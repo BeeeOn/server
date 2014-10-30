@@ -1,2 +1,2 @@
-Smarthome server repository.
+This is smarthome server repository.
 See subdirectories for individual server parts.
