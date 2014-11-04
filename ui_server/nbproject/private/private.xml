@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <data xmlns="http://www.netbeans.org/ns/make-project-private/1">
+        <activeConfTypeElem>1</activeConfTypeElem>
+        <activeConfIndexElem>0</activeConfIndexElem>
+    </data>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/home/pavel/git-server/ui_server/tests/testMsgGetCondition.cpp</file>
+            <file>file:/home/pavel/git-server/ui_server/testHelper.h</file>
+            <file>file:/home/pavel/git-server/ui_server/tests/testMsgInPartial.cpp</file>
+            <file>file:/home/pavel/git-server/ui_server/DBConnector.cpp</file>
+            <file>file:/home/pavel/git-server/ui_server/tests/testChangeConAccount.cpp</file>
+            <file>file:/home/pavel/git-server/ui_server/Logger.h</file>
+            <file>file:/home/pavel/git-server/ui_server/tests/testChangeConAccount.h</file>
+            <file>file:/home/pavel/git-server/ui_server/testHelper.cpp</file>
+            <file>file:/home/pavel/git-server/ui_server/tests/newtestclass.cpp</file>
+            <file>file:/home/pavel/git-server/ui_server/tests/testrunnerMsgGetCondition.cpp</file>
+            <file>file:/home/pavel/git-server/ui_server/tests/newtestclass.h</file>
+            <file>file:/home/pavel/git-server/ui_server/newtestClass.cpp</file>
+            <file>file:/home/pavel/git-server/ui_server/Logger.cpp</file>
+            <file>file:/home/pavel/git-server/ui_server/communication.cpp</file>
+            <file>file:/home/pavel/git-server/ui_server/tests/testMsgInConditionPlusAction.h</file>
+            <file>file:/home/pavel/git-server/ui_server/MsgInConditionPlusAction.h</file>
+            <file>file:/home/pavel/git-server/ui_server/tests/newtestrunner.cpp</file>
+            <file>file:/home/pavel/git-server/ui_server/ui_server.cpp</file>
+            <file>file:/home/pavel/git-server/ui_server/ComTable.cpp</file>
+            <file>file:/home/pavel/git-server/ui_server/tests/testMsgInConditionPlusAction.cpp</file>
+            <file>file:/home/pavel/git-server/ui_server/newtestClass.h</file>
+            <file>file:/home/pavel/git-server/ui_server/MsgInGetNewDevices.cpp</file>
+        </group>
+    </open-files>
+</project-private>

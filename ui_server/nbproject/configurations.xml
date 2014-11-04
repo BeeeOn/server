@@ -1,0 +1,2420 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="95">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <logicalFolder name="f1" displayName="msgIn" projectFiles="true">
+        <itemPath>IMsgIn.h</itemPath>
+        <itemPath>MsgInAddAccount.h</itemPath>
+        <itemPath>MsgInAddRoom.h</itemPath>
+        <itemPath>MsgInAddView.h</itemPath>
+        <itemPath>MsgInChangeAccount.h</itemPath>
+        <itemPath>MsgInDelAccount.h</itemPath>
+        <itemPath>MsgInDelRoom.h</itemPath>
+        <itemPath>MsgInDelView.h</itemPath>
+        <itemPath>MsgInGetAccount.h</itemPath>
+        <itemPath>MsgInGetAdapters.h</itemPath>
+        <itemPath>MsgInGetDevices.h</itemPath>
+        <itemPath>MsgInGetLog.h</itemPath>
+        <itemPath>MsgInGetRooms.h</itemPath>
+        <itemPath>MsgInGetTimeZone.h</itemPath>
+        <itemPath>MsgInGetViews.h</itemPath>
+        <itemPath>MsgInPartial.h</itemPath>
+        <itemPath>MsgInSetTimeZone.h</itemPath>
+        <itemPath>MsgInSignIn.h</itemPath>
+        <itemPath>MsgInSignUp.h</itemPath>
+        <itemPath>MsgInUnknown.h</itemPath>
+        <itemPath>MsgInUpdateRooms.h</itemPath>
+        <itemPath>MsgInUpdateView.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f2" displayName="msgOut" projectFiles="true">
+        <itemPath>IMsgOut.h</itemPath>
+        <itemPath>MsgOutAccountList.h</itemPath>
+        <itemPath>MsgOutCommunication.h</itemPath>
+        <itemPath>MsgOutDevices.h</itemPath>
+        <itemPath>MsgOutFalse.h</itemPath>
+        <itemPath>MsgOutLogData.h</itemPath>
+        <itemPath>MsgOutNotRegA.h</itemPath>
+        <itemPath>MsgOutNotRegB.h</itemPath>
+        <itemPath>MsgOutReSign.h</itemPath>
+        <itemPath>MsgOutReady.h</itemPath>
+        <itemPath>MsgOutRoomCreated.h</itemPath>
+        <itemPath>MsgOutRooms.h</itemPath>
+        <itemPath>MsgOutTimeZone.h</itemPath>
+        <itemPath>MsgOutTrue.h</itemPath>
+        <itemPath>MsgOutViewsList.h</itemPath>
+      </logicalFolder>
+      <itemPath>ComTable.h</itemPath>
+      <itemPath>Communicator.h</itemPath>
+      <itemPath>Config.h</itemPath>
+      <itemPath>DBConnector.h</itemPath>
+      <itemPath>IMsgInLoginAndAdapterAccessRequired.h</itemPath>
+      <itemPath>IMsgInLoginRequired.h</itemPath>
+      <itemPath>IMsgInLoginUnwanted.h</itemPath>
+      <itemPath>Logger.h</itemPath>
+      <itemPath>MsgInAdapterListen.h</itemPath>
+      <itemPath>MsgInAddAdapter.h</itemPath>
+      <itemPath>MsgInConditionPlusAction.h</itemPath>
+      <itemPath>MsgInDelAction.h</itemPath>
+      <itemPath>MsgInDelCondition.h</itemPath>
+      <itemPath>MsgInDelDevice.h</itemPath>
+      <itemPath>MsgInFactory.h</itemPath>
+      <itemPath>MsgInGetAction.h</itemPath>
+      <itemPath>MsgInGetActions.h</itemPath>
+      <itemPath>MsgInGetAllDevices.h</itemPath>
+      <itemPath>MsgInGetConditions.h</itemPath>
+      <itemPath>MsgInGetNewDevices.h</itemPath>
+      <itemPath>MsgRightsChecker.h</itemPath>
+      <itemPath>ServerException.h</itemPath>
+      <itemPath>SocketClient.h</itemPath>
+      <itemPath>ThreadPool.h</itemPath>
+      <itemPath>communication.h</itemPath>
+      <itemPath>gTokenChecker.h</itemPath>
+      <itemPath>pugiconfig.hpp</itemPath>
+      <itemPath>pugixml.hpp</itemPath>
+      <itemPath>stdafx.h</itemPath>
+      <itemPath>targetver.h</itemPath>
+      <itemPath>testHelper.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <logicalFolder name="f8" displayName="accounts" projectFiles="true">
+        <itemPath>MsgInAddAccount.cpp</itemPath>
+        <itemPath>MsgInDelConAccount.cpp</itemPath>
+        <itemPath>MsgInGetConAccount.cpp</itemPath>
+        <itemPath>MsgInSetConAccount.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f7" displayName="actions_conditions" projectFiles="true">
+        <itemPath>MsgInConditionPlusAction.cpp</itemPath>
+        <itemPath>MsgInDelAction.cpp</itemPath>
+        <itemPath>MsgInDelCondition.cpp</itemPath>
+        <itemPath>MsgInGetAction.cpp</itemPath>
+        <itemPath>MsgInGetActions.cpp</itemPath>
+        <itemPath>MsgInGetConditions.cpp</itemPath>
+        <itemPath>MsgInSetAction.cpp</itemPath>
+        <itemPath>MsgInSetAction.h</itemPath>
+        <itemPath>MsgInSetCondition.cpp</itemPath>
+        <itemPath>MsgInSetCondition.h</itemPath>
+        <itemPath>MsgInUpdateAction.cpp</itemPath>
+        <itemPath>MsgInUpdateAction.h</itemPath>
+        <itemPath>MsgInUpdateCondition.cpp</itemPath>
+        <itemPath>MsgInUpdateCondition.h</itemPath>
+        <itemPath>msgInGetCondition.cpp</itemPath>
+        <itemPath>msgInGetCondition.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f4" displayName="devices" projectFiles="true">
+        <itemPath>MsgInAdapterListen.cpp</itemPath>
+        <itemPath>MsgInDelDevice.cpp</itemPath>
+        <itemPath>MsgInGetAllDevices.cpp</itemPath>
+        <itemPath>MsgInGetDevices.cpp</itemPath>
+        <itemPath>MsgInGetLog.cpp</itemPath>
+        <itemPath>MsgInGetNewDevices.cpp</itemPath>
+        <itemPath>MsgInSetDevices.cpp</itemPath>
+        <itemPath>MsgInSwitch.cpp</itemPath>
+        <itemPath>MsgInSwitch.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f5" displayName="locations" projectFiles="true">
+        <itemPath>MsgInAddRoom.cpp</itemPath>
+        <itemPath>MsgInDelRoom.cpp</itemPath>
+        <itemPath>MsgInGetRooms.cpp</itemPath>
+        <itemPath>MsgInSetRooms.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f1" displayName="msgIn" projectFiles="true">
+        <itemPath>IMsgIn.cpp</itemPath>
+        <itemPath>IMsgInLoginAndAdapterAccessRequired.cpp</itemPath>
+        <itemPath>IMsgInLoginRequired.cpp</itemPath>
+        <itemPath>IMsgInLoginUnwanted.cpp</itemPath>
+        <itemPath>MsgInUnknown.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f2" displayName="msgOut" projectFiles="true">
+      </logicalFolder>
+      <logicalFolder name="f3" displayName="sign_reg_adapters" projectFiles="true">
+        <itemPath>MsgInAddAdapter.cpp</itemPath>
+        <itemPath>MsgInGetAdapters.cpp</itemPath>
+        <itemPath>MsgInSignIn.cpp</itemPath>
+        <itemPath>MsgInSignUp.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f9" displayName="time" projectFiles="true">
+        <itemPath>MsgInGetTimeZone.cpp</itemPath>
+        <itemPath>MsgInSetTimeZone.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f10" displayName="todo" projectFiles="true">
+        <itemPath>MsgInReinitAdapter.cpp</itemPath>
+        <itemPath>MsgInReinitAdapter.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f6" displayName="views" projectFiles="true">
+        <itemPath>MsgInAddView.cpp</itemPath>
+        <itemPath>MsgInDelView.cpp</itemPath>
+        <itemPath>MsgInGetViews.cpp</itemPath>
+        <itemPath>MsgInUpdateView.cpp</itemPath>
+      </logicalFolder>
+      <itemPath>ComTable.cpp</itemPath>
+      <itemPath>Config.cpp</itemPath>
+      <itemPath>DBConnector.cpp</itemPath>
+      <itemPath>Logger.cpp</itemPath>
+      <itemPath>MsgInFactory.cpp</itemPath>
+      <itemPath>MsgRightsChecker.cpp</itemPath>
+      <itemPath>ServerException.cpp</itemPath>
+      <itemPath>SocketClient.cpp</itemPath>
+      <itemPath>communication.cpp</itemPath>
+      <itemPath>gTokenChecker.cpp</itemPath>
+      <itemPath>pugixml.cpp</itemPath>
+      <itemPath>testHelper.cpp</itemPath>
+      <itemPath>ui_server.cpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+      <logicalFolder name="f21"
+                     displayName="AlfaTest"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>newtestClass.cpp</itemPath>
+        <itemPath>newtestClass.h</itemPath>
+        <itemPath>tests/newtestclass.cpp</itemPath>
+        <itemPath>tests/newtestclass.h</itemPath>
+        <itemPath>tests/newtestrunner.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f15"
+                     displayName="testChangeConAccount"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/testChangeConAccount.cpp</itemPath>
+        <itemPath>tests/testChangeConAccount.h</itemPath>
+        <itemPath>tests/testrunnerChangeConAccount.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f3"
+                     displayName="testGlobal"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/testGlobal.cpp</itemPath>
+        <itemPath>tests/testGlobal.h</itemPath>
+        <itemPath>tests/testrunnerGlobal.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f20"
+                     displayName="testMsgInAddAdapter"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/testMsgInAddAdapter.cpp</itemPath>
+        <itemPath>tests/testMsgInAddAdapter.h</itemPath>
+        <itemPath>tests/testrunnerMsgInAddAdapter.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f8"
+                     displayName="testMsgInAddConAcc"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/testMsgInAddConAcc.cpp</itemPath>
+        <itemPath>tests/testMsgInAddConAcc.h</itemPath>
+        <itemPath>tests/testrunnerMsgInAddConAcc.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f4"
+                     displayName="testMsgInAddRooms"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/testMsgInAddRooms.cpp</itemPath>
+        <itemPath>tests/testMsgInAddRooms.h</itemPath>
+        <itemPath>tests/testrunnerMsgInAddRooms.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f31"
+                     displayName="testMsgInDelAction"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/testMsgInDelAction.cpp</itemPath>
+        <itemPath>tests/testMsgInDelAction.h</itemPath>
+        <itemPath>tests/testrunnerMsgInDelAction.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f16"
+                     displayName="testMsgInDelConAcc"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/testMsgInDelConAcc.cpp</itemPath>
+        <itemPath>tests/testMsgInDelConAcc.h</itemPath>
+        <itemPath>tests/testrunnerMsgInDelConAcc.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f9"
+                     displayName="testMsgInDelDevice"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/testMsgInDelDevice.cpp</itemPath>
+        <itemPath>tests/testMsgInDelDevice.h</itemPath>
+        <itemPath>tests/testrunnerMsgInDelDevice.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f26"
+                     displayName="testMsgInDeleteCondition"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/testMsgInDeleteCondition.cpp</itemPath>
+        <itemPath>tests/testMsgInDeleteCondition.h</itemPath>
+        <itemPath>tests/testrunnerMsgInDeleteCondition.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f5"
+                     displayName="testMsgInDelRoom"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/testMsgInDelRoom.cpp</itemPath>
+        <itemPath>tests/testMsgInDelRoom.h</itemPath>
+        <itemPath>tests/testrunnerMsgInDelRoom.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f19"
+                     displayName="testMsgInDevices"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/testMsgInPartial.cpp</itemPath>
+        <itemPath>tests/testMsgInPartial.h</itemPath>
+        <itemPath>tests/testrunnerMsgInPartial.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f29"
+                     displayName="testMsgInGetAction"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/testMsgInGetAction.cpp</itemPath>
+        <itemPath>tests/testMsgInGetAction.h</itemPath>
+        <itemPath>tests/testrunnerMsgInGetAction.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f28"
+                     displayName="testMsgInGetActions"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/testMsgInGetActions.cpp</itemPath>
+        <itemPath>tests/testMsgInGetActions.h</itemPath>
+        <itemPath>tests/testrunnerMsgInGetActions.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f18"
+                     displayName="testMsgInGetAdapters"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/testMsgInGetAdapters.cpp</itemPath>
+        <itemPath>tests/testMsgInGetAdapters.h</itemPath>
+        <itemPath>tests/testrunnerMsgInGetAdapters.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f17"
+                     displayName="testMsgInGetConAcc"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/testMsgInGetConAcc.cpp</itemPath>
+        <itemPath>tests/testMsgInGetConAcc.h</itemPath>
+        <itemPath>tests/testrunnerMsgInGetConAcc.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f24"
+                     displayName="testMsgInGetConditions"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/testMsgInGetConditions.cpp</itemPath>
+        <itemPath>tests/testMsgInGetConditions.h</itemPath>
+        <itemPath>tests/testrunnerMsgInGetConditions.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f7"
+                     displayName="testMsgInGetRooms"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/testMsgInGetRooms.cpp</itemPath>
+        <itemPath>tests/testMsgInGetRooms.h</itemPath>
+        <itemPath>tests/testrunnerMsgInGetRooms.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f14"
+                     displayName="testMsgInGetTimeZone"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/testMsgInGetTimeZone.cpp</itemPath>
+        <itemPath>tests/testMsgInGetTimeZone.h</itemPath>
+        <itemPath>tests/testrunnerMsgInGetTimeZone.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f11"
+                     displayName="testMsgInLogName"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/testMsgInLogName.cpp</itemPath>
+        <itemPath>tests/testMsgInLogName.h</itemPath>
+        <itemPath>tests/testrunnerMsgInLogName.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f27"
+                     displayName="testMsgInSetAction"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/testMsgInSetAction.cpp</itemPath>
+        <itemPath>tests/testMsgInSetAction.h</itemPath>
+        <itemPath>tests/testrunnerMsgInSetAction.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f22"
+                     displayName="testMsgInSetCondition"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/testMsgInSetCondition.cpp</itemPath>
+        <itemPath>tests/testMsgInSetCondition.h</itemPath>
+        <itemPath>tests/testrunnerMsgInSetCondition.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f13"
+                     displayName="testMsgInSetTimeZone"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/testMsgInSetTimeZone.cpp</itemPath>
+        <itemPath>tests/testMsgInSetTimeZone.h</itemPath>
+        <itemPath>tests/testrunnerMsgInSetTimeZone.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f1"
+                     displayName="testMsgInSignIn"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/testMsgInSignIn.cpp</itemPath>
+        <itemPath>tests/testMsgInSignIn.h</itemPath>
+        <itemPath>tests/testrunnerMsgInSignIn.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f2"
+                     displayName="testMsgInSignUp"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/testMsgInSignUp.cpp</itemPath>
+        <itemPath>tests/testMsgInSignUp.h</itemPath>
+        <itemPath>tests/testrunnerMsgInSignUp.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f10"
+                     displayName="testMsgInSwitch"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/testMsgInSwitch.cpp</itemPath>
+        <itemPath>tests/testMsgInSwitch.h</itemPath>
+        <itemPath>tests/testrunnerMsgInSwitch.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f12"
+                     displayName="testMsgInUpdate"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/testMsgInUpdate.cpp</itemPath>
+        <itemPath>tests/testMsgInUpdate.h</itemPath>
+        <itemPath>tests/testrunnerMsgInUpdate.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f30"
+                     displayName="testMsgInUpdateAction"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/testMsgInUpdateAction.cpp</itemPath>
+        <itemPath>tests/testMsgInUpdateAction.h</itemPath>
+        <itemPath>tests/testrunnerMsgInUpdateAction.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f25"
+                     displayName="testMsgInUpdateCondition"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/testMsgInUpdateCondition.cpp</itemPath>
+        <itemPath>tests/testMsgInUpdateCondition.h</itemPath>
+        <itemPath>tests/testrunnerMsgInUpdateCondition.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f6"
+                     displayName="testMsgInUpdateRooms"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/testMsgInUpdateRooms.cpp</itemPath>
+        <itemPath>tests/testMsgInUpdateRooms.h</itemPath>
+        <itemPath>tests/testrunnerMsgInUpdateRooms.cpp</itemPath>
+      </logicalFolder>
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+      <itemPath>tests/XMLtestFiles</itemPath>
+      <itemPath>config.xml</itemPath>
+      <itemPath>sqlQueries</itemPath>
+    </logicalFolder>
+    <itemPath>ccolor.cpp</itemPath>
+    <itemPath>ccolor.h</itemPath>
+    <itemPath>testInfo</itemPath>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+          </incDir>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandlineTool>g++</commandlineTool>
+          <incDir>
+            <pElem>/usr/include/postgresql</pElem>
+            <pElem>/usr/include/postgresql/libpq</pElem>
+            <pElem>/usr/include</pElem>
+            <pElem>/usr/local/include/soci</pElem>
+            <pElem>usr/include/openssl</pElem>
+            <pElem>../Server</pElem>
+            <pElem>.</pElem>
+          </incDir>
+          <commandLine>-std=c++0x -D_GLIBCXX_USE_NANOSLEEP `cppunit-config --cflags`</commandLine>
+          <warningLevel>2</warningLevel>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f34</output>
+          <linkerAddLib>
+            <pElem>/usr/local/lib</pElem>
+            <pElem>/usr/local/lib64</pElem>
+            <pElem>/opt/centos/devtoolset-1.1/root/usr/lib/gcc/x86_64-redhat-linux/4.7.2</pElem>
+          </linkerAddLib>
+          <linkerDynSerch>
+            <pElem>/usr/local/lib</pElem>
+            <pElem>/usr/local/lib64</pElem>
+          </linkerDynSerch>
+          <commandlineTool>g++</commandlineTool>
+          <linkerLibItems>
+            <linkerLibLibItem>soci_core</linkerLibLibItem>
+            <linkerLibLibItem>soci_empty</linkerLibLibItem>
+            <linkerLibLibItem>soci_postgresql</linkerLibLibItem>
+            <linkerLibLibItem>pq</linkerLibLibItem>
+            <linkerLibLibItem>jansson</linkerLibLibItem>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+          <commandLine>-lpq -lsoci_core -lsoci_empty -lsoci_postgresql -lcppunit -lssl -lcrypto -ljansson -lstdc++</commandLine>
+        </linkerTool>
+      </compileType>
+      <item path="ComTable.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ComTable.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Communicator.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Config.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Config.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="DBConnector.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="DBConnector.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="IMsgIn.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="IMsgIn.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="IMsgInLoginAndAdapterAccessRequired.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="IMsgInLoginAndAdapterAccessRequired.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="IMsgInLoginRequired.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="IMsgInLoginRequired.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="IMsgInLoginUnwanted.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="IMsgInLoginUnwanted.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="IMsgOut.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Logger.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Logger.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInAdapterListen.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInAdapterListen.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInAddAccount.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInAddAccount.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInAddAdapter.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInAddAdapter.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInAddRoom.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInAddRoom.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInAddView.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInAddView.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInChangeAccount.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInConditionPlusAction.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInConditionPlusAction.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInDelAccount.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInDelAction.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInDelAction.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInDelConAccount.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInDelCondition.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInDelCondition.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInDelDevice.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInDelDevice.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInDelRoom.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInDelRoom.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInDelView.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInDelView.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInFactory.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInFactory.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInGetAccount.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInGetAction.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInGetAction.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInGetActions.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInGetActions.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInGetAdapters.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInGetAdapters.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInGetAllDevices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInGetAllDevices.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInGetConAccount.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInGetConditions.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInGetConditions.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInGetDevices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInGetDevices.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInGetLog.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInGetLog.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInGetNewDevices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInGetNewDevices.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInGetRooms.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInGetRooms.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInGetTimeZone.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInGetTimeZone.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInGetViews.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInGetViews.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInPartial.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInReinitAdapter.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInReinitAdapter.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInSetAction.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInSetAction.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInSetConAccount.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInSetCondition.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInSetCondition.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInSetDevices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInSetRooms.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInSetTimeZone.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInSetTimeZone.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInSignIn.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInSignIn.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInSignUp.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInSignUp.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInSwitch.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInSwitch.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInUnknown.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInUnknown.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInUpdateAction.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInUpdateAction.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInUpdateCondition.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInUpdateCondition.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInUpdateRooms.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInUpdateView.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInUpdateView.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgOutAccountList.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgOutCommunication.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgOutDevices.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgOutFalse.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgOutLogData.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgOutNotRegA.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgOutNotRegB.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgOutReSign.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgOutReady.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgOutRoomCreated.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgOutRooms.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgOutTimeZone.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgOutTrue.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgOutViewsList.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgRightsChecker.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgRightsChecker.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="ServerException.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ServerException.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="SocketClient.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="SocketClient.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="ThreadPool.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="ccolor.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ccolor.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="communication.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="communication.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <folder path="TestFiles">
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <linkerAddLib>
+            <pElem>/usr/local/lib64</pElem>
+            <pElem>/usr/local/lib</pElem>
+          </linkerAddLib>
+          <linkerDynSerch>
+            <pElem>/usr/local/lib64</pElem>
+            <pElem>/usr/local/lib</pElem>
+          </linkerDynSerch>
+          <linkerLibItems>
+            <linkerLibLibItem>soci_core</linkerLibLibItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f1">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f1</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f10">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f10</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f11">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f11</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f12">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f12</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f13">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f13</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f14">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f14</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f15">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f15</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f16">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f16</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f17">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f17</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f18">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f18</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f19">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f19</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f2">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f2</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f20">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f20</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f21">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f21</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f22">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f22</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f24">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f24</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f25">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f25</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f26">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f26</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f27">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f27</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f28">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f28</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f29">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f29</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f3">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f3</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f30">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f30</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f31">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f31</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f4">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f4</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f5">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f5</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f6">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f6</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f7">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f7</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f8">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f8</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f9">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f9</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <item path="gTokenChecker.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="gTokenChecker.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgInGetCondition.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgInGetCondition.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="newtestClass.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="newtestClass.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="pugiconfig.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="pugixml.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="pugixml.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="stdafx.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="targetver.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="testHelper.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="testHelper.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="testInfo" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/newtestclass.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/newtestclass.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/newtestrunner.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testChangeConAccount.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testChangeConAccount.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testGlobal.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testGlobal.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInAddAdapter.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInAddAdapter.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInAddConAcc.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInAddConAcc.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInAddRooms.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInAddRooms.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInDelAction.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInDelAction.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInDelConAcc.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInDelConAcc.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInDelDevice.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInDelDevice.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInDelRoom.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInDelRoom.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInDeleteCondition.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInDeleteCondition.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInGetAction.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInGetAction.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInGetActions.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInGetActions.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInGetAdapters.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInGetAdapters.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInGetConAcc.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInGetConAcc.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInGetConditions.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInGetConditions.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInGetRooms.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInGetRooms.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInGetTimeZone.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInGetTimeZone.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInLogName.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInLogName.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInPartial.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInPartial.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInSetAction.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInSetAction.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInSetCondition.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInSetCondition.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInSetTimeZone.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInSetTimeZone.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInSignIn.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInSignIn.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInSignUp.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInSignUp.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInSwitch.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInSwitch.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInUpdate.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInUpdate.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInUpdateAction.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInUpdateAction.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInUpdateCondition.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInUpdateCondition.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInUpdateRooms.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInUpdateRooms.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testrunnerChangeConAccount.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="tests/testrunnerGlobal.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInAddAdapter.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInAddConAcc.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInAddRooms.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInDelAction.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInDelConAcc.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInDelDevice.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInDelRoom.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInDeleteCondition.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInGetAction.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInGetActions.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInGetAdapters.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInGetConAcc.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInGetConditions.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInGetRooms.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInGetTimeZone.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInLogName.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInPartial.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInSetAction.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInSetCondition.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInSetTimeZone.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInSignIn.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInSignUp.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInSwitch.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInUpdate.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInUpdateAction.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInUpdateCondition.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInUpdateRooms.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="ui_server.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+          <incDir>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+          </incDir>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+          <commandlineTool>g++</commandlineTool>
+          <incDir>
+            <pElem>../soci-3.2.2/soci-3.2.2/backends/postgresql</pElem>
+            <pElem>../soci-3.2.2/soci-3.2.2/core</pElem>
+            <pElem>/usr/include/postgresql</pElem>
+            <pElem>/usr/include/postgresql/libpq</pElem>
+            <pElem>.</pElem>
+            <pElem>/usr/include</pElem>
+            <pElem>.</pElem>
+          </incDir>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f34</output>
+          <linkerAddLib>
+            <pElem>../soci-3.2.2/build/lib</pElem>
+            <pElem>/usr/local/include/soci</pElem>
+            <pElem>../soci-3.2.2/soci-3.2.2/backends/postgresql</pElem>
+            <pElem>../soci-3.2.2/soci-3.2.2/core</pElem>
+            <pElem>/usr/include/postgresql</pElem>
+            <pElem>/usr/include/postgresql/libpq</pElem>
+            <pElem>.</pElem>
+            <pElem>/usr/include</pElem>
+            <pElem>/usr/local/include</pElem>
+            <pElem>/usr/local/lib</pElem>
+            <pElem>/usr/lib</pElem>
+          </linkerAddLib>
+          <linkerDynSerch>
+            <pElem>../soci-3.2.2/build/lib</pElem>
+            <pElem>/usr/local/lib</pElem>
+          </linkerDynSerch>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+            <linkerLibLibItem>pq</linkerLibLibItem>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+          <commandLine>-lpq -lsoci_core -lsoci_empty -lsoci_postgresql -lcppunit -lssl -lcrypto -ljansson</commandLine>
+        </linkerTool>
+      </compileType>
+      <item path="ComTable.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ComTable.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Communicator.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Config.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Config.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="DBConnector.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="DBConnector.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="IMsgIn.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="IMsgIn.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="IMsgInLoginAndAdapterAccessRequired.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="IMsgInLoginAndAdapterAccessRequired.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="IMsgInLoginRequired.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="IMsgInLoginRequired.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="IMsgInLoginUnwanted.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="IMsgInLoginUnwanted.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="IMsgOut.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Logger.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Logger.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInAdapterListen.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInAdapterListen.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInAddAccount.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInAddAccount.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInAddAdapter.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInAddAdapter.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInAddRoom.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInAddRoom.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInAddView.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInAddView.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInChangeAccount.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInConditionPlusAction.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInConditionPlusAction.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInDelAccount.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInDelAction.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInDelAction.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInDelConAccount.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInDelCondition.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInDelCondition.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInDelDevice.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInDelDevice.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInDelRoom.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInDelRoom.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInDelView.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInDelView.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInFactory.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInFactory.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInGetAccount.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInGetAction.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInGetAction.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInGetActions.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInGetActions.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInGetAdapters.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInGetAdapters.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInGetAllDevices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInGetAllDevices.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInGetConAccount.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInGetConditions.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInGetConditions.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInGetDevices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInGetDevices.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInGetLog.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInGetLog.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInGetNewDevices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInGetNewDevices.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInGetRooms.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInGetRooms.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInGetTimeZone.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInGetTimeZone.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInGetViews.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInGetViews.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInPartial.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInReinitAdapter.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInReinitAdapter.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInSetAction.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInSetAction.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInSetConAccount.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInSetCondition.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInSetCondition.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInSetDevices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInSetRooms.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInSetTimeZone.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInSetTimeZone.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInSignIn.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInSignIn.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInSignUp.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInSignUp.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInSwitch.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInSwitch.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInUnknown.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInUnknown.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInUpdateAction.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInUpdateAction.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInUpdateCondition.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInUpdateCondition.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInUpdateRooms.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInUpdateView.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInUpdateView.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgOutAccountList.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgOutCommunication.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgOutDevices.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgOutFalse.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgOutLogData.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgOutNotRegA.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgOutNotRegB.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgOutReSign.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgOutReady.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgOutRoomCreated.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgOutRooms.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgOutTimeZone.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgOutTrue.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgOutViewsList.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgRightsChecker.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgRightsChecker.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="ServerException.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ServerException.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="SocketClient.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="SocketClient.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="ThreadPool.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="ccolor.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ccolor.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="communication.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="communication.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <folder path="TestFiles/f1">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f1</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f10">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f10</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f11">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f11</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f12">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f12</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f13">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f13</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f14">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f14</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f15">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f15</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f16">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f16</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f17">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f17</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f18">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f18</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f19">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f19</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f2">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f2</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f20">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f20</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f21">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f21</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f22">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f22</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f24">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f24</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f25">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f25</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f26">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f26</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f27">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f27</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f28">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f28</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f29">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f29</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f3">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f3</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f30">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f30</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f31">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f31</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f4">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f4</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f5">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f5</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f6">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f6</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f7">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f7</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f8">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f8</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f9">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f9</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <item path="gTokenChecker.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="gTokenChecker.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgInGetCondition.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgInGetCondition.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="newtestClass.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="newtestClass.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="pugiconfig.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="pugixml.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="pugixml.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="stdafx.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="targetver.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="testHelper.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="testHelper.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="testInfo" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/newtestclass.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/newtestclass.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/newtestrunner.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testChangeConAccount.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testChangeConAccount.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testGlobal.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testGlobal.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInAddAdapter.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInAddAdapter.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInAddConAcc.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInAddConAcc.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInAddRooms.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInAddRooms.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInDelAction.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInDelAction.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInDelConAcc.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInDelConAcc.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInDelDevice.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInDelDevice.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInDelRoom.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInDelRoom.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInDeleteCondition.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInDeleteCondition.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInGetAction.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInGetAction.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInGetActions.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInGetActions.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInGetAdapters.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInGetAdapters.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInGetConAcc.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInGetConAcc.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInGetConditions.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInGetConditions.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInGetRooms.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInGetRooms.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInGetTimeZone.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInGetTimeZone.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInLogName.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInLogName.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInPartial.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInPartial.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInSetAction.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInSetAction.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInSetCondition.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInSetCondition.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInSetTimeZone.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInSetTimeZone.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInSignIn.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInSignIn.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInSignUp.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInSignUp.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInSwitch.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInSwitch.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInUpdate.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInUpdate.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInUpdateAction.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInUpdateAction.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInUpdateCondition.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInUpdateCondition.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInUpdateRooms.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInUpdateRooms.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testrunnerChangeConAccount.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="tests/testrunnerGlobal.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInAddAdapter.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInAddConAcc.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInAddRooms.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInDelAction.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInDelConAcc.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInDelDevice.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInDelRoom.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInDeleteCondition.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInGetAction.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInGetActions.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInGetAdapters.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInGetConAcc.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInGetConditions.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInGetRooms.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInGetTimeZone.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInLogName.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInPartial.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInSetAction.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInSetCondition.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInSetTimeZone.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInSignIn.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInSignUp.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInSwitch.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInUpdate.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInUpdateAction.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInUpdateCondition.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInUpdateRooms.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="ui_server.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
