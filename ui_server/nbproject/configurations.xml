@@ -459,7 +459,7 @@
           <warningLevel>2</warningLevel>
         </ccTool>
         <linkerTool>
-          <output>${TESTDIR}/TestFiles/f34</output>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/ui_server</output>
           <linkerAddLib>
             <pElem>/usr/local/lib</pElem>
             <pElem>/usr/local/lib64</pElem>

@@ -272,8 +272,10 @@ std::string DBConnector::getXMLAllDevs(string adapter)
                     ,use(adapter,"adapter"),soci::into(xml,ind);
             
 
-            if(ind != i_ok)
-                throw ServerException(ServerException::XML);                
+        if(ind != i_ok){
+                Logger::getInstance(Logger::DEBUG3)<<"query not ok"<<"\n";
+               return "";         
+            }
             return xml;
         }
         catch (soci::postgresql_soci_error& e)

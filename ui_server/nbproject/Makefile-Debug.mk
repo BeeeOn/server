@@ -147,11 +147,11 @@ LDLIBSOPTIONS=-L/usr/local/lib -L/usr/local/lib64 -L/opt/centos/devtoolset-1.1/r
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${TESTDIR}/TestFiles/f34
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/ui_server
 
-${TESTDIR}/TestFiles/f34: ${OBJECTFILES}
-	${MKDIR} -p ${TESTDIR}/TestFiles
-	g++ -o ${TESTDIR}/TestFiles/f34 ${OBJECTFILES} ${LDLIBSOPTIONS} -lpq -lsoci_core -lsoci_empty -lsoci_postgresql -lcppunit -lssl -lcrypto -ljansson -lstdc++
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/ui_server: ${OBJECTFILES}
+	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
+	g++ -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/ui_server ${OBJECTFILES} ${LDLIBSOPTIONS} -lpq -lsoci_core -lsoci_empty -lsoci_postgresql -lcppunit -lssl -lcrypto -ljansson -lstdc++
 
 ${OBJECTDIR}/ComTable.o: ComTable.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -1712,7 +1712,7 @@ ${OBJECTDIR}/ui_server_nomain.o: ${OBJECTDIR}/ui_server.o ui_server.cpp
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${TESTDIR}/TestFiles/f34
+	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/ui_server
 
 # Subprojects
 .clean-subprojects:
