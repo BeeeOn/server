@@ -335,7 +335,7 @@ string DBConnector::getXMLdevices(int userId, vector<device> devicesVec)
                         
                         //copypaste
                         " xmlagg("
-                        "xmlelement(name adapter, xmlattributes(adapter_id as aid),"
+                        "xmlelement(name adapter, xmlattributes(adapter_id as id),"
                         "xmlelement(name  dev,xmlattributes(init as init, mac as did, fk_room_id as lid, refresh as refresh, battery as batt,"
                                                 " timestamp as time, involved  as inv, quality as rssi),"
                                                  "(select xmlagg(xmlelement(name part,xmlattributes(type as type, visibility as vis, name as name, value as val)))from devices where fk_facilities_mac=mac )"

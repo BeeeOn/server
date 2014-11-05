@@ -49,14 +49,20 @@ string resolveMsg(char* msg)
         response = msgIn->envelopeResponse(R_FALSE, e.getErrText(), e.getErrCode());
         Logger::getInstance(Logger::DEBUG)<< "MSGOUT: " << response<<"\n"<<endl;
     }
-    catch (soci::soci_error const & e)
+    catch (soci::postgresql_soci_error const & e)
     {
-        //TODO  mozna nedelat false 
-        Logger::getInstance(Logger::ERROR) << "DB error: " << e.what() << endl;
+        Logger::getInstance(Logger::ERROR) << "DB error (psql_soci): " << e.what() <<"| sql state:"<<e.sqlstate()<< endl;
         
         response = msgIn->envelopeResponse(R_FALSE);
         Logger::getInstance(Logger::DEBUG)<< "MSGOUT: " << response<<"\n";
+    }
+    catch (soci::soci_error const & e)
+    {
+        //TODO  mozna nedelat false 
+        Logger::getInstance(Logger::ERROR) << "DB error (soci): " << e.what() << endl;
         
+        response = msgIn->envelopeResponse(R_FALSE);
+        Logger::getInstance(Logger::DEBUG)<< "MSGOUT: " << response<<"\n";
     }
     catch (...)
     {

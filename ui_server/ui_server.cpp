@@ -262,9 +262,15 @@ int main(int argc, char** argv)
         
         Logger::getInstance(Logger::FATAL) << "start with port"<<serverPort <<endl;
         ComTable::getInstance().startComTableCleaner(Config::getInstance().getComTableSleepPeriodMs(), Config::getInstance().getComTableMaxInactivityMs() );
-                        
-        DBConnector::getInstance().setConnectionStringAndOpenSessions( Config::getInstance().getDBConnectionString() , Config::getInstance().getDBSessionsNumber());
-       /* device d;
+        try{                        
+            DBConnector::getInstance().setConnectionStringAndOpenSessions( Config::getInstance().getDBConnectionString() , Config::getInstance().getDBSessionsNumber());
+        }
+        catch (soci::soci_error const & e)
+        {
+            Logger::getInstance(Logger::ERROR) << "DB error (soci): " << e.what() << endl;
+            
+        }
+        /* device d;
         d.id = "53.54.55.56";
         d.type="0x00";
         DBConnector::getInstance().getDeviceLog((string)"51966", d,(string)"2014-08-05 00:00:00",(string)"2014-08-12 11:23:50",(string)"avg",(string)"3600");
@@ -277,40 +283,6 @@ int main(int argc, char** argv)
         resolveMsg( "<com ver=\"2.2\" sid=\"1\" state=\"getlog\" from=\"1377684610\" ftype=\"avg\" interval=\"0\" aid=\"21\" did=\"0.0.21.1\" dtype=\"1\" />" );
        resolveMsg( "<com ver=\"2.2\" sid=\"1\" state=\"getnewdevs\" aid=\"10\"  />" );
 
-
-        if(0){
-            resolveMsg( "<?xml version=\"1.0\" encoding=\"UTF-8\"?><communication version=\"1.0\" id=\"0\" state=\"signin\"><user email=\"user2@gmail.com\" "
-                                "gtoken=\"1\"  locale=\"cs\" /></communication>");
-             resolveMsg( "<?xml version=\"1.0\" encoding=\"UTF-8\"?><communication version=\"2.0\" id=\"0\" state=\"signin\"><user email=\"user2@gmail.com\" "
-                                "gtoken=\"1\"  locale=\"cs\" /></communication>");
-             return 0;
-            resolveMsg( "<?xml version=\"1.0\" encoding=\"UTF-8\"?><communication version=\"1.9\" id=\"1\" state=\"getadapters\"><communication>");
-
-
-            resolveMsg( "<?xml version=\"1.0\" encoding=\"UTF-8\"?><communication version=\"1.9\" id=\"1\" state=\"getxml\" adapter=\"10\" ></communication>");
-/*
-            resolveMsg("<?xml version=\"1.0\" encoding=\"UTF-8\"?><communication version=\"1.9\" id=\"1\" state=\"update\" adapter=\"10\" ><device id=\"1.1.1.1\" type=\"0x02\"/><device id=\"2.2.2.2\" type=\"0x01\"/></communication>");
-              resolveMsg("<?xml version=\"1.0\" encoding=\"UTF-8\"?><communication version=\"1.9\" id=\"1\" state=\"partial\" adapter=\"10\" ><device id=\"1.1.1.1\" type=\"0x02\"><refresh>12</refresh></device></communication>");
-           
-            resolveMsg("<?xml version=\"1.0\" encoding=\"UTF-8\"?><communication version=\"1.9\" id=\"1\" state=\"gettimezone\" adapter=\"10\" ></communication>");
-            resolveMsg("<?xml version=\"1.0\" encoding=\"UTF-8\"?><communication version=\"1.9\" id=\"1\" state=\"settimezone\" adapter=\"10\" ><time utc=\"2\"/></communication>");
-
-            resolveMsg("<?xml version=\"1.0\" encoding=\"UTF-8\"?><communication version=\"1.9\" id=\"1\" state=\"delconaccount\" adapter=\"10\"><user email=\"\"/><user email=\"u\"/></communication>");
-            resolveMsg("<?xml version=\"1.0\" encoding=\"UTF-8\"?><communication version=\"1.9\" id=\"1\" state=\"changeconaccount\" adapter=\"10\"><user email=\"u@gmail.com\" role=\"guest\"/></communication>");
-*/
-            resolveMsg("<?xml version=\"1.0\" encoding=\"UTF-8\"?><communication version=\"1.9\" id=\"1\" state=\"logname\"  type=\"avg\" from=\"2014-07-31 00:00:00\" to=\"2014-07-31 16:47:43\" interval=\"3600\" adapter=\"10\"><device id=\"1.1.1.1\" type=\"0x01\"/> ></communication>");
-            return 0;
-            resolveMsg("<?xml version=\"1.0\" encoding=\"UTF-8\"?><communication version=\"1.0\" id=\"1\" state=\"addconaccount\" adapter=\"10\"><user email=\"nn\" role=\"n1\"/><user email=\"n\" role=\"n2\"/></communication>");
-
-            resolveMsg("<?xml version=\"1.0\" encoding=\"UTF-8\"?><communication version=\"1.0\" id=\"1\" state=\"getconaccount\" adapter=\"10\"></communication>");
-
-            resolveMsg("<?xml version=\"1.0\" encoding=\"UTF-8\"?><communication version=\"1.0\" id=\"1\" state=\"addview\" name=\"custom_name_of_view22\" icon=\"1\"  adapter=\"10\"><device id=\"1.1.1.1\" type=\"0x02\"/><device id=\"2.2.2.2\" type=\"0x01\"/></communication>");
-
-            resolveMsg("<?xml version=\"1.0\" encoding=\"UTF-8\"?><communication version=\"1.0\" id=\"1\" state=\"updateview\" name=\"custom_name_of_view\" icon=\"1\"  adapter=\"10\"><device id=\"1.1.1.1\" type=\"0x02\" action=\"remove\"/><device id=\"2.2.2.2\" type=\"0x01\" action=\"add\"/></communication>");
-
-            resolveMsg("<?xml version=\"1.0\" encoding=\"UTF-8\"?><communication version=\"1.0\" id=\"1\" state=\"getviews\"  adapter=\"10\"></communication>");
-            return 0;
-}
         
         SSL_CTX *ctx;
         int server;
