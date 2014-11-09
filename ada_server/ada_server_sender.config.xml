@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <Database>home3</Database>
+  <Port>7081</Port>
+  <ConnectionsCount>10</ConnectionsCount>
+  <AdapterPort>7978</AdapterPort>
+  <LogConfig>
+    <Level>7</Level>
+    <FileNaming>ada_server_sender</FileNaming>
+    <FilesCount>5</FilesCount>
+    <LinesCount>100000</LinesCount>
+  </LogConfig>
+ </configuration>
