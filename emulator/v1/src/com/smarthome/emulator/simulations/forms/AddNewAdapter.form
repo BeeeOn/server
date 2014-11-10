@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.smarthome.emulator.simulations.forms.AddNewAdapter">
+  <grid id="cbd77" binding="contentPane" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="10" left="10" bottom="10" right="10"/>
+    <constraints>
+      <xy x="48" y="54" width="619" height="271"/>
+    </constraints>
+    <properties>
+      <background color="-1"/>
+    </properties>
+    <border type="none"/>
+    <children>
+      <grid id="94766" binding="mainBtnsWrapPanel" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <background color="-1"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <grid id="9538f" binding="mainBtnsPanel" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="true" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <background color="-1"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <component id="e7465" class="javax.swing.JButton" binding="buttonOK">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                    <minimum-size width="115" height="24"/>
+                    <preferred-size width="115" height="24"/>
+                    <maximum-size width="115" height="24"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <background color="-5841665"/>
+                  <borderPainted value="false"/>
+                  <focusPainted value="false"/>
+                  <foreground color="-12303292"/>
+                  <margin top="2" left="0" bottom="2" right="0"/>
+                  <text value="Add"/>
+                </properties>
+              </component>
+              <component id="5723f" class="javax.swing.JButton" binding="buttonCancel">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                    <minimum-size width="115" height="24"/>
+                    <preferred-size width="115" height="24"/>
+                    <maximum-size width="115" height="24"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <background color="-3750202"/>
+                  <borderPainted value="false"/>
+                  <focusPainted value="false"/>
+                  <foreground color="-1"/>
+                  <margin top="2" left="0" bottom="2" right="0"/>
+                  <text value="Cancel"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+          <component id="501aa" class="javax.swing.JLabel" binding="warningLbl">
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <background color="-1"/>
+              <foreground color="-52429"/>
+              <text value=""/>
+            </properties>
+          </component>
+          <hspacer id="d325f">
+            <constraints>
+              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </hspacer>
+        </children>
+      </grid>
+      <grid id="e3588" binding="mainPanel" layout-manager="GridLayoutManager" row-count="3" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <background color="-1"/>
+          <foreground color="-12303292"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="24cb6" class="javax.swing.JLabel" binding="addNewAdapterLbl">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="211" height="40"/>
+              </grid>
+            </constraints>
+            <properties>
+              <font name="Segoe UI" size="28" style="0"/>
+              <foreground color="-13127169"/>
+              <labelFor value="43ee4"/>
+              <text value="Add new adapter"/>
+              <verticalAlignment value="1"/>
+            </properties>
+          </component>
+          <component id="2d9f2" class="javax.swing.JLabel" binding="adapterInfoLbl">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <background color="-1"/>
+              <font name="Segoe UI" size="14" style="1"/>
+              <foreground color="-8224126"/>
+              <labelFor value="1d4d8"/>
+              <opaque value="true"/>
+              <text value="Adapter information:"/>
+              <verticalAlignment value="1"/>
+            </properties>
+          </component>
+          <component id="81d3a" class="javax.swing.JLabel" binding="serverInfoLbl">
+            <constraints>
+              <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <background color="-1"/>
+              <font name="Segoe UI" size="14" style="1"/>
+              <foreground color="-8224126"/>
+              <labelFor value="1d4d8"/>
+              <opaque value="true"/>
+              <text value="Server information:"/>
+              <verticalAlignment value="1"/>
+            </properties>
+          </component>
+          <grid id="672eb" layout-manager="GridLayoutManager" row-count="4" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="5" left="2" bottom="2" right="2"/>
+            <constraints>
+              <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="2" hsize-policy="2" anchor="0" fill="3" indent="0" use-parent-layout="true"/>
+            </constraints>
+            <properties>
+              <background color="-1"/>
+            </properties>
+            <border type="line">
+              <color color="-1052689"/>
+            </border>
+            <children>
+              <component id="794ba" class="javax.swing.JLabel" binding="idLbl">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="5" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <background color="-1"/>
+                  <foreground color="-8224126"/>
+                  <text value="Id:"/>
+                  <verticalAlignment value="1"/>
+                </properties>
+              </component>
+              <component id="2053d" class="com.smarthome.emulator.design.JLimitedTextField" binding="idTextField" custom-create="true">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="1" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties/>
+              </component>
+              <component id="4fec4" class="javax.swing.JLabel" binding="nameLbl">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="5" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <background color="-1"/>
+                  <foreground color="-8224126"/>
+                  <text value="Name:"/>
+                </properties>
+              </component>
+              <component id="bbb1e" class="javax.swing.JTextField" binding="nameTextField">
+                <constraints>
+                  <grid row="1" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="1" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <background color="-1"/>
+                  <caretColor color="-8224126"/>
+                  <foreground color="-8224126"/>
+                  <margin top="0" left="5" bottom="0" right="10"/>
+                  <selectionColor color="-5841665"/>
+                </properties>
+              </component>
+              <component id="ed501" class="javax.swing.JLabel" binding="protocolLbl">
+                <constraints>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="5" fill="0" indent="0" use-parent-layout="false">
+                    <minimum-size width="100" height="-1"/>
+                    <preferred-size width="100" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <background color="-1"/>
+                  <foreground color="-8224126"/>
+                  <horizontalAlignment value="4"/>
+                  <horizontalTextPosition value="4"/>
+                  <text value="Comm.protocol:"/>
+                </properties>
+              </component>
+              <component id="1fe7" class="javax.swing.JTextField" binding="protocolTextField">
+                <constraints>
+                  <grid row="2" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="1" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <background color="-1"/>
+                  <caretColor color="-8224126"/>
+                  <foreground color="-8224126"/>
+                  <margin top="0" left="5" bottom="0" right="10"/>
+                  <selectionColor color="-5841665"/>
+                  <text value=""/>
+                </properties>
+              </component>
+              <component id="a44bb" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="5" fill="0" indent="0" use-parent-layout="false">
+                    <minimum-size width="100" height="-1"/>
+                    <preferred-size width="100" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <background color="-1"/>
+                  <foreground color="-8224126"/>
+                  <horizontalAlignment value="4"/>
+                  <horizontalTextPosition value="4"/>
+                  <text value="Registered:"/>
+                </properties>
+              </component>
+              <component id="292e9" class="javax.swing.JRadioButton" binding="registeredYesRadBtn">
+                <constraints>
+                  <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="9" fill="0" indent="0" use-parent-layout="false">
+                    <minimum-size width="-1" height="18"/>
+                    <preferred-size width="-1" height="18"/>
+                    <maximum-size width="-1" height="18"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <background color="-1"/>
+                  <foreground color="-8224126"/>
+                  <icon value="img/radioButtonNotSelected.png"/>
+                  <pressedIcon value="img/radioButtonSelected.png"/>
+                  <selected value="true"/>
+                  <selectedIcon value="img/radioButtonSelected.png"/>
+                  <text value="Yes"/>
+                </properties>
+              </component>
+              <component id="442ae" class="javax.swing.JRadioButton" binding="registeredNoRadBtn">
+                <constraints>
+                  <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="9" fill="0" indent="0" use-parent-layout="false">
+                    <minimum-size width="-1" height="18"/>
+                    <preferred-size width="-1" height="18"/>
+                    <maximum-size width="-1" height="18"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <background color="-1"/>
+                  <foreground color="-8224126"/>
+                  <icon value="img/radioButtonNotSelected.png"/>
+                  <pressedIcon value="img/radioButtonSelected.png"/>
+                  <selectedIcon value="img/radioButtonSelected.png"/>
+                  <text value="No"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+          <grid id="6e42" layout-manager="GridLayoutManager" row-count="4" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="5" left="2" bottom="2" right="2"/>
+            <constraints>
+              <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="true"/>
+            </constraints>
+            <properties>
+              <background color="-1"/>
+            </properties>
+            <border type="line">
+              <color color="-1052689"/>
+            </border>
+            <children>
+              <component id="75f99" class="javax.swing.JLabel" binding="addressLbl">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="5" fill="0" indent="0" use-parent-layout="false">
+                    <minimum-size width="80" height="-1"/>
+                    <preferred-size width="80" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <background color="-1"/>
+                  <foreground color="-8224126"/>
+                  <horizontalAlignment value="4"/>
+                  <horizontalTextPosition value="4"/>
+                  <requestFocusEnabled value="true"/>
+                  <text value="Address:"/>
+                </properties>
+              </component>
+              <component id="72202" class="javax.swing.JRadioButton" binding="hostRadBtn">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="9" fill="0" indent="0" use-parent-layout="false">
+                    <minimum-size width="-1" height="18"/>
+                    <preferred-size width="-1" height="18"/>
+                    <maximum-size width="-1" height="18"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <background color="-1"/>
+                  <foreground color="-8224126"/>
+                  <icon value="img/radioButtonNotSelected.png"/>
+                  <pressedIcon value="img/radioButtonSelected.png"/>
+                  <selected value="true"/>
+                  <selectedIcon value="img/radioButtonSelected.png"/>
+                  <text value="Host"/>
+                </properties>
+              </component>
+              <component id="3889a" class="javax.swing.JRadioButton" binding="ipRadBtn">
+                <constraints>
+                  <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="9" fill="0" indent="0" use-parent-layout="false">
+                    <minimum-size width="-1" height="18"/>
+                    <preferred-size width="-1" height="18"/>
+                    <maximum-size width="-1" height="18"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <background color="-1"/>
+                  <foreground color="-8224126"/>
+                  <icon value="img/radioButtonNotSelected.png"/>
+                  <pressedIcon value="img/radioButtonSelected.png"/>
+                  <selectedIcon value="img/radioButtonSelected.png"/>
+                  <text value="IP"/>
+                </properties>
+              </component>
+              <component id="98343" class="javax.swing.JTextField" binding="addressTextField">
+                <constraints>
+                  <grid row="1" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="1" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <background color="-1"/>
+                  <caretColor color="-8224126"/>
+                  <foreground color="-8224126"/>
+                  <selectionColor color="-5841665"/>
+                </properties>
+              </component>
+              <component id="d19e8" class="javax.swing.JLabel" binding="portLbl">
+                <constraints>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="5" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <background color="-1"/>
+                  <foreground color="-8224126"/>
+                  <requestFocusEnabled value="true"/>
+                  <text value="Port:"/>
+                </properties>
+              </component>
+              <component id="31410" class="com.smarthome.emulator.design.JNumberTextField" binding="portTextField" custom-create="true">
+                <constraints>
+                  <grid row="2" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="1" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties/>
+              </component>
+              <component id="c69fa" class="javax.swing.JLabel" binding="validateLbl">
+                <constraints>
+                  <grid row="3" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                    <minimum-size width="100" height="-1"/>
+                    <preferred-size width="100" height="-1"/>
+                    <maximum-size width="100" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <background color="-1"/>
+                  <foreground color="-7631989"/>
+                  <text value=""/>
+                </properties>
+              </component>
+              <component id="d2803" class="javax.swing.JButton" binding="validateBtn">
+                <constraints>
+                  <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                    <minimum-size width="100" height="24"/>
+                    <preferred-size width="100" height="24"/>
+                    <maximum-size width="100" height="24"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <background color="-5841665"/>
+                  <borderPainted value="false"/>
+                  <focusPainted value="false"/>
+                  <foreground color="-12303292"/>
+                  <margin top="5" left="0" bottom="5" right="0"/>
+                  <text value="Validate"/>
+                  <verticalAlignment value="0"/>
+                  <verticalTextPosition value="0"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+        </children>
+      </grid>
+    </children>
+  </grid>
+  <buttonGroups>
+    <group name="addressRadBtnsGroup">
+      <member id="72202"/>
+      <member id="3889a"/>
+    </group>
+    <group name="registeredGruop">
+      <member id="292e9"/>
+      <member id="442ae"/>
+    </group>
+  </buttonGroups>
+</form>
