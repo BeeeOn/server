@@ -13,7 +13,7 @@
   <property name="compiler.debug" value="on"/>
   <property name="compiler.generate.no.warnings" value="off"/>
   <property name="compiler.args" value=""/>
-  <property name="compiler.max.memory" value="128m"/>
+  <property name="compiler.max.memory" value="700m"/>
   <patternset id="ignored.files">
     <exclude name="**/CVS/**"/>
     <exclude name="**/SCCS/**"/>
@@ -34,15 +34,17 @@
     <exclude name="**/__pycache__/**"/>
     <exclude name="**/.bundle/**"/>
     <exclude name="**/*.rbc/**"/>
+    <exclude name="**/vssver.scc/**"/>
+    <exclude name="**/vssver2.scc/**"/>
   </patternset>
   <patternset id="library.patterns">
-    <include name="*.zip"/>
-    <include name="*.apk"/>
     <include name="*.war"/>
-    <include name="*.egg"/>
     <include name="*.ear"/>
-    <include name="*.ane"/>
+    <include name="*.apk"/>
+    <include name="*.zip"/>
     <include name="*.swc"/>
+    <include name="*.ane"/>
+    <include name="*.egg"/>
     <include name="*.jar"/>
   </patternset>
   <patternset id="compiler.resources">
@@ -90,8 +92,12 @@
   
   <!-- Project Libraries -->
   
+  <path id="library.dom4j-2.0.0-alpha-2.classpath">
+    <pathelement location="${basedir}/lib/dom4j-2.0.0-ALPHA-2.jar"/>
+  </path>
+  
   <path id="library.intellij_forms_rt.classpath">
-      <pathelement location="${basedir}/lib/dom4j-2.0.0-ALPHA-2.jar"/>
+    <pathelement location="${basedir}/lib/dom4j-2.0.0-ALPHA-2.jar"/>
     <pathelement location="${basedir}/lib/intellij_forms_rt.jar"/>
     <pathelement location="${basedir}/lib/jcommon-1.0.21.jar"/>
     <pathelement location="${basedir}/lib/jfreechart-1.0.17.jar"/>
@@ -121,23 +127,27 @@
   <path id="smarthomeemulator.module.production.classpath">
     <path refid="${module.jdk.classpath.smarthomeemulator}"/>
     <path refid="library.intellij_forms_rt.classpath"/>
+    <path refid="library.dom4j-2.0.0-alpha-2.classpath"/>
   </path>
   
   <path id="smarthomeemulator.runtime.production.module.classpath">
     <pathelement location="${smarthomeemulator.output.dir}"/>
     <path refid="library.intellij_forms_rt.classpath"/>
+    <path refid="library.dom4j-2.0.0-alpha-2.classpath"/>
   </path>
   
   <path id="smarthomeemulator.module.classpath">
     <path refid="${module.jdk.classpath.smarthomeemulator}"/>
     <pathelement location="${smarthomeemulator.output.dir}"/>
     <path refid="library.intellij_forms_rt.classpath"/>
+    <path refid="library.dom4j-2.0.0-alpha-2.classpath"/>
   </path>
   
   <path id="smarthomeemulator.runtime.module.classpath">
     <pathelement location="${smarthomeemulator.testoutput.dir}"/>
     <pathelement location="${smarthomeemulator.output.dir}"/>
     <path refid="library.intellij_forms_rt.classpath"/>
+    <path refid="library.dom4j-2.0.0-alpha-2.classpath"/>
   </path>
   
   
@@ -208,7 +218,6 @@
     <mkdir dir="${artifact.temp.output.smarthomeemulator:jar}"/>
     <jar destfile="${temp.jar.path.SmartHomeEmulator.jar}" duplicate="preserve" filesetmanifest="mergewithoutmain">
       <zipfileset dir="${smarthomeemulator.output.dir}"/>
-        <zipfileset src="${basedir}/lib/dom4j-2.0.0-ALPHA-2.jar"/>
       <zipfileset src="${basedir}/lib/intellij_forms_rt.jar"/>
       <zipfileset src="${basedir}/lib/jcommon-1.0.21.jar"/>
       <zipfileset src="${basedir}/lib/jfreechart-1.0.17.jar"/>
