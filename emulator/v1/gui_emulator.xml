@@ -221,6 +221,7 @@
       <zipfileset src="${basedir}/lib/intellij_forms_rt.jar"/>
       <zipfileset src="${basedir}/lib/jcommon-1.0.21.jar"/>
       <zipfileset src="${basedir}/lib/jfreechart-1.0.17.jar"/>
+      <zipfileset src="${basedir}/lib/dom4j-2.0.0-ALPHA-2.jar"/>
     </jar>
     <copy file="${temp.jar.path.SmartHomeEmulator.jar}" tofile="${artifact.temp.output.smarthomeemulator:jar}/SmartHomeEmulator.jar"/>
   </target>
