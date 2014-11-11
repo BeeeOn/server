@@ -7,6 +7,7 @@
 
 #include "testMsgInDelDevice.h"
 
+#include "ServerException.h"
 
 CPPUNIT_TEST_SUITE_REGISTRATION(testMsgInDelDevice);
 

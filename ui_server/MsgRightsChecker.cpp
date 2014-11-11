@@ -58,7 +58,7 @@ MsgRightsChecker::MsgRightsChecker() {
     this->_msgRightsTable[MsgInGetAdapters::state] = GUEST;
     /*SENSORS*/
     this->_msgRightsTable[MsgInGetAllDevices::state] = GUEST; 
-    this->_msgRightsTable[MsgInUpdate::state] = GUEST;
+    this->_msgRightsTable[MsgInGetDevs::state] = GUEST;
     this->_msgRightsTable[MsgInLogName::state] = GUEST;
     this->_msgRightsTable[MsgInDevices::state] = ADMIN; // USER na prepinani aktoru
     /*ROOMS*/

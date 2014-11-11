@@ -2,22 +2,22 @@
 
 using namespace std;
 
-const string MsgInUpdate::state = "getdevs";
+const string MsgInGetDevs::state = "getdevs";
 
-MsgInUpdate::MsgInUpdate(char* msg, pugi::xml_document* doc): IMsgInLoginRequired(msg, doc)
+MsgInGetDevs::MsgInGetDevs(char* msg, pugi::xml_document* doc): IMsgInLoginRequired(msg, doc)
 {
 }
 
-MsgInUpdate::~MsgInUpdate(void)
+MsgInGetDevs::~MsgInGetDevs(void)
 {
 }
 
-int MsgInUpdate::getMsgAuthorization() {
+int MsgInGetDevs::getMsgAuthorization() {
     return GUEST;
 }
 
 
-string MsgInUpdate::createResponseMsgOut()
+string MsgInGetDevs::createResponseMsgOut()
 {
     string adapterId;
     string facilityMac;
@@ -54,6 +54,8 @@ string MsgInUpdate::createResponseMsgOut()
                 device d;
                 d.id = facilityMac;
                 d.type = deviceType;
+                if(d.id == "" || d.type == "")
+                    continue;
                 //cout<<d.id<<d.type<<endl;
                 devicesVec.insert(devicesVec.begin(), d);
             }

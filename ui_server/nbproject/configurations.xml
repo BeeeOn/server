@@ -176,8 +176,6 @@
                      displayName="AlfaTest"
                      projectFiles="true"
                      kind="TEST">
-        <itemPath>newtestClass.cpp</itemPath>
-        <itemPath>newtestClass.h</itemPath>
         <itemPath>tests/newtestclass.cpp</itemPath>
         <itemPath>tests/newtestclass.h</itemPath>
         <itemPath>tests/newtestrunner.cpp</itemPath>
@@ -309,6 +307,14 @@
         <itemPath>tests/testMsgInGetConditions.cpp</itemPath>
         <itemPath>tests/testMsgInGetConditions.h</itemPath>
         <itemPath>tests/testrunnerMsgInGetConditions.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f23"
+                     displayName="testMsgInGetDevs"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/testMsgInGetDevs.cpp</itemPath>
+        <itemPath>tests/testMsgInGetDevs.h</itemPath>
+        <itemPath>tests/testrunnerMsgInGetDevs.cpp</itemPath>
       </logicalFolder>
       <logicalFolder name="f7"
                      displayName="testMsgInGetRooms"
@@ -964,6 +970,20 @@
           </linkerLibItems>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f23">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f23</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
       <folder path="TestFiles/f24">
         <cTool>
           <commandLine>`cppunit-config --cflags`</commandLine>
@@ -1183,10 +1203,6 @@
       </item>
       <item path="msgInGetCondition.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="newtestClass.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="newtestClass.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="pugiconfig.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="pugixml.cpp" ex="false" tool="1" flavor2="0">
@@ -1268,6 +1284,10 @@
       <item path="tests/testMsgInGetConditions.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/testMsgInGetConditions.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInGetDevs.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInGetDevs.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="tests/testMsgInGetRooms.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -1372,6 +1392,8 @@
             ex="false"
             tool="1"
             flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInGetDevs.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/testrunnerMsgInGetRooms.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -1958,6 +1980,20 @@
           </linkerLibItems>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f23">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f23</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
       <folder path="TestFiles/f24">
         <cTool>
           <commandLine>`cppunit-config --cflags`</commandLine>
@@ -2177,10 +2213,6 @@
       </item>
       <item path="msgInGetCondition.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="newtestClass.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="newtestClass.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="pugiconfig.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="pugixml.cpp" ex="false" tool="1" flavor2="0">
@@ -2262,6 +2294,10 @@
       <item path="tests/testMsgInGetConditions.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/testMsgInGetConditions.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/testMsgInGetDevs.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/testMsgInGetDevs.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="tests/testMsgInGetRooms.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -2366,6 +2402,8 @@
             ex="false"
             tool="1"
             flavor2="0">
+      </item>
+      <item path="tests/testrunnerMsgInGetDevs.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/testrunnerMsgInGetRooms.cpp" ex="false" tool="1" flavor2="0">
       </item>

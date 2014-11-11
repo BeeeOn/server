@@ -303,7 +303,9 @@ string DBConnector::getXMLdevices(int userId, vector<device> devicesVec)
              * 
             */
                 soci::session sql(*_pool);
-                
+                Logger::getInstance(Logger::DEBUG3)<<"devices n."<<devicesVec.size()<<"\n";
+                if( devicesVec.size() == 0)
+                    return "";
                 stringstream ssD,ssF;
                 ssD<<"(";
                 for (unsigned int i=0; i<devicesVec.size()-1; i++){
@@ -729,7 +731,7 @@ string DBConnector::getXMLDeviceLog(string adapterId, device device, string logF
                         "on full_time=date_trunc";*/
                  //TODO nezavisi na adapter_id        
                 
-                oss<<"select xmlagg( xmlelement(name row,a,' ',b ))from (select ceil(avg(timestamp)) as a,"<<aggregationFunction<<"(value) as b from "
+                oss<<"select xmlagg( xmlelement(name row,a,' ',b ))from (select ceil(avg(timestamp)) as a,  trunc("<<aggregationFunction<<"(value),2) as b from "
                         "logs where  fk_facilities_mac= :d_id and  fk_devices_type= :d_type and"<< timeCond<<" group by timestamp/"<<intInterval<<") as innerQ";
                         //select xmlagg(xmlelement(name row,a,' ',b ))from (select ceil(avg(timestamp)) as a,min(value) as b from logs where timestamp between 0 and 10000000000 group by timestamp/2) as x;
                 string query;

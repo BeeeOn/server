@@ -6,11 +6,11 @@
 #include "IMsgInLoginAndAdapterAccessRequired.h"
 
 using namespace std;
-class MsgInUpdate : public IMsgInLoginRequired
+class MsgInGetDevs : public IMsgInLoginRequired
 {
 public:
-    MsgInUpdate(char* msg, pugi::xml_document* doc);
-    virtual ~MsgInUpdate(void);
+    MsgInGetDevs(char* msg, pugi::xml_document* doc);
+    virtual ~MsgInGetDevs(void);
     
     virtual int getMsgAuthorization();
     

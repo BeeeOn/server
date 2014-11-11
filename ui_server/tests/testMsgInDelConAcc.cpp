@@ -7,7 +7,7 @@
 
 #include "testMsgInDelConAcc.h"
 #include "MsgInDelAccount.h"
-
+#include "../testHelper.h"
 
 CPPUNIT_TEST_SUITE_REGISTRATION(testMsgInDelConAcc);
 

@@ -160,7 +160,7 @@ void Servlet(SSL* ssl) {
         int readSize = 1024;
         char *rc=NULL;
         int count = 0;
-        again:
+        
         if ( (ret = SSL_accept(ssl)) != 1 ) {     /* do SSL-protocol accept */
                 ERR_print_errors_fp(stderr);
                 int ssl_err = SSL_get_error(ssl, ret);
@@ -183,7 +183,9 @@ void Servlet(SSL* ssl) {
 
                     received = SSL_read(ssl, buf, sizeof(buf)-1); /* get request */
                     buf[received] = '\0';
-                
+                    
+                    Logger::getInstance(Logger::DEBUG3)<<"ssl read ("<<received<<")result:"<< buf <<endl;
+                    
                     if(received > 0){
                         strcat (rc, buf);
                     }else{

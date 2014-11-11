@@ -6,6 +6,7 @@
  */
 
 #include "testMsgInAddRooms.h"
+#include "../testHelper.h"
 #include "ServerException.h"
 CPPUNIT_TEST_SUITE_REGISTRATION(testMsgInAddRooms);
 

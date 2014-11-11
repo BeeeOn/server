@@ -83,8 +83,8 @@ IMsgIn* MsgInFactory::createMsg(char* msg)
         return new MsgInGetAdapters(msg, doc);
     if(state == MsgInGetAllDevices::state)
         return new MsgInGetAllDevices(msg, doc);
-    if(state == MsgInUpdate::state)
-        return new MsgInUpdate(msg, doc);
+    if(state == MsgInGetDevs::state)
+        return new MsgInGetDevs(msg, doc);
     if(state == MsgInSignUp::state)
         return new MsgInSignUp(msg, doc);
     if(state == MsgInDevices::state)

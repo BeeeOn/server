@@ -8,6 +8,7 @@
 #include "testMsgInGetConAcc.h"
 #include "MsgInGetAccount.h"
 
+#include "ServerException.h"
 
 CPPUNIT_TEST_SUITE_REGISTRATION(testMsgInGetConAcc);
 

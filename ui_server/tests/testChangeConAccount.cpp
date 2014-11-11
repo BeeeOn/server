@@ -6,7 +6,8 @@
  */
 
 #include "testChangeConAccount.h"
-
+#include "../testHelper.h"
+#include "ServerException.h"
 
 CPPUNIT_TEST_SUITE_REGISTRATION(testChangeConAccount);
 

@@ -33,46 +33,46 @@ public:
    /* string getId();
     string getState();*/
 public:
-    static const int VERSION = 1;
-    static const int TOKEN_EMAIL = 2;
-    static const int EMAIL = 3; //+text
-    static const int LOCALE = 4;
+    static const int VERSION;
+    static const int TOKEN_EMAIL;
+    static const int EMAIL; //+text
+    static const int LOCALE;
 
-    static const int ADAPTER_ID = 5;
+    static const int ADAPTER_ID;
 
-    static const int AGG_FUNCTION = 8;
-    static const int INTERVAL = 9;
-    static const int DEVICE_ID_TYPE = 10; //+text
+    static const int AGG_FUNCTION;
+    static const int INTERVAL;
+    static const int DEVICE_ID_TYPE; //+text
 
-    static const int XML = 12;
+    static const int XML;
 
-    static const int MISSING_ENTITY = 13;
-    static const int ICON = 14;
-    static const int ACTION = 15;
-    static const int MSG_RIGHT = 16;
-    static const int ROLE = 17; //+text
-    static const int EMAIL_ROLE = 17; //+text
-    static const int TIME_UTC = 18;
+    static const int MISSING_ENTITY;
+    static const int ICON;
+    static const int ACTION;
+    static const int MSG_RIGHT;
+    static const int ROLE; //+text
+    static const int EMAIL_ROLE; //+text
+    static const int TIME_UTC;
 
-    static const int BAD_ACTOR_VALUE = 19;
+    static const int BAD_ACTOR_VALUE;
 
-    static const int RESIGN = 20;
-    static const int NOTREG_A = 21;
-    static const int NOTREG_B = 22;
+    static const int RESIGN;
+    static const int NOTREG_A;
+    static const int NOTREG_B;
 
-    static const int ROOM_TYPE = 50;
+    static const int ROOM_TYPE;
 
-    static const int SERVER2SERVER = 100;
-    static const int SWITCH_FAIL = 100;
-    static const int ADAPTER_LISTEN_FAIL =100;
+    static const int SERVER2SERVER;
+    static const int SWITCH_FAIL;
+    static const int ADAPTER_LISTEN_FAIL;
 
-    static const int WRONG_COND_OR_EMTPY_COND = 200;
-    static const int WRONG_OR_EMPTY_ACTION = 201;
-    static const int CONDITION_ACTION = 202;
+    static const int WRONG_COND_OR_EMTPY_COND;
+    static const int WRONG_OR_EMPTY_ACTION;
+    static const int CONDITION_ACTION;
 
-    static const int UNKNOWN_ERROR =998;
+    static const int UNKNOWN_ERROR;
     
-    static const int MSG_UNKNOWN = 999;
+    static const int MSG_UNKNOWN;
     
 };
 #endif	/* SERVEREXCEPTION_H */
