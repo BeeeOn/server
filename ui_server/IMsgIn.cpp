@@ -2,7 +2,7 @@
 
 
 using namespace std;
-const string IMsgIn::VERSION="2.2";
+const string IMsgIn::VERSION="2.3";
 
 
 IMsgIn::IMsgIn(char* msg, pugi::xml_document* doc)
@@ -11,15 +11,15 @@ IMsgIn::IMsgIn(char* msg, pugi::xml_document* doc)
     _msg = msg;
     _doc = doc;
     
-    std::string comId = _doc->child(P_COMMUNICATION).attribute(P_SESSION_ID).value();
+    std::string IHAtoken = _doc->child(P_COMMUNICATION).attribute(P_SESSION_ID).value();
     _state = _doc->child(P_COMMUNICATION).attribute(P_STATE).value();
     
     try{
-        _comId = stoi(comId);
-        if(_comId < 0 )
-            _comId = -1;
+        _IHAtoken = stoi(IHAtoken);
+        if(_IHAtoken < 0 )
+            _IHAtoken = -1;
     }catch(...){
-        _comId = -1;
+        _IHAtoken = -1;
     }
     
     _adapterId = _doc->child(P_COMMUNICATION).attribute(P_ADAPTER_ID).value();
@@ -50,7 +50,7 @@ string IMsgIn::envelopeResponseSetAttributes(string state, string response, stri
         //std::cout<<"envelope Msg "<<getState()<<std::endl;
         ss << "<com "
                         P_VERSION "="<<"\""<<VERSION<<"\" "<<
-                        P_SESSION_ID "=\"" << this->_comId << "\" "<<
+                        P_SESSION_ID "=\"" << this->_IHAtoken << "\" "<<
                         P_STATE "=\"" << state <<  "\""<<
                         " " << attributes<<
                         ">" 

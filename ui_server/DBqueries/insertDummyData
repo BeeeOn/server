@@ -4,6 +4,12 @@ INSERT INTO USERS (user_id,MAIL) VALUES (3,'user2a@gmail.com');
 INSERT INTO USERS (user_id,MAIL) VALUES (4,'user4@gmail.com');
 INSERT INTO USERS (user_id,MAIL) VALUES (5,'user1su@gmail.com');
 
+insert into mobile_devices(fk_user_id, token) values(1,1);
+insert into mobile_devices(fk_user_id, token) values(2,2);
+insert into mobile_devices(fk_user_id, token) values(3,3);
+insert into mobile_devices(fk_user_id, token) values(4,4);
+insert into mobile_devices(fk_user_id, token) values(5,5);
+
 INSERT INTO ADAPTERS (ADAPTER_ID,NAME,ip_address) VALUES (10, 'ad10', '::10');
 INSERT INTO ADAPTERS (ADAPTER_ID,NAME,ip_address) VALUES (20, 'ad20', '::20');
 INSERT INTO ADAPTERS (ADAPTER_ID,NAME,ip_address) VALUES (21, 'ad21', '::21');
@@ -16,6 +22,7 @@ INSERT INTO USERS_ADAPTERS (fk_adapter_id, fk_user_id, role) VALUES (20,2,'super
 INSERT INTO USERS_ADAPTERS (fk_adapter_id, fk_user_id, role) VALUES (21,2,'superuser');
 INSERT INTO USERS_ADAPTERS (fk_adapter_id, fk_user_id, role) VALUES (21,3,'admin');
 INSERT INTO USERS_ADAPTERS (fk_adapter_id, fk_user_id, role) VALUES (40,4,'superuser');
+
 
 INSERT INTO ROOMS	(room_id, fk_adapter_id,type,name) VALUES(100,10,3,'room100' );
 INSERT INTO ROOMS	(room_id, fk_adapter_id,type,name) VALUES(200,20,3,'room200' );

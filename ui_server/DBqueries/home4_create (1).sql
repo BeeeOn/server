@@ -1,7 +1,7 @@
 -- Created by Vertabelo (http://vertabelo.com)
 -- Script type: create
 -- Scope: [tables, references, sequences, views, procedures]
--- Generated at Thu Oct 23 20:24:24 UTC 2014
+-- Generated at Fri Nov 14 15:07:32 UTC 2014
 
 
 
@@ -12,7 +12,7 @@ CREATE TABLE actions (
     action_id serial  NOT NULL,
     name varchar(25)  NOT NULL,
     xml xml  NOT NULL,
-    fk_user_id int  NOT NULL,
+    fk_user_id decimal(21,0)  NOT NULL,
     CONSTRAINT actions_pk PRIMARY KEY (action_id)
 );
 
@@ -29,15 +29,6 @@ CREATE TABLE adapters (
     logging_period int  NOT NULL DEFAULT 7,
     CONSTRAINT adapters_pk PRIMARY KEY (adapter_id)
 );
-CREATE FUNCTION insert_room_trigger_function()
-RETURNS trigger AS '
-BEGIN
-  insert into rooms values (0,new.adapter_id,0);
-  return new;
-END' LANGUAGE 'plpgsql';
-
-CREATE TRIGGER insert_def_room AFTER INSERT ON adapters
-    FOR EACH ROW EXECUTE PROCEDURE insert_room_trigger_function();
 
 
 
@@ -47,7 +38,7 @@ CREATE TABLE conditions (
     name varchar(25)  NOT NULL,
     type varchar(3)  NOT NULL,
     xml xml  NOT NULL,
-    fk_user_id int  NOT NULL,
+    fk_user_id decimal(21,0)  NOT NULL,
     fk_action_id int  NULL,
     CONSTRAINT conditions_pk PRIMARY KEY (cond_id)
 );
@@ -75,7 +66,7 @@ CREATE TABLE facilities (
     init char(1)  NOT NULL DEFAULT '0',
     involved bigint  NOT NULL,
     timestamp bigint  NOT NULL,
-    fk_room_id bigint  NOT NULL,
+    fk_room_id bigint  NULL,
     fk_adapter_id decimal(20,0)  NOT NULL,
     CONSTRAINT facilities_pk PRIMARY KEY (mac)
 );
@@ -85,7 +76,7 @@ CREATE TABLE facilities (
 -- Table: gcm_ids
 CREATE TABLE gcm_ids (
     gcm_id text  NOT NULL,
-    fk_user_id int  NOT NULL,
+    fk_user_id decimal(21,0)  NOT NULL,
     CONSTRAINT gcm_ids_pk PRIMARY KEY (gcm_id,fk_user_id)
 );
 
@@ -94,10 +85,21 @@ CREATE TABLE gcm_ids (
 -- Table: logs
 CREATE TABLE logs (
     timestamp bigint  NOT NULL,
-    value int  NOT NULL,
+    value real  NOT NULL,
     fk_facilities_mac inet  NOT NULL,
     fk_devices_type smallint  NOT NULL,
     CONSTRAINT logs_pk PRIMARY KEY (timestamp,fk_facilities_mac,fk_devices_type)
+);
+
+
+
+-- Table: mobile_devices
+CREATE TABLE mobile_devices (
+    token bigint  NOT NULL,
+    fk_user_id decimal(21,0)  NOT NULL,
+    type varchar(255)  NULL,
+    ip inet  NULL,
+    CONSTRAINT mobile_devices_pk PRIMARY KEY (token)
 );
 
 
@@ -106,9 +108,9 @@ CREATE TABLE logs (
 CREATE TABLE notifications (
     text text  NOT NULL,
     "level" smallint  NOT NULL,
-    message_id int  NOT NULL,
+    message_id bigint  NOT NULL,
     timestamp timestamp  NOT NULL,
-    fk_user_id int  NOT NULL,
+    fk_user_id decimal(21,0)  NOT NULL,
     CONSTRAINT notifications_pk PRIMARY KEY (message_id)
 );
 
@@ -120,14 +122,14 @@ CREATE TABLE rooms (
     fk_adapter_id decimal(20,0)  NOT NULL,
     type smallint  NOT NULL,
     name varchar(50)  NOT NULL DEFAULT '',
-    CONSTRAINT rooms_pk PRIMARY KEY (room_id,fk_adapter_id)
+    CONSTRAINT rooms_pk PRIMARY KEY (room_id)
 );
 
 
 
 -- Table: users
 CREATE TABLE users (
-    user_id serial  NOT NULL,
+    user_id decimal(21,0)  NOT NULL,
     mail varchar(250)  NOT NULL,
     signin_count int  NOT NULL DEFAULT 0,
     phone_locale varchar(10)  NOT NULL DEFAULT 'cs',
@@ -149,7 +151,7 @@ ALTER TABLE users ADD UNIQUE (mail);
 
 -- Table: users_adapters
 CREATE TABLE users_adapters (
-    fk_user_id int  NOT NULL,
+    fk_user_id decimal(21,0)  NOT NULL,
     fk_adapter_id decimal(20,0)  NOT NULL,
     role varchar(15)  NOT NULL CHECK (role='guest' OR role='user' OR role='admin' OR role='superuser'),
     CONSTRAINT users_adapters_pk PRIMARY KEY (fk_user_id,fk_adapter_id)
@@ -160,7 +162,7 @@ CREATE TABLE users_adapters (
 -- Table: views
 CREATE TABLE views (
     name varchar(50)  NOT NULL,
-    fk_user_id int  NOT NULL,
+    fk_user_id decimal(21,0)  NOT NULL,
     icon smallint  NOT NULL DEFAULT 0,
     CONSTRAINT views_pk PRIMARY KEY (name,fk_user_id)
 );
@@ -170,7 +172,7 @@ CREATE TABLE views (
 -- Table: views_devices
 CREATE TABLE views_devices (
     fk_view_name varchar(50)  NOT NULL,
-    fk_user_id int  NOT NULL,
+    fk_user_id decimal(21,0)  NOT NULL,
     fk_facilities_mac inet  NOT NULL,
     fk_devices_type smallint  NOT NULL,
     CONSTRAINT views_devices_pk PRIMARY KEY (fk_view_name,fk_user_id,fk_facilities_mac,fk_devices_type)
@@ -253,8 +255,9 @@ ALTER TABLE facilities ADD CONSTRAINT facilities_adapters
 
 
 ALTER TABLE facilities ADD CONSTRAINT facilities_rooms 
-    FOREIGN KEY (fk_room_id,fk_adapter_id)
-    REFERENCES rooms (room_id,fk_adapter_id)
+    FOREIGN KEY (fk_room_id)
+    REFERENCES rooms (room_id)
+    ON DELETE  SET NULL 
     NOT DEFERRABLE 
     INITIALLY IMMEDIATE 
 ;
@@ -276,6 +279,18 @@ ALTER TABLE gcm_ids ADD CONSTRAINT gcm_ids_users
 ALTER TABLE logs ADD CONSTRAINT logs_devices 
     FOREIGN KEY (fk_facilities_mac,fk_devices_type)
     REFERENCES devices (fk_facilities_mac,type)
+    ON DELETE  CASCADE 
+    NOT DEFERRABLE 
+    INITIALLY IMMEDIATE 
+;
+
+-- Reference:  mobile_devices_users (table: mobile_devices)
+
+
+ALTER TABLE mobile_devices ADD CONSTRAINT mobile_devices_users 
+    FOREIGN KEY (fk_user_id)
+    REFERENCES users (user_id)
+    ON DELETE  CASCADE 
     NOT DEFERRABLE 
     INITIALLY IMMEDIATE 
 ;
@@ -348,18 +363,6 @@ ALTER TABLE views_devices ADD CONSTRAINT views_views_devices
 
 
 
-
-
-
-CREATE FUNCTION insert_room_trigger_function()
-RETURNS trigger AS '
-BEGIN
-  insert into rooms values (0,new.adapter_id,0);
-  return new;
-END' LANGUAGE 'plpgsql';
-
-CREATE TRIGGER insert_def_room AFTER INSERT ON adapters
-    FOR EACH ROW EXECUTE PROCEDURE insert_room_trigger_function();
 
 
 

@@ -31,7 +31,7 @@ string MsgInSetAction::createResponseMsgOut() {
         it->print(oss,"",pugi::format_raw);
     string actionXml = oss.str();
     //TODO kontrola validity akce?
-    string newActionId = DBConnector::getInstance().insertNewAction(_parredUserId, actionName, actionXml);
+    string newActionId = DBConnector::getInstance().insertNewAction(_gUserId, actionName, actionXml);
     //return new MsgOutActionCreated(_comId, newActionId, _state);
     return envelopeResponse(R_TRUE);
 }

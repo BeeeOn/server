@@ -18,8 +18,7 @@ int MsgInSignIn::getMsgAuthorization(){
 
 string MsgInSignIn::createResponseMsgOut()
 {
-    
-        pugi::xml_node comNode =  _doc->child(P_COMMUNICATION);
+    /*     pugi::xml_node comNode =  _doc->child(P_COMMUNICATION);
         string email = comNode.attribute(P_EMAIL).value();
         string gToken = comNode.attribute(P_GOOGLE_TOKEN).value();
         string phoneLocale = comNode.attribute(P_LOCALIZATION).value();
@@ -44,11 +43,12 @@ string MsgInSignIn::createResponseMsgOut()
             }catch(...){
                    Logger::getInstance(Logger::ERROR) << "google info update failed"<<endl;
             }
-            _comId = ComTable::getInstance().setComInfo(userId ,email);
+            _IHAtoken = ComTable::getInstance().setComInfo(userId ,email);
              return envelopeResponse(R_TRUE);
         }
         else if( DBConnector::getInstance().isAnyUnregistredAdapter() )
             throw ServerException(ServerException::NOTREG_A);
         else
-            throw ServerException(ServerException::NOTREG_B);
+            throw ServerException(ServerException::NOTREG_B);*/
+    return "";
 }

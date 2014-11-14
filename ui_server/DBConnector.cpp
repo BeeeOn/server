@@ -83,6 +83,65 @@ void DBConnector::clean(){
      delete _pool;
 }
 
+
+
+
+
+int DBConnector::insertNewUser(string gid, googleInfo gInfo)
+{
+        Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"insertNewUser"<<"\n";
+        try
+        {
+                soci::session sql(*_pool);
+                
+                sql << "insert into users( user_id, mail ) values(:gid, :mail)",
+                        use(gid, "gid"), use (gInfo.email,"mail");   
+                return 1;
+        }
+        catch (soci::postgresql_soci_error& e)
+        {
+                Logger::getInstance(Logger::ERROR) << "Error: " << e.what() << '\n';
+                return 0;
+        }
+}
+
+int DBConnector::insertNewIHAtoken(IhaToken ihaToken, string gId) {
+        Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"insertNewIHAtoken"<<"\n";
+        try
+        {
+                soci::session sql(*_pool);
+                
+                sql << "insert into mobile_devices( token, fk_user_id ) values(:token, :gid)",
+                        use (ihaToken,"token"), use(gId, "gid");   
+                return 1;
+        }
+        catch (soci::postgresql_soci_error& e)
+        {
+                Logger::getInstance(Logger::ERROR) << "Error: " << e.what() << '\n';
+                return 0;
+        }
+}
+
+GUserId DBConnector::getUserIdbyIhaToken(IhaToken ihaToken) {
+        Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"iha token valid?"<<"\n";
+        try
+        {
+                soci::session sql(*_pool);
+                
+                indicator ind;
+                GUserId gUserId = "";
+                sql << "select fk_user_id from mobile_devices where token = :token",
+                        use (ihaToken,"token"), into(gUserId,ind);   
+                return gUserId;
+        }
+        catch (soci::postgresql_soci_error& e)
+        {
+                Logger::getInstance(Logger::ERROR) << "Error: " << e.what() << '\n';
+                return 0;
+        }
+}
+
+
 bool DBConnector::isUserRegistred(std::string email)
 {
         Logger::getInstance(Logger::DEBUG3)<<"DB: is "<<email<<" registred?";
@@ -125,15 +184,16 @@ int DBConnector::getUserId(std::string email)
         }
 }
 
-string DBConnector::getUserRole(string userMail, string adapterId)
+
+string DBConnector::getUserRoleM(GUserId gUserId, string adapterId)
 {
-        Logger::getInstance(Logger::DEBUG3)<<"DB: get role "<<userMail<<" on "<<adapterId<<endl;
+        Logger::getInstance(Logger::DEBUG3)<<"DB: get role "<<gUserId<<" on "<<adapterId<<endl;
         string role;
         try
         {
                 session sql(*_pool);
-                sql << "select role from users_adapters where fk_user_id= (select user_id from users where mail=:mail) and fk_adapter_id = :adapter",
-                    use(userMail, "mail"), use(adapterId, "adapter"), into(role);
+                sql << "select role from users_adapters where fk_user_id= :guserid and fk_adapter_id = :adapter",
+                    use(gUserId, "guserid"), use(adapterId, "adapter"), into(role);
                 return role;
         }
         catch (soci::postgresql_soci_error& e)
@@ -286,7 +346,7 @@ std::string DBConnector::getXMLAllDevs(string adapter)
         
 }
 
-string DBConnector::getXMLdevices(int userId, vector<device> devicesVec)
+string DBConnector::getXMLdevices(GUserId userId, vector<device> devicesVec)
 {
          Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"getPartialDevices"<<"\n";
         try
@@ -437,23 +497,8 @@ bool DBConnector::isAdapterRegistrable(string adapterId){
         }
 }
 
-int DBConnector::insertNewUser(string mail)
-{
-        Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"insertNewUser"<<"\n";
-        try
-        {
-                soci::session sql(*_pool);
-                
-                sql << "insert into users( mail ) values(:mail)",
-                        use(mail, "mail");   
-                return 1;
-        }
-        catch (soci::postgresql_soci_error& e)
-        {
-                Logger::getInstance(Logger::ERROR) << "Error: " << e.what() << '\n';
-                return 0;
-        }
-}
+
+
 
 string DBConnector::getUserId(session & sql, string userMail)
 {
@@ -1065,14 +1110,14 @@ void DBConnector::deleteCondition(string condId) {
     }
 }
 
-string DBConnector::insertNewAction(int _parredUserId, string actionName, string actionXml) {
+string DBConnector::insertNewAction(GUserId userId, string actionName, string actionXml) {
     Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"insert action:"<<actionName<<"  "<<actionXml<<"\n";
     try{
         soci::session sql(*_pool);
         
         string newActionId;
         sql << "insert into actions(name, xml, fk_user_id) values(:name, :xml, :u_id) returning action_id",
-                use(actionName, "name"),use(actionXml,"xml"),use(_parredUserId,"u_id"),into(newActionId);
+                use(actionName, "name"),use(actionXml,"xml"),use(userId,"u_id"),into(newActionId);
 
         return newActionId;
     }
@@ -1083,8 +1128,8 @@ string DBConnector::insertNewAction(int _parredUserId, string actionName, string
     }
 }
 
-string DBConnector::getActionsList(int userld) {
-    Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"get actions list for "<<userld<<")\n";
+string DBConnector::getActionsList(GUserId userId) {
+    Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"get actions list for "<<userId<<")\n";
     try{
         soci::session sql(*_pool);
         
@@ -1096,7 +1141,7 @@ string DBConnector::getActionsList(int userld) {
                                                          ")"
                                                   ")"
                        "from actions where fk_user_id=:u_id",
-                use(userld, "u_id"), into(xml,ind);
+                use(userId, "u_id"), into(xml,ind);
         if(xml=="")
             throw ServerException(ServerException::WRONG_OR_EMPTY_ACTION);
         
@@ -1184,11 +1229,11 @@ int DBConnector::connectConditionWithAction(string condId, string actionId) {
     }
 }
 
-int DBConnector::updateUsersGCMID(int userId, string gcmid) {
+int DBConnector::updateUsersGCMID(GUserId userId, string gcmid) {
     return 0;
 }
 
-int DBConnector::updateUserGoogleInformation(int userId, googleInfo gInfo) {
+int DBConnector::updateUserGoogleInformation(GUserId userId, googleInfo gInfo) {
     Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"update ginfo"<<endl;
     try{
         soci::session sql(*_pool);

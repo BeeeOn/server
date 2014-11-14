@@ -7,15 +7,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/pavel/git-ant/ui_server/MsgInGetAllDevices.cpp</file>
-            <file>file:/home/pavel/git-ant/ui_server/IMsgIn.h</file>
-            <file>file:/home/pavel/git-ant/ui_server/DBConnector.cpp</file>
-            <file>file:/home/pavel/git-ant/ui_server/config.xml</file>
-            <file>file:/home/pavel/git-ant/ui_server/communication.cpp</file>
+            <file>file:/home/pavel/git-ant/ui_server/testHelper.h</file>
+            <file>file:/home/pavel/git-ant/ui_server/IMsgInLoginRequired.cpp</file>
+            <file>file:/home/pavel/git-ant/ui_server/IMsgIn.cpp</file>
+            <file>file:/home/pavel/git-ant/ui_server/tests/testMsgInPartial.cpp</file>
+            <file>file:/home/pavel/git-ant/ui_server/tests/testMsgInLogName.cpp</file>
+            <file>file:/home/pavel/git-ant/ui_server/IMsgInLoginUnwanted.cpp</file>
+            <file>file:/home/pavel/git-ant/ui_server/testHelper.cpp</file>
             <file>file:/home/pavel/git-ant/ui_server/ComTable.cpp</file>
-            <file>file:/home/pavel/git-ant/ui_server/MsgInGetDevices.cpp</file>
             <file>file:/home/pavel/git-ant/ui_server/ui_server.cpp</file>
-            <file>file:/home/pavel/git-ant/ui_server/DBConnector.h</file>
+            <file>file:/home/pavel/git-ant/ui_server/MsgInSignIn.cpp</file>
         </group>
     </open-files>
 </project-private>

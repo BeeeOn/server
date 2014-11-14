@@ -11,6 +11,48 @@ int getSessionId(pugi::xml_document* doc){
 int getErrCode(pugi::xml_document* doc){
     return doc->child(P_COMMUNICATION).attribute(P_ERRCODE).as_int(-1);
 }
+
+#include <string>
+#include <cstdarg>
+
+void createMsgInWithAttr(char*   msgin, string com_ver,string ses_id,string state, int nAttr , char* fmt, ...)
+{
+    va_list args;
+    va_start(args, fmt);
+    
+    std::stringstream ss;
+    ss<< "<" P_COMMUNICATION " " P_VERSION "=" COM_VERSION " " P_SESSION_ID "=\"" <<ses_id <<"\" "<< P_STATE "=\"" << state<< "\" ";
+    
+     for (int i=0 ;i<nAttr; i++)
+    {
+        char* attrName = va_arg(args, char*);
+        ss<< attrName;
+        char* attrValue = va_arg(args, char*);
+        ss<<  "=\""<< attrValue<< "\" ";
+    }
+    ss << " />";
+    strcpy (msgin,ss.str().c_str());
+    va_end(args);
+}
+
+
+void createMsgInWithAttr( char*   msgin, string com_ver,string ses_id,string state, std::initializer_list<string> argList )
+{
+    std::stringstream ss;
+    ss<< "<" P_COMMUNICATION " " P_VERSION "=" COM_VERSION " " P_SESSION_ID "=\"" <<ses_id <<"\" "<< P_STATE "=\"" << state<< "\" ";
+    
+    for ( std::initializer_list<string>::iterator it=argList.begin(); it!=argList.end(); it++){
+        ss<< *it;
+        if(it!=argList.end())
+            it++;
+        ss<<  "=\""<< *it<< "\" ";
+    }
+    
+    ss << " />";
+    strcpy (msgin,ss.str().c_str());
+}
+//createMsgInWithAttr(msg, "1", "2", "st",{"x","y","z","q"});
+
 void createMsgInWithAttributes(char*   msgin, string com_ver,string ses_id,string state){
     std::stringstream ss;
     ss<< "<" P_COMMUNICATION " " P_VERSION "=" COM_VERSION " " P_SESSION_ID "=\"" <<ses_id <<"\" "<< P_STATE "=\"" << state<< "\" " <<

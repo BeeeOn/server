@@ -1,32 +1,47 @@
 
 #include "MsgInSignUp.h"
 #include "ServerException.h"
-const std::string MsgInSignUp::state = "signup";
-MsgInSignUp::MsgInSignUp(char* msg, pugi::xml_document* doc): IMsgInLoginUnwanted(msg, doc)
+const std::string MsgInGetUID::state = "getuid";
+
+long long int MsgInGetUID::_IHAtokenGenerator = 100;
+
+MsgInGetUID::MsgInGetUID(char* msg, pugi::xml_document* doc): IMsgInLoginUnwanted(msg, doc)
 {
 }
 
 
-MsgInSignUp::~MsgInSignUp(void)
+MsgInGetUID::~MsgInGetUID(void)
 {
 }
 
-int MsgInSignUp::getMsgAuthorization() {
+int MsgInGetUID::getMsgAuthorization() {
     return EVERYONE;
 }
 
-string MsgInSignUp::createResponseMsgOut()
+string MsgInGetUID::createResponseMsgOut()
 {
-    Logger::getInstance(Logger::DEBUG)<<"register new user"<<"\n";
-    string mail  =  _doc->child(P_COMMUNICATION).attribute(P_EMAIL).value();
+    Logger::getInstance(Logger::DEBUG)<<"GUID"<<"\n";
+    string gId  =  _doc->child(P_COMMUNICATION).attribute(P_GOOGLE_ID).value();
     string gToken = _doc->child(P_COMMUNICATION).attribute(P_GOOGLE_TOKEN).value();
+    string phoneLocale = _doc->child(P_COMMUNICATION).attribute(P_LOCALIZATION).value();
     
     googleInfo gInfo;
-    if( !isGTokenOk(gToken, mail, gInfo) )
+    if( !isGTokenOk(gToken, gId, gInfo) )
         throw ServerException(ServerException::TOKEN_EMAIL);
     
-    if( DBConnector::getInstance().insertNewUser(mail) == 0)
+    if( DBConnector::getInstance().insertNewUser(gId, gInfo) == 0)
         throw ServerException(ServerException::TOKEN_EMAIL);
     
-    return envelopeResponse(R_TRUE);
+       long long int IHAtoken = getnewIHAtoken();
+       
+    if( DBConnector::getInstance().insertNewIHAtoken(IHAtoken, gId) == 0)
+        throw ServerException(ServerException::TOKEN_EMAIL);
+       
+       string attr = makeXMLattribute(P_SESSION_ID, to_string(IHAtoken));
+    return envelopeResponseWithAttributes(R_UID, attr);
+}
+
+long long int MsgInGetUID::getnewIHAtoken() {
+    _IHAtokenGenerator++;
+    return _IHAtokenGenerator;
 }

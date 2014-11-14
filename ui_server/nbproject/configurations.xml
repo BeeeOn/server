@@ -68,14 +68,13 @@
       <itemPath>MsgRightsChecker.h</itemPath>
       <itemPath>ServerException.h</itemPath>
       <itemPath>SocketClient.h</itemPath>
-      <itemPath>ThreadPool.h</itemPath>
       <itemPath>communication.h</itemPath>
       <itemPath>gTokenChecker.h</itemPath>
       <itemPath>pugiconfig.hpp</itemPath>
       <itemPath>pugixml.hpp</itemPath>
-      <itemPath>stdafx.h</itemPath>
-      <itemPath>targetver.h</itemPath>
+      <itemPath>sslServlet.h</itemPath>
       <itemPath>testHelper.h</itemPath>
+      <itemPath>ui_server.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -165,6 +164,7 @@
       <itemPath>communication.cpp</itemPath>
       <itemPath>gTokenChecker.cpp</itemPath>
       <itemPath>pugixml.cpp</itemPath>
+      <itemPath>sslServlet.cpp</itemPath>
       <itemPath>testHelper.cpp</itemPath>
       <itemPath>ui_server.cpp</itemPath>
     </logicalFolder>
@@ -727,8 +727,6 @@
       </item>
       <item path="SocketClient.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="ThreadPool.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="ccolor.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="ccolor.h" ex="false" tool="3" flavor2="0">
@@ -1209,9 +1207,9 @@
       </item>
       <item path="pugixml.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="stdafx.h" ex="false" tool="3" flavor2="0">
+      <item path="sslServlet.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="targetver.h" ex="false" tool="3" flavor2="0">
+      <item path="sslServlet.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="testHelper.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -1442,6 +1440,8 @@
             flavor2="0">
       </item>
       <item path="ui_server.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ui_server.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -1756,8 +1756,6 @@
       <item path="SocketClient.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="SocketClient.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="ThreadPool.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="ccolor.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -2219,9 +2217,9 @@
       </item>
       <item path="pugixml.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="stdafx.h" ex="false" tool="3" flavor2="0">
+      <item path="sslServlet.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="targetver.h" ex="false" tool="3" flavor2="0">
+      <item path="sslServlet.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="testHelper.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -2452,6 +2450,8 @@
             flavor2="0">
       </item>
       <item path="ui_server.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ui_server.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>

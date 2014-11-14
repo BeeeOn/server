@@ -20,6 +20,7 @@ public:
     virtual enumAccessStatus checkAccess();
 
     string _role;
+    
 };
 
 #endif	/* IMSGINLOGINANDADAPTERACCESSREQUIRED_H */

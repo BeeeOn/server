@@ -8,7 +8,8 @@
 #define P_ERRCODE "errcode"
 #define P_STATE "state"
 #define P_EMAIL "email"
-#define P_SESSION_ID "sid"
+#define P_SESSION_ID "uid"
+#define P_GOOGLE_ID "gid"
 
 #define P_ADAPTER "adapter"
 #define P_FACILITY "dev"
@@ -68,6 +69,7 @@
 
 #define R_TRUE "true"
 #define R_FALSE "false"
+#define R_UID "uid"
 #define R_ACCOUNTS "accounts"
 #define R_DEVICES_ALL "alldevs"
 #define R_DEVICES "devs"
@@ -78,11 +80,16 @@
 #define R_VIEWS "views"
 #define R_LOG "logdata"
 
-
+#define EVERYONE 1
+#define GUEST 2
+#define USER 3
+#define ADMIN 4
+#define SUPERUSER 5
 
 #include <string>
 #include <iostream>
-
+#include <inttypes.h>
+        
 #include "ComTable.h"
 
 #include "pugiconfig.hpp"
@@ -100,11 +107,8 @@ struct device {
     string type;
 };
 
-#define EVERYONE 1
-#define GUEST 2
-#define USER 3
-#define ADMIN 4
-#define SUPERUSER 5
+typedef long long int IhaToken;
+typedef string GUserId;
 
 enum enumAccessStatus { GRANTED, FORBIDDEN_NOT_LOGGED, FORBIDDEN_WRONG_RIGHTS };
 
@@ -121,7 +125,7 @@ public:
         bool checkProtocolVersion();
 public:
         std::string _state;
-        int _comId;
+        long long int _IHAtoken;
         string _adapterId;
 protected:
         char* _msg;

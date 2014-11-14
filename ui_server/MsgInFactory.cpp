@@ -64,7 +64,7 @@ IMsgIn* MsgInFactory::createMsg(char* msg)
         
     if (!result)
     {
-        Logger::getInstance(Logger::DEBUG2) << "XML [" << msg << "] parsed with errors, attr value: [" << doc->child("node").attribute("attr").value() << "]\n";
+        Logger::getInstance(Logger::DEBUG2) << "XML [" << msg << "] parsed with errors\n";
         Logger::getInstance(Logger::DEBUG2) << "Error description: " << result.description() << "\n";
         Logger::getInstance(Logger::DEBUG2) << "Error offset: " << result.offset << " (error at [..." << (msg + result.offset) << "]"<<endl;
         return new MsgInUnknown(msg,doc); 
@@ -85,8 +85,8 @@ IMsgIn* MsgInFactory::createMsg(char* msg)
         return new MsgInGetAllDevices(msg, doc);
     if(state == MsgInGetDevs::state)
         return new MsgInGetDevs(msg, doc);
-    if(state == MsgInSignUp::state)
-        return new MsgInSignUp(msg, doc);
+    if(state == MsgInGetUID::state)
+        return new MsgInGetUID(msg, doc);
     if(state == MsgInDevices::state)
         return new MsgInDevices(msg, doc);
     if(state == MsgInUpdateRooms::state)
