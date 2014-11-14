@@ -757,7 +757,7 @@ string DBConnector::getXMLDeviceLog(string adapterId, device device, string logF
                 Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"RAW data\n";
                 
                 sql<<"select xmlagg("
-                        " xmlelement(name row, concat( timestamp, ' ' ,logs.value) )"
+                        " xmlelement(name row, timestamp || ' ' || logs.value )"
                         ")"
                         "from logs where  fk_facilities_mac= :d_id and  fk_devices_type= :d_type and"+ timeCond
                         ,use(device.id,"d_id"), use(device.type, "d_type"), soci::into(xml, ind);
@@ -776,7 +776,7 @@ string DBConnector::getXMLDeviceLog(string adapterId, device device, string logF
                         "on full_time=date_trunc";*/
                  //TODO nezavisi na adapter_id        
                 
-                oss<<"select xmlagg( xmlelement(name row,a,' ',b ))from (select ceil(avg(timestamp)) as a,  trunc("<<aggregationFunction<<"(value),2) as b from "
+                oss<<"select xmlagg( xmlelement(name row,a,' ',b ))from (select ceil(avg(timestamp)) as a,  trunc("<<aggregationFunction<<"(value)::numeric,2) as b from "
                         "logs where  fk_facilities_mac= :d_id and  fk_devices_type= :d_type and"<< timeCond<<" group by timestamp/"<<intInterval<<") as innerQ";
                         //select xmlagg(xmlelement(name row,a,' ',b ))from (select ceil(avg(timestamp)) as a,min(value) as b from logs where timestamp between 0 and 10000000000 group by timestamp/2) as x;
                 string query;
