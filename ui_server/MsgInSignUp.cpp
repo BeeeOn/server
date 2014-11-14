@@ -30,7 +30,7 @@ string MsgInGetUID::createResponseMsgOut()
         throw ServerException(ServerException::TOKEN_EMAIL);
     
     if( DBConnector::getInstance().insertNewUser(gId, gInfo) == 0)
-        throw ServerException(ServerException::TOKEN_EMAIL);
+            Logger::getInstance(Logger::DEBUG3)<<gId<<" already exist?"<<"\n";
     
        long long int IHAtoken = getnewIHAtoken();
     

@@ -137,7 +137,8 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
                         rc = (char*)realloc (rc, (count + 1) * readSize * sizeof (char) + 1);
                     
                     received = SSL_read(ssl, buf, sizeof(buf)-1); /* get request */
-                    buf[received] = '\0';
+                    if(received >= 0)
+                        buf[received] = '\0';
                     
                     Logger::getInstance(Logger::DEBUG3)<<"ssl read ("<<received<<")result:"<< buf <<endl;
                     
@@ -167,6 +168,7 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
                         SSL_write(ssl, replyString.c_str(), replyString.length() ); /* send reply */
                         count =0;
                         rc=NULL;
+                        buf[0] = '\0';
                         goto read;
                 }
                 else {
