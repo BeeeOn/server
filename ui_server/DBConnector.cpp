@@ -921,13 +921,13 @@ int DBConnector::addConAccount(string adapterId, string userMail, string newRole
 /***************************************************************************************************************/
  /*                                                           VIEWS                                                                                                              */
 /***************************************************************************************************************/
-void DBConnector::addView(string userMail, string viewName, string viewIcon){
+void DBConnector::addView(string gId, string viewName, string viewIcon){
         Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"add view:"<<viewName<<")\n";
     try{
         soci::session sql(*_pool);
        
-        sql << "insert into views( name, fk_user_id, icon ) values(:name,  (select user_id from users where mail=:mail), :icon)",
-                        use(viewName, "name"), use(userMail, "mail"), use(viewIcon, "icon");        
+        sql << "insert into views( name, fk_user_id, icon ) values(:name,  :gid, :icon)",
+                        use(viewName, "name"), use(gId, "gid"), use(viewIcon, "icon");        
         return ;
     }
     catch (soci::postgresql_soci_error& e)
