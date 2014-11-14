@@ -219,7 +219,7 @@ void DBConnector::updatePhoneLocale(string mail, string phoneLocale){
                 throw;
         }
 }
-std::string DBConnector::getXMLusersAdapters(std::string email)
+std::string DBConnector::getXMLusersAdapters(std::string gId)
 {
         Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"make usersAdapterListXml\n";
         try
@@ -228,8 +228,8 @@ std::string DBConnector::getXMLusersAdapters(std::string email)
                 std::string xml;
                 indicator ind;
                 sql << "select xmlagg(xmlelement(name adapter, xmlattributes(adapter_id as id, adapters.name as name, role as role, timezone as utc)))"
-                                    "from users join users_adapters on user_id=fk_user_id join adapters on fk_adapter_id = adapter_id where mail=:mail"
-                            ,use(email,"mail"), soci::into(xml,ind);
+                                    "from users join users_adapters on user_id=fk_user_id join adapters on fk_adapter_id = adapter_id where user_id = :gid"
+                            ,use(gId,"gid"), soci::into(xml,ind);
                 Logger::getInstance(Logger::DEBUG3)<<"sql done result:"<<std::endl;
                 if(ind != i_ok)
                     return "";
@@ -518,7 +518,7 @@ string DBConnector::getUserId(session & sql, string userMail)
 }
 
 
-int DBConnector::parAdapterWithUserIfPossible(int adapterId, string adapterName, string mail){
+int DBConnector::parAdapterWithUserIfPossible(int adapterId, string adapterName, string gId){
     Logger::getInstance(Logger::DEBUG3)<< "par user - adapter (new user?)\n";
     try
     {
@@ -526,8 +526,8 @@ int DBConnector::parAdapterWithUserIfPossible(int adapterId, string adapterName,
        
         string role = "superuser";
         
-        sql << "insert into users_adapters(fk_adapter_id, fk_user_id, role) values(:a_id ,(select user_id from users where mail=:u_mail), :role)",
-                use(adapterId, "a_id"), use(role, "role"),  use(mail, "u_mail");
+        sql << "insert into users_adapters(fk_adapter_id, fk_user_id, role) values(:a_id , :gId, :role)",
+                use(adapterId, "a_id"), use(role, "role"),  use(gId, "gId");
         sql << "update adapters set name=:a_name where adapter_id=:a_id",
                  use(adapterId, "a_id"), use(adapterName, "a_name");
         //TODO if adapter is registrable, 2x sql
@@ -937,13 +937,13 @@ void DBConnector::addView(string userMail, string viewName, string viewIcon){
     }
 } 
 
-void DBConnector::addDeviceToView(string  viewName, string  userMail, string deviceId, string deviceType){
+void DBConnector::addDeviceToView(string  viewName, string  gId, string deviceId, string deviceType){
             Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"addDeviceToView:"<<viewName<<")\n";
     try{
         soci::session sql(*_pool);
        //TODO musi se propojit s mailem-adapterem-device, protože jinak by mohl koukat na cizi zařizeni
-        sql << "insert into views_devices ( fk_view_name, fk_user_id, fk_devices_mac, fk_devices_type ) values(:name,  (select user_id from users where mail=:mail), :d_id, :d_type)",
-                        use(viewName, "name"), use(userMail, "mail"), use(deviceId, "d_id"), use(deviceType, "d_type");        
+        sql << "insert into views_devices ( fk_view_name, fk_user_id, fk_devices_mac, fk_devices_type ) values(:name,  :gid, :d_id, :d_type)",
+                        use(viewName, "name"), use(gId, "gid"), use(deviceId, "d_id"), use(deviceType, "d_type");        
         return ;
     } 
     catch (soci::postgresql_soci_error& e)
@@ -953,13 +953,13 @@ void DBConnector::addDeviceToView(string  viewName, string  userMail, string dev
     }
 }
 
-void DBConnector::removeDeviceFromView(string  viewName, string  userMail, string deviceId, string deviceType){
+void DBConnector::removeDeviceFromView(string  viewName, string  gId, string deviceId, string deviceType){
             Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"removeDeviceToView:"<<viewName<<")\n";
     try{
         soci::session sql(*_pool);
         
-        sql << "delete from views_devices where fk_view_name=:name and fk_user_id = (select user_id from users where mail=:mail) and fk_devices_mac = :d_id and fk_devices_type = :d_type",
-                        use(viewName, "name"), use(userMail, "mail"), use(deviceId, "d_id"), use(deviceType, "d_type");        
+        sql << "delete from views_devices where fk_view_name=:name and fk_user_id = :gid and fk_devices_mac = :d_id and fk_devices_type = :d_type",
+                        use(viewName, "name"), use(gId, "gid"), use(deviceId, "d_id"), use(deviceType, "d_type");        
         return ;
     }
     catch (soci::postgresql_soci_error& e)
@@ -969,13 +969,13 @@ void DBConnector::removeDeviceFromView(string  viewName, string  userMail, strin
     }
 }
 
-void DBConnector::delView(string viewName, string userMail){
+void DBConnector::delView(string viewName, string gId){
     Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"delView:"<<viewName<<")\n";
     try{
         soci::session sql(*_pool);
         
-        sql << "delete from views where name=:name and fk_user_id = (select user_id from users where mail=:mail) ",
-                use(viewName, "name"), use(userMail, "mail");        
+        sql << "delete from views where name=:name and fk_user_id = :gid ",
+                use(viewName, "name"), use(gId, "gid");        
         return ;
     }
     catch (soci::postgresql_soci_error& e)
@@ -985,8 +985,8 @@ void DBConnector::delView(string viewName, string userMail){
     }
 }
 
-string DBConnector::viewsList(string userMail){
-    Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"viewList:"<<userMail<<")\n";
+string DBConnector::viewsList(string gId){
+    Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"viewList:"<<gId<<")\n";
     try{
         soci::session sql(*_pool);
         
@@ -995,8 +995,8 @@ string DBConnector::viewsList(string userMail){
         sql << "select xmlagg("
                                                 "xmlelement(name \"view\", xmlattributes(name as name, icon as icon)) "
                                                   ")"
-                       "from views where fk_user_id=(select user_id from users where mail=:mail)",
-            use(userMail, "mail"),into(xml, ind);
+                       "from views where fk_user_id=:gid",
+            use(gId, "gid"),into(xml, ind);
 
             if(ind != i_ok)
                 return "";        
@@ -1009,14 +1009,14 @@ string DBConnector::viewsList(string userMail){
     }
 }
 
-string DBConnector::insertNewCondition(string mail, string condName, string condType, string condXml) {
+string DBConnector::insertNewCondition(string gId, string condName, string condType, string condXml) {
     Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"insert Cond:"<<condName<<"\n";
     try{
         soci::session sql(*_pool);
         
         string newCondId;
-        sql << "insert into conditions(name, type, xml, fk_user_id) values(:name, :type, :xml,(select user_id from users where mail=:mail) ) returning cond_id",
-                use(condName, "name"),use(condType,"type"),use(condXml,"xml"),use(mail,"mail"),into(newCondId);
+        sql << "insert into conditions(name, type, xml, fk_user_id) values(:name, :type, :xml,:gid ) returning cond_id",
+                use(condName, "name"),use(condType,"type"),use(condXml,"xml"),use(gId,"gid"),into(newCondId);
 
         return newCondId;
     }

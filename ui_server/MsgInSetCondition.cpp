@@ -31,7 +31,7 @@ string MsgInSetCondition::createResponseMsgOut() {
     string condXml = oss.str();
     //TODO kontrola validity podminky?
     //TODO kontrola typu + test
-    string condId = DBConnector::getInstance().insertNewCondition(_parredUserMail, condName, condType, condXml);
+    string condId = DBConnector::getInstance().insertNewCondition(_gUserId, condName, condType, condXml);
     
     
     //return new MsgOutConditionCreated(_comId, condId, _state);

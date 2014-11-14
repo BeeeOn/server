@@ -20,7 +20,7 @@ string MsgInAddAdapter::createResponseMsgOut() {
     int adapterId = adapterNode.attribute(P_ADAPTER_ID).as_int(0);
     string adapterName = adapterNode.attribute(P_ADAPTER_NAME).value();
     
-    if(DBConnector::getInstance().parAdapterWithUserIfPossible(adapterId, adapterName, _parredUserMail) == 0)
+    if(DBConnector::getInstance().parAdapterWithUserIfPossible(adapterId, adapterName, _gUserId) == 0)
         throw ServerException(ServerException::ADAPTER_ID);
     
     return envelopeResponse(R_TRUE);

@@ -10,7 +10,7 @@
 
 IMsgInLoginRequired::IMsgInLoginRequired(char* msg, pugi::xml_document* doc): IMsgIn(msg, doc) {
     
-    Logger::getInstance(Logger::DEBUG)<<"user:"<<_parredUserMail<<" comId:"<<_IHAtoken<<endl;
+    Logger::getInstance(Logger::DEBUG)<<"user:"<<_gUserId<<" comId:"<<_IHAtoken<<endl;
 }
 
 IMsgInLoginRequired::~IMsgInLoginRequired() {

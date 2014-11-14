@@ -53,7 +53,7 @@ public:
     string getXMLdevices(GUserId userId, vector<device> devicesVec);
     string getXMLNewDevices(string adapterId);
     bool isAdapterRegistrable(string adapterId);
-    int parAdapterWithUserIfPossible(int adapterId, string adapterName, string mail);
+    int parAdapterWithUserIfPossible(int adapterId, string adapterName, string gId);
     void insertNewUserParredWithUnregistredAdapter(string adapterId, string mail, bool registerNewUser = false);
     
     /*ROOMS*/

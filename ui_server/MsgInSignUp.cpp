@@ -44,5 +44,5 @@ string MsgInGetUID::createResponseMsgOut()
 
 long long int MsgInGetUID::getnewIHAtoken() {
     _IHAtokenGenerator++;
-    return _IHAtokenGenerator;
+    return stoll( DBConnector::getInstance().DEBUGexec("select max(token)+1 from mobile_devices ") );
 }

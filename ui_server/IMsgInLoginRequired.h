@@ -19,7 +19,6 @@ public:
     virtual bool isComIdValid();
     virtual enumAccessStatus checkAccess();
 
-    string _parredUserMail;
     GUserId _gUserId;
 };
 
