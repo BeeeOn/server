@@ -28,7 +28,7 @@ string MsgInGetUID::createResponseMsgOut()
     googleInfo gInfo;
     if( !isGTokenOk(gToken, gId, gInfo) )
         throw ServerException(ServerException::TOKEN_EMAIL);
-    
+    //TODO upsert
     if( DBConnector::getInstance().insertNewUser(gId, gInfo) == 0)
             Logger::getInstance(Logger::DEBUG3)<<gId<<" already exist?"<<"\n";
     

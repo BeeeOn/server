@@ -292,27 +292,6 @@ string DBConnector::getXMLDevicesQueryString(string facilitiesCond)
                 ") "
                 ;
 
-    
-    /* verze home2
-    return  "xmlagg("
-                        "xmlelement("
-                            "name dev,"
-                            "xmlattributes(\"mac\" as \"id\", \"type\" as \"type\", \"init\" as \"initialized\", to_char(timestamp, "DBTIMEFORMAT") as \"involved\", \"visibility\" as \"visibility\" ),"
-                            "xmlelement(name \"location\", "
-                                    "xmlattributes(\"fk_room_id\" as \"id\") "
-                            "),"
-                            "xmlforest(devices.name as \"name\",refresh,battery,quality),"
-                            "xmlelement(name \"value\", "
-                                        "xmlattributes(to_char(timestamp, "DBTIMEFORMAT") as \"hwupdated\") ,"
-                                        "value"
-                            "),"
-                            "xmlelement(name \"logging\", "
-                                        "xmlattributes(\"log_en\" as \"enabled\") "
-                            ")"
-                        ")"
-                   ")"
-            ;  
-    */
 }
 std::string DBConnector::getXMLAllDevs(string adapter)
 {
@@ -351,44 +330,29 @@ string DBConnector::getXMLdevices(GUserId userId, vector<device> devicesVec)
          Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"getPartialDevices"<<"\n";
         try
         {
-            /*
-             * select xmlagg(
-                        xmlelement(name  dev,xmlattributes(mac as did),
-                                                (select xmlagg(xmlelement(name part,xmlattributes(type as type)))
-                                                from devices where fk_facilities_mac=mac and concat(fk_facilities_mac,type) in('0.0.10.11','0.0.10.21') )
-                    )
-                )
-                from users_adapters as ua join adapters on ua.fk_adapter_id=adapter_id join facilities on adapters.adapter_id=facilities.fk_adapter_id
-                where ua.fk_user_id = 1 
-             * 
-            */
                 soci::session sql(*_pool);
                 Logger::getInstance(Logger::DEBUG3)<<"devices n."<<devicesVec.size()<<"\n";
                 if( devicesVec.size() == 0)
                     return "";
                 stringstream ssD,ssF;
                 ssD<<"(";
-                for (unsigned int i=0; i<devicesVec.size()-1; i++){
-                    //cout<<devicesVec[i].id<<devicesVec[i].type<<","<<endl;
-                    ssD << "'"<<devicesVec[i].id<<devicesVec[i].type<<"'"<<",";
+                 ssF<<"(";
+                for (unsigned int i=0; i<devicesVec.size(); i++){
+                    ssD << "('"<<devicesVec[i].id<<"',"<<devicesVec[i].type<<")";
+                    ssF << "'"<<devicesVec[i].id<<"'";
                     
+                    if( i != devicesVec.size()-1){
+                        ssD <<",";
+                        ssF <<",";
+                    }
                 }
-                if(devicesVec.size() >0)//TODO vylepšit podmínku
-                ssD<<"'"<<devicesVec[devicesVec.size()-1].id<<devicesVec[devicesVec.size()-1].type<<"'";
                 ssD<<")";
-                
+                 ssF<<")";
                 string devices = ssD.str();
-                /*
-                ssF<<"(";
-                for (unsigned int i=0; i<devicesVec.size()-1; i++){
-                    ssF << devicesVec[i].id<<",";
-                }
-                ssF<<devicesVec[devicesVec.size()-1].id;
-                ssF<<")";
-                string facilities = ssF.str();
-                */                 
+                string facs = ssF.str();
+              
                 Logger::getInstance(Logger::DEBUG3)<<"check devices string:"<<devices<<endl;
-                //Logger::getInstance(Logger::DEBUG3)<<"check facilities string::"<<facilities<<endl;
+                Logger::getInstance(Logger::DEBUG3)<<"check facilities string::"<<facs<<endl;
                 
                 string xml;
                 indicator ind;
@@ -399,19 +363,18 @@ string DBConnector::getXMLdevices(GUserId userId, vector<device> devicesVec)
                         
                         //copypaste
                         " xmlagg("
-                        "xmlelement(name adapter, xmlattributes(adapter_id as id),"
-                        "xmlelement(name  dev,xmlattributes(init as init, mac as did, fk_room_id as lid, refresh as refresh, battery as batt,"
-                                                " timestamp as time, involved  as inv, quality as rssi),"
-                                                 "(select xmlagg(xmlelement(name part,xmlattributes(type as type, visibility as vis, name as name, value as val)))from devices where fk_facilities_mac=mac )"
-                        ")"
-                    ")"
-                ") "
+                                "xmlelement(name adapter, xmlattributes(adapter_id as id),"
+                                            "xmlelement(name  dev,xmlattributes(init as init, mac as did, fk_room_id as lid, refresh as refresh, battery as batt,"
+                                                                    " timestamp as time, involved  as inv, quality as rssi),"
+                                                                     "(select  xmlagg(xmlelement(name part,xmlattributes(type as type, visibility as vis, name as name, value as val)))from devices where (host(fk_facilities_mac) , type) in "+devices+" )"
+                                                                ")"
+                                                     ")"
+                                        ") "
                         
                         //!copypaste
                         
                       // " ) " 
-                        "from adapters join facilities on adapters.adapter_id=facilities.fk_adapter_id  join devices on mac= fk_facilities_mac where (host(fk_facilities_mac) || type) in "+devices//+" group by adapter_id"
-                        // neni potreba diky predchozi podmince "where mac in "+facilities+ (host(mac) || '1') in ('0.0.10.21');
+                        "from adapters join facilities on adapters.adapter_id=facilities.fk_adapter_id  where host(mac) in "+facs +" "
 
                         
                         ,
@@ -458,7 +421,7 @@ string DBConnector::getXMLNewDevices(string adapterId)
                 
                 string xml;
                 indicator ind;
-
+//TODO možná tady nemusi byt join na devices
                 statement st = (sql.prepare <<"select " +
                         getXMLDevicesQueryString() +
                        "from adapters join facilities on adapter_id=fk_adapter_id join devices on mac=fk_facilities_mac where init='0' and adapter_id =:adapter" 
