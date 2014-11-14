@@ -33,12 +33,13 @@ string MsgInGetUID::createResponseMsgOut()
         throw ServerException(ServerException::TOKEN_EMAIL);
     
        long long int IHAtoken = getnewIHAtoken();
-       
+    
     if( DBConnector::getInstance().insertNewIHAtoken(IHAtoken, gId) == 0)
         throw ServerException(ServerException::TOKEN_EMAIL);
        
-       string attr = makeXMLattribute(P_SESSION_ID, to_string(IHAtoken));
-    return envelopeResponseWithAttributes(R_UID, attr);
+       //string attr = makeXMLattribute(P_SESSION_ID, to_string(IHAtoken));
+       _IHAtoken = IHAtoken;
+    return envelopeResponse(R_UID);
 }
 
 long long int MsgInGetUID::getnewIHAtoken() {

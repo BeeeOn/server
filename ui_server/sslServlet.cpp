@@ -130,12 +130,12 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
                 //ShowCerts(ssl);
                 
                 while(1){
-                    
+        read:            
                     if (!rc)
                         rc = (char*)malloc (readSize * sizeof (char) + 1);
                     else
                         rc = (char*)realloc (rc, (count + 1) * readSize * sizeof (char) + 1);
-
+                    
                     received = SSL_read(ssl, buf, sizeof(buf)-1); /* get request */
                     buf[received] = '\0';
                     
@@ -145,9 +145,7 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
                         strcat (rc, buf);
                     }else{
                             int sslReadErr = SSL_get_error(ssl,received);
-                            Logger::getInstance(Logger::DEBUG3)<<"ssl read err"<< sslReadErr <<endl;
-                            //if(sslReadErr == SSL_ERROR_WANT_READ)
-                            //goto readMore;
+                            break;
                     }
                     if(count > 5){
                         Logger::getInstance(Logger::ERROR)<<"ssl incoming data are too much big"<<endl;
@@ -158,8 +156,8 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
                     
                     count++;
                 }
-                
-                if ( received > 0  || count > 0) {
+                 Logger::getInstance(Logger::DEBUG3)<<"received"<< received<<"count"<<count <<endl;
+                if ( received > 0  || count > 1) {
                         std::string replyString = resolveFunc(rc);
 #ifdef DEBUG
                         printf("Client msg: \"%s\"\n", buf);
@@ -167,6 +165,9 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
                         //sprintf(reply, response, buf);   /* construct reply */
                         free(rc);
                         SSL_write(ssl, replyString.c_str(), replyString.length() ); /* send reply */
+                        count =0;
+                        rc=NULL;
+                        goto read;
                 }
                 else {
                         ERR_print_errors_fp(stderr);
