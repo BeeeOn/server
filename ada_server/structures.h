@@ -19,17 +19,27 @@
 
 typedef enum valueTypes
 {
-	TEMP,
-	HUM,
-	BAR,
-	ONOFFSEN,
-	ONOFSW,
-	LUM,
-	EMI,
-	REZ
+	TEMP = 0x00,
+	HUM = 0x01,
+	BAR = 0x02,
+	ONOFFSEN = 0x03,
+	ONOFSW = 0x10,
+	LUM = 0x05,
+	EMI = 0x06,
+	REZ = 0x07,
+	POS = 0x08,
+	ONON = 0x11,
+	TOG = 0x12,
+	RAN = 0x13,
+	RGB = 0x14,
+	UNK = 0xFF
 } tvalueTypes;
 
-
+typedef union concatenate
+{
+	unsigned short int input[2];
+	unsigned int result;
+} tconcatenate;
 
 typedef enum deviceType
 {
@@ -51,10 +61,15 @@ typedef enum deviceType
  */
 typedef struct value
 {
-	unsigned short int intType;
+	unsigned long int intType;
+	unsigned short int offset;
 	tvalueTypes  type;
-	bool bval;
-	float fval;
+	union
+	{
+		bool bval;
+		float fval;
+		int ival;
+	};
 } tvalue;
 
 typedef struct xml_string_writer: pugi::xml_writer
@@ -108,22 +123,14 @@ typedef struct xml_string_writer: pugi::xml_writer
 
 typedef struct message
 {
-	std::string adapter_id;
 	unsigned short int state;
 	long long int adapterINTid;
 	in_addr adapter_ip;
 	float fm_version;
-	std::string string_fm_version;
 	float cp_version;
-	std::string string_cp_version;
-	short int init;
 	time_t timestamp;
 	unsigned int sensor_id;
-	char byte_sensor_id[4];
-	unsigned short int sensor_port;
-	char byte_sensor_port[4];
 	std::string DeviceIDstr;
-	unsigned short int deviceProcolVersion;
 	unsigned short int battery;
 	unsigned short int signal_strength;
 	unsigned short int values_count;

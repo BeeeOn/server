@@ -37,6 +37,7 @@ class DBHandler
 		int GetWakeUpTime(std::string record);
 		void LogValue (tmessage *message);
 		soci::session *ReturnConnection();
+		void GetAdapterData(std::string *adapterIP, long int ID);
 };
 
 

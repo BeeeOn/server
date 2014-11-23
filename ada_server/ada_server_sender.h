@@ -24,17 +24,10 @@
 #include <postgresql/soci-postgresql.h>
 #include "config.h"
 #include "loger.h"
-
-
-typedef struct xml_string_writer: pugi::xml_writer
-{
-    std::string result;
-    const std::string _Name="xml_string_writer";
-    virtual void write(const void* data, size_t size)
-    {
-        result += std::string(static_cast<const char*>(data), size);
-    }
-} tstringXMLwriter;
+#include "structures.h"
+#include "DBHandler.h"
+#include "databaseConnectionContainer.h"
+#include <atomic>
 
 
 class Sender
@@ -44,7 +37,7 @@ class Sender
 		int _port;
 		int s;
 	public:
-		int Connect(std::string Message,std::string IP);
+		bool Connect(std::string Message,std::string IP);
 };
 
 class Listener
@@ -61,17 +54,6 @@ class Listener
 };
 
 
-class DBHandler
-{
-	private:
-		const std::string _Name = "DBHandler";
-		soci::session *sql;
-
-	public:
-		DBHandler();
-		void GetAdapterData(std::string *adapterIP, long int ID);
-};
-
 class MessageCreator
 {
 	private:
@@ -81,6 +63,7 @@ class MessageCreator
 	std::string CreateDeleteMessage(std::string deviceID);
 	//std::string CreateSwitchMessage(std::string type, std::string val, std::string actorIP);
 	std::string CreateListenMessage(std::string AdapterID);
+	std::string CreateSwitchMessage(std::string deviceId, std::string value, std::string type, std::string offset);
 	MessageCreator();
 };
 
@@ -98,7 +81,8 @@ class ConnectionServer
 		Sender *s;
 		//void StoreData();
 	public:
-		ConnectionServer(DBHandler *d);
-		void HandleConnection(int socket);
+		ConnectionServer(int Com_s);
+		bool HandleRequest();
+		void HandleRequestCover();
 		~ConnectionServer();
 };

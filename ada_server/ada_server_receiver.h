@@ -71,8 +71,6 @@ class MessageParser
 		virtual void GetFM()=0;
 		virtual void GetCP()=0;
 		virtual void GetDeviceID()=0;
-		virtual void GetInitVal()=0;
-		virtual void GetDeviceCP()=0;
 		virtual void GetBattery()= 0;
 		virtual void GetSignal()= 0;
 		virtual bool GetValues()= 0;
@@ -95,8 +93,6 @@ class ProtocolV1MessageParser :public MessageParser
 		virtual void GetFM();
 		virtual void GetCP();
 		virtual void GetDeviceID();
-		virtual void GetInitVal();
-		virtual void GetDeviceCP();
 		virtual void GetBattery();
 		virtual void GetSignal();
 		virtual bool GetValues();

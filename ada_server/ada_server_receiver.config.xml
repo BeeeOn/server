@@ -8,6 +8,7 @@
     <Level>7</Level>
     <FileNaming>ada_server_receiver</FileNaming>
     <FilesCount>5</FilesCount>
-    <LinesCount>10000000</LinesCount>
+    <MaxFileSize>100</MaxFileSize>
+    <LogPath>/home/tuso/log/</LogPath>
   </LogConfig>
  </configuration>

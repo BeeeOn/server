@@ -25,6 +25,7 @@ class Config
 		int _maxFiles;
 		int _maxLines;
 		int _timeOut;
+		std::string _path;
 		bool GetLogProperties(pugi::xml_node log);
 	public:
 		bool setConfig(std::string File,int AppType);
