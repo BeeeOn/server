@@ -49,9 +49,9 @@ string MsgInUpdateView::createResponseMsgOut()
         action = deviceNode.attribute("action").value();
         
         if(action.compare("add") == 0)
-            DBConnector::getInstance().addDeviceToView(viewName,_parredUserMail, deviceId, deviceType);
+            DBConnector::getInstance().addDeviceToView(viewName,_gUserId, deviceId, deviceType);
         else if(action.compare("remove") == 0)
-            DBConnector::getInstance().removeDeviceFromView(viewName,_parredUserMail, deviceId, deviceType);
+            DBConnector::getInstance().removeDeviceFromView(viewName,_gUserId, deviceId, deviceType);
         else
             throw ServerException(ServerException::ACTION);
     }

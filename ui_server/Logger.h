@@ -15,6 +15,7 @@
 
 using namespace std;
 
+
 class Logger {
 private:
     Logger();
@@ -30,6 +31,10 @@ public:
      Logger& operator<<(const string& s);
      Logger& operator<<(const int& i);
      */
+    
+
+
+    
     template <typename T>
     Logger &operator<<(const T &a) {
         

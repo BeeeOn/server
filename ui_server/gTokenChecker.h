@@ -19,7 +19,7 @@ struct googleInfo {
     string locale;
 };
 
-bool isGTokenOk(string gToken, string mail, googleInfo &gInfo);;
+bool isGTokenOk(string gToken, string gid, googleInfo &gInfo);;
 
 #endif	/* GTOKENCHECKER_H */
 

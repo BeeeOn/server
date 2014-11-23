@@ -42,6 +42,9 @@ string getState(pugi::xml_document* doc);
 int getSessionId(pugi::xml_document* doc);
 int getErrCode(pugi::xml_document* doc);
 
+void createMsgInWithAttr(char*   msgin, string com_ver,string ses_id,string state, int nAttr , char* fmt, ...);
+void createMsgInWithAttr( char*   msgin, string com_ver,string ses_id,string state, std::initializer_list<string> argList );
+
 void createMsgInWithAttributes(char*   msgin, string com_ver,string ses_id,string state);
 void createMsgInWithAttributes(char*   msgin, string com_ver,string ses_id,string state,string attr1name, string attr1value);
 void createMsgInWithAttributes(char*   msgin, string com_ver,string ses_id,string state,string attr1name, string attr1value,string attr2name, string attr2value,string attr3name, string attr3value);

@@ -25,5 +25,5 @@ int MsgInGetViews::getMsgAuthorization() {
 
 string MsgInGetViews::createResponseMsgOut()
 {  
-    return envelopeResponse(R_VIEWS, DBConnector::getInstance().viewsList(_parredUserMail));
+    return envelopeResponse(R_VIEWS, DBConnector::getInstance().viewsList(_gUserId));
 }

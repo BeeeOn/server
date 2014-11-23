@@ -83,6 +83,65 @@ void DBConnector::clean(){
      delete _pool;
 }
 
+
+
+
+
+int DBConnector::insertNewUser(string gid, googleInfo gInfo)
+{
+        Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"insertNewUser"<<"\n";
+        try
+        {
+                soci::session sql(*_pool);
+                
+                sql << "insert into users( user_id, mail ) values(:gid, :mail)",
+                        use(gid, "gid"), use (gInfo.email,"mail");   
+                return 1;
+        }
+        catch (soci::postgresql_soci_error& e)
+        {
+                Logger::getInstance(Logger::ERROR) << "Error: " << e.what() << '\n';
+                return 0;
+        }
+}
+
+int DBConnector::insertNewIHAtoken(IhaToken ihaToken, string gId) {
+        Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"insertNewIHAtoken"<<"\n";
+        try
+        {
+                soci::session sql(*_pool);
+                
+                sql << "insert into mobile_devices( token, fk_user_id ) values(:token, :gid)",
+                        use (ihaToken,"token"), use(gId, "gid");   
+                return 1;
+        }
+        catch (soci::postgresql_soci_error& e)
+        {
+                Logger::getInstance(Logger::ERROR) << "Error: " << e.what() << '\n';
+                return 0;
+        }
+}
+
+GUserId DBConnector::getUserIdbyIhaToken(IhaToken ihaToken) {
+        Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"iha token valid?"<<"\n";
+        try
+        {
+                soci::session sql(*_pool);
+                
+                indicator ind;
+                GUserId gUserId = "";
+                sql << "select fk_user_id from mobile_devices where token = :token",
+                        use (ihaToken,"token"), into(gUserId,ind);   
+                return gUserId;
+        }
+        catch (soci::postgresql_soci_error& e)
+        {
+                Logger::getInstance(Logger::ERROR) << "Error: " << e.what() << '\n';
+                return 0;
+        }
+}
+
+
 bool DBConnector::isUserRegistred(std::string email)
 {
         Logger::getInstance(Logger::DEBUG3)<<"DB: is "<<email<<" registred?";
@@ -125,15 +184,16 @@ int DBConnector::getUserId(std::string email)
         }
 }
 
-string DBConnector::getUserRole(string userMail, string adapterId)
+
+string DBConnector::getUserRoleM(GUserId gUserId, string adapterId)
 {
-        Logger::getInstance(Logger::DEBUG3)<<"DB: get role "<<userMail<<" on "<<adapterId<<endl;
+        Logger::getInstance(Logger::DEBUG3)<<"DB: get role "<<gUserId<<" on "<<adapterId<<endl;
         string role;
         try
         {
                 session sql(*_pool);
-                sql << "select role from users_adapters where fk_user_id= (select user_id from users where mail=:mail) and fk_adapter_id = :adapter",
-                    use(userMail, "mail"), use(adapterId, "adapter"), into(role);
+                sql << "select role from users_adapters where fk_user_id= :guserid and fk_adapter_id = :adapter",
+                    use(gUserId, "guserid"), use(adapterId, "adapter"), into(role);
                 return role;
         }
         catch (soci::postgresql_soci_error& e)
@@ -159,7 +219,7 @@ void DBConnector::updatePhoneLocale(string mail, string phoneLocale){
                 throw;
         }
 }
-std::string DBConnector::getXMLusersAdapters(std::string email)
+std::string DBConnector::getXMLusersAdapters(std::string gId)
 {
         Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"make usersAdapterListXml\n";
         try
@@ -168,8 +228,8 @@ std::string DBConnector::getXMLusersAdapters(std::string email)
                 std::string xml;
                 indicator ind;
                 sql << "select xmlagg(xmlelement(name adapter, xmlattributes(adapter_id as id, adapters.name as name, role as role, timezone as utc)))"
-                                    "from users join users_adapters on user_id=fk_user_id join adapters on fk_adapter_id = adapter_id where mail=:mail"
-                            ,use(email,"mail"), soci::into(xml,ind);
+                                    "from users join users_adapters on user_id=fk_user_id join adapters on fk_adapter_id = adapter_id where user_id = :gid"
+                            ,use(gId,"gid"), soci::into(xml,ind);
                 Logger::getInstance(Logger::DEBUG3)<<"sql done result:"<<std::endl;
                 if(ind != i_ok)
                     return "";
@@ -232,27 +292,6 @@ string DBConnector::getXMLDevicesQueryString(string facilitiesCond)
                 ") "
                 ;
 
-    
-    /* verze home2
-    return  "xmlagg("
-                        "xmlelement("
-                            "name dev,"
-                            "xmlattributes(\"mac\" as \"id\", \"type\" as \"type\", \"init\" as \"initialized\", to_char(timestamp, "DBTIMEFORMAT") as \"involved\", \"visibility\" as \"visibility\" ),"
-                            "xmlelement(name \"location\", "
-                                    "xmlattributes(\"fk_room_id\" as \"id\") "
-                            "),"
-                            "xmlforest(devices.name as \"name\",refresh,battery,quality),"
-                            "xmlelement(name \"value\", "
-                                        "xmlattributes(to_char(timestamp, "DBTIMEFORMAT") as \"hwupdated\") ,"
-                                        "value"
-                            "),"
-                            "xmlelement(name \"logging\", "
-                                        "xmlattributes(\"log_en\" as \"enabled\") "
-                            ")"
-                        ")"
-                   ")"
-            ;  
-    */
 }
 std::string DBConnector::getXMLAllDevs(string adapter)
 {
@@ -286,49 +325,34 @@ std::string DBConnector::getXMLAllDevs(string adapter)
         
 }
 
-string DBConnector::getXMLdevices(int userId, vector<device> devicesVec)
+string DBConnector::getXMLdevices(GUserId userId, vector<device> devicesVec)
 {
          Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"getPartialDevices"<<"\n";
         try
         {
-            /*
-             * select xmlagg(
-                        xmlelement(name  dev,xmlattributes(mac as did),
-                                                (select xmlagg(xmlelement(name part,xmlattributes(type as type)))
-                                                from devices where fk_facilities_mac=mac and concat(fk_facilities_mac,type) in('0.0.10.11','0.0.10.21') )
-                    )
-                )
-                from users_adapters as ua join adapters on ua.fk_adapter_id=adapter_id join facilities on adapters.adapter_id=facilities.fk_adapter_id
-                where ua.fk_user_id = 1 
-             * 
-            */
                 soci::session sql(*_pool);
                 Logger::getInstance(Logger::DEBUG3)<<"devices n."<<devicesVec.size()<<"\n";
                 if( devicesVec.size() == 0)
                     return "";
                 stringstream ssD,ssF;
                 ssD<<"(";
-                for (unsigned int i=0; i<devicesVec.size()-1; i++){
-                    //cout<<devicesVec[i].id<<devicesVec[i].type<<","<<endl;
-                    ssD << "'"<<devicesVec[i].id<<devicesVec[i].type<<"'"<<",";
+                 ssF<<"(";
+                for (unsigned int i=0; i<devicesVec.size(); i++){
+                    ssD << "('"<<devicesVec[i].id<<"',"<<devicesVec[i].type<<")";
+                    ssF << "'"<<devicesVec[i].id<<"'";
                     
+                    if( i != devicesVec.size()-1){
+                        ssD <<",";
+                        ssF <<",";
+                    }
                 }
-                if(devicesVec.size() >0)//TODO vylepšit podmínku
-                ssD<<"'"<<devicesVec[devicesVec.size()-1].id<<devicesVec[devicesVec.size()-1].type<<"'";
                 ssD<<")";
-                
+                 ssF<<")";
                 string devices = ssD.str();
-                /*
-                ssF<<"(";
-                for (unsigned int i=0; i<devicesVec.size()-1; i++){
-                    ssF << devicesVec[i].id<<",";
-                }
-                ssF<<devicesVec[devicesVec.size()-1].id;
-                ssF<<")";
-                string facilities = ssF.str();
-                */                 
+                string facs = ssF.str();
+              
                 Logger::getInstance(Logger::DEBUG3)<<"check devices string:"<<devices<<endl;
-                //Logger::getInstance(Logger::DEBUG3)<<"check facilities string::"<<facilities<<endl;
+                Logger::getInstance(Logger::DEBUG3)<<"check facilities string::"<<facs<<endl;
                 
                 string xml;
                 indicator ind;
@@ -339,19 +363,18 @@ string DBConnector::getXMLdevices(int userId, vector<device> devicesVec)
                         
                         //copypaste
                         " xmlagg("
-                        "xmlelement(name adapter, xmlattributes(adapter_id as id),"
-                        "xmlelement(name  dev,xmlattributes(init as init, mac as did, fk_room_id as lid, refresh as refresh, battery as batt,"
-                                                " timestamp as time, involved  as inv, quality as rssi),"
-                                                 "(select xmlagg(xmlelement(name part,xmlattributes(type as type, visibility as vis, name as name, value as val)))from devices where fk_facilities_mac=mac )"
-                        ")"
-                    ")"
-                ") "
+                                "xmlelement(name adapter, xmlattributes(adapter_id as id),"
+                                            "xmlelement(name  dev,xmlattributes(init as init, mac as did, fk_room_id as lid, refresh as refresh, battery as batt,"
+                                                                    " timestamp as time, involved  as inv, quality as rssi),"
+                                                                     "(select  xmlagg(xmlelement(name part,xmlattributes(type as type, visibility as vis, name as name, value as val)))from devices where (host(fk_facilities_mac) , type) in "+devices+" )"
+                                                                ")"
+                                                     ")"
+                                        ") "
                         
                         //!copypaste
                         
                       // " ) " 
-                        "from adapters join facilities on adapters.adapter_id=facilities.fk_adapter_id  join devices on mac= fk_facilities_mac where (host(fk_facilities_mac) || type) in "+devices//+" group by adapter_id"
-                        // neni potreba diky predchozi podmince "where mac in "+facilities+ (host(mac) || '1') in ('0.0.10.21');
+                        "from adapters join facilities on adapters.adapter_id=facilities.fk_adapter_id  where host(mac) in "+facs +" "
 
                         
                         ,
@@ -398,7 +421,7 @@ string DBConnector::getXMLNewDevices(string adapterId)
                 
                 string xml;
                 indicator ind;
-
+//TODO možná tady nemusi byt join na devices
                 statement st = (sql.prepare <<"select " +
                         getXMLDevicesQueryString() +
                        "from adapters join facilities on adapter_id=fk_adapter_id join devices on mac=fk_facilities_mac where init='0' and adapter_id =:adapter" 
@@ -437,23 +460,8 @@ bool DBConnector::isAdapterRegistrable(string adapterId){
         }
 }
 
-int DBConnector::insertNewUser(string mail)
-{
-        Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"insertNewUser"<<"\n";
-        try
-        {
-                soci::session sql(*_pool);
-                
-                sql << "insert into users( mail ) values(:mail)",
-                        use(mail, "mail");   
-                return 1;
-        }
-        catch (soci::postgresql_soci_error& e)
-        {
-                Logger::getInstance(Logger::ERROR) << "Error: " << e.what() << '\n';
-                return 0;
-        }
-}
+
+
 
 string DBConnector::getUserId(session & sql, string userMail)
 {
@@ -473,7 +481,7 @@ string DBConnector::getUserId(session & sql, string userMail)
 }
 
 
-int DBConnector::parAdapterWithUserIfPossible(int adapterId, string adapterName, string mail){
+int DBConnector::parAdapterWithUserIfPossible(int adapterId, string adapterName, string gId){
     Logger::getInstance(Logger::DEBUG3)<< "par user - adapter (new user?)\n";
     try
     {
@@ -481,8 +489,8 @@ int DBConnector::parAdapterWithUserIfPossible(int adapterId, string adapterName,
        
         string role = "superuser";
         
-        sql << "insert into users_adapters(fk_adapter_id, fk_user_id, role) values(:a_id ,(select user_id from users where mail=:u_mail), :role)",
-                use(adapterId, "a_id"), use(role, "role"),  use(mail, "u_mail");
+        sql << "insert into users_adapters(fk_adapter_id, fk_user_id, role) values(:a_id , :gId, :role)",
+                use(adapterId, "a_id"), use(role, "role"),  use(gId, "gId");
         sql << "update adapters set name=:a_name where adapter_id=:a_id",
                  use(adapterId, "a_id"), use(adapterName, "a_name");
         //TODO if adapter is registrable, 2x sql
@@ -712,7 +720,7 @@ string DBConnector::getXMLDeviceLog(string adapterId, device device, string logF
                 Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"RAW data\n";
                 
                 sql<<"select xmlagg("
-                        " xmlelement(name row, concat( timestamp, ' ' ,logs.value) )"
+                        " xmlelement(name row, timestamp || ' ' || logs.value )"
                         ")"
                         "from logs where  fk_facilities_mac= :d_id and  fk_devices_type= :d_type and"+ timeCond
                         ,use(device.id,"d_id"), use(device.type, "d_type"), soci::into(xml, ind);
@@ -731,7 +739,7 @@ string DBConnector::getXMLDeviceLog(string adapterId, device device, string logF
                         "on full_time=date_trunc";*/
                  //TODO nezavisi na adapter_id        
                 
-                oss<<"select xmlagg( xmlelement(name row,a,' ',b ))from (select ceil(avg(timestamp)) as a,  trunc("<<aggregationFunction<<"(value),2) as b from "
+                oss<<"select xmlagg( xmlelement(name row,a,' ',b ))from (select ceil(avg(timestamp)) as a,  trunc("<<aggregationFunction<<"(value)::numeric,2) as b from "
                         "logs where  fk_facilities_mac= :d_id and  fk_devices_type= :d_type and"<< timeCond<<" group by timestamp/"<<intInterval<<") as innerQ";
                         //select xmlagg(xmlelement(name row,a,' ',b ))from (select ceil(avg(timestamp)) as a,min(value) as b from logs where timestamp between 0 and 10000000000 group by timestamp/2) as x;
                 string query;
@@ -876,13 +884,13 @@ int DBConnector::addConAccount(string adapterId, string userMail, string newRole
 /***************************************************************************************************************/
  /*                                                           VIEWS                                                                                                              */
 /***************************************************************************************************************/
-void DBConnector::addView(string userMail, string viewName, string viewIcon){
+void DBConnector::addView(string gId, string viewName, string viewIcon){
         Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"add view:"<<viewName<<")\n";
     try{
         soci::session sql(*_pool);
        
-        sql << "insert into views( name, fk_user_id, icon ) values(:name,  (select user_id from users where mail=:mail), :icon)",
-                        use(viewName, "name"), use(userMail, "mail"), use(viewIcon, "icon");        
+        sql << "insert into views( name, fk_user_id, icon ) values(:name,  :gid, :icon)",
+                        use(viewName, "name"), use(gId, "gid"), use(viewIcon, "icon");        
         return ;
     }
     catch (soci::postgresql_soci_error& e)
@@ -892,13 +900,13 @@ void DBConnector::addView(string userMail, string viewName, string viewIcon){
     }
 } 
 
-void DBConnector::addDeviceToView(string  viewName, string  userMail, string deviceId, string deviceType){
+void DBConnector::addDeviceToView(string  viewName, string  gId, string deviceId, string deviceType){
             Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"addDeviceToView:"<<viewName<<")\n";
     try{
         soci::session sql(*_pool);
        //TODO musi se propojit s mailem-adapterem-device, protože jinak by mohl koukat na cizi zařizeni
-        sql << "insert into views_devices ( fk_view_name, fk_user_id, fk_devices_mac, fk_devices_type ) values(:name,  (select user_id from users where mail=:mail), :d_id, :d_type)",
-                        use(viewName, "name"), use(userMail, "mail"), use(deviceId, "d_id"), use(deviceType, "d_type");        
+        sql << "insert into views_devices ( fk_view_name, fk_user_id, fk_devices_mac, fk_devices_type ) values(:name,  :gid, :d_id, :d_type)",
+                        use(viewName, "name"), use(gId, "gid"), use(deviceId, "d_id"), use(deviceType, "d_type");        
         return ;
     } 
     catch (soci::postgresql_soci_error& e)
@@ -908,13 +916,13 @@ void DBConnector::addDeviceToView(string  viewName, string  userMail, string dev
     }
 }
 
-void DBConnector::removeDeviceFromView(string  viewName, string  userMail, string deviceId, string deviceType){
+void DBConnector::removeDeviceFromView(string  viewName, string  gId, string deviceId, string deviceType){
             Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"removeDeviceToView:"<<viewName<<")\n";
     try{
         soci::session sql(*_pool);
         
-        sql << "delete from views_devices where fk_view_name=:name and fk_user_id = (select user_id from users where mail=:mail) and fk_devices_mac = :d_id and fk_devices_type = :d_type",
-                        use(viewName, "name"), use(userMail, "mail"), use(deviceId, "d_id"), use(deviceType, "d_type");        
+        sql << "delete from views_devices where fk_view_name=:name and fk_user_id = :gid and fk_devices_mac = :d_id and fk_devices_type = :d_type",
+                        use(viewName, "name"), use(gId, "gid"), use(deviceId, "d_id"), use(deviceType, "d_type");        
         return ;
     }
     catch (soci::postgresql_soci_error& e)
@@ -924,13 +932,13 @@ void DBConnector::removeDeviceFromView(string  viewName, string  userMail, strin
     }
 }
 
-void DBConnector::delView(string viewName, string userMail){
+void DBConnector::delView(string viewName, string gId){
     Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"delView:"<<viewName<<")\n";
     try{
         soci::session sql(*_pool);
         
-        sql << "delete from views where name=:name and fk_user_id = (select user_id from users where mail=:mail) ",
-                use(viewName, "name"), use(userMail, "mail");        
+        sql << "delete from views where name=:name and fk_user_id = :gid ",
+                use(viewName, "name"), use(gId, "gid");        
         return ;
     }
     catch (soci::postgresql_soci_error& e)
@@ -940,8 +948,8 @@ void DBConnector::delView(string viewName, string userMail){
     }
 }
 
-string DBConnector::viewsList(string userMail){
-    Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"viewList:"<<userMail<<")\n";
+string DBConnector::viewsList(string gId){
+    Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"viewList:"<<gId<<")\n";
     try{
         soci::session sql(*_pool);
         
@@ -950,8 +958,8 @@ string DBConnector::viewsList(string userMail){
         sql << "select xmlagg("
                                                 "xmlelement(name \"view\", xmlattributes(name as name, icon as icon)) "
                                                   ")"
-                       "from views where fk_user_id=(select user_id from users where mail=:mail)",
-            use(userMail, "mail"),into(xml, ind);
+                       "from views where fk_user_id=:gid",
+            use(gId, "gid"),into(xml, ind);
 
             if(ind != i_ok)
                 return "";        
@@ -964,14 +972,14 @@ string DBConnector::viewsList(string userMail){
     }
 }
 
-string DBConnector::insertNewCondition(string mail, string condName, string condType, string condXml) {
+string DBConnector::insertNewCondition(string gId, string condName, string condType, string condXml) {
     Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"insert Cond:"<<condName<<"\n";
     try{
         soci::session sql(*_pool);
         
         string newCondId;
-        sql << "insert into conditions(name, type, xml, fk_user_id) values(:name, :type, :xml,(select user_id from users where mail=:mail) ) returning cond_id",
-                use(condName, "name"),use(condType,"type"),use(condXml,"xml"),use(mail,"mail"),into(newCondId);
+        sql << "insert into conditions(name, type, xml, fk_user_id) values(:name, :type, :xml,:gid ) returning cond_id",
+                use(condName, "name"),use(condType,"type"),use(condXml,"xml"),use(gId,"gid"),into(newCondId);
 
         return newCondId;
     }
@@ -1065,14 +1073,14 @@ void DBConnector::deleteCondition(string condId) {
     }
 }
 
-string DBConnector::insertNewAction(int _parredUserId, string actionName, string actionXml) {
+string DBConnector::insertNewAction(GUserId userId, string actionName, string actionXml) {
     Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"insert action:"<<actionName<<"  "<<actionXml<<"\n";
     try{
         soci::session sql(*_pool);
         
         string newActionId;
         sql << "insert into actions(name, xml, fk_user_id) values(:name, :xml, :u_id) returning action_id",
-                use(actionName, "name"),use(actionXml,"xml"),use(_parredUserId,"u_id"),into(newActionId);
+                use(actionName, "name"),use(actionXml,"xml"),use(userId,"u_id"),into(newActionId);
 
         return newActionId;
     }
@@ -1083,8 +1091,8 @@ string DBConnector::insertNewAction(int _parredUserId, string actionName, string
     }
 }
 
-string DBConnector::getActionsList(int userld) {
-    Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"get actions list for "<<userld<<")\n";
+string DBConnector::getActionsList(GUserId userId) {
+    Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"get actions list for "<<userId<<")\n";
     try{
         soci::session sql(*_pool);
         
@@ -1096,7 +1104,7 @@ string DBConnector::getActionsList(int userld) {
                                                          ")"
                                                   ")"
                        "from actions where fk_user_id=:u_id",
-                use(userld, "u_id"), into(xml,ind);
+                use(userId, "u_id"), into(xml,ind);
         if(xml=="")
             throw ServerException(ServerException::WRONG_OR_EMPTY_ACTION);
         
@@ -1184,11 +1192,11 @@ int DBConnector::connectConditionWithAction(string condId, string actionId) {
     }
 }
 
-int DBConnector::updateUsersGCMID(int userId, string gcmid) {
+int DBConnector::updateUsersGCMID(GUserId userId, string gcmid) {
     return 0;
 }
 
-int DBConnector::updateUserGoogleInformation(int userId, googleInfo gInfo) {
+int DBConnector::updateUserGoogleInformation(GUserId userId, googleInfo gInfo) {
     Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"update ginfo"<<endl;
     try{
         soci::session sql(*_pool);

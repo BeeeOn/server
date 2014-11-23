@@ -1,13 +1,10 @@
 -- Created by Vertabelo (http://vertabelo.com)
 -- Script type: drop
 -- Scope: [tables, references, sequences, views, procedures]
--- Generated at Thu Oct 23 17:45:30 UTC 2014
+-- Generated at Fri Nov 14 15:07:48 UTC 2014
 
 
-DROP FUNCTION insert_room_trigger_function() cascade;
 DROP FUNCTION unreg_adapter_after_delete_last_superuser() cascade;
-DROP FUNCTION null_room_before_delete() cascade;
-
 
 
 
@@ -31,6 +28,8 @@ ALTER TABLE facilities DROP CONSTRAINT facilities_rooms;
 ALTER TABLE gcm_ids DROP CONSTRAINT gcm_ids_users;
 
 ALTER TABLE logs DROP CONSTRAINT logs_devices;
+
+ALTER TABLE mobile_devices DROP CONSTRAINT mobile_devices_users;
 
 ALTER TABLE notifications DROP CONSTRAINT notifications_users;
 
@@ -56,6 +55,7 @@ DROP TABLE devices;
 DROP TABLE facilities;
 DROP TABLE gcm_ids;
 DROP TABLE logs;
+DROP TABLE mobile_devices;
 DROP TABLE notifications;
 DROP TABLE rooms;
 DROP TABLE users;

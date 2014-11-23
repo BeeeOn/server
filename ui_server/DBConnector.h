@@ -36,21 +36,27 @@ public:
     string DEBUGexec(string sqlQuery);
         
     string escapeString(string str);
+    
+    int insertNewUser(string gid, googleInfo gInfo);
+    int insertNewIHAtoken(IhaToken ihaToken, string gId);
+    GUserId getUserIdbyIhaToken(IhaToken ihaToken);
+    
     int getUserId(string email);
     bool isUserRegistred(string email);
-    string getUserRole(string userMail, string adapterId);
+    string getUserRoleM(GUserId gUserId, string adapterId);
     void updatePhoneLocale(string mail, string phoneLocale);
     string getXMLusersAdapters(string email);
     bool isAnyUnregistredAdapter();
     bool isUserParredWithAdapter(string mail, string adapter);
     string getXMLDevicesQueryString(string facilitiesCond="");
     string getXMLAllDevs(string adapter);
-    string getXMLdevices(int userId, vector<device> devicesVec);
+    string getXMLdevices(GUserId userId, vector<device> devicesVec);
     string getXMLNewDevices(string adapterId);
     bool isAdapterRegistrable(string adapterId);
-    int insertNewUser(string mail);
-    int parAdapterWithUserIfPossible(int adapterId, string adapterName, string mail);
+    int parAdapterWithUserIfPossible(int adapterId, string adapterName, string gId);
     void insertNewUserParredWithUnregistredAdapter(string adapterId, string mail, bool registerNewUser = false);
+    
+    /*ROOMS*/
     int insertNewRoom(string adapterId, string roomType, string roomName);
     void updateRoom(string adapterId, string roomId, string type, string name);
     void deleteRoom(string adapterId, string roomId);
@@ -82,8 +88,8 @@ public:
     int updateCondition(string condId, string condName, string condType, string condXml);
     void deleteCondition(string condId);
     /*ACTIONS*/
-    string insertNewAction(int _parredUserId, string actionName, string actionXml);
-    string getActionsList(int userld);  
+    string insertNewAction(GUserId userId, string actionName, string actionXml);
+    string getActionsList(GUserId userId);  
     string getAction(string actionId);
     int updateAction(string actionId, string actionName, string actionXml) ;
     void deleteAction(string actionId) ;
@@ -91,8 +97,8 @@ public:
     int connectConditionWithAction(string condId, string actionId) ;
     
     /*Google*/
-    int updateUsersGCMID(int userId, string gcmid);
-    int updateUserGoogleInformation(int userId, googleInfo gInfo);
+    int updateUsersGCMID(GUserId userId, string gcmid);
+    int updateUserGoogleInformation(GUserId userId, googleInfo gInfo);
 private:
     string _connectionString;
     size_t _poolSize;

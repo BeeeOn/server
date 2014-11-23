@@ -6,24 +6,19 @@
  */
 
 #include "IMsgInLoginRequired.h"
+#include "DBConnector.h"
 
 IMsgInLoginRequired::IMsgInLoginRequired(char* msg, pugi::xml_document* doc): IMsgIn(msg, doc) {
     
-    if(_comId != 0){
-        user u = ComTable::getInstance().getUserByComId(_comId);
-        _parredUserMail = u.mail;
-        _parredUserId = u.id;
-    }else{
-        _parredUserMail = "";
-    }
-    Logger::getInstance(Logger::DEBUG)<<"user:"<<_parredUserMail<<" comId:"<<_comId<<endl;
+    Logger::getInstance(Logger::DEBUG)<<"user:"<<_gUserId<<" comId:"<<_IHAtoken<<endl;
 }
 
 IMsgInLoginRequired::~IMsgInLoginRequired() {
 }
 
 bool IMsgInLoginRequired::isComIdValid(){
-    return ( _parredUserMail.compare("") != 0);
+    _gUserId = DBConnector::getInstance().getUserIdbyIhaToken(_IHAtoken);
+    return (_gUserId != "" );
 }
 
 enumAccessStatus IMsgInLoginRequired::checkAccess(){

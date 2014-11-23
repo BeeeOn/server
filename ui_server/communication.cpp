@@ -63,7 +63,13 @@ string resolveMsg(char* msg)
         
         response = msgIn->envelopeResponse(R_FALSE);
         Logger::getInstance(Logger::DEBUG)<< "MSGOUT: " << response<<"\n";
-    }
+    }catch (exception& e)
+  {
+            Logger::getInstance(Logger::FATAL) <<"ERROR ! :"<<e.what()<<endl;
+        
+        response = msgIn->envelopeResponse(R_FALSE);
+        Logger::getInstance(Logger::DEBUG)<< "MSGOUT: " << response<<"\n";
+  }
     catch (...)
     {
         //TODO  mozna nedelat false 

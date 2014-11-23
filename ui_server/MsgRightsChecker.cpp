@@ -28,6 +28,8 @@
 #include "MsgInGetAccount.h"
 #include "MsgInSetTimeZone.h"
 #include "MsgInGetTimeZone.h"
+#include "IMsgIn.h"
+#include <stdio.h>
 /*******************************************
  Role
  Název	 Práva
@@ -54,7 +56,7 @@ MsgRightsChecker::MsgRightsChecker() {
     
     /*MSGS*/
     this->_msgRightsTable[MsgInSignIn::state] = EVERYONE;
-    this->_msgRightsTable[MsgInSignUp::state] = EVERYONE;
+    this->_msgRightsTable[MsgInGetUID::state] = EVERYONE;
     this->_msgRightsTable[MsgInGetAdapters::state] = GUEST;
     /*SENSORS*/
     this->_msgRightsTable[MsgInGetAllDevices::state] = GUEST; 
@@ -93,8 +95,8 @@ MsgRightsChecker& MsgRightsChecker::getInstance()
 
 
 bool MsgRightsChecker::checkRights(IMsgInLoginAndAdapterAccessRequired& msg){
-   string role = DBConnector::getInstance().getUserRole(msg._parredUserMail, msg._adapterId);
-    Logger::getInstance(Logger::DEBUG) << "check role: "<< msg._parredUserMail <<" on "<<msg._state<<"("<<role<<"="<<_rightsTable[role] <<" "<<msg._state<<"="<<_msgRightsTable[msg._state] <<") \n";
+   string role = DBConnector::getInstance().getUserRoleM(msg._gUserId, msg._adapterId);
+    Logger::getInstance(Logger::DEBUG) << "check role: "<< msg._gUserId <<" on "<<msg._state<<"("<<role<<"="<<_rightsTable[role] <<" "<<msg._state<<"="<<_msgRightsTable[msg._state] <<") \n";
     
     if(_msgRightsTable[msg._state] == 0){//this is handled by checker in msgFactory
         Logger::getInstance(Logger::DEBUG) << "wrong msg: "<<msg._state<<"\n";
