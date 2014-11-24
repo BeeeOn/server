@@ -9,24 +9,24 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<VBox prefHeight="673.0" prefWidth="1131.0" stylesheets="@DetailedSimulationCss.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="view" prefHeight="673.0" prefWidth="1131.0" stylesheets="@DetailedSimulation.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iha.emulator.ui.simulations.detailed.DetailedSimulationView">
   <children>
       <HBox prefHeight="43.0" prefWidth="1110.0" styleClass="whiteBackground" VBox.vgrow="NEVER">
          <children>
-          <MenuBar styleClass="menuBar" stylesheets="@DetailedSimulationCss.css" VBox.vgrow="NEVER">
+          <MenuBar styleClass="menuBar" VBox.vgrow="NEVER">
             <menus>
               <Menu mnemonicParsing="false" styleClass=".menuBarStripes">
                 <items>
-                  <MenuItem mnemonicParsing="false" text="New adapter" />
-                  <MenuItem mnemonicParsing="false" text="Open..." />
+                  <MenuItem fx:id="newAdapterItem" mnemonicParsing="false" onAction="#handleNewAdapter" text="New adapter" />
+                  <MenuItem fx:id="openItem" mnemonicParsing="false" onAction="#handleOpen" text="Open..." />
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Save" />
-                  <MenuItem mnemonicParsing="false" text="Save all" />
-                  <MenuItem mnemonicParsing="false" text="Print" />
+                  <MenuItem fx:id="saveItem" mnemonicParsing="false" onAction="#handleSave" text="Save" />
+                  <MenuItem fx:id="saveAllItem" mnemonicParsing="false" onAction="#handleSaveAll" text="Save all" />
+                  <MenuItem fx:id="printItem" mnemonicParsing="false" onAction="#handlePrint" text="Print" />
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Preferences…" />
+                  <MenuItem fx:id="preferencesItem" mnemonicParsing="false" onAction="#handlePreferences" text="Preferences…" />
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Quit" />
+                  <MenuItem fx:id="quitItem" mnemonicParsing="false" onAction="#handleQuit" text="Quit" />
                 </items>
               </Menu>
             </menus>
@@ -34,9 +34,9 @@
                   <Insets top="5.0" />
                </HBox.margin>
           </MenuBar>
-            <ToolBar prefHeight="37.0" prefWidth="380.0" styleClass="toolBar" stylesheets="@DetailedSimulationCss.css" HBox.hgrow="ALWAYS">
+            <ToolBar prefHeight="37.0" prefWidth="380.0" styleClass="toolBar" HBox.hgrow="ALWAYS">
               <items>
-                <Button mnemonicParsing="false" stylesheets="@DetailedSimulationCss.css">
+                <Button fx:id="saveTBtn" mnemonicParsing="false" onAction="#handleSave">
                      <styleClass>
                         <String fx:value="plainToolBarBtn" />
                         <String fx:value="saveBtn" />
@@ -45,7 +45,7 @@
                         <Tooltip text="Save current adapter" />
                      </tooltip>
                   </Button>
-                  <Button mnemonicParsing="false">
+                  <Button fx:id="saveAllTBtn" mnemonicParsing="false" onAction="#handleSaveAll">
                      <styleClass>
                         <String fx:value="plainToolBarBtn" />
                         <String fx:value="saveAllBtn" />
@@ -54,7 +54,7 @@
                         <Tooltip text="Save all adapters" />
                      </tooltip>
                   </Button>
-                  <Button mnemonicParsing="false">
+                  <Button fx:id="openTBtn" mnemonicParsing="false" onAction="#handleOpen">
                      <styleClass>
                         <String fx:value="plainToolBarBtn" />
                         <String fx:value="loadBtn" />
@@ -63,7 +63,7 @@
                         <Tooltip text="Load adapter/s" />
                      </tooltip>
                   </Button>
-                  <Button layoutX="139.0" layoutY="12.0" mnemonicParsing="false">
+                  <Button fx:id="printTBtn" layoutX="139.0" layoutY="12.0" mnemonicParsing="false" onAction="#handlePrint">
                      <styleClass>
                         <String fx:value="plainToolBarBtn" />
                         <String fx:value="printBtn" />
@@ -77,7 +77,7 @@
                         <Insets bottom="4.0" top="4.0" />
                      </padding>
                   </Separator>
-                  <Button disable="true" mnemonicParsing="false">
+                  <Button fx:id="enableAdapterTBtn" disable="true" mnemonicParsing="false" onAction="#handleEnableAdapter">
                      <styleClass>
                         <String fx:value="plainToolBarBtn" />
                         <String fx:value="enableAdapterBtn" />
@@ -86,7 +86,7 @@
                         <Tooltip text="Enable current adapter" />
                      </tooltip>
                   </Button>
-                  <Button disable="true" mnemonicParsing="false">
+                  <Button fx:id="disableAdapterTBtn" disable="true" mnemonicParsing="false" onAction="#handleDisableAdapter">
                      <styleClass>
                         <String fx:value="plainToolBarBtn" />
                         <String fx:value="disableAdapterBtn" />
@@ -100,7 +100,7 @@
                         <Insets bottom="4.0" top="4.0" />
                      </padding>
                   </Separator>
-                  <Button mnemonicParsing="false">
+                  <Button fx:id="newAdapterTBtn" mnemonicParsing="false" onAction="#handleNewAdapter">
                      <styleClass>
                         <String fx:value="plainToolBarBtn" />
                         <String fx:value="addAdapterMenuBtn" />
@@ -109,7 +109,7 @@
                         <Tooltip text="Add new adapter" />
                      </tooltip>
                   </Button>
-                  <Button mnemonicParsing="false">
+                  <Button fx:id="deleteAdapterTBtn" mnemonicParsing="false" onAction="#handleDeleteAdapter">
                      <styleClass>
                         <String fx:value="plainToolBarBtn" />
                         <String fx:value="deleteAdapterBtn" />
@@ -123,7 +123,7 @@
                         <Insets bottom="4.0" top="4.0" />
                      </padding>
                   </Separator>
-                  <Button disable="true" mnemonicParsing="false">
+                  <Button fx:id="enableInternetTBtn" disable="true" mnemonicParsing="false" onAction="#handleEnableInternet">
                      <styleClass>
                         <String fx:value="plainToolBarBtn" />
                         <String fx:value="enableInternetConnectionBtn" />
@@ -132,7 +132,7 @@
                         <Tooltip text="Enable internet connection" />
                      </tooltip>
                   </Button>
-                  <Button disable="true" mnemonicParsing="false">
+                  <Button fx:id="disableInternetTBtn" disable="true" mnemonicParsing="false" onAction="#handleDisableInternet">
                      <styleClass>
                         <String fx:value="plainToolBarBtn" />
                         <String fx:value="disableInternetConnectionBtn" />
@@ -463,23 +463,23 @@
         <panes>
           <TitledPane animated="false" text="Application Log">
                <content>
-                  <TextFlow />
+                  <TextFlow prefHeight="300.0" />
                </content>
           </TitledPane>
         </panes>
       </Accordion>
-    <HBox id="HBox" alignment="CENTER_RIGHT" prefHeight="27.0" prefWidth="1068.0" spacing="5.0" styleClass="statusLine" stylesheets="@DetailedSimulationCss.css" VBox.vgrow="NEVER">
+    <HBox id="HBox" alignment="CENTER_RIGHT" prefHeight="27.0" prefWidth="1068.0" spacing="5.0" styleClass="statusLine" VBox.vgrow="NEVER">
       <children>
-            <ProgressIndicator prefHeight="20.0" prefWidth="30.0" styleClass="statusLineText" visible="false" HBox.hgrow="NEVER" />
-        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="21.0" prefWidth="544.0" styleClass="statusLineText" text="Status line" HBox.hgrow="ALWAYS" />
+            <ProgressIndicator fx:id="statusIndicator" prefHeight="20.0" prefWidth="30.0" styleClass="statusLineText" visible="false" HBox.hgrow="NEVER" />
+        <Label fx:id="statusLineLbl" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="21.0" prefWidth="544.0" styleClass="statusLineText" text="Status line" HBox.hgrow="ALWAYS" />
             <Separator orientation="VERTICAL" prefHeight="200.0" HBox.hgrow="NEVER" />
-            <Label alignment="CENTER_RIGHT" contentDisplay="CENTER" prefHeight="14.0" prefWidth="98.0" styleClass="statusLineText" text="Memory usage: " textAlignment="RIGHT" textFill="#9f9f9f" HBox.hgrow="NEVER">
+            <Label alignment="CENTER_RIGHT" contentDisplay="CENTER" prefHeight="16.0" prefWidth="96.0" styleClass="statusLineText" text="Memory usage: " textAlignment="RIGHT" textFill="#9f9f9f" HBox.hgrow="NEVER">
                <font>
                   <Font size="11.0" />
                </font>
             </Label>
-            <ProgressBar prefHeight="20.0" prefWidth="118.0" progress="0.11" />
-            <Label contentDisplay="CENTER" layoutX="629.0" layoutY="17.0" prefHeight="14.0" prefWidth="112.0" styleClass="statusLineText" text="(0MB of 00MB)" textAlignment="RIGHT" textFill="#9f9f9f" HBox.hgrow="NEVER">
+            <ProgressBar fx:id="memCheckProgressBar" prefHeight="20.0" prefWidth="118.0" progress="0.0" />
+            <Label fx:id="memCheckStatusLbl" contentDisplay="CENTER" layoutX="629.0" layoutY="17.0" prefHeight="16.0" prefWidth="128.0" styleClass="statusLineText" text="(0MB of 00MB)" textAlignment="RIGHT" textFill="#9f9f9f" HBox.hgrow="NEVER">
                <font>
                   <Font size="11.0" />
                </font>

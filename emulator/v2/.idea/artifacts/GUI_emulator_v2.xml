@@ -1,5 +1,5 @@
 <component name="ArtifactManager">
-  <artifact type="javafx" name="GUI-emulator-v2">
+  <artifact type="javafx" build-on-make="true" name="GUI-emulator-v2">
     <output-path>$PROJECT_DIR$/out/artifacts/GUI_emulator_v2</output-path>
     <properties id="javafx-properties">
       <options>
@@ -14,6 +14,12 @@
     <root id="root">
       <element id="archive" name="SmartHomeEmulator.jar">
         <element id="module-output" name="v2" />
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="controlsfx-8.20.8" />
+          <element id="library" level="project" name="openjfx-dialogs-1.0.2" />
+          <element id="library" level="project" name="log4j-api-2.1" />
+          <element id="library" level="project" name="log4j-core-2.1" />
+        </element>
       </element>
     </root>
   </artifact>

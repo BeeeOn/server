@@ -9,5 +9,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" exported="" name="controlsfx-8.20.8" level="project" />
+    <orderEntry type="library" name="openjfx-dialogs-1.0.2" level="project" />
+    <orderEntry type="library" name="log4j-api-2.1" level="project" />
+    <orderEntry type="library" name="log4j-core-2.1" level="project" />
   </component>
 </module>

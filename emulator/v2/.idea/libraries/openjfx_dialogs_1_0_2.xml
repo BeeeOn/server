@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="openjfx-dialogs-1.0.2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/src/com/iha/emulator/resources/lib/openjfx-dialogs-1.0.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

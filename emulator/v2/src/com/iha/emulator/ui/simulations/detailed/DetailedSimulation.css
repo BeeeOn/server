@@ -330,7 +330,7 @@
     -fx-max-width: 205px;
 }
 
-/** GUI add min width and height, change sensor icons to smaller size **/
+/** FIXGUI add min width and height, change sensor icons to smaller size**/
 .sensorPanelHeader {
     -fx-background-color: #0cdf56;
     -fx-pref-width: 230px;
@@ -342,11 +342,9 @@
     -fx-wrap-text: true;
     -fx-background-radius: 0;
     -fx-graphic-text-gap: 10px;
-    -fx-graphic: url("../../../resources/images/multisensor.png");
+    -fx-graphic: url("../../../resources/images/sensor_types/multisensor.png");
     -fx-padding: 3px 6px 3px 3px;
 }
-
-/** GUI change color of battery, signal, refresh icons in photoshop **/
 
 .sensorBattery {
     -fx-graphic-text-gap: 0;
@@ -600,4 +598,8 @@
     -fx-alignment: center-left;
     -fx-border-width: 0 0 0 1px;
     -fx-border-color: #efefef;
+}
+
+.progress-dialog {
+    -fx-background-color: #444444;
 }
