@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0" xmlns:jfx="http://javafx.com" href="SmartHomeEmulator.jnlp">
+  <information>
+    <title>Sample JavaFX Application</title>
+    <vendor>Unknown vendor</vendor>
+    <description>Sample JavaFX 2.0 application.</description>
+    <offline-allowed/>
+  </information>
+  <resources>
+    <jfx:javafx-runtime version="8.0+" href="http://javadl.sun.com/webapps/download/GetFile/javafx-latest/windows-i586/javafx2.jnlp"/>
+  </resources>
+  <resources>
+    <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+    <jar href="SmartHomeEmulator.jar" size="287220" download="eager" />
+    <jar href="com/iha/emulator/resources/lib/controlsfx-8.20.8.jar" size="957666" download="eager" />
+    <jar href="com/iha/emulator/resources/lib/log4j-1.2.17.jar" size="489883" download="eager" />
+    <jar href="com/iha/emulator/resources/lib/log4j-api-2.1.jar" size="133531" download="eager" />
+    <jar href="com/iha/emulator/resources/lib/log4j-core-2.1.jar" size="824749" download="eager" />
+    <jar href="com/iha/emulator/resources/lib/openjfx-dialogs-1.0.2.jar" size="148557" download="eager" />
+    <jar href="lib/controlsfx-8.20.8.jar" size="957666" download="eager" />
+    <jar href="lib/log4j-1.2.17.jar" size="489883" download="eager" />
+    <jar href="lib/log4j-api-2.1.jar" size="133531" download="eager" />
+    <jar href="lib/log4j-core-2.1.jar" size="824749" download="eager" />
+    <jar href="lib/openjfx-dialogs-1.0.2.jar" size="148557" download="eager" />
+  </resources>
+  <applet-desc  width="600" height="400" main-class="com.javafx.main.NoJavaFXFallback"  name="GUI-emulator-v2" >
+    <param name="requiredFXVersion" value="8.0+"/>
+  </applet-desc>
+  <jfx:javafx-desc  width="600" height="400" main-class="com.iha.emulator.Main"  name="GUI-emulator-v2" />
+  <update check="background"/>
+</jnlp>

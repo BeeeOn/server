@@ -34,9 +34,9 @@ void sig_handler(int signo)
 		Log->WriteMessage(ERR,"SIGINT received stopping server!");
 		delete(cont);
 		delete(CH);
-		delete(Log);
 		delete(c);
 		sem_destroy(&connectionSem);
+		delete(Log);
 	}
 	exit(EXIT_SUCCESS);
 }
@@ -455,22 +455,11 @@ bool ProtocolV1MessageParser::parseMessage(xml_node *adapter,float FM,float CP)
 	}
 	//ulozime si IP adresu zariadenia (verzia pre emulatory)
 	this->GetDeviceID();
-	
-	//ulozime inicializacnu hodnotu
-	//this->GetInitVal();
-	
-	//ulozime si verziu komunikacneho protokolu zariadenia
-	//this->GetDeviceCP();
-
-	//ulozime hodnotu baterie
-
 	this->GetBattery();
 
 	//ulozime hodnotu kvality signalu
-
 	this->GetSignal();
 	//ulozime pocet posielanych dvojic typ hodnota
-
 	this->GetValues();
 	Log->WriteMessage(TRACE,"Exiting " + this->_Name + "::parseMessage");
 	return true;
@@ -550,19 +539,6 @@ void ProtocolV1MessageParser::GetDeviceID()
 	Log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetDeviceID");
 }
 
-void ProtocolV1MessageParser::GetInitVal()
-{
-
-	//Log->WriteMessage(INFO,"Init Val :" + std::to_string(this->_message->init));
-}
-
-void ProtocolV1MessageParser::GetDeviceCP()
-{
-	Log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetDeviceCP");
-	Log->WriteMessage(INFO,"Device protocol version :" + std::to_string(this->_message->deviceProcolVersion));
-	Log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetDeviceCP");
-}
-
 
 void ProtocolV1MessageParser::GetBattery()
 {
@@ -605,10 +581,84 @@ bool ProtocolV1MessageParser::GetValues()
 			_message->values_count = i;
 			break;
 		}
-		_message->values[i].intType=value.attribute("type").as_uint();
-		_message->values[i].type = static_cast<tvalueTypes>(_message->values[i].intType);
+		unsigned short int tempType = value.attribute("type").as_uint();
+		_message->values[i].offset = value.attribute("offset").as_uint();
+		tconcatenate temp;
+		temp.input[0]=tempType;
+		temp.input[1]=_message->values[i].offset;
+		_message->values[i].intType = temp.result;
+		Log->WriteMessage(MSG,"Type + offset :" + std::to_string(_message->values[i].intType));
+		_message->values[i].type = static_cast<tvalueTypes>(tempType);
 		Log->WriteMessage(MSG,"Type :" + std::to_string(_message->values[i].type));
-		if ((_message->values[i].type==ONOFFSEN)||(_message->values[i].type==ONOFSW))  //ak je typ 0x04 a 0x05 precitame jeden byte a ulozime hodnotu
+		Log->WriteMessage(MSG,"Offset :" + std::to_string(_message->values[i].offset));
+		switch(_message->values[i].type)
+		{
+			case TEMP:
+			case LUM:
+			case REZ:
+			case POS:
+				_message->values[i].fval = value.text().as_float();
+				Log->WriteMessage(MSG,"Value :" + std::to_string(_message->values[i].fval));
+				if (_message->devType==UNDEF)
+				{
+					_message->devType=SEN;
+				}
+				else
+				{
+					if (_message->devType==ACT)
+					{
+						_message->devType=SENACT;
+					}
+				}
+				break;
+			case ONON:
+			case TOG:
+			case ONOFFSEN:
+			case ONOFSW:
+				_message->values[i].bval = false;
+				if (strcmp(value.value(),"1")==0)
+					_message->values[i].bval = true;
+				Log->WriteMessage(MSG,"Value :" + std::to_string(_message->values[i].bval));
+				if (_message->devType==UNDEF)
+				{
+					if(_message->values[i].type==ONOFFSEN)
+						_message->devType=SEN;
+					else
+						_message->devType=ACT;
+				}
+				else
+				{
+					if (((_message->devType==ACT)&&(_message->values[i].type==ONOFFSEN))||((_message->devType==SEN)&&(_message->values[i].type==ONOFSW)))
+					{
+						_message->devType=SENACT;
+					}
+				}
+				break;
+			case EMI:
+			case HUM:
+			case BAR:
+			case RGB:
+			case RAN:
+				_message->values[i].ival = value.text().as_int();
+				Log->WriteMessage(MSG,"Value :" + std::to_string(_message->values[i].ival));
+				if (_message->devType==UNDEF)
+				{
+					_message->devType=SEN;
+				}
+				else
+				{
+					if (_message->devType==ACT)
+					{
+						_message->devType=SENACT;
+					}
+				}
+				break;
+			default:
+				_message->values[i].type = UNK;
+				Log->WriteMessage(WARN,"Received unknown value type from " + this->_message->DeviceIDstr);
+				break;
+		}
+	/*	if ((_message->values[i].type==ONOFFSEN)||(_message->values[i].type==ONOFSW))  //ak je typ 0x04 a 0x05 precitame jeden byte a ulozime hodnotu
 		{
 			_message->values[i].bval = false;
 			if (strcmp(value.value(),"1")==0)
@@ -645,7 +695,7 @@ bool ProtocolV1MessageParser::GetValues()
 					_message->devType=SENACT;
 				}
 			}
-		}
+		}*/
 	value = value.next_sibling();
 	}
 	Log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetValues");
@@ -714,8 +764,20 @@ ProtocolV1MessageParser::ProtocolV1MessageParser()
 
 message::message()
 {
-	values = NULL;
-	devType = UNDEF;
+	this->values = NULL;
+	this->devType = UNDEF;
+	this->DeviceIDstr = "";
+	this->adapterINTid = 0;
+	inet_pton(AF_INET, "0.0.0.0", &(this->adapter_ip));
+	this->battery = 0;
+	this->cp_version = 0.0;
+	this->signal_strength=0;
+	this->state = 0;
+	this->values_count = 0;
+	this->fm_version = 0;
+	this->sensor_id = 0;
+	this->timestamp = 0;
+
 }
 
 message::~message()

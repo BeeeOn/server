@@ -24,14 +24,35 @@ void DBHandler::LogValue (tmessage *message)
 		{
 			std::string retRec;
 			std::string val = "0";
-			if ((message->values[i].type==ONOFFSEN )|| (message->values[i].type==ONOFFSEN))
+			switch(message->values[i].type)
 			{
-				if(message->values[i].bval)
-					val = "1";
-			}
-			else
-			{
-				val = std::to_string(message->values[i].fval);
+				case TEMP:
+				case LUM:
+				case REZ:
+				case POS:
+					if ((message->values[i].type==ONOFFSEN )|| (message->values[i].type==ONOFFSEN))
+					{
+						if(message->values[i].bval)
+							val = "1";
+					}
+					break;
+				case ONON:
+				case TOG:
+				case ONOFFSEN:
+				case ONOFSW:
+					val = std::to_string(message->values[i].fval);
+					break;
+				case EMI:
+				case HUM:
+				case BAR:
+				case RGB:
+				case RAN:
+					val = std::to_string(message->values[i].ival);
+					break;
+				default:
+					this->_log->WriteMessage(WARN,"Unknown value type nothing will be saved to DB!");
+					continue;
+					break;
 			}
 			std::string sqlQuery = "insert into logs (fk_facilities_mac,timestamp,fk_devices_type,value) values ( '"+ message->DeviceIDstr + "', " + std::to_string(message->timestamp) + " , " + std::to_string(message->values[i].intType) + ", " + val + " );" ;
 			this->_log->WriteMessage(TRACE,sqlQuery);
@@ -188,14 +209,35 @@ bool DBHandler::InsertSenAct(tmessage *message)
 		{
 			std::string retRec;
 			std::string val = "0";
-			if ((message->values[i].type==ONOFFSEN )|| (message->values[i].type==ONOFFSEN))
+			switch(message->values[i].type)
 			{
-				if(message->values[i].bval)
-					val = "1";
-			}
-			else
-			{
-				val = std::to_string(message->values[i].fval);
+				case TEMP:
+				case LUM:
+				case REZ:
+				case POS:
+					if ((message->values[i].type==ONOFFSEN )|| (message->values[i].type==ONOFFSEN))
+					{
+						if(message->values[i].bval)
+							val = "1";
+					}
+					break;
+				case ONON:
+				case TOG:
+				case ONOFFSEN:
+				case ONOFSW:
+					val = std::to_string(message->values[i].fval);
+					break;
+				case EMI:
+				case HUM:
+				case BAR:
+				case RGB:
+				case RAN:
+					val = std::to_string(message->values[i].ival);
+					break;
+				default:
+					this->_log->WriteMessage(WARN,"Unknown value type nothing will be saved to DB!");
+					continue;
+					break;
 			}
 			//pri prvom ulozeni do databazy sa nastavi cas zobudzania defaultne na 5 sekund
 			std::string sqlQuery = "insert into devices (fk_facilities_mac,type,value) values ( '" + message->DeviceIDstr + "', " + std::to_string(message->values[i].intType) + ", '" + val + "');" ;
@@ -237,14 +279,35 @@ bool DBHandler::UpdateSenAct(tmessage *message)
 		{
 
 			std::string val = "0";
-			if ((message->values[i].type==ONOFFSEN )|| (message->values[i].type==ONOFFSEN))
+			switch(message->values[i].type)
 			{
-				if(message->values[i].bval)
-					val = "1";
-			}
-			else
-			{
-				val = std::to_string(message->values[i].fval);
+				case TEMP:
+				case LUM:
+				case REZ:
+				case POS:
+					if ((message->values[i].type==ONOFFSEN )|| (message->values[i].type==ONOFFSEN))
+					{
+						if(message->values[i].bval)
+							val = "1";
+					}
+					break;
+				case ONON:
+				case TOG:
+				case ONOFFSEN:
+				case ONOFSW:
+					val = std::to_string(message->values[i].fval);
+					break;
+				case EMI:
+				case HUM:
+				case BAR:
+				case RGB:
+				case RAN:
+					val = std::to_string(message->values[i].ival);
+					break;
+				default:
+					this->_log->WriteMessage(WARN,"Unknown value nothing will be saved to DB!");
+					continue;
+					break;
 			}
 			std::string sqlQuery = "update devices set value=" + val  +" where (fk_facilities_mac='" + message->DeviceIDstr + "' AND type =" + std::to_string(message->values[i].intType) +");" ;
 			this->_log->WriteMessage(TRACE,sqlQuery);
@@ -303,6 +366,22 @@ session *DBHandler::ReturnConnection()
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::ReturnConnection");
 	return s;
 
+}
+
+void DBHandler::GetAdapterData(std::string *adapterIP, long int ID)
+{
+	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetAdapterData");
+	try
+	{
+		*_sql<<"SELECT ip_address FROM adapters where adapter_id=" + std::to_string(ID) + ";" , into(*adapterIP);
+	}
+	catch(std::exception const &e)
+	{
+		std::string ErrorMessage = "Database Error : ";
+		ErrorMessage.append (e.what());
+		this->_log->WriteMessage(ERR,ErrorMessage );
+	}
+	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetAdapterData");
 }
 
 

@@ -71,9 +71,10 @@ bool Config::setConfig(std::string File,int AppType)
 bool Config::GetLogProperties(xml_node Log)
 {
 	this->_Verbosity=Log.child("Level").text().as_int();
-	this->_maxLines=Log.child("LinesCount").text().as_int();
+	this->_maxLines=Log.child("MaxFileSize").text().as_int();
 	this->_maxFiles=Log.child("FilesCount").text().as_int();
 	this->_fileNaming=Log.child("FileNaming").text().as_string();
+	this->_path =Log.child("LogPath").text().as_string();
 	return true;
 }
 
