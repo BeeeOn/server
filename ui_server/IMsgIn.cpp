@@ -28,6 +28,7 @@ IMsgIn::IMsgIn(char* msg, pugi::xml_document* doc)
 IMsgIn::~IMsgIn(void)
 {
     delete _doc;
+    //free(_msg);
 }
 
 bool IMsgIn::checkProtocolVersion(){

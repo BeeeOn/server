@@ -1,5 +1,6 @@
 
 #include "sslServlet.h"
+#include "communication.h"
 
 int OpenListener(int port) {
         int sd;
@@ -104,7 +105,7 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
         
         int fd = SSL_get_fd(ssl);
         struct timeval tv;
-        tv.tv_sec = 3;
+        tv.tv_sec = 30;
         tv.tv_usec = 0; 
         setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv,sizeof(struct timeval));
         SSL_set_fd(ssl, fd);
@@ -115,15 +116,12 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
         int readSize = 1024;
         char *rc=NULL;
         int count = 0;
+        int burstMsgCount = 1;
         
-        if ( (ret = SSL_accept(ssl)) != 1 ) {     /* do SSL-protocol accept */
+        if ( (ret = SSL_accept(ssl)) != 1 ) {     // do SSL-protocol accept 
                 ERR_print_errors_fp(stderr);
                 int ssl_err = SSL_get_error(ssl, ret);
                 Logger::getInstance(Logger::DEBUG3)<<"ssl_accept err:"<<ssl_err<<endl;
-                /*if( ssl_err == SSL_ERROR_WANT_READ ){
-                        Logger::getInstance(Logger::DEBUG3)<<"jump"<<endl;
-                        goto again;
-                }*/
         }else {
                 Logger::getInstance(Logger::DEBUG3)<<"ssl accepted"<<endl;
                 // print client certificate
@@ -136,7 +134,7 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
                     else
                         rc = (char*)realloc (rc, (count + 1) * readSize * sizeof (char) + 1);
                     
-                    received = SSL_read(ssl, buf, sizeof(buf)-1); /* get request */
+                    received = SSL_read(ssl, buf, sizeof(buf)-1); // get request 
                     if(received >= 0)
                         buf[received] = '\0';
                     
@@ -146,6 +144,7 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
                         strcat (rc, buf);
                     }else{
                             int sslReadErr = SSL_get_error(ssl,received);
+                            Logger::getInstance(Logger::DEBUG3)<<"ssl read err:"<< sslReadErr <<endl;
                             break;
                     }
                     if(count > 5){
@@ -159,13 +158,14 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
                 }
                  Logger::getInstance(Logger::DEBUG3)<<"received"<< received<<"count"<<count <<endl;
                 if ( received > 0  || count > 1) {
-                        std::string replyString = resolveFunc(rc);
+                        Logger::getInstance(Logger::DEBUG3)<<"Start resolve "<< burstMsgCount++ <<" msg in burst"<<endl;
+                        std::string replyString = resolveMsg(rc);
 #ifdef DEBUG
                         printf("Client msg: \"%s\"\n", buf);
 #endif
-                        //sprintf(reply, response, buf);   /* construct reply */
+                        //sprintf(reply, response, buf);   //construct reply
                         free(rc);
-                        SSL_write(ssl, replyString.c_str(), replyString.length() ); /* send reply */
+                        SSL_write(ssl, replyString.c_str(), replyString.length() ); // send reply 
                         count =0;
                         rc=NULL;
                         buf[0] = '\0';
@@ -176,9 +176,9 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
                 }
         }
          Logger::getInstance(Logger::DEBUG3)<<"ssl com done"<<endl;
-        sd = SSL_get_fd(ssl);       /* get socket connection */
-        SSL_free(ssl);         /* release SSL state */
-        close(sd);          /* close connection */
+        sd = SSL_get_fd(ssl);       // get socket connection 
+        SSL_free(ssl);         // release SSL state 
+        close(sd);          // close connection 
         Logger::getInstance(Logger::DEBUG3)<<"servlet done"<<endl;
 }
 /*

@@ -56,7 +56,7 @@ void Logger::printTime(){
     if(_colored)
 		cout<<zkr::cc::bold;
     
-    cout<<">"<<_verbosityLevel<<"< " << getpid()<<": ";
+    cout<<">"<<_verbosityLevel<<"< " << std::this_thread::get_id() <<": ";
         
     printf("%d.%d.%d %02d:%02d:%02d:%03ld ", t->tm_mday,t->tm_mon,(t->tm_year+1900),t->tm_hour, t->tm_min, t->tm_sec, tp.tv_usec/1000);
     if(_colored)

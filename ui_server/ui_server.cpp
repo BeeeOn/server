@@ -1,6 +1,7 @@
 // Server.cpp : Defines the entry point for the console application.
 
 #include "ui_server.h"
+#include "msgInGetCondition.h"
 // uncoment if you want print debug reports
 //#define DEBUG 1
 
@@ -19,14 +20,18 @@ char KeyFile[]  = "./cert/ant-2.fit.vutbr.cz.key";
 using namespace std;
 
 
+
+
 bool serverStop;
 int serverPort;
+
 
 void sig_handler(int signo)
 {
     if (signo == SIGINT)
     {
         serverStop = true;
+        exit(0);//ODSTRANENI toho vede k vypisum ve valgrindu, tak si to zkontroluj!!!
         Logger::getInstance(Logger::FATAL) << "SIGINT catched"<<endl;
         SocketClient sc(serverPort);
         sc.write("end");
@@ -35,7 +40,6 @@ void sig_handler(int signo)
 
 int main(int argc, char** argv)
 {   
-
     if(argc>=2){
         try{
             Config::getInstance().loadXml(argv[1]);
@@ -54,7 +58,8 @@ int main(int argc, char** argv)
         Logger::getInstance().setVerbosityThreshold( Config::getInstance().getVerbosity() );
         
         Logger::getInstance(Logger::FATAL) << "start with port"<<serverPort <<endl;
-        ComTable::getInstance().startComTableCleaner(Config::getInstance().getComTableSleepPeriodMs(), Config::getInstance().getComTableMaxInactivityMs() );
+        Logger::getInstance(Logger::FATAL) << "threads: "<<Config::getInstance().getServerThreadsNumber() << endl;
+       // ComTable::getInstance().startComTableCleaner(Config::getInstance().getComTableSleepPeriodMs(), Config::getInstance().getComTableMaxInactivityMs() );
         try{                        
             DBConnector::getInstance().setConnectionStringAndOpenSessions( Config::getInstance().getDBConnectionString() , Config::getInstance().getDBSessionsNumber());
         }
@@ -68,7 +73,7 @@ int main(int argc, char** argv)
         DBConnector::getInstance().getDeviceLog((string)"51966", d,(string)"2014-08-05 00:00:00",(string)"2014-08-12 11:23:50",(string)"avg",(string)"3600");
         return 0;*/
 
-        
+        /*
          resolveMsg( "<com ver=\"2.3\"  state=\"getuid\" email=\"new22@gmail.com\" gid=\"1111\" gt=\"1\"  loc=\"cs\" />");
         resolveMsg( "<com uid=\"1\" state=\"getdevs\" ver=\"2.3\"><adapter id=\"10\"><dev id=\"0.0.10.1\"><part type=\"1\" /><part type=\"2\" /></dev></adapter></com>");
         resolveMsg( "<com uid=\"1\" state=\"getnewdevs\" ver=\"2.3\" aid=\"10\"></com>");
@@ -78,14 +83,14 @@ int main(int argc, char** argv)
         resolveMsg( "<com ver=\"2.3\" uid=\"2\" state=\"getdevs\" ><adapter id=\"20\"><dev id=\"0.0.20.1\"><part type=\"1\" /></dev><dev id=\"0.0.10.2\"><part type=\"1\" /></dev></adapter></com>");
         resolveMsg( "<com ver=\"2.3\" uid=\"2\" state=\"getlog\" from=\"1377684610\" ftype=\"avg\" interval=\"0\" aid=\"21\" did=\"0.0.21.1\" dtype=\"1\" />" );
        resolveMsg( "<com ver=\"2.3\" uid=\"1\" state=\"getnewdevs\" aid=\"10\"  />" );
-
+*/
         
        
        
        
         SSL_CTX *ctx;
         int server;
-        atomic<int>* threadCounter = new atomic<int>(0);
+       atomic<int>* threadCounter = new atomic<int>(0);
         
         SSL_library_init();
         
@@ -98,6 +103,7 @@ int main(int argc, char** argv)
             
             int client = accept(server, (struct sockaddr*)&addr, &len);  /* accept connection as usual */
             Logger::getInstance(Logger::DEBUG3)<<"socket accepted"<<endl;
+            
 #ifdef DEBUG
             printf("Connection: %s:%d\n",inet_ntoa(addr.sin_addr), ntohs(addr.sin_port));
 #endif
@@ -105,15 +111,17 @@ int main(int argc, char** argv)
             ssl = SSL_new(ctx);              /* get new SSL state with context */
             SSL_set_fd(ssl, client);      /* set connection socket to SSL state */
             
-            std::function<string(char*)> resolveFunc = &resolveMsg;
+            std::function<string(char*)> resolveFunc;// = &resolveMsg;
             
-            if(1){
-                Servlet(ssl, resolveFunc);
+            if(serverStop)break;
+            
+            if(0){
+              //  Servlet(ssl, resolveFunc);
             }else{
                 while(*threadCounter > Config::getInstance().getServerThreadsNumber()) 
                     std::this_thread::sleep_for(std::chrono::milliseconds(50));
 
-                Logger::getInstance(Logger::DEBUG2)<<"threads c.:"<<threadCounter<<endl;
+                Logger::getInstance(Logger::DEBUG2)<<"threads c.:"<<(*threadCounter +1)<<endl;
                 Logger::getInstance(Logger::DEBUG2)<<"new thread started"<<endl;
                 thread *t =  new thread( [ssl, threadCounter,resolveFunc](){
                     (*threadCounter)++;
@@ -122,7 +130,11 @@ int main(int argc, char** argv)
                 });
             }
         }
-        
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        while(*threadCounter){
+            Logger::getInstance(Logger::DEBUG2)<<"wait- threads c.:"<<(*threadCounter +1)<<endl;
+            std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        }
         close(server);          /* close server socket */
         SSL_CTX_free(ctx);         /* release context */
         Logger::getInstance(Logger::FATAL) << "Server main thread exit\n";

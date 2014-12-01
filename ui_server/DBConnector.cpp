@@ -325,7 +325,7 @@ std::string DBConnector::getXMLAllDevs(string adapter)
         
 }
 
-string DBConnector::getXMLdevices(GUserId userId, vector<device> devicesVec)
+string DBConnector::getXMLdevices(GUserId userId, vector<string> adaptersVec, vector<device> devicesVec)
 {
          Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"getPartialDevices"<<"\n";
         try
@@ -334,7 +334,8 @@ string DBConnector::getXMLdevices(GUserId userId, vector<device> devicesVec)
                 Logger::getInstance(Logger::DEBUG3)<<"devices n."<<devicesVec.size()<<"\n";
                 if( devicesVec.size() == 0)
                     return "";
-                stringstream ssD,ssF;
+                
+                stringstream ssD,ssF,ssA;
                 ssD<<"(";
                  ssF<<"(";
                 for (unsigned int i=0; i<devicesVec.size(); i++){
@@ -348,35 +349,45 @@ string DBConnector::getXMLdevices(GUserId userId, vector<device> devicesVec)
                 }
                 ssD<<")";
                  ssF<<")";
+                 
+                 ssA<<"(";
+                for (unsigned int i=0; i<adaptersVec.size(); i++){
+                    ssA << "'"<<adaptersVec[i]<<"'";
+                    
+                    if( i != adaptersVec.size()-1){
+                        ssA <<",";
+                    }
+                }
+                ssA<<")";
                 string devices = ssD.str();
                 string facs = ssF.str();
+                string adapters = ssA.str();
               
+                Logger::getInstance(Logger::DEBUG3)<<"check ada string::"<<adapters<<endl;
                 Logger::getInstance(Logger::DEBUG3)<<"check devices string:"<<devices<<endl;
                 Logger::getInstance(Logger::DEBUG3)<<"check facilities string::"<<facs<<endl;
                 
                 string xml;
                 indicator ind;
                 //cout<<getXMLDevicesQueryString(" and concat(fk_facilities_mac,type) in "+devices);
-                statement st = (sql.prepare <<"select "
-                        //"xmlelement(name adapter, xmlattributes(adapter_id as aid), " 
-                        //+getXMLDevicesQueryString() +
-                        
-                        //copypaste
-                        " xmlagg("
-                                "xmlelement(name adapter, xmlattributes(adapter_id as id),"
-                                            "xmlelement(name  dev,xmlattributes(init as init, mac as did, fk_room_id as lid, refresh as refresh, battery as batt,"
-                                                                    " timestamp as time, involved  as inv, quality as rssi),"
-                                                                     "(select  xmlagg(xmlelement(name part,xmlattributes(type as type, visibility as vis, name as name, value as val)))from devices where (host(fk_facilities_mac) , type) in "+devices+" )"
-                                                                ")"
-                                                     ")"
-                                        ") "
-                        
-                        //!copypaste
-                        
-                      // " ) " 
-                        "from adapters join facilities on adapters.adapter_id=facilities.fk_adapter_id  where host(mac) in "+facs +" "
-
-                        
+                statement st = (sql.prepare <<
+                        "select  xmlagg("
+		"xmlelement(name adapter, xmlattributes(adapter_id as id),"
+					    "(select  "
+						    "xmlagg(xmlelement(name  dev,xmlattributes(mac as did, fk_room_id as lid, refresh as refresh, battery as batt,"
+                                                                                                                                     " timestamp as time, involved  as inv, quality as rssi),"
+								"(select xmlagg(xmlelement(name part,xmlattributes(type as type, visibility as vis, name as name,value as val))) from devices where "
+									"(host(fk_facilities_mac) , type) in "+devices+" "
+									"and devices.fk_facilities_mac = facilities.mac"
+								")"								
+							   ")"
+						   " ) from facilities where facilities.mac in "+facs +" and"
+						   " adapters.adapter_id=facilities.fk_adapter_id"
+							
+						")"
+		")"
+	") "
+"from adapters where adapter_id in "+adapters
                         ,
                         soci::into(xml, ind) );
                 //TODO napojeni na uživatlee

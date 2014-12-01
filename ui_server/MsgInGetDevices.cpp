@@ -25,7 +25,7 @@ string MsgInGetDevs::createResponseMsgOut()
     
     
     vector<device> devicesVec;
-     //vector<string> adapterVec;
+    vector<string> adaptersVec;
     //vector<string> facilitiesVec;
    // vector<string> devicesVec;
     
@@ -35,8 +35,8 @@ string MsgInGetDevs::createResponseMsgOut()
     
     for (; adapterNode; adapterNode = adapterNode.next_sibling(P_ADAPTER))
     {
-        //adapterId = adapterNode.attribute(...).value();
-        //adapterVec.insert(adapterVec.begin(), adapterId);
+        adapterId = adapterNode.attribute(P_IN_ADAPTER_ID).value();
+        adaptersVec.insert(adaptersVec.begin(), adapterId);
         
         facilityNode =  _doc->child(P_COMMUNICATION).child(P_ADAPTER).child(P_FACILITY);
         
@@ -62,5 +62,5 @@ string MsgInGetDevs::createResponseMsgOut()
         }
     }
     
-    return envelopeResponse(R_DEVICES, DBConnector::getInstance().getXMLdevices(_gUserId, devicesVec));
+    return envelopeResponse(R_DEVICES, DBConnector::getInstance().getXMLdevices(_gUserId, adaptersVec, devicesVec));
 }

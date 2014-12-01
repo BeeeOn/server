@@ -16,6 +16,7 @@
 #define P_DEVICE "part"
 
 #define P_ADAPTER_ID "aid"
+#define P_IN_ADAPTER_ID "id"
 #define P_ADAPTER_NAME "aname"
 
 #define P_FACILITY_ID "did"

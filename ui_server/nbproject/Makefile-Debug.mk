@@ -135,8 +135,8 @@ TESTFILES= \
 CFLAGS=`cppunit-config --cflags` 
 
 # CC Compiler Flags
-CCFLAGS=-std=c++0x -D_GLIBCXX_USE_NANOSLEEP `cppunit-config --cflags` 
-CXXFLAGS=-std=c++0x -D_GLIBCXX_USE_NANOSLEEP `cppunit-config --cflags` 
+CCFLAGS=-O0 -std=c++0x -D_GLIBCXX_USE_NANOSLEEP `cppunit-config --cflags` 
+CXXFLAGS=-O0 -std=c++0x -D_GLIBCXX_USE_NANOSLEEP `cppunit-config --cflags` 
 
 # Fortran Compiler Flags
 FFLAGS=

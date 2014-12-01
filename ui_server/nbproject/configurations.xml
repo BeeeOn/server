@@ -461,7 +461,7 @@
             <pElem>../Server</pElem>
             <pElem>.</pElem>
           </incDir>
-          <commandLine>-std=c++0x -D_GLIBCXX_USE_NANOSLEEP `cppunit-config --cflags`</commandLine>
+          <commandLine>-O0 -std=c++0x -D_GLIBCXX_USE_NANOSLEEP `cppunit-config --cflags`</commandLine>
           <warningLevel>2</warningLevel>
         </ccTool>
         <linkerTool>
