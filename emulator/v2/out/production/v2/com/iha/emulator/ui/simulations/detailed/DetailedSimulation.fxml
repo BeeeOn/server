@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.input.*?>
+<?import javafx.scene.web.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
@@ -9,7 +12,7 @@
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
-<VBox fx:id="view" prefHeight="673.0" prefWidth="1131.0" stylesheets="@DetailedSimulation.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iha.emulator.ui.simulations.detailed.DetailedSimulationView">
+<VBox fx:id="view" prefHeight="673.0" prefWidth="1131.0" stylesheets="@../../../resources/images/css/theme-light.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iha.emulator.ui.simulations.detailed.DetailedSimulationView">
   <children>
       <HBox prefHeight="43.0" prefWidth="1110.0" styleClass="whiteBackground" VBox.vgrow="NEVER">
          <children>
@@ -17,12 +20,27 @@
             <menus>
               <Menu mnemonicParsing="false" styleClass=".menuBarStripes">
                 <items>
-                  <MenuItem fx:id="newAdapterItem" mnemonicParsing="false" onAction="#handleNewAdapter" text="New adapter" />
-                  <MenuItem fx:id="openItem" mnemonicParsing="false" onAction="#handleOpen" text="Open..." />
+                  <MenuItem fx:id="newAdapterItem" mnemonicParsing="false" onAction="#handleNewAdapter" text="New adapter">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
+                  <MenuItem fx:id="openItem" mnemonicParsing="false" onAction="#handleOpen" text="Open...">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem fx:id="saveItem" mnemonicParsing="false" onAction="#handleSave" text="Save" />
-                  <MenuItem fx:id="saveAllItem" mnemonicParsing="false" onAction="#handleSaveAll" text="Save all" />
-                  <MenuItem fx:id="printItem" mnemonicParsing="false" onAction="#handlePrint" text="Print" />
+                  <MenuItem fx:id="saveItem" mnemonicParsing="false" onAction="#handleSave" text="Save">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
+                  <MenuItem fx:id="saveAllItem" mnemonicParsing="false" onAction="#handleSaveAll" text="Save all">
+                           <accelerator>
+                              <KeyCodeCombination alt="DOWN" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
+                  <MenuItem fx:id="printItem" mnemonicParsing="false" onAction="#handlePrint" text="Print">
+                           <accelerator>
+                              <KeyCodeCombination alt="DOWN" code="P" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem fx:id="preferencesItem" mnemonicParsing="false" onAction="#handlePreferences" text="Preferences…" />
                   <SeparatorMenuItem mnemonicParsing="false" />
@@ -34,7 +52,7 @@
                   <Insets top="5.0" />
                </HBox.margin>
           </MenuBar>
-            <ToolBar prefHeight="37.0" prefWidth="380.0" styleClass="toolBar" HBox.hgrow="ALWAYS">
+            <ToolBar fx:id="tooBar" prefHeight="37.0" prefWidth="380.0" styleClass="toolBar" HBox.hgrow="ALWAYS">
               <items>
                 <Button fx:id="saveTBtn" mnemonicParsing="false" onAction="#handleSave">
                      <styleClass>
@@ -108,6 +126,22 @@
                      <tooltip>
                         <Tooltip text="Add new adapter" />
                      </tooltip>
+                     <contextMenu>
+                        <ContextMenu>
+                          <items>
+                            <MenuItem fx:id="newAdapterSubItem" mnemonicParsing="false" onAction="#handleNewAdapter" text="Add new adapter">
+                                 <accelerator>
+                                    <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                                 </accelerator>
+                              </MenuItem>
+                              <MenuItem fx:id="newSensorSubItem" mnemonicParsing="false" onAction="#handleNewSensor" text="Add new sensor">
+                                 <accelerator>
+                                    <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+                                 </accelerator>
+                              </MenuItem>
+                          </items>
+                        </ContextMenu>
+                     </contextMenu>
                   </Button>
                   <Button fx:id="deleteAdapterTBtn" mnemonicParsing="false" onAction="#handleDeleteAdapter">
                      <styleClass>
@@ -123,7 +157,7 @@
                         <Insets bottom="4.0" top="4.0" />
                      </padding>
                   </Separator>
-                  <Button fx:id="enableInternetTBtn" disable="true" mnemonicParsing="false" onAction="#handleEnableInternet">
+                  <Button fx:id="enableInternetTBtn" mnemonicParsing="false" onAction="#handleEnableInternet">
                      <styleClass>
                         <String fx:value="plainToolBarBtn" />
                         <String fx:value="enableInternetConnectionBtn" />
@@ -132,14 +166,14 @@
                         <Tooltip text="Enable internet connection" />
                      </tooltip>
                   </Button>
-                  <Button fx:id="disableInternetTBtn" disable="true" mnemonicParsing="false" onAction="#handleDisableInternet">
+                  <Button fx:id="disableInternetTBtn" mnemonicParsing="false" onAction="#handleDisableInternet">
+                     <tooltip>
+                        <Tooltip text="Disable internet connection" />
+                     </tooltip>
                      <styleClass>
                         <String fx:value="plainToolBarBtn" />
                         <String fx:value="disableInternetConnectionBtn" />
                      </styleClass>
-                     <tooltip>
-                        <Tooltip text="Disable internet connection" />
-                     </tooltip>
                   </Button>
               </items>
                <HBox.margin>
@@ -160,9 +194,9 @@
                   </Label>
                   <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minHeight="250.0" prefHeight="368.0" prefWidth="250.0" styleClass="adaptersListScrollPanel" VBox.vgrow="ALWAYS">
                      <content>
-                        <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefHeight="411.0" prefWidth="250.0" rowValignment="TOP" styleClass="adaptersList" vgap="4.0">
+                        <FlowPane fx:id="adapterBtnsContainer" alignment="TOP_CENTER" columnHalignment="CENTER" prefHeight="411.0" prefWidth="250.0" rowValignment="TOP" styleClass="adaptersList" vgap="4.0">
                            <children>
-                              <Button mnemonicParsing="false" prefWidth="232.0" text="Add new adapter">
+                              <Button fx:id="addAdapterBtn" mnemonicParsing="false" onAction="#handleNewAdapter" prefWidth="232.0" text="Add new adapter">
                                  <styleClass>
                                     <String fx:value="adapterListBtn" />
                                     <String fx:value="addAdapterBtn" />
@@ -174,34 +208,6 @@
                         <Insets left="10.0" right="10.0" />
                      </padding>
                   </ScrollPane>
-                  <BorderPane prefHeight="48.0" prefWidth="244.0" styleClass="serverDetailsLblContainer" VBox.vgrow="NEVER">
-                     <left>
-                        <Label prefHeight="24.0" prefWidth="178.0" styleClass="sectionName" text="Server details" BorderPane.alignment="CENTER_LEFT" />
-                     </left>
-                     <right>
-                        <Button mnemonicParsing="false" prefHeight="29.0" prefWidth="30.0" styleClass="settingsBtn" BorderPane.alignment="CENTER_LEFT">
-                           <BorderPane.margin>
-                              <Insets />
-                           </BorderPane.margin>
-                           <tooltip>
-                              <Tooltip text="Server settings" />
-                           </tooltip>
-                        </Button>
-                     </right>
-                  </BorderPane>
-                  <Pane prefHeight="129.0" prefWidth="250.0" VBox.vgrow="NEVER">
-                     <children>
-                        <TableView prefHeight="128.0" prefWidth="251.0" styleClass="plainTable">
-                          <columns>
-                            <TableColumn editable="false" prefWidth="129.0" resizable="false" sortable="false" />
-                            <TableColumn editable="false" prefWidth="120.0" resizable="false" sortable="false" />
-                          </columns>
-                           <columnResizePolicy>
-                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                           </columnResizePolicy>
-                        </TableView>
-                     </children>
-                  </Pane>
                </children>
                <HBox.margin>
                   <Insets bottom="10.0" left="20.0" right="20.0" />
@@ -216,11 +222,12 @@
                   </Label>
                   <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="610.0" prefWidth="565.0" styleClass="centralSplitPanel" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
                     <items>
-                        <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minHeight="250.0" minWidth="500.0" prefViewportHeight="286.0" prefViewportWidth="534.0" styleClass="sensorsListContainer">
+                        <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minWidth="500.0" prefHeight="250.0" prefViewportHeight="286.0" prefViewportWidth="534.0" styleClass="sensorsListContainer">
                            <content>
-                              <FlowPane prefHeight="250.0" prefWidth="500.0" styleClass="sensorsList">
+                              <FlowPane fx:id="sensorPanelContainer" hgap="2.0" prefWidth="500.0" styleClass="sensorsList" vgap="5.0">
                                  <children>
-                                    <VBox maxWidth="242.0" prefHeight="249.0" prefWidth="242.0" styleClass="sensorPanel">
+                                    <Button fx:id="addNewSensorBtn" mnemonicParsing="false" onAction="#handleNewSensor" styleClass="sensorAddBtn" text="Add sensor / actuator" />
+                                    <VBox maxWidth="242.0" prefHeight="249.0" styleClass="sensorPanel" visible="false">
                                        <children>
                                           <Label prefHeight="59.0" styleClass="sensorPanelHeader" text="Multisensor" VBox.vgrow="NEVER" />
                                           <HBox alignment="CENTER" prefHeight="25.0" prefWidth="205.0" VBox.vgrow="NEVER">
@@ -232,68 +239,12 @@
                                                       <String fx:value="withPlainContextMenu" />
                                                       <String fx:value="withSlider" />
                                                    </styleClass>
-                                                   <contextMenu>
-                                                      <ContextMenu>
-                                                        <items>
-                                                            <CustomMenuItem hideOnClick="false" mnemonicParsing="false" text="Change battery">
-                                                               <content>
-                                                                  <Slider majorTickUnit="10.0" minorTickCount="10" showTickLabels="true" showTickMarks="true" value="100.0" />
-                                                               </content>
-                                                            </CustomMenuItem>
-                                                            <CustomMenuItem mnemonicParsing="false" text="Ok">
-                                                               <content>
-                                                                  <HBox alignment="CENTER" spacing="5.0">
-                                                                     <children>
-                                                                        <Button alignment="CENTER" defaultButton="true" mnemonicParsing="false" text="Ok" HBox.hgrow="NEVER">
-                                                                           <HBox.margin>
-                                                                              <Insets left="5.0" />
-                                                                           </HBox.margin>
-                                                                        </Button>
-                                                                        <Button alignment="CENTER" cancelButton="true" mnemonicParsing="false" text="Cancel" />
-                                                                     </children>
-                                                                  </HBox>
-                                                               </content>
-                                                            </CustomMenuItem>
-                                                        </items>
-                                                      </ContextMenu>
-                                                   </contextMenu>
-                                                   <tooltip>
-                                                      <Tooltip text="Right-click to change battery value" />
-                                                   </tooltip>
                                                 </Label>
                                                 <Label prefHeight="16.0" prefWidth="67.0" text="100%" HBox.hgrow="NEVER">
                                                    <styleClass>
                                                       <String fx:value="sensorSignal" />
                                                       <String fx:value="plainTextColor" />
                                                    </styleClass>
-                                                   <contextMenu>
-                                                      <ContextMenu>
-                                                         <items>
-                                                            <CustomMenuItem hideOnClick="false" mnemonicParsing="false" text="Change signal">
-                                                               <content>
-                                                                  <Slider majorTickUnit="10.0" minorTickCount="10" showTickLabels="true" showTickMarks="true" value="100.0" />
-                                                               </content>
-                                                            </CustomMenuItem>
-                                                            <CustomMenuItem mnemonicParsing="false" text="Ok">
-                                                               <content>
-                                                                  <HBox alignment="CENTER" spacing="5.0">
-                                                                     <children>
-                                                                        <Button alignment="CENTER" defaultButton="true" mnemonicParsing="false" text="Ok" HBox.hgrow="NEVER">
-                                                                           <HBox.margin>
-                                                                              <Insets left="5.0" />
-                                                                           </HBox.margin>
-                                                                        </Button>
-                                                                        <Button alignment="CENTER" cancelButton="true" mnemonicParsing="false" text="Cancel" />
-                                                                     </children>
-                                                                  </HBox>
-                                                               </content>
-                                                            </CustomMenuItem>
-                                                         </items>
-                                                      </ContextMenu>
-                                                   </contextMenu>
-                                                   <tooltip>
-                                                      <Tooltip text="Right-click to change signal value" />
-                                                   </tooltip>
                                                 </Label>
                                                 <Label prefHeight="16.0" prefWidth="80.0" text="10 min" HBox.hgrow="ALWAYS">
                                                    <styleClass>
@@ -301,34 +252,6 @@
                                                       <String fx:value="plainTextColor" />
                                                       <String fx:value="boldText" />
                                                    </styleClass>
-                                                   <contextMenu>
-                                                      <ContextMenu>
-                                                         <items>
-                                                            <CustomMenuItem hideOnClick="false" mnemonicParsing="false" text="Change refresh time">
-                                                               <content>
-                                                                  <Slider showTickLabels="true" showTickMarks="true" snapToTicks="true" value="10.0" />
-                                                               </content>
-                                                            </CustomMenuItem>
-                                                            <CustomMenuItem mnemonicParsing="false" text="Ok">
-                                                               <content>
-                                                                  <HBox alignment="CENTER" spacing="5.0">
-                                                                     <children>
-                                                                        <Button alignment="CENTER" defaultButton="true" mnemonicParsing="false" text="Ok" HBox.hgrow="ALWAYS">
-                                                                           <HBox.margin>
-                                                                              <Insets left="5.0" />
-                                                                           </HBox.margin>
-                                                                        </Button>
-                                                                        <Button alignment="CENTER" cancelButton="true" mnemonicParsing="false" text="Cancel" HBox.hgrow="ALWAYS" />
-                                                                     </children>
-                                                                  </HBox>
-                                                               </content>
-                                                            </CustomMenuItem>
-                                                         </items>
-                                                      </ContextMenu>
-                                                   </contextMenu>
-                                                   <tooltip>
-                                                      <Tooltip text="Right-click to change refresh time" />
-                                                   </tooltip>
                                                 </Label>
                                              </children>
                                              <padding>
@@ -350,9 +273,9 @@
                                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                             </rowConstraints>
                                              <children>
-                                                <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="93.0" text="Status:" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
-                                                <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="83.0" text="Id:" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" />
-                                                <Label prefHeight="14.0" prefWidth="125.0" text="Active" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+                                                <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="93.0" styleClass="sensorText" text="Status:" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
+                                                <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="83.0" styleClass="sensorText" text="Id:" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" />
+                                                <Label prefHeight="14.0" prefWidth="125.0" styleClass="sensorText" text="Active" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
                                                    <padding>
                                                       <Insets left="10.0" />
                                                    </padding>
@@ -414,17 +337,56 @@
                           <tabs>
                             <Tab closable="false" text="Adapter Log">
                                  <content>
-                                    <TextFlow prefHeight="200.0" prefWidth="200.0" />
+                                    <VBox prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <Accordion styleClass="logMorePane">
+                                            <panes>
+                                              <TitledPane animated="false" text="More">
+                                                   <content>
+                                                      <HBox alignment="CENTER_LEFT" prefHeight="44.0" prefWidth="545.0" spacing="10.0" styleClass="logMorePanelContainer">
+                                                         <children>
+                                                            <Label text="Message:" />
+                                                            <RadioButton fx:id="fullLogMessageRadBtn" mnemonicParsing="false" selected="true" text="Full">
+                                                               <toggleGroup>
+                                                                  <ToggleGroup fx:id="logMessageTypeRadBtnGroup" />
+                                                               </toggleGroup>
+                                                               <tooltip>
+                                                                  <Tooltip />
+                                                               </tooltip>
+                                                            </RadioButton>
+                                                            <RadioButton fx:id="partialLogMessageRadBtn" mnemonicParsing="false" text="Partial" toggleGroup="$logMessageTypeRadBtnGroup" />
+                                                            <RadioButton fx:id="shortLogMessageRadBtn" mnemonicParsing="false" text="Short" toggleGroup="$logMessageTypeRadBtnGroup" />
+                                                            <Region prefHeight="0.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                                                            <Button disable="true" mnemonicParsing="false" styleClass="showLogButton" text="Show log" HBox.hgrow="NEVER" />
+                                                         </children>
+                                                         <padding>
+                                                            <Insets left="10.0" right="10.0" />
+                                                         </padding>
+                                                      </HBox>
+                                                   </content>
+                                              </TitledPane>
+                                            </panes>
+                                          </Accordion>
+                                          <Separator prefWidth="200.0" styleClass="logMorePaneSeparator" visible="false" VBox.vgrow="NEVER">
+                                             <padding>
+                                                <Insets left="10.0" right="10.0" />
+                                             </padding>
+                                             <VBox.margin>
+                                                <Insets />
+                                             </VBox.margin>
+                                          </Separator>
+                                          <StackPane fx:id="adapterLogContainer" prefHeight="150.0" prefWidth="200.0" styleClass="logTextAreaContainer" VBox.vgrow="ALWAYS" />
+                                       </children>
+                                    </VBox>
                                  </content>
                             </Tab>
                             <Tab closable="false" text="To Be Sent">
                                  <content>
-                                    <TextFlow prefHeight="200.0" prefWidth="200.0" />
-                                 </content>
-                            </Tab>
+                                    <StackPane fx:id="toBeSentLogContainer" prefHeight="150.0" prefWidth="200.0" styleClass="logTextAreaContainer" />
+                                 </content></Tab>
                               <Tab closable="false" text="Error Log">
                                  <content>
-                                    <TextFlow prefHeight="200.0" prefWidth="200.0" />
+                                    <StackPane fx:id="errorLogContainer" prefHeight="150.0" prefWidth="200.0" styleClass="logTextAreaContainer" />
                                  </content>
                               </Tab>
                           </tabs>
@@ -443,15 +405,23 @@
                         <Insets bottom="5.0" top="5.0" />
                      </VBox.margin>
                   </Label>
-                  <TableView prefHeight="440.0" prefWidth="250.0" styleClass="plainTable">
-                    <columns>
-                      <TableColumn editable="false" prefWidth="124.0" resizable="false" sortable="false" />
-                      <TableColumn editable="false" prefWidth="123.0" resizable="false" sortable="false" />
-                    </columns>
-                     <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                     </columnResizePolicy>
-                  </TableView>
+                  <FlowPane fx:id="adapterDetailsContainer" prefHeight="197.0" prefWidth="256.0" styleClass="adapterDetailsContainer" />
+                  <BorderPane prefHeight="48.0" prefWidth="244.0" styleClass="serverDetailsLblContainer" VBox.vgrow="NEVER">
+                     <left>
+                        <Label prefHeight="24.0" prefWidth="178.0" styleClass="sectionName" text="Server details" BorderPane.alignment="CENTER_LEFT" />
+                     </left>
+                     <right>
+                        <Button mnemonicParsing="false" prefHeight="29.0" prefWidth="30.0" styleClass="settingsBtn" BorderPane.alignment="CENTER_LEFT">
+                           <BorderPane.margin>
+                              <Insets />
+                           </BorderPane.margin>
+                           <tooltip>
+                              <Tooltip text="Server settings" />
+                           </tooltip>
+                        </Button>
+                     </right>
+                  </BorderPane>
+                  <FlowPane fx:id="serverDetailsContainer" alignment="CENTER" columnHalignment="CENTER" prefHeight="119.0" prefWidth="250.0" styleClass="serverDetailsContainer" VBox.vgrow="NEVER" />
                </children>
                <HBox.margin>
                   <Insets bottom="10.0" left="20.0" right="20.0" />
@@ -463,7 +433,7 @@
         <panes>
           <TitledPane animated="false" text="Application Log">
                <content>
-                  <TextFlow prefHeight="300.0" />
+                  <TextArea fx:id="appLog" editable="false" prefHeight="200.0" scrollTop="200.0" wrapText="true" />
                </content>
           </TitledPane>
         </panes>

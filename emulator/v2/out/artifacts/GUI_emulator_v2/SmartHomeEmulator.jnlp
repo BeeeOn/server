@@ -11,14 +11,19 @@
   </resources>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="SmartHomeEmulator.jar" size="287220" download="eager" />
+    <jar href="SmartHomeEmulator.jar" size="282705" download="eager" />
     <jar href="com/iha/emulator/resources/lib/controlsfx-8.20.8.jar" size="957666" download="eager" />
-    <jar href="com/iha/emulator/resources/lib/log4j-1.2.17.jar" size="489883" download="eager" />
+    <jar href="com/iha/emulator/resources/lib/dom4j-2.0.0-ALPHA-2.jar" size="340028" download="eager" />
     <jar href="com/iha/emulator/resources/lib/log4j-api-2.1.jar" size="133531" download="eager" />
     <jar href="com/iha/emulator/resources/lib/log4j-core-2.1.jar" size="824749" download="eager" />
     <jar href="com/iha/emulator/resources/lib/openjfx-dialogs-1.0.2.jar" size="148557" download="eager" />
+    <jar href="com/iha/resources/lib/controlsfx-8.20.8.jar" size="957666" download="eager" />
+    <jar href="com/iha/resources/lib/dom4j-2.0.0-ALPHA-2.jar" size="340028" download="eager" />
+    <jar href="com/iha/resources/lib/log4j-api-2.1.jar" size="133531" download="eager" />
+    <jar href="com/iha/resources/lib/log4j-core-2.1.jar" size="824749" download="eager" />
+    <jar href="com/iha/resources/lib/openjfx-dialogs-1.0.2.jar" size="148557" download="eager" />
     <jar href="lib/controlsfx-8.20.8.jar" size="957666" download="eager" />
-    <jar href="lib/log4j-1.2.17.jar" size="489883" download="eager" />
+    <jar href="lib/dom4j-2.0.0-ALPHA-2.jar" size="340028" download="eager" />
     <jar href="lib/log4j-api-2.1.jar" size="133531" download="eager" />
     <jar href="lib/log4j-core-2.1.jar" size="824749" download="eager" />
     <jar href="lib/openjfx-dialogs-1.0.2.jar" size="148557" download="eager" />
