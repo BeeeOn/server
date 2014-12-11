@@ -1,0 +1,828 @@
+.enableAdapterBtn {
+
+}
+
+.blueBtn {
+}
+
+.menuBar{
+    -fx-background-color: #ffffff;
+    -fx-padding: 0 0 0 0;
+}
+
+.menu {
+    -fx-background-image: url("../../resources/images/menu-grey.PNG");
+    -fx-background-position: center center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 30px 30px;
+    -fx-background-insets: 0;
+    -fx-border-width: 2px 4px 2px 4px;
+    -fx-border-color: #dbdbdb;
+    -fx-padding: 5px 20px 5px 20px;
+    -fx-background-color: #dbdbdb;
+    -fx-cursor: hand;
+}
+
+.menu:hover,.menu:focused{
+    -fx-background-color: #36b1ff;
+    -fx-border-color: #36b1ff;
+    -fx-background-image: url("../../resources/images/menu-white.PNG");
+}
+
+.menu-item {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #828282;
+    -fx-cursor: hand;
+}
+
+.menu-item:focused {
+    -fx-background-color: #36b1ff;
+    -fx-text-fill: #ffffff;
+}
+/** START ToolBar **/
+.toolBar {
+    -fx-background-color: #ffffff;
+    -fx-padding: 0 0.5em 0.5em 0.5em;
+}
+
+.plainToolBarBtn {
+    -fx-background-position: center center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 22px;
+    -fx-background-color: #ffffff;
+    -fx-border-width: 3px;
+    -fx-pref-width: 30px;
+    -fx-pref-height: 30px;
+    -fx-cursor: hand;
+}
+
+.saveBtn {
+    -fx-background-image: url("../../resources/images/save-grey.PNG");
+}
+.saveBtn:hover {
+    -fx-background-image: url("../../resources/images/save-white.PNG");
+    -fx-background-color: #a6dcff;
+}
+
+.saveAllBtn {
+    -fx-background-image: url("../../resources/images/saveall-grey.PNG");
+}
+.saveAllBtn:hover {
+    -fx-background-image: url("../../resources/images/saveall-white.PNG");
+    -fx-background-color: #a6dcff;
+}
+
+.loadBtn {
+    -fx-background-image: url("../../resources/images/open-grey.PNG");
+}
+.loadBtn:hover {
+    -fx-background-image: url("../../resources/images/open-white.PNG");
+    -fx-background-color: #a6dcff;
+}
+
+.printBtn {
+    -fx-background-image: url("../../resources/images/print-grey.png");
+}
+.printBtn:hover {
+    -fx-background-image: url("../../resources/images/print-white.png");
+    -fx-background-color: #a6dcff;
+}
+
+.enableAdapterBtn {
+    -fx-background-image: url("../../resources/images/play-green.png");
+}
+.enableAdapterBtn:hover {
+    -fx-background-image: url("../../resources/images/play-white.png");
+    -fx-background-color: #65f74d;
+}
+.enableAdapterBtn:disabled {
+    -fx-background-image: url("../../resources/images/play-grey.png");
+    -fx-cursor: default;
+}
+
+.disableAdapterBtn {
+    -fx-background-image: url("../../resources/images/stop-red.PNG");
+}
+.disableAdapterBtn:hover {
+    -fx-background-image: url("../../resources/images/stop-white.PNG");
+    -fx-background-color: #eb4242;
+}
+.disableAdapterBtn:disabled {
+    -fx-background-image: url("../../resources/images/stop-grey.PNG");
+    -fx-cursor: default;
+}
+
+.addAdapterMenuBtn {
+    -fx-background-image: url("../../resources/images/add-grey.PNG");
+}
+.addAdapterMenuBtn:hover {
+    -fx-background-image: url("../../resources/images/add-white.png");
+    -fx-background-color: #a6dcff;
+}
+
+.deleteAdapterBtn {
+    -fx-background-image: url("../../resources/images/delete-grey.PNG");
+}
+.deleteAdapterBtn:hover {
+    -fx-background-image: url("../../resources/images/delete-white.PNG");
+    -fx-background-color: #a6dcff;
+}
+
+.enableInternetConnectionBtn {
+    -fx-background-image: url("../../resources/images/internet-green.png");
+}
+.enableInternetConnectionBtn:hover {
+    -fx-background-image: url("../../resources/images/internet-white.png");
+    -fx-background-color: #65f74d;
+}
+.enableInternetConnectionBtn:disabled {
+    -fx-background-image: url("../../resources/images/internet-grey.png");
+    -fx-cursor: default;
+}
+
+.disableInternetConnectionBtn {
+    -fx-background-image: url("../../resources/images/internet-stop-red.png");
+}
+.disableInternetConnectionBtn:hover {
+    -fx-background-image: url("../../resources/images/internet-stop-white.png");
+    -fx-background-color: #eb4242;
+}
+.disableInternetConnectionBtn:disabled {
+    -fx-background-image: url("../../resources/images/internet-stop-grey.png");
+    -fx-cursor: default;
+}
+
+/** END ToolBar **/
+
+.statusLine {
+    -fx-background-color: #f4f4f4;
+    -fx-border-width: 1px 0 0 0;
+    -fx-border-color: #c6c6c6;
+}
+
+.statusLineText,.statusLineText .percentage {
+    -fx-text-fill: #828282;
+    -fx-font-size: 11px;
+    -fx-background-color: #f4f4f4;
+}
+
+.middleContent {
+
+}
+
+.whiteBackground {
+    -fx-background-color: #ffffff;
+    -fx-padding: 0;
+}
+
+.leftPanel {
+    -fx-min-width: 250px;
+    -fx-max-width: 250px;
+}
+
+.rightPanel {
+    -fx-min-width: 250px;
+    -fx-max-width: 250px;
+}
+
+.tab-header-background {
+    -fx-background-color: #ffffff;
+}
+
+.tab-header-area {
+    -fx-padding: 4px 0 0 0;
+}
+
+.tab {
+    -fx-background-radius: none;
+    -fx-background-color: #c6c6c6;
+    -fx-padding: 5px 15px 5px 15px;
+    -fx-cursor: hand;
+    -fx-focus-color: transparent;
+}
+
+.tab .tab-container {
+    -fx-focus-color: transparent;
+}
+
+.tab:selected {
+    -fx-background-color: #a6dcff;
+}
+
+.tab-content-area {
+    -fx-border-width: 5px 3px 3px 3px;
+    -fx-border-color: #efefef;
+}
+
+.showLogButton {
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+    -fx-border-width: 0;
+    -fx-padding: 4px 10px 4px 10px;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-cursor: hand;
+    -fx-background-color: #c6c6c6;
+    -fx-fill: #ffffff;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 8pt;
+    -fx-font-weight: bolder;
+}
+
+.showLogButton:hover {
+    -fx-background-color: #a6dcff;
+    -fx-fill: #ffffff;
+    -fx-text-fill: #ffffff;
+}
+
+.showLogButton:disabled {
+    -fx-background-color: #dbdbdb;
+    -fx-cursor: default;
+    -fx-fill: #828282;
+    -fx-text-fill: #828282;
+}
+
+.logTextAreaContainer {
+
+}
+
+.logTextArea {
+    -fx-text-fill: #444444;
+    -fx-focus-color: transparent;
+    -fx-background-color: #ffffff;
+    -fx-wrap-text: true;
+}
+.logTextArea .scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.logTextArea .scroll-pane .viewport{
+    -fx-background-color: transparent;
+}
+.logTextArea .scroll-pane .content{
+    -fx-background-color: transparent;
+}
+
+.logMorePanelContainer {
+    -fx-background-color: #ffffff;
+    -fx-border-width: 0 0 2px 0;
+    -fx-border-color: #efefef;
+}
+
+.logMorePane {
+
+}
+
+.logMorePane .title {
+    -fx-background-color: #efefef;
+}
+
+.logMorePaneSeparator {
+    -fx-padding: -1px 10px 0 10px;
+
+}
+
+.logMorePane .content{
+    -fx-border-width: 0;
+}
+
+.centralSplitPanel {
+    -fx-border-width: 0;
+    -fx-padding: 0;
+    -fx-background-color: #ffffff;
+}
+
+.centralSplitPanel .split-pane-divider {
+    -fx-background-image: url("../../resources/images/divider.PNG");
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+    -fx-background-color: #ffffff;
+    -fx-padding: 1.5em 0.25em 1em 0.25em;
+}
+
+.adaptersList {
+    -fx-background-color: #efefef;
+    -fx-padding: 5px 8px 3px 8px;
+}
+
+.adaptersListScrollPanel {
+    -fx-padding: 0;
+}
+
+.adapterListBtn {
+    -fx-graphic-text-gap: 10px;
+    -fx-pref-width: 224px;
+    -fx-pref-height: 60px;
+    -fx-alignment: center-left;
+    -fx-wrap-text: true;
+    -fx-background-radius: 0;
+    -fx-cursor: hand;
+}
+
+.adapterBtn {
+    -fx-background-color: #a6dcff;
+}
+
+.adapterBtn:hover {
+    -fx-background-color: #36b1ff;
+}
+
+.adapterBtn .text{
+    -fx-fill: #ffffff;
+    -fx-font-size: 10pt;
+    -fx-font-weight: bold;
+}
+
+.activeAdapterBtn {
+    -fx-graphic: url("../../resources/images/active_adapter.png");
+}
+
+.inactiveAdapterBtn {
+    -fx-graphic: url("../../resources/images/inactive_adapter.png");
+}
+
+.selectedAdapterBtn {
+    -fx-background-color: #36b1ff;
+}
+
+.addAdapterBtn {
+    -fx-background-color: #c6c6c6;
+    -fx-graphic: url("../../resources/images/add_adapter.png");
+}
+
+.addAdapterBtn:hover {
+    -fx-background-color: #36b1ff;
+}
+
+.addAdapterBtn .text{
+    -fx-fill: #ffffff;
+    -fx-font-size: 10pt;
+    -fx-font-weight: bold;
+}
+
+.sectionName {
+    -fx-text-fill: #828282;
+    -fx-font-size: 14pt;
+    -fx-font-weight: bold;
+}
+
+.serverDetailsLblContainer {
+    -fx-padding: 5px 0 5px 0;
+}
+
+.serverDetailsContainer {
+    -fx-border-width: 5px 3px 3px 3px;
+    -fx-border-color: #efefef;
+}
+
+.serverDetailsText{
+    -fx-font-size: 8pt;
+    -fx-fill: #828282;
+    -fx-text-fill: #828282;
+    -fx-padding: 0 0 0 8px;
+}
+
+.settingsBtn{
+    -fx-background-image: url("../../resources/images/settings.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+    -fx-background-color: #ffffff;
+    -fx-border-width: 0;
+    -fx-padding: 0.5em 0.677em 0.5em 0.677em ;
+    -fx-border-radius: 0;
+    -fx-cursor: hand;
+    -fx-min-width: 20px;
+    -fx-min-height: 20px;
+    -fx-max-width: 20px;
+    -fx-max-height: 20px;
+}
+
+.settingsBtn:hover {
+    -fx-background-color: #a6dcff;
+}
+
+.sensorsListContainer {
+    -fx-background-color: #ffffff;
+    -fx-border-width: 0 0 4px 0;
+    -fx-border-color: #ffffff;
+}
+
+.sensorsList {
+    -fx-background-color: #efefef;
+    -fx-padding: 5px 2px 5px 2px;
+}
+
+.sensorPanel {
+    -fx-background-color: #ffffff;
+    -fx-pref-width: 205px;
+    -fx-pref-height: 249px;
+    -fx-max-width: 205px;
+    -fx-max-height: 249px;
+}
+
+.sensorAddBtn {
+    -fx-pref-width: 205px;
+    -fx-max-width: 205px;
+    -fx-pref-height: 249px;
+    -fx-max-height: 249px;
+    -fx-background-color: #c6c6c6;
+    -fx-graphic: url("../../resources/images/add_sensor.png");
+    -fx-graphic-text-gap: 10px;
+    -fx-cursor: hand;
+    -fx-background-radius: 0;
+}
+
+.sensorAddBtn:hover {
+    -fx-background-color: #36b1ff;
+}
+
+.sensorAddBtn .text{
+    -fx-fill: #444444;
+    -fx-text-fill: #444444;
+    -fx-font-weight: bold;
+}
+
+/** FIXGUI add min width and height, change sensor icons to smaller size**/
+.sensorPanelHeader {
+    -fx-background-color: rgb(12,223,86);
+    -fx-pref-width: 230px;
+    -fx-max-width: 230px;
+    -fx-pref-height: 40px;
+    -fx-max-height: 40px;
+    -fx-text-fill: #444444;
+    -fx-alignment: center;
+    -fx-wrap-text: true;
+    -fx-background-radius: 0;
+    -fx-graphic-text-gap: 10px;
+    -fx-graphic: url("../../resources/images/sensor_types/multisensor.png");
+    -fx-padding: 3px 6px 3px 3px;
+}
+
+.sensorBattery {
+    -fx-graphic-text-gap: 4px;
+    -fx-graphic: url("../../resources/images/battery.png");
+    -fx-padding: 0 3px 0 3px;
+    -fx-cursor: hand;
+    -fx-font-size: 8pt;
+}
+
+.sensorSignal {
+    -fx-graphic-text-gap: 4px;
+    -fx-graphic: url("../../resources/images/signal.png");
+    -fx-padding: 0 3px 0 3px;
+    -fx-cursor: hand;
+    -fx-font-size: 8pt;
+}
+
+.sensorRefresh {
+    -fx-graphic-text-gap: 4px;
+    -fx-graphic: url("../../resources/images/refresh.png");
+    -fx-padding: 0 3px 0 3px;
+    -fx-cursor: hand;
+    -fx-font-size: 8pt;
+}
+
+.sensorText{
+    -fx-font-size: 8pt;
+    -fx-fill: #828282;
+    -fx-text-fill: #828282;
+    -fx-padding: 0 0 0 8px;
+}
+
+.statusActive {
+    -fx-fill: #65f74d;
+    -fx-text-fill: #65f74d;
+    -fx-font-weight: bold;
+}
+
+.statusInactive {
+    -fx-fill: #eb4242;
+    -fx-text-fill: #eb4242;
+    -fx-font-weight: bold;
+}
+
+.sensorId {
+    -fx-font-weight: bold;
+}
+
+.sensorControlBtn {
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+    -fx-border-width: 0;
+    -fx-padding: 4px 10px 4px 10px;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-cursor: hand;
+    -fx-background-color: #0cdf56;
+    -fx-fill: #444444;
+    -fx-text-fill: #444444;
+    -fx-font-size: 8pt;
+}
+
+.sensorControlBtn:hover{
+    -fx-background-color: #c6c6c6;
+    -fx-fill: #ffffff;
+    -fx-text-fill: #ffffff;
+}
+
+
+
+.appLog {
+    -fx-border-width: 5px 3px 3px 3px;
+    -fx-border-color: #efefef;
+}
+
+.detailedSimLbl{
+    -fx-text-fill: #36b1ff;
+    -fx-font-size: 21pt;
+}
+
+.plainTable {
+    -fx-table-cell-border-color: transparent;
+    -fx-background-color: #ffffff;
+    -fx-border-width: 5px 3px 3px 3px;
+    -fx-border-color: #efefef;
+    -fx-padding: 0 0 -1em 0;
+}
+
+.plainTable .scroll-bar{
+    visibility: hidden;
+}
+
+.plainTable .corner{
+    visibility: hidden;
+}
+
+.plainTable:focused:row-selection .scroll-bar{
+    visibility: hidden;
+}
+
+.plainTable:focused:row-selection .corner{
+    visibility: hidden;
+}
+
+.plainTable .column-header-background {
+    visibility: hidden;
+    -fx-padding: -1em;
+}
+
+.plainTable .table-row-cell{
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #828282;
+}
+
+.plainTable .table-row-cell:selected{
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #828282;
+    -fx-border-width: 0;
+}
+
+.plainTable .table-row-cell:selected .text{
+    -fx-fill: #828282;
+}
+
+.plainTable .table-row-cell .text{
+    -fx-fill: #828282;
+}
+
+.plainTable .table-row-cell:filled:focused:selected{
+    -fx-background-color: #ffffff;
+    -fx-fill: #828282;
+}
+
+.plainTable:focused .table-row-cell:filled:focused:selected {
+    -fx-background-color: #ffffff;
+    -fx-fill: #828282;
+}
+
+.plainTable:row-selection .table-row-cell:filled:hover {
+    -fx-background-color: #ffffff;
+    -fx-fill: #828282;
+}
+
+.plainTable .table-column:filled {
+    -fx-alignment: center-right;
+    -fx-border-width: 0 1px 0 0;
+    -fx-border-color: #efefef;
+}
+
+.plainTable .table-column:last-visible {
+    -fx-alignment: center-left;
+    -fx-border-width: 0 0 0 1px;
+    -fx-border-color: #efefef;
+}
+
+.plainTextColor {
+    -fx-fill: #444444;
+    -fx-text-fill: #444444;
+}
+
+.boldText {
+    -fx-font-weight: bold;
+}
+
+.withPlainContextMenu .custom-menu-item:hover{
+    -fx-background-color: #ffffff;
+}
+
+.withSlider .button{
+    -fx-background-color: transparent;
+    -fx-background-image: url("../../resources/images/add-grey.PNG");
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+    -fx-background-size: 15px;
+}
+
+/** START Sensor values table **/
+.valuesTable {
+    -fx-table-cell-border-color: transparent;
+    -fx-background-color: #ffffff;
+    -fx-border-width: 0;
+    -fx-padding: 0 3px -1em 3px;
+    -fx-font-size: 8pt;
+    -fx-background-insets: 0;
+}
+
+.valuesTable .column-resize-line {
+    visibility: hidden;
+}
+
+.valuesTable .scroll-bar:horizontal{
+    visibility: hidden;
+}
+
+.valuesTable .corner{
+    visibility: hidden;
+}
+
+.valuesTable:focused:row-selection .scroll-bar:horizontal{
+    visibility: hidden;
+}
+
+.valuesTable:focused:row-selection .corner{
+    visibility: hidden;
+}
+
+.valuesTable .column-header-background {
+    visibility: hidden;
+    -fx-padding: -1em;
+}
+
+.valuesTable .table-row-cell{
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #828282;
+    -fx-cell-size: 20;
+}
+
+.valuesTable .table-row-cell:selected{
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #828282;
+    -fx-border-width: 0;
+}
+
+.valuesTable .table-row-cell:selected .text{
+    -fx-background-color: #ffffff;
+    -fx-fill: #828282;
+}
+
+.valuesTable .table-row-cell  .text{
+    -fx-fill: #828282;
+}
+
+.valuesTable .table-row-cell:filled:focused:selected{
+    -fx-background-color: #ffffff;
+    -fx-fill: #828282;
+}
+
+.valuesTable:focused .table-row-cell:filled:focused:selected {
+    -fx-background-color: #a6dcff !important;
+    -fx-fill: #828282;
+}
+
+.valuesTable:row-selection .table-row-cell:filled:hover {
+    -fx-background-color: #ffffff;
+    -fx-fill: #828282;
+}
+
+.valuesTable .table-column:filled {
+    -fx-alignment: center-right;
+    -fx-border-width: 0 1px 0 0;
+    -fx-border-color: #efefef;
+}
+
+.valuesTable .table-column:last-visible {
+    -fx-alignment: center-left;
+    -fx-border-width: 0 0 0 1px;
+    -fx-border-color: #efefef;
+}
+
+.progress-dialog {
+    -fx-background-color: #444444;
+}
+
+/** START Adapter */
+.adapterDetailsContainer {
+    -fx-border-width: 5px 3px 3px 3px;
+    -fx-border-color: #efefef;
+}
+
+.adapterDetailsText{
+    -fx-font-size: 8pt;
+    -fx-fill: #828282;
+    -fx-text-fill: #828282;
+    -fx-padding: 0 0 0 8px;
+}
+
+.actuatorControlBtn, .actuatorControlBtn .text {
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+    -fx-border-width: 0;
+    -fx-padding: 0px 3px 0px 3px;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-cursor: hand;
+    -fx-background-color: #828282;
+    -fx-fill: #828282;
+    -fx-text-fill: #828282;
+    -fx-font-size: 8pt;
+    -fx-font-weight: bold;
+}
+
+.actuatorControlBtn:hover, .actuatorControlBtn:hover .text{
+    -fx-background-color: #36b1ff;
+    -fx-fill: #ffffff !important;
+    -fx-text-fill: #ffffff !important;
+}
+
+.actuatorControlBtn:disabled, .actuatorControlBtn:disabled .text {
+    -fx-background-color: #dbdbdb !important;
+    -fx-fill: #242424 !important;
+    -fx-text-fill: #242424 !important;
+}
+
+/** DIALOGS */
+.addAdapterDialogBtn {
+    -fx-background-color: #36b1ff;
+    -fx-fill: #ffffff;
+    -fx-text-fill: #ffffff;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-border-width: 0;
+    -fx-cursor: hand;
+}
+
+.addAdapterDialogBtn:hover {
+    -fx-background-color: #a6dcff;
+    -fx-fill: #ffffff;
+    -fx-text-fill: #ffffff;
+}
+
+.addAdapterDialogBtn:disabled {
+    -fx-background-color: #efefef;
+    -fx-fill: #828282;
+    -fx-text-fill: #828282;
+}
+
+.informationHeader {
+    -fx-fill: #828282;
+    -fx-text-fill: #828282;
+    -fx-font-weight: bold;
+    -fx-font-size: 12pt;
+}
+
+.informationContainer {
+    -fx-border-width: 5px 3px 3px 3px;
+    -fx-border-color: #efefef;
+}
+
+.validationError {
+    -fx-border-color: #eb4242;
+    -fx-border-width: 2px;
+}
+
+.validationWarn {
+    -fx-border-color: #FFFF54;
+    -fx-border-width: 2px;
+}
+
+.plainTextField {
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-border-width: 0;
+}
+
+.showAdaptersDialogBtn {
+    -fx-background-color: #a6dcff;
+    -fx-fill: #ffffff;
+    -fx-text-fill: #ffffff;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-border-width: 0;
+    -fx-cursor: hand;
+}
+
+.showAdaptersDialogBtn:hover{
+    -fx-background-color: #36b1ff;
+    -fx-fill: #ffffff;
+    -fx-text-fill: #ffffff;
+}

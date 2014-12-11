@@ -1,14 +1,22 @@
 package com.iha.emulator.ui.simulations.detailed;
 
+import com.iha.emulator.control.AdapterController;
+import com.iha.emulator.ui.panels.adapter.AdapterButton;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 /**
@@ -17,7 +25,7 @@ import java.util.ResourceBundle;
 public class DetailedSimulationView implements Initializable,DetailedSimulationPresenter.Display{
 
     private static final Logger logger = LogManager.getLogger(DetailedSimulationView.class);
-    DetailedSimulationPresenter presenter;
+    private DetailedSimulationPresenter presenter;
 
     //region MENU
     @FXML private MenuItem newAdapterItem;
@@ -29,6 +37,7 @@ public class DetailedSimulationView implements Initializable,DetailedSimulationP
     @FXML private MenuItem quitItem;
     //endregion
     //region TOOLBAR (TBtn = Toolbar button)
+    @FXML private ToolBar tooBar;
     @FXML private Button openTBtn;
     @FXML private Button saveTBtn;
     @FXML private Button saveAllTBtn;
@@ -39,33 +48,57 @@ public class DetailedSimulationView implements Initializable,DetailedSimulationP
     @FXML private Button deleteAdapterTBtn;
     @FXML private Button enableInternetTBtn;
     @FXML private Button disableInternetTBtn;
+    @FXML private MenuItem newAdapterSubItem;
+    @FXML private MenuItem newSensorSubItem;
     //endregion
-
-
-
     @FXML private Node view;
+    //region BOTTOM STATUS LINE
     @FXML private Label statusLineLbl;
     @FXML private ProgressIndicator statusIndicator;
     @FXML private ProgressBar memCheckProgressBar;
     @FXML private Label memCheckStatusLbl;
+    //endregion
+    @FXML private TextArea appLog;
+    //region SERVER DETAILS
+    @FXML private FlowPane serverDetailsContainer;
+    @FXML private FlowPane adapterDetailsContainer;
+    //endregion
+    //region ADAPTER
+    @FXML private FlowPane adapterBtnsContainer;
+    @FXML private Button addAdapterBtn;
+    private ArrayList<AdapterButton> adapterBtns;
+    private AdapterButtonClickHandler adapterButtonClickHandler = new AdapterButtonClickHandler();
+    @FXML private StackPane adapterLogContainer;
+    @FXML private StackPane toBeSentLogContainer;
+    @FXML private StackPane errorLogContainer;
+    @FXML private RadioButton fullLogMessageRadBtn;
+    @FXML private RadioButton partialLogMessageRadBtn;
+    @FXML private RadioButton shortLogMessageRadBtn;
+    //endregion
+    //region SENSORS
+    @FXML private Button addNewSensorBtn;
+    @FXML private FlowPane sensorPanelContainer;
+    //endregion
 
-    public DetailedSimulationView() {
-        logger.trace("Trace message");
+    public DetailedSimulationView(){
     }
 
     @FXML
     public void handleEnableAdapter(ActionEvent event) {
-        logger.debug("Enable adapter Clicked! -> unimplemented");
+        logger.trace("Enable adapter Clicked!");
+        presenter.enableCurrentAdapter();
     }
 
     @FXML
     public void handleDisableAdapter(ActionEvent event) {
-        logger.debug("Disable adapter Clicked! -> unimplemented");
+        logger.trace("Disable adapter Clicked!");
+        presenter.disableCurrentAdapter();
     }
 
     @FXML
     public void handleNewAdapter(ActionEvent event) {
-        logger.debug("New adapter Clicked! -> unimplemented");
+        logger.trace("New adapter Clicked!");
+        presenter.addNewAdapter();
     }
 
     @FXML
@@ -78,15 +111,16 @@ public class DetailedSimulationView implements Initializable,DetailedSimulationP
         logger.debug("Open Clicked! -> unimplemented");
     }
 
-
     @FXML
     public void handleSave(ActionEvent event) {
-        logger.debug("Save Clicked! -> unimplemented");
+        logger.trace("Save current adapter Clicked!");
+        presenter.saveCurrentAdapter();
     }
 
     @FXML
     public void handleSaveAll(ActionEvent event) {
-        logger.debug("SaveAll Clicked! -> unimplemented");
+        logger.trace("Save all adapters Clicked!");
+        presenter.saveAllAdapters();
     }
 
     @FXML
@@ -106,12 +140,20 @@ public class DetailedSimulationView implements Initializable,DetailedSimulationP
 
     @FXML
     public void handleEnableInternet(ActionEvent event) {
-        logger.debug("Enable Internet Clicked! -> unimplemented");
+        logger.trace("Enable internet connection Clicked!");
+        presenter.enableInternetConnection();
     }
 
     @FXML
     public void handleDisableInternet(ActionEvent event) {
-        logger.debug("Disable internet Clicked! -> unimplemented");
+        logger.trace("Disable internet connection Clicked!");
+        presenter.disableInternetConnection();
+    }
+
+    @FXML
+    public void handleNewSensor(ActionEvent event) {
+        logger.debug("Add new sensor Clicked!");
+        presenter.addNewSensor();
     }
 
     @Override
@@ -136,7 +178,7 @@ public class DetailedSimulationView implements Initializable,DetailedSimulationP
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        enableAdapterTBtn.setDisable(true);
     }
 
     @Override
@@ -148,6 +190,7 @@ public class DetailedSimulationView implements Initializable,DetailedSimulationP
     public Node getView(){
         return view;
     }
+
     @Override
     public void setAdapterBtns(boolean enableBtnDisabled,boolean disableBtnDisabled){
         this.enableAdapterTBtn.setDisable(enableBtnDisabled);
@@ -159,5 +202,127 @@ public class DetailedSimulationView implements Initializable,DetailedSimulationP
         this.disableInternetTBtn.setDisable(disableBtnDisabled);
     }
 
+    @Override
+    public TextArea getApplicationLogTextArea() {
+        return appLog;
+    }
 
+    @Override
+    public void addServerDetailsView(Node serverDetailsView) {
+        serverDetailsContainer.getChildren().add(serverDetailsView);
+    }
+
+    @Override
+    public void addAdapterDetailsView(Node adapterDetailsView) {
+        adapterDetailsContainer.getChildren().add(adapterDetailsView);
+    }
+
+    @Override
+    public void addAdapterBtn(AdapterButton newBtn) {
+        //create if doesn't exist
+        if(adapterBtns== null)adapterBtns = new ArrayList<>();
+        //add to gui
+        adapterBtnsContainer.getChildren().add(0,newBtn);
+        //add to list
+        adapterBtns.add(newBtn);
+        newBtn.setOnAction(adapterButtonClickHandler);
+    }
+
+    @Override
+    public ArrayList<AdapterButton> getAdapterBtns() {
+        if(adapterBtns== null)adapterBtns = new ArrayList<>();
+        return adapterBtns;
+    }
+
+    @Override
+    public Button getEnableAdapterBtn() {
+        return enableAdapterTBtn;
+    }
+
+    @Override
+    public Button getDisableAdapterBtn() {
+        return disableAdapterTBtn;
+    }
+
+    @Override
+    public Button getEnableInternetBtn() {
+        return enableInternetTBtn;
+    }
+
+    @Override
+    public Button getDisableInternetBtn() {
+        return disableInternetTBtn;
+    }
+
+    @Override
+    public Button getSaveBtn() {
+        return saveTBtn;
+    }
+
+    @Override
+    public Button getSaveAllBtn() {
+        return saveAllTBtn;
+    }
+
+    @Override
+    public Button getPrintBtn() {
+        return printTBtn;
+    }
+
+    @Override
+    public Pane getErrorLogContainer() {
+        return errorLogContainer;
+    }
+
+    @Override
+    public Pane getToBeSentLogContainer() {
+        return toBeSentLogContainer;
+    }
+
+    @Override
+    public Pane getAdapterLogContainer() {
+        return adapterLogContainer;
+    }
+
+    @Override
+    public RadioButton getShortLogMessageRadBtn() {
+        return shortLogMessageRadBtn;
+    }
+
+    @Override
+    public RadioButton getPartialLogMessageRadBtn() {
+        return partialLogMessageRadBtn;
+    }
+
+    @Override
+    public Button getAddNewSensorBtn() {
+        return addNewSensorBtn;
+    }
+
+    @Override
+    public FlowPane getSensorPanelContainer() {
+        return sensorPanelContainer;
+    }
+
+    @Override
+    public RadioButton getFullLogMessageRadBtn() {
+        return fullLogMessageRadBtn;
+    }
+
+    @Override
+    public MenuItem getNewSensorSubItem() {
+        return newSensorSubItem;
+    }
+
+    @Override
+    public MenuItem getNewAdapterSubItem() {
+        return newAdapterSubItem;
+    }
+
+    private class AdapterButtonClickHandler implements EventHandler<ActionEvent>{
+        @Override
+        public void handle(ActionEvent event) {
+            presenter.setCurrentAdapter(((AdapterButton)event.getSource()).getController());
+        }
+    }
 }

@@ -7,6 +7,7 @@
  - Java v1.8.0_##
 
 # Executable:
+- !!!! executable file(JAR) and folder "lib" MUST be in same folder !!!!
 Path: out/artifacts/GUI-emulator-v2/SmartHomeEmulator.jar
 Linux cmd: java -jar path/to/jar
 Windows: double-click on jar file
