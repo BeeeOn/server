@@ -1,13 +1,13 @@
 #include <sstream>
 #include "JsonNotificationBuilder.h"
 #include "JsonUtil.h"
+#include "Constants.h"
 
 using namespace std;
 
 JsonNotificationBuilder::JsonNotificationBuilder()
-:mCollapseKey(STRING_UNDEFINED), mRestrictedPackageName(STRING_UNDEFINED), mNotificationKey(STRING_UNDEFINED),
- mTimeToLive(TTL_UNDEFINED), mDryRun(DEFAULT_DRY_RUN), mDelayWhileIdle(DEFAULT_DELAY_IDLE),
- isTTL(false), isCollapse(false), isNotificationKey(false), isDelay(false), isRestricted(false),isDryRun(false)
+:mCollapseKey(STRING_UNDEFINED), mRestrictedPackageName(STRING_UNDEFINED), mNotificationKey(STRING_UNDEFINED), mRegIds(STRING_UNDEFINED), mTimeToLive(TTL_UNDEFINED),
+mDryRun(false), mDelayWhileIdle(false), isCollapse(false), isRestricted(false), isDelay(false), isNotificationKey(false), isTTL(false) , isDryRun(false), isRegIds(false)
 {
 
 }
@@ -68,33 +68,35 @@ string JsonNotificationBuilder::build()
     stringstream ss;
     ss << "{";
     if (isRegIds) {
-        JsonUtil::addPair(&ss, TAG_REG_IDS, mRegIds);
+        JsonUtil::addPair(&ss, JSON_TAG_REG_IDS, mRegIds);
     }
     if (isNotificationKey) {
-        JsonUtil::addPair(&ss, TAG_NOTIFICATION_KEY, JsonUtil::getJsonString(mNotificationKey));
+        JsonUtil::addPair(&ss, JSON_TAG_NOTIFICATION_KEY, JsonUtil::getJsonString(mNotificationKey));
     }
-//    if (isTTL) {
-//        addPair(&ss, TAG_TTL, std::to_string(mTimeToLive));
-//    }
+    /*
+    if (isTTL) {
+        addPair(&ss, JSON_TAG_TTL, std::to_string(mTimeToLive));
+    }
+    */
     if (isDelay) {
-        JsonUtil::addPair(&ss, TAG_WHILE_IDLE, mDelayWhileIdle?TRUE:FALSE);
+        JsonUtil::addPair(&ss, JSON_TAG_WHILE_IDLE, mDelayWhileIdle?TRUE:FALSE);
     }
 
     if (isRestricted) {
-        JsonUtil::addPair(&ss, TAG_RESTRICTED_PACK, JsonUtil::getJsonString(mRestrictedPackageName));
+        JsonUtil::addPair(&ss, JSON_TAG_RESTRICTED_PACK, JsonUtil::getJsonString(mRestrictedPackageName));
     }
 
     if (isCollapse) {
-        JsonUtil::addPair(&ss, TAG_COLLAPSE_KEY, JsonUtil::getJsonString(mCollapseKey));
+        JsonUtil::addPair(&ss, JSON_TAG_COLLAPSE_KEY, JsonUtil::getJsonString(mCollapseKey));
     }
 
     if (isDryRun) {
-        JsonUtil::addPair(&ss, TAG_DRY_RUN, mDryRun?TRUE:FALSE);
+        JsonUtil::addPair(&ss, JSON_TAG_DRY_RUN, mDryRun?TRUE:FALSE);
     }
 
     // DATA section
     if (mKeys.size() > 1) {
-        ss << TAG_DATA << ": {" << endl;
+        ss << JSON_TAG_DATA << ": {" << endl;
         for(vector<int>::size_type i = 0; i < mKeys.size(); i++) {
             JsonUtil::addPair(&ss, mKeys[i], JsonUtil::getJsonString(mValues[i]));
         }

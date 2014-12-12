@@ -5,7 +5,7 @@ using namespace std;
 
 BaseGcmNotification::BaseGcmNotification(string email, int notificationId,
         vector<string> gcmIds, long time, string action)
-: Notification(), mEmail(email), mNotificationId(notificationId), mGcmIds(gcmIds),
+: Notification(), mEmail(email), mGcmIds(gcmIds), mNotificationId(notificationId),
 mTime(time), mAction(action) {
 
 }
