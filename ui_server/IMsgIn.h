@@ -66,6 +66,8 @@
 #define P_TIME_MIN -1000
 #define P_TIME_MAX 1000
 
+#define P_PHONE_ID "pid"
+
 /******************************************/
 
 #define R_TRUE "true"

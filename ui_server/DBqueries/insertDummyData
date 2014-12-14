@@ -4,11 +4,11 @@ INSERT INTO USERS (user_id,MAIL) VALUES (3,'user2a@gmail.com');
 INSERT INTO USERS (user_id,MAIL) VALUES (4,'user4@gmail.com');
 INSERT INTO USERS (user_id,MAIL) VALUES (5,'user1su@gmail.com');
 
-insert into mobile_devices(fk_user_id, token) values(1,1);
-insert into mobile_devices(fk_user_id, token) values(2,2);
-insert into mobile_devices(fk_user_id, token) values(3,3);
-insert into mobile_devices(fk_user_id, token) values(4,4);
-insert into mobile_devices(fk_user_id, token) values(5,5);
+insert into mobile_devices(fk_user_id, id, token) values(1,1,1);
+insert into mobile_devices(fk_user_id, id, token) values(2,2,2);
+insert into mobile_devices(fk_user_id, id, token) values(3,3,3);
+insert into mobile_devices(fk_user_id, id, token) values(4,4,4);
+insert into mobile_devices(fk_user_id, id, token) values(5,5,5);
 
 INSERT INTO ADAPTERS (ADAPTER_ID,NAME,ip_address) VALUES (10, 'ad10', '::10');
 INSERT INTO ADAPTERS (ADAPTER_ID,NAME,ip_address) VALUES (20, 'ad20', '::20');

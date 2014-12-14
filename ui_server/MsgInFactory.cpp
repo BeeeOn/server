@@ -41,6 +41,8 @@
 #include "MsgInDelAction.h"
 #include "MsgInConditionPlusAction.h"
 #include "MsgInGetNewDevices.h"
+#include "MsgInSetGCMID.h"
+#include "MsgInDelGCMID.h"
 
 MsgInFactory::MsgInFactory(void)
 {
@@ -151,6 +153,10 @@ IMsgIn* MsgInFactory::createMsg(char* msg)
         return new MsgInConditionPlusAction(msg, doc);
     if(state == MsgInGetNewDevices::state)
         return new MsgInGetNewDevices(msg, doc);
+    if(state == MsgInSetGCMID::state)
+        return new MsgInSetGCMID(msg, doc);
+    if(state == MsgInDelGCMID::state)
+        return new MsgInDelGCMID(msg, doc);
     else{
         Logger::getInstance(Logger::ERROR)<<"UNKNOWN MSG"<<endl;
         return new MsgInUnknown(msg,doc);

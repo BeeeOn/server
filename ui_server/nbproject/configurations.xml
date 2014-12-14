@@ -133,6 +133,12 @@
       </logicalFolder>
       <logicalFolder name="f2" displayName="msgOut" projectFiles="true">
       </logicalFolder>
+      <logicalFolder name="f11" displayName="notif" projectFiles="true">
+        <itemPath>MsgInDelGCMID.cpp</itemPath>
+        <itemPath>MsgInDelGCMID.h</itemPath>
+        <itemPath>MsgInSetGCMID.cpp</itemPath>
+        <itemPath>MsgInSetGCMID.h</itemPath>
+      </logicalFolder>
       <logicalFolder name="f3" displayName="sign_reg_adapters" projectFiles="true">
         <itemPath>MsgInAddAdapter.cpp</itemPath>
         <itemPath>MsgInGetAdapters.cpp</itemPath>
@@ -573,6 +579,10 @@
       </item>
       <item path="MsgInDelDevice.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="MsgInDelGCMID.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInDelGCMID.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="MsgInDelRoom.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="MsgInDelRoom.h" ex="false" tool="3" flavor2="0">
@@ -650,6 +660,10 @@
       <item path="MsgInSetCondition.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="MsgInSetDevices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInSetGCMID.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInSetGCMID.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="MsgInSetRooms.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -1603,6 +1617,10 @@
       </item>
       <item path="MsgInDelDevice.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="MsgInDelGCMID.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInDelGCMID.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="MsgInDelRoom.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="MsgInDelRoom.h" ex="false" tool="3" flavor2="0">
@@ -1680,6 +1698,10 @@
       <item path="MsgInSetCondition.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="MsgInSetDevices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInSetGCMID.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInSetGCMID.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="MsgInSetRooms.cpp" ex="false" tool="1" flavor2="0">
       </item>

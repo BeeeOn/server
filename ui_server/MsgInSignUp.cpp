@@ -23,9 +23,14 @@ string MsgInGetUID::createResponseMsgOut()
     Logger::getInstance(Logger::DEBUG)<<"GUID"<<"\n";
     string gId  =  _doc->child(P_COMMUNICATION).attribute(P_GOOGLE_ID).value();
     string gToken = _doc->child(P_COMMUNICATION).attribute(P_GOOGLE_TOKEN).value();
+    string phoneId = _doc->child(P_COMMUNICATION).attribute(P_PHONE_ID).value();
     string phoneLocale = _doc->child(P_COMMUNICATION).attribute(P_LOCALIZATION).value();
     
     googleInfo gInfo;
+    //DEBUG
+    if(gInfo.email == "")
+        gInfo.email = phoneId+"@v";
+    
     if( !isGTokenOk(gToken, gId, gInfo) )
         throw ServerException(ServerException::TOKEN_EMAIL);
     //TODO upsert
@@ -33,8 +38,8 @@ string MsgInGetUID::createResponseMsgOut()
             Logger::getInstance(Logger::DEBUG3)<<gId<<" already exist?"<<"\n";
     
        long long int IHAtoken = getnewIHAtoken();
-    
-    if( DBConnector::getInstance().insertNewIHAtoken(IHAtoken, gId) == 0)
+       
+    if( DBConnector::getInstance().insertNewMobileDevice(IHAtoken, gId, phoneId, phoneLocale) == 0)
         throw ServerException(ServerException::TOKEN_EMAIL);
        
        //string attr = makeXMLattribute(P_SESSION_ID, to_string(IHAtoken));

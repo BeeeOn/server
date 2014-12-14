@@ -53,6 +53,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/MsgInDelConAccount.o \
 	${OBJECTDIR}/MsgInDelCondition.o \
 	${OBJECTDIR}/MsgInDelDevice.o \
+	${OBJECTDIR}/MsgInDelGCMID.o \
 	${OBJECTDIR}/MsgInDelRoom.o \
 	${OBJECTDIR}/MsgInDelView.o \
 	${OBJECTDIR}/MsgInFactory.o \
@@ -73,6 +74,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/MsgInSetConAccount.o \
 	${OBJECTDIR}/MsgInSetCondition.o \
 	${OBJECTDIR}/MsgInSetDevices.o \
+	${OBJECTDIR}/MsgInSetGCMID.o \
 	${OBJECTDIR}/MsgInSetRooms.o \
 	${OBJECTDIR}/MsgInSetTimeZone.o \
 	${OBJECTDIR}/MsgInSignIn.o \
@@ -245,6 +247,11 @@ ${OBJECTDIR}/MsgInDelDevice.o: MsgInDelDevice.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInDelDevice.o MsgInDelDevice.cpp
 
+${OBJECTDIR}/MsgInDelGCMID.o: MsgInDelGCMID.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInDelGCMID.o MsgInDelGCMID.cpp
+
 ${OBJECTDIR}/MsgInDelRoom.o: MsgInDelRoom.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
@@ -344,6 +351,11 @@ ${OBJECTDIR}/MsgInSetDevices.o: MsgInSetDevices.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInSetDevices.o MsgInSetDevices.cpp
+
+${OBJECTDIR}/MsgInSetGCMID.o: MsgInSetGCMID.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInSetGCMID.o MsgInSetGCMID.cpp
 
 ${OBJECTDIR}/MsgInSetRooms.o: MsgInSetRooms.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -1181,6 +1193,19 @@ ${OBJECTDIR}/MsgInDelDevice_nomain.o: ${OBJECTDIR}/MsgInDelDevice.o MsgInDelDevi
 	    ${CP} ${OBJECTDIR}/MsgInDelDevice.o ${OBJECTDIR}/MsgInDelDevice_nomain.o;\
 	fi
 
+${OBJECTDIR}/MsgInDelGCMID_nomain.o: ${OBJECTDIR}/MsgInDelGCMID.o MsgInDelGCMID.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInDelGCMID.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInDelGCMID_nomain.o MsgInDelGCMID.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/MsgInDelGCMID.o ${OBJECTDIR}/MsgInDelGCMID_nomain.o;\
+	fi
+
 ${OBJECTDIR}/MsgInDelRoom_nomain.o: ${OBJECTDIR}/MsgInDelRoom.o MsgInDelRoom.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInDelRoom.o`; \
@@ -1439,6 +1464,19 @@ ${OBJECTDIR}/MsgInSetDevices_nomain.o: ${OBJECTDIR}/MsgInSetDevices.o MsgInSetDe
 	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInSetDevices_nomain.o MsgInSetDevices.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/MsgInSetDevices.o ${OBJECTDIR}/MsgInSetDevices_nomain.o;\
+	fi
+
+${OBJECTDIR}/MsgInSetGCMID_nomain.o: ${OBJECTDIR}/MsgInSetGCMID.o MsgInSetGCMID.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInSetGCMID.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInSetGCMID_nomain.o MsgInSetGCMID.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/MsgInSetGCMID.o ${OBJECTDIR}/MsgInSetGCMID_nomain.o;\
 	fi
 
 ${OBJECTDIR}/MsgInSetRooms_nomain.o: ${OBJECTDIR}/MsgInSetRooms.o MsgInSetRooms.cpp 

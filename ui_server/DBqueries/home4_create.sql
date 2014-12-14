@@ -1,7 +1,7 @@
 -- Created by Vertabelo (http://vertabelo.com)
 -- Script type: create
 -- Scope: [tables, references, sequences, views, procedures]
--- Generated at Fri Nov 14 15:07:32 UTC 2014
+-- Generated at Fri Dec 12 09:51:58 UTC 2014
 
 
 
@@ -73,15 +73,6 @@ CREATE TABLE facilities (
 
 
 
--- Table: gcm_ids
-CREATE TABLE gcm_ids (
-    gcm_id text  NOT NULL,
-    fk_user_id decimal(21,0)  NOT NULL,
-    CONSTRAINT gcm_ids_pk PRIMARY KEY (gcm_id,fk_user_id)
-);
-
-
-
 -- Table: logs
 CREATE TABLE logs (
     timestamp bigint  NOT NULL,
@@ -96,9 +87,11 @@ CREATE TABLE logs (
 -- Table: mobile_devices
 CREATE TABLE mobile_devices (
     token bigint  NOT NULL,
-    fk_user_id decimal(21,0)  NOT NULL,
+    id text  NOT NULL,
     type varchar(255)  NULL,
-    ip inet  NULL,
+    locale varchar(10)  NULL,
+    push_notification text  NULL,
+    fk_user_id decimal(21,0)  NOT NULL,
     CONSTRAINT mobile_devices_pk PRIMARY KEY (token)
 );
 
@@ -133,7 +126,6 @@ CREATE TABLE users (
     mail varchar(250)  NOT NULL,
     signin_count int  NOT NULL DEFAULT 0,
     phone_locale varchar(10)  NOT NULL DEFAULT 'cs',
-    google_id varchar(250)  NULL,
     verified_email boolean  NULL,
     name varchar(250)  NULL,
     given_name varchar(250)  NULL,
@@ -258,17 +250,6 @@ ALTER TABLE facilities ADD CONSTRAINT facilities_rooms
     FOREIGN KEY (fk_room_id)
     REFERENCES rooms (room_id)
     ON DELETE  SET NULL 
-    NOT DEFERRABLE 
-    INITIALLY IMMEDIATE 
-;
-
--- Reference:  gcm_ids_users (table: gcm_ids)
-
-
-ALTER TABLE gcm_ids ADD CONSTRAINT gcm_ids_users 
-    FOREIGN KEY (fk_user_id)
-    REFERENCES users (user_id)
-    ON DELETE  CASCADE 
     NOT DEFERRABLE 
     INITIALLY IMMEDIATE 
 ;

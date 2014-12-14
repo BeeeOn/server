@@ -70,6 +70,8 @@ public:
     static const int WRONG_OR_EMPTY_ACTION;
     static const int CONDITION_ACTION;
 
+    static const int GCMID;
+    
     static const int UNKNOWN_ERROR;
     
     static const int MSG_UNKNOWN;

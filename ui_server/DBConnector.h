@@ -38,7 +38,7 @@ public:
     string escapeString(string str);
     
     int insertNewUser(string gid, googleInfo gInfo);
-    int insertNewIHAtoken(IhaToken ihaToken, string gId);
+    int insertNewMobileDevice(IhaToken ihaToken, string gId, string phoneId, string phoneLocale);
     GUserId getUserIdbyIhaToken(IhaToken ihaToken);
     
     int getUserId(string email);
@@ -99,6 +99,10 @@ public:
     /*Google*/
     int updateUsersGCMID(GUserId userId, string gcmid);
     int updateUserGoogleInformation(GUserId userId, googleInfo gInfo);
+    
+    /*NOTIFICATION*/
+    int setGCMId(IhaToken IHAtoken, string phoneid, string gUserId, string gcmid); 
+    int delGCMId(string oldUserId, string gcmid);
 private:
     string _connectionString;
     size_t _poolSize;

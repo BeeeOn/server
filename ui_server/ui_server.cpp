@@ -84,9 +84,18 @@ int main(int argc, char** argv)
         resolveMsg( "<com ver=\"2.3\" uid=\"2\" state=\"getlog\" from=\"1377684610\" ftype=\"avg\" interval=\"0\" aid=\"21\" did=\"0.0.21.1\" dtype=\"1\" />" );
        resolveMsg( "<com ver=\"2.3\" uid=\"1\" state=\"getnewdevs\" aid=\"10\"  />" );
 */
-        
+        /*
+        resolveMsg( "<com ver=\"2.3\"  state=\"getuid\" email=\"new22@gmail.com\" gid=\"1111\" gt=\"1\" pid=\"11\" loc=\"cs\" />");
+        resolveMsg( "<com ver=\"2.3\"  state=\"getuid\" email=\"new22@gmail.com\" gid=\"1111\" gt=\"1\" pid=\"111\" loc=\"cs\" />");
+        resolveMsg( "<com ver=\"2.3\"  state=\"getuid\" email=\"new33@gmail.com\" gid=\"11111\" gt=\"1\" pid=\"11111\"  loc=\"cs\" />");
+*/
+       // resolveMsg( "<com ver=\"2.3\"  state=\"getuid\" email=\"newww@gmail.com\" gid=\"33\" gt=\"1\" pid=\"34\" loc=\"cs\" />");
        
-       
+      //resolveMsg("<com ver=\"2.3\"  uid=\"15\" state=\"setgcmid\"  gcmid=\"new\" />");
+    //resolveMsg("<com ver=\"2.3\"  uid=\"14\" state=\"delgcmid\"  email=\"11111@v\" gcmid=\"new\" />");
+    //resolveMsg("<com ver=\"2.3\"  uid=\"15\" state=\"setgcmid\"  gcmid=\"new\" />");
+
+       resolveMsg( "<com ver=\"2.3\"  state=\"getuid\" email=\"n@gmail.com\" gid=\"999\" gt=\"1\" pid=\"100\" loc=\"cs\" />");
        
         SSL_CTX *ctx;
         int server;

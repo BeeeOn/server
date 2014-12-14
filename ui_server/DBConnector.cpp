@@ -55,7 +55,7 @@ void DBConnector::DEBUGrollbackEverything(){
 string DBConnector::DEBUGexec(string sqlQuery){
     session sql(*_pool);
     string result;
-    
+    cout<<"exec: "<<sqlQuery<<endl;;
     try{
         sql << sqlQuery,into(result);
     }
@@ -64,6 +64,7 @@ string DBConnector::DEBUGexec(string sqlQuery){
         cerr<<"ERROR in DEBUGexec "<<sqlQuery<<endl;
         cerr<<"cause "<< e.what()<<endl;
     }
+    cout<<"exec result:"<<result<<endl;
     return result;
 }
 
@@ -105,15 +106,20 @@ int DBConnector::insertNewUser(string gid, googleInfo gInfo)
         }
 }
 
-int DBConnector::insertNewIHAtoken(IhaToken ihaToken, string gId) {
-        Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"insertNewIHAtoken"<<"\n";
+int DBConnector::insertNewMobileDevice(IhaToken ihaToken, string gId, string phoneId, string phoneLocale) {
+        Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"insertNewmobileDevice"<<"\n";
         try
         {
                 soci::session sql(*_pool);
                 
-                sql << "insert into mobile_devices( token, fk_user_id ) values(:token, :gid)",
-                        use (ihaToken,"token"), use(gId, "gid");   
-                return 1;
+                sql<<"update mobile_devices set locale=:phoneLoc, token=:token where id=:phoneid and fk_user_id=:gid",
+                        use(phoneId,"phoneid"),use(phoneLocale, "phoneLoc"), use(ihaToken, "token"),use(gId, "gid");
+                
+                sql << "insert into mobile_devices( token, fk_user_id, id, locale) select :token, :gid, :phoneid, :locale "
+                        " where not exists  (SELECT 1 FROM mobile_devices WHERE id=:phoneid and fk_user_id=:gid) ",
+                        use (ihaToken,"token"), use(gId, "gid"), use(phoneId, "phoneid"), use(phoneLocale,"locale");   
+                
+                return 1;                
         }
         catch (soci::postgresql_soci_error& e)
         {
@@ -121,6 +127,8 @@ int DBConnector::insertNewIHAtoken(IhaToken ihaToken, string gId) {
                 return 0;
         }
 }
+
+
 
 GUserId DBConnector::getUserIdbyIhaToken(IhaToken ihaToken) {
         Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"iha token valid?"<<"\n";
@@ -1227,5 +1235,43 @@ int DBConnector::updateUserGoogleInformation(GUserId userId, googleInfo gInfo) {
     {
         Logger::getInstance(Logger::ERROR) << "Error: " << e.what() << '\n';
         throw;
+    }
+}
+
+int DBConnector::delGCMId(string oldUserId, string gcmid) {
+    Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"delGCMId"<<oldUserId<<endl;
+    try{
+        soci::session sql(*_pool);
+        
+        statement st = (sql.prepare << 
+                "update mobile_devices set push_notification = '' where fk_user_id = :user_id and push_notification=:gcmid",
+                use(oldUserId, "user_id"),use(gcmid,"gcmid")
+             );
+        st.execute(true);
+        return st.get_affected_rows();
+    }
+    catch (soci::postgresql_soci_error& e)
+    {
+        Logger::getInstance(Logger::ERROR) << "Error: " << e.what() << '\n';
+        return 0;
+    }
+}
+
+int DBConnector::setGCMId(IhaToken IHAtoken, string phoneid,string gUserId, string gcmid) {
+    Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"setGCMId"<< "guser"<<gUserId<<"tok:"<<IHAtoken<<"gc"<<gcmid<<endl;
+    try{
+        soci::session sql(*_pool);
+        
+       statement st = (sql.prepare << 
+                "update mobile_devices set push_notification = :gcmid where token = :ihaToken",
+                use(IHAtoken, "ihaToken"), use(gcmid,"gcmid")
+             );
+        st.execute(true);
+        return st.get_affected_rows();
+    }
+    catch (soci::postgresql_soci_error& e)
+    {
+        Logger::getInstance(Logger::ERROR) << "Error: " << e.what() << '\n';
+        return 0;
     }
 }
