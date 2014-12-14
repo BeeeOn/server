@@ -13,10 +13,12 @@
 class LimitExceededNotification : public InfoNotification {
 public:
     LimitExceededNotification(string email, int notificationId,
-            vector<string> gcmIds, long time, string message);
+            vector<string> gcmIds, long time, string message, int adapterId, string deviceId, int type, int offset);
     ~LimitExceededNotification();
     string getJson();
 private:
+    int mAdapterId, mType, mOffset;
+    string mDeviceId;
 
 };
 

@@ -9,7 +9,7 @@ int Notificator::sendNotification(Notification &message) {
 
 
     CURL *curl;
-    CURLcode res;
+    //CURLcode res;
 
     struct curl_slist *headers = NULL; // init to NULL is important 
     headers = curl_slist_append(headers, HEADER_CONTENT_TYPE);

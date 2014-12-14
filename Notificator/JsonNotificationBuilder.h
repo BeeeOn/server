@@ -24,8 +24,7 @@ class JsonNotificationBuilder
     private:
         string mCollapseKey, mRestrictedPackageName, mNotificationKey, mRegIds;
         int mTimeToLive;
-        bool mDryRun, mDelayWhileIdle;
-        bool isCollapse, isRestricted, isDelay, isNotificationKey ,isTTL , isDryRun, isRegIds;
+        bool mDryRun, mDelayWhileIdle,isCollapse, isRestricted, isDelay, isNotificationKey ,isTTL , isDryRun, isRegIds;
         vector <string> mKeys;
         vector <string> mValues;
 };
