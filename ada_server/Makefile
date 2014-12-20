@@ -9,7 +9,7 @@ all:
 	make ada_server_sender
 
 ada_server_receiver: $(ADA_SERVER_RECIVER) $(COMMON_FILES) 
-	$(BUILDER) $(CPPFLAGS) -o $@ $^ -I/usr/local/include/soci -L/usr/local/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -I/usr/include/postgresql/ -lpq
+	$(BUILDER) $(CPPFLAGS) -o $@ $^ -I/usr/local/include/soci -L/usr/local/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -I/usr/include/postgresql/ -lpq -L./notif -lnotif -lcurl
 
 ada_server_sender: $(ADA_SERVER_SENDER) $(COMMON_FILES) 
 	$(BUILDER) $(CPPFLAGS) -o $@ $^ -I/usr/local/include/soci -L/usr/local/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -I/usr/include/postgresql/ -lpq

@@ -25,6 +25,7 @@ DatabaseConnectionContainer *cont = NULL;
 ConnectionHandler *CH;
 std::atomic<unsigned long> connCount;
 Config *c;
+int counter = 0;
 
 
 void sig_handler(int signo)
@@ -323,6 +324,10 @@ void ConnectionServer::HandleConnection (in_addr IP)
 		}
 	}
 	this->end = std::chrono::system_clock::now();
+	if (parsedMessage->state!=0)
+	{
+		this->Notify();
+	}
 	this->StoreData();
 	if (parsedMessage->state!=0)
 	{
@@ -330,6 +335,66 @@ void ConnectionServer::HandleConnection (in_addr IP)
 	}
 	Log->WriteMessage(TRACE,"Exiting " + this->_Name + "::HandleConnection");
 	return;
+}
+
+void ConnectionServer::Notify()
+{
+	Log->WriteMessage(TRACE,"Entering " + this->_Name + "::Notify");
+	for (int i=0;i<this->parsedMessage->values_count;i++)
+	{
+		if (this->parsedMessage->values[i].type!=TEMP)
+		{
+			continue;
+		}
+		else
+		{
+			if (this->parsedMessage->values[i].fval<30.0)
+			{
+				continue;
+			}
+			else
+			{
+				float lastVal = this->database->GetLastTemp(this->parsedMessage->DeviceIDstr,std::to_string(this->parsedMessage->values[i].intType));
+				Log->WriteMessage(TRACE,"Last val : " + std::to_string(lastVal));
+				if (lastVal>30.0)
+				{
+					continue;
+				}
+				else
+				{
+					std::vector<std::string> *emails;
+					emails = database->GetEmails(std::to_string(this->parsedMessage->adapterINTid));
+					if (emails==nullptr)
+					{
+						continue;
+					}
+					else
+					{
+						for (int i =0;i<emails->size();i++)
+						{
+							if (emails->at(i).empty())
+							{
+								break;
+							}
+							std::vector<std::string> *IDs;
+							IDs = database->GetNotifString(emails->at(i));
+							if (IDs == nullptr)
+							{
+								Log->WriteMessage(INFO,"Email " + emails->at(i) + " has no notification string");
+								continue;
+							}
+							Log->WriteMessage(INFO,"Notifying email " + emails->at(i));
+							Notification *notif = new LimitExceededNotification(emails->at(i), counter++, *IDs, this->parsedMessage->timestamp, "Temperature exceeded 30 degrees on adapter :" + std::to_string(this->parsedMessage->adapterINTid) +" on device " + std::to_string (this->parsedMessage->sensor_id) , 123, this->parsedMessage->DeviceIDstr, 1, 2);
+							Notificator::sendNotification(*notif);
+							delete IDs;
+							delete notif;
+						}
+					}
+				}
+			}
+		}
+	}
+	Log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Notify");
 }
 
 ConnectionServer::ConnectionServer(int s)
@@ -616,7 +681,7 @@ bool ProtocolV1MessageParser::GetValues()
 			case ONOFFSEN:
 			case ONOFSW:
 				_message->values[i].bval = false;
-				if (strcmp(value.value(),"1")==0)
+				if (value.text().as_float()==1.0)
 					_message->values[i].bval = true;
 				Log->WriteMessage(MSG,"Value :" + std::to_string(_message->values[i].bval));
 				if (_message->devType==UNDEF)

@@ -241,7 +241,12 @@ bool ConnectionServer::HandleRequest ()  //TODO: spravit bool return type
 			Log->WriteMessage(INFO,"Device type :" + std::to_string(temp.input[0]));
 			Log->WriteMessage(INFO,"Device offset :" + std::to_string(temp.input[1]));
 			Log->WriteMessage(INFO,"Device value :" + value);
-			message = this->MC->CreateSwitchMessage(ID,value,std::to_string(temp.input[0]),std::to_string(temp.input[1]));
+			std::string stringType;
+			std::ostringstream os;
+			os << std::hex << temp.input[0];
+			stringType = os.str();
+			Log->WriteMessage(INFO,"Device hexa type :" + stringType);
+			message = this->MC->CreateSwitchMessage(ID,value,stringType,std::to_string(temp.input[1]));
 			database->GetAdapterData(&AdapterIP,AdapterId);
 		}
 		else
@@ -284,7 +289,7 @@ void ConnectionServer::HandleRequestCover()
 		return;
 	}
 	std::string Message = "<reply>true</reply>";
-	if (this->HandleRequest())
+	if (!this->HandleRequest())
 	{
 		 Message = "<reply>false</reply>";
 	}

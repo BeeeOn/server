@@ -12,6 +12,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <vector>
 #include "structures.h"
 #include "loger.h"
 
@@ -38,6 +39,9 @@ class DBHandler
 		void LogValue (tmessage *message);
 		soci::session *ReturnConnection();
 		void GetAdapterData(std::string *adapterIP, long int ID);
+		float GetLastTemp(std::string ID, std::string type);
+		std::vector<std::string> *GetEmails(std::string AdapterID);
+		std::vector<std::string> *GetNotifString(std::string email);
 };
 
 

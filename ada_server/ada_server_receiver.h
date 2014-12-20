@@ -41,6 +41,9 @@
 #include "databaseConnectionContainer.h"
 #include "DBHandler.h"
 #include "structures.h"
+#include "notif/Notificator.h"
+#include "notif/LimitExceededNotification.h"
+#include "notif/Notificator.h"
 
 
 /** @brief Class MessageParser
@@ -143,6 +146,7 @@ class ConnectionServer
 		int GetData();
 		void StoreData();
 		void HandleConnection(in_addr IP);
+		void Notify();
 	public:
 		ConnectionServer(int s);
 		void HandleConnectionCover(in_addr IP);
