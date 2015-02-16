@@ -1,24 +1,44 @@
 package com.iha.emulator.models.value.implemented;
 
-import com.iha.emulator.models.SensorType;
 import com.iha.emulator.models.value.AbstractValue;
+import com.iha.emulator.models.value.HasLinearDistribution;
+import com.iha.emulator.models.value.HasNormalDistribution;
 import com.iha.emulator.utilities.Utilities;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 import java.util.Random;
 
 /**
  * Created by Shu on 2.12.2014.
  */
-public class TemperatureSensorValue extends AbstractValue<Double> {
+public class TemperatureSensorValue extends AbstractValue<Double> implements HasNormalDistribution,HasLinearDistribution {
 
-    private Double dev;
-    private Double avg;
-    private Double min;
-    private Double max;
+    private static final double DEFAULT_VALUE = 25.5;
+    private static final double DEFAULT_MAX = 50;
+    private static final double DEFAULT_MIN = -50;
+    private static final double DEFAULT_NORMAL_DEV = 0.5;
+    private static final double DEFAULT_NORMAL_AVG = 25.5;
+    private static final double DEFAULT_LINEAR_STEP = 3;
 
-    public TemperatureSensorValue(String name, String type, String unit, boolean generateValue, boolean storeHistory, Random generator, Long generatorSeed) {
-        super(SensorType.SENSOR_TEMPERATURE,name,type,unit,generateValue,storeHistory,generator,generatorSeed);
-        setValue(0.0);
+    private DoubleProperty dev;
+    private DoubleProperty avg;
+    private DoubleProperty min;
+    private DoubleProperty max;
+    private DoubleProperty step;
+    private ObjectProperty<Generator> generatorType;
+
+    public TemperatureSensorValue(Type valueType,String name, String type,int offset, String unit, boolean generateValue, boolean storeHistory, Random generator, Long generatorSeed) {
+        super(valueType,name,type,offset,unit,generateValue,storeHistory,generator,generatorSeed);
+        this.dev = new SimpleDoubleProperty(DEFAULT_NORMAL_DEV);
+        this.avg = new SimpleDoubleProperty(DEFAULT_NORMAL_AVG);
+        this.min = new SimpleDoubleProperty(DEFAULT_MIN);
+        this.max= new SimpleDoubleProperty(DEFAULT_MAX);
+        this.step = new SimpleDoubleProperty(DEFAULT_LINEAR_STEP);
+        this.generatorType = new SimpleObjectProperty<>(null);
+        setValue(DEFAULT_VALUE);
     }
 
     @Override
@@ -26,9 +46,9 @@ public class TemperatureSensorValue extends AbstractValue<Double> {
         //store value history if needed
         if(isStoreHistory()) storeValue(this.getValue());
         //check for variables needed to generate new value
-        if(getDev() == null || getAvg() == null || getMax() == null ||getMin() == null){
+        /*if(devProperty() == null || avgProperty() == null || maxProperty() == null || minProperty() == null){
             throw new UnsupportedOperationException("Temperature generator doesn't have variables needed to generate new value (Dev,Avg,Max,Min)");
-        }
+        }*/
         this.setValue(Utilities.normalDistribution(getGenerator(), 100, getDev(), getAvg(), getMax(), getMin()));
     }
 
@@ -47,6 +67,16 @@ public class TemperatureSensorValue extends AbstractValue<Double> {
         return String.valueOf(getValue()) + " " + getUnit();
     }
 
+    @Override
+    public String asMessageString() {
+        return String.valueOf(getValue());
+    }
+
+    @Override
+    public Double fromStringToValueType(String valueString) {
+        return Double.valueOf(valueString);
+    }
+
     public void setGeneratorVariables(double dev,double avg,double max,double min){
         setDev(dev);
         setAvg(avg);
@@ -54,35 +84,81 @@ public class TemperatureSensorValue extends AbstractValue<Double> {
         setMin(min);
     }
 
-    public Double getDev() {
+    @Override
+    public double getDev() {
+        return dev.get();
+    }
+
+    public DoubleProperty devProperty() {
         return dev;
     }
 
-    public void setDev(Double dev) {
-        this.dev = dev;
+    public void setDev(double dev) {
+        this.dev.set(dev);
     }
 
-    public Double getAvg() {
+    @Override
+    public double getAvg() {
+        return avg.get();
+    }
+
+    public DoubleProperty avgProperty() {
         return avg;
     }
 
-    public void setAvg(Double avg) {
-        this.avg = avg;
+    public void setAvg(double avg) {
+        this.avg.set(avg);
     }
 
-    public Double getMin() {
+    @Override
+    public double getMin() {
+        return min.get();
+    }
+
+    public DoubleProperty minProperty() {
         return min;
     }
 
-    public void setMin(Double min) {
-        this.min = min;
+    public void setMin(double min) {
+        this.min.set(min);
     }
 
-    public Double getMax() {
+    @Override
+    public double getMax() {
+        return max.get();
+    }
+
+    public DoubleProperty maxProperty() {
         return max;
     }
 
-    public void setMax(Double max) {
-        this.max = max;
+    public void setMax(double max) {
+        this.max.set(max);
+    }
+
+    @Override
+    public double getStep() {
+        return step.get();
+    }
+
+    public DoubleProperty stepProperty() {
+        return step;
+    }
+
+    public void setStep(double step) {
+        this.step.set(step);
+    }
+
+    @Override
+    public Generator getGeneratorType() {
+        return generatorType.get();
+    }
+
+    public ObjectProperty<Generator> generatorTypeProperty(){
+        return generatorType;
+    }
+
+    public void setGeneratorType(Generator generatorType){
+        this.generatorType.set(generatorType);
     }
 }

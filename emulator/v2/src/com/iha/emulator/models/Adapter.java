@@ -22,12 +22,13 @@ public class Adapter {
     private Protocol protocol;
     private DoubleProperty firmware;
 
-    public Adapter(boolean status,int id,boolean registered,double protocolVersion,double firmware) {
+    //TODO change firmware to version (integer)
+    public Adapter(boolean status,int id,boolean registered,Protocol.Version protocolVersion,double firmware) {
         this("EA" + id,status,id,registered,protocolVersion,firmware);
 
     }
 
-    public Adapter(String name,boolean status,int id,boolean registered,double protocolVersion,double firmware){
+    public Adapter(String name,boolean status,int id,boolean registered,Protocol.Version protocolVersion,double firmware){
         //default status must be false
         this.status = new SimpleBooleanProperty(status);
         //set name

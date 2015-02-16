@@ -8,7 +8,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -17,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.ResourceBundle;
 
 /**
@@ -29,6 +29,12 @@ public class DetailedSimulationView implements Initializable,DetailedSimulationP
 
     //region MENU
     @FXML private MenuItem newAdapterItem;
+    @FXML private MenuItem newSensorItem;
+    @FXML private MenuItem enableAdapterItem;
+    @FXML private MenuItem disableAdapterItem;
+    @FXML private MenuItem disableAllAdaptersItem;
+    @FXML private MenuItem deleteAdapterItem;
+    @FXML private MenuItem deleteSensorItem;
     @FXML private MenuItem openItem;
     @FXML private MenuItem saveItem;
     @FXML private MenuItem saveAllItem;
@@ -68,12 +74,16 @@ public class DetailedSimulationView implements Initializable,DetailedSimulationP
     @FXML private Button addAdapterBtn;
     private ArrayList<AdapterButton> adapterBtns;
     private AdapterButtonClickHandler adapterButtonClickHandler = new AdapterButtonClickHandler();
-    @FXML private StackPane adapterLogContainer;
-    @FXML private StackPane toBeSentLogContainer;
-    @FXML private StackPane errorLogContainer;
+    @FXML private ScrollPane adapterLogContainer;
+    @FXML private ScrollPane toBeSentLogContainer;
+    @FXML private TabPane logTabPane;
+    @FXML private Tab errorTab;
+    @FXML private ScrollPane errorLogContainer;
+    @FXML private ToggleGroup logMessageTypeRadBtnGroup;
     @FXML private RadioButton fullLogMessageRadBtn;
     @FXML private RadioButton partialLogMessageRadBtn;
     @FXML private RadioButton shortLogMessageRadBtn;
+    @FXML private Button showFullLogBtn;
     //endregion
     //region SENSORS
     @FXML private Button addNewSensorBtn;
@@ -96,6 +106,12 @@ public class DetailedSimulationView implements Initializable,DetailedSimulationP
     }
 
     @FXML
+    public void handleDisableAllAdapters(ActionEvent event) {
+        logger.trace("Disable all adapters Clicked!");
+        presenter.disableAllAdapters();
+    }
+
+    @FXML
     public void handleNewAdapter(ActionEvent event) {
         logger.trace("New adapter Clicked!");
         presenter.addNewAdapter();
@@ -103,7 +119,14 @@ public class DetailedSimulationView implements Initializable,DetailedSimulationP
 
     @FXML
     public void handleDeleteAdapter(ActionEvent event) {
-        logger.debug("Delete adapter Clicked! -> unimplemented");
+        logger.debug("Delete adapter Clicked!");
+        presenter.deleteAdapter();
+    }
+
+    @FXML
+    public void handleDeleteSensor(ActionEvent event) {
+        logger.debug("Delete sensor Clicked!");
+        presenter.deleteSensor();
     }
 
     @FXML
@@ -154,6 +177,22 @@ public class DetailedSimulationView implements Initializable,DetailedSimulationP
     public void handleNewSensor(ActionEvent event) {
         logger.debug("Add new sensor Clicked!");
         presenter.addNewSensor();
+    }
+
+    @FXML
+    public void handleShowFullLog(ActionEvent event) {
+        logger.trace("Show full log Clicked!");
+        presenter.showFullLog();
+    }
+
+    @Override
+    public TabPane getLogTabPane() {
+        return logTabPane;
+    }
+
+    @Override
+    public Tab getErrorTab() {
+        return errorTab;
     }
 
     @Override
@@ -229,6 +268,19 @@ public class DetailedSimulationView implements Initializable,DetailedSimulationP
     }
 
     @Override
+    public void removeAdapterBtn(AdapterController adapterController){
+        if(adapterBtns != null && adapterBtns.size() > 0){
+            for(Iterator<AdapterButton> it = adapterBtns.iterator();it.hasNext();){
+                AdapterButton btn = (AdapterButton)it.next();
+                if(btn.getController().equals(adapterController)){
+                    it.remove();
+                    adapterBtnsContainer.getChildren().remove(btn);
+                }
+            }
+        }
+    }
+
+    @Override
     public ArrayList<AdapterButton> getAdapterBtns() {
         if(adapterBtns== null)adapterBtns = new ArrayList<>();
         return adapterBtns;
@@ -242,6 +294,11 @@ public class DetailedSimulationView implements Initializable,DetailedSimulationP
     @Override
     public Button getDisableAdapterBtn() {
         return disableAdapterTBtn;
+    }
+
+    @Override
+    public Button getDeleteAdapterBtn() {
+        return deleteAdapterTBtn;
     }
 
     @Override
@@ -270,17 +327,17 @@ public class DetailedSimulationView implements Initializable,DetailedSimulationP
     }
 
     @Override
-    public Pane getErrorLogContainer() {
+    public ScrollPane getErrorLogContainer() {
         return errorLogContainer;
     }
 
     @Override
-    public Pane getToBeSentLogContainer() {
+    public ScrollPane getToBeSentLogContainer() {
         return toBeSentLogContainer;
     }
 
     @Override
-    public Pane getAdapterLogContainer() {
+    public ScrollPane getAdapterLogContainer() {
         return adapterLogContainer;
     }
 
@@ -310,8 +367,48 @@ public class DetailedSimulationView implements Initializable,DetailedSimulationP
     }
 
     @Override
+    public ToggleGroup getLogMessageTypeRadBtnGroup() {
+        return logMessageTypeRadBtnGroup;
+    }
+
+    @Override
+    public Button getShowFullLogBtn() {
+        return showFullLogBtn;
+    }
+
+    @Override
+    public MenuItem getNewSensorItem() {
+        return newSensorItem;
+    }
+
+    @Override
     public MenuItem getNewSensorSubItem() {
         return newSensorSubItem;
+    }
+
+    @Override
+    public MenuItem getEnableAdapterItem() {
+        return enableAdapterItem;
+    }
+
+    @Override
+    public MenuItem getDisableAdapterItem() {
+        return disableAdapterItem;
+    }
+
+    @Override
+    public MenuItem getDisableAllAdaptersItem() {
+        return disableAllAdaptersItem;
+    }
+
+    @Override
+    public MenuItem getDeleteAdapterItem() {
+        return deleteAdapterItem;
+    }
+
+    @Override
+    public MenuItem getDeleteSensorItem() {
+        return deleteSensorItem;
     }
 
     @Override

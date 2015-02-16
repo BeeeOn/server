@@ -2,9 +2,7 @@
 
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
-
 <VBox fx:id="view" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="280.0" prefWidth="444.0" styleClass="whiteBackground" stylesheets="@../../../resources/css/theme-light.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iha.emulator.ui.dialogs.adapter.AddAdapterDialogView">
    <children>
       <Label prefHeight="47.0" prefWidth="598.0" styleClass="detailedSimLbl" text="Add new adapter" VBox.vgrow="NEVER">
@@ -109,12 +107,12 @@
                               <Insets right="6.0" />
                            </padding>
                         </Label>
-                        <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="107.0" styleClass="sensorText" text="IP:" GridPane.rowIndex="2">
+                        <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="107.0" styleClass="sensorText" text="Firmware:" GridPane.rowIndex="2">
                            <padding>
                               <Insets right="6.0" />
                            </padding>
                         </Label>
-                        <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="107.0" styleClass="sensorText" text="Port:" GridPane.rowIndex="3">
+                        <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="107.0" styleClass="sensorText" text="Registered:" GridPane.rowIndex="3">
                            <padding>
                               <Insets right="6.0" />
                            </padding>
@@ -124,47 +122,57 @@
                               <Insets right="6.0" />
                            </padding>
                         </Label>
-                        <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="107.0" styleClass="sensorText" text="Database name:" GridPane.rowIndex="4">
+                        <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="107.0" styleClass="sensorText" text="Comm.protocol:" GridPane.rowIndex="4">
                            <padding>
                               <Insets right="6.0" />
                            </padding>
                         </Label>
-                        <TextField fx:id="serverNameTxtField1" prefHeight="25.0" prefWidth="209.0" styleClass="plainTextField" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.vgrow="NEVER">
+                        <TextField fx:id="adapterNameLbl" prefHeight="25.0" prefWidth="209.0" styleClass="plainTextField" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.vgrow="NEVER">
                            <tooltip>
-                              <Tooltip text="Fill name of server. Example: Production" />
+                              <Tooltip text="Fill name of adapter. Example: CACA" />
                            </tooltip>
                         </TextField>
-                        <TextField fx:id="serverIpTxtField1" prefHeight="25.0" prefWidth="209.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <TextField fx:id="adapterFirmwareLbl" prefHeight="25.0" prefWidth="209.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2">
                            <tooltip>
-                              <Tooltip text="Fill server IP address. Example: 10.1.0.1" />
+                              <Tooltip text="Fill adapter firmware version. Example: 0" />
                            </tooltip>
                         </TextField>
-                        <TextField fx:id="serverPortTxtField1" prefHeight="25.0" prefWidth="209.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                        <TextField fx:id="adapterIdLbl" prefHeight="25.0" prefWidth="193.0" styleClass="plainTextField" GridPane.columnIndex="1" GridPane.columnSpan="2">
                            <tooltip>
-                              <Tooltip text="Fill server port. Example: 9092" />
+                              <Tooltip text="Fill adapter ID. Example: 51914" />
                            </tooltip>
                         </TextField>
-                        <TextField fx:id="serverDbNameTxtField1" prefHeight="25.0" prefWidth="209.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
-                           <tooltip>
-                              <Tooltip text="Fill database name. Example: home4" />
-                           </tooltip>
-                        </TextField>
-                        <TextField fx:id="serverNameTxtField11" prefHeight="25.0" prefWidth="209.0" styleClass="plainTextField" GridPane.columnIndex="1">
-                           <tooltip>
-                              <Tooltip text="Fill name of server. Example: Production" />
-                           </tooltip>
-                        </TextField>
-                        <MenuButton mnemonicParsing="false" text="Database" GridPane.columnIndex="2" GridPane.halignment="CENTER">
+                        <MenuButton mnemonicParsing="false" text="Database" GridPane.columnIndex="3" GridPane.halignment="CENTER">
                           <items>
                             <MenuItem fx:id="checkIdMenuItem" mnemonicParsing="false" onAction="#handleCheckId" text="Check ID" />
                             <MenuItem fx:id="showAdaptersMenuItem" mnemonicParsing="false" onAction="#handleShowAdapters" text="Show adapters in DB" />
                           </items>
+                           <tooltip>
+                              <Tooltip text="Click to see database options" />
+                           </tooltip>
                         </MenuButton>
+                        <RadioButton fx:id="adapterNoRegisteredRadBtn" mnemonicParsing="false" selected="true" text="No" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="registeregRadBtnGroup" />
+                           </toggleGroup>
+                           <tooltip>
+                              <Tooltip text="Pick if adapter doesn't exist in database" />
+                           </tooltip>
+                        </RadioButton>
+                        <RadioButton fx:id="adapterYesRegisteredRadBtn" mnemonicParsing="false" text="Yes" toggleGroup="$registeregRadBtnGroup" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                           <tooltip>
+                              <Tooltip text="Pick if adapter doesn't exist in database" />
+                           </tooltip></RadioButton>
+                        <ComboBox fx:id="adapterProtocolComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4">
+                           <tooltip>
+                              <Tooltip text="Pick version of communication protocol between server and emulator" />
+                           </tooltip></ComboBox>
                      </children>
                      <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="300.0" minWidth="0.0" prefWidth="91.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="464.0" minWidth="10.0" prefWidth="138.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="458.0" minWidth="10.0" prefWidth="64.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="300.0" minWidth="0.0" prefWidth="115.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="464.0" minWidth="10.0" prefWidth="52.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="464.0" minWidth="10.0" prefWidth="136.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="458.0" minWidth="10.0" prefWidth="106.0" />
                      </columnConstraints>
                      <rowConstraints>
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />

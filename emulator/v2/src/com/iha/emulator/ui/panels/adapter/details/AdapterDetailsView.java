@@ -1,6 +1,5 @@
 package com.iha.emulator.ui.panels.adapter.details;
 
-import com.iha.emulator.ui.panels.server.details.ServerDetailsPresenter;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;

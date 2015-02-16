@@ -1,23 +1,28 @@
 package com.iha.emulator.utilities;
 
+import com.iha.emulator.control.SensorController;
+import com.iha.emulator.ui.simulations.detailed.DetailedSimulationPresenter;
 import javafx.application.Platform;
-import javafx.beans.InvalidationListener;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.control.TextArea;
-import javafx.scene.layout.StackPane;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import javafx.scene.web.WebView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Iterator;
 
 /**
  * Created by Shu on 27.11.2014.
@@ -27,6 +32,8 @@ public class AdapterLogger {
 
     private static final String TIME_PATTERN = "HH:mm:ss(SSS)";
     private static DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(TIME_PATTERN);
+
+    private static final int BUFFER_LINE_COUNT_MAX = 80;
 
     public enum Type{
         FULL,
@@ -39,6 +46,12 @@ public class AdapterLogger {
         BOLD
     }
 
+    private Type actualType;
+
+    private Node adapterLogContainer;
+    private Node toBeSentLogContainer;
+    private Node errorLogContainer;
+
     private TextFlow adapterLog;
     private TextFlow toBeSentLog;
     private TextFlow errorLog;
@@ -47,7 +60,10 @@ public class AdapterLogger {
     private BooleanProperty partialMessage;
     private BooleanProperty shortMessage;
 
-    private Type actualType;
+    private boolean buffered = false;
+    private File bufferFile;
+    private BufferedWriter bufferWriter;
+    private int bufferMark;
 
     private Property<StringBuilder> fullString;
 
@@ -55,32 +71,31 @@ public class AdapterLogger {
         this.fullMessage = new SimpleBooleanProperty(true);
         this.partialMessage = new SimpleBooleanProperty(false);
         this.shortMessage = new SimpleBooleanProperty(false);
-        bondChangeListener();
-
+        bindChangeListener();
     }
 
-    public synchronized void log(String fullMessage,String partialMessage,String shortMessage){
-        Platform.runLater(() -> {
-            if(adapterLog!= null){
-                String msg = null;
-                //determine which message to use
-                switch (actualType){
-                    case FULL:
-                        msg = fullMessage;
-                        break;
-                    case PARTIAL:
-                        msg = partialMessage;
-                        break;
-                    case SHORT:
-                        msg = shortMessage;
-                        break;
+    public synchronized void log(String message){
+        if(adapterLog!= null){
+            //don't wont to show empty messages
+            if(message.equals("")) return;
+            if(buffered && bufferWriter != null){
+                if(adapterLog.getChildren().size() > BUFFER_LINE_COUNT_MAX){
+                    ObservableList<Node> lines = adapterLog.getChildren();
+                    for(int i = 0; i < BUFFER_LINE_COUNT_MAX - 5;i++){
+                        try {
+                            bufferWriter.write(((Text)lines.get(i)).getText());
+                            bufferWriter.flush();
+                        } catch (IOException e) {
+                            DetailedSimulationPresenter.showException(logger,"Cannot write line " + i + " to buffer file!",e,false,null);
+                        }
+                    }
+                    Platform.runLater(() -> lines.remove(0, BUFFER_LINE_COUNT_MAX - 5));
                 }
-                //don't wont to show empty messages
-                if(msg.equals("")) return;
-                //write message with timestamp
-                adapterLog.getChildren().add(new Text(timeFormatter.format(LocalTime.now()) + " - " + msg + "\n"));
             }
-        });
+
+            Platform.runLater(() -> adapterLog.getChildren().add(new Text(timeFormatter.format(LocalTime.now()) + " - " + message + "\n")));
+        }
+
     }
 
     public synchronized void sent(String message){
@@ -101,12 +116,11 @@ public class AdapterLogger {
 
     public synchronized void notifyDataSent(){
         if(toBeSentLog.getChildren().size() > 0){
-            toBeSentLog.getChildren().remove(0);
+            Platform.runLater(() -> toBeSentLog.getChildren().remove(0));
         }else{
             logger.error("Trying to remove first toBeSent line, but there are no lines");
         }
     }
-
 
     public TextFlow addAdapterLogTo(Node container){
         //create new textArea
@@ -114,10 +128,10 @@ public class AdapterLogger {
             adapterLog = new TextFlow();
             stylize(adapterLog);
         }
-        StackPane paneContainer = (StackPane) container;
-        paneContainer.getChildren().clear();
-        //add new
-        paneContainer.getChildren().add(adapterLog);
+        ScrollPane paneContainer = (ScrollPane) container;
+        paneContainer.setContent(adapterLog);
+        paneContainer.setFitToWidth(true);
+        this.adapterLogContainer = container;
         return adapterLog;
     }
 
@@ -127,10 +141,10 @@ public class AdapterLogger {
             toBeSentLog = new TextFlow();
             stylize(toBeSentLog);
         }
-        StackPane paneContainer = (StackPane) container;
-        paneContainer.getChildren().clear();
-        //add new
-        paneContainer.getChildren().add(toBeSentLog);
+        ScrollPane paneContainer = (ScrollPane) container;
+        paneContainer.setContent(toBeSentLog);
+        paneContainer.setFitToWidth(true);
+        this.toBeSentLogContainer = container;
         return toBeSentLog;
     }
 
@@ -140,22 +154,75 @@ public class AdapterLogger {
             errorLog = new TextFlow();
             stylize(errorLog);
         }
-        StackPane paneContainer = (StackPane) container;
-        paneContainer.getChildren().clear();
-        //add new
-        paneContainer.getChildren().add(errorLog);
+        ScrollPane paneContainer = (ScrollPane) container;
+        paneContainer.setContent(errorLog);
+        paneContainer.setFitToWidth(true);
+        this.errorLogContainer = container;
         return errorLog;
+    }
+
+    public void clearContainers(){
+        if(this.adapterLogContainer != null){
+            ((ScrollPane)adapterLogContainer).setContent(null);
+        }
+        if(this.toBeSentLogContainer != null){
+            ((ScrollPane)toBeSentLogContainer).setContent(null);
+        }
+        if(this.errorLogContainer != null){
+            ((ScrollPane)errorLogContainer).setContent(null);
+        }
+    }
+
+    public void delete(){
+        closeBuffer();
+        adapterLog.getChildren().clear();
+        toBeSentLog.getChildren().clear();
+        errorLog.getChildren().clear();
+    }
+
+    private void closeBuffer(){
+        if(this.bufferWriter != null){
+            try {
+                bufferWriter.flush();
+                bufferWriter.close();
+            } catch (IOException e) {
+                DetailedSimulationPresenter.showException(logger,"Cannot close adapter logger buffer",e,false,null);
+            }
+        }
+    }
+
+    public void removeUnsentMessagesBySensor(SensorController sensorController){
+        if(toBeSentLog != null && toBeSentLog.getChildren().size() !=0){
+            for (Iterator<Node> it = toBeSentLog.getChildren().iterator(); it.hasNext(); ) {
+                Node child = it.next();
+                if (Utilities.containsIgnoreCase(((Text) child).getText(), sensorController.toString())) {
+                    it.remove();
+                }
+            }
+        }
     }
 
     private void stylize(TextFlow area){
         area.getStyleClass().addAll("logTextArea");
-
     }
 
-    private void bondChangeListener(){
+    private void bindChangeListener(){
         this.fullMessage.addListener(new MessageTypeChangeListener(Type.FULL));
         this.partialMessage.addListener(new MessageTypeChangeListener(Type.PARTIAL));
         this.shortMessage.addListener(new MessageTypeChangeListener(Type.SHORT));
+    }
+
+    public void setBuffered(boolean buffered,String adapterId) throws IOException {
+        this.buffered = buffered;
+        if(buffered){
+            if(bufferFile == null){
+                bufferFile = File.createTempFile("adapter_emu_" + adapterId ,".tmp");
+                logger.trace("Temp file location: " + bufferFile.getAbsolutePath());
+                bufferWriter = new BufferedWriter(new FileWriter(bufferFile));
+                logger.debug("Created adapter's log buffer file.");
+            }
+        }
+        logger.debug("Adapter's log is now buffered");
     }
 
     public static Type toType(String typeString){

@@ -1,14 +1,25 @@
 package com.iha.emulator.ui.dialogs.adapter;
 
+import com.iha.emulator.communication.protocol.Protocol;
+import com.iha.emulator.control.AdapterController;
 import com.iha.emulator.models.Server;
 import com.iha.emulator.ui.Presenter;
 import com.iha.emulator.ui.panels.PanelPresenter;
+import com.iha.emulator.ui.simulations.detailed.DetailedSimulationPresenter;
+import com.iha.emulator.utilities.AdapterLogger;
 import com.iha.emulator.utilities.Utilities;
+import com.iha.emulator.communication.eserver.EmulatorServerClient;
+import com.iha.emulator.communication.eserver.model.AdapterInfo;
+import com.iha.emulator.communication.eserver.task.ServerTask;
+import com.iha.emulator.communication.eserver.task.TaskParser;
+import com.iha.emulator.communication.eserver.task.implemented.CheckIdTask;
+import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -17,17 +28,16 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.controlsfx.dialog.ExceptionDialog;
 import org.controlsfx.validation.ValidationMessage;
 import org.controlsfx.validation.ValidationResult;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
 import org.controlsfx.validation.decoration.StyleClassValidationDecoration;
 import org.controlsfx.validation.decoration.ValidationDecoration;
+import org.dom4j.DocumentException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,10 +47,12 @@ import java.io.InputStream;
  */
 public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
 
+    private String DEFAULT_FIRMWARE = "0";
     private static final Logger logger = LogManager.getLogger(AddAdapterDialogPresenter.class);
     private static final String FXML_PATH = "AddAdapterDialog.fxml";
     private static final String CSS_PATH = "/com/iha/emulator/resources/css/theme-light.css";
-    private ValidationSupport validationSupport = new ValidationSupport();
+    private ValidationSupport serverValidationSupport = new ValidationSupport();
+    private ValidationSupport adapterValidationSupport = new ValidationSupport();
     private ValidationDecoration iconDecorator = new StyleClassValidationDecoration("validationError","validationWarn");
 
     private Display view;
@@ -55,6 +67,9 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
 
     private ObservableList<Server> servers;
     private Server selectedServer;
+    private Protocol.Version selectedVersion;
+
+    private DetailedSimulationPresenter parent;
 
     public interface Display {
         public Node getView();
@@ -72,22 +87,31 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
         public CheckBox getServerModifyCheckBox();
         public MenuItem getCheckIdMenuItem();
         public MenuItem getShowAdaptersMenuItem();
+        public TextField getAdapterIdLbl();
+        public TextField getAdapterNameLbl();
+        public TextField getAdapterFirmwareLbl();
+        public RadioButton getAdapterNoRegisteredRadBtn();
+        public RadioButton getAdapterYesRegisteredRadBtn();
+        public ComboBox getAdapterProtocolComboBox();
     }
 
-    public AddAdapterDialogPresenter(Stage stage,ObservableList<Server> servers) {
+    public AddAdapterDialogPresenter(Stage stage,ObservableList<Server> servers,DetailedSimulationPresenter parent,String defaultFirmware) {
         this.disableNext = new SimpleBooleanProperty(false);
         this.disablePrevious = new SimpleBooleanProperty(true);
         this.disableFinish = new SimpleBooleanProperty(true);
         this.serverInfoSet = new SimpleBooleanProperty(false);
         this.adapterInfoSet = new SimpleBooleanProperty(false);
         this.modifyServer = new SimpleBooleanProperty(false);
-        validationSupport.setValidationDecorator(iconDecorator);
+        serverValidationSupport.setValidationDecorator(iconDecorator);
         this.window = stage;
         this.servers = servers;
+        this.parent = parent;
+        this.DEFAULT_FIRMWARE = defaultFirmware;
     }
 
     @SuppressWarnings("unchecked")
     public void initialize(){
+        //----------------SERVER-------------------
         //check if we have any servers
         if(this.servers == null){
             this.servers = FXCollections.observableArrayList();
@@ -124,12 +148,35 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
             view.getServerModifyCheckBox().requestFocus();
         });
         //bind field validation support to variable holding completion of server info
-        validationSupport.validationResultProperty().addListener((observable, oldValue, newValue) -> {
-            if(validationSupport.isInvalid()){
-                setServerInfoSet(false);
-            }else{
-                setServerInfoSet(true);
+        serverValidationSupport.validationResultProperty().addListener((observable, oldValue, newValue) -> {
+                setServerInfoSet(!serverValidationSupport.isInvalid());
+        });
+        //----------------ADAPTER-------------------
+        view.getAdapterFirmwareLbl().setText(DEFAULT_FIRMWARE);
+        view.getAdapterProtocolComboBox().setItems(getProtocolVersions());
+        view.getAdapterProtocolComboBox().setCellFactory(new Callback<ListView<Protocol.Version>, ListCell<Protocol.Version>>() {
+            @Override
+            public ListCell call(ListView<Protocol.Version> param) {
+                return new ListCell<Protocol.Version>(){
+                    @Override
+                    protected void updateItem(Protocol.Version s,boolean bln){
+                        super.updateItem(s,bln);
+                        if( s != null ){
+                            setText(String.valueOf(s.getVersion()));
+                        }else{
+                            setText(null);
+                        }
+                    }
+                };
             }
+        });
+        //add change listener, if new item is selected in combo box, other fields are changed
+        view.getAdapterProtocolComboBox().valueProperty().addListener((observable, oldValue, newValue) -> {
+            selectedVersion = (Protocol.Version) newValue;
+        });
+        //bind field validation support to variable holding completion of protocol version
+        adapterValidationSupport.validationResultProperty().addListener((observable, oldValue, newValue) -> {
+                setAdapterInfoSet(!adapterValidationSupport.isInvalid());
         });
     }
 
@@ -138,6 +185,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
     public void next(){
         if(getServerInfoSet() && selectedServer != null){
             logger.trace("Showing next panel");
+            updateServerInfo();
             enableAdapterPanel();
             setDisablePrevious(false);
             setDisableNext(true);
@@ -145,7 +193,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
         }else{
             logger.trace("Server info not filled. Cannot \"Next\" dialog");
             String message = null;
-            for(ValidationMessage msg : validationSupport.getValidationResult().getErrors()){
+            for(ValidationMessage msg : serverValidationSupport.getValidationResult().getErrors()){
                 if(message == null){
                     message = msg.getText();
                 }else {
@@ -153,6 +201,15 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
                 }
             }
             showWarning("Server information","Please fill all necessary information",message);
+        }
+    }
+
+    private void updateServerInfo(){
+        if(selectedServer != null){
+            selectedServer.setIp(view.getServerIpTxtField().getText());
+            selectedServer.setPort(Integer.valueOf(view.getServerPortTxtField().getText()));
+            selectedServer.setDatabaseName(view.getServerDbNameTxtField().getText());
+            selectedServer.setName(view.getServerNameTxtField().getText());
         }
     }
 
@@ -169,11 +226,146 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
     }
 
     public void finish(){
-        logger.trace("Finishing");
+        if(getAdapterInfoSet() && selectedVersion != null){
+            logger.trace("Finishing");
+            if(addAdapter())
+                window.hide();
+            else
+                return;
+        }else{
+            logger.trace("Adapter info not filled. Cannot \"Finish\" dialog");
+            String message = null;
+            for(ValidationMessage msg : adapterValidationSupport.getValidationResult().getErrors()){
+                if(message == null){
+                    message = msg.getText();
+                }else {
+                    message = message + "\n"  + msg.getText();
+                }
+            }
+            showWarning("Adapter information","Please fill all necessary information",message);
+        }
+    }
+
+    private boolean addAdapter(){
+        //check if list of adapter controllers exist
+        AdapterController newAdapterController = null;
+        try {
+            //create new adapter controller
+            newAdapterController = new AdapterController();
+            //add it to list
+            parent.getAdapterControllersList().add(newAdapterController);
+            //create new adapter
+            newAdapterController.createAdapter(
+                    view.getAdapterNameLbl().getText(),
+                    false,
+                    Integer.valueOf(view.getAdapterIdLbl().getText()),
+                    view.getAdapterYesRegisteredRadBtn().isSelected(),
+                    selectedVersion,
+                    Double.valueOf(view.getAdapterFirmwareLbl().getText()));
+            //create new server
+            newAdapterController.createServer(selectedServer);
+            //create logger
+            newAdapterController.createLog();
+            //config log
+            newAdapterController.getLog().setType(AdapterLogger.toType(parent.getProperty("defaultLogMessageType")));
+            //create scheduler
+            newAdapterController.createScheduler();
+            //set response tracking
+            newAdapterController.setTrackServerResponse(true);
+            newAdapterController.setDumpServerResponse(true);
+            //bind scheduler processing to adapter's status indicator
+            newAdapterController.bindSchedulerProcess(newAdapterController.getAdapter(), newAdapterController.getScheduler());
+            //bind register message
+            newAdapterController.bindRegisterMessage(newAdapterController);
+            //add new adapter button
+            parent.addAdapterBtn(newAdapterController);
+            // set new adapter as current
+            parent.setCurrentAdapter(newAdapterController);
+            return true;
+        } catch (IllegalArgumentException e){
+            parent.getAdapterControllersList().remove(newAdapterController);
+            DetailedSimulationPresenter.showException(
+                    logger,
+                    "Cannot create adapter. Error in properties file. Please review file an start application again.",
+                    e,
+                    true,
+                    event -> parent.quit());
+            return false;
+        }
     }
 
     public void checkId(){
+        Task<Object> worker = new Task<Object>() {
+            @Override
+            protected Object call() throws Exception {
+                EmulatorServerClient server = new EmulatorServerClient();
+                try{
+                    server.connect();
+                }catch (IOException e){
+                    Platform.runLater(() -> DetailedSimulationPresenter.showException(logger, "Cannot connect to server", e, false, null));
+                }
+                try{
+                    //composite message for server
+                    ServerTask task = new CheckIdTask(selectedServer.getDatabaseName(),view.getAdapterIdLbl().getText());
+                    //send message and wait for response
+                    String messageFromServer = server.sendMessage(task.buildMessage());
+                    //determine result state (OK/ERROR)
+                    TaskParser.parseTaskResult(messageFromServer);
+                    //if ok, parse response
+                    task.parseResponse(messageFromServer);
+                    //show response in table
+                    Platform.runLater(()->showAdapterFromServer(((CheckIdTask)task).getResult()));
+                }catch (IOException e){
+                    Platform.runLater(()-> DetailedSimulationPresenter.showException(logger,"Cannot read from socket",e,false,null));
+                }catch (DocumentException de){
+                    Platform.runLater(()-> DetailedSimulationPresenter.showException(logger,"Cannot parse server message",de,false,null));
+                }catch (IllegalStateException ie){
+                    Platform.runLater(()-> DetailedSimulationPresenter.showException(logger,"Error on server",ie,false,null));
+                }
+                return null;
+            }
+        };
+        //create thread for background process
+        Thread th = new Thread(worker);
+        th.setDaemon(true);
+        //run background process
+        th.start();
+    }
 
+    private void showAdapterFromServer(AdapterInfo adapterInfo){
+        //TODO show dialog, that id was found and if user want to set data from server
+        if(adapterInfo == null){
+            Alert dlg = new Alert(Alert.AlertType.INFORMATION,"");
+            dlg.initModality(Modality.WINDOW_MODAL);
+            dlg.initOwner(window);
+            dlg.setTitle("Check adapter ID");
+            dlg.setHeaderText("ID was not found in database");
+            dlg.getDialogPane().setContentText("Setting registered to: \"No\"");
+            dlg.show();
+            view.getAdapterNameLbl().setText("");
+            view.getAdapterFirmwareLbl().setText(DEFAULT_FIRMWARE);
+            view.getAdapterNoRegisteredRadBtn().setSelected(true);
+        } else {
+            Alert dlg = new Alert(Alert.AlertType.INFORMATION,"");
+            dlg.initModality(Modality.WINDOW_MODAL);
+            dlg.initOwner(window);
+            dlg.setTitle("Check adapter ID");
+            dlg.setHeaderText("ID was found in database");
+            dlg.getDialogPane().setContentText("Setting adapter information:\n" +
+                    "ID: " + adapterInfo.getId() + "\n" +
+                    "Name: " + adapterInfo.getName() + "\n" +
+                    "Version: " + adapterInfo.getVersion() + "\n" +
+                    "Registered: Yes");
+            dlg.show();
+            view.getAdapterIdLbl().setText(adapterInfo.getId());
+            view.getAdapterNameLbl().setText(adapterInfo.getName());
+            view.getAdapterFirmwareLbl().setText(adapterInfo.getVersion());
+            view.getAdapterYesRegisteredRadBtn().setSelected(true);
+        }
+    }
+
+    private ObservableList<Protocol.Version> getProtocolVersions(){
+        return FXCollections.observableArrayList(Protocol.Version.values());
     }
 
     public void showAdapters(){
@@ -191,7 +383,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
             stage.show();
             showAdaptersDialogPresenter.refresh();
             } catch (IOException e) {
-                showException("Cannot load dialog for showing adapters in database!",e);
+                DetailedSimulationPresenter.showException(logger, "Cannot load dialog for showing adapters in database!", e, false,null);
             }
     }
 
@@ -218,18 +410,6 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
         {
             if (fxmlStream != null) fxmlStream.close();
         }
-    }
-
-    public void showException(String header,Exception e){
-        logger.error(e.getMessage(),e);
-        //create exception dialog
-        ExceptionDialog dlg = new ExceptionDialog(e);
-        //define default header
-        if (header == null) header = "Ooops. Something went wrong!.";
-        dlg.getDialogPane().setHeaderText(header);
-        dlg.initStyle(StageStyle.DECORATED);
-        //show exception dialog
-        dlg.show();
     }
 
     private void enableServerPanel(){
@@ -275,6 +455,11 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
     }
 
     @Override
+    public void clear() {
+
+    }
+
+    @Override
     public void bind() {
         view.setPresenter(this);
         //control buttons
@@ -296,23 +481,51 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
         view.getServerIpTxtField().disableProperty().bind(textFieldToModify);
         view.getServerPortTxtField().disableProperty().bind(textFieldToModify);
         view.getServerDbNameTxtField().disableProperty().bind(textFieldToModify);
-        //server field validator
-        validationSupport.registerValidator(view.getServerNameTxtField(),false, Validator.createEmptyValidator("Name is required"));
-        validationSupport.registerValidator(view.getServerIpTxtField(),false, Validator.createEmptyValidator("Ip is required"));
-        validationSupport.registerValidator(view.getServerIpTxtField(),false,(Control c, String newValue) ->
-                ValidationResult.fromErrorIf( view.getServerIpTxtField(), "Ip must be in IP4 address format (xxx.xxx.xxx.xxx)", !Utilities.isIp(newValue)));
-        validationSupport.registerValidator(view.getServerPortTxtField(),false, Validator.createEmptyValidator("Port is required"));
-        validationSupport.registerValidator(view.getServerPortTxtField(),false,(Control c, String newValue) ->
-                ValidationResult.fromErrorIf( view.getServerPortTxtField(), "Port must be an integer number with maximum of 5 digits", !Utilities.isIntegerNumber(newValue)));
-        validationSupport.registerValidator(view.getServerDbNameTxtField(),false, Validator.createEmptyValidator("Database name is required"));
-        //set placeholders
+        //--server field validator
+        serverValidationSupport.registerValidator(view.getServerNameTxtField(), false, Validator.createEmptyValidator("Name is required"));
+        serverValidationSupport.registerValidator(view.getServerIpTxtField(), false, Validator.createEmptyValidator("Ip is required"));
+        serverValidationSupport.registerValidator(view.getServerIpTxtField(), false, (Control c, String newValue) ->
+                ValidationResult.fromErrorIf(view.getServerIpTxtField(), "Ip must be in IP4 address format (xxx.xxx.xxx.xxx)", !Utilities.isIp(newValue)));
+        serverValidationSupport.registerValidator(view.getServerPortTxtField(), false, Validator.createEmptyValidator("Port is required"));
+        serverValidationSupport.registerValidator(view.getServerPortTxtField(), false, (Control c, String newValue) ->
+                ValidationResult.fromErrorIf(view.getServerPortTxtField(), "Port must be an integer number with maximum of 5 digits", !Utilities.isIntegerNumber(newValue, 1, 5)));
+        serverValidationSupport.registerValidator(view.getServerDbNameTxtField(), false, Validator.createEmptyValidator("Database name is required"));
+        //--set placeholders
         view.getServerNameTxtField().setPromptText("Example: devel");
         view.getServerIpTxtField().setPromptText("Example: 10.1.0.1");
         view.getServerPortTxtField().setPromptText("Example: 7080");
         view.getServerDbNameTxtField().setPromptText("Example: home4");
-        //disable checkbox
+            //disable checkbox
         view.getServerModifyCheckBox().setDisable(true);
-
+        //adapter
+        //--checkId button
+        view.getCheckIdMenuItem().disableProperty().bind(new BooleanBinding() {
+            {
+                bind(view.getAdapterIdLbl().textProperty());
+            }
+            @Override
+            protected boolean computeValue() {
+                if(view.getAdapterIdLbl().getText().equals("")){
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+        });
+        //--adapter field validator
+        adapterValidationSupport.registerValidator(view.getAdapterIdLbl(), false, Validator.createEmptyValidator("ID is required"));
+        adapterValidationSupport.registerValidator(view.getAdapterIdLbl(), false, (Control c, String newValue) ->
+                ValidationResult.fromErrorIf(view.getAdapterIdLbl(), "ID must be an integer number", !Utilities.isIntegerNumber(newValue, 1, 10)));
+        adapterValidationSupport.registerValidator(view.getAdapterFirmwareLbl(), false, Validator.createEmptyValidator("Firmware is required"));
+        adapterValidationSupport.registerValidator(view.getAdapterFirmwareLbl(), false, (Control c, String newValue) ->
+                ValidationResult.fromErrorIf(view.getAdapterIdLbl(), "Firmware must be an integer number", !Utilities.isIntegerNumber(newValue, 1, 4)));
+        adapterValidationSupport.registerValidator(view.getAdapterProtocolComboBox(), false, (Control c, Protocol.Version version) ->
+                ValidationResult.fromErrorIf(view.getAdapterProtocolComboBox(), "Protocol version is required", (version == null)));
+        //--adapter placeholders
+        view.getAdapterIdLbl().setPromptText("Example: 51914");
+        view.getAdapterNameLbl().setPromptText("Example: EA51914");
+        view.getAdapterFirmwareLbl().setPromptText("Example: 0");
+        //--adapter bind finish disable property to validator
     }
 
     public boolean getDisableNext() {

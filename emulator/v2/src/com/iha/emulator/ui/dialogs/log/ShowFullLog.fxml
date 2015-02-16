@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="view" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="658.0" prefWidth="795.0" stylesheets="@../../../resources/css/theme-light.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iha.emulator.ui.dialogs.log.ShowFullLogView">
+   <children>
+      <ScrollPane fitToHeight="true" fitToWidth="true" prefViewportHeight="620.0" prefViewportWidth="795.0" VBox.vgrow="ALWAYS">
+         <content>
+            <TextFlow prefHeight="615.0" prefWidth="781.0" VBox.vgrow="ALWAYS" />
+         </content>
+      </ScrollPane>
+      <HBox alignment="CENTER_RIGHT" fillHeight="false" prefHeight="38.0" prefWidth="302.0" spacing="10.0" VBox.vgrow="NEVER">
+         <children>
+            <ProgressIndicator fx:id="indicator" prefHeight="22.0" prefWidth="40.0" HBox.hgrow="NEVER">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </ProgressIndicator>
+            <Label fx:id="status" prefHeight="17.0" prefWidth="606.0" styleClass="sensorText" wrapText="true" HBox.hgrow="ALWAYS" />
+            <Button fx:id="refreshBtn" defaultButton="true" mnemonicParsing="false" onAction="#handleRefresh" styleClass="showAdaptersDialogBtn" text="Refresh" HBox.hgrow="NEVER" />
+            <Button fx:id="closeBtn" cancelButton="true" mnemonicParsing="false" onAction="#handleClose" styleClass="showAdaptersDialogBtn" text="Close" />
+         </children>
+         <VBox.margin>
+            <Insets right="15.0" />
+         </VBox.margin>
+      </HBox>
+   </children>
+</VBox>

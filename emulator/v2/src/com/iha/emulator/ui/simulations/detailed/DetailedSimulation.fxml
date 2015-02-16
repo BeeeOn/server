@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.input.*?>
-<?import javafx.scene.web.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.image.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.input.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.paint.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.text.Font?>
+<?import java.lang.*?>
 
-<VBox fx:id="view" prefHeight="673.0" prefWidth="1131.0" stylesheets="@../../../resources/images/css/theme-light.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iha.emulator.ui.simulations.detailed.DetailedSimulationView">
+<VBox fx:id="view" prefHeight="673.0" prefWidth="1131.0" stylesheets="@../../../resources/css/theme-light.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iha.emulator.ui.simulations.detailed.DetailedSimulationView">
   <children>
       <HBox prefHeight="43.0" prefWidth="1110.0" styleClass="whiteBackground" VBox.vgrow="NEVER">
          <children>
@@ -24,11 +20,43 @@
                            <accelerator>
                               <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                            </accelerator></MenuItem>
+                        <MenuItem fx:id="newSensorItem" mnemonicParsing="false" onAction="#handleNewSensor" text="New sensor">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="enableAdapterItem" mnemonicParsing="false" onAction="#handleEnableAdapter" text="Enable current adapter">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="A" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
+                        <MenuItem fx:id="disableAdapterItem" mnemonicParsing="false" onAction="#handleDisableAdapter" text="Disable current adapter">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="D" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
+                        <MenuItem fx:id="disableAllAdaptersItem" mnemonicParsing="false" onAction="#handleDisableAllAdapters" text="Disable all adapters">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="D" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="deleteAdapterItem" mnemonicParsing="false" onAction="#handleDeleteAdapter" text="Delete adapter">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="DELETE" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
+                        <MenuItem fx:id="deleteSensorItem" mnemonicParsing="false" onAction="#handleDeleteSensor" text="Delete sensor">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="DELETE" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
+                  <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem fx:id="openItem" mnemonicParsing="false" onAction="#handleOpen" text="Open...">
                            <accelerator>
                               <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                            </accelerator></MenuItem>
-                  <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem fx:id="saveItem" mnemonicParsing="false" onAction="#handleSave" text="Save">
                            <accelerator>
                               <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
@@ -41,8 +69,8 @@
                            <accelerator>
                               <KeyCodeCombination alt="DOWN" code="P" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                            </accelerator></MenuItem>
-                  <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem fx:id="preferencesItem" mnemonicParsing="false" onAction="#handlePreferences" text="Preferences…" />
+                  <SeparatorMenuItem mnemonicParsing="false" visible="false" />
+                  <MenuItem fx:id="preferencesItem" mnemonicParsing="false" onAction="#handlePreferences" text="Preferences…" visible="false" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem fx:id="quitItem" mnemonicParsing="false" onAction="#handleQuit" text="Quit" />
                 </items>
@@ -110,8 +138,23 @@
                         <String fx:value="disableAdapterBtn" />
                      </styleClass>
                      <tooltip>
-                        <Tooltip text="Disable current adapter" />
+                        <Tooltip text="Disable adapter. Right-click for more options" />
                      </tooltip>
+                     <contextMenu>
+                        <ContextMenu>
+                          <items>
+                            <MenuItem mnemonicParsing="false" onAction="#handleDisableAdapter" text="Disable current adapter">
+                                 <accelerator>
+                                    <KeyCodeCombination alt="UP" code="D" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                                 </accelerator>
+                              </MenuItem>
+                              <MenuItem mnemonicParsing="false" onAction="#handleDisableAllAdapters" text="Disable all adapters">
+                                 <accelerator>
+                                    <KeyCodeCombination alt="UP" code="D" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+                                 </accelerator></MenuItem>
+                          </items>
+                        </ContextMenu>
+                     </contextMenu>
                   </Button>
                   <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0">
                      <padding>
@@ -124,7 +167,7 @@
                         <String fx:value="addAdapterMenuBtn" />
                      </styleClass>
                      <tooltip>
-                        <Tooltip text="Add new adapter" />
+                        <Tooltip text="Add. Right-click for more options" />
                      </tooltip>
                      <contextMenu>
                         <ContextMenu>
@@ -149,8 +192,23 @@
                         <String fx:value="deleteAdapterBtn" />
                      </styleClass>
                      <tooltip>
-                        <Tooltip text="Delete adapter/s" />
+                        <Tooltip text="Delete .Right-click for more options" />
                      </tooltip>
+                     <contextMenu>
+                        <ContextMenu>
+                          <items>
+                            <MenuItem mnemonicParsing="false" onAction="#handleDeleteAdapter" text="Delete adapter">
+                                 <accelerator>
+                                    <KeyCodeCombination alt="UP" code="DELETE" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                                 </accelerator>
+                              </MenuItem>
+                              <MenuItem mnemonicParsing="false" onAction="#handleDeleteSensor" text="Delete sensor">
+                                 <accelerator>
+                                    <KeyCodeCombination alt="UP" code="DELETE" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+                                 </accelerator></MenuItem>
+                          </items>
+                        </ContextMenu>
+                     </contextMenu>
                   </Button>
                   <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0">
                      <padding>
@@ -333,41 +391,22 @@
                                  </children></FlowPane>
                            </content>
                         </ScrollPane>
-                        <TabPane minWidth="550.0" prefHeight="260.0" prefWidth="550.0">
+                        <TabPane fx:id="logTabPane" minWidth="550.0" prefHeight="260.0" prefWidth="550.0">
                           <tabs>
                             <Tab closable="false" text="Adapter Log">
                                  <content>
                                     <VBox prefHeight="200.0" prefWidth="100.0">
                                        <children>
-                                          <Accordion styleClass="logMorePane">
-                                            <panes>
-                                              <TitledPane animated="false" text="More">
-                                                   <content>
-                                                      <HBox alignment="CENTER_LEFT" prefHeight="44.0" prefWidth="545.0" spacing="10.0" styleClass="logMorePanelContainer">
-                                                         <children>
-                                                            <Label text="Message:" />
-                                                            <RadioButton fx:id="fullLogMessageRadBtn" mnemonicParsing="false" selected="true" text="Full">
-                                                               <toggleGroup>
-                                                                  <ToggleGroup fx:id="logMessageTypeRadBtnGroup" />
-                                                               </toggleGroup>
-                                                               <tooltip>
-                                                                  <Tooltip />
-                                                               </tooltip>
-                                                            </RadioButton>
-                                                            <RadioButton fx:id="partialLogMessageRadBtn" mnemonicParsing="false" text="Partial" toggleGroup="$logMessageTypeRadBtnGroup" />
-                                                            <RadioButton fx:id="shortLogMessageRadBtn" mnemonicParsing="false" text="Short" toggleGroup="$logMessageTypeRadBtnGroup" />
-                                                            <Region prefHeight="0.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                                                            <Button disable="true" mnemonicParsing="false" styleClass="showLogButton" text="Show log" HBox.hgrow="NEVER" />
-                                                         </children>
-                                                         <padding>
-                                                            <Insets left="10.0" right="10.0" />
-                                                         </padding>
-                                                      </HBox>
-                                                   </content>
-                                              </TitledPane>
-                                            </panes>
-                                          </Accordion>
-                                          <Separator prefWidth="200.0" styleClass="logMorePaneSeparator" visible="false" VBox.vgrow="NEVER">
+                                          <HBox prefHeight="35.0" prefWidth="545.0" VBox.vgrow="NEVER">
+                                             <children>
+                                                <Button fx:id="showFullLogBtn" mnemonicParsing="false" onAction="#handleShowFullLog" styleClass="showLogButton" text="Show full log" HBox.hgrow="NEVER">
+                                                   <HBox.margin>
+                                                      <Insets left="5.0" top="4.0" />
+                                                   </HBox.margin>
+                                                </Button>
+                                             </children>
+                                          </HBox>
+                                          <Separator prefWidth="200.0" styleClass="logMorePaneSeparator" VBox.vgrow="NEVER">
                                              <padding>
                                                 <Insets left="10.0" right="10.0" />
                                              </padding>
@@ -375,18 +414,22 @@
                                                 <Insets />
                                              </VBox.margin>
                                           </Separator>
-                                          <StackPane fx:id="adapterLogContainer" prefHeight="150.0" prefWidth="200.0" styleClass="logTextAreaContainer" VBox.vgrow="ALWAYS" />
+                                          <ScrollPane fx:id="adapterLogContainer" prefHeight="200.0" prefWidth="200.0" styleClass="logTextAreaContainer" VBox.vgrow="ALWAYS">
+                                             <padding>
+                                                <Insets left="5.0" right="5.0" />
+                                             </padding>
+                                          </ScrollPane>
                                        </children>
                                     </VBox>
                                  </content>
                             </Tab>
                             <Tab closable="false" text="To Be Sent">
                                  <content>
-                                    <StackPane fx:id="toBeSentLogContainer" prefHeight="150.0" prefWidth="200.0" styleClass="logTextAreaContainer" />
+                                    <ScrollPane fx:id="toBeSentLogContainer" prefHeight="200.0" prefWidth="200.0" styleClass="logTextAreaContainer" />
                                  </content></Tab>
-                              <Tab closable="false" text="Error Log">
+                              <Tab fx:id="errorTab" closable="false" text="Error Log">
                                  <content>
-                                    <StackPane fx:id="errorLogContainer" prefHeight="150.0" prefWidth="200.0" styleClass="logTextAreaContainer" />
+                                    <ScrollPane fx:id="errorLogContainer" prefHeight="200.0" prefWidth="200.0" styleClass="logTextAreaContainer" />
                                  </content>
                               </Tab>
                           </tabs>

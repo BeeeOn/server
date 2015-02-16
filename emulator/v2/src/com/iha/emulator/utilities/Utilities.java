@@ -1,16 +1,17 @@
 package com.iha.emulator.utilities;
 
 import com.iha.emulator.Main;
+import com.iha.emulator.control.AdapterController;
+import com.iha.emulator.control.SensorController;
 import com.iha.emulator.models.Server;
-import com.iha.emulator.models.value.Value;
 import javafx.beans.property.LongProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.paint.Color;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import java.io.*;
-import java.net.Inet4Address;
-import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
@@ -35,7 +36,6 @@ public class Utilities {
     private Pattern pattern;
     private Matcher matcher;
 
-    private static final String INTEGER_NUMBER_PATTERN = "\\d{1,5}";
     private static final String IPADDRESS_PATTERN =
             "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
                     "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
@@ -127,7 +127,7 @@ public class Utilities {
         }
     }
 
-    public static String intToIpString(int i){
+    public static synchronized String intToIpString(int i){
         return ((i >> 24 ) & 0xFF) + "." +
 
                 ((i >> 16 ) & 0xFF) + "." +
@@ -137,26 +137,190 @@ public class Utilities {
                 ( i & 0xFF);
     }
 
+    public static synchronized int ipStringToInt(String ip){
+        String[] ipArray = ip.split("\\.");
+        int num = 0;
+
+        for (int i=0;i<ipArray.length;i++) {
+            int power = 3-i;
+            num += ((Integer.parseInt(ipArray[i])%256 * Math.pow(256,power)));
+        }
+        return num;
+    }
+
+    public static boolean containsIgnoreCase( String haystack, String needle ) {
+        if(haystack == null || needle == null || haystack .equals(""))
+            return false;
+        if(needle.equals(""))
+            return true;
+        Pattern p = Pattern.compile(needle,Pattern.CASE_INSENSITIVE+Pattern.LITERAL);
+        Matcher m = p.matcher(haystack);
+        return m.find();
+    }
+
+    public static boolean isSensorIdTaken(AdapterController controller,String sensorId){
+        if(sensorId.equals("")) return false;
+        int id = Utilities.ipStringToInt(sensorId);
+        for(SensorController sController : controller.getSensorControllersList()){
+            if(sController.getModel().getId() == id){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static boolean isIp(String ipString){
         Pattern pattern = Pattern.compile(IPADDRESS_PATTERN);
         Matcher matcher = pattern.matcher(ipString);
         return matcher.matches();
     }
 
-    public static boolean isIntegerNumber(String number){
-        Pattern pattern = Pattern.compile(INTEGER_NUMBER_PATTERN);
+    public static boolean isIntegerNumber(String number,int minDigits,int maxDigits){
+        Pattern pattern = Pattern.compile("\\d{"+minDigits+","+maxDigits+"}");
         Matcher matcher = pattern.matcher(number);
         return matcher.matches();
     }
 
     public static String formatSeconds(int seconds){
         if(seconds < 60) {
-            return seconds + " sec";
+            return seconds + " s";
         }else if(seconds < 3600){
-            return (seconds/60) + " min";
+            return (seconds/60) + " m";
         }else {
-            return (seconds/3600) + " hour";
+            return (seconds/3600) + " h";
         }
+    }
+
+    public static int refreshSliderScaleToSeconds(double scaleNo) {
+        Double scaleDouble = scaleNo;
+        int seconds;
+        switch (scaleDouble.intValue()) {
+            case 0:
+                seconds = 1;
+                break;
+            case 1:
+                seconds = 5;
+                break;
+            case 2:
+                seconds = 10;
+                break;
+            case 3:
+                seconds = 20;
+                break;
+            case 4:
+                seconds = 30;
+                break;
+            case 5:
+                seconds = 60;
+                break;
+            case 6:
+                seconds = 300;
+                break;
+            case 7:
+                seconds = 600;
+                break;
+            case 8:
+                seconds = 900;
+                break;
+            case 9:
+                seconds = 1800;
+                break;
+            case 10:
+                seconds = 3600;
+                break;
+            case 11:
+                seconds = 7200;
+                break;
+            case 12:
+                seconds = 10800;
+                break;
+            case 13:
+                seconds = 14400;
+                break;
+            case 14:
+                seconds = 28800;
+                break;
+            case 15:
+                seconds = 43200;
+                break;
+            case 16:
+                seconds = 86400;
+                break;
+            default:
+                seconds = 0;
+                break;
+        }
+        return seconds;
+    }
+
+    public static double secondsToRefershSliderScale(int seconds) {
+        int scaleNo;
+        switch (seconds) {
+            case 1:
+                scaleNo = 0;
+                break;
+            case 5:
+                scaleNo = 1;
+                break;
+            case 10:
+                scaleNo = 2;
+                break;
+            case 20:
+                scaleNo = 3;
+                break;
+            case 30:
+                scaleNo = 4;
+                break;
+            case 60:
+                scaleNo = 5;
+                break;
+            case 300:
+                scaleNo = 6;
+                break;
+            case 600:
+                scaleNo = 7;
+                break;
+            case 900:
+                scaleNo = 8;
+                break;
+            case 1800:
+                scaleNo = 9;
+                break;
+            case 3600:
+                scaleNo = 10;
+                break;
+            case 7200:
+                scaleNo = 11;
+                break;
+            case 10800:
+                scaleNo = 12;
+                break;
+            case 14400:
+                scaleNo = 13;
+                break;
+            case 28800:
+                scaleNo = 14;
+                break;
+            case 43200:
+                scaleNo = 15;
+                break;
+            case 86400:
+                scaleNo = 16;
+                break;
+            default:
+                scaleNo = 1;
+                break;
+        }
+        Integer i = new Integer(scaleNo);
+        return i.doubleValue();
+    }
+
+    public static String toRGBCode( Color color )
+    {
+        return String.format( "#%02X%02X%02X",
+                (int)( color.getRed() * 255 ),
+                (int)( color.getGreen() * 255 ),
+                (int)( color.getBlue() * 255 ) );
     }
     /**
      * Generates new value from current one with accuracy given as parameters.

@@ -1,7 +1,6 @@
 package com.iha.emulator.models.value;
 
-import com.iha.emulator.control.AdapterController;
-import com.iha.emulator.models.SensorType;
+import com.iha.emulator.models.value.implemented.HasGenerator;
 import javafx.beans.property.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,15 +11,16 @@ import java.util.Random;
 /**
  * Created by Shu on 2.12.2014.
  */
-public abstract class AbstractValue<T> implements Value<T>{
+public abstract class AbstractValue<T> implements Value<T>,HasGenerator{
 
-    private static final Logger logger = LogManager.getLogger(AdapterController.class);
+    private static final Logger logger = LogManager.getLogger(Value.class);
 
-    private SensorType valueType;
+    private Type valueType;
     private ObjectProperty<T> value;
     private StringProperty stringValue;
     private StringProperty name;
     private String type;
+    private int offset;
     private String unit;
     private boolean generateValue;
     private boolean storeHistory;
@@ -29,10 +29,18 @@ public abstract class AbstractValue<T> implements Value<T>{
 
     private ArrayList<T> valueHistory;
 
-    public AbstractValue(SensorType valueType,String name,String type,String unit,boolean generateValue,boolean storeHistory,Random generator,Long generatorSeed) {
+    public AbstractValue(Type valueType,String name,String type,String unit){
+        this.name = new SimpleStringProperty(name);
+        this.valueType = valueType;
+        this.type = type;
+        this.unit = unit;
+    }
+
+    public AbstractValue(Type valueType,String name,String type,int offset,String unit,boolean generateValue,boolean storeHistory,Random generator,Long generatorSeed) {
         this.valueType = valueType;
         this.name = new SimpleStringProperty(name);
         this.type = type;
+        this.offset = offset;
         this.unit = unit;
         this.generateValue = generateValue;
         this.storeHistory = storeHistory;
@@ -65,7 +73,6 @@ public abstract class AbstractValue<T> implements Value<T>{
     }
 
     public void setValue(T value) {
-        logger.debug("Setting sensor/actuator to value: " + value);
         this.value.set(value);
         setStringValue(toStringWithUnit());
     }
@@ -84,8 +91,13 @@ public abstract class AbstractValue<T> implements Value<T>{
 
     public abstract void nextValue();
 
-    public SensorType getValueType() {
+    public Type getValueType() {
         return valueType;
+    }
+
+    @Override
+    public void setValueType(Type valueType) {
+        this.valueType = valueType;
     }
 
     public String getName() {
@@ -106,6 +118,14 @@ public abstract class AbstractValue<T> implements Value<T>{
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public int getOffset(){
+        return this.offset;
+    }
+
+    public void setOffset(int offset){
+        this.offset = offset;
     }
 
     public String getUnit() {

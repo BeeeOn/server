@@ -1,6 +1,5 @@
 package com.iha.emulator.ui.dialogs.adapter;
 
-import com.iha.emulator.ui.panels.server.details.ServerDetailsPresenter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -40,6 +39,12 @@ public class AddAdapterDialogView implements Initializable,AddAdapterDialogPrese
     //region ADAPTER
     @FXML private MenuItem checkIdMenuItem;
     @FXML private MenuItem showAdaptersMenuItem;
+    @FXML private TextField adapterIdLbl;
+    @FXML private TextField adapterNameLbl;
+    @FXML private TextField adapterFirmwareLbl;
+    @FXML private RadioButton adapterNoRegisteredRadBtn;
+    @FXML private RadioButton adapterYesRegisteredRadBtn;
+    @FXML private ComboBox adapterProtocolComboBox;
     //endregion
     @FXML
     public void handleNext(ActionEvent event) {
@@ -134,6 +139,36 @@ public class AddAdapterDialogView implements Initializable,AddAdapterDialogPrese
     @Override
     public MenuItem getShowAdaptersMenuItem() {
         return showAdaptersMenuItem;
+    }
+
+    @Override
+    public TextField getAdapterIdLbl() {
+        return adapterIdLbl;
+    }
+
+    @Override
+    public TextField getAdapterNameLbl() {
+        return adapterNameLbl;
+    }
+
+    @Override
+    public TextField getAdapterFirmwareLbl() {
+        return adapterFirmwareLbl;
+    }
+
+    @Override
+    public RadioButton getAdapterNoRegisteredRadBtn() {
+        return adapterNoRegisteredRadBtn;
+    }
+
+    @Override
+    public RadioButton getAdapterYesRegisteredRadBtn() {
+        return adapterYesRegisteredRadBtn;
+    }
+
+    @Override
+    public ComboBox getAdapterProtocolComboBox() {
+        return adapterProtocolComboBox;
     }
 
     @Override

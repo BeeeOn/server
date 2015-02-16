@@ -1,8 +1,6 @@
 package com.iha.emulator.models.value.implemented;
 
-import com.iha.emulator.models.SensorType;
 import com.iha.emulator.models.value.AbstractValue;
-import com.iha.emulator.utilities.Utilities;
 
 import java.util.Random;
 
@@ -11,13 +9,9 @@ import java.util.Random;
  */
 public class OnOffActuatorValue extends AbstractValue<Boolean> {
 
-    private Double dev;
-    private Double avg;
-    private Double min;
-    private Double max;
 
-    public OnOffActuatorValue(String name, String type, String unit, boolean generateValue, boolean storeHistory, Random generator, Long generatorSeed) {
-        super(SensorType.ACTUATOR_ON_OFF,name,type,unit,generateValue,storeHistory,generator,generatorSeed);
+    public OnOffActuatorValue(String name, String type,int offset, String unit, boolean generateValue, boolean storeHistory, Random generator, Long generatorSeed) {
+        super(Type.ACTUATOR_ON_OFF,name,type,offset,unit,generateValue,storeHistory,generator,generatorSeed);
         setValue(false);
     }
 
@@ -43,42 +37,27 @@ public class OnOffActuatorValue extends AbstractValue<Boolean> {
         return String.valueOf(getValue()) + " " + getUnit();
     }
 
-    public void setGeneratorVariables(double dev,double avg,double max,double min){
-        setDev(dev);
-        setAvg(avg);
-        setMax(max);
-        setMin(min);
+    @Override
+    public String asMessageString() {
+        return getValue() ? "1" : "0";
     }
 
-    public Double getDev() {
-        return dev;
+    @Override
+    public Boolean fromStringToValueType(String valueString) throws NumberFormatException {
+        if(valueString.equals("1") || valueString.equals("1.0"))
+            return true;
+        else if (valueString.equals("0") || valueString.equals("0.0"))
+            return false;
+        else return Boolean.valueOf(valueString);
     }
 
-    public void setDev(Double dev) {
-        this.dev = dev;
+    @Override
+    public Generator getGeneratorType() {
+        return null;
     }
 
-    public Double getAvg() {
-        return avg;
-    }
+    @Override
+    public void setGeneratorType(Generator generatorType) {
 
-    public void setAvg(Double avg) {
-        this.avg = avg;
-    }
-
-    public Double getMin() {
-        return min;
-    }
-
-    public void setMin(Double min) {
-        this.min = min;
-    }
-
-    public Double getMax() {
-        return max;
-    }
-
-    public void setMax(Double max) {
-        this.max = max;
     }
 }

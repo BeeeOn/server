@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="WARN">
+<Configuration status="WARN" packages="com.iha.emulator.utilities">
     <Properties>
         <Property name="globalPresenterLevel">debug</Property>
         <Property name="globalViewLevel">debug</Property>
         <Property name="globalModelLevel">debug</Property>
+        <Property name="globalControllerLevel">trace</Property>
     </Properties>
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%highlight{%d{HH:mm:ss} %-5level %logger{1} - %msg%n}{FATAL=magenta, ERROR=red, WARN=yellow, INFO=white, DEBUG=bright green, TRACE=black}"/>
+            <PatternLayout pattern="%highlight{%d{HH:mm:ss} %-5level %logger{1} - %msg%n}{FATAL=magenta, ERROR=red, WARN=yellow, INFO=white, DEBUG=bright green, TRACE=cyan}"/>
         </Console>
         <TextAreaAppender name="TextAreaAppender">
             <PatternLayout pattern="%d{HH:mm:ss} %-5level - %msg%n"/>
         </TextAreaAppender>
     </Appenders>
     <Loggers>
-        <Logger name="com.iha.emulator.ui.simulations.detailed.DetailedSimulationPresenter" level="${globalPresenterLevel}"/>
+        <Logger name="com.iha.emulator.ui.simulations.detailed.DetailedSimulationPresenter" level="${globalControllerLevel}"/>
         <Logger name="com.iha.emulator.ui.simulations.detailed.DetailedSimulationView" level="${globalViewLevel}"/>
 
         <Logger name="com.iha.emulator.ui.panels.server.details.ServerDetailsPresenter" level="${globalPresenterLevel}"/>
@@ -26,18 +27,33 @@
         <Logger name="com.iha.emulator.ui.panels.sensor.SensorPanelPresenter" level="${globalPresenterLevel}"/>
         <Logger name="com.iha.emulator.ui.panels.sensor.SensorPanelView" level="${globalViewLevel}"/>
 
-        <Logger name="com.iha.emulator.ui.dialogs.adapter.AddAdapterDialogPresenter" level="trace"/>
-        <Logger name="com.iha.emulator.ui.dialogs.adapter.AddAdapterDialogView" level="trace"/>
+        <Logger name="com.iha.emulator.ui.dialogs.adapter.AddAdapterDialogPresenter" level="${globalPresenterLevel}"/>
+        <Logger name="com.iha.emulator.ui.dialogs.adapter.AddAdapterDialogView" level="${globalViewLevel}"/>
 
-        <Logger name="com.iha.emulator.ui.dialogs.adapter.ShowAdaptersDialogPresenter" level="trace"/>
-        <Logger name="com.iha.emulator.ui.dialogs.adapter.ShowAdaptersDialogView" level="trace"/>
+        <Logger name="com.iha.emulator.ui.dialogs.adapter.ShowAdaptersDialogPresenter" level="${globalPresenterLevel}"/>
+        <Logger name="com.iha.emulator.ui.dialogs.adapter.ShowAdaptersDialogView" level="${globalViewLevel}"/>
+
+        <Logger name="com.iha.emulator.ui.dialogs.sensor.AddNewSensorDialogPresenter" level="${globalPresenterLevel}"/>
+        <Logger name="com.iha.emulator.ui.dialogs.sensor.AddNewSensorDialogView" level="${globalViewLevel}"/>
+
+        <Logger name="com.iha.emulator.ui.dialogs.adapter.DeleteAdaptersDialogPresenter" level="trace"/>
+        <Logger name="com.iha.emulator.ui.dialogs.adapter.DeleteAdaptersDialogView" level="${globalViewLevel}"/>
 
         <Logger name="com.iha.emulator.models.Adapter" level="${globalModelLevel}"/>
-        <Logger name="com.iha.emulator.control.AdapterController" level="${globalModelLevel}"/>
+        <Logger name="com.iha.emulator.control.AdapterController" level="${globalControllerLevel}"/>
+        <Logger name="com.iha.emulator.control.SensorController" level="${globalControllerLevel}"/>
+        <Logger name="com.iha.emulator.communication.protocol.AbstractProtocol" level="${globalControllerLevel}"/>
+        <Logger name="com.iha.emulator.communication.server.ServerController" level="${globalControllerLevel}"/>
+        <Logger name="com.iha.emulator.control.Scheduler" level="${globalControllerLevel}"/>
+        <Logger name="com.iha.emulator.communication.server.ServerListener" level="${globalControllerLevel}"/>
+        <Logger name="com.iha.emulator.communication.server.ServerListenerWorker" level="${globalControllerLevel}"/>
         <Logger name="com.iha.emulator.models.Sensor" level="${globalModelLevel}"/>
+        <Logger name="com.iha.emulator.models.value.Value" level="${globalModelLevel}"/>
 
         <Logger name="com.iha.emulator.utilities.Utilities" level="trace"/>
-        <Logger name="com.iha.emulator.utilities.server.EmulatorServerClient" level="trace"/>
+        <Logger name="com.iha.emulator.utilities.AdapterLogger" level="trace"/>
+        <Logger name="com.iha.emulator.communication.eserver.EmulatorServerClient" level="${globalControllerLevel}"/>
+        <Logger name="com.iha.emulator.ui.panels.sensor.SensorValueCellFactory" level="trace"/>
         <Root level="info">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="TextAreaAppender"/>

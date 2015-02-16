@@ -2,19 +2,26 @@ package com.iha.emulator.ui.dialogs.adapter;
 
 import com.iha.emulator.ui.Presenter;
 import com.iha.emulator.ui.panels.PanelPresenter;
-import com.iha.emulator.utilities.server.EmulatorServerClient;
-import com.iha.emulator.utilities.server.MessageFactory;
+import com.iha.emulator.ui.simulations.detailed.DetailedSimulationPresenter;
+import com.iha.emulator.communication.eserver.EmulatorServerClient;
+import com.iha.emulator.communication.eserver.model.AdapterInfo;
+import com.iha.emulator.communication.eserver.task.ServerTask;
+import com.iha.emulator.communication.eserver.task.TaskParser;
+import com.iha.emulator.communication.eserver.task.implemented.GetAdaptersTask;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.dom4j.DocumentException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,6 +34,9 @@ public class ShowAdaptersDialogPresenter implements Presenter,PanelPresenter {
     private static final Logger logger = LogManager.getLogger(ShowAdaptersDialogPresenter.class);
     private static final String FXML_PATH = "ShowAdaptersDialog.fxml";
 
+    public static final String Column1MapKey = "A";
+    public static final String Column2MapKey = "B";
+
     private Display view;
     private Stage window;
 
@@ -37,8 +47,6 @@ public class ShowAdaptersDialogPresenter implements Presenter,PanelPresenter {
         public void setPresenter(ShowAdaptersDialogPresenter presenter);
         public ProgressIndicator getIndicator();
         public Label getStatus();
-        public Button getRefreshBtn();
-        public Button getCloseBtn();
         public TableView getTable();
     }
 
@@ -59,11 +67,23 @@ public class ShowAdaptersDialogPresenter implements Presenter,PanelPresenter {
                     Platform.runLater(()->showStatus("Cannot connect to server",false));
                 }
                 try{
-                    server.sendMessage(MessageFactory.buildGetAdaptersMessage(databaseName,"id,name"));
+                    //composite message for server
+                    ServerTask task = new GetAdaptersTask(databaseName,"adapter_id,name");
+                    //send message and wait for response
+                    String messageFromServer = server.sendMessage(task.buildMessage());
+                    //determine result state (OK/ERROR)
+                    TaskParser.parseTaskResult(messageFromServer);
+                    //if ok, parse response
+                    task.parseResponse(messageFromServer);
+                    //show response in table
+                    Platform.runLater(()->populateTable(((GetAdaptersTask)task).getResult()));
                 }catch (IOException e){
-                    Platform.runLater(()->showStatus("Cannot read from socket",false));
+                    Platform.runLater(()-> DetailedSimulationPresenter.showException(logger,"Cannot read from socket",e,false,null));
+                }catch (DocumentException de){
+                    Platform.runLater(()-> DetailedSimulationPresenter.showException(logger,"Cannot parse server message",de,false,null));
+                }catch (IllegalStateException ie){
+                    Platform.runLater(()-> DetailedSimulationPresenter.showException(logger,"Error on server",ie,false,null));
                 }
-
                 Platform.runLater(()->showStatus("Table is ready",false));
                 return null;
             }
@@ -76,12 +96,23 @@ public class ShowAdaptersDialogPresenter implements Presenter,PanelPresenter {
     }
 
     public void close(){
-        showStatus("Table is ready",false);
+        window.hide();
     }
 
-    public void showStatus(String status,boolean inidicate){
+    public void showStatus(String status,boolean indicate){
         view.getStatus().setText(status);
-        view.getIndicator().setVisible(inidicate);
+        view.getIndicator().setVisible(indicate);
+    }
+
+    @SuppressWarnings("unchecked")
+    public void populateTable(ObservableList<AdapterInfo> tableData) {
+        logger.trace("Populating table with data from server");
+        TableView table = view.getTable();
+        TableColumn<AdapterInfo,String> idColumn= (TableColumn<AdapterInfo, String>) table.getColumns().get(0);
+        idColumn.setCellValueFactory( new PropertyValueFactory<>("id"));
+        TableColumn<AdapterInfo,String> nameColumn= (TableColumn<AdapterInfo, String>) table.getColumns().get(1);
+        nameColumn.setCellValueFactory( new PropertyValueFactory<>("name"));
+        table.setItems(tableData);
     }
 
     @Override
@@ -120,6 +151,11 @@ public class ShowAdaptersDialogPresenter implements Presenter,PanelPresenter {
     @Override
     public Node getView() {
         return view.getView();
+    }
+
+    @Override
+    public void clear() {
+
     }
 
     @Override

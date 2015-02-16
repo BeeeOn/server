@@ -12,4 +12,5 @@ public interface PanelPresenter {
     public void addModel(Object model);
     public Object getModel();
     public Node getView();
+    public void clear();
 }

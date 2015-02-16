@@ -5,7 +5,6 @@ import com.iha.emulator.ui.Presenter;
 import com.iha.emulator.ui.panels.PanelPresenter;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
-import javafx.beans.property.Property;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -42,6 +41,31 @@ public class AdapterDetailsPresenter implements Presenter,PanelPresenter {
 
     public AdapterDetailsPresenter() {
 
+    }
+
+    @Override
+    public void clear(){
+        logger.trace("CLEAR!");
+        if(this.model!=null){
+            logger.trace("Unbinding labels");
+            unbindLbl(view.getStatusLbl());
+            unbindLbl(view.getNameLbl());
+            unbindLbl(view.getIdLbl());
+            unbindLbl(view.getRegisteredLbl());
+            unbindLbl(view.getActiveCountLbl());
+            unbindLbl(view.getRegisteredCountLbl());
+            unbindLbl(view.getProtocolLbl());
+            unbindLbl(view.getFirmwareLbl());
+        }
+        this.model = null;
+        view.getStatusLbl().setText("");
+        view.getNameLbl().setText("");
+        view.getIdLbl().setText("");
+        view.getRegisteredLbl().setText("");
+        view.getActiveCountLbl().setText("");
+        view.getRegisteredCountLbl().setText("");
+        view.getProtocolLbl().setText("");
+        view.getFirmwareLbl().setText("");
     }
 
     @Override

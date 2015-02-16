@@ -1,7 +1,6 @@
 package com.iha.emulator.models;
 
 import com.iha.emulator.communication.protocol.Protocol;
-import com.iha.emulator.control.AdapterController;
 import com.iha.emulator.models.value.Value;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
@@ -109,7 +108,7 @@ public class Sensor {
     }
 
     public void setRefreshTime(int refreshTime) {
-        this.refreshTime.set(refreshTime);
+        if(refreshTime != 0) this.refreshTime.set(refreshTime);
     }
 
     public Protocol getProtocol() {

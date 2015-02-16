@@ -4,7 +4,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableView;
@@ -26,8 +25,6 @@ public class ShowAdaptersDialogView implements Initializable,ShowAdaptersDialogP
 
     @FXML private ProgressIndicator indicator;
     @FXML private Label status;
-    @FXML private Button refreshBtn;
-    @FXML private Button closeBtn;
     @FXML private TableView table;
 
     public ShowAdaptersDialogView() {
@@ -54,16 +51,6 @@ public class ShowAdaptersDialogView implements Initializable,ShowAdaptersDialogP
     @Override
     public Label getStatus() {
         return status;
-    }
-
-    @Override
-    public Button getRefreshBtn() {
-        return refreshBtn;
-    }
-
-    @Override
-    public Button getCloseBtn() {
-        return closeBtn;
     }
 
     @Override

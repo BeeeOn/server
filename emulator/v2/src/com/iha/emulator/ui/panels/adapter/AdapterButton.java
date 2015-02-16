@@ -1,12 +1,8 @@
 package com.iha.emulator.ui.panels.adapter;
 
 import com.iha.emulator.control.AdapterController;
-import com.iha.emulator.models.Adapter;
-import com.iha.emulator.ui.simulations.detailed.DetailedSimulationView;
-import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 
 /**

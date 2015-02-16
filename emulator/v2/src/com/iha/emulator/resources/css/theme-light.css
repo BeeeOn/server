@@ -243,7 +243,8 @@
 }
 
 .logTextAreaContainer {
-
+    -fx-background-color: #ffffff;
+    -fx-border-width: 0px;
 }
 
 .logTextArea {
@@ -278,7 +279,7 @@
 }
 
 .logMorePaneSeparator {
-    -fx-padding: -1px 10px 0 10px;
+    -fx-padding: 0 10px 0 10px;
 
 }
 
@@ -298,6 +299,20 @@
     -fx-background-position: center center;
     -fx-background-color: #ffffff;
     -fx-padding: 1.5em 0.25em 1em 0.25em;
+}
+
+.horSplitPanel {
+    -fx-border-width: 0;
+    -fx-padding: 0;
+    -fx-background-color: #ffffff;
+}
+
+.horSplitPanel .split-pane-divider {
+    -fx-background-image: url("../../resources/images/hor-divider.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+    -fx-background-color: #ffffff;
+    -fx-padding: 0.25em 1em 0.25em 1em;
 }
 
 .adaptersList {
@@ -454,7 +469,7 @@
     -fx-wrap-text: true;
     -fx-background-radius: 0;
     -fx-graphic-text-gap: 10px;
-    -fx-graphic: url("../../resources/images/sensor_types/multisensor.png");
+
     -fx-padding: 3px 6px 3px 3px;
 }
 
@@ -783,6 +798,22 @@
     -fx-text-fill: #828282;
 }
 
+.cancelDialogBtn {
+    -fx-background-color: #f4f4f4;
+    -fx-fill: #444444;
+    -fx-text-fill: #444444;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-border-width: 0;
+    -fx-cursor: hand;
+}
+.cancelDialogBtn:hover {
+    -fx-background-color: #828282;
+    -fx-fill: #ffffff;
+    -fx-text-fill: #ffffff;
+}
+
+
 .informationHeader {
     -fx-fill: #828282;
     -fx-text-fill: #828282;
@@ -825,4 +856,68 @@
     -fx-background-color: #36b1ff;
     -fx-fill: #ffffff;
     -fx-text-fill: #ffffff;
+}
+
+.showAdaptersDialogTable .table-column {
+    -fx-text-alignment: center;
+}
+
+.valueControlBtn {
+    -fx-background-position: center center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 20px;
+    -fx-background-color: #ffffff;
+    -fx-border-width: 3px;
+    -fx-pref-width: 24px;
+    -fx-pref-height: 24px;
+    -fx-cursor: hand;
+}
+
+.addValueBtn {
+    -fx-background-image: url("../../resources/images/add-value-green.png");
+}
+.addValueBtn:hover {
+    -fx-background-image: url("../../resources/images/add-value-white.png");
+    -fx-background-color: #65f74d;
+}
+
+.deleteValueBtn {
+    -fx-background-image: url("../../resources/images/delete-value-red.png");
+}
+.deleteValueBtn:hover {
+    -fx-background-image: url("../../resources/images/delete-value-white.png");
+    -fx-background-color: #eb4242;
+}
+
+.valuesTree {
+    -fx-border-color: #dbdbdb;
+    -fx-border-width: 1px;
+}
+
+.valuesTree .tree-cell{
+    -fx-background-color: #f4f4f4;
+}
+
+.valuesTree .tree-cell .text{
+    -fx-text-fill: #444444;
+    -fx-fill: #444444;
+}
+
+.valuesTree .tree-cell:selected{
+    -fx-background-color: #444444;
+}
+
+.valuesTree .tree-cell:selected .text{
+    -fx-text-fill: #ffffff;
+    -fx-fill: #ffffff;
+}
+
+.valuesInformationContainerLeft {
+    -fx-border-color: #dbdbdb;
+    -fx-border-width: 1px 0px 1px 1px;
+}
+
+.valuesInformationContainerRight {
+    -fx-border-color: #dbdbdb;
+    -fx-border-width: 1px 1px 1px 0;
 }

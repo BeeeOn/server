@@ -1,21 +1,23 @@
 package com.iha.emulator.ui.panels.sensor;
 
 import com.iha.emulator.models.Sensor;
-import com.iha.emulator.models.SensorType;
 import com.iha.emulator.models.value.Value;
-import com.iha.emulator.models.value.ValueFactory;
+import com.iha.emulator.resources.images.sensor_types.SensorIcon;
 import com.iha.emulator.ui.Presenter;
 import com.iha.emulator.ui.panels.PanelPresenter;
 import com.iha.emulator.utilities.Utilities;
 import javafx.beans.binding.StringBinding;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.Callback;
-import javafx.util.Pair;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.FlowPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -46,9 +48,24 @@ public class SensorPanelPresenter implements Presenter,PanelPresenter{
 
     private Display view;
     private Sensor model;
+    private Node container;
+
+    public SensorPanelPresenter(){
+
+    }
+
+    public SensorPanelPresenter(Node container){
+        this.container = container;
+    }
 
     public void connection(){
         model.setStatus(!model.getStatus());
+    }
+
+    public void deletePanel(){
+        if(this.container != null){
+            ((FlowPane)this.container).getChildren().remove(getView());
+        }
     }
 
     @Override
@@ -180,6 +197,20 @@ public class SensorPanelPresenter implements Presenter,PanelPresenter{
         view.getValueTable().setItems(model.getValues());
     }
 
+    public void setHeaderColor(String hexColor){
+        view.getNameLbl().setStyle("-fx-background-color: " + hexColor + ";");
+        view.getConnectionBtn().setStyle("-fx-background-color: " + hexColor + ";");
+        view.getSettingsBtn().setStyle("-fx-background-color: " + hexColor + ";");
+    }
+
+    public void setIcon(SensorIcon icon){
+        view.getNameLbl().setGraphic(
+                new ImageView(
+                        new Image("/com/iha/emulator/resources/images/sensor_types/" + icon.getFile())
+                )
+        );
+    }
+
     private void unbindLbl(Label lbl){
         lbl.textProperty().unbind();
     }
@@ -192,6 +223,11 @@ public class SensorPanelPresenter implements Presenter,PanelPresenter{
     @Override
     public Node getView() {
         return view.getView();
+    }
+
+    @Override
+    public void clear() {
+
     }
 
     @Override

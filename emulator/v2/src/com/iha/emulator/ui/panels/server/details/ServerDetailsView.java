@@ -1,5 +1,6 @@
 package com.iha.emulator.ui.panels.server.details;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -97,13 +98,15 @@ public class ServerDetailsView implements Initializable,ServerDetailsPresenter.D
         connectionLbl.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if(newValue.equals("Connected")){
-                    connectionLbl.getStyleClass().remove("statusInactive");
-                    connectionLbl.getStyleClass().add("statusActive");
-                }else{
-                    connectionLbl.getStyleClass().remove("statusActive");
-                    connectionLbl.getStyleClass().add("statusInactive");
-                }
+                Platform.runLater(()-> {
+                    if(newValue.equals("Connected")){
+                        connectionLbl.getStyleClass().remove("statusInactive");
+                        connectionLbl.getStyleClass().add("statusActive");
+                    }else{
+                        connectionLbl.getStyleClass().remove("statusActive");
+                        connectionLbl.getStyleClass().add("statusInactive");
+                    }
+                });
             }
         });
     }

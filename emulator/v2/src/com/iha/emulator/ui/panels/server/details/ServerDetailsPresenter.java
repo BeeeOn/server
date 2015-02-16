@@ -7,8 +7,6 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -42,6 +40,25 @@ public class ServerDetailsPresenter implements Presenter,PanelPresenter {
 
     public ServerDetailsPresenter() {
 
+    }
+
+    @Override
+    public void clear(){
+        logger.trace("CLEAR!");
+        if(this.model != null) {
+            logger.trace("Unbinding labels");
+            view.getConnectionLbl().textProperty().unbind();
+            view.getNameLbl().textProperty().unbind();
+            view.getIpLbl().textProperty().unbind();
+            view.getPortLbl().textProperty().unbind();
+            view.getDbNameLbl().textProperty().unbind();
+        }
+        this.model = null;
+        view.getConnectionLbl().setText("");
+        view.getNameLbl().setText("");
+        view.getIpLbl().setText("");
+        view.getPortLbl().setText("");
+        view.getDbNameLbl().setText("");
     }
 
     @Override
