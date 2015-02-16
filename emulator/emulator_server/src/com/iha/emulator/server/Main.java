@@ -9,12 +9,18 @@ import java.io.IOException;
 public class Main {
 
     private static final Logger logger = LogManager.getLogger(Server.class);
-    private static final String DEFAULT_PROPERTIES_FILE = "server.properties";
+    private static final String DEFAULT_PROPERTIES_FILE = "/home/xsutov00/emulator_server/server.properties";
 
     public static void main(String[] args) {
+        String propertiesString;
+        if(args.length == 0 && args[0].endsWith(".properties")){
+            propertiesString = args[0];
+        }else{
+            propertiesString = DEFAULT_PROPERTIES_FILE;
+        }
         Server server = new Server();
         try {
-            server.loadProperties(DEFAULT_PROPERTIES_FILE);
+            server.loadProperties(propertiesString);
             logger.info("Initializing server");
             server.init();
             new Thread(server).start();

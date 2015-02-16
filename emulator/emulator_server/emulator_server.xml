@@ -93,15 +93,15 @@
   <!-- Project Libraries -->
   
   <path id="library.dom4j-2.0.0-alpha-2.classpath">
-    <pathelement location="${basedir}/src/com/iha/emulator/resources/dom4j-2.0.0-ALPHA-2.jar"/>
+    <pathelement location="//dom4j-2.0.0-ALPHA-2.jar"/>
   </path>
   
   <path id="library.log4j-api-2.1.classpath">
-    <pathelement location="${basedir}/src/com/iha/emulator/resources/log4j-api-2.1.jar"/>
+    <pathelement location="//log4j-api-2.1.jar"/>
   </path>
   
   <path id="library.log4j-core-2.1.classpath">
-    <pathelement location="${basedir}/src/com/iha/emulator/resources/log4j-core-2.1.jar"/>
+    <pathelement location="//log4j-core-2.1.jar"/>
   </path>
   
   <!-- Modules -->
@@ -189,7 +189,7 @@
         <patternset refid="compiler.resources"/>
         <type type="file"/>
       </fileset>
-      <fileset dir="${module.emulator_server.basedir}/src/com/iha/emulator/resources">
+      <fileset dir="/">
         <patternset refid="compiler.resources"/>
         <type type="file"/>
       </fileset>
@@ -229,9 +229,9 @@
     </jar>
     <copy file="${temp.jar.path.emulator_server.jar}" tofile="${artifact.output.emulator_server:jar}/emulator_server.jar"/>
     <mkdir dir="${artifact.output.emulator_server:jar}/lib"/>
-    <copy file="${basedir}/src/com/iha/emulator/resources/log4j-api-2.1.jar" tofile="${artifact.output.emulator_server:jar}/lib/log4j-api-2.1.jar"/>
-    <copy file="${basedir}/src/com/iha/emulator/resources/log4j-core-2.1.jar" tofile="${artifact.output.emulator_server:jar}/lib/log4j-core-2.1.jar"/>
-    <copy file="${basedir}/src/com/iha/emulator/resources/dom4j-2.0.0-ALPHA-2.jar" tofile="${artifact.output.emulator_server:jar}/lib/dom4j-2.0.0-ALPHA-2.jar"/>
+    <copy file="//log4j-api-2.1.jar" tofile="${artifact.output.emulator_server:jar}/lib/log4j-api-2.1.jar"/>
+    <copy file="//log4j-core-2.1.jar" tofile="${artifact.output.emulator_server:jar}/lib/log4j-core-2.1.jar"/>
+    <copy file="//dom4j-2.0.0-ALPHA-2.jar" tofile="${artifact.output.emulator_server:jar}/lib/dom4j-2.0.0-ALPHA-2.jar"/>
     <copy file="${basedir}/server.properties" tofile="${artifact.output.emulator_server:jar}/server.properties"/>
   </target>
   
