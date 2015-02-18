@@ -17,6 +17,7 @@ import javafx.util.Duration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dom4j.Document;
+import org.dom4j.Element;
 
 /**
  * Created by Shu on 4.2.2015.
@@ -179,6 +180,23 @@ public class SensorController {
             timer.play();
         }else{
             timer.getKeyFrames().setAll(keyFrame);
+        }
+    }
+
+    public void saveToXML(Element rootElement){
+        Element sensorElement = rootElement.addElement("sensor")
+                .addAttribute("id",String.valueOf(getModel().getId()));
+        sensorElement.addElement("name").addText(getModel().getName());
+        sensorElement.addElement("refresh").addText(String.valueOf(getModel().getRefreshTime()));
+        sensorElement.addElement("signal").addText(String.valueOf(getModel().getSignal()));
+        sensorElement.addElement("battery").addText(String.valueOf(getModel().getBattery()));
+        if(getPanel() != null){
+            sensorElement.addElement("icon").addText(getPanel().getIconType().getName());
+            sensorElement.addElement("header_color").addText(getPanel().getHexHeaderColor());
+        }
+        Element valuesElement = sensorElement.addElement("values");
+        for(Value value : getModel().getValues()){
+            value.saveToXML(valuesElement);
         }
     }
 

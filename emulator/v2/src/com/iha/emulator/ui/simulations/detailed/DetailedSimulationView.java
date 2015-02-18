@@ -131,13 +131,14 @@ public class DetailedSimulationView implements Initializable,DetailedSimulationP
 
     @FXML
     public void handleOpen(ActionEvent event) {
-        logger.debug("Open Clicked! -> unimplemented");
+        logger.debug("Open Clicked!");
+        presenter.open();
     }
 
     @FXML
     public void handleSave(ActionEvent event) {
         logger.trace("Save current adapter Clicked!");
-        presenter.saveCurrentAdapter();
+        presenter.saveCurrentAdapter(null);
     }
 
     @FXML
@@ -183,6 +184,12 @@ public class DetailedSimulationView implements Initializable,DetailedSimulationP
     public void handleShowFullLog(ActionEvent event) {
         logger.trace("Show full log Clicked!");
         presenter.showFullLog();
+    }
+
+    @FXML
+    public void handleChangeServerSettings(ActionEvent event){
+        logger.trace("Change server settings Clicked!");
+        presenter.changeServerSettings();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.iha.emulator.models.value.implemented;
 
 import com.iha.emulator.models.value.AbstractValue;
+import org.dom4j.Element;
 
 /**
  * Created by Shu on 12.12.2014.
@@ -33,6 +34,11 @@ public class EmptyValue extends AbstractValue {
     @Override
     public Object fromStringToValueType(String valueString) throws NumberFormatException {
         return null;
+    }
+
+    @Override
+    public void saveToXML(Element rootElement) {
+
     }
 
     @Override

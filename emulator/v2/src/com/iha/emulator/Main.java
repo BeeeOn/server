@@ -21,7 +21,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         /** FIXGUI remove css from .fxml after done styling */
-        DetailedSimulationPresenter dPresenter = new DetailedSimulationPresenter();
+        DetailedSimulationPresenter dPresenter = new DetailedSimulationPresenter(primaryStage);
         primaryStage.setTitle("IHA Emulator");
         primaryStage.setScene(dPresenter.loadView());
         primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("/com/iha/emulator/resources/images/emu_icon32x32.png")));

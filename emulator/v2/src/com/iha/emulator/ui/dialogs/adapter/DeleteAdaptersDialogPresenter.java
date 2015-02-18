@@ -104,6 +104,7 @@ public class DeleteAdaptersDialogPresenter implements Presenter,PanelPresenter {
 
     private void saveAdapter(AdapterController adapterController){
         logger.trace("Saving adapter: " + adapterController.toString());
+        detailedSimulationPresenter.saveCurrentAdapter(adapterController);
     }
 
     private Task deleteFromDatabase(AdapterController adapterController){

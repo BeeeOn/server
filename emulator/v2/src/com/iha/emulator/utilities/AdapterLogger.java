@@ -92,8 +92,10 @@ public class AdapterLogger {
                     Platform.runLater(() -> lines.remove(0, BUFFER_LINE_COUNT_MAX - 5));
                 }
             }
-
-            Platform.runLater(() -> adapterLog.getChildren().add(new Text(timeFormatter.format(LocalTime.now()) + " - " + message + "\n")));
+            Platform.runLater(() -> {
+                adapterLog.getChildren().add(new Text(timeFormatter.format(LocalTime.now()) + " - " + message + "\n"));
+                ((ScrollPane)adapterLogContainer).setVvalue(1.0);
+            });
         }
 
     }

@@ -26,7 +26,9 @@ import javafx.scene.layout.FlowPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dom4j.Document;
+import org.dom4j.Element;
 
+import javax.print.Doc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -47,6 +49,7 @@ public class AdapterController{
     private AdapterLogger log;
     private BooleanProperty internetConnection;
     private boolean registerMessageSent = false;
+    private boolean saved = false;
 
 
     private ArrayList<OutMessage> messages = new ArrayList<>();
@@ -210,6 +213,26 @@ public class AdapterController{
         return this.serverController;
     }
 
+    public SensorPanelPresenter createSensorPanel(Node container,String headerHexColor,SensorIcon icon,SensorController sensorController) throws LoadException {
+        SensorPanelPresenter newPanel;
+        try{
+            newPanel = new SensorPanelPresenter(container);
+            newPanel.loadView();
+            if(headerHexColor!= null)
+                newPanel.setHeaderColor(headerHexColor);
+            if(icon != null){
+                newPanel.setIcon(icon);
+            }else{
+                newPanel.setIcon(SensorIcon.UNKNOWN);
+            }
+            newPanel.addModel(sensorController.getModel());
+            sensorController.setPanel(newPanel);
+        } catch (IOException e) {
+            throw new LoadException("Cannot initiate new sensor panel.Error while loading FXML file",e);
+        }
+        return newPanel;
+    }
+
     public SensorController createSensor(Node container,String headerHexColor,SensorIcon icon,ObservableList<Value> values,boolean status,int id,String name,int battery,int signal,int refreshTime,Protocol protocol) throws LoadException {
         SensorController controller;
         SensorPanelPresenter newPanel;
@@ -286,6 +309,27 @@ public class AdapterController{
         startScheduler();
         logger.trace("Scheduler/"+ String.valueOf(adapter.getId()) + " created and started");
         return this.scheduler;
+    }
+
+    public Document saveToXml(Document document){
+        //<adapter id="1312">
+        Element adapterElement = document.getRootElement()
+                .addElement("adapter")
+                .addAttribute("id",String.valueOf(getAdapter().getId()))
+                .addAttribute("name",getAdapter().getName())
+                .addAttribute("protocol",String.valueOf(getAdapter().getProtocolVersion()))
+                .addAttribute("registered",String.valueOf(getAdapter().getRegistered()))
+                .addAttribute("firmware",String.valueOf(getAdapter().getFirmware()));
+        adapterElement.addElement("server")
+                .addAttribute("name",getServerController().getModel().getName())
+                .addAttribute("ip",getServerController().getModel().getIp())
+                .addAttribute("port",String.valueOf(getServerController().getModel().getPort()))
+                .addAttribute("db",getServerController().getModel().getDatabaseName());
+        Element sensorsElement = adapterElement.addElement("sensors");
+        for(SensorController sensorController : getSensorControllers()){
+            sensorController.saveToXML(sensorsElement);
+        }
+        return document;
     }
 
     public void setTrackServerResponse(boolean b) throws NullPointerException{
@@ -399,6 +443,14 @@ public class AdapterController{
 
     public void setRegisterMessageSent(boolean registerMessageSent) {
         this.registerMessageSent = registerMessageSent;
+    }
+
+    public boolean isSaved() {
+        return saved;
+    }
+
+    public void setSaved(boolean saved) {
+        this.saved = saved;
     }
 
     public String toString(){

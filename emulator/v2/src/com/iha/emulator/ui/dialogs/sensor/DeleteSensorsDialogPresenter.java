@@ -73,6 +73,7 @@ public class DeleteSensorsDialogPresenter implements Presenter,PanelPresenter {
             showStatus("Deleting from emulator",true);
             adapterController.deleteSensors(sensorControllers);
             adapterController.getAdapter().setStatus(adapterStatus);
+            adapterController.setSaved(false);
             close();
         }else{
             logger.debug("No sensors chosen to be deleted");

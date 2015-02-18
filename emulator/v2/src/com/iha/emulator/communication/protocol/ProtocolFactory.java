@@ -5,6 +5,14 @@ package com.iha.emulator.communication.protocol;
  */
 public class ProtocolFactory {
 
+    public static Protocol.Version getVersion(double versionNumber){
+        for(Protocol.Version version : Protocol.Version.values()){
+            if(version.getVersion() == versionNumber)
+                return version;
+        }
+        return null;
+    }
+
     public static Protocol buildProtocol(Double versionNumber) throws IllegalArgumentException{
         for(Protocol.Version version : Protocol.Version.values()){
             if(version.getVersion() == versionNumber){
@@ -13,7 +21,6 @@ public class ProtocolFactory {
                 }catch (IllegalArgumentException e){
                     throw new IllegalArgumentException(e);
                 }
-
             }
         }
         return null;

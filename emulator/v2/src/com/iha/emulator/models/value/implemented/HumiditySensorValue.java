@@ -8,6 +8,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import org.dom4j.Element;
 
 import java.util.Random;
 
@@ -38,6 +39,7 @@ public class HumiditySensorValue extends AbstractValue<Integer> implements HasNo
         this.max= new SimpleDoubleProperty(DEFAULT_MAX);
         this.step = new SimpleDoubleProperty(DEFAULT_LINEAR_STEP);
         this.generatorType = new SimpleObjectProperty<>(null);
+        setInitialValue(DEFAULT_VALUE);
         setValue(DEFAULT_VALUE);
     }
 
@@ -75,6 +77,36 @@ public class HumiditySensorValue extends AbstractValue<Integer> implements HasNo
     @Override
     public Integer fromStringToValueType(String valueString) throws NumberFormatException {
         return Integer.valueOf(valueString);
+    }
+
+    @Override
+    public void saveToXML(Element rootElement) {
+        Element valueElement = rootElement.addElement("value")
+                .addAttribute("type",getValueType().getName())
+                .addAttribute("name",getName())
+                .addAttribute("store_history",String.valueOf(isStoreHistory()))
+                .addAttribute("generate_value",String.valueOf(isGenerateValue()));
+        valueElement.addElement("initial_value").addText(String.valueOf(getInitialValue()));
+        if(getGeneratorType() != null){
+            Element generatorElement = valueElement.addElement("generator")
+                    .addAttribute("type", getGeneratorType().getName())
+                    .addAttribute("seed",String.valueOf(getGeneratorSeed()));
+            switch (getGeneratorType()){
+                case NORMAL_DISTRIBUTION:
+                    generatorElement.addElement("params")
+                            .addAttribute("min", String.valueOf(getMin()))
+                            .addAttribute("max",String.valueOf(getMax()))
+                            .addAttribute("dev",String.valueOf(getDev()))
+                            .addAttribute("avg",String.valueOf(getAvg()));
+                    break;
+                case LINEAR_DISTRIBUTION:
+                    generatorElement.addElement("params")
+                            .addAttribute("min", String.valueOf(getMin()))
+                            .addAttribute("max",String.valueOf(getMax()))
+                            .addAttribute("step",String.valueOf(getStep()));
+                    break;
+            }
+        }
     }
 
     public void setGeneratorVariables(double dev,double avg,double max,double min){

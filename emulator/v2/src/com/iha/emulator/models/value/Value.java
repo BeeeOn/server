@@ -4,6 +4,7 @@ import com.iha.emulator.models.value.implemented.HumiditySensorValue;
 import com.iha.emulator.models.value.implemented.OnOffActuatorValue;
 import com.iha.emulator.models.value.implemented.TemperatureSensorValue;
 import javafx.beans.property.StringProperty;
+import org.dom4j.Element;
 
 import java.util.Random;
 
@@ -74,6 +75,8 @@ public interface Value<T> {
     public String getName();
     public void setName(String name);
     public T getValue();
+    public T getInitialValue();
+    public void setInitialValue(T value);
     public void setValue(T value);
     public void nextValue();
     public void nextValue(T value);
@@ -92,4 +95,5 @@ public interface Value<T> {
     public T fromStringToValueType(String valueString) throws NumberFormatException;
     public int getOffset();
     public void setOffset(int offset);
+    public void saveToXML(Element rootElement);
 }

@@ -454,7 +454,7 @@
                         <Label prefHeight="24.0" prefWidth="178.0" styleClass="sectionName" text="Server details" BorderPane.alignment="CENTER_LEFT" />
                      </left>
                      <right>
-                        <Button mnemonicParsing="false" prefHeight="29.0" prefWidth="30.0" styleClass="settingsBtn" BorderPane.alignment="CENTER_LEFT">
+                        <Button mnemonicParsing="false" onAction="#handleChangeServerSettings" prefHeight="29.0" prefWidth="30.0" styleClass="settingsBtn" BorderPane.alignment="CENTER_LEFT">
                            <BorderPane.margin>
                               <Insets />
                            </BorderPane.margin>

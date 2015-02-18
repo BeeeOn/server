@@ -11,7 +11,7 @@
   </resources>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="SmartHomeEmulator.jar" size="482586" download="eager" />
+    <jar href="SmartHomeEmulator.jar" size="502185" download="eager" />
     <jar href="lib/controlsfx-8.20.8.jar" size="957666" download="eager" />
     <jar href="lib/dom4j-2.0.0-ALPHA-2.jar" size="340028" download="eager" />
     <jar href="lib/log4j-api-2.1.jar" size="133531" download="eager" />

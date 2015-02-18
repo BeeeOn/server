@@ -137,40 +137,13 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
 
     public void loadTemplate() {
         logger.trace("Trying to load from XML file");
-        FileChooser fileChooser = new FileChooser();
-        //Set extension filter
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
-        fileChooser.getExtensionFilters().add(extFilter);
-        //directory
-        File dir = new File(TEMPLATES_DEFAULT_DIR);
-        if(!dir.exists()) dir.mkdirs();
-        fileChooser.setInitialDirectory(dir);
-        //Show save file dialog
-        File file = fileChooser.showOpenDialog(window);
-        try{
-            if(file != null){
-                parseAndShowXml(readFile(file));
-            }
-        }catch (IOException e){
-            DetailedSimulationPresenter.showException(logger,"Cannot load file",e,false,null);
+        try {
+            String content = Utilities.loadDialogForXML(window, TEMPLATES_DEFAULT_DIR);
+            if(content == null) throw new DocumentException("File is null");
+            parseAndShowXml(content);
         } catch (DocumentException e) {
             DetailedSimulationPresenter.showException(logger, "Cannot parse loaded file", e, false, null);
-        } catch (NullPointerException ex) {
-            DetailedSimulationPresenter.showException(logger, "Cannot parse loaded file. Incorrect or damaged file content format.", ex, false, null);
         }
-    }
-
-    private String readFile(File file) throws IOException {
-        logger.trace("reading XML file");
-        FileReader fileReader = new FileReader(file);
-        BufferedReader bufferedReader = new BufferedReader(fileReader);
-        StringBuilder stringBuffer = new StringBuilder();
-        String line;
-        while ((line = bufferedReader.readLine()) != null) {
-            stringBuffer.append(line);
-        }
-        fileReader.close();
-        return stringBuffer.toString();
     }
 
     private void parseAndShowXml(String content) throws DocumentException ,NullPointerException {
@@ -234,48 +207,18 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
         );
         view.getSensorColorPicker().setValue(Color.web(color));
         values.clear();
-        for(Value newValue : tmpValues){
-            addValueToTree(newValue);
-        }
+        tmpValues.forEach(this::addValueToTree);
         view.getValuesTree().getSelectionModel().selectLast();
     }
 
     public void saveTemplate() {
         if(getValueInfoSet() && values.size() > 0){
-            logger.trace("Trying to save to XML file");
-            FileChooser fileChooser = new FileChooser();
-            //Set extension filter
-            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
-            fileChooser.getExtensionFilters().add(extFilter);
-            //directory
-            File dir = new File(TEMPLATES_DEFAULT_DIR);
-            if(!dir.exists())
-                dir.mkdirs();
-            fileChooser.setInitialDirectory(dir);
-            //Show save file dialog
-            File file = fileChooser.showSaveDialog(window);
-            try {
-                if(file != null){
-                    if (!file.getPath().endsWith(".xml")) {
-                        file = new File(file.getPath() + ".xml");
-                    }
-                    writeFile(buildSensorTemplateXml().asXML(), file);
-                    logger.trace("OK");
-                    showInformation("File saved", "Sensor template successfully saved", "Saved to file \"" + file.getName() + "\"");
-                }
-            }catch (IOException e){
-                DetailedSimulationPresenter.showException(logger,"Cannot save file",e,false,null);
-            }
+            String filename = Utilities.saveDialogForXML(window,TEMPLATES_DEFAULT_DIR,buildSensorTemplateXml().asXML());
+            if(filename != null)
+                showInformation("File saved", "Sensor template successfully saved", "Saved to file \"" + filename + "\"");
         }else{
             showMissingInfoWarning(true);
         }
-    }
-
-    private void writeFile(String content, File file) throws IOException {
-        FileWriter fileWriter;
-        fileWriter = new FileWriter(file);
-        fileWriter.write(content);
-        fileWriter.close();
     }
 
     private Document buildSensorTemplateXml(){
@@ -416,6 +359,7 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
                             Utilities.refreshSliderScaleToSeconds(view.getSensorRefreshSlider().getValue()), //refresh time in seconds
                             adapterController.getAdapter().getProtocol() //comm.protocol
                     );
+                    adapterController.setSaved(false);
                     logger.debug("Sensor \"" + Utilities.intToIpString(newSensor.getModel().getId()) + "\" created successfully");
                     //newSensor.getValues().addAll(values.get());
 
@@ -628,6 +572,9 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
         value.setName(view.getValueNameTextField().getText());
         value.setStoreHistory(view.getValueYesStoreHistoryRadBtn().isSelected());
         value.setGenerateValue(view.getValueYesGenerateValueRadBtn().isSelected());
+        if(!view.getValueTextField().getText().equals(String.valueOf(value.getInitialValue()))){
+            value.setInitialValue(value.fromStringToValueType(view.getValueTextField().getText()));
+        }
         logger.trace("Updating tree");
         updateTree();
         setValueInfoSet(true);

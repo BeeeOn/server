@@ -50,6 +50,9 @@ public class SensorPanelPresenter implements Presenter,PanelPresenter{
     private Sensor model;
     private Node container;
 
+    private SensorIcon iconType;
+    private String hexHeaderColor;
+
     public SensorPanelPresenter(){
 
     }
@@ -201,6 +204,7 @@ public class SensorPanelPresenter implements Presenter,PanelPresenter{
         view.getNameLbl().setStyle("-fx-background-color: " + hexColor + ";");
         view.getConnectionBtn().setStyle("-fx-background-color: " + hexColor + ";");
         view.getSettingsBtn().setStyle("-fx-background-color: " + hexColor + ";");
+        setHexHeaderColor(hexColor);
     }
 
     public void setIcon(SensorIcon icon){
@@ -209,6 +213,23 @@ public class SensorPanelPresenter implements Presenter,PanelPresenter{
                         new Image("/com/iha/emulator/resources/images/sensor_types/" + icon.getFile())
                 )
         );
+        setIconType(icon);
+    }
+
+    public SensorIcon getIconType() {
+        return iconType;
+    }
+
+    public void setIconType(SensorIcon iconType) {
+        this.iconType = iconType;
+    }
+
+    public String getHexHeaderColor() {
+        return hexHeaderColor;
+    }
+
+    public void setHexHeaderColor(String hexHeaderColor) {
+        this.hexHeaderColor = hexHeaderColor;
     }
 
     private void unbindLbl(Label lbl){

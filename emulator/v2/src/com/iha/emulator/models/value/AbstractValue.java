@@ -17,6 +17,7 @@ public abstract class AbstractValue<T> implements Value<T>,HasGenerator{
 
     private Type valueType;
     private ObjectProperty<T> value;
+    private T initialValue;
     private StringProperty stringValue;
     private StringProperty name;
     private String type;
@@ -61,6 +62,16 @@ public abstract class AbstractValue<T> implements Value<T>,HasGenerator{
     public void storeValue(T value){
         if(valueHistory == null) valueHistory = new ArrayList<>();
         valueHistory.add(value);
+    }
+
+    @Override
+    public T getInitialValue() {
+        return initialValue;
+    }
+
+    @Override
+    public void setInitialValue(T initialValue) {
+        this.initialValue = initialValue;
     }
 
     @Override

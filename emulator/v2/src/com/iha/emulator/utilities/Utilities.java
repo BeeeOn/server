@@ -4,18 +4,27 @@ import com.iha.emulator.Main;
 import com.iha.emulator.control.AdapterController;
 import com.iha.emulator.control.SensorController;
 import com.iha.emulator.models.Server;
+import com.iha.emulator.ui.simulations.detailed.DetailedSimulationPresenter;
 import javafx.beans.property.LongProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.ChoiceDialog;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.dom4j.DocumentException;
 
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
+import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Random;
 import java.util.prefs.Preferences;
@@ -156,6 +165,105 @@ public class Utilities {
         Pattern p = Pattern.compile(needle,Pattern.CASE_INSENSITIVE+Pattern.LITERAL);
         Matcher m = p.matcher(haystack);
         return m.find();
+    }
+
+    public static ChoiceDialog<SaveOption> saveOnQuitDialog(){
+        ChoiceDialog<SaveOption> dlg = new ChoiceDialog<>(SaveOption.SAVE_ALL,SaveOption.values());
+        dlg.setTitle("Unsaved adapters");
+        dlg.getDialogPane().setContentText("There are unsaved adapters. Choose option");
+        return dlg;
+    }
+
+    public enum SaveOption{
+        SAVE_ALL(0,"Save all adapters"),
+        SAVE_CURRENT(1,"Save currently selected adapter"),
+        DO_NOTHING(2,"Do nothing");
+
+        final private int id;
+        final private String text;
+
+        SaveOption(int id, String text){
+            this.id = id;
+            this.text = text;
+        }
+        public int getId(){
+            return this.id;
+        }
+        public String getText(){
+            return this.text;
+        }
+        public String toString(){
+            return this.text;
+        }
+    }
+
+    public static String saveDialogForXML(Stage parentWindow,String dirPath,String XMLContent){
+        FileChooser fileChooser = new FileChooser();
+        //Set extension filter
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
+        fileChooser.getExtensionFilters().add(extFilter);
+        //directory
+        File dir = new File(dirPath);
+        if(!dir.exists())
+            dir.mkdirs();
+        fileChooser.setInitialDirectory(dir);
+        //Show save file dialog
+        File file = fileChooser.showSaveDialog(parentWindow);
+        try {
+            if(file != null){
+                if (!file.getPath().endsWith(".xml")) {
+                    file = new File(file.getPath() + ".xml");
+                }
+                FileWriter fileWriter;
+                fileWriter = new FileWriter(file);
+                fileWriter.write(XMLContent);
+                fileWriter.close();
+                logger.trace("OK");
+            }else {
+                return null;
+            }
+        }catch (IOException e){
+            DetailedSimulationPresenter.showException(logger, "Cannot save file", e, false, null);
+        }
+        return file.getName();
+    }
+
+    public static String loadDialogForXML(Stage window,String dirPath){
+        FileChooser fileChooser = new FileChooser();
+        //Set extension filter
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("XML files (*.xml)", "*.xml");
+        fileChooser.getExtensionFilters().add(extFilter);
+        //directory
+        File dir = new File(dirPath);
+        if(!dir.exists()) dir.mkdirs();
+        fileChooser.setInitialDirectory(dir);
+        //Show save file dialog
+        File file = fileChooser.showOpenDialog(window);
+        try{
+            if(file != null){
+                return readFile(file);
+            }
+        }catch (IOException e){
+            DetailedSimulationPresenter.showException(logger,"Cannot load file",e,false,null);
+            return null;
+        }catch (NullPointerException ex) {
+            DetailedSimulationPresenter.showException(logger, "Cannot parse loaded file. Incorrect or damaged file content format.", ex, false, null);
+            return null;
+        }
+        return null;
+    }
+
+    public static String readFile(File file) throws IOException {
+        logger.trace("reading XML file");
+        FileReader fileReader = new FileReader(file);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        StringBuilder stringBuffer = new StringBuilder();
+        String line;
+        while ((line = bufferedReader.readLine()) != null) {
+            stringBuffer.append(line);
+        }
+        fileReader.close();
+        return stringBuffer.toString();
     }
 
     public static boolean isSensorIdTaken(AdapterController controller,String sensorId){

@@ -1,14 +1,18 @@
 package com.iha.emulator.ui.simulations.detailed;
 
 import com.iha.emulator.communication.protocol.Protocol;
+import com.iha.emulator.communication.protocol.ProtocolFactory;
 import com.iha.emulator.communication.server.ServerListener;
 import com.iha.emulator.control.AdapterController;
 import com.iha.emulator.control.SensorController;
-import com.iha.emulator.models.Adapter;
 import com.iha.emulator.models.Server;
+import com.iha.emulator.models.value.HasLinearDistribution;
+import com.iha.emulator.models.value.HasNormalDistribution;
 import com.iha.emulator.models.value.Value;
 import com.iha.emulator.models.value.ValueFactory;
+import com.iha.emulator.models.value.implemented.HasGenerator;
 import com.iha.emulator.resources.images.sensor_types.SensorIcon;
+import com.iha.emulator.resources.images.sensor_types.SensorIconFactory;
 import com.iha.emulator.ui.Presenter;
 import com.iha.emulator.ui.dialogs.adapter.AddAdapterDialogPresenter;
 import com.iha.emulator.ui.dialogs.adapter.DeleteAdaptersDialogPresenter;
@@ -22,9 +26,6 @@ import com.iha.emulator.utilities.AdapterLogger;
 import com.iha.emulator.utilities.MemoryChecker;
 import com.iha.emulator.utilities.TextAreaAppender;
 import com.iha.emulator.utilities.Utilities;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ListProperty;
@@ -47,16 +48,17 @@ import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.util.Duration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.controlsfx.dialog.ExceptionDialog;
 import org.controlsfx.dialog.ProgressDialog;
+import org.dom4j.*;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 /**
  * Created by Filip Sutovsky on 14/11/14.
@@ -64,13 +66,14 @@ import java.util.Properties;
 public class DetailedSimulationPresenter implements Presenter{
 
     private static final Logger logger = LogManager.getLogger(DetailedSimulationPresenter.class);
-    private static final boolean DEBUG_AUTO_CREATE = true;
+    private static final boolean DEBUG_AUTO_CREATE = false;
     private static final int DEFAULT_SERVER_LISTENER_PORT = 7978;
-
+    private static final String SAVES_DEFAULT_DIR = "saved_adapters";
     private static final String FXML_PATH = "DetailedSimulation.fxml";
     private static final String CSS_PATH = "/com/iha/emulator/resources/css/theme-light.css";
 
     private Scene scene;
+    private Stage window;
 
     private MemoryChecker memoryChecker = MemoryChecker.getInstance();
     private Properties properties;
@@ -135,7 +138,8 @@ public class DetailedSimulationPresenter implements Presenter{
     //endregion
 
     //region constructor
-    public DetailedSimulationPresenter() {
+    public DetailedSimulationPresenter(Stage window) {
+        this.window = window;
     }
     //endregion
 
@@ -259,6 +263,7 @@ public class DetailedSimulationPresenter implements Presenter{
                     //Value actValue = ValueFactory.buildValue(Value.Type.ACTUATOR_ON_OFF);
                     tmpValues.addAll(tempValue,humValue);*/
                     currentAdapterController.createSensor(view.getSensorPanelContainer(),"#0cdf56", SensorIcon.MULTI_SENSOR,tmpValues,false,1677721601+i,"Test sensor",90,91,5,currentAdapterController.getAdapter().getProtocol());
+                    currentAdapterController.setSaved(false);
                     i++;
                 } catch (LoadException e) {
                     showException(logger,"Cannot create new sensor",e,false,null);
@@ -479,12 +484,223 @@ public class DetailedSimulationPresenter implements Presenter{
         view.removeAdapterBtn(controller);
     }
 
-    public void saveCurrentAdapter(){
-
+    public void saveCurrentAdapter(AdapterController adapterController){
+        if(adapterController == null) {
+            if(this.currentAdapterController == null) return;
+            adapterController = currentAdapterController;
+        }
+        final AdapterController tmpController = adapterController;
+        logger.trace("Saving adapter: " + tmpController.toString());
+        Task<Document> worker = new Task<Document>() {
+            @Override
+            protected Document call() throws Exception {
+                logger.trace("Creating XML file");
+                Document doc = DocumentFactory.getInstance().createDocument();
+                doc.addElement("adapters");
+                doc = tmpController.saveToXml(doc);
+                return doc;
+            }
+        };
+        worker.setOnSucceeded(event -> {
+            logger.trace("Trying to save to XML file");
+            String filename = Utilities.saveDialogForXML(window, SAVES_DEFAULT_DIR, worker.getValue().asXML());
+            if(filename != null){
+                showInformation("File saved", "Adapter/s successfully saved", "Saved to file \"" + filename + "\"");
+                tmpController.setSaved(true);
+            }
+        });
+        //create thread for background process
+        Thread th = new Thread(worker);
+        th.setDaemon(true);
+        //run background process
+        th.start();
     }
 
     public void saveAllAdapters(){
+        if(getAdapterControllers().size() < 1) return;
+        logger.trace("Saving all adapters: ");
+        Task<Document> worker = new Task<Document>() {
+            @Override
+            protected Document call() throws Exception {
+                logger.trace("Creating XML file");
+                Document doc = DocumentFactory.getInstance().createDocument();
+                doc.addElement("adapters");
+                for(AdapterController adapterController : getAdapterControllers()){
+                    doc = adapterController.saveToXml(doc);
+                }
+                return doc;
+            }
+        };
+        worker.setOnSucceeded(event -> {
+            logger.trace("Trying to save to XML file");
+            String filename = Utilities.saveDialogForXML(window,SAVES_DEFAULT_DIR,worker.getValue().asXML());
+            if(filename != null){
+                showInformation("File saved", "Adapter/s successfully saved", "Saved to file \"" + filename + "\"");
+                getAdapterControllers().forEach(adapterController -> adapterController.setSaved(true));
+            }
+        });
+        //create thread for background process
+        Thread th = new Thread(worker);
+        th.setDaemon(true);
+        //run background process
+        th.start();
+    }
 
+    public void changeServerSettings(){
+        if(this.currentAdapterController == null) return;
+        logger.trace("Show change server details dialog.");
+    }
+
+    public void open(){
+        logger.trace("Trying to load from XML file");
+        try {
+            String content = Utilities.loadDialogForXML(window, SAVES_DEFAULT_DIR);
+            if(content == null) throw new DocumentException("File is null");
+            parseAndLoadXML(content);
+        } catch (DocumentException e) {
+            DetailedSimulationPresenter.showException(logger, "Cannot parse loaded file", e, false, null);
+        }
+    }
+
+    private void parseAndLoadXML(String content) throws DocumentException {
+        logger.trace("Parsing XML file");
+        Document doc = DocumentHelper.parseText(content);
+        //root element = <adapters>
+        Element rootElement = doc.getRootElement();
+        for(Iterator<Element> it = rootElement.elementIterator("adapter"); it.hasNext();){
+            Element adapterElement = it.next();
+            logger.trace("XML -> Parsing adapter: " + adapterElement.attribute("id").getValue());
+            AdapterController tmpAdapterController = null;
+            try{
+                //parse adapter info
+                logger.trace("XML -> Parsing adapter info");
+                Integer adapterId = Integer.valueOf(adapterElement.attribute("id").getValue());
+                String adapterName = adapterElement.attribute("name").getValue();
+                Double adapterProtocolVersion = Double.valueOf(adapterElement.attribute("protocol").getValue());
+                Boolean adapterRegistered = Boolean.valueOf(adapterElement.attributeValue("registered"));
+                Double adapterFirmware = Double.valueOf(adapterElement.attributeValue("firmware"));
+                if(adapterId == null || adapterName == null || adapterProtocolVersion == null ||adapterRegistered == null ||adapterFirmware == null)
+                    throw new NullPointerException("Adapter info missing");
+
+                tmpAdapterController = new AdapterController();
+                Protocol.Version protocolVersion = ProtocolFactory.getVersion(adapterProtocolVersion);
+                if(protocolVersion == null)
+                    throw new NullPointerException("Unknown protocol version -> " + adapterProtocolVersion);
+                //CREATE ADAPTER
+                tmpAdapterController.createAdapter(adapterName,false,adapterId,adapterRegistered, protocolVersion ,adapterFirmware);
+                logger.trace("XML -> Adapter info OK -> ID: " + adapterId + " Name: " + adapterName + " Prot.: " + adapterProtocolVersion);
+                //parse server info
+                logger.trace("XML -> Parsing server info");
+                Element serverElement = adapterElement.element("server");
+                String serverName = serverElement.attribute("name").getValue();
+                String serverIp = serverElement.attribute("ip").getValue();
+                Integer serverPort = Integer.valueOf(serverElement.attribute("port").getValue());
+                String serverDb = serverElement.attribute("db").getValue();
+                if(serverName == null || serverIp == null || serverPort == null || serverDb == null)
+                    throw new NullPointerException("Adapter info missing");
+                //CREATE SERVER
+                tmpAdapterController.createServer(false,serverName,serverIp,serverPort,serverDb);
+                logger.trace("XML -> Server info OK -> Name: " + serverName + " IP: " + serverIp + " Port: " + serverPort + " DB: " + serverDb);
+
+                //parse sensors
+                logger.trace("XML -> Parsing sensors");
+                Element sensorsElement = adapterElement.element("sensors");
+                for(Iterator<Element> its = sensorsElement.elementIterator("sensor");its.hasNext();) {
+                    Element sensorElement = its.next();
+                    logger.trace("XML -> Parsing sensor -> " + sensorElement.attribute("id").getValue());
+                    Integer sensorId = Integer.valueOf(sensorElement.attributeValue("id"));
+                    String sensorName = sensorElement.elementText("name");
+                    Integer sensorRefresh = Integer.valueOf(sensorElement.elementText("refresh"));
+                    Integer sensorSignal = Integer.valueOf(sensorElement.elementText("signal"));
+                    Integer sensorBattery = Integer.valueOf(sensorElement.elementText("battery"));
+                    SensorIcon sensorIcon = SensorIconFactory.getByName(sensorElement.elementText("icon"));
+                    String sensorColor = sensorElement.elementText("header_color");
+                    if (sensorId == null || sensorName == null || sensorRefresh == null || sensorSignal == null || sensorBattery == null || sensorIcon == null || sensorColor == null) {
+                        throw new NullPointerException("Sensor info missing");
+                    }
+                    Element valuesElement = sensorElement.element("values");
+                    ObservableList<Value> values = FXCollections.observableArrayList();
+                    for (Iterator<Element> itv = valuesElement.elementIterator("value"); itv.hasNext(); ) {
+                        Element valueElement = itv.next();
+                        logger.trace("XML -> Parsing sensor -> " + sensorId + " Parsing value -> " + valueElement.attributeValue("type"));
+                        String valueType = valueElement.attributeValue("type");
+                        String valueName = valueElement.attributeValue("name");
+                        Boolean valueStoreHistory = Boolean.valueOf(valueElement.attributeValue("store_history"));
+                        Boolean valueGenerateValue = Boolean.valueOf(valueElement.attributeValue("generate_value"));
+                        String valueInitialValue = valueElement.elementText("initial_value");
+                        if(valueType == null || valueName == null || valueStoreHistory == null || valueGenerateValue == null || valueInitialValue == null){
+                            throw new NullPointerException("Value missing info");
+                        }
+                        //CREATE VALUE
+                        Value tmpValue = ValueFactory.buildValue(valueType);
+                        tmpValue.setName(valueName);
+                        tmpValue.setStoreHistory(valueStoreHistory);
+                        tmpValue.setGenerateValue(valueGenerateValue);
+                        tmpValue.setInitialValue(tmpValue.fromStringToValueType(valueInitialValue));
+                        tmpValue.setValue(tmpValue.fromStringToValueType(valueInitialValue));
+                        Element generatorElement = null;
+                        try{
+                            generatorElement = valueElement.element("generator");
+                        }catch (NullPointerException e){
+                            //it is OK, if generator element doesn't exist
+                        }
+                        if(generatorElement != null){
+                            String generatorType = generatorElement.attributeValue("type");
+                            Value.Generator generator = ValueFactory.generatorByName(generatorType);
+                            if(generator == null) throw new NullPointerException("Unknown generator type -> " + generatorType);
+                            ((HasGenerator)tmpValue).setGeneratorType(generator);
+                            switch (generator) {
+                                case NORMAL_DISTRIBUTION:
+                                    ((HasNormalDistribution)tmpValue).setMax(Double.valueOf(generatorElement.element("params").attributeValue("max")));
+                                    ((HasNormalDistribution)tmpValue).setMin(Double.valueOf(generatorElement.element("params").attributeValue("min")));
+                                    ((HasNormalDistribution)tmpValue).setDev(Double.valueOf(generatorElement.element("params").attributeValue("dev")));
+                                    ((HasNormalDistribution)tmpValue).setAvg(Double.valueOf(generatorElement.element("params").attributeValue("avg")));
+                                    break;
+                                case LINEAR_DISTRIBUTION:
+                                    ((HasLinearDistribution)tmpValue).setMax(Double.valueOf(generatorElement.element("params").attributeValue("max")));
+                                    ((HasLinearDistribution)tmpValue).setMin(Double.valueOf(generatorElement.element("params").attributeValue("min")));
+                                    ((HasLinearDistribution)tmpValue).setStep(Double.valueOf(generatorElement.element("params").attributeValue("step")));
+                                    break;
+                            }
+                        }
+                        values.add(tmpValue);
+                    }
+                    //CREATE SENSOR
+                    SensorController tmpSensor =tmpAdapterController.createSensor(values,false,sensorId,sensorName,sensorBattery,sensorSignal,sensorRefresh,tmpAdapterController.getAdapter().getProtocol());
+                    tmpAdapterController.createSensorPanel(view.getSensorPanelContainer(),sensorColor,sensorIcon,tmpSensor);
+                    //tmpAdapterController.createSensor(view.getSensorPanelContainer(),sensorColor,sensorIcon,values,false,sensorId,sensorName,sensorBattery,sensorSignal,sensorRefresh,tmpAdapterController.getAdapter().getProtocol());
+                }
+            }catch (LoadException e){
+                throw new DocumentException("Wrong format of file. Cannot create sensor " + adapterElement.attribute("id").getValue(),e);
+            }catch (NumberFormatException e){
+                throw new DocumentException("Wrong format of file. Error on in content of adapter " + adapterElement.attribute("id").getValue(),e);
+            }catch (NullPointerException e){
+                throw new DocumentException("Wrong format of file. Cannot find one or more required elements. Error on in content of adapter " + adapterElement.attribute("id").getValue(),e);
+            }
+            if(tmpAdapterController.getAdapter() != null){
+                //CREATE LOG
+                tmpAdapterController.createLog();
+                //CREATE SCHEDULER
+                tmpAdapterController.createScheduler();
+                tmpAdapterController.setTrackServerResponse(true);
+                tmpAdapterController.setDumpServerResponse(true);
+                tmpAdapterController.bindSchedulerProcess(tmpAdapterController.getAdapter(),tmpAdapterController.getScheduler());
+                tmpAdapterController.bindRegisterMessage(tmpAdapterController);
+                //CREATE ADAPTER BUTTON
+                addAdapterBtn(tmpAdapterController);
+                //ADD ADAPTER TO OTHERS
+                getAdapterControllersList().add(tmpAdapterController);
+                try{
+                    tmpAdapterController.getLog().setBuffered(true,String.valueOf(tmpAdapterController.getAdapter().getId()));
+                }catch (IOException e){
+                    throw new DocumentException("Wrong format of file. Error on in content of adapter " + adapterElement.attribute("id").getValue(),e);
+                }
+                tmpAdapterController.setSaved(true);
+            }
+        }
+        if(getAdapterControllers().size() > 0){
+            setCurrentAdapter(getAdapterControllers().get(0));
+        }
     }
 
     public void init(String defaultPropertiesFileName){
@@ -507,16 +723,15 @@ public class DetailedSimulationPresenter implements Presenter{
         bindControlBtnsToAdaptersCount();
         //initialize server listener
         initAndStartServerListener();
-        //add handlers to message type change
-        /*view.getLogMessageTypeRadBtnGroup().selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-            @Override
-            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
-                if(currentAdapterController == null) return;
-                currentAdapterController.getLog().setFullMessage(view.getFullLogMessageRadBtn().isSelected());
-                currentAdapterController.getLog().setPartialMessage(view.getPartialLogMessageRadBtn().isSelected());
-                currentAdapterController.getLog().setShortMessage(view.getShortLogMessageRadBtn().isSelected());
+        //handle close event
+        window.setOnCloseRequest(event -> {
+            checkIfSaved();
+            if(getUnsavedAdapters() == null){
+                quit();
+            }else {
+                event.consume();
             }
-        });*/
+        });
     }
 
     private void initAndStartServerListener(){
@@ -577,6 +792,17 @@ public class DetailedSimulationPresenter implements Presenter{
             log.addSentLogTo(view.getToBeSentLogContainer());
             log.addErrorLogTo(view.getErrorLogContainer());
         }
+    }
+
+    private void showInformation(String title,String headerMessage,String message){
+        logger.trace("Showing information");
+        Alert dlg = new Alert(Alert.AlertType.INFORMATION, "");
+        dlg.initModality(Modality.WINDOW_MODAL);
+        dlg.initOwner(this.window);
+        dlg.setTitle(title);
+        dlg.getDialogPane().setContentText(message);
+        dlg.getDialogPane().setHeaderText(headerMessage);
+        dlg.show();
     }
 
     private void bindControlBtnsToAdaptersCount(){
@@ -815,6 +1041,48 @@ public class DetailedSimulationPresenter implements Presenter{
     @Override
     public void bind() {
         view.setPresenter(this);
+    }
+
+    private ObservableList<AdapterController> getUnsavedAdapters(){
+        ArrayList<AdapterController> unsavedAdapters = null;
+        if(getAdapterControllers().size() > 0){
+             unsavedAdapters =
+                    getAdapterControllers()
+                            .stream()
+                            .filter(a -> !a.isSaved())
+                            .collect(Collectors.toCollection(ArrayList<AdapterController>::new));
+        }
+        if(unsavedAdapters == null || unsavedAdapters.size() == 0){
+            return null;
+        }
+        else{
+            logger.trace("Unsaved adapters count: " + unsavedAdapters.size());
+            return FXCollections.observableArrayList(unsavedAdapters);
+        }
+
+    }
+
+    private void checkIfSaved(){
+        logger.debug("Checking unsaved adapters");
+        if(getAdapterControllers().size() > 0){
+            ObservableList<AdapterController> unsavedAdapters = getUnsavedAdapters();
+            if(unsavedAdapters != null){
+                ChoiceDialog<Utilities.SaveOption> dlg = Utilities.saveOnQuitDialog();
+                dlg.showAndWait().ifPresent(result -> {
+                    switch (result){
+                        case SAVE_ALL:
+                            saveAllAdapters();
+                            break;
+                        case SAVE_CURRENT:
+                            saveCurrentAdapter(null);
+                            break;
+                        case DO_NOTHING:
+                            unsavedAdapters.forEach(a -> a.setSaved(true));
+                            break;
+                    }
+                });
+            }
+        }
     }
 
     public void quit(){

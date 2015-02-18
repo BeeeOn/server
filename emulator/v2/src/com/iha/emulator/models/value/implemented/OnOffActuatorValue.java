@@ -1,6 +1,7 @@
 package com.iha.emulator.models.value.implemented;
 
 import com.iha.emulator.models.value.AbstractValue;
+import org.dom4j.Element;
 
 import java.util.Random;
 
@@ -12,6 +13,7 @@ public class OnOffActuatorValue extends AbstractValue<Boolean> {
 
     public OnOffActuatorValue(String name, String type,int offset, String unit, boolean generateValue, boolean storeHistory, Random generator, Long generatorSeed) {
         super(Type.ACTUATOR_ON_OFF,name,type,offset,unit,generateValue,storeHistory,generator,generatorSeed);
+        setInitialValue(false);
         setValue(false);
     }
 
@@ -49,6 +51,21 @@ public class OnOffActuatorValue extends AbstractValue<Boolean> {
         else if (valueString.equals("0") || valueString.equals("0.0"))
             return false;
         else return Boolean.valueOf(valueString);
+    }
+
+    @Override
+    public void saveToXML(Element rootElement) {
+        Element valueElement = rootElement.addElement("value")
+                .addAttribute("type",getValueType().getName())
+                .addAttribute("name",getName())
+                .addAttribute("store_history",String.valueOf(isStoreHistory()))
+                .addAttribute("generate_value",String.valueOf(isGenerateValue()));
+        valueElement.addElement("initial_value").addText(String.valueOf(getInitialValue()));
+        if(getGeneratorType() != null){
+            valueElement.addElement("generator")
+                    .addAttribute("type", getGeneratorType().getName())
+                    .addAttribute("seed",String.valueOf(getGeneratorSeed()));
+        }
     }
 
     @Override

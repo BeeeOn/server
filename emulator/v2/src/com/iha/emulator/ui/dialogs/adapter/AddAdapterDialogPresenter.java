@@ -281,6 +281,17 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
             parent.addAdapterBtn(newAdapterController);
             // set new adapter as current
             parent.setCurrentAdapter(newAdapterController);
+            try {
+                newAdapterController.getLog().setBuffered(true,String.valueOf(newAdapterController.getAdapter().getId()));
+            } catch (IOException e) {
+                DetailedSimulationPresenter.showException(
+                        logger,
+                        "Cannot create buffer file for new adapter log.",
+                        e,
+                        true,
+                        event -> parent.quit());
+                return false;
+            }
             return true;
         } catch (IllegalArgumentException e){
             parent.getAdapterControllersList().remove(newAdapterController);
