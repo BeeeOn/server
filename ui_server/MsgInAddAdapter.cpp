@@ -21,7 +21,7 @@ string MsgInAddAdapter::createResponseMsgOut() {
     string adapterName = adapterNode.attribute(P_ADAPTER_NAME).value();
     
     if(DBConnector::getInstance().parAdapterWithUserIfPossible(adapterId, adapterName, _gUserId) == 0)
-        throw ServerException(ServerException::ADAPTER_ID);
+        throw ServerException(ServerException::ADAPTER_TAKEN);
     
     return envelopeResponse(R_TRUE);
 }

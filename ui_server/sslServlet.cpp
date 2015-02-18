@@ -165,7 +165,11 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
 #endif
                         //sprintf(reply, response, buf);   //construct reply
                         free(rc);
-                        SSL_write(ssl, replyString.c_str(), replyString.length() ); // send reply 
+                        int writeBytes = SSL_write(ssl, replyString.c_str(), replyString.length() ); // send reply 
+                        Logger::getInstance(Logger::DEBUG3)<<"write "<< writeBytes<<endl;
+                        if(writeBytes<0)
+                            Logger::getInstance(Logger::DEBUG3)<< "write error: "<<SSL_get_error(ssl, writeBytes);
+                        
                         count =0;
                         rc=NULL;
                         buf[0] = '\0';

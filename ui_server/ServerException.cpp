@@ -17,6 +17,7 @@ using namespace std;
      const int  ServerException::LOCALE = 4;
 
      const int  ServerException::ADAPTER_ID = 5;
+     const int  ServerException::ADAPTER_TAKEN = 6;
 
      const int  ServerException::AGG_FUNCTION = 8;
      const int  ServerException::INTERVAL = 9;
