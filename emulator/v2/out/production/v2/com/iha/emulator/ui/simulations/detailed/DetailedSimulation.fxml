@@ -443,18 +443,28 @@
             </VBox>
             <VBox minHeight="250.0" minWidth="250.0" prefHeight="560.0" prefWidth="250.0" styleClass="rightPanel" HBox.hgrow="NEVER">
                <children>
-                  <Label styleClass="sectionName" text="Adapter Details" VBox.vgrow="NEVER">
-                     <VBox.margin>
-                        <Insets bottom="5.0" top="5.0" />
-                     </VBox.margin>
-                  </Label>
+                  <BorderPane prefHeight="48.0" prefWidth="244.0" styleClass="serverDetailsLblContainer">
+                     <left>
+                        <Label prefHeight="24.0" prefWidth="178.0" styleClass="sectionName" text="Adapter details" BorderPane.alignment="CENTER_LEFT" />
+                     </left>
+                     <right>
+                        <Button mnemonicParsing="false" onAction="#handleChangeAdapterDetails" prefHeight="29.0" prefWidth="30.0" styleClass="settingsBtn" BorderPane.alignment="CENTER_LEFT">
+                           <tooltip>
+                              <Tooltip text="Server settings" />
+                           </tooltip>
+                           <BorderPane.margin>
+                              <Insets />
+                           </BorderPane.margin>
+                        </Button>
+                     </right>
+                  </BorderPane>
                   <FlowPane fx:id="adapterDetailsContainer" prefHeight="197.0" prefWidth="256.0" styleClass="adapterDetailsContainer" />
                   <BorderPane prefHeight="48.0" prefWidth="244.0" styleClass="serverDetailsLblContainer" VBox.vgrow="NEVER">
                      <left>
                         <Label prefHeight="24.0" prefWidth="178.0" styleClass="sectionName" text="Server details" BorderPane.alignment="CENTER_LEFT" />
                      </left>
                      <right>
-                        <Button mnemonicParsing="false" onAction="#handleChangeServerSettings" prefHeight="29.0" prefWidth="30.0" styleClass="settingsBtn" BorderPane.alignment="CENTER_LEFT">
+                        <Button mnemonicParsing="false" onAction="#handleChangeServerDetails" prefHeight="29.0" prefWidth="30.0" styleClass="settingsBtn" BorderPane.alignment="CENTER_LEFT">
                            <BorderPane.margin>
                               <Insets />
                            </BorderPane.margin>

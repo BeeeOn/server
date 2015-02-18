@@ -2,6 +2,8 @@ package com.iha.emulator.models;
 
 import javafx.beans.property.*;
 
+import java.util.Objects;
+
 /**
  * Created by Shu on 25.11.2014.
  */
@@ -84,5 +86,21 @@ public class Server {
 
     public void setDatabaseName(String databaseName) {
         this.databaseName.set(databaseName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.getName(),this.getIp(),this.getPort(),this.getDatabaseName());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Server server = (Server) o;
+        return getDatabaseName().equals(server.getDatabaseName()) &&
+                getIp().equals(server.getIp()) &&
+                getName().equals(server.getName()) &&
+                getPort() == server.getPort();
     }
 }
