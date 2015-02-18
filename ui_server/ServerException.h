@@ -52,7 +52,7 @@ public:
     static const int MSG_RIGHT;
     static const int ROLE; //+text
     static const int EMAIL_ROLE; //+text
-    static const int TIME_UTC;
+    static const int TIMEZONE_UTC;
 
     static const int BAD_ACTOR_VALUE;
 

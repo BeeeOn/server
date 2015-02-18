@@ -1,5 +1,5 @@
 
-#include "MsgInSignUp.h"
+#include "MsgInGetUID.h"
 #include "ServerException.h"
 const std::string MsgInGetUID::state = "getuid";
 
@@ -29,7 +29,7 @@ string MsgInGetUID::createResponseMsgOut()
     googleInfo gInfo;
     //DEBUG
     if(gInfo.email == "")
-        gInfo.email = phoneId+"@v";
+        gInfo.email = phoneId+"@debug";
     
     if( !isGTokenOk(gToken, gId, gInfo) )
         throw ServerException(ServerException::TOKEN_EMAIL);
@@ -49,5 +49,7 @@ string MsgInGetUID::createResponseMsgOut()
 
 long long int MsgInGetUID::getnewIHAtoken() {
     _IHAtokenGenerator++;
-    return stoll( DBConnector::getInstance().DEBUGexec("select max(token)+1 from mobile_devices ") );
+    string r =  DBConnector::getInstance().DEBUGexec("select max(token)+1 from mobile_devices" );
+    //if(r=="")return 1;
+    return stoll(r);
 }

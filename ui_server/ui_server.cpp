@@ -1,4 +1,4 @@
-// Server.cpp : Defines the entry point for the console application.
+//Defines the entry point for the console application.
 
 #include "ui_server.h"
 #include "msgInGetCondition.h"
@@ -40,6 +40,7 @@ void sig_handler(int signo)
 
 int main(int argc, char** argv)
 {   
+    //load XML file from argv[1]
     if(argc>=2){
         try{
             Config::getInstance().loadXml(argv[1]);
@@ -48,7 +49,8 @@ int main(int argc, char** argv)
             return 1;
         }
     }
-        serverPort = Config::getInstance().getServerPort();
+    
+    serverPort = Config::getInstance().getServerPort();
 
     if (signal(SIGINT, sig_handler) == SIG_ERR)
     {
@@ -95,44 +97,60 @@ int main(int argc, char** argv)
     //resolveMsg("<com ver=\"2.3\"  uid=\"14\" state=\"delgcmid\"  email=\"11111@v\" gcmid=\"new\" />");
     //resolveMsg("<com ver=\"2.3\"  uid=\"15\" state=\"setgcmid\"  gcmid=\"new\" />");
 
-       resolveMsg( "<com ver=\"2.3\"  state=\"getuid\" email=\"n@gmail.com\" gid=\"999\" gt=\"1\" pid=\"100\" loc=\"cs\" />");
+      DBConnector::getInstance().DEBUGexec("INSERT INTO USERS (user_id,MAIL) VALUES (1,'dummy@gmail.com');" );
+      DBConnector::getInstance().DEBUGexec("insert into mobile_devices(fk_user_id, id, token) values(1,1,1);" );
+
+       resolveMsg( "<com ver=\"2.3\"  state=\"getuid\" email=\"n11@gmail.com\" gid=\"99191\" gt=\"1\" pid=\"1100\" loc=\"cs\" />");
+        resolveMsg( "<com ver=\"2.3\"  uid=\"9\" state=\"addadapter\" aid=\"10\"     aname=\"home\"  />");
+    resolveMsg( "<com ver=\"2.3\"  state=\"getuid\" email=\"n11@gmail.com\" gid=\"99191\" gt=\"1\" pid=\"1100\" loc=\"cs\" />");
+
        
-        SSL_CTX *ctx;
-        int server;
+       SSL_CTX *ctx;
+       int server;
        atomic<int>* threadCounter = new atomic<int>(0);
         
+       //initSSL
         SSL_library_init();
-        
         ctx = InitServerCTX();        /* initialize SSL */
         LoadCertificates(ctx, CertFile, KeyFile); /* load certs */
         server = OpenListener(serverPort);    /* create server socket */
+        
+        
         while (!serverStop) {
             struct sockaddr_in addr;
             socklen_t len = sizeof(addr);
             
+            //wait for phone connection (unsecured))
             int client = accept(server, (struct sockaddr*)&addr, &len);  /* accept connection as usual */
             Logger::getInstance(Logger::DEBUG3)<<"socket accepted"<<endl;
             
 #ifdef DEBUG
             printf("Connection: %s:%d\n",inet_ntoa(addr.sin_addr), ntohs(addr.sin_port));
 #endif
+            //create secured connection
             SSL *ssl;
             ssl = SSL_new(ctx);              /* get new SSL state with context */
             SSL_set_fd(ssl, client);      /* set connection socket to SSL state */
             
             std::function<string(char*)> resolveFunc;// = &resolveMsg;
             
-            if(serverStop)break;
+            if(serverStop)
+                break;
             
-            if(0){
-              //  Servlet(ssl, resolveFunc);
+            
+            bool singleThread = false;
+            if(singleThread){
+                Servlet(ssl, resolveFunc);
             }else{
+                //wait if max thread n. is reached
                 while(*threadCounter > Config::getInstance().getServerThreadsNumber()) 
                     std::this_thread::sleep_for(std::chrono::milliseconds(50));
 
                 Logger::getInstance(Logger::DEBUG2)<<"threads c.:"<<(*threadCounter +1)<<endl;
                 Logger::getInstance(Logger::DEBUG2)<<"new thread started"<<endl;
-                thread *t =  new thread( [ssl, threadCounter,resolveFunc](){
+                
+                //create thread which
+                thread *t =  new thread( [ssl, threadCounter, resolveFunc](){
                     (*threadCounter)++;
                     Servlet(ssl,resolveFunc);
                     (*threadCounter)--;

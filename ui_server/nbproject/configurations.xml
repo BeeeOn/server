@@ -19,11 +19,10 @@
         <itemPath>MsgInGetLog.h</itemPath>
         <itemPath>MsgInGetRooms.h</itemPath>
         <itemPath>MsgInGetTimeZone.h</itemPath>
+        <itemPath>MsgInGetUID.h</itemPath>
         <itemPath>MsgInGetViews.h</itemPath>
         <itemPath>MsgInPartial.h</itemPath>
         <itemPath>MsgInSetTimeZone.h</itemPath>
-        <itemPath>MsgInSignIn.h</itemPath>
-        <itemPath>MsgInSignUp.h</itemPath>
         <itemPath>MsgInUnknown.h</itemPath>
         <itemPath>MsgInUpdateRooms.h</itemPath>
         <itemPath>MsgInUpdateView.h</itemPath>
@@ -142,8 +141,7 @@
       <logicalFolder name="f3" displayName="sign_reg_adapters" projectFiles="true">
         <itemPath>MsgInAddAdapter.cpp</itemPath>
         <itemPath>MsgInGetAdapters.cpp</itemPath>
-        <itemPath>MsgInSignIn.cpp</itemPath>
-        <itemPath>MsgInSignUp.cpp</itemPath>
+        <itemPath>MsgInGetUID.cpp</itemPath>
       </logicalFolder>
       <logicalFolder name="f9" displayName="time" projectFiles="true">
         <itemPath>MsgInGetTimeZone.cpp</itemPath>
@@ -639,6 +637,10 @@
       </item>
       <item path="MsgInGetTimeZone.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="MsgInGetUID.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInGetUID.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="MsgInGetViews.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="MsgInGetViews.h" ex="false" tool="3" flavor2="0">
@@ -670,14 +672,6 @@
       <item path="MsgInSetTimeZone.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="MsgInSetTimeZone.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInSignIn.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInSignIn.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInSignUp.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInSignUp.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="MsgInSwitch.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -1677,6 +1671,10 @@
       </item>
       <item path="MsgInGetTimeZone.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="MsgInGetUID.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInGetUID.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="MsgInGetViews.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="MsgInGetViews.h" ex="false" tool="3" flavor2="0">
@@ -1708,14 +1706,6 @@
       <item path="MsgInSetTimeZone.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="MsgInSetTimeZone.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInSignIn.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInSignIn.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInSignUp.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInSignUp.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="MsgInSwitch.cpp" ex="false" tool="1" flavor2="0">
       </item>

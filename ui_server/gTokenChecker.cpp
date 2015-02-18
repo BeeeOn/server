@@ -274,7 +274,7 @@ bool isGTokenOk(string gToken, string gid, googleInfo &gInfo){
         
         json_decref(root);
         
-        Logger::getInstance(Logger::DEBUG) << "Google Information: "<< gInfo.id << " "<< gInfo.email <<" "<<gInfo.locale<< endl;
+        Logger::getInstance(Logger::DEBUG) << "Google Information: "<< gInfo.id << " "<< gInfo.email <<" "<< gInfo.family_name <<" "<< gInfo.given_name <<" "<<gInfo.locale<< endl;
         return true;
     }
     else //HTTP result is not 200 - not ok 

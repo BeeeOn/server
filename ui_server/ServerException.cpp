@@ -30,7 +30,7 @@ using namespace std;
      const int  ServerException::MSG_RIGHT = 16;
      const int  ServerException::ROLE = 17; //+text
      const int  ServerException::EMAIL_ROLE = 17; //+text
-     const int  ServerException::TIME_UTC = 18;
+     const int  ServerException::TIMEZONE_UTC = 18;
 
      const int  ServerException::BAD_ACTOR_VALUE = 19;
 

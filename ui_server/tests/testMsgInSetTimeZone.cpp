@@ -62,7 +62,7 @@ void testMsgInSetTimeZone::testWrongUTC() {
     string  state = doc->child("communication").attribute("state").value();
     int errCode = doc->child("communication").attribute("errcode").as_int(-1000);
     
-    CPPUNIT_ASSERT_ASSERTION_PASS(CPPUNIT_ASSERT_EQUAL_MESSAGE(response.c_str(),errCode, ServerException::TIME_UTC));
+    CPPUNIT_ASSERT_ASSERTION_PASS(CPPUNIT_ASSERT_EQUAL_MESSAGE(response.c_str(),errCode, ServerException::TIMEZONE_UTC));
     CPPUNIT_ASSERT_EQUAL_MESSAGE(response.c_str(),state, (string)"false");
 }
 

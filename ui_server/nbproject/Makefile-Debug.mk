@@ -68,6 +68,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/MsgInGetNewDevices.o \
 	${OBJECTDIR}/MsgInGetRooms.o \
 	${OBJECTDIR}/MsgInGetTimeZone.o \
+	${OBJECTDIR}/MsgInGetUID.o \
 	${OBJECTDIR}/MsgInGetViews.o \
 	${OBJECTDIR}/MsgInReinitAdapter.o \
 	${OBJECTDIR}/MsgInSetAction.o \
@@ -77,8 +78,6 @@ OBJECTFILES= \
 	${OBJECTDIR}/MsgInSetGCMID.o \
 	${OBJECTDIR}/MsgInSetRooms.o \
 	${OBJECTDIR}/MsgInSetTimeZone.o \
-	${OBJECTDIR}/MsgInSignIn.o \
-	${OBJECTDIR}/MsgInSignUp.o \
 	${OBJECTDIR}/MsgInSwitch.o \
 	${OBJECTDIR}/MsgInUnknown.o \
 	${OBJECTDIR}/MsgInUpdateAction.o \
@@ -322,6 +321,11 @@ ${OBJECTDIR}/MsgInGetTimeZone.o: MsgInGetTimeZone.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInGetTimeZone.o MsgInGetTimeZone.cpp
 
+${OBJECTDIR}/MsgInGetUID.o: MsgInGetUID.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInGetUID.o MsgInGetUID.cpp
+
 ${OBJECTDIR}/MsgInGetViews.o: MsgInGetViews.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
@@ -366,16 +370,6 @@ ${OBJECTDIR}/MsgInSetTimeZone.o: MsgInSetTimeZone.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInSetTimeZone.o MsgInSetTimeZone.cpp
-
-${OBJECTDIR}/MsgInSignIn.o: MsgInSignIn.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInSignIn.o MsgInSignIn.cpp
-
-${OBJECTDIR}/MsgInSignUp.o: MsgInSignUp.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInSignUp.o MsgInSignUp.cpp
 
 ${OBJECTDIR}/MsgInSwitch.o: MsgInSwitch.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -1388,6 +1382,19 @@ ${OBJECTDIR}/MsgInGetTimeZone_nomain.o: ${OBJECTDIR}/MsgInGetTimeZone.o MsgInGet
 	    ${CP} ${OBJECTDIR}/MsgInGetTimeZone.o ${OBJECTDIR}/MsgInGetTimeZone_nomain.o;\
 	fi
 
+${OBJECTDIR}/MsgInGetUID_nomain.o: ${OBJECTDIR}/MsgInGetUID.o MsgInGetUID.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInGetUID.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInGetUID_nomain.o MsgInGetUID.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/MsgInGetUID.o ${OBJECTDIR}/MsgInGetUID_nomain.o;\
+	fi
+
 ${OBJECTDIR}/MsgInGetViews_nomain.o: ${OBJECTDIR}/MsgInGetViews.o MsgInGetViews.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInGetViews.o`; \
@@ -1503,32 +1510,6 @@ ${OBJECTDIR}/MsgInSetTimeZone_nomain.o: ${OBJECTDIR}/MsgInSetTimeZone.o MsgInSet
 	    $(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInSetTimeZone_nomain.o MsgInSetTimeZone.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/MsgInSetTimeZone.o ${OBJECTDIR}/MsgInSetTimeZone_nomain.o;\
-	fi
-
-${OBJECTDIR}/MsgInSignIn_nomain.o: ${OBJECTDIR}/MsgInSignIn.o MsgInSignIn.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInSignIn.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInSignIn_nomain.o MsgInSignIn.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/MsgInSignIn.o ${OBJECTDIR}/MsgInSignIn_nomain.o;\
-	fi
-
-${OBJECTDIR}/MsgInSignUp_nomain.o: ${OBJECTDIR}/MsgInSignUp.o MsgInSignUp.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInSignUp.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInSignUp_nomain.o MsgInSignUp.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/MsgInSignUp.o ${OBJECTDIR}/MsgInSignUp_nomain.o;\
 	fi
 
 ${OBJECTDIR}/MsgInSwitch_nomain.o: ${OBJECTDIR}/MsgInSwitch.o MsgInSwitch.cpp 

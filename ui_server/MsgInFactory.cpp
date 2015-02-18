@@ -1,8 +1,7 @@
 #include "MsgInFactory.h"
 
 #include "IMsgIn.h"
-#include "MsgInSignIn.h"
-#include "MsgInSignUp.h"
+#include "MsgInGetUID.h"
 #include "MsgInGetDevices.h"
 #include "ComTable.h"
 #include "MsgInUnknown.h"
@@ -78,9 +77,7 @@ IMsgIn* MsgInFactory::createMsg(char* msg)
     string state = doc->child(P_COMMUNICATION).attribute(P_STATE).value();
     
     Logger::getInstance(Logger::DEBUG) << "msg: "<< state<< "\n";
-    
-    if(state == MsgInSignIn::state)
-        return new MsgInSignIn(msg, doc);
+
     if(state == MsgInGetAdapters::state)
         return new MsgInGetAdapters(msg, doc);
     if(state == MsgInGetAllDevices::state)

@@ -31,10 +31,10 @@ string MsgInSetTimeZone::createResponseMsgOut()
     try{
         tz = stoi(newTimeZone);
     }catch(...){
-        throw ServerException(ServerException::TIME_UTC);
+        throw ServerException(ServerException::TIMEZONE_UTC);
     }
     if(tz <= P_TIME_MIN || tz >= P_TIME_MAX)
-        throw ServerException(ServerException::TIME_UTC);
+        throw ServerException(ServerException::TIMEZONE_UTC);
     
     DBConnector::getInstance().updateAdaptersTimezone(_adapterId, newTimeZone);
     

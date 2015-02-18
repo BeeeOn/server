@@ -95,8 +95,8 @@ int DBConnector::insertNewUser(string gid, googleInfo gInfo)
         {
                 soci::session sql(*_pool);
                 
-                sql << "insert into users( user_id, mail ) values(:gid, :mail)",
-                        use(gid, "gid"), use (gInfo.email,"mail");   
+                sql << "insert into users( user_id, mail, given_name, family_name, gender ) values(:gid, :mail, :name1, :name2, :gen)",
+                        use(gid, "gid"), use (gInfo.email,"mail"), use(gInfo.given_name, "name1"), use(gInfo.family_name, "name2"), use(gInfo.gender, "gen");   
                 return 1;
         }
         catch (soci::postgresql_soci_error& e)
@@ -507,9 +507,14 @@ int DBConnector::parAdapterWithUserIfPossible(int adapterId, string adapterName,
         soci::session sql(*_pool);
        
         string role = "superuser";
+         statement st = (sql.prepare <<  "insert into users_adapters(fk_adapter_id, fk_user_id, role) select :a_id , :gId, :role where not exists (select 1 from users_Adapters where fk_adapter_id=:a_id)",
+                use(adapterId, "a_id"), use(role, "role"),  use(gId, "gId"));
+        st.execute(true);
         
-        sql << "insert into users_adapters(fk_adapter_id, fk_user_id, role) values(:a_id , :gId, :role)",
-                use(adapterId, "a_id"), use(role, "role"),  use(gId, "gId");
+        int updateCount = st.get_affected_rows();
+        if(updateCount == 0)
+            return 0;
+       
         sql << "update adapters set name=:a_name where adapter_id=:a_id",
                  use(adapterId, "a_id"), use(adapterName, "a_name");
         //TODO if adapter is registrable, 2x sql
@@ -825,7 +830,7 @@ string DBConnector::getXMLconAccounts(string adapterId){
         string xml;
         indicator ind;
         sql << "select xmlagg ("
-                                                "xmlelement(name user, xmlattributes(mail as mail, role as role, given_name as name, family_name as surname , gender as gender))"
+                                                "xmlelement(name user, xmlattributes(mail as email, role as role, given_name as name, family_name as surname , gender as gender))"
                                                 ")"
                 "from users left join users_adapters on user_id = fk_user_id where fk_adapter_id = :adapter"
                 ,use(adapterId,"adapter"), into(xml, ind);
