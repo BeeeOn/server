@@ -1,0 +1,22 @@
+#create DB
+sudo su postgres
+psql postgres
+create database home;
+
+#create user
+create user uiserver with password 'xyz';
+
+#goto DB home
+\c home
+
+#create tables ...   (pokud postgres nemá práva chmod a+r create.sql)
+\i home4_create.sql
+
+#grant access to user uiserver
+grant connect on database home to uiserver;
+grant select,insert,update,delete on users,users_adapters,adapters,facilities,devices,logs,rooms,mobile_devices to uiserver;
+
+
+
+#quit
+\q

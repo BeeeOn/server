@@ -432,6 +432,8 @@
       <itemPath>Makefile</itemPath>
       <itemPath>tests/XMLtestFiles</itemPath>
       <itemPath>config.xml</itemPath>
+      <itemPath>config_devel.xml</itemPath>
+      <itemPath>config_prod.xml</itemPath>
       <itemPath>sqlQueries</itemPath>
     </logicalFolder>
     <itemPath>ccolor.cpp</itemPath>

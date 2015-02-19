@@ -39,6 +39,7 @@ void DBConnector::setConnectionStringAndOpenSessions(string conString, int sessi
     for (size_t i = 0; i != _poolSize; ++i)
     {
         session & sql = _pool->at(i);
+        sql.
         sql.open(postgresql, _connectionString);
     }
 }
@@ -519,7 +520,7 @@ int DBConnector::parAdapterWithUserIfPossible(int adapterId, string adapterName,
         soci::session sql(*_pool);
        
         string role = "superuser";
-         statement st = (sql.prepare <<  "insert into users_adapters(fk_adapter_id, fk_user_id, role) select :a_id , :gId, :role where not exists (select 1 from users_Adapters where fk_adapter_id=0)",// where fk_adapter_id=:a_id)
+         statement st = (sql.prepare <<  "insert into users_adapters(fk_adapter_id, fk_user_id, role) select :a_id , :gId, :role where not exists (select 1 from users_Adapters where fk_adapter_id=:a_id)",// where fk_adapter_id=:a_id)
                 use(adapterId, "a_id"), use(role, "role"),  use(gId, "gId"));
         st.execute(true);
         
@@ -867,6 +868,7 @@ int DBConnector::delConAccount(string adapterId, string userMail){
                 ,use(adapterId,"adapter"), use(userMail,"mail") );
         st.execute(true);
         return st.get_affected_rows();
+        
     }
     catch (soci::postgresql_soci_error& e)
     {
