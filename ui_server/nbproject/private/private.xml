@@ -7,18 +7,19 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/pavel/git-ant/ui_server/MsgInGetUID.cpp</file>
-            <file>file:/home/pavel/git-ant/ui_server/IMsgIn.cpp</file>
-            <file>file:/home/pavel/git-ant/ui_server/IMsgInLoginRequired.cpp</file>
-            <file>file:/home/pavel/git-ant/ui_server/MsgInDelGCMID.h</file>
-            <file>file:/home/pavel/git-ant/ui_server/IMsgIn.h</file>
+            <file>file:/home/pavel/git-ant/ui_server/gTokenChecker.cpp</file>
             <file>file:/home/pavel/git-ant/ui_server/MsgInAddAdapter.cpp</file>
-            <file>file:/home/pavel/git-ant/ui_server/DBConnector.cpp</file>
-            <file>file:/home/pavel/git-ant/ui_server/communication.cpp</file>
-            <file>file:/home/pavel/git-ant/ui_server/IMsgInLoginAndAdapterAccessRequired.cpp</file>
+            <file>file:/home/pavel/git-ant/ui_server/MsgInAddAccount.cpp</file>
+            <file>file:/home/pavel/git-ant/ui_server/MsgInGetConAccount.cpp</file>
             <file>file:/home/pavel/git-ant/ui_server/ui_server.cpp</file>
-            <file>file:/home/pavel/git-ant/ui_server/MsgInUnknown.cpp</file>
-            <file>file:/home/pavel/git-ant/ui_server/MsgInDelGCMID.cpp</file>
+            <file>file:/home/pavel/git-ant/ui_server/MsgInSetConAccount.cpp</file>
+            <file>file:/home/pavel/git-ant/ui_server/MsgInDelConAccount.cpp</file>
+            <file>file:/home/pavel/git-ant/ui_server/MsgInGetUID.cpp</file>
+            <file>file:/home/pavel/git-ant/ui_server/sslServlet.cpp</file>
+            <file>file:/home/pavel/git-ant/ui_server/ServerException.h</file>
+            <file>file:/home/pavel/git-ant/ui_server/DBConnector.cpp</file>
+            <file>file:/home/pavel/git-ant/ui_server/ServerException.cpp</file>
+            <file>file:/home/pavel/git-ant/ui_server/DBConnector.h</file>
         </group>
     </open-files>
 </project-private>

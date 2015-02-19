@@ -18,6 +18,18 @@ DBConnector& DBConnector::getInstance(){
         static DBConnector instance;
         return instance;
 }
+
+soci::session* DBConnector::getSession() {
+    session s = new session(*_pool);
+    return s;    
+}
+
+void DBConnector::releaseSession(soci::session session) {
+    delete session;
+    return;
+}
+
+
 void DBConnector::setConnectionStringAndOpenSessions(string conString, int sessionPoolSize){
     _connectionString = conString;
        //TODO pozor na deadlock, pokud nekde jsou 2 sql sessions pouzite za sebou
@@ -885,7 +897,7 @@ int DBConnector::addConAccount(string adapterId, string userMail, string newRole
     try{
         soci::session sql(*_pool);
         
-        sql << "LOCK TABLE users IN SHARE ROW EXCLUSIVE MODE";
+        //sql << "LOCK TABLE users IN SHARE ROW EXCLUSIVE MODE";
         
         sql << "insert into users( mail ) SELECT :mail "
 	"WHERE NOT EXISTS ("

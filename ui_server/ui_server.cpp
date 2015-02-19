@@ -102,7 +102,7 @@ int main(int argc, char** argv)
 
        resolveMsg( "<com ver=\"2.3\"  state=\"getuid\" email=\"n11@gmail.com\" gid=\"99191\" gt=\"1\" pid=\"1100\" loc=\"cs\" />");
         resolveMsg( "<com ver=\"2.3\"  uid=\"9\" state=\"addadapter\" aid=\"10\"     aname=\"home\"  />");
-    resolveMsg( "<com ver=\"2.3\"  state=\"getuid\" email=\"n11@gmail.com\" gid=\"99191\" gt=\"1\" pid=\"1100\" loc=\"cs\" />");
+        resolveMsg( "<com ver=\"2.3\"  state=\"getuid\" email=\"n11@gmail.com\" gid=\"99191\" gt=\"1\" pid=\"1100\" loc=\"cs\" />");
 
        
        SSL_CTX *ctx;
@@ -124,13 +124,11 @@ int main(int argc, char** argv)
             int client = accept(server, (struct sockaddr*)&addr, &len);  /* accept connection as usual */
             Logger::getInstance(Logger::DEBUG3)<<"socket accepted"<<endl;
             
-#ifdef DEBUG
-            printf("Connection: %s:%d\n",inet_ntoa(addr.sin_addr), ntohs(addr.sin_port));
-#endif
+            
             //create secured connection
             SSL *ssl;
-            ssl = SSL_new(ctx);              /* get new SSL state with context */
-            SSL_set_fd(ssl, client);      /* set connection socket to SSL state */
+            ssl = SSL_new(ctx);
+            SSL_set_fd(ssl, client);
             
             std::function<string(char*)> resolveFunc;// = &resolveMsg;
             
@@ -139,6 +137,7 @@ int main(int argc, char** argv)
             
             
             bool singleThread = false;
+            
             if(singleThread){
                 Servlet(ssl, resolveFunc);
             }else{
@@ -146,24 +145,28 @@ int main(int argc, char** argv)
                 while(*threadCounter > Config::getInstance().getServerThreadsNumber()) 
                     std::this_thread::sleep_for(std::chrono::milliseconds(50));
 
-                Logger::getInstance(Logger::DEBUG2)<<"threads c.:"<<(*threadCounter +1)<<endl;
-                Logger::getInstance(Logger::DEBUG2)<<"new thread started"<<endl;
+                Logger::getInstance(Logger::DEBUG2)<<"new thread started, threads c.:"<<(*threadCounter +1)<<endl;
                 
-                //create thread which
+                //create thread which serve phone
                 thread *t =  new thread( [ssl, threadCounter, resolveFunc](){
                     (*threadCounter)++;
                     Servlet(ssl,resolveFunc);
                     (*threadCounter)--;
                 });
             }
+            
         }
+        //wait till threads end their job
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
         while(*threadCounter){
             Logger::getInstance(Logger::DEBUG2)<<"wait- threads c.:"<<(*threadCounter +1)<<endl;
             std::this_thread::sleep_for(std::chrono::milliseconds(50));
         }
-        close(server);          /* close server socket */
-        SSL_CTX_free(ctx);         /* release context */
-        Logger::getInstance(Logger::FATAL) << "Server main thread exit\n";
+        
+        //close server socket 
+        close(server);
+        //release ssl
+        SSL_CTX_free(ctx);
+        Logger::getInstance(Logger::FATAL) << "ui_server done\n";
         return 0;
 }

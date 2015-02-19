@@ -27,6 +27,8 @@ private:
 public:
     int test;
     static DBConnector& getInstance();
+    soci::session * getSession();
+    void releaseSession(soci::session session);
     
     ~DBConnector(void);
     void setConnectionStringAndOpenSessions(string conString, int sessionPoolSize = 10);
