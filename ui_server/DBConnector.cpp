@@ -39,7 +39,6 @@ void DBConnector::setConnectionStringAndOpenSessions(string conString, int sessi
     for (size_t i = 0; i != _poolSize; ++i)
     {
         session & sql = _pool->at(i);
-        sql.
         sql.open(postgresql, _connectionString);
     }
 }
