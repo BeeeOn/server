@@ -96,4 +96,6 @@ public interface Value<T> {
     public int getOffset();
     public void setOffset(int offset);
     public void saveToXML(Element rootElement);
+    public long getGeneratorSeed();
+    public void setGeneratorSeed(long generatorSeed);
 }

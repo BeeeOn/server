@@ -189,4 +189,8 @@ public abstract class AbstractValue<T> implements Value<T>,HasGenerator{
     public void setValueHistory(ArrayList<T> valueHistory) {
         this.valueHistory = valueHistory;
     }
+
+    public Logger getLogger(){
+        return logger;
+    }
 }

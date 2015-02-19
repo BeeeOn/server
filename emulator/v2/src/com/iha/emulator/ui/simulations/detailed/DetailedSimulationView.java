@@ -271,9 +271,9 @@ public class DetailedSimulationView implements Initializable,DetailedSimulationP
     public void addAdapterBtn(AdapterButton newBtn) {
         //create if doesn't exist
         if(adapterBtns== null)adapterBtns = new ArrayList<>();
-        //add to gui
+        //save to gui
         adapterBtnsContainer.getChildren().add(0,newBtn);
-        //add to list
+        //save to list
         adapterBtns.add(newBtn);
         newBtn.setOnAction(adapterButtonClickHandler);
     }

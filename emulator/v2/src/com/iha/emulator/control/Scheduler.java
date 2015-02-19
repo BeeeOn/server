@@ -25,6 +25,7 @@ public class Scheduler extends Thread {
 
     public Scheduler(AdapterController adapterController) {
         this.adapterController = adapterController;
+        setName("Scheduler/" + adapterController.getAdapter().getId());
     }
 
     public void run(){
@@ -109,7 +110,7 @@ public class Scheduler extends Thread {
     }
 
     public void processTracking(OutMessage message){
-        //if is tracking on, add to end of successful message response time
+        //if is tracking on, save to end of successful message response time
         if(responseTracker.isEnabled()){
             message.appendToMsg(" -> " + responseTracker.getLastResponseValue() + "ms");
         }

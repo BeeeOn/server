@@ -116,7 +116,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
         if(this.servers == null){
             this.servers = FXCollections.observableArrayList();
         }else{
-            //add default server
+            //save default server
             this.servers.add(new Server(false,"New server...","",0,""));
         }
         //populate combo box
@@ -137,7 +137,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
                 };
             }
         });
-        //add change listener, if new item is selected in combo box, other fields are changed
+        //save change listener, if new item is selected in combo box, other fields are changed
         view.getServerComboBox().valueProperty().addListener((observable, oldValue, newValue) -> {
             if(oldValue == null){
                 view.getServerModifyCheckBox().setDisable(false);
@@ -170,7 +170,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
                 };
             }
         });
-        //add change listener, if new item is selected in combo box, other fields are changed
+        //save change listener, if new item is selected in combo box, other fields are changed
         view.getAdapterProtocolComboBox().valueProperty().addListener((observable, oldValue, newValue) -> {
             selectedVersion = (Protocol.Version) newValue;
         });
@@ -252,7 +252,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
         try {
             //create new adapter controller
             newAdapterController = new AdapterController();
-            //add it to list
+            //save it to list
             parent.getAdapterControllersList().add(newAdapterController);
             //create new adapter
             newAdapterController.createAdapter(
@@ -277,7 +277,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
             newAdapterController.bindSchedulerProcess(newAdapterController.getAdapter(), newAdapterController.getScheduler());
             //bind register message
             newAdapterController.bindRegisterMessage(newAdapterController);
-            //add new adapter button
+            //save new adapter button
             parent.addAdapterBtn(newAdapterController);
             // set new adapter as current
             parent.setCurrentAdapter(newAdapterController);

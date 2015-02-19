@@ -1,15 +1,19 @@
 package com.iha.emulator.ui.panels.sensor;
 
-import com.iha.emulator.models.Sensor;
+import com.iha.emulator.control.SensorController;
 import com.iha.emulator.models.value.Value;
 import com.iha.emulator.resources.images.sensor_types.SensorIcon;
 import com.iha.emulator.ui.Presenter;
+import com.iha.emulator.ui.dialogs.sensor.SensorDetailsDialogPresenter;
 import com.iha.emulator.ui.panels.PanelPresenter;
+import com.iha.emulator.ui.simulations.detailed.DetailedSimulationPresenter;
 import com.iha.emulator.utilities.Utilities;
+import javafx.application.Platform;
 import javafx.beans.binding.StringBinding;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -18,6 +22,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
+import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,6 +36,7 @@ public class SensorPanelPresenter implements Presenter,PanelPresenter{
 
     private static final Logger logger = LogManager.getLogger(SensorPanelPresenter.class);
     private static final String FXML_PATH = "SensorPanel.fxml";
+    private static final String CSS_PATH = "/com/iha/emulator/resources/css/theme-light.css";
 
     public interface Display {
         public Node getView();
@@ -47,7 +53,7 @@ public class SensorPanelPresenter implements Presenter,PanelPresenter{
     }
 
     private Display view;
-    private Sensor model;
+    private SensorController controller;
     private Node container;
 
     private SensorIcon iconType;
@@ -62,7 +68,29 @@ public class SensorPanelPresenter implements Presenter,PanelPresenter{
     }
 
     public void connection(){
-        model.setStatus(!model.getStatus());
+        controller.getModel().setStatus(!controller.getModel().getStatus());
+    }
+
+    public void settings(){
+        getController().disable();
+        SensorDetailsDialogPresenter sensorDetailsDialogPresenter;
+        try{
+            if(controller == null) throw new NullPointerException("Controller is null");
+            Stage stage = new Stage();
+            sensorDetailsDialogPresenter = new SensorDetailsDialogPresenter(stage,controller);
+            stage.setTitle("Add new adapter");
+            Scene scene = new Scene((Parent) sensorDetailsDialogPresenter.loadView());
+            // set css for view
+            logger.trace("Loading CSS from: " + CSS_PATH);
+            scene.getStylesheets().add(getClass().getResource(CSS_PATH).toExternalForm());
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.show();
+        } catch (IOException e) {
+            Platform.runLater(()->DetailedSimulationPresenter.showException(logger,"Cannot load sensor details dialog",e,false,null));
+        } catch (NullPointerException e){
+            Platform.runLater(()->DetailedSimulationPresenter.showException(logger,"Cannot load sensor controller",e,false,null));
+        }
     }
 
     public void deletePanel(){
@@ -99,7 +127,7 @@ public class SensorPanelPresenter implements Presenter,PanelPresenter{
     @SuppressWarnings("unchecked")
     public void addModel(Object newModel) {
         logger.trace("Assigning new model to SensorPanelPresenter");
-        if(this.model != null){
+        if(this.controller != null){
             logger.trace("Model already exists -> unbinding labels");
             unbindLbl(view.getStatusLbl());
             unbindLbl(view.getIdLbl());
@@ -110,16 +138,16 @@ public class SensorPanelPresenter implements Presenter,PanelPresenter{
         }else{
             logger.trace("No model = no need to unbind");
         }
-        this.model = (Sensor) newModel;
+        this.controller = (SensorController) newModel;
         logger.trace("New sensor model:");
         if (newModel != null) {
-            logger.trace("      Status: " + this.model.getStatus());
-            logger.trace("      Name: " + this.model.getName());
-            logger.trace("      Id: " + this.model.getId());
-            logger.trace("      Battery: " + this.model.getBattery());
-            logger.trace("      Signal: " + this.model.getSignal());
-            logger.trace("      Refresh time: " + this.model.getRefreshTime());
-            logger.trace("      Protocol: " + this.model.getProtocol().getVersion());
+            logger.trace("      Status: " + this.controller.getModel().getStatus());
+            logger.trace("      Name: " + this.controller.getModel().getName());
+            logger.trace("      Id: " + this.controller.getModel().getId());
+            logger.trace("      Battery: " + this.controller.getModel().getBattery());
+            logger.trace("      Signal: " + this.controller.getModel().getSignal());
+            logger.trace("      Refresh time: " + this.controller.getModel().getRefreshTime());
+            logger.trace("      Protocol: " + this.controller.getModel().getProtocol().getVersion());
         }else{
             logger.trace("      Model is null");
         }
@@ -127,11 +155,11 @@ public class SensorPanelPresenter implements Presenter,PanelPresenter{
         //bind GUI labels
         view.getStatusLbl().textProperty().bind(new StringBinding() {
             {
-                bind(model.statusProperty());
+                bind(controller.getModel().statusProperty());
             }
             @Override
             protected String computeValue() {
-                if(model.statusProperty().get()){
+                if(controller.getModel().statusProperty().get()){
                     return "Connected";
                 }else{
                     return "Disconnected";
@@ -140,49 +168,49 @@ public class SensorPanelPresenter implements Presenter,PanelPresenter{
         });
         view.getIdLbl().textProperty().bind(new StringBinding() {
             {
-                bind(model.idProperty());
+                bind(controller.getModel().idProperty());
             }
             @Override
             protected String computeValue() {
-                return Utilities.intToIpString(model.getId());
+                return Utilities.intToIpString(controller.getModel().getId());
             }
         });
-        view.getNameLbl().textProperty().bind(this.model.nameProperty());
+        view.getNameLbl().textProperty().bind(this.controller.getModel().nameProperty());
         view.getBatteryLbl().textProperty().bind(new StringBinding() {
             {
-                bind(model.batteryProperty());
+                bind(controller.getModel().batteryProperty());
             }
             @Override
             protected String computeValue() {
-                return model.getBattery() + "%";
+                return controller.getModel().getBattery() + "%";
             }
         });
         view.getSignalLbl().textProperty().bind(new StringBinding() {
             {
-                bind(model.signalProperty());
+                bind(controller.getModel().signalProperty());
             }
             @Override
             protected String computeValue() {
-                return model.getSignal() + "%";
+                return controller.getModel().getSignal() + "%";
             }
         });
         view.getRefreshTimeLbl().textProperty().bind(new StringBinding() {
             {
-                bind(model.refreshTimeProperty());
+                bind(controller.getModel().refreshTimeProperty());
             }
             @Override
             protected String computeValue() {
-                return Utilities.formatSeconds(model.getRefreshTime());
+                return Utilities.formatSeconds(controller.getModel().getRefreshTime());
             }
         });
         //bind GUI buttons
         view.getConnectionBtn().textProperty().bind(new StringBinding() {
             {
-                bind(model.statusProperty());
+                bind(controller.getModel().statusProperty());
             }
             @Override
             protected String computeValue() {
-                if(model.getStatus()){
+                if(controller.getModel().getStatus()){
                     return "Disconnect";
                 }else{
                     return "Connect";
@@ -191,13 +219,13 @@ public class SensorPanelPresenter implements Presenter,PanelPresenter{
         });
         logger.trace("OK");
         //show values in table and bind them
-        if(model.getValues().size() == 0) return;
+        if(controller.getModel().getValues().size() == 0) return;
         // values names column, setting to bind to value name
         ((TableColumn<Value,String>)view.getValueTable().getColumns().get(0)).setCellValueFactory(new PropertyValueFactory<>("name"));
         // values column, setting to show UI item according to value's type
         ((TableColumn<Value,Object>)view.getValueTable().getColumns().get(1)).setCellValueFactory(new SensorValueFactory());
         ((TableColumn<Value,Value>)view.getValueTable().getColumns().get(1)).setCellFactory(param -> new SensorValueCellFactory());
-        view.getValueTable().setItems(model.getValues());
+        view.getValueTable().setItems(controller.getModel().getValues());
     }
 
     public void setHeaderColor(String hexColor){
@@ -238,7 +266,11 @@ public class SensorPanelPresenter implements Presenter,PanelPresenter{
 
     @Override
     public Object getModel() {
-        return model;
+        return controller.getModel();
+    }
+
+    public SensorController getController(){
+        return controller;
     }
 
     @Override
@@ -255,8 +287,5 @@ public class SensorPanelPresenter implements Presenter,PanelPresenter{
     public void bind() {
         view.setPresenter(this);
     }
-
-
-
 
 }

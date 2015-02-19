@@ -28,7 +28,6 @@ import org.apache.logging.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.Element;
 
-import javax.print.Doc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -225,7 +224,7 @@ public class AdapterController{
             }else{
                 newPanel.setIcon(SensorIcon.UNKNOWN);
             }
-            newPanel.addModel(sensorController.getModel());
+            newPanel.addModel(sensorController);
             sensorController.setPanel(newPanel);
         } catch (IOException e) {
             throw new LoadException("Cannot initiate new sensor panel.Error while loading FXML file",e);
@@ -248,7 +247,7 @@ public class AdapterController{
                 newPanel.setIcon(SensorIcon.UNKNOWN);
             }
             controller = createSensor(values,status,id,name,battery,signal,refreshTime,protocol);
-            newPanel.addModel(controller.getModel());
+            newPanel.addModel(controller);
             controller.setPanel(newPanel);
         } catch (IOException e) {
             throw new LoadException("Cannot initiate new sensor panel.Error while loading FXML file",e);

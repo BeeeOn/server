@@ -41,7 +41,6 @@ public class ServerController {
             }
             Platform.runLater(() -> getModel().setConn(true));
             ByteBuffer out = ByteBuffer.wrap(message.asXML().getBytes());
-            //TODO start tracking response time
             if(responseTracker.isEnabled()) responseStart = System.currentTimeMillis();
             while (out.hasRemaining()){
                 socketChannel.write(out);
@@ -56,11 +55,9 @@ public class ServerController {
                     if(bytesRead == -1){
                         throw new WrongResponseException("Wrong response from server");
                     }
-                    //TODO stop tracking response time
                     if(responseTracker.isEnabled()) responseTracker.addResponse(responseStart,System.currentTimeMillis());
                     break;
                 case REGISTER_ADAPTER:
-                    //TODO stop tracking response time
                     if(responseTracker.isEnabled()) responseTracker.addResponse(responseStart,System.currentTimeMillis());
                     return null;
             }

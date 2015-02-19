@@ -40,20 +40,20 @@ public class ZeroPointOne extends AbstractProtocol {
 
     @Override
     public Document buildSensorMessage(Element rootElement,Sensor sensor) {
-        //add device tag
+        //save device tag
         Element deviceElement = rootElement.addElement("device")
                 .addAttribute("id", getHexSensorId(sensor));
-        //add battery tag
+        //save battery tag
         deviceElement.addElement("battery")
                 .addAttribute("value",String.valueOf(sensor.getBattery()));
-        //add signal tag
+        //save signal tag
         deviceElement.addElement("rssi")
                 .addAttribute("value",String.valueOf(sensor.getSignal()));
-        //add values tag
+        //save values tag
 
         Element valuesElement = deviceElement.addElement("values")
                 .addAttribute("count",String.valueOf(sensor.getValues().size()));
-        //add individual values
+        //save individual values
         for(Value value : sensor.getValues()){
             valuesElement.addElement("value")
                     .addAttribute("type",value.getValueType().getType())

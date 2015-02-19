@@ -46,6 +46,7 @@ public class SensorPanelView implements Initializable,SensorPanelPresenter.Displ
     @FXML
     public void handleSettings(ActionEvent event) {
         logger.trace("Sensor settings Clicked!");
+        presenter.settings();
     }
 
     @Override

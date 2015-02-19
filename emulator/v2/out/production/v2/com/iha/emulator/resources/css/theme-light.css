@@ -457,7 +457,7 @@
     -fx-font-weight: bold;
 }
 
-/** FIXGUI add min width and height, change sensor icons to smaller size**/
+/** FIXGUI save min width and height, change sensor icons to smaller size**/
 .sensorPanelHeader {
     -fx-background-color: rgb(12,223,86);
     -fx-pref-width: 230px;

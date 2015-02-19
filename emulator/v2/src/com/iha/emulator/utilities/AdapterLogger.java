@@ -8,7 +8,6 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.text.Text;
@@ -33,7 +32,7 @@ public class AdapterLogger {
     private static final String TIME_PATTERN = "HH:mm:ss(SSS)";
     private static DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(TIME_PATTERN);
 
-    private static final int BUFFER_LINE_COUNT_MAX = 80;
+    private static final int BUFFER_LINE_COUNT_MAX = 60;
 
     public enum Type{
         FULL,
@@ -78,7 +77,26 @@ public class AdapterLogger {
         if(adapterLog!= null){
             //don't wont to show empty messages
             if(message.equals("")) return;
+            String timeAndMessage = timeFormatter.format(LocalTime.now())  + " - " + message + "\n";
+            //write message to file
             if(buffered && bufferWriter != null){
+                try {
+                    bufferWriter.write(timeAndMessage);
+                    bufferWriter.flush();
+                } catch (IOException e) {
+                    DetailedSimulationPresenter.showException(logger,"Cannot write line \"" + message + "\" to buffer file!",e,false,null);
+                }
+            }
+            //delete already buffered messages from log
+            if(adapterLog.getChildren().size() > BUFFER_LINE_COUNT_MAX){
+                Platform.runLater(() -> adapterLog.getChildren().remove(0, BUFFER_LINE_COUNT_MAX / 2));
+            }
+            //write message to log
+            Platform.runLater(() -> {
+                adapterLog.getChildren().add(new Text(timeAndMessage));
+                ((ScrollPane)adapterLogContainer).setVvalue(1.0);
+            });
+            /*if(buffered && bufferWriter != null){
                 if(adapterLog.getChildren().size() > BUFFER_LINE_COUNT_MAX){
                     ObservableList<Node> lines = adapterLog.getChildren();
                     for(int i = 0; i < BUFFER_LINE_COUNT_MAX - 5;i++){
@@ -95,9 +113,8 @@ public class AdapterLogger {
             Platform.runLater(() -> {
                 adapterLog.getChildren().add(new Text(timeFormatter.format(LocalTime.now()) + " - " + message + "\n"));
                 ((ScrollPane)adapterLogContainer).setVvalue(1.0);
-            });
+            });*/
         }
-
     }
 
     public synchronized void sent(String message){
@@ -182,11 +199,12 @@ public class AdapterLogger {
         errorLog.getChildren().clear();
     }
 
-    private void closeBuffer(){
+    public void closeBuffer(){
         if(this.bufferWriter != null){
             try {
                 bufferWriter.flush();
                 bufferWriter.close();
+                bufferFile.delete();
             } catch (IOException e) {
                 DetailedSimulationPresenter.showException(logger,"Cannot close adapter logger buffer",e,false,null);
             }
@@ -300,6 +318,10 @@ public class AdapterLogger {
 
     public BooleanProperty shortMessageProperty() {
         return shortMessage;
+    }
+
+    public File getBufferFile(){
+        return bufferFile;
     }
 
     @SuppressWarnings("unused")

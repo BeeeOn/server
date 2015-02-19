@@ -58,6 +58,14 @@ public class SensorController {
         });
     }
 
+    public void enable(){
+        getModel().setStatus(true);
+    }
+
+    public void disable(){
+        getModel().setStatus(false);
+    }
+
     public void startTimer(){
         logger.trace("Sensor/" + getSensorIdAsIp() + " timer started");
         if(timer != null) timer.play();

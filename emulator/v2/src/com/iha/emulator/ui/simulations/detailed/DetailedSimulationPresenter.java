@@ -19,8 +19,8 @@ import com.iha.emulator.ui.dialogs.adapter.ChangeAdapterDetailsDialogPresenter;
 import com.iha.emulator.ui.dialogs.adapter.DeleteAdaptersDialogPresenter;
 import com.iha.emulator.ui.dialogs.log.ShowFullLogPresenter;
 import com.iha.emulator.ui.dialogs.sensor.AddNewSensorDialogPresenter;
-import com.iha.emulator.ui.dialogs.sensor.ChangeServerDetailsDialogPresenter;
 import com.iha.emulator.ui.dialogs.sensor.DeleteSensorsDialogPresenter;
+import com.iha.emulator.ui.dialogs.server.ChangeServerDetailsDialogPresenter;
 import com.iha.emulator.ui.panels.adapter.AdapterButton;
 import com.iha.emulator.ui.panels.adapter.details.AdapterDetailsPresenter;
 import com.iha.emulator.ui.panels.server.details.ServerDetailsPresenter;
@@ -184,7 +184,7 @@ public class DetailedSimulationPresenter implements Presenter{
             try {
                 //create new adapter controller
                 newAdapterController = new AdapterController();
-                //add it to list
+                //save it to list
                 adapterControllersList.add(newAdapterController);
                 //create new adapter
                 newAdapterController.createAdapter(false,99999-i,false, Protocol.Version.ZERO_POINT_ONE,Double.valueOf(getProperty("defaultFirmware")));
@@ -203,7 +203,7 @@ public class DetailedSimulationPresenter implements Presenter{
                 newAdapterController.bindSchedulerProcess(newAdapterController.getAdapter(), newAdapterController.getScheduler());
                 //bind register message
                 newAdapterController.bindRegisterMessage(newAdapterController);
-                //add new adapter button
+                //save new adapter button
                 addAdapterBtn(newAdapterController);
                 // set new adapter as current
                 setCurrentAdapter(newAdapterController);
@@ -301,15 +301,15 @@ public class DetailedSimulationPresenter implements Presenter{
         ShowFullLogPresenter showFullLogPresenter;
         try{
             Stage stage = new Stage();
-            if(currentAdapterController == null) return;
-            showFullLogPresenter = new ShowFullLogPresenter(stage,currentAdapterController.getAdapter());
+            if(currentAdapterController == null || currentAdapterController.getLog().getBufferFile() == null) return;
+            showFullLogPresenter = new ShowFullLogPresenter(stage,currentAdapterController);
             stage.setTitle("Full log for adapter: " + currentAdapterController.getAdapter().getName() + " / " + String.valueOf(currentAdapterController.getAdapter().getId()));
             Scene scene = new Scene((Parent) showFullLogPresenter.loadView());
             // set css for view
             logger.trace("Loading CSS from: " + CSS_PATH);
             scene.getStylesheets().add(getClass().getResource(CSS_PATH).toExternalForm());
             stage.setScene(scene);
-            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initModality(Modality.NONE);
             stage.setResizable(true);
             stage.show();
         } catch (IOException e) {
@@ -344,9 +344,7 @@ public class DetailedSimulationPresenter implements Presenter{
             stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
-            showException(logger,"Cannot load dialog for adding adapter!",e,false,null);
-        } catch (IllegalArgumentException ei){
-            showException(logger,"Cannot create adapter. Error in properties file. Please review file an start application again.",ei,true,event->quit());
+            showException(logger,"Cannot load dialog for deleting adapter!",e,false,null);
         }
     }
 
@@ -395,9 +393,7 @@ public class DetailedSimulationPresenter implements Presenter{
             stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
-            showException(logger,"Cannot load dialog for adding adapter!",e,false,null);
-        } catch (IllegalArgumentException ei){
-            showException(logger,"Cannot create adapter. Error in properties file. Please review file an start application again.",ei,true,event->quit());
+            showException(logger,"Cannot load dialog for deleting sensor!",e,false,null);
         }
     }
 
@@ -471,7 +467,7 @@ public class DetailedSimulationPresenter implements Presenter{
                 view.getSensorPanelContainer().getChildren().remove(controller.getPanel().getView());
             }
         }
-        //add sensor panels from adapter to be set as current
+        //save sensor panels from adapter to be set as current
         if(newController.getSensorControllersList() != null && newController.getSensorControllersList().size() != 0) {
             for(SensorController controller : newController.getSensorControllersList()){
                 view.getSensorPanelContainer().getChildren().add(0,controller.getPanel().getView());
@@ -564,7 +560,7 @@ public class DetailedSimulationPresenter implements Presenter{
             }
             Stage stage = new Stage();
             if(currentAdapterController == null) throw new NullPointerException("No current adapter");
-            changeServerDetailsDialogPresenter = new ChangeServerDetailsDialogPresenter(stage,tmp,this,currentAdapterController);
+            changeServerDetailsDialogPresenter = new ChangeServerDetailsDialogPresenter(stage,tmp,currentAdapterController);
             stage.setTitle("Change server details");
             Scene scene = new Scene((Parent) changeServerDetailsDialogPresenter.loadView());
             // set css for view
@@ -575,9 +571,9 @@ public class DetailedSimulationPresenter implements Presenter{
             stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
-            showException(logger,"Cannot load dialog for adding sensor!",e,false,null);
+            showException(logger,"Cannot load server details dialog!",e,false,null);
         } catch (NullPointerException en){
-            showException(logger,"Cannot create new sensor",en,false,null);
+            showException(logger,"Cannot load server",en,false,null);
         }
     }
 
@@ -599,9 +595,9 @@ public class DetailedSimulationPresenter implements Presenter{
             stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
-            showException(logger,"Cannot load dialog for adding sensor!",e,false,null);
+            showException(logger,"Cannot load adapter details dialog!",e,false,null);
         } catch (NullPointerException en){
-            showException(logger,"Cannot create new sensor",en,false,null);
+            showException(logger,"Cannot load adapter",en,false,null);
         }
 
     }
@@ -610,7 +606,7 @@ public class DetailedSimulationPresenter implements Presenter{
         logger.trace("Trying to load from XML file");
         try {
             String content = Utilities.loadDialogForXML(window, SAVES_DEFAULT_DIR);
-            if(content == null) throw new DocumentException("File is null");
+            if(content == null) return;
             parseAndLoadXML(content);
         } catch (DocumentException e) {
             DetailedSimulationPresenter.showException(logger, "Cannot parse loaded file", e, false, null);
@@ -717,6 +713,8 @@ public class DetailedSimulationPresenter implements Presenter{
                                     ((HasLinearDistribution)tmpValue).setStep(Double.valueOf(generatorElement.element("params").attributeValue("step")));
                                     break;
                             }
+                            Long generatorSeed = Long.valueOf(generatorElement.attributeValue("seed"));
+                            tmpValue.setGeneratorSeed(generatorSeed);
                         }
                         values.add(tmpValue);
                     }
@@ -766,7 +764,7 @@ public class DetailedSimulationPresenter implements Presenter{
         loadProperties(defaultPropertiesFileName);
         //point logger to textArea
         TextAreaAppender.setTextFlow(view.getApplicationLogTextArea());
-        //init presenters and add their views to GUI
+        //init presenters and save their views to GUI
         initPresentersAndViews();
         //disable toolbar buttons
         view.setAdapterBtns(true,true);
@@ -1140,9 +1138,15 @@ public class DetailedSimulationPresenter implements Presenter{
         }
     }
 
+    private void removeTempFiles(){
+        if(getAdapterControllers().size() < 1) return;
+        getAdapterControllers().stream().filter(a->a.getLog().getBufferFile()!=null).forEach(a->a.getLog().closeBuffer());
+    }
+
     public void quit(){
         memoryChecker.stop();
         if(serverListener != null) serverListener.terminateServerListener();
+        removeTempFiles();
         Platform.exit();
     }
     //endregion
