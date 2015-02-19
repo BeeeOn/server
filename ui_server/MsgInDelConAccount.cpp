@@ -18,7 +18,7 @@ MsgInDelConAccount::~MsgInDelConAccount() {
 }
 
 int MsgInDelConAccount::getMsgAuthorization() {
-    return SUPERUSER;
+    return GUEST;
 }
 
 string MsgInDelConAccount::createResponseMsgOut()
