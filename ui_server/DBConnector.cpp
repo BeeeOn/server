@@ -20,11 +20,11 @@ DBConnector& DBConnector::getInstance(){
 }
 
 soci::session* DBConnector::getSession() {
-    session s = new session(*_pool);
+    session* s = new session(*_pool);
     return s;    
 }
 
-void DBConnector::releaseSession(soci::session session) {
+void DBConnector::releaseSession(soci::session* session) {
     delete session;
     return;
 }
