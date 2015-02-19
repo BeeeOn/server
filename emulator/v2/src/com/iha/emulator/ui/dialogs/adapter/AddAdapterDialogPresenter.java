@@ -1,5 +1,10 @@
 package com.iha.emulator.ui.dialogs.adapter;
 
+import com.iha.emulator.communication.eserver.EmulatorServerClient;
+import com.iha.emulator.communication.eserver.model.AdapterInfo;
+import com.iha.emulator.communication.eserver.task.ServerTask;
+import com.iha.emulator.communication.eserver.task.TaskParser;
+import com.iha.emulator.communication.eserver.task.implemented.CheckIdTask;
 import com.iha.emulator.communication.protocol.Protocol;
 import com.iha.emulator.control.AdapterController;
 import com.iha.emulator.models.Server;
@@ -8,11 +13,6 @@ import com.iha.emulator.ui.panels.PanelPresenter;
 import com.iha.emulator.ui.simulations.detailed.DetailedSimulationPresenter;
 import com.iha.emulator.utilities.AdapterLogger;
 import com.iha.emulator.utilities.Utilities;
-import com.iha.emulator.communication.eserver.EmulatorServerClient;
-import com.iha.emulator.communication.eserver.model.AdapterInfo;
-import com.iha.emulator.communication.eserver.task.ServerTask;
-import com.iha.emulator.communication.eserver.task.TaskParser;
-import com.iha.emulator.communication.eserver.task.implemented.CheckIdTask;
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
@@ -529,7 +529,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
                 ValidationResult.fromErrorIf(view.getAdapterIdLbl(), "ID must be an integer number", !Utilities.isIntegerNumber(newValue, 1, 10)));
         adapterValidationSupport.registerValidator(view.getAdapterFirmwareLbl(), false, Validator.createEmptyValidator("Firmware is required"));
         adapterValidationSupport.registerValidator(view.getAdapterFirmwareLbl(), false, (Control c, String newValue) ->
-                ValidationResult.fromErrorIf(view.getAdapterIdLbl(), "Firmware must be an integer number", !Utilities.isIntegerNumber(newValue, 1, 4)));
+                ValidationResult.fromErrorIf(view.getAdapterFirmwareLbl(), "Firmware must be a number", !Utilities.isNumeric(newValue)));
         adapterValidationSupport.registerValidator(view.getAdapterProtocolComboBox(), false, (Control c, Protocol.Version version) ->
                 ValidationResult.fromErrorIf(view.getAdapterProtocolComboBox(), "Protocol version is required", (version == null)));
         //--adapter placeholders

@@ -6,25 +6,20 @@ import com.iha.emulator.control.SensorController;
 import com.iha.emulator.models.Server;
 import com.iha.emulator.ui.simulations.detailed.DetailedSimulationPresenter;
 import javafx.beans.property.LongProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ChoiceDialog;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.dom4j.DocumentException;
 
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
-import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Random;
 import java.util.prefs.Preferences;
@@ -77,7 +72,7 @@ public class Utilities {
     public static ObservableList<Server> buildServersFromProperties(Properties properties,LongProperty progress) throws IllegalArgumentException{
         ObservableList<Server> servers = FXCollections.observableArrayList();
         String serversProperty = properties.getProperty("servers", null);
-        progress.set(10);
+        if(progress != null ) progress.set(10);
         if(serversProperty == null) throw new IllegalArgumentException("Cannot find property \"servers\" in properties file");
         String[] serversArray = serversProperty.split(",");
         for (String serverProperty : serversArray){
@@ -90,7 +85,7 @@ public class Utilities {
             try {
                 Server server = new Server(false,serverProperty,tmpServer,Integer.valueOf(tmpPort),tmpDbName);
                 servers.add(server);
-                progress.set(progress.get()+(90/serversArray.length));
+                if(progress != null ) progress.set(progress.get()+(90/serversArray.length));
             } catch (NumberFormatException en){
                 throw new IllegalArgumentException("Cannot parse port to integer on property \"" + serverProperty +"_server_port\" in properties file",en);
             }
@@ -287,6 +282,19 @@ public class Utilities {
         Pattern pattern = Pattern.compile("\\d{"+minDigits+","+maxDigits+"}");
         Matcher matcher = pattern.matcher(number);
         return matcher.matches();
+    }
+
+    public static boolean isNumeric(String str)
+    {
+        try
+        {
+            double d = Double.parseDouble(str);
+        }
+        catch(NumberFormatException nfe)
+        {
+            return false;
+        }
+        return true;
     }
 
     public static String formatSeconds(int seconds){

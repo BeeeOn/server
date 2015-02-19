@@ -9,8 +9,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -187,9 +185,15 @@ public class DetailedSimulationView implements Initializable,DetailedSimulationP
     }
 
     @FXML
-    public void handleChangeServerSettings(ActionEvent event){
+    public void handleChangeServerDetails(ActionEvent event){
         logger.trace("Change server settings Clicked!");
-        presenter.changeServerSettings();
+        presenter.changeServerDetails();
+    }
+
+    @FXML
+    public void handleChangeAdapterDetails(ActionEvent event){
+        logger.trace("Change adapter details Clicked!");
+        presenter.changeAdapterDetails();
     }
 
     @Override

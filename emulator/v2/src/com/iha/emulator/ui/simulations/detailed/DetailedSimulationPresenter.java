@@ -15,9 +15,11 @@ import com.iha.emulator.resources.images.sensor_types.SensorIcon;
 import com.iha.emulator.resources.images.sensor_types.SensorIconFactory;
 import com.iha.emulator.ui.Presenter;
 import com.iha.emulator.ui.dialogs.adapter.AddAdapterDialogPresenter;
+import com.iha.emulator.ui.dialogs.adapter.ChangeAdapterDetailsDialogPresenter;
 import com.iha.emulator.ui.dialogs.adapter.DeleteAdaptersDialogPresenter;
 import com.iha.emulator.ui.dialogs.log.ShowFullLogPresenter;
 import com.iha.emulator.ui.dialogs.sensor.AddNewSensorDialogPresenter;
+import com.iha.emulator.ui.dialogs.sensor.ChangeServerDetailsDialogPresenter;
 import com.iha.emulator.ui.dialogs.sensor.DeleteSensorsDialogPresenter;
 import com.iha.emulator.ui.panels.adapter.AdapterButton;
 import com.iha.emulator.ui.panels.adapter.details.AdapterDetailsPresenter;
@@ -54,7 +56,8 @@ import org.controlsfx.dialog.ExceptionDialog;
 import org.controlsfx.dialog.ProgressDialog;
 import org.dom4j.*;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Properties;
@@ -546,9 +549,61 @@ public class DetailedSimulationPresenter implements Presenter{
         th.start();
     }
 
-    public void changeServerSettings(){
+    public void changeServerDetails(){
         if(this.currentAdapterController == null) return;
         logger.trace("Show change server details dialog.");
+        ChangeServerDetailsDialogPresenter changeServerDetailsDialogPresenter;
+        try{
+            ObservableList<Server> tmp = null;
+            try{
+                tmp = Utilities.buildServersFromProperties(properties,null);
+
+            }catch (IllegalArgumentException e){
+                Platform.runLater(() -> showAddAdapterDialog(null));
+                Platform.runLater(() -> showException(logger,"Cannot load settings from properties file" ,e,false,null));
+            }
+            Stage stage = new Stage();
+            if(currentAdapterController == null) throw new NullPointerException("No current adapter");
+            changeServerDetailsDialogPresenter = new ChangeServerDetailsDialogPresenter(stage,tmp,this,currentAdapterController);
+            stage.setTitle("Change server details");
+            Scene scene = new Scene((Parent) changeServerDetailsDialogPresenter.loadView());
+            // set css for view
+            logger.trace("Loading CSS from: " + CSS_PATH);
+            scene.getStylesheets().add(getClass().getResource(CSS_PATH).toExternalForm());
+            stage.setScene(scene);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
+            stage.show();
+        } catch (IOException e) {
+            showException(logger,"Cannot load dialog for adding sensor!",e,false,null);
+        } catch (NullPointerException en){
+            showException(logger,"Cannot create new sensor",en,false,null);
+        }
+    }
+
+    public void changeAdapterDetails(){
+        if(this.currentAdapterController == null) return;
+        logger.trace("Show change adapter details dialog.");
+        ChangeAdapterDetailsDialogPresenter changeAdapterDetailsDialogPresenter;
+        try{
+            Stage stage = new Stage();
+            if(currentAdapterController == null) throw new NullPointerException("No current adapter");
+            changeAdapterDetailsDialogPresenter = new ChangeAdapterDetailsDialogPresenter(stage,currentAdapterController);
+            stage.setTitle("Change adapter details");
+            Scene scene = new Scene((Parent) changeAdapterDetailsDialogPresenter.loadView());
+            // set css for view
+            logger.trace("Loading CSS from: " + CSS_PATH);
+            scene.getStylesheets().add(getClass().getResource(CSS_PATH).toExternalForm());
+            stage.setScene(scene);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
+            stage.show();
+        } catch (IOException e) {
+            showException(logger,"Cannot load dialog for adding sensor!",e,false,null);
+        } catch (NullPointerException en){
+            showException(logger,"Cannot create new sensor",en,false,null);
+        }
+
     }
 
     public void open(){

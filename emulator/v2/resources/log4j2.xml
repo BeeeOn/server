@@ -39,6 +39,12 @@
         <Logger name="com.iha.emulator.ui.dialogs.adapter.DeleteAdaptersDialogPresenter" level="trace"/>
         <Logger name="com.iha.emulator.ui.dialogs.adapter.DeleteAdaptersDialogView" level="${globalViewLevel}"/>
 
+        <Logger name="com.iha.emulator.ui.dialogs.adapter.ChangeAdapterDetailsDialogPresenter" level="trace"/>
+        <Logger name="com.iha.emulator.ui.dialogs.adapter.ChangeAdapterDetailsDialogView" level="${globalViewLevel}"/>
+
+        <Logger name="com.iha.emulator.ui.dialogs.sensor.ChangeServerDetailsDialogPresenter" level="trace"/>
+        <Logger name="com.iha.emulator.ui.dialogs.sensor.ChangeServerDetailsDialogView" level="${globalViewLevel}"/>
+
         <Logger name="com.iha.emulator.models.Adapter" level="${globalModelLevel}"/>
         <Logger name="com.iha.emulator.control.AdapterController" level="${globalControllerLevel}"/>
         <Logger name="com.iha.emulator.control.SensorController" level="${globalControllerLevel}"/>
