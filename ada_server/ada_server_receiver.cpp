@@ -292,9 +292,16 @@ void ConnectionServer::HandleConnection (in_addr IP)
 			}
 			else
 			{
-				Log->WriteMessage(WARN,"Unsupported protocol version");
-				Log->WriteMessage(TRACE,"Exiting " + this->_Name + "::HandleConnection");
-				return;
+				try
+				{
+					MP = new ProtocolV1MessageParser();
+				}
+				catch (std::exception &e)
+				{
+					Log->WriteMessage(ERR,"Unable to create space for Protocol parser exiting client won't be server!");
+					Log->WriteMessage(TRACE,"Exiting " + this->_Name + "::HandleConnection");
+					return;
+				}
 			}
 		}
 	}
