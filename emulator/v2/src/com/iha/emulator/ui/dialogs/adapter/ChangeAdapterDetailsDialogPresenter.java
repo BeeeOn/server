@@ -152,11 +152,7 @@ public class ChangeAdapterDetailsDialogPresenter implements Presenter,PanelPrese
             adapterController.setSaved(false);
         }
         boolean yesSelected;
-        if(view.getAdapterYesRegisteredRadBtn().isSelected()) {
-            yesSelected = true;
-        }else {
-            yesSelected = false;
-        }
+        yesSelected = view.getAdapterYesRegisteredRadBtn().isSelected();
         if(adapterController.getAdapter().getRegistered() != yesSelected){
             logger.debug("Setting adapter registered (old/new) -> " + adapterController.getAdapter().getRegistered() + "/" + yesSelected);
             adapterController.getAdapter().setRegistered(yesSelected);

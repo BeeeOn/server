@@ -22,6 +22,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.LoadException;
 import javafx.scene.Node;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.FlowPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -55,7 +56,6 @@ public class AdapterController{
 
     public AdapterController() {
         this.internetConnection = new SimpleBooleanProperty(true);
-        this.log = new AdapterLogger();
     }
 
     public void enable(){
@@ -91,6 +91,15 @@ public class AdapterController{
         }
     }
 
+    public void sendError(String message){
+        sendError(message,null);
+    }
+
+    public void sendError(String message,Throwable t){
+        if(t != null) message = message + " -> " + t.getMessage();
+        getLog().error(message);
+    }
+
     public void changeValueOnSensor(int sensorId,ArrayList<SetNewValue> newValues) throws IllegalArgumentException{
         SensorController sensorController = getSensorById(sensorId);
         if(sensorController == null)
@@ -111,7 +120,7 @@ public class AdapterController{
         if(sensorControllers == null) return;
         String name = sensorControllers.toString();
         for(Iterator<SensorController> it = sensorControllers.iterator();it.hasNext();){
-            SensorController sensorController = (SensorController)it.next();
+            SensorController sensorController = it.next();
             logger.debug(name + " -> Deleting");
             sensorController.stopTimer();
             if(sensorController.getPanel() != null ) {
@@ -189,7 +198,7 @@ public class AdapterController{
 
     public Adapter createAdapter(String name,boolean status,int id,boolean registered,Protocol.Version protocolVersion,double firmware){
         logger.trace("Creating adapter model: "+ "name->"+name + "status->"+status + " id->"+id + " registered->"+registered + " protocol->" + protocolVersion + " firmware->" + firmware);
-        if(name.equals("")){
+        if(name != null && name.equals("")){
             this.adapter = new Adapter(status,id,registered,protocolVersion,firmware);
         }else{
             this.adapter = new Adapter(name,status,id,registered,protocolVersion,firmware);
@@ -381,6 +390,10 @@ public class AdapterController{
 
     public void createLog(){
         this.log = new AdapterLogger();
+    }
+
+    public void createLog(TabPane tabPane){
+        this.log = new AdapterLogger(tabPane);
     }
 
     private void setValuesOffsets(ObservableList<Value> values){

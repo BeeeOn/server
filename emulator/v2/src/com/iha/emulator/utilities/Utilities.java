@@ -261,6 +261,15 @@ public class Utilities {
         return stringBuffer.toString();
     }
 
+    public static boolean isAdapterIdTaken(ObservableList<AdapterController> adapterControllers,int newId){
+        if(adapterControllers.size() == 0) return false;
+        for(AdapterController adapterController : adapterControllers){
+            if(adapterController.getAdapter().getId() == newId)
+                return true;
+        }
+        return false;
+    }
+
     public static boolean isSensorIdTaken(AdapterController controller,String sensorId){
         if(sensorId.equals("")) return false;
         int id = Utilities.ipStringToInt(sensorId);
@@ -442,8 +451,9 @@ public class Utilities {
      * Generates new value from current one with accuracy given as parameters.
      * Accuracy = 10 for 1 decimal, 100 for to decimals, ...
      */
-    public static double normalDistribution(Random generator,int accuracy,double dev,double avg,double max, double min){
-        if(generator == null) throw new NullPointerException("Generator is null. Cannot generate new value");
+    public static double normalDistribution(Random generator,int accuracy,double dev,double avg,double max, double min) throws IllegalArgumentException{
+        if(generator == null) throw new IllegalArgumentException("Generator is null. Cannot generate new value");
+        if(max < min) throw new IllegalArgumentException("Max value is smaller than min value");
         double newValue;
         do{
             double val = generator.nextGaussian() * dev + avg;
@@ -453,6 +463,27 @@ public class Utilities {
         return newValue;
     }
 
+    public static double linearDistribution(double value,double step,double max,double min) throws IllegalArgumentException{
+        if(max < min) throw new IllegalArgumentException("Max value is smaller than min value");
+        double newValue = value + step;
+        if(newValue > max){
+            logger.trace("Linear distribution reached max, returning max -> " + max);
+            return max;
+        }
+        if(newValue < min) {
+            logger.trace("Linear distribution smaller than minimum, returning min -> " + min);
+            return min;
+        }
+        logger.trace("Generating new value with linear distribution: newVal -> " + newValue);
+        return newValue;
+    }
+
+    public static boolean booleanRandomGenerate(boolean value,double probability,Random generator){
+        if(generator == null) throw new IllegalArgumentException("Generator is null. Cannot generate new value");
+        boolean newValue =generator.nextDouble() <= probability ? !value : value;
+        logger.trace("Generating new boolean random value: newVal -> " + newValue);
+        return newValue;
+    }
 
     private boolean checkIfExists(String filename){
         File file = new File(filename);

@@ -37,7 +37,6 @@ public class ChangeServerDetailsDialogPresenter implements Presenter,PanelPresen
     private static final String FXML_PATH = "ChangeServerDetailsDialog.fxml";
     private static final String CSS_PATH = "/com/iha/emulator/resources/css/theme-light.css";
     private ValidationSupport serverValidationSupport = new ValidationSupport();
-    private ValidationDecoration iconDecorator = new StyleClassValidationDecoration("validationError","validationWarn");
 
     private Display view;
     private Stage window;
@@ -63,6 +62,7 @@ public class ChangeServerDetailsDialogPresenter implements Presenter,PanelPresen
 
     public ChangeServerDetailsDialogPresenter(Stage stage, ObservableList<Server> servers, AdapterController adapterController) {
         this.serverInfoSet = new SimpleBooleanProperty(false);
+        ValidationDecoration iconDecorator = new StyleClassValidationDecoration("validationError", "validationWarn");
         serverValidationSupport.setValidationDecorator(iconDecorator);
         this.window = stage;
         this.servers = servers;
@@ -166,7 +166,7 @@ public class ChangeServerDetailsDialogPresenter implements Presenter,PanelPresen
             model.setDatabaseName(view.getServerDbNameTxtField().getText());
             adapterController.setSaved(false);
         }
-        if(!model.equals(view.getServerIpTxtField().getText())){
+        if(!model.getIp().equals(view.getServerIpTxtField().getText())){
             model.setIp(view.getServerIpTxtField().getText());
             adapterController.setSaved(false);
         }

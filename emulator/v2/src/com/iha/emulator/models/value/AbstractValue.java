@@ -27,6 +27,7 @@ public abstract class AbstractValue<T> implements Value<T>,HasGenerator{
     private boolean storeHistory;
     private Random generator;
     private Long generatorSeed;
+    private ObjectProperty<Generator> generatorType;
 
     private ArrayList<T> valueHistory;
 
@@ -57,6 +58,7 @@ public abstract class AbstractValue<T> implements Value<T>,HasGenerator{
             this.stringValue = new SimpleStringProperty();
         }
         this.value = new SimpleObjectProperty<>();
+        this.generatorType = new SimpleObjectProperty<>(null);
     }
 
     public void storeValue(T value){
@@ -192,5 +194,19 @@ public abstract class AbstractValue<T> implements Value<T>,HasGenerator{
 
     public Logger getLogger(){
         return logger;
+    }
+
+    @Override
+    public Generator getGeneratorType() {
+        return generatorType.get();
+    }
+
+    public ObjectProperty<Generator> generatorTypeProperty() {
+        return generatorType;
+    }
+
+    @Override
+    public void setGeneratorType(Generator generatorType) {
+        this.generatorType.set(generatorType);
     }
 }

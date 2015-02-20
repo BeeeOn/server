@@ -51,6 +51,7 @@ public class AddNewSensorDialogView implements Initializable,AddNewSensorDialogP
     @FXML private TextField valueTypeTextField;
     @FXML private TextField valueNameTextField;
     @FXML private TextField valueTextField;
+    @FXML private ComboBox valueComboBox;
     @FXML private ToggleGroup storeValueRadBtnGroup;
     @FXML private RadioButton valueYesStoreHistoryRadBtn;
     @FXML private RadioButton valueNoStoreHistoryRadBtn;
@@ -59,19 +60,22 @@ public class AddNewSensorDialogView implements Initializable,AddNewSensorDialogP
     // generator panels
     @FXML private StackPane generatorsContainer;
     @FXML private Label generatorTypeLbl;
+    @FXML private ComboBox generatorTypeComboBox;
     // -- normal distribution
-    @FXML private RadioButton normalDistributionRadBtn;
     @FXML private GridPane normalDistributionContainer;
     @FXML private TextField minNormalTextField;
     @FXML private TextField maxNormalTextField;
     @FXML private TextField devNormalTextField;
     @FXML private TextField avgNormalTextField;
     // -- linear distribution
-    @FXML private RadioButton linearDistributionRadBtn;
     @FXML private GridPane linearDistributionContainer;
     @FXML private TextField minLinearTextField;
     @FXML private TextField maxLinearTextField;
     @FXML private TextField stepLinearTextField;
+    // -- boolean random
+    @FXML private GridPane booleanRandomContainer;
+    @FXML private Slider booleanRandomProbabilitySlider;
+    @FXML private Label booleanRandomProbabilityLbl;
     // -- save button
     @FXML private Button saveValueBtn;
 
@@ -207,6 +211,11 @@ public class AddNewSensorDialogView implements Initializable,AddNewSensorDialogP
     }
 
     @Override
+    public ComboBox getValueComboBox(){
+        return valueComboBox;
+    }
+
+    @Override
     public RadioButton getValueYesStoreHistoryRadBtn() {
         return valueYesStoreHistoryRadBtn;
     }
@@ -237,11 +246,6 @@ public class AddNewSensorDialogView implements Initializable,AddNewSensorDialogP
     }
 
     @Override
-    public RadioButton getNormalDistributionRadBtn() {
-        return normalDistributionRadBtn;
-    }
-
-    @Override
     public GridPane getNormalDistributionContainer() {
         return normalDistributionContainer;
     }
@@ -267,11 +271,6 @@ public class AddNewSensorDialogView implements Initializable,AddNewSensorDialogP
     }
 
     @Override
-    public RadioButton getLinearDistributionRadBtn() {
-        return linearDistributionRadBtn;
-    }
-
-    @Override
     public GridPane getLinearDistributionContainer() {
         return linearDistributionContainer;
     }
@@ -289,6 +288,26 @@ public class AddNewSensorDialogView implements Initializable,AddNewSensorDialogP
     @Override
     public TextField getStepLinearTextField() {
         return stepLinearTextField;
+    }
+
+    @Override
+    public GridPane getBooleanRandomContainer() {
+        return booleanRandomContainer;
+    }
+
+    @Override
+    public Slider getBooleanRandomProbabilitySlider() {
+        return booleanRandomProbabilitySlider;
+    }
+
+    @Override
+    public Label getBooleanRandomProbabilityLbl() {
+        return booleanRandomProbabilityLbl;
+    }
+
+    @Override
+    public ComboBox getGeneratorTypeComboBox() {
+        return generatorTypeComboBox;
     }
 
     @Override

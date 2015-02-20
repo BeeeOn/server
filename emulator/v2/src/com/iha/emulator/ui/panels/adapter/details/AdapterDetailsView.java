@@ -16,7 +16,6 @@ import java.util.ResourceBundle;
  * Created by Shu on 26.11.2014.
  */
 public class AdapterDetailsView implements Initializable,AdapterDetailsPresenter.Display {
-    /** SUGGESTION save active protocol change to adapter details, maybe checkbox */
 
     private static final Logger logger = LogManager.getLogger(AdapterDetailsView.class);
 

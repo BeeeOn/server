@@ -6,10 +6,7 @@ import com.iha.emulator.communication.server.ServerListener;
 import com.iha.emulator.control.AdapterController;
 import com.iha.emulator.control.SensorController;
 import com.iha.emulator.models.Server;
-import com.iha.emulator.models.value.HasLinearDistribution;
-import com.iha.emulator.models.value.HasNormalDistribution;
-import com.iha.emulator.models.value.Value;
-import com.iha.emulator.models.value.ValueFactory;
+import com.iha.emulator.models.value.*;
 import com.iha.emulator.models.value.implemented.HasGenerator;
 import com.iha.emulator.resources.images.sensor_types.SensorIcon;
 import com.iha.emulator.resources.images.sensor_types.SensorIconFactory;
@@ -75,7 +72,6 @@ public class DetailedSimulationPresenter implements Presenter{
     private static final String FXML_PATH = "DetailedSimulation.fxml";
     private static final String CSS_PATH = "/com/iha/emulator/resources/css/theme-light.css";
 
-    private Scene scene;
     private Stage window;
 
     private MemoryChecker memoryChecker = MemoryChecker.getInstance();
@@ -191,7 +187,7 @@ public class DetailedSimulationPresenter implements Presenter{
                 //create new server
                 newAdapterController.createServer(false,"production","10.1.0.1",9092,"home4prod");
                 //create logger
-                newAdapterController.createLog();
+                newAdapterController.createLog(getView().getLogTabPane());
                 //config log
                 newAdapterController.getLog().setType(AdapterLogger.toType(getProperty("defaultLogMessageType")));
                 //create scheduler
@@ -626,6 +622,7 @@ public class DetailedSimulationPresenter implements Presenter{
                 //parse adapter info
                 logger.trace("XML -> Parsing adapter info");
                 Integer adapterId = Integer.valueOf(adapterElement.attribute("id").getValue());
+                if(Utilities.isAdapterIdTaken(getAdapterControllers(),adapterId)) throw new IllegalArgumentException("Adapter with id \"" + adapterId + "\" already exist!");
                 String adapterName = adapterElement.attribute("name").getValue();
                 Double adapterProtocolVersion = Double.valueOf(adapterElement.attribute("protocol").getValue());
                 Boolean adapterRegistered = Boolean.valueOf(adapterElement.attributeValue("registered"));
@@ -712,6 +709,9 @@ public class DetailedSimulationPresenter implements Presenter{
                                     ((HasLinearDistribution)tmpValue).setMin(Double.valueOf(generatorElement.element("params").attributeValue("min")));
                                     ((HasLinearDistribution)tmpValue).setStep(Double.valueOf(generatorElement.element("params").attributeValue("step")));
                                     break;
+                                case BOOLEAN_RANDOM:
+                                    ((HasBooleanRandom)tmpValue).setProbability((Double.valueOf(generatorElement.element("params").attributeValue("probability"))));
+                                    break;
                             }
                             Long generatorSeed = Long.valueOf(generatorElement.attributeValue("seed"));
                             tmpValue.setGeneratorSeed(generatorSeed);
@@ -729,10 +729,12 @@ public class DetailedSimulationPresenter implements Presenter{
                 throw new DocumentException("Wrong format of file. Error on in content of adapter " + adapterElement.attribute("id").getValue(),e);
             }catch (NullPointerException e){
                 throw new DocumentException("Wrong format of file. Cannot find one or more required elements. Error on in content of adapter " + adapterElement.attribute("id").getValue(),e);
+            }catch (IllegalArgumentException e ){
+                showException(logger,"Adapter id already exist",e,false,null);
             }
-            if(tmpAdapterController.getAdapter() != null){
+            if(tmpAdapterController != null && tmpAdapterController.getAdapter() != null){
                 //CREATE LOG
-                tmpAdapterController.createLog();
+                tmpAdapterController.createLog(getView().getLogTabPane());
                 //CREATE SCHEDULER
                 tmpAdapterController.createScheduler();
                 tmpAdapterController.setTrackServerResponse(true);
@@ -811,10 +813,7 @@ public class DetailedSimulationPresenter implements Presenter{
                 }
                 @Override
                 protected boolean computeValue() {
-                    if(currentAdapterController.getAdapter().getStatus())
-                        return false;
-                    else
-                        return true;
+                    return !currentAdapterController.getAdapter().getStatus();
                 }
             });
         }
@@ -865,11 +864,7 @@ public class DetailedSimulationPresenter implements Presenter{
             }
             @Override
             protected boolean computeValue() {
-                if(adapterControllersList.size() > 0){
-                    return false;
-                }else{
-                    return true;
-                }
+                return adapterControllersList.size() <= 0;
             }
         };
         view.getSaveBtn().disableProperty().bind(adapterListZeroReturnTrue);
@@ -889,50 +884,9 @@ public class DetailedSimulationPresenter implements Presenter{
             }
             @Override
             protected boolean computeValue() {
-                if(adapterControllersList.size() > 0){
-                    return true;
-                }else{
-                    return false;
-                }
+                return adapterControllersList.size() > 0;
             }
         });
-    }
-
-    private void bindLogMessageType(AdapterController newController){
-        /*if(currentAdapterController != null){
-            logger.debug("Current adapter message type: "
-                    + " F-> " + currentAdapterController.getLog().getFullMessage() + " "
-                    + " P-> " + currentAdapterController.getLog().getPartialMessage() + " "
-                    + " S-> " + currentAdapterController.getLog().getShortMessage() + " ");
-            if(currentAdapterController.getLog().fullMessageProperty().isBound())
-                currentAdapterController.getLog().fullMessageProperty().unbindBidirectional(view.getFullLogMessageRadBtn().selectedProperty());
-            if(currentAdapterController.getLog().partialMessageProperty().isBound())
-                currentAdapterController.getLog().partialMessageProperty().unbindBidirectional(view.getPartialLogMessageRadBtn().selectedProperty());
-            if(currentAdapterController.getLog().shortMessageProperty().isBound())
-                currentAdapterController.getLog().shortMessageProperty().unbindBidirectional(view.getShortLogMessageRadBtn().selectedProperty());
-        }
-
-        logger.debug("New adapter message type: "
-                + " F-> " + newController.getLog().getFullMessage() + " "
-                + " P-> " + newController.getLog().getPartialMessage() + " "
-                + " S-> " + newController.getLog().getShortMessage() + " ");*/
-        view.getFullLogMessageRadBtn().setSelected(newController.getLog().getFullMessage());
-        view.getPartialLogMessageRadBtn().setSelected(newController.getLog().getPartialMessage());
-        view.getShortLogMessageRadBtn().setSelected(newController.getLog().getShortMessage());
-        /*view.getFullLogMessageRadBtn().selectedProperty().bind(currentAdapterController.getLog().fullMessageProperty());
-        view.().selectedProperty().bind(currentAdapterController.getLog().partialMessageProperty());
-        view.getShortLogMessageRadBtn().selectedProperty().bind(currentAdapterController.getLog().shortMessageProperty());*/
-        //unbind radio buttons if they are bound
-
-        //set message type according to currently set adapter
-
-        //bind message type to adapter's log
-        /*view.getFullLogMessageRadBtn().selectedProperty().bindBidirectional(currentAdapterController.getLog().fullMessageProperty());
-        view.getPartialLogMessageRadBtn().selectedProperty().bindBidirectional(currentAdapterController.getLog().partialMessageProperty());
-        view.getShortLogMessageRadBtn().selectedProperty().bindBidirectional(currentAdapterController.getLog().shortMessageProperty());*/
-        /*newController.getLog().fullMessageProperty().bindBidirectional(view.getFullLogMessageRadBtn().selectedProperty());
-        newController.getLog().partialMessageProperty().bindBidirectional(view.getPartialLogMessageRadBtn().selectedProperty());
-        newController.getLog().shortMessageProperty().bindBidirectional(view.getShortLogMessageRadBtn().selectedProperty());*/
     }
 
     private void bindRegisteredCount(){
@@ -954,7 +908,6 @@ public class DetailedSimulationPresenter implements Presenter{
         } catch (IOException e) {
             showException(logger,"Cannot load Adapter Details",e,true, event -> quit());
         }
-
     }
     /**
      *  Load view from FXML file{@link com.iha.emulator.ui.simulations.detailed.DetailedSimulationPresenter#FXML_PATH} and after that
@@ -974,7 +927,7 @@ public class DetailedSimulationPresenter implements Presenter{
             //remember view
             view = loader.getController();
             //build scene
-            scene = new Scene((Parent)view.getView());
+            Scene scene = new Scene((Parent) view.getView());
             // bind view and presenter
             bind();
             // set css for view
@@ -990,7 +943,6 @@ public class DetailedSimulationPresenter implements Presenter{
     }
 
     private void loadProperties(String defaultPropertiesFileName){
-        /** FIXGUI change progress dialog css */
         setStatus("Loading application settings",true);
         //define background process
         Task<Object> worker = new Task<Object>() {
@@ -1112,7 +1064,6 @@ public class DetailedSimulationPresenter implements Presenter{
             logger.trace("Unsaved adapters count: " + unsavedAdapters.size());
             return FXCollections.observableArrayList(unsavedAdapters);
         }
-
     }
 
     private void checkIfSaved(){
@@ -1141,6 +1092,10 @@ public class DetailedSimulationPresenter implements Presenter{
     private void removeTempFiles(){
         if(getAdapterControllers().size() < 1) return;
         getAdapterControllers().stream().filter(a->a.getLog().getBufferFile()!=null).forEach(a->a.getLog().closeBuffer());
+    }
+
+    public Display getView(){
+        return this.view;
     }
 
     public void quit(){

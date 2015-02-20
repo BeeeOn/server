@@ -12,7 +12,7 @@ public class Main extends Application {
 
     public enum SIM{
         DETAILED_SIMULATION,
-        PERFORMANCE_SIMULATION;
+        PERFORMANCE_SIMULATION
     }
 
     private static final String DEFAULT_SETTINGS_FILE = "default_settings.properties";

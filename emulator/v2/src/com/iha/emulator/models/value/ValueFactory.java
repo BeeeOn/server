@@ -1,8 +1,6 @@
 package com.iha.emulator.models.value;
 
-import com.iha.emulator.models.value.implemented.HumiditySensorValue;
-import com.iha.emulator.models.value.implemented.OnOffActuatorValue;
-import com.iha.emulator.models.value.implemented.TemperatureSensorValue;
+import com.iha.emulator.models.value.implemented.*;
 
 import java.util.Random;
 
@@ -30,10 +28,22 @@ public class ValueFactory {
         Value value = null;
         switch (valueType){
             case SENSOR_TEMPERATURE:
-                value = new TemperatureSensorValue(valueType,valueType.getName(),valueType.getType(),0,valueType.getUnit(),generateValue,storeHistory,new Random(),generatorSeed);
+                value = new TemperatureSensorValue(valueType.getName(),valueType.getType(),0,valueType.getUnit(),generateValue,storeHistory,new Random(),generatorSeed);
+                break;
+            case SENSOR_NOISE:
+                value = new NoiseSensorValue(valueType.getName(),valueType.getType(),0,valueType.getUnit(),generateValue,storeHistory,new Random(),generatorSeed);
+                break;
+            case SENSOR_LIGHT:
+                value = new LightSensorValue(valueType.getName(),valueType.getType(),0,valueType.getUnit(),generateValue,storeHistory,new Random(),generatorSeed);
                 break;
             case SENSOR_HUMIDITY:
                 value = new HumiditySensorValue(valueType.getName(),valueType.getType(),0,valueType.getUnit(),generateValue,storeHistory,new Random(),generatorSeed);
+                break;
+            case SENSOR_PRESSURE:
+                value = new PressureSensorValue(valueType.getName(),valueType.getType(),0,valueType.getUnit(),generateValue,storeHistory,new Random(),generatorSeed);
+                break;
+            case SENSOR_EMISSIONS:
+                value = new EmissionsSensorValue(valueType.getName(),valueType.getType(),0,valueType.getUnit(),generateValue,storeHistory,new Random(),generatorSeed);
                 break;
             case ACTUATOR_ON_OFF:
                 value = new OnOffActuatorValue(valueType.getName(),valueType.getType(),0,valueType.getUnit(),generateValue,storeHistory,new Random(),generatorSeed);
@@ -44,7 +54,7 @@ public class ValueFactory {
 
     public static Value.Generator generatorByName(String generatorName){
         for(Value.Generator gen : Value.Generator.values()){
-            if(gen.getName().equals(generatorName))
+            if(gen.getType().equals(generatorName))
                 return gen;
         }
         return null;

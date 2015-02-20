@@ -20,7 +20,11 @@ public class SensorValueCellFactory extends TableCell<Value, Value> {
         super.updateItem(item, empty);
         if (item != null) {
             switch (item.getValueType()) {
+                case SENSOR_EMISSIONS:
+                case SENSOR_PRESSURE:
                 case SENSOR_TEMPERATURE:
+                case SENSOR_NOISE:
+                case SENSOR_LIGHT:
                 case SENSOR_HUMIDITY:
                     Label lbl = new Label();
                     lbl.textProperty().bind(item.stringValueProperty());
@@ -39,11 +43,7 @@ public class SensorValueCellFactory extends TableCell<Value, Value> {
                         }
                         @Override
                         protected boolean computeValue() {
-                            if(actuator.getValue()){
-                                return true;
-                            }else{
-                                return false;
-                            }
+                            return actuator.getValue();
                         }
                     });
                     onBtn.setOnAction(event -> actuator.setValue(true));
@@ -53,11 +53,7 @@ public class SensorValueCellFactory extends TableCell<Value, Value> {
                         }
                         @Override
                         protected boolean computeValue() {
-                            if(actuator.getValue()){
-                                return false;
-                            }else{
-                                return true;
-                            }
+                            return !actuator.getValue();
                         }
                     });
                     offBtn.setOnAction(event -> actuator.setValue(false));

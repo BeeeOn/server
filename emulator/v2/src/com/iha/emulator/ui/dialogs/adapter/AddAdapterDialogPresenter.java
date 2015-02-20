@@ -53,7 +53,6 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
     private static final String CSS_PATH = "/com/iha/emulator/resources/css/theme-light.css";
     private ValidationSupport serverValidationSupport = new ValidationSupport();
     private ValidationSupport adapterValidationSupport = new ValidationSupport();
-    private ValidationDecoration iconDecorator = new StyleClassValidationDecoration("validationError","validationWarn");
 
     private Display view;
     private Stage window;
@@ -102,6 +101,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
         this.serverInfoSet = new SimpleBooleanProperty(false);
         this.adapterInfoSet = new SimpleBooleanProperty(false);
         this.modifyServer = new SimpleBooleanProperty(false);
+        ValidationDecoration iconDecorator = new StyleClassValidationDecoration("validationError", "validationWarn");
         serverValidationSupport.setValidationDecorator(iconDecorator);
         this.window = stage;
         this.servers = servers;
@@ -230,8 +230,6 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
             logger.trace("Finishing");
             if(addAdapter())
                 window.hide();
-            else
-                return;
         }else{
             logger.trace("Adapter info not filled. Cannot \"Finish\" dialog");
             String message = null;
@@ -265,7 +263,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
             //create new server
             newAdapterController.createServer(selectedServer);
             //create logger
-            newAdapterController.createLog();
+            newAdapterController.createLog(parent.getView().getLogTabPane());
             //config log
             newAdapterController.getLog().setType(AdapterLogger.toType(parent.getProperty("defaultLogMessageType")));
             //create scheduler
@@ -369,7 +367,11 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
                     "Registered: Yes");
             dlg.show();
             view.getAdapterIdLbl().setText(adapterInfo.getId());
-            view.getAdapterNameLbl().setText(adapterInfo.getName());
+            if(adapterInfo.getName() == null || adapterInfo.getName().equals("null")){
+                view.getAdapterNameLbl().setText("EA"+adapterInfo.getId());
+            }else{
+                view.getAdapterNameLbl().setText(adapterInfo.getName());
+            }
             view.getAdapterFirmwareLbl().setText(adapterInfo.getVersion());
             view.getAdapterYesRegisteredRadBtn().setSelected(true);
         }
@@ -516,11 +518,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
             }
             @Override
             protected boolean computeValue() {
-                if(view.getAdapterIdLbl().getText().equals("")){
-                    return true;
-                }else{
-                    return false;
-                }
+                return view.getAdapterIdLbl().getText().equals("");
             }
         });
         //--adapter field validator

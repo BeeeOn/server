@@ -1,6 +1,7 @@
 package com.iha.emulator.ui.dialogs.sensor;
 
 import com.iha.emulator.control.SensorController;
+import com.iha.emulator.models.value.HasBooleanRandom;
 import com.iha.emulator.models.value.HasLinearDistribution;
 import com.iha.emulator.models.value.HasNormalDistribution;
 import com.iha.emulator.models.value.Value;
@@ -42,6 +43,7 @@ import org.controlsfx.validation.Validator;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
+import java.util.Objects;
 
 import static com.iha.emulator.models.value.Value.Generator;
 
@@ -88,23 +90,26 @@ public class SensorDetailsDialogPresenter implements Presenter,PanelPresenter{
         public TextField getValueTypeTextField();
         public TextField getValueNameTextField();
         public TextField getValueTextField();
+        public ComboBox getValueComboBox();
         public RadioButton getValueYesStoreHistoryRadBtn();
         public RadioButton getValueNoStoreHistoryRadBtn();
         public RadioButton getValueYesGenerateValueRadBtn();
         public RadioButton getValueNoGenerateValueRadBtn();
         public StackPane getGeneratorsContainer();
         public Label getGeneratorTypeLbl();
-        public RadioButton getNormalDistributionRadBtn();
+        public ComboBox getGeneratorTypeComboBox();
         public GridPane getNormalDistributionContainer();
         public TextField getMinNormalTextField();
         public TextField getMaxNormalTextField();
         public TextField getDevNormalTextField();
         public TextField getAvgNormalTextField();
-        public RadioButton getLinearDistributionRadBtn();
         public GridPane getLinearDistributionContainer();
         public TextField getMinLinearTextField();
         public TextField getMaxLinearTextField();
         public TextField getStepLinearTextField();
+        public GridPane getBooleanRandomContainer();
+        public Slider getBooleanRandomProbabilitySlider();
+        public Label getBooleanRandomProbabilityLbl();
         public Button getSaveValueBtn();
     }
 
@@ -154,33 +159,36 @@ public class SensorDetailsDialogPresenter implements Presenter,PanelPresenter{
 
     protected void addValueToTree(Value newValue) {
         logger.debug("Adding new value to tree: " + newValue.getName());
-        view.getValuesTree().getRoot().getChildren().add(new TreeItem<>(newValue));
-        view.getValuesTree().getSelectionModel().selectLast();
+        TreeItem newItem = new TreeItem<>(newValue);
+        view.getValuesTree().getRoot().getChildren().add(newItem);
+        view.getValuesTree().getSelectionModel().select(newItem);
     }
 
     protected void prepareValueInfoContainer(Value value){
         logger.trace("Preparing value information container for new value");
         clearValueInformation();
         valueValidator = new ValidationSupport();
-        //hide generator radio buttons
-        view.getNormalDistributionRadBtn().setVisible(false);
-        view.getLinearDistributionRadBtn().setVisible(false);
+
         //show needed radio buttons
         if(value.getValueType().getGenerators() != null){
             for(Generator generator: value.getValueType().getGenerators()){
                 switch (generator){
                     case NORMAL_DISTRIBUTION:
-                        view.getNormalDistributionRadBtn().setVisible(true);
+                        view.getGeneratorTypeComboBox().getItems().add(Generator.NORMAL_DISTRIBUTION);
                         view.getMaxNormalTextField().setText(String.valueOf(((HasNormalDistribution)value).getMax()));
                         view.getMinNormalTextField().setText(String.valueOf(((HasNormalDistribution)value).getMin()));
                         view.getDevNormalTextField().setText(String.valueOf(((HasNormalDistribution)value).getDev()));
                         view.getAvgNormalTextField().setText(String.valueOf(((HasNormalDistribution)value).getAvg()));
                         break;
                     case LINEAR_DISTRIBUTION:
-                        view.getLinearDistributionRadBtn().setVisible(true);
+                        view.getGeneratorTypeComboBox().getItems().add(Generator.LINEAR_DISTRIBUTION);
                         view.getMaxLinearTextField().setText(String.valueOf(((HasLinearDistribution)value).getMax()));
                         view.getMinLinearTextField().setText(String.valueOf(((HasLinearDistribution)value).getMin()));
                         view.getStepLinearTextField().setText(String.valueOf(((HasLinearDistribution)value).getStep()));
+                        break;
+                    case BOOLEAN_RANDOM:
+                        view.getGeneratorTypeComboBox().getItems().add(Generator.BOOLEAN_RANDOM);
+                        view.getBooleanRandomProbabilitySlider().setValue(((HasBooleanRandom)value).getProbability()*100);
                         break;
                     default:
                         break;
@@ -197,7 +205,7 @@ public class SensorDetailsDialogPresenter implements Presenter,PanelPresenter{
                 switch (generator){
                     case NORMAL_DISTRIBUTION:
                         logger.trace("setting NORMAL_DISTRIBUTION");
-                        view.getNormalDistributionRadBtn().setSelected(true);
+                        view.getGeneratorTypeComboBox().getSelectionModel().select(Generator.NORMAL_DISTRIBUTION);
                         view.getMaxNormalTextField().setText(String.valueOf(((HasNormalDistribution)value).getMax()));
                         view.getMinNormalTextField().setText(String.valueOf(((HasNormalDistribution)value).getMin()));
                         view.getDevNormalTextField().setText(String.valueOf(((HasNormalDistribution)value).getDev()));
@@ -205,10 +213,15 @@ public class SensorDetailsDialogPresenter implements Presenter,PanelPresenter{
                         break;
                     case LINEAR_DISTRIBUTION:
                         logger.trace("setting LINEAR_DISTRIBUTION");
-                        view.getLinearDistributionRadBtn().setSelected(true);
+                        view.getGeneratorTypeComboBox().getSelectionModel().select(Generator.LINEAR_DISTRIBUTION);
                         view.getMaxLinearTextField().setText(String.valueOf(((HasLinearDistribution)value).getMax()));
                         view.getMinLinearTextField().setText(String.valueOf(((HasLinearDistribution)value).getMin()));
                         view.getStepLinearTextField().setText(String.valueOf(((HasLinearDistribution)value).getStep()));
+                        break;
+                    case BOOLEAN_RANDOM:
+                        logger.trace("setting BOOLEAN_RANDOM");
+                        view.getGeneratorTypeComboBox().getSelectionModel().select(Generator.BOOLEAN_RANDOM);
+                        view.getBooleanRandomProbabilitySlider().setValue(((HasBooleanRandom)value).getProbability()*100);
                         break;
                     default:
                         break;
@@ -221,7 +234,20 @@ public class SensorDetailsDialogPresenter implements Presenter,PanelPresenter{
         }
         view.getValueTypeTextField().setText(value.getValueType().getName());
         view.getValueNameTextField().setText(value.getName());
-        view.getValueTextField().setText(String.valueOf(value.getValue()));
+        //if value is type boolean, show checkbox, else textfield
+        if(value.getValue() instanceof Boolean){
+            view.getValueTextField().setVisible(false);
+            view.getValueComboBox().setVisible(true);
+            if((Boolean) value.getValue()){
+                view.getValueComboBox().getSelectionModel().select("ON");
+            }else{
+                view.getValueComboBox().getSelectionModel().select("OFF");
+            }
+        }else{
+            view.getValueTextField().setVisible(true);
+            view.getValueComboBox().setVisible(false);
+            view.getValueTextField().setText(String.valueOf(value.getValue()));
+        }
         view.getValueYesStoreHistoryRadBtn().setSelected(value.isStoreHistory());
         view.getValueNoStoreHistoryRadBtn().setSelected(!value.isStoreHistory());
         view.getValueYesGenerateValueRadBtn().setSelected(value.isGenerateValue());
@@ -234,6 +260,9 @@ public class SensorDetailsDialogPresenter implements Presenter,PanelPresenter{
     }
 
     private void clearValueInformation(){
+        //clear generator combo box
+        view.getGeneratorTypeComboBox().getSelectionModel().clearSelection();
+        view.getGeneratorTypeComboBox().getItems().clear();
         view.getValueTypeTextField().clear();
         view.getValueNameTextField().clear();
         view.getValueTextField().clear();
@@ -250,9 +279,11 @@ public class SensorDetailsDialogPresenter implements Presenter,PanelPresenter{
         valueValidationMessage = "";
         if(view.getValueNameTextField().getText().equals(""))
             valueValidationMessage = "Name is required" + "\n";
-        if(view.getValueTextField().getText().equals(""))
+        if(view.getValueTextField().isVisible() && view.getValueTextField().getText().equals(""))
             valueValidationMessage = valueValidationMessage +  "Value is required" + "\n";
-        if(view.getNormalDistributionRadBtn().isVisible() && !view.getNormalDistributionRadBtn().isDisabled() && view.getNormalDistributionRadBtn().isSelected()){
+        if(view.getValueYesGenerateValueRadBtn().isSelected() && view.getGeneratorTypeComboBox().getSelectionModel().getSelectedItem() == null){
+            valueValidationMessage = valueValidationMessage +  "No generator selected" + "\n";
+        }else if(view.getValueYesGenerateValueRadBtn().isSelected() && view.getGeneratorTypeComboBox().getSelectionModel().getSelectedItem().equals(Generator.NORMAL_DISTRIBUTION)){
             if(view.getMinNormalTextField().getText().equals(""))
                 valueValidationMessage = valueValidationMessage +  "Normal distribution minimum is required" + "\n";
             if(view.getMaxNormalTextField().getText().equals(""))
@@ -261,8 +292,7 @@ public class SensorDetailsDialogPresenter implements Presenter,PanelPresenter{
                 valueValidationMessage = valueValidationMessage +  "Normal distribution average is required" + "\n";
             if(view.getDevNormalTextField().getText().equals(""))
                 valueValidationMessage = valueValidationMessage +  "Normal distribution deviation is required" + "\n";
-        }
-        if(view.getLinearDistributionRadBtn().isVisible() && !view.getLinearDistributionRadBtn().isDisabled() && view.getLinearDistributionRadBtn().isSelected()){
+        }else if(view.getValueYesGenerateValueRadBtn().isSelected() && view.getGeneratorTypeComboBox().getSelectionModel().getSelectedItem().equals(Generator.LINEAR_DISTRIBUTION)){
             if(view.getMinLinearTextField().getText().equals(""))
                 valueValidationMessage = valueValidationMessage +  "Linear distribution minimum is required" + "\n";
             if(view.getMaxLinearTextField().getText().equals(""))
@@ -281,25 +311,32 @@ public class SensorDetailsDialogPresenter implements Presenter,PanelPresenter{
         logger.trace("Saving information to value");
         Value value = (Value) ((TreeItem)view.getValuesTree().getSelectionModel().getSelectedItem()).getValue();
         try{
-            value.setValue(value.fromStringToValueType(view.getValueTextField().getText()));
+            if(view.getValueTextField().isVisible()){
+                value.setValue(value.fromStringToValueType(view.getValueTextField().getText()));
+            }else if(view.getValueComboBox().isVisible()){
+                value.setValue(value.fromStringToValueType(view.getValueComboBox().getSelectionModel().getSelectedItem().equals("ON") ? "true" : "false"));
+            }
         }catch (NumberFormatException e){
             showWarning("Value information","Cannot parse value. Is it correct datatype?",null);
             return;
         }
         try{
-            if(view.getNormalDistributionRadBtn().isVisible() && !view.getNormalDistributionRadBtn().isDisabled() && view.getNormalDistributionRadBtn().isSelected()){
+            if(view.getValueYesGenerateValueRadBtn().isSelected() && view.getGeneratorTypeComboBox().getSelectionModel().getSelectedItem().equals(Generator.NORMAL_DISTRIBUTION)){
                 logger.trace("Saving NORMAL generator");
                 ((HasNormalDistribution)value).setAvg(Double.valueOf(view.getAvgNormalTextField().getText()));
                 ((HasNormalDistribution)value).setDev(Double.valueOf(view.getDevNormalTextField().getText()));
                 ((HasNormalDistribution)value).setMax(Double.valueOf(view.getMaxNormalTextField().getText()));
                 ((HasNormalDistribution)value).setMin(Double.valueOf(view.getMinNormalTextField().getText()));
                 ((HasGenerator)value).setGeneratorType(Generator.NORMAL_DISTRIBUTION);
-            }else if(view.getLinearDistributionRadBtn().isVisible() && !view.getLinearDistributionRadBtn().isDisabled() && view.getLinearDistributionRadBtn().isSelected()){
+            }else if(view.getValueYesGenerateValueRadBtn().isSelected() && view.getGeneratorTypeComboBox().getSelectionModel().getSelectedItem().equals(Generator.LINEAR_DISTRIBUTION)){
                 logger.trace("Saving LINEAR generator");
                 ((HasLinearDistribution)value).setStep(Double.valueOf(view.getStepLinearTextField().getText()));
                 ((HasLinearDistribution)value).setMax(Double.valueOf(view.getMaxLinearTextField().getText()));
                 ((HasLinearDistribution)value).setMin(Double.valueOf(view.getMinLinearTextField().getText()));
                 ((HasGenerator)value).setGeneratorType(Generator.LINEAR_DISTRIBUTION);
+            }else if(view.getValueYesGenerateValueRadBtn().isSelected() && view.getGeneratorTypeComboBox().getSelectionModel().getSelectedItem().equals(Generator.BOOLEAN_RANDOM)){
+                ((HasBooleanRandom)value).setProbability(view.getBooleanRandomProbabilitySlider().getValue() / 100);
+                ((HasGenerator)value).setGeneratorType(Generator.BOOLEAN_RANDOM);
             }
         }catch (NumberFormatException e){
             showWarning("Value information","Cannot parse distribution values.",null);
@@ -308,8 +345,12 @@ public class SensorDetailsDialogPresenter implements Presenter,PanelPresenter{
         value.setName(view.getValueNameTextField().getText());
         value.setStoreHistory(view.getValueYesStoreHistoryRadBtn().isSelected());
         value.setGenerateValue(view.getValueYesGenerateValueRadBtn().isSelected());
-        if(!view.getValueTextField().getText().equals(String.valueOf(value.getInitialValue()))){
+        if(view.getValueTextField().isVisible() && !view.getValueTextField().getText().equals(String.valueOf(value.getInitialValue()))){
             value.setInitialValue(value.fromStringToValueType(view.getValueTextField().getText()));
+        }else if(view.getValueComboBox().isVisible()
+                && !(view.getValueComboBox().getSelectionModel().getSelectedItem().equals("ON") ? "true" : "false")
+                    .equals(String.valueOf(value.getInitialValue()))){
+            value.setInitialValue(value.fromStringToValueType(view.getValueComboBox().getSelectionModel().getSelectedItem().equals("ON") ? "true" : "false"));
         }
         logger.trace("Updating tree");
         updateTree();
@@ -321,19 +362,32 @@ public class SensorDetailsDialogPresenter implements Presenter,PanelPresenter{
         logger.trace("Adding value information change listeners");
         ChangeListener<Boolean> radBtnChangeListener = (observable, oldValue, newValue) ->
                 setValueInfoSet(false);
-        ChangeListener<String> textFieldChangeListener = (observable, oldValue, newValue) ->
+        ChangeListener<String> textFieldChangeListener = (observable, oldValue, newValue) -> {
                 setValueInfoSet(oldValue.equals(newValue));
+        };
         //general info
         view.getValueNameTextField().textProperty().addListener(textFieldChangeListener);
-        view.getValueTextField().textProperty().addListener(textFieldChangeListener);
+        view.getValueTextField().textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if(view.getValueTextField().isVisible()){
+                    setValueInfoSet(oldValue.equals(newValue));
+                }
+            }
+        });
+        view.getValueComboBox().getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if(oldValue != null && view.getValueComboBox().isVisible())
+                setValueInfoSet(oldValue.equals(newValue));
+        });
         // store history
         view.getValueYesStoreHistoryRadBtn().selectedProperty().addListener(radBtnChangeListener);
         view.getValueNoStoreHistoryRadBtn().selectedProperty().addListener(radBtnChangeListener);
         //generator
         view.getValueYesGenerateValueRadBtn().selectedProperty().addListener(radBtnChangeListener);
         view.getValueNoGenerateValueRadBtn().selectedProperty().addListener(radBtnChangeListener);
-        view.getNormalDistributionRadBtn().selectedProperty().addListener(radBtnChangeListener);
-        view.getLinearDistributionRadBtn().selectedProperty().addListener(radBtnChangeListener);
+        view.getGeneratorTypeComboBox().getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            setValueInfoSet(false);
+        });
         //generator text fields
         view.getMinNormalTextField().textProperty().addListener(textFieldChangeListener);
         view.getMaxNormalTextField().textProperty().addListener(textFieldChangeListener);
@@ -343,6 +397,13 @@ public class SensorDetailsDialogPresenter implements Presenter,PanelPresenter{
         view.getMaxLinearTextField().textProperty().addListener(textFieldChangeListener);
         view.getMinLinearTextField().textProperty().addListener(textFieldChangeListener);
         view.getStepLinearTextField().textProperty().addListener(textFieldChangeListener);
+
+        view.getBooleanRandomProbabilitySlider().valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                setValueInfoSet(Objects.equals(oldValue, newValue));
+            }
+        });
     }
 
     private void showWarning(String title,String headerMessage,String message){
@@ -486,14 +547,9 @@ public class SensorDetailsDialogPresenter implements Presenter,PanelPresenter{
                 return treeItem;
             }
         });
-        view.getValuesTree().getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                if(oldValue != null){
-                }
-                if (newValue != null && newValue instanceof TreeItem) {
-                    prepareValueInfoContainer((Value) ((TreeItem) newValue).getValue());
-                }
+        view.getValuesTree().getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && newValue instanceof TreeItem) {
+                prepareValueInfoContainer((Value) ((TreeItem) newValue).getValue());
             }
         });
         if(values != null){
@@ -561,33 +617,56 @@ public class SensorDetailsDialogPresenter implements Presenter,PanelPresenter{
     @Override
     public void bind() {
         view.setPresenter(this);
+        //value boolean combo box
+        view.getValueComboBox().setItems(FXCollections.observableArrayList("ON","OFF"));
         values = new SimpleListProperty<>(sensorController.getModel().getValues());
         //normal distribution
         view.getNormalDistributionContainer().setVisible(false);
         view.getNormalDistributionContainer().visibleProperty().bind(new BooleanBinding() {
             {
-                bind(view.getNormalDistributionRadBtn().selectedProperty());
+                bind(view.getGeneratorTypeComboBox().getSelectionModel().selectedItemProperty());
             }
             @Override
             protected boolean computeValue() {
-                return view.getNormalDistributionRadBtn().isSelected();
+                if(view.getGeneratorTypeComboBox().getSelectionModel().getSelectedItem() == null) return false;
+                return view.getGeneratorTypeComboBox().getSelectionModel().getSelectedItem().equals(Generator.NORMAL_DISTRIBUTION);
             }
         });
         view.getLinearDistributionContainer().setVisible(false);
         view.getLinearDistributionContainer().visibleProperty().bind(new BooleanBinding() {
             {
-                bind(view.getLinearDistributionRadBtn().selectedProperty());
+                bind(view.getGeneratorTypeComboBox().getSelectionModel().selectedItemProperty());
             }
             @Override
             protected boolean computeValue() {
-                return view.getLinearDistributionRadBtn().isSelected();
+                if(view.getGeneratorTypeComboBox().getSelectionModel().getSelectedItem() == null) return false;
+                return view.getGeneratorTypeComboBox().getSelectionModel().getSelectedItem().equals(Generator.LINEAR_DISTRIBUTION);
+            }
+        });
+        view.getBooleanRandomContainer().setVisible(false);
+        view.getBooleanRandomContainer().visibleProperty().bind(new BooleanBinding() {
+            {
+                bind(view.getGeneratorTypeComboBox().getSelectionModel().selectedItemProperty());
+            }
+            @Override
+            protected boolean computeValue() {
+                if(view.getGeneratorTypeComboBox().getSelectionModel().getSelectedItem() == null) return false;
+                return view.getGeneratorTypeComboBox().getSelectionModel().getSelectedItem().equals(Generator.BOOLEAN_RANDOM);
+            }
+        });
+        view.getBooleanRandomProbabilityLbl().textProperty().bind(new StringBinding() {
+            {
+                bind(view.getBooleanRandomProbabilitySlider().valueProperty());
+            }
+            @Override
+            protected String computeValue() {
+                return signalBatterySliderFormatter.format(view.getBooleanRandomProbabilitySlider().getValue()) + " %";
             }
         });
         //generators
         view.getGeneratorsContainer().visibleProperty().bind(view.getValueYesGenerateValueRadBtn().selectedProperty());
         view.getGeneratorTypeLbl().disableProperty().bind(view.getValueNoGenerateValueRadBtn().selectedProperty());
-        view.getNormalDistributionRadBtn().disableProperty().bind(view.getValueNoGenerateValueRadBtn().selectedProperty());
-        view.getLinearDistributionRadBtn().disableProperty().bind(view.getValueNoGenerateValueRadBtn().selectedProperty());
+        view.getGeneratorTypeComboBox().disableProperty().bind(view.getValueNoGenerateValueRadBtn().selectedProperty());
         //general information
         sensorGeneralValidator.registerValidator(view.getSensorNameLbl(), false, Validator.createEmptyValidator("Name is required"));
         sensorGeneralValidator.registerValidator(view.getSensorIdLbl(), false, Validator.createEmptyValidator("Id is required"));

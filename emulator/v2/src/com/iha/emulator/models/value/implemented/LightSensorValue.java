@@ -13,14 +13,14 @@ import java.util.Random;
 /**
  * Created by Shu on 2.12.2014.
  */
-public class TemperatureSensorValue extends AbstractValue<Double> implements HasNormalDistribution,HasLinearDistribution {
+public class LightSensorValue extends AbstractValue<Double> implements HasNormalDistribution,HasLinearDistribution {
 
-    private static final double DEFAULT_VALUE = 25.5;
-    private static final double DEFAULT_MAX = 50;
-    private static final double DEFAULT_MIN = -50;
-    private static final double DEFAULT_NORMAL_DEV = 0.5;
-    private static final double DEFAULT_NORMAL_AVG = 25.5;
-    private static final double DEFAULT_LINEAR_STEP = 3;
+    private static final double DEFAULT_VALUE = 400;
+    private static final double DEFAULT_MAX = 20000;
+    private static final double DEFAULT_MIN = 0;
+    private static final double DEFAULT_NORMAL_DEV = 20;
+    private static final double DEFAULT_NORMAL_AVG = 400;
+    private static final double DEFAULT_LINEAR_STEP = 20;
 
     private DoubleProperty dev;
     private DoubleProperty avg;
@@ -28,8 +28,8 @@ public class TemperatureSensorValue extends AbstractValue<Double> implements Has
     private DoubleProperty max;
     private DoubleProperty step;
 
-    public TemperatureSensorValue(String name, String type,int offset, String unit, boolean generateValue, boolean storeHistory, Random generator, Long generatorSeed) {
-        super(Type.SENSOR_TEMPERATURE,name,type,offset,unit,generateValue,storeHistory,generator,generatorSeed);
+    public LightSensorValue(String name, String type, int offset, String unit, boolean generateValue, boolean storeHistory, Random generator, Long generatorSeed) {
+        super(Type.SENSOR_LIGHT,name,type,offset,unit,generateValue,storeHistory,generator,generatorSeed);
         this.dev = new SimpleDoubleProperty(DEFAULT_NORMAL_DEV);
         this.avg = new SimpleDoubleProperty(DEFAULT_NORMAL_AVG);
         this.min = new SimpleDoubleProperty(DEFAULT_MIN);
@@ -48,13 +48,13 @@ public class TemperatureSensorValue extends AbstractValue<Double> implements Has
         switch (getGeneratorType()){
             case NORMAL_DISTRIBUTION:
                 if(devProperty() == null || avgProperty() == null || maxProperty() == null || minProperty() == null){
-                    throw new IllegalArgumentException("Temperature generator doesn't have variables needed to generate new value (Dev,Avg,Max,Min)");
+                    throw new IllegalArgumentException("Light intensity generator doesn't have variables needed to generate new value (Dev,Avg,Max,Min)");
                 }
                 this.setValue(Utilities.normalDistribution(getGenerator(), 100, getDev(), getAvg(), getMax(), getMin()));
                 break;
             case LINEAR_DISTRIBUTION:
                 if(stepProperty() == null || maxProperty() == null || minProperty() == null){
-                    throw new IllegalArgumentException("Temperature generator doesn't have variables needed to generate new value (Step,Max,Min)");
+                    throw new IllegalArgumentException("Light intensity generator doesn't have variables needed to generate new value (Step,Max,Min)");
                 }
                 this.setValue(Utilities.linearDistribution(getValue(),getStep(),getMax(),getMin()));
                 break;

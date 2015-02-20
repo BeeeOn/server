@@ -282,7 +282,7 @@ public class DetailedSimulationView implements Initializable,DetailedSimulationP
     public void removeAdapterBtn(AdapterController adapterController){
         if(adapterBtns != null && adapterBtns.size() > 0){
             for(Iterator<AdapterButton> it = adapterBtns.iterator();it.hasNext();){
-                AdapterButton btn = (AdapterButton)it.next();
+                AdapterButton btn = it.next();
                 if(btn.getController().equals(adapterController)){
                     it.remove();
                     adapterBtnsContainer.getChildren().remove(btn);

@@ -1,8 +1,6 @@
 package com.iha.emulator.models.value;
 
-import com.iha.emulator.models.value.implemented.HumiditySensorValue;
-import com.iha.emulator.models.value.implemented.OnOffActuatorValue;
-import com.iha.emulator.models.value.implemented.TemperatureSensorValue;
+import com.iha.emulator.models.value.implemented.*;
 import javafx.beans.property.StringProperty;
 import org.dom4j.Element;
 
@@ -15,8 +13,12 @@ public interface Value<T> {
 
     public enum Type{
         SENSOR_TEMPERATURE("Temperature", TemperatureSensorValue.class, "°C", "0x0A", new Generator[]{Generator.NORMAL_DISTRIBUTION, Generator.LINEAR_DISTRIBUTION}),
+        SENSOR_NOISE("Noise", NoiseSensorValue.class, "dB", "0x06", new Generator[]{Generator.NORMAL_DISTRIBUTION, Generator.LINEAR_DISTRIBUTION}),
+        SENSOR_LIGHT("Light", LightSensorValue.class, "lx", "0x05", new Generator[]{Generator.NORMAL_DISTRIBUTION, Generator.LINEAR_DISTRIBUTION}),
+        SENSOR_EMISSIONS("Emissions", EmissionsSensorValue.class, "ppm", "0x07", new Generator[]{Generator.NORMAL_DISTRIBUTION, Generator.LINEAR_DISTRIBUTION}),
+        SENSOR_PRESSURE("Pressure", PressureSensorValue.class, "hPa", "0x02", new Generator[]{Generator.NORMAL_DISTRIBUTION, Generator.LINEAR_DISTRIBUTION}),
         SENSOR_HUMIDITY("Humidity", HumiditySensorValue.class, "%", "0x01", new Generator[]{Generator.NORMAL_DISTRIBUTION, Generator.LINEAR_DISTRIBUTION}),
-        ACTUATOR_ON_OFF("On/Off Actuator", OnOffActuatorValue.class, "", "0xA0", null);
+        ACTUATOR_ON_OFF("On/Off Actuator", OnOffActuatorValue.class, "", "0xA0", new Generator[]{Generator.BOOLEAN_RANDOM});
 
         final private String name;
         final private Class typeClass;
@@ -58,17 +60,28 @@ public interface Value<T> {
     }
 
     public enum Generator {
-        NORMAL_DISTRIBUTION("ND"),
-        LINEAR_DISTRIBUTION("LD");
+        NORMAL_DISTRIBUTION("ND","Normal distribution"),
+        LINEAR_DISTRIBUTION("LD","Linear distribution"),
+        BOOLEAN_RANDOM("BR","Boolean random");
 
+        final private String type;
         final private String name;
 
-        Generator(String name) {
+        Generator(String type,String name) {
+            this.type = type;
             this.name = name;
         }
 
-        public String getName(){
-            return this.name;
+        public String getType(){
+            return this.type;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String toString(){
+            return name;
         }
     }
 

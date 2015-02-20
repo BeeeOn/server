@@ -20,7 +20,6 @@ import java.util.ResourceBundle;
  */
 public class SensorPanelView implements Initializable,SensorPanelPresenter.Display {
 
-    /** FIXGUI remove invisible sensor panel from DetailsSimulations.fxml */
     private static final Logger logger = LogManager.getLogger(SensorPanelView.class);
     private SensorPanelPresenter presenter;
 

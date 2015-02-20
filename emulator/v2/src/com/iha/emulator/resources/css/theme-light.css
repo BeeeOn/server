@@ -244,7 +244,7 @@
 
 .logTextAreaContainer {
     -fx-background-color: #ffffff;
-    -fx-border-width: 0px;
+    -fx-border-width: 0;
 }
 
 .logTextArea {
@@ -457,7 +457,6 @@
     -fx-font-weight: bold;
 }
 
-/** FIXGUI save min width and height, change sensor icons to smaller size**/
 .sensorPanelHeader {
     -fx-background-color: rgb(12,223,86);
     -fx-pref-width: 230px;
@@ -752,7 +751,7 @@
     -fx-background-repeat: no-repeat;
     -fx-background-position: center center;
     -fx-border-width: 0;
-    -fx-padding: 0px 3px 0px 3px;
+    -fx-padding: 0 3px 0 3px;
     -fx-border-radius: 0;
     -fx-background-radius: 0;
     -fx-cursor: hand;
@@ -914,7 +913,7 @@
 
 .valuesInformationContainerLeft {
     -fx-border-color: #dbdbdb;
-    -fx-border-width: 1px 0px 1px 1px;
+    -fx-border-width: 1px 0 1px 1px;
 }
 
 .valuesInformationContainerRight {

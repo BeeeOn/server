@@ -10,6 +10,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TabPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import org.apache.logging.log4j.LogManager;
@@ -31,6 +32,7 @@ public class AdapterLogger {
 
     private static final String TIME_PATTERN = "HH:mm:ss(SSS)";
     private static DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(TIME_PATTERN);
+    private static final int ERROR_TAB_INDEX = 2;
 
     private static final int BUFFER_LINE_COUNT_MAX = 60;
 
@@ -46,6 +48,8 @@ public class AdapterLogger {
     }
 
     private Type actualType;
+
+    private TabPane tabPane = null;
 
     private Node adapterLogContainer;
     private Node toBeSentLogContainer;
@@ -71,6 +75,11 @@ public class AdapterLogger {
         this.partialMessage = new SimpleBooleanProperty(false);
         this.shortMessage = new SimpleBooleanProperty(false);
         bindChangeListener();
+    }
+
+    public AdapterLogger(TabPane tabPane){
+        this();
+        this.tabPane = tabPane;
     }
 
     public synchronized void log(String message){
@@ -129,6 +138,7 @@ public class AdapterLogger {
         Platform.runLater(() -> {
             if(errorLog!= null){
                 errorLog.getChildren().add(new Text(timeFormatter.format(LocalTime.now()) + " - " + message + "\n"));
+                if(tabPane != null) tabPane.getSelectionModel().select(ERROR_TAB_INDEX);
             }
         });
     }

@@ -13,14 +13,14 @@ import java.util.Random;
 /**
  * Created by Shu on 2.12.2014.
  */
-public class TemperatureSensorValue extends AbstractValue<Double> implements HasNormalDistribution,HasLinearDistribution {
+public class EmissionsSensorValue extends AbstractValue<Integer> implements HasNormalDistribution,HasLinearDistribution{
 
-    private static final double DEFAULT_VALUE = 25.5;
-    private static final double DEFAULT_MAX = 50;
-    private static final double DEFAULT_MIN = -50;
-    private static final double DEFAULT_NORMAL_DEV = 0.5;
-    private static final double DEFAULT_NORMAL_AVG = 25.5;
-    private static final double DEFAULT_LINEAR_STEP = 3;
+    private static final int DEFAULT_VALUE = 320;
+    private static final double DEFAULT_MAX = 2000;
+    private static final double DEFAULT_MIN = 0;
+    private static final double DEFAULT_NORMAL_DEV = 5;
+    private static final double DEFAULT_NORMAL_AVG = 320;
+    private static final double DEFAULT_LINEAR_STEP = 20;
 
     private DoubleProperty dev;
     private DoubleProperty avg;
@@ -28,8 +28,8 @@ public class TemperatureSensorValue extends AbstractValue<Double> implements Has
     private DoubleProperty max;
     private DoubleProperty step;
 
-    public TemperatureSensorValue(String name, String type,int offset, String unit, boolean generateValue, boolean storeHistory, Random generator, Long generatorSeed) {
-        super(Type.SENSOR_TEMPERATURE,name,type,offset,unit,generateValue,storeHistory,generator,generatorSeed);
+    public EmissionsSensorValue(String name, String type, int offset, String unit, boolean generateValue, boolean storeHistory, Random generator, Long generatorSeed) {
+        super(Type.SENSOR_EMISSIONS,name,type,offset,unit,generateValue,storeHistory,generator,generatorSeed);
         this.dev = new SimpleDoubleProperty(DEFAULT_NORMAL_DEV);
         this.avg = new SimpleDoubleProperty(DEFAULT_NORMAL_AVG);
         this.min = new SimpleDoubleProperty(DEFAULT_MIN);
@@ -40,34 +40,35 @@ public class TemperatureSensorValue extends AbstractValue<Double> implements Has
     }
 
     @Override
-    public void nextValue() throws NullPointerException,IllegalArgumentException{
+    public void nextValue() throws NullPointerException{
         //store value history if needed
         if(isStoreHistory()) storeValue(this.getValue());
-        /**/
         if(getGeneratorType() == null || !isGenerateValue()) return;
+        Double result = null;
         switch (getGeneratorType()){
             case NORMAL_DISTRIBUTION:
                 if(devProperty() == null || avgProperty() == null || maxProperty() == null || minProperty() == null){
-                    throw new IllegalArgumentException("Temperature generator doesn't have variables needed to generate new value (Dev,Avg,Max,Min)");
+                    throw new IllegalArgumentException("Emissions generator doesn't have variables needed to generate new value (Dev,Avg,Max,Min)");
                 }
-                this.setValue(Utilities.normalDistribution(getGenerator(), 100, getDev(), getAvg(), getMax(), getMin()));
+                 result = Utilities.normalDistribution(getGenerator(), 1, getDev(), getAvg(), getMax(), getMin());
+
                 break;
             case LINEAR_DISTRIBUTION:
                 if(stepProperty() == null || maxProperty() == null || minProperty() == null){
-                    throw new IllegalArgumentException("Temperature generator doesn't have variables needed to generate new value (Step,Max,Min)");
+                    throw new IllegalArgumentException("Emissions generator doesn't have variables needed to generate new value (Step,Max,Min)");
                 }
-                this.setValue(Utilities.linearDistribution(getValue(),getStep(),getMax(),getMin()));
+                result = Utilities.linearDistribution(getValue(),getStep(),getMax(),getMin());
                 break;
         }
+        this.setValue(result == null ? null : (int) Math.round(result));
     }
 
     @Override
-    public void nextValue(Double value) {
+    public void nextValue(Integer value) {
         //check value
         if(value == null) throw new NullPointerException("Trying to set value to null");
         //store value history if needed
         if(isStoreHistory()) storeValue(this.getValue());
-        //set value
         this.setValue(value);
     }
 
@@ -82,8 +83,8 @@ public class TemperatureSensorValue extends AbstractValue<Double> implements Has
     }
 
     @Override
-    public Double fromStringToValueType(String valueString) {
-        return Double.valueOf(valueString);
+    public Integer fromStringToValueType(String valueString) throws NumberFormatException {
+        return Integer.valueOf(valueString);
     }
 
     @Override
@@ -123,7 +124,6 @@ public class TemperatureSensorValue extends AbstractValue<Double> implements Has
         setMin(min);
     }
 
-    @Override
     public double getDev() {
         return dev.get();
     }
@@ -136,7 +136,6 @@ public class TemperatureSensorValue extends AbstractValue<Double> implements Has
         this.dev.set(dev);
     }
 
-    @Override
     public double getAvg() {
         return avg.get();
     }
@@ -149,7 +148,6 @@ public class TemperatureSensorValue extends AbstractValue<Double> implements Has
         this.avg.set(avg);
     }
 
-    @Override
     public double getMin() {
         return min.get();
     }
@@ -162,7 +160,6 @@ public class TemperatureSensorValue extends AbstractValue<Double> implements Has
         this.min.set(min);
     }
 
-    @Override
     public double getMax() {
         return max.get();
     }
@@ -175,7 +172,6 @@ public class TemperatureSensorValue extends AbstractValue<Double> implements Has
         this.max.set(max);
     }
 
-    @Override
     public double getStep() {
         return step.get();
     }

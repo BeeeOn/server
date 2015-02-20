@@ -96,9 +96,13 @@ public class SensorController {
         //generate new value or send existing to server
         if(isValueGeneratorRunning()){
             logger.trace("Generating new sensor value");
-            getModel().getValues().stream()
-                    .filter(Value::isGenerateValue) //if new value should be generated
-                    .forEach(Value::nextValue); //do it
+            try{
+                getModel().getValues().stream()
+                        .filter(Value::isGenerateValue) //if new value should be generated
+                        .forEach(Value::nextValue); //do it
+            }catch (IllegalArgumentException e){
+                adapterController.sendError(toString() + " -> cannot generate new value!",e);
+            }
             //change engine to send message mod
             setRunValueGenerator(false);
         }else if(getModel().getStatus()){
@@ -113,7 +117,7 @@ public class SensorController {
                 //used in "Detailed simulation"
                 adapterController.sendMessage("Sensor " + getModel().getName() + "/" + getSensorIdAsIp() + " trying to send message.");
                 adapterController.sendMessage("Sensor " + getModel().getName() + "/" + getSensorIdAsIp() + " --> data sent",message,this, OutMessage.Type.SENSOR_MESSAGE);
-                //adapterController.sendMessage("Sensor " + getModel().getName() + "/" + getSensorIdAsIp() + " falling asleep for " + (timer.getDelay().toMillis()*2) / 1000 + " second/s");
+                //adapterController.sendMessage("Sensor " + getModel().getType() + "/" + getSensorIdAsIp() + " falling asleep for " + (timer.getDelay().toMillis()*2) / 1000 + " second/s");
             }
             //change engine to generate value mod
             setRunValueGenerator(true);
@@ -258,7 +262,10 @@ public class SensorController {
     }
 
     public String toString(){
-        if(getModel() != null) return getModel().getName() + "/" + getSensorIdAsIp();
-        else return "Unknown sensor";
+        if(isFullMessage()){
+            return  "Adapter/" + adapterController.getAdapter().getId() + " -> " + "Sensor/" + (getModel() != null ? getSensorIdAsIp() : "Unknown sensor");
+        }else {
+            return getModel() != null ? getModel().getName() + "/" + getSensorIdAsIp() : "Unknown sensor";
+        }
     }
 }
