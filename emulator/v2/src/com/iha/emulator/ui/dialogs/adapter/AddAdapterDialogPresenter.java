@@ -248,6 +248,10 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
         //check if list of adapter controllers exist
         AdapterController newAdapterController = null;
         try {
+            if(Utilities.isAdapterIdTaken(parent.getAdapterControllers(),Integer.valueOf(view.getAdapterIdLbl().getText()))){
+                showWarning("Warning","Adapter ID\"" + view.getAdapterIdLbl().getText() + "\" id taken.","Please choose another ID");
+                return false;
+            }
             //create new adapter controller
             newAdapterController = new AdapterController();
             //save it to list

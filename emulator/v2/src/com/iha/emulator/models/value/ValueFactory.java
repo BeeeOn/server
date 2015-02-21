@@ -45,6 +45,12 @@ public class ValueFactory {
             case SENSOR_EMISSIONS:
                 value = new EmissionsSensorValue(valueType.getName(),valueType.getType(),0,valueType.getUnit(),generateValue,storeHistory,new Random(),generatorSeed);
                 break;
+            case SENSOR_ON_OFF:
+                value = new OnOffSensorValue(valueType.getName(),valueType.getType(),0,valueType.getUnit(),generateValue,storeHistory,new Random(),generatorSeed);
+                break;
+            case SENSOR_OPEN_CLOSED:
+                value = new OpenClosedSensorValue(valueType.getName(),valueType.getType(),0,valueType.getUnit(),generateValue,storeHistory,new Random(),generatorSeed);
+                break;
             case ACTUATOR_ON_OFF:
                 value = new OnOffActuatorValue(valueType.getName(),valueType.getType(),0,valueType.getUnit(),generateValue,storeHistory,new Random(),generatorSeed);
                 break;

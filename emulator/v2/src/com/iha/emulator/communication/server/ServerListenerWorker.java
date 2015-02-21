@@ -71,23 +71,32 @@ public class ServerListenerWorker implements Runnable {
         Protocol protocol = getMessageProtocolVersion(inDocument);
         protocol.checkProtocolVersion(inDocument);
         logger.trace("Getting adapter id");
-        int adapterId = protocol.parseAdapterId(inDocument);
-        logger.trace("Getting adapter controller for adapter id: " + adapterId);
-        AdapterController adapterController;
-        if(adapterId != 0) {
-            adapterController = getAdapterControllerById(adapterId);
-        }else {
-            logger.debug("Cannot retrieve adapter id from incoming message. Cancel message processing.");
-            return;
-        }
-        if(adapterController != null){
-            protocol.parseInAdapterMessage(inDocument,adapterController);
-        }else {
-            logger.error("AdapterController for adapter " + adapterId + " NOT found");
-            Platform.runLater(() -> DetailedSimulationPresenter.showException(logger, "Incoming message error. Cannot find adapter with id: " + adapterId, null, false, null)
+        int adapterId;
+        try{
+            adapterId = protocol.parseAdapterId(inDocument);
+            logger.trace("Getting adapter controller for adapter id: " + adapterId);
+            AdapterController adapterController;
+            if(adapterId != 0) {
+                adapterController = getAdapterControllerById(adapterId);
+            }else {
+                logger.error("Cannot retrieve adapter id from incoming message. Cancel message processing.");
+                Platform.runLater(() -> DetailedSimulationPresenter.showException(logger, "Cannot retrieve adapter id from incoming message. Cancel message processing.", null, false, null)
+                );
+                return;
+            }
+            if(adapterController != null){
+                protocol.parseInAdapterMessage(inDocument,adapterController);
+            }else {
+                logger.error("AdapterController for adapter " + adapterId + " NOT found");
+                final int finalAdapterId = adapterId;
+                Platform.runLater(() -> DetailedSimulationPresenter.showException(logger, "Incoming message error. Cannot find adapter with id: " + finalAdapterId, null, false, null)
+                );
+            }
+        }catch (NumberFormatException e){
+            logger.error("Cannot convert adapter id from message to integer!");
+            Platform.runLater(() -> DetailedSimulationPresenter.showException(logger, "Cannot convert adapter id from message to integer!", null, false, null)
             );
         }
-
     }
 
     public AdapterController getAdapterControllerById(int id){

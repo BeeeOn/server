@@ -130,13 +130,13 @@ public class ZeroPointOne extends AbstractProtocol {
     }
 
     @Override
-    public int parseAdapterId(Document inDocument) throws NullPointerException{
+    public int parseAdapterId(Document inDocument) throws NullPointerException,NumberFormatException{
         Element rootElement = inDocument.getRootElement();
         String state = rootElement.attribute("state").getValue();
         getLogger().trace("Incoming message state: " + state);
         switch (state){
             case "set":
-                return 99999;
+                return Integer.valueOf(rootElement.attributeValue("debug_adapter_id"));
             case "listen":
                 return Integer.valueOf(rootElement.attribute("adaptr_id").getValue());
         }
