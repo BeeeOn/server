@@ -93,15 +93,19 @@
   <!-- Project Libraries -->
   
   <path id="library.dom4j-2.0.0-alpha-2.classpath">
-    <pathelement location="//dom4j-2.0.0-ALPHA-2.jar"/>
+    <pathelement location="${basedir}/resources/dom4j-2.0.0-ALPHA-2.jar"/>
   </path>
   
   <path id="library.log4j-api-2.1.classpath">
-    <pathelement location="//log4j-api-2.1.jar"/>
+    <pathelement location="${basedir}/resources/log4j-api-2.1.jar"/>
   </path>
   
   <path id="library.log4j-core-2.1.classpath">
-    <pathelement location="//log4j-core-2.1.jar"/>
+    <pathelement location="${basedir}/resources/log4j-core-2.1.jar"/>
+  </path>
+  
+  <path id="library.postgresql-9.3-1102.jdbc41.classpath">
+    <pathelement location="${basedir}/resources/postgresql-9.3-1102.jdbc41.jar"/>
   </path>
   
   <!-- Modules -->
@@ -130,6 +134,7 @@
     <path refid="library.log4j-core-2.1.classpath"/>
     <path refid="library.log4j-api-2.1.classpath"/>
     <path refid="library.dom4j-2.0.0-alpha-2.classpath"/>
+    <path refid="library.postgresql-9.3-1102.jdbc41.classpath"/>
   </path>
   
   <path id="emulator_server.runtime.production.module.classpath">
@@ -137,6 +142,7 @@
     <path refid="library.log4j-core-2.1.classpath"/>
     <path refid="library.log4j-api-2.1.classpath"/>
     <path refid="library.dom4j-2.0.0-alpha-2.classpath"/>
+    <path refid="library.postgresql-9.3-1102.jdbc41.classpath"/>
   </path>
   
   <path id="emulator_server.module.classpath">
@@ -145,6 +151,7 @@
     <path refid="library.log4j-core-2.1.classpath"/>
     <path refid="library.log4j-api-2.1.classpath"/>
     <path refid="library.dom4j-2.0.0-alpha-2.classpath"/>
+    <path refid="library.postgresql-9.3-1102.jdbc41.classpath"/>
   </path>
   
   <path id="emulator_server.runtime.module.classpath">
@@ -153,6 +160,7 @@
     <path refid="library.log4j-core-2.1.classpath"/>
     <path refid="library.log4j-api-2.1.classpath"/>
     <path refid="library.dom4j-2.0.0-alpha-2.classpath"/>
+    <path refid="library.postgresql-9.3-1102.jdbc41.classpath"/>
   </path>
   
   
@@ -167,7 +175,7 @@
   <path id="emulator_server.module.sourcepath">
     <dirset dir="${module.emulator_server.basedir}">
       <include name="src"/>
-      <include name="src/com/iha/emulator/resources"/>
+      <include name="resources"/>
     </dirset>
   </path>
   
@@ -189,7 +197,7 @@
         <patternset refid="compiler.resources"/>
         <type type="file"/>
       </fileset>
-      <fileset dir="/">
+      <fileset dir="${module.emulator_server.basedir}/resources">
         <patternset refid="compiler.resources"/>
         <type type="file"/>
       </fileset>
@@ -229,9 +237,10 @@
     </jar>
     <copy file="${temp.jar.path.emulator_server.jar}" tofile="${artifact.output.emulator_server:jar}/emulator_server.jar"/>
     <mkdir dir="${artifact.output.emulator_server:jar}/lib"/>
-    <copy file="//log4j-api-2.1.jar" tofile="${artifact.output.emulator_server:jar}/lib/log4j-api-2.1.jar"/>
-    <copy file="//log4j-core-2.1.jar" tofile="${artifact.output.emulator_server:jar}/lib/log4j-core-2.1.jar"/>
-    <copy file="//dom4j-2.0.0-ALPHA-2.jar" tofile="${artifact.output.emulator_server:jar}/lib/dom4j-2.0.0-ALPHA-2.jar"/>
+    <copy file="${basedir}/resources/log4j-api-2.1.jar" tofile="${artifact.output.emulator_server:jar}/lib/log4j-api-2.1.jar"/>
+    <copy file="${basedir}/resources/log4j-core-2.1.jar" tofile="${artifact.output.emulator_server:jar}/lib/log4j-core-2.1.jar"/>
+    <copy file="${basedir}/resources/dom4j-2.0.0-ALPHA-2.jar" tofile="${artifact.output.emulator_server:jar}/lib/dom4j-2.0.0-ALPHA-2.jar"/>
+    <copy file="${basedir}/resources/postgresql-9.3-1102.jdbc41.jar" tofile="${artifact.output.emulator_server:jar}/lib/postgresql-9.3-1102.jdbc41.jar"/>
     <copy file="${basedir}/server.properties" tofile="${artifact.output.emulator_server:jar}/server.properties"/>
   </target>
   
