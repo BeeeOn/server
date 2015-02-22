@@ -246,7 +246,7 @@ bool ConnectionServer::HandleRequest ()  //TODO: spravit bool return type
 			os << std::hex << temp.input[0];
 			stringType = os.str();
 			Log->WriteMessage(INFO,"Device hexa type :" + stringType);
-			message = this->MC->CreateSwitchMessage(ID,value,stringType,std::to_string(temp.input[1]));
+			message = this->MC->CreateSwitchMessage(std::to_string(AdapterId),ID,value,stringType,std::to_string(temp.input[1]));
 			database->GetAdapterData(&AdapterIP,AdapterId);
 		}
 		else
@@ -370,7 +370,7 @@ std::string MessageCreator::CreateListenMessage(std::string AdapterID)
 
 };
 
-std::string MessageCreator::CreateSwitchMessage(std::string deviceId, std::string value, std::string type, std::string offset)
+std::string MessageCreator::CreateSwitchMessage(std::string Adapter, std::string deviceId, std::string value, std::string type, std::string offset)
 {
 	Log->WriteMessage(TRACE,"Entering " + this->_Name + "::CreateSwitchMessage");
 	xml_document *resp = new xml_document();
@@ -382,7 +382,8 @@ std::string MessageCreator::CreateSwitchMessage(std::string deviceId, std::strin
 	unsigned int DeviceIPint = ntohl (DeviceIP);
 	server_adapter.append_attribute("protocol_version") = "0.1";
 	server_adapter.append_attribute("state") = "set";
-	server_adapter.append_attribute("id") = std::to_string(DeviceIPint).c_str();;
+	server_adapter.append_attribute("id") = std::to_string(DeviceIPint).c_str();
+	server_adapter.append_attribute("debug_adapter_id") = Adapter.c_str();
 	//server_adapter.attribute("protocol_version") = "0.1";
 	//server_adapter.attribute("state")
 	xml_node value_node = server_adapter.append_child("value");

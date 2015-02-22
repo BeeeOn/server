@@ -63,7 +63,7 @@ class MessageCreator
 	std::string CreateDeleteMessage(std::string deviceID);
 	//std::string CreateSwitchMessage(std::string type, std::string val, std::string actorIP);
 	std::string CreateListenMessage(std::string AdapterID);
-	std::string CreateSwitchMessage(std::string deviceId, std::string value, std::string type, std::string offset);
+	std::string CreateSwitchMessage(std::string Adapter,std::string deviceId, std::string value, std::string type, std::string offset);
 	MessageCreator();
 };
 
