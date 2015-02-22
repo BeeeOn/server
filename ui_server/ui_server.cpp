@@ -40,6 +40,8 @@ void sig_handler(int signo)
 
 int main(int argc, char** argv)
 {   
+
+    
     //load XML file from argv[1]
     if(argc>=2){
         try{
@@ -61,13 +63,16 @@ int main(int argc, char** argv)
         
         Logger::getInstance(Logger::FATAL) << "start with port"<<serverPort <<endl;
         Logger::getInstance(Logger::FATAL) << "threads: "<<Config::getInstance().getServerThreadsNumber() << endl;
+        Logger::getInstance(Logger::FATAL) << "logs will be stored in : " << Logger::getInstance().getFileNamebyDate() <<" and (if not std::out ) file will be changed every day "<< endl;
+        
        // ComTable::getInstance().startComTableCleaner(Config::getInstance().getComTableSleepPeriodMs(), Config::getInstance().getComTableMaxInactivityMs() );
         try{                        
             DBConnector::getInstance().setConnectionStringAndOpenSessions( Config::getInstance().getDBConnectionString() , Config::getInstance().getDBSessionsNumber());
         }
         catch (soci::soci_error const & e)
         {
-            Logger::getInstance(Logger::ERROR) << "DB error (soci): " << e.what() << endl;
+            Logger::getInstance(Logger::FATAL) << "DB error (soci), probably cant set connection, more:" << e.what() << endl;
+            return 1;
         }
         /* device d;
         d.id = "53.54.55.56";

@@ -1,0 +1,36 @@
+>1< 140291954194240: 22.2.2015 13:10:38:680 start with port4565
+>1< 140291954194240: 22.2.2015 13:10:38:680 threads: 10
+>1< 140291954194240: 22.2.2015 13:10:38:681 logs will be stored in : logs/log22_2_2015 and (if not std::out ) file will be changed every day 
+>6< 140291954194240: 22.2.2015 13:10:38:711 MSGIN: <com ver="2.3"  state="getuid" email="n11@gmail.com" gid="99191" gt="1" pid="1100" loc="cs" />
+>5< 140291954194240: 22.2.2015 13:10:38:711 msg: getuid
+>7< 140291954194240: 22.2.2015 13:10:38:711 access granted 
+>5< 140291954194240: 22.2.2015 13:10:38:711 GUID
+>7< 140291954194240: 22.2.2015 13:10:38:711 DB:insertNewUser
+>3< 140291954194240: 22.2.2015 13:10:38:712 Error: Cannot execute query. ERROR:  duplicate key value violates unique constraint "users_pk"
+DETAIL:  Key (user_id)=(99191) already exists.
+
+>7< 140291954194240: 22.2.2015 13:10:38:712 99191 already exist?
+>7< 140291954194240: 22.2.2015 13:10:38:713 DB:insertNewmobileDevice
+>6< 140291954194240: 22.2.2015 13:10:38:991 MSGOUT: <com ver="2.3" uid="18" state="uid" ></com>
+
+>6< 140291954194240: 22.2.2015 13:10:38:991 MSGIN: <com ver="2.3"  uid="9" state="addadapter" aid="10"     aname="home"  />
+>5< 140291954194240: 22.2.2015 13:10:38:991 msg: addadapter
+>5< 140291954194240: 22.2.2015 13:10:38:991 user: comId:9
+>7< 140291954194240: 22.2.2015 13:10:38:991 DB:iha token valid?
+>7< 140291954194240: 22.2.2015 13:10:38:992 user not logged: 
+>3< 140291954194240: 22.2.2015 13:10:38:992 Server error: 
+>6< 140291954194240: 22.2.2015 13:10:38:992 MSGOUT: <com ver="2.3" uid="9" state="false" errcode="20"></com>
+
+
+>6< 140291954194240: 22.2.2015 13:10:38:992 MSGIN: <com ver="2.3"  state="getuid" email="n11@gmail.com" gid="99191" gt="1" pid="1100" loc="cs" />
+>5< 140291954194240: 22.2.2015 13:10:38:992 msg: getuid
+>7< 140291954194240: 22.2.2015 13:10:38:992 access granted 
+>5< 140291954194240: 22.2.2015 13:10:38:992 GUID
+>7< 140291954194240: 22.2.2015 13:10:38:992 DB:insertNewUser
+>3< 140291954194240: 22.2.2015 13:10:38:993 Error: Cannot execute query. ERROR:  duplicate key value violates unique constraint "users_pk"
+DETAIL:  Key (user_id)=(99191) already exists.
+
+>7< 140291954194240: 22.2.2015 13:10:38:993 99191 already exist?
+>7< 140291954194240: 22.2.2015 13:10:38:993 DB:insertNewmobileDevice
+>6< 140291954194240: 22.2.2015 13:10:39:91 MSGOUT: <com ver="2.3" uid="19" state="uid" ></com>
+

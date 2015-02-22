@@ -6,16 +6,15 @@
 #include <malloc.h>
 #include <iostream>
 #include <vector>
-#include <soci.h>
-#include <postgresql/soci-postgresql.h>
+#include <soci/soci.h>
+#include <soci/postgresql/soci-postgresql.h>
 #include "Logger.h"
 #include "IMsgIn.h"
 #include "gTokenChecker.h"
 #include "ServerException.h"
 
 
-using namespace std;
-using namespace soci;
+
 
 class DBConnector
 {
@@ -31,32 +30,32 @@ public:
     void releaseSession(soci::session* session);
     
     ~DBConnector(void);
-    void setConnectionStringAndOpenSessions(string conString, int sessionPoolSize = 10);
+    void setConnectionStringAndOpenSessions(std::string conString, int sessionPoolSize = 10);
     
-    void DEBUGsetConnectionStringAndOpenSessions(string conString, int sessionPoolSize = 10);
+    void DEBUGsetConnectionStringAndOpenSessions(std::string conString, int sessionPoolSize = 10);
     void DEBUGrollbackEverything();
-    string DEBUGexec(string sqlQuery);
+    std::string DEBUGexec(std::string sqlQuery);
         
-    string escapeString(string str);
+    std::string escapeString(std::string str);
     
-    int insertNewUser(string gid, googleInfo gInfo);
-    int insertNewMobileDevice(IhaToken ihaToken, string gId, string phoneId, string phoneLocale);
+    int insertNewUser(std::string gid, googleInfo gInfo);
+    int insertNewMobileDevice(IhaToken ihaToken, std::string gId, std::string phoneId, std::string phoneLocale);
     GUserId getUserIdbyIhaToken(IhaToken ihaToken);
     
-    int getUserId(string email);
-    bool isUserRegistred(string email);
-    string getUserRoleM(GUserId gUserId, string adapterId);
-    void updatePhoneLocale(string mail, string phoneLocale);
-    string getXMLusersAdapters(string email);
+    int getUserId(std::string email);
+    bool isUserRegistred(std::string email);
+    string getUserRoleM(GUserId gUserId, std::string adapterId);
+    void updatePhoneLocale(std::string mail, std::string phoneLocale);
+    std::string getXMLusersAdapters(std::string email);
     bool isAnyUnregistredAdapter();
-    bool isUserParredWithAdapter(string mail, string adapter);
-    string getXMLDevicesQueryString(string facilitiesCond="");
-    string getXMLAllDevs(string adapter);
-    string getXMLdevices(GUserId userId, vector<string> adaptersVec, vector<device> devicesVec);
-    string getXMLNewDevices(string adapterId);
-    bool isAdapterRegistrable(string adapterId);
-    int parAdapterWithUserIfPossible(int adapterId, string adapterName, string gId);
-    void insertNewUserParredWithUnregistredAdapter(string adapterId, string mail, bool registerNewUser = false);
+    bool isUserParredWithAdapter(std::string mail, std::string adapter);
+    std::string getXMLDevicesQueryString(std::string facilitiesCond="");
+    std::string getXMLAllDevs(std::string adapter);
+    std::string getXMLdevices(GUserId userId, vector<std::string> adaptersVec, vector<device> devicesVec);
+    std::string getXMLNewDevices(std::string adapterId);
+    bool isAdapterRegistrable(std::string adapterId);
+    int parAdapterWithUserIfPossible(int adapterId, std::string adapterName, std::string gId);
+    void insertNewUserParredWithUnregistredAdapter(std::string adapterId, std::string mail, bool registerNewUser = false);
     
     /*ROOMS*/
     int insertNewRoom(string adapterId, string roomType, string roomName);
@@ -64,7 +63,7 @@ public:
     void deleteRoom(string adapterId, string roomId);
     
     string getXMLrooms(string adapterId);
-    string getUserId(session & sql,string userMail);
+    string getUserId(soci::session & sql,string userMail);
     /*DEVICES*/
     int updateFacility(string adapterId,string id,string init, string locationId, string refresh);
     int updateDevice(string adapterId, string id, string type, string name, string visibility);
