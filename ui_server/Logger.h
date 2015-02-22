@@ -10,12 +10,10 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <thread>
-#include <mutex>
 #include "ccolor.h"
 
-//#define  COLORED_LOGGER
-#define LOGS_FILE "logs"
-//#define LOGS_TO_STDOUT
+
+using namespace std;
 
 
 class Logger {
@@ -29,21 +27,42 @@ public:
     static Logger& getInstance();
     static Logger& getInstance(int newVerbosityLvl);
     void setVerbosityThreshold(int verbosityThreshold);
+    /*
+     Logger& operator<<(const string& s);
+     Logger& operator<<(const int& i);
+     */
     
-    void changeFiles();
-    std::string getFileNamebyDate();
-        int test;
+
+
+    
+    template <typename T>
+    Logger &operator<<(const T &a) {
+        
+        if(_verbosityLevel > _verbosityThreshold)
+            return *this;
+        
+        if(_verbosityLevel == this->FATAL && _colored)
+            cout<<zkr::cc::fore::red << zkr::cc::bold;
+        
+        if(_verbosityLevel == this->ERROR && _colored)
+            cout<<zkr::cc::bold;
+        
+        cout<<a;
+        if(_colored)
+            cout<<zkr::cc::console;
+        cout<<flush;
+        return *this;
+    }
+    
+    //allow to use function like std::endl
+    Logger &operator<<(std::ostream& (*pf) (std::ostream&));
+    
+    int test;
 private:
     void setVerbosityLevel(int verbosityLvl);
     void printTime();
     //ofstream _output;
     bool _colored;
-    std::ofstream _currentFile;
-    std::string _fileName;
-    std::mutex _mtx;
-    //day when was stored last log, used for determining new day and change log file
-    int _dayPrecidingChanges;
-    
 public:
     int _verbosityThreshold;
     int _verbosityLevel;
@@ -57,41 +76,6 @@ public:
     static const int DEBUG = 5;
     static const int DEBUG2 = 6;
     static const int DEBUG3 = 7;
-    
-    //allow to use function like std::endl
-    Logger &operator<<(std::ostream& (*pf) (std::ostream&));
-    
-    template <typename T>
-    Logger &operator<<(const T &a) {
-        
-        if(_verbosityLevel > _verbosityThreshold)
-            return *this;
-        
-        
-        std::lock_guard<std::mutex> lck (_mtx);
-        
-        if(_verbosityLevel == this->FATAL)
-        
-        #ifdef COLORED_LOGGER
-        if(_verbosityLevel == this->FATAL)
-            _currentFile<<zkr::cc::fore::red << zkr::cc::bold;
-        
-        if(_verbosityLevel == this->ERROR)
-            _currentFile<<zkr::cc::bold;
-        #endif
-
-        if(_verbosityLevel == this->FATAL)
-            std::cerr << a;
-       _currentFile<<a;
-       
-        #ifdef COLORED_LOGGER
-            std::cout<<zkr::cc::console;
-       #endif
-
-        _currentFile<<std::flush;
-        
-        return *this;
-    }
 };
 
 #endif	/* LOGGER_H */
