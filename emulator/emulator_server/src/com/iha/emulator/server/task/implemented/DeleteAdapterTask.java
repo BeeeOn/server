@@ -1,6 +1,7 @@
 package com.iha.emulator.server.task.implemented;
 
 import com.iha.emulator.server.Database;
+import com.iha.emulator.server.DatabaseInfo;
 import com.iha.emulator.server.task.AbstractTask;
 import org.apache.logging.log4j.Logger;
 import org.dom4j.Element;
@@ -17,13 +18,13 @@ public class DeleteAdapterTask extends AbstractTask {
 
     private Logger logger;
 
-    private String dbName;
+    private DatabaseInfo dbInfo;
     private String adapterId;
     private Database database;
 
-    public DeleteAdapterTask(Logger logger, String dbName, String adapterId) {
+    public DeleteAdapterTask(Logger logger, DatabaseInfo dbInfo, String adapterId) {
         this.logger = logger;
-        this.dbName = dbName;
+        this.dbInfo = dbInfo;
         this.adapterId = adapterId;
         this.database = new Database();
     }
@@ -31,7 +32,7 @@ public class DeleteAdapterTask extends AbstractTask {
     @Override
     public Element resolveTask() {
         try {
-            Connection conn = database.connect(this.dbName);
+            Connection conn = database.connect(this.dbInfo);
             String sql = "DELETE FROM adapters WHERE adapter_id="+this.adapterId;
             logger.trace("DeleteAdapter SQL: ");
             logger.trace(sql);

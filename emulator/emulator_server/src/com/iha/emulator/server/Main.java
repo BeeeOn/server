@@ -3,19 +3,20 @@ package com.iha.emulator.server;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class Main {
 
     private static final Logger logger = LogManager.getLogger(Server.class);
-    private static final String DEFAULT_PROPERTIES_FILE = "/home/xsutov00/emulator_server/server.properties";
+    private static final String DEFAULT_PROPERTIES_FILE = "server.properties";
 
     public static void main(String[] args) {
         String propertiesString;
-        if(args.length == 0 && args[0].endsWith(".properties")){
+        if(args.length != 0 && args[0].endsWith(".properties")){
             propertiesString = args[0];
+            logger.trace("Reading properties file from argument: " + propertiesString);
         }else{
+            logger.trace("Reading default properties file");
             propertiesString = DEFAULT_PROPERTIES_FILE;
         }
         Server server = new Server();

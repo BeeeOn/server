@@ -1,9 +1,10 @@
 package com.iha.emulator.server.task.implemented;
 
-import com.iha.emulator.server.task.AbstractTask;
 import com.iha.emulator.server.Database;
-import org.dom4j.Element;
+import com.iha.emulator.server.DatabaseInfo;
+import com.iha.emulator.server.task.AbstractTask;
 import org.apache.logging.log4j.Logger;
+import org.dom4j.Element;
 
 import javax.naming.NamingException;
 import java.net.ConnectException;
@@ -18,12 +19,12 @@ public class GetAdaptersTask extends AbstractTask {
 
     private Logger logger;
 
-    private String dbName;
+    private DatabaseInfo dbInfo;
     private String attributes;
     private Database database;
 
-    public GetAdaptersTask(Logger logger,String dbName,String attributes) {
-        this.dbName = dbName;
+    public GetAdaptersTask(Logger logger,DatabaseInfo dbInfo,String attributes) {
+        this.dbInfo = dbInfo;
         this.attributes = attributes;
         this.logger = logger;
         database = new Database();
@@ -32,7 +33,7 @@ public class GetAdaptersTask extends AbstractTask {
     @Override
     public Element resolveTask(){
         try {
-            Connection conn = database.connect(this.dbName);
+            Connection conn = database.connect(this.dbInfo);
             String sql = "SELECT " + attributes + " FROM adapters";
             logger.trace("GetAdapters SQL: ");
             logger.trace(sql);

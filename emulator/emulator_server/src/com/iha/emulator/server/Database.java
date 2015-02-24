@@ -3,9 +3,7 @@ package com.iha.emulator.server;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.sql.DataSource;
 import java.net.ConnectException;
 import java.sql.*;
 
@@ -17,9 +15,9 @@ public class Database {
     private static final Logger logger = LogManager.getLogger(Database.class);
 
 
-    public Connection connect(String dbName) throws SQLException, ClassNotFoundException {
+    public Connection connect(DatabaseInfo dbInfo) throws SQLException, ClassNotFoundException {
         Class.forName("org.postgresql.Driver");
-        return DriverManager.getConnection("jdbc:postgresql://localhost:5432/" + dbName, "postgres", "ewwq");
+        return DriverManager.getConnection("jdbc:postgresql://"+dbInfo.getHost()+":"+dbInfo.getPort()+"/" + dbInfo.getDbName(), dbInfo.getUser(), dbInfo.getPass());
     }
 
     public Statement getStatement(Connection c) throws ConnectException, SQLException, NamingException {
