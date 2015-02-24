@@ -11,7 +11,6 @@ import com.iha.emulator.models.Server;
 import com.iha.emulator.ui.Presenter;
 import com.iha.emulator.ui.panels.PanelPresenter;
 import com.iha.emulator.ui.simulations.detailed.DetailedSimulationPresenter;
-import com.iha.emulator.utilities.AdapterLogger;
 import com.iha.emulator.utilities.Utilities;
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
@@ -269,7 +268,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
             //create logger
             newAdapterController.createLog(parent.getView().getLogTabPane());
             //config log
-            newAdapterController.getLog().setType(AdapterLogger.toType(parent.getProperty("defaultLogMessageType")));
+            //newAdapterController.getLog().setType(AdapterLogger.toType(parent.getProperty("defaultLogMessageType")));
             //create scheduler
             newAdapterController.createScheduler();
             //set response tracking

@@ -3,9 +3,9 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<VBox fx:id="view" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="344.0" prefWidth="317.0" stylesheets="@../../../resources/css/theme-light.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iha.emulator.ui.dialogs.adapter.ShowAdaptersDialogView">
+<VBox fx:id="view" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="344.0" prefWidth="396.0" stylesheets="@../../../resources/css/theme-light.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iha.emulator.ui.dialogs.adapter.ShowAdaptersDialogView">
    <children>
-      <TableView fx:id="table" prefHeight="328.0" prefWidth="286.0" tableMenuButtonVisible="true" VBox.vgrow="ALWAYS">
+      <TableView fx:id="table" prefHeight="309.0" prefWidth="386.0" tableMenuButtonVisible="true" VBox.vgrow="ALWAYS">
         <columns>
           <TableColumn editable="false" prefWidth="75.0" text="ID" />
           <TableColumn editable="false" prefWidth="75.0" text="Name" />
@@ -21,9 +21,9 @@
                   <Insets />
                </HBox.margin>
             </ProgressIndicator>
-            <Label fx:id="status" prefHeight="17.0" prefWidth="130.0" styleClass="sensorText" wrapText="true" />
-            <Button fx:id="refreshBtn" defaultButton="true" mnemonicParsing="false" onAction="#handleRefresh" styleClass="showAdaptersDialogBtn" text="Refresh" HBox.hgrow="NEVER" />
-            <Button fx:id="closeBtn" cancelButton="true" mnemonicParsing="false" onAction="#handleClose" styleClass="showAdaptersDialogBtn" text="Close" />
+            <Label fx:id="status" prefHeight="17.0" prefWidth="161.0" styleClass="sensorText" wrapText="true" />
+            <Button fx:id="refreshBtn" defaultButton="true" mnemonicParsing="false" onAction="#handleRefresh" prefHeight="25.0" prefWidth="75.0" styleClass="showAdaptersDialogBtn" text="Refresh" HBox.hgrow="NEVER" />
+            <Button fx:id="closeBtn" cancelButton="true" mnemonicParsing="false" onAction="#handleClose" prefHeight="25.0" prefWidth="75.0" styleClass="showAdaptersDialogBtn" text="Close" />
          </children>
          <VBox.margin>
             <Insets right="15.0" />

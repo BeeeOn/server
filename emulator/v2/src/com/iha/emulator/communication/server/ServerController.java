@@ -65,7 +65,7 @@ public class ServerController {
             reusableBuffer.position(0);
             return new String(reusableBuffer.array()).substring(0,bytesRead);
         } finally {
-            socketChannel.close();
+            if(socketChannel != null) socketChannel.close();
         }
     }
 

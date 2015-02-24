@@ -22,12 +22,12 @@
                      <children>
                         <GridPane prefHeight="201.0" prefWidth="804.0" VBox.vgrow="NEVER">
                           <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="10.0" prefWidth="95.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="232.0" minWidth="10.0" prefWidth="169.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="10.0" prefWidth="107.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="232.0" minWidth="10.0" prefWidth="156.0" />
                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="236.0" minWidth="10.0" prefWidth="102.0" />
                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="409.0" minWidth="10.0" prefWidth="58.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="474.0" minWidth="10.0" prefWidth="123.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="487.0" minWidth="10.0" prefWidth="262.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="474.0" minWidth="10.0" prefWidth="151.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="487.0" minWidth="10.0" prefWidth="234.0" />
                               <ColumnConstraints />
                           </columnConstraints>
                           <rowConstraints>
@@ -39,22 +39,22 @@
                               <RowConstraints maxHeight="37.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="76.0" styleClass="sensorText" text="ID:" GridPane.hgrow="NEVER" GridPane.vgrow="NEVER">
+                              <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="97.0" styleClass="sensorText" text="ID:" GridPane.hgrow="NEVER" GridPane.vgrow="NEVER">
                                  <padding>
                                     <Insets right="6.0" />
                                  </padding>
                               </Label>
-                              <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="76.0" styleClass="sensorText" text="Name:" GridPane.rowIndex="1">
+                              <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="97.0" styleClass="sensorText" text="Name:" GridPane.rowIndex="1">
                                  <padding>
                                     <Insets right="6.0" />
                                  </padding>
                               </Label>
-                              <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="115.0" styleClass="sensorText" text="Icon:" GridPane.columnIndex="4" GridPane.hgrow="NEVER" GridPane.vgrow="NEVER">
+                              <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="144.0" styleClass="sensorText" text="Icon:" GridPane.columnIndex="4" GridPane.hgrow="NEVER" GridPane.vgrow="NEVER">
                                  <padding>
                                     <Insets right="6.0" />
                                  </padding>
                               </Label>
-                              <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="117.0" styleClass="sensorText" text="Color:" GridPane.columnIndex="4" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.vgrow="NEVER">
+                              <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="144.0" styleClass="sensorText" text="Color:" GridPane.columnIndex="4" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.vgrow="NEVER">
                                  <padding>
                                     <Insets right="6.0" />
                                  </padding>
@@ -73,17 +73,17 @@
                                     <Insets right="6.0" />
                                  </padding>
                               </Label>
-                              <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="76.0" styleClass="sensorText" text="Battery:" GridPane.rowIndex="2">
+                              <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="97.0" styleClass="sensorText" text="Battery:" GridPane.rowIndex="2">
                                  <padding>
                                     <Insets right="6.0" />
                                  </padding>
                               </Label>
-                              <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="76.0" styleClass="sensorText" text="Signal:" GridPane.rowIndex="3">
+                              <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="97.0" styleClass="sensorText" text="Signal:" GridPane.rowIndex="3">
                                  <padding>
                                     <Insets right="6.0" />
                                  </padding>
                               </Label>
-                              <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="76.0" styleClass="sensorText" text="Refresh time:" GridPane.rowIndex="4">
+                              <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="97.0" styleClass="sensorText" text="Refresh time:" GridPane.rowIndex="4">
                                  <padding>
                                     <Insets right="6.0" />
                                  </padding>
@@ -106,7 +106,7 @@
                                     <Insets right="6.0" />
                                  </padding>
                               </Label>
-                              <Label alignment="TOP_RIGHT" prefHeight="21.0" prefWidth="119.0" styleClass="sensorText" text="Panel header sample:" GridPane.columnIndex="4" GridPane.columnSpan="2" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+                              <Label alignment="TOP_RIGHT" prefHeight="21.0" prefWidth="144.0" styleClass="sensorText" text="Panel header sample:" GridPane.columnIndex="4" GridPane.columnSpan="2" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                                  <padding>
                                     <Insets right="6.0" />
                                  </padding>
@@ -143,9 +143,9 @@
                                        <children>
                                           <GridPane prefHeight="93.0" prefWidth="537.0" VBox.vgrow="NEVER">
                                             <columnConstraints>
-                                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="297.0" minWidth="0.0" prefWidth="62.0" />
-                                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="541.0" minWidth="0.0" prefWidth="158.0" />
-                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="541.0" minWidth="0.0" prefWidth="160.0" />
+                                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="297.0" minWidth="0.0" prefWidth="70.0" />
+                                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="541.0" minWidth="0.0" prefWidth="168.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="541.0" minWidth="0.0" prefWidth="138.0" />
                                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="541.0" minWidth="6.0" prefWidth="52.0" />
                                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="541.0" minWidth="10.0" prefWidth="110.0" />
                                             </columnConstraints>
@@ -155,23 +155,23 @@
                                               <RowConstraints maxHeight="31.0" minHeight="10.0" prefHeight="28.0" vgrow="SOMETIMES" />
                                             </rowConstraints>
                                              <children>
-                                                <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="41.0" styleClass="sensorText" text="Type:">
+                                                <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="61.0" styleClass="sensorText" text="Type:">
                                                    <padding>
                                                       <Insets right="6.0" />
                                                    </padding>
                                                 </Label>
-                                                <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="41.0" styleClass="sensorText" text="Name:" GridPane.rowIndex="1">
+                                                <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="61.0" styleClass="sensorText" text="Name:" GridPane.rowIndex="1">
                                                    <padding>
                                                       <Insets right="6.0" />
                                                    </padding>
                                                 </Label>
                                                 <TextField fx:id="valueNameTextField" prefHeight="25.0" prefWidth="466.0" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.vgrow="NEVER" />
-                                                <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="144.0" styleClass="sensorText" text="Store history:" GridPane.columnIndex="2">
+                                                <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="129.0" styleClass="sensorText" text="Store history:" GridPane.columnIndex="2">
                                                    <padding>
                                                       <Insets right="6.0" />
                                                    </padding>
                                                 </Label>
-                                                <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="144.0" styleClass="sensorText" text="Generate value:" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                                <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="129.0" styleClass="sensorText" text="Generate value:" GridPane.columnIndex="2" GridPane.rowIndex="1">
                                                    <padding>
                                                       <Insets right="6.0" />
                                                    </padding>
@@ -188,7 +188,7 @@
                                                    </toggleGroup>
                                                 </RadioButton>
                                                 <RadioButton fx:id="valueNoGenerateValueRadBtn" mnemonicParsing="false" prefHeight="17.0" prefWidth="49.0" text="No" toggleGroup="$generateRadBtnGroup" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-                                                <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="41.0" text="Value:" GridPane.rowIndex="2">
+                                                <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="61.0" text="Value:" GridPane.rowIndex="2">
                                                    <padding>
                                                       <Insets right="6.0" />
                                                    </padding>
@@ -198,7 +198,7 @@
                                                    </styleClass>
                                                 </Label>
                                                 <TextField fx:id="valueTextField" prefHeight="25.0" prefWidth="466.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                                <Label fx:id="generatorTypeLbl" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="144.0" styleClass="sensorText" text="Generator type:" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                                                <Label fx:id="generatorTypeLbl" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="129.0" styleClass="sensorText" text="Generator type:" GridPane.columnIndex="2" GridPane.rowIndex="2">
                                                    <padding>
                                                       <Insets right="6.0" />
                                                    </padding>

@@ -14,7 +14,7 @@
          <children>
             <VBox fx:id="serverContainer" prefHeight="314.0" prefWidth="467.0" StackPane.alignment="TOP_LEFT">
                <children>
-                  <Label prefHeight="25.0" prefWidth="169.0" styleClass="informationHeader" text="Server information" />
+                  <Label prefHeight="25.0" prefWidth="266.0" styleClass="informationHeader" text="Server information" />
                   <GridPane prefHeight="163.0" styleClass="informationContainer" VBox.vgrow="NEVER">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="300.0" minWidth="0.0" prefWidth="118.0" />

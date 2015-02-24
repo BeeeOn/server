@@ -4,7 +4,7 @@
         <Property name="log-path">logs/</Property>
     </Properties>
     <Appenders>
-        <RollingFile name="RollingFile" fileName="${log-path}/emu_log.log" filePattern="${log-path}/emu_log_%d{dd-MM-yyyy}-%i.log" >
+        <RollingFile name="RollingFile" fileName="${log-path}/emu_log.log" filePattern="${log-path}/emu_log_$%d{dd-MM-yyyy}-%i.log" >
             <PatternLayout pattern="%d{HH:mm:ss} [%thread] %-5level - %msg%n" />
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
@@ -20,10 +20,10 @@
         </TextAreaAppender>
     </Appenders>
     <Loggers>
-        <Root level="trace" additivity="false">
+        <Root level="info" additivity="false">
             <!--<AppenderRef ref="Console"/>-->
             <AppenderRef ref="TextAreaAppender"/>
-            <AppenderRef ref="RollingFile" level="trace"/>
+            <AppenderRef ref="RollingFile" level="debug"/>
         </Root>
     </Loggers>
 </Configuration>

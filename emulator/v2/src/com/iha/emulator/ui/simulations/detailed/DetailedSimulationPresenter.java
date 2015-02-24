@@ -36,6 +36,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.LoadException;
@@ -47,8 +48,11 @@ import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.Configuration;
 import org.controlsfx.dialog.ExceptionDialog;
 import org.controlsfx.dialog.ProgressDialog;
 import org.dom4j.*;
@@ -189,7 +193,7 @@ public class DetailedSimulationPresenter implements Presenter{
                 //create logger
                 newAdapterController.createLog(getView().getLogTabPane());
                 //config log
-                newAdapterController.getLog().setType(AdapterLogger.toType(getProperty("defaultLogMessageType")));
+                //newAdapterController.getLog().setType(AdapterLogger.toType(getProperty("defaultLogMessageType")));
                 //create scheduler
                 newAdapterController.createScheduler();
                 //set response tracking
@@ -763,7 +767,19 @@ public class DetailedSimulationPresenter implements Presenter{
         //application initialisation
         startMemoryCheck();
         //load properties from .properties file
-        loadProperties(defaultPropertiesFileName);
+        Task<Object> worker = loadProperties(defaultPropertiesFileName);
+        worker.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                try{
+                    setLoggerLevel(getProperty("logLevel"));
+                }catch (IllegalAddException e){
+                    showException(logger,"Cannot retrieve \"logLevel\" from properties. Setting logger to level INFO",e,false,null);
+                    setLoggerLevel("INFO");
+                }
+
+            }
+        });
         //point logger to textArea
         TextAreaAppender.setTextFlow(view.getApplicationLogTextArea());
         //init presenters and save their views to GUI
@@ -787,6 +803,46 @@ public class DetailedSimulationPresenter implements Presenter{
                 event.consume();
             }
         });
+    }
+
+    private void setLoggerLevel(String levelString){
+        Level level;
+        switch (levelString.toLowerCase()){
+            case "all":
+                level = Level.ALL;
+                break;
+            case "trace":
+                level = Level.TRACE;
+                break;
+            case "debug":
+                level = Level.DEBUG;
+                break;
+            case "info":
+                level = Level.INFO;
+                break;
+            case "warn":
+                level = Level.WARN;
+                break;
+            case "error":
+                level = Level.ERROR;
+                break;
+            case "fatal":
+                level = Level.FATAL;
+                break;
+            case "off":
+                level = Level.OFF;
+                break;
+            default:
+                level = Level.INFO;
+                break;
+        }
+        logger.info("Setting logger level: " + level.toString());
+        if(level != null){
+            LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
+            Configuration conf = ctx.getConfiguration();
+            conf.getLoggerConfig(LogManager.ROOT_LOGGER_NAME).setLevel(level);
+            ctx.updateLoggers(conf);
+        }
     }
 
     private void initAndStartServerListener(){
@@ -942,7 +998,7 @@ public class DetailedSimulationPresenter implements Presenter{
         }
     }
 
-    private void loadProperties(String defaultPropertiesFileName){
+    private Task<Object> loadProperties(String defaultPropertiesFileName){
         setStatus("Loading application settings",true);
         //define background process
         Task<Object> worker = new Task<Object>() {
@@ -971,6 +1027,7 @@ public class DetailedSimulationPresenter implements Presenter{
             }
         };
         showLoadingDialog(worker,"Loading...");
+        return worker;
     }
 
     private void showLoadingDialog(Task worker,String title){
