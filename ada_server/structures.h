@@ -9,6 +9,10 @@
 #include "pugiconfig.hpp"
 #include <string>
 #include <ctime>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netinet/ip.h>
 
 #ifndef STRUCTURES_H_
 #define STRUCTURES_H_

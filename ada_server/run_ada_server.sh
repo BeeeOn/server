@@ -1,4 +1,4 @@
-echo "Starting Server Receiver" 
-./run_ada_server_receiver.sh &
-echo "Starting Server Sender" 
-./run_ada_server_sender.sh &
+echo "Starting Server" 
+LD_LIBRARY_PATH=/usr/local/lib64
+export LD_LIBRARY_PATH
+./ada_server 

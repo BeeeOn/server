@@ -16,6 +16,7 @@
 #include <semaphore.h>
 #include <thread>
 #include <unistd.h>
+#include <atomic>
 
 #ifndef LOGER_H_
 #define LOGER_H_
@@ -63,7 +64,7 @@ class Loger
 		std::queue<tlogMsg*> *_msgQueue;
 		void Dequeue();
 		std::thread _worker;
-		bool _teminate;
+		std::atomic<bool> _teminate;
 	public:
 		Loger();
 		~Loger();

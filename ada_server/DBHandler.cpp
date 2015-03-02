@@ -100,12 +100,12 @@ bool DBHandler::IsInDB(std::string tableName, std::string columnName, std::strin
 		if (retRec > 0) //ak sme dostali nejake data znamena to ze udaj sa uz v DB nachadza
 		{
 			this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::IsInDB");
-			return true;
+			return (true);
 		}
 		else
 		{
 			this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::IsInDB");
-			return false;
+			return (false);
 		}
 	}
 	catch(std::exception const &e)
@@ -114,7 +114,7 @@ bool DBHandler::IsInDB(std::string tableName, std::string columnName, std::strin
 		ErrorMessage.append (e.what());
 		this->_log->WriteMessage(ERR,ErrorMessage );
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::IsInDB");
-		return false;
+		return (false);
 	}
 }
 
@@ -135,7 +135,7 @@ bool DBHandler::InsertAdapter(tmessage *message)
 		*_sql << sqlQuery,
 			into(retRec);
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::InsertAdapter");
-		return true;
+		return (true);
 	}
 	catch(std::exception const &e)
 	{
@@ -143,7 +143,7 @@ bool DBHandler::InsertAdapter(tmessage *message)
 		ErrorMessage.append (e.what());
 		this->_log->WriteMessage(ERR,ErrorMessage );
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::InsertAdapter");
-		return false;
+		return (false);
 	}
 }
 
@@ -165,7 +165,7 @@ bool DBHandler::UpdateAdapter(tmessage *message)
 		*_sql << sqlQuery,
 			into(retRec);
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::UpdateAdapter");
-		return true;
+		return (true);
 	}
 	catch(std::exception const &e)
 	{
@@ -173,7 +173,7 @@ bool DBHandler::UpdateAdapter(tmessage *message)
 		ErrorMessage.append (e.what());
 		this->_log->WriteMessage(ERR,ErrorMessage );
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::UpdateAdapter");
-		return false;
+		return (false);
 	}
 }
 
@@ -200,7 +200,7 @@ bool DBHandler::InsertSenAct(tmessage *message)
 		ErrorMessage.append (e.what());
 		this->_log->WriteMessage(ERR,ErrorMessage );
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::InsertSenAct");
-		return false;
+		return (false);
 	}
 	try
 	{
@@ -242,7 +242,7 @@ bool DBHandler::InsertSenAct(tmessage *message)
 				into(retRec);
 		}
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::InsertSenAct");
-		return true;
+		return (true);
 	}
 	catch(std::exception const &e)
 	{
@@ -250,7 +250,7 @@ bool DBHandler::InsertSenAct(tmessage *message)
 		ErrorMessage.append (e.what());
 		this->_log->WriteMessage(ERR,ErrorMessage );
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::InsertSenAct");
-		return false;
+		return (false);
 	}
 }
 
@@ -309,7 +309,7 @@ bool DBHandler::UpdateSenAct(tmessage *message)
 				into(retRec);
 		}
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::UpdateSenAct");
-		return true;
+		return (true);
 	}
 	catch(std::exception const &e)
 	{
@@ -317,7 +317,7 @@ bool DBHandler::UpdateSenAct(tmessage *message)
 		ErrorMessage.append (e.what());
 		this->_log->WriteMessage(ERR,ErrorMessage );
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::UpdateSenAct");
-		return false;
+		return (false);
 	}
 }
 
@@ -339,7 +339,7 @@ int DBHandler::GetWakeUpTime(std::string record)
 		*_sql << sqlQuery,
 			into(retRec, ind);
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetWakeUpTime");
-		return retRec;
+		return (retRec);
 
 	}
 	catch(std::exception const &e)
@@ -348,18 +348,8 @@ int DBHandler::GetWakeUpTime(std::string record)
 		ErrorMessage.append (e.what());
 		this->_log->WriteMessage(ERR,ErrorMessage );
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetWakeUpTime");
-		return 5;
+		return (5);
 	}
-}
-
-session *DBHandler::ReturnConnection()
-{
-	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::ReturnConnection");
-	session *s= this->_sql;
-	this->_sql = NULL;
-	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::ReturnConnection");
-	return s;
-
 }
 
 void DBHandler::GetAdapterData(std::string *adapterIP, long int ID)
@@ -398,7 +388,7 @@ float DBHandler::GetLastTemp(std::string ID, std::string type)
 		retVal = 0.0;
 	}
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetLastTemp");
-	return retVal;
+	return (retVal);
 }
 
 std::vector<std::string> *DBHandler::GetEmails(std::string AdapterID)
@@ -420,7 +410,7 @@ std::vector<std::string> *DBHandler::GetEmails(std::string AdapterID)
 		retVal = nullptr;
 	}
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetEmails");
-	return retVal;
+	return (retVal);
 }
 
 std::vector<std::string> *DBHandler::GetNotifString(std::string email)
@@ -442,7 +432,7 @@ std::vector<std::string> *DBHandler::GetNotifString(std::string email)
 		retVal = nullptr;
 	}
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetNotifString");
-	return retVal;
+	return (retVal);
 }
 
 

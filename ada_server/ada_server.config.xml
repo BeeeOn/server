@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <Database>
+    <Name>home3</Name> <!-- Database Name-->
+    <User>user</User> <!-- DB user name with admin rights to DB-->
+    <Password>Password</Password> <!-- user password -->
+    <ConnectionsCount>50</ConnectionsCount> <!-- Number of connections count to DB -->
+  </Database>
+  <Sender> <!-- Start of ada server sender congif section -->
+    <LogConfig> <!-- Configuration of loging -->
+      <Level>7</Level>
+      <FileNaming>ada_server_sender</FileNaming> <!-- Name of log file -->
+      <FilesCount>5</FilesCount> <!-- Log files history count -->
+      <MaxFileSize>100</MaxFileSize> <!-- Size of log file in MB -->
+      <LogPath>/home/tuso/log/</LogPath> <!-- Path for log files -->
+    </LogConfig>
+    <Port>7070</Port>  <!-- Port to listen on for ui_server request -->
+    <AdapterPort>7978</AdapterPort> <!-- Port where is adapter listening -->
+  </Sender>
+  <Receiver> <!-- Start of ada server receiver congif section -->
+    <Port>7071</Port> <!-- Port to listen for incoming connections from adapters -->
+    <ConnectionTimeOut>10</ConnectionTimeOut> <!-- time out for reading messages -->
+    <LogConfig> <!-- See config description in Sender section-->
+      <Level>7</Level>  
+      <FileNaming>ada_server_receiver</FileNaming>
+      <FilesCount>5</FilesCount>
+      <MaxFileSize>100</MaxFileSize>
+      <LogPath>/home/tuso/log/</LogPath>
+    </LogConfig>
+    </Receiver>
+ </configuration>
