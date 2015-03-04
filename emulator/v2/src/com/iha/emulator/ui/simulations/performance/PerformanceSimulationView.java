@@ -6,6 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.StackPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -57,7 +58,7 @@ public class PerformanceSimulationView implements Initializable,PerformanceSimul
     @FXML private FlowPane serverDetailsContainer;
     //endregion
     //region ADAPTER
-    @FXML private ScrollPane adapterLogContainer;
+    @FXML private StackPane adapterLogContainer;
     @FXML private ScrollPane toBeSentLogContainer;
     @FXML private TabPane logTabPane;
     @FXML private Tab errorTab;
@@ -233,7 +234,7 @@ public class PerformanceSimulationView implements Initializable,PerformanceSimul
     }
 
     @Override
-    public ScrollPane getAdapterLogContainer() {
+    public StackPane getAdapterLogContainer() {
         return adapterLogContainer;
     }
 

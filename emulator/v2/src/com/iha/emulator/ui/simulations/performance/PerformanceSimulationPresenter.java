@@ -20,10 +20,9 @@ import com.iha.emulator.utilities.TextAreaAppender;
 import com.iha.emulator.utilities.Utilities;
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleListProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -178,45 +177,66 @@ public class PerformanceSimulationPresenter implements Presenter{
         if(!DEBUG_AUTO_CREATE){
 
         }else {
-            SimulationTask task = new SimulationTask();
-            //set id
-            task.setId(getTasks().size());
-            //create server model for task
-            logger.trace("Creating new task -> Creating server");
-            task.createServer(false,"production","10.1.0.1",9092,"home4prod");
-            //create task parameters
-            logger.trace("Creating new task -> Creating parameters");
-            task.createTaskParameters(
-                    3, //adapters count
-                    Protocol.Version.ZERO_POINT_ONE, //protocol version
-                    1000, //starting adapter id
-                    1, // sensors count minimum
-                    10, //sensors count maximum
-                    1, //refresh time minimum
-                    10 //refresh time maximum
-            );
-            //create value information
-            ObservableList<Value> enabledValues = FXCollections.observableArrayList();
-            enabledValues = generateEnabledValues(enabledValues);
-            ValueParameters valueParameters = new ValueParameters();
-            valueParameters.setEnabledValues(enabledValues);
-            task.setValueParameters(valueParameters);
-            //create log
-            logger.trace("Creating new task -> Creating logs");
-            task.createLog(view.getLogTabPane());
-            //set log to buffer
-            logger.trace("Creating new task -> Setting logs to buffer");
-            try {
-                task.getLog().setBuffered(true,"task_emu_" + task.getId());
-                logger.trace("");
-            } catch (IOException e) {
-                Utilities.showException(logger, "Cannot create buffer file for new task's log.", e, true, event -> quit());
-            }
-            //add to other tasks
-            logger.trace("Creating new task -> Adding task to list");
-            getTasks().add(task);
-            //set current task
-            //switchCurrentTask(task);
+            Task<Object> worker = new Task<Object>() {
+                @Override
+                protected Object call() throws Exception {
+                    LongProperty progress = new SimpleLongProperty(0);
+                    progress.addListener(new ChangeListener<Number>() {
+                        @Override
+                        public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                            if((Long)newValue > 0 && (Long)newValue < 100)
+                                updateProgress((long)newValue,100);
+                        }
+                    });
+                    SimulationTask task = new SimulationTask();
+                    //set id
+                    task.setId(getTasks().size());
+                    //create server model for task
+                    logger.trace("Creating new task -> Creating server");
+                    task.createServer(false,"production","10.1.0.1",9092,"home4prod");
+                    //create task parameters
+                    logger.trace("Creating new task -> Creating parameters");
+                    task.createTaskParameters(
+                            3, //adapters count
+                            Protocol.Version.ZERO_POINT_ONE, //protocol version
+                            1000, //starting adapter id
+                            1, // sensors count minimum
+                            5, //sensors count maximum
+                            1, //refresh time minimum
+                            10 //refresh time maximum
+                    );
+                    //update progress
+                    progress.set(10);
+                    //create value information
+                    ObservableList<Value> enabledValues = FXCollections.observableArrayList();
+                    enabledValues = generateEnabledValues(enabledValues);
+                    ValueParameters valueParameters = new ValueParameters();
+                    valueParameters.setEnabledValues(enabledValues);
+                    task.setValueParameters(valueParameters);
+                    //create log
+                    logger.trace("Creating new task -> Creating logs");
+                    task.createLog(view.getLogTabPane());
+                    task.getLog().createLogs();
+                    //set log to buffer
+                    logger.trace("Creating new task -> Setting logs to buffer");
+                    try {
+                        task.getLog().setBuffered(true,"task_emu_" + task.getId());
+                        logger.trace("");
+                    } catch (IOException e) {
+                        Utilities.showException(logger, "Cannot create buffer file for new task's log.", e, true, event -> quit());
+                    }
+                    //add to other tasks
+                    logger.trace("Creating new task -> Adding task to list");
+                    getTasks().add(task);
+                    //initialize adapters
+                    progress.set(20);
+                    logger.trace("Creating new task -> Creating adapters");
+                    task.createAdapters(progress);
+                    progress.set(100);
+                    return null;
+                }
+            };
+            Utilities.showLoadingDialog(worker,"Creating task...");
         }
     }
 
@@ -312,6 +332,7 @@ public class PerformanceSimulationPresenter implements Presenter{
     private void bindLogs(){
         if(getCurrentTask()!= null && getCurrentTask().getLog() != null){
             AdapterLogger log = getCurrentTask().getLog();
+            log.clearContainers();
             log.addAdapterLogTo(view.getAdapterLogContainer());
             log.addSentLogTo(view.getToBeSentLogContainer());
             log.addErrorLogTo(view.getErrorLogContainer());

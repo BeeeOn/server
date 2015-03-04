@@ -1,6 +1,4 @@
-package com.iha.emulator.models.value.implemented;
-
-import com.iha.emulator.models.value.Value;
+package com.iha.emulator.models.value;
 
 /**
  * Created by Shu on 12.12.2014.

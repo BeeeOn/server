@@ -1,12 +1,8 @@
 package com.iha.emulator.ui.dialogs.sensor;
 
 import com.iha.emulator.control.SensorController;
-import com.iha.emulator.models.value.HasBooleanRandom;
-import com.iha.emulator.models.value.HasLinearDistribution;
-import com.iha.emulator.models.value.HasNormalDistribution;
-import com.iha.emulator.models.value.Value;
+import com.iha.emulator.models.value.*;
 import com.iha.emulator.models.value.implemented.EmptyValue;
-import com.iha.emulator.models.value.implemented.HasGenerator;
 import com.iha.emulator.resources.images.sensor_types.SensorIcon;
 import com.iha.emulator.ui.Presenter;
 import com.iha.emulator.ui.panels.PanelPresenter;

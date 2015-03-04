@@ -1,7 +1,6 @@
 package com.iha.emulator.control;
 
 import com.iha.emulator.models.value.*;
-import com.iha.emulator.models.value.implemented.HasGenerator;
 import javafx.collections.ObservableList;
 
 /**

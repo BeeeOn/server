@@ -40,10 +40,10 @@ public class HumiditySensorValue extends AbstractValue<Integer> implements HasNo
     }
 
     @Override
-    public void nextValue() throws NullPointerException{
+    public Integer nextValue() throws NullPointerException{
         //store value history if needed
         if(isStoreHistory()) storeValue(this.getValue());
-        if(getGeneratorType() == null || !isGenerateValue()) return;
+        if(getGeneratorType() == null || !isGenerateValue()) return null;
         Double result = null;
         switch (getGeneratorType()){
             case NORMAL_DISTRIBUTION:
@@ -60,16 +60,7 @@ public class HumiditySensorValue extends AbstractValue<Integer> implements HasNo
                 result = Utilities.linearDistribution(getValue(),getStep(),getMax(),getMin());
                 break;
         }
-        this.setValue(result == null ? null : (int) Math.round(result));
-    }
-
-    @Override
-    public void nextValue(Integer value) {
-        //check value
-        if(value == null) throw new NullPointerException("Trying to set value to null");
-        //store value history if needed
-        if(isStoreHistory()) storeValue(this.getValue());
-        this.setValue(value);
+        return result == null ? null : (int) Math.round(result);
     }
 
     @Override

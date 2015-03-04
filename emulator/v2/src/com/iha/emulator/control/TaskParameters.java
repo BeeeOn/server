@@ -123,6 +123,7 @@ public class TaskParameters {
         this.refreshTimeMax.set(refreshTimeMax);
     }
 
+
     public Long getSensorsCountGeneratorSeed() {
         return sensorsCountGeneratorSeed;
     }

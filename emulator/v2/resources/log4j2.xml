@@ -59,7 +59,7 @@
         <Logger name="com.iha.emulator.models.Sensor" level="${globalModelLevel}"/>
         <Logger name="com.iha.emulator.models.value.Value" level="${globalModelLevel}"/>
 
-        <Logger name="com.iha.emulator.utilities.Utilities" level="trace"/>
+        <Logger name="com.iha.emulator.utilities.Utilities" level="${globalControllerLevel}"/>
         <Logger name="com.iha.emulator.utilities.AdapterLogger" level="trace"/>
         <Logger name="com.iha.emulator.communication.eserver.EmulatorServerClient" level="${globalControllerLevel}"/>
         <Logger name="com.iha.emulator.ui.panels.sensor.SensorValueCellFactory" level="trace"/>

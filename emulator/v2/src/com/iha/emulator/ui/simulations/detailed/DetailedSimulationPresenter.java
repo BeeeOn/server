@@ -7,7 +7,6 @@ import com.iha.emulator.control.AdapterController;
 import com.iha.emulator.control.SensorController;
 import com.iha.emulator.models.Server;
 import com.iha.emulator.models.value.*;
-import com.iha.emulator.models.value.implemented.HasGenerator;
 import com.iha.emulator.resources.images.sensor_types.SensorIcon;
 import com.iha.emulator.resources.images.sensor_types.SensorIconFactory;
 import com.iha.emulator.ui.Presenter;
@@ -359,7 +358,8 @@ public class DetailedSimulationPresenter implements Presenter{
         logger.trace("Removing adapter button");
         removeAdapterBtn(adapterController);
         logger.trace("Removing adapter controller");
-        adapterController.delete();
+        //delete adepter, logs, server
+        adapterController.deleteAll();
         logger.trace("Removing adapter from list");
         adapterControllersList.get().remove(adapterController);
         if(adapterControllersList.get().size() != 0){

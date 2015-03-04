@@ -40,6 +40,9 @@ import java.util.Iterator;
 public class AdapterController{
 
     private static final Logger logger = LogManager.getLogger(AdapterController.class);
+    static final int SLEEP_TIME = 500;
+
+    private boolean terminate = false;
 
     private Adapter adapter;
     private ServerController serverController;
@@ -52,12 +55,12 @@ public class AdapterController{
     private boolean registerMessageSent = false;
     private boolean saved = false;
 
-
     private ArrayList<OutMessage> messages = new ArrayList<>();
 
     public AdapterController() {
         this.internetConnection = new SimpleBooleanProperty(true);
     }
+
 
     public void enable(){
         logger.debug("Enabling adapter -> " + adapter.getId());
@@ -120,11 +123,12 @@ public class AdapterController{
 
     public void deleteSensors(ObservableList<SensorController> sensorControllers){
         if(sensorControllers == null) return;
-        String name = sensorControllers.toString();
+        String name = null;
         for(Iterator<SensorController> it = sensorControllers.iterator();it.hasNext();){
             SensorController sensorController = it.next();
+             name = sensorController.toString();
             logger.debug(name + " -> Deleting");
-            sensorController.stopTimer();
+            if(sensorController.getTimerRunning()) sensorController.stopTimer();
             if(sensorController.getPanel() != null ) {
                 logger.trace(name + " -> removing panel from panel container");
                 sensorController.getPanel().deletePanel();
@@ -139,7 +143,7 @@ public class AdapterController{
         System.gc();
     }
 
-    public void delete(){
+    public void deleteAll(){
         logger.trace("Removing sensors");
         deleteSensors(getSensorControllersList().get());
         logger.trace("Removing logs");
@@ -150,6 +154,19 @@ public class AdapterController{
         messages = null;
         logger.trace("Removing server");
         serverController.delete();
+        sensorControllers = null;
+        log = null;
+        serverController = null;
+        scheduler = null;
+    }
+
+    public void delete(){
+        logger.trace("Removing sensors");
+        deleteSensors(getSensorControllersList().get());
+        logger.trace("Removing scheduler");
+        getScheduler().terminateScheduler();
+        messages.clear();
+        messages = null;
         sensorControllers = null;
         log = null;
         serverController = null;

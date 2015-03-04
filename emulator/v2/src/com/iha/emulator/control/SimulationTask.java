@@ -106,8 +106,7 @@ public class SimulationTask {
                             updateProgress((long)newValue,100);
                     }
                 });
-                //initialize adapters
-                createAdapters(progress);
+                progress.set(1);
                 //set task to running simulationState
                 Platform.runLater(() -> {
                     setSimulationState(SimulationTask.State.RUNNING);
@@ -122,14 +121,6 @@ public class SimulationTask {
         };
         Utilities.showLoadingDialog(worker,"Starting task...");
         worker.setOnSucceeded(event -> resume());
-        /*//initialize adapters
-        createAdapters();
-        //set task to running simulationState
-        setSimulationState(State.RUNNING);
-        setStarted(true);
-        setPaused(false);
-        logMessage("Task STARTED");
-        resume();*/
     }
 
     public void pause(){
@@ -164,9 +155,11 @@ public class SimulationTask {
     }
 
     public void stop(){
+        pause();
         Task<Object> worker = new Task<Object>() {
             @Override
             protected Object call() throws Exception {
+                Platform.runLater(()->logMessage("Task STOPPED"));
                 LongProperty progress = new SimpleLongProperty(0);
                 progress.addListener(new ChangeListener<Number>() {
                     @Override
@@ -176,18 +169,34 @@ public class SimulationTask {
                     }
                 });
                 progress.set(1);
-
+                updateMessage("Deleting adapters");
+                long progressPerAdapter = 95/getAdapterControllers().size();
+                getAdapterControllers().forEach(a->{
+                    //TODO save logs
+                    //delete adapter data
+                    a.delete();
+                    //update process
+                    progress.set(progress.get() + progressPerAdapter);
+                });
+                //clear adapters list
+                if(getAdapterControllers().size() > 0){
+                    getAdapterControllers().clear();
+                }
                 Platform.runLater(() -> {
                     setSimulationState(SimulationTask.State.STOPPED);
                     setStarted(false);
                     setPaused(true);
-                    logMessage("Task STOPPED");
                 });
                 progress.set(99);
                 return null;
             }
         };
         Utilities.showLoadingDialog(worker,"Stopping task...");
+    }
+
+    public void clear(){
+        //clear logs
+        getLog().delete();
     }
 
     public void resume(){
@@ -236,7 +245,7 @@ public class SimulationTask {
                 progress.set(1);
                 long progressPerAdapter = 95/getAdapterControllers().size();
                 getAdapterControllers().forEach(a->{
-                    a.getSensorControllers().forEach(SensorController::stopTimer);
+                    a.getSensorControllers().forEach(s->s.setTimerRunning(false));
                     progress.set(progress.get() + progressPerAdapter);
                 });
                 Platform.runLater(() -> {
@@ -266,7 +275,7 @@ public class SimulationTask {
                 progress.set(1);
                 long progressPerAdapter = 95/getAdapterControllers().size();
                 getAdapterControllers().forEach(a->{
-                    a.getSensorControllers().forEach(SensorController::startTimer);
+                    a.getSensorControllers().forEach(s->s.setTimerRunning(true));
                     progress.set(progress.get() + progressPerAdapter);
                 });
                 Platform.runLater(() -> {
@@ -290,8 +299,7 @@ public class SimulationTask {
             return;
         }
         //loading dialog progress help variable; 95% / number of adapters
-        long oneAdapterProgress = 95/getTaskParameters().getAdaptersCount();
-
+        long oneAdapterProgress = (90-progress.get())/getTaskParameters().getAdaptersCount();
         for (int i = 0;i<getTaskParameters().getAdaptersCount();i++){
             int newAdapterId = getTaskParameters().getStartId();
             logger.trace("Creating adapter: " + (newAdapterId+i));
@@ -326,7 +334,7 @@ public class SimulationTask {
         TaskParameters parameters = getTaskParameters();
         try{
             //determine sensors count
-            if(getTaskParameters().getSensorsCountMin() == 0){
+            if(getTaskParameters().getSensorsCountMin() == 0 || getTaskParameters().getSensorsCountMin() == getTaskParameters().getSensorsCountMax()){
                 sensorsCount = getTaskParameters().getSensorsCountMax();
             }else{
                 sensorsCount = Utilities.generateIntInRange(
@@ -364,11 +372,11 @@ public class SimulationTask {
                 //generate refresh time
                 int refreshTime;
                 logger.trace("Generating refresh time");
-                if(getTaskParameters().getRefreshTimeMin() == 0) {
+                if(getTaskParameters().getRefreshTimeMin() == 0 || getTaskParameters().getRefreshTimeMin() == getTaskParameters().getRefreshTimeMax()) {
                     refreshTime = getTaskParameters().getRefreshTimeMax();
                 }
                 else{
-                    refreshTime = Utilities.generateIntInRange(
+                    refreshTime = Utilities.generateRefreshTime(
                             refreshTimeGenerator,
                             getTaskParameters().getRefreshTimeMin(),
                             getTaskParameters().getRefreshTimeMax()
@@ -386,6 +394,7 @@ public class SimulationTask {
                         adapterController.getAdapter().getProtocol() //communication protocol
                 );
                 tmp.setFullMessage(true);
+                tmp.setIgnoreRefreshChange(true);
                 adapterController.setSaved(true);
                 logMessage("Sensor/" + tmp.getSensorIdAsIp() + " created successfully");
             }
@@ -397,6 +406,7 @@ public class SimulationTask {
 
     public void logMessage(String message){
         if(this.log != null) log.log(message);
+        else logger.error("No logger");
     }
 
     public ServerController createServer(boolean conn,String name,String ip, int port,String databaseName){

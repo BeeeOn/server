@@ -30,8 +30,8 @@ public class SimulationTaskAdaptersCellFactory extends TableCell<SimulationTask,
                             "Adapters count: " + params.getAdaptersCount() + "\n" +
                             "Protocol: " + params.getProtocolVersion().getVersion() + "\n" +
                             "Start ID: " + params.getStartId() + "\n" +
-                            "Sensors count: " + params.getSensorsCountMin() + " -> " + params.getSensorsCountMax() + "\n" +
-                            "Refresh time: " + params.getRefreshTimeMin() + " -> " + params.getSensorsCountMax()
+                            "Sensors count per adapter: " + (params.getSensorsCountMin()!=0 ? params.getSensorsCountMin() + " -> " : "") + params.getSensorsCountMax() + "\n" +
+                            "Refresh time range: " + (params.getRefreshTimeMin()!=0 ? params.getRefreshTimeMin() + " -> " : "") + params.getRefreshTimeMax()
             );
             tp.setAutoHide(false);
             lbl.setTooltip(tp);

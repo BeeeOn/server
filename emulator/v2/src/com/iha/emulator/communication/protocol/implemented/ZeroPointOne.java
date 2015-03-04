@@ -114,7 +114,7 @@ public class ZeroPointOne extends AbstractProtocol {
                 if(id!= null && time != null){
                     int timeInt = Integer.valueOf(time);
                     if(timeInt < 0) throw new IllegalArgumentException(" --> server trying to set refresh rate " + timeInt);
-                    if(senderController.getModel().getRefreshTime() != timeInt && timeInt != 0 && adapterController != null){
+                    if(senderController.getModel().getRefreshTime() != timeInt && timeInt != 0 && adapterController != null && !senderController.getIgnoreRefreshChange()){
                         senderController.setNewRefreshTime(timeInt);
                         if(senderController.isFullMessage()){
                             Platform.runLater(() -> adapterController.getLog().log("Adapter/" + adapterController.getAdapter().getId() + " -> Sensor/" + senderController.getSensorIdAsIp() + " new Refresh time --> " + timeInt));

@@ -26,7 +26,7 @@ public class ResponseTracker {
      * @param end
      */
     public synchronized void addResponse(long start,long end){
-        if(start!=0 && start < end){
+        if(responses != null && start!=0 && start < end){
             Response response = new Response(start,end);
             responses.add(response);
         }

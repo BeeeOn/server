@@ -9,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.StackPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -72,7 +73,7 @@ public class DetailedSimulationView implements Initializable,DetailedSimulationP
     @FXML private Button addAdapterBtn;
     private ArrayList<AdapterButton> adapterBtns;
     private AdapterButtonClickHandler adapterButtonClickHandler = new AdapterButtonClickHandler();
-    @FXML private ScrollPane adapterLogContainer;
+    @FXML private StackPane adapterLogContainer;
     @FXML private ScrollPane toBeSentLogContainer;
     @FXML private TabPane logTabPane;
     @FXML private Tab errorTab;
@@ -348,7 +349,7 @@ public class DetailedSimulationView implements Initializable,DetailedSimulationP
     }
 
     @Override
-    public ScrollPane getAdapterLogContainer() {
+    public StackPane getAdapterLogContainer() {
         return adapterLogContainer;
     }
 

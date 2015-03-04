@@ -1,6 +1,5 @@
 package com.iha.emulator.models.value;
 
-import com.iha.emulator.models.value.implemented.HasGenerator;
 import javafx.beans.property.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -102,7 +101,7 @@ public abstract class AbstractValue<T> implements Value<T>,HasGenerator{
         this.stringValue.set(stringValue);
     }
 
-    public abstract void nextValue();
+    public abstract T nextValue();
 
     public Type getValueType() {
         return valueType;

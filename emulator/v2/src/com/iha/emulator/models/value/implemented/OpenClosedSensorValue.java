@@ -26,28 +26,19 @@ public class OpenClosedSensorValue extends AbstractValue<Boolean> implements Has
     }
 
     @Override
-    public void nextValue() throws IllegalArgumentException{
+    public Boolean nextValue() throws IllegalArgumentException{
         //store value history if needed
         if(isStoreHistory()) storeValue(this.getValue());
         //generate new value
-        if(getGeneratorType() == null || !isGenerateValue()) return;
+        if(getGeneratorType() == null || !isGenerateValue()) return null;
         switch (getGeneratorType()){
             case BOOLEAN_RANDOM:
                 if(probabilityProperty() == null){
                     throw new IllegalArgumentException("Open/Closed sensor generator doesn't have variables needed to generate new value (Probability)");
                 }
-                setValue(Utilities.booleanRandomGenerate(getValue(),getProbability(),getGenerator()));
-                break;
+                return Utilities.booleanRandomGenerate(getValue(),getProbability(),getGenerator());
         }
-    }
-
-    @Override
-    public void nextValue(Boolean value) {
-        //check value
-        if(value == null) throw new NullPointerException("Trying to set value to null");
-        //store value history if needed
-        if(isStoreHistory()) storeValue(this.getValue());
-        this.setValue(value);
+        return null;
     }
 
     @Override

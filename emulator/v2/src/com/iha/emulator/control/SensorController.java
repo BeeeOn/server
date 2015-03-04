@@ -5,19 +5,19 @@ import com.iha.emulator.models.Sensor;
 import com.iha.emulator.models.value.Value;
 import com.iha.emulator.ui.panels.sensor.SensorPanelPresenter;
 import com.iha.emulator.utilities.Utilities;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.util.Duration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.Element;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by Shu on 4.2.2015.
@@ -32,7 +32,10 @@ public class SensorController {
     private BooleanProperty timerRunning;
     private boolean runValueGenerator = false;
     private Timeline timer;
+    private Timer newTimer;
+    private TimerTask timerTask;
     private boolean fullMessage = false;
+    private BooleanProperty ignoreRefreshChange;
 
     public SensorController(AdapterController adapterController,Sensor model) throws NullPointerException{
         this(adapterController,null,model);
@@ -45,6 +48,7 @@ public class SensorController {
         this.panel = panel;
         this.model = model;
         this.timerRunning = new SimpleBooleanProperty(false);
+        this.ignoreRefreshChange = new SimpleBooleanProperty(false);
 
         this.timerRunningProperty().addListener(new ChangeListener<Boolean>() {
             @Override
@@ -69,11 +73,29 @@ public class SensorController {
     public void startTimer(){
         logger.trace("Sensor/" + getSensorIdAsIp() + " timer started");
         if(timer != null) timer.play();
+        if(newTimer != null){
+            //newTimer = new Timer();
+            newTimer.purge();
+            if(timerTask != null) timerTask.cancel();
+            timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    timerEngine();
+                }
+            };
+            newTimer.schedule(timerTask,0,(getModel().getRefreshTime()*1000)/2);
+        }
+
     }
 
     public void stopTimer(){
         logger.trace("Sensor/" + getSensorIdAsIp() + " timer stopped");
-        timer.stop();
+        if(timer!=null) timer.stop();
+        if(newTimer != null && timerTask != null){
+            timerTask.cancel();
+            newTimer.purge();
+            timerTask = null;
+        }
     }
 
     public void delete(){
@@ -85,43 +107,61 @@ public class SensorController {
     private void initializeTimer(){
         logger.trace("Sensor/" + getSensorIdAsIp() + " initialising timer");
         //create timer
-        timer = new Timeline(new KeyFrame(
+        /*timer = new Timeline(new KeyFrame(
                 Duration.millis((model.getRefreshTime()*1000)/2),
                 ae -> timerEngine()));
         //set infinite periodical cycle
-        timer.setCycleCount(Animation.INDEFINITE);
+        timer.setCycleCount(Timeline.INDEFINITE);*/
+        newTimer = new Timer();
     }
 
     private void timerEngine(){
-        //generate new value or send existing to server
-        if(isValueGeneratorRunning()){
-            logger.trace("Generating new sensor value");
-            try{
-                getModel().getValues().stream()
-                        .filter(Value::isGenerateValue) //if new value should be generated
-                        .forEach(Value::nextValue); //do it
-            }catch (IllegalArgumentException e){
-                adapterController.sendError(toString() + " -> cannot generate new value!",e);
+        SensorController me = this;
+        /*Task<Object> worker = new Task<Object>() {
+            @Override
+            protected Object call() throws Exception {*/
+                //generate new value or send existing to server
+                if(isValueGeneratorRunning()){
+                    logger.trace("Generating new sensor value");
+                    try{
+                        getModel().getValues().stream()
+                                .filter(Value::isGenerateValue) //if new value should be generated
+                                .forEach(v -> {
+                                    Object next = v.nextValue();
+                                    if(next != null){
+                                        Platform.runLater(()->v.setValue(next));
+                                    }
+                                }); //do it
+                    }catch (IllegalArgumentException e){
+                        adapterController.sendError(toString() + " -> cannot generate new value!",e);
+                    }
+                    //change engine to send message mod
+                    setRunValueGenerator(false);
+                }else if(getModel().getStatus()){
+                    logger.trace("Building and sending sensor message");
+                    Document message = adapterController.getAdapter().getProtocol()
+                            .buildSensorMessage(adapterController.getAdapter().getProtocol().buildAdapterMessage(adapterController.getAdapter()), getModel());
+                    //should message include adapter id and sensor id?
+                    if(isFullMessage()){
+                        //used in "Performance simulation"
+                        adapterController.sendMessage(me.toString() + " --> data sent",message,me, OutMessage.Type.SENSOR_MESSAGE);
+                    }else{
+                        //used in "Detailed simulation"
+                        adapterController.sendMessage("Sensor " + me.toString() + " trying to send message.");
+                        adapterController.sendMessage("Sensor " + me.toString() + " --> data sent",message,me, OutMessage.Type.SENSOR_MESSAGE);
+                        //adapterController.sendMessage("Sensor " + getModel().getType() + "/" + getSensorIdAsIp() + " falling asleep for " + (timer.getDelay().toMillis()*2) / 1000 + " second/s");
+                    }
+                    //change engine to generate value mod
+                    setRunValueGenerator(true);
+                }
+                /*return null;
             }
-            //change engine to send message mod
-            setRunValueGenerator(false);
-        }else if(getModel().getStatus()){
-            logger.trace("Building and sending sensor message");
-            Document message = adapterController.getAdapter().getProtocol()
-                    .buildSensorMessage(adapterController.getAdapter().getProtocol().buildAdapterMessage(adapterController.getAdapter()), getModel());
-            //should message include adapter id and sensor id?
-            if(isFullMessage()){
-                //used in "Performance simulation"
-                adapterController.sendMessage("Adapter/" + adapterController.getAdapter().getId() + " -> Sensor/" + getSensorIdAsIp() + " --> data sent",message,this, OutMessage.Type.SENSOR_MESSAGE);
-            }else{
-                //used in "Detailed simulation"
-                adapterController.sendMessage("Sensor " + getModel().getName() + "/" + getSensorIdAsIp() + " trying to send message.");
-                adapterController.sendMessage("Sensor " + getModel().getName() + "/" + getSensorIdAsIp() + " --> data sent",message,this, OutMessage.Type.SENSOR_MESSAGE);
-                //adapterController.sendMessage("Sensor " + getModel().getType() + "/" + getSensorIdAsIp() + " falling asleep for " + (timer.getDelay().toMillis()*2) / 1000 + " second/s");
-            }
-            //change engine to generate value mod
-            setRunValueGenerator(true);
-        }
+        };
+        //create thread for background process
+        Thread th = new Thread(worker);
+        //th.setDaemon(true);
+        //run background process
+        th.start();*/
     }
 
     @SuppressWarnings("unchecked")
@@ -192,20 +232,31 @@ public class SensorController {
 
     public void setNewRefreshTime(int refreshTime){
         resetTimer(refreshTime);
-        Platform.runLater(() -> getModel().setRefreshTime(refreshTime));
     }
 
     private void resetTimer(int refreshTime){
-        KeyFrame keyFrame = new KeyFrame(
+        /*KeyFrame keyFrame = new KeyFrame(
                 Duration.millis((refreshTime*1000)/2),
                 ae -> timerEngine()
         );
         if(getTimerRunning()){
             timer.stop();
+            timer.getKeyFrames().clear();
             timer.getKeyFrames().setAll(keyFrame);
             timer.play();
         }else{
+            timer.getKeyFrames().clear();
             timer.getKeyFrames().setAll(keyFrame);
+        }*/
+        if(getTimerRunning()){
+            setTimerRunning(false);
+            Platform.runLater(() -> {
+                getModel().setRefreshTime(refreshTime);
+                setTimerRunning(true);
+            });
+
+        }else{
+            Platform.runLater(() -> getModel().setRefreshTime(refreshTime));
         }
     }
 
@@ -273,6 +324,18 @@ public class SensorController {
 
     public void setFullMessage(boolean fullMessage) {
         this.fullMessage = fullMessage;
+    }
+
+    public boolean getIgnoreRefreshChange() {
+        return ignoreRefreshChange.get();
+    }
+
+    public BooleanProperty ignoreRefreshChangeProperty() {
+        return ignoreRefreshChange;
+    }
+
+    public void setIgnoreRefreshChange(boolean ignoreRefreshChange) {
+        this.ignoreRefreshChange.set(ignoreRefreshChange);
     }
 
     public String toString(){

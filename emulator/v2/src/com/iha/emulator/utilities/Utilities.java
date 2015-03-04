@@ -40,9 +40,11 @@ import java.util.regex.Pattern;
  */
 public class Utilities {
     private static final Logger logger = LogManager.getLogger(Utilities.class);
-
+    private static final int[] REFERSH_TIME_OPTIONS = {1,5,10,20,30,60,300,600,900,1800,3600,7200,10800,14400,28800,43200,86400};
     private static final String PATH_TO_RESOURCES = "/com/iha/emulator/resources/";
     private static final String PROPERTIES_FILENAME = "emu.properties";
+
+
     private static Utilities instance;
     Preferences prefs = Preferences.userNodeForPackage(Main.class);
 
@@ -436,6 +438,26 @@ public class Utilities {
         }
     }
 
+    public static int generateRefreshTime(Random generator,int min,int max) throws IllegalArgumentException{
+        if(generator == null || max < min) throw new IllegalArgumentException("Generator is null or max is less then min.");
+        int minIndex = getIndexOf(min,REFERSH_TIME_OPTIONS);
+        int maxIndex = getIndexOf(max,REFERSH_TIME_OPTIONS);
+        int newIndex;
+        newIndex = generator.nextInt((maxIndex - minIndex)+1) + minIndex;
+        logger.trace("Generating refresh time (index/value): " + newIndex + "/" + REFERSH_TIME_OPTIONS[newIndex]);
+        return REFERSH_TIME_OPTIONS[newIndex];
+    }
+
+    public static int getIndexOf( int toSearch, int[] tab )throws IllegalArgumentException{
+        int i = 0;
+        while(!(tab[i] == toSearch) ){
+            i++;
+            if(i == tab.length) throw new IllegalArgumentException("Cannot find index of second value: " + toSearch);
+        }
+        return i; // or return tab[i];
+    }
+
+
     public static int refreshSliderScaleToSeconds(double scaleNo) {
         Double scaleDouble = scaleNo;
         int seconds;
@@ -497,6 +519,8 @@ public class Utilities {
         }
         return seconds;
     }
+
+
 
     public static double secondsToRefershSliderScale(int seconds) {
         int scaleNo;

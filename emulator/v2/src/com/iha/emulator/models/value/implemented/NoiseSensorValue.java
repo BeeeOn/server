@@ -40,35 +40,24 @@ public class NoiseSensorValue extends AbstractValue<Double> implements HasNormal
     }
 
     @Override
-    public void nextValue() throws NullPointerException,IllegalArgumentException{
+    public Double nextValue() throws NullPointerException,IllegalArgumentException{
         //store value history if needed
         if(isStoreHistory()) storeValue(this.getValue());
         /**/
-        if(getGeneratorType() == null || !isGenerateValue()) return;
+        if(getGeneratorType() == null || !isGenerateValue()) return null;
         switch (getGeneratorType()){
             case NORMAL_DISTRIBUTION:
                 if(devProperty() == null || avgProperty() == null || maxProperty() == null || minProperty() == null){
                     throw new IllegalArgumentException("Noise intensity generator doesn't have variables needed to generate new value (Dev,Avg,Max,Min)");
                 }
-                this.setValue(Utilities.normalDistribution(getGenerator(), 100, getDev(), getAvg(), getMax(), getMin()));
-                break;
+                return Utilities.normalDistribution(getGenerator(), 100, getDev(), getAvg(), getMax(), getMin());
             case LINEAR_DISTRIBUTION:
                 if(stepProperty() == null || maxProperty() == null || minProperty() == null){
                     throw new IllegalArgumentException("Noise intensity generator doesn't have variables needed to generate new value (Step,Max,Min)");
                 }
-                this.setValue(Utilities.linearDistribution(getValue(),getStep(),getMax(),getMin()));
-                break;
+                return Utilities.linearDistribution(getValue(),getStep(),getMax(),getMin());
         }
-    }
-
-    @Override
-    public void nextValue(Double value) {
-        //check value
-        if(value == null) throw new NullPointerException("Trying to set value to null");
-        //store value history if needed
-        if(isStoreHistory()) storeValue(this.getValue());
-        //set value
-        this.setValue(value);
+        return null;
     }
 
     @Override

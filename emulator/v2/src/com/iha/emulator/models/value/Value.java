@@ -118,8 +118,7 @@ public interface Value<T> {
     public T getInitialValue();
     public void setInitialValue(T value);
     public void setValue(T value);
-    public void nextValue();
-    public void nextValue(T value);
+    public T nextValue();
     public Random getGenerator();
     public String toStringWithUnit();
     public String asMessageString();
