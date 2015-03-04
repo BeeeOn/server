@@ -1,10 +1,8 @@
 package com.iha.emulator.utilities;
 
 import com.iha.emulator.control.SensorController;
-import com.iha.emulator.ui.simulations.detailed.DetailedSimulationPresenter;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -34,7 +32,7 @@ public class AdapterLogger {
     private static DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(TIME_PATTERN);
     private static final int ERROR_TAB_INDEX = 2;
 
-    private static final int BUFFER_LINE_COUNT_MAX = 60;
+    private static final int BUFFER_LINE_COUNT_MAX = 100;
 
     public enum Type{
         FULL,
@@ -66,9 +64,6 @@ public class AdapterLogger {
     private boolean buffered = false;
     private File bufferFile;
     private BufferedWriter bufferWriter;
-    private int bufferMark;
-
-    private Property<StringBuilder> fullString;
 
     public AdapterLogger() {
         this.fullMessage = new SimpleBooleanProperty(true);
@@ -93,18 +88,13 @@ public class AdapterLogger {
                     bufferWriter.write(timeAndMessage);
                     bufferWriter.flush();
                 } catch (IOException e) {
-                    DetailedSimulationPresenter.showException(logger,"Cannot write line \"" + message + "\" to buffer file!",e,false,null);
+                    Utilities.showException(logger,"Cannot write line \"" + message + "\" to buffer file!",e,false,null);
                 }
             }
             //delete already buffered messages from log
-            if(adapterLog.getChildren().size() > BUFFER_LINE_COUNT_MAX){
-                Platform.runLater(() -> adapterLog.getChildren().remove(0, BUFFER_LINE_COUNT_MAX / 2));
-            }
+            checkIfRemove();
             //write message to log
-            Platform.runLater(() -> {
-                adapterLog.getChildren().add(new Text(timeAndMessage));
-                ((ScrollPane)adapterLogContainer).setVvalue(1.0);
-            });
+            addTextToLog(new Text(timeAndMessage));
             /*if(buffered && bufferWriter != null){
                 if(adapterLog.getChildren().size() > BUFFER_LINE_COUNT_MAX){
                     ObservableList<Node> lines = adapterLog.getChildren();
@@ -126,12 +116,27 @@ public class AdapterLogger {
         }
     }
 
-    public synchronized void sent(String message){
+    public synchronized void checkIfRemove(){
+        if(adapterLog.getChildren().size() > BUFFER_LINE_COUNT_MAX){
+            Platform.runLater(()->adapterLog.getChildren().remove(0, BUFFER_LINE_COUNT_MAX/2));
+        }
+    }
+
+    public synchronized void addTextToLog(Text text){
+        Platform.runLater(()->{
+            adapterLog.getChildren().add(text);
+            ((ScrollPane)adapterLogContainer).setVvalue(1.0);
+        });
+    }
+
+    public synchronized Text sent(String message){
+        Text messageText = new Text(timeFormatter.format(LocalTime.now()) + " - " + message + "\n");
         Platform.runLater(() -> {
             if(toBeSentLog!= null){
-                toBeSentLog.getChildren().add(new Text(timeFormatter.format(LocalTime.now()) + " - " + message + "\n"));
+                toBeSentLog.getChildren().add(messageText);
             }
         });
+        return messageText;
     }
 
     public synchronized void error(String message){
@@ -146,6 +151,14 @@ public class AdapterLogger {
     public synchronized void notifyDataSent(){
         if(toBeSentLog.getChildren().size() > 0){
             Platform.runLater(() -> toBeSentLog.getChildren().remove(0));
+        }else{
+            logger.error("Trying to remove first toBeSent line, but there are no lines");
+        }
+    }
+
+    public synchronized void notifyDataSent(Text message){
+        if(toBeSentLog.getChildren().size() > 0){
+            Platform.runLater(() -> toBeSentLog.getChildren().remove(message));
         }else{
             logger.error("Trying to remove first toBeSent line, but there are no lines");
         }
@@ -216,12 +229,12 @@ public class AdapterLogger {
                 bufferWriter.close();
                 bufferFile.delete();
             } catch (IOException e) {
-                DetailedSimulationPresenter.showException(logger,"Cannot close adapter logger buffer",e,false,null);
+                Utilities.showException(logger,"Cannot close adapter logger buffer",e,false,null);
             }
         }
     }
 
-    public void removeUnsentMessagesBySensor(SensorController sensorController){
+    public synchronized void removeUnsentMessagesBySensor(SensorController sensorController){
         if(toBeSentLog != null && toBeSentLog.getChildren().size() !=0){
             for (Iterator<Node> it = toBeSentLog.getChildren().iterator(); it.hasNext(); ) {
                 Node child = it.next();
@@ -242,17 +255,17 @@ public class AdapterLogger {
         this.shortMessage.addListener(new MessageTypeChangeListener(Type.SHORT));
     }
 
-    public void setBuffered(boolean buffered,String adapterId) throws IOException {
+    public void setBuffered(boolean buffered,String filename) throws IOException {
         this.buffered = buffered;
         if(buffered){
             if(bufferFile == null){
-                bufferFile = File.createTempFile("adapter_emu_" + adapterId ,".tmp");
+                bufferFile = File.createTempFile(filename ,".tmp");
                 logger.trace("Temp file location: " + bufferFile.getAbsolutePath());
                 bufferWriter = new BufferedWriter(new FileWriter(bufferFile));
-                logger.debug("Created adapter's log buffer file.");
+                logger.debug("Created  log buffer file.");
             }
         }
-        logger.debug("Adapter's log is now buffered");
+        logger.debug("Log is now buffered");
     }
 
     public static Type toType(String typeString){

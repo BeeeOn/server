@@ -3,7 +3,7 @@ package com.iha.emulator.communication.server;
 import com.iha.emulator.communication.protocol.Protocol;
 import com.iha.emulator.communication.protocol.ProtocolFactory;
 import com.iha.emulator.control.AdapterController;
-import com.iha.emulator.ui.simulations.detailed.DetailedSimulationPresenter;
+import com.iha.emulator.utilities.Utilities;
 import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import org.apache.logging.log4j.LogManager;
@@ -49,17 +49,17 @@ public class ServerListenerWorker implements Runnable {
             }
         }catch ( IllegalStateException | NullPointerException | IllegalArgumentException e){
             final int finalBytesRead = bytesRead;
-            Platform.runLater(() -> DetailedSimulationPresenter.showException(logger,"Cannot parse message or error on socket reading!\n" + new String(reusableBuffer.array()).substring(0, finalBytesRead),e,false,null));
+            Platform.runLater(() -> Utilities.showException(logger, "Cannot parse message or error on socket reading!\n" + new String(reusableBuffer.array()).substring(0, finalBytesRead), e, false, null));
         }catch (IOException e) {
-            Platform.runLater(() -> DetailedSimulationPresenter.showException(logger, "Cannot read message from socket!", e, false, null));
+            Platform.runLater(() -> Utilities.showException(logger, "Cannot read message from socket!", e, false, null));
         }catch (DocumentException e) {
-            Platform.runLater(() -> DetailedSimulationPresenter.showException(logger,"Cannot parse incoming message from server",e,false,null));
+            Platform.runLater(() -> Utilities.showException(logger,"Cannot parse incoming message from server",e,false,null));
         } finally {
             if(socketChannel != null) {
                 try {
                     socketChannel.close();
                 } catch (IOException e) {
-                    Platform.runLater(() -> DetailedSimulationPresenter.showException(logger, "Cannot close socket on incoming connection", e, false, null));
+                    Platform.runLater(() -> Utilities.showException(logger, "Cannot close socket on incoming connection", e, false, null));
                 }
             }
         }
@@ -80,7 +80,7 @@ public class ServerListenerWorker implements Runnable {
                 adapterController = getAdapterControllerById(adapterId);
             }else {
                 logger.error("Cannot retrieve adapter id from incoming message. Cancel message processing.");
-                Platform.runLater(() -> DetailedSimulationPresenter.showException(logger, "Cannot retrieve adapter id from incoming message. Cancel message processing.", null, false, null)
+                Platform.runLater(() -> Utilities.showException(logger, "Cannot retrieve adapter id from incoming message. Cancel message processing.", null, false, null)
                 );
                 return;
             }
@@ -89,12 +89,12 @@ public class ServerListenerWorker implements Runnable {
             }else {
                 logger.error("AdapterController for adapter " + adapterId + " NOT found");
                 final int finalAdapterId = adapterId;
-                Platform.runLater(() -> DetailedSimulationPresenter.showException(logger, "Incoming message error. Cannot find adapter with id: " + finalAdapterId, null, false, null)
+                Platform.runLater(() -> Utilities.showException(logger, "Incoming message error. Cannot find adapter with id: " + finalAdapterId, null, false, null)
                 );
             }
         }catch (NumberFormatException e){
             logger.error("Cannot convert adapter id from message to integer!");
-            Platform.runLater(() -> DetailedSimulationPresenter.showException(logger, "Cannot convert adapter id from message to integer!", null, false, null)
+            Platform.runLater(() -> Utilities.showException(logger, "Cannot convert adapter id from message to integer!", null, false, null)
             );
         }
     }

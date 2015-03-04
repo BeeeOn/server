@@ -37,14 +37,14 @@ public interface Value<T> {
     * */
 
     public enum Type{
-        SENSOR_TEMPERATURE("Temperature", TemperatureSensorValue.class, "°C", "0x0A", new Generator[]{Generator.NORMAL_DISTRIBUTION, Generator.LINEAR_DISTRIBUTION}),
-        SENSOR_NOISE("Noise", NoiseSensorValue.class, "dB", "0x06", new Generator[]{Generator.NORMAL_DISTRIBUTION, Generator.LINEAR_DISTRIBUTION}),
-        SENSOR_LIGHT("Light", LightSensorValue.class, "lx", "0x05", new Generator[]{Generator.NORMAL_DISTRIBUTION, Generator.LINEAR_DISTRIBUTION}),
-        SENSOR_EMISSIONS("Emissions", EmissionsSensorValue.class, "ppm", "0x07", new Generator[]{Generator.NORMAL_DISTRIBUTION, Generator.LINEAR_DISTRIBUTION}),
-        SENSOR_PRESSURE("Pressure", PressureSensorValue.class, "hPa", "0x02", new Generator[]{Generator.NORMAL_DISTRIBUTION, Generator.LINEAR_DISTRIBUTION}),
         SENSOR_HUMIDITY("Humidity", HumiditySensorValue.class, "%", "0x01", new Generator[]{Generator.NORMAL_DISTRIBUTION, Generator.LINEAR_DISTRIBUTION}),
-        SENSOR_ON_OFF("On/Off Sensor", OnOffActuatorValue.class, "", "0x04", new Generator[]{Generator.BOOLEAN_RANDOM}),
+        SENSOR_PRESSURE("Pressure", PressureSensorValue.class, "hPa", "0x02", new Generator[]{Generator.NORMAL_DISTRIBUTION, Generator.LINEAR_DISTRIBUTION}),
         SENSOR_OPEN_CLOSED("Open/Closed Sensor", OpenClosedSensorValue.class, "", "0x03", new Generator[]{Generator.BOOLEAN_RANDOM}),
+        SENSOR_ON_OFF("On/Off Sensor", OnOffActuatorValue.class, "", "0x04", new Generator[]{Generator.BOOLEAN_RANDOM}),
+        SENSOR_LIGHT("Light", LightSensorValue.class, "lx", "0x05", new Generator[]{Generator.NORMAL_DISTRIBUTION, Generator.LINEAR_DISTRIBUTION}),
+        SENSOR_NOISE("Noise", NoiseSensorValue.class, "dB", "0x06", new Generator[]{Generator.NORMAL_DISTRIBUTION, Generator.LINEAR_DISTRIBUTION}),
+        SENSOR_EMISSIONS("Emissions", EmissionsSensorValue.class, "ppm", "0x07", new Generator[]{Generator.NORMAL_DISTRIBUTION, Generator.LINEAR_DISTRIBUTION}),
+        SENSOR_TEMPERATURE("Temperature", TemperatureSensorValue.class, "°C", "0x0A", new Generator[]{Generator.NORMAL_DISTRIBUTION, Generator.LINEAR_DISTRIBUTION}),
         ACTUATOR_ON_OFF("On/Off Actuator", OnOffActuatorValue.class, "", "0xA0", new Generator[]{Generator.BOOLEAN_RANDOM});
 
         final private String name;

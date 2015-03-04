@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.input.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import java.lang.*?>
+<VBox fx:id="view" prefHeight="673.0" prefWidth="1131.0" stylesheets="@../../../resources/css/theme-light.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iha.emulator.ui.simulations.performance.PerformanceSimulationView">
+  <children>
+      <HBox prefHeight="43.0" prefWidth="1110.0" styleClass="whiteBackground" VBox.vgrow="NEVER">
+         <children>
+          <MenuBar styleClass="menuBar" VBox.vgrow="NEVER">
+            <menus>
+              <Menu mnemonicParsing="false" styleClass=".menuBarStripes">
+                <items>
+                  <MenuItem fx:id="newTaskItem" mnemonicParsing="false" onAction="#handleAddTask" text="New task">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="startTaskItem" mnemonicParsing="false" onAction="#handleStartTask" text="Start/Resume task">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="A" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
+                        <MenuItem fx:id="pauseTaskItem" mnemonicParsing="false" onAction="#handlePauseTask" text="Pause task">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="D" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
+                        <MenuItem fx:id="stopTaskItem" mnemonicParsing="false" onAction="#handleStopTask" text="Stop task">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="D" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="resumeSensorsItem" mnemonicParsing="false" onAction="#handleResumeSensors" text="Resume sensors">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="DELETE" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
+                        <MenuItem fx:id="pauseSensorsItem" mnemonicParsing="false" onAction="#handlePauseSensors" text="Pause sensors">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="DELETE" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+                           </accelerator>
+                        </MenuItem>
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem fx:id="openItem" mnemonicParsing="false" onAction="#handleOpen" text="Open...">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
+                  <MenuItem fx:id="saveAllItem" mnemonicParsing="false" onAction="#handleSaveAll" text="Save all">
+                           <accelerator>
+                              <KeyCodeCombination alt="DOWN" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
+                  <MenuItem fx:id="printItem" mnemonicParsing="false" onAction="#handlePrint" text="Print">
+                           <accelerator>
+                              <KeyCodeCombination alt="DOWN" code="P" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem fx:id="quitItem" mnemonicParsing="false" onAction="#handleQuit" text="Quit" />
+                </items>
+              </Menu>
+            </menus>
+               <HBox.margin>
+                  <Insets top="5.0" />
+               </HBox.margin>
+          </MenuBar>
+            <ToolBar fx:id="tooBar" prefHeight="37.0" prefWidth="380.0" styleClass="toolBar" HBox.hgrow="ALWAYS">
+              <items>
+                  <Button fx:id="saveAllTBtn" mnemonicParsing="false" onAction="#handleSaveAll">
+                     <styleClass>
+                        <String fx:value="plainToolBarBtn" />
+                        <String fx:value="saveAllBtn" />
+                     </styleClass>
+                     <tooltip>
+                        <Tooltip text="Save all tasks" />
+                     </tooltip>
+                  </Button>
+                  <Button fx:id="openTBtn" mnemonicParsing="false" onAction="#handleOpen">
+                     <styleClass>
+                        <String fx:value="plainToolBarBtn" />
+                        <String fx:value="loadBtn" />
+                     </styleClass>
+                     <tooltip>
+                        <Tooltip text="Load tasks" />
+                     </tooltip>
+                  </Button>
+                  <Button fx:id="printTBtn" layoutX="139.0" layoutY="12.0" mnemonicParsing="false" onAction="#handlePrint">
+                     <styleClass>
+                        <String fx:value="plainToolBarBtn" />
+                        <String fx:value="printBtn" />
+                     </styleClass>
+                     <tooltip>
+                        <Tooltip text="Print current adapter logs" />
+                     </tooltip>
+                  </Button>
+                  <Separator orientation="VERTICAL" prefHeight="6.0" prefWidth="0.0">
+                     <padding>
+                        <Insets bottom="4.0" top="4.0" />
+                     </padding>
+                  </Separator>
+                  <Button fx:id="startTaskTBtn" disable="true" mnemonicParsing="false" onAction="#handleStartTask">
+                     <styleClass>
+                        <String fx:value="plainToolBarBtn" />
+                        <String fx:value="enableAdapterBtn" />
+                     </styleClass>
+                     <tooltip>
+                        <Tooltip text="Start/Resume task" />
+                     </tooltip>
+                  </Button>
+                  <Button fx:id="pauseTaskTBtn" disable="true" mnemonicParsing="false" onAction="#handlePauseTask">
+                     <tooltip>
+                        <Tooltip text="Pause task" />
+                     </tooltip>
+                     <styleClass>
+                        <String fx:value="plainToolBarBtn" />
+                        <String fx:value="pauseSimulationBtn" />
+                     </styleClass>
+                  </Button>
+                  <Button fx:id="stopTaskTBtn" disable="true" mnemonicParsing="false" onAction="#handleStopTask">
+                     <styleClass>
+                        <String fx:value="plainToolBarBtn" />
+                        <String fx:value="disableAdapterBtn" />
+                     </styleClass>
+                     <tooltip>
+                        <Tooltip text="Stop task" />
+                     </tooltip>
+                  </Button>
+                  <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0">
+                     <padding>
+                        <Insets bottom="4.0" top="4.0" />
+                     </padding>
+                  </Separator>
+                  <Button fx:id="resumeSensorsTBtn" disable="true" mnemonicParsing="false" onAction="#handleResumeSensors">
+                     <styleClass>
+                        <String fx:value="plainToolBarBtn" />
+                        <String fx:value="playSensorsBtn" />
+                     </styleClass>
+                     <tooltip>
+                        <Tooltip text="Resume sensors" />
+                     </tooltip>
+                  </Button>
+                  <Button fx:id="pauseSensorsTBtn" disable="true" mnemonicParsing="false" onAction="#handlePauseSensors">
+                     <styleClass>
+                        <String fx:value="plainToolBarBtn" />
+                        <String fx:value="pauseSensorsBtn" />
+                     </styleClass>
+                     <tooltip>
+                        <Tooltip text="Pause sensors" />
+                     </tooltip>
+                  </Button>
+                  <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0">
+                     <padding>
+                        <Insets bottom="4.0" top="4.0" />
+                     </padding>
+                  </Separator>
+                  <Button fx:id="newTaskTBtn" mnemonicParsing="false" onAction="#handleAddTask">
+                     <styleClass>
+                        <String fx:value="plainToolBarBtn" />
+                        <String fx:value="addAdapterMenuBtn" />
+                     </styleClass>
+                     <tooltip>
+                        <Tooltip text="Add task" />
+                     </tooltip>
+                  </Button>
+                  <Button fx:id="deleteTaskTBtn" mnemonicParsing="false" onAction="#handleDeleteTask">
+                     <styleClass>
+                        <String fx:value="plainToolBarBtn" />
+                        <String fx:value="deleteAdapterBtn" />
+                     </styleClass>
+                     <tooltip>
+                        <Tooltip text="Delete task" />
+                     </tooltip>
+                  </Button>
+                  <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0">
+                     <padding>
+                        <Insets bottom="4.0" top="4.0" />
+                     </padding>
+                  </Separator>
+              </items>
+               <HBox.margin>
+                  <Insets top="5.0" />
+               </HBox.margin>
+            </ToolBar>
+            <Label prefHeight="43.0" prefWidth="350.0" styleClass="detailedSimLbl" text="Performance Simulation" HBox.hgrow="NEVER" />
+         </children>
+      </HBox>
+      <HBox prefHeight="421.0" prefWidth="1066.0" styleClass="whiteBackground" VBox.vgrow="ALWAYS">
+         <children>
+            <VBox prefHeight="547.0" prefWidth="250.0" styleClass="leftPanelPerformance" HBox.hgrow="ALWAYS">
+               <children>
+                  <Label styleClass="sectionName" text="Tasks" VBox.vgrow="NEVER">
+                     <VBox.margin>
+                        <Insets bottom="5.0" top="5.0" />
+                     </VBox.margin>
+                  </Label>
+                  <HBox prefHeight="21.0" prefWidth="400.0">
+                     <children>
+                        <CheckBox mnemonicParsing="false" text="auto process queue" />
+                     </children>
+                  </HBox>
+                  <TableView fx:id="tasksTable" prefHeight="200.0" prefWidth="348.0">
+                    <columns>
+                      <TableColumn fx:id="enabledColumn" editable="false" prefWidth="30.0" sortable="false" />
+                        <TableColumn fx:id="idColumn" editable="false" prefWidth="27.0" sortable="false" text="Id" />
+                      <TableColumn fx:id="stateColumn" editable="false" prefWidth="156.0" sortable="false" text="State" />
+                        <TableColumn fx:id="serverColumn" editable="false" prefWidth="97.0" sortable="false" text="Server" />
+                        <TableColumn fx:id="adaptersColumn" editable="false" prefWidth="87.0" sortable="false" text="Adapters" />
+                        <TableColumn editable="false" prefWidth="65.0" sortable="false" text="Actions" />
+                    </columns>
+                  </TableView>
+                  <BorderPane prefHeight="48.0" prefWidth="244.0" styleClass="serverDetailsLblContainer" VBox.vgrow="NEVER">
+                     <left>
+                        <Label prefHeight="24.0" prefWidth="178.0" styleClass="sectionName" text="Server details" BorderPane.alignment="CENTER_LEFT" />
+                     </left>
+                  </BorderPane>
+                  <FlowPane fx:id="serverDetailsContainer" alignment="CENTER" columnHalignment="CENTER" maxHeight="119.0" maxWidth="250.0" prefHeight="119.0" prefWidth="250.0" styleClass="serverDetailsContainer" VBox.vgrow="NEVER" />
+               </children>
+               <HBox.margin>
+                  <Insets bottom="10.0" left="20.0" right="20.0" />
+               </HBox.margin>
+            </VBox>
+            <VBox HBox.hgrow="ALWAYS">
+               <children>
+                  <Label styleClass="sectionName" text="Task logs">
+                     <VBox.margin>
+                        <Insets bottom="5.0" top="5.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TabPane fx:id="logTabPane" minWidth="550.0" prefHeight="260.0" prefWidth="550.0" VBox.vgrow="ALWAYS">
+                    <tabs>
+                      <Tab closable="false" text="Adapter Log">
+                           <content>
+                              <VBox prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <HBox prefHeight="35.0" prefWidth="545.0" VBox.vgrow="NEVER">
+                                       <children>
+                                          <Button fx:id="showFullLogBtn" mnemonicParsing="false" onAction="#handleShowFullLog" styleClass="showLogButton" text="Show full log" HBox.hgrow="NEVER">
+                                             <HBox.margin>
+                                                <Insets left="5.0" top="4.0" />
+                                             </HBox.margin>
+                                          </Button>
+                                       </children>
+                                    </HBox>
+                                    <Separator prefWidth="200.0" styleClass="logMorePaneSeparator" VBox.vgrow="NEVER">
+                                       <padding>
+                                          <Insets left="10.0" right="10.0" />
+                                       </padding>
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                    </Separator>
+                                    <ScrollPane fx:id="adapterLogContainer" prefHeight="200.0" prefWidth="200.0" styleClass="logTextAreaContainer" VBox.vgrow="ALWAYS">
+                                       <padding>
+                                          <Insets left="5.0" right="5.0" />
+                                       </padding>
+                                    </ScrollPane>
+                                 </children>
+                              </VBox>
+                           </content>
+                      </Tab>
+                      <Tab closable="false" text="To Be Sent">
+                           <content>
+                              <ScrollPane fx:id="toBeSentLogContainer" prefHeight="200.0" prefWidth="200.0" styleClass="logTextAreaContainer" />
+                           </content>
+                        </Tab>
+                        <Tab fx:id="errorTab" closable="false" text="Error Log">
+                           <content>
+                              <ScrollPane fx:id="errorLogContainer" prefHeight="200.0" prefWidth="200.0" styleClass="logTextAreaContainer" />
+                           </content>
+                        </Tab>
+                    </tabs>
+                  </TabPane>
+               </children>
+               <HBox.margin>
+                  <Insets bottom="10.0" right="10.0" />
+               </HBox.margin>
+            </VBox>
+         </children>
+      </HBox>
+      <Accordion VBox.vgrow="NEVER">
+        <panes>
+          <TitledPane animated="false" text="Application Log">
+               <content>
+                  <TextArea fx:id="appLog" editable="false" prefHeight="200.0" scrollTop="200.0" wrapText="true" />
+               </content>
+          </TitledPane>
+        </panes>
+      </Accordion>
+    <HBox id="HBox" alignment="CENTER_RIGHT" prefHeight="27.0" prefWidth="1068.0" spacing="5.0" styleClass="statusLine" VBox.vgrow="NEVER">
+      <children>
+            <ProgressIndicator fx:id="statusIndicator" prefHeight="20.0" prefWidth="30.0" styleClass="statusLineText" visible="false" HBox.hgrow="NEVER" />
+        <Label fx:id="statusLineLbl" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="21.0" prefWidth="544.0" styleClass="statusLineText" text="Status line" HBox.hgrow="ALWAYS" />
+            <Separator orientation="VERTICAL" prefHeight="200.0" HBox.hgrow="NEVER" />
+            <Label alignment="CENTER_RIGHT" contentDisplay="CENTER" prefHeight="16.0" prefWidth="96.0" styleClass="statusLineText" text="Memory usage: " textAlignment="RIGHT" textFill="#9f9f9f" HBox.hgrow="NEVER">
+               <font>
+                  <Font size="11.0" />
+               </font>
+            </Label>
+            <ProgressBar fx:id="memCheckProgressBar" prefHeight="20.0" prefWidth="118.0" progress="0.0" />
+            <Label fx:id="memCheckStatusLbl" contentDisplay="CENTER" layoutX="629.0" layoutY="17.0" prefHeight="16.0" prefWidth="128.0" styleClass="statusLineText" text="(0MB of 00MB)" textAlignment="RIGHT" textFill="#9f9f9f" HBox.hgrow="NEVER">
+               <font>
+                  <Font size="11.0" />
+               </font>
+            </Label>
+      </children>
+      <padding>
+        <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+      </padding>
+    </HBox>
+  </children>
+</VBox>

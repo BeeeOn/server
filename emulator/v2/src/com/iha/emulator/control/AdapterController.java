@@ -24,6 +24,7 @@ import javafx.fxml.LoadException;
 import javafx.scene.Node;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dom4j.Document;
@@ -74,19 +75,20 @@ public class AdapterController{
 
     public void sendMessage(String logMessage,Document message,SensorController senderController,OutMessage.Type type){
         if(message != null){
-            messages.add(new OutMessage(logMessage,message,senderController,type));
+            Text unsent = null;
             switch (type){
                 case REGISTER_ADAPTER:
-                    log.sent("Adapter/" + getAdapter().getId() + " -> trying to register");
+                    unsent = log.sent("Adapter/" + getAdapter().getId() + " -> trying to register");
                     break;
                 case SENSOR_MESSAGE:
                     if(senderController.isFullMessage()){
-                        log.sent("Adapter/" + getAdapter().getId() + " -> Sensor/" + senderController.getSensorIdAsIp() + " waiting to send data.");
+                        unsent = log.sent("Adapter/" + getAdapter().getId() + " -> Sensor/" + senderController.getSensorIdAsIp() + " waiting to send data.");
                     }else{
-                        log.sent("Sensor " + senderController.toString() + " waiting to send data.");
+                        unsent = log.sent("Sensor " + senderController.toString() + " waiting to send data.");
                     }
                     break;
             }
+            messages.add(new OutMessage(logMessage,message,senderController,type,unsent));
             startScheduler();
         }
     }
@@ -175,6 +177,11 @@ public class AdapterController{
     public void messageSuccessfullySent(){
         if(messages.size() != 0) messages.remove(0);
         getLog().notifyDataSent();
+    }
+
+    public synchronized void messageSuccessfullySent(OutMessage message){
+        if(messages.size() != 0) messages.remove(message);
+        getLog().notifyDataSent(message.getUnsent());
     }
 
     /**
@@ -266,7 +273,7 @@ public class AdapterController{
         return controller;
     }
 
-    public SensorController createSensor(ObservableList<Value> values,boolean status,int id,String name,int battery,int signal,int refreshTime,Protocol protocol) throws LoadException {
+    public SensorController createSensor(ObservableList<Value> values,boolean status,int id,String name,int battery,int signal,int refreshTime,Protocol protocol) {
         Sensor newSensor = new Sensor(status,id,name,battery,signal,refreshTime,protocol);
         logger.debug("Adding values");
         newSensor.getValues().addAll(values);
@@ -415,6 +422,11 @@ public class AdapterController{
 
     public ServerController getServerController() {
         return serverController;
+    }
+
+    public void setServerController(ServerController serverController) {
+        logger.trace("Setting server: " + serverController.getModel().getName());
+        this.serverController = serverController;
     }
 
     public boolean getInternetConnection() {

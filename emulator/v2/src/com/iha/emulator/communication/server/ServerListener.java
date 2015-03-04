@@ -1,7 +1,7 @@
 package com.iha.emulator.communication.server;
 
 import com.iha.emulator.control.AdapterController;
-import com.iha.emulator.ui.simulations.detailed.DetailedSimulationPresenter;
+import com.iha.emulator.utilities.Utilities;
 import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import org.apache.logging.log4j.LogManager;
@@ -47,7 +47,7 @@ public class ServerListener extends Thread {
                     logger.info("Server listener stopped.");
                     return;
                 }
-                Platform.runLater(() -> DetailedSimulationPresenter.showException(logger, "Server listener cannot accept new connection!", e, false, null));
+                Platform.runLater(() -> Utilities.showException(logger, "Server listener cannot accept new connection!", e, false, null));
             }
             logger.debug("Accepted message from server.");
             if(socketChannel != null){
@@ -55,7 +55,7 @@ public class ServerListener extends Thread {
                 workerThread.setName("Server Listener Worker");
                 workerThread.start();
             }else{
-                Platform.runLater(() -> DetailedSimulationPresenter.showException(logger, "Unknown error on server listener. Accepted socket is null", null, false, null));
+                Platform.runLater(() -> Utilities.showException(logger, "Unknown error on server listener. Accepted socket is null", null, false, null));
             }
 
         }

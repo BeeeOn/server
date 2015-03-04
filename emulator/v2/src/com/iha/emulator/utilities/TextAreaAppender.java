@@ -68,7 +68,7 @@ public final class TextAreaAppender extends AbstractAppender {
                 }
             });
         } catch (final IllegalStateException e) {
-            // ignore case when the platform hasn't yet been iniitialized
+            // ignore case when the platform hasn't yet been initialized
         }
     }
 }

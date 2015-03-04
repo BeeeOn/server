@@ -1,13 +1,13 @@
 package com.iha.emulator.ui.dialogs.adapter;
 
-import com.iha.emulator.ui.Presenter;
-import com.iha.emulator.ui.panels.PanelPresenter;
-import com.iha.emulator.ui.simulations.detailed.DetailedSimulationPresenter;
 import com.iha.emulator.communication.eserver.EmulatorServerClient;
 import com.iha.emulator.communication.eserver.model.AdapterInfo;
 import com.iha.emulator.communication.eserver.task.ServerTask;
 import com.iha.emulator.communication.eserver.task.TaskParser;
 import com.iha.emulator.communication.eserver.task.implemented.GetAdaptersTask;
+import com.iha.emulator.ui.Presenter;
+import com.iha.emulator.ui.panels.PanelPresenter;
+import com.iha.emulator.utilities.Utilities;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -78,11 +78,11 @@ public class ShowAdaptersDialogPresenter implements Presenter,PanelPresenter {
                     //show response in table
                     Platform.runLater(()->populateTable(((GetAdaptersTask)task).getResult()));
                 }catch (IOException e){
-                    Platform.runLater(()-> DetailedSimulationPresenter.showException(logger,"Cannot read from socket",e,false,null));
+                    Platform.runLater(()-> Utilities.showException(logger, "Cannot read from socket", e, false, null));
                 }catch (DocumentException de){
-                    Platform.runLater(()-> DetailedSimulationPresenter.showException(logger,"Cannot parse server message",de,false,null));
+                    Platform.runLater(()-> Utilities.showException(logger,"Cannot parse server message",de,false,null));
                 }catch (IllegalStateException ie){
-                    Platform.runLater(()-> DetailedSimulationPresenter.showException(logger,"Error on server",ie,false,null));
+                    Platform.runLater(()-> Utilities.showException(logger,"Error on server",ie,false,null));
                 }
                 Platform.runLater(()->showStatus("Table is ready",false));
                 return null;

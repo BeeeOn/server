@@ -36,8 +36,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.LoadException;
 import javafx.scene.Node;
@@ -48,12 +46,8 @@ import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.LoggerContext;
-import org.apache.logging.log4j.core.config.Configuration;
-import org.controlsfx.dialog.ExceptionDialog;
 import org.controlsfx.dialog.ProgressDialog;
 import org.dom4j.*;
 
@@ -172,7 +166,7 @@ public class DetailedSimulationPresenter implements Presenter{
                         Platform.runLater(() -> showAddAdapterDialog(finalTmp));
                     }catch (IllegalArgumentException e){
                         Platform.runLater(() -> showAddAdapterDialog(null));
-                        Platform.runLater(() -> showException(logger,"Cannot load settings from properties file" ,e,false,null));
+                        Platform.runLater(() -> Utilities.showException(logger, "Cannot load settings from properties file", e, false, null));
                     }
                     return null;
                 }
@@ -187,7 +181,7 @@ public class DetailedSimulationPresenter implements Presenter{
                 //save it to list
                 adapterControllersList.add(newAdapterController);
                 //create new adapter
-                newAdapterController.createAdapter(false,99999-i,false, Protocol.Version.ZERO_POINT_ONE,Double.valueOf(getProperty("defaultFirmware")));
+                newAdapterController.createAdapter(false,99999-i,false, Protocol.Version.ZERO_POINT_ONE,Double.valueOf(Utilities.getProperty(properties, "defaultFirmware")));
                 //create new server
                 newAdapterController.createServer(false,"production","10.1.0.1",9092,"home4prod");
                 //create logger
@@ -208,13 +202,13 @@ public class DetailedSimulationPresenter implements Presenter{
                 // set new adapter as current
                 setCurrentAdapter(newAdapterController);
                 try {
-                    newAdapterController.getLog().setBuffered(true,String.valueOf(newAdapterController.getAdapter().getId()));
+                    newAdapterController.getLog().setBuffered(true,"adapter_emu_" + String.valueOf(newAdapterController.getAdapter().getId()));
                 } catch (IOException e) {
-                    showException(logger,"Cannot create buffer file for new adapter log.",e,true,event -> quit());
+                    Utilities.showException(logger, "Cannot create buffer file for new adapter log.", e, true, event -> quit());
                 }
             } catch (IllegalArgumentException e){
                 adapterControllersList.remove(newAdapterController);
-                showException(
+                Utilities.showException(
                         logger,
                         "Cannot create adapter. Error in properties file. Please review file an start application again.",
                         e,
@@ -230,7 +224,7 @@ public class DetailedSimulationPresenter implements Presenter{
         AddAdapterDialogPresenter addAdapterDialogPresenter;
         try{
             Stage stage = new Stage();
-            addAdapterDialogPresenter = new AddAdapterDialogPresenter(stage,servers,this,getProperty("defaultFirmware"));
+            addAdapterDialogPresenter = new AddAdapterDialogPresenter(stage,servers,this,Utilities.getProperty(properties, "defaultFirmware"));
             stage.setTitle("Add new adapter");
             Scene scene = new Scene((Parent) addAdapterDialogPresenter.loadView());
             // set css for view
@@ -240,9 +234,9 @@ public class DetailedSimulationPresenter implements Presenter{
             stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
-            showException(logger,"Cannot load dialog for adding adapter!",e,false,null);
+            Utilities.showException(logger, "Cannot load dialog for adding adapter!", e, false, null);
         } catch (IllegalArgumentException ei){
-            showException(logger,"Cannot create adapter. Error in properties file. Please review file an start application again.",ei,true,event->quit());
+            Utilities.showException(logger, "Cannot create adapter. Error in properties file. Please review file an start application again.", ei, true, event -> quit());
         }
     }
 
@@ -269,7 +263,7 @@ public class DetailedSimulationPresenter implements Presenter{
                     currentAdapterController.setSaved(false);
                     i++;
                 } catch (LoadException e) {
-                    showException(logger,"Cannot create new sensor",e,false,null);
+                    Utilities.showException(logger, "Cannot create new sensor", e, false, null);
                 }
             }
         }
@@ -291,9 +285,9 @@ public class DetailedSimulationPresenter implements Presenter{
             stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
-            showException(logger,"Cannot load dialog for adding sensor!",e,false,null);
+            Utilities.showException(logger, "Cannot load dialog for adding sensor!", e, false, null);
         } catch (NullPointerException en){
-            showException(logger,"Cannot create new sensor",en,false,null);
+            Utilities.showException(logger, "Cannot create new sensor", en, false, null);
         }
     }
 
@@ -313,7 +307,7 @@ public class DetailedSimulationPresenter implements Presenter{
             stage.setResizable(true);
             stage.show();
         } catch (IOException e) {
-            showException(logger,"Cannot load dialog showing full log!",e,false,null);
+            Utilities.showException(logger, "Cannot load dialog showing full log!", e, false, null);
         }
     }
 
@@ -344,7 +338,7 @@ public class DetailedSimulationPresenter implements Presenter{
             stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
-            showException(logger,"Cannot load dialog for deleting adapter!",e,false,null);
+            Utilities.showException(logger, "Cannot load dialog for deleting adapter!", e, false, null);
         }
     }
 
@@ -393,7 +387,7 @@ public class DetailedSimulationPresenter implements Presenter{
             stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
-            showException(logger,"Cannot load dialog for deleting sensor!",e,false,null);
+            Utilities.showException(logger, "Cannot load dialog for deleting sensor!", e, false, null);
         }
     }
 
@@ -556,7 +550,7 @@ public class DetailedSimulationPresenter implements Presenter{
 
             }catch (IllegalArgumentException e){
                 Platform.runLater(() -> showAddAdapterDialog(null));
-                Platform.runLater(() -> showException(logger,"Cannot load settings from properties file" ,e,false,null));
+                Platform.runLater(() -> Utilities.showException(logger, "Cannot load settings from properties file", e, false, null));
             }
             Stage stage = new Stage();
             if(currentAdapterController == null) throw new NullPointerException("No current adapter");
@@ -571,9 +565,9 @@ public class DetailedSimulationPresenter implements Presenter{
             stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
-            showException(logger,"Cannot load server details dialog!",e,false,null);
+            Utilities.showException(logger, "Cannot load server details dialog!", e, false, null);
         } catch (NullPointerException en){
-            showException(logger,"Cannot load server",en,false,null);
+            Utilities.showException(logger, "Cannot load server", en, false, null);
         }
     }
 
@@ -595,9 +589,9 @@ public class DetailedSimulationPresenter implements Presenter{
             stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
-            showException(logger,"Cannot load adapter details dialog!",e,false,null);
+            Utilities.showException(logger, "Cannot load adapter details dialog!", e, false, null);
         } catch (NullPointerException en){
-            showException(logger,"Cannot load adapter",en,false,null);
+            Utilities.showException(logger, "Cannot load adapter", en, false, null);
         }
 
     }
@@ -609,7 +603,7 @@ public class DetailedSimulationPresenter implements Presenter{
             if(content == null) return;
             parseAndLoadXML(content);
         } catch (DocumentException e) {
-            DetailedSimulationPresenter.showException(logger, "Cannot parse loaded file", e, false, null);
+            Utilities.showException(logger, "Cannot parse loaded file", e, false, null);
         }
     }
 
@@ -734,7 +728,7 @@ public class DetailedSimulationPresenter implements Presenter{
             }catch (NullPointerException e){
                 throw new DocumentException("Wrong format of file. Cannot find one or more required elements. Error on in content of adapter " + adapterElement.attribute("id").getValue(),e);
             }catch (IllegalArgumentException e ){
-                showException(logger,"Adapter id already exist",e,false,null);
+                Utilities.showException(logger, "Adapter id already exist", e, false, null);
             }
             if(tmpAdapterController != null && tmpAdapterController.getAdapter() != null){
                 //CREATE LOG
@@ -750,9 +744,9 @@ public class DetailedSimulationPresenter implements Presenter{
                 //ADD ADAPTER TO OTHERS
                 getAdapterControllersList().add(tmpAdapterController);
                 try{
-                    tmpAdapterController.getLog().setBuffered(true,String.valueOf(tmpAdapterController.getAdapter().getId()));
+                    tmpAdapterController.getLog().setBuffered(true,"adapter_emu_" + String.valueOf(tmpAdapterController.getAdapter().getId()));
                 }catch (IOException e){
-                    throw new DocumentException("Wrong format of file. Error on in content of adapter " + adapterElement.attribute("id").getValue(),e);
+                    throw new DocumentException("Cannot buffer adapter " + adapterElement.attribute("id").getValue() + " . Failed to create .tmp file!",e);
                 }
                 tmpAdapterController.setSaved(true);
             }
@@ -762,24 +756,12 @@ public class DetailedSimulationPresenter implements Presenter{
         }
     }
 
-    public void init(String defaultPropertiesFileName){
+    public void init(Properties properties){
         logger.info("Initialization");
         //application initialisation
         startMemoryCheck();
         //load properties from .properties file
-        Task<Object> worker = loadProperties(defaultPropertiesFileName);
-        worker.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-            @Override
-            public void handle(WorkerStateEvent event) {
-                try{
-                    setLoggerLevel(getProperty("logLevel"));
-                }catch (IllegalAddException e){
-                    showException(logger,"Cannot retrieve \"logLevel\" from properties. Setting logger to level INFO",e,false,null);
-                    setLoggerLevel("INFO");
-                }
-
-            }
-        });
+        this.properties = properties;
         //point logger to textArea
         TextAreaAppender.setTextFlow(view.getApplicationLogTextArea());
         //init presenters and save their views to GUI
@@ -805,46 +787,6 @@ public class DetailedSimulationPresenter implements Presenter{
         });
     }
 
-    private void setLoggerLevel(String levelString){
-        Level level;
-        switch (levelString.toLowerCase()){
-            case "all":
-                level = Level.ALL;
-                break;
-            case "trace":
-                level = Level.TRACE;
-                break;
-            case "debug":
-                level = Level.DEBUG;
-                break;
-            case "info":
-                level = Level.INFO;
-                break;
-            case "warn":
-                level = Level.WARN;
-                break;
-            case "error":
-                level = Level.ERROR;
-                break;
-            case "fatal":
-                level = Level.FATAL;
-                break;
-            case "off":
-                level = Level.OFF;
-                break;
-            default:
-                level = Level.INFO;
-                break;
-        }
-        logger.info("Setting logger level: " + level.toString());
-        if(level != null){
-            LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
-            Configuration conf = ctx.getConfiguration();
-            conf.getLoggerConfig(LogManager.ROOT_LOGGER_NAME).setLevel(level);
-            ctx.updateLoggers(conf);
-        }
-    }
-
     private void initAndStartServerListener(){
         if(properties != null){
             serverListener = new ServerListener(Integer.valueOf(properties.getProperty("serverListenerPort")),adapterControllersList);
@@ -855,7 +797,7 @@ public class DetailedSimulationPresenter implements Presenter{
         try {
             serverListener.connect();
         } catch (IOException e) {
-            showException(logger,"Cannot start listening for connections",e,false,null);
+            Utilities.showException(logger, "Cannot start listening for connections", e, false, null);
         }
         serverListener.start();
     }
@@ -956,13 +898,13 @@ public class DetailedSimulationPresenter implements Presenter{
             serverDetailsPresenter = new ServerDetailsPresenter();
             view.addServerDetailsView(serverDetailsPresenter.loadView());
         } catch (IOException e) {
-            showException(logger,"Cannot load Server Details", e, true, event -> quit());
+            Utilities.showException(logger, "Cannot load Server Details", e, true, event -> quit());
         }
         try {
             adapterDetailsPresenter = new AdapterDetailsPresenter();
             view.addAdapterDetailsView(adapterDetailsPresenter.loadView());
         } catch (IOException e) {
-            showException(logger,"Cannot load Adapter Details",e,true, event -> quit());
+            Utilities.showException(logger, "Cannot load Adapter Details", e, true, event -> quit());
         }
     }
     /**
@@ -974,8 +916,7 @@ public class DetailedSimulationPresenter implements Presenter{
     public Scene loadView() throws IOException{
         logger.trace("Loading DetailedSimulationView from: " + FXML_PATH);
         InputStream fxmlStream = null;
-        try
-        {
+        try {
             //load resource FXML
             fxmlStream = getClass().getResourceAsStream(FXML_PATH);
             FXMLLoader loader = new FXMLLoader();
@@ -998,38 +939,6 @@ public class DetailedSimulationPresenter implements Presenter{
         }
     }
 
-    private Task<Object> loadProperties(String defaultPropertiesFileName){
-        setStatus("Loading application settings",true);
-        //define background process
-        Task<Object> worker = new Task<Object>() {
-            @Override
-            protected Object call() throws Exception {
-                //update progress bar
-                updateProgress(1,99);
-                //update progress message
-                updateMessage("Loading application settings...");
-                //load properties
-                try{
-                    properties = Utilities.getInstance().loadDefaultProperties(defaultPropertiesFileName);
-                    updateProgress(50,99);
-                    //unlikely to happen, just to be sure
-                    if(properties == null){
-                        throw new IOException("Properties is null");
-                    }
-                    updateProgress(99, 99);
-                    //update Status line
-                    Platform.runLater(() -> setStatus("Application settings successfully loaded.",false));
-                }catch (IOException e){
-                    //show exception dialog
-                    Platform.runLater(() -> showException(logger,"Cannot load properties. PLease review properties file and run application again",e,true,event -> quit()));
-                }
-                return null;
-            }
-        };
-        showLoadingDialog(worker,"Loading...");
-        return worker;
-    }
-
     private void showLoadingDialog(Task worker,String title){
         //create progress dialog
         ProgressDialog dlg = new ProgressDialog(worker);
@@ -1041,16 +950,6 @@ public class DetailedSimulationPresenter implements Presenter{
         th.setDaemon(true);
         //run background process
         th.start();
-    }
-
-    public String getProperty(String property) throws IllegalArgumentException{
-        if(properties == null) throw new IllegalArgumentException("Properties not found");
-        String tmp = properties.getProperty(property);
-        if( tmp == null){
-            throw new IllegalArgumentException("Missing property \"" + property + "\" in properties file");
-        }else{
-            return tmp;
-        }
     }
 
     public void setStatus(String status,boolean indicate){
@@ -1067,21 +966,6 @@ public class DetailedSimulationPresenter implements Presenter{
             //start checking
             memoryChecker.start();
         }
-    }
-
-    public static void showException(Logger log,String header,Exception e,boolean closeApp,EventHandler<DialogEvent> onCloseEvent){
-        log.error(e.getMessage(),e);
-        //create exception dialog
-        ExceptionDialog dlg = new ExceptionDialog(e);
-        //define default header
-        if (header == null) header = "Ooops. Something went wrong!.";
-        dlg.getDialogPane().setHeaderText(header);
-        dlg.initStyle(StageStyle.DECORATED);
-        if(closeApp && onCloseEvent != null){
-            dlg.setOnCloseRequest(onCloseEvent);
-        }
-        //show exception dialog
-        dlg.show();
     }
 
     public void showError(String message,String title) {

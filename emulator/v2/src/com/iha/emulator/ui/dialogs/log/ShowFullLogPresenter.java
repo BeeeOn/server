@@ -1,8 +1,10 @@
 package com.iha.emulator.ui.dialogs.log;
 
 import com.iha.emulator.control.AdapterController;
+import com.iha.emulator.control.SimulationTask;
 import com.iha.emulator.ui.Presenter;
 import com.iha.emulator.ui.panels.PanelPresenter;
+import com.iha.emulator.utilities.AdapterLogger;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -38,6 +40,7 @@ public class ShowFullLogPresenter implements Presenter,PanelPresenter{
     private Stage window;
 
     private AdapterController adapterController;
+    private SimulationTask currentTask;
 
     private long filePointer = 0;
     private boolean reading = false;
@@ -57,6 +60,11 @@ public class ShowFullLogPresenter implements Presenter,PanelPresenter{
         this.adapterController = adapterController;
     }
 
+    public ShowFullLogPresenter(Stage window,SimulationTask currentTask) {
+        this.window = window;
+        this.currentTask = currentTask;
+    }
+
     public void refresh(){
         showStatus("Loading log file...",true);
         Task<Object> worker = new Task<Object>() {
@@ -65,7 +73,13 @@ public class ShowFullLogPresenter implements Presenter,PanelPresenter{
                 //indicate, that file is being read
                 reading = true;
                 try{
-                    RandomAccessFile file = new RandomAccessFile(adapterController.getLog().getBufferFile(),"r");
+                    AdapterLogger log = null;
+                    if(adapterController != null)
+                        log = adapterController.getLog();
+                    else if(currentTask != null)
+                        log = currentTask.getLog();
+                    if(log == null) return null;
+                    RandomAccessFile file = new RandomAccessFile(log.getBufferFile(),"r");
                     if( file.length() > filePointer){
                         file.seek(filePointer);
                         String line = file.readLine();

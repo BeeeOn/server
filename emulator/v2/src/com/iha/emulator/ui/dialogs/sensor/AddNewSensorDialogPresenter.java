@@ -12,7 +12,6 @@ import com.iha.emulator.models.value.implemented.HasGenerator;
 import com.iha.emulator.resources.images.sensor_types.SensorIcon;
 import com.iha.emulator.ui.Presenter;
 import com.iha.emulator.ui.panels.PanelPresenter;
-import com.iha.emulator.ui.simulations.detailed.DetailedSimulationPresenter;
 import com.iha.emulator.utilities.Utilities;
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
@@ -142,7 +141,7 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
             if(content == null) return;
             parseAndShowXml(content);
         } catch (DocumentException e) {
-            DetailedSimulationPresenter.showException(logger, "Cannot parse loaded file", e, false, null);
+            Utilities.showException(logger, "Cannot parse loaded file", e, false, null);
         }
     }
 
@@ -298,7 +297,7 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
                 try{
                     server.connect();
                 }catch (IOException e){
-                    Platform.runLater(() -> DetailedSimulationPresenter.showException(logger, "Cannot connect to server", e, false, null));
+                    Platform.runLater(() -> Utilities.showException(logger, "Cannot connect to server", e, false, null));
                 }
                 try{
                     //composite message for server
@@ -312,11 +311,11 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
                     //show response in table
                     Platform.runLater(()->showAdapterFromServer(((CheckSensorIdTask)task).getResult()));
                 }catch (IOException e){
-                    Platform.runLater(()-> DetailedSimulationPresenter.showException(logger,"Cannot read from socket",e,false,null));
+                    Platform.runLater(()-> Utilities.showException(logger,"Cannot read from socket",e,false,null));
                 }catch (DocumentException de){
-                    Platform.runLater(()-> DetailedSimulationPresenter.showException(logger,"Cannot parse server message",de,false,null));
+                    Platform.runLater(()-> Utilities.showException(logger,"Cannot parse server message",de,false,null));
                 }catch (IllegalStateException ie){
-                    Platform.runLater(()-> DetailedSimulationPresenter.showException(logger,"Error on server",ie,false,null));
+                    Platform.runLater(()-> Utilities.showException(logger,"Error on server",ie,false,null));
                 }
                 return null;
             }
@@ -374,11 +373,11 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
                     //newSensor.getValues().addAll(values.get());
 
                 }else{
-                    DetailedSimulationPresenter.showException(logger,"Cannot create new sensor, missing container or controller",null,true,null);
+                    Utilities.showException(logger,"Cannot create new sensor, missing container or controller",null,true,null);
                 }
                 window.hide();
             }catch (LoadException e){
-                DetailedSimulationPresenter.showException(logger,"Cannot create new sensor",e,false,null);
+                Utilities.showException(logger,"Cannot create new sensor",e,false,null);
             }
         }else {
             showMissingInfoWarning(false);

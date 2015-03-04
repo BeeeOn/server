@@ -6,7 +6,6 @@ import com.iha.emulator.resources.images.sensor_types.SensorIcon;
 import com.iha.emulator.ui.Presenter;
 import com.iha.emulator.ui.dialogs.sensor.SensorDetailsDialogPresenter;
 import com.iha.emulator.ui.panels.PanelPresenter;
-import com.iha.emulator.ui.simulations.detailed.DetailedSimulationPresenter;
 import com.iha.emulator.utilities.Utilities;
 import javafx.application.Platform;
 import javafx.beans.binding.StringBinding;
@@ -87,9 +86,9 @@ public class SensorPanelPresenter implements Presenter,PanelPresenter{
             stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
-            Platform.runLater(()->DetailedSimulationPresenter.showException(logger,"Cannot load sensor details dialog",e,false,null));
+            Platform.runLater(()->Utilities.showException(logger,"Cannot load sensor details dialog",e,false,null));
         } catch (NullPointerException e){
-            Platform.runLater(()->DetailedSimulationPresenter.showException(logger,"Cannot load sensor controller",e,false,null));
+            Platform.runLater(()->Utilities.showException(logger,"Cannot load sensor controller",e,false,null));
         }
     }
 

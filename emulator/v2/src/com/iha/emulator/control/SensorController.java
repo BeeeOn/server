@@ -176,6 +176,20 @@ public class SensorController {
         adapterController.startScheduler();
     }
 
+    public void criticalErrorStop(String fullMessage,String shortMessage,OutMessage message){
+        //stop sensor
+        Platform.runLater(() -> getModel().setStatus(false));
+        //pause adapter
+        adapterController.stopScheduler();
+        adapterController.messageSuccessfullySent(message);
+        if(isFullMessage()){
+            Platform.runLater(() -> adapterController.getLog().error(fullMessage));
+        }else{
+            Platform.runLater(() -> adapterController.getLog().error(shortMessage));
+        }
+        adapterController.startScheduler();
+    }
+
     public void setNewRefreshTime(int refreshTime){
         resetTimer(refreshTime);
         Platform.runLater(() -> getModel().setRefreshTime(refreshTime));

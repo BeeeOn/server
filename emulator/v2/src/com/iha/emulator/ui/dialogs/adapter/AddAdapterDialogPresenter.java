@@ -283,9 +283,9 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
             // set new adapter as current
             parent.setCurrentAdapter(newAdapterController);
             try {
-                newAdapterController.getLog().setBuffered(true,String.valueOf(newAdapterController.getAdapter().getId()));
+                newAdapterController.getLog().setBuffered(true,"adapter_emu_" + String.valueOf(newAdapterController.getAdapter().getId()));
             } catch (IOException e) {
-                DetailedSimulationPresenter.showException(
+                Utilities.showException(
                         logger,
                         "Cannot create buffer file for new adapter log.",
                         e,
@@ -296,7 +296,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
             return true;
         } catch (IllegalArgumentException e){
             parent.getAdapterControllersList().remove(newAdapterController);
-            DetailedSimulationPresenter.showException(
+            Utilities.showException(
                     logger,
                     "Cannot create adapter. Error in properties file. Please review file an start application again.",
                     e,
@@ -314,7 +314,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
                 try{
                     server.connect();
                 }catch (IOException e){
-                    Platform.runLater(() -> DetailedSimulationPresenter.showException(logger, "Cannot connect to server", e, false, null));
+                    Platform.runLater(() -> Utilities.showException(logger, "Cannot connect to server", e, false, null));
                 }
                 try{
                     //composite message for server
@@ -328,11 +328,11 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
                     //show response in table
                     Platform.runLater(()->showAdapterFromServer(((CheckIdTask)task).getResult()));
                 }catch (IOException e){
-                    Platform.runLater(()-> DetailedSimulationPresenter.showException(logger,"Cannot read from socket",e,false,null));
+                    Platform.runLater(()-> Utilities.showException(logger,"Cannot read from socket",e,false,null));
                 }catch (DocumentException de){
-                    Platform.runLater(()-> DetailedSimulationPresenter.showException(logger,"Cannot parse server message",de,false,null));
+                    Platform.runLater(()-> Utilities.showException(logger,"Cannot parse server message",de,false,null));
                 }catch (IllegalStateException ie){
-                    Platform.runLater(()-> DetailedSimulationPresenter.showException(logger,"Error on server",ie,false,null));
+                    Platform.runLater(()-> Utilities.showException(logger,"Error on server",ie,false,null));
                 }
                 return null;
             }
@@ -399,7 +399,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
             stage.show();
             showAdaptersDialogPresenter.refresh();
             } catch (IOException e) {
-                DetailedSimulationPresenter.showException(logger, "Cannot load dialog for showing adapters in database!", e, false,null);
+            Utilities.showException(logger, "Cannot load dialog for showing adapters in database!", e, false,null);
             }
     }
 
