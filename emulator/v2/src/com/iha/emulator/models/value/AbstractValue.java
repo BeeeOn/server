@@ -180,6 +180,7 @@ public abstract class AbstractValue<T> implements Value<T>,HasGenerator{
         this.generatorSeed = generatorSeed;
         if(this.generator != null){
             this.generator.setSeed(this.generatorSeed);
+
         }
     }
 

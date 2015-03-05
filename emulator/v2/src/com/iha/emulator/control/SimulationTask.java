@@ -1,5 +1,9 @@
 package com.iha.emulator.control;
 
+import com.iha.emulator.communication.eserver.EmulatorServerClient;
+import com.iha.emulator.communication.eserver.task.ServerTask;
+import com.iha.emulator.communication.eserver.task.TaskParser;
+import com.iha.emulator.communication.eserver.task.implemented.DeleteAdapterTask;
 import com.iha.emulator.communication.protocol.Protocol;
 import com.iha.emulator.communication.server.ServerController;
 import com.iha.emulator.models.Server;
@@ -16,7 +20,10 @@ import javafx.concurrent.Task;
 import javafx.scene.control.TabPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.dom4j.DocumentException;
 
+import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.Random;
 
 /**
@@ -30,13 +37,9 @@ public class SimulationTask {
     private static final int VALUE_TYPE_MAX = Value.Type.SENSOR_TEMPERATURE.ordinal();
 
     public enum State{
+        READY("Ready"),
         RUNNING("Running"),
         PAUSED("Paused"),
-        RESUMED("Resumed"),
-        STOPPED("Stopped"),
-        PAUSED_SENSORS("Paused sensors"),
-        RESUMED_SENSORS("Resumed sensors"),
-        WAITING("Waiting"),
         FINISHED("Finished"),
         ERROR("Error");
 
@@ -71,8 +74,8 @@ public class SimulationTask {
     private ListProperty<AdapterController> adapterControllersList = new SimpleListProperty<>(adapterControllers);
 
     //region CONTROL
-    private BooleanProperty started;
-    private BooleanProperty paused;
+    private BooleanProperty running;
+    private BooleanProperty finished;
     private BooleanProperty sensorsPaused;
     //endregion
     //region GENERATORS
@@ -86,148 +89,243 @@ public class SimulationTask {
 
     public SimulationTask() {
         this.enabled = new SimpleBooleanProperty(true);
-        this.simulationState = new SimpleObjectProperty<>(State.WAITING);
+        this.simulationState = new SimpleObjectProperty<>(State.READY);
         this.id = new SimpleIntegerProperty();
 
-        this.started = new SimpleBooleanProperty(false);
-        this.paused = new SimpleBooleanProperty(true);
+        this.running = new SimpleBooleanProperty(false);
+        this.finished = new SimpleBooleanProperty(false);
         this.sensorsPaused = new SimpleBooleanProperty(false);
     }
 
     public void start(){
-        Task<Object> worker = new Task<Object>() {
-            @Override
-            protected Object call() throws Exception {
-                LongProperty progress = new SimpleLongProperty(0);
-                progress.addListener(new ChangeListener<Number>() {
+        switch (getSimulationState()){
+            case READY:
+            case PAUSED:
+                logger.trace("Enabling adapters");
+                Task<Object> worker = new Task<Object>() {
                     @Override
-                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                        if((Long)newValue > 0 && (Long)newValue < 100)
-                            updateProgress((long)newValue,100);
+                    protected Object call() throws Exception {
+                        LongProperty progress = new SimpleLongProperty(0);
+                        progress.addListener(new ChangeListener<Number>() {
+                            @Override
+                            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                                if((Long)newValue > 0 && (Long)newValue < 100)
+                                    updateProgress((long)newValue,100);
+                            }
+                        });
+                        progress.set(1);
+                        //set task to running simulationState
+                        long progressPerAdapter = 95/getAdapterControllers().size();
+                        getAdapterControllers().forEach(a->{
+                            a.enable();
+                            progress.set(progress.get()+progressPerAdapter);
+                        });
+                        Platform.runLater(() -> logMessage("Task RUNNING"));
+                        progress.set(100);
+                        return null;
                     }
-                });
-                progress.set(1);
-                //set task to running simulationState
-                Platform.runLater(() -> {
-                    setSimulationState(SimulationTask.State.RUNNING);
-                    setStarted(true);
-                    setPaused(false);
-                    progress.set(97);
-                    logMessage("Task STARTED");
-                });
-                progress.set(100);
-                return null;
-            }
-        };
-        Utilities.showLoadingDialog(worker,"Starting task...");
-        worker.setOnSucceeded(event -> resume());
+                };
+                Utilities.showLoadingDialog(worker,"Starting task...");
+                worker.setOnSucceeded(event -> setSimulationState(State.RUNNING));
+                break;
+            case FINISHED:
+                Task restartTask = restart();
+                if(restartTask != null)
+                    restartTask.setOnSucceeded(event -> start());
+                break;
+        }
     }
 
-    public void pause(){
-        logger.trace("Disabling adapters");
-        Task<Object> worker = new Task<Object>() {
-            @Override
-            protected Object call() throws Exception {
-                LongProperty progress = new SimpleLongProperty(0);
-                progress.addListener(new ChangeListener<Number>() {
+    public Task pause(){
+        switch (getSimulationState()){
+            case ERROR:
+            case RUNNING:
+                logger.trace("Disabling adapters");
+                Task<Object> worker = new Task<Object>() {
                     @Override
-                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                        if((Long)newValue > 0 && (Long)newValue < 100)
-                            updateProgress((long)newValue,100);
+                    protected Object call() throws Exception {
+                        LongProperty progress = new SimpleLongProperty(0);
+                        progress.addListener(new ChangeListener<Number>() {
+                            @Override
+                            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                                if((Long)newValue > 0 && (Long)newValue < 100)
+                                    updateProgress((long)newValue,100);
+                            }
+                        });
+                        progress.set(1);
+                        long progressPerAdapter = 95/getAdapterControllers().size();
+                        getAdapterControllers().forEach(a->{
+                            a.disable();
+                            progress.set(progress.get() + progressPerAdapter);
+                        });
+                        Platform.runLater(() -> logMessage("Task PAUSED"));
+                        progress.set(99);
+                        return null;
                     }
-                });
-                progress.set(1);
-                long progressPerAdapter = 95/getAdapterControllers().size();
-                getAdapterControllers().forEach(a->{
-                    a.disable();
-                    progress.set(progress.get() + progressPerAdapter);
-                });
-                Platform.runLater(() -> {
-                    setSimulationState(SimulationTask.State.PAUSED);
-                    setPaused(true);
-                    logMessage("Task PAUSED");
-                });
-                progress.set(99);
-                return null;
-            }
-        };
-        Utilities.showLoadingDialog(worker,"Pausing task...");
+                };
+                Utilities.showLoadingDialog(worker,"Pausing task...");
+                worker.setOnSucceeded(event -> setSimulationState(State.PAUSED));
+                return worker;
+        }
+        return null;
     }
 
-    public void stop(){
-        pause();
-        Task<Object> worker = new Task<Object>() {
-            @Override
-            protected Object call() throws Exception {
-                Platform.runLater(()->logMessage("Task STOPPED"));
-                LongProperty progress = new SimpleLongProperty(0);
-                progress.addListener(new ChangeListener<Number>() {
+    public Task stop(){
+        switch (getSimulationState()){
+            case RUNNING:
+            case PAUSED:
+            case ERROR:
+                //pause task if necessary
+                Task pauseTask = pause();
+                //delete adapters from emulator and database
+                Task<Object> worker = new Task<Object>() {
                     @Override
-                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                        if((Long)newValue > 0 && (Long)newValue < 100)
-                            updateProgress((long)newValue,100);
+                    protected Object call() throws Exception {
+                        Platform.runLater(()->logMessage("Task STOPPED"));
+                        LongProperty progress = new SimpleLongProperty(0);
+                        progress.addListener(new ChangeListener<Number>() {
+                            @Override
+                            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                                if ((Long) newValue > 0 && (Long) newValue < 100)
+                                    updateProgress((long) newValue, 100);
+                            }
+                        });
+                        progress.set(1);
+                        updateMessage("Deleting adapters from database");
+                        logger.trace("Deleting adapters from database");
+                        removeAdaptersFromDb();
+                        progress.set(30);
+                        updateMessage("Saving log file : " + getLog().getBufferFile().getAbsolutePath());
+                        logger.trace("Saving log file : " + getLog().getBufferFile().getAbsolutePath());
+                        logMessage("Task FINISHED");
+                        logger.trace("Closing buffer");
+                        getLog().closeBuffer();
+                        progress.set(40);
+                        progress.set(99);
+                        return null;
                     }
-                });
-                progress.set(1);
-                updateMessage("Deleting adapters");
-                long progressPerAdapter = 95/getAdapterControllers().size();
-                getAdapterControllers().forEach(a->{
-                    //TODO save logs
-                    //delete adapter data
-                    a.delete();
-                    //update process
-                    progress.set(progress.get() + progressPerAdapter);
-                });
-                //clear adapters list
-                if(getAdapterControllers().size() > 0){
-                    getAdapterControllers().clear();
+                };
+                if(pauseTask != null){
+                    pauseTask.setOnSucceeded(e -> {
+                        Utilities.showLoadingDialog(worker,"Finishing task...");
+                        worker.setOnSucceeded(event -> {
+                            if(!getSimulationState().equals(State.ERROR)){
+                                setSimulationState(State.FINISHED);
+                            }
+                        });
+                    });
+                }else{
+                    Utilities.showLoadingDialog(worker, "Finishing task...");
+                    worker.setOnSucceeded(event -> {
+                        if(!getSimulationState().equals(State.ERROR)){
+                            setSimulationState(State.FINISHED);
+                        }
+                    });
                 }
-                Platform.runLater(() -> {
-                    setSimulationState(SimulationTask.State.STOPPED);
-                    setStarted(false);
-                    setPaused(true);
-                });
-                progress.set(99);
-                return null;
+
+                return worker;
+        }
+        return null;
+    }
+
+    public Task restart(){
+        logger.debug("Restarting task");
+        switch (getSimulationState()){
+            case ERROR:
+            case FINISHED:
+                Task<Object> worker = new Task<Object>() {
+                    @Override
+                    protected Object call() throws Exception {
+                        Platform.runLater(()->logMessage("Task STOPPED"));
+                        LongProperty progress = new SimpleLongProperty(0);
+                        progress.addListener(new ChangeListener<Number>() {
+                            @Override
+                            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                                if ((Long) newValue > 0 && (Long) newValue < 100)
+                                    updateProgress((long) newValue, 100);
+                            }
+                        });
+                        progress.set(1);
+                        updateMessage("Clearing logs");
+                        getLog().delete();
+                        updateMessage("Buffering logs");
+                        getLog().createLogs();
+                        try{
+                            getLog().openBufferFile();
+                        }catch (IOException e){
+                            Platform.runLater(()-> Utilities.showException(logger, "Cannot open buffer file", e, true, event -> stop()));
+                        }
+                        updateMessage("Deleting responses");
+                        clearResponseTrackers();
+                        updateMessage("Unregister adapters");
+                        getAdapterControllers().forEach(a->{
+                            a.setRegisterMessageSent(false);
+                            a.getAdapter().setRegistered(false);
+                            a.restartValueGenerators();
+                        });
+                        setSensorsPaused(false);
+                        logMessage("Task RESTARTED");
+                        progress.set(99);
+                        return null;
+                    }
+                };
+                Utilities.showLoadingDialog(worker,"Restarting task...");
+                worker.setOnSucceeded(event -> setSimulationState(State.READY));
+                return worker;
+            default:
+                Task stopTask = stop();
+                if(stopTask != null) stopTask.setOnSucceeded(event -> restart());
+        }
+        return null;
+    }
+
+    public void criticalStop(){
+        if(getSimulationState() == State.ERROR) return;
+        setSimulationState(State.ERROR);
+        stop();
+    }
+
+    private void clearResponseTrackers(){
+        if(getAdapterControllers() == null) return;
+        getAdapterControllers().forEach(AdapterController::clearResponseTracker);
+    }
+
+    private void removeAdaptersFromDb(){
+        EmulatorServerClient server;
+        try{
+            server = new EmulatorServerClient();
+            server.connect();
+            //composite message for server
+            ServerTask task = new DeleteAdapterTask(
+                    getServerController().getModel().getDatabaseName(),
+                    String.valueOf(getTaskParameters().getStartId()),
+                    getTaskParameters().getAdaptersCount()
+            );
+            //send message and wait for response
+            if(server == null) throw new IllegalStateException("Server is null");
+            String messageFromServer = server.sendMessage(task.buildMessage());
+            //determine result state (OK/ERROR)
+            TaskParser.parseTaskResult(messageFromServer);
+            //if ok, parse response
+            task.parseResponse(messageFromServer);
+            //show if error occurred
+            if(!((DeleteAdapterTask)task).getResult()){
+                Platform.runLater(()->Utilities.showException(logger,"Error in database delete",null,false,null));
             }
-        };
-        Utilities.showLoadingDialog(worker,"Stopping task...");
+        }catch (UnknownHostException e){
+            Platform.runLater(()->Utilities.showException(logger,"Cannot connect to emulator server.Unknown host",e,false,null));
+        }catch (IOException e){
+            Platform.runLater(()->Utilities.showException(logger,"Cannot connect to emulator server",e,false,null));
+        }catch (DocumentException de){
+            Platform.runLater(()-> Utilities.showException(logger,"Cannot parse emulator server message",de,false,null));
+        }catch (IllegalStateException ie){
+            Platform.runLater(()-> Utilities.showException(logger,"Error on emulator server",ie,false,null));
+        }
     }
 
     public void clear(){
         //clear logs
         getLog().delete();
-    }
-
-    public void resume(){
-        logger.trace("Enabling adapters");
-        Task<Object> worker = new Task<Object>() {
-            @Override
-            protected Object call() throws Exception {
-                LongProperty progress = new SimpleLongProperty(0);
-                progress.addListener(new ChangeListener<Number>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                        if((Long)newValue > 0 && (Long)newValue < 100)
-                            updateProgress((long)newValue,100);
-                    }
-                });
-                progress.set(1);
-                long progressPerAdapter = 95/getAdapterControllers().size();
-                getAdapterControllers().forEach(a->{
-                    a.enable();
-                    progress.set(progress.get()+progressPerAdapter);
-                });
-                Platform.runLater(() -> {
-                    setSimulationState(SimulationTask.State.RUNNING);
-                    setPaused(false);
-                    logMessage("Task RESUMED");
-                });
-                progress.set(99);
-                return null;
-            }
-        };
-        Utilities.showLoadingDialog(worker,"Resuming task...");
     }
 
     public void pauseSensors(){
@@ -245,19 +343,16 @@ public class SimulationTask {
                 progress.set(1);
                 long progressPerAdapter = 95/getAdapterControllers().size();
                 getAdapterControllers().forEach(a->{
-                    a.getSensorControllers().forEach(s->s.setTimerRunning(false));
+                    a.getSensorControllers().forEach(SensorController::disable);
                     progress.set(progress.get() + progressPerAdapter);
                 });
-                Platform.runLater(() -> {
-                    setSimulationState(SimulationTask.State.PAUSED_SENSORS);
-                    setSensorsPaused(true);
-                    logMessage("Task's sensors PAUSED");
-                });
+                Platform.runLater(() -> logMessage("Task's sensors PAUSED"));
                 progress.set(99);
                 return null;
             }
         };
         Utilities.showLoadingDialog(worker,"Pausing sensors...");
+        worker.setOnSucceeded(event -> setSensorsPaused(true));
     }
 
     public void resumeSensors(){
@@ -275,22 +370,16 @@ public class SimulationTask {
                 progress.set(1);
                 long progressPerAdapter = 95/getAdapterControllers().size();
                 getAdapterControllers().forEach(a->{
-                    a.getSensorControllers().forEach(s->s.setTimerRunning(true));
+                    a.getSensorControllers().forEach(SensorController::enable);
                     progress.set(progress.get() + progressPerAdapter);
                 });
-                Platform.runLater(() -> {
-                    if(getPaused())
-                        setSimulationState(SimulationTask.State.PAUSED);
-                    else
-                        setSimulationState(SimulationTask.State.RUNNING);
-                    setSensorsPaused(false);
-                    logMessage("Task's sensors RESUMED");
-                });
+                Platform.runLater(() -> logMessage("Task's sensors RESUMED"));
                 progress.set(99);
                 return null;
             }
         };
         Utilities.showLoadingDialog(worker,"Resuming sensors...");
+        worker.setOnSucceeded(event -> setSensorsPaused(false));
     }
 
     public void createAdapters(LongProperty progress){
@@ -300,6 +389,7 @@ public class SimulationTask {
         }
         //loading dialog progress help variable; 95% / number of adapters
         long oneAdapterProgress = (90-progress.get())/getTaskParameters().getAdaptersCount();
+        int sensorsTotal = 0;
         for (int i = 0;i<getTaskParameters().getAdaptersCount();i++){
             int newAdapterId = getTaskParameters().getStartId();
             logger.trace("Creating adapter: " + (newAdapterId+i));
@@ -323,14 +413,15 @@ public class SimulationTask {
             //save it to list
             adapterControllersList.add(newAdapterController);
             //create sensors for new adapter
-            createSensors(newAdapterController);
+            sensorsTotal = sensorsTotal + createSensors(newAdapterController);
             //set loading dialog progress
             progress.set(progress.get()+oneAdapterProgress);
         }
+        logMessage("Created " + sensorsTotal + " sensors.");
     }
 
-    public void createSensors(AdapterController adapterController){
-        int sensorsCount;
+    public int createSensors(AdapterController adapterController){
+        int sensorsCount,sensorsTotal = 0;
         TaskParameters parameters = getTaskParameters();
         try{
             //determine sensors count
@@ -397,14 +488,16 @@ public class SimulationTask {
                 tmp.setIgnoreRefreshChange(true);
                 adapterController.setSaved(true);
                 logMessage("Sensor/" + tmp.getSensorIdAsIp() + " created successfully");
+                sensorsTotal++;
             }
+            return sensorsTotal;
         }catch (IllegalArgumentException e ){
             Utilities.showException(logger, "Cannot create sensors for adapter " + adapterController.getAdapter().getId(), e, false, null);
         }
-
+        return 0;
     }
 
-    public void logMessage(String message){
+    public synchronized void logMessage(String message){
         if(this.log != null) log.log(message);
         else logger.error("No logger");
     }
@@ -417,10 +510,13 @@ public class SimulationTask {
     }
 
     public void createLog(TabPane panel){
+        //create log
         this.log = new AdapterLogger(panel);
+        //register error handler
+        this.log.getErrorHandler().addErrorListener(this::criticalStop);
     }
 
-    public TaskParameters createTaskParameters(int adaptersCount,Protocol.Version version, int startId,int sensorsCountMin,int sensorsCountMax,int refreshTimeMin,int refreshTimeMax) throws IllegalArgumentException{
+    public TaskParameters createTaskParameters(int adaptersCount,Protocol.Version version, int startId,int sensorsCountMin,int sensorsCountMax,int refreshTimeMin,int refreshTimeMax,String saveDir) throws IllegalArgumentException{
         this.taskParameters = new TaskParameters();
         //set task parameters
         taskParameters.setAdaptersCount(adaptersCount);
@@ -430,6 +526,8 @@ public class SimulationTask {
         taskParameters.setSensorsCountMax(sensorsCountMax);
         taskParameters.setRefreshTimeMin(refreshTimeMin);
         taskParameters.setRefreshTimeMax(refreshTimeMax);
+        if(saveDir != null)
+            taskParameters.setSaveDir(saveDir);
         //create task's generators
         createGenerators();
         return taskParameters;
@@ -468,6 +566,7 @@ public class SimulationTask {
     }
 
     public void setSimulationState(State simulationState) {
+        logger.debug("Setting task state -> "  + simulationState.getName());
         this.simulationState.set(simulationState);
     }
 
@@ -491,30 +590,17 @@ public class SimulationTask {
         this.id.set(id);
     }
 
-    public boolean getStarted() {
-        return started.get();
+    public boolean getRunning() {
+        return running.get();
     }
 
-    public BooleanProperty startedProperty() {
-        return started;
+    public BooleanProperty runningProperty() {
+        return running;
     }
 
-    public void setStarted(boolean started) {
-        logger.debug(toString() + " -> setting started -> " + started);
-        this.started.set(started);
-    }
-
-    public boolean getPaused() {
-        return paused.get();
-    }
-
-    public BooleanProperty pausedProperty() {
-        return paused;
-    }
-
-    public void setPaused(boolean paused) {
-        logger.debug(toString() + " -> setting paused -> " + paused);
-        this.paused.set(paused);
+    public void setRunning(boolean running) {
+        logger.debug(toString() + " -> setting running -> " + running);
+        this.running.set(running);
     }
 
     public boolean getSensorsPaused() {
@@ -563,5 +649,18 @@ public class SimulationTask {
 
     public void setAdapterControllersList(ObservableList<AdapterController> adapterControllersList) {
         this.adapterControllersList.set(adapterControllersList);
+    }
+
+    public boolean getFinished() {
+        return finished.get();
+    }
+
+    public BooleanProperty finishedProperty() {
+        return finished;
+    }
+
+    public void setFinished(boolean finished) {
+        logger.debug(toString() + " -> setting finished -> " + finished);
+        this.finished.set(finished);
     }
 }

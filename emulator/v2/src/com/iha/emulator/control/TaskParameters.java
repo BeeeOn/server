@@ -1,15 +1,14 @@
 package com.iha.emulator.control;
 
 import com.iha.emulator.communication.protocol.Protocol;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 
 /**
  * Created by Shu on 26.2.2015.
  */
 public class TaskParameters {
+
+    private static final String DEFAULT_SAVE_DIR = "logs/performance";
 
     private IntegerProperty adaptersCount;
     private ObjectProperty<Protocol.Version> protocolVersion;
@@ -23,6 +22,7 @@ public class TaskParameters {
     private Long signalGeneratorSeed;
     private Long batteryGeneratorSeed;
     private Long valueTypeGeneratorSeed;
+    private StringProperty saveDir;
 
     public TaskParameters() {
         this.adaptersCount = new SimpleIntegerProperty(0);
@@ -37,6 +37,7 @@ public class TaskParameters {
         this.signalGeneratorSeed = System.currentTimeMillis();
         this.batteryGeneratorSeed = System.currentTimeMillis();
         this.valueTypeGeneratorSeed = System.currentTimeMillis();
+        this.saveDir = new SimpleStringProperty(DEFAULT_SAVE_DIR);
     }
 
     public int getAdaptersCount() {
@@ -162,5 +163,17 @@ public class TaskParameters {
 
     public void setValueTypeGeneratorSeed(Long valueTypeGeneratorSeed) {
         this.valueTypeGeneratorSeed = valueTypeGeneratorSeed;
+    }
+
+    public String getSaveDir() {
+        return saveDir.get();
+    }
+
+    public StringProperty saveDirProperty() {
+        return saveDir;
+    }
+
+    public void setSaveDir(String saveDir) {
+        this.saveDir.set(saveDir);
     }
 }

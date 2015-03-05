@@ -201,7 +201,7 @@ public class DetailedSimulationPresenter implements Presenter{
                 // set new adapter as current
                 setCurrentAdapter(newAdapterController);
                 try {
-                    newAdapterController.getLog().setBuffered(true,"adapter_emu_" + String.valueOf(newAdapterController.getAdapter().getId()));
+                    newAdapterController.getLog().setBuffered(true,"adapter_emu_" + String.valueOf(newAdapterController.getAdapter().getId()),null);
                 } catch (IOException e) {
                     Utilities.showException(logger, "Cannot create buffer file for new adapter log.", e, true, event -> quit());
                 }
@@ -744,7 +744,7 @@ public class DetailedSimulationPresenter implements Presenter{
                 //ADD ADAPTER TO OTHERS
                 getAdapterControllersList().add(tmpAdapterController);
                 try{
-                    tmpAdapterController.getLog().setBuffered(true,"adapter_emu_" + String.valueOf(tmpAdapterController.getAdapter().getId()));
+                    tmpAdapterController.getLog().setBuffered(true,"adapter_emu_" + String.valueOf(tmpAdapterController.getAdapter().getId()),null);
                 }catch (IOException e){
                     throw new DocumentException("Cannot buffer adapter " + adapterElement.attribute("id").getValue() + " . Failed to create .tmp file!",e);
                 }
@@ -1032,7 +1032,10 @@ public class DetailedSimulationPresenter implements Presenter{
 
     private void removeTempFiles(){
         if(getAdapterControllers().size() < 1) return;
-        getAdapterControllers().stream().filter(a->a.getLog().getBufferFile()!=null).forEach(a->a.getLog().closeBuffer());
+        getAdapterControllers().stream().filter(a->a.getLog().getBufferFile()!=null).forEach(a->{
+            a.getLog().closeBuffer();
+            a.getLog().deleteBufferFile();
+        });
     }
 
     public Display getView(){

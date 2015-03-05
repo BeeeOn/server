@@ -2,10 +2,10 @@ package com.iha.emulator.control;
 
 import com.iha.emulator.communication.server.OutMessage;
 import com.iha.emulator.models.Sensor;
+import com.iha.emulator.models.value.HasGenerator;
 import com.iha.emulator.models.value.Value;
 import com.iha.emulator.ui.panels.sensor.SensorPanelPresenter;
 import com.iha.emulator.utilities.Utilities;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -31,7 +31,6 @@ public class SensorController {
     private Sensor model;
     private BooleanProperty timerRunning;
     private boolean runValueGenerator = false;
-    private Timeline timer;
     private Timer newTimer;
     private TimerTask timerTask;
     private boolean fullMessage = false;
@@ -72,7 +71,6 @@ public class SensorController {
 
     public void startTimer(){
         logger.trace("Sensor/" + getSensorIdAsIp() + " timer started");
-        if(timer != null) timer.play();
         if(newTimer != null){
             //newTimer = new Timer();
             newTimer.purge();
@@ -83,14 +81,13 @@ public class SensorController {
                     timerEngine();
                 }
             };
-            newTimer.schedule(timerTask,0,(getModel().getRefreshTime()*1000)/2);
+            newTimer.schedule(timerTask,(getModel().getRefreshTime()*1000),(getModel().getRefreshTime()*1000)/2);
         }
 
     }
 
     public void stopTimer(){
         logger.trace("Sensor/" + getSensorIdAsIp() + " timer stopped");
-        if(timer!=null) timer.stop();
         if(newTimer != null && timerTask != null){
             timerTask.cancel();
             newTimer.purge();
@@ -100,18 +97,12 @@ public class SensorController {
 
     public void delete(){
         adapterController = null;
-        timer = null;
         model = null;
     }
 
     private void initializeTimer(){
         logger.trace("Sensor/" + getSensorIdAsIp() + " initialising timer");
         //create timer
-        /*timer = new Timeline(new KeyFrame(
-                Duration.millis((model.getRefreshTime()*1000)/2),
-                ae -> timerEngine()));
-        //set infinite periodical cycle
-        timer.setCycleCount(Timeline.INDEFINITE);*/
         newTimer = new Timer();
     }
 
@@ -202,6 +193,14 @@ public class SensorController {
 
     }
 
+    public void restartValueGenerators(){
+        if(getModel().getValues() == null ) return;
+        getModel().getValues().stream()
+                .filter(v -> v.isGenerateValue() && ((HasGenerator) v).getGeneratorType() != null)
+                .forEach(v -> ((HasGenerator) v).restartGenerator());
+
+    }
+
     public void criticalErrorStop(String fullMessage,String shortMessage){
         //stop sensor
         Platform.runLater(() -> getModel().setStatus(false));
@@ -235,19 +234,6 @@ public class SensorController {
     }
 
     private void resetTimer(int refreshTime){
-        /*KeyFrame keyFrame = new KeyFrame(
-                Duration.millis((refreshTime*1000)/2),
-                ae -> timerEngine()
-        );
-        if(getTimerRunning()){
-            timer.stop();
-            timer.getKeyFrames().clear();
-            timer.getKeyFrames().setAll(keyFrame);
-            timer.play();
-        }else{
-            timer.getKeyFrames().clear();
-            timer.getKeyFrames().setAll(keyFrame);
-        }*/
         if(getTimerRunning()){
             setTimerRunning(false);
             Platform.runLater(() -> {

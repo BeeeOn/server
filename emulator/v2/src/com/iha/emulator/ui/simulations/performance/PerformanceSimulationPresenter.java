@@ -123,15 +123,20 @@ public class PerformanceSimulationPresenter implements Presenter{
     //region public methods
     public void startTask(){
         if(getCurrentTask() == null) return;
-        if(getCurrentTask().getStarted()){
-            logger.debug(getCurrentTask().toString() + " -> RESUMING");
-            getCurrentTask().resume();
-        }
-        else{
-            logger.debug(getCurrentTask().toString() + " -> STARTING");
-            setStatus("Starting task " + getCurrentTask().getId(),true);
-            getCurrentTask().start();
-            setStatus(getCurrentTask().toString() + " started",false);
+        switch (getCurrentTask().getSimulationState()){
+            case ERROR:
+            case FINISHED:
+                setStatus("Restarting task " + getCurrentTask().getId(),true);
+                logger.debug(getCurrentTask().toString() + " -> RESTARTING");
+                getCurrentTask().restart();
+                setStatus(getCurrentTask().toString() + " restarted",false);
+                break;
+            default:
+                setStatus("Starting task " + getCurrentTask().getId(),true);
+                logger.debug(getCurrentTask().toString() + " -> STARTING");
+                getCurrentTask().start();
+                setStatus(getCurrentTask().toString() + " started",false);
+                break;
         }
     }
 
@@ -141,17 +146,6 @@ public class PerformanceSimulationPresenter implements Presenter{
         setStatus("Stopping task " + getCurrentTask().getId(),true);
         getCurrentTask().stop();
         setStatus(getCurrentTask().toString() + " stopped",false);
-    }
-
-    public void resumeTask(){
-        if(getCurrentTask() == null) return;
-        logger.debug(getCurrentTask().toString() + " -> RESUMING");
-        if(getCurrentTask().getStarted()){
-            getCurrentTask().resume();
-            setStatus(getCurrentTask().toString() + " resumed",false);
-        }
-        else
-            startTask();
     }
 
     public void pauseTask(){
@@ -197,13 +191,14 @@ public class PerformanceSimulationPresenter implements Presenter{
                     //create task parameters
                     logger.trace("Creating new task -> Creating parameters");
                     task.createTaskParameters(
-                            3, //adapters count
+                            1, //adapters count
                             Protocol.Version.ZERO_POINT_ONE, //protocol version
                             1000, //starting adapter id
-                            1, // sensors count minimum
-                            5, //sensors count maximum
-                            1, //refresh time minimum
-                            10 //refresh time maximum
+                            4, // sensors count minimum
+                            6, //sensors count maximum
+                            5, //refresh time minimum
+                            10, //refresh time maximum
+                            null // default save dir
                     );
                     //update progress
                     progress.set(10);
@@ -220,7 +215,7 @@ public class PerformanceSimulationPresenter implements Presenter{
                     //set log to buffer
                     logger.trace("Creating new task -> Setting logs to buffer");
                     try {
-                        task.getLog().setBuffered(true,"task_emu_" + task.getId());
+                        task.getLog().setBuffered(true,"task_"+task.getId()+"_",task.getTaskParameters().getSaveDir());
                         logger.trace("");
                     } catch (IOException e) {
                         Utilities.showException(logger, "Cannot create buffer file for new task's log.", e, true, event -> quit());
@@ -232,6 +227,7 @@ public class PerformanceSimulationPresenter implements Presenter{
                     progress.set(20);
                     logger.trace("Creating new task -> Creating adapters");
                     task.createAdapters(progress);
+                    task.setSimulationState(SimulationTask.State.READY);
                     progress.set(100);
                     return null;
                 }
@@ -260,7 +256,7 @@ public class PerformanceSimulationPresenter implements Presenter{
     public void switchCurrentTask(SimulationTask newTask){
         if(getCurrentTask() != null && newTask != null){
             if(newTask.equals(getCurrentTask())) return;
-            else if(getCurrentTask().getStarted()) getCurrentTask().stop();
+            else if(getCurrentTask().getRunning()) getCurrentTask().stop();
         }
         if(newTask == null){
             clearControlsBinding();
@@ -374,7 +370,7 @@ public class PerformanceSimulationPresenter implements Presenter{
     private void checkIfSwitchTasks(SimulationTask newTask){
         logger.trace("Trying to switch tasks");
         if(newTask != null){
-            if(getCurrentTask() == null || !getCurrentTask().getStarted()){
+            if(getCurrentTask() == null || !getCurrentTask().getRunning()){
                 logger.trace("Trying to switch to task: " + newTask.getId());
                 switchCurrentTask(newTask);
                 return;
@@ -473,61 +469,60 @@ public class PerformanceSimulationPresenter implements Presenter{
 
     private void bindTaskControlBtns(){
         if(getCurrentTask() == null) return;
-        //start btns
+        //start buttons
         BooleanBinding startBinding = new BooleanBinding() {
             {
-                bind(getCurrentTask().startedProperty());
+                bind(getCurrentTask().simulationStateProperty());
             }
             @Override
             protected boolean computeValue() {
-                return getCurrentTask().getStarted();
+                switch (getCurrentTask().getSimulationState()){
+                    case RUNNING:
+                        return true;
+                    default:
+                        return false;
+                }
             }
-        }.and(new BooleanBinding() {
-            {
-                bind(getCurrentTask().pausedProperty());
-            }
-
-            @Override
-            protected boolean computeValue() {
-                return !getCurrentTask().getPaused();
-            }
-        });
+        };
         view.getStartTaskTBtn().disableProperty().bind(startBinding);
         view.getStartTaskItem().disableProperty().bind(startBinding);
-        //pause btns
+        //pause buttons
         BooleanBinding pauseBinding = new BooleanBinding() {
             {
-                bind(getCurrentTask().pausedProperty());
+                bind(getCurrentTask().simulationStateProperty());
             }
             @Override
             protected boolean computeValue() {
-                return getCurrentTask().getPaused();
+                switch (getCurrentTask().getSimulationState()){
+                    case RUNNING:
+                        return false;
+                    default:
+                        return true;
+                }
             }
         };
         view.getPauseTaskTBtn().disableProperty().bind(pauseBinding);
         view.getPauseTaskItem().disableProperty().bind(pauseBinding);
-        //stop btns
+        //start buttons
         BooleanBinding stopBinding = new BooleanBinding() {
             {
-                bind(getCurrentTask().startedProperty());
+                bind(getCurrentTask().simulationStateProperty());
             }
             @Override
             protected boolean computeValue() {
-                return !getCurrentTask().getStarted();
+                switch (getCurrentTask().getSimulationState()){
+                    case RUNNING:
+                    case PAUSED:
+                        return false;
+                    default:
+                        return true;
+                }
             }
         };
         view.getStopTaskTBtn().disableProperty().bind(stopBinding);
-        view.getStopTaskItem().disableProperty().bind(stopBinding);
-        //pause sensors
+        view.getStartTaskItem().disableProperty().bind(stopBinding);
+        //pause sensors buttons
         BooleanBinding pauseSensorsBinding = new BooleanBinding() {
-            {
-                bind(getCurrentTask().startedProperty());
-            }
-            @Override
-            protected boolean computeValue() {
-                return !getCurrentTask().getStarted();
-            }
-        }.or(new BooleanBinding() {
             {
                 bind(getCurrentTask().sensorsPausedProperty());
             }
@@ -535,25 +530,47 @@ public class PerformanceSimulationPresenter implements Presenter{
             protected boolean computeValue() {
                 return getCurrentTask().getSensorsPaused();
             }
+        }.or(new BooleanBinding() {
+            {
+                bind(getCurrentTask().simulationStateProperty());
+            }
+
+            @Override
+            protected boolean computeValue() {
+                switch (getCurrentTask().getSimulationState()) {
+                    case RUNNING:
+                    case PAUSED:
+                        return false;
+                    default:
+                        return true;
+                }
+            }
         });
         view.getPauseSensorsTBtn().disableProperty().bind(pauseSensorsBinding);
         view.getPauseSensorsItem().disableProperty().bind(pauseSensorsBinding);
-        //resume sensors
+        //resume sensors buttons
         BooleanBinding resumeSensorsBinding = new BooleanBinding() {
-            {
-                bind(getCurrentTask().startedProperty());
-            }
-            @Override
-            protected boolean computeValue() {
-                return !getCurrentTask().getStarted();
-            }
-        }.or(new BooleanBinding() {
             {
                 bind(getCurrentTask().sensorsPausedProperty());
             }
             @Override
             protected boolean computeValue() {
                 return !getCurrentTask().getSensorsPaused();
+            }
+        }.or(new BooleanBinding() {
+            {
+                bind(getCurrentTask().simulationStateProperty());
+            }
+
+            @Override
+            protected boolean computeValue() {
+                switch (getCurrentTask().getSimulationState()) {
+                    case RUNNING:
+                    case PAUSED:
+                        return false;
+                    default:
+                        return true;
+                }
             }
         });
         view.getResumeSensorsTBtn().disableProperty().bind(resumeSensorsBinding);

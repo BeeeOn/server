@@ -6,4 +6,5 @@ package com.iha.emulator.models.value;
 public interface HasGenerator {
     public Value.Generator getGeneratorType();
     public void setGeneratorType(Value.Generator generatorType);
+    public void restartGenerator();
 }

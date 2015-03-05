@@ -100,7 +100,7 @@ public class AdapterController{
         sendError(message,null);
     }
 
-    public void sendError(String message,Throwable t){
+    public synchronized void sendError(String message,Throwable t){
         if(t != null) message = message + " -> " + t.getMessage();
         getLog().error(message);
     }
@@ -148,6 +148,7 @@ public class AdapterController{
         deleteSensors(getSensorControllersList().get());
         logger.trace("Removing logs");
         getLog().delete();
+        getLog().deleteBufferFile();
         logger.trace("Removing scheduler");
         getScheduler().terminateScheduler();
         messages.clear();
@@ -171,6 +172,11 @@ public class AdapterController{
         log = null;
         serverController = null;
         scheduler = null;
+    }
+
+    public void clearResponseTracker(){
+        if(scheduler == null) return;
+        scheduler.clearResponseTracker();
     }
 
     private void removeUnsentMessages(SensorController sensorController){
@@ -398,6 +404,11 @@ public class AdapterController{
                 }
             }
         });
+    }
+
+    public void restartValueGenerators(){
+        if(getSensorControllers() == null) return;
+        getSensorControllers().forEach(SensorController::restartValueGenerators);
     }
 
     public void startScheduler(){

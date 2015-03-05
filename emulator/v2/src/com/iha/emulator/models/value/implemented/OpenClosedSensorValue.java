@@ -81,6 +81,12 @@ public class OpenClosedSensorValue extends AbstractValue<Boolean> implements Has
         }
     }
 
+    @Override
+    public void restartGenerator() {
+        setGenerator(new Random());
+        setGeneratorSeed(getGeneratorSeed());
+    }
+
 
     @Override
     public double getProbability() {

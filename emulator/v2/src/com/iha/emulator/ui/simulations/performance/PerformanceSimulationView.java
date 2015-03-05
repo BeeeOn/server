@@ -88,12 +88,6 @@ public class PerformanceSimulationView implements Initializable,PerformanceSimul
     }
 
     @FXML
-    public void handleResumeTask(ActionEvent event){
-        logger.trace("Resume task Clicked!");
-        presenter.resumeTask();
-    }
-
-    @FXML
     public void handlePauseTask(ActionEvent event){
         logger.trace("Pause task Clicked!");
         presenter.pauseTask();

@@ -1,6 +1,5 @@
 package com.iha.emulator.communication.eserver.task.implemented;
 
-import com.iha.emulator.communication.eserver.model.AdapterInfo;
 import com.iha.emulator.communication.eserver.task.AbstractServerTask;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -14,16 +13,22 @@ public class DeleteAdapterTask extends AbstractServerTask<Boolean> {
 
     private String dbName;
     private String adapterId;
+    private int count;
 
     public DeleteAdapterTask(String dbName, String id) {
+        this(dbName,id,1);
+    }
+
+    public DeleteAdapterTask(String dbName, String id,int count) {
         this.dbName = dbName;
         this.adapterId = id;
+        this.count = count;
     }
 
     /**
      * <emulator_server db="home4>
      *     <task type="deleteAdapter">
-     *         <adapter adapter_id="111" />
+     *         <adapter adapter_id="111" count="1"/>
      *     </task>
      * </emulator_server>
      * @return XML message as one string
@@ -35,7 +40,8 @@ public class DeleteAdapterTask extends AbstractServerTask<Boolean> {
                 .addElement("task")
                 .addAttribute("type", "deleteAdapter")
                 .addElement("adapter")
-                .addAttribute("adapter_id", adapterId);
+                .addAttribute("adapter_id", adapterId)
+                .addAttribute("count", String.valueOf(count));
         return doc.asXML();
     }
 

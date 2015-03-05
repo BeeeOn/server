@@ -19,7 +19,7 @@
                               <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                            </accelerator></MenuItem>
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem fx:id="startTaskItem" mnemonicParsing="false" onAction="#handleStartTask" text="Start/Resume task">
+                        <MenuItem fx:id="startTaskItem" mnemonicParsing="false" onAction="#handleStartTask" text="Start/Restart task">
                            <accelerator>
                               <KeyCodeCombination alt="UP" code="A" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                            </accelerator>
@@ -29,7 +29,7 @@
                               <KeyCodeCombination alt="UP" code="D" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                            </accelerator>
                         </MenuItem>
-                        <MenuItem fx:id="stopTaskItem" mnemonicParsing="false" onAction="#handleStopTask" text="Stop task">
+                        <MenuItem fx:id="stopTaskItem" mnemonicParsing="false" onAction="#handleStopTask" text="Finish task">
                            <accelerator>
                               <KeyCodeCombination alt="UP" code="D" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
                            </accelerator>
@@ -107,7 +107,7 @@
                         <String fx:value="enableAdapterBtn" />
                      </styleClass>
                      <tooltip>
-                        <Tooltip text="Start/Resume task" />
+                        <Tooltip text="Start/Restart task" />
                      </tooltip>
                   </Button>
                   <Button fx:id="pauseTaskTBtn" disable="true" mnemonicParsing="false" onAction="#handlePauseTask">
@@ -125,7 +125,7 @@
                         <String fx:value="disableAdapterBtn" />
                      </styleClass>
                      <tooltip>
-                        <Tooltip text="Stop task" />
+                        <Tooltip text="Finish task" />
                      </tooltip>
                   </Button>
                   <Separator orientation="VERTICAL" prefHeight="0.0" prefWidth="0.0">

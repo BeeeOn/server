@@ -81,6 +81,12 @@ public class OnOffSensorValue extends AbstractValue<Boolean> implements HasBoole
         }
     }
 
+    @Override
+    public void restartGenerator() {
+        setGenerator(new Random());
+        setGeneratorSeed(getGeneratorSeed());
+    }
+
 
     @Override
     public double getProbability() {

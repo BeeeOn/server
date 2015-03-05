@@ -4,6 +4,7 @@ import com.iha.emulator.control.SimulationTask;
 import javafx.beans.binding.StringBinding;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
+import javafx.scene.control.Tooltip;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,6 +27,8 @@ public class SimulationTaskIdCellFactory extends TableCell<SimulationTask, Simul
                     return String.valueOf(item.getId());
                 }
             });
+            Tooltip tp = new Tooltip("Log file location: " + item.getLog().getBufferFile().getAbsolutePath());
+            lbl.setTooltip(tp);
             setGraphic(lbl);
         } else {
             setText(null);

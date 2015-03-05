@@ -24,6 +24,10 @@ public class SimulationTaskStateCellFactory extends TableCell<SimulationTask, Si
                 @Override
                 protected String computeValue() {
                     switch (item.getSimulationState()){
+                        case READY:
+                            lbl.getStyleClass().clear();
+                            lbl.getStyleClass().add("taskStateWaiting");
+                            break;
                         case RUNNING:
                             lbl.getStyleClass().clear();
                             lbl.getStyleClass().add("taskStateRunning");
@@ -31,26 +35,6 @@ public class SimulationTaskStateCellFactory extends TableCell<SimulationTask, Si
                         case PAUSED:
                             lbl.getStyleClass().clear();
                             lbl.getStyleClass().add("taskStatePaused");
-                            break;
-                        case RESUMED:
-                            lbl.getStyleClass().clear();
-                            lbl.getStyleClass().add("taskStateResumed");
-                            break;
-                        case STOPPED:
-                            lbl.getStyleClass().clear();
-                            lbl.getStyleClass().add("taskStateStopped");
-                            break;
-                        case PAUSED_SENSORS:
-                            lbl.getStyleClass().clear();
-                            lbl.getStyleClass().add("taskStatePaused");
-                            break;
-                        case RESUMED_SENSORS:
-                            lbl.getStyleClass().clear();
-                            lbl.getStyleClass().add("taskStateResumed");
-                            break;
-                        case WAITING:
-                            lbl.getStyleClass().clear();
-                            lbl.getStyleClass().add("taskStateWaiting");
                             break;
                         case FINISHED:
                             lbl.getStyleClass().clear();

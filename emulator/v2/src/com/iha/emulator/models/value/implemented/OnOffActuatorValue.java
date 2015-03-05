@@ -81,6 +81,12 @@ public class OnOffActuatorValue extends AbstractValue<Boolean> implements HasBoo
         }
     }
 
+    @Override
+    public void restartGenerator() {
+        setGenerator(new Random());
+        setGeneratorSeed(getGeneratorSeed());
+    }
+
 
     @Override
     public double getProbability() {

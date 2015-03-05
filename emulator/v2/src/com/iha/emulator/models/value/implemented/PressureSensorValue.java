@@ -115,6 +115,12 @@ public class PressureSensorValue extends AbstractValue<Integer> implements HasNo
         setMin(min);
     }
 
+    @Override
+    public void restartGenerator() {
+        setGenerator(new Random());
+        setGeneratorSeed(getGeneratorSeed());
+    }
+
     public double getDev() {
         return dev.get();
     }

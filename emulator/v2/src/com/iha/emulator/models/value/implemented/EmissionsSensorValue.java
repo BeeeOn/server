@@ -115,6 +115,12 @@ public class EmissionsSensorValue extends AbstractValue<Integer> implements HasN
         setMin(min);
     }
 
+    @Override
+    public void restartGenerator() {
+        setGenerator(new Random());
+        setGeneratorSeed(getGeneratorSeed());
+    }
+
     public double getDev() {
         return dev.get();
     }
@@ -174,5 +180,4 @@ public class EmissionsSensorValue extends AbstractValue<Integer> implements HasN
     public void setStep(double step) {
         this.step.set(step);
     }
-
 }

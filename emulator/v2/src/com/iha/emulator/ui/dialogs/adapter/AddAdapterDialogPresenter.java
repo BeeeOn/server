@@ -283,7 +283,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
             // set new adapter as current
             parent.setCurrentAdapter(newAdapterController);
             try {
-                newAdapterController.getLog().setBuffered(true,"adapter_emu_" + String.valueOf(newAdapterController.getAdapter().getId()));
+                newAdapterController.getLog().setBuffered(true,"adapter_emu_" + String.valueOf(newAdapterController.getAdapter().getId()),null);
             } catch (IOException e) {
                 Utilities.showException(
                         logger,

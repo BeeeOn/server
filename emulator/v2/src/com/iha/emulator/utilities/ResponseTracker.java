@@ -41,6 +41,10 @@ public class ResponseTracker {
         else
             return 0L;
     }
+
+    public void clearResponses(){
+        if(responses != null) responses.clear();
+    }
     /**
      * Clears {@link com.iha.emulator.utilities.ResponseTracker#responses} list
      */

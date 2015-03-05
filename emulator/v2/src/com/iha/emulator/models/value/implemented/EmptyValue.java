@@ -12,6 +12,10 @@ public class EmptyValue extends AbstractValue {
     }
 
     @Override
+    public void restartGenerator() {
+    }
+
+    @Override
     public Object nextValue() {
         return null;
     }

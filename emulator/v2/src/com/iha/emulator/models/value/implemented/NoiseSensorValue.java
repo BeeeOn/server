@@ -113,6 +113,12 @@ public class NoiseSensorValue extends AbstractValue<Double> implements HasNormal
     }
 
     @Override
+    public void restartGenerator() {
+        setGenerator(new Random());
+        setGeneratorSeed(getGeneratorSeed());
+    }
+
+    @Override
     public double getDev() {
         return dev.get();
     }

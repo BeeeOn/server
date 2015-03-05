@@ -71,8 +71,11 @@ public class Scheduler extends Thread {
                                 message
                         );
                     } catch (IOException ioe) {
-                        Platform.runLater(() -> adapterController.getLog().error("Warning: Cannot connect to server!"));
-                        adapterController.getServerController().getModel().setConn(false);
+                        Platform.runLater(() -> {
+                            adapterController.getLog().error("Warning: Cannot connect to server!");
+                            adapterController.getServerController().getModel().setConn(false);
+                        });
+
                     } catch (DocumentException e) {
                         if(message.getSenderController() != null) message.getSenderController().criticalErrorStop(
                                 "Error: Adapter/" + adapterController.getAdapter().getId() + " -> Sensor/" + message.getSenderController().getSensorIdAsIp() + " --> Cannot parse XML response",
@@ -110,6 +113,11 @@ public class Scheduler extends Thread {
             logger.trace("Proceed");
         }
         logger.debug("Scheduler for adapter " + adapterController.getAdapter().getId() + " terminated.");
+    }
+
+    public void clearResponseTracker(){
+        if(responseTracker == null) return;
+        responseTracker.clearResponses();
     }
 
     public void processTracking(OutMessage message){
