@@ -50,7 +50,7 @@ int Config::getActivityPort() {
 }
 
 int Config::getNotifyPort() {
-    return _doc.child(CONFIG_ROOT).child(SERVER_NODE).attribute("notifyPort").as_int();
+    return 0;
 }
 
 int Config::getVerbosity() {

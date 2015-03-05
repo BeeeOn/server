@@ -1,0 +1,24 @@
+>1< 139695910930240: 5.3.2015 11:15:34:916 start with port4565
+>1< 139695910930240: 5.3.2015 11:15:34:917 threads: 10
+>1< 139695910930240: 5.3.2015 11:15:34:918 logs will be stored in : logs/log5_3_2015 and (if not std::out ) file will be changed every day 
+>6< 139695910930240: 5.3.2015 11:15:34:956 MSGIN: 
+>5< 139695910930240: 5.3.2015 11:15:34:956 msg: getuid
+>7< 139695910930240: 5.3.2015 11:15:34:956 access granted 
+>5< 139695910930240: 5.3.2015 11:15:34:956 GUID
+>7< 139695910930240: 5.3.2015 11:15:34:956 DB:insertNewUser
+>3< 139695910930240: 5.3.2015 11:15:34:957 Error: Cannot execute query. ERROR:  duplicate key value violates unique constraint "users_pk"
+DETAIL:  Key (user_id)=(99191) already exists.
+
+>7< 139695910930240: 5.3.2015 11:15:34:957 99191 already exist?
+>7< 139695910930240: 5.3.2015 11:15:34:958 DB:insertNewmobileDevice
+>6< 139695910930240: 5.3.2015 11:15:35:261 MSGOUT: <com ver="2.3" uid="40" state="uid" ></com>
+
+>6< 139695910930240: 5.3.2015 11:15:35:261 MSGIN: 
+>5< 139695910930240: 5.3.2015 11:15:35:261 msg: addadapter
+>5< 139695910930240: 5.3.2015 11:15:35:261 user: comId:40
+>7< 139695910930240: 5.3.2015 11:15:35:261 DB:iha token valid?
+>7< 139695910930240: 5.3.2015 11:15:35:262 access granted 
+>7< 139695910930240: 5.3.2015 11:15:35:262 par user - adapter (new user?)
+>7< 139695910930240: 5.3.2015 11:15:35:782 parred
+>6< 139695910930240: 5.3.2015 11:15:35:782 MSGOUT: <com ver="2.3" uid="40" state="true" ></com>
+

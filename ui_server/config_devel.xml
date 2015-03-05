@@ -1,5 +1,5 @@
 <config>
-	<server threads="10" port="4566" activityPort="7081" notifyPort="12346" verbosity="7"/>
+	<server threads="10" port="4566" activityPort="7081" verbosity="7"/>
 	<database sessions="10" connectionString="port = '5432' dbname = 'home4' user = 'xvampo01' password = '1234' connect_timeout = '3'"/>
 	<comTable cleanerSleepPeriodMs="30000" maxInactivityTimeMs="600000"/>
 </config>

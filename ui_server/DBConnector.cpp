@@ -512,7 +512,7 @@ string DBConnector::getUserId(session & sql, string userMail)
 }
 
 
-int DBConnector::parAdapterWithUserIfPossible(int adapterId, string adapterName, string gId){
+int DBConnector::parAdapterWithUserIfPossible(long long int adapterId, string adapterName, string gId){
     Logger::getInstance(Logger::DEBUG3)<< "par user - adapter (new user?)\n";
     try
     {

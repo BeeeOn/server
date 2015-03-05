@@ -10,10 +10,10 @@
 using namespace std;
 
 Logger::Logger() {
-    _verbosityThreshold = 0;
-    _verbosityLevel = 0;
+    _verbosityThreshold = Logger::NO_OUTPUT;
+    _verbosityLevel = Logger::NO_OUTPUT;
     _colored = false; 
-    
+    _cerrVerbosity = Logger::DEBUG3; 
     _fileName =  getFileName(); 
     
     _currentFile.open ( _fileName );  
@@ -116,6 +116,12 @@ void Logger::printTime(){
     _currentFile << t->tm_mday <<"." << (t->tm_mon+1) << "." << (t->tm_year+1900) <<" ";
     _currentFile << t->tm_hour << ":" << t->tm_min << ":" << t->tm_sec << ":" << tp.tv_usec/1000<< " ";
     
+        if(_verbosityLevel <= _cerrVerbosity){
+            cerr<<">"<<_verbosityLevel<<"< " << std::this_thread::get_id() <<": ";
+            cerr << t->tm_mday <<"." << (t->tm_mon+1) << "." << (t->tm_year+1900) <<" ";
+            cerr<< t->tm_hour << ":" << t->tm_min << ":" << t->tm_sec << ":" << tp.tv_usec/1000<< " ";            
+        }
+    
     #ifdef COLORED_LOGGER
             cout<<zkr::cc::console;
     #endif
@@ -131,7 +137,7 @@ Logger &Logger::operator<<(std::ostream& (*pf) (std::ostream&)){
     std::lock_guard<std::mutex> lck (_mtx);
     _currentFile<<pf;
 
-    if(_verbosityLevel == this->FATAL)
+    if(_verbosityLevel <= _cerrVerbosity)
             std::cerr << pf;
     
     return *this;

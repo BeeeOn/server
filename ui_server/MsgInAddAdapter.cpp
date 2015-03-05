@@ -17,7 +17,9 @@ MsgInAddAdapter::~MsgInAddAdapter() {
 
 string MsgInAddAdapter::createResponseMsgOut() {
     pugi::xml_node adapterNode =  _doc->child(P_COMMUNICATION);
-    int adapterId = adapterNode.attribute(P_ADAPTER_ID).as_int(0);
+    string adapterIDStr = adapterNode.attribute(P_ADAPTER_ID).as_string();
+    long long int adapterId = stoll(adapterIDStr);// TODO can throw exc: invalid argument
+    
     string adapterName = adapterNode.attribute(P_ADAPTER_NAME).value();
     
     if(DBConnector::getInstance().parAdapterWithUserIfPossible(adapterId, adapterName, _gUserId) == 0)

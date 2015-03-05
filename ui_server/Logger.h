@@ -39,6 +39,7 @@ private:
     void printTime();
     //ofstream _output;
     bool _colored;
+    int _cerrVerbosity;
     std::ofstream _currentFile;
     std::string _fileName;
     std::mutex _mtx;
@@ -71,7 +72,7 @@ public:
         
         std::lock_guard<std::mutex> lck (_mtx);
         
-        if(_verbosityLevel == this->FATAL)
+        if(_verbosityLevel <= _cerrVerbosity)
         
         #ifdef COLORED_LOGGER
         if(_verbosityLevel == this->FATAL)
@@ -81,7 +82,7 @@ public:
             _currentFile<<zkr::cc::bold;
         #endif
 
-        if(_verbosityLevel == this->FATAL)
+        if(_verbosityLevel  <= _cerrVerbosity)
             std::cerr << a;
        _currentFile<<a;
        
