@@ -4,18 +4,15 @@ import com.iha.emulator.communication.eserver.EmulatorServerClient;
 import com.iha.emulator.communication.eserver.task.ServerTask;
 import com.iha.emulator.communication.eserver.task.TaskParser;
 import com.iha.emulator.communication.eserver.task.implemented.DeleteAdapterTask;
-import com.iha.emulator.communication.eserver.task.implemented.GetAdaptersTask;
 import com.iha.emulator.control.AdapterController;
-import com.iha.emulator.models.Adapter;
 import com.iha.emulator.ui.Presenter;
 import com.iha.emulator.ui.panels.PanelPresenter;
 import com.iha.emulator.ui.simulations.detailed.DetailedSimulationPresenter;
+import com.iha.emulator.utilities.Utilities;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
@@ -23,7 +20,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import javafx.util.StringConverter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.CheckComboBox;
@@ -136,11 +132,11 @@ public class DeleteAdaptersDialogPresenter implements Presenter,PanelPresenter {
                     }
                     Platform.runLater(()->showStatus(status,false));
                 }catch (IOException e){
-                    Platform.runLater(()-> DetailedSimulationPresenter.showException(logger,"Cannot read from socket",e,false,null));
+                    Platform.runLater(()-> Utilities.showException(logger, "Cannot read from socket", e, false, null));
                 }catch (DocumentException de){
-                    Platform.runLater(()-> DetailedSimulationPresenter.showException(logger,"Cannot parse server message",de,false,null));
+                    Platform.runLater(()-> Utilities.showException(logger,"Cannot parse server message",de,false,null));
                 }catch (IllegalStateException ie){
-                    Platform.runLater(()-> DetailedSimulationPresenter.showException(logger,"Error on server",ie,false,null));
+                    Platform.runLater(()-> Utilities.showException(logger,"Error on server",ie,false,null));
                 }
                 return null;
             }

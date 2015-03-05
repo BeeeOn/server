@@ -227,20 +227,26 @@
     <!-- Perform any build initialization in this target -->
   </target>
   
-  <target name="clean" depends="clean.module.v2, clean.artifact.gui-emulator-v2" description="cleanup all"/>
+  <target name="clean" depends="clean.module.v2, clean.artifact.gui-emulator-v2, clean.artifact.javafxapp" description="cleanup all"/>
   
   <target name="build.modules" depends="init, clean, compile.module.v2" description="build all modules"/>
   
   <target name="init.artifacts">
     <property name="artifacts.temp.dir" value="${basedir}/__artifacts_temp"/>
     <property name="artifact.output.gui-emulator-v2" value="${basedir}/out/artifacts/GUI_emulator_v2"/>
+    <property name="artifact.output.javafxapp" value="${basedir}/out/artifacts/JavaFXApp"/>
     <mkdir dir="${artifacts.temp.dir}"/>
     <property name="artifact.temp.output.SmartHomeEmulator" value="${artifacts.temp.dir}/SmartHomeEmulator.jar"/>
+    <property name="artifact.temp.output.JavaFXApp" value="${artifacts.temp.dir}/JavaFXApp.jar"/>
     <taskdef resource="com/sun/javafx/tools/ant/antlib.xml" uri="javafx:com.sun.javafx.tools.ant" classpath="${jdk.home.1.8_(32-bit)}/lib/ant-javafx.jar"/>
   </target>
   
   <target name="clean.artifact.gui-emulator-v2" description="clean GUI-emulator-v2 artifact output">
     <delete dir="${artifact.output.gui-emulator-v2}"/>
+  </target>
+  
+  <target name="clean.artifact.javafxapp" description="clean JavaFXApp artifact output">
+    <delete dir="${artifact.output.javafxapp}"/>
   </target>
   
   <target name="artifact.gui-emulator-v2" depends="init.artifacts, compile.module.v2" description="Build &#39;GUI-emulator-v2&#39; artifact" xmlns:fx="javafx:com.sun.javafx.tools.ant">
@@ -254,6 +260,10 @@
     <copy file="${basedir}/resources/lib/log4j-core-2.1.jar" tofile="${artifact.temp.output.SmartHomeEmulator}/lib/log4j-core-2.1.jar"/>
     <copy file="${basedir}/resources/lib/openjfx-dialogs-1.0.2.jar" tofile="${artifact.temp.output.SmartHomeEmulator}/lib/openjfx-dialogs-1.0.2.jar"/>
     <copy file="${basedir}/resources/lib/dom4j-2.0.0-ALPHA-2.jar" tofile="${artifact.temp.output.SmartHomeEmulator}/lib/dom4j-2.0.0-ALPHA-2.jar"/>
+    <mkdir dir="${artifact.temp.output.SmartHomeEmulator}/sensor_templates"/>
+    <copy todir="${artifact.temp.output.SmartHomeEmulator}/sensor_templates">
+      <fileset dir="${basedir}/sensor_templates"/>
+    </copy>
     <fx:fileset id="all_but_SmartHomeEmulator" dir="${artifact.temp.output.SmartHomeEmulator}" includes="**/*.jar">
       <exclude name="SmartHomeEmulator.jar"/>
     </fx:fileset>
@@ -281,7 +291,39 @@
     </delete>
   </target>
   
-  <target name="build.all.artifacts" depends="artifact.gui-emulator-v2" description="Build all artifacts">
+  <target name="artifact.javafxapp" depends="init.artifacts" description="Build &#39;JavaFXApp&#39; artifact" xmlns:fx="javafx:com.sun.javafx.tools.ant">
+    <mkdir dir="${artifact.output.javafxapp}"/>
+    <copy todir="${artifact.temp.output.JavaFXApp}">
+      <fileset dir="${gui-emulator-v2.output.dir}"/>
+    </copy>
+    <fx:fileset id="all_but_JavaFXApp" dir="${artifact.temp.output.JavaFXApp}" includes="**/*.jar">
+      <exclude name="JavaFXApp.jar"/>
+    </fx:fileset>
+    <fx:fileset id="all_JavaFXApp" dir="${artifact.temp.output.JavaFXApp}" includes="**/*.jar"/>
+    <fx:application id="JavaFXApp_id" name="JavaFXApp" mainClass="sample.Main"/>
+    <fx:jar destfile="${artifact.temp.output.JavaFXApp}\JavaFXApp.jar">
+      <fx:application refid="JavaFXApp_id"/>
+      <fileset dir="${artifact.temp.output.JavaFXApp}" excludes="**/*.jar"/>
+      <fx:resources>
+        <fx:fileset refid="all_but_JavaFXApp"/>
+      </fx:resources>
+      <manifest/>
+    </fx:jar>
+    <fx:deploy width="600" height="400" updatemode="background" outdir="${artifact.temp.output.JavaFXApp}\deploy" outfile="JavaFXApp">
+      <fx:application refid="JavaFXApp_id"/>
+      <fx:resources>
+        <fx:fileset refid="all_JavaFXApp"/>
+      </fx:resources>
+    </fx:deploy>
+    <copy todir="${artifact.output.javafxapp}">
+      <fileset dir="${artifact.temp.output.JavaFXApp}/deploy"/>
+    </copy>
+    <delete includeemptydirs="true">
+      <fileset dir="${artifact.temp.output.JavaFXApp}"/>
+    </delete>
+  </target>
+  
+  <target name="build.all.artifacts" depends="artifact.gui-emulator-v2, artifact.javafxapp" description="Build all artifacts">
     
     <!-- Delete temporary files -->
     <delete dir="${artifacts.temp.dir}"/>

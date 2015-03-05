@@ -1,4 +1,4 @@
-package com.iha.emulator.ui.dialogs.sensor;
+package com.iha.emulator.ui.dialogs.server;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

@@ -10,6 +10,19 @@
     -fx-padding: 0 0 0 0;
 }
 
+.chooserBtn{
+    -fx-background-color: #36b1ff;
+    -fx-fill: #ffffff;
+    -fx-text-fill: #ffffff;
+    -fx-border-width: 0;
+    -fx-pref-width: 200px;
+    -fx-pref-height: 200px;
+    -fx-cursor: hand;
+    -fx-font-size: 20pt;
+    -fx-font-weight: bold;
+    -fx-text-alignment: center;
+}
+
 .menu {
     -fx-background-image: url("../../resources/images/menu-grey.PNG");
     -fx-background-position: center center;
@@ -100,6 +113,31 @@
     -fx-cursor: default;
 }
 
+.resumeSimulationBtn {
+    -fx-background-image: url("../../resources/images/resume-green.png");
+}
+.resumeSimulationBtn:hover {
+    -fx-background-image: url("../../resources/images/resume-white.png");
+    -fx-background-color: #65f74d;
+}
+.resumeSimulationBtn:disabled {
+    -fx-background-image: url("../../resources/images/resume-grey.png");
+    -fx-cursor: default;
+}
+
+.pauseSimulationBtn {
+    -fx-background-image: url("../../resources/images/pause-yellow.png");
+}
+.pauseSimulationBtn:hover {
+    -fx-background-image: url("../../resources/images/pause-white.png");
+    -fx-background-color: #ffde00;
+}
+
+.pauseSimulationBtn:disabled {
+    -fx-background-image: url("../../resources/images/pause-grey.png");
+    -fx-cursor: default;
+}
+
 .disableAdapterBtn {
     -fx-background-image: url("../../resources/images/stop-red.PNG");
 }
@@ -109,6 +147,30 @@
 }
 .disableAdapterBtn:disabled {
     -fx-background-image: url("../../resources/images/stop-grey.PNG");
+    -fx-cursor: default;
+}
+
+.playSensorsBtn {
+    -fx-background-image: url("../../resources/images/play_sensors_green.png");
+}
+.playSensorsBtn:hover {
+    -fx-background-image: url("../../resources/images/play_sensors_white.png");
+    -fx-background-color: #65f74d;
+}
+.playSensorsBtn:disabled {
+    -fx-background-image: url("../../resources/images/play_sensors_grey.png");
+    -fx-cursor: default;
+}
+
+.pauseSensorsBtn {
+    -fx-background-image: url("../../resources/images/pause_sensors_red.png");
+}
+.pauseSensorsBtn:hover {
+    -fx-background-image: url("../../resources/images/pause_sensors_white.png");
+    -fx-background-color: #eb4242;
+}
+.pauseSensorsBtn:disabled {
+    -fx-background-image: url("../../resources/images/pause_sensors_grey.png");
     -fx-cursor: default;
 }
 
@@ -180,6 +242,10 @@
     -fx-max-width: 250px;
 }
 
+.leftPanelPerformance {
+    -fx-min-width: 400px;
+}
+
 .rightPanel {
     -fx-min-width: 250px;
     -fx-max-width: 250px;
@@ -244,7 +310,7 @@
 
 .logTextAreaContainer {
     -fx-background-color: #ffffff;
-    -fx-border-width: 0px;
+    -fx-border-width: 0;
 }
 
 .logTextArea {
@@ -388,6 +454,8 @@
 .serverDetailsContainer {
     -fx-border-width: 5px 3px 3px 3px;
     -fx-border-color: #efefef;
+    -fx-max-width: 250px;
+    -fx-max-height: 119px;
 }
 
 .serverDetailsText{
@@ -457,7 +525,6 @@
     -fx-font-weight: bold;
 }
 
-/** FIXGUI add min width and height, change sensor icons to smaller size**/
 .sensorPanelHeader {
     -fx-background-color: rgb(12,223,86);
     -fx-pref-width: 230px;
@@ -752,7 +819,7 @@
     -fx-background-repeat: no-repeat;
     -fx-background-position: center center;
     -fx-border-width: 0;
-    -fx-padding: 0px 3px 0px 3px;
+    -fx-padding: 0 3px 0 3px;
     -fx-border-radius: 0;
     -fx-background-radius: 0;
     -fx-cursor: hand;
@@ -914,10 +981,52 @@
 
 .valuesInformationContainerLeft {
     -fx-border-color: #dbdbdb;
-    -fx-border-width: 1px 0px 1px 1px;
+    -fx-border-width: 1px 0 1px 1px;
 }
 
 .valuesInformationContainerRight {
     -fx-border-color: #dbdbdb;
     -fx-border-width: 1px 1px 1px 0;
+}
+
+.taskStateRunning {
+    -fx-fill: #65f74d;
+    -fx-text-fill: #65f74d;
+    -fx-font-weight: bold;
+}
+
+.taskStatePaused {
+    -fx-fill: #ffde00;
+    -fx-text-fill: #ffde00;
+    -fx-font-weight: bold;
+}
+
+.taskStateResumed {
+    -fx-fill: #65f74d;
+    -fx-text-fill: #65f74d;
+    -fx-font-weight: bold;
+}
+
+.taskStateStopped {
+    -fx-fill: #eb4242;
+    -fx-text-fill: #eb4242;
+    -fx-font-weight: bold;
+}
+
+.taskStateWaiting {
+    -fx-fill: #444444;
+    -fx-text-fill: #444444;
+    -fx-font-weight: bold;
+}
+
+.taskStateFinished {
+    -fx-fill: #36b1ff;
+    -fx-text-fill: #36b1ff;
+    -fx-font-weight: bold;
+}
+
+.taskStateError {
+    -fx-fill: #eb4242;
+    -fx-text-fill: #eb4242;
+    -fx-font-weight: bold;
 }

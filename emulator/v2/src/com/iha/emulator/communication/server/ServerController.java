@@ -19,29 +19,31 @@ import java.nio.channels.SocketChannel;
 public class ServerController {
 
     private static final Logger logger = LogManager.getLogger(ServerController.class);
+    private static final int MESSAGE_BUFFER_SIZE = 1000;
     private static final int SOCKET_TIMEOUT = 5000;
 
     private Server model;
     private SocketChannel socketChannel;
     private long responseStart = 0L;
 
-    ByteBuffer reusableBuffer = ByteBuffer.allocate(5024);
+
 
     public ServerController(Server model) {
         setModel(model);
     }
 
     public String sendMessage(Document message,ResponseTracker responseTracker,OutMessage.Type type) throws WrongResponseException, IOException, SocketTimeoutException {
+        SocketChannel socketChannel = null;
+        ByteBuffer messageBuffer = ByteBuffer.allocate(MESSAGE_BUFFER_SIZE);
         try{
             logger.trace("Sending message: " + type.toString());
-            socketChannel = SocketChannel.open();
+             socketChannel = SocketChannel.open();
             socketChannel.socket().setSoTimeout(SOCKET_TIMEOUT);
             if(!socketChannel.connect(new InetSocketAddress(getModel().getIp(),getModel().getPort()))){
                 throw new SocketTimeoutException("Unsuccessful connect!");
             }
             Platform.runLater(() -> getModel().setConn(true));
             ByteBuffer out = ByteBuffer.wrap(message.asXML().getBytes());
-            //TODO start tracking response time
             if(responseTracker.isEnabled()) responseStart = System.currentTimeMillis();
             while (out.hasRemaining()){
                 socketChannel.write(out);
@@ -50,25 +52,26 @@ public class ServerController {
             int bytesRead = 0;
             switch (type){
                 case SENSOR_MESSAGE:
-                    reusableBuffer.clear();
-                    bytesRead = socketChannel.read(reusableBuffer);
+                    messageBuffer.clear();
+                    bytesRead = socketChannel.read(messageBuffer);
                     //if socket suddenly closes
                     if(bytesRead == -1){
                         throw new WrongResponseException("Wrong response from server");
                     }
-                    //TODO stop tracking response time
                     if(responseTracker.isEnabled()) responseTracker.addResponse(responseStart,System.currentTimeMillis());
                     break;
                 case REGISTER_ADAPTER:
-                    //TODO stop tracking response time
                     if(responseTracker.isEnabled()) responseTracker.addResponse(responseStart,System.currentTimeMillis());
                     return null;
             }
-            reusableBuffer.flip();
-            reusableBuffer.position(0);
-            return new String(reusableBuffer.array()).substring(0,bytesRead);
+            messageBuffer.flip();
+            messageBuffer.position(0);
+            return new String(messageBuffer.array()).substring(0,bytesRead);
         } finally {
-            socketChannel.close();
+            if(socketChannel != null) {
+                socketChannel.close();
+                socketChannel = null;
+            }
         }
     }
 
@@ -80,9 +83,12 @@ public class ServerController {
         this.model = model;
     }
 
+    public String toString(){
+        return getModel().getName() + "/" + getModel().getIp();
+    }
+
     public void delete(){
         this.model = null;
-        reusableBuffer = null;
         socketChannel = null;
     }
 }

@@ -25,6 +25,7 @@ public class Scheduler extends Thread {
 
     public Scheduler(AdapterController adapterController) {
         this.adapterController = adapterController;
+        setName("Scheduler/" + adapterController.getAdapter().getId());
     }
 
     public void run(){
@@ -46,7 +47,7 @@ public class Scheduler extends Thread {
                                 Document inDocument = protocol.checkProtocolVersion(protocol.convertInMessageToXML(inMessageString));
                                 logger.trace("Message from server: \n" + inDocument.asXML());
                                 protocol.parseInSensorMessage(inDocument, message.getSenderController(), adapterController);
-                                adapterController.messageSuccessfullySent();
+                                adapterController.messageSuccessfullySent(message);
                                 break;
                             case REGISTER_ADAPTER:
                                 processTracking(message);
@@ -54,18 +55,20 @@ public class Scheduler extends Thread {
                                     adapterController.getLog().log(message.getLogMessage());
                                     adapterController.getAdapter().setRegistered(true);
                                 });
-                                adapterController.messageSuccessfullySent();
+                                adapterController.messageSuccessfullySent(message);
                                 break;
                         }
                     } catch (IllegalArgumentException ie) {
                         if(message.getSenderController() != null) message.getSenderController().criticalErrorStop(
                                 "Error: Adapter/" + adapterController.getAdapter().getId() + " -> Sensor/" + message.getSenderController().getSensorIdAsIp() + ie.getMessage(),
-                                "Error: " + message.getSenderController().getModel().getName() + "/" + message.getSenderController().getSensorIdAsIp() + ie.getMessage()
+                                "Error: " + message.getSenderController().getModel().getName() + "/" + message.getSenderController().getSensorIdAsIp() + ie.getMessage(),
+                                message
                         );
                     } catch (WrongResponseException we) {
                         if(message.getSenderController() != null) message.getSenderController().criticalErrorStop(
                                 "Adapter/" + adapterController.getAdapter().getId() + " -> Sensor/" + message.getSenderController().getSensorIdAsIp() + " --> socket closed or wrong response from server! Stopping sensor",
-                                message.getSenderController().getModel().getName() + "/" + message.getSenderController().getSensorIdAsIp() + " --> socket closed or wrong response from server! Stopping sensor"
+                                message.getSenderController().getModel().getName() + "/" + message.getSenderController().getSensorIdAsIp() + " --> socket closed or wrong response from server! Stopping sensor",
+                                message
                         );
                     } catch (IOException ioe) {
                         Platform.runLater(() -> adapterController.getLog().error("Warning: Cannot connect to server!"));
@@ -73,7 +76,8 @@ public class Scheduler extends Thread {
                     } catch (DocumentException e) {
                         if(message.getSenderController() != null) message.getSenderController().criticalErrorStop(
                                 "Error: Adapter/" + adapterController.getAdapter().getId() + " -> Sensor/" + message.getSenderController().getSensorIdAsIp() + " --> Cannot parse XML response",
-                                "Error: " + message.getSenderController().getModel().getName() + "/" + message.getSenderController().getSensorIdAsIp() + " --> Cannot parse XML response"
+                                "Error: " + message.getSenderController().getModel().getName() + "/" + message.getSenderController().getSensorIdAsIp() + " --> Cannot parse XML response",
+                                message
                         );
                     }
                 }else {
@@ -109,7 +113,7 @@ public class Scheduler extends Thread {
     }
 
     public void processTracking(OutMessage message){
-        //if is tracking on, add to end of successful message response time
+        //if is tracking on, save to end of successful message response time
         if(responseTracker.isEnabled()){
             message.appendToMsg(" -> " + responseTracker.getLastResponseValue() + "ms");
         }

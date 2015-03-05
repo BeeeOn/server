@@ -40,20 +40,20 @@ public class ZeroPointOne extends AbstractProtocol {
 
     @Override
     public Document buildSensorMessage(Element rootElement,Sensor sensor) {
-        //add device tag
+        //save device tag
         Element deviceElement = rootElement.addElement("device")
                 .addAttribute("id", getHexSensorId(sensor));
-        //add battery tag
+        //save battery tag
         deviceElement.addElement("battery")
                 .addAttribute("value",String.valueOf(sensor.getBattery()));
-        //add signal tag
+        //save signal tag
         deviceElement.addElement("rssi")
                 .addAttribute("value",String.valueOf(sensor.getSignal()));
-        //add values tag
+        //save values tag
 
         Element valuesElement = deviceElement.addElement("values")
                 .addAttribute("count",String.valueOf(sensor.getValues().size()));
-        //add individual values
+        //save individual values
         for(Value value : sensor.getValues()){
             valuesElement.addElement("value")
                     .addAttribute("type",value.getValueType().getType())
@@ -114,7 +114,7 @@ public class ZeroPointOne extends AbstractProtocol {
                 if(id!= null && time != null){
                     int timeInt = Integer.valueOf(time);
                     if(timeInt < 0) throw new IllegalArgumentException(" --> server trying to set refresh rate " + timeInt);
-                    if(senderController.getModel().getRefreshTime() != timeInt && timeInt != 0 && adapterController != null){
+                    if(senderController.getModel().getRefreshTime() != timeInt && timeInt != 0 && adapterController != null && !senderController.getIgnoreRefreshChange()){
                         senderController.setNewRefreshTime(timeInt);
                         if(senderController.isFullMessage()){
                             Platform.runLater(() -> adapterController.getLog().log("Adapter/" + adapterController.getAdapter().getId() + " -> Sensor/" + senderController.getSensorIdAsIp() + " new Refresh time --> " + timeInt));
@@ -130,13 +130,13 @@ public class ZeroPointOne extends AbstractProtocol {
     }
 
     @Override
-    public int parseAdapterId(Document inDocument) throws NullPointerException{
+    public int parseAdapterId(Document inDocument) throws NullPointerException,NumberFormatException{
         Element rootElement = inDocument.getRootElement();
         String state = rootElement.attribute("state").getValue();
         getLogger().trace("Incoming message state: " + state);
         switch (state){
             case "set":
-                return 99999;
+                return Integer.valueOf(rootElement.attributeValue("debug_adapter_id"));
             case "listen":
                 return Integer.valueOf(rootElement.attribute("adaptr_id").getValue());
         }

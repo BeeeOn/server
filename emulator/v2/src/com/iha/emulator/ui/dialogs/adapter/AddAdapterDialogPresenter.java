@@ -11,7 +11,6 @@ import com.iha.emulator.models.Server;
 import com.iha.emulator.ui.Presenter;
 import com.iha.emulator.ui.panels.PanelPresenter;
 import com.iha.emulator.ui.simulations.detailed.DetailedSimulationPresenter;
-import com.iha.emulator.utilities.AdapterLogger;
 import com.iha.emulator.utilities.Utilities;
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
@@ -53,7 +52,6 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
     private static final String CSS_PATH = "/com/iha/emulator/resources/css/theme-light.css";
     private ValidationSupport serverValidationSupport = new ValidationSupport();
     private ValidationSupport adapterValidationSupport = new ValidationSupport();
-    private ValidationDecoration iconDecorator = new StyleClassValidationDecoration("validationError","validationWarn");
 
     private Display view;
     private Stage window;
@@ -102,6 +100,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
         this.serverInfoSet = new SimpleBooleanProperty(false);
         this.adapterInfoSet = new SimpleBooleanProperty(false);
         this.modifyServer = new SimpleBooleanProperty(false);
+        ValidationDecoration iconDecorator = new StyleClassValidationDecoration("validationError", "validationWarn");
         serverValidationSupport.setValidationDecorator(iconDecorator);
         this.window = stage;
         this.servers = servers;
@@ -116,7 +115,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
         if(this.servers == null){
             this.servers = FXCollections.observableArrayList();
         }else{
-            //add default server
+            //save default server
             this.servers.add(new Server(false,"New server...","",0,""));
         }
         //populate combo box
@@ -137,7 +136,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
                 };
             }
         });
-        //add change listener, if new item is selected in combo box, other fields are changed
+        //save change listener, if new item is selected in combo box, other fields are changed
         view.getServerComboBox().valueProperty().addListener((observable, oldValue, newValue) -> {
             if(oldValue == null){
                 view.getServerModifyCheckBox().setDisable(false);
@@ -170,7 +169,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
                 };
             }
         });
-        //add change listener, if new item is selected in combo box, other fields are changed
+        //save change listener, if new item is selected in combo box, other fields are changed
         view.getAdapterProtocolComboBox().valueProperty().addListener((observable, oldValue, newValue) -> {
             selectedVersion = (Protocol.Version) newValue;
         });
@@ -230,8 +229,6 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
             logger.trace("Finishing");
             if(addAdapter())
                 window.hide();
-            else
-                return;
         }else{
             logger.trace("Adapter info not filled. Cannot \"Finish\" dialog");
             String message = null;
@@ -250,9 +247,13 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
         //check if list of adapter controllers exist
         AdapterController newAdapterController = null;
         try {
+            if(Utilities.isAdapterIdTaken(parent.getAdapterControllers(),Integer.valueOf(view.getAdapterIdLbl().getText()))){
+                showWarning("Warning","Adapter ID\"" + view.getAdapterIdLbl().getText() + "\" id taken.","Please choose another ID");
+                return false;
+            }
             //create new adapter controller
             newAdapterController = new AdapterController();
-            //add it to list
+            //save it to list
             parent.getAdapterControllersList().add(newAdapterController);
             //create new adapter
             newAdapterController.createAdapter(
@@ -265,9 +266,9 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
             //create new server
             newAdapterController.createServer(selectedServer);
             //create logger
-            newAdapterController.createLog();
+            newAdapterController.createLog(parent.getView().getLogTabPane());
             //config log
-            newAdapterController.getLog().setType(AdapterLogger.toType(parent.getProperty("defaultLogMessageType")));
+            //newAdapterController.getLog().setType(AdapterLogger.toType(parent.getProperty("defaultLogMessageType")));
             //create scheduler
             newAdapterController.createScheduler();
             //set response tracking
@@ -277,14 +278,14 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
             newAdapterController.bindSchedulerProcess(newAdapterController.getAdapter(), newAdapterController.getScheduler());
             //bind register message
             newAdapterController.bindRegisterMessage(newAdapterController);
-            //add new adapter button
+            //save new adapter button
             parent.addAdapterBtn(newAdapterController);
             // set new adapter as current
             parent.setCurrentAdapter(newAdapterController);
             try {
-                newAdapterController.getLog().setBuffered(true,String.valueOf(newAdapterController.getAdapter().getId()));
+                newAdapterController.getLog().setBuffered(true,"adapter_emu_" + String.valueOf(newAdapterController.getAdapter().getId()));
             } catch (IOException e) {
-                DetailedSimulationPresenter.showException(
+                Utilities.showException(
                         logger,
                         "Cannot create buffer file for new adapter log.",
                         e,
@@ -295,7 +296,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
             return true;
         } catch (IllegalArgumentException e){
             parent.getAdapterControllersList().remove(newAdapterController);
-            DetailedSimulationPresenter.showException(
+            Utilities.showException(
                     logger,
                     "Cannot create adapter. Error in properties file. Please review file an start application again.",
                     e,
@@ -313,7 +314,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
                 try{
                     server.connect();
                 }catch (IOException e){
-                    Platform.runLater(() -> DetailedSimulationPresenter.showException(logger, "Cannot connect to server", e, false, null));
+                    Platform.runLater(() -> Utilities.showException(logger, "Cannot connect to server", e, false, null));
                 }
                 try{
                     //composite message for server
@@ -327,11 +328,11 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
                     //show response in table
                     Platform.runLater(()->showAdapterFromServer(((CheckIdTask)task).getResult()));
                 }catch (IOException e){
-                    Platform.runLater(()-> DetailedSimulationPresenter.showException(logger,"Cannot read from socket",e,false,null));
+                    Platform.runLater(()-> Utilities.showException(logger,"Cannot read from socket",e,false,null));
                 }catch (DocumentException de){
-                    Platform.runLater(()-> DetailedSimulationPresenter.showException(logger,"Cannot parse server message",de,false,null));
+                    Platform.runLater(()-> Utilities.showException(logger,"Cannot parse server message",de,false,null));
                 }catch (IllegalStateException ie){
-                    Platform.runLater(()-> DetailedSimulationPresenter.showException(logger,"Error on server",ie,false,null));
+                    Platform.runLater(()-> Utilities.showException(logger,"Error on server",ie,false,null));
                 }
                 return null;
             }
@@ -369,7 +370,11 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
                     "Registered: Yes");
             dlg.show();
             view.getAdapterIdLbl().setText(adapterInfo.getId());
-            view.getAdapterNameLbl().setText(adapterInfo.getName());
+            if(adapterInfo.getName() == null || adapterInfo.getName().equals("null")){
+                view.getAdapterNameLbl().setText("EA"+adapterInfo.getId());
+            }else{
+                view.getAdapterNameLbl().setText(adapterInfo.getName());
+            }
             view.getAdapterFirmwareLbl().setText(adapterInfo.getVersion());
             view.getAdapterYesRegisteredRadBtn().setSelected(true);
         }
@@ -394,7 +399,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
             stage.show();
             showAdaptersDialogPresenter.refresh();
             } catch (IOException e) {
-                DetailedSimulationPresenter.showException(logger, "Cannot load dialog for showing adapters in database!", e, false,null);
+            Utilities.showException(logger, "Cannot load dialog for showing adapters in database!", e, false,null);
             }
     }
 
@@ -516,11 +521,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
             }
             @Override
             protected boolean computeValue() {
-                if(view.getAdapterIdLbl().getText().equals("")){
-                    return true;
-                }else{
-                    return false;
-                }
+                return view.getAdapterIdLbl().getText().equals("");
             }
         });
         //--adapter field validator

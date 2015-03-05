@@ -13,16 +13,24 @@ Loger::Loger()
 	sem_init(&(this->_msgCounter),0,0);
 	this->_msgQueue = new std::queue<tlogMsg*>;
 	this->_teminate = false;
+	this->_ActualFile = 0;
+	this->_MaxFileSize = 0;
+	this->_FileSize =0;
+	this->_verbosity = 0;
+	this->_MaxFilesCount = 0;
+	this->_FilesCount = 0;
 }
 
 Loger::~Loger()
 {
 	this->SetTerminate();
+	//sem_post(&(this->_msgCounter));
 	while (!this->_msgQueue->empty())
 	{
-		sleep(1);
+		sleep(3);
 	}
-	//delete (this->_worker);
+
+	this->_worker.join();
 	delete (this->_WriteSemaphore);
 	delete (this->_msgQueue);
 	std::cout<<this->_FileSize<<"\n";
@@ -119,7 +127,7 @@ void Loger::SetLogger(int Verbosity, int FilesCount, int LinesCount, std::string
 	}
 	this->OpenFile();
 	this->_worker = std::thread(&Loger::Dequeue,this);
-	this->_worker.detach();
+	//this->_worker.detach();
 }
 
 void Loger::OpenFile()

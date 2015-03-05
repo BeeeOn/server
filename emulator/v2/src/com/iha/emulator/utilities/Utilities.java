@@ -4,16 +4,25 @@ import com.iha.emulator.Main;
 import com.iha.emulator.control.AdapterController;
 import com.iha.emulator.control.SensorController;
 import com.iha.emulator.models.Server;
-import com.iha.emulator.ui.simulations.detailed.DetailedSimulationPresenter;
+import javafx.application.Platform;
 import javafx.beans.property.LongProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+import javafx.event.EventHandler;
 import javafx.scene.control.ChoiceDialog;
+import javafx.scene.control.DialogEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.config.Configuration;
+import org.controlsfx.dialog.ExceptionDialog;
+import org.controlsfx.dialog.ProgressDialog;
 
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -31,9 +40,11 @@ import java.util.regex.Pattern;
  */
 public class Utilities {
     private static final Logger logger = LogManager.getLogger(Utilities.class);
-
+    private static final int[] REFERSH_TIME_OPTIONS = {1,5,10,20,30,60,300,600,900,1800,3600,7200,10800,14400,28800,43200,86400};
     private static final String PATH_TO_RESOURCES = "/com/iha/emulator/resources/";
     private static final String PROPERTIES_FILENAME = "emu.properties";
+
+
     private static Utilities instance;
     Preferences prefs = Preferences.userNodeForPackage(Main.class);
 
@@ -122,6 +133,104 @@ public class Utilities {
         return defaultProperties;
     }
 
+    public static String getProperty(Properties properties, String property) throws IllegalArgumentException{
+        if(properties == null) throw new IllegalArgumentException("Properties NULL");
+        String tmp = properties.getProperty(property);
+        if( tmp == null){
+            throw new IllegalArgumentException("Missing property \"" + property + "\" in properties file");
+        }else{
+            return tmp;
+        }
+    }
+
+    public static void showException(Logger log,String header,Exception e,boolean closeApp,EventHandler<DialogEvent> onCloseEvent){
+        if(e == null){
+            e = new IllegalArgumentException(header);
+        }
+        log.error(e.getMessage(),e);
+        //create exception dialog
+        ExceptionDialog dlg = new ExceptionDialog(e);
+        //define default header
+        if (header == null) header = "Ooops. Something went wrong!.";
+        dlg.getDialogPane().setHeaderText(header);
+        dlg.initStyle(StageStyle.DECORATED);
+        if(closeApp && onCloseEvent != null){
+            dlg.setOnCloseRequest(onCloseEvent);
+        }
+        //show exception dialog
+        Platform.runLater(dlg::show);
+    }
+
+    public static Task<Properties> loadProperties(String defaultPropertiesFileName){
+        logger.trace("loading");
+        //define background process
+        Task<Properties> worker = new Task<Properties>() {
+            @Override
+            protected Properties call() throws Exception {
+                Properties properties = null;
+                //update progress bar
+                updateProgress(1,99);
+                //update progress message
+                updateMessage("Loading application settings...");
+                //load properties
+                try{
+                    properties = Utilities.getInstance().loadDefaultProperties(defaultPropertiesFileName);
+                    updateProgress(50, 99);
+                    //unlikely to happen, just to be sure
+                    if(properties == null){
+                        throw new IOException("Properties is null");
+                    }
+                    updateProgress(99, 99);
+                }catch (IOException e){
+                    showException(logger, "Cannot load properties. PLease review properties file and run application again", e, true, null);
+                    logger.trace("success");
+                }
+                return properties;
+            }
+        };
+        return worker;
+    }
+
+    public static void setLoggerLevel(String levelString){
+        Level level;
+        switch (levelString.toLowerCase()){
+            case "all":
+                level = Level.ALL;
+                break;
+            case "trace":
+                level = Level.TRACE;
+                break;
+            case "debug":
+                level = Level.DEBUG;
+                break;
+            case "info":
+                level = Level.INFO;
+                break;
+            case "warn":
+                level = Level.WARN;
+                break;
+            case "error":
+                level = Level.ERROR;
+                break;
+            case "fatal":
+                level = Level.FATAL;
+                break;
+            case "off":
+                level = Level.OFF;
+                break;
+            default:
+                level = Level.INFO;
+                break;
+        }
+        logger.info("Setting logger level: " + level.toString());
+        if(level != null){
+            LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
+            Configuration conf = ctx.getConfiguration();
+            conf.getLoggerConfig(LogManager.ROOT_LOGGER_NAME).setLevel(level);
+            ctx.updateLoggers(conf);
+        }
+    }
+
     public void setLastOpenedFile(String path) {
         logger.trace("Setting last opened file: " + path);
         if (path != null) {
@@ -160,6 +269,19 @@ public class Utilities {
         Pattern p = Pattern.compile(needle,Pattern.CASE_INSENSITIVE+Pattern.LITERAL);
         Matcher m = p.matcher(haystack);
         return m.find();
+    }
+
+    public static void showLoadingDialog(Task worker,String title){
+        //create progress dialog
+        ProgressDialog dlg = new ProgressDialog(worker);
+        dlg.setTitle(title);
+        dlg.getDialogPane().setHeaderText("");
+        dlg.initStyle(StageStyle.UNIFIED);
+        //create thread for background process
+        Thread th = new Thread(worker);
+        th.setDaemon(true);
+        //run background process
+        th.start();
     }
 
     public static ChoiceDialog<SaveOption> saveOnQuitDialog(){
@@ -218,7 +340,7 @@ public class Utilities {
                 return null;
             }
         }catch (IOException e){
-            DetailedSimulationPresenter.showException(logger, "Cannot save file", e, false, null);
+            Utilities.showException(logger, "Cannot save file", e, false, null);
         }
         return file.getName();
     }
@@ -239,10 +361,10 @@ public class Utilities {
                 return readFile(file);
             }
         }catch (IOException e){
-            DetailedSimulationPresenter.showException(logger,"Cannot load file",e,false,null);
+            Utilities.showException(logger,"Cannot load file",e,false,null);
             return null;
         }catch (NullPointerException ex) {
-            DetailedSimulationPresenter.showException(logger, "Cannot parse loaded file. Incorrect or damaged file content format.", ex, false, null);
+            Utilities.showException(logger, "Cannot parse loaded file. Incorrect or damaged file content format.", ex, false, null);
             return null;
         }
         return null;
@@ -259,6 +381,15 @@ public class Utilities {
         }
         fileReader.close();
         return stringBuffer.toString();
+    }
+
+    public static boolean isAdapterIdTaken(ObservableList<AdapterController> adapterControllers,int newId){
+        if(adapterControllers.size() == 0) return false;
+        for(AdapterController adapterController : adapterControllers){
+            if(adapterController.getAdapter().getId() == newId)
+                return true;
+        }
+        return false;
     }
 
     public static boolean isSensorIdTaken(AdapterController controller,String sensorId){
@@ -306,6 +437,26 @@ public class Utilities {
             return (seconds/3600) + " h";
         }
     }
+
+    public static int generateRefreshTime(Random generator,int min,int max) throws IllegalArgumentException{
+        if(generator == null || max < min) throw new IllegalArgumentException("Generator is null or max is less then min.");
+        int minIndex = getIndexOf(min,REFERSH_TIME_OPTIONS);
+        int maxIndex = getIndexOf(max,REFERSH_TIME_OPTIONS);
+        int newIndex;
+        newIndex = generator.nextInt((maxIndex - minIndex)+1) + minIndex;
+        logger.trace("Generating refresh time (index/value): " + newIndex + "/" + REFERSH_TIME_OPTIONS[newIndex]);
+        return REFERSH_TIME_OPTIONS[newIndex];
+    }
+
+    public static int getIndexOf( int toSearch, int[] tab )throws IllegalArgumentException{
+        int i = 0;
+        while(!(tab[i] == toSearch) ){
+            i++;
+            if(i == tab.length) throw new IllegalArgumentException("Cannot find index of second value: " + toSearch);
+        }
+        return i; // or return tab[i];
+    }
+
 
     public static int refreshSliderScaleToSeconds(double scaleNo) {
         Double scaleDouble = scaleNo;
@@ -368,6 +519,8 @@ public class Utilities {
         }
         return seconds;
     }
+
+
 
     public static double secondsToRefershSliderScale(int seconds) {
         int scaleNo;
@@ -442,8 +595,9 @@ public class Utilities {
      * Generates new value from current one with accuracy given as parameters.
      * Accuracy = 10 for 1 decimal, 100 for to decimals, ...
      */
-    public static double normalDistribution(Random generator,int accuracy,double dev,double avg,double max, double min){
-        if(generator == null) throw new NullPointerException("Generator is null. Cannot generate new value");
+    public static double normalDistribution(Random generator,int accuracy,double dev,double avg,double max, double min) throws IllegalArgumentException{
+        if(generator == null) throw new IllegalArgumentException("Generator is null. Cannot generate new value");
+        if(max < min) throw new IllegalArgumentException("Max value is smaller than min value");
         double newValue;
         do{
             double val = generator.nextGaussian() * dev + avg;
@@ -453,6 +607,39 @@ public class Utilities {
         return newValue;
     }
 
+    public static double linearDistribution(double value,double step,double max,double min) throws IllegalArgumentException{
+        if(max < min) throw new IllegalArgumentException("Max value is smaller than min value");
+        double newValue = value + step;
+        if(newValue > max){
+            logger.trace("Linear distribution reached max, returning max -> " + max);
+            return max;
+        }
+        if(newValue < min) {
+            logger.trace("Linear distribution smaller than minimum, returning min -> " + min);
+            return min;
+        }
+        logger.trace("Generating new value with linear distribution: newVal -> " + newValue);
+        return newValue;
+    }
+
+    public static boolean booleanRandomGenerate(boolean value,double probability,Random generator)throws IllegalArgumentException{
+        if(generator == null) throw new IllegalArgumentException("Generator is null. Cannot generate new value");
+        boolean newValue =generator.nextDouble() <= probability ? !value : value;
+        logger.trace("Generating new boolean random value: newVal -> " + newValue);
+        return newValue;
+    }
+
+    public static int generateIntInRange(Random generator,int min,int max)throws IllegalArgumentException{
+        if(generator == null || max < min) throw new IllegalArgumentException("Generator is null or max is less then min.");
+        int newValue;
+        if(min == max){
+            newValue = max;
+        }else {
+            newValue = generator.nextInt((max - min) + 1) + min;
+        }
+        logger.trace("Generating integer in range(min/max) -> " + newValue + "(" + min + "/" + max + ")");
+        return  newValue;
+    }
 
     private boolean checkIfExists(String filename){
         File file = new File(filename);

@@ -22,13 +22,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.LoadException;
 import javafx.scene.Node;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.Element;
 
-import javax.print.Doc;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -39,6 +40,9 @@ import java.util.Iterator;
 public class AdapterController{
 
     private static final Logger logger = LogManager.getLogger(AdapterController.class);
+    static final int SLEEP_TIME = 500;
+
+    private boolean terminate = false;
 
     private Adapter adapter;
     private ServerController serverController;
@@ -51,13 +55,12 @@ public class AdapterController{
     private boolean registerMessageSent = false;
     private boolean saved = false;
 
-
     private ArrayList<OutMessage> messages = new ArrayList<>();
 
     public AdapterController() {
         this.internetConnection = new SimpleBooleanProperty(true);
-        this.log = new AdapterLogger();
     }
+
 
     public void enable(){
         logger.debug("Enabling adapter -> " + adapter.getId());
@@ -75,21 +78,31 @@ public class AdapterController{
 
     public void sendMessage(String logMessage,Document message,SensorController senderController,OutMessage.Type type){
         if(message != null){
-            messages.add(new OutMessage(logMessage,message,senderController,type));
+            Text unsent = null;
             switch (type){
                 case REGISTER_ADAPTER:
-                    log.sent("Adapter/" + getAdapter().getId() + " -> trying to register");
+                    unsent = log.sent("Adapter/" + getAdapter().getId() + " -> trying to register");
                     break;
                 case SENSOR_MESSAGE:
                     if(senderController.isFullMessage()){
-                        log.sent("Adapter/" + getAdapter().getId() + " -> Sensor/" + senderController.getSensorIdAsIp() + " waiting to send data.");
+                        unsent = log.sent("Adapter/" + getAdapter().getId() + " -> Sensor/" + senderController.getSensorIdAsIp() + " waiting to send data.");
                     }else{
-                        log.sent("Sensor " + senderController.toString() + " waiting to send data.");
+                        unsent = log.sent("Sensor " + senderController.toString() + " waiting to send data.");
                     }
                     break;
             }
+            messages.add(new OutMessage(logMessage,message,senderController,type,unsent));
             startScheduler();
         }
+    }
+
+    public void sendError(String message){
+        sendError(message,null);
+    }
+
+    public void sendError(String message,Throwable t){
+        if(t != null) message = message + " -> " + t.getMessage();
+        getLog().error(message);
     }
 
     public void changeValueOnSensor(int sensorId,ArrayList<SetNewValue> newValues) throws IllegalArgumentException{
@@ -110,11 +123,12 @@ public class AdapterController{
 
     public void deleteSensors(ObservableList<SensorController> sensorControllers){
         if(sensorControllers == null) return;
-        String name = sensorControllers.toString();
+        String name = null;
         for(Iterator<SensorController> it = sensorControllers.iterator();it.hasNext();){
-            SensorController sensorController = (SensorController)it.next();
+            SensorController sensorController = it.next();
+             name = sensorController.toString();
             logger.debug(name + " -> Deleting");
-            sensorController.stopTimer();
+            if(sensorController.getTimerRunning()) sensorController.stopTimer();
             if(sensorController.getPanel() != null ) {
                 logger.trace(name + " -> removing panel from panel container");
                 sensorController.getPanel().deletePanel();
@@ -129,7 +143,7 @@ public class AdapterController{
         System.gc();
     }
 
-    public void delete(){
+    public void deleteAll(){
         logger.trace("Removing sensors");
         deleteSensors(getSensorControllersList().get());
         logger.trace("Removing logs");
@@ -140,6 +154,19 @@ public class AdapterController{
         messages = null;
         logger.trace("Removing server");
         serverController.delete();
+        sensorControllers = null;
+        log = null;
+        serverController = null;
+        scheduler = null;
+    }
+
+    public void delete(){
+        logger.trace("Removing sensors");
+        deleteSensors(getSensorControllersList().get());
+        logger.trace("Removing scheduler");
+        getScheduler().terminateScheduler();
+        messages.clear();
+        messages = null;
         sensorControllers = null;
         log = null;
         serverController = null;
@@ -169,6 +196,11 @@ public class AdapterController{
         getLog().notifyDataSent();
     }
 
+    public synchronized void messageSuccessfullySent(OutMessage message){
+        if(messages.size() != 0) messages.remove(message);
+        getLog().notifyDataSent(message.getUnsent());
+    }
+
     /**
      * Returns next unprocessed message
      * @return message to be processed, null if there are no new messages
@@ -190,7 +222,7 @@ public class AdapterController{
 
     public Adapter createAdapter(String name,boolean status,int id,boolean registered,Protocol.Version protocolVersion,double firmware){
         logger.trace("Creating adapter model: "+ "name->"+name + "status->"+status + " id->"+id + " registered->"+registered + " protocol->" + protocolVersion + " firmware->" + firmware);
-        if(name.equals("")){
+        if(name != null && name.equals("")){
             this.adapter = new Adapter(status,id,registered,protocolVersion,firmware);
         }else{
             this.adapter = new Adapter(name,status,id,registered,protocolVersion,firmware);
@@ -225,7 +257,7 @@ public class AdapterController{
             }else{
                 newPanel.setIcon(SensorIcon.UNKNOWN);
             }
-            newPanel.addModel(sensorController.getModel());
+            newPanel.addModel(sensorController);
             sensorController.setPanel(newPanel);
         } catch (IOException e) {
             throw new LoadException("Cannot initiate new sensor panel.Error while loading FXML file",e);
@@ -248,7 +280,7 @@ public class AdapterController{
                 newPanel.setIcon(SensorIcon.UNKNOWN);
             }
             controller = createSensor(values,status,id,name,battery,signal,refreshTime,protocol);
-            newPanel.addModel(controller.getModel());
+            newPanel.addModel(controller);
             controller.setPanel(newPanel);
         } catch (IOException e) {
             throw new LoadException("Cannot initiate new sensor panel.Error while loading FXML file",e);
@@ -258,7 +290,7 @@ public class AdapterController{
         return controller;
     }
 
-    public SensorController createSensor(ObservableList<Value> values,boolean status,int id,String name,int battery,int signal,int refreshTime,Protocol protocol) throws LoadException {
+    public SensorController createSensor(ObservableList<Value> values,boolean status,int id,String name,int battery,int signal,int refreshTime,Protocol protocol) {
         Sensor newSensor = new Sensor(status,id,name,battery,signal,refreshTime,protocol);
         logger.debug("Adding values");
         newSensor.getValues().addAll(values);
@@ -384,6 +416,10 @@ public class AdapterController{
         this.log = new AdapterLogger();
     }
 
+    public void createLog(TabPane tabPane){
+        this.log = new AdapterLogger(tabPane);
+    }
+
     private void setValuesOffsets(ObservableList<Value> values){
         for (int i = 0; i < values.size(); i++) {
             Value tmpValue = values.get(i);
@@ -403,6 +439,11 @@ public class AdapterController{
 
     public ServerController getServerController() {
         return serverController;
+    }
+
+    public void setServerController(ServerController serverController) {
+        logger.trace("Setting server: " + serverController.getModel().getName());
+        this.serverController = serverController;
     }
 
     public boolean getInternetConnection() {

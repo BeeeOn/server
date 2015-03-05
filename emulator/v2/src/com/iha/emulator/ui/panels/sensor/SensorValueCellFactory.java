@@ -2,7 +2,10 @@ package com.iha.emulator.ui.panels.sensor;
 
 import com.iha.emulator.models.value.Value;
 import com.iha.emulator.models.value.implemented.OnOffActuatorValue;
+import com.iha.emulator.models.value.implemented.OnOffSensorValue;
+import com.iha.emulator.models.value.implemented.OpenClosedSensorValue;
 import javafx.beans.binding.BooleanBinding;
+import javafx.beans.binding.StringBinding;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
@@ -20,11 +23,43 @@ public class SensorValueCellFactory extends TableCell<Value, Value> {
         super.updateItem(item, empty);
         if (item != null) {
             switch (item.getValueType()) {
+                case SENSOR_EMISSIONS:
+                case SENSOR_PRESSURE:
                 case SENSOR_TEMPERATURE:
+                case SENSOR_NOISE:
+                case SENSOR_LIGHT:
                 case SENSOR_HUMIDITY:
-                    Label lbl = new Label();
-                    lbl.textProperty().bind(item.stringValueProperty());
-                    setGraphic(lbl);
+                    Label humLbl = new Label();
+                    humLbl.textProperty().bind(item.stringValueProperty());
+                    setGraphic(humLbl);
+                    break;
+                case SENSOR_ON_OFF:
+                    Label onOffLbl = new Label();
+                    OnOffSensorValue onOffSensor = (OnOffSensorValue) item;
+                    onOffLbl.textProperty().bind(new StringBinding() {
+                        {
+                            bind(onOffSensor.valueProperty());
+                        }
+                        @Override
+                        protected String computeValue() {
+                            return onOffSensor.getValue() ? "ON" : "OFF";
+                        }
+                    });
+                    setGraphic(onOffLbl);
+                    break;
+                case SENSOR_OPEN_CLOSED:
+                    Label openClosedLbl = new Label();
+                    OpenClosedSensorValue openClosedSensor = (OpenClosedSensorValue) item;
+                    openClosedLbl.textProperty().bind(new StringBinding() {
+                        {
+                            bind(openClosedSensor.valueProperty());
+                        }
+                        @Override
+                        protected String computeValue() {
+                            return openClosedSensor.getValue() ? "OPEN" : "CLOSED";
+                        }
+                    });
+                    setGraphic(openClosedLbl);
                     break;
                 case ACTUATOR_ON_OFF:
                     HBox hBox = new HBox();
@@ -39,11 +74,7 @@ public class SensorValueCellFactory extends TableCell<Value, Value> {
                         }
                         @Override
                         protected boolean computeValue() {
-                            if(actuator.getValue()){
-                                return true;
-                            }else{
-                                return false;
-                            }
+                            return actuator.getValue();
                         }
                     });
                     onBtn.setOnAction(event -> actuator.setValue(true));
@@ -53,11 +84,7 @@ public class SensorValueCellFactory extends TableCell<Value, Value> {
                         }
                         @Override
                         protected boolean computeValue() {
-                            if(actuator.getValue()){
-                                return false;
-                            }else{
-                                return true;
-                            }
+                            return !actuator.getValue();
                         }
                     });
                     offBtn.setOnAction(event -> actuator.setValue(false));

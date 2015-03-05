@@ -1,13 +1,13 @@
 package com.iha.emulator.ui.dialogs.log;
 
-import com.iha.emulator.ui.dialogs.adapter.ShowAdaptersDialogPresenter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,6 +27,8 @@ public class ShowFullLogView implements Initializable,ShowFullLogPresenter.Displ
 
     @FXML private ProgressIndicator indicator;
     @FXML private Label status;
+    @FXML private TextArea textArea;
+    @FXML private CheckBox refreshAutomaticallyCheckBox;
 
     public ShowFullLogView() {
 
@@ -62,6 +64,16 @@ public class ShowFullLogView implements Initializable,ShowFullLogPresenter.Displ
     @Override
     public Label getStatus() {
         return status;
+    }
+
+    @Override
+    public TextArea getTextArea(){
+        return textArea;
+    }
+
+    @Override
+    public CheckBox getRefreshAutomaticallyCheckBox() {
+        return refreshAutomaticallyCheckBox;
     }
 
     @Override

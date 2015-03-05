@@ -12,13 +12,8 @@ public class EmptyValue extends AbstractValue {
     }
 
     @Override
-    public void nextValue() {
-
-    }
-
-    @Override
-    public void nextValue(Object value) {
-
+    public Object nextValue() {
+        return null;
     }
 
     @Override

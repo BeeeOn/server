@@ -1,13 +1,12 @@
 package com.iha.emulator.server.task.implemented;
 
 import com.iha.emulator.server.Database;
+import com.iha.emulator.server.DatabaseInfo;
 import com.iha.emulator.server.task.AbstractTask;
-import com.sun.deploy.util.StringUtils;
 import org.apache.logging.log4j.Logger;
 import org.dom4j.Element;
 
 import javax.naming.NamingException;
-import java.lang.reflect.Array;
 import java.net.ConnectException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -20,13 +19,13 @@ public class DeleteSensorsTask extends AbstractTask {
 
     private Logger logger;
 
-    private String dbName;
+    private DatabaseInfo dbInfo;
     private ArrayList<String> sensorsIds;
     private Database database;
 
-    public DeleteSensorsTask(Logger logger, String dbName, ArrayList<String> sensorsIds) {
+    public DeleteSensorsTask(Logger logger, DatabaseInfo dbInfo, ArrayList<String> sensorsIds) {
         this.logger = logger;
-        this.dbName = dbName;
+        this.dbInfo = dbInfo;
         this.sensorsIds = sensorsIds;
         this.database = new Database();
     }
@@ -34,7 +33,7 @@ public class DeleteSensorsTask extends AbstractTask {
     @Override
     public Element resolveTask() {
         try {
-            Connection conn = database.connect(this.dbName);
+            Connection conn = database.connect(this.dbInfo);
             String sql = "DELETE FROM facilities WHERE mac IN (" + concatStringsWSep(sensorsIds,",") + ")";
             logger.trace("DeleteSensors SQL: ");
             logger.trace(sql);

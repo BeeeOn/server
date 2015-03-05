@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.*?>
+<VBox fx:id="view" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="643.0" prefWidth="840.0" styleClass="whiteBackground" stylesheets="@../../../resources/css/theme-light.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iha.emulator.ui.dialogs.sensor.SensorDetailsDialogView">
+   <children>
+      <Label styleClass="detailedSimLbl" text="Sensor / actuator details" VBox.vgrow="NEVER">
+         <VBox.margin>
+            <Insets left="15.0" right="15.0" />
+         </VBox.margin>
+      </Label>
+      <TabPane VBox.vgrow="ALWAYS">
+         <tabs>
+            <Tab closable="false" text="Sensor information">
+               <content>
+                  <VBox prefHeight="200.0" prefWidth="100.0" styleClass="informationContainer" VBox.vgrow="ALWAYS">
+                     <VBox.margin>
+                        <Insets left="15.0" right="15.0" />
+                     </VBox.margin>
+                     <children>
+                        <GridPane prefHeight="201.0" prefWidth="804.0" VBox.vgrow="NEVER">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="10.0" prefWidth="107.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="232.0" minWidth="10.0" prefWidth="156.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="236.0" minWidth="10.0" prefWidth="102.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="409.0" minWidth="10.0" prefWidth="58.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="474.0" minWidth="10.0" prefWidth="151.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="487.0" minWidth="10.0" prefWidth="234.0" />
+                              <ColumnConstraints />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints maxHeight="55.0" minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="43.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="37.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="37.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="37.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="37.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="97.0" styleClass="sensorText" text="ID:" GridPane.hgrow="NEVER" GridPane.vgrow="NEVER">
+                                 <padding>
+                                    <Insets right="6.0" />
+                                 </padding>
+                              </Label>
+                              <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="97.0" styleClass="sensorText" text="Name:" GridPane.rowIndex="1">
+                                 <padding>
+                                    <Insets right="6.0" />
+                                 </padding>
+                              </Label>
+                              <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="144.0" styleClass="sensorText" text="Icon:" GridPane.columnIndex="4" GridPane.hgrow="NEVER" GridPane.vgrow="NEVER">
+                                 <padding>
+                                    <Insets right="6.0" />
+                                 </padding>
+                              </Label>
+                              <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="144.0" styleClass="sensorText" text="Color:" GridPane.columnIndex="4" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.vgrow="NEVER">
+                                 <padding>
+                                    <Insets right="6.0" />
+                                 </padding>
+                              </Label>
+                              <TextField fx:id="sensorIdLbl" disable="true" editable="false" prefHeight="25.0" prefWidth="129.0" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.vgrow="NEVER" />
+                              <TextField fx:id="sensorNameLbl" prefHeight="25.0" prefWidth="165.0" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.vgrow="NEVER" />
+                              <ComboBox fx:id="sensorIconComboBox" prefHeight="25.0" prefWidth="50.0" GridPane.columnIndex="5" GridPane.hgrow="NEVER" GridPane.vgrow="NEVER" />
+                              <ColorPicker fx:id="sensorColorPicker" GridPane.columnIndex="5" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.vgrow="NEVER" />
+                              <Label alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="104.0" styleClass="informationHeader" text="Values:" GridPane.columnSpan="2" GridPane.hgrow="NEVER" GridPane.rowIndex="5" GridPane.valignment="BOTTOM" GridPane.vgrow="NEVER">
+                                 <padding>
+                                    <Insets right="6.0" />
+                                 </padding>
+                              </Label>
+                              <Label alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="159.0" styleClass="informationHeader" text="Value informations:" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="5" GridPane.valignment="BOTTOM" GridPane.vgrow="NEVER">
+                                 <padding>
+                                    <Insets right="6.0" />
+                                 </padding>
+                              </Label>
+                              <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="97.0" styleClass="sensorText" text="Battery:" GridPane.rowIndex="2">
+                                 <padding>
+                                    <Insets right="6.0" />
+                                 </padding>
+                              </Label>
+                              <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="97.0" styleClass="sensorText" text="Signal:" GridPane.rowIndex="3">
+                                 <padding>
+                                    <Insets right="6.0" />
+                                 </padding>
+                              </Label>
+                              <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="97.0" styleClass="sensorText" text="Refresh time:" GridPane.rowIndex="4">
+                                 <padding>
+                                    <Insets right="6.0" />
+                                 </padding>
+                              </Label>
+                              <Slider fx:id="sensorBatterySlider" blockIncrement="1.0" majorTickUnit="1.0" minorTickCount="0" prefHeight="14.0" prefWidth="201.0" snapToTicks="true" value="95.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+                              <Slider fx:id="sensorSignalSlider" blockIncrement="1.0" majorTickUnit="1.0" minorTickCount="0" snapToTicks="true" value="90.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+                              <Slider fx:id="sensorRefreshSlider" blockIncrement="1.0" majorTickUnit="1.0" max="16.0" minorTickCount="0" snapToTicks="true" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4" />
+                              <Label fx:id="sensorBatteryValueLbl" prefHeight="17.0" prefWidth="76.0" styleClass="sensorText" text="100%" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                                 <padding>
+                                    <Insets right="6.0" />
+                                 </padding>
+                              </Label>
+                              <Label fx:id="sensorSignalValueLbl" prefHeight="17.0" prefWidth="76.0" styleClass="sensorText" text="100%" GridPane.columnIndex="3" GridPane.rowIndex="3">
+                                 <padding>
+                                    <Insets right="6.0" />
+                                 </padding>
+                              </Label>
+                              <Label fx:id="sensorRefreshValueLbl" prefHeight="17.0" prefWidth="76.0" styleClass="sensorText" text="0 sec" GridPane.columnIndex="3" GridPane.rowIndex="4">
+                                 <padding>
+                                    <Insets right="6.0" />
+                                 </padding>
+                              </Label>
+                              <Label alignment="TOP_RIGHT" prefHeight="21.0" prefWidth="144.0" styleClass="sensorText" text="Panel header sample:" GridPane.columnIndex="4" GridPane.columnSpan="2" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+                                 <padding>
+                                    <Insets right="6.0" />
+                                 </padding>
+                              </Label>
+                              <Label fx:id="sensorHeaderSampleLbl" styleClass="sensorPanelHeader" text="Sensor" GridPane.columnIndex="5" GridPane.columnSpan="2" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.rowSpan="2" GridPane.valignment="TOP" GridPane.vgrow="NEVER" />
+                           </children>
+                        </GridPane>
+                        <HBox prefHeight="314.0" prefWidth="834.0" VBox.vgrow="ALWAYS">
+                           <padding>
+                              <Insets left="15.0" right="15.0" top="3.0" />
+                           </padding>
+                           <children>
+                              <VBox alignment="TOP_CENTER" prefHeight="392.0" prefWidth="31.0" HBox.hgrow="NEVER">
+                                 <children>
+                                    <Button fx:id="addValueBtn" mnemonicParsing="false" onAction="#handleAddValue" prefHeight="17.0" prefWidth="22.0" visible="false">
+                                       <styleClass>
+                                          <String fx:value="valueControlBtn" />
+                                          <String fx:value="addValueBtn" />
+                                       </styleClass>
+                                    </Button>
+                                    <Button fx:id="deleteValueBtn" mnemonicParsing="false" onAction="#handleDeleteValue" visible="false">
+                                       <styleClass>
+                                          <String fx:value="valueControlBtn" />
+                                          <String fx:value="deleteValueBtn" />
+                                       </styleClass>
+                                    </Button>
+                                 </children>
+                              </VBox>
+                              <TreeView fx:id="valuesTree" prefHeight="372.0" prefWidth="178.0" styleClass="valuesTree" />
+                              <StackPane>
+                                 <children>
+                                    <Label fx:id="noValueSelectedLbl" styleClass="sensorText" text="No value selected" />
+                                    <VBox fx:id="valuesPanelContainer" prefHeight="333.0" prefWidth="558.0" styleClass="valuesInformationContainerRight">
+                                       <children>
+                                          <GridPane prefHeight="93.0" prefWidth="537.0" VBox.vgrow="NEVER">
+                                            <columnConstraints>
+                                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="297.0" minWidth="0.0" prefWidth="70.0" />
+                                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="541.0" minWidth="0.0" prefWidth="168.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="541.0" minWidth="0.0" prefWidth="138.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="541.0" minWidth="6.0" prefWidth="52.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="541.0" minWidth="10.0" prefWidth="110.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                              <RowConstraints maxHeight="31.0" minHeight="10.0" prefHeight="28.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                             <children>
+                                                <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="61.0" styleClass="sensorText" text="Type:">
+                                                   <padding>
+                                                      <Insets right="6.0" />
+                                                   </padding>
+                                                </Label>
+                                                <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="61.0" styleClass="sensorText" text="Name:" GridPane.rowIndex="1">
+                                                   <padding>
+                                                      <Insets right="6.0" />
+                                                   </padding>
+                                                </Label>
+                                                <TextField fx:id="valueNameTextField" prefHeight="25.0" prefWidth="466.0" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.vgrow="NEVER" />
+                                                <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="129.0" styleClass="sensorText" text="Store history:" GridPane.columnIndex="2">
+                                                   <padding>
+                                                      <Insets right="6.0" />
+                                                   </padding>
+                                                </Label>
+                                                <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="129.0" styleClass="sensorText" text="Generate value:" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                                   <padding>
+                                                      <Insets right="6.0" />
+                                                   </padding>
+                                                </Label>
+                                                <RadioButton fx:id="valueYesStoreHistoryRadBtn" mnemonicParsing="false" prefHeight="17.0" prefWidth="49.0" text="Yes" GridPane.columnIndex="3">
+                                                   <toggleGroup>
+                                                      <ToggleGroup fx:id="storeValueRadBtnGroup" />
+                                                   </toggleGroup>
+                                                </RadioButton>
+                                                <RadioButton fx:id="valueNoStoreHistoryRadBtn" mnemonicParsing="false" prefHeight="17.0" prefWidth="49.0" selected="true" text="No" toggleGroup="$storeValueRadBtnGroup" GridPane.columnIndex="4" />
+                                                <RadioButton fx:id="valueYesGenerateValueRadBtn" mnemonicParsing="false" prefHeight="17.0" prefWidth="49.0" selected="true" text="Yes" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                                                   <toggleGroup>
+                                                      <ToggleGroup fx:id="generateRadBtnGroup" />
+                                                   </toggleGroup>
+                                                </RadioButton>
+                                                <RadioButton fx:id="valueNoGenerateValueRadBtn" mnemonicParsing="false" prefHeight="17.0" prefWidth="49.0" text="No" toggleGroup="$generateRadBtnGroup" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                                                <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="61.0" text="Value:" GridPane.rowIndex="2">
+                                                   <padding>
+                                                      <Insets right="6.0" />
+                                                   </padding>
+                                                   <styleClass>
+                                                      <String fx:value="sensorText" />
+                                                      <String fx:value="boldText" />
+                                                   </styleClass>
+                                                </Label>
+                                                <TextField fx:id="valueTextField" prefHeight="25.0" prefWidth="466.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                <Label fx:id="generatorTypeLbl" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="129.0" styleClass="sensorText" text="Generator type:" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                                                   <padding>
+                                                      <Insets right="6.0" />
+                                                   </padding>
+                                                </Label>
+                                                <TextField fx:id="valueTypeTextField" editable="false" prefHeight="25.0" prefWidth="466.0" GridPane.columnIndex="1" />
+                                                <ComboBox fx:id="valueComboBox" prefWidth="150.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                <ComboBox fx:id="generatorTypeComboBox" prefWidth="150.0" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+                                             </children>
+                                          </GridPane>
+                                          <StackPane fx:id="generatorsContainer" VBox.vgrow="ALWAYS">
+                                             <children>
+                                                <GridPane fx:id="normalDistributionContainer" prefHeight="92.0" prefWidth="513.0" visible="false">
+                                                  <columnConstraints>
+                                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="285.0" minWidth="10.0" prefWidth="104.0" />
+                                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="497.0" minWidth="10.0" prefWidth="92.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="497.0" minWidth="10.0" prefWidth="96.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="497.0" minWidth="10.0" prefWidth="111.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="497.0" minWidth="10.0" prefWidth="202.0" />
+                                                  </columnConstraints>
+                                                  <rowConstraints>
+                                                    <RowConstraints maxHeight="45.0" minHeight="10.0" prefHeight="23.0" vgrow="SOMETIMES" />
+                                                    <RowConstraints maxHeight="38.0" minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
+                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                  </rowConstraints>
+                                                   <children>
+                                                      <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="75.0" styleClass="sensorText" text="Minimum:" GridPane.rowIndex="1">
+                                                         <padding>
+                                                            <Insets right="6.0" />
+                                                         </padding>
+                                                      </Label>
+                                                      <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="75.0" styleClass="sensorText" text="Maximum:" GridPane.rowIndex="2">
+                                                         <padding>
+                                                            <Insets right="6.0" />
+                                                         </padding>
+                                                      </Label>
+                                                      <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="75.0" styleClass="sensorText" text="Deviation:" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                                         <padding>
+                                                            <Insets right="6.0" />
+                                                         </padding>
+                                                      </Label>
+                                                      <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="75.0" styleClass="sensorText" text="Average:" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                                                         <padding>
+                                                            <Insets right="6.0" />
+                                                         </padding>
+                                                      </Label>
+                                                      <Label alignment="BOTTOM_LEFT" prefHeight="17.0" prefWidth="267.0" text="Normal distribution generator values" GridPane.columnSpan="3" GridPane.valignment="BOTTOM">
+                                                         <padding>
+                                                            <Insets right="6.0" />
+                                                         </padding>
+                                                         <styleClass>
+                                                            <String fx:value="sensorText" />
+                                                            <String fx:value="boldText" />
+                                                         </styleClass>
+                                                      </Label>
+                                                      <TextField fx:id="minNormalTextField" prefHeight="25.0" prefWidth="466.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                      <TextField fx:id="maxNormalTextField" prefHeight="25.0" prefWidth="466.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                      <TextField fx:id="devNormalTextField" prefHeight="25.0" prefWidth="466.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                                      <TextField fx:id="avgNormalTextField" prefHeight="25.0" prefWidth="466.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                                                   </children>
+                                                </GridPane>
+                                                <GridPane fx:id="linearDistributionContainer" prefHeight="92.0" prefWidth="513.0" visible="false">
+                                                   <children>
+                                                      <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="75.0" styleClass="sensorText" text="Minimum:" GridPane.rowIndex="1">
+                                                         <padding>
+                                                            <Insets right="6.0" />
+                                                         </padding>
+                                                      </Label>
+                                                      <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="75.0" styleClass="sensorText" text="Maximum:" GridPane.rowIndex="2">
+                                                         <padding>
+                                                            <Insets right="6.0" />
+                                                         </padding>
+                                                      </Label>
+                                                      <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="75.0" styleClass="sensorText" text="Step:" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                                         <padding>
+                                                            <Insets right="6.0" />
+                                                         </padding>
+                                                      </Label>
+                                                      <Label alignment="BOTTOM_LEFT" prefHeight="17.0" prefWidth="273.0" text="Linear distribution generator values" GridPane.columnSpan="3" GridPane.valignment="BOTTOM">
+                                                         <padding>
+                                                            <Insets right="6.0" />
+                                                         </padding>
+                                                         <styleClass>
+                                                            <String fx:value="sensorText" />
+                                                            <String fx:value="boldText" />
+                                                         </styleClass>
+                                                      </Label>
+                                                      <TextField fx:id="minLinearTextField" prefHeight="25.0" prefWidth="466.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                      <TextField fx:id="maxLinearTextField" prefHeight="25.0" prefWidth="466.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                      <TextField fx:id="stepLinearTextField" prefHeight="25.0" prefWidth="466.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                                   </children>
+                                                   <columnConstraints>
+                                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="285.0" minWidth="10.0" prefWidth="104.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="497.0" minWidth="10.0" prefWidth="92.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="497.0" minWidth="10.0" prefWidth="96.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="497.0" minWidth="10.0" prefWidth="111.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="497.0" minWidth="10.0" prefWidth="202.0" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints maxHeight="45.0" minHeight="10.0" prefHeight="23.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints maxHeight="38.0" minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                </GridPane>
+                                                <GridPane fx:id="booleanRandomContainer" prefHeight="92.0" prefWidth="513.0">
+                                                   <children>
+                                                      <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="178.0" styleClass="sensorText" text="Probability of switching value:" GridPane.rowIndex="1">
+                                                         <padding>
+                                                            <Insets right="6.0" />
+                                                         </padding>
+                                                      </Label>
+                                                      <Label alignment="BOTTOM_LEFT" prefHeight="17.0" prefWidth="273.0" text="Boolean random generator values" GridPane.columnSpan="3" GridPane.valignment="BOTTOM">
+                                                         <padding>
+                                                            <Insets right="6.0" />
+                                                         </padding>
+                                                         <styleClass>
+                                                            <String fx:value="sensorText" />
+                                                            <String fx:value="boldText" />
+                                                         </styleClass>
+                                                      </Label>
+                                                      <Slider fx:id="booleanRandomProbabilitySlider" blockIncrement="1.0" majorTickUnit="1.0" minorTickCount="0" snapToTicks="true" value="25.0" GridPane.columnSpan="2" GridPane.rowIndex="2">
+                                                         <GridPane.margin>
+                                                            <Insets left="15.0" />
+                                                         </GridPane.margin>
+                                                      </Slider>
+                                                      <Label fx:id="booleanRandomProbabilityLbl" prefHeight="17.0" prefWidth="76.0" styleClass="sensorText" text="100%" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                                                         <padding>
+                                                            <Insets right="6.0" />
+                                                         </padding>
+                                                      </Label>
+                                                   </children>
+                                                   <columnConstraints>
+                                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="285.0" minWidth="10.0" prefWidth="158.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="497.0" minWidth="10.0" prefWidth="170.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="497.0" minWidth="10.0" prefWidth="200.0" />
+                                                   </columnConstraints>
+                                                   <rowConstraints>
+                                                      <RowConstraints maxHeight="45.0" minHeight="10.0" prefHeight="23.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints maxHeight="38.0" minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints maxHeight="38.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints maxHeight="64.0" minHeight="10.0" prefHeight="56.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                </GridPane>
+                                             </children>
+                                          </StackPane>
+                                          <HBox alignment="CENTER_RIGHT">
+                                             <children>
+                                                <Button fx:id="saveValueBtn" alignment="CENTER" mnemonicParsing="false" styleClass="addAdapterDialogBtn" text="Save value" VBox.vgrow="NEVER" />
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </padding>
+                                    </VBox>
+                                 </children>
+                              </StackPane>
+                           </children>
+                        </HBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" top="10.0" />
+                     </padding>
+                  </VBox>
+               </content>
+            </Tab>
+            <Tab closable="false" text="History">
+               <content>
+                  <VBox prefHeight="200.0" prefWidth="100.0" styleClass="whiteBackground">
+                     <children>
+                        <Label text="Graphs with history of values. NOT implemented yet!" />
+                     </children></VBox>
+               </content>
+            </Tab>
+         </tabs>
+         <VBox.margin>
+            <Insets left="10.0" right="10.0" />
+         </VBox.margin>
+      </TabPane>
+      <HBox alignment="CENTER_RIGHT" prefHeight="36.0" prefWidth="870.0" spacing="10.0" VBox.vgrow="NEVER">
+         <children>
+            <Button fx:id="addBtn" mnemonicParsing="false" onAction="#handleAdd" styleClass="addAdapterDialogBtn" text="Save" />
+            <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#handleCancel" styleClass="cancelDialogBtn" text="Cancel" />
+         </children>
+         <padding>
+            <Insets right="10.0" />
+         </padding>
+      </HBox>
+   </children>
+   <padding>
+      <Insets left="15.0" right="15.0" />
+   </padding>
+</VBox>

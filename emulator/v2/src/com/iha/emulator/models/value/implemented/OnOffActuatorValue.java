@@ -1,6 +1,10 @@
 package com.iha.emulator.models.value.implemented;
 
 import com.iha.emulator.models.value.AbstractValue;
+import com.iha.emulator.models.value.HasBooleanRandom;
+import com.iha.emulator.utilities.Utilities;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import org.dom4j.Element;
 
 import java.util.Random;
@@ -8,30 +12,33 @@ import java.util.Random;
 /**
  * Created by Shu on 2.12.2014.
  */
-public class OnOffActuatorValue extends AbstractValue<Boolean> {
+public class OnOffActuatorValue extends AbstractValue<Boolean> implements HasBooleanRandom {
 
+    private static final double DEFAULT_PROBABILITY = 0.25;
+
+    private DoubleProperty probability;
 
     public OnOffActuatorValue(String name, String type,int offset, String unit, boolean generateValue, boolean storeHistory, Random generator, Long generatorSeed) {
         super(Type.ACTUATOR_ON_OFF,name,type,offset,unit,generateValue,storeHistory,generator,generatorSeed);
+        probability = new SimpleDoubleProperty(DEFAULT_PROBABILITY);
         setInitialValue(false);
         setValue(false);
     }
 
     @Override
-    public void nextValue() throws NullPointerException{
+    public Boolean nextValue() throws IllegalArgumentException{
         //store value history if needed
         if(isStoreHistory()) storeValue(this.getValue());
         //generate new value
-        setValue(!getValue());
-    }
-
-    @Override
-    public void nextValue(Boolean value) {
-        //check value
-        if(value == null) throw new NullPointerException("Trying to set value to null");
-        //store value history if needed
-        if(isStoreHistory()) storeValue(this.getValue());
-        this.setValue(value);
+        if(getGeneratorType() == null || !isGenerateValue()) return null;
+        switch (getGeneratorType()){
+            case BOOLEAN_RANDOM:
+                if(probabilityProperty() == null){
+                    throw new IllegalArgumentException("On/Off Actuator generator doesn't have variables needed to generate new value (Probability)");
+                }
+                return Utilities.booleanRandomGenerate(getValue(),getProbability(),getGenerator());
+        }
+        return null;
     }
 
     @Override
@@ -62,19 +69,30 @@ public class OnOffActuatorValue extends AbstractValue<Boolean> {
                 .addAttribute("generate_value",String.valueOf(isGenerateValue()));
         valueElement.addElement("initial_value").addText(String.valueOf(getInitialValue()));
         if(getGeneratorType() != null){
-            valueElement.addElement("generator")
-                    .addAttribute("type", getGeneratorType().getName())
+            Element generatorElement = valueElement.addElement("generator")
+                    .addAttribute("type", getGeneratorType().getType())
                     .addAttribute("seed",String.valueOf(getGeneratorSeed()));
+            switch (getGeneratorType()){
+                case BOOLEAN_RANDOM:
+                    generatorElement.addElement("params")
+                            .addAttribute("probability", String.valueOf(getProbability()));
+                    break;
+            }
         }
     }
 
+
     @Override
-    public Generator getGeneratorType() {
-        return null;
+    public double getProbability() {
+        return probability.get();
+    }
+
+    public DoubleProperty probabilityProperty() {
+        return probability;
     }
 
     @Override
-    public void setGeneratorType(Generator generatorType) {
-
+    public void setProbability(double probability) {
+        this.probability.set(probability);
     }
 }

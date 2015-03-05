@@ -7,10 +7,9 @@ import com.iha.emulator.communication.eserver.task.implemented.DeleteAdapterTask
 import com.iha.emulator.communication.eserver.task.implemented.DeleteSensorsTask;
 import com.iha.emulator.control.AdapterController;
 import com.iha.emulator.control.SensorController;
-import com.iha.emulator.models.Sensor;
 import com.iha.emulator.ui.Presenter;
 import com.iha.emulator.ui.panels.PanelPresenter;
-import com.iha.emulator.ui.simulations.detailed.DetailedSimulationPresenter;
+import com.iha.emulator.utilities.Utilities;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -111,11 +110,11 @@ public class DeleteSensorsDialogPresenter implements Presenter,PanelPresenter {
                     Platform.runLater(()->showStatus(status,false));
                     sensorControllers.clear();
                 }catch (IOException e){
-                    Platform.runLater(()-> DetailedSimulationPresenter.showException(logger,"Cannot read from socket",e,false,null));
+                    Platform.runLater(()-> Utilities.showException(logger, "Cannot read from socket", e, false, null));
                 }catch (DocumentException de){
-                    Platform.runLater(()-> DetailedSimulationPresenter.showException(logger,"Cannot parse server message",de,false,null));
+                    Platform.runLater(()-> Utilities.showException(logger,"Cannot parse server message",de,false,null));
                 }catch (IllegalStateException ie){
-                    Platform.runLater(()-> DetailedSimulationPresenter.showException(logger,"Error on server",ie,false,null));
+                    Platform.runLater(()-> Utilities.showException(logger,"Error on server",ie,false,null));
                 }
                 return null;
             }

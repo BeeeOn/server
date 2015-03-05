@@ -1,10 +1,9 @@
-package com.iha.emulator.ui.dialogs.sensor;
+package com.iha.emulator.ui.dialogs.server;
 
 import com.iha.emulator.control.AdapterController;
 import com.iha.emulator.models.Server;
 import com.iha.emulator.ui.Presenter;
 import com.iha.emulator.ui.panels.PanelPresenter;
-import com.iha.emulator.ui.simulations.detailed.DetailedSimulationPresenter;
 import com.iha.emulator.utilities.Utilities;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -38,7 +37,6 @@ public class ChangeServerDetailsDialogPresenter implements Presenter,PanelPresen
     private static final String FXML_PATH = "ChangeServerDetailsDialog.fxml";
     private static final String CSS_PATH = "/com/iha/emulator/resources/css/theme-light.css";
     private ValidationSupport serverValidationSupport = new ValidationSupport();
-    private ValidationDecoration iconDecorator = new StyleClassValidationDecoration("validationError","validationWarn");
 
     private Display view;
     private Stage window;
@@ -48,8 +46,6 @@ public class ChangeServerDetailsDialogPresenter implements Presenter,PanelPresen
     private ObservableList<Server> servers;
     private Server selectedServer;
     private AdapterController adapterController;
-
-    private DetailedSimulationPresenter parent;
 
     public interface Display {
         public Node getView();
@@ -64,12 +60,12 @@ public class ChangeServerDetailsDialogPresenter implements Presenter,PanelPresen
         public ComboBox getServerComboBox();
     }
 
-    public ChangeServerDetailsDialogPresenter(Stage stage, ObservableList<Server> servers, DetailedSimulationPresenter parent, AdapterController adapterController) {
+    public ChangeServerDetailsDialogPresenter(Stage stage, ObservableList<Server> servers, AdapterController adapterController) {
         this.serverInfoSet = new SimpleBooleanProperty(false);
+        ValidationDecoration iconDecorator = new StyleClassValidationDecoration("validationError", "validationWarn");
         serverValidationSupport.setValidationDecorator(iconDecorator);
         this.window = stage;
         this.servers = servers;
-        this.parent = parent;
         this.adapterController = adapterController;
         adapterController.disable();
     }
@@ -123,7 +119,7 @@ public class ChangeServerDetailsDialogPresenter implements Presenter,PanelPresen
             setSelectedServer(tmp);
             view.getServerComboBox().getSelectionModel().select(tmp);
         }
-        //add change listener, if new item is selected in combo box, other fields are changed
+        //save change listener, if new item is selected in combo box, other fields are changed
         view.getServerComboBox().valueProperty().addListener((observable, oldValue, newValue) -> {
             Server tmpServer = (Server) newValue;
             setSelectedServer(tmpServer);
@@ -162,10 +158,22 @@ public class ChangeServerDetailsDialogPresenter implements Presenter,PanelPresen
             return false;
         }
         Server model = adapterController.getServerController().getModel();
-        model.setName(view.getServerNameTxtField().getText());
-        model.setDatabaseName(view.getServerDbNameTxtField().getText());
-        model.setIp(view.getServerIpTxtField().getText());
-        model.setPort(Integer.valueOf(view.getServerPortTxtField().getText()));
+        if(!model.getName().equals(view.getServerNameTxtField().getText())){
+            model.setName(view.getServerNameTxtField().getText());
+            adapterController.setSaved(false);
+        }
+        if(!model.getDatabaseName().equals(view.getServerDbNameTxtField().getText())){
+            model.setDatabaseName(view.getServerDbNameTxtField().getText());
+            adapterController.setSaved(false);
+        }
+        if(!model.getIp().equals(view.getServerIpTxtField().getText())){
+            model.setIp(view.getServerIpTxtField().getText());
+            adapterController.setSaved(false);
+        }
+        if(model.getPort() != Integer.valueOf(view.getServerPortTxtField().getText())){
+            model.setPort(Integer.valueOf(view.getServerPortTxtField().getText()));
+            adapterController.setSaved(false);
+        }
         return true;
     }
 

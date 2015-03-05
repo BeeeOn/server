@@ -5,9 +5,7 @@ import com.iha.emulator.models.value.HasLinearDistribution;
 import com.iha.emulator.models.value.HasNormalDistribution;
 import com.iha.emulator.utilities.Utilities;
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import org.dom4j.Element;
 
 import java.util.Random;
@@ -29,7 +27,6 @@ public class HumiditySensorValue extends AbstractValue<Integer> implements HasNo
     private DoubleProperty min;
     private DoubleProperty max;
     private DoubleProperty step;
-    private ObjectProperty<Generator> generatorType;
 
     public HumiditySensorValue(String name, String type,int offset, String unit, boolean generateValue, boolean storeHistory, Random generator, Long generatorSeed) {
         super(Type.SENSOR_HUMIDITY,name,type,offset,unit,generateValue,storeHistory,generator,generatorSeed);
@@ -38,30 +35,32 @@ public class HumiditySensorValue extends AbstractValue<Integer> implements HasNo
         this.min = new SimpleDoubleProperty(DEFAULT_MIN);
         this.max= new SimpleDoubleProperty(DEFAULT_MAX);
         this.step = new SimpleDoubleProperty(DEFAULT_LINEAR_STEP);
-        this.generatorType = new SimpleObjectProperty<>(null);
         setInitialValue(DEFAULT_VALUE);
         setValue(DEFAULT_VALUE);
     }
 
     @Override
-    public void nextValue() throws NullPointerException{
+    public Integer nextValue() throws NullPointerException{
         //store value history if needed
         if(isStoreHistory()) storeValue(this.getValue());
-        //check for variables needed to generate new value
-        //TODO diverse distributions
-        //generate new value
-        Double result = Utilities.normalDistribution(getGenerator(), 1, getDev(), getAvg(), getMax(), getMin());
-        Integer integer = result == null ? null : (int) Math.round(result);
-        this.setValue(integer);
-    }
+        if(getGeneratorType() == null || !isGenerateValue()) return null;
+        Double result = null;
+        switch (getGeneratorType()){
+            case NORMAL_DISTRIBUTION:
+                if(devProperty() == null || avgProperty() == null || maxProperty() == null || minProperty() == null){
+                    throw new IllegalArgumentException("Humidity generator doesn't have variables needed to generate new value (Dev,Avg,Max,Min)");
+                }
+                 result = Utilities.normalDistribution(getGenerator(), 1, getDev(), getAvg(), getMax(), getMin());
 
-    @Override
-    public void nextValue(Integer value) {
-        //check value
-        if(value == null) throw new NullPointerException("Trying to set value to null");
-        //store value history if needed
-        if(isStoreHistory()) storeValue(this.getValue());
-        this.setValue(value);
+                break;
+            case LINEAR_DISTRIBUTION:
+                if(stepProperty() == null || maxProperty() == null || minProperty() == null){
+                    throw new IllegalArgumentException("Humidity generator doesn't have variables needed to generate new value (Step,Max,Min)");
+                }
+                result = Utilities.linearDistribution(getValue(),getStep(),getMax(),getMin());
+                break;
+        }
+        return result == null ? null : (int) Math.round(result);
     }
 
     @Override
@@ -89,7 +88,7 @@ public class HumiditySensorValue extends AbstractValue<Integer> implements HasNo
         valueElement.addElement("initial_value").addText(String.valueOf(getInitialValue()));
         if(getGeneratorType() != null){
             Element generatorElement = valueElement.addElement("generator")
-                    .addAttribute("type", getGeneratorType().getName())
+                    .addAttribute("type", getGeneratorType().getType())
                     .addAttribute("seed",String.valueOf(getGeneratorSeed()));
             switch (getGeneratorType()){
                 case NORMAL_DISTRIBUTION:
@@ -176,16 +175,4 @@ public class HumiditySensorValue extends AbstractValue<Integer> implements HasNo
         this.step.set(step);
     }
 
-    @Override
-    public Generator getGeneratorType() {
-        return generatorType.get();
-    }
-
-    public ObjectProperty<Generator> generatorTypeProperty() {
-        return generatorType;
-    }
-
-    public void setGeneratorType(Generator generatorType) {
-        this.generatorType.set(generatorType);
-    }
 }

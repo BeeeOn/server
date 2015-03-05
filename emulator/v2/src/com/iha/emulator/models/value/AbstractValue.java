@@ -1,6 +1,5 @@
 package com.iha.emulator.models.value;
 
-import com.iha.emulator.models.value.implemented.HasGenerator;
 import javafx.beans.property.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,6 +26,7 @@ public abstract class AbstractValue<T> implements Value<T>,HasGenerator{
     private boolean storeHistory;
     private Random generator;
     private Long generatorSeed;
+    private ObjectProperty<Generator> generatorType;
 
     private ArrayList<T> valueHistory;
 
@@ -57,6 +57,7 @@ public abstract class AbstractValue<T> implements Value<T>,HasGenerator{
             this.stringValue = new SimpleStringProperty();
         }
         this.value = new SimpleObjectProperty<>();
+        this.generatorType = new SimpleObjectProperty<>(null);
     }
 
     public void storeValue(T value){
@@ -100,7 +101,7 @@ public abstract class AbstractValue<T> implements Value<T>,HasGenerator{
         this.stringValue.set(stringValue);
     }
 
-    public abstract void nextValue();
+    public abstract T nextValue();
 
     public Type getValueType() {
         return valueType;
@@ -188,5 +189,23 @@ public abstract class AbstractValue<T> implements Value<T>,HasGenerator{
 
     public void setValueHistory(ArrayList<T> valueHistory) {
         this.valueHistory = valueHistory;
+    }
+
+    public Logger getLogger(){
+        return logger;
+    }
+
+    @Override
+    public Generator getGeneratorType() {
+        return generatorType.get();
+    }
+
+    public ObjectProperty<Generator> generatorTypeProperty() {
+        return generatorType;
+    }
+
+    @Override
+    public void setGeneratorType(Generator generatorType) {
+        this.generatorType.set(generatorType);
     }
 }

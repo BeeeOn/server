@@ -1,16 +1,16 @@
 package com.iha.emulator.utilities;
 
 import com.iha.emulator.control.SensorController;
-import com.iha.emulator.ui.simulations.detailed.DetailedSimulationPresenter;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import org.apache.logging.log4j.LogManager;
@@ -32,8 +32,9 @@ public class AdapterLogger {
 
     private static final String TIME_PATTERN = "HH:mm:ss(SSS)";
     private static DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(TIME_PATTERN);
+    private static final int ERROR_TAB_INDEX = 2;
 
-    private static final int BUFFER_LINE_COUNT_MAX = 80;
+    private static final int BUFFER_LINE_COUNT_MAX = 200;
 
     public enum Type{
         FULL,
@@ -48,11 +49,13 @@ public class AdapterLogger {
 
     private Type actualType;
 
+    private TabPane tabPane = null;
+
     private Node adapterLogContainer;
     private Node toBeSentLogContainer;
     private Node errorLogContainer;
 
-    private TextFlow adapterLog;
+    private TextArea adapterLog;
     private TextFlow toBeSentLog;
     private TextFlow errorLog;
 
@@ -63,9 +66,7 @@ public class AdapterLogger {
     private boolean buffered = false;
     private File bufferFile;
     private BufferedWriter bufferWriter;
-    private int bufferMark;
-
-    private Property<StringBuilder> fullString;
+    private int bufferMark = 0;
 
     public AdapterLogger() {
         this.fullMessage = new SimpleBooleanProperty(true);
@@ -74,11 +75,31 @@ public class AdapterLogger {
         bindChangeListener();
     }
 
+    public AdapterLogger(TabPane tabPane){
+        this();
+        this.tabPane = tabPane;
+    }
+
     public synchronized void log(String message){
         if(adapterLog!= null){
             //don't wont to show empty messages
             if(message.equals("")) return;
+            String timeAndMessage = timeFormatter.format(LocalTime.now())  + " - " + message + "\n";
+            //write message to file
             if(buffered && bufferWriter != null){
+                try {
+                    bufferWriter.write(timeAndMessage);
+                    bufferWriter.flush();
+                    bufferMark++;
+                } catch (IOException e) {
+                    Utilities.showException(logger,"Cannot write line \"" + message + "\" to buffer file!",e,false,null);
+                }
+            }
+            //delete already buffered messages from log
+            checkIfRemove();
+            //write message to log
+            addTextToLog(timeAndMessage);
+            /*if(buffered && bufferWriter != null){
                 if(adapterLog.getChildren().size() > BUFFER_LINE_COUNT_MAX){
                     ObservableList<Node> lines = adapterLog.getChildren();
                     for(int i = 0; i < BUFFER_LINE_COUNT_MAX - 5;i++){
@@ -95,23 +116,45 @@ public class AdapterLogger {
             Platform.runLater(() -> {
                 adapterLog.getChildren().add(new Text(timeFormatter.format(LocalTime.now()) + " - " + message + "\n"));
                 ((ScrollPane)adapterLogContainer).setVvalue(1.0);
-            });
+            });*/
+        }else{
+            logger.error("No adapterLog");
         }
-
     }
 
-    public synchronized void sent(String message){
+    public synchronized void checkIfRemove(){
+        /*if(adapterLog.getChildren().size() > BUFFER_LINE_COUNT_MAX){
+            Platform.runLater(()->adapterLog.getChildren().remove(0, BUFFER_LINE_COUNT_MAX/2));
+        }*/
+        if(bufferMark >= BUFFER_LINE_COUNT_MAX){
+            Platform.runLater(() -> adapterLog.clear());
+            bufferMark = 0;
+        }
+    }
+
+    public synchronized void addTextToLog(String text){
+        Platform.runLater(()->{
+            adapterLog.appendText(text);
+            //adapterLog.getChildren().add(text);
+            //((ScrollPane)adapterLogContainer).setVvalue(1.0);
+        });
+    }
+
+    public synchronized Text sent(String message){
+        Text messageText = new Text(timeFormatter.format(LocalTime.now()) + " - " + message + "\n");
         Platform.runLater(() -> {
             if(toBeSentLog!= null){
-                toBeSentLog.getChildren().add(new Text(timeFormatter.format(LocalTime.now()) + " - " + message + "\n"));
+                toBeSentLog.getChildren().add(messageText);
             }
         });
+        return messageText;
     }
 
     public synchronized void error(String message){
         Platform.runLater(() -> {
             if(errorLog!= null){
                 errorLog.getChildren().add(new Text(timeFormatter.format(LocalTime.now()) + " - " + message + "\n"));
+                if(tabPane != null) tabPane.getSelectionModel().select(ERROR_TAB_INDEX);
             }
         });
     }
@@ -124,15 +167,39 @@ public class AdapterLogger {
         }
     }
 
-    public TextFlow addAdapterLogTo(Node container){
+    public synchronized void notifyDataSent(Text message){
+        if(toBeSentLog.getChildren().size() > 0){
+            Platform.runLater(() -> toBeSentLog.getChildren().remove(message));
+        }else{
+            logger.error("Trying to remove first toBeSent line, but there are no lines");
+        }
+    }
+
+    public void createLogs(){
+        if(adapterLog == null){
+            adapterLog = new TextArea();
+            adapterLog.setWrapText(true);
+        }
+        if(toBeSentLog == null){
+            toBeSentLog = new TextFlow();
+            stylize(toBeSentLog);
+        }
+        if(errorLog == null){
+            errorLog = new TextFlow();
+            stylize(errorLog);
+        }
+    }
+
+    public TextArea addAdapterLogTo(Node container){
         //create new textArea
         if(adapterLog == null){
-            adapterLog = new TextFlow();
-            stylize(adapterLog);
+            adapterLog = new TextArea();
+            adapterLog.setWrapText(true);
         }
-        ScrollPane paneContainer = (ScrollPane) container;
-        paneContainer.setContent(adapterLog);
-        paneContainer.setFitToWidth(true);
+        StackPane paneContainer = (StackPane) container;
+        paneContainer.getChildren().add(adapterLog);
+        //paneContainer.setContent(adapterLog);
+        //paneContainer.setFitToWidth(true);
         this.adapterLogContainer = container;
         return adapterLog;
     }
@@ -165,8 +232,11 @@ public class AdapterLogger {
 
     public void clearContainers(){
         if(this.adapterLogContainer != null){
-            ((ScrollPane)adapterLogContainer).setContent(null);
+            ((StackPane)adapterLogContainer).getChildren().clear();
         }
+        /*if(this.adapterLogContainer != null){
+            ((ScrollPane)adapterLogContainer).setContent(null);
+        }*/
         if(this.toBeSentLogContainer != null){
             ((ScrollPane)toBeSentLogContainer).setContent(null);
         }
@@ -177,23 +247,27 @@ public class AdapterLogger {
 
     public void delete(){
         closeBuffer();
-        adapterLog.getChildren().clear();
+        //adapterLog.getChildren().clear();
+        adapterLog.clear();
         toBeSentLog.getChildren().clear();
         errorLog.getChildren().clear();
     }
 
-    private void closeBuffer(){
+    public void closeBuffer(){
         if(this.bufferWriter != null){
             try {
                 bufferWriter.flush();
                 bufferWriter.close();
+                bufferFile.delete();
+                bufferFile = null;
+                bufferWriter = null;
             } catch (IOException e) {
-                DetailedSimulationPresenter.showException(logger,"Cannot close adapter logger buffer",e,false,null);
+                Utilities.showException(logger,"Cannot close adapter logger buffer",e,false,null);
             }
         }
     }
 
-    public void removeUnsentMessagesBySensor(SensorController sensorController){
+    public synchronized void removeUnsentMessagesBySensor(SensorController sensorController){
         if(toBeSentLog != null && toBeSentLog.getChildren().size() !=0){
             for (Iterator<Node> it = toBeSentLog.getChildren().iterator(); it.hasNext(); ) {
                 Node child = it.next();
@@ -214,17 +288,17 @@ public class AdapterLogger {
         this.shortMessage.addListener(new MessageTypeChangeListener(Type.SHORT));
     }
 
-    public void setBuffered(boolean buffered,String adapterId) throws IOException {
+    public void setBuffered(boolean buffered,String filename) throws IOException {
         this.buffered = buffered;
         if(buffered){
             if(bufferFile == null){
-                bufferFile = File.createTempFile("adapter_emu_" + adapterId ,".tmp");
+                bufferFile = File.createTempFile(filename ,".tmp");
                 logger.trace("Temp file location: " + bufferFile.getAbsolutePath());
                 bufferWriter = new BufferedWriter(new FileWriter(bufferFile));
-                logger.debug("Created adapter's log buffer file.");
+                logger.debug("Created  log buffer file.");
             }
         }
-        logger.debug("Adapter's log is now buffered");
+        logger.debug("Log is now buffered");
     }
 
     public static Type toType(String typeString){
@@ -251,7 +325,7 @@ public class AdapterLogger {
     }
 
     @SuppressWarnings("unused")
-    public TextFlow getAdapterLog() {
+    public TextArea getAdapterLog() {
         return adapterLog;
     }
 
@@ -300,6 +374,10 @@ public class AdapterLogger {
 
     public BooleanProperty shortMessageProperty() {
         return shortMessage;
+    }
+
+    public File getBufferFile(){
+        return bufferFile;
     }
 
     @SuppressWarnings("unused")

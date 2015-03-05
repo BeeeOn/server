@@ -5,9 +5,7 @@ import com.iha.emulator.models.value.HasLinearDistribution;
 import com.iha.emulator.models.value.HasNormalDistribution;
 import com.iha.emulator.utilities.Utilities;
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import org.dom4j.Element;
 
 import java.util.Random;
@@ -29,39 +27,37 @@ public class TemperatureSensorValue extends AbstractValue<Double> implements Has
     private DoubleProperty min;
     private DoubleProperty max;
     private DoubleProperty step;
-    private ObjectProperty<Generator> generatorType;
 
-    public TemperatureSensorValue(Type valueType,String name, String type,int offset, String unit, boolean generateValue, boolean storeHistory, Random generator, Long generatorSeed) {
-        super(valueType,name,type,offset,unit,generateValue,storeHistory,generator,generatorSeed);
+    public TemperatureSensorValue(String name, String type,int offset, String unit, boolean generateValue, boolean storeHistory, Random generator, Long generatorSeed) {
+        super(Type.SENSOR_TEMPERATURE,name,type,offset,unit,generateValue,storeHistory,generator,generatorSeed);
         this.dev = new SimpleDoubleProperty(DEFAULT_NORMAL_DEV);
         this.avg = new SimpleDoubleProperty(DEFAULT_NORMAL_AVG);
         this.min = new SimpleDoubleProperty(DEFAULT_MIN);
         this.max= new SimpleDoubleProperty(DEFAULT_MAX);
         this.step = new SimpleDoubleProperty(DEFAULT_LINEAR_STEP);
-        this.generatorType = new SimpleObjectProperty<>(null);
         setInitialValue(DEFAULT_VALUE);
         setValue(DEFAULT_VALUE);
     }
 
     @Override
-    public void nextValue() throws NullPointerException{
+    public Double nextValue() throws NullPointerException,IllegalArgumentException{
         //store value history if needed
         if(isStoreHistory()) storeValue(this.getValue());
-        //check for variables needed to generate new value
-        /*if(devProperty() == null || avgProperty() == null || maxProperty() == null || minProperty() == null){
-            throw new UnsupportedOperationException("Temperature generator doesn't have variables needed to generate new value (Dev,Avg,Max,Min)");
-        }*/
-        this.setValue(Utilities.normalDistribution(getGenerator(), 100, getDev(), getAvg(), getMax(), getMin()));
-    }
-
-    @Override
-    public void nextValue(Double value) {
-        //check value
-        if(value == null) throw new NullPointerException("Trying to set value to null");
-        //store value history if needed
-        if(isStoreHistory()) storeValue(this.getValue());
-        //set value
-        this.setValue(value);
+        /**/
+        if(getGeneratorType() == null || !isGenerateValue()) return null;
+        switch (getGeneratorType()){
+            case NORMAL_DISTRIBUTION:
+                if(devProperty() == null || avgProperty() == null || maxProperty() == null || minProperty() == null){
+                    throw new IllegalArgumentException("Temperature generator doesn't have variables needed to generate new value (Dev,Avg,Max,Min)");
+                }
+                return Utilities.normalDistribution(getGenerator(), 100, getDev(), getAvg(), getMax(), getMin());
+            case LINEAR_DISTRIBUTION:
+                if(stepProperty() == null || maxProperty() == null || minProperty() == null){
+                    throw new IllegalArgumentException("Temperature generator doesn't have variables needed to generate new value (Step,Max,Min)");
+                }
+                return Utilities.linearDistribution(getValue(),getStep(),getMax(),getMin());
+        }
+        return null;
     }
 
     @Override
@@ -89,7 +85,7 @@ public class TemperatureSensorValue extends AbstractValue<Double> implements Has
         valueElement.addElement("initial_value").addText(String.valueOf(getInitialValue()));
         if(getGeneratorType() != null){
             Element generatorElement = valueElement.addElement("generator")
-                    .addAttribute("type", getGeneratorType().getName())
+                    .addAttribute("type", getGeneratorType().getType())
                     .addAttribute("seed",String.valueOf(getGeneratorSeed()));
             switch (getGeneratorType()){
                 case NORMAL_DISTRIBUTION:
@@ -181,16 +177,4 @@ public class TemperatureSensorValue extends AbstractValue<Double> implements Has
         this.step.set(step);
     }
 
-    @Override
-    public Generator getGeneratorType() {
-        return generatorType.get();
-    }
-
-    public ObjectProperty<Generator> generatorTypeProperty(){
-        return generatorType;
-    }
-
-    public void setGeneratorType(Generator generatorType){
-        this.generatorType.set(generatorType);
-    }
 }

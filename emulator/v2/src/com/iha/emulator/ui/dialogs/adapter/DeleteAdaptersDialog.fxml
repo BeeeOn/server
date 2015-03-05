@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
 <?import javafx.geometry.*?>
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
-<VBox fx:id="view" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="287.0" prefWidth="317.0" styleClass="whiteBackground" stylesheets="@../../../resources/css/theme-light.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iha.emulator.ui.dialogs.adapter.DeleteAdaptersDialogView">
+<VBox fx:id="view" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="287.0" prefWidth="379.0" styleClass="whiteBackground" stylesheets="@../../../resources/css/theme-light.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iha.emulator.ui.dialogs.adapter.DeleteAdaptersDialogView">
    <children>
       <VBox prefHeight="249.0" prefWidth="317.0" VBox.vgrow="ALWAYS">
          <children>
@@ -28,8 +25,8 @@
             </Label>
             <GridPane prefHeight="81.0" prefWidth="317.0">
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="149.0" minWidth="10.0" prefWidth="36.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="283.0" minWidth="10.0" prefWidth="281.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="149.0" minWidth="10.0" prefWidth="41.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="338.0" minWidth="10.0" prefWidth="338.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -53,7 +50,7 @@
                         <Insets left="15.0" />
                      </GridPane.margin>
                   </CheckBox>
-                  <CheckBox fx:id="saveCheckBox" alignment="CENTER" mnemonicParsing="false" prefHeight="17.0" prefWidth="57.0" GridPane.rowIndex="1">
+                  <CheckBox fx:id="saveCheckBox" alignment="CENTER" mnemonicParsing="false" prefHeight="17.0" prefWidth="51.0" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets left="15.0" />
                      </GridPane.margin>
@@ -74,9 +71,9 @@
                   <Insets />
                </HBox.margin>
             </ProgressIndicator>
-            <Label fx:id="status" prefHeight="17.0" prefWidth="130.0" styleClass="sensorText" wrapText="true" />
-            <Button defaultButton="true" mnemonicParsing="false" onAction="#handleDelete" styleClass="showAdaptersDialogBtn" text="Delete" HBox.hgrow="NEVER" />
-            <Button fx:id="closeBtn" cancelButton="true" mnemonicParsing="false" onAction="#handleClose" styleClass="showAdaptersDialogBtn" text="Close" />
+            <Label fx:id="status" prefHeight="17.0" prefWidth="142.0" styleClass="sensorText" wrapText="true" />
+            <Button defaultButton="true" mnemonicParsing="false" onAction="#handleDelete" prefHeight="25.0" prefWidth="75.0" styleClass="showAdaptersDialogBtn" text="Delete" HBox.hgrow="NEVER" />
+            <Button fx:id="closeBtn" cancelButton="true" mnemonicParsing="false" onAction="#handleClose" prefHeight="25.0" prefWidth="75.0" styleClass="showAdaptersDialogBtn" text="Close" />
          </children>
          <VBox.margin>
             <Insets right="15.0" />

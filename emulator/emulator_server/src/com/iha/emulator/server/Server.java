@@ -23,6 +23,7 @@ public class Server implements Runnable{
     private ServerSocket    serverSocket;
     private Thread          runningThread;
     private boolean         running = true;
+    private DatabaseInfo dbInfo;
 
     public Server() {
 
@@ -54,7 +55,7 @@ public class Server implements Runnable{
                 throw new RuntimeException("Error accepting client connection", e);
             }
             logger.debug("Client connected -> " + clientSocket.getInetAddress().getHostAddress());
-            new Thread(new Worker(clientSocket, "Multithreaded Server")).start();
+            new Thread(new Worker(clientSocket, "Multithreaded Server",dbInfo)).start();
         }
         logger.info("Server stopped!");
     }
@@ -85,7 +86,7 @@ public class Server implements Runnable{
         InputStream input;
         properties = new Properties();
         if(!checkIfExists(file)){
-            throw new FileNotFoundException("Properties file \"server.properties\" NOT found!");
+            throw new FileNotFoundException("Properties file \""+file+"\" NOT found!");
         }
         input = new FileInputStream(file);
         properties.load(input);
@@ -109,6 +110,9 @@ public class Server implements Runnable{
         }
         logger.trace("Setting logger level");
         updateLoggerLevels(loggerLevel);
+        //reading db info
+        logger.trace("Reading database info from properties file");
+        dbInfo = new DatabaseInfo(properties.getProperty("dbHost"),properties.getProperty("dbPort"),properties.getProperty("dbUser"),properties.getProperty("dbPass"));
     }
 
     private void updateLoggerLevels(String levelString){

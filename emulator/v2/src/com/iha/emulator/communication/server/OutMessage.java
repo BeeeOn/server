@@ -2,6 +2,7 @@ package com.iha.emulator.communication.server;
 
 import com.iha.emulator.control.SensorController;
 import com.iha.emulator.models.Sensor;
+import javafx.scene.text.Text;
 import org.dom4j.Document;
 
 /**
@@ -22,17 +23,20 @@ public class OutMessage {
     Document socketMessage = null;
     /** Message type */
     Type type = null;
+
+    Text unsent = null;
     /**
      * Creates new message to be sent to server and written to log
      * @param message to be written to lgo
      * @param serverMessage message according to communication protocol to be sent to server
      * @param senderController that sent message
      */
-    public OutMessage(String message, Document serverMessage, SensorController senderController, Type type) {
+    public OutMessage(String message, Document serverMessage, SensorController senderController, Type type,Text unsent) {
         this.logMessage = message;
         this.socketMessage = serverMessage;
         this.senderController = senderController;
         this.type = type;
+        this.unsent = unsent;
     }
     /**
      * Appends string to message to be written to log
@@ -63,5 +67,9 @@ public class OutMessage {
 
     public Type getType(){
         return this.type;
+    }
+
+    public Text getUnsent() {
+        return unsent;
     }
 }

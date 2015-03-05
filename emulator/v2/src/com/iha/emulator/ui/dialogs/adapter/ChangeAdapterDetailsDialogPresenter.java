@@ -93,7 +93,7 @@ public class ChangeAdapterDetailsDialogPresenter implements Presenter,PanelPrese
                 };
             }
         });
-        //add change listener, if new item is selected in combo box, other fields are changed
+        //save change listener, if new item is selected in combo box, other fields are changed
         view.getAdapterProtocolComboBox().valueProperty().addListener((observable, oldValue, newValue) -> {
             selectedVersion = (Protocol.Version) newValue;
         });
@@ -136,7 +136,6 @@ public class ChangeAdapterDetailsDialogPresenter implements Presenter,PanelPrese
     }
 
     private boolean changeAdapter(){
-        boolean noChange = true;
         if(!adapterController.getAdapter().getName().equals(view.getAdapterNameLbl().getText())){
             logger.debug("Setting adapter name (old/new) -> " + adapterController.getAdapter().getName() + "/" + view.getAdapterNameLbl().getText());
             adapterController.getAdapter().setName(view.getAdapterNameLbl().getText());
@@ -153,11 +152,7 @@ public class ChangeAdapterDetailsDialogPresenter implements Presenter,PanelPrese
             adapterController.setSaved(false);
         }
         boolean yesSelected;
-        if(view.getAdapterYesRegisteredRadBtn().isSelected()) {
-            yesSelected = true;
-        }else {
-            yesSelected = false;
-        }
+        yesSelected = view.getAdapterYesRegisteredRadBtn().isSelected();
         if(adapterController.getAdapter().getRegistered() != yesSelected){
             logger.debug("Setting adapter registered (old/new) -> " + adapterController.getAdapter().getRegistered() + "/" + yesSelected);
             adapterController.getAdapter().setRegistered(yesSelected);

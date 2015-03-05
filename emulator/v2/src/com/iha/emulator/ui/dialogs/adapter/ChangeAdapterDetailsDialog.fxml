@@ -3,7 +3,7 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<VBox fx:id="view" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="267.0" prefWidth="348.0" styleClass="whiteBackground" stylesheets="@../../../resources/css/theme-light.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iha.emulator.ui.dialogs.adapter.ChangeAdapterDetailsDialogView">
+<VBox fx:id="view" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="267.0" prefWidth="382.0" styleClass="whiteBackground" stylesheets="@../../../resources/css/theme-light.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iha.emulator.ui.dialogs.adapter.ChangeAdapterDetailsDialogView">
    <children>
       <Label prefHeight="47.0" prefWidth="598.0" styleClass="detailedSimLbl" text="Change adapter details" VBox.vgrow="NEVER">
          <VBox.margin>
@@ -17,22 +17,22 @@
                   <Label prefHeight="17.0" prefWidth="524.0" styleClass="informationHeader" text="Adapter information" />
                   <GridPane prefHeight="163.0" styleClass="informationContainer">
                      <children>
-                        <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="107.0" styleClass="sensorText" text="Firmware:" GridPane.rowIndex="1">
+                        <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="139.0" styleClass="sensorText" text="Firmware:" GridPane.rowIndex="1">
                            <padding>
                               <Insets right="6.0" />
                            </padding>
                         </Label>
-                        <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="107.0" styleClass="sensorText" text="Registered:" GridPane.rowIndex="2">
+                        <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="139.0" styleClass="sensorText" text="Registered:" GridPane.rowIndex="2">
                            <padding>
                               <Insets right="6.0" />
                            </padding>
                         </Label>
-                        <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="107.0" styleClass="sensorText" text="Name:">
+                        <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="139.0" styleClass="sensorText" text="Name:">
                            <padding>
                               <Insets right="6.0" />
                            </padding>
                         </Label>
-                        <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="107.0" styleClass="sensorText" text="Comm.protocol:" GridPane.rowIndex="3">
+                        <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="139.0" styleClass="sensorText" text="Comm.protocol:" GridPane.rowIndex="3">
                            <padding>
                               <Insets right="6.0" />
                            </padding>
@@ -65,8 +65,8 @@
                            </tooltip></ComboBox>
                      </children>
                      <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="300.0" minWidth="0.0" prefWidth="123.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="464.0" minWidth="10.0" prefWidth="57.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="300.0" minWidth="0.0" prefWidth="156.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="464.0" minWidth="10.0" prefWidth="38.0" />
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="464.0" minWidth="10.0" prefWidth="112.0" />
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="458.0" minWidth="2.0" prefWidth="27.0" />
                      </columnConstraints>
@@ -85,8 +85,8 @@
          </children></StackPane>
       <HBox alignment="CENTER_RIGHT" prefHeight="39.0" prefWidth="600.0" spacing="10.0" VBox.vgrow="NEVER">
          <children>
-            <Button fx:id="changeBtn" mnemonicParsing="false" onAction="#handleChange" styleClass="addAdapterDialogBtn" text="Change" />
-            <Button fx:id="closeBtn" mnemonicParsing="false" onAction="#handleClose" styleClass="addAdapterDialogBtn" text="Close" />
+            <Button fx:id="changeBtn" mnemonicParsing="false" onAction="#handleChange" prefHeight="25.0" prefWidth="75.0" styleClass="addAdapterDialogBtn" text="Change" />
+            <Button fx:id="closeBtn" mnemonicParsing="false" onAction="#handleClose" prefHeight="25.0" prefWidth="75.0" styleClass="addAdapterDialogBtn" text="Close" />
          </children>
          <padding>
             <Insets right="15.0" />

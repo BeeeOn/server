@@ -414,11 +414,7 @@
                                                 <Insets />
                                              </VBox.margin>
                                           </Separator>
-                                          <ScrollPane fx:id="adapterLogContainer" prefHeight="200.0" prefWidth="200.0" styleClass="logTextAreaContainer" VBox.vgrow="ALWAYS">
-                                             <padding>
-                                                <Insets left="5.0" right="5.0" />
-                                             </padding>
-                                          </ScrollPane>
+                                          <StackPane fx:id="adapterLogContainer" prefHeight="150.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                                        </children>
                                     </VBox>
                                  </content>

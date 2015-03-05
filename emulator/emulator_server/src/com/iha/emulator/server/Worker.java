@@ -6,7 +6,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dom4j.*;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 
 /**
@@ -20,11 +23,13 @@ public class Worker implements Runnable{
     private Socket clientSocket = null;
     private String serverText = null;
     private Database database = null;
+    private DatabaseInfo databaseInfo;
 
-    public Worker(Socket clientSocket,String serverText) {
+    public Worker(Socket clientSocket,String serverText,DatabaseInfo dbInfo) {
         this.clientSocket = clientSocket;
         this.serverText = serverText;
         this.database = new Database();
+        this.databaseInfo = dbInfo;
     }
 
     @Override
@@ -79,8 +84,10 @@ public class Worker implements Runnable{
         String databaseName = doc.getRootElement().attributeValue("db");
         //extract task element
         Element taskElement =   doc.getRootElement().element("task");
+        DatabaseInfo tmpDbInfo = new DatabaseInfo(databaseInfo.getHost(),databaseInfo.getPort(),databaseInfo.getUser(),databaseInfo.getPass());
+        tmpDbInfo.setDbName(databaseName);
         //determine task
-        Task task = TaskParser.parseTask(databaseName,taskElement);
+        Task task = TaskParser.parseTask(tmpDbInfo,taskElement);
         //determine task and resolve it
         logger.trace("Resolving task");
         if(task != null){
