@@ -54,8 +54,9 @@ public class PerformanceSimulationView implements Initializable,PerformanceSimul
     @FXML private Label memCheckStatusLbl;
     //endregion
     @FXML private TextArea appLog;
-    //region SERVER DETAILS
+    //region DETAILS
     @FXML private FlowPane serverDetailsContainer;
+    @FXML private FlowPane taskDetailsContainer;
     //endregion
     //region ADAPTER
     @FXML private StackPane adapterLogContainer;
@@ -75,7 +76,6 @@ public class PerformanceSimulationView implements Initializable,PerformanceSimul
     @FXML private TableColumn idColumn;
     @FXML private TableColumn stateColumn;
     @FXML private TableColumn serverColumn;
-    @FXML private TableColumn adaptersColumn;
     //endregion
 
     public PerformanceSimulationView(){
@@ -208,6 +208,16 @@ public class PerformanceSimulationView implements Initializable,PerformanceSimul
     }
 
     @Override
+    public void addTaskDetailsView(Node taskDetailsView) {
+        taskDetailsContainer.getChildren().add(taskDetailsView);
+    }
+
+    @Override
+    public FlowPane getTaskDetailsContainer() {
+        return taskDetailsContainer;
+    }
+
+    @Override
     public Button getSaveAllBtn() {
         return saveAllTBtn;
     }
@@ -320,11 +330,6 @@ public class PerformanceSimulationView implements Initializable,PerformanceSimul
     @Override
     public Button getNewTaskTBtn() {
         return newTaskTBtn;
-    }
-
-    @Override
-    public TableColumn getAdaptersColumn() {
-        return adaptersColumn;
     }
 
     @Override

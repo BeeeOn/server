@@ -38,6 +38,7 @@ public class AdapterLogger {
     private static final String DATE_TIME_PATTERN = "dd-MM-yyyy_HH-mm-ss";
     private static DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(TIME_PATTERN);
     private static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
+    private static final int TO_BE_SENT_TAB_INDEX = 1;
     private static final int ERROR_TAB_INDEX = 2;
 
     private static final int BUFFER_LINE_COUNT_MAX = 200;
@@ -64,6 +65,9 @@ public class AdapterLogger {
     private TextArea adapterLog;
     private TextFlow toBeSentLog;
     private TextFlow errorLog;
+
+    private MessageTracker messageTracker = new MessageTracker(false);
+    private boolean showToBeSent = true;
 
     private BooleanProperty fullMessage;
     private BooleanProperty partialMessage;
@@ -98,7 +102,6 @@ public class AdapterLogger {
             //write message to file
             if(buffered && bufferWriter != null){
                 try {
-
                     bufferWriter.write(timeAndMessage);
                     bufferWriter.flush();
                     bufferMark++;
@@ -129,6 +132,8 @@ public class AdapterLogger {
     }
 
     public synchronized Text sent(String message){
+        Platform.runLater(() -> getMessageTracker().incrementWaitingCounter());
+        if(!isShowToBeSent()) return null;
         Text messageText = new Text(timeFormatter.format(LocalTime.now()) + " - " + message + "\n");
         Platform.runLater(() -> {
             if(toBeSentLog!= null){
@@ -138,17 +143,22 @@ public class AdapterLogger {
         return messageText;
     }
 
-    public synchronized void error(String message){
+    public synchronized void error(String message,boolean terminate){
         Platform.runLater(() -> {
             if(errorLog!= null){
                 errorLog.getChildren().add(new Text(timeFormatter.format(LocalTime.now()) + " - " + message + "\n"));
                 if(tabPane != null) tabPane.getSelectionModel().select(ERROR_TAB_INDEX);
-                if(errorHandler != null) errorHandler.fireErrorEvent();
+                if(errorHandler != null&& terminate && !message.contains("Warning:")) errorHandler.fireErrorEvent();
             }
         });
     }
 
     public synchronized void notifyDataSent(){
+        Platform.runLater(() -> {
+            getMessageTracker().decrementWaitingCounter();
+            getMessageTracker().incrementSentCounter();
+        });
+        if(!isShowToBeSent()) return;
         if(toBeSentLog.getChildren().size() > 0){
             Platform.runLater(() -> toBeSentLog.getChildren().remove(0));
         }else{
@@ -157,6 +167,11 @@ public class AdapterLogger {
     }
 
     public synchronized void notifyDataSent(Text message){
+        Platform.runLater(() ->{
+            getMessageTracker().decrementWaitingCounter();
+            getMessageTracker().incrementSentCounter();
+        });
+        if(!isShowToBeSent()) return;
         processRemoveLaterMessages();
         if(toBeSentLog.getChildren().size() > 0){
             Platform.runLater(() -> toBeSentLog.getChildren().remove(message));
@@ -280,8 +295,15 @@ public class AdapterLogger {
 
     public synchronized void moveLogsToFile() throws IOException {
         if(bufferWriter == null) return;
+        logSentMessagesCount(bufferWriter);
         moveToBeSentToFile(bufferWriter);
         moveErrorToFile(bufferWriter);
+    }
+
+    public synchronized void logSentMessagesCount(BufferedWriter writer) throws IOException {
+        if(getMessageTracker().isEnabled()){
+            writer.write("Number of sent messages: " + getMessageTracker().getSentMessageCounter());
+        }
     }
 
     public synchronized void moveToBeSentToFile(BufferedWriter writer) throws IOException {
@@ -289,9 +311,13 @@ public class AdapterLogger {
         writer.newLine();
         writer.newLine();
         writer.write("== TO BE SENT LOG =============================================\n");
-        for(Node node : toBeSentLog.getChildren()){
-            Text text = (Text) node;
-            writer.write(text.getText());
+        if(isShowToBeSent()){
+            for(Node node : toBeSentLog.getChildren()){
+                Text text = (Text) node;
+                writer.write(text.getText());
+            }
+        }else if(getMessageTracker().isEnabled()){
+            writer.write("Number of waiting messages: " + getMessageTracker().getWaitingMessageCounter());
         }
         writer.newLine();
         writer.newLine();
@@ -453,6 +479,19 @@ public class AdapterLogger {
 
     public ErrorHandler getErrorHandler() {
         return errorHandler;
+    }
+
+    public MessageTracker getMessageTracker() {
+        return messageTracker;
+    }
+
+    public boolean isShowToBeSent() {
+        return showToBeSent;
+    }
+
+    public void setShowToBeSent(boolean showToBeSent) {
+        this.showToBeSent = showToBeSent;
+        if(tabPane != null) tabPane.getTabs().get(TO_BE_SENT_TAB_INDEX).setDisable(!showToBeSent);
     }
 
     private class MessageTypeChangeListener implements ChangeListener<Boolean> {

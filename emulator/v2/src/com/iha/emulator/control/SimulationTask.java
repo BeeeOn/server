@@ -191,6 +191,7 @@ public class SimulationTask {
                             }
                         });
                         progress.set(1);
+                        getAdapterControllers().forEach(AdapterController::clearScheduler);
                         updateMessage("Deleting adapters from database");
                         logger.trace("Deleting adapters from database");
                         removeAdaptersFromDb();
@@ -257,6 +258,7 @@ public class SimulationTask {
                         }
                         updateMessage("Deleting responses");
                         clearResponseTrackers();
+                        clearMessageTracker();
                         updateMessage("Unregister adapters");
                         getAdapterControllers().forEach(a->{
                             a.setRegisterMessageSent(false);
@@ -282,12 +284,34 @@ public class SimulationTask {
     public void criticalStop(){
         if(getSimulationState() == State.ERROR) return;
         setSimulationState(State.ERROR);
-        stop();
+        //stop();
+        //disable adapters
+        getAdapterControllers().forEach(a->{
+            a.disable();
+            a.clearScheduler();
+        });
+        getLog().closeBuffer();
+        Task<Object> worker = new Task<Object>() {
+            @Override
+            protected Object call() throws Exception {
+                updateProgress(10,100);
+                updateMessage("Removing adapters");
+                removeAdaptersFromDb();
+                updateProgress(100,100);
+                return null;
+            }
+        };
+        Utilities.showLoadingDialog(worker,"Removing adapters from database");
     }
 
     private void clearResponseTrackers(){
         if(getAdapterControllers() == null) return;
         getAdapterControllers().forEach(AdapterController::clearResponseTracker);
+    }
+
+    private void clearMessageTracker(){
+        if(getLog() == null) return;
+        Platform.runLater(()->getLog().getMessageTracker().clearCounters());
     }
 
     private void removeAdaptersFromDb(){
@@ -412,8 +436,8 @@ public class SimulationTask {
             newAdapterController.bindRegisterMessage(newAdapterController);
             //save it to list
             adapterControllersList.add(newAdapterController);
-            //create sensors for new adapter
-            sensorsTotal = sensorsTotal + createSensors(newAdapterController);
+            //create sensors for new adapter and save devices count
+            getTaskParameters().setSensorsCount(getTaskParameters().getSensorsCount() + createSensors(newAdapterController));
             //set loading dialog progress
             progress.set(progress.get()+oneAdapterProgress);
         }

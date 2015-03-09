@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <?import java.lang.*?>
-<VBox fx:id="view" prefHeight="673.0" prefWidth="1131.0" stylesheets="@../../../resources/css/theme-light.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iha.emulator.ui.simulations.performance.PerformanceSimulationView">
+<VBox fx:id="view" prefHeight="673.0" prefWidth="1007.0" stylesheets="@../../../resources/css/theme-light.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iha.emulator.ui.simulations.performance.PerformanceSimulationView">
   <children>
       <HBox prefHeight="43.0" prefWidth="1110.0" styleClass="whiteBackground" VBox.vgrow="NEVER">
          <children>
@@ -187,9 +187,9 @@
             <Label prefHeight="43.0" prefWidth="350.0" styleClass="detailedSimLbl" text="Performance Simulation" HBox.hgrow="NEVER" />
          </children>
       </HBox>
-      <HBox prefHeight="421.0" prefWidth="1066.0" styleClass="whiteBackground" VBox.vgrow="ALWAYS">
+      <HBox prefHeight="578.0" prefWidth="1092.0" styleClass="whiteBackground" VBox.vgrow="ALWAYS">
          <children>
-            <VBox prefHeight="547.0" prefWidth="250.0" styleClass="leftPanelPerformance" HBox.hgrow="ALWAYS">
+            <VBox minWidth="228.0" prefHeight="568.0" prefWidth="228.0" styleClass="leftPanelPerformance" HBox.hgrow="ALWAYS">
                <children>
                   <Label styleClass="sectionName" text="Tasks" VBox.vgrow="NEVER">
                      <VBox.margin>
@@ -201,35 +201,58 @@
                         <CheckBox mnemonicParsing="false" text="auto process queue" />
                      </children>
                   </HBox>
-                  <TableView fx:id="tasksTable" prefHeight="200.0" prefWidth="348.0">
+                  <TableView fx:id="tasksTable" minWidth="290.0" prefHeight="200.0" prefWidth="290.0" styleClass="tasksTable">
                     <columns>
                       <TableColumn fx:id="enabledColumn" editable="false" prefWidth="30.0" sortable="false" />
                         <TableColumn fx:id="idColumn" editable="false" prefWidth="27.0" sortable="false" text="Id" />
-                      <TableColumn fx:id="stateColumn" editable="false" prefWidth="156.0" sortable="false" text="State" />
-                        <TableColumn fx:id="serverColumn" editable="false" prefWidth="97.0" sortable="false" text="Server" />
-                        <TableColumn fx:id="adaptersColumn" editable="false" prefWidth="87.0" sortable="false" text="Adapters" />
-                        <TableColumn editable="false" prefWidth="65.0" sortable="false" text="Actions" />
+                      <TableColumn fx:id="stateColumn" editable="false" prefWidth="97.0" sortable="false" text="State" />
+                        <TableColumn fx:id="serverColumn" editable="false" prefWidth="142.0" sortable="false" text="Information" />
+                        <TableColumn editable="false" prefWidth="79.0" sortable="false" text="Actions" />
                     </columns>
                   </TableView>
-                  <BorderPane prefHeight="48.0" prefWidth="244.0" styleClass="serverDetailsLblContainer" VBox.vgrow="NEVER">
-                     <left>
-                        <Label prefHeight="24.0" prefWidth="178.0" styleClass="sectionName" text="Server details" BorderPane.alignment="CENTER_LEFT" />
-                     </left>
-                  </BorderPane>
-                  <FlowPane fx:id="serverDetailsContainer" alignment="CENTER" columnHalignment="CENTER" maxHeight="119.0" maxWidth="250.0" prefHeight="119.0" prefWidth="250.0" styleClass="serverDetailsContainer" VBox.vgrow="NEVER" />
+                  <HBox prefHeight="207.0" prefWidth="380.0" VBox.vgrow="NEVER">
+                     <children>
+                        <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="NEVER">
+                           <children>
+                              <BorderPane prefHeight="48.0" prefWidth="244.0" styleClass="serverDetailsLblContainer">
+                                 <left>
+                                    <Label prefHeight="24.0" prefWidth="178.0" styleClass="sectionName" text="Server details" BorderPane.alignment="CENTER_LEFT" />
+                                 </left>
+                              </BorderPane>
+                              <FlowPane fx:id="serverDetailsContainer" alignment="TOP_CENTER" columnHalignment="CENTER" maxHeight="160.0" maxWidth="250.0" minHeight="160.0" minWidth="250.0" prefHeight="160.0" prefWidth="250.0" rowValignment="TOP" styleClass="serverDetailsPerformanceContainer" />
+                           </children>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="NEVER">
+                           <children>
+                              <BorderPane prefHeight="48.0" prefWidth="244.0" styleClass="serverDetailsLblContainer">
+                                 <left>
+                                    <Label prefHeight="24.0" prefWidth="178.0" styleClass="sectionName" text="Task details" BorderPane.alignment="CENTER_LEFT" />
+                                 </left>
+                              </BorderPane>
+                              <FlowPane fx:id="taskDetailsContainer" alignment="CENTER" columnHalignment="CENTER" maxHeight="160.0" maxWidth="250.0" minHeight="160.0" minWidth="250.0" prefHeight="160.0" prefWidth="250.0" rowValignment="TOP" styleClass="taskDetailsContainer" />
+                           </children>
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </VBox>
+                     </children>
+                  </HBox>
                </children>
                <HBox.margin>
                   <Insets bottom="10.0" left="20.0" right="20.0" />
                </HBox.margin>
             </VBox>
-            <VBox HBox.hgrow="ALWAYS">
+            <VBox prefHeight="568.0" prefWidth="443.0" HBox.hgrow="ALWAYS">
                <children>
                   <Label styleClass="sectionName" text="Task logs">
                      <VBox.margin>
                         <Insets bottom="5.0" top="5.0" />
                      </VBox.margin>
                   </Label>
-                  <TabPane fx:id="logTabPane" minWidth="550.0" prefHeight="260.0" prefWidth="550.0" VBox.vgrow="ALWAYS">
+                  <TabPane fx:id="logTabPane" minWidth="500.0" prefHeight="260.0" prefWidth="500.0" VBox.vgrow="ALWAYS">
                     <tabs>
                       <Tab closable="false" text="Adapter Log">
                            <content>

@@ -15,6 +15,7 @@ public class TaskParameters {
     private IntegerProperty startId;
     private IntegerProperty sensorsCountMin;
     private IntegerProperty sensorsCountMax;
+    private IntegerProperty sensorsCount;
     private IntegerProperty refreshTimeMin;
     private IntegerProperty refreshTimeMax;
     private Long sensorsCountGeneratorSeed;
@@ -30,6 +31,7 @@ public class TaskParameters {
         this.startId = new SimpleIntegerProperty(0);
         this.sensorsCountMin = new SimpleIntegerProperty(0);
         this.sensorsCountMax = new SimpleIntegerProperty(0);
+        this.sensorsCount = new SimpleIntegerProperty(0);
         this.refreshTimeMin = new SimpleIntegerProperty(0);
         this.refreshTimeMax = new SimpleIntegerProperty(0);
         this.sensorsCountGeneratorSeed = System.currentTimeMillis();
@@ -175,5 +177,17 @@ public class TaskParameters {
 
     public void setSaveDir(String saveDir) {
         this.saveDir.set(saveDir);
+    }
+
+    public int getSensorsCount() {
+        return sensorsCount.get();
+    }
+
+    public IntegerProperty sensorsCountProperty() {
+        return sensorsCount;
+    }
+
+    public void setSensorsCount(int sensorsCount) {
+        this.sensorsCount.set(sensorsCount);
     }
 }

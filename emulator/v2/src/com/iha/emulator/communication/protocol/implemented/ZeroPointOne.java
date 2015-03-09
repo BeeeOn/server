@@ -138,7 +138,7 @@ public class ZeroPointOne extends AbstractProtocol {
             case "set":
                 return Integer.valueOf(rootElement.attributeValue("debug_adapter_id"));
             case "listen":
-                return Integer.valueOf(rootElement.attribute("adaptr_id").getValue());
+                return Integer.valueOf(rootElement.attribute("adapter_id").getValue());
         }
         return 0;
     }

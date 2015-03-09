@@ -17,7 +17,7 @@
                <HBox.margin>
                   <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                </HBox.margin></Button>
-            <Button mnemonicParsing="false" onAction="#handlePerformanceSimulation" styleClass="chooserBtn" text="Performance Simulation" wrapText="true">
+            <Button disable="true" mnemonicParsing="false" onAction="#handlePerformanceSimulation" styleClass="chooserBtn" text="Performance Simulation" wrapText="true">
                <HBox.margin>
                   <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                </HBox.margin></Button>

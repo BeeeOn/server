@@ -32,13 +32,12 @@ public class ServerController {
         setModel(model);
     }
 
-    public String sendMessage(Document message,ResponseTracker responseTracker,OutMessage.Type type) throws WrongResponseException, IOException, SocketTimeoutException {
-        SocketChannel socketChannel = null;
+    public String sendMessage(SocketChannel socketChannel,Document message,ResponseTracker responseTracker,OutMessage.Type type) throws WrongResponseException, IOException, SocketTimeoutException {
         ByteBuffer messageBuffer = ByteBuffer.allocate(MESSAGE_BUFFER_SIZE);
         try{
-            logger.trace("Sending message: " + type.toString());
-             socketChannel = SocketChannel.open();
+            socketChannel = SocketChannel.open();
             socketChannel.socket().setSoTimeout(SOCKET_TIMEOUT);
+            logger.trace("Sending message: " + type.toString());
             if(!socketChannel.connect(new InetSocketAddress(getModel().getIp(),getModel().getPort()))){
                 throw new SocketTimeoutException("Unsuccessful connect!");
             }

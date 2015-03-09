@@ -67,7 +67,12 @@ public class SensorPanelPresenter implements Presenter,PanelPresenter{
     }
 
     public void connection(){
-        controller.getModel().setStatus(!controller.getModel().getStatus());
+        if(controller.getModel().getStatus()){
+            controller.disable();
+        }else{
+            controller.enable();
+        }
+        //controller.getModel().setStatus(!controller.getModel().getStatus());
     }
 
     public void settings(){

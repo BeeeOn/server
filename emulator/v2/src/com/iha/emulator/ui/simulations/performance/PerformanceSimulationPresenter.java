@@ -6,14 +6,11 @@ import com.iha.emulator.control.SimulationTask;
 import com.iha.emulator.control.ValueParameters;
 import com.iha.emulator.models.value.Value;
 import com.iha.emulator.models.value.ValueFactory;
-import com.iha.emulator.models.value.implemented.EmissionsSensorValue;
-import com.iha.emulator.models.value.implemented.HumiditySensorValue;
-import com.iha.emulator.models.value.implemented.NoiseSensorValue;
-import com.iha.emulator.models.value.implemented.TemperatureSensorValue;
 import com.iha.emulator.ui.Presenter;
 import com.iha.emulator.ui.dialogs.log.ShowFullLogPresenter;
 import com.iha.emulator.ui.panels.server.details.ServerDetailsPresenter;
 import com.iha.emulator.ui.panels.task.*;
+import com.iha.emulator.ui.panels.task.details.TaskDetailsPresenter;
 import com.iha.emulator.utilities.AdapterLogger;
 import com.iha.emulator.utilities.MemoryChecker;
 import com.iha.emulator.utilities.TextAreaAppender;
@@ -31,6 +28,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.FlowPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -60,6 +58,7 @@ public class PerformanceSimulationPresenter implements Presenter{
 
     //region PRESENTERS
     private ServerDetailsPresenter serverDetailsPresenter;
+    private TaskDetailsPresenter taskDetailsPresenter;
     //endregion
     private ServerListener serverListener;
     //region TASKS
@@ -79,8 +78,10 @@ public class PerformanceSimulationPresenter implements Presenter{
         public Label getMemCheckStatusLabel();
         public TextArea getApplicationLogTextArea();
         public void addServerDetailsView(Node serverDetailsView);
+        public void addTaskDetailsView(Node taskDetailsView);
         public Button getSaveAllBtn();
         public Button getPrintBtn();
+        public FlowPane getTaskDetailsContainer();
         public Node getAdapterLogContainer();
         public Node getToBeSentLogContainer();
         public Node getErrorLogContainer();
@@ -103,7 +104,6 @@ public class PerformanceSimulationPresenter implements Presenter{
         public Button getDeleteTaskTBtn();
         public Button getNewTaskTBtn();
         public TableColumn getIdColumn();
-        public TableColumn getAdaptersColumn();
         public TableColumn getServerColumn();
         public TableColumn getStateColumn();
         public TableColumn getEnabledColumn();
@@ -191,13 +191,13 @@ public class PerformanceSimulationPresenter implements Presenter{
                     //create task parameters
                     logger.trace("Creating new task -> Creating parameters");
                     task.createTaskParameters(
-                            1, //adapters count
+                            200, //adapters count
                             Protocol.Version.ZERO_POINT_ONE, //protocol version
                             1000, //starting adapter id
-                            4, // sensors count minimum
-                            6, //sensors count maximum
+                            1, // sensors count minimum
+                            1, //sensors count maximum
                             5, //refresh time minimum
-                            10, //refresh time maximum
+                            5, //refresh time maximum
                             null // default save dir
                     );
                     //update progress
@@ -212,6 +212,10 @@ public class PerformanceSimulationPresenter implements Presenter{
                     logger.trace("Creating new task -> Creating logs");
                     task.createLog(view.getLogTabPane());
                     task.getLog().createLogs();
+                    //set message tracking (waiting and sent counter)
+                    task.getLog().getMessageTracker().setEnabled(true);
+                    //DON'T show to be sent messages
+                    task.getLog().setShowToBeSent(false);
                     //set log to buffer
                     logger.trace("Creating new task -> Setting logs to buffer");
                     try {
@@ -267,6 +271,7 @@ public class PerformanceSimulationPresenter implements Presenter{
         setCurrentTask(newTask);
         //show task's server information
         serverDetailsPresenter.addModel(newTask.getServerController().getModel());
+        taskDetailsPresenter.addModel(newTask);
         //bind control buttons to new task
         bindTaskControlBtns();
         //bind log areas to new task
@@ -349,9 +354,6 @@ public class PerformanceSimulationPresenter implements Presenter{
         //server column
         view.getServerColumn().setCellValueFactory(new SimulationTaskFactory());
         view.getServerColumn().setCellFactory(param -> new SimulationTaskServerCellFactory());
-        //adapters column
-        view.getAdaptersColumn().setCellValueFactory(new SimulationTaskFactory());
-        view.getAdaptersColumn().setCellFactory(param -> new SimulationTaskAdaptersCellFactory());
         //set content for tasks table
         view.getTasksTable().setItems(getTasksList());
         //set click action
@@ -413,23 +415,39 @@ public class PerformanceSimulationPresenter implements Presenter{
     }
 
     private ObservableList<Value> generateEnabledValues(ObservableList<Value> tmpValuesList){
-        Value tempValue = ValueFactory.buildValue(Value.Type.SENSOR_TEMPERATURE);
-        tempValue.setGenerateValue(true);
-        ((TemperatureSensorValue) tempValue).setGeneratorType(Value.Generator.NORMAL_DISTRIBUTION);
+        Value emValue = ValueFactory.buildValue(Value.Type.SENSOR_EMISSIONS);
+        emValue.setGenerateValue(false);
+        //((EmissionsSensorValue) emValue).setGeneratorType(Value.Generator.NORMAL_DISTRIBUTION);
 
         Value humValue = ValueFactory.buildValue(Value.Type.SENSOR_HUMIDITY);
-        humValue.setGenerateValue(true);
-        ((HumiditySensorValue) humValue).setGeneratorType(Value.Generator.NORMAL_DISTRIBUTION);
+        humValue.setGenerateValue(false);
+        //((HumiditySensorValue) humValue).setGeneratorType(Value.Generator.NORMAL_DISTRIBUTION);
 
-        Value emValue = ValueFactory.buildValue(Value.Type.SENSOR_EMISSIONS);
-        emValue.setGenerateValue(true);
-        ((EmissionsSensorValue) emValue).setGeneratorType(Value.Generator.NORMAL_DISTRIBUTION);
+        Value lightValue = ValueFactory.buildValue(Value.Type.SENSOR_LIGHT);
+        lightValue.setGenerateValue(false);
+        //((LightSensorValue) lightValue).setGeneratorType(Value.Generator.NORMAL_DISTRIBUTION);
 
         Value noiseValue = ValueFactory.buildValue(Value.Type.SENSOR_NOISE);
-        noiseValue.setGenerateValue(true);
-        ((NoiseSensorValue) noiseValue).setGeneratorType(Value.Generator.NORMAL_DISTRIBUTION);
+        noiseValue.setGenerateValue(false);
+        //((NoiseSensorValue) noiseValue).setGeneratorType(Value.Generator.NORMAL_DISTRIBUTION);
 
-        tmpValuesList.addAll(tempValue,humValue,emValue,noiseValue);
+        Value onOffValue = ValueFactory.buildValue(Value.Type.SENSOR_ON_OFF);
+        onOffValue.setGenerateValue(false);
+        //((OnOffSensorValue) onOffValue).setGeneratorType(Value.Generator.BOOLEAN_RANDOM);
+
+        Value openCloseValue = ValueFactory.buildValue(Value.Type.SENSOR_OPEN_CLOSED);
+        openCloseValue.setGenerateValue(false);
+        //((OpenClosedSensorValue) openCloseValue).setGeneratorType(Value.Generator.BOOLEAN_RANDOM);
+
+        Value pressureValue = ValueFactory.buildValue(Value.Type.SENSOR_PRESSURE);
+        pressureValue.setGenerateValue(false);
+        //((PressureSensorValue) pressureValue).setGeneratorType(Value.Generator.NORMAL_DISTRIBUTION);
+
+        Value tempValue = ValueFactory.buildValue(Value.Type.SENSOR_TEMPERATURE);
+        tempValue.setGenerateValue(false);
+        //((TemperatureSensorValue) tempValue).setGeneratorType(Value.Generator.NORMAL_DISTRIBUTION);
+
+        tmpValuesList.addAll(tempValue,humValue,emValue,noiseValue,lightValue,onOffValue,openCloseValue,pressureValue);
         return tmpValuesList;
     }
 
@@ -644,6 +662,12 @@ public class PerformanceSimulationPresenter implements Presenter{
         try {
             serverDetailsPresenter = new ServerDetailsPresenter();
             view.addServerDetailsView(serverDetailsPresenter.loadView());
+        } catch (IOException e) {
+            Utilities.showException(logger, "Cannot load Server Details", e, true, event -> quit());
+        }
+        try {
+            taskDetailsPresenter = new TaskDetailsPresenter();
+            view.addTaskDetailsView(taskDetailsPresenter.loadView());
         } catch (IOException e) {
             Utilities.showException(logger, "Cannot load Server Details", e, true, event -> quit());
         }

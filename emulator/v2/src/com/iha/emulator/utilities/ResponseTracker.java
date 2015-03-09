@@ -97,7 +97,6 @@ public class ResponseTracker {
 
     public void delete(){
         responses.clear();
-        responses = null;
     }
 
 }

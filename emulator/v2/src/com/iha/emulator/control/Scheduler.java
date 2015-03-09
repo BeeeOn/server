@@ -11,6 +11,8 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 
 import java.io.IOException;
+import java.nio.channels.SocketChannel;
+
 public class Scheduler extends Thread {
 
     private static final int SLEEP_INTERVAL = 300;
@@ -20,10 +22,11 @@ public class Scheduler extends Thread {
     private boolean continueProcessing = true;
 
     private ResponseTracker responseTracker  = new ResponseTracker(false);
+    private SocketChannel socketChannel;
 
     private AdapterController adapterController;
 
-    public Scheduler(AdapterController adapterController) {
+    public Scheduler(AdapterController adapterController){
         this.adapterController = adapterController;
         setName("Scheduler/" + adapterController.getAdapter().getId());
     }
@@ -35,7 +38,7 @@ public class Scheduler extends Thread {
                 if(message != null){
                     logger.trace("Scheduler processing message: " + message.getType().toString());
                     try {
-                        String inMessageString = adapterController.getServerController().sendMessage(message.getSocketMessage(),responseTracker,message.getType());
+                        String inMessageString = adapterController.getServerController().sendMessage(socketChannel,message.getSocketMessage(),responseTracker,message.getType());
                         switch (message.getType()){
                             case SENSOR_MESSAGE:
                                 logger.trace("Message to server: \n" + message.getSocketMessage().asXML());
@@ -72,7 +75,7 @@ public class Scheduler extends Thread {
                         );
                     } catch (IOException ioe) {
                         Platform.runLater(() -> {
-                            adapterController.getLog().error("Warning: Cannot connect to server!");
+                            adapterController.sendError("Warning: Cannot connect to server!", ioe, false);
                             adapterController.getServerController().getModel().setConn(false);
                         });
 
@@ -94,7 +97,7 @@ public class Scheduler extends Thread {
                     logger.trace("Scheduler sleeping...");
                     Thread.sleep(SLEEP_INTERVAL);
                 }catch (InterruptedException e){
-                    Platform.runLater(() -> adapterController.getLog().error("Cannot put scheduler to sleep, while waiting for server!"));
+                    Platform.runLater(() -> adapterController.getLog().error("Cannot put scheduler to sleep, while waiting for server!",true));
                 }
             }
             //thread paused and waiting to be started again
@@ -106,7 +109,7 @@ public class Scheduler extends Thread {
                         try {
                             wait();
                         } catch (InterruptedException e) {
-                            Platform.runLater(() -> adapterController.getLog().error("Cannot put scheduler to wait while waiting for new messages"));
+                            Platform.runLater(() -> adapterController.getLog().error("Cannot put scheduler to wait while waiting for new messages",true));
                         }
                 }
             }
@@ -133,23 +136,20 @@ public class Scheduler extends Thread {
      * Sets process indicator to start and notifies thread if it is waiting
      */
     public synchronized void startProcessing(){
-        logger.trace("Scheduler/" + adapterController.getAdapter().getId() + " starting scheduler processing");
-        //setProceed(true);
-        this.continueProcessing = true;
-        notify();
-    }
-
-    public synchronized void notifyScheduler(){
-        logger.trace("Scheduler/" + adapterController.getAdapter().getId() + " notifying thread to start");
-        notify();
+        if(!isContinueProcessing()){
+            logger.trace("Scheduler/" + adapterController.getAdapter().getId() + " starting scheduler processing");
+            this.continueProcessing = true;
+            notify();
+        }
     }
     /**
      * Sets process indicator to stop
      */
     public synchronized void stopProcessing(){
-        logger.trace("Scheduler/" + adapterController.getAdapter().getId() + " stopping scheduler processing");
-        //setProceed(false);
-        this.continueProcessing = false;
+        if(isContinueProcessing()){
+            logger.trace("Scheduler/" + adapterController.getAdapter().getId() + " stopping scheduler processing");
+            this.continueProcessing = false;
+        }
     }
     /**
      * Makes scheduler thread to finish
@@ -158,8 +158,6 @@ public class Scheduler extends Thread {
         this.terminate = true;
         if(responseTracker != null)
             responseTracker.delete();
-        responseTracker = null;
-        adapterController = null;
     }
 
     public ResponseTracker getResponseTracker(){
@@ -170,7 +168,9 @@ public class Scheduler extends Thread {
      * Returns <code>true</code> if scheduler is processing messages, <code>false</code> otherwise
      * @return <code>true</code> if scheduler is processing messages, <code>false</code> otherwise
      */
-    public boolean isContinueProcessing(){
+    public synchronized boolean isContinueProcessing(){
         return this.continueProcessing;
     }
+
+
 }

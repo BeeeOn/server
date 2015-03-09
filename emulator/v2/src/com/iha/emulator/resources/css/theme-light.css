@@ -243,7 +243,18 @@
 }
 
 .leftPanelPerformance {
-    -fx-min-width: 400px;
+    -fx-min-width: 520px;
+    -fx-max-width: 520px;
+}
+
+.rightPanelPerformance {
+    -fx-min-width: 250px;
+}
+
+.tasksTable {
+    -fx-min-height: 80px;
+    -fx-min-width: 300px;
+    -fx-pref-width: 300px;
 }
 
 .rightPanel {
@@ -458,11 +469,26 @@
     -fx-max-height: 119px;
 }
 
+.serverDetailsPerformanceContainer {
+    -fx-border-width: 5px 3px 3px 3px;
+    -fx-border-color: #efefef;
+    -fx-max-width: 250px;
+    -fx-max-height: 160px;
+}
+
 .serverDetailsText{
     -fx-font-size: 8pt;
     -fx-fill: #828282;
     -fx-text-fill: #828282;
     -fx-padding: 0 0 0 8px;
+}
+
+.serverDetailsTextBold{
+    -fx-font-size: 8pt;
+    -fx-fill: #eb4242;
+    -fx-text-fill: #eb4242;
+    -fx-padding: 0 0 0 8px;
+    -fx-font-weight: bold;
 }
 
 .settingsBtn{
@@ -1029,4 +1055,11 @@
     -fx-fill: #eb4242;
     -fx-text-fill: #eb4242;
     -fx-font-weight: bold;
+}
+
+.taskDetailsContainer {
+    -fx-border-width: 5px 3px 3px 3px;
+    -fx-border-color: #efefef;
+    -fx-max-width: 250px;
+    -fx-max-height: 160px;
 }

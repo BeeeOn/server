@@ -30,11 +30,13 @@ public class SensorController {
     private SensorPanelPresenter panel;
     private Sensor model;
     private BooleanProperty timerRunning;
-    private boolean runValueGenerator = false;
+    private boolean runValueGenerator = true;
     private Timer newTimer;
     private TimerTask timerTask;
     private boolean fullMessage = false;
     private BooleanProperty ignoreRefreshChange;
+    private Document XMLmessage = null;
+    private boolean criticalStop = false;
 
     public SensorController(AdapterController adapterController,Sensor model) throws NullPointerException{
         this(adapterController,null,model);
@@ -62,10 +64,12 @@ public class SensorController {
     }
 
     public void enable(){
+        if(criticalStop) return;
         getModel().setStatus(true);
     }
 
     public void disable(){
+        if(criticalStop) return;
         getModel().setStatus(false);
     }
 
@@ -108,51 +112,47 @@ public class SensorController {
 
     private void timerEngine(){
         SensorController me = this;
-        /*Task<Object> worker = new Task<Object>() {
-            @Override
-            protected Object call() throws Exception {*/
-                //generate new value or send existing to server
-                if(isValueGeneratorRunning()){
-                    logger.trace("Generating new sensor value");
-                    try{
-                        getModel().getValues().stream()
-                                .filter(Value::isGenerateValue) //if new value should be generated
-                                .forEach(v -> {
-                                    Object next = v.nextValue();
-                                    if(next != null){
-                                        Platform.runLater(()->v.setValue(next));
-                                    }
-                                }); //do it
-                    }catch (IllegalArgumentException e){
-                        adapterController.sendError(toString() + " -> cannot generate new value!",e);
-                    }
-                    //change engine to send message mod
-                    setRunValueGenerator(false);
-                }else if(getModel().getStatus()){
-                    logger.trace("Building and sending sensor message");
-                    Document message = adapterController.getAdapter().getProtocol()
-                            .buildSensorMessage(adapterController.getAdapter().getProtocol().buildAdapterMessage(adapterController.getAdapter()), getModel());
-                    //should message include adapter id and sensor id?
-                    if(isFullMessage()){
-                        //used in "Performance simulation"
-                        adapterController.sendMessage(me.toString() + " --> data sent",message,me, OutMessage.Type.SENSOR_MESSAGE);
-                    }else{
-                        //used in "Detailed simulation"
-                        adapterController.sendMessage("Sensor " + me.toString() + " trying to send message.");
-                        adapterController.sendMessage("Sensor " + me.toString() + " --> data sent",message,me, OutMessage.Type.SENSOR_MESSAGE);
-                        //adapterController.sendMessage("Sensor " + getModel().getType() + "/" + getSensorIdAsIp() + " falling asleep for " + (timer.getDelay().toMillis()*2) / 1000 + " second/s");
-                    }
-                    //change engine to generate value mod
-                    setRunValueGenerator(true);
-                }
-                /*return null;
+        //generate new value or send existing to server
+        if(isValueGeneratorRunning()){
+            logger.trace("Generating new sensor value");
+            try{
+                getModel().getValues().stream()
+                        .filter(Value::isGenerateValue) //if new value should be generated
+                        .forEach(v -> {
+                            Object next = v.nextValue();
+                            if (next != null) {
+                                Platform.runLater(() -> v.setValue(next));
+                            }
+                        }); //do it
+            }catch (IllegalArgumentException e){
+                adapterController.sendError(toString() + " -> cannot generate new value!",e,false);
             }
-        };
-        //create thread for background process
-        Thread th = new Thread(worker);
-        //th.setDaemon(true);
-        //run background process
-        th.start();*/
+            logger.trace("Building sensor message");
+            XMLmessage = adapterController.getAdapter().getProtocol()
+                    .buildSensorMessage(adapterController.getAdapter().getProtocol().buildAdapterMessage(adapterController.getAdapter()), getModel());
+            //change engine to send message mod
+            setRunValueGenerator(false);
+        }else if(getModel().getStatus()){
+            /*logger.trace("Building and sending sensor message");
+            Document message = adapterController.getAdapter().getProtocol()
+                .buildSensorMessage(adapterController.getAdapter().getProtocol().buildAdapterMessage(adapterController.getAdapter()), getModel());*/
+            //should message include adapter id and sensor id?
+            if(XMLmessage == null){
+                adapterController.sendError(toString() + " doesn't have XML message to send",null,false);
+                return;
+            }
+            if(isFullMessage()){
+                //used in "Performance simulation"
+                adapterController.sendMessage(me.toString() + " --> data sent",XMLmessage,me, OutMessage.Type.SENSOR_MESSAGE);
+            }else{
+                //used in "Detailed simulation"
+                adapterController.sendMessage("Sensor " + me.toString() + " trying to send message.");
+                adapterController.sendMessage("Sensor " + me.toString() + " --> data sent",XMLmessage,me, OutMessage.Type.SENSOR_MESSAGE);
+                //adapterController.sendMessage("Sensor " + getModel().getType() + "/" + getSensorIdAsIp() + " falling asleep for " + (timer.getDelay().toMillis()*2) / 1000 + " second/s");
+            }
+            //change engine to generate value mod
+            setRunValueGenerator(true);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -201,30 +201,19 @@ public class SensorController {
 
     }
 
-    public void criticalErrorStop(String fullMessage,String shortMessage){
-        //stop sensor
-        Platform.runLater(() -> getModel().setStatus(false));
-        //pause adapter
-        adapterController.stopScheduler();
-        adapterController.messageSuccessfullySent();
-        if(isFullMessage()){
-            Platform.runLater(() -> adapterController.getLog().error(fullMessage));
-        }else{
-            Platform.runLater(() -> adapterController.getLog().error(shortMessage));
-        }
-        adapterController.startScheduler();
-    }
-
     public void criticalErrorStop(String fullMessage,String shortMessage,OutMessage message){
         //stop sensor
-        Platform.runLater(() -> getModel().setStatus(false));
+        Platform.runLater(this::disable);
+        //set critical stop flag
+        setCriticalStop(true);
         //pause adapter
         adapterController.stopScheduler();
         adapterController.messageSuccessfullySent(message);
         if(isFullMessage()){
-            Platform.runLater(() -> adapterController.getLog().error(fullMessage));
+            //if Performance simulation, stop task
+            Platform.runLater(() -> adapterController.getLog().error(fullMessage,true));
         }else{
-            Platform.runLater(() -> adapterController.getLog().error(shortMessage));
+            Platform.runLater(() -> adapterController.getLog().error(shortMessage,false));
         }
         adapterController.startScheduler();
     }
@@ -322,6 +311,14 @@ public class SensorController {
 
     public void setIgnoreRefreshChange(boolean ignoreRefreshChange) {
         this.ignoreRefreshChange.set(ignoreRefreshChange);
+    }
+
+    public boolean isCriticalStop() {
+        return criticalStop;
+    }
+
+    public void setCriticalStop(boolean criticalStop) {
+        this.criticalStop = criticalStop;
     }
 
     public String toString(){

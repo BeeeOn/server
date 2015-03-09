@@ -79,30 +79,27 @@ public class AdapterController{
     public void sendMessage(String logMessage,Document message,SensorController senderController,OutMessage.Type type){
         if(message != null){
             Text unsent = null;
-            switch (type){
-                case REGISTER_ADAPTER:
-                    unsent = log.sent("Adapter/" + getAdapter().getId() + " -> trying to register");
-                    break;
-                case SENSOR_MESSAGE:
-                    if(senderController.isFullMessage()){
-                        unsent = log.sent("Adapter/" + getAdapter().getId() + " -> Sensor/" + senderController.getSensorIdAsIp() + " waiting to send data.");
-                    }else{
-                        unsent = log.sent("Sensor " + senderController.toString() + " waiting to send data.");
-                    }
-                    break;
-            }
+                switch (type){
+                    case REGISTER_ADAPTER:
+                        unsent = log.sent("Adapter/" + getAdapter().getId() + " -> trying to register");
+                        break;
+                    case SENSOR_MESSAGE:
+                        if(senderController.isFullMessage()){
+                            unsent = log.sent("Adapter/" + getAdapter().getId() + " -> Sensor/" + senderController.getSensorIdAsIp() + " waiting to send data.");
+                        }else{
+                            unsent = log.sent("Sensor " + senderController.toString() + " waiting to send data.");
+                        }
+                        break;
+                }
+
             messages.add(new OutMessage(logMessage,message,senderController,type,unsent));
             startScheduler();
         }
     }
 
-    public void sendError(String message){
-        sendError(message,null);
-    }
-
-    public synchronized void sendError(String message,Throwable t){
+    public synchronized void sendError(String message,Throwable t,boolean terminate){
         if(t != null) message = message + " -> " + t.getMessage();
-        getLog().error(message);
+        getLog().error(message,terminate);
     }
 
     public void changeValueOnSensor(int sensorId,ArrayList<SetNewValue> newValues) throws IllegalArgumentException{
@@ -114,7 +111,7 @@ public class AdapterController{
                 sensorController.changeValue(newValue.getType(),newValue.getOffset(),newValue.getValue());
             }
         }catch (IllegalArgumentException e){
-            Platform.runLater(() -> log.error(e.getMessage()));
+            Platform.runLater(() -> log.error(e.getMessage(),false));
             logger.error(e.getMessage(),e);
         }
 
@@ -195,11 +192,6 @@ public class AdapterController{
             if(sensorController.getModel().getId() == sensorId) return sensorController;
         }
         return null;
-    }
-
-    public void messageSuccessfullySent(){
-        if(messages.size() != 0) messages.remove(0);
-        getLog().notifyDataSent();
     }
 
     public synchronized void messageSuccessfullySent(OutMessage message){
@@ -380,6 +372,11 @@ public class AdapterController{
         getScheduler().getResponseTracker().setDumpResponses(b);
     }
 
+    public void setTrackMessages(boolean b) throws NullPointerException{
+        if(getScheduler() == null) throw new NullPointerException("Adapter/" + getAdapter().getId() + " cannot set response dumping, scheduler is null");
+        getLog().getMessageTracker().setEnabled(b);
+    }
+
     public void bindSchedulerProcess(Adapter adapter, Scheduler scheduler){
         adapter.statusProperty().addListener(new ChangeListener<Boolean>() {
             @Override
@@ -409,6 +406,11 @@ public class AdapterController{
     public void restartValueGenerators(){
         if(getSensorControllers() == null) return;
         getSensorControllers().forEach(SensorController::restartValueGenerators);
+    }
+
+    public synchronized void clearScheduler(){
+        if(scheduler != null) scheduler.stopProcessing();
+        if(messages != null) messages.clear();
     }
 
     public void startScheduler(){
