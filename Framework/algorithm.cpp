@@ -66,7 +66,12 @@ bool Algorithm::SendAndExit(){
 	int size;                   
 	port = atoi(FW_PORT);
 	host = gethostbyname("localhost");
-
+	
+	if ((mySocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == -1)
+	{
+		cerr << "Nelze vytvoøit soket" << endl;
+		return -1;
+	}
 	serverSock.sin_family = AF_INET;
 	serverSock.sin_port = htons(port);
 	memcpy(&(serverSock.sin_addr), host->h_addr, host->h_length);
@@ -234,13 +239,13 @@ Algorithm * Algorithm::getCmdLineArgsAndCreateAlgorithm(int argc, char *argv[]){
 
 //Metoda, která vezme hodnotu parametru -v pøík. øádky a zparsuje jej
 multimap<unsigned int, map<string, string>> Algorithm::parseValues(std::string values){
-	vector<string> senzorValues = Algorithm::explode(values, '|');
+	vector<string> senzorValues = Algorithm::explode(values, '$');
 
 	multimap<unsigned int, map<string, string>> valuesTmp;
 	
 	for (auto it = senzorValues.begin(); it != senzorValues.end(); ++it){
 		
-		vector<string> tmp = Algorithm::explode(*it, '&');
+		vector<string> tmp = Algorithm::explode(*it, '#');
 		map<string, string> tmpmap;
 		
 		for (auto it2 = tmp.begin(); it2 != tmp.end(); ++it2){
@@ -257,7 +262,7 @@ multimap<unsigned int, map<string, string>> Algorithm::parseValues(std::string v
 
 //Metoda, která vezme hodnotu parametru -p pøík. øádky a zparsuje jej
 vector<string> Algorithm::parseParams(std::string paramsInput){
-	vector<string> params = Algorithm::explode(paramsInput, '&');
+	vector<string> params = Algorithm::explode(paramsInput, '#');
 
 	/* COMMENTED - NEED	TO WRITE METHOD SpaceReplace
 	vector<string> paramsOutput;
@@ -265,8 +270,10 @@ vector<string> Algorithm::parseParams(std::string paramsInput){
 	for (auto it = params.begin(); it != params.end(); ++it){
 		string tmp = Algorithm::spaceReplace(*it);
 		paramsOutput.push_back(tmp);
-	}*/
+	}
 	return paramsOutput;
+	*/
+	return params;
 }
 //TODO:
 //Replace \_ in string with comma
