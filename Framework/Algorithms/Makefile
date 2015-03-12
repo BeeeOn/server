@@ -7,8 +7,11 @@ WATCHNOTIF= watch_and_notify.cpp
 all:
 	echo "use make name_of_algorithm"
 	
-alg1:watch_and_notify.cpp $(COMMON_FILES) 
+example:example.cpp $(COMMON_FILES) 
 	$(BUILDER) $(CPPFLAGS) -o $@ $^  -I/usr/local/include/soci -L/usr/local/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -I/usr/include/postgresql/ -lpq -L../  -lnotif -lcurl
 	
+watch_and_notify:watch_and_notify.cpp $(COMMON_FILES) 
+	$(BUILDER) $(CPPFLAGS) -o $@ $^  -I/usr/local/include/soci -L/usr/local/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -I/usr/include/postgresql/ -lpq -L../  -lnotif -lcurl
+
 
 

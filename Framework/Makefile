@@ -1,24 +1,25 @@
 CPPFLAGS= -Wall -W -std=c++11 -pthread -g
 BUILDER= /opt/centos/devtoolset-1.1/root/usr/bin/g++
-FW= framework.cpp
+FRAMEWORK= framework.cpp
 COMMON_FILES= ../pugixml.cpp ../loger.cpp ../config.cpp ../databaseConnectionContainer.cpp ../DBHandler.cpp
-COMMON_FILES_WN= ../pugixml.cpp algorithm.cpp
-
-WATCHNOTIF= watch_and_notify.cpp
 
 all:
-	make fw
+	make framework
 
-fw: $(FW) $(COMMON_FILES) 
+framework: $(FRAMEWORK) $(COMMON_FILES) 
 	$(BUILDER) $(CPPFLAGS) -o $@ $^ -I/usr/local/include/soci -L/usr/local/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -I/usr/include/postgresql/ -lpq -L.  -lnotif -lcurl
 
+run:
+	./run_framework.sh
+
+memtest:
+	valgrind --tool=memcheck --trace-children=yes --leak-check=full --show-reachable=yes ./run_framework.sh	
+	
 testAdapter: testAdapter.cpp
 	$(BUILDER) $(CPPFLAGS) -o $@ $^ 
-clean:
-	rm fw
 	
-alg1:$(WATCHNOTIF) $(COMMON_FILES_WN) 
-	$(BUILDER) $(CPPFLAGS) -I boost_1_57_0 -o $@ $^  -I/usr/local/include/soci -L/usr/local/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -I/usr/include/postgresql/ -lpq -L.  -lnotif -lcurl -lboost_program_options
+clean:
+	rm framework
 	
 
 

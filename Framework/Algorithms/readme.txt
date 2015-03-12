@@ -1,14 +1,23 @@
 For compiling Algorithm there is prepared Makefile where is only needed to 
 add new target for every algorithm and HERE WE GO...
 
+To test compiling, you have there example Amgorithm: example.cpp, which
+can be compiled with command:
+  
+  make example
+
 Then to run Algorithm application you must load soci using these two commands:
 
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib64
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./notif
+  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib64
+  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./notif
+  pwd = 'pwd'
+  export LD_LIBRARY_PATH=$pwd:$LD_LIBRARY_PATH
 
 Then try:
 
-./name_of_algorithm -u 1 -a 1 -d 1 -o 1 -v ID=1#type=1#bval=true#offset=1$ID=2#type=1#bval=true#offset=1  -p param1#param2#...
+./name_of_algorithm -u 1 -a 1 -d 1 -o 1
+
+./example -u 1 -a 1 -d 1 -o 1 -v ID=1#type=1#bval=true#offset=1$ID=2#type=1#bval=true#offset=1  -p param1#param2#...
 
 WARNING!
 

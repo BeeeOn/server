@@ -23,6 +23,9 @@
 #include <exception>
 #include <thread> 
 #include <semaphore.h>
+#include <stdlib.h> 
+
+
 //Dalsi includy
 #include "../pugixml.hpp"
 #include "../pugiconfig.hpp"
@@ -125,6 +128,8 @@ class FrameworkServerHandle {
 		FrameworkServerHandle(int init_socket, unsigned short init_port);
 		void Watchdog();
 		void HandleClientConnection();
+		int spawn(char* program, char** arg_list);
+
 		~FrameworkServerHandle();
 };
 

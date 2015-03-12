@@ -11,7 +11,7 @@
 using namespace std;
 using namespace pugi;
 
-#define FW_PORT "7282"
+#define FW_PORT "7382"
 
 // Konstruktor Algoritmu, bude pøedán do algoritmu pod názvem instance alg
 Algorithm::Algorithm(long long int init_userID, long long int init_algID, long long int init_adapterID,

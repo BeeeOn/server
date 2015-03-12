@@ -134,7 +134,14 @@ void FrameworkServerHandle::HandleClientConnection(){
 	ufds.fd = handledSocket;
 	ufds.events = POLLIN;
 
-	//cerr << ntohs(clientPort); takto zjistim port
+
+	//TEST
+	cerr << clientPort ; //takto zjistim port
+
+
+	bool isAdapterServerMessage = false;
+	bool uiServerMessage = false;
+	bool isAlgorithmMessage = false;
 
 	while (1)
 	{
@@ -158,6 +165,7 @@ void FrameworkServerHandle::HandleClientConnection(){
 			}
 
 			if (clientPort == ADA_SERVER_PORT){
+				isAdapterServerMessage = true;
 				if (DataSize == 0)
 				{
 					cerr << "Nothing to be read! DataSize==0" << endl;
@@ -170,82 +178,141 @@ void FrameworkServerHandle::HandleClientConnection(){
 				}
 			}
 			else if (clientPort == UI_SERVER_PORT){
+				uiServerMessage = true;
 
 			}
 			else{
 				//Zde je pøijímání zpráv od algoritmù
-
+				isAlgorithmMessage = true;
+				
+				if (DataSize == 0)
+				{
+					cerr << "Nothing to be read! DataSize==0" << endl;
+					return;
+				}
+				data.append(buf, DataSize);
+				if ((data.find("</algorithm_message>") != std::string::npos) || ((data[data.size() - 2] == '/') && (data[data.size() - 2] == '>')))
+				{
+					break;
+				}
 			}
 		}
 	}
 
 	//zaèíná parser zprávy
+	if (isAdapterServerMessage){
+		cerr << "AdapterServerMessage" << endl;
+		xml_document doc;
+		xml_parse_result result = doc.load_buffer(data.data(), data.size());
+		xml_node adapter = doc.child("adapter_server");
+		float CPversion = adapter.attribute("protocol_version").as_float();
+		int FMversion = adapter.attribute("fw_version").as_int();
 
-	xml_document doc;
-	xml_parse_result result = doc.load_buffer(data.data(), data.size());
-	xml_node adapter = doc.child("adapter_server");
-	float CPversion = adapter.attribute("protocol_version").as_float();
-	int FMversion = adapter.attribute("fw_version").as_int();
-
-	if ((CPversion == (float)0.1) || (CPversion == (float)1.0))
-	{
-		if (FMversion == 0)
+		if ((CPversion == (float)0.1) || (CPversion == (float)1.0))
 		{
-			MP = new ProtocolV1MessageParser();
-		}
-		else
-		{
-			if (FMversion == 1)
+			if (FMversion == 0)
 			{
-				try
-				{
-					MP = new ProtocolV1MessageParser();
-				}
-				catch (std::exception &e)
-				{
-					Log->WriteMessage(ERR, "Unable to create space for Protocol parser exiting client won't be server!");
-					Log->WriteMessage(TRACE, "Exiting " + this->_Name + "::HandleConnection");
-					return;
-				}
+				MP = new ProtocolV1MessageParser();
 			}
 			else
 			{
-				try
+				if (FMversion == 1)
 				{
-					MP = new ProtocolV1MessageParser();
+					try
+					{
+						MP = new ProtocolV1MessageParser();
+					}
+					catch (std::exception &e)
+					{
+						Log->WriteMessage(ERR, "Unable to create space for Protocol parser exiting client won't be server!");
+						Log->WriteMessage(TRACE, "Exiting " + this->_Name + "::HandleConnection");
+						return;
+					}
 				}
-				catch (std::exception &e)
+				else
 				{
-					Log->WriteMessage(ERR, "Unable to create space for Protocol parser exiting client won't be server!");
-					Log->WriteMessage(TRACE, "Exiting " + this->_Name + "::HandleConnection");
-					return;
+					try
+					{
+						MP = new ProtocolV1MessageParser();
+					}
+					catch (std::exception &e)
+					{
+						Log->WriteMessage(ERR, "Unable to create space for Protocol parser exiting client won't be server!");
+						Log->WriteMessage(TRACE, "Exiting " + this->_Name + "::HandleConnection");
+						return;
+					}
 				}
 			}
 		}
-	}
-	else
-	{
-		Log->WriteMessage(WARN, "Unsupported protocol version");
-		Log->WriteMessage(TRACE, "Exiting " + this->_Name + "::HandleConnection");
-		return;
-	}
-	if (!MP->parseMessage(&adapter, FMversion, CPversion))  //pomocou parsera spracujeme spravu
-	{
+		else
+		{
+			Log->WriteMessage(WARN, "Unsupported protocol version");
+			Log->WriteMessage(TRACE, "Exiting " + this->_Name + "::HandleConnection");
+			return;
+		}
+		if (!MP->parseMessage(&adapter, FMversion, CPversion))  //pomocou parsera spracujeme spravu
+		{
+	
+			Log->WriteMessage(WARN, "Wrong request format");
+			Log->WriteMessage(TRACE, "Exiting " + this->_Name + "::HandleConnection");
+			return;
+		}
+		//this->MP->setAdapterIP(IP);  //ulozime IP adresu adapteru do spravy ODSTRANENO PROTOZE nepotøebuji IP adresu
+		parsedMessage = this->MP->ReturnMessage();
+		if (parsedMessage->state != 0)
+		{
 
-		Log->WriteMessage(WARN, "Wrong request format");
-		Log->WriteMessage(TRACE, "Exiting " + this->_Name + "::HandleConnection");
-		return;
+			//  The argument list to pass to the Algorithm
+			char* arg_list[] = {
+				"alg1",     /* argv[0], the name of the program.  */
+				"-u",
+				"1",
+				"-a",
+				"1",
+				"-d",
+				"1",
+				"-o",
+				"1",
+				"/",
+				NULL      /* The argument list must end with a NULL.  */
+			};
+
+			this->spawn("Algorithms/alg1", arg_list);
+
+		}
 	}
-	//this->MP->setAdapterIP(IP);  //ulozime IP adresu adapteru do spravy ODSTRANENO PROTOZE nepotøebuji IP adresu
-	parsedMessage = this->MP->ReturnMessage();
-	if (parsedMessage->state != 0)
-	{
-		this->Watchdog();
+	else if (uiServerMessage){
+		//Kód zpracující zprávy od UIServeru (Pøeposílání zpráv od uživatelù Androidu)
+		
+
+	}
+	else{
+		//Kód zpracující zprávy od Algoritmù
+
+		cerr << "Framework Info: Algorithm send me a message!" << endl;
 	}
 
 	sem_post(&connectionSem);
 	delete(this);
 	return;
+}
+
+int FrameworkServerHandle::spawn(char* program, char** arg_list)
+{
+	pid_t child_pid;
+
+	/* Duplicate this process. */
+	child_pid = fork();
+	if (child_pid != 0)
+		/* This is the parent process. */
+		return child_pid;
+	else {
+		/* Now execute PROGRAM, searching for it in the path. */
+		execvp(program, arg_list);
+		/* The execvp  function returns only if an error occurs. */
+		fprintf(stderr, "an error occurred in execvp\n");
+		abort();
+	}
 }
 
 //Metoda zpracujici hodnoty ze zpravy
