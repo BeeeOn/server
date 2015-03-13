@@ -22,10 +22,11 @@ public class DeleteAdapterTask extends AbstractTask {
     private String adapterId;
     private Database database;
 
-    public DeleteAdapterTask(Logger logger, DatabaseInfo dbInfo, String adapterId) {
+    public DeleteAdapterTask(Logger logger, DatabaseInfo dbInfo, String adapterId,Integer count) {
+        if(count == null) count = 1;
         this.logger = logger;
         this.dbInfo = dbInfo;
-        this.adapterId = adapterId;
+        this.adapterId = joinIds(adapterId,count);
         this.database = new Database();
     }
 
@@ -33,7 +34,7 @@ public class DeleteAdapterTask extends AbstractTask {
     public Element resolveTask() {
         try {
             Connection conn = database.connect(this.dbInfo);
-            String sql = "DELETE FROM adapters WHERE adapter_id="+this.adapterId;
+            String sql = "DELETE FROM adapters WHERE adapter_id IN ("+this.adapterId +")";
             logger.trace("DeleteAdapter SQL: ");
             logger.trace(sql);
             int resultCount = database.getStatement(conn).executeUpdate(sql);
@@ -49,5 +50,14 @@ public class DeleteAdapterTask extends AbstractTask {
             logger.error("Cannot execute SQL query", e);
             return buildNegativeResultElement("Cannot execute SQL query.\n " + e.getMessage());
         }
+    }
+
+    public String joinIds(String adapterId,int count){
+        int firstId = Integer.valueOf(adapterId);
+        adapterId = "";
+        for(int i = 0; i < count; i++){
+            adapterId = (i != 0 ? adapterId + "," : "") + (firstId+i);
+        }
+        return adapterId;
     }
 }
