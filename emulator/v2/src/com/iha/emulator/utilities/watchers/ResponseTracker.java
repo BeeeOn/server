@@ -1,0 +1,118 @@
+package com.iha.emulator.utilities.watchers;
+
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import java.util.ArrayList;
+
+/**
+ * Created by Shu on 11.2.2015.
+ */
+public class ResponseTracker {
+
+    private boolean enabled = false;
+    private boolean dumpResponses = false;
+    private ObservableList<Response> responses = FXCollections.observableArrayList();
+    private ListProperty<Response> responsesList = new SimpleListProperty<>(responses);
+
+    public ResponseTracker(boolean enabled) {
+        this(enabled,null);
+    }
+
+    public ResponseTracker(Boolean enabled,Boolean dumpResponses) {
+        if(enabled!=null) this.enabled = enabled;
+        if(dumpResponses != null) this.dumpResponses = dumpResponses;
+
+    }
+    /**
+     * Adds new {@link Response} to {@link ResponseTracker#responses} list.
+     * Sets response value as <code>start - end</code> and time of response as <code>end</code>
+     * @param start
+     * @param end
+     */
+    public synchronized void addResponse(long start,long end){
+        if(responses != null && start!=0 && start < end){
+            Response response = new Response(start,end);
+            responses.add(response);
+        }
+    }
+    /**
+     * If there are any responses in {@link ResponseTracker#responses}, returns value of last one, else returns <code>0L</code>
+     * @return last response value or <code>0L</code>
+     */
+    public synchronized Long getLastResponseValue(){
+        if(responses.size() != 0)
+            return responses.get(responses.size()-1).getValue();
+        else
+            return 0L;
+    }
+
+    public void clearResponses(){
+        if(responses != null) responses.clear();
+    }
+    /**
+     * Clears {@link ResponseTracker#responses} list
+     */
+    public void dumpResponses(){
+        responses.clear();
+    }
+    /**
+     * Returns new {@link java.util.ArrayList} of {@link Response}s saved since last call of this method,
+     * then clears {@link ResponseTracker#responses} list
+     * @return responses saved since last call of this method
+     */
+    public ArrayList<Response> getNewResponses(){
+        ArrayList<Response> newResponses = new ArrayList<>();
+        for(int i = 0;i<responses.size();i++){
+            newResponses.add(responses.get(i));
+        }
+        responses.clear();
+        return newResponses;
+    }
+    /**
+     * Returns if response times are saved tracked
+     * @return <code>true</code> enable tracking, <code>false</code> otherwise
+     */
+    public boolean isEnabled(){
+        return enabled;
+    }
+    /**
+     * Sets whether responses should be saved or not. Creates list of responses if there is not one.
+     * @param b <code>true</code> if save responses, <code>false</code> otherwise
+     */
+    public void setEnabled(boolean b){
+        this.enabled = b;
+    }
+    /**
+     * Returns whether there are responses stored or not.
+     * @return <code>false</code> if responses are saved, <code>true</code> otherwise
+     */
+    public boolean isDumpResponses(){
+        return this.dumpResponses;
+    }
+    /**
+     * Sets if responses should be stored or not
+     * @param b <code>false</code> if save responses, <code>true</code> otherwise</code>
+     */
+    public void setDumpResponses(boolean b){
+        this.dumpResponses = b;
+    }
+
+    public void delete(){
+        responses.clear();
+    }
+
+    public ObservableList<Response> getResponsesList() {
+        return responsesList.get();
+    }
+
+    public ListProperty<Response> responsesListProperty() {
+        return responsesList;
+    }
+
+    public void setResponsesList(ObservableList<Response> responsesList) {
+        this.responsesList.set(responsesList);
+    }
+}

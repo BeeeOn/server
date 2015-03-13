@@ -3,7 +3,7 @@ package com.iha.emulator.control;
 import com.iha.emulator.communication.protocol.Protocol;
 import com.iha.emulator.communication.server.OutMessage;
 import com.iha.emulator.communication.server.WrongResponseException;
-import com.iha.emulator.utilities.ResponseTracker;
+import com.iha.emulator.utilities.watchers.ResponseTracker;
 import javafx.application.Platform;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -123,7 +123,7 @@ public class Scheduler extends Thread {
         responseTracker.clearResponses();
     }
 
-    public void processTracking(OutMessage message){
+    public synchronized void processTracking(OutMessage message){
         //if is tracking on, save to end of successful message response time
         if(responseTracker.isEnabled()){
             message.appendToMsg(" -> " + responseTracker.getLastResponseValue() + "ms");
@@ -168,7 +168,7 @@ public class Scheduler extends Thread {
      * Returns <code>true</code> if scheduler is processing messages, <code>false</code> otherwise
      * @return <code>true</code> if scheduler is processing messages, <code>false</code> otherwise
      */
-    public synchronized boolean isContinueProcessing(){
+    public boolean isContinueProcessing(){
         return this.continueProcessing;
     }
 

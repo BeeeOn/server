@@ -1,9 +1,11 @@
 package com.iha.emulator.ui.simulations.chooser;
 
 import com.iha.emulator.ui.Presenter;
+import com.iha.emulator.ui.dialogs.thread.ThreadTesterPresenter;
 import com.iha.emulator.ui.simulations.detailed.DetailedSimulationPresenter;
 import com.iha.emulator.ui.simulations.performance.PerformanceSimulationPresenter;
 import com.iha.emulator.utilities.Utilities;
+import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
@@ -32,6 +34,8 @@ public class ChooserPresenter implements Presenter {
 
     private Properties loadedProperties;
 
+    private HostServices hostServices;
+
     public interface Display {
         public void setPresenter(ChooserPresenter presenter);
         public Node getView();
@@ -44,6 +48,7 @@ public class ChooserPresenter implements Presenter {
     public void runDetailedSimulation(){
         logger.info("Starting Detailed Simulation");
         DetailedSimulationPresenter dPresenter = new DetailedSimulationPresenter(window);
+        dPresenter.setHostServices(hostServices);
         window.setTitle("BeeeOn Emulator - Detailed Simulation");
         try {
             Scene dScene = dPresenter.loadView();
@@ -63,6 +68,7 @@ public class ChooserPresenter implements Presenter {
     public void runPerformanceSimulation(){
         logger.info("Starting Performance Simulation");
         PerformanceSimulationPresenter pPresenter = new PerformanceSimulationPresenter(window);
+        pPresenter.setHostServices(hostServices);
         window.setTitle("BeeeOn Emulator - Performance Simulation");
         try {
             Scene dScene = pPresenter.loadView();
@@ -77,6 +83,24 @@ public class ChooserPresenter implements Presenter {
             });
         }
         pPresenter.init(loadedProperties);
+    }
+
+    public void runMaxThreadTest(){
+        ThreadTesterPresenter tPresenter;
+        window.setTitle("BeeeOn Emulator - Max thread tester");
+        try{
+            tPresenter = new ThreadTesterPresenter(window);
+            Scene scene = new Scene((Parent) tPresenter.loadView());
+            // set css for view
+            logger.trace("Loading CSS from: " + CSS_PATH);
+            scene.getStylesheets().add(getClass().getResource(CSS_PATH).toExternalForm());
+            window.setScene(scene);
+            window.setResizable(true);
+            window.show();
+            tPresenter.init();
+        } catch (IOException e) {
+            Utilities.showException(logger, "Cannot load dialog for thread tester!", e, false, null);
+        }
     }
 
     public void init(String defaultPropertiesFileName){
@@ -132,5 +156,13 @@ public class ChooserPresenter implements Presenter {
 
     public void quit(){
         Platform.exit();
+    }
+
+    public HostServices getHostServices() {
+        return hostServices;
+    }
+
+    public void setHostServices(HostServices hostServices) {
+        this.hostServices = hostServices;
     }
 }

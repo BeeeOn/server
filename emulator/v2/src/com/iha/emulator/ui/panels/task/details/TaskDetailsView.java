@@ -27,6 +27,7 @@ public class TaskDetailsView implements Initializable,TaskDetailsPresenter.Displ
     @FXML private Label adaptersCountLbl;
     @FXML private Label waitingMessagesLbl;
     @FXML private Label sentMessagesLbl;
+    @FXML private Label stopWatchLbl;
 
     public TaskDetailsView() {
 
@@ -65,6 +66,11 @@ public class TaskDetailsView implements Initializable,TaskDetailsPresenter.Displ
     @Override
     public Label getSentMessagesLbl() {
         return sentMessagesLbl;
+    }
+
+    @Override
+    public Label getStopWatchLbl() {
+        return stopWatchLbl;
     }
 
     @Override

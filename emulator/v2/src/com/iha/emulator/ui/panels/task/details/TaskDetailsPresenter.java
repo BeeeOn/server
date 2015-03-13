@@ -1,6 +1,6 @@
 package com.iha.emulator.ui.panels.task.details;
 
-import com.iha.emulator.control.SimulationTask;
+import com.iha.emulator.control.task.SimulationTask;
 import com.iha.emulator.ui.Presenter;
 import com.iha.emulator.ui.panels.PanelPresenter;
 import javafx.beans.binding.StringBinding;
@@ -33,6 +33,7 @@ public class TaskDetailsPresenter implements Presenter,PanelPresenter {
         public Label getAdaptersCountLbl();
         public Label getWaitingMessagesLbl();
         public Label getSentMessagesLbl();
+        public Label getStopWatchLbl();
     }
 
     public TaskDetailsPresenter() {
@@ -50,14 +51,16 @@ public class TaskDetailsPresenter implements Presenter,PanelPresenter {
             unbindLbl(view.getAdaptersCountLbl());
             unbindLbl(view.getWaitingMessagesLbl());
             unbindLbl(view.getSentMessagesLbl());
+            unbindLbl(view.getStopWatchLbl());
         }
         this.model = null;
-        view.getIdLbl();
-        view.getStateLbl();
-        view.getDevicesCountLbl();
-        view.getAdaptersCountLbl();
-        view.getWaitingMessagesLbl();
-        view.getSentMessagesLbl();
+        view.getIdLbl().setText("");
+        view.getStateLbl().setText("");
+        view.getDevicesCountLbl().setText("");
+        view.getAdaptersCountLbl().setText("");
+        view.getWaitingMessagesLbl().setText("");
+        view.getSentMessagesLbl().setText("");
+        view.getStopWatchLbl().setText("");
     }
 
     @Override
@@ -96,6 +99,7 @@ public class TaskDetailsPresenter implements Presenter,PanelPresenter {
             unbindLbl(view.getAdaptersCountLbl());
             unbindLbl(view.getWaitingMessagesLbl());
             unbindLbl(view.getSentMessagesLbl());
+            unbindLbl(view.getStopWatchLbl());
         }else{
             logger.trace("No model = no need to unbind");
         }
@@ -155,6 +159,7 @@ public class TaskDetailsPresenter implements Presenter,PanelPresenter {
                 return String.valueOf(model.getLog().getMessageTracker().getSentMessageCounter());
             }
         });
+        view.getStopWatchLbl().textProperty().bind(model.getTaskParameters().getStopWatch().timeStringProperty());
         logger.trace("OK");
     }
 

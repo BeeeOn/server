@@ -1,11 +1,12 @@
 package com.iha.emulator.communication.server;
 
 import com.iha.emulator.models.Server;
-import com.iha.emulator.utilities.ResponseTracker;
+import com.iha.emulator.utilities.watchers.ResponseTracker;
 import javafx.application.Platform;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dom4j.Document;
+import org.dom4j.Element;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -72,6 +73,14 @@ public class ServerController {
                 socketChannel = null;
             }
         }
+    }
+
+    public Element saveToXml(Element rootElement){
+        return rootElement.addElement("server")
+                .addAttribute("name",getModel().getName())
+                .addAttribute("ip",getModel().getIp())
+                .addAttribute("port", String.valueOf(getModel().getPort()))
+                .addAttribute("db", getModel().getDatabaseName());
     }
 
     public Server getModel() {

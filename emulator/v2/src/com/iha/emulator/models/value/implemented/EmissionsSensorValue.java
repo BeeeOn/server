@@ -40,7 +40,7 @@ public class EmissionsSensorValue extends AbstractValue<Integer> implements HasN
     }
 
     @Override
-    public Integer nextValue() throws NullPointerException{
+    public Integer nextValue() throws NullPointerException,IllegalArgumentException{
         //store value history if needed
         if(isStoreHistory()) storeValue(this.getValue());
         if(getGeneratorType() == null || !isGenerateValue()) return null;

@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <?import java.lang.*?>
-<VBox fx:id="view" prefHeight="673.0" prefWidth="1007.0" stylesheets="@../../../resources/css/theme-light.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iha.emulator.ui.simulations.performance.PerformanceSimulationView">
+<VBox fx:id="view" prefHeight="795.0" prefWidth="1070.0" stylesheets="@../../../resources/css/theme-light.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iha.emulator.ui.simulations.performance.PerformanceSimulationView">
   <children>
       <HBox prefHeight="43.0" prefWidth="1110.0" styleClass="whiteBackground" VBox.vgrow="NEVER">
          <children>
@@ -78,7 +78,7 @@
                         <Tooltip text="Save all tasks" />
                      </tooltip>
                   </Button>
-                  <Button fx:id="openTBtn" mnemonicParsing="false" onAction="#handleOpen">
+                  <Button fx:id="openTBtn" disable="true" mnemonicParsing="false" onAction="#handleOpen">
                      <styleClass>
                         <String fx:value="plainToolBarBtn" />
                         <String fx:value="loadBtn" />
@@ -156,7 +156,7 @@
                         <Insets bottom="4.0" top="4.0" />
                      </padding>
                   </Separator>
-                  <Button fx:id="newTaskTBtn" mnemonicParsing="false" onAction="#handleAddTask">
+                  <Button fx:id="newTaskTBtn" disable="true" mnemonicParsing="false" onAction="#handleAddTask">
                      <styleClass>
                         <String fx:value="plainToolBarBtn" />
                         <String fx:value="addAdapterMenuBtn" />
@@ -193,12 +193,27 @@
                <children>
                   <Label styleClass="sectionName" text="Tasks" VBox.vgrow="NEVER">
                      <VBox.margin>
-                        <Insets bottom="5.0" top="5.0" />
+                        <Insets top="5.0" />
                      </VBox.margin>
                   </Label>
-                  <HBox prefHeight="21.0" prefWidth="400.0">
+                  <HBox fx:id="queueProcessContainer" alignment="CENTER_LEFT" minHeight="27.0" prefHeight="27.0" prefWidth="520.0">
                      <children>
-                        <CheckBox mnemonicParsing="false" text="auto process queue" />
+                        <Button fx:id="queueProcessOnBtn" mnemonicParsing="false" onAction="#handleQueueProcessOn" styleClass="actuatorControlBtn" text="ON" HBox.hgrow="NEVER" />
+                        <Button fx:id="queueProcessOffBtn" mnemonicParsing="false" onAction="#handleQueueProcessOff" styleClass="actuatorControlBtn" text="OFF" />
+                        <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="17.0" prefWidth="78.0" styleClass="serverDetailsText" text="Start time:" />
+                        <RadioButton fx:id="immediatelyStartRadBtn" mnemonicParsing="false" selected="true" text="immediately">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                           <toggleGroup>
+                              <ToggleGroup fx:id="startTimeRadGroup" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton fx:id="pickTimeStartRadBtn" mnemonicParsing="false" text="pick time" toggleGroup="$startTimeRadGroup">
+                           <HBox.margin>
+                              <Insets left="10.0" right="10.0" />
+                           </HBox.margin>
+                        </RadioButton>
                      </children>
                   </HBox>
                   <TableView fx:id="tasksTable" minWidth="290.0" prefHeight="200.0" prefWidth="290.0" styleClass="tasksTable">
@@ -207,7 +222,7 @@
                         <TableColumn fx:id="idColumn" editable="false" prefWidth="27.0" sortable="false" text="Id" />
                       <TableColumn fx:id="stateColumn" editable="false" prefWidth="97.0" sortable="false" text="State" />
                         <TableColumn fx:id="serverColumn" editable="false" prefWidth="142.0" sortable="false" text="Information" />
-                        <TableColumn editable="false" prefWidth="79.0" sortable="false" text="Actions" />
+                        <TableColumn fx:id="stopConditionColumn" editable="false" prefWidth="127.0" sortable="false" text="Stop conditions" />
                     </columns>
                   </TableView>
                   <HBox prefHeight="207.0" prefWidth="380.0" VBox.vgrow="NEVER">
@@ -219,7 +234,7 @@
                                     <Label prefHeight="24.0" prefWidth="178.0" styleClass="sectionName" text="Server details" BorderPane.alignment="CENTER_LEFT" />
                                  </left>
                               </BorderPane>
-                              <FlowPane fx:id="serverDetailsContainer" alignment="TOP_CENTER" columnHalignment="CENTER" maxHeight="160.0" maxWidth="250.0" minHeight="160.0" minWidth="250.0" prefHeight="160.0" prefWidth="250.0" rowValignment="TOP" styleClass="serverDetailsPerformanceContainer" />
+                              <FlowPane fx:id="serverDetailsContainer" alignment="TOP_CENTER" columnHalignment="CENTER" maxHeight="160.0" maxWidth="250.0" minHeight="170.0" minWidth="250.0" prefHeight="170.0" prefWidth="250.0" rowValignment="TOP" styleClass="serverDetailsPerformanceContainer" />
                            </children>
                            <HBox.margin>
                               <Insets />
@@ -232,7 +247,7 @@
                                     <Label prefHeight="24.0" prefWidth="178.0" styleClass="sectionName" text="Task details" BorderPane.alignment="CENTER_LEFT" />
                                  </left>
                               </BorderPane>
-                              <FlowPane fx:id="taskDetailsContainer" alignment="CENTER" columnHalignment="CENTER" maxHeight="160.0" maxWidth="250.0" minHeight="160.0" minWidth="250.0" prefHeight="160.0" prefWidth="250.0" rowValignment="TOP" styleClass="taskDetailsContainer" />
+                              <FlowPane fx:id="taskDetailsContainer" alignment="CENTER" columnHalignment="CENTER" maxHeight="160.0" maxWidth="250.0" minHeight="170.0" minWidth="250.0" prefHeight="170.0" prefWidth="250.0" rowValignment="TOP" styleClass="taskDetailsContainer" />
                            </children>
                            <HBox.margin>
                               <Insets left="20.0" />
@@ -240,6 +255,12 @@
                         </VBox>
                      </children>
                   </HBox>
+                  <BorderPane prefHeight="48.0" prefWidth="244.0" styleClass="serverDetailsLblContainer">
+                     <left>
+                        <Label prefHeight="24.0" prefWidth="178.0" styleClass="sectionName" text="Server response" BorderPane.alignment="CENTER_LEFT" />
+                     </left>
+                  </BorderPane>
+                  <StackPane prefHeight="150.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                </children>
                <HBox.margin>
                   <Insets bottom="10.0" left="20.0" right="20.0" />
@@ -287,7 +308,7 @@
                         </Tab>
                         <Tab fx:id="errorTab" closable="false" text="Error Log">
                            <content>
-                              <ScrollPane fx:id="errorLogContainer" prefHeight="200.0" prefWidth="200.0" styleClass="logTextAreaContainer" />
+                              <StackPane fx:id="errorLogContainer" prefHeight="150.0" prefWidth="200.0" />
                            </content>
                         </Tab>
                     </tabs>

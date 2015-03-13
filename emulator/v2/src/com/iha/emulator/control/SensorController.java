@@ -77,8 +77,8 @@ public class SensorController {
         logger.trace("Sensor/" + getSensorIdAsIp() + " timer started");
         if(newTimer != null){
             //newTimer = new Timer();
-            newTimer.purge();
             if(timerTask != null) timerTask.cancel();
+            newTimer.purge();
             timerTask = new TimerTask() {
                 @Override
                 public void run() {
@@ -107,7 +107,7 @@ public class SensorController {
     private void initializeTimer(){
         logger.trace("Sensor/" + getSensorIdAsIp() + " initialising timer");
         //create timer
-        newTimer = new Timer();
+        newTimer = new Timer(true);
     }
 
     private void timerEngine(){

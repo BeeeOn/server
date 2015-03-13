@@ -423,7 +423,7 @@
                                  </content></Tab>
                               <Tab fx:id="errorTab" closable="false" text="Error Log">
                                  <content>
-                                    <ScrollPane fx:id="errorLogContainer" prefHeight="200.0" prefWidth="200.0" styleClass="logTextAreaContainer" />
+                                    <StackPane fx:id="errorLogContainer" prefHeight="150.0" prefWidth="200.0" />
                                  </content>
                               </Tab>
                           </tabs>

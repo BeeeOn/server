@@ -10,7 +10,7 @@ import com.iha.emulator.models.Server;
 import com.iha.emulator.models.value.Value;
 import com.iha.emulator.resources.images.sensor_types.SensorIcon;
 import com.iha.emulator.ui.panels.sensor.SensorPanelPresenter;
-import com.iha.emulator.utilities.AdapterLogger;
+import com.iha.emulator.utilities.logging.AdapterLogger;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
@@ -350,11 +350,7 @@ public class AdapterController{
                 .addAttribute("protocol",String.valueOf(getAdapter().getProtocolVersion()))
                 .addAttribute("registered",String.valueOf(getAdapter().getRegistered()))
                 .addAttribute("firmware",String.valueOf(getAdapter().getFirmware()));
-        adapterElement.addElement("server")
-                .addAttribute("name",getServerController().getModel().getName())
-                .addAttribute("ip",getServerController().getModel().getIp())
-                .addAttribute("port",String.valueOf(getServerController().getModel().getPort()))
-                .addAttribute("db",getServerController().getModel().getDatabaseName());
+        getServerController().saveToXml(adapterElement);
         Element sensorsElement = adapterElement.addElement("sensors");
         for(SensorController sensorController : getSensorControllers()){
             sensorController.saveToXML(sensorsElement);
