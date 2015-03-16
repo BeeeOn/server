@@ -42,6 +42,25 @@ public class ThreadTesterPresenter implements Presenter,PanelPresenter{
     }
 
     public void start(){
+        /*ArrayList<Integer> sensorIds = new ArrayList<>();
+        int adapterId=1000;
+        int adapterCount = 20;
+        int sensorsCount = 100;
+        for (int i = 0; i < adapterCount; i++) {
+            int tmpAdapterId= adapterId+i;
+            view.getTextArea().appendText("Adapter/" + tmpAdapterId + "\n");
+            for (int j = 0; j < sensorsCount; j++) {
+                Integer sensorId = Integer.valueOf(tmpAdapterId + "" + (tmpAdapterId + j));
+                if(!sensorIds.contains(sensorId)){
+                    sensorIds.add(sensorId);
+                    view.getTextArea().appendText("Adapter/" + tmpAdapterId + " sensor/" + sensorId + "\n");
+                }else{
+                    view.getTextArea().appendText("Already in list -> " + sensorId);
+                }
+
+            }
+
+        }*/
         if(tester!= null) tester.startTest();
         else logger.error("No tester");
     }

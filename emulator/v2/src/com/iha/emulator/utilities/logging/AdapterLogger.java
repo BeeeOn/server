@@ -45,7 +45,7 @@ public class AdapterLogger {
     private static final int ERROR_TAB_INDEX = 2;
 
     private static final int BUFFER_LINE_COUNT_MAX = 200;
-    private static final int MAX_WARNING_COUNT = 1000;
+    private static final int MAX_WARNING_COUNT = 500;
 
     public enum Type{
         FULL,
@@ -211,6 +211,7 @@ public class AdapterLogger {
         if(adapterLog == null){
             adapterLog = new TextArea();
             adapterLog.setWrapText(true);
+            adapterLog.setEditable(false);
         }
         if(toBeSentLog == null){
             toBeSentLog = new TextFlow();
@@ -219,6 +220,7 @@ public class AdapterLogger {
         if(errorLog == null){
             errorLog = new TextArea();
             errorLog.setWrapText(true);
+            errorLog.setEditable(false);
         }
     }
 
@@ -227,6 +229,7 @@ public class AdapterLogger {
         if(adapterLog == null){
             adapterLog = new TextArea();
             adapterLog.setWrapText(true);
+            adapterLog.setEditable(false);
         }
         StackPane paneContainer = (StackPane) container;
         paneContainer.getChildren().add(adapterLog);
@@ -252,6 +255,7 @@ public class AdapterLogger {
         if(errorLog == null){
             errorLog = new TextArea();
             errorLog.setWrapText(true);
+            errorLog.setEditable(false);
         }
         StackPane paneContainer = (StackPane) container;
         paneContainer.getChildren().add(errorLog);

@@ -43,6 +43,7 @@ public class ChooserPresenter implements Presenter {
 
     public ChooserPresenter(Stage window) {
         this.window = window;
+        logger.info("Running JVM bits: " + System.getProperty("sun.arch.data.model"));
     }
 
     public void runDetailedSimulation(){

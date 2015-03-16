@@ -54,8 +54,6 @@ public class AddNewTaskDialogView implements Initializable,AddNewTaskDialogPrese
     @FXML private Label refreshTimeMinLbl;
     @FXML private Label refreshTimeMaxLbl;
     @FXML private ComboBox protocolComboBox;
-    @FXML private RadioButton disableLogYesRadBtn;
-    @FXML private RadioButton disableLogNoRadBtn;
     @FXML private TextField saveDirTextField;
     @FXML private TextField adaptersCountTxtField;
     @FXML private TextField startIdTxtField;
@@ -225,14 +223,6 @@ public class AddNewTaskDialogView implements Initializable,AddNewTaskDialogPrese
 
     public ComboBox getProtocolComboBox() {
         return protocolComboBox;
-    }
-
-    public RadioButton getDisableLogYesRadBtn() {
-        return disableLogYesRadBtn;
-    }
-
-    public RadioButton getDisableLogNoRadBtn() {
-        return disableLogNoRadBtn;
     }
 
     public TextField getSaveDirTextField() {

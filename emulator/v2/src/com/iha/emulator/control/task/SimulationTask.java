@@ -13,6 +13,7 @@ import com.iha.emulator.models.value.Value;
 import com.iha.emulator.utilities.Utilities;
 import com.iha.emulator.utilities.logging.AdapterLogger;
 import com.iha.emulator.utilities.watchers.QueueWatcher;
+import com.iha.emulator.utilities.watchers.ResponseTracker;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
@@ -70,8 +71,8 @@ public class SimulationTask {
     private ServerController serverController;
     private IntegerProperty id;
     private TaskParameters taskParameters = null;
-
     private StopCondition stopCondition = null;
+    private ResponseTracker responseTracker = new ResponseTracker(true,false);
 
     private AdapterLogger log;
     private ObservableList<AdapterController> adapterControllers = FXCollections.observableArrayList();
@@ -204,6 +205,7 @@ public class SimulationTask {
                         });
                         progress.set(1);
                         getAdapterControllers().forEach(AdapterController::clearScheduler);
+                        getTaskParameters().getStopWatch().stop();
                         updateMessage("Deleting adapters from database");
                         logger.trace("Deleting adapters from database");
                         removeAdaptersFromDb();
@@ -229,7 +231,6 @@ public class SimulationTask {
                                 setSimulationState(State.FINISHED);
                             }
                             setRunning(false);
-                            getTaskParameters().getStopWatch().stop();
                             if(getQueueWatcher() != null) getQueueWatcher().next();
                         });
                     });
@@ -240,7 +241,6 @@ public class SimulationTask {
                             setSimulationState(State.FINISHED);
                         }
                         setRunning(false);
-                        getTaskParameters().getStopWatch().stop();
                         if(getQueueWatcher() != null) getQueueWatcher().next();
                     });
                 }
@@ -319,6 +319,7 @@ public class SimulationTask {
         });
         if(getTaskParameters().getStopWatch() != null){
             logMessage("Task duration: " + getTaskParameters().getStopWatch().getTimeString());
+            getTaskParameters().getStopWatch().stop();
         }
         getLog().closeBuffer();
         Task<Object> worker = new Task<Object>() {
@@ -449,7 +450,6 @@ public class SimulationTask {
         }
         //loading dialog progress help variable; 95% / number of adapters
         long oneAdapterProgress = (90-progress.get())/getTaskParameters().getAdaptersCount();
-        int sensorsTotal = 0;
         for (int i = 0;i<getTaskParameters().getAdaptersCount();i++){
             int newAdapterId = getTaskParameters().getStartId();
             logger.trace("Creating adapter: " + (newAdapterId+i));
@@ -457,6 +457,7 @@ public class SimulationTask {
             AdapterController newAdapterController = new AdapterController();
             //create new adapter
             newAdapterController.createAdapter(false,newAdapterId+i,false, getTaskParameters().getProtocolVersion(),DEFAULT_ADAPTER_FIRMWARE);
+            newAdapterController.getAdapter().setName("Adapter");
             //create new server
             newAdapterController.setServerController(getServerController());
             //create logger
@@ -464,14 +465,14 @@ public class SimulationTask {
             //create scheduler
             newAdapterController.createScheduler();
             //set response tracking
-            newAdapterController.setTrackServerResponse(true);
-            newAdapterController.setDumpServerResponse(false);
+            newAdapterController.setServerResponseTracker(getResponseTracker());
             //bind scheduler processing to adapter's status indicator
             newAdapterController.bindSchedulerProcess(newAdapterController.getAdapter(), newAdapterController.getScheduler());
             //bind register message
             newAdapterController.bindRegisterMessage(newAdapterController);
             //create sensors for new adapter and save devices count
             getTaskParameters().setSensorsCount(getTaskParameters().getSensorsCount() + createSensors(newAdapterController));
+            newAdapterController.setSaved(true);
             //save it to list
             adapterControllersList.add(newAdapterController);
             //set loading dialog progress
@@ -538,7 +539,7 @@ public class SimulationTask {
                 SensorController tmp = adapterController.createSensor(
                         tmpValues, //value for sensor
                         true, //connection
-                        Integer.valueOf(adapterController.getAdapter().getId() + "" + adapterController.getAdapter().getId() + i), //sensor id
+                        Integer.valueOf(adapterController.getAdapter().getId() + "" + (adapterController.getAdapter().getId() + i)), //sensor id
                         "Sensor", // sensor name
                         battery, //battery
                         signal, //signal
@@ -547,7 +548,6 @@ public class SimulationTask {
                 );
                 tmp.setFullMessage(true);
                 tmp.setIgnoreRefreshChange(true);
-                adapterController.setSaved(true);
                 /*logMessage("Sensor/" + tmp.getSensorIdAsIp() + " created successfully");*/
                 sensorsTotal++;
             }
@@ -753,5 +753,13 @@ public class SimulationTask {
 
     public void setQueueWatcher(QueueWatcher queueWatcher) {
         this.queueWatcher = queueWatcher;
+    }
+
+    public ResponseTracker getResponseTracker() {
+        return responseTracker;
+    }
+
+    public void setResponseTracker(ResponseTracker responseTracker) {
+        this.responseTracker = responseTracker;
     }
 }

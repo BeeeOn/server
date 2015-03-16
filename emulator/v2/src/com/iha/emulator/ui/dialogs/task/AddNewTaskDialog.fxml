@@ -13,7 +13,7 @@
       </Label>
       <HBox prefHeight="32.0" prefWidth="570.0" VBox.vgrow="NEVER">
          <children>
-            <Label prefHeight="30.0" prefWidth="161.0" styleClass="informationHeader" text="Task informations" />
+            <Label prefHeight="30.0" prefWidth="199.0" styleClass="informationHeader" text="Task informations" />
             <Button fx:id="loadTemplateBtn" mnemonicParsing="false" onAction="#handleLoadTemplate">
                <styleClass>
                   <String fx:value="plainToolBarBtn" />
@@ -22,12 +22,18 @@
                <HBox.margin>
                   <Insets left="15.0" />
                </HBox.margin>
+               <tooltip>
+                  <Tooltip text="Load task template" />
+               </tooltip>
             </Button>
             <Button fx:id="saveTemplateBtn" mnemonicParsing="false" onAction="#handleSaveTemplate">
                <styleClass>
                   <String fx:value="plainToolBarBtn" />
                   <String fx:value="saveBtn" />
                </styleClass>
+               <tooltip>
+                  <Tooltip text="Save task template" />
+               </tooltip>
             </Button>
          </children>
          <VBox.margin>
@@ -44,11 +50,11 @@
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="10.0" prefWidth="135.0" />
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="232.0" minWidth="10.0" prefWidth="63.0" />
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="236.0" minWidth="10.0" prefWidth="92.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="409.0" minWidth="10.0" prefWidth="106.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="474.0" minWidth="10.0" prefWidth="64.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="409.0" minWidth="10.0" prefWidth="151.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="474.0" minWidth="10.0" prefWidth="48.0" />
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="499.0" minWidth="10.0" prefWidth="125.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="487.0" minWidth="10.0" prefWidth="63.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="487.0" minWidth="10.0" prefWidth="129.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="487.0" minWidth="10.0" prefWidth="58.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="487.0" minWidth="10.0" prefWidth="96.0" />
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="487.0" minWidth="10.0" prefWidth="39.0" />
                   <ColumnConstraints />
               </columnConstraints>
@@ -68,7 +74,7 @@
                         <Tooltip text="Number of created adapters" />
                      </tooltip>
                   </Label>
-                  <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="129.0" styleClass="sensorText" text="Comm. ptotocol:" GridPane.columnIndex="5" GridPane.rowIndex="2">
+                  <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="129.0" styleClass="sensorText" text="Comm. ptotocol:" GridPane.columnIndex="5" GridPane.rowIndex="1">
                      <padding>
                         <Insets right="6.0" />
                      </padding>
@@ -136,7 +142,7 @@
                         <Insets right="6.0" />
                      </padding>
                   </Label>
-                  <ComboBox fx:id="protocolComboBox" prefWidth="150.0" GridPane.columnIndex="6" GridPane.columnSpan="2" GridPane.rowIndex="2">
+                  <ComboBox fx:id="protocolComboBox" prefWidth="150.0" GridPane.columnIndex="6" GridPane.columnSpan="2" GridPane.rowIndex="1">
                      <tooltip>
                         <Tooltip text="Pick version of communication protocol between server and emulator" />
                      </tooltip>
@@ -144,15 +150,7 @@
                         <Insets left="6.0" />
                      </GridPane.margin>
                   </ComboBox>
-                  <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="144.0" styleClass="sensorText" text="Disable &quot;ToBeSent&quot; log:" GridPane.columnIndex="5">
-                     <padding>
-                        <Insets right="6.0" />
-                     </padding>
-                     <tooltip>
-                        <Tooltip text="Disabled showing of waiting messages. WARNING: if not disabled, can rapidlly slow emulator!" />
-                     </tooltip>
-                  </Label>
-                  <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="144.0" styleClass="sensorText" text="Task log file path:" GridPane.columnIndex="5" GridPane.rowIndex="1">
+                  <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="144.0" styleClass="sensorText" text="Task log file path:" GridPane.columnIndex="5">
                      <padding>
                         <Insets right="6.0" />
                      </padding>
@@ -160,21 +158,12 @@
                         <Tooltip text="Where log file should be saved" />
                      </tooltip>
                   </Label>
-                  <RadioButton fx:id="disableLogYesRadBtn" mnemonicParsing="false" selected="true" text="Yes" GridPane.columnIndex="6">
-                     <toggleGroup>
-                        <ToggleGroup fx:id="disableLogGroup" />
-                     </toggleGroup>
-                     <GridPane.margin>
-                        <Insets left="5.0" />
-                     </GridPane.margin>
-                  </RadioButton>
-                  <RadioButton fx:id="disableLogNoRadBtn" mnemonicParsing="false" text="No" toggleGroup="$disableLogGroup" GridPane.columnIndex="7" />
-                  <TextField fx:id="saveDirTextField" prefHeight="25.0" prefWidth="168.0" GridPane.columnIndex="6" GridPane.columnSpan="2" GridPane.rowIndex="1">
+                  <TextField fx:id="saveDirTextField" prefHeight="25.0" prefWidth="168.0" GridPane.columnIndex="6" GridPane.columnSpan="2">
                      <GridPane.margin>
                         <Insets left="6.0" />
                      </GridPane.margin>
                   </TextField>
-                  <Button mnemonicParsing="false" onAction="#handleOpenSaveDir" GridPane.columnIndex="8" GridPane.rowIndex="1">
+                  <Button mnemonicParsing="false" onAction="#handleOpenSaveDir" GridPane.columnIndex="8">
                      <styleClass>
                         <String fx:value="plainToolBarBtn" />
                         <String fx:value="loadBtn" />
@@ -232,13 +221,13 @@
                      <children>
                         <GridPane prefHeight="104.0" prefWidth="536.0" styleClass="informationContainer" VBox.vgrow="NEVER">
                           <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="203.0" minWidth="10.0" prefWidth="164.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="192.0" minWidth="0.0" prefWidth="56.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="203.0" minWidth="10.0" prefWidth="178.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="192.0" minWidth="0.0" prefWidth="63.0" />
                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="0.0" prefWidth="54.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="276.0" minWidth="0.0" prefWidth="74.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="276.0" minWidth="6.0" prefWidth="72.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="276.0" minWidth="0.0" prefWidth="73.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="276.0" minWidth="6.0" prefWidth="73.0" />
                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="276.0" minWidth="10.0" prefWidth="74.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="276.0" minWidth="10.0" prefWidth="38.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="276.0" minWidth="10.0" prefWidth="15.0" />
                           </columnConstraints>
                           <rowConstraints>
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -246,7 +235,7 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="153.0" styleClass="sensorText" text="Sent messages count:" GridPane.rowIndex="1">
+                              <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="173.0" styleClass="sensorText" text="Sent messages count:" GridPane.rowIndex="1">
                                  <padding>
                                     <Insets right="6.0" />
                                  </padding>
@@ -254,7 +243,7 @@
                                     <Tooltip text="Number of sent messages, after which task should finish processing" />
                                  </tooltip>
                               </Label>
-                              <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="153.0" styleClass="sensorText" text="Waiting messages count:" GridPane.rowIndex="2">
+                              <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="173.0" styleClass="sensorText" text="Waiting messages count:" GridPane.rowIndex="2">
                                  <padding>
                                     <Insets right="6.0" />
                                  </padding>
@@ -262,7 +251,7 @@
                                     <Tooltip text="Number of waiting messages, after which task should finish processing" />
                                  </tooltip>
                               </Label>
-                              <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="153.0" styleClass="sensorText" text="Time duration:">
+                              <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="173.0" styleClass="sensorText" text="Time duration:">
                                  <padding>
                                     <Insets right="6.0" />
                                  </padding>
@@ -403,8 +392,8 @@
       </VBox>
       <HBox alignment="CENTER_RIGHT" prefHeight="36.0" prefWidth="870.0" spacing="10.0" VBox.vgrow="NEVER">
          <children>
-            <Button fx:id="addBtn" mnemonicParsing="false" onAction="#handleAdd" styleClass="addAdapterDialogBtn" text="Add" />
-            <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#handleCancel" styleClass="cancelDialogBtn" text="Cancel" />
+            <Button fx:id="addBtn" defaultButton="true" mnemonicParsing="false" onAction="#handleAdd" styleClass="addAdapterDialogBtn" text="Add" />
+            <Button fx:id="cancelBtn" cancelButton="true" mnemonicParsing="false" onAction="#handleCancel" styleClass="cancelDialogBtn" text="Cancel" />
          </children>
          <padding>
             <Insets right="10.0" />

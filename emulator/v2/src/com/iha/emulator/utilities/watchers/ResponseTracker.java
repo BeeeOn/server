@@ -49,13 +49,13 @@ public class ResponseTracker {
             return 0L;
     }
 
-    public void clearResponses(){
+    public synchronized void clearResponses(){
         if(responses != null) responses.clear();
     }
     /**
      * Clears {@link ResponseTracker#responses} list
      */
-    public void dumpResponses(){
+    public synchronized void dumpResponses(){
         responses.clear();
     }
     /**
@@ -63,7 +63,7 @@ public class ResponseTracker {
      * then clears {@link ResponseTracker#responses} list
      * @return responses saved since last call of this method
      */
-    public ArrayList<Response> getNewResponses(){
+    public synchronized ArrayList<Response> getNewResponses(){
         ArrayList<Response> newResponses = new ArrayList<>();
         for(int i = 0;i<responses.size();i++){
             newResponses.add(responses.get(i));

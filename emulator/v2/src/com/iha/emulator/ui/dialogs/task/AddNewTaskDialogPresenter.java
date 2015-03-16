@@ -89,8 +89,6 @@ public class AddNewTaskDialogPresenter implements Presenter,PanelPresenter{
     private ValidationSupport taskInfoSupport = new ValidationSupport();
     private BooleanProperty taskInfoSet;
     private Protocol.Version selectedVersion;
-    //TBS log
-    private BooleanProperty disableLog;
 
 
     public interface Display{
@@ -126,8 +124,6 @@ public class AddNewTaskDialogPresenter implements Presenter,PanelPresenter{
         public Label getRefreshTimeMinLbl();
         public Label getRefreshTimeMaxLbl();
         public ComboBox getProtocolComboBox();
-        public RadioButton getDisableLogYesRadBtn();
-        public RadioButton getDisableLogNoRadBtn();
         public TextField getSaveDirTextField();
         public TextField getAdaptersCountTxtField();
         public TextField getStartIdTxtField();
@@ -145,7 +141,6 @@ public class AddNewTaskDialogPresenter implements Presenter,PanelPresenter{
         taskInfoSupport.setValidationDecorator(cssDecorator);
         this.window = window;
         this.servers = servers;
-        this.disableLog = new SimpleBooleanProperty(true);
         this.simulation = simulation;
     }
 
@@ -167,7 +162,6 @@ public class AddNewTaskDialogPresenter implements Presenter,PanelPresenter{
         Document doc = DocumentHelper.parseText(content);
         //<task>
         Element taskElement = doc.getRootElement().element("task");
-        boolean disableLogs = Boolean.valueOf(taskElement.attributeValue("disable_log"));
         //parse server info
         logger.trace("XML -> Parsing server info");
         Element serverElement = taskElement.element("server");
@@ -208,12 +202,11 @@ public class AddNewTaskDialogPresenter implements Presenter,PanelPresenter{
         Element waitingMessagesElement = stopConditionsElement.element("waiting_messages");
         boolean waitingEnabled = Boolean.valueOf(waitingMessagesElement.attributeValue("enabled"));
         String waitingMessagesCount = "";
-        if(sentEnabled){
+        if(waitingEnabled){
             waitingMessagesCount = waitingMessagesElement.attributeValue("count");
         }
-        //---------------------------SET GUI ELEMENTS--------------------------------
+        //---------------------------SETGUI ELEMENTS--------------------------------
         //general
-        view.getDisableLogYesRadBtn().setSelected(disableLogs);
         view.getAdaptersCountTxtField().setText(adaptersCount);
         view.getStartIdTxtField().setText(start_id);
         view.getProtocolComboBox().getSelectionModel().select(ProtocolFactory.getVersion(protocolVersion));
@@ -279,8 +272,7 @@ public class AddNewTaskDialogPresenter implements Presenter,PanelPresenter{
     public void saveTemplate() {
         if(!isAllSet()) return;
         String filename = Utilities.saveDialogForXML(window,TEMPLATES_DEFAULT_DIR,buildTaskXML().asXML());
-        if(filename != null)
-            showInformation("File saved", "Sensor template successfully saved", "Saved to file \"" + filename + "\"");
+        if(filename != null) showInformation("File saved", "Sensor template successfully saved", "Saved to file \"" + filename + "\"");
 
     }
 
@@ -288,7 +280,6 @@ public class AddNewTaskDialogPresenter implements Presenter,PanelPresenter{
         Document doc = DocumentHelper.createDocument();
         //root element
         Element taskElement = doc.addElement("tasks").addElement("task");
-        taskElement.addAttribute("disable_log",String.valueOf(view.getDisableLogYesRadBtn().isSelected()));
         //server element
         ServerController serverController = new ServerController(selectedServer);
         serverController.saveToXml(taskElement);
@@ -386,8 +377,7 @@ public class AddNewTaskDialogPresenter implements Presenter,PanelPresenter{
                 logger.trace("Creating new task -> Creating logs -> Enabling response tracking");
                 task.getLog().getMessageTracker().setEnabled(true);
                 //DON'T show to be sent messages
-                logger.trace("Creating new task -> Creating logs -> Setting disable on To Be Sent log -> " + !view.getDisableLogYesRadBtn().isSelected());
-                task.getLog().setShowToBeSent(!view.getDisableLogYesRadBtn().isSelected());
+                task.getLog().setShowToBeSent(false);
                 //set log to buffer
                 logger.trace("Creating new task -> Setting logs to buffer");
                 try {
@@ -644,7 +634,7 @@ public class AddNewTaskDialogPresenter implements Presenter,PanelPresenter{
         logger.trace("Showing information");
         Alert dlg = new Alert(Alert.AlertType.INFORMATION, "");
         dlg.initModality(Modality.WINDOW_MODAL);
-        dlg.initOwner(this.window);
+        //dlg.initOwner(this.window);
         dlg.setTitle(title);
         dlg.getDialogPane().setContentText(message);
         dlg.getDialogPane().setHeaderText(headerMessage);
@@ -1018,10 +1008,6 @@ public class AddNewTaskDialogPresenter implements Presenter,PanelPresenter{
         });
         taskInfoSupport.registerValidator(view.getProtocolComboBox(), false, (Control c, Protocol.Version version) ->
                 ValidationResult.fromErrorIf(view.getProtocolComboBox(), "Protocol version is required", (version == null)));
-        //DISABLE TBS LOG
-        view.getDisableLogYesRadBtn().selectedProperty().addListener((observable, oldValue, newValue) -> {
-            setDisableLog(newValue);
-        });
         //SAVE DIR
         view.getSaveDirTextField().setText(TaskParameters.DEFAULT_SAVE_DIR);
         taskInfoSupport.registerValidator(view.getSaveDirTextField(),false,Validator.createEmptyValidator("You have to choose location for task's log file"));
@@ -1162,17 +1148,5 @@ public class AddNewTaskDialogPresenter implements Presenter,PanelPresenter{
 
     public void setTaskInfoSet(boolean taskInfoSet) {
         this.taskInfoSet.set(taskInfoSet);
-    }
-
-    public boolean getDisableLog() {
-        return disableLog.get();
-    }
-
-    public BooleanProperty disableLogProperty() {
-        return disableLog;
-    }
-
-    public void setDisableLog(boolean disableLog) {
-        this.disableLog.set(disableLog);
     }
 }
