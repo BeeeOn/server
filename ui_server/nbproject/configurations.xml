@@ -106,6 +106,10 @@
         <itemPath>msgInGetCondition.cpp</itemPath>
         <itemPath>msgInGetCondition.h</itemPath>
       </logicalFolder>
+      <logicalFolder name="f12" displayName="algorithms" projectFiles="true">
+        <itemPath>MsgInAlgorithmsRedirect.cpp</itemPath>
+        <itemPath>MsgInAlgorithmsRedirect.h</itemPath>
+      </logicalFolder>
       <logicalFolder name="f4" displayName="devices" projectFiles="true">
         <itemPath>MsgInAdapterListen.cpp</itemPath>
         <itemPath>MsgInDelDevice.cpp</itemPath>
@@ -556,6 +560,10 @@
       <item path="MsgInAddView.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="MsgInAddView.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInAlgorithmsRedirect.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInAlgorithmsRedirect.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="MsgInChangeAccount.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -1590,6 +1598,10 @@
       <item path="MsgInAddView.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="MsgInAddView.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInAlgorithmsRedirect.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInAlgorithmsRedirect.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="MsgInChangeAccount.h" ex="false" tool="3" flavor2="0">
       </item>

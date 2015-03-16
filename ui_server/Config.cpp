@@ -53,6 +53,11 @@ int Config::getNotifyPort() {
     return 0;
 }
 
+int Config::getAlgorithmPort() {
+    return _doc.child(CONFIG_ROOT).child(SERVER_NODE).attribute("algorithmPort").as_int();
+}
+
+
 int Config::getVerbosity() {
     return _doc.child(CONFIG_ROOT).child(SERVER_NODE).attribute("verbosity").as_int(10);//10 = max verbosity
 }

@@ -42,6 +42,8 @@
 #include "MsgInGetNewDevices.h"
 #include "MsgInSetGCMID.h"
 #include "MsgInDelGCMID.h"
+#include "MsgInAlgorithmsRedirect.h"
+#include <algorithm> 
 
 MsgInFactory::MsgInFactory(void)
 {
@@ -154,6 +156,16 @@ IMsgIn* MsgInFactory::createMsg(char* msg)
         return new MsgInSetGCMID(msg, doc);
     if(state == MsgInDelGCMID::state)
         return new MsgInDelGCMID(msg, doc);
+   
+    vector<string> algMsgs;
+    algMsgs.push_back("addalg");
+    algMsgs.push_back("getalg");
+    algMsgs.push_back("getalgs");
+    algMsgs.push_back("setalg");
+    algMsgs.push_back("delalg");
+    
+    if(std::find(algMsgs.begin(), algMsgs.end(), state)!=algMsgs.end())
+        return new MsgInAlgorithmsRedirect(msg, doc);
     else{
         Logger::getInstance(Logger::ERROR)<<"UNKNOWN MSG"<<endl;
         return new MsgInUnknown(msg,doc);
