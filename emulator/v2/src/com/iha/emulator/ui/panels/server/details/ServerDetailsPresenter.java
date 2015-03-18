@@ -5,6 +5,7 @@ import com.iha.emulator.ui.Presenter;
 import com.iha.emulator.ui.panels.PanelPresenter;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
+import javafx.beans.property.BooleanProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -24,6 +25,7 @@ public class ServerDetailsPresenter implements Presenter,PanelPresenter {
 
     private Display view;
     private Server model;
+    private BooleanProperty senderConnectionProp;
 
     public interface Display {
         public Node getView();
@@ -36,6 +38,7 @@ public class ServerDetailsPresenter implements Presenter,PanelPresenter {
         public Label getIpLbl();
         public Label getPortLbl();
         public Label getDbNameLbl();
+        public Label getSenderConnectionLbl();
     }
 
     public ServerDetailsPresenter() {
@@ -48,6 +51,7 @@ public class ServerDetailsPresenter implements Presenter,PanelPresenter {
         if(this.model != null) {
             logger.trace("Unbinding labels");
             view.getConnectionLbl().textProperty().unbind();
+            view.getSenderConnectionLbl().textProperty().unbind();
             view.getNameLbl().textProperty().unbind();
             view.getIpLbl().textProperty().unbind();
             view.getPortLbl().textProperty().unbind();
@@ -55,6 +59,7 @@ public class ServerDetailsPresenter implements Presenter,PanelPresenter {
         }
         this.model = null;
         view.getConnectionLbl().setText("");
+        view.getSenderConnectionLbl().setText("");
         view.getNameLbl().setText("");
         view.getIpLbl().setText("");
         view.getPortLbl().setText("");
@@ -140,6 +145,30 @@ public class ServerDetailsPresenter implements Presenter,PanelPresenter {
         view.getPortLbl().textProperty().bind(Bindings.convert(this.model.portProperty()));
         view.getDbNameLbl().textProperty().bind(this.model.databaseNameProperty());
         logger.trace("OK");
+    }
+
+    public void addSenderProperty(BooleanProperty senderConnection){
+        if(senderConnection == null) {
+            view.getSenderConnectionLbl().setText("Disabled");
+            return;
+        }
+        if(senderConnection != null){
+            view.getSenderConnectionLbl().textProperty().unbind();
+        }
+        this.senderConnectionProp = senderConnection;
+        view.getSenderConnectionLbl().textProperty().bind(new StringBinding() {
+            {
+                bind(senderConnectionProp);
+            }
+            @Override
+            protected String computeValue() {
+                if(senderConnectionProp == null ) return "Disabled";
+                if(senderConnectionProp.get())
+                    return "Connected";
+                else
+                    return "Disconnected";
+            }
+        });
     }
 
     @Override

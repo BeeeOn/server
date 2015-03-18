@@ -25,6 +25,7 @@ public class ServerDetailsView implements Initializable,ServerDetailsPresenter.D
     @FXML private Node view;
 
     @FXML private Label connectionLbl;
+    @FXML private Label senderConnectionLbl;
     @FXML private Label nameLbl;
     @FXML private Label ipLbl;
     @FXML private Label portLbl;
@@ -65,6 +66,11 @@ public class ServerDetailsView implements Initializable,ServerDetailsPresenter.D
     @Override
     public Label getConnectionLbl() {
         return connectionLbl;
+    }
+
+    @Override
+    public Label getSenderConnectionLbl() {
+        return senderConnectionLbl;
     }
 
     @Override
@@ -109,5 +115,24 @@ public class ServerDetailsView implements Initializable,ServerDetailsPresenter.D
                 });
             }
         });
+        senderConnectionLbl.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                Platform.runLater(()-> {
+                    if(newValue.equals("Connected")){
+                        senderConnectionLbl.getStyleClass().remove("statusInactive");
+                        senderConnectionLbl.getStyleClass().add("statusActive");
+                    }else if(newValue.equals("Disconnected")){
+                        senderConnectionLbl.getStyleClass().remove("statusActive");
+                        senderConnectionLbl.getStyleClass().add("statusInactive");
+                    }else {
+                        senderConnectionLbl.getStyleClass().remove("statusActive");
+                        senderConnectionLbl.getStyleClass().remove("statusInactive");
+                        senderConnectionLbl.getStyleClass().add("serverDetailsText");
+                    }
+                });
+            }
+        });
+
     }
 }

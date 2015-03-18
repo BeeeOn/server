@@ -7,6 +7,7 @@ import com.iha.emulator.communication.eserver.task.TaskParser;
 import com.iha.emulator.communication.eserver.task.implemented.CheckIdTask;
 import com.iha.emulator.communication.protocol.Protocol;
 import com.iha.emulator.control.AdapterController;
+import com.iha.emulator.control.scheduler.Scheduler;
 import com.iha.emulator.models.Server;
 import com.iha.emulator.ui.Presenter;
 import com.iha.emulator.ui.panels.PanelPresenter;
@@ -271,18 +272,16 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
             //config log
             //newAdapterController.getLog().setType(AdapterLogger.toType(parent.getProperty("defaultLogMessageType")));
             //create scheduler
-            newAdapterController.createScheduler();
+            newAdapterController.createScheduler(Scheduler.Type.DETAILED);
             //set response tracking
             newAdapterController.setTrackServerResponse(true);
             newAdapterController.setDumpServerResponse(true);
             //bind scheduler processing to adapter's status indicator
             newAdapterController.bindSchedulerProcess(newAdapterController.getAdapter(), newAdapterController.getScheduler());
             //bind register message
-            newAdapterController.bindRegisterMessage(newAdapterController);
+            newAdapterController.bindRegisterMessage();
             //save new adapter button
             parent.addAdapterBtn(newAdapterController);
-            // set new adapter as current
-            parent.setCurrentAdapter(newAdapterController);
             try {
                 newAdapterController.getLog().setBuffered(true,"adapter_emu_" + String.valueOf(newAdapterController.getAdapter().getId())+"_",DEFAULT_LOG_PATH);
                 newAdapterController.getLog().writeAdapterLogHeaderToBuffer();
@@ -295,6 +294,11 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
                         event -> parent.quit());
                 return false;
             }
+            //create server receiver
+            newAdapterController.createServerReceiver();
+            newAdapterController.getServerReceiver().start();
+            // set new adapter as current
+            parent.setCurrentAdapter(newAdapterController);
             return true;
         } catch (IllegalArgumentException e){
             parent.getAdapterControllersList().remove(newAdapterController);

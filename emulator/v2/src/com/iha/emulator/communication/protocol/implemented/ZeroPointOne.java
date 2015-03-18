@@ -98,6 +98,7 @@ public class ZeroPointOne extends AbstractProtocol {
         if(!protocol.equals(String.valueOf(getVersion()))){
             throw new IllegalArgumentException(" --> Protocols doesn't match! (in/current): " + protocol + " / " + getVersion());
         }
+        getLogger().trace("Protocol version match");
         return inDocument;
     }
 
@@ -114,6 +115,10 @@ public class ZeroPointOne extends AbstractProtocol {
                 if(id!= null && time != null){
                     int timeInt = Integer.valueOf(time);
                     if(timeInt < 0) throw new IllegalArgumentException(" --> server trying to set refresh rate " + timeInt);
+                    if(senderController == null || senderController.getModel() == null || adapterController == null){
+                        getLogger().error("Null where should not be null");
+                        return;
+                    }
                     if(senderController.getModel().getRefreshTime() != timeInt && timeInt != 0 && adapterController != null && !senderController.getIgnoreRefreshChange()){
                         senderController.setNewRefreshTime(timeInt);
                         if(senderController.isFullMessage()){
@@ -130,28 +135,15 @@ public class ZeroPointOne extends AbstractProtocol {
     }
 
     @Override
-    public int parseAdapterId(Document inDocument) throws NullPointerException,NumberFormatException{
-        Element rootElement = inDocument.getRootElement();
-        String state = rootElement.attribute("state").getValue();
-        getLogger().trace("Incoming message state: " + state);
-        switch (state){
-            case "set":
-                return Integer.valueOf(rootElement.attributeValue("debug_adapter_id"));
-            case "listen":
-                return Integer.valueOf(rootElement.attribute("adapter_id").getValue());
-        }
-        return 0;
-    }
-
-    @Override
     public void parseInAdapterMessage(Document inDocument, AdapterController adapterController) throws NullPointerException,IllegalArgumentException{
-        getLogger().debug("Parsing incoming message");
+        getLogger().debug("Parsing incoming message -> getting state");
         Element rootElement = inDocument.getRootElement();
         String state = rootElement.attribute("state").getValue();
         getLogger().trace("State = " + state);
+        int sensorId;
         switch (state){
             case "set":
-                int sensorId = Integer.valueOf(rootElement.attribute("id").getValue());
+                sensorId = Integer.valueOf(rootElement.attribute("id").getValue());
                 getLogger().debug("Sensor Ip: " + Utilities.intToIpString(sensorId));
                 ArrayList<SetNewValue> newValues = new ArrayList<>();
                 for(Iterator i = rootElement.elementIterator();i.hasNext();){
@@ -160,6 +152,8 @@ public class ZeroPointOne extends AbstractProtocol {
                         newValues.add(new SetNewValue(current.attribute("type").getValue(),current.attribute("offset").getValue(),current.getText()));
                     }
                 }
+                //16843009 = 1.1.1.1
+                //33686018 = 2.2.2.2
                 getLogger().trace("Number of values, to be changed: " + newValues.size());
                 adapterController.changeValueOnSensor(sensorId,newValues);
                 return;
@@ -171,6 +165,13 @@ public class ZeroPointOne extends AbstractProtocol {
                 }else{
                     throw new IllegalArgumentException("Register response is FALSE");
                 }
+                return;
+            case "clean":
+                sensorId = Integer.valueOf(rootElement.attribute("id").getValue());
+                adapterController.cleanSensor(sensorId);
+                return;
+            case "listen":
+                Platform.runLater(()->adapterController.sendMessage("Server requested \"listen\" (sensor pairing)"));
                 return;
         }
         getLogger().warn("Unknown state");

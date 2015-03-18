@@ -1,7 +1,6 @@
 package com.iha.emulator.ui.simulations.performance;
 
 import com.iha.emulator.communication.protocol.Protocol;
-import com.iha.emulator.communication.server.ServerListener;
 import com.iha.emulator.control.task.SimulationTask;
 import com.iha.emulator.control.task.StopCondition;
 import com.iha.emulator.control.task.ValueParameters;
@@ -40,6 +39,8 @@ import javafx.stage.Stage;
 import jfxtras.scene.control.LocalDateTimeTextField;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.dom4j.Document;
+import org.dom4j.DocumentFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -67,7 +68,6 @@ public class PerformanceSimulationPresenter implements Presenter{
     private ServerDetailsPresenter serverDetailsPresenter;
     private TaskDetailsPresenter taskDetailsPresenter;
     //endregion
-    private ServerListener serverListener;
     //region TASKS
     private ObjectProperty<SimulationTask> currentTask;
     private ObservableList<SimulationTask> tasks = FXCollections.observableArrayList();
@@ -232,7 +232,7 @@ public class PerformanceSimulationPresenter implements Presenter{
                     //create task parameters
                     logger.trace("Creating new task -> Creating parameters");
                     task.createTaskParameters(
-                            20, //adapters count
+                            1, //adapters count
                             Protocol.Version.ZERO_POINT_ONE, //protocol version
                             1000, //starting adapter id
                             3, // sensors count minimum
@@ -241,6 +241,8 @@ public class PerformanceSimulationPresenter implements Presenter{
                             5, //refresh time maximum
                             null // default save dir
                     );
+                    //register tracking responses per second
+                    task.getResponseTracker().registerSecondCounter(task.getTaskParameters().getStopWatch().timeProperty());
                     //update progress
                     progress.set(10);
                     //create value information
@@ -263,7 +265,7 @@ public class PerformanceSimulationPresenter implements Presenter{
                     logger.trace("Creating new task -> Setting logs to buffer");
                     try {
                         task.getLog().setBuffered(true,"task_"+task.getId()+"_",task.getTaskParameters().getSaveDir());
-                        task.getLog().writeTaskLogHeaderToBuffer();
+                        task.getLog().writeTaskLogHeaderToBuffer(task);
                         logger.trace("");
                     } catch (IOException e) {
                         Utilities.showException(logger, "Cannot create buffer file for new task's log.", e, true, event -> quit());
@@ -271,15 +273,13 @@ public class PerformanceSimulationPresenter implements Presenter{
                     //register stop conditions
                     logger.trace("Creating new task -> Creating stop conditions");
                     StopCondition sc = task.createStopCondition();
-                    sc.registerSentMessageWatcher(100);
-                    //sc.registerWaitingMessageWatcher(254);
+                    sc.registerWaitingMessageWatcher(4000);
                     //add to other tasks
                     logger.trace("Creating new task -> Adding task to list");
                     getTasks().add(task);
                     //initialize adapters
                     progress.set(20);
                     logger.trace("Creating new task -> Creating adapters");
-                    task.createAdapters(progress);
                     task.setSimulationState(SimulationTask.State.READY);
                     //add QueueWatcher to task
                     task.setQueueWatcher(getQueueWatcher());
@@ -297,7 +297,20 @@ public class PerformanceSimulationPresenter implements Presenter{
     }
 
     public void saveAll(){
-
+        if(getTasks().size() < 1) return;
+        logger.trace("Saving all tasks");
+        Task<Document> worker = new Task<Document>() {
+            @Override
+            protected Document call() throws Exception {
+                logger.trace("Creating XML file");
+                Document doc = DocumentFactory.getInstance().createDocument();
+                doc.addElement("adapters");
+                for(SimulationTask task : getTasks()){
+                    //doc = adapterController.saveToXml(doc);
+                }
+                return doc;
+            }
+        };
     }
 
     public void open(){
@@ -359,6 +372,7 @@ public class PerformanceSimulationPresenter implements Presenter{
         setCurrentTask(newTask);
         //show task's server information
         serverDetailsPresenter.addModel(newTask.getServerController().getModel());
+        serverDetailsPresenter.addSenderProperty(null);
         taskDetailsPresenter.addModel(newTask);
         //bind control buttons to new task
         bindTaskControlBtns();
@@ -895,7 +909,6 @@ public class PerformanceSimulationPresenter implements Presenter{
 
     public void quit(){
         memoryChecker.stop();
-        if(serverListener != null) serverListener.terminateServerListener();
         Platform.exit();
     }
 

@@ -57,5 +57,4 @@ public abstract class AbstractProtocol implements Protocol{
     public abstract Document buildRegisterMessage(AdapterController adapterController);
 
     public abstract void parseInSensorMessage(Document inDocument, SensorController senderController, AdapterController adapterController) throws NullPointerException;
-    public abstract int parseAdapterId(Document inDocument) throws NullPointerException;
 }

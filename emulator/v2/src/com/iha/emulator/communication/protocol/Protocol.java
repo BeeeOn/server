@@ -46,8 +46,7 @@ public interface Protocol {
     public Document buildRegisterMessage(AdapterController adapterController);
     public Document convertInMessageToXML(String inMessage) throws DocumentException;
     public void parseInSensorMessage(Document inDocument,SensorController senderController, AdapterController adapterController) throws NullPointerException;
-    public void parseInAdapterMessage(Document inDocument,AdapterController adapterController) throws NullPointerException;
-    public int parseAdapterId(Document inDocument) throws NullPointerException;
+    public void parseInAdapterMessage(Document inDocument,AdapterController adapterController) throws NullPointerException,IllegalArgumentException;
     public Document checkProtocolVersion(Document inDocument) throws IllegalArgumentException , NullPointerException;
     public String getHexAdapterId(Adapter adapter);
     public String getHexSensorId(Sensor sensor);

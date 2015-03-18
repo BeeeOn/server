@@ -221,8 +221,8 @@
                       <TableColumn fx:id="enabledColumn" editable="false" prefWidth="30.0" sortable="false" />
                         <TableColumn fx:id="idColumn" editable="false" prefWidth="27.0" sortable="false" text="Id" />
                       <TableColumn fx:id="stateColumn" editable="false" prefWidth="97.0" sortable="false" text="State" />
-                        <TableColumn fx:id="serverColumn" editable="false" prefWidth="142.0" sortable="false" text="Information" />
-                        <TableColumn fx:id="stopConditionColumn" editable="false" prefWidth="127.0" sortable="false" text="Stop conditions" />
+                        <TableColumn fx:id="serverColumn" editable="false" prefWidth="167.0" sortable="false" text="Information" />
+                        <TableColumn fx:id="stopConditionColumn" editable="false" prefWidth="158.0" sortable="false" text="Stop conditions" />
                     </columns>
                   </TableView>
                   <HBox prefHeight="207.0" prefWidth="380.0" VBox.vgrow="NEVER">
@@ -234,7 +234,7 @@
                                     <Label prefHeight="24.0" prefWidth="178.0" styleClass="sectionName" text="Server details" BorderPane.alignment="CENTER_LEFT" />
                                  </left>
                               </BorderPane>
-                              <FlowPane fx:id="serverDetailsContainer" alignment="TOP_CENTER" columnHalignment="CENTER" maxHeight="160.0" maxWidth="250.0" minHeight="170.0" minWidth="250.0" prefHeight="170.0" prefWidth="250.0" rowValignment="TOP" styleClass="serverDetailsPerformanceContainer" />
+                              <FlowPane fx:id="serverDetailsContainer" alignment="TOP_CENTER" columnHalignment="CENTER" maxHeight="249.0" maxWidth="250.0" minHeight="215.0" minWidth="250.0" prefHeight="249.0" prefWidth="250.0" rowValignment="TOP" styleClass="serverDetailsPerformanceContainer" />
                            </children>
                            <HBox.margin>
                               <Insets />
@@ -247,7 +247,7 @@
                                     <Label prefHeight="24.0" prefWidth="178.0" styleClass="sectionName" text="Task details" BorderPane.alignment="CENTER_LEFT" />
                                  </left>
                               </BorderPane>
-                              <FlowPane fx:id="taskDetailsContainer" alignment="CENTER" columnHalignment="CENTER" maxHeight="160.0" maxWidth="250.0" minHeight="170.0" minWidth="250.0" prefHeight="170.0" prefWidth="250.0" rowValignment="TOP" styleClass="taskDetailsContainer" />
+                              <FlowPane fx:id="taskDetailsContainer" alignment="CENTER" columnHalignment="CENTER" maxHeight="360.0" maxWidth="250.0" minHeight="215.0" minWidth="250.0" prefHeight="360.0" prefWidth="250.0" rowValignment="TOP" styleClass="taskDetailsContainer" />
                            </children>
                            <HBox.margin>
                               <Insets left="20.0" />

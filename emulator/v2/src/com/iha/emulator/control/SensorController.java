@@ -162,6 +162,7 @@ public class SensorController {
             if(!typeString.startsWith("0x")) typeString = "0x" + typeString;
             //modify offset string
             if(!offsetString.startsWith("0x")) offsetString = "0x" + offsetString;
+            boolean valueChanged = false;
             for(Value value : getModel().getValues()){
                 String currentValueTypeString = value.getValueType().getType();
                 String currentOffsetString = "0x" + Integer.toHexString(value.getOffset());
@@ -184,9 +185,11 @@ public class SensorController {
                                     + oldValue + " -> " + value.asMessageString());
                         }
                     });
-                    return;
+                    valueChanged = true;
+                    break;
                 }
             }
+            if(!valueChanged) throw new IllegalArgumentException(toString() + " -> message \"set\" -> Cannot find value with type-> " + typeString + " offset -> " + offsetString);
         }catch (NumberFormatException e){
             throw new IllegalArgumentException("Cannot set value to -> " + valueString + " on sensor " + getSensorIdAsIp());
         }

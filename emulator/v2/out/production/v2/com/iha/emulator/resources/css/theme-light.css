@@ -491,7 +491,7 @@
     -fx-border-width: 5px 3px 3px 3px;
     -fx-border-color: #efefef;
     -fx-max-width: 250px;
-    -fx-max-height: 170px;
+    -fx-max-height: 215px;
 }
 
 .serverDetailsText{
@@ -1079,5 +1079,5 @@
     -fx-border-width: 5px 3px 3px 3px;
     -fx-border-color: #efefef;
     -fx-max-width: 250px;
-    -fx-max-height: 170px;
+    -fx-max-height: 215px;
 }

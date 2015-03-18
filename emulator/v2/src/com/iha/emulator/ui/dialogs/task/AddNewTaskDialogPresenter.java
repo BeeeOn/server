@@ -346,12 +346,14 @@ public class AddNewTaskDialogPresenter implements Presenter,PanelPresenter{
                             updateProgress((long)newValue,100);
                     }
                 });
+                progress.set(1);
                 SimulationTask task = new SimulationTask();
                 //set id
                 task.setId(simulation.getTasks().size());
                 //create server model for task
                 logger.trace("Creating new task -> Creating server");
                 task.createServer(selectedServer);
+                progress.set(10);
                 //create task parameters
                 logger.trace("Creating new task -> Creating parameters");
                 task.createTaskParameters(
@@ -364,8 +366,10 @@ public class AddNewTaskDialogPresenter implements Presenter,PanelPresenter{
                         Utilities.refreshSliderScaleToSeconds(view.getRefreshTimeCountSlider().getHighValue()), //refresh time maximum
                         view.getSaveDirTextField().getText() // default save dir
                 );
+                //register tracking responses per second
+                task.getResponseTracker().registerSecondCounter(task.getTaskParameters().getStopWatch().timeProperty());
                 //update progress
-                progress.set(10);
+                progress.set(20);
                 ValueParameters valueParameters = new ValueParameters();
                 valueParameters.setEnabledValues(values);
                 task.setValueParameters(valueParameters);
@@ -373,19 +377,22 @@ public class AddNewTaskDialogPresenter implements Presenter,PanelPresenter{
                 logger.trace("Creating new task -> Creating logs");
                 task.createLog(simulation.getView().getLogTabPane());
                 task.getLog().createLogs();
+                progress.set(30);
                 //set message tracking (waiting and sent counter)
                 logger.trace("Creating new task -> Creating logs -> Enabling response tracking");
                 task.getLog().getMessageTracker().setEnabled(true);
                 //DON'T show to be sent messages
                 task.getLog().setShowToBeSent(false);
+                progress.set(40);
                 //set log to buffer
                 logger.trace("Creating new task -> Setting logs to buffer");
                 try {
                     task.getLog().setBuffered(true,"task_"+task.getId()+"_",task.getTaskParameters().getSaveDir());
-                    task.getLog().writeTaskLogHeaderToBuffer();
+                    task.getLog().writeTaskLogHeaderToBuffer(task);
                 } catch (IOException e) {
                     Utilities.showException(logger, "Cannot create buffer file for new task's log.", e, true, event -> simulation.quit());
                 }
+                progress.set(50);
                 //register stop conditions
                 logger.trace("Creating new task -> Creating stop conditions");
                 StopCondition sc = task.createStopCondition();
@@ -398,13 +405,13 @@ public class AddNewTaskDialogPresenter implements Presenter,PanelPresenter{
                 if(view.getWaitingMessagesYesRadBtn().isSelected()){
                     sc.registerWaitingMessageWatcher(Long.valueOf(view.getWaitingMessagesCountTxtField().getText()));
                 }
+                progress.set(60);
                 //initialize adapters
-                progress.set(20);
-                logger.trace("Creating new task -> Creating adapters");
-                task.createAdapters(progress);
                 task.setSimulationState(SimulationTask.State.READY);
+                progress.set(70);
                 //add QueueWatcher to task
                 task.setQueueWatcher(simulation.getQueueWatcher());
+                progress.set(80);
                 //add to other tasks
                 logger.trace("Creating new task -> Adding task to list");
                 progress.set(100);

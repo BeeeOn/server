@@ -28,6 +28,8 @@ public class TaskDetailsView implements Initializable,TaskDetailsPresenter.Displ
     @FXML private Label waitingMessagesLbl;
     @FXML private Label sentMessagesLbl;
     @FXML private Label stopWatchLbl;
+    @FXML private Label respPerSecondLbl;
+    @FXML private Label maxRespPerSecondLbl;
 
     public TaskDetailsView() {
 
@@ -71,6 +73,16 @@ public class TaskDetailsView implements Initializable,TaskDetailsPresenter.Displ
     @Override
     public Label getStopWatchLbl() {
         return stopWatchLbl;
+    }
+
+    @Override
+    public Label getRespPerSecondLbl() {
+        return respPerSecondLbl;
+    }
+
+    @Override
+    public Label getMaxRespPerSecondLbl() {
+        return maxRespPerSecondLbl;
     }
 
     @Override

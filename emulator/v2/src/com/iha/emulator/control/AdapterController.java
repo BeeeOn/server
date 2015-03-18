@@ -2,8 +2,13 @@ package com.iha.emulator.control;
 
 import com.iha.emulator.communication.protocol.Protocol;
 import com.iha.emulator.communication.protocol.SetNewValue;
+import com.iha.emulator.communication.server.MessageSender;
 import com.iha.emulator.communication.server.OutMessage;
 import com.iha.emulator.communication.server.ServerController;
+import com.iha.emulator.communication.server.ServerReceiver;
+import com.iha.emulator.control.scheduler.Scheduler;
+import com.iha.emulator.control.scheduler.implemented.DetailedScheduler;
+import com.iha.emulator.control.scheduler.implemented.PerformanceScheduler;
 import com.iha.emulator.models.Adapter;
 import com.iha.emulator.models.Sensor;
 import com.iha.emulator.models.Server;
@@ -38,7 +43,7 @@ import java.util.Iterator;
 /**
  * Created by Shu on 27.11.2014.
  */
-public class AdapterController{
+public class AdapterController {
 
     private static final Logger logger = LogManager.getLogger(AdapterController.class);
     static final int SLEEP_TIME = 500;
@@ -48,6 +53,9 @@ public class AdapterController{
     private Adapter adapter;
     private ServerController serverController;
     private Scheduler scheduler;
+    private MessageSender messageSender;
+
+    private ServerReceiver serverReceiver = null;
 
     private ListProperty<SensorController> sensorControllers = new SimpleListProperty<>(FXCollections.observableArrayList());
 
@@ -63,92 +71,122 @@ public class AdapterController{
     }
 
 
-    public void enable(){
-        logger.debug("Enabling adapter -> " + adapter.getId());
+    public void enable() {
+        logger.trace("Enabling adapter -> " + adapter.getId());
         adapter.setStatus(true);
     }
 
-    public void disable(){
-        logger.debug("Disabling adapter -> " + adapter.getId());
+    public void disable() {
+        logger.trace("Disabling adapter -> " + adapter.getId());
         adapter.setStatus(false);
     }
 
-    public void sendMessage(String logMessage){
+    public void sendMessage(String logMessage) {
         log.log(logMessage);
     }
 
-    public void sendMessage(String logMessage,Document message,SensorController senderController,OutMessage.Type type){
-        if(message != null){
-            Text unsent = null;
-                switch (type){
-                    case REGISTER_ADAPTER:
-                        unsent = log.sent("Adapter/" + getAdapter().getId() + " -> trying to register");
-                        break;
-                    case SENSOR_MESSAGE:
-                        if(senderController.isFullMessage()){
-                            unsent = log.sent("Adapter/" + getAdapter().getId() + " -> Sensor/" + senderController.getSensorIdAsIp() + " waiting to send data.");
-                        }else{
-                            unsent = log.sent("Sensor " + senderController.toString() + " waiting to send data.");
-                        }
-                        break;
-                }
-
-            messages.add(new OutMessage(logMessage,message,senderController,type,unsent));
+    public void sendMessage(OutMessage message) {
+        if (messages != null) {
+            switch (message.getType()){
+                case REGISTER_ADAPTER:
+                    messages.add(0,message);
+                    break;
+                case SENSOR_MESSAGE:
+                    messages.add(message);
+                    break;
+            }
             startScheduler();
         }
     }
 
-    public synchronized void sendError(String message,Throwable t,boolean terminate){
-        if(t != null) message = message + " -> " + t.getMessage();
-        getLog().error(message,terminate);
-    }
-
-    public void changeValueOnSensor(int sensorId,ArrayList<SetNewValue> newValues) throws IllegalArgumentException{
-        SensorController sensorController = getSensorById(sensorId);
-        if(sensorController == null)
-            throw new IllegalArgumentException("Sensor with id \""  + sensorId + "\n doesn't exist");
-        try{
-            for(SetNewValue newValue : newValues){
-                sensorController.changeValue(newValue.getType(),newValue.getOffset(),newValue.getValue());
+    public void sendMessage(String logMessage, Document message, SensorController senderController, OutMessage.Type type) {
+        if (message != null) {
+            Text unsent;
+            switch (type) {
+                case REGISTER_ADAPTER:
+                    unsent = log.sent("Adapter/" + getAdapter().getId() + " -> trying to register");
+                    messages.add(0, new OutMessage(logMessage, message, senderController, type, unsent));
+                    break;
+                case SENSOR_MESSAGE:
+                    if (senderController.isFullMessage()) {
+                        unsent = log.sent("Adapter/" + getAdapter().getId() + " -> Sensor/" + senderController.getSensorIdAsIp() + " waiting to send data.");
+                    } else {
+                        unsent = log.sent("Sensor " + senderController.toString() + " waiting to send data.");
+                    }
+                    messages.add(new OutMessage(logMessage, message, senderController, type, unsent));
+                    break;
             }
-        }catch (IllegalArgumentException e){
-            Platform.runLater(() -> log.error(e.getMessage(),false));
-            logger.error(e.getMessage(),e);
+            startScheduler();
         }
-
-
     }
 
-    public void deleteSensors(ObservableList<SensorController> sensorControllers){
-        if(sensorControllers == null) return;
-        String name = null;
-        for(Iterator<SensorController> it = sensorControllers.iterator();it.hasNext();){
-            SensorController sensorController = it.next();
-             name = sensorController.toString();
-            logger.debug(name + " -> Deleting");
-            if(sensorController.getTimerRunning()) sensorController.stopTimer();
-            if(sensorController.getPanel() != null ) {
-                logger.trace(name + " -> removing panel from panel container");
-                sensorController.getPanel().deletePanel();
+    public synchronized void sendError(String message, Throwable t, boolean terminate) {
+        if (t != null) message = message + " -> " + t.getMessage();
+        getLog().error(message, terminate);
+    }
+
+    public void changeValueOnSensor(int sensorId, ArrayList<SetNewValue> newValues) throws IllegalArgumentException {
+        SensorController sensorController = getSensorById(sensorId);
+        if (sensorController == null)
+            throw new IllegalArgumentException("Sensor with id \"" + sensorId + "\n doesn't exist");
+        try {
+            for (SetNewValue newValue : newValues) {
+                logger.trace("Trying to change value on sensor: " + sensorController.toString());
+                sensorController.changeValue(newValue.getType(), newValue.getOffset(), newValue.getValue());
             }
-            logger.trace(name + " -> removing unsent messages");
-            removeUnsentMessages(sensorController);
-            logger.trace(name + " -> removing from list");
-            sensorController.delete();
+        } catch (IllegalArgumentException e) {
+            Platform.runLater(() -> log.error(e.getMessage(), false));
+            logger.error(e.getMessage(), e);
+        }
+    }
+
+    public void cleanSensor(int sensorId) throws IllegalArgumentException{
+        Platform.runLater(()->deleteSensor(getSensorControllerById(sensorId)));
+    }
+
+    private SensorController getSensorControllerById(int id)throws IllegalArgumentException{
+        for (SensorController s : getSensorControllers()){
+            if(s.getModel().getId() == id) return s;
+        }
+        throw new IllegalArgumentException("Sensor id \"" + id + "\" not found");
+    }
+
+    public void deleteSensors(ObservableList<SensorController> sensorControllers) {
+        if (sensorControllers == null) return;
+        for (Iterator<SensorController> it = sensorControllers.iterator(); it.hasNext(); ) {
+            SensorController sensorController = it.next();
+            deleteSensor(sensorController);
         }
         getSensorControllers().removeAll(sensorControllers);
-        logger.debug(name + " -> OK");
         System.gc();
     }
 
-    public void deleteAll(){
+    public void deleteSensor(SensorController sensorController){
+        String name;
+        name = sensorController.toString();
+        logger.debug(name + " -> Deleting");
+        if (sensorController.getTimerRunning()) sensorController.setTimerRunning(false);
+        if (sensorController.getPanel() != null) {
+            logger.trace(name + " -> removing panel from panel container");
+            sensorController.getPanel().deletePanel();
+        }
+        logger.trace(name + " -> removing unsent messages");
+        removeUnsentMessages(sensorController);
+        logger.trace(name + " -> removing from list");
+        sensorController.delete();
+        logger.debug(name + " -> OK");
+    }
+
+
+
+    public void deleteAll() {
         logger.trace("Removing sensors");
         deleteSensors(getSensorControllersList().get());
         logger.trace("Removing logs");
         getLog().delete();
         getLog().deleteBufferFile();
         logger.trace("Removing scheduler");
-        getScheduler().terminateScheduler();
+        getScheduler().terminateScheduler(true);
         messages.clear();
         messages = null;
         logger.trace("Removing server");
@@ -159,12 +197,21 @@ public class AdapterController{
         scheduler = null;
     }
 
-    public void delete(){
+    public void terminateScheduler() {
+        logger.trace("Terminating scheduler");
+        messages.clear();
+        getScheduler().terminateScheduler(false);
+        if (getScheduler().isAlive()) getScheduler().interrupt();
+        try {
+            getScheduler().join();
+        } catch (InterruptedException e) {
+            logger.error("Cannot join " + getScheduler().getName());
+        }
+    }
+
+    public void delete() {
         logger.trace("Removing sensors");
         deleteSensors(getSensorControllersList().get());
-        logger.trace("Removing scheduler");
-        getScheduler().terminateScheduler();
-        messages.clear();
         messages = null;
         sensorControllers = null;
         log = null;
@@ -172,13 +219,13 @@ public class AdapterController{
         scheduler = null;
     }
 
-    public void clearResponseTracker(){
-        if(scheduler == null) return;
+    public void clearResponseTracker() {
+        if (scheduler == null) return;
         scheduler.clearResponseTracker();
     }
 
-    private void removeUnsentMessages(SensorController sensorController){
-        if(messages == null || messages.size() == 0) return;
+    private void removeUnsentMessages(SensorController sensorController) {
+        if (messages == null || messages.size() == 0) return;
         for (Iterator<OutMessage> it = messages.iterator(); it.hasNext(); ) {
             OutMessage message = it.next();
             if (message.getSenderController() != null && message.getSenderController().equals(sensorController)) {
@@ -188,109 +235,132 @@ public class AdapterController{
         log.removeUnsentMessagesBySensor(sensorController);
     }
 
-    private SensorController getSensorById(int sensorId){
-        for(SensorController sensorController : sensorControllers){
-            if(sensorController.getModel().getId() == sensorId) return sensorController;
+    private SensorController getSensorById(int sensorId) {
+        for (SensorController sensorController : sensorControllers) {
+            if (sensorController.getModel().getId() == sensorId) return sensorController;
         }
         return null;
     }
 
-    public synchronized void messageSuccessfullySent(OutMessage message){
-        if(messages.size() != 0) messages.remove(message);
+    public synchronized void messageSuccessfullySent(OutMessage message) {
+        if (messages.size() != 0) messages.remove(message);
         getLog().notifyDataSent(message.getUnsent());
     }
 
     /**
      * Returns next unprocessed message
+     *
      * @return message to be processed, null if there are no new messages
      */
-    public OutMessage getNextMessage(){
-        if(!messages.isEmpty())
+    public OutMessage getNextMessage() {
+        if (!messages.isEmpty())
             return messages.get(0);
         else
             return null;
     }
 
-    public Adapter createAdapter(boolean status,int id,boolean registered,Protocol.Version protocolVersion,double firmware){
-        logger.trace("Creating adapter model: " + "status->"+status + " id->"+id + " registered->"+registered + " protocol->" + protocolVersion + " firmware->" + firmware);
-        this.adapter = new Adapter(status,id,registered,protocolVersion,firmware);
+    public Adapter createAdapter(boolean status, int id, boolean registered, Protocol.Version protocolVersion, double firmware) {
+        logger.trace("Creating adapter model: " + "status->" + status + " id->" + id + " registered->" + registered + " protocol->" + protocolVersion + " firmware->" + firmware);
+        this.adapter = new Adapter(status, id, registered, protocolVersion, firmware);
         logger.trace("OK");
 
         return this.adapter;
     }
 
-    public Adapter createAdapter(String name,boolean status,int id,boolean registered,Protocol.Version protocolVersion,double firmware){
-        logger.trace("Creating adapter model: "+ "name->"+name + "status->"+status + " id->"+id + " registered->"+registered + " protocol->" + protocolVersion + " firmware->" + firmware);
-        if(name != null && name.equals("")){
-            this.adapter = new Adapter(status,id,registered,protocolVersion,firmware);
-        }else{
-            this.adapter = new Adapter(name,status,id,registered,protocolVersion,firmware);
+    public Adapter createAdapter(String name, boolean status, int id, boolean registered, Protocol.Version protocolVersion, double firmware) {
+        logger.trace("Creating adapter model: " + "name->" + name + "status->" + status + " id->" + id + " registered->" + registered + " protocol->" + protocolVersion + " firmware->" + firmware);
+        if (name != null && name.equals("")) {
+            this.adapter = new Adapter(status, id, registered, protocolVersion, firmware);
+        } else {
+            this.adapter = new Adapter(name, status, id, registered, protocolVersion, firmware);
         }
         logger.trace("OK");
         return this.adapter;
     }
 
-    public ServerController createServer(boolean conn,String name,String ip, int port,String databaseName){
-        logger.trace("Creating server model: " + "conn->"+conn + "name->"+name + " ip->"+ip + " port->"+port + " DB->"+databaseName);
-        this.serverController = new ServerController(new Server(conn,name,ip,port,databaseName));
+    public ServerController createServer(boolean conn, String name, String ip, int port, String databaseName) {
+        logger.trace("Creating server model: " + "conn->" + conn + "name->" + name + " ip->" + ip + " port->" + port + " DB->" + databaseName);
+        this.serverController = new ServerController(new Server(conn, name, ip, port, databaseName));
+        setMessageSender(serverController);
         logger.trace("OK");
         return this.serverController;
     }
 
-    public ServerController createServer(Server server){
+    public ServerController createServer(Server server) {
         logger.trace("Setting server: " + server.getName());
-        if(this.serverController == null) this.serverController = new ServerController(server);
+        if (this.serverController == null) this.serverController = new ServerController(server);
+        setMessageSender(serverController);
         logger.trace("OK");
         return this.serverController;
     }
 
-    public SensorPanelPresenter createSensorPanel(Node container,String headerHexColor,SensorIcon icon,SensorController sensorController) throws LoadException {
+    public ServerReceiver createServerReceiver() {
+        logger.trace("Creating server receiver");
+        this.serverReceiver = new ServerReceiver(7071, this);
+        this.serverReceiver.setDaemon(true);
+        setMessageSender(serverReceiver);
+        getAdapter().statusProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if(newValue){
+                    if(getServerReceiver()!= null) getServerReceiver().enable();
+                }else{
+                    if(getServerReceiver()!= null) {
+                        getServerReceiver().disable();
+                    }
+                }
+            }
+        });
+        return this.serverReceiver;
+    }
+
+    public SensorPanelPresenter createSensorPanel(Node container, String headerHexColor, SensorIcon icon, SensorController sensorController) throws LoadException {
         SensorPanelPresenter newPanel;
-        try{
+        try {
             newPanel = new SensorPanelPresenter(container);
             newPanel.loadView();
-            if(headerHexColor!= null)
+            if (headerHexColor != null)
                 newPanel.setHeaderColor(headerHexColor);
-            if(icon != null){
+            if (icon != null) {
                 newPanel.setIcon(icon);
-            }else{
+            } else {
                 newPanel.setIcon(SensorIcon.UNKNOWN);
             }
             newPanel.addModel(sensorController);
             sensorController.setPanel(newPanel);
         } catch (IOException e) {
-            throw new LoadException("Cannot initiate new sensor panel.Error while loading FXML file",e);
+            throw new LoadException("Cannot initiate new sensor panel.Error while loading FXML file", e);
         }
         return newPanel;
     }
 
-    public SensorController createSensor(Node container,String headerHexColor,SensorIcon icon,ObservableList<Value> values,boolean status,int id,String name,int battery,int signal,int refreshTime,Protocol protocol) throws LoadException {
+    public SensorController createSensor(Node container, String headerHexColor, SensorIcon icon, ObservableList<Value> values, boolean status, int id, String name, int battery, int signal, int refreshTime, Protocol protocol) throws LoadException {
         SensorController controller;
         SensorPanelPresenter newPanel;
         try {
             //create presenter
             newPanel = new SensorPanelPresenter(container);
-            ((FlowPane) container).getChildren().add(0,newPanel.loadView());
-            if(headerHexColor!= null)
+            ((FlowPane) container).getChildren().add(0, newPanel.loadView());
+            if (headerHexColor != null)
                 newPanel.setHeaderColor(headerHexColor);
-            if(icon != null){
+            if (icon != null) {
                 newPanel.setIcon(icon);
-            }else{
+            } else {
                 newPanel.setIcon(SensorIcon.UNKNOWN);
             }
-            controller = createSensor(values,status,id,name,battery,signal,refreshTime,protocol);
+            controller = createSensor(values, status, id, name, battery, signal, refreshTime, protocol);
             newPanel.addModel(controller);
             controller.setPanel(newPanel);
         } catch (IOException e) {
-            throw new LoadException("Cannot initiate new sensor panel.Error while loading FXML file",e);
-        } catch (NullPointerException ne){
-            throw new LoadException("Cannot initiate new sensor panel.Error while creating SensorController",ne);
+            throw new LoadException("Cannot initiate new sensor panel.Error while loading FXML file", e);
+        } catch (NullPointerException ne) {
+            throw new LoadException("Cannot initiate new sensor panel.Error while creating SensorController", ne);
         }
         return controller;
     }
 
-    public SensorController createSensor(ObservableList<Value> values,boolean status,int id,String name,int battery,int signal,int refreshTime,Protocol protocol) {
-        Sensor newSensor = new Sensor(status,id,name,battery,signal,refreshTime,protocol);
+    public SensorController createSensor(ObservableList<Value> values, boolean status, int id, String name, int battery, int signal, int refreshTime, Protocol protocol) {
+        Sensor newSensor = new Sensor(status, id, name, battery, signal, refreshTime, protocol);
         logger.debug("Adding values");
         newSensor.getValues().addAll(values);
         setValuesOffsets(values);
@@ -305,15 +375,15 @@ public class AdapterController{
                 }
             }
         });
-        SensorController controller = new SensorController(this,newSensor);
+        SensorController controller = new SensorController(this, newSensor);
         sensorControllers.add(controller);
         //listener for sensor activity; start sensor timer, if adapter is enabled and sensor is enabled
         controller.getModel().statusProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if(newValue && adapter.getStatus()){
+                if (newValue && adapter.getStatus()) {
                     controller.setTimerRunning(true);
-                }else{
+                } else {
                     controller.setTimerRunning(false);
                 }
             }
@@ -322,9 +392,9 @@ public class AdapterController{
         adapter.statusProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if(newValue && controller.getModel().getStatus()){
+                if (newValue && controller.getModel().getStatus()) {
                     controller.setTimerRunning(true);
-                }else{
+                } else {
                     controller.setTimerRunning(false);
                 }
             }
@@ -332,77 +402,122 @@ public class AdapterController{
         return controller;
     }
 
-    public Scheduler createScheduler(){
+    public Scheduler createScheduler(Scheduler.Type type) {
+        switch (type) {
+            case DETAILED:
+                this.scheduler = new DetailedScheduler(this);
+                break;
+            case PERFORMANCE:
+                this.scheduler = new PerformanceScheduler(this);
+                break;
+        }
         //create scheduler
-        this.scheduler = new Scheduler(this);
         this.scheduler.setDaemon(true);
         this.scheduler.start();
         startScheduler();
-        logger.trace("Scheduler/"+ String.valueOf(adapter.getId()) + " created and started");
+        logger.trace("Scheduler/" + String.valueOf(adapter.getId()) + " created and started");
         return this.scheduler;
     }
 
-    public Document saveToXml(Document document){
+    public Document saveToXml(Document document) {
         //<adapter id="1312">
         Element adapterElement = document.getRootElement()
                 .addElement("adapter")
-                .addAttribute("id",String.valueOf(getAdapter().getId()))
-                .addAttribute("name",getAdapter().getName())
-                .addAttribute("protocol",String.valueOf(getAdapter().getProtocolVersion()))
-                .addAttribute("registered",String.valueOf(getAdapter().getRegistered()))
-                .addAttribute("firmware",String.valueOf(getAdapter().getFirmware()));
+                .addAttribute("id", String.valueOf(getAdapter().getId()))
+                .addAttribute("name", getAdapter().getName())
+                .addAttribute("protocol", String.valueOf(getAdapter().getProtocolVersion()))
+                .addAttribute("registered", String.valueOf(getAdapter().getRegistered()))
+                .addAttribute("firmware", String.valueOf(getAdapter().getFirmware()));
         getServerController().saveToXml(adapterElement);
         Element sensorsElement = adapterElement.addElement("sensors");
-        for(SensorController sensorController : getSensorControllers()){
+        for (SensorController sensorController : getSensorControllers()) {
             sensorController.saveToXML(sensorsElement);
         }
         return document;
     }
 
-    public void setTrackServerResponse(boolean b) throws NullPointerException{
-        if(getScheduler() == null) throw new NullPointerException("Adapter/" + getAdapter().getId() + " cannot set response tracking, scheduler is null");
+    public void setTrackServerResponse(boolean b) throws NullPointerException {
+        if (getScheduler() == null)
+            throw new NullPointerException("Adapter/" + getAdapter().getId() + " cannot set response tracking, scheduler is null");
         getScheduler().getResponseTracker().setEnabled(b);
     }
 
-    public void setServerResponseTracker(ResponseTracker responseTracker){
-        if(getScheduler() == null) throw new NullPointerException("Adapter/" + getAdapter().getId() + " cannot set response tracking, scheduler is null");
+    public void setServerResponseTracker(ResponseTracker responseTracker) {
+        if (getScheduler() == null)
+            throw new NullPointerException("Adapter/" + getAdapter().getId() + " cannot set response tracking, scheduler is null");
         getScheduler().setResponseTracker(responseTracker);
     }
 
-    public void setDumpServerResponse(boolean b) throws NullPointerException{
-        if(getScheduler() == null) throw new NullPointerException("Adapter/" + getAdapter().getId() + " cannot set response dumping, scheduler is null");
+    public void setDumpServerResponse(boolean b) throws NullPointerException {
+        if (getScheduler() == null)
+            throw new NullPointerException("Adapter/" + getAdapter().getId() + " cannot set response dumping, scheduler is null");
         getScheduler().getResponseTracker().setDumpResponses(b);
     }
 
-    public void setTrackMessages(boolean b) throws NullPointerException{
-        if(getScheduler() == null) throw new NullPointerException("Adapter/" + getAdapter().getId() + " cannot set response dumping, scheduler is null");
+    public void setTrackMessages(boolean b) throws NullPointerException {
+        if (getScheduler() == null)
+            throw new NullPointerException("Adapter/" + getAdapter().getId() + " cannot set response dumping, scheduler is null");
         getLog().getMessageTracker().setEnabled(b);
     }
 
-    public void bindSchedulerProcess(Adapter adapter, Scheduler scheduler){
+    public void bindSchedulerProcess(Adapter adapter, Scheduler scheduler) {
         adapter.statusProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if(newValue && scheduler != null ){
+                if (newValue && scheduler != null) {
                     scheduler.startProcessing();
-                }else if(!newValue && scheduler != null){
+                } else if (!newValue && scheduler != null) {
                     scheduler.stopProcessing();
                 }
             }
         });
     }
 
-    public void bindRegisterMessage(AdapterController adapterController){
-        adapterController.getAdapter().statusProperty().addListener(new ChangeListener<Boolean>() {
+    public void bindRegisterMessage() {
+        AdapterController me = this;
+        me.getAdapter().statusProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if(newValue && !adapterController.getAdapter().getRegistered() && !adapterController.isRegisterMessageSent()){
-                    logger.trace("Adapter/" + adapterController.getAdapter().getId() + " creating register message.");
-                    adapterController.sendMessage(adapterController.toString() + " -> Registering adapter", adapterController.getAdapter().getProtocol().buildRegisterMessage(adapterController), null, OutMessage.Type.REGISTER_ADAPTER);
-                    adapterController.setRegisterMessageSent(true);
+                if (me.isRegisterMessageSent()) return;
+                if (newValue && !me.getAdapter().getRegistered()) {
+                    me.sendRegisterMessage(me);
                 }
             }
         });
+    }
+
+    public void sendRegisterMessage(AdapterController adapterController) {
+        //if register message already exists, do nothing
+        if(checkIfRegisterMessageExists()) return;
+        //else create register message
+        logger.trace("Adapter/" + adapterController.getAdapter().getId() + " creating register message.");
+        adapterController.sendMessage(adapterController.toString() + " -> Registering adapter", //log message
+                adapterController.getAdapter().getProtocol().buildRegisterMessage(adapterController), //socket message
+                null, //not null if sensor sends message
+                OutMessage.Type.REGISTER_ADAPTER //message type
+        );
+        adapterController.setRegisterMessageSent(true);
+    }
+
+    public OutMessage createRegisterMessage(){
+        return new OutMessage(
+                toString() + " -> reconnected to server sender", //log message
+                getAdapter().getProtocol().buildRegisterMessage(this), //socket message
+                null, //not null if sensor sends message
+                OutMessage.Type.REGISTER_ADAPTER, //message type
+                log.sent("Adapter/" + getAdapter().getId() + " -> trying to reconnect to server sender ")
+        );
+    }
+
+    private boolean checkIfRegisterMessageExists(){
+        if (messages == null || messages.size() == 0) return false;
+        boolean found = false;
+        for (OutMessage m : messages) {
+            if (m.getType() == OutMessage.Type.REGISTER_ADAPTER) {
+                found = true;
+            }
+        }
+        return found;
     }
 
     public void restartValueGenerators(){
@@ -411,15 +526,10 @@ public class AdapterController{
     }
 
     public synchronized void clearScheduler(){
-        if(scheduler != null){
-            try{
-                scheduler.stopProcessing();
-                scheduler.terminateSocket();
-            }catch (IOException e){
-                //terminating blocking sockets
-            }
-        }
         if(messages != null) messages.clear();
+        if(scheduler != null){
+            scheduler.stopProcessing();
+        }
     }
 
     public void startScheduler(){
@@ -514,6 +624,22 @@ public class AdapterController{
 
     public void setSaved(boolean saved) {
         this.saved = saved;
+    }
+
+    public ServerReceiver getServerReceiver() {
+        return serverReceiver;
+    }
+
+    public void setServerReceiver(ServerReceiver serverReceiver) {
+        this.serverReceiver = serverReceiver;
+    }
+
+    public MessageSender getMessageSender() {
+        return messageSender;
+    }
+
+    public void setMessageSender(MessageSender messageSender) {
+        this.messageSender = messageSender;
     }
 
     public String toString(){

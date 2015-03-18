@@ -1,6 +1,8 @@
 package com.iha.emulator.utilities.logging;
 
 import com.iha.emulator.control.SensorController;
+import com.iha.emulator.control.task.SimulationTask;
+import com.iha.emulator.control.task.TaskParameters;
 import com.iha.emulator.utilities.Utilities;
 import com.iha.emulator.utilities.handlers.ErrorHandler;
 import javafx.application.Platform;
@@ -14,6 +16,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.StackPane;
@@ -41,24 +44,18 @@ public class AdapterLogger {
     private static final String DATE_TIME_PATTERN = "dd-MM-yyyy_HH-mm-ss";
     private static DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(TIME_PATTERN);
     private static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
+    private static final int ADAPTER_LOG_TAB_INDEX = 0;
     private static final int TO_BE_SENT_TAB_INDEX = 1;
     private static final int ERROR_TAB_INDEX = 2;
 
     private static final int BUFFER_LINE_COUNT_MAX = 200;
-    private static final int MAX_WARNING_COUNT = 500;
+    private static final int MAX_WARNING_COUNT = 5000;
 
     public enum Type{
         FULL,
         PARTIAL,
         SHORT
     }
-
-    public enum Style {
-        REGULAR,
-        BOLD
-    }
-
-    private Type actualType;
 
     private TabPane tabPane = null;
 
@@ -92,7 +89,6 @@ public class AdapterLogger {
         this.shortMessage = new SimpleBooleanProperty(false);
         this.warningCounter = new SimpleIntegerProperty(0);
         errorHandler = new ErrorHandler();
-        bindChangeListener();
         initWarningCounter();
     }
 
@@ -157,7 +153,17 @@ public class AdapterLogger {
             if(errorLog!= null){
                 String messageWithTime = timeFormatter.format(LocalTime.now()) + " - " + message + "\n";
                 errorLog.appendText(messageWithTime);
-                if(tabPane != null && !tabPane.getSelectionModel().isSelected(ERROR_TAB_INDEX)) tabPane.getSelectionModel().select(ERROR_TAB_INDEX);
+                if(tabPane != null){
+                    Tab errorTab = tabPane.getTabs().get(ERROR_TAB_INDEX);
+                    if(!errorTab.isSelected() && message.contains("Warning:")){
+                        //yellow background
+                        errorTab.setStyle("-fx-background-color: #ffde00;-fx-fill: #ffffff;-fx-text-fill: #ffffff;");
+                    }else if(!message.contains("Warning:")){
+                        //fatal error - red background
+                        errorTab.setStyle("-fx-background-color: #eb4242;-fx-fill: #ffffff;-fx-text-fill: #ffffff;");
+                        tabPane.getSelectionModel().select(ERROR_TAB_INDEX);
+                    }
+                }
                 if(errorHandler != null){
                     if(message.contains("Warning: Cannot connect to server! -> Connection timed out: connect") && !terminate){
                         setWarningCounter(getWarningCounter() + 1);
@@ -232,8 +238,19 @@ public class AdapterLogger {
             adapterLog.setEditable(false);
         }
         StackPane paneContainer = (StackPane) container;
+        paneContainer.getChildren().clear();
         paneContainer.getChildren().add(adapterLog);
         this.adapterLogContainer = container;
+        tabPane.getTabs().get(ADAPTER_LOG_TAB_INDEX).selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if(newValue){
+                    Platform.runLater(()-> tabPane.getTabs().get(ADAPTER_LOG_TAB_INDEX).setStyle("-fx-background-color: #a6dcff;-fx-fill: #242424;-fx-text-fill: #242424;"));
+                }else {
+                    Platform.runLater(()->tabPane.getTabs().get(ADAPTER_LOG_TAB_INDEX).setStyle("-fx-background-color: #c6c6c6;-fx-fill: #242424;-fx-text-fill: #242424;"));
+                }
+            }
+        });
         return adapterLog;
     }
 
@@ -244,9 +261,20 @@ public class AdapterLogger {
             stylize(toBeSentLog);
         }
         ScrollPane paneContainer = (ScrollPane) container;
+        paneContainer.setContent(null);
         paneContainer.setContent(toBeSentLog);
         paneContainer.setFitToWidth(true);
         this.toBeSentLogContainer = container;
+        tabPane.getTabs().get(TO_BE_SENT_TAB_INDEX).selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if(!tabPane.getTabs().get(TO_BE_SENT_TAB_INDEX).isDisable() && newValue){
+                    Platform.runLater(()-> tabPane.getTabs().get(TO_BE_SENT_TAB_INDEX).setStyle("-fx-background-color: #a6dcff;-fx-fill: #242424;-fx-text-fill: #242424;"));
+                }else if(!tabPane.getTabs().get(TO_BE_SENT_TAB_INDEX).isDisable()){
+                    Platform.runLater(()->tabPane.getTabs().get(TO_BE_SENT_TAB_INDEX).setStyle("-fx-background-color: #c6c6c6;-fx-fill: #242424;-fx-text-fill: #242424;"));
+                }
+            }
+        });
         return toBeSentLog;
     }
 
@@ -258,8 +286,19 @@ public class AdapterLogger {
             errorLog.setEditable(false);
         }
         StackPane paneContainer = (StackPane) container;
+        paneContainer.getChildren().clear();
         paneContainer.getChildren().add(errorLog);
         this.errorLogContainer = container;
+        tabPane.getTabs().get(ERROR_TAB_INDEX).selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if(newValue){
+                    Platform.runLater(()-> tabPane.getTabs().get(ERROR_TAB_INDEX).setStyle("-fx-background-color: #a6dcff;-fx-fill: #242424;-fx-text-fill: #242424;"));
+                }else {
+                    Platform.runLater(()->tabPane.getTabs().get(ERROR_TAB_INDEX).setStyle("-fx-background-color: #c6c6c6;-fx-fill: #242424;-fx-text-fill: #242424;"));
+                }
+            }
+        });
         return errorLog;
     }
 
@@ -309,7 +348,7 @@ public class AdapterLogger {
 
     public synchronized void logSentMessagesCount(BufferedWriter writer) throws IOException {
         if(writer == null) throw new IOException("Buffered writer is null. Cannot move log to buffer file!");
-        if(getMessageTracker().isEnabled()){
+        if(getMessageTracker() != null && getMessageTracker().isEnabled()){
             writer.write("Number of sent messages: " + getMessageTracker().getSentMessageCounter());
         }
     }
@@ -365,12 +404,6 @@ public class AdapterLogger {
         area.getStyleClass().addAll("logTextArea");
     }
 
-    private void bindChangeListener(){
-        this.fullMessage.addListener(new MessageTypeChangeListener(Type.FULL));
-        this.partialMessage.addListener(new MessageTypeChangeListener(Type.PARTIAL));
-        this.shortMessage.addListener(new MessageTypeChangeListener(Type.SHORT));
-    }
-
     public void setBuffered(boolean buffered,String filename,String path) throws IOException {
         this.buffered = buffered;
         if(buffered){
@@ -404,8 +437,22 @@ public class AdapterLogger {
         bufferWriter = new BufferedWriter(new FileWriter(bufferFile,true));
     }
 
-    public void writeTaskLogHeaderToBuffer() throws IOException {
+    public void writeTaskLogHeaderToBuffer(SimulationTask task) throws IOException {
+        TaskParameters params = task.getTaskParameters();
         bufferWriter.write("== TASK LOG =================================================\n");
+        bufferWriter.write("Task parameters: \n");
+        bufferWriter.write("\tServer: \n");
+        bufferWriter.write("\t" + "  Name: " + task.getServerController().getModel().getName() + "\n" +
+                            "\t" + "  IP: " + task.getServerController().getModel().getIp() + "\n" +
+                            "\t" + "  Port: " +task.getServerController().getModel().getPort() + "\n" +
+                            "\t" + "  Database: " +task.getServerController().getModel().getDatabaseName() + "\n");
+        bufferWriter.write("\tAdapters: " + "\n" +
+                            "\t" + "  Adapters count: " + params.getAdaptersCount() + "\n" +
+                            "\t" + "  Protocol: " + params.getProtocolVersion().getVersion() + "\n" +
+                            "\t" + "  Start ID: " + params.getStartId() + "\n" +
+                            "\t" + "  Sensors count per adapter: " + (params.getSensorsCountMin()!=0 ? params.getSensorsCountMin() + " -> " : "") + params.getSensorsCountMax() + "\n" +
+                            "\t" + "  Refresh time range: " + (params.getRefreshTimeMin()!=0 ? params.getRefreshTimeMin() + " -> " : "") + params.getRefreshTimeMax() + "\n");
+        bufferWriter.newLine();
         bufferWriter.flush();
     }
 
@@ -442,10 +489,6 @@ public class AdapterLogger {
                 throw new IllegalArgumentException("Unknown value of property \"defaultLogMessageType\" ->" + typeString +" -> has to be: FULL or PARTIAL or SHORT");
         }
         return type;
-    }
-
-    public void setType(Type type){
-        this.actualType = type;
     }
 
     @SuppressWarnings("unused")
@@ -541,25 +584,6 @@ public class AdapterLogger {
             logger.trace("OK");
         }else {
             logger.trace("Cannot disable \"To Be sent\" tab. TabPane is null");
-        }
-    }
-
-    private class MessageTypeChangeListener implements ChangeListener<Boolean> {
-
-        private Type type;
-
-        public MessageTypeChangeListener(Type type){
-            super();
-            this.type = type;
-        }
-
-        @Override
-        public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-            if(newValue) actualType = this.getType();
-        }
-
-        private Type getType() {
-            return type;
         }
     }
 }

@@ -34,6 +34,8 @@ public class TaskDetailsPresenter implements Presenter,PanelPresenter {
         public Label getWaitingMessagesLbl();
         public Label getSentMessagesLbl();
         public Label getStopWatchLbl();
+        public Label getRespPerSecondLbl();
+        public Label getMaxRespPerSecondLbl();
     }
 
     public TaskDetailsPresenter() {
@@ -52,6 +54,8 @@ public class TaskDetailsPresenter implements Presenter,PanelPresenter {
             unbindLbl(view.getWaitingMessagesLbl());
             unbindLbl(view.getSentMessagesLbl());
             unbindLbl(view.getStopWatchLbl());
+            unbindLbl(view.getRespPerSecondLbl());
+            unbindLbl(view.getMaxRespPerSecondLbl());
         }
         this.model = null;
         view.getIdLbl().setText("");
@@ -61,6 +65,8 @@ public class TaskDetailsPresenter implements Presenter,PanelPresenter {
         view.getWaitingMessagesLbl().setText("");
         view.getSentMessagesLbl().setText("");
         view.getStopWatchLbl().setText("");
+        view.getRespPerSecondLbl().setText("");
+        view.getMaxRespPerSecondLbl().setText("");
     }
 
     @Override
@@ -100,6 +106,8 @@ public class TaskDetailsPresenter implements Presenter,PanelPresenter {
             unbindLbl(view.getWaitingMessagesLbl());
             unbindLbl(view.getSentMessagesLbl());
             unbindLbl(view.getStopWatchLbl());
+            unbindLbl(view.getRespPerSecondLbl());
+            unbindLbl(view.getMaxRespPerSecondLbl());
         }else{
             logger.trace("No model = no need to unbind");
         }
@@ -157,6 +165,24 @@ public class TaskDetailsPresenter implements Presenter,PanelPresenter {
             @Override
             protected String computeValue() {
                 return String.valueOf(model.getLog().getMessageTracker().getSentMessageCounter());
+            }
+        });
+        view.getRespPerSecondLbl().textProperty().bind(new StringBinding() {
+            {
+                bind(model.getResponseTracker().currentPerSecondProperty());
+            }
+            @Override
+            protected String computeValue() {
+                return String.valueOf(model.getResponseTracker().getCurrentPerSecond());
+            }
+        });
+        view.getMaxRespPerSecondLbl().textProperty().bind(new StringBinding() {
+            {
+                bind(model.getResponseTracker().maxPerSecondProperty());
+            }
+            @Override
+            protected String computeValue() {
+                return String.valueOf(model.getResponseTracker().getMaxPerSecond());
             }
         });
         view.getStopWatchLbl().textProperty().bind(model.getTaskParameters().getStopWatch().timeStringProperty());

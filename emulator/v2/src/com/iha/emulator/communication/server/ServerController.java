@@ -10,37 +10,35 @@ import org.dom4j.Element;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.SocketTimeoutException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
 /**
  * Created by Shu on 9.2.2015.
  */
-public class ServerController {
+public class ServerController implements MessageSender{
 
     private static final Logger logger = LogManager.getLogger(ServerController.class);
-    private static final int MESSAGE_BUFFER_SIZE = 1000;
-    private static final int SOCKET_TIMEOUT = 5000;
+    public static final int MESSAGE_BUFFER_SIZE = 1000;
+    public static final int SOCKET_TIMEOUT = 3000;
     public static final boolean DEBUG = true;
 
     private Server model;
-    private SocketChannel socketChannel;
+    //private SocketChannel socketChannel;
     private long responseStart = 0L;
 
     public ServerController(Server model) {
         setModel(model);
     }
 
-    public String sendMessage(SocketChannel socketChannel,Document message,ResponseTracker responseTracker,OutMessage.Type type) throws WrongResponseException, IOException, SocketTimeoutException {
+    public String sendMessage(Document message,ResponseTracker responseTracker,OutMessage.Type type) throws WrongResponseException, IOException {
         ByteBuffer messageBuffer = ByteBuffer.allocate(MESSAGE_BUFFER_SIZE);
-        try {
-            socketChannel = SocketChannel.open();
+        int bytesRead = 0;
+        try (SocketChannel socketChannel = SocketChannel.open()){
+            //socketChannel = SocketChannel.open();
             socketChannel.socket().setSoTimeout(SOCKET_TIMEOUT);
             logger.trace("Sending message: " + type.toString());
-            if (!socketChannel.connect(new InetSocketAddress(getModel().getIp(), getModel().getPort()))) {
-                throw new SocketTimeoutException("Unsuccessful connect!");
-            }
+            socketChannel.connect(new InetSocketAddress(getModel().getIp(), getModel().getPort()));
             Platform.runLater(() -> getModel().setConn(true));
             ByteBuffer out = ByteBuffer.wrap(message.asXML().getBytes());
             if (responseTracker.isEnabled()) responseStart = System.currentTimeMillis();
@@ -48,7 +46,6 @@ public class ServerController {
                 socketChannel.write(out);
             }
             logger.trace("Message sent");
-            int bytesRead = 0;
             if(!DEBUG){
                 switch (type) {
                     case SENSOR_MESSAGE:
@@ -78,13 +75,8 @@ public class ServerController {
             }
             messageBuffer.flip();
             messageBuffer.position(0);
-            return new String(messageBuffer.array()).substring(0, bytesRead);
-        } finally {
-            if(socketChannel != null) {
-                socketChannel.close();
-                socketChannel = null;
-            }
         }
+        return new String(messageBuffer.array()).substring(0, bytesRead);
     }
 
     public Element saveToXml(Element rootElement){
@@ -109,6 +101,5 @@ public class ServerController {
 
     public void delete(){
         this.model = null;
-        socketChannel = null;
     }
 }

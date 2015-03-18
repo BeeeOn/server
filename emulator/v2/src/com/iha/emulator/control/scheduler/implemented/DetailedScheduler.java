@@ -1,9 +1,10 @@
-package com.iha.emulator.control;
+package com.iha.emulator.control.scheduler.implemented;
 
 import com.iha.emulator.communication.protocol.Protocol;
 import com.iha.emulator.communication.server.OutMessage;
-import com.iha.emulator.communication.server.ServerController;
 import com.iha.emulator.communication.server.WrongResponseException;
+import com.iha.emulator.control.AdapterController;
+import com.iha.emulator.control.scheduler.Scheduler;
 import com.iha.emulator.utilities.watchers.ResponseTracker;
 import javafx.application.Platform;
 import org.apache.logging.log4j.LogManager;
@@ -12,23 +13,24 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 
 import java.io.IOException;
-import java.nio.channels.SocketChannel;
+import java.net.ConnectException;
+import java.nio.channels.ClosedByInterruptException;
 
-public class Scheduler extends Thread {
+public class DetailedScheduler extends Thread implements Scheduler{
 
     private static final int SLEEP_INTERVAL = 300;
-    private static final Logger logger = LogManager.getLogger(Scheduler.class);
+    private static final Logger logger = LogManager.getLogger(DetailedScheduler.class);
+    public static final Type TYPE = Type.DETAILED;
 
 
     private boolean terminate = false;
     private boolean continueProcessing = true;
 
     private ResponseTracker responseTracker  = new ResponseTracker(false);
-    private SocketChannel socketChannel;
 
     private AdapterController adapterController;
 
-    public Scheduler(AdapterController adapterController){
+    public DetailedScheduler(AdapterController adapterController){
         this.adapterController = adapterController;
         setName("Scheduler/" + adapterController.getAdapter().getId());
     }
@@ -40,8 +42,14 @@ public class Scheduler extends Thread {
                 if(message != null){
                     logger.trace("Scheduler processing message: " + message.getType().toString());
                     try {
-                        String inMessageString = adapterController.getServerController().sendMessage(socketChannel,message.getSocketMessage(),responseTracker,message.getType());
-                        if(ServerController.DEBUG){
+                        String inMessageString;
+                        if(message.getType() == OutMessage.Type.REGISTER_ADAPTER && adapterController.getServerReceiver() != null){
+                            inMessageString = adapterController.getServerReceiver().sendMessage(message.getSocketMessage(),responseTracker,message.getType());
+                        }else{
+                            inMessageString = adapterController.getServerController().sendMessage(message.getSocketMessage(),responseTracker,message.getType());
+                        }
+                        //check if adapter was not already terminated
+                        if(adapterController != null && adapterController.getLog() != null && adapterController.getScheduler() != null){
                             logger.trace("Message to server: \n" + message.getSocketMessage().asXML());
                             processTracking(message);
                             //check protocol version
@@ -57,32 +65,11 @@ public class Scheduler extends Thread {
                                     break;
                                 case REGISTER_ADAPTER:
                                     protocol.parseInAdapterMessage(inDocument,adapterController);
-                                    Platform.runLater(() -> {
-                                        adapterController.getLog().log(message.getLogMessage());
-                                    });
-                                    adapterController.messageSuccessfullySent(message);
-                                    break;
-                            }
-                        }else{
-                            switch (message.getType()){
-                                case SENSOR_MESSAGE:
-                                    logger.trace("Message to server: \n" + message.getSocketMessage().asXML());
-                                    processTracking(message);
                                     Platform.runLater(() -> adapterController.getLog().log(message.getLogMessage()));
-                                    //check protocol version
-                                    Protocol protocol = adapterController.getAdapter().getProtocol();
-                                    //convert incoming message to XML and check protocol version
-                                    Document inDocument = protocol.checkProtocolVersion(protocol.convertInMessageToXML(inMessageString));
-                                    logger.trace("Message from server: \n" + inDocument.asXML());
-                                    protocol.parseInSensorMessage(inDocument, message.getSenderController(), adapterController);
-                                    adapterController.messageSuccessfullySent(message);
-                                    break;
-                                case REGISTER_ADAPTER:
-                                    processTracking(message);
-                                    Platform.runLater(() -> {
-                                        adapterController.getLog().log(message.getLogMessage());
-                                        adapterController.getAdapter().setRegistered(true);
-                                    });
+                                    //start listening for messages from server
+                                    if(adapterController.getServerReceiver() != null) {
+                                        adapterController.getServerReceiver().initialize();
+                                    }
                                     adapterController.messageSuccessfullySent(message);
                                     break;
                             }
@@ -90,30 +77,49 @@ public class Scheduler extends Thread {
                     } catch (IllegalArgumentException ie) {
                         if(message.getSenderController() != null){
                             message.getSenderController().criticalErrorStop(
-                                    "Error: Adapter/" + adapterController.getAdapter().getId() + " -> Sensor/" + message.getSenderController().getSensorIdAsIp() + ie.getMessage(),
-                                    "Error: " + message.getSenderController().getModel().getName() + "/" + message.getSenderController().getSensorIdAsIp() + ie.getMessage(),
+                                    "Error: " + message.getSenderController().toString() + " -> " + ie.getMessage(),
+                                    "Error: " + message.getSenderController().toString() + " -> " + ie.getMessage(),
                                     message
                             );
                         }else{
-                            Platform.runLater(()->adapterController.sendError("Warning: " + adapterController.toString() ,ie,false));
+                            Platform.runLater(()->{
+                                adapterController.sendError("Warning: " + adapterController.toString() ,ie,false);
+                                adapterController.disable();
+                            });
                         }
                     } catch (WrongResponseException we) {
-                        if(message.getSenderController() != null) message.getSenderController().criticalErrorStop(
-                                "Adapter/" + adapterController.getAdapter().getId() + " -> Sensor/" + message.getSenderController().getSensorIdAsIp() + " --> socket closed or wrong response from server! Stopping sensor",
-                                message.getSenderController().getModel().getName() + "/" + message.getSenderController().getSensorIdAsIp() + " --> socket closed or wrong response from server! Stopping sensor",
-                                message
-                        );
+                        if(message.getSenderController() != null){
+                            message.getSenderController().criticalErrorStop(
+                                    message.getSenderController().toString()+ " --> socket closed or wrong response from server! Stopping sensor",
+                                    message.getSenderController().toString() + " --> socket closed or wrong response from server! Stopping sensor",
+                                    message
+                            );
+                        } else {
+                            adapterController.sendError(adapterController.toString(),we,false);
+                        }
+                    } catch (ClosedByInterruptException e){
+                        logger.trace(getName() + " closed by interrupt");
+                        terminateScheduler(false);
                     } catch (IOException ioe) {
                         Platform.runLater(() -> {
                             //adapter register message
-                            if(message.getSenderController() == null){
-                                adapterController.sendError("Warning: Cannot connect to server ( " + getName() + " -> register message )!", ioe, false);
-                            }else{
-                                adapterController.sendError("Warning: Cannot connect to server ( " + message.getSenderController().toString() + ")!", ioe, false);
+                            try{
+                                if(message.getSenderController() == null){
+                                    if(ioe instanceof ConnectException){
+                                        adapterController.disable();
+                                        adapterController.sendError("Error: Cannot connect to server ( " + getName() + " -> server probably not running)!", ioe, false);
+                                    }else{
+                                        adapterController.sendError("Warning: Cannot connect to server ( " + getName() + " -> register message )!", ioe, false);
+                                    }
+                                }else{
+                                    adapterController.sendError("Warning: Cannot connect to server ( " + message.getSenderController().toString() + ")!", ioe, false);
+                                }
+                                adapterController.getServerController().getModel().setConn(false);
+                            }catch (NullPointerException e){
+                                //some threads may not know, they are terminated and their data are cleaned
                             }
-                            adapterController.getServerController().getModel().setConn(false);
-                        });
 
+                        });
                     } catch (DocumentException e) {
                         if(message.getSenderController() != null) message.getSenderController().criticalErrorStop(
                                 "Error: Adapter/" + adapterController.getAdapter().getId() + " -> Sensor/" + message.getSenderController().getSensorIdAsIp() + " --> Cannot parse XML response",
@@ -144,13 +150,15 @@ public class Scheduler extends Thread {
                         try {
                             wait();
                         } catch (InterruptedException e) {
-                            Platform.runLater(() -> adapterController.getLog().error("Cannot put scheduler to wait while waiting for new messages",true));
+                            terminateScheduler(false);
+                            break;
+                            /*Platform.runLater(() -> adapterController.getLog().error("Cannot put scheduler to wait while waiting for new messages",true));*/
                         }
                 }
             }
             logger.trace("Proceed");
         }
-        logger.debug("Scheduler for adapter " + adapterController.getAdapter().getId() + " terminated.");
+        logger.trace(getName() + " terminated.");
     }
 
     public void clearResponseTracker(){
@@ -186,19 +194,13 @@ public class Scheduler extends Thread {
             this.continueProcessing = false;
         }
     }
-
-    public synchronized void terminateSocket() throws IOException {
-        if(socketChannel != null) {
-            logger.warn("terminating socket on: " + getName());
-            socketChannel.close();
-        }
-    }
     /**
      * Makes scheduler thread to finish
      */
-    public void terminateScheduler(){
+    public void terminateScheduler(boolean clearResponses){
+        startProcessing();
         this.terminate = true;
-        if(responseTracker != null)
+        if(clearResponses && responseTracker != null)
             responseTracker.delete();
     }
 
@@ -218,5 +220,8 @@ public class Scheduler extends Thread {
         return this.continueProcessing;
     }
 
-
+    @Override
+    public Type getType() {
+        return TYPE;
+    }
 }

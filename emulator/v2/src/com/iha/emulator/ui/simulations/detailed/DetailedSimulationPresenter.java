@@ -2,9 +2,9 @@ package com.iha.emulator.ui.simulations.detailed;
 
 import com.iha.emulator.communication.protocol.Protocol;
 import com.iha.emulator.communication.protocol.ProtocolFactory;
-import com.iha.emulator.communication.server.ServerListener;
 import com.iha.emulator.control.AdapterController;
 import com.iha.emulator.control.SensorController;
+import com.iha.emulator.control.scheduler.Scheduler;
 import com.iha.emulator.models.Server;
 import com.iha.emulator.models.value.*;
 import com.iha.emulator.resources.images.sensor_types.SensorIcon;
@@ -84,7 +84,6 @@ public class DetailedSimulationPresenter implements Presenter{
     private ObservableList<AdapterController> adapterControllers = FXCollections.observableArrayList();
     private ListProperty<AdapterController> adapterControllersList = new SimpleListProperty<>(adapterControllers);
     //endregion
-    private ServerListener serverListener;
 
     public interface Display {
         public void setPresenter(DetailedSimulationPresenter presenter);
@@ -189,16 +188,17 @@ public class DetailedSimulationPresenter implements Presenter{
                 //config log
                 //newAdapterController.getLog().setType(AdapterLogger.toType(getProperty("defaultLogMessageType")));
                 //create scheduler
-                newAdapterController.createScheduler();
+                newAdapterController.createScheduler(Scheduler.Type.DETAILED);
                 //set response tracking
                 newAdapterController.setTrackServerResponse(true);
                 newAdapterController.setDumpServerResponse(true);
                 //bind scheduler processing to adapter's status indicator
                 newAdapterController.bindSchedulerProcess(newAdapterController.getAdapter(), newAdapterController.getScheduler());
                 //bind register message
-                newAdapterController.bindRegisterMessage(newAdapterController);
+                newAdapterController.bindRegisterMessage();
                 //save new adapter button
                 addAdapterBtn(newAdapterController);
+
                 // set new adapter as current
                 setCurrentAdapter(newAdapterController);
                 try {
@@ -430,6 +430,11 @@ public class DetailedSimulationPresenter implements Presenter{
         adapterDetailsPresenter.addModel(currentAdapterController.getAdapter());
         //assign server data model to GUI
         serverDetailsPresenter.addModel(currentAdapterController.getServerController().getModel());
+        if(this.currentAdapterController.getServerReceiver() != null){
+            serverDetailsPresenter.addSenderProperty(this.currentAdapterController.getServerReceiver().connProperty());
+        }else{
+            serverDetailsPresenter.addSenderProperty(null);
+        }
         //bind adapter control buttons
         bindAdapterControlButtons();
         //bind internet control buttons
@@ -722,11 +727,11 @@ public class DetailedSimulationPresenter implements Presenter{
                 //CREATE LOG
                 tmpAdapterController.createLog(getView().getLogTabPane());
                 //CREATE SCHEDULER
-                tmpAdapterController.createScheduler();
+                tmpAdapterController.createScheduler(Scheduler.Type.DETAILED);
                 tmpAdapterController.setTrackServerResponse(true);
                 tmpAdapterController.setDumpServerResponse(true);
                 tmpAdapterController.bindSchedulerProcess(tmpAdapterController.getAdapter(),tmpAdapterController.getScheduler());
-                tmpAdapterController.bindRegisterMessage(tmpAdapterController);
+                tmpAdapterController.bindRegisterMessage();
                 //CREATE ADAPTER BUTTON
                 addAdapterBtn(tmpAdapterController);
                 //ADD ADAPTER TO OTHERS
@@ -737,6 +742,9 @@ public class DetailedSimulationPresenter implements Presenter{
                 }catch (IOException e){
                     throw new DocumentException("Cannot buffer adapter " + adapterElement.attribute("id").getValue() + " . Failed to create .tmp file!",e);
                 }
+                //create server receiver
+                tmpAdapterController.createServerReceiver();
+                tmpAdapterController.getServerReceiver().start();
                 tmpAdapterController.setSaved(true);
             }
         }
@@ -763,8 +771,6 @@ public class DetailedSimulationPresenter implements Presenter{
         view.getPrintBtn().setDisable(true);
         //bind adapter file control buttons (Save, SaveAll, Print),others are bounded to current adapter
         bindControlBtnsToAdaptersCount();
-        //initialize server listener
-        initAndStartServerListener();
         //handle close event
         window.setOnCloseRequest(event -> {
             checkIfSaved();
@@ -774,21 +780,6 @@ public class DetailedSimulationPresenter implements Presenter{
                 event.consume();
             }
         });
-    }
-
-    private void initAndStartServerListener(){
-        if(properties != null){
-            serverListener = new ServerListener(Integer.valueOf(properties.getProperty("serverListenerPort")),adapterControllersList);
-        }else{
-            serverListener = new ServerListener(DEFAULT_SERVER_LISTENER_PORT,adapterControllersList);
-        }
-        serverListener.setDaemon(true);
-        try {
-            serverListener.connect();
-        } catch (IOException e) {
-            Utilities.showException(logger, "Cannot start listening for connections", e, false, null);
-        }
-        serverListener.start();
     }
 
     private void bindAdapterControlButtons(){
@@ -1027,14 +1018,21 @@ public class DetailedSimulationPresenter implements Presenter{
         });
     }
 
+    private void dumpLogsToFiles(){
+        if(getAdapterControllers().size() < 1) return;
+        for(AdapterController adapterController : getAdapterControllers()){
+            adapterController.getLog().closeBuffer();
+        }
+    }
+
     public Display getView(){
         return this.view;
     }
 
     public void quit(){
         memoryChecker.stop();
-        if(serverListener != null) serverListener.terminateServerListener();
-        removeTempFiles();
+        //removeTempFiles();
+        dumpLogsToFiles();
         Platform.exit();
     }
 
