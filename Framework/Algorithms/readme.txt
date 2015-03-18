@@ -8,10 +8,10 @@ can be compiled with command:
 
 Then to run Algorithm application you must load soci using these two commands:
 
-  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib64
-  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./notif
-  pwd = 'pwd'
-  export LD_LIBRARY_PATH=$pwd:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib64
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:./notif
+pwd = 'pwd'
+export LD_LIBRARY_PATH=$pwd:$LD_LIBRARY_PATH
 
 Then try:
 
