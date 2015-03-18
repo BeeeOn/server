@@ -262,6 +262,7 @@ multimap<unsigned int, map<string, string>> Algorithm::parseValues(std::string v
 
 //Metoda, která vezme hodnotu parametru -p pøík. øádky a zparsuje jej
 vector<string> Algorithm::parseParams(std::string paramsInput){
+	
 	vector<string> params = Algorithm::explode(paramsInput, '#');
 
 	/* COMMENTED - NEED	TO WRITE METHOD SpaceReplace
@@ -273,6 +274,8 @@ vector<string> Algorithm::parseParams(std::string paramsInput){
 	}
 	return paramsOutput;
 	*/
+	/*for (auto c : params)
+    std::cout << c << "\n";*/
 	return params;
 }
 //TODO:
@@ -286,20 +289,27 @@ std::string Algorithm::spaceReplace(std::string text) {
 vector<string> Algorithm::explode(string str, char ch) {
 	string next;
 	vector<string> result;
+	bool backslash = false;
 
 	// For each character in the string
 	for (string::const_iterator it = str.begin(); it != str.end(); it++) {
 		// If we've hit the terminal character
-		if (*it == ch) {
+		if (*it == ch && backslash == false) {
 			// If we have some characters accumulated
 			if (!next.empty()) {
 				// Add them to the result vector
 				result.push_back(next);
 				next.clear();
 			}
+			backslash = false;
+		}
+		else if (*it == '\\' )
+		{
+			backslash = true;
 		}
 		else {
 			// Accumulate the next character into the sequence
+			backslash = false;
 			next += *it;
 		}
 	}
