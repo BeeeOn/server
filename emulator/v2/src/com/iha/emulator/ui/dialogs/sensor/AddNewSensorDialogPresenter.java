@@ -63,8 +63,7 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
 
     private static final Logger logger = LogManager.getLogger(AddNewSensorDialogPresenter.class);
     private static final String FXML_PATH = "AddNewSensorDialog.fxml";
-    private static final String TEMPLATES_DEFAULT_DIR = "sensor_templates";
-    private static final double REFRESH_SLIDER_VALUE_COUNT = 16;
+    private static final String TEMPLATES_DEFAULT_DIR = "templates/sensors";
     private static final String[] DEFAULT_COLORS = {
             "0cdf56", "65c2ff", "ffe037", "fe9e49", "ffff81", "db8fff"
     };
@@ -951,7 +950,7 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
             }
         });
         // -- -- refresh slider
-        view.getSensorRefreshSlider().setMax(REFRESH_SLIDER_VALUE_COUNT);
+        view.getSensorRefreshSlider().setMax(Utilities.REFRESH_SLIDER_VALUE_COUNT);
         view.getSensorRefreshValueLbl().textProperty().bind(new StringBinding() {
             {
                 bind(view.getSensorRefreshSlider().valueProperty());

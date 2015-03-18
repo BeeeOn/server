@@ -27,6 +27,7 @@ public:
     
     int getActivityPort();
     int getNotifyPort();
+    int getAlgorithmPort();
     int getVerbosity();
     
     string getDBConnectionString();
@@ -34,6 +35,7 @@ public:
     
     int getComTableSleepPeriodMs();
     int getComTableMaxInactivityMs();
+    
     
     
 private:

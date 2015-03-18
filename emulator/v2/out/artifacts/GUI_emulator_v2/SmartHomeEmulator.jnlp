@@ -11,9 +11,12 @@
   </resources>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="SmartHomeEmulator.jar" size="753149" download="eager" />
+    <jar href="SmartHomeEmulator.jar" size="1056505" download="eager" />
     <jar href="lib/controlsfx-8.20.8.jar" size="957666" download="eager" />
     <jar href="lib/dom4j-2.0.0-ALPHA-2.jar" size="340028" download="eager" />
+    <jar href="lib/jfxtras-common-8.0-r3.jar" size="46517" download="eager" />
+    <jar href="lib/jfxtras-controls-8.0-r3.jar" size="213299" download="eager" />
+    <jar href="lib/jfxtras-fxml-8.0-r3.jar" size="2095" download="eager" />
     <jar href="lib/log4j-api-2.1.jar" size="133531" download="eager" />
     <jar href="lib/log4j-core-2.1.jar" size="824749" download="eager" />
     <jar href="lib/openjfx-dialogs-1.0.2.jar" size="148557" download="eager" />

@@ -109,7 +109,9 @@ int main(int argc, char** argv)
        // resolveMsg( "<com ver=\"2.3\"  uid=\"9\" state=\"addadapter\" aid=\"10\"     aname=\"home\"  />");
         //resolveMsg( "<com ver=\"2.3\"  state=\"getuid\" email=\"n11@gmail.com\" gid=\"99191\" gt=\"1\" pid=\"1100\" loc=\"cs\" />");
     resolveMsg("<com ver=\"2.3\" state=\"addadapter\" uid=\"40\" aid=\"1234567890123456\" aname=\"test\" />");
-       
+    
+        resolveMsg("<com ver=\"2.3\" state=\"delalg\" uid=\"42\" aid=\"1234567890123456\" aname=\"test\" />");
+        
        SSL_CTX *ctx;
        int server;
        atomic<int>* threadCounter = new atomic<int>(0);

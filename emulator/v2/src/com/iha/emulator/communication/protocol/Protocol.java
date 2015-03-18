@@ -5,7 +5,6 @@ import com.iha.emulator.control.AdapterController;
 import com.iha.emulator.control.SensorController;
 import com.iha.emulator.models.Adapter;
 import com.iha.emulator.models.Sensor;
-import com.iha.emulator.utilities.AdapterLogger;
 import javafx.beans.property.DoubleProperty;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;

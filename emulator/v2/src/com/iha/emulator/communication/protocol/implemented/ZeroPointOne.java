@@ -102,7 +102,7 @@ public class ZeroPointOne extends AbstractProtocol {
     }
 
     @Override
-    public void parseInSensorMessage(Document inDocument, SensorController senderController, AdapterController adapterController) throws NullPointerException{
+    public void parseInSensorMessage(Document inDocument, SensorController senderController, AdapterController adapterController) throws IllegalArgumentException,NullPointerException{
         Element rootElement = inDocument.getRootElement();
         //check state
         String state = rootElement.attribute("state").getValue();
@@ -162,10 +162,18 @@ public class ZeroPointOne extends AbstractProtocol {
                 }
                 getLogger().trace("Number of values, to be changed: " + newValues.size());
                 adapterController.changeValueOnSensor(sensorId,newValues);
-
+                return;
+            case "register":
+                Boolean response = Boolean.valueOf(rootElement.attributeValue("response"));
+                if(response == null) throw new IllegalArgumentException("Cannot parse \"response\" attribute in incoming message");
+                if(response){
+                    Platform.runLater(()->adapterController.getAdapter().setRegistered(true));
+                }else{
+                    throw new IllegalArgumentException("Register response is FALSE");
+                }
                 return;
         }
-        getLogger().trace("Unknown state");
+        getLogger().warn("Unknown state");
     }
 
 

@@ -15,10 +15,23 @@
     -fx-fill: #ffffff;
     -fx-text-fill: #ffffff;
     -fx-border-width: 0;
-    -fx-pref-width: 200px;
+    -fx-pref-width: 260px;
     -fx-pref-height: 200px;
     -fx-cursor: hand;
     -fx-font-size: 20pt;
+    -fx-font-weight: bold;
+    -fx-text-alignment: center;
+}
+
+.chooserSmallBtn{
+    -fx-background-color: #36b1ff;
+    -fx-fill: #ffffff;
+    -fx-text-fill: #ffffff;
+    -fx-border-width: 0;
+    -fx-pref-width: 200px;
+    -fx-pref-height: 30px;
+    -fx-cursor: hand;
+    -fx-font-size: 10pt;
     -fx-font-weight: bold;
     -fx-text-alignment: center;
 }
@@ -56,6 +69,11 @@
 .toolBar {
     -fx-background-color: #ffffff;
     -fx-padding: 0 0.5em 0.5em 0.5em;
+}
+
+.radio-button {
+    -fx-font-size: 11;
+    -fx-text-fill: #828282;
 }
 
 .plainToolBarBtn {
@@ -473,7 +491,7 @@
     -fx-border-width: 5px 3px 3px 3px;
     -fx-border-color: #efefef;
     -fx-max-width: 250px;
-    -fx-max-height: 160px;
+    -fx-max-height: 170px;
 }
 
 .serverDetailsText{
@@ -1061,5 +1079,5 @@
     -fx-border-width: 5px 3px 3px 3px;
     -fx-border-color: #efefef;
     -fx-max-width: 250px;
-    -fx-max-height: 160px;
+    -fx-max-height: 170px;
 }

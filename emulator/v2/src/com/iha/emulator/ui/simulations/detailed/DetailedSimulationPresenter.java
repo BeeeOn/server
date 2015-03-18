@@ -13,17 +13,17 @@ import com.iha.emulator.ui.Presenter;
 import com.iha.emulator.ui.dialogs.adapter.AddAdapterDialogPresenter;
 import com.iha.emulator.ui.dialogs.adapter.ChangeAdapterDetailsDialogPresenter;
 import com.iha.emulator.ui.dialogs.adapter.DeleteAdaptersDialogPresenter;
-import com.iha.emulator.ui.dialogs.log.ShowFullLogPresenter;
 import com.iha.emulator.ui.dialogs.sensor.AddNewSensorDialogPresenter;
 import com.iha.emulator.ui.dialogs.sensor.DeleteSensorsDialogPresenter;
 import com.iha.emulator.ui.dialogs.server.ChangeServerDetailsDialogPresenter;
 import com.iha.emulator.ui.panels.adapter.AdapterButton;
 import com.iha.emulator.ui.panels.adapter.details.AdapterDetailsPresenter;
 import com.iha.emulator.ui.panels.server.details.ServerDetailsPresenter;
-import com.iha.emulator.utilities.AdapterLogger;
-import com.iha.emulator.utilities.MemoryChecker;
-import com.iha.emulator.utilities.TextAreaAppender;
 import com.iha.emulator.utilities.Utilities;
+import com.iha.emulator.utilities.logging.AdapterLogger;
+import com.iha.emulator.utilities.logging.TextAreaAppender;
+import com.iha.emulator.utilities.watchers.MemoryChecker;
+import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ListProperty;
@@ -70,6 +70,7 @@ public class DetailedSimulationPresenter implements Presenter{
     private static final String CSS_PATH = "/com/iha/emulator/resources/css/theme-light.css";
 
     private Stage window;
+    private HostServices hostServices;
 
     private MemoryChecker memoryChecker = MemoryChecker.getInstance();
     private Properties properties;
@@ -201,7 +202,8 @@ public class DetailedSimulationPresenter implements Presenter{
                 // set new adapter as current
                 setCurrentAdapter(newAdapterController);
                 try {
-                    newAdapterController.getLog().setBuffered(true,"adapter_emu_" + String.valueOf(newAdapterController.getAdapter().getId()),null);
+                    newAdapterController.getLog().setBuffered(true,"adapter_emu_" + String.valueOf(newAdapterController.getAdapter().getId())+"_",AddAdapterDialogPresenter.DEFAULT_LOG_PATH);
+                    newAdapterController.getLog().writeAdapterLogHeaderToBuffer();
                 } catch (IOException e) {
                     Utilities.showException(logger, "Cannot create buffer file for new adapter log.", e, true, event -> quit());
                 }
@@ -291,22 +293,8 @@ public class DetailedSimulationPresenter implements Presenter{
     }
 
     public void showFullLog(){
-        ShowFullLogPresenter showFullLogPresenter;
-        try{
-            Stage stage = new Stage();
-            if(currentAdapterController == null || currentAdapterController.getLog().getBufferFile() == null) return;
-            showFullLogPresenter = new ShowFullLogPresenter(stage,currentAdapterController);
-            stage.setTitle("Full log for adapter: " + currentAdapterController.getAdapter().getName() + " / " + String.valueOf(currentAdapterController.getAdapter().getId()));
-            Scene scene = new Scene((Parent) showFullLogPresenter.loadView());
-            // set css for view
-            logger.trace("Loading CSS from: " + CSS_PATH);
-            scene.getStylesheets().add(getClass().getResource(CSS_PATH).toExternalForm());
-            stage.setScene(scene);
-            stage.initModality(Modality.NONE);
-            stage.setResizable(true);
-            stage.show();
-        } catch (IOException e) {
-            Utilities.showException(logger, "Cannot load dialog showing full log!", e, false, null);
+        if(hostServices != null && currentAdapterController!= null && currentAdapterController.getLog().getBufferFile()!= null){
+            hostServices.showDocument(currentAdapterController.getLog().getBufferFile().getAbsolutePath());
         }
     }
 
@@ -744,7 +732,8 @@ public class DetailedSimulationPresenter implements Presenter{
                 //ADD ADAPTER TO OTHERS
                 getAdapterControllersList().add(tmpAdapterController);
                 try{
-                    tmpAdapterController.getLog().setBuffered(true,"adapter_emu_" + String.valueOf(tmpAdapterController.getAdapter().getId()),null);
+                    tmpAdapterController.getLog().setBuffered(true,"adapter_emu_" + String.valueOf(tmpAdapterController.getAdapter().getId())+"_",AddAdapterDialogPresenter.DEFAULT_LOG_PATH);
+                    tmpAdapterController.getLog().writeAdapterLogHeaderToBuffer();
                 }catch (IOException e){
                     throw new DocumentException("Cannot buffer adapter " + adapterElement.attribute("id").getValue() + " . Failed to create .tmp file!",e);
                 }
@@ -1048,6 +1037,15 @@ public class DetailedSimulationPresenter implements Presenter{
         removeTempFiles();
         Platform.exit();
     }
+
+    public HostServices getHostServices() {
+        return hostServices;
+    }
+
+    public void setHostServices(HostServices hostServices) {
+        this.hostServices = hostServices;
+    }
+
     //endregion
 
 }

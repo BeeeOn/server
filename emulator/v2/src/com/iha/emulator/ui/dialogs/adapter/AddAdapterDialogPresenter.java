@@ -50,6 +50,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
     private static final Logger logger = LogManager.getLogger(AddAdapterDialogPresenter.class);
     private static final String FXML_PATH = "AddAdapterDialog.fxml";
     private static final String CSS_PATH = "/com/iha/emulator/resources/css/theme-light.css";
+    public static final String DEFAULT_LOG_PATH = "logs/detailed";
     private ValidationSupport serverValidationSupport = new ValidationSupport();
     private ValidationSupport adapterValidationSupport = new ValidationSupport();
 
@@ -152,7 +153,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
         });
         //----------------ADAPTER-------------------
         view.getAdapterFirmwareLbl().setText(DEFAULT_FIRMWARE);
-        view.getAdapterProtocolComboBox().setItems(getProtocolVersions());
+        view.getAdapterProtocolComboBox().setItems(Utilities.getProtocolVersions());
         view.getAdapterProtocolComboBox().setCellFactory(new Callback<ListView<Protocol.Version>, ListCell<Protocol.Version>>() {
             @Override
             public ListCell call(ListView<Protocol.Version> param) {
@@ -283,7 +284,8 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
             // set new adapter as current
             parent.setCurrentAdapter(newAdapterController);
             try {
-                newAdapterController.getLog().setBuffered(true,"adapter_emu_" + String.valueOf(newAdapterController.getAdapter().getId()),null);
+                newAdapterController.getLog().setBuffered(true,"adapter_emu_" + String.valueOf(newAdapterController.getAdapter().getId())+"_",DEFAULT_LOG_PATH);
+                newAdapterController.getLog().writeAdapterLogHeaderToBuffer();
             } catch (IOException e) {
                 Utilities.showException(
                         logger,
@@ -380,9 +382,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
         }
     }
 
-    private ObservableList<Protocol.Version> getProtocolVersions(){
-        return FXCollections.observableArrayList(Protocol.Version.values());
-    }
+
 
     public void showAdapters(){
         ShowAdaptersDialogPresenter showAdaptersDialogPresenter;
@@ -398,9 +398,9 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
             //stage.setResizable(false);
             stage.show();
             showAdaptersDialogPresenter.refresh();
-            } catch (IOException e) {
+        } catch (IOException e) {
             Utilities.showException(logger, "Cannot load dialog for showing adapters in database!", e, false,null);
-            }
+        }
     }
 
     @Override

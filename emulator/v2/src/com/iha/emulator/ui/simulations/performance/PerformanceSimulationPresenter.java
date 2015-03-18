@@ -2,19 +2,23 @@ package com.iha.emulator.ui.simulations.performance;
 
 import com.iha.emulator.communication.protocol.Protocol;
 import com.iha.emulator.communication.server.ServerListener;
-import com.iha.emulator.control.SimulationTask;
-import com.iha.emulator.control.ValueParameters;
+import com.iha.emulator.control.task.SimulationTask;
+import com.iha.emulator.control.task.StopCondition;
+import com.iha.emulator.control.task.ValueParameters;
+import com.iha.emulator.models.Server;
 import com.iha.emulator.models.value.Value;
 import com.iha.emulator.models.value.ValueFactory;
 import com.iha.emulator.ui.Presenter;
-import com.iha.emulator.ui.dialogs.log.ShowFullLogPresenter;
+import com.iha.emulator.ui.dialogs.task.AddNewTaskDialogPresenter;
 import com.iha.emulator.ui.panels.server.details.ServerDetailsPresenter;
-import com.iha.emulator.ui.panels.task.*;
+import com.iha.emulator.ui.panels.task.cell.*;
 import com.iha.emulator.ui.panels.task.details.TaskDetailsPresenter;
-import com.iha.emulator.utilities.AdapterLogger;
-import com.iha.emulator.utilities.MemoryChecker;
-import com.iha.emulator.utilities.TextAreaAppender;
 import com.iha.emulator.utilities.Utilities;
+import com.iha.emulator.utilities.logging.AdapterLogger;
+import com.iha.emulator.utilities.logging.TextAreaAppender;
+import com.iha.emulator.utilities.watchers.MemoryChecker;
+import com.iha.emulator.utilities.watchers.QueueWatcher;
+import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.*;
@@ -29,12 +33,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+import jfxtras.scene.control.LocalDateTimeTextField;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.controlsfx.dialog.ProgressDialog;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -47,14 +52,16 @@ public class PerformanceSimulationPresenter implements Presenter{
 
     private static final Logger logger = LogManager.getLogger(PerformanceSimulationPresenter.class);
     private static final int DEFAULT_SERVER_LISTENER_PORT = 7978;
-    private static final boolean DEBUG_AUTO_CREATE = true;
+    private static final boolean DEBUG_AUTO_CREATE = false;
     private static final String FXML_PATH = "PerformanceSimulation.fxml";
     private static final String CSS_PATH = "/com/iha/emulator/resources/css/theme-light.css";
 
     private Stage window;
+    private HostServices hostServices;
 
     private MemoryChecker memoryChecker = MemoryChecker.getInstance();
     private Properties properties;
+    private QueueWatcher queueWatcher;
 
     //region PRESENTERS
     private ServerDetailsPresenter serverDetailsPresenter;
@@ -81,6 +88,8 @@ public class PerformanceSimulationPresenter implements Presenter{
         public void addTaskDetailsView(Node taskDetailsView);
         public Button getSaveAllBtn();
         public Button getPrintBtn();
+        public MenuItem getOpenItem();
+        public Button getOpenTBtn();
         public FlowPane getTaskDetailsContainer();
         public Node getAdapterLogContainer();
         public Node getToBeSentLogContainer();
@@ -107,7 +116,16 @@ public class PerformanceSimulationPresenter implements Presenter{
         public TableColumn getServerColumn();
         public TableColumn getStateColumn();
         public TableColumn getEnabledColumn();
+        public TableColumn getStopConditionColumn();
+        public HBox getQueueProcessContainer();
+        public Button getQueueProcessOnBtn();
+        public Button getQueueProcessOffBtn();
+        public LocalDateTimeTextField getStartDateTimeTextField();
+        public void setStartDateTimeTextField(LocalDateTimeTextField startDateTimeTextField);
+        public RadioButton getPickTimeStartRadBtn();
+        public RadioButton getImmediatelyStartRadBtn();
         public TableView getTasksTable();
+        public StackPane getResponseChartContainer();
     }
     //region variables
     private Display view;
@@ -169,7 +187,30 @@ public class PerformanceSimulationPresenter implements Presenter{
     public void addTask(){
         logger.trace("Creating new task");
         if(!DEBUG_AUTO_CREATE){
-
+            Task<Object> worker = new Task<Object>() {
+                @Override
+                protected Object call() throws Exception {
+                    LongProperty progress = new SimpleLongProperty(0);
+                    progress.addListener(new ChangeListener<Number>() {
+                        @Override
+                        public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                            if((Long)newValue > 0 && (Long)newValue < 100)
+                                updateProgress((long)newValue,100);
+                        }
+                    });
+                    ObservableList<Server> tmp;
+                    try{
+                        tmp = Utilities.buildServersFromProperties(properties,progress);
+                        final ObservableList<Server> finalTmp = tmp;
+                        Platform.runLater(() -> showAddTaskDialog(finalTmp));
+                    }catch (IllegalArgumentException e){
+                        Platform.runLater(() -> showAddTaskDialog(null));
+                        Platform.runLater(() -> Utilities.showException(logger, "Cannot load settings from properties file", e, false, null));
+                    }
+                    return null;
+                }
+            };
+            Utilities.showLoadingDialog(worker, "Loading...");
         }else {
             Task<Object> worker = new Task<Object>() {
                 @Override
@@ -191,11 +232,11 @@ public class PerformanceSimulationPresenter implements Presenter{
                     //create task parameters
                     logger.trace("Creating new task -> Creating parameters");
                     task.createTaskParameters(
-                            200, //adapters count
+                            20, //adapters count
                             Protocol.Version.ZERO_POINT_ONE, //protocol version
                             1000, //starting adapter id
-                            1, // sensors count minimum
-                            1, //sensors count maximum
+                            3, // sensors count minimum
+                            3, //sensors count maximum
                             5, //refresh time minimum
                             5, //refresh time maximum
                             null // default save dir
@@ -213,17 +254,25 @@ public class PerformanceSimulationPresenter implements Presenter{
                     task.createLog(view.getLogTabPane());
                     task.getLog().createLogs();
                     //set message tracking (waiting and sent counter)
+                    logger.trace("Creating new task -> Creating logs -> Enabling response tracking");
                     task.getLog().getMessageTracker().setEnabled(true);
                     //DON'T show to be sent messages
+                    logger.trace("Creating new task -> Creating logs -> Disabling To Be Sent log");
                     task.getLog().setShowToBeSent(false);
                     //set log to buffer
                     logger.trace("Creating new task -> Setting logs to buffer");
                     try {
                         task.getLog().setBuffered(true,"task_"+task.getId()+"_",task.getTaskParameters().getSaveDir());
+                        task.getLog().writeTaskLogHeaderToBuffer();
                         logger.trace("");
                     } catch (IOException e) {
                         Utilities.showException(logger, "Cannot create buffer file for new task's log.", e, true, event -> quit());
                     }
+                    //register stop conditions
+                    logger.trace("Creating new task -> Creating stop conditions");
+                    StopCondition sc = task.createStopCondition();
+                    sc.registerSentMessageWatcher(100);
+                    //sc.registerWaitingMessageWatcher(254);
                     //add to other tasks
                     logger.trace("Creating new task -> Adding task to list");
                     getTasks().add(task);
@@ -232,6 +281,8 @@ public class PerformanceSimulationPresenter implements Presenter{
                     logger.trace("Creating new task -> Creating adapters");
                     task.createAdapters(progress);
                     task.setSimulationState(SimulationTask.State.READY);
+                    //add QueueWatcher to task
+                    task.setQueueWatcher(getQueueWatcher());
                     progress.set(100);
                     return null;
                 }
@@ -255,6 +306,43 @@ public class PerformanceSimulationPresenter implements Presenter{
 
     public void print(){
 
+    }
+
+    public void queueProcessStart(){
+        if(getQueueWatcher() == null){
+            logger.warn("QueueWatcher is null");
+            return;
+        }
+        if(getTasks().size() == 0 || checkMissingStopConditions()) return;
+        try{
+            getQueueWatcher().start();
+        }catch (IllegalArgumentException e){
+            logger.debug(e.getMessage());
+            Utilities.showError("Choose time to start queue auto processing","Auto process queue");
+        }
+    }
+
+    public void queueProcessStop(){
+        if(getQueueWatcher() == null){
+            logger.warn("QueueWatcher is null");
+            return;
+        }
+        getQueueWatcher().stop();
+    }
+
+    private boolean checkMissingStopConditions(){
+        String taskIds = "";
+        for (SimulationTask t : getTasks()){
+            if(t.getStopCondition().getConditionCounter() == 0){
+                taskIds = (taskIds.isEmpty() ? "" : " , ") + t.getId();
+            }
+        }
+        if(!taskIds.isEmpty()){
+            Utilities.showError("Tasks " + taskIds + " don't have stop condition. Cannot run queue auto processing.","Auto queue process");
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public void switchCurrentTask(SimulationTask newTask){
@@ -283,22 +371,8 @@ public class PerformanceSimulationPresenter implements Presenter{
 
 
     public void showFullLog(){
-        ShowFullLogPresenter showFullLogPresenter;
-        try{
-            Stage stage = new Stage();
-            if(getCurrentTask() == null || getCurrentTask().getLog().getBufferFile() == null) return;
-            showFullLogPresenter = new ShowFullLogPresenter(stage,getCurrentTask());
-            stage.setTitle("Full log for task: " + getCurrentTask().getId());
-            Scene scene = new Scene((Parent) showFullLogPresenter.loadView());
-            // set css for view
-            logger.trace("Loading CSS from: " + CSS_PATH);
-            scene.getStylesheets().add(getClass().getResource(CSS_PATH).toExternalForm());
-            stage.setScene(scene);
-            stage.initModality(Modality.NONE);
-            stage.setResizable(true);
-            stage.show();
-        } catch (IOException e) {
-            Utilities.showException(logger, "Cannot load dialog showing full log!", e, false, null);
+        if(hostServices != null && getCurrentTask()!= null && getCurrentTask().getLog().getBufferFile()!= null){
+            hostServices.showDocument(getCurrentTask().getLog().getBufferFile().getAbsolutePath());
         }
     }
 
@@ -317,17 +391,29 @@ public class PerformanceSimulationPresenter implements Presenter{
         view.getPrintBtn().setDisable(true);
         //bind task controls disable property
         bindControlBtnsToTasksCount();
+        //create date time picker
+        createDateTimePicker();
+        //create and bind queue watcher
+        this.queueWatcher = new QueueWatcher(this,getTasks());
+        bindQueueWatcherControls();
         //init task table, set columns cell factories
         initTasksTable();
-        //initialize server listener
-        //TODO start server listener
-        //initAndStartServerListener();
-        //initialize current task
-
+        view.getNewTaskItem().setDisable(false);
+        view.getNewTaskTBtn().setDisable(false);
+        view.getOpenTBtn().setDisable(false);
+        view.getOpenItem().setDisable(false);
         //handle close event
         window.setOnCloseRequest(event -> {
             quit();
         });
+    }
+
+    private void createDateTimePicker(){
+        LocalDateTimeTextField l = new LocalDateTimeTextField();
+        l.setPrefHeight(27);
+        l.setPrefWidth(189);
+        view.setStartDateTimeTextField(l);
+        view.getQueueProcessContainer().getChildren().add(l);
     }
 
     private void bindLogs(){
@@ -338,6 +424,41 @@ public class PerformanceSimulationPresenter implements Presenter{
             log.addSentLogTo(view.getToBeSentLogContainer());
             log.addErrorLogTo(view.getErrorLogContainer());
         }
+    }
+
+    private void bindQueueWatcherControls(){
+        if(getQueueWatcher() == null){
+            logger.warn("QueueWatcher is null");
+            return;
+        }
+        getQueueWatcher().initDateTimePicker(view.getStartDateTimeTextField());
+        view.getQueueProcessOnBtn().disableProperty().bind(getQueueWatcher().enabledProperty());
+        view.getQueueProcessOffBtn().disableProperty().bind(new BooleanBinding() {
+            {
+                bind(getQueueWatcher().enabledProperty());
+            }
+            @Override
+            protected boolean computeValue() {
+                return !getQueueWatcher().getEnabled();
+            }
+        });
+        view.getImmediatelyStartRadBtn().selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                getQueueWatcher().setImmediateStart(newValue);
+            }
+        });
+        view.getStartDateTimeTextField().disableProperty().bind(new BooleanBinding() {
+            {
+                bind(getQueueWatcher().enabledProperty());
+            }
+            @Override
+            protected boolean computeValue() {
+                return getQueueWatcher().getEnabled();
+            }
+        }.or(getQueueWatcher().immediateStartProperty()));
+        view.getImmediatelyStartRadBtn().disableProperty().bind(getQueueWatcher().enabledProperty());
+        view.getPickTimeStartRadBtn().disableProperty().bind(getQueueWatcher().enabledProperty());
     }
 
     @SuppressWarnings("unchecked")
@@ -354,14 +475,18 @@ public class PerformanceSimulationPresenter implements Presenter{
         //server column
         view.getServerColumn().setCellValueFactory(new SimulationTaskFactory());
         view.getServerColumn().setCellFactory(param -> new SimulationTaskServerCellFactory());
+        //stop condition column
+        view.getStopConditionColumn().setCellValueFactory(new SimulationTaskFactory());
+        view.getStopConditionColumn().setCellFactory(param -> new SimulationTaskStopCellFactory());
         //set content for tasks table
         view.getTasksTable().setItems(getTasksList());
         //set click action
         view.getTasksTable().setRowFactory(tv->{
             TableRow<SimulationTask> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
-                if((!row.isEmpty()) && event.getClickCount() > 1){
+                if((!row.isEmpty()) && event.getClickCount() > 1 && !getQueueWatcher().getEnabled()){
                     SimulationTask task = row.getItem();
+                    logger.warn("Double-Clicked task: " + task.getId());
                     checkIfSwitchTasks(task);
                 }
             });
@@ -483,6 +608,26 @@ public class PerformanceSimulationPresenter implements Presenter{
         view.getResumeSensorsTBtn().setDisable(true);
 
         setCurrentTask(null);
+    }
+
+    private void showAddTaskDialog(ObservableList<Server> servers){
+        AddNewTaskDialogPresenter addNewTaskDialogPresenter;
+        try{
+            Stage stage = new Stage();
+            addNewTaskDialogPresenter = new AddNewTaskDialogPresenter(stage,this,servers);
+            stage.setTitle("Add new task");
+            Scene scene = new Scene((Parent) addNewTaskDialogPresenter.loadView());
+            // set css for view
+            logger.trace("Loading CSS from: " + CSS_PATH);
+            scene.getStylesheets().add(getClass().getResource(CSS_PATH).toExternalForm());
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.show();
+        } catch (IOException e) {
+            Utilities.showException(logger, "Cannot load dialog for task adapter!", e, false, null);
+        } catch (IllegalArgumentException ei){
+            Utilities.showException(logger, "Cannot create task. Error in properties file. Please review file an start application again.", ei, true, event -> quit());
+        }
     }
 
     private void bindTaskControlBtns(){
@@ -671,6 +816,25 @@ public class PerformanceSimulationPresenter implements Presenter{
         } catch (IOException e) {
             Utilities.showException(logger, "Cannot load Server Details", e, true, event -> quit());
         }
+        //init date time picker
+        /*String DATE_TIME_PATTERN = "dd-MM-yyyy HH:mm:ss";
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
+        LocalDateTimeTextField dateTimePicker = new LocalDateTimeTextField(LocalDateTime.now());
+        dateTimePicker.setMinWidth(150);
+        dateTimePicker.setDateTimeFormatter(dateTimeFormatter);
+
+        dateTimePicker.setLocalDateTimeRangeCallback(new Callback<LocalDateTimePicker.LocalDateTimeRange, Void>() {
+            @Override
+            public Void call(LocalDateTimePicker.LocalDateTimeRange param) {
+
+                return null;
+            }
+        });
+        Locale l = Locale.UK;
+        dateTimePicker.setLocale(l);
+        dateTimePicker.setAllowNull(false);
+
+        view.getQueueProcessContainer().getChildren().add(dateTimePicker);*/
     }
     /**
      *  Load view from FXML file{@link com.iha.emulator.ui.simulations.performance.PerformanceSimulationPresenter#FXML_PATH} and after that
@@ -704,19 +868,6 @@ public class PerformanceSimulationPresenter implements Presenter{
         }
     }
 
-    private void showLoadingDialog(Task worker,String title){
-        //create progress dialog
-        ProgressDialog dlg = new ProgressDialog(worker);
-        dlg.setTitle(title);
-        dlg.getDialogPane().setHeaderText("");
-        dlg.initStyle(StageStyle.UNIFIED);
-        //create thread for background process
-        Thread th = new Thread(worker);
-        th.setDaemon(true);
-        //run background process
-        th.start();
-    }
-
     public void setStatus(String status,boolean indicate){
         view.setStatusLine(status);
         view.setStatusIndicator(indicate);
@@ -731,13 +882,6 @@ public class PerformanceSimulationPresenter implements Presenter{
             //start checking
             memoryChecker.start();
         }
-    }
-
-    public void showError(String message,String title) {
-        Alert dlg = new Alert(Alert.AlertType.ERROR, message);
-        dlg.initModality(Modality.WINDOW_MODAL);
-        dlg.setTitle(title);
-        dlg.show();
     }
 
     @Override
@@ -779,7 +923,17 @@ public class PerformanceSimulationPresenter implements Presenter{
         return tasksList.get();
     }
 
+    public QueueWatcher getQueueWatcher() {
+        return queueWatcher;
+    }
 
+    public HostServices getHostServices() {
+        return hostServices;
+    }
+
+    public void setHostServices(HostServices hostServices) {
+        this.hostServices = hostServices;
+    }
 
     //endregion
 

@@ -37,6 +37,11 @@ public class ChooserView implements Initializable,ChooserPresenter.Display {
         presenter.runPerformanceSimulation();
     }
 
+    @FXML
+    public void handleMaxThreadTest(ActionEvent event){
+        presenter.runMaxThreadTest();
+    }
+
     @Override
     public void setPresenter(ChooserPresenter presenter) {
         this.presenter = presenter;

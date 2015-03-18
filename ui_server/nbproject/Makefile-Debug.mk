@@ -48,6 +48,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/MsgInAddAdapter.o \
 	${OBJECTDIR}/MsgInAddRoom.o \
 	${OBJECTDIR}/MsgInAddView.o \
+	${OBJECTDIR}/MsgInAlgorithmsRedirect.o \
 	${OBJECTDIR}/MsgInConditionPlusAction.o \
 	${OBJECTDIR}/MsgInDelAction.o \
 	${OBJECTDIR}/MsgInDelConAccount.o \
@@ -220,6 +221,11 @@ ${OBJECTDIR}/MsgInAddView.o: MsgInAddView.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInAddView.o MsgInAddView.cpp
+
+${OBJECTDIR}/MsgInAlgorithmsRedirect.o: MsgInAlgorithmsRedirect.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInAlgorithmsRedirect.o MsgInAlgorithmsRedirect.cpp
 
 ${OBJECTDIR}/MsgInConditionPlusAction.o: MsgInConditionPlusAction.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -1120,6 +1126,19 @@ ${OBJECTDIR}/MsgInAddView_nomain.o: ${OBJECTDIR}/MsgInAddView.o MsgInAddView.cpp
 	    $(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInAddView_nomain.o MsgInAddView.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/MsgInAddView.o ${OBJECTDIR}/MsgInAddView_nomain.o;\
+	fi
+
+${OBJECTDIR}/MsgInAlgorithmsRedirect_nomain.o: ${OBJECTDIR}/MsgInAlgorithmsRedirect.o MsgInAlgorithmsRedirect.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInAlgorithmsRedirect.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInAlgorithmsRedirect_nomain.o MsgInAlgorithmsRedirect.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/MsgInAlgorithmsRedirect.o ${OBJECTDIR}/MsgInAlgorithmsRedirect_nomain.o;\
 	fi
 
 ${OBJECTDIR}/MsgInConditionPlusAction_nomain.o: ${OBJECTDIR}/MsgInConditionPlusAction.o MsgInConditionPlusAction.cpp 

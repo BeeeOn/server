@@ -10,7 +10,8 @@ import com.iha.emulator.models.Server;
 import com.iha.emulator.models.value.Value;
 import com.iha.emulator.resources.images.sensor_types.SensorIcon;
 import com.iha.emulator.ui.panels.sensor.SensorPanelPresenter;
-import com.iha.emulator.utilities.AdapterLogger;
+import com.iha.emulator.utilities.logging.AdapterLogger;
+import com.iha.emulator.utilities.watchers.ResponseTracker;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
@@ -350,11 +351,7 @@ public class AdapterController{
                 .addAttribute("protocol",String.valueOf(getAdapter().getProtocolVersion()))
                 .addAttribute("registered",String.valueOf(getAdapter().getRegistered()))
                 .addAttribute("firmware",String.valueOf(getAdapter().getFirmware()));
-        adapterElement.addElement("server")
-                .addAttribute("name",getServerController().getModel().getName())
-                .addAttribute("ip",getServerController().getModel().getIp())
-                .addAttribute("port",String.valueOf(getServerController().getModel().getPort()))
-                .addAttribute("db",getServerController().getModel().getDatabaseName());
+        getServerController().saveToXml(adapterElement);
         Element sensorsElement = adapterElement.addElement("sensors");
         for(SensorController sensorController : getSensorControllers()){
             sensorController.saveToXML(sensorsElement);
@@ -365,6 +362,11 @@ public class AdapterController{
     public void setTrackServerResponse(boolean b) throws NullPointerException{
         if(getScheduler() == null) throw new NullPointerException("Adapter/" + getAdapter().getId() + " cannot set response tracking, scheduler is null");
         getScheduler().getResponseTracker().setEnabled(b);
+    }
+
+    public void setServerResponseTracker(ResponseTracker responseTracker){
+        if(getScheduler() == null) throw new NullPointerException("Adapter/" + getAdapter().getId() + " cannot set response tracking, scheduler is null");
+        getScheduler().setResponseTracker(responseTracker);
     }
 
     public void setDumpServerResponse(boolean b) throws NullPointerException{
@@ -396,7 +398,7 @@ public class AdapterController{
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if(newValue && !adapterController.getAdapter().getRegistered() && !adapterController.isRegisterMessageSent()){
                     logger.trace("Adapter/" + adapterController.getAdapter().getId() + " creating register message.");
-                    adapterController.sendMessage("Registering adapter", adapterController.getAdapter().getProtocol().buildRegisterMessage(adapterController), null, OutMessage.Type.REGISTER_ADAPTER);
+                    adapterController.sendMessage(adapterController.toString() + " -> Registering adapter", adapterController.getAdapter().getProtocol().buildRegisterMessage(adapterController), null, OutMessage.Type.REGISTER_ADAPTER);
                     adapterController.setRegisterMessageSent(true);
                 }
             }
@@ -409,7 +411,14 @@ public class AdapterController{
     }
 
     public synchronized void clearScheduler(){
-        if(scheduler != null) scheduler.stopProcessing();
+        if(scheduler != null){
+            try{
+                scheduler.stopProcessing();
+                scheduler.terminateSocket();
+            }catch (IOException e){
+                //terminating blocking sockets
+            }
+        }
         if(messages != null) messages.clear();
     }
 

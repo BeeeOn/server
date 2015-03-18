@@ -1,6 +1,7 @@
 package com.iha.emulator.utilities;
 
 import com.iha.emulator.Main;
+import com.iha.emulator.communication.protocol.Protocol;
 import com.iha.emulator.control.AdapterController;
 import com.iha.emulator.control.SensorController;
 import com.iha.emulator.models.Server;
@@ -10,10 +11,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.EventHandler;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.DialogEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.apache.logging.log4j.Level;
@@ -41,6 +44,7 @@ import java.util.regex.Pattern;
 public class Utilities {
     private static final Logger logger = LogManager.getLogger(Utilities.class);
     private static final int[] REFERSH_TIME_OPTIONS = {1,5,10,20,30,60,300,600,900,1800,3600,7200,10800,14400,28800,43200,86400};
+    public static final double REFRESH_SLIDER_VALUE_COUNT = 16;
     private static final String PATH_TO_RESOURCES = "/com/iha/emulator/resources/";
     private static final String PROPERTIES_FILENAME = "emu.properties";
 
@@ -62,6 +66,10 @@ public class Utilities {
             instance = new Utilities();
         }
         return instance;
+    }
+
+    public static ObservableList<Protocol.Version> getProtocolVersions(){
+        return FXCollections.observableArrayList(Protocol.Version.values());
     }
 
     public Properties loadDefaultProperties(String propertiesFileName) throws IOException {
@@ -143,7 +151,7 @@ public class Utilities {
         }
     }
 
-    public static void showException(Logger log,String header,Exception e,boolean closeApp,EventHandler<DialogEvent> onCloseEvent){
+    public static void showException(Logger log,String header,Throwable e,boolean closeApp,EventHandler<DialogEvent> onCloseEvent){
         if(e == null){
             e = new IllegalArgumentException(header);
         }
@@ -158,6 +166,13 @@ public class Utilities {
             dlg.setOnCloseRequest(onCloseEvent);
         }
         //show exception dialog
+        Platform.runLater(dlg::show);
+    }
+
+    public static void showError(String message,String title) {
+        Alert dlg = new Alert(Alert.AlertType.ERROR, message);
+        dlg.initModality(Modality.WINDOW_MODAL);
+        dlg.setTitle(title);
         Platform.runLater(dlg::show);
     }
 
@@ -410,6 +425,7 @@ public class Utilities {
     }
 
     public static boolean isIntegerNumber(String number,int minDigits,int maxDigits){
+        if(number == null) return false;
         Pattern pattern = Pattern.compile("\\d{"+minDigits+","+maxDigits+"}");
         Matcher matcher = pattern.matcher(number);
         return matcher.matches();
@@ -435,6 +451,22 @@ public class Utilities {
             return (seconds/60) + " m";
         }else {
             return (seconds/3600) + " h";
+        }
+    }
+
+    public static String formatSeconds(long seconds){
+        if(seconds < 60) {
+            return seconds + " s";
+        }else if(seconds < 3600){
+            long min = (seconds/60);
+            long sec = seconds%60;
+            return min + "m : " + sec + "s";
+        }else {
+            long hour = seconds/3600;
+            long remaining = seconds%3600;
+            long min = remaining/60;
+            long sec = remaining%60;
+            return hour + "h : " + min + "m : " + sec + "s";
         }
     }
 

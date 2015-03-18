@@ -6,7 +6,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import jfxtras.scene.control.LocalDateTimeTextField;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -63,7 +65,7 @@ public class PerformanceSimulationView implements Initializable,PerformanceSimul
     @FXML private ScrollPane toBeSentLogContainer;
     @FXML private TabPane logTabPane;
     @FXML private Tab errorTab;
-    @FXML private ScrollPane errorLogContainer;
+    @FXML private StackPane errorLogContainer;
     @FXML private ToggleGroup logMessageTypeRadBtnGroup;
     @FXML private RadioButton fullLogMessageRadBtn;
     @FXML private RadioButton partialLogMessageRadBtn;
@@ -76,6 +78,16 @@ public class PerformanceSimulationView implements Initializable,PerformanceSimul
     @FXML private TableColumn idColumn;
     @FXML private TableColumn stateColumn;
     @FXML private TableColumn serverColumn;
+    @FXML private TableColumn stopConditionColumn;
+    @FXML private HBox queueProcessContainer;
+    @FXML private Button queueProcessOnBtn;
+    @FXML private Button queueProcessOffBtn;
+    @FXML private RadioButton immediatelyStartRadBtn;
+    @FXML private RadioButton pickTimeStartRadBtn;
+    private LocalDateTimeTextField startDateTimeTextField;
+    //endregion
+    //region SERVER RESPONSE
+    @FXML private StackPane responeChartContainer;
     //endregion
 
     public PerformanceSimulationView(){
@@ -150,6 +162,28 @@ public class PerformanceSimulationView implements Initializable,PerformanceSimul
     public void handleShowFullLog(ActionEvent event) {
         logger.trace("Show full log Clicked!");
         presenter.showFullLog();
+    }
+
+    @FXML
+    public void handleQueueProcessOn(){
+        logger.trace("Queue process ON Clicked!");
+        presenter.queueProcessStart();
+    }
+
+    @FXML
+    public void handleQueueProcessOff(){
+        logger.trace("Queue process OFF Clicked!");
+        presenter.queueProcessStop();
+    }
+
+    @Override
+    public MenuItem getOpenItem() {
+        return openItem;
+    }
+
+    @Override
+    public Button getOpenTBtn() {
+        return openTBtn;
     }
 
     @Override
@@ -228,7 +262,7 @@ public class PerformanceSimulationView implements Initializable,PerformanceSimul
     }
 
     @Override
-    public ScrollPane getErrorLogContainer() {
+    public StackPane getErrorLogContainer() {
         return errorLogContainer;
     }
 
@@ -353,7 +387,52 @@ public class PerformanceSimulationView implements Initializable,PerformanceSimul
     }
 
     @Override
+    public TableColumn getStopConditionColumn() {
+        return stopConditionColumn;
+    }
+
+    @Override
+    public HBox getQueueProcessContainer() {
+        return queueProcessContainer;
+    }
+
+    @Override
+    public Button getQueueProcessOnBtn() {
+        return queueProcessOnBtn;
+    }
+
+    @Override
+    public Button getQueueProcessOffBtn() {
+        return queueProcessOffBtn;
+    }
+
+    @Override
+    public LocalDateTimeTextField getStartDateTimeTextField() {
+        return startDateTimeTextField;
+    }
+
+    @Override
+    public void setStartDateTimeTextField(LocalDateTimeTextField startDateTimeTextField) {
+        this.startDateTimeTextField = startDateTimeTextField;
+    }
+
+    @Override
+    public RadioButton getPickTimeStartRadBtn() {
+        return pickTimeStartRadBtn;
+    }
+
+    @Override
+    public RadioButton getImmediatelyStartRadBtn() {
+        return immediatelyStartRadBtn;
+    }
+
+    @Override
     public TableView getTasksTable() {
         return tasksTable;
+    }
+
+    @Override
+    public StackPane getResponseChartContainer() {
+        return responeChartContainer;
     }
 }

@@ -881,7 +881,7 @@ int DBConnector::changeConAccount(string adapterId, string userMail, string newR
     try{
         soci::session sql(*_pool);
         statement st = (sql.prepare << " update users_adapters set role=:role  where fk_user_id=(select user_id from users where mail=:mail) and fk_adapter_id=:adapter "
-                "and check_downgrade_last_superuser(:adapter, (select user_id from users where mail=:mail))"
+                //"and check_downgrade_last_superuser(:adapter, (select user_id from users where mail=:mail))"
                 ,use(newRole, "role"),use(adapterId,"adapter"), use(userMail,"mail"));
         st.execute(true);
         return st.get_affected_rows();

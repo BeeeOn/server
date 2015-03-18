@@ -77,7 +77,7 @@ public class DetailedSimulationView implements Initializable,DetailedSimulationP
     @FXML private ScrollPane toBeSentLogContainer;
     @FXML private TabPane logTabPane;
     @FXML private Tab errorTab;
-    @FXML private ScrollPane errorLogContainer;
+    @FXML private StackPane errorLogContainer;
     @FXML private ToggleGroup logMessageTypeRadBtnGroup;
     @FXML private RadioButton fullLogMessageRadBtn;
     @FXML private RadioButton partialLogMessageRadBtn;
@@ -339,7 +339,7 @@ public class DetailedSimulationView implements Initializable,DetailedSimulationP
     }
 
     @Override
-    public ScrollPane getErrorLogContainer() {
+    public StackPane getErrorLogContainer() {
         return errorLogContainer;
     }
 
