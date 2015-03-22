@@ -25,6 +25,9 @@
 #include <string>  //c++ znakove retazce
 #include <semaphore.h>
 #include <exception> //kniznica pre bok try/catch
+#include <bitset>
+#include <errno.h>
+#include <string.h>
 
 class RequestServer
 {

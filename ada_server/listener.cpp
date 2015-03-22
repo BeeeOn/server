@@ -61,7 +61,10 @@ int Listener::ReciveConnection()
 	{
 		if ((com_s=accept(s,(struct sockaddr *)&sin ,&s_size )) < 0)  //budeme na nom prijimat data
 		{
-			this->_log->WriteMessage(FATAL,"Unable to accept");
+			/*char errorbuf[200];
+			strerror_r(errno,errorbuf,200);*/
+			std::cerr<<std::strerror(errno);
+			this->_log->WriteMessage(FATAL,"Error when accepting code : " + std::to_string(errno) + " : " + std::strerror(errno) );
 			this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::ReciveConnection");
 			this->terminated = true;
 			return (1);
@@ -73,7 +76,7 @@ int Listener::ReciveConnection()
 		{
 			w = this->_workers->GetWorker(this->_log);
 		}
-		w->Unlock(com_s,sin.sin_addr);
+		w->Unlock(com_s);
 
 	//close (com_s);  //zavreme socket
 	}

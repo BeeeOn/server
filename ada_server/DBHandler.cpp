@@ -7,6 +7,8 @@
 
 #include "DBHandler.h"
 
+/*todo :  move sql commands out of code*/
+
 	/**********************************************Start of DBHandler section******************************************************/
 
 using namespace soci;
@@ -53,13 +55,17 @@ void DBHandler::LogValue (tmessage *message)
 					continue;
 					break;
 			}
-			std::string sqlQuery = "insert into logs (fk_facilities_mac,timestamp,fk_devices_type,value) values ( '"+ message->DeviceIDstr + "', " + std::to_string(message->timestamp) + " , " + std::to_string(message->values[i].intType) + ", " + val + " );" ;
-			this->_log->WriteMessage(TRACE,sqlQuery);
-			*_sql << sqlQuery,
-				into(retRec);
+			/*std::string sqlQuery = "insert into logs (fk_facilities_mac,timestamp,fk_devices_type,value) values ( '"+ message->sensor_id + "', " + std::to_string(message->timestamp) + " , " + std::to_string(message->values[i].intType) + ", " + val + " );" ;
+			this->_log->WriteMessage(TRACE,sqlQuery);*/
+			*_sql << SQLQueries::InsertLog,
+					use (message->sensor_id,"deviceID"),
+					use(std::to_string(message->timestamp),"timeStamp"),
+					use (std::to_string(message->values[i].intType),"type"),
+					use (val,"value");
 		}
 		catch(std::exception const &e)
 		{
+			this->_log->WriteMessage(ERR, "Error in query : " + _sql->get_last_query() );
 			std::string ErrorMessage = "Database Error : ";
 			ErrorMessage.append (e.what());
 			this->_log->WriteMessage(ERR,ErrorMessage );
@@ -90,13 +96,18 @@ DBHandler::DBHandler(soci::session *SQL, Loger *l)
 bool DBHandler::IsInDB(std::string tableName, std::string columnName, std::string record)
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::IsInDB");
+	this->_log->WriteMessage(TRACE, "params : " + columnName + " " + record + " " + tableName);
 	try //zavolame jednoduchy select nad DB
 	{
 		int retRec;
 		std::string sqlQuery = "select count(*)" + columnName + " from " + tableName + " where " + columnName + " = "+ record + ";";
 		this->_log->WriteMessage(TRACE,sqlQuery);
-		*_sql << sqlQuery,
-			into(retRec);
+		*_sql<<sqlQuery,into(retRec);
+	/*	*_sql << SQLQueries::SelectCount,
+			use (columnName, "columnName"),
+			use (tableName, "tableName"),
+			use (record, "record"),
+			into(retRec);*/
 		if (retRec > 0) //ak sme dostali nejake data znamena to ze udaj sa uz v DB nachadza
 		{
 			this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::IsInDB");
@@ -110,6 +121,7 @@ bool DBHandler::IsInDB(std::string tableName, std::string columnName, std::strin
 	}
 	catch(std::exception const &e)
 	{
+		this->_log->WriteMessage(ERR, "Error in query : " + _sql->get_last_query() );
 		std::string ErrorMessage = "Database Error : ";
 		ErrorMessage.append (e.what());
 		this->_log->WriteMessage(ERR,ErrorMessage );
@@ -128,17 +140,18 @@ bool DBHandler::InsertAdapter(tmessage *message)
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::InsertAdapter");
 	try
 	{
-		std::string retRec;
-        std::string addressStr = inet_ntoa(message->adapter_ip);
-        std::string sqlQuery = "insert into adapters (adapter_id,version,ip_address) values ( "+ std::to_string(message->adapterINTid)+ ", " + std::to_string(message->fm_version) + ", '" + addressStr + "');" ;
-		this->_log->WriteMessage(TRACE,sqlQuery);
-		*_sql << sqlQuery,
-			into(retRec);
+        /*std::string sqlQuery = "insert into adapters (adapter_id,version,socket) values ( "+ std::to_string(message->adapterINTid)+ ", " + std::to_string(message->fm_version) + ", '" + std::to_string(message->socket) + "');" ;
+		this->_log->WriteMessage(TRACE,sqlQuery);*/
+		*_sql << SQLQueries::InsertAdapter,
+				use(message->adapterINTid,"AdapterID"),
+				use(std::to_string(message->fm_version),"FMver"),
+				use(message->socket,"socket");
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::InsertAdapter");
 		return (true);
 	}
 	catch(std::exception const &e)
 	{
+		this->_log->WriteMessage(ERR, "Error in query : " + _sql->get_last_query() );
 		std::string ErrorMessage = "Database Error : ";
 		ErrorMessage.append (e.what());
 		this->_log->WriteMessage(ERR,ErrorMessage );
@@ -159,16 +172,29 @@ bool DBHandler::UpdateAdapter(tmessage *message)
 	try
 	{
 		std::string retRec;
-        std::string addressStr = inet_ntoa(message->adapter_ip);
-        std::string sqlQuery = "update adapters set version=" + std::to_string(message->fm_version) + ",ip_address='" + addressStr + "' where adapter_id=" + std::to_string(message->adapterINTid) + ";" ;
+        /*std::string sqlQuery = "update adapters set version=" + std::to_string(message->fm_version) + ", socket=" + std::to_string(message->socket) + " where adapter_id=" + std::to_string(message->adapterINTid) + ";" ;
 		this->_log->WriteMessage(TRACE,sqlQuery);
 		*_sql << sqlQuery,
-			into(retRec);
+			into(retRec);*/
+		if (message->socket>0)
+		{
+		*_sql <<SQLQueries::UpdateAdapterSocket,
+				use(message->adapterINTid,"ID"),
+				use(std::to_string(message->fm_version),"FMver"),
+				use(message->socket,"socket");
+		}
+		else
+		{
+			*_sql <<SQLQueries::UpdateAdapter,
+				use(message->adapterINTid,"ID"),
+				use(std::to_string(message->fm_version),"FMver");
+		}
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::UpdateAdapter");
 		return (true);
 	}
 	catch(std::exception const &e)
 	{
+		this->_log->WriteMessage(ERR, "Error in query : " + _sql->get_last_query() );
 		std::string ErrorMessage = "Database Error : ";
 		ErrorMessage.append (e.what());
 		this->_log->WriteMessage(ERR,ErrorMessage );
@@ -189,13 +215,19 @@ bool DBHandler::InsertSenAct(tmessage *message)
 	try
 	{
 		std::string retRec;
-		std::string sqlQuery = "insert into facilities (mac,refresh,battery,quality,fk_adapter_id,involved,timestamp) values \
-				( '" + message->DeviceIDstr + "', 5 ," + std::to_string(message->battery)+ ", " + std::to_string(message->signal_strength) +  ", " +std::to_string(message->adapterINTid)+ ", " +std::to_string(message->timestamp) + ", " + std::to_string(message->timestamp) +" );" ;
-		this->_log->WriteMessage(TRACE,sqlQuery);
-		*_sql << sqlQuery,into(retRec);
+		/*std::string sqlQuery = "insert into facilities (mac,refresh,battery,quality,fk_adapter_id,involved,timestamp) values \
+				( '" + message->sensor_id + "', 5 ," + std::to_string(message->battery)+ ", " + std::to_string(message->signal_strength) +  ", " +std::to_string(message->adapterINTid)+ ", " +std::to_string(message->timestamp) + ", " + std::to_string(message->timestamp) +" );" ;
+		this->_log->WriteMessage(TRACE,sqlQuery);*/
+		*_sql << SQLQueries::InsertFacility,
+					use(message->sensor_id,"deviceID"),
+					use(message->timestamp,"timestamp"),
+					use(message->battery,"battery"),
+					use(message->signal_strength,"signal"),
+					use(message->adapterINTid,"adapterID");
 	}
 	catch (std::exception const &e)
 	{
+		this->_log->WriteMessage(ERR, "Error in query : " + _sql->get_last_query() );
 		std::string ErrorMessage = "Database Error while inserting sensor/actor details : ";
 		ErrorMessage.append (e.what());
 		this->_log->WriteMessage(ERR,ErrorMessage );
@@ -236,16 +268,21 @@ bool DBHandler::InsertSenAct(tmessage *message)
 					break;
 			}
 			//pri prvom ulozeni do databazy sa nastavi cas zobudzania defaultne na 5 sekund
-			std::string sqlQuery = "insert into devices (fk_facilities_mac,type,value) values ( '" + message->DeviceIDstr + "', " + std::to_string(message->values[i].intType) + ", '" + val + "');" ;
+			/*std::string sqlQuery = "insert into devices (fk_facilities_mac,type,value) values ( '" + message->sensor_id + "', " + std::to_string(message->values[i].intType) + ", '" + val + "');" ;
 			this->_log->WriteMessage(TRACE,sqlQuery);
 			*_sql << sqlQuery,
-				into(retRec);
+				into(retRec);*/
+			*_sql << SQLQueries::InsertDevice,
+					use(message->sensor_id,"devID"),
+					use(message->values[i].intType,"type"),
+					use(val,"value");
 		}
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::InsertSenAct");
 		return (true);
 	}
 	catch(std::exception const &e)
 	{
+		this->_log->WriteMessage(ERR, "Error in query : " + _sql->get_last_query() );
 		std::string ErrorMessage = "Database Error while inserting values : ";
 		ErrorMessage.append (e.what());
 		this->_log->WriteMessage(ERR,ErrorMessage );
@@ -267,10 +304,14 @@ bool DBHandler::UpdateSenAct(tmessage *message)
 	{
 
 		std::string retRec;
-		std::string sqlQuery = "update facilities set battery=" + std::to_string(message->battery) + ",quality=" + std::to_string(message->signal_strength) + ",timestamp=" + std::to_string(message->timestamp)  +" where (mac='" + message->DeviceIDstr + "');" ;
-		this->_log->WriteMessage(TRACE,sqlQuery);
-		*_sql << sqlQuery,
-			into(retRec);
+		//std::string sqlQuery = "update facilities set battery=" + std::to_string(message->battery) + ",quality=" + std::to_string(message->signal_strength) + ",timestamp=" + std::to_string(message->timestamp)  +" where (mac='" + message->sensor_id + "');" ;
+		//this->_log->WriteMessage(TRACE,sqlQuery);
+		*_sql << SQLQueries::UpdateFacility,
+			into(retRec),
+			use(message->battery,"battery"),
+			use(message->signal_strength, "quality"),
+			use(message->sensor_id, "mac"),
+			use(message->timestamp, "timestamp");
 		for (int i = 0;i<message->values_count;i++)
 		{
 
@@ -303,16 +344,29 @@ bool DBHandler::UpdateSenAct(tmessage *message)
 					continue;
 					break;
 			}
-			std::string sqlQuery = "update devices set value=" + val  +" where (fk_facilities_mac='" + message->DeviceIDstr + "' AND type =" + std::to_string(message->values[i].intType) +");" ;
-			this->_log->WriteMessage(TRACE,sqlQuery);
-			*_sql << sqlQuery,
-				into(retRec);
+			//std::string sqlQuery = "update devices set value=" + val  +" where (fk_facilities_mac='" + message->sensor_id + "' AND type =" + std::to_string(message->values[i].intType) +");" ;
+			//this->_log->WriteMessage(TRACE,sqlQuery);
+			statement stl = (_sql->prepare <<SQLQueries::UpdateDevice,
+								use(message->sensor_id,"deviceID"),
+								use(val,"value"),
+								use(message->values[i].intType,"type"));
+			stl.execute(false);
+			if (stl.get_affected_rows()<=0)
+			{
+				this->_log->WriteMessage(INFO,"Update affected 0 rows going to insert");
+				//std::string sqlQuery = "insert into devices (fk_facilities_mac,type,value) values ( '" + message->sensor_id + "', " + std::to_string(message->values[i].intType) + ", '" + val + "');" ;
+				*_sql << SQLQueries::InsertDevice,
+						use(message->sensor_id,"devID"),
+						use(message->values[i].intType,"type"),
+						use(val,"value");
+			}
 		}
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::UpdateSenAct");
 		return (true);
 	}
 	catch(std::exception const &e)
 	{
+		this->_log->WriteMessage(ERR, "Error in query : " + _sql->get_last_query() );
 		std::string ErrorMessage = "Database Error : ";
 		ErrorMessage.append (e.what());
 		this->_log->WriteMessage(ERR,ErrorMessage );
@@ -332,18 +386,19 @@ int DBHandler::GetWakeUpTime(std::string record)
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetWakeUpTime");
 	try
 	{
-		//TODO indikator zabrani vyhozeni vyjimky, pokud nenajde ����dn�� data.
 		indicator ind;
 		int retRec;
-		std::string sqlQuery = "select refresh from facilities where mac = '" + record + "';";
-		*_sql << sqlQuery,
-			into(retRec, ind);
+		//std::string sqlQuery = "select refresh from facilities where mac = '" + record + "';";
+		*_sql << SQLQueries::SelectTime,
+				into(retRec, ind),
+				use(record) ;
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetWakeUpTime");
 		return (retRec);
 
 	}
 	catch(std::exception const &e)
 	{
+		this->_log->WriteMessage(ERR, "Error in query : " + _sql->get_last_query() );
 		std::string ErrorMessage = "Database Error : ";
 		ErrorMessage.append (e.what());
 		this->_log->WriteMessage(ERR,ErrorMessage );
@@ -352,20 +407,28 @@ int DBHandler::GetWakeUpTime(std::string record)
 	}
 }
 
-void DBHandler::GetAdapterData(std::string *adapterIP, long int ID)
+void DBHandler::GetAdapterData(int *soc, long int ID)
 {
+	indicator ind;
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetAdapterData");
-	std::string sqlQuery = "SELECT ip_address FROM adapters where adapter_id=" + std::to_string(ID) + ";" ;
-	this->_log->WriteMessage(TRACE,sqlQuery);
+	/*std::string sqlQuery = "SELECT socket FROM adapters where adapter_id=" + std::to_string(ID) + ";" ;
+	this->_log->WriteMessage(TRACE,sqlQuery);*/
 	try
 	{
-		*_sql<<sqlQuery, into(*adapterIP);
+		*_sql<<SQLQueries::SelectSocket,
+				into(*soc,ind),
+				use(ID);
+		if (ind!=i_ok)
+		{
+			*soc=-1;
+		}
 	}
 	catch(std::exception const &e)
 	{
 		std::string ErrorMessage = "Database Error : ";
 		ErrorMessage.append (e.what());
 		this->_log->WriteMessage(ERR,ErrorMessage );
+		*soc = -1;
 	}
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetAdapterData");
 }

@@ -19,7 +19,7 @@ std::string MessageCreator::CreateDeleteMessage(std::string deviceID)
 	server_adapter.append_attribute("state");
 	server_adapter.append_attribute("id");
 	server_adapter.attribute("protocol_version") = "0.1";
-	server_adapter.attribute("state") = "clear";
+	server_adapter.attribute("state") = "clean";
 	struct sockaddr_in antelope;
 	inet_aton(deviceID.c_str(), &antelope.sin_addr);
 	in_addr_t DeviceIP = antelope.sin_addr.s_addr;

@@ -18,6 +18,7 @@
 #include "loger.h"
 #include <string>  //c++ znakove retazce
 #include <cstring>
+#include <bitset>
 
 class MessageParser
 {
@@ -32,7 +33,7 @@ class MessageParser
 		MessageParser() {};
 		virtual bool ParseMessage(pugi::xml_node *adapter,float FM,float CP) = 0;
 		virtual std::string CreateAnswer(int value) = 0;
-		void setAdapterIP(in_addr IP){this->_message->adapter_ip=IP;};
+		void setAdapterSocket(int Soc){this->_message->socket=Soc;};
 		tmessage* ReturnMessage();
 		int AnswerSize() {return (this->_AnswerSize);};
 		virtual  ~MessageParser() { };

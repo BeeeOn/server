@@ -130,7 +130,8 @@ void ProtocolV1MessageParser::GetState()
 void ProtocolV1MessageParser::GetDeviceID()
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetDeviceID");
-	this->_message->sensor_id = std::stoll(_device.attribute("id").as_string(),nullptr,16);
+	this->_message->sensor_id = _device.attribute("id").as_ullong();
+			//std::stoll(_device.attribute("id").as_string(),nullptr,16);
 	in_addr_t temp = htonl (_message->sensor_id);
 	this->_log->WriteMessage(MSG,"Device id :" + std::to_string(this->_message->sensor_id));
 	struct sockaddr_in antelope;
@@ -181,14 +182,14 @@ bool ProtocolV1MessageParser::GetValues()
 			_message->values_count = i;
 			break;
 		}
-		unsigned short int tempType = value.attribute("type").as_uint();
-		_message->values[i].offset = value.attribute("offset").as_uint();
-		tconcatenate temp;
-		temp.input[0]=tempType;
-		temp.input[1]=_message->values[i].offset;
-		_message->values[i].intType = temp.result;
+		std::bitset<16> type (value.attribute("type").as_uint());
+		std::bitset<16> offset (value.attribute("offset").as_uint());
+		std::bitset<16> result(0);
+		offset<<=(8);
+		result = offset | type;
+		_message->values[i].intType = (unsigned short int)result.to_ulong();
 		this->_log->WriteMessage(MSG,"Type + offset :" + std::to_string(_message->values[i].intType));
-		_message->values[i].type = static_cast<tvalueTypes>(tempType);
+		_message->values[i].type = static_cast<tvalueTypes>(type.to_ulong());
 		this->_log->WriteMessage(MSG,"Type :" + std::to_string(_message->values[i].type));
 		this->_log->WriteMessage(MSG,"Offset :" + std::to_string(_message->values[i].offset));
 		switch(_message->values[i].type)
@@ -258,44 +259,6 @@ bool ProtocolV1MessageParser::GetValues()
 				this->_log->WriteMessage(WARN,"Received unknown value type from " + this->_message->DeviceIDstr);
 				break;
 		}
-	/*	if ((_message->values[i].type==ONOFFSEN)||(_message->values[i].type==ONOFSW))  //ak je typ 0x04 a 0x05 precitame jeden byte a ulozime hodnotu
-		{
-			_message->values[i].bval = false;
-			if (strcmp(value.value(),"1")==0)
-				_message->values[i].bval = true;
-			this->_log->WriteMessage(MSG,"Value :" + std::to_string(_message->values[i].bval));
-			if (_message->devType==UNDEF)
-			{
-				if(_message->values[i].type==ONOFFSEN)
-					_message->devType=SEN;
-				else
-					_message->devType=ACT;
-			}
-			else
-			{
-				if (((_message->devType==ACT)&&(_message->values[i].type==ONOFFSEN))||((_message->devType==SEN)&&(_message->values[i].type==ONOFSW)))
-				{
-					_message->devType=SENACT;
-				}
-			}
-
-		}
-		else
-		{
-			_message->values[i].fval = value.text().as_float();
-			this->_log->WriteMessage(MSG,"Value :" + std::to_string(_message->values[i].fval));
-			if (_message->devType==UNDEF)
-			{
-				_message->devType=SEN;
-			}
-			else
-			{
-				if (_message->devType==ACT)
-				{
-					_message->devType=SENACT;
-				}
-			}
-		}*/
 	value = value.next_sibling();
 	}
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetValues");
@@ -354,7 +317,6 @@ ProtocolV1MessageParser::ProtocolV1MessageParser(Loger *L)
 	L->WriteMessage(TRACE,"Entering " + this->_Name + "::Constructor");
 	this->_message = new tmessage();
 	this->_log = L;
-	sleep(1);
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Constructor");
 }
 

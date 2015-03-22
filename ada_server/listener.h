@@ -17,6 +17,9 @@
 #include <sys/types.h>
 #include "loger.h"
 #include "workerPool.h"
+#include <string.h>
+#include <locale.h>
+#include <cstring>
 
 class Listener
 {

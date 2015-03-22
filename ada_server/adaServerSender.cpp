@@ -23,7 +23,7 @@ AdaServerSender::~AdaServerSender()
 
 void AdaServerSender::Start()
 {
-	if (!this->_L->Listen())
+	if (this->_L->Listen()==0)
 	this->_L->ReciveConnection();
 	return;
 }

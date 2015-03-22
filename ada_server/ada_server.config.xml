@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
   <Database>
-    <Name>home3</Name> <!-- Database Name-->
+    <Name>home4</Name> <!-- Database Name-->
     <User>user</User> <!-- DB user name with admin rights to DB-->
     <Password>Password</Password> <!-- user password -->
-    <ConnectionsCount>50</ConnectionsCount> <!-- Number of connections count to DB -->
+    <ConnectionsCount>60</ConnectionsCount> <!-- Number of connections count to DB -->
   </Database>
   <Sender> <!-- Start of ada server sender congif section -->
     <LogConfig> <!-- Configuration of loging -->

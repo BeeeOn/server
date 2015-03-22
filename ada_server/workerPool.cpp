@@ -101,6 +101,7 @@ void WorkerPool::ReturnWorker(Worker *worker, Loger *l)
 	this->workers[this->freeCount] = worker;
 	this->freeCount++;
 	this->semaphore.unlock();
+	sem_post((this->Sem));
 	l->WriteMessage(TRACE,"Exiting " + this->_Name + "::ReturnConnection");
 }
 

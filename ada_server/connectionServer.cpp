@@ -29,7 +29,7 @@ void ConnectionServer::HandleConnection (in_addr IP)
 		pollRes = poll(&ufds, 1, this->_timeTimeOut*1000);
 		if(pollRes==-1)
 		{
-			_log->WriteMessage(WARN,"Reading data from client failed!");
+			_log->WriteMessage(WARN,"Reading data from client failed with code " + std::to_string(errno) + " : " + std::strerror(errno));
 			_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::HandleConnection");
 			close(this->com_s);
 			return;
@@ -135,90 +135,95 @@ void ConnectionServer::HandleConnection (in_addr IP)
 		_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::HandleConnection");
 		return;
 	}
-	MP->setAdapterIP(IP);  //ulozime IP adresu adapteru do spravy
+	//MP->setAdapterSocket();  //ulozime IP adresu adapteru do spravy
 	parsedMessage = MP->ReturnMessage();  //spracovanu spravu si ulozime lokalne
 	if (parsedMessage->state!=0)
 	{
 		response = MP->CreateAnswer(this->GetData());  //zavolame metodu na vytvorenie odpovede a metodu na ulozenie dat do DB
 		int Err;
-		_log->WriteMessage(MSG,"Message: \n" + response);
+		_log->WriteMessage(MSG,"Response message: \n" + response);
 		if ((Err=send(this->com_s, response.c_str(), response.size() , 0))<0)  //odoslanie odpovede klientovi
 		{
-			_log->WriteMessage(WARN,"Unable to send answer");
+			_log->WriteMessage(WARN,"Sending answer failed with code : " + std::to_string(errno) + " : " + std::strerror(errno));
 		}
+		close (this->com_s);
+	}
+	else
+	{
+	    std::string resp;
+	    parsedMessage->socket = this->com_s;
+	    _log->WriteMessage(TRACE,"Client socket desrciptor :" + std::to_string(this->com_s));
+	    int oldSocket = -1;
+	    database->GetAdapterData(&oldSocket,parsedMessage->adapterINTid);
+	    if (oldSocket<=0)
+	    {
+			if (database->InsertAdapter(this->parsedMessage))
+			{
+			  resp="<server_adapter protocol_version=\"0.1\" state=\"register\" response=\"true\"/>";
+			}
+			else
+			{
+			  resp="<server_adapter protocol_version=\"0.1\" state=\"register\" response=\"false\"/>";
+			}
+	    }
+	    else
+	    {
+	    	close (oldSocket);
+	    	if (database->UpdateAdapter(this->parsedMessage))
+			{
+			  resp="<server_adapter protocol_version=\"0.1\" state=\"register\" response=\"true\"/>";
+			}
+			else
+			{
+			  resp="<server_adapter protocol_version=\"0.1\" state=\"register\" response=\"false\"/>";
+			}
+	    }
+	    int Err;
+	    if ((Err=send(this->com_s, resp.c_str(), resp.size() , 0))<0)  //odoslanie odpovede klientovi
+	    {
+			_log->WriteMessage(WARN,"Sending registration answer failed with code : " + std::to_string(errno) + " : " + std::strerror(errno));
+	    }
 	}
 	if (parsedMessage->state!=0)
 	{
-		this->Notify();
+		this->Notify(data);
 	}
-	this->StoreData();
+
 	if (parsedMessage->state!=0)
 	{
+		this->StoreData();
 		database->LogValue(parsedMessage); //zavolame metodu ktora zisti ci je pre dane zariadenie zapnute logovanie hodnot a pripadne ich ulozi
 	}
-	delete this->MP;
-	close(this->com_s);
 	_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::HandleConnection");
 	return;
 }
 
-void ConnectionServer::Notify()
+void ConnectionServer::Notify(std::string MSG)
 {
-	/*_log->WriteMessage(TRACE,"Entering " + this->_Name + "::Notify");
-	for (int i=0;i<this->parsedMessage->values_count;i++)
+	sockaddr_in SvSoc;
+	_log->WriteMessage(TRACE,"Entering " + this->_Name + "::Notify");
+	int s,Err;
+	s = socket(AF_INET, SOCK_STREAM, 0);//vytvorenie socketu
+	if(s < 0)
 	{
-		if (this->parsedMessage->values[i].type!=TEMP)
-		{
-			continue;
+		std::cerr<<"Creating socket failed\n";
+		return; //chyba pri vytvarani socketu
+	}
+	SvSoc.sin_port = htons(7083);
+	SvSoc.sin_family = AF_INET;  //nastavenie socketu servra
+	in_addr adapterIP;
+	inet_pton(AF_INET, "127.0.0.1",&adapterIP);
+	SvSoc.sin_addr.s_addr = adapterIP.s_addr;
+	//memcpy(&SvSoc.sin_addr.s_addr ,Adapter->h_addr, Adapter->h_length);
+	if(connect(s,(sockaddr *) &SvSoc, sizeof(SvSoc)) < 0)//pripojenie na server
+	{
+		std::cerr<<"Unable to connect to framework\n";
+		return;  //nepodarilo sa pripojit na server
+	}
+	if ((Err=send(s, MSG.c_str(), MSG.size(), 0))<0)  //odoslanie poziadavky na server
+	{
+		std::cerr<<"Unable to send message to framework\n";
 		}
-		else
-		{
-			if (this->parsedMessage->values[i].fval<30.0)
-			{
-				continue;
-			}
-			else
-			{
-				float lastVal = this->database->GetLastTemp(this->parsedMessage->DeviceIDstr,std::to_string(this->parsedMessage->values[i].intType));
-				_log->WriteMessage(TRACE,"Last val : " + std::to_string(lastVal));
-				if (lastVal>30.0)
-				{
-					continue;
-				}
-				else
-				{
-					std::vector<std::string> *emails;
-					emails = database->GetEmails(std::to_string(this->parsedMessage->adapterINTid));
-					if (emails==nullptr)
-					{
-						continue;
-					}
-					else
-					{
-						for (int i =0;i<emails->size();i++)
-						{
-							if (emails->at(i).empty())
-							{
-								break;
-							}
-							std::vector<std::string> *IDs;
-							IDs = database->GetNotifString(emails->at(i));
-							if (IDs == nullptr)
-							{
-								_log->WriteMessage(INFO,"Email " + emails->at(i) + " has no notification string");
-								continue;
-							}
-							_log->WriteMessage(INFO,"Notifying email " + emails->at(i));
-							Notification *notif = new LimitExceededNotification(emails->at(i), counter++, *IDs, this->parsedMessage->timestamp, "Temperature exceeded 30 degrees on adapter :" + std::to_string(this->parsedMessage->adapterINTid) +" on device " + std::to_string (this->parsedMessage->sensor_id) , 123, this->parsedMessage->DeviceIDstr, 1, 2);
-							Notificator::sendNotification(*notif);
-							delete IDs;
-							delete notif;
-						}
-					}
-				}
-			}
-		}
-	}*/
 	_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Notify");
 }
 
@@ -252,14 +257,21 @@ void ConnectionServer::StoreData()
 	_log->WriteMessage(TRACE,"Entering " + this->_Name + "::StoreData");
 	if (this->parsedMessage->state == 0)
 	{
-		database->InsertAdapter(this->parsedMessage);
+		if(!database->IsInDB("adapters","ID",std::to_string(this->parsedMessage->adapterINTid)))
+		{
+			database->InsertAdapter(this->parsedMessage);
+		}
+		else
+		{
+			database->UpdateAdapter(this->parsedMessage);
+		}
 		_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::StoreData");
 		return;
 	}
 	else
 	{
 		database->UpdateAdapter(this->parsedMessage); //ak ano uz len updatneme jeho data
-		if(!database->IsInDB("facilities","mac","'" + this->parsedMessage->DeviceIDstr + "'")) //to iste spravime aj pre senzor/aktor
+		if(!database->IsInDB("facilities","mac","'" + std::to_string(this->parsedMessage->sensor_id) + "'")) //to iste spravime aj pre senzor/aktor
 		{
 			database->InsertSenAct(this->parsedMessage);
 		}
@@ -280,13 +292,13 @@ int ConnectionServer::GetData()
 {
 	_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetData");
 	int wakeUpTime = 5;
-	if(!database->IsInDB("facilities","mac","'" + this->parsedMessage->DeviceIDstr + "'"))
+	if(!database->IsInDB("facilities","mac","'" + std::to_string(this->parsedMessage->sensor_id) + "'"))
 	{
 		wakeUpTime = 5;
 	}
 	else
 	{
-		wakeUpTime = database->GetWakeUpTime(this->parsedMessage->DeviceIDstr);
+		wakeUpTime = database->GetWakeUpTime(std::to_string(this->parsedMessage->sensor_id));
 	}
 	_log->WriteMessage(TRACE,"refresh:" + std::to_string(wakeUpTime));
 	if(wakeUpTime> 100000)

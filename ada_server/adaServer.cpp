@@ -84,6 +84,7 @@ int main()  //hlavne telo programu
 		SenderLog->WriteMessage(INFO,"[Main Process] Maximal connection count : " + std::to_string(semVal));
 		ReceiverLog->WriteMessage(INFO,"[Main Process] Maximal connection count : " + std::to_string(semVal));
 		sem_init(&connectionSem,0,semVal);
+		wpool->SetSemaphore(&connectionSem);
 		SenderLog->WriteMessage(TRACE,"[Main Process] Creating Sender");
 		ReceiverLog->WriteMessage(TRACE,"[Main Process] Creating Sender");
 		sender = new AdaServerSender(&connectionSem,wpool,SenderLog,c);
@@ -100,7 +101,6 @@ int main()  //hlavne telo programu
 	}
 	if (!sigint)
 	{
-		std::cout<<"kurva\n\n\n\n\n\n\n";
 		delete (c);
 		delete (wpool);
 		delete (sender);

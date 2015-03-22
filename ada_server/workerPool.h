@@ -19,6 +19,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netinet/ip.h>
+#include <semaphore.h>
 #include "connectionServer.h"
 #include "DBHandler.h"
 #include "requestServer.h"
@@ -34,6 +35,7 @@ class WorkerPool
 		Worker *workers[100];
 		std::mutex semaphore;
 		std::string _DBName;
+		sem_t *Sem;
 		WorkerPool(std::string DBName, int ConnLimit, Loger *Rl, Loger *Sl);
 		static WorkerPool *instance;
 	public:
@@ -41,6 +43,7 @@ class WorkerPool
 		static WorkerPool *CreatePool(Loger *Rl, Loger *Sl, std::string DBName, int ConnLimit);
 		Worker *GetWorker(Loger *l);
 		void ReturnWorker(Worker *worker,Loger *l);
+		void SetSemaphore (sem_t *sem){this->Sem=sem;};
 		~WorkerPool();
 };
 

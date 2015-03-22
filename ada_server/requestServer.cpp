@@ -21,7 +21,9 @@ bool RequestServer::HandleRequest ()
 	{
 		if ((DataSize = read(this->com_s, &buffer, 1024)) < 0) //prijmeme dlzku prichadzajucich dat (2 byty kratkeho integera bez znamienka)
 		{
-			this->_log->WriteMessage(ERR,"Reading data from client failed");
+			char errorbuf[200];
+			strerror_r(errno,errorbuf,200);
+			this->_log->WriteMessage(ERR,"Reading data from client failed with code : " + std::to_string(errno) + errorbuf);
 			this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::HandleConnection");
 			return (false);
 		}
@@ -48,7 +50,8 @@ bool RequestServer::HandleRequest ()
 	xml_node request = doc.child("request");
 	std::string reqType = request.attribute("type").as_string();
 	xml_node subject = request.first_child();
-	std::string AdapterIP,message;
+	std::string message;
+	int AdapterIP = -1;
 	this->_log->WriteMessage(INFO,"Request type :" + reqType);
 	if(reqType.compare("delete")==0)
 	{
@@ -64,21 +67,25 @@ bool RequestServer::HandleRequest ()
 		if (reqType.compare("switch")==0)
 		{
 			std::string ID = subject.attribute("id").as_string();
-			tconcatenate temp;
-			temp.result=subject.attribute("type").as_int();
+			std::bitset<16> type(subject.attribute("type").as_int()),typeoffset(subject.attribute("type").as_int());
+			type.reset(8);
+			type.reset(9);
+			type.reset(10);
+			type.reset(11);
+			typeoffset>>=(8);
 			long long AdapterId = subject.attribute("onAdapter").as_llong();
 			std::string value = subject.first_child().text().as_string();
 			this->_log->WriteMessage(INFO,"Adapter ID :" + std::to_string(AdapterId));
 			this->_log->WriteMessage(INFO,"Device ID :" + ID);
-			this->_log->WriteMessage(INFO,"Device type :" + std::to_string(temp.input[0]));
-			this->_log->WriteMessage(INFO,"Device offset :" + std::to_string(temp.input[1]));
+			this->_log->WriteMessage(INFO,"Device type :" + std::to_string(type.to_ulong()));
+			this->_log->WriteMessage(INFO,"Device offset :" + std::to_string(typeoffset.to_ulong()));
 			this->_log->WriteMessage(INFO,"Device value :" + value);
 			std::string stringType;
 			std::ostringstream os;
-			os << std::hex << temp.input[0];
+			os << std::hex << type.to_ulong();
 			stringType = os.str();
 			this->_log->WriteMessage(INFO,"Device hexa type :" + stringType);
-			message = this->MC->CreateSwitchMessage(std::to_string(AdapterId),ID,value,stringType,std::to_string(temp.input[1]));
+			message = this->MC->CreateSwitchMessage(std::to_string(AdapterId),ID,value,stringType,std::to_string(typeoffset.to_ulong()));
 			database->GetAdapterData(&AdapterIP,AdapterId);
 		}
 		else
@@ -89,9 +96,9 @@ bool RequestServer::HandleRequest ()
 			database->GetAdapterData(&AdapterIP,ID);
 		}
 	}
-	this->_log->WriteMessage(INFO,"Adapter IP :" + AdapterIP);
+	this->_log->WriteMessage(INFO,"Adapter socket :" + std::to_string(AdapterIP));
 	this->_log->WriteMessage(INFO,"Message: \n" + message);
-	bool res = this->s->Connect(message,AdapterIP);
+	bool res = this->s->Send(message,AdapterIP);
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::HandleConnection");
 	return (res);
 }
@@ -116,8 +123,10 @@ void RequestServer::HandleRequestCover()
 	}
 	if ((send(com_s, Message.c_str(), Message.size(), 0))<0)  //odoslanie poziadavky na server
 	{
+		char errorbuf[200];
+		strerror_r(errno,errorbuf,200);
 		close (com_s);  //zavreme socket //todo:replace
-		this->_log->WriteMessage(WARN,"Unable to send message to server");
+		this->_log->WriteMessage(WARN,"Unable to send message to ui_server with code : " + std::to_string(errno) + " : " + errorbuf);
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::ReciveConnection");
 	}
 	//sem_post(&connectionSem);
@@ -130,7 +139,7 @@ RequestServer::RequestServer(Loger *l, soci::session *SQL)
 	this->_log = l;
 	this->com_s = -1;
 	MC = new MessageCreator(l);
-	s = new Sender(l,7000);
+	s = new Sender(l);
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::RequestServer");
 }
 

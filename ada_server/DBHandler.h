@@ -15,6 +15,7 @@
 #include <vector>
 #include "structures.h"
 #include "loger.h"
+#include "sqlCommands.h"
 
 #ifndef DBHANDLER_H_
 #define DBHANDLER_H_
@@ -37,7 +38,8 @@ class DBHandler
 		bool UpdateSenAct(tmessage *message);
 		int GetWakeUpTime(std::string record);
 		void LogValue (tmessage *message);
-		void GetAdapterData(std::string *adapterIP, long int ID);
+		void GetAdapterData(int *soc, long int ID);
+		bool UpdateAdapterPort(tmessage *message);
 		float GetLastTemp(std::string ID, std::string type);
 		std::vector<std::string> *GetEmails(std::string AdapterID);
 		std::vector<std::string> *GetNotifString(std::string email);

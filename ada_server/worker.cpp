@@ -23,7 +23,7 @@ void Worker::Work()
 		this->Wait->lock();
 		if (this->terminate)
 		{
-			this->SenderLog->WriteMessage(INFO,"Termination received ending worker" + std::to_string(this->_number) + "body");
+			this->SenderLog->WriteMessage(INFO,"Termination received ending worker " + std::to_string(this->_number) + "body");
 			this->ReceiverLog->WriteMessage(INFO,"Termination received" + std::to_string(this->_number) + " ending worker body");
 			this->SenderLog->WriteMessage(TRACE,"Exiting" + this->_Name + "Work");
 			this->ReceiverLog->WriteMessage(TRACE,"Exiting" + this->_Name + "Work");

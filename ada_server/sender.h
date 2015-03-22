@@ -15,18 +15,18 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <arpa/inet.h>
+#include <errno.h>
 #include "loger.h"
 
 class Sender
 {
 	private:
     	const std::string _Name="Sender";
-		int _port;
 		int s;
 		Loger *_log;
 	public:
-		bool Connect(std::string Message,std::string IP);
-		Sender(Loger *l,int p);
+		bool Send(std::string Message,int soc);
+		Sender(Loger *l);
 		~Sender();
 };
 

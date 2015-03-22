@@ -28,6 +28,8 @@
 #include "loger.h"
 #include "messageParsers.h"
 #include "DBHandler.h"
+#include <errno.h>
+#include <string.h>
 
 
 class ConnectionServer
@@ -41,7 +43,7 @@ class ConnectionServer
 		std::string response;		/**< ukazatel na spravu odpovede*/
 		int GetData();
 		void StoreData();
-		void Notify();
+		void Notify(std::string MSG);
 		Loger *_log;
 		int _timeTimeOut;
 	public:

@@ -19,18 +19,18 @@ int ConnectionHandler::Listen ()  //funkcia na vytvorenie spojenia a komunikaciu
 	  this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Listen");
 	  return (1);
 	}
-	std::string opt;
+	/*std::string opt;
 	opt = "tap0";
 	if (setsockopt(s, SOL_SOCKET, SO_BINDTODEVICE, opt.c_str(), 4) < 0)
 	{
 		this->_log->WriteMessage(ERR,"Unable to switch socket to VPN tap0");
-	}
+	}*/
 	sin.sin_family = PF_INET;   //nastavime komunikaciu na internet
 	sin.sin_port = htons (_port);  //nastavime port
 	sin.sin_addr.s_addr = INADDR_ANY;  //nastavime IP adresu
 	if (bind(s,(struct sockaddr *)&sin , sizeof(sin)) < 0)  //pripojime socket na port
 	{
-	  this->_log->WriteMessage(FATAL,"Error while binding socket");  //ak je obsadeny alebo nieco ine sa nepodari vratime chybu
+	  this->_log->WriteMessage(FATAL,"Error while binding socket with code : " + std::to_string(errno) + " : " + std::strerror(errno));  //ak je obsadeny alebo nieco ine sa nepodari vratime chybu
 	  this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Listen");
 	  return (1);
 	}
@@ -38,9 +38,9 @@ int ConnectionHandler::Listen ()  //funkcia na vytvorenie spojenia a komunikaciu
 	{
 		this->_log->WriteMessage(INFO,"Socket successfully binded");
 	}
-	if ((listen (s,10))<0) //chceme na sockete pocuvat
+	if ((listen (s,100))<0) //chceme na sockete pocuvat
 	{
-	  this->_log->WriteMessage(FATAL,"Unable to listen");
+	  this->_log->WriteMessage(FATAL,"Error to listen with code : " + std::to_string(errno) + " : " + std::strerror(errno));
 	  this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Listen");
 	  return (1);
 	}
@@ -66,9 +66,9 @@ int ConnectionHandler::ReciveConnection()
 	{
 		if ((com_s=accept(s,(struct sockaddr *)&sin ,&s_size )) < 0)  //budeme na nom prijimat data
 		{
-			this->_log->WriteMessage(FATAL,"Unable to accept");
+			this->_log->WriteMessage(FATAL,"Unable to accept with code : " + std::to_string(errno) + " : " + std::strerror(errno));
 			this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::ReciveConnection");
-			return (1);
+			//return (1);
 		}
 		sem_wait((this->_semaphore));
 		Worker *w  = NULL;

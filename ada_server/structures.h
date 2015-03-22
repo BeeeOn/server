@@ -39,11 +39,6 @@ typedef enum valueTypes
 	UNK = 0x00
 } tvalueTypes;
 
-typedef union concatenate
-{
-	unsigned short int input[2];
-	unsigned int result;
-} tconcatenate;
 
 typedef enum deviceType
 {
@@ -65,7 +60,7 @@ typedef enum deviceType
  */
 typedef struct value
 {
-	unsigned long int intType;
+	unsigned short int intType;
 	unsigned short int offset;
 	tvalueTypes  type;
 	union
@@ -129,11 +124,11 @@ typedef struct message
 {
 	unsigned short int state;
 	long long int adapterINTid;
-	in_addr adapter_ip;
-	float fm_version;
+	int fm_version;
 	float cp_version;
 	time_t timestamp;
-	unsigned int sensor_id;
+	int socket;
+	unsigned long long int sensor_id;
 	std::string DeviceIDstr;
 	unsigned short int battery;
 	unsigned short int signal_strength;

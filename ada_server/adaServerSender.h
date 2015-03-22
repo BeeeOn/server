@@ -26,7 +26,6 @@
 #include "loger.h"
 #include "structures.h"
 #include "DBHandler.h"
-#include "databaseConnectionContainer.h"
 #include <atomic>
 #include "workerPool.h"
 #include "listener.h"

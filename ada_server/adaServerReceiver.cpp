@@ -26,7 +26,7 @@ message::message()
 	this->devType = UNDEF;
 	this->DeviceIDstr = "";
 	this->adapterINTid = 0;
-	inet_pton(AF_INET, "0.0.0.0", &(this->adapter_ip));
+	this->socket = 0;
 	this->battery = 0;
 	this->cp_version = 0.0;
 	this->signal_strength=0;
@@ -62,8 +62,8 @@ AdaServerReceiver::~AdaServerReceiver()
 
 void AdaServerReceiver::Start()
 {
-	if (!this->_CH->Listen())
-	this->_CH->ReciveConnection();
+	if (this->_CH->Listen()==0)
+		this->_CH->ReciveConnection();
 	return;
 }
 
