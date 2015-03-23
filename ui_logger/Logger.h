@@ -33,7 +33,8 @@ public:
     
     
     void setVerbose(int verbose);
-    
+
+    void openOutput();    
     void changeFiles();
     std::string getFileNamebyDate();
     std::string getFileName();
@@ -43,6 +44,7 @@ private:
     void printTime();
 
     int _cerrVerbosity;
+//    std::ostream& _output;	
     std::ofstream _currentFile;
     std::string _fileName;
     std::mutex _mtx;

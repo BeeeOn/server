@@ -6,7 +6,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <sstream>
-const std::string MsgInSignMe::state = "getuid";
+const std::string MsgInSignMe::state = "signme";
 
 long long int MsgInSignMe::_IHAtokenGenerator = 100;
 

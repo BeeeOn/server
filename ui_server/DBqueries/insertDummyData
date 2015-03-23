@@ -10,11 +10,11 @@ insert into mobile_devices(fk_user_id, id, token) values(3,3,3);
 insert into mobile_devices(fk_user_id, id, token) values(4,4,4);
 insert into mobile_devices(fk_user_id, id, token) values(5,5,5);
 
-INSERT INTO ADAPTERS (ADAPTER_ID,NAME,ip_address) VALUES (10, 'ad10', '::10');
-INSERT INTO ADAPTERS (ADAPTER_ID,NAME,ip_address) VALUES (20, 'ad20', '::20');
-INSERT INTO ADAPTERS (ADAPTER_ID,NAME,ip_address) VALUES (21, 'ad21', '::21');
-INSERT INTO ADAPTERS (ADAPTER_ID,NAME,ip_address) VALUES (30, 'ad30', '::30');
-INSERT INTO ADAPTERS (ADAPTER_ID,NAME,ip_address) VALUES (40, 'ad40', '::40');
+INSERT INTO ADAPTERS (ADAPTER_ID,NAME,ip_address) VALUES (10, 'ad10', 10);
+INSERT INTO ADAPTERS (ADAPTER_ID,NAME,ip_address) VALUES (20, 'ad20', 20);
+INSERT INTO ADAPTERS (ADAPTER_ID,NAME,ip_address) VALUES (21, 'ad21', 21);
+INSERT INTO ADAPTERS (ADAPTER_ID,NAME,ip_address) VALUES (30, 'ad30', 30);
+INSERT INTO ADAPTERS (ADAPTER_ID,NAME,ip_address) VALUES (40, 'ad40', 40);
 
 INSERT INTO USERS_ADAPTERS (fk_adapter_id, fk_user_id, role) VALUES (10,1,'superuser');
 INSERT INTO USERS_ADAPTERS (fk_adapter_id, fk_user_id, role) VALUES (10,5,'superuser');
@@ -30,33 +30,28 @@ INSERT INTO ROOMS	(room_id, fk_adapter_id,type,name) VALUES(210,21,3,'room210' )
 INSERT INTO ROOMS	(room_id, fk_adapter_id,type,name) VALUES(211,21,3,'room211' );
 
 insert into facilities(mac, refresh, battery, quality, init, involved, timestamp, fk_room_id, fk_adapter_id) values
-			('0.0.10.1', 100,110,120, 1,1414086934,1414086982,100,10),
-			('0.0.10.2', 100,110,120, 1,1414086934,1414086982,null,10),
-			('0.0.20.1', 100,110,120, 1,1414086934,1414086982,null,20),
-			('0.0.21.1', 100,110,120, 1,1414086934,1414086982,210,21),
-			('0.0.21.2', 100,110,120, 1,1414086934,1414086982,null,21),
-			('0.0.30.1', 100,110,120, 1,1414086934,1414086982,null,30),
-			('0.0.40.1', 100,110,120, 1,1414086934,1414086982,null,40);
+			(1001, 100,110,120, 1,1414086934,1414086982,100,10),
+			(1002, 100,110,120, 1,1414086934,1414086982,null,10),
+			(2001, 100,110,120, 1,1414086934,1414086982,null,20),
+			(2101, 100,110,120, 1,1414086934,1414086982,210,21),
+			(2102, 100,110,120, 1,1414086934,1414086982,null,21),
+			(3001, 100,110,120, 1,1414086934,1414086982,null,30),
+			(4001, 100,110,120, 1,1414086934,1414086982,null,40);
 
 INSERT INTO DEVICES	(fk_facilities_mac, type, name,  value ) VALUES
-			('0.0.10.1',1,'s101',101),
-			('0.0.10.1',2,'s1012',1012),
-			('0.0.10.2',1,'s102',102),
-			('0.0.20.1',1,'s201',201),
-			('0.0.21.1',1,'s211',211),
-			('0.0.21.2',1,'s212',212),
-			('0.0.30.1',1,'s301',301),
-			('0.0.40.1',1,'s401',401);
+			(1001,1,'s101',101),
+			(1001,2,'s1012',1012),
+			(1002,1,'s102',102),
+			(2001,1,'s201',201),
+			(2101,1,'s211',211),
+			(2102,1,'s212',212),
+			(3001,1,'s301',301),
+			(4001,1,'s401',401);
 			
-insert into logs (fk_facilities_mac, fk_devices_type, timestamp, value) values ('0.0.21.1', 1,1414086983, 122.00);
-insert into logs (fk_facilities_mac, fk_devices_type, timestamp, value) values ('0.0.21.1', 1,1414086984, 50.00);			
-insert into logs (fk_facilities_mac, fk_devices_type, timestamp, value) values ('0.0.21.1', 1,1414086985, 100);
-insert into logs (fk_facilities_mac, fk_devices_type, timestamp, value) values ('0.0.21.1', 1,1414086986, 90);
-insert into logs (fk_facilities_mac, fk_devices_type, timestamp, value) values ('0.0.21.1', 1,1414086987, 110);
-
-insert into conditions (cond_id, name, type, xml, fk_user_id) values (1, 'cond1', 'and', '<func type="eq"><device id="0.0.0.100" type="0x01"/><value>ON</value></func>',2);
-
-insert into actions (action_id, name, xml, fk_user_id) values (1, 'act1', '<action type="notification"/>',2);
-
+insert into logs (fk_facilities_mac, fk_devices_type, timestamp, value) values (2101, 1,1414086983, 122.00);
+insert into logs (fk_facilities_mac, fk_devices_type, timestamp, value) values (2101, 1,1414086984, 50.00);			
+insert into logs (fk_facilities_mac, fk_devices_type, timestamp, value) values (2101, 1,1414086985, 100);
+insert into logs (fk_facilities_mac, fk_devices_type, timestamp, value) values (2101, 1,1414086986, 90);
+insert into logs (fk_facilities_mac, fk_devices_type, timestamp, value) values (2101, 1,1414086987, 110);
 
 

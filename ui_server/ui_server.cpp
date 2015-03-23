@@ -118,7 +118,7 @@ int main(int argc, char** argv)
         
         
         //resolveMsg( "<com ver=\"2.3\"  state=\"getuid\" email=\"n11@gmail.com\" gid=\"99191\" gt=\"1\" pid=\"1100\" loc=\"cs\" />");
-        resolveMsg( "<com ver=\"2.3\"  state=\"getuserinfo\" bt=\"1026877\"  />");
+        resolveMsg( "<com ver=\"2.4\"  state=\"signme\" bt=\"1026877\"  />");
        /* User u;
         MobileDevice m;
         

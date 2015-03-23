@@ -62,6 +62,16 @@ Logger& Logger::db()
     return l;
 }
 
+void Logger::openOutput(){
+/*
+   #ifdef LOGS_TO_STDOUT
+	_output = std:cout;
+   #else
+	_currentFile.open
+	_output = _currentFile;	
+*/
+}
+
 void Logger::changeFiles() {
     _currentFile.close();
     

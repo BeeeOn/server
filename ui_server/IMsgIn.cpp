@@ -14,7 +14,7 @@ IMsgIn::IMsgIn(char* msg, pugi::xml_document* doc)
     _mainNode.set_name(P_COMMUNICATION);
     
     
-    std::string IHAtoken = _doc->child(P_COMMUNICATION).attribute(P_SESSION_ID).value();
+    _IHAtoken = _doc->child(P_COMMUNICATION).attribute(P_SESSION_ID).value();
     _state = _doc->child(P_COMMUNICATION).attribute(P_STATE).value();
     
    /* try{
