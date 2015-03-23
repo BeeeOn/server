@@ -10,8 +10,10 @@
             <sourceEncoding>UTF-8</sourceEncoding>
             <make-dep-projects/>
             <sourceRootList>
-                <sourceRootElem>/home/pavel/git-ant/ui_logger</sourceRootElem>
-                <sourceRootElem>/home/pavel/git-ant/DAO</sourceRootElem>
+                <sourceRootElem>../ui_logger</sourceRootElem>
+                <sourceRootElem>../DAO</sourceRootElem>
+                <sourceRootElem>../ui_logger</sourceRootElem>
+                <sourceRootElem>../DAO</sourceRootElem>
             </sourceRootList>
             <confList>
                 <confElem>
