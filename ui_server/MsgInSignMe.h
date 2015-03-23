@@ -8,12 +8,12 @@
 #include "gTokenChecker.h"
 #include "IMsgInLoginUnwanted.h"
 
-class MsgInGetUID :
+class MsgInSignMe :
 	public IMsgInLoginUnwanted
 {
             public:
-                MsgInGetUID(char* msg, pugi::xml_document* doc);
-                virtual ~MsgInGetUID(void);
+                MsgInSignMe(char* msg, pugi::xml_document* doc);
+                virtual ~MsgInSignMe(void);
                 virtual string createResponseMsgOut();
                 
                 virtual int getMsgAuthorization();
@@ -21,7 +21,7 @@ class MsgInGetUID :
                 
                 static const std::string state;
                 private :
-                    long long int getnewIHAtoken();
+                    string getnewIHAtoken();
                     static long long int _IHAtokenGenerator;
         };
         

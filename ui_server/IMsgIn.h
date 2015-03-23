@@ -8,7 +8,7 @@
 #define P_ERRCODE "errcode"
 #define P_STATE "state"
 #define P_EMAIL "email"
-#define P_SESSION_ID "uid"
+#define P_SESSION_ID "bt"
 #define P_GOOGLE_ID "gid"
 
 #define P_ADAPTER "adapter"
@@ -51,6 +51,11 @@
 #define P_USER "user"
 #define P_ROLE "role"
 
+#define P_USER_NAME "name"
+#define P_USER_SURNAME "surname"
+#define P_USER_GENDER "gender"
+#define P_USER_EMAIL "email"
+
 #define P_ROOM "loc"
 #define P_ROOM_ID "lid"
 #define P_ROOM_NAME "lname"
@@ -82,6 +87,8 @@
 #define R_ROOMS "rooms"
 #define R_VIEWS "views"
 #define R_LOG "logdata"
+#define R_BEEEON_TOKEN "bt"
+#define R_USER_INFO "userinfo"
 
 #define EVERYONE 1
 #define GUEST 2
@@ -98,20 +105,14 @@
 #include "pugiconfig.hpp"
 #include "pugixml.hpp"
 
-#include "Logger.h"
+#include "../ui_logger/Logger.h"
 #include "ServerException.h"
 
 
-using namespace std;
-
-
 struct device {
-    string id;
-    string type;
+    std::string id;
+    std::string type;
 };
-
-typedef long long int IhaToken;
-typedef string GUserId;
 
 enum enumAccessStatus { GRANTED, FORBIDDEN_NOT_LOGGED, FORBIDDEN_WRONG_RIGHTS };
 
@@ -120,7 +121,7 @@ class IMsgIn
 public:
         IMsgIn(char* msg, pugi::xml_document* doc);
         virtual ~IMsgIn(void);
-        virtual string createResponseMsgOut() = 0;
+        virtual std::string createResponseMsgOut() = 0;
         
         virtual enumAccessStatus checkAccess() = 0;
         virtual int getMsgAuthorization() = 0;
@@ -128,31 +129,35 @@ public:
         bool checkProtocolVersion();
 public:
         std::string _state;
-        long long int _IHAtoken;
-        string _adapterId;
+        std::string _IHAtoken;
+        std::string _adapterId;
 protected:
         char* _msg;
         pugi::xml_document* _doc;
-        string _msgOut;
+        std::string _msgOut;
         
+        pugi::xml_document _outputDoc;
+        pugi::xml_node _mainNode;
         
 public:
-    string envelopeResponse(string state);
-    string envelopeResponse(string state, string response);
-    string envelopeResponse(string state, string response, int errcode);
-    string envelopeResponseWithRole(string state, string response, string role);
-    string envelopeResponseWithAdapterId(string state, string response);
-    string envelopeResponseWithAdapterId(string state, string response, string adapterId);
-    string envelopeResponseWithAttributes(string state, string attributes);
+    std::string envelopeResponse(std::string state);
+    std::string envelopeResponse(std::string state, std::string response);
+    std::string envelopeResponse(std::string state, std::string response, int errcode);
+    std::string envelopeResponseWithRole(std::string state, std::string response, std::string role);
+    std::string envelopeResponseWithAdapterId(std::string state, std::string response);
+    std::string envelopeResponseWithAdapterId(std::string state, std::string response, std::string adapterId);
+    std::string envelopeResponseWithAttributes(std::string state, std::string attributes);
   /*  int _comId;
     string _additionalInfo;
     string _requestState;
     */
-    static const string VERSION;
+    static const std::string VERSION;
 protected:
-    string makeXMLattribute(string attr,string value);
+    std::string makeXMLattribute(std::string attr,std::string value);
+    std::string genOutputXMLwithVersionAndState(std::string responseState);
+
 private:
-    string envelopeResponseSetAttributes(string state, string response, string attributes);
+    std::string envelopeResponseSetAttributes(std::string state, std::string response, std::string attributes);
         
 };
 

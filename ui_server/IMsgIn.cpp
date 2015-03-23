@@ -1,8 +1,7 @@
 #include "IMsgIn.h"
-
-
+#include "save_custom_writer.h"
 using namespace std;
-const string IMsgIn::VERSION="2.3";
+const string IMsgIn::VERSION="2.4";
 
 
 IMsgIn::IMsgIn(char* msg, pugi::xml_document* doc)
@@ -11,16 +10,20 @@ IMsgIn::IMsgIn(char* msg, pugi::xml_document* doc)
     _msg = msg;
     _doc = doc;
     
+    _mainNode = _outputDoc.append_child();
+    _mainNode.set_name(P_COMMUNICATION);
+    
+    
     std::string IHAtoken = _doc->child(P_COMMUNICATION).attribute(P_SESSION_ID).value();
     _state = _doc->child(P_COMMUNICATION).attribute(P_STATE).value();
     
-    try{
+   /* try{
         _IHAtoken = stoi(IHAtoken);
         if(_IHAtoken < 0 )
             _IHAtoken = -1;
     }catch(...){
         _IHAtoken = -1;
-    }
+    }*/
     
     _adapterId = _doc->child(P_COMMUNICATION).attribute(P_ADAPTER_ID).value();
         
@@ -51,7 +54,7 @@ string IMsgIn::envelopeResponseSetAttributes(string state, string response, stri
         //std::cout<<"envelope Msg "<<getState()<<std::endl;
         ss << "<com "
                         P_VERSION "="<<"\""<<VERSION<<"\" "<<
-                        P_SESSION_ID "=\"" << this->_IHAtoken << "\" "<<
+                        //P_SESSION_ID "=\"" << this->_IHAtoken << "\" "<<
                         P_STATE "=\"" << state <<  "\""<<
                         " " << attributes<<
                         ">" 
@@ -107,3 +110,16 @@ string IMsgIn::makeXMLattribute(string attr, string value) {
     return attr+"=\""+value+"\"";
 }
 
+std::string IMsgIn::genOutputXMLwithVersionAndState(std::string responseState) {
+    
+    _mainNode.prepend_attribute(P_STATE) = responseState.c_str();
+    _mainNode.prepend_attribute(P_VERSION) = IMsgIn::VERSION.c_str();
+    
+    //_outputDoc.print(std::cout);
+    
+    return node_to_string(_outputDoc);
+   /* std:: ostringstream ss; 
+_outputDoc.save (ss); 
+std:: string s = ss.str (); 
+return s;*/
+}

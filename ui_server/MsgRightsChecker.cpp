@@ -7,7 +7,7 @@
 
 #include "MsgRightsChecker.h"
 
-#include "MsgInGetUID.h"
+#include "MsgInSignMe.h"
 #include "MsgInGetAdapters.h"
 #include "MsgInGetDevices.h"
 #include "MsgInGetLog.h"
@@ -54,7 +54,7 @@ MsgRightsChecker::MsgRightsChecker() {
     this->_rightsTable["superuser"] = SUPERUSER;
     
     /*MSGS*/
-    this->_msgRightsTable[MsgInGetUID::state] = EVERYONE;
+    this->_msgRightsTable[MsgInSignMe::state] = EVERYONE;
     this->_msgRightsTable[MsgInGetAdapters::state] = GUEST;
     /*SENSORS*/
     this->_msgRightsTable[MsgInGetAllDevices::state] = GUEST; 

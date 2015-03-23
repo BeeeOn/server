@@ -18,7 +18,7 @@ testMsgInSetCondition::~testMsgInSetCondition() {
 
 void testMsgInSetCondition::setUp() {
     DBConnector::getInstance().DEBUGsetConnectionStringAndOpenSessions(TESTDB1_CON_STRING);
-    Logger::getInstance().setVerbosityThreshold(Logger::NO_OUTPUT);
+    Logger::getInstance().setVerbose(Logger::NO_OUTPUT);
     ComTable::getInstance().setComInfo("user2@gmail.com");
 }
 

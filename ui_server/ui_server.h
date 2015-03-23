@@ -20,7 +20,7 @@
 
 #include <string>
 #include <iostream>
-#include "Logger.h"
+#include "../ui_logger/Logger.h"
 #include "DBConnector.h"
 #include "gTokenChecker.h"
 #include "ComTable.h"

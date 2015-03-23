@@ -11,11 +11,9 @@
 #include <sys/types.h>
 #include <thread>
 #include <mutex>
-#include "ccolor.h"
 
-//#define  COLORED_LOGGER
 #define LOGS_FILE "logs"
-//#define LOGS_TO_STDOUT
+#define LOGS_TO_STDOUT
 
 
 class Logger {
@@ -28,27 +26,32 @@ public:
     
     static Logger& getInstance();
     static Logger& getInstance(int newVerbosityLvl);
-    void setVerbosityThreshold(int verbosityThreshold);
+    static Logger& debug();
+    static Logger& error();
+    static Logger& fatal();
+    static Logger& db();
+    
+    
+    void setVerbose(int verbose);
     
     void changeFiles();
     std::string getFileNamebyDate();
     std::string getFileName();
-        int test;
+
 private:
-    void setVerbosityLevel(int verbosityLvl);
+    void setLevel(int level);
     void printTime();
-    //ofstream _output;
-    bool _colored;
+
     int _cerrVerbosity;
     std::ofstream _currentFile;
     std::string _fileName;
     std::mutex _mtx;
-    //day when was stored last log, used for determining new day and change log file
-    int _dayPrecidingChanges;
+    
+    int _dayOfLastLog;
     
 public:
-    int _verbosityThreshold;
-    int _verbosityLevel;
+    int _verbose;
+    int _level;
 public:
     static const int NO_OUTPUT = 0;
     
@@ -58,6 +61,7 @@ public:
     
     static const int DEBUG = 5;
     static const int DEBUG2 = 6;
+    static const int DB = 7;
     static const int DEBUG3 = 7;
     
     //allow to use function like std::endl
@@ -66,29 +70,15 @@ public:
     template <typename T>
     Logger &operator<<(const T &a) {
         
-        if(_verbosityLevel > _verbosityThreshold)
+        if(_level > _verbose)
             return *this;
         
         
         std::lock_guard<std::mutex> lck (_mtx);
         
-        if(_verbosityLevel <= _cerrVerbosity)
-        
-        #ifdef COLORED_LOGGER
-        if(_verbosityLevel == this->FATAL)
-            _currentFile<<zkr::cc::fore::red << zkr::cc::bold;
-        
-        if(_verbosityLevel == this->ERROR)
-            _currentFile<<zkr::cc::bold;
-        #endif
-
-        if(_verbosityLevel  <= _cerrVerbosity)
+        if(_level  <= _cerrVerbosity)
             std::cerr << a;
        _currentFile<<a;
-       
-        #ifdef COLORED_LOGGER
-            std::cout<<zkr::cc::console;
-       #endif
 
         _currentFile<<std::flush;
         

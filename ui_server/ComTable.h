@@ -3,7 +3,7 @@
 
 #include <map>
 #include <string>
-#include "Logger.h"
+#include "../ui_logger/Logger.h"
 
 #include <chrono>
 #include <thread>

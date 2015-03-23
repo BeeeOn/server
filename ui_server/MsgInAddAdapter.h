@@ -10,6 +10,7 @@
 
 #include "IMsgInLoginRequired.h"
 #include "DBConnector.h"
+#include "../DAO/DAOAdapters.h"
 #include "IMsgIn.h"
 
 class MsgInAddAdapter : public IMsgInLoginRequired{

@@ -19,7 +19,7 @@ testMsgInSetAction::~testMsgInSetAction() {
 
 void testMsgInSetAction::setUp() {
     DBConnector::getInstance().DEBUGsetConnectionStringAndOpenSessions(TESTDB1_CON_STRING);
-    Logger::getInstance().setVerbosityThreshold(Logger::DEBUG3);
+    Logger::getInstance().setVerbose(Logger::DEBUG3);
     ComTable::getInstance().setComInfo("user2@gmail.com");
 }
 

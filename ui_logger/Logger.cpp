@@ -10,22 +10,56 @@
 using namespace std;
 
 Logger::Logger() {
-    _verbosityThreshold = Logger::NO_OUTPUT;
-    _verbosityLevel = Logger::NO_OUTPUT;
-    _colored = false; 
-    _cerrVerbosity = Logger::DEBUG3; 
+    _verbose = Logger::DEBUG3;
+    _level = Logger::NO_OUTPUT;
+    _cerrVerbosity = Logger::NO_OUTPUT; 
     _fileName =  getFileName(); 
     
     _currentFile.open ( _fileName );  
-/*
-std::ofstream of;
-std::ostream& out = condition ? std::cout : of.open(filename);
-*/
 
 }
 
 Logger::~Logger() {
     _currentFile.close();
+}
+
+
+Logger& Logger::getInstance()
+{
+    static Logger instance;
+    return instance;
+}
+
+Logger& Logger::getInstance(int level)
+{
+    Logger& l =Logger::getInstance();
+    l.setLevel(level);
+    l.printTime();
+    return l;
+}
+
+Logger& Logger::debug()
+{
+    Logger& l =Logger::getInstance(Logger::DEBUG);
+    return l;
+}
+
+Logger& Logger::error()
+{
+    Logger& l =Logger::getInstance(Logger::ERROR);
+    return l;
+}
+
+Logger& Logger::fatal()
+{
+    Logger& l =Logger::getInstance(Logger::FATAL);
+    return l;
+}
+
+Logger& Logger::db()
+{
+    Logger& l =Logger::getInstance(Logger::DB);
+    return l;
 }
 
 void Logger::changeFiles() {
@@ -58,39 +92,22 @@ string Logger::getFileNamebyDate() {
     
     ostringstream convert; 
     
-    _dayPrecidingChanges = t->tm_mday;
+    _dayOfLastLog = t->tm_mday;
             
     convert<<LOGS_FILE << "/" << "log"<<t->tm_mday <<"_"<< t->tm_mon+1 <<"_"<< (t->tm_year+1900);
     
     return convert.str();
 }
 
-
-
-Logger& Logger::getInstance()
-{
-    static Logger instance;
-    return instance;
+void Logger::setVerbose(int verbose){
+    _verbose = verbose;
 }
 
-Logger& Logger::getInstance(int newVerbosityLvl)
-{
-    Logger& l =Logger::getInstance();
-    l.setVerbosityLevel(newVerbosityLvl);
-    l.printTime();
-    return l;
-}
-
-
-void Logger::setVerbosityThreshold(int verbosityThreshold){
-    _verbosityThreshold = verbosityThreshold;
-}
-
-void Logger::setVerbosityLevel(int verbosityLvl){
-    _verbosityLevel = verbosityLvl;
+void Logger::setLevel(int level){
+    _level = level;
 }
 void Logger::printTime(){   
-    if(_verbosityLevel > _verbosityThreshold)
+    if(_level > _verbose)
         return;
     
    
@@ -103,41 +120,34 @@ void Logger::printTime(){
     curtime = tp.tv_sec;
     tm *t = localtime(&curtime);
     
-    if(_dayPrecidingChanges != t->tm_mday)
+    if(_dayOfLastLog != t->tm_mday)
         changeFiles();
-    
-    #ifdef COLORED_LOGGER
-        cout<<zkr::cc::bold;
-    #endif 
-        
-    _currentFile<<">"<<_verbosityLevel<<"< " << std::this_thread::get_id() <<": ";
+            
+    _currentFile<<">"<<_level<<"< " << std::this_thread::get_id() <<": ";
 
     //printf("%d.%d.%d %02d:%02d:%02d:%03ld ", t->tm_mday,(t->tm_mon+1),(t->tm_year+1900),t->tm_hour, t->tm_min, t->tm_sec, tp.tv_usec/1000);
     _currentFile << t->tm_mday <<"." << (t->tm_mon+1) << "." << (t->tm_year+1900) <<" ";
     _currentFile << t->tm_hour << ":" << t->tm_min << ":" << t->tm_sec << ":" << tp.tv_usec/1000<< " ";
     
-        if(_verbosityLevel <= _cerrVerbosity){
-            cerr<<">"<<_verbosityLevel<<"< " << std::this_thread::get_id() <<": ";
+        if(_level <= _cerrVerbosity){
+            cerr<<">"<<_level<<"< " << std::this_thread::get_id() <<": ";
             cerr << t->tm_mday <<"." << (t->tm_mon+1) << "." << (t->tm_year+1900) <<" ";
             cerr<< t->tm_hour << ":" << t->tm_min << ":" << t->tm_sec << ":" << tp.tv_usec/1000<< " ";            
         }
     
-    #ifdef COLORED_LOGGER
-            cout<<zkr::cc::console;
-    #endif
   
 }
 
 
 Logger &Logger::operator<<(std::ostream& (*pf) (std::ostream&)){
-    if(_verbosityLevel > _verbosityThreshold)
+    if(_level > _verbose)
         return *this;   
     
     
     std::lock_guard<std::mutex> lck (_mtx);
     _currentFile<<pf;
 
-    if(_verbosityLevel <= _cerrVerbosity)
+    if(_level <= _cerrVerbosity)
             std::cerr << pf;
     
     return *this;

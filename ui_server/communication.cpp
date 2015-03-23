@@ -1,6 +1,6 @@
 #include "communication.h"
 #include "MsgInFactory.h"
-#include "Logger.h"
+#include "../ui_logger/Logger.h"
 #include "ServerException.h"
 #include <soci/soci.h>
 #include <soci/postgresql/soci-postgresql.h>

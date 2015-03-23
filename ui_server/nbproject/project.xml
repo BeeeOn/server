@@ -9,7 +9,10 @@
             <header-extensions>h,hpp</header-extensions>
             <sourceEncoding>UTF-8</sourceEncoding>
             <make-dep-projects/>
-            <sourceRootList/>
+            <sourceRootList>
+                <sourceRootElem>/home/pavel/git-ant/ui_logger</sourceRootElem>
+                <sourceRootElem>/home/pavel/git-ant/DAO</sourceRootElem>
+            </sourceRootList>
             <confList>
                 <confElem>
                     <name>Debug</name>

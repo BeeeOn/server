@@ -38,7 +38,7 @@ using namespace std;
 #include <openssl/err.h>
 
 #include <jansson.h>
-#include "Logger.h"
+#include "../ui_logger/Logger.h"
 
 
 typedef struct {

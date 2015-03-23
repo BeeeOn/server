@@ -22,7 +22,7 @@ testMsgInSignIn::~testMsgInSignIn() {
 
 void testMsgInSignIn::setUp() {
     DBConnector::getInstance().setConnectionStringAndOpenSessions(TESTDB1_CON_STRING);
-    Logger::getInstance().setVerbosityThreshold(Logger::NO_OUTPUT);
+    Logger::getInstance().setVerbose(Logger::NO_OUTPUT);
 }
 
 void testMsgInSignIn::tearDown() {

@@ -1,7 +1,7 @@
 #include "MsgInFactory.h"
 
 #include "IMsgIn.h"
-#include "MsgInGetUID.h"
+#include "MsgInSignMe.h"
 #include "MsgInGetDevices.h"
 #include "ComTable.h"
 #include "MsgInUnknown.h"
@@ -28,21 +28,12 @@
 #include "MsgInAdapterListen.h"
 #include "MsgInSwitch.h"
 #include "MsgInAddAdapter.h"
-#include "MsgInSetCondition.h"
-#include "msgInGetCondition.h"
-#include "MsgInGetConditions.h"
-#include "MsgInUpdateCondition.h"
-#include "MsgInDelCondition.h"
-#include "MsgInSetAction.h"
-#include "MsgInGetActions.h"
-#include "MsgInGetAction.h"
-#include "MsgInUpdateAction.h"
-#include "MsgInDelAction.h"
-#include "MsgInConditionPlusAction.h"
 #include "MsgInGetNewDevices.h"
 #include "MsgInSetGCMID.h"
 #include "MsgInDelGCMID.h"
 #include "MsgInAlgorithmsRedirect.h"
+#include "MsgInGetUserID.h"
+#include "MsgInGetUserInfo.h"
 #include <algorithm> 
 
 MsgInFactory::MsgInFactory(void)
@@ -86,8 +77,8 @@ IMsgIn* MsgInFactory::createMsg(char* msg)
         return new MsgInGetAllDevices(msg, doc);
     if(state == MsgInGetDevs::state)
         return new MsgInGetDevs(msg, doc);
-    if(state == MsgInGetUID::state)
-        return new MsgInGetUID(msg, doc);
+    if(state == MsgInSignMe::state)
+        return new MsgInSignMe(msg, doc);
     if(state == MsgInDevices::state)
         return new MsgInDevices(msg, doc);
     if(state == MsgInUpdateRooms::state)
@@ -128,34 +119,16 @@ IMsgIn* MsgInFactory::createMsg(char* msg)
         return new MsgInSwitch(msg, doc);
     if(state == MsgInAddAdapter::state)
         return new MsgInAddAdapter(msg, doc);
-    if(state == MsgInSetCondition::state)
-        return new MsgInSetCondition(msg, doc);
-    if(state == msgInGetCondition::state)
-        return new msgInGetCondition(msg, doc);
-    if(state == MsgInGetConditions::state)
-        return new MsgInGetConditions(msg, doc);
-    if(state == MsgInUpdateCondition::state)
-        return new MsgInUpdateCondition(msg, doc);
-    if(state == MsgInDelCondition::state)
-        return new MsgInDelCondition(msg, doc);
-    if(state == MsgInSetAction::state)
-        return new MsgInSetAction(msg, doc);
-    if(state == MsgInGetActions::state)
-        return new MsgInGetActions(msg, doc);
-    if(state == MsgInGetAction::state)
-        return new MsgInGetAction(msg, doc);
-    if(state == MsgInUpdateAction::state)
-        return new MsgInUpdateAction(msg, doc);
-    if(state == MsgInDelAction::state)
-        return new MsgInDelAction(msg, doc);
-    if(state == MsgInConditionPlusAction::state)
-        return new MsgInConditionPlusAction(msg, doc);
     if(state == MsgInGetNewDevices::state)
         return new MsgInGetNewDevices(msg, doc);
     if(state == MsgInSetGCMID::state)
         return new MsgInSetGCMID(msg, doc);
     if(state == MsgInDelGCMID::state)
         return new MsgInDelGCMID(msg, doc);
+    if(state == MsgInGetUserID::state)
+        return new MsgInGetUserID(msg, doc);
+    if(state == MsgInGetUserInfo::state)
+        return new MsgInGetUserInfo(msg, doc);
    
     vector<string> algMsgs;
     algMsgs.push_back("addalg");

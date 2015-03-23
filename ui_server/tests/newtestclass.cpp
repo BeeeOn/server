@@ -20,7 +20,7 @@ newtestclass::~newtestclass() {
 
 void newtestclass::setUp() {
    DBConnector::getInstance().DEBUGsetConnectionStringAndOpenSessions("port = '5432' dbname = 'home2' user = 'pavel'");
-    Logger::getInstance().setVerbosityThreshold(Logger::NO_OUTPUT);
+    Logger::getInstance().setVerbose(Logger::NO_OUTPUT);
      ComTable::getInstance().setComInfo("user2@gmail.com");
     ComTable::getInstance().setComInfo("user1@gmail.com");
 

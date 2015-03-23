@@ -8,7 +8,7 @@
 #include <vector>
 #include <soci.h>
 #include <postgresql/soci-postgresql.h>
-#include "Logger.h"
+#include "../ui_logger/Logger.h"
 #include "IMsgIn.h"
 #include "gTokenChecker.h"
 #include "ServerException.h"
@@ -25,7 +25,6 @@ private:
     void operator=(DBConnector const&); // Don't implement
     void clean();
 public:
-    int test;
     static DBConnector& getInstance();
     soci::session * getSession();
     void releaseSession(soci::session* session);
@@ -40,19 +39,19 @@ public:
     string escapeString(string str);
     
     int insertNewUser(string gid, googleInfo gInfo);
-    int insertNewMobileDevice(IhaToken ihaToken, string gId, string phoneId, string phoneLocale);
-    GUserId getUserIdbyIhaToken(IhaToken ihaToken);
+    int insertNewMobileDevice(std::string ihaToken, string gId, string phoneId, string phoneLocale);
+    string getUserIdbyIhaToken(string ihaToken);
     
     int getUserId(string email);
     bool isUserRegistred(string email);
-    string getUserRoleM(GUserId gUserId, string adapterId);
+    string getUserRoleM(string gUserId, string adapterId);
     void updatePhoneLocale(string mail, string phoneLocale);
     string getXMLusersAdapters(string email);
     bool isAnyUnregistredAdapter();
     bool isUserParredWithAdapter(string mail, string adapter);
     string getXMLDevicesQueryString(string facilitiesCond="");
     string getXMLAllDevs(string adapter);
-    string getXMLdevices(GUserId userId, vector<string> adaptersVec, vector<device> devicesVec);
+    string getXMLdevices(string userId, vector<string> adaptersVec, vector<device> devicesVec);
     string getXMLNewDevices(string adapterId);
     bool isAdapterRegistrable(string adapterId);
     int parAdapterWithUserIfPossible(long long int adapterId, string adapterName, string gId);
@@ -90,8 +89,8 @@ public:
     int updateCondition(string condId, string condName, string condType, string condXml);
     void deleteCondition(string condId);
     /*ACTIONS*/
-    string insertNewAction(GUserId userId, string actionName, string actionXml);
-    string getActionsList(GUserId userId);  
+    string insertNewAction(string userId, string actionName, string actionXml);
+    string getActionsList(string userId);  
     string getAction(string actionId);
     int updateAction(string actionId, string actionName, string actionXml) ;
     void deleteAction(string actionId) ;
@@ -99,11 +98,11 @@ public:
     int connectConditionWithAction(string condId, string actionId) ;
     
     /*Google*/
-    int updateUsersGCMID(GUserId userId, string gcmid);
-    int updateUserGoogleInformation(GUserId userId, googleInfo gInfo);
+    int updateUsersGCMID(string userId, string gcmid);
+    int updateUserGoogleInformation(string userId, googleInfo gInfo);
     
     /*NOTIFICATION*/
-    int setGCMId(IhaToken IHAtoken, string phoneid, string gUserId, string gcmid); 
+    int setGCMId(string IHAtoken, string phoneid, string gUserId, string gcmid); 
     int delGCMId(string oldUserId, string gcmid);
 private:
     string _connectionString;

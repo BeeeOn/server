@@ -66,6 +66,8 @@ public:
     static const int SERVER2SERVER;
     static const int SWITCH_FAIL;
     static const int ADAPTER_LISTEN_FAIL;
+    
+    static const int UI2ALGO;
 
     static const int WRONG_COND_OR_EMTPY_COND;
     static const int WRONG_OR_EMPTY_ACTION;
@@ -74,6 +76,8 @@ public:
     static const int GCMID;
     
     static const int UNKNOWN_ERROR;
+    
+    static const int RANDOMGEN;
     
     static const int MSG_UNKNOWN;
     

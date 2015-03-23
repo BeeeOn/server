@@ -22,8 +22,12 @@ string MsgInAddAdapter::createResponseMsgOut() {
     
     string adapterName = adapterNode.attribute(P_ADAPTER_NAME).value();
     
-    if(DBConnector::getInstance().parAdapterWithUserIfPossible(adapterId, adapterName, _gUserId) == 0)
-        throw ServerException(ServerException::ADAPTER_TAKEN);
+    if(DAOAdapters::getInstance().parAdapterWithUserIfPossible(adapterId, adapterName, _gUserId) == 0){
+        if(DAOAdapters::getInstance().isAdapterInDB(adapterId) == 0)
+            throw ServerException(ServerException::ADAPTER_ID);
+        else
+            throw ServerException(ServerException::ADAPTER_TAKEN);
+    }
     
     return envelopeResponse(R_TRUE);
 }

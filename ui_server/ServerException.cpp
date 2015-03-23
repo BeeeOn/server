@@ -45,11 +45,15 @@ using namespace std;
      const int  ServerException::SWITCH_FAIL = 100;
      const int  ServerException::ADAPTER_LISTEN_FAIL =100;
 
+     const int  ServerException::UI2ALGO = 200;
+     
      const int  ServerException::WRONG_COND_OR_EMTPY_COND = 200;
      const int  ServerException::WRONG_OR_EMPTY_ACTION = 201;
      const int  ServerException::CONDITION_ACTION = 202;
      
      const int  ServerException::GCMID = 300;
+     
+     const int ServerException::RANDOMGEN = 997;
 
      const int  ServerException::UNKNOWN_ERROR =998;
     

@@ -7,6 +7,7 @@
 
 #include "MsgInAlgorithmsRedirect.h"
 #include "Config.h"
+#include "SocketClient.h"
 
 
 const std::string MsgInAlgorithmsRedirect::state = "algo";
@@ -18,9 +19,20 @@ MsgInAlgorithmsRedirect::~MsgInAlgorithmsRedirect() {
 }
 
 string MsgInAlgorithmsRedirect::createResponseMsgOut() {
-    //redirect to algo...
-    Config::getInstance().getAlgorithmPort();
-    return "algook";
+
+    string r;
+        try{
+        SocketClient sc(Config::getInstance().getAlgorithmPort());    
+                        
+        Logger::getInstance(Logger::DEBUG3)<<"Algo communication"<<endl; 
+        sc.write(_msg);
+        r = sc.read();
+    }catch(...){
+        throw ServerException(ServerException::UI2ALGO);
+    }
+    Logger::getInstance(Logger::DEBUG3)<<"S2S communication: "<< r<<endl; 
+        
+    return r;
 }
 
 int MsgInAlgorithmsRedirect::getMsgAuthorization() {

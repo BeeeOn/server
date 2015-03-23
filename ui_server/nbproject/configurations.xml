@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurationDescriptor version="95">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="DAO" displayName="DAO" projectFiles="true">
+      <itemPath>/home/pavel/git-ant/DAO/DAO.cpp</itemPath>
+      <itemPath>/home/pavel/git-ant/DAO/DAO.h</itemPath>
+      <itemPath>/home/pavel/git-ant/DAO/DAOAdapters.cpp</itemPath>
+      <itemPath>/home/pavel/git-ant/DAO/DAOAdapters.h</itemPath>
+      <itemPath>/home/pavel/git-ant/DAO/DAOUsers.cpp</itemPath>
+      <itemPath>/home/pavel/git-ant/DAO/DAOUsers.h</itemPath>
+    </logicalFolder>
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
@@ -19,30 +27,13 @@
         <itemPath>MsgInGetLog.h</itemPath>
         <itemPath>MsgInGetRooms.h</itemPath>
         <itemPath>MsgInGetTimeZone.h</itemPath>
-        <itemPath>MsgInGetUID.h</itemPath>
         <itemPath>MsgInGetViews.h</itemPath>
         <itemPath>MsgInPartial.h</itemPath>
         <itemPath>MsgInSetTimeZone.h</itemPath>
+        <itemPath>MsgInSignMe.h</itemPath>
         <itemPath>MsgInUnknown.h</itemPath>
         <itemPath>MsgInUpdateRooms.h</itemPath>
         <itemPath>MsgInUpdateView.h</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f2" displayName="msgOut" projectFiles="true">
-        <itemPath>IMsgOut.h</itemPath>
-        <itemPath>MsgOutAccountList.h</itemPath>
-        <itemPath>MsgOutCommunication.h</itemPath>
-        <itemPath>MsgOutDevices.h</itemPath>
-        <itemPath>MsgOutFalse.h</itemPath>
-        <itemPath>MsgOutLogData.h</itemPath>
-        <itemPath>MsgOutNotRegA.h</itemPath>
-        <itemPath>MsgOutNotRegB.h</itemPath>
-        <itemPath>MsgOutReSign.h</itemPath>
-        <itemPath>MsgOutReady.h</itemPath>
-        <itemPath>MsgOutRoomCreated.h</itemPath>
-        <itemPath>MsgOutRooms.h</itemPath>
-        <itemPath>MsgOutTimeZone.h</itemPath>
-        <itemPath>MsgOutTrue.h</itemPath>
-        <itemPath>MsgOutViewsList.h</itemPath>
       </logicalFolder>
       <itemPath>ComTable.h</itemPath>
       <itemPath>Communicator.h</itemPath>
@@ -51,16 +42,10 @@
       <itemPath>IMsgInLoginAndAdapterAccessRequired.h</itemPath>
       <itemPath>IMsgInLoginRequired.h</itemPath>
       <itemPath>IMsgInLoginUnwanted.h</itemPath>
-      <itemPath>Logger.h</itemPath>
       <itemPath>MsgInAdapterListen.h</itemPath>
       <itemPath>MsgInAddAdapter.h</itemPath>
-      <itemPath>MsgInConditionPlusAction.h</itemPath>
-      <itemPath>MsgInDelAction.h</itemPath>
-      <itemPath>MsgInDelCondition.h</itemPath>
       <itemPath>MsgInDelDevice.h</itemPath>
       <itemPath>MsgInFactory.h</itemPath>
-      <itemPath>MsgInGetAction.h</itemPath>
-      <itemPath>MsgInGetActions.h</itemPath>
       <itemPath>MsgInGetAllDevices.h</itemPath>
       <itemPath>MsgInGetConditions.h</itemPath>
       <itemPath>MsgInGetNewDevices.h</itemPath>
@@ -71,6 +56,7 @@
       <itemPath>gTokenChecker.h</itemPath>
       <itemPath>pugiconfig.hpp</itemPath>
       <itemPath>pugixml.hpp</itemPath>
+      <itemPath>save_custom_writer.h</itemPath>
       <itemPath>sslServlet.h</itemPath>
       <itemPath>testHelper.h</itemPath>
       <itemPath>ui_server.h</itemPath>
@@ -87,24 +73,6 @@
         <itemPath>MsgInDelConAccount.cpp</itemPath>
         <itemPath>MsgInGetConAccount.cpp</itemPath>
         <itemPath>MsgInSetConAccount.cpp</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f7" displayName="actions_conditions" projectFiles="true">
-        <itemPath>MsgInConditionPlusAction.cpp</itemPath>
-        <itemPath>MsgInDelAction.cpp</itemPath>
-        <itemPath>MsgInDelCondition.cpp</itemPath>
-        <itemPath>MsgInGetAction.cpp</itemPath>
-        <itemPath>MsgInGetActions.cpp</itemPath>
-        <itemPath>MsgInGetConditions.cpp</itemPath>
-        <itemPath>MsgInSetAction.cpp</itemPath>
-        <itemPath>MsgInSetAction.h</itemPath>
-        <itemPath>MsgInSetCondition.cpp</itemPath>
-        <itemPath>MsgInSetCondition.h</itemPath>
-        <itemPath>MsgInUpdateAction.cpp</itemPath>
-        <itemPath>MsgInUpdateAction.h</itemPath>
-        <itemPath>MsgInUpdateCondition.cpp</itemPath>
-        <itemPath>MsgInUpdateCondition.h</itemPath>
-        <itemPath>msgInGetCondition.cpp</itemPath>
-        <itemPath>msgInGetCondition.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f12" displayName="algorithms" projectFiles="true">
         <itemPath>MsgInAlgorithmsRedirect.cpp</itemPath>
@@ -134,8 +102,6 @@
         <itemPath>IMsgInLoginUnwanted.cpp</itemPath>
         <itemPath>MsgInUnknown.cpp</itemPath>
       </logicalFolder>
-      <logicalFolder name="f2" displayName="msgOut" projectFiles="true">
-      </logicalFolder>
       <logicalFolder name="f11" displayName="notif" projectFiles="true">
         <itemPath>MsgInDelGCMID.cpp</itemPath>
         <itemPath>MsgInDelGCMID.h</itemPath>
@@ -145,7 +111,11 @@
       <logicalFolder name="f3" displayName="sign_reg_adapters" projectFiles="true">
         <itemPath>MsgInAddAdapter.cpp</itemPath>
         <itemPath>MsgInGetAdapters.cpp</itemPath>
-        <itemPath>MsgInGetUID.cpp</itemPath>
+        <itemPath>MsgInGetUserID.cpp</itemPath>
+        <itemPath>MsgInGetUserID.h</itemPath>
+        <itemPath>MsgInGetUserInfo.cpp</itemPath>
+        <itemPath>MsgInGetUserInfo.h</itemPath>
+        <itemPath>MsgInSignMe.cpp</itemPath>
       </logicalFolder>
       <logicalFolder name="f9" displayName="time" projectFiles="true">
         <itemPath>MsgInGetTimeZone.cpp</itemPath>
@@ -164,7 +134,6 @@
       <itemPath>ComTable.cpp</itemPath>
       <itemPath>Config.cpp</itemPath>
       <itemPath>DBConnector.cpp</itemPath>
-      <itemPath>Logger.cpp</itemPath>
       <itemPath>MsgInFactory.cpp</itemPath>
       <itemPath>MsgRightsChecker.cpp</itemPath>
       <itemPath>ServerException.cpp</itemPath>
@@ -172,9 +141,14 @@
       <itemPath>communication.cpp</itemPath>
       <itemPath>gTokenChecker.cpp</itemPath>
       <itemPath>pugixml.cpp</itemPath>
+      <itemPath>save_custom_writer.cpp</itemPath>
       <itemPath>sslServlet.cpp</itemPath>
       <itemPath>testHelper.cpp</itemPath>
       <itemPath>ui_server.cpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ui_logger" displayName="ui_logger" projectFiles="true">
+      <itemPath>/home/pavel/git-ant/ui_logger/Logger.cpp</itemPath>
+      <itemPath>/home/pavel/git-ant/ui_logger/Logger.h</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -440,10 +414,12 @@
       <itemPath>config_prod.xml</itemPath>
       <itemPath>sqlQueries</itemPath>
     </logicalFolder>
-    <itemPath>ccolor.cpp</itemPath>
-    <itemPath>ccolor.h</itemPath>
     <itemPath>testInfo</itemPath>
   </logicalFolder>
+  <sourceRootList>
+    <Elem>/home/pavel/git-ant/ui_logger</Elem>
+    <Elem>/home/pavel/git-ant/DAO</Elem>
+  </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
     <conf name="Debug" type="1">
@@ -475,7 +451,7 @@
           <warningLevel>2</warningLevel>
         </ccTool>
         <linkerTool>
-          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/ui_server</output>
+          <output>./ui_server</output>
           <linkerAddLib>
             <pElem>/usr/local/lib</pElem>
             <pElem>/usr/local/lib64</pElem>
@@ -499,6 +475,37 @@
           <commandLine>-lpq -lsoci_core -lsoci_empty -lsoci_postgresql -lcppunit -lssl -lcrypto -ljansson -lstdc++</commandLine>
         </linkerTool>
       </compileType>
+      <item path="/home/pavel/git-ant/DAO/DAO.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="/home/pavel/git-ant/DAO/DAO.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="/home/pavel/git-ant/DAO/DAOAdapters.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="/home/pavel/git-ant/DAO/DAOAdapters.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/home/pavel/git-ant/DAO/DAOUsers.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="/home/pavel/git-ant/DAO/DAOUsers.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="/home/pavel/git-ant/ui_logger/Logger.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="/home/pavel/git-ant/ui_logger/Logger.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="ComTable.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="ComTable.h" ex="false" tool="3" flavor2="0">
@@ -535,12 +542,6 @@
       </item>
       <item path="IMsgInLoginUnwanted.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="IMsgOut.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Logger.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="Logger.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="MsgInAdapterListen.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="MsgInAdapterListen.h" ex="false" tool="3" flavor2="0">
@@ -567,21 +568,9 @@
       </item>
       <item path="MsgInChangeAccount.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="MsgInConditionPlusAction.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInConditionPlusAction.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="MsgInDelAccount.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="MsgInDelAction.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInDelAction.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="MsgInDelConAccount.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInDelCondition.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInDelCondition.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="MsgInDelDevice.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -605,14 +594,6 @@
       </item>
       <item path="MsgInGetAccount.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="MsgInGetAction.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInGetAction.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInGetActions.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInGetActions.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="MsgInGetAdapters.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="MsgInGetAdapters.h" ex="false" tool="3" flavor2="0">
@@ -622,8 +603,6 @@
       <item path="MsgInGetAllDevices.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="MsgInGetConAccount.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInGetConditions.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="MsgInGetConditions.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -647,9 +626,13 @@
       </item>
       <item path="MsgInGetTimeZone.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="MsgInGetUID.cpp" ex="false" tool="1" flavor2="0">
+      <item path="MsgInGetUserID.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="MsgInGetUID.h" ex="false" tool="3" flavor2="0">
+      <item path="MsgInGetUserID.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInGetUserInfo.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInGetUserInfo.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="MsgInGetViews.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -661,15 +644,7 @@
       </item>
       <item path="MsgInReinitAdapter.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="MsgInSetAction.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInSetAction.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="MsgInSetConAccount.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInSetCondition.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInSetCondition.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="MsgInSetDevices.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -683,6 +658,10 @@
       </item>
       <item path="MsgInSetTimeZone.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="MsgInSignMe.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInSignMe.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="MsgInSwitch.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="MsgInSwitch.h" ex="false" tool="3" flavor2="0">
@@ -691,47 +670,11 @@
       </item>
       <item path="MsgInUnknown.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="MsgInUpdateAction.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInUpdateAction.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInUpdateCondition.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInUpdateCondition.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="MsgInUpdateRooms.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="MsgInUpdateView.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="MsgInUpdateView.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgOutAccountList.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgOutCommunication.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgOutDevices.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgOutFalse.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgOutLogData.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgOutNotRegA.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgOutNotRegB.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgOutReSign.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgOutReady.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgOutRoomCreated.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgOutRooms.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgOutTimeZone.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgOutTrue.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgOutViewsList.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="MsgRightsChecker.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -744,10 +687,6 @@
       <item path="SocketClient.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="SocketClient.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="ccolor.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="ccolor.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="communication.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -1215,15 +1154,15 @@
       </item>
       <item path="gTokenChecker.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="msgInGetCondition.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgInGetCondition.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="pugiconfig.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="pugixml.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="pugixml.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="save_custom_writer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="save_custom_writer.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="sslServlet.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -1537,6 +1476,37 @@
           <commandLine>-lpq -lsoci_core -lsoci_empty -lsoci_postgresql -lcppunit -lssl -lcrypto -ljansson</commandLine>
         </linkerTool>
       </compileType>
+      <item path="/home/pavel/git-ant/DAO/DAO.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="/home/pavel/git-ant/DAO/DAO.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="/home/pavel/git-ant/DAO/DAOAdapters.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="/home/pavel/git-ant/DAO/DAOAdapters.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="/home/pavel/git-ant/DAO/DAOUsers.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="/home/pavel/git-ant/DAO/DAOUsers.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="/home/pavel/git-ant/ui_logger/Logger.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="/home/pavel/git-ant/ui_logger/Logger.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="ComTable.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="ComTable.h" ex="false" tool="3" flavor2="0">
@@ -1573,12 +1543,6 @@
       </item>
       <item path="IMsgInLoginUnwanted.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="IMsgOut.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Logger.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="Logger.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="MsgInAdapterListen.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="MsgInAdapterListen.h" ex="false" tool="3" flavor2="0">
@@ -1605,21 +1569,9 @@
       </item>
       <item path="MsgInChangeAccount.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="MsgInConditionPlusAction.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInConditionPlusAction.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="MsgInDelAccount.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="MsgInDelAction.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInDelAction.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="MsgInDelConAccount.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInDelCondition.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInDelCondition.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="MsgInDelDevice.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -1643,14 +1595,6 @@
       </item>
       <item path="MsgInGetAccount.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="MsgInGetAction.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInGetAction.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInGetActions.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInGetActions.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="MsgInGetAdapters.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="MsgInGetAdapters.h" ex="false" tool="3" flavor2="0">
@@ -1660,8 +1604,6 @@
       <item path="MsgInGetAllDevices.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="MsgInGetConAccount.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInGetConditions.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="MsgInGetConditions.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -1685,9 +1627,13 @@
       </item>
       <item path="MsgInGetTimeZone.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="MsgInGetUID.cpp" ex="false" tool="1" flavor2="0">
+      <item path="MsgInGetUserID.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="MsgInGetUID.h" ex="false" tool="3" flavor2="0">
+      <item path="MsgInGetUserID.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="MsgInGetUserInfo.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInGetUserInfo.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="MsgInGetViews.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -1699,15 +1645,7 @@
       </item>
       <item path="MsgInReinitAdapter.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="MsgInSetAction.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInSetAction.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="MsgInSetConAccount.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInSetCondition.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInSetCondition.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="MsgInSetDevices.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -1721,6 +1659,10 @@
       </item>
       <item path="MsgInSetTimeZone.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="MsgInSignMe.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="MsgInSignMe.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="MsgInSwitch.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="MsgInSwitch.h" ex="false" tool="3" flavor2="0">
@@ -1729,47 +1671,11 @@
       </item>
       <item path="MsgInUnknown.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="MsgInUpdateAction.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInUpdateAction.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInUpdateCondition.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInUpdateCondition.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="MsgInUpdateRooms.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="MsgInUpdateView.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="MsgInUpdateView.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgOutAccountList.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgOutCommunication.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgOutDevices.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgOutFalse.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgOutLogData.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgOutNotRegA.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgOutNotRegB.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgOutReSign.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgOutReady.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgOutRoomCreated.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgOutRooms.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgOutTimeZone.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgOutTrue.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgOutViewsList.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="MsgRightsChecker.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -1782,10 +1688,6 @@
       <item path="SocketClient.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="SocketClient.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="ccolor.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="ccolor.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="communication.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -2233,15 +2135,15 @@
       </item>
       <item path="gTokenChecker.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="msgInGetCondition.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgInGetCondition.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="pugiconfig.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="pugixml.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="pugixml.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="save_custom_writer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="save_custom_writer.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="sslServlet.cpp" ex="false" tool="1" flavor2="0">
       </item>

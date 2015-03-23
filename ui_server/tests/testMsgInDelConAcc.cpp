@@ -19,7 +19,7 @@ testMsgInDelConAcc::~testMsgInDelConAcc() {
 
 void testMsgInDelConAcc::setUp() {
     DBConnector::getInstance().DEBUGsetConnectionStringAndOpenSessions(TESTDB1_CON_STRING);
-    Logger::getInstance().setVerbosityThreshold(Logger::DEBUG3);
+    Logger::getInstance().setVerbose(Logger::DEBUG3);
     ComTable::getInstance().setComInfo("user2@gmail.com");
     ComTable::getInstance().setComInfo("user4@gmail.com");
     ComTable::getInstance().setComInfo("user1@gmail.com");

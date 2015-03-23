@@ -2,6 +2,8 @@
 
 #include "ui_server.h"
 #include "msgInGetCondition.h"
+#include "../DAO/DAO.h"
+#include "../DAO/DAOUsers.h"
 // uncoment if you want print debug reports
 //#define DEBUG 1
 
@@ -40,8 +42,7 @@ void sig_handler(int signo)
 
 int main(int argc, char** argv)
 {   
-
-    
+//http://pugixml.googlecode.com/svn-history/r605/trunk/docs/samples/modify_add.cpp
     //load XML file from argv[1]
     if(argc>=2){
         try{
@@ -59,11 +60,13 @@ int main(int argc, char** argv)
             Logger::getInstance(Logger::FATAL) << "unable to catch signal SIGINT "<<endl;
     }
 
-        Logger::getInstance().setVerbosityThreshold( Config::getInstance().getVerbosity() );
+        Logger::getInstance().setVerbose( Config::getInstance().getVerbosity() );
         
-        Logger::getInstance(Logger::FATAL) << "start with port"<<serverPort <<endl;
+        Logger::getInstance(Logger::FATAL) << "start with port"<<serverPort << endl ;
         Logger::getInstance(Logger::FATAL) << "threads: "<<Config::getInstance().getServerThreadsNumber() << endl;
+        Logger::getInstance(Logger::FATAL) << "DB: "<<Config::getInstance().getDBConnectionString() << "Fgh" << endl;
         Logger::getInstance(Logger::FATAL) << "logs will be stored in : " << Logger::getInstance().getFileName() <<" and (if not std::out ) file will be changed every day "<< endl;
+
         
        // ComTable::getInstance().startComTableCleaner(Config::getInstance().getComTableSleepPeriodMs(), Config::getInstance().getComTableMaxInactivityMs() );
         try{                        
@@ -102,16 +105,29 @@ int main(int argc, char** argv)
     //resolveMsg("<com ver=\"2.3\"  uid=\"14\" state=\"delgcmid\"  email=\"11111@v\" gcmid=\"new\" />");
     //resolveMsg("<com ver=\"2.3\"  uid=\"15\" state=\"setgcmid\"  gcmid=\"new\" />");
 
-      DBConnector::getInstance().DEBUGexec("INSERT INTO USERS (user_id,MAIL) VALUES (1,'dummy@gmail.com');" );
-      DBConnector::getInstance().DEBUGexec("insert into mobile_devices(fk_user_id, id, token) values(1,1,1);" );
 
-       resolveMsg( "<com ver=\"2.3\"  state=\"getuid\" email=\"n11@gmail.com\" gid=\"99191\" gt=\"1\" pid=\"1100\" loc=\"cs\" />");
+    
+      //DBConnector::getInstance().DEBUGexec("INSERT INTO USERS (user_id,MAIL) VALUES (1,'dummy@gmail.com');" );
+      //DBConnector::getInstance().DEBUGexec("insert into mobile_devices(fk_user_id, id, token) values(1,1,1);" );
+      
        // resolveMsg( "<com ver=\"2.3\"  uid=\"9\" state=\"addadapter\" aid=\"10\"     aname=\"home\"  />");
         //resolveMsg( "<com ver=\"2.3\"  state=\"getuid\" email=\"n11@gmail.com\" gid=\"99191\" gt=\"1\" pid=\"1100\" loc=\"cs\" />");
-    resolveMsg("<com ver=\"2.3\" state=\"addadapter\" uid=\"40\" aid=\"1234567890123456\" aname=\"test\" />");
+    //resolveMsg("<com ver=\"2.3\" state=\"addadapter\" uid=\"40\" aid=\"1234567890123456\" aname=\"test\" />");
     
-        resolveMsg("<com ver=\"2.3\" state=\"delalg\" uid=\"42\" aid=\"1234567890123456\" aname=\"test\" />");
+       // resolveMsg("<com ver=\"2.3\" state=\"delalg\" uid=\"42\" aid=\"1234567890123456\" aname=\"test\" />"); 
         
+        
+        //resolveMsg( "<com ver=\"2.3\"  state=\"getuid\" email=\"n11@gmail.com\" gid=\"99191\" gt=\"1\" pid=\"1100\" loc=\"cs\" />");
+        resolveMsg( "<com ver=\"2.3\"  state=\"getuserinfo\" bt=\"1026877\"  />");
+       /* User u;
+        MobileDevice m;
+        
+        u.mail = "a@a.xx";
+        m.token=111;
+        m.mobile_id ="abc";
+        DAOUsers::getInstance().upsertUserWithMobileDevice(u, m);
+        */
+        return 0;
        SSL_CTX *ctx;
        int server;
        atomic<int>* threadCounter = new atomic<int>(0);

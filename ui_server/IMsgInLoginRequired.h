@@ -19,7 +19,7 @@ public:
     virtual bool isComIdValid();
     virtual enumAccessStatus checkAccess();
 
-    GUserId _gUserId;
+    string _gUserId;
 };
 
 #endif	/* IMSGINLOGINREQUIRED_H */
