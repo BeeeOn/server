@@ -35,10 +35,10 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/_ext/1122871435/DAO.o \
-	${OBJECTDIR}/_ext/1122871435/DAOAdapters.o \
-	${OBJECTDIR}/_ext/1122871435/DAOUsers.o \
-	${OBJECTDIR}/_ext/374718452/Logger.o \
+	${OBJECTDIR}/_ext/1360890531/DAO.o \
+	${OBJECTDIR}/_ext/1360890531/DAOAdapters.o \
+	${OBJECTDIR}/_ext/1360890531/DAOUsers.o \
+	${OBJECTDIR}/_ext/1154895860/Logger.o \
 	${OBJECTDIR}/ComTable.o \
 	${OBJECTDIR}/Config.o \
 	${OBJECTDIR}/DBConnector.o \
@@ -151,25 +151,25 @@ LDLIBSOPTIONS=-L/usr/local/lib -L/usr/local/lib64 -L/opt/centos/devtoolset-1.1/r
 	${MKDIR} -p .
 	g++ -o ./ui_server ${OBJECTFILES} ${LDLIBSOPTIONS} -lpq -lsoci_core -lsoci_empty -lsoci_postgresql -lcppunit -lssl -lcrypto -ljansson -lstdc++
 
-${OBJECTDIR}/_ext/1122871435/DAO.o: /home/pavel/git-ant/DAO/DAO.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1122871435
+${OBJECTDIR}/_ext/1360890531/DAO.o: ../DAO/DAO.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1122871435/DAO.o /home/pavel/git-ant/DAO/DAO.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAO.o ../DAO/DAO.cpp
 
-${OBJECTDIR}/_ext/1122871435/DAOAdapters.o: /home/pavel/git-ant/DAO/DAOAdapters.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1122871435
+${OBJECTDIR}/_ext/1360890531/DAOAdapters.o: ../DAO/DAOAdapters.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1122871435/DAOAdapters.o /home/pavel/git-ant/DAO/DAOAdapters.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOAdapters.o ../DAO/DAOAdapters.cpp
 
-${OBJECTDIR}/_ext/1122871435/DAOUsers.o: /home/pavel/git-ant/DAO/DAOUsers.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1122871435
+${OBJECTDIR}/_ext/1360890531/DAOUsers.o: ../DAO/DAOUsers.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1122871435/DAOUsers.o /home/pavel/git-ant/DAO/DAOUsers.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOUsers.o ../DAO/DAOUsers.cpp
 
-${OBJECTDIR}/_ext/374718452/Logger.o: /home/pavel/git-ant/ui_logger/Logger.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/374718452
+${OBJECTDIR}/_ext/1154895860/Logger.o: ../ui_logger/Logger.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1154895860
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/374718452/Logger.o /home/pavel/git-ant/ui_logger/Logger.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1154895860/Logger.o ../ui_logger/Logger.cpp
 
 ${OBJECTDIR}/ComTable.o: ComTable.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -923,56 +923,56 @@ ${TESTDIR}/tests/testrunnerMsgInUpdateRooms.o: tests/testrunnerMsgInUpdateRooms.
 	$(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testrunnerMsgInUpdateRooms.o tests/testrunnerMsgInUpdateRooms.cpp
 
 
-${OBJECTDIR}/_ext/1122871435/DAO_nomain.o: ${OBJECTDIR}/_ext/1122871435/DAO.o /home/pavel/git-ant/DAO/DAO.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1122871435
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/_ext/1122871435/DAO.o`; \
+${OBJECTDIR}/_ext/1360890531/DAO_nomain.o: ${OBJECTDIR}/_ext/1360890531/DAO.o ../DAO/DAO.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/_ext/1360890531/DAO.o`; \
 	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
 	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1122871435/DAO_nomain.o /home/pavel/git-ant/DAO/DAO.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAO_nomain.o ../DAO/DAO.cpp;\
 	else  \
-	    ${CP} ${OBJECTDIR}/_ext/1122871435/DAO.o ${OBJECTDIR}/_ext/1122871435/DAO_nomain.o;\
+	    ${CP} ${OBJECTDIR}/_ext/1360890531/DAO.o ${OBJECTDIR}/_ext/1360890531/DAO_nomain.o;\
 	fi
 
-${OBJECTDIR}/_ext/1122871435/DAOAdapters_nomain.o: ${OBJECTDIR}/_ext/1122871435/DAOAdapters.o /home/pavel/git-ant/DAO/DAOAdapters.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1122871435
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/_ext/1122871435/DAOAdapters.o`; \
+${OBJECTDIR}/_ext/1360890531/DAOAdapters_nomain.o: ${OBJECTDIR}/_ext/1360890531/DAOAdapters.o ../DAO/DAOAdapters.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/_ext/1360890531/DAOAdapters.o`; \
 	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
 	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1122871435/DAOAdapters_nomain.o /home/pavel/git-ant/DAO/DAOAdapters.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOAdapters_nomain.o ../DAO/DAOAdapters.cpp;\
 	else  \
-	    ${CP} ${OBJECTDIR}/_ext/1122871435/DAOAdapters.o ${OBJECTDIR}/_ext/1122871435/DAOAdapters_nomain.o;\
+	    ${CP} ${OBJECTDIR}/_ext/1360890531/DAOAdapters.o ${OBJECTDIR}/_ext/1360890531/DAOAdapters_nomain.o;\
 	fi
 
-${OBJECTDIR}/_ext/1122871435/DAOUsers_nomain.o: ${OBJECTDIR}/_ext/1122871435/DAOUsers.o /home/pavel/git-ant/DAO/DAOUsers.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1122871435
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/_ext/1122871435/DAOUsers.o`; \
+${OBJECTDIR}/_ext/1360890531/DAOUsers_nomain.o: ${OBJECTDIR}/_ext/1360890531/DAOUsers.o ../DAO/DAOUsers.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/_ext/1360890531/DAOUsers.o`; \
 	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
 	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1122871435/DAOUsers_nomain.o /home/pavel/git-ant/DAO/DAOUsers.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOUsers_nomain.o ../DAO/DAOUsers.cpp;\
 	else  \
-	    ${CP} ${OBJECTDIR}/_ext/1122871435/DAOUsers.o ${OBJECTDIR}/_ext/1122871435/DAOUsers_nomain.o;\
+	    ${CP} ${OBJECTDIR}/_ext/1360890531/DAOUsers.o ${OBJECTDIR}/_ext/1360890531/DAOUsers_nomain.o;\
 	fi
 
-${OBJECTDIR}/_ext/374718452/Logger_nomain.o: ${OBJECTDIR}/_ext/374718452/Logger.o /home/pavel/git-ant/ui_logger/Logger.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/374718452
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/_ext/374718452/Logger.o`; \
+${OBJECTDIR}/_ext/1154895860/Logger_nomain.o: ${OBJECTDIR}/_ext/1154895860/Logger.o ../ui_logger/Logger.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1154895860
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/_ext/1154895860/Logger.o`; \
 	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
 	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/374718452/Logger_nomain.o /home/pavel/git-ant/ui_logger/Logger.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1154895860/Logger_nomain.o ../ui_logger/Logger.cpp;\
 	else  \
-	    ${CP} ${OBJECTDIR}/_ext/374718452/Logger.o ${OBJECTDIR}/_ext/374718452/Logger_nomain.o;\
+	    ${CP} ${OBJECTDIR}/_ext/1154895860/Logger.o ${OBJECTDIR}/_ext/1154895860/Logger_nomain.o;\
 	fi
 
 ${OBJECTDIR}/ComTable_nomain.o: ${OBJECTDIR}/ComTable.o ComTable.cpp 

@@ -646,36 +646,21 @@
           <commandLine>-lpq -lsoci_core -lsoci_empty -lsoci_postgresql -lcppunit -lssl -lcrypto -ljansson -lstdc++</commandLine>
         </linkerTool>
       </compileType>
-      <item path="/home/pavel/git-ant/DAO/DAO.cpp" ex="false" tool="1" flavor2="0">
+      <item path="../DAO/DAO.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="/home/pavel/git-ant/DAO/DAO.h" ex="false" tool="3" flavor2="0">
+      <item path="../DAO/DAO.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="/home/pavel/git-ant/DAO/DAOAdapters.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
+      <item path="../DAO/DAOAdapters.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="/home/pavel/git-ant/DAO/DAOAdapters.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="../DAO/DAOAdapters.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="/home/pavel/git-ant/DAO/DAOUsers.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
+      <item path="../DAO/DAOUsers.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="/home/pavel/git-ant/DAO/DAOUsers.h" ex="false" tool="3" flavor2="0">
+      <item path="../DAO/DAOUsers.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="/home/pavel/git-ant/ui_logger/Logger.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
+      <item path="../ui_logger/Logger.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="/home/pavel/git-ant/ui_logger/Logger.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="../ui_logger/Logger.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="ComTable.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -1647,36 +1632,21 @@
           <commandLine>-lpq -lsoci_core -lsoci_empty -lsoci_postgresql -lcppunit -lssl -lcrypto -ljansson</commandLine>
         </linkerTool>
       </compileType>
-      <item path="/home/pavel/git-ant/DAO/DAO.cpp" ex="false" tool="1" flavor2="0">
+      <item path="../DAO/DAO.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="/home/pavel/git-ant/DAO/DAO.h" ex="false" tool="3" flavor2="0">
+      <item path="../DAO/DAO.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="/home/pavel/git-ant/DAO/DAOAdapters.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
+      <item path="../DAO/DAOAdapters.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="/home/pavel/git-ant/DAO/DAOAdapters.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="../DAO/DAOAdapters.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="/home/pavel/git-ant/DAO/DAOUsers.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
+      <item path="../DAO/DAOUsers.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="/home/pavel/git-ant/DAO/DAOUsers.h" ex="false" tool="3" flavor2="0">
+      <item path="../DAO/DAOUsers.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="/home/pavel/git-ant/ui_logger/Logger.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
+      <item path="../ui_logger/Logger.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="/home/pavel/git-ant/ui_logger/Logger.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="../ui_logger/Logger.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="ComTable.cpp" ex="false" tool="1" flavor2="0">
       </item>

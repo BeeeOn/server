@@ -127,7 +127,7 @@ int main(int argc, char** argv)
         m.mobile_id ="abc";
         DAOUsers::getInstance().upsertUserWithMobileDevice(u, m);
         */
-        return 0;
+      //  return 0;
        SSL_CTX *ctx;
        int server;
        atomic<int>* threadCounter = new atomic<int>(0);
