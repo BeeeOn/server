@@ -1,7 +1,7 @@
 -- Created by Vertabelo (http://vertabelo.com)
 -- Script type: drop
 -- Scope: [tables, references, sequences, views, procedures]
--- Generated at Tue Mar 17 14:54:07 UTC 2015
+-- Generated at Mon Mar 23 18:17:56 UTC 2015
 
 
 
@@ -34,6 +34,8 @@ ALTER TABLE notifications DROP CONSTRAINT notifications_users;
 ALTER TABLE rooms DROP CONSTRAINT rooms_adapters;
 
 ALTER TABLE users_adapters DROP CONSTRAINT users_adapters_users;
+
+ALTER TABLE users_algorithms DROP CONSTRAINT users_algorithms_adapters;
 
 ALTER TABLE users_algorithms DROP CONSTRAINT users_algorithms_algorithms;
 

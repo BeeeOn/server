@@ -9,14 +9,17 @@
 
 using namespace std;
 
-Logger::Logger() {
+Logger::Logger(): _output(std::cout) {
     _verbose = Logger::DEBUG3;
     _level = Logger::NO_OUTPUT;
     _cerrVerbosity = Logger::NO_OUTPUT; 
-    _fileName =  getFileName(); 
     
-    _currentFile.open ( _fileName );  
-
+    _outputToStdout = true; //or Config:: .....
+    if(!_outputToStdout){
+        _fileName =  getFileName(); 
+        _currentFile.open ( _fileName );  
+    }
+    
 }
 
 Logger::~Logger() {
@@ -62,13 +65,14 @@ Logger& Logger::db()
     return l;
 }
 
-void Logger::openOutput(){
+void Logger::openOutput() {
+
 /*
-   #ifdef LOGS_TO_STDOUT
-	_output = std:cout;
-   #else
-	_currentFile.open
-	_output = _currentFile;	
+    //_output = std::cout;
+
+    _fileName = getFileName();
+    _currentFile.open(_fileName);
+    _output = _currentFile;
 */
 }
 
@@ -81,13 +85,8 @@ void Logger::changeFiles() {
 }
 
 std::string Logger::getFileName() {
-    
-    #ifdef LOGS_TO_STDOUT
-       _fileName = "/dev/stdout" ;
-   #else
-       _fileName =  getFileNamebyDate(); 
-   #endif
-       return _fileName;
+ 
+       return getFileNamebyDate();
 }
 
 string Logger::getFileNamebyDate() {
@@ -102,7 +101,7 @@ string Logger::getFileNamebyDate() {
     
     ostringstream convert; 
     
-    _dayOfLastLog = t->tm_mday;
+    _day = t->tm_mday;
             
     convert<<LOGS_FILE << "/" << "log"<<t->tm_mday <<"_"<< t->tm_mon+1 <<"_"<< (t->tm_year+1900);
     
@@ -130,14 +129,16 @@ void Logger::printTime(){
     curtime = tp.tv_sec;
     tm *t = localtime(&curtime);
     
-    if(_dayOfLastLog != t->tm_mday)
-        changeFiles();
-            
-    _currentFile<<">"<<_level<<"< " << std::this_thread::get_id() <<": ";
+    if(!_outputToStdout){
+        if(_day != t->tm_mday)
+            changeFiles();
+    }       
+    
+    _output<<">"<<_level<<"< " << std::this_thread::get_id() <<": ";
 
     //printf("%d.%d.%d %02d:%02d:%02d:%03ld ", t->tm_mday,(t->tm_mon+1),(t->tm_year+1900),t->tm_hour, t->tm_min, t->tm_sec, tp.tv_usec/1000);
-    _currentFile << t->tm_mday <<"." << (t->tm_mon+1) << "." << (t->tm_year+1900) <<" ";
-    _currentFile << t->tm_hour << ":" << t->tm_min << ":" << t->tm_sec << ":" << tp.tv_usec/1000<< " ";
+    _output << t->tm_mday <<"." << (t->tm_mon+1) << "." << (t->tm_year+1900) <<" ";
+    _output << t->tm_hour << ":" << t->tm_min << ":" << t->tm_sec << ":" << tp.tv_usec/1000<< " ";
     
         if(_level <= _cerrVerbosity){
             cerr<<">"<<_level<<"< " << std::this_thread::get_id() <<": ";
@@ -155,7 +156,7 @@ Logger &Logger::operator<<(std::ostream& (*pf) (std::ostream&)){
     
     
     std::lock_guard<std::mutex> lck (_mtx);
-    _currentFile<<pf;
+    _output<<pf;
 
     if(_level <= _cerrVerbosity)
             std::cerr << pf;

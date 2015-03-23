@@ -31,12 +31,12 @@ string MsgInGetUserInfo::createResponseMsgOut() {
 
 
      return envelopeResponseWithAttributes(R_USER_INFO, attr);*/
-    _mainNode.append_attribute("uid") = user.user_id;
+    _mainNode.append_attribute(P_USER_ID) = user.user_id;
     _mainNode.append_attribute(P_USER_NAME) = user.givenName.c_str();
     _mainNode.append_attribute(P_USER_SURNAME) = user.familyName.c_str();
     _mainNode.append_attribute(P_USER_GENDER) = user.gender.c_str();
     _mainNode.append_attribute(P_USER_EMAIL) = user.mail.c_str();
-    _mainNode.append_attribute("imgurl") = user.picture.c_str();    
+    _mainNode.append_attribute(P_USER_PICTURE) = user.picture.c_str();    
 	
     return genOutputXMLwithVersionAndState(R_USER_INFO);
 }

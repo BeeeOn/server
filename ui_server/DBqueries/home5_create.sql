@@ -1,7 +1,7 @@
 -- Created by Vertabelo (http://vertabelo.com)
 -- Script type: create
 -- Scope: [tables, references, sequences, views, procedures]
--- Generated at Tue Mar 17 14:54:03 UTC 2015
+-- Generated at Mon Mar 23 18:17:49 UTC 2015
 
 
 
@@ -9,10 +9,9 @@
 -- tables
 -- Table: a_algorithms
 CREATE TABLE a_algorithms (
-    id int  NOT NULL,
+    algorithm_id int  NOT NULL,
     name varchar(50)  NOT NULL,
-    parameters_template text  NOT NULL,
-    CONSTRAINT a_algorithms_pk PRIMARY KEY (id)
+    CONSTRAINT a_algorithms_pk PRIMARY KEY (algorithm_id)
 );
 
 
@@ -33,22 +32,22 @@ CREATE TABLE adapters (
 
 -- Table: algo_devices
 CREATE TABLE algo_devices (
-    devices_fk_facilities_mac int  NOT NULL,
-    devices_type smallint  NOT NULL,
-    users_algorithms_users_user_id int  NOT NULL,
-    users_algorithms_algorithms_id int  NOT NULL,
-    users_algorithms_users_algorithms_id int  NOT NULL,
-    CONSTRAINT algo_devices_pk PRIMARY KEY (devices_fk_facilities_mac,devices_type)
+    fk_users_algorithms_id int  NOT NULL,
+    fk_user_id int  NOT NULL,
+    fk_algorithm_id int  NOT NULL,
+    fk_facilities_mac int  NOT NULL,
+    fk_devices_type smallint  NOT NULL,
+    CONSTRAINT algo_devices_pk PRIMARY KEY (fk_users_algorithms_id,fk_user_id,fk_algorithm_id,fk_facilities_mac,fk_devices_type)
 );
 
 
 
 -- Table: algorithms_adapters
 CREATE TABLE algorithms_adapters (
-    adapters_adapter_id decimal(20,0)  NOT NULL,
+    fk_adapter_id decimal(20,0)  NOT NULL,
+    fk_algorithm_id int  NOT NULL,
     email_list text  NOT NULL,
-    a_algorithms_id int  NOT NULL,
-    CONSTRAINT algorithms_adapters_pk PRIMARY KEY (adapters_adapter_id)
+    CONSTRAINT algorithms_adapters_pk PRIMARY KEY (fk_adapter_id,fk_algorithm_id,email_list)
 );
 
 
@@ -94,7 +93,7 @@ CREATE TABLE logs (
 
 -- Table: mobile_devices
 CREATE TABLE mobile_devices (
-    token bigint  NOT NULL,
+    token text  NOT NULL,
     mobile_id text  NOT NULL,
     type varchar(255)  NULL,
     locale varchar(10)  NULL,
@@ -130,10 +129,9 @@ CREATE TABLE rooms (
 
 -- Table: u_algorithms
 CREATE TABLE u_algorithms (
-    id int  NOT NULL,
+    algorithm_id int  NOT NULL,
     name varchar(50)  NOT NULL,
-    parameters_template text  NOT NULL,
-    CONSTRAINT u_algorithms_pk PRIMARY KEY (id)
+    CONSTRAINT u_algorithms_pk PRIMARY KEY (algorithm_id)
 );
 
 
@@ -143,7 +141,7 @@ CREATE TABLE users (
     user_id serial  NOT NULL,
     mail varchar(250)  NOT NULL,
     signin_count int  NOT NULL DEFAULT 0,
-    phone_locale varchar(10)  NOT NULL DEFAULT 'cs',
+    phone_locale varchar(10)  NULL DEFAULT 'cs',
     verified_email boolean  NULL,
     name varchar(250)  NULL,
     given_name varchar(250)  NULL,
@@ -152,7 +150,7 @@ CREATE TABLE users (
     picture varchar(250)  NULL,
     gender varchar(10)  NULL,
     google_locale varchar(10)  NULL,
-    google_id decimal(21,0)  NULL,
+    google_id text  NULL,
     CONSTRAINT users_pk PRIMARY KEY (user_id)
 );
 ALTER TABLE users ADD UNIQUE (mail);
@@ -172,12 +170,14 @@ CREATE TABLE users_adapters (
 
 -- Table: users_algorithms
 CREATE TABLE users_algorithms (
-    users_user_id int  NOT NULL,
-    algorithms_id int  NOT NULL,
-    users_algorithms_id int  NOT NULL,
+    fk_user_id int  NOT NULL,
+    fk_algorithm_id int  NOT NULL,
+    users_algorithms_id serial  NOT NULL,
     parameters text  NOT NULL,
     data text  NOT NULL,
-    CONSTRAINT users_algorithms_pk PRIMARY KEY (users_user_id,algorithms_id,users_algorithms_id)
+    name text  NOT NULL,
+    fk_adapter_id decimal(20,0)  NOT NULL,
+    CONSTRAINT users_algorithms_pk PRIMARY KEY (fk_user_id,fk_algorithm_id,users_algorithms_id)
 );
 
 
@@ -223,8 +223,9 @@ ALTER TABLE users_adapters ADD CONSTRAINT adapters_users_adapters
 
 
 ALTER TABLE algo_devices ADD CONSTRAINT algo_devices_devices 
-    FOREIGN KEY (devices_fk_facilities_mac,devices_type)
+    FOREIGN KEY (fk_facilities_mac,fk_devices_type)
     REFERENCES devices (fk_facilities_mac,type)
+    ON DELETE  CASCADE 
     NOT DEFERRABLE 
     INITIALLY IMMEDIATE 
 ;
@@ -233,8 +234,9 @@ ALTER TABLE algo_devices ADD CONSTRAINT algo_devices_devices
 
 
 ALTER TABLE algo_devices ADD CONSTRAINT algo_devices_users_algorithms 
-    FOREIGN KEY (users_algorithms_users_user_id,users_algorithms_algorithms_id,users_algorithms_users_algorithms_id)
-    REFERENCES users_algorithms (users_user_id,algorithms_id,users_algorithms_id)
+    FOREIGN KEY (fk_user_id,fk_algorithm_id,fk_users_algorithms_id)
+    REFERENCES users_algorithms (fk_user_id,fk_algorithm_id,users_algorithms_id)
+    ON DELETE  CASCADE 
     NOT DEFERRABLE 
     INITIALLY IMMEDIATE 
 ;
@@ -243,8 +245,9 @@ ALTER TABLE algo_devices ADD CONSTRAINT algo_devices_users_algorithms
 
 
 ALTER TABLE algorithms_adapters ADD CONSTRAINT algorithms_adapters_a_algorithms 
-    FOREIGN KEY (a_algorithms_id)
-    REFERENCES a_algorithms (id)
+    FOREIGN KEY (fk_algorithm_id)
+    REFERENCES a_algorithms (algorithm_id)
+    ON DELETE  CASCADE 
     NOT DEFERRABLE 
     INITIALLY IMMEDIATE 
 ;
@@ -253,8 +256,9 @@ ALTER TABLE algorithms_adapters ADD CONSTRAINT algorithms_adapters_a_algorithms
 
 
 ALTER TABLE algorithms_adapters ADD CONSTRAINT algorithms_adapters_adapters 
-    FOREIGN KEY (adapters_adapter_id)
+    FOREIGN KEY (fk_adapter_id)
     REFERENCES adapters (adapter_id)
+    ON DELETE  CASCADE 
     NOT DEFERRABLE 
     INITIALLY IMMEDIATE 
 ;
@@ -347,12 +351,23 @@ ALTER TABLE users_adapters ADD CONSTRAINT users_adapters_users
     INITIALLY IMMEDIATE 
 ;
 
+-- Reference:  users_algorithms_adapters (table: users_algorithms)
+
+
+ALTER TABLE users_algorithms ADD CONSTRAINT users_algorithms_adapters 
+    FOREIGN KEY (fk_adapter_id)
+    REFERENCES adapters (adapter_id)
+    NOT DEFERRABLE 
+    INITIALLY IMMEDIATE 
+;
+
 -- Reference:  users_algorithms_algorithms (table: users_algorithms)
 
 
 ALTER TABLE users_algorithms ADD CONSTRAINT users_algorithms_algorithms 
-    FOREIGN KEY (algorithms_id)
-    REFERENCES u_algorithms (id)
+    FOREIGN KEY (fk_algorithm_id)
+    REFERENCES u_algorithms (algorithm_id)
+    ON DELETE  CASCADE 
     NOT DEFERRABLE 
     INITIALLY IMMEDIATE 
 ;
@@ -361,8 +376,9 @@ ALTER TABLE users_algorithms ADD CONSTRAINT users_algorithms_algorithms
 
 
 ALTER TABLE users_algorithms ADD CONSTRAINT users_algorithms_users 
-    FOREIGN KEY (users_user_id)
+    FOREIGN KEY (fk_user_id)
     REFERENCES users (user_id)
+    ON DELETE  CASCADE 
     NOT DEFERRABLE 
     INITIALLY IMMEDIATE 
 ;

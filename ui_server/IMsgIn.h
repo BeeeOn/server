@@ -51,10 +51,12 @@
 #define P_USER "user"
 #define P_ROLE "role"
 
+#define P_USER_ID "uid"
 #define P_USER_NAME "name"
 #define P_USER_SURNAME "surname"
 #define P_USER_GENDER "gender"
 #define P_USER_EMAIL "email"
+#define P_USER_PICTURE "imgurl"
 
 #define P_ROOM "loc"
 #define P_ROOM_ID "lid"

@@ -44,12 +44,13 @@ private:
     void printTime();
 
     int _cerrVerbosity;
-//    std::ostream& _output;	
+    std::ostream& _output;	
     std::ofstream _currentFile;
     std::string _fileName;
     std::mutex _mtx;
+    bool _outputToStdout;
     
-    int _dayOfLastLog;
+    int _day;
     
 public:
     int _verbose;
@@ -80,9 +81,9 @@ public:
         
         if(_level  <= _cerrVerbosity)
             std::cerr << a;
-       _currentFile<<a;
+       _output<<a;
 
-        _currentFile<<std::flush;
+        _output<<std::flush;
         
         return *this;
     }
