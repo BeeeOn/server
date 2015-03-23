@@ -12,8 +12,6 @@
             <sourceRootList>
                 <sourceRootElem>../ui_logger</sourceRootElem>
                 <sourceRootElem>../DAO</sourceRootElem>
-                <sourceRootElem>../ui_logger</sourceRootElem>
-                <sourceRootElem>../DAO</sourceRootElem>
             </sourceRootList>
             <confList>
                 <confElem>

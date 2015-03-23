@@ -590,8 +590,6 @@
   <sourceRootList>
     <Elem>../ui_logger</Elem>
     <Elem>../DAO</Elem>
-    <Elem>../ui_logger</Elem>
-    <Elem>../DAO</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -1610,7 +1608,7 @@
           <developmentMode>5</developmentMode>
         </asmTool>
         <linkerTool>
-          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/ui_server</output>
+          <output>./ui_server</output>
           <linkerAddLib>
             <pElem>../soci-3.2.2/build/lib</pElem>
             <pElem>/usr/local/include/soci</pElem>

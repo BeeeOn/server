@@ -145,11 +145,11 @@ LDLIBSOPTIONS=-L../soci-3.2.2/build/lib -L/usr/local/include/soci -L../soci-3.2.
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/ui_server
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ./ui_server
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/ui_server: ${OBJECTFILES}
-	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/ui_server ${OBJECTFILES} ${LDLIBSOPTIONS} -lpq -lsoci_core -lsoci_empty -lsoci_postgresql -lcppunit -lssl -lcrypto -ljansson
+./ui_server: ${OBJECTFILES}
+	${MKDIR} -p .
+	${LINK.cc} -o ./ui_server ${OBJECTFILES} ${LDLIBSOPTIONS} -lpq -lsoci_core -lsoci_empty -lsoci_postgresql -lcppunit -lssl -lcrypto -ljansson
 
 ${OBJECTDIR}/_ext/1122871435/DAO.o: /home/pavel/git-ant/DAO/DAO.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1122871435
@@ -1667,7 +1667,7 @@ ${OBJECTDIR}/ui_server_nomain.o: ${OBJECTDIR}/ui_server.o ui_server.cpp
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/ui_server
+	${RM} ./ui_server
 
 # Subprojects
 .clean-subprojects:
