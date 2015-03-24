@@ -12,7 +12,7 @@
 #include <thread>
 #include <mutex>
 
-#define LOGS_FILE "logs"
+#define DEFAULT_LOGS_FILE "logs"
 #define LOGS_TO_STDOUT
 
 
@@ -27,14 +27,18 @@ public:
     static Logger& getInstance();
     static Logger& getInstance(int newVerbosityLvl);
     static Logger& debug();
+    static Logger& debug2();
+    static Logger& debug3();
     static Logger& error();
     static Logger& fatal();
     static Logger& db();
     
-    
+    void setOutputToFiles(std::string folder=DEFAULT_LOGS_FILE);
+    void setOutputToStdout();
     void setVerbose(int verbose);
+    void setCerrVerbose(int verbose);
 
-    void openOutput();    
+    void openOutput(std::string fileName);    
     void changeFiles();
     std::string getFileNamebyDate();
     std::string getFileName();
@@ -46,6 +50,7 @@ private:
     int _cerrVerbosity;
     std::ostream& _output;	
     std::ofstream _currentFile;
+    std::string _logsFolder;
     std::string _fileName;
     std::mutex _mtx;
     bool _outputToStdout;

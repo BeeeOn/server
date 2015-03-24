@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurationDescriptor version="95">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
-    <logicalFolder name="DAO" displayName="DAO" projectFiles="true">
-      <itemPath>/home/pavel/git-ant/DAO/DAO.cpp</itemPath>
-      <itemPath>/home/pavel/git-ant/DAO/DAO.h</itemPath>
-      <itemPath>/home/pavel/git-ant/DAO/DAOAdapters.cpp</itemPath>
-      <itemPath>/home/pavel/git-ant/DAO/DAOAdapters.h</itemPath>
-      <itemPath>/home/pavel/git-ant/DAO/DAOUsers.cpp</itemPath>
-      <itemPath>/home/pavel/git-ant/DAO/DAOUsers.h</itemPath>
-    </logicalFolder>
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
@@ -145,10 +137,6 @@
       <itemPath>sslServlet.cpp</itemPath>
       <itemPath>testHelper.cpp</itemPath>
       <itemPath>ui_server.cpp</itemPath>
-    </logicalFolder>
-    <logicalFolder name="ui_logger" displayName="ui_logger" projectFiles="true">
-      <itemPath>/home/pavel/git-ant/ui_logger/Logger.cpp</itemPath>
-      <itemPath>/home/pavel/git-ant/ui_logger/Logger.h</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -585,6 +573,14 @@
       <itemPath>config_prod.xml</itemPath>
       <itemPath>sqlQueries</itemPath>
     </logicalFolder>
+    <itemPath>../DAO/DAO.cpp</itemPath>
+    <itemPath>../DAO/DAO.h</itemPath>
+    <itemPath>../DAO/DAOAdapters.cpp</itemPath>
+    <itemPath>../DAO/DAOAdapters.h</itemPath>
+    <itemPath>../DAO/DAOUsers.cpp</itemPath>
+    <itemPath>../DAO/DAOUsers.h</itemPath>
+    <itemPath>../ui_logger/Logger.cpp</itemPath>
+    <itemPath>../ui_logger/Logger.h</itemPath>
     <itemPath>testInfo</itemPath>
   </logicalFolder>
   <sourceRootList>

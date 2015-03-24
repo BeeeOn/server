@@ -1,6 +1,7 @@
 
 #include "sslServlet.h"
 #include "communication.h"
+#include <errno.h> 
 
 int OpenListener(int port) {
         int sd;
@@ -99,6 +100,17 @@ void ShowCerts(SSL* ssl) {
 #endif
 }
 
+void logErrors(SSL* ssl, int returnValue){
+    Logger::debug3()<<"loging error" << endl;
+    ERR_print_errors_fp(stderr);
+    int ssl_err = SSL_get_error(ssl, returnValue);
+    Logger::error()<<"ssl err: "<<ssl_err << " = " << ERR_error_string(ssl_err, NULL) << endl;
+    if(ssl_err != 0){
+        cout << "errno: " << errno << endl;
+        perror("errno");
+    }
+}
+
 /* Serve the connection -- threadable */
 void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) { 
         Logger::getInstance(Logger::DEBUG3)<<"servlet start"<<endl;
@@ -118,10 +130,9 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
         int count = 0;
         int burstMsgCount = 1;
         
+        //http://comments.gmane.org/gmane.comp.encryption.openssl.user/49443
         if ( (ret = SSL_accept(ssl)) != 1 ) {     // do SSL-protocol accept 
-                ERR_print_errors_fp(stderr);
-                int ssl_err = SSL_get_error(ssl, ret);
-                Logger::getInstance(Logger::DEBUG3)<<"ssl_accept err:"<<ssl_err<<endl;
+            logErrors(ssl, ret);                
         }else {
                 Logger::getInstance(Logger::DEBUG3)<<"ssl accepted"<<endl;
                 // print client certificate
@@ -143,12 +154,11 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
                     if(received > 0){
                         strcat (rc, buf);
                     }else{
-                            int sslReadErr = SSL_get_error(ssl,received);
-                            Logger::getInstance(Logger::DEBUG3)<<"ssl read err:"<< sslReadErr <<endl;
+                            logErrors(ssl, received);   
                             break;
                     }
                     if(count > 5){
-                        Logger::getInstance(Logger::ERROR)<<"ssl incoming data are too much big"<<endl;
+                        Logger::getInstance(Logger::ERROR)<<"ssl incoming data are too big"<<endl;
                         break;
                     }
                     if(buf[received-1] == '>' && received < sizeof(buf))
@@ -167,8 +177,9 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
                         free(rc);
                         int writeBytes = SSL_write(ssl, replyString.c_str(), replyString.length() ); // send reply 
                         Logger::getInstance(Logger::DEBUG3)<<"write "<< writeBytes<<endl;
-                        if(writeBytes<0)
-                            Logger::getInstance(Logger::DEBUG3)<< "write error: "<<SSL_get_error(ssl, writeBytes);
+                        if(writeBytes<0){
+                            logErrors(ssl, writeBytes);   
+                        }
                         
                         count =0;
                         rc=NULL;

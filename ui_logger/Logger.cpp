@@ -10,15 +10,11 @@
 using namespace std;
 
 Logger::Logger(): _output(std::cout) {
+    _outputToStdout = true;
+    
     _verbose = Logger::DEBUG3;
     _level = Logger::NO_OUTPUT;
     _cerrVerbosity = Logger::NO_OUTPUT; 
-    
-    _outputToStdout = true; //or Config:: .....
-    if(!_outputToStdout){
-        _fileName =  getFileName(); 
-        _currentFile.open ( _fileName );  
-    }
     
 }
 
@@ -47,6 +43,18 @@ Logger& Logger::debug()
     return l;
 }
 
+Logger& Logger::debug2()
+{
+    Logger& l =Logger::getInstance(Logger::DEBUG2);
+    return l;
+}
+
+Logger& Logger::debug3()
+{
+    Logger& l =Logger::getInstance(Logger::DEBUG3);
+    return l;
+}
+
 Logger& Logger::error()
 {
     Logger& l =Logger::getInstance(Logger::ERROR);
@@ -65,8 +73,32 @@ Logger& Logger::db()
     return l;
 }
 
-void Logger::openOutput() {
+void Logger::setVerbose(int verbose){
+    _verbose = verbose;
+}
+void Logger::setCerrVerbose(int verbose){
+    _cerrVerbosity = verbose;
+}
+void Logger::setLevel(int level){
+    _level = level;
+}
 
+void Logger::setOutputToFiles(string folder){
+        _outputToStdout = false;
+        _logsFolder = folder;
+        openOutput( getFileName() );
+}
+ void Logger::setOutputToStdout(){
+     if( _currentFile.is_open() )
+         _currentFile.close();
+         _outputToStdout = true;
+         _output.rdbuf( std::cout.rdbuf());
+ }
+
+void Logger::openOutput(string fileName) {
+
+    _currentFile.open ( fileName );  
+    _output.rdbuf( _currentFile.rdbuf());
 /*
     //_output = std::cout;
 
@@ -81,7 +113,8 @@ void Logger::changeFiles() {
     
     _fileName =  getFileName(); 
     
-    _currentFile.open ( _fileName );    
+    openOutput(_fileName);
+    
 }
 
 std::string Logger::getFileName() {
@@ -103,18 +136,12 @@ string Logger::getFileNamebyDate() {
     
     _day = t->tm_mday;
             
-    convert<<LOGS_FILE << "/" << "log"<<t->tm_mday <<"_"<< t->tm_mon+1 <<"_"<< (t->tm_year+1900);
+    convert<<_logsFolder << "/" << "log"<<t->tm_mday <<"_"<< t->tm_mon+1 <<"_"<< (t->tm_year+1900);
     
     return convert.str();
 }
 
-void Logger::setVerbose(int verbose){
-    _verbose = verbose;
-}
 
-void Logger::setLevel(int level){
-    _level = level;
-}
 void Logger::printTime(){   
     if(_level > _verbose)
         return;

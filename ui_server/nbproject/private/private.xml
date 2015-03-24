@@ -14,8 +14,10 @@
             <file>file:/home/pavel/git-ant/DAO/DAOAdapters.cpp</file>
             <file>file:/home/pavel/git-ant/ui_server/MsgInAddAdapter.cpp</file>
             <file>file:/home/pavel/git-ant/ui_server/save_custom_writer.h</file>
+            <file>file:/home/pavel/git-ant/ui_logger/Logger.cpp</file>
             <file>file:/home/pavel/git-ant/ui_server/ui_server.cpp</file>
             <file>file:/home/pavel/git-ant/ui_server/MsgInGetUserInfo.cpp</file>
+            <file>file:/home/pavel/git-ant/ui_logger/Logger.h</file>
             <file>file:/home/pavel/git-ant/ui_server/MsgInFactory.cpp</file>
             <file>file:/home/pavel/git-ant/ui_server/IMsgIn.h</file>
             <file>file:/home/pavel/git-ant/ui_server/DBConnector.cpp</file>
