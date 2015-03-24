@@ -32,16 +32,14 @@ public class ServerReceiver extends Thread implements MessageSender{
     private boolean terminate = false;
     private boolean enabled = false;
     private boolean initialized = false;
-    private int port;
     private AdapterController adapterController;
     private SocketChannel socketChannel;
     private ServerController serverController;
     private BooleanProperty conn;
 
-    public ServerReceiver(int port,AdapterController adapterController) {
+    public ServerReceiver(AdapterController adapterController) {
         this.adapterController = adapterController;
         this.serverController = adapterController.getServerController();
-        this.port = port;
         this.conn = new SimpleBooleanProperty(false);
         setName("ServerReceiver/"+adapterController.getAdapter().getId());
     }
@@ -54,7 +52,7 @@ public class ServerReceiver extends Thread implements MessageSender{
         //set socket option to keep connection alive
         socketChannel.setOption(StandardSocketOptions.SO_KEEPALIVE,true);
         //connect to server
-        socketChannel.connect(new InetSocketAddress(serverController.getModel().getIp(),port));
+        socketChannel.connect(new InetSocketAddress(serverController.getModel().getIp(),serverController.getModel().getPort()));
         Platform.runLater(()-> Platform.runLater(()->setConn(true)));
     }
 

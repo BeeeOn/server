@@ -35,14 +35,16 @@ public class ServerController implements MessageSender{
     public String sendMessage(Document message,ResponseTracker responseTracker,OutMessage.Type type) throws WrongResponseException, IOException {
         ByteBuffer messageBuffer = ByteBuffer.allocate(MESSAGE_BUFFER_SIZE);
         int bytesRead = 0;
+        logger.trace("Opening socketchannel");
         try (SocketChannel socketChannel = SocketChannel.open()){
             //socketChannel = SocketChannel.open();
             socketChannel.socket().setSoTimeout(SOCKET_TIMEOUT);
-            logger.trace("Sending message: " + type.toString());
+            logger.trace("Trying to connect");
             socketChannel.connect(new InetSocketAddress(getModel().getIp(), getModel().getPort()));
             Platform.runLater(() -> getModel().setConn(true));
             ByteBuffer out = ByteBuffer.wrap(message.asXML().getBytes());
             if (responseTracker.isEnabled()) responseStart = System.currentTimeMillis();
+            logger.trace("Sending message: " + type.toString());
             while (out.hasRemaining()) {
                 socketChannel.write(out);
             }

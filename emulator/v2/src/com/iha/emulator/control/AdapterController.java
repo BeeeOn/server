@@ -296,7 +296,7 @@ public class AdapterController {
 
     public ServerReceiver createServerReceiver() {
         logger.trace("Creating server receiver");
-        this.serverReceiver = new ServerReceiver(7071, this);
+        this.serverReceiver = new ServerReceiver(this);
         this.serverReceiver.setDaemon(true);
         setMessageSender(serverReceiver);
         getAdapter().statusProperty().addListener(new ChangeListener<Boolean>() {

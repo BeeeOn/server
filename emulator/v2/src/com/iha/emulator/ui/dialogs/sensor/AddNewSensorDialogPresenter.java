@@ -1031,7 +1031,7 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
             }
         });
 
-        view.getSensorIdLbl().setPromptText("Example: 100.100.100.100");
+        view.getSensorIdLbl().setPromptText("Example: 111");
         view.getSensorNameLbl().setPromptText("Example: Multisensor");
         listenToValueChanges();
     }

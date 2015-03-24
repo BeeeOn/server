@@ -4,7 +4,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import java.lang.*?>
-
 <VBox fx:id="view" maxWidth="242.0" prefHeight="249.0" styleClass="sensorPanel" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iha.emulator.ui.panels.sensor.SensorPanelView">
    <children>
       <Label fx:id="nameLbl" prefHeight="59.0" styleClass="sensorPanelHeader" text="Multisensor" VBox.vgrow="NEVER" />

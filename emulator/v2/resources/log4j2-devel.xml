@@ -69,7 +69,7 @@
         <Logger name="com.iha.emulator.communication.protocol.AbstractProtocol" level="${globalControllerLevel}"/>
         <Logger name="com.iha.emulator.communication.server.ServerController" level="${globalControllerLevel}"/>
         <Logger name="com.iha.emulator.control.scheduler.implemented.PerformanceScheduler" level="${globalControllerLevel}"/>
-        <Logger name="com.iha.emulator.control.scheduler.implemented.DetailedScheduler" level="${globalControllerLevel}"/>
+        <Logger name="com.iha.emulator.control.scheduler.implemented.DetailedScheduler" level="debug"/>
         <Logger name="com.iha.emulator.models.Sensor" level="${globalModelLevel}"/>
         <Logger name="com.iha.emulator.models.value.Value" level="${globalModelLevel}"/>
 

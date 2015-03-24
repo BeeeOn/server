@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.layout.*?>
-
 <GridPane fx:id="view" alignment="CENTER" prefHeight="139.0" prefWidth="244.0" styleClass="serverDetailsText" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iha.emulator.ui.panels.server.details.ServerDetailsView">
    <children>
       <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="17.0" prefWidth="132.0" styleClass="serverDetailsText" text="To server conn.:" />
