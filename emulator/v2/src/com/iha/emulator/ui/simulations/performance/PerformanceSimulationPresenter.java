@@ -1,6 +1,5 @@
 package com.iha.emulator.ui.simulations.performance;
 
-import com.iha.emulator.communication.protocol.Protocol;
 import com.iha.emulator.communication.protocol.ProtocolFactory;
 import com.iha.emulator.control.task.SimulationTask;
 import com.iha.emulator.control.task.StopCondition;
@@ -46,8 +45,10 @@ import org.dom4j.*;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 /**
  * Created by Filip Sutovsky on 14/11/14.
@@ -189,113 +190,30 @@ public class PerformanceSimulationPresenter implements Presenter{
 
     public void addTask(){
         logger.trace("Creating new task");
-        if(!DEBUG_AUTO_CREATE){
-            Task<Object> worker = new Task<Object>() {
-                @Override
-                protected Object call() throws Exception {
-                    LongProperty progress = new SimpleLongProperty(0);
-                    progress.addListener(new ChangeListener<Number>() {
-                        @Override
-                        public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                            if((Long)newValue > 0 && (Long)newValue < 100)
-                                updateProgress((long)newValue,100);
-                        }
-                    });
-                    ObservableList<Server> tmp;
-                    try{
-                        tmp = Utilities.buildServersFromProperties(properties,progress);
-                        final ObservableList<Server> finalTmp = tmp;
-                        Platform.runLater(() -> showAddTaskDialog(finalTmp));
-                    }catch (IllegalArgumentException e){
-                        Platform.runLater(() -> showAddTaskDialog(null));
-                        Platform.runLater(() -> Utilities.showException(logger, "Cannot load settings from properties file", e, false, null));
+        Task<Object> worker = new Task<Object>() {
+            @Override
+            protected Object call() throws Exception {
+                LongProperty progress = new SimpleLongProperty(0);
+                progress.addListener(new ChangeListener<Number>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                        if((Long)newValue > 0 && (Long)newValue < 100)
+                            updateProgress((long)newValue,100);
                     }
-                    return null;
+                });
+                ObservableList<Server> tmp;
+                try{
+                    tmp = Utilities.buildServersFromProperties(properties,progress);
+                    final ObservableList<Server> finalTmp = tmp;
+                    Platform.runLater(() -> showAddTaskDialog(finalTmp));
+                }catch (IllegalArgumentException e){
+                    Platform.runLater(() -> showAddTaskDialog(null));
+                    Platform.runLater(() -> Utilities.showException(logger, "Cannot load settings from properties file", e, false, null));
                 }
-            };
-            Utilities.showLoadingDialog(worker, "Loading...");
-        }else {
-            Task<Object> worker = new Task<Object>() {
-                @Override
-                protected Object call() throws Exception {
-                    LongProperty progress = new SimpleLongProperty(0);
-                    progress.addListener(new ChangeListener<Number>() {
-                        @Override
-                        public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                            if((Long)newValue > 0 && (Long)newValue < 100)
-                                updateProgress((long)newValue,100);
-                        }
-                    });
-                    SimulationTask task = new SimulationTask();
-                    //set id
-                    if(getTasks().size() == 0){
-                        task.setId(0);
-                    }else{
-                        task.setId(getTasks().get(getTasks().size()-1).getId()+1);
-                    }
-                    //create server model for task
-                    logger.trace("Creating new task -> Creating server");
-                    task.createServer(false,"production","10.1.0.1",9092,"home4prod");
-                    //create task parameters
-                    logger.trace("Creating new task -> Creating parameters");
-                    task.createTaskParameters(
-                            1, //adapters count
-                            Protocol.Version.ZERO_POINT_ONE, //protocol version
-                            1000, //starting adapter id
-                            3, // sensors count minimum
-                            3, //sensors count maximum
-                            5, //refresh time minimum
-                            5, //refresh time maximum
-                            null // default save dir
-                    );
-                    //register tracking responses per second
-                    task.getResponseTracker().registerSecondCounter(task.getTaskParameters().getStopWatch().timeProperty());
-                    //update progress
-                    progress.set(10);
-                    //create value information
-                    ObservableList<Value> enabledValues = FXCollections.observableArrayList();
-                    enabledValues = generateEnabledValues(enabledValues);
-                    ValueParameters valueParameters = new ValueParameters();
-                    valueParameters.setEnabledValues(enabledValues);
-                    task.setValueParameters(valueParameters);
-                    //create log
-                    logger.trace("Creating new task -> Creating logs");
-                    task.createLog(view.getLogTabPane());
-                    task.getLog().createLogs();
-                    //set message tracking (waiting and sent counter)
-                    logger.trace("Creating new task -> Creating logs -> Enabling response tracking");
-                    task.getLog().getMessageTracker().setEnabled(true);
-                    //DON'T show to be sent messages
-                    logger.trace("Creating new task -> Creating logs -> Disabling To Be Sent log");
-                    task.getLog().setShowToBeSent(false);
-                    //set log to buffer
-                    logger.trace("Creating new task -> Setting logs to buffer");
-                    try {
-                        task.getLog().setBuffered(true,"task_"+task.getId()+"_",task.getTaskParameters().getSaveDir());
-                        task.getLog().writeTaskLogHeaderToBuffer(task);
-                        logger.trace("");
-                    } catch (IOException e) {
-                        Utilities.showException(logger, "Cannot create buffer file for new task's log.", e, true, event -> quit());
-                    }
-                    //register stop conditions
-                    logger.trace("Creating new task -> Creating stop conditions");
-                    StopCondition sc = task.createStopCondition();
-                    sc.registerWaitingMessageWatcher(4000);
-                    //add to other tasks
-                    logger.trace("Creating new task -> Adding task to list");
-                    getTasks().add(task);
-                    //initialize adapters
-                    progress.set(20);
-                    logger.trace("Creating new task -> Creating adapters");
-                    task.setSimulationState(SimulationTask.State.READY);
-                    //add QueueWatcher to task
-                    task.setQueueWatcher(getQueueWatcher());
-                    progress.set(100);
-                    return null;
-                }
-            };
-            Utilities.showLoadingDialog(worker,"Creating task...");
-        }
+                return null;
+            }
+        };
+        Utilities.showLoadingDialog(worker, "Loading...");
     }
 
     public void deleteTask(){
@@ -362,6 +280,7 @@ public class PerformanceSimulationPresenter implements Presenter{
                 for(SimulationTask task : taskToDelete){
                     logger.debug("Saving task -> " + task.getId());
                     doc = task.saveToXml(doc);
+                    task.setSaved(true);
                     logger.debug("Done saving task -> " + task.getId());
                 }
                 return doc;
@@ -523,6 +442,7 @@ public class PerformanceSimulationPresenter implements Presenter{
                 //add QueueWatcher to task
                 tmpTask.setQueueWatcher(getQueueWatcher());
                 logger.trace("Load task from XML -> Adding task to list");
+                tmpTask.setSaved(true);
                 getTasks().add(tmpTask);
             }catch (NullPointerException e){
                 throw new DocumentException("Wrong format of file. Cannot find one or more required elements. Error on in content of tasks ",e);
@@ -654,6 +574,15 @@ public class PerformanceSimulationPresenter implements Presenter{
         view.getNewTaskTBtn().setDisable(false);
         view.getOpenTBtn().setDisable(false);
         view.getOpenItem().setDisable(false);
+        //on quit
+        window.setOnCloseRequest(event -> {
+            checkIfSaved();
+            if(getUnsavedTasks() == null){
+                quit();
+            }else {
+                event.consume();
+            }
+        });
         Runtime.getRuntime().addShutdownHook(new Thread(){
             public void run(){
                 quit();
@@ -1145,6 +1074,44 @@ public class PerformanceSimulationPresenter implements Presenter{
 
     public Display getView(){
         return this.view;
+    }
+
+    private ObservableList<SimulationTask> getUnsavedTasks(){
+        ArrayList<SimulationTask> unsavedTasks = null;
+        if(getTasks().size() > 0){
+            unsavedTasks =
+                    getTasks()
+                            .stream()
+                            .filter(a -> !a.isSaved())
+                            .collect(Collectors.toCollection(ArrayList<SimulationTask>::new));
+        }
+        if(unsavedTasks == null || unsavedTasks.size() == 0){
+            return null;
+        }
+        else{
+            logger.trace("Unsaved adapters count: " + unsavedTasks.size());
+            return FXCollections.observableArrayList(unsavedTasks);
+        }
+    }
+
+    private void checkIfSaved(){
+        logger.debug("Checking unsaved adapters");
+        if(getTasks().size() > 0){
+            ObservableList<SimulationTask> unsavedTasks = getUnsavedTasks();
+            if(unsavedTasks != null){
+                ChoiceDialog<Utilities.SaveTasksOption> dlg = Utilities.saveTasksOnQuitDialog();
+                dlg.showAndWait().ifPresent(result -> {
+                    switch (result){
+                        case SAVE_ALL:
+                            saveAll(null);
+                            break;
+                        case DO_NOTHING:
+                            unsavedTasks.forEach(t -> t.setSaved(true));
+                            break;
+                    }
+                });
+            }
+        }
     }
 
     public void quit(){

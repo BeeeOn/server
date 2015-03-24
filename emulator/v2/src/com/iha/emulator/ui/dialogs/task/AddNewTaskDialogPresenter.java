@@ -419,6 +419,7 @@ public class AddNewTaskDialogPresenter implements Presenter,PanelPresenter{
                 //add to other tasks
                 logger.trace("Creating new task -> Adding task to list");
                 progress.set(100);
+                task.setSaved(false);
                 return task;
             }
         };

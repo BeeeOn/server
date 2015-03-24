@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tasks><task><server name="ant_devel" ip="147.229.176.131" port="7080" db="home5"/><parameters ada_count="500" protocol="0.1" start_id="1000"><sensors_count min="1" max="1"/><refresh_time min="10" max="10"/><save_dir>logs/performance</save_dir><enabled_values>Humidity,Temperature</enabled_values></parameters><stop_conditions><time_duration enabled="false" sec="0"/><sent_messages enabled="true" count="2000"/><waiting_messages enabled="true" count="100000"/></stop_conditions></task></tasks>

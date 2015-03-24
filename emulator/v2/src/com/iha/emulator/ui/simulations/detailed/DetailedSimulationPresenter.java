@@ -998,7 +998,7 @@ public class DetailedSimulationPresenter implements Presenter{
         if(getAdapterControllers().size() > 0){
             ObservableList<AdapterController> unsavedAdapters = getUnsavedAdapters();
             if(unsavedAdapters != null){
-                ChoiceDialog<Utilities.SaveOption> dlg = Utilities.saveOnQuitDialog();
+                ChoiceDialog<Utilities.SaveAdaptersOption> dlg = Utilities.saveAdaptersOnQuitDialog();
                 dlg.showAndWait().ifPresent(result -> {
                     switch (result){
                         case SAVE_ALL:

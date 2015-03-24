@@ -74,7 +74,7 @@ public class SensorController {
     }
 
     public void startTimer(){
-        logger.trace("Sensor/" + getSensorIdAsIp() + " timer started");
+        logger.trace("Sensor/" + getModel().getId() + " timer started");
         if(newTimer != null){
             //newTimer = new Timer();
             if(timerTask != null) timerTask.cancel();
@@ -91,7 +91,7 @@ public class SensorController {
     }
 
     public void stopTimer(){
-        logger.trace("Sensor/" + getSensorIdAsIp() + " timer stopped");
+        logger.trace("Sensor/" + getModel().getId() + " timer stopped");
         if(newTimer != null && timerTask != null){
             timerTask.cancel();
             newTimer.purge();
@@ -105,7 +105,7 @@ public class SensorController {
     }
 
     private void initializeTimer(){
-        logger.trace("Sensor/" + getSensorIdAsIp() + " initialising timer");
+        logger.trace("Sensor/" + getModel().getId() + " initialising timer");
         //create timer
         newTimer = new Timer(true);
     }
@@ -165,7 +165,7 @@ public class SensorController {
                 String currentValueTypeString = value.getValueType().getType();
                 String currentOffsetString = "0x" + Integer.toHexString(value.getOffset());
                 if(currentValueTypeString.equalsIgnoreCase(typeString) && currentOffsetString.equalsIgnoreCase(offsetString)){
-                    logger.debug("Sensor/" + getSensorIdAsIp() + " changing value set by server (from->to): " + value.asMessageString() + " -> " + valueString);
+                    logger.debug("Sensor/" + getModel().getId() + " changing value set by server (from->to): " + value.asMessageString() + " -> " + valueString);
                     String oldValue = value.asMessageString();
                     Platform.runLater(() -> {
                         value.setValue(value.fromStringToValueType(valueString));
@@ -173,12 +173,12 @@ public class SensorController {
                             adapterController.sendMessage(
                                     "Adapter/" + adapterController.getAdapter().getId() + " -> " +
                                             "Sensor "
-                                            + getModel().getName() + "/" + getSensorIdAsIp()
+                                            + getModel().getName() + "/" + getModel().getId()
                                             + " changed value of " + value.getName() + " (from->to): "
                                             + oldValue + " -> " + value.asMessageString());
                         }else {
                             adapterController.sendMessage("Sensor "
-                                    + getModel().getName() + "/" + getSensorIdAsIp()
+                                    + getModel().getName() + "/" + getModel().getId()
                                     + " changed value of " + value.getName() + " (from->to): "
                                     + oldValue + " -> " + value.asMessageString());
                         }
@@ -189,7 +189,7 @@ public class SensorController {
             }
             if(!valueChanged) throw new IllegalArgumentException(toString() + " -> message \"set\" -> Cannot find value with type-> " + typeString + " offset -> " + offsetString);
         }catch (NumberFormatException e){
-            throw new IllegalArgumentException("Cannot set value to -> " + valueString + " on sensor " + getSensorIdAsIp());
+            throw new IllegalArgumentException("Cannot set value to -> " + valueString + " on sensor " + getModel().getId());
         }
 
     }
@@ -257,7 +257,6 @@ public class SensorController {
         return Utilities.intToIpString(getModel().getId());
     }
 
-
     public SensorPanelPresenter getPanel(){
         return this.panel;
     }
@@ -324,9 +323,9 @@ public class SensorController {
 
     public String toString(){
         if(isFullMessage()){
-            return  "Adapter/" + adapterController.getAdapter().getId() + " -> " + "Sensor/" + (getModel() != null ? getSensorIdAsIp() : "Unknown sensor");
+            return  "Adapter/" + adapterController.getAdapter().getId() + " -> " + "Sensor/" + (getModel() != null ? getModel().getId() : "Unknown sensor");
         }else {
-            return getModel() != null ? getModel().getName() + "/" + getSensorIdAsIp() : "Unknown sensor";
+            return getModel() != null ? getModel().getName() + "/" + getModel().getId() : "Unknown sensor";
         }
     }
 }

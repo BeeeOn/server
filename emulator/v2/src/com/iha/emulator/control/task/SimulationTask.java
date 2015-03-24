@@ -70,6 +70,7 @@ public class SimulationTask {
     }
 
     private SimulationTask me;
+    private boolean saved = false;
     private BooleanProperty enabled;
     private ObjectProperty<State> simulationState;
     private ServerController serverController;
@@ -257,7 +258,8 @@ public class SimulationTask {
                         getTaskParameters().getStopWatch().stop();
                         updateMessage("Deleting adapters from database");
                         logger.trace("Deleting adapters from database");
-                        removeAdaptersFromDb();
+                        //TODO find a way to remove adapters from DB
+                        //removeAdaptersFromDb();
                         updateMessage("Saving log file : " + getLog().getBufferFile().getAbsolutePath());
                         logger.trace("Saving log file : " + getLog().getBufferFile().getAbsolutePath());
                         logMessage("Task FINISHED");
@@ -902,5 +904,13 @@ public class SimulationTask {
     public void setValueTypeGeneratorSeed(long seed) {
         getTaskParameters().setValueTypeGeneratorSeed(seed);
         if(valueTypeGenerator != null) valueTypeGenerator.setSeed(seed);
+    }
+
+    public boolean isSaved() {
+        return saved;
+    }
+
+    public void setSaved(boolean saved) {
+        this.saved = saved;
     }
 }

@@ -9,11 +9,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="log4j2.1" level="project" />
     <orderEntry type="library" name="dom4j-2.0.0-ALPHA-2" level="project" />
-    <orderEntry type="library" name="jfreechart-1.0.19" level="project" />
-    <orderEntry type="library" name="jcommon-1.0.23" level="project" />
-    <orderEntry type="library" name="jfxtras8.0-r3" level="project" />
     <orderEntry type="library" name="controlsfx-8.20.8" level="project" />
     <orderEntry type="library" name="log4j-api-2.1" level="project" />
     <orderEntry type="library" name="jfxtras-common-8.0-r3" level="project" />
