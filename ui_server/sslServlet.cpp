@@ -108,8 +108,8 @@ void logErrors(SSL* ssl, int returnValue){
     int err = ERR_get_error();
     Logger::error()<<"ssl err: "<<ssl_err << " get_Err: " << err << " err_string " << ERR_error_string(ssl_err, NULL) << endl;
     if(ssl_err != 0){
-        cout << "errno: " << errno << endl;
-        perror("errno");
+        Logger::debug3() << "errno: " << errno << endl;
+        perror("errno Log");
     }
 }
 
@@ -172,6 +172,7 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
                 if ( received > 0  || count > 1) {
                         Logger::getInstance(Logger::DEBUG3)<<"Start resolve "<< burstMsgCount++ <<" msg in burst"<<endl;
                         std::string replyString = resolveMsg(rc);
+                        replyString.append("\r\n");
 #ifdef DEBUG
                         printf("Client msg: \"%s\"\n", buf);
 #endif
