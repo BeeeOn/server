@@ -99,12 +99,14 @@ void ShowCerts(SSL* ssl) {
         }
 #endif
 }
-
+// http://stackoverflow.com/questions/13686398/ssl-read-failing-with-ssl-error-syscall-error
+// http://jmarshall.com/stuff/handling-nbio-errors-in-openssl.html
 void logErrors(SSL* ssl, int returnValue){
-    Logger::debug3()<<"loging error" << endl;
+    Logger::debug3()<<"loging, err occuerd, return value =  " << returnValue << endl;
     ERR_print_errors_fp(stderr);
     int ssl_err = SSL_get_error(ssl, returnValue);
-    Logger::error()<<"ssl err: "<<ssl_err << " = " << ERR_error_string(ssl_err, NULL) << endl;
+    int err = ERR_get_error();
+    Logger::error()<<"ssl err: "<<ssl_err << " get_Err: " << err << " err_string " << ERR_error_string(ssl_err, NULL) << endl;
     if(ssl_err != 0){
         cout << "errno: " << errno << endl;
         perror("errno");
