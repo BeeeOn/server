@@ -316,7 +316,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
         Task<Object> worker = new Task<Object>() {
             @Override
             protected Object call() throws Exception {
-                EmulatorServerClient server = new EmulatorServerClient();
+                EmulatorServerClient server = new EmulatorServerClient(selectedServer.getIp());
                 try{
                     server.connect();
                 }catch (IOException e){
@@ -392,7 +392,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
         ShowAdaptersDialogPresenter showAdaptersDialogPresenter;
         try{
             Stage stage = new Stage();
-            showAdaptersDialogPresenter = new ShowAdaptersDialogPresenter(stage,selectedServer.getDatabaseName());
+            showAdaptersDialogPresenter = new ShowAdaptersDialogPresenter(stage,selectedServer);
             stage.setTitle("Adapters in database");
             Scene scene = new Scene((Parent) showAdaptersDialogPresenter.loadView());
             // set css for view

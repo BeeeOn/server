@@ -54,10 +54,6 @@
                            <accelerator>
                               <KeyCodeCombination alt="DOWN" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                            </accelerator></MenuItem>
-                  <MenuItem fx:id="printItem" mnemonicParsing="false" onAction="#handlePrint" text="Print">
-                           <accelerator>
-                              <KeyCodeCombination alt="DOWN" code="P" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
-                           </accelerator></MenuItem>
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem fx:id="quitItem" mnemonicParsing="false" onAction="#handleQuit" text="Quit" />
                 </items>
@@ -85,15 +81,6 @@
                      </styleClass>
                      <tooltip>
                         <Tooltip text="Load tasks" />
-                     </tooltip>
-                  </Button>
-                  <Button fx:id="printTBtn" layoutX="139.0" layoutY="12.0" mnemonicParsing="false" onAction="#handlePrint">
-                     <styleClass>
-                        <String fx:value="plainToolBarBtn" />
-                        <String fx:value="printBtn" />
-                     </styleClass>
-                     <tooltip>
-                        <Tooltip text="Print current adapter logs" />
                      </tooltip>
                   </Button>
                   <Separator orientation="VERTICAL" prefHeight="6.0" prefWidth="0.0">
@@ -260,7 +247,7 @@
                         <Label prefHeight="24.0" prefWidth="178.0" styleClass="sectionName" text="Server response" BorderPane.alignment="CENTER_LEFT" />
                      </left>
                   </BorderPane>
-                  <StackPane prefHeight="150.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                  <StackPane fx:id="responseChartContainer" prefHeight="150.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                </children>
                <HBox.margin>
                   <Insets bottom="10.0" left="20.0" right="20.0" />

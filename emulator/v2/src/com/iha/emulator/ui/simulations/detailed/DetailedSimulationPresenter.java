@@ -65,7 +65,7 @@ public class DetailedSimulationPresenter implements Presenter{
     private static final Logger logger = LogManager.getLogger(DetailedSimulationPresenter.class);
     private static final boolean DEBUG_AUTO_CREATE = false;
     private static final int DEFAULT_SERVER_LISTENER_PORT = 7978;
-    private static final String SAVES_DEFAULT_DIR = "saved_adapters";
+    private static final String SAVES_DEFAULT_DIR = "saved/adapters";
     private static final String FXML_PATH = "DetailedSimulation.fxml";
     private static final String CSS_PATH = "/com/iha/emulator/resources/css/theme-light.css";
 
@@ -778,6 +778,12 @@ public class DetailedSimulationPresenter implements Presenter{
                 quit();
             }else {
                 event.consume();
+            }
+        });
+        Runtime.getRuntime().addShutdownHook(new Thread(){
+            public void run(){
+                dumpLogsToFiles();
+                logger.info("Shutting down");
             }
         });
     }

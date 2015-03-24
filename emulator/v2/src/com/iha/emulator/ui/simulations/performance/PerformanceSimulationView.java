@@ -32,14 +32,12 @@ public class PerformanceSimulationView implements Initializable,PerformanceSimul
     @FXML private MenuItem pauseSensorsItem;
     @FXML private MenuItem openItem;
     @FXML private MenuItem saveAllItem;
-    @FXML private MenuItem printItem;
     @FXML private MenuItem quitItem;
     //endregion
     //region TOOLBAR (TBtn = Toolbar button)
     @FXML private ToolBar tooBar;
     @FXML private Button openTBtn;
     @FXML private Button saveAllTBtn;
-    @FXML private Button printTBtn;
     @FXML private Button startTaskTBtn;
     @FXML private Button pauseTaskTBtn;
     @FXML private Button stopTaskTBtn;
@@ -87,7 +85,7 @@ public class PerformanceSimulationView implements Initializable,PerformanceSimul
     private LocalDateTimeTextField startDateTimeTextField;
     //endregion
     //region SERVER RESPONSE
-    @FXML private StackPane responeChartContainer;
+    @FXML private StackPane responseChartContainer;
     //endregion
 
     public PerformanceSimulationView(){
@@ -138,7 +136,7 @@ public class PerformanceSimulationView implements Initializable,PerformanceSimul
     @FXML
     public void handleSaveAll(ActionEvent event) {
         logger.trace("Save all Clicked!");
-        presenter.saveAll();
+        presenter.saveAll(null);
     }
 
     @FXML
@@ -254,11 +252,6 @@ public class PerformanceSimulationView implements Initializable,PerformanceSimul
     @Override
     public Button getSaveAllBtn() {
         return saveAllTBtn;
-    }
-
-    @Override
-    public Button getPrintBtn() {
-        return printTBtn;
     }
 
     @Override
@@ -433,6 +426,6 @@ public class PerformanceSimulationView implements Initializable,PerformanceSimul
 
     @Override
     public StackPane getResponseChartContainer() {
-        return responeChartContainer;
+        return responseChartContainer;
     }
 }

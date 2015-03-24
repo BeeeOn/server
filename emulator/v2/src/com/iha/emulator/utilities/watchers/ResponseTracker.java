@@ -1,5 +1,6 @@
 package com.iha.emulator.utilities.watchers;
 
+import com.iha.emulator.ui.panels.chart.ResponseChart;
 import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.LongProperty;
@@ -22,8 +23,10 @@ public class ResponseTracker {
     private ListProperty<Response> responsesList = new SimpleListProperty<>(responses);
     private LongProperty currentPerSecond;
     private LongProperty maxPerSecond;
+    private long lastChartSecond = 0;
     private int responseIndex = 0;
     private long currentSecond = 0;
+    private ResponseChart chart;
 
     public ResponseTracker(boolean enabled) {
         this(enabled,false,false);
@@ -42,27 +45,41 @@ public class ResponseTracker {
         this.maxPerSecond = new SimpleLongProperty(0);
     }
 
+    public void registerChart(ResponseChart chart){
+        this.chart = chart;
+        this.chart.clearChart();
+        dumpResponsesToChart();
+    }
+
+    private void dumpResponsesToChart(){
+        responses.stream().filter(r -> chart != null).forEach(chart::addResponse);
+    }
+
     public void registerSecondCounter(LongProperty seconds){
         seconds.addListener((observable, oldValue, newValue) -> {
-            checkPerSecond((long)newValue);
+            //checkPerSecond();
+        });
+    }
+
+    private synchronized void checkPerSecond(){
+        if(!trackPerSecond) return;
+        Platform.runLater(()->{
+            setCurrentPerSecond(responses.size() - responseIndex);
+            responseIndex = responses.size();
+            if(getCurrentPerSecond() > getMaxPerSecond()) setMaxPerSecond(getCurrentPerSecond());
         });
     }
 
     private synchronized void checkPerSecond(long time){
         if(!trackPerSecond) return;
-        /*if(currentSecond == 0) currentSecond = time/1000;
+        if(currentSecond == 0) currentSecond = time/1000;
         if(currentSecond == (time/1000)){
             Platform.runLater(()-> setCurrentPerSecond(getCurrentPerSecond()+1));
             if(getMaxPerSecond() < getCurrentPerSecond()) Platform.runLater(() -> setMaxPerSecond(getCurrentPerSecond()));
         }else{
             currentSecond = time/1000;
             Platform.runLater(()->setCurrentPerSecond(1));
-        }*/
-        Platform.runLater(()->{
-            setCurrentPerSecond(responses.size() - responseIndex);
-            responseIndex = responses.size();
-            if(getCurrentPerSecond() > getMaxPerSecond()) setMaxPerSecond(getCurrentPerSecond());
-        });
+        }
     }
     /**
      * Adds new {@link Response} to {@link ResponseTracker#responses} list.
@@ -74,6 +91,7 @@ public class ResponseTracker {
         if(responses != null && start!=0 && start < end){
             Response response = new Response(start,end);
             responses.add(response);
+            if(chart!=null) chart.addResponse(response);
         }
         checkPerSecond(end);
     }
@@ -90,6 +108,10 @@ public class ResponseTracker {
 
     public synchronized void clearResponses(){
         if(responses != null) responses.clear();
+        if(chart != null){
+            chart.clearChart();
+            chart = null;
+        }
         if(isTrackPerSecond()) {
             Platform.runLater(()->{
                 setCurrentPerSecond(0);

@@ -113,7 +113,12 @@ public class StopCondition {
         }
         logger.trace("Unregistering timer stop condition");
         this.timerEnabled = false;
-        task.getTaskParameters().getStopWatch().timeProperty().removeListener(timerListener);
+        try{
+            task.getTaskParameters().getStopWatch().timeProperty().removeListener(timerListener);
+        }catch (NullPointerException e){
+
+        }
+
         decrementConditionCounter();
     }
 
@@ -130,7 +135,11 @@ public class StopCondition {
         }
         logger.trace("Unregistering sent message stop condition");
         this.sentMessageEnabled = false;
-        task.getLog().getMessageTracker().sentMessageCounterProperty().removeListener(sentMessageListener);
+        try{
+            task.getLog().getMessageTracker().sentMessageCounterProperty().removeListener(sentMessageListener);
+        }catch (NullPointerException e){
+
+        }
         decrementConditionCounter();
     }
 
@@ -147,7 +156,11 @@ public class StopCondition {
         }
         logger.trace("Unregistering waiting message stop condition");
         this.waitingMessageEnabled = false;
-        task.getLog().getMessageTracker().waitingMessageCounterProperty().removeListener(waitingMessageListener);
+        try{
+            task.getLog().getMessageTracker().waitingMessageCounterProperty().removeListener(waitingMessageListener);
+        }catch (NullPointerException e){
+
+        }
         decrementConditionCounter();
     }
 
@@ -179,6 +192,12 @@ public class StopCondition {
         if(timerEnabled) atomicTimerTriggered.set(false);
         if(sentMessageEnabled) atomicSentMessageTriggered.set(false);
         if(waitingMessageEnabled) atomicWaitingMessageTriggered.set(false);
+    }
+
+    public void unregisterAllConditions(){
+        unregisterTimeDurationWatcher();
+        unregisterSentMessageWatcher();
+        unregisterWaitingMessageWatcher();
     }
 
     public Element saveToXml(Element rootElement){

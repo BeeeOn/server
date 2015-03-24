@@ -133,25 +133,23 @@ public class SensorController {
             //change engine to send message mod
             setRunValueGenerator(false);
         }else if(getModel().getStatus()){
-            /*logger.trace("Building and sending sensor message");
-            Document message = adapterController.getAdapter().getProtocol()
-                .buildSensorMessage(adapterController.getAdapter().getProtocol().buildAdapterMessage(adapterController.getAdapter()), getModel());*/
             //should message include adapter id and sensor id?
             if(XMLmessage == null){
                 adapterController.sendError(toString() + " doesn't have XML message to send",null,false);
                 return;
             }
-            if(isFullMessage()){
-                //used in "Performance simulation"
-                adapterController.sendMessage(me.toString() + " --> data sent",XMLmessage,me, OutMessage.Type.SENSOR_MESSAGE);
-            }else{
-                //used in "Detailed simulation"
-                adapterController.sendMessage("Sensor " + me.toString() + " trying to send message.");
-                adapterController.sendMessage("Sensor " + me.toString() + " --> data sent",XMLmessage,me, OutMessage.Type.SENSOR_MESSAGE);
-                //adapterController.sendMessage("Sensor " + getModel().getType() + "/" + getSensorIdAsIp() + " falling asleep for " + (timer.getDelay().toMillis()*2) / 1000 + " second/s");
+            if(adapterController.getServerReceiver() != null || adapterController.getAdapter().getRegistered()){
+                if(isFullMessage()){
+                    //used in "Performance simulation"
+                    adapterController.sendMessage(me.toString() + " --> data sent",XMLmessage,me, OutMessage.Type.SENSOR_MESSAGE);
+                }else{
+                    //used in "Detailed simulation"
+                    adapterController.sendMessage("Sensor " + me.toString() + " trying to send message.");
+                    adapterController.sendMessage("Sensor " + me.toString() + " --> data sent",XMLmessage,me, OutMessage.Type.SENSOR_MESSAGE);
+                }
+                //change engine to generate value mod
+                setRunValueGenerator(true);
             }
-            //change engine to generate value mod
-            setRunValueGenerator(true);
         }
     }
 
@@ -214,7 +212,7 @@ public class SensorController {
         adapterController.messageSuccessfullySent(message);
         if(isFullMessage()){
             //if Performance simulation, stop task
-            Platform.runLater(() -> adapterController.getLog().error(fullMessage,true));
+            Platform.runLater(() -> adapterController.getLog().error(fullMessage,false));
         }else{
             Platform.runLater(() -> adapterController.getLog().error(shortMessage,false));
         }

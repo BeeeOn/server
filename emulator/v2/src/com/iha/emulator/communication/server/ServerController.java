@@ -11,6 +11,7 @@ import org.dom4j.Element;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
+import java.nio.channels.NotYetConnectedException;
 import java.nio.channels.SocketChannel;
 
 /**
@@ -50,10 +51,24 @@ public class ServerController implements MessageSender{
                 switch (type) {
                     case SENSOR_MESSAGE:
                         messageBuffer.clear();
-                        bytesRead = socketChannel.read(messageBuffer);
+                        try{
+                            bytesRead = socketChannel.read(messageBuffer);
+                        }catch (NotYetConnectedException e){
+                            switch (type){
+                                case REGISTER_ADAPTER:
+                                    throw new WrongResponseException("Not yet connected (REGISTER_MESSAGE)",e);
+                                case SENSOR_MESSAGE:
+                                    throw new WrongResponseException("Not yet connected (SENSOR_MESSAGE",e);
+                            }
+                        }
                         //if socket suddenly closes
                         if (bytesRead == -1) {
-                            throw new WrongResponseException("Wrong response from server");
+                            switch (type){
+                                case REGISTER_ADAPTER:
+                                    throw new WrongResponseException("End of read stream. Socket closed (REGISTER_MESSAGE)");
+                                case SENSOR_MESSAGE:
+                                    throw new WrongResponseException("End of read stream. Socket closed (SENSOR_MESSAGE");
+                            }
                         }
                         if (responseTracker.isEnabled())
                             responseTracker.addResponse(responseStart, System.currentTimeMillis());
@@ -65,10 +80,24 @@ public class ServerController implements MessageSender{
                 }
             }else {
                 messageBuffer.clear();
-                bytesRead = socketChannel.read(messageBuffer);
+                try{
+                    bytesRead = socketChannel.read(messageBuffer);
+                }catch (NotYetConnectedException e){
+                    switch (type){
+                        case REGISTER_ADAPTER:
+                            throw new WrongResponseException("Not yet connected (REGISTER_MESSAGE)",e);
+                        case SENSOR_MESSAGE:
+                            throw new WrongResponseException("Not yet connected (SENSOR_MESSAGE",e);
+                    }
+                }
                 //if socket suddenly closes
                 if (bytesRead == -1) {
-                    throw new WrongResponseException("Wrong response from server");
+                    switch (type){
+                        case REGISTER_ADAPTER:
+                            throw new WrongResponseException("End of read stream. Socket closed (REGISTER_MESSAGE)");
+                        case SENSOR_MESSAGE:
+                            throw new WrongResponseException("End of read stream. Socket closed (SENSOR_MESSAGE");
+                    }
                 }
                 if (responseTracker.isEnabled())
                     responseTracker.addResponse(responseStart, System.currentTimeMillis());

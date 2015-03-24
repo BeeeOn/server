@@ -49,7 +49,7 @@ public class AdapterLogger {
     private static final int ERROR_TAB_INDEX = 2;
 
     private static final int BUFFER_LINE_COUNT_MAX = 200;
-    private static final int MAX_WARNING_COUNT = 5000;
+    private static final int MAX_WARNING_COUNT = 100000;
 
     public enum Type{
         FULL,

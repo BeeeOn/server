@@ -1,4 +1,4 @@
-package com.iha.emulator.ui.dialogs.adapter;
+package com.iha.emulator.ui.dialogs.task;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,10 +17,10 @@ import java.util.ResourceBundle;
 /**
  * Created by Shu on 6.12.2014.
  */
-public class DeleteAdaptersDialogView implements Initializable,DeleteAdaptersDialogPresenter.Display {
+public class DeleteTasksDialogView implements Initializable,DeleteTasksDialogPresenter.Display {
 
-    private static final Logger logger = LogManager.getLogger(DeleteAdaptersDialogView.class);
-    private DeleteAdaptersDialogPresenter presenter;
+    private static final Logger logger = LogManager.getLogger(DeleteTasksDialogView.class);
+    private DeleteTasksDialogPresenter presenter;
 
     @FXML private Node view;
 
@@ -28,10 +28,9 @@ public class DeleteAdaptersDialogView implements Initializable,DeleteAdaptersDia
     @FXML private Label status;
     @FXML private StackPane listConteiner;
 
-    @FXML private CheckBox databaseCheckBox;
     @FXML private CheckBox saveCheckBox;
 
-    public DeleteAdaptersDialogView() {
+    public DeleteTasksDialogView() {
 
     }
 
@@ -45,11 +44,6 @@ public class DeleteAdaptersDialogView implements Initializable,DeleteAdaptersDia
     public void handleClose(ActionEvent event){
         logger.trace("Close button clicked");
         presenter.close();
-    }
-
-    @Override
-    public CheckBox getDatabaseCheckBox() {
-        return databaseCheckBox;
     }
 
     @Override
@@ -78,7 +72,7 @@ public class DeleteAdaptersDialogView implements Initializable,DeleteAdaptersDia
     }
 
     @Override
-    public void setPresenter(DeleteAdaptersDialogPresenter presenter) {
+    public void setPresenter(DeleteTasksDialogPresenter presenter) {
         this.presenter = presenter;
     }
 
