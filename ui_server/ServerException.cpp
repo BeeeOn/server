@@ -38,6 +38,8 @@ using namespace std;
      const int  ServerException::RESIGN = 20;
      const int ServerException::NOTREG_A = 21;
      const int  ServerException::NOTREG_B = 22;
+     
+     const int ServerException::WRONG_AUTH_PROVIDER = 27;
 
      const int  ServerException::ROOM_TYPE = 50;
 

@@ -8,7 +8,7 @@
 #include "MsgInAlgorithmsRedirect.h"
 #include "Config.h"
 #include "SocketClient.h"
-
+#include "save_custom_writer.h"
 
 const std::string MsgInAlgorithmsRedirect::state = "algo";
 
@@ -20,12 +20,17 @@ MsgInAlgorithmsRedirect::~MsgInAlgorithmsRedirect() {
 
 string MsgInAlgorithmsRedirect::createResponseMsgOut() {
 
+
     string r;
         try{
         SocketClient sc(Config::getInstance().getAlgorithmPort());    
                         
         Logger::getInstance(Logger::DEBUG3)<<"Algo communication"<<endl; 
-        sc.write(_msg);
+       pugi::xml_node node = _doc->child(P_COMMUNICATION);
+        node.append_attribute("userid")=_gUserId.c_str();
+        string algoStr = node_to_string(node);
+        Logger::debug3() << "toAlgo: " << algoStr << endl;
+        sc.write(algoStr.c_str());
         r = sc.read();
     }catch(...){
         throw ServerException(ServerException::UI2ALGO);

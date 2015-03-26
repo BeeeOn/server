@@ -22,7 +22,6 @@ class MsgInSignMe :
                 static const std::string state;
                 private :
                     string getnewIHAtoken();
-                    static long long int _IHAtokenGenerator;
         };
         
 #endif /* MSGINSIGNUP_H */

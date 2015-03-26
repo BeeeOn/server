@@ -8,7 +8,6 @@
 #include <sstream>
 const std::string MsgInSignMe::state = "signme";
 
-long long int MsgInSignMe::_IHAtokenGenerator = 100;
 
 MsgInSignMe::MsgInSignMe(char* msg, pugi::xml_document* doc): IMsgInLoginUnwanted(msg, doc)
 {
@@ -26,32 +25,40 @@ int MsgInSignMe::getMsgAuthorization() {
 string MsgInSignMe::createResponseMsgOut()
 {
     Logger::getInstance(Logger::DEBUG)<<"GUID"<<endl;
-    string gId  =  _doc->child(P_COMMUNICATION).attribute(P_GOOGLE_ID).value();
-    string gToken = _doc->child(P_COMMUNICATION).attribute(P_GOOGLE_TOKEN).value();
-    string phoneId = _doc->child(P_COMMUNICATION).attribute(P_PHONE_ID).value();
-    string phoneLocale = _doc->child(P_COMMUNICATION).attribute(P_LOCALIZATION).value();
+    pugi::xml_node parametersNode =  _doc->child(P_COMMUNICATION).child(P_SIGN_PARAMS);
     
-    googleInfo gInfo;
-    //DEBUG
-    if(gInfo.email == "")
-        gInfo.email = phoneId+"@debug";
+    string service = _doc->child(P_COMMUNICATION).attribute(P_SIGN_SERVICE).value();
     
-    if( !isGTokenOk(gToken, gId, gInfo) )
-        throw ServerException(ServerException::TOKEN_EMAIL);
     
     User user;
-    user.familyName = gInfo.family_name;
-    user.gender = gInfo.gender;
-    user.givenName = gInfo.given_name;
-    user.googleId = gInfo.id;
-    user.googleLocale = gInfo.locale;
-    user.link = gInfo.link;
-    user.mail = gInfo.email;
-    user.name = "todo";
-    user.phoneLocale = gInfo.locale;
-    user.picture = gInfo.picture;
-    user.verifiedMail = gInfo.verified_email;
-            
+    
+    if(service == "google"){
+        string gToken = parametersNode.attribute(P_GOOGLE_TOKEN).value();       
+                
+            googleInfo gInfo;
+
+        if( !isGTokenOk(gToken, gInfo) )
+            throw ServerException(ServerException::TOKEN_EMAIL);
+
+        user.familyName = gInfo.family_name;
+        user.gender = gInfo.gender;
+        user.givenName = gInfo.given_name;
+        user.googleId = gInfo.id;
+        user.googleLocale = gInfo.locale;
+        user.link = gInfo.link;
+        user.mail = gInfo.email;
+        user.name = "todo";
+        user.phoneLocale = gInfo.locale;
+        user.picture = gInfo.picture;
+        user.verifiedMail = gInfo.verified_email;
+    }else{
+        throw ServerException(ServerException::WRONG_AUTH_PROVIDER);
+    }
+    //string gId  = parametersNode.child(P_COMMUNICATION).attribute(P_GOOGLE_ID).value();
+    
+    string phoneId = parametersNode.attribute(P_PHONE_ID).value();
+    string phoneLocale = parametersNode.attribute(P_LOCALIZATION).value();
+                
      MobileDevice mobile;
      mobile.locale = phoneLocale;
      mobile.mobile_id = phoneId;
@@ -74,9 +81,6 @@ string MsgInSignMe::createResponseMsgOut()
        //string attr = makeXMLattribute(P_SESSION_ID, to_string(IHAtoken));*/
   
     _mainNode.append_attribute(P_SESSION_ID) = _IHAtoken.c_str();
-    pugi::xml_document doc;
-    doc.load("<foo bar='baz'><call>hey</call></foo>");
-    _mainNode.append_copy(doc);
     return genOutputXMLwithVersionAndState(R_BEEEON_TOKEN);
     //return envelopeResponseWithAttributes(R_BEEEON_TOKEN, P_SESSION_ID "=\""+_IHAtoken+"\" ");
 }

@@ -60,6 +60,8 @@ public:
     static const int RESIGN;
     static const int NOTREG_A;
     static const int NOTREG_B;
+    
+   static  const int WRONG_AUTH_PROVIDER;
 
     static const int ROOM_TYPE;
 

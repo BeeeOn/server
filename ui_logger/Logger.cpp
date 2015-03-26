@@ -11,7 +11,7 @@ using namespace std;
 
 Logger::Logger(): _output(std::cout) {
     _outputToStdout = true;
-    
+    _mtx.unlock();
     _verbose = Logger::DEBUG3;
     _level = Logger::NO_OUTPUT;
     _cerrVerbosity = Logger::NO_OUTPUT; 
@@ -147,7 +147,7 @@ void Logger::printTime(){
         return;
     
    
-    std::lock_guard<std::mutex> lck (_mtx);
+    //std::lock_guard<std::mutex> lck (_mtx);
     timeval tp;
     time_t curtime;
 
@@ -182,7 +182,7 @@ Logger &Logger::operator<<(std::ostream& (*pf) (std::ostream&)){
         return *this;   
     
     
-    std::lock_guard<std::mutex> lck (_mtx);
+    //std::lock_guard<std::mutex> lck (_mtx);
     _output<<pf;
 
     if(_level <= _cerrVerbosity)

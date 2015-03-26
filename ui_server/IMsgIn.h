@@ -63,6 +63,9 @@
 #define P_ROOM_NAME "lname"
 #define P_ROOM_TYPE "ltype"
 
+#define P_SIGN_PARAMS "par"
+#define P_SIGN_SERVICE "srv"
+
 #define P_IN_ROOM_ID "id"
 #define P_IN_ROOM_NAME "name"
 #define P_IN_ROOM_TYPE "type"
