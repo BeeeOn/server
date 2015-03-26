@@ -176,7 +176,7 @@ public class SensorPanelPresenter implements Presenter,PanelPresenter{
             }
             @Override
             protected String computeValue() {
-                return Utilities.intToIpString(controller.getModel().getId());
+                return String.valueOf(controller.getModel().getId());
             }
         });
         view.getNameLbl().textProperty().bind(this.controller.getModel().nameProperty());

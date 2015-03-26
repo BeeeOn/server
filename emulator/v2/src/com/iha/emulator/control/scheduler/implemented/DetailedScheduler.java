@@ -122,8 +122,8 @@ public class DetailedScheduler extends Thread implements Scheduler{
                         });
                     } catch (DocumentException e) {
                         if(message.getSenderController() != null) message.getSenderController().criticalErrorStop(
-                                "Error: Adapter/" + adapterController.getAdapter().getId() + " -> Sensor/" + message.getSenderController().getSensorIdAsIp() + " --> Cannot parse XML response",
-                                "Error: " + message.getSenderController().getModel().getName() + "/" + message.getSenderController().getSensorIdAsIp() + " --> Cannot parse XML response",
+                                "Error: Adapter/" + adapterController.getAdapter().getId() + " -> Sensor/" + message.getSenderController().getModel().getId() + " --> Cannot parse XML response",
+                                "Error: " + message.getSenderController().getModel().getName() + "/" + message.getSenderController().getModel().getId() + " --> Cannot parse XML response",
                                 message
                         );
                     }

@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <?import java.lang.*?>
-<VBox fx:id="view" prefHeight="673.0" prefWidth="1131.0" stylesheets="@../../../resources/css/theme-light.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iha.emulator.ui.simulations.detailed.DetailedSimulationView">
+<VBox fx:id="view" prefHeight="673.0" prefWidth="1131.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iha.emulator.ui.simulations.detailed.DetailedSimulationView">
   <children>
       <HBox prefHeight="43.0" prefWidth="1110.0" styleClass="whiteBackground" VBox.vgrow="NEVER">
          <children>
@@ -184,7 +184,7 @@
                         </ContextMenu>
                      </contextMenu>
                   </Button>
-                  <Button fx:id="deleteAdapterTBtn" mnemonicParsing="false" onAction="#handleDeleteAdapter">
+                  <Button fx:id="deleteAdapterTBtn" mnemonicParsing="false" onAction="#handleDeleteSensor">
                      <styleClass>
                         <String fx:value="plainToolBarBtn" />
                         <String fx:value="deleteAdapterBtn" />
@@ -195,15 +195,15 @@
                      <contextMenu>
                         <ContextMenu>
                           <items>
+                              <MenuItem mnemonicParsing="false" onAction="#handleDeleteSensor" text="Delete sensor">
+                                 <accelerator>
+                                    <KeyCodeCombination alt="UP" code="DELETE" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+                                 </accelerator></MenuItem>
                             <MenuItem mnemonicParsing="false" onAction="#handleDeleteAdapter" text="Delete adapter">
                                  <accelerator>
                                     <KeyCodeCombination alt="UP" code="DELETE" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                                  </accelerator>
                               </MenuItem>
-                              <MenuItem mnemonicParsing="false" onAction="#handleDeleteSensor" text="Delete sensor">
-                                 <accelerator>
-                                    <KeyCodeCombination alt="UP" code="DELETE" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
-                                 </accelerator></MenuItem>
                           </items>
                         </ContextMenu>
                      </contextMenu>

@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<adapters><adapter id="99999" name="EA99999" protocol="0.1" registered="false" firmware="0.0"><server name="ant_devel" ip="147.229.176.131" port="7080" db="home5"/><sensors/></adapter></adapters>

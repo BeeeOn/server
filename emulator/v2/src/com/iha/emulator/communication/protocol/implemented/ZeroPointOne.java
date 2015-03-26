@@ -7,7 +7,6 @@ import com.iha.emulator.control.SensorController;
 import com.iha.emulator.models.Adapter;
 import com.iha.emulator.models.Sensor;
 import com.iha.emulator.models.value.Value;
-import com.iha.emulator.utilities.Utilities;
 import javafx.application.Platform;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -122,9 +121,9 @@ public class ZeroPointOne extends AbstractProtocol {
                     if(senderController.getModel().getRefreshTime() != timeInt && timeInt != 0 && adapterController != null && !senderController.getIgnoreRefreshChange()){
                         senderController.setNewRefreshTime(timeInt);
                         if(senderController.isFullMessage()){
-                            Platform.runLater(() -> adapterController.getLog().log("Adapter/" + adapterController.getAdapter().getId() + " -> Sensor/" + senderController.getSensorIdAsIp() + " new Refresh time --> " + timeInt));
+                            Platform.runLater(() -> adapterController.getLog().log("Adapter/" + adapterController.getAdapter().getId() + " -> Sensor/" + senderController.getModel().getId() + " new Refresh time --> " + timeInt));
                         }else {
-                            Platform.runLater(() -> adapterController.getLog().log("Sensor " + senderController.getModel().getName() + "/" + senderController.getSensorIdAsIp() + " new Refresh time --> " + time));
+                            Platform.runLater(() -> adapterController.getLog().log("Sensor " + senderController.getModel().getName() + "/" + senderController.getModel().getId() + " new Refresh time --> " + time));
                         }
                     }
                 }else{
@@ -144,7 +143,7 @@ public class ZeroPointOne extends AbstractProtocol {
         switch (state){
             case "set":
                 sensorId = Integer.valueOf(rootElement.attribute("id").getValue());
-                getLogger().debug("Sensor Ip: " + Utilities.intToIpString(sensorId));
+                getLogger().debug("Sensor Ip: " + sensorId);
                 ArrayList<SetNewValue> newValues = new ArrayList<>();
                 for(Iterator i = rootElement.elementIterator();i.hasNext();){
                     Element current = (Element) i.next();

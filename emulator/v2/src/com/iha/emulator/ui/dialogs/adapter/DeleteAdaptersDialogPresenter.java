@@ -47,7 +47,6 @@ public class DeleteAdaptersDialogPresenter implements Presenter,PanelPresenter {
         public void setPresenter(DeleteAdaptersDialogPresenter presenter);
         public CheckBox getDatabaseCheckBox();
         public CheckBox getSaveCheckBox();
-        public CheckBox getPrintCheckBox();
         public ProgressIndicator getIndicator();
         public Label getStatus();
         public StackPane getListContainer();
@@ -66,10 +65,6 @@ public class DeleteAdaptersDialogPresenter implements Presenter,PanelPresenter {
             ObservableList<AdapterController> adapterControllers = FXCollections.observableArrayList(checkComboBox.getCheckModel().getCheckedItems());
             for(AdapterController adapterController : adapterControllers){
                 adapterController.disable();
-                if(view.getPrintCheckBox().isSelected()){
-                    showStatus("Printing logs for " + adapterController.toString(),true);
-                    printAdaptersLogs(adapterController);
-                }
                 if(view.getSaveCheckBox().isSelected()){
                     showStatus("Saving adapter " + adapterController.toString(),true);
                     saveAdapter(adapterController);
@@ -108,7 +103,7 @@ public class DeleteAdaptersDialogPresenter implements Presenter,PanelPresenter {
         Task<Object> worker = new Task<Object>() {
             @Override
             protected Object call() throws Exception {
-                EmulatorServerClient server = new EmulatorServerClient();
+                EmulatorServerClient server = new EmulatorServerClient(adapterController.getServerController().getModel().getIp());
                 try{
                     server.connect();
                 }catch (IOException e){

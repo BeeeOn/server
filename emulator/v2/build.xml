@@ -60,60 +60,57 @@
   
   <!-- JDK definitions -->
   
-  <property name="jdk.bin.1.8_(32-bit)" value="${jdk.home.1.8_(32-bit)}/bin"/>
-  <path id="jdk.classpath.1.8_(32-bit)">
-    <fileset dir="${jdk.home.1.8_(32-bit)}">
-      <include name="jre/lib/charsets.jar"/>
-      <include name="jre/lib/deploy.jar"/>
-      <include name="jre/lib/javaws.jar"/>
-      <include name="jre/lib/jce.jar"/>
-      <include name="jre/lib/jfr.jar"/>
-      <include name="jre/lib/jfxswt.jar"/>
-      <include name="jre/lib/jsse.jar"/>
+  <property name="jdk.bin.1.8" value="${jdk.home.1.8}/bin"/>
+  <path id="jdk.classpath.1.8">
+    <fileset dir="${jdk.home.1.8}">
       <include name="jre/lib/management-agent.jar"/>
-      <include name="jre/lib/plugin.jar"/>
-      <include name="jre/lib/resources.jar"/>
       <include name="jre/lib/rt.jar"/>
-      <include name="jre/lib/ext/access-bridge-32.jar"/>
-      <include name="jre/lib/ext/cldrdata.jar"/>
-      <include name="jre/lib/ext/dnsns.jar"/>
-      <include name="jre/lib/ext/jaccess.jar"/>
-      <include name="jre/lib/ext/jfxrt.jar"/>
-      <include name="jre/lib/ext/localedata.jar"/>
-      <include name="jre/lib/ext/nashorn.jar"/>
+      <include name="jre/lib/plugin.jar"/>
+      <include name="jre/lib/jfr.jar"/>
+      <include name="jre/lib/javaws.jar"/>
+      <include name="jre/lib/deploy.jar"/>
+      <include name="jre/lib/resources.jar"/>
+      <include name="jre/lib/jce.jar"/>
+      <include name="jre/lib/jfxswt.jar"/>
+      <include name="jre/lib/charsets.jar"/>
+      <include name="jre/lib/jsse.jar"/>
       <include name="jre/lib/ext/sunec.jar"/>
-      <include name="jre/lib/ext/sunjce_provider.jar"/>
-      <include name="jre/lib/ext/sunmscapi.jar"/>
-      <include name="jre/lib/ext/sunpkcs11.jar"/>
       <include name="jre/lib/ext/zipfs.jar"/>
+      <include name="jre/lib/ext/sunpkcs11.jar"/>
+      <include name="jre/lib/ext/dnsns.jar"/>
+      <include name="jre/lib/ext/nashorn.jar"/>
+      <include name="jre/lib/ext/cldrdata.jar"/>
+      <include name="jre/lib/ext/sunjce_provider.jar"/>
+      <include name="jre/lib/ext/localedata.jar"/>
+      <include name="jre/lib/ext/jfxrt.jar"/>
     </fileset>
   </path>
   
-  <property name="project.jdk.home" value="${jdk.home.1.8_(32-bit)}"/>
-  <property name="project.jdk.bin" value="${jdk.bin.1.8_(32-bit)}"/>
-  <property name="project.jdk.classpath" value="jdk.classpath.1.8_(32-bit)"/>
+  <property name="project.jdk.home" value="${jdk.home.1.8}"/>
+  <property name="project.jdk.bin" value="${jdk.bin.1.8}"/>
+  <property name="project.jdk.classpath" value="jdk.classpath.1.8"/>
   
   
   <!-- Project Libraries -->
   
   <path id="library.controlsfx-8.20.8.classpath">
     <pathelement location="${basedir}/resources/lib/controlsfx-8.20.8.jar"/>
+    <pathelement location="${basedir}/resources/lib/openjfx-dialogs-1.0.2.jar"/>
   </path>
   
   <path id="library.dom4j-2.0.0-alpha-2.classpath">
     <pathelement location="${basedir}/resources/lib/dom4j-2.0.0-ALPHA-2.jar"/>
   </path>
   
+  <path id="library.jfxtras-common-8.0-r3.classpath">
+    <pathelement location="${basedir}/resources/lib/jfxtras-common-8.0-r3.jar"/>
+    <pathelement location="${basedir}/resources/lib/jfxtras-controls-8.0-r3.jar"/>
+    <pathelement location="${basedir}/resources/lib/jfxtras-fxml-8.0-r3.jar"/>
+  </path>
+  
   <path id="library.log4j-api-2.1.classpath">
     <pathelement location="${basedir}/resources/lib/log4j-api-2.1.jar"/>
-  </path>
-  
-  <path id="library.log4j-core-2.1.classpath">
     <pathelement location="${basedir}/resources/lib/log4j-core-2.1.jar"/>
-  </path>
-  
-  <path id="library.openjfx-dialogs-1.0.2.classpath">
-    <pathelement location="${basedir}/resources/lib/openjfx-dialogs-1.0.2.jar"/>
   </path>
   
   <!-- Modules -->
@@ -139,40 +136,36 @@
   
   <path id="v2.module.production.classpath">
     <path refid="${module.jdk.classpath.v2}"/>
-    <path refid="library.controlsfx-8.20.8.classpath"/>
-    <path refid="library.openjfx-dialogs-1.0.2.classpath"/>
-    <path refid="library.log4j-api-2.1.classpath"/>
-    <path refid="library.log4j-core-2.1.classpath"/>
     <path refid="library.dom4j-2.0.0-alpha-2.classpath"/>
+    <path refid="library.controlsfx-8.20.8.classpath"/>
+    <path refid="library.log4j-api-2.1.classpath"/>
+    <path refid="library.jfxtras-common-8.0-r3.classpath"/>
   </path>
   
   <path id="v2.runtime.production.module.classpath">
     <pathelement location="${v2.output.dir}"/>
-    <path refid="library.controlsfx-8.20.8.classpath"/>
-    <path refid="library.openjfx-dialogs-1.0.2.classpath"/>
-    <path refid="library.log4j-api-2.1.classpath"/>
-    <path refid="library.log4j-core-2.1.classpath"/>
     <path refid="library.dom4j-2.0.0-alpha-2.classpath"/>
+    <path refid="library.controlsfx-8.20.8.classpath"/>
+    <path refid="library.log4j-api-2.1.classpath"/>
+    <path refid="library.jfxtras-common-8.0-r3.classpath"/>
   </path>
   
   <path id="v2.module.classpath">
     <path refid="${module.jdk.classpath.v2}"/>
     <pathelement location="${v2.output.dir}"/>
-    <path refid="library.controlsfx-8.20.8.classpath"/>
-    <path refid="library.openjfx-dialogs-1.0.2.classpath"/>
-    <path refid="library.log4j-api-2.1.classpath"/>
-    <path refid="library.log4j-core-2.1.classpath"/>
     <path refid="library.dom4j-2.0.0-alpha-2.classpath"/>
+    <path refid="library.controlsfx-8.20.8.classpath"/>
+    <path refid="library.log4j-api-2.1.classpath"/>
+    <path refid="library.jfxtras-common-8.0-r3.classpath"/>
   </path>
   
   <path id="v2.runtime.module.classpath">
     <pathelement location="${v2.testoutput.dir}"/>
     <pathelement location="${v2.output.dir}"/>
-    <path refid="library.controlsfx-8.20.8.classpath"/>
-    <path refid="library.openjfx-dialogs-1.0.2.classpath"/>
-    <path refid="library.log4j-api-2.1.classpath"/>
-    <path refid="library.log4j-core-2.1.classpath"/>
     <path refid="library.dom4j-2.0.0-alpha-2.classpath"/>
+    <path refid="library.controlsfx-8.20.8.classpath"/>
+    <path refid="library.log4j-api-2.1.classpath"/>
+    <path refid="library.jfxtras-common-8.0-r3.classpath"/>
   </path>
   
   
@@ -227,26 +220,20 @@
     <!-- Perform any build initialization in this target -->
   </target>
   
-  <target name="clean" depends="clean.module.v2, clean.artifact.gui-emulator-v2, clean.artifact.javafxapp" description="cleanup all"/>
+  <target name="clean" depends="clean.module.v2, clean.artifact.gui-emulator-v2" description="cleanup all"/>
   
   <target name="build.modules" depends="init, clean, compile.module.v2" description="build all modules"/>
   
   <target name="init.artifacts">
     <property name="artifacts.temp.dir" value="${basedir}/__artifacts_temp"/>
     <property name="artifact.output.gui-emulator-v2" value="${basedir}/out/artifacts/GUI_emulator_v2"/>
-    <property name="artifact.output.javafxapp" value="${basedir}/out/artifacts/JavaFXApp"/>
     <mkdir dir="${artifacts.temp.dir}"/>
     <property name="artifact.temp.output.SmartHomeEmulator" value="${artifacts.temp.dir}/SmartHomeEmulator.jar"/>
-    <property name="artifact.temp.output.JavaFXApp" value="${artifacts.temp.dir}/JavaFXApp.jar"/>
-    <taskdef resource="com/sun/javafx/tools/ant/antlib.xml" uri="javafx:com.sun.javafx.tools.ant" classpath="${jdk.home.1.8_(32-bit)}/lib/ant-javafx.jar"/>
+    <taskdef resource="com/sun/javafx/tools/ant/antlib.xml" uri="javafx:com.sun.javafx.tools.ant" classpath="${jdk.home.1.8}/lib/ant-javafx.jar"/>
   </target>
   
   <target name="clean.artifact.gui-emulator-v2" description="clean GUI-emulator-v2 artifact output">
     <delete dir="${artifact.output.gui-emulator-v2}"/>
-  </target>
-  
-  <target name="clean.artifact.javafxapp" description="clean JavaFXApp artifact output">
-    <delete dir="${artifact.output.javafxapp}"/>
   </target>
   
   <target name="artifact.gui-emulator-v2" depends="init.artifacts, compile.module.v2" description="Build &#39;GUI-emulator-v2&#39; artifact" xmlns:fx="javafx:com.sun.javafx.tools.ant">
@@ -256,20 +243,29 @@
     </copy>
     <mkdir dir="${artifact.temp.output.SmartHomeEmulator}/lib"/>
     <copy file="${basedir}/resources/lib/controlsfx-8.20.8.jar" tofile="${artifact.temp.output.SmartHomeEmulator}/lib/controlsfx-8.20.8.jar"/>
-    <copy file="${basedir}/resources/lib/log4j-api-2.1.jar" tofile="${artifact.temp.output.SmartHomeEmulator}/lib/log4j-api-2.1.jar"/>
-    <copy file="${basedir}/resources/lib/log4j-core-2.1.jar" tofile="${artifact.temp.output.SmartHomeEmulator}/lib/log4j-core-2.1.jar"/>
     <copy file="${basedir}/resources/lib/openjfx-dialogs-1.0.2.jar" tofile="${artifact.temp.output.SmartHomeEmulator}/lib/openjfx-dialogs-1.0.2.jar"/>
     <copy file="${basedir}/resources/lib/dom4j-2.0.0-ALPHA-2.jar" tofile="${artifact.temp.output.SmartHomeEmulator}/lib/dom4j-2.0.0-ALPHA-2.jar"/>
-    <mkdir dir="${artifact.temp.output.SmartHomeEmulator}/sensor_templates"/>
-    <copy todir="${artifact.temp.output.SmartHomeEmulator}/sensor_templates">
-      <fileset dir="${basedir}/sensor_templates"/>
-    </copy>
+    <copy file="${basedir}/resources/lib/log4j-api-2.1.jar" tofile="${artifact.temp.output.SmartHomeEmulator}/lib/log4j-api-2.1.jar"/>
+    <copy file="${basedir}/resources/lib/log4j-core-2.1.jar" tofile="${artifact.temp.output.SmartHomeEmulator}/lib/log4j-core-2.1.jar"/>
+    <copy file="${basedir}/resources/lib/jfxtras-common-8.0-r3.jar" tofile="${artifact.temp.output.SmartHomeEmulator}/lib/jfxtras-common-8.0-r3.jar"/>
+    <copy file="${basedir}/resources/lib/jfxtras-controls-8.0-r3.jar" tofile="${artifact.temp.output.SmartHomeEmulator}/lib/jfxtras-controls-8.0-r3.jar"/>
+    <copy file="${basedir}/resources/lib/jfxtras-fxml-8.0-r3.jar" tofile="${artifact.temp.output.SmartHomeEmulator}/lib/jfxtras-fxml-8.0-r3.jar"/>
+    <!--copy saved templates of tasks and sensors-->
+    <mkdir dir="${artifact.output.gui-emulator-v2}/templates"/>
+    <copydir src="${basedir}/templates" dest="${artifact.output.gui-emulator-v2}/templates" includes="**/*"/>
+    <!--copy saved adapters and tasks-->
+    <mkdir dir="${artifact.output.gui-emulator-v2}/saved"/>
+    <copydir src="${basedir}/saved" dest="${artifact.output.gui-emulator-v2}/saved" includes="**/*"/>
+    <!--copy logs-->
+    <mkdir dir="${artifact.output.gui-emulator-v2}/logs"/>
+    <copydir src="${basedir}/logs" dest="${artifact.output.gui-emulator-v2}/logs" includes="**/*"/>
+
     <fx:fileset id="all_but_SmartHomeEmulator" dir="${artifact.temp.output.SmartHomeEmulator}" includes="**/*.jar">
       <exclude name="SmartHomeEmulator.jar"/>
     </fx:fileset>
     <fx:fileset id="all_SmartHomeEmulator" dir="${artifact.temp.output.SmartHomeEmulator}" includes="**/*.jar"/>
     <fx:application id="SmartHomeEmulator_id" name="GUI-emulator-v2" mainClass="com.iha.emulator.Main"/>
-    <fx:jar destfile="${artifact.temp.output.SmartHomeEmulator}\SmartHomeEmulator.jar">
+    <fx:jar destfile="${artifact.temp.output.SmartHomeEmulator}/SmartHomeEmulator.jar">
       <fx:application refid="SmartHomeEmulator_id"/>
       <fileset dir="${artifact.temp.output.SmartHomeEmulator}" excludes="**/*.jar"/>
       <fx:resources>
@@ -277,7 +273,7 @@
       </fx:resources>
       <manifest/>
     </fx:jar>
-    <fx:deploy width="600" height="400" updatemode="background" outdir="${artifact.temp.output.SmartHomeEmulator}\deploy" outfile="SmartHomeEmulator">
+    <fx:deploy width="600" height="400" updatemode="background" outdir="${artifact.temp.output.SmartHomeEmulator}/deploy" outfile="SmartHomeEmulator">
       <fx:application refid="SmartHomeEmulator_id"/>
       <fx:resources>
         <fx:fileset refid="all_SmartHomeEmulator"/>
@@ -291,39 +287,7 @@
     </delete>
   </target>
   
-  <target name="artifact.javafxapp" depends="init.artifacts" description="Build &#39;JavaFXApp&#39; artifact" xmlns:fx="javafx:com.sun.javafx.tools.ant">
-    <mkdir dir="${artifact.output.javafxapp}"/>
-    <copy todir="${artifact.temp.output.JavaFXApp}">
-      <fileset dir="${gui-emulator-v2.output.dir}"/>
-    </copy>
-    <fx:fileset id="all_but_JavaFXApp" dir="${artifact.temp.output.JavaFXApp}" includes="**/*.jar">
-      <exclude name="JavaFXApp.jar"/>
-    </fx:fileset>
-    <fx:fileset id="all_JavaFXApp" dir="${artifact.temp.output.JavaFXApp}" includes="**/*.jar"/>
-    <fx:application id="JavaFXApp_id" name="JavaFXApp" mainClass="sample.Main"/>
-    <fx:jar destfile="${artifact.temp.output.JavaFXApp}\JavaFXApp.jar">
-      <fx:application refid="JavaFXApp_id"/>
-      <fileset dir="${artifact.temp.output.JavaFXApp}" excludes="**/*.jar"/>
-      <fx:resources>
-        <fx:fileset refid="all_but_JavaFXApp"/>
-      </fx:resources>
-      <manifest/>
-    </fx:jar>
-    <fx:deploy width="600" height="400" updatemode="background" outdir="${artifact.temp.output.JavaFXApp}\deploy" outfile="JavaFXApp">
-      <fx:application refid="JavaFXApp_id"/>
-      <fx:resources>
-        <fx:fileset refid="all_JavaFXApp"/>
-      </fx:resources>
-    </fx:deploy>
-    <copy todir="${artifact.output.javafxapp}">
-      <fileset dir="${artifact.temp.output.JavaFXApp}/deploy"/>
-    </copy>
-    <delete includeemptydirs="true">
-      <fileset dir="${artifact.temp.output.JavaFXApp}"/>
-    </delete>
-  </target>
-  
-  <target name="build.all.artifacts" depends="artifact.gui-emulator-v2, artifact.javafxapp" description="Build all artifacts">
+  <target name="build.all.artifacts" depends="artifact.gui-emulator-v2" description="Build all artifacts">
     
     <!-- Delete temporary files -->
     <delete dir="${artifacts.temp.dir}"/>

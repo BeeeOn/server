@@ -11,6 +11,7 @@ import org.dom4j.Element;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
+import java.nio.channels.NotYetConnectedException;
 import java.nio.channels.SocketChannel;
 
 /**
@@ -34,14 +35,16 @@ public class ServerController implements MessageSender{
     public String sendMessage(Document message,ResponseTracker responseTracker,OutMessage.Type type) throws WrongResponseException, IOException {
         ByteBuffer messageBuffer = ByteBuffer.allocate(MESSAGE_BUFFER_SIZE);
         int bytesRead = 0;
+        logger.trace("Opening socketchannel");
         try (SocketChannel socketChannel = SocketChannel.open()){
             //socketChannel = SocketChannel.open();
             socketChannel.socket().setSoTimeout(SOCKET_TIMEOUT);
-            logger.trace("Sending message: " + type.toString());
+            logger.trace("Trying to connect");
             socketChannel.connect(new InetSocketAddress(getModel().getIp(), getModel().getPort()));
             Platform.runLater(() -> getModel().setConn(true));
             ByteBuffer out = ByteBuffer.wrap(message.asXML().getBytes());
             if (responseTracker.isEnabled()) responseStart = System.currentTimeMillis();
+            logger.trace("Sending message: " + type.toString());
             while (out.hasRemaining()) {
                 socketChannel.write(out);
             }
@@ -50,10 +53,24 @@ public class ServerController implements MessageSender{
                 switch (type) {
                     case SENSOR_MESSAGE:
                         messageBuffer.clear();
-                        bytesRead = socketChannel.read(messageBuffer);
+                        try{
+                            bytesRead = socketChannel.read(messageBuffer);
+                        }catch (NotYetConnectedException e){
+                            switch (type){
+                                case REGISTER_ADAPTER:
+                                    throw new WrongResponseException("Not yet connected (REGISTER_MESSAGE)",e);
+                                case SENSOR_MESSAGE:
+                                    throw new WrongResponseException("Not yet connected (SENSOR_MESSAGE",e);
+                            }
+                        }
                         //if socket suddenly closes
                         if (bytesRead == -1) {
-                            throw new WrongResponseException("Wrong response from server");
+                            switch (type){
+                                case REGISTER_ADAPTER:
+                                    throw new WrongResponseException("End of read stream. Socket closed (REGISTER_MESSAGE)");
+                                case SENSOR_MESSAGE:
+                                    throw new WrongResponseException("End of read stream. Socket closed (SENSOR_MESSAGE");
+                            }
                         }
                         if (responseTracker.isEnabled())
                             responseTracker.addResponse(responseStart, System.currentTimeMillis());
@@ -65,10 +82,24 @@ public class ServerController implements MessageSender{
                 }
             }else {
                 messageBuffer.clear();
-                bytesRead = socketChannel.read(messageBuffer);
+                try{
+                    bytesRead = socketChannel.read(messageBuffer);
+                }catch (NotYetConnectedException e){
+                    switch (type){
+                        case REGISTER_ADAPTER:
+                            throw new WrongResponseException("Not yet connected (REGISTER_MESSAGE)",e);
+                        case SENSOR_MESSAGE:
+                            throw new WrongResponseException("Not yet connected (SENSOR_MESSAGE",e);
+                    }
+                }
                 //if socket suddenly closes
                 if (bytesRead == -1) {
-                    throw new WrongResponseException("Wrong response from server");
+                    switch (type){
+                        case REGISTER_ADAPTER:
+                            throw new WrongResponseException("End of read stream. Socket closed (REGISTER_MESSAGE)");
+                        case SENSOR_MESSAGE:
+                            throw new WrongResponseException("End of read stream. Socket closed (SENSOR_MESSAGE");
+                    }
                 }
                 if (responseTracker.isEnabled())
                     responseTracker.addResponse(responseStart, System.currentTimeMillis());

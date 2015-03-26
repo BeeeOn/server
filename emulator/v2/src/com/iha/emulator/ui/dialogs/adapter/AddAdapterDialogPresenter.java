@@ -316,7 +316,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
         Task<Object> worker = new Task<Object>() {
             @Override
             protected Object call() throws Exception {
-                EmulatorServerClient server = new EmulatorServerClient();
+                EmulatorServerClient server = new EmulatorServerClient(selectedServer.getIp());
                 try{
                     server.connect();
                 }catch (IOException e){
@@ -392,7 +392,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
         ShowAdaptersDialogPresenter showAdaptersDialogPresenter;
         try{
             Stage stage = new Stage();
-            showAdaptersDialogPresenter = new ShowAdaptersDialogPresenter(stage,selectedServer.getDatabaseName());
+            showAdaptersDialogPresenter = new ShowAdaptersDialogPresenter(stage,selectedServer);
             stage.setTitle("Adapters in database");
             Scene scene = new Scene((Parent) showAdaptersDialogPresenter.loadView());
             // set css for view
@@ -504,8 +504,8 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
         //--server field validator
         serverValidationSupport.registerValidator(view.getServerNameTxtField(), false, Validator.createEmptyValidator("Name is required"));
         serverValidationSupport.registerValidator(view.getServerIpTxtField(), false, Validator.createEmptyValidator("Ip is required"));
-        serverValidationSupport.registerValidator(view.getServerIpTxtField(), false, (Control c, String newValue) ->
-                ValidationResult.fromErrorIf(view.getServerIpTxtField(), "Ip must be in IP4 address format (xxx.xxx.xxx.xxx)", !Utilities.isIp(newValue)));
+        /*serverValidationSupport.registerValidator(view.getServerIpTxtField(), false, (Control c, String newValue) ->
+                ValidationResult.fromErrorIf(view.getServerIpTxtField(), "Ip must be in IP4 address format (xxx.xxx.xxx.xxx)", !Utilities.isIp(newValue)));*/
         serverValidationSupport.registerValidator(view.getServerPortTxtField(), false, Validator.createEmptyValidator("Port is required"));
         serverValidationSupport.registerValidator(view.getServerPortTxtField(), false, (Control c, String newValue) ->
                 ValidationResult.fromErrorIf(view.getServerPortTxtField(), "Port must be an integer number with maximum of 5 digits", !Utilities.isIntegerNumber(newValue, 1, 5)));

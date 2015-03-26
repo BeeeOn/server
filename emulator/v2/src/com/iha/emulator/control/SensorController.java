@@ -74,7 +74,7 @@ public class SensorController {
     }
 
     public void startTimer(){
-        logger.trace("Sensor/" + getSensorIdAsIp() + " timer started");
+        logger.trace("Sensor/" + getModel().getId() + " timer started");
         if(newTimer != null){
             //newTimer = new Timer();
             if(timerTask != null) timerTask.cancel();
@@ -91,7 +91,7 @@ public class SensorController {
     }
 
     public void stopTimer(){
-        logger.trace("Sensor/" + getSensorIdAsIp() + " timer stopped");
+        logger.trace("Sensor/" + getModel().getId() + " timer stopped");
         if(newTimer != null && timerTask != null){
             timerTask.cancel();
             newTimer.purge();
@@ -105,7 +105,7 @@ public class SensorController {
     }
 
     private void initializeTimer(){
-        logger.trace("Sensor/" + getSensorIdAsIp() + " initialising timer");
+        logger.trace("Sensor/" + getModel().getId() + " initialising timer");
         //create timer
         newTimer = new Timer(true);
     }
@@ -133,25 +133,23 @@ public class SensorController {
             //change engine to send message mod
             setRunValueGenerator(false);
         }else if(getModel().getStatus()){
-            /*logger.trace("Building and sending sensor message");
-            Document message = adapterController.getAdapter().getProtocol()
-                .buildSensorMessage(adapterController.getAdapter().getProtocol().buildAdapterMessage(adapterController.getAdapter()), getModel());*/
             //should message include adapter id and sensor id?
             if(XMLmessage == null){
                 adapterController.sendError(toString() + " doesn't have XML message to send",null,false);
                 return;
             }
-            if(isFullMessage()){
-                //used in "Performance simulation"
-                adapterController.sendMessage(me.toString() + " --> data sent",XMLmessage,me, OutMessage.Type.SENSOR_MESSAGE);
-            }else{
-                //used in "Detailed simulation"
-                adapterController.sendMessage("Sensor " + me.toString() + " trying to send message.");
-                adapterController.sendMessage("Sensor " + me.toString() + " --> data sent",XMLmessage,me, OutMessage.Type.SENSOR_MESSAGE);
-                //adapterController.sendMessage("Sensor " + getModel().getType() + "/" + getSensorIdAsIp() + " falling asleep for " + (timer.getDelay().toMillis()*2) / 1000 + " second/s");
+            if(adapterController.getServerReceiver() != null || adapterController.getAdapter().getRegistered()){
+                if(isFullMessage()){
+                    //used in "Performance simulation"
+                    adapterController.sendMessage(me.toString() + " --> data sent",XMLmessage,me, OutMessage.Type.SENSOR_MESSAGE);
+                }else{
+                    //used in "Detailed simulation"
+                    adapterController.sendMessage("Sensor " + me.toString() + " trying to send message.");
+                    adapterController.sendMessage("Sensor " + me.toString() + " --> data sent",XMLmessage,me, OutMessage.Type.SENSOR_MESSAGE);
+                }
+                //change engine to generate value mod
+                setRunValueGenerator(true);
             }
-            //change engine to generate value mod
-            setRunValueGenerator(true);
         }
     }
 
@@ -167,7 +165,7 @@ public class SensorController {
                 String currentValueTypeString = value.getValueType().getType();
                 String currentOffsetString = "0x" + Integer.toHexString(value.getOffset());
                 if(currentValueTypeString.equalsIgnoreCase(typeString) && currentOffsetString.equalsIgnoreCase(offsetString)){
-                    logger.debug("Sensor/" + getSensorIdAsIp() + " changing value set by server (from->to): " + value.asMessageString() + " -> " + valueString);
+                    logger.debug("Sensor/" + getModel().getId() + " changing value set by server (from->to): " + value.asMessageString() + " -> " + valueString);
                     String oldValue = value.asMessageString();
                     Platform.runLater(() -> {
                         value.setValue(value.fromStringToValueType(valueString));
@@ -175,12 +173,12 @@ public class SensorController {
                             adapterController.sendMessage(
                                     "Adapter/" + adapterController.getAdapter().getId() + " -> " +
                                             "Sensor "
-                                            + getModel().getName() + "/" + getSensorIdAsIp()
+                                            + getModel().getName() + "/" + getModel().getId()
                                             + " changed value of " + value.getName() + " (from->to): "
                                             + oldValue + " -> " + value.asMessageString());
                         }else {
                             adapterController.sendMessage("Sensor "
-                                    + getModel().getName() + "/" + getSensorIdAsIp()
+                                    + getModel().getName() + "/" + getModel().getId()
                                     + " changed value of " + value.getName() + " (from->to): "
                                     + oldValue + " -> " + value.asMessageString());
                         }
@@ -191,7 +189,7 @@ public class SensorController {
             }
             if(!valueChanged) throw new IllegalArgumentException(toString() + " -> message \"set\" -> Cannot find value with type-> " + typeString + " offset -> " + offsetString);
         }catch (NumberFormatException e){
-            throw new IllegalArgumentException("Cannot set value to -> " + valueString + " on sensor " + getSensorIdAsIp());
+            throw new IllegalArgumentException("Cannot set value to -> " + valueString + " on sensor " + getModel().getId());
         }
 
     }
@@ -214,7 +212,7 @@ public class SensorController {
         adapterController.messageSuccessfullySent(message);
         if(isFullMessage()){
             //if Performance simulation, stop task
-            Platform.runLater(() -> adapterController.getLog().error(fullMessage,true));
+            Platform.runLater(() -> adapterController.getLog().error(fullMessage,false));
         }else{
             Platform.runLater(() -> adapterController.getLog().error(shortMessage,false));
         }
@@ -258,7 +256,6 @@ public class SensorController {
     public String getSensorIdAsIp(){
         return Utilities.intToIpString(getModel().getId());
     }
-
 
     public SensorPanelPresenter getPanel(){
         return this.panel;
@@ -326,9 +323,9 @@ public class SensorController {
 
     public String toString(){
         if(isFullMessage()){
-            return  "Adapter/" + adapterController.getAdapter().getId() + " -> " + "Sensor/" + (getModel() != null ? getSensorIdAsIp() : "Unknown sensor");
+            return  "Adapter/" + adapterController.getAdapter().getId() + " -> " + "Sensor/" + (getModel() != null ? getModel().getId() : "Unknown sensor");
         }else {
-            return getModel() != null ? getModel().getName() + "/" + getSensorIdAsIp() : "Unknown sensor";
+            return getModel() != null ? getModel().getName() + "/" + getModel().getId() : "Unknown sensor";
         }
     }
 }

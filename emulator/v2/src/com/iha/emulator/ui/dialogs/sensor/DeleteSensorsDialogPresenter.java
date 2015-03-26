@@ -85,7 +85,7 @@ public class DeleteSensorsDialogPresenter implements Presenter,PanelPresenter {
         Task<Object> worker = new Task<Object>() {
             @Override
             protected Object call() throws Exception {
-                EmulatorServerClient server = new EmulatorServerClient();
+                EmulatorServerClient server = new EmulatorServerClient(adapterController.getServerController().getModel().getIp());
                 try{
                     server.connect();
                 }catch (IOException e){

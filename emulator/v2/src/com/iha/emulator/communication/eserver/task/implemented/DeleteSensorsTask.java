@@ -2,14 +2,11 @@ package com.iha.emulator.communication.eserver.task.implemented;
 
 import com.iha.emulator.communication.eserver.task.AbstractServerTask;
 import com.iha.emulator.control.SensorController;
-import com.iha.emulator.models.Sensor;
 import javafx.collections.ObservableList;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-
-import java.util.ArrayList;
 
 /**
  * Created by Shu on 8.12.2014.
@@ -49,7 +46,7 @@ public class DeleteSensorsTask extends AbstractServerTask<Boolean> {
         Element sensorsElement = task.addElement("sensors");
         for(SensorController sensor : sensors){
             sensorsElement.addElement("sensor")
-                    .addAttribute("id",sensor.getSensorIdAsIp());
+                    .addAttribute("id",String.valueOf(sensor.getModel().getId()));
         }
         return doc.asXML();
     }

@@ -25,7 +25,9 @@ import javafx.concurrent.Task;
 import javafx.scene.control.TabPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.dom4j.Document;
 import org.dom4j.DocumentException;
+import org.dom4j.Element;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -68,6 +70,7 @@ public class SimulationTask {
     }
 
     private SimulationTask me;
+    private boolean saved = false;
     private BooleanProperty enabled;
     private ObjectProperty<State> simulationState;
     private ServerController serverController;
@@ -255,23 +258,27 @@ public class SimulationTask {
                         getTaskParameters().getStopWatch().stop();
                         updateMessage("Deleting adapters from database");
                         logger.trace("Deleting adapters from database");
-                        removeAdaptersFromDb();
+                        //TODO find a way to remove adapters from DB
+                        //removeAdaptersFromDb();
                         updateMessage("Saving log file : " + getLog().getBufferFile().getAbsolutePath());
                         logger.trace("Saving log file : " + getLog().getBufferFile().getAbsolutePath());
                         logMessage("Task FINISHED");
                         if(getTaskParameters().getStopWatch() != null){
                             logMessage("Task duration: " + getTaskParameters().getStopWatch().getTimeString());
                             logMessage("Max responses per second: " + getResponseTracker().getMaxPerSecond());
+                            logMessage("Average sent messages per second: " + (getLog().getMessageTracker().getSentMessageCounter()/getTaskParameters().getStopWatch().getTime()));
                         }
                         updateMessage("Deleting adapters from emulator");
-                        getAdapterControllers().forEach(a->{
+                        /*getAdapterControllers().forEach(a->{
                             a.delete();
                             setTaskProgress(getTaskProgress() + progressPerAdapter);
-                        });
+                        });*/
+                        getAdapterControllers().clear();
+                        adapterControllersList.clear();
+                        System.gc();
                         logger.trace("Closing buffer");
                         getLog().closeBuffer();
                         setTaskProgress(95);
-                        System.gc();
                         return null;
                     }
 
@@ -310,10 +317,8 @@ public class SimulationTask {
                 setSimulationState(State.FINISHED);
             }
             //getAdapterControllers().forEach(AdapterController::delete);
-            getAdapterControllers().clear();
             setRunning(false);
             if(getQueueWatcher() != null) getQueueWatcher().next();
-            System.gc();
         });
     }
 
@@ -446,7 +451,7 @@ public class SimulationTask {
     private void removeAdaptersFromDb(){
         EmulatorServerClient server;
         try{
-            server = new EmulatorServerClient();
+            server = new EmulatorServerClient(getServerController().getModel().getIp());
             server.connect();
             //composite message for server
             ServerTask task = new DeleteAdapterTask(
@@ -651,9 +656,39 @@ public class SimulationTask {
         return 0;
     }
 
+    public void delete(){
+        logger.debug("Deleting " + toString());
+        logger.trace("Dumping logs");
+        getLog().closeBuffer();
+        logger.trace("Clearing responses");
+        getResponseTracker().clearResponses();
+        logger.trace("Unregistering stop conditions");
+        getStopCondition().unregisterAllConditions();
+        logger.trace("Clearing adapters");
+        getAdapterControllers().clear();
+    }
+
+    protected void finalize(){
+        logger.warn("Finalizing " + toString());
+    }
+
     public synchronized void logMessage(String message){
         if(this.log != null) log.log(message);
         else logger.error("No logger");
+    }
+
+    public Document saveToXml(Document doc){
+        Element taskElement = doc.getRootElement().addElement("task");
+        //server info
+        logger.trace("Saving server info");
+        getServerController().saveToXml(taskElement);
+        //task parameters
+        logger.trace("Saving parameters");
+        getTaskParameters().saveToXml(taskElement);
+        //stop conditions
+        logger.trace("Saving stop conditions");
+        getStopCondition().saveToXml(taskElement);
+        return doc;
     }
 
     public ServerController createServer(boolean conn,String name,String ip, int port,String databaseName){
@@ -854,5 +889,28 @@ public class SimulationTask {
 
     public void setResponseTracker(ResponseTracker responseTracker) {
         this.responseTracker = responseTracker;
+    }
+
+    public void setSensorCountGeneratorSeed(long seed) {
+        getTaskParameters().setSensorsCountGeneratorSeed(seed);
+        if(sensorCountGenerator != null) sensorCountGenerator.setSeed(seed);
+    }
+
+    public void setRefreshTimeGeneratorSeed(long seed) {
+        getTaskParameters().setRefreshTimeGeneratorSeed(seed);
+        if(refreshTimeGenerator != null) refreshTimeGenerator.setSeed(seed);
+    }
+
+    public void setValueTypeGeneratorSeed(long seed) {
+        getTaskParameters().setValueTypeGeneratorSeed(seed);
+        if(valueTypeGenerator != null) valueTypeGenerator.setSeed(seed);
+    }
+
+    public boolean isSaved() {
+        return saved;
+    }
+
+    public void setSaved(boolean saved) {
+        this.saved = saved;
     }
 }

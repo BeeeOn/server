@@ -7,7 +7,6 @@ import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.TableView;
 import javafx.scene.layout.StackPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,7 +30,6 @@ public class DeleteAdaptersDialogView implements Initializable,DeleteAdaptersDia
 
     @FXML private CheckBox databaseCheckBox;
     @FXML private CheckBox saveCheckBox;
-    @FXML private CheckBox printCheckBox;
 
     public DeleteAdaptersDialogView() {
 
@@ -57,11 +55,6 @@ public class DeleteAdaptersDialogView implements Initializable,DeleteAdaptersDia
     @Override
     public CheckBox getSaveCheckBox() {
         return saveCheckBox;
-    }
-
-    @Override
-    public CheckBox getPrintCheckBox() {
-        return printCheckBox;
     }
 
     @Override

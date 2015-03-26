@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import java.lang.*?>
-<VBox fx:id="view" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="643.0" prefWidth="840.0" styleClass="whiteBackground" stylesheets="@../../../resources/css/theme-light.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iha.emulator.ui.dialogs.sensor.AddNewSensorDialogView">
+<VBox fx:id="view" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="643.0" prefWidth="840.0" styleClass="whiteBackground" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iha.emulator.ui.dialogs.sensor.AddNewSensorDialogView">
    <children>
       <Label styleClass="detailedSimLbl" text="Add new sensor / actuator" VBox.vgrow="NEVER">
          <VBox.margin>
@@ -13,7 +13,7 @@
       </Label>
       <HBox prefHeight="32.0" prefWidth="570.0" VBox.vgrow="NEVER">
          <children>
-            <Label prefHeight="30.0" prefWidth="161.0" styleClass="informationHeader" text="Sensor informations" />
+            <Label prefHeight="30.0" prefWidth="224.0" styleClass="informationHeader" text="Sensor informations" />
             <Button fx:id="loadTemplateBtn" mnemonicParsing="false" onAction="#handleLoadTemplate">
                <styleClass>
                   <String fx:value="plainToolBarBtn" />
@@ -96,7 +96,7 @@
                         <Insets right="6.0" />
                      </padding>
                   </Label>
-                  <Label alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="171.0" styleClass="informationHeader" text="Value informations:" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="5" GridPane.valignment="BOTTOM" GridPane.vgrow="NEVER">
+                  <Label alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="190.0" styleClass="informationHeader" text="Value informations:" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="5" GridPane.valignment="BOTTOM" GridPane.vgrow="NEVER">
                      <padding>
                         <Insets right="6.0" />
                      </padding>
@@ -332,7 +332,7 @@
                                     </GridPane>
                                     <GridPane fx:id="booleanRandomContainer" prefHeight="114.0" prefWidth="537.0">
                                        <children>
-                                          <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="158.0" styleClass="sensorText" text="Probability of switching value:" GridPane.rowIndex="1">
+                                          <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="191.0" styleClass="sensorText" text="Probability of switching value:" GridPane.columnSpan="2" GridPane.rowIndex="1">
                                              <padding>
                                                 <Insets right="6.0" />
                                              </padding>

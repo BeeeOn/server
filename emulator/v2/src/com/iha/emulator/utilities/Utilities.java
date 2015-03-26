@@ -299,14 +299,21 @@ public class Utilities {
         th.start();
     }
 
-    public static ChoiceDialog<SaveOption> saveOnQuitDialog(){
-        ChoiceDialog<SaveOption> dlg = new ChoiceDialog<>(SaveOption.SAVE_ALL,SaveOption.values());
+    public static ChoiceDialog<SaveAdaptersOption> saveAdaptersOnQuitDialog(){
+        ChoiceDialog<SaveAdaptersOption> dlg = new ChoiceDialog<>(SaveAdaptersOption.SAVE_ALL, SaveAdaptersOption.values());
         dlg.setTitle("Unsaved adapters");
         dlg.getDialogPane().setContentText("There are unsaved adapters. Choose option");
         return dlg;
     }
 
-    public enum SaveOption{
+    public static ChoiceDialog<SaveTasksOption> saveTasksOnQuitDialog(){
+        ChoiceDialog<SaveTasksOption> dlg = new ChoiceDialog<>(SaveTasksOption.SAVE_ALL, SaveTasksOption.values());
+        dlg.setTitle("Unsaved tasks");
+        dlg.getDialogPane().setContentText("There are unsaved tasks. Choose option");
+        return dlg;
+    }
+
+    public enum SaveAdaptersOption {
         SAVE_ALL(0,"Save all adapters"),
         SAVE_CURRENT(1,"Save currently selected adapter"),
         DO_NOTHING(2,"Do nothing");
@@ -314,7 +321,29 @@ public class Utilities {
         final private int id;
         final private String text;
 
-        SaveOption(int id, String text){
+        SaveAdaptersOption(int id, String text){
+            this.id = id;
+            this.text = text;
+        }
+        public int getId(){
+            return this.id;
+        }
+        public String getText(){
+            return this.text;
+        }
+        public String toString(){
+            return this.text;
+        }
+    }
+
+    public enum SaveTasksOption {
+        SAVE_ALL(0,"Save tasks"),
+        DO_NOTHING(2,"Do nothing");
+
+        final private int id;
+        final private String text;
+
+        SaveTasksOption(int id, String text){
             this.id = id;
             this.text = text;
         }
@@ -409,7 +438,7 @@ public class Utilities {
 
     public static boolean isSensorIdTaken(AdapterController controller,String sensorId){
         if(sensorId.equals("")) return false;
-        int id = Utilities.ipStringToInt(sensorId);
+        int id = Integer.valueOf(sensorId);
         for(SensorController sController : controller.getSensorControllersList()){
             if(sController.getModel().getId() == id){
                 return true;

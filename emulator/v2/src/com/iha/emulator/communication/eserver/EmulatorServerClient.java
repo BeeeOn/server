@@ -23,9 +23,14 @@ public class EmulatorServerClient {
     private Socket socket;
     private InetAddress address;
 
-    public EmulatorServerClient() throws UnknownHostException {
+    public EmulatorServerClient(String host) throws UnknownHostException {
         logger.trace("Getting host address");
         this.address = InetAddress.getByName(HOST_IP);
+        if(host == null){
+            this.address = InetAddress.getByName(HOST_IP);
+        }else {
+            this.address = InetAddress.getByName(host);
+        }
         logger.trace("  OK");
     }
 

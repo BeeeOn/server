@@ -109,7 +109,7 @@ public class AdapterController {
                     break;
                 case SENSOR_MESSAGE:
                     if (senderController.isFullMessage()) {
-                        unsent = log.sent("Adapter/" + getAdapter().getId() + " -> Sensor/" + senderController.getSensorIdAsIp() + " waiting to send data.");
+                        unsent = log.sent("Adapter/" + getAdapter().getId() + " -> Sensor/" + senderController.getModel().getId() + " waiting to send data.");
                     } else {
                         unsent = log.sent("Sensor " + senderController.toString() + " waiting to send data.");
                     }
@@ -296,7 +296,7 @@ public class AdapterController {
 
     public ServerReceiver createServerReceiver() {
         logger.trace("Creating server receiver");
-        this.serverReceiver = new ServerReceiver(7071, this);
+        this.serverReceiver = new ServerReceiver(this);
         this.serverReceiver.setDaemon(true);
         setMessageSender(serverReceiver);
         getAdapter().statusProperty().addListener(new ChangeListener<Boolean>() {

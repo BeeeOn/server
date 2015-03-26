@@ -5,6 +5,7 @@ import com.iha.emulator.communication.eserver.model.AdapterInfo;
 import com.iha.emulator.communication.eserver.task.ServerTask;
 import com.iha.emulator.communication.eserver.task.TaskParser;
 import com.iha.emulator.communication.eserver.task.implemented.GetAdaptersTask;
+import com.iha.emulator.models.Server;
 import com.iha.emulator.ui.Presenter;
 import com.iha.emulator.ui.panels.PanelPresenter;
 import com.iha.emulator.utilities.Utilities;
@@ -40,7 +41,7 @@ public class ShowAdaptersDialogPresenter implements Presenter,PanelPresenter {
     private Display view;
     private Stage window;
 
-    private String databaseName;
+    private Server server;
 
     public interface Display {
         public Node getView();
@@ -50,17 +51,18 @@ public class ShowAdaptersDialogPresenter implements Presenter,PanelPresenter {
         public TableView getTable();
     }
 
-    public ShowAdaptersDialogPresenter(Stage window,String databaseName) {
+    public ShowAdaptersDialogPresenter(Stage window,Server server) {
         this.window = window;
-        this.databaseName = databaseName;
+        this.server = server;
     }
 
     public void refresh(){
         showStatus("Fetching tables...",true);
+        final Server server1 = server;
         Task<Object> worker = new Task<Object>() {
             @Override
             protected Object call() throws Exception {
-                EmulatorServerClient server = new EmulatorServerClient();
+                EmulatorServerClient server = new EmulatorServerClient(server1.getIp());
                 try{
                     server.connect();
                 }catch (IOException e){
@@ -68,7 +70,7 @@ public class ShowAdaptersDialogPresenter implements Presenter,PanelPresenter {
                 }
                 try{
                     //composite message for server
-                    ServerTask task = new GetAdaptersTask(databaseName,"adapter_id,name");
+                    ServerTask task = new GetAdaptersTask(server1.getDatabaseName(),"adapter_id,name");
                     //send message and wait for response
                     String messageFromServer = server.sendMessage(task.buildMessage());
                     //determine result state (OK/ERROR)

@@ -470,7 +470,7 @@ public class SensorDetailsDialogPresenter implements Presenter,PanelPresenter{
 
     @SuppressWarnings("unchecked")
     private void fillDialog(){
-        view.getSensorIdLbl().setText(sensorController.getSensorIdAsIp());
+        view.getSensorIdLbl().setText(String.valueOf(sensorController.getModel().getId()));
         view.getSensorNameLbl().setText(sensorController.getModel().getName());
         view.getSensorBatterySlider().setValue((double) sensorController.getModel().getBattery());
         view.getSensorSignalSlider().setValue((double)sensorController.getModel().getSignal());

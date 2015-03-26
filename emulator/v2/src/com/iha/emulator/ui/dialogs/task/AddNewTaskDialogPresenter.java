@@ -349,7 +349,11 @@ public class AddNewTaskDialogPresenter implements Presenter,PanelPresenter{
                 progress.set(1);
                 SimulationTask task = new SimulationTask();
                 //set id
-                task.setId(simulation.getTasks().size());
+                if(simulation.getTasks().size() == 0){
+                    task.setId(0);
+                }else{
+                    task.setId(simulation.getTasks().get(simulation.getTasks().size()-1).getId()+1);
+                }
                 //create server model for task
                 logger.trace("Creating new task -> Creating server");
                 task.createServer(selectedServer);
@@ -415,6 +419,7 @@ public class AddNewTaskDialogPresenter implements Presenter,PanelPresenter{
                 //add to other tasks
                 logger.trace("Creating new task -> Adding task to list");
                 progress.set(100);
+                task.setSaved(false);
                 return task;
             }
         };
@@ -581,7 +586,7 @@ public class AddNewTaskDialogPresenter implements Presenter,PanelPresenter{
         ShowAdaptersDialogPresenter showAdaptersDialogPresenter;
         try{
             Stage stage = new Stage();
-            showAdaptersDialogPresenter = new ShowAdaptersDialogPresenter(stage,selectedServer.getDatabaseName());
+            showAdaptersDialogPresenter = new ShowAdaptersDialogPresenter(stage,selectedServer);
             stage.setTitle("Adapters in database");
             Scene scene = new Scene((Parent) showAdaptersDialogPresenter.loadView());
             // set css for view

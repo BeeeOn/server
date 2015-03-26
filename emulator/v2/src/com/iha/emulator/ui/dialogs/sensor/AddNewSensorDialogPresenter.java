@@ -291,7 +291,7 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
         Task<Object> worker = new Task<Object>() {
             @Override
             protected Object call() throws Exception {
-                EmulatorServerClient server = new EmulatorServerClient();
+                EmulatorServerClient server = new EmulatorServerClient(adapterController.getServerController().getModel().getIp());
                 try{
                     server.connect();
                 }catch (IOException e){
@@ -359,7 +359,7 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
                             (SensorIcon)view.getSensorIconComboBox().getSelectionModel().getSelectedItem(), //sensor icon
                             values.get(),
                             false, //sensor status
-                            Utilities.ipStringToInt(view.getSensorIdLbl().getText()), //ip as int
+                            Integer.valueOf(view.getSensorIdLbl().getText()), //ip as int
                             view.getSensorNameLbl().getText(), //sensor name
                             Double.valueOf(view.getSensorBatterySlider().getValue()).intValue(), //battery
                             Double.valueOf(view.getSensorSignalSlider().getValue()).intValue(), //signal
@@ -367,7 +367,7 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
                             adapterController.getAdapter().getProtocol() //comm.protocol
                     );
                     adapterController.setSaved(false);
-                    logger.debug("Sensor \"" + Utilities.intToIpString(newSensor.getModel().getId()) + "\" created successfully");
+                    logger.debug("Sensor \"" + newSensor.getModel().getId() + "\" created successfully");
                     //newSensor.getValues().addAll(values.get());
 
                 }else{
@@ -925,7 +925,7 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
         sensorGeneralValidator.registerValidator(view.getSensorNameLbl(), false, Validator.createEmptyValidator("Name is required"));
         sensorGeneralValidator.registerValidator(view.getSensorIdLbl(), false, Validator.createEmptyValidator("Id is required"));
         sensorGeneralValidator.registerValidator(view.getSensorIdLbl(), false, (Control c, String newValue) ->
-                ValidationResult.fromErrorIf(view.getSensorIdLbl(), "Id must be in IP4 address format (xxx.xxx.xxx.xxx)", !Utilities.isIp(newValue)));
+                ValidationResult.fromErrorIf(view.getSensorIdLbl(), "Id must be in integer number", !Utilities.isIntegerNumber(newValue,1,10)));
         sensorGeneralValidator.registerValidator(view.getSensorIconComboBox(), false, (Control c, SensorIcon icon) ->
                 ValidationResult.fromErrorIf(view.getSensorIconComboBox(), "Icon is required", (icon == null)));
         // --sliders
@@ -1031,7 +1031,7 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
             }
         });
 
-        view.getSensorIdLbl().setPromptText("Example: 100.100.100.100");
+        view.getSensorIdLbl().setPromptText("Example: 111");
         view.getSensorNameLbl().setPromptText("Example: Multisensor");
         listenToValueChanges();
     }
