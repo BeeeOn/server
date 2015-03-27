@@ -454,7 +454,7 @@ string DBConnector::getXMLNewDevices(string adapterId)
 //TODO možná tady nemusi byt join na devices
                 statement st = (sql.prepare <<"select " +
                         getXMLDevicesQueryString() +
-                       "from adapters join facilities on adapter_id=fk_adapter_id join devices on mac=fk_facilities_mac where init='0' and adapter_id =:adapter" 
+                       "from adapters join facilities on adapter_id=fk_adapter_id  where init='0' and adapter_id =:adapter" //join devices on mac=fk_facilities_mac
                         ,use(adapterId, "adapter"),soci::into(xml, ind) );
                 
                 st.execute(true);

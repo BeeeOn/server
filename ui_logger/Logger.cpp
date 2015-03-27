@@ -147,7 +147,7 @@ void Logger::printTime(){
         return;
     
    
-    //std::lock_guard<std::mutex> lck (_mtx);
+    std::lock_guard<std::mutex> lck (_mtx);
     timeval tp;
     time_t curtime;
 
@@ -182,7 +182,7 @@ Logger &Logger::operator<<(std::ostream& (*pf) (std::ostream&)){
         return *this;   
     
     
-    //std::lock_guard<std::mutex> lck (_mtx);
+    std::lock_guard<std::mutex> lck (_mtx);
     _output<<pf;
 
     if(_level <= _cerrVerbosity)

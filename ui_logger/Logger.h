@@ -80,7 +80,7 @@ public:
         
         if(_level > _verbose)
             return *this;
-       // std::lock_guard<std::mutex> lck (_mtx);
+        std::lock_guard<std::mutex> lck (_mtx);
         
         if(_level  <= _cerrVerbosity)
             std::cerr << a;
