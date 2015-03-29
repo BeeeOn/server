@@ -7,7 +7,7 @@
 
 #include "MsgInUpdateRooms.h"
 #include "pugixml.hpp"
-#include "DBConnector.h"
+#include "../DAO/DAORooms.h"
 using namespace std;
 
 const string MsgInUpdateRooms::state = "setrooms";
@@ -37,7 +37,7 @@ string MsgInUpdateRooms::createResponseMsgOut()
             //TODO check type
             name = locationNode.attribute(P_IN_ROOM_NAME).value();
             try{
-                DBConnector::getInstance().updateRoom(_adapterId, id, type, name);
+                DAORooms::getInstance().updateRoom(_adapterId, id, type, name);
             }catch(ServerException & e){
                 failed = true;
             }
@@ -46,3 +46,4 @@ string MsgInUpdateRooms::createResponseMsgOut()
             throw ServerException(ServerException::MISSING_ENTITY);
         return envelopeResponse(R_TRUE);
 }
+

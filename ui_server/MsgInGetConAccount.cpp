@@ -6,7 +6,7 @@
  */
 
 #include "MsgInGetAccount.h"
-#include "DBConnector.h"
+#include "../DAO/DAOUsersAdapters.h"
 
 
 using namespace std;
@@ -24,5 +24,5 @@ int MsgInGetConAccount::getMsgAuthorization() {
 
 string MsgInGetConAccount::createResponseMsgOut()
 {                
-    return envelopeResponse(R_ACCOUNTS, DBConnector::getInstance().getXMLconAccounts(_adapterId));
+    return envelopeResponse(R_ACCOUNTS, DAOUsersAdapters::getInstance().getXMLconAccounts(_adapterId));
 }

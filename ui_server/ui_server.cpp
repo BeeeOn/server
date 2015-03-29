@@ -4,6 +4,11 @@
 #include "msgInGetCondition.h"
 #include "../DAO/DAO.h"
 #include "../DAO/DAOUsers.h"
+#include "../DAO/DAOAdapters.h"
+#include "../DAO/DAODevices.h"
+#include "../DAO/DAOMobileDevices.h"
+#include "../DAO/DAORooms.h"
+#include "../DAO/DAOUsersAdapters.h"
 // uncoment if you want print debug reports
 //#define DEBUG 1
 
@@ -18,11 +23,7 @@
 char CertFile[] = "./cert/ant-2.fit.vutbr.cz.crt";
 char KeyFile[]  = "./cert/ant-2.fit.vutbr.cz.key";
 
-
 using namespace std;
-
-
-
 
 bool serverStop;
 int serverPort;
@@ -48,7 +49,7 @@ int main(int argc, char** argv)
         try{
             Config::getInstance().loadXml(argv[1]);
         }catch(string & e){
-            cerr <<e<<endl;
+            Logger::fatal() << "Cannot load config file. " <<e<<endl;
             return 1;
         }
     }
@@ -57,24 +58,35 @@ int main(int argc, char** argv)
 
     if (signal(SIGINT, sig_handler) == SIG_ERR)
     {
-            Logger::getInstance(Logger::FATAL) << "unable to catch signal SIGINT "<<endl;
+            Logger::error()<< "unable to catch signal SIGINT "<<endl;
     }
 
         Logger::getInstance().setVerbose( Config::getInstance().getVerbosity() );
         
-        Logger::getInstance(Logger::FATAL) << "start with port"<<serverPort << endl ;
-        Logger::getInstance(Logger::FATAL) << "threads: "<<Config::getInstance().getServerThreadsNumber() << endl;
-        Logger::getInstance(Logger::FATAL) << "DB: "<<Config::getInstance().getDBConnectionString() << "Fgh" << endl;
-        Logger::getInstance(Logger::FATAL) << "logs will be stored in : " << Logger::getInstance().getFileName() <<" and (if not std::out ) file will be changed every day "<< endl;
+        Logger::debug()<< "start with port"<<serverPort << endl ;
+        Logger::debug()<< "threads: "<<Config::getInstance().getServerThreadsNumber() << endl;
+        Logger::debug() << "DB: "<<Config::getInstance().getDBConnectionString() << endl;
+        if(Logger::getInstance().isOutputSetToCout())
+            Logger::debug()<< "logs will be printed on cout"<< endl;
+        else
+            Logger::debug()<< "logs will be stored in : " << Logger::getInstance().getFileName() <<" and file will be changed every day "<< endl;
 
         
        // ComTable::getInstance().startComTableCleaner(Config::getInstance().getComTableSleepPeriodMs(), Config::getInstance().getComTableMaxInactivityMs() );
-        try{                        
+        try{      
+            Logger::debug()<< "setting connection to DB..."<< endl;
             DBConnector::getInstance().setConnectionStringAndOpenSessions( Config::getInstance().getDBConnectionString() , Config::getInstance().getDBSessionsNumber());
+            DAOUsers::getInstance().setConnectionStringAndOpenSessions(Config::getInstance().getDBConnectionString(), 2);
+            DAOAdapters::getInstance().setConnectionStringAndOpenSessions(Config::getInstance().getDBConnectionString(), 2);
+            DAODevices::getInstance().setConnectionStringAndOpenSessions(Config::getInstance().getDBConnectionString(), 2);
+            DAORooms::getInstance().setConnectionStringAndOpenSessions(Config::getInstance().getDBConnectionString(), 1);
+            DAOMobileDevices::getInstance().setConnectionStringAndOpenSessions(Config::getInstance().getDBConnectionString(), 1);
+            DAOUsersAdapters::getInstance().setConnectionStringAndOpenSessions(Config::getInstance().getDBConnectionString(), 1);
+            Logger::debug()<< "connection to DB set"<< endl;
         }
         catch (soci::soci_error const & e)
         {
-            Logger::getInstance(Logger::FATAL) << "DB error (soci), probably cant set connection, more:" << e.what() << endl;
+            Logger::fatal()<< "DB error (soci), probably cant set connection, more:" << e.what()<< endl;
             return 1;
         }
         /* device d;
@@ -118,8 +130,11 @@ int main(int argc, char** argv)
         
         
         //resolveMsg( "<com ver=\"2.3\"  state=\"getuid\" email=\"n11@gmail.com\" gid=\"99191\" gt=\"1\" pid=\"1100\" loc=\"cs\" />");
-        resolveMsg( "<com ver=\"2.4\"  state=\"signme\" srv=\"google\" bt=\"Rv8FZr2ktR\"  />");
-         resolveMsg( "<com ver=\"2.4\"  state=\"addalg\" bt=\"Rv8FZr2ktR\"  />");
+        
+        //resolveMsg( "<com ver=\"2.4\"  state=\"signup\" srv=\"beeeon\"> <par name=\"pavel2\" pswd=\"xxx\"  /> </com>>");
+        //resolveMsg( "<com ver=\"2.4\"  state=\"signin\" srv=\"beeeon\" > <par name=\"pavel2\" pswd=\"xxx\"  />  </com>");
+        
+         resolveMsg( "<com bt=\"Rv8FZr2ktR\" state=\"getdevs\" ver=\"2.4\"><adapter id=\"20\"><dev id=\"2001\"><part type=\"1\" /></dev></adapter></com>");
         
        /* User u;
         MobileDevice m;
@@ -192,6 +207,6 @@ int main(int argc, char** argv)
         close(server);
         //release ssl
         SSL_CTX_free(ctx);
-        Logger::getInstance(Logger::FATAL) << "ui_server done\n";
+        Logger::debug() << "ui_server done\n";
         return 0;
 }

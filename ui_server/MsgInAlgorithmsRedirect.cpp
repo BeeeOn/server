@@ -27,7 +27,7 @@ string MsgInAlgorithmsRedirect::createResponseMsgOut() {
                         
         Logger::getInstance(Logger::DEBUG3)<<"Algo communication"<<endl; 
        pugi::xml_node node = _doc->child(P_COMMUNICATION);
-        node.append_attribute("userid")=_gUserId.c_str();
+        node.append_attribute("userid")=_userId;
         string algoStr = node_to_string(node);
         Logger::debug3() << "toAlgo: " << algoStr << endl;
         sc.write(algoStr.c_str());

@@ -114,10 +114,7 @@
 #include "ServerException.h"
 
 
-struct device {
-    std::string id;
-    std::string type;
-};
+
 
 enum enumAccessStatus { GRANTED, FORBIDDEN_NOT_LOGGED, FORBIDDEN_WRONG_RIGHTS };
 
@@ -134,7 +131,7 @@ public:
         bool checkProtocolVersion();
 public:
         std::string _state;
-        std::string _IHAtoken;
+        std::string _token;
         std::string _adapterId;
 protected:
         char* _msg;
@@ -142,7 +139,7 @@ protected:
         std::string _msgOut;
         
         pugi::xml_document _outputDoc;
-        pugi::xml_node _mainNode;
+        pugi::xml_node _outputMainNode;
         
 public:
     std::string envelopeResponse(std::string state);

@@ -10,8 +10,6 @@
 
 #include "IMsgIn.h"
 
-using namespace std;
-
 class IMsgInLoginRequired : public IMsgIn{
 public:
     IMsgInLoginRequired(char* msg, pugi::xml_document* doc);
@@ -19,7 +17,7 @@ public:
     virtual bool isComIdValid();
     virtual enumAccessStatus checkAccess();
 
-    string _gUserId;
+    int _userId;
 };
 
 #endif	/* IMSGINLOGINREQUIRED_H */

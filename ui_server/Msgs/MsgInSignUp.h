@@ -1,5 +1,5 @@
-#ifndef MSGINSIGNME_H
-#define	MSGINSIGNME_H
+#ifndef MSGINSIGNUP_H
+#define	MSGINSIGNUP_H
 
 #include "IMsgIn.h"
 #include "DBConnector.h"
@@ -8,20 +8,18 @@
 #include "gTokenChecker.h"
 #include "IMsgInLoginUnwanted.h"
 
-class MsgInSignMe :
+class MsgInSignUp :
 	public IMsgInLoginUnwanted
 {
             public:
-                MsgInSignMe(char* msg, pugi::xml_document* doc);
-                virtual ~MsgInSignMe(void);
+                MsgInSignUp(char* msg, pugi::xml_document* doc);
+                virtual ~MsgInSignUp(void);
                 virtual string createResponseMsgOut();
                 
                 virtual int getMsgAuthorization();
                 
                 
                 static const std::string state;
-                private :
-                    string getnewIHAtoken();
         };
         
-#endif /* MSGINSIGNME_H */
+#endif /* MSGINSIGNUP_H */

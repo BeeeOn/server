@@ -6,6 +6,7 @@
  */
 
 #include "MsgInDelRoom.h"
+#include "../DAO/DAORooms.h"
 
 
 const std::string MsgInDelRoom::state = "delroom";
@@ -29,7 +30,7 @@ string MsgInDelRoom::createResponseMsgOut()
     
     //if(roomId == "0")
      //   return envelopeResponse(R_TRUE);
-    DBConnector::getInstance().deleteRoom(_adapterId, roomId);
+    DAORooms::getInstance().deleteRoom(_adapterId, roomId);
     
     return envelopeResponse(R_TRUE);
 }

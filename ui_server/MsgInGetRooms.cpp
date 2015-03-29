@@ -7,7 +7,7 @@
 
 #include "MsgInGetRooms.h"
 #include "pugixml.hpp"
-#include "DBConnector.h"
+#include "../DAO/DAORooms.h"
 
 using namespace std;
 
@@ -26,5 +26,5 @@ int MsgInGetRooms::getMsgAuthorization() {
 
 string MsgInGetRooms::createResponseMsgOut()
 {                        
-    return envelopeResponseWithAdapterId(R_ROOMS, DBConnector::getInstance().getXMLrooms(_adapterId));
+    return envelopeResponseWithAdapterId(R_ROOMS, DAORooms::getInstance().getXMLrooms(_adapterId));
 }

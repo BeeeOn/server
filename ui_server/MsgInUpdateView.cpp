@@ -47,13 +47,13 @@ string MsgInUpdateView::createResponseMsgOut()
         deviceId = deviceNode.attribute("id").value();
         deviceType = deviceNode.attribute("type").value();
         action = deviceNode.attribute("action").value();
-        
+       /* 
         if(action.compare("add") == 0)
-            DBConnector::getInstance().addDeviceToView(viewName,_gUserId, deviceId, deviceType);
+            DBConnector::getInstance().addDeviceToView(viewName,_userId, deviceId, deviceType);
         else if(action.compare("remove") == 0)
-            DBConnector::getInstance().removeDeviceFromView(viewName,_gUserId, deviceId, deviceType);
+            DBConnector::getInstance().removeDeviceFromView(viewName,_userId, deviceId, deviceType);
         else
-            throw ServerException(ServerException::ACTION);
+            throw ServerException(ServerException::ACTION);*/
     }
     
    return envelopeResponse(R_TRUE);

@@ -8,7 +8,7 @@
 #include "MsgInGetLog.h"
 #include "pugixml.hpp"
 #include "pugiconfig.hpp"
-#include "DBConnector.h"
+#include "../DAO/DAODevices.h"
 using namespace std;
 
 const string MsgInLogName::state = "getlog";
@@ -35,5 +35,5 @@ string MsgInLogName::createResponseMsgOut()
     d.id =  comNode.attribute(P_DEVICE_ID).value();
     d.type =  comNode.attribute(P_DEVICE_TYPE).value();
     
-    return envelopeResponse(R_LOG, DBConnector::getInstance().getXMLDeviceLog(_adapterId, d, logFrom, logTo, type , interval));
+    return envelopeResponse(R_LOG, DAODevices::getInstance().getXMLDeviceLog(_adapterId, d, logFrom, logTo, type , interval));
 }

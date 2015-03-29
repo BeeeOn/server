@@ -26,7 +26,7 @@ int MsgInDelView::getMsgAuthorization() {
 string MsgInDelView::createResponseMsgOut()
 {
     string viewName = _doc->child("communication").attribute("name").value();
-    DBConnector::getInstance().delView(viewName,_gUserId);
+    //DBConnector::getInstance().delView(viewName,_userId);
 
     return envelopeResponse(R_TRUE);
 }

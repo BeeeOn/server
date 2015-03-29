@@ -6,19 +6,19 @@
  */
 
 #include "IMsgInLoginRequired.h"
-#include "DBConnector.h"
+#include "../DAO/DAOUsers.h"
 
 IMsgInLoginRequired::IMsgInLoginRequired(char* msg, pugi::xml_document* doc): IMsgIn(msg, doc) {
     
-    Logger::getInstance(Logger::DEBUG)<<"user:"<<_gUserId<<" comId:"<<_IHAtoken<<endl;
+    Logger::getInstance(Logger::DEBUG)<<"user:"<<_userId<<" comId:"<<_token<<endl;
 }
 
 IMsgInLoginRequired::~IMsgInLoginRequired() {
 }
 
 bool IMsgInLoginRequired::isComIdValid(){
-    _gUserId = DBConnector::getInstance().getUserIdbyIhaToken(_IHAtoken);
-    return (_gUserId != "" );
+    _userId = DAOUsers::getInstance().getUserIdbyIhaToken(_token);
+    return (_userId > 0 );
 }
 
 enumAccessStatus IMsgInLoginRequired::checkAccess(){

@@ -36,6 +36,7 @@ public:
     static const int VERSION;
     static const int TOKEN_EMAIL;
     static const int EMAIL; //+text
+    static const int IDENTIFICATION_TAKEN;
     static const int LOCALE;
 
     static const int ADAPTER_ID;
@@ -61,6 +62,7 @@ public:
     static const int NOTREG_A;
     static const int NOTREG_B;
     
+    static  const int USER_DONOT_EXISTS;
    static  const int WRONG_AUTH_PROVIDER;
 
     static const int ROOM_TYPE;

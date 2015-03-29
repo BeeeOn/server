@@ -2,7 +2,7 @@
 #define	MSGETADAPTERS_H
 
 #include "IMsgIn.h"
-#include "DBConnector.h"
+#include "../DAO/DAOUsers.h"
 #include "IMsgInLoginRequired.h"
 
 class MsgInGetAdapters :

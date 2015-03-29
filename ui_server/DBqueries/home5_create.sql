@@ -1,7 +1,7 @@
 -- Created by Vertabelo (http://vertabelo.com)
 -- Script type: create
 -- Scope: [tables, references, sequences, views, procedures]
--- Generated at Mon Mar 23 18:17:49 UTC 2015
+-- Generated at Sun Mar 29 20:28:07 UTC 2015
 
 
 
@@ -21,7 +21,7 @@ CREATE TABLE adapters (
     adapter_id decimal(20,0)  NOT NULL,
     name varchar(50)  NULL,
     version int  NULL,
-    ip_address int  NULL,
+    socket int  NULL,
     registrable char(1)  NOT NULL DEFAULT '1',
     timezone smallint  NOT NULL DEFAULT '1',
     logging_period int  NOT NULL DEFAULT 7,
@@ -37,7 +37,8 @@ CREATE TABLE algo_devices (
     fk_algorithm_id int  NOT NULL,
     fk_facilities_mac int  NOT NULL,
     fk_devices_type smallint  NOT NULL,
-    CONSTRAINT algo_devices_pk PRIMARY KEY (fk_users_algorithms_id,fk_user_id,fk_algorithm_id,fk_facilities_mac,fk_devices_type)
+    algo_devices_id serial  NOT NULL,
+    CONSTRAINT algo_devices_pk PRIMARY KEY (fk_users_algorithms_id,fk_user_id,fk_algorithm_id,fk_facilities_mac,fk_devices_type,algo_devices_id)
 );
 
 
@@ -99,8 +100,9 @@ CREATE TABLE mobile_devices (
     locale varchar(10)  NULL,
     push_notification text  NULL,
     fk_user_id int  NOT NULL,
-    CONSTRAINT mobile_devices_pk PRIMARY KEY (token)
+    CONSTRAINT mobile_devices_pk PRIMARY KEY (mobile_id,fk_user_id)
 );
+CREATE UNIQUE INDEX idx_token ON mobile_devices (token);
 
 
 
@@ -139,7 +141,7 @@ CREATE TABLE u_algorithms (
 -- Table: users
 CREATE TABLE users (
     user_id serial  NOT NULL,
-    mail varchar(250)  NOT NULL,
+    mail varchar(250)  NULL,
     signin_count int  NOT NULL DEFAULT 0,
     phone_locale varchar(10)  NULL DEFAULT 'cs',
     verified_email boolean  NULL,
@@ -151,10 +153,12 @@ CREATE TABLE users (
     gender varchar(10)  NULL,
     google_locale varchar(10)  NULL,
     google_id text  NULL,
+    CONSTRAINT users_ak_1 UNIQUE (mail) NOT DEFERRABLE  INITIALLY IMMEDIATE ,
     CONSTRAINT users_pk PRIMARY KEY (user_id)
 );
-ALTER TABLE users ADD UNIQUE (mail);
-
+CREATE UNIQUE INDEX idx_user_mail ON users (mail);
+CREATE UNIQUE INDEX idx_user_name ON users (name);
+CREATE UNIQUE INDEX idx_user_google_id ON users (google_id);
 
 
 

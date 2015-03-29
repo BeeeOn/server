@@ -38,6 +38,8 @@ public:
     void setVerbose(int verbose);
     void setCerrVerbose(int verbose);
 
+    bool isOutputSetToCout();
+    
     void openOutput(std::string fileName);    
     void changeFiles();
     std::string getFileNamebyDate();

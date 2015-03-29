@@ -38,13 +38,13 @@ string MsgInAddView::createResponseMsgOut()
         throw ServerException(ServerException::ICON);
     
     //TODO castecne pridani (2x ten samy senzor=chyba))
-    DBConnector::getInstance().addView(_gUserId, viewName, viewIcon);
+    /*DBConnector::getInstance().addView(_userId, viewName, viewIcon);
     
     for (; deviceNode; deviceNode = deviceNode.next_sibling("device"))
     {
         deviceId = deviceNode.attribute("id").value();
         deviceType = deviceNode.attribute("type").value();
-        DBConnector::getInstance().addDeviceToView(viewName,_gUserId, deviceId, deviceType);
-    }
+        DBConnector::getInstance().addDeviceToView(viewName,_userId, deviceId, deviceType);
+    }*/
      return envelopeResponse(R_TRUE);
 }

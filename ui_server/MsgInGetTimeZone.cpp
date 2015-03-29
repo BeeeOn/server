@@ -6,7 +6,7 @@
  */
 
 #include "MsgInGetTimeZone.h"
-#include "DBConnector.h"
+#include "../DAO/DAOAdapters.h"
 
 using namespace std;
 
@@ -23,6 +23,6 @@ int MsgInGetTimeZone::getMsgAuthorization() {
 
 string MsgInGetTimeZone::createResponseMsgOut()
 {                
-        string attr = makeXMLattribute("utc",DBConnector::getInstance().getTimeZone(_adapterId) );
+        string attr = makeXMLattribute("utc",DAOAdapters::getInstance().getTimeZone(_adapterId) );
          return envelopeResponseWithAttributes(R_TIMEZONE, attr);
 }

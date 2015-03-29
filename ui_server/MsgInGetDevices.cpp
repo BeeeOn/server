@@ -62,5 +62,5 @@ string MsgInGetDevs::createResponseMsgOut()
         }
     }
     
-    return envelopeResponse(R_DEVICES, DBConnector::getInstance().getXMLdevices(_gUserId, adaptersVec, devicesVec));
+    return envelopeResponse(R_DEVICES, DAODevices::getInstance().getXMLdevices(_userId, adaptersVec, devicesVec));
 }

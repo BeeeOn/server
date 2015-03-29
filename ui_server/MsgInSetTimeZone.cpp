@@ -7,7 +7,7 @@
 
 #include "MsgInSetTimeZone.h"
 #include "ServerException.h"
-
+#include "../DAO/DAOAdapters.h"
 
 using namespace std;
 
@@ -36,7 +36,7 @@ string MsgInSetTimeZone::createResponseMsgOut()
     if(tz <= P_TIME_MIN || tz >= P_TIME_MAX)
         throw ServerException(ServerException::TIMEZONE_UTC);
     
-    DBConnector::getInstance().updateAdaptersTimezone(_adapterId, newTimeZone);
+    DAOAdapters::getInstance().updateAdaptersTimezone(_adapterId, newTimeZone);
     
     
     return envelopeResponse(R_TRUE);

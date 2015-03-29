@@ -6,7 +6,9 @@
  */
 
 #include "MsgInDelGCMID.h"
+#include "../DAO/DAOMobileDevices.h"
 #include "DBConnector.h"
+
 
 const std::string MsgInDelGCMID::state = "delgcmid";
 
@@ -24,7 +26,7 @@ string MsgInDelGCMID::createResponseMsgOut() {
     string mail = _doc->child(P_COMMUNICATION).attribute(P_EMAIL).value();
     oldGID =   DBConnector::getInstance().DEBUGexec("select user_id from users where mail='"+mail+"';" );
     
-    if(DBConnector::getInstance().delGCMId(oldGID, gcmid) == 0)
+    if(DAOMobileDevices::getInstance().delGCMId(oldGID, gcmid) == 0)
         ;//zadne duplicatni GCMID se nesmazalo - false?
     
     return envelopeResponse(R_TRUE); 

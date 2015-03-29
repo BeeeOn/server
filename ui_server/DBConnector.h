@@ -12,7 +12,7 @@
 #include "IMsgIn.h"
 #include "gTokenChecker.h"
 #include "ServerException.h"
-
+#include "../DAO/DAODevices.h"
 
 using namespace std;
 using namespace soci;
@@ -44,14 +44,14 @@ public:
     
     int getUserId(string email);
     bool isUserRegistred(string email);
-    string getUserRoleM(string gUserId, string adapterId);
+    string getUserRoleM(int userId, string adapterId);
     void updatePhoneLocale(string mail, string phoneLocale);
-    string getXMLusersAdapters(string email);
+    string getXMLusersAdapters(int userId);
     bool isAnyUnregistredAdapter();
     bool isUserParredWithAdapter(string mail, string adapter);
     string getXMLDevicesQueryString(string facilitiesCond="");
     string getXMLAllDevs(string adapter);
-    string getXMLdevices(string userId, vector<string> adaptersVec, vector<device> devicesVec);
+    string getXMLdevices(int userId, vector<string> adaptersVec, vector<device> devicesVec);
     string getXMLNewDevices(string adapterId);
     bool isAdapterRegistrable(string adapterId);
     int parAdapterWithUserIfPossible(long long int adapterId, string adapterName, string gId);
@@ -102,7 +102,7 @@ public:
     int updateUserGoogleInformation(string userId, googleInfo gInfo);
     
     /*NOTIFICATION*/
-    int setGCMId(string IHAtoken, string phoneid, string gUserId, string gcmid); 
+    int setGCMId(string IHAtoken, string phoneid, int gUserId, string gcmid); 
     int delGCMId(string oldUserId, string gcmid);
 private:
     string _connectionString;

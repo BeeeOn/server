@@ -16,5 +16,5 @@ int MsgInGetAdapters::getMsgAuthorization() {
 
 string MsgInGetAdapters::createResponseMsgOut()
 {
-        return envelopeResponse(R_ADAPTERS, DBConnector::getInstance().getXMLusersAdapters(_gUserId));
+        return envelopeResponse(R_ADAPTERS, DAOUsers::getInstance().getXMLusersAdapters(_userId));
 }

@@ -23,7 +23,7 @@ int MsgInGetUserInfo::getMsgAuthorization() {
 
 string MsgInGetUserInfo::createResponseMsgOut() {
     
-    User user = DAOUsers::getInstance().getUserAssociatedWithToken(_IHAtoken);
+    User user = DAOUsers::getInstance().getUserAssociatedWithToken(_token);
  /*   string attr = string(P_USER_NAME)+"=\""+user.givenName+"\" "+
             P_USER_SURNAME+"=\""+user.familyName+"\" "+
             P_USER_GENDER+"=\""+user.gender+"\" "+
@@ -31,12 +31,12 @@ string MsgInGetUserInfo::createResponseMsgOut() {
 
 
      return envelopeResponseWithAttributes(R_USER_INFO, attr);*/
-    _mainNode.append_attribute(P_USER_ID) = user.user_id;
-    _mainNode.append_attribute(P_USER_NAME) = user.givenName.c_str();
-    _mainNode.append_attribute(P_USER_SURNAME) = user.familyName.c_str();
-    _mainNode.append_attribute(P_USER_GENDER) = user.gender.c_str();
-    _mainNode.append_attribute(P_USER_EMAIL) = user.mail.c_str();
-    _mainNode.append_attribute(P_USER_PICTURE) = user.picture.c_str();    
+    _outputMainNode.append_attribute(P_USER_ID) = user.user_id;
+    _outputMainNode.append_attribute(P_USER_NAME) = user.givenName.c_str();
+    _outputMainNode.append_attribute(P_USER_SURNAME) = user.familyName.c_str();
+    _outputMainNode.append_attribute(P_USER_GENDER) = user.gender.c_str();
+    _outputMainNode.append_attribute(P_USER_EMAIL) = user.mail.c_str();
+    _outputMainNode.append_attribute(P_USER_PICTURE) = user.picture.c_str();    
 	
     return genOutputXMLwithVersionAndState(R_USER_INFO);
 }

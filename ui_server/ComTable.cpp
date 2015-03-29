@@ -86,7 +86,7 @@ user ComTable::getUserByComId(int id)
     }
 }
 int ComTable::setComInfo( string email)
-{
+{/*
     //TODO DEBUG jenom pro testovani !!!
     int userId = DBConnector::getInstance().getUserId(email);
     
@@ -100,11 +100,11 @@ int ComTable::setComInfo( string email)
     map<int, ComTableEntry*>::iterator it = _comInfos.begin();
     _comInfos.insert(it,std::pair<int, ComTableEntry*>(comId,e));
     
-    return comId;
+    return comId;*/
 }
 int ComTable::setComInfo(int userId, string email)
 {
-    std::lock_guard<std::mutex> lck (_mtx);
+    /*std::lock_guard<std::mutex> lck (_mtx);
     int comId = getNewComId();
     ComTableEntry* e = new ComTableEntry;
     e->id = userId;
@@ -114,7 +114,7 @@ int ComTable::setComInfo(int userId, string email)
     map<int, ComTableEntry*>::iterator it = _comInfos.begin();
     _comInfos.insert(it,std::pair<int, ComTableEntry*>(comId,e));
     
-    return comId;
+    return comId;*/
 }
 
 

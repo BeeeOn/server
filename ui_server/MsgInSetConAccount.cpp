@@ -7,6 +7,7 @@
 
 #include "MsgInChangeAccount.h"
 #include "../DAO/DAOUsers.h"
+#include "../DAO/DAOUsersAdapters.h"
 
 
 const std::string MsgInChangeConAccount::state = "setaccs";
@@ -43,7 +44,7 @@ string MsgInChangeConAccount::createResponseMsgOut()
                 user.mail = newUserMail;
                 DAOUsers::getInstance().add(user);
             }
-             if(DBConnector::getInstance().changeConAccount(_adapterId, newUserMail, newRole) != 1){
+             if(DAOUsersAdapters::getInstance().changeConAccount(_adapterId, newUserMail, newRole) != 1){
                     errText += "<user email=\""+newUserMail+"\" role=\""+newRole+"\"/>";
                     fail = ServerException::EMAIL;
              }

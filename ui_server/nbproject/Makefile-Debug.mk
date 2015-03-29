@@ -37,7 +37,11 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/_ext/1360890531/DAO.o \
 	${OBJECTDIR}/_ext/1360890531/DAOAdapters.o \
+	${OBJECTDIR}/_ext/1360890531/DAODevices.o \
+	${OBJECTDIR}/_ext/1360890531/DAOMobileDevices.o \
+	${OBJECTDIR}/_ext/1360890531/DAORooms.o \
 	${OBJECTDIR}/_ext/1360890531/DAOUsers.o \
+	${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters.o \
 	${OBJECTDIR}/_ext/1154895860/Logger.o \
 	${OBJECTDIR}/ComTable.o \
 	${OBJECTDIR}/Config.o \
@@ -80,6 +84,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/MsgInUnknown.o \
 	${OBJECTDIR}/MsgInUpdateView.o \
 	${OBJECTDIR}/MsgRightsChecker.o \
+	${OBJECTDIR}/Msgs/MsgInSignUp.o \
 	${OBJECTDIR}/ServerException.o \
 	${OBJECTDIR}/SocketClient.o \
 	${OBJECTDIR}/communication.o \
@@ -161,10 +166,30 @@ ${OBJECTDIR}/_ext/1360890531/DAOAdapters.o: ../DAO/DAOAdapters.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOAdapters.o ../DAO/DAOAdapters.cpp
 
+${OBJECTDIR}/_ext/1360890531/DAODevices.o: ../DAO/DAODevices.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAODevices.o ../DAO/DAODevices.cpp
+
+${OBJECTDIR}/_ext/1360890531/DAOMobileDevices.o: ../DAO/DAOMobileDevices.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOMobileDevices.o ../DAO/DAOMobileDevices.cpp
+
+${OBJECTDIR}/_ext/1360890531/DAORooms.o: ../DAO/DAORooms.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAORooms.o ../DAO/DAORooms.cpp
+
 ${OBJECTDIR}/_ext/1360890531/DAOUsers.o: ../DAO/DAOUsers.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOUsers.o ../DAO/DAOUsers.cpp
+
+${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters.o: ../DAO/DAOUsersAdapters.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters.o ../DAO/DAOUsersAdapters.cpp
 
 ${OBJECTDIR}/_ext/1154895860/Logger.o: ../ui_logger/Logger.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1154895860
@@ -375,6 +400,11 @@ ${OBJECTDIR}/MsgRightsChecker.o: MsgRightsChecker.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgRightsChecker.o MsgRightsChecker.cpp
+
+${OBJECTDIR}/Msgs/MsgInSignUp.o: Msgs/MsgInSignUp.cpp 
+	${MKDIR} -p ${OBJECTDIR}/Msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Msgs/MsgInSignUp.o Msgs/MsgInSignUp.cpp
 
 ${OBJECTDIR}/ServerException.o: ServerException.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -949,6 +979,45 @@ ${OBJECTDIR}/_ext/1360890531/DAOAdapters_nomain.o: ${OBJECTDIR}/_ext/1360890531/
 	    ${CP} ${OBJECTDIR}/_ext/1360890531/DAOAdapters.o ${OBJECTDIR}/_ext/1360890531/DAOAdapters_nomain.o;\
 	fi
 
+${OBJECTDIR}/_ext/1360890531/DAODevices_nomain.o: ${OBJECTDIR}/_ext/1360890531/DAODevices.o ../DAO/DAODevices.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/_ext/1360890531/DAODevices.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAODevices_nomain.o ../DAO/DAODevices.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/_ext/1360890531/DAODevices.o ${OBJECTDIR}/_ext/1360890531/DAODevices_nomain.o;\
+	fi
+
+${OBJECTDIR}/_ext/1360890531/DAOMobileDevices_nomain.o: ${OBJECTDIR}/_ext/1360890531/DAOMobileDevices.o ../DAO/DAOMobileDevices.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/_ext/1360890531/DAOMobileDevices.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOMobileDevices_nomain.o ../DAO/DAOMobileDevices.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/_ext/1360890531/DAOMobileDevices.o ${OBJECTDIR}/_ext/1360890531/DAOMobileDevices_nomain.o;\
+	fi
+
+${OBJECTDIR}/_ext/1360890531/DAORooms_nomain.o: ${OBJECTDIR}/_ext/1360890531/DAORooms.o ../DAO/DAORooms.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/_ext/1360890531/DAORooms.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAORooms_nomain.o ../DAO/DAORooms.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/_ext/1360890531/DAORooms.o ${OBJECTDIR}/_ext/1360890531/DAORooms_nomain.o;\
+	fi
+
 ${OBJECTDIR}/_ext/1360890531/DAOUsers_nomain.o: ${OBJECTDIR}/_ext/1360890531/DAOUsers.o ../DAO/DAOUsers.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/_ext/1360890531/DAOUsers.o`; \
@@ -960,6 +1029,19 @@ ${OBJECTDIR}/_ext/1360890531/DAOUsers_nomain.o: ${OBJECTDIR}/_ext/1360890531/DAO
 	    $(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOUsers_nomain.o ../DAO/DAOUsers.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/_ext/1360890531/DAOUsers.o ${OBJECTDIR}/_ext/1360890531/DAOUsers_nomain.o;\
+	fi
+
+${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters_nomain.o: ${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters.o ../DAO/DAOUsersAdapters.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters_nomain.o ../DAO/DAOUsersAdapters.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters.o ${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters_nomain.o;\
 	fi
 
 ${OBJECTDIR}/_ext/1154895860/Logger_nomain.o: ${OBJECTDIR}/_ext/1154895860/Logger.o ../ui_logger/Logger.cpp 
@@ -1506,6 +1588,19 @@ ${OBJECTDIR}/MsgRightsChecker_nomain.o: ${OBJECTDIR}/MsgRightsChecker.o MsgRight
 	    $(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgRightsChecker_nomain.o MsgRightsChecker.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/MsgRightsChecker.o ${OBJECTDIR}/MsgRightsChecker_nomain.o;\
+	fi
+
+${OBJECTDIR}/Msgs/MsgInSignUp_nomain.o: ${OBJECTDIR}/Msgs/MsgInSignUp.o Msgs/MsgInSignUp.cpp 
+	${MKDIR} -p ${OBJECTDIR}/Msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/Msgs/MsgInSignUp.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Msgs/MsgInSignUp_nomain.o Msgs/MsgInSignUp.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/Msgs/MsgInSignUp.o ${OBJECTDIR}/Msgs/MsgInSignUp_nomain.o;\
 	fi
 
 ${OBJECTDIR}/ServerException_nomain.o: ${OBJECTDIR}/ServerException.o ServerException.cpp 

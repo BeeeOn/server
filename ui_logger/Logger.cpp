@@ -94,7 +94,11 @@ void Logger::setOutputToFiles(string folder){
          _outputToStdout = true;
          _output.rdbuf( std::cout.rdbuf());
  }
+bool Logger::isOutputSetToCout() {
+    return _outputToStdout;
+}
 
+ 
 void Logger::openOutput(string fileName) {
 
     _currentFile.open ( fileName );  
