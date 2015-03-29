@@ -10,7 +10,6 @@
 
 #include "DAO.h"
 #include "../ui_logger/Logger.h"
-#include "DAOUsers.h"
 
 struct MobileDevice
 {
@@ -36,7 +35,7 @@ public:
 int delGCMId(std::string oldUserId, std::string gcmid);
     int setGCMId(std::string IHAtoken, std::string phoneid,int userId, std::string gcmid) ;
     
-int upsertMobileDevice(MobileDevice mobile, User user);
+int upsertMobileDevice(MobileDevice mobile, std::string mail);
 };
 
 #endif	/* DAOMOBILEDEVICES_H */
