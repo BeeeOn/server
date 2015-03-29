@@ -85,7 +85,7 @@ string MsgInSignMe::createResponseMsgOut()
         throw ServerException(ServerException::WRONG_AUTH_PROVIDER);
     }
     
-    DAOMobileDevices::getInstance().upsertMobileDevice(mobile) ;
+    DAOMobileDevices::getInstance().upsertMobileDevice(mobile, user) ;
     
     //string gId  = parametersNode.child(P_COMMUNICATION).attribute(P_GOOGLE_ID).value();
     

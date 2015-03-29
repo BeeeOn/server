@@ -37,7 +37,7 @@ $$
 BEGIN
     LOOP
         -- first try to update the key
-        UPDATE mobile_devices SET token = bon_token, type = d_type, locale = d_locale, push_notification = d_push_n, 
+        UPDATE mobile_devices SET token = bon_token, type = d_type, locale = d_locale, push_notification = d_push_n
         WHERE mobile_id = d_mobile_id and fk_user_id = d_uid;
         IF found THEN
             RETURN;

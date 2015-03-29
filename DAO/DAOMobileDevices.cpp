@@ -60,7 +60,7 @@ int DAOMobileDevices::setGCMId(string IHAtoken, string phoneid,int userId, strin
     }
 }
 
-int DAOMobileDevices::upsertMobileDevice(MobileDevice mobile){
+int DAOMobileDevices::upsertMobileDevice(MobileDevice mobile, User user){
     session sql(*_pool);
     Logger::db()<<"DB:"<<"upsertMobileDevice"<<endl;
     try
@@ -69,6 +69,8 @@ int DAOMobileDevices::upsertMobileDevice(MobileDevice mobile){
 
             int newUserID;
             //d_mail TEXT, d_locale TEXT, d_ver BOOLEAN, d_name TEXT, d_g_name TEXT, d_f_name TEXT, d_link TEXT, d_picture TEXT, d_gender TEXT, d_g_loc TEXT, d_g_id TEXT
+            
+            sql << "select user_id from users where mail=:mail",use(user.mail),into(newUserID);
             
             //bon_token TEXT, d_mobile_id TEXT,d_type TEXT, d_locale TEXT, d_push_n TEXT, d_uid integer
             sql << "select upsert_mobile_device(:bt, :mobileID, :type, :loc, :pushN, :userID)",
