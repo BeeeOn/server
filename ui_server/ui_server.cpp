@@ -135,7 +135,8 @@ int main(int argc, char** argv)
         //resolveMsg( "<com ver=\"2.4\"  state=\"signin\" srv=\"beeeon\" > <par name=\"pavel2\" pswd=\"xxx\"  />  </com>");
         
          resolveMsg( "<com bt=\"Rv8FZr2ktR\" state=\"getdevs\" ver=\"2.4\"><adapter id=\"20\"><dev id=\"2001\"><part type=\"1\" /></dev></adapter></com>");
-        
+        //User u =DAOUsers::getInstance().getUserAssociatedWithToken("6iD0IVVLnq") ;
+        //cout<< u.mail<<endl;
        /* User u;
         MobileDevice m;
         

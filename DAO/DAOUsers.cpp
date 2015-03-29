@@ -172,7 +172,7 @@ User DAOUsers::getUserAssociatedWithToken(std::string token) {
             session sql(*_pool);
             User user;
 
-            sql << "select user_id, mail, phone_locale,verified_email,name,given_name,family_name,link,picture,gender,google_locale,google_id from users join mobile_devices on user_id = fk_user_id where token = :btoken", use(token, "btoken"),into(user);
+            sql << "select * from users join mobile_devices on user_id = fk_user_id where token = :btoken", use(token, "btoken"),into(user);
             return user; 
     }
     catch (soci::postgresql_soci_error& e)
