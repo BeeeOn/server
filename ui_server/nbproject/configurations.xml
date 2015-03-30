@@ -76,11 +76,15 @@
         <itemPath>../DAO/DAOAdapters.cpp</itemPath>
         <itemPath>../DAO/DAOAdapters.h</itemPath>
         <itemPath>../DAO/DAODevices.cpp</itemPath>
+        <itemPath>../DAO/DAODevices.h</itemPath>
         <itemPath>../DAO/DAOMobileDevices.cpp</itemPath>
+        <itemPath>../DAO/DAOMobileDevices.h</itemPath>
         <itemPath>../DAO/DAORooms.cpp</itemPath>
+        <itemPath>../DAO/DAORooms.h</itemPath>
         <itemPath>../DAO/DAOUsers.cpp</itemPath>
         <itemPath>../DAO/DAOUsers.h</itemPath>
         <itemPath>../DAO/DAOUsersAdapters.cpp</itemPath>
+        <itemPath>../DAO/DAOUsersAdapters.h</itemPath>
         <itemPath>DBConnector.cpp</itemPath>
       </logicalFolder>
       <logicalFolder name="f4" displayName="devices" projectFiles="true">
@@ -121,6 +125,8 @@
         <itemPath>MsgInGetUserInfo.cpp</itemPath>
         <itemPath>MsgInGetUserInfo.h</itemPath>
         <itemPath>MsgInSignMe.cpp</itemPath>
+        <itemPath>Msgs/MsgInSignUp.cpp</itemPath>
+        <itemPath>Msgs/MsgInSignUp.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f9" displayName="time" projectFiles="true">
         <itemPath>MsgInGetTimeZone.cpp</itemPath>
@@ -138,10 +144,6 @@
       </logicalFolder>
       <itemPath>ComTable.cpp</itemPath>
       <itemPath>Config.cpp</itemPath>
-      <itemPath>../DAO/DAODevices.h</itemPath>
-      <itemPath>../DAO/DAOMobileDevices.h</itemPath>
-      <itemPath>../DAO/DAORooms.h</itemPath>
-      <itemPath>../DAO/DAOUsersAdapters.h</itemPath>
       <itemPath>MsgInFactory.cpp</itemPath>
       <itemPath>MsgRightsChecker.cpp</itemPath>
       <itemPath>ServerException.cpp</itemPath>
@@ -591,8 +593,6 @@
     </logicalFolder>
     <itemPath>../ui_logger/Logger.cpp</itemPath>
     <itemPath>../ui_logger/Logger.h</itemPath>
-    <itemPath>Msgs/MsgInSignUp.cpp</itemPath>
-    <itemPath>Msgs/MsgInSignUp.h</itemPath>
     <itemPath>testInfo</itemPath>
   </logicalFolder>
   <sourceRootList>

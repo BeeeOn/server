@@ -80,7 +80,7 @@ int main(int argc, char** argv)
             DAOAdapters::getInstance().setConnectionStringAndOpenSessions(Config::getInstance().getDBConnectionString(), 2);
             DAODevices::getInstance().setConnectionStringAndOpenSessions(Config::getInstance().getDBConnectionString(), 2);
             DAORooms::getInstance().setConnectionStringAndOpenSessions(Config::getInstance().getDBConnectionString(), 2);
-            DAOMobileDevices::getInstance().setConnectionStringAndOpenSessions(Config::getInstance().getDBConnectionString(), 2);
+            DAOMobileDevices::getInstance().setConnectionStringAndOpenSessions(Config::getInstance().getDBConnectionString(), 3);
             DAOUsersAdapters::getInstance().setConnectionStringAndOpenSessions(Config::getInstance().getDBConnectionString(), 2);
             Logger::debug()<< "connection to DB set"<< endl;
         }
@@ -131,10 +131,22 @@ int main(int argc, char** argv)
         
         //resolveMsg( "<com ver=\"2.3\"  state=\"getuid\" email=\"n11@gmail.com\" gid=\"99191\" gt=\"1\" pid=\"1100\" loc=\"cs\" />");
         
-        //resolveMsg( "<com ver=\"2.4\"  state=\"signup\" srv=\"beeeon\"> <par name=\"pavel2\" pswd=\"xxx\"  /> </com>>");
-        //resolveMsg( "<com ver=\"2.4\"  state=\"signin\" srv=\"beeeon\" > <par name=\"pavel2\" pswd=\"xxx\"  />  </com>");
+        resolveMsg( "<com ver=\"2.4\"  state=\"signup\" srv=\"beeeon\"> <par name=\"pavel3\" pswd=\"xxx\"  /> </com>>");
+        resolveMsg( "<com ver=\"2.4\"  state=\"signin\" srv=\"beeeon\" > <par name=\"pavel3\" pswd=\"xxx\"  />  </com>");
         
-         resolveMsg( "<com bt=\"Rv8FZr2ktR\" state=\"getdevs\" ver=\"2.4\"><adapter id=\"20\"><dev id=\"2001\"><part type=\"1\" /></dev></adapter></com>");
+/*
+        int id = DAOUsers::getInstance().getUserIDbyAlternativeKeys("user2a@gmail.com", "1111","user2");
+             MobileDevice mobile;
+    mobile.locale = "pl";
+    mobile.mobile_id = "XXX";
+    mobile.push_notification = "aaa";
+
+    mobile.token = "ABC";
+    mobile.type = "android";
+        
+        DAOMobileDevices::getInstance().upsertMobileDevice( mobile, id);
+        */
+         //resolveMsg( "<com bt=\"Rv8FZr2ktR\" state=\"getdevs\" ver=\"2.4\"><adapter id=\"20\"><dev id=\"2001\"><part type=\"1\" /></dev></adapter></com>");
         //User u =DAOUsers::getInstance().getUserAssociatedWithToken("6iD0IVVLnq") ;
         //cout<< u.mail<<endl;
        /* User u;

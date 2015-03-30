@@ -35,7 +35,7 @@ public:
 int delGCMId(std::string oldUserId, std::string gcmid);
     int setGCMId(std::string IHAtoken, std::string phoneid,int userId, std::string gcmid) ;
     
-int upsertMobileDevice(MobileDevice mobile, std::string mail);
+int upsertMobileDevice(MobileDevice mobile, int userId);
 };
 
 #endif	/* DAOMOBILEDEVICES_H */

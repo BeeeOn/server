@@ -10,6 +10,8 @@
 using namespace std;
 using namespace soci;
 
+
+
 DAOMobileDevices::DAOMobileDevices(){
 }
 
@@ -60,21 +62,16 @@ int DAOMobileDevices::setGCMId(string IHAtoken, string phoneid,int userId, strin
     }
 }
 
-int DAOMobileDevices::upsertMobileDevice(MobileDevice mobile, string mail){
+int DAOMobileDevices::upsertMobileDevice(MobileDevice mobile, int userId){
     session sql(*_pool);
     Logger::db()<<"DB:"<<"upsertMobileDevice"<<endl;
     try
     {
             soci::session sql(*_pool);
-
-            int newUserID;
-            //d_mail TEXT, d_locale TEXT, d_ver BOOLEAN, d_name TEXT, d_g_name TEXT, d_f_name TEXT, d_link TEXT, d_picture TEXT, d_gender TEXT, d_g_loc TEXT, d_g_id TEXT
-            
-            sql << "select user_id from users where mail=:mail",use(mail),into(newUserID);
             
             //bon_token TEXT, d_mobile_id TEXT,d_type TEXT, d_locale TEXT, d_push_n TEXT, d_uid integer
             sql << "select upsert_mobile_device(:bt, :mobileID, :type, :loc, :pushN, :userID)",
-                    use(mobile.token), use(mobile.mobile_id), use(mobile.type), use(mobile.locale),use(mobile.push_notification),use(newUserID);
+                    use(mobile.token), use(mobile.mobile_id), use(mobile.type), use(mobile.locale),use(mobile.push_notification),use(userId);
             return 1;
     }
     catch (soci::postgresql_soci_error& e)

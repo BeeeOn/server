@@ -10,7 +10,6 @@
 
 IMsgInLoginRequired::IMsgInLoginRequired(char* msg, pugi::xml_document* doc): IMsgIn(msg, doc) {
     
-    Logger::getInstance(Logger::DEBUG)<<"user:"<<_userId<<" comId:"<<_token<<endl;
 }
 
 IMsgInLoginRequired::~IMsgInLoginRequired() {
@@ -18,6 +17,9 @@ IMsgInLoginRequired::~IMsgInLoginRequired() {
 
 bool IMsgInLoginRequired::isComIdValid(){
     _userId = DAOUsers::getInstance().getUserIdbyIhaToken(_token);
+    
+    Logger::getInstance(Logger::DEBUG)<<"user:"<<_userId<<" token:"<<_token<<endl;
+    
     return (_userId > 0 );
 }
 

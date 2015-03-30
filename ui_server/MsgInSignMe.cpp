@@ -65,27 +65,28 @@ string MsgInSignMe::createResponseMsgOut()
         user.picture = gInfo.picture;
         user.verifiedMail = gInfo.verified_email;
         
-        //TODO muze se stat ze token se bude duplikovat, mala sance       
-        if(DAOUsers::getInstance().isGoogleIdRegistred(user.googleId) ==0 )
-            throw ServerException(ServerException::USER_DONOT_EXISTS);
-//        else
-//            DAOUsers::getInstance().upsertUserWithMobileDevice(user, mobile) ;
     }else  if(service == "beeeon"){
         string userName = parametersNode.attribute("name").value();       
         string userPassword = parametersNode.attribute("pswd").value();       
         
+        
+        // TODO is pswd OK?
+        
         user.name = userName;
         user.password  = userPassword;
         
-        if(DAOUsers::getInstance().isNameRegistred(user.name) ==0 )
-            throw ServerException(ServerException::USER_DONOT_EXISTS);
 //        else
 //            DAOUsers::getInstance().upsertUserWithMobileDevice(user, mobile) ;
     }else{
         throw ServerException(ServerException::WRONG_AUTH_PROVIDER);
     }
     
-    DAOMobileDevices::getInstance().upsertMobileDevice(mobile, user.mail) ;
+    int userId = DAOUsers::getInstance().getUserIDbyAlternativeKeys(user.mail, user.googleId, user.name);
+    
+    
+    if(userId < 0)
+            throw ServerException(ServerException::USER_DONOT_EXISTS);
+    DAOMobileDevices::getInstance().upsertMobileDevice(mobile, userId) ;
     
     //string gId  = parametersNode.child(P_COMMUNICATION).attribute(P_GOOGLE_ID).value();
     

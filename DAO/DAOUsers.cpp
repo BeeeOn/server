@@ -12,6 +12,52 @@
 using namespace std;
 using namespace soci;
 
+
+
+namespace soci
+{
+    template<>
+    struct type_conversion<User>
+    {
+        typedef values base_type;
+
+        static void from_base(values const & v, indicator /* ind */, User & user)
+        {
+            user.user_id = v.get<int>("user_id");
+            user.mail = v.get<std::string>("mail","");
+            user.password = v.get<std::string>("password","");
+            user.phoneLocale = v.get<std::string>("phone_locale","");
+            user.verifiedMail = v.get<int>("verified_email");
+            user.name = v.get<std::string>("name","");
+            user.givenName = v.get<std::string>("given_name","");
+            user.familyName = v.get<std::string>("family_name","");
+            user.link = v.get<std::string>("link","");
+            user.picture = v.get<std::string>("picture","");
+            user.gender = v.get<std::string>("gender","");
+            user.googleLocale = v.get<std::string>("google_locale","");
+            user.googleId = v.get<std::string>("google_id","");
+        }
+    
+        static void to_base(const User & user, values & v, indicator & ind)
+        {           
+            v.set("user_id", user.user_id);
+            v.set("mail", user.mail, user.mail.empty() ? i_null : i_ok);
+            v.set("password", user.password, user.password.empty() ? i_null : i_ok);
+            v.set("phone_locale", user.phoneLocale);
+            v.set("verified_email", user.verifiedMail);
+            v.set("name", user.name, user.name.empty() ? i_null : i_ok);
+            v.set("given_name", user.givenName, user.givenName.empty() ? i_null : i_ok);
+            v.set("family_name", user.familyName, user.familyName.empty() ? i_null : i_ok);
+            v.set("link", user.link, user.link.empty() ? i_null : i_ok);
+            v.set("picture", user.picture, user.picture.empty() ? i_null : i_ok);
+            v.set("gender", user.gender, user.gender.empty() ? i_null : i_ok);
+            v.set("google_locale", user.googleLocale, user.googleLocale.empty() ? i_null : i_ok);
+            v.set("google_id", user.googleId, user.googleId.empty() ? i_null : i_ok);
+            ind = i_ok;
+        }
+    };
+}
+
 DAOUsers::DAOUsers(){
 }
 
@@ -49,24 +95,7 @@ int DAOUsers::add(User user) {
         }
 }
 
-int DAOUsers::getUserIdbyIhaToken(string token) {
-        Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"iha token valid?"<<"\n";
-        try
-        {
-                soci::session sql(*_pool);
-                
-                indicator ind;
-                int userId = -1;
-                sql << "select fk_user_id from mobile_devices where token = :token",
-                        use (token,"token"), into(userId,ind);   
-                return userId;
-        }
-        catch (soci::postgresql_soci_error& e)
-        {
-                Logger::getInstance(Logger::ERROR) << "Error: " << e.what() << '\n';
-                return -1;
-        }
-}
+
 
 int DAOUsers::upsertUserWithMobileDevice(User user, MobileDevice mobile){
     session sql(*_pool);
@@ -146,22 +175,51 @@ bool DAOUsers::isGoogleIdRegistred(std::string g_id) {
     }
 }
 
-std::string DAOUsers::getUserID(std::string Btoken) {
-    Logger::db()<<"DB: getUID by token:"<<Btoken << endl;
+int DAOUsers::getUserIDbyAlternativeKeys(std::string mail, std::string google_id, std::string name){
+    Logger::db()<<"DB: getUID by alternative keys:("<<mail << google_id << name <<")"<< endl;
     
     try
     {
             session sql(*_pool);
-            string UID;
-            sql << "select user_id from users join mobile_devices on user_id = fk_user_id where token = :btoken", use(Btoken, "btoken"),into(UID);
+            int UID=-1;
+            
+            indicator i1 = mail.empty()?i_null:i_ok;
+            indicator i2 = google_id.empty()?i_null:i_ok;
+            indicator i3 = name.empty()?i_null:i_ok;
+            sql << "select user_id from users where "
+                                "CASE WHEN :mail::text is not NULL THEN mail=:mail  "
+                                            "WHEN :google_id::text is not NULL then google_id=:google_id "
+                                            "WHEN :name::text is not NULL then name=:name "
+                                "END",
+                    use(mail,i1,"mail"), use(google_id,i2,"google_id"),use(name,i3,"name"),
+                    into(UID);
             Logger::getInstance(Logger::DEBUG3)<<"uid is: "<<UID<< endl;
             return UID; 
     }
     catch (soci::postgresql_soci_error& e)
     {
             Logger::db() << "Error: " << e.what() << " sqlState: " << e.sqlstate() <<endl;
-            throw;
+            return -1;
     }   
+}
+
+int DAOUsers::getUserIdbyIhaToken(string token) {
+        Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"iha token valid?"<<"\n";
+        try
+        {
+                soci::session sql(*_pool);
+                
+                indicator ind;
+                int userId = -1;
+                sql << "select fk_user_id from mobile_devices where token = :token",
+                        use (token,"token"), into(userId,ind);   
+                return userId;
+        }
+        catch (soci::postgresql_soci_error& e)
+        {
+                Logger::getInstance(Logger::ERROR) << "Error: " << e.what() << '\n';
+                return -1;
+        }
 }
 
 User DAOUsers::getUserAssociatedWithToken(std::string token) {

@@ -8,12 +8,11 @@ using namespace std;
 
 string resolveMsg(char* msg)
 {       
-    //TODO cele to upravit, bordel s MsgIn,MsgOut, kdy to je a neni vytvoreno, kdy se uvolnuje... asi rozdelit na 2 try catch, kde jeden chyta msgIn a jeden MsgOut
     string response;
     MsgInFactory msgFactory = MsgInFactory::getInstance();
     IMsgIn* msgIn=NULL;
     
-    Logger::getInstance(Logger::DEBUG)<< "MSGIN: "<<msg<<"\n";
+    Logger::getInstance(Logger::DEBUG)<< "MSGIN: "<<msg<< endl;
     
     msgIn = msgFactory.createMsg(msg);
     
@@ -44,7 +43,7 @@ string resolveMsg(char* msg)
     }
     catch (ServerException & e)
     {
-        Logger::getInstance(Logger::ERROR) << "Server error: " << endl;
+        Logger::getInstance(Logger::ERROR) << "Server error: " << e.getErrCode()<< endl;
         response = msgIn->envelopeResponse(R_FALSE, e.getErrText(), e.getErrCode());
     }
     catch (soci::postgresql_soci_error const & e)
