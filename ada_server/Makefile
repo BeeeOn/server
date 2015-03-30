@@ -1,17 +1,17 @@
 CPPFLAGS= -Wall -W -std=c++11 -pthread -g
-BUILDER= g++
+BUILDER= /opt/centos/devtoolset-1.1/root/usr/bin/g++
 ADA_SERVER= adaServer.cpp
 METHOD_TEST= methodTester.cpp
-SOURCE_FILES= pugixml.cpp loger.cpp config.cpp worker.cpp workerPool.cpp DBHandler.cpp connectionServer.cpp connectionHandler.cpp messageParsers.cpp sender.cpp listener.cpp requestServer.cpp messageCreator.cpp adaServerReceiver.cpp adaServerSender.cpp
+SOURCE_FILES= pugixml.cpp loger.cpp config.cpp SSLContainer.cpp worker.cpp workerPool.cpp DBHandler.cpp connectionServer.cpp connectionHandler.cpp messageParsers.cpp sender.cpp listener.cpp requestServer.cpp messageCreator.cpp adaServerReceiver.cpp adaServerSender.cpp
 
 all:
 	make ada_server
 
 ada_server: $(ADA_SERVER) $(SOURCE_FILES) 
-	$(BUILDER) $(CPPFLAGS) -o $@ $^ -I/usr/local/include/soci -L/usr/local/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -I/usr/include/postgresql/ -lpq 
+	$(BUILDER) $(CPPFLAGS) -o $@ $^  -L/usr/local/lib -lssl -lcurl -lcrypto -I/usr/local/include/soci -L/usr/local/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -I/usr/include/postgresql/ -lpq 
 
 method_test: $(METHOD_TEST) $(SOURCE_FILES) 
-	$(BUILDER) $(CPPFLAGS) -o $@ $^ -I/usr/local/include/soci -L/usr/local/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -I/usr/include/postgresql/ -lpq 
+	$(BUILDER) $(CPPFLAGS) -o $@ $^  -L/usr/local/lib -lssl -lcurl -lcrypto -I/usr/local/include/soci -L/usr/local/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -I/usr/include/postgresql/ -lpq 
 
 run:
 	./run_ada_server.sh

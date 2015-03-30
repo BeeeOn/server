@@ -11,7 +11,7 @@
 
 using namespace soci;
 
-WorkerPool::WorkerPool(std::string DBName, int ConnLimit, Loger *Rl, Loger *Sl)
+WorkerPool::WorkerPool(std::string DBName, int ConnLimit, Loger *Rl, Loger *Sl,SSLContainer *sslcont)
 {
 	this->ReceiverLoger = Rl;
 	this->SenderLoger = Sl;
@@ -48,7 +48,7 @@ WorkerPool::WorkerPool(std::string DBName, int ConnLimit, Loger *Rl, Loger *Sl)
 	{
 		try  //pokusime  sa o vytvorenie vlakna
 		{
-			Worker *w= new Worker(connections[i],this->ReceiverLoger,this->SenderLoger, this, i);
+			Worker *w= new Worker(connections[i],this->ReceiverLoger,this->SenderLoger, this, i,sslcont);
 			this->workers[i] = w;
 			this->workers[i]->Start();
 		}
@@ -129,12 +129,12 @@ Worker *WorkerPool::GetWorker(Loger *l)
 
 WorkerPool *WorkerPool::instance = NULL;
 
-WorkerPool *WorkerPool::CreatePool(Loger *Rl, Loger *Sl, std::string DBName, int ConnLimit)
+WorkerPool *WorkerPool::CreatePool(Loger *Rl, Loger *Sl, std::string DBName, int ConnLimit,SSLContainer *sslcont)
 {
 	Rl->WriteMessage(TRACE,"Entering WorkerPool::CreatePool");
 	Sl->WriteMessage(TRACE,"Entering WorkerPool::CreatePool");
 	if (!instance)
-		instance=new WorkerPool(DBName, ConnLimit, Rl, Sl);
+		instance=new WorkerPool(DBName, ConnLimit, Rl, Sl,sslcont);
 	Sl->WriteMessage(TRACE,"Exiting WorkerPool::CreatePool");
 	Rl->WriteMessage(TRACE,"Exiting WorkerPool::CreatePool");
 	return (instance);

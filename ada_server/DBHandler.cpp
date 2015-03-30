@@ -507,6 +507,27 @@ DBHandler::~DBHandler()
 	//delete (_sql); //zrusenie a vymazanie pripojenia k DB
 }
 
+bool DBHandler::DeleteFacility(std::string ID)
+{
+	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::DeleteFacility");
+	try
+	{
+		*_sql << SQLQueries::DeleteDevice,
+				use(ID,"ID");
+		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::DeleteFacility");
+		return (true);
+	}
+	catch(std::exception const &e)
+	{
+		this->_log->WriteMessage(ERR, "Error in query : " + _sql->get_last_query() );
+		std::string ErrorMessage = "Database Error : ";
+		ErrorMessage.append (e.what());
+		this->_log->WriteMessage(ERR,ErrorMessage );
+		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::DeleteFacility");
+		return (false);
+	}
+}
+
 	/**********************************************End of DBHandler section******************************************************/
 
 

@@ -10,6 +10,58 @@
 using namespace soci;
 using namespace pugi;
 
+bool ConnectionServer::LoadCertificates()
+{
+	_log->WriteMessage(TRACE,"Entering " + this->_Name + "::LoadCertificates");
+	SSL_load_error_strings();
+	SSL_library_init();
+	OpenSSL_add_all_algorithms();
+	sslctx = SSL_CTX_new( TLSv1_server_method());
+	/*SSL_CTX_set_options(sslctx, SSL_OP_SINGLE_DH_USE);
+	int use_cert = SSL_CTX_use_certificate_file(sslctx, "/etc/openvpn/server.crt" , SSL_FILETYPE_PEM);*/
+	char errorBuffer[1000];
+	std::string msgBase = "Certificate error ";
+	unsigned long int err;
+	if ((err=SSL_CTX_load_verify_locations(sslctx, "ca.crt", NULL)) != 1)
+	{
+		ERR_error_string_n(err,errorBuffer,1000);
+		_log->WriteMessage(FATAL,msgBase + " in verify locations" + errorBuffer);
+		return (false);
+	}
+	if ((err=SSL_CTX_set_default_verify_paths(sslctx)) != 1)
+	{
+		ERR_error_string_n(err,errorBuffer,1000);
+		_log->WriteMessage(FATAL,msgBase + " in verify def paths" + errorBuffer);
+				return (false);
+	}
+		/* set the local certificate from CertFile */
+	if ((err=SSL_CTX_use_certificate_chain_file(sslctx, "/etc/openvpn/server.crt")) <= 0)
+	{
+		ERR_error_string_n(err,errorBuffer,1000);
+		_log->WriteMessage(FATAL,msgBase + " use chain file" + errorBuffer);
+				return (false);
+	}
+		/* set the private key from KeyFile (may be the same as CertFile) */
+	if ((err=SSL_CTX_use_PrivateKey_file(sslctx, "/etc/openvpn/server.key", SSL_FILETYPE_PEM)) <= 0)
+	{
+		ERR_error_string_n(err,errorBuffer,1000);
+		_log->WriteMessage(FATAL,msgBase + " in verify use private key"+ errorBuffer);
+				return (false);
+	}
+		/* verify private key */
+	if (!SSL_CTX_check_private_key(sslctx))
+	{
+		_log->WriteMessage(FATAL, "Private key does not match the public certificate");
+		return (false);
+	}
+	_log->WriteMessage(INFO, "Certificates successfully loaded");
+	cSSL = SSL_new(sslctx);
+	_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::LoadCertificates");
+	return (true);
+}
+
+
+
 /** Metoda pre prijatie spravy a jej spracovanie a odpovedanie na nu
  * @param IP - ip adresa zariadenia s ktorym sa komunikuje
     */
@@ -17,11 +69,47 @@ void ConnectionServer::HandleConnection (in_addr IP)
 {
 	_log->WriteMessage(TRACE,"Entering " + this->_Name + "::HandleConnection");
 	char buffer[1024];  //natavime buffer
-	int pollRes;
+	//int pollRes;
+
+	/*int use_prv = SSL_CTX_use_PrivateKey_file(sslctx, "/etc/openvpn/server.key", SSL_FILETYPE_PEM);*/
+	/*if (use_prv!=1)
+	{
+		_log->WriteMessage(ERR,"Private key loading error");
+	}*/
 	ssize_t DataSize=0;
 	std::string data;
 	data.clear();
-	struct pollfd ufds;
+	SSL_set_fd(cSSL, com_s );
+	int ssl_err = SSL_accept(cSSL);
+	if(ssl_err <= 0)
+	{
+		_log->WriteMessage(ERR,"SSL accept error");
+	    //Error occured, log and close down ssl
+		 close(com_s);
+		 return;
+	}
+	while(1)
+	{
+		if((DataSize = SSL_read(cSSL, buffer, 1024))>0)
+		{
+			data.append(buffer,DataSize);
+			if ((data.find("</adapter_server>")!=std::string::npos)||((data[data.size()-2]=='/')&&(data[data.size()-2]=='>')))
+			{
+				break;
+			}
+			if(!SSL_pending(cSSL))
+			{
+				break;
+			}
+		}
+		else
+		{
+			_log->WriteMessage(ERR,"SSL read error");
+			close(com_s);
+			 return;
+		}
+	}
+	/*struct pollfd ufds;
 	ufds.fd = com_s;
 	ufds.events = POLLIN;
 	while (1)
@@ -62,7 +150,7 @@ void ConnectionServer::HandleConnection (in_addr IP)
 				break;
 			}
 		}
-	}
+	}*/
 	_log->WriteMessage(MSG,"Message :" + data);
 	xml_document doc;
 	xml_parse_result result = doc.load_buffer(data.data(), data.size());
@@ -72,7 +160,7 @@ void ConnectionServer::HandleConnection (in_addr IP)
 		tmp.append(result.description());
 		_log->WriteMessage(WARN,tmp);
 		_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::HandleConnection");
-		close(this->com_s);
+		close(com_s);
 		return;
 	}
 	xml_node adapter = doc.child("adapter_server");
@@ -97,7 +185,7 @@ void ConnectionServer::HandleConnection (in_addr IP)
 					_log->WriteMessage(ERR,"Unable to create space for Protocol parser exiting client won't be server!");
 					_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::HandleConnection");
 					delete this->MP;
-					close(this->com_s);
+					close(com_s);
 					return;
 				}
 			}
@@ -112,7 +200,7 @@ void ConnectionServer::HandleConnection (in_addr IP)
 					_log->WriteMessage(ERR,"Unable to create space for Protocol parser exiting client won't be server!");
 					_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::HandleConnection");
 					delete this->MP;
-					close(this->com_s);
+					close(com_s);
 					return;
 				}
 			}
@@ -123,7 +211,7 @@ void ConnectionServer::HandleConnection (in_addr IP)
 		_log->WriteMessage(WARN,"Unsupported protocol version");
 		_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::HandleConnection");
 		delete this->MP;
-		close(this->com_s);
+		close(com_s);
 		return;
 	}
 	if (!MP->ParseMessage(&adapter,FMversion,CPversion))  //pomocou parsera spracujeme spravu
@@ -131,7 +219,7 @@ void ConnectionServer::HandleConnection (in_addr IP)
 
 		_log->WriteMessage(WARN,"Wrong request format");
 		delete this->MP;
-		close(this->com_s);
+		close(com_s);
 		_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::HandleConnection");
 		return;
 	}
@@ -142,16 +230,20 @@ void ConnectionServer::HandleConnection (in_addr IP)
 		response = MP->CreateAnswer(this->GetData());  //zavolame metodu na vytvorenie odpovede a metodu na ulozenie dat do DB
 		int Err;
 		_log->WriteMessage(MSG,"Response message: \n" + response);
-		if ((Err=send(this->com_s, response.c_str(), response.size() , 0))<0)  //odoslanie odpovede klientovi
+		/*if ((Err=send(this->com_s, response.c_str(), response.size() , 0))<0)  //odoslanie odpovede klientovi
 		{
 			_log->WriteMessage(WARN,"Sending answer failed with code : " + std::to_string(errno) + " : " + std::strerror(errno));
+		}*/
+		if((Err=SSL_write(cSSL, response.c_str(), response.size()))<=0)
+		{
+			_log->WriteMessage(ERR,"Writing to SSL failed :");
 		}
-		close (this->com_s);
+		close(com_s);
 	}
 	else
 	{
 	    std::string resp;
-	    parsedMessage->socket = this->com_s;
+	    parsedMessage->socket = 1000;
 	    _log->WriteMessage(TRACE,"Client socket desrciptor :" + std::to_string(this->com_s));
 	    int oldSocket = -1;
 	    database->GetAdapterData(&oldSocket,parsedMessage->adapterINTid);
@@ -168,7 +260,7 @@ void ConnectionServer::HandleConnection (in_addr IP)
 	    }
 	    else
 	    {
-	    	close (oldSocket);
+	    	//close (oldSocket);
 	    	if (database->UpdateAdapter(this->parsedMessage))
 			{
 			  resp="<server_adapter protocol_version=\"0.1\" state=\"register\" response=\"true\"/>";
@@ -177,12 +269,26 @@ void ConnectionServer::HandleConnection (in_addr IP)
 			{
 			  resp="<server_adapter protocol_version=\"0.1\" state=\"register\" response=\"false\"/>";
 			}
+
 	    }
+	    this->_sslcont->InsertSSL(parsedMessage->adapterINTid,cSSL);
 	    int Err;
-	    if ((Err=send(this->com_s, resp.c_str(), resp.size() , 0))<0)  //odoslanie odpovede klientovi
+	  /*  if ((Err=send(this->com_s, resp.c_str(), resp.size() , 0))<0)  //odoslanie odpovede klientovi
 	    {
 			_log->WriteMessage(WARN,"Sending registration answer failed with code : " + std::to_string(errno) + " : " + std::strerror(errno));
-	    }
+	    }*/
+		_log->WriteMessage(INFO,"Going to send response to register MSG ");
+		_log->WriteMessage(INFO,"Response register MSG : " + resp);
+	    if((Err=SSL_write(cSSL, resp.c_str(), resp.size()))<=0)
+		{
+			_log->WriteMessage(ERR,"Sending registration answer failed :");
+			//close(com_s);
+		}
+		else
+		{
+			_log->WriteMessage(INFO,"Response msg successfully sent with number of bytes : " + std::to_string(Err));
+		}
+	    cSSL = SSL_new(sslctx);
 	}
 	if (parsedMessage->state!=0)
 	{
@@ -217,20 +323,23 @@ void ConnectionServer::Notify(std::string MSG)
 	//memcpy(&SvSoc.sin_addr.s_addr ,Adapter->h_addr, Adapter->h_length);
 	if(connect(s,(sockaddr *) &SvSoc, sizeof(SvSoc)) < 0)//pripojenie na server
 	{
-		std::cerr<<"Unable to connect to framework\n";
+		_log->WriteMessage(ERR,"Unable to connect to framework");
+		close (s);
 		return;  //nepodarilo sa pripojit na server
 	}
 	if ((Err=send(s, MSG.c_str(), MSG.size(), 0))<0)  //odoslanie poziadavky na server
 	{
-		std::cerr<<"Unable to send message to framework\n";
-		}
+		_log->WriteMessage(ERR,"Unable to send msg to framework");
+	}
+	close (s);
 	_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Notify");
 }
 
-ConnectionServer::ConnectionServer(soci::session *SQL, Loger *L, int timeOut)
+ConnectionServer::ConnectionServer(soci::session *SQL, Loger *L, int timeOut,SSLContainer *sslcont)
 {
 	L->WriteMessage(TRACE,"Entering " + this->_Name + "::Constructor");
 	this->MP = nullptr;
+	this->_sslcont = sslcont;
 	this->database = new DBHandler(SQL,L);
 	this->_log = L;
 	this->_timeTimeOut = timeOut;
@@ -242,6 +351,8 @@ ConnectionServer::ConnectionServer(soci::session *SQL, Loger *L, int timeOut)
 ConnectionServer::~ConnectionServer()
 {
 	_log->WriteMessage(TRACE,"Entering " + this->_Name + "::Destructor");
+	SSL_shutdown(this->cSSL);
+	SSL_free(this->cSSL);
 	delete this->database;
 	_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Destructor");
 }

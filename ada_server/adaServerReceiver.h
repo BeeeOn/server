@@ -39,6 +39,7 @@ class AdaServerReceiver
 		WorkerPool *workers;
 		Config *conf;
 		ConnectionHandler *_CH;
+
 	public:
 		AdaServerReceiver(sem_t *Sem, WorkerPool *workers, Loger *L,Config *c);
 		void Start();

@@ -31,6 +31,7 @@ class DBHandler
 	public:
 		~DBHandler();
 		DBHandler(soci::session *SQL, Loger *l);
+		bool DeleteFacility(std::string ID);
 		bool IsInDB(std::string tableName,std::string columnName,std::string record);
 		bool InsertAdapter(tmessage *message);
 		bool InsertSenAct(tmessage *message);
