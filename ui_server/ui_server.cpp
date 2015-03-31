@@ -82,7 +82,7 @@ int main(int argc, char** argv)
             DAORooms::getInstance().setConnectionStringAndOpenSessions(Config::getInstance().getDBConnectionString(), 2);
             DAOMobileDevices::getInstance().setConnectionStringAndOpenSessions(Config::getInstance().getDBConnectionString(), 3);
             DAOUsersAdapters::getInstance().setConnectionStringAndOpenSessions(Config::getInstance().getDBConnectionString(), 2);
-            Logger::debug()<< "connection to DB set"<< endl;
+            Logger::debug()<< "connection to DB is set"<< endl;
         }
         catch (soci::soci_error const & e)
         {
@@ -133,7 +133,7 @@ int main(int argc, char** argv)
         
         resolveMsg( "<com ver=\"2.4\"  state=\"signup\" srv=\"beeeon\"> <par name=\"pavel3\" pswd=\"xxx\"  /> </com>>");
         resolveMsg( "<com ver=\"2.4\"  state=\"signin\" srv=\"beeeon\" > <par name=\"pavel3\" pswd=\"xxx\"  />  </com>");
-        
+        DAOUsers::getInstance().getUserIDbyAlternativeKeys("leo.podmolik@gmail.com", "","");
 /*
         int id = DAOUsers::getInstance().getUserIDbyAlternativeKeys("user2a@gmail.com", "1111","user2");
              MobileDevice mobile;

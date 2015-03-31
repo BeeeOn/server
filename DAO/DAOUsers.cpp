@@ -27,7 +27,7 @@ namespace soci
             user.mail = v.get<std::string>("mail","");
             user.password = v.get<std::string>("password","");
             user.phoneLocale = v.get<std::string>("phone_locale","");
-            user.verifiedMail = v.get<int>("verified_email");
+            user.verifiedMail = v.get<int>("verified_email",1);
             user.name = v.get<std::string>("name","");
             user.givenName = v.get<std::string>("given_name","");
             user.familyName = v.get<std::string>("family_name","");
@@ -44,7 +44,7 @@ namespace soci
             v.set("mail", user.mail, user.mail.empty() ? i_null : i_ok);
             v.set("password", user.password, user.password.empty() ? i_null : i_ok);
             v.set("phone_locale", user.phoneLocale);
-            v.set("verified_email", user.verifiedMail);
+            v.set("verified_email", user.verifiedMail, user.name.empty() ? i_null : i_ok);
             v.set("name", user.name, user.name.empty() ? i_null : i_ok);
             v.set("given_name", user.givenName, user.givenName.empty() ? i_null : i_ok);
             v.set("family_name", user.familyName, user.familyName.empty() ? i_null : i_ok);

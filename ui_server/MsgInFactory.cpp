@@ -139,6 +139,7 @@ IMsgIn* MsgInFactory::createMsg(char* msg)
     algMsgs.push_back("getalgs");
     algMsgs.push_back("setalg");
     algMsgs.push_back("delalg");
+    algMsgs.push_back("getallalgs");
     
     if(std::find(algMsgs.begin(), algMsgs.end(), state)!=algMsgs.end())
         return new MsgInAlgorithmsRedirect(msg, doc);

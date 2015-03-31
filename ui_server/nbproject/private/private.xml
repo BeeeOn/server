@@ -7,38 +7,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/pavel/git-ant/ui_server/IMsgIn.cpp</file>
-            <file>file:/home/pavel/git-ant/ui_server/MsgInSignMe.cpp</file>
-            <file>file:/home/pavel/git-ant/ui_server/MsgInAddAccount.cpp</file>
-            <file>file:/home/pavel/git-ant/ui_logger/Logger.cpp</file>
-            <file>file:/home/pavel/git-ant/ui_server/MsgInGetUserID.cpp</file>
-            <file>file:/home/pavel/git-ant/ui_server/MsgInGetConAccount.cpp</file>
-            <file>file:/home/pavel/git-ant/DAO/DAORooms.h</file>
-            <file>file:/home/pavel/git-ant/ui_server/ui_server.cpp</file>
-            <file>file:/home/pavel/git-ant/ui_server/IMsgInLoginRequired.cpp</file>
-            <file>file:/home/pavel/git-ant/ui_server/ServerException.h</file>
-            <file>file:/home/pavel/git-ant/ui_server/MsgInFactory.cpp</file>
-            <file>file:/home/pavel/git-ant/ui_server/DBConnector.cpp</file>
-            <file>file:/home/pavel/git-ant/ui_server/communication.cpp</file>
-            <file>file:/home/pavel/git-ant/DAO/DAOUsers.cpp</file>
-            <file>file:/home/pavel/git-ant/ui_server/MsgInGetUserID.h</file>
-            <file>file:/home/pavel/git-ant/DAO/DAOMobileDevices.cpp</file>
             <file>file:/home/pavel/git-ant/ui_server/Msgs/MsgInSignUp.cpp</file>
+            <file>file:/home/pavel/git-ant/ui_server/MsgInSignMe.cpp</file>
+            <file>file:/home/pavel/git-ant/ui_server/MsgInGetUserID.cpp</file>
+            <file>file:/home/pavel/git-ant/DAO/DAOUsers.cpp</file>
             <file>file:/home/pavel/git-ant/DAO/DAOMobileDevices.h</file>
-            <file>file:/home/pavel/git-ant/ui_server/IMsgInLoginAndAdapterAccessRequired.cpp</file>
-            <file>file:/home/pavel/git-ant/ui_server/MsgInSetConAccount.cpp</file>
-            <file>file:/home/pavel/git-ant/ui_server/MsgInDelConAccount.cpp</file>
-            <file>file:/home/pavel/git-ant/DAO/DAOUsersAdapters.h</file>
-            <file>file:/home/pavel/git-ant/ui_server/MsgInSetGCMID.cpp</file>
-            <file>file:/home/pavel/git-ant/ui_logger/Logger.h</file>
-            <file>file:/home/pavel/git-ant/ui_server/IMsgIn.h</file>
-            <file>file:/home/pavel/git-ant/DAO/DAORooms.cpp</file>
-            <file>file:/home/pavel/git-ant/ui_server/ServerException.cpp</file>
-            <file>file:/home/pavel/git-ant/ui_server/IMsgInLoginUnwanted.cpp</file>
-            <file>file:/home/pavel/git-ant/DAO/DAOUsersAdapters.cpp</file>
-            <file>file:/home/pavel/git-ant/ui_server/DBConnector.h</file>
+            <file>file:/home/pavel/git-ant/ui_server/ui_server.cpp</file>
             <file>file:/home/pavel/git-ant/DAO/DAOUsers.h</file>
-            <file>file:/home/pavel/git-ant/ui_server/MsgInDelGCMID.cpp</file>
+            <file>file:/home/pavel/git-ant/DAO/DAOMobileDevices.cpp</file>
         </group>
     </open-files>
 </project-private>
