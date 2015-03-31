@@ -90,8 +90,6 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
         public TextField getAdapterIdLbl();
         public TextField getAdapterNameLbl();
         public TextField getAdapterFirmwareLbl();
-        public RadioButton getAdapterNoRegisteredRadBtn();
-        public RadioButton getAdapterYesRegisteredRadBtn();
         public ComboBox getAdapterProtocolComboBox();
     }
 
@@ -262,7 +260,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
                     view.getAdapterNameLbl().getText(),
                     false,
                     Integer.valueOf(view.getAdapterIdLbl().getText()),
-                    view.getAdapterYesRegisteredRadBtn().isSelected(),
+                    false,
                     selectedVersion,
                     Double.valueOf(view.getAdapterFirmwareLbl().getText()));
             //create new server
@@ -362,7 +360,6 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
             dlg.show();
             view.getAdapterNameLbl().setText("");
             view.getAdapterFirmwareLbl().setText(DEFAULT_FIRMWARE);
-            view.getAdapterNoRegisteredRadBtn().setSelected(true);
         } else {
             Alert dlg = new Alert(Alert.AlertType.INFORMATION,"");
             dlg.initModality(Modality.WINDOW_MODAL);
@@ -372,8 +369,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
             dlg.getDialogPane().setContentText("Setting adapter information:\n" +
                     "ID: " + adapterInfo.getId() + "\n" +
                     "Name: " + adapterInfo.getName() + "\n" +
-                    "Version: " + adapterInfo.getVersion() + "\n" +
-                    "Registered: Yes");
+                    "Version: " + adapterInfo.getVersion());
             dlg.show();
             view.getAdapterIdLbl().setText(adapterInfo.getId());
             if(adapterInfo.getName() == null || adapterInfo.getName().equals("null")){
@@ -382,7 +378,6 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
                 view.getAdapterNameLbl().setText(adapterInfo.getName());
             }
             view.getAdapterFirmwareLbl().setText(adapterInfo.getVersion());
-            view.getAdapterYesRegisteredRadBtn().setSelected(true);
         }
     }
 
@@ -512,7 +507,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
         serverValidationSupport.registerValidator(view.getServerDbNameTxtField(), false, Validator.createEmptyValidator("Database name is required"));
         //--set placeholders
         view.getServerNameTxtField().setPromptText("Example: devel");
-        view.getServerIpTxtField().setPromptText("Example: 10.1.0.1");
+        view.getServerIpTxtField().setPromptText("Example: ant-2.fit.vutbr.cz");
         view.getServerPortTxtField().setPromptText("Example: 7080");
         view.getServerDbNameTxtField().setPromptText("Example: home4");
             //disable checkbox

@@ -37,6 +37,7 @@ public abstract class AbstractServerTask<T> implements ServerTask<T> {
      * </emulator_server>
      */
     public Element buildMessageRoot(Document doc,String dbName){
+        getLogger().warn("DeleteSensorsTask -> root message generating");
         return doc.addElement("emulator_server")
                 .addAttribute("db", dbName);
     }

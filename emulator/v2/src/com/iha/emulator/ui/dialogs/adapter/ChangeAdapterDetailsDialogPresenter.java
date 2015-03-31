@@ -58,8 +58,6 @@ public class ChangeAdapterDetailsDialogPresenter implements Presenter,PanelPrese
         public VBox getAdapterContainer();
         public TextField getAdapterNameLbl();
         public TextField getAdapterFirmwareLbl();
-        public RadioButton getAdapterNoRegisteredRadBtn();
-        public RadioButton getAdapterYesRegisteredRadBtn();
         public ComboBox getAdapterProtocolComboBox();
     }
 
@@ -99,12 +97,6 @@ public class ChangeAdapterDetailsDialogPresenter implements Presenter,PanelPrese
         });
         //name
         view.getAdapterNameLbl().setText(adapterController.getAdapter().getName());
-        //registered
-        if(adapterController.getAdapter().getRegistered()){
-            view.getAdapterYesRegisteredRadBtn().setSelected(true);
-        }else{
-            view.getAdapterNoRegisteredRadBtn().setSelected(true);
-        }
         //bind field validation support to variable holding completion of protocol version
         adapterValidationSupport.validationResultProperty().addListener((observable, oldValue, newValue) -> {
                 setAdapterInfoSet(!adapterValidationSupport.isInvalid());
@@ -149,18 +141,6 @@ public class ChangeAdapterDetailsDialogPresenter implements Presenter,PanelPrese
         if(selectedVersion != null && !selectedVersion.equals(ProtocolFactory.getVersion(adapterController.getAdapter().getProtocolVersion()))){
             logger.trace("Setting new protocol version (old/new) -> " + adapterController.getAdapter().getProtocolVersion() + "/" + selectedVersion.getVersion());
             adapterController.getAdapter().setProtocol(ProtocolFactory.buildProtocol(selectedVersion));
-            adapterController.setSaved(false);
-        }
-        boolean yesSelected;
-        yesSelected = view.getAdapterYesRegisteredRadBtn().isSelected();
-        if(adapterController.getAdapter().getRegistered() != yesSelected){
-            logger.debug("Setting adapter registered (old/new) -> " + adapterController.getAdapter().getRegistered() + "/" + yesSelected);
-            adapterController.getAdapter().setRegistered(yesSelected);
-            if(yesSelected){
-                adapterController.setRegisterMessageSent(true);
-            }else {
-                adapterController.setRegisterMessageSent(false);
-            }
             adapterController.setSaved(false);
         }
         return true;

@@ -2,6 +2,7 @@ package com.iha.emulator.communication.server;
 
 import com.iha.emulator.communication.protocol.Protocol;
 import com.iha.emulator.communication.protocol.ProtocolFactory;
+import com.iha.emulator.communication.server.ssl.ServerController;
 import com.iha.emulator.control.AdapterController;
 import com.iha.emulator.utilities.Utilities;
 import com.iha.emulator.utilities.watchers.ResponseTracker;
@@ -15,6 +16,8 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocket;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.StandardSocketOptions;
@@ -36,6 +39,10 @@ public class ServerReceiver extends Thread implements MessageSender{
     private SocketChannel socketChannel;
     private ServerController serverController;
     private BooleanProperty conn;
+
+    private SSLSocket socket;
+    private SSLContext sslContext;
+    private String hostName;
 
     public ServerReceiver(AdapterController adapterController) {
         this.adapterController = adapterController;
@@ -200,7 +207,7 @@ public class ServerReceiver extends Thread implements MessageSender{
             //TODO parse register message response
             sendMessage(registerMessage.getSocketMessage(),adapterController.getScheduler().getResponseTracker(),registerMessage.getType());
             adapterController.messageSuccessfullySent(registerMessage);
-        } catch (IOException | WrongResponseException e) {
+        }  catch (IOException | WrongResponseException e) {
             logger.debug("Connection unsuccessful");
         }
     }

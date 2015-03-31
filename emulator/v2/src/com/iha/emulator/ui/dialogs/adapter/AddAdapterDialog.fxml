@@ -3,14 +3,14 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<VBox fx:id="view" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="280.0" prefWidth="444.0" styleClass="whiteBackground" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iha.emulator.ui.dialogs.adapter.AddAdapterDialogView">
+<VBox fx:id="view" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="248.0" prefWidth="444.0" styleClass="whiteBackground" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iha.emulator.ui.dialogs.adapter.AddAdapterDialogView">
    <children>
       <Label prefHeight="47.0" prefWidth="598.0" styleClass="detailedSimLbl" text="Add new adapter" VBox.vgrow="NEVER">
          <VBox.margin>
             <Insets left="15.0" />
          </VBox.margin>
       </Label>
-      <StackPane prefHeight="314.0" prefWidth="296.0" VBox.vgrow="ALWAYS">
+      <StackPane prefHeight="164.0" prefWidth="444.0" VBox.vgrow="ALWAYS">
          <children>
             <VBox fx:id="serverContainer" prefHeight="314.0" prefWidth="467.0" visible="false" StackPane.alignment="TOP_LEFT">
                <children>
@@ -97,10 +97,10 @@
                   <Insets left="15.0" right="15.0" />
                </padding>
             </VBox>
-            <VBox fx:id="adapterContainer" prefHeight="200.0" prefWidth="100.0">
+            <VBox fx:id="adapterContainer" prefHeight="186.0" prefWidth="444.0">
                <children>
                   <Label prefHeight="17.0" prefWidth="524.0" styleClass="informationHeader" text="Adapter information" />
-                  <GridPane prefHeight="163.0" styleClass="informationContainer">
+                  <GridPane prefHeight="145.0" prefWidth="414.0" styleClass="informationContainer">
                      <children>
                         <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="107.0" styleClass="sensorText" text="ID:">
                            <padding>
@@ -112,17 +112,12 @@
                               <Insets right="6.0" />
                            </padding>
                         </Label>
-                        <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="107.0" styleClass="sensorText" text="Registered:" GridPane.rowIndex="3">
-                           <padding>
-                              <Insets right="6.0" />
-                           </padding>
-                        </Label>
                         <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="107.0" styleClass="sensorText" text="Name:" GridPane.rowIndex="1">
                            <padding>
                               <Insets right="6.0" />
                            </padding>
                         </Label>
-                        <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="107.0" styleClass="sensorText" text="Comm.protocol:" GridPane.rowIndex="4">
+                        <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="107.0" styleClass="sensorText" text="Comm.protocol:" GridPane.rowIndex="3">
                            <padding>
                               <Insets right="6.0" />
                            </padding>
@@ -151,19 +146,7 @@
                               <Tooltip text="Click to see database options" />
                            </tooltip>
                         </MenuButton>
-                        <RadioButton fx:id="adapterNoRegisteredRadBtn" mnemonicParsing="false" selected="true" text="No" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                           <toggleGroup>
-                              <ToggleGroup fx:id="registeregRadBtnGroup" />
-                           </toggleGroup>
-                           <tooltip>
-                              <Tooltip text="Pick if adapter doesn't exist in database" />
-                           </tooltip>
-                        </RadioButton>
-                        <RadioButton fx:id="adapterYesRegisteredRadBtn" mnemonicParsing="false" text="Yes" toggleGroup="$registeregRadBtnGroup" GridPane.columnIndex="2" GridPane.rowIndex="3">
-                           <tooltip>
-                              <Tooltip text="Pick if adapter doesn't exist in database" />
-                           </tooltip></RadioButton>
-                        <ComboBox fx:id="adapterProtocolComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4">
+                        <ComboBox fx:id="adapterProtocolComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3">
                            <tooltip>
                               <Tooltip text="Pick version of communication protocol between server and emulator" />
                            </tooltip></ComboBox>
@@ -175,7 +158,6 @@
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="458.0" minWidth="10.0" prefWidth="106.0" />
                      </columnConstraints>
                      <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />

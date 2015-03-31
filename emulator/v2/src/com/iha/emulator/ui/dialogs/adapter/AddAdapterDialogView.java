@@ -42,8 +42,6 @@ public class AddAdapterDialogView implements Initializable,AddAdapterDialogPrese
     @FXML private TextField adapterIdLbl;
     @FXML private TextField adapterNameLbl;
     @FXML private TextField adapterFirmwareLbl;
-    @FXML private RadioButton adapterNoRegisteredRadBtn;
-    @FXML private RadioButton adapterYesRegisteredRadBtn;
     @FXML private ComboBox adapterProtocolComboBox;
     //endregion
     @FXML
@@ -154,16 +152,6 @@ public class AddAdapterDialogView implements Initializable,AddAdapterDialogPrese
     @Override
     public TextField getAdapterFirmwareLbl() {
         return adapterFirmwareLbl;
-    }
-
-    @Override
-    public RadioButton getAdapterNoRegisteredRadBtn() {
-        return adapterNoRegisteredRadBtn;
-    }
-
-    @Override
-    public RadioButton getAdapterYesRegisteredRadBtn() {
-        return adapterYesRegisteredRadBtn;
     }
 
     @Override

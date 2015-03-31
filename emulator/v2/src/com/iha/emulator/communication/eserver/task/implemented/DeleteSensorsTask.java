@@ -1,12 +1,12 @@
 package com.iha.emulator.communication.eserver.task.implemented;
 
 import com.iha.emulator.communication.eserver.task.AbstractServerTask;
-import com.iha.emulator.control.SensorController;
-import javafx.collections.ObservableList;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+
+import java.util.ArrayList;
 
 /**
  * Created by Shu on 8.12.2014.
@@ -14,16 +14,17 @@ import org.dom4j.Element;
 public class DeleteSensorsTask extends AbstractServerTask<Boolean> {
 
     private String dbName;
-    private ObservableList<SensorController> sensors;
+    private ArrayList<Integer> sensors;
 
 
-    public DeleteSensorsTask(String dbName,ObservableList<SensorController> sensors) {
+    public DeleteSensorsTask(String dbName,ArrayList<Integer> sensors) {
         this.dbName = dbName;
         this.sensors = sensors;
+        getLogger().warn("DeleteSensorsTask -> initializing -> " + dbName + " sensors: " + sensors);
     }
 
     /**
-     * <emulator_server db="home4>
+     * <emulator_server db="home4">
      *     <task type="deleteSensors">
      *         <sensors>
      *             <sensor id="132123"/>
@@ -39,15 +40,19 @@ public class DeleteSensorsTask extends AbstractServerTask<Boolean> {
      */
     @Override
     public String buildMessage() {
+        getLogger().warn("DeleteSensorsTask -> building message");
         Document doc = createDocument();
+        getLogger().warn("DeleteSensorsTask -> document created");
         Element task = buildMessageRoot(doc, dbName)
                 .addElement("task")
                 .addAttribute("type", "deleteSensors");
+        getLogger().warn("DeleteSensorsTask -> task element created");
         Element sensorsElement = task.addElement("sensors");
-        for(SensorController sensor : sensors){
+        for(Integer sensor : sensors){
             sensorsElement.addElement("sensor")
-                    .addAttribute("id",String.valueOf(sensor.getModel().getId()));
+                    .addAttribute("id",String.valueOf(sensor));
         }
+        getLogger().warn("DELETE message: " + doc.asXML());
         return doc.asXML();
     }
 

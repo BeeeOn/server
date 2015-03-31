@@ -4,8 +4,8 @@ import com.iha.emulator.communication.protocol.Protocol;
 import com.iha.emulator.communication.protocol.SetNewValue;
 import com.iha.emulator.communication.server.MessageSender;
 import com.iha.emulator.communication.server.OutMessage;
-import com.iha.emulator.communication.server.ServerController;
-import com.iha.emulator.communication.server.ServerReceiver;
+import com.iha.emulator.communication.server.ssl.ServerController;
+import com.iha.emulator.communication.server.ssl.ServerReceiver;
 import com.iha.emulator.control.scheduler.Scheduler;
 import com.iha.emulator.control.scheduler.implemented.DetailedScheduler;
 import com.iha.emulator.control.scheduler.implemented.PerformanceScheduler;
@@ -141,6 +141,47 @@ public class AdapterController {
     }
 
     public void cleanSensor(int sensorId) throws IllegalArgumentException{
+        /*ArrayList<Integer> ids = new ArrayList<>();
+        ids.add(sensorId);
+        Task<Object> worker = new Task<Object>() {
+            @Override
+            protected Object call() throws Exception {
+                EmulatorServerClient server = new EmulatorServerClient(getServerController().getModel().getIp());
+                try{
+                    server.connect();
+                }catch (IOException e){
+                    Platform.runLater(()->Utilities.showException(logger, "Cannot connect to emulator server", e, false, null));
+                }
+                try{
+                    //compose message for server
+                    ServerTask task = new DeleteSensorsTask(getServerController().getModel().getDatabaseName(),ids);
+                    //send message and wait for response
+                    logger.warn("Creating and sending message");
+                    String messageFromServer = server.sendMessage(task.buildMessage());
+                    //determine result state (OK/ERROR)
+                    TaskParser.parseTaskResult(messageFromServer);
+                    //if ok, parse response
+                    task.parseResponse(messageFromServer);
+                    //show response in table
+                    String status;
+                    if(!((DeleteAdapterTask)task).getResult()){
+                        Platform.runLater(()-> Utilities.showException(logger, "Error in database delete", null, false, null));
+                    }
+                }catch (IOException e){
+                    Platform.runLater(()-> Utilities.showException(logger, "Cannot read from socket", e, false, null));
+                }catch (DocumentException de){
+                    Platform.runLater(()-> Utilities.showException(logger,"Cannot parse server message",de,false,null));
+                }catch (IllegalStateException ie){
+                    Platform.runLater(()-> Utilities.showException(logger,"Error on server",ie,false,null));
+                }
+                return null;
+            }
+        };
+        //create thread for background process
+        Thread th = new Thread(worker);
+        th.setDaemon(true);
+        //run background process
+        th.start();*/
         Platform.runLater(()->deleteSensor(getSensorControllerById(sensorId)));
     }
 
@@ -164,6 +205,7 @@ public class AdapterController {
     public void deleteSensor(SensorController sensorController){
         String name;
         name = sensorController.toString();
+        removeSensorsAdaptersStatusListener(sensorController);
         logger.debug(name + " -> Deleting");
         if (sensorController.getTimerRunning()) sensorController.setTimerRunning(false);
         if (sensorController.getPanel() != null) {
@@ -175,6 +217,11 @@ public class AdapterController {
         logger.trace(name + " -> removing from list");
         sensorController.delete();
         logger.debug(name + " -> OK");
+    }
+
+    private void removeSensorsAdaptersStatusListener(SensorController sensorController){
+        if(sensorController.getAdapterStatusChangeListener() == null) return;
+        adapter.statusProperty().removeListener(sensorController.getAdapterStatusChangeListener());
     }
 
 
@@ -389,16 +436,15 @@ public class AdapterController {
             }
         });
         //listener for adapter activity; start all active sensors timers, if adapter is enabled
-        adapter.statusProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if (newValue && controller.getModel().getStatus()) {
-                    controller.setTimerRunning(true);
-                } else {
-                    controller.setTimerRunning(false);
-                }
+        controller.setAdapterStatusChangeListener((observable, oldValue, newValue) -> {
+            if(controller == null || controller.getModel() == null) return;
+            if (newValue && controller.getModel().getStatus()) {
+                controller.setTimerRunning(true);
+            } else {
+                controller.setTimerRunning(false);
             }
         });
+        adapter.statusProperty().addListener(controller.getAdapterStatusChangeListener());
         return controller;
     }
 

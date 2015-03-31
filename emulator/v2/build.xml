@@ -250,6 +250,11 @@
     <copy file="${basedir}/resources/lib/jfxtras-common-8.0-r3.jar" tofile="${artifact.temp.output.SmartHomeEmulator}/lib/jfxtras-common-8.0-r3.jar"/>
     <copy file="${basedir}/resources/lib/jfxtras-controls-8.0-r3.jar" tofile="${artifact.temp.output.SmartHomeEmulator}/lib/jfxtras-controls-8.0-r3.jar"/>
     <copy file="${basedir}/resources/lib/jfxtras-fxml-8.0-r3.jar" tofile="${artifact.temp.output.SmartHomeEmulator}/lib/jfxtras-fxml-8.0-r3.jar"/>
+    <!--<mkdir dir="${artifact.temp.output.SmartHomeEmulator}/lib/certificates"/>
+    <copy todir="${artifact.temp.output.SmartHomeEmulator}/lib/certificates">
+      <fileset dir="${basedir}/resources/lib/certificates"/>
+    </copy>
+    <mkdir dir="${artifact.temp.output.SmartHomeEmulator}/lib/certificates"/>-->
     <!--copy saved templates of tasks and sensors-->
     <mkdir dir="${artifact.output.gui-emulator-v2}/templates"/>
     <copydir src="${basedir}/templates" dest="${artifact.output.gui-emulator-v2}/templates" includes="**/*"/>
@@ -259,6 +264,9 @@
     <!--copy logs-->
     <mkdir dir="${artifact.output.gui-emulator-v2}/logs"/>
     <copydir src="${basedir}/logs" dest="${artifact.output.gui-emulator-v2}/logs" includes="**/*"/>
+    <!--copy certificates-->
+    <mkdir dir="${artifact.output.gui-emulator-v2}/lib/certificates"/>
+    <copydir src="${basedir}/lib/certificates" dest="${artifact.output.gui-emulator-v2}/lib/certificates" includes="**/*"/>
 
     <fx:fileset id="all_but_SmartHomeEmulator" dir="${artifact.temp.output.SmartHomeEmulator}" includes="**/*.jar">
       <exclude name="SmartHomeEmulator.jar"/>
@@ -282,9 +290,9 @@
     <copy todir="${artifact.output.gui-emulator-v2}">
       <fileset dir="${artifact.temp.output.SmartHomeEmulator}/deploy"/>
     </copy>
-    <delete includeemptydirs="true">
+    <!--<delete includeemptydirs="true">
       <fileset dir="${artifact.temp.output.SmartHomeEmulator}"/>
-    </delete>
+    </delete>-->
   </target>
   
   <target name="build.all.artifacts" depends="artifact.gui-emulator-v2" description="Build all artifacts">

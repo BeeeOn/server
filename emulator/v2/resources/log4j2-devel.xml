@@ -51,6 +51,9 @@
         <Logger name="com.iha.emulator.ui.dialogs.sensor.SensorDetailsDialogPresenter" level="${globalPresenterLevel}"/>
         <Logger name="com.iha.emulator.ui.dialogs.sensor.SensorDetailsDialogView" level="${globalViewLevel}"/>
 
+        <Logger name="com.iha.emulator.ui.dialogs.sensor.DeleteSensorsDialogPresenter" level="${globalPresenterLevel}"/>
+        <Logger name="com.iha.emulator.ui.dialogs.sensor.SensorDetailsDialogView" level="${globalViewLevel}"/>
+
         <Logger name="com.iha.emulator.ui.dialogs.task.AddNewTaskDialogPresenter" level="${globalPresenterLevel}"/>
         <Logger name="com.iha.emulator.ui.dialogs.task.AddNewTaskDialogView" level="${globalViewLevel}"/>
 
@@ -61,23 +64,27 @@
         <Logger name="com.iha.emulator.control.AdapterController" level="${globalControllerLevel}"/>
         <Logger name="com.iha.emulator.control.SensorController" level="${globalControllerLevel}"/>
 
-        <Logger name="com.iha.emulator.control.task.SimulationTask" level="trace"/>
-        <Logger name="com.iha.emulator.control.task.TaskParameters" level="trace"/>
-        <Logger name="com.iha.emulator.control.task.StopCondition" level="trace"/>
-        <Logger name="com.iha.emulator.control.task.ValueParameters" level="trace"/>
+        <Logger name="com.iha.emulator.control.task.SimulationTask" level="${globalControllerLevel}"/>
+        <Logger name="com.iha.emulator.control.task.TaskParameters" level="${globalControllerLevel}"/>
+        <Logger name="com.iha.emulator.control.task.StopCondition" level="${globalControllerLevel}"/>
+        <Logger name="com.iha.emulator.control.task.ValueParameters" level="${globalControllerLevel}"/>
 
         <Logger name="com.iha.emulator.communication.protocol.AbstractProtocol" level="${globalControllerLevel}"/>
-        <Logger name="com.iha.emulator.communication.server.ServerController" level="${globalControllerLevel}"/>
         <Logger name="com.iha.emulator.control.scheduler.implemented.PerformanceScheduler" level="${globalControllerLevel}"/>
-        <Logger name="com.iha.emulator.control.scheduler.implemented.DetailedScheduler" level="debug"/>
+        <Logger name="com.iha.emulator.control.scheduler.implemented.DetailedScheduler" level="${globalControllerLevel}"/>
         <Logger name="com.iha.emulator.models.Sensor" level="${globalModelLevel}"/>
         <Logger name="com.iha.emulator.models.value.Value" level="${globalModelLevel}"/>
 
+        <Logger name="com.iha.emulator.communication.server.ServerController" level="${globalControllerLevel}"/>
         <Logger name="com.iha.emulator.communication.server.ServerReceiver" level="${globalControllerLevel}"/>
+        <Logger name="com.iha.emulator.communication.eserver.EmulatorServerClient" level="${globalControllerLevel}"/>
+        <Logger name="com.iha.emulator.communication.eserver.task.AbstractServerTask" level="${globalControllerLevel}"/>
+
+        <Logger name="com.iha.emulator.communication.server.ssl.ServerController" level="trace"/>
+        <Logger name="com.iha.emulator.communication.server.ssl.ServerReceiver" level="trace"/>
 
         <Logger name="com.iha.emulator.utilities.Utilities" level="${globalControllerLevel}"/>
         <Logger name="com.iha.emulator.utilities.logging.AdapterLogger" level="${globalControllerLevel}"/>
-        <Logger name="com.iha.emulator.communication.eserver.EmulatorServerClient" level="${globalControllerLevel}"/>
         <Logger name="com.iha.emulator.ui.panels.sensor.SensorValueCellFactory" level="${globalControllerLevel}"/>
         <Root level="trace">
             <AppenderRef ref="Console" level="trace"/>

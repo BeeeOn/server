@@ -81,8 +81,7 @@ public class ZeroPointOne extends AbstractProtocol {
         try{
             document = DocumentHelper.parseText(inMessage);
         }catch (DocumentException e){
-            getLogger().error("Unparsable message from server: " + inMessage,e);
-            throw new DocumentException("Unparsable message from server: " + inMessage);
+            throw new DocumentException("Unparsable message from server: \n" + (inMessage.isEmpty() ? "message is empty": inMessage));
         }
         if(document == null) throw new NullPointerException("ZeroPointOne protocol -> parseInMessage -> document=null");
         return document;

@@ -53,9 +53,9 @@ public class OnOffActuatorValue extends AbstractValue<Boolean> implements HasBoo
 
     @Override
     public Boolean fromStringToValueType(String valueString) throws NumberFormatException {
-        if(valueString.equals("1") || valueString.equals("1.0"))
+        if(valueString.equals("1") || valueString.equals("1.0") || valueString.equals("ON"))
             return true;
-        else if (valueString.equals("0") || valueString.equals("0.0"))
+        else if (valueString.equals("0") || valueString.equals("0.0") || valueString.equals("OFF"))
             return false;
         else return Boolean.valueOf(valueString);
     }

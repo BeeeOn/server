@@ -61,7 +61,7 @@ public class ChangeServerDetailsDialogPresenter implements Presenter,PanelPresen
     }
 
     public ChangeServerDetailsDialogPresenter(Stage stage, ObservableList<Server> servers, AdapterController adapterController) {
-        this.serverInfoSet = new SimpleBooleanProperty(false);
+        this.serverInfoSet = new SimpleBooleanProperty(true);
         ValidationDecoration iconDecorator = new StyleClassValidationDecoration("validationError", "validationWarn");
         serverValidationSupport.setValidationDecorator(iconDecorator);
         this.window = stage;
@@ -264,16 +264,14 @@ public class ChangeServerDetailsDialogPresenter implements Presenter,PanelPresen
         //server
         //--server field validator
         serverValidationSupport.registerValidator(view.getServerNameTxtField(), false, Validator.createEmptyValidator("Name is required"));
-        serverValidationSupport.registerValidator(view.getServerIpTxtField(), false, Validator.createEmptyValidator("Ip is required"));
-        serverValidationSupport.registerValidator(view.getServerIpTxtField(), false, (Control c, String newValue) ->
-                ValidationResult.fromErrorIf(view.getServerIpTxtField(), "Ip must be in IP4 address format (xxx.xxx.xxx.xxx)", !Utilities.isIp(newValue)));
+        serverValidationSupport.registerValidator(view.getServerIpTxtField(), false, Validator.createEmptyValidator("Hostname or IP is required"));
         serverValidationSupport.registerValidator(view.getServerPortTxtField(), false, Validator.createEmptyValidator("Port is required"));
         serverValidationSupport.registerValidator(view.getServerPortTxtField(), false, (Control c, String newValue) ->
                 ValidationResult.fromErrorIf(view.getServerPortTxtField(), "Port must be an integer number with maximum of 5 digits", !Utilities.isIntegerNumber(newValue, 1, 5)));
         serverValidationSupport.registerValidator(view.getServerDbNameTxtField(), false, Validator.createEmptyValidator("Database name is required"));
         //--set placeholders
         view.getServerNameTxtField().setPromptText("Example: devel");
-        view.getServerIpTxtField().setPromptText("Example: 10.1.0.1");
+        view.getServerIpTxtField().setPromptText("Example: ant-2.fit.vutbr.cz");
         view.getServerPortTxtField().setPromptText("Example: 7080");
         view.getServerDbNameTxtField().setPromptText("Example: home4");
             //disable checkbox

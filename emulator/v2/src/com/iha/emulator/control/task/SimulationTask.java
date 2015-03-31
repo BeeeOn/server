@@ -5,7 +5,7 @@ import com.iha.emulator.communication.eserver.task.ServerTask;
 import com.iha.emulator.communication.eserver.task.TaskParser;
 import com.iha.emulator.communication.eserver.task.implemented.DeleteAdapterTask;
 import com.iha.emulator.communication.protocol.Protocol;
-import com.iha.emulator.communication.server.ServerController;
+import com.iha.emulator.communication.server.ssl.ServerController;
 import com.iha.emulator.control.AdapterController;
 import com.iha.emulator.control.SensorController;
 import com.iha.emulator.control.scheduler.Scheduler;

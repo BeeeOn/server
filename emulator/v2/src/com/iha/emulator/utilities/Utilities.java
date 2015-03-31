@@ -440,7 +440,7 @@ public class Utilities {
         if(sensorId.equals("")) return false;
         int id = Integer.valueOf(sensorId);
         for(SensorController sController : controller.getSensorControllersList()){
-            if(sController.getModel().getId() == id){
+            if(sController.getModel() != null && sController.getModel().getId() == id){
                 return true;
             }
         }

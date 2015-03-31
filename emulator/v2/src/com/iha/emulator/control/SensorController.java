@@ -37,6 +37,7 @@ public class SensorController {
     private BooleanProperty ignoreRefreshChange;
     private Document XMLmessage = null;
     private boolean criticalStop = false;
+    private ChangeListener<Boolean> adapterStatusChangeListener = null;
 
     public SensorController(AdapterController adapterController,Sensor model) throws NullPointerException{
         this(adapterController,null,model);
@@ -319,6 +320,14 @@ public class SensorController {
 
     public void setCriticalStop(boolean criticalStop) {
         this.criticalStop = criticalStop;
+    }
+
+    public ChangeListener<Boolean> getAdapterStatusChangeListener() {
+        return adapterStatusChangeListener;
+    }
+
+    public void setAdapterStatusChangeListener(ChangeListener<Boolean> adapterStatusChangeListener) {
+        this.adapterStatusChangeListener = adapterStatusChangeListener;
     }
 
     public String toString(){

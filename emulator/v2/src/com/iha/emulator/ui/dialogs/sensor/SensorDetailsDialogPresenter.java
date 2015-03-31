@@ -667,7 +667,7 @@ public class SensorDetailsDialogPresenter implements Presenter,PanelPresenter{
         sensorGeneralValidator.registerValidator(view.getSensorNameLbl(), false, Validator.createEmptyValidator("Name is required"));
         sensorGeneralValidator.registerValidator(view.getSensorIdLbl(), false, Validator.createEmptyValidator("Id is required"));
         sensorGeneralValidator.registerValidator(view.getSensorIdLbl(), false, (Control c, String newValue) ->
-                ValidationResult.fromErrorIf(view.getSensorIdLbl(), "Id must be in IP4 address format (xxx.xxx.xxx.xxx)", !Utilities.isIp(newValue)));
+                ValidationResult.fromErrorIf(view.getSensorIdLbl(), "Id must be an integer number", !Utilities.isIntegerNumber(newValue,1,10)));
         sensorGeneralValidator.registerValidator(view.getSensorIconComboBox(), false, (Control c, SensorIcon icon) ->
                 ValidationResult.fromErrorIf(view.getSensorIconComboBox(), "Icon is required", (icon == null)));
         // --sliders
@@ -764,7 +764,7 @@ public class SensorDetailsDialogPresenter implements Presenter,PanelPresenter{
             }
         });
 
-        view.getSensorIdLbl().setPromptText("Example: 100.100.100.100");
+        view.getSensorIdLbl().setPromptText("Example: 111");
         view.getSensorNameLbl().setPromptText("Example: Multisensor");
         listenToValueChanges();
     }

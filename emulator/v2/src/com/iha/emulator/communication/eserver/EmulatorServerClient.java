@@ -47,7 +47,7 @@ public class EmulatorServerClient {
         try {
             logger.debug("Sending message:");
             logger.debug(message);
-            if(message.isEmpty()) logger.debug("Message for server is EMPTY!!!");
+            if(message.isEmpty()) logger.error("Message for server is EMPTY!!!");
             out.println(message);
             out.flush();
             logger.debug("Message sent successfully");

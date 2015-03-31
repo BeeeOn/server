@@ -28,6 +28,7 @@ import org.dom4j.DocumentException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 /**
  * Created by Shu on 6.12.2014.
@@ -71,6 +72,7 @@ public class DeleteSensorsDialogPresenter implements Presenter,PanelPresenter {
             }
             showStatus("Deleting from emulator",true);
             adapterController.deleteSensors(sensorControllers);
+            sensorControllers.clear();
             adapterController.getAdapter().setStatus(adapterStatus);
             adapterController.setSaved(false);
             close();
@@ -81,6 +83,8 @@ public class DeleteSensorsDialogPresenter implements Presenter,PanelPresenter {
     }
 
     private Thread deleteFromDatabase(ObservableList<SensorController> sensorControllers){
+        ArrayList<Integer> ids = new ArrayList<>();
+        sensorControllers.forEach(s->ids.add(s.getModel().getId()));
         logger.trace("Deleting sensors from database");
         Task<Object> worker = new Task<Object>() {
             @Override
@@ -93,22 +97,21 @@ public class DeleteSensorsDialogPresenter implements Presenter,PanelPresenter {
                 }
                 try{
                     //compose message for server
-                    ServerTask task = new DeleteSensorsTask(adapterController.getServerController().getModel().getDatabaseName(),sensorControllers);
+                    ServerTask task = new DeleteSensorsTask(adapterController.getServerController().getModel().getDatabaseName(),ids);
                     //send message and wait for response
+                    logger.warn("Creating and sending message");
                     String messageFromServer = server.sendMessage(task.buildMessage());
                     //determine result state (OK/ERROR)
                     TaskParser.parseTaskResult(messageFromServer);
                     //if ok, parse response
                     task.parseResponse(messageFromServer);
                     //show response in table
-                    String status;
-                    if(((DeleteAdapterTask)task).getResult()){
-                        status = "Database delete OK";
-                    }else{
-                        status = "Error in database delete";
+                    if(!((DeleteAdapterTask)task).getResult()){
+                        Platform.runLater(()->{
+                            showStatus("Error in database delete",false);
+                            Utilities.showException(logger,"Error in database delete",null,false,null);
+                        });
                     }
-                    Platform.runLater(()->showStatus(status,false));
-                    sensorControllers.clear();
                 }catch (IOException e){
                     Platform.runLater(()-> Utilities.showException(logger, "Cannot read from socket", e, false, null));
                 }catch (DocumentException de){

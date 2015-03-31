@@ -3,26 +3,21 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<VBox fx:id="view" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="267.0" prefWidth="382.0" styleClass="whiteBackground" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iha.emulator.ui.dialogs.adapter.ChangeAdapterDetailsDialogView">
+<VBox fx:id="view" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="225.0" prefWidth="382.0" styleClass="whiteBackground" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iha.emulator.ui.dialogs.adapter.ChangeAdapterDetailsDialogView">
    <children>
       <Label prefHeight="47.0" prefWidth="598.0" styleClass="detailedSimLbl" text="Change adapter details" VBox.vgrow="NEVER">
          <VBox.margin>
             <Insets left="15.0" />
          </VBox.margin>
       </Label>
-      <StackPane prefHeight="314.0" prefWidth="296.0" VBox.vgrow="ALWAYS">
+      <StackPane prefHeight="135.0" prefWidth="382.0" VBox.vgrow="ALWAYS">
          <children>
-            <VBox fx:id="adapterContainer" prefHeight="200.0" prefWidth="100.0">
+            <VBox fx:id="adapterContainer" prefHeight="148.0" prefWidth="382.0">
                <children>
                   <Label prefHeight="17.0" prefWidth="524.0" styleClass="informationHeader" text="Adapter information" />
-                  <GridPane prefHeight="163.0" styleClass="informationContainer">
+                  <GridPane prefHeight="121.0" prefWidth="352.0" styleClass="informationContainer">
                      <children>
                         <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="139.0" styleClass="sensorText" text="Firmware:" GridPane.rowIndex="1">
-                           <padding>
-                              <Insets right="6.0" />
-                           </padding>
-                        </Label>
-                        <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="139.0" styleClass="sensorText" text="Registered:" GridPane.rowIndex="2">
                            <padding>
                               <Insets right="6.0" />
                            </padding>
@@ -32,7 +27,7 @@
                               <Insets right="6.0" />
                            </padding>
                         </Label>
-                        <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="139.0" styleClass="sensorText" text="Comm.protocol:" GridPane.rowIndex="3">
+                        <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="139.0" styleClass="sensorText" text="Comm.protocol:" GridPane.rowIndex="2">
                            <padding>
                               <Insets right="6.0" />
                            </padding>
@@ -47,19 +42,7 @@
                               <Tooltip text="Fill adapter firmware version. Example: 0" />
                            </tooltip>
                         </TextField>
-                        <RadioButton fx:id="adapterNoRegisteredRadBtn" mnemonicParsing="false" selected="true" text="No" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                           <toggleGroup>
-                              <ToggleGroup fx:id="registeregRadBtnGroup" />
-                           </toggleGroup>
-                           <tooltip>
-                              <Tooltip text="Pick if adapter doesn't exist in database" />
-                           </tooltip>
-                        </RadioButton>
-                        <RadioButton fx:id="adapterYesRegisteredRadBtn" mnemonicParsing="false" text="Yes" toggleGroup="$registeregRadBtnGroup" GridPane.columnIndex="2" GridPane.rowIndex="2">
-                           <tooltip>
-                              <Tooltip text="Pick if adapter doesn't exist in database" />
-                           </tooltip></RadioButton>
-                        <ComboBox fx:id="adapterProtocolComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3">
+                        <ComboBox fx:id="adapterProtocolComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2">
                            <tooltip>
                               <Tooltip text="Pick version of communication protocol between server and emulator" />
                            </tooltip></ComboBox>
@@ -71,7 +54,6 @@
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="458.0" minWidth="2.0" prefWidth="27.0" />
                      </columnConstraints>
                      <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />

@@ -63,8 +63,6 @@ import java.util.stream.Collectors;
 public class DetailedSimulationPresenter implements Presenter{
 
     private static final Logger logger = LogManager.getLogger(DetailedSimulationPresenter.class);
-    private static final boolean DEBUG_AUTO_CREATE = false;
-    private static final int DEFAULT_SERVER_LISTENER_PORT = 7978;
     private static final String SAVES_DEFAULT_DIR = "saved/adapters";
     private static final String FXML_PATH = "DetailedSimulation.fxml";
     private static final String CSS_PATH = "/com/iha/emulator/resources/css/theme-light.css";
@@ -145,80 +143,31 @@ public class DetailedSimulationPresenter implements Presenter{
 
     public void addNewAdapter(){
         logger.debug("Creating new adapter");
-        if(!DEBUG_AUTO_CREATE){
-            //define background process
-            Task<Object> worker = new Task<Object>() {
-                @Override
-                protected Object call() throws Exception {
-                    LongProperty progress = new SimpleLongProperty(0);
-                    progress.addListener(new ChangeListener<Number>() {
-                        @Override
-                        public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                            if((Long)newValue > 0 && (Long)newValue < 100)
-                                updateProgress((long)newValue,100);
-                        }
-                    });
-                    ObservableList<Server> tmp;
-                    try{
-                        tmp = Utilities.buildServersFromProperties(properties,progress);
-                        final ObservableList<Server> finalTmp = tmp;
-                        Platform.runLater(() -> showAddAdapterDialog(finalTmp));
-                    }catch (IllegalArgumentException e){
-                        Platform.runLater(() -> showAddAdapterDialog(null));
-                        Platform.runLater(() -> Utilities.showException(logger, "Cannot load settings from properties file", e, false, null));
+        //define background process
+        Task<Object> worker = new Task<Object>() {
+            @Override
+            protected Object call() throws Exception {
+                LongProperty progress = new SimpleLongProperty(0);
+                progress.addListener(new ChangeListener<Number>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                        if((Long)newValue > 0 && (Long)newValue < 100)
+                            updateProgress((long)newValue,100);
                     }
-                    return null;
+                });
+                ObservableList<Server> tmp;
+                try{
+                    tmp = Utilities.buildServersFromProperties(properties,progress);
+                    final ObservableList<Server> finalTmp = tmp;
+                    Platform.runLater(() -> showAddAdapterDialog(finalTmp));
+                }catch (IllegalArgumentException e){
+                    Platform.runLater(() -> showAddAdapterDialog(null));
+                    Platform.runLater(() -> Utilities.showException(logger, "Cannot load settings from properties file", e, false, null));
                 }
-            };
-            showLoadingDialog(worker,"Loading...");
-        }else{
-            //check if list of adapter controllers exist
-            AdapterController newAdapterController = null;
-            try {
-                //create new adapter controller
-                newAdapterController = new AdapterController();
-                //save it to list
-                adapterControllersList.add(newAdapterController);
-                //create new adapter
-                newAdapterController.createAdapter(false,99999-i,false, Protocol.Version.ZERO_POINT_ONE,Double.valueOf(Utilities.getProperty(properties, "defaultFirmware")));
-                //create new server
-                newAdapterController.createServer(false,"production","10.1.0.1",9092,"home4prod");
-                //create logger
-                newAdapterController.createLog(getView().getLogTabPane());
-                //config log
-                //newAdapterController.getLog().setType(AdapterLogger.toType(getProperty("defaultLogMessageType")));
-                //create scheduler
-                newAdapterController.createScheduler(Scheduler.Type.DETAILED);
-                //set response tracking
-                newAdapterController.setTrackServerResponse(true);
-                newAdapterController.setDumpServerResponse(true);
-                //bind scheduler processing to adapter's status indicator
-                newAdapterController.bindSchedulerProcess(newAdapterController.getAdapter(), newAdapterController.getScheduler());
-                //bind register message
-                newAdapterController.bindRegisterMessage();
-                //save new adapter button
-                addAdapterBtn(newAdapterController);
-
-                // set new adapter as current
-                setCurrentAdapter(newAdapterController);
-                try {
-                    newAdapterController.getLog().setBuffered(true,"adapter_emu_" + String.valueOf(newAdapterController.getAdapter().getId())+"_",AddAdapterDialogPresenter.DEFAULT_LOG_PATH);
-                    newAdapterController.getLog().writeAdapterLogHeaderToBuffer();
-                } catch (IOException e) {
-                    Utilities.showException(logger, "Cannot create buffer file for new adapter log.", e, true, event -> quit());
-                }
-            } catch (IllegalArgumentException e){
-                adapterControllersList.remove(newAdapterController);
-                Utilities.showException(
-                        logger,
-                        "Cannot create adapter. Error in properties file. Please review file an start application again.",
-                        e,
-                        true,
-                        event -> quit());
+                return null;
             }
-            i++;
-        }
-
+        };
+        showLoadingDialog(worker,"Loading...");
     }
 
     private void showAddAdapterDialog(ObservableList<Server> servers){
@@ -243,34 +192,6 @@ public class DetailedSimulationPresenter implements Presenter{
 
     public void addNewSensor(){
         logger.debug("Creating new sensor");
-        if(!DEBUG_AUTO_CREATE){
-            showAddSensorDialog();
-        }else {
-            if(currentAdapterController != null){
-                try {
-                    ObservableList<Value> tmpValues = FXCollections.observableArrayList();
-
-                    Value actValue = ValueFactory.buildValue(Value.Type.ACTUATOR_ON_OFF);
-                    tmpValues.addAll(actValue);
-                    /*Value tempValue = ValueFactory.buildValue(Value.Type.SENSOR_TEMPERATURE);
-                    tempValue.setGenerateValue(true);
-                    ((TemperatureSensorValue) tempValue).setGeneratorType(Value.Generator.NORMAL_DISTRIBUTION);
-                    Value humValue = ValueFactory.buildValue(Value.Type.SENSOR_HUMIDITY);
-                    humValue.setGenerateValue(true);
-                    ((HumiditySensorValue) humValue).setGeneratorType(Value.Generator.NORMAL_DISTRIBUTION);
-                    //Value actValue = ValueFactory.buildValue(Value.Type.ACTUATOR_ON_OFF);
-                    tmpValues.addAll(tempValue,humValue);*/
-                    currentAdapterController.createSensor(view.getSensorPanelContainer(),"#0cdf56", SensorIcon.MULTI_SENSOR,tmpValues,false,1677721601+i,"Test sensor",90,91,5,currentAdapterController.getAdapter().getProtocol());
-                    currentAdapterController.setSaved(false);
-                    i++;
-                } catch (LoadException e) {
-                    Utilities.showException(logger, "Cannot create new sensor", e, false, null);
-                }
-            }
-        }
-    }
-
-    private void showAddSensorDialog(){
         AddNewSensorDialogPresenter addNewSensorDialogPresenter;
         try{
             Stage stage = new Stage();
@@ -616,9 +537,8 @@ public class DetailedSimulationPresenter implements Presenter{
                 if(Utilities.isAdapterIdTaken(getAdapterControllers(),adapterId)) throw new IllegalArgumentException("Adapter with id \"" + adapterId + "\" already exist!");
                 String adapterName = adapterElement.attribute("name").getValue();
                 Double adapterProtocolVersion = Double.valueOf(adapterElement.attribute("protocol").getValue());
-                Boolean adapterRegistered = Boolean.valueOf(adapterElement.attributeValue("registered"));
                 Double adapterFirmware = Double.valueOf(adapterElement.attributeValue("firmware"));
-                if(adapterId == null || adapterName == null || adapterProtocolVersion == null ||adapterRegistered == null ||adapterFirmware == null)
+                if(adapterId == null || adapterName == null || adapterProtocolVersion == null ||adapterFirmware == null)
                     throw new NullPointerException("Adapter info missing");
 
                 tmpAdapterController = new AdapterController();
@@ -626,7 +546,7 @@ public class DetailedSimulationPresenter implements Presenter{
                 if(protocolVersion == null)
                     throw new NullPointerException("Unknown protocol version -> " + adapterProtocolVersion);
                 //CREATE ADAPTER
-                tmpAdapterController.createAdapter(adapterName,false,adapterId,adapterRegistered, protocolVersion ,adapterFirmware);
+                tmpAdapterController.createAdapter(adapterName,false,adapterId,false, protocolVersion ,adapterFirmware);
                 logger.trace("XML -> Adapter info OK -> ID: " + adapterId + " Name: " + adapterName + " Prot.: " + adapterProtocolVersion);
                 //parse server info
                 logger.trace("XML -> Parsing server info");

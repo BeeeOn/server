@@ -6,7 +6,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
@@ -32,8 +31,6 @@ public class ChangeAdapterDetailsDialogView implements Initializable,ChangeAdapt
     //region ADAPTER
     @FXML private TextField adapterNameLbl;
     @FXML private TextField adapterFirmwareLbl;
-    @FXML private RadioButton adapterNoRegisteredRadBtn;
-    @FXML private RadioButton adapterYesRegisteredRadBtn;
     @FXML private ComboBox adapterProtocolComboBox;
     //endregion
 
@@ -72,16 +69,6 @@ public class ChangeAdapterDetailsDialogView implements Initializable,ChangeAdapt
     @Override
     public TextField getAdapterFirmwareLbl() {
         return adapterFirmwareLbl;
-    }
-
-    @Override
-    public RadioButton getAdapterNoRegisteredRadBtn() {
-        return adapterNoRegisteredRadBtn;
-    }
-
-    @Override
-    public RadioButton getAdapterYesRegisteredRadBtn() {
-        return adapterYesRegisteredRadBtn;
     }
 
     @Override

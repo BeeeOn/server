@@ -12,8 +12,10 @@ import org.apache.logging.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 
+import javax.net.ssl.SSLHandshakeException;
 import java.io.IOException;
 import java.net.ConnectException;
+import java.net.UnknownHostException;
 import java.nio.channels.ClosedByInterruptException;
 
 public class DetailedScheduler extends Thread implements Scheduler{
@@ -75,57 +77,90 @@ public class DetailedScheduler extends Thread implements Scheduler{
                             }
                         }
                     } catch (IllegalArgumentException ie) {
-                        if(message.getSenderController() != null){
-                            message.getSenderController().criticalErrorStop(
-                                    "Error: " + message.getSenderController().toString() + " -> " + ie.getMessage(),
-                                    "Error: " + message.getSenderController().toString() + " -> " + ie.getMessage(),
-                                    message
-                            );
-                        }else{
-                            Platform.runLater(()->{
+                        switch (message.getType()){
+                            case SENSOR_MESSAGE:
+                                message.getSenderController().criticalErrorStop(
+                                        "Error: " + message.getSenderController().toString() + " -> " + ie.getMessage(),
+                                        "Error: " + message.getSenderController().toString() + " -> " + ie.getMessage(),
+                                        message
+                                );
+                                break;
+                            case REGISTER_ADAPTER:
                                 adapterController.sendError("Warning: " + adapterController.toString() ,ie,false);
-                                adapterController.disable();
-                            });
+                                Platform.runLater(adapterController::disable);
+                                break;
+                            default:
+                                logger.fatal("Cannot determine message type");
+                                break;
                         }
                     } catch (WrongResponseException we) {
-                        if(message.getSenderController() != null){
-                            message.getSenderController().criticalErrorStop(
-                                    message.getSenderController().toString()+ " --> socket closed or wrong response from server! Stopping sensor",
-                                    message.getSenderController().toString() + " --> socket closed or wrong response from server! Stopping sensor",
-                                    message
-                            );
-                        } else {
-                            adapterController.sendError(adapterController.toString(),we,false);
+                        switch (message.getType()){
+                            case SENSOR_MESSAGE:
+                                message.getSenderController().criticalErrorStop(
+                                        message.getSenderController().toString() + " --> " + we.getMessage() + "! Stopping sensor",
+                                        message.getSenderController().toString() + " --> " + we.getMessage() + "! Stopping sensor",
+                                        message
+                                );
+                                break;
+                            case REGISTER_ADAPTER:
+                                adapterController.sendError(adapterController.toString(), we, false);
+                                break;
+                            default:
+                                logger.fatal("Cannot determine message type");
+                                break;
                         }
                     } catch (ClosedByInterruptException e){
                         logger.trace(getName() + " closed by interrupt");
                         terminateScheduler(false);
+                    } catch (SSLHandshakeException e){
+                        Platform.runLater(()->{
+                            adapterController.disable();
+                            adapterController.sendError(getName(),
+                                    e,
+                                    false);
+                        });
+                    }catch (UnknownHostException e){
+                        adapterController.sendError("Unknown host for " + adapterController.getServerController().getModel().getIp() + ". Please check IP address in server details.", e, false);
+                        Platform.runLater(adapterController::disable);
                     } catch (IOException ioe) {
-                        Platform.runLater(() -> {
-                            //adapter register message
-                            try{
-                                if(message.getSenderController() == null){
+                        try{
+                            switch (message.getType()){
+                                case SENSOR_MESSAGE:
+                                    adapterController.sendError("Warning: Cannot connect to server ( " + message.getSenderController().toString() + ")!", ioe, false);
+                                    break;
+                                case REGISTER_ADAPTER:
                                     if(ioe instanceof ConnectException){
-                                        adapterController.disable();
+                                        Platform.runLater(adapterController::disable);
                                         adapterController.sendError("Error: Cannot connect to server ( " + getName() + " -> server probably not running)!", ioe, false);
                                     }else{
-                                        adapterController.sendError("Warning: Cannot connect to server ( " + getName() + " -> register message )!", ioe, false);
+                                        adapterController.sendError("Warning: Cannot connect to server ( " + getName() + " -> server is probably busy )!", ioe, false);
                                     }
-                                }else{
-                                    adapterController.sendError("Warning: Cannot connect to server ( " + message.getSenderController().toString() + ")!", ioe, false);
-                                }
-                                adapterController.getServerController().getModel().setConn(false);
-                            }catch (NullPointerException e){
-                                //some threads may not know, they are terminated and their data are cleaned
+                                    break;
+                                default:
+                                    logger.fatal("Cannot determine message type");
+                                    break;
                             }
-
-                        });
+                            Platform.runLater(() -> adapterController.getServerController().getModel().setConn(false));
+                        }catch (NullPointerException e){
+                            //some threads may not know, they are terminated and their data are cleaned
+                        }
                     } catch (DocumentException e) {
-                        if(message.getSenderController() != null) message.getSenderController().criticalErrorStop(
-                                "Error: Adapter/" + adapterController.getAdapter().getId() + " -> Sensor/" + message.getSenderController().getModel().getId() + " --> Cannot parse XML response",
-                                "Error: " + message.getSenderController().getModel().getName() + "/" + message.getSenderController().getModel().getId() + " --> Cannot parse XML response",
-                                message
-                        );
+                        switch (message.getType()){
+                            case SENSOR_MESSAGE:
+                                message.getSenderController().criticalErrorStop(
+                                        "Error: Adapter/" + adapterController.getAdapter().getId() + " -> Sensor/" + message.getSenderController().getModel().getId() + " --> Cannot parse XML response",
+                                        "Error: " + message.getSenderController().getModel().getName() + "/" + message.getSenderController().getModel().getId() + " --> Cannot parse XML response",
+                                        message
+                                );
+                                break;
+                            case REGISTER_ADAPTER:
+                                Platform.runLater(adapterController::disable);
+                                adapterController.sendError("Cannot parse server XML response (REGISTER MESSAGE)",e,false);
+                                break;
+                            default:
+                                logger.fatal("Cannot determine message type");
+                                break;
+                        }
                     }
                 }else {
                     stopProcessing();

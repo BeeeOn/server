@@ -2,8 +2,8 @@ package com.iha.emulator.control.scheduler.implemented;
 
 import com.iha.emulator.communication.protocol.Protocol;
 import com.iha.emulator.communication.server.OutMessage;
-import com.iha.emulator.communication.server.ServerController;
 import com.iha.emulator.communication.server.WrongResponseException;
+import com.iha.emulator.communication.server.ssl.ServerController;
 import com.iha.emulator.control.AdapterController;
 import com.iha.emulator.control.scheduler.Scheduler;
 import com.iha.emulator.utilities.watchers.ResponseTracker;
@@ -13,7 +13,9 @@ import org.apache.logging.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 
+import javax.net.ssl.SSLHandshakeException;
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.nio.channels.ClosedByInterruptException;
 
 public class PerformanceScheduler extends Thread implements Scheduler{
@@ -117,7 +119,19 @@ public class PerformanceScheduler extends Thread implements Scheduler{
                     } catch (ClosedByInterruptException e){
                         logger.trace(getName() + " closed by interrupt");
                         terminateScheduler(false);
-                    } catch (IOException ioe) {
+                    } catch (SSLHandshakeException e){
+                        Platform.runLater(()-> adapterController.sendError(getName(),
+                                e,
+                                true));
+                        terminateScheduler(false);
+                    } catch (UnknownHostException e){
+                        logger.trace(getName() + " unknown host for -> " + adapterController.getServerController().getModel().getIp());
+                        Platform.runLater(()-> adapterController.sendError(
+                                "Unknown host for" + adapterController.getServerController().getModel().getIp() + ". Please check IP address in server details.",
+                                e,
+                                false));
+                        terminateScheduler(false);
+                    }catch (IOException ioe) {
                         Platform.runLater(() -> {
                             //adapter register message
                             try{
@@ -133,11 +147,18 @@ public class PerformanceScheduler extends Thread implements Scheduler{
 
                         });
                     } catch (DocumentException e) {
-                        if(message.getSenderController() != null) message.getSenderController().criticalErrorStop(
-                                "Error: Adapter/" + adapterController.getAdapter().getId() + " -> Sensor/" + message.getSenderController().getModel().getId() + " --> Cannot parse XML response",
-                                "Error: " + message.getSenderController().getModel().getName() + "/" + message.getSenderController().getModel().getId() + " --> Cannot parse XML response",
-                                message
-                        );
+                        if(message.getSenderController() != null){
+                            message.getSenderController().criticalErrorStop(
+                                    "Error: Adapter/" + adapterController.getAdapter().getId() + " -> Sensor/" + message.getSenderController().getModel().getId() + " --> Cannot parse XML response",
+                                    "Error: " + message.getSenderController().getModel().getName() + "/" + message.getSenderController().getModel().getId() + " --> Cannot parse XML response",
+                                    message
+                            );
+                        }else{
+                            Platform.runLater(() -> {
+                                adapterController.disable();
+                                adapterController.sendError("Cannot parse server XML response (REGISTER MESSAGE)", e, false);
+                            });
+                        }
                     }
                 }else {
                     stopProcessing();

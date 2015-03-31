@@ -2,7 +2,7 @@ package com.iha.emulator.ui.dialogs.task;
 
 import com.iha.emulator.communication.protocol.Protocol;
 import com.iha.emulator.communication.protocol.ProtocolFactory;
-import com.iha.emulator.communication.server.ServerController;
+import com.iha.emulator.communication.server.ssl.ServerController;
 import com.iha.emulator.control.task.SimulationTask;
 import com.iha.emulator.control.task.StopCondition;
 import com.iha.emulator.control.task.TaskParameters;
