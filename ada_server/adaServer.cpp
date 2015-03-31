@@ -14,6 +14,7 @@
 #include "workerPool.h"
 #include "adaServerSender.h"
 #include "adaServerReceiver.h"
+#include "SSLContainer.h"
 #include <exception> //kniznica pre bok try/catch
 #include <semaphore.h>
 #include <iostream> //kniznica pre vystup na teminal
@@ -29,6 +30,7 @@ std::thread *SenderThread;
 Loger *SenderLog;
 Loger *ReceiverLog;
 bool sigint =false;
+SSLContainer *sslCont;
 
 void sig_handler(int signo)
 {
@@ -37,6 +39,7 @@ void sig_handler(int signo)
 		sigint = true;
 		receiver->LogINT();
 		sender->LogINT();
+		delete (sslCont);
 		delete (c);
 		delete (wpool);
 		delete (sender);
@@ -68,7 +71,8 @@ int main()  //hlavne telo programu
 	{
 		SenderLog->WriteMessage(ERR," [Main Process] Unable to catch SIGINT");
 	}
-	wpool = WorkerPool::CreatePool(ReceiverLog,SenderLog,c->DBName(),c->ConnLimit());
+	sslCont = new SSLContainer();
+	wpool = WorkerPool::CreatePool(ReceiverLog,SenderLog,c->DBName(),c->ConnLimit(),sslCont);
 	if (wpool->Limit()<=0)
 	{
 		SenderLog->WriteMessage(FATAL," [Main Process] 0 connections to DB unable to server terminating!");

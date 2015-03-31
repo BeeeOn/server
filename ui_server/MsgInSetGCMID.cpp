@@ -6,7 +6,7 @@
  */
 
 #include "MsgInSetGCMID.h"
-#include "DBConnector.h"
+#include "../DAO/DAOMobileDevices.h"
 
 
 const std::string MsgInSetGCMID::state = "setgcmid";
@@ -29,7 +29,7 @@ string MsgInSetGCMID::createResponseMsgOut() {
     string mail = _doc->child(P_COMMUNICATION).attribute(P_EMAIL).value();
    // gcmid =   DBConnector::getInstance().DEBUGexec("select user_id from users where mail='"+mail+"';" );
     
-    if(DBConnector::getInstance().setGCMId(_IHAtoken, phoneid, _gUserId, gcmid) == 0)
+    if(DAOMobileDevices::getInstance().setGCMId(_token, phoneid, _userId, gcmid) == 0)
         throw ServerException(ServerException::GCMID);
     
     return envelopeResponse(R_TRUE); 

@@ -34,6 +34,7 @@
 #include "MsgInAlgorithmsRedirect.h"
 #include "MsgInGetUserID.h"
 #include "MsgInGetUserInfo.h"
+#include "Msgs/MsgInSignUp.h"
 #include <algorithm> 
 
 MsgInFactory::MsgInFactory(void)
@@ -58,9 +59,9 @@ IMsgIn* MsgInFactory::createMsg(char* msg)
         
     if (!result)
     {
-        Logger::getInstance(Logger::DEBUG2) << "XML [" << msg << "] parsed with errors\n";
-        Logger::getInstance(Logger::DEBUG2) << "Error description: " << result.description() << "\n";
-        Logger::getInstance(Logger::DEBUG2) << "Error offset: " << result.offset << " (error at [..." << (msg + result.offset) << "]"<<endl;
+        Logger::error()<< "XML [" << msg << "] parsed with errors" << endl;
+        Logger::error()<< "Error description: " << result.description() << endl;
+        Logger::error() << "Error offset: " << result.offset << " (error at [..." << (msg + result.offset) << "]"<<endl;
         return new MsgInUnknown(msg,doc); 
     }
     
@@ -69,7 +70,7 @@ IMsgIn* MsgInFactory::createMsg(char* msg)
     
     string state = doc->child(P_COMMUNICATION).attribute(P_STATE).value();
     
-    Logger::getInstance(Logger::DEBUG) << "msg: "<< state<< "\n";
+    Logger::getInstance(Logger::DEBUG3) << "factory: msg= "<< state<< endl;
 
     if(state == MsgInGetAdapters::state)
         return new MsgInGetAdapters(msg, doc);
@@ -79,6 +80,8 @@ IMsgIn* MsgInFactory::createMsg(char* msg)
         return new MsgInGetDevs(msg, doc);
     if(state == MsgInSignMe::state)
         return new MsgInSignMe(msg, doc);
+    if(state == MsgInSignUp::state)
+        return new MsgInSignUp(msg, doc);
     if(state == MsgInDevices::state)
         return new MsgInDevices(msg, doc);
     if(state == MsgInUpdateRooms::state)

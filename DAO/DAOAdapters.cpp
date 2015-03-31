@@ -6,15 +6,12 @@
  */
 
 #include "DAOAdapters.h"
+#include "ServerException.h"
 
 using namespace std;
 using namespace soci;
 
 DAOAdapters::DAOAdapters(){
-    _connectionString = Config::getInstance().getDBConnectionString();
-    _poolSize = 2;
-    _pool = new connection_pool(_poolSize);
-    setConnectionStringAndOpenSessions(_connectionString, _poolSize);
 }
 
 
@@ -26,7 +23,7 @@ DAOAdapters& DAOAdapters::getInstance(){
         return instance;
 }
 
-int DAOAdapters::parAdapterWithUserIfPossible(long long int adapterId, std::string adapterName, std::string gId) {
+int DAOAdapters::parAdapterWithUserIfPossible(long long int adapterId, std::string adapterName, int userId) {
     
     Logger::db()<< "par user - adapter (new user?)" << endl;
     try
@@ -36,7 +33,7 @@ int DAOAdapters::parAdapterWithUserIfPossible(long long int adapterId, std::stri
         
         string role = "superuser";
          statement st = (sql.prepare <<  "insert into users_adapters(fk_adapter_id, fk_user_id, role) select :a_id , :gId, :role where not exists (select 1 from users_Adapters where fk_adapter_id=:a_id)",// where fk_adapter_id=:a_id)
-                use(adapterId, "a_id"), use(role, "role"),  use(gId, "gId"));
+                use(adapterId, "a_id"), use(role, "role"),  use(userId, "gId"));
         st.execute(true);
         
         int updateCount = st.get_affected_rows();
@@ -74,3 +71,39 @@ int DAOAdapters::isAdapterInDB(long long int adapterId) {
 }
 
        
+string DAOAdapters::getTimeZone(string adapterId){
+    Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"get time zone (adapter="<<adapterId<<")\n";
+    try{
+        soci::session sql(*_pool);
+        
+        string timezone;
+        indicator ind;
+        sql << "select timezone from adapters where adapter_id=:adapter"
+                ,use(adapterId,"adapter"), into(timezone, ind);
+        
+            if(ind != i_ok)
+                throw ServerException(ServerException::ADAPTER_ID);
+        return timezone;
+    }
+    catch (soci::postgresql_soci_error& e)
+    {
+        Logger::getInstance(Logger::ERROR) << "Error: " << e.what() << '\n';
+        throw;
+    }
+}
+
+void DAOAdapters::updateAdaptersTimezone(string adapterId,  string newTimeZone){
+    Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"update time zone (adapter="<<adapterId<<")\n";
+    try{
+        soci::session sql(*_pool);
+        
+        string xml;
+        sql <<"update adapters set timezone = :timezone where adapter_id = :adapter"
+                ,use(newTimeZone, "timezone"),use(adapterId,"adapter");             
+    }
+    catch (soci::postgresql_soci_error& e)
+    {
+        Logger::getInstance(Logger::ERROR) << "Error: " << e.what() << '\n';
+        throw;
+    }
+}

@@ -43,7 +43,7 @@ void Worker::Work()
 		this->parentPool->ReturnWorker(this,this->_log);
 	}
 }
-Worker::Worker (soci::session *s,Loger *Rl,  Loger *Sl, WorkerPool *pool, int i)
+Worker::Worker (soci::session *s,Loger *Rl,  Loger *Sl, WorkerPool *pool, int i,SSLContainer *sslcont)
 {
 	Sl->WriteMessage(TRACE,"Entering" + this->_Name + "Constructor");
 	Rl->WriteMessage(TRACE,"Entering" + this->_Name + "Constructor");
@@ -58,8 +58,9 @@ Worker::Worker (soci::session *s,Loger *Rl,  Loger *Sl, WorkerPool *pool, int i)
 	this->terminate = false;
 	this->_number = i;
 	thr = NULL;
-	this->_RS = new RequestServer(Sl,s);
-	this->_CS = new ConnectionServer(s,Rl,5); //TODO: timeout!
+	this->_RS = new RequestServer(Sl,s,sslcont);
+	this->_CS = new ConnectionServer(s,Rl,5,sslcont);
+	this->_CS->LoadCertificates();
 	this->Receiver = true;
 	Sl->WriteMessage(TRACE,"Exiting" + this->_Name + "Constructor");
 	Rl->WriteMessage(TRACE,"Exiting" + this->_Name + "Constructor");

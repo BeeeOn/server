@@ -6,6 +6,7 @@
  */
 
 #include "MsgInAddAccount.h"
+#include "../DAO/DAOUsersAdapters.h"
 
 
 const std::string MsgInAddAccount::state = "addaccs";
@@ -38,7 +39,7 @@ string MsgInAddAccount::createResponseMsgOut()
         if(newRole != P_ROLE_GUEST && newRole != P_ROLE_USER && newRole !=P_ROLE_ADMIN && newRole != P_ROLE_SUPERUSER){
             errText += "<" P_USER " " P_EMAIL "=\""+newUserMail+"\" " P_ROLE "=\""+newRole+"\" />";
             fail = ServerException::ROLE;
-        }else if(DBConnector::getInstance().addConAccount(_adapterId, newUserMail, newRole) != 1){
+        }else if(DAOUsersAdapters::getInstance().addConAccount(_adapterId, newUserMail, newRole) != 1){
             errText += "<" P_USER " " P_EMAIL "=\""+newUserMail+"\" " P_ROLE "=\""+newRole+"\" />";
             fail = ServerException::EMAIL;
         } 

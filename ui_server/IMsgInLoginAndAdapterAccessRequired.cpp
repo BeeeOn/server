@@ -6,7 +6,7 @@
  */
 
 #include "IMsgInLoginAndAdapterAccessRequired.h"
-#include "DBConnector.h"
+#include "../DAO/DAOUsers.h"
 
 
 
@@ -19,11 +19,11 @@ IMsgInLoginAndAdapterAccessRequired::~IMsgInLoginAndAdapterAccessRequired() {
 
 enumAccessStatus IMsgInLoginAndAdapterAccessRequired::checkAccess(){
     
-        if( !isComIdValid() )
-            return FORBIDDEN_NOT_LOGGED;
+    if( !isComIdValid() )
+        return FORBIDDEN_NOT_LOGGED;
     
     //TODO přístup do paměti bez try catch, ale je to mimo kontruktor, tak mozna to je OK
-    string role = DBConnector::getInstance().getUserRoleM(_gUserId, _adapterId);
+    string role = DAOUsers::getInstance().getUserRoleM(_userId, _adapterId);
     
     int roleId;
     if(role == P_ROLE_GUEST)
@@ -36,23 +36,17 @@ enumAccessStatus IMsgInLoginAndAdapterAccessRequired::checkAccess(){
         roleId= SUPERUSER;
     else {
         roleId = -1;
-         Logger::getInstance(Logger::DEBUG3) << "undefined role:>"<<role <<"< ";
+         Logger::getInstance(Logger::ERROR) << "undefined role:>"<<role <<"< ";
     }
-    Logger::getInstance(Logger::DEBUG3) << "check role: "<< _gUserId <<" on "<<_state<<"("<<role<<"="<<roleId<<" "<<_state<<"="<<this->getMsgAuthorization() <<")"<<endl;
-    
-    if(roleId == -1){//this is handled by checker in msgFactory
-        Logger::getInstance(Logger::DEBUG3) << "wrong msg: "<<_state<<endl;
-        return FORBIDDEN_WRONG_RIGHTS;
-    }
+    Logger::getInstance(Logger::DEBUG3) << "check role: "<< _userId <<" on "<<_state<<"("<<role<<"="<<roleId<<" "<<_state<<"="<<this->getMsgAuthorization() <<")"<<endl;
+
     _role = role;
     
     if( roleId >= this->getMsgAuthorization()  ){
          Logger::getInstance(Logger::DEBUG3) << "msg right OK "<<endl;
          return GRANTED;
     }else{
-        Logger::getInstance(Logger::ERROR) << " NOT OK "<< _gUserId <<" on "<<_state<<"("<<role<<"="<<roleId<<" "<<_state<<"="<<this->getMsgAuthorization() <<") "<<endl;
+        Logger::getInstance(Logger::ERROR) << " NOT OK "<< _userId <<" on "<<_state<<"("<<role<<"="<<roleId<<" "<<_state<<"="<<this->getMsgAuthorization() <<") "<<endl;
         return FORBIDDEN_WRONG_RIGHTS;
     }
-    
-    
 }

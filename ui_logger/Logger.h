@@ -38,6 +38,8 @@ public:
     void setVerbose(int verbose);
     void setCerrVerbose(int verbose);
 
+    bool isOutputSetToCout();
+    
     void openOutput(std::string fileName);    
     void changeFiles();
     std::string getFileNamebyDate();
@@ -80,8 +82,6 @@ public:
         
         if(_level > _verbose)
             return *this;
-        
-        
         std::lock_guard<std::mutex> lck (_mtx);
         
         if(_level  <= _cerrVerbosity)

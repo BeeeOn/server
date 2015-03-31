@@ -6,7 +6,7 @@
  */
 
 #include "MsgInGetNewDevices.h"
-#include "DBConnector.h"
+#include "../DAO/DAODevices.h"
 const string MsgInGetNewDevices::state = "getnewdevs";
 
 MsgInGetNewDevices::MsgInGetNewDevices(char* msg, pugi::xml_document* doc) : IMsgInLoginAndAdapterAccessRequired(msg, doc){
@@ -22,6 +22,6 @@ int MsgInGetNewDevices::getMsgAuthorization() {
 
 string MsgInGetNewDevices::createResponseMsgOut() {
     
-     return envelopeResponseWithAdapterId(R_DEVICES, DBConnector::getInstance().getXMLNewDevices(_adapterId) , _adapterId);
+     return envelopeResponseWithAdapterId(R_DEVICES, DAODevices::getInstance().getXMLNewDevices(_adapterId) , _adapterId);
 }
 

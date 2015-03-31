@@ -8,6 +8,8 @@
 #include "MsgInGetAllDevices.h"
 #include "IMsgInLoginAndAdapterAccessRequired.h"
 
+#include "../DAO/DAODevices.h"
+
 using namespace std;
 
 const std::string MsgInGetAllDevices::state = "getalldevs";
@@ -24,5 +26,5 @@ int MsgInGetAllDevices::getMsgAuthorization() {
 
 string MsgInGetAllDevices::createResponseMsgOut()
 {          
-        return envelopeResponseWithAdapterId(R_DEVICES_ALL, DBConnector::getInstance().getXMLAllDevs(_adapterId), _adapterId);
+        return envelopeResponseWithAdapterId(R_DEVICES_ALL, DAODevices::getInstance().getXMLAllDevs(_adapterId), _adapterId);
 }

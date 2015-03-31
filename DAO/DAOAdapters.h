@@ -9,7 +9,7 @@
 #define	DAOADAPTERS_H
 
 #include "../ui_logger/Logger.h"
-#include "Config.h"
+
 #include "DAO.h"
 
 class DAOAdapters : public DAO {
@@ -21,9 +21,11 @@ public:
     static DAOAdapters& getInstance();
     ~DAOAdapters(void);
     
-    int parAdapterWithUserIfPossible(long long int adapterId, std::string adapterName, std::string gId);
+    int parAdapterWithUserIfPossible(long long int adapterId, std::string adapterName, int userId);
     int isAdapterInDB(long long int adapterId);
+    std::string getTimeZone(std::string adapterId);
     
+    void updateAdaptersTimezone(std::string adapterId,  std::string newTimeZone);
 };
 
 #endif	/* DAOADAPTERS_H */

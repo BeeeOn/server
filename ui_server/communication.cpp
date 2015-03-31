@@ -8,12 +8,11 @@ using namespace std;
 
 string resolveMsg(char* msg)
 {       
-    //TODO cele to upravit, bordel s MsgIn,MsgOut, kdy to je a neni vytvoreno, kdy se uvolnuje... asi rozdelit na 2 try catch, kde jeden chyta msgIn a jeden MsgOut
     string response;
     MsgInFactory msgFactory = MsgInFactory::getInstance();
     IMsgIn* msgIn=NULL;
     
-    Logger::getInstance(Logger::DEBUG2)<< "MSGIN: "<<msg<<"\n";
+    Logger::getInstance(Logger::DEBUG)<< "MSGIN: "<<msg<< endl;
     
     msgIn = msgFactory.createMsg(msg);
     
@@ -41,20 +40,17 @@ string resolveMsg(char* msg)
         }
         
         
-        Logger::getInstance(Logger::DEBUG2)<< "MSGOUT: " << response<<"\n";
     }
     catch (ServerException & e)
     {
-        Logger::getInstance(Logger::ERROR) << "Server error: " << endl;
+        Logger::getInstance(Logger::ERROR) << "Server error: " << e.getErrCode()<< endl;
         response = msgIn->envelopeResponse(R_FALSE, e.getErrText(), e.getErrCode());
-        Logger::getInstance(Logger::DEBUG2)<< "MSGOUT: " << response<<"\n"<<endl;
     }
     catch (soci::postgresql_soci_error const & e)
     {
         Logger::getInstance(Logger::ERROR) << "DB error (psql_soci): " << e.what() <<"| sql state:"<<e.sqlstate()<< endl;
         
         response = msgIn->envelopeResponse(R_FALSE);
-        Logger::getInstance(Logger::DEBUG2)<< "MSGOUT: " << response<<"\n";
     }
     catch (soci::soci_error const & e)
     {
@@ -62,13 +58,11 @@ string resolveMsg(char* msg)
         Logger::getInstance(Logger::ERROR) << "DB error (soci): " << e.what() << endl;
         
         response = msgIn->envelopeResponse(R_FALSE);
-        Logger::getInstance(Logger::DEBUG2)<< "MSGOUT: " << response<<"\n";
     }catch (exception& e)
   {
             Logger::getInstance(Logger::FATAL) <<"ERROR ! :"<<e.what()<<endl;
         
         response = msgIn->envelopeResponse(R_FALSE);
-        Logger::getInstance(Logger::DEBUG2)<< "MSGOUT: " << response<<"\n";
   }
     catch (...)
     {
@@ -76,8 +70,10 @@ string resolveMsg(char* msg)
         Logger::getInstance(Logger::FATAL) <<"ERROR !!!!!!!!!!!!!!!!!!"<<endl;
         
         response = msgIn->envelopeResponse(R_FALSE);
-        Logger::getInstance(Logger::DEBUG2)<< "MSGOUT: " << response<<"\n";
     }
+    
+    Logger::getInstance(Logger::DEBUG)<< "MSGOUT: " << response<<"\n";
+    
     delete msgIn;
     
     return response;

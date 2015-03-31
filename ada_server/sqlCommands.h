@@ -36,6 +36,8 @@ const string InsertLog = "insert into logs (fk_facilities_mac,timestamp,fk_devic
 const string SelectTime = "select refresh from facilities where mac=:record;"; //"select refresh from facilities where mac = '" + record + "';";
 /** uses (:ID) */
 const string SelectSocket = "SELECT socket FROM adapters where adapter_id= :ID ;";
+/** uses (:ID) */
+const string DeleteDevice = "Delete from facilities where mac=:ID;";
 
 }
 #endif /* SQLCOMMANDS_H_ */

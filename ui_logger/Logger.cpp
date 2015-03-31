@@ -11,7 +11,7 @@ using namespace std;
 
 Logger::Logger(): _output(std::cout) {
     _outputToStdout = true;
-    
+    _mtx.unlock();
     _verbose = Logger::DEBUG3;
     _level = Logger::NO_OUTPUT;
     _cerrVerbosity = Logger::NO_OUTPUT; 
@@ -94,7 +94,11 @@ void Logger::setOutputToFiles(string folder){
          _outputToStdout = true;
          _output.rdbuf( std::cout.rdbuf());
  }
+bool Logger::isOutputSetToCout() {
+    return _outputToStdout;
+}
 
+ 
 void Logger::openOutput(string fileName) {
 
     _currentFile.open ( fileName );  

@@ -8,7 +8,12 @@ BEGIN
         UPDATE users SET  phone_locale = d_locale, verified_email = d_ver, name = d_name,
                                             given_name = d_g_name, family_name = d_f_name, link = d_link, picture = d_picture,
                                             gender = d_gender, google_locale = d_g_loc, google_id = d_g_id
-        WHERE mail = d_mail returning user_id into t_out;
+        WHERE 
+			CASE WHEN d_mail is not NULL THEN mail=d_mail  
+				WHEN d_g_id is not NULL then google_id=d_g_id
+			END
+		returning user_id into t_out;
+		
         IF found THEN
             RETURN t_out;
         END IF;
@@ -32,8 +37,8 @@ $$
 BEGIN
     LOOP
         -- first try to update the key
-        UPDATE mobile_devices SET  mobile_id = d_mobile_id, type = d_type, locale = d_locale, push_notification = d_push_n, fk_user_id = d_uid
-        WHERE token = bon_token;
+        UPDATE mobile_devices SET token = bon_token, type = d_type, locale = d_locale, push_notification = d_push_n
+        WHERE mobile_id = d_mobile_id and fk_user_id = d_uid;
         IF found THEN
             RETURN;
         END IF;

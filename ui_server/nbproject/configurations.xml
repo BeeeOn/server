@@ -70,6 +70,23 @@
         <itemPath>MsgInAlgorithmsRedirect.cpp</itemPath>
         <itemPath>MsgInAlgorithmsRedirect.h</itemPath>
       </logicalFolder>
+      <logicalFolder name="f2" displayName="DAO" projectFiles="true">
+        <itemPath>../DAO/DAO.cpp</itemPath>
+        <itemPath>../DAO/DAO.h</itemPath>
+        <itemPath>../DAO/DAOAdapters.cpp</itemPath>
+        <itemPath>../DAO/DAOAdapters.h</itemPath>
+        <itemPath>../DAO/DAODevices.cpp</itemPath>
+        <itemPath>../DAO/DAODevices.h</itemPath>
+        <itemPath>../DAO/DAOMobileDevices.cpp</itemPath>
+        <itemPath>../DAO/DAOMobileDevices.h</itemPath>
+        <itemPath>../DAO/DAORooms.cpp</itemPath>
+        <itemPath>../DAO/DAORooms.h</itemPath>
+        <itemPath>../DAO/DAOUsers.cpp</itemPath>
+        <itemPath>../DAO/DAOUsers.h</itemPath>
+        <itemPath>../DAO/DAOUsersAdapters.cpp</itemPath>
+        <itemPath>../DAO/DAOUsersAdapters.h</itemPath>
+        <itemPath>DBConnector.cpp</itemPath>
+      </logicalFolder>
       <logicalFolder name="f4" displayName="devices" projectFiles="true">
         <itemPath>MsgInAdapterListen.cpp</itemPath>
         <itemPath>MsgInDelDevice.cpp</itemPath>
@@ -108,6 +125,8 @@
         <itemPath>MsgInGetUserInfo.cpp</itemPath>
         <itemPath>MsgInGetUserInfo.h</itemPath>
         <itemPath>MsgInSignMe.cpp</itemPath>
+        <itemPath>Msgs/MsgInSignUp.cpp</itemPath>
+        <itemPath>Msgs/MsgInSignUp.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f9" displayName="time" projectFiles="true">
         <itemPath>MsgInGetTimeZone.cpp</itemPath>
@@ -125,7 +144,6 @@
       </logicalFolder>
       <itemPath>ComTable.cpp</itemPath>
       <itemPath>Config.cpp</itemPath>
-      <itemPath>DBConnector.cpp</itemPath>
       <itemPath>MsgInFactory.cpp</itemPath>
       <itemPath>MsgRightsChecker.cpp</itemPath>
       <itemPath>ServerException.cpp</itemPath>
@@ -573,12 +591,6 @@
       <itemPath>config_prod.xml</itemPath>
       <itemPath>sqlQueries</itemPath>
     </logicalFolder>
-    <itemPath>../DAO/DAO.cpp</itemPath>
-    <itemPath>../DAO/DAO.h</itemPath>
-    <itemPath>../DAO/DAOAdapters.cpp</itemPath>
-    <itemPath>../DAO/DAOAdapters.h</itemPath>
-    <itemPath>../DAO/DAOUsers.cpp</itemPath>
-    <itemPath>../DAO/DAOUsers.h</itemPath>
     <itemPath>../ui_logger/Logger.cpp</itemPath>
     <itemPath>../ui_logger/Logger.h</itemPath>
     <itemPath>testInfo</itemPath>
@@ -586,6 +598,7 @@
   <sourceRootList>
     <Elem>../ui_logger</Elem>
     <Elem>../DAO</Elem>
+    <Elem>Msgs</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -650,9 +663,25 @@
       </item>
       <item path="../DAO/DAOAdapters.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="../DAO/DAODevices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAODevices.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../DAO/DAOMobileDevices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAOMobileDevices.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../DAO/DAORooms.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAORooms.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="../DAO/DAOUsers.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../DAO/DAOUsers.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../DAO/DAOUsersAdapters.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAOUsersAdapters.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../ui_logger/Logger.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -831,6 +860,10 @@
       <item path="MsgRightsChecker.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="MsgRightsChecker.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Msgs/MsgInSignUp.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Msgs/MsgInSignUp.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="ServerException.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -1636,9 +1669,25 @@
       </item>
       <item path="../DAO/DAOAdapters.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="../DAO/DAODevices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAODevices.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../DAO/DAOMobileDevices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAOMobileDevices.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../DAO/DAORooms.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAORooms.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="../DAO/DAOUsers.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../DAO/DAOUsers.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../DAO/DAOUsersAdapters.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAOUsersAdapters.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../ui_logger/Logger.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -1817,6 +1866,10 @@
       <item path="MsgRightsChecker.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="MsgRightsChecker.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Msgs/MsgInSignUp.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Msgs/MsgInSignUp.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="ServerException.cpp" ex="false" tool="1" flavor2="0">
       </item>

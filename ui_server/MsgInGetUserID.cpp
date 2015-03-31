@@ -24,6 +24,6 @@ int MsgInGetUserID::getMsgAuthorization() {
 
 string MsgInGetUserID::createResponseMsgOut() {
     
-    string UID = DAOUsers::getInstance().getUserID(_IHAtoken);
-    return envelopeResponse(R_UID, "uid=\""+UID+"\" ");
+    int UID = DAOUsers::getInstance().getUserIdbyIhaToken(_token);
+    return envelopeResponse(R_UID, "uid=\""+to_string(UID)+"\" ");
 }

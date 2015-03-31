@@ -28,6 +28,7 @@
 #include <bitset>
 #include <errno.h>
 #include <string.h>
+#include "SSLContainer.h"
 
 class RequestServer
 {
@@ -40,9 +41,10 @@ class RequestServer
 		MessageCreator *MC;
 		Sender *s;
 		Loger *_log;
+		SSLContainer *_sslcont;
 		//void StoreData();
 	public:
-		RequestServer(Loger *l,soci::session *SQl);
+		RequestServer(Loger *l,soci::session *SQl, SSLContainer *sslcont);
 		bool HandleRequest();
 		void HandleRequestCover();
 		void SetSocket(int Soc);

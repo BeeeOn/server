@@ -22,7 +22,7 @@ string MsgInAddAdapter::createResponseMsgOut() {
     
     string adapterName = adapterNode.attribute(P_ADAPTER_NAME).value();
     
-    if(DAOAdapters::getInstance().parAdapterWithUserIfPossible(adapterId, adapterName, _gUserId) == 0){
+    if(DAOAdapters::getInstance().parAdapterWithUserIfPossible(adapterId, adapterName, _userId) == 0){
         if(DAOAdapters::getInstance().isAdapterInDB(adapterId) == 0)
             throw ServerException(ServerException::ADAPTER_ID);
         else

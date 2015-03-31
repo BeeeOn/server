@@ -17,6 +17,9 @@
 #include <arpa/inet.h>
 #include <errno.h>
 #include "loger.h"
+#include <openssl/bio.h>
+#include <openssl/ssl.h>
+#include <openssl/err.h>
 
 class Sender
 {
@@ -24,10 +27,13 @@ class Sender
     	const std::string _Name="Sender";
 		int s;
 		Loger *_log;
+		SSL_CTX *sslctx;
+		SSL *cSSL;
 	public:
-		bool Send(std::string Message,int soc);
+		bool Send(std::string Message,SSL *s);
 		Sender(Loger *l);
 		~Sender();
+		bool LoadCertificates();
 };
 
 

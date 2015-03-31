@@ -17,6 +17,7 @@ bool RequestServer::HandleRequest ()
 	ssize_t DataSize=0;
 	std::string data;
 	data.clear();
+	bool del =false;
 	while (1)
 	{
 		if ((DataSize = read(this->com_s, &buffer, 1024)) < 0) //prijmeme dlzku prichadzajucich dat (2 byty kratkeho integera bez znamienka)
@@ -53,14 +54,19 @@ bool RequestServer::HandleRequest ()
 	std::string message;
 	int AdapterIP = -1;
 	this->_log->WriteMessage(INFO,"Request type :" + reqType);
+	long long aID;
+	std::string DEVID = "-1";
 	if(reqType.compare("delete")==0)
 	{
 		std::string ID = subject.attribute("id").as_string();
+		DEVID = ID;
+		del = true;
 		long long AdapterId = subject.attribute("onAdapter").as_llong();
+		aID = AdapterId;
 		this->_log->WriteMessage(INFO,"Adapter ID :" + std::to_string(AdapterId));
 		this->_log->WriteMessage(INFO,"Device ID :" + ID);
 		message = MC->CreateDeleteMessage(ID);
-		database->GetAdapterData(&AdapterIP,AdapterId);
+		//database->GetAdapterData(&AdapterIP,AdapterId);
 	}
 	else
 	{
@@ -74,6 +80,7 @@ bool RequestServer::HandleRequest ()
 			type.reset(11);
 			typeoffset>>=(8);
 			long long AdapterId = subject.attribute("onAdapter").as_llong();
+			aID = AdapterId;
 			std::string value = subject.first_child().text().as_string();
 			this->_log->WriteMessage(INFO,"Adapter ID :" + std::to_string(AdapterId));
 			this->_log->WriteMessage(INFO,"Device ID :" + ID);
@@ -86,19 +93,47 @@ bool RequestServer::HandleRequest ()
 			stringType = os.str();
 			this->_log->WriteMessage(INFO,"Device hexa type :" + stringType);
 			message = this->MC->CreateSwitchMessage(std::to_string(AdapterId),ID,value,stringType,std::to_string(typeoffset.to_ulong()));
-			database->GetAdapterData(&AdapterIP,AdapterId);
+			//database->GetAdapterData(&AdapterIP,AdapterId);
 		}
 		else
 		{
 			long long int ID = subject.attribute("id").as_llong();
+			aID = ID;
 			this->_log->WriteMessage(INFO,"Adapter ID :" + std::to_string(ID));
 			message = MC->CreateListenMessage(std::to_string(ID));
-			database->GetAdapterData(&AdapterIP,ID);
+			//database->GetAdapterData(&AdapterIP,ID);
 		}
 	}
-	this->_log->WriteMessage(INFO,"Adapter socket :" + std::to_string(AdapterIP));
+	bool res;
+	//this->_log->WriteMessage(INFO,"Adapter socket :" + std::to_string(AdapterIP));
 	this->_log->WriteMessage(INFO,"Message: \n" + message);
-	bool res = this->s->Send(message,AdapterIP);
+	SSL *s = NULL;
+	if ((s = this->_sslcont->GetSSL(aID))==NULL)
+	{
+		res = false;
+	}
+	else
+	{
+		res = this->s->Send(message,s);
+	}
+	std::string Message = "<reply>true</reply>";
+	if (!res)
+	{
+		 Message = "<reply>false</reply>";
+	}
+	if ((send(com_s, Message.c_str(), Message.size(), 0))<0)  //odoslanie poziadavky na server
+	{
+		char errorbuf[200];
+		strerror_r(errno,errorbuf,200);
+		close (com_s);
+		this->_log->WriteMessage(WARN,"Unable to send message to ui_server with code : " + std::to_string(errno) + " : " + errorbuf);
+		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::ReciveConnection");
+	}
+	if ((res==true)&&(del==true))
+	{
+		this->_log->WriteMessage(TRACE,"Deleting device ID" + DEVID);
+		this->database->DeleteFacility(DEVID);
+	}
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::HandleConnection");
 	return (res);
 }
@@ -132,14 +167,16 @@ void RequestServer::HandleRequestCover()
 	//sem_post(&connectionSem);
 }
 
-RequestServer::RequestServer(Loger *l, soci::session *SQL)
+RequestServer::RequestServer(Loger *l, soci::session *SQL, SSLContainer *sslcont)
 {
 	l->WriteMessage(TRACE,"Entering " + this->_Name + "::RequestServer");
 	this->database = new DBHandler(SQL,l);
+	this->_sslcont = sslcont;
 	this->_log = l;
 	this->com_s = -1;
 	MC = new MessageCreator(l);
 	s = new Sender(l);
+	s->LoadCertificates();
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::RequestServer");
 }
 

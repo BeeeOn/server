@@ -28,6 +28,8 @@
 #include "MsgInSetTimeZone.h"
 #include "MsgInGetTimeZone.h"
 #include "IMsgIn.h"
+
+#include "../DAO/DAOUsers.h"
 #include <stdio.h>
 /*******************************************
  Role
@@ -93,8 +95,8 @@ MsgRightsChecker& MsgRightsChecker::getInstance()
 
 
 bool MsgRightsChecker::checkRights(IMsgInLoginAndAdapterAccessRequired& msg){
-   string role = DBConnector::getInstance().getUserRoleM(msg._gUserId, msg._adapterId);
-    Logger::getInstance(Logger::DEBUG) << "check role: "<< msg._gUserId <<" on "<<msg._state<<"("<<role<<"="<<_rightsTable[role] <<" "<<msg._state<<"="<<_msgRightsTable[msg._state] <<") \n";
+   string role = DAOUsers::getInstance().getUserRoleM(msg._userId, msg._adapterId);
+    Logger::getInstance(Logger::DEBUG) << "check role: "<< msg._userId <<" on "<<msg._state<<"("<<role<<"="<<_rightsTable[role] <<" "<<msg._state<<"="<<_msgRightsTable[msg._state] <<") \n";
     
     if(_msgRightsTable[msg._state] == 0){//this is handled by checker in msgFactory
         Logger::getInstance(Logger::DEBUG) << "wrong msg: "<<msg._state<<"\n";

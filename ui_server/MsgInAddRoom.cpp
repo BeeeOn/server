@@ -6,7 +6,7 @@
  */
 
 #include "MsgInAddRoom.h"
-#include "DBConnector.h"
+#include "../DAO/DAORooms.h"
 #include "ServerException.h"
 #include "IMsgInLoginRequired.h"
 #include "IMsgInLoginAndAdapterAccessRequired.h"
@@ -40,7 +40,7 @@ string MsgInAddRoom::createResponseMsgOut()
         
         string roomName = roomNode.attribute(P_ROOM_NAME).value();
         
-        int newRoomId = DBConnector::getInstance().insertNewRoom(_adapterId, roomType, roomName);
+        int newRoomId = DAORooms::getInstance().insertNewRoom(_adapterId, roomType, roomName);
         
         stringstream ss;
         ss << newRoomId;

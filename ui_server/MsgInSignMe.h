@@ -1,5 +1,5 @@
-#ifndef MSGINSIGNUP_H
-#define	MSGINSIGNUP_H
+#ifndef MSGINSIGNME_H
+#define	MSGINSIGNME_H
 
 #include "IMsgIn.h"
 #include "DBConnector.h"
@@ -22,7 +22,6 @@ class MsgInSignMe :
                 static const std::string state;
                 private :
                     string getnewIHAtoken();
-                    static long long int _IHAtokenGenerator;
         };
         
-#endif /* MSGINSIGNUP_H */
+#endif /* MSGINSIGNME_H */

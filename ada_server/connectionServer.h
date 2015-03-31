@@ -27,9 +27,13 @@
 #include "pugiconfig.hpp"
 #include "loger.h"
 #include "messageParsers.h"
+#include "SSLContainer.h"
 #include "DBHandler.h"
 #include <errno.h>
 #include <string.h>
+#include <openssl/bio.h>
+#include <openssl/ssl.h>
+#include <openssl/err.h>
 
 
 class ConnectionServer
@@ -46,11 +50,15 @@ class ConnectionServer
 		void Notify(std::string MSG);
 		Loger *_log;
 		int _timeTimeOut;
+		SSL_CTX *sslctx;
+		SSL *cSSL;
+		SSLContainer *_sslcont;
 	public:
-		ConnectionServer(soci::session *SQL, Loger *L, int timeOut);
+		ConnectionServer(soci::session *SQL, Loger *L, int timeOut,SSLContainer *sslcont);
 		void HandleConnection(in_addr IP);
 		void SetSocket(int s);
 		~ConnectionServer();
+		bool LoadCertificates();
 };
 
 

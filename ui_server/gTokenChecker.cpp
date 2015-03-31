@@ -187,7 +187,7 @@ void sslWrite (connection *c, char *text)
 }
 
 
-bool isGTokenOk(string gToken, string gid, googleInfo &gInfo){
+bool isGTokenOk(string gToken, googleInfo &gInfo){
     //TODO !!!!!!!!!!!!!! pouze DEBUG - odstranit!
     if(gToken == "1")
         return true;
@@ -235,11 +235,6 @@ bool isGTokenOk(string gToken, string gid, googleInfo &gInfo){
         if(json_is_string(data))
             gInfo.email = json_string_value(data);
         
-        if(gInfo.id != gid){
-            Logger::getInstance(Logger::ERROR) << "DEBUG !!! provided id is not same as id in gtoken"<<endl;
-            //TODO !!!!!!!!!!!!!! pouze DEBUG
-           // return false;
-        }
         data = json_object_get(root, "verified_email");
         if(json_is_boolean(data))
             gInfo.verified_email = json_boolean(data);

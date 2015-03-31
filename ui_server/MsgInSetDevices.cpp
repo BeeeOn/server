@@ -7,6 +7,7 @@
 
 #include "MsgInPartial.h"
 #include "ServerException.h"
+#include "../DAO/DAODevices.h"
 using namespace std;
 const string MsgInDevices::state = "setdevs";
 
@@ -39,7 +40,7 @@ string MsgInDevices::createResponseMsgOut()
         string refresh = facilityNode.attribute(P_FACILITY_REFRESH).value();
         
         if(init !="" || locationId!="" || refresh!="")
-            DBConnector::getInstance().updateFacility(_adapterId, id, init, locationId, refresh);
+            DAODevices::getInstance().updateFacility(_adapterId, id, init, locationId, refresh);
         
         deviceNode =  facilityNode.child(P_DEVICE);
                 
@@ -50,7 +51,7 @@ string MsgInDevices::createResponseMsgOut()
             string name = deviceNode.attribute(P_DEVICE_NAME).value();
             
             if(visibility !="" || name !="")
-                if( DBConnector::getInstance().updateDevice(_adapterId, id, type, name, visibility) == 0){
+                if( DAODevices::getInstance().updateDevice(_adapterId, id, type, name, visibility) == 0){
                     error = true;
                     errorText += "<device id=\"" + id + "\" type=\"" + type + "\" />";
                 }

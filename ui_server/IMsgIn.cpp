@@ -10,11 +10,11 @@ IMsgIn::IMsgIn(char* msg, pugi::xml_document* doc)
     _msg = msg;
     _doc = doc;
     
-    _mainNode = _outputDoc.append_child();
-    _mainNode.set_name(P_COMMUNICATION);
+    _outputMainNode = _outputDoc.append_child();
+    _outputMainNode.set_name(P_COMMUNICATION);
     
     
-    _IHAtoken = _doc->child(P_COMMUNICATION).attribute(P_SESSION_ID).value();
+    _token = _doc->child(P_COMMUNICATION).attribute(P_SESSION_ID).value();
     _state = _doc->child(P_COMMUNICATION).attribute(P_STATE).value();
     
    /* try{
@@ -112,9 +112,9 @@ string IMsgIn::makeXMLattribute(string attr, string value) {
 
 std::string IMsgIn::genOutputXMLwithVersionAndState(std::string responseState) {
     
-    _mainNode.prepend_attribute(P_STATE) = responseState.c_str();
-    _mainNode.prepend_attribute(P_VERSION) = IMsgIn::VERSION.c_str();
-    
+    _outputMainNode.prepend_attribute(P_STATE) = responseState.c_str();
+    _outputMainNode.prepend_attribute(P_VERSION) = IMsgIn::VERSION.c_str();
+    _outputMainNode.append_child(pugi::node_pcdata).set_value("");
     //_outputDoc.print(std::cout);
     
     return node_to_string(_outputDoc);
