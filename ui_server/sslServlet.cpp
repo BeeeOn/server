@@ -142,11 +142,12 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
                 
                 while(1){
         read:            
-                    if (!rc)
+                    if (!rc){
                         rc = (char*)malloc (readSize * sizeof (char) + 1);
-                    else
+                        bzero(rc, readSize * sizeof (char) + 1);
+                    }else{
                         rc = (char*)realloc (rc, (count + 1) * readSize * sizeof (char) + 1);
-                    
+                    }
                     received = SSL_read(ssl, buf, sizeof(buf)-1); // get request 
                     if(received >= 0)
                         buf[received] = '\0';

@@ -66,12 +66,12 @@ string SocketClient::read(){
                 if ( recieved > 0 )
                 {
                      data.append(rc, recieved);
-                      if ( (data.find("</com>")!=std::string::npos)||((data[data.size()-2]=='/')&&(data[data.size()-1]=='>'))) 
+                      if ( (data.find("</reply>")!=std::string::npos)||(data.find("</com>")!=std::string::npos)||((data[data.size()-2]=='/')&&(data[data.size()-1]=='>'))) 
                             break; 
                 }
                 else if ( recieved == 0 )
                 {
-                       if(strlen(rc)>0)
+                       if(data.length()>0)
                        {
                            break;
                        }
