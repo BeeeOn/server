@@ -7,14 +7,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/pavel/git-ant/ui_server/Msgs/MsgInSignUp.cpp</file>
-            <file>file:/home/pavel/git-ant/ui_server/MsgInSignMe.cpp</file>
-            <file>file:/home/pavel/git-ant/ui_server/MsgInGetUserID.cpp</file>
-            <file>file:/home/pavel/git-ant/DAO/DAOUsers.cpp</file>
-            <file>file:/home/pavel/git-ant/DAO/DAOMobileDevices.h</file>
             <file>file:/home/pavel/git-ant/ui_server/ui_server.cpp</file>
-            <file>file:/home/pavel/git-ant/DAO/DAOUsers.h</file>
-            <file>file:/home/pavel/git-ant/DAO/DAOMobileDevices.cpp</file>
         </group>
     </open-files>
 </project-private>

@@ -9,6 +9,7 @@
 #include "../DAO/DAOMobileDevices.h"
 #include "../DAO/DAORooms.h"
 #include "../DAO/DAOUsersAdapters.h"
+#include "SocketServer.h"
 // uncoment if you want print debug reports
 //#define DEBUG 1
 
@@ -130,10 +131,12 @@ int main(int argc, char** argv)
         
         
         //resolveMsg( "<com ver=\"2.3\"  state=\"getuid\" email=\"n11@gmail.com\" gid=\"99191\" gt=\"1\" pid=\"1100\" loc=\"cs\" />");
-        
+/*
         resolveMsg( "<com ver=\"2.4\"  state=\"signup\" srv=\"beeeon\"> <par name=\"pavel3\" pswd=\"xxx\"  /> </com>>");
         resolveMsg( "<com ver=\"2.4\"  state=\"signin\" srv=\"beeeon\" > <par name=\"pavel3\" pswd=\"xxx\"  />  </com>");
         DAOUsers::getInstance().getUserIDbyAlternativeKeys("leo.podmolik@gmail.com", "","");
+        */
+        
 /*
         int id = DAOUsers::getInstance().getUserIDbyAlternativeKeys("user2a@gmail.com", "1111","user2");
              MobileDevice mobile;

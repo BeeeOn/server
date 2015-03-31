@@ -8,7 +8,7 @@
 #include <string>
 
 #include "SocketClient.h"
-
+using namespace std;
 
 SocketClient::SocketClient(int portNumber, string hostName) {
     struct sockaddr_in serv_addr;
@@ -38,28 +38,53 @@ SocketClient::~SocketClient() {
 
 
 void SocketClient::write(string text){
-    char buffer[256];
     int n;
-    
-    bzero(buffer,256);
     n = ::write(_socketfd, text.c_str(), text.length());
     if (n < 0) 
         throw "ERROR writing to socket";
 }
 
 string SocketClient::read(){
-    int n;
-    char buffer[256];
-    
-    bzero(buffer,256);
-    
+
     struct timeval tv;
     tv.tv_sec = 5;
     tv.tv_usec = 0; 
     setsockopt(_socketfd, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv,sizeof(struct timeval));
     
-    n = ::read(_socketfd,buffer,255);
-    if (n < 0) 
-        throw "ERROR reading from socket";
-    return buffer;
+    
+
+    string data;
+    int recieved;
+    int bufferSize = 1024;
+    char rc[bufferSize];
+    while(1)
+     {
+        bzero(rc,bufferSize);
+        //recieved = recv(_socketfd, rc, bufferSize,0);
+         recieved = ::read(_socketfd,rc,bufferSize);
+                //printf("Bytes received: %d\n",recieved);
+                if ( recieved > 0 )
+                {
+                     data.append(rc, recieved);
+                      if ( (data.find("</com>")!=std::string::npos)||((data[data.size()-2]=='/')&&(data[data.size()-1]=='>'))) 
+                            break; 
+                }
+                else if ( recieved == 0 )
+                {
+                       if(strlen(rc)>0)
+                       {
+                           break;
+                       }
+                       else{
+                            throw "ERROR reading from socket";
+                             free(rc);
+                       }
+                       break;
+                }
+                else{
+                    throw "ERROR reading from socket";
+                }
+    }
+    return data;
 }
+
