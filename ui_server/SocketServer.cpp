@@ -21,7 +21,8 @@ SocketServer::SocketServer() {
 SocketServer::~SocketServer() {
 }
 
-int SocketServer::start(){
+int SocketServer::start(int port){
+    _port = port;
         int socket_desc , client_sock , c , read_size;
     struct sockaddr_in server , client;
     char client_message[2000];
@@ -37,7 +38,7 @@ int SocketServer::start(){
     //Prepare the sockaddr_in structure
     server.sin_family = AF_INET;
     server.sin_addr.s_addr = INADDR_ANY;
-    server.sin_port = htons( 8892 );
+    server.sin_port = htons( _port );
      
     //Bind
     if( bind(socket_desc,(struct sockaddr *)&server , sizeof(server)) < 0)
@@ -65,17 +66,16 @@ int SocketServer::start(){
     puts("Connection accepted");
      
     //Receive a message from client
-    while( 1 )
+    //while( 1 )
     {
         
         bzero(client_message,2000);
         //Send the message back to client
         read_size = recv(client_sock , client_message , 2000 , 0);
         
-        std::string reply;
+        std::string reply="server reply: ";
         reply.append(client_message);
-        reply.append("</com>");
-        std::cout<<"reply" << reply<<std::endl;
+        std::cout<<"reply:" << reply<<std::endl;
         write(client_sock , reply.c_str()  , reply.length());
     }
      
@@ -88,7 +88,7 @@ int SocketServer::start(){
     {
         perror("recv failed");
     }
-     
+    std::cout<< "serverdone"<<std::endl;
     return 0;
 }
 

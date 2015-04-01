@@ -25,7 +25,7 @@ public:
     
     SocketClient(int portNumber, string hostName="localhost");
     virtual ~SocketClient();
-    void write(string text);
+    int write(string text);
     string read();
 private:
     int _socketfd;

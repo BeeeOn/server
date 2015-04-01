@@ -86,7 +86,8 @@ string MsgInSignMe::createResponseMsgOut()
     
     if(userId < 0)
             throw ServerException(ServerException::USER_DONOT_EXISTS);
-    DAOMobileDevices::getInstance().upsertMobileDevice(mobile, userId) ;
+    //DAOMobileDevices::getInstance().upsertMobileDevice(mobile, userId) ;
+    DAOUsers::getInstance().upsertUserWithMobileDevice(user, mobile);
     
     //string gId  = parametersNode.child(P_COMMUNICATION).attribute(P_GOOGLE_ID).value();
     

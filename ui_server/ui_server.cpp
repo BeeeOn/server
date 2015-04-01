@@ -42,6 +42,10 @@ void sig_handler(int signo)
     }
 }
 
+void serverF(int port){
+    SocketServer ss;
+    ss.start(port);
+}
 int main(int argc, char** argv)
 {   
 //http://pugixml.googlecode.com/svn-history/r605/trunk/docs/samples/modify_add.cpp
@@ -90,6 +94,22 @@ int main(int argc, char** argv)
             Logger::fatal()<< "DB error (soci), probably cant set connection, more:" << e.what()<< endl;
             return 1;
         }
+        
+        int port = 9999; 
+        std::thread t(&serverF,port);
+     /*   std::thread t([ss,port](){
+            std::cout << "thread function\n";
+        
+            ss.start(9999);
+        });*/
+        
+        SocketClient sc(port);
+        //sc.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?><com ver=\"2.4\" state=\"algs\" aid=\"7777\"></com>\nqwertasdfgh</></>");
+        sc.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?><com ver=\"2.4\" state=\"algs\" aid=\"7777\"></cm>xx\nqwertasdfgh</></>");
+        std::cout <<"read"<< sc.read() << "|"<<endl;
+        t.join();
+        return 0;
+        
         /* device d;
         d.id = "53.54.55.56";
         d.type="0x00";

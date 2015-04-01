@@ -6,7 +6,9 @@
  */
 
 #include <string>
-
+#include<stdio.h>
+#include<string.h>  
+#include <iostream>
 #include "SocketClient.h"
 using namespace std;
 
@@ -37,11 +39,12 @@ SocketClient::~SocketClient() {
 }
 
 
-void SocketClient::write(string text){
+int SocketClient::write(string text){
     int n;
     n = ::write(_socketfd, text.c_str(), text.length());
     if (n < 0) 
-        throw "ERROR writing to socket";
+        return 0;
+    return 1;
 }
 
 string SocketClient::read(){
@@ -55,29 +58,36 @@ string SocketClient::read(){
 
     string data;
     int recieved;
-    int bufferSize = 1024;
-    char rc[bufferSize];
+    int bufferSize = 10
+    ;
+    char rc[bufferSize+2];
     while(1)
      {
-        bzero(rc,bufferSize);
+        bzero(rc,bufferSize+1);
         //recieved = recv(_socketfd, rc, bufferSize,0);
          recieved = ::read(_socketfd,rc,bufferSize);
+         
+                    std::cout<<"|"<<rc<<"|"<<endl;
                 //printf("Bytes received: %d\n",recieved);
                 if ( recieved > 0 )
                 {
+                        rc[recieved] = '\0';
                      data.append(rc, recieved);
-                      if ( (data.find("</reply>")!=std::string::npos)||(data.find("</com>")!=std::string::npos)||((data[data.size()-2]=='/')&&(data[data.size()-1]=='>'))) 
+                      if ( (data.find("</reply>")!=std::string::npos) ||
+                              (data.find("</com>")!=std::string::npos) ||
+                              ((data[data.size()-2]=='/')&&(data[data.size()-1]=='>'))
+                              ) 
                             break; 
                 }
                 else if ( recieved == 0 )
                 {
+                    std::cout<<"rec ==0"<<endl;
                        if(data.length()>0)
                        {
                            break;
                        }
                        else{
                             throw "ERROR reading from socket";
-                             free(rc);
                        }
                        break;
                 }
@@ -85,6 +95,7 @@ string SocketClient::read(){
                     throw "ERROR reading from socket";
                 }
     }
+    std::cout<<"client done reading":<< data <<endl;
     return data;
 }
 

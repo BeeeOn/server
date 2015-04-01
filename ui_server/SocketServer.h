@@ -13,9 +13,9 @@ public:
     SocketServer();
     SocketServer(const SocketServer& orig);
     virtual ~SocketServer();
-    int start();
+    int start(int port);
 private:
-
+    int _port;
 };
 
 #endif	/* SOCKETSERVER_H */
