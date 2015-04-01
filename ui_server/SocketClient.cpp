@@ -95,7 +95,7 @@ string SocketClient::read(){
                     throw "ERROR reading from socket";
                 }
     }
-    std::cout<<"client done reading":<< data <<endl;
+    std::cout<<"client done reading"<< data <<endl;
     return data;
 }
 

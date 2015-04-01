@@ -108,7 +108,7 @@ int DAOUsers::upsertUserWithMobileDevice(User user, MobileDevice mobile){
             //d_mail TEXT, d_locale TEXT, d_ver BOOLEAN, d_name TEXT, d_g_name TEXT, d_f_name TEXT, d_link TEXT, d_picture TEXT, d_gender TEXT, d_g_loc TEXT, d_g_id TEXT
             
             user.verifiedMail = 1;
-            sql.begin();
+            //sql.begin();
             sql << "select upsert_user_returning_uid(:mail, :pLoc, :verMail, :name, :gName, :fName, :link, :picture, :gender, :googleLocale, :googleID)",
                     use(user.mail), use(user.phoneLocale), use(user.verifiedMail), use(user.name), use(user.givenName), use(user.familyName), use(user.link), use(user.picture), use(user.gender), 
                     use(user.googleLocale), use(user.googleId), into(newUserID);
@@ -116,7 +116,7 @@ int DAOUsers::upsertUserWithMobileDevice(User user, MobileDevice mobile){
             //bon_token TEXT, d_mobile_id TEXT,d_type TEXT, d_locale TEXT, d_push_n TEXT, d_uid integer
             sql << "select upsert_mobile_device(:bt, :mobileID, :type, :loc, :pushN, :userID)",
                     use(mobile.token), use(mobile.mobile_id), use(mobile.type), use(mobile.locale),use(mobile.push_notification),use(newUserID);
-            sql.commit();
+            //sql.commit();
             return 1;
     }
     catch (soci::postgresql_soci_error& e)
