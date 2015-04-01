@@ -7,6 +7,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/home/pavel/git-ant/ui_server/MsgInAlgorithmsRedirect.cpp</file>
+            <file>file:/home/pavel/git-ant/ui_server/SocketServer.cpp</file>
+            <file>file:/home/pavel/git-ant/ui_server/sslServlet.cpp</file>
+            <file>file:/home/pavel/git-ant/ui_server/MsgInFactory.cpp</file>
+            <file>file:/home/pavel/git-ant/ui_server/SocketClient.cpp</file>
+            <file>file:/home/pavel/git-ant/ui_server/communication.cpp</file>
+            <file>file:/home/pavel/git-ant/ui_server/sslServlet.h</file>
+            <file>file:/home/pavel/git-ant/DAO/DAODevices.cpp</file>
+            <file>file:/home/pavel/git-ant/ui_server/SocketServer.h</file>
             <file>file:/home/pavel/git-ant/ui_server/ui_server.cpp</file>
         </group>
     </open-files>

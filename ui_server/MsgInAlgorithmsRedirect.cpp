@@ -35,7 +35,7 @@ string MsgInAlgorithmsRedirect::createResponseMsgOut() {
     }catch(...){
         throw ServerException(ServerException::UI2ALGO);
     }
-    Logger::getInstance(Logger::DEBUG3)<<"S2S communication: "<< r<<endl; 
+    Logger::getInstance(Logger::DEBUG3)<<"S2S communication: "<< r<<"|"<<endl; 
         
     return r;
 }

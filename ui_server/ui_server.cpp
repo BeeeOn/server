@@ -34,9 +34,9 @@ void sig_handler(int signo)
 {
     if (signo == SIGINT)
     {
-        serverStop = true;
-        exit(0);//ODSTRANENI toho vede k vypisum ve valgrindu, tak si to zkontroluj!!!
         Logger::getInstance(Logger::FATAL) << "SIGINT catched"<<endl;
+        serverStop = true;
+       // exit(0);//ODSTRANENI toho vede k vypisum ve valgrindu, tak si to zkontroluj!!!
         SocketClient sc(serverPort);
         sc.write("end");
     }
@@ -136,7 +136,6 @@ int main(int argc, char** argv)
         resolveMsg( "<com ver=\"2.4\"  state=\"signin\" srv=\"beeeon\" > <par name=\"pavel3\" pswd=\"xxx\"  />  </com>");
         DAOUsers::getInstance().getUserIDbyAlternativeKeys("leo.podmolik@gmail.com", "","");
         */
-        
 /*
         int id = DAOUsers::getInstance().getUserIDbyAlternativeKeys("user2a@gmail.com", "1111","user2");
              MobileDevice mobile;
@@ -161,6 +160,7 @@ int main(int argc, char** argv)
         DAOUsers::getInstance().upsertUserWithMobileDevice(u, m);
         */
       //  return 0;
+        Logger::debug()<< "setting SSL context..."<< endl;
        SSL_CTX *ctx;
        int server;
        atomic<int>* threadCounter = new atomic<int>(0);
@@ -171,7 +171,7 @@ int main(int argc, char** argv)
         LoadCertificates(ctx, CertFile, KeyFile); /* load certs */
         server = OpenListener(serverPort);    /* create server socket */
         
-        
+        Logger::debug()<< "SSL context is set"<< endl;
         while (!serverStop) {
             struct sockaddr_in addr;
             socklen_t len = sizeof(addr);

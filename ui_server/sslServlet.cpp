@@ -173,6 +173,7 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
                 if ( received > 0  || count > 1) {
                         Logger::getInstance(Logger::DEBUG3)<<"Start resolve "<< burstMsgCount++ <<" msg in burst"<<endl;
                         std::string replyString = resolveMsg(rc);
+                        Logger::getInstance(Logger::DEBUG3)<<"last chars of reply:"<< replyString.substr(replyString.length()-10, 10)<<"<"<<endl;
                         replyString.append("\r\n");
 #ifdef DEBUG
                         printf("Client msg: \"%s\"\n", buf);
