@@ -96,20 +96,20 @@ int main(int argc, char** argv)
         }
         
         int port = 9999; 
-        std::thread t(&serverF,port);
+     //   std::thread t(&serverF,port);
      /*   std::thread t([ss,port](){
             std::cout << "thread function\n";
         
             ss.start(9999);
         });*/
-        
+  /*      
         SocketClient sc(port);
         //sc.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?><com ver=\"2.4\" state=\"algs\" aid=\"7777\"></com>\nqwertasdfgh</></>");
         sc.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?><com ver=\"2.4\" state=\"algs\" aid=\"7777\"></cm>xx\nqwertasdfgh</></>");
         std::cout <<"read"<< sc.read() << "|"<<endl;
         t.join();
         return 0;
-        
+ */       
         /* device d;
         d.id = "53.54.55.56";
         d.type="0x00";
@@ -156,6 +156,7 @@ int main(int argc, char** argv)
         resolveMsg( "<com ver=\"2.4\"  state=\"signin\" srv=\"beeeon\" > <par name=\"pavel3\" pswd=\"xxx\"  />  </com>");
         DAOUsers::getInstance().getUserIDbyAlternativeKeys("leo.podmolik@gmail.com", "","");
         */
+        resolveMsg( "<com ver=\"2.4\" state=\"getallalgs\" bt=\"nXj66lMqqi\" aid=\"9494\" userid=\"21\" />" );
 /*
         int id = DAOUsers::getInstance().getUserIDbyAlternativeKeys("user2a@gmail.com", "1111","user2");
              MobileDevice mobile;

@@ -9,9 +9,10 @@
 #define	MSGINDELGCMID_H
 
 #include "IMsgInLoginRequired.h"
+#include "IMsgInLoginUnwanted.h"
 
 
-class MsgInDelGCMID : public IMsgInLoginRequired{
+class MsgInDelGCMID : public IMsgInLoginUnwanted{
 public:
     MsgInDelGCMID(char* msg, pugi::xml_document* doc);
     virtual ~MsgInDelGCMID();

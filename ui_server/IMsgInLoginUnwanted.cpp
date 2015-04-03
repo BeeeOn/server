@@ -21,3 +21,7 @@ bool IMsgInLoginUnwanted::isComIdValid(){
 enumAccessStatus IMsgInLoginUnwanted::checkAccess(){
     return GRANTED;
 }
+
+int IMsgInLoginUnwanted::getMsgAuthorization() {
+    return EVERYONE;
+}

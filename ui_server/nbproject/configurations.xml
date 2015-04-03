@@ -595,7 +595,6 @@
     </logicalFolder>
     <itemPath>../ui_logger/Logger.cpp</itemPath>
     <itemPath>../ui_logger/Logger.h</itemPath>
-    <itemPath>testInfo</itemPath>
   </logicalFolder>
   <sourceRootList>
     <Elem>../ui_logger</Elem>
@@ -1362,8 +1361,6 @@
       <item path="testHelper.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="testHelper.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="testInfo" ex="false" tool="3" flavor2="0">
       </item>
       <item path="tests/newtestclass.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -2352,8 +2349,6 @@
       <item path="testHelper.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="testHelper.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="testInfo" ex="false" tool="3" flavor2="0">
       </item>
       <item path="tests/newtestclass.cpp" ex="false" tool="1" flavor2="0">
       </item>

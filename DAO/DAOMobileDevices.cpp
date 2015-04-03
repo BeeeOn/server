@@ -24,7 +24,7 @@ DAOMobileDevices& DAOMobileDevices::getInstance(){
         return instance;
 }
 
-int DAOMobileDevices::delGCMId(string oldUserId, string gcmid) {
+int DAOMobileDevices::delGCMId(int oldUserId, string gcmid) {
     Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"delGCMId"<<oldUserId<<endl;
     try{
         soci::session sql(*_pool);
@@ -43,14 +43,14 @@ int DAOMobileDevices::delGCMId(string oldUserId, string gcmid) {
     }
 }
 
-int DAOMobileDevices::setGCMId(string IHAtoken, string phoneid,int userId, string gcmid) {
-    Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"setGCMId"<< "guser"<<userId<<"tok:"<<IHAtoken<<"gc"<<gcmid<<endl;
+int DAOMobileDevices::setGCMId(string token, string gcmid) {
+    Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"setGCMId"<<"tok:"<<token<<"gc"<<gcmid<<endl;
     try{
         soci::session sql(*_pool);
         
        statement st = (sql.prepare << 
                 "update mobile_devices set push_notification = :gcmid where token = :ihaToken",
-                use(IHAtoken, "ihaToken"), use(gcmid,"gcmid")
+                use(token, "ihaToken"), use(gcmid,"gcmid")
              );
         st.execute(true);
         return st.get_affected_rows();

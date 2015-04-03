@@ -15,7 +15,8 @@ class IMsgInLoginUnwanted : public IMsgIn{
 public:
     IMsgInLoginUnwanted(char* msg, pugi::xml_document* doc);
     virtual ~IMsgInLoginUnwanted();
-
+    
+    virtual int getMsgAuthorization();
     virtual bool isComIdValid();
 
     virtual enumAccessStatus checkAccess();

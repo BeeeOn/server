@@ -19,7 +19,7 @@ MsgInGetConAccount::~MsgInGetConAccount() {
 }
 
 int MsgInGetConAccount::getMsgAuthorization() {
-    return SUPERUSER;
+    return GUEST;
 }
 
 string MsgInGetConAccount::createResponseMsgOut()

@@ -27,6 +27,7 @@ public:
     virtual ~SocketClient();
     int write(string text);
     string read();
+    string readUntilendTag(string endTag);
 private:
     int _socketfd;
     

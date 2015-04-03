@@ -24,12 +24,12 @@ int MsgInSetGCMID::getMsgAuthorization() {
 
 string MsgInSetGCMID::createResponseMsgOut() {
     string gcmid = _doc->child(P_COMMUNICATION).attribute(P_GOOGLE_CLOUD_MID).value();
-    string phoneid = _doc->child(P_COMMUNICATION).attribute(P_PHONE_ID).value();
+    //string phoneid = _doc->child(P_COMMUNICATION).attribute(P_PHONE_ID).value();
     
-    string mail = _doc->child(P_COMMUNICATION).attribute(P_EMAIL).value();
+    //string mail = _doc->child(P_COMMUNICATION).attribute(P_EMAIL).value();
    // gcmid =   DBConnector::getInstance().DEBUGexec("select user_id from users where mail='"+mail+"';" );
     
-    if(DAOMobileDevices::getInstance().setGCMId(_token, phoneid, _userId, gcmid) == 0)
+    if(DAOMobileDevices::getInstance().setGCMId(_token, gcmid) == 0)
         throw ServerException(ServerException::GCMID);
     
     return envelopeResponse(R_TRUE); 

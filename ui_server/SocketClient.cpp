@@ -10,6 +10,7 @@
 #include<string.h>  
 #include <iostream>
 #include "SocketClient.h"
+#include <unistd.h>
 using namespace std;
 
 SocketClient::SocketClient(int portNumber, string hostName) {
@@ -58,8 +59,7 @@ string SocketClient::read(){
 
     string data;
     int recieved;
-    int bufferSize = 10
-    ;
+    int bufferSize = 1000;
     char rc[bufferSize+2];
     while(1)
      {
@@ -68,11 +68,13 @@ string SocketClient::read(){
          recieved = ::read(_socketfd,rc,bufferSize);
          
                     std::cout<<"|"<<rc<<"|"<<endl;
-                //printf("Bytes received: %d\n",recieved);
+                printf("Bytes received: %d vs %d\n",recieved,strlen(rc));
                 if ( recieved > 0 )
                 {
                         rc[recieved] = '\0';
-                     data.append(rc, recieved);
+		std::cout << "data before append" << data << "|" << strlen(rc) << std::endl;           
+          data.append(rc, strlen(rc));
+		std::cout << "after" << data << "|" << std::endl;
                       if ( (data.find("</reply>")!=std::string::npos) ||
                               (data.find("</com>")!=std::string::npos) ||
                               ((data[data.size()-2]=='/')&&(data[data.size()-1]=='>'))
@@ -85,6 +87,8 @@ string SocketClient::read(){
                        if(data.length()>0)
                        {
                            break;
+                           //usleep(100*1000);
+                           //continue; //wait for end element
                        }
                        else{
                             throw "ERROR reading from socket";
@@ -95,7 +99,66 @@ string SocketClient::read(){
                     throw "ERROR reading from socket";
                 }
     }
-    std::cout<<"client done reading":<< data <<endl;
+    std::cout<<"client done reading"<< data <<endl;
+    
     return data;
 }
-
+bool hasEnding (std::string const &fullString, std::string const &ending) {
+    if (fullString.length() >= ending.length()) {
+        return (0 == fullString.compare (fullString.length() - ending.length(), ending.length(), ending));
+    } else {
+        return false;
+    }
+}
+string SocketClient::readUntilendTag(string endTag) {
+    struct timeval tv;
+    tv.tv_sec = 5;
+    tv.tv_usec = 0; 
+    setsockopt(_socketfd, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv,sizeof(struct timeval));
+    
+    string data;
+    int recieved;
+    int bufferSize = 1000;
+    char rc[bufferSize+1];
+    while(1)
+     {
+        bzero(rc,bufferSize+1);
+        //recieved = recv(_socketfd, rc, bufferSize,0);
+         recieved = ::read(_socketfd,rc,bufferSize);
+         
+         
+         
+                 //   std::cout<<"|"<<rc<<"|"<<endl;
+                //printf("Bytes received: %d vs %d\n",recieved,strlen(rc));
+                if ( recieved > 0 )
+                {
+                    rc[recieved] = '\0';
+                    
+                    //std::cout << "data before append" << data << "|" << strlen(rc) << std::endl;           
+                    data.append(rc, strlen(rc));
+                    //std::cout << "after" << data << "|" << std::endl;
+                      //if ( data.find(endTag)!=std::string::npos ) 
+                    if(hasEnding(data, endTag))
+                        break; 
+                }
+                else if ( recieved == 0 )//other side closed socket
+                {
+                    //std::cout<<"rec ==0"<<endl;
+                       if(data.length()>0)
+                       {
+                           break;
+                           //usleep(100*1000);
+                           //continue; //wait for end element
+                       }
+                       else{
+                            throw "ERROR reading from socket";
+                       }
+                       break;
+                }
+                else{
+                    throw "ERROR reading from socket";
+                }
+    }
+    std::cout<<"client done reading"<< data <<endl;
+    return data;
+}
