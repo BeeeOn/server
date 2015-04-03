@@ -11,11 +11,11 @@
 using namespace std;
 using namespace pugi;
 
-#define FW_PORT "7082"
+#define FW_PORT "7084"
 
 // Konstruktor Algoritmu, bude pøedán do algoritmu pod názvem instance alg
-Algorithm::Algorithm(long long int init_userID, long long int init_algID, long long int init_adapterID,
-	unsigned short int init_offset, multimap<unsigned int, map<string, string>> init_values, std::vector<std::string> init_parameters){
+Algorithm::Algorithm(std::string init_userID, std::string init_algID, std::string init_adapterID,
+	std::string init_offset, multimap<unsigned int, map<string, string>> init_values, std::vector<std::string> init_parameters){
 
 	this->userID = init_userID;
 	this->algID = init_algID;
@@ -31,29 +31,50 @@ Algorithm::~Algorithm(){
 
 // Metoda pøidávající notifikaci uživateli algoritmu
 bool Algorithm::AddNotify(unsigned short int type, std::string text){
-	/*
+	tnotify * newNotification;
 	try
 	{
-		tnotify newNotification = new tnotify();
+		newNotification = new tnotify();
 	}
 	catch (std::exception &e)
 	{
 		newNotification = NULL;
-		cerr < "Algorithm failure: Unable to allocate memory for structure tnotify!";
+		cerr << "Algorithm failure: Unable to allocate memory for structure tnotify!";
 		return false;
 	}
 	newNotification->notifyType = type;
-	newNotification->NotifyText = text;
+	newNotification->notifyText = text;
 	this->toNotify.push_back(newNotification);
-	*/
+
 	return true;
 }
 
+// Metoda pøidávající notifikaci uživateli algoritmu
+bool Algorithm::ChangeActor(std::string id, std::string type){
+	
+	ttoggle * newToggle;
+	try
+	{
+		newToggle = new ttoggle();
+	}
+	catch (std::exception &e)
+	{
+		newToggle = NULL;
+		cerr << "Algorithm failure: Unable to allocate memory for structure ttoggle!";
+		return false;
+	}
+	newToggle->id = id;
+	newToggle->type = type;
+	this->toToggleActor.push_back(newToggle);
+
+	return true;
+}
+/*
 bool Algorithm::AddDataToDB(tvalue *AddValue, unsigned short int offsetInDB){
 
 	return true;
 }
-
+*/
 
 //Funkce provede spojení se serverem Frameworku a odešle zprávu.
 bool Algorithm::SendAndExit(){
@@ -82,6 +103,8 @@ bool Algorithm::SendAndExit(){
 		return false;
 	}
 
+	cout << ParsedMessage << endl;
+
 	// Odeslání dat
 	if ((size = send(mySocket, ParsedMessage.c_str(), ParsedMessage.size() + 1, 0)) == -1)
 	{
@@ -100,34 +123,50 @@ std::string Algorithm::CreateMessage(){
 	xml_document *resp = new xml_document();
 
 	//Definuj element algorithm_message
-	xml_node algorithm_message = resp->append_child("algorithm_message");
+	xml_node algorithm_message = resp->append_child("alg_m");
 	algorithm_message.append_attribute("protocol_version");
 	algorithm_message.append_attribute("userID");
 	algorithm_message.append_attribute("algID");
 	algorithm_message.append_attribute("adapterID");
-	//algorithm_message.append_attribute("sensor_id");
-	algorithm_message.append_attribute("offset");
+
 	//Nastav element algorithm_message
 	algorithm_message.attribute("protocol_version") = "1.0";
-	algorithm_message.attribute("userID") = to_string(this->userID).c_str();
-	algorithm_message.attribute("algID") = to_string(this->algID).c_str();
-	algorithm_message.attribute("adapterID") = to_string(this->adapterID).c_str();
-	//algorithm_message.attribute("sensor_id") = to_string(this->sensor_id).c_str();
-	algorithm_message.attribute("offset") = to_string(this->offset).c_str();
+	algorithm_message.attribute("userID") = this->userID.c_str();
+	algorithm_message.attribute("algID") = this->algID.c_str();
+	algorithm_message.attribute("adapterID") = this->adapterID.c_str();
 
-	xml_node notifications = algorithm_message.append_child("notifications");
-	//notifications.attribute("count") = (this->toNotify.size()).c_str();  //poèet notifikací
-	notifications.attribute("count") = "0";
-	//Pøidej všechny notifikace
-	/*
+	//Dale nejak predavat DeviceId, Device Offset a DeviceType ... je v atributu values
+
+	xml_node notifications = algorithm_message.append_child("notifs");
+	notifications.append_attribute("count");
+	int countNotifs = this->toNotify.size();
+	notifications.attribute("count") = to_string(countNotifs).c_str();  //poèet notifikací
+
+	//Add all notifications to message
 	for (auto oneNotif = this->toNotify.begin(); oneNotif != this->toNotify.end(); ++oneNotif){
 		xml_node notifNode = notifications.append_child("notif");
 		notifNode.append_attribute("type");
 		notifNode.append_attribute("text");
-		notifNode.attribute("type") = (oneNotif->notifyType).c_str();
-		notifNode.attribute("text") = (oneNotif->notifyText).c_str();
+		tnotify * notiftmp = *oneNotif;
+		notifNode.attribute("type") = to_string(notiftmp->notifyType).c_str();
+		notifNode.attribute("text") = notiftmp->notifyText.c_str();
 	}
-	*/
+
+	xml_node toggleActors = algorithm_message.append_child("tactors");
+	toggleActors.append_attribute("count");
+	int countToggles = this->toToggleActor.size();
+	toggleActors.attribute("count") = to_string(countToggles).c_str();  //poèet notifikací
+
+	//Add all toogles to message
+	for (auto oneToggle = this->toToggleActor.begin(); oneToggle != this->toToggleActor.end(); ++oneToggle){
+		xml_node toggleNode = toggleActors.append_child("notif");
+		toggleNode.append_attribute("id");
+		toggleNode.append_attribute("type");
+		ttoggle * toggleTmp = *oneToggle;
+		toggleNode.attribute("id") = (toggleTmp->id).c_str();
+		toggleNode.attribute("type") = (toggleTmp->type).c_str();
+	}
+
 	tstringXMLwriter writer;
 	resp->print(writer);
 	delete(resp);
@@ -173,7 +212,7 @@ Algorithm * Algorithm::getCmdLineArgsAndCreateAlgorithm(int argc, char *argv[]){
 	string userIDString = "";
 	string algIDString = "";
 	string adapterIDString = "";
-	string offsetString = "";
+	string UserAlgIdString = "";
 	string valuesString = "";
 	string parametersString = "";
 	int opt;
@@ -186,27 +225,27 @@ Algorithm * Algorithm::getCmdLineArgsAndCreateAlgorithm(int argc, char *argv[]){
 			cout << "print help" << endl;
 			return nullptr;
 			break;
-		case 'u':
+		case 'u': // userID
 			userIDString = optarg;
 			u = true;
 			break;
-		case 'a':
+		case 'a': // algID
 			algIDString = optarg;
 			a = true;
 			break;
-		case 'd':
+		case 'd': // adapterID
 			adapterIDString = optarg;
 			d = true;
 			break;
-		case 'o':
-			offsetString = optarg;
+		case 'o': // offset
+			UserAlgIdString = optarg;
 			o = true;
 			break;
-		case 'v':
+		case 'v': // senzor values
 			valuesString = optarg;
 			v = true;
 			break;
-		case 'p':
+		case 'p': // parameters given by User
 			parametersString = optarg;
 			p = true;
 			break;
@@ -218,11 +257,15 @@ Algorithm * Algorithm::getCmdLineArgsAndCreateAlgorithm(int argc, char *argv[]){
 		cerr << "Algorithm failure: Wrong command line arguments! You have to specify at least -u -a -d -o\n";
 		return nullptr;
 	}
-	long long int userID = std::stoi(userIDString);
-	long long int algID = std::stoi(algIDString);
-	long long int adapterID = std::stoi(adapterIDString);
+
+	cerr << "Paramstring: " << parametersString.c_str() << endl;
+	/*
+	long long int userID = std::atoll(userIDString.c_str());
+	long long int algID = std::atoll(algIDString.c_str());
+	long long int adapterID = std::atoll(adapterIDString.c_str());
 	unsigned short int offset = std::stoi(offsetString);
-	
+	*/
+
 	//Deklarace promìnných pro uložení z operací parsování
 	multimap<unsigned int, map<string, string>> values;
 	vector<string> params;
@@ -234,7 +277,7 @@ Algorithm * Algorithm::getCmdLineArgsAndCreateAlgorithm(int argc, char *argv[]){
 	if (p){
 		params = Algorithm::parseParams(parametersString);
 	}
-	return new Algorithm(userID, algID, adapterID, offset, values, params);
+	return new Algorithm(userIDString, algIDString, adapterIDString, UserAlgIdString, values, params);
 }
 
 //Metoda, která vezme hodnotu parametru -v pøík. øádky a zparsuje jej
@@ -264,26 +307,7 @@ multimap<unsigned int, map<string, string>> Algorithm::parseValues(std::string v
 vector<string> Algorithm::parseParams(std::string paramsInput){
 	
 	vector<string> params = Algorithm::explode(paramsInput, '#');
-
-	/* COMMENTED - NEED	TO WRITE METHOD SpaceReplace
-	vector<string> paramsOutput;
-	
-	for (auto it = params.begin(); it != params.end(); ++it){
-		string tmp = Algorithm::spaceReplace(*it);
-		paramsOutput.push_back(tmp);
-	}
-	return paramsOutput;
-	*/
-	/*for (auto c : params)
-    std::cout << c << "\n";*/
 	return params;
-}
-//TODO:
-//Replace \_ in string with comma
-std::string Algorithm::spaceReplace(std::string text) {
-
-
-	return text;
 }
 
 vector<string> Algorithm::explode(string str, char ch) {
@@ -324,4 +348,45 @@ std::multimap<unsigned int, std::map<std::string, std::string>> Algorithm::getVa
 
 std::vector<std::string> Algorithm::getParameters(){
 	return this->parameters;
+}
+
+//Nastavi podminku dle zadaneho retezce
+int Algorithm::SetCondition(std::string cond){
+	tcondition retVal;
+
+	if (cond.compare("eq") == 0){
+		retVal = EQ;
+	}
+	else if (cond.compare("gt") == 0){
+		retVal = GT;
+	}
+	else if (cond.compare("ge") == 0){
+		retVal = GE;
+	}
+	else if (cond.compare("lt") == 0){
+		retVal = LT;
+	}
+	else if (cond.compare("le") == 0){
+		retVal = LE;
+	}
+	else if (cond.compare("btw") == 0){
+		retVal = BTW;
+	}
+	else if (cond.compare("chg") == 0){
+		retVal = CHG;
+	}
+	else if (cond.compare("dp") == 0){
+		retVal = DP;
+	}
+	else if (cond.compare("time") == 0){
+		retVal = TIME;
+	}
+	else if (cond.compare("geo") == 0){
+		retVal = GEO;
+	}
+	else{
+
+	}
+
+	return retVal;
 }
