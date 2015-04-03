@@ -12,6 +12,7 @@ SSLContainer::~SSLContainer()
 {
 	for (int i=0;i<size;i++)
 	{
+		close(SSL_get_fd(SSLs[i]));
 		SSL_shutdown(SSLs[i]);
 		SSL_free(SSLs[i]);
 	}
@@ -26,6 +27,7 @@ void SSLContainer::InsertSSL(long long adapter,SSL *ssl)
 	{
 		if (adapters[i]==adapter)
 		{
+			close(SSL_get_fd(SSLs[i]));
 			SSL_shutdown(SSLs[i]);
 			SSL_free(SSLs[i]);
 			SSLs[i] = ssl;

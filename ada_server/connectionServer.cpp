@@ -68,7 +68,7 @@ bool ConnectionServer::LoadCertificates()
 void ConnectionServer::HandleConnection (in_addr IP)
 {
 	_log->WriteMessage(TRACE,"Entering " + this->_Name + "::HandleConnection");
-	char buffer[1024];  //natavime buffer
+	char buffer[1024];// = new char[1024];  //natavime buffer
 	//int pollRes;
 
 	/*int use_prv = SSL_CTX_use_PrivateKey_file(sslctx, "/etc/openvpn/server.key", SSL_FILETYPE_PEM);*/
@@ -85,6 +85,9 @@ void ConnectionServer::HandleConnection (in_addr IP)
 	{
 		_log->WriteMessage(ERR,"SSL accept error");
 	    //Error occured, log and close down ssl
+		SSL_shutdown(this->cSSL);
+		SSL_free(this->cSSL);
+		cSSL = SSL_new(sslctx);
 		 close(com_s);
 		 return;
 	}
@@ -351,8 +354,13 @@ ConnectionServer::ConnectionServer(soci::session *SQL, Loger *L, int timeOut,SSL
 ConnectionServer::~ConnectionServer()
 {
 	_log->WriteMessage(TRACE,"Entering " + this->_Name + "::Destructor");
+	close(SSL_get_fd(cSSL));
 	SSL_shutdown(this->cSSL);
 	SSL_free(this->cSSL);
+	ERR_free_strings();
+	EVP_cleanup();
+	CRYPTO_cleanup_all_ex_data();
+	SSL_CTX_free(this->sslctx);
 	delete this->database;
 	_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Destructor");
 }

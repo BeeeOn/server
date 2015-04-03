@@ -121,6 +121,11 @@ bool RequestServer::HandleRequest ()
 	{
 		 Message = "<reply>false</reply>";
 	}
+	if ((res==true)&&(del==true))
+	{
+		this->_log->WriteMessage(TRACE,"Deleting device ID" + DEVID);
+		this->database->DeleteFacility(DEVID);
+	}
 	if ((send(com_s, Message.c_str(), Message.size(), 0))<0)  //odoslanie poziadavky na server
 	{
 		char errorbuf[200];
@@ -128,11 +133,6 @@ bool RequestServer::HandleRequest ()
 		close (com_s);
 		this->_log->WriteMessage(WARN,"Unable to send message to ui_server with code : " + std::to_string(errno) + " : " + errorbuf);
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::ReciveConnection");
-	}
-	if ((res==true)&&(del==true))
-	{
-		this->_log->WriteMessage(TRACE,"Deleting device ID" + DEVID);
-		this->database->DeleteFacility(DEVID);
 	}
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::HandleConnection");
 	return (res);

@@ -16,7 +16,7 @@ using namespace std;
 /**Q to insert adapter uses ( :AdapterID, :FMver, ':socket')*/
 const string InsertAdapter = "insert into adapters (adapter_id,version,socket) values ( :AdapterID,:FMver, :socket);";  //"insert into adapters (adapter_id,version,socket) values ( "+ std::to_string(message->adapterINTid)+ ", " + std::to_string(message->fm_version) + ", '" + std::to_string(message->socket) + "');" ;
 /**Q to insert device uses ( ':devID', :type, ':value')*/
-const string InsertDevice = "insert into devices (fk_facilities_mac,type,value) values ( :devID, :type, ':value');";  //"insert into devices (fk_facilities_mac,type,value) values ( '" + message->DeviceIDstr + "', " + std::to_string(message->values[i].intType) + ", '" + val + "');" ;
+const string InsertDevice = "insert into devices (fk_facilities_mac,type,value) values ( :devID, :type, :value);";  //"insert into devices (fk_facilities_mac,type,value) values ( '" + message->DeviceIDstr + "', " + std::to_string(message->values[i].intType) + ", '" + val + "');" ;
 /**Q to insert facility uses ( ':deviceID',:battery, :signal, :adapterID, :timestamp , :timestamp)*/
 const string InsertFacility = "insert into facilities (mac,refresh,battery,quality,fk_adapter_id,involved,timestamp) values ( :deviceID, 5 ,:battery, :signal, :adapterID, :timestamp , :timestamp);";  /*"insert into facilities (mac,refresh,battery,quality,fk_adapter_id,involved,timestamp) values
 ( '" + message->DeviceIDstr + "', 5 ," + std::to_string(message->battery)+ ", " + std::to_string(message->signal_strength) +  ", " +std::to_string(message->adapterINTid)+ ", " +std::to_string(message->timestamp) + ", " + std::to_string(message->timestamp) +" );" ;*/

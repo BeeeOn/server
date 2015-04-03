@@ -12,6 +12,16 @@ bool Sender::Send(std::string Message,SSL *s) //pripojenie na server a komunikac
 {
 	int Err;
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::Send");
+	int soc = SSL_get_fd(s);
+	int error_code;
+	unsigned int error_code_size = sizeof(error_code);
+	getsockopt(soc, SOL_SOCKET, SO_ERROR, &error_code, &error_code_size);
+	if (error_code!=0)
+	{
+		this->_log->WriteMessage(ERR,"Unable to send message sockeet is closed");
+		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Send");
+		return (false);
+	}
 	/*
 	if ((Err=send(soc, Message.c_str(), Message.size(), 0))<0)  //odoslanie poziadavky na server
 	{
