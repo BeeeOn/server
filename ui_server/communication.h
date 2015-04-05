@@ -12,6 +12,7 @@
 using namespace std;
 
 std::string resolveMsg(char* msg);
+std::string resolveMsg(string msg);
 
 #endif	/* COMMUNICATION_H */
 

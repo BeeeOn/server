@@ -95,7 +95,7 @@ int main(int argc, char** argv)
             return 1;
         }
         
-        int port = 9999; 
+      //  int port = 9999; 
      //   std::thread t(&serverF,port);
      /*   std::thread t([ss,port](){
             std::cout << "thread function\n";
@@ -156,7 +156,7 @@ int main(int argc, char** argv)
         resolveMsg( "<com ver=\"2.4\"  state=\"signin\" srv=\"beeeon\" > <par name=\"pavel3\" pswd=\"xxx\"  />  </com>");
         DAOUsers::getInstance().getUserIDbyAlternativeKeys("leo.podmolik@gmail.com", "","");
         */
-        resolveMsg( "<com ver=\"2.4\" state=\"getallalgs\" bt=\"nXj66lMqqi\" aid=\"9494\" userid=\"21\" />" );
+        resolveMsg( (char*)"<com ver=\"2.4\" state=\"getallalgs\" bt=\"nXj66lMqqi\" aid=\"9494\" userid=\"21\" />");
 /*
         int id = DAOUsers::getInstance().getUserIDbyAlternativeKeys("user2a@gmail.com", "1111","user2");
              MobileDevice mobile;
@@ -225,7 +225,7 @@ int main(int argc, char** argv)
                 Logger::getInstance(Logger::DEBUG2)<<"new thread started, threads c.:"<<(*threadCounter +1)<<endl;
                 
                 //create thread which serve phone
-                thread *t =  new thread( [ssl, threadCounter, resolveFunc](){
+                new thread( [ssl, threadCounter, resolveFunc](){
                     (*threadCounter)++;
                     Servlet(ssl,resolveFunc);
                     (*threadCounter)--;

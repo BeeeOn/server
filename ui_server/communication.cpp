@@ -78,3 +78,8 @@ string resolveMsg(char* msg)
     
     return response;
 }
+
+string resolveMsg(string msg){
+    string response = resolveMsg(msg.c_str());
+    return response;
+}

@@ -101,6 +101,7 @@ int ComTable::setComInfo( string email)
     _comInfos.insert(it,std::pair<int, ComTableEntry*>(comId,e));
     
     return comId;*/
+    return -1;
 }
 int ComTable::setComInfo(int userId, string email)
 {
@@ -115,6 +116,7 @@ int ComTable::setComInfo(int userId, string email)
     _comInfos.insert(it,std::pair<int, ComTableEntry*>(comId,e));
     
     return comId;*/
+    return -1;
 }
 
 

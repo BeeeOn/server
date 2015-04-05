@@ -27,7 +27,7 @@ string MsgInDelConAccount::createResponseMsgOut()
     
     pugi::xml_node userNode =  _doc->child(P_COMMUNICATION).child(P_USER);
     string userMail;
-    bool fail=false;
+    //bool fail=false;
     string errText;
     
     for (; userNode; userNode = userNode.next_sibling(P_USER))

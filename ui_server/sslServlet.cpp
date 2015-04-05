@@ -164,7 +164,7 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
                         Logger::getInstance(Logger::ERROR)<<"ssl incoming data are too big"<<endl;
                         break;
                     }
-                    if(buf[received-1] == '>' && received < sizeof(buf))
+                    if(buf[received-1] == '>' && received < (int)sizeof(buf))
                         break;
                     
                     count++;

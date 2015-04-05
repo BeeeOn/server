@@ -22,7 +22,7 @@ int MsgInAddView::getMsgAuthorization() {
 
 string MsgInAddView::createResponseMsgOut()
 {
-    
+    /*
     pugi::xml_node deviceNode =  _doc->child("communication").child("device");
     string deviceId;
     string deviceType;
@@ -36,7 +36,7 @@ string MsgInAddView::createResponseMsgOut()
     }
     if(vi<0)//TODO horni omezeni
         throw ServerException(ServerException::ICON);
-    
+    */
     //TODO castecne pridani (2x ten samy senzor=chyba))
     /*DBConnector::getInstance().addView(_userId, viewName, viewIcon);
     
