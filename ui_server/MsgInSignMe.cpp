@@ -119,7 +119,7 @@ string MsgInSignMe::getnewIHAtoken() {
         i++;
         if(i >= 5)
             throw ServerException(ServerException::RANDOMGEN);
-        char * block;
+        
         int len = 10;
 
         static const char alphanum[] =
@@ -131,7 +131,7 @@ string MsgInSignMe::getnewIHAtoken() {
         if (fd != -1) {
             // uint8_t buffer[len];
             char buffer[len];
-            if (read(fd, buffer, sizeof (buffer)) == sizeof (buffer)) {
+            if (read(fd, buffer, sizeof (buffer)) == (int)sizeof (buffer)) {
                 for (int i = 0; i < len; ++i) {
                     newToken += alphanum[buffer[i] % (sizeof (alphanum) - 1)];
                 }

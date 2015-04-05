@@ -67,14 +67,14 @@ string SocketClient::read(){
         //recieved = recv(_socketfd, rc, bufferSize,0);
          recieved = ::read(_socketfd,rc,bufferSize);
          
-                    std::cout<<"|"<<rc<<"|"<<endl;
-                printf("Bytes received: %d vs %d\n",recieved,strlen(rc));
+                //    std::cout<<"|"<<rc<<"|"<<endl;
+                //printf("Bytes received: %d vs %d\n",recieved,strlen(rc));
                 if ( recieved > 0 )
                 {
                         rc[recieved] = '\0';
-		std::cout << "data before append" << data << "|" << strlen(rc) << std::endl;           
+		//std::cout << "data before append" << data << "|" << strlen(rc) << std::endl;           
           data.append(rc, strlen(rc));
-		std::cout << "after" << data << "|" << std::endl;
+		//std::cout << "after" << data << "|" << std::endl;
                       if ( (data.find("</reply>")!=std::string::npos) ||
                               (data.find("</com>")!=std::string::npos) ||
                               ((data[data.size()-2]=='/')&&(data[data.size()-1]=='>'))
@@ -83,7 +83,7 @@ string SocketClient::read(){
                 }
                 else if ( recieved == 0 )
                 {
-                    std::cout<<"rec ==0"<<endl;
+                    //std::cout<<"rec ==0"<<endl;
                        if(data.length()>0)
                        {
                            break;
