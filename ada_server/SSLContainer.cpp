@@ -1,15 +1,19 @@
 #include "SSLContainer.h"
 
 
-SSLContainer::SSLContainer()
+SSLContainer::SSLContainer(Loger *l)
 {
+	l->WriteMessage(TRACE,"Entering " + this->_Name + "::Constructor");
 	this->size=0;
+	this->_log=l;
 	//this->SSLs = new SSL*[1000];
 	//this->adapters = new int[1000];
+	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Constructor");
 }
 
 SSLContainer::~SSLContainer()
 {
+	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::Destructor");
 	for (int i=0;i<size;i++)
 	{
 		close(SSL_get_fd(SSLs[i]));
@@ -19,6 +23,7 @@ SSLContainer::~SSLContainer()
 	/*delete[] SSLs;
 	delete[] adapters;*/
 	size = 0;
+	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Destructor");
 }
 
 void SSLContainer::InsertSSL(long long adapter,SSL *ssl)

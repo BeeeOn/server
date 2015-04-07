@@ -48,6 +48,16 @@ typedef enum deviceType
 	SENACT
 } tdeviceType;
 
+typedef enum reqType
+{
+	DATA,
+	REGISTER,
+	SWITCH,
+	DELETE,
+	LISTEN,
+	UNKNOWN
+}treqType;
+
 
 /** @struct value
  *  @brief Struktura uchovavajuca hodnoty prijate od adapteru a zariadenia.
@@ -122,7 +132,7 @@ typedef struct xml_string_writer: pugi::xml_writer
 
 typedef struct message
 {
-	unsigned short int state;
+	reqType state;
 	long long int adapterINTid;
 	int fm_version;
 	float cp_version;

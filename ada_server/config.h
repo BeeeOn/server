@@ -32,9 +32,14 @@ class Config
 		std::string _receiverLogPath;
 		std::string _senderLogPath;
 		int _timeOut;
-		std::string _path;
 		std::string _password;
 		std::string _user;
+		std::string _CApath;
+		std::string _crtPath;
+		std::string _keyPath;
+		int _mode;
+		bool GetCommonProperties(pugi::xml_node Common);
+		bool GetCertificatesProperties(pugi::xml_node Certificates);
 		bool GetLogProperties(pugi::xml_node log,int *verbosity,int *maxFiles,int*maxLines,std::string *fileNaming,std::string *path);
 		bool GetDatabaseProperties (pugi::xml_node DB);
 		bool GetReceiverProperties (pugi::xml_node receiver);
@@ -54,11 +59,15 @@ class Config
 		std::string ReceiverFileNaming() const {return (this->_receiverFileNaming);};
 		int ReceiverMaxFiles() const {return( this->_receiverMaxFiles);};
 		int ReceiverMaxLines() const {return( this->_receiverMaxLines);};
-	int TimeOut() {
-		return (_timeOut);
-	}
-
-	;
+		std::string SenderPath() const {return (this->_senderLogPath);};
+		std::string ReceiverPath() const {return (this->_receiverLogPath);};
+		std::string Password() const {return (this->_password);};
+		std::string User() const {return (this->_user);};
+		int TimeOut() {return (_timeOut);};
+		std::string CApath ()const {return (_CApath);};
+		std::string CRTPath () const {return (_crtPath);};
+		std::string KeyPath () const {return (_keyPath);};
+		int Mode () const {return (_mode);};
 
 };
 

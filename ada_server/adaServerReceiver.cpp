@@ -30,7 +30,7 @@ message::message()
 	this->battery = 0;
 	this->cp_version = 0.0;
 	this->signal_strength=0;
-	this->state = 0;
+	this->state = UNKNOWN;
 	this->values_count = 0;
 	this->fm_version = 0;
 	this->sensor_id = 0;
@@ -57,7 +57,7 @@ AdaServerReceiver::AdaServerReceiver(sem_t *Sem, WorkerPool *workers, Loger *L,C
 AdaServerReceiver::~AdaServerReceiver()
 {
 	delete this->_CH;
-	delete this->_log;
+	//delete this->_log;
 }
 
 void AdaServerReceiver::Start()

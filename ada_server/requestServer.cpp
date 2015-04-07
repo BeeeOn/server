@@ -17,7 +17,6 @@ bool RequestServer::HandleRequest ()
 	ssize_t DataSize=0;
 	std::string data;
 	data.clear();
-	bool del =false;
 	while (1)
 	{
 		if ((DataSize = read(this->com_s, &buffer, 1024)) < 0) //prijmeme dlzku prichadzajucich dat (2 byty kratkeho integera bez znamienka)
@@ -39,7 +38,8 @@ bool RequestServer::HandleRequest ()
 		}
 	}
 	this->_log->WriteMessage(INFO,"Data: " + data);
-	xml_document doc;
+	std::string message;
+	/*xml_document doc;
 	xml_parse_result result = doc.load_buffer(data.data(), data.size());
 	if (result.status!=status_ok)
 	{
@@ -52,7 +52,6 @@ bool RequestServer::HandleRequest ()
 	std::string reqType = request.attribute("type").as_string();
 	xml_node subject = request.first_child();
 	std::string message;
-	int AdapterIP = -1;
 	this->_log->WriteMessage(INFO,"Request type :" + reqType);
 	long long aID;
 	std::string DEVID = "-1";
@@ -66,7 +65,6 @@ bool RequestServer::HandleRequest ()
 		this->_log->WriteMessage(INFO,"Adapter ID :" + std::to_string(AdapterId));
 		this->_log->WriteMessage(INFO,"Device ID :" + ID);
 		message = MC->CreateDeleteMessage(ID);
-		//database->GetAdapterData(&AdapterIP,AdapterId);
 	}
 	else
 	{
@@ -93,7 +91,6 @@ bool RequestServer::HandleRequest ()
 			stringType = os.str();
 			this->_log->WriteMessage(INFO,"Device hexa type :" + stringType);
 			message = this->MC->CreateSwitchMessage(std::to_string(AdapterId),ID,value,stringType,std::to_string(typeoffset.to_ulong()));
-			//database->GetAdapterData(&AdapterIP,AdapterId);
 		}
 		else
 		{
@@ -101,14 +98,36 @@ bool RequestServer::HandleRequest ()
 			aID = ID;
 			this->_log->WriteMessage(INFO,"Adapter ID :" + std::to_string(ID));
 			message = MC->CreateListenMessage(std::to_string(ID));
-			//database->GetAdapterData(&AdapterIP,ID);
 		}
+	}*/
+	std::string stringType;
+	std::ostringstream os;
+	if (!UIp->ParseMessage(data))
+	{
+		return (false);
+	}
+	tmessage *m = UIp->ReturnMessage();
+	switch(m->state)
+	{
+		case DELETE:
+			message = MC->CreateDeleteMessage(m->DeviceIDstr);
+			break;
+		case SWITCH:
+			os << std::hex << m->values->type;
+			stringType = os.str();
+			message = this->MC->CreateSwitchMessage(std::to_string(m->adapterINTid),m->DeviceIDstr,std::to_string(m->values->bval),stringType,std::to_string(m->values->offset));
+			break;
+		case LISTEN:
+			message = MC->CreateListenMessage(std::to_string(m->adapterINTid));
+			break;
+		default:
+			return (false);
 	}
 	bool res;
 	//this->_log->WriteMessage(INFO,"Adapter socket :" + std::to_string(AdapterIP));
 	this->_log->WriteMessage(INFO,"Message: \n" + message);
 	SSL *s = NULL;
-	if ((s = this->_sslcont->GetSSL(aID))==NULL)
+	if ((s = this->_sslcont->GetSSL(m->adapterINTid))==NULL)
 	{
 		res = false;
 	}
@@ -121,10 +140,10 @@ bool RequestServer::HandleRequest ()
 	{
 		 Message = "<reply>false</reply>";
 	}
-	if ((res==true)&&(del==true))
+	if ((res==true)&&(m->state==DELETE))
 	{
-		this->_log->WriteMessage(TRACE,"Deleting device ID" + DEVID);
-		this->database->DeleteFacility(DEVID);
+		this->_log->WriteMessage(TRACE,"Deleting device ID" + m->DeviceIDstr);
+		this->database->DeleteFacility(m->DeviceIDstr);
 	}
 	if ((send(com_s, Message.c_str(), Message.size(), 0))<0)  //odoslanie poziadavky na server
 	{
@@ -138,35 +157,6 @@ bool RequestServer::HandleRequest ()
 	return (res);
 }
 
-void RequestServer::HandleRequestCover()
-{
-	this->_log->WriteMessage(TRACE,"Process created!");
-	/*session *Conn = NULL;
-	while (Conn==NULL)
-	{
-		Conn=cont->GetConnection();
-		if (Conn==NULL)
-		{
-			this->_log->WriteMessage(INFO,"ALL CONNECTIONS ARE USED!");
-		}
-	}*/
-
-	std::string Message = "<reply>true</reply>";
-	if (!this->HandleRequest())
-	{
-		 Message = "<reply>false</reply>";
-	}
-	if ((send(com_s, Message.c_str(), Message.size(), 0))<0)  //odoslanie poziadavky na server
-	{
-		char errorbuf[200];
-		strerror_r(errno,errorbuf,200);
-		close (com_s);  //zavreme socket //todo:replace
-		this->_log->WriteMessage(WARN,"Unable to send message to ui_server with code : " + std::to_string(errno) + " : " + errorbuf);
-		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::ReciveConnection");
-	}
-	//sem_post(&connectionSem);
-}
-
 RequestServer::RequestServer(Loger *l, soci::session *SQL, SSLContainer *sslcont)
 {
 	l->WriteMessage(TRACE,"Entering " + this->_Name + "::RequestServer");
@@ -176,7 +166,7 @@ RequestServer::RequestServer(Loger *l, soci::session *SQL, SSLContainer *sslcont
 	this->com_s = -1;
 	MC = new MessageCreator(l);
 	s = new Sender(l);
-	s->LoadCertificates();
+	UIp = new UIServerMessageParser(l);
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::RequestServer");
 }
 
@@ -184,6 +174,7 @@ RequestServer::~RequestServer()
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::~RequestServer");
 	delete this->database;
+	delete this->UIp;
 	delete this->MC;
 	delete this->s;
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::~RequestServer");

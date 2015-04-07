@@ -24,6 +24,7 @@
 #include "DBHandler.h"
 #include "requestServer.h"
 #include "SSLContainer.h"
+#include "config.h"
 
 class Worker;
 
@@ -35,13 +36,13 @@ class WorkerPool
 		int freeCount;
 		Worker *workers[100];
 		std::mutex semaphore;
-		std::string _DBName;
+		std::string _DBConnString;
 		sem_t *Sem;
-		WorkerPool(std::string DBName, int ConnLimit, Loger *Rl, Loger *Sl,SSLContainer *sslcont);
+		WorkerPool(std::string DBConnString, Config *c, Loger *Rl, Loger *Sl,SSLContainer *sslcont);
 		static WorkerPool *instance;
 	public:
 		int Limit();
-		static WorkerPool *CreatePool(Loger *Rl, Loger *Sl, std::string DBName, int ConnLimit,SSLContainer *sslcont);
+		static WorkerPool *CreatePool(Loger *Rl, Loger *Sl, std::string DBConnString, Config *c, SSLContainer *sslcont);
 		Worker *GetWorker(Loger *l);
 		void ReturnWorker(Worker *worker,Loger *l);
 		void SetSemaphore (sem_t *sem){this->Sem=sem;};
@@ -69,7 +70,7 @@ class Worker
 		int _number;
 		bool Receiver;
 	public :
-		Worker (soci::session *s,Loger *Rl,  Loger *Sl, WorkerPool *pool, int i, SSLContainer *sslcont);
+		Worker (soci::session *s,Loger *Rl,  Loger *Sl, WorkerPool *pool, int i, SSLContainer *sslcont, Config *c);
 		void Unlock(int Soc, in_addr IP);
 		void Unlock(int Soc);
 		~Worker();

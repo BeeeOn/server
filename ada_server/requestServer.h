@@ -29,6 +29,7 @@
 #include <errno.h>
 #include <string.h>
 #include "SSLContainer.h"
+#include "messageParsers.h"
 
 class RequestServer
 {
@@ -42,11 +43,10 @@ class RequestServer
 		Sender *s;
 		Loger *_log;
 		SSLContainer *_sslcont;
-		//void StoreData();
+		UIServerMessageParser *UIp;
 	public:
 		RequestServer(Loger *l,soci::session *SQl, SSLContainer *sslcont);
 		bool HandleRequest();
-		void HandleRequestCover();
 		void SetSocket(int Soc);
 		~RequestServer();
 };

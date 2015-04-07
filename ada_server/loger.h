@@ -17,6 +17,8 @@
 #include <thread>
 #include <unistd.h>
 #include <atomic>
+#include <sys/time.h>
+#include <sys/stat.h>
 
 #ifndef LOGER_H_
 #define LOGER_H_
@@ -40,9 +42,9 @@ typedef struct logMsg
 {
 	std::string _msg;
 	std::string _MsgType;
-	std::time_t _TimeStamp;
+	struct timeval _TimeStamp;
 	std::thread::id _thrId;
-	logMsg(std::string Msg,std::string MsgType,std::time_t timestamp,std::thread::id thrID);
+	logMsg(std::string Msg,std::string MsgType,struct timeval timestamp,std::thread::id thrID);
 } tlogMsg;
 
 class Loger
@@ -65,12 +67,13 @@ class Loger
 		void Dequeue();
 		std::thread _worker;
 		std::atomic<bool> _teminate;
+		std::string _path;
 	public:
 		Loger();
 		~Loger();
 		void SetTerminate(){this->_teminate = true;};
 		void WriteMessage (tmessageType MT,std::string message);
-		void SetLogger(int Verbosity, int FilesCount, int LinesCount, std::string FileName, std::string AppName);
+		void SetLogger(int Verbosity, int FilesCount, int LinesCount, std::string FileName, std::string Path ,std::string AppName);
 
 };
 

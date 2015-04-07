@@ -77,5 +77,27 @@ class ProtocolV1MessageParser :public MessageParser
 		~ProtocolV1MessageParser();
 };
 
+class UIServerMessageParser
+{
+	private:
+		tmessage *_Message;
+		std::string _toParse;
+		Loger* _log;
+		pugi::xml_node request;
+		pugi::xml_node subject;
+		const std::string _Name = "UIServerMessageParser";
+	public:
+		bool ParseMessage(std::string MSG);
+		bool GetAdapterID();
+		bool GetSubjectID();
+		bool GetState();
+		bool GetValue();
+		bool GetOffsetType();
+		UIServerMessageParser(Loger *l);
+		~UIServerMessageParser();
+		tmessage* ReturnMessage(){return (_Message);};
+
+};
+
 
 #endif /* MESSAGEPARSERS_H_ */
