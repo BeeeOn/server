@@ -91,12 +91,12 @@ string SocketClient::read(){
                            //continue; //wait for end element
                        }
                        else{
-                            throw "ERROR reading from socket";
+                            throw SocketClientException("ERROR reading from socket");
                        }
                        break;
                 }
                 else{
-                    throw "ERROR reading from socket";
+                    throw SocketClientException("ERROR reading from socket");
                 }
     }
     std::cout<<"client done reading"<< data <<endl;
@@ -143,22 +143,33 @@ string SocketClient::readUntilendTag(string endTag) {
                 }
                 else if ( recieved == 0 )//other side closed socket
                 {
-                    //std::cout<<"rec ==0"<<endl;
-                       if(data.length()>0)
-                       {
-                           break;
-                           //usleep(100*1000);
-                           //continue; //wait for end element
-                       }
-                       else{
-                            throw "ERROR reading from socket";
-                       }
-                       break;
+                    if(data.length()>0)
+                    {
+                        break;
+                    }
+                    else{
+                        throw SocketClientException("ERROR reading from socket, zero length");
+                    }
+                    break;
                 }
                 else{
-                    throw "ERROR reading from socket";
+                    throw SocketClientException("ERROR reading from socket, recieved code:" + to_string(recieved));
                 }
     }
     std::cout<<"client done reading"<< data <<endl;
     return data;
+}
+
+
+
+SocketClientException::SocketClientException(string errText) : runtime_error(errText) {
+    
+    _errText = errText;
+}
+
+const char* SocketClientException::what() const throw()
+{
+    string what = "SocketClient exception: ";
+    what.append( _errText);
+    return what.c_str();
 }

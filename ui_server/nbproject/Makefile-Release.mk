@@ -84,6 +84,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/MsgInUnknown.o \
 	${OBJECTDIR}/MsgInUpdateView.o \
 	${OBJECTDIR}/MsgRightsChecker.o \
+	${OBJECTDIR}/Msgs/MsgInDelAdapter.o \
 	${OBJECTDIR}/Msgs/MsgInSignUp.o \
 	${OBJECTDIR}/ServerException.o \
 	${OBJECTDIR}/SocketClient.o \
@@ -401,6 +402,11 @@ ${OBJECTDIR}/MsgRightsChecker.o: MsgRightsChecker.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgRightsChecker.o MsgRightsChecker.cpp
+
+${OBJECTDIR}/Msgs/MsgInDelAdapter.o: Msgs/MsgInDelAdapter.cpp 
+	${MKDIR} -p ${OBJECTDIR}/Msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Msgs/MsgInDelAdapter.o Msgs/MsgInDelAdapter.cpp
 
 ${OBJECTDIR}/Msgs/MsgInSignUp.o: Msgs/MsgInSignUp.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Msgs
@@ -1594,6 +1600,19 @@ ${OBJECTDIR}/MsgRightsChecker_nomain.o: ${OBJECTDIR}/MsgRightsChecker.o MsgRight
 	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgRightsChecker_nomain.o MsgRightsChecker.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/MsgRightsChecker.o ${OBJECTDIR}/MsgRightsChecker_nomain.o;\
+	fi
+
+${OBJECTDIR}/Msgs/MsgInDelAdapter_nomain.o: ${OBJECTDIR}/Msgs/MsgInDelAdapter.o Msgs/MsgInDelAdapter.cpp 
+	${MKDIR} -p ${OBJECTDIR}/Msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/Msgs/MsgInDelAdapter.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Msgs/MsgInDelAdapter_nomain.o Msgs/MsgInDelAdapter.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/Msgs/MsgInDelAdapter.o ${OBJECTDIR}/Msgs/MsgInDelAdapter_nomain.o;\
 	fi
 
 ${OBJECTDIR}/Msgs/MsgInSignUp_nomain.o: ${OBJECTDIR}/Msgs/MsgInSignUp.o Msgs/MsgInSignUp.cpp 

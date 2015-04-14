@@ -108,9 +108,50 @@ void logErrors(SSL* ssl, int returnValue){
     int err = ERR_get_error();
     Logger::error()<<"ssl err: "<<ssl_err << " get_Err: " << err << " err_string " << ERR_error_string(ssl_err, NULL) << endl;
     if(ssl_err != 0){
-        Logger::debug3() << "errno: " << errno << endl;
-        perror("errno Log");
+        Logger::debug3() << "errno: " << errno << endl << "perror: " << strerror(errno) << endl;
     }
+}
+
+bool endsWith (char* base, char* str) {
+    int blen = strlen(base);
+    int slen = strlen(str);
+    return (blen >= slen) && (0 == strcmp(base + blen - slen, str));
+}
+
+
+int readMsgFromSSL(SSL* ssl, char* rc){
+    
+    char buf[1025];
+    int readSize = 1024;
+    int received = 0;  
+    int readCount = 0;
+    
+    do{ 
+        if (!rc){
+            rc = (char*)malloc (readSize * sizeof (char) + 1);
+            bzero(rc, readSize * sizeof (char) + 1);
+        }else{
+            rc = (char*)realloc (rc, (readCount + 1) * readSize * sizeof (char) + 1);
+        }
+        received = SSL_read(ssl, buf, sizeof(buf)-1); // get request 
+        if(received > 0){
+            buf[received] = '\0';
+            Logger::getInstance(Logger::DEBUG3)<<"ssl read ("<<received<<")result:"<< buf <<endl;
+            strcat (rc, buf);
+        }else if(received < 0){
+                logErrors(ssl, received);   
+                break;
+        }
+        if(readCount > 5){
+            Logger::getInstance(Logger::ERROR)<<"ssl incoming data are too big"<<endl;
+            break;
+        }
+
+        readCount++;
+        
+    }while( !endsWith(rc, (char*)"</com>") );
+    
+    return received;
 }
 
 /* Serve the connection -- threadable */
@@ -124,12 +165,9 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
         setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv,sizeof(struct timeval));
         SSL_set_fd(ssl, fd);
         
-        char buf[1025];
         int sd, received;
         int ret;
-        int readSize = 1024;
         char *rc=NULL;
-        int count = 0;
         int burstMsgCount = 1;
         
         //http://comments.gmane.org/gmane.comp.encryption.openssl.user/49443
@@ -139,61 +177,36 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
                 Logger::getInstance(Logger::DEBUG3)<<"ssl accepted"<<endl;
                 // print client certificate
                 //ShowCerts(ssl);
+           
+           do{
+               
+                rc=NULL;
+                received = readMsgFromSSL(ssl, rc);
                 
-                while(1){
-        read:            
-                    if (!rc){
-                        rc = (char*)malloc (readSize * sizeof (char) + 1);
-                        bzero(rc, readSize * sizeof (char) + 1);
-                    }else{
-                        rc = (char*)realloc (rc, (count + 1) * readSize * sizeof (char) + 1);
-                    }
-                    received = SSL_read(ssl, buf, sizeof(buf)-1); // get request 
-                    if(received >= 0)
-                        buf[received] = '\0';
+                if ( received > 0) {
+                    Logger::getInstance(Logger::DEBUG3)<<"Start resolve "<< burstMsgCount++ <<" msg in burst"<<endl;
+
+                    std::string replyString = resolveMsg(rc);
                     
-                    Logger::getInstance(Logger::DEBUG3)<<"ssl read ("<<received<<")result:"<< buf <<endl;
-                    
-                    if(received > 0){
-                        strcat (rc, buf);
-                    }else{
-                            logErrors(ssl, received);   
-                            break;
+                    replyString.insert(0, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"); 
+                    //Logger::getInstance(Logger::DEBUG3)<<"last chars of reply:"<< replyString.substr(replyString.length()-10, 10)<<"<"<<endl;
+
+                    int writeBytes = SSL_write(ssl, replyString.c_str(), replyString.length() ); // send reply 
+                    Logger::getInstance(Logger::DEBUG3)<<"write "<< writeBytes<<endl;
+                    if(writeBytes<0){
+                        logErrors(ssl, writeBytes);   
                     }
-                    if(count > 5){
-                        Logger::getInstance(Logger::ERROR)<<"ssl incoming data are too big"<<endl;
-                        break;
-                    }
-                    if(buf[received-1] == '>' && received < (int)sizeof(buf))
-                        break;
-                    
-                    count++;
+                    //buf[0] = '\0';
+                }else{
+                    ERR_print_errors_fp(stderr);
                 }
-                 Logger::getInstance(Logger::DEBUG3)<<"received"<< received<<"count"<<count <<endl;
-                if ( received > 0  || count > 1) {
-                        Logger::getInstance(Logger::DEBUG3)<<"Start resolve "<< burstMsgCount++ <<" msg in burst"<<endl;
-                        std::string replyString = resolveMsg(rc);
-                        Logger::getInstance(Logger::DEBUG3)<<"last chars of reply:"<< replyString.substr(replyString.length()-10, 10)<<"<"<<endl;
-                        replyString.append("\r\n");
-#ifdef DEBUG
-                        printf("Client msg: \"%s\"\n", buf);
-#endif
-                        //sprintf(reply, response, buf);   //construct reply
-                        free(rc);
-                        int writeBytes = SSL_write(ssl, replyString.c_str(), replyString.length() ); // send reply 
-                        Logger::getInstance(Logger::DEBUG3)<<"write "<< writeBytes<<endl;
-                        if(writeBytes<0){
-                            logErrors(ssl, writeBytes);   
-                        }
-                        
-                        count =0;
-                        rc=NULL;
-                        buf[0] = '\0';
-                        goto read;
-                }
-                else {
-                        ERR_print_errors_fp(stderr);
-                }
+            
+                if (!rc)   
+                    free(rc);
+                
+           }while(received > 0);
+            Logger::getInstance(Logger::DEBUG3)<<"received"<< received <<endl;
+
         }
          Logger::getInstance(Logger::DEBUG3)<<"ssl com done"<<endl;
         sd = SSL_get_fd(ssl);       // get socket connection 

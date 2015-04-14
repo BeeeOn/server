@@ -31,7 +31,7 @@ string MsgInAlgorithmsRedirect::createResponseMsgOut() {
         string algoStr = node_to_string(node);
         Logger::debug3() << "toAlgo: " << algoStr << endl;
         sc.write(algoStr.c_str());
-        r = sc.read();
+        r = sc.readUntilendTag("</com>");
     }catch(...){
         throw ServerException(ServerException::UI2ALGO);
     }

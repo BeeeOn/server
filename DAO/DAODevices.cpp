@@ -316,11 +316,12 @@ string DAODevices::escapeString(string str) {
 int DAODevices::updateFacility(string adapterId, string id, string init, string locationId, string refresh) {
     Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"update Facility"<<id<<"\n";
     try
-    {       
+    {      
+        
         soci::session sql(*_pool);
         string query = "update facilities set";
         if(init != "")query.append(" init='"+escapeString(init)+"', ");
-        if(locationId != "")query.append(" fk_room_id='"+escapeString(locationId)+"', ");
+        if(locationId != "")query.append(" fk_room_id="+escapeString(locationId)+", ");
         if(refresh != "")query.append(" refresh='"+escapeString(refresh)+"', ");
         
         query = query.substr(0,query.size()-2);//erase last ', '

@@ -58,3 +58,24 @@ $$
 LANGUAGE plpgsql;
 
 
+CREATE OR REPLACE FUNCTION def_name_update() returns trigger
+AS
+$$
+
+BEGIN
+  UPDATE facilities set name = 
+COALESCE( ( select default_name from facility_types where mac_range @> NEW.mac::numeric) ,'') where facs.mac = NEW.mac;
+
+RETURN NEW;
+END;
+
+$$
+
+LANGUAGE plpgsql;
+
+
+CREATE TRIGGER set_facilities_def_name
+    AFTER INSERT ON facilities
+    FOR EACH ROW
+    EXECUTE PROCEDURE def_name_update();
+

@@ -19,6 +19,7 @@ create user uiserver with password 'xyz';
 #grant access to user uiserver
 grant connect on database home5prod to uiserver;
 grant select,insert,update,delete on users,users_adapters,adapters,facilities,devices,logs,rooms,mobile_devices to uiserver;
+# grant select,insert,update,delete on users,users_adapters,adapters,facilities,devices,logs,rooms,mobile_devices,a_algorithms,algo_devices,u_algorithms,users_algorithms,algorithms_adapters to george;
 
 #quit
 \q

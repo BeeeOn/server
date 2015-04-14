@@ -13,23 +13,23 @@
 #include <sstream>
 #include <stdio.h>
 #include <stdlib.h>
-using namespace std;
-class ServerException : public runtime_error {
+
+class ServerException : public std::runtime_error {
 public:
     ServerException(int errCode);
-    ServerException(int errCode, string errText);
+    ServerException(int errCode, std::string errText);
    // ServerException(int errCode, string errText, string id, string state);
    // virtual ~ServerException() throw();
     virtual ~ServerException() throw() {};
     virtual const char* what() const throw();
 private:
     int _errCode;
-    string _errText;
+    std::string _errText;
     /*string _id;
     string _state;*/
 public:
     int getErrCode();
-    string getErrText();
+    std::string getErrText();
    /* string getId();
     string getState();*/
 public:

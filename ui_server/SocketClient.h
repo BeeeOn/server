@@ -7,6 +7,9 @@
 
 #ifndef SOCKETCLIENT_H
 #define	SOCKETCLIENT_H
+#include <exception>
+#include <stdexcept>
+#include <sstream>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -32,6 +35,20 @@ private:
     int _socketfd;
     
 };
+
+class SocketClientException : public runtime_error {
+public:
+    //SocketClientException(int errCode);
+    SocketClientException(std::string errText);
+   // ServerException(int errCode, string errText, string id, string state);
+   // virtual ~ServerException() throw();
+    virtual ~SocketClientException() throw() {};
+    virtual const char* what() const throw();
+private:
+    int _errCode;
+    std::string _errText;
+};
+
 
 #endif	/* SOCKETCLIENT_H */
 

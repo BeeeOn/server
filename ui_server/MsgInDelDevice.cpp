@@ -32,7 +32,7 @@ string MsgInDelDevice::createResponseMsgOut()
         sc.write("<request type=\"delete\">"
                             "<sensor id=\""+deviceId+"\" onAdapter=\""+_adapterId+"\" />"
                         "</request>");
-        r = sc.read();
+        r = sc.readUntilendTag("</reply>");
     }catch(...){
         throw ServerException(ServerException::SERVER2SERVER);
     }

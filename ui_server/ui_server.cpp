@@ -156,8 +156,10 @@ int main(int argc, char** argv)
         resolveMsg( "<com ver=\"2.4\"  state=\"signin\" srv=\"beeeon\" > <par name=\"pavel3\" pswd=\"xxx\"  />  </com>");
         DAOUsers::getInstance().getUserIDbyAlternativeKeys("leo.podmolik@gmail.com", "","");
         */
-        resolveMsg( (char*)"<com ver=\"2.4\" state=\"getallalgs\" bt=\"nXj66lMqqi\" aid=\"9494\" userid=\"21\" />");
-/*
+        //resolveMsg( (char*)"<com ver=\"2.4\" state=\"getallalgs\" bt=\"nXj66lMqqi\" aid=\"9494\" userid=\"21\" />");
+        //DAODevices::getInstance().updateFacility("7771111", "11112", "", "null", "");
+        //return 0;
+        /*
         int id = DAOUsers::getInstance().getUserIDbyAlternativeKeys("user2a@gmail.com", "1111","user2");
              MobileDevice mobile;
     mobile.locale = "pl";
@@ -244,6 +246,6 @@ int main(int argc, char** argv)
         close(server);
         //release ssl
         SSL_CTX_free(ctx);
-        Logger::debug() << "ui_server done\n";
+        Logger::debug() << "ui_server done" << endl << "###############################################" << endl;
         return 0;
 }

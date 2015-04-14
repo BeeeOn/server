@@ -37,7 +37,7 @@ string MsgInSwitch::createResponseMsgOut()
                         
         Logger::getInstance(Logger::DEBUG3)<<"S2S communication: "<< request<<endl; 
         sc.write(request);
-        r = sc.read();
+        r = sc.readUntilendTag("</reply>");
     }catch(...){
         throw ServerException(ServerException::SERVER2SERVER);
     }
