@@ -11,6 +11,9 @@
 #define SERVER_NODE "server"
 #define DB_NODE "database"
 #define COMTABLE_NODE "comTable"
+#define LOGS_NODE "logs"
+
+using namespace std;
 
 #define DEFAULT_DB_CONNECTION_STRING ""
 
@@ -28,25 +31,37 @@ Config& Config::getInstance()
     return instance;
 }
 
-void Config::loadXml(string file) {
+void Config::loadXml(std::string file) {
     pugi::xml_parse_result result = _doc.load_file(file.c_str());
     if(!result){
-        string desc = result.description();
+        std::string desc = result.description();
         throw "Cant load config XML file:"+file+" Error description: " + desc + "\n"; 
     }
+    _threadNumber = _doc.child(CONFIG_ROOT).child(SERVER_NODE).attribute("threads").as_int(1);
+    _serverPort = _doc.child(CONFIG_ROOT).child(SERVER_NODE).attribute("port").as_int();
+    
+    _activityPort = _doc.child(CONFIG_ROOT).child(SERVER_NODE).attribute("activityPort").as_int();
+    _algorithmPort = _doc.child(CONFIG_ROOT).child(SERVER_NODE).attribute("algorithmPort").as_int();
+    _verbosity = _doc.child(CONFIG_ROOT).child(SERVER_NODE).attribute("verbosity").as_int(10);//10 = max verbosity
+    
+    _connectionString = _doc.child(CONFIG_ROOT).child(DB_NODE).attribute("connectionString").as_string(DEFAULT_DB_CONNECTION_STRING);
+    _sessionsNumber = _doc.child(CONFIG_ROOT).child(DB_NODE).attribute("sessions").as_int(10);
+    
+    _logsToCout = _doc.child(CONFIG_ROOT).child(LOGS_NODE).attribute("toCout").as_bool(false);
+    _logsFolder = _doc.child(CONFIG_ROOT).child(LOGS_NODE).attribute("folder").as_string("logs");
 }
 
 int Config::getServerThreadsNumber() {
-    return _doc.child(CONFIG_ROOT).child(SERVER_NODE).attribute("threads").as_int(1);
+    return _threadNumber;
 }
 
 int Config::getServerPort() {
-    return _doc.child(CONFIG_ROOT).child(SERVER_NODE).attribute("port").as_int();
+    return _serverPort;
 }
 
 
 int Config::getActivityPort() {
-    return _doc.child(CONFIG_ROOT).child(SERVER_NODE).attribute("activityPort").as_int();
+    return _activityPort;
 }
 
 int Config::getNotifyPort() {
@@ -54,21 +69,20 @@ int Config::getNotifyPort() {
 }
 
 int Config::getAlgorithmPort() {
-    return _doc.child(CONFIG_ROOT).child(SERVER_NODE).attribute("algorithmPort").as_int();
+    return _algorithmPort;
 }
 
 
 int Config::getVerbosity() {
-    return _doc.child(CONFIG_ROOT).child(SERVER_NODE).attribute("verbosity").as_int(10);//10 = max verbosity
+    return _verbosity;
 }
 
-
 string Config::getDBConnectionString() {
-    return _doc.child(CONFIG_ROOT).child(DB_NODE).attribute("connectionString").as_string(DEFAULT_DB_CONNECTION_STRING);
+    return _connectionString;
 }
 
 int Config::getDBSessionsNumber() {
-    return _doc.child(CONFIG_ROOT).child(DB_NODE).attribute("sessions").as_int(10);
+    return _sessionsNumber;
 }
 
 int Config::getComTableSleepPeriodMs() {
@@ -77,5 +91,13 @@ int Config::getComTableSleepPeriodMs() {
 
 int Config::getComTableMaxInactivityMs() {
     return _doc.child(CONFIG_ROOT).child(COMTABLE_NODE).attribute("maxInactivityTimeMs").as_int(60000);
+}
+
+bool Config::isLogsPrintedToCout() {
+    return _logsToCout;
+}
+
+std::string Config::getLogsFolder() {
+    return _logsFolder;
 }
 

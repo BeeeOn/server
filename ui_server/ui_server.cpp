@@ -66,34 +66,46 @@ int main(int argc, char** argv)
             Logger::error()<< "unable to catch signal SIGINT "<<endl;
     }
 
-        Logger::getInstance().setVerbose( Config::getInstance().getVerbosity() );
-        
-        Logger::debug()<< "start with port"<<serverPort << endl ;
-        Logger::debug()<< "threads: "<<Config::getInstance().getServerThreadsNumber() << endl;
-        Logger::debug() << "DB: "<<Config::getInstance().getDBConnectionString() << endl;
-        if(Logger::getInstance().isOutputSetToCout())
-            Logger::debug()<< "logs will be printed on cout"<< endl;
-        else
-            Logger::debug()<< "logs will be stored in : " << Logger::getInstance().getFileName() <<" and file will be changed every day "<< endl;
+    if(Config::getInstance().isLogsPrintedToCout()){
+        Logger::getInstance().setOutputToStdout();
+    }else{
+        string logsFolder = Config::getInstance().getLogsFolder();
+        Logger::getInstance().setOutputToFiles(logsFolder);
+    }
 
+    Logger::getInstance().setVerbose( Config::getInstance().getVerbosity() );
         
-       // ComTable::getInstance().startComTableCleaner(Config::getInstance().getComTableSleepPeriodMs(), Config::getInstance().getComTableMaxInactivityMs() );
-        try{      
-            Logger::debug()<< "setting connection to DB..."<< endl;
-            DBConnector::getInstance().setConnectionStringAndOpenSessions( Config::getInstance().getDBConnectionString() , Config::getInstance().getDBSessionsNumber());
-            DAOUsers::getInstance().setConnectionStringAndOpenSessions(Config::getInstance().getDBConnectionString(), 2);
-            DAOAdapters::getInstance().setConnectionStringAndOpenSessions(Config::getInstance().getDBConnectionString(), 2);
-            DAODevices::getInstance().setConnectionStringAndOpenSessions(Config::getInstance().getDBConnectionString(), 2);
-            DAORooms::getInstance().setConnectionStringAndOpenSessions(Config::getInstance().getDBConnectionString(), 2);
-            DAOMobileDevices::getInstance().setConnectionStringAndOpenSessions(Config::getInstance().getDBConnectionString(), 3);
-            DAOUsersAdapters::getInstance().setConnectionStringAndOpenSessions(Config::getInstance().getDBConnectionString(), 2);
-            Logger::debug()<< "connection to DB is set"<< endl;
-        }
-        catch (soci::soci_error const & e)
-        {
-            Logger::fatal()<< "DB error (soci), probably cant set connection, more:" << e.what()<< endl;
-            return 1;
-        }
+        
+
+
+
+    Logger::debug()<< "start with port"<<serverPort << endl ;
+    Logger::debug()<< "threads: "<<Config::getInstance().getServerThreadsNumber() << endl;
+    Logger::debug() << "DB: "<<Config::getInstance().getDBConnectionString() << endl;
+    if(Logger::getInstance().isOutputSetToCout()){
+        Logger::debug()<< "logs will be printed on cout"<< endl;
+    }else{
+        cout << "logs will be stored in : " << Logger::getInstance().getFileName() <<" and file will be changed every day "<< endl;
+        Logger::debug()<< "logs will be stored in : " << Logger::getInstance().getFileName() <<" and file will be changed every day "<< endl;
+    }
+
+   // ComTable::getInstance().startComTableCleaner(Config::getInstance().getComTableSleepPeriodMs(), Config::getInstance().getComTableMaxInactivityMs() );
+    try{      
+        Logger::debug()<< "setting connection to DB..."<< endl;
+        DBConnector::getInstance().setConnectionStringAndOpenSessions( Config::getInstance().getDBConnectionString() , Config::getInstance().getDBSessionsNumber());
+        DAOUsers::getInstance().setConnectionStringAndOpenSessions(Config::getInstance().getDBConnectionString(), 2);
+        DAOAdapters::getInstance().setConnectionStringAndOpenSessions(Config::getInstance().getDBConnectionString(), 2);
+        DAODevices::getInstance().setConnectionStringAndOpenSessions(Config::getInstance().getDBConnectionString(), 2);
+        DAORooms::getInstance().setConnectionStringAndOpenSessions(Config::getInstance().getDBConnectionString(), 2);
+        DAOMobileDevices::getInstance().setConnectionStringAndOpenSessions(Config::getInstance().getDBConnectionString(), 3);
+        DAOUsersAdapters::getInstance().setConnectionStringAndOpenSessions(Config::getInstance().getDBConnectionString(), 2);
+        Logger::debug()<< "connection to DB is set"<< endl;
+    }
+    catch (soci::soci_error const & e)
+    {
+        Logger::fatal()<< "DB error (soci), probably cant set connection, more:" << e.what()<< endl;
+        return 1;
+    }
         
       //  int port = 9999; 
      //   std::thread t(&serverF,port);

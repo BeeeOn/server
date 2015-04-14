@@ -10,7 +10,6 @@
 
 #include "pugixml.hpp"
 
-using namespace std;
 
 class Config {
 private:
@@ -20,7 +19,7 @@ private:
 public:
     virtual ~Config();
     static Config& getInstance();
-    void loadXml(string file);
+    void loadXml(std::string file);
     
     int getServerThreadsNumber();
     int getServerPort();
@@ -30,23 +29,31 @@ public:
     int getAlgorithmPort();
     int getVerbosity();
     
-    string getDBConnectionString();
+    std::string getDBConnectionString();
     int getDBSessionsNumber();
     
     int getComTableSleepPeriodMs();
     int getComTableMaxInactivityMs();
     
-    
+    bool isLogsPrintedToCout();
+    std::string getLogsFolder();
     
 private:
     pugi::xml_document _doc;
-
-
-/* connection string
- pocet vlaken
- buzeni threadu na clean com table
- * minuty neaktivity do resign
- */    
+    
+    int _threadNumber;    
+    int _serverPort;
+    
+    int _activityPort;
+    int _notifyPort;
+    int _algorithmPort;
+    int _verbosity;
+    
+    std::string _connectionString;
+    int _sessionsNumber;
+    
+    bool _logsToCout;
+    std::string _logsFolder;
 };
 
 #endif	/* CONFIG_H */

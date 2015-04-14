@@ -172,6 +172,7 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
         
         //http://comments.gmane.org/gmane.comp.encryption.openssl.user/49443
         if ( (ret = SSL_accept(ssl)) != 1 ) {     // do SSL-protocol accept 
+            Logger::getInstance(Logger::DEBUG3)<<"ssl accept FAIL"<<endl;
             logErrors(ssl, ret);                
         }else {
                 Logger::getInstance(Logger::DEBUG3)<<"ssl accepted"<<endl;
@@ -182,7 +183,7 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
                
                 rc=NULL;
                 received = readMsgFromSSL(ssl, rc);
-                
+                Logger::getInstance(Logger::DEBUG3)<<"received"<< received << endl;
                 if ( received > 0) {
                     Logger::getInstance(Logger::DEBUG3)<<"Start resolve "<< burstMsgCount++ <<" msg in burst"<<endl;
 
@@ -205,10 +206,9 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
                     free(rc);
                 
            }while(received > 0);
-            Logger::getInstance(Logger::DEBUG3)<<"received"<< received <<endl;
-
+           
         }
-         Logger::getInstance(Logger::DEBUG3)<<"ssl com done"<<endl;
+        Logger::getInstance(Logger::DEBUG3)<<"ssl com done"<<endl;
         sd = SSL_get_fd(ssl);       // get socket connection 
         SSL_free(ssl);         // release SSL state 
         close(sd);          // close connection 

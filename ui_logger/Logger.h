@@ -51,6 +51,7 @@ private:
 
     int _cerrVerbosity;
     std::ostream& _output;	
+    //std::streambuf *_stdoutBackup;
     std::ofstream _currentFile;
     std::string _logsFolder;
     std::string _fileName;

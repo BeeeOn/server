@@ -10,6 +10,7 @@
 using namespace std;
 
 Logger::Logger(): _output(std::cout) {
+    //_stdoutBackup = std::cout.rdbuf();
     _outputToStdout = true;
     _mtx.unlock();
     _verbose = Logger::DEBUG3;
@@ -31,7 +32,7 @@ Logger& Logger::getInstance()
 
 Logger& Logger::getInstance(int level)
 {
-    Logger& l =Logger::getInstance();
+    Logger& l = Logger::getInstance();
     l.setLevel(level);
     l.printTime();
     return l;
@@ -84,15 +85,19 @@ void Logger::setLevel(int level){
 }
 
 void Logger::setOutputToFiles(string folder){
-        _outputToStdout = false;
-        _logsFolder = folder;
-        openOutput( getFileName() );
+    //std::cout.rdbuf(_stdoutBackup);
+    _outputToStdout = false;
+    _logsFolder = folder;
+    openOutput( getFileName() );
 }
  void Logger::setOutputToStdout(){
-     if( _currentFile.is_open() )
+    if( _currentFile.is_open() )
          _currentFile.close();
-         _outputToStdout = true;
-         _output.rdbuf( std::cout.rdbuf());
+    
+    if(_outputToStdout == false){ 
+        _output.rdbuf( std::cout.rdbuf());
+        _outputToStdout = true;
+    }
  }
 bool Logger::isOutputSetToCout() {
     return _outputToStdout;
