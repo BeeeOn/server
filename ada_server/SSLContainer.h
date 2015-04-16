@@ -7,7 +7,7 @@
 
 #ifndef SSLCONTAINER_H_
 #define SSLCONTAINER_H_
-
+#include "loger.h"
 #include <string.h>
 #include <openssl/bio.h>
 #include <openssl/ssl.h>
@@ -21,8 +21,10 @@ class SSLContainer
 		long long adapters[1000];
 		SSL* SSLs[1000];
 		int size;
+		const std::string _Name="SSLContainer";
+		Loger *_log;
 	public:
-		SSLContainer();
+		SSLContainer(Loger *l);
 		~SSLContainer();
 		void InsertSSL(long long adapter,SSL *ssl);
 		SSL* GetSSL(long long adapter);

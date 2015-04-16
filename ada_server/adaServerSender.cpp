@@ -18,7 +18,7 @@ AdaServerSender::AdaServerSender(sem_t *Sem, WorkerPool *workers, Loger *L,Confi
 AdaServerSender::~AdaServerSender()
 {
 	delete this->_L;
-	delete this->_log;
+	//delete this->_log;
 }
 
 void AdaServerSender::Start()

@@ -25,11 +25,7 @@ Loger::~Loger()
 {
 	this->SetTerminate();
 	//sem_post(&(this->_msgCounter));
-	while (!this->_msgQueue->empty())
-	{
-		sleep(3);
-	}
-
+	this->QueueMsg("LOGINFO","***********Closing log***********");
 	this->_worker.join();
 	delete (this->_WriteSemaphore);
 	delete (this->_msgQueue);
@@ -40,7 +36,9 @@ Loger::~Loger()
 void Loger::QueueMsg(std::string MT, std::string MSG)
 {
 	this->_WriteSemaphore->lock();
-	this->_msgQueue->push(new tlogMsg(MSG,MT,std::time(nullptr),std::this_thread::get_id()));
+	struct timeval str;
+	gettimeofday(&str,NULL);
+	this->_msgQueue->push(new tlogMsg(MSG,MT,str,std::this_thread::get_id()));
 	sem_post(&(this->_msgCounter));
 	this->_WriteSemaphore->unlock();
 };
@@ -103,7 +101,7 @@ void Loger::WriteMessage (tmessageType MT,std::string message)
 /** Metoda pre nastavenie urovne vypisovania dat 
  * @param Verbosity - uroven vypisovania dat*/
 
-void Loger::SetLogger(int Verbosity, int FilesCount, int LinesCount, std::string FileName, std::string AppName)
+void Loger::SetLogger(int Verbosity, int FilesCount, int LinesCount, std::string FileName, std::string Path ,std::string AppName)
 {
 	this->_verbosity = Verbosity;
 	std::cout.precision(10);
@@ -113,6 +111,7 @@ void Loger::SetLogger(int Verbosity, int FilesCount, int LinesCount, std::string
 	this->_FileName = FileName;
 	this->_FilesCount = 0;
 	this->_appName = AppName;
+	this->_path = Path;
 	if (_MaxFilesCount<=0)
 	{
 		_MaxFilesCount = 1;
@@ -132,10 +131,15 @@ void Loger::SetLogger(int Verbosity, int FilesCount, int LinesCount, std::string
 
 void Loger::OpenFile()
 {
-	this->_Log.open(this->_FileName + "." + std::to_string(this->_FilesCount) + ".log", std::ios::out|std::ios::trunc);
-}
+	int result;
+	result = mkdir(this->_path.c_str(),S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+	if (result==0||errno==EEXIST)
+	{
+		this->_Log.open(this->_path + "/" + this->_FileName + "." + std::to_string(this->_FilesCount) + ".log", std::ios::out|std::ios::trunc);
+	}
+	}
 
-logMsg::logMsg(std::string Msg,std::string MsgType,std::time_t timestamp,std::thread::id thrID)
+logMsg::logMsg(std::string Msg,std::string MsgType,struct timeval timestamp,std::thread::id thrID)
 {
 	this->_msg = Msg;
 	this->_thrId = thrID;
@@ -155,11 +159,11 @@ void Loger::Dequeue()
 		this->_WriteSemaphore->unlock();
 		char timebuf[200];
 		struct tm *tmp;
-		tmp = localtime(&(message->_TimeStamp));
+		tmp = localtime(&(message->_TimeStamp.tv_sec));
 		strftime(timebuf,sizeof(timebuf),"%y/%m/%d_%H:%M:%S",tmp);
 		std::stringstream ss;
 		ss << message->_thrId;
-		std::string MSGstr = this->_appName + " [" + ss.str() + "] (" + timebuf + ") " + message->_MsgType + " : " + message->_msg + "\n";
+		std::string MSGstr = this->_appName + " [" + ss.str() + "] (" + timebuf + "." + std::to_string(message->_TimeStamp.tv_usec) +") " + message->_MsgType + " : " + message->_msg + "\n";
 		if ((this->_FileSize+=MSGstr.size())>this->_MaxFileSize)
 		{
 			this->_FileSize=0;

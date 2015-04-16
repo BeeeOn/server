@@ -33,7 +33,6 @@ class Sender
 		bool Send(std::string Message,SSL *s);
 		Sender(Loger *l);
 		~Sender();
-		bool LoadCertificates();
 };
 
 

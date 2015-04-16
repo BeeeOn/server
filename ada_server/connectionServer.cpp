@@ -22,7 +22,7 @@ bool ConnectionServer::LoadCertificates()
 	char errorBuffer[1000];
 	std::string msgBase = "Certificate error ";
 	unsigned long int err;
-	if ((err=SSL_CTX_load_verify_locations(sslctx, "ca.crt", NULL)) != 1)
+	if ((err=SSL_CTX_load_verify_locations(sslctx, _config->CApath().c_str(), NULL)) != 1)
 	{
 		ERR_error_string_n(err,errorBuffer,1000);
 		_log->WriteMessage(FATAL,msgBase + " in verify locations" + errorBuffer);
@@ -35,14 +35,14 @@ bool ConnectionServer::LoadCertificates()
 				return (false);
 	}
 		/* set the local certificate from CertFile */
-	if ((err=SSL_CTX_use_certificate_chain_file(sslctx, "/etc/openvpn/server.crt")) <= 0)
+	if ((err=SSL_CTX_use_certificate_chain_file(sslctx, _config->CRTPath().c_str())) <= 0)
 	{
 		ERR_error_string_n(err,errorBuffer,1000);
 		_log->WriteMessage(FATAL,msgBase + " use chain file" + errorBuffer);
 				return (false);
 	}
 		/* set the private key from KeyFile (may be the same as CertFile) */
-	if ((err=SSL_CTX_use_PrivateKey_file(sslctx, "/etc/openvpn/server.key", SSL_FILETYPE_PEM)) <= 0)
+	if ((err=SSL_CTX_use_PrivateKey_file(sslctx, _config->KeyPath().c_str(), SSL_FILETYPE_PEM)) <= 0)
 	{
 		ERR_error_string_n(err,errorBuffer,1000);
 		_log->WriteMessage(FATAL,msgBase + " in verify use private key"+ errorBuffer);
@@ -228,7 +228,7 @@ void ConnectionServer::HandleConnection (in_addr IP)
 	}
 	//MP->setAdapterSocket();  //ulozime IP adresu adapteru do spravy
 	parsedMessage = MP->ReturnMessage();  //spracovanu spravu si ulozime lokalne
-	if (parsedMessage->state!=0)
+	if (parsedMessage->state!=REGISTER)
 	{
 		response = MP->CreateAnswer(this->GetData());  //zavolame metodu na vytvorenie odpovede a metodu na ulozenie dat do DB
 		int Err;
@@ -246,11 +246,7 @@ void ConnectionServer::HandleConnection (in_addr IP)
 	else
 	{
 	    std::string resp;
-	    parsedMessage->socket = 1000;
-	    _log->WriteMessage(TRACE,"Client socket desrciptor :" + std::to_string(this->com_s));
-	    int oldSocket = -1;
-	    database->GetAdapterData(&oldSocket,parsedMessage->adapterINTid);
-	    if (oldSocket<=0)
+	    if (!database->IsInDB("adapters","adapter_id",std::to_string(parsedMessage->adapterINTid)))
 	    {
 			if (database->InsertAdapter(this->parsedMessage))
 			{
@@ -285,7 +281,6 @@ void ConnectionServer::HandleConnection (in_addr IP)
 	    if((Err=SSL_write(cSSL, resp.c_str(), resp.size()))<=0)
 		{
 			_log->WriteMessage(ERR,"Sending registration answer failed :");
-			//close(com_s);
 		}
 		else
 		{
@@ -293,13 +288,9 @@ void ConnectionServer::HandleConnection (in_addr IP)
 		}
 	    cSSL = SSL_new(sslctx);
 	}
-	if (parsedMessage->state!=0)
+	if (parsedMessage->state!=REGISTER)
 	{
 		this->Notify(data);
-	}
-
-	if (parsedMessage->state!=0)
-	{
 		this->StoreData();
 		database->LogValue(parsedMessage); //zavolame metodu ktora zisti ci je pre dane zariadenie zapnute logovanie hodnot a pripadne ich ulozi
 	}
@@ -338,7 +329,7 @@ void ConnectionServer::Notify(std::string MSG)
 	_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Notify");
 }
 
-ConnectionServer::ConnectionServer(soci::session *SQL, Loger *L, int timeOut,SSLContainer *sslcont)
+ConnectionServer::ConnectionServer(soci::session *SQL, Loger *L, int timeOut,SSLContainer *sslcont,Config *c)
 {
 	L->WriteMessage(TRACE,"Entering " + this->_Name + "::Constructor");
 	this->MP = nullptr;
@@ -348,6 +339,7 @@ ConnectionServer::ConnectionServer(soci::session *SQL, Loger *L, int timeOut,SSL
 	this->_timeTimeOut = timeOut;
 	this->parsedMessage = NULL;
 	this->com_s = -1;
+	this->_config = c;
 	_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Constructor");
 }
 
@@ -357,10 +349,11 @@ ConnectionServer::~ConnectionServer()
 	close(SSL_get_fd(cSSL));
 	SSL_shutdown(this->cSSL);
 	SSL_free(this->cSSL);
+	SSL_CTX_free(this->sslctx);
+	CRYPTO_cleanup_all_ex_data();
+	ERR_remove_state(0);
 	ERR_free_strings();
 	EVP_cleanup();
-	CRYPTO_cleanup_all_ex_data();
-	SSL_CTX_free(this->sslctx);
 	delete this->database;
 	_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Destructor");
 }
@@ -374,30 +367,14 @@ ConnectionServer::~ConnectionServer()
 void ConnectionServer::StoreData()
 {
 	_log->WriteMessage(TRACE,"Entering " + this->_Name + "::StoreData");
-	if (this->parsedMessage->state == 0)
+	database->UpdateAdapter(this->parsedMessage); //ak ano uz len updatneme jeho data
+	if(!database->IsInDB("facilities","mac","'" + std::to_string(this->parsedMessage->sensor_id) + "'")) //to iste spravime aj pre senzor/aktor
 	{
-		if(!database->IsInDB("adapters","ID",std::to_string(this->parsedMessage->adapterINTid)))
-		{
-			database->InsertAdapter(this->parsedMessage);
-		}
-		else
-		{
-			database->UpdateAdapter(this->parsedMessage);
-		}
-		_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::StoreData");
-		return;
+		database->InsertSenAct(this->parsedMessage);
 	}
 	else
 	{
-		database->UpdateAdapter(this->parsedMessage); //ak ano uz len updatneme jeho data
-		if(!database->IsInDB("facilities","mac","'" + std::to_string(this->parsedMessage->sensor_id) + "'")) //to iste spravime aj pre senzor/aktor
-		{
-			database->InsertSenAct(this->parsedMessage);
-		}
-		else
-		{
-			database->UpdateSenAct(this->parsedMessage);
-		}
+		database->UpdateSenAct(this->parsedMessage);
 	}
 	_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::StoreData");
 }

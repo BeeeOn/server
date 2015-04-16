@@ -48,7 +48,7 @@ bool ProtocolV1MessageParser::ParseMessage(xml_node *adapter,float FM,float CP)
 	this->GetState();
 	//spracujeme a ulozime casove razitko
 	this->GetTimeStamp();
-	if (_message->state == 0)
+	if (_message->state == REGISTER)
 	{
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::parseMessage");
 		return (true);
@@ -110,17 +110,17 @@ void ProtocolV1MessageParser::GetState()
 
 	if (temp_state.compare("register")==0)
 	{
-		_message->state = 0;
+		_message->state = REGISTER;
 	}
 	else
 	{
 		if (temp_state.compare("data")==0)
 		{
-			_message->state = 1;
+			_message->state = DATA;
 		}
 		else
 		{
-			_message->state = 2;
+			_message->state = UNKNOWN;
 		}
 	}
 	this->_log->WriteMessage(MSG,"STATE :" + std::to_string(this->_message->state));
@@ -312,6 +312,7 @@ ProtocolV1MessageParser::~ProtocolV1MessageParser()
 	delete(this->_message);
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Destructor");
 }
+
 ProtocolV1MessageParser::ProtocolV1MessageParser(Loger *L)
 {
 	L->WriteMessage(TRACE,"Entering " + this->_Name + "::Constructor");
@@ -320,4 +321,159 @@ ProtocolV1MessageParser::ProtocolV1MessageParser(Loger *L)
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Constructor");
 }
 
+bool UIServerMessageParser::GetSubjectID()
+{
+	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetSubjectID");
+	this->_Message->DeviceIDstr= subject.attribute("id").as_string();
+	this->_log->WriteMessage(INFO,"Device ID : " + _Message->DeviceIDstr);
+	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetSubjectID");
+	return (true);
+}
 
+bool UIServerMessageParser::GetAdapterID()
+{
+	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetAdapterID");
+	if(this->_Message->state==LISTEN)
+	{
+		this->_Message->adapterINTid = subject.attribute("id").as_llong();
+	}
+	else
+	{
+		this->_Message->adapterINTid = subject.attribute("onAdapter").as_llong();
+	}
+	this->_log->WriteMessage(INFO,"Adapter ID : " + std::to_string(_Message->adapterINTid));
+	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetAdapterID");
+	return (true);
+}
+
+bool UIServerMessageParser::GetValue()
+{
+	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetValue");
+	xml_node value = subject.first_child();
+	switch(this->_Message->values->type)
+	{
+		case ONON:
+		case TOG:
+		case ONOFFSEN:
+		case ONOFSW:
+			_Message->values->bval = false;
+			if (value.text().as_float()==1.0)
+				_Message->values->bval = true;
+			this->_log->WriteMessage(MSG,"Value :" + std::to_string(_Message->values->bval));
+			break;
+		default:
+			_Message->values->type = UNK;
+			this->_log->WriteMessage(WARN,"Unsupported type!");
+			this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetValue");
+			return (false);
+			break;
+	}
+	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetValue");
+	return (true);
+}
+
+
+bool UIServerMessageParser::GetOffsetType()
+{
+	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetTypeOffset");
+	std::bitset<16> type(this->subject.attribute("type").as_int()),typeoffset(subject.attribute("type").as_int());
+	type.reset(8);
+	type.reset(9);
+	type.reset(10);
+	type.reset(11);
+	typeoffset>>=(8);
+	_Message->values->type = static_cast<tvalueTypes>(type.to_ulong());
+	this->_Message->values->intType=type.to_ulong();
+	this->_Message->values->offset = typeoffset.to_ulong();
+	this->_log->WriteMessage(MSG,"offset : " + std::to_string(this->_Message->values->offset));
+	this->_log->WriteMessage(MSG,"type : " + std::to_string(this->_Message->values->intType));
+	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetTypeOffset");
+	return (true);
+}
+
+bool UIServerMessageParser::GetState()
+{
+	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetState");
+	std::string reqType = request.attribute("type").as_string();
+	if(reqType.compare("delete")==0)
+	{
+		this->_Message->state=DELETE;
+		this->_log->WriteMessage(MSG,"Request type is DELETE");
+		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetState");
+		return (true);
+	}
+	if(reqType.compare("switch")==0)
+	{
+		this->_Message->state=SWITCH;
+		this->_log->WriteMessage(MSG,"Request type is SWITCH");
+		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetState");
+		return (true);
+	}
+	if (reqType.compare("listen")==0)
+	{
+		this->_log->WriteMessage(MSG,"Request type is LISTEN");
+		this->_Message->state=LISTEN;
+		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetState");
+		return (true);
+	}
+
+	this->_log->WriteMessage(WARN,"Request type is UNKNOWN");
+	this->_Message->state=UNKNOWN;
+	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetState");
+	return (false);
+}
+
+bool UIServerMessageParser::ParseMessage(std::string MSG)
+{
+	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::ParseMessage");
+	this->_toParse = MSG;
+	bool res;
+	xml_document doc;
+	xml_parse_result result = doc.load_buffer(this->_toParse.data(), this->_toParse.size());
+	if (result.status!=status_ok)
+	{
+		std::string Err = result.description();
+		this->_log->WriteMessage(WARN,"Message XML error :" + Err);
+		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::ParseMessage");
+		return (false);
+	}
+	this->request = doc.child("request");
+	this->subject = request.first_child();
+	res = GetState();
+	switch(this->_Message->state)
+	{
+		case DELETE:
+			res = this->GetAdapterID();
+			res = this->GetSubjectID();
+			break;
+		case SWITCH:
+			res = this->GetAdapterID();
+			res = this->GetSubjectID();
+			res = this->GetOffsetType();
+			res = this->GetValue();
+			break;
+		case LISTEN:
+			res=this->GetAdapterID();
+			break;
+		default:
+			this->_log->WriteMessage(WARN,"Something was wrong with request MSG!");
+			this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::ParseMessage");
+			return (false);
+	}
+	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::ParseMessage");
+	return (res);
+}
+
+UIServerMessageParser::UIServerMessageParser(Loger *l)
+{
+	this->_Message = new tmessage();
+	this->_Message->values = new tvalue;
+	this->_log = l;
+}
+
+UIServerMessageParser::~UIServerMessageParser()
+{
+	delete this->_Message->values;
+	this->_Message->values =NULL;
+	delete this->_Message;
+}

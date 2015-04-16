@@ -42,9 +42,16 @@ bool Config::setConfig(std::string File)
 			std::cerr<<"Wrong format configuration file missing receiver section !"<<std::endl;
 			result=false;
 		}
+		xml_node common = ConfRoot.child("Common");
+		if(common == NULL)
+		{
+			std::cerr<<"Wrong format configuration file missing receiver common !"<<std::endl;
+			result=false;
+		}
 	    this->GetDatabaseProperties(database);
 	    this->GetReceiverProperties(receiver);
 	    this->GetSenderProperties(sender);
+	    result = result & this->GetCommonProperties(common);
 	    return (result);
 	    break;
 	  }
@@ -80,13 +87,9 @@ bool Config::setConfig(std::string File)
 bool Config::GetLogProperties(pugi::xml_node log,int *verbosity,int *maxFiles,int*maxLines,std::string *fileNaming,std::string *path)
 {
 	*verbosity=log.child("Level").text().as_int();
-	std::cout<<*verbosity<<"\n";
 	*maxLines=log.child("MaxFileSize").text().as_int();
-	std::cout<<*maxLines<<"\n";
 	*maxFiles=log.child("FilesCount").text().as_int();
-	std::cout<<*maxFiles<<"\n";
 	*fileNaming=log.child("FileNaming").text().as_string();
-	std::cout<<*fileNaming<<"\n";
 	*path =log.child("LogPath").text().as_string();
 	return (true);
 }
@@ -123,6 +126,35 @@ bool Config::GetSenderProperties (pugi::xml_node sender)
 	return (true);
 }
 
+bool Config::GetCommonProperties(pugi::xml_node Common)
+{
+	std::string modeStr = Common.child("Mode").text().as_string();
+	if (modeStr.compare("DEBUG")==0)
+	{
+		this->_mode = 0;
+	}
+	else
+	{
+		this->_mode = 1;
+	}
+	xml_node Cert = Common.child("Certificates");
+	if (Cert == NULL)
+	{
+		std::cerr<<"Wrong format configuration file missing certificates section !"<<std::endl;
+		return (false);
+	}
+	else
+	{
+		return (this->GetCertificatesProperties(Cert));
+	}
+}
 
+bool Config::GetCertificatesProperties(xml_node Certificates)
+{
+	this->_CApath = Certificates.child("CACrtFile").text().as_string();
+	this->_crtPath = Certificates.child("CrtFile").text().as_string();
+	this->_keyPath = Certificates.child("KeyFile").text().as_string();
+	return (true);
+}
 
 

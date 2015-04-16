@@ -18,6 +18,9 @@
 #include <exception> //kniznica pre bok try/catch
 #include <semaphore.h>
 #include <iostream> //kniznica pre vystup na teminal
+#include <termios.h>
+#include <unistd.h>
+#include <syslog.h>
 
 Config *c;
 
@@ -34,7 +37,7 @@ SSLContainer *sslCont;
 
 void sig_handler(int signo)
 {
-	if (signo == SIGINT)
+	if ((signo == SIGINT)||(signo == SIGTERM))
 	{
 		sigint = true;
 		receiver->LogINT();
@@ -46,41 +49,145 @@ void sig_handler(int signo)
 		delete (receiver);
 		sem_destroy(&connectionSem);
 		delete (SenderThread);
+		delete (SenderLog);
+		delete (ReceiverLog);
+		CRYPTO_cleanup_all_ex_data();
+		ERR_remove_state(0);
+		ERR_free_strings();
+		EVP_cleanup();
 	}
 	exit(EXIT_SUCCESS);
 }
 
+std::string buildConnString(std::string DBName, std::string User, std::string Password)
+{
+	std::string result;
+	result.clear();
+	if(DBName.empty())
+	{
+		return ("");
+	}
+	if (User.empty())
+	{
+		return ("dbname=" + DBName);
+	}
+	if (Password.empty())
+	{
+		std::cout<<"Enter password for user :"<<User<<std::endl;
+		struct termios tty;
+		tcgetattr(STDIN_FILENO, &tty);
+		tty.c_lflag &= ~ECHO;
+		(void) tcsetattr(STDIN_FILENO, TCSANOW, &tty);
+		std::cin>>Password;
+		tcgetattr(STDIN_FILENO, &tty);
+		tty.c_lflag |= ECHO;
+		(void) tcsetattr(STDIN_FILENO, TCSANOW, &tty);
+		std::cout<<"Password readed"<<std::endl;
+		result = "dbname="+ DBName + " user=" + User + " password=" + Password;
+		return (result);
+	}
+	result = "dbname="+ DBName + " user=" + User + " password=" + Password;
+	return(result);
+}
+
+
 int main()  //hlavne telo programu
 {
-	SenderLog = new Loger();
-	ReceiverLog = new Loger();
+	pid_t pid, sid;
+	std::cout<<"Reading configuration"<<std::endl;
 	c = new Config();
 	if (!c->setConfig("ada_server.config.xml"))
 	{
-		delete SenderLog;
-		delete ReceiverLog;
+		std::cerr<<"Errors during configuration exiting"<<std::endl;
 		delete c;
-		return (1);
+		exit(EXIT_FAILURE);
+	}
+	std::string connStr = buildConnString(c->DBName(),c->User(),c->Password());
+	/* Fork off the parent process */
+	if (c->Mode()!=0)
+	{
+		std::cout<<"Starting deamonization"<<std::endl;
+		pid = fork();
+		if (pid < 0)
+		{
+				std::cerr<<"Deamonzation failed! Running in teminal mode."<<std::endl;
+		}
+		else
+		{
+		/* If we got a good PID, then
+		   we can exit the parent process. */
+			if (pid > 0)
+			{
+				delete(c);
+				exit(EXIT_SUCCESS);
+			}
+
+			/* Change the file mode mask */
+			umask(0);
+
+			/* Open any logs here */
+
+			/* Create a new SID for the child process */
+			sid = setsid();
+			if (sid < 0) {
+					/* Log the failure */
+					exit(EXIT_FAILURE);
+			}
+			int proces_id=getpid();
+			//std::cout<<"Creating stop script in current directory"<<std::endl;
+			std::ofstream stopSCR;
+			stopSCR.open("stop_ada_server.sh", std::ios::out|std::ios::trunc);
+			stopSCR<<"kill -SIGINT "<<proces_id<<std::endl;
+			stopSCR.close();
+			/* Change the current working directory */
+			if ((chdir("/")) < 0)
+			{
+					/* Log the failure */
+					exit(EXIT_FAILURE);
+			}
+			//std::cout<<"Finishing deamonization"<<std::endl;
+			/* Close out the standard file descriptors */
+			close(STDIN_FILENO);
+			close(STDOUT_FILENO);
+			close(STDERR_FILENO);
+		}
 	}
 	else
 	{
-		SenderLog->SetLogger(c->SenderVerbosity(),c->SenderMaxFiles(),c->SenderMaxLines(),c->SenderFileNaming(),"SENDER");
-		ReceiverLog->SetLogger(c->ReceiverVerbosity(),c->ReceiverMaxFiles(),c->ReceiverMaxLines(),c->ReceiverFileNaming(),"RECEIVER");
+		std::cout<<"Server started in terminal(debug) mode"<<std::endl;
+		int proces_id=getpid();
+		//std::cout<<"Creating stop script in current directory"<<std::endl;
+		std::ofstream stopSCR;
+		stopSCR.open("stop_ada_server.sh", std::ios::out|std::ios::trunc);
+		stopSCR<<"kill -SIGINT "<<proces_id<<std::endl;
+		stopSCR.close();
 	}
+	SenderLog = new Loger();
+	ReceiverLog = new Loger();
+	SenderLog->SetLogger(c->SenderVerbosity(),c->SenderMaxFiles(),c->SenderMaxLines(),c->SenderFileNaming(),c->SenderPath(),"SENDER");
+	ReceiverLog->SetLogger(c->ReceiverVerbosity(),c->ReceiverMaxFiles(),c->ReceiverMaxLines(),c->ReceiverFileNaming(),c->SenderPath(),"RECEIVER");
 	if (signal(SIGINT, sig_handler) == SIG_ERR)
 	{
 		SenderLog->WriteMessage(ERR," [Main Process] Unable to catch SIGINT");
 	}
-	sslCont = new SSLContainer();
-	wpool = WorkerPool::CreatePool(ReceiverLog,SenderLog,c->DBName(),c->ConnLimit(),sslCont);
+	if (signal(SIGTERM, sig_handler) == SIG_ERR)
+	{
+		SenderLog->WriteMessage(ERR," [Main Process] Unable to catch SIGTERM");
+	}
+	if (signal(SIGHUP, SIG_IGN) == SIG_ERR)
+	{
+		SenderLog->WriteMessage(ERR," [Main Process] Unable to mask SIGHUP");
+	}
+	sslCont = new SSLContainer(ReceiverLog);
+	wpool = WorkerPool::CreatePool(ReceiverLog,SenderLog,connStr,c,sslCont);
 	if (wpool->Limit()<=0)
 	{
-		SenderLog->WriteMessage(FATAL," [Main Process] 0 connections to DB unable to server terminating!");
+		SenderLog->WriteMessage(FATAL," [Main Process] 0 connections to DB unable to serve, terminating!");
 		delete (c);
 		delete wpool;
 		delete SenderLog;
 		delete ReceiverLog;
-		return (1);
+		exit(EXIT_FAILURE);
 	}
 	else
 	{
@@ -111,6 +218,8 @@ int main()  //hlavne telo programu
 		delete (receiver);
 		//SenderThread->join();
 		delete (SenderThread);
+		delete (SenderLog);
+		delete (ReceiverLog);
 	}
 	return (0);
 }

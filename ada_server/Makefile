@@ -8,10 +8,10 @@ all:
 	make ada_server
 
 ada_server: $(ADA_SERVER) $(SOURCE_FILES) 
-	$(BUILDER) $(CPPFLAGS) -o $@ $^  -L/usr/local/lib -lssl -lcurl -lcrypto -I/usr/local/include/soci -L/usr/local/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -I/usr/include/postgresql/ -lpq 
+	$(BUILDER) $(CPPFLAGS) -o $@ $^  -L/usr/local/lib -lssl -lcurl -lcrypto -I/usr/local/include/soci -L/usr/local/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -I/usr/pgsql-9.2/include -L/usr/pgsql-9.2/lib -lpq 
 
 method_test: $(METHOD_TEST) $(SOURCE_FILES) 
-	$(BUILDER) $(CPPFLAGS) -o $@ $^  -L/usr/local/lib -lssl -lcurl -lcrypto -I/usr/local/include/soci -L/usr/local/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -I/usr/include/postgresql/ -lpq 
+	$(BUILDER) $(CPPFLAGS) -o $@ $^  -L/usr/local/lib -lssl -lcurl -lcrypto -I/usr/local/include/soci -L/usr/local/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -L/usr/pgsql-9.2/lib -I/usr/local/pgsql/include -lpq 
 
 run:
 	./run_ada_server.sh

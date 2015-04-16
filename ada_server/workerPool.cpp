@@ -11,7 +11,7 @@
 
 using namespace soci;
 
-WorkerPool::WorkerPool(std::string DBName, int ConnLimit, Loger *Rl, Loger *Sl,SSLContainer *sslcont)
+WorkerPool::WorkerPool(std::string DBConnString, Config *c, Loger *Rl, Loger *Sl,SSLContainer *sslcont)
 {
 	this->ReceiverLoger = Rl;
 	this->SenderLoger = Sl;
@@ -19,15 +19,15 @@ WorkerPool::WorkerPool(std::string DBName, int ConnLimit, Loger *Rl, Loger *Sl,S
 	this->freeCount =0;
 	Rl->WriteMessage(TRACE,"Entering " + this->_Name + "::Constructor");
 	Sl->WriteMessage(TRACE,"Entering " + this->_Name + "::Constructor");
-	_DBName = DBName;
+	_DBConnString = DBConnString;
 	Rl->WriteMessage(INFO,"Creating connections to DB");
 	Sl->WriteMessage(INFO,"Creating connections to DB");
 	soci::session *connections[100];
-	for (int i = 0; i < ConnLimit; i++)
+	for (int i = 0; i < c->ConnLimit(); i++)
 	{
 		try  //pokusime  sa o vytvorenie spojenia s databazou
 		{
-			session *SQL = new session(postgresql, "dbname="+this->_DBName);
+			session *SQL = new session(postgresql, this->_DBConnString);
 			connections[i] = SQL;
 			this->freeCount = i+1;
 		}
@@ -48,7 +48,7 @@ WorkerPool::WorkerPool(std::string DBName, int ConnLimit, Loger *Rl, Loger *Sl,S
 	{
 		try  //pokusime  sa o vytvorenie vlakna
 		{
-			Worker *w= new Worker(connections[i],this->ReceiverLoger,this->SenderLoger, this, i,sslcont);
+			Worker *w= new Worker(connections[i],this->ReceiverLoger,this->SenderLoger, this, i,sslcont,c);
 			this->workers[i] = w;
 			this->workers[i]->Start();
 		}
@@ -129,12 +129,12 @@ Worker *WorkerPool::GetWorker(Loger *l)
 
 WorkerPool *WorkerPool::instance = NULL;
 
-WorkerPool *WorkerPool::CreatePool(Loger *Rl, Loger *Sl, std::string DBName, int ConnLimit,SSLContainer *sslcont)
+WorkerPool *WorkerPool::CreatePool(Loger *Rl, Loger *Sl, std::string DBConnString, Config *c,SSLContainer *sslcont)
 {
 	Rl->WriteMessage(TRACE,"Entering WorkerPool::CreatePool");
 	Sl->WriteMessage(TRACE,"Entering WorkerPool::CreatePool");
 	if (!instance)
-		instance=new WorkerPool(DBName, ConnLimit, Rl, Sl,sslcont);
+		instance=new WorkerPool(DBConnString, c, Rl, Sl,sslcont);
 	Sl->WriteMessage(TRACE,"Exiting WorkerPool::CreatePool");
 	Rl->WriteMessage(TRACE,"Exiting WorkerPool::CreatePool");
 	return (instance);

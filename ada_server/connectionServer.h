@@ -28,6 +28,7 @@
 #include "loger.h"
 #include "messageParsers.h"
 #include "SSLContainer.h"
+#include "config.h"
 #include "DBHandler.h"
 #include <errno.h>
 #include <string.h>
@@ -53,8 +54,9 @@ class ConnectionServer
 		SSL_CTX *sslctx;
 		SSL *cSSL;
 		SSLContainer *_sslcont;
+		Config *_config;
 	public:
-		ConnectionServer(soci::session *SQL, Loger *L, int timeOut,SSLContainer *sslcont);
+		ConnectionServer(soci::session *SQL, Loger *L, int timeOut,SSLContainer *sslcont,Config *c);
 		void HandleConnection(in_addr IP);
 		void SetSocket(int s);
 		~ConnectionServer();
