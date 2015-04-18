@@ -38,6 +38,7 @@
 #include "../notif/Notificator.h"
 #include "../databaseConnectionContainer.h"
 #include "DBFWHandler.h"
+#include "config.h"
 
 
 typedef struct chldMsg
@@ -167,6 +168,10 @@ class FrameworkServerHandle {
 	public:
 		FrameworkServerHandle(int init_socket, int init_port);
 		void HandleClientConnection();
+		//Handlers
+		void HandleAdapterMessage(std::string data, Loger *Log, FrameworkConfig *FConfig);
+		void HandleUIServerMessage(std::string data, Loger *Log, FrameworkConfig *FConfig);
+		void HandleAlgorithmMessage(std::string data, Loger *Log, FrameworkConfig *FConfig);
 		int spawn(char* program, char** arg_list);
 		~FrameworkServerHandle();
 		std::string parseParametersToDB(tparam *params, int paramsCnt);

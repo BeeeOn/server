@@ -3,10 +3,12 @@
 *
 * @Implementace prvního algoritmu watch_and_notify
 * @Ocekavane parametry:
-*						SENZOR_VALUE1 | ANY_SENZOR_VALUE
-OPERATOR | ENTITY
-VALUE | REAL
-NOTIFICATION | STRING
+*	SENZOR_VALUE1 | ANY_SENZOR_VALUE
+*	OPERATOR | ENTITY
+*	VALUE | REAL
+*	NOTIF_OR_ACTOR | NOTIF_OR_ACTOR
+*	NOTIFICATION | STRING
+*
 * @author xrasov01
 * @version 1.0
 */
@@ -134,9 +136,11 @@ int main(int argc, char *argv[])
 
 	bool isToBeSendNotificationOrChangeActor = false;
 
+	float lastValue = alg->database->GetLastTemp(idOfSenzorString, typeOfSenzorString);
+
 	if (IsSetFval){
 		if (op == GT){
-			if (fvalFromSenzor > valueDefinedByUser){
+			if (fvalFromSenzor > valueDefinedByUser && lastValue <= valueDefinedByUser){
 				isToBeSendNotificationOrChangeActor = true;
 			}
 		}
@@ -146,17 +150,17 @@ int main(int argc, char *argv[])
 			}
 		}
 		else if (op == GE){
-			if (fvalFromSenzor >= valueDefinedByUser){
+			if (fvalFromSenzor >= valueDefinedByUser && lastValue < valueDefinedByUser){
 				isToBeSendNotificationOrChangeActor = true;
 			}
 		}
 		else if (op == LT){
-			if (fvalFromSenzor < valueDefinedByUser){
+			if (fvalFromSenzor < valueDefinedByUser && lastValue >= valueDefinedByUser){
 				isToBeSendNotificationOrChangeActor = true;
 			}
 		}
 		else if (op == LE){
-			if (fvalFromSenzor <= valueDefinedByUser){
+			if (fvalFromSenzor <= valueDefinedByUser && lastValue > valueDefinedByUser){
 				isToBeSendNotificationOrChangeActor = true;
 			}
 		}
@@ -164,7 +168,7 @@ int main(int argc, char *argv[])
 
 	if (IsSetIval){
 		if (op == GT){
-			if (ivalFromSenzor > valueDefinedByUser){
+			if (ivalFromSenzor > valueDefinedByUser && lastValue <= valueDefinedByUser){
 				isToBeSendNotificationOrChangeActor = true;
 			}
 		}
@@ -174,17 +178,17 @@ int main(int argc, char *argv[])
 			}
 		}
 		else if (op == GE){
-			if (ivalFromSenzor >= valueDefinedByUser){
+			if (ivalFromSenzor >= valueDefinedByUser && lastValue < valueDefinedByUser){
 				isToBeSendNotificationOrChangeActor = true;
 			}
 		}
 		else if (op == LT){
-			if (ivalFromSenzor < valueDefinedByUser){
+			if (ivalFromSenzor < valueDefinedByUser && lastValue >= valueDefinedByUser){
 				isToBeSendNotificationOrChangeActor = true;
 			}
 		}
 		else if (op == LE){
-			if (ivalFromSenzor <= valueDefinedByUser){
+			if (ivalFromSenzor <= valueDefinedByUser && lastValue > valueDefinedByUser){
 				isToBeSendNotificationOrChangeActor = true;
 			}
 		}

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<algorithms_config>
+	<alg
+		id="1"
+		name="Watch_and_notify"
+		pathOfBinary="Algorithms/Watch_and_notify"
+		numParams="5"
+		maxDevs="2"
+		type="1"
+	/>
+	<alg
+		id="3"
+		name="Geofencing"
+		pathOfBinary="Algorithms/Geofencing"
+		numParams="4"
+		maxDevs="1"
+		type="2"
+	/>
+</algorithms_config>

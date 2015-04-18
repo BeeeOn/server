@@ -10,12 +10,13 @@
 
 using namespace std;
 using namespace pugi;
+using namespace soci;
 
 #define FW_PORT "7084"
 
 // Konstruktor Algoritmu, bude pøedán do algoritmu pod názvem instance alg
 Algorithm::Algorithm(std::string init_userID, std::string init_algID, std::string init_adapterID,
-	std::string init_offset, multimap<unsigned int, map<string, string>> init_values, std::vector<std::string> init_parameters){
+	std::string init_offset, multimap<unsigned int, map<string, string>> init_values, std::vector<std::string> init_parameters, vector<tRidValues *> init_Rids){
 
 	this->userID = init_userID;
 	this->algID = init_algID;
@@ -23,6 +24,38 @@ Algorithm::Algorithm(std::string init_userID, std::string init_algID, std::strin
 	this->offset = init_offset;
 	this->values = init_values; 
 	this->parameters = init_parameters;
+	this->Rids = init_Rids;
+	try
+	{
+		this->Log = new Loger();
+	}
+	catch (std::exception &e)
+	{
+		std::cerr << e.what() << std::endl;
+		std::cerr << "Unable to create memory space for logging exiting!" << std::endl;
+		exit(EXIT_FAILURE);
+	}
+	//Nastaveni kontejneru pro DB
+	this->cont = DatabaseConnectionContainer::CreateContainer(Log, "home5", 1);
+	this->Log->SetLogger(7, 5, 100, "algorithm_log",".", "ALGORITHM");
+	session *Conn = NULL;
+	while (Conn == NULL)
+	{
+		Conn = cont->GetConnection();
+		if (Conn == NULL)
+		{
+			this->Log->WriteMessage(INFO, "ALL CONNECTIONS ARE USED!");
+		}
+	}
+	try
+	{
+		this->database = new DBHandler(Conn, Log);
+	}
+	catch (std::exception &e)
+	{
+
+	}
+
 }
 
 Algorithm::~Algorithm(){
@@ -114,7 +147,7 @@ bool Algorithm::SendAndExit(){
 	cout << "Algorithm info: Message send." << size << endl;
 
 	close(mySocket);
-	
+	this->cont->ReturnConnection(this->database->ReturnConnection());
 	return true;
 }
 
@@ -259,29 +292,24 @@ Algorithm * Algorithm::getCmdLineArgsAndCreateAlgorithm(int argc, char *argv[]){
 	}
 
 	cerr << "Paramstring: " << parametersString.c_str() << endl;
-	/*
-	long long int userID = std::atoll(userIDString.c_str());
-	long long int algID = std::atoll(algIDString.c_str());
-	long long int adapterID = std::atoll(adapterIDString.c_str());
-	unsigned short int offset = std::stoi(offsetString);
-	*/
 
 	//Deklarace promìnných pro uložení z operací parsování
 	multimap<unsigned int, map<string, string>> values;
 	vector<string> params;
+	vector<tRidValues *> Rids;
 
 	//TODO Parsování vstupních øetìzcù ve valuesString a parametersString, pokud je to potøeba
 	if (v){
-		values = Algorithm::parseValues(valuesString);
+		values = Algorithm::parseValues(valuesString, &Rids);
 	}
 	if (p){
 		params = Algorithm::parseParams(parametersString);
 	}
-	return new Algorithm(userIDString, algIDString, adapterIDString, UserAlgIdString, values, params);
+	return new Algorithm(userIDString, algIDString, adapterIDString, UserAlgIdString, values, params, Rids);
 }
 
 //Metoda, která vezme hodnotu parametru -v pøík. øádky a zparsuje jej
-multimap<unsigned int, map<string, string>> Algorithm::parseValues(std::string values){
+multimap<unsigned int, map<string, string>> Algorithm::parseValues(std::string values, vector<tRidValues *> *Rids){
 	vector<string> senzorValues = Algorithm::explode(values, '$');
 
 	multimap<unsigned int, map<string, string>> valuesTmp;
@@ -296,9 +324,22 @@ multimap<unsigned int, map<string, string>> Algorithm::parseValues(std::string v
 			tmpmap[tmp2.front()] = tmp2.back();
 		}
 		
-		string newMultimapIndexStr = tmpmap.at("ID");
-		unsigned int newMultimapIndex = std::stoi(newMultimapIndexStr);
-		valuesTmp.insert(std::pair<unsigned int, map<string, string>>(newMultimapIndex, tmpmap));
+		string RidOrDevice = tmpmap.at("RidOrDevice");
+		if (RidOrDevice.compare("device") == 0){
+			string newMultimapIndexStr = tmpmap.at("ID");
+			unsigned int newMultimapIndex = std::stoi(newMultimapIndexStr);
+			valuesTmp.insert(std::pair<unsigned int, map<string, string>>(newMultimapIndex, tmpmap));
+		}
+		else if (RidOrDevice.compare("rid") == 0){
+			string newRid = tmpmap.at("RID");
+			string newtypeRid = tmpmap.at("type");
+			tRidValues * newRidValue = new tRidValues();
+			newRidValue->rid = newRid;
+			newRidValue->type = newtypeRid;
+			Rids->push_back(newRidValue);
+		}
+
+
 	}
 	return valuesTmp;
 }
@@ -348,6 +389,10 @@ std::multimap<unsigned int, std::map<std::string, std::string>> Algorithm::getVa
 
 std::vector<std::string> Algorithm::getParameters(){
 	return this->parameters;
+}
+
+std::vector<tRidValues *> Algorithm::getRids(){
+	return this->Rids;
 }
 
 //Nastavi podminku dle zadaneho retezce

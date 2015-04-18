@@ -52,6 +52,7 @@ public:
 	std::string SelectAlgIdByUsersAlgId(std::string UsersAlgId);
 	std::string SelectNameByUsersAlgId(std::string UsersAlgId);
 	std::string SelectParametersByUsersAlgId(std::string UsersAlgId);
+	std::string SelectAdapterIdByUsersAlgId(std::string UsersAlgId);
 	std::vector<std::string> SelectAllIdsOfUsersAlgorithmsByAdapterId(std::string adapterId);
 	std::string SelectDevTypeByDevId(std::string devId);
 	std::vector<std::string> SelectDevIdsByUsersAlgId(std::string UsersAlgId);
@@ -59,6 +60,7 @@ public:
 	std::vector<std::string> SelectIdsEnabledAlgorithmsByAdapterId(std::string adapterId);
 	std::string SelectStateByUsersAlgId(std::string UsersAlgId);
 	std::vector<std::string> SelectAllIdsOfUsersAlgorithmsByAdapterIdAndUserId(std::string adapterId, std::string userId);
+	std::vector<std::string> SelectIdsAlgorithmsByAlgId(std::string algId);
 };
 
 

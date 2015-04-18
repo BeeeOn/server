@@ -549,6 +549,26 @@ std::vector<std::string> DBHandler::SelectIdsEnabledAlgorithmsByAdapterId(std::s
 	return (retVal);
 }
 
+std::vector<std::string> DBHandler::SelectIdsAlgorithmsByAlgId(std::string algId)
+{
+	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::SelectIdsEnabledAlgorithmsByAdapterId");
+	std::string sqlQuery = "SELECT users_algorithms_id FROM users_algorithms WHERE (fk_algorithm_id=" + algId +"); ";
+	this->_log->WriteMessage(TRACE, sqlQuery);
+	std::vector<std::string> retVal(20);
+	try
+	{
+		*_sql << sqlQuery, into(retVal);
+	}
+	catch (std::exception const &e)
+	{
+		std::string ErrorMessage = "Database Error : ";
+		ErrorMessage.append(e.what());
+		this->_log->WriteMessage(ERR, ErrorMessage);
+	}
+	this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::SelectIdsEnabledAlgorithmsByAdapterId");
+	return (retVal);
+}
+
 std::string DBHandler::SelectAlgIdByUsersAlgId(std::string UsersAlgId)
 {
 	std::string retVal = "";
@@ -575,6 +595,27 @@ std::string DBHandler::SelectStateByUsersAlgId(std::string UsersAlgId)
 	std::string retVal = "";
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::SelectStateByUsersAlgId");
 	std::string sqlQuery = "SELECT state FROM users_algorithms WHERE users_algorithms_id = " + UsersAlgId + ";";
+	this->_log->WriteMessage(TRACE, sqlQuery);
+	try
+	{
+		*_sql << sqlQuery, into(retVal);
+	}
+	catch (std::exception const &e)
+	{
+		std::string ErrorMessage = "Database Error : ";
+		ErrorMessage.append(e.what());
+		this->_log->WriteMessage(ERR, ErrorMessage);
+		retVal = "0";
+	}
+	this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::SelectStateByUsersAlgId");
+	return (retVal);
+}
+
+std::string DBHandler::SelectAdapterIdByUsersAlgId(std::string UsersAlgId)
+{
+	std::string retVal = "";
+	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::SelectStateByUsersAlgId");
+	std::string sqlQuery = "SELECT fk_adapter_id FROM users_algorithms WHERE users_algorithms_id = " + UsersAlgId + ";";
 	this->_log->WriteMessage(TRACE, sqlQuery);
 	try
 	{

@@ -13,8 +13,6 @@
 #define ADA_FRAMEWORK_PORT 7083 
 #define ALG_FRAMEWORK_PORT 7084
 #define BUFSIZE 1000
-#define ADA_SERVER_PORT 7383
-#define UI_SERVER_PORT 1111
 
 using namespace std;
 using namespace soci;
@@ -27,6 +25,7 @@ FrameworkServer * AdaServer;
 FrameworkServer * AlgServer;
 Loger *Log;									//Loger pro logování do souboru
 DatabaseConnectionContainer *cont = NULL;	//Container pro DB
+FrameworkConfig *FConfig = NULL;
 sem_t connectionSem;						//Semafor pro maximální poèet pøipojení k Frameworku
 int notifIndex = 0;
 std::atomic<unsigned long> connCount;
@@ -118,22 +117,17 @@ void FrameworkServerHandle::HandleClientConnection(){
 	bool isUIServerMessage = false;
 	bool isAlgorithmMessage = false;
 
-	switch (this->port) {
-		case UI_FRAMEWORK_PORT:
-			isUIServerMessage = true;
-			break;
-
-		case ADA_FRAMEWORK_PORT:
-			isAdapterServerMessage = true;
-			break;
-
-		case ALG_FRAMEWORK_PORT:
-			isAlgorithmMessage = true;
-			break;
-
-		default:
-			Log->WriteMessage(ERR, "Something is wrong with Server port!");
-			return;
+	if (this->port == FConfig->portUIServer){
+		isUIServerMessage = true;
+	}
+	else if (this->port == FConfig->portAdaRecieverServer){
+		isAdapterServerMessage = true;
+	}
+	else if (this->port == FConfig->portAlgorithmServer){
+		isAlgorithmMessage = true;
+	}
+	else{
+		Log->WriteMessage(ERR, "Something is wrong with Server port!");
 	}
 
 	//Vytvoøení spojení s DB
@@ -161,8 +155,7 @@ void FrameworkServerHandle::HandleClientConnection(){
 		return;
 	}
 
-	char buf[BUFSIZE];				// Pøijímací buffer
-	//int size;						// Poèet pøijatých a odeslaných bytù
+	char buf[FConfig->recieveBuffSize];				// Pøijímací buffer
 	int pollRes;
 	ssize_t DataSize = 0;
 	std::string data;
@@ -274,479 +267,13 @@ void FrameworkServerHandle::HandleClientConnection(){
 
 	//zaèíná parser zprávy
 	if (isAdapterServerMessage){
-		Log->WriteMessage(TRACE, "HandleClientConnection: Entering AdapterServerMessage");
-		xml_node adapter = doc.child("adapter_server");
-		float CPversion = adapter.attribute("protocol_version").as_float();
-		int FMversion = adapter.attribute("fw_version").as_int();
-
-		if ((CPversion == (float)0.1) || (CPversion == (float)1.0))
-		{
-			if (FMversion == 0)
-			{
-				MP = new ProtocolV1MessageParser();
-			}
-			else
-			{
-				if (FMversion == 1)
-				{
-					try
-					{
-						MP = new ProtocolV1MessageParser();
-					}
-					catch (std::exception &e)
-					{
-						Log->WriteMessage(ERR, "Unable to create space for Protocol parser exiting client won't be server!");
-						Log->WriteMessage(TRACE, "Exiting " + this->_Name + "::HandleConnection");
-						return;
-					}
-				}
-				else
-				{
-					try
-					{
-						MP = new ProtocolV1MessageParser();
-					}
-					catch (std::exception &e)
-					{
-						Log->WriteMessage(ERR, "Unable to create space for Protocol parser exiting client won't be server!");
-						Log->WriteMessage(TRACE, "Exiting " + this->_Name + "::HandleConnection");
-						return;
-					}
-				}
-			}
-		}
-		else
-		{
-			Log->WriteMessage(WARN, "Unsupported protocol version");
-			Log->WriteMessage(TRACE, "Exiting " + this->_Name + "::HandleConnection");
-			return;
-		}
-		if (!MP->parseMessage(&adapter, FMversion, CPversion))  //pomocou parsera spracujeme spravu
-		{
-	
-			Log->WriteMessage(WARN, "Wrong request format");
-			Log->WriteMessage(TRACE, "Exiting " + this->_Name + "::HandleConnection");
-			return;
-		}
-		//this->MP->setAdapterIP(IP);  //ulozime IP adresu adapteru do spravy ODSTRANENO PROTOZE nepotøebuji IP adresu
-		parsedMessage = this->MP->ReturnMessage();
-
-		//----------------------Zde testovat obsah zpravy a na zaklade neho mathovat s db a pokud ano pak spustit Algoritmus-------------------
-
-		//Nejdrive match zda existuje zaznam v UserAlgorithm s algoritmem na dany adapter
-		//  pokud ano, pak vzit UserAlgId s timto adapterem a testovat na mac senzoru
-		//Pokud se alespon jeden z tech senzoru matchne => vyvolat algoritmus
-		xml_node adapterMessage = doc.child("adapter_server");
-		string adapterId = adapterMessage.attribute("adapter_id").value();
-
-		xml_node dev = adapterMessage.child("device");
-		string deviceId = dev.attribute("id").value();
-		int deviceIdInt = strtol(deviceId.c_str(), NULL, 0);
-
-		string adapterIDString = to_string(this->parsedMessage->adapterINTid);
-		Log->WriteMessage(TRACE, "adapterIDString = " + adapterIDString);
-		vector<string> allIdsOfUsersAlgorithms = database->SelectIdsEnabledAlgorithmsByAdapterId(adapterIDString);
-
-		if ( ! allIdsOfUsersAlgorithms.empty() ){
-			Log->WriteMessage(TRACE, "HandleClientConnection: AdapterServerMessage - after condition(!allIdsOfUsersAlgorithms.empty()) && parsedMessage->state != 0 ");
-			//Nalezen alespon jeden UserAlg s danym AdapterId
-			for (auto idOfUsersAlgorithms = allIdsOfUsersAlgorithms.begin(); idOfUsersAlgorithms != allIdsOfUsersAlgorithms.end(); ++idOfUsersAlgorithms){
-				vector<string> allSenzorIds = database->SelectDevIdsByUsersAlgId(*idOfUsersAlgorithms);
-				if (! allSenzorIds.empty()){
-					Log->WriteMessage(TRACE, "HandleClientConnection: AdapterServerMessage - after SECOND condition (! allSenzorIds.empty())");
-					//Nasel mac pro UserAlg
-					for (auto itSenzorId = allSenzorIds.begin(); itSenzorId != allSenzorIds.end(); ++itSenzorId){
-						int currentDevId = strtol((*itSenzorId).c_str(), NULL, 10);
-						Log->WriteMessage(TRACE, "HandleClientConnection: AdapterServerMessage - THIRD THESE TWO - currentDevId:" + to_string(currentDevId) + ", deviceIdInt: " + to_string(deviceIdInt));
-
-						if (currentDevId == deviceIdInt){
-							for (int i = 0; i < this->parsedMessage->values_count; i++)
-							{
-								//if (this->parsedMessage->values[i].type != TEMP)
-
-								//Start algorithm WATCHDOG!!!
-								//  The argument list to pass to the Algorithm
-								string UserId = database->SelectUserIdByUsersAlgId(*idOfUsersAlgorithms);
-								string AlgId = database->SelectAlgIdByUsersAlgId(*idOfUsersAlgorithms);
-								string parametersTmp = database->SelectParametersByUsersAlgId(*idOfUsersAlgorithms);
-								string parameters = '"' + parametersTmp + '"';
-
-								//Prepare senzor values for argument -v
-								string senzorValues = "";
-								senzorValues += "ID=" + (*itSenzorId) + "#";
-								senzorValues += "type=" + to_string(this->parsedMessage->values[i].type) + "#";
-								if (this->parsedMessage->values[i].type == TEMP || this->parsedMessage->values[i].type == HUM ){ //Predavani do fval
-
-									senzorValues += "fval=" + to_string(this->parsedMessage->values[i].fval) + "#";
-								}
-								else { //Predavani do fval
-
-									senzorValues += "ival=" + to_string(this->parsedMessage->values[i].fval) + "#";
-								}
-
-								senzorValues += "offset=" + to_string(this->parsedMessage->values[i].offset);						
-								string nameOfBinary = "watch_and_notify";
-
-								Log->WriteMessage(INFO, "EXECUTING ALGORITHM BINARY " + nameOfBinary + " - AlgId: " + AlgId + " , userId: " + UserId + ", parameters: " + parametersTmp + ", senzorValues: " + senzorValues);
-
-								char* arg_list[] = {
-									StringToChar(nameOfBinary),
-									StringToChar("-u"), // userID
-									StringToChar(UserId),
-									StringToChar("-a"), // algID
-									StringToChar(AlgId),
-									StringToChar("-d"), // adapterID
-									StringToChar(adapterIDString),
-									StringToChar("-o"), // UsersAlgId
-									StringToChar(*idOfUsersAlgorithms),
-									StringToChar("-v"), //Senzor Values
-									StringToChar(senzorValues),
-									StringToChar("-p"), // parameters given by User
-									StringToChar(parametersTmp),
-									StringToChar("/"),
-									NULL
-								};
-								this->spawn(StringToChar("Algorithms/watch_and_notify"), arg_list);
-
-								Log->WriteMessage(INFO, "EXECUTED ALGORITHM BINARY " + nameOfBinary + "- AlgId: " + AlgId + "userId: " + UserId + ", parameters: " + parametersTmp + ", senzorValues: " + senzorValues);
-							}
-						}
-					}
-				}
-			}
-		}
-		//---------------------------------------------------------------------------------------------
-
-
-
-
-
+		this->HandleAdapterMessage(data, Log, FConfig);
 	}
 	else if (isUIServerMessage){
-		Log->WriteMessage(TRACE, "HandleClientConnection: Entering UiServerMessage");
-		//Kód zpracující zprávy od UIServeru (Pøeposílání zpráv od uživatelù Androidu)
-		xml_node algMessage = doc.child("com");
-
-		string ver = algMessage.attribute("ver").value();
-		string state = algMessage.attribute("state").value();
-		string bt = algMessage.attribute("bt").value();
-		string userId = algMessage.attribute("userid").value();
-		
-		bool error = false;
-		string stringToSendAsAnswer = "";
-		
-		if (state.compare("addalg") == 0){
-			//zpracování zprávy addalg
-			string adapterId = algMessage.attribute("aid").value();
-			string algId = algMessage.attribute("atype").value();
-			string algName = algMessage.attribute("algname").value();
-			Log->WriteMessage(TRACE, "HandleClientConnection: UIServerMessage : UIServerMessageone addalg");		
-			//Zde z configu musim ziskat informace o algoritmu kolik bude mit parametru a devices
-			//Momentalne jen max 2 device a 5 parametru - WATCHDOG 
-			int maxdevsToExpect = 2;
-			int maxparamsToExpect = 5;
-
-			//inicializace poli do kterych se budou predavat struktury uchovavajici dev a params
-			tdevice * devices = new tdevice[maxdevsToExpect];
-			tparam * params = new tparam[maxparamsToExpect];
-
-			//Zpracovat dev
-			xml_node child = algMessage.first_child();
-			int numberOfDevs = 0;
-			for (pugi::xml_node algNode = algMessage.first_child(); algNode; algNode = algNode.next_sibling())
-			{
-				string name = algNode.name();
-				if (name.compare("dev") == 0){
-					int devId = child.attribute("id").as_int();
-					int devType = child.attribute("type").as_int();
-					int devPos = child.attribute("pos").as_int();
-					devices[numberOfDevs].id = devId;
-					devices[numberOfDevs].type = devType;
-					devices[numberOfDevs].pos = devPos;
-					numberOfDevs++;
-				}
-			}
-
-			//Zpracovani par
-			child = algMessage.first_child();
-			int numberOfParams = 0;
-			for (pugi::xml_node algNode = algMessage.first_child(); algNode; algNode = algNode.next_sibling())
-			{
-				string name = algNode.name();
-				if (name.compare("par") == 0){
-					int parPos = algNode.attribute("pos").as_int();
-					string parText = algNode.child_value();
-					params[numberOfParams].pos = parPos;
-					params[numberOfParams].text = parText;
-					numberOfParams++;
-				}
-			}
-
-			if (numberOfDevs > maxdevsToExpect || numberOfParams > maxparamsToExpect){
-				Log->WriteMessage(FATAL, "HandleClientConnection: UIServerMessage : incorrect message according to specification of algorithm!");
-				sem_post(&connectionSem);
-				connCount--;
-				stringToSendAsAnswer = this->createMessageFalse("12");
-				//ODESLANI ODPOVEDI NA UI SERVER - TEDY NA ANDROID ZARIZENI
-				if (!this->sendMessageToSocket(this->handledSocket, stringToSendAsAnswer)){
-					//Error sendind data
-				}
-				delete(this);
-				return;
-			}
-
-			Log->WriteMessage(TRACE, "HandleClientConnection: UIServerMessage : preParsedParameters");
-			//Predzpracovat string parametru
-			string preParsedParameters = parseParametersToDB(params, numberOfParams);
-
-			string newUserALgorithmId = database->InsertUserAlgorithm(userId, algId, preParsedParameters, algName, adapterId);
-
-			if (newUserALgorithmId == "0"){
-				Log->WriteMessage(FATAL, "HandleClientConnection: UIServerMessage : Adding UserAlgorithm to DB failure!");
-				error = true;
-			}
-			else{
-				Log->WriteMessage(INFO, "HandleClientConnection: UIServerMessage : NewUserAlgorithmId - " + newUserALgorithmId);
-			}
-			for (int i = 0; i < numberOfDevs; i++){
-				if (!database->InsertAlgoDevices(newUserALgorithmId, userId, algId, std::to_string(devices[i].id), std::to_string(devices[i].type))){
-					Log->WriteMessage(FATAL, "HandleClientConnection: UIServerMessage : Adding AlgoDevices to DB failure!");
-					error = true;
-				}
-			}	
-
-			//Odeslat nazpet zpravu ohledne uspesnem pridani algoritmu
-			if (! error){
-				stringToSendAsAnswer = this->createMessageAlgCreated(newUserALgorithmId);
-			}
-			else{
-				stringToSendAsAnswer = this->createMessageFalse("12");
-			}
-
-
-		}
-		else if (state.compare("getallalgs") == 0){
-			//zpracování zprávy getallalgs
-			Log->WriteMessage(TRACE, "HandleClientConnection: UIServerMessage : getAllAlgs ENTERING");
-
-			string ver = algMessage.attribute("ver").value();
-			string state = algMessage.attribute("state").value();
-			string adapterId = algMessage.attribute("aid").value();
-			
-			vector<talg *> allAlgs = getAllAlgsByAdapterIdAndUserId(adapterId, userId);
-			if (!error){
-				stringToSendAsAnswer = this->createMessageAlgs(allAlgs, adapterId);
-			}
-			else{
-				stringToSendAsAnswer = this->createMessageFalse("12");
-			}
-
-		}
-		else if (state.compare("getalgs") == 0){
-			//zpracování zprávy getalgs
-			Log->WriteMessage(TRACE, "HandleClientConnection: UIServerMessage : getalgs ENTERING");
-			vector<talg *> allAlgs;
-			string adapterId = algMessage.attribute("aid").value();
-
-			for (pugi::xml_node algNode = algMessage.first_child(); algNode; algNode = algNode.next_sibling())
-			{
-				string userAlgId = algNode.attribute("id").as_string();
-				allAlgs.push_back(this->getAlgByUserAlgorithmId(userAlgId));
-			}
-			if (!error){
-				stringToSendAsAnswer = this->createMessageAlgs(allAlgs, adapterId);
-			}
-			else{
-				stringToSendAsAnswer = this->createMessageFalse("12");
-			}
-		}
-		else if (state.compare("setalg") == 0){
-			//zpracování zprávy setalg
-			Log->WriteMessage(TRACE, "HandleClientConnection: UIServerMessage : setalg ENTERING");
-			string userAlgId = algMessage.attribute("algid").value();
-			string enable = algMessage.attribute("enable").value();
-			string algId = algMessage.attribute("atype").value();
-			string algName = algMessage.attribute("algname").value();
-			//Zpracovat prijate parametry do stringu
-			//Zde z configu musim ziskat informace o algoritmu kolik bude mit parametru a devices
-			//Momentalne jen 1 device a 4 parametry - WATCHDOG
-			//Zde z configu musim ziskat informace o algoritmu kolik bude mit parametru a devices
-			//Momentalne jen max 2 device a 5 parametru - WATCHDOG 
-			int maxdevsToExpect = 2;
-			int maxparamsToExpect = 5;
-
-			//inicializace poli do kterych se budou predavat struktury uchovavajici dev a params
-			tdevice * devices = new tdevice[maxdevsToExpect];
-			tparam * params = new tparam[maxparamsToExpect];
-
-			//Zpracovat dev
-			xml_node child = algMessage.first_child();
-			int numberOfDevs = 0;
-			for (pugi::xml_node algNode = algMessage.first_child(); algNode; algNode = algNode.next_sibling())
-			{
-				string name = algNode.name();
-				if (name.compare("dev") == 0){
-					int devId = child.attribute("id").as_int();
-					int devType = child.attribute("type").as_int();
-					int devPos = child.attribute("pos").as_int();
-					devices[numberOfDevs].id = devId;
-					devices[numberOfDevs].type = devType;
-					devices[numberOfDevs].pos = devPos;
-					numberOfDevs++;
-				}
-			}
-
-			//Zpracovani par
-			child = algMessage.first_child();
-			int numberOfParams = 0;
-			for (pugi::xml_node algNode = algMessage.first_child(); algNode; algNode = algNode.next_sibling())
-			{
-				string name = algNode.name();
-				if (name.compare("par") == 0){
-					int parPos = algNode.attribute("pos").as_int();
-					string parText = algNode.child_value();
-					params[numberOfParams].pos = parPos;
-					params[numberOfParams].text = parText;
-					numberOfParams++;
-				}	
-			}
-
-			if (numberOfDevs > maxdevsToExpect || numberOfParams > maxparamsToExpect){
-				Log->WriteMessage(FATAL, "HandleClientConnection: UIServerMessage : incorrect message according to specification of algorithm!");
-				sem_post(&connectionSem);
-				connCount--;
-				stringToSendAsAnswer = this->createMessageFalse("12");
-				//ODESLANI ODPOVEDI NA UI SERVER - TEDY NA ANDROID ZARIZENI
-				if (!this->sendMessageToSocket(this->handledSocket, stringToSendAsAnswer)){
-					//Error sendind data
-				}
-				delete(this);
-				return;
-			}
-			Log->WriteMessage(TRACE, "HandleClientConnection: UIServerMessage : preParsedParameters");
-			//Predzpracovat string parametru
-			string preParsedParameters = parseParametersToDB(params, numberOfParams);
-			//Delete devs
-			if (!database->DeleteAlgoDevices(userAlgId)){
-				error = true;
-			}
-			//Add new devs
-			for (int i = 0; i < numberOfDevs; i++){
-				if (!database->InsertAlgoDevices(userAlgId, userId, algId, std::to_string(devices[i].id), std::to_string(devices[i].type))){
-					Log->WriteMessage(FATAL, "HandleClientConnection: UIServerMessage : Adding AlgoDevices to DB failure!");
-					error = true;
-				}
-			}
-			//Update UserAlg
-			if (!database->UpdateUserAlgorithm(userAlgId, algId, preParsedParameters, algName, enable)){
-				error = true;
-			}
-
-			if (!error){
-				stringToSendAsAnswer = this->createMessageTrue();
-			}
-			else{
-				stringToSendAsAnswer = this->createMessageFalse("12");
-			}
-
-		}
-		else if (state.compare("delalg") == 0){
-			//zpracování zprávy getalgs
-			Log->WriteMessage(TRACE, "HandleClientConnection: UIServerMessage : delalg ENTERING");
-			string userAlgId = algMessage.attribute("algid").value();
-			//Delete devs
-			if (!database->DeleteAlgoDevices(userAlgId)){
-				error = true;
-			}
-			//Delete userAlg
-			if (!database->DeleteUsersAlgorithms(userAlgId)){
-				error = true;
-			}
-
-			if (!error){
-				stringToSendAsAnswer = this->createMessageTrue();
-			}
-			else{
-				stringToSendAsAnswer = this->createMessageFalse("12");
-			}
-		}
-		else {
-			//ostatni typy zprav
-
-		}
-
-
-		//ODESLANI ODPOVEDI NA UI SERVER - TEDY NA ANDROID ZARIZENI
-		if (!this->sendMessageToSocket(this->handledSocket, stringToSendAsAnswer)){
-			//Error sendind data
-		}
-
+		this->HandleUIServerMessage(data, Log, FConfig);
 	}
 	else if (isAlgorithmMessage) {
-		//Kód zpracující zprávy od Algoritmù
-		xml_node algMessage = doc.child("alg_m");
-
-		string userID = algMessage.attribute("userID").value();
-		string algID = algMessage.attribute("algID").value();
-		string adapterID = algMessage.attribute("adapterID").value();
-		string offset = algMessage.attribute("offset").value();
-		//float PV = algMessage.attribute("protocol_version").as_float();
-
-		int adapterIdInt = std::stoi(adapterID);
-
-
-		xml_node notifications = algMessage.child("notifs");
-		int notifsCnt = notifications.attribute("count").as_uint();
-		xml_node notification = notifications.first_child();
-		//tnotify * notifyArray = new tnotify[notifsCnt];
-
-		int notifsIndex = notifsCnt - 1;
-		if (notifsIndex >= 0){
-			auto time = sc::system_clock::now(); 
-			auto since_epoch = time.time_since_epoch(); 
-			auto millis = sc::duration_cast<sc::milliseconds>(since_epoch);
-			long now = millis.count();
-
-			std::vector<std::string> *IDs;
-			if ((IDs = database->GetNotifStringByUserId(userID)) != nullptr){
-				for (int i = 0; i <= notifsIndex; i++){
-					//int notifyType = notification.attribute("type").as_int();
-					string notifyText = notification.attribute("text").value();
-					Notification *notif = new LimitExceededNotification(userID, notifIndex++, *IDs, now, notifyText, adapterIdInt, "111", 1, 2);
-					Notificator::sendNotification(*notif);
-					delete notif;
-					//Saving notification to field for future purposes
-					//notifyArray[i].notifyType = notifyType;
-					//notifyArray[i].notifyText = notifyText;
-					//std::cout << "notifyText = " << notification.attribute("text").value() << std::endl;
-					notification = notification.next_sibling();
-				}
-				delete IDs;
-			}
-			else{
-				Log->WriteMessage(FATAL, "HandleClientConnection: AlgorithmMessage: No GCMid for UserId");
-			}
-		}
-
-		xml_node togleActors = algMessage.child("tactors");
-		int togglesCnt = togleActors.attribute("count").as_uint();
-		xml_node toggle = togleActors.first_child();
-		//tnotify * notifyArray = new tnotify[notifsCnt];
-
-		int toggleIndex = togglesCnt - 1;
-		if (toggleIndex >= 0){
-
-			for (int i = 0; i <= toggleIndex; i++){
-				string idOfActor = toggle.attribute("id").value();
-				string typeOfActor = toggle.attribute("type").value();
-				//Odeslat zpravu na adapter server
-				string messageToAdaServer = this->createMessageRequestSwitch(idOfActor, typeOfActor, adapterID);
-				this->sendMessageToAdaServer(messageToAdaServer);
-				toggle = toggle.next_sibling();
-			}
-
-		}
-
+		this->HandleAlgorithmMessage(data, Log, FConfig);
 	}
 	else{
 		//Error
@@ -878,7 +405,7 @@ bool FrameworkServerHandle::sendMessageToAdaServer(string xmlMessage){
 	int socketToAdaServer;               
 	int port;                   // Èíslo portu
 	int size;                   // Poèet pøijatých a odeslaných bytù
-	port = atoi("7081");
+	port = atoi(to_string(FConfig->portAdaSenderServer).c_str());
 	if ((host = gethostbyname("localhost")) == NULL)
 	{
 		Log->WriteMessage(FATAL, "FrameworkServerHandle::sendMessageToAdaServer : Bad Address!");
@@ -1506,7 +1033,7 @@ message::~message()
 
 void sig_handler(int signo)
 {
-	if (signo == SIGINT)
+	if (signo == SIGTERM)
 	{
 		delete(UIServer);
 		delete(AdaServer);
@@ -1514,8 +1041,11 @@ void sig_handler(int signo)
 		delete(cont);
 		sem_destroy(&connectionSem);
 		delete(Log);
+		exit(EXIT_SUCCESS);
 	}
-	exit(EXIT_SUCCESS);
+	if (signo == SIGINT){
+		FConfig->ResetAlgorithms();
+	}
 }
 
 
@@ -1533,24 +1063,41 @@ int main()
 	catch (std::exception &e)
 	{
 		std::cerr << e.what() << std::endl;
-		std::cerr << "Unable to create memory space for logging exiting!" << std::endl;
+		std::cerr << "Unable to create memory space for Loger, exiting!" << std::endl;
 		exit(EXIT_FAILURE);
 	}
+	try{
+		FConfig = new FrameworkConfig();
+	}
+	catch (std::exception &e){
+		std::cerr << e.what() << std::endl;
+		std::cerr << "Unable to create memory space for FrameworkConfig, exiting!" << std::endl;
+		exit(EXIT_FAILURE);
+	}
+	//Nastaveni configu
+	FConfig->SetConfig("config.xml");
 
 	connCount = 0;
 	//Nastaveni kontejneru pro DB
-	cont = DatabaseConnectionContainer::CreateContainer(Log, "home5", 30);
+	cont = DatabaseConnectionContainer::CreateContainer(Log, FConfig->dbName, FConfig->maxNumberDBConnections);
 	//Nastaveni semaforu pro omezeni poctu pripojeni k DB
 	int semVal = 30;
 	Log->WriteMessage(FATAL, "Maximal conn count : " + std::to_string(semVal));
 	sem_init(&connectionSem, 0, semVal);
 	//Nastaveni Loggeru
-	Log->SetLogger(7, 5, 100, "framework_log", "FRAMEWORK");
+	Log->SetLogger(	FConfig->loggerSettingVerbosity, 
+					FConfig->loggerSettingFilesCnt,
+					FConfig->loggerSettingLinesCnt,
+					FConfig->loggerSettingFileName,
+					".",
+					FConfig->loggerSettingAppName);
+
+	FConfig->SetLogger(Log);
 
 	//Instanciace serveru prijimajici zpravy od UI Serveru
 	try
 	{
-		UIServer = new FrameworkServer(UI_FRAMEWORK_PORT);
+		UIServer = new FrameworkServer(FConfig->portUIServer);
 		std::thread worker(&FrameworkServer::StartServer, UIServer);
 		worker.detach();
 	}
@@ -1564,7 +1111,7 @@ int main()
 	//Instanciace serveru prijimajici zpravy od Ada Serveru
 	try
 	{
-		AdaServer = new FrameworkServer(ADA_FRAMEWORK_PORT);
+		AdaServer = new FrameworkServer(FConfig->portAdaRecieverServer);
 		std::thread worker(&FrameworkServer::StartServer, AdaServer);
 		worker.detach();
 	}
@@ -1578,7 +1125,7 @@ int main()
 	//Instanciace serveru prijimajici zpravy od Algoritmu (nikoliv jiz vlakno)
 	try
 	{
-		AlgServer = new FrameworkServer(ALG_FRAMEWORK_PORT);
+		AlgServer = new FrameworkServer(FConfig->portAlgorithmServer);
 		AlgServer->StartServer();
 	}
 	catch (std::exception &e)
@@ -1592,7 +1139,7 @@ int main()
 	delete(AdaServer);
 	delete(AlgServer);
 
-	return 0;
+	return EXIT_SUCCESS;
 }
 
 
