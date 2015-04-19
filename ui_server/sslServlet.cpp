@@ -102,7 +102,7 @@ void ShowCerts(SSL* ssl) {
 // http://stackoverflow.com/questions/13686398/ssl-read-failing-with-ssl-error-syscall-error
 // http://jmarshall.com/stuff/handling-nbio-errors-in-openssl.html
 void logErrors(SSL* ssl, int returnValue){
-    Logger::debug3()<<"loging, err occuerd, return value =  " << returnValue << endl;
+    Logger::debug3()<<"SSLerr loging, err occuerd, return value =  " << returnValue << endl;
     ERR_print_errors_fp(stderr);
     int ssl_err = SSL_get_error(ssl, returnValue);
     int err = ERR_get_error();
@@ -119,25 +119,36 @@ bool endsWith (char* base, char* str) {
 }
 
 
-int readMsgFromSSL(SSL* ssl, char* rc){
+int readMsgFromSSL(SSL* ssl, char** rc){
+    
     
     char buf[1025];
+    //bzero(buf, 1025);
     int readSize = 1024;
     int received = 0;  
     int readCount = 0;
-    
     do{ 
-        if (!rc){
-            rc = (char*)malloc (readSize * sizeof (char) + 1);
-            bzero(rc, readSize * sizeof (char) + 1);
+        if (!(*rc)){
+            *rc = (char*)malloc (readSize * sizeof (char) + 1);
+            bzero(*rc, readSize * sizeof (char) + 1);
+            //Logger::getInstance(Logger::DEBUG3)<<"rc len" <<endl<< strlen(*rc)<<endl;
         }else{
-            rc = (char*)realloc (rc, (readCount + 1) * readSize * sizeof (char) + 1);
+            *rc = (char*)realloc (*rc, (readCount + 1) * readSize * sizeof (char) + 1);
         }
         received = SSL_read(ssl, buf, sizeof(buf)-1); // get request 
-        if(received > 0){
+        if(received >= 0){
             buf[received] = '\0';
             Logger::getInstance(Logger::DEBUG3)<<"ssl read ("<<received<<")result:"<< buf <<endl;
-            strcat (rc, buf);
+            
+            char *const strBuf = (char*)malloc(strlen(buf) + 1);
+            
+            memcpy( (void*)strBuf,(void*)buf, strlen(buf)+1);
+            //free(strBuf);
+            strcat (*rc, strBuf);
+            //const char src[50] = "http://www.tutorialspoint.com";
+            //char dest[50];
+
+            //printf("Before memcpy dest = %s\n", dest);
         }else if(received < 0){
                 logErrors(ssl, received);   
                 break;
@@ -149,7 +160,11 @@ int readMsgFromSSL(SSL* ssl, char* rc){
 
         readCount++;
         
-    }while( !endsWith(rc, (char*)"</com>") );
+    }while( !endsWith(*rc, (char*)"</com>") );
+    
+    (*rc)[strlen(*rc)] = '\0';
+    Logger::getInstance(Logger::DEBUG3)<<"ssl whole read ("<<received<< " vs "<< strlen(*rc) <<")result:"<< *rc <<endl;
+    
     
     return received;
 }
@@ -182,14 +197,15 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
            do{
                
                 rc=NULL;
-                received = readMsgFromSSL(ssl, rc);
-                Logger::getInstance(Logger::DEBUG3)<<"received"<< received << endl;
+                received = readMsgFromSSL(ssl, &rc);
+                
+                Logger::getInstance(Logger::DEBUG3)<<"received"<< received << " : " <<rc<< endl;
                 if ( received > 0) {
                     Logger::getInstance(Logger::DEBUG3)<<"Start resolve "<< burstMsgCount++ <<" msg in burst"<<endl;
 
                     std::string replyString = resolveMsg(rc);
                     
-                    replyString.insert(0, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"); 
+                    //replyString.insert(0, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"); 
                     //Logger::getInstance(Logger::DEBUG3)<<"last chars of reply:"<< replyString.substr(replyString.length()-10, 10)<<"<"<<endl;
 
                     int writeBytes = SSL_write(ssl, replyString.c_str(), replyString.length() ); // send reply 

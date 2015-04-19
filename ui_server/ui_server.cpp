@@ -139,6 +139,9 @@ int main(int argc, char** argv)
         resolveMsg( "<com ver=\"2.3\" uid=\"2\" state=\"getlog\" from=\"1377684610\" ftype=\"avg\" interval=\"0\" aid=\"21\" did=\"0.0.21.1\" dtype=\"1\" />" );
        resolveMsg( "<com ver=\"2.3\" uid=\"1\" state=\"getnewdevs\" aid=\"10\"  />" );
 */
+    //string x = "<com ver=\"2.3\" uid=\"1\" state=\"getnewdevs\" aid=\"10\"  />";
+    //resolveMsg(x.c_str());
+    //return 0;
         /*
         resolveMsg( "<com ver=\"2.3\"  state=\"getuid\" email=\"new22@gmail.com\" gid=\"1111\" gt=\"1\" pid=\"11\" loc=\"cs\" />");
         resolveMsg( "<com ver=\"2.3\"  state=\"getuid\" email=\"new22@gmail.com\" gid=\"1111\" gt=\"1\" pid=\"111\" loc=\"cs\" />");
@@ -238,14 +241,20 @@ int main(int argc, char** argv)
 
                 Logger::getInstance(Logger::DEBUG2)<<"new thread started, threads c.:"<<(*threadCounter +1)<<endl;
                 
+                
+                try{
                 //create thread which serve phone
-                new thread( [ssl, threadCounter, resolveFunc](){
-                    (*threadCounter)++;
-                    Servlet(ssl,resolveFunc);
-                    (*threadCounter)--;
-                });
-            }
+                    new thread( [ssl, threadCounter, resolveFunc](){
+                        (*threadCounter)++;
+                        Servlet(ssl,resolveFunc);
+                        (*threadCounter)--;
+                    });
+                }catch(const std::system_error& e) {
+                    std::cout << "Caught system_error with code " << e.code() 
+                              << " meaning " << e.what() << '\n';
+                }
             
+            }
         }
         //wait till threads end their job
         std::this_thread::sleep_for(std::chrono::milliseconds(50));

@@ -52,7 +52,7 @@ string IMsgIn::envelopeResponseSetAttributes(string state, string response, stri
 { 
         std::stringstream ss;
         //std::cout<<"envelope Msg "<<getState()<<std::endl;
-        ss << "<com "
+        ss << "<?xml version=\"1.0\" encoding=\"UTF-8\"?><com "
                         P_VERSION "="<<"\""<<VERSION<<"\" "<<
                         //P_SESSION_ID "=\"" << this->_IHAtoken << "\" "<<
                         P_STATE "=\"" << state <<  "\""<<
@@ -112,12 +112,14 @@ string IMsgIn::makeXMLattribute(string attr, string value) {
 
 std::string IMsgIn::genOutputXMLwithVersionAndState(std::string responseState) {
     
+        
+    
     _outputMainNode.prepend_attribute(P_STATE) = responseState.c_str();
     _outputMainNode.prepend_attribute(P_VERSION) = IMsgIn::VERSION.c_str();
     _outputMainNode.append_child(pugi::node_pcdata).set_value("");
     //_outputDoc.print(std::cout);
     
-    return node_to_string(_outputDoc);
+    return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + node_to_string(_outputDoc);
    /* std:: ostringstream ss; 
 _outputDoc.save (ss); 
 std:: string s = ss.str (); 
