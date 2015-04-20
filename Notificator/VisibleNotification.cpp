@@ -7,9 +7,10 @@
 
 #include "VisibleNotification.h"
 
-VisibleNotification::VisibleNotification(string email, int notificationId,
-        vector<string> gcmIds, long time, string action, string message)
-: BaseGcmNotification(email, notificationId, gcmIds, time, action),
+VisibleNotification::VisibleNotification(string name, int userId, 
+    int notificationId, vector<string> gcmIds, long time, 
+    string message)
+: BaseGcmNotification(name, userId, notificationId, gcmIds, time),
 mMessage(message) {
 }
 
@@ -17,12 +18,12 @@ string VisibleNotification::getMessage() {
     return mMessage;
 }
 
-string VisibleNotification::getEmail() {
-    return BaseGcmNotification::getEmail();
+string VisibleNotification::getUserId() {
+    return BaseGcmNotification::getUserId();
 }
 
-string VisibleNotification::getNotificationId() {
-    return BaseGcmNotification::getNotificationId();
+string VisibleNotification::getId() {
+    return BaseGcmNotification::getId();
 }
 
 string VisibleNotification::getGcmIds() {
@@ -31,10 +32,6 @@ string VisibleNotification::getGcmIds() {
 
 string VisibleNotification::getTime() {
     return BaseGcmNotification::getTime();
-}
-
-string VisibleNotification::getAction() {
-    return BaseGcmNotification::getAction();
 }
 
 VisibleNotification::~VisibleNotification() {

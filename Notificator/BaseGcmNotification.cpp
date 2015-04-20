@@ -3,18 +3,30 @@
 
 using namespace std;
 
-BaseGcmNotification::BaseGcmNotification(string email, int notificationId,
-        vector<string> gcmIds, long time, string action)
-: Notification(), mEmail(email), mGcmIds(gcmIds), mNotificationId(notificationId),
-mTime(time), mAction(action) {
-
+BaseGcmNotification::BaseGcmNotification(string name, int userId, int notificationId, vector<string> gcmIds, long time)
+: Notification(), 
+  mName(name), 
+  mUserId(userId), 
+  mGcmIds(gcmIds), 
+  mNotificationId(notificationId), 
+  mTime(time) {
 }
 
-string BaseGcmNotification::getEmail() {
-    return mEmail;
+vector<string> BaseGcmNotification::send() {
+  // TODO
+  vector<string> ahoj;
+  return ahoj;
 }
 
-string BaseGcmNotification::getNotificationId() {
+string BaseGcmNotification::getUserId() {
+    string number;
+    stringstream ss;
+    ss << mUserId;
+    ss >> number;
+    return number;
+}
+
+string BaseGcmNotification::getId() {
     string number;
     stringstream ss;
     ss << mNotificationId;
@@ -43,9 +55,8 @@ string BaseGcmNotification::getTime() {
     return number;
 }
 
-string BaseGcmNotification::getAction() {
-    return mAction;
+
+string BaseGcmNotification::getName() {
+  return mName;
 }
-
-
 

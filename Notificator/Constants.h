@@ -17,7 +17,7 @@ static const string ACTION_DEVICE = "device";
 /** DATA TAGS */
 static const string DATA_MSGID = "mid";
 static const string DATA_TYPE = "type";
-static const string DATA_EMAIL = "email";
+static const string DATA_USER_ID = "usrId";
 static const string DATA_TIME = "time";
 static const string DATA_ACTION = "act";
 static const string DATA_MESSAGE = "msg";
@@ -47,9 +47,8 @@ static const string JSON_TAG_REG_IDS = "\"registration_ids\"";
 /** JSON DATA KEYS */
 static const string JSON_DATA_MSGID = "\"" + DATA_MSGID  + "\"";
 static const string JSON_DATA_TYPE = "\"" + DATA_TYPE + "\"";
-static const string JSON_DATA_EMAIL = "\"" + DATA_EMAIL + "\"";
+static const string JSON_DATA_USER_ID = "\"" + DATA_USER_ID + "\"";
 static const string JSON_DATA_TIME = "\"" + DATA_TIME + "\"";
-static const string JSON_DATA_ACTION = "\"" + DATA_ACTION + "\"";
 static const string JSON_DATA_MESSAGE = "\"" + DATA_MESSAGE + "\"";
 
 #endif

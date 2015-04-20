@@ -7,14 +7,19 @@
 
 #include "AdvertNotification.h"
 
-AdvertNotification::AdvertNotification(string email, int notificationId,
-            vector<string> gcmIds, long time, string action, string message) 
-: VisibleNotification(email, notificationId, gcmIds, time, action, message),
-        TYPE_CONTROL("advert") {
+AdvertNotification::AdvertNotification(string name, int userId, 
+    int notificationId, vector<string> gcmIds, long time, 
+    string message) 
+: VisibleNotification(name, userId, notificationId, gcmIds, time, message),
+        TYPE_ADVERT("advert"), LEVEL_ADVERT(200) {
+}
+
+int AdvertNotification::getLevel() {
+    return LEVEL_ADVERT;
 }
 
 string AdvertNotification::getType() {
-    return TYPE_CONTROL;
+    return TYPE_ADVERT;
 }
 
 AdvertNotification::~AdvertNotification() {

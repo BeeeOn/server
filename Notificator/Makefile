@@ -35,10 +35,10 @@ libnotif.so: $(OBJECTS)
 #######################################################
 # MAIN EXAMPLE
 
-#main: main.cpp
+#main:  main.cpp
 #	$(CC) $(CFLAGS) -static main.cpp -L. -lnotif -o main
 
-main: main.cpp
+main: all main.cpp
 	$(CC) $(CFLAGS) main.cpp -o main -L. -lnotif -lcurl
 
 ########################################################

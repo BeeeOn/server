@@ -14,15 +14,18 @@
 
 class AlertNotification : VisibleNotification {
 public:
-
-    virtual ~AlertNotification();
+    virtual string getJson() = 0;
+    virtual string getDbXml() = 0;
+    virtual ~AlertNotification() = 0;
+    string getType();
+    int getLevel();
 protected:
-    string getType() = 0;
-    AlertNotification(string email, int notificationId,
-        vector<string> gcmIds, long time, string action, string message);
+    AlertNotification(string name, int userId, int notificationId,
+        vector<string> gcmIds, long time, string message);
 
 private:
-    const string TYPE_CONTROL;
+    const string TYPE_ALERT;
+    const int LEVEL_ALERT;
 };
 
 #endif	/* ALERTNOTIFICATION_H */

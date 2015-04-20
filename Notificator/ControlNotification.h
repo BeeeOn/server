@@ -10,14 +10,21 @@ using namespace std;
 class ControlNotification : public BaseGcmNotification
 {
     public:
+        virtual string getDbXml() = 0;
         virtual string getJson() = 0;
         virtual ~ControlNotification() {};
-    protected:
-        ControlNotification(string email, int notificationId, 
-                vector<string> gcmIds, long time, string action);
+        
         string getType();
+        int getLevel();
+
+    protected:
+        ControlNotification (string name, int userId, int notificationId, 
+                vector<string> gcmIds, long time);
+    
     private:
         const string TYPE_CONTROL;
+        const int LEVEL_CONTROL;
+
 };
 
 #endif // CONTROLNOTIFICATION_H

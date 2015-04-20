@@ -10,9 +10,16 @@ using namespace std;
 int main()
 {   
     vector <string> ids;
-    ids.push_back("APA91bHGqKoRnpLTUeHnLNIVLyOkXKqWiKxJn0CzCED55jMpDLxq85wBalb_p06mX27nwo9vx6ahKmhJAMYyqHVWPe1_u50ons-zatXX8S3vV2vtkH4BUW1J-qgvjDXxziDAwu09qreCJu8PWhHKOOSYSsaYYxeZxQ");
-    Notification *notif = new LimitExceededNotification("doudera.m@gmail.com", 123,
-            ids, 1418220573673, "Jsem nova zprava", 123, "deviceId", 1, 2);
+    ids.push_back("APA91bFq51HkPkbr6t88BPb5Uq7IX-BrOMoZIPP8Y5W_vHd_OscaE84KdH_N-yCLWb8E1bD9sGh3bBvUwORTJxtEY01R6v_5mzY5RQfX60CyhLjJtor3AkET13J6tFH0cKtQejaC7BrG6Zan75KER-lkrsZ56xBCzw");
+    Notification *notif = new LimitExceededNotification(
+        123,
+        123,
+        ids, 
+        1418220573673, 
+        "Jsem nova zprava",
+        123, 
+        "deviceId", 
+        1);
     Notificator::sendNotification(*notif);
     
     delete(notif);
