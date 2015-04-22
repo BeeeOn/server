@@ -9,6 +9,7 @@
 
 #include "InfoNotification.h"
 #include <string>
+#include "Utils.h"
 
 class WatchdogNotif : public InfoNotification {
 public:
@@ -20,7 +21,7 @@ public:
 protected:
     string getGcmMsg(string ids);
 private:
-    int mAdapterId, mSensorType;
+    int mAdapterId, mDeviceType;
     string mDeviceId;
 
 };

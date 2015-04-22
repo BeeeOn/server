@@ -1,5 +1,6 @@
 #include "BaseNotification.h"
 #include "Notificator.h"
+#include "Utils.h"
 #include <sstream>
 #include <iostream>
 using namespace std;
@@ -24,19 +25,25 @@ vector<string> BaseNotification::sendGcm(vector<string> *ids) {
 }
 
 string BaseNotification::getUserId() {
+  return Utils::intToString(mUserId);
+  /*
   string number;
   stringstream ss;
   ss << mUserId;
   ss >> number;
   return number;
+  */
 }
 
 string BaseNotification::getId() {
+  return Utils::intToString(mNotificationId);
+  /*
   string number;
   stringstream ss;
   ss << mNotificationId;
   ss >> number;
   return number;
+  */
 }
 
 string BaseNotification::getGcmIds(vector<string>* ids) {
@@ -58,11 +65,14 @@ string BaseNotification::getGcmIds(vector<string>* ids) {
 }
 
 string BaseNotification::getTime() {
-    string number;
+  return Utils::longToString(mTime);
+  /*
+  string number;
     stringstream ss;
     ss << mTime;
     ss >> number;
     return number;
+*/
 }
 
 string BaseNotification::getName() {

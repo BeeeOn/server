@@ -22,6 +22,10 @@ static const string DATA_TIME = "time";
 static const string DATA_ACTION = "act";
 static const string DATA_MESSAGE = "msg";
 static const string DATA_NAME = "name";
+static const string DATA_ADAPTER_ID = "aid";
+static const string DATA_DEVICE_ID = "did";
+static const string DATA_DEVICE_TYPE = "dtype";
+
 
 
 /**************************************************/
@@ -52,6 +56,9 @@ static const string JSON_DATA_USER_ID = "\"" + DATA_USER_ID + "\"";
 static const string JSON_DATA_TIME = "\"" + DATA_TIME + "\"";
 static const string JSON_DATA_MESSAGE = "\"" + DATA_MESSAGE + "\"";
 static const string JSON_DATA_NAME = "\"" + DATA_NAME + "\"";
+static const string JSON_DATA_ADAPTER_ID = "\"" + DATA_ADAPTER_ID + "\"";
+static const string JSON_DATA_DEVICE_ID = "\"" + DATA_DEVICE_ID + "\"";
+static const string JSON_DATA_DEVICE_TYPE = "\"" + DATA_DEVICE_TYPE + "\"";
 
 /** NOTIFICATION NAME */
 static const string NAME_WATCHDOG = "watchdog";
