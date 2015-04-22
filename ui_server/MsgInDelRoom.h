@@ -13,7 +13,6 @@
 #include "DBConnector.h"
 #include "IMsgInLoginRequired.h"
 
-using namespace std;
 
 class MsgInDelRoom : public IMsgInLoginRequired{
 public:
@@ -23,7 +22,7 @@ public:
     virtual int getMsgAuthorization();
 
     
-    virtual string createResponseMsgOut();
+    virtual std::string createResponseMsgOut();
 
     static const std::string state;
 

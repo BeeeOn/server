@@ -9,10 +9,9 @@
 #define	COMMUNICATION_H
 #include <iostream>
 
-using namespace std;
 
 std::string resolveMsg(char* msg);
-std::string resolveMsg(string msg);
+std::string resolveMsg(std::string msg);
 
 #endif	/* COMMUNICATION_H */
 

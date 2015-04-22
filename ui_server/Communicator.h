@@ -2,7 +2,6 @@
 #define	COM_H
 
 #include "IMsgIn.h"
-using namespace std;
 class Communicator
 {
 public:

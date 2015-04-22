@@ -12,8 +12,6 @@
 #include "pugixml.hpp"
 #include "IMsgInLoginAndAdapterAccessRequired.h"
 
-using namespace std;
-
 class MsgInLogName : public IMsgInLoginAndAdapterAccessRequired {
 public:
     MsgInLogName(char* msg, pugi::xml_document* doc);
@@ -21,7 +19,7 @@ public:
 
     virtual int getMsgAuthorization();
 
-    virtual string createResponseMsgOut();
+    virtual std::string createResponseMsgOut();
     
     static const std::string state;
 

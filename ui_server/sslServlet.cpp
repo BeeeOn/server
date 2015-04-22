@@ -3,6 +3,8 @@
 #include "communication.h"
 #include <errno.h> 
 
+using namespace std;
+
 int OpenListener(int port) {
         int sd;
         struct sockaddr_in addr;

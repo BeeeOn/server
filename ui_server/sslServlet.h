@@ -29,10 +29,9 @@
 
 #include "../ui_logger/Logger.h"
 
-using namespace std;
 int OpenListener(int port);
 
-void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc);
+void Servlet(SSL* ssl ,std::function<std::string(char*)> resolveFunc);
 
 SSL_CTX* InitServerCTX(void);
 void LoadCertificates(SSL_CTX* ctx, char* CertFile, char* KeyFile) ;

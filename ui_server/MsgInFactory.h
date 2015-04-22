@@ -4,7 +4,6 @@
 #include <string>
 #include "IMsgIn.h"
 
-using namespace std;
 class MsgInFactory
 {
 private:

@@ -5,7 +5,6 @@
 #include "DBConnector.h"
 #include "IMsgInLoginAndAdapterAccessRequired.h"
 
-using namespace std;
 class MsgInGetDevs : public IMsgInLoginRequired
 {
 public:
@@ -14,7 +13,7 @@ public:
     
     virtual int getMsgAuthorization();
     
-    virtual string createResponseMsgOut();
+    virtual std::string createResponseMsgOut();
     
     static const std::string state;
 };

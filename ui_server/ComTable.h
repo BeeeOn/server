@@ -9,18 +9,17 @@
 #include <thread>
 #include <mutex>
 
-using namespace std;
 struct ComTableEntry {
-    chrono::time_point<chrono::system_clock> lastActivity;
+    std::chrono::time_point<std::chrono::system_clock> lastActivity;
     time_t t;
-    string mail;
-    string adapterId;
+    std::string mail;
+    std::string adapterId;
     int id;
 };
 
 struct user {
     int id;
-    string mail;
+    std::string mail;
 };
 
 class ComTable
@@ -37,19 +36,19 @@ public:
     void removeOldEntries();
     user getUserByComId(int id);
     
-    int setComInfo(string email);
-    int setComInfo(int userId, string email);
+    int setComInfo(std::string email);
+    int setComInfo(int userId, std::string email);
     
     bool _cleanerStop;
     int _maxInactivityMs;
-    mutex _mtx;
+    std::mutex _mtx;
 private:
     int getNewComId();
     
     static ComTable* pInstance;
-    map<int, ComTableEntry*> _comInfos;
+    std::map<int, ComTableEntry*> _comInfos;
     
-    thread * _comTableCleanerThread;
+    std::thread * _comTableCleanerThread;
 };
 
 #endif	/* COMTABLE_H */

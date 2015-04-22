@@ -14,8 +14,6 @@
 
 
 
-using namespace std; 
-
 class IMsgInLoginAndAdapterAccessRequired;
 
 class MsgRightsChecker {
@@ -30,8 +28,8 @@ public:
     bool checkRights(IMsgInLoginAndAdapterAccessRequired& msg);
     
 private:
-    map<string,int> _msgRightsTable;
-    map<string,int> _rightsTable;
+    std::map<string,int> _msgRightsTable;
+    std::map<string,int> _rightsTable;
 };
 
 #endif	/* MSGRIGHTSCHECKER_H */

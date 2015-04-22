@@ -4,22 +4,21 @@
 
 
 
-using namespace std;
 
 struct googleInfo {
-    string id;
-    string email;
+    std::string id;
+    std::string email;
     bool verified_email;
-    string name;
-    string given_name;
-    string family_name;
-    string link;
-    string picture;
-    string gender;
-    string locale;
+    std::string name;
+    std::string given_name;
+    std::string family_name;
+    std::string link;
+    std::string picture;
+    std::string gender;
+    std::string locale;
 };
 
-bool isGTokenOk(string gToken, googleInfo &gInfo);;
+bool isGTokenOk(std::string gToken, googleInfo &gInfo);;
 
 #endif	/* GTOKENCHECKER_H */
 

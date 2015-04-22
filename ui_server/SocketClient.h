@@ -20,17 +20,15 @@
 #include <netinet/in.h>
 #include <netdb.h> 
 
-using namespace std;
-
 class SocketClient {
 
 public:
     
-    SocketClient(int portNumber, string hostName="localhost");
+    SocketClient(int portNumber, std::string hostName="localhost");
     virtual ~SocketClient();
-    int write(string text);
-    string read();
-    string readUntilendTag(string endTag);
+    int write(std::string text);
+    std::string read();
+    std::string readUntilendTag(std::string endTag);
 private:
     int _socketfd;
     
