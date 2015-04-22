@@ -142,11 +142,11 @@ int main(int argc, char** argv)
     //string x = "<com ver=\"2.3\" uid=\"1\" state=\"getnewdevs\" aid=\"10\"  />";
     //resolveMsg(x.c_str());
     //return 0;
-        /*
-        resolveMsg( "<com ver=\"2.3\"  state=\"getuid\" email=\"new22@gmail.com\" gid=\"1111\" gt=\"1\" pid=\"11\" loc=\"cs\" />");
-        resolveMsg( "<com ver=\"2.3\"  state=\"getuid\" email=\"new22@gmail.com\" gid=\"1111\" gt=\"1\" pid=\"111\" loc=\"cs\" />");
-        resolveMsg( "<com ver=\"2.3\"  state=\"getuid\" email=\"new33@gmail.com\" gid=\"11111\" gt=\"1\" pid=\"11111\"  loc=\"cs\" />");
-*/
+        
+        resolveMsg( "<com ver=\"2.4\"  state=\"getadapters\" email=\"new22@gmail.com\" gid=\"1111\" gt=\"1\" pid=\"11\" loc=\"cs\" />");
+        resolveMsg( "<com ver=\"1.3\"  state=\"getadapters\" email=\"new22@gmail.com\" gid=\"1111\" gt=\"1\" pid=\"111\" loc=\"cs\" />");
+        resolveMsg( "<com ver=\"1.3\"  state=\"getadapters\" email=\"new33@gmail.com\" gid=\"11111\" gt=\"1\" pid=\"11111\"  loc=\"cs\" />");
+
        // resolveMsg( "<com ver=\"2.3\"  state=\"getuid\" email=\"newww@gmail.com\" gid=\"33\" gt=\"1\" pid=\"34\" loc=\"cs\" />");
        
       //resolveMsg("<com ver=\"2.3\"  uid=\"15\" state=\"setgcmid\"  gcmid=\"new\" />");

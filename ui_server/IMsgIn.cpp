@@ -1,7 +1,9 @@
 #include "IMsgIn.h"
 #include "save_custom_writer.h"
 using namespace std;
-const string IMsgIn::VERSION="2.4";
+const int IMsgIn::MAJOR_VERSION = 2;
+const int IMsgIn::MINOR_VERSION = 5;
+const string IMsgIn::VERSION = to_string(MAJOR_VERSION) + "." + to_string(MINOR_VERSION);
 
 
 IMsgIn::IMsgIn(char* msg, pugi::xml_document* doc)
@@ -34,13 +36,40 @@ IMsgIn::~IMsgIn(void)
     //free(_msg);
 }
 
+t_version IMsgIn::parseProtocolVersion(std::string version) {
+    t_version ver;
+    
+    istringstream f(version);
+    string s;
+    
+    try{
+
+        getline(f, s, '.');
+        ver.majorVersion = atoi(s.c_str());
+
+        getline(f, s, '.');
+        ver.minorVersion = atoi(s.c_str());
+    }catch(...){
+        Logger::error() <<"version parsing: "<< version <<endl;
+        ver.majorVersion = -1;
+        ver.minorVersion = -1;
+    }    
+    return ver;
+}
+
+
 bool IMsgIn::checkProtocolVersion(){
     string protocolVersion = _doc->child(P_COMMUNICATION).attribute(P_VERSION).value();
-    if(protocolVersion == VERSION) {
-        return true;
-    }else{
-        Logger::getInstance(Logger::ERROR) <<"BAD protocol v. - expected: "<< VERSION<<" actual "<<protocolVersion<<endl;
+    
+    t_version ver = parseProtocolVersion(protocolVersion);
+    
+    Logger::debug3() << "major ver.: " << ver.majorVersion << " minor ver.: " << ver.minorVersion <<endl; 
+    
+    if(ver.majorVersion  != MAJOR_VERSION) {
+        Logger::error() <<"BAD protocol v. - expected: "<< VERSION<<" actual "<<protocolVersion<<endl;
         return false;
+    }else{
+        return true;
     }
 }
 

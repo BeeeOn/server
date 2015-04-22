@@ -43,6 +43,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/_ext/1360890531/DAOUsers.o \
 	${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters.o \
 	${OBJECTDIR}/_ext/1154895860/Logger.o \
+	${OBJECTDIR}/_ext/1154895860/MsgInGamificationRedirect.o \
 	${OBJECTDIR}/ComTable.o \
 	${OBJECTDIR}/Config.o \
 	${OBJECTDIR}/DBConnector.o \
@@ -197,6 +198,11 @@ ${OBJECTDIR}/_ext/1154895860/Logger.o: ../ui_logger/Logger.cpp
 	${MKDIR} -p ${OBJECTDIR}/_ext/1154895860
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1154895860/Logger.o ../ui_logger/Logger.cpp
+
+${OBJECTDIR}/_ext/1154895860/MsgInGamificationRedirect.o: ../ui_logger/MsgInGamificationRedirect.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1154895860
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1154895860/MsgInGamificationRedirect.o ../ui_logger/MsgInGamificationRedirect.cpp
 
 ${OBJECTDIR}/ComTable.o: ComTable.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -1067,6 +1073,19 @@ ${OBJECTDIR}/_ext/1154895860/Logger_nomain.o: ${OBJECTDIR}/_ext/1154895860/Logge
 	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1154895860/Logger_nomain.o ../ui_logger/Logger.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/_ext/1154895860/Logger.o ${OBJECTDIR}/_ext/1154895860/Logger_nomain.o;\
+	fi
+
+${OBJECTDIR}/_ext/1154895860/MsgInGamificationRedirect_nomain.o: ${OBJECTDIR}/_ext/1154895860/MsgInGamificationRedirect.o ../ui_logger/MsgInGamificationRedirect.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1154895860
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/_ext/1154895860/MsgInGamificationRedirect.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1154895860/MsgInGamificationRedirect_nomain.o ../ui_logger/MsgInGamificationRedirect.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/_ext/1154895860/MsgInGamificationRedirect.o ${OBJECTDIR}/_ext/1154895860/MsgInGamificationRedirect_nomain.o;\
 	fi
 
 ${OBJECTDIR}/ComTable_nomain.o: ${OBJECTDIR}/ComTable.o ComTable.cpp 

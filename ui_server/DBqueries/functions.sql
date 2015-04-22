@@ -125,4 +125,26 @@ CREATE TRIGGER set_facilities_type
     AFTER INSERT ON types
     FOR EACH ROW
     EXECUTE PROCEDURE facility_type_update();  
+     
       
+CREATE OR REPLACE FUNCTION check_fac_type() returns trigger
+  AS
+  $$
+  
+  BEGIN
+    if NEW.fk_type_id = null OR NEW.mac::numeric <@ (select mac_range from types where type_id = NEW.fk_type_id) THEN
+      RETURN NEW;
+    ELSE  
+      RAISE EXCEPTION '% have wrong type, must be null or valid in range table', NEW.mac;
+    END IF;  
+  END;
+  
+  $$
+  LANGUAGE plpgsql;      
+      
+
+
+CREATE TRIGGER trigger_check_fac_type
+    BEFORE INSERT OR UPDATE ON facilities
+    FOR EACH ROW
+    EXECUTE PROCEDURE check_fac_type();  

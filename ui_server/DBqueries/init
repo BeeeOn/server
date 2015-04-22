@@ -6,8 +6,7 @@ su postgres
 psql postgres
 create database home5prod;
 
-#create user
-create user uiserver with password 'xyz';
+
 
 #goto DB home
 \c home5prod
@@ -15,11 +14,7 @@ create user uiserver with password 'xyz';
 #create tables ...   (pokud postgres nemá práva chmod a+r create.sql...)
 \i home5_create.sql
 \i functions.sql
-
-#grant access to user uiserver
-grant connect on database home5prod to uiserver;
-grant select,insert,update,delete on users,users_adapters,adapters,facilities,devices,logs,rooms,mobile_devices to uiserver;
-# grant select,insert,update,delete on users,users_adapters,adapters,facilities,devices,logs,rooms,mobile_devices,a_algorithms,algo_devices,u_algorithms,users_algorithms,algorithms_adapters to george;
+\i users.sql
 
 INSERT INTO u_algorithms (algorithm_id,name) VALUES (1, 'Watch and notify');
 INSERT INTO u_algorithms (algorithm_id,name) VALUES (3, 'Geofencing');

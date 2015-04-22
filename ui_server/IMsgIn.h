@@ -113,8 +113,10 @@
 #include "../ui_logger/Logger.h"
 #include "ServerException.h"
 
-
-
+struct t_version {
+    int majorVersion;
+    int minorVersion;
+};
 
 enum enumAccessStatus { GRANTED, FORBIDDEN_NOT_LOGGED, FORBIDDEN_WRONG_RIGHTS };
 
@@ -153,14 +155,17 @@ public:
     string _additionalInfo;
     string _requestState;
     */
+    static const int MAJOR_VERSION;
+    static const int MINOR_VERSION;
     static const std::string VERSION;
 protected:
     std::string makeXMLattribute(std::string attr,std::string value);
     std::string genOutputXMLwithVersionAndState(std::string responseState);
 
 private:
+    t_version parseProtocolVersion(std::string version);
     std::string envelopeResponseSetAttributes(std::string state, std::string response, std::string attributes);
-        
+    
 };
 
 #endif /* IMSGIN_H */
