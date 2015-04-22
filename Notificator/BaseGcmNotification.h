@@ -10,23 +10,27 @@ using namespace std;
 class BaseGcmNotification : public Notification
 {
     public:
+        virtual int getLevel() = 0;
         virtual string getJson() = 0;
+        virtual string getDbXml() = 0;
         virtual ~BaseGcmNotification() {};
-        string getEmail();
-        string getNotificationId();
+        
+        vector<string> send();       
+        string getId();
+        string getUserId();
         string getGcmIds();
         string getTime();
-        string getAction();
+        string getName();
+
     protected:
-        BaseGcmNotification(string email, int notificationId, 
-                vector<string> gcmIds, long time, string action);
-        virtual string getType() = 0;
+        BaseGcmNotification(string name, int userId, int notificationId, 
+                vector<string> gcmIds, long time);
     private:
-        string mEmail;
+        string mName;
+        int mUserId;
         vector<string> mGcmIds;
         int mNotificationId;
         long mTime;
-        string mAction;
 };
 
 #endif // BASENOTIFICATION_H

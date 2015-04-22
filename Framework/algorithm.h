@@ -24,6 +24,9 @@
 #include <map>
 #include <regex>
 
+#include "../loger.h"
+#include "../databaseConnectionContainer.h"
+#include "DBFWHandler.h"
 #include "structures.h"
 #include "../pugixml.hpp"
 
@@ -48,6 +51,12 @@ typedef struct AlgValues
 	tvalue* values;
 	unsigned int* sensor_ids;
 } tAlgValues;
+
+typedef struct RidValues
+{
+	std::string rid;
+	std::string type;
+} tRidValues;
 
 typedef std::multimap<unsigned int, std::map<std::string, std::string>> values_t;
 
@@ -78,28 +87,25 @@ private:
 	std::vector<std::string> parameters;		//Parametry algoritmu, poøadí atd. si definuje autor algoritmu
 	std::vector<tnotify *> toNotify;			//Vektor uchovávající jednotlivé notifikace (kdyby z nìjakého dùvodu jich bylo více)		
 	std::vector<ttoggle *> toToggleActor;
-	
-	static std::multimap<unsigned int, std::map<std::string, std::string>> parseValues(std::string values);
+	std::vector<tRidValues *> Rids;
+	Loger *Log;									//Loger pro logování do souboru
+	DatabaseConnectionContainer *cont = NULL;	//Container pro DB
+	static std::multimap<unsigned int, std::map<std::string, std::string>> parseValues(std::string values, std::vector<tRidValues *> *Rids);
 	static std::vector<std::string> parseParams(std::string paramsInput);
 	static std::string spaceReplace(std::string text);
 public:
 	Algorithm(std::string init_userID, std::string init_algID, std::string init_adapterID,
-		std::string init_offset, std::multimap<unsigned int, std::map<std::string, std::string>> init_values, std::vector<std::string> init_parameters);
+		std::string init_offset, std::multimap<unsigned int, std::map<std::string, std::string>> init_values, std::vector<std::string> init_parameters, std::vector<tRidValues *> init_Rids);
 	~Algorithm();
 	bool AddNotify(unsigned short int type, std::string text);
-	//bool AddDataToDB(tvalue *AddValue, unsigned short int offsetInDB);
 	bool SendAndExit();
 	std::string CreateMessage();
 	std::multimap<unsigned int, std::map<std::string, std::string>> getValues();
 	std::vector<std::string> getParameters();
+	std::vector<tRidValues *> getRids();
 	static Algorithm * getCmdLineArgsAndCreateAlgorithm(int argc, char *argv[]);
 	int SetCondition(std::string cond);
 	static std::vector<std::string> explode(std::string str, char ch);
 	bool ChangeActor(std::string id, std::string type);
-	//TODO Zpøístupnit DB + Aktory
-	/*
-	int SetActor();
-	int ToggleActor();
-	tvalue * GetLastAlgorithmData();
-	*/
+	DBHandler *database;
 };

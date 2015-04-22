@@ -14,13 +14,19 @@
 
 class AdvertNotification : VisibleNotification{
 public:
+    virtual string getJson() = 0;
+    virtual string getDbXml() = 0;
     virtual ~AdvertNotification();
+    
+    string getType();
+    int getLevel();
+
 protected:
-    AdvertNotification(string email, int notificationId,
-            vector<string> gcmIds, long time, string action, string message);
-    string getType() = 0;
+    AdvertNotification(string name, int userId, int notificationId,
+            vector<string> gcmIds, long time,  string message);
 private:
-    const string TYPE_CONTROL;
+    const string TYPE_ADVERT;
+    const int LEVEL_ADVERT;
 };
 
 #endif	/* ADVERTNOTIFICATION_H */

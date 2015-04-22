@@ -17,17 +17,19 @@ class VisibleNotification : public BaseGcmNotification
 {
 public:
     virtual string getJson() = 0;
+    virtual string getDbXml() = 0;
+    virtual int getLevel() = 0;
     virtual ~VisibleNotification();
     string getMessage();
-    string getEmail();
-    string getNotificationId();
+    string getUserId();
+    string getId();
     string getGcmIds();
     string getTime();
-    string getAction();
 protected:
-    VisibleNotification(string email, int notificationId, 
-                vector<string> gcmIds, long time, string action, string message);
+    VisibleNotification(string name, int userId, int notificationId, 
+                vector<string> gcmIds, long time, string message);
     virtual string getType() = 0;
+
 private:
     string mMessage;
 };

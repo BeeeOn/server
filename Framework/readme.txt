@@ -13,6 +13,9 @@ Run:
 ./framework &
 
 Stop:
+pkill -SIGTERM framework
+
+ResetAlgorithms:
 pkill -SIGINT framework
 
 -----------------------------------------------------------

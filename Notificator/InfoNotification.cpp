@@ -7,33 +7,34 @@
 
 #include "InfoNotification.h"
 
-InfoNotification::InfoNotification(string email, int notificationId,
-        vector<string> gcmIds, long time, string action, string message)
-: VisibleNotification(email, notificationId, gcmIds, time, action, message),
-TYPE_CONTROL("info") {
+InfoNotification::InfoNotification(string name, int userId, int notificationId,
+        vector<string> gcmIds, long time, string message)
+: VisibleNotification(name, userId, notificationId, gcmIds, time, message),
+TYPE_INFO("info"), LEVEL_INFO(300) {
 }
 
 string InfoNotification::getType() {
-    return TYPE_CONTROL;
+    return TYPE_INFO;
+}
+
+int InfoNotification::getLevel() {
+    return LEVEL_INFO;
 }
 
 string InfoNotification::getMessage() {
     return VisibleNotification::getMessage();
 }
-string InfoNotification::getEmail() {
-    return VisibleNotification::getEmail();
+string InfoNotification::getUserId() {
+    return VisibleNotification::getUserId();
 }
-string InfoNotification::getNotificationId() {
-    return VisibleNotification::getNotificationId();
+string InfoNotification::getId() {
+    return VisibleNotification::getId();
 }
 string InfoNotification::getGcmIds() {
     return VisibleNotification::getGcmIds();
 }
 string InfoNotification::getTime() {
     return VisibleNotification::getTime();
-}
-string InfoNotification::getAction() {
-    return VisibleNotification::getAction();
 }
 
 InfoNotification::~InfoNotification() {

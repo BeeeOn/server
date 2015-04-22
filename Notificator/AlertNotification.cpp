@@ -7,18 +7,24 @@
 
 #include "AlertNotification.h"
 
-AlertNotification::AlertNotification(string email, int notificationId,
-        vector<string> gcmIds, long time, string action, string message)
-: VisibleNotification(email, notificationId, gcmIds, time, action, message),
-        TYPE_CONTROL("alert")
+AlertNotification::AlertNotification(string name, int userId, 
+    int notificationId, vector<string> gcmIds, long time, 
+    string message)
+: VisibleNotification(name, userId, notificationId, gcmIds, 
+    time, message), TYPE_ALERT("alert"), LEVEL_ALERT(400)
 {
 
 }
 
+int AlertNotification::getLevel() {
+    return LEVEL_ALERT;
+}
+
 string AlertNotification::getType() {
-    return TYPE_CONTROL;
+    return TYPE_ALERT;
 }
 
 AlertNotification::~AlertNotification() {
+
 }
 

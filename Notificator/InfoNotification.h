@@ -15,19 +15,22 @@
 class InfoNotification : public VisibleNotification {
 public:
     virtual string getJson() = 0;
+    virtual string getDbXml() = 0;
     virtual ~InfoNotification();
+
     string getMessage();
-    string getEmail();
-    string getNotificationId();
+    string getUserId();
+    string getId();
     string getGcmIds();
     string getTime();
-    string getAction();
-protected:
-    InfoNotification(string email, int notificationId,
-            vector<string> gcmIds, long time, string action, string message);
     string getType();
+    int getLevel();
+protected:
+    InfoNotification(string name, int userId, int notificationId,
+            vector<string> gcmIds, long time, string message);
 private:
-    const string TYPE_CONTROL;
+    const string TYPE_INFO;
+    const int LEVEL_INFO;
 };
 
 #endif	/* INFONOTIFICATION_H */
