@@ -11,11 +11,10 @@ class Notification
   
     public:
         virtual ~Notification() {};
-        virtual string getJson() = 0;
         virtual string getDbXml() = 0;
         virtual string getId() = 0;
         virtual int getLevel() = 0;
-        virtual vector<string> send() = 0;
+        virtual vector<string> sendGcm(vector<string> *ids) = 0;
     
     protected:
         Notification(){};

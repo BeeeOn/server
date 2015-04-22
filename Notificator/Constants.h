@@ -17,10 +17,11 @@ static const string ACTION_DEVICE = "device";
 /** DATA TAGS */
 static const string DATA_MSGID = "mid";
 static const string DATA_TYPE = "type";
-static const string DATA_USER_ID = "usrId";
+static const string DATA_USER_ID = "uid";
 static const string DATA_TIME = "time";
 static const string DATA_ACTION = "act";
 static const string DATA_MESSAGE = "msg";
+static const string DATA_NAME = "name";
 
 
 /**************************************************/
@@ -50,5 +51,19 @@ static const string JSON_DATA_TYPE = "\"" + DATA_TYPE + "\"";
 static const string JSON_DATA_USER_ID = "\"" + DATA_USER_ID + "\"";
 static const string JSON_DATA_TIME = "\"" + DATA_TIME + "\"";
 static const string JSON_DATA_MESSAGE = "\"" + DATA_MESSAGE + "\"";
+static const string JSON_DATA_NAME = "\"" + DATA_NAME + "\"";
 
+/** NOTIFICATION NAME */
+static const string NAME_WATCHDOG = "watchdog";
+
+/** NOTIFICAITON TYPE AND LEVEL */
+static const string TYPE_ALERT = "alert";
+static const string TYPE_INFO = "info";
+static const string TYPE_ADVERT = "advert";
+static const string TYPE_CONTROL = "control";
+
+static const int LEVEL_ALERT = 400;
+static const int LEVEL_INFO = 300;
+static const int LEVEL_ADVERT = 200;
+static const int LEVEL_CONTROL = 100;
 #endif

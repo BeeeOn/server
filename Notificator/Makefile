@@ -8,7 +8,7 @@ CC=g++
 CFLAGS=-Wall -std=c++98
 LDLIBS=-lcurl
 DEPS=Notification.h
-SOURCES=AdvertNotification.cpp InfoNotification.cpp AlertNotification.cpp Notificator.cpp JsonNotificationBuilder.cpp BaseGcmNotification.cpp VisibleNotification.cpp JsonUtil.cpp ControlNotification.cpp LimitExceededNotification.cpp
+SOURCES=AdvertNotification.cpp InfoNotification.cpp AlertNotification.cpp Notificator.cpp JsonNotificationBuilder.cpp BaseNotification.cpp VisibleNotification.cpp JsonUtil.cpp ControlNotification.cpp WatchdogNotif.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 EXEC=main
 

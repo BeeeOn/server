@@ -8,9 +8,8 @@
 #include "VisibleNotification.h"
 
 VisibleNotification::VisibleNotification(string name, int userId, 
-    int notificationId, vector<string> gcmIds, long time, 
-    string message)
-: BaseGcmNotification(name, userId, notificationId, gcmIds, time),
+    int notificationId, long time, string message)
+: BaseNotification(name, userId, notificationId, time),
 mMessage(message) {
 }
 
@@ -19,19 +18,15 @@ string VisibleNotification::getMessage() {
 }
 
 string VisibleNotification::getUserId() {
-    return BaseGcmNotification::getUserId();
+    return BaseNotification::getUserId();
 }
 
 string VisibleNotification::getId() {
-    return BaseGcmNotification::getId();
-}
-
-string VisibleNotification::getGcmIds() {
-    return BaseGcmNotification::getGcmIds();
+    return BaseNotification::getId();
 }
 
 string VisibleNotification::getTime() {
-    return BaseGcmNotification::getTime();
+    return BaseNotification::getTime();
 }
 
 VisibleNotification::~VisibleNotification() {

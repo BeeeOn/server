@@ -1,14 +1,14 @@
 #include "ControlNotification.h"
+#include "Constants.h"
 
 using namespace std;
 
 
 
 ControlNotification::ControlNotification(string name, int userId,
-    int notificationId, vector<string> gcmIds, long time)
-: BaseGcmNotification(name, userId, notificationId, gcmIds, time),
-  TYPE_CONTROL("control"), LEVEL_CONTROL(100){
-
+    int notificationId, long time)
+: BaseNotification(name, userId, notificationId, time)
+{
 }
 
 int ControlNotification::getLevel() {

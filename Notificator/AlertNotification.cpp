@@ -6,12 +6,11 @@
  */
 
 #include "AlertNotification.h"
+#include "Constants.h"
 
 AlertNotification::AlertNotification(string name, int userId, 
-    int notificationId, vector<string> gcmIds, long time, 
-    string message)
-: VisibleNotification(name, userId, notificationId, gcmIds, 
-    time, message), TYPE_ALERT("alert"), LEVEL_ALERT(400)
+    int notificationId, long time, string message)
+: VisibleNotification(name, userId, notificationId, time, message)
 {
 
 }

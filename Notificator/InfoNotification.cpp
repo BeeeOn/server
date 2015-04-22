@@ -6,11 +6,12 @@
  */
 
 #include "InfoNotification.h"
+#include "Constants.h"
 
 InfoNotification::InfoNotification(string name, int userId, int notificationId,
-        vector<string> gcmIds, long time, string message)
-: VisibleNotification(name, userId, notificationId, gcmIds, time, message),
-TYPE_INFO("info"), LEVEL_INFO(300) {
+        long time, string message)
+: VisibleNotification(name, userId, notificationId, time, message)
+{
 }
 
 string InfoNotification::getType() {
@@ -30,9 +31,7 @@ string InfoNotification::getUserId() {
 string InfoNotification::getId() {
     return VisibleNotification::getId();
 }
-string InfoNotification::getGcmIds() {
-    return VisibleNotification::getGcmIds();
-}
+
 string InfoNotification::getTime() {
     return VisibleNotification::getTime();
 }
