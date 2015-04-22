@@ -17,8 +17,8 @@ public:
     virtual ~MsgInAlgorithmsRedirect();
     virtual int getMsgAuthorization();
 
-    virtual string createResponseMsgOut();
-    static const string state;
+    virtual std::string createResponseMsgOut();
+    static const std::string state;
 
 };
 

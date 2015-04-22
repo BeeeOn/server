@@ -27,6 +27,7 @@ public:
     int getActivityPort();
     int getNotifyPort();
     int getAlgorithmPort();
+    int getGamificationPort();
     int getVerbosity();
     
     std::string getDBConnectionString();
@@ -47,6 +48,7 @@ private:
     int _activityPort;
     int _notifyPort;
     int _algorithmPort;
+    int _gamificationPort;
     int _verbosity;
     
     std::string _connectionString;

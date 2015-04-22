@@ -42,6 +42,7 @@ void Config::loadXml(std::string file) {
     
     _activityPort = _doc.child(CONFIG_ROOT).child(SERVER_NODE).attribute("activityPort").as_int();
     _algorithmPort = _doc.child(CONFIG_ROOT).child(SERVER_NODE).attribute("algorithmPort").as_int();
+    _gamificationPort = _doc.child(CONFIG_ROOT).child(SERVER_NODE).attribute("gamificationPort").as_int();
     _verbosity = _doc.child(CONFIG_ROOT).child(SERVER_NODE).attribute("verbosity").as_int(10);//10 = max verbosity
     
     _connectionString = _doc.child(CONFIG_ROOT).child(DB_NODE).attribute("connectionString").as_string(DEFAULT_DB_CONNECTION_STRING);
@@ -70,6 +71,10 @@ int Config::getNotifyPort() {
 
 int Config::getAlgorithmPort() {
     return _algorithmPort;
+}
+
+int Config::getGamificationPort() {
+    return _gamificationPort;
 }
 
 
