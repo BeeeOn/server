@@ -1,7 +1,9 @@
 #ifndef NOTIFICATOR_H
 #define NOTIFICATOR_H
 
-#include "Notification.h"
+#include <string>
+
+using namespace std;
 
 const static char* GCM_SERVER = "https://android.googleapis.com/gcm/send";
 
@@ -12,14 +14,13 @@ const static char* HEADER_ACCEPT = "Accept:";
 
 class Notificator {
 public:
-    static int sendNotification(Notification &message);
+    static int sendGcm(string json);
 protected:
 private:
     static size_t writeToString(void *ptr, size_t size, size_t count, void *stream);
 
     Notificator() {
     };
-    //        virtual ~Notificator();
 };
 
 #endif // NOTIFICATOR_H

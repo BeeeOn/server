@@ -1,12 +1,9 @@
 #include "Notificator.h"
 
 #include <iostream>
-#include <curl/curl.h> 
+#include <curl/curl.h>
 
-int Notificator::sendNotification(Notification &message) {
-//        cout << message.getJson() << endl;
-  cout << "ahoj" << endl;
-
+int Notificator::sendGcm(string json) {
 
     CURL *curl;
     //CURLcode res;
@@ -19,7 +16,6 @@ int Notificator::sendNotification(Notification &message) {
     curl = curl_easy_init();
 
     string response;
-    string json = message.getJson();
 
     cout << json << endl;
 
@@ -29,16 +25,12 @@ int Notificator::sendNotification(Notification &message) {
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
         curl_easy_setopt(curl, CURLOPT_POSTFIELDS, json.c_str());
         curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, json.length());   
-        /* get verbose debug output*/
         curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
 
         curl_easy_perform(curl);
-
         /* always cleanup */
         curl_easy_cleanup(curl);
     }
-
-
 
     return 0;
 }

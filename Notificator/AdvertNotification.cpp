@@ -6,12 +6,13 @@
  */
 
 #include "AdvertNotification.h"
+#include "Constants.h"
 
 AdvertNotification::AdvertNotification(string name, int userId, 
-    int notificationId, vector<string> gcmIds, long time, 
+    int notificationId, long time, 
     string message) 
-: VisibleNotification(name, userId, notificationId, gcmIds, time, message),
-        TYPE_ADVERT("advert"), LEVEL_ADVERT(200) {
+: VisibleNotification(name, userId, notificationId, time, message)
+{
 }
 
 int AdvertNotification::getLevel() {

@@ -14,23 +14,20 @@
 
 class InfoNotification : public VisibleNotification {
 public:
-    virtual string getJson() = 0;
     virtual string getDbXml() = 0;
     virtual ~InfoNotification();
 
     string getMessage();
     string getUserId();
     string getId();
-    string getGcmIds();
     string getTime();
-    string getType();
     int getLevel();
 protected:
     InfoNotification(string name, int userId, int notificationId,
-            vector<string> gcmIds, long time, string message);
+             long time, string message);
+    virtual string getGcmMsg(string ids) = 0;
+    string getType();
 private:
-    const string TYPE_INFO;
-    const int LEVEL_INFO;
 };
 
 #endif	/* INFONOTIFICATION_H */

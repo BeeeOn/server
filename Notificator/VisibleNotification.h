@@ -9,26 +9,27 @@
 #define	VISIBLENOTIFICATION_H
 
 #include <string>
-#include "BaseGcmNotification.h"
+#include "BaseNotification.h"
 
 using namespace std;
 
-class VisibleNotification : public BaseGcmNotification
+class VisibleNotification : public BaseNotification
 {
 public:
-    virtual string getJson() = 0;
     virtual string getDbXml() = 0;
     virtual int getLevel() = 0;
     virtual ~VisibleNotification();
-    string getMessage();
-    string getUserId();
+    
     string getId();
-    string getGcmIds();
     string getTime();
+    string getUserId();
+
 protected:
     VisibleNotification(string name, int userId, int notificationId, 
-                vector<string> gcmIds, long time, string message);
+                long time, string message);
     virtual string getType() = 0;
+    virtual string getGcmMsg(string ids) = 0;
+    string getMessage();
 
 private:
     string mMessage;
