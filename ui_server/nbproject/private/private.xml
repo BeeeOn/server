@@ -7,23 +7,51 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_logger/Logger.h</file>
-            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/Config.cpp</file>
-            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/Msgs/MsgInDelAdapter.cpp</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/communication.h</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/communication.cpp</file>
             <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/config.xml</file>
             <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/IMsgIn.cpp</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/MsgInGetLog.h</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_logger/MsgInGamificationRedirect.h</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/MsgInSetTimeZone.h</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/IMsgInLoginRequired.h</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/ComTable.h</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/MsgInFactory.h</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_logger/Logger.h</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/DAO/DAOUsersAdapters.cpp</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/Config.cpp</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/MsgInAlgorithmsRedirect.cpp</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/MsgInDelRoom.h</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/MsgInGetRooms.h</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/gTokenChecker.h</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/Msgs/MsgInDelAdapter.cpp</file>
             <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/ui_server.cpp</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/MsgInGetDevices.h</file>
             <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/pugixml.hpp</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/config_devel.xml</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/SocketClient.h</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/MsgInGetConAccount.cpp</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_logger/MsgInGamificationRedirect.cpp</file>
             <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/Config.h</file>
             <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/sslServlet.cpp</file>
             <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/pugixml.cpp</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/ServerException.h</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/DBConnector.h</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/Communicator.h</file>
             <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/Msgs/MsgInDelAdapter.h</file>
             <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/ServerException.cpp</file>
             <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/MsgInFactory.cpp</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/MsgInAlgorithmsRedirect.h</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/MsgInChangeAccount.h</file>
             <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_logger/Logger.cpp</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/MsgInUpdateRooms.h</file>
             <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/DAO/DAODevices.cpp</file>
             <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/IMsgIn.h</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/MsgRightsChecker.h</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/sslServlet.h</file>
             <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/MsgInSetDevices.cpp</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/MsgInGetAccount.h</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/MsgRightsChecker.cpp</file>
         </group>
     </open-files>
 </project-private>

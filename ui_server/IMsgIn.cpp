@@ -43,7 +43,6 @@ t_version IMsgIn::parseProtocolVersion(std::string version) {
     string s;
     
     try{
-
         getline(f, s, '.');
         ver.majorVersion = atoi(s.c_str());
 

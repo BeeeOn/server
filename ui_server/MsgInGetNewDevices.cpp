@@ -7,6 +7,9 @@
 
 #include "MsgInGetNewDevices.h"
 #include "../DAO/DAODevices.h"
+
+using namespace std;
+
 const string MsgInGetNewDevices::state = "getnewdevs";
 
 MsgInGetNewDevices::MsgInGetNewDevices(char* msg, pugi::xml_document* doc) : IMsgInLoginAndAdapterAccessRequired(msg, doc){

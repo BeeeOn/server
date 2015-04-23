@@ -7,7 +7,7 @@
 
 #include "MsgInGamificationRedirect.h"
 #include "Config.h"
-#include "SocketClient.h"
+#include "../SocketClient.h"
 #include "save_custom_writer.h"
 using namespace std;
 MsgInGamificationRedirect::MsgInGamificationRedirect(char* msg, pugi::xml_document* doc): IMsgInLoginRequired(msg, doc){

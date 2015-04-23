@@ -8,6 +8,8 @@
 #include "MsgInGetUserInfo.h"
 #include "../DAO/DAOUsers.h"
 
+using namespace std;
+
 const std::string MsgInGetUserInfo::state = "getuserinfo";
 
 MsgInGetUserInfo::MsgInGetUserInfo(char* msg, pugi::xml_document* doc): IMsgInLoginRequired(msg, doc){

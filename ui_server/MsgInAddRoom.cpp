@@ -11,6 +11,8 @@
 #include "IMsgInLoginRequired.h"
 #include "IMsgInLoginAndAdapterAccessRequired.h"
 
+using namespace std;
+
 const std::string MsgInAddRoom::state = "addroom";
 
 MsgInAddRoom::MsgInAddRoom(char* msg, pugi::xml_document* doc): IMsgInLoginAndAdapterAccessRequired(msg, doc){

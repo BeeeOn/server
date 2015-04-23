@@ -16,8 +16,8 @@ public:
     MsgInReinitAdapter(char* msg, pugi::xml_document* doc);
     virtual ~MsgInReinitAdapter();
 private:
-    string _oldAdapter;
-    string _newAdapter;
+    std::string _oldAdapter;
+    std::string _newAdapter;
 };
 
 #endif	/* MSGINREINIT_H */

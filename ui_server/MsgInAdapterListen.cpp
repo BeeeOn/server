@@ -9,6 +9,7 @@
 #include "MsgInAdapterListen.h"
 #include "Config.h"
 
+using namespace std;
 const std::string MsgInAdapterListen::state = "scanmode";
 
 MsgInAdapterListen::MsgInAdapterListen(char* msg, pugi::xml_document* doc) : IMsgInLoginAndAdapterAccessRequired(msg, doc) {

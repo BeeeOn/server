@@ -8,6 +8,8 @@
 #include "MsgInSwitch.h"
 #include "Config.h"
 
+using namespace std;
+
 const string MsgInSwitch::state = "switch";
 MsgInSwitch::MsgInSwitch(char* msg, pugi::xml_document* doc) : IMsgInLoginAndAdapterAccessRequired(msg, doc) {
 }

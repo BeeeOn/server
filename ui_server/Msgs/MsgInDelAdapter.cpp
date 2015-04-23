@@ -6,6 +6,9 @@
  */
 
 #include "MsgInDelAdapter.h"
+#include "../DAO/DAOAdapters.h"
+
+using namespace std;
 
 const string MsgInDelAdapter::state = "deladapter";
 
@@ -20,8 +23,15 @@ int MsgInDelAdapter::getMsgAuthorization() {
 }
 
 string MsgInDelAdapter::createResponseMsgOut() {
-    
-    return "";
+    if(_role != "superuser")
+    {
+        if (DAOAdapters::getInstance().delUsersAdapter(_adapterId, _userId) > 0)
+        {
+            return genOutputXMLwithVersionAndState(R_TRUE);
+        }
+    }
+    _outputMainNode.append_attribute(P_ERRCODE) = ServerException::ROLE;
+    return genOutputXMLwithVersionAndState(R_FALSE);
 }
 
 

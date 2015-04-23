@@ -1,5 +1,6 @@
 #include "MsgInGetAdapters.h"
 
+using namespace std;
 
 const std::string MsgInGetAdapters::state = "getadapters";
 

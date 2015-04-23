@@ -9,6 +9,8 @@
 #include "../DAO/DAOMobileDevices.h"
 #include "../DAO/DAORooms.h"
 #include "../DAO/DAOUsersAdapters.h"
+#include "../DAO/DAONotification.h"
+
 #include "SocketServer.h"
 // uncoment if you want print debug reports
 //#define DEBUG 1
@@ -91,14 +93,19 @@ int main(int argc, char** argv)
 
    // ComTable::getInstance().startComTableCleaner(Config::getInstance().getComTableSleepPeriodMs(), Config::getInstance().getComTableMaxInactivityMs() );
     try{      
-        Logger::debug()<< "setting connection to DB..."<< endl;
-        DBConnector::getInstance().setConnectionStringAndOpenSessions( Config::getInstance().getDBConnectionString() , Config::getInstance().getDBSessionsNumber());
-        DAOUsers::getInstance().setConnectionStringAndOpenSessions(Config::getInstance().getDBConnectionString(), 2);
-        DAOAdapters::getInstance().setConnectionStringAndOpenSessions(Config::getInstance().getDBConnectionString(), 2);
-        DAODevices::getInstance().setConnectionStringAndOpenSessions(Config::getInstance().getDBConnectionString(), 2);
-        DAORooms::getInstance().setConnectionStringAndOpenSessions(Config::getInstance().getDBConnectionString(), 2);
-        DAOMobileDevices::getInstance().setConnectionStringAndOpenSessions(Config::getInstance().getDBConnectionString(), 3);
-        DAOUsersAdapters::getInstance().setConnectionStringAndOpenSessions(Config::getInstance().getDBConnectionString(), 2);
+        Logger::debug()<< "setting connections to DB..."<< endl;
+        
+        string conString = Config::getInstance().getDBConnectionString();
+        
+        DBConnector::getInstance().setConnectionStringAndOpenSessions( conString , Config::getInstance().getDBSessionsNumber());
+        DAOUsers::getInstance().setConnectionStringAndOpenSessions(conString, 2);
+        DAOAdapters::getInstance().setConnectionStringAndOpenSessions(conString, 2);
+        DAODevices::getInstance().setConnectionStringAndOpenSessions(conString, 2);
+        DAORooms::getInstance().setConnectionStringAndOpenSessions(conString, 2);
+        DAOMobileDevices::getInstance().setConnectionStringAndOpenSessions(conString, 3);
+        DAOUsersAdapters::getInstance().setConnectionStringAndOpenSessions(conString, 2);
+        DAONotification::getInstance().setConnectionStringAndOpenSessions(conString, 2);
+        
         Logger::debug()<< "connection to DB is set"<< endl;
     }
     catch (soci::soci_error const & e)

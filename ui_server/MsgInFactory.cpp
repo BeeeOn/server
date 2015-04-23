@@ -32,9 +32,14 @@
 #include "MsgInSetGCMID.h"
 #include "MsgInDelGCMID.h"
 #include "MsgInAlgorithmsRedirect.h"
+#include "Msgs/MsgInGamificationRedirect.h"
+#include "Msgs/MsgInGetNotifications.h"
+#include "Msgs/MsgInNotificationRead.h"
 #include "MsgInGetUserID.h"
 #include "MsgInGetUserInfo.h"
 #include "Msgs/MsgInSignUp.h"
+#include "Msgs/MsgInDelAdapter.h"
+
 #include <algorithm> 
 
 MsgInFactory::MsgInFactory(void)
@@ -144,6 +149,20 @@ IMsgIn* MsgInFactory::createMsg(char* msg)
     
     if(std::find(algMsgs.begin(), algMsgs.end(), state)!=algMsgs.end())
         return new MsgInAlgorithmsRedirect(msg, doc);
+    
+    vector<string> gamiMsgs = {"getallachievements","setprogresslvl"};
+    
+    if(std::find(gamiMsgs.begin(), gamiMsgs.end(), state) != gamiMsgs.end())
+        return new MsgInGamificationRedirect(msg, doc);
+    
+    if(state == MsgInGetNotifications::state)
+        return new MsgInGetNotifications(msg, doc);
+    
+    if(state == MsgInNotificationRead::state)
+        return new MsgInNotificationRead(msg, doc);    
+    if(state == MsgInDelAdapter::state)
+        return new MsgInDelAdapter(msg, doc);
+    
     else{
         Logger::getInstance(Logger::ERROR)<<"UNKNOWN MSG"<<endl;
         return new MsgInUnknown(msg,doc);

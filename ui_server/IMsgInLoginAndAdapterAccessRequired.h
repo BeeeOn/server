@@ -19,7 +19,7 @@ public:
     
     virtual enumAccessStatus checkAccess();
 
-    string _role;
+    std::string _role;
     
 };
 

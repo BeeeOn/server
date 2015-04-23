@@ -10,7 +10,7 @@
 
 #include <soci.h>
 #include <postgresql/soci-postgresql.h>
-
+#include "../ui_logger/Logger.h"
 class DAO {
 public:
     virtual void setConnectionStringAndOpenSessions(std::string conString, int sessionPoolSize);

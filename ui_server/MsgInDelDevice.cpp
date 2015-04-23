@@ -7,6 +7,7 @@
 
 #include "MsgInDelDevice.h"
 #include "Config.h"
+using namespace std;
 const string MsgInDelDevice::state = "deldev";
 MsgInDelDevice::MsgInDelDevice(char* msg, pugi::xml_document* doc) : IMsgInLoginAndAdapterAccessRequired(msg, doc)  {
 }

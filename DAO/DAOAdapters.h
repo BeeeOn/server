@@ -26,6 +26,7 @@ public:
     std::string getTimeZone(std::string adapterId);
     
     void updateAdaptersTimezone(std::string adapterId,  std::string newTimeZone);
+    int delUsersAdapter(std::string adapterId, int userId);
 };
 
 #endif	/* DAOADAPTERS_H */

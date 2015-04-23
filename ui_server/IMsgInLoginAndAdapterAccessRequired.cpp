@@ -8,7 +8,7 @@
 #include "IMsgInLoginAndAdapterAccessRequired.h"
 #include "../DAO/DAOUsers.h"
 
-
+using namespace std;
 
 IMsgInLoginAndAdapterAccessRequired::IMsgInLoginAndAdapterAccessRequired(char* msg, pugi::xml_document* doc) : IMsgInLoginRequired(msg, doc) {
 }
@@ -23,7 +23,7 @@ enumAccessStatus IMsgInLoginAndAdapterAccessRequired::checkAccess(){
         return FORBIDDEN_NOT_LOGGED;
     
     //TODO přístup do paměti bez try catch, ale je to mimo kontruktor, tak mozna to je OK
-    string role = DAOUsers::getInstance().getUserRoleM(_userId, _adapterId);
+    std::string role = DAOUsers::getInstance().getUserRoleM(_userId, _adapterId);
     
     int roleId;
     if(role == P_ROLE_GUEST)

@@ -17,7 +17,7 @@ public:
     MsgInDelAdapter(char* msg, pugi::xml_document* doc);
     virtual ~MsgInDelAdapter();
     
-    virtual string createResponseMsgOut();
+    virtual std::string createResponseMsgOut();
     virtual int getMsgAuthorization();
     static const std::string state;
  

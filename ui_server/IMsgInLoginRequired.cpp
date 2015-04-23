@@ -8,6 +8,8 @@
 #include "IMsgInLoginRequired.h"
 #include "../DAO/DAOUsers.h"
 
+using namespace std;
+
 IMsgInLoginRequired::IMsgInLoginRequired(char* msg, pugi::xml_document* doc): IMsgIn(msg, doc) {
     
 }

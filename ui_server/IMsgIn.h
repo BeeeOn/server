@@ -94,6 +94,7 @@
 #define R_LOG "logdata"
 #define R_BEEEON_TOKEN "bt"
 #define R_USER_INFO "userinfo"
+#define R_NOTIFICATIONS "notifs"
 
 #define EVERYONE 1
 #define GUEST 2

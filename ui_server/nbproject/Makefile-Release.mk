@@ -39,11 +39,11 @@ OBJECTFILES= \
 	${OBJECTDIR}/_ext/1360890531/DAOAdapters.o \
 	${OBJECTDIR}/_ext/1360890531/DAODevices.o \
 	${OBJECTDIR}/_ext/1360890531/DAOMobileDevices.o \
+	${OBJECTDIR}/_ext/1360890531/DAONotification.o \
 	${OBJECTDIR}/_ext/1360890531/DAORooms.o \
 	${OBJECTDIR}/_ext/1360890531/DAOUsers.o \
 	${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters.o \
 	${OBJECTDIR}/_ext/1154895860/Logger.o \
-	${OBJECTDIR}/_ext/1154895860/MsgInGamificationRedirect.o \
 	${OBJECTDIR}/ComTable.o \
 	${OBJECTDIR}/Config.o \
 	${OBJECTDIR}/DBConnector.o \
@@ -86,6 +86,9 @@ OBJECTFILES= \
 	${OBJECTDIR}/MsgInUpdateView.o \
 	${OBJECTDIR}/MsgRightsChecker.o \
 	${OBJECTDIR}/Msgs/MsgInDelAdapter.o \
+	${OBJECTDIR}/Msgs/MsgInGamificationRedirect.o \
+	${OBJECTDIR}/Msgs/MsgInGetNotifications.o \
+	${OBJECTDIR}/Msgs/MsgInNotificationRead.o \
 	${OBJECTDIR}/Msgs/MsgInSignUp.o \
 	${OBJECTDIR}/ServerException.o \
 	${OBJECTDIR}/SocketClient.o \
@@ -179,6 +182,11 @@ ${OBJECTDIR}/_ext/1360890531/DAOMobileDevices.o: ../DAO/DAOMobileDevices.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOMobileDevices.o ../DAO/DAOMobileDevices.cpp
 
+${OBJECTDIR}/_ext/1360890531/DAONotification.o: ../DAO/DAONotification.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAONotification.o ../DAO/DAONotification.cpp
+
 ${OBJECTDIR}/_ext/1360890531/DAORooms.o: ../DAO/DAORooms.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
 	${RM} "$@.d"
@@ -198,11 +206,6 @@ ${OBJECTDIR}/_ext/1154895860/Logger.o: ../ui_logger/Logger.cpp
 	${MKDIR} -p ${OBJECTDIR}/_ext/1154895860
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1154895860/Logger.o ../ui_logger/Logger.cpp
-
-${OBJECTDIR}/_ext/1154895860/MsgInGamificationRedirect.o: ../ui_logger/MsgInGamificationRedirect.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1154895860
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1154895860/MsgInGamificationRedirect.o ../ui_logger/MsgInGamificationRedirect.cpp
 
 ${OBJECTDIR}/ComTable.o: ComTable.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -413,6 +416,21 @@ ${OBJECTDIR}/Msgs/MsgInDelAdapter.o: Msgs/MsgInDelAdapter.cpp
 	${MKDIR} -p ${OBJECTDIR}/Msgs
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Msgs/MsgInDelAdapter.o Msgs/MsgInDelAdapter.cpp
+
+${OBJECTDIR}/Msgs/MsgInGamificationRedirect.o: Msgs/MsgInGamificationRedirect.cpp 
+	${MKDIR} -p ${OBJECTDIR}/Msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Msgs/MsgInGamificationRedirect.o Msgs/MsgInGamificationRedirect.cpp
+
+${OBJECTDIR}/Msgs/MsgInGetNotifications.o: Msgs/MsgInGetNotifications.cpp 
+	${MKDIR} -p ${OBJECTDIR}/Msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Msgs/MsgInGetNotifications.o Msgs/MsgInGetNotifications.cpp
+
+${OBJECTDIR}/Msgs/MsgInNotificationRead.o: Msgs/MsgInNotificationRead.cpp 
+	${MKDIR} -p ${OBJECTDIR}/Msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Msgs/MsgInNotificationRead.o Msgs/MsgInNotificationRead.cpp
 
 ${OBJECTDIR}/Msgs/MsgInSignUp.o: Msgs/MsgInSignUp.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Msgs
@@ -1023,6 +1041,19 @@ ${OBJECTDIR}/_ext/1360890531/DAOMobileDevices_nomain.o: ${OBJECTDIR}/_ext/136089
 	    ${CP} ${OBJECTDIR}/_ext/1360890531/DAOMobileDevices.o ${OBJECTDIR}/_ext/1360890531/DAOMobileDevices_nomain.o;\
 	fi
 
+${OBJECTDIR}/_ext/1360890531/DAONotification_nomain.o: ${OBJECTDIR}/_ext/1360890531/DAONotification.o ../DAO/DAONotification.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/_ext/1360890531/DAONotification.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAONotification_nomain.o ../DAO/DAONotification.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/_ext/1360890531/DAONotification.o ${OBJECTDIR}/_ext/1360890531/DAONotification_nomain.o;\
+	fi
+
 ${OBJECTDIR}/_ext/1360890531/DAORooms_nomain.o: ${OBJECTDIR}/_ext/1360890531/DAORooms.o ../DAO/DAORooms.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/_ext/1360890531/DAORooms.o`; \
@@ -1073,19 +1104,6 @@ ${OBJECTDIR}/_ext/1154895860/Logger_nomain.o: ${OBJECTDIR}/_ext/1154895860/Logge
 	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1154895860/Logger_nomain.o ../ui_logger/Logger.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/_ext/1154895860/Logger.o ${OBJECTDIR}/_ext/1154895860/Logger_nomain.o;\
-	fi
-
-${OBJECTDIR}/_ext/1154895860/MsgInGamificationRedirect_nomain.o: ${OBJECTDIR}/_ext/1154895860/MsgInGamificationRedirect.o ../ui_logger/MsgInGamificationRedirect.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1154895860
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/_ext/1154895860/MsgInGamificationRedirect.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1154895860/MsgInGamificationRedirect_nomain.o ../ui_logger/MsgInGamificationRedirect.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/_ext/1154895860/MsgInGamificationRedirect.o ${OBJECTDIR}/_ext/1154895860/MsgInGamificationRedirect_nomain.o;\
 	fi
 
 ${OBJECTDIR}/ComTable_nomain.o: ${OBJECTDIR}/ComTable.o ComTable.cpp 
@@ -1632,6 +1650,45 @@ ${OBJECTDIR}/Msgs/MsgInDelAdapter_nomain.o: ${OBJECTDIR}/Msgs/MsgInDelAdapter.o 
 	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Msgs/MsgInDelAdapter_nomain.o Msgs/MsgInDelAdapter.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/Msgs/MsgInDelAdapter.o ${OBJECTDIR}/Msgs/MsgInDelAdapter_nomain.o;\
+	fi
+
+${OBJECTDIR}/Msgs/MsgInGamificationRedirect_nomain.o: ${OBJECTDIR}/Msgs/MsgInGamificationRedirect.o Msgs/MsgInGamificationRedirect.cpp 
+	${MKDIR} -p ${OBJECTDIR}/Msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/Msgs/MsgInGamificationRedirect.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Msgs/MsgInGamificationRedirect_nomain.o Msgs/MsgInGamificationRedirect.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/Msgs/MsgInGamificationRedirect.o ${OBJECTDIR}/Msgs/MsgInGamificationRedirect_nomain.o;\
+	fi
+
+${OBJECTDIR}/Msgs/MsgInGetNotifications_nomain.o: ${OBJECTDIR}/Msgs/MsgInGetNotifications.o Msgs/MsgInGetNotifications.cpp 
+	${MKDIR} -p ${OBJECTDIR}/Msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/Msgs/MsgInGetNotifications.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Msgs/MsgInGetNotifications_nomain.o Msgs/MsgInGetNotifications.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/Msgs/MsgInGetNotifications.o ${OBJECTDIR}/Msgs/MsgInGetNotifications_nomain.o;\
+	fi
+
+${OBJECTDIR}/Msgs/MsgInNotificationRead_nomain.o: ${OBJECTDIR}/Msgs/MsgInNotificationRead.o Msgs/MsgInNotificationRead.cpp 
+	${MKDIR} -p ${OBJECTDIR}/Msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/Msgs/MsgInNotificationRead.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Msgs/MsgInNotificationRead_nomain.o Msgs/MsgInNotificationRead.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/Msgs/MsgInNotificationRead.o ${OBJECTDIR}/Msgs/MsgInNotificationRead_nomain.o;\
 	fi
 
 ${OBJECTDIR}/Msgs/MsgInSignUp_nomain.o: ${OBJECTDIR}/Msgs/MsgInSignUp.o Msgs/MsgInSignUp.cpp 

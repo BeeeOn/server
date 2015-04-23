@@ -19,7 +19,7 @@ class MsgInGetTimeZone : public IMsgInLoginRequired{
         
         virtual int getMsgAuthorization();
         
-        virtual string createResponseMsgOut();
+        virtual std::string createResponseMsgOut();
         
         static const std::string state;
         private:

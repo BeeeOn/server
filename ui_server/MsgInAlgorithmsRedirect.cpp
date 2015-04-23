@@ -10,6 +10,8 @@
 #include "SocketClient.h"
 #include "save_custom_writer.h"
 
+using namespace std;
+
 const std::string MsgInAlgorithmsRedirect::state = "algo";
 
 MsgInAlgorithmsRedirect::MsgInAlgorithmsRedirect(char* msg, pugi::xml_document* doc): IMsgInLoginRequired(msg, doc)  {

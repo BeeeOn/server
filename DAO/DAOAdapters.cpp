@@ -32,7 +32,7 @@ int DAOAdapters::parAdapterWithUserIfPossible(long long int adapterId, std::stri
        
         
         string role = "superuser";
-         statement st = (sql.prepare <<  "insert into users_adapters(fk_adapter_id, fk_user_id, role) select :a_id , :gId, :role where not exists (select 1 from users_Adapters where fk_adapter_id=:a_id)",// where fk_adapter_id=:a_id)
+        statement st = (sql.prepare <<  "insert into users_adapters(fk_adapter_id, fk_user_id, role) select :a_id , :gId, :role where not exists (select 1 from users_Adapters where fk_adapter_id=:a_id)",// where fk_adapter_id=:a_id)
                 use(adapterId, "a_id"), use(role, "role"),  use(userId, "gId"));
         st.execute(true);
         
@@ -100,6 +100,27 @@ void DAOAdapters::updateAdaptersTimezone(string adapterId,  string newTimeZone){
         string xml;
         sql <<"update adapters set timezone = :timezone where adapter_id = :adapter"
                 ,use(newTimeZone, "timezone"),use(adapterId,"adapter");             
+    }
+    catch (soci::postgresql_soci_error& e)
+    {
+        Logger::getInstance(Logger::ERROR) << "Error: " << e.what() << '\n';
+        throw;
+    }
+}
+
+int DAOAdapters::delUsersAdapter(std::string adapterId, int userId) {
+    Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"delUsersAdapter" << endl;
+    try{
+        soci::session sql(*_pool);
+        
+        string xml;
+        statement st = (sql.prepare <<  
+        "delete from users_adapters where fk_adapter_id = :adapter and fk_user_id = :user_id and role != 'superuser' "
+                ,use(userId, "user_id"),use(adapterId,"adapter"));         
+        st.execute(true);
+        
+        int deleteCount = st.get_affected_rows();
+        return deleteCount;
     }
     catch (soci::postgresql_soci_error& e)
     {

@@ -34,7 +34,7 @@ private:
     
 };
 
-class SocketClientException : public runtime_error {
+class SocketClientException : public std::runtime_error {
 public:
     //SocketClientException(int errCode);
     SocketClientException(std::string errText);

@@ -8,6 +8,7 @@
 #include "MsgInGetViews.h"
 #include "DBConnector.h"
 
+using namespace std;
 
 const std::string MsgInGetViews::state = "getviews";
 

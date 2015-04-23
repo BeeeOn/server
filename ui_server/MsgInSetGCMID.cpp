@@ -8,6 +8,7 @@
 #include "MsgInSetGCMID.h"
 #include "../DAO/DAOMobileDevices.h"
 
+using namespace std;
 
 const std::string MsgInSetGCMID::state = "setgcmid";
 

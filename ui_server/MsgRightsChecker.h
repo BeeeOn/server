@@ -28,8 +28,8 @@ public:
     bool checkRights(IMsgInLoginAndAdapterAccessRequired& msg);
     
 private:
-    std::map<string,int> _msgRightsTable;
-    std::map<string,int> _rightsTable;
+    std::map<std::string,int> _msgRightsTable;
+    std::map<std::string,int> _rightsTable;
 };
 
 #endif	/* MSGRIGHTSCHECKER_H */

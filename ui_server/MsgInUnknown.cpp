@@ -8,6 +8,8 @@
 #include "MsgInUnknown.h"
 #include "ServerException.h"
 
+using namespace std;
+
 const std::string MsgInUnknown::state = "";
 
 MsgInUnknown::MsgInUnknown(char* msg, pugi::xml_document* doc): IMsgInLoginUnwanted(msg, doc){

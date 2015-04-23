@@ -76,6 +76,8 @@
         <itemPath>../DAO/DAODevices.h</itemPath>
         <itemPath>../DAO/DAOMobileDevices.cpp</itemPath>
         <itemPath>../DAO/DAOMobileDevices.h</itemPath>
+        <itemPath>../DAO/DAONotification.cpp</itemPath>
+        <itemPath>../DAO/DAONotification.h</itemPath>
         <itemPath>../DAO/DAORooms.cpp</itemPath>
         <itemPath>../DAO/DAORooms.h</itemPath>
         <itemPath>../DAO/DAOUsers.cpp</itemPath>
@@ -111,6 +113,10 @@
       <logicalFolder name="f11" displayName="notif" projectFiles="true">
         <itemPath>MsgInDelGCMID.cpp</itemPath>
         <itemPath>MsgInDelGCMID.h</itemPath>
+        <itemPath>Msgs/MsgInGetNotifications.cpp</itemPath>
+        <itemPath>Msgs/MsgInGetNotifications.h</itemPath>
+        <itemPath>Msgs/MsgInNotificationRead.cpp</itemPath>
+        <itemPath>Msgs/MsgInNotificationRead.h</itemPath>
         <itemPath>MsgInSetGCMID.cpp</itemPath>
         <itemPath>MsgInSetGCMID.h</itemPath>
       </logicalFolder>
@@ -119,8 +125,8 @@
                      projectFiles="true">
         <itemPath>MsgInAlgorithmsRedirect.cpp</itemPath>
         <itemPath>MsgInAlgorithmsRedirect.h</itemPath>
-        <itemPath>../ui_logger/MsgInGamificationRedirect.cpp</itemPath>
-        <itemPath>../ui_logger/MsgInGamificationRedirect.h</itemPath>
+        <itemPath>Msgs/MsgInGamificationRedirect.cpp</itemPath>
+        <itemPath>Msgs/MsgInGamificationRedirect.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f3" displayName="sign_reg_adapters" projectFiles="true">
         <itemPath>MsgInAddAdapter.cpp</itemPath>
@@ -681,6 +687,10 @@
       </item>
       <item path="../DAO/DAOMobileDevices.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="../DAO/DAONotification.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAONotification.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="../DAO/DAORooms.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../DAO/DAORooms.h" ex="false" tool="3" flavor2="0">
@@ -696,16 +706,6 @@
       <item path="../ui_logger/Logger.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../ui_logger/Logger.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../ui_logger/MsgInGamificationRedirect.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="../ui_logger/MsgInGamificationRedirect.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
       </item>
       <item path="ComTable.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -884,6 +884,18 @@
       <item path="Msgs/MsgInDelAdapter.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Msgs/MsgInDelAdapter.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Msgs/MsgInGamificationRedirect.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Msgs/MsgInGamificationRedirect.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Msgs/MsgInGetNotifications.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Msgs/MsgInGetNotifications.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Msgs/MsgInNotificationRead.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Msgs/MsgInNotificationRead.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Msgs/MsgInSignUp.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -1703,6 +1715,10 @@
       </item>
       <item path="../DAO/DAOMobileDevices.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="../DAO/DAONotification.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAONotification.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="../DAO/DAORooms.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../DAO/DAORooms.h" ex="false" tool="3" flavor2="0">
@@ -1718,16 +1734,6 @@
       <item path="../ui_logger/Logger.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../ui_logger/Logger.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../ui_logger/MsgInGamificationRedirect.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="../ui_logger/MsgInGamificationRedirect.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
       </item>
       <item path="ComTable.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -1906,6 +1912,18 @@
       <item path="Msgs/MsgInDelAdapter.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Msgs/MsgInDelAdapter.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Msgs/MsgInGamificationRedirect.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Msgs/MsgInGamificationRedirect.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Msgs/MsgInGetNotifications.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Msgs/MsgInGetNotifications.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Msgs/MsgInNotificationRead.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Msgs/MsgInNotificationRead.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Msgs/MsgInSignUp.cpp" ex="false" tool="1" flavor2="0">
       </item>

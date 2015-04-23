@@ -10,6 +10,7 @@
 #include "DBConnector.h"
 #include "IMsgInLoginUnwanted.h"
 
+using namespace std;
 
 const std::string MsgInDelGCMID::state = "delgcmid";
 

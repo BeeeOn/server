@@ -14,7 +14,7 @@ class MsgInGetUserInfo: public IMsgInLoginRequired {
 public:
     MsgInGetUserInfo(char* msg, pugi::xml_document* doc);;
     virtual ~MsgInGetUserInfo();
-    virtual string createResponseMsgOut();
+    virtual std::string createResponseMsgOut();
     virtual int getMsgAuthorization();
     static const std::string state;
 
