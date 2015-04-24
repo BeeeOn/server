@@ -151,8 +151,9 @@ int main(int argc, char** argv)
     //return 0;
         
         resolveMsg( "<com ver=\"2.4\"  state=\"getadapters\" email=\"new22@gmail.com\" gid=\"1111\" gt=\"1\" pid=\"11\" loc=\"cs\" />");
-        resolveMsg( "<com ver=\"1.3\"  state=\"getadapters\" email=\"new22@gmail.com\" gid=\"1111\" gt=\"1\" pid=\"111\" loc=\"cs\" />");
+        resolveMsg( "<com ver=\"2.5\"  state=\"getadapters\" email=\"new22@gmail.com\" gid=\"1111\" gt=\"1\" pid=\"111\" loc=\"cs\" />");
         resolveMsg( "<com ver=\"1.3\"  state=\"getadapters\" email=\"new33@gmail.com\" gid=\"11111\" gt=\"1\" pid=\"11111\"  loc=\"cs\" />");
+    resolveMsg( "<com ver=\"2.4\" state=\"signup\" srv=\"facebook\"><par fbt=\"CAAMVd7mjduYBAKsnl5i2iJljZAG1A6PDraitTxF2v91iDDoOwZA5uOSxYCpo2a0WZC7ZB8I8n3hXEFrgBBZCEoO6HZAtENfNO72n8DmZAYdVYknltIY50g1ACzkhPavWnCtOkGBdD68VnwnfhLtZA00SjWw9QiZCzjg09ZBVKPSZBPqKZAGFDawZAWZBV82KWiCp4uMruh5AiBcs5ihHTsENM0d5CfGx0bfEwo0F7IIGHOUGv0IJYSZBOZCmZANPc\" /></com>");
 
        // resolveMsg( "<com ver=\"2.3\"  state=\"getuid\" email=\"newww@gmail.com\" gid=\"33\" gt=\"1\" pid=\"34\" loc=\"cs\" />");
        

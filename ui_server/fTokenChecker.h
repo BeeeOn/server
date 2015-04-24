@@ -16,4 +16,6 @@ struct facebookInfo {
     bool verified;
 };
 
+bool isFTokenOkay(string fToken, facebookInfo &fInfo);
+
 #endif

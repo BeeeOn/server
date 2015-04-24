@@ -13,19 +13,20 @@
 #include "DAOMobileDevices.h"
 struct User
 {
-    int user_id;
-    std::string mail;
-    std::string password;
-   std:: string phoneLocale;
-   int verifiedMail;
-   std::string name;
+   int user_id;
+   std::string mail;
+   std::string passwordMd5;
+   //std:: string phoneLocale;
+   //int verifiedMail;
+   //std::string name;
    std::string givenName;
    std::string familyName;
-   std::string link;
+   //std::string link;
    std::string picture;
    std::string gender;
-   std::string googleLocale;
-  std::string googleId;
+   //std::string googleLocale;
+   std::string googleId;
+   std::string facebookId;
 };
 
 class DAOUsers:public DAO{
@@ -39,7 +40,7 @@ public:
     
     int add(User user);
     int getUserIdbyIhaToken(std::string token);
-    int getUserIDbyAlternativeKeys(std::string mail, std::string google_id, std::string name);
+    int getUserIDbyAlternativeKeys(std::string mail, std::string google_id, std::string facebook_id);
     int upsertUserWithMobileDevice(User user, MobileDevice mobile);
     bool isMailRegistred(std::string mail);
     bool isNameRegistred(std::string name);

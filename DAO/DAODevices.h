@@ -25,11 +25,28 @@ public:
     static DAODevices& getInstance();
     ~DAODevices(void);
     
-    
-    std::string getXMLAllDevs(std::string adapter);
+    /**
+     * 
+     * @param adapterId
+     * @return XML string with all devices on adapter
+     */
+    std::string getXMLAllDevs(std::string adapterId);
     std::string getXMLdevices(int userId, std::vector<std::string> adaptersVec, std::vector<device> devicesVec);
+    /**
+     * 
+     * @param adapterId
+     * @return XML string with devices on adapter which is not initialized 
+     */
     std::string getXMLNewDevices(std::string adapterId);
-
+    /**
+     * 
+     * @param adapterId
+     * @param id
+     * @param type
+     * @param name
+     * @param visibility
+     * @return number of updated rows in DB (0 or 1)
+     */
     int updateDevice(std::string adapterId, std::string id, std::string type, std::string name, std::string visibility);
     std::string getXMLDeviceLog(std::string adapterId, device device, std::string logFrom, std::string logTo, std::string dataType, std::string interval);
     int updateFacility(std::string adapterId, std::string id, std::string init, std::string locationId, std::string refresh) ;

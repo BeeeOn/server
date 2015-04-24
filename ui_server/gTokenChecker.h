@@ -3,8 +3,6 @@
 #include <string>
 
 
-
-
 struct googleInfo {
     std::string id;
     std::string email;

@@ -13,7 +13,6 @@ MsgInSignUp::MsgInSignUp(char* msg, pugi::xml_document* doc): IMsgInLoginUnwante
 {
 }
 
-
 MsgInSignUp::~MsgInSignUp(void)
 {
 }
@@ -33,7 +32,7 @@ string MsgInSignUp::createResponseMsgOut()
     if(service == "google"){
         string gToken = parametersNode.attribute(P_GOOGLE_TOKEN).value();       
                 
-            googleInfo gInfo;
+        googleInfo gInfo;
 
         if( !isGTokenOk(gToken, gInfo) )
             throw ServerException(ServerException::TOKEN_EMAIL);
@@ -42,22 +41,30 @@ string MsgInSignUp::createResponseMsgOut()
         user.gender = gInfo.gender;
         user.givenName = gInfo.given_name;
         user.googleId = gInfo.id;
-        user.googleLocale = gInfo.locale;
-        user.link = gInfo.link;
         user.mail = gInfo.email;
-        user.name = gInfo.name;
-        user.phoneLocale = gInfo.locale;
         user.picture = gInfo.picture;
-        user.verifiedMail = gInfo.verified_email;
+    }else  if(service == "facebook"){
+        
+        facebookInfo fInfo;
+                
+        string fbToken = parametersNode.attribute(P_FACEBOOK_TOKEN).value();   
+        if ( !isFTokenOkay(fbToken, fInfo))
+            throw ServerException(ServerException::TOKEN_EMAIL);
+
+        user.familyName = fInfo.last_name;
+        //user.gender = fInfo.gender;
+        user.givenName = fInfo.first_name;
+        user.googleId = fInfo.id;
+        user.mail = fInfo.email;
+        //user.picture = fInfo.picture;
+        
     }else if(service == "beeeon"){
         
         string userName = parametersNode.attribute("name").value();       
-        string userPassword = parametersNode.attribute("pswd").value();       
-        
-        user.name = userName;
-        user.password  = userPassword;
+        string userPassword = parametersNode.attribute("pswd").value();     
         
     }else{
+        Logger::error() << "unsupported provider : " << service <<endl;
         throw ServerException(ServerException::WRONG_AUTH_PROVIDER);
     }
               

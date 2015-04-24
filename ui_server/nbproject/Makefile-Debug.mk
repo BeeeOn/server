@@ -94,6 +94,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/SocketClient.o \
 	${OBJECTDIR}/SocketServer.o \
 	${OBJECTDIR}/communication.o \
+	${OBJECTDIR}/fTokenChecker.o \
 	${OBJECTDIR}/gTokenChecker.o \
 	${OBJECTDIR}/pugixml.o \
 	${OBJECTDIR}/save_custom_writer.o \
@@ -160,7 +161,7 @@ LDLIBSOPTIONS=-L/usr/local/lib -L/usr/local/lib64 -L/opt/centos/devtoolset-1.1/r
 
 ./ui_server: ${OBJECTFILES}
 	${MKDIR} -p .
-	g++ -o ./ui_server ${OBJECTFILES} ${LDLIBSOPTIONS} -lpq -lsoci_core -lsoci_empty -lsoci_postgresql -lcppunit -lssl -lcrypto -ljansson -lstdc++
+	g++ -o ./ui_server ${OBJECTFILES} ${LDLIBSOPTIONS} -lpq -lsoci_core -lsoci_empty -lsoci_postgresql -lcppunit -lcurl -lssl -lcrypto -ljansson -lstdc++
 
 ${OBJECTDIR}/_ext/1360890531/DAO.o: ../DAO/DAO.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
@@ -456,6 +457,11 @@ ${OBJECTDIR}/communication.o: communication.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/communication.o communication.cpp
+
+${OBJECTDIR}/fTokenChecker.o: fTokenChecker.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/fTokenChecker.o fTokenChecker.cpp
 
 ${OBJECTDIR}/gTokenChecker.o: gTokenChecker.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -1754,6 +1760,19 @@ ${OBJECTDIR}/communication_nomain.o: ${OBJECTDIR}/communication.o communication.
 	    $(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/communication_nomain.o communication.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/communication.o ${OBJECTDIR}/communication_nomain.o;\
+	fi
+
+${OBJECTDIR}/fTokenChecker_nomain.o: ${OBJECTDIR}/fTokenChecker.o fTokenChecker.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/fTokenChecker.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Wall -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../Server -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/fTokenChecker_nomain.o fTokenChecker.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/fTokenChecker.o ${OBJECTDIR}/fTokenChecker_nomain.o;\
 	fi
 
 ${OBJECTDIR}/gTokenChecker_nomain.o: ${OBJECTDIR}/gTokenChecker.o gTokenChecker.cpp 

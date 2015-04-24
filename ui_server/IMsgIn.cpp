@@ -2,7 +2,7 @@
 #include "save_custom_writer.h"
 using namespace std;
 const int IMsgIn::MAJOR_VERSION = 2;
-const int IMsgIn::MINOR_VERSION = 5;
+const int IMsgIn::MINOR_VERSION = 4;
 const string IMsgIn::VERSION = to_string(MAJOR_VERSION) + "." + to_string(MINOR_VERSION);
 
 

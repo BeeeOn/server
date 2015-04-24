@@ -48,7 +48,7 @@ string MsgInSignMe::createResponseMsgOut()
     if(service == "google"){
         string gToken = parametersNode.attribute(P_GOOGLE_TOKEN).value();       
                 
-            googleInfo gInfo;
+        googleInfo gInfo;
 
         if( !isGTokenOk(gToken, gInfo) )
             throw ServerException(ServerException::TOKEN_EMAIL);
@@ -57,58 +57,43 @@ string MsgInSignMe::createResponseMsgOut()
         user.gender = gInfo.gender;
         user.givenName = gInfo.given_name;
         user.googleId = gInfo.id;
-        user.googleLocale = gInfo.locale;
-        user.link = gInfo.link;
         user.mail = gInfo.email;
-        user.name = gInfo.name;
-        user.phoneLocale = gInfo.locale;
         user.picture = gInfo.picture;
-        user.verifiedMail = gInfo.verified_email;
+    
+    }else  if(service == "facebook"){
+        
+        facebookInfo fInfo;
+                
+        string fbToken = parametersNode.attribute(P_FACEBOOK_TOKEN).value();   
+        if ( !isFTokenOkay(fbToken, fInfo))
+            throw ServerException(ServerException::TOKEN_EMAIL);
+
+        user.familyName = fInfo.last_name;
+        //user.gender = fInfo.gender;
+        user.givenName = fInfo.first_name;
+        user.googleId = fInfo.id;
+        user.mail = fInfo.email;
+        //user.picture = fInfo.picture;
         
     }else  if(service == "beeeon"){
         string userName = parametersNode.attribute("name").value();       
         string userPassword = parametersNode.attribute("pswd").value();       
-        
-        
-        // TODO is pswd OK?
-        
-        user.name = userName;
-        user.password  = userPassword;
-        
-//        else
-//            DAOUsers::getInstance().upsertUserWithMobileDevice(user, mobile) ;
     }else{
+        Logger::error() << "unsupported provider : " << service <<endl;
         throw ServerException(ServerException::WRONG_AUTH_PROVIDER);
     }
     
-    int userId = DAOUsers::getInstance().getUserIDbyAlternativeKeys(user.mail, user.googleId, user.name);
+    int userId = DAOUsers::getInstance().getUserIDbyAlternativeKeys(user.mail, user.googleId, user.facebookId);
     
     
     if(userId < 0)
-            throw ServerException(ServerException::USER_DONOT_EXISTS);
-    //DAOMobileDevices::getInstance().upsertMobileDevice(mobile, userId) ;
+        throw ServerException(ServerException::USER_DONOT_EXISTS);
+    
     if(DAOUsers::getInstance().upsertUserWithMobileDevice(user, mobile) == 0 )
          throw ServerException(ServerException::USER_DONOT_EXISTS);
-    
-    //string gId  = parametersNode.child(P_COMMUNICATION).attribute(P_GOOGLE_ID).value();
-    
 
-     
- 
-    //TODO upsert
-  /*  if( DBConnector::getInstance().insertNewUser(gId, gInfo) == 0)
-            Logger::getInstance(Logger::DEBUG3)<<gId<<" already exist?"<<endl;
-    
-       long long int IHAtoken = getnewIHAtoken();
-       
-    if( DBConnector::getInstance().insertNewMobileDevice(IHAtoken, gId, phoneId, phoneLocale) == 0)
-        throw ServerException(ServerException::TOKEN_EMAIL);
-       
-       //string attr = makeXMLattribute(P_SESSION_ID, to_string(IHAtoken));*/
-  
     _outputMainNode.append_attribute(P_SESSION_ID) = _token.c_str();
     return genOutputXMLwithVersionAndState(R_BEEEON_TOKEN);
-    //return envelopeResponseWithAttributes(R_BEEEON_TOKEN, P_SESSION_ID "=\""+_IHAtoken+"\" ");
 }
 
 string MsgInSignMe::getnewIHAtoken() {

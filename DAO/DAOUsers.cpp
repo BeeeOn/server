@@ -25,34 +25,36 @@ namespace soci
         {
             user.user_id = v.get<int>("user_id");
             user.mail = v.get<std::string>("mail","");
-            user.password = v.get<std::string>("password","");
-            user.phoneLocale = v.get<std::string>("phone_locale","");
-            user.verifiedMail = v.get<int>("verified_email",1);
-            user.name = v.get<std::string>("name","");
+            user.passwordMd5 = v.get<std::string>("password","");
+            //user.phoneLocale = v.get<std::string>("phone_locale","");
+            //user.verifiedMail = v.get<int>("verified_email",1);
+            //user.name = v.get<std::string>("name","");
             user.givenName = v.get<std::string>("given_name","");
             user.familyName = v.get<std::string>("family_name","");
-            user.link = v.get<std::string>("link","");
+            //user.link = v.get<std::string>("link","");
             user.picture = v.get<std::string>("picture","");
             user.gender = v.get<std::string>("gender","");
-            user.googleLocale = v.get<std::string>("google_locale","");
+            //user.googleLocale = v.get<std::string>("google_locale","");
             user.googleId = v.get<std::string>("google_id","");
+            user.facebookId = v.get<std::string>("facebook_id","");
         }
     
         static void to_base(const User & user, values & v, indicator & ind)
         {           
             v.set("user_id", user.user_id);
             v.set("mail", user.mail, user.mail.empty() ? i_null : i_ok);
-            v.set("password", user.password, user.password.empty() ? i_null : i_ok);
-            v.set("phone_locale", user.phoneLocale);
-            v.set("verified_email", user.verifiedMail, user.name.empty() ? i_null : i_ok);
-            v.set("name", user.name, user.name.empty() ? i_null : i_ok);
+            v.set("password", user.passwordMd5, user.passwordMd5.empty() ? i_null : i_ok);
+            ///v.set("phone_locale", user.phoneLocale);
+            //v.set("verified_email", user.verifiedMail, user.name.empty() ? i_null : i_ok);
+            //v.set("name", user.name, user.name.empty() ? i_null : i_ok);
             v.set("given_name", user.givenName, user.givenName.empty() ? i_null : i_ok);
             v.set("family_name", user.familyName, user.familyName.empty() ? i_null : i_ok);
-            v.set("link", user.link, user.link.empty() ? i_null : i_ok);
+            //v.set("link", user.link, user.link.empty() ? i_null : i_ok);
             v.set("picture", user.picture, user.picture.empty() ? i_null : i_ok);
             v.set("gender", user.gender, user.gender.empty() ? i_null : i_ok);
-            v.set("google_locale", user.googleLocale, user.googleLocale.empty() ? i_null : i_ok);
+            //v.set("google_locale", user.googleLocale, user.googleLocale.empty() ? i_null : i_ok);
             v.set("google_id", user.googleId, user.googleId.empty() ? i_null : i_ok);
+            v.set("facebook_id", user.facebookId, user.facebookId.empty() ? i_null : i_ok);
             ind = i_ok;
         }
     };
@@ -82,10 +84,9 @@ int DAOUsers::add(User user) {
                         use (user.mail,"mail"), use(user.phoneLocale, "phoneLoc"), use(user.verifiedMail, "verMail"), use(user.name, "name"),
                         use(user.givenName, "name1"), use(user.familyName, "name2"), use(user.link, "link"),use(user.picture, "pic"), use(user.gender, "gen"), use(user.googleLocale, "g_loc"), use(user.googleId, "gid");   
                 */
-                user.verifiedMail = 1;
-                sql << "insert into users(mail, password, phone_locale, verified_email, name, given_name, family_name, link, picture, gender, google_locale, google_id) "
-                                                " values(:mail, :password, :phone_locale, :verified_email,:name, "
-                                            " :given_name, :family_name, :link, :picture, :gender, :google_locale, :google_id)", use(user);
+                sql << "insert into users(mail, password, given_name, family_name, picture, gender, google_id, facebook_id) "
+                                                " values(:mail, :password, "
+                                            " :given_name, :family_name, :picture, :gender, :google_id, :facebook_id)", use(user);
                 return 1;
         }
         catch (soci::postgresql_soci_error& e)
@@ -107,11 +108,9 @@ int DAOUsers::upsertUserWithMobileDevice(User user, MobileDevice mobile){
             int newUserID;
             //d_mail TEXT, d_locale TEXT, d_ver BOOLEAN, d_name TEXT, d_g_name TEXT, d_f_name TEXT, d_link TEXT, d_picture TEXT, d_gender TEXT, d_g_loc TEXT, d_g_id TEXT
             
-            user.verifiedMail = 1;
-            //sql.begin();
-            sql << "select upsert_user_returning_uid(:mail, :pLoc, :verMail, :name, :gName, :fName, :link, :picture, :gender, :googleLocale, :googleID)",
-                    use(user.mail), use(user.phoneLocale), use(user.verifiedMail), use(user.name), use(user.givenName), use(user.familyName), use(user.link), use(user.picture), use(user.gender), 
-                    use(user.googleLocale), use(user.googleId), into(newUserID);
+            //sql.begin(); 
+            sql << "select upsert_user_returning_uid(:mail,:given_name, :family_name, :picture, :gender, :google_id, :facebook_id)",
+                    use(user), into(newUserID);
             
             //bon_token TEXT, d_mobile_id TEXT,d_type TEXT, d_locale TEXT, d_push_n TEXT, d_uid integer
             sql << "select upsert_mobile_device(:bt, :mobileID, :type, :loc, :pushN, :userID)",
@@ -175,8 +174,8 @@ bool DAOUsers::isGoogleIdRegistred(std::string g_id) {
     }
 }
 
-int DAOUsers::getUserIDbyAlternativeKeys(std::string mail, std::string google_id, std::string name){
-    Logger::db()<<"DB: getUID by alternative keys:("<<mail << google_id << name <<")"<< endl;
+int DAOUsers::getUserIDbyAlternativeKeys(std::string mail, std::string google_id, std::string facebook_id){
+    Logger::db()<<"DB: getUID by alternative keys:("<<mail << google_id << facebook_id <<")"<< endl;
     
     try
     {
@@ -185,13 +184,13 @@ int DAOUsers::getUserIDbyAlternativeKeys(std::string mail, std::string google_id
             
             indicator i1 = mail.empty()?i_null:i_ok;
             indicator i2 = google_id.empty()?i_null:i_ok;
-            indicator i3 = name.empty()?i_null:i_ok;
+            indicator i3 = facebook_id.empty()?i_null:i_ok;
             sql << "select user_id from users where "
                                 "CASE WHEN :mail::text is not NULL THEN mail=:mail  "
                                             "WHEN :google_id::text is not NULL then google_id=:google_id "
-                                            "WHEN :name::text is not NULL then name=:name "
+                                            "WHEN :fb_id::text is not NULL then facebook_id=:fb_id "
                                 "END",
-                    use(mail,i1,"mail"), use(google_id,i2,"google_id"),use(name,i3,"name"),
+                    use(mail,i1,"mail"), use(google_id,i2,"google_id"),use(facebook_id,i3,"fb_id"),
                     into(UID);
             Logger::getInstance(Logger::DEBUG3)<<"uid is: "<<UID<< endl;
             return UID; 
@@ -270,8 +269,8 @@ std::string DAOUsers::getXMLusersAdapters(int userId)
                 std::string xml;
                 indicator ind;
                 sql << "select xmlagg(xmlelement(name adapter, xmlattributes(adapter_id as id, adapters.name as name, role as role, timezone as utc)))"
-                                    "from users join users_adapters on user_id=fk_user_id join adapters on fk_adapter_id = adapter_id where user_id = :gid"
-                            ,use(userId,"gid"), soci::into(xml,ind);
+                                    "from users join users_adapters on user_id=fk_user_id join adapters on fk_adapter_id = adapter_id where user_id = :id"
+                            ,use(userId,"id"), soci::into(xml,ind);
                 Logger::getInstance(Logger::DEBUG3)<<"sql done result:"<<std::endl;
                 if(ind != i_ok)
                     return "";

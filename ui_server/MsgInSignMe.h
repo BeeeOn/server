@@ -6,6 +6,7 @@
 
 #include "ComTable.h"
 #include "gTokenChecker.h"
+#include "fTokenChecker.h"
 #include "IMsgInLoginUnwanted.h"
 
 class MsgInSignMe :

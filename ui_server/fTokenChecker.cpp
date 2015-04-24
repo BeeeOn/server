@@ -5,6 +5,8 @@
 #include <curl/curl.h>
 #include <jansson.h>
 
+#include "fTokenChecker.h"
+
 using namespace std;
 
 // Write function for curl_easy_setopt CURLOPT_WRITEFUNCTION.

@@ -35,6 +35,7 @@
 #define P_DEVICE_NAME "name"
 
 #define P_GOOGLE_TOKEN "gt"
+#define P_FACEBOOK_TOKEN "fbt"
 #define P_LOCALIZATION "loc"
 #define P_GOOGLE_CLOUD_MID "gcmid"
 

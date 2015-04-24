@@ -1,16 +1,17 @@
-CREATE OR REPLACE FUNCTION upsert_user_returning_uid(d_mail TEXT, d_locale TEXT, d_ver BOOLEAN, d_name TEXT, d_g_name TEXT, d_f_name TEXT, d_link TEXT, d_picture TEXT, d_gender TEXT, d_g_loc TEXT, d_g_id TEXT) RETURNS integer AS
+CREATE OR REPLACE FUNCTION upsert_user_returning_uid(d_mail TEXT, d_g_name TEXT, d_f_name TEXT, d_picture TEXT, d_gender TEXT, d_g_id TEXT, d_f_id TEXT) RETURNS integer AS
   $$
   DECLARE
   	t_out integer;
   BEGIN
       LOOP
           -- first try to update the key
-          UPDATE users SET  phone_locale = d_locale, verified_email = d_ver, name = d_name,
-                                              given_name = d_g_name, family_name = d_f_name, link = d_link, picture = d_picture,
-                                              gender = d_gender, google_locale = d_g_loc, google_id = d_g_id
+          UPDATE users SET  
+              given_name = d_g_name, family_name = d_f_name, picture = d_picture,
+              gender = d_gender, google_id = d_g_id
           WHERE 
-  			CASE WHEN d_mail is not NULL THEN mail=d_mail  
-  				WHEN d_g_id is not NULL then google_id=d_g_id
+  			CASE  
+  				WHEN d_g_id is not NULL then google_id=d_g_id 
+  				WHEN d_f_id is not NULL then google_id=d_f_id  
   			END
   		returning user_id into t_out;
   		
@@ -21,8 +22,8 @@ CREATE OR REPLACE FUNCTION upsert_user_returning_uid(d_mail TEXT, d_locale TEXT,
           -- if someone else inserts the same key concurrently,
           -- we could get a unique-key failure
           BEGIN
-              INSERT INTO users(mail, phone_locale, verified_email, name, given_name, family_name, link, picture, gender, google_locale, google_id) 
-                  VALUES (d_mail, d_locale, d_ver, d_name, d_g_name, d_f_name, d_link, d_picture, d_gender, d_g_loc, d_g_id) returning user_id into t_out;
+              INSERT INTO users(mail, given_name, family_name, picture, gender, google_id, facebook_id) 
+                  VALUES (d_mail, d_g_name, d_f_name, d_picture, d_gender, d_g_id, facebook_id) returning user_id into t_out;
               RETURN t_out;
           EXCEPTION WHEN unique_violation THEN
               -- Do nothing, and loop to try the UPDATE again.

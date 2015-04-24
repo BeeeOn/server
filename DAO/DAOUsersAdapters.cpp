@@ -31,8 +31,8 @@ string DAOUsersAdapters::getXMLconAccounts(string adapterId){
         string xml;
         indicator ind;
         sql << "select xmlagg ("
-                                                "xmlelement(name user, xmlattributes(user_id as userid, mail as email, role as role, given_name as name, family_name as surname , gender as gender))"
-                                                ")"
+                              "xmlelement(name user, xmlattributes(user_id as userid, mail as email, role as role, given_name as name, family_name as surname , gender as gender))"
+                              ")"
                 "from users left join users_adapters on user_id = fk_user_id where fk_adapter_id = :adapter"
                 ,use(adapterId,"adapter"), into(xml, ind);
         
@@ -81,6 +81,7 @@ int DAOUsersAdapters::changeConAccount(string adapterId, string userMail, string
         return 0;
     }
 }
+
 int DAOUsersAdapters::addConAccount(string adapterId, string userMail, string newRole){
     Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"change acc (adapter="<<adapterId<<" acc:"<<userMail<<" role:"<<newRole<<")\n";
     

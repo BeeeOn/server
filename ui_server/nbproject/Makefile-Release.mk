@@ -94,6 +94,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/SocketClient.o \
 	${OBJECTDIR}/SocketServer.o \
 	${OBJECTDIR}/communication.o \
+	${OBJECTDIR}/fTokenChecker.o \
 	${OBJECTDIR}/gTokenChecker.o \
 	${OBJECTDIR}/pugixml.o \
 	${OBJECTDIR}/save_custom_writer.o \
@@ -456,6 +457,11 @@ ${OBJECTDIR}/communication.o: communication.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/communication.o communication.cpp
+
+${OBJECTDIR}/fTokenChecker.o: fTokenChecker.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/fTokenChecker.o fTokenChecker.cpp
 
 ${OBJECTDIR}/gTokenChecker.o: gTokenChecker.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -1754,6 +1760,19 @@ ${OBJECTDIR}/communication_nomain.o: ${OBJECTDIR}/communication.o communication.
 	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/communication_nomain.o communication.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/communication.o ${OBJECTDIR}/communication_nomain.o;\
+	fi
+
+${OBJECTDIR}/fTokenChecker_nomain.o: ${OBJECTDIR}/fTokenChecker.o fTokenChecker.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/fTokenChecker.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/fTokenChecker_nomain.o fTokenChecker.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/fTokenChecker.o ${OBJECTDIR}/fTokenChecker_nomain.o;\
 	fi
 
 ${OBJECTDIR}/gTokenChecker_nomain.o: ${OBJECTDIR}/gTokenChecker.o gTokenChecker.cpp 

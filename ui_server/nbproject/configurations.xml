@@ -163,6 +163,8 @@
       <itemPath>SocketClient.cpp</itemPath>
       <itemPath>SocketServer.cpp</itemPath>
       <itemPath>communication.cpp</itemPath>
+      <itemPath>fTokenChecker.cpp</itemPath>
+      <itemPath>fTokenChecker.h</itemPath>
       <itemPath>gTokenChecker.cpp</itemPath>
       <itemPath>pugixml.cpp</itemPath>
       <itemPath>save_custom_writer.cpp</itemPath>
@@ -668,7 +670,7 @@
             <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
             <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
           </linkerLibItems>
-          <commandLine>-lpq -lsoci_core -lsoci_empty -lsoci_postgresql -lcppunit -lssl -lcrypto -ljansson -lstdc++</commandLine>
+          <commandLine>-lpq -lsoci_core -lsoci_empty -lsoci_postgresql -lcppunit -lcurl -lssl -lcrypto -ljansson -lstdc++</commandLine>
         </linkerTool>
       </compileType>
       <item path="../DAO/DAO.cpp" ex="false" tool="1" flavor2="0">
@@ -1375,6 +1377,10 @@
           </linkerLibItems>
         </linkerTool>
       </folder>
+      <item path="fTokenChecker.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="fTokenChecker.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="gTokenChecker.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="gTokenChecker.h" ex="false" tool="3" flavor2="0">
@@ -2383,6 +2389,10 @@
           </linkerLibItems>
         </linkerTool>
       </folder>
+      <item path="fTokenChecker.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="fTokenChecker.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="gTokenChecker.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="gTokenChecker.h" ex="false" tool="3" flavor2="0">
