@@ -19,10 +19,10 @@ public:
     string getDbXml();
 
 protected:
-    string getGcmMsg(string ids);
+    void addGcmData(JsonNotificationBuilder *builder);
 private:
     int mAdapterId, mDeviceType;
-    string mDeviceId;
+    string mDeviceId, mMsg;
 
 };
 

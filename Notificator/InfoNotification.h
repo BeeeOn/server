@@ -10,22 +10,19 @@
 
 #include <string>
 #include <vector>
-#include "VisibleNotification.h"
+#include "BaseNotification.h"
+#include "JsonNotificationBuilder.h"
 
-class InfoNotification : public VisibleNotification {
+class InfoNotification : public BaseNotification {
 public:
     virtual string getDbXml() = 0;
     virtual ~InfoNotification();
 
-    string getMessage();
-    string getUserId();
-    string getId();
-    string getTime();
     int getLevel();
 protected:
     InfoNotification(string name, int userId, int notificationId,
-             long time, string message);
-    virtual string getGcmMsg(string ids) = 0;
+             long time);
+    virtual void addGcmData(JsonNotificationBuilder *builder) = 0;
     string getType();
 private:
 };

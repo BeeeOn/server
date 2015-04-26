@@ -18,8 +18,7 @@ class ControlNotification : public BaseNotification
     protected:
         ControlNotification (string name, int userId, int notificationId, 
                long time);
-    
-        virtual string getGcmMsg(string ids) = 0;
+        virtual void addGcmData(JsonNotificationBuilder *builder) = 0;
         string getType();
     private:
 
