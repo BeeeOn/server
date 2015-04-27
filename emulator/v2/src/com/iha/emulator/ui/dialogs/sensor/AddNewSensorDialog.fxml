@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import java.lang.*?>
-<VBox fx:id="view" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="643.0" prefWidth="840.0" styleClass="whiteBackground" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iha.emulator.ui.dialogs.sensor.AddNewSensorDialogView">
+<VBox fx:id="view" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="643.0" prefWidth="840.0" styleClass="whiteBackground" stylesheets="@../../../resources/css/theme-light.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iha.emulator.ui.dialogs.sensor.AddNewSensorDialogView">
    <children>
       <Label styleClass="detailedSimLbl" text="Add new sensor / actuator" VBox.vgrow="NEVER">
          <VBox.margin>
@@ -204,12 +204,12 @@
                                           <Insets right="6.0" />
                                        </padding>
                                     </Label>
-                                    <RadioButton fx:id="valueYesStoreHistoryRadBtn" mnemonicParsing="false" prefHeight="17.0" prefWidth="49.0" text="Yes" GridPane.columnIndex="3">
+                                    <RadioButton fx:id="valueYesStoreHistoryRadBtn" disable="true" mnemonicParsing="false" prefHeight="17.0" prefWidth="49.0" text="Yes" GridPane.columnIndex="3">
                                        <toggleGroup>
                                           <ToggleGroup fx:id="storeValueRadBtnGroup" />
                                        </toggleGroup>
                                     </RadioButton>
-                                    <RadioButton fx:id="valueNoStoreHistoryRadBtn" mnemonicParsing="false" prefHeight="17.0" prefWidth="49.0" selected="true" text="No" toggleGroup="$storeValueRadBtnGroup" GridPane.columnIndex="4" />
+                                    <RadioButton fx:id="valueNoStoreHistoryRadBtn" disable="true" mnemonicParsing="false" prefHeight="17.0" prefWidth="49.0" selected="true" text="No" toggleGroup="$storeValueRadBtnGroup" GridPane.columnIndex="4" />
                                     <RadioButton fx:id="valueYesGenerateValueRadBtn" mnemonicParsing="false" prefHeight="17.0" prefWidth="49.0" selected="true" text="Yes" GridPane.columnIndex="3" GridPane.rowIndex="1">
                                        <toggleGroup>
                                           <ToggleGroup fx:id="generateRadBtnGroup" />
@@ -234,6 +234,7 @@
                                     <TextField fx:id="valueTypeTextField" editable="false" prefHeight="25.0" prefWidth="466.0" GridPane.columnIndex="1" />
                                     <ComboBox fx:id="valueComboBox" prefWidth="150.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                     <ComboBox fx:id="generatorTypeComboBox" prefWidth="150.0" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+                                    <ComboBox fx:id="boilerStatusComboBox" prefWidth="150.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                  </children>
                               </GridPane>
                               <StackPane fx:id="generatorsContainer" VBox.vgrow="ALWAYS">

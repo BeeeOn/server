@@ -9,33 +9,29 @@ import org.dom4j.Element;
 import java.util.ArrayList;
 
 /**
- * Created by Shu on 8.12.2014.
+ * Class implementing task for EmulatorServer, that deletes given sensors IDs
+ * from database.
+ *
+ * @see com.iha.emulator.communication.eserver.task.implemented
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
 public class DeleteSensorsTask extends AbstractServerTask<Boolean> {
-
+    /** database name */
     private String dbName;
+    /** array of sensors IDs to be deleted */
     private ArrayList<Integer> sensors;
-
-
+    /**
+     * Creates DeleteSensorsTask for given array of sensor IDs in given database
+     * @param dbName database name
+     * @param sensors array of sensors IDs, to be deleted from database
+     */
     public DeleteSensorsTask(String dbName,ArrayList<Integer> sensors) {
         this.dbName = dbName;
         this.sensors = sensors;
-        getLogger().warn("DeleteSensorsTask -> initializing -> " + dbName + " sensors: " + sensors);
+        getLogger().trace("DeleteSensorsTask -> initializing -> " + dbName + " sensors: " + sensors);
     }
-
     /**
-     * <emulator_server db="home4">
-     *     <task type="deleteSensors">
-     *         <sensors>
-     *             <sensor id="132123"/>
-     *             <sensor id="132123"/>
-     *             <sensor id="132123"/>
-     *             .
-     *             .
-     *             .
-     *         </sensors>
-     *     </task>
-     * </emulator_server>
+     * Creates message for EmulatorServer in XML format. (see <a href="https://ant-2.fit.vutbr.cz/projects/server/wiki/Emulator_server">Protocol</a> )
      * @return XML message as one string
      */
     @Override
@@ -57,11 +53,8 @@ public class DeleteSensorsTask extends AbstractServerTask<Boolean> {
     }
 
     /**
-     * <server_emulator>
-     *     <result state="OK or ERROR">
-     *         error message
-     *     </result>
-     * </server_emulator>
+     * Parses response from server, set result as true ( everything went OK) or
+     * false if an error occurred during adapter delete. (see <a href="https://ant-2.fit.vutbr.cz/projects/server/wiki/Emulator_server">Protocol</a> )
      * @param serverMessage XML server response as string
      * @throws org.dom4j.DocumentException XML parsing errors
      */

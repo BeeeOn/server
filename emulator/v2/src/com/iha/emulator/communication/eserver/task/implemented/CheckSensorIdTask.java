@@ -7,24 +7,29 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
 /**
- * Created by Shu on 8.12.2014.
+ * Class implementing task for EmulatorServer, that checks, if given
+ * sensor ID exists in database
+ *
+ * @see com.iha.emulator.communication.eserver.task.implemented
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
 public class CheckSensorIdTask extends AbstractServerTask<String> {
-
+    /** database name */
     private String dbName;
+    /** sensor ID as string */
     private String checkedId;
-
+    /**
+     * Creates CheckSensorIdTask for given sensor ID and in given database
+     * @param dbName database name
+     * @param id adapter ID as String
+     */
     public CheckSensorIdTask(String dbName, String id) {
         this.dbName = dbName;
         this.checkedId = id;
     }
 
     /**
-     * <emulator_server db="home4>
-     *     <task type="checkSensorId">
-     *         <sensor sensor_id="111.111.111.111" />
-     *     </task>
-     * </emulator_server>
+     * Creates message for EmulatorServer in XML format. (see <a href="https://ant-2.fit.vutbr.cz/projects/server/wiki/Emulator_server">Protocol</a> )
      * @return XML message as one string
      */
     @Override
@@ -39,17 +44,9 @@ public class CheckSensorIdTask extends AbstractServerTask<String> {
     }
 
     /**
-     * <server_emulator>
-     *     <result state="OK or ERROR">
-     *         <sensor registered="true" adapter_id="111" />
-     *         or
-     *         <sensor registered="false" />
-     *         or
-     *         error message
-     *     </result>
-     * </server_emulator>
+     * Parses response from server and sets sensor ID, which owns given sensor as result. (see <a href="https://ant-2.fit.vutbr.cz/projects/server/wiki/Emulator_server">Protocol</a> )
      * @param serverMessage XML server response as string
-     * @throws org.dom4j.DocumentException XML parsing errors
+     * @throws DocumentException XML parsing errors
      */
     @Override
     public void parseResponse(String serverMessage) throws DocumentException {

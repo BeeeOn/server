@@ -51,8 +51,20 @@ public class ValueFactory {
             case SENSOR_OPEN_CLOSED:
                 value = new OpenClosedSensorValue(valueType.getName(),valueType.getType(),0,valueType.getUnit(),generateValue,storeHistory,new Random(),generatorSeed);
                 break;
+            case SENSOR_BOILER_STATUS:
+                value = new BoilerStatusSensorValue(valueType.getName(),valueType.getType(),0,valueType.getUnit(),generateValue,storeHistory,new Random(),generatorSeed);
+                break;
             case ACTUATOR_ON_OFF:
                 value = new OnOffActuatorValue(valueType.getName(),valueType.getType(),0,valueType.getUnit(),generateValue,storeHistory,new Random(),generatorSeed);
+                break;
+            case ACTUATOR_TEMPERATURE:
+                value = new TemperatureActuatorValue(valueType.getName(),valueType.getType(),0,valueType.getUnit(),generateValue,storeHistory,new Random(),generatorSeed);
+                break;
+            case ACTUATOR_BOILER_TYPE:
+                value = new BoilerTypeActuatorValue(valueType.getName(),valueType.getType(),0,valueType.getUnit(),generateValue,storeHistory,new Random(),generatorSeed);
+                break;
+            case ACTUATOR_BOILER_MODE:
+                value = new BoilerModeActuatorValue(valueType.getName(),valueType.getType(),0,valueType.getUnit(),generateValue,storeHistory,new Random(),generatorSeed);
                 break;
         }
         return (T)value;

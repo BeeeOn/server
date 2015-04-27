@@ -8,24 +8,30 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
 /**
- * Created by Shu on 8.12.2014.
+ * Class implementing task for EmulatorServer, that checks, if given
+ * adapter ID exists in database
+ *
+ * @see com.iha.emulator.communication.eserver.task.implemented
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
 public class CheckIdTask extends AbstractServerTask<AdapterInfo> {
-
+    /** database name */
     private String dbName;
+    /** adapter ID as string */
     private String checkedId;
 
+    /**
+     * Creates CheckIdTask for given adapter ID and in given database
+     * @param dbName database name
+     * @param id adapter ID as String
+     */
     public CheckIdTask(String dbName,String id) {
         this.dbName = dbName;
         this.checkedId = id;
     }
 
     /**
-     * <emulator_server db="home4>
-     *     <task type="checkId">
-     *         <adapter adapter_id="111" />
-     *     </task>
-     * </emulator_server>
+     * Creates message for EmulatorServer in XML format. (see <a href="https://ant-2.fit.vutbr.cz/projects/server/wiki/Emulator_server">Protocol</a> )
      * @return XML message as one string
      */
     @Override
@@ -38,17 +44,9 @@ public class CheckIdTask extends AbstractServerTask<AdapterInfo> {
                 .addAttribute("adapter_id", checkedId);
         return doc.asXML();
     }
-
     /**
-     * <server_emulator>
-     *     <result state="OK or ERROR">
-     *         <adapter registered="true" adapter_id="111" name="name" version="0" />
-     *         or
-     *         <adapter registered="false" />
-     *         or
-     *         error message
-     *     </result>
-     * </server_emulator>
+     * Parses response from server, creates {@link com.iha.emulator.communication.eserver.model.AdapterInfo} with
+     * result from server and sets this class as this task's result. (see <a href="https://ant-2.fit.vutbr.cz/projects/server/wiki/Emulator_server">Protocol</a> )
      * @param serverMessage XML server response as string
      * @throws DocumentException XML parsing errors
      */

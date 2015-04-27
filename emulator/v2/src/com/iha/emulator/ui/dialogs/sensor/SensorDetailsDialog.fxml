@@ -206,6 +206,7 @@
                                                 <TextField fx:id="valueTypeTextField" editable="false" prefHeight="25.0" prefWidth="466.0" GridPane.columnIndex="1" />
                                                 <ComboBox fx:id="valueComboBox" prefWidth="150.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                                 <ComboBox fx:id="generatorTypeComboBox" prefWidth="150.0" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+                                                <ComboBox fx:id="boilerStatusComboBox" prefWidth="150.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                              </children>
                                           </GridPane>
                                           <StackPane fx:id="generatorsContainer" VBox.vgrow="ALWAYS">

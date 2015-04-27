@@ -17,14 +17,26 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * Created by Shu on 26.11.2014.
+ * Implementation of protocol version 0.1 (see <a href="https://ant-2.fit.vutbr.cz/projects/adapter/wiki/Adapt%C3%A9r_-_server_XML_komunikace">Wiki</a> )
+ *
+ * @see com.iha.emulator.communication.protocol.Protocol
+ * @see com.iha.emulator.communication.protocol.AbstractProtocol
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
 public class ZeroPointOne extends AbstractProtocol {
-
+    /**
+     * Creates instance of ZeroPointOne protocol
+     */
     public ZeroPointOne() {
         super(Version.ZERO_POINT_ONE.getVersion());
     }
-
+    /**
+     * <p>{@inheritDoc}</p>
+     * <p>
+     *     ZeroPointOne (0.1): <br>
+     *     Message contains protocol version, state(data), adapter ID, firmware version, time ( when was message created )
+     * </p>
+     */
     @Override
     public Element buildAdapterMessage(Adapter adapter) {
         Document document = DocumentHelper.createDocument();
@@ -36,7 +48,13 @@ public class ZeroPointOne extends AbstractProtocol {
                 .addAttribute("time",String.valueOf((System.currentTimeMillis()/1000L)));
         return root;
     }
-
+    /**
+     * <p>{@inheritDoc}</p>
+     * <p>
+     *     ZeroPointOne (0.1): <br>
+     *     Message contains sensor/actuator ID, battery value, signal value, values information (type, offset, value).
+     * </p>
+     */
     @Override
     public Document buildSensorMessage(Element rootElement,Sensor sensor) {
         //save device tag
@@ -61,7 +79,13 @@ public class ZeroPointOne extends AbstractProtocol {
         }
         return rootElement.getDocument();
     }
-
+    /**
+     * <p>{@inheritDoc}</p>
+     * <p>
+     *     ZeroPointOne (0.1): <br>
+     *     Message contains protocol version, state(register), adapter ID, firmware version, time ( when was message created )
+     * </p>
+     */
     @Override
     public Document buildRegisterMessage(AdapterController adapterController){
         Document document = DocumentHelper.createDocument();
@@ -74,7 +98,9 @@ public class ZeroPointOne extends AbstractProtocol {
         root.addElement("tmp");
         return document;
     }
-
+    /**
+     * <p>{@inheritDoc}</p>
+     */
     @Override
     public Document convertInMessageToXML(String inMessage) throws DocumentException, NullPointerException {
         Document document;
@@ -86,7 +112,13 @@ public class ZeroPointOne extends AbstractProtocol {
         if(document == null) throw new NullPointerException("ZeroPointOne protocol -> parseInMessage -> document=null");
         return document;
     }
-
+    /**
+     * <p>{@inheritDoc}</p>
+     * <p>
+     *     ZeroPointOne (0.1): <br>
+     *     Checks, if protocol version in message equals 0.1
+     * </p>
+     */
     @Override
     public Document checkProtocolVersion(Document inDocument) throws IllegalArgumentException, NullPointerException{
         Element rootElement = inDocument.getRootElement();
@@ -99,7 +131,22 @@ public class ZeroPointOne extends AbstractProtocol {
         getLogger().trace("Protocol version match");
         return inDocument;
     }
-
+    /**
+     * <p>{@inheritDoc}</p>
+     * <p>
+     *     ZeroPointOne(0.1):
+     * </p>
+     * <ul>
+     *    <li>Processes states:</li>
+     *    <li>update - changes sensor's refresh time, if server sends different from currently set</li>
+     * </ul>
+     *
+     * @param inDocument Dom4j XML document containing response message from server
+     * @param senderController controller of sensor, for which was message sent
+     * @param adapterController controller of adapter, which own sensor
+     * @throws IllegalArgumentException if sensor ID or time XML element doesn't exist in received message
+     * @throws NullPointerException if trying to parse XML element that should be in message, but is not.
+     */
     @Override
     public void parseInSensorMessage(Document inDocument, SensorController senderController, AdapterController adapterController) throws IllegalArgumentException,NullPointerException{
         Element rootElement = inDocument.getRootElement();
@@ -132,6 +179,25 @@ public class ZeroPointOne extends AbstractProtocol {
         }
     }
 
+    /**
+     * <p>{@inheritDoc}</p>
+     * <p>
+     *     ZeroPointOne(0.1):
+     * </p>
+     *<ul>
+     *     <li>Processes states:</li>
+     *     <li>set - sets new value on sensor with given ID</li>
+     *     <li>register - response to register message, true if adapter was successfully registered, false otherwise</li>
+     *     <li>clean - delete sensor with given ID</li>
+     *     <li>listen - sensor pairing ( only prints message to log )</li>
+     * </ul>
+     *
+     * @param inDocument Dom4j XML document containing message from server
+     * @param adapterController controller of adapter, which received message
+     * @throws NullPointerException if trying to parse XML element that should be in message, but is not.
+     * @throws IllegalArgumentException if message state is unknown or one of the message arguments is wrong
+     * (example: sensor ID doesn't exist). More info in exception message
+     */
     @Override
     public void parseInAdapterMessage(Document inDocument, AdapterController adapterController) throws NullPointerException,IllegalArgumentException{
         getLogger().debug("Parsing incoming message -> getting state");
@@ -150,8 +216,6 @@ public class ZeroPointOne extends AbstractProtocol {
                         newValues.add(new SetNewValue(current.attribute("type").getValue(),current.attribute("offset").getValue(),current.getText()));
                     }
                 }
-                //16843009 = 1.1.1.1
-                //33686018 = 2.2.2.2
                 getLogger().trace("Number of values, to be changed: " + newValues.size());
                 adapterController.changeValueOnSensor(sensorId,newValues);
                 return;
@@ -171,10 +235,9 @@ public class ZeroPointOne extends AbstractProtocol {
             case "listen":
                 Platform.runLater(()->adapterController.sendMessage("Server requested \"listen\" (sensor pairing)"));
                 return;
+            default:
+                getLogger().warn("Unknown state");
+                throw new IllegalArgumentException("Unknown message state: " + state);
         }
-        getLogger().warn("Unknown state");
     }
-
-
-
 }

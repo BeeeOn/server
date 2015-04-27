@@ -138,9 +138,6 @@ public class DetailedSimulationPresenter implements Presenter{
     //endregion
 
     //region public methods
-    /** TODO erase i*/
-    private int i = 0;
-
     public void addNewAdapter(){
         logger.debug("Creating new adapter");
         //define background process

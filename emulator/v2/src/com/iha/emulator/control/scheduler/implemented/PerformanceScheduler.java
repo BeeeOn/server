@@ -3,7 +3,6 @@ package com.iha.emulator.control.scheduler.implemented;
 import com.iha.emulator.communication.protocol.Protocol;
 import com.iha.emulator.communication.server.OutMessage;
 import com.iha.emulator.communication.server.WrongResponseException;
-import com.iha.emulator.communication.server.ssl.ServerController;
 import com.iha.emulator.control.AdapterController;
 import com.iha.emulator.control.scheduler.Scheduler;
 import com.iha.emulator.utilities.watchers.ResponseTracker;
@@ -46,51 +45,26 @@ public class PerformanceScheduler extends Thread implements Scheduler{
                         String inMessageString = adapterController.getServerController().sendMessage(message.getSocketMessage(),responseTracker,message.getType());
                         //check if adapter was not already terminated
                         if(adapterController != null && adapterController.getLog() != null && adapterController.getScheduler() != null){
-                            if(ServerController.DEBUG){
-                                logger.trace("Message to server: \n" + message.getSocketMessage().asXML());
-                                processTracking(message);
-                                //check protocol version
-                                Protocol protocol = adapterController.getAdapter().getProtocol();
-                                //convert incoming message to XML and check protocol version
-                                Document inDocument = protocol.checkProtocolVersion(protocol.convertInMessageToXML(inMessageString));
-                                logger.trace("Message from server: \n" + inDocument.asXML());
-                                switch (message.getType()){
-                                    case SENSOR_MESSAGE:
-                                        Platform.runLater(() -> adapterController.getLog().log(message.getLogMessage()));
-                                        protocol.parseInSensorMessage(inDocument, message.getSenderController(), adapterController);
-                                        adapterController.messageSuccessfullySent(message);
-                                        break;
-                                    case REGISTER_ADAPTER:
-                                        protocol.parseInAdapterMessage(inDocument,adapterController);
-                                        Platform.runLater(() -> {
-                                            adapterController.getLog().log(message.getLogMessage());
-                                        });
-                                        adapterController.messageSuccessfullySent(message);
-                                        break;
-                                }
-                            }else{
-                                switch (message.getType()){
-                                    case SENSOR_MESSAGE:
-                                        logger.trace("Message to server: \n" + message.getSocketMessage().asXML());
-                                        processTracking(message);
-                                        Platform.runLater(() -> adapterController.getLog().log(message.getLogMessage()));
-                                        //check protocol version
-                                        Protocol protocol = adapterController.getAdapter().getProtocol();
-                                        //convert incoming message to XML and check protocol version
-                                        Document inDocument = protocol.checkProtocolVersion(protocol.convertInMessageToXML(inMessageString));
-                                        logger.trace("Message from server: \n" + inDocument.asXML());
-                                        protocol.parseInSensorMessage(inDocument, message.getSenderController(), adapterController);
-                                        adapterController.messageSuccessfullySent(message);
-                                        break;
-                                    case REGISTER_ADAPTER:
-                                        processTracking(message);
-                                        Platform.runLater(() -> {
-                                            adapterController.getLog().log(message.getLogMessage());
-                                            adapterController.getAdapter().setRegistered(true);
-                                        });
-                                        adapterController.messageSuccessfullySent(message);
-                                        break;
-                                }
+                            logger.trace("Message to server: \n" + message.getSocketMessage().asXML());
+                            processTracking(message);
+                            //check protocol version
+                            Protocol protocol = adapterController.getAdapter().getProtocol();
+                            //convert incoming message to XML and check protocol version
+                            Document inDocument = protocol.checkProtocolVersion(protocol.convertInMessageToXML(inMessageString));
+                            logger.trace("Message from server: \n" + inDocument.asXML());
+                            switch (message.getType()){
+                                case SENSOR_MESSAGE:
+                                    Platform.runLater(() -> adapterController.getLog().log(message.getLogMessage()));
+                                    protocol.parseInSensorMessage(inDocument, message.getSenderController(), adapterController);
+                                    adapterController.messageSuccessfullySent(message);
+                                    break;
+                                case REGISTER_ADAPTER:
+                                    protocol.parseInAdapterMessage(inDocument,adapterController);
+                                    Platform.runLater(() -> {
+                                        adapterController.getLog().log(message.getLogMessage());
+                                    });
+                                    adapterController.messageSuccessfullySent(message);
+                                    break;
                             }
                         }
                     } catch (IllegalArgumentException ie) {

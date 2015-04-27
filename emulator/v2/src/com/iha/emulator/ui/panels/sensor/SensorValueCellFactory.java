@@ -1,18 +1,15 @@
 package com.iha.emulator.ui.panels.sensor;
 
+import com.iha.emulator.models.value.Status;
 import com.iha.emulator.models.value.Value;
-import com.iha.emulator.models.value.implemented.OnOffActuatorValue;
-import com.iha.emulator.models.value.implemented.OnOffSensorValue;
-import com.iha.emulator.models.value.implemented.OpenClosedSensorValue;
+import com.iha.emulator.models.value.implemented.*;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.StringBinding;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableCell;
+import javafx.collections.FXCollections;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 /**
  * Created by Shu on 2.12.2014.
  */
@@ -32,6 +29,11 @@ public class SensorValueCellFactory extends TableCell<Value, Value> {
                     Label humLbl = new Label();
                     humLbl.textProperty().bind(item.stringValueProperty());
                     setGraphic(humLbl);
+                    break;
+                case SENSOR_BOILER_STATUS:
+                    Label statusLbl = new Label();
+                    statusLbl.textProperty().bind(item.stringValueProperty());
+                    setGraphic(statusLbl);
                     break;
                 case SENSOR_ON_OFF:
                     Label onOffLbl = new Label();
@@ -91,6 +93,49 @@ public class SensorValueCellFactory extends TableCell<Value, Value> {
                     hBox.getChildren().addAll(onBtn,offBtn);
                     setGraphic(hBox);
                     break;
+                case ACTUATOR_TEMPERATURE:
+                    Label actTempLbl = new Label();
+                    actTempLbl.textProperty().bind(item.stringValueProperty());
+                    setGraphic(actTempLbl);
+                    break;
+                case ACTUATOR_BOILER_TYPE:
+                    HBox typeHBox = new HBox();
+                    ComboBox typeCB = new ComboBox(FXCollections.observableArrayList(BoilerTypeActuatorValue.BoilerOperationType.values()));
+                    comboBoxConverter(typeCB);
+                    for(BoilerTypeActuatorValue.BoilerOperationType type : BoilerTypeActuatorValue.BoilerOperationType.values()){
+                        if(type.getCode() == (int)item.getValue()){
+                            typeCB.valueProperty().set(type);
+                        }
+                    }
+                    typeCB.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                        if(newValue != oldValue){
+                            item.setValue(((BoilerTypeActuatorValue.BoilerOperationType)newValue).getCode());
+                        }
+                    });
+                    typeHBox.getChildren().add(typeCB);
+                    setText(null);
+                    setEditable(true);
+                    setGraphic(typeHBox);
+                    break;
+                case ACTUATOR_BOILER_MODE:
+                    HBox modeHBox = new HBox();
+                    ComboBox modeCB = new ComboBox(FXCollections.observableArrayList(BoilerModeActuatorValue.BoilerOperationMode.values()));
+                    comboBoxConverter(modeCB);
+                    for(BoilerTypeActuatorValue.BoilerOperationType type : BoilerTypeActuatorValue.BoilerOperationType.values()){
+                        if(type.getCode() == (int)item.getValue()){
+                            modeCB.valueProperty().set(type);
+                        }
+                    }
+                    modeCB.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                        if(newValue != oldValue){
+                            item.setValue(((BoilerTypeActuatorValue.BoilerOperationType)newValue).getCode());
+                        }
+                    });
+                    modeHBox.getChildren().add(modeCB);
+                    setText(null);
+                    setEditable(true);
+                    setGraphic(modeHBox);
+                    break;
                 default:
                     logger.trace("Unknown sensor type, cannot show in table");
                     break;
@@ -99,5 +144,23 @@ public class SensorValueCellFactory extends TableCell<Value, Value> {
             setText(null);
             setGraphic(null);
         }
+    }
+
+    private void comboBoxConverter(ComboBox<Status> comboBox) {
+        // Define rendering of the list of values in ComboBox drop down.
+        comboBox.setCellFactory((c) -> {
+            return new ListCell<Status>() {
+                @Override
+                protected void updateItem(Status item, boolean empty) {
+                    super.updateItem(item, empty);
+
+                    if (item == null || empty) {
+                        setText(null);
+                    } else {
+                        setText(item.getCode() + "-" + item.getDescription());
+                    }
+                }
+            };
+        });
     }
 }
