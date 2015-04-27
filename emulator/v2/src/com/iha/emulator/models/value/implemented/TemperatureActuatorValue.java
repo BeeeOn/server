@@ -29,7 +29,7 @@ public class TemperatureActuatorValue extends AbstractValue<Double> implements H
     private DoubleProperty step;
 
     public TemperatureActuatorValue(String name, String type, int offset, String unit, boolean generateValue, boolean storeHistory, Random generator, Long generatorSeed) {
-        super(Type.SENSOR_TEMPERATURE,name,type,offset,unit,generateValue,storeHistory,generator,generatorSeed);
+        super(Type.ACTUATOR_TEMPERATURE,name,type,offset,unit,generateValue,storeHistory,generator,generatorSeed);
         this.dev = new SimpleDoubleProperty(DEFAULT_NORMAL_DEV);
         this.avg = new SimpleDoubleProperty(DEFAULT_NORMAL_AVG);
         this.min = new SimpleDoubleProperty(DEFAULT_MIN);

@@ -28,7 +28,7 @@ public class DetailedScheduler extends Thread implements Scheduler{
     private boolean terminate = false;
     private boolean continueProcessing = true;
 
-    private ResponseTracker responseTracker  = new ResponseTracker(false);
+    private ResponseTracker responseTracker  = new ResponseTracker(false,true,false);
 
     private AdapterController adapterController;
 

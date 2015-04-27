@@ -168,7 +168,9 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
             tmpValue.setName(valueElement.element("name").getText());
             tmpValue.setInitialValue(tmpValue.fromStringToValueType(valueElement.element("initial").getText()));
             tmpValue.setValue(tmpValue.fromStringToValueType(valueElement.element("initial").getText()));
-            tmpValue.setStoreHistory(valueElement.element("store_history").getText().equals("true"));
+            //TODO fix forcefull history storage disabling
+            tmpValue.setStoreHistory(false);
+            //tmpValue.setStoreHistory(valueElement.element("store_history").getText().equals("true"));
             tmpValue.setGenerateValue(valueElement.element("generate_value").getText().equals("true"));
             Element generatorElement = null;
             try{
@@ -357,6 +359,11 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
             logger.debug("All info OK -> creating sensor");
             try{
                 if(sensorContainer != null && adapterController != null){
+                    //TODO delete logger warn info
+                    logger.warn("Values and types: ");
+                    for(Value value : values.get()){
+                        logger.warn("   name: "+value.getName() + " -> type: " + value.getValueType().getType());
+                    }
                     SensorController newSensor = adapterController.createSensor(
                             sensorContainer, // sensor panel container
                             Utilities.toRGBCode(view.getSensorColorPicker().getValue()), //sensor panel header color
@@ -422,7 +429,7 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
 
     @SuppressWarnings("unchecked")
     protected void addValueToTree(Type type) {
-        logger.debug("Chosen value: " + type.getName());
+        logger.debug("Chosen value: " + type.getName() + "-> type: " + type.getType());
         Value newValue = ValueFactory.buildValue(type);
         TreeItem newItem = new TreeItem<>(newValue);
         view.getValuesTree().getRoot().getChildren().add(newItem);
