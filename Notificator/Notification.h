@@ -15,7 +15,7 @@ class Notification
         virtual string getId() = 0;
         virtual int getLevel() = 0;
         virtual vector<string> sendGcm(vector<string> *ids) = 0;
-    
+        virtual bool saveToDb() = 0;
     protected:
         Notification(){};
 

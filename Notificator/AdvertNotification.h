@@ -17,7 +17,8 @@ class AdvertNotification : BaseNotification{
 public:
     virtual string getDbXml() = 0;
     virtual ~AdvertNotification();
-    
+    virtual bool saveToDb();
+
     int getLevel();
 
 protected:

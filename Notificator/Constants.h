@@ -10,11 +10,8 @@
 static const int TTL_UNDEFINED = -1;
 static const string STRING_UNDEFINED = "";
 
-/** ACTIONS */
-static const string ACTION_DEVICE = "device";
-
-
 /** DATA TAGS */
+static const string DATA_MSGID_DELETE = "mid_del";
 static const string DATA_MSGID = "mid";
 static const string DATA_TYPE = "type";
 static const string DATA_USER_ID = "uid";
@@ -25,7 +22,7 @@ static const string DATA_NAME = "name";
 static const string DATA_ADAPTER_ID = "aid";
 static const string DATA_DEVICE_ID = "did";
 static const string DATA_DEVICE_TYPE = "dtype";
-
+static const string DATA_URI = "uri";
 
 
 /**************************************************/
@@ -59,9 +56,16 @@ static const string JSON_DATA_NAME = "\"" + DATA_NAME + "\"";
 static const string JSON_DATA_ADAPTER_ID = "\"" + DATA_ADAPTER_ID + "\"";
 static const string JSON_DATA_DEVICE_ID = "\"" + DATA_DEVICE_ID + "\"";
 static const string JSON_DATA_DEVICE_TYPE = "\"" + DATA_DEVICE_TYPE + "\"";
+static const string JSON_DATA_MSGID_DELETE = "\"" + DATA_MSGID_DELETE + "\"";
+static const string JSON_DATA_URI = "\"" + DATA_URI + "\"";
 
 /** NOTIFICATION NAME */
 static const string NAME_WATCHDOG = "watchdog";
+static const string NAME_DELETE_NOTIF = "delete_not";
+static const string NAME_URI = "uri";
+static const string NAME_SENSOR_ADDED = "sensor_add";
+static const string NAME_ADAPTER_ADDED = "adapter_add";
+
 
 /** NOTIFICAITON TYPE AND LEVEL */
 static const string TYPE_ALERT = "alert";

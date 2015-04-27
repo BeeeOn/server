@@ -15,7 +15,8 @@ class BaseNotification : public Notification
         virtual int getLevel() = 0;
         virtual string getDbXml() = 0;
         virtual ~BaseNotification() {};
-        
+        virtual bool saveToDb() = 0;
+
         vector<string> sendGcm(vector<string> *ids);       
         string getId();
         string getUserId();

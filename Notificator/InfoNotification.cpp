@@ -14,6 +14,10 @@ InfoNotification::InfoNotification(string name, int userId, int notificationId,
 {
 }
 
+bool InfoNotification::saveToDb() {
+  return true;
+}
+
 string InfoNotification::getType() {
     return TYPE_INFO;
 }

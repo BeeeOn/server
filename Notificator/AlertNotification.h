@@ -15,6 +15,7 @@
 
 class AlertNotification : BaseNotification {
 public:
+    virtual bool saveToDb();
     virtual string getDbXml() = 0;
     virtual ~AlertNotification() = 0;
     int getLevel();

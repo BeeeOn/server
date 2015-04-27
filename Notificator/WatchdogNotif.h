@@ -4,8 +4,8 @@
  *
  */
 
-#ifndef LIMITEXCEEDEDNOTIFICATION_H
-#define	LIMITEXCEEDEDNOTIFICATION_H
+#ifndef WATCHDOGNOTIFICATION_H
+#define	WATCHDOGNOTIFICATION_H
 
 #include "InfoNotification.h"
 #include <string>
@@ -17,7 +17,6 @@ public:
             long time, string message, int adapterId, string deviceId, int type);
     ~WatchdogNotif();
     string getDbXml();
-
 protected:
     void addGcmData(JsonNotificationBuilder *builder);
 private:
@@ -26,5 +25,5 @@ private:
 
 };
 
-#endif	/* LIMITEXCEEDEDNOTIFICATION_H */
+#endif	/* WATCHDOGNOTIFICATION_H */
 

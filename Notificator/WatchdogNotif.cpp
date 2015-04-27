@@ -17,14 +17,10 @@ WatchdogNotif::WatchdogNotif(int userId, int notificationId,
 }
 
 void WatchdogNotif::addGcmData(JsonNotificationBuilder *builder) {
-  (*builder)
-      .addData(JSON_DATA_MESSAGE, mMsg);
-  (*builder)
-      .addData(JSON_DATA_ADAPTER_ID, Utils::intToString(mAdapterId));
-  (*builder)
-      .addData(JSON_DATA_DEVICE_ID, mDeviceId);
-  (*builder)
-      .addData(JSON_DATA_DEVICE_TYPE, Utils::intToString(mDeviceType));
+  builder->addData(JSON_DATA_MESSAGE, mMsg);
+  builder->addData(JSON_DATA_ADAPTER_ID, Utils::intToString(mAdapterId));
+  builder->addData(JSON_DATA_DEVICE_ID, mDeviceId);
+  builder->addData(JSON_DATA_DEVICE_TYPE, Utils::intToString(mDeviceType));
 }
 
 string WatchdogNotif::getDbXml() {

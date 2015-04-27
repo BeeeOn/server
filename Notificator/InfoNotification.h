@@ -17,6 +17,7 @@ class InfoNotification : public BaseNotification {
 public:
     virtual string getDbXml() = 0;
     virtual ~InfoNotification();
+    virtual bool saveToDb();
 
     int getLevel();
 protected:

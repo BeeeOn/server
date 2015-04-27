@@ -15,6 +15,10 @@ AlertNotification::AlertNotification(string name, int userId,
 
 }
 
+bool AlertNotification::saveToDb() {
+  return true;
+}
+
 int AlertNotification::getLevel() {
     return LEVEL_ALERT;
 }

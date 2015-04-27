@@ -14,6 +14,10 @@ AdvertNotification::AdvertNotification(string name, int userId,
 {
 }
 
+bool AdvertNotification::saveToDb() {
+    return true;
+}
+
 int AdvertNotification::getLevel() {
     return LEVEL_ADVERT;
 }

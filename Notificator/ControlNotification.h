@@ -12,7 +12,7 @@ class ControlNotification : public BaseNotification
     public:
         virtual string getDbXml() = 0;
         virtual ~ControlNotification() {};
-        
+        bool saveToDb();
         int getLevel();
 
     protected:
