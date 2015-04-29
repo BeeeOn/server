@@ -6,6 +6,7 @@
 #include <vector>
 #include "JsonNotificationBuilder.h"
 #include "Constants.h"
+#include <sstream>
 
 using namespace std;
 
@@ -13,10 +14,10 @@ class BaseNotification : public Notification
 {
     public:
         virtual int getLevel() = 0;
-        virtual string getDbXml() = 0;
         virtual ~BaseNotification() {};
         virtual bool saveToDb() = 0;
 
+        string getDbXml();
         vector<string> sendGcm(vector<string> *ids);       
         string getId();
         string getUserId();
@@ -28,6 +29,7 @@ class BaseNotification : public Notification
         string getName();
         string getGcmMsg(string ids);
         virtual void addGcmData(JsonNotificationBuilder *builder) = 0;
+        virtual void addDbXmlData(stringstream *ss) = 0; 
         virtual string getType() = 0;
     
     private:

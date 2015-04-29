@@ -9,6 +9,7 @@
 #include "Constants.h"    
 #include <iostream>
 #include "Utils.h"
+#include "XmlHelper.h"
 
 DeleteNotif::DeleteNotif(int userId, int notificationId,
             long time, int deleteNotifId)
@@ -21,10 +22,10 @@ void DeleteNotif::addGcmData(JsonNotificationBuilder *builder) {
   builder->addData(JSON_DATA_MSGID_DELETE, Utils::intToString(mDeleteNotifId));
 }
 
-string DeleteNotif::getDbXml() {
-  // it should not be called  
-  return "";
+void DeleteNotif::addDbXmlData(stringstream *ss) {
+    XmlHelper::tagWithValue(ss, DATA_MSGID_DELETE, Utils::intToString(mDeleteNotifId));
 }
+
 
 DeleteNotif::~DeleteNotif() {
 }

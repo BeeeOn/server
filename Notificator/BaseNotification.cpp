@@ -3,6 +3,8 @@
 #include "Utils.h"
 #include <sstream>
 #include <iostream>
+#include "XmlHelper.h"
+
 using namespace std;
 
 BaseNotification::BaseNotification(string name, int userId, int notificationId, long time)
@@ -30,6 +32,31 @@ vector<string> BaseNotification::sendGcm(vector<string> *ids) {
   vector<string> gcmDelete;
   gcmDelete.clear();
   return gcmDelete;
+}
+
+string BaseNotification::getDbXml() {
+  stringstream ss;
+  
+  // add compulsory XML data
+  // <notif attr=value>
+  ss << "<" << XML_TAG_NOTIFICATION;
+
+  XmlHelper::addAttribute(&ss, DATA_NAME, getName());
+  XmlHelper::addAttribute(&ss, DATA_USER_ID, getUserId());
+  XmlHelper::addAttribute(&ss, DATA_TYPE, getType());
+  XmlHelper::addAttribute(&ss, DATA_TIME, getTime());
+  XmlHelper::addAttribute(&ss, DATA_MSGID, getId());
+
+  ss << ">";
+  
+  // add specific XML data
+  addDbXmlData(&ss);
+
+  // add end tag
+  // </notif>
+  XmlHelper::endTag(&ss, XML_TAG_NOTIFICATION);
+
+  return ss.str();
 }
 
 string BaseNotification::getUserId() {

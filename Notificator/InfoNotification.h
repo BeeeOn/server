@@ -10,12 +10,12 @@
 
 #include <string>
 #include <vector>
+#include <sstream>
 #include "BaseNotification.h"
 #include "JsonNotificationBuilder.h"
 
 class InfoNotification : public BaseNotification {
 public:
-    virtual string getDbXml() = 0;
     virtual ~InfoNotification();
     virtual bool saveToDb();
 
@@ -24,6 +24,7 @@ protected:
     InfoNotification(string name, int userId, int notificationId,
              long time);
     virtual void addGcmData(JsonNotificationBuilder *builder) = 0;
+    virtual void addDbXmlData(stringstream *ss) = 0;
     string getType();
 private:
 };

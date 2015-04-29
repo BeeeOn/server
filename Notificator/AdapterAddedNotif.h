@@ -10,15 +10,16 @@
 #include "InfoNotification.h"
 #include <string>
 #include "Utils.h"
+#include <sstream>
 
 class AdapterAddedNotif : public InfoNotification {
 public:
     AdapterAddedNotif(int userId, int notificationId,
             long time, int adapterId);
     ~AdapterAddedNotif();
-    string getDbXml();
 protected:
     void addGcmData(JsonNotificationBuilder *builder);
+    void addDbXmlData(stringstream *ss);
 private:
     int mAdapterId;
 };

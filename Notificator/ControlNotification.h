@@ -6,11 +6,11 @@
 using namespace std;
 
 #include <string>
+#include <sstream>
 
 class ControlNotification : public BaseNotification
 {
     public:
-        virtual string getDbXml() = 0;
         virtual ~ControlNotification() {};
         bool saveToDb();
         int getLevel();
@@ -19,6 +19,7 @@ class ControlNotification : public BaseNotification
         ControlNotification (string name, int userId, int notificationId, 
                long time);
         virtual void addGcmData(JsonNotificationBuilder *builder) = 0;
+        virtual void addDbXmlData(stringstream *ss) = 0;
         string getType();
     private:
 

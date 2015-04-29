@@ -9,13 +9,13 @@
 #define	ADVERTNOTIFICATION_H
 
 #include <string>
+#include <sstream>
 #include <vector>
 #include "BaseNotification.h"
 #include "JsonNotificationBuilder.h"
 
 class AdvertNotification : BaseNotification{
 public:
-    virtual string getDbXml() = 0;
     virtual ~AdvertNotification();
     virtual bool saveToDb();
 
@@ -25,6 +25,7 @@ protected:
     AdvertNotification(string name, int userId, int notificationId,
             long time);
     virtual void addGcmData(JsonNotificationBuilder *builder) = 0;
+    virtual void addDbXmlData(stringstream *ss) = 0;
     string getType();
 private:
 };

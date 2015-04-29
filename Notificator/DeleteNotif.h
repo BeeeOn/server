@@ -16,10 +16,11 @@ public:
     DeleteNotif(int userId, int notificationId,
             long time, int deleteNotifId);
     ~DeleteNotif();
-    string getDbXml();
 
 protected:
     void addGcmData(JsonNotificationBuilder *builder);
+    void addDbXmlData(stringstream *ss);
+
 private:
     int mDeleteNotifId;
 };

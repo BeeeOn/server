@@ -59,6 +59,9 @@ static const string JSON_DATA_DEVICE_TYPE = "\"" + DATA_DEVICE_TYPE + "\"";
 static const string JSON_DATA_MSGID_DELETE = "\"" + DATA_MSGID_DELETE + "\"";
 static const string JSON_DATA_URI = "\"" + DATA_URI + "\"";
 
+/** XML SPECIFIC TAGS */
+static const string XML_TAG_NOTIFICATION = "notif";
+
 /** NOTIFICATION NAME */
 static const string NAME_WATCHDOG = "watchdog";
 static const string NAME_DELETE_NOTIF = "delete_not";

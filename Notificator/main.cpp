@@ -19,6 +19,11 @@ int main()
         1);                   // sensor type
     
     notif->sendGcm(&ids);
+    
+    if (notif->saveToDb()) {
+      cout << endl << "########   SAVING TO DATABASE ############" << endl;
+      cout << notif->getDbXml() << endl;
+    }
 
     delete(notif);
     return 0;
