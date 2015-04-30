@@ -19,9 +19,9 @@ class BaseNotification : public Notification
 
         string getDbXml();
         vector<string> sendGcm(vector<string> *ids);       
-        string getId();
-        string getUserId();
-        string getTime();
+        int getId();
+        int getUserId();
+        long getTime();
 
     protected:
         BaseNotification(string name, int userId, 

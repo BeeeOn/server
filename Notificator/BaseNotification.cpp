@@ -19,10 +19,10 @@ vector<string> BaseNotification::sendGcm(vector<string> *ids) {
   JsonNotificationBuilder builder;
   builder =  builder.registrationIds(ids)
          .addData(JSON_DATA_NAME, getName())
-         .addData(JSON_DATA_USER_ID, getUserId())
-         .addData(JSON_DATA_TIME, getTime())
+         .addData(JSON_DATA_USER_ID, Utils::intToString(mUserId))
+         .addData(JSON_DATA_TIME, Utils::longToString(mTime))
          .addData(JSON_DATA_TYPE, getType())
-         .addData(JSON_DATA_MSGID, getId());
+         .addData(JSON_DATA_MSGID, Utils::intToString(mNotificationId));
 
   addGcmData(&builder);
 
@@ -39,6 +39,7 @@ string BaseNotification::getDbXml() {
   
   // add compulsory XML data
   // <notif attr=value>
+  /*
   ss << "<" << XML_TAG_NOTIFICATION;
 
   XmlHelper::addAttribute(&ss, DATA_NAME, getName());
@@ -48,27 +49,27 @@ string BaseNotification::getDbXml() {
   XmlHelper::addAttribute(&ss, DATA_MSGID, getId());
 
   ss << ">";
-  
+  */
   // add specific XML data
   addDbXmlData(&ss);
 
   // add end tag
   // </notif>
-  XmlHelper::endTag(&ss, XML_TAG_NOTIFICATION);
+  // XmlHelper::endTag(&ss, XML_TAG_NOTIFICATION); 
 
   return ss.str();
 }
 
-string BaseNotification::getUserId() {
-  return Utils::intToString(mUserId);
+int BaseNotification::getUserId() {
+  return mUserId;
 }
 
-string BaseNotification::getId() {
-  return Utils::intToString(mNotificationId);
+int BaseNotification::getId() {
+  return mNotificationId;
 }
 
-string BaseNotification::getTime() {
-  return Utils::longToString(mTime);
+long BaseNotification::getTime() {
+  return mTime;
 }
 
 string BaseNotification::getName() {

@@ -22,6 +22,11 @@ int main()
     
     if (notif->saveToDb()) {
       cout << endl << "########   SAVING TO DATABASE ############" << endl;
+      int userId = notif->getUserId();
+      long timestamp = notif->getTime();
+      int notificationId = notif->getId();
+      int level = notif->getLevel();
+
       cout << notif->getDbXml() << endl;
     }
 
