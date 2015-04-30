@@ -18,6 +18,7 @@ class Notification
         virtual long getTime() = 0;
         virtual vector<string> sendGcm(vector<string> *ids) = 0;
         virtual bool saveToDb() = 0;
+        virtual string getName() = 0;
     protected:
         Notification(){};
 

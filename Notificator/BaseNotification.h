@@ -22,11 +22,11 @@ class BaseNotification : public Notification
         int getId();
         int getUserId();
         long getTime();
+        string getName();
 
     protected:
         BaseNotification(string name, int userId, 
             int notificationId, long time);
-        string getName();
         string getGcmMsg(string ids);
         virtual void addGcmData(JsonNotificationBuilder *builder) = 0;
         virtual void addDbXmlData(stringstream *ss) = 0; 

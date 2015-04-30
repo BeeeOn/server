@@ -26,7 +26,7 @@ int main()
       long timestamp = notif->getTime();
       int notificationId = notif->getId();
       int level = notif->getLevel();
-
+      string name = notif->getName();
       cout << notif->getDbXml() << endl;
     }
 
