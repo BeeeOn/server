@@ -23,7 +23,8 @@ static const string DATA_ADAPTER_ID = "aid";
 static const string DATA_DEVICE_ID = "did";
 static const string DATA_DEVICE_TYPE = "dtype";
 static const string DATA_URI = "uri";
-
+static const string DATA_BATTERY = "bat";
+static const string DATA_SIGNAL = "rssi";
 
 /**************************************************/
 /*********         JSON              **************/
@@ -58,6 +59,8 @@ static const string JSON_DATA_DEVICE_ID = "\"" + DATA_DEVICE_ID + "\"";
 static const string JSON_DATA_DEVICE_TYPE = "\"" + DATA_DEVICE_TYPE + "\"";
 static const string JSON_DATA_MSGID_DELETE = "\"" + DATA_MSGID_DELETE + "\"";
 static const string JSON_DATA_URI = "\"" + DATA_URI + "\"";
+static const string JSON_DATA_BATTERY = "\"" + DATA_BATTERY + "\"";
+static const string JSON_DATA_SIGNAL = "\"" + DATA_SIGNAL + "\"";
 
 /** XML SPECIFIC TAGS */
 static const string XML_TAG_NOTIFICATION = "notif";
@@ -67,8 +70,10 @@ static const string NAME_WATCHDOG = "watchdog";
 static const string NAME_DELETE_NOTIF = "delete_not";
 static const string NAME_URI = "uri";
 static const string NAME_SENSOR_ADDED = "sensor_add";
+static const string NAME_SENSOR_LOW_BATTERY = "sensor_bat";
+static const string NAME_SENSOR_LOW_SIGNAL = "sensor_sig";
 static const string NAME_ADAPTER_ADDED = "adapter_add";
-
+static const string NAME_ADAPTER_OFFLINE = "adapter_off";
 
 /** NOTIFICAITON TYPE AND LEVEL */
 static const string TYPE_ALERT = "alert";
