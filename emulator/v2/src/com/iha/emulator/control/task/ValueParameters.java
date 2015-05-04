@@ -8,29 +8,34 @@ import org.apache.logging.log4j.Logger;
 import org.dom4j.Element;
 
 /**
- * Created by Shu on 3.3.2015.
+ * Information about values, that are enabled. Used in "Performance Simulation". When creating {@link com.iha.emulator.control.task.SimulationTask}
+ * random values are created. Each simulation task can have own enabled values.
+ *
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
 public class ValueParameters {
-
+    /** Log4j2 logger field */
     private static final Logger logger = LogManager.getLogger(ValueParameters.class);
+    /** list of enabled values */
     private ObservableList<Value> enabledValues;
 
-    public Value isValueEnabled(int valueIndex) throws IllegalArgumentException{
-        if(enabledValues == null || enabledValues.size() == 0)
-            throw new IllegalArgumentException("No enabled values(possible null).");
-        for(Value value : enabledValues){
-            if(valueIndex == value.getValueType().ordinal()){
-                return copyDeepFoundValue(value);
-            }
-        }
-        return null;
-    }
-
+    /**
+     * Returns new instance of value, if given value index is in enabled values list.
+     * @param valueIndex index of value, that is to be created. This index is number of value in {@link com.iha.emulator.models.value.Value.Type}
+     * @return new instance of value or null if given value index is not enabled.
+     */
     public Value getEnabledValue(int valueIndex){
         return copyDeepFoundValue(enabledValues.get(valueIndex));
     }
 
+    /**
+     * Creates new instance of same type as value given as parameter. New value will have same value,initial value and name
+     * as given value. Store history and generate value flags are automatically set to <code>false</code>.
+     * @param foundValue value to be copied
+     * @return deep copy of given value
+     */
     private Value copyDeepFoundValue(Value foundValue){
+        //create new value of same type as given value
         Value newValue = ValueFactory.buildValue(foundValue.getValueType());
         /*if(((HasGenerator)foundValue).getGeneratorType() == null)
             return newValue;
@@ -55,16 +60,24 @@ public class ValueParameters {
                     break;
             }
         }*/
-        //set other value parameters
+        //copy value
         newValue.setValue(foundValue.getValue());
+        //copy initial value
         newValue.setInitialValue(foundValue.getInitialValue());
-        //newValue.setGeneratorSeed(foundValue.getGeneratorSeed());
+        //set flags
         newValue.setGenerateValue(false);
         newValue.setStoreHistory(false);
+        //copy name
         newValue.setName(foundValue.getName());
         return newValue;
     }
-
+    /**
+     * Creates Dom4j XML element with information about enabled values.
+     * This element is added to root element given as parameter.
+     *
+     * @param rootElement root Dom4j XML element for server
+     * @return XML element
+     */
     public Element saveToXml(Element rootElement){
         Element enabledElement = rootElement.addElement("enabled_values");
         String valueString = "";
@@ -74,11 +87,18 @@ public class ValueParameters {
         enabledElement.setText(valueString);
         return enabledElement;
     }
-
+    /**
+     * Gets list of enabled values
+     * @return list of enabled values
+     */
     public ObservableList<Value> getEnabledValues() {
         return enabledValues;
     }
 
+    /**
+     * Sets list of enabled values
+     * @param enabledValues list of enabled values
+     */
     public void setEnabledValues(ObservableList<Value> enabledValues) {
         this.enabledValues = enabledValues;
     }

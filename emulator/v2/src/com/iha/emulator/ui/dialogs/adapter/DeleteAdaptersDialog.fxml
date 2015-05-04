@@ -39,7 +39,7 @@
                         <Insets right="6.0" />
                      </padding>
                   </Label>
-                  <CheckBox fx:id="databaseCheckBox" alignment="CENTER" disable="true" mnemonicParsing="false" prefHeight="17.0" prefWidth="57.0" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                  <CheckBox fx:id="databaseCheckBox" alignment="CENTER" mnemonicParsing="false" prefHeight="17.0" prefWidth="57.0" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                      <GridPane.margin>
                         <Insets left="15.0" />
                      </GridPane.margin>
