@@ -9,10 +9,13 @@
 #include "Constants.h"
 
 AdvertNotification::AdvertNotification(string name, int userId, 
-    int notificationId, long time, 
-    string message) 
-: VisibleNotification(name, userId, notificationId, time, message)
+    int notificationId, long time) 
+: BaseNotification(name, userId, notificationId, time)
 {
+}
+
+bool AdvertNotification::saveToDb() {
+    return true;
 }
 
 int AdvertNotification::getLevel() {

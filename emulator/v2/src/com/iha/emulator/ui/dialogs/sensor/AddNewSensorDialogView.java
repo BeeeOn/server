@@ -52,6 +52,7 @@ public class AddNewSensorDialogView implements Initializable,AddNewSensorDialogP
     @FXML private TextField valueNameTextField;
     @FXML private TextField valueTextField;
     @FXML private ComboBox valueComboBox;
+    @FXML private ComboBox boilerStatusComboBox;
     @FXML private ToggleGroup storeValueRadBtnGroup;
     @FXML private RadioButton valueYesStoreHistoryRadBtn;
     @FXML private RadioButton valueNoStoreHistoryRadBtn;
@@ -213,6 +214,11 @@ public class AddNewSensorDialogView implements Initializable,AddNewSensorDialogP
     @Override
     public ComboBox getValueComboBox(){
         return valueComboBox;
+    }
+
+    @Override
+    public ComboBox getBoilerStatusComboBox(){
+        return boilerStatusComboBox;
     }
 
     @Override

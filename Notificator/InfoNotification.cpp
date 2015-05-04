@@ -9,9 +9,13 @@
 #include "Constants.h"
 
 InfoNotification::InfoNotification(string name, int userId, int notificationId,
-        long time, string message)
-: VisibleNotification(name, userId, notificationId, time, message)
+        long time)
+: BaseNotification(name, userId, notificationId, time)
 {
+}
+
+bool InfoNotification::saveToDb() {
+  return true;
 }
 
 string InfoNotification::getType() {
@@ -20,20 +24,6 @@ string InfoNotification::getType() {
 
 int InfoNotification::getLevel() {
     return LEVEL_INFO;
-}
-
-string InfoNotification::getMessage() {
-    return VisibleNotification::getMessage();
-}
-string InfoNotification::getUserId() {
-    return VisibleNotification::getUserId();
-}
-string InfoNotification::getId() {
-    return VisibleNotification::getId();
-}
-
-string InfoNotification::getTime() {
-    return VisibleNotification::getTime();
 }
 
 InfoNotification::~InfoNotification() {

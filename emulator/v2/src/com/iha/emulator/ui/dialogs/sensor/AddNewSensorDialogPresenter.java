@@ -7,6 +7,9 @@ import com.iha.emulator.communication.eserver.task.implemented.CheckSensorIdTask
 import com.iha.emulator.control.AdapterController;
 import com.iha.emulator.control.SensorController;
 import com.iha.emulator.models.value.*;
+import com.iha.emulator.models.value.implemented.BoilerModeActuatorValue;
+import com.iha.emulator.models.value.implemented.BoilerStatusSensorValue;
+import com.iha.emulator.models.value.implemented.BoilerTypeActuatorValue;
 import com.iha.emulator.models.value.implemented.EmptyValue;
 import com.iha.emulator.resources.images.sensor_types.SensorIcon;
 import com.iha.emulator.ui.Presenter;
@@ -101,6 +104,7 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
         public TextField getValueNameTextField();
         public TextField getValueTextField();
         public ComboBox getValueComboBox();
+        public ComboBox getBoilerStatusComboBox();
         public RadioButton getValueYesStoreHistoryRadBtn();
         public RadioButton getValueNoStoreHistoryRadBtn();
         public RadioButton getValueYesGenerateValueRadBtn();
@@ -164,7 +168,9 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
             tmpValue.setName(valueElement.element("name").getText());
             tmpValue.setInitialValue(tmpValue.fromStringToValueType(valueElement.element("initial").getText()));
             tmpValue.setValue(tmpValue.fromStringToValueType(valueElement.element("initial").getText()));
-            tmpValue.setStoreHistory(valueElement.element("store_history").getText().equals("true"));
+            //TODO fix forcefull history storage disabling
+            tmpValue.setStoreHistory(false);
+            //tmpValue.setStoreHistory(valueElement.element("store_history").getText().equals("true"));
             tmpValue.setGenerateValue(valueElement.element("generate_value").getText().equals("true"));
             Element generatorElement = null;
             try{
@@ -353,6 +359,11 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
             logger.debug("All info OK -> creating sensor");
             try{
                 if(sensorContainer != null && adapterController != null){
+                    //TODO delete logger warn info
+                    logger.warn("Values and types: ");
+                    for(Value value : values.get()){
+                        logger.warn("   name: "+value.getName() + " -> type: " + value.getValueType().getType());
+                    }
                     SensorController newSensor = adapterController.createSensor(
                             sensorContainer, // sensor panel container
                             Utilities.toRGBCode(view.getSensorColorPicker().getValue()), //sensor panel header color
@@ -418,7 +429,7 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
 
     @SuppressWarnings("unchecked")
     protected void addValueToTree(Type type) {
-        logger.debug("Chosen value: " + type.getName());
+        logger.debug("Chosen value: " + type.getName() + "-> type: " + type.getType());
         Value newValue = ValueFactory.buildValue(type);
         TreeItem newItem = new TreeItem<>(newValue);
         view.getValuesTree().getRoot().getChildren().add(newItem);
@@ -506,19 +517,36 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
         //if value is type boolean, show checkbox, else textfield
         if(value.getValue() instanceof Boolean){
             view.getValueTextField().setVisible(false);
+            view.getBoilerStatusComboBox().setVisible(false);
             view.getValueComboBox().setVisible(true);
             if((Boolean) value.getValue()){
                 view.getValueComboBox().getSelectionModel().select("ON");
             }else{
                 view.getValueComboBox().getSelectionModel().select("OFF");
             }
+        }else if(value instanceof VPTRegulatorValue){
+            clearStatusComboBox();
+            if(value instanceof BoilerStatusSensorValue){
+                //value boiler status combo box
+                view.getBoilerStatusComboBox().setItems(FXCollections.observableArrayList(BoilerStatusSensorValue.BoilerStatus.values()));
+            }else if(value instanceof BoilerTypeActuatorValue){
+                view.getBoilerStatusComboBox().setItems(FXCollections.observableArrayList(BoilerTypeActuatorValue.BoilerOperationType.values()));
+            }else if(value instanceof BoilerModeActuatorValue){
+                view.getBoilerStatusComboBox().setItems(FXCollections.observableArrayList(BoilerModeActuatorValue.BoilerOperationMode.values()));
+            }
+            view.getValueTextField().setVisible(false);
+            view.getValueComboBox().setVisible(false);
+            view.getBoilerStatusComboBox().setVisible(true);
+            view.getBoilerStatusComboBox().getSelectionModel().select(value.getValue());
         }else{
             view.getValueTextField().setVisible(true);
             view.getValueComboBox().setVisible(false);
+            view.getBoilerStatusComboBox().setVisible(false);
             view.getValueTextField().setText(String.valueOf(value.getValue()));
         }
-        view.getValueYesStoreHistoryRadBtn().setSelected(value.isStoreHistory());
-        view.getValueNoStoreHistoryRadBtn().setSelected(!value.isStoreHistory());
+        //TODO fix forcefull history storage disabling
+        view.getValueYesStoreHistoryRadBtn().setSelected(false); //value.isStoreHistory()
+        view.getValueNoStoreHistoryRadBtn().setSelected(true); //!value.isStoreHistory()
         view.getValueYesGenerateValueRadBtn().setSelected(value.isGenerateValue());
         view.getValueNoGenerateValueRadBtn().setSelected(!value.isGenerateValue());
         view.getSaveValueBtn().setOnAction(null);
@@ -528,6 +556,11 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
         setValueInfoSet(true);
     }
 
+    private void clearStatusComboBox(){
+        view.getBoilerStatusComboBox().getSelectionModel().clearSelection();
+        view.getBoilerStatusComboBox().getItems().clear();
+    }
+
     private void clearValueInformation(){
         //clear generator combo box
         view.getGeneratorTypeComboBox().getSelectionModel().clearSelection();
@@ -535,6 +568,7 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
         view.getValueTypeTextField().clear();
         view.getValueNameTextField().clear();
         view.getValueComboBox().setVisible(false);
+        view.getBoilerStatusComboBox().setVisible(false);
         view.getValueTextField().setVisible(true);
         view.getValueTextField().clear();
         view.getMinNormalTextField().clear();
@@ -586,6 +620,8 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
                 value.setValue(value.fromStringToValueType(view.getValueTextField().getText()));
             }else if(view.getValueComboBox().isVisible()){
                 value.setValue(value.fromStringToValueType(view.getValueComboBox().getSelectionModel().getSelectedItem().equals("ON") ? "true" : "false"));
+            }else if(view.getBoilerStatusComboBox().isVisible()){
+                value.setValue(((Status) view.getBoilerStatusComboBox().getSelectionModel().getSelectedItem()).getCode());
             }
         }catch (NumberFormatException e){
             showWarning("Value information","Cannot parse value. Is it correct datatype?",null);
@@ -623,6 +659,9 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
                 && !(view.getValueComboBox().getSelectionModel().getSelectedItem().equals("ON") ? "true" : "false")
                 .equals(String.valueOf(value.getInitialValue()))){
             value.setInitialValue(value.fromStringToValueType(view.getValueComboBox().getSelectionModel().getSelectedItem().equals("ON") ? "true" : "false"));
+        }else if(view.getBoilerStatusComboBox().isVisible()
+                && ((Status)view.getBoilerStatusComboBox().getSelectionModel().getSelectedItem()).getCode() != (int)value.getInitialValue() ){
+            value.setInitialValue(((Status)view.getBoilerStatusComboBox().getSelectionModel().getSelectedItem()).getCode());
         }
         logger.trace("Updating tree");
         updateTree();
@@ -649,6 +688,10 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
         view.getValueComboBox().getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if(oldValue != null && view.getValueComboBox().isVisible())
                 setValueInfoSet(oldValue.equals(newValue));
+        });
+        view.getBoilerStatusComboBox().getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if(oldValue != null && view.getBoilerStatusComboBox().isVisible())
+                setValueInfoSet((oldValue.equals(newValue)));
         });
         // store history
         view.getValueYesStoreHistoryRadBtn().selectedProperty().addListener(radBtnChangeListener);
@@ -812,6 +855,36 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
                 prepareValueInfoContainer((Value) ((TreeItem) newValue).getValue());
             }
         });
+        view.getBoilerStatusComboBox().setCellFactory(new Callback<ListView<Status>, ListCell<Status>>() {
+            @Override
+            public ListCell call(ListView<Status> status) {
+                return new ListCell<Status>() {
+                    @Override
+                    protected void updateItem(Status s, boolean bln) {
+                        super.updateItem(s, bln);
+                        if (s != null) {
+                            setGraphic(null);
+                            setText(s.getCode() + "-" + s.getDescription());
+                        } else {
+                            setText(null);
+                            setGraphic(null);
+                        }
+                    }
+                };
+            }
+        });
+        view.getBoilerStatusComboBox().setButtonCell(new ListCell<Status>(){
+            @Override
+            protected void updateItem(Status s,boolean bln){
+                super.updateItem(s,bln);
+                if( s != null ){
+                    setText(s.getCode() + "-" + s.getDescription());
+                }else{
+                    setText(null);
+                    setGraphic(null);
+                }
+            }
+        });
     }
 
     private void updateTree(){
@@ -874,6 +947,8 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
         view.setPresenter(this);
         //value boolean combo box
         view.getValueComboBox().setItems(FXCollections.observableArrayList("ON","OFF"));
+        //value boiler status combo box
+        view.getBoilerStatusComboBox().setItems(FXCollections.observableArrayList(BoilerStatusSensorValue.BoilerStatus.values()));
         //normal distribution
         view.getNormalDistributionContainer().setVisible(false);
         view.getNormalDistributionContainer().visibleProperty().bind(new BooleanBinding() {

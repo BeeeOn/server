@@ -41,7 +41,7 @@ public class SimulationTask {
     private static final Logger logger = LogManager.getLogger(SimulationTask.class);
     private static final Double DEFAULT_ADAPTER_FIRMWARE = 0.0;
     public static final int VALUE_TYPE_MIN = Value.Type.SENSOR_HUMIDITY.ordinal();
-    public static final int VALUE_TYPE_MAX = Value.Type.SENSOR_TEMPERATURE.ordinal();
+    public static final int VALUE_TYPE_MAX = Value.Type.SENSOR_BOILER_STATUS.ordinal();
 
     public enum State{
         READY("Ready"),

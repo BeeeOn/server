@@ -4,7 +4,6 @@
 #include <curl/curl.h>
 
 int Notificator::sendGcm(string json) {
-
     CURL *curl;
     //CURLcode res;
 

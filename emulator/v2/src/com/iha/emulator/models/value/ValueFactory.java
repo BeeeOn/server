@@ -1,6 +1,8 @@
 package com.iha.emulator.models.value;
 
 import com.iha.emulator.models.value.implemented.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Random;
 
@@ -10,6 +12,8 @@ import static com.iha.emulator.models.value.Value.Type;
  * Created by Shu on 2.12.2014.
  */
 public class ValueFactory {
+
+    private static final Logger logger = LogManager.getLogger(ValueFactory.class);
 
     public static <T extends Value> T  buildValue(String valueTypeName){
         for(Type name : Value.Type.values()){
@@ -51,8 +55,24 @@ public class ValueFactory {
             case SENSOR_OPEN_CLOSED:
                 value = new OpenClosedSensorValue(valueType.getName(),valueType.getType(),0,valueType.getUnit(),generateValue,storeHistory,new Random(),generatorSeed);
                 break;
+            case SENSOR_BOILER_STATUS:
+                logger.debug("Creating new Sensor Boiler Status -> type: " + valueType.getType());
+                value = new BoilerStatusSensorValue(valueType.getName(),valueType.getType(),0,valueType.getUnit(),generateValue,storeHistory,new Random(),generatorSeed);
+                break;
             case ACTUATOR_ON_OFF:
                 value = new OnOffActuatorValue(valueType.getName(),valueType.getType(),0,valueType.getUnit(),generateValue,storeHistory,new Random(),generatorSeed);
+                break;
+            case ACTUATOR_TEMPERATURE:
+                logger.debug("Creating new Actuator Temperature -> type: " + valueType.getType());
+                value = new TemperatureActuatorValue(valueType.getName(),valueType.getType(),0,valueType.getUnit(),generateValue,storeHistory,new Random(),generatorSeed);
+                break;
+            case ACTUATOR_BOILER_TYPE:
+                logger.debug("Creating new Actuator Boiler Type -> type: " + valueType.getType());
+                value = new BoilerTypeActuatorValue(valueType.getName(),valueType.getType(),0,valueType.getUnit(),generateValue,storeHistory,new Random(),generatorSeed);
+                break;
+            case ACTUATOR_BOILER_MODE:
+                logger.debug("Creating new Actuator Boiler Mode -> type: " + valueType.getType());
+                value = new BoilerModeActuatorValue(valueType.getName(),valueType.getType(),0,valueType.getUnit(),generateValue,storeHistory,new Random(),generatorSeed);
                 break;
         }
         return (T)value;

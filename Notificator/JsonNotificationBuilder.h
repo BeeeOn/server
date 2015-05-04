@@ -17,16 +17,19 @@ class JsonNotificationBuilder
         JsonNotificationBuilder timeToLive(int value);
         JsonNotificationBuilder dryRun(bool value);
         JsonNotificationBuilder notificationKey(string value);
-        JsonNotificationBuilder registrationIds(string value);
+        JsonNotificationBuilder registrationIds(vector<string> *ids);
         string build();
         ~JsonNotificationBuilder();
     protected:
     private:
-        string mCollapseKey, mRestrictedPackageName, mNotificationKey, mRegIds;
+        static string vectorToJsonArray(vector<string> *array);
+
+        string mCollapseKey, mRestrictedPackageName, mNotificationKey;
         int mTimeToLive;
         bool mDryRun, mDelayWhileIdle,isCollapse, isRestricted, isDelay, isNotificationKey ,isTTL , isDryRun, isRegIds;
         vector <string> mKeys;
         vector <string> mValues;
+        vector <string> *mIds;
 };
 
 #endif // JSONNOTIFICATIONBUILDER_H

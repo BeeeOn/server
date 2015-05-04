@@ -11,6 +11,10 @@ ControlNotification::ControlNotification(string name, int userId,
 {
 }
 
+bool ControlNotification::saveToDb() {
+    return false;
+}
+
 int ControlNotification::getLevel() {
     return LEVEL_CONTROL;
 }

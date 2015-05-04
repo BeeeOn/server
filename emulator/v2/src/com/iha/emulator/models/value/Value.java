@@ -24,6 +24,7 @@ public interface Value<T> {
               <value type="0x07" name="CO2"         data_type="int"       unit="ppm"  transform=""    ></value> OK
               <value type="0x08" name="position"    data_type="bit array" unit=""     transform=""    ></value>
               <value type="0x0A" name="temperature" data_type="float"     unit="°C"   transform="/100"></value> OK
+              <value type="0x0B" name="boiler status" data_type="int"       unit=""     transform="">   </value> OK
             </sensors>
             <actors>
               <value type="0xA0" name="on/off"   data_type="bool" unit="" transform="" size="1b"></value>  OK
@@ -31,6 +32,8 @@ public interface Value<T> {
               <value type="0xA2" name="toggle"   data_type="bool" unit="" transform="" size="1b"></value>
               <value type="0xA3" name="range"    data_type="int"  unit="" transform="" size="1B"></value>
               <value type="0xA4" name="RGB"      data_type="int"  unit="" transform="" size="3B"></value>
+              <value type="0xA6" name="boiler operation type" data_type="int" unit="" transform="" size="1B"></value> OK
+              <value type="0xA7" name="boiler operation mode" data_type="int" unit="" transform="" size="1B"></value> OK
             </actors>
           </table>
         <server_adapter>
@@ -45,7 +48,11 @@ public interface Value<T> {
         SENSOR_NOISE("Noise", NoiseSensorValue.class, "dB", "0x06", new Generator[]{Generator.NORMAL_DISTRIBUTION, Generator.LINEAR_DISTRIBUTION}),
         SENSOR_EMISSIONS("Emissions", EmissionsSensorValue.class, "ppm", "0x07", new Generator[]{Generator.NORMAL_DISTRIBUTION, Generator.LINEAR_DISTRIBUTION}),
         SENSOR_TEMPERATURE("Temperature", TemperatureSensorValue.class, "°C", "0x0A", new Generator[]{Generator.NORMAL_DISTRIBUTION, Generator.LINEAR_DISTRIBUTION}),
-        ACTUATOR_ON_OFF("On/Off Actuator", OnOffActuatorValue.class, "", "0xA0", new Generator[]{Generator.BOOLEAN_RANDOM});
+        SENSOR_BOILER_STATUS("Boiler status", BoilerStatusSensorValue.class, "", "0x0B", new Generator[]{Generator.NORMAL_DISTRIBUTION, Generator.LINEAR_DISTRIBUTION}),
+        ACTUATOR_ON_OFF("On/Off Actuator", OnOffActuatorValue.class, "", "0xA0", new Generator[]{Generator.BOOLEAN_RANDOM}),
+        ACTUATOR_TEMPERATURE("B.O. temperature", TemperatureActuatorValue.class, "°C", "0xA5", new Generator[]{Generator.NORMAL_DISTRIBUTION, Generator.LINEAR_DISTRIBUTION}),
+        ACTUATOR_BOILER_TYPE("B.O. type", BoilerTypeActuatorValue.class, "", "0xA6", new Generator[]{Generator.NORMAL_DISTRIBUTION, Generator.LINEAR_DISTRIBUTION}),
+        ACTUATOR_BOILER_MODE("B.O. mode", BoilerModeActuatorValue.class, "", "0xA7", new Generator[]{Generator.NORMAL_DISTRIBUTION, Generator.LINEAR_DISTRIBUTION});
 
         final private String name;
         final private Class typeClass;

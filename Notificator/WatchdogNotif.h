@@ -4,27 +4,28 @@
  *
  */
 
-#ifndef LIMITEXCEEDEDNOTIFICATION_H
-#define	LIMITEXCEEDEDNOTIFICATION_H
+#ifndef WATCHDOGNOTIFICATION_H
+#define	WATCHDOGNOTIFICATION_H
 
 #include "InfoNotification.h"
 #include <string>
 #include "Utils.h"
+#include <sstream>
 
 class WatchdogNotif : public InfoNotification {
 public:
     WatchdogNotif(int userId, int notificationId,
             long time, string message, int adapterId, string deviceId, int type);
     ~WatchdogNotif();
-    string getDbXml();
-
 protected:
-    string getGcmMsg(string ids);
+    void addGcmData(JsonNotificationBuilder *builder);
+    void addDbXmlData(stringstream *ss);
+
 private:
     int mAdapterId, mDeviceType;
-    string mDeviceId;
+    string mDeviceId, mMsg;
 
 };
 
-#endif	/* LIMITEXCEEDEDNOTIFICATION_H */
+#endif	/* WATCHDOGNOTIFICATION_H */
 

@@ -2,18 +2,19 @@
 #include "JsonNotificationBuilder.h"
 #include "JsonUtil.h"
 #include "Constants.h"
+#include <iostream>
 
 using namespace std;
 
 JsonNotificationBuilder::JsonNotificationBuilder()
-:mCollapseKey(STRING_UNDEFINED), mRestrictedPackageName(STRING_UNDEFINED), mNotificationKey(STRING_UNDEFINED), mRegIds(STRING_UNDEFINED), mTimeToLive(TTL_UNDEFINED),
+:mCollapseKey(STRING_UNDEFINED), mRestrictedPackageName(STRING_UNDEFINED), mNotificationKey(STRING_UNDEFINED), mTimeToLive(TTL_UNDEFINED),
 mDryRun(false), mDelayWhileIdle(false), isCollapse(false), isRestricted(false), isDelay(false), isNotificationKey(false), isTTL(false) , isDryRun(false), isRegIds(false)
 {
 
 }
 
 JsonNotificationBuilder JsonNotificationBuilder::addData(string key, string value)
-{
+{   
     mKeys.push_back(key);
     mValues.push_back(value);
     return *this;
@@ -45,7 +46,7 @@ JsonNotificationBuilder JsonNotificationBuilder::timeToLive(int value)
     return *this;
 }
 JsonNotificationBuilder JsonNotificationBuilder::dryRun(bool value)
-{
+{   
     isDryRun = true;
     mDryRun = value;
     return *this;
@@ -57,9 +58,9 @@ JsonNotificationBuilder JsonNotificationBuilder::notificationKey(string value)
     return *this;
 }
 
-JsonNotificationBuilder JsonNotificationBuilder::registrationIds(string value) {
+JsonNotificationBuilder JsonNotificationBuilder::registrationIds(vector<string> *array) {
     isRegIds = true;
-    mRegIds = value;
+    mIds = array;
     return *this;
 }
 
@@ -67,9 +68,11 @@ string JsonNotificationBuilder::build()
 {
     stringstream ss;
     ss << "{";
+    
     if (isRegIds) {
-        JsonUtil::addPair(&ss, JSON_TAG_REG_IDS, mRegIds);
+        JsonUtil::addPair(&ss, JSON_TAG_REG_IDS, vectorToJsonArray(mIds));
     }
+        
     if (isNotificationKey) {
         JsonUtil::addPair(&ss, JSON_TAG_NOTIFICATION_KEY, JsonUtil::getJsonString(mNotificationKey));
     }
@@ -78,6 +81,7 @@ string JsonNotificationBuilder::build()
         addPair(&ss, JSON_TAG_TTL, std::to_string(mTimeToLive));
     }
     */
+    
     if (isDelay) {
         JsonUtil::addPair(&ss, JSON_TAG_WHILE_IDLE, mDelayWhileIdle?TRUE:FALSE);
     }
@@ -106,6 +110,25 @@ string JsonNotificationBuilder::build()
     ss << "}";
     return ss.str();
 }
+
+string JsonNotificationBuilder::vectorToJsonArray(vector<string> *array) {
+  stringstream ss;
+
+  ss << "[";
+
+  if (array->size() > 0) {
+    ss << "\"" << (*array)[0] << "\"";
+  }
+
+  for (unsigned int i = 1; i < array->size(); i++) {
+    ss << ",\"" << (*array)[i] << "\"";
+  }
+
+  ss << "]";
+
+  return ss.str();
+}
+
 JsonNotificationBuilder::~JsonNotificationBuilder()
 {
     // nothing to do

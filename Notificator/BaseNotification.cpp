@@ -3,6 +3,8 @@
 #include "Utils.h"
 #include <sstream>
 #include <iostream>
+#include "XmlHelper.h"
+
 using namespace std;
 
 BaseNotification::BaseNotification(string name, int userId, int notificationId, long time)
@@ -14,65 +16,60 @@ BaseNotification::BaseNotification(string name, int userId, int notificationId, 
 }
 
 vector<string> BaseNotification::sendGcm(vector<string> *ids) {
-  string stringIds = getGcmIds(ids);
-  string msg = getGcmMsg(stringIds);
+  JsonNotificationBuilder builder;
+  builder =  builder.registrationIds(ids)
+         .addData(JSON_DATA_NAME, getName())
+         .addData(JSON_DATA_USER_ID, Utils::intToString(mUserId))
+         .addData(JSON_DATA_TIME, Utils::longToString(mTime))
+         .addData(JSON_DATA_TYPE, getType())
+         .addData(JSON_DATA_MSGID, Utils::intToString(mNotificationId));
 
-  Notificator::sendGcm(msg);
+  addGcmData(&builder);
+
+  Notificator::sendGcm(builder.build());
 
   //TODO
-  vector<string> ahoj;
-  return ahoj;
+  vector<string> gcmDelete;
+  gcmDelete.clear();
+  return gcmDelete;
 }
 
-string BaseNotification::getUserId() {
-  return Utils::intToString(mUserId);
-  /*
-  string number;
+string BaseNotification::getDbXml() {
   stringstream ss;
-  ss << mUserId;
-  ss >> number;
-  return number;
-  */
-}
-
-string BaseNotification::getId() {
-  return Utils::intToString(mNotificationId);
+  
+  // add compulsory XML data
+  // <notif attr=value>
   /*
-  string number;
-  stringstream ss;
-  ss << mNotificationId;
-  ss >> number;
-  return number;
+  ss << "<" << XML_TAG_NOTIFICATION;
+
+  XmlHelper::addAttribute(&ss, DATA_NAME, getName());
+  XmlHelper::addAttribute(&ss, DATA_USER_ID, getUserId());
+  XmlHelper::addAttribute(&ss, DATA_TYPE, getType());
+  XmlHelper::addAttribute(&ss, DATA_TIME, getTime());
+  XmlHelper::addAttribute(&ss, DATA_MSGID, getId());
+
+  ss << ">";
   */
+  // add specific XML data
+  addDbXmlData(&ss);
+
+  // add end tag
+  // </notif>
+  // XmlHelper::endTag(&ss, XML_TAG_NOTIFICATION); 
+
+  return ss.str();
 }
 
-string BaseNotification::getGcmIds(vector<string>* ids) {
-    stringstream ss;
-    
-    ss << "[";
-    
-    if (ids->size() > 0) {
-        ss << "\"" << (*ids)[0] << "\"";
-    }
-
-    for (unsigned int i = 1; i < ids->size(); i++) {
-        ss << ",\"" << (*ids)[i] << "\"";
-    }
-
-    ss << "]";
-    
-    return ss.str();
+int BaseNotification::getUserId() {
+  return mUserId;
 }
 
-string BaseNotification::getTime() {
-  return Utils::longToString(mTime);
-  /*
-  string number;
-    stringstream ss;
-    ss << mTime;
-    ss >> number;
-    return number;
-*/
+int BaseNotification::getId() {
+  return mNotificationId;
+}
+
+long BaseNotification::getTime() {
+  return mTime;
 }
 
 string BaseNotification::getName() {

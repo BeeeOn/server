@@ -138,9 +138,6 @@ public class DetailedSimulationPresenter implements Presenter{
     //endregion
 
     //region public methods
-    /** TODO erase i*/
-    private int i = 0;
-
     public void addNewAdapter(){
         logger.debug("Creating new adapter");
         //define background process
@@ -584,7 +581,9 @@ public class DetailedSimulationPresenter implements Presenter{
                         logger.trace("XML -> Parsing sensor -> " + sensorId + " Parsing value -> " + valueElement.attributeValue("type"));
                         String valueType = valueElement.attributeValue("type");
                         String valueName = valueElement.attributeValue("name");
-                        Boolean valueStoreHistory = Boolean.valueOf(valueElement.attributeValue("store_history"));
+                        //TODO fix forcefull history storage disabling
+                        Boolean valueStoreHistory = false;
+                        //Boolean valueStoreHistory = Boolean.valueOf(valueElement.attributeValue("store_history"));
                         Boolean valueGenerateValue = Boolean.valueOf(valueElement.attributeValue("generate_value"));
                         String valueInitialValue = valueElement.elementText("initial_value");
                         if(valueType == null || valueName == null || valueStoreHistory == null || valueGenerateValue == null || valueInitialValue == null){
