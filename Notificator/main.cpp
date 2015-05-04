@@ -16,7 +16,8 @@ int main()
         "Jsem nova zprava",   // message
         123,                  // adadpter ID
         "deviceId",           // sensor ID
-        1);                   // sensor type
+        1,                    // sensor type
+        3);                   // rule ID
     
     notif->sendGcm(&ids);
     
