@@ -1,19 +1,10 @@
 -- Created by Vertabelo (http://vertabelo.com)
--- Last modification date: 2015-04-20 11:33:20.968
+-- Last modification date: 2015-05-03 19:03:21.476
 
 
 
 
 -- tables
--- Table: a_algorithms
-CREATE TABLE a_algorithms (
-    algorithm_id int  NOT NULL,
-    name varchar(50)  NOT NULL,
-    CONSTRAINT a_algorithms_pk PRIMARY KEY (algorithm_id)
-);
-
-
-
 -- Table: achievements
 CREATE TABLE achievements (
     achievement_id int  NOT NULL,
@@ -70,9 +61,9 @@ CREATE TABLE algo_devices (
 -- Table: algorithms_adapters
 CREATE TABLE algorithms_adapters (
     fk_adapter_id decimal(20,0)  NOT NULL,
-    fk_algorithm_id int  NOT NULL,
     email_list text  NOT NULL,
-    CONSTRAINT algorithms_adapters_pk PRIMARY KEY (fk_adapter_id,fk_algorithm_id,email_list)
+    fk_algorithm_id int  NOT NULL,
+    CONSTRAINT algorithms_adapters_pk PRIMARY KEY (fk_adapter_id,email_list)
 );
 
 
@@ -100,7 +91,6 @@ CREATE TABLE facilities (
     timestamp bigint  NOT NULL,
     fk_room_id bigint  NULL,
     fk_adapter_id decimal(20,0)  NOT NULL,
-    fk_type_id int  NULL,
     CONSTRAINT check_positive_mac CHECK (mac >= 0) NOT DEFERRABLE INITIALLY IMMEDIATE ,
     CONSTRAINT facilities_pk PRIMARY KEY (mac)
 );
@@ -148,6 +138,7 @@ CREATE TABLE notifications (
     timestamp bigint  NOT NULL,
     fk_user_id int  NOT NULL,
     read boolean  NOT NULL,
+    name text  NOT NULL,
     CONSTRAINT notifications_pk PRIMARY KEY (message_id)
 );
 
@@ -174,9 +165,6 @@ CREATE TABLE types (
     default_name text  NOT NULL,
     CONSTRAINT types_pk PRIMARY KEY (type_id)
 );
-CREATE EXTENSION btree_gist;
-CREATE INDEX idx_mac_range ON facility_types USING gist (mac_range with &&);
-alter table facility_types add constraint range_nonoverlap exclude using gist (mac_range with &&);
 
 
 
@@ -184,6 +172,7 @@ alter table facility_types add constraint range_nonoverlap exclude using gist (m
 CREATE TABLE u_algorithms (
     algorithm_id int  NOT NULL,
     name varchar(50)  NOT NULL,
+    type int  NOT NULL DEFAULT 0,
     CONSTRAINT u_algorithms_pk PRIMARY KEY (algorithm_id)
 );
 
@@ -192,23 +181,18 @@ CREATE TABLE u_algorithms (
 -- Table: users
 CREATE TABLE users (
     user_id serial  NOT NULL,
-    mail varchar(250)  NULL,
     signin_count int  NOT NULL DEFAULT 0,
-    phone_locale varchar(10)  NULL DEFAULT 'cs',
-    verified_email boolean  NULL,
-    name varchar(250)  NULL,
     given_name varchar(250)  NULL,
     family_name varchar(250)  NULL,
-    link varchar(250)  NULL,
     picture varchar(250)  NULL,
     gender varchar(10)  NULL,
-    google_locale varchar(10)  NULL,
+    mail varchar(250)  NULL,
+    password_md5 text  NULL,
     google_id text  NULL,
-    password text  NULL,
+    facebook_id text  NULL,
     CONSTRAINT users_pk PRIMARY KEY (user_id)
 );
 CREATE UNIQUE INDEX idx_user_mail ON users (mail);
-CREATE UNIQUE INDEX idx_user_name ON users (name);
 CREATE UNIQUE INDEX idx_user_google_id ON users (google_id);
 
 
@@ -361,23 +345,23 @@ ALTER TABLE algo_devices ADD CONSTRAINT algo_devices_users_algorithms
     INITIALLY IMMEDIATE 
 ;
 
--- Reference:  algorithms_adapters_a_algorithms (table: algorithms_adapters)
-
-
-ALTER TABLE algorithms_adapters ADD CONSTRAINT algorithms_adapters_a_algorithms 
-    FOREIGN KEY (fk_algorithm_id)
-    REFERENCES a_algorithms (algorithm_id)
-    ON DELETE  CASCADE 
-    NOT DEFERRABLE 
-    INITIALLY IMMEDIATE 
-;
-
 -- Reference:  algorithms_adapters_adapters (table: algorithms_adapters)
 
 
 ALTER TABLE algorithms_adapters ADD CONSTRAINT algorithms_adapters_adapters 
     FOREIGN KEY (fk_adapter_id)
     REFERENCES adapters (adapter_id)
+    ON DELETE  CASCADE 
+    NOT DEFERRABLE 
+    INITIALLY IMMEDIATE 
+;
+
+-- Reference:  algorithms_adapters_u_algorithms (table: algorithms_adapters)
+
+
+ALTER TABLE algorithms_adapters ADD CONSTRAINT algorithms_adapters_u_algorithms 
+    FOREIGN KEY (fk_algorithm_id)
+    REFERENCES u_algorithms (algorithm_id)
     ON DELETE  CASCADE 
     NOT DEFERRABLE 
     INITIALLY IMMEDIATE 
@@ -400,17 +384,6 @@ ALTER TABLE devices ADD CONSTRAINT devices_facilities
 ALTER TABLE facilities ADD CONSTRAINT facilities_adapters 
     FOREIGN KEY (fk_adapter_id)
     REFERENCES adapters (adapter_id)
-    ON DELETE  CASCADE 
-    NOT DEFERRABLE 
-    INITIALLY IMMEDIATE 
-;
-
--- Reference:  facilities_facility_types (table: facilities)
-
-
-ALTER TABLE facilities ADD CONSTRAINT facilities_facility_types 
-    FOREIGN KEY (fk_type_id)
-    REFERENCES types (type_id)
     ON DELETE  CASCADE 
     NOT DEFERRABLE 
     INITIALLY IMMEDIATE 

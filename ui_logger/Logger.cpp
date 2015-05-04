@@ -170,11 +170,11 @@ void Logger::printTime(){
             changeFiles();
     }       
     
-    _output<<">"<<_level<<"< " << std::this_thread::get_id() <<": ";
+    _output<<"|"<<_level<<"|~" << std::this_thread::get_id() <<":~";
 
     //printf("%d.%d.%d %02d:%02d:%02d:%03ld ", t->tm_mday,(t->tm_mon+1),(t->tm_year+1900),t->tm_hour, t->tm_min, t->tm_sec, tp.tv_usec/1000);
-    _output << t->tm_mday <<"." << (t->tm_mon+1) << "." << (t->tm_year+1900) <<" ";
-    _output << t->tm_hour << ":" << t->tm_min << ":" << t->tm_sec << ":" << tp.tv_usec/1000<< " ";
+    _output << t->tm_mday <<"." << (t->tm_mon+1) << "." << (t->tm_year+1900) <<"~";
+    _output << t->tm_hour << ":" << t->tm_min << ":" << t->tm_sec << ":" << tp.tv_usec/1000<< "~";
     
         if(_level <= _cerrVerbosity){
             cerr<<">"<<_level<<"< " << std::this_thread::get_id() <<": ";

@@ -1,6 +1,6 @@
 <config>
 	<server threads="10" port="4566" activityPort="7081" algorithmPort="7082" gamificationPort="7085" verbosity="7"/>
-	<database sessions="10" connectionString="port = '5432' dbname = 'home5' user = 'xvampo01' password = '1234' connect_timeout = '3'"/>
+	<database sessions="10" connectionString="port = '5432' dbname = 'home6' user = 'xvampo01' password = '1234' connect_timeout = '3'"/>
 	<comTable cleanerSleepPeriodMs="30000" maxInactivityTimeMs="600000"/>
         <logs toCout="true" />
 </config>

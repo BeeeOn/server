@@ -12,7 +12,7 @@
 #include "IMsgInLoginUnwanted.h"
 
 
-class MsgInDelGCMID : public IMsgInLoginUnwanted{
+class MsgInDelGCMID : public IMsgInFreeAccess{
 public:
     MsgInDelGCMID(char* msg, pugi::xml_document* doc);
     virtual ~MsgInDelGCMID();

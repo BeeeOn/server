@@ -9,8 +9,9 @@
 #define	IMSGINLOGINREQUIRED_H
 
 #include "IMsgIn.h"
+#include "IMsgInLoginUnwanted.h"
 
-class IMsgInLoginRequired : public IMsgIn{
+class IMsgInLoginRequired : public IMsgInFreeAccess{
 public:
     IMsgInLoginRequired(char* msg, pugi::xml_document* doc);
     virtual ~IMsgInLoginRequired();

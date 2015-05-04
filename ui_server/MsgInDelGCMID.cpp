@@ -14,7 +14,7 @@ using namespace std;
 
 const std::string MsgInDelGCMID::state = "delgcmid";
 
-MsgInDelGCMID::MsgInDelGCMID(char* msg, pugi::xml_document* doc): IMsgInLoginUnwanted(msg, doc) {
+MsgInDelGCMID::MsgInDelGCMID(char* msg, pugi::xml_document* doc): IMsgInFreeAccess(msg, doc) {
 
 }
 

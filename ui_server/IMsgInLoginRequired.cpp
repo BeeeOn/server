@@ -7,10 +7,11 @@
 
 #include "IMsgInLoginRequired.h"
 #include "../DAO/DAOUsers.h"
+#include "IMsgInLoginUnwanted.h"
 
 using namespace std;
 
-IMsgInLoginRequired::IMsgInLoginRequired(char* msg, pugi::xml_document* doc): IMsgIn(msg, doc) {
+IMsgInLoginRequired::IMsgInLoginRequired(char* msg, pugi::xml_document* doc): IMsgInFreeAccess(msg, doc) {
     
 }
 

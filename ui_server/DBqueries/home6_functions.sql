@@ -84,68 +84,38 @@ CREATE TRIGGER only_one_superuser
     EXECUTE PROCEDURE remove_another_superuser();
     
     
-
-
-
-CREATE OR REPLACE FUNCTION def_name_update() returns trigger
+    
+    
+CREATE OR REPLACE FUNCTION devs_set_name() returns trigger
   AS
   $$
-  
+    DECLARE
+  	def_name text;
   BEGIN
-    UPDATE devices set name = 
-  COALESCE( ( select default_name from types where mac_range @> NEW.mac::numeric) ,'') where devices.mac = NEW.mac AND devices.type = NEW.type;
+    IF NEW.fk_facilities_mac between 3232235519 AND 3232235776 THEN
+      CASE NEW.type WHEN   0 THEN def_name := 'Zóna 1 - Typ provozu'  ;
+            WHEN 1 THEN def_name := 'Zóna 1 - Režim provozu'  ;
+            WHEN 2 THEN def_name := 'Zóna 1 - Žádaná teplota'  ;
+            WHEN 3 THEN def_name := 'Zóna 1 - Aktuální teplota'  ;
+            WHEN 4 THEN def_name := 'Zóna 2 - Typ provozu'  ;
+            WHEN 5 THEN def_name := 'Zóna 2 - Režim provozu'  ;
+            WHEN 6 THEN def_name := 'Zóna 2 - Žádaná teplota'  ;
+            ELSE def_name := ''   ;
+       END CASE;
+      UPDATE devices set name = def_name where fk_facilities_mac = NEW.fk_facilities_mac AND type = NEW.type;
+      RETURN NEW;
+    END IF;  
+
+    
   
   RETURN NEW;
   END;
   
   $$
-  
   LANGUAGE plpgsql;
 
 
-CREATE TRIGGER set_facilities_def_name
+CREATE TRIGGER set_devs_type
     AFTER INSERT ON devices
     FOR EACH ROW
-    EXECUTE PROCEDURE def_name_update();  
-    
-CREATE OR REPLACE FUNCTION facility_type_update() returns trigger
-  AS
-  $$
-  
-  BEGIN
-    UPDATE facilities set fk_type = NEW.type_id from types where NEW.mac_range <@ facilities.mac::numeric;
-  
-  RETURN NEW;
-  END;
-  
-  $$
-  LANGUAGE plpgsql;
-
-
-CREATE TRIGGER set_facilities_type
-    AFTER INSERT ON types
-    FOR EACH ROW
-    EXECUTE PROCEDURE facility_type_update();  
-     
-      
-CREATE OR REPLACE FUNCTION check_fac_type() returns trigger
-  AS
-  $$
-  
-  BEGIN
-    if NEW.fk_type_id = null OR NEW.mac::numeric <@ (select mac_range from types where type_id = NEW.fk_type_id) THEN
-      RETURN NEW;
-    ELSE  
-      RAISE EXCEPTION '% have wrong type, must be null or valid in range table', NEW.mac;
-    END IF;  
-  END;
-  
-  $$
-  LANGUAGE plpgsql;      
-      
-
-
-CREATE TRIGGER trigger_check_fac_type
-    BEFORE INSERT OR UPDATE ON facilities
-    FOR EACH ROW
-    EXECUTE PROCEDURE check_fac_type();  
+    EXECUTE PROCEDURE devs_set_name();  

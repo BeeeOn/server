@@ -1,5 +1,5 @@
 -- Created by Vertabelo (http://vertabelo.com)
--- Last modification date: 2015-04-20 11:33:20.968
+-- Last modification date: 2015-05-03 18:51:26.473
 
 
 
@@ -23,15 +23,13 @@ ALTER TABLE algo_devices DROP CONSTRAINT algo_devices_devices;
 
 ALTER TABLE algo_devices DROP CONSTRAINT algo_devices_users_algorithms;
 
-ALTER TABLE algorithms_adapters DROP CONSTRAINT algorithms_adapters_a_algorithms;
-
 ALTER TABLE algorithms_adapters DROP CONSTRAINT algorithms_adapters_adapters;
+
+ALTER TABLE algorithms_adapters DROP CONSTRAINT algorithms_adapters_u_algorithms;
 
 ALTER TABLE devices DROP CONSTRAINT devices_facilities;
 
 ALTER TABLE facilities DROP CONSTRAINT facilities_adapters;
-
-ALTER TABLE facilities DROP CONSTRAINT facilities_facility_types;
 
 ALTER TABLE facilities DROP CONSTRAINT facilities_rooms;
 
@@ -62,7 +60,6 @@ ALTER TABLE views_devices DROP CONSTRAINT views_views_devices;
 
 
 -- tables
-DROP TABLE a_algorithms;
 DROP TABLE achievements;
 DROP TABLE adapters;
 DROP TABLE adapters_achievements;

@@ -11,10 +11,10 @@
 #include "IMsgIn.h"
 
 
-class IMsgInLoginUnwanted : public IMsgIn{
+class IMsgInFreeAccess : public IMsgIn{
 public:
-    IMsgInLoginUnwanted(char* msg, pugi::xml_document* doc);
-    virtual ~IMsgInLoginUnwanted();
+    IMsgInFreeAccess(char* msg, pugi::xml_document* doc);
+    virtual ~IMsgInFreeAccess();
     
     virtual int getMsgAuthorization();
     virtual bool isComIdValid();

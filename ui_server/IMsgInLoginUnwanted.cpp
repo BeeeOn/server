@@ -7,21 +7,21 @@
 
 #include "IMsgInLoginUnwanted.h"
 
-IMsgInLoginUnwanted::IMsgInLoginUnwanted(char* msg, pugi::xml_document* doc): IMsgIn(msg, doc) {
+IMsgInFreeAccess::IMsgInFreeAccess(char* msg, pugi::xml_document* doc): IMsgIn(msg, doc) {
 }
 
 
-IMsgInLoginUnwanted::~IMsgInLoginUnwanted() {
+IMsgInFreeAccess::~IMsgInFreeAccess() {
 }
 
-bool IMsgInLoginUnwanted::isComIdValid(){
+bool IMsgInFreeAccess::isComIdValid(){
     return true;
 }
 
-enumAccessStatus IMsgInLoginUnwanted::checkAccess(){
+enumAccessStatus IMsgInFreeAccess::checkAccess(){
     return GRANTED;
 }
 
-int IMsgInLoginUnwanted::getMsgAuthorization() {
+int IMsgInFreeAccess::getMsgAuthorization() {
     return EVERYONE;
 }

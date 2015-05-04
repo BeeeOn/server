@@ -11,7 +11,7 @@
 const std::string MsgInSignMe::state = "signin";
 
 
-MsgInSignMe::MsgInSignMe(char* msg, pugi::xml_document* doc): IMsgInLoginUnwanted(msg, doc)
+MsgInSignMe::MsgInSignMe(char* msg, pugi::xml_document* doc): IMsgInFreeAccess(msg, doc)
 {
 }
 

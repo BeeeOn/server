@@ -21,7 +21,7 @@ MsgInDelAdapter::~MsgInDelAdapter() {
 int MsgInDelAdapter::getMsgAuthorization() {
     return GUEST;
 }
-
+//Pokud je uživatel SU a tohle udělá, smaže se všechno, musím poslat ada_server zprávu 
 string MsgInDelAdapter::createResponseMsgOut() {
     if(_role != "superuser")
     {

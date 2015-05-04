@@ -9,7 +9,7 @@
 const std::string MsgInSignUp::state = "signup";
 
 
-MsgInSignUp::MsgInSignUp(char* msg, pugi::xml_document* doc): IMsgInLoginUnwanted(msg, doc)
+MsgInSignUp::MsgInSignUp(char* msg, pugi::xml_document* doc): IMsgInFreeAccess(msg, doc)
 {
 }
 

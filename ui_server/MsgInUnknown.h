@@ -10,7 +10,7 @@
 #include "IMsgIn.h"
 #include "IMsgInLoginUnwanted.h"
 class MsgInUnknown :
-	public IMsgInLoginUnwanted {
+	public IMsgInFreeAccess {
 public:
     MsgInUnknown(char* msg, pugi::xml_document* doc);
     virtual ~MsgInUnknown();

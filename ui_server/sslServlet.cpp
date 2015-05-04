@@ -207,6 +207,8 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
 
                     std::string replyString = resolveMsg(rc);
                     
+                    if ( replyString[replyString.size()-1] != '\n' )
+                        replyString.append("\n");
                     //replyString.insert(0, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"); 
                     //Logger::getInstance(Logger::DEBUG3)<<"last chars of reply:"<< replyString.substr(replyString.length()-10, 10)<<"<"<<endl;
 

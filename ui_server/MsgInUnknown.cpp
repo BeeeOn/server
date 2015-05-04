@@ -12,7 +12,7 @@ using namespace std;
 
 const std::string MsgInUnknown::state = "";
 
-MsgInUnknown::MsgInUnknown(char* msg, pugi::xml_document* doc): IMsgInLoginUnwanted(msg, doc){
+MsgInUnknown::MsgInUnknown(char* msg, pugi::xml_document* doc): IMsgInFreeAccess(msg, doc){
 }
 
 

@@ -10,7 +10,7 @@
 #include "IMsgInLoginUnwanted.h"
 
 class MsgInSignUp :
-	public IMsgInLoginUnwanted
+	public IMsgInFreeAccess
 {
             public:
                 MsgInSignUp(char* msg, pugi::xml_document* doc);
