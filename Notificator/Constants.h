@@ -25,7 +25,7 @@ static const string DATA_DEVICE_TYPE = "dtype";
 static const string DATA_URI = "uri";
 static const string DATA_BATTERY = "bat";
 static const string DATA_SIGNAL = "rssi";
-static const string DATA_RULE_ID = "rule_id";
+static const string DATA_ALG_ID = "algid";
 
 /**************************************************/
 /*********         JSON              **************/
@@ -62,7 +62,7 @@ static const string JSON_DATA_MSGID_DELETE = "\"" + DATA_MSGID_DELETE + "\"";
 static const string JSON_DATA_URI = "\"" + DATA_URI + "\"";
 static const string JSON_DATA_BATTERY = "\"" + DATA_BATTERY + "\"";
 static const string JSON_DATA_SIGNAL = "\"" + DATA_SIGNAL + "\"";
-static const string JSON_DATA_RULE_ID = "\"" + DATA_RULE_ID + "\"";
+static const string JSON_DATA_ALG_ID = "\"" + DATA_ALG_ID + "\"";
 
 /** XML SPECIFIC TAGS */
 static const string XML_TAG_NOTIFICATION = "notif";
