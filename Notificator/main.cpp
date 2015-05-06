@@ -8,9 +8,9 @@ using namespace std;
 int main()
 {   
     vector <string> ids;
-    ids.push_back("APA91bH32oxlBDYis-iOnmnQSlPQ65AwjoNIwlVjhZdvZNfFI7exUubTF1SK4M0qukXWPt-9VmbYneGu6098KSqgVtc14Pnukk2sf8Hu5UbRx__vOS6wCmwYG6JD_J9NzQp65WqspOu9aqG_f1O4mkkQqTJnb7P0ww");
+    ids.push_back("APA91bH_8E7ph0hY1cPoSGcznmYzF0pn_cahzm2OrUXPk42Cdr7KS_jxSNQcHLdhxfXEJeS2d_3J_KcHRxDJfcYONRs1jCNVpr4c2GOQP13PFflWIvK7iHAOH_-qD3L7mdz2vwPCyo3q_8_gF0m8KkeJpmHjmo9ETA");
     Notification *notif = new WatchdogNotif(
-        7,                  // user ID
+        8,                  // user ID
         123,                  // message (notification) ID
         1418220573673,        // timestamp (ms)
         "Jsem nova zprava",   // message

@@ -26,6 +26,7 @@ static const string DATA_URI = "uri";
 static const string DATA_BATTERY = "bat";
 static const string DATA_SIGNAL = "rssi";
 static const string DATA_ALG_ID = "algid";
+static const string DATA_ACHIEVEMENT = "id";
 
 /**************************************************/
 /*********         JSON              **************/
@@ -63,6 +64,7 @@ static const string JSON_DATA_URI = "\"" + DATA_URI + "\"";
 static const string JSON_DATA_BATTERY = "\"" + DATA_BATTERY + "\"";
 static const string JSON_DATA_SIGNAL = "\"" + DATA_SIGNAL + "\"";
 static const string JSON_DATA_ALG_ID = "\"" + DATA_ALG_ID + "\"";
+static const string JSON_DATA_ACHIEVEMENT = "\"" + DATA_ACHIEVEMENT + "\"";
 
 /** XML SPECIFIC TAGS */
 static const string XML_TAG_NOTIFICATION = "notif";
@@ -76,6 +78,7 @@ static const string NAME_SENSOR_LOW_BATTERY = "sensor_bat";
 static const string NAME_SENSOR_LOW_SIGNAL = "sensor_sig";
 static const string NAME_ADAPTER_ADDED = "adapter_add";
 static const string NAME_ADAPTER_OFFLINE = "adapter_off";
+static const string NAME_ACHIEVEMENT = "achievement";
 
 /** NOTIFICAITON TYPE AND LEVEL */
 static const string TYPE_ALERT = "alert";
