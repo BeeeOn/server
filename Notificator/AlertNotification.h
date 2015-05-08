@@ -14,7 +14,7 @@
 #include "JsonNotificationBuilder.h"
 #include <sstream>
 
-class AlertNotification : BaseNotification {
+class AlertNotification : public BaseNotification {
 public:
     virtual ~AlertNotification() = 0;
     int getLevel();

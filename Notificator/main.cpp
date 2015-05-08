@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include "WatchdogNotif.h"
+#include "AchievementNotif.h"
 #include <vector>
 
 using namespace std;
@@ -31,6 +32,18 @@ int main()
       cout << notif->getDbXml() << endl;
     }
 
+    
+    Notification *notif2 = new AchievementNotif(
+        8,                  // user ID
+        123,                // message (notification) ID
+        1418220573673,      // timestamp (ms)
+        1                   // achievement ID
+        );
+
+    notif->sendGcm(&ids);
+
     delete(notif);
+    delete(notif2);
+
     return 0;
 }
