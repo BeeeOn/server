@@ -24,68 +24,37 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 
 /**
- * Created by Shu on 9.2.2015.
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
+@Deprecated
 public class ServerController implements MessageSender{
-
+    /** Log4j2 logger field */
     private static final Logger logger = LogManager.getLogger(ServerController.class);
+    /** default size of buffer for message to server */
     public static final int MESSAGE_BUFFER_SIZE = 1000;
+    /** default socket timeout */
     public static final int SOCKET_TIMEOUT = 3000;
-    public static final boolean DEBUG = true;
-    private static final boolean USE_SSL = true;
-
+    /** path to SSL certificate file */
     private static final String CA_CERT_PATH = "lib/certificates/cacert-ant-2.crt";
+    /** client certificate alias */
     private static final String ALIAS_CA_CERT = "ca";
-
+    /** server model */
     private Server model;
-    //private SocketChannel socketChannel;
+    /** default time of server response */
     private long responseStart = 0L;
-
+    /** field holding created ssl context used in communication */
     private SSLContext sslContext;
 
+    /**
+     * Creates ServerController with {@link com.iha.emulator.models.Server} model given as parameter.
+     * @param model class with server information
+     */
     public ServerController(Server model) {
+        //assign model
         setModel(model);
-        if(USE_SSL){
-            logger.warn("Current dir: " + System.getProperty("user.dir"));
-            createSSLCertificate();
-        }
-    }
-
-    private void createSSLCertificate(){
-        logger.debug("Creating certificate");
-        try(InputStream inStreamCert = new FileInputStream(new File(CA_CERT_PATH))){
-            logger.trace("Certificate file loaded");
-            CertificateFactory cf = CertificateFactory.getInstance("X.509");
-            Certificate ca = cf.generateCertificate(inStreamCert);
-            logger.trace("Certificate generated");
-            // Create a KeyStore containing our trusted CAs
-            String keyStoreType = KeyStore.getDefaultType();
-            KeyStore keyStore = KeyStore.getInstance(keyStoreType);
-            keyStore.load(null, null);
-            keyStore.setCertificateEntry(ALIAS_CA_CERT, ca);
-            logger.trace("KeyStore initialized");
-            // Create a TrustManager that trusts the CAs in our KeyStore
-            String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
-            TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
-            tmf.init(keyStore);
-            logger.trace("Algorithm initialized");
-            // Create an SSLContext that uses our TrustManager
-            sslContext = SSLContext.getInstance("TLS");
-            sslContext.init(null, tmf.getTrustManagers(), null);
-            logger.trace("SSL context initialized");
-        } catch (FileNotFoundException e) {
-            logger.fatal("Certificate file: " + CA_CERT_PATH + " not found!");
-        } catch (IOException e) {
-            logger.fatal("Certificate file: " + CA_CERT_PATH + " IO exception");
-        } catch (CertificateException e) {
-            logger.fatal("No such certificate exception",e);
-        } catch (NoSuchAlgorithmException e) {
-            logger.fatal("No such algorithm exception", e);
-        } catch (KeyStoreException e) {
-            logger.fatal("KeyStore exception", e);
-        } catch (KeyManagementException e) {
-            logger.fatal("KeyManagement exception", e);
-        }
+        logger.trace("Current dir: " + System.getProperty("user.dir"));
+        //create initial SSL certificate
+        createSSLCertificate();
     }
 
     public String sendMessage(Document message,ResponseTracker responseTracker,OutMessage.Type type) throws WrongResponseException, IOException {
@@ -141,6 +110,43 @@ public class ServerController implements MessageSender{
                 .addAttribute("ip",getModel().getIp())
                 .addAttribute("port", String.valueOf(getModel().getPort()))
                 .addAttribute("db", getModel().getDatabaseName());
+    }
+
+    private void createSSLCertificate(){
+        logger.debug("Creating certificate");
+        try(InputStream inStreamCert = new FileInputStream(new File(CA_CERT_PATH))){
+            logger.trace("Certificate file loaded");
+            CertificateFactory cf = CertificateFactory.getInstance("X.509");
+            Certificate ca = cf.generateCertificate(inStreamCert);
+            logger.trace("Certificate generated");
+            // Create a KeyStore containing our trusted CAs
+            String keyStoreType = KeyStore.getDefaultType();
+            KeyStore keyStore = KeyStore.getInstance(keyStoreType);
+            keyStore.load(null, null);
+            keyStore.setCertificateEntry(ALIAS_CA_CERT, ca);
+            logger.trace("KeyStore initialized");
+            // Create a TrustManager that trusts the CAs in our KeyStore
+            String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
+            TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
+            tmf.init(keyStore);
+            logger.trace("Algorithm initialized");
+            // Create an SSLContext that uses our TrustManager
+            sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(null, tmf.getTrustManagers(), null);
+            logger.trace("SSL context initialized");
+        } catch (FileNotFoundException e) {
+            logger.fatal("Certificate file: " + CA_CERT_PATH + " not found!");
+        } catch (IOException e) {
+            logger.fatal("Certificate file: " + CA_CERT_PATH + " IO exception");
+        } catch (CertificateException e) {
+            logger.fatal("No such certificate exception",e);
+        } catch (NoSuchAlgorithmException e) {
+            logger.fatal("No such algorithm exception", e);
+        } catch (KeyStoreException e) {
+            logger.fatal("KeyStore exception", e);
+        } catch (KeyManagementException e) {
+            logger.fatal("KeyManagement exception", e);
+        }
     }
 
     public Server getModel() {

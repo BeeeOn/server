@@ -25,8 +25,9 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
 /**
- * Created by Shu on 17/03/15.
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
+@Deprecated
 public class ServerReceiver extends Thread implements MessageSender{
 
     private static final Logger logger = LogManager.getLogger(ServerReceiver.class);

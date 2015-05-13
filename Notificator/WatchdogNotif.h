@@ -15,14 +15,14 @@
 class WatchdogNotif : public InfoNotification {
 public:
     WatchdogNotif(int userId, int notificationId,
-            long time, string message, int adapterId, string deviceId, int type);
+            long time, string message, int adapterId, string deviceId, int type, int algId);
     ~WatchdogNotif();
 protected:
     void addGcmData(JsonNotificationBuilder *builder);
     void addDbXmlData(stringstream *ss);
 
 private:
-    int mAdapterId, mDeviceType;
+    int mAdapterId, mDeviceType, mAlgId;
     string mDeviceId, mMsg;
 
 };

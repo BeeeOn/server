@@ -13,7 +13,10 @@ using namespace std;
 using namespace soci;
 using namespace pugi;
 
-void FrameworkServerHandle::HandleAdapterMessage(std::string data, Loger *Log, FrameworkConfig *FConfig){
+/** Metoda obsluhujici prichozi spojeni od Adapter Reciever Serveru.
+*
+*/
+void FrameworkServerHandle::HandleAdapterMessage(std::string data, Loger *Log, FrameworkConfig *FConfig, DBFWHandler *database, sem_t* dbAccessSem){
 	xml_document doc;
 	xml_parse_result result = doc.load_buffer(data.data(), data.size());
 
@@ -25,8 +28,6 @@ void FrameworkServerHandle::HandleAdapterMessage(std::string data, Loger *Log, F
 	{
 		acceptedMessageString.erase(acceptedMessageString.length() - 1, 1);
 	}
-	Log->WriteMessage(TRACE, "MESSAGE ACCEPTED: " + acceptedMessageString);
-
 
 	Log->WriteMessage(TRACE, "HandleClientConnection: Entering AdapterServerMessage");
 	xml_node adapter = doc.child("adapter_server");
@@ -134,9 +135,8 @@ void FrameworkServerHandle::HandleAdapterMessage(std::string data, Loger *Log, F
 									}
 
 									senzorValues += "offset=" + to_string(this->parsedMessage->values[i].offset);
-									string nameOfBinary = "watch_and_notify";
 
-									Log->WriteMessage(INFO, "EXECUTING ALGORITHM BINARY " + nameOfBinary + " - AlgId: " + AlgId + " , userId: " + UserId + ", parameters: " + parametersTmp + ", senzorValues: " + senzorValues);
+									Log->WriteMessage(INFO, "EXECUTING ALGORITHM BINARY " + algorithmSpecification->name + " - AlgId: " + AlgId + " , userId: " + UserId + ", parameters: " + parametersTmp + ", senzorValues: " + senzorValues);
 
 									char* arg_list[] = {
 										StringToChar(algorithmSpecification->name),
@@ -155,9 +155,11 @@ void FrameworkServerHandle::HandleAdapterMessage(std::string data, Loger *Log, F
 										StringToChar("/"),
 										NULL
 									};
+
+									cout << algorithmSpecification->pathOfBinary.c_str() << endl;
 									this->spawn(StringToChar(algorithmSpecification->pathOfBinary), arg_list);
 
-									Log->WriteMessage(INFO, "EXECUTED ALGORITHM BINARY " + nameOfBinary + "- AlgId: " + AlgId + "userId: " + UserId + ", parameters: " + parametersTmp + ", senzorValues: " + senzorValues);
+									Log->WriteMessage(INFO, "EXECUTED ALGORITHM BINARY " + algorithmSpecification->name + "- AlgId: " + AlgId + "userId: " + UserId + ", parameters: " + parametersTmp + ", senzorValues: " + senzorValues);
 								}
 							}
 						}

@@ -14,7 +14,7 @@
 #include "BaseNotification.h"
 #include "JsonNotificationBuilder.h"
 
-class AdvertNotification : BaseNotification{
+class AdvertNotification : public BaseNotification {
 public:
     virtual ~AdvertNotification();
     virtual bool saveToDb();

@@ -20,6 +20,10 @@ FrameworkConfig::~FrameworkConfig(){
 	this->ClearAlgorithms();
 }
 
+/**
+* Maze specifikace algoritmu
+*
+*/
 void FrameworkConfig::ClearAlgorithms(){
 	for (auto oneAlgorithm = this->algorithms.begin(); oneAlgorithm != this->algorithms.end(); ++oneAlgorithm){
 		delete (*oneAlgorithm);
@@ -27,6 +31,12 @@ void FrameworkConfig::ClearAlgorithms(){
 	this->algorithms.clear();
 }
 
+/**
+* Nastavuje FrameworkConfig dle cesty zadane v parametru
+*
+* @param configPath   relativni cesta ke souboru s konfiguraci serveru
+* @return             nothing
+*/
 void FrameworkConfig::SetConfig(std::string configPath){
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("config.xml");
@@ -50,16 +60,18 @@ void FrameworkConfig::SetConfig(std::string configPath){
 	this->loggerSettingLinesCnt = loger.attribute("LinesCnt").as_int();
 	this->SetAlgorithms();
 }
-
+/**
+* Nacte specifikaci algoritmu do objektu z konfiguracniho souboru
+*
+* @return            nothing
+*/
 void FrameworkConfig::SetAlgorithms(){
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("Algorithms/algsConfig.xml");
 
 	xml_node algorithmsConfig = doc.child("algorithms_config");
-
 	for (pugi::xml_node algNode = algorithmsConfig.first_child(); algNode; algNode = algNode.next_sibling())
 	{
-		
 		talgorithm * tmpAlgorithm = new talgorithm();
 		tmpAlgorithm->id = algNode.attribute("id").as_int();
 		tmpAlgorithm->name = algNode.attribute("name").value();
@@ -68,13 +80,25 @@ void FrameworkConfig::SetAlgorithms(){
 		tmpAlgorithm->maxDevs = algNode.attribute("maxDevs").as_int();
 		tmpAlgorithm->type = algNode.attribute("type").as_int();
 		this->algorithms.push_back(tmpAlgorithm);
+
+
 	}
 }
-
+/**
+* Nastaveni instance pro logovani do objektu FrameworkConfig 
+*
+* @param init_Log   instance tridy Loger, ktera umoznuje logovani do souboru
+* @return            nothing
+*/
 void FrameworkConfig::SetLogger(Loger *init_Log){
 	this->Log = init_Log;
 }
 
+/**
+* Znovu nacte specifikaci algoritmu zadanych v souboru s konfiguraci.
+*
+* @return            nothing
+*/
 void FrameworkConfig::ResetAlgorithms(){
 	Log->WriteMessage(TRACE, "ENTERING FrameworkConfig::ResetAlgorithms");
 
@@ -84,10 +108,16 @@ void FrameworkConfig::ResetAlgorithms(){
 	Log->WriteMessage(TRACE, "EXITING FrameworkConfig::ResetAlgorithms");
 }
 
+/**
+* Vrati specifikaci jednoho algoritmu dle jeho id
+*
+* @param id           id algoritmu
+* @return retValue    struktura talgorithm, ve ktere jsou ulozeny informace o algoritmu
+*/
 talgorithm * FrameworkConfig::GetAlgorithmById(int id){
 	Log->WriteMessage(TRACE, "ENTERING FrameworkConfig::GetAlgorithmById");
 
-	talgorithm * retValue = NULL;
+	talgorithm * retValue = nullptr;
 	for (auto oneAlgorithm = this->algorithms.begin(); oneAlgorithm != this->algorithms.end(); ++oneAlgorithm){
 		if ((*oneAlgorithm)->id == id){
 			Log->WriteMessage(TRACE, "EXITING FrameworkConfig::GetAlgorithmById");
@@ -96,5 +126,21 @@ talgorithm * FrameworkConfig::GetAlgorithmById(int id){
 	}
 	Log->WriteMessage(TRACE, "EXITING FrameworkConfig::GetAlgorithmById");
 	return retValue;
+}
+
+/**
+* Nastavi algoritmy do databaze
+*
+* @param database           objekt tridy DBFWHandler
+*/
+void FrameworkConfig::SetUpAlgorithmsInDatabase(DBFWHandler * database){
+	Log->WriteMessage(TRACE, "ENTERING FrameworkConfig::SetUpAlgorithmsInDatabase");
+
+	talgorithm * retValue = nullptr;
+	for (auto oneAlgorithm = this->algorithms.begin(); oneAlgorithm != this->algorithms.end(); ++oneAlgorithm){
+		database->UpdateAlgList(to_string((*oneAlgorithm)->id), (*oneAlgorithm)->name, to_string((*oneAlgorithm)->type));
+		database->InsertAlgList(to_string((*oneAlgorithm)->id), (*oneAlgorithm)->name, to_string((*oneAlgorithm)->type));
+	}
+	Log->WriteMessage(TRACE, "EXITING FrameworkConfig::SetUpAlgorithmsInDatabase");
 }
 

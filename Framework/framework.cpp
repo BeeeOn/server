@@ -9,32 +9,51 @@
 
 #include "framework.h"
 
+//Konstanty
 #define UI_FRAMEWORK_PORT 7082 
 #define ADA_FRAMEWORK_PORT 7083 
 #define ALG_FRAMEWORK_PORT 7084
 #define BUFSIZE 1000
 
+//Namespacy
 using namespace std;
 using namespace soci;
 using namespace pugi;
-
 namespace sc = std::chrono;
 
-FrameworkServer * UIServer;					//Ukazatel na instanci serveru Frameworku
+// Globalni promenne
+FrameworkServer * UIServer;					
 FrameworkServer * AdaServer;
 FrameworkServer * AlgServer;
 Loger *Log;									//Loger pro logování do souboru
-DatabaseConnectionContainer *cont = NULL;	//Container pro DB
+DBConnectionsContainer *cont = NULL;		//Container pro DB
 FrameworkConfig *FConfig = NULL;
 sem_t connectionSem;						//Semafor pro maximální poèet pøipojení k Frameworku
-int notifIndex = 0;
+sem_t dbAccessSem;
 std::atomic<unsigned long> connCount;
 
+//---------------------------------------  BEGIN FRAMEWORK SERVER METHODS IMPLEMENTATIONS ---------------------------------------
+
+FrameworkServer::FrameworkServer(int init_port){
+	this->port = init_port;
+}
+
+FrameworkServer::~FrameworkServer(){
+	close(this->serverSocket);
+}
+
+/**
+* Zacne naslouchat na drive specifikovanem portu v instanciaci objektu FrameworkServer 
+* 
+*/
 void FrameworkServer::StartServer(){
 	this->SetUpSockets();
 	this->AcceptConnection();
 }
 
+/** Konstruktor nastavi sockety pro naslouchani serveru
+*
+*/
 bool FrameworkServer::SetUpSockets(){
 
 	//Vytvoøení soketu
@@ -64,6 +83,9 @@ bool FrameworkServer::SetUpSockets(){
 	return true;
 }
 
+/** Metoda reprezentujici konkruentni server naslouchajici na portu definovanem v Objektu FrameworkServer a vytvarejici vlakno pri prichozim spojeni, ktere obsluhuje prichozi spojeni.
+*
+*/
 int FrameworkServer::AcceptConnection(){
 
 	sockaddr_in clientInfo;			// Informace o klientovi
@@ -100,37 +122,36 @@ int FrameworkServer::AcceptConnection(){
 	}
 	return 0;
 }
+//---------------------------------------  END FRAMEWORK SERVER METHODS IMPLEMENTATIONS ---------------------------------------
 
-FrameworkServer::FrameworkServer(int init_port){
-	this->port = init_port;
-}
+//---------------------------------------  BEGIN FRAMEWORK SERVER HANDLE METHODS IMPLEMENTATIONS ---------------------------------------
 
-FrameworkServer::~FrameworkServer(){
-	close(this->serverSocket);
-}
 
-//FrameworkServerHandle
-
+/** Metoda obsluhujici prichozi spojeni. Je rozdelena na tri casti, protoze je implementovana k obsluze tri serveru (3 portu). Tyto tri servery jsou: Server pro zpracovani zprav od UI serveru, Server pro zpracovani zprav od Adapter Reciever serveru a Server pro zpracovani zprav od Algoritmu
+*
+*/
 void FrameworkServerHandle::HandleClientConnection(){
-	Log->WriteMessage(ERR, "Entering HandleClientConnection");
+	Log->WriteMessage(TRACE, "Entering HandleClientConnection");
 	bool isAdapterServerMessage = false;
 	bool isUIServerMessage = false;
 	bool isAlgorithmMessage = false;
 
+	//Obsluha zprav od UI serveru
 	if (this->port == FConfig->portUIServer){
 		isUIServerMessage = true;
 	}
+	//Obsluha zprav od Adapter Reciever serveru
 	else if (this->port == FConfig->portAdaRecieverServer){
 		isAdapterServerMessage = true;
 	}
+	//Obsluha zprav od Algoritmu (Aplikacnich modulu)
 	else if (this->port == FConfig->portAlgorithmServer){
 		isAlgorithmMessage = true;
 	}
 	else{
 		Log->WriteMessage(ERR, "Something is wrong with Server port!");
 	}
-
-	//Vytvoøení spojení s DB
+	//Ziskani spojení s DB
 	session *Conn = NULL;
 	while (Conn == NULL)
 	{
@@ -142,7 +163,7 @@ void FrameworkServerHandle::HandleClientConnection(){
 	}
 	try
 	{
-		this->database = new DBHandler(Conn, Log);
+		this->database = new DBFWHandler(Conn, Log);
 	}
 	catch (std::exception &e)
 	{
@@ -154,8 +175,7 @@ void FrameworkServerHandle::HandleClientConnection(){
 		delete (this);
 		return;
 	}
-
-	char buf[FConfig->recieveBuffSize];				// Pøijímací buffer
+	char buf[FConfig->recieveBuffSize];// Prijimaci buffer
 	int pollRes;
 	ssize_t DataSize = 0;
 	std::string data;
@@ -163,7 +183,6 @@ void FrameworkServerHandle::HandleClientConnection(){
 	struct pollfd ufds;
 	ufds.fd = handledSocket;
 	ufds.events = POLLIN;
-
 	while (1)
 	{
 		pollRes = poll(&ufds, 1, 1000); // 3. parametr je Timeout
@@ -185,7 +204,7 @@ void FrameworkServerHandle::HandleClientConnection(){
 		}
 		else
 		{
-			if ((DataSize = read(this->handledSocket, &buf, 1024)) < 0) //prijmeme dlzku prichadzajucich dat (2 byty kratkeho integera bez znamienka)
+			if ((DataSize = read(this->handledSocket, &buf, 1024)) < 0)
 			{
 				Log->WriteMessage(ERR, "Problem with reading data!");
 				connCount--;
@@ -267,31 +286,32 @@ void FrameworkServerHandle::HandleClientConnection(){
 
 	//zaèíná parser zprávy
 	if (isAdapterServerMessage){
-		this->HandleAdapterMessage(data, Log, FConfig);
+		this->HandleAdapterMessage(data, Log, FConfig, database, &dbAccessSem);
 	}
 	else if (isUIServerMessage){
-		this->HandleUIServerMessage(data, Log, FConfig);
+		this->HandleUIServerMessage(data, Log, FConfig, database, &dbAccessSem);
 	}
 	else if (isAlgorithmMessage) {
-		this->HandleAlgorithmMessage(data, Log, FConfig);
+		this->HandleAlgorithmMessage(data, Log, FConfig, database, &dbAccessSem);
 	}
 	else{
-		//Error
+		Log->WriteMessage(ERR, "Message wrong format: " + acceptedMessageString);
 	}
-	cont->ReturnConnection(database->ReturnConnection());
+	cont->ReturnConnection(database->GetConnectionSession());
 	sem_post(&connectionSem);
 	connCount--;
 	delete(this);
 	return;
 }
 
-char * FrameworkServerHandle::StringToChar(string toChange){
-	char *inChar = new char[toChange.length() + 1];
-	strcpy(inChar, toChange.c_str());
-	return inChar;
-}
 
-
+/** Metoda, ktera ziska vsechny algoritmy dle adapterID  a userID a ulozi je do struktury talg , ktere vlozi postupne do vektoru a vrati.
+*
+* @param adapterId	id adapteru v DB
+* @param userId		id uzivatele v DB
+*
+* @return vektor struktur talg reprezentujici jeden algoritmus 
+*/
 vector<talg *> FrameworkServerHandle::getAllAlgsByAdapterIdAndUserId(string adapterId, string userId){
 	Log->WriteMessage(TRACE, "ENTERING FrameworkServerHandle::getAllAlgsByAdapterId");
 	vector <talg *> allAlgs;
@@ -304,7 +324,12 @@ vector<talg *> FrameworkServerHandle::getAllAlgsByAdapterIdAndUserId(string adap
 	return allAlgs;
 }
 
-
+/** Metoda, ktera ziska algoritmus dle ID uzivatelskeho algoritmu a ulozi je do struktury talg, kterou vrati
+*
+* @param userAlgId	id uzivatelskeho algoritmu
+*
+* @return struktura talg reprezentujici uzivatelsky algoritmus
+*/
 talg * FrameworkServerHandle::getAlgByUserAlgorithmId(string userAlgId){
 	Log->WriteMessage(TRACE, "ENTERING FrameworkServerHandle::getAlgByUserAlgorithmId");
 	talg * algorithmMessage = new talg();
@@ -314,7 +339,7 @@ talg * FrameworkServerHandle::getAlgByUserAlgorithmId(string userAlgId){
 	algorithmMessage->name = database->SelectNameByUsersAlgId(userAlgId);
 	string notParsedParameters = database->SelectParametersByUsersAlgId(userAlgId);
 	std::vector<std::string> childsIds = database->SelectDevIdsByUsersAlgId(userAlgId);
-	
+
 	//Pridani childs dev
 	int posDev = 1;
 	Log->WriteMessage(TRACE, "FrameworkServerHandle::getAlgByUserAlgorithmId adding devs");
@@ -353,18 +378,28 @@ vector<string> FrameworkServerHandle::parseParametersToVector(string notParsedPa
 	return parsedParams;
 }
 
+/** Pomocna metoda pro konverzi retezce na char *
+*
+* @param toChange	retezec ke zmene
+*/
+char * FrameworkServerHandle::StringToChar(string toChange){
+	char *inChar = new char[toChange.length() + 1];
+	strcpy(inChar, toChange.c_str());
+	return inChar;
+}
+
+/** Pomocna metoda pro rozdeleni retezce dle znaku
+*
+* @param vektor retezcu
+*/
 vector<string> FrameworkServerHandle::explode(string str, char ch) {
 	string next;
 	vector<string> result;
 	bool backslash = false;
 
-	// For each character in the string
 	for (string::const_iterator it = str.begin(); it != str.end(); it++) {
-		// If we've hit the terminal character
 		if (*it == ch && backslash == false) {
-			// If we have some characters accumulated
 			if (!next.empty()) {
-				// Add them to the result vector
 				result.push_back(next);
 				next.clear();
 			}
@@ -375,7 +410,6 @@ vector<string> FrameworkServerHandle::explode(string str, char ch) {
 			backslash = true;
 		}
 		else {
-			// Accumulate the next character into the sequence
 			backslash = false;
 			next += *it;
 		}
@@ -385,7 +419,18 @@ vector<string> FrameworkServerHandle::explode(string str, char ch) {
 	return result;
 }
 
+/** Metoda odesilajici zpravu na socket.
+*
+* @param socket			Socket, na ktery se odesle zprava
+* @param xmlMessage		Text zpravy (retezec)
+*
+* @return pravdivostni hodnota zda byla zprava odeslana.
+*/
 bool FrameworkServerHandle::sendMessageToSocket(int socket, string xmlMessage){
+	if (xmlMessage[xmlMessage.length() - 1] == '\n')
+	{
+		xmlMessage.erase(xmlMessage.length() - 1, 1);
+	}
 	Log->WriteMessage(TRACE, "ENTERING FrameworkServerHandle::sendMessageToSocket");
 	if ((send(socket, xmlMessage.c_str(), xmlMessage.size() + 1, 0)) == -1)
 	{
@@ -398,6 +443,12 @@ bool FrameworkServerHandle::sendMessageToSocket(int socket, string xmlMessage){
 	return true;
 }
 
+/** Metoda odesilajici zpravu na ada server, kde je potreba jeste naslouchat pro odpoved a tuto odpoved pripadne zpracovat.
+*
+* @param xmlMessage		Text zpravy (retezec)
+*
+* @return pravdivostni hodnota zda byla zprava odeslana ci nedoslo k chybe pri prijimani odpovedi.
+*/
 bool FrameworkServerHandle::sendMessageToAdaServer(string xmlMessage){
 	Log->WriteMessage(TRACE, "ENTERING FrameworkServerHandle::sendMessageToAdaServer");
 	hostent *host;              
@@ -482,9 +533,91 @@ bool FrameworkServerHandle::sendMessageToAdaServer(string xmlMessage){
 	return true;
 }
 
-/**********************************************Creating messages for UI server**********************************************************/
+/** Metoda parsujici parametry do Databaze
+*
+* @param params			struktura tparam
+* @param paramsCnt		pocet parametru
+*
+* @return zparsovane parametry do retezce k ulozeni do DB
+*/
+string FrameworkServerHandle::parseParametersToDB(tparam *params, int paramsCnt){
+	string toReturn = "";
+	int posExp = 1;
+	for (int i = 0; i < paramsCnt; i++){
+		if (posExp != params[i].pos)
+			Log->WriteMessage(FATAL, "HandleClientConnection: UIServerMessage: parseParametersToDB something wrong");
+
+		Log->WriteMessage(FATAL, "HandleClientConnection: UIServerMessage: parseParametersToDB content of params[i].text: " + params[i].text);
+
+		if (i == (paramsCnt - 1)){
+			toReturn += params[i].text;
+		}
+		else{
+			toReturn += params[i].text + "#";
+		}
+		posExp++;
+	}
+	return toReturn;
+}
+
+/** Metoda spoustejici program se zadanymi argumenty.
+*
+* @param program			nazev binarky programu
+* @param arg_list			seznam parametru predanych binarce pri spusteni
+*
+* @return zparsovane parametry do retezce k ulozeni do DB
+*/
+int FrameworkServerHandle::spawn(char* programBinaryName, char** arg_list)
+{
+	pid_t childProcessId;
+	childProcessId = fork();
+	if (childProcessId != 0)
+		//Rodicovsky program
+		return childProcessId;
+	else {
+		//Program potomek - zde se vyvola program dle parametru
+		execvp(programBinaryName, arg_list);
+
+		//Tento kod se vyvola pouze pokud nastane chyba v execvp
+		if (programBinaryName != nullptr){
+			std::string programBinaryNameString(programBinaryName);
+			Log->WriteMessage(ERR, "FrameworkServerHandle::spawn Error occured during execvp! Binary name: " + programBinaryNameString);
+		}
+		else{
+			cerr << "FRAMEWORK ERROR: FrameworkServerHandle::spawn Error occured during execvp!" << endl;
+		}
+		abort();
+	}
+}
+/** Konstruktor objektu FrameworkServerHandle. Je to objekt pro obsluhu serverovych spojeni.
+*
+* @param init_socket			socket na kterem je navazano spojeni a ktere se bude obsluhovat
+* @param init_port				port serveru, ktery obsluhuje spojeni (potreba pro nasledne rozliseni jakou obsluhu ma vybrat)
+*/
+FrameworkServerHandle::FrameworkServerHandle(int init_socket, int init_port){
+	this->handledSocket = init_socket;
+	this->port = init_port;
+}
+
+/** Destruktor objektu FrameworkServerHandle.
+*
+*/
+FrameworkServerHandle::~FrameworkServerHandle(){
+	close(this->handledSocket);
+}
 
 
+//---------------------------------------  CREATING MESSAGES ---------------------------------------
+
+
+//Zde jsou implementace zprav protokolu IOT - smerem k UI serveru a nasledne do mobilniho zarizeni
+
+/** Metoda vytvarejici zpravu algcreated dle algId 
+*
+* @param algId		ID vytvoreneho uzivatelskeho algoritmu
+*
+* @return XML zprava v retezci
+*/
 string FrameworkServerHandle::createMessageAlgCreated(string algId){
 	xml_document *resp = new xml_document();
 
@@ -494,7 +627,7 @@ string FrameworkServerHandle::createMessageAlgCreated(string algId){
 	algorithm_message.append_attribute("state");
 	algorithm_message.append_attribute("algid");
 	//Nastav element algorithm_message
-	algorithm_message.attribute("ver") = "2.4";
+	algorithm_message.attribute("ver") = "2.5";
 	algorithm_message.attribute("state") = "algcreated";
 	algorithm_message.attribute("algid") = algId.c_str();
 
@@ -510,11 +643,20 @@ string FrameworkServerHandle::createMessageAlgCreated(string algId){
 	{
 		tmp.erase(tmp.length() - 1, 1);
 	}
+	if (tmp[tmp.length() - 1] == '\n')
+	{
+		tmp.erase(tmp.length() - 1, 1);
+	}
 	return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + tmp;
 }
 
+/** Metoda vytvarejici zpravu false dle error kodu zadaneho parametrem
+*
+* @param errcode		https://ant-2.fit.vutbr.cz/projects/android-app/wiki/Smarthome_Phone-Server_Protocol_XML_#Info-tabulky
+*
+* @return XML zprava v retezci
+*/
 string FrameworkServerHandle::createMessageFalse(string errcode){
-	// https://ant-2.fit.vutbr.cz/projects/android-app/wiki/Smarthome_Phone-Server_Protocol_XML_#Info-tabulky
 	xml_document *resp = new xml_document();
 	//Definuj element algorithm_message
 	xml_node algorithm_message = resp->append_child("com");
@@ -522,7 +664,7 @@ string FrameworkServerHandle::createMessageFalse(string errcode){
 	algorithm_message.append_attribute("state");
 	algorithm_message.append_attribute("errcode");
 	//Nastav element algorithm_message
-	algorithm_message.attribute("ver") = "2.4";
+	algorithm_message.attribute("ver") = "2.5";
 	algorithm_message.attribute("state") = "false";
 	algorithm_message.attribute("errcode") = errcode.c_str(); 
 
@@ -538,9 +680,17 @@ string FrameworkServerHandle::createMessageFalse(string errcode){
 	{
 		tmp.erase(tmp.length() - 1, 1);
 	}
+	if (tmp[tmp.length() - 1] == '\n')
+	{
+		tmp.erase(tmp.length() - 1, 1);
+	}
 	return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + tmp;
 }
 
+/** Metoda vytvarejici zpravu true 
+*
+* @return XML zprava v retezci
+*/
 string FrameworkServerHandle::createMessageTrue(){
 	xml_document *resp = new xml_document();
 	//Definuj element algorithm_message
@@ -548,7 +698,7 @@ string FrameworkServerHandle::createMessageTrue(){
 	algorithm_message.append_attribute("ver");
 	algorithm_message.append_attribute("state");
 	//Nastav element algorithm_message
-	algorithm_message.attribute("ver") = "2.4";
+	algorithm_message.attribute("ver") = "2.5";
 	algorithm_message.attribute("state") = "true";
 
 	string emptyString = " ";
@@ -563,9 +713,20 @@ string FrameworkServerHandle::createMessageTrue(){
 	{
 		tmp.erase(tmp.length() - 1, 1);
 	}
+	if (tmp[tmp.length() - 1] == '\n')
+	{
+		tmp.erase(tmp.length() - 1, 1);
+	}
 	return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + tmp;
 }
 
+/** Metoda vytvarejici zpravu algs
+*
+* @param allAlgs		vektor struktur talg reprezentujici seznam uzivatelskych algoritmu
+* @param adapterId		Id adapteru
+*
+* @return XML zprava v retezci
+*/
 string FrameworkServerHandle::createMessageAlgs(vector<talg *> allAlgs, string adapterId){
 
 	xml_document *resp = new xml_document();
@@ -575,7 +736,7 @@ string FrameworkServerHandle::createMessageAlgs(vector<talg *> allAlgs, string a
 	algorithm_message.append_attribute("state");
 	algorithm_message.append_attribute("aid");
 
-	algorithm_message.attribute("ver") = "2.4";
+	algorithm_message.attribute("ver") = "2.5";
 	algorithm_message.attribute("state") = "algs";
 	algorithm_message.attribute("aid") = adapterId.c_str();
 
@@ -633,9 +794,25 @@ string FrameworkServerHandle::createMessageAlgs(vector<talg *> allAlgs, string a
 	{
 		tmp.erase(tmp.length() - 1, 1);
 	}
+	if (tmp[tmp.length() - 1] == '\n')
+	{
+		tmp.erase(tmp.length() - 1, 1);
+	}
 	return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + tmp;
 }
 
+//Zde jsou implementace zprav smerem na Adapter Server Sender
+
+/** Metoda vytvarejici zpravu o zmìnì aktoru z jednoho stavu na stav druhý.
+*
+* @param id				id aktporu
+* @param type			typ aktoru
+* @param adapterId		Id adapteru
+*
+* @todo Zadny z oddeleni senzoru nebyl schopen zatim specifikovat presny tvar zpravy. Momentalne zprava pouze prepina z vypnuto na zapnuto. 
+*
+* @return XML zprava v retezci
+*/
 string FrameworkServerHandle::createMessageRequestSwitch(string id, string type, string adapterId){
 	/*
 	<request type="switch">
@@ -678,359 +855,10 @@ string FrameworkServerHandle::createMessageRequestSwitch(string id, string type,
 	return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + tmp;
 }
 
-
-
-string FrameworkServerHandle::parseParametersToDB(tparam *params, int paramsCnt){
-	string toReturn = "";
-	int posExp = 1;
-	for (int i = 0; i < paramsCnt; i++){
-		if (posExp != params[i].pos)
-			Log->WriteMessage(FATAL, "HandleClientConnection: UIServerMessage: parseParametersToDB something wrong");
-
-		Log->WriteMessage(FATAL, "HandleClientConnection: UIServerMessage: parseParametersToDB content of params[i].text: " + params[i].text);
-
-		if (i == (paramsCnt - 1)){
-			toReturn += params[i].text;
-		}
-		else{
-			toReturn += params[i].text + "#";
-		}
-		posExp++;
-	}
-	return toReturn;
-}
-
-
-
-
-
-int FrameworkServerHandle::spawn(char* program, char** arg_list)
-{
-	pid_t child_pid;
-
-	/* Duplicate this process. */
-	child_pid = fork();
-	if (child_pid != 0)
-		/* This is the parent process. */
-		return child_pid;
-	else {
-		/* Now execute PROGRAM, searching for it in the path. */
-		execvp(program, arg_list);
-		/* The execvp  function returns only if an error occurs. */
-		fprintf(stderr, "an error occurred in execvp\n");
-		abort();
-	}
-}
-
-FrameworkServerHandle::FrameworkServerHandle(int init_socket, int init_port){
-	this->handledSocket = init_socket;
-	this->port = init_port;
-}
-
-FrameworkServerHandle::~FrameworkServerHandle(){
-	close(this->handledSocket);
-}
-
-
-
-/**********************************************Start of MessageParser section******************************************************/
-
-/** Metoda vracajuca obsah spracovanej spravy
-* @return _message
+/** Funkce pro obsluhu prijatych signalu procesu
+*
+* @param signo		cislo prijateho signalu
 */
-
-
-
-tmessage* MessageParser::ReturnMessage()
-{
-	return _message;
-
-}
-
-/**********************************************End of MessageParser section******************************************************/
-
-/**********************************************Start of ProtocolV1MessageParser section******************************************************/
-
-
-/** Metoda spracovanie spravy od adaptera verzie protokolu 1
-* @param *message - ukazatel na zaciatok prijatej spravy
-* @param length - dlzka spravy
-* @return na zaklade uspechu/neuspechu vrati true/false
-*/
-
-
-
-bool ProtocolV1MessageParser::parseMessage(xml_node *adapter, float FM, float CP)
-{
-	this->_adapter = adapter;
-	this->_device = this->_adapter->child("device");
-	//ulozime si ID adaptera v znakovej forme
-	this->GetID();
-	//uloznie verzie firmwaru 
-	this->_message->cp_version = CP;
-	//ulozenie verzie komunikacneho protokolu
-	this->_message->fm_version = FM;
-	this->GetState();
-	//spracujeme a ulozime casove razitko
-	this->GetTimeStamp();
-	if (_message->state == 0)
-	{
-		return true;
-	}
-	//ulozime si IP adresu zariadenia (verzia pre emulatory)
-	this->GetDeviceID();
-	this->GetBattery();
-
-	//ulozime hodnotu kvality signalu
-	this->GetSignal();
-	//ulozime pocet posielanych dvojic typ hodnota
-	this->GetValues();
-	return true;
-}
-
-void ProtocolV1MessageParser::GetTimeStamp()
-{
-	this->_message->timestamp = _adapter->attribute("time").as_llong();
-	char timebuf[200];
-	struct tm *tmp;
-	tmp = gmtime(&(this->_message->timestamp));
-	strftime(timebuf, sizeof(timebuf), "%Y-%m-%d %T", tmp);
-	std::string msg;
-	msg.append(timebuf);
-}
-
-void ProtocolV1MessageParser::GetID()
-{
-	this->_message->adapterINTid = std::stoll(_adapter->attribute("adapter_id").as_string(), nullptr, 16);
-}
-
-void ProtocolV1MessageParser::GetFM()
-{
-
-}
-
-void ProtocolV1MessageParser::GetCP()
-{
-
-
-}
-
-void ProtocolV1MessageParser::GetState()
-{
-	std::string temp_state = _adapter->attribute("state").as_string();
-
-	if (temp_state.compare("register") == 0)
-	{
-		_message->state = 0;
-	}
-	else
-	{
-		if (temp_state.compare("data") == 0)
-		{
-			_message->state = 1;
-		}
-		else
-		{
-			_message->state = 2;
-		}
-	}
-}
-
-void ProtocolV1MessageParser::GetDeviceID()
-{
-	this->_message->sensor_id = std::stoll(_device.attribute("id").as_string(), nullptr, 16);
-	in_addr_t temp = htonl(_message->sensor_id);
-	struct sockaddr_in antelope;
-	antelope.sin_addr.s_addr = temp;
-	this->_message->DeviceIDstr = inet_ntoa(antelope.sin_addr);
-}
-
-
-void ProtocolV1MessageParser::GetBattery()
-{
-	xml_node battery = (_device.child("battery"));
-	_message->battery = battery.attribute("value").as_uint();
-}
-void ProtocolV1MessageParser::GetSignal()
-{
-	xml_node signal = (_device.child("rssi"));
-	_message->signal_strength = signal.attribute("value").as_uint();
-}
-bool ProtocolV1MessageParser::GetValues()
-{
-	//vytvotime si v pamati miesto na ulozenie dvojic typ hodnota
-	xml_node values = _device.child("values");
-	_message->values_count = values.attribute("count").as_uint();
-	xml_node value = values.first_child();
-	try
-	{
-		_message->values = new tvalue[_message->values_count];
-	}
-	catch (std::exception &e)
-	{
-		_message->values = NULL;
-		return false;
-	}
-	for (int i = 0; i < _message->values_count; i++) //v cykle spracujeme prijate dvojice typ hodnota
-	{
-		if (value == NULL)
-		{
-			_message->values_count = i;
-			break;
-		}
-		unsigned short int tempType = value.attribute("type").as_uint();
-		_message->values[i].offset = value.attribute("offset").as_uint();
-		tconcatenate temp;
-		temp.input[0] = tempType;
-		temp.input[1] = _message->values[i].offset;
-		_message->values[i].intType = temp.result;
-		_message->values[i].type = static_cast<tvalueTypes>(tempType);
-		switch (_message->values[i].type)
-		{
-		case TEMP:
-		case LUM:
-		case REZ:
-		case POS:
-			_message->values[i].fval = value.text().as_float();
-			if (_message->devType == UNDEF)
-			{
-				_message->devType = SEN;
-			}
-			else
-			{
-				if (_message->devType == ACT)
-				{
-					_message->devType = SENACT;
-				}
-			}
-			break;
-		case ONON:
-		case TOG:
-		case ONOFFSEN:
-		case ONOFSW:
-			_message->values[i].bval = false;
-			if (value.text().as_float() == 1.0)
-				_message->values[i].bval = true;
-			if (_message->devType == UNDEF)
-			{
-				if (_message->values[i].type == ONOFFSEN)
-					_message->devType = SEN;
-				else
-					_message->devType = ACT;
-			}
-			else
-			{
-				if (((_message->devType == ACT) && (_message->values[i].type == ONOFFSEN)) || ((_message->devType == SEN) && (_message->values[i].type == ONOFSW)))
-				{
-					_message->devType = SENACT;
-				}
-			}
-			break;
-		case EMI:
-		case HUM:
-		case BAR:
-		case RGB:
-		case RAN:
-			_message->values[i].ival = value.text().as_int();
-			if (_message->devType == UNDEF)
-			{
-				_message->devType = SEN;
-			}
-			else
-			{
-				if (_message->devType == ACT)
-				{
-					_message->devType = SENACT;
-				}
-			}
-			break;
-		default:
-			_message->values[i].type = UNK;
-			break;
-		}
-		value = value.next_sibling();
-	}
-	return true;
-}
-void ProtocolV1MessageParser::GetValuesCount()
-{
-}
-
-/** Metoda vytvarajuca odpoved adapteru
-* @param value - hodnota dalsieho zobudenia senzoru
-* @return resp - ukazatel na spracovanu spravu
-*/
-
-std::string ProtocolV1MessageParser::CreateAnswer(int value)
-{
-
-	xml_document *resp = new xml_document();
-	xml_node server_adapter = resp->append_child("server_adapter");
-	//server_adapter->set_name("server_adapter");
-	server_adapter.append_attribute("protocol_version");
-	server_adapter.append_attribute("state");
-	server_adapter.append_attribute("id");
-	server_adapter.append_attribute("time");
-	std::stringstream s;
-	s.precision(2);
-	s << _message->cp_version;
-	server_adapter.attribute("protocol_version") = s.str().c_str();
-	server_adapter.attribute("state") = "update";
-	server_adapter.attribute("id") = std::to_string(_message->sensor_id).c_str();
-	server_adapter.attribute("time") = std::to_string(value).c_str();
-	tstringXMLwriter writer;
-	resp->print(writer);
-	delete(resp);
-	std::string tmp = writer.result;
-	if (tmp[tmp.length() - 1] == '\n')
-	{
-		tmp.erase(tmp.length() - 1, 1);
-	}
-	return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + tmp;
-};
-
-
-ProtocolV1MessageParser::~ProtocolV1MessageParser()
-{
-	delete(this->_message);
-}
-ProtocolV1MessageParser::ProtocolV1MessageParser()
-{
-	this->_message = new tmessage();
-}
-
-/**********************************************End of ProtocolV1MessageParser section******************************************************/
-
-
-
-/**********************************************Start of message section*********************************************************/
-
-message::message()
-{
-	this->values = NULL;
-	this->devType = UNDEF;
-	this->DeviceIDstr = "";
-	this->adapterINTid = 0;
-	inet_pton(AF_INET, "0.0.0.0", &(this->adapter_ip));
-	this->battery = 0;
-	this->cp_version = 0.0;
-	this->signal_strength = 0;
-	this->state = 0;
-	this->values_count = 0;
-	this->fm_version = 0;
-	this->sensor_id = 0;
-	this->timestamp = 0;
-
-}
-
-message::~message()
-{
-	delete[] values;
-	values = NULL;
-}
-
-/**********************************************End of message section**********************************************************/
-
 void sig_handler(int signo)
 {
 	if (signo == SIGTERM)
@@ -1045,9 +873,33 @@ void sig_handler(int signo)
 	}
 	if (signo == SIGINT){
 		FConfig->ResetAlgorithms();
+		//Nastaveni seznamu algoritmu do tabulky u_algorithms do databaze
+		//Ziskani spojení s DB
+		session *Conn = NULL;
+		DBFWHandler * database = NULL;
+		while (Conn == NULL)
+		{
+			Conn = cont->GetConnection();
+			if (Conn == NULL)
+			{
+				Log->WriteMessage(INFO, "ALL CONNECTIONS ARE USED!");
+			}
+		}
+		try
+		{
+			database = new DBFWHandler(Conn, Log);
+		}
+		catch (std::exception &e)
+		{
+			Log->WriteMessage(ERR, "Unable to create DBHandler during reset of Application!");
+		}
+		FConfig->SetUpAlgorithmsInDatabase(database);
+		cont->ReturnConnection(database->GetConnectionSession());
+		delete(database);
 	}
 }
 
+//---------------------------------------  MAIN ---------------------------------------
 
 int main()
 {
@@ -1079,11 +931,18 @@ int main()
 
 	connCount = 0;
 	//Nastaveni kontejneru pro DB
-	cont = DatabaseConnectionContainer::CreateContainer(Log, FConfig->dbName, FConfig->maxNumberDBConnections);
+	cont = DBConnectionsContainer::GetConnectionContainer(Log, FConfig->dbName, FConfig->maxNumberDBConnections);
+	if (cont == nullptr){
+		std::cerr << "Unable to create memory space for DBConnectionsContainer, exiting!" << std::endl;
+		exit(EXIT_FAILURE);
+	}
+
 	//Nastaveni semaforu pro omezeni poctu pripojeni k DB
-	int semVal = 30;
+	int semVal = FConfig->maxNumberDBConnections;
 	Log->WriteMessage(FATAL, "Maximal conn count : " + std::to_string(semVal));
 	sem_init(&connectionSem, 0, semVal);
+	//Nastaveni semaforu pro vylucny pristup prace s databazi
+	sem_init(&dbAccessSem, 0, 1);
 	//Nastaveni Loggeru
 	Log->SetLogger(	FConfig->loggerSettingVerbosity, 
 					FConfig->loggerSettingFilesCnt,
@@ -1094,6 +953,22 @@ int main()
 
 	FConfig->SetLogger(Log);
 
+	//Nastaveni seznamu algoritmu do tabulky u_algorithms do databaze
+	//Ziskani spojení s DB
+	session *Conn = NULL;
+	Conn = cont->GetConnection();
+	DBFWHandler * database = NULL;
+	try
+	{
+		database = new DBFWHandler(Conn, Log);
+	}
+	catch (std::exception &e)
+	{
+		Log->WriteMessage(ERR, "Unable to create DBHandler during inicialization of Application!");
+	}
+	FConfig->SetUpAlgorithmsInDatabase(database);
+	cont->ReturnConnection(database->GetConnectionSession());
+	delete(database);
 	//Instanciace serveru prijimajici zpravy od UI Serveru
 	try
 	{
@@ -1118,7 +993,7 @@ int main()
 	catch (std::exception &e)
 	{
 		std::cerr << "Framework: Unable to create memory space for FrameworkServer. Exiting!" << std::endl;
-		delete(UIServer);
+		delete(AdaServer);
 		exit(EXIT_FAILURE);
 	}
 
@@ -1131,7 +1006,7 @@ int main()
 	catch (std::exception &e)
 	{
 		std::cerr << "Framework: Unable to create memory space for FrameworkServer. Exiting!" << std::endl;
-		delete(UIServer);
+		delete(AlgServer);
 		exit(EXIT_FAILURE);
 	}
 

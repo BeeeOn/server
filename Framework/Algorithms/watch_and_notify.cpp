@@ -94,9 +94,9 @@ int main(int argc, char *argv[])
 	if (actorVersionOfAlgorithm){
 
 		std::string delimeter = "---";
-		idOfActor = notificationTextOrIdActor.substr(0, notificationTextOrIdActor.find(delimeter)); // token is "scott"
+		idOfActor = notificationTextOrIdActor.substr(0, notificationTextOrIdActor.find(delimeter)); 
 
-		std::string tmpString = notificationTextOrIdActor.substr(notificationTextOrIdActor.find(delimeter)); // token is "---tiger"
+		std::string tmpString = notificationTextOrIdActor.substr(notificationTextOrIdActor.find(delimeter)); 
 		typeOfActor = tmpString.erase(0, delimeter.length());
 	}
 	
@@ -136,11 +136,13 @@ int main(int argc, char *argv[])
 
 	bool isToBeSendNotificationOrChangeActor = false;
 
-	float lastValue = alg->database->GetLastTemp(idOfSenzorString, typeOfSenzorString);
+	//float lastValue = alg->database->GetValueFromDevices(idOfSenzorString, typeOfSenzorString);
+	
+	//std::cout << to_string(lastValue).c_str() << endl;
 
 	if (IsSetFval){
 		if (op == GT){
-			if (fvalFromSenzor > valueDefinedByUser && lastValue <= valueDefinedByUser){
+			if (fvalFromSenzor > valueDefinedByUser ){
 				isToBeSendNotificationOrChangeActor = true;
 			}
 		}
@@ -150,22 +152,28 @@ int main(int argc, char *argv[])
 			}
 		}
 		else if (op == GE){
-			if (fvalFromSenzor >= valueDefinedByUser && lastValue < valueDefinedByUser){
+			if (fvalFromSenzor >= valueDefinedByUser ){
 				isToBeSendNotificationOrChangeActor = true;
 			}
 		}
 		else if (op == LT){
-			if (fvalFromSenzor < valueDefinedByUser && lastValue >= valueDefinedByUser){
+			if (fvalFromSenzor < valueDefinedByUser ){
 				isToBeSendNotificationOrChangeActor = true;
 			}
 		}
 		else if (op == LE){
-			if (fvalFromSenzor <= valueDefinedByUser && lastValue > valueDefinedByUser){
+			if (fvalFromSenzor <= valueDefinedByUser ){
 				isToBeSendNotificationOrChangeActor = true;
 			}
 		}
-	}
 
+		//Zde ulozit aktualni prijata data
+		/*
+		if (alg->database->UpdateValueOfDevices(idOfSenzorString, typeOfSenzorString, to_string(fvalFromSenzor)))	   {
+			cout << "UpdateLastTemp: " << to_string(fvalFromSenzor).c_str() << endl;
+		}	*/
+	}
+	/*
 	if (IsSetIval){
 		if (op == GT){
 			if (ivalFromSenzor > valueDefinedByUser && lastValue <= valueDefinedByUser){
@@ -192,12 +200,40 @@ int main(int argc, char *argv[])
 				isToBeSendNotificationOrChangeActor = true;
 			}
 		}
+	}*/
+
+	if (IsSetIval){
+		if (op == GT){
+			if (ivalFromSenzor > valueDefinedByUser){
+				isToBeSendNotificationOrChangeActor = true;
+			}
+		}
+		else if (op == EQ){
+			if (ivalFromSenzor == valueDefinedByUser){
+				isToBeSendNotificationOrChangeActor = true;
+			}
+		}
+		else if (op == GE){
+			if (ivalFromSenzor >= valueDefinedByUser){
+				isToBeSendNotificationOrChangeActor = true;
+			}
+		}
+		else if (op == LT){
+			if (ivalFromSenzor < valueDefinedByUser ){
+				isToBeSendNotificationOrChangeActor = true;
+			}
+		}
+		else if (op == LE){
+			if (ivalFromSenzor <= valueDefinedByUser){
+				isToBeSendNotificationOrChangeActor = true;
+			}
+		}
 	}
 
 	if (isToBeSendNotificationOrChangeActor){
 		if (notifVersionOfAlgorithm){
 			//Odeslat notifikaci
-			alg->AddNotify(1, notificationTextOrIdActor);
+			alg->AddNotify(1, notificationTextOrIdActor, idOfSenzorString, typeOfSenzorString);
 		}
 		if (actorVersionOfAlgorithm){
 			//Zmenit aktor

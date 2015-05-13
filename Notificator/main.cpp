@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include "WatchdogNotif.h"
+#include "AchievementNotif.h"
 #include <vector>
 
 using namespace std;
@@ -8,15 +9,16 @@ using namespace std;
 int main()
 {   
     vector <string> ids;
-    ids.push_back("APA91bFqQjAONaBCNnguzbS6wwvLt2s0V2X8f9o9ZO3VdjjlI8U9C_P-dm6QcXYgsB3b2M8x_EZzO-A6bzMMy3fFjL9lLMRDob3_UKkQ0g8KSdqiwKTdFd7OLU6TrbOfT7KNO28xVHAV0zgtvOKTUMAeuBstzxeHIQ");
+    ids.push_back("APA91bH_8E7ph0hY1cPoSGcznmYzF0pn_cahzm2OrUXPk42Cdr7KS_jxSNQcHLdhxfXEJeS2d_3J_KcHRxDJfcYONRs1jCNVpr4c2GOQP13PFflWIvK7iHAOH_-qD3L7mdz2vwPCyo3q_8_gF0m8KkeJpmHjmo9ETA");
     Notification *notif = new WatchdogNotif(
-        7,                  // user ID
+        8,                  // user ID
         123,                  // message (notification) ID
         1418220573673,        // timestamp (ms)
         "Jsem nova zprava",   // message
         123,                  // adadpter ID
         "deviceId",           // sensor ID
-        1);                   // sensor type
+        1,                    // sensor type
+        3);                   // rule ID
     
     notif->sendGcm(&ids);
     
@@ -30,6 +32,18 @@ int main()
       cout << notif->getDbXml() << endl;
     }
 
+    
+    Notification *notif2 = new AchievementNotif(
+        8,                  // user ID
+        123,                // message (notification) ID
+        1418220573673,      // timestamp (ms)
+        1                   // achievement ID
+        );
+
+    notif->sendGcm(&ids);
+
     delete(notif);
+    delete(notif2);
+
     return 0;
 }

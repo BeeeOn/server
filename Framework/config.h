@@ -8,7 +8,8 @@
 */
 #include <string>
 #include <stdlib.h> 
-#include "../loger.h"
+#include "loger.h"
+#include "DBFWHandler.h"
 
 #ifndef STRUCTURES_CONFIG_
 #define STRUCTURES_CONFIG_
@@ -28,14 +29,6 @@ class FrameworkConfig
 private:
 	Loger *Log;
 public:
-	FrameworkConfig();
-	~FrameworkConfig();
-	void SetConfig(std::string configPath);
-	void SetAlgorithms();
-	void ClearAlgorithms();
-	void SetLogger(Loger *init_Log);
-	void ResetAlgorithms();
-	talgorithm * GetAlgorithmById(int id);
 	int portUIServer;
 	int portAdaRecieverServer;
 	int portAdaSenderServer;
@@ -50,6 +43,18 @@ public:
 	int loggerSettingFilesCnt;
 	int loggerSettingLinesCnt;
 	std::vector<talgorithm *> algorithms;
+
+
+	FrameworkConfig();
+	~FrameworkConfig();
+	void SetConfig(std::string configPath);
+	void SetAlgorithms();
+	void ClearAlgorithms();
+	void SetLogger(Loger *init_Log);
+	void ResetAlgorithms();
+	talgorithm * GetAlgorithmById(int id);
+	void SetUpAlgorithmsInDatabase(DBFWHandler * database);
+
 };
 
 #endif
