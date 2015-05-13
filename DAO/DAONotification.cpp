@@ -26,12 +26,12 @@ std::string DAONotification::getXMLNotifications(int userId) {
     Logger::debug3()<<"DB:"<<"getNotifications"<<userId<<endl;
     try{
         soci::session sql(*_pool);
+        indicator ind;
         string xml;
-        sql << "select xmlagg( xmlelement(name notif, xmlattributes(message_id as mid, timestamp as time, level as type, read as read),"
+        sql << "select xmlagg( xmlelement(name notif, xmlattributes(name as name, message_id as mid, timestamp as time, level as type, read::int as read),"
                 " text) ) "
                 "from notifications where fk_user_id=:user_id",       
-                use(userId, "user_id"), into(xml);
-    
+                use(userId, "user_id"), into(xml,ind);
         return xml;
     }
     catch (soci::postgresql_soci_error& e)

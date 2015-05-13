@@ -187,7 +187,7 @@ CREATE TABLE users (
     picture varchar(250)  NULL,
     gender varchar(10)  NULL,
     mail varchar(250)  NULL,
-    password_md5 text  NULL,
+    password text  NULL,
     google_id text  NULL,
     facebook_id text  NULL,
     CONSTRAINT users_pk PRIMARY KEY (user_id)

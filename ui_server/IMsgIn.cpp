@@ -3,7 +3,7 @@
 using namespace std;
 const int IMsgIn::MAJOR_VERSION = 2;
 const int IMsgIn::MINOR_VERSION = 5;
-const string IMsgIn::VERSION = to_string(MAJOR_VERSION) + "." + to_string(MINOR_VERSION);
+const string IMsgIn::VERSION = to_string((long long int)MAJOR_VERSION) + "." + to_string((long long int)MINOR_VERSION);
 
 
 IMsgIn::IMsgIn(char* msg, pugi::xml_document* doc)
@@ -64,7 +64,7 @@ bool IMsgIn::checkProtocolVersion(){
     
     Logger::debug3() << "major ver.: " << ver.majorVersion << " minor ver.: " << ver.minorVersion <<endl; 
     
-    if(ver.majorVersion  != MAJOR_VERSION) {
+    if(ver.majorVersion != MAJOR_VERSION ) {
         Logger::error() <<"BAD protocol v. - expected: "<< VERSION<<" actual "<<protocolVersion<<endl;
         return false;
     }else{

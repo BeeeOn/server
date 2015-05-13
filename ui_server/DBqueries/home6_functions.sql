@@ -93,13 +93,30 @@ CREATE OR REPLACE FUNCTION devs_set_name() returns trigger
   	def_name text;
   BEGIN
     IF NEW.fk_facilities_mac between 3232235519 AND 3232235776 THEN
-      CASE NEW.type WHEN   0 THEN def_name := 'Zóna 1 - Typ provozu'  ;
-            WHEN 1 THEN def_name := 'Zóna 1 - Režim provozu'  ;
-            WHEN 2 THEN def_name := 'Zóna 1 - Žádaná teplota'  ;
-            WHEN 3 THEN def_name := 'Zóna 1 - Aktuální teplota'  ;
-            WHEN 4 THEN def_name := 'Zóna 2 - Typ provozu'  ;
-            WHEN 5 THEN def_name := 'Zóna 2 - Režim provozu'  ;
-            WHEN 6 THEN def_name := 'Zóna 2 - Žádaná teplota'  ;
+      CASE NEW.type 
+      
+            WHEN x'0B'::integer THEN def_name := 'Stav kotle'  ;
+            
+            WHEN x'A6'::integer THEN def_name := 'Z1: Typ provozu'  ;
+            WHEN x'A7'::integer THEN def_name := 'Z1: Režim provozu'  ;
+            WHEN x'A5'::integer THEN def_name := 'Z1: Žádaná teplota'  ;
+            WHEN x'0A'::integer THEN def_name := 'Z1: Aktuální teplota'  ;
+            
+            WHEN x'1A6'::integer THEN def_name := 'Z2: Typ provozu'  ;
+            WHEN x'1A7'::integer THEN def_name := 'Z2: Režim provozu'  ;
+            WHEN x'1A5'::integer THEN def_name := 'Z2: Žádaná teplota'  ;
+            WHEN x'10A'::integer THEN def_name := 'Z2: Aktuální teplota'  ;
+            
+            WHEN x'2A6'::integer THEN def_name := 'Z3: Typ provozu'  ;
+            WHEN x'2A7'::integer THEN def_name := 'Z3: Režim provozu'  ;
+            WHEN x'2A5'::integer THEN def_name := 'Z3: Žádaná teplota'  ;
+            WHEN x'20A'::integer THEN def_name := 'Z3: Aktuální teplota'  ;
+            
+            WHEN x'3A6'::integer THEN def_name := 'Z4: Typ provozu'  ;
+            WHEN x'3A7'::integer THEN def_name := 'Z4: Režim provozu'  ;
+            WHEN x'3A5'::integer THEN def_name := 'Z4: Žádaná teplota'  ;
+            WHEN x'30A'::integer THEN def_name := 'Z4: Aktuální teplota'  ;
+            
             ELSE def_name := ''   ;
        END CASE;
       UPDATE devices set name = def_name where fk_facilities_mac = NEW.fk_facilities_mac AND type = NEW.type;

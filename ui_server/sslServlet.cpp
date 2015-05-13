@@ -129,6 +129,7 @@ int readMsgFromSSL(SSL* ssl, char** rc){
     int readSize = 1024;
     int received = 0;  
     int readCount = 0;
+    int sslWant = 0;
     do{ 
         if (!(*rc)){
             *rc = (char*)malloc (readSize * sizeof (char) + 1);
@@ -138,22 +139,51 @@ int readMsgFromSSL(SSL* ssl, char** rc){
             *rc = (char*)realloc (*rc, (readCount + 1) * readSize * sizeof (char) + 1);
         }
         received = SSL_read(ssl, buf, sizeof(buf)-1); // get request 
-        if(received >= 0){
+        if(received > 0)
+        {
             buf[received] = '\0';
             Logger::getInstance(Logger::DEBUG3)<<"ssl read ("<<received<<")result:"<< buf <<endl;
             
             char *const strBuf = (char*)malloc(strlen(buf) + 1);
-            
+            //strcpy( (*rc)[strlen(rc)], buf );
             memcpy( (void*)strBuf,(void*)buf, strlen(buf)+1);
-            //free(strBuf);
+            
             strcat (*rc, strBuf);
+            
             //const char src[50] = "http://www.tutorialspoint.com";
             //char dest[50];
 
             //printf("Before memcpy dest = %s\n", dest);
-        }else if(received < 0){
-                logErrors(ssl, received);   
-                break;
+            
+            /*            char *const strBuf = (char*)malloc(strlen(buf) + 1);
+            
+            memcpy( (void*)strBuf,(void*)buf, strlen(buf)+1);
+            
+            if (!(*rc)){
+                strcpy(*rc, strBuf);
+            }else{
+                strcat (*rc, strBuf);
+            }*/
+        }
+        else if(received == 0)
+        {
+            Logger::getInstance(Logger::DEBUG3)<<"ssl read 0 shutdown:"<<SSL_get_shutdown(ssl)<<endl;
+            break;
+        }
+        else if(received < 0)
+        {
+            int ssl_err = SSL_get_error(ssl, received);
+            if(ssl_err == SSL_ERROR_WANT_WRITE || ssl_err == SSL_ERROR_WANT_READ){
+                Logger::getInstance(Logger::DEBUG3)<<"ssl read, want"<< ssl_err <<"_"<<SSL_get_shutdown(ssl) <<endl;
+                
+                usleep(100*1000);
+                sslWant++;
+                if(sslWant > 10)
+                    break;
+                continue;
+            }
+            logErrors(ssl, received);   
+            break;
         }
         if(readCount > 5){
             Logger::getInstance(Logger::ERROR)<<"ssl incoming data are too big"<<endl;
@@ -206,7 +236,6 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
                     Logger::getInstance(Logger::DEBUG3)<<"Start resolve "<< burstMsgCount++ <<" msg in burst"<<endl;
 
                     std::string replyString = resolveMsg(rc);
-                    
                     if ( replyString[replyString.size()-1] != '\n' )
                         replyString.append("\n");
                     //replyString.insert(0, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"); 
@@ -222,9 +251,10 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
                     ERR_print_errors_fp(stderr);
                 }
             
-                if (!rc)   
+                //if (!rc){   
                     free(rc);
-                
+                    Logger::getInstance(Logger::DEBUG3)<<"msg free "<<endl;
+                //}
            }while(received > 0);
            
         }

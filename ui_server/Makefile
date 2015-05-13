@@ -51,7 +51,7 @@ CCADMIN=CCadmin
 CCC=/opt/centos/devtoolset-1.1/root/usr/bin/g++ -std=c++0x -D_GLIBCXX_USE_NANOSLEEP  
 CXX=/opt/centos/devtoolset-1.1/root/usr/bin/g++ -std=c++0x -D_GLIBCXX_USE_NANOSLEEP
 
-ifeq (ant-2.fit.vutbr.cz,$(shell hostname))  
+ifeq (ant-2,$(shell hostname))  
 	CXX=/opt/centos/devtoolset-1.1/root/usr/bin/g++ -std=c++0x -D_GLIBCXX_USE_NANOSLEEP
 else
 	CXX=g++

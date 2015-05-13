@@ -52,6 +52,7 @@ int main(int argc, char** argv)
 {   
 //http://pugixml.googlecode.com/svn-history/r605/trunk/docs/samples/modify_add.cpp
     //load XML file from argv[1]
+
     if(argc>=2){
         try{
             Config::getInstance().loadXml(argv[1]);
@@ -114,98 +115,12 @@ int main(int argc, char** argv)
         return 1;
     }
         
-      //  int port = 9999; 
-     //   std::thread t(&serverF,port);
-     /*   std::thread t([ss,port](){
-            std::cout << "thread function\n";
-        
-            ss.start(9999);
-        });*/
-  /*      
-        SocketClient sc(port);
-        //sc.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?><com ver=\"2.4\" state=\"algs\" aid=\"7777\"></com>\nqwertasdfgh</></>");
-        sc.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?><com ver=\"2.4\" state=\"algs\" aid=\"7777\"></cm>xx\nqwertasdfgh</></>");
-        std::cout <<"read"<< sc.read() << "|"<<endl;
-        t.join();
-        return 0;
- */       
-        /* device d;
-        d.id = "53.54.55.56";
-        d.type="0x00";
-        DBConnector::getInstance().getDeviceLog((string)"51966", d,(string)"2014-08-05 00:00:00",(string)"2014-08-12 11:23:50",(string)"avg",(string)"3600");
-        return 0;*/
 
-        /*
-         resolveMsg( "<com ver=\"2.3\"  state=\"getuid\" email=\"new22@gmail.com\" gid=\"1111\" gt=\"1\"  loc=\"cs\" />");
-        resolveMsg( "<com uid=\"1\" state=\"getdevs\" ver=\"2.3\"><adapter id=\"10\"><dev id=\"0.0.10.1\"><part type=\"1\" /><part type=\"2\" /></dev></adapter></com>");
-        resolveMsg( "<com uid=\"1\" state=\"getnewdevs\" ver=\"2.3\" aid=\"10\"></com>");
-        return 0;
-        resolveMsg( "<com ver=\"2.3\"  state=\"getuid\" email=\"new22@gmail.com\" gid=\"1111\" gt=\"1\"  loc=\"cs\" />");
-        resolveMsg( "<com ver=\"2.3\" uid=\"2\" state=\"getalldevs\" aid=\"20\" />");
-        resolveMsg( "<com ver=\"2.3\" uid=\"2\" state=\"getdevs\" ><adapter id=\"20\"><dev id=\"0.0.20.1\"><part type=\"1\" /></dev><dev id=\"0.0.10.2\"><part type=\"1\" /></dev></adapter></com>");
-        resolveMsg( "<com ver=\"2.3\" uid=\"2\" state=\"getlog\" from=\"1377684610\" ftype=\"avg\" interval=\"0\" aid=\"21\" did=\"0.0.21.1\" dtype=\"1\" />" );
-       resolveMsg( "<com ver=\"2.3\" uid=\"1\" state=\"getnewdevs\" aid=\"10\"  />" );
-*/
-    //string x = "<com ver=\"2.3\" uid=\"1\" state=\"getnewdevs\" aid=\"10\"  />";
-    //resolveMsg(x.c_str());
-    //return 0;
-        
         resolveMsg( "<com ver=\"2.4\"  state=\"getadapters\" email=\"new22@gmail.com\" gid=\"1111\" gt=\"1\" pid=\"11\" loc=\"cs\" />");
         resolveMsg( "<com ver=\"2.5\"  state=\"getadapters\" email=\"new22@gmail.com\" gid=\"1111\" gt=\"1\" pid=\"111\" loc=\"cs\" />");
         resolveMsg( "<com ver=\"1.3\"  state=\"getadapters\" email=\"new33@gmail.com\" gid=\"11111\" gt=\"1\" pid=\"11111\"  loc=\"cs\" />");
     resolveMsg( "<com ver=\"2.4\" state=\"signup\" srv=\"facebook\"><par fbt=\"CAAMVd7mjduYBAKsnl5i2iJljZAG1A6PDraitTxF2v91iDDoOwZA5uOSxYCpo2a0WZC7ZB8I8n3hXEFrgBBZCEoO6HZAtENfNO72n8DmZAYdVYknltIY50g1ACzkhPavWnCtOkGBdD68VnwnfhLtZA00SjWw9QiZCzjg09ZBVKPSZBPqKZAGFDawZAWZBV82KWiCp4uMruh5AiBcs5ihHTsENM0d5CfGx0bfEwo0F7IIGHOUGv0IJYSZBOZCmZANPc\" /></com>");
 
-       // resolveMsg( "<com ver=\"2.3\"  state=\"getuid\" email=\"newww@gmail.com\" gid=\"33\" gt=\"1\" pid=\"34\" loc=\"cs\" />");
-       
-      //resolveMsg("<com ver=\"2.3\"  uid=\"15\" state=\"setgcmid\"  gcmid=\"new\" />");
-    //resolveMsg("<com ver=\"2.3\"  uid=\"14\" state=\"delgcmid\"  email=\"11111@v\" gcmid=\"new\" />");
-    //resolveMsg("<com ver=\"2.3\"  uid=\"15\" state=\"setgcmid\"  gcmid=\"new\" />");
-
-
-    
-      //DBConnector::getInstance().DEBUGexec("INSERT INTO USERS (user_id,MAIL) VALUES (1,'dummy@gmail.com');" );
-      //DBConnector::getInstance().DEBUGexec("insert into mobile_devices(fk_user_id, id, token) values(1,1,1);" );
-      
-       // resolveMsg( "<com ver=\"2.3\"  uid=\"9\" state=\"addadapter\" aid=\"10\"     aname=\"home\"  />");
-        //resolveMsg( "<com ver=\"2.3\"  state=\"getuid\" email=\"n11@gmail.com\" gid=\"99191\" gt=\"1\" pid=\"1100\" loc=\"cs\" />");
-    //resolveMsg("<com ver=\"2.3\" state=\"addadapter\" uid=\"40\" aid=\"1234567890123456\" aname=\"test\" />");
-    
-       // resolveMsg("<com ver=\"2.3\" state=\"delalg\" uid=\"42\" aid=\"1234567890123456\" aname=\"test\" />"); 
-        
-        
-        //resolveMsg( "<com ver=\"2.3\"  state=\"getuid\" email=\"n11@gmail.com\" gid=\"99191\" gt=\"1\" pid=\"1100\" loc=\"cs\" />");
-/*
-        resolveMsg( "<com ver=\"2.4\"  state=\"signup\" srv=\"beeeon\"> <par name=\"pavel3\" pswd=\"xxx\"  /> </com>>");
-        resolveMsg( "<com ver=\"2.4\"  state=\"signin\" srv=\"beeeon\" > <par name=\"pavel3\" pswd=\"xxx\"  />  </com>");
-        DAOUsers::getInstance().getUserIDbyAlternativeKeys("leo.podmolik@gmail.com", "","");
-        */
-        //resolveMsg( (char*)"<com ver=\"2.4\" state=\"getallalgs\" bt=\"nXj66lMqqi\" aid=\"9494\" userid=\"21\" />");
-        //DAODevices::getInstance().updateFacility("7771111", "11112", "", "null", "");
-        //return 0;
-        /*
-        int id = DAOUsers::getInstance().getUserIDbyAlternativeKeys("user2a@gmail.com", "1111","user2");
-             MobileDevice mobile;
-    mobile.locale = "pl";
-    mobile.mobile_id = "XXX";
-    mobile.push_notification = "aaa";
-
-    mobile.token = "ABC";
-    mobile.type = "android";
-        
-        DAOMobileDevices::getInstance().upsertMobileDevice( mobile, id);
-        */
-         //resolveMsg( "<com bt=\"Rv8FZr2ktR\" state=\"getdevs\" ver=\"2.4\"><adapter id=\"20\"><dev id=\"2001\"><part type=\"1\" /></dev></adapter></com>");
-        //User u =DAOUsers::getInstance().getUserAssociatedWithToken("6iD0IVVLnq") ;
-        //cout<< u.mail<<endl;
-       /* User u;
-        MobileDevice m;
-        
-        u.mail = "a@a.xx";
-        m.token=111;
-        m.mobile_id ="abc";
-        DAOUsers::getInstance().upsertUserWithMobileDevice(u, m);
-        */
-      //  return 0;
         Logger::debug()<< "setting SSL context..."<< endl;
        SSL_CTX *ctx;
        int server;

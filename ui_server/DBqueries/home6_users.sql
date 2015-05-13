@@ -31,8 +31,9 @@ create user emuserver with password 'd3lame.EMU';
   GRANT SELECT, INSERT, UPDATE, DELETE
     ON ALL TABLES IN SCHEMA public 
     TO emuserver;
-                              
 
+GRANT SELECT, INSERT, UPDATE, DELETE on                            
+users,users_adapters,adapters,facilities,devices,logs,rooms,mobile_devices,algo_devices,u_algorithms,users_algorithms,algorithms_adapters to george;
 
 #hba_file+ 
 #user local md5
