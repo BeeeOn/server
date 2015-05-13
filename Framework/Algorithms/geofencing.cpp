@@ -44,7 +44,10 @@ int main(int argc, char *argv[])
 		else if (parameterCounter == 2){ // TYPE | DIRECTION
 			directionParams = (*parameter);
 		}
-		else if (parameterCounter == 3){  // NOTIF_OR_ACTOR | NOTIF_OR_ACTOR
+		else if (parameterCounter == 3){
+			//do nothing
+		}
+		else if (parameterCounter == 4){  // NOTIF_OR_ACTOR | NOTIF_OR_ACTOR
 			toBeNotifiedOrChangeActor = (*parameter);
 			if (toBeNotifiedOrChangeActor.compare("notif") == 0){
 				notifVersionOfAlgorithm = true;
@@ -53,7 +56,7 @@ int main(int argc, char *argv[])
 				actorVersionOfAlgorithm = true;
 			}
 		}
-		else if (parameterCounter == 4){ // NOTIFICATION OR ACTOR | STRING
+		else if (parameterCounter == 5){ // NOTIFICATION OR ACTOR | STRING
 			notificationTextOrIdActor = *parameter;
 		}
 		else{
@@ -74,8 +77,9 @@ int main(int argc, char *argv[])
 		std::string tmpString = notificationTextOrIdActor.substr(notificationTextOrIdActor.find(delimeter)); 
 		typeOfActor = tmpString.erase(0, delimeter.length());
 	}
-	
+
 	//Zpracovani hodnot Rid
+
 	std::vector<tRidValues *> Rids = alg->getRids();
 	string directionValues;
 	string idOfRIDValues;
@@ -95,12 +99,12 @@ int main(int argc, char *argv[])
 	if (isToBeSendNotificationOrChangeActor){
 		if (notifVersionOfAlgorithm){
 			//Odeslat notifikaci
-			alg->AddNotify(1, notificationTextOrIdActor);
+			alg->AddNotify(1, notificationTextOrIdActor, "", "");
 		}
 		if (actorVersionOfAlgorithm){
 			//Zmenit aktor
 			alg->ChangeActor(idOfActor, typeOfActor);
-		}	
+		}
 	}
 	/*-----------------------------------Konec tìla programu-----------------------------------*/
 	//Odeslání dat do Frameworku a ukonèení algoritmu.

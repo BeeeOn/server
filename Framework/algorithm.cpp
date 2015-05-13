@@ -36,7 +36,8 @@ Algorithm::Algorithm(std::string init_userID, std::string init_algID, std::strin
 		exit(EXIT_FAILURE);
 	}
 	//Nastaveni kontejneru pro DB
-	this->cont = DatabaseConnectionContainer::CreateContainer(Log, "home5", 1);
+	/*
+	this->cont = DBConnectionsContainer::GetConnectionContainer(Log, "home5", 1);
 	this->Log->SetLogger(7, 5, 100, "algorithm_log",".", "ALGORITHM");
 	session *Conn = NULL;
 	while (Conn == NULL)
@@ -49,12 +50,13 @@ Algorithm::Algorithm(std::string init_userID, std::string init_algID, std::strin
 	}
 	try
 	{
-		this->database = new DBHandler(Conn, Log);
+		this->database = new DBFWHandler(Conn, Log);
 	}
 	catch (std::exception &e)
 	{
-
+		cout << "Unable to create memory space for DBHandler!!!" << endl;
 	}
+	*/
 
 }
 
@@ -63,7 +65,7 @@ Algorithm::~Algorithm(){
 }
 
 // Metoda pøidávající notifikaci uživateli algoritmu
-bool Algorithm::AddNotify(unsigned short int type, std::string text){
+bool Algorithm::AddNotify(unsigned short int type, std::string text, std::string senzorId, std::string typeOfSenzor){
 	tnotify * newNotification;
 	try
 	{
@@ -77,6 +79,8 @@ bool Algorithm::AddNotify(unsigned short int type, std::string text){
 	}
 	newNotification->notifyType = type;
 	newNotification->notifyText = text;
+	newNotification->senzorId = senzorId;
+	newNotification->typeOfSenzor = typeOfSenzor;
 	this->toNotify.push_back(newNotification);
 
 	return true;
@@ -147,7 +151,7 @@ bool Algorithm::SendAndExit(){
 	cout << "Algorithm info: Message send." << size << endl;
 
 	close(mySocket);
-	this->cont->ReturnConnection(this->database->ReturnConnection());
+	//this->cont->ReturnConnection(this->database->GetConnectionSession());
 	return true;
 }
 
@@ -180,9 +184,11 @@ std::string Algorithm::CreateMessage(){
 		xml_node notifNode = notifications.append_child("notif");
 		notifNode.append_attribute("type");
 		notifNode.append_attribute("text");
+		notifNode.append_attribute("senzorId");
 		tnotify * notiftmp = *oneNotif;
 		notifNode.attribute("type") = to_string(notiftmp->notifyType).c_str();
 		notifNode.attribute("text") = notiftmp->notifyText.c_str();
+		notifNode.attribute("senzorId") = notiftmp->senzorId.c_str();
 	}
 
 	xml_node toggleActors = algorithm_message.append_child("tactors");
@@ -192,7 +198,7 @@ std::string Algorithm::CreateMessage(){
 
 	//Add all toogles to message
 	for (auto oneToggle = this->toToggleActor.begin(); oneToggle != this->toToggleActor.end(); ++oneToggle){
-		xml_node toggleNode = toggleActors.append_child("notif");
+		xml_node toggleNode = toggleActors.append_child("tactor");
 		toggleNode.append_attribute("id");
 		toggleNode.append_attribute("type");
 		ttoggle * toggleTmp = *oneToggle;
@@ -290,8 +296,6 @@ Algorithm * Algorithm::getCmdLineArgsAndCreateAlgorithm(int argc, char *argv[]){
 		cerr << "Algorithm failure: Wrong command line arguments! You have to specify at least -u -a -d -o\n";
 		return nullptr;
 	}
-
-	cerr << "Paramstring: " << parametersString.c_str() << endl;
 
 	//Deklarace promìnných pro uložení z operací parsování
 	multimap<unsigned int, map<string, string>> values;

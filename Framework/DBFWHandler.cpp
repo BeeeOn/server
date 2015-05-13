@@ -1,387 +1,57 @@
-﻿/*
-* DBHandler.cpp
+﻿/**
+* @file DBFWHandler.cpp
 *
-*  Created on: Oct 26, 2014
-*      Author: tuso
+* @Implementace metod, krete pracuji jiz primo nad DB. Jde o abstrakci dotazu nad Databazi nad tabulkami pro algoritmy a dalsimi na nich navazanymi. Vyuziva se knihovny soci (soci::session)
+*
+* @author xrasov01
+* @version 1.0
 */
 
 #include "DBFWHandler.h"
-
-/**********************************************Start of DBHandler section******************************************************/
-
 using namespace soci;
 
-/** Metoda ktora zisti ci je zapnute logovanie pre dane zariadenie a ulozi logovacie data do databazy
-* @param message - spracovana sprava
+/**
+* Vrati sezeni nad databazi, pomoci ktereho se nad databazi provadi dotazy.
+*
+* @return session	ukazatel na sezeni
 */
-
-session *DBHandler::ReturnConnection()
+soci::session *DBFWHandler::GetConnectionSession()
 {
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::ReturnConnection");
-	session *s = this->_sql;
-	this->_sql = NULL;
+	session * t = this->ses;
+	this->ses = NULL;
 	this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::ReturnConnection");
-	return s;
-
+	return t;
 }
 
-
-void DBHandler::LogValue(tmessage *message)
-{
-	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::LogValue");
-	for (int i = 0; i<message->values_count; i++)
-	{
-		try  //zavolame prikaz na volzenie dat do databazy
-		{
-			std::string retRec;
-			std::string val = "0";
-			switch (message->values[i].type)
-			{
-			case TEMP:
-			case LUM:
-			case REZ:
-			case POS:
-				val = std::to_string(message->values[i].fval);
-				break;
-			case ONON:
-			case TOG:
-			case ONOFFSEN:
-			case ONOFSW:
-
-				if (message->values[i].bval)
-					val = "1";
-
-				break;
-			case EMI:
-			case HUM:
-			case BAR:
-			case RGB:
-			case RAN:
-				val = std::to_string(message->values[i].ival);
-				break;
-			default:
-				this->_log->WriteMessage(WARN, "Unknown value type nothing will be saved to DB!");
-				continue;
-				break;
-			}
-			std::string sqlQuery = "insert into logs (fk_facilities_mac,timestamp,fk_devices_type,value) values ( '" + message->DeviceIDstr + "', " + std::to_string(message->timestamp) + " , " + std::to_string(message->values[i].intType) + ", " + val + " );";
-			this->_log->WriteMessage(TRACE, sqlQuery);
-			*_sql << sqlQuery,
-				into(retRec);
-		}
-		catch (std::exception const &e)
-		{
-			std::string ErrorMessage = "Database Error : ";
-			ErrorMessage.append(e.what());
-			this->_log->WriteMessage(ERR, ErrorMessage);
-		}
-	}
-	this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::LogValue");
-}
-
-/** Konstruktor objektu vytvoreneho z triedy DBHandler
-* @param DBname - nazov databazy
+/** Konstruktor tridy DBFWHandler
+*
+* @param session	Sezeni nad databazi
+* @param loger		Ukazatel na instanci logeru umoznujici logovani do souboru.
 */
-
-DBHandler::DBHandler(soci::session *SQL, Loger *l)
+DBFWHandler::DBFWHandler(soci::session *ses_init, Loger *loger)
 {
-	this->_log = l;
-	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::Constructor");
-	this->_sql = SQL;
-	this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::Constructor");
+	//this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::Constructor");
+	this->_log = loger;
+	this->ses = ses_init;
+	//this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::Constructor");
 }
 
-/** Metoda pre zistenie pritomnosti urciteho zaznamu v databaze
-* @param tableName - nazov tabulky v ktorej sa ma zaznam hladat
-* @param columnName - stlpec podla ktoreho ma byt zaznam hladany
-* @param record - hodnota zaznamu
-* @return true/false podla toho ci bol zaznam najdeny
+/** Destruktor tridy DBFWHandler
+*
 */
-
-bool DBHandler::IsInDB(std::string tableName, std::string columnName, std::string record)
+DBFWHandler::~DBFWHandler()
 {
-	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::IsInDB");
-	try //zavolame jednoduchy select nad DB
-	{
-		int retRec;
-		std::string sqlQuery = "select count(*)" + columnName + " from " + tableName + " where " + columnName + " = " + record + ";";
-		this->_log->WriteMessage(TRACE, sqlQuery);
-		*_sql << sqlQuery,
-			into(retRec);
-		if (retRec > 0) //ak sme dostali nejake data znamena to ze udaj sa uz v DB nachadza
-		{
-			this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::IsInDB");
-			return (true);
-		}
-		else
-		{
-			this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::IsInDB");
-			return (false);
-		}
-	}
-	catch (std::exception const &e)
-	{
-		std::string ErrorMessage = "Database Error : ";
-		ErrorMessage.append(e.what());
-		this->_log->WriteMessage(ERR, ErrorMessage);
-		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::IsInDB");
-		return (false);
-	}
 }
 
-/** Metoda vytvori v databaze novy zaznam v tabulke adapterov
-* @param message - obsah spracovanej spravy
-* @return na zaklade uspechu/neuspechu vrati true/false
+//---------------------------------------  BEGIN QUERY SECTION ---------------------------------------
+
+/** Dotaz ziskavajici posledni hodnotu z tabulky Devices (napr pro ziskani posledni teploty z teplotniho senzoru) 
+*
+* @param ID			fk_facilities_mac
+* @param type		type
 */
-
-bool DBHandler::InsertAdapter(tmessage *message)
-{
-	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::InsertAdapter");
-	try
-	{
-		std::string retRec;
-		std::string addressStr = inet_ntoa(message->adapter_ip);
-		std::string sqlQuery = "insert into adapters (adapter_id,version,ip_address) values ( " + std::to_string(message->adapterINTid) + ", " + std::to_string(message->fm_version) + ", '" + addressStr + "');";
-		this->_log->WriteMessage(TRACE, sqlQuery);
-		*_sql << sqlQuery,
-			into(retRec);
-		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::InsertAdapter");
-		return (true);
-	}
-	catch (std::exception const &e)
-	{
-		std::string ErrorMessage = "Database Error : ";
-		ErrorMessage.append(e.what());
-		this->_log->WriteMessage(ERR, ErrorMessage);
-		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::InsertAdapter");
-		return (false);
-	}
-}
-
-
-/** Metoda aktualizuje zaznam v databaze v tabulke adapterov
-* @param message - obsah spracovanej spravy
-* @return na zaklade uspechu/neuspechu vrati true/false
-*/
-
-bool DBHandler::UpdateAdapter(tmessage *message)
-{
-	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::UpdateAdapter");
-	try
-	{
-		std::string retRec;
-		std::string addressStr = inet_ntoa(message->adapter_ip);
-		std::string sqlQuery = "update adapters set version=" + std::to_string(message->fm_version) + ",ip_address='" + addressStr + "' where adapter_id=" + std::to_string(message->adapterINTid) + ";";
-		this->_log->WriteMessage(TRACE, sqlQuery);
-		*_sql << sqlQuery,
-			into(retRec);
-		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::UpdateAdapter");
-		return (true);
-	}
-	catch (std::exception const &e)
-	{
-		std::string ErrorMessage = "Database Error : ";
-		ErrorMessage.append(e.what());
-		this->_log->WriteMessage(ERR, ErrorMessage);
-		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::UpdateAdapter");
-		return (false);
-	}
-}
-
-
-/** Metoda vytvori v databaze novy zaznam v tabulke zariadeni
-* @param message - obsah spracovanej spravy
-* @return na zaklade uspechu/neuspechu vrati true/false
-*/
-
-bool DBHandler::InsertSenAct(tmessage *message)
-{
-	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::InsertSenAct");
-	try
-	{
-		std::string retRec;
-		std::string sqlQuery = "insert into facilities (mac,refresh,battery,quality,fk_adapter_id,involved,timestamp) values \
-							   				( '" + message->DeviceIDstr + "', 5 ," + std::to_string(message->battery) + ", " + std::to_string(message->signal_strength) + ", " + std::to_string(message->adapterINTid) + ", " + std::to_string(message->timestamp) + ", " + std::to_string(message->timestamp) + " );";
-		this->_log->WriteMessage(TRACE, sqlQuery);
-		*_sql << sqlQuery, into(retRec);
-	}
-	catch (std::exception const &e)
-	{
-		std::string ErrorMessage = "Database Error while inserting sensor/actor details : ";
-		ErrorMessage.append(e.what());
-		this->_log->WriteMessage(ERR, ErrorMessage);
-		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::InsertSenAct");
-		return (false);
-	}
-	try
-	{
-		for (int i = 0; i<message->values_count; i++)  //musime ulozit do DB vsetky hodnoty ktore sme dostali
-		{
-			std::string retRec;
-			std::string val = "0";
-			switch (message->values[i].type)
-			{
-			case TEMP:
-			case LUM:
-			case REZ:
-			case POS:
-				val = std::to_string(message->values[i].fval);
-				break;
-			case ONON:
-			case TOG:
-			case ONOFFSEN:
-			case ONOFSW:
-				if (message->values[i].bval)
-					val = "1";
-				break;
-			case EMI:
-			case HUM:
-			case BAR:
-			case RGB:
-			case RAN:
-				val = std::to_string(message->values[i].ival);
-				break;
-			default:
-				this->_log->WriteMessage(WARN, "Unknown value type nothing will be saved to DB!");
-				continue;
-				break;
-			}
-			//pri prvom ulozeni do databazy sa nastavi cas zobudzania defaultne na 5 sekund
-			std::string sqlQuery = "insert into devices (fk_facilities_mac,type,value) values ( '" + message->DeviceIDstr + "', " + std::to_string(message->values[i].intType) + ", '" + val + "');";
-			this->_log->WriteMessage(TRACE, sqlQuery);
-			*_sql << sqlQuery,
-				into(retRec);
-		}
-		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::InsertSenAct");
-		return (true);
-	}
-	catch (std::exception const &e)
-	{
-		std::string ErrorMessage = "Database Error while inserting values : ";
-		ErrorMessage.append(e.what());
-		this->_log->WriteMessage(ERR, ErrorMessage);
-		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::InsertSenAct");
-		return (false);
-	}
-}
-
-
-/** Metoda aktualizu v databaze zaznam v tabulke adapterov
-* @param message - obsah spracovanej spravy
-* @return na zaklade uspechu/neuspechu vrati true/false
-*/
-
-bool DBHandler::UpdateSenAct(tmessage *message)
-{
-	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::UpdateSenAct");
-	try
-	{
-
-		std::string retRec;
-		std::string sqlQuery = "update facilities set battery=" + std::to_string(message->battery) + ",quality=" + std::to_string(message->signal_strength) + ",timestamp=" + std::to_string(message->timestamp) + " where (mac='" + message->DeviceIDstr + "');";
-		this->_log->WriteMessage(TRACE, sqlQuery);
-		*_sql << sqlQuery,
-			into(retRec);
-		for (int i = 0; i<message->values_count; i++)
-		{
-
-			std::string val = "0";
-			switch (message->values[i].type)
-			{
-			case TEMP:
-			case LUM:
-			case REZ:
-			case POS:
-				val = std::to_string(message->values[i].fval);
-				break;
-			case ONON:
-			case TOG:
-			case ONOFFSEN:
-			case ONOFSW:
-				if (message->values[i].bval)
-					val = "1";
-
-				break;
-			case EMI:
-			case HUM:
-			case BAR:
-			case RGB:
-			case RAN:
-				val = std::to_string(message->values[i].ival);
-				break;
-			default:
-				this->_log->WriteMessage(WARN, "Unknown value nothing will be saved to DB!");
-				continue;
-				break;
-			}
-			std::string sqlQuery = "update devices set value=" + val + " where (fk_facilities_mac='" + message->DeviceIDstr + "' AND type =" + std::to_string(message->values[i].intType) + ");";
-			this->_log->WriteMessage(TRACE, sqlQuery);
-			*_sql << sqlQuery,
-				into(retRec);
-		}
-		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::UpdateSenAct");
-		return (true);
-	}
-	catch (std::exception const &e)
-	{
-		std::string ErrorMessage = "Database Error : ";
-		ErrorMessage.append(e.what());
-		this->_log->WriteMessage(ERR, ErrorMessage);
-		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::UpdateSenAct");
-		return (false);
-	}
-}
-
-
-/** Metoda ziska z databazy zaznam o case zobudenia pre konkretny senzor
-* @param record - obsah spracovanej spravy
-* @return hodnota zobudenia
-*/
-
-int DBHandler::GetWakeUpTime(std::string record)
-{
-	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::GetWakeUpTime");
-	try
-	{
-		//TODO indikator zabrani vyhozeni vyjimky, pokud nenajde ����dn�� data.
-		indicator ind;
-		int retRec;
-		std::string sqlQuery = "select refresh from facilities where mac = '" + record + "';";
-		*_sql << sqlQuery,
-			into(retRec, ind);
-		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::GetWakeUpTime");
-		return (retRec);
-
-	}
-	catch (std::exception const &e)
-	{
-		std::string ErrorMessage = "Database Error : ";
-		ErrorMessage.append(e.what());
-		this->_log->WriteMessage(ERR, ErrorMessage);
-		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::GetWakeUpTime");
-		return (5);
-	}
-}
-
-void DBHandler::GetAdapterData(std::string *adapterIP, long int ID)
-{
-	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::GetAdapterData");
-	std::string sqlQuery = "SELECT ip_address FROM adapters where adapter_id=" + std::to_string(ID) + ";";
-	this->_log->WriteMessage(TRACE, sqlQuery);
-	try
-	{
-		*_sql << sqlQuery, into(*adapterIP);
-	}
-	catch (std::exception const &e)
-	{
-		std::string ErrorMessage = "Database Error : ";
-		ErrorMessage.append(e.what());
-		this->_log->WriteMessage(ERR, ErrorMessage);
-	}
-	this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::GetAdapterData");
-}
-
-float DBHandler::GetLastTemp(std::string ID, std::string type)
+float DBFWHandler::GetValueFromDevices(std::string ID, std::string type)
 {
 	double retVal;
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::GetLastTemp");
@@ -389,7 +59,7 @@ float DBHandler::GetLastTemp(std::string ID, std::string type)
 	this->_log->WriteMessage(TRACE, sqlQuery);
 	try
 	{
-		*_sql << sqlQuery, into(retVal);
+		*ses << sqlQuery, into(retVal);
 	}
 	catch (std::exception const &e)
 	{
@@ -402,29 +72,45 @@ float DBHandler::GetLastTemp(std::string ID, std::string type)
 	return (retVal);
 }
 
-std::vector<std::string> *DBHandler::GetEmails(std::string AdapterID)
+/** Dotaz nastavujici posledni hodnotu (domena value) v tabulce Devices. (dle parametru)
+*
+* @param ID			fk_facilities_mac
+* @param type		type
+* @param value		Hodnota, na kterou se provadi Update
+*
+* @return boolean dle toho zda update probehl uspesne
+*/
+bool DBFWHandler::UpdateValueOfDevices(std::string ID, std::string type, std::string value)
 {
-	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::GetEmails");
-	std::string sqlQuery = "SELECT mail FROM users INNER JOIN users_adapters ON user_id=fk_user_id WHERE (fk_adapter_id=" + AdapterID + ");";
-	this->_log->WriteMessage(TRACE, sqlQuery);
-	std::vector<std::string> * retVal = new std::vector<std::string>(10);
+	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::UpdateLastTemp");
+	std::string retVal = "";
 	try
 	{
-		*_sql << sqlQuery, into(*retVal);
+		std::string sqlQuery = "UPDATE devices SET  value=" + value + " WHERE (fk_facilities_mac='" + ID + "' AND type =" + type + ");";
+		this->_log->WriteMessage(TRACE, sqlQuery);
+		*ses << sqlQuery,
+			into(retVal);
+		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::UpdateLastTemp");
+		return (true);
+
 	}
 	catch (std::exception const &e)
 	{
 		std::string ErrorMessage = "Database Error : ";
 		ErrorMessage.append(e.what());
 		this->_log->WriteMessage(ERR, ErrorMessage);
-		delete (retVal);
-		retVal = nullptr;
+		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::UpdateLastTemp");
+		return (false);
 	}
-	this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::GetEmails");
-	return (retVal);
 }
 
-std::string DBHandler::GetEmailByUserId(std::string UserID)
+/** Dotaz ziskavajici Email z tabulky Users dle primarniho klice (id)
+*
+* @param UserID			user_id
+*
+* @return email
+*/
+std::string DBFWHandler::GetEmailByUserId(std::string UserID)
 {
 	std::string retVal = "";
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::GetEmailByUserId");
@@ -432,7 +118,7 @@ std::string DBHandler::GetEmailByUserId(std::string UserID)
 	this->_log->WriteMessage(TRACE, sqlQuery);
 	try
 	{
-		*_sql << sqlQuery, into(retVal);
+		*ses << sqlQuery, into(retVal);
 	}
 	catch (std::exception const &e)
 	{
@@ -445,7 +131,13 @@ std::string DBHandler::GetEmailByUserId(std::string UserID)
 	return (retVal);
 }
 
-std::string DBHandler::GetUserIdByEmail(std::string Email)
+/** Dotaz ziskavajici primarni klic z tabulky Users dle Emailu
+*
+* @param Email			mail
+*
+* @return user_id
+*/
+std::string DBFWHandler::GetUserIdByEmail(std::string Email)
 {
 	std::string retVal = "";
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::GetEmailByUserId");
@@ -453,7 +145,7 @@ std::string DBHandler::GetUserIdByEmail(std::string Email)
 	this->_log->WriteMessage(TRACE, sqlQuery);
 	try
 	{
-		*_sql << sqlQuery, into(retVal);
+		*ses << sqlQuery, into(retVal);
 	}
 	catch (std::exception const &e)
 	{
@@ -467,29 +159,68 @@ std::string DBHandler::GetUserIdByEmail(std::string Email)
 	return (retVal);
 }
 
-std::vector<std::string> *DBHandler::GetNotifStringByUserId(std::string userId)
+/** Dotaz ziskavajici GCM Identifikacni retezce pro jednoho uzivatele a vracejici jako vektor retezcu.
+*
+* @param userId			user_id
+*
+* @return vektor retezcu GCM identifikacnich retezcu
+*/
+std::vector<std::string> DBFWHandler::GetNotifStringByUserId(std::string userId)
 {
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::GetNotifString");
 	std::string sqlQuery = "SELECT push_notification FROM users INNER JOIN mobile_devices ON user_id=fk_user_id WHERE (user_id=" + userId + ");";
 	this->_log->WriteMessage(TRACE, sqlQuery);
-	std::vector<std::string> * retVal = new std::vector<std::string>(10);
+	std::vector<std::string> retVal(20);
 	try
 	{
-		*_sql << sqlQuery, into(*retVal);
+		*ses << sqlQuery, into(retVal);
 	}
 	catch (std::exception const &e)
 	{
 		std::string ErrorMessage = "Database Error : ";
 		ErrorMessage.append(e.what());
 		this->_log->WriteMessage(ERR, ErrorMessage);
-		delete (retVal);
-		retVal = nullptr;
 	}
 	this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::GetNotifString");
 	return (retVal);
 }
 
-std::vector<std::string> DBHandler::SelectAllIdsOfUsersAlgorithmsByAdapterId(std::string adapterId)
+/** Dotaz mazajici zaznam v tabulce mobile_devices dle GCM ID 
+*
+* @param UsersAlgorithmsId			fk_users_algorithms_id
+*
+* @return  pravdivostni hodnota zda se smazani zaznamu podarilo
+*/
+bool DBFWHandler::DeleteMobileDeviceByGcmId(std::string GCMId)
+{
+	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::DeleteMobileDeviceByGcmId");
+	std::string retVal = "";
+	try
+	{
+		std::string sqlQuery = "DELETE FROM mobile_devices WHERE push_notification = " + GCMId + ";";
+		this->_log->WriteMessage(TRACE, sqlQuery);
+		*ses << sqlQuery,
+			into(retVal);
+		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::DeleteMobileDeviceByGcmId");
+		return (true);
+	}
+	catch (std::exception const &e)
+	{
+		std::string ErrorMessage = "Database Error : ";
+		ErrorMessage.append(e.what());
+		this->_log->WriteMessage(ERR, ErrorMessage);
+		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::DeleteAlgoDevices");
+		return (false);
+	}
+}
+
+/** Dotaz ziskavajici vsechny primarni klice algoritmu, ktere jsou navazany na adapter a vracejici jako vektor retezcu (musi se nasledne pretypovat!). Informace se vyhledavaji z tabulky users_algorithms
+*
+* @param adapterId			fk_adapter_id
+*
+* @return vsechny primarni klice algoritmu
+*/
+std::vector<std::string> DBFWHandler::SelectAllIdsOfUsersAlgorithmsByAdapterId(std::string adapterId)
 {
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::SelectAllIdsOfUsersAlgorithmsByAdapterId");
 	std::string sqlQuery = "SELECT users_algorithms_id FROM users_algorithms WHERE (fk_adapter_id=" + adapterId + ");";
@@ -497,7 +228,7 @@ std::vector<std::string> DBHandler::SelectAllIdsOfUsersAlgorithmsByAdapterId(std
 	std::vector<std::string> retVal(20);
 	try
 	{
-		*_sql << sqlQuery, into(retVal);
+		*ses << sqlQuery, into(retVal);
 	}
 	catch (std::exception const &e)
 	{
@@ -509,7 +240,14 @@ std::vector<std::string> DBHandler::SelectAllIdsOfUsersAlgorithmsByAdapterId(std
 	return (retVal);
 }
 
-std::vector<std::string> DBHandler::SelectAllIdsOfUsersAlgorithmsByAdapterIdAndUserId(std::string adapterId, std::string userId)
+/** Dotaz ziskavajici vsechny primarni klice algoritmu, ktere jsou navazany na adapter a na uzivatele a vracejici jako vektor retezcu (musi se nasledne pretypovat!). Informace se vyhledavaji z tabulky users_algorithms
+*
+* @param adapterId			fk_adapter_id
+* @param userId				fk_user_id
+*
+* @return vsechny primarni klice algoritmu
+*/
+std::vector<std::string> DBFWHandler::SelectAllIdsOfUsersAlgorithmsByAdapterIdAndUserId(std::string adapterId, std::string userId)
 {
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::SelectAllIdsOfUsersAlgorithmsByAdapterIdAndUserId");
 	std::string sqlQuery = "SELECT users_algorithms_id FROM users_algorithms WHERE (fk_adapter_id=" + adapterId + " AND fk_user_id = " + userId + ");";
@@ -517,7 +255,7 @@ std::vector<std::string> DBHandler::SelectAllIdsOfUsersAlgorithmsByAdapterIdAndU
 	std::vector<std::string> retVal(20);
 	try
 	{
-		*_sql << sqlQuery, into(retVal);
+		*ses << sqlQuery, into(retVal);
 	}
 	catch (std::exception const &e)
 	{
@@ -529,7 +267,13 @@ std::vector<std::string> DBHandler::SelectAllIdsOfUsersAlgorithmsByAdapterIdAndU
 	return (retVal);
 }
 
-std::vector<std::string> DBHandler::SelectIdsEnabledAlgorithmsByAdapterId(std::string adapterId)
+/** Dotaz ziskavajici vsechny primarni klice algoritmu, ktere jsou povolene (enabled == true) a dle adapter id
+*
+* @param adapterId			fk_adapter_id
+*
+* @return primarni klice algoritmu
+*/
+std::vector<std::string> DBFWHandler::SelectIdsEnabledAlgorithmsByAdapterId(std::string adapterId)
 {
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::SelectIdsEnabledAlgorithmsByAdapterId");
 	std::string sqlQuery = "SELECT users_algorithms_id FROM users_algorithms WHERE (fk_adapter_id=" + adapterId + " AND state = '1');";
@@ -537,7 +281,7 @@ std::vector<std::string> DBHandler::SelectIdsEnabledAlgorithmsByAdapterId(std::s
 	std::vector<std::string> retVal(20);
 	try
 	{
-		*_sql << sqlQuery, into(retVal);
+		*ses << sqlQuery, into(retVal);
 	}
 	catch (std::exception const &e)
 	{
@@ -549,15 +293,21 @@ std::vector<std::string> DBHandler::SelectIdsEnabledAlgorithmsByAdapterId(std::s
 	return (retVal);
 }
 
-std::vector<std::string> DBHandler::SelectIdsAlgorithmsByAlgId(std::string algId)
+/** Dotaz ziskavajici vsechny primarni klice algoritmu, ktere jsou urciteho typu (algId nebo AlgType)
+*
+* @param algId			fk_algorithm_id
+*
+* @return primarni klice algoritmu
+*/
+std::vector<std::string> DBFWHandler::SelectIdsAlgorithmsByAlgIdAndUserId(std::string userId, std::string algId)
 {
-	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::SelectIdsEnabledAlgorithmsByAdapterId");
-	std::string sqlQuery = "SELECT users_algorithms_id FROM users_algorithms WHERE (fk_algorithm_id=" + algId +"); ";
+	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::SelectIdsAlgorithmsByAlgId");
+	std::string sqlQuery = "SELECT users_algorithms_id FROM users_algorithms WHERE (fk_user_id = " + algId + " AND fk_algorithm_id=" + userId + "); ";
 	this->_log->WriteMessage(TRACE, sqlQuery);
 	std::vector<std::string> retVal(20);
 	try
 	{
-		*_sql << sqlQuery, into(retVal);
+		*ses << sqlQuery, into(retVal);
 	}
 	catch (std::exception const &e)
 	{
@@ -565,11 +315,17 @@ std::vector<std::string> DBHandler::SelectIdsAlgorithmsByAlgId(std::string algId
 		ErrorMessage.append(e.what());
 		this->_log->WriteMessage(ERR, ErrorMessage);
 	}
-	this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::SelectIdsEnabledAlgorithmsByAdapterId");
+	this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::SelectIdsAlgorithmsByAlgId");
 	return (retVal);
 }
 
-std::string DBHandler::SelectAlgIdByUsersAlgId(std::string UsersAlgId)
+/** Dotaz ziskavajici typ algoritmu konkterniho uzivatelskeho algoritmu (z tabulky users_algorithms)
+*
+* @param UsersAlgId			users_algorithms_id
+*
+* @return id typu algoritmu
+*/
+std::string DBFWHandler::SelectAlgIdByUsersAlgId(std::string UsersAlgId)
 {
 	std::string retVal = "";
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::SelectAlgIdByUsersAlgId");
@@ -577,7 +333,7 @@ std::string DBHandler::SelectAlgIdByUsersAlgId(std::string UsersAlgId)
 	this->_log->WriteMessage(TRACE, sqlQuery);
 	try
 	{
-		*_sql << sqlQuery, into(retVal);
+		*ses << sqlQuery, into(retVal);
 	}
 	catch (std::exception const &e)
 	{
@@ -590,7 +346,13 @@ std::string DBHandler::SelectAlgIdByUsersAlgId(std::string UsersAlgId)
 	return (retVal);
 }
 
-std::string DBHandler::SelectStateByUsersAlgId(std::string UsersAlgId)
+/** Dotaz ziskavajici stav (state) konkterniho uzivatelskeho algoritmu (z tabulky users_algorithms)
+*
+* @param UsersAlgId			users_algorithms_id
+*
+* @return stav (state) algoritmu
+*/
+std::string DBFWHandler::SelectStateByUsersAlgId(std::string UsersAlgId)
 {
 	std::string retVal = "";
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::SelectStateByUsersAlgId");
@@ -598,7 +360,7 @@ std::string DBHandler::SelectStateByUsersAlgId(std::string UsersAlgId)
 	this->_log->WriteMessage(TRACE, sqlQuery);
 	try
 	{
-		*_sql << sqlQuery, into(retVal);
+		*ses << sqlQuery, into(retVal);
 	}
 	catch (std::exception const &e)
 	{
@@ -611,7 +373,13 @@ std::string DBHandler::SelectStateByUsersAlgId(std::string UsersAlgId)
 	return (retVal);
 }
 
-std::string DBHandler::SelectAdapterIdByUsersAlgId(std::string UsersAlgId)
+/** Dotaz ziskavajici jedinecne ID Adapteru na ktery je navazan uzivatelsky algoritmus
+*
+* @param UsersAlgId			users_algorithms_id
+*
+* @return jedinecne ID Adapteru
+*/
+std::string DBFWHandler::SelectAdapterIdByUsersAlgId(std::string UsersAlgId)
 {
 	std::string retVal = "";
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::SelectStateByUsersAlgId");
@@ -619,7 +387,7 @@ std::string DBHandler::SelectAdapterIdByUsersAlgId(std::string UsersAlgId)
 	this->_log->WriteMessage(TRACE, sqlQuery);
 	try
 	{
-		*_sql << sqlQuery, into(retVal);
+		*ses << sqlQuery, into(retVal);
 	}
 	catch (std::exception const &e)
 	{
@@ -632,7 +400,13 @@ std::string DBHandler::SelectAdapterIdByUsersAlgId(std::string UsersAlgId)
 	return (retVal);
 }
 
-std::string DBHandler::SelectUserIdByUsersAlgId(std::string UsersAlgId)
+/** Dotaz ziskavajici ID Uzivatele dle Uzivatelskeho algoritmu
+*
+* @param UsersAlgId			users_algorithms_id
+*
+* @return ID Uzivatele
+*/
+std::string DBFWHandler::SelectUserIdByUsersAlgId(std::string UsersAlgId)
 {
 	std::string retVal = "";
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::SelectAlgIdByUsersAlgId");
@@ -640,7 +414,7 @@ std::string DBHandler::SelectUserIdByUsersAlgId(std::string UsersAlgId)
 	this->_log->WriteMessage(TRACE, sqlQuery);
 	try
 	{
-		*_sql << sqlQuery, into(retVal);
+		*ses << sqlQuery, into(retVal);
 	}
 	catch (std::exception const &e)
 	{
@@ -653,7 +427,13 @@ std::string DBHandler::SelectUserIdByUsersAlgId(std::string UsersAlgId)
 	return (retVal);
 }
 
-std::string DBHandler::SelectNameByUsersAlgId(std::string UsersAlgId)
+/** Dotaz ziskavajici jmeno uzivatelem nadefinovane uzivatelskeho algoritmu dle ID Uzivatelskeho algoritmu
+*
+* @param UsersAlgId			users_algorithms_id
+*
+* @return  jmeno algoritmu (uzivatelem nadefinovane)
+*/
+std::string DBFWHandler::SelectNameByUsersAlgId(std::string UsersAlgId)
 {
 	std::string retVal = "";
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::SelectNameByUsersAlgId");
@@ -661,7 +441,7 @@ std::string DBHandler::SelectNameByUsersAlgId(std::string UsersAlgId)
 	this->_log->WriteMessage(TRACE, sqlQuery);
 	try
 	{
-		*_sql << sqlQuery, into(retVal);
+		*ses << sqlQuery, into(retVal);
 	}
 	catch (std::exception const &e)
 	{
@@ -674,7 +454,13 @@ std::string DBHandler::SelectNameByUsersAlgId(std::string UsersAlgId)
 	return (retVal);
 }
 
-std::string DBHandler::SelectParametersByUsersAlgId(std::string UsersAlgId)
+/** Dotaz ziskavajici parametry uzivatelskeho algoritmu (users_algorithms) dle users_algorithms ID 
+*
+* @param UsersAlgId			users_algorithms_id
+*
+* @return  parametry
+*/
+std::string DBFWHandler::SelectParametersByUsersAlgId(std::string UsersAlgId)
 {
 	std::string retVal = "";
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::SelectParametersByUsersAlgId");
@@ -682,7 +468,7 @@ std::string DBHandler::SelectParametersByUsersAlgId(std::string UsersAlgId)
 	this->_log->WriteMessage(TRACE, sqlQuery);
 	try
 	{
-		*_sql << sqlQuery, into(retVal);
+		*ses << sqlQuery, into(retVal);
 	}
 	catch (std::exception const &e)
 	{
@@ -695,7 +481,13 @@ std::string DBHandler::SelectParametersByUsersAlgId(std::string UsersAlgId)
 	return (retVal);
 }
 
-std::vector<std::string> DBHandler::SelectDevIdsByUsersAlgId(std::string UsersAlgId)
+/** Dotaz ziskavajici seznam ID senzoru/aktoru navazane na uzivatelsky algoritmus.
+*
+* @param UsersAlgId			users_algorithms_id
+*
+* @return  seznam ID senzoru/aktoru jako vektor stringu (musi se nasledne ID pretypovat!)
+*/
+std::vector<std::string> DBFWHandler::SelectDevIdsByUsersAlgId(std::string UsersAlgId)
 {
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::SelectDevIdsByUsersAlgId");
 	std::string sqlQuery = "SELECT fk_facilities_mac FROM algo_devices WHERE (fk_users_algorithms_id=" + UsersAlgId + ");";
@@ -703,7 +495,7 @@ std::vector<std::string> DBHandler::SelectDevIdsByUsersAlgId(std::string UsersAl
 	std::vector<std::string> retVal(20);
 	try
 	{
-		*_sql << sqlQuery, into(retVal);
+		*ses << sqlQuery, into(retVal);
 	}
 	catch (std::exception const &e)
 	{
@@ -715,7 +507,13 @@ std::vector<std::string> DBHandler::SelectDevIdsByUsersAlgId(std::string UsersAl
 	return (retVal);
 }
 
-std::string DBHandler::SelectDevTypeByDevId(std::string devId)
+/** Dotaz ziskavajici Typ (type) zarizeni (senzoru/aktoru) dle ID zarizeni
+*
+* @param devId			fk_facilities_mac
+*
+* @return  typ zarizeni (jako string)
+*/
+std::string DBFWHandler::SelectDevTypeByDevId(std::string devId)
 {
 	std::string retVal = "";
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::SelectDevTypeByDevId");
@@ -723,7 +521,7 @@ std::string DBHandler::SelectDevTypeByDevId(std::string devId)
 	this->_log->WriteMessage(TRACE, sqlQuery);
 	try
 	{
-		*_sql << sqlQuery, into(retVal);
+		*ses << sqlQuery, into(retVal);
 	}
 	catch (std::exception const &e)
 	{
@@ -736,7 +534,17 @@ std::string DBHandler::SelectDevTypeByDevId(std::string devId)
 	return (retVal);
 }
 
-std::string DBHandler::InsertUserAlgorithm(std::string userId, std::string algId, std::string parameters, std::string name, std::string adapterId)
+/** Dotaz vkladajici Uzivatelsky algoritmus (users_algorithms) do databaze.
+*
+* @param userId				fk_user_id
+* @param algId				fk_algorithm_id
+* @param parameters			parameters
+* @param name				name
+* @param adapterId			fk_adapter_id
+*
+* @return  ID noveho zaznamu users_algorithms v Databazi
+*/
+std::string DBFWHandler::InsertUserAlgorithm(std::string userId, std::string algId, std::string parameters, std::string name, std::string adapterId)
 {
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::InsertUserAlgorithm");
 	std::string retVal = "";
@@ -744,7 +552,7 @@ std::string DBHandler::InsertUserAlgorithm(std::string userId, std::string algId
 	{
 		std::string sqlQuery = "INSERT into users_algorithms (fk_user_id,fk_algorithm_id, parameters,data,name,fk_adapter_id,state) values ( " + userId + ", " + algId + ", '" + parameters + "', '','" + name + "', "+ adapterId +", '1') returning users_algorithms_id;";
 		this->_log->WriteMessage(TRACE, sqlQuery);
-		*_sql << sqlQuery,
+		*ses << sqlQuery,
 			into(retVal);
 		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::InsertUserAlgorithm");
 		
@@ -760,7 +568,17 @@ std::string DBHandler::InsertUserAlgorithm(std::string userId, std::string algId
 	return (retVal);
 }
 
-bool DBHandler::UpdateUserAlgorithm(std::string userAlgId, std::string AlgId, std::string parameters, std::string name, std::string state)
+/** Dotaz menici hodnoty uzivatelskeho algoritmu (users_algorithms)
+*
+* @param userAlgId			users_algorithms_id
+* @param algId				fk_algorithm_id
+* @param parameters			parameters
+* @param name				name
+* @param adapterId			fk_adapter_id
+*
+* @return  pravdivostni hodnota zda se editace zaznamu podarila
+*/
+bool DBFWHandler::UpdateUserAlgorithm(std::string userAlgId, std::string AlgId, std::string parameters, std::string name, std::string state)
 {
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::UpdateUserAlgorithm");
 	std::string retVal = "";
@@ -768,7 +586,7 @@ bool DBHandler::UpdateUserAlgorithm(std::string userAlgId, std::string AlgId, st
 	{
 		std::string sqlQuery = "UPDATE users_algorithms SET  fk_algorithm_id=" + AlgId + ", parameters = '" + parameters + "', name = '" + name + "', state = '" + state + "' WHERE (users_algorithms_id = " + userAlgId + ");";
 		this->_log->WriteMessage(TRACE, sqlQuery);
-		*_sql << sqlQuery,
+		*ses << sqlQuery,
 			into(retVal);
 		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::UpdateUserAlgorithm");
 		return (true);
@@ -784,7 +602,17 @@ bool DBHandler::UpdateUserAlgorithm(std::string userAlgId, std::string AlgId, st
 	}
 }
 
-bool DBHandler::InsertAlgoDevices(std::string UsersAlgorithmsId, std::string UserId, std::string AlgorithId, std::string mac, std::string type)
+/** Dotaz vkladajici zaznam algo_devices do databaze
+*
+* @param UsersAlgorithmsId			fk_users_algorithms_id
+* @param UserId						fk_user_id
+* @param AlgorithId					fk_algorithm_id
+* @param mac						fk_facilities_mac
+* @param type						fk_devices_type
+*
+* @return  pravdivostni hodnota zda se vlozeni zaznamu podarilo
+*/
+bool DBFWHandler::InsertAlgoDevices(std::string UsersAlgorithmsId, std::string UserId, std::string AlgorithId, std::string mac, std::string type)
 {
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::InsertAlgoDevices");
 	std::string retVal = "";
@@ -792,7 +620,7 @@ bool DBHandler::InsertAlgoDevices(std::string UsersAlgorithmsId, std::string Use
 	{
 		std::string sqlQuery = "INSERT into algo_devices (fk_users_algorithms_id,fk_user_id,fk_algorithm_id,fk_facilities_mac,fk_devices_type) values ( " + UsersAlgorithmsId + ", " + UserId + ", " + AlgorithId + ", " + mac + ", " + type + " );";
 		this->_log->WriteMessage(TRACE, sqlQuery);
-		*_sql << sqlQuery,
+		*ses << sqlQuery,
 			into(retVal);
 		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::InsertAlgoDevices");
 		return (true);
@@ -807,8 +635,13 @@ bool DBHandler::InsertAlgoDevices(std::string UsersAlgorithmsId, std::string Use
 	}
 }
 
-
-bool DBHandler::DeleteAlgoDevices(std::string UsersAlgorithmsId)
+/** Dotaz mazajici vsechny zaznamy z algo_devices z databaze dle ID uzivatelskeho algoritmu
+*
+* @param UsersAlgorithmsId			fk_users_algorithms_id
+*
+* @return  pravdivostni hodnota zda se smazani zaznamu podarilo
+*/
+bool DBFWHandler::DeleteAlgoDevices(std::string UsersAlgorithmsId)
 {
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::DeleteAlgoDevices");
 	std::string retVal = "";
@@ -816,7 +649,7 @@ bool DBHandler::DeleteAlgoDevices(std::string UsersAlgorithmsId)
 	{
 		std::string sqlQuery = "DELETE FROM algo_devices WHERE fk_users_algorithms_id = " + UsersAlgorithmsId + ";";
 		this->_log->WriteMessage(TRACE, sqlQuery);
-		*_sql << sqlQuery,
+		*ses << sqlQuery,
 			into(retVal);
 		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::DeleteAlgoDevices");
 		return (true);
@@ -831,7 +664,13 @@ bool DBHandler::DeleteAlgoDevices(std::string UsersAlgorithmsId)
 	}
 }
 
-bool DBHandler::DeleteUsersAlgorithms(std::string UsersAlgorithmsId)
+/** Dotaz mazajici zaznam users_algorithms z databaze dle primarniho klice
+*
+* @param UsersAlgorithmsId			users_algorithms_id
+*
+* @return  pravdivostni hodnota zda se smazani zaznamu podarilo
+*/
+bool DBFWHandler::DeleteUsersAlgorithms(std::string UsersAlgorithmsId)
 {
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::DeleteUsersAlgorithms");
 	std::string retVal = "";
@@ -839,7 +678,7 @@ bool DBHandler::DeleteUsersAlgorithms(std::string UsersAlgorithmsId)
 	{
 		std::string sqlQuery = "DELETE FROM users_algorithms WHERE users_algorithms_id = " + UsersAlgorithmsId + ";";
 		this->_log->WriteMessage(TRACE, sqlQuery);
-		*_sql << sqlQuery,
+		*ses << sqlQuery,
 			into(retVal);
 		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::DeleteUsersAlgorithms");
 		return (true);
@@ -854,14 +693,133 @@ bool DBHandler::DeleteUsersAlgorithms(std::string UsersAlgorithmsId)
 	}
 }
 
-/** Destruktor objektu vytvoreneho z triedy DBHandler
+/** Dotaz vkladajici zaznam do tabulky notifications (reprezentuje LOGOVANI NOTIFIKACI)
+*
+* @param text				text notifikace
+* @param level				level
+* @param timestamp			timestamp - Unix timestamp (ms), kdy byla zprava vytvorena
+* @param userId				fk_user_id
+* @param messageId			message_id - unikatni identiffikator zpravy
+* @param read				read - urcuje zda byla zprava jiz prectena
+* @param name				name
+*
+* @return  pravdivostni hodnota zda se vlozeni zaznamu do DB podarilo
 */
-
-DBHandler::~DBHandler()
+bool DBFWHandler::InsertNotification(std::string text, std::string level, std::string timestamp, std::string userId,
+									std::string messageId, std::string read, std::string name)
 {
-	//delete (_sql); //zrusenie a vymazanie pripojenia k DB
+	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::InsertNotification");
+	std::string retVal = "";
+	try
+	{
+		std::string sqlQuery = "INSERT into notifications (text,level,message_id,timestamp,fk_user_id,read,name) values ( '" + text + "', " + level + ", " + messageId + ", " + timestamp + ", " + userId + ", '" + read + "', '" + name + "' );";
+		this->_log->WriteMessage(TRACE, sqlQuery);
+		*ses << sqlQuery,
+			into(retVal);
+		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::InsertNotification");
+		return (true);
+	}
+	catch (std::exception const &e)
+	{
+		std::string ErrorMessage = "Database Error : ";
+		ErrorMessage.append(e.what());
+		this->_log->WriteMessage(ERR, ErrorMessage);
+		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::InsertNotification");
+		return (false);
+	}
 }
 
-/**********************************************End of DBHandler section******************************************************/
+/** Dotaz ziskajici maximalni hodnotu ID Notifikace dle ID Uzivatele 
+*
+* @param userId				fk_user_id
+*
+* @return  nejvyssi hodnota ID notifikace dle uzivatele
+*/
+std::string DBFWHandler::GetHighestIdInNotificationsPerUser(std::string userId)
+{
+	std::string retVal = "";
+	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::GetHighestIdInNotificationsPerUser");
+	std::string sqlQuery = "SELECT max(message_id) FROM notifications WHERE fk_user_id = " + userId + ";";
+	this->_log->WriteMessage(TRACE, sqlQuery);
+	try
+	{
+		*ses << sqlQuery, into(retVal);
+	}
+	catch (std::exception const &e)
+	{
+		std::string ErrorMessage = "Database Error : ";
+		ErrorMessage.append(e.what());
+		this->_log->WriteMessage(ERR, ErrorMessage);
+		retVal = "";
+	}
+	this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::GetHighestIdInNotificationsPerUser");
+	return (retVal);
+}
+
+/** Dotaz vkladajici nazev a ID aplikacniho modulu do tabulky u_algorithms
+*
+* @param algorithm_id		algorithm_id
+* @param name				nazev
+* @param type				typ
+*
+* @return  pravdivostni hodnota provedeni
+*/
+bool DBFWHandler::InsertAlgList(std::string algorithm_id, std::string name, std::string type)
+{
+	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::InsertAlgList");
+	std::string retVal = "";
+	try
+	{
+		std::string sqlQuery = "INSERT into u_algorithms (algorithm_id,name, type) values ( " + algorithm_id + ", '" + name + "', " + type + "); ";
+		this->_log->WriteMessage(TRACE, sqlQuery);
+		*ses << sqlQuery,
+			into(retVal);
+		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::InsertAlgList");
+		return (true);
+
+	}
+	catch (std::exception const &e)
+	{
+		std::string ErrorMessage = "Database Error : ";
+		ErrorMessage.append(e.what());
+		this->_log->WriteMessage(ERR, ErrorMessage);
+		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::InsertAlgList");
+		return (false);
+	}
+}
+
+/** Dotaz UPDATE dle ID aplikacniho modulu v tabulce u_algorithms
+*
+* @param ID			fk_facilities_mac
+* @param type		type
+* @param value		Hodnota, na kterou se provadi Update
+*
+* @return boolean dle toho zda update probehl uspesne
+*/
+bool DBFWHandler::UpdateAlgList(std::string algorithm_id, std::string name, std::string type)
+{
+	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::UpdateAlgList");
+	std::string retVal = "";
+	try
+	{
+		std::string sqlQuery = "UPDATE u_algorithms SET name='" + name + "', type = " + type + " WHERE (algorithm_id=" + algorithm_id + ");";
+		this->_log->WriteMessage(TRACE, sqlQuery);
+		*ses << sqlQuery,
+			into(retVal);
+		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::UpdateAlgList");
+		return (true);
+
+	}
+	catch (std::exception const &e)
+	{
+		std::string ErrorMessage = "Database Error : ";
+		ErrorMessage.append(e.what());
+		this->_log->WriteMessage(ERR, ErrorMessage);
+		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::UpdateAlgList");
+		return (false);
+	}
+}
+
+//---------------------------------------  END QUERY SECTION ---------------------------------------
 
 

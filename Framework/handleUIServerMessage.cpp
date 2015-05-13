@@ -13,7 +13,10 @@ using namespace std;
 using namespace soci;
 using namespace pugi;
 
-void FrameworkServerHandle::HandleUIServerMessage(std::string data, Loger *Log, FrameworkConfig *FConfig){
+/** Metoda obsluhujici prichozi spojeni od UI serveru (zprostredkovane od mobilniho zarizeni)
+*
+*/
+void FrameworkServerHandle::HandleUIServerMessage(std::string data, Loger *Log, FrameworkConfig *FConfig, DBFWHandler *database, sem_t* dbAccessSem){
 	xml_document doc;
 	xml_parse_result result = doc.load_buffer(data.data(), data.size());
 
@@ -25,7 +28,7 @@ void FrameworkServerHandle::HandleUIServerMessage(std::string data, Loger *Log, 
 	{
 		acceptedMessageString.erase(acceptedMessageString.length() - 1, 1);
 	}
-	Log->WriteMessage(TRACE, "MESSAGE ACCEPTED: " + acceptedMessageString);
+
 	Log->WriteMessage(TRACE, "HandleClientConnection: Entering UiServerMessage");
 	//Kód zpracující zprávy od UIServeru (Pøeposílání zpráv od uživatelù Androidu)
 	xml_node algMessage = doc.child("com");
@@ -47,8 +50,10 @@ void FrameworkServerHandle::HandleUIServerMessage(std::string data, Loger *Log, 
 		Log->WriteMessage(TRACE, "HandleClientConnection: UIServerMessage : UIServerMessageone addalg");
 		Log->WriteMessage(TRACE, "HandleClientConnection: UIServerMessage : atype - " + to_string(algIdInt));
 		talgorithm * AlgSpecification = FConfig->GetAlgorithmById(algIdInt);
+		Log->WriteMessage(TRACE, "HandleClientConnection: after FConfig->GetAlgorithmById(algIdInt)");
 
-		if (AlgSpecification != NULL){
+		if (AlgSpecification != nullptr){
+			Log->WriteMessage(TRACE, "HandleClientConnection: after if (AlgSpecification != NULL){");
 
 			int maxdevsToExpect = AlgSpecification->maxDevs;
 			int maxparamsToExpect = AlgSpecification->numParams;
@@ -65,6 +70,11 @@ void FrameworkServerHandle::HandleUIServerMessage(std::string data, Loger *Log, 
 			{
 				string name = algNode.name();
 				if (name.compare("dev") == 0){
+					if (numberOfDevs == maxdevsToExpect){
+						Log->WriteMessage(ERR, "HandleClientConnection: UIServerMessage : Wrong number of devs in protocol");
+						error = true;
+						break;
+					}
 					int devId = child.attribute("id").as_int();
 					int devType = child.attribute("type").as_int();
 					int devPos = child.attribute("pos").as_int();
@@ -82,6 +92,11 @@ void FrameworkServerHandle::HandleUIServerMessage(std::string data, Loger *Log, 
 			{
 				string name = algNode.name();
 				if (name.compare("par") == 0){
+					if (numberOfParams == maxparamsToExpect){
+						Log->WriteMessage(ERR, "HandleClientConnection: UIServerMessage : Wrong number of params in protocol");
+						error = true;
+						break;
+					}
 					int parPos = algNode.attribute("pos").as_int();
 					string parText = algNode.child_value();
 					params[numberOfParams].pos = parPos;
@@ -279,15 +294,19 @@ void FrameworkServerHandle::HandleUIServerMessage(std::string data, Loger *Log, 
 		string rid = algMessage.attribute("rid").value();
 		string typeRid = algMessage.attribute("type").value();
 		//Vytahnout algoritmy uzivatele, ktere jsou geofencing a spustit je s parametry
-		std::vector<std::string> IDsUserAlg = database->SelectIdsAlgorithmsByAlgId(userId);
+		Log->WriteMessage(TRACE, "HandleClientConnection: UIServerMessage : userId" + userId);
+		std::vector<std::string> IDsUserAlg = database->SelectIdsAlgorithmsByAlgIdAndUserId(to_string(3), userId);
 
 		if (!IDsUserAlg.empty()){
+			Log->WriteMessage(TRACE, "HandleClientConnection: UIServerMessage : IDsUserAlg not empty");
 			for (auto UserAlgId = IDsUserAlg.begin(); UserAlgId != IDsUserAlg.end(); ++UserAlgId){
 
 				string UserId = database->SelectUserIdByUsersAlgId(*UserAlgId);
 				string AlgId = database->SelectAlgIdByUsersAlgId(*UserAlgId);
 				string parametersTmp = database->SelectParametersByUsersAlgId(*UserAlgId);
 				string adapterIdString = database->SelectAdapterIdByUsersAlgId(*UserAlgId);
+
+				Log->WriteMessage(TRACE, "HandleClientConnection: UIServerMessage : IDsUserAlg not empty" + UserId);
 
 				//Prepare senzor values for argument -v
 				string senzorValues = "";
@@ -317,7 +336,6 @@ void FrameworkServerHandle::HandleUIServerMessage(std::string data, Loger *Log, 
 					NULL
 				};
 				this->spawn(StringToChar("Algorithms/geofencing"), arg_list);
-
 			}
 		}
 
@@ -330,10 +348,7 @@ void FrameworkServerHandle::HandleUIServerMessage(std::string data, Loger *Log, 
 	}
 	else {
 		//ostatni typy zprav
-
 	}
-
-
 	//ODESLANI ODPOVEDI NA UI SERVER - TEDY NA ANDROID ZARIZENI
 	if (!this->sendMessageToSocket(this->handledSocket, stringToSendAsAnswer)){
 		//Error sendind data

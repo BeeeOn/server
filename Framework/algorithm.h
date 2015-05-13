@@ -24,11 +24,11 @@
 #include <map>
 #include <regex>
 
-#include "../loger.h"
-#include "../databaseConnectionContainer.h"
+#include "loger.h"
+#include "DBConnectionsContainer.h"
 #include "DBFWHandler.h"
 #include "structures.h"
-#include "../pugixml.hpp"
+#include "pugixml.hpp"
 
 
 typedef enum condition
@@ -65,6 +65,8 @@ typedef struct notify
 {
 	unsigned short int notifyType;	//Typ notifikace (Bude použito do budoucna, zatím mùžeme vložit 0 jako obecná notifikace)
 	std::string notifyText;			//Text zprávy
+	std::string senzorId;
+	std::string typeOfSenzor;
 } tnotify;
 
 typedef struct toggle
@@ -89,7 +91,7 @@ private:
 	std::vector<ttoggle *> toToggleActor;
 	std::vector<tRidValues *> Rids;
 	Loger *Log;									//Loger pro logování do souboru
-	DatabaseConnectionContainer *cont = NULL;	//Container pro DB
+	DBConnectionsContainer *cont = NULL;	//Container pro DB
 	static std::multimap<unsigned int, std::map<std::string, std::string>> parseValues(std::string values, std::vector<tRidValues *> *Rids);
 	static std::vector<std::string> parseParams(std::string paramsInput);
 	static std::string spaceReplace(std::string text);
@@ -97,7 +99,7 @@ public:
 	Algorithm(std::string init_userID, std::string init_algID, std::string init_adapterID,
 		std::string init_offset, std::multimap<unsigned int, std::map<std::string, std::string>> init_values, std::vector<std::string> init_parameters, std::vector<tRidValues *> init_Rids);
 	~Algorithm();
-	bool AddNotify(unsigned short int type, std::string text);
+	bool AddNotify(unsigned short int type, std::string text, std::string senzorId, std::string typeOfSenzor);
 	bool SendAndExit();
 	std::string CreateMessage();
 	std::multimap<unsigned int, std::map<std::string, std::string>> getValues();
@@ -107,5 +109,5 @@ public:
 	int SetCondition(std::string cond);
 	static std::vector<std::string> explode(std::string str, char ch);
 	bool ChangeActor(std::string id, std::string type);
-	DBHandler *database;
+	DBFWHandler *database;
 };

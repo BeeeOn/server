@@ -14,34 +14,25 @@
 #include <arpa/inet.h>
 #include <vector>
 #include "structures.h"
-#include "../loger.h"
+#include "loger.h"
 
 #ifndef DBHANDLER_H_
 #define DBHANDLER_H_
 
-
-class DBHandler
+class DBFWHandler
 {
 private:
-	const std::string _Name = "DBHandler";
-	soci::session *_sql;  /**< ukazatel na pripojenie k databaze*/
-	std::string _DBName;  /**< nazov databazy*/
+	const std::string _Name = "DBFWHandler";
+	soci::session *ses;					//Sezeni nad databazi
+	std::string _DBName;					
 	Loger *_log;
 public:
-	~DBHandler();
-	DBHandler(soci::session *SQL, Loger *l);
-	soci::session *ReturnConnection();
-	bool IsInDB(std::string tableName, std::string columnName, std::string record);
-	bool InsertAdapter(tmessage *message);
-	bool InsertSenAct(tmessage *message);
-	bool UpdateAdapter(tmessage *message);
-	bool UpdateSenAct(tmessage *message);
-	int GetWakeUpTime(std::string record);
-	void LogValue(tmessage *message);
-	void GetAdapterData(std::string *adapterIP, long int ID);
-	float GetLastTemp(std::string ID, std::string type);
-	std::vector<std::string> *GetEmails(std::string AdapterID);
-	std::vector<std::string> *GetNotifStringByUserId(std::string userId);
+	~DBFWHandler();
+	DBFWHandler(soci::session *ses_init, Loger *loger);
+	soci::session *GetConnectionSession();
+	float GetValueFromDevices(std::string ID, std::string type);
+	bool UpdateValueOfDevices(std::string ID, std::string type, std::string value);
+	std::vector<std::string> GetNotifStringByUserId(std::string userId);
 	std::string GetUserIdByEmail(std::string Email);
 	std::string GetEmailByUserId(std::string UserID);
 	std::string InsertUserAlgorithm(std::string UserId, std::string AlgId, std::string parameters, std::string name, std::string adapterId);
@@ -60,8 +51,12 @@ public:
 	std::vector<std::string> SelectIdsEnabledAlgorithmsByAdapterId(std::string adapterId);
 	std::string SelectStateByUsersAlgId(std::string UsersAlgId);
 	std::vector<std::string> SelectAllIdsOfUsersAlgorithmsByAdapterIdAndUserId(std::string adapterId, std::string userId);
-	std::vector<std::string> SelectIdsAlgorithmsByAlgId(std::string algId);
+	bool InsertNotification(std::string text, std::string level, std::string timestamp, std::string userId, std::string messageId, std::string read, std::string name);
+	std::string GetHighestIdInNotificationsPerUser(std::string userId);
+	bool DeleteMobileDeviceByGcmId(std::string GCMId);
+	std::vector<std::string> SelectIdsAlgorithmsByAlgIdAndUserId(std::string userId, std::string algId);
+	bool InsertAlgList(std::string algorithm_id, std::string name, std::string type);
+	bool UpdateAlgList(std::string algorithm_id, std::string name, std::string type);
 };
-
 
 #endif /* DBHANDLER_H_ */
