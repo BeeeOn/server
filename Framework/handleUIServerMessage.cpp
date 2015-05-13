@@ -105,7 +105,7 @@ void FrameworkServerHandle::HandleUIServerMessage(std::string data, Loger *Log, 
 				}
 			}
 
-			if ( !(numberOfDevs > maxdevsToExpect || numberOfParams > maxparamsToExpect )){		
+			if (!(numberOfDevs > maxdevsToExpect || numberOfParams > maxparamsToExpect) && !error){
 				Log->WriteMessage(TRACE, "HandleClientConnection: UIServerMessage : preParsedParameters");
 				//Predzpracovat string parametru
 				string preParsedParameters = parseParametersToDB(params, numberOfParams);
@@ -205,6 +205,11 @@ void FrameworkServerHandle::HandleUIServerMessage(std::string data, Loger *Log, 
 			{
 				string name = algNode.name();
 				if (name.compare("dev") == 0){
+					if (numberOfDevs == maxdevsToExpect){
+						Log->WriteMessage(ERR, "HandleClientConnection: UIServerMessage : Wrong number of devs in protocol");
+						error = true;
+						break;
+					}
 					int devId = child.attribute("id").as_int();
 					int devType = child.attribute("type").as_int();
 					int devPos = child.attribute("pos").as_int();
@@ -222,6 +227,11 @@ void FrameworkServerHandle::HandleUIServerMessage(std::string data, Loger *Log, 
 			{
 				string name = algNode.name();
 				if (name.compare("par") == 0){
+					if (numberOfParams == maxparamsToExpect){
+						Log->WriteMessage(ERR, "HandleClientConnection: UIServerMessage : Wrong number of params in protocol");
+						error = true;
+						break;
+					}
 					int parPos = algNode.attribute("pos").as_int();
 					string parText = algNode.child_value();
 					params[numberOfParams].pos = parPos;
@@ -230,7 +240,7 @@ void FrameworkServerHandle::HandleUIServerMessage(std::string data, Loger *Log, 
 				}
 			}
 
-			if (!(numberOfDevs > maxdevsToExpect || numberOfParams > maxparamsToExpect)){
+			if (!(numberOfDevs > maxdevsToExpect || numberOfParams > maxparamsToExpect) && !error){
 				Log->WriteMessage(TRACE, "HandleClientConnection: UIServerMessage : preParsedParameters");
 				//Predzpracovat string parametru
 				string preParsedParameters = parseParametersToDB(params, numberOfParams);
