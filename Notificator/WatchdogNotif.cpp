@@ -31,7 +31,7 @@ void WatchdogNotif::addDbXmlData(stringstream *ss) {
     XmlHelper::tagWithValue(ss, DATA_ADAPTER_ID, Utils::intToString(mAdapterId));
     XmlHelper::tagWithValue(ss, DATA_DEVICE_ID, mDeviceId);
     XmlHelper::tagWithValue(ss, DATA_DEVICE_TYPE, Utils::intToString(mDeviceType));
-    XmlHelper::tagWithValue(ss, DATA_ALG_ID, Utils::intToString(mDeviceType));
+    XmlHelper::tagWithValue(ss, DATA_ALG_ID, Utils::intToString(mAlgId));
 
 }
 
