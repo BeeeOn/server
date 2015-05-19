@@ -1,9 +1,9 @@
 /**
 * @file framework.h
 *
-* @Definice trid pro Modularni prostredi
+* Definice trid pro Modularni prostredi.
 *
-* @author xrasov01
+* @author Martin Rasovsky (xrasov01@stud.fit.vutbr.cz)
 * @version 1.0
 */
 
@@ -49,53 +49,66 @@
 #ifndef FRAMEWORK_HEADER_
 #define FRAMEWORK_HEADER_
 
+/** Struktura pro uchovavani informaci ohledne predanych parametru a devices v prubehu parsovani dat ohledne aplikacnich modulech ulozenych v databazi.
+*
+*/
 typedef struct chldMsg
 {
-	std::string nameOfElement;
-	std::string id;
-	std::string type;
-	std::string pos;
-	std::string text;
+	std::string nameOfElement;		/** Nazev elementu (napr pro <par .../> je to "par".  */
+	std::string id;					/** Id senzoru ci aktoru, pokud se jedna o element dev. */
+	std::string type;				/** Typ senzoru ci aktoru, pokud se jedna o element dev. */
+	std::string pos;				/** Pozice predaneho elementu. (at uz "dev", ci "par")*/
+	std::string text;				/** Obsah elementu. <par> OBSAH ELEMENTU </par>*/
 } tchldMsg;
 
+/** Struktura uchovavajici informace o jednom aplikacnim modulu nactenem z databaze.
+*
+*/
 typedef struct alg
 {
-	std::string usersAlgorithmsId;
-	std::string atype;
-	std::string enable;
-	std::string name;
-	std::vector<tchldMsg*> childs;
+	std::string usersAlgorithmsId;	/** Primarni klic zaznamu.*/		
+	std::string atype;				/** Typ aplikacniho modulu. Definovany v konfiguracnim souboru a nasledne take ulozeny v tabulce u_algorithms.*/
+	std::string enable;				/** Urceni, zda se jedna o zapnuty ci vypnuty palikacni modul.*/
+	std::string name;				/** Nazev aplikacniho modulu definovany uzivatelem. (napr. Hlidani teploty)*/
+	std::vector<tchldMsg*> childs;	/** Kolekce informaci o definovanych parametrech a zarizenich uzivatelem, ktere jsou prirazeny k aplikacnimu modulu.*/
 } talg;
 
-//Struktura pøedávající informace ohlednì notifikace
+/** Struktura predavajici informace ohledne notifikace.
+*
+*/
 typedef struct notify
 {
-	unsigned short int notifyType;	//Typ notifikace (Bude použito do budoucna, zatím mùžeme vložit 0 jako obecná notifikace)
-	std::string notifyText;			//Text zprávy
+	unsigned short int notifyType;	/** Typ notifikace (Bude pouzito do budoucna, zatim muzeme vlozit 0 jako obecna notifikace). */
+	std::string notifyText;			/** Text zprávy. */
 } tnotify;
 
+/** Struktura predavajici informace ohledne zarizeni (aktor, senzor).
+*
+*/
 typedef struct device
 {
-	int id;
-	int type;
-	int pos;
+	int id;							/** Identifikacni cislo zarizeni. */
+	int type;						/** Typ zarizeni. */
+	int pos;						/** Pozice zarizeni predana do aplikacniho modulu. */
 } tdevice;
 
+/** Struktura predavajici informace o predanem parametru.
+*
+*/
 typedef struct param
 {
-	int pos;
-	std::string text;
+	int pos;						/** Pozice parametru predaneho do aplikacniho modulu. */
+	std::string text;				/** Obsah parametru ve formatu retezce. */
 } tparam;
 
-/** @brief Class FrameworkServer
-
-Tøída sloužící pro pøípravu soketù pro naslouchání a tvorbu procesù pro obsluhu pøijatých spojení.
+/** Trida slouzici pro pripravu schranek pro naslouchani a tvorbu procesu pro obsluhu projatych spojeni. 
+*
 */
 class FrameworkServer {
 	private:
-		sockaddr_in portBind;			// Nabindování portu				
-		int serverSocket;				// Socket tcp serveru
-		int port;
+		sockaddr_in portBind;			/** Nabindovani portu. */				
+		int serverSocket;				/** Socket tcp serveru. */
+		int port;						/** Port, na kterem server nasloucha. */
 	public: 
 		FrameworkServer(int init_port);
 		void StartServer();
@@ -104,15 +117,18 @@ class FrameworkServer {
 		~FrameworkServer();
 };
 
+/** Trida slouzici pro obsluhu zprav zasilanych na jednotlive servery. Je navrzena a implementovana tim zpusobem, ze obsluhuje vsechny tri typy serveru dle zadaneho portu.
+*
+*/
 class FrameworkServerHandle {
 	private:
 		const std::string _Name = "FrameworkServerHandle";
-		std::string message;				// Pøijímaná zpráva
-		int handledSocket;					// Obsluhovaný socket
-		int port;							// Port klienta se kterým se komunikuje
-		MessageParser *MP;					// Ukazatel na objekt MessageParser
-		tmessage *parsedMessage;			// Zpracovana zprava
-		DBFWHandler *database;
+		std::string message;				/** Prijimana zprava. */
+		int handledSocket;					/** Obsluhovany socket. */
+		int port;							/** Port klienta, se kterym se komunikuje. */
+		MessageParser *MP;					/** Ukazatel na objekt MessageParser.*/
+		tmessage *parsedMessage;			/** Zpracovana zprava. */
+		DBFWHandler *database;				/** Prace s databazi. Je do nej predano sezeni. */
 	public:
 		FrameworkServerHandle(int init_socket, int init_port);
 		void HandleClientConnection();
@@ -136,6 +152,5 @@ class FrameworkServerHandle {
 		std::string createMessageAlgs(vector<talg *> allAlgs, string adapterId);
 		std::string createMessageTrue();
 		string createMessageRequestSwitch(string id, string type, string adapterId);
-
 };
 #endif

@@ -1,7 +1,7 @@
 /**
 * @file config.cpp
 *
-* @Implementace Metod pro zpracovani konfiguracniho souboru
+* Implementace Metod pro zpracovani konfiguracniho souboru
 *
 * @author xrasov01
 * @version 1.0
@@ -13,15 +13,21 @@
 using namespace pugi;
 using namespace std;
 
+/** Konstruktor objektu tridy FrameworkConfig.
+*
+*/
 FrameworkConfig::FrameworkConfig(){
 }
 
+/** Destruktor objektu tridy FrameworkConfig.
+*
+*/
 FrameworkConfig::~FrameworkConfig(){
 	this->ClearAlgorithms();
 }
 
 /**
-* Maze specifikace algoritmu
+* Metoda, ktera maze specifikace aplikacnich modulu.
 *
 */
 void FrameworkConfig::ClearAlgorithms(){

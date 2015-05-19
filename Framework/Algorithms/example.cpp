@@ -29,7 +29,9 @@ int main(int argc, char *argv[])
 	/*Konec tìla programu*/
 	//Odeslání dat do Frameworku a ukonèení algoritmu.
 	if (!alg->SendAndExit()){
+		delete(alg);
 		return EXIT_FAILURE;
 	}
+	delete(alg);
 	return EXIT_SUCCESS;
 }

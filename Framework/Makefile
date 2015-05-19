@@ -29,6 +29,9 @@ memtest:
 	
 clean:
 	rm framework
+
+doc:
+	doxygen Doxyfile
 	
 
 

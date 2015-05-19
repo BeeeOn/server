@@ -1,7 +1,7 @@
 ﻿/**
 * @file DBFWHandler.cpp
 *
-* @Implementace metod, krete pracuji jiz primo nad DB. Jde o abstrakci dotazu nad Databazi nad tabulkami pro algoritmy a dalsimi na nich navazanymi. Vyuziva se knihovny soci (soci::session)
+* Implementace metod, krete pracuji jiz primo nad DB. Jde o abstrakci dotazu nad Databazi nad tabulkami pro algoritmy a dalsimi na nich navazanymi. Vyuziva se knihovny soci (soci::session)
 *
 * @author xrasov01
 * @version 1.0
@@ -11,7 +11,7 @@
 using namespace soci;
 
 /**
-* Vrati sezeni nad databazi, pomoci ktereho se nad databazi provadi dotazy.
+* Vrati sezeni nad databazi pro pripadne uvolneni z pameti nebo navraceni do kolekce sezeni.
 *
 * @return session	ukazatel na sezeni
 */
@@ -31,10 +31,10 @@ soci::session *DBFWHandler::GetConnectionSession()
 */
 DBFWHandler::DBFWHandler(soci::session *ses_init, Loger *loger)
 {
-	//this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::Constructor");
+	//this->_log->WriteMessage(TRACE, "Entering DBFWHandler::Constructor");
 	this->_log = loger;
 	this->ses = ses_init;
-	//this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::Constructor");
+	//this->_log->WriteMessage(TRACE, "Exiting DBFWHandler::Constructor");
 }
 
 /** Destruktor tridy DBFWHandler
@@ -735,11 +735,11 @@ bool DBFWHandler::InsertNotification(std::string text, std::string level, std::s
 *
 * @return  nejvyssi hodnota ID notifikace dle uzivatele
 */
-std::string DBFWHandler::GetHighestIdInNotificationsPerUser(std::string userId)
+std::string DBFWHandler::GetHighestIdInNotification()
 {
 	std::string retVal = "";
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::GetHighestIdInNotificationsPerUser");
-	std::string sqlQuery = "SELECT max(message_id) FROM notifications WHERE fk_user_id = " + userId + ";";
+	std::string sqlQuery = "SELECT message_id FROM notifications ORDER BY message_id DESC LIMIT 1;";
 	this->_log->WriteMessage(TRACE, sqlQuery);
 	try
 	{
@@ -750,7 +750,7 @@ std::string DBFWHandler::GetHighestIdInNotificationsPerUser(std::string userId)
 		std::string ErrorMessage = "Database Error : ";
 		ErrorMessage.append(e.what());
 		this->_log->WriteMessage(ERR, ErrorMessage);
-		retVal = "";
+		retVal = "0";
 	}
 	this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::GetHighestIdInNotificationsPerUser");
 	return (retVal);

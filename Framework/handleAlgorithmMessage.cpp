@@ -1,7 +1,7 @@
 /**
 * @file adapterServerHandle.cpp
 *
-* @Implementace Metod pro zpracovani zprav od Adapter Serveru
+* Implementace Metod pro zpracovani zprav od Adapter Serveru
 *
 * @author xrasov01
 * @version 1.0
@@ -39,8 +39,8 @@ void FrameworkServerHandle::HandleAlgorithmMessage(std::string data, Loger *Log,
 	string userID = algMessage.attribute("userID").value();
 	int algID = algMessage.attribute("algID").as_int();
 	string adapterID = algMessage.attribute("adapterID").value();
-	string senzorId = algMessage.attribute("senzorId").value();
-	int typeOfSenzor = algMessage.attribute("typeOfSenzor").as_int();
+	
+	
 	int algTypeId = algMessage.attribute("algTypeId").as_int();
 	//float PV = algMessage.attribute("protocol_version").as_float();
 
@@ -63,9 +63,11 @@ void FrameworkServerHandle::HandleAlgorithmMessage(std::string data, Loger *Log,
 		if (!IDs.empty()){
 			for (int i = 0; i <= notifsIndex; i++){
 				string notifyText = notification.attribute("text").value();
+				string senzorId = notification.attribute("senzorId").value();
+				int typeOfSenzor = notification.attribute("typeOfSenzor").as_int();
 				//ziskat unikatni ID notifikace pomoci DB
 				sem_wait(dbAccessSem);
-				string currentHighestIdOfNotifPerUserString = database->GetHighestIdInNotificationsPerUser(userID);
+				string currentHighestIdOfNotifPerUserString = database->GetHighestIdInNotification();
 				int highestNotifId = atoi(currentHighestIdOfNotifPerUserString.c_str()) + 1;
 
 				Notification *notif = new WatchdogNotif(

@@ -1,7 +1,7 @@
 /**
 * @file adapterServerHandle.cpp
 *
-* @Implementace Metod pro zpracovani zprav od Adapter Serveru
+* Implementace Metod pro zpracovani zprav od Adapter Serveru
 *
 * @author xrasov01
 * @version 1.0
@@ -97,7 +97,6 @@ void FrameworkServerHandle::HandleAdapterMessage(std::string data, Loger *Log, F
 	string adapterIDString = to_string(this->parsedMessage->adapterINTid);
 	Log->WriteMessage(TRACE, "adapterIDString = " + adapterIDString);
 	vector<string> allIdsOfUsersAlgorithms = database->SelectIdsEnabledAlgorithmsByAdapterId(adapterIDString);
-
 	if (!allIdsOfUsersAlgorithms.empty()){
 		Log->WriteMessage(TRACE, "HandleClientConnection: AdapterServerMessage - after condition(!allIdsOfUsersAlgorithms.empty()) && parsedMessage->state != 0 ");
 			//Nalezen alespon jeden UserAlg s danym AdapterId
@@ -109,7 +108,6 @@ void FrameworkServerHandle::HandleAdapterMessage(std::string data, Loger *Log, F
 					for (auto itSenzorId = allSenzorIds.begin(); itSenzorId != allSenzorIds.end(); ++itSenzorId){
 						int currentDevId = strtol((*itSenzorId).c_str(), NULL, 10);
 						Log->WriteMessage(TRACE, "HandleClientConnection: AdapterServerMessage - THIRD THESE TWO - currentDevId:" + to_string(currentDevId) + ", deviceIdInt: " + to_string(deviceIdInt));
-
 						if (currentDevId == deviceIdInt){
 							for (int i = 0; i < this->parsedMessage->values_count; i++)
 							{
@@ -133,7 +131,6 @@ void FrameworkServerHandle::HandleAdapterMessage(std::string data, Loger *Log, F
 									else { //Predavani do fval
 										senzorValues += "ival=" + to_string(this->parsedMessage->values[i].fval) + "#";
 									}
-
 									senzorValues += "offset=" + to_string(this->parsedMessage->values[i].offset);
 
 									Log->WriteMessage(INFO, "EXECUTING ALGORITHM BINARY " + algorithmSpecification->name + " - AlgId: " + AlgId + " , userId: " + UserId + ", parameters: " + parametersTmp + ", senzorValues: " + senzorValues);
@@ -152,11 +149,11 @@ void FrameworkServerHandle::HandleAdapterMessage(std::string data, Loger *Log, F
 										StringToChar(senzorValues),
 										StringToChar("-p"), // parameters given by User
 										StringToChar(parametersTmp),
+										StringToChar("-e"), // name of database
+										StringToChar(FConfig->dbName),
 										StringToChar("/"),
 										NULL
 									};
-
-									cout << algorithmSpecification->pathOfBinary.c_str() << endl;
 									this->spawn(StringToChar(algorithmSpecification->pathOfBinary), arg_list);
 
 									Log->WriteMessage(INFO, "EXECUTED ALGORITHM BINARY " + algorithmSpecification->name + "- AlgId: " + AlgId + "userId: " + UserId + ", parameters: " + parametersTmp + ", senzorValues: " + senzorValues);
@@ -167,4 +164,5 @@ void FrameworkServerHandle::HandleAdapterMessage(std::string data, Loger *Log, F
 				}
 			}
 		}
+	delete(MP);
 }

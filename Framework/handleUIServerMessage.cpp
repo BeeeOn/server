@@ -1,7 +1,7 @@
 /**
 * @file uiServerHandle.cpp
 *
-* @Implementace Metod pro zpracovani zprav od UI serveru
+* Implementace Metod pro zpracovani zprav od UI serveru
 *
 * @author xrasov01
 * @version 1.0
@@ -40,7 +40,6 @@ void FrameworkServerHandle::HandleUIServerMessage(std::string data, Loger *Log, 
 
 	bool error = false;
 	string stringToSendAsAnswer = "";
-
 	if (state.compare("addalg") == 0){
 		//zpracování zprávy addalg
 		string adapterId = algMessage.attribute("aid").value();
@@ -342,6 +341,8 @@ void FrameworkServerHandle::HandleUIServerMessage(std::string data, Loger *Log, 
 					StringToChar(senzorValues),
 					StringToChar("-p"), // parameters given by User
 					StringToChar(parametersTmp),
+					StringToChar("-e"), // name of database
+					StringToChar(FConfig->dbName),
 					StringToChar("/"),
 					NULL
 				};

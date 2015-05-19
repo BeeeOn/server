@@ -1,13 +1,15 @@
 /**
 * @file loger.cpp
 *
-* @Implementace Metod pro logovani vypisu do souboru
+* Implementace Metod pro logovani vypisu do souboru
 *
 */
 
 #include "loger.h"
 
-
+/** Konstruktor objektu tridy Loger.
+* 
+*/
 Loger::Loger()
 {
 	this->_WriteSemaphore = new std::mutex();
@@ -22,6 +24,9 @@ Loger::Loger()
 	this->_FilesCount = 0;
 }
 
+/** Destruktor objektu tridy Loger.
+*
+*/
 Loger::~Loger()
 {
 	this->SetTerminate();
@@ -126,7 +131,9 @@ void Loger::QueueMsg(std::string MT, std::string MSG)
 };
 
 
-
+/** Otevre soubor.
+*
+*/
 void Loger::OpenFile()
 {
 	int result;

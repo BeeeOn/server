@@ -1,7 +1,7 @@
 /**
 * @file loger.h
 *
-* @Definice tridy Loger pro vypis zprav do souboru.
+* Definice tridy Loger pro vypis zprav do souboru.
 */
 
 #include <mutex>

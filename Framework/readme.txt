@@ -1,11 +1,11 @@
-Framework(R) Version 1.0 2/5/2015
-
+Modular Framework for Sensor Data Processing(R) Version 1.0 18/5/2015
+Author: Martin Rasovsky
 
 How to build framework
 -----------------------
-1)Download Notification and build it (make in the Notificator directory)
-2)Copy libnotif.so to root directory of Framework and to the directory of Algorithms
-3)In directory Algorithms do make. It will build all algorithms
+1)In directory Notificator do make (cd Notificator/, make)
+2)Copy libnotif.so to root directory of Framework and to the directory of Algorithms (cp libnotif.so .. , cp libnotif.so ../Algorithms/)
+3)In directory Algorithms do make. It will build all algorithms. (cd Algorithms/, make) 
 3)Compile framework (make)   
 
 How to start framework
@@ -20,7 +20,7 @@ export LD_LIBRARY_PATH=$pwd:$LD_LIBRARY_PATH
 2)Run (with super user privilegies):
 ./framework &
 
-How ro stop framework
+How to stop framework
 -----------------------
 pkill -SIGTERM framework
 
