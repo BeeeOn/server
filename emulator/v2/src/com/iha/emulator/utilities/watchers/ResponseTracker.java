@@ -12,30 +12,60 @@ import javafx.collections.ObservableList;
 import java.util.ArrayList;
 
 /**
- * Created by Shu on 11.2.2015.
+ * Class responsible for storing server responses time. Also create statistical information about responses times as
+ * maximal responses per second or number of responses for current second.
+ *
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
 public class ResponseTracker {
-
+    /** response tracker enabled flag */
     private boolean enabled = false;
+    /** dump responses after logging them flag */
     private boolean dumpResponses = false;
+    /** statistical information enabled flag */
     private boolean trackPerSecond = false;
+    /** list of stored responses */
     private ObservableList<Response> responses = FXCollections.observableArrayList();
+    /** list property of stored responses */
     private ListProperty<Response> responsesList = new SimpleListProperty<>(responses);
+    /** number of responses in last second */
     private LongProperty currentPerSecond;
+    /** maximal responses per second */
     private LongProperty maxPerSecond;
-    private long lastChartSecond = 0;
-    private int responseIndex = 0;
+    /** current second in milliseconds */
     private long currentSecond = 0;
+    /** GUI chart instance, used in "Performance simulation" */
     private ResponseChart chart;
 
+    /**
+     * Creates response tracker and sets if it is enabled according to parameter. Responses are stored and statistical
+     * information gathering is disabled.
+     *
+     * @param enabled <code>true</code> if response tracking is enabled, <code>false</code> otherwise
+     */
     public ResponseTracker(boolean enabled) {
         this(enabled,false,false);
     }
 
+    /**
+     * Creates response tracker, sets if it is enabled and if responses are stored according to parameters. Statistical
+     * information gathering is disabled.
+     *
+     * @param enabled <code>true</code> if response tracking is enabled, <code>false</code> otherwise
+     * @param dumpResponses <code>true</code> if responses shouldn't be stored, <code>false</code> otherwise
+     */
     public ResponseTracker(boolean enabled,boolean dumpResponses){
         this(enabled,dumpResponses,false);
     }
 
+    /**
+     * Creates response tracker, sets if it is enabled, if responses are stored and if statistical
+     * information are gathered according to parameters.
+     *
+     * @param enabled <code>true</code> if response tracking is enabled, <code>false</code> otherwise
+     * @param dumpResponses <code>true</code> if responses shouldn't be stored, <code>false</code> otherwise
+     * @param trackPerSecond <code>true</code> if statistical information should be gathered, <code>false</code> otherwise
+     */
     public ResponseTracker(boolean enabled,boolean dumpResponses,boolean trackPerSecond) {
         this.enabled = enabled;
         this.dumpResponses = dumpResponses;
@@ -45,47 +75,49 @@ public class ResponseTracker {
         this.maxPerSecond = new SimpleLongProperty(0);
     }
 
+    /**
+     * Sets GUI representation of responses as chart. Charts data are cleared and all stored responses are added afterwards.
+     * @param chart GUI representation of responses
+     */
     public void registerChart(ResponseChart chart){
         this.chart = chart;
         this.chart.clearChart();
         dumpResponsesToChart();
     }
-
+    /**
+     * Adds all stored responses to previously given chart.
+     */
     private void dumpResponsesToChart(){
         responses.stream().filter(r -> chart != null).forEach(chart::addResponse);
     }
 
-    public void registerSecondCounter(LongProperty seconds){
-        seconds.addListener((observable, oldValue, newValue) -> {
-            //checkPerSecond();
-        });
-    }
-
-    private synchronized void checkPerSecond(){
-        if(!trackPerSecond) return;
-        Platform.runLater(()->{
-            setCurrentPerSecond(responses.size() - responseIndex);
-            responseIndex = responses.size();
-            if(getCurrentPerSecond() > getMaxPerSecond()) setMaxPerSecond(getCurrentPerSecond());
-        });
-    }
-
+    /**
+     * If gathering statistical information is enabled, measures count of responses in current second and stores maximal
+     * responses per second
+     * @param time current time
+     */
     private synchronized void checkPerSecond(long time){
         if(!trackPerSecond) return;
+        //if measured second is not set, set it to current
         if(currentSecond == 0) currentSecond = time/1000;
+        //measured second equals to current second
         if(currentSecond == (time/1000)){
+            //increment number of responses per current second
             Platform.runLater(()-> setCurrentPerSecond(getCurrentPerSecond()+1));
+            //check if number of responses in current second is not greater than max responses per second
             if(getMaxPerSecond() < getCurrentPerSecond()) Platform.runLater(() -> setMaxPerSecond(getCurrentPerSecond()));
         }else{
+            //set current measured second
             currentSecond = time/1000;
             Platform.runLater(()->setCurrentPerSecond(1));
         }
     }
     /**
-     * Adds new {@link Response} to {@link ResponseTracker#responses} list.
+     * Adds new {@link Response} to {@link ResponseTracker#responses} list. If chart is assigned, adds response to chart
+     * as well. Also if statistical information gathering is enabled, measuring method is invoked
      * Sets response value as <code>start - end</code> and time of response as <code>end</code>
-     * @param start
-     * @param end
+     * @param start response start time in milliseconds
+     * @param end response end time in milliseconds
      */
     public synchronized void addResponse(long start,long end){
         if(responses != null && start!=0 && start < end){
@@ -106,6 +138,10 @@ public class ResponseTracker {
             return 0L;
     }
 
+    /**
+     * Clears all stored responses from list and from chart as well. If statistical information gathering is enabled,
+     * resets information counters.
+     */
     public synchronized void clearResponses(){
         if(responses != null) responses.clear();
         if(chart != null){
@@ -117,7 +153,6 @@ public class ResponseTracker {
                 setCurrentPerSecond(0);
                 setMaxPerSecond(0);
             });
-            responseIndex = 0;
             currentSecond = 0;
         }
     }
@@ -141,25 +176,28 @@ public class ResponseTracker {
         return newResponses;
     }
 
+    /**
+     * Removes last response from list.
+     */
     public synchronized void dumpLastResponse(){
         if(responses.size() != 0) responses.remove(responses.size()-1);
     }
     /**
-     * Returns if response times are saved tracked
+     * Returns if response times are stored
      * @return <code>true</code> enable tracking, <code>false</code> otherwise
      */
     public boolean isEnabled(){
         return enabled;
     }
     /**
-     * Sets whether responses should be saved or not. Creates list of responses if there is not one.
+     * Sets whether responses should be stored or not
      * @param b <code>true</code> if save responses, <code>false</code> otherwise
      */
     public void setEnabled(boolean b){
         this.enabled = b;
     }
     /**
-     * Returns whether there are responses stored or not.
+     * Returns whether responses are being stored or not.
      * @return <code>false</code> if responses are saved, <code>true</code> otherwise
      */
     public boolean isDumpResponses(){
@@ -167,56 +205,103 @@ public class ResponseTracker {
     }
     /**
      * Sets if responses should be stored or not
-     * @param b <code>false</code> if save responses, <code>true</code> otherwise</code>
+     * @param b <code>false</code> if save responses, <code>true</code> otherwise
      */
     public void setDumpResponses(boolean b){
         this.dumpResponses = b;
     }
 
+    /**
+     * Clears responses list
+     */
     public void delete(){
         responses.clear();
     }
 
+    /**
+     * Gets list of stored responses
+     * @return list of stored responses
+     */
     public ObservableList<Response> getResponsesList() {
         return responsesList.get();
     }
 
+    /**
+     * Stored responses list property, that can be bound
+     * @return stored responses list property
+     */
     public ListProperty<Response> responsesListProperty() {
         return responsesList;
     }
 
+    /**
+     * Sets list of stored responses
+     * @param responsesList list of stored responses
+     */
     public void setResponsesList(ObservableList<Response> responsesList) {
         this.responsesList.set(responsesList);
     }
 
+    /**
+     * Gets flag, if gathering of statistical information is enabled
+     * @return <code>true</code> if enabled, <code>false</code> otherwise
+     */
     public boolean isTrackPerSecond() {
         return trackPerSecond;
     }
 
+    /**
+     * Sets flag, if gathering of statistical information is enabled
+     * @param trackPerSecond <code>true</code> if enabled, <code>false</code> otherwise
+     */
     public void setTrackPerSecond(boolean trackPerSecond) {
         this.trackPerSecond = trackPerSecond;
     }
 
+    /**
+     * Gets maximal responses per second
+     * @return maximal responses per second
+     */
     public long getMaxPerSecond() {
         return maxPerSecond.get();
     }
 
+    /**
+     * Maximal responses per second property, that can be bound
+     * @return maximal responses per second property
+     */
     public LongProperty maxPerSecondProperty() {
         return maxPerSecond;
     }
 
+    /**
+     * Sets maximal responses per second
+     * @param maxPerSecond maximal responses per second
+     */
     public void setMaxPerSecond(long maxPerSecond) {
         this.maxPerSecond.set(maxPerSecond);
     }
 
+    /**
+     * Gets number of responses in current second
+     * @return number of responses in current second
+     */
     public long getCurrentPerSecond() {
         return currentPerSecond.get();
     }
 
+    /**
+     * Number of responses in current second property, can be bound
+     * @return number of responses in current second property
+     */
     public LongProperty currentPerSecondProperty() {
         return currentPerSecond;
     }
 
+    /**
+     * Sets number of responses in current second
+     * @param currentPerSecond number of responses in current second
+     */
     public void setCurrentPerSecond(long currentPerSecond) {
         this.currentPerSecond.set(currentPerSecond);
     }

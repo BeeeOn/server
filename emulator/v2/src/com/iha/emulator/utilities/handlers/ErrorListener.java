@@ -1,8 +1,11 @@
 package com.iha.emulator.utilities.handlers;
 
 /**
- * Created by Shu on 5.3.2015.
+ * {@link com.iha.emulator.utilities.handlers.ErrorEvent} listener.
  */
 public interface ErrorListener {
+    /**
+     * Method called after error event is raised.
+     */
     public void handleError();
 }

@@ -15,24 +15,23 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Created by Shu on 6.12.2014.
+ * Class providing GUI components for "Delete simulation tasks dialog". Part View of MVP design pattern.
+ * Contains methods invoked on user interaction with user interface. These methods call appropriate presenter method
+ * to process user interaction.
+ *
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
 public class DeleteTasksDialogView implements Initializable,DeleteTasksDialogPresenter.Display {
-
+    /** Log4j2 logger field */
     private static final Logger logger = LogManager.getLogger(DeleteTasksDialogView.class);
+    /** presenter */
     private DeleteTasksDialogPresenter presenter;
-
+    /** GUI components */
     @FXML private Node view;
-
     @FXML private ProgressIndicator indicator;
     @FXML private Label status;
     @FXML private StackPane listConteiner;
-
     @FXML private CheckBox saveCheckBox;
-
-    public DeleteTasksDialogView() {
-
-    }
 
     @FXML
     public void handleDelete(ActionEvent event){

@@ -13,16 +13,26 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- * Created by Shu on 8.12.2014.
+ * Class implementing EmulatorServer task, that deletes given sensor IDs from database.
+ *
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
 public class DeleteSensorsTask extends AbstractTask {
-
+    /** Log4j2 logger field */
     private Logger logger;
-
+    /** database information */
     private DatabaseInfo dbInfo;
     private ArrayList<String> sensorsIds;
+    /** instance of class providing connection to database */
     private Database database;
 
+    /**
+     * Creates EmulatorServer task with given information
+     *
+     * @param logger log4j2 logger
+     * @param dbInfo database information
+     * @param sensorsIds array of sensors' IDs, that will be deleted
+     */
     public DeleteSensorsTask(Logger logger, DatabaseInfo dbInfo, ArrayList<String> sensorsIds) {
         this.logger = logger;
         this.dbInfo = dbInfo;
@@ -30,6 +40,9 @@ public class DeleteSensorsTask extends AbstractTask {
         this.database = new Database();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Element resolveTask() {
         try {
@@ -52,6 +65,13 @@ public class DeleteSensorsTask extends AbstractTask {
         }
     }
 
+    /**
+     * Creates one string of sensor IDs that will be deleted.
+     *
+     * @param strings array of sensors' IDs
+     * @param separator IDs separator
+     * @return string containing all adapter IDs separated by given separator
+     */
     public static String concatStringsWSep(Iterable<String> strings, String separator) {
         StringBuilder sb = new StringBuilder();
         String sep = "";

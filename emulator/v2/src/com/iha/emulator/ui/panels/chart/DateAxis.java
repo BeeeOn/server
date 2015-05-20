@@ -22,6 +22,8 @@ package com.iha.emulator.ui.panels.chart;
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
+ *
+ * Source: http://myjavafx.blogspot.cz/2013/09/javafx-charts-display-date-values-on.html
  */
 
 import com.sun.javafx.charts.ChartLayoutAnimator;
@@ -40,22 +42,18 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * An axis that displays date and time values.
- * <p/>
- * Tick labels are usually automatically set and calculated depending on the range unless you explicitly {@linkplain #setTickLabelFormatter(javafx.util.StringConverter) set an formatter}.
- * <p/>
- * You also have the chance to specify fix lower and upper bounds, otherwise they are calculated by your data.
- * <p/>
- * <p/>
+ * An axis that displays date and time values. <br>
+ * Tick labels are usually automatically set and calculated depending on the range unless you explicitly {@linkplain #setTickLabelFormatter(javafx.util.StringConverter) set an formatter}.<br>
+ * You also have the chance to specify fix lower and upper bounds, otherwise they are calculated by your data.<br>
+ * <br>
  * <h3>Screenshots</h3>
  * <p>
  * Displaying date values, ranging over several months:</p>
- * <img src="doc-files/DateAxisMonths.png" alt="DateAxisMonths" />
+ * <img src="doc-files/DateAxisMonths.png" alt="DateAxisMonths" >
  * <p>
  * Displaying date values, ranging only over a few hours:</p>
- * <img src="doc-files/DateAxisHours.png" alt="DateAxisHours" />
- * <p/>
- * <p/>
+ * <img src="doc-files/DateAxisHours.png" alt="DateAxisHours" ><br>
+ * <br>
  * <h3>Sample Usage</h3>
  * <pre>
  * {@code
@@ -477,6 +475,7 @@ public final class DateAxis extends Axis<Date> {
      * Makes dates even, in the sense of that years always begin in January, months always begin on the 1st and days always at midnight.
      *
      * @param dates The list of dates.
+     * @param calendar Used calendar
      * @return The new list of dates.
      */
     private List<Date> makeDatesEven(List<Date> dates, Calendar calendar) {

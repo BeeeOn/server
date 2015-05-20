@@ -13,23 +13,35 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Created by Shu on 8.12.2014.
+ * Class implementing EmulatorServer task, that retrieves ID and name from all adapters in database.
+ *
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
 public class GetAdaptersTask extends AbstractTask {
-
+    /** Log4j2 logger field */
     private Logger logger;
-
+    /** database information */
     private DatabaseInfo dbInfo;
     private String attributes;
+    /** instance of class providing connection to database */
     private Database database;
 
+    /**
+     * Creates EmulatorServer task with given information
+     *
+     * @param logger log4j2 logger
+     * @param dbInfo database information
+     * @param attributes needed database column name separated by comma (adapter_id,name)
+     */
     public GetAdaptersTask(Logger logger,DatabaseInfo dbInfo,String attributes) {
         this.dbInfo = dbInfo;
         this.attributes = attributes;
         this.logger = logger;
         database = new Database();
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Element resolveTask(){
         try {

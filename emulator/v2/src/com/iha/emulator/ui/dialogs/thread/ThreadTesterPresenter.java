@@ -16,19 +16,24 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Created by Shu on 3.2.2015.
+ * Class providing logic to user interactions for "Thread tester dialog". Part Presenter of MVP design pattern.
+ *
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
 public class ThreadTesterPresenter implements Presenter,PanelPresenter{
-
+    /** Log4j2 logger field */
     private static final Logger logger = LogManager.getLogger(ThreadTesterPresenter.class);
+    /** path to FXML file */
     private static final String FXML_PATH = "ThreadTester.fxml";
-    private static final double DEFAULT_REFRESH_MILLIS = 2000;
-
+    /** view */
     private Display view;
+    /** window */
     private Stage window;
-
+    /** class providing logic of tester */
     private MaxThreadTester tester;
-
+    /**
+     * Interface implemented by "Thread tester dialog" view.
+     */
     public interface Display {
         public Node getView();
         public void setPresenter(ThreadTesterPresenter presenter);
@@ -37,39 +42,31 @@ public class ThreadTesterPresenter implements Presenter,PanelPresenter{
         public TextArea getTextArea();
     }
 
+    /**
+     * Creates new "Thread tester dialog" presenter.
+     * @param window parent window
+     */
     public ThreadTesterPresenter(Stage window) {
         this.window = window;
     }
 
+    /**
+     * Starts thread test
+     */
     public void start(){
-        /*ArrayList<Integer> sensorIds = new ArrayList<>();
-        int adapterId=1000;
-        int adapterCount = 20;
-        int sensorsCount = 100;
-        for (int i = 0; i < adapterCount; i++) {
-            int tmpAdapterId= adapterId+i;
-            view.getTextArea().appendText("Adapter/" + tmpAdapterId + "\n");
-            for (int j = 0; j < sensorsCount; j++) {
-                Integer sensorId = Integer.valueOf(tmpAdapterId + "" + (tmpAdapterId + j));
-                if(!sensorIds.contains(sensorId)){
-                    sensorIds.add(sensorId);
-                    view.getTextArea().appendText("Adapter/" + tmpAdapterId + " sensor/" + sensorId + "\n");
-                }else{
-                    view.getTextArea().appendText("Already in list -> " + sensorId);
-                }
-
-            }
-
-        }*/
         if(tester!= null) tester.startTest();
         else logger.error("No tester");
     }
-
+    /**
+     * Closes dialog
+     */
     public void close(){
         window.hide();
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Node loadView() throws IOException {
         logger.trace("Loading ThreadTesterView from: " + FXML_PATH);
@@ -92,31 +89,55 @@ public class ThreadTesterPresenter implements Presenter,PanelPresenter{
             if (fxmlStream != null) fxmlStream.close();
         }
     }
-
+    /**
+     * Initializes dialog. Fills components with data and sets validation options.
+     */
     public void init(){
         this.tester = new MaxThreadTester(view.getTextArea());
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Empty
+     */
     @Override
     public void addModel(Object model) {
 
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Empty
+     * @return null
+     */
     @Override
     public Object getModel() {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Node getView() {
         return view.getView();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Empty
+     */
     @Override
     public void clear() {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void bind() {
         view.setPresenter(this);

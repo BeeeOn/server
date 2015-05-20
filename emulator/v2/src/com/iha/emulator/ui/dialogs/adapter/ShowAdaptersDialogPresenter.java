@@ -28,21 +28,24 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Created by Shu on 6.12.2014.
+ * Class providing logic to user interactions for "Show adapters in database dialog". Part Presenter of MVP design pattern.
+ *
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
 public class ShowAdaptersDialogPresenter implements Presenter,PanelPresenter {
-
+    /** Log4j2 logger field */
     private static final Logger logger = LogManager.getLogger(ShowAdaptersDialogPresenter.class);
+    /** path to FXML file */
     private static final String FXML_PATH = "ShowAdaptersDialog.fxml";
-
-    public static final String Column1MapKey = "A";
-    public static final String Column2MapKey = "B";
-
+    /** view */
     private Display view;
+    /** window */
     private Stage window;
-
+    /** server model with information about server */
     private Server server;
-
+    /**
+     * Interface implemented by "Show adapters in database dialog" view.
+     */
     public interface Display {
         public Node getView();
         public void setPresenter(ShowAdaptersDialogPresenter presenter);
@@ -51,19 +54,29 @@ public class ShowAdaptersDialogPresenter implements Presenter,PanelPresenter {
         public TableView getTable();
     }
 
+    /**
+     * Creates "Show adapters in database dialog" presenter. Dialog used to show existing adapter's in database.
+     * @param window parent window
+     * @param server server model
+     */
     public ShowAdaptersDialogPresenter(Stage window,Server server) {
         this.window = window;
         this.server = server;
     }
 
+    /**
+     * Get all adapters from database. Uses emulator server. Creates separate {@link javafx.concurrent.Task}
+     */
     public void refresh(){
         showStatus("Fetching tables...",true);
         final Server server1 = server;
         Task<Object> worker = new Task<Object>() {
             @Override
             protected Object call() throws Exception {
+                //create emulator server client
                 EmulatorServerClient server = new EmulatorServerClient(server1.getIp());
                 try{
+                    //connect to emulator server
                     server.connect();
                 }catch (IOException e){
                     Platform.runLater(()->showStatus("Cannot connect to server",false));
@@ -96,27 +109,42 @@ public class ShowAdaptersDialogPresenter implements Presenter,PanelPresenter {
         //run background process
         th.start();
     }
-
+    /**
+     * Closes dialog
+     */
     public void close(){
         window.hide();
     }
-
+    /**
+     * Shows given message in dialog. Also can start or stop loop indicator
+     * @param status message to be shown
+     * @param indicate <code>true</code> show indicator, <code>false</code> hide indicator
+     */
     public void showStatus(String status,boolean indicate){
         view.getStatus().setText(status);
         view.getIndicator().setVisible(indicate);
     }
 
+    /**
+     * Populates table with adapters' information given as parameter.
+     * @param tableData list of adapters' information
+     */
     @SuppressWarnings("unchecked")
     public void populateTable(ObservableList<AdapterInfo> tableData) {
         logger.trace("Populating table with data from server");
         TableView table = view.getTable();
+        //set ID column
         TableColumn<AdapterInfo,String> idColumn= (TableColumn<AdapterInfo, String>) table.getColumns().get(0);
         idColumn.setCellValueFactory( new PropertyValueFactory<>("id"));
+        //set name column
         TableColumn<AdapterInfo,String> nameColumn= (TableColumn<AdapterInfo, String>) table.getColumns().get(1);
-        nameColumn.setCellValueFactory( new PropertyValueFactory<>("name"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        //show data
         table.setItems(tableData);
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Node loadView() throws IOException {
         logger.trace("Loading ShowAdaptersDialogView from: " + FXML_PATH);
@@ -140,26 +168,48 @@ public class ShowAdaptersDialogPresenter implements Presenter,PanelPresenter {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Empty
+     */
     @Override
     public void addModel(Object model) {
 
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Empty
+     * @return null
+     */
     @Override
     public Object getModel() {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Node getView() {
         return view.getView();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Empty
+     */
     @Override
     public void clear() {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void bind() {
         view.setPresenter(this);

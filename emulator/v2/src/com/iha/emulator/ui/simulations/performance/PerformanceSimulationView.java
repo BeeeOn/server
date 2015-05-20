@@ -16,13 +16,18 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Created by Shu on 23/11/14.
+ * Class providing GUI components for "Performance simulation". Part View of MVP design pattern.
+ * Contains methods invoked on user interaction with user interface. These methods call appropriate presenter method
+ * to process user interaction.
+ *
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
 public class PerformanceSimulationView implements Initializable,PerformanceSimulationPresenter.Display{
-
+    /** Log4j2 logger field */
     private static final Logger logger = LogManager.getLogger(PerformanceSimulationView.class);
+    /** presenter */
     private PerformanceSimulationPresenter presenter;
-
+    /** GUI components */
     //region MENU
     @FXML private MenuItem newTaskItem;
     @FXML private MenuItem startTaskItem;
@@ -87,9 +92,6 @@ public class PerformanceSimulationView implements Initializable,PerformanceSimul
     //region SERVER RESPONSE
     @FXML private StackPane responseChartContainer;
     //endregion
-
-    public PerformanceSimulationView(){
-    }
 
     @FXML
     public void handleStartTask(ActionEvent event){

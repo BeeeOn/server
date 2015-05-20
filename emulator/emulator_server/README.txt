@@ -1,5 +1,5 @@
 ################################################################
-#################### IHA emulator_server ###########################
+#################### Emulator_server ###########################
 # Author: Filip Šutovský
 # Created: 11/2014
 
@@ -15,7 +15,7 @@ Linux cmd: java -jar path/to/jar [properties/file/path]
  - emulator_server.properties -> set path to Java JDK
  - Command: ant -buildfile emulator_server.xml
 
-#Service
+#Service on ant-2.fit.vutbr.cz
 - !! log in as ROOT!!
 - service start
     service eserver start

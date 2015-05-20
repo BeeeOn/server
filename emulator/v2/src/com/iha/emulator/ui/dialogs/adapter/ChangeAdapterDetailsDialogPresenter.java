@@ -31,25 +31,30 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Created by Shu on 5.12.2014.
+ * Class providing logic to user interactions for "Change adapter settings dialog". Part Presenter of MVP design pattern.
+ *
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
 public class ChangeAdapterDetailsDialogPresenter implements Presenter,PanelPresenter{
-
-    private String DEFAULT_FIRMWARE = "0";
+    /** Log4j2 logger field */
     private static final Logger logger = LogManager.getLogger(ChangeAdapterDetailsDialogPresenter.class);
+    /** path to FXML file */
     private static final String FXML_PATH = "ChangeAdapterDetailsDialog.fxml";
-    private static final String CSS_PATH = "/com/iha/emulator/resources/css/theme-light.css";
+    /** adapter information validator */
     private ValidationSupport adapterValidationSupport = new ValidationSupport();
-    private ValidationDecoration iconDecorator = new StyleClassValidationDecoration("validationError","validationWarn");
-
+    /** view */
     private Display view;
+    /** window */
     private Stage window;
-
+    /** adapter controller */
     private AdapterController adapterController;
+    /** all needed adapter information set property */
     private BooleanProperty adapterInfoSet;
+    /** selected protocol version */
     private Protocol.Version selectedVersion;
-    private DetailedSimulationPresenter parent;
-
+    /**
+     * Interface implemented by "Change adapter settings dialog" view.
+     */
     public interface Display {
         public Node getView();
         public void setPresenter(ChangeAdapterDetailsDialogPresenter presenter);
@@ -61,12 +66,19 @@ public class ChangeAdapterDetailsDialogPresenter implements Presenter,PanelPrese
         public ComboBox getAdapterProtocolComboBox();
     }
 
+    /**
+     * Creates "Change adapter settings dialog" presenter for given adapter.
+     * @param stage parent window
+     * @param adapterController adapter controller
+     */
     public ChangeAdapterDetailsDialogPresenter(Stage stage, AdapterController adapterController) {
         this.adapterInfoSet = new SimpleBooleanProperty(false);
         this.window = stage;
         this.adapterController = adapterController;
     }
-
+    /**
+     * Initializes dialog. Fills components with data and sets validation options.
+     */
     @SuppressWarnings("unchecked")
     public void initialize(){
         //----------------ADAPTER-------------------
@@ -104,6 +116,9 @@ public class ChangeAdapterDetailsDialogPresenter implements Presenter,PanelPrese
 
     }
 
+    /**
+     * If all needed information about adapter is set, applies changes and closes dialog. Otherwise notifies user.
+     */
     public void change(){
         if(getAdapterInfoSet()){
             logger.trace("Finishing");
@@ -123,11 +138,17 @@ public class ChangeAdapterDetailsDialogPresenter implements Presenter,PanelPrese
         }
     }
 
+    /**
+     * Closes dialog
+     */
     public void close(){
         window.hide();
     }
 
-    private boolean changeAdapter(){
+    /**
+     * Checks if any information was changed, if it was, applies changes to adapter's model.
+     */
+    private void changeAdapter(){
         if(!adapterController.getAdapter().getName().equals(view.getAdapterNameLbl().getText())){
             logger.debug("Setting adapter name (old/new) -> " + adapterController.getAdapter().getName() + "/" + view.getAdapterNameLbl().getText());
             adapterController.getAdapter().setName(view.getAdapterNameLbl().getText());
@@ -143,13 +164,18 @@ public class ChangeAdapterDetailsDialogPresenter implements Presenter,PanelPrese
             adapterController.getAdapter().setProtocol(ProtocolFactory.buildProtocol(selectedVersion));
             adapterController.setSaved(false);
         }
-        return true;
     }
-
+    /**
+     * Gets list of all implemented protocol version
+     * @return list of all implemented protocol version
+     */
     private ObservableList<Protocol.Version> getProtocolVersions(){
         return FXCollections.observableArrayList(Protocol.Version.values());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Node loadView() throws IOException {
         logger.trace("Loading ChangeAdapterDetailsDialogView from: " + FXML_PATH);
@@ -174,7 +200,12 @@ public class ChangeAdapterDetailsDialogPresenter implements Presenter,PanelPrese
             if (fxmlStream != null) fxmlStream.close();
         }
     }
-
+    /**
+     * Shows warning dialog with given title and message
+     * @param title dialog title
+     * @param headerMessage dialog header message
+     * @param message warning message
+     */
     private void showWarning(String title,String headerMessage,String message){
         Alert dlg = new Alert(Alert.AlertType.WARNING, "");
         dlg.initModality(Modality.WINDOW_MODAL);
@@ -185,26 +216,48 @@ public class ChangeAdapterDetailsDialogPresenter implements Presenter,PanelPrese
         dlg.show();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Empty
+     */
     @Override
     public void addModel(Object model) {
 
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Empty
+     * @return null
+     */
     @Override
     public Object getModel() {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Node getView() {
         return view.getView();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Empty
+     */
     @Override
     public void clear() {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void bind() {
         view.setPresenter(this);
@@ -219,16 +272,24 @@ public class ChangeAdapterDetailsDialogPresenter implements Presenter,PanelPrese
         view.getAdapterNameLbl().setPromptText("Example: EA51914");
         view.getAdapterFirmwareLbl().setPromptText("Example: 0");
     }
-
-
+    /**
+     * Gets if all needed adapter information is set
+     * @return <code>true</code> all set, <code>false</code> otherwise
+     */
     public boolean getAdapterInfoSet() {
         return adapterInfoSet.get();
     }
-
+    /**
+     * All needed adapter information is set property
+     * @return all needed adapter information is set property
+     */
     public BooleanProperty adapterInfoSetProperty() {
         return adapterInfoSet;
     }
-
+    /**
+     * Sets if all needed adapter information is set
+     * @param adapterInfoSet <code>true</code> all set, <code>false</code> otherwise
+     */
     public void setAdapterInfoSet(boolean adapterInfoSet) {
         this.adapterInfoSet.set(adapterInfoSet);
     }

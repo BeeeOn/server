@@ -19,13 +19,18 @@ import java.util.Iterator;
 import java.util.ResourceBundle;
 
 /**
- * Created by Shu on 23/11/14.
+ * Class providing GUI components for "Detailed simulation". Part View of MVP design pattern.
+ * Contains methods invoked on user interaction with user interface. These methods call appropriate presenter method
+ * to process user interaction.
+ *
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
 public class DetailedSimulationView implements Initializable,DetailedSimulationPresenter.Display{
-
+    /** Log4j2 logger field */
     private static final Logger logger = LogManager.getLogger(DetailedSimulationView.class);
+    /** presenter */
     private DetailedSimulationPresenter presenter;
-
+    /** GUI components */
     //region MENU
     @FXML private MenuItem newAdapterItem;
     @FXML private MenuItem newSensorItem;
@@ -46,7 +51,6 @@ public class DetailedSimulationView implements Initializable,DetailedSimulationP
     @FXML private Button openTBtn;
     @FXML private Button saveTBtn;
     @FXML private Button saveAllTBtn;
-    @FXML private Button printTBtn;
     @FXML private Button enableAdapterTBtn;
     @FXML private Button disableAdapterTBtn;
     @FXML private Button newAdapterTBtn;
@@ -88,9 +92,6 @@ public class DetailedSimulationView implements Initializable,DetailedSimulationP
     @FXML private Button addNewSensorBtn;
     @FXML private FlowPane sensorPanelContainer;
     //endregion
-
-    public DetailedSimulationView(){
-    }
 
     @FXML
     public void handleEnableAdapter(ActionEvent event) {
@@ -331,11 +332,6 @@ public class DetailedSimulationView implements Initializable,DetailedSimulationP
     @Override
     public Button getSaveAllBtn() {
         return saveAllTBtn;
-    }
-
-    @Override
-    public Button getPrintBtn() {
-        return printTBtn;
     }
 
     @Override

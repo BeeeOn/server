@@ -12,16 +12,28 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
- * Created by Shu on 8.12.2014.
+ * Class implementing EmulatorServer task, that deletes given adapter IDs from database.
+ *
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
 public class DeleteAdapterTask extends AbstractTask {
-
+    /** Log4j2 logger field */
     private Logger logger;
-
+    /** database information */
     private DatabaseInfo dbInfo;
+    /** string containing all adapter IDs separated by comma */
     private String adapterId;
+    /** instance of class providing connection to database */
     private Database database;
 
+    /**
+     * Creates EmulatorServer task with given information
+     *
+     * @param logger log4j2 logger
+     * @param dbInfo database information
+     * @param adapterId ID of first adapter to be deleted
+     * @param count number of adapters to be deleted
+     */
     public DeleteAdapterTask(Logger logger, DatabaseInfo dbInfo, String adapterId,Integer count) {
         if(count == null) count = 1;
         this.logger = logger;
@@ -30,6 +42,9 @@ public class DeleteAdapterTask extends AbstractTask {
         this.database = new Database();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Element resolveTask() {
         try {
@@ -52,6 +67,13 @@ public class DeleteAdapterTask extends AbstractTask {
         }
     }
 
+    /**
+     * Creates one string of adapter IDs that will be deleted.
+     *
+     * @param adapterId ID of first adapter
+     * @param count adapters count
+     * @return string containing all adapter IDs separated by comma
+     */
     public String joinIds(String adapterId,int count){
         int firstId = Integer.valueOf(adapterId);
         adapterId = "";

@@ -6,9 +6,7 @@ import com.iha.emulator.control.task.TaskParameters;
 import com.iha.emulator.utilities.Utilities;
 import com.iha.emulator.utilities.handlers.ErrorHandler;
 import javafx.application.Platform;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -35,68 +33,92 @@ import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 
 /**
- * Created by Shu on 27.11.2014.
+ * Class providing GUI components and method for adapter to write in three types of log:<br>
+ * - "Adapter's Log" - global messages by adapter and it's sensors
+ * - "To Be Sent Log" - showing unsent messages
+ * - "Error Log" - showing errors that occurred on adapter and it's sensors <br>
+ * Also provides logs buffering to given file.
+ *
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
 public class AdapterLogger {
+    /** Log4j2 logger field */
     private static final Logger logger = LogManager.getLogger(AdapterLogger.class);
-
+    /** default time pattern */
     private static final String TIME_PATTERN = "HH:mm:ss(SSS)";
+    /** default date-time pattern */
     private static final String DATE_TIME_PATTERN = "dd-MM-yyyy_HH-mm-ss";
+    /** time formatter */
     private static DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(TIME_PATTERN);
+    /** date-time formatter */
     private static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
+    /** index of "Adapter Log" in TabPane */
     private static final int ADAPTER_LOG_TAB_INDEX = 0;
+    /** index of "To Be Sent Log" in TabPane */
     private static final int TO_BE_SENT_TAB_INDEX = 1;
+    /** index of "Error Log" in TabPane */
     private static final int ERROR_TAB_INDEX = 2;
-
+    /** maximum number of lines showed in application*/
     private static final int BUFFER_LINE_COUNT_MAX = 200;
+    /** maximum warning messages count, after which error event is raised */
     private static final int MAX_WARNING_COUNT = 100000;
-
-    public enum Type{
-        FULL,
-        PARTIAL,
-        SHORT
-    }
-
+    /** panel containing logs areas */
     private TabPane tabPane = null;
-
+    /** "Adapter's Log" GUI component container */
     private Node adapterLogContainer;
+    /** "To Be Sent Log" GUI component container */
     private Node toBeSentLogContainer;
+    /** "Error Log" GUI component container */
     private Node errorLogContainer;
-
+    /** "Adapter's Log" GUI component */
     private TextArea adapterLog;
+    /** "To Be Sent Log" GUI component */
     private TextFlow toBeSentLog;
+    /** "Error Log" GUI component */
     private TextArea errorLog;
-
+    /** Instance of message tracker*/
     private MessageTracker messageTracker = new MessageTracker(false);
+    /** flag, if "To Be Sent Log" should be shown */
     private boolean showToBeSent = true;
-
-    private BooleanProperty fullMessage;
-    private BooleanProperty partialMessage;
-    private BooleanProperty shortMessage;
-
+    /** flag, if adapter's logs should be buffered */
     private boolean buffered = false;
+    /** Logs buffer file*/
     private File bufferFile;
+    /** Logs file buffered writer */
     private BufferedWriter bufferWriter;
+    /** helper variable to determine, when should be log GUI area cleared */
     private int bufferMark = 0;
-
+    /** list of "To Be Sent Log" messages, that are to be deleted*/
     private ObservableList<Text> removeLater = FXCollections.observableArrayList();
+    /** handler for error events*/
     private ErrorHandler errorHandler = null;
+    /** connection warning counter*/
     private IntegerProperty warningCounter;
 
+    /**
+     * Creates new instance of AdapterLogger, initializes warning messages counter and error handler.
+     */
     public AdapterLogger() {
-        this.fullMessage = new SimpleBooleanProperty(true);
-        this.partialMessage = new SimpleBooleanProperty(false);
-        this.shortMessage = new SimpleBooleanProperty(false);
         this.warningCounter = new SimpleIntegerProperty(0);
         errorHandler = new ErrorHandler();
         initWarningCounter();
     }
 
+    /**
+     * Creates new instance of AdapterLogger, sets it's parent component and initializes warning messages counter
+     * and error handler.
+     *
+     * @param tabPane container for logs components
+     */
     public AdapterLogger(TabPane tabPane){
         this();
         this.tabPane = tabPane;
     }
 
+    /**
+     * Write message to buffer file and "Adapter's Log" GUI component. Checks, if GUI component should clear it's messages.
+     * @param message message to be written
+     */
     public synchronized void log(String message){
         if(adapterLog!= null){
             //don't wont to show empty messages
@@ -121,6 +143,10 @@ public class AdapterLogger {
         }
     }
 
+    /**
+     * Checks if number of messages in "Adapter's Log" is bigger than {@link #BUFFER_LINE_COUNT_MAX}. If it is,
+     * "Adapter's Log" component is cleared and mar is set to 0.
+     */
     public synchronized void checkIfRemove(){
         if(bufferMark >= BUFFER_LINE_COUNT_MAX){
             Platform.runLater(adapterLog::clear);
@@ -128,14 +154,27 @@ public class AdapterLogger {
         }
     }
 
+    /**
+     * Adds given string to "Adapter's Log" component.
+     * @param text text to be shown.
+     */
     public synchronized void addTextToLog(String text){
         Platform.runLater(()-> adapterLog.appendText(text));
     }
 
+    /**
+     * If showing unsent messages is enabled, adds new message to "To Be Sent Log" component.
+     * @param message message to be written
+     * @return GUI component representing given message
+     */
     public synchronized Text sent(String message){
+        //increment waiting messages counter
         Platform.runLater(() -> getMessageTracker().incrementWaitingCounter());
+        //if unsent messages are not enabled, return null
         if(!isShowToBeSent()) return null;
+        //create message GUI component
         Text messageText = new Text(timeFormatter.format(LocalTime.now()) + " - " + message + "\n");
+        //add component to "To Be Sent Log" component
         Platform.runLater(() -> {
             if(toBeSentLog!= null){
                 toBeSentLog.getChildren().add(messageText);
@@ -144,19 +183,22 @@ public class AdapterLogger {
         return messageText;
     }
 
-    public synchronized void error(String message){
-        error(message,false);
-    }
-
+    /**
+     * Writes error message to "Error Log" component. Changes color of error tab according to error level. Also if
+     * termination is set, error event is fired.
+     * @param message message to be written
+     * @param terminate <code>true</code> if error event should be fired, <code>false</code> otherwise
+     */
     public synchronized void error(String message,boolean terminate){
         Platform.runLater(() -> {
             if(errorLog!= null){
                 String messageWithTime = timeFormatter.format(LocalTime.now()) + " - " + message + "\n";
                 errorLog.appendText(messageWithTime);
                 if(tabPane != null){
+                    //change color of error tab
                     Tab errorTab = tabPane.getTabs().get(ERROR_TAB_INDEX);
                     if(!errorTab.isSelected() && message.contains("Warning:")){
-                        //yellow background
+                        //yellow background if only warning
                         errorTab.setStyle("-fx-background-color: #ffde00;-fx-fill: #ffffff;-fx-text-fill: #ffffff;");
                     }else if(!message.contains("Warning:")){
                         //fatal error - red background
@@ -175,6 +217,11 @@ public class AdapterLogger {
         });
     }
 
+    /**
+     * Removes text of successfully sent message from "To Be Sent Log". If cannot remove immediately, message is moved to
+     * {@link #removeLater} list and is dealt with later.
+     * @param message text of message, that is to be removed
+     */
     public synchronized void notifyDataSent(Text message){
         Platform.runLater(() ->{
             getMessageTracker().decrementWaitingCounter();
@@ -195,6 +242,9 @@ public class AdapterLogger {
         }
     }
 
+    /**
+     * Process removing of messages, that were supposed to be removed.
+     */
     public synchronized void processRemoveLaterMessages(){
         if(removeLater.size() > 0){
             synchronized (this){
@@ -213,6 +263,9 @@ public class AdapterLogger {
         }
     }
 
+    /**
+     * Create GUI components for all three logs
+     */
     public void createLogs(){
         if(adapterLog == null){
             adapterLog = new TextArea();
@@ -230,6 +283,11 @@ public class AdapterLogger {
         }
     }
 
+    /**
+     * If "Adapter's Log" GUI component doesn't exit, method creates it and adds it to given container.
+     * @param container container for log component
+     * @return log GUI component
+     */
     public TextArea addAdapterLogTo(Node container){
         //create new textArea
         if(adapterLog == null){
@@ -241,6 +299,7 @@ public class AdapterLogger {
         paneContainer.getChildren().clear();
         paneContainer.getChildren().add(adapterLog);
         this.adapterLogContainer = container;
+        // listener for tab color change
         tabPane.getTabs().get(ADAPTER_LOG_TAB_INDEX).selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -253,7 +312,11 @@ public class AdapterLogger {
         });
         return adapterLog;
     }
-
+    /**
+     * If "To Be Sent Log" GUI component doesn't exit, method creates it and adds it to given container.
+     * @param container container for log component
+     * @return log GUI component
+     */
     public TextFlow addSentLogTo(Node container){
         //create new textArea
         if (toBeSentLog == null){
@@ -265,6 +328,7 @@ public class AdapterLogger {
         paneContainer.setContent(toBeSentLog);
         paneContainer.setFitToWidth(true);
         this.toBeSentLogContainer = container;
+        // listener for tab color change
         tabPane.getTabs().get(TO_BE_SENT_TAB_INDEX).selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -277,7 +341,11 @@ public class AdapterLogger {
         });
         return toBeSentLog;
     }
-
+    /**
+     * If "Error Log" GUI component doesn't exit, method creates it and adds it to given container.
+     * @param container container for log component
+     * @return log GUI component
+     */
     public TextArea addErrorLogTo(Node container){
         //create new textArea
         if(errorLog == null){
@@ -289,6 +357,7 @@ public class AdapterLogger {
         paneContainer.getChildren().clear();
         paneContainer.getChildren().add(errorLog);
         this.errorLogContainer = container;
+        // listener for tab color change
         tabPane.getTabs().get(ERROR_TAB_INDEX).selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -302,6 +371,9 @@ public class AdapterLogger {
         return errorLog;
     }
 
+    /**
+     * Clear contents of all logs components
+     */
     public void clearContainers(){
         if(this.adapterLogContainer != null){
             ((StackPane)adapterLogContainer).getChildren().clear();
@@ -314,6 +386,9 @@ public class AdapterLogger {
         }
     }
 
+    /**
+     * Closes buffer file, and clears logs GUI components content
+     */
     public void delete(){
         closeBuffer();
         //adapterLog.getChildren().clear();
@@ -325,6 +400,9 @@ public class AdapterLogger {
         removeLater.clear();
     }
 
+    /**
+     * Closes buffer file, writes all logs to buffer file before closing.
+     */
     public void closeBuffer(){
         setWarningCounter(0);
         if(this.bufferWriter != null){
@@ -339,6 +417,10 @@ public class AdapterLogger {
         }
     }
 
+    /**
+     * Writes all logs to buffer file
+     * @throws IOException cannot write to file
+     */
     public synchronized void moveLogsToFile() throws IOException {
         if(bufferWriter == null) return;
         logSentMessagesCount(bufferWriter);
@@ -346,13 +428,22 @@ public class AdapterLogger {
         moveErrorToFile(bufferWriter);
     }
 
+    /**
+     * Write unsent messages count to buffer file
+     * @param writer writer of buffer file
+     * @throws IOException buffer file doesn't exist
+     */
     public synchronized void logSentMessagesCount(BufferedWriter writer) throws IOException {
         if(writer == null) throw new IOException("Buffered writer is null. Cannot move log to buffer file!");
         if(getMessageTracker() != null && getMessageTracker().isEnabled()){
             writer.write("Number of sent messages: " + getMessageTracker().getSentMessageCounter());
         }
     }
-
+    /**
+     * Write unsent messages to buffer file
+     * @param writer writer of buffer file
+     * @throws IOException buffer file doesn't exist
+     */
     public synchronized void moveToBeSentToFile(BufferedWriter writer) throws IOException {
         if(toBeSentLog == null|| writer == null) throw new IOException("ToBeSent log or buffered writer is null. Cannot move log to buffer file!");
         writer.newLine();
@@ -370,7 +461,11 @@ public class AdapterLogger {
         writer.newLine();
         writer.flush();
     }
-
+    /**
+     * Write error messages to buffer file
+     * @param writer writer of buffer file
+     * @throws IOException buffer file doesn't exist
+     */
     public synchronized void moveErrorToFile(BufferedWriter writer) throws IOException {
         if(errorLog == null|| writer == null) throw new IOException("ToBeSent log or buffered writer is null. Cannot move log to buffer file!");
         writer.newLine();
@@ -382,6 +477,9 @@ public class AdapterLogger {
         writer.flush();
     }
 
+    /**
+     * Deletes buffer file from system.
+     */
     public void deleteBufferFile(){
         if(bufferFile != null){
             bufferFile.delete();
@@ -389,6 +487,10 @@ public class AdapterLogger {
         }
     }
 
+    /**
+     * Remove all messages still present in "To Be Sent Log" by given sensor
+     * @param sensorController sensor, for which should be messages removed
+     */
     public synchronized void removeUnsentMessagesBySensor(SensorController sensorController){
         if(toBeSentLog != null && toBeSentLog.getChildren().size() !=0){
             for (Iterator<Node> it = toBeSentLog.getChildren().iterator(); it.hasNext(); ) {
@@ -400,10 +502,22 @@ public class AdapterLogger {
         }
     }
 
+    /**
+     * Adds CSS class to given component
+     * @param area area to be stylized
+     */
     private void stylize(TextFlow area){
         area.getStyleClass().addAll("logTextArea");
     }
 
+    /**
+     * Creates and opens buffer file. If path given as parameter is null, temp file is created.
+     *
+     * @param buffered flag, if logs should be buffered
+     * @param filename buffer file filename
+     * @param path path to buffer file
+     * @throws IOException cannot create file or directory
+     */
     public void setBuffered(boolean buffered,String filename,String path) throws IOException {
         this.buffered = buffered;
         if(buffered){
@@ -432,11 +546,20 @@ public class AdapterLogger {
         logger.debug("Log is now buffered");
     }
 
+    /**
+     * Open previously saved buffer file to write
+     * @throws IOException cannot open file
+     */
     public void openBufferFile() throws IOException {
         logger.trace("Opening buffer file");
         bufferWriter = new BufferedWriter(new FileWriter(bufferFile,true));
     }
 
+    /**
+     * Writes default information about {@link com.iha.emulator.control.task.SimulationTask} to log.
+     * @param task task providing information
+     * @throws IOException cannot write to buffer file
+     */
     public void writeTaskLogHeaderToBuffer(SimulationTask task) throws IOException {
         TaskParameters params = task.getTaskParameters();
         bufferWriter.write("== TASK LOG =================================================\n");
@@ -456,11 +579,19 @@ public class AdapterLogger {
         bufferWriter.flush();
     }
 
+    /**
+     * Write default header of "Adapter's Log" to buffer file
+     * @throws IOException cannot write to file
+     */
     public void writeAdapterLogHeaderToBuffer() throws IOException {
         bufferWriter.write("== ADAPTER LOG ===============================================\n");
         bufferWriter.flush();
     }
 
+    /**
+     * Initializes connection warnings counter. If there are more connection warnings then {@link #MAX_WARNING_COUNT},
+     * error message is sent and error event is fired.
+     */
     private void initWarningCounter(){
         warningCounterProperty().addListener(new ChangeListener<Number>() {
             @Override
@@ -472,110 +603,90 @@ public class AdapterLogger {
         });
     }
 
-    public static Type toType(String typeString){
-        String lowerTypeString = typeString.toLowerCase();
-        Type type;
-        switch (lowerTypeString){
-            case "full":
-                type = Type.FULL;
-                break;
-            case "partial":
-                type = Type.PARTIAL;
-                break;
-            case "short":
-                type = Type.SHORT;
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown value of property \"defaultLogMessageType\" ->" + typeString +" -> has to be: FULL or PARTIAL or SHORT");
-        }
-        return type;
-    }
-
-    @SuppressWarnings("unused")
+    /**
+     * Gets GUI component for "Adapter's Log"
+     * @return GUI component for "Adapter's Log"
+     */
     public TextArea getAdapterLog() {
         return adapterLog;
     }
 
-    @SuppressWarnings("unused")
+    /**
+     * Gets GUI component for "To Be Sent Log"
+     * @return GUI component for "To Be Sent Log"
+     */
     public TextFlow getToBeSentLog() {
         return toBeSentLog;
     }
 
-    @SuppressWarnings("unused")
+    /**
+     * Gets GUI component for "Error Log"
+     * @return GUI component for "Error Log"
+     */
     public TextArea getErrorLog() {
         return errorLog;
     }
 
-    @SuppressWarnings("unused")
-    public boolean getFullMessage() {
-        return fullMessage.get();
-    }
-
-    public BooleanProperty fullMessageProperty() {
-        return fullMessage;
-    }
-
-    @SuppressWarnings("unused")
-    public void setFullMessage(boolean fullMessage) {
-        this.fullMessage.set(fullMessage);
-    }
-
-    @SuppressWarnings("unused")
-    public boolean getPartialMessage() {
-        return partialMessage.get();
-    }
-
-    public BooleanProperty partialMessageProperty() {
-        return partialMessage;
-    }
-
-    @SuppressWarnings("unused")
-    public void setPartialMessage(boolean partialMessage) {
-        this.partialMessage.set(partialMessage);
-    }
-
-    @SuppressWarnings("unused")
-    public boolean getShortMessage() {
-        return shortMessage.get();
-    }
-
-    public BooleanProperty shortMessageProperty() {
-        return shortMessage;
-    }
-
+    /**
+     * Gets buffer file
+     * @return buffer file
+     */
     public File getBufferFile(){
         return bufferFile;
     }
 
-    @SuppressWarnings("unused")
-    public void setShortMessage(boolean shortMessage) {
-        this.shortMessage.set(shortMessage);
-    }
-
+    /**
+     * Gets error events handler
+     * @return error events handler
+     */
     public ErrorHandler getErrorHandler() {
         return errorHandler;
     }
 
+    /**
+     * Gets instance of message tracker
+     * @return instance of message tracker
+     */
     public MessageTracker getMessageTracker() {
         return messageTracker;
     }
 
+    /**
+     * Gets flag, if unsent messages should be shown
+     * @return <code>true</code> if unsent messages should be shown, <code>false</code> otherwise
+     */
     public boolean isShowToBeSent() {
         return showToBeSent;
     }
 
+    /**
+     * Gets value of connection warnings counter
+     * @return value of connection warnings counter
+     */
     public int getWarningCounter() {
         return warningCounter.get();
     }
 
+    /**
+     * Connection warnings counter property, that can be bound
+     * @return connection warnings counter property
+     */
     public IntegerProperty warningCounterProperty() {
         return warningCounter;
     }
 
+    /**
+     * Sets value of connection warnings counter
+     * @param warningCounter value of connection warnings counter
+     */
     public void setWarningCounter(int warningCounter) {
         this.warningCounter.set(warningCounter);
     }
 
+    /**
+     * Sets flag, if unsent messages should be shown. Also disables "To Be Sent Log" tab, if not.
+     * @param showToBeSent <code>true</code> if unsent message should be shown, <code>false</code> otherwise
+     */
     public void setShowToBeSent(boolean showToBeSent) {
         this.showToBeSent = showToBeSent;
         if(tabPane != null){

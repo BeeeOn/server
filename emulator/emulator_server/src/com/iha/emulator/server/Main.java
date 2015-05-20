@@ -5,11 +5,22 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
+/**
+ * Application providing database statements for BeeeOn Emulator.<br>
+ *
+ * <a href="https://ant-2.fit.vutbr.cz/projects/server/wiki/Emulator_server" target="_blank">See for more info</a>
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
+ */
 public class Main {
-
+    /** Log4j2 logger field */
     private static final Logger logger = LogManager.getLogger(Server.class);
+    /** default properties file path */
     private static final String DEFAULT_PROPERTIES_FILE = "server.properties";
 
+    /**
+     * Loads application arguments, loads properties file and starts EmulatorServer.
+     * @param args arg[0] = path to properties file
+     */
     public static void main(String[] args) {
         String propertiesString;
         if(args.length != 0 && args[0].endsWith(".properties")){

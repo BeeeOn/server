@@ -15,25 +15,24 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Created by Shu on 6.12.2014.
+ * Class providing GUI components for "Delete adapter dialog". Part View of MVP design pattern.
+ * Contains methods invoked on user interaction with user interface. These methods call appropriate presenter method
+ * to process user interaction.
+ *
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
 public class DeleteAdaptersDialogView implements Initializable,DeleteAdaptersDialogPresenter.Display {
-
+    /** Log4j2 logger field */
     private static final Logger logger = LogManager.getLogger(DeleteAdaptersDialogView.class);
+    /** presenter */
     private DeleteAdaptersDialogPresenter presenter;
-
+    /** GUI components */
     @FXML private Node view;
-
     @FXML private ProgressIndicator indicator;
     @FXML private Label status;
     @FXML private StackPane listConteiner;
-
     @FXML private CheckBox databaseCheckBox;
     @FXML private CheckBox saveCheckBox;
-
-    public DeleteAdaptersDialogView() {
-
-    }
 
     @FXML
     public void handleDelete(ActionEvent event){

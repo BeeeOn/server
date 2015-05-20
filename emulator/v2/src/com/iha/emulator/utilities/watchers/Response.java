@@ -2,6 +2,8 @@ package com.iha.emulator.utilities.watchers;
 
 /**
  * Stores server response time and time in which was this response measured
+ *
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
 public class Response {
     /** response time */

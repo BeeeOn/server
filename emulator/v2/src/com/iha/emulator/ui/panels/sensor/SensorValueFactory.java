@@ -7,9 +7,14 @@ import javafx.scene.control.TableColumn;
 import javafx.util.Callback;
 
 /**
- * Created by Shu on 2.12.2014.
+ * Class used to display a value name in values table.
+ *
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
 public class SensorValueFactory implements Callback<TableColumn.CellDataFeatures<Value, Object>, ObservableValue<Object>> {
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     @Override
     public ObservableValue<Object> call(TableColumn.CellDataFeatures<Value, Object> param) {

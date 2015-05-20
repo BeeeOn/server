@@ -14,14 +14,18 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Created by Shu on 10.12.2014.
+ * Class providing GUI components for "Add sensor dialog". Part View of MVP design pattern.
+ * Contains methods invoked on user interaction with user interface. These methods call appropriate presenter method
+ * to process user interaction.
+ *
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
 public class AddNewSensorDialogView implements Initializable,AddNewSensorDialogPresenter.Display{
-
+    /** Log4j2 logger field */
     private static final Logger logger = LogManager.getLogger(AddNewSensorDialogView.class);
-
+    /** presenter */
     private AddNewSensorDialogPresenter presenter;
-
+    /** GUI components */
     @FXML private Node view;
     @FXML private Button loadTemplateBtn;
     @FXML private Button saveTemplateBtn;
@@ -79,10 +83,6 @@ public class AddNewSensorDialogView implements Initializable,AddNewSensorDialogP
     @FXML private Label booleanRandomProbabilityLbl;
     // -- save button
     @FXML private Button saveValueBtn;
-
-    public AddNewSensorDialogView() {
-
-    }
 
     @FXML
     public void handleLoadTemplate(){

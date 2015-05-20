@@ -29,24 +29,32 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Created by Shu on 5.12.2014.
+ * Class providing logic to user interactions for "Change server details dialog". Part Presenter of MVP design pattern.
+ *
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
 public class ChangeServerDetailsDialogPresenter implements Presenter,PanelPresenter{
-
+    /** Log4j2 logger field */
     private static final Logger logger = LogManager.getLogger(ChangeServerDetailsDialogPresenter.class);
+    /** path to FXML file */
     private static final String FXML_PATH = "ChangeServerDetailsDialog.fxml";
-    private static final String CSS_PATH = "/com/iha/emulator/resources/css/theme-light.css";
+    /** server information validator */
     private ValidationSupport serverValidationSupport = new ValidationSupport();
-
+    /** view */
     private Display view;
+    /** window */
     private Stage window;
-
+    /** all needed server information set property */
     private BooleanProperty serverInfoSet;
-
+    /** list of possible server */
     private ObservableList<Server> servers;
+    /** selected server */
     private Server selectedServer;
+    /** adapter controller */
     private AdapterController adapterController;
-
+    /**
+     * Interface implemented by "Change server details dialog" view.
+     */
     public interface Display {
         public Node getView();
         public void setPresenter(ChangeServerDetailsDialogPresenter presenter);
@@ -60,6 +68,12 @@ public class ChangeServerDetailsDialogPresenter implements Presenter,PanelPresen
         public ComboBox getServerComboBox();
     }
 
+    /**
+     * Creates "Change server details dialog" presenter for given servers. While modifying server, adapter is disabled.
+     * @param stage parent window
+     * @param servers list of servers, that can be chosen
+     * @param adapterController adapter containing server model to be changed
+     */
     public ChangeServerDetailsDialogPresenter(Stage stage, ObservableList<Server> servers, AdapterController adapterController) {
         this.serverInfoSet = new SimpleBooleanProperty(true);
         ValidationDecoration iconDecorator = new StyleClassValidationDecoration("validationError", "validationWarn");
@@ -69,7 +83,9 @@ public class ChangeServerDetailsDialogPresenter implements Presenter,PanelPresen
         this.adapterController = adapterController;
         adapterController.disable();
     }
-
+    /**
+     * Initializes dialog. Fills components with data and sets validation options.
+     */
     @SuppressWarnings("unchecked")
     public void initialize(){
         //----------------SERVER-------------------
@@ -129,11 +145,15 @@ public class ChangeServerDetailsDialogPresenter implements Presenter,PanelPresen
                 setServerInfoSet(!serverValidationSupport.isInvalid());
         });
     }
-
+    /**
+     * Closes dialog
+     */
     public void close(){
         this.window.hide();
     }
-
+    /**
+     * If all needed information about server is set, applies changes and closes dialog. Otherwise notifies user.
+     */
     public void change(){
         if(getServerInfoSet() && changeServer()){
             close();
@@ -151,6 +171,10 @@ public class ChangeServerDetailsDialogPresenter implements Presenter,PanelPresen
         }
     }
 
+    /**
+     * Checks if any information was changed, if it was, applies changes to server's model.
+     * @return <code>true</code> everything OK, <code>false</code> no server selected
+     */
     private boolean changeServer(){
         logger.trace("Changing server");
         if(selectedServer == null){
@@ -177,6 +201,9 @@ public class ChangeServerDetailsDialogPresenter implements Presenter,PanelPresen
         return true;
     }
 
+    /**
+     * Saves text from text fields to selected server model.
+     */
     private void updateServerInfo(){
         if(selectedServer != null){
             if(!view.getServerIpTxtField().getText().isEmpty())
@@ -190,12 +217,18 @@ public class ChangeServerDetailsDialogPresenter implements Presenter,PanelPresen
         }
     }
 
+    /**
+     * Sets selected server model, fills fields with model information
+     * @param server server model to be selected
+     */
     public void setSelectedServer(Server server){
         this.selectedServer = server;
         setServerTextFields(server.getName(), server.getIp(), String.valueOf(server.getPort()), server.getDatabaseName());
         updateServerInfo();
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Node loadView() throws IOException {
         logger.trace("Loading AddAdapterDialogView from: " + FXML_PATH);
@@ -220,7 +253,12 @@ public class ChangeServerDetailsDialogPresenter implements Presenter,PanelPresen
             if (fxmlStream != null) fxmlStream.close();
         }
     }
-
+    /**
+     * Shows warning dialog with given title and message
+     * @param title dialog title
+     * @param headerMessage dialog header message
+     * @param message warning message
+     */
     private void showWarning(String title,String headerMessage,String message){
         Alert dlg = new Alert(Alert.AlertType.WARNING, "");
         dlg.initModality(Modality.WINDOW_MODAL);
@@ -231,6 +269,13 @@ public class ChangeServerDetailsDialogPresenter implements Presenter,PanelPresen
         dlg.show();
     }
 
+    /**
+     * Fills fields with given information
+     * @param name server name
+     * @param ip server hostname
+     * @param port server port
+     * @param dbName database name
+     */
     private void setServerTextFields(String name,String ip,String port,String dbName){
         view.getServerNameTxtField().setText(name);
         view.getServerIpTxtField().setText(ip);
@@ -238,26 +283,48 @@ public class ChangeServerDetailsDialogPresenter implements Presenter,PanelPresen
         view.getServerDbNameTxtField().setText(dbName);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Empty
+     */
     @Override
     public void addModel(Object model) {
 
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Empty
+     * @return null
+     */
     @Override
     public Object getModel() {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Node getView() {
         return view.getView();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Empty
+     */
     @Override
     public void clear() {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void bind() {
         view.setPresenter(this);
@@ -277,15 +344,24 @@ public class ChangeServerDetailsDialogPresenter implements Presenter,PanelPresen
             //disable checkbox
 
     }
-
+    /**
+     * Gets if all needed server information is set
+     * @return <code>true</code> all set, <code>false</code> otherwise
+     */
     public boolean getServerInfoSet() {
         return serverInfoSet.get();
     }
-
+    /**
+     * All needed server information is set property
+     * @return all needed server information is set property
+     */
     public BooleanProperty serverInfoSetProperty() {
         return serverInfoSet;
     }
-
+    /**
+     * Sets if all needed server information is set
+     * @param serverInfoSet <code>true</code> all set, <code>false</code> otherwise
+     */
     public void setServerInfoSet(boolean serverInfoSet) {
         this.serverInfoSet.set(serverInfoSet);
     }

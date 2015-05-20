@@ -19,19 +19,37 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 /**
- * Created by Shu on 25.11.2014.
+ * Class used as plugin by log4j2 to use GUI component {@link javafx.scene.control.TextArea} as output.
+ *
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
 @Plugin(name = "TextAreaAppender", category = "Core", elementType = "appender")
 public final class TextAreaAppender extends AbstractAppender {
-
+    /** GUI component */
     private static volatile TextArea text;
+    /** Log4j2 logger field */
     private static final Logger logger = LogManager.getLogger("AppLog");
+    /** date formatter */
     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy-HH:mm:ss");
 
+    /**
+     * Creates new instance of TextAreaAppender with given name, filter and layout used by {@link org.apache.logging.log4j.core.appender.AbstractAppender}
+     * @param name appender name
+     * @param filter appender filter
+     * @param layout appender layout
+     */
     protected TextAreaAppender(String name, Filter filter, Layout<? extends Serializable> layout) {
         super(name, filter, layout);
     }
 
+    /**
+     * Creates and returns new instance of TextAreaAppender with given name, filter and layout used by
+     * {@link org.apache.logging.log4j.core.appender.AbstractAppender}
+     * @param name appender name
+     * @param layout appender layout
+     * @param filter appender filer
+     * @return new appender
+     */
     @PluginFactory
     public static TextAreaAppender createAppender(@PluginAttribute("name") String name,
                                                   @PluginElement("PatternLayout")PatternLayout layout,
@@ -46,10 +64,18 @@ public final class TextAreaAppender extends AbstractAppender {
         return new TextAreaAppender(name,filter,layout);
     }
 
+    /**
+     * Set text area as destination component
+     * @param textArea destination component
+     */
     public static void setTextFlow(final TextArea textArea){
         TextAreaAppender.text = textArea;
     }
 
+    /**
+     * Append log message contained in given logEvent.
+     * @param logEvent event containing log message information
+     */
     @Override
     public void append(LogEvent logEvent) {
         // Append formatted message to text area using the Thread.

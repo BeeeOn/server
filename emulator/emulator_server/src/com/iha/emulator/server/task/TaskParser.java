@@ -10,12 +10,21 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * Created by Shu on 8.12.2014.
+ * Class parses message from client and creates relevant implementation of interface
+ * {@link com.iha.emulator.server.task.Task}
+ *
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
 public class TaskParser {
-
+    /** Log4j2 logger field */
     private static final Logger logger = LogManager.getLogger(TaskParser.class);
 
+    /**
+     * Create relevant implementation of {@link com.iha.emulator.server.task.Task} from given parameters
+     * @param dbInfo database information
+     * @param taskElement XML element from client message, that holds information about task type
+     * @return relevant task implementation
+     */
     public static synchronized Task parseTask(DatabaseInfo dbInfo,Element taskElement){
         //extract type from task element
         String type = taskElement.attributeValue("type");

@@ -11,16 +11,25 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * Created by Shu on 26.2.2015.
+ * Class extending {@link javafx.scene.control.TableCell} used to display information about adapters and server in tasks table.
+ *
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
 public class SimulationTaskServerCellFactory extends TableCell<SimulationTask, SimulationTask> {
+    /** Log4j2 logger field */
     private static final Logger logger = LogManager.getLogger(SimulationTaskServerCellFactory.class);
+    /**
+     * {@inheritDoc}
+     *
+     * @param item simulation task, that needs to display it's server information
+     */
     @Override
     protected void updateItem(SimulationTask item, boolean empty) {
+        //if there is item to be displayed
         super.updateItem(item, empty);
         if (item != null) {
+            //create main label showing server name and max devices, that can be created
             Label lbl = new Label();
-
             lbl.textProperty().bind(Bindings.concat(new StringBinding() {
                 {
                     bind(item.getServerController().getModel().nameProperty());
@@ -39,6 +48,7 @@ public class SimulationTaskServerCellFactory extends TableCell<SimulationTask, S
                     return "Max: "  +  "\t" +(item.getTaskParameters().getAdaptersCount() * item.getTaskParameters().getSensorsCountMax()) + " devices";
                 }
             }));
+            //detailed information about server and adapters add to tool tip
             TaskParameters params = item.getTaskParameters();
             Tooltip tp = new Tooltip(
                     "Server: " + "\n" +
