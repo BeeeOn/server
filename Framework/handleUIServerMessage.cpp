@@ -74,7 +74,7 @@ void FrameworkServerHandle::HandleUIServerMessage(std::string data, Loger *Log, 
 						error = true;
 						break;
 					}
-					int devId = child.attribute("id").as_int();
+					unsigned int devId = child.attribute("id").as_uint();
 					int devType = child.attribute("type").as_int();
 					int devPos = child.attribute("pos").as_int();
 					devices[numberOfDevs].id = devId;
@@ -209,7 +209,7 @@ void FrameworkServerHandle::HandleUIServerMessage(std::string data, Loger *Log, 
 						error = true;
 						break;
 					}
-					int devId = child.attribute("id").as_int();
+					unsigned int devId = child.attribute("id").as_int();
 					int devType = child.attribute("type").as_int();
 					int devPos = child.attribute("pos").as_int();
 					devices[numberOfDevs].id = devId;

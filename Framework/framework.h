@@ -87,7 +87,7 @@ typedef struct notify
 */
 typedef struct device
 {
-	int id;							/** Identifikacni cislo zarizeni. */
+	unsigned int id;				/** Identifikacni cislo zarizeni. */
 	int type;						/** Typ zarizeni. */
 	int pos;						/** Pozice zarizeni predana do aplikacniho modulu. */
 } tdevice;
