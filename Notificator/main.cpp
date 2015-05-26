@@ -18,9 +18,9 @@ int main()
         i,                  // message (notification) ID
         1431593526000,        // timestamp (ms)
         "Vlhkost v obýváku překročila 60%",   // message
-        54321,                  // adadpter ID
-        "774312",               // sensor ID
-        2,                  // sensor type
+        4321,                  // adadpter ID
+        "",               // sensor ID
+        10,                  // sensor type
         3);                   // rule ID
     
     notif->sendGcm(&ids);

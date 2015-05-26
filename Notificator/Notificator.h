@@ -2,6 +2,7 @@
 #define NOTIFICATOR_H
 
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -14,7 +15,7 @@ const static char* HEADER_ACCEPT = "Accept:";
 
 class Notificator {
 public:
-    static int sendGcm(string json);
+    static vector<string> sendGcm(string json);
 protected:
 private:
     static size_t writeToString(void *ptr, size_t size, size_t count, void *stream);
