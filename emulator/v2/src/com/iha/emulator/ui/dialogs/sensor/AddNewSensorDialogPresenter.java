@@ -60,28 +60,44 @@ import static com.iha.emulator.models.value.Value.Generator;
 import static com.iha.emulator.models.value.Value.Type;
 
 /**
- * Created by Shu on 10.12.2014.
+ * Class providing logic to user interactions for "Add sensor dialog". Part Presenter of MVP design pattern.
+ *
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
 public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
-
+    /** Log4j2 logger field */
     private static final Logger logger = LogManager.getLogger(AddNewSensorDialogPresenter.class);
+    /** path to FXML file */
     private static final String FXML_PATH = "AddNewSensorDialog.fxml";
+    /** default sensors' template path */
     private static final String TEMPLATES_DEFAULT_DIR = "templates/sensors";
+    /** array of default sensor panel colors */
     private static final String[] DEFAULT_COLORS = {
             "0cdf56", "65c2ff", "ffe037", "fe9e49", "ffff81", "db8fff"
     };
+    /** view */
     private Display view;
+    /** window */
     private Stage window;
+    /** GUI component holding sensor panels */
     private Node sensorContainer;
-
+    /** all needed sensor information set property */
     private BooleanProperty sensorInfoSet;
+    /** all needed value information set property */
     private BooleanProperty valueInfoSet;
+    /** adapter, for which is new sensor added */
     private AdapterController adapterController;
+    /** sensor information validator */
     private ValidationSupport sensorGeneralValidator = new ValidationSupport();
+    /** validation message */
     private String valueValidationMessage = "";
+    /** signal and battery value formatter */
     private final DecimalFormat signalBatterySliderFormatter = new DecimalFormat( "##0" );
+    /** list of sensors values */
     private ListProperty<Value> values = new SimpleListProperty<>(FXCollections.observableArrayList());
-
+    /**
+     * Interface implemented by "Add sensor dialog" view.
+     */
     public interface Display{
         public Node getView();
         public void setPresenter(AddNewSensorDialogPresenter presenter);
@@ -127,7 +143,12 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
         public Button getSaveValueBtn();
     }
 
-    // SUGGESTION change valueTextField to show combo box when value is of type boolean
+    /**
+     * Creates "Sensor details dialog" presenter. Initializes information validation.
+     * @param window parent window
+     * @param sensorContainer GUI component holding sensor panels
+     * @param adapterController adapter, for which is new sensor added
+     */
     public AddNewSensorDialogPresenter(Stage window,Node sensorContainer,AdapterController adapterController) {
         this.window = window;
         this.adapterController = adapterController;
@@ -136,6 +157,9 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
         this.sensorContainer = sensorContainer;
     }
 
+    /**
+     * Shows dialog, where user chooses XML file with sensor template to be loaded. Afterwards is chosen file parsed.
+     */
     public void loadTemplate() {
         logger.trace("Trying to load from XML file");
         try {
@@ -147,6 +171,12 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
         }
     }
 
+    /**
+     * Parses given XML file content, fills dialog fields with information from file.
+     * @param content XML content with sensor template
+     * @throws DocumentException cannot parse as XML
+     * @throws NullPointerException some information is missing, see message for more info
+     */
     private void parseAndShowXml(String content) throws DocumentException ,NullPointerException {
         logger.trace("Parsing XML file");
         Document doc = DocumentHelper.parseText(content);
@@ -168,7 +198,6 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
             tmpValue.setName(valueElement.element("name").getText());
             tmpValue.setInitialValue(tmpValue.fromStringToValueType(valueElement.element("initial").getText()));
             tmpValue.setValue(tmpValue.fromStringToValueType(valueElement.element("initial").getText()));
-            //TODO fix forcefull history storage disabling
             tmpValue.setStoreHistory(false);
             //tmpValue.setStoreHistory(valueElement.element("store_history").getText().equals("true"));
             tmpValue.setGenerateValue(valueElement.element("generate_value").getText().equals("true"));
@@ -219,6 +248,9 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
         view.getValuesTree().getSelectionModel().selectLast();
     }
 
+    /**
+     * Save information from fields as sensor template to file chosen by shown dialog.
+     */
     public void saveTemplate() {
         if(getValueInfoSet() && values.size() > 0){
             String filename = Utilities.saveDialogForXML(window,TEMPLATES_DEFAULT_DIR,buildSensorTemplateXml().asXML());
@@ -229,6 +261,10 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
         }
     }
 
+    /**
+     * Creates XML template document from fields.
+     * @return XML document with sensor template
+     */
     private Document buildSensorTemplateXml(){
         Document doc = DocumentHelper.createDocument();
         //save general info
@@ -292,13 +328,17 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
         }
         return doc;
     }
-
+    /**
+     * Check if filled adapter ID exists in database. Creates separate {@link javafx.concurrent.Task}.
+     */
     public void checkId() {
         Task<Object> worker = new Task<Object>() {
             @Override
             protected Object call() throws Exception {
+                //create emulator server client
                 EmulatorServerClient server = new EmulatorServerClient(adapterController.getServerController().getModel().getIp());
                 try{
+                    //connect to emulator server
                     server.connect();
                 }catch (IOException e){
                     Platform.runLater(() -> Utilities.showException(logger, "Cannot connect to server", e, false, null));
@@ -313,7 +353,7 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
                     //if ok, parse response
                     task.parseResponse(messageFromServer);
                     //show response in table
-                    Platform.runLater(()->showAdapterFromServer(((CheckSensorIdTask)task).getResult()));
+                    Platform.runLater(()-> showSensorFromServer(((CheckSensorIdTask) task).getResult()));
                 }catch (IOException e){
                     Platform.runLater(()-> Utilities.showException(logger,"Cannot read from socket",e,false,null));
                 }catch (DocumentException de){
@@ -330,9 +370,12 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
         //run background process
         th.start();
     }
-
-    private void showAdapterFromServer(String adapterId){
-        //TODO show dialog, that id was found and if user want to set data from server
+    /**
+     * Shows sensor information gathered by communication with emulator server.
+     * @param adapterId adapter ID to which sensor ID belongs
+     */
+    private void showSensorFromServer(String adapterId){
+        //if null sensor ID is free to take
         if(adapterId == null){
             Alert dlg = new Alert(Alert.AlertType.INFORMATION,"");
             dlg.initModality(Modality.WINDOW_MODAL);
@@ -342,16 +385,21 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
             //dlg.getDialogPane().setContentText("Setting registered to: \"No\"");
             dlg.show();
         } else {
+            //ID found, show user to which adapter given sensor ID belogs
             showInformation(
                     "Check sensor ID",
                     "ID was found in database",
                     "ID registered to adapter \"" + adapterId + "\"");
         }
     }
-
-
+    /**
+     * Creates new {@link com.iha.emulator.control.SensorController} with {@link com.iha.emulator.models.Sensor} model
+     * and adds it to adapter's sensors list. Also adds sensor panel given container and closes dialog afterwards.
+     */
     public void add() {
+        //all sensor and value information set
         if(getSensorInfoSet() && getValueInfoSet() && values.size() > 0){
+            //check if ID is not taken, in context of emulator
             if(Utilities.isSensorIdTaken(adapterController,view.getSensorIdLbl().getText())){
                 showWarning("Sensor information","This sensor ID is already taken"," Please choose another ID");
                 return;
@@ -359,11 +407,11 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
             logger.debug("All info OK -> creating sensor");
             try{
                 if(sensorContainer != null && adapterController != null){
-                    //TODO delete logger warn info
-                    logger.warn("Values and types: ");
+                    logger.trace("Values and types: ");
                     for(Value value : values.get()){
-                        logger.warn("   name: "+value.getName() + " -> type: " + value.getValueType().getType());
+                        logger.trace("   name: "+value.getName() + " -> type: " + value.getValueType().getType());
                     }
+                    //create sensor
                     SensorController newSensor = adapterController.createSensor(
                             sensorContainer, // sensor panel container
                             Utilities.toRGBCode(view.getSensorColorPicker().getValue()), //sensor panel header color
@@ -380,10 +428,10 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
                     adapterController.setSaved(false);
                     logger.debug("Sensor \"" + newSensor.getModel().getId() + "\" created successfully");
                     //newSensor.getValues().addAll(values.get());
-
                 }else{
                     Utilities.showException(logger,"Cannot create new sensor, missing container or controller",null,true,null);
                 }
+                //close when all done
                 window.hide();
             }catch (LoadException e){
                 Utilities.showException(logger,"Cannot create new sensor",e,false,null);
@@ -392,16 +440,24 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
             showMissingInfoWarning(false);
         }
     }
-
+    /**
+     * Closes dialog
+     */
     public void cancel() {
         window.hide();
     }
 
+    /**
+     * Shows a {@link javafx.scene.control.ChoiceDialog} where user chooses type of value, which is added to tree
+     * of sensor's values
+     */
     public void addValue(){
+        //show choice dialog
         ChoiceDialog<Value.Type> dlg = new ChoiceDialog<>(Type.SENSOR_TEMPERATURE, Type.values());
         dlg.setTitle("Choose");
         dlg.getDialogPane().setContentText("Choose value type");
         dlg.show();
+        //add chosen value to tree
         dlg.resultProperty().addListener(new ChangeListener<Value.Type>() {
             @Override
             public void changed(ObservableValue<? extends Value.Type> observable, Type oldValue, Type newValue) {
@@ -410,46 +466,70 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
         });
     }
 
+    /**
+     * Delete currently selected value from tree
+     */
     public void deleteValue(){
         logger.trace("Deleting values");
+        //get selected value
         TreeItem item = (TreeItem) view.getValuesTree().getSelectionModel().getSelectedItem();
+        //remove it
         if(item != null){
             values.remove(item.getValue());
             view.getValuesTree().getRoot().getChildren().remove(item);
         }
+        //if there are more values, select first
         if(values.size() > 0){
             view.getValuesTree().getSelectionModel().select(0);
         }
+        //refresh tree
         updateTree();
         logger.trace("Values after");
         for(Value v : values){
             logger.trace(" Value -> " + v.getName());
         }
     }
-
+    /**
+     * Adds value given by it's type to values tree.
+     * @param type type of value to be added to tree
+     */
     @SuppressWarnings("unchecked")
     protected void addValueToTree(Type type) {
         logger.debug("Chosen value: " + type.getName() + "-> type: " + type.getType());
+        //build new value based on given type
         Value newValue = ValueFactory.buildValue(type);
+        //create new tree item
         TreeItem newItem = new TreeItem<>(newValue);
+        //add to tree
         view.getValuesTree().getRoot().getChildren().add(newItem);
+        //select new value
         view.getValuesTree().getSelectionModel().select(newItem);
+        //add new value to list
         values.add(newValue);
     }
-
+    /**
+     * Adds given value to values tree.
+     * @param newValue value to be added to tree
+     */
     protected void addValueToTree(Value newValue) {
         logger.debug("Adding new value to tree: " + newValue.getName());
+        //create new tree item
         TreeItem newItem = new TreeItem<>(newValue);
+        //add to tree
         view.getValuesTree().getRoot().getChildren().add(newItem);
+        //select new value
         view.getValuesTree().getSelectionModel().select(newItem);
         values.add(newValue);
     }
-
+    /**
+     * Clears value information container and adds information about given value to it.
+     * @param value value to be shown in value information container
+     */
     protected void prepareValueInfoContainer(Value value){
         logger.trace("Preparing value information container for new value");
+        //clear all value fields
         clearValueInformation();
-        ValidationSupport valueValidator = new ValidationSupport();
-        //show needed radio buttons
+        //show generator choices
         if(value.getValueType().getGenerators() != null){
             for(Generator generator: value.getValueType().getGenerators()){
                 switch (generator){
@@ -476,9 +556,11 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
             }
             view.getValueYesGenerateValueRadBtn().setDisable(false);
         }else {
+            //if there are no generator choices, disable generating of value
             view.getValueYesGenerateValueRadBtn().setDisable(true);
         }
         try{
+            //fill generator fields with information about currently chosen generator
             Generator generator =((HasGenerator)value).getGeneratorType();
             if(generator != null){
                 logger.trace("Setting generator");
@@ -512,6 +594,7 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
         }catch (Exception e){
             logger.trace("Doesn't have generator",e);
         }
+        //fill value fields
         view.getValueTypeTextField().setText(value.getValueType().getName());
         view.getValueNameTextField().setText(value.getName());
         //if value is type boolean, show checkbox, else textfield
@@ -544,7 +627,7 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
             view.getBoilerStatusComboBox().setVisible(false);
             view.getValueTextField().setText(String.valueOf(value.getValue()));
         }
-        //TODO fix forcefull history storage disabling
+        //fill the rest of fields with information about value
         view.getValueYesStoreHistoryRadBtn().setSelected(false); //value.isStoreHistory()
         view.getValueNoStoreHistoryRadBtn().setSelected(true); //!value.isStoreHistory()
         view.getValueYesGenerateValueRadBtn().setSelected(value.isGenerateValue());
@@ -555,12 +638,16 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
         });
         setValueInfoSet(true);
     }
-
+    /**
+     * Clears checkbox for values from enum
+     */
     private void clearStatusComboBox(){
         view.getBoilerStatusComboBox().getSelectionModel().clearSelection();
         view.getBoilerStatusComboBox().getItems().clear();
     }
-
+    /**
+     * Clear all field in value information container
+     */
     private void clearValueInformation(){
         //clear generator combo box
         view.getGeneratorTypeComboBox().getSelectionModel().clearSelection();
@@ -579,7 +666,9 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
         view.getMaxLinearTextField().clear();
         view.getStepLinearTextField().clear();
     }
-
+    /**
+     * Checks if any information about value is missing, if yes, notifies user.
+     */
     private void validateSaveValue(){
         valueValidationMessage = "";
         if(view.getValueNameTextField().getText().equals(""))
@@ -611,16 +700,21 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
             showWarning("Value information","Please fill all necessary information",valueValidationMessage);
         }
     }
-
+    /**
+     * Save information about value from value information container fields to currently chosen value.
+     */
     private void saveValue(){
         logger.trace("Saving information to value");
         Value value = (Value) ((TreeItem)view.getValuesTree().getSelectionModel().getSelectedItem()).getValue();
         try{
             if(view.getValueTextField().isVisible()){
+                //save value from textfield
                 value.setValue(value.fromStringToValueType(view.getValueTextField().getText()));
             }else if(view.getValueComboBox().isVisible()){
+                //save value from combo box
                 value.setValue(value.fromStringToValueType(view.getValueComboBox().getSelectionModel().getSelectedItem().equals("ON") ? "true" : "false"));
             }else if(view.getBoilerStatusComboBox().isVisible()){
+                //save value from enum
                 value.setValue(((Status) view.getBoilerStatusComboBox().getSelectionModel().getSelectedItem()).getCode());
             }
         }catch (NumberFormatException e){
@@ -628,6 +722,7 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
             return;
         }
         try{
+            //save information about chosen generator
             if(view.getValueYesGenerateValueRadBtn().isSelected() && view.getGeneratorTypeComboBox().getSelectionModel().getSelectedItem().equals(Generator.NORMAL_DISTRIBUTION)){
                 logger.trace("Saving NORMAL generator");
                 ((HasNormalDistribution)value).setAvg(Double.valueOf(view.getAvgNormalTextField().getText()));
@@ -650,6 +745,7 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
             showWarning("Value information","Cannot parse distribution values.",null);
             return;
         }
+        //set the rest of value's information
         value.setName(view.getValueNameTextField().getText());
         value.setStoreHistory(view.getValueYesStoreHistoryRadBtn().isSelected());
         value.setGenerateValue(view.getValueYesGenerateValueRadBtn().isSelected());
@@ -668,7 +764,10 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
         setValueInfoSet(true);
         logger.trace("OK");
     }
-
+    /**
+     * Add listeners for changes on value information container field, so user have to confirm changes before selecting
+     * next value or changing sensor.
+     */
     private void listenToValueChanges(){
         logger.trace("Adding value information change listeners");
         ChangeListener<Boolean> radBtnChangeListener = (observable, oldValue, newValue) ->
@@ -719,7 +818,12 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
             }
         });
     }
-
+    /**
+     * Shows warning dialog with given title and message
+     * @param title dialog title
+     * @param headerMessage dialog header message
+     * @param message warning message
+     */
     private void showWarning(String title,String headerMessage,String message){
         logger.trace("Showing warning");
         Alert dlg = new Alert(Alert.AlertType.WARNING, "");
@@ -731,6 +835,12 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
         dlg.show();
     }
 
+    /**
+     * Shows information dialog with given message.
+     * @param title dialog title
+     * @param headerMessage dialog header message
+     * @param message information message
+     */
     private void showInformation(String title,String headerMessage,String message){
         logger.trace("Showing information");
         Alert dlg = new Alert(Alert.AlertType.INFORMATION, "");
@@ -741,7 +851,11 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
         dlg.getDialogPane().setHeaderText(headerMessage);
         dlg.show();
     }
-
+    /**
+     * Show dialog with messages about missing information from sensor and values. If parameter is set to <code>true</code>,
+     * only message about missing value information is shown.
+     * @param valueInfoOnly <code>true</code> only value messages shown, <code>false</code> all messages shown
+     */
     private void showMissingInfoWarning(boolean valueInfoOnly){
         logger.trace("Adapter info not filled. Cannot \"Finish\" dialog");
         String message = null;
@@ -760,7 +874,9 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
         if(message == null) message = "";
         showWarning("Sensor information","Please fill all necessary information",message + valueValidationMessage);
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Node loadView() throws IOException {
         logger.trace("Loading AddNewSensorView from: " + FXML_PATH);
@@ -784,7 +900,9 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
             if (fxmlStream != null) fxmlStream.close();
         }
     }
-
+    /**
+     * Initializes dialog. Fills components with data and sets validation options and change listeners.
+     */
     @SuppressWarnings("unchecked")
     private void initialize(){
         //populate sensor icon combo box
@@ -886,61 +1004,56 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
             }
         });
     }
-
+    /**
+     * Force tree to refresh it's items
+     */
     private void updateTree(){
         TreeItem newItem = new TreeItem();
         view.getValuesTree().getRoot().getChildren().add(newItem);
         view.getValuesTree().getRoot().getChildren().remove(newItem);
     }
 
-    private ObservableList<SensorIcon> getSensorIcons(){
-        return FXCollections.observableArrayList(SensorIcon.values());
-    }
-
-    public boolean getSensorInfoSet() {
-        return sensorInfoSet.get();
-    }
-
-    public BooleanProperty sensorInfoSetProperty() {
-        return sensorInfoSet;
-    }
-
-    public void setSensorInfoSet(boolean sensorInfoSet) {
-        this.sensorInfoSet.set(sensorInfoSet);
-    }
-
-    public boolean getValueInfoSet() {
-        return valueInfoSet.get();
-    }
-
-    public BooleanProperty valueInfoSetProperty() {
-        return valueInfoSet;
-    }
-
-    public void setValueInfoSet(boolean valueInfoSet) {
-        this.valueInfoSet.set(valueInfoSet);
-    }
-
+    /**
+     * {@inheritDoc}
+     *
+     * Empty
+     */
     @Override
     public void addModel(Object model) {
 
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Empty
+     * @return null
+     */
     @Override
     public Object getModel() {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Node getView() {
         return view.getView();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Empty
+     */
     @Override
     public void clear() {
 
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("unchecked")
     @Override
     public void bind() {
@@ -1111,6 +1224,59 @@ public class AddNewSensorDialogPresenter implements Presenter,PanelPresenter{
         listenToValueChanges();
     }
 
+    /**
+     * Gets list of implemented sensor icons
+     * @return list of implemented sensor icons
+     */
+    private ObservableList<SensorIcon> getSensorIcons(){
+        return FXCollections.observableArrayList(SensorIcon.values());
+    }
+    /**
+     * Gets if all needed sensor information is set
+     * @return <code>true</code> all set, <code>false</code> otherwise
+     */
+    public boolean getSensorInfoSet() {
+        return sensorInfoSet.get();
+    }
+    /**
+     * All needed sensor information is set property
+     * @return all needed sensor information is set property
+     */
+    public BooleanProperty sensorInfoSetProperty() {
+        return sensorInfoSet;
+    }
+    /**
+     * Sets if all needed sensor information is set
+     * @param sensorInfoSet <code>true</code> all set, <code>false</code> otherwise
+     */
+    public void setSensorInfoSet(boolean sensorInfoSet) {
+        this.sensorInfoSet.set(sensorInfoSet);
+    }
+    /**
+     * Gets if all needed value information is set
+     * @return <code>true</code> all set, <code>false</code> otherwise
+     */
+    public boolean getValueInfoSet() {
+        return valueInfoSet.get();
+    }
+    /**
+     * All needed value information is set property
+     * @return all needed server information is set property
+     */
+    public BooleanProperty valueInfoSetProperty() {
+        return valueInfoSet;
+    }
+    /**
+     * Sets if all needed value information is set
+     * @param valueInfoSet <code>true</code> all set, <code>false</code> otherwise
+     */
+    public void setValueInfoSet(boolean valueInfoSet) {
+        this.valueInfoSet.set(valueInfoSet);
+    }
+    /**
+     * Adds default colors from {@link #DEFAULT_COLORS} to color picker
+     * @param picker color picker component
+     */
     private void addCustomColorsToColorPicker(ColorPicker picker){
         // clear default picker colors
         picker.getCustomColors().clear();

@@ -1,9 +1,9 @@
 /**
 * @file algorithm.cpp
 *
-* @Implementace metod pro tvorbu algoritmù.
+* Implementace metod pro tvorbu aplikacniho modulu.
 *
-* @author xrasov01
+* @author Martin Rasovsky (xrasov01@stud.fit.vutbr.cz)
 * @version 1.0
 */
 #include "algorithm.h"
@@ -14,9 +14,12 @@ using namespace soci;
 
 #define FW_PORT "7084"
 
-// Konstruktor Algoritmu, bude pøedán do algoritmu pod názvem instance alg
+/** Konstruktor tridy Algorithm.
+*
+*/
 Algorithm::Algorithm(std::string init_userID, std::string init_algID, std::string init_adapterID,
-	std::string init_offset, multimap<unsigned int, map<string, string>> init_values, std::vector<std::string> init_parameters, vector<tRidValues *> init_Rids){
+	std::string init_offset, multimap<unsigned int, map<string, string>> init_values, 
+	std::vector<std::string> init_parameters, vector<tRidValues *> init_Rids, std::string init_nameOfDB){
 
 	this->userID = init_userID;
 	this->algID = init_algID;
@@ -25,6 +28,7 @@ Algorithm::Algorithm(std::string init_userID, std::string init_algID, std::strin
 	this->values = init_values; 
 	this->parameters = init_parameters;
 	this->Rids = init_Rids;
+	this->nameOfDB = init_nameOfDB;
 	try
 	{
 		this->Log = new Loger();
@@ -36,18 +40,15 @@ Algorithm::Algorithm(std::string init_userID, std::string init_algID, std::strin
 		exit(EXIT_FAILURE);
 	}
 	//Nastaveni kontejneru pro DB
-	/*
-	this->cont = DBConnectionsContainer::GetConnectionContainer(Log, "home5", 1);
+	this->cont = DBConnectionsContainer::GetConnectionContainer(Log, this->nameOfDB, 1);
 	this->Log->SetLogger(7, 5, 100, "algorithm_log",".", "ALGORITHM");
 	session *Conn = NULL;
-	while (Conn == NULL)
+	Conn = cont->GetConnection();
+	if (Conn == NULL)
 	{
-		Conn = cont->GetConnection();
-		if (Conn == NULL)
-		{
-			this->Log->WriteMessage(INFO, "ALL CONNECTIONS ARE USED!");
-		}
+		cout << "Unable to get Database connection!" << endl;
 	}
+
 	try
 	{
 		this->database = new DBFWHandler(Conn, Log);
@@ -56,15 +57,38 @@ Algorithm::Algorithm(std::string init_userID, std::string init_algID, std::strin
 	{
 		cout << "Unable to create memory space for DBHandler!!!" << endl;
 	}
-	*/
-
 }
 
+/** Destruktor tridy Algorithm.
+*
+*/
 Algorithm::~Algorithm(){
-	
+	this->cont->ReturnConnection(this->database->GetConnectionSession());
+	delete(this->cont);
+	delete(Log);
+	//Clean memory of vector toNotify
+	for (auto oneNotif = this->toNotify.begin(); oneNotif != this->toNotify.end(); ++oneNotif){
+		delete(*oneNotif);
+	}
+	//Clean memory of vector toToggleActor
+	for (auto oneToggle = this->toToggleActor.begin(); oneToggle != this->toToggleActor.end(); ++oneToggle){
+		delete(*oneToggle);
+	}
+	//Clean memory of vector Rids
+	for (auto oneRid = this->Rids.begin(); oneRid != this->Rids.end(); ++oneRid){
+		delete(*oneRid);
+	}
 }
 
-// Metoda pøidávající notifikaci uživateli algoritmu
+/** Metoda umoznujici zaslani notifikace uzivateli, pro ktereho byl aplikacni modul spusten. Jakmile je metoda zavolana, nelze vratit operaci zpet (je potreba na to predem myslet).
+*
+* @param type			Typ notifikacni zpravy (pro budouci pouziti).
+* @param text			Text k zaslani uzivateli.
+* @param senzorId		Specifikace pro ktery senzor je notifikacni zprava navazana.
+* @param typeOfSenzor	Specifikace pro jaky typ senzoru je notifikacni zprava navazana.
+*
+* @return boolean o vysledku oprerace
+*/
 bool Algorithm::AddNotify(unsigned short int type, std::string text, std::string senzorId, std::string typeOfSenzor){
 	tnotify * newNotification;
 	try
@@ -86,7 +110,13 @@ bool Algorithm::AddNotify(unsigned short int type, std::string text, std::string
 	return true;
 }
 
-// Metoda pøidávající notifikaci uživateli algoritmu
+/** Metoda menici stav aktoru dle jeho id a typu. Tyto informace jsou predany uzivateli v ramci parametru (argument -p) a values (argument -v).
+*
+* @param id			Jedinecny identifikator zarizeni.
+* @param type		Typ zarizeni dle tabulky uvedene na strankach orijektu inteligentni domacnosti.
+*
+* @return Boolean o vysledku oprerace.
+*/
 bool Algorithm::ChangeActor(std::string id, std::string type){
 	
 	ttoggle * newToggle;
@@ -106,14 +136,11 @@ bool Algorithm::ChangeActor(std::string id, std::string type){
 
 	return true;
 }
-/*
-bool Algorithm::AddDataToDB(tvalue *AddValue, unsigned short int offsetInDB){
 
-	return true;
-}
+/** Funkce provede spojeni s modularnim prostredim, odesle zpravu. (Nasledne by se mela radne uvolnit pamet pred ukoncenim celeho aplikacniho modulu.) 
+*
+* @return Boolean o vysledku operace.
 */
-
-//Funkce provede spojení se serverem Frameworku a odešle zprávu.
 bool Algorithm::SendAndExit(){
 	
 	string ParsedMessage = this->CreateMessage();
@@ -140,21 +167,21 @@ bool Algorithm::SendAndExit(){
 		return false;
 	}
 
-	cout << ParsedMessage << endl;
-
 	// Odeslání dat
 	if ((size = send(mySocket, ParsedMessage.c_str(), ParsedMessage.size() + 1, 0)) == -1)
 	{
 		cerr << "Algorithm failure: Problem with sending message!" << endl;
 		return false;
 	}
-	cout << "Algorithm info: Message send." << size << endl;
-
 	close(mySocket);
-	//this->cont->ReturnConnection(this->database->GetConnectionSession());
+	
 	return true;
 }
 
+/** Vytvori zpravu k odeslani na modularni prostredi pomoci externi knihovny soci.
+*
+* @return Vytvorena zprava k odeslani na modularni prostredi.
+*/
 std::string Algorithm::CreateMessage(){
 
 	xml_document *resp = new xml_document();
@@ -185,10 +212,12 @@ std::string Algorithm::CreateMessage(){
 		notifNode.append_attribute("type");
 		notifNode.append_attribute("text");
 		notifNode.append_attribute("senzorId");
+		notifNode.append_attribute("typeOfSenzor");
 		tnotify * notiftmp = *oneNotif;
 		notifNode.attribute("type") = to_string(notiftmp->notifyType).c_str();
 		notifNode.attribute("text") = notiftmp->notifyText.c_str();
 		notifNode.attribute("senzorId") = notiftmp->senzorId.c_str();
+		notifNode.attribute("typeOfSenzor") = notiftmp->typeOfSenzor.c_str();
 	}
 
 	xml_node toggleActors = algorithm_message.append_child("tactors");
@@ -217,34 +246,9 @@ std::string Algorithm::CreateMessage(){
 	return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + tmp;
 
 }
-/*
----------------------------------------------------------------------
-Do algoritmu se musí pøedat pøes parametry pøík. øádku násl. data:
----------------------------------------------------------------------
-const long long int userID;					//ID uživatele algoritmu
-const long long int algID;					//ID algoritmu
-const long long int adapterID;				//ID adaptéru
-const unsigned short int offset;			//Offset algoritmu uživatele na senzoru
-const tAlgValues *values;					//Pøedané hodnoty do algoritmu
-const vector <std::String> parameters;
-
-typedef struct AlgValues
-{
-unsigned short int values_count;
-tvalue* values;								//Se musí vytvoøit pole hodnot tvalue
-unsigned int* sensor_ids;					//Se musí vytvoøit na stejných indexech pole hodnot s ID senzory
-} tAlgValues;
-
-argc == 7 
-
-argv[1] ... userID
-argv[2] ... algID
-argv[3] ... adapterID
-argv[4] ... offset
-argv[5] ... values
-argv[6] ... parameters
-
-
+/** Staticka metoda zpracujici parametry prikazoveho radku a vytvarejici objekt tridy Algorithm.
+*
+* @return Algorithm * Ukazatel na vytvoreny objekt tridy Algorithm. 
 */
 Algorithm * Algorithm::getCmdLineArgsAndCreateAlgorithm(int argc, char *argv[]){
 
@@ -254,10 +258,11 @@ Algorithm * Algorithm::getCmdLineArgsAndCreateAlgorithm(int argc, char *argv[]){
 	string UserAlgIdString = "";
 	string valuesString = "";
 	string parametersString = "";
+	string nameOfDB = "";
 	int opt;
-	bool u, a, d, o, v, p;
-	u = a = d = o = v = p = false;
-	while ((opt = getopt(argc, argv, "hu:a:d:o:v:p:")) != EOF)
+	bool u, a, d, o, v, p, e;
+	u = a = d = o = v = p = e = false;
+	while ((opt = getopt(argc, argv, "hu:a:d:o:v:p:e:")) != EOF)
 		switch (opt)
 	{
 		case 'h':
@@ -288,6 +293,10 @@ Algorithm * Algorithm::getCmdLineArgsAndCreateAlgorithm(int argc, char *argv[]){
 			parametersString = optarg;
 			p = true;
 			break;
+		case 'e': // name of database to use
+			nameOfDB = optarg;
+			e = true;
+			break;
 		default:
 			cerr << "Algorithm failure: Wrong command line arguments!\n";
 			return nullptr;
@@ -302,17 +311,18 @@ Algorithm * Algorithm::getCmdLineArgsAndCreateAlgorithm(int argc, char *argv[]){
 	vector<string> params;
 	vector<tRidValues *> Rids;
 
-	//TODO Parsování vstupních øetìzcù ve valuesString a parametersString, pokud je to potøeba
 	if (v){
 		values = Algorithm::parseValues(valuesString, &Rids);
 	}
 	if (p){
 		params = Algorithm::parseParams(parametersString);
 	}
-	return new Algorithm(userIDString, algIDString, adapterIDString, UserAlgIdString, values, params, Rids);
+	return new Algorithm(userIDString, algIDString, adapterIDString, UserAlgIdString, values, params, Rids, nameOfDB);
 }
 
-//Metoda, která vezme hodnotu parametru -v pøík. øádky a zparsuje jej
+/** Metoda, ktera vezme hodnotu parametru -v prikazove radky a zparsuje jej.
+*
+*/
 multimap<unsigned int, map<string, string>> Algorithm::parseValues(std::string values, vector<tRidValues *> *Rids){
 	vector<string> senzorValues = Algorithm::explode(values, '$');
 
@@ -342,13 +352,13 @@ multimap<unsigned int, map<string, string>> Algorithm::parseValues(std::string v
 			newRidValue->type = newtypeRid;
 			Rids->push_back(newRidValue);
 		}
-
-
 	}
 	return valuesTmp;
 }
 
-//Metoda, která vezme hodnotu parametru -p pøík. øádky a zparsuje jej
+/** Metoda, ktera vezme hodnotu parametru -p prikazove radky a zparsuje jej.
+*
+*/
 vector<string> Algorithm::parseParams(std::string paramsInput){
 	
 	vector<string> params = Algorithm::explode(paramsInput, '#');
@@ -359,14 +369,9 @@ vector<string> Algorithm::explode(string str, char ch) {
 	string next;
 	vector<string> result;
 	bool backslash = false;
-
-	// For each character in the string
 	for (string::const_iterator it = str.begin(); it != str.end(); it++) {
-		// If we've hit the terminal character
 		if (*it == ch && backslash == false) {
-			// If we have some characters accumulated
 			if (!next.empty()) {
-				// Add them to the result vector
 				result.push_back(next);
 				next.clear();
 			}
@@ -377,7 +382,6 @@ vector<string> Algorithm::explode(string str, char ch) {
 			backslash = true;
 		}
 		else {
-			// Accumulate the next character into the sequence
 			backslash = false;
 			next += *it;
 		}
@@ -387,19 +391,32 @@ vector<string> Algorithm::explode(string str, char ch) {
 	return result;
 }
 
+/** Metoda, ktera vrati atribut values.
+*
+*/
 std::multimap<unsigned int, std::map<std::string, std::string>> Algorithm::getValues() {
 	return this->values;
 }
 
+/** Metoda, ktera vrati atribut parameters.
+*
+*/
 std::vector<std::string> Algorithm::getParameters(){
 	return this->parameters;
 }
 
+/** Metoda, ktera vrati atribut Rids.
+*
+*/
 std::vector<tRidValues *> Algorithm::getRids(){
 	return this->Rids;
 }
 
-//Nastavi podminku dle zadaneho retezce
+/** Metoda, ktera nastavi podminku dle zadaneho retezce.
+* @param cond podminka v retezci
+*
+* @return podminka dle enumu.
+*/
 int Algorithm::SetCondition(std::string cond){
 	tcondition retVal;
 

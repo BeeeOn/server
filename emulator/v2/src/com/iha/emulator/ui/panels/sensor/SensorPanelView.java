@@ -16,15 +16,19 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Created by Shu on 28.11.2014.
+ * Class providing GUI components for "Sensor panel". Part View of MVP design pattern.
+ * Contains methods invoked on user interaction with user interface. These methods call appropriate presenter method
+ * to process user interaction.
+ *
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
 public class SensorPanelView implements Initializable,SensorPanelPresenter.Display {
-
+    /** Log4j2 logger field */
     private static final Logger logger = LogManager.getLogger(SensorPanelView.class);
+    /** presenter */
     private SensorPanelPresenter presenter;
-
+    /** GUI components */
     @FXML private Node view;
-
     @FXML private Label nameLbl;
     @FXML private Label batteryLbl;
     @FXML private Label signalLbl;
@@ -33,7 +37,6 @@ public class SensorPanelView implements Initializable,SensorPanelPresenter.Displ
     @FXML private Label idLbl;
     @FXML private Button settingsBtn;
     @FXML private Button connectionBtn;
-
     @FXML private TableView valueTable;
 
     @FXML

@@ -1,7 +1,7 @@
 /**
 * @file databaseConnectionContainer.cpp
 *
-* @Implementace kontejneru pro praci s databazi pomoci knihovny soci 
+* Implementace kontejneru pro praci s databazi pomoci knihovny soci 
 *
 */
 
@@ -12,6 +12,7 @@ using namespace soci;
 using namespace std;
 
 DBConnectionsContainer *DBConnectionsContainer::instance = NULL;
+
 /**
 * Konstruktor kontejneru pro práci s databazi. Je vyuzit pouze interne
 *
@@ -77,7 +78,7 @@ void DBConnectionsContainer::ReturnConnection(session *conn)
 }
 
 /**
-* Vypíše poèet volných spojení v kontejneru
+* Vypise poèet volných spojení v kontejneru.
 *
 */
 int DBConnectionsContainer::Limit()
@@ -88,13 +89,13 @@ int DBConnectionsContainer::Limit()
 }
 
 /**
-* Vyda spojeni z kontejneru, se kterym je pak mozne pracovat
+* Vyda spojeni z kontejneru, se kterym je pak mozne pracovat.
 *
 * @return session Session je tedy spojeni s databazi, se kterym je mozno pracovat. 
 */
 session *DBConnectionsContainer::GetConnection()
 {
-	this->_log->WriteMessage(TRACE,"Entering  DBConnectionsContainer::GetConnection");
+	this->_log->WriteMessage(TRACE,"Entering DBConnectionsContainer::GetConnection");
 	session *retConn = NULL;
 	this->semaphore.lock();
 	if (this->freeCount>0)
@@ -105,7 +106,7 @@ session *DBConnectionsContainer::GetConnection()
 		this->_log->WriteMessage(INFO,"Free connections : " + std::to_string(this->freeCount));
 	}
 	this->semaphore.unlock();
-	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetConnection");
+	this->_log->WriteMessage(TRACE,"Exiting DBConnectionsContainer::GetConnection");
 	return retConn;
 }
 

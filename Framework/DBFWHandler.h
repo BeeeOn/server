@@ -1,8 +1,10 @@
-/*
-* DBHandler.h
+/**
+* @file DBFWHandler.h
 *
-*  Created on: Oct 26, 2014
-*      Author: tuso
+* Definice tridy DBFWHandler.
+*
+* @author Martin Rasovsky (xrasov01@stud.fit.vutbr.cz)
+* @version 1.0
 */
 
 #include <soci.h>
@@ -19,13 +21,16 @@
 #ifndef DBHANDLER_H_
 #define DBHANDLER_H_
 
+/** Trida, ktera implementuje databazove dotazy vyuzivajici externi knihovny soci.
+*
+*/
 class DBFWHandler
 {
 private:
-	const std::string _Name = "DBFWHandler";
-	soci::session *ses;					//Sezeni nad databazi
-	std::string _DBName;					
-	Loger *_log;
+	const std::string _Name = "DBFWHandler";	/** Nazev tridy pro lepsi pouziti. */
+	soci::session *ses;							/** Predane sezeni nad databazi. */
+	std::string _DBName;						/** Nazev databaze. */
+	Loger *_log;								/** Objekt pro pristup k logovacimu souboru. */
 public:
 	~DBFWHandler();
 	DBFWHandler(soci::session *ses_init, Loger *loger);
@@ -52,7 +57,7 @@ public:
 	std::string SelectStateByUsersAlgId(std::string UsersAlgId);
 	std::vector<std::string> SelectAllIdsOfUsersAlgorithmsByAdapterIdAndUserId(std::string adapterId, std::string userId);
 	bool InsertNotification(std::string text, std::string level, std::string timestamp, std::string userId, std::string messageId, std::string read, std::string name);
-	std::string GetHighestIdInNotificationsPerUser(std::string userId);
+	std::string GetHighestIdInNotification();
 	bool DeleteMobileDeviceByGcmId(std::string GCMId);
 	std::vector<std::string> SelectIdsAlgorithmsByAlgIdAndUserId(std::string userId, std::string algId);
 	bool InsertAlgList(std::string algorithm_id, std::string name, std::string type);

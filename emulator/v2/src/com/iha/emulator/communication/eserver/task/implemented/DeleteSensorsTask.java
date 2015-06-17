@@ -36,19 +36,19 @@ public class DeleteSensorsTask extends AbstractServerTask<Boolean> {
      */
     @Override
     public String buildMessage() {
-        getLogger().warn("DeleteSensorsTask -> building message");
+        getLogger().trace("DeleteSensorsTask -> building message");
         Document doc = createDocument();
-        getLogger().warn("DeleteSensorsTask -> document created");
+        getLogger().trace("DeleteSensorsTask -> document created");
         Element task = buildMessageRoot(doc, dbName)
                 .addElement("task")
                 .addAttribute("type", "deleteSensors");
-        getLogger().warn("DeleteSensorsTask -> task element created");
+        getLogger().trace("DeleteSensorsTask -> task element created");
         Element sensorsElement = task.addElement("sensors");
         for(Integer sensor : sensors){
             sensorsElement.addElement("sensor")
                     .addAttribute("id",String.valueOf(sensor));
         }
-        getLogger().warn("DELETE message: " + doc.asXML());
+        getLogger().trace("DELETE message: " + doc.asXML());
         return doc.asXML();
     }
 

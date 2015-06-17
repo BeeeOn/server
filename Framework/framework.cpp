@@ -1,7 +1,7 @@
 /**
 * @file framework.cpp
 *
-* @Implementace modulárního prostøedí pro algoritmy
+* Implementace modulárního prostøedí pro algoritmy
 *
 * @author xrasov01
 * @version 1.0
@@ -111,12 +111,12 @@ int FrameworkServer::AcceptConnection(){
 		}
 		catch (std::bad_alloc &e)
 		{
-			cerr << "Chyba alokace " << endl;
+			Log->WriteMessage(ERR, "Allocation error FrameworkServerHandle !");
 			close(newSocket);
 		}
 		catch (std::exception &e)
 		{
-			cerr << "Client won't be served unable to crate thread! " << endl;
+			Log->WriteMessage(ERR, "Client won't be served unable to crate thread!");
 			close(newSocket);
 		}
 	}
@@ -153,13 +153,14 @@ void FrameworkServerHandle::HandleClientConnection(){
 	}
 	//Ziskani spojení s DB
 	session *Conn = NULL;
-	while (Conn == NULL)
+
+	Conn = cont->GetConnection();
+	if (Conn == NULL)
 	{
-		Conn = cont->GetConnection();
-		if (Conn == NULL)
-		{
-			Log->WriteMessage(INFO, "ALL CONNECTIONS ARE USED!");
-		}
+		Log->WriteMessage(INFO, "ALL CONNECTIONS ARE USED! Exiting thread!");
+		connCount--;
+		sem_post(&connectionSem);
+		delete(this);
 	}
 	try
 	{
@@ -167,9 +168,9 @@ void FrameworkServerHandle::HandleClientConnection(){
 	}
 	catch (std::exception &e)
 	{
-		Log->WriteMessage(ERR, "Client won't be served unable to create DBHandler!");
+		Log->WriteMessage(ERR, "Client won't be served unable to create DBFWHandler!");
 		close(this->handledSocket);
-		Log->WriteMessage(TRACE, "Exiting " + this->_Name + "::HandleConnectionCover");
+		Log->WriteMessage(TRACE, "Exiting " + this->_Name + "::HandleClientConnection");
 		sem_post(&connectionSem);
 		connCount--;
 		delete (this);
@@ -232,6 +233,7 @@ void FrameworkServerHandle::HandleClientConnection(){
 				break; //TODO Solve different way... last two chars as "/>" and then break...
 			}
 			else if (isAdapterServerMessage){
+				Log->WriteMessage(TRACE, "Reading data from Adapter Server Reciever...");
 				if (DataSize == 0)
 				{
 					Log->WriteMessage(ERR, "Nothing to be read! DataSize==0");
@@ -247,6 +249,7 @@ void FrameworkServerHandle::HandleClientConnection(){
 				}
 			}
 			else if (isAlgorithmMessage){
+				Log->WriteMessage(TRACE, "Reading data from Algorithm...");
 				if (DataSize == 0)
 				{
 					Log->WriteMessage(ERR, "Nothing to be read! DataSize==0");
@@ -298,10 +301,9 @@ void FrameworkServerHandle::HandleClientConnection(){
 		Log->WriteMessage(ERR, "Message wrong format: " + acceptedMessageString);
 	}
 	cont->ReturnConnection(database->GetConnectionSession());
-	sem_post(&connectionSem);
 	connCount--;
+	sem_post(&connectionSem);
 	delete(this);
-	return;
 }
 
 
@@ -868,7 +870,9 @@ void sig_handler(int signo)
 		delete(AlgServer);
 		delete(cont);
 		sem_destroy(&connectionSem);
+		sem_destroy(&dbAccessSem);
 		delete(Log);
+		delete(FConfig);
 		exit(EXIT_SUCCESS);
 	}
 	if (signo == SIGINT){
@@ -877,13 +881,13 @@ void sig_handler(int signo)
 		//Ziskani spojení s DB
 		session *Conn = NULL;
 		DBFWHandler * database = NULL;
-		while (Conn == NULL)
+		sem_wait(&connectionSem);
+		connCount++;
+
+		Conn = cont->GetConnection();
+		if (Conn == NULL)
 		{
-			Conn = cont->GetConnection();
-			if (Conn == NULL)
-			{
-				Log->WriteMessage(INFO, "ALL CONNECTIONS ARE USED!");
-			}
+			Log->WriteMessage(INFO, "ALL CONNECTIONS ARE USED!");
 		}
 		try
 		{
@@ -895,6 +899,7 @@ void sig_handler(int signo)
 		}
 		FConfig->SetUpAlgorithmsInDatabase(database);
 		cont->ReturnConnection(database->GetConnectionSession());
+		sem_post(&connectionSem);
 		delete(database);
 	}
 }
@@ -1013,6 +1018,11 @@ int main()
 	delete(UIServer);
 	delete(AdaServer);
 	delete(AlgServer);
+	delete(cont);
+	sem_destroy(&connectionSem);
+	sem_destroy(&dbAccessSem);
+	delete(Log);
+	delete(FConfig);
 
 	return EXIT_SUCCESS;
 }

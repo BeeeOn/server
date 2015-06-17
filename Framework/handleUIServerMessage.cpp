@@ -1,7 +1,7 @@
 /**
 * @file uiServerHandle.cpp
 *
-* @Implementace Metod pro zpracovani zprav od UI serveru
+* Implementace Metod pro zpracovani zprav od UI serveru
 *
 * @author xrasov01
 * @version 1.0
@@ -40,7 +40,6 @@ void FrameworkServerHandle::HandleUIServerMessage(std::string data, Loger *Log, 
 
 	bool error = false;
 	string stringToSendAsAnswer = "";
-
 	if (state.compare("addalg") == 0){
 		//zpracování zprávy addalg
 		string adapterId = algMessage.attribute("aid").value();
@@ -75,7 +74,7 @@ void FrameworkServerHandle::HandleUIServerMessage(std::string data, Loger *Log, 
 						error = true;
 						break;
 					}
-					int devId = child.attribute("id").as_int();
+					unsigned int devId = child.attribute("id").as_uint();
 					int devType = child.attribute("type").as_int();
 					int devPos = child.attribute("pos").as_int();
 					devices[numberOfDevs].id = devId;
@@ -105,7 +104,7 @@ void FrameworkServerHandle::HandleUIServerMessage(std::string data, Loger *Log, 
 				}
 			}
 
-			if ( !(numberOfDevs > maxdevsToExpect || numberOfParams > maxparamsToExpect )){		
+			if (!(numberOfDevs > maxdevsToExpect || numberOfParams > maxparamsToExpect) && !error){
 				Log->WriteMessage(TRACE, "HandleClientConnection: UIServerMessage : preParsedParameters");
 				//Predzpracovat string parametru
 				string preParsedParameters = parseParametersToDB(params, numberOfParams);
@@ -205,7 +204,12 @@ void FrameworkServerHandle::HandleUIServerMessage(std::string data, Loger *Log, 
 			{
 				string name = algNode.name();
 				if (name.compare("dev") == 0){
-					int devId = child.attribute("id").as_int();
+					if (numberOfDevs == maxdevsToExpect){
+						Log->WriteMessage(ERR, "HandleClientConnection: UIServerMessage : Wrong number of devs in protocol");
+						error = true;
+						break;
+					}
+					unsigned int devId = child.attribute("id").as_int();
 					int devType = child.attribute("type").as_int();
 					int devPos = child.attribute("pos").as_int();
 					devices[numberOfDevs].id = devId;
@@ -222,6 +226,11 @@ void FrameworkServerHandle::HandleUIServerMessage(std::string data, Loger *Log, 
 			{
 				string name = algNode.name();
 				if (name.compare("par") == 0){
+					if (numberOfParams == maxparamsToExpect){
+						Log->WriteMessage(ERR, "HandleClientConnection: UIServerMessage : Wrong number of params in protocol");
+						error = true;
+						break;
+					}
 					int parPos = algNode.attribute("pos").as_int();
 					string parText = algNode.child_value();
 					params[numberOfParams].pos = parPos;
@@ -230,7 +239,7 @@ void FrameworkServerHandle::HandleUIServerMessage(std::string data, Loger *Log, 
 				}
 			}
 
-			if (!(numberOfDevs > maxdevsToExpect || numberOfParams > maxparamsToExpect)){
+			if (!(numberOfDevs > maxdevsToExpect || numberOfParams > maxparamsToExpect) && !error){
 				Log->WriteMessage(TRACE, "HandleClientConnection: UIServerMessage : preParsedParameters");
 				//Predzpracovat string parametru
 				string preParsedParameters = parseParametersToDB(params, numberOfParams);
@@ -332,6 +341,8 @@ void FrameworkServerHandle::HandleUIServerMessage(std::string data, Loger *Log, 
 					StringToChar(senzorValues),
 					StringToChar("-p"), // parameters given by User
 					StringToChar(parametersTmp),
+					StringToChar("-e"), // name of database
+					StringToChar(FConfig->dbName),
 					StringToChar("/"),
 					NULL
 				};

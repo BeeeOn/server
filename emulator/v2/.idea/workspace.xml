@@ -1,78 +1,212 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="ANALYZE_TEST_SOURCES" value="false" />
+  </component>
   <component name="ArtifactsWorkspaceSettings">
     <artifacts-to-build>
       <artifact name="GUI-emulator-v2" />
     </artifacts-to-build>
   </component>
+  <component name="BookmarkManager">
+    <bookmark url="file://$PROJECT_DIR$/src/com/iha/emulator/ui/panels/task/cell/SimulationTaskStateCellFactory.java" description="&#10;/**&#10; * Created by Shu on 26.2.2015.&#10; */" line="8" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="pridane zakladne ovladanie GUI;pridane GUI kniznice">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/iha/emulator/resources/lib/controlsfx-8.20.8.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/iha/emulator/resources/lib/log4j-api-2.1.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/iha/emulator/resources/lib/log4j-core-2.1.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/iha/emulator/resources/lib/openjfx-dialogs-1.0.2.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/Display.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/iha/emulator/utilities/MemoryChecker.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/Presenter.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/iha/emulator/utilities/Utilities.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/controlsfx_8_20_8.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/iha/emulator/resources/default_settings.properties" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/iha/emulator/resources/log4j2.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/log4j_api_2_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/log4j_core_2_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/openjfx_dialogs_1_0_2.xml" />
-      <change type="DELETED" beforePath="C:\Users\Filip\git\server\emulator\v1\out\test\SmartHomeEmulator\com\intellij\uiDesigner\core\AbstractLayout.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Filip\git\server\emulator\v1\out\test\SmartHomeEmulator\com\intellij\uiDesigner\core\DimensionInfo.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Filip\git\server\emulator\v1\out\test\SmartHomeEmulator\com\intellij\uiDesigner\core\GridConstraints.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Filip\git\server\emulator\v1\out\test\SmartHomeEmulator\com\intellij\uiDesigner\core\GridLayoutManager.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Filip\git\server\emulator\v1\out\test\SmartHomeEmulator\com\intellij\uiDesigner\core\HorizontalInfo.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Filip\git\server\emulator\v1\out\test\SmartHomeEmulator\com\intellij\uiDesigner\core\LayoutState.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Filip\git\server\emulator\v1\out\test\SmartHomeEmulator\com\intellij\uiDesigner\core\Spacer.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Filip\git\server\emulator\v1\out\test\SmartHomeEmulator\com\intellij\uiDesigner\core\SupportCode$TextWithMnemonic.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Filip\git\server\emulator\v1\out\test\SmartHomeEmulator\com\intellij\uiDesigner\core\SupportCode.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Filip\git\server\emulator\v1\out\test\SmartHomeEmulator\com\intellij\uiDesigner\core\Util.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Filip\git\server\emulator\v1\out\test\SmartHomeEmulator\com\intellij\uiDesigner\core\VerticalInfo.class" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Filip\git\server\emulator\v2\out\production\v2\com\iha\emulator\resources\images\multisensor.png" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Filip\git\server\emulator\v2\out\production\v2\com\iha\emulator\ui\simulations\detailed\DetailedSimulationCss.css" afterPath="" />
-      <change type="DELETED" beforePath="C:\Users\Filip\git\server\emulator\v2\out\production\v2\images\multisensor.png" afterPath="" />
-      <change type="MOVED" beforePath="C:\Users\Filip\git\server\emulator\v2\src\com\iha\emulator\resources\images\multisensor.png" afterPath="$PROJECT_DIR$/src/com/iha/emulator/resources/images/sensor_types/multisensor.png" />
-      <change type="MOVED" beforePath="C:\Users\Filip\git\server\emulator\v2\src\com\iha\emulator\ui\simulations\detailed\DetailedSimulationCss.css" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/detailed/DetailedSimulation.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../v1/out/production/SmartHomeEmulator/com/smarthome/emulator/simulations/DetailedSimulation.class" afterPath="$PROJECT_DIR$/../v1/out/production/SmartHomeEmulator/com/smarthome/emulator/simulations/DetailedSimulation.class" />
+      <change type="DELETED" beforePath="C:\Users\Filip\git\server\emulator\v2\src\com\iha\emulator\ui\panels\task\cell\SimulationTaskAdaptersCellFactory.java" afterPath="" />
+      <change type="DELETED" beforePath="C:\Users\Filip\git\server\emulator\v2\src\com\iha\emulator\utilities\WildcardHostnameVerifier.java" afterPath="" />
+      <change type="MOVED" beforePath="C:\Users\Filip\git\server\emulator\v2\resources\log4j2-prod.xml" afterPath="$PROJECT_DIR$/resources/log4j2.xml" />
+      <change type="MOVED" beforePath="C:\Users\Filip\git\server\emulator\v2\resources\log4j2.xml" afterPath="$PROJECT_DIR$/resources/log4j2-devel.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/models/value/AbstractValue.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/models/value/AbstractValue.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/adapter/AdapterButton$1.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/adapter/AdapterButton$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/adapter/AdapterButton.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/adapter/AdapterButton.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/control/AdapterController$1.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/control/AdapterController$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/control/AdapterController.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/control/AdapterController.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/adapter/details/AdapterDetailsPresenter$1.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/adapter/details/AdapterDetailsPresenter$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/adapter/details/AdapterDetailsPresenter$2.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/adapter/details/AdapterDetailsPresenter$2.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/adapter/details/AdapterDetailsPresenter.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/adapter/details/AdapterDetailsPresenter.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/adapter/details/AdapterDetailsView$1.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/adapter/details/AdapterDetailsView$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/adapter/details/AdapterDetailsView.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/adapter/details/AdapterDetailsView.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/dialogs/adapter/AddAdapterDialogPresenter$1$1.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/dialogs/adapter/AddAdapterDialogPresenter$1$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/dialogs/adapter/AddAdapterDialogPresenter$1.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/dialogs/adapter/AddAdapterDialogPresenter$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/dialogs/adapter/AddAdapterDialogPresenter$2.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/dialogs/adapter/AddAdapterDialogPresenter$2.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/dialogs/adapter/AddAdapterDialogPresenter.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/dialogs/adapter/AddAdapterDialogPresenter.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/dialogs/adapter/AddAdapterDialogView.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/dialogs/adapter/AddAdapterDialogView.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/simulations/detailed/DetailedSimulationPresenter$2.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/simulations/detailed/DetailedSimulationPresenter$2.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/simulations/detailed/DetailedSimulationPresenter$3.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/simulations/detailed/DetailedSimulationPresenter$3.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/simulations/detailed/DetailedSimulationPresenter$4.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/simulations/detailed/DetailedSimulationPresenter$4.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/simulations/detailed/DetailedSimulationPresenter$5.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/simulations/detailed/DetailedSimulationPresenter$5.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/simulations/detailed/DetailedSimulationPresenter$6.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/simulations/detailed/DetailedSimulationPresenter$6.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/simulations/detailed/DetailedSimulationPresenter$Display.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/simulations/detailed/DetailedSimulationPresenter$Display.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/simulations/detailed/DetailedSimulationPresenter.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/simulations/detailed/DetailedSimulationPresenter.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/simulations/detailed/DetailedSimulationView$AdapterButtonClickHandler.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/simulations/detailed/DetailedSimulationView$AdapterButtonClickHandler.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/simulations/detailed/DetailedSimulationView.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/simulations/detailed/DetailedSimulationView.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/models/value/implemented/HumiditySensorValue.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/models/value/implemented/HumiditySensorValue.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/Main$SIM.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/Main$SIM.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/Main.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/Main.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../v1/out/production/SmartHomeEmulator/com/smarthome/emulator/simulations/basis/Sensor.class" afterPath="$PROJECT_DIR$/../v1/out/production/SmartHomeEmulator/com/smarthome/emulator/simulations/basis/Sensor.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../v1/out/artifacts/SmartHomeEmulator_jar/SmartHomeEmulator.jar" afterPath="$PROJECT_DIR$/../v1/out/artifacts/SmartHomeEmulator_jar/SmartHomeEmulator.jar" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/models/value/implemented/OnOffActuatorValue.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/models/value/implemented/OnOffActuatorValue.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/sensor/SensorPanelPresenter$1.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/sensor/SensorPanelPresenter$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/sensor/SensorPanelPresenter$2.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/sensor/SensorPanelPresenter$2.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/sensor/SensorPanelPresenter$3.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/sensor/SensorPanelPresenter$3.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/sensor/SensorPanelPresenter$4.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/sensor/SensorPanelPresenter$4.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/sensor/SensorPanelPresenter$5.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/sensor/SensorPanelPresenter$5.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/sensor/SensorPanelPresenter$6.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/sensor/SensorPanelPresenter$6.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/sensor/SensorPanelPresenter.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/sensor/SensorPanelPresenter.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/sensor/SensorPanelView$1.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/sensor/SensorPanelView$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/sensor/SensorPanelView.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/sensor/SensorPanelView.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/sensor/SensorValueCellFactory$1.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/sensor/SensorValueCellFactory$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/sensor/SensorValueCellFactory$2.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/sensor/SensorValueCellFactory$2.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/sensor/SensorValueCellFactory$3.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/sensor/SensorValueCellFactory$3.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/sensor/SensorValueCellFactory.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/sensor/SensorValueCellFactory.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/sensor/SensorValueFactory.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/sensor/SensorValueFactory.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/server/details/ServerDetailsPresenter$1.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/server/details/ServerDetailsPresenter$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/server/details/ServerDetailsPresenter.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/server/details/ServerDetailsPresenter.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/server/details/ServerDetailsView$1.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/server/details/ServerDetailsView$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/server/details/ServerDetailsView.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/panels/server/details/ServerDetailsView.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/dialogs/adapter/ShowAdaptersDialogPresenter$1.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/dialogs/adapter/ShowAdaptersDialogPresenter$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/dialogs/adapter/ShowAdaptersDialogPresenter.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/dialogs/adapter/ShowAdaptersDialogPresenter.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/dialogs/adapter/ShowAdaptersDialogView.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/dialogs/adapter/ShowAdaptersDialogView.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/GUI_emulator_v2/SmartHomeEmulator.jar" afterPath="$PROJECT_DIR$/out/artifacts/GUI_emulator_v2/SmartHomeEmulator.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/resources/images/battery.png" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/resources/images/battery.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/images/battery.png" afterPath="$PROJECT_DIR$/out/production/v2/images/battery.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/resources/images/battery.png" afterPath="$PROJECT_DIR$/src/com/iha/emulator/resources/images/battery.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/resources/images/refresh.png" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/resources/images/refresh.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/images/refresh.png" afterPath="$PROJECT_DIR$/out/production/v2/images/refresh.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/resources/images/refresh.png" afterPath="$PROJECT_DIR$/src/com/iha/emulator/resources/images/refresh.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/resources/images/settings.png" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/resources/images/settings.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/images/settings.png" afterPath="$PROJECT_DIR$/out/production/v2/images/settings.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/resources/images/settings.png" afterPath="$PROJECT_DIR$/src/com/iha/emulator/resources/images/settings.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/resources/images/signal.png" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/resources/images/signal.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/images/signal.png" afterPath="$PROJECT_DIR$/out/production/v2/images/signal.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/resources/images/signal.png" afterPath="$PROJECT_DIR$/src/com/iha/emulator/resources/images/signal.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/models/value/implemented/TemperatureSensorValue.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/models/value/implemented/TemperatureSensorValue.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/utilities/Utilities.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/utilities/Utilities.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/models/value/ValueFactory$1.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/models/value/ValueFactory$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/models/value/ValueFactory.class" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/models/value/ValueFactory.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../emulator_server/src/com/iha/emulator/server/task/AbstractTask.java" afterPath="$PROJECT_DIR$/../emulator_server/src/com/iha/emulator/server/task/AbstractTask.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/models/value/AbstractValue.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/models/value/AbstractValue.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/adapter/AdapterButton.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/adapter/AdapterButton.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/control/AdapterController.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/control/AdapterController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/adapter/details/AdapterDetailsPresenter.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/adapter/details/AdapterDetailsPresenter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/adapter/details/AdapterDetailsView.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/adapter/details/AdapterDetailsView.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/utilities/logging/AdapterLogger.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/utilities/logging/AdapterLogger.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/adapter/AddAdapterDialogPresenter.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/adapter/AddAdapterDialogPresenter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/adapter/AddAdapterDialogView.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/adapter/AddAdapterDialogView.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/sensor/AddNewSensorDialog.fxml" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/sensor/AddNewSensorDialog.fxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/sensor/AddNewSensorDialogPresenter.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/sensor/AddNewSensorDialogPresenter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/sensor/AddNewSensorDialogView.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/sensor/AddNewSensorDialogView.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/task/AddNewTaskDialogPresenter.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/task/AddNewTaskDialogPresenter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/task/AddNewTaskDialogView.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/task/AddNewTaskDialogView.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/models/value/implemented/BoilerModeActuatorValue.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/models/value/implemented/BoilerModeActuatorValue.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/models/value/implemented/BoilerStatusSensorValue.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/models/value/implemented/BoilerStatusSensorValue.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/models/value/implemented/BoilerTypeActuatorValue.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/models/value/implemented/BoilerTypeActuatorValue.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/adapter/ChangeAdapterDetailsDialogPresenter.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/adapter/ChangeAdapterDetailsDialogPresenter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/adapter/ChangeAdapterDetailsDialogView.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/adapter/ChangeAdapterDetailsDialogView.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/server/ChangeServerDetailsDialogPresenter.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/server/ChangeServerDetailsDialogPresenter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/server/ChangeServerDetailsDialogView.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/server/ChangeServerDetailsDialogView.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../emulator_server/src/com/iha/emulator/server/task/implemented/CheckIdTask.java" afterPath="$PROJECT_DIR$/../emulator_server/src/com/iha/emulator/server/task/implemented/CheckIdTask.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../emulator_server/src/com/iha/emulator/server/task/implemented/CheckSensorIdTask.java" afterPath="$PROJECT_DIR$/../emulator_server/src/com/iha/emulator/server/task/implemented/CheckSensorIdTask.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/chooser/ChooserPresenter.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/chooser/ChooserPresenter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/chooser/ChooserView.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/chooser/ChooserView.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../emulator_server/src/com/iha/emulator/server/Database.java" afterPath="$PROJECT_DIR$/../emulator_server/src/com/iha/emulator/server/Database.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../emulator_server/src/com/iha/emulator/server/DatabaseInfo.java" afterPath="$PROJECT_DIR$/../emulator_server/src/com/iha/emulator/server/DatabaseInfo.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/chart/DateAxis.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/chart/DateAxis.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../emulator_server/src/com/iha/emulator/server/task/implemented/DeleteAdapterTask.java" afterPath="$PROJECT_DIR$/../emulator_server/src/com/iha/emulator/server/task/implemented/DeleteAdapterTask.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/adapter/DeleteAdaptersDialogPresenter.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/adapter/DeleteAdaptersDialogPresenter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/adapter/DeleteAdaptersDialogView.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/adapter/DeleteAdaptersDialogView.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/sensor/DeleteSensorsDialogPresenter.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/sensor/DeleteSensorsDialogPresenter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/sensor/DeleteSensorsDialogView.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/sensor/DeleteSensorsDialogView.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../emulator_server/src/com/iha/emulator/server/task/implemented/DeleteSensorsTask.java" afterPath="$PROJECT_DIR$/../emulator_server/src/com/iha/emulator/server/task/implemented/DeleteSensorsTask.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/communication/eserver/task/implemented/DeleteSensorsTask.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/communication/eserver/task/implemented/DeleteSensorsTask.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/task/DeleteTasksDialogPresenter.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/task/DeleteTasksDialogPresenter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/task/DeleteTasksDialogView.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/task/DeleteTasksDialogView.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/simulations/detailed/DetailedSimulation.fxml" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/ui/simulations/detailed/DetailedSimulation.fxml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/detailed/DetailedSimulation.fxml" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/detailed/DetailedSimulation.fxml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/detailed/DetailedSimulationPresenter.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/detailed/DetailedSimulationPresenter.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/detailed/DetailedSimulationView.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/detailed/DetailedSimulationView.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/models/value/implemented/EmissionsSensorValue.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/models/value/implemented/EmissionsSensorValue.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/models/value/implemented/EmptyValue.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/models/value/implemented/EmptyValue.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/utilities/handlers/ErrorEvent.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/utilities/handlers/ErrorEvent.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/utilities/handlers/ErrorHandler.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/utilities/handlers/ErrorHandler.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/utilities/handlers/ErrorListener.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/utilities/handlers/ErrorListener.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/artifacts/GUI_emulator_v2.xml" afterPath="$PROJECT_DIR$/.idea/artifacts/GUI_emulator_v2.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../emulator_server/src/com/iha/emulator/server/task/implemented/GetAdaptersTask.java" afterPath="$PROJECT_DIR$/../emulator_server/src/com/iha/emulator/server/task/implemented/GetAdaptersTask.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/models/value/HasBooleanRandom.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/models/value/HasBooleanRandom.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/models/value/HasGenerator.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/models/value/HasGenerator.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/models/value/HasLinearDistribution.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/models/value/HasLinearDistribution.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/models/value/HasNormalDistribution.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/models/value/HasNormalDistribution.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/models/value/implemented/HumiditySensorValue.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/models/value/implemented/HumiditySensorValue.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/models/value/implemented/LightSensorValue.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/models/value/implemented/LightSensorValue.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../emulator_server/src/com/iha/emulator/server/Main.java" afterPath="$PROJECT_DIR$/../emulator_server/src/com/iha/emulator/server/Main.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/Main.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/Main.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/utilities/MaxThreadTester.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/utilities/MaxThreadTester.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/utilities/watchers/MemoryChecker.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/utilities/watchers/MemoryChecker.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/utilities/logging/MessageTracker.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/utilities/logging/MessageTracker.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/models/value/implemented/NoiseSensorValue.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/models/value/implemented/NoiseSensorValue.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/models/value/implemented/OnOffActuatorValue.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/models/value/implemented/OnOffActuatorValue.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/models/value/implemented/OnOffSensorValue.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/models/value/implemented/OnOffSensorValue.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/models/value/implemented/OpenClosedSensorValue.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/models/value/implemented/OpenClosedSensorValue.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/PanelPresenter.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/PanelPresenter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/performance/PerformanceSimulationPresenter.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/performance/PerformanceSimulationPresenter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/performance/PerformanceSimulationView.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/performance/PerformanceSimulationView.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/Presenter.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/Presenter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/models/value/implemented/PressureSensorValue.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/models/value/implemented/PressureSensorValue.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/utilities/watchers/QueueWatcher.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/utilities/watchers/QueueWatcher.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../emulator_server/README.txt" afterPath="$PROJECT_DIR$/../emulator_server/README.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/utilities/watchers/Response.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/utilities/watchers/Response.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/chart/ResponseChart.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/chart/ResponseChart.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/utilities/watchers/ResponseTracker.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/utilities/watchers/ResponseTracker.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/control/SensorController.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/control/SensorController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/sensor/SensorDetailsDialogPresenter.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/sensor/SensorDetailsDialogPresenter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/sensor/SensorDetailsDialogView.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/sensor/SensorDetailsDialogView.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/resources/images/sensor_types/SensorIcon.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/resources/images/sensor_types/SensorIcon.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/resources/images/sensor_types/SensorIconFactory.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/resources/images/sensor_types/SensorIconFactory.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/sensor/SensorPanelPresenter.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/sensor/SensorPanelPresenter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/sensor/SensorPanelView.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/sensor/SensorPanelView.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/sensor/SensorValueCellFactory.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/sensor/SensorValueCellFactory.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/sensor/SensorValueFactory.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/sensor/SensorValueFactory.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../emulator_server/src/com/iha/emulator/server/Server.java" afterPath="$PROJECT_DIR$/../emulator_server/src/com/iha/emulator/server/Server.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/server/details/ServerDetailsPresenter.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/server/details/ServerDetailsPresenter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/server/details/ServerDetailsView.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/server/details/ServerDetailsView.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/adapter/ShowAdaptersDialogPresenter.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/adapter/ShowAdaptersDialogPresenter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/adapter/ShowAdaptersDialogView.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/adapter/ShowAdaptersDialogView.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/task/cell/SimulationTaskEnabledCellFactory.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/task/cell/SimulationTaskEnabledCellFactory.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/task/cell/SimulationTaskFactory.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/task/cell/SimulationTaskFactory.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/task/cell/SimulationTaskIdCellFactory.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/task/cell/SimulationTaskIdCellFactory.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/task/cell/SimulationTaskServerCellFactory.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/task/cell/SimulationTaskServerCellFactory.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/task/cell/SimulationTaskStateCellFactory.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/task/cell/SimulationTaskStateCellFactory.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/task/cell/SimulationTaskStopCellFactory.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/task/cell/SimulationTaskStopCellFactory.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/GUI_emulator_v2/SmartHomeEmulator.html" afterPath="$PROJECT_DIR$/out/artifacts/GUI_emulator_v2/SmartHomeEmulator.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/GUI_emulator_v2/SmartHomeEmulator.jnlp" afterPath="$PROJECT_DIR$/out/artifacts/GUI_emulator_v2/SmartHomeEmulator.jnlp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/models/value/Status.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/models/value/Status.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/utilities/watchers/StopWatch.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/utilities/watchers/StopWatch.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../emulator_server/src/com/iha/emulator/server/task/Task.java" afterPath="$PROJECT_DIR$/../emulator_server/src/com/iha/emulator/server/task/Task.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/task/details/TaskDetailsPresenter.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/task/details/TaskDetailsPresenter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/task/details/TaskDetailsView.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/task/details/TaskDetailsView.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../emulator_server/src/com/iha/emulator/server/task/TaskParser.java" afterPath="$PROJECT_DIR$/../emulator_server/src/com/iha/emulator/server/task/TaskParser.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/models/value/implemented/TemperatureActuatorValue.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/models/value/implemented/TemperatureActuatorValue.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/models/value/implemented/TemperatureSensorValue.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/models/value/implemented/TemperatureSensorValue.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/utilities/logging/TextAreaAppender.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/utilities/logging/TextAreaAppender.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/thread/ThreadTesterPresenter.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/thread/ThreadTesterPresenter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/thread/ThreadTesterView.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/thread/ThreadTesterView.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/utilities/Utilities.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/utilities/Utilities.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/models/value/VPTRegulatorValue.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/models/value/VPTRegulatorValue.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/models/value/Value.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/models/value/Value.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/models/value/ValueFactory.java" afterPath="$PROJECT_DIR$/src/com/iha/emulator/models/value/ValueFactory.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../emulator_server/src/com/iha/emulator/server/Worker.java" afterPath="$PROJECT_DIR$/../emulator_server/src/com/iha/emulator/server/Worker.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/ant.xml" afterPath="$PROJECT_DIR$/.idea/ant.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.properties" afterPath="$PROJECT_DIR$/build.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/controlsfx_8_20_8.xml" afterPath="$PROJECT_DIR$/.idea/libraries/controlsfx_8_20_8.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/resources/default_settings.properties" afterPath="$PROJECT_DIR$/out/production/v2/com/iha/emulator/resources/default_settings.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/iha/emulator/resources/default_settings.properties" afterPath="$PROJECT_DIR$/src/com/iha/emulator/resources/default_settings.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/description.html" afterPath="$PROJECT_DIR$/.idea/description.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/gradle.xml" afterPath="$PROJECT_DIR$/.idea/gradle.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/v2/log4j2.xml" afterPath="$PROJECT_DIR$/out/production/v2/log4j2.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/log4j_api_2_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/log4j_api_2_1.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/copyright/profiles_settings.xml" afterPath="$PROJECT_DIR$/.idea/copyright/profiles_settings.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/scopes/scope_settings.xml" afterPath="$PROJECT_DIR$/.idea/scopes/scope_settings.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/v2.iml" afterPath="$PROJECT_DIR$/v2.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../v1/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../v1/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="JavaFxApplication.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path=".idea/dataSources.local.xml" />
+    <ignored path=".idea/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -131,38 +265,31 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="DetailedSimulationPresenter.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/detailed/DetailedSimulationPresenter.java">
+      <file leaf-file-name="AbstractServerTask.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/communication/eserver/task/AbstractServerTask.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="306" max-vertical-offset="2975">
-              <caret line="56" column="38" selection-start-line="56" selection-start-column="38" selection-end-line="56" selection-end-column="38" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#1996#1997#0" expanded="true" />
-                <element signature="e#2041#2042#0" expanded="true" />
-                <element signature="docComment;method#loadView#0;class#DetailedSimulationPresenter#0" expanded="false" />
-              </folding>
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="969">
+              <caret line="16" column="4" selection-start-line="16" selection-start-column="4" selection-end-line="16" selection-end-column="30" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Utilities.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/utilities/Utilities.java">
+      <file leaf-file-name="DeleteSensorsDialogPresenter.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/sensor/DeleteSensorsDialogPresenter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="34" max-vertical-offset="1139">
-              <caret line="17" column="71" selection-start-line="17" selection-start-column="71" selection-end-line="17" selection-end-column="71" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3893">
+              <caret line="38" column="4" selection-start-line="38" selection-start-column="4" selection-end-line="38" selection-end-column="30" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="log4j2.xml" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/resources/log4j2.xml">
+      <file leaf-file-name="CheckIdTask.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/communication/eserver/task/implemented/CheckIdTask.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.17626728" vertical-offset="0" max-vertical-offset="868">
-              <caret line="9" column="16" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="16" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1105">
+              <caret line="17" column="24" selection-start-line="17" selection-start-column="24" selection-end-line="17" selection-end-column="24" />
               <folding />
             </state>
           </provider>
@@ -171,83 +298,58 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="51" max-vertical-offset="1173">
-              <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DetailedSimulationView.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/detailed/DetailedSimulationView.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="374" max-vertical-offset="2873">
-              <caret line="52" column="35" selection-start-line="52" selection-start-column="35" selection-end-line="52" selection-end-column="35" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#1650#1651#0" expanded="true" />
-                <element signature="e#1695#1696#0" expanded="true" />
-                <element signature="e#1763#1764#0" expanded="true" />
-                <element signature="e#1835#1836#0" expanded="true" />
-                <element signature="e#1904#1905#0" expanded="true" />
-                <element signature="e#1977#1978#0" expanded="true" />
-                <element signature="e#2042#2043#0" expanded="true" />
-                <element signature="e#2111#2112#0" expanded="true" />
-                <element signature="e#2179#2180#0" expanded="true" />
-                <element signature="e#2251#2252#0" expanded="true" />
-                <element signature="e#2310#2311#0" expanded="true" />
-                <element signature="e#2372#2373#0" expanded="true" />
-                <element signature="e#2432#2433#0" expanded="true" />
-                <element signature="e#2494#2495#0" expanded="true" />
-                <element signature="e#2556#2557#0" expanded="true" />
-                <element signature="e#2621#2622#0" expanded="true" />
-                <element signature="e#2681#2682#0" expanded="true" />
-                <element signature="e#2744#2745#0" expanded="true" />
-                <element signature="e#2810#2811#0" expanded="true" />
-                <element signature="e#2879#2880#0" expanded="true" />
-                <element signature="e#2938#2939#0" expanded="true" />
-                <element signature="e#2990#2991#0" expanded="true" />
-                <element signature="e#3059#3060#0" expanded="true" />
-                <element signature="e#3132#3133#0" expanded="true" />
-                <element signature="e#3202#3203#0" expanded="true" />
-                <element signature="e#3276#3277#0" expanded="true" />
-                <element signature="e#3337#3338#0" expanded="true" />
-                <element signature="e#3382#3383#0" expanded="true" />
-                <element signature="e#3451#3452#0" expanded="true" />
-                <element signature="e#3502#3503#0" expanded="true" />
-                <element signature="e#3567#3568#0" expanded="true" />
-                <element signature="e#3609#3610#0" expanded="true" />
-                <element signature="e#3668#3669#0" expanded="true" />
-                <element signature="e#3708#3709#0" expanded="true" />
-                <element signature="e#3884#3885#0" expanded="true" />
-                <element signature="e#3926#3927#0" expanded="true" />
-                <element signature="e#3968#3969#0" expanded="true" />
-                <element signature="e#3995#3996#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DetailedSimulation.fxml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/detailed/DetailedSimulation.fxml">
-          <provider editor-type-id="JavaFX-Scene-Builder">
-            <state />
-          </provider>
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="44" max-vertical-offset="8483">
-              <caret line="19" column="28" selection-start-line="19" selection-start-column="28" selection-end-line="19" selection-end-column="28" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="901">
+              <caret line="47" column="26" selection-start-line="47" selection-start-column="26" selection-end-line="47" selection-end-column="26" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="dialogs.css" pinned="false" current-in-tab="false">
-        <entry file="jar://$PROJECT_DIR$/src/com/iha/emulator/resources/lib/controlsfx-8.20.8.jar!/org/controlsfx/dialog/dialogs.css">
+      <file leaf-file-name="build.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/build.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="306">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state vertical-scroll-proportion="83.03846" vertical-offset="2448" max-vertical-offset="5270">
+              <caret line="17" column="31" selection-start-line="17" selection-start-column="31" selection-end-line="17" selection-end-column="31" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="default_settings.properties" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/resources/default_settings.properties">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.17366628" vertical-offset="0" max-vertical-offset="881">
+              <caret line="9" column="28" selection-start-line="9" selection-start-column="28" selection-end-line="9" selection-end-column="28" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ChooserPresenter.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/chooser/ChooserPresenter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="2019" max-vertical-offset="3451">
+              <caret line="153" column="33" selection-start-line="153" selection-start-column="33" selection-end-line="153" selection-end-column="33" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Utilities.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/utilities/Utilities.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="15130">
+              <caret line="47" column="119" selection-start-line="47" selection-start-column="119" selection-end-line="47" selection-end-column="119" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DetailedSimulationPresenter.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/detailed/DetailedSimulationPresenter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="12576" max-vertical-offset="18887">
+              <caret line="819" column="16" selection-start-line="819" selection-start-column="16" selection-end-line="819" selection-end-column="16" />
               <folding />
             </state>
           </provider>
@@ -261,25 +363,67 @@
     </FindUsagesManager>
   </component>
   <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="Filip Šutovský &lt;xsutov00@stud.fit.vutbr.cz&gt;" />
+      </list>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/detailed/DetailedSimulationCss.css" />
-        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/detailed/DetailedSimulation.fxml" />
-        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/Display.java" />
-        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/Presenter.java" />
-        <option value="$PROJECT_DIR$/src/com/iha/emulator/utilities/MemoryChecker.java" />
-        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/detailed/DetailedSimulation.css" />
-        <option value="$PROJECT_DIR$/src/com/iha/emulator/resources/default_settings.properties" />
-        <option value="$PROJECT_DIR$/src/com/iha/emulator/Main.java" />
-        <option value="$PROJECT_DIR$/src/com/iha/emulator/resources/log4j.properties" />
-        <option value="$PROJECT_DIR$/src/com/iha/emulator/utilities/Utilities.java" />
-        <option value="$PROJECT_DIR$/src/com/iha/emulator/resources/lib/log4j2.xml" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/task/DeleteTasksDialogView.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/thread/ThreadTesterView.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/adapter/details/AdapterDetailsView.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/sensor/SensorPanelView.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/server/details/ServerDetailsView.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/task/details/TaskDetailsView.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/chooser/ChooserView.java" />
         <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/detailed/DetailedSimulationView.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/performance/PerformanceSimulationView.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/adapter/ChangeAdapterDetailsDialogPresenter.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/adapter/ShowAdaptersDialogPresenter.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/sensor/DeleteSensorsDialogPresenter.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/sensor/SensorDetailsDialogPresenter.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/utilities/MaxThreadTester.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/utilities/Utilities.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/control/AdapterController.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/control/SensorController.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/utilities/watchers/ResponseTracker.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/utilities/logging/AdapterLogger.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/sensor/AddNewSensorDialogPresenter.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/server/ChangeServerDetailsDialogPresenter.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/thread/ThreadTesterPresenter.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/adapter/DeleteAdaptersDialogPresenter.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/task/DeleteTasksDialogPresenter.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/adapter/AddAdapterDialogPresenter.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/task/AddNewTaskDialogPresenter.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/adapter/AdapterButton.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/adapter/details/AdapterDetailsPresenter.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/task/details/TaskDetailsPresenter.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/server/details/ServerDetailsPresenter.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/sensor/SensorValueFactory.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/chart/ResponseChart.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/sensor/SensorPanelPresenter.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/chart/DateAxis.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/task/cell/SimulationTaskFactory.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/task/cell/SimulationTaskEnabledCellFactory.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/task/cell/SimulationTaskIdCellFactory.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/task/cell/SimulationTaskAdaptersCellFactory.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/task/cell/SimulationTaskServerCellFactory.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/task/cell/SimulationTaskStateCellFactory.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/task/cell/SimulationTaskStopCellFactory.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/sensor/SensorValueCellFactory.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/Presenter.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/panels/PanelPresenter.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/Main.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/performance/PerformanceSimulationPresenter.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/chooser/ChooserPresenter.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/resources/images/sensor_types/SensorIcon.java" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/resources/images/sensor_types/SensorIconFactory.java" />
         <option value="$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/detailed/DetailedSimulationPresenter.java" />
-        <option value="$PROJECT_DIR$/src/com/iha/emulator/resources/log4j2.xml" />
+        <option value="$PROJECT_DIR$/src/com/iha/emulator/resources/default_settings.properties" />
       </list>
     </option>
   </component>
@@ -321,7 +465,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -329,10 +472,6 @@
               <option name="myItemId" value="v2" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="External Libraries" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -341,121 +480,12 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="v2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="v2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="v2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="emulator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="v2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="v2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="emulator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="utilities" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="v2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="v2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="emulator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ui" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="v2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="v2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="emulator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resources" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="v2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="v2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="emulator" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resources" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lib" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
       <pane id="PackagesPane" />
     </panes>
   </component>
@@ -470,25 +500,29 @@
     <property name="GoToClass.includeLibraries" value="false" />
     <property name="dynamic.classpath" value="false" />
     <property name="MemberChooser.copyJavadoc" value="false" />
-    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="restartRequiresConfirmation" value="true" />
-    <property name="options.lastSelected" value="net.sf.logsupport.LogSupportProjectComponent" />
+    <property name="restartRequiresConfirmation" value="false" />
+    <property name="options.lastSelected" value="project.propVCSSupport.Ignored.Files" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="OverrideImplement.overriding.sorted" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/out/artifacts/GUI_emulator_v2/SmartHomeEmulator.jar" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="LayoutCode.rearrangeEntriesJava" value="false" />
     <property name="FullScreen" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Filip\git\server\emulator\v2\src\com\iha\emulator\resources" />
       <recent name="C:\Users\Filip\git\server\emulator\v2\src\com\iha\emulator\resources\images\sensor_types" />
     </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.iha.emulator.models.value.implemented" />
+    </key>
   </component>
-  <component name="RunManager" selected="JAR Application.EMU_JAR">
+  <component name="RunManager" selected="Application.Main">
     <configuration default="true" type="Remote" factoryName="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -608,7 +642,19 @@
       <node-options />
       <gulpfile />
       <tasks />
+      <arguments />
       <pass-parent-envs>true</pass-parent-envs>
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="BashConfigurationType" factoryName="Bash">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="INTERPRETER_PATH" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <module name="" />
       <envs />
       <method />
     </configuration>
@@ -736,7 +782,7 @@
       <envs />
       <method />
     </configuration>
-    <configuration default="false" name="Main" type="Application" factoryName="Application">
+    <configuration default="false" name="Main" type="Application" factoryName="Application" singleton="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
           <option name="PATTERN" value="sample.*" />
@@ -759,27 +805,14 @@
         <option name="TRANSPORT" value="0" />
         <option name="LOCAL" value="true" />
       </RunnerSettings>
+      <RunnerSettings RunnerId="Profile " />
       <RunnerSettings RunnerId="Run" />
       <ConfigurationWrapper RunnerId="Debug" />
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <configuration default="false" name="EMU_JAR" type="JarApplication" factoryName="JAR Application">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <option name="JAR_PATH" value="$PROJECT_DIR$/out/artifacts/GUI_emulator_v2/SmartHomeEmulator.jar" />
-      <option name="WORKING_DIRECTORY" value="C:\Users\Filip\git\server\emulator\v2" />
-      <envs />
-      <RunnerSettings RunnerId="Basic" />
-      <ConfigurationWrapper RunnerId="Basic" />
-      <method>
-        <option name="BuildArtifacts" enabled="true">
-          <artifact name="GUI-emulator-v2" />
-        </option>
-      </method>
-    </configuration>
-    <list size="2">
+    <list size="1">
       <item index="0" class="java.lang.String" itemvalue="Application.Main" />
-      <item index="1" class="java.lang.String" itemvalue="JAR Application.EMU_JAR" />
     </list>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
@@ -787,6 +820,11 @@
     </configuration>
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="SliceManager">
+    <option name="analysisUIOptions">
+      <AnalysisUIOptions />
+    </option>
+  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -801,11 +839,67 @@
       <workItem from="1416766706012" duration="61000" />
       <workItem from="1416819860536" duration="33201000" />
       <workItem from="1416864366852" duration="6250000" />
+      <workItem from="1427803569713" duration="12437000" />
+      <workItem from="1427876246218" duration="12493000" />
+      <workItem from="1427910513294" duration="18000" />
+      <workItem from="1427976466893" duration="16479000" />
+      <workItem from="1428009883500" duration="41000" />
+      <workItem from="1428066793981" duration="1198000" />
+      <workItem from="1428570020114" duration="1958000" />
+      <workItem from="1430140543421" duration="18685000" />
+      <workItem from="1430169085772" duration="1938000" />
+      <workItem from="1430173465564" duration="683000" />
+      <workItem from="1430223861626" duration="4671000" />
+      <workItem from="1430303294625" duration="6989000" />
+      <workItem from="1430388361402" duration="11652000" />
+      <workItem from="1430568963450" duration="7786000" />
+      <workItem from="1430730144042" duration="156000" />
+      <workItem from="1430732892889" duration="2126000" />
+      <workItem from="1430816722832" duration="6529000" />
+      <workItem from="1430898195266" duration="4633000" />
+      <workItem from="1431085898899" duration="5167000" />
+      <workItem from="1431172658624" duration="1408000" />
+      <workItem from="1431253356660" duration="15948000" />
+      <workItem from="1431332542138" duration="9023000" />
+      <workItem from="1431443853209" duration="5410000" />
+      <workItem from="1431521041670" duration="718000" />
+      <workItem from="1431597224297" duration="1547000" />
+      <workItem from="1431767878543" duration="67000" />
+      <workItem from="1431773767156" duration="55000" />
+      <workItem from="1431895477836" duration="3744000" />
+      <workItem from="1431934204651" duration="40397000" />
+      <workItem from="1432018010333" duration="23215000" />
+      <workItem from="1432044273504" duration="6061000" />
     </task>
+    <task id="LOCAL-00001" summary="added STABLE version 2.0.5-fixed2;">
+      <created>1427804181368</created>
+      <option name="number" value="00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1427804181368</updated>
+    </task>
+    <task id="LOCAL-00002" summary="added VPT regulator sensors and actuators;">
+      <created>1430162149325</created>
+      <option name="number" value="00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1430162149325</updated>
+    </task>
+    <task id="LOCAL-00003" summary="fixed RAM consuption;&#10;added stable version 2.0.6;">
+      <created>1430171012137</created>
+      <option name="number" value="00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1430171012137</updated>
+    </task>
+    <task id="LOCAL-00004" summary="added partial documentation;&#10;">
+      <created>1430730288763</created>
+      <option name="number" value="00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1430730288763</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="40876000" />
+    <option name="totallyTimeSpent" value="264108000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -831,34 +925,34 @@
     <frame x="1912" y="-8" width="2576" height="1066" extended-state="6" />
     <editor active="false" />
     <layout>
-      <window_info id="Changes" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32960597" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32893288" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32893288" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32893288" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32893288" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32893288" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.37122416" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3278328" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32893288" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.16057234" sideWeight="0.6703755" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19594595" sideWeight="0.6703755" order="0" side_tool="false" content_ui="combo" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32893288" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.40484047" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.34543455" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Profiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.34543455" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32893288" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.49614963" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Problems" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
     </layout>
@@ -875,13 +969,21 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
     <option name="myTodoPanelSettings">
       <TodoPanelSettings />
     </option>
+    <MESSAGE value="added STABLE version 2.0.5-fixed2;" />
+    <MESSAGE value="added VPT regulator sensors and actuators;" />
+    <MESSAGE value="fixed RAM consuption;&#10;added stable version 2.0.6;" />
+    <MESSAGE value="added partial documentation;&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="added partial documentation;&#10;" />
+    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="10" />
+      <option name="time" value="11" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -907,383 +1009,503 @@
     </buildFile>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/detailed/DetailedSimulationPresenter.java">
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/task/DeleteTasksDialogPresenter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="462" max-vertical-offset="2873">
-          <caret line="44" column="89" selection-start-line="44" selection-start-column="89" selection-end-line="44" selection-end-column="89" />
+        <state vertical-scroll-proportion="-1.6400839" vertical-offset="2192" max-vertical-offset="3145">
+          <caret line="55" column="75" selection-start-line="55" selection-start-column="75" selection-end-line="55" selection-end-column="75" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/thread/ThreadTesterPresenter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.7135362" vertical-offset="0" max-vertical-offset="2210">
+          <caret line="53" column="25" selection-start-line="53" selection-start-column="25" selection-end-line="53" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/server/ChangeServerDetailsDialogPresenter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="4.156348" vertical-offset="51" max-vertical-offset="5763">
+          <caret line="262" column="59" selection-start-line="262" selection-start-column="59" selection-end-line="262" selection-end-column="59" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1996#1997#0" expanded="true" />
-            <element signature="e#2041#2042#0" expanded="true" />
-            <element signature="docComment;method#loadView#0;class#DetailedSimulationPresenter#0" expanded="false" />
+            <element signature="e#3738#3768#0" expanded="false" />
+            <element signature="e#6472#6473#0" expanded="false" />
+            <element signature="e#6506#6507#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/utilities/Utilities.java">
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/task/AddNewTaskDialogPresenter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="71" max-vertical-offset="1020">
-          <caret line="33" column="20" selection-start-line="33" selection-start-column="20" selection-end-line="33" selection-end-column="20" />
+        <state vertical-scroll-proportion="0.55299056" vertical-offset="16949" max-vertical-offset="22627">
+          <caret line="1087" column="42" selection-start-line="1087" selection-start-column="42" selection-end-line="1087" selection-end-column="42" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#8744#8774#0" expanded="false" />
+            <element signature="e#18602#18603#0" expanded="false" />
+            <element signature="e#18686#18687#0" expanded="false" />
+            <element signature="e#34617#34647#0" expanded="false" />
+            <element signature="e#38248#38278#0" expanded="false" />
+            <element signature="e#44779#44809#0" expanded="false" />
+            <element signature="e#52173#52203#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/Main.java">
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/panels/adapter/details/AdapterDetailsView.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="51" max-vertical-offset="1173">
-          <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.03859251" vertical-offset="51" max-vertical-offset="1377">
+          <caret line="15" column="60" selection-start-line="15" selection-start-column="39" selection-end-line="15" selection-end-column="60" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/panels/task/details/TaskDetailsView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.08967083" vertical-offset="6" max-vertical-offset="1224">
+          <caret line="13" column="57" selection-start-line="13" selection-start-column="39" selection-end-line="13" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/panels/sensor/SensorPanelView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.27014756" vertical-offset="0" max-vertical-offset="1615">
+          <caret line="27" column="20" selection-start-line="27" selection-start-column="20" selection-end-line="27" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/panels/server/details/ServerDetailsView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.07718502" vertical-offset="17" max-vertical-offset="1904">
+          <caret line="16" column="59" selection-start-line="16" selection-start-column="39" selection-end-line="16" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/panels/adapter/AdapterButton.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.3735572" vertical-offset="0" max-vertical-offset="1513">
+          <caret line="80" column="36" selection-start-line="80" selection-start-column="36" selection-end-line="80" selection-end-column="36" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#3116#3117#0" expanded="false" />
+            <element signature="e#3149#3150#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/resources/default_settings.properties">
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/panels/task/details/TaskDetailsPresenter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="17" max-vertical-offset="119">
-          <caret line="1" column="8" selection-start-line="1" selection-start-column="8" selection-end-line="1" selection-end-column="8" />
+        <state vertical-scroll-proportion="0.660021" vertical-offset="0" max-vertical-offset="3468">
+          <caret line="48" column="7" selection-start-line="48" selection-start-column="7" selection-end-line="48" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/panels/server/details/ServerDetailsPresenter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="2.6579223" vertical-offset="0" max-vertical-offset="3332">
+          <caret line="162" column="113" selection-start-line="162" selection-start-column="113" selection-end-line="162" selection-end-column="113" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/panels/adapter/details/AdapterDetailsPresenter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5886674" vertical-offset="51" max-vertical-offset="3281">
+          <caret line="49" column="26" selection-start-line="49" selection-start-column="26" selection-end-line="49" selection-end-column="26" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/panels/chart/ResponseChart.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.6787741" vertical-offset="0" max-vertical-offset="1649">
+          <caret line="107" column="88" selection-start-line="107" selection-start-column="88" selection-end-line="107" selection-end-column="88" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/panels/chart/DateAxis.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3924449" vertical-offset="323" max-vertical-offset="10710">
+          <caret line="54" column="62" selection-start-line="54" selection-start-column="62" selection-end-line="54" selection-end-column="62" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/panels/sensor/SensorValueFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="476">
+          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="12" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/panels/task/cell/SimulationTaskFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.09648127" vertical-offset="0" max-vertical-offset="881">
+          <caret line="9" column="40" selection-start-line="9" selection-start-column="40" selection-end-line="9" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/panels/sensor/SensorPanelPresenter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="526" max-vertical-offset="5372">
+          <caret line="69" column="0" selection-start-line="69" selection-start-column="0" selection-end-line="69" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/panels/task/cell/SimulationTaskEnabledCellFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3567681" vertical-offset="0" max-vertical-offset="953">
+          <caret line="24" column="8" selection-start-line="24" selection-start-column="8" selection-end-line="24" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/panels/task/cell/SimulationTaskIdCellFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.42812172" vertical-offset="0" max-vertical-offset="953">
+          <caret line="30" column="52" selection-start-line="30" selection-start-column="52" selection-end-line="30" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/panels/task/cell/SimulationTaskServerCellFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5886674" vertical-offset="153" max-vertical-offset="1224">
+          <caret line="50" column="76" selection-start-line="50" selection-start-column="76" selection-end-line="50" selection-end-column="76" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/panels/task/cell/SimulationTaskStateCellFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3210913" vertical-offset="102" max-vertical-offset="1173">
+          <caret line="29" column="48" selection-start-line="29" selection-start-column="48" selection-end-line="29" selection-end-column="48" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/panels/task/cell/SimulationTaskStopCellFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.30325288" vertical-offset="0" max-vertical-offset="969">
+          <caret line="25" column="13" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/panels/sensor/SensorValueCellFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.8331441" vertical-offset="938" max-vertical-offset="2176">
+          <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/sensor/SensorDetailsDialogPresenter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.19585253" vertical-offset="0" max-vertical-offset="15385">
+          <caret line="54" column="4" selection-start-line="54" selection-start-column="4" selection-end-line="54" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/chooser/ChooserView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="867">
+          <caret line="13" column="69" selection-start-line="13" selection-start-column="39" selection-end-line="13" selection-end-column="69" />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#1377#1378#0" expanded="false" />
+            <element signature="e#1421#1422#0" expanded="false" />
+            <element signature="e#1495#1496#0" expanded="false" />
+            <element signature="e#1537#1538#0" expanded="false" />
+            <element signature="e#1580#1581#0" expanded="false" />
+            <element signature="e#1607#1608#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/detailed/DetailedSimulationView.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2805">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5899">
+          <caret line="21" column="58" selection-start-line="21" selection-start-column="39" selection-end-line="21" selection-end-column="58" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1650#1651#0" expanded="true" />
-            <element signature="e#1695#1696#0" expanded="true" />
-            <element signature="e#1763#1764#0" expanded="true" />
-            <element signature="e#1835#1836#0" expanded="true" />
-            <element signature="e#1904#1905#0" expanded="true" />
-            <element signature="e#1977#1978#0" expanded="true" />
-            <element signature="e#2042#2043#0" expanded="true" />
-            <element signature="e#2111#2112#0" expanded="true" />
-            <element signature="e#2179#2180#0" expanded="true" />
-            <element signature="e#2251#2252#0" expanded="true" />
-            <element signature="e#2310#2311#0" expanded="true" />
-            <element signature="e#2372#2373#0" expanded="true" />
-            <element signature="e#2432#2433#0" expanded="true" />
-            <element signature="e#2494#2495#0" expanded="true" />
-            <element signature="e#2556#2557#0" expanded="true" />
-            <element signature="e#2621#2622#0" expanded="true" />
-            <element signature="e#2681#2682#0" expanded="true" />
-            <element signature="e#2744#2745#0" expanded="true" />
-            <element signature="e#2810#2811#0" expanded="true" />
-            <element signature="e#2879#2880#0" expanded="true" />
-            <element signature="e#2938#2939#0" expanded="true" />
-            <element signature="e#2990#2991#0" expanded="true" />
-            <element signature="e#3059#3060#0" expanded="true" />
-            <element signature="e#3132#3133#0" expanded="true" />
-            <element signature="e#3202#3203#0" expanded="true" />
-            <element signature="e#3276#3277#0" expanded="true" />
-            <element signature="e#3337#3338#0" expanded="true" />
-            <element signature="e#3382#3383#0" expanded="true" />
-            <element signature="e#3451#3452#0" expanded="true" />
-            <element signature="e#3502#3503#0" expanded="true" />
-            <element signature="e#3567#3568#0" expanded="true" />
-            <element signature="e#3609#3610#0" expanded="true" />
-            <element signature="e#3668#3669#0" expanded="true" />
-            <element signature="e#3708#3709#0" expanded="true" />
-            <element signature="e#3884#3885#0" expanded="true" />
-            <element signature="e#3926#3927#0" expanded="true" />
-            <element signature="e#3968#3969#0" expanded="true" />
-            <element signature="e#3995#3996#0" expanded="true" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#5210#5211#0" expanded="false" />
+            <element signature="e#5273#5274#0" expanded="false" />
+            <element signature="e#5339#5340#0" expanded="false" />
+            <element signature="e#5408#5409#0" expanded="false" />
+            <element signature="e#5467#5468#0" expanded="false" />
+            <element signature="e#5519#5520#0" expanded="false" />
+            <element signature="e#6600#6601#0" expanded="false" />
+            <element signature="e#6633#6634#0" expanded="false" />
+            <element signature="e#6679#6680#0" expanded="false" />
+            <element signature="e#6710#6711#0" expanded="false" />
+            <element signature="e#6771#6772#0" expanded="false" />
+            <element signature="e#6816#6817#0" expanded="false" />
+            <element signature="e#6885#6886#0" expanded="false" />
+            <element signature="e#6936#6937#0" expanded="false" />
+            <element signature="e#7001#7002#0" expanded="false" />
+            <element signature="e#7043#7044#0" expanded="false" />
+            <element signature="e#7102#7103#0" expanded="false" />
+            <element signature="e#7142#7143#0" expanded="false" />
+            <element signature="e#7226#7227#0" expanded="false" />
+            <element signature="e#7276#7277#0" expanded="false" />
+            <element signature="e#7361#7362#0" expanded="false" />
+            <element signature="e#7403#7404#0" expanded="false" />
+            <element signature="e#7445#7446#0" expanded="false" />
+            <element signature="e#7472#7473#0" expanded="false" />
+            <element signature="e#8005#8006#0" expanded="false" />
+            <element signature="e#8034#8035#0" expanded="false" />
+            <element signature="e#9423#9424#0" expanded="false" />
+            <element signature="e#9463#9464#0" expanded="false" />
+            <element signature="e#9521#9522#0" expanded="false" />
+            <element signature="e#9562#9563#0" expanded="false" />
+            <element signature="e#9619#9620#0" expanded="false" />
+            <element signature="e#9659#9660#0" expanded="false" />
+            <element signature="e#9717#9718#0" expanded="false" />
+            <element signature="e#9758#9759#0" expanded="false" />
+            <element signature="e#9817#9818#0" expanded="false" />
+            <element signature="e#9859#9860#0" expanded="false" />
+            <element signature="e#9907#9908#0" expanded="false" />
+            <element signature="e#9938#9939#0" expanded="false" />
+            <element signature="e#9989#9990#0" expanded="false" />
+            <element signature="e#10023#10024#0" expanded="false" />
+            <element signature="e#10084#10085#0" expanded="false" />
+            <element signature="e#10124#10125#0" expanded="false" />
+            <element signature="e#10189#10190#0" expanded="false" />
+            <element signature="e#10232#10233#0" expanded="false" />
+            <element signature="e#10295#10296#0" expanded="false" />
+            <element signature="e#10337#10338#0" expanded="false" />
+            <element signature="e#10404#10405#0" expanded="false" />
+            <element signature="e#10448#10449#0" expanded="false" />
+            <element signature="e#10517#10518#0" expanded="false" />
+            <element signature="e#10563#10564#0" expanded="false" />
+            <element signature="e#10619#10620#0" expanded="false" />
+            <element signature="e#10657#10658#0" expanded="false" />
+            <element signature="e#10720#10721#0" expanded="false" />
+            <element signature="e#10763#10764#0" expanded="false" />
+            <element signature="e#10829#10830#0" expanded="false" />
+            <element signature="e#10872#10873#0" expanded="false" />
+            <element signature="e#10943#10944#0" expanded="false" />
+            <element signature="e#10991#10992#0" expanded="false" />
+            <element signature="e#11046#11047#0" expanded="false" />
+            <element signature="e#11083#11084#0" expanded="false" />
+            <element signature="e#11139#11140#0" expanded="false" />
+            <element signature="e#11175#11176#0" expanded="false" />
+            <element signature="e#11234#11235#0" expanded="false" />
+            <element signature="e#11273#11274#0" expanded="false" />
+            <element signature="e#11333#11334#0" expanded="false" />
+            <element signature="e#11373#11374#0" expanded="false" />
+            <element signature="e#11434#11435#0" expanded="false" />
+            <element signature="e#11475#11476#0" expanded="false" />
+            <element signature="e#11540#11541#0" expanded="false" />
+            <element signature="e#11585#11586#0" expanded="false" />
+            <element signature="e#11645#11646#0" expanded="false" />
+            <element signature="e#11685#11686#0" expanded="false" />
+            <element signature="e#11744#11745#0" expanded="false" />
+            <element signature="e#11783#11784#0" expanded="false" />
+            <element signature="e#11843#11844#0" expanded="false" />
+            <element signature="e#11883#11884#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/detailed/DetailedSimulation.fxml">
-      <provider editor-type-id="JavaFX-Scene-Builder">
-        <state />
-      </provider>
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/adapter/AddAdapterDialogPresenter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="44" max-vertical-offset="8483">
-          <caret line="19" column="28" selection-start-line="19" selection-start-column="28" selection-end-line="19" selection-end-column="28" />
+        <state vertical-scroll-proportion="0.3552781" vertical-offset="3427" max-vertical-offset="12138">
+          <caret line="260" column="32" selection-start-line="260" selection-start-column="26" selection-end-line="260" selection-end-column="32" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$PROJECT_DIR$/src/com/iha/emulator/resources/lib/controlsfx-8.20.8.jar!/org/controlsfx/dialog/dialogs.css">
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/adapter/ChangeAdapterDetailsDialogPresenter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="306">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state vertical-scroll-proportion="-2.9807038" vertical-offset="3561" max-vertical-offset="4471">
+          <caret line="83" column="52" selection-start-line="83" selection-start-column="52" selection-end-line="83" selection-end-column="52" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/simulations/DetailedSimulationController.java">
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/adapter/DeleteAdaptersDialogPresenter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.14604811" vertical-offset="0" max-vertical-offset="582">
-          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+        <state vertical-scroll-proportion="0.19585253" vertical-offset="0" max-vertical-offset="4284">
+          <caret line="36" column="30" selection-start-line="36" selection-start-column="4" selection-end-line="36" selection-end-column="30" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/Display.java">
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/adapter/ShowAdaptersDialogPresenter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.17525773" vertical-offset="0" max-vertical-offset="582">
-          <caret line="6" column="31" selection-start-line="6" selection-start-column="31" selection-end-line="6" selection-end-column="31" />
+        <state vertical-scroll-proportion="0.019296255" vertical-offset="1921" max-vertical-offset="3230">
+          <caret line="141" column="19" selection-start-line="141" selection-start-column="19" selection-end-line="141" selection-end-column="19" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/sensor/AddNewSensorDialogPresenter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.23732719" vertical-offset="13020" max-vertical-offset="20587">
+          <caret line="837" column="4" selection-start-line="837" selection-start-column="4" selection-end-line="842" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/control/task/SimulationTask.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.7638249" vertical-offset="6426" max-vertical-offset="20043">
+          <caret line="474" column="36" selection-start-line="474" selection-start-column="36" selection-end-line="474" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/control/task/StopCondition.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-1.524404" vertical-offset="1530" max-vertical-offset="5882">
+          <caret line="19" column="13" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/panels/PanelPresenter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.09648127" vertical-offset="0" max-vertical-offset="881">
+          <caret line="7" column="116" selection-start-line="7" selection-start-column="116" selection-end-line="7" selection-end-column="116" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/Presenter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.17525773" vertical-offset="0" max-vertical-offset="582">
-          <caret line="6" column="23" selection-start-line="6" selection-start-column="23" selection-end-line="6" selection-end-column="23" />
+        <state vertical-scroll-proportion="0.03859251" vertical-offset="0" max-vertical-offset="881">
+          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="6" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/performance/PerformanceSimulationPresenter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="17578" max-vertical-offset="21114">
+          <caret line="1122" column="47" selection-start-line="1122" selection-start-column="47" selection-end-line="1122" selection-end-column="47" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/utilities/MemoryChecker.java">
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/resources/images/sensor_types/SensorIconFactory.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="727" max-vertical-offset="1377">
-          <caret line="65" column="62" selection-start-line="65" selection-start-column="62" selection-end-line="65" selection-end-column="62" />
+        <state vertical-scroll-proportion="0.07718502" vertical-offset="0" max-vertical-offset="881">
+          <caret line="4" column="45" selection-start-line="4" selection-start-column="45" selection-end-line="4" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/resources/images/sensor_types/SensorIcon.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.09648127" vertical-offset="0" max-vertical-offset="1071">
+          <caret line="5" column="73" selection-start-line="5" selection-start-column="73" selection-end-line="5" selection-end-column="73" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#1108#1109#0" expanded="false" />
+            <element signature="e#1135#1136#0" expanded="false" />
+            <element signature="e#1237#1238#0" expanded="false" />
+            <element signature="e#1264#1265#0" expanded="false" />
+            <element signature="e#1357#1358#0" expanded="false" />
+            <element signature="e#1389#1390#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_25/javafx-src.zip!/javafx/stage/StageStyle.java">
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/performance/PerformanceSimulationView.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="833">
-          <caret line="31" column="12" selection-start-line="31" selection-start-column="12" selection-end-line="31" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/src/com/iha/emulator/resources/lib/openjfx-dialogs-1.0.2.jar!/javafx/scene/control/FXDialog.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.73967683" vertical-offset="1084" max-vertical-offset="1666">
-          <caret line="104" column="18" selection-start-line="104" selection-start-column="18" selection-end-line="104" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/detailed/DetailedSimulation.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="9720" max-vertical-offset="10370">
-          <caret line="602" column="17" selection-start-line="602" selection-start-column="17" selection-end-line="602" selection-end-column="17" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="136" max-vertical-offset="5542">
+          <caret line="25" column="4" selection-start-line="25" selection-start-column="4" selection-end-line="25" selection-end-column="30" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_25/src.zip!/java/lang/Object.java">
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/communication/eserver/task/ServerTask.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="469" max-vertical-offset="9095">
-          <caret line="62" column="33" selection-start-line="62" selection-start-column="33" selection-end-line="62" selection-end-column="33" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="646">
+          <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="8" selection-end-column="3" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_25/src.zip!/java/lang/invoke/DirectMethodHandle.java">
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/communication/eserver/task/TaskParser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="3976" max-vertical-offset="11135">
-          <caret line="292" column="0" selection-start-line="292" selection-start-column="0" selection-end-line="292" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_25/src.zip!/java/lang/invoke/LambdaForm.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="27761">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_25/src.zip!/java/util/function/Consumer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="236" max-vertical-offset="850">
-          <caret line="48" column="9" selection-start-line="48" selection-start-column="9" selection-end-line="48" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_25/javafx-src.zip!/javafx/scene/Parent.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="20279" max-vertical-offset="29274">
-          <caret line="1281" column="0" selection-start-line="1281" selection-start-column="0" selection-end-line="1281" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_25/javafx-src.zip!/javafx/scene/layout/Region.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="5812" max-vertical-offset="54332">
-          <caret line="433" column="0" selection-start-line="433" selection-start-column="0" selection-end-line="433" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_25/javafx-src.zip!/javafx/scene/layout/Pane.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1494" max-vertical-offset="2108">
-          <caret line="124" column="0" selection-start-line="124" selection-start-column="0" selection-end-line="124" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/src/com/iha/emulator/resources/lib/openjfx-dialogs-1.0.2.jar!/javafx/scene/control/DialogPane.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-7.2" vertical-offset="1928" max-vertical-offset="8772">
-          <caret line="175" column="11" selection-start-line="175" selection-start-column="11" selection-end-line="175" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/src/com/iha/emulator/resources/lib/openjfx-dialogs-1.0.2.jar!/javafx/scene/control/Dialog.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-7.2" vertical-offset="959" max-vertical-offset="5763">
-          <caret line="99" column="11" selection-start-line="99" selection-start-column="11" selection-end-line="99" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_25/javafx-src.zip!/javafx/concurrent/Task.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33333334" vertical-offset="23237" max-vertical-offset="23868">
-          <caret line="1436" column="0" selection-start-line="1436" selection-start-column="0" selection-end-line="1436" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="595">
+          <caret line="12" column="25" selection-start-line="12" selection-start-column="25" selection-end-line="12" selection-end-column="25" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$PROJECT_DIR$/src/com/iha/emulator/resources/lib/controlsfx-8.20.8.jar!/controlsfx.properties">
-      <provider editor-type-id="ResourceBundle">
-        <state />
-      </provider>
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/dialogs/sensor/DeleteSensorsDialogPresenter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1207">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/src/com/iha/emulator/resources/lib/controlsfx-8.20.8.jar!/org/controlsfx/dialog/dialog-information.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/src/com/iha/emulator/resources/lib/controlsfx-8.20.8.jar!/org/controlsfx/dialog/dialogs.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="582">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3893">
+          <caret line="38" column="4" selection-start-line="38" selection-start-column="4" selection-end-line="38" selection-end-column="30" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$PROJECT_DIR$/src/com/iha/emulator/resources/lib/controlsfx-8.20.8.jar!/org/controlsfx/dialog/ExceptionDialog.class">
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/communication/eserver/task/implemented/CheckIdTask.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.54937166" vertical-offset="0" max-vertical-offset="697">
-          <caret line="31" column="38" selection-start-line="31" selection-start-column="38" selection-end-line="31" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/detailed/DetailedSimulation.fxml">
-      <provider editor-type-id="JavaFX-Scene-Builder">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="44" max-vertical-offset="8483">
-          <caret line="19" column="28" selection-start-line="19" selection-start-column="28" selection-end-line="19" selection-end-column="28" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1105">
+          <caret line="17" column="24" selection-start-line="17" selection-start-column="24" selection-end-line="17" selection-end-column="24" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/resources/default_settings.properties">
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/communication/eserver/task/AbstractServerTask.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.019296255" vertical-offset="0" max-vertical-offset="881">
-          <caret line="1" column="8" selection-start-line="1" selection-start-column="8" selection-end-line="1" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="51" max-vertical-offset="1173">
-          <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/detailed/DetailedSimulationView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="374" max-vertical-offset="2873">
-          <caret line="52" column="35" selection-start-line="52" selection-start-column="35" selection-end-line="52" selection-end-column="35" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1650#1651#0" expanded="true" />
-            <element signature="e#1695#1696#0" expanded="true" />
-            <element signature="e#1763#1764#0" expanded="true" />
-            <element signature="e#1835#1836#0" expanded="true" />
-            <element signature="e#1904#1905#0" expanded="true" />
-            <element signature="e#1977#1978#0" expanded="true" />
-            <element signature="e#2042#2043#0" expanded="true" />
-            <element signature="e#2111#2112#0" expanded="true" />
-            <element signature="e#2179#2180#0" expanded="true" />
-            <element signature="e#2251#2252#0" expanded="true" />
-            <element signature="e#2310#2311#0" expanded="true" />
-            <element signature="e#2372#2373#0" expanded="true" />
-            <element signature="e#2432#2433#0" expanded="true" />
-            <element signature="e#2494#2495#0" expanded="true" />
-            <element signature="e#2556#2557#0" expanded="true" />
-            <element signature="e#2621#2622#0" expanded="true" />
-            <element signature="e#2681#2682#0" expanded="true" />
-            <element signature="e#2744#2745#0" expanded="true" />
-            <element signature="e#2810#2811#0" expanded="true" />
-            <element signature="e#2879#2880#0" expanded="true" />
-            <element signature="e#2938#2939#0" expanded="true" />
-            <element signature="e#2990#2991#0" expanded="true" />
-            <element signature="e#3059#3060#0" expanded="true" />
-            <element signature="e#3132#3133#0" expanded="true" />
-            <element signature="e#3202#3203#0" expanded="true" />
-            <element signature="e#3276#3277#0" expanded="true" />
-            <element signature="e#3337#3338#0" expanded="true" />
-            <element signature="e#3382#3383#0" expanded="true" />
-            <element signature="e#3451#3452#0" expanded="true" />
-            <element signature="e#3502#3503#0" expanded="true" />
-            <element signature="e#3567#3568#0" expanded="true" />
-            <element signature="e#3609#3610#0" expanded="true" />
-            <element signature="e#3668#3669#0" expanded="true" />
-            <element signature="e#3708#3709#0" expanded="true" />
-            <element signature="e#3884#3885#0" expanded="true" />
-            <element signature="e#3926#3927#0" expanded="true" />
-            <element signature="e#3968#3969#0" expanded="true" />
-            <element signature="e#3995#3996#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/src/com/iha/emulator/resources/lib/log4j-core-2.1.jar!/org/apache/logging/log4j/core/config/plugins/convert/TypeConverters.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-11.72" vertical-offset="2903" max-vertical-offset="5304">
-          <caret line="229" column="0" selection-start-line="229" selection-start-column="0" selection-end-line="229" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="969">
+          <caret line="16" column="4" selection-start-line="16" selection-start-column="4" selection-end-line="16" selection-end-column="30" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/detailed/DetailedSimulationPresenter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="306" max-vertical-offset="2975">
-          <caret line="56" column="38" selection-start-line="56" selection-start-column="38" selection-end-line="56" selection-end-column="38" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1996#1997#0" expanded="true" />
-            <element signature="e#2041#2042#0" expanded="true" />
-            <element signature="docComment;method#loadView#0;class#DetailedSimulationPresenter#0" expanded="false" />
-          </folding>
+        <state vertical-scroll-proportion="0.0" vertical-offset="12576" max-vertical-offset="18887">
+          <caret line="819" column="16" selection-start-line="819" selection-start-column="16" selection-end-line="819" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/ui/simulations/chooser/ChooserPresenter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2019" max-vertical-offset="3451">
+          <caret line="153" column="33" selection-start-line="153" selection-start-column="33" selection-end-line="153" selection-end-column="33" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/utilities/Utilities.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="34" max-vertical-offset="1139">
-          <caret line="17" column="71" selection-start-line="17" selection-start-column="71" selection-end-line="17" selection-end-column="71" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="15130">
+          <caret line="47" column="119" selection-start-line="47" selection-start-column="119" selection-end-line="47" selection-end-column="119" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/resources/log4j2.xml">
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.17626728" vertical-offset="0" max-vertical-offset="868">
-          <caret line="9" column="16" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="16" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="901">
+          <caret line="47" column="26" selection-start-line="47" selection-start-column="26" selection-end-line="47" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="83.03846" vertical-offset="2448" max-vertical-offset="5270">
+          <caret line="17" column="31" selection-start-line="17" selection-start-column="31" selection-end-line="17" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/log4j2.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="881">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/iha/emulator/resources/default_settings.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.17366628" vertical-offset="0" max-vertical-offset="881">
+          <caret line="9" column="28" selection-start-line="9" selection-start-column="28" selection-end-line="9" selection-end-column="28" />
           <folding />
         </state>
       </provider>
@@ -1330,7 +1552,7 @@
       </state>
       <state key="JdkListConfigurable.UI">
         <settings>
-          <last-edited>1.8 (32-bit)</last-edited>
+          <last-edited>1.7</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -1355,7 +1577,18 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
-          <last-edited>log4j-api-2.1</last-edited>
+          <last-edited>controlsfx-8.20.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ScopeChooserConfigurable.UI">
+        <settings>
           <splitter-proportions>
             <option name="proportions">
               <list>

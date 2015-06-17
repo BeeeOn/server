@@ -16,17 +16,24 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Created by Shu on 25.11.2014.
+ * Class providing logic to user interactions for "Server details panel". Part Presenter of MVP design pattern.
+ * Also responsible for model change.
+ *
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
 public class ServerDetailsPresenter implements Presenter,PanelPresenter {
-
+    /** Log4j2 logger field */
     private static final Logger logger = LogManager.getLogger(ServerDetailsPresenter.class);
+    /** path to FXML file */
     private static final String FXML_PATH = "ServerDetails.fxml";
-
+    /** view */
     private Display view;
+    /** model */
     private Server model;
     private BooleanProperty senderConnectionProp;
-
+    /**
+     * Interface implemented by "Server details panel" view.
+     */
     public interface Display {
         public Node getView();
         public void setPresenter(ServerDetailsPresenter presenter);
@@ -40,11 +47,9 @@ public class ServerDetailsPresenter implements Presenter,PanelPresenter {
         public Label getDbNameLbl();
         public Label getSenderConnectionLbl();
     }
-
-    public ServerDetailsPresenter() {
-
-    }
-
+    /**
+     * Unbinds model, if it exists and clears all panel's fields.
+     */
     @Override
     public void clear(){
         logger.trace("CLEAR!");
@@ -65,7 +70,9 @@ public class ServerDetailsPresenter implements Presenter,PanelPresenter {
         view.getPortLbl().setText("");
         view.getDbNameLbl().setText("");
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Node loadView() throws IOException {
         logger.trace("Loading ServerDetailsView from: " + FXML_PATH);
@@ -89,7 +96,10 @@ public class ServerDetailsPresenter implements Presenter,PanelPresenter {
             if (fxmlStream != null) fxmlStream.close();
         }
     }
-
+    /**
+     * Assign model to panel and binds it's variables to panel fields. If panel has already assigned model, it is unbound.
+     * @param newModel model to be bound with panel's fields
+     */
     @Override
     public void addModel(Object newModel){
         logger.trace("Assigning new model to ServerDetailsPresenter");
@@ -147,6 +157,11 @@ public class ServerDetailsPresenter implements Presenter,PanelPresenter {
         logger.trace("OK");
     }
 
+    /**
+     * Bind {@link com.iha.emulator.communication.server.ssl.ServerReceiver}'s status property to panel's field.
+     * If ServerReceiver doesn't exist, "Disabled" is shown.
+     * @param senderConnection {@link com.iha.emulator.communication.server.ssl.ServerReceiver}'s status property
+     */
     public void addSenderProperty(BooleanProperty senderConnection){
         if(senderConnection == null) {
             view.getSenderConnectionLbl().setText("Disabled");
@@ -170,17 +185,23 @@ public class ServerDetailsPresenter implements Presenter,PanelPresenter {
             }
         });
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Object getModel() {
         return model;
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Node getView() {
         return view.getView();
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void bind() {
         view.setPresenter(this);

@@ -1,6 +1,3 @@
-
-
-
 #include "AdapterMessageParser.h"
 
 using namespace pugi;
@@ -119,7 +116,6 @@ void ProtocolV1MessageParser::GetSignal()
 }
 bool ProtocolV1MessageParser::GetValues()
 {
-	//vytvotime si v pamati miesto na ulozenie dvojic typ hodnota
 	xml_node values = _device.child("values");
 	_message->values_count = values.attribute("count").as_uint();
 	xml_node value = values.first_child();
@@ -132,7 +128,7 @@ bool ProtocolV1MessageParser::GetValues()
 		_message->values = NULL;
 		return false;
 	}
-	for (int i = 0; i < _message->values_count; i++) //v cykle spracujeme prijate dvojice typ hodnota
+	for (int i = 0; i < _message->values_count; i++)
 	{
 		if (value == NULL)
 		{

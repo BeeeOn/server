@@ -14,16 +14,23 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Created by Shu on 25.11.2014.
+ * Class providing logic to user interactions for "Task details panel". Part Presenter of MVP design pattern.
+ * Also responsible for model change.
+ *
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
 public class TaskDetailsPresenter implements Presenter,PanelPresenter {
-
+    /** Log4j2 logger field */
     private static final Logger logger = LogManager.getLogger(TaskDetailsPresenter.class);
+    /** path to FXML file */
     private static final String FXML_PATH = "TaskDetails.fxml";
-
+    /** view */
     private Display view;
+    /** model */
     private SimulationTask model;
-
+    /**
+     * Interface implemented by "Task details panel" view.
+     */
     public interface Display {
         public Node getView();
         public void setPresenter(TaskDetailsPresenter presenter);
@@ -37,11 +44,9 @@ public class TaskDetailsPresenter implements Presenter,PanelPresenter {
         public Label getRespPerSecondLbl();
         public Label getMaxRespPerSecondLbl();
     }
-
-    public TaskDetailsPresenter() {
-
-    }
-
+    /**
+     * Unbinds model, if it exists and clears all panel's fields.
+     */
     @Override
     public void clear(){
         logger.trace("CLEAR!");
@@ -68,7 +73,9 @@ public class TaskDetailsPresenter implements Presenter,PanelPresenter {
         view.getRespPerSecondLbl().setText("");
         view.getMaxRespPerSecondLbl().setText("");
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Node loadView() throws IOException {
         logger.trace("Loading TaskDetailsView from: " + FXML_PATH);
@@ -92,7 +99,10 @@ public class TaskDetailsPresenter implements Presenter,PanelPresenter {
             if (fxmlStream != null) fxmlStream.close();
         }
     }
-
+    /**
+     * Assign model to panel and binds it's variables to panel fields. If panel has already assigned model, it is unbound.
+     * @param newModel model to be bound with panel's fields
+     */
     @Override
     public void addModel(Object newModel){
         logger.trace("Assigning new model to TaskDetailsPresenter");
@@ -188,22 +198,31 @@ public class TaskDetailsPresenter implements Presenter,PanelPresenter {
         view.getStopWatchLbl().textProperty().bind(model.getTaskParameters().getStopWatch().timeStringProperty());
         logger.trace("OK");
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Object getModel() {
         return model;
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Node getView() {
         return view.getView();
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void bind() {
         view.setPresenter(this);
     }
-
+    /**
+     * Unbinds given label text property
+     * @param lbl label for which should be text property unbound
+     */
     private void unbindLbl(Label lbl){
         lbl.textProperty().unbind();
     }

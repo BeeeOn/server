@@ -51,34 +51,52 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 
 /**
- * Created by Filip Sutovsky on 14/11/14.
+ * Class providing logic to user interactions for "Performance simulation". Part Presenter of MVP design pattern.
+ * Also serving main window of "Performance simulation"
+ *
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
 public class PerformanceSimulationPresenter implements Presenter{
-
+    /** Log4j2 logger field */
     private static final Logger logger = LogManager.getLogger(PerformanceSimulationPresenter.class);
-    private static final boolean DEBUG_AUTO_CREATE = false;
+    /** default location for saving XML files */
     private static final String SAVES_DEFAULT_DIR = "saved/tasks";
+    /** path to FXML file */
     private static final String FXML_PATH = "PerformanceSimulation.fxml";
+    /** path to CSS style file */
     private static final String CSS_PATH = "/com/iha/emulator/resources/css/theme-light.css";
-
+    /** view */
+    private Display view;
+    /** window */
     private Stage window;
+    /** host services */
     private HostServices hostServices;
-
+    /** instance of memory checker responsible for checking memory usage */
     private MemoryChecker memoryChecker = MemoryChecker.getInstance();
+    /** properties loaded from configuration file */
     private Properties properties;
+    /** watcher responsible for automatic task processing */
     private QueueWatcher queueWatcher;
 
     //region PRESENTERS
+    /** server panel */
     private ServerDetailsPresenter serverDetailsPresenter;
+    /** task details panel */
     private TaskDetailsPresenter taskDetailsPresenter;
     //endregion
+    /** chart showing response times */
     private ResponseChart responseChart;
     //region TASKS
+    /** currently selected task */
     private ObjectProperty<SimulationTask> currentTask;
+    /** list of all created tasks */
     private ObservableList<SimulationTask> tasks = FXCollections.observableArrayList();
+    /** tasks list property */
     private ListProperty<SimulationTask> tasksList = new SimpleListProperty<>(tasks);
     //endregion
-
+    /**
+     * Interface implemented by "Performance simulation" view.
+     */
     public interface Display {
         public void setPresenter(PerformanceSimulationPresenter presenter);
         public Node getView();
@@ -131,11 +149,12 @@ public class PerformanceSimulationPresenter implements Presenter{
         public TableView getTasksTable();
         public StackPane getResponseChartContainer();
     }
-    //region variables
-    private Display view;
-    //endregion
 
     //region constructor
+    /**
+     * Creates new "Performance simulation" presenter. Sets current simulation task to null.
+     * @param window parent window
+     */
     public PerformanceSimulationPresenter(Stage window) {
         this.window = window;
         this.currentTask = new SimpleObjectProperty<>(null);
@@ -143,6 +162,10 @@ public class PerformanceSimulationPresenter implements Presenter{
     //endregion
 
     //region public methods
+
+    /**
+     * Method start or restarts currently selected simulation task according to it's {@link com.iha.emulator.control.task.SimulationTask.State}
+     */
     public void startTask(){
         if(getCurrentTask() == null) return;
         switch (getCurrentTask().getSimulationState()){
@@ -162,6 +185,9 @@ public class PerformanceSimulationPresenter implements Presenter{
         }
     }
 
+    /**
+     * Method stops currently selected simulation task.
+     */
     public void stopTask(){
         if(getCurrentTask() == null) return;
         logger.debug(getCurrentTask().toString() + " -> STOPPING");
@@ -169,25 +195,34 @@ public class PerformanceSimulationPresenter implements Presenter{
         getCurrentTask().stop();
         setStatus(getCurrentTask().toString() + " stopped",false);
     }
-
+    /**
+     * Method pauses currently selected simulation task.
+     */
     public void pauseTask(){
         if(getCurrentTask() == null) return;
         logger.debug(getCurrentTask().toString() + " -> PAUSING");
         getCurrentTask().pause();
         setStatus(getCurrentTask().toString() + " paused",false);
     }
-
+    /**
+     * Method resumes currently selected simulation task sensors.
+     */
     public void resumeSensors(){
         if(getCurrentTask() == null) return;
         logger.debug(getCurrentTask().toString() + " -> RESUMING SENSORS");
         getCurrentTask().resumeSensors();
     }
-
+    /**
+     * Method pauses currently selected simulation task sensors.
+     */
     public void pauseSensors(){
         logger.debug(getCurrentTask().toString() + " -> PAUSING SENSORS");
         getCurrentTask().pauseSensors();
     }
-
+    /**
+     * Creates server models from properties and invokes showing of "Add task dialog". Uses separate {@link javafx.concurrent.Task}
+     * and shows tasks progress in progress dialog.
+     */
     public void addTask(){
         logger.trace("Creating new task");
         Task<Object> worker = new Task<Object>() {
@@ -203,21 +238,31 @@ public class PerformanceSimulationPresenter implements Presenter{
                 });
                 ObservableList<Server> tmp;
                 try{
+                    //create server models from properties
                     tmp = Utilities.buildServersFromProperties(properties,progress);
                     final ObservableList<Server> finalTmp = tmp;
+                    //show add task dialog with created server models
                     Platform.runLater(() -> showAddTaskDialog(finalTmp));
                 }catch (IllegalArgumentException e){
+                    //show add adapter dialog without server models
                     Platform.runLater(() -> showAddTaskDialog(null));
                     Platform.runLater(() -> Utilities.showException(logger, "Cannot load settings from properties file", e, false, null));
                 }
                 return null;
             }
         };
+        //show progress dialog
         Utilities.showLoadingDialog(worker, "Loading...");
     }
-
+    /**
+     * Shows {@link com.iha.emulator.ui.dialogs.task.DeleteTasksDialogPresenter} in new window, but only if no task
+     * is currently selected or currently selected task is not running. Otherwise informs user, that cannot delete
+     * tasks while simulation is running.
+     */
     public void deleteTask(){
+        //if currently selected task is running
         if(getCurrentTask() != null && getCurrentTask().getRunning()){
+            //notify user
             logger.trace("Showing delete conformation dialog");
             Alert dlg = new Alert(Alert.AlertType.WARNING,"");
             dlg.initModality(Modality.WINDOW_MODAL);
@@ -226,19 +271,24 @@ public class PerformanceSimulationPresenter implements Presenter{
             dlg.getDialogPane().setContentText("Current task is running. Please stop every task, before trying to delete.");
             dlg.show();
         }else{
+            //no task is running, set current task to null
             switchCurrentTask(null);
             logger.trace("Showing delete dialog");
             DeleteTasksDialogPresenter deleteTasksDialogPresenter;
             try{
+                //create window
                 Stage stage = new Stage();
+                //create presenter
                 deleteTasksDialogPresenter = new DeleteTasksDialogPresenter(stage,this);
                 stage.setTitle("Delete tasks");
+                //create and initiate scene
                 Scene scene = new Scene((Parent) deleteTasksDialogPresenter.loadView());
                 // set css for view
                 logger.trace("Loading CSS from: " + CSS_PATH);
                 scene.getStylesheets().add(getClass().getResource(CSS_PATH).toExternalForm());
                 stage.setScene(scene);
                 stage.setResizable(false);
+                //show dialog
                 stage.show();
             } catch (IOException e) {
                 Utilities.showException(logger, "Cannot load dialog for deleting adapter!", e, false, null);
@@ -246,8 +296,14 @@ public class PerformanceSimulationPresenter implements Presenter{
         }
     }
 
+    /**
+     * Removes given simulation task from list of created tasks
+     * @param task task to be removed
+     */
     public void deleteTask(SimulationTask task){
+        //remove all tasks parts
         task.delete();
+        //remove it from list
         for(Iterator<SimulationTask> i = getTasks().iterator();i.hasNext();){
             SimulationTask tmp = i.next();
             if(tmp.toString().equals(task.toString())){
@@ -257,27 +313,40 @@ public class PerformanceSimulationPresenter implements Presenter{
         //getTasks().remove(task);
         logger.debug("Tasks count after delete -> " + getTasks().size());
         getTasks().forEach(t->logger.trace(t.toString()));
+        //invoke garbage collector
         System.gc();
     }
 
+    /**
+     * Creates XML document for all given simulation tasks in list, that is saved to file chosen by invoked file save dialog.
+     * Uses separate {@link javafx.concurrent.Task}. If given list is null, all created tasks are saved.
+     *
+     * @param tasks list of tasks to be saved, if null all created tasks are saved
+     */
     public void saveAll(ObservableList<SimulationTask> tasks){
-        ObservableList<SimulationTask> taskToDelete;
+        ObservableList<SimulationTask> taskToBeSaved;
+        //if no tasks are given, save all created tasks
         if(tasks == null){
-            taskToDelete = getTasks();
+            taskToBeSaved = getTasks();
         }else{
-            taskToDelete = tasks;
+            taskToBeSaved = tasks;
         }
-        if(taskToDelete.size() < 1) return;
+        if(taskToBeSaved.size() < 1) return;
         logger.trace("Saving tasks");
+        //initiate progress task
         Task<Document> worker = new Task<Document>() {
             @Override
             protected Document call() throws Exception {
                 logger.trace("Creating XML file");
+                //notify user
                 updateMessage("Creating XML file");
                 updateProgress(20,100);
+                //create blank XML document
                 Document doc = DocumentFactory.getInstance().createDocument();
+                //create root element
                 doc.addElement("tasks");
-                for(SimulationTask task : taskToDelete){
+                //save all tasks to root element
+                for(SimulationTask task : taskToBeSaved){
                     logger.debug("Saving task -> " + task.getId());
                     doc = task.saveToXml(doc);
                     task.setSaved(true);
@@ -292,12 +361,13 @@ public class PerformanceSimulationPresenter implements Presenter{
                 Utilities.showException(logger, "Saving to XML failed", getException(), false, null);
             }
         };
+        //define action after saving task success
         worker.setOnSucceeded(event -> {
             logger.trace("Trying to save to XML file");
+            //show save dialog
             String filename = Utilities.saveDialogForXML(window, SAVES_DEFAULT_DIR, worker.getValue().asXML());
             if(filename != null){
                 showInformation("File saved", "Task/s successfully saved", "Saved to file \"" + filename + "\"");
-                //tmpController.setSaved(true);
             }
         });
         //create thread for background process
@@ -306,18 +376,27 @@ public class PerformanceSimulationPresenter implements Presenter{
         //run background process
         th.start();
     }
-
+    /**
+     * Shows dialog for loading XML file with saved tasks and adds tasks from this XML.
+     */
     public void open(){
         logger.trace("Trying to load from XML file");
         try {
+            //show open dialog
             String content = Utilities.loadDialogForXML(window, SAVES_DEFAULT_DIR);
             if(content == null) return;
+            //parse XML
             parseAndLoadXML(content);
         } catch (DocumentException e) {
             Utilities.showException(logger, "Cannot parse loaded file", e, false, null);
         }
     }
-
+    /**
+     * Parses given XML document as string and creates simulation tasks.
+     *
+     * @param content XML document content containing tasks configuration
+     * @throws DocumentException cannot parse read XML document
+     */
     private void parseAndLoadXML(String content)throws DocumentException{
         logger.trace("Parsing XML file");
         Document doc = DocumentHelper.parseText(content);
@@ -399,7 +478,7 @@ public class PerformanceSimulationPresenter implements Presenter{
                 tmpTask.setRefreshTimeGeneratorSeed(refreshTimeSeed);
                 tmpTask.setValueTypeGeneratorSeed(enabledValuesSeed);
                 //register tracking responses per second
-                tmpTask.getResponseTracker().registerSecondCounter(tmpTask.getTaskParameters().getStopWatch().timeProperty());
+                //tmpTask.getResponseTracker().registerSecondCounter(tmpTask.getTaskParameters().getStopWatch().timeProperty());
                 //value parameters
                 ObservableList<Value> tmpValues = FXCollections.observableArrayList();
                 for(String s : enabledValuesNames){
@@ -437,7 +516,7 @@ public class PerformanceSimulationPresenter implements Presenter{
                 if(waitingEnabled){
                     sc.registerWaitingMessageWatcher(waitingMessagesCount);
                 }
-                //initialize adapters
+                //set task's state
                 tmpTask.setSimulationState(SimulationTask.State.READY);
                 //add QueueWatcher to task
                 tmpTask.setQueueWatcher(getQueueWatcher());
@@ -450,40 +529,56 @@ public class PerformanceSimulationPresenter implements Presenter{
         }
     }
 
-    public void print(){
-
-    }
-
+    /**
+     * Starts {@link com.iha.emulator.utilities.watchers.QueueWatcher}, but only if every simulation task has at least
+     * one stop condition.
+     */
     public void queueProcessStart(){
+        //check if queue watcher exists
         if(getQueueWatcher() == null){
             logger.warn("QueueWatcher is null");
             return;
         }
+        //check if every task has at least one stop condition
         if(getTasks().size() == 0 || checkMissingStopConditions()) return;
         try{
+            //start processing
             getQueueWatcher().start();
         }catch (IllegalArgumentException e){
             logger.debug(e.getMessage());
+            //notify user about error
             Utilities.showError("Choose time to start queue auto processing","Auto process queue");
         }
     }
 
+    /**
+     * Stops {@link com.iha.emulator.utilities.watchers.QueueWatcher}'s automatic simulation tasks processing
+     */
     public void queueProcessStop(){
         if(getQueueWatcher() == null){
             logger.warn("QueueWatcher is null");
             return;
         }
+        //stop
         getQueueWatcher().stop();
     }
 
+    /**
+     * Checks, if every task has at least one stop condition. If not, tasks with no condition are shown in invoked
+     * error dialog.
+     * @return <code>true</code> there are tasks missing conditions, <code>false</code> otherwise
+     */
     private boolean checkMissingStopConditions(){
         String taskIds = "";
+        //check all tasks
         for (SimulationTask t : getTasks()){
             if(t.getStopCondition().getConditionCounter() == 0){
                 taskIds = (taskIds.isEmpty() ? "" : " , ") + t.getId();
             }
         }
+        //if anything found
         if(!taskIds.isEmpty()){
+            //notify user
             Utilities.showError("Tasks " + taskIds + " don't have stop condition. Cannot run queue auto processing.","Auto queue process");
             return true;
         }else{
@@ -491,14 +586,23 @@ public class PerformanceSimulationPresenter implements Presenter{
         }
     }
 
+    /**
+     * Selects given simulation task as current and displays it's information to user interface. If previous task is still
+     * running, it is stopped. If given simulation task is null, control buttons in navigation are disabled.
+     * @param newTask task to be set as current
+     */
     public void switchCurrentTask(SimulationTask newTask){
         Task<Object> worker = new Task<Object>() {
             @Override
             protected Object call() throws Exception {
+                //have previous task and new task
                 if(getCurrentTask() != null && newTask != null){
+                    //are previous task and new the same?
                     if(newTask.equals(getCurrentTask())) return null;
+                    //if previous is running, stop it
                     else if(getCurrentTask().getRunning()) getCurrentTask().stop();
                 }
+                //if new task is null, disable control buttons in navigation
                 if(newTask == null){
                     Platform.runLater(PerformanceSimulationPresenter.this::clearControlsBinding);
                     return null;
@@ -542,13 +646,20 @@ public class PerformanceSimulationPresenter implements Presenter{
         th.start();
     }
 
-
+    /**
+     * Shows currently selected task's buffer file in default application used by operating system.
+     */
     public void showFullLog(){
         if(hostServices != null && getCurrentTask()!= null && getCurrentTask().getLog().getBufferFile()!= null){
             hostServices.showDocument(getCurrentTask().getLog().getBufferFile().getAbsolutePath());
         }
     }
-
+    /**
+     * Initializes window. Fills components with data, defines application onClose actions and initiates details panels.
+     * Also starts memory usage checking. Also creates time picker for automatic queue processing.
+     *
+     * @param properties properties loaded from configuration file
+     */
     public void init(Properties properties){
         logger.info("Initialization");
         //application initialisation
@@ -591,6 +702,9 @@ public class PerformanceSimulationPresenter implements Presenter{
         });
     }
 
+    /**
+     * Creates {@link jfxtras.scene.control.LocalDateTimeTextField} with time used to start queue processing.
+     */
     private void createDateTimePicker(){
         LocalDateTimeTextField l = new LocalDateTimeTextField();
         l.setPrefHeight(27);
@@ -598,7 +712,9 @@ public class PerformanceSimulationPresenter implements Presenter{
         view.setStartDateTimeTextField(l);
         view.getQueueProcessContainer().getChildren().add(l);
     }
-
+    /**
+     * Binds application log areas to currently selected task
+     */
     private void bindLogs(){
         if(getCurrentTask()!= null && getCurrentTask().getLog() != null){
             AdapterLogger log = getCurrentTask().getLog();
@@ -609,6 +725,9 @@ public class PerformanceSimulationPresenter implements Presenter{
         }
     }
 
+    /**
+     * Binds {@link com.iha.emulator.utilities.watchers.QueueWatcher}'s variables to interface's relevant fields.
+     */
     private void bindQueueWatcherControls(){
         if(getQueueWatcher() == null){
             logger.warn("QueueWatcher is null");
@@ -644,6 +763,10 @@ public class PerformanceSimulationPresenter implements Presenter{
         view.getPickTimeStartRadBtn().disableProperty().bind(getQueueWatcher().enabledProperty());
     }
 
+    /**
+     * Initiates simulation task's table. Adds custom display for each table column. Also adds listener for double-click
+     * which is used to change current task.
+     */
     @SuppressWarnings("unchecked")
     private void initTasksTable(){
         //checkbox column
@@ -676,17 +799,26 @@ public class PerformanceSimulationPresenter implements Presenter{
         });
     }
 
+    /**
+     * Checks if given task can be set as current. New task can be selected only if current task is null or current tusk is
+     * not running. If there is a problem, notifies user with confirmation dialog.
+     * @param newTask tak to be selected
+     */
     private void checkIfSwitchTasks(SimulationTask newTask){
         logger.trace("Trying to switch tasks");
         if(newTask != null){
+            //check if current exists or if it is not running
             if(getCurrentTask() == null || !getCurrentTask().getRunning()){
                 logger.trace("Trying to switch to task: " + newTask.getId());
+                //switch to new task
                 switchCurrentTask(newTask);
                 return;
             }
+            //if current new are the same, nothing happens
             if(newTask.equals(getCurrentTask())){
                 logger.trace("Selected task is already current");
             }else {
+                //notify user, let user choose, if current should be stopped and new selected or do nothing
                 logger.trace("Showing switch conformation dialog");
                 Alert dlg = new Alert(Alert.AlertType.CONFIRMATION,"");
                 dlg.initModality(Modality.WINDOW_MODAL);
@@ -713,6 +845,10 @@ public class PerformanceSimulationPresenter implements Presenter{
         }
     }
 
+    /**
+     * Focuses simulation tasks table selection on given task.
+     * @param task task to be focused on
+     */
     private void selectTaskInTable(SimulationTask task){
         view.getTasksTable().requestFocus();
         logger.debug("Focusing table on task: " + task.getId());
@@ -721,43 +857,9 @@ public class PerformanceSimulationPresenter implements Presenter{
         view.getTasksTable().getFocusModel().focus(index);
     }
 
-    private ObservableList<Value> generateEnabledValues(ObservableList<Value> tmpValuesList){
-        Value emValue = ValueFactory.buildValue(Value.Type.SENSOR_EMISSIONS);
-        emValue.setGenerateValue(false);
-        //((EmissionsSensorValue) emValue).setGeneratorType(Value.Generator.NORMAL_DISTRIBUTION);
-
-        Value humValue = ValueFactory.buildValue(Value.Type.SENSOR_HUMIDITY);
-        humValue.setGenerateValue(false);
-        //((HumiditySensorValue) humValue).setGeneratorType(Value.Generator.NORMAL_DISTRIBUTION);
-
-        Value lightValue = ValueFactory.buildValue(Value.Type.SENSOR_LIGHT);
-        lightValue.setGenerateValue(false);
-        //((LightSensorValue) lightValue).setGeneratorType(Value.Generator.NORMAL_DISTRIBUTION);
-
-        Value noiseValue = ValueFactory.buildValue(Value.Type.SENSOR_NOISE);
-        noiseValue.setGenerateValue(false);
-        //((NoiseSensorValue) noiseValue).setGeneratorType(Value.Generator.NORMAL_DISTRIBUTION);
-
-        Value onOffValue = ValueFactory.buildValue(Value.Type.SENSOR_ON_OFF);
-        onOffValue.setGenerateValue(false);
-        //((OnOffSensorValue) onOffValue).setGeneratorType(Value.Generator.BOOLEAN_RANDOM);
-
-        Value openCloseValue = ValueFactory.buildValue(Value.Type.SENSOR_OPEN_CLOSED);
-        openCloseValue.setGenerateValue(false);
-        //((OpenClosedSensorValue) openCloseValue).setGeneratorType(Value.Generator.BOOLEAN_RANDOM);
-
-        Value pressureValue = ValueFactory.buildValue(Value.Type.SENSOR_PRESSURE);
-        pressureValue.setGenerateValue(false);
-        //((PressureSensorValue) pressureValue).setGeneratorType(Value.Generator.NORMAL_DISTRIBUTION);
-
-        Value tempValue = ValueFactory.buildValue(Value.Type.SENSOR_TEMPERATURE);
-        tempValue.setGenerateValue(false);
-        //((TemperatureSensorValue) tempValue).setGeneratorType(Value.Generator.NORMAL_DISTRIBUTION);
-
-        tmpValuesList.addAll(tempValue,humValue,emValue,noiseValue,lightValue,onOffValue,openCloseValue,pressureValue);
-        return tmpValuesList;
-    }
-
+    /**
+     * Disable control buttons in navigation, sets current task to null.
+     */
     private void clearControlsBinding(){
         if(view.getStartTaskItem().disableProperty().isBound()) view.getStartTaskItem().disableProperty().unbind();
         if(view.getStartTaskTBtn().disableProperty().isBound()) view.getStartTaskTBtn().disableProperty().unbind();
@@ -791,19 +893,26 @@ public class PerformanceSimulationPresenter implements Presenter{
 
         setCurrentTask(null);
     }
-
+    /**
+     * Shows {@link com.iha.emulator.ui.dialogs.task.AddNewTaskDialogPresenter} in new window.
+     * @param servers default server models list
+     */
     private void showAddTaskDialog(ObservableList<Server> servers){
         AddNewTaskDialogPresenter addNewTaskDialogPresenter;
         try{
+            //create window
             Stage stage = new Stage();
+            //create presenter
             addNewTaskDialogPresenter = new AddNewTaskDialogPresenter(stage,this,servers);
             stage.setTitle("Add new task");
+            //create and initiate scene
             Scene scene = new Scene((Parent) addNewTaskDialogPresenter.loadView());
             // set css for view
             logger.trace("Loading CSS from: " + CSS_PATH);
             scene.getStylesheets().add(getClass().getResource(CSS_PATH).toExternalForm());
             stage.setScene(scene);
             stage.setResizable(false);
+            //show window
             stage.show();
         } catch (IOException e) {
             Utilities.showException(logger, "Cannot load dialog for task adapter!", e, false, null);
@@ -811,7 +920,9 @@ public class PerformanceSimulationPresenter implements Presenter{
             Utilities.showException(logger, "Cannot create task. Error in properties file. Please review file an start application again.", ei, true, event -> quit());
         }
     }
-
+    /**
+     * Binds task's control buttons in navigation to currently selected task.
+     */
     private void bindTaskControlBtns(){
         if(getCurrentTask() == null) return;
         //start buttons
@@ -921,7 +1032,10 @@ public class PerformanceSimulationPresenter implements Presenter{
         view.getResumeSensorsTBtn().disableProperty().bind(resumeSensorsBinding);
         view.getResumeSensorsItem().disableProperty().bind(resumeSensorsBinding);
     }
-
+    /**
+     * Binds navigation buttons disable state to number of created tasks. If no task exists, relevant buttons are
+     * disabled.
+     */
     private void bindControlBtnsToTasksCount(){
         BooleanBinding tasksListZeroReturnTrue = new BooleanBinding() {
             {
@@ -966,7 +1080,12 @@ public class PerformanceSimulationPresenter implements Presenter{
         view.getDeleteTaskTBtn().disableProperty().bind(tasksListZero);
 
     }
-
+    /**
+     * Shows information dialog with given message.
+     * @param title dialog title
+     * @param headerMessage dialog header message
+     * @param message information message
+     */
     private void showInformation(String title,String headerMessage,String message){
         logger.trace("Showing information");
         Alert dlg = new Alert(Alert.AlertType.INFORMATION, "");
@@ -977,7 +1096,9 @@ public class PerformanceSimulationPresenter implements Presenter{
         dlg.getDialogPane().setHeaderText(headerMessage);
         dlg.show();
     }
-
+    /**
+     * Creates presenter for details panels and initiates their views.
+     */
     private void initPresentersAndViews(){
         //load server details
         try {
@@ -992,32 +1113,15 @@ public class PerformanceSimulationPresenter implements Presenter{
         } catch (IOException e) {
             Utilities.showException(logger, "Cannot load Server Details", e, true, event -> quit());
         }
-        //init date time picker
-        /*String DATE_TIME_PATTERN = "dd-MM-yyyy HH:mm:ss";
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
-        LocalDateTimeTextField dateTimePicker = new LocalDateTimeTextField(LocalDateTime.now());
-        dateTimePicker.setMinWidth(150);
-        dateTimePicker.setDateTimeFormatter(dateTimeFormatter);
-
-        dateTimePicker.setLocalDateTimeRangeCallback(new Callback<LocalDateTimePicker.LocalDateTimeRange, Void>() {
-            @Override
-            public Void call(LocalDateTimePicker.LocalDateTimeRange param) {
-
-                return null;
-            }
-        });
-        Locale l = Locale.UK;
-        dateTimePicker.setLocale(l);
-        dateTimePicker.setAllowNull(false);
-
-        view.getQueueProcessContainer().getChildren().add(dateTimePicker);*/
     }
+
     /**
-     *  Load view from FXML file{@link com.iha.emulator.ui.simulations.performance.PerformanceSimulationPresenter#FXML_PATH} and after that
-     *  bind the view with a presenter. Also assigns CSS file {@link com.iha.emulator.ui.simulations.performance.PerformanceSimulationPresenter#CSS_PATH}
-     *   and creates {@link javafx.scene.Scene}, which is returned.
-     *   @return scene created from loaded view
-     * */
+     * Load view from FXML file{@link com.iha.emulator.ui.simulations.performance.PerformanceSimulationPresenter#FXML_PATH} and after that
+     * bind the view with a presenter. Also assigns CSS file {@link com.iha.emulator.ui.simulations.performance.PerformanceSimulationPresenter#CSS_PATH}
+     * and creates {@link javafx.scene.Scene}, which is returned.
+     * @return scene created from loaded view
+     * @throws IOException canot load FXML file
+     */
     public Scene loadView() throws IOException{
         logger.trace("Loading PerformanceSimulationView from: " + FXML_PATH);
         InputStream fxmlStream = null;
@@ -1043,13 +1147,19 @@ public class PerformanceSimulationPresenter implements Presenter{
             if (fxmlStream != null) fxmlStream.close();
         }
     }
-
+    /**
+     * Shows given message in dialog. Also can start or stop loop indicator
+     * @param status message to be shown
+     * @param indicate <code>true</code> show indicator, <code>false</code> hide indicator
+     */
     public void setStatus(String status,boolean indicate){
         view.setStatusLine(status);
         view.setStatusIndicator(indicate);
         logger.info(status);
     }
-
+    /**
+     * Starts memory usage checking.
+     */
     public void startMemoryCheck(){
         if(view != null && memoryChecker != null){
             logger.trace("Starting memory check");
@@ -1059,23 +1169,32 @@ public class PerformanceSimulationPresenter implements Presenter{
             memoryChecker.start();
         }
     }
-
+    /**
+     * Closes buffer files for all tasks in tasks list
+     */
     private void dumpLogs(){
         if(getTasks() == null || getTasks().size() == 0) return;
         for(SimulationTask task : getTasks()){
             task.getLog().closeBuffer();
         }
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void bind() {
         view.setPresenter(this);
     }
-
+    /**
+     * {@inheritDoc}
+     */
     public Display getView(){
         return this.view;
     }
-
+    /**
+     * Gets list of tasks, that have been modified but not saved to XML file
+     * @return list of unsaved tasks
+     */
     private ObservableList<SimulationTask> getUnsavedTasks(){
         ArrayList<SimulationTask> unsavedTasks = null;
         if(getTasks().size() > 0){
@@ -1093,7 +1212,10 @@ public class PerformanceSimulationPresenter implements Presenter{
             return FXCollections.observableArrayList(unsavedTasks);
         }
     }
-
+    /**
+     * Shows {@link javafx.scene.control.ChoiceDialog} with {@link com.iha.emulator.utilities.Utilities.SaveTasksOption}
+     * actions, that should be made on list of unsaved adapters.
+     */
     private void checkIfSaved(){
         logger.debug("Checking unsaved adapters");
         if(getTasks().size() > 0){
@@ -1113,45 +1235,82 @@ public class PerformanceSimulationPresenter implements Presenter{
             }
         }
     }
-
+    /**
+     * Stops memory usage checking and closes all tasks' buffer files. Afterwards closes application.
+     */
     public void quit(){
         Platform.runLater(memoryChecker::stop);
         dumpLogs();
         Platform.exit();
     }
 
+    /**
+     * Gets currently selected task
+     * @return currently selected task
+     */
     public SimulationTask getCurrentTask() {
         return currentTask.get();
     }
 
+    /**
+     * Currently selected task property, that can be bound
+     * @return currently selected task property
+     */
     public ObjectProperty<SimulationTask> currentTaskProperty() {
         return currentTask;
     }
 
+    /**
+     * Sets currently selected task
+     * @param currentTask currently selected task
+     */
     public void setCurrentTask(SimulationTask currentTask) {
         this.currentTask.set(currentTask);
     }
 
+    /**
+     * Gets list of created tasks
+     * @return list of created tasks
+     */
     public ObservableList<SimulationTask> getTasksList() {
         return tasksList.get();
     }
 
+    /**
+     * List of created tasks property, that can be bound
+     * @return list of created tasks property
+     */
     public ListProperty<SimulationTask> tasksListProperty() {
         return tasksList;
     }
-
+    /**
+     * Gets list of created tasks
+     * @return list of created tasks
+     */
     public ObservableList<SimulationTask> getTasks() {
         return tasksList.get();
     }
 
+    /**
+     * Gets instance of queue watcher
+     * @return instance of queue watcher
+     */
     public QueueWatcher getQueueWatcher() {
         return queueWatcher;
     }
 
+    /**
+     * Gets host services
+     * @return host services
+     */
     public HostServices getHostServices() {
         return hostServices;
     }
 
+    /**
+     * Sets host services
+     * @param hostServices host services
+     */
     public void setHostServices(HostServices hostServices) {
         this.hostServices = hostServices;
     }

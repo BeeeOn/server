@@ -7,7 +7,9 @@ import javafx.scene.control.TableColumn;
 import javafx.util.Callback;
 
 /**
- * Created by Shu on 26.2.2015.
+ * Class used to display a task in tasks table.
+ *
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
 public class SimulationTaskFactory implements Callback<TableColumn.CellDataFeatures<SimulationTask, Object>, ObservableValue<Object>> {
     @SuppressWarnings("unchecked")

@@ -43,34 +43,53 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Created by Shu on 5.12.2014.
+ * Class providing logic to user interactions for "Add adapter dialog". Part Presenter of MVP design pattern.
+ *
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
 public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
-
+    /** default firmware version */
     private String DEFAULT_FIRMWARE = "0";
+    /** Log4j2 logger field */
     private static final Logger logger = LogManager.getLogger(AddAdapterDialogPresenter.class);
+    /** path to FXML file */
     private static final String FXML_PATH = "AddAdapterDialog.fxml";
+    /** path to CSS file */
     private static final String CSS_PATH = "/com/iha/emulator/resources/css/theme-light.css";
+    /** path to default directory for adapters' logs */
     public static final String DEFAULT_LOG_PATH = "logs/detailed";
+    /** server information validator */
     private ValidationSupport serverValidationSupport = new ValidationSupport();
+    /** adapter information validator */
     private ValidationSupport adapterValidationSupport = new ValidationSupport();
-
+    /** view */
     private Display view;
+    /** window */
     private Stage window;
-
+    /** dialog navigation "Next" disable property */
     private BooleanProperty disableNext;
+    /** dialog navigation "Previous" disable property */
     private BooleanProperty disablePrevious;
+    /** dialog navigation "Finish" disable property */
     private BooleanProperty disableFinish;
+    /** all needed server information set property */
     private BooleanProperty serverInfoSet;
+    /** all needed adapter information set property */
     private BooleanProperty adapterInfoSet;
+    /** server information modification property */
     private BooleanProperty modifyServer;
-
+    /** list of possible server */
     private ObservableList<Server> servers;
+    /** selected server */
     private Server selectedServer;
+    /** selected protocol version */
     private Protocol.Version selectedVersion;
-
+    /** parent presenter */
     private DetailedSimulationPresenter parent;
 
+    /**
+     * Interface implemented by "Add adapter dialog" view.
+     */
     public interface Display {
         public Node getView();
         public void setPresenter(AddAdapterDialogPresenter presenter);
@@ -93,13 +112,22 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
         public ComboBox getAdapterProtocolComboBox();
     }
 
+    /**
+     * Creates new "Add adapter dialog" presenter. Sets default servers and default adapter firmware version
+     * @param stage parent window
+     * @param servers list of default server
+     * @param parent parent presenter
+     * @param defaultFirmware default adapter firmware version
+     */
     public AddAdapterDialogPresenter(Stage stage,ObservableList<Server> servers,DetailedSimulationPresenter parent,String defaultFirmware) {
+        //initializes properties
         this.disableNext = new SimpleBooleanProperty(false);
         this.disablePrevious = new SimpleBooleanProperty(true);
         this.disableFinish = new SimpleBooleanProperty(true);
         this.serverInfoSet = new SimpleBooleanProperty(false);
         this.adapterInfoSet = new SimpleBooleanProperty(false);
         this.modifyServer = new SimpleBooleanProperty(false);
+        //initializes validation
         ValidationDecoration iconDecorator = new StyleClassValidationDecoration("validationError", "validationWarn");
         serverValidationSupport.setValidationDecorator(iconDecorator);
         this.window = stage;
@@ -108,6 +136,9 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
         this.DEFAULT_FIRMWARE = defaultFirmware;
     }
 
+    /**
+     * Initializes dialog. Fills components with data and sets validation options.
+     */
     @SuppressWarnings("unchecked")
     public void initialize(){
         //----------------SERVER-------------------
@@ -179,19 +210,25 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
         });
     }
 
-
-
+    /**
+     * Next button clicked. If all needed information about server is set, show adapter's information dialog
+     */
     public void next(){
+        //if server was selected and all information about server is set
         if(getServerInfoSet() && selectedServer != null){
             logger.trace("Showing next panel");
             updateServerInfo();
+            //show adapter's information dialog
             enableAdapterPanel();
+            //disable or enable appropriate navigation buttons
             setDisablePrevious(false);
             setDisableNext(true);
             setDisableFinish(false);
         }else{
+            //not all needed info is set, notify user
             logger.trace("Server info not filled. Cannot \"Next\" dialog");
             String message = null;
+            //gather validation messages
             for(ValidationMessage msg : serverValidationSupport.getValidationResult().getErrors()){
                 if(message == null){
                     message = msg.getText();
@@ -199,10 +236,14 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
                     message = message + "\n"  + msg.getText();
                 }
             }
+            //notify user
             showWarning("Server information","Please fill all necessary information",message);
         }
     }
 
+    /**
+     * Update selected server information from text fields.
+     */
     private void updateServerInfo(){
         if(selectedServer != null){
             selectedServer.setIp(view.getServerIpTxtField().getText());
@@ -212,6 +253,9 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
         }
     }
 
+    /**
+     * Hide adapter's information dialog and show server information dialog.
+     */
     public void previous(){
         if(getServerInfoSet()){
             logger.trace("Showing previous panel");
@@ -224,9 +268,14 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
         }
     }
 
+    /**
+     * If all needed server and adapter information is set, add adapter to parent's adapters list and close dialog. Otherwise
+     * notify user about unfilled information.
+     */
     public void finish(){
         if(getAdapterInfoSet() && selectedVersion != null){
             logger.trace("Finishing");
+            //all info set, add adapter
             if(addAdapter())
                 window.hide();
         }else{
@@ -243,6 +292,11 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
         }
     }
 
+    /**
+     * Creates new {@link com.iha.emulator.control.AdapterController} with {@link com.iha.emulator.models.Adapter} model
+     * and adds it to parent's adapters list. Also adds adapter button to list of adapters in user interface.
+     * @return <code>true</code> adapter added, <code>false</code> error occurred while adding adapter
+     */
     private boolean addAdapter(){
         //check if list of adapter controllers exist
         AdapterController newAdapterController = null;
@@ -310,12 +364,17 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
         }
     }
 
+    /**
+     * Check if filled adapter ID exists in database. Creates separate {@link javafx.concurrent.Task}.
+     */
     public void checkId(){
         Task<Object> worker = new Task<Object>() {
             @Override
             protected Object call() throws Exception {
+                //create emulator server client
                 EmulatorServerClient server = new EmulatorServerClient(selectedServer.getIp());
                 try{
+                    //connect to emulator server
                     server.connect();
                 }catch (IOException e){
                     Platform.runLater(() -> Utilities.showException(logger, "Cannot connect to server", e, false, null));
@@ -348,9 +407,14 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
         th.start();
     }
 
+    /**
+     * Shows adapter information gathered by communication with emulator server.
+     * @param adapterInfo information about adapter from server
+     */
     private void showAdapterFromServer(AdapterInfo adapterInfo){
-        //TODO show dialog, that id was found and if user want to set data from server
         if(adapterInfo == null){
+            //no info found, so adapter was not found in database
+            //show dialog notifying user, that adapter doesn't exist yet
             Alert dlg = new Alert(Alert.AlertType.INFORMATION,"");
             dlg.initModality(Modality.WINDOW_MODAL);
             dlg.initOwner(window);
@@ -361,6 +425,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
             view.getAdapterNameLbl().setText("");
             view.getAdapterFirmwareLbl().setText(DEFAULT_FIRMWARE);
         } else {
+            //show dialog notifying user about adapter information
             Alert dlg = new Alert(Alert.AlertType.INFORMATION,"");
             dlg.initModality(Modality.WINDOW_MODAL);
             dlg.initOwner(window);
@@ -371,6 +436,7 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
                     "Name: " + adapterInfo.getName() + "\n" +
                     "Version: " + adapterInfo.getVersion());
             dlg.show();
+            //set text field according to gathered adapter info
             view.getAdapterIdLbl().setText(adapterInfo.getId());
             if(adapterInfo.getName() == null || adapterInfo.getName().equals("null")){
                 view.getAdapterNameLbl().setText("EA"+adapterInfo.getId());
@@ -381,27 +447,36 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
         }
     }
 
-
-
+    /**
+     * Shows new window with {@link com.iha.emulator.ui.dialogs.adapter.ShowAdaptersDialogPresenter} dialog.
+     */
     public void showAdapters(){
         ShowAdaptersDialogPresenter showAdaptersDialogPresenter;
         try{
+            //create window
             Stage stage = new Stage();
+            //create presenter
             showAdaptersDialogPresenter = new ShowAdaptersDialogPresenter(stage,selectedServer);
             stage.setTitle("Adapters in database");
+            //create and set scene, load view
             Scene scene = new Scene((Parent) showAdaptersDialogPresenter.loadView());
             // set css for view
             logger.trace("Loading CSS from: " + CSS_PATH);
+            //set CSS style
             scene.getStylesheets().add(getClass().getResource(CSS_PATH).toExternalForm());
             stage.setScene(scene);
-            //stage.setResizable(false);
+            //show window
             stage.show();
+            //get adapters from DB
             showAdaptersDialogPresenter.refresh();
         } catch (IOException e) {
             Utilities.showException(logger, "Cannot load dialog for showing adapters in database!", e, false,null);
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Node loadView() throws IOException {
         logger.trace("Loading AddAdapterDialogView from: " + FXML_PATH);
@@ -427,16 +502,27 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
         }
     }
 
+    /**
+     * Shows panel with server information
+     */
     private void enableServerPanel(){
         view.getServerContainer().setVisible(true);
         view.getAdapterContainer().setVisible(false);
     }
-
+    /**
+     * Shows panel with adapter information
+     */
     private void enableAdapterPanel(){
         view.getServerContainer().setVisible(false);
         view.getAdapterContainer().setVisible(true);
     }
 
+    /**
+     * Shows warning dialog with given title and message
+     * @param title dialog title
+     * @param headerMessage dialog header message
+     * @param message warning message
+     */
     private void showWarning(String title,String headerMessage,String message){
         Alert dlg = new Alert(Alert.AlertType.WARNING, "");
         dlg.initModality(Modality.WINDOW_MODAL);
@@ -447,6 +533,13 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
         dlg.show();
     }
 
+    /**
+     * Fill server text fields with given values
+     * @param name server name
+     * @param ip server hostname
+     * @param port server port
+     * @param dbName database name
+     */
     private void setServerTextFields(String name,String ip,String port,String dbName){
         view.getServerNameTxtField().setText(name);
         view.getServerIpTxtField().setText(ip);
@@ -454,26 +547,49 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
         view.getServerDbNameTxtField().setText(dbName);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Empty
+     * @param model null
+     */
     @Override
     public void addModel(Object model) {
 
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Empty
+     * @return null
+     */
     @Override
     public Object getModel() {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Node getView() {
         return view.getView();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Empty
+     */
     @Override
     public void clear() {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void bind() {
         view.setPresenter(this);
@@ -539,74 +655,137 @@ public class AddAdapterDialogPresenter implements Presenter,PanelPresenter{
         //--adapter bind finish disable property to validator
     }
 
+    /**
+     * Gets if next button is disabled
+     * @return <code>true</code> if next button is disabled, <code>false</code> otherwise
+     */
     public boolean getDisableNext() {
         return disableNext.get();
     }
 
+    /**
+     * Next button is disabled property
+     * @return next button is disabled property
+     */
     public BooleanProperty disableNextProperty() {
         return disableNext;
     }
 
+    /**
+     * Sets if next button is disabled
+     * @param disableNext <code>true</code> if next button is disabled, <code>false</code> otherwise
+     */
     public void setDisableNext(boolean disableNext) {
         this.disableNext.set(disableNext);
     }
-
+    /**
+     * Gets if previous button is disabled
+     * @return <code>true</code> if previous button is disabled, <code>false</code> otherwise
+     */
     public boolean getDisablePrevious() {
         return disablePrevious.get();
     }
-
+    /**
+     * Previous button is disabled property
+     * @return previous button is disabled property
+     */
     public BooleanProperty disablePreviousProperty() {
         return disablePrevious;
     }
-
+    /**
+     * Sets if previous button is disabled
+     * @param disablePrevious if previous button is disabled, <code>false</code> otherwise
+     */
     public void setDisablePrevious(boolean disablePrevious) {
         this.disablePrevious.set(disablePrevious);
     }
-
+    /**
+     * Gets if previous button is disabled
+     * @return <code>true</code> if previous button is disabled, <code>false</code> otherwise
+     */
     public boolean getDisableFinish() {
         return disableFinish.get();
     }
-
+    /**
+     * Previous button is disabled property
+     * @return previous button is disabled property
+     */
     public BooleanProperty disableFinishProperty() {
         return disableFinish;
     }
-
+    /**
+     * Sets if previous button is disabled
+     * @param disableFinish <code>true</code> if previous button is disabled, <code>false</code> otherwise
+     */
     public void setDisableFinish(boolean disableFinish) {
         this.disableFinish.set(disableFinish);
     }
 
+    /**
+     * Gets if all needed server information is set
+     * @return <code>true</code> all set, <code>false</code> otherwise
+     */
     public boolean getServerInfoSet() {
         return serverInfoSet.get();
     }
 
+    /**
+     * All needed server information is set property
+     * @return all needed server information is set property
+     */
     public BooleanProperty serverInfoSetProperty() {
         return serverInfoSet;
     }
 
+    /**
+     * Sets if all needed server information is set
+     * @param serverInfoSet <code>true</code> all set, <code>false</code> otherwise
+     */
     public void setServerInfoSet(boolean serverInfoSet) {
         this.serverInfoSet.set(serverInfoSet);
     }
-
+    /**
+     * Gets if all needed adapter information is set
+     * @return <code>true</code> all set, <code>false</code> otherwise
+     */
     public boolean getAdapterInfoSet() {
         return adapterInfoSet.get();
     }
-
+    /**
+     * All needed adapter information is set property
+     * @return all needed adapter information is set property
+     */
     public BooleanProperty adapterInfoSetProperty() {
         return adapterInfoSet;
     }
-
+    /**
+     * Sets if all needed adapter information is set
+     * @param adapterInfoSet <code>true</code> all set, <code>false</code> otherwise
+     */
     public void setAdapterInfoSet(boolean adapterInfoSet) {
         this.adapterInfoSet.set(adapterInfoSet);
     }
 
+    /**
+     * Gets if server is modified
+     * @return <code>true</code> if modified, <code>false</code> otherwise
+     */
     public boolean getModifyServer() {
         return modifyServer.get();
     }
 
+    /**
+     * Server is modified property
+     * @return server is modified property
+     */
     public BooleanProperty modifyServerProperty() {
         return modifyServer;
     }
 
+    /**
+     * Sets if server is modified
+     * @param modifyServer <code>true</code> if modified, <code>false</code> otherwise
+     */
     public void setModifyServer(boolean modifyServer) {
         this.modifyServer.set(modifyServer);
     }

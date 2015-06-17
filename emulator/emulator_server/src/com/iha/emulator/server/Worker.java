@@ -13,25 +13,36 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 /**
- * Created by Shu on 5.12.2014.
+ * Class serving request from one client. Ran in separate thread, so server can accept more connections while this is
+ * processed.
+ *
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
 public class Worker implements Runnable{
-
+    /** Log4j2 logger field */
     private static final Logger logger = LogManager.getLogger(Server.class);
+    /** xml document factory */
     private static DocumentFactory xmlFactory = DocumentFactory.getInstance();
-
+    /** client socket */
     private Socket clientSocket = null;
-    private String serverText = null;
-    private Database database = null;
+    /** information about database from configuration file */
     private DatabaseInfo databaseInfo;
 
-    public Worker(Socket clientSocket,String serverText,DatabaseInfo dbInfo) {
+    /**
+     * Creates new worker responsible for receiving and processing client request.
+     *
+     * @param clientSocket connected client socket
+     * @param dbInfo information about database from configuration file
+     */
+    public Worker(Socket clientSocket,DatabaseInfo dbInfo) {
         this.clientSocket = clientSocket;
-        this.serverText = serverText;
-        this.database = new Database();
         this.databaseInfo = dbInfo;
     }
 
+    /**
+     * Method reads message on client socket, processes this message and sends server's response. Afterwards is connection
+     * closed.
+     */
     @Override
     public void run() {
         try {
@@ -67,6 +78,12 @@ public class Worker implements Runnable{
         }
     }
 
+    /**
+     * Parse XML message given as string.
+     *
+     * @param clientMessageString XML message content
+     * @return server's response in XML format as string
+     */
     private String parseMessage(String clientMessageString){
         logger.trace("Parsing message");
         try{
@@ -77,6 +94,14 @@ public class Worker implements Runnable{
         }
     }
 
+    /**
+     * Parse given XML content, creates new {@link com.iha.emulator.server.DatabaseInfo} from one created from configuration
+     * file and inserts database name parsed from message. Creates and resolves EmulatorServer {@link com.iha.emulator.server.task.Task}.
+     *
+     * @param clientMessageString message from client in XML format
+     * @return server's response in XML format as string
+     * @throws DocumentException
+     */
     private String parseXml(String clientMessageString) throws DocumentException {
         //create XML document from received string
         Document doc = DocumentHelper.parseText(clientMessageString);
@@ -98,14 +123,11 @@ public class Worker implements Runnable{
         }
 
     }
+
     /**
-     * <server_emulator>
-     *     <result state="OK/ERROR">
-     *         Result or error message
-     *     </result>
-     * </server_emulator>
-     * @param result error message
-     * @return XML message as string
+     * Wraps task result in default element
+     * @param result task's result
+     * @return response ready to be sent to client
      */
     private String buildMessage(Element result){
         Document doc = xmlFactory.createDocument();
@@ -115,13 +137,12 @@ public class Worker implements Runnable{
     }
 
     /**
-     * <server_emulator>
-     *     <result state="ERROR">
-     *         Error message
-     *     </result>
-     * </server_emulator>
-     * @param error error message
-     * @return XML message as string
+     * When error on server occurs, error message is created. This message is
+     * ready to be sent to client. This is global server error, not specific
+     * task error.
+     *
+     * @param error error message for client
+     * @return error message ready to be sent to client
      */
     private String serverErrorMessage(String error){
         Document doc = xmlFactory.createDocument();

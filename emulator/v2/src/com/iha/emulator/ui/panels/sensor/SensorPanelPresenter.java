@@ -29,14 +29,21 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Created by Shu on 28.11.2014.
+ * Class providing logic to user interactions for "Sensor panel". Part Presenter of MVP design pattern.
+ * Also responsible for model change.
+ *
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
 public class SensorPanelPresenter implements Presenter,PanelPresenter{
-
+    /** Log4j2 logger field */
     private static final Logger logger = LogManager.getLogger(SensorPanelPresenter.class);
+    /** path to FXML file */
     private static final String FXML_PATH = "SensorPanel.fxml";
+    /** path to CSS style class */
     private static final String CSS_PATH = "/com/iha/emulator/resources/css/theme-light.css";
-
+    /**
+     * Interface implemented by "Sensor panel" view.
+     */
     public interface Display {
         public Node getView();
         public void setPresenter(SensorPanelPresenter presenter);
@@ -50,45 +57,58 @@ public class SensorPanelPresenter implements Presenter,PanelPresenter{
         public Button getConnectionBtn();
         public TableView getValueTable();
     }
-
+    /** view */
     private Display view;
+    /** model */
     private SensorController controller;
+    /** panel's container component */
     private Node container;
-
+    /** panel's icon */
     private SensorIcon iconType;
+    /** panel's color as hex number */
     private String hexHeaderColor;
 
-    public SensorPanelPresenter(){
-
-    }
-
+    /**
+     * Creates new "Sensor panel" presenter. Stores panel's container component
+     * @param container container component for sensor's panel
+     */
     public SensorPanelPresenter(Node container){
         this.container = container;
     }
 
+    /**
+     * Sets sensor's connection to adapter
+     */
     public void connection(){
         if(controller.getModel().getStatus()){
             controller.disable();
         }else{
             controller.enable();
         }
-        //controller.getModel().setStatus(!controller.getModel().getStatus());
     }
 
+    /**
+     * Disables sensor and shows {@link com.iha.emulator.ui.dialogs.sensor.SensorDetailsDialogPresenter} dialog.
+     */
     public void settings(){
         getController().disable();
         SensorDetailsDialogPresenter sensorDetailsDialogPresenter;
         try{
+            //must have controller
             if(controller == null) throw new NullPointerException("Controller is null");
+            //create new window
             Stage stage = new Stage();
+            //create details presenter
             sensorDetailsDialogPresenter = new SensorDetailsDialogPresenter(stage,controller);
             stage.setTitle("Add new adapter");
+            //create and initialize scene
             Scene scene = new Scene((Parent) sensorDetailsDialogPresenter.loadView());
             // set css for view
             logger.trace("Loading CSS from: " + CSS_PATH);
             scene.getStylesheets().add(getClass().getResource(CSS_PATH).toExternalForm());
             stage.setScene(scene);
             stage.setResizable(false);
+            //show window
             stage.show();
         } catch (IOException e) {
             Platform.runLater(()->Utilities.showException(logger,"Cannot load sensor details dialog",e,false,null));
@@ -97,12 +117,17 @@ public class SensorPanelPresenter implements Presenter,PanelPresenter{
         }
     }
 
+    /**
+     * Removes panel from it's container
+     */
     public void deletePanel(){
         if(this.container != null){
             ((FlowPane)this.container).getChildren().remove(getView());
         }
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Node loadView() throws IOException {
         logger.trace("Loading SensorPanelView from: " + FXML_PATH);
@@ -126,7 +151,10 @@ public class SensorPanelPresenter implements Presenter,PanelPresenter{
             if (fxmlStream != null) fxmlStream.close();
         }
     }
-
+    /**
+     * Assign model to panel and binds it's variables to panel fields. If panel has already assigned model, it is unbound.
+     * @param newModel model to be bound with panel's fields
+     */
     @Override
     @SuppressWarnings("unchecked")
     public void addModel(Object newModel) {
@@ -232,6 +260,10 @@ public class SensorPanelPresenter implements Presenter,PanelPresenter{
         view.getValueTable().setItems(controller.getModel().getValues());
     }
 
+    /**
+     * Sets panel's header color as hex number
+     * @param hexColor panel's header color as hex number
+     */
     public void setHeaderColor(String hexColor){
         view.getNameLbl().setStyle("-fx-background-color: " + hexColor + ";");
         view.getConnectionBtn().setStyle("-fx-background-color: " + hexColor + ";");
@@ -239,6 +271,10 @@ public class SensorPanelPresenter implements Presenter,PanelPresenter{
         setHexHeaderColor(hexColor);
     }
 
+    /**
+     * Sets panel's icon type
+     * @param icon panel's icon type
+     */
     public void setIcon(SensorIcon icon){
         view.getNameLbl().setGraphic(
                 new ImageView(
@@ -248,45 +284,78 @@ public class SensorPanelPresenter implements Presenter,PanelPresenter{
         setIconType(icon);
     }
 
+    /**
+     * Gets panel's icon type
+     * @return panel's icon type
+     */
     public SensorIcon getIconType() {
         return iconType;
     }
 
+    /**
+     * Stores panel's icon type
+     * @param iconType panel's icon type
+     */
     public void setIconType(SensorIcon iconType) {
         this.iconType = iconType;
     }
 
+    /**
+     * Gets panel's header color as hex number
+     * @return panel's header color as hex number
+     */
     public String getHexHeaderColor() {
         return hexHeaderColor;
     }
 
+    /**
+     * Stores panel's header color as hex number
+     * @param hexHeaderColor panel's header color as hex number
+     */
     public void setHexHeaderColor(String hexHeaderColor) {
         this.hexHeaderColor = hexHeaderColor;
     }
-
+    /**
+     * Unbinds given label text property
+     * @param lbl label for which should be text property unbound
+     */
     private void unbindLbl(Label lbl){
         lbl.textProperty().unbind();
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Object getModel() {
         return controller.getModel();
     }
 
+    /**
+     * Gets panel's model controller
+     * @return panel's model controller
+     */
     public SensorController getController(){
         return controller;
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Node getView() {
         return view.getView();
     }
-
+    /**
+     * {@inheritDoc}
+     *
+     * Empty
+     */
     @Override
     public void clear() {
 
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void bind() {
         view.setPresenter(this);

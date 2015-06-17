@@ -1,7 +1,8 @@
 <component name="libraryTable">
   <library name="controlsfx-8.20.8">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/src/com/iha/emulator/resources/lib/controlsfx-8.20.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/resources/lib/controlsfx-8.20.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/resources/lib/openjfx-dialogs-1.0.2.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

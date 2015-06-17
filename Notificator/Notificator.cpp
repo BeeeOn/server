@@ -3,7 +3,7 @@
 #include <iostream>
 #include <curl/curl.h>
 
-int Notificator::sendGcm(string json) {
+vector<string> Notificator::sendGcm(string json) {
     CURL *curl;
     //CURLcode res;
 
@@ -30,8 +30,11 @@ int Notificator::sendGcm(string json) {
         /* always cleanup */
         curl_easy_cleanup(curl);
     }
+    
+    vector<string> gcmDelete;
+    gcmDelete.clear();
 
-    return 0;
+    return gcmDelete;
 }
 
 size_t writeToString(void *ptr, size_t size, size_t count, void *stream) {

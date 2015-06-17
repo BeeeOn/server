@@ -44,23 +44,12 @@ int main(int argc, char *argv[])
 		if (parameterCounter == 1){
 			std::string AnySenzorValue = (*parameter);
 			std::string delimiter = "---";
-			int countTmp = 1;
 			size_t pos = 0;
 			std::string token;
-			while ((pos = AnySenzorValue.find(delimiter)) != std::string::npos) {
-				token = AnySenzorValue.substr(0, pos);
-				if (countTmp == 1){
-					idOfSenzorString = token;
-				}
-				else if (countTmp == 2){
-					typeOfSenzorString = token;
-				}
-				else{
-					break;
-				}
-				AnySenzorValue.erase(0, pos + delimiter.length());
-				countTmp++;
-			}
+			pos = AnySenzorValue.find(delimiter);
+			token = AnySenzorValue.substr(0, pos);
+			idOfSenzorString = token;
+			typeOfSenzorString = AnySenzorValue.erase(0, pos + delimiter.length());
 			idOfSenzor = std::atoll(idOfSenzorString.c_str());
 		}
 		else if (parameterCounter == 2){
@@ -136,13 +125,11 @@ int main(int argc, char *argv[])
 
 	bool isToBeSendNotificationOrChangeActor = false;
 
-	//float lastValue = alg->database->GetValueFromDevices(idOfSenzorString, typeOfSenzorString);
-	
-	//std::cout << to_string(lastValue).c_str() << endl;
+	float lastValue = alg->database->GetValueFromDevices(idOfSenzorString, typeOfSenzorString);
 
 	if (IsSetFval){
 		if (op == GT){
-			if (fvalFromSenzor > valueDefinedByUser ){
+			if (fvalFromSenzor > valueDefinedByUser && lastValue <= valueDefinedByUser){
 				isToBeSendNotificationOrChangeActor = true;
 			}
 		}
@@ -152,28 +139,27 @@ int main(int argc, char *argv[])
 			}
 		}
 		else if (op == GE){
-			if (fvalFromSenzor >= valueDefinedByUser ){
+			if (fvalFromSenzor >= valueDefinedByUser && lastValue < valueDefinedByUser){
 				isToBeSendNotificationOrChangeActor = true;
 			}
 		}
 		else if (op == LT){
-			if (fvalFromSenzor < valueDefinedByUser ){
+			if (fvalFromSenzor < valueDefinedByUser && lastValue >= valueDefinedByUser){
 				isToBeSendNotificationOrChangeActor = true;
 			}
 		}
 		else if (op == LE){
-			if (fvalFromSenzor <= valueDefinedByUser ){
+			if (fvalFromSenzor <= valueDefinedByUser && lastValue > valueDefinedByUser){
 				isToBeSendNotificationOrChangeActor = true;
 			}
 		}
 
 		//Zde ulozit aktualni prijata data
-		/*
+		
 		if (alg->database->UpdateValueOfDevices(idOfSenzorString, typeOfSenzorString, to_string(fvalFromSenzor)))	   {
-			cout << "UpdateLastTemp: " << to_string(fvalFromSenzor).c_str() << endl;
-		}	*/
+		}
 	}
-	/*
+
 	if (IsSetIval){
 		if (op == GT){
 			if (ivalFromSenzor > valueDefinedByUser && lastValue <= valueDefinedByUser){
@@ -200,34 +186,6 @@ int main(int argc, char *argv[])
 				isToBeSendNotificationOrChangeActor = true;
 			}
 		}
-	}*/
-
-	if (IsSetIval){
-		if (op == GT){
-			if (ivalFromSenzor > valueDefinedByUser){
-				isToBeSendNotificationOrChangeActor = true;
-			}
-		}
-		else if (op == EQ){
-			if (ivalFromSenzor == valueDefinedByUser){
-				isToBeSendNotificationOrChangeActor = true;
-			}
-		}
-		else if (op == GE){
-			if (ivalFromSenzor >= valueDefinedByUser){
-				isToBeSendNotificationOrChangeActor = true;
-			}
-		}
-		else if (op == LT){
-			if (ivalFromSenzor < valueDefinedByUser ){
-				isToBeSendNotificationOrChangeActor = true;
-			}
-		}
-		else if (op == LE){
-			if (ivalFromSenzor <= valueDefinedByUser){
-				isToBeSendNotificationOrChangeActor = true;
-			}
-		}
 	}
 
 	if (isToBeSendNotificationOrChangeActor){
@@ -243,7 +201,9 @@ int main(int argc, char *argv[])
 	/*-----------------------------------Konec tìla programu-----------------------------------*/
 	//Odeslání dat do Frameworku a ukonèení algoritmu.
 	if (!alg->SendAndExit()){
+		delete(alg);
 		return EXIT_FAILURE;
 	}
+	delete(alg);
 	return EXIT_SUCCESS;
 }

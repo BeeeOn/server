@@ -11,19 +11,19 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Created by Shu on 25.2.2015.
+ * Class providing GUI components for "Application simulation chooser". Part View of MVP design pattern.
+ * Contains methods invoked on user interaction with user interface. These methods call appropriate presenter method
+ * to process user interaction.
+ *
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
 public class ChooserView implements Initializable,ChooserPresenter.Display {
-
+    /** Log4j2 logger field */
     private static final Logger logger = LogManager.getLogger(ChooserView.class);
-
+    /** presenter */
     private ChooserPresenter presenter;
-
+    /** GUI components */
     @FXML private Node view;
-
-    public ChooserView() {
-
-    }
 
     @FXML
     public void handleDetailedSimulation(ActionEvent event){

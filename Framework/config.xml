@@ -6,7 +6,7 @@
 	portAlgorithmsServer="7084"
 	DBName="home6"
 	maxNumDBConnections="10"
-	recieveBuffSize="1000"
+	recieveBuffSize="5000"
 	algorithmsConfig="Algorithms/AlgsConfig.xml">
 	<loger
 		fileName="log"

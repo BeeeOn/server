@@ -1,7 +1,9 @@
 package com.iha.emulator.models.value;
 
 /**
- * Created by Shu on 27/04/15.
+ * Interface implemented by values emulating VPT regulator. Used to identify this values.
+ *
+ * @author <a href="mailto:xsutov00@stud.fit.vutbr.cz">Filip Sutovsky</a>
  */
 public interface VPTRegulatorValue {
 }

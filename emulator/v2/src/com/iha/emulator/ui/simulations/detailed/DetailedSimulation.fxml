@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.input.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <?import java.lang.*?>
+
 <VBox fx:id="view" prefHeight="673.0" prefWidth="1131.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iha.emulator.ui.simulations.detailed.DetailedSimulationView">
   <children>
       <HBox prefHeight="43.0" prefWidth="1110.0" styleClass="whiteBackground" VBox.vgrow="NEVER">
@@ -105,15 +107,6 @@
                      </styleClass>
                      <tooltip>
                         <Tooltip text="Load adapter/s" />
-                     </tooltip>
-                  </Button>
-                  <Button fx:id="printTBtn" layoutX="139.0" layoutY="12.0" mnemonicParsing="false" onAction="#handlePrint">
-                     <styleClass>
-                        <String fx:value="plainToolBarBtn" />
-                        <String fx:value="printBtn" />
-                     </styleClass>
-                     <tooltip>
-                        <Tooltip text="Print current adapter logs" />
                      </tooltip>
                   </Button>
                   <Separator orientation="VERTICAL" prefHeight="6.0" prefWidth="0.0">

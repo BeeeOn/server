@@ -1,11 +1,3 @@
-/**
-* @file config.h
-*
-* @Definice tridy FrameworkConfig
-*
-* @author xrasov01
-* @version 1.0
-*/
 #include <string>
 #include <cstring>
 #include <arpa/inet.h>
