@@ -1,8 +1,10 @@
-/*
- * requestHandler.h
+/**
+ * @file requestServer.h
+ * 
+ * @brief definition of RequestServer class
  *
- *  Created on: Feb 22, 2015
- *      Author: tuso
+ * @author Matus Blaho 
+ * @version 1.0
  */
 
 #ifndef REQUESTHANDLER_H_
@@ -12,42 +14,63 @@
 #include "sender.h"
 #include "messageCreator.h"
 #include "DBHandler.h"
-#include <arpa/inet.h> //kniznica pre internetove operacie
-#include <netdb.h> //kniznica pre sietove operacie
-#include <cstdlib>  //kniznica pre standarnde funkcie a dynamicku pamat
-#include <netinet/in.h>  //kniznica pre sietovy protokol
-#include <sys/socket.h>  //kniznica pre sockety
-#include <sys/types.h>  //kniznica pre systemove typy
-#include <string.h>  //kniznica pre znakove retazce
-#include <unistd.h>  //kniznica pre standardne symbolicke konstanty a typy
-#include <signal.h>  //kniznica pre signaly
-#include <sys/wait.h> //kniznica pre funkciu wait
-#include <string>  //c++ znakove retazce
+#include <arpa/inet.h> 
+#include <netdb.h> 
+#include <cstdlib>  
+#include <netinet/in.h>  
+#include <sys/socket.h>  
+#include <sys/types.h>  
+#include <string.h>  
+#include <unistd.h>  
+#include <signal.h>  
+#include <sys/wait.h> 
+#include <string>  
 #include <semaphore.h>
-#include <exception> //kniznica pre bok try/catch
+#include <exception> 
 #include <bitset>
 #include <errno.h>
 #include <string.h>
 #include "SSLContainer.h"
 #include "messageParsers.h"
 
+/**
+ * @Class RequestServer
+ * @brief Class to receive and parse message from the ui_server and sent it to adapter 
+ */
+
 class RequestServer
 {
 	private:
-		const std::string _Name = "RequestServer";
-		int com_s;
-		DBHandler *database;    /**< ukazatel na objekt DBHandler*/
-		std::string response;		/**< ukazatel na spravu odpovede*/
+		const std::string _Name = "RequestServer"; /**< Name of class*/
+		int com_s;  /**< communication socket*/
+		DBHandler *database;    /**< database interface*/
+		std::string response;		/**< response text*/
+		/**Method to to obtain data from database
+		 * @return int representing result
+						 */
 		int GetData();
-		MessageCreator *MC;
-		Sender *s;
-		Loger *_log;
-		SSLContainer *_sslcont;
-		UIServerMessageParser *UIp;
+		MessageCreator *MC; /**< reference to message creator*/
+		Sender *s;  /**< reference to sender*/
+ 		Loger *_log; /**< reference to loger used for logging*/
+		SSLContainer *_sslcont;  /**< reference to SSLContainer to pick SSL connection*/
+		UIServerMessageParser *UIp; /**< reference to UIServerMessageParser*/
 	public:
+		/**Constructor
+		 * @param l Loger used to log messages
+		 * @param SQL soci::session pointer to database connection
+		 * @param sslcont SSLContainer pointer to ssl container with active ssl connection
+				 */
 		RequestServer(Loger *l,soci::session *SQl, SSLContainer *sslcont);
+		/**Method to handle request
+		 * @return bool true/false on success/failure
+				 */
 		bool HandleRequest();
+		/**Method to set clients socket
+		 * @param Soc int representation of socket descriptor
+				 */
 		void SetSocket(int Soc);
+		/**Descrutor
+				 */
 		~RequestServer();
 };
 

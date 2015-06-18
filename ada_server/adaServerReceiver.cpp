@@ -1,20 +1,13 @@
 /**
- * @file server.cpp
+ * @file adaServerReceiver.cpp
  * 
- * @brief Implementacia servera - zdrojovy subor
+ * @brief implementation of AdaServerReceiver Class
  *
- * @author xblaho03 
+ * @author Matus Blaho 
  * @version 1.0
  */
-#define DEF_PORT 9091  //defaultny port
-//makro pre prehodenie hodnot dvoch premennych
-#define SWAP(X,Y) { \
-       char temp = X ; \
-       X = Y ; \
-       Y = temp ; \
-    }
 
-#include "adaServerReceiver.h" //hlavickovy subor
+#include "adaServerReceiver.h" 
 
 using namespace soci;
 using namespace pugi;

@@ -1,48 +1,53 @@
 /**
- * @file server.h
+ * @file adaServerReceiver.h
  * 
- * @brief JImplementacia servera - hlavickovy subor
+ * @brief definition of AdaServerReceiver Class
  *
- * @author xblaho03 
+ * @author Matus Blaho 
  * @version 1.0
  */
 
-#include<string>  //c++ znakove retazce
-#include<cstring>
-#include <ctime>  // kniznica nutna pre casove razitka
-//kniznice na pracu s DB
-#include <mutex>
-#include <fstream>
-#include <iomanip>
-#include <ctime>
-#include <chrono>  //kniznica pre meranie casu
-#include <iostream> //kniznica pre vystup na teminal
-#include <signal.h>  //kniznica pre signaly
+#include<string>  //c++ strings
+#include<cstring> // C strings
+#include <ctime>  // timestamps
+#include <mutex>  // mutex library
+#include <fstream> //file streams
+#include <iomanip> // I/O manipulation
 #include <sys/wait.h> //kniznica pre funkciu wait
-#include <atomic>
-#include <exception> //kniznica pre bok try/catch
-#include <semaphore.h>
-#include "pugixml.hpp"
-#include "pugiconfig.hpp"
+#include <atomic>  // atomic library
+#include <exception> //exceptions library
+#include <semaphore.h>  //definitions of semaphore
+#include "pugi/pugixml.hpp"
+#include "pugi/pugiconfig.hpp"
 #include "loger.h"
 #include "config.h"
 #include "connectionHandler.h"
 #include "workerPool.h"
 
-
+/** @Class AdaServerReceiver
+ *  @brief Class representing ada_server_receiver part of aplication created on start of app
+ */
 
 class AdaServerReceiver
 {
 	private:
-		std::string _Name = "AdaServerReceiver";
-		Loger *_log;
-		WorkerPool *workers;
-		Config *conf;
-		ConnectionHandler *_CH;
+		std::string _Name = "AdaServerReceiver"; /**< Member representing name of class*/
+		Loger *_log; /**< Member representing object used for logging*/
+		WorkerPool *workers; /**< Member representing workerpool reference*/
+		Config *conf;  /**< Member representing configuration reference*/
+		ConnectionHandler *_CH; /**< Member representing connection hander reference*/
 
 	public:
+		/** Constructor of class
+		 *  @param Sem - semaphore
+		 *  @param workers - WorkerPool for obtaining workers
+		 *  @param L - Loger object used for logging
+		 *  @param c - Config object used to load configuration*/
 		AdaServerReceiver(sem_t *Sem, WorkerPool *workers, Loger *L,Config *c);
+		/** Method to start ada_server_receiver part of app */
 		void Start();
+		/** Destructor */
 		~AdaServerReceiver();
+		/** method to log interuption signal */
 		void LogINT(){this->_log->WriteMessage(ERR,"SIGINT received stopping server!");};
 };

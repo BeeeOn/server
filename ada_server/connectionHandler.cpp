@@ -1,36 +1,31 @@
-/*
- * connectionHandler.cpp
+/**
+ * @file conncetionHandler.cpp
+ * 
+ * @brief implementation of ConncetionHandler Class
  *
- *  Created on: Feb 18, 2015
- *      Author: tuso
+ * @author Matus Blaho 
+ * @version 1.0
  */
 
 #include "connectionHandler.h"
 
-/** Metoda pre nastavenie serveroveho socketu a pocuvanie na nom
-    */
-int ConnectionHandler::Listen ()  //funkcia na vytvorenie spojenia a komunikaciu s klientom
+
+int ConnectionHandler::Listen ()
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::Listen");
 	struct sockaddr_in sin;
-	if ((s = socket(AF_INET, SOCK_STREAM, 0)) < 0)  //vytvorime socket
+	if ((s = socket(AF_INET, SOCK_STREAM, 0)) < 0)
 	{
-	  this->_log->WriteMessage(FATAL,"Creating socket failed");  //ak nastala chyba
+	  this->_log->WriteMessage(FATAL,"Creating socket failed");
 	  this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Listen");
 	  return (1);
 	}
-	/*std::string opt;
-	opt = "tap0";
-	if (setsockopt(s, SOL_SOCKET, SO_BINDTODEVICE, opt.c_str(), 4) < 0)
+	sin.sin_family = PF_INET;
+	sin.sin_port = htons (_port);
+	sin.sin_addr.s_addr = INADDR_ANY;
+	if (bind(s,(struct sockaddr *)&sin , sizeof(sin)) < 0)
 	{
-		this->_log->WriteMessage(ERR,"Unable to switch socket to VPN tap0");
-	}*/
-	sin.sin_family = PF_INET;   //nastavime komunikaciu na internet
-	sin.sin_port = htons (_port);  //nastavime port
-	sin.sin_addr.s_addr = INADDR_ANY;  //nastavime IP adresu
-	if (bind(s,(struct sockaddr *)&sin , sizeof(sin)) < 0)  //pripojime socket na port
-	{
-	  this->_log->WriteMessage(FATAL,"Error while binding socket with code : " + std::to_string(errno) + " : " + std::strerror(errno));  //ak je obsadeny alebo nieco ine sa nepodari vratime chybu
+	  this->_log->WriteMessage(FATAL,"Error while binding socket with code : " + std::to_string(errno) + " : " + std::strerror(errno));
 	  this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Listen");
 	  return (1);
 	}
@@ -38,7 +33,7 @@ int ConnectionHandler::Listen ()  //funkcia na vytvorenie spojenia a komunikaciu
 	{
 		this->_log->WriteMessage(INFO,"Socket successfully binded");
 	}
-	if ((listen (s,100))<0) //chceme na sockete pocuvat
+	if ((listen (s,100))<0)
 	{
 	  this->_log->WriteMessage(FATAL,"Error to listen with code : " + std::to_string(errno) + " : " + std::strerror(errno));
 	  this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Listen");
@@ -53,37 +48,38 @@ int ConnectionHandler::Listen ()  //funkcia na vytvorenie spojenia a komunikaciu
 }
 
 
-/** Metoda pre prijatie pripojenia na sockete servra
-    */
+
 int ConnectionHandler::ReciveConnection()
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::ReciveConnection");
 	struct sockaddr_in sin;
-	int com_s;  //nastavime si este jeden socket
+	int com_s;
 	socklen_t s_size;
 	s_size=sizeof(sin);
 	while (1)
 	{
-		if ((com_s=accept(s,(struct sockaddr *)&sin ,&s_size )) < 0)  //budeme na nom prijimat data
+		if ((com_s=accept(s,(struct sockaddr *)&sin ,&s_size )) < 0)
 		{
 			this->_log->WriteMessage(FATAL,"Unable to accept with code : " + std::to_string(errno) + " : " + std::strerror(errno));
 			this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::ReciveConnection");
 			//return (1);
 		}
-		sem_wait((this->_semaphore));
-		Worker *w  = NULL;
-		while (w==NULL)
+		else
 		{
-			w = this->_workers->GetWorker(this->_log);
+		  sem_wait((this->_semaphore));
+		  Worker *w  = NULL;
+		  while (w==NULL)
+		  {
+			  w = this->_workers->GetWorker(this->_log);
+		  }
+	      w->Unlock(com_s,sin.sin_addr);
 		}
-		w->Unlock(com_s,sin.sin_addr);
 	}
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::ReciveConnection");
-	return (0);  //vratime ze je vsetko v poriadku
+	return (0);
 }
 
-/** Konstruktor objektu vytvoreneho z triedy ConnectionHandler
-    */
+
 
 ConnectionHandler::ConnectionHandler(Loger *L, int port,sem_t *sem, WorkerPool *wp)
 {
@@ -96,7 +92,6 @@ ConnectionHandler::ConnectionHandler(Loger *L, int port,sem_t *sem, WorkerPool *
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Constructor");
 }
 
-/** Destruktor objektu vytvoreneho z triedy ConnectionHandler */
 
 ConnectionHandler::~ConnectionHandler()
 {
@@ -105,12 +100,13 @@ ConnectionHandler::~ConnectionHandler()
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Destructor");
 }
 
+
+
 void ConnectionHandler::UnbindSocket()
 {
 	shutdown (s,SHUT_RDWR);
 	close(this->s);
 }
 
-	/**********************************************End of ConnectionHandler section******************************************************/
 
 

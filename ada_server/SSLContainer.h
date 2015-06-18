@@ -1,8 +1,10 @@
-/*
- * SSLContainer.h
+/**
+ * @file SSLContainer.h
+ * 
+ * @brief definition of SSLContainer class
  *
- *  Created on: Mar 24, 2015
- *      Author: tuso
+ * @author Matus Blaho 
+ * @version 1.0
  */
 
 #ifndef SSLCONTAINER_H_
@@ -14,19 +16,33 @@
 #include <openssl/err.h>
 #include <unistd.h>
 
+/** @Class SSLContainer
+ *  @brief Stores SSL connections with adapters
+ */
 
 class SSLContainer
 {
 	private:
-		long long adapters[1000];
-		SSL* SSLs[1000];
-		int size;
-		const std::string _Name="SSLContainer";
-		Loger *_log;
+		long long adapters[1000]; /**< adapter ids*/
+		SSL* SSLs[1000]; /**< SSLconncetions*/
+		int size; /**< size of structure*/
+		const std::string _Name="SSLContainer"; /**< Class name*/
+		Loger *_log; /**< logger*/
 	public:
+		/**Constructor
+		 * @param l Loger used to log messages */
 		SSLContainer(Loger *l);
+		/** Destructor
+		 */
 		~SSLContainer();
+		/** Method to store SSL and adapter id in container
+		 * @param adapter ID
+		 * @ ssl connection pointer
+				 */
 		void InsertSSL(long long adapter,SSL *ssl);
+		/** Method to return SSL connection
+		 * @param adapter ID
+				 */
 		SSL* GetSSL(long long adapter);
 };
 
