@@ -1,14 +1,21 @@
-/*
- * conncetionServer.cpp
+/**
+ * @file connectionServer.cpp
+ * 
+ * @brief implementation of ConnectionServer Class
  *
- *  Created on: Feb 18, 2015
- *      Author: tuso
+ * @author Matus Blaho 
+ * @version 1.0
  */
 
 #include "connectionServer.h"
 
 using namespace soci;
 using namespace pugi;
+
+void apps_ssl_info_callback()
+{
+	std::cout<<"CAllback called!"<<"\n";
+}
 
 bool ConnectionServer::LoadCertificates()
 {
@@ -17,35 +24,39 @@ bool ConnectionServer::LoadCertificates()
 	SSL_library_init();
 	OpenSSL_add_all_algorithms();
 	sslctx = SSL_CTX_new( TLSv1_server_method());
-	/*SSL_CTX_set_options(sslctx, SSL_OP_SINGLE_DH_USE);
-	int use_cert = SSL_CTX_use_certificate_file(sslctx, "/etc/openvpn/server.crt" , SSL_FILETYPE_PEM);*/
 	char errorBuffer[1000];
 	std::string msgBase = "Certificate error ";
 	unsigned long int err;
+	  /* load CA certificate*/
 	if ((err=SSL_CTX_load_verify_locations(sslctx, _config->CApath().c_str(), NULL)) != 1)
 	{
+		err = ERR_get_error();
 		ERR_error_string_n(err,errorBuffer,1000);
-		_log->WriteMessage(FATAL,msgBase + " in verify locations" + errorBuffer);
+		_log->WriteMessage(FATAL,msgBase + " in verify locations " + errorBuffer);
 		return (false);
 	}
+		/* verify paths*/
 	if ((err=SSL_CTX_set_default_verify_paths(sslctx)) != 1)
 	{
+		err = ERR_get_error();
 		ERR_error_string_n(err,errorBuffer,1000);
-		_log->WriteMessage(FATAL,msgBase + " in verify def paths" + errorBuffer);
+		_log->WriteMessage(FATAL,msgBase + " in verify def paths " + errorBuffer);
 				return (false);
 	}
 		/* set the local certificate from CertFile */
 	if ((err=SSL_CTX_use_certificate_chain_file(sslctx, _config->CRTPath().c_str())) <= 0)
 	{
+		err = ERR_get_error();
 		ERR_error_string_n(err,errorBuffer,1000);
-		_log->WriteMessage(FATAL,msgBase + " use chain file" + errorBuffer);
+		_log->WriteMessage(FATAL,msgBase + " use chain file " + errorBuffer);
 				return (false);
 	}
 		/* set the private key from KeyFile (may be the same as CertFile) */
 	if ((err=SSL_CTX_use_PrivateKey_file(sslctx, _config->KeyPath().c_str(), SSL_FILETYPE_PEM)) <= 0)
 	{
+		err = ERR_get_error();
 		ERR_error_string_n(err,errorBuffer,1000);
-		_log->WriteMessage(FATAL,msgBase + " in verify use private key"+ errorBuffer);
+		_log->WriteMessage(FATAL,msgBase + " in verify use private key "+ errorBuffer);
 				return (false);
 	}
 		/* verify private key */
@@ -54,6 +65,8 @@ bool ConnectionServer::LoadCertificates()
 		_log->WriteMessage(FATAL, "Private key does not match the public certificate");
 		return (false);
 	}
+	SSL_CTX_set_verify(sslctx,SSL_VERIFY_PEER,NULL);
+	//void SSL_CTX_set_info_callback((void *)sslctx,(void *)&apps_ssl_info_callback);
 	_log->WriteMessage(INFO, "Certificates successfully loaded");
 	cSSL = SSL_new(sslctx);
 	_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::LoadCertificates");
@@ -62,98 +75,88 @@ bool ConnectionServer::LoadCertificates()
 
 
 
-/** Metoda pre prijatie spravy a jej spracovanie a odpovedanie na nu
- * @param IP - ip adresa zariadenia s ktorym sa komunikuje
-    */
 void ConnectionServer::HandleConnection (in_addr IP)
 {
 	_log->WriteMessage(TRACE,"Entering " + this->_Name + "::HandleConnection");
-	char buffer[1024];// = new char[1024];  //natavime buffer
-	//int pollRes;
-
-	/*int use_prv = SSL_CTX_use_PrivateKey_file(sslctx, "/etc/openvpn/server.key", SSL_FILETYPE_PEM);*/
-	/*if (use_prv!=1)
-	{
-		_log->WriteMessage(ERR,"Private key loading error");
-	}*/
+	char buffer[1024];
+	char errorBuffer[1000];
 	ssize_t DataSize=0;
 	std::string data;
 	data.clear();
 	SSL_set_fd(cSSL, com_s );
-	int ssl_err = SSL_accept(cSSL);
+	//SSL_set_verify(cSSL,SSL_VERIFY_PEER|SSL_VERIFY_FAIL_IF_NO_PEER_CERT,NULL);
+	X509 *peer = SSL_get_peer_certificate(cSSL);
+	if(peer==NULL)
+	{
+		_log->WriteMessage(WARN,"Peer did not provided certificate!");
+	}
+	else
+	{
+		std::string hash;
+		//hash=peer->sha1_hash;
+		_log->WriteMessage(TRACE,"Clients hash is : " + hash);
+		char issuer[100];
+		X509_NAME_oneline(X509_get_issuer_name(peer), issuer, 100);
+		printf("issuer= %s\n", issuer);
+		std::cout<<issuer<<"\n";
+		std::string iss = issuer;
+		_log->WriteMessage(TRACE,"Certificate was issued by : " +  iss);
+	}
+	int ssl_err = SSL_accept(cSSL); //SSL handshake 
 	if(ssl_err <= 0)
 	{
-		_log->WriteMessage(ERR,"SSL accept error");
+		ssl_err = ERR_get_error();
+		std::string MSGbase = "SSL accept error : ";
+		ERR_error_string_n(ssl_err,errorBuffer,1000);
+		_log->WriteMessage(ERR,MSGbase + errorBuffer);
 	    //Error occured, log and close down ssl
 		SSL_shutdown(this->cSSL);
 		SSL_free(this->cSSL);
 		cSSL = SSL_new(sslctx);
-		 close(com_s);
-		 return;
+		close(com_s);
+		return;
+	}
+	peer=SSL_get_peer_certificate(cSSL);
+	if(peer==NULL)
+	{
+		_log->WriteMessage(WARN,"Peer did not provided certificate!");
+	}
+	else
+	{
+		std::string hash;
+		hash+=(*(peer->sha1_hash));
+		_log->WriteMessage(TRACE,"Clients hash is : " + hash);
+		char issuer[100];
+		X509_NAME_oneline(X509_get_issuer_name(peer), issuer, 100);
+		printf("issuer= %s\n", issuer);
+		std::cout<<issuer<<"\n";
+		std::string iss = issuer;
+		_log->WriteMessage(TRACE,"Certificate was issued by : " +  iss);
 	}
 	while(1)
 	{
-		if((DataSize = SSL_read(cSSL, buffer, 1024))>0)
+		if((DataSize = SSL_read(cSSL, buffer, 1024))>0) //read message
 		{
 			data.append(buffer,DataSize);
 			if ((data.find("</adapter_server>")!=std::string::npos)||((data[data.size()-2]=='/')&&(data[data.size()-2]=='>')))
 			{
 				break;
 			}
-			if(!SSL_pending(cSSL))
+			if(!SSL_pending(cSSL)) //if there is nothing to read break;
 			{
 				break;
 			}
 		}
 		else
 		{
-			_log->WriteMessage(ERR,"SSL read error");
+			ssl_err = ERR_get_error();
+			std::string MSGbase = "SSL read error : ";
+			ERR_error_string_n(ssl_err,errorBuffer,1000);
+			_log->WriteMessage(ERR,MSGbase + errorBuffer);
 			close(com_s);
 			 return;
 		}
 	}
-	/*struct pollfd ufds;
-	ufds.fd = com_s;
-	ufds.events = POLLIN;
-	while (1)
-	{
-		pollRes = poll(&ufds, 1, this->_timeTimeOut*1000);
-		if(pollRes==-1)
-		{
-			_log->WriteMessage(WARN,"Reading data from client failed with code " + std::to_string(errno) + " : " + std::strerror(errno));
-			_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::HandleConnection");
-			close(this->com_s);
-			return;
-		}
-		if(pollRes==0)
-		{
-			_log->WriteMessage(WARN,"Connection to client timed out!");
-			_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::HandleConnection");
-			close(this->com_s);
-			return;
-		}
-		else
-		{
-			if ((DataSize = read(this->com_s, &buffer, 1024)) < 0) //prijmeme dlzku prichadzajucich dat (2 byty kratkeho integera bez znamienka)
-			{
-				_log->WriteMessage(WARN,"Reading data from client failed");
-				_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::HandleConnection");
-				close(this->com_s);
-				return;
-			}
-			if (DataSize==0)  //ak nic neprislo ukoncime proces
-			{
-				_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::HandleConnection");
-				close(this->com_s);
-				return;
-			}
-			data.append(buffer,DataSize);
-			if ((data.find("</adapter_server>")!=std::string::npos)||((data[data.size()-2]=='/')&&(data[data.size()-2]=='>')))
-			{
-				break;
-			}
-		}
-	}*/
 	_log->WriteMessage(MSG,"Message :" + data);
 	xml_document doc;
 	xml_parse_result result = doc.load_buffer(data.data(), data.size());
@@ -169,7 +172,7 @@ void ConnectionServer::HandleConnection (in_addr IP)
 	xml_node adapter = doc.child("adapter_server");
 	float CPversion =  adapter.attribute("protocol_version").as_float();
 	int FMversion =  adapter.attribute("fw_version").as_int();
-	if ((CPversion == (float)0.1)||(CPversion == (float)1.0))
+	if ((CPversion == (float)0.1)||(CPversion == (float)1.0))  //according to version create parser
 	{
 		if (FMversion == 0)
 		{
@@ -217,7 +220,7 @@ void ConnectionServer::HandleConnection (in_addr IP)
 		close(com_s);
 		return;
 	}
-	if (!MP->ParseMessage(&adapter,FMversion,CPversion))  //pomocou parsera spracujeme spravu
+	if (!MP->ParseMessage(&adapter,FMversion,CPversion))  //parse message
 	{
 
 		_log->WriteMessage(WARN,"Wrong request format");
@@ -226,17 +229,13 @@ void ConnectionServer::HandleConnection (in_addr IP)
 		_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::HandleConnection");
 		return;
 	}
-	//MP->setAdapterSocket();  //ulozime IP adresu adapteru do spravy
-	parsedMessage = MP->ReturnMessage();  //spracovanu spravu si ulozime lokalne
-	if (parsedMessage->state!=REGISTER)
+
+	parsedMessage = MP->ReturnMessage();
+	if (parsedMessage->state!=REGISTER) //on registration register agent
 	{
-		response = MP->CreateAnswer(this->GetData());  //zavolame metodu na vytvorenie odpovede a metodu na ulozenie dat do DB
+		response = MP->CreateAnswer(this->GetData());
 		int Err;
 		_log->WriteMessage(MSG,"Response message: \n" + response);
-		/*if ((Err=send(this->com_s, response.c_str(), response.size() , 0))<0)  //odoslanie odpovede klientovi
-		{
-			_log->WriteMessage(WARN,"Sending answer failed with code : " + std::to_string(errno) + " : " + std::strerror(errno));
-		}*/
 		if((Err=SSL_write(cSSL, response.c_str(), response.size()))<=0)
 		{
 			_log->WriteMessage(ERR,"Writing to SSL failed :");
@@ -259,7 +258,6 @@ void ConnectionServer::HandleConnection (in_addr IP)
 	    }
 	    else
 	    {
-	    	//close (oldSocket);
 	    	if (database->UpdateAdapter(this->parsedMessage))
 			{
 			  resp="<server_adapter protocol_version=\"0.1\" state=\"register\" response=\"true\"/>";
@@ -272,10 +270,6 @@ void ConnectionServer::HandleConnection (in_addr IP)
 	    }
 	    this->_sslcont->InsertSSL(parsedMessage->adapterINTid,cSSL);
 	    int Err;
-	  /*  if ((Err=send(this->com_s, resp.c_str(), resp.size() , 0))<0)  //odoslanie odpovede klientovi
-	    {
-			_log->WriteMessage(WARN,"Sending registration answer failed with code : " + std::to_string(errno) + " : " + std::strerror(errno));
-	    }*/
 		_log->WriteMessage(INFO,"Going to send response to register MSG ");
 		_log->WriteMessage(INFO,"Response register MSG : " + resp);
 	    if((Err=SSL_write(cSSL, resp.c_str(), resp.size()))<=0)
@@ -288,11 +282,11 @@ void ConnectionServer::HandleConnection (in_addr IP)
 		}
 	    cSSL = SSL_new(sslctx);
 	}
-	if (parsedMessage->state!=REGISTER)
+	if (parsedMessage->state!=REGISTER) //we are receiving data so save them
 	{
 		this->Notify(data);
 		this->StoreData();
-		database->LogValue(parsedMessage); //zavolame metodu ktora zisti ci je pre dane zariadenie zapnute logovanie hodnot a pripadne ich ulozi
+		database->LogValue(parsedMessage);
 	}
 	_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::HandleConnection");
 	return;
@@ -303,25 +297,24 @@ void ConnectionServer::Notify(std::string MSG)
 	sockaddr_in SvSoc;
 	_log->WriteMessage(TRACE,"Entering " + this->_Name + "::Notify");
 	int s,Err;
-	s = socket(AF_INET, SOCK_STREAM, 0);//vytvorenie socketu
+	s = socket(AF_INET, SOCK_STREAM, 0);
 	if(s < 0)
 	{
 		std::cerr<<"Creating socket failed\n";
-		return; //chyba pri vytvarani socketu
+		return;
 	}
 	SvSoc.sin_port = htons(7083);
-	SvSoc.sin_family = AF_INET;  //nastavenie socketu servra
+	SvSoc.sin_family = AF_INET;
 	in_addr adapterIP;
 	inet_pton(AF_INET, "127.0.0.1",&adapterIP);
 	SvSoc.sin_addr.s_addr = adapterIP.s_addr;
-	//memcpy(&SvSoc.sin_addr.s_addr ,Adapter->h_addr, Adapter->h_length);
-	if(connect(s,(sockaddr *) &SvSoc, sizeof(SvSoc)) < 0)//pripojenie na server
+	if(connect(s,(sockaddr *) &SvSoc, sizeof(SvSoc)) < 0)
 	{
 		_log->WriteMessage(ERR,"Unable to connect to framework");
 		close (s);
-		return;  //nepodarilo sa pripojit na server
+		return;
 	}
-	if ((Err=send(s, MSG.c_str(), MSG.size(), 0))<0)  //odoslanie poziadavky na server
+	if ((Err=send(s, MSG.c_str(), MSG.size(), 0))<0)
 	{
 		_log->WriteMessage(ERR,"Unable to send msg to framework");
 	}
@@ -340,16 +333,24 @@ ConnectionServer::ConnectionServer(soci::session *SQL, Loger *L, int timeOut,SSL
 	this->parsedMessage = NULL;
 	this->com_s = -1;
 	this->_config = c;
+	this->cSSL = NULL;
+	this->sslctx = NULL;
 	_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Constructor");
 }
 
 ConnectionServer::~ConnectionServer()
 {
 	_log->WriteMessage(TRACE,"Entering " + this->_Name + "::Destructor");
-	close(SSL_get_fd(cSSL));
-	SSL_shutdown(this->cSSL);
-	SSL_free(this->cSSL);
-	SSL_CTX_free(this->sslctx);
+	if (cSSL != NULL)
+	{
+	  close(SSL_get_fd(cSSL));
+	  SSL_shutdown(this->cSSL);
+	  SSL_free(this->cSSL);
+	}
+	if(sslctx!=NULL)
+	{
+	  SSL_CTX_free(this->sslctx);
+	}
 	CRYPTO_cleanup_all_ex_data();
 	ERR_remove_state(0);
 	ERR_free_strings();
@@ -358,17 +359,11 @@ ConnectionServer::~ConnectionServer()
 	_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Destructor");
 }
 
-
-
-/** Metoda volajuca funkcie na ulozenie a ziskanie dat z DB
- * @param message - spracovana sprava
-    */
-
 void ConnectionServer::StoreData()
 {
 	_log->WriteMessage(TRACE,"Entering " + this->_Name + "::StoreData");
-	database->UpdateAdapter(this->parsedMessage); //ak ano uz len updatneme jeho data
-	if(!database->IsInDB("facilities","mac","'" + std::to_string(this->parsedMessage->sensor_id) + "'")) //to iste spravime aj pre senzor/aktor
+	database->UpdateAdapter(this->parsedMessage); 
+	if(!database->IsInDB("facilities","mac","'" + std::to_string(this->parsedMessage->sensor_id) + "'")) 
 	{
 		database->InsertSenAct(this->parsedMessage);
 	}

@@ -1,13 +1,19 @@
-/*
- * sqlCommands.h
+/**
+ * @file sqlCommands.h
+ * 
+ * @brief definition of namespace SQLQueries
  *
- *  Created on: Mar 8, 2015
- *      Author: tuso
+ * @author Matus Blaho 
+ * @version 1.0
  */
 
 #ifndef SQLCOMMANDS_H_
 #define SQLCOMMANDS_H_
 #include <string>
+
+/** @namespace SQLQueries
+ *  @brief groups SQL queries to database used by application
+ */
 
 namespace SQLQueries
 {
@@ -20,23 +26,23 @@ const string InsertDevice = "insert into devices (fk_facilities_mac,type,value) 
 /**Q to insert facility uses ( ':deviceID',:battery, :signal, :adapterID, :timestamp , :timestamp)*/
 const string InsertFacility = "insert into facilities (mac,refresh,battery,quality,fk_adapter_id,involved,timestamp) values ( :deviceID, 5 ,:battery, :signal, :adapterID, :timestamp , :timestamp);";  /*"insert into facilities (mac,refresh,battery,quality,fk_adapter_id,involved,timestamp) values
 ( '" + message->DeviceIDstr + "', 5 ," + std::to_string(message->battery)+ ", " + std::to_string(message->signal_strength) +  ", " +std::to_string(message->adapterINTid)+ ", " +std::to_string(message->timestamp) + ", " + std::to_string(message->timestamp) +" );" ;*/
-/** uses ( :value, :FMver, ':mac', :type)*/
+/** Q to update device  uses ( :value, :FMver, ':mac', :type)*/
 const string UpdateDevice = "update devices set value= :value where (fk_facilities_mac=:deviceID AND type = :type);";  //"update devices set value=" + val  +" where (fk_facilities_mac='" + message->DeviceIDstr + "' AND type =" + std::to_string(message->values[i].intType) +");" ;
-/** uses ( :battery, :quality, :timestamp, :mac)*/
+/** Q to update facility uses ( :battery, :quality, :timestamp, :mac)*/
 const string UpdateFacility = "update facilities set battery= :battery , quality = :quality , timestamp = :timestamp where (mac=:mac);"; //"update facilities set battery=" + std::to_string(message->battery) + ",quality=" + std::to_string(message->signal_strength) + ",timestamp=" + std::to_string(message->timestamp)  +" where (mac='" + message->DeviceIDstr + "');" ;
-/** uses ( :AdapterID, :FMver)*/
+/** Q to update adapter uses ( :AdapterID, :FMver)*/
 const string UpdateAdapter = "update adapters set version =:FMver where adapter_id=:ID ;"; //"update adapters set version=" + std::to_string(message->fm_version) + ", socket=" + std::to_string(message->socket) + " where adapter_id=" + std::to_string(message->adapterINTid) + ";" ;
-/** uses ( :AdapterID, :FMver, :socket)*/
+/** Q to update socket of adapter uses ( :AdapterID, :FMver, :socket)*/
 const string UpdateAdapterSocket = "update adapters set version =:FMver, socket = :socket where adapter_id=:ID ;"; //"update adapters set version=" + std::to_string(message->fm_version) + ", socket=" + std::to_string(message->socket) + " where adapter_id=" + std::to_string(message->adapterINTid) + ";" ;
-/** uses ( :coulmnName :tableName :coumnName :record)*/
+/** Q to select count of record uses ( :coulmnName :tableName :coumnName :record)*/
 const string SelectCount = "select count(*) from :tableName where  :columnName = :record ;"; //"select count(*)" + columnName + " from " + tableName + " where " + columnName + " = "+ record + ";";
-/** uses ( ':deviceID', :timeStamp , :type, :value)*/
+/** Q to insert history row uses ( ':deviceID', :timeStamp , :type, :value)*/
 const string InsertLog = "insert into logs (fk_facilities_mac,timestamp,fk_devices_type,value) values ( :deviceID, :timeStamp , :type, :value );"; //"insert into logs (fk_facilities_mac,timestamp,fk_devices_type,value) values ( '"+ message->DeviceIDstr + "', " + std::to_string(message->timestamp) + " , " + std::to_string(message->values[i].intType) + ", " + val + " );" ;
-/** uses ( :record)*/
+/** Q to select wake up time of record uses ( :record)*/
 const string SelectTime = "select refresh from facilities where mac=:record;"; //"select refresh from facilities where mac = '" + record + "';";
-/** uses (:ID) */
+/** Q to select socket of adapter uses (:ID) */
 const string SelectSocket = "SELECT socket FROM adapters where adapter_id= :ID ;";
-/** uses (:ID) */
+/** Q to Delete facility uses (:ID) */
 const string DeleteDevice = "Delete from facilities where mac=:ID;";
 
 }

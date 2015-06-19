@@ -1,4 +1,11 @@
-
+/**
+ * @file adaServerSender.cpp
+ * 
+ * @brief implementation of AdaServerSender Class
+ *
+ * @author Matus Blaho 
+ * @version 1.0
+ */
 
 #include "adaServerSender.h"
 
@@ -18,7 +25,6 @@ AdaServerSender::AdaServerSender(sem_t *Sem, WorkerPool *workers, Loger *L,Confi
 AdaServerSender::~AdaServerSender()
 {
 	delete this->_L;
-	//delete this->_log;
 }
 
 void AdaServerSender::Start()

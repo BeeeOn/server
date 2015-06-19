@@ -1,28 +1,22 @@
-/*
- * DBHandler.cpp
+/**
+ * @file DBHandler.cpp
+ * 
+ * @brief implementation of DBHandler class
  *
- *  Created on: Oct 26, 2014
- *      Author: tuso
+ * @author Matus Blaho 
+ * @version 1.0
  */
 
 #include "DBHandler.h"
 
-/*todo :  move sql commands out of code*/
-
-	/**********************************************Start of DBHandler section******************************************************/
-
 using namespace soci;
-
-/** Metoda ktora zisti ci je zapnute logovanie pre dane zariadenie a ulozi logovacie data do databazy
- * @param message - spracovana sprava
-    */
 
 void DBHandler::LogValue (tmessage *message)
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::LogValue");
-	for (int i = 0; i<message->values_count;i++)
+	for (int i = 0; i<message->values_count;i++) //for all values create text representation and call SQL querry
 	{
-		try  //zavolame prikaz na volzenie dat do databazy
+		try
 		{
 			std::string retRec;
 			std::string val = "0";
@@ -32,6 +26,7 @@ void DBHandler::LogValue (tmessage *message)
 				case LUM:
 				case REZ:
 				case POS:
+				case BT:
 					val = std::to_string(message->values[i].fval);
 					break;
 				case ONON:
@@ -48,6 +43,9 @@ void DBHandler::LogValue (tmessage *message)
 				case BAR:
 				case RGB:
 				case RAN:
+				case BOT:
+				case BOM:
+				case BST:
 					val = std::to_string(message->values[i].ival);
 					break;
 				default:
@@ -55,8 +53,6 @@ void DBHandler::LogValue (tmessage *message)
 					continue;
 					break;
 			}
-			/*std::string sqlQuery = "insert into logs (fk_facilities_mac,timestamp,fk_devices_type,value) values ( '"+ message->sensor_id + "', " + std::to_string(message->timestamp) + " , " + std::to_string(message->values[i].intType) + ", " + val + " );" ;
-			this->_log->WriteMessage(TRACE,sqlQuery);*/
 			*_sql << SQLQueries::InsertLog,
 					use (message->sensor_id,"deviceID"),
 					use(std::to_string(message->timestamp),"timeStamp"),
@@ -74,10 +70,6 @@ void DBHandler::LogValue (tmessage *message)
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::LogValue");
 }
 
-/** Konstruktor objektu vytvoreneho z triedy DBHandler
- * @param DBname - nazov databazy
-    */
-
 DBHandler::DBHandler(soci::session *SQL, Loger *l)
 {
 	this->_log = l;
@@ -86,29 +78,17 @@ DBHandler::DBHandler(soci::session *SQL, Loger *l)
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Constructor");
 }
 
-/** Metoda pre zistenie pritomnosti urciteho zaznamu v databaze
- * @param tableName - nazov tabulky v ktorej sa ma zaznam hladat
- * @param columnName - stlpec podla ktoreho ma byt zaznam hladany
- * @param record - hodnota zaznamu
- * @return true/false podla toho ci bol zaznam najdeny
-     */
-
 bool DBHandler::IsInDB(std::string tableName, std::string columnName, std::string record)
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::IsInDB");
 	this->_log->WriteMessage(TRACE, "params : " + columnName + " " + record + " " + tableName);
-	try //zavolame jednoduchy select nad DB
+	try
 	{
 		int retRec;
 		std::string sqlQuery = "select count(*)" + columnName + " from " + tableName + " where " + columnName + " = "+ record + ";";
 		this->_log->WriteMessage(TRACE,sqlQuery);
 		*_sql<<sqlQuery,into(retRec);
-	/*	*_sql << SQLQueries::SelectCount,
-			use (columnName, "columnName"),
-			use (tableName, "tableName"),
-			use (record, "record"),
-			into(retRec);*/
-		if (retRec > 0) //ak sme dostali nejake data znamena to ze udaj sa uz v DB nachadza
+		if (retRec > 0)
 		{
 			this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::IsInDB");
 			return (true);
@@ -130,18 +110,11 @@ bool DBHandler::IsInDB(std::string tableName, std::string columnName, std::strin
 	}
 }
 
-/** Metoda vytvori v databaze novy zaznam v tabulke adapterov
- * @param message - obsah spracovanej spravy
- * @return na zaklade uspechu/neuspechu vrati true/false
-    */
-
 bool DBHandler::InsertAdapter(tmessage *message)
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::InsertAdapter");
 	try
 	{
-        /*std::string sqlQuery = "insert into adapters (adapter_id,version,socket) values ( "+ std::to_string(message->adapterINTid)+ ", " + std::to_string(message->fm_version) + ", '" + std::to_string(message->socket) + "');" ;
-		this->_log->WriteMessage(TRACE,sqlQuery);*/
 		*_sql << SQLQueries::InsertAdapter,
 				use(message->adapterINTid,"AdapterID"),
 				use(std::to_string(message->fm_version),"FMver"),
@@ -160,22 +133,12 @@ bool DBHandler::InsertAdapter(tmessage *message)
 	}
 }
 
-
-/** Metoda aktualizuje zaznam v databaze v tabulke adapterov
- * @param message - obsah spracovanej spravy
- * @return na zaklade uspechu/neuspechu vrati true/false
-    */
-
 bool DBHandler::UpdateAdapter(tmessage *message)
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::UpdateAdapter");
 	try
 	{
 		std::string retRec;
-        /*std::string sqlQuery = "update adapters set version=" + std::to_string(message->fm_version) + ", socket=" + std::to_string(message->socket) + " where adapter_id=" + std::to_string(message->adapterINTid) + ";" ;
-		this->_log->WriteMessage(TRACE,sqlQuery);
-		*_sql << sqlQuery,
-			into(retRec);*/
 		if (message->socket>0)
 		{
 		*_sql <<SQLQueries::UpdateAdapterSocket,
@@ -203,21 +166,12 @@ bool DBHandler::UpdateAdapter(tmessage *message)
 	}
 }
 
-
-/** Metoda vytvori v databaze novy zaznam v tabulke zariadeni
- * @param message - obsah spracovanej spravy
- * @return na zaklade uspechu/neuspechu vrati true/false
-    */
-
 bool DBHandler::InsertSenAct(tmessage *message)
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::InsertSenAct");
 	try
 	{
 		std::string retRec;
-		/*std::string sqlQuery = "insert into facilities (mac,refresh,battery,quality,fk_adapter_id,involved,timestamp) values \
-				( '" + message->sensor_id + "', 5 ," + std::to_string(message->battery)+ ", " + std::to_string(message->signal_strength) +  ", " +std::to_string(message->adapterINTid)+ ", " +std::to_string(message->timestamp) + ", " + std::to_string(message->timestamp) +" );" ;
-		this->_log->WriteMessage(TRACE,sqlQuery);*/
 		*_sql << SQLQueries::InsertFacility,
 					use(message->sensor_id,"deviceID"),
 					use(message->timestamp,"timestamp"),
@@ -236,7 +190,7 @@ bool DBHandler::InsertSenAct(tmessage *message)
 	}
 	try
 	{
-		for (int i=0;i<message->values_count;i++)  //musime ulozit do DB vsetky hodnoty ktore sme dostali
+		for (int i=0;i<message->values_count;i++) //for all values create text representation and call SQL querry
 		{
 			std::string retRec;
 			std::string val = "0";
@@ -246,6 +200,7 @@ bool DBHandler::InsertSenAct(tmessage *message)
 				case LUM:
 				case REZ:
 				case POS:
+				case BT:
 					val = std::to_string(message->values[i].fval);
 					break;
 				case ONON:
@@ -260,6 +215,9 @@ bool DBHandler::InsertSenAct(tmessage *message)
 				case BAR:
 				case RGB:
 				case RAN:
+				case BOT:
+				case BOM:
+				case BST:
 					val = std::to_string(message->values[i].ival);
 					break;
 				default:
@@ -267,11 +225,6 @@ bool DBHandler::InsertSenAct(tmessage *message)
 					continue;
 					break;
 			}
-			//pri prvom ulozeni do databazy sa nastavi cas zobudzania defaultne na 5 sekund
-			/*std::string sqlQuery = "insert into devices (fk_facilities_mac,type,value) values ( '" + message->sensor_id + "', " + std::to_string(message->values[i].intType) + ", '" + val + "');" ;
-			this->_log->WriteMessage(TRACE,sqlQuery);
-			*_sql << sqlQuery,
-				into(retRec);*/
 			*_sql << SQLQueries::InsertDevice,
 					use(message->sensor_id,"devID"),
 					use(message->values[i].intType,"type"),
@@ -291,12 +244,6 @@ bool DBHandler::InsertSenAct(tmessage *message)
 	}
 }
 
-
-/** Metoda aktualizu v databaze zaznam v tabulke adapterov
- * @param message - obsah spracovanej spravy
- * @return na zaklade uspechu/neuspechu vrati true/false
-    */
-
 bool DBHandler::UpdateSenAct(tmessage *message)
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::UpdateSenAct");
@@ -304,15 +251,13 @@ bool DBHandler::UpdateSenAct(tmessage *message)
 	{
 
 		std::string retRec;
-		//std::string sqlQuery = "update facilities set battery=" + std::to_string(message->battery) + ",quality=" + std::to_string(message->signal_strength) + ",timestamp=" + std::to_string(message->timestamp)  +" where (mac='" + message->sensor_id + "');" ;
-		//this->_log->WriteMessage(TRACE,sqlQuery);
 		*_sql << SQLQueries::UpdateFacility,
 			into(retRec),
 			use(message->battery,"battery"),
 			use(message->signal_strength, "quality"),
 			use(message->sensor_id, "mac"),
 			use(message->timestamp, "timestamp");
-		for (int i = 0;i<message->values_count;i++)
+		for (int i = 0;i<message->values_count;i++)  //for all values create text representation and call SQL querry
 		{
 
 			std::string val = "0";
@@ -322,6 +267,7 @@ bool DBHandler::UpdateSenAct(tmessage *message)
 				case LUM:
 				case REZ:
 				case POS:
+				case BT:
 					val = std::to_string(message->values[i].fval);
 					break;
 				case ONON:
@@ -337,6 +283,9 @@ bool DBHandler::UpdateSenAct(tmessage *message)
 				case BAR:
 				case RGB:
 				case RAN:
+				case BOT:
+				case BOM:
+				case BST:
 					val = std::to_string(message->values[i].ival);
 					break;
 				default:
@@ -344,8 +293,6 @@ bool DBHandler::UpdateSenAct(tmessage *message)
 					continue;
 					break;
 			}
-			//std::string sqlQuery = "update devices set value=" + val  +" where (fk_facilities_mac='" + message->sensor_id + "' AND type =" + std::to_string(message->values[i].intType) +");" ;
-			//this->_log->WriteMessage(TRACE,sqlQuery);
 			statement stl = (_sql->prepare <<SQLQueries::UpdateDevice,
 								use(message->sensor_id,"deviceID"),
 								use(val,"value"),
@@ -354,7 +301,6 @@ bool DBHandler::UpdateSenAct(tmessage *message)
 			if (stl.get_affected_rows()<=0)
 			{
 				this->_log->WriteMessage(INFO,"Update affected 0 rows going to insert");
-				//std::string sqlQuery = "insert into devices (fk_facilities_mac,type,value) values ( '" + message->sensor_id + "', " + std::to_string(message->values[i].intType) + ", '" + val + "');" ;
 				*_sql << SQLQueries::InsertDevice,
 						use(message->sensor_id,"devID"),
 						use(message->values[i].intType,"type"),
@@ -375,12 +321,6 @@ bool DBHandler::UpdateSenAct(tmessage *message)
 	}
 }
 
-
-/** Metoda ziska z databazy zaznam o case zobudenia pre konkretny senzor
- * @param record - obsah spracovanej spravy
- * @return hodnota zobudenia
-    */
-
 int DBHandler::GetWakeUpTime(std::string record)
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetWakeUpTime");
@@ -388,7 +328,6 @@ int DBHandler::GetWakeUpTime(std::string record)
 	{
 		indicator ind;
 		int retRec;
-		//std::string sqlQuery = "select refresh from facilities where mac = '" + record + "';";
 		*_sql << SQLQueries::SelectTime,
 				into(retRec, ind),
 				use(record) ;
@@ -411,8 +350,6 @@ void DBHandler::GetAdapterData(int *soc, long int ID)
 {
 	indicator ind;
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetAdapterData");
-	/*std::string sqlQuery = "SELECT socket FROM adapters where adapter_id=" + std::to_string(ID) + ";" ;
-	this->_log->WriteMessage(TRACE,sqlQuery);*/
 	try
 	{
 		*_sql<<SQLQueries::SelectSocket,
@@ -498,13 +435,8 @@ std::vector<std::string> *DBHandler::GetNotifString(std::string email)
 	return (retVal);
 }
 
-
-/** Destruktor objektu vytvoreneho z triedy DBHandler
- */
-
 DBHandler::~DBHandler()
 {
-	//delete (_sql); //zrusenie a vymazanie pripojenia k DB
 }
 
 bool DBHandler::DeleteFacility(std::string ID)
@@ -527,7 +459,5 @@ bool DBHandler::DeleteFacility(std::string ID)
 		return (false);
 	}
 }
-
-	/**********************************************End of DBHandler section******************************************************/
 
 

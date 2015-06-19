@@ -1,8 +1,10 @@
-/*
- * sender.h
+/**
+ * @file sender.h
+ * 
+ * @brief definition of sender class
  *
- *  Created on: Feb 22, 2015
- *      Author: tuso
+ * @author Matus Blaho 
+ * @version 1.0
  */
 
 #ifndef SENDER_H_
@@ -21,17 +23,30 @@
 #include <openssl/ssl.h>
 #include <openssl/err.h>
 
+/** @Class Sender
+ *  @brief Class to send message to adapter
+ */
+
 class Sender
 {
 	private:
-    	const std::string _Name="Sender";
-		int s;
-		Loger *_log;
-		SSL_CTX *sslctx;
-		SSL *cSSL;
+    	const std::string _Name="Sender"; /**< class name*/
+		int s; /**< socket*/
+		Loger *_log; /**< reference to loger*/
+		SSL_CTX *sslctx; /**< SSL context*/
+		SSL *cSSL; /**< ssl connection*/
 	public:
+		/**Method to send message
+		 * @param Message std::string text of message
+		 * @param s pointer to SSL connection to use for sending
+				 */
 		bool Send(std::string Message,SSL *s);
+		/**Constructor
+		 * @param l Loger pointer to loger used for logging
+				 */
 		Sender(Loger *l);
+		/**Destructor
+				 */
 		~Sender();
 };
 

@@ -1,8 +1,10 @@
-/*
- * config.cpp
+/**
+ * @file config.cpp
+ * 
+ * @brief implementation of Config Class
  *
- *  Created on: Oct 19, 2014
- *      Author: tuso
+ * @author Matus Blaho 
+ * @version 1.0
  */
 
 #include "config.h"

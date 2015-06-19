@@ -1,8 +1,10 @@
-/*
- * adaServer.cpp
+/**
+ * @file loger.cpp
+ * 
+ * @brief implementation main
  *
- *  Created on: Feb 22, 2015
- *      Author: tuso
+ * @author Matus Blaho 
+ * @version 1.0
  */
 
 
@@ -15,9 +17,9 @@
 #include "adaServerSender.h"
 #include "adaServerReceiver.h"
 #include "SSLContainer.h"
-#include <exception> //kniznica pre bok try/catch
+#include <exception> 
 #include <semaphore.h>
-#include <iostream> //kniznica pre vystup na teminal
+#include <iostream> 
 #include <termios.h>
 #include <unistd.h>
 #include <syslog.h>
@@ -35,7 +37,7 @@ Loger *ReceiverLog;
 bool sigint =false;
 SSLContainer *sslCont;
 
-void sig_handler(int signo)
+void sig_handler(int signo) //on signals to turn of clear 
 {
 	if ((signo == SIGINT)||(signo == SIGTERM))
 	{
@@ -59,7 +61,7 @@ void sig_handler(int signo)
 	exit(EXIT_SUCCESS);
 }
 
-std::string buildConnString(std::string DBName, std::string User, std::string Password)
+std::string buildConnString(std::string DBName, std::string User, std::string Password) //building connection string to database
 {
 	std::string result;
 	result.clear();
@@ -91,7 +93,7 @@ std::string buildConnString(std::string DBName, std::string User, std::string Pa
 }
 
 
-int main()  //hlavne telo programu
+int main()  //main body of application
 {
 	pid_t pid, sid;
 	std::cout<<"Reading configuration"<<std::endl;
@@ -104,7 +106,7 @@ int main()  //hlavne telo programu
 	}
 	std::string connStr = buildConnString(c->DBName(),c->User(),c->Password());
 	/* Fork off the parent process */
-	if (c->Mode()!=0)
+	if (c->Mode()!=0)  //start as deamon
 	{
 		std::cout<<"Starting deamonization"<<std::endl;
 		pid = fork();
@@ -178,9 +180,13 @@ int main()  //hlavne telo programu
 	{
 		SenderLog->WriteMessage(ERR," [Main Process] Unable to mask SIGHUP");
 	}
+	if (signal(SIGPIPE, SIG_IGN) == SIG_ERR)
+	{
+		SenderLog->WriteMessage(ERR," [Main Process] Unable to mask SIGPIPE");
+	}
 	sslCont = new SSLContainer(ReceiverLog);
 	wpool = WorkerPool::CreatePool(ReceiverLog,SenderLog,connStr,c,sslCont);
-	if (wpool->Limit()<=0)
+	if ((wpool==NULL)||(wpool->Limit()<=0))
 	{
 		SenderLog->WriteMessage(FATAL," [Main Process] 0 connections to DB unable to serve, terminating!");
 		delete (c);

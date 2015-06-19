@@ -20,8 +20,8 @@ void Worker::Work()
 	this->ReceiverLog->WriteMessage(INFO,"Worker " + std::to_string(this->_number) + " started");
 	while (1)
 	{
-		this->Wait->lock();
-		if (this->terminate)
+		this->Wait->lock();  //wait until tasks comes
+		if (this->terminate) //if task is to terminate end cycle and thread
 		{
 			this->SenderLog->WriteMessage(INFO,"Termination received ending worker " + std::to_string(this->_number) + " body");
 			this->ReceiverLog->WriteMessage(INFO,"Termination received" + std::to_string(this->_number) + " ending worker body");
@@ -40,13 +40,18 @@ void Worker::Work()
 			this->_RS->HandleRequest();
 		}
 		//this->SimpleMothod();
-		this->parentPool->ReturnWorker(this,this->_log);
+		this->parentPool->ReturnWorker(this,this->_log);  //return back to pool and then lock yourself on mutex
 	}
 }
 Worker::Worker (soci::session *s,Loger *Rl,  Loger *Sl, WorkerPool *pool, int i,SSLContainer *sslcont,Config *c)
 {
 	Sl->WriteMessage(TRACE,"Entering" + this->_Name + "::Constructor");
 	Rl->WriteMessage(TRACE,"Entering" + this->_Name + "::Constructor");
+	this->_CS = new ConnectionServer(s,Rl,5,sslcont,c);
+	if (!this->_CS->LoadCertificates())
+	{
+		throw CertificateLoadException();
+	};
 	this->parentPool = pool;
 	this->connection=s;
 	this->DB = s;
@@ -59,8 +64,6 @@ Worker::Worker (soci::session *s,Loger *Rl,  Loger *Sl, WorkerPool *pool, int i,
 	this->_number = i;
 	thr = NULL;
 	this->_RS = new RequestServer(Sl,s,sslcont);
-	this->_CS = new ConnectionServer(s,Rl,5,sslcont,c);
-	this->_CS->LoadCertificates();
 	this->Receiver = true;
 	Sl->WriteMessage(TRACE,"Exiting" + this->_Name + "::Constructor");
 	Rl->WriteMessage(TRACE,"Exiting" + this->_Name + "::Constructor");
@@ -73,7 +76,7 @@ void Worker::Unlock(int Soc, in_addr IP)
 	this->_log = this->ReceiverLog;
 	this->Socket = Soc;
 	this->IPaddress = IP;
-	this->Receiver = true;
+	this->Receiver = true; //will work in receiver mode
 	this->Wait->unlock();
 	this->_log->WriteMessage(TRACE,"Unlocking worker number " + std::to_string(this->_number));
 	this->_log->WriteMessage(TRACE,"Entering" + this->_Name + "::Unlock");
@@ -84,7 +87,7 @@ void Worker::Unlock(int Soc)
 	this->SenderLog->WriteMessage(TRACE,"Entering" + this->_Name + "::Unlock");
 	this->_log = this->SenderLog;
 	this->Socket = Soc;
-	this->Receiver = false;
+	this->Receiver = false; //will work in sender mode
 	this->Wait->unlock();
 	this->_log->WriteMessage(TRACE,"Unlocking worker number" + std::to_string(this->_number));
 	this->_log->WriteMessage(TRACE,"Exiting" + this->_Name + "::Unlock");
@@ -105,15 +108,15 @@ Worker::~Worker()
 }
 void Worker::Start()
 {
-	this->Wait->lock();
-	this->thr = new std::thread( [this] { this->Work(); } );
+	this->Wait->lock(); //initiate mutex to stop thrad 
+	this->thr = new std::thread( [this] { this->Work(); } ); //start thread 
 	//thr->detach();
 }
 
 void Worker::SetTermination()
 {
-	this->terminate = true;
-	this->Wait->unlock();
+	this->terminate = true; //set terminate flag
+	this->Wait->unlock();  //enleash worker to end his body
 }
 
 

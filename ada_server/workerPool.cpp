@@ -1,8 +1,10 @@
-/*
- * workerPool.cpp
+/**
+ * @file WorkerPool.cpp
+ * 
+ * @brief implementation of WorkerPool class
  *
- *  Created on: Feb 16, 2015
- *      Author: tuso
+ * @author Matus Blaho 
+ * @version 1.0
  */
 
 #include "workerPool.h"
@@ -25,13 +27,13 @@ WorkerPool::WorkerPool(std::string DBConnString, Config *c, Loger *Rl, Loger *Sl
 	soci::session *connections[100];
 	for (int i = 0; i < c->ConnLimit(); i++)
 	{
-		try  //pokusime  sa o vytvorenie spojenia s databazou
+		try  //try to connect to database
 		{
 			session *SQL = new session(postgresql, this->_DBConnString);
 			connections[i] = SQL;
 			this->freeCount = i+1;
 		}
-		catch(std::exception const &e) //ak nastala chyba zachytime ju
+		catch(std::exception const &e) //if there is error 
 		{
 			std::string ErrorMessage = "Creating DB connection number : " + std::to_string(i) + "failed reason :";
 			ErrorMessage.append (e.what());
@@ -46,7 +48,7 @@ WorkerPool::WorkerPool(std::string DBConnString, Config *c, Loger *Rl, Loger *Sl
 	this->SenderLoger->WriteMessage(INFO,"Creating workers");
 	for (int i = 0; i < this->freeCount; i++)
 	{
-		try  //pokusime  sa o vytvorenie vlakna
+		try  //try to create workers
 		{
 			Worker *w= new Worker(connections[i],this->ReceiverLoger,this->SenderLoger, this, i,sslcont,c);
 			this->workers[i] = w;
@@ -60,6 +62,28 @@ WorkerPool::WorkerPool(std::string DBConnString, Config *c, Loger *Rl, Loger *Sl
 			ErrMessage.append(e.what());
 			SenderLoger->WriteMessage(ERR, ErrMessage);
 			ReceiverLoger->WriteMessage(ERR, ErrMessage);
+		}
+		catch(CertificateLoadException &e)
+		{
+			SenderLoger->WriteMessage(FATAL, "Error during certificates loading occurred! Terminating!");
+			ReceiverLoger->WriteMessage(FATAL, "Error during certificates loading occurred! Terminating!");
+			for (int y=i; y<freeCount; y++)
+			{
+				delete connections[y];
+			}
+			for (int y=0;y<i;y++)
+			{
+				workers[y]->SetTermination();
+			}
+			this->semaphore.lock(); //mututal exclusion zone
+			for (int y = 0; y< i; y++)
+			{
+				delete(workers[y]); //delete workers
+				this->SenderLoger->WriteMessage(TRACE,"Deleted connection : " + std::to_string(i) + " from : " + std::to_string(this->freeCount));
+				this->ReceiverLoger->WriteMessage(TRACE,"Deleted connection : " + std::to_string(i) + " from : " + std::to_string(this->freeCount));
+			}
+			this->semaphore.unlock();
+			throw(WorkerPoolCreateException());
 		}
 
 	}
@@ -77,13 +101,13 @@ WorkerPool::~WorkerPool()
 	this->ReceiverLoger->WriteMessage(INFO,"Closing connections to DB");
 	for (int i = 0; i< this->freeCount; i++)
 	{
-		workers[i]->SetTermination();
+		workers[i]->SetTermination(); //terminate all workers
 	}
 	sleep(6);
-	this->semaphore.lock();
+	this->semaphore.lock(); //mututal exclusion zone
 	for (int i = 0; i< this->freeCount; i++)
 	{
-		delete(workers[i]);
+		delete(workers[i]); //delete workers
 		this->SenderLoger->WriteMessage(TRACE,"Deleted connection : " + std::to_string(i) + " from : " + std::to_string(this->freeCount));
 		this->ReceiverLoger->WriteMessage(TRACE,"Deleted connection : " + std::to_string(i) + " from : " + std::to_string(this->freeCount));
 	}
@@ -98,7 +122,7 @@ void WorkerPool::ReturnWorker(Worker *worker, Loger *l)
 {
 	l->WriteMessage(TRACE,"Entering " + this->_Name + "::ReturnConnection");
 	this->semaphore.lock();
-	this->workers[this->freeCount] = worker;
+	this->workers[this->freeCount] = worker; //give worker back to array
 	this->freeCount++;
 	this->semaphore.unlock();
 	sem_post((this->Sem));
@@ -133,8 +157,19 @@ WorkerPool *WorkerPool::CreatePool(Loger *Rl, Loger *Sl, std::string DBConnStrin
 {
 	Rl->WriteMessage(TRACE,"Entering WorkerPool::CreatePool");
 	Sl->WriteMessage(TRACE,"Entering WorkerPool::CreatePool");
-	if (!instance)
-		instance=new WorkerPool(DBConnString, c, Rl, Sl,sslcont);
+	if (!instance)  //if there is no instance create it
+	{
+		try
+		{
+			instance=new WorkerPool(DBConnString, c, Rl, Sl,sslcont);
+		}
+		catch(WorkerPoolCreateException &e)
+		{
+			instance = NULL;
+			Sl->WriteMessage(TRACE,"WorkerPool creation failed!");
+			Rl->WriteMessage(TRACE,"WorkerPool creation failed!");
+		}
+	}
 	Sl->WriteMessage(TRACE,"Exiting WorkerPool::CreatePool");
 	Rl->WriteMessage(TRACE,"Exiting WorkerPool::CreatePool");
 	return (instance);

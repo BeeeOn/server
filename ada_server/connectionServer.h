@@ -1,30 +1,32 @@
-/*
-( * connectionserver.h
+/**
+ * @file connectionServer.h
+ * 
+ * @brief definition of ConnectionServer Class
  *
- *  Created on: Feb 18, 2015
- *      Author: tuso
+ * @author Matus Blaho 
+ * @version 1.0
  */
 
 #ifndef CONNECTIONSERVER_H_
 #define CONNECTIONSERVER_H_
 
-#include<string>  //c++ znakove retazce
+#include<string>  
 #include<cstring>
-#include <arpa/inet.h> //kniznica pre internetove operacie
+#include <arpa/inet.h> 
 #include <sys/poll.h>
-#include <chrono>  //kniznica pre meranie casu
-#include <iostream> //kniznica pre vystup na teminal
-#include <netdb.h> //kniznica pre sietove operacie
-#include <cstdlib>  //kniznica pre standarnde funkcie a dynamicku pamat
-#include <netinet/in.h>  //kniznica pre sietovy protokol
-#include <sys/socket.h>  //kniznica pre sockety
-#include <sys/types.h>  //kniznica pre systemove typy
-#include <string.h>  //kniznica pre znakove retazce
-#include <unistd.h>  //kniznica pre standardne symbolicke konstanty a typy
-#include <signal.h>  //kniznica pre signaly
-#include <sys/wait.h> //kniznica pre funkciu wait
-#include "pugixml.hpp"
-#include "pugiconfig.hpp"
+#include <chrono>  
+#include <iostream> 
+#include <netdb.h> 
+#include <cstdlib>  
+#include <netinet/in.h>  
+#include <sys/socket.h>  
+#include <sys/types.h>  
+#include <string.h>  
+#include <unistd.h>  
+#include <signal.h>  
+#include <sys/wait.h> 
+#include "pugi/pugixml.hpp"
+#include "pugi/pugiconfig.hpp"
 #include "loger.h"
 #include "messageParsers.h"
 #include "SSLContainer.h"
@@ -37,29 +39,55 @@
 #include <openssl/err.h>
 
 
+/** @class ConnectionServer
+ *  @brief Class responsible for receiving and serving clients requests
+ */
+
 class ConnectionServer
 {
 	private:
-		const std::string _Name="ConnectionServer";
-		int com_s;
-		DBHandler *database;    /**< ukazatel na objekt DBHandler*/
-		MessageParser *MP;	/**< ukazatel na objekt MessageParser*/
-		tmessage *parsedMessage; /**< spracovana sprava*/
-		std::string response;		/**< ukazatel na spravu odpovede*/
+		const std::string _Name="ConnectionServer"; /**< member representing class name*/
+		int com_s;	/**< communication socket*/
+		DBHandler *database;    /**< reference to DBHandler object*/
+		MessageParser *MP;	/**< reference to MessageParser object*/
+		tmessage *parsedMessage; /**< reference to tmessage object for parsed meesage*/
+		std::string response;		/**< text of response*/
+		 /**
+		   * Obtainng wakeup time
+		   * @return integer representation of next wakeup
+		   */
 		int GetData();
+		/**
+		  * Storing data logic
+		  */
 		void StoreData();
+		/**
+		* Method to send received message also to framework
+		* @param MSG std::string containng message text.
+		*/
 		void Notify(std::string MSG);
-		Loger *_log;
-		int _timeTimeOut;
-		SSL_CTX *sslctx;
-		SSL *cSSL;
-		SSLContainer *_sslcont;
-		Config *_config;
+		Loger *_log;	/**< reference to Loger object used for logging*/
+		int _timeTimeOut;	/**< timeout for unresponsive client*/
+		SSL_CTX *sslctx;	/**< SSL context of server*/
+		SSL *cSSL;	/**< current SSL connection*/
+		SSLContainer *_sslcont;  /**< reference to ssl container used for saving connections*/
+		Config *_config;  /**< reference to Config object used for loading configuration*/
 	public:
 		ConnectionServer(soci::session *SQL, Loger *L, int timeOut,SSLContainer *sslcont,Config *c);
+		/** Method for receiving message and creating response
+		 * @param IP - IP address of client
+		    */
 		void HandleConnection(in_addr IP);
+		/**
+		* Method to set socket to read message from
+		* @param s socket which to be set.
+		*/
 		void SetSocket(int s);
+		/**
+		* Destructor of object
+		*/
 		~ConnectionServer();
+		/** Method to load server certificates */
 		bool LoadCertificates();
 };
 

@@ -1,90 +1,126 @@
-/*
- * structures.h
+/**
+ * @file structures.h
+ * 
+ * @brief definition helping structures of program
  *
- *  Created on: Oct 26, 2014
- *      Author: tuso
+ * @author Matus Blaho 
+ * @version 1.0
  */
 
-#include "pugixml.hpp"
-#include "pugiconfig.hpp"
+#include "pugi/pugixml.hpp"
+#include "pugi/pugiconfig.hpp"
 #include <string>
 #include <ctime>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netinet/ip.h>
+#include <exception>
 
 #ifndef STRUCTURES_H_
 #define STRUCTURES_H_
 
+
+class CertificateLoadException: public std::exception
+{
+  virtual const char* what() const throw()
+  {
+    return ("Error during certificates loading");
+  }
+};
+
+class WorkerPoolCreateException: public std::exception
+{
+  virtual const char* what() const throw()
+  {
+    return ("Error during workerpool creation");
+  }
+};
+
 /** @enum valueTypes
- *  @brief Enumerator sluziaci na zaznamenanie typu hodnoty posielanej zo zariadenia
+ *  @brief Enumerator for types of values
  */
 
 typedef enum valueTypes
 {
-	TEMP = 0x0A,
-	HUM = 0x01,
-	BAR = 0x02,
-	ONOFFSEN = 0x03,
-	LUM = 0x05,
-	EMI = 0x06,
-	REZ = 0x07,
-	POS = 0x08,
-	ONOFSW = 0xA0,
-	ONON = 0xA1,
-	TOG = 0xA2,
-	RAN = 0xA3,
-	RGB = 0xA4,
-	UNK = 0x00
+	TEMP = 0x0A, /**< temperature*/
+	BST = 0x0B, /**< boiler status*/
+	HUM = 0x01, /**< humidity */
+	BAR = 0x02, /**< pressure*/
+	OPCL = 0x03, /**< open/closed sensor*/
+	ONOFFSEN = 0x04, /**< on/off sensor*/
+	LUM = 0x05, /**< intensity of light*/
+	EMI = 0x06, /**< emissions*/
+	REZ = 0x07, /**< resonance*/
+	POS = 0x08, /**<position */
+	ONOFSW = 0xA0, /**< on/off switch*/
+	ONON = 0xA1, /**< only on actuator*/
+	TOG = 0xA2, /**< toggle actuator*/
+	RAN = 0xA3, /**< range*/
+	RGB = 0xA4, /**< red green blue actuator*/
+	BT = 0xA5, /**< boiler temperature*/
+	BOT = 0xA6, /**< boiler operation type*/
+	BOM = 0xA7, /**< boiler operation mode*/
+	UNK = 0x00 /**< unknown value*/
 } tvalueTypes;
 
+/** @enum deviceType
+ *  @brief Enumerator for types of device according to their values
+ */
 
 typedef enum deviceType
 {
-	UNDEF,
-	SEN,
-	ACT,
-	SENACT
+	UNDEF, /**< undefined*/
+	SEN, /**< sensor only*/
+	ACT, /**< actuator only*/
+	SENACT /**< sensor and actuator*/
 } tdeviceType;
+
+/** @enum reqType
+ *  @brief Enumerator for types of requests
+ */
 
 typedef enum reqType
 {
-	DATA,
-	REGISTER,
-	SWITCH,
-	DELETE,
-	LISTEN,
-	UNKNOWN
+	DATA,  /**< data*/
+	REGISTER, /**< register*/
+	SWITCH, /**< switch*/
+	DELETE, /**< delete*/
+	LISTEN, /**< listen*/
+	UNKNOWN /**< unknown*/
 }treqType;
 
 
 /** @struct value
- *  @brief Struktura uchovavajuca hodnoty prijate od adapteru a zariadenia.
- *  @var value::type
- *  Clen 'type' obsahuje typ hodnoty.
- *  @var value::bval
- *  Clen 'bval' obsahuje booleanovsku hodnotu
- *  @var value::fval
- *  Clen 'fval' obsahuje hodnotu s plavajucou desatinnou ciarkou.
+ *  Structure saving value and type
  */
 typedef struct value
 {
-	unsigned short int intType;
-	unsigned short int offset;
-	tvalueTypes  type;
+	unsigned short int intType; /**< integer representation of type*/
+	unsigned short int offset;  /**< offset of value in device*/
+	tvalueTypes  type; /**< type of value*/
+	/** @union reqType
+	 *  @brief union to save value according to data type
+	 */
 	union
 	{
-		bool bval;
-		float fval;
-		int ival;
+		bool bval; /**< boolean type*/
+		float fval; /**< float type*/
+		int ival; /**< integer type*/
 	};
 } tvalue;
 
+/** @struct xml_string_writer
+ *  @brief writes XML structure from memory to std::string
+ */
+
 typedef struct xml_string_writer: pugi::xml_writer
 {
-    std::string result;
-
+    std::string result; /**< result*/
+    /**Virtual metod to write result to string
+     * @param void pointer data to write
+     * @param size_t of data to write
+    				 */
     virtual void write(const void* data, size_t size)
     {
         result += std::string(static_cast<const char*>(data), size);
@@ -93,65 +129,39 @@ typedef struct xml_string_writer: pugi::xml_writer
 
 
 /** @struct value
- *  @brief Struktura uchovavajuca spracovanu spravu od adapteru a zariadenia.
- *  @var message::adapter_id
- *  Clen 'adapter_id' obsahuje znakove ID adaptera.
- *  @var message::adapterINTid
- *  Clen 'adapterINTid' obsahuje integerovu hodnotu adaptera
- *  @var message::adapter_ip
- *  Clen 'adapter_ip' obsahuje ip adresu adaptera
- * @var message::fm_version
- *  Clen 'fm_version' obsahuje verziu firmwaru adaptera
- * @var message::byte_fm_version
- *  Clen 'byte_fm_version' obsahuje bytovu verziu firmwaru adaptera pre rychlejsie tvorenie odpovede
- * @var message::cp_version
- *  Clen 'cp_version' obsahuje verziu komunikacneho protokolu adaptera
- * @var message::byte_cp_version
- *  Clen 'byte_cp_version' obsahuje bytovu verziu komunikacneho protokolu adaptera pre rychlejsie tvorenie odpovede
- * @var message::timestamp
- *  Clen 'timestamp' obsahuje casove razitko
- * @var message::sensor_id
- *  Clen 'sensor_id' obsahuje ip adresu zariadenia
- * @var message::byte_sensor_id
- *  Clen 'byte_sensor_id' obsahuje bytovu ip adresu zariadenia
- * @var message::sensor_port
- *  Clen 'sensor_port' obsahuje port zariadenia
- * @var message::byte_sensor_port
- *  Clen 'byte_sensor_port' obsahuje bytovy port zariadenia
- * @var message::deviceProcolVersion
- *  Clen 'deviceProcolVersion' obsahuje verziu protokolu zariadenia
- * @var message::battery
- *  Clen 'battery' obsahuje hodnotu baterie zariadenia
- * @var message::signal_strength
- *  Clen 'signal_strength' obsahuje silu signalu zariadenia
- * @var message::values_count
- *  Clen 'values_count' obsahuje pocet prenasanych dvojic typ hodnota
- * @var message::values
- *  Clen 'values' obsahuje ukazatel na pole dvojic typ hodnota
+ *  @brief Saving parsed message
  */
 
 typedef struct message
 {
-	reqType state;
-	long long int adapterINTid;
-	int fm_version;
-	float cp_version;
-	time_t timestamp;
-	int socket;
-	unsigned long long int sensor_id;
-	std::string DeviceIDstr;
-	unsigned short int battery;
-	unsigned short int signal_strength;
-	unsigned short int values_count;
-	tvalue* values;
-	tdeviceType devType;
+	reqType state; /**< request type*/
+	long long int adapterINTid; /**< ID of adapter*/
+	int fm_version; /**< firmware version of adapter*/
+	float cp_version; /**< communication protocol version*/
+	time_t timestamp; /**< timestamp of message*/
+	int socket; /**< communication socket*/
+	unsigned long long int sensor_id; /**< ID of device*/
+	std::string DeviceIDstr; /**< Device ID string*/
+	unsigned short int battery; /**< battery value percentage*/
+	unsigned short int signal_strength; /**< signal strength percentage*/
+	unsigned short int values_count; /**< count of values received*/
+	tvalue* values; /**< pointer to vales array*/
+	tdeviceType devType; /**< device type*/
+	/** Destructor
+	 */
 	~message();
+	/** Constructor
+		 */
 	message();
 } tmessage;
 
+/** @struct testMessage
+ *  message type used once for testing inherits from tmessage
+ */
+
 typedef struct testMessage : public message
 {
-	int sensor_port;
+	int sensor_port; /**< port of testing sensor*/
 } ttestMessage;
 
 

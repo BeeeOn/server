@@ -1,8 +1,10 @@
-/*
- * sender.cpp
+/**
+ * @file sender.cpp
+ * 
+ * @brief implementation of sender class
  *
- *  Created on: Feb 22, 2015
- *      Author: tuso
+ * @author Matus Blaho 
+ * @version 1.0
  */
 
 #include "sender.h"
@@ -15,25 +17,27 @@ bool Sender::Send(std::string Message,SSL *s) //pripojenie na server a komunikac
 	int soc = SSL_get_fd(s);
 	int error_code;
 	unsigned int error_code_size = sizeof(error_code);
-	getsockopt(soc, SOL_SOCKET, SO_ERROR, &error_code, &error_code_size);
-	if (error_code!=0)
+	if (soc==-1) //if is socket set to -1 it was closed time ago
 	{
-		this->_log->WriteMessage(ERR,"Unable to send message sockeet is closed");
+		this->_log->WriteMessage(ERR,"Unable to send message socket is closed");
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Send");
 		return (false);
 	}
-	/*
-	if ((Err=send(soc, Message.c_str(), Message.size(), 0))<0)  //odoslanie poziadavky na server
+	getsockopt(soc, SOL_SOCKET, SO_ERROR, &error_code, &error_code_size);  //check socket for errors before writing to it
+	if (error_code!=0)
 	{
-		this->_log->WriteMessage(ERR,"Unable to send message to : " + std::to_string(soc) + "error code : " + std::to_string(errno));
-		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Connect");
+		this->_log->WriteMessage(ERR,"Unable to send message socket is closed");
+		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Send");
+		SSL_set_fd(s,-1);
 		return (false);
-	}*/
-	 if((Err=SSL_write(s, Message.c_str(), Message.size()))<=0)
+	}
+	char x = 0;
+	Message+=x;
+	 if((Err=SSL_write(s, Message.c_str(), Message.size()))<=0) //finally sent message
 	{
 		 std::string msg;
 		 int x = SSL_get_error(s,Err);
-		 switch(x)
+		 switch(x) //parse SSL error
 		 {
 		 case SSL_ERROR_NONE:
 			 _log->WriteMessage(ERR,"Sending message to adapter failed with code : " + std::to_string(x) + "None");

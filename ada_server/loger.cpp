@@ -1,11 +1,14 @@
-#include "loger.h"
-
-	/**********************************************Start of OutputWriter section******************************************************************/
-
-/** Metoda pre vypis spravy servra na terminal 
- * @param MT - typ spravy
- * @param message - obsah spravy
+/**
+ * @file loger.cpp
+ * 
+ * @brief implementation of Loger class
+ *
+ * @author Matus Blaho 
+ * @version 1.0
  */
+
+
+#include "loger.h"
 
 Loger::Loger()
 {
@@ -23,14 +26,13 @@ Loger::Loger()
 
 Loger::~Loger()
 {
-	this->SetTerminate();
-	//sem_post(&(this->_msgCounter));
+	this->SetTerminate(); //terminate log thread
 	this->QueueMsg("LOGINFO","***********Closing log***********");
-	this->_worker.join();
+	this->_worker.join();  //wait for it
 	delete (this->_WriteSemaphore);
 	delete (this->_msgQueue);
 	std::cout<<this->_FileSize<<"\n";
-	sem_destroy(&(this->_msgCounter));
+	sem_destroy(&(this->_msgCounter)); //delete counter
 }
 
 void Loger::QueueMsg(std::string MT, std::string MSG)
@@ -49,57 +51,44 @@ void Loger::WriteMessage (tmessageType MT,std::string message)
 	switch(MT)
 	{
 		case FATAL:
-		/*	*outp<<this->_appName<<" ["<<std::this_thread::get_id()<<"] ("<<timebuf<<") FATAL ERROR : "<<message<<std::endl;
-			outp->flush();*/
+
 			this->QueueMsg("FATAL",message);
 			break;
 		case ERR:
-			if (_verbosity>0)  //ak je zapnuty len vypis chyb servra 
+			if (_verbosity>0)  //on error level 
 			{
-		/*		*outp<<this->_appName<<" ["<<std::this_thread::get_id()<<"] ("<<timebuf<<") ERROR : "<<message<<std::endl;
-				outp->flush();*/
 				this->QueueMsg("ERROR",message);
 			}
 			break;
 		case INFO:
-			if (_verbosity>1)  //ak je zapnuty len vypis chyb servra 
+			if (_verbosity>1)  //on INFO leve
 			{
 				this->QueueMsg("INFO ",message);
-			/*	*outp<<this->_appName<<" ["<<std::this_thread::get_id()<<"] ("<<timebuf<<") INFO : "<<message<<std::endl;
-				std::cout.flush();*/
+
 			}
 			break;
 		case WARN:
-			if (_verbosity>2)  //ak je zapnuty len vypis chyb servra
+			if (_verbosity>2)  //on WARN level
 			{
 				this->QueueMsg("WARN ",message);
-			/*	*outp<<this->_appName<<" ["<<std::this_thread::get_id()<<"] ("<<timebuf<<") WARN : "<<message<<std::endl;
-				std::cout.flush();*/
 			}
 			break;
 		case MSG:
-			if (_verbosity>3)  //ak je zapnuty len vypis chyb servra
+			if (_verbosity>3)  //on MSG level
 			{
 				this->QueueMsg(" MSG ",message);
-			/*	*outp<<this->_appName<<" ["<<std::this_thread::get_id()<<"] ("<<timebuf<<") MSG : "<<message<<std::endl;
-				outp->flush();*/
 			}
 			break;
 		case TRACE:
-			if (_verbosity>4)  //ak je zapnuty len vypis chyb servra
+			if (_verbosity>4)  //on TRACE level
 			{
 				this->QueueMsg("TRACE",message);
-			/*	*outp<<this->_appName<<" ["<<std::this_thread::get_id()<<"] ("<<timebuf<<") TRACE : "<<message<<std::endl;
-				outp->flush();*/
 			}
 			break;
 		default:
 			break;
 	}
 }
-
-/** Metoda pre nastavenie urovne vypisovania dat 
- * @param Verbosity - uroven vypisovania dat*/
 
 void Loger::SetLogger(int Verbosity, int FilesCount, int LinesCount, std::string FileName, std::string Path ,std::string AppName)
 {
@@ -137,7 +126,7 @@ void Loger::OpenFile()
 	{
 		this->_Log.open(this->_path + "/" + this->_FileName + "." + std::to_string(this->_FilesCount) + ".log", std::ios::out|std::ios::trunc);
 	}
-	}
+}
 
 logMsg::logMsg(std::string Msg,std::string MsgType,struct timeval timestamp,std::thread::id thrID)
 {
@@ -150,9 +139,9 @@ logMsg::logMsg(std::string Msg,std::string MsgType,struct timeval timestamp,std:
 void Loger::Dequeue()
 {
 	tlogMsg *message;
-	while((!this->_teminate)||(!this->_msgQueue->empty()))
+	while((!this->_teminate)||(!this->_msgQueue->empty())) //if queue is empty and loger has to stop
 	{
-		sem_wait(&(this->_msgCounter));
+		sem_wait(&(this->_msgCounter)); //lock until messages come
 		this->_WriteSemaphore->lock();
 		message = this->_msgQueue->front();
 		this->_msgQueue->pop();
@@ -164,20 +153,20 @@ void Loger::Dequeue()
 		std::stringstream ss;
 		ss << message->_thrId;
 		std::string MSGstr = this->_appName + " [" + ss.str() + "] (" + timebuf + "." + std::to_string(message->_TimeStamp.tv_usec) +") " + message->_MsgType + " : " + message->_msg + "\n";
-		if ((this->_FileSize+=MSGstr.size())>this->_MaxFileSize)
+		if ((this->_FileSize+=MSGstr.size())>this->_MaxFileSize) //verify size of file
 		{
 			this->_FileSize=0;
 			this->_Log.close();
-			if(++this->_FilesCount>=this->_MaxFilesCount)
+			if(++this->_FilesCount>=this->_MaxFilesCount) //verify count of files
 			{
 				this->_FilesCount=0;
 				this->OpenFile();
 			}
 		}
 		std::ostream *outp;
-		if (this->_Log.is_open())
+		if (this->_Log.is_open()) //if opening succeded
 		{
-			outp = &_Log;
+			outp = &_Log; 
 		}
 		else
 		{
@@ -197,6 +186,4 @@ void Loger::Dequeue()
 		delete(message);
 	}
 };
-
-	/**********************************************End of OutputWriter section******************************************************/
 

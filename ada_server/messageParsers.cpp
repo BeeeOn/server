@@ -1,10 +1,11 @@
-/*
- * messageParsers.cpp
+/**
+ * @file messageParsers.cpp
+ * 
+ * @brief implementation of MessageParser UIServerMessageParser ProtocolV1MessageParser classes
  *
- *  Created on: Feb 18, 2015
- *      Author: tuso
+ * @author Matus Blaho 
+ * @version 1.0
  */
-
 
 
 #include "messageParsers.h"
@@ -37,29 +38,23 @@ bool ProtocolV1MessageParser::ParseMessage(xml_node *adapter,float FM,float CP)
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::parseMessage");
 	this->_adapter = adapter;
 	this->_device = this->_adapter->child("device");
-	//ulozime si ID adaptera v znakovej forme
+	//GEt adapter ID
 	this->GetID();
-	//uloznie verzie firmwaru
 	this->_message->cp_version=CP;
 	this->_log->WriteMessage(INFO,"CP version " + std::to_string(_message->cp_version));
-	//ulozenie verzie komunikacneho protokolu
 	this->_message->fm_version=FM;
 	this->_log->WriteMessage(INFO,"FM version " + std::to_string(_message->fm_version));
 	this->GetState();
-	//spracujeme a ulozime casove razitko
 	this->GetTimeStamp();
+	//register message ends here
 	if (_message->state == REGISTER)
 	{
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::parseMessage");
 		return (true);
 	}
-	//ulozime si IP adresu zariadenia (verzia pre emulatory)
 	this->GetDeviceID();
 	this->GetBattery();
-
-	//ulozime hodnotu kvality signalu
 	this->GetSignal();
-	//ulozime pocet posielanych dvojic typ hodnota
 	this->GetValues();
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::parseMessage");
 	return (true);
@@ -71,7 +66,6 @@ void ProtocolV1MessageParser::GetTimeStamp()
 	time_t tmpTime = 0;
 
 	tmpTime = 0;
-    //double tempd = 0.0; //pretoze python pouziva na ulozenie casoveho razitka datovy typ s plavajucou desatinnou ciarkou musime vykonat pretypovanie
 	this->_message->timestamp = _adapter->attribute("time").as_llong();
 	char timebuf[200];
 	struct tm *tmp;
@@ -160,13 +154,12 @@ void ProtocolV1MessageParser::GetSignal()
 bool ProtocolV1MessageParser::GetValues()
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetValues");
-	//vytvotime si v pamati miesto na ulozenie dvojic typ hodnota
 	xml_node values = _device.child("values");
 	_message->values_count = values.attribute("count").as_uint();
 	xml_node value = values.first_child();
 	try
 	{
-		_message->values = new tvalue[_message->values_count];
+		_message->values = new tvalue[_message->values_count]; //try to create space for values
 	}
 	catch(std::exception &e)
 	{
@@ -175,7 +168,7 @@ bool ProtocolV1MessageParser::GetValues()
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetValues");
 		return (false);
 	}
-	for (int i = 0; i < _message->values_count; i++) //v cykle spracujeme prijate dvojice typ hodnota
+	for (int i = 0; i < _message->values_count; i++) //go through all values and save them
 	{
 		if (value==NULL)
 		{
@@ -185,19 +178,19 @@ bool ProtocolV1MessageParser::GetValues()
 		std::bitset<16> type (value.attribute("type").as_uint());
 		std::bitset<16> offset (value.attribute("offset").as_uint());
 		std::bitset<16> result(0);
-		offset<<=(8);
-		result = offset | type;
+		offset<<=(8); //shift offset 
+		result = offset | type; //and OR it with type for one number which is saved to DB
 		_message->values[i].intType = (unsigned short int)result.to_ulong();
 		this->_log->WriteMessage(MSG,"Type + offset :" + std::to_string(_message->values[i].intType));
 		_message->values[i].type = static_cast<tvalueTypes>(type.to_ulong());
 		this->_log->WriteMessage(MSG,"Type :" + std::to_string(_message->values[i].type));
-		this->_log->WriteMessage(MSG,"Offset :" + std::to_string(_message->values[i].offset));
 		switch(_message->values[i].type)
 		{
 			case TEMP:
 			case LUM:
 			case REZ:
 			case POS:
+			case BT:
 				_message->values[i].fval = value.text().as_float();
 				this->_log->WriteMessage(MSG,"Value :" + std::to_string(_message->values[i].fval));
 				if (_message->devType==UNDEF)
@@ -216,6 +209,7 @@ bool ProtocolV1MessageParser::GetValues()
 			case TOG:
 			case ONOFFSEN:
 			case ONOFSW:
+			case OPCL:
 				_message->values[i].bval = false;
 				if (value.text().as_float()==1.0)
 					_message->values[i].bval = true;
@@ -240,6 +234,9 @@ bool ProtocolV1MessageParser::GetValues()
 			case BAR:
 			case RGB:
 			case RAN:
+			case BOT:
+			case BOM:
+			case BST:
 				_message->values[i].ival = value.text().as_int();
 				this->_log->WriteMessage(MSG,"Value :" + std::to_string(_message->values[i].ival));
 				if (_message->devType==UNDEF)
@@ -270,11 +267,6 @@ void ProtocolV1MessageParser::GetValuesCount()
 	this->_log->WriteMessage(MSG,"Values count :" + std::to_string(_message->values_count));
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetValuesCount");
 }
-
-/** Metoda vytvarajuca odpoved adapteru
- * @param value - hodnota dalsieho zobudenia senzoru
- * @return resp - ukazatel na spracovanu spravu
-    */
 
 std::string ProtocolV1MessageParser::CreateAnswer(int value)
 {
@@ -350,23 +342,56 @@ bool UIServerMessageParser::GetValue()
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetValue");
 	xml_node value = subject.first_child();
-	switch(this->_Message->values->type)
+	int n =0;
+	while (value != NULL)
 	{
-		case ONON:
-		case TOG:
-		case ONOFFSEN:
-		case ONOFSW:
-			_Message->values->bval = false;
-			if (value.text().as_float()==1.0)
-				_Message->values->bval = true;
-			this->_log->WriteMessage(MSG,"Value :" + std::to_string(_Message->values->bval));
-			break;
-		default:
-			_Message->values->type = UNK;
-			this->_log->WriteMessage(WARN,"Unsupported type!");
-			this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetValue");
-			return (false);
-			break;
+		n++;
+		value = value.next_sibling();
+	}
+	value = subject.first_child();
+	_Message->values_count = n;
+	_Message->values = new tvalue[_Message->values_count];
+	for (int i = 0;i<n;i++)
+	{
+		std::bitset<16> type(value.parent().attribute("type").as_int()),typeoffset(value.parent().attribute("type").as_int());
+		type.reset(8);
+		type.reset(9);
+		type.reset(10);
+		type.reset(11);
+		typeoffset>>=(8);
+		_Message->values[i].type = static_cast<tvalueTypes>(type.to_ulong());
+		this->_Message->values[i].intType=type.to_ulong();
+		this->_Message->values[i].offset = typeoffset.to_ulong();
+		this->_log->WriteMessage(MSG,"offset : " + std::to_string(this->_Message->values[i].offset));
+		this->_log->WriteMessage(MSG,"type : " + std::to_string(this->_Message->values[i].intType));
+
+		switch(this->_Message->values[i].type)
+		{
+			case ONON:
+			case TOG:
+			case ONOFFSEN:
+			case ONOFSW:
+				_Message->values[i].bval = false;
+				if (value.text().as_float()==1.0)
+					_Message->values[i].bval = true;
+				this->_log->WriteMessage(MSG,"Value :" + std::to_string(_Message->values[i].bval));
+				break;
+			case BT:
+				_Message->values[i].fval = value.text().as_float();
+				this->_log->WriteMessage(MSG,"Value :" + std::to_string(_Message->values[i].fval));
+				break;
+			case BOT:
+			case BOM:
+				_Message->values[i].ival = value.text().as_int();
+				this->_log->WriteMessage(MSG,"Value :" + std::to_string(_Message->values[i].ival));
+				break;
+			default:
+				_Message->values[i].type = UNK;
+				this->_log->WriteMessage(WARN,"Unsupported type!");
+				this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetValue");
+				return (false);
+				break;
+		}
 	}
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetValue");
 	return (true);
@@ -377,11 +402,11 @@ bool UIServerMessageParser::GetOffsetType()
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetTypeOffset");
 	std::bitset<16> type(this->subject.attribute("type").as_int()),typeoffset(subject.attribute("type").as_int());
-	type.reset(8);
+	type.reset(8); //clear offset from type
 	type.reset(9);
 	type.reset(10);
 	type.reset(11);
-	typeoffset>>=(8);
+	typeoffset>>=(8); //shift offset back to right
 	_Message->values->type = static_cast<tvalueTypes>(type.to_ulong());
 	this->_Message->values->intType=type.to_ulong();
 	this->_Message->values->offset = typeoffset.to_ulong();
@@ -449,7 +474,6 @@ bool UIServerMessageParser::ParseMessage(std::string MSG)
 		case SWITCH:
 			res = this->GetAdapterID();
 			res = this->GetSubjectID();
-			res = this->GetOffsetType();
 			res = this->GetValue();
 			break;
 		case LISTEN:
@@ -467,7 +491,6 @@ bool UIServerMessageParser::ParseMessage(std::string MSG)
 UIServerMessageParser::UIServerMessageParser(Loger *l)
 {
 	this->_Message = new tmessage();
-	this->_Message->values = new tvalue;
 	this->_log = l;
 }
 
