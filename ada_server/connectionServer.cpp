@@ -86,22 +86,6 @@ void ConnectionServer::HandleConnection (in_addr IP)
 	SSL_set_fd(cSSL, com_s );
 	//SSL_set_verify(cSSL,SSL_VERIFY_PEER|SSL_VERIFY_FAIL_IF_NO_PEER_CERT,NULL);
 	X509 *peer = SSL_get_peer_certificate(cSSL);
-	if(peer==NULL)
-	{
-		_log->WriteMessage(WARN,"Peer did not provided certificate!");
-	}
-	else
-	{
-		std::string hash;
-		//hash=peer->sha1_hash;
-		_log->WriteMessage(TRACE,"Clients hash is : " + hash);
-		char issuer[100];
-		X509_NAME_oneline(X509_get_issuer_name(peer), issuer, 100);
-		printf("issuer= %s\n", issuer);
-		std::cout<<issuer<<"\n";
-		std::string iss = issuer;
-		_log->WriteMessage(TRACE,"Certificate was issued by : " +  iss);
-	}
 	int ssl_err = SSL_accept(cSSL); //SSL handshake 
 	if(ssl_err <= 0)
 	{
@@ -132,6 +116,7 @@ void ConnectionServer::HandleConnection (in_addr IP)
 		std::cout<<issuer<<"\n";
 		std::string iss = issuer;
 		_log->WriteMessage(TRACE,"Certificate was issued by : " +  iss);
+		X509_free(peer);
 	}
 	while(1)
 	{
