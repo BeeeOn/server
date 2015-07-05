@@ -86,7 +86,7 @@ string resolveMsg(string msg){
     
     Logger::getInstance(Logger::DEBUG)<< "MSGIN: "<<msg<< endl;
     
-    msgIn = msgFactory.createMsg((char*)msg.c_str());
+    msgIn = msgFactory.createMsg(msg.c_str());
     
     try
     {     

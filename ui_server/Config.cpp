@@ -44,12 +44,13 @@ void Config::loadXml(std::string file) {
     _algorithmPort = _doc.child(CONFIG_ROOT).child(SERVER_NODE).attribute("algorithmPort").as_int();
     _gamificationPort = _doc.child(CONFIG_ROOT).child(SERVER_NODE).attribute("gamificationPort").as_int();
     _verbosity = _doc.child(CONFIG_ROOT).child(SERVER_NODE).attribute("verbosity").as_int(10);//10 = max verbosity
-    
     _connectionString = _doc.child(CONFIG_ROOT).child(DB_NODE).attribute("connectionString").as_string(DEFAULT_DB_CONNECTION_STRING);
     _sessionsNumber = _doc.child(CONFIG_ROOT).child(DB_NODE).attribute("sessions").as_int(10);
     
     _logsToCout = _doc.child(CONFIG_ROOT).child(LOGS_NODE).attribute("toCout").as_bool(true);
     _logsFolder = _doc.child(CONFIG_ROOT).child(LOGS_NODE).attribute("folder").as_string("logs");
+    
+    
 }
 
 int Config::getServerThreadsNumber() {

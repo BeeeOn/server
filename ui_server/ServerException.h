@@ -66,6 +66,7 @@ public:
    static  const int WRONG_AUTH_PROVIDER;
 
     static const int ROOM_TYPE;
+    static const int NOTIFICATION_ID;
 
     static const int SERVER2SERVER;
     static const int SWITCH_FAIL;

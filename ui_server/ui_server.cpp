@@ -1,7 +1,6 @@
 //Defines the entry point for the console application.
 
 #include "ui_server.h"
-#include "msgInGetCondition.h"
 #include "../DAO/DAO.h"
 #include "../DAO/DAOUsers.h"
 #include "../DAO/DAOAdapters.h"
@@ -48,9 +47,18 @@ void serverF(int port){
     SocketServer ss;
     ss.start(port);
 }
+
+bool has_suffix1(const std::string &str, const std::string &suffix)
+{
+    return str.size() >= suffix.size() &&
+           str.compare(str.size() - suffix.size(), suffix.size(), suffix) == 0;
+}
+
+
 int main(int argc, char** argv)
 {   
-//http://pugixml.googlecode.com/svn-history/r605/trunk/docs/samples/modify_add.cpp
+    
+    //http://pugixml.googlecode.com/svn-history/r605/trunk/docs/samples/modify_add.cpp
     //load XML file from argv[1]
 
     if(argc>=2){
@@ -92,13 +100,12 @@ int main(int argc, char** argv)
         Logger::debug()<< "logs will be stored in : " << Logger::getInstance().getFileName() <<" and file will be changed every day "<< endl;
     }
 
-   // ComTable::getInstance().startComTableCleaner(Config::getInstance().getComTableSleepPeriodMs(), Config::getInstance().getComTableMaxInactivityMs() );
     try{      
         Logger::debug()<< "setting connections to DB..."<< endl;
         
         string conString = Config::getInstance().getDBConnectionString();
         
-        DBConnector::getInstance().setConnectionStringAndOpenSessions( conString , Config::getInstance().getDBSessionsNumber());
+        //DBConnector::getInstance().setConnectionStringAndOpenSessions( conString , Config::getInstance().getDBSessionsNumber());
         DAOUsers::getInstance().setConnectionStringAndOpenSessions(conString, 2);
         DAOAdapters::getInstance().setConnectionStringAndOpenSessions(conString, 2);
         DAODevices::getInstance().setConnectionStringAndOpenSessions(conString, 2);
@@ -115,12 +122,15 @@ int main(int argc, char** argv)
         return 1;
     }
         
-
-        resolveMsg( "<com ver=\"2.4\"  state=\"getadapters\" email=\"new22@gmail.com\" gid=\"1111\" gt=\"1\" pid=\"11\" loc=\"cs\" />");
+/*
+        resolveMsg( "<?xml version='1.0' encoding='UTF-8' ?><com ver=\"2.5\" bt=\"9j6xC3Df9c\" state=\"getlog\" from=\"1431268648\" to=\"1431527848\" ftype=\"avg\" interval=\"600\" aid=\"52428\" did=\"7372\" dtype=\"10\"></com>");
+        resolveMsg( "<?xml version='1.0' encoding='UTF-8' ?><com ver=\"2.5\" bt=\"9j6xC3Df9c\" state=\"getlog\" from=\"1431268648\" to=\"1431527848\" ftype=\"avg\" interval=\"600\" aid=\"52428\" did=\"7372\" dtype=\"10\"></com>");
+        resolveMsg( "<?xml version='1.0' encoding='UTF-8' ?><com ver=\"2.5\" bt=\"9j6xC3Df9c\" state=\"getlog\" from=\"1431268648\" to=\"1431527848\" ftype=\"avg\" interval=\"600\" aid=\"52428\" did=\"7372\" dtype=\"10\"></com>");
         resolveMsg( "<com ver=\"2.5\"  state=\"getadapters\" email=\"new22@gmail.com\" gid=\"1111\" gt=\"1\" pid=\"111\" loc=\"cs\" />");
         resolveMsg( "<com ver=\"1.3\"  state=\"getadapters\" email=\"new33@gmail.com\" gid=\"11111\" gt=\"1\" pid=\"11111\"  loc=\"cs\" />");
-    resolveMsg( "<com ver=\"2.4\" state=\"signup\" srv=\"facebook\"><par fbt=\"CAAMVd7mjduYBAKsnl5i2iJljZAG1A6PDraitTxF2v91iDDoOwZA5uOSxYCpo2a0WZC7ZB8I8n3hXEFrgBBZCEoO6HZAtENfNO72n8DmZAYdVYknltIY50g1ACzkhPavWnCtOkGBdD68VnwnfhLtZA00SjWw9QiZCzjg09ZBVKPSZBPqKZAGFDawZAWZBV82KWiCp4uMruh5AiBcs5ihHTsENM0d5CfGx0bfEwo0F7IIGHOUGv0IJYSZBOZCmZANPc\" /></com>");
-
+        resolveMsg( "<com ver=\"2.4\" state=\"signup\" srv=\"facebook\"><par fbt=\"CAAMVd7mjduYBAKsnl5i2iJljZAG1A6PDraitTxF2v91iDDoOwZA5uOSxYCpo2a0WZC7ZB8I8n3hXEFrgBBZCEoO6HZAtENfNO72n8DmZAYdVYknltIY50g1ACzkhPavWnCtOkGBdD68VnwnfhLtZA00SjWw9QiZCzjg09ZBVKPSZBPqKZAGFDawZAWZBV82KWiCp4uMruh5AiBcs5ihHTsENM0d5CfGx0bfEwo0F7IIGHOUGv0IJYSZBOZCmZANPc\" /></com>");
+        return 0;
+        */
         Logger::debug()<< "setting SSL context..."<< endl;
        SSL_CTX *ctx;
        int server;
@@ -167,11 +177,12 @@ int main(int argc, char** argv)
                 
                 try{
                 //create thread which serve phone
-                    new thread( [ssl, threadCounter, resolveFunc](){
-                        (*threadCounter)++;
-                        Servlet(ssl,resolveFunc);
-                        (*threadCounter)--;
-                    });
+                    thread t( [ssl, threadCounter, resolveFunc](){
+                            (*threadCounter)++;
+                            Servlet(ssl,resolveFunc);
+                            (*threadCounter)--;
+                        });
+                    t.detach();
                 }catch(const std::system_error& e) {
                     std::cout << "Caught system_error with code " << e.code() 
                               << " meaning " << e.what() << '\n';
@@ -186,6 +197,7 @@ int main(int argc, char** argv)
             std::this_thread::sleep_for(std::chrono::milliseconds(50));
         }
         
+        delete threadCounter;
         //close server socket 
         close(server);
         //release ssl

@@ -9,7 +9,7 @@
 #include <soci.h>
 #include <postgresql/soci-postgresql.h>
 #include "../ui_logger/Logger.h"
-#include "IMsgIn.h"
+#include "msgs/IMsgIn.h"
 #include "gTokenChecker.h"
 #include "ServerException.h"
 #include "../DAO/DAODevices.h"

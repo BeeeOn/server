@@ -21,9 +21,8 @@
 #include <string>
 #include <iostream>
 #include "../ui_logger/Logger.h"
-#include "DBConnector.h"
+
 #include "gTokenChecker.h"
-#include "ComTable.h"
 #include "pugixml.hpp"
 #include "MsgRightsChecker.h"
 #include "ServerException.h"

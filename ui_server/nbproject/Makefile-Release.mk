@@ -44,58 +44,54 @@ OBJECTFILES= \
 	${OBJECTDIR}/_ext/1360890531/DAOUsers.o \
 	${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters.o \
 	${OBJECTDIR}/_ext/1154895860/Logger.o \
-	${OBJECTDIR}/ComTable.o \
 	${OBJECTDIR}/Config.o \
 	${OBJECTDIR}/DBConnector.o \
-	${OBJECTDIR}/IMsgIn.o \
-	${OBJECTDIR}/IMsgInLoginAndAdapterAccessRequired.o \
-	${OBJECTDIR}/IMsgInLoginRequired.o \
-	${OBJECTDIR}/IMsgInLoginUnwanted.o \
-	${OBJECTDIR}/MsgInAdapterListen.o \
-	${OBJECTDIR}/MsgInAddAccount.o \
-	${OBJECTDIR}/MsgInAddAdapter.o \
-	${OBJECTDIR}/MsgInAddRoom.o \
-	${OBJECTDIR}/MsgInAddView.o \
-	${OBJECTDIR}/MsgInAlgorithmsRedirect.o \
-	${OBJECTDIR}/MsgInDelConAccount.o \
-	${OBJECTDIR}/MsgInDelDevice.o \
-	${OBJECTDIR}/MsgInDelGCMID.o \
-	${OBJECTDIR}/MsgInDelRoom.o \
-	${OBJECTDIR}/MsgInDelView.o \
 	${OBJECTDIR}/MsgInFactory.o \
-	${OBJECTDIR}/MsgInGetAdapters.o \
-	${OBJECTDIR}/MsgInGetAllDevices.o \
-	${OBJECTDIR}/MsgInGetConAccount.o \
-	${OBJECTDIR}/MsgInGetDevices.o \
-	${OBJECTDIR}/MsgInGetLog.o \
-	${OBJECTDIR}/MsgInGetNewDevices.o \
-	${OBJECTDIR}/MsgInGetRooms.o \
-	${OBJECTDIR}/MsgInGetTimeZone.o \
-	${OBJECTDIR}/MsgInGetUserID.o \
-	${OBJECTDIR}/MsgInGetUserInfo.o \
-	${OBJECTDIR}/MsgInGetViews.o \
-	${OBJECTDIR}/MsgInReinitAdapter.o \
-	${OBJECTDIR}/MsgInSetConAccount.o \
-	${OBJECTDIR}/MsgInSetDevices.o \
-	${OBJECTDIR}/MsgInSetGCMID.o \
-	${OBJECTDIR}/MsgInSetRooms.o \
-	${OBJECTDIR}/MsgInSetTimeZone.o \
-	${OBJECTDIR}/MsgInSignMe.o \
-	${OBJECTDIR}/MsgInSwitch.o \
-	${OBJECTDIR}/MsgInUnknown.o \
-	${OBJECTDIR}/MsgInUpdateView.o \
 	${OBJECTDIR}/MsgRightsChecker.o \
-	${OBJECTDIR}/Msgs/MsgInDelAdapter.o \
-	${OBJECTDIR}/Msgs/MsgInGamificationRedirect.o \
-	${OBJECTDIR}/Msgs/MsgInGetNotifications.o \
-	${OBJECTDIR}/Msgs/MsgInNotificationRead.o \
-	${OBJECTDIR}/Msgs/MsgInSignUp.o \
 	${OBJECTDIR}/ServerException.o \
 	${OBJECTDIR}/SocketClient.o \
 	${OBJECTDIR}/SocketServer.o \
 	${OBJECTDIR}/communication.o \
 	${OBJECTDIR}/fTokenChecker.o \
 	${OBJECTDIR}/gTokenChecker.o \
+	${OBJECTDIR}/msgs/IMsgIn.o \
+	${OBJECTDIR}/msgs/IMsgInLoginAndAdapterAccessRequired.o \
+	${OBJECTDIR}/msgs/IMsgInLoginRequired.o \
+	${OBJECTDIR}/msgs/IMsgInLoginUnwanted.o \
+	${OBJECTDIR}/msgs/MsgInAdapterListen.o \
+	${OBJECTDIR}/msgs/MsgInAddAccount.o \
+	${OBJECTDIR}/msgs/MsgInAddAdapter.o \
+	${OBJECTDIR}/msgs/MsgInAddRoom.o \
+	${OBJECTDIR}/msgs/MsgInAddView.o \
+	${OBJECTDIR}/msgs/MsgInAlgorithmsRedirect.o \
+	${OBJECTDIR}/msgs/MsgInDelAdapter.o \
+	${OBJECTDIR}/msgs/MsgInDelConAccount.o \
+	${OBJECTDIR}/msgs/MsgInDelDevice.o \
+	${OBJECTDIR}/msgs/MsgInDelGCMID.o \
+	${OBJECTDIR}/msgs/MsgInDelRoom.o \
+	${OBJECTDIR}/msgs/MsgInDelView.o \
+	${OBJECTDIR}/msgs/MsgInGamificationRedirect.o \
+	${OBJECTDIR}/msgs/MsgInGetAdapters.o \
+	${OBJECTDIR}/msgs/MsgInGetAllDevices.o \
+	${OBJECTDIR}/msgs/MsgInGetConAccount.o \
+	${OBJECTDIR}/msgs/MsgInGetDevices.o \
+	${OBJECTDIR}/msgs/MsgInGetNewDevices.o \
+	${OBJECTDIR}/msgs/MsgInGetNotifications.o \
+	${OBJECTDIR}/msgs/MsgInGetRooms.o \
+	${OBJECTDIR}/msgs/MsgInGetTimeZone.o \
+	${OBJECTDIR}/msgs/MsgInGetUserID.o \
+	${OBJECTDIR}/msgs/MsgInGetUserInfo.o \
+	${OBJECTDIR}/msgs/MsgInGetViews.o \
+	${OBJECTDIR}/msgs/MsgInNotificationRead.o \
+	${OBJECTDIR}/msgs/MsgInSetConAccount.o \
+	${OBJECTDIR}/msgs/MsgInSetGCMID.o \
+	${OBJECTDIR}/msgs/MsgInSetRooms.o \
+	${OBJECTDIR}/msgs/MsgInSetTimeZone.o \
+	${OBJECTDIR}/msgs/MsgInSignMe.o \
+	${OBJECTDIR}/msgs/MsgInSignUp.o \
+	${OBJECTDIR}/msgs/MsgInSwitch.o \
+	${OBJECTDIR}/msgs/MsgInUnknown.o \
+	${OBJECTDIR}/msgs/MsgInUpdateView.o \
 	${OBJECTDIR}/pugixml.o \
 	${OBJECTDIR}/save_custom_writer.o \
 	${OBJECTDIR}/sslServlet.o \
@@ -208,11 +204,6 @@ ${OBJECTDIR}/_ext/1154895860/Logger.o: ../ui_logger/Logger.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1154895860/Logger.o ../ui_logger/Logger.cpp
 
-${OBJECTDIR}/ComTable.o: ComTable.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/ComTable.o ComTable.cpp
-
 ${OBJECTDIR}/Config.o: Config.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
@@ -223,220 +214,15 @@ ${OBJECTDIR}/DBConnector.o: DBConnector.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/DBConnector.o DBConnector.cpp
 
-${OBJECTDIR}/IMsgIn.o: IMsgIn.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/IMsgIn.o IMsgIn.cpp
-
-${OBJECTDIR}/IMsgInLoginAndAdapterAccessRequired.o: IMsgInLoginAndAdapterAccessRequired.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/IMsgInLoginAndAdapterAccessRequired.o IMsgInLoginAndAdapterAccessRequired.cpp
-
-${OBJECTDIR}/IMsgInLoginRequired.o: IMsgInLoginRequired.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/IMsgInLoginRequired.o IMsgInLoginRequired.cpp
-
-${OBJECTDIR}/IMsgInLoginUnwanted.o: IMsgInLoginUnwanted.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/IMsgInLoginUnwanted.o IMsgInLoginUnwanted.cpp
-
-${OBJECTDIR}/MsgInAdapterListen.o: MsgInAdapterListen.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInAdapterListen.o MsgInAdapterListen.cpp
-
-${OBJECTDIR}/MsgInAddAccount.o: MsgInAddAccount.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInAddAccount.o MsgInAddAccount.cpp
-
-${OBJECTDIR}/MsgInAddAdapter.o: MsgInAddAdapter.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInAddAdapter.o MsgInAddAdapter.cpp
-
-${OBJECTDIR}/MsgInAddRoom.o: MsgInAddRoom.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInAddRoom.o MsgInAddRoom.cpp
-
-${OBJECTDIR}/MsgInAddView.o: MsgInAddView.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInAddView.o MsgInAddView.cpp
-
-${OBJECTDIR}/MsgInAlgorithmsRedirect.o: MsgInAlgorithmsRedirect.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInAlgorithmsRedirect.o MsgInAlgorithmsRedirect.cpp
-
-${OBJECTDIR}/MsgInDelConAccount.o: MsgInDelConAccount.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInDelConAccount.o MsgInDelConAccount.cpp
-
-${OBJECTDIR}/MsgInDelDevice.o: MsgInDelDevice.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInDelDevice.o MsgInDelDevice.cpp
-
-${OBJECTDIR}/MsgInDelGCMID.o: MsgInDelGCMID.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInDelGCMID.o MsgInDelGCMID.cpp
-
-${OBJECTDIR}/MsgInDelRoom.o: MsgInDelRoom.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInDelRoom.o MsgInDelRoom.cpp
-
-${OBJECTDIR}/MsgInDelView.o: MsgInDelView.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInDelView.o MsgInDelView.cpp
-
 ${OBJECTDIR}/MsgInFactory.o: MsgInFactory.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInFactory.o MsgInFactory.cpp
 
-${OBJECTDIR}/MsgInGetAdapters.o: MsgInGetAdapters.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInGetAdapters.o MsgInGetAdapters.cpp
-
-${OBJECTDIR}/MsgInGetAllDevices.o: MsgInGetAllDevices.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInGetAllDevices.o MsgInGetAllDevices.cpp
-
-${OBJECTDIR}/MsgInGetConAccount.o: MsgInGetConAccount.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInGetConAccount.o MsgInGetConAccount.cpp
-
-${OBJECTDIR}/MsgInGetDevices.o: MsgInGetDevices.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInGetDevices.o MsgInGetDevices.cpp
-
-${OBJECTDIR}/MsgInGetLog.o: MsgInGetLog.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInGetLog.o MsgInGetLog.cpp
-
-${OBJECTDIR}/MsgInGetNewDevices.o: MsgInGetNewDevices.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInGetNewDevices.o MsgInGetNewDevices.cpp
-
-${OBJECTDIR}/MsgInGetRooms.o: MsgInGetRooms.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInGetRooms.o MsgInGetRooms.cpp
-
-${OBJECTDIR}/MsgInGetTimeZone.o: MsgInGetTimeZone.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInGetTimeZone.o MsgInGetTimeZone.cpp
-
-${OBJECTDIR}/MsgInGetUserID.o: MsgInGetUserID.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInGetUserID.o MsgInGetUserID.cpp
-
-${OBJECTDIR}/MsgInGetUserInfo.o: MsgInGetUserInfo.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInGetUserInfo.o MsgInGetUserInfo.cpp
-
-${OBJECTDIR}/MsgInGetViews.o: MsgInGetViews.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInGetViews.o MsgInGetViews.cpp
-
-${OBJECTDIR}/MsgInReinitAdapter.o: MsgInReinitAdapter.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInReinitAdapter.o MsgInReinitAdapter.cpp
-
-${OBJECTDIR}/MsgInSetConAccount.o: MsgInSetConAccount.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInSetConAccount.o MsgInSetConAccount.cpp
-
-${OBJECTDIR}/MsgInSetDevices.o: MsgInSetDevices.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInSetDevices.o MsgInSetDevices.cpp
-
-${OBJECTDIR}/MsgInSetGCMID.o: MsgInSetGCMID.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInSetGCMID.o MsgInSetGCMID.cpp
-
-${OBJECTDIR}/MsgInSetRooms.o: MsgInSetRooms.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInSetRooms.o MsgInSetRooms.cpp
-
-${OBJECTDIR}/MsgInSetTimeZone.o: MsgInSetTimeZone.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInSetTimeZone.o MsgInSetTimeZone.cpp
-
-${OBJECTDIR}/MsgInSignMe.o: MsgInSignMe.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInSignMe.o MsgInSignMe.cpp
-
-${OBJECTDIR}/MsgInSwitch.o: MsgInSwitch.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInSwitch.o MsgInSwitch.cpp
-
-${OBJECTDIR}/MsgInUnknown.o: MsgInUnknown.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInUnknown.o MsgInUnknown.cpp
-
-${OBJECTDIR}/MsgInUpdateView.o: MsgInUpdateView.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInUpdateView.o MsgInUpdateView.cpp
-
 ${OBJECTDIR}/MsgRightsChecker.o: MsgRightsChecker.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgRightsChecker.o MsgRightsChecker.cpp
-
-${OBJECTDIR}/Msgs/MsgInDelAdapter.o: Msgs/MsgInDelAdapter.cpp 
-	${MKDIR} -p ${OBJECTDIR}/Msgs
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Msgs/MsgInDelAdapter.o Msgs/MsgInDelAdapter.cpp
-
-${OBJECTDIR}/Msgs/MsgInGamificationRedirect.o: Msgs/MsgInGamificationRedirect.cpp 
-	${MKDIR} -p ${OBJECTDIR}/Msgs
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Msgs/MsgInGamificationRedirect.o Msgs/MsgInGamificationRedirect.cpp
-
-${OBJECTDIR}/Msgs/MsgInGetNotifications.o: Msgs/MsgInGetNotifications.cpp 
-	${MKDIR} -p ${OBJECTDIR}/Msgs
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Msgs/MsgInGetNotifications.o Msgs/MsgInGetNotifications.cpp
-
-${OBJECTDIR}/Msgs/MsgInNotificationRead.o: Msgs/MsgInNotificationRead.cpp 
-	${MKDIR} -p ${OBJECTDIR}/Msgs
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Msgs/MsgInNotificationRead.o Msgs/MsgInNotificationRead.cpp
-
-${OBJECTDIR}/Msgs/MsgInSignUp.o: Msgs/MsgInSignUp.cpp 
-	${MKDIR} -p ${OBJECTDIR}/Msgs
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Msgs/MsgInSignUp.o Msgs/MsgInSignUp.cpp
 
 ${OBJECTDIR}/ServerException.o: ServerException.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -467,6 +253,196 @@ ${OBJECTDIR}/gTokenChecker.o: gTokenChecker.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/gTokenChecker.o gTokenChecker.cpp
+
+${OBJECTDIR}/msgs/IMsgIn.o: msgs/IMsgIn.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/IMsgIn.o msgs/IMsgIn.cpp
+
+${OBJECTDIR}/msgs/IMsgInLoginAndAdapterAccessRequired.o: msgs/IMsgInLoginAndAdapterAccessRequired.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/IMsgInLoginAndAdapterAccessRequired.o msgs/IMsgInLoginAndAdapterAccessRequired.cpp
+
+${OBJECTDIR}/msgs/IMsgInLoginRequired.o: msgs/IMsgInLoginRequired.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/IMsgInLoginRequired.o msgs/IMsgInLoginRequired.cpp
+
+${OBJECTDIR}/msgs/IMsgInLoginUnwanted.o: msgs/IMsgInLoginUnwanted.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/IMsgInLoginUnwanted.o msgs/IMsgInLoginUnwanted.cpp
+
+${OBJECTDIR}/msgs/MsgInAdapterListen.o: msgs/MsgInAdapterListen.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAdapterListen.o msgs/MsgInAdapterListen.cpp
+
+${OBJECTDIR}/msgs/MsgInAddAccount.o: msgs/MsgInAddAccount.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAddAccount.o msgs/MsgInAddAccount.cpp
+
+${OBJECTDIR}/msgs/MsgInAddAdapter.o: msgs/MsgInAddAdapter.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAddAdapter.o msgs/MsgInAddAdapter.cpp
+
+${OBJECTDIR}/msgs/MsgInAddRoom.o: msgs/MsgInAddRoom.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAddRoom.o msgs/MsgInAddRoom.cpp
+
+${OBJECTDIR}/msgs/MsgInAddView.o: msgs/MsgInAddView.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAddView.o msgs/MsgInAddView.cpp
+
+${OBJECTDIR}/msgs/MsgInAlgorithmsRedirect.o: msgs/MsgInAlgorithmsRedirect.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAlgorithmsRedirect.o msgs/MsgInAlgorithmsRedirect.cpp
+
+${OBJECTDIR}/msgs/MsgInDelAdapter.o: msgs/MsgInDelAdapter.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelAdapter.o msgs/MsgInDelAdapter.cpp
+
+${OBJECTDIR}/msgs/MsgInDelConAccount.o: msgs/MsgInDelConAccount.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelConAccount.o msgs/MsgInDelConAccount.cpp
+
+${OBJECTDIR}/msgs/MsgInDelDevice.o: msgs/MsgInDelDevice.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelDevice.o msgs/MsgInDelDevice.cpp
+
+${OBJECTDIR}/msgs/MsgInDelGCMID.o: msgs/MsgInDelGCMID.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelGCMID.o msgs/MsgInDelGCMID.cpp
+
+${OBJECTDIR}/msgs/MsgInDelRoom.o: msgs/MsgInDelRoom.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelRoom.o msgs/MsgInDelRoom.cpp
+
+${OBJECTDIR}/msgs/MsgInDelView.o: msgs/MsgInDelView.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelView.o msgs/MsgInDelView.cpp
+
+${OBJECTDIR}/msgs/MsgInGamificationRedirect.o: msgs/MsgInGamificationRedirect.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGamificationRedirect.o msgs/MsgInGamificationRedirect.cpp
+
+${OBJECTDIR}/msgs/MsgInGetAdapters.o: msgs/MsgInGetAdapters.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetAdapters.o msgs/MsgInGetAdapters.cpp
+
+${OBJECTDIR}/msgs/MsgInGetAllDevices.o: msgs/MsgInGetAllDevices.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetAllDevices.o msgs/MsgInGetAllDevices.cpp
+
+${OBJECTDIR}/msgs/MsgInGetConAccount.o: msgs/MsgInGetConAccount.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetConAccount.o msgs/MsgInGetConAccount.cpp
+
+${OBJECTDIR}/msgs/MsgInGetDevices.o: msgs/MsgInGetDevices.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetDevices.o msgs/MsgInGetDevices.cpp
+
+${OBJECTDIR}/msgs/MsgInGetNewDevices.o: msgs/MsgInGetNewDevices.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetNewDevices.o msgs/MsgInGetNewDevices.cpp
+
+${OBJECTDIR}/msgs/MsgInGetNotifications.o: msgs/MsgInGetNotifications.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetNotifications.o msgs/MsgInGetNotifications.cpp
+
+${OBJECTDIR}/msgs/MsgInGetRooms.o: msgs/MsgInGetRooms.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetRooms.o msgs/MsgInGetRooms.cpp
+
+${OBJECTDIR}/msgs/MsgInGetTimeZone.o: msgs/MsgInGetTimeZone.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetTimeZone.o msgs/MsgInGetTimeZone.cpp
+
+${OBJECTDIR}/msgs/MsgInGetUserID.o: msgs/MsgInGetUserID.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetUserID.o msgs/MsgInGetUserID.cpp
+
+${OBJECTDIR}/msgs/MsgInGetUserInfo.o: msgs/MsgInGetUserInfo.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetUserInfo.o msgs/MsgInGetUserInfo.cpp
+
+${OBJECTDIR}/msgs/MsgInGetViews.o: msgs/MsgInGetViews.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetViews.o msgs/MsgInGetViews.cpp
+
+${OBJECTDIR}/msgs/MsgInNotificationRead.o: msgs/MsgInNotificationRead.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInNotificationRead.o msgs/MsgInNotificationRead.cpp
+
+${OBJECTDIR}/msgs/MsgInSetConAccount.o: msgs/MsgInSetConAccount.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSetConAccount.o msgs/MsgInSetConAccount.cpp
+
+${OBJECTDIR}/msgs/MsgInSetGCMID.o: msgs/MsgInSetGCMID.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSetGCMID.o msgs/MsgInSetGCMID.cpp
+
+${OBJECTDIR}/msgs/MsgInSetRooms.o: msgs/MsgInSetRooms.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSetRooms.o msgs/MsgInSetRooms.cpp
+
+${OBJECTDIR}/msgs/MsgInSetTimeZone.o: msgs/MsgInSetTimeZone.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSetTimeZone.o msgs/MsgInSetTimeZone.cpp
+
+${OBJECTDIR}/msgs/MsgInSignMe.o: msgs/MsgInSignMe.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSignMe.o msgs/MsgInSignMe.cpp
+
+${OBJECTDIR}/msgs/MsgInSignUp.o: msgs/MsgInSignUp.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSignUp.o msgs/MsgInSignUp.cpp
+
+${OBJECTDIR}/msgs/MsgInSwitch.o: msgs/MsgInSwitch.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSwitch.o msgs/MsgInSwitch.cpp
+
+${OBJECTDIR}/msgs/MsgInUnknown.o: msgs/MsgInUnknown.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInUnknown.o msgs/MsgInUnknown.cpp
+
+${OBJECTDIR}/msgs/MsgInUpdateView.o: msgs/MsgInUpdateView.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInUpdateView.o msgs/MsgInUpdateView.cpp
 
 ${OBJECTDIR}/pugixml.o: pugixml.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -1112,19 +1088,6 @@ ${OBJECTDIR}/_ext/1154895860/Logger_nomain.o: ${OBJECTDIR}/_ext/1154895860/Logge
 	    ${CP} ${OBJECTDIR}/_ext/1154895860/Logger.o ${OBJECTDIR}/_ext/1154895860/Logger_nomain.o;\
 	fi
 
-${OBJECTDIR}/ComTable_nomain.o: ${OBJECTDIR}/ComTable.o ComTable.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/ComTable.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/ComTable_nomain.o ComTable.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/ComTable.o ${OBJECTDIR}/ComTable_nomain.o;\
-	fi
-
 ${OBJECTDIR}/Config_nomain.o: ${OBJECTDIR}/Config.o Config.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/Config.o`; \
@@ -1151,201 +1114,6 @@ ${OBJECTDIR}/DBConnector_nomain.o: ${OBJECTDIR}/DBConnector.o DBConnector.cpp
 	    ${CP} ${OBJECTDIR}/DBConnector.o ${OBJECTDIR}/DBConnector_nomain.o;\
 	fi
 
-${OBJECTDIR}/IMsgIn_nomain.o: ${OBJECTDIR}/IMsgIn.o IMsgIn.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/IMsgIn.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/IMsgIn_nomain.o IMsgIn.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/IMsgIn.o ${OBJECTDIR}/IMsgIn_nomain.o;\
-	fi
-
-${OBJECTDIR}/IMsgInLoginAndAdapterAccessRequired_nomain.o: ${OBJECTDIR}/IMsgInLoginAndAdapterAccessRequired.o IMsgInLoginAndAdapterAccessRequired.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/IMsgInLoginAndAdapterAccessRequired.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/IMsgInLoginAndAdapterAccessRequired_nomain.o IMsgInLoginAndAdapterAccessRequired.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/IMsgInLoginAndAdapterAccessRequired.o ${OBJECTDIR}/IMsgInLoginAndAdapterAccessRequired_nomain.o;\
-	fi
-
-${OBJECTDIR}/IMsgInLoginRequired_nomain.o: ${OBJECTDIR}/IMsgInLoginRequired.o IMsgInLoginRequired.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/IMsgInLoginRequired.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/IMsgInLoginRequired_nomain.o IMsgInLoginRequired.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/IMsgInLoginRequired.o ${OBJECTDIR}/IMsgInLoginRequired_nomain.o;\
-	fi
-
-${OBJECTDIR}/IMsgInLoginUnwanted_nomain.o: ${OBJECTDIR}/IMsgInLoginUnwanted.o IMsgInLoginUnwanted.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/IMsgInLoginUnwanted.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/IMsgInLoginUnwanted_nomain.o IMsgInLoginUnwanted.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/IMsgInLoginUnwanted.o ${OBJECTDIR}/IMsgInLoginUnwanted_nomain.o;\
-	fi
-
-${OBJECTDIR}/MsgInAdapterListen_nomain.o: ${OBJECTDIR}/MsgInAdapterListen.o MsgInAdapterListen.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInAdapterListen.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInAdapterListen_nomain.o MsgInAdapterListen.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/MsgInAdapterListen.o ${OBJECTDIR}/MsgInAdapterListen_nomain.o;\
-	fi
-
-${OBJECTDIR}/MsgInAddAccount_nomain.o: ${OBJECTDIR}/MsgInAddAccount.o MsgInAddAccount.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInAddAccount.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInAddAccount_nomain.o MsgInAddAccount.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/MsgInAddAccount.o ${OBJECTDIR}/MsgInAddAccount_nomain.o;\
-	fi
-
-${OBJECTDIR}/MsgInAddAdapter_nomain.o: ${OBJECTDIR}/MsgInAddAdapter.o MsgInAddAdapter.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInAddAdapter.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInAddAdapter_nomain.o MsgInAddAdapter.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/MsgInAddAdapter.o ${OBJECTDIR}/MsgInAddAdapter_nomain.o;\
-	fi
-
-${OBJECTDIR}/MsgInAddRoom_nomain.o: ${OBJECTDIR}/MsgInAddRoom.o MsgInAddRoom.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInAddRoom.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInAddRoom_nomain.o MsgInAddRoom.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/MsgInAddRoom.o ${OBJECTDIR}/MsgInAddRoom_nomain.o;\
-	fi
-
-${OBJECTDIR}/MsgInAddView_nomain.o: ${OBJECTDIR}/MsgInAddView.o MsgInAddView.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInAddView.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInAddView_nomain.o MsgInAddView.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/MsgInAddView.o ${OBJECTDIR}/MsgInAddView_nomain.o;\
-	fi
-
-${OBJECTDIR}/MsgInAlgorithmsRedirect_nomain.o: ${OBJECTDIR}/MsgInAlgorithmsRedirect.o MsgInAlgorithmsRedirect.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInAlgorithmsRedirect.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInAlgorithmsRedirect_nomain.o MsgInAlgorithmsRedirect.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/MsgInAlgorithmsRedirect.o ${OBJECTDIR}/MsgInAlgorithmsRedirect_nomain.o;\
-	fi
-
-${OBJECTDIR}/MsgInDelConAccount_nomain.o: ${OBJECTDIR}/MsgInDelConAccount.o MsgInDelConAccount.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInDelConAccount.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInDelConAccount_nomain.o MsgInDelConAccount.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/MsgInDelConAccount.o ${OBJECTDIR}/MsgInDelConAccount_nomain.o;\
-	fi
-
-${OBJECTDIR}/MsgInDelDevice_nomain.o: ${OBJECTDIR}/MsgInDelDevice.o MsgInDelDevice.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInDelDevice.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInDelDevice_nomain.o MsgInDelDevice.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/MsgInDelDevice.o ${OBJECTDIR}/MsgInDelDevice_nomain.o;\
-	fi
-
-${OBJECTDIR}/MsgInDelGCMID_nomain.o: ${OBJECTDIR}/MsgInDelGCMID.o MsgInDelGCMID.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInDelGCMID.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInDelGCMID_nomain.o MsgInDelGCMID.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/MsgInDelGCMID.o ${OBJECTDIR}/MsgInDelGCMID_nomain.o;\
-	fi
-
-${OBJECTDIR}/MsgInDelRoom_nomain.o: ${OBJECTDIR}/MsgInDelRoom.o MsgInDelRoom.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInDelRoom.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInDelRoom_nomain.o MsgInDelRoom.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/MsgInDelRoom.o ${OBJECTDIR}/MsgInDelRoom_nomain.o;\
-	fi
-
-${OBJECTDIR}/MsgInDelView_nomain.o: ${OBJECTDIR}/MsgInDelView.o MsgInDelView.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInDelView.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInDelView_nomain.o MsgInDelView.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/MsgInDelView.o ${OBJECTDIR}/MsgInDelView_nomain.o;\
-	fi
-
 ${OBJECTDIR}/MsgInFactory_nomain.o: ${OBJECTDIR}/MsgInFactory.o MsgInFactory.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInFactory.o`; \
@@ -1359,279 +1127,6 @@ ${OBJECTDIR}/MsgInFactory_nomain.o: ${OBJECTDIR}/MsgInFactory.o MsgInFactory.cpp
 	    ${CP} ${OBJECTDIR}/MsgInFactory.o ${OBJECTDIR}/MsgInFactory_nomain.o;\
 	fi
 
-${OBJECTDIR}/MsgInGetAdapters_nomain.o: ${OBJECTDIR}/MsgInGetAdapters.o MsgInGetAdapters.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInGetAdapters.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInGetAdapters_nomain.o MsgInGetAdapters.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/MsgInGetAdapters.o ${OBJECTDIR}/MsgInGetAdapters_nomain.o;\
-	fi
-
-${OBJECTDIR}/MsgInGetAllDevices_nomain.o: ${OBJECTDIR}/MsgInGetAllDevices.o MsgInGetAllDevices.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInGetAllDevices.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInGetAllDevices_nomain.o MsgInGetAllDevices.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/MsgInGetAllDevices.o ${OBJECTDIR}/MsgInGetAllDevices_nomain.o;\
-	fi
-
-${OBJECTDIR}/MsgInGetConAccount_nomain.o: ${OBJECTDIR}/MsgInGetConAccount.o MsgInGetConAccount.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInGetConAccount.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInGetConAccount_nomain.o MsgInGetConAccount.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/MsgInGetConAccount.o ${OBJECTDIR}/MsgInGetConAccount_nomain.o;\
-	fi
-
-${OBJECTDIR}/MsgInGetDevices_nomain.o: ${OBJECTDIR}/MsgInGetDevices.o MsgInGetDevices.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInGetDevices.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInGetDevices_nomain.o MsgInGetDevices.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/MsgInGetDevices.o ${OBJECTDIR}/MsgInGetDevices_nomain.o;\
-	fi
-
-${OBJECTDIR}/MsgInGetLog_nomain.o: ${OBJECTDIR}/MsgInGetLog.o MsgInGetLog.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInGetLog.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInGetLog_nomain.o MsgInGetLog.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/MsgInGetLog.o ${OBJECTDIR}/MsgInGetLog_nomain.o;\
-	fi
-
-${OBJECTDIR}/MsgInGetNewDevices_nomain.o: ${OBJECTDIR}/MsgInGetNewDevices.o MsgInGetNewDevices.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInGetNewDevices.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInGetNewDevices_nomain.o MsgInGetNewDevices.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/MsgInGetNewDevices.o ${OBJECTDIR}/MsgInGetNewDevices_nomain.o;\
-	fi
-
-${OBJECTDIR}/MsgInGetRooms_nomain.o: ${OBJECTDIR}/MsgInGetRooms.o MsgInGetRooms.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInGetRooms.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInGetRooms_nomain.o MsgInGetRooms.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/MsgInGetRooms.o ${OBJECTDIR}/MsgInGetRooms_nomain.o;\
-	fi
-
-${OBJECTDIR}/MsgInGetTimeZone_nomain.o: ${OBJECTDIR}/MsgInGetTimeZone.o MsgInGetTimeZone.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInGetTimeZone.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInGetTimeZone_nomain.o MsgInGetTimeZone.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/MsgInGetTimeZone.o ${OBJECTDIR}/MsgInGetTimeZone_nomain.o;\
-	fi
-
-${OBJECTDIR}/MsgInGetUserID_nomain.o: ${OBJECTDIR}/MsgInGetUserID.o MsgInGetUserID.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInGetUserID.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInGetUserID_nomain.o MsgInGetUserID.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/MsgInGetUserID.o ${OBJECTDIR}/MsgInGetUserID_nomain.o;\
-	fi
-
-${OBJECTDIR}/MsgInGetUserInfo_nomain.o: ${OBJECTDIR}/MsgInGetUserInfo.o MsgInGetUserInfo.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInGetUserInfo.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInGetUserInfo_nomain.o MsgInGetUserInfo.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/MsgInGetUserInfo.o ${OBJECTDIR}/MsgInGetUserInfo_nomain.o;\
-	fi
-
-${OBJECTDIR}/MsgInGetViews_nomain.o: ${OBJECTDIR}/MsgInGetViews.o MsgInGetViews.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInGetViews.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInGetViews_nomain.o MsgInGetViews.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/MsgInGetViews.o ${OBJECTDIR}/MsgInGetViews_nomain.o;\
-	fi
-
-${OBJECTDIR}/MsgInReinitAdapter_nomain.o: ${OBJECTDIR}/MsgInReinitAdapter.o MsgInReinitAdapter.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInReinitAdapter.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInReinitAdapter_nomain.o MsgInReinitAdapter.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/MsgInReinitAdapter.o ${OBJECTDIR}/MsgInReinitAdapter_nomain.o;\
-	fi
-
-${OBJECTDIR}/MsgInSetConAccount_nomain.o: ${OBJECTDIR}/MsgInSetConAccount.o MsgInSetConAccount.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInSetConAccount.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInSetConAccount_nomain.o MsgInSetConAccount.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/MsgInSetConAccount.o ${OBJECTDIR}/MsgInSetConAccount_nomain.o;\
-	fi
-
-${OBJECTDIR}/MsgInSetDevices_nomain.o: ${OBJECTDIR}/MsgInSetDevices.o MsgInSetDevices.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInSetDevices.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInSetDevices_nomain.o MsgInSetDevices.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/MsgInSetDevices.o ${OBJECTDIR}/MsgInSetDevices_nomain.o;\
-	fi
-
-${OBJECTDIR}/MsgInSetGCMID_nomain.o: ${OBJECTDIR}/MsgInSetGCMID.o MsgInSetGCMID.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInSetGCMID.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInSetGCMID_nomain.o MsgInSetGCMID.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/MsgInSetGCMID.o ${OBJECTDIR}/MsgInSetGCMID_nomain.o;\
-	fi
-
-${OBJECTDIR}/MsgInSetRooms_nomain.o: ${OBJECTDIR}/MsgInSetRooms.o MsgInSetRooms.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInSetRooms.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInSetRooms_nomain.o MsgInSetRooms.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/MsgInSetRooms.o ${OBJECTDIR}/MsgInSetRooms_nomain.o;\
-	fi
-
-${OBJECTDIR}/MsgInSetTimeZone_nomain.o: ${OBJECTDIR}/MsgInSetTimeZone.o MsgInSetTimeZone.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInSetTimeZone.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInSetTimeZone_nomain.o MsgInSetTimeZone.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/MsgInSetTimeZone.o ${OBJECTDIR}/MsgInSetTimeZone_nomain.o;\
-	fi
-
-${OBJECTDIR}/MsgInSignMe_nomain.o: ${OBJECTDIR}/MsgInSignMe.o MsgInSignMe.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInSignMe.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInSignMe_nomain.o MsgInSignMe.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/MsgInSignMe.o ${OBJECTDIR}/MsgInSignMe_nomain.o;\
-	fi
-
-${OBJECTDIR}/MsgInSwitch_nomain.o: ${OBJECTDIR}/MsgInSwitch.o MsgInSwitch.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInSwitch.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInSwitch_nomain.o MsgInSwitch.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/MsgInSwitch.o ${OBJECTDIR}/MsgInSwitch_nomain.o;\
-	fi
-
-${OBJECTDIR}/MsgInUnknown_nomain.o: ${OBJECTDIR}/MsgInUnknown.o MsgInUnknown.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInUnknown.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInUnknown_nomain.o MsgInUnknown.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/MsgInUnknown.o ${OBJECTDIR}/MsgInUnknown_nomain.o;\
-	fi
-
-${OBJECTDIR}/MsgInUpdateView_nomain.o: ${OBJECTDIR}/MsgInUpdateView.o MsgInUpdateView.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgInUpdateView.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInUpdateView_nomain.o MsgInUpdateView.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/MsgInUpdateView.o ${OBJECTDIR}/MsgInUpdateView_nomain.o;\
-	fi
-
 ${OBJECTDIR}/MsgRightsChecker_nomain.o: ${OBJECTDIR}/MsgRightsChecker.o MsgRightsChecker.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/MsgRightsChecker.o`; \
@@ -1643,71 +1138,6 @@ ${OBJECTDIR}/MsgRightsChecker_nomain.o: ${OBJECTDIR}/MsgRightsChecker.o MsgRight
 	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgRightsChecker_nomain.o MsgRightsChecker.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/MsgRightsChecker.o ${OBJECTDIR}/MsgRightsChecker_nomain.o;\
-	fi
-
-${OBJECTDIR}/Msgs/MsgInDelAdapter_nomain.o: ${OBJECTDIR}/Msgs/MsgInDelAdapter.o Msgs/MsgInDelAdapter.cpp 
-	${MKDIR} -p ${OBJECTDIR}/Msgs
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/Msgs/MsgInDelAdapter.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Msgs/MsgInDelAdapter_nomain.o Msgs/MsgInDelAdapter.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/Msgs/MsgInDelAdapter.o ${OBJECTDIR}/Msgs/MsgInDelAdapter_nomain.o;\
-	fi
-
-${OBJECTDIR}/Msgs/MsgInGamificationRedirect_nomain.o: ${OBJECTDIR}/Msgs/MsgInGamificationRedirect.o Msgs/MsgInGamificationRedirect.cpp 
-	${MKDIR} -p ${OBJECTDIR}/Msgs
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/Msgs/MsgInGamificationRedirect.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Msgs/MsgInGamificationRedirect_nomain.o Msgs/MsgInGamificationRedirect.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/Msgs/MsgInGamificationRedirect.o ${OBJECTDIR}/Msgs/MsgInGamificationRedirect_nomain.o;\
-	fi
-
-${OBJECTDIR}/Msgs/MsgInGetNotifications_nomain.o: ${OBJECTDIR}/Msgs/MsgInGetNotifications.o Msgs/MsgInGetNotifications.cpp 
-	${MKDIR} -p ${OBJECTDIR}/Msgs
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/Msgs/MsgInGetNotifications.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Msgs/MsgInGetNotifications_nomain.o Msgs/MsgInGetNotifications.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/Msgs/MsgInGetNotifications.o ${OBJECTDIR}/Msgs/MsgInGetNotifications_nomain.o;\
-	fi
-
-${OBJECTDIR}/Msgs/MsgInNotificationRead_nomain.o: ${OBJECTDIR}/Msgs/MsgInNotificationRead.o Msgs/MsgInNotificationRead.cpp 
-	${MKDIR} -p ${OBJECTDIR}/Msgs
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/Msgs/MsgInNotificationRead.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Msgs/MsgInNotificationRead_nomain.o Msgs/MsgInNotificationRead.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/Msgs/MsgInNotificationRead.o ${OBJECTDIR}/Msgs/MsgInNotificationRead_nomain.o;\
-	fi
-
-${OBJECTDIR}/Msgs/MsgInSignUp_nomain.o: ${OBJECTDIR}/Msgs/MsgInSignUp.o Msgs/MsgInSignUp.cpp 
-	${MKDIR} -p ${OBJECTDIR}/Msgs
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/Msgs/MsgInSignUp.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Msgs/MsgInSignUp_nomain.o Msgs/MsgInSignUp.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/Msgs/MsgInSignUp.o ${OBJECTDIR}/Msgs/MsgInSignUp_nomain.o;\
 	fi
 
 ${OBJECTDIR}/ServerException_nomain.o: ${OBJECTDIR}/ServerException.o ServerException.cpp 
@@ -1786,6 +1216,500 @@ ${OBJECTDIR}/gTokenChecker_nomain.o: ${OBJECTDIR}/gTokenChecker.o gTokenChecker.
 	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/gTokenChecker_nomain.o gTokenChecker.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/gTokenChecker.o ${OBJECTDIR}/gTokenChecker_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/IMsgIn_nomain.o: ${OBJECTDIR}/msgs/IMsgIn.o msgs/IMsgIn.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/IMsgIn.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/IMsgIn_nomain.o msgs/IMsgIn.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/IMsgIn.o ${OBJECTDIR}/msgs/IMsgIn_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/IMsgInLoginAndAdapterAccessRequired_nomain.o: ${OBJECTDIR}/msgs/IMsgInLoginAndAdapterAccessRequired.o msgs/IMsgInLoginAndAdapterAccessRequired.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/IMsgInLoginAndAdapterAccessRequired.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/IMsgInLoginAndAdapterAccessRequired_nomain.o msgs/IMsgInLoginAndAdapterAccessRequired.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/IMsgInLoginAndAdapterAccessRequired.o ${OBJECTDIR}/msgs/IMsgInLoginAndAdapterAccessRequired_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/IMsgInLoginRequired_nomain.o: ${OBJECTDIR}/msgs/IMsgInLoginRequired.o msgs/IMsgInLoginRequired.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/IMsgInLoginRequired.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/IMsgInLoginRequired_nomain.o msgs/IMsgInLoginRequired.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/IMsgInLoginRequired.o ${OBJECTDIR}/msgs/IMsgInLoginRequired_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/IMsgInLoginUnwanted_nomain.o: ${OBJECTDIR}/msgs/IMsgInLoginUnwanted.o msgs/IMsgInLoginUnwanted.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/IMsgInLoginUnwanted.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/IMsgInLoginUnwanted_nomain.o msgs/IMsgInLoginUnwanted.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/IMsgInLoginUnwanted.o ${OBJECTDIR}/msgs/IMsgInLoginUnwanted_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInAdapterListen_nomain.o: ${OBJECTDIR}/msgs/MsgInAdapterListen.o msgs/MsgInAdapterListen.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInAdapterListen.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAdapterListen_nomain.o msgs/MsgInAdapterListen.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInAdapterListen.o ${OBJECTDIR}/msgs/MsgInAdapterListen_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInAddAccount_nomain.o: ${OBJECTDIR}/msgs/MsgInAddAccount.o msgs/MsgInAddAccount.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInAddAccount.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAddAccount_nomain.o msgs/MsgInAddAccount.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInAddAccount.o ${OBJECTDIR}/msgs/MsgInAddAccount_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInAddAdapter_nomain.o: ${OBJECTDIR}/msgs/MsgInAddAdapter.o msgs/MsgInAddAdapter.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInAddAdapter.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAddAdapter_nomain.o msgs/MsgInAddAdapter.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInAddAdapter.o ${OBJECTDIR}/msgs/MsgInAddAdapter_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInAddRoom_nomain.o: ${OBJECTDIR}/msgs/MsgInAddRoom.o msgs/MsgInAddRoom.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInAddRoom.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAddRoom_nomain.o msgs/MsgInAddRoom.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInAddRoom.o ${OBJECTDIR}/msgs/MsgInAddRoom_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInAddView_nomain.o: ${OBJECTDIR}/msgs/MsgInAddView.o msgs/MsgInAddView.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInAddView.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAddView_nomain.o msgs/MsgInAddView.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInAddView.o ${OBJECTDIR}/msgs/MsgInAddView_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInAlgorithmsRedirect_nomain.o: ${OBJECTDIR}/msgs/MsgInAlgorithmsRedirect.o msgs/MsgInAlgorithmsRedirect.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInAlgorithmsRedirect.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAlgorithmsRedirect_nomain.o msgs/MsgInAlgorithmsRedirect.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInAlgorithmsRedirect.o ${OBJECTDIR}/msgs/MsgInAlgorithmsRedirect_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInDelAdapter_nomain.o: ${OBJECTDIR}/msgs/MsgInDelAdapter.o msgs/MsgInDelAdapter.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInDelAdapter.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelAdapter_nomain.o msgs/MsgInDelAdapter.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInDelAdapter.o ${OBJECTDIR}/msgs/MsgInDelAdapter_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInDelConAccount_nomain.o: ${OBJECTDIR}/msgs/MsgInDelConAccount.o msgs/MsgInDelConAccount.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInDelConAccount.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelConAccount_nomain.o msgs/MsgInDelConAccount.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInDelConAccount.o ${OBJECTDIR}/msgs/MsgInDelConAccount_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInDelDevice_nomain.o: ${OBJECTDIR}/msgs/MsgInDelDevice.o msgs/MsgInDelDevice.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInDelDevice.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelDevice_nomain.o msgs/MsgInDelDevice.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInDelDevice.o ${OBJECTDIR}/msgs/MsgInDelDevice_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInDelGCMID_nomain.o: ${OBJECTDIR}/msgs/MsgInDelGCMID.o msgs/MsgInDelGCMID.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInDelGCMID.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelGCMID_nomain.o msgs/MsgInDelGCMID.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInDelGCMID.o ${OBJECTDIR}/msgs/MsgInDelGCMID_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInDelRoom_nomain.o: ${OBJECTDIR}/msgs/MsgInDelRoom.o msgs/MsgInDelRoom.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInDelRoom.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelRoom_nomain.o msgs/MsgInDelRoom.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInDelRoom.o ${OBJECTDIR}/msgs/MsgInDelRoom_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInDelView_nomain.o: ${OBJECTDIR}/msgs/MsgInDelView.o msgs/MsgInDelView.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInDelView.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelView_nomain.o msgs/MsgInDelView.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInDelView.o ${OBJECTDIR}/msgs/MsgInDelView_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInGamificationRedirect_nomain.o: ${OBJECTDIR}/msgs/MsgInGamificationRedirect.o msgs/MsgInGamificationRedirect.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInGamificationRedirect.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGamificationRedirect_nomain.o msgs/MsgInGamificationRedirect.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInGamificationRedirect.o ${OBJECTDIR}/msgs/MsgInGamificationRedirect_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInGetAdapters_nomain.o: ${OBJECTDIR}/msgs/MsgInGetAdapters.o msgs/MsgInGetAdapters.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInGetAdapters.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetAdapters_nomain.o msgs/MsgInGetAdapters.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInGetAdapters.o ${OBJECTDIR}/msgs/MsgInGetAdapters_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInGetAllDevices_nomain.o: ${OBJECTDIR}/msgs/MsgInGetAllDevices.o msgs/MsgInGetAllDevices.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInGetAllDevices.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetAllDevices_nomain.o msgs/MsgInGetAllDevices.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInGetAllDevices.o ${OBJECTDIR}/msgs/MsgInGetAllDevices_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInGetConAccount_nomain.o: ${OBJECTDIR}/msgs/MsgInGetConAccount.o msgs/MsgInGetConAccount.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInGetConAccount.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetConAccount_nomain.o msgs/MsgInGetConAccount.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInGetConAccount.o ${OBJECTDIR}/msgs/MsgInGetConAccount_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInGetDevices_nomain.o: ${OBJECTDIR}/msgs/MsgInGetDevices.o msgs/MsgInGetDevices.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInGetDevices.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetDevices_nomain.o msgs/MsgInGetDevices.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInGetDevices.o ${OBJECTDIR}/msgs/MsgInGetDevices_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInGetNewDevices_nomain.o: ${OBJECTDIR}/msgs/MsgInGetNewDevices.o msgs/MsgInGetNewDevices.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInGetNewDevices.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetNewDevices_nomain.o msgs/MsgInGetNewDevices.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInGetNewDevices.o ${OBJECTDIR}/msgs/MsgInGetNewDevices_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInGetNotifications_nomain.o: ${OBJECTDIR}/msgs/MsgInGetNotifications.o msgs/MsgInGetNotifications.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInGetNotifications.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetNotifications_nomain.o msgs/MsgInGetNotifications.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInGetNotifications.o ${OBJECTDIR}/msgs/MsgInGetNotifications_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInGetRooms_nomain.o: ${OBJECTDIR}/msgs/MsgInGetRooms.o msgs/MsgInGetRooms.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInGetRooms.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetRooms_nomain.o msgs/MsgInGetRooms.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInGetRooms.o ${OBJECTDIR}/msgs/MsgInGetRooms_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInGetTimeZone_nomain.o: ${OBJECTDIR}/msgs/MsgInGetTimeZone.o msgs/MsgInGetTimeZone.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInGetTimeZone.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetTimeZone_nomain.o msgs/MsgInGetTimeZone.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInGetTimeZone.o ${OBJECTDIR}/msgs/MsgInGetTimeZone_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInGetUserID_nomain.o: ${OBJECTDIR}/msgs/MsgInGetUserID.o msgs/MsgInGetUserID.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInGetUserID.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetUserID_nomain.o msgs/MsgInGetUserID.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInGetUserID.o ${OBJECTDIR}/msgs/MsgInGetUserID_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInGetUserInfo_nomain.o: ${OBJECTDIR}/msgs/MsgInGetUserInfo.o msgs/MsgInGetUserInfo.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInGetUserInfo.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetUserInfo_nomain.o msgs/MsgInGetUserInfo.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInGetUserInfo.o ${OBJECTDIR}/msgs/MsgInGetUserInfo_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInGetViews_nomain.o: ${OBJECTDIR}/msgs/MsgInGetViews.o msgs/MsgInGetViews.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInGetViews.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetViews_nomain.o msgs/MsgInGetViews.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInGetViews.o ${OBJECTDIR}/msgs/MsgInGetViews_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInNotificationRead_nomain.o: ${OBJECTDIR}/msgs/MsgInNotificationRead.o msgs/MsgInNotificationRead.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInNotificationRead.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInNotificationRead_nomain.o msgs/MsgInNotificationRead.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInNotificationRead.o ${OBJECTDIR}/msgs/MsgInNotificationRead_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInSetConAccount_nomain.o: ${OBJECTDIR}/msgs/MsgInSetConAccount.o msgs/MsgInSetConAccount.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInSetConAccount.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSetConAccount_nomain.o msgs/MsgInSetConAccount.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInSetConAccount.o ${OBJECTDIR}/msgs/MsgInSetConAccount_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInSetGCMID_nomain.o: ${OBJECTDIR}/msgs/MsgInSetGCMID.o msgs/MsgInSetGCMID.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInSetGCMID.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSetGCMID_nomain.o msgs/MsgInSetGCMID.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInSetGCMID.o ${OBJECTDIR}/msgs/MsgInSetGCMID_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInSetRooms_nomain.o: ${OBJECTDIR}/msgs/MsgInSetRooms.o msgs/MsgInSetRooms.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInSetRooms.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSetRooms_nomain.o msgs/MsgInSetRooms.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInSetRooms.o ${OBJECTDIR}/msgs/MsgInSetRooms_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInSetTimeZone_nomain.o: ${OBJECTDIR}/msgs/MsgInSetTimeZone.o msgs/MsgInSetTimeZone.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInSetTimeZone.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSetTimeZone_nomain.o msgs/MsgInSetTimeZone.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInSetTimeZone.o ${OBJECTDIR}/msgs/MsgInSetTimeZone_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInSignMe_nomain.o: ${OBJECTDIR}/msgs/MsgInSignMe.o msgs/MsgInSignMe.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInSignMe.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSignMe_nomain.o msgs/MsgInSignMe.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInSignMe.o ${OBJECTDIR}/msgs/MsgInSignMe_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInSignUp_nomain.o: ${OBJECTDIR}/msgs/MsgInSignUp.o msgs/MsgInSignUp.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInSignUp.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSignUp_nomain.o msgs/MsgInSignUp.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInSignUp.o ${OBJECTDIR}/msgs/MsgInSignUp_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInSwitch_nomain.o: ${OBJECTDIR}/msgs/MsgInSwitch.o msgs/MsgInSwitch.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInSwitch.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSwitch_nomain.o msgs/MsgInSwitch.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInSwitch.o ${OBJECTDIR}/msgs/MsgInSwitch_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInUnknown_nomain.o: ${OBJECTDIR}/msgs/MsgInUnknown.o msgs/MsgInUnknown.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInUnknown.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInUnknown_nomain.o msgs/MsgInUnknown.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInUnknown.o ${OBJECTDIR}/msgs/MsgInUnknown_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInUpdateView_nomain.o: ${OBJECTDIR}/msgs/MsgInUpdateView.o msgs/MsgInUpdateView.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInUpdateView.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInUpdateView_nomain.o msgs/MsgInUpdateView.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInUpdateView.o ${OBJECTDIR}/msgs/MsgInUpdateView_nomain.o;\
 	fi
 
 ${OBJECTDIR}/pugixml_nomain.o: ${OBJECTDIR}/pugixml.o pugixml.cpp 

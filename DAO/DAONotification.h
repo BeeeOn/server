@@ -21,6 +21,7 @@ public:
     ~DAONotification(void);
 
     std::string getXMLNotifications(int userId);
+    int setReaded(int notif);
 
 };
 

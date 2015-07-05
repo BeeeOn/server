@@ -14,13 +14,35 @@ using namespace soci;
 DAOAdapters::DAOAdapters(){
 }
 
-
 DAOAdapters::~DAOAdapters() {
 }
 
 DAOAdapters& DAOAdapters::getInstance(){
         static DAOAdapters instance;
         return instance;
+}
+
+int DAOAdapters::deleteAdapter(string adapterId){
+    Logger::db()<< "delete adapter " << adapterId << endl;
+    try
+    {
+        soci::session sql(*_pool);
+       
+        statement st = (sql.prepare <<  
+                "delete from adapters where adapter_id = :a_id",
+                use(adapterId, "a_id"));
+        st.execute(true);
+        
+        int updateCount = st.get_affected_rows();
+        if(updateCount == 0)
+            return 0;
+        return 1;
+    }
+    catch (soci::postgresql_soci_error& e)
+    {
+        Logger::db() << "Error: " << e.what() << " sqlState: " << e.sqlstate() <<endl;
+        return 0;
+    }
 }
 
 int DAOAdapters::parAdapterWithUserIfPossible(long long int adapterId, std::string adapterName, int userId) {

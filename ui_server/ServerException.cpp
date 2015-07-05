@@ -6,7 +6,8 @@
  */
 
 #include <string.h>
-
+#include <stdlib.h>
+#include <stdio.h>
 #include "ServerException.h"
 
 using namespace std;
@@ -46,7 +47,8 @@ using namespace std;
      const int ServerException::WRONG_AUTH_PROVIDER = 27;
 
      const int  ServerException::ROOM_TYPE = 50;
-
+    const int ServerException::NOTIFICATION_ID = 996;
+    
      const int  ServerException::SERVER2SERVER = 100;
      const int  ServerException::SWITCH_FAIL = 100;
      const int  ServerException::ADAPTER_LISTEN_FAIL =100;
@@ -86,15 +88,18 @@ ServerException::ServerException(int errCode, string errText, string id, string 
  }*/
 
 const char* ServerException::what() const throw()
-{
-    string what = "Server exception: ";
-    what.append( to_string(_errCode));
-    return what.c_str();
+{    
+    //char what [100];
+    //snprintf ( what, 100, "Server exception: %d", _errCode );
+    return "Server exception";
 }
 
-int ServerException::getErrCode(){
+int ServerException::getErrCode()
+{
     return _errCode;
 }
-string ServerException::getErrText(){
+
+string ServerException::getErrText()
+{
     return _errText;
 } 

@@ -21,6 +21,7 @@ public:
     static DAOAdapters& getInstance();
     ~DAOAdapters(void);
     
+    int deleteAdapter(std::string adapterId);
     int parAdapterWithUserIfPossible(long long int adapterId, std::string adapterName, int userId);
     int isAdapterInDB(long long int adapterId);
     std::string getTimeZone(std::string adapterId);

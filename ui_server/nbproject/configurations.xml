@@ -430,11 +430,9 @@
                    projectFiles="false"
                    kind="IMPORTANT_FILES_FOLDER">
       <itemPath>Makefile</itemPath>
-      <itemPath>tests/XMLtestFiles</itemPath>
       <itemPath>config.xml</itemPath>
       <itemPath>config_devel.xml</itemPath>
       <itemPath>config_prod.xml</itemPath>
-      <itemPath>sqlQueries</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -613,7 +611,7 @@
   <sourceRootList>
     <Elem>../ui_logger</Elem>
     <Elem>../DAO</Elem>
-    <Elem>Msgs</Elem>
+    <Elem>msgs</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -634,6 +632,7 @@
         <ccTool>
           <commandlineTool>g++</commandlineTool>
           <incDir>
+            <pElem>/usr/include/soci</pElem>
             <pElem>/usr/include/postgresql</pElem>
             <pElem>/usr/include/postgresql/libpq</pElem>
             <pElem>/usr/include</pElem>
@@ -654,10 +653,12 @@
             <pElem>/usr/local/lib64</pElem>
             <pElem>/opt/centos/devtoolset-1.1/root/usr/lib/gcc/x86_64-redhat-linux/4.7.2</pElem>
             <pElem>/usr/pgsql-9.2/lib</pElem>
+            <pElem>/usr/lib64</pElem>
           </linkerAddLib>
           <linkerDynSerch>
             <pElem>/usr/local/lib</pElem>
             <pElem>/usr/local/lib64</pElem>
+            <pElem>/usr/lib64</pElem>
           </linkerDynSerch>
           <commandlineTool>g++</commandlineTool>
           <linkerLibItems>
@@ -670,7 +671,7 @@
             <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
             <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
           </linkerLibItems>
-          <commandLine>-lpq -lsoci_core -lsoci_empty -lsoci_postgresql -lcppunit -lcurl -lssl -lcrypto -ljansson -lstdc++</commandLine>
+          <commandLine>-lpq -lsoci_core -lsoci_empty -lsoci_postgresql -lcurl -lssl -lcrypto -ljansson -lstdc++</commandLine>
         </linkerTool>
       </compileType>
       <item path="../DAO/DAO.cpp" ex="false" tool="1" flavor2="0">
@@ -709,10 +710,6 @@
       </item>
       <item path="../ui_logger/Logger.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="ComTable.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="ComTable.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="Communicator.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Config.cpp" ex="false" tool="1" flavor2="0">
@@ -721,187 +718,13 @@
       </item>
       <item path="DBConnector.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="DBConnector.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="IMsgIn.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="IMsgIn.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="IMsgInLoginAndAdapterAccessRequired.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="IMsgInLoginAndAdapterAccessRequired.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
-      <item path="IMsgInLoginRequired.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="IMsgInLoginRequired.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="IMsgInLoginUnwanted.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="IMsgInLoginUnwanted.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInAdapterListen.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInAdapterListen.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInAddAccount.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInAddAccount.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInAddAdapter.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInAddAdapter.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInAddRoom.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInAddRoom.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInAddView.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInAddView.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInAlgorithmsRedirect.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInAlgorithmsRedirect.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInChangeAccount.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInDelAccount.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInDelConAccount.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInDelDevice.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInDelDevice.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInDelGCMID.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInDelGCMID.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInDelRoom.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInDelRoom.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInDelView.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInDelView.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="MsgInFactory.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="MsgInFactory.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="MsgInGetAccount.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInGetAdapters.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInGetAdapters.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInGetAllDevices.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInGetAllDevices.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInGetConAccount.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInGetConditions.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInGetDevices.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInGetDevices.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInGetLog.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInGetLog.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInGetNewDevices.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInGetNewDevices.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInGetRooms.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInGetRooms.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInGetTimeZone.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInGetTimeZone.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInGetUserID.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInGetUserID.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInGetUserInfo.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInGetUserInfo.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInGetViews.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInGetViews.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInPartial.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInReinitAdapter.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInReinitAdapter.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInSetConAccount.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInSetDevices.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInSetGCMID.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInSetGCMID.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInSetRooms.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInSetTimeZone.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInSetTimeZone.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInSignMe.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInSignMe.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInSwitch.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInSwitch.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInUnknown.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInUnknown.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInUpdateRooms.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInUpdateView.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInUpdateView.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="MsgRightsChecker.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="MsgRightsChecker.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Msgs/MsgInDelAdapter.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="Msgs/MsgInDelAdapter.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Msgs/MsgInGamificationRedirect.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="Msgs/MsgInGamificationRedirect.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Msgs/MsgInGetNotifications.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="Msgs/MsgInGetNotifications.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Msgs/MsgInNotificationRead.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="Msgs/MsgInNotificationRead.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Msgs/MsgInSignUp.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="Msgs/MsgInSignUp.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="ServerException.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -1385,6 +1208,170 @@
       </item>
       <item path="gTokenChecker.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="msgs/IMsgIn.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/IMsgIn.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/IMsgInLoginAndAdapterAccessRequired.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="msgs/IMsgInLoginAndAdapterAccessRequired.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="msgs/IMsgInLoginRequired.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/IMsgInLoginRequired.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/IMsgInLoginUnwanted.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/IMsgInLoginUnwanted.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInAdapterListen.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInAdapterListen.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInAddAccount.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInAddAccount.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInAddAdapter.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInAddAdapter.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInAddRoom.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInAddRoom.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInAddView.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInAddView.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInAlgorithmsRedirect.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInAlgorithmsRedirect.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInChangeAccount.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInChangeConAccount.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInDelAccount.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInDelAdapter.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInDelAdapter.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInDelConAccount.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInDelConAccount.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInDelDevice.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInDelDevice.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInDelGCMID.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInDelGCMID.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInDelRoom.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInDelRoom.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInDelView.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInDelView.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGamificationRedirect.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGamificationRedirect.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetAccount.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetAdapters.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetAdapters.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetAllDevices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetAllDevices.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetConAccount.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetConAccount.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetDevices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetDevices.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetNewDevices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetNewDevices.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetNotifications.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetNotifications.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetRooms.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetRooms.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetTimeZone.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetTimeZone.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetUserID.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetUserID.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetUserInfo.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetUserInfo.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetViews.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetViews.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInNotificationRead.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInNotificationRead.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInSetConAccount.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInSetGCMID.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInSetGCMID.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInSetRooms.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInSetRooms.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInSetTimeZone.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInSetTimeZone.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInSignMe.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInSignMe.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInSignUp.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInSignUp.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInSwitch.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInSwitch.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInUnknown.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInUnknown.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInUpdateView.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInUpdateView.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="pugiconfig.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="pugixml.cpp" ex="false" tool="1" flavor2="0">
@@ -1741,10 +1728,6 @@
       </item>
       <item path="../ui_logger/Logger.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="ComTable.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="ComTable.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="Communicator.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Config.cpp" ex="false" tool="1" flavor2="0">
@@ -1753,187 +1736,13 @@
       </item>
       <item path="DBConnector.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="DBConnector.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="IMsgIn.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="IMsgIn.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="IMsgInLoginAndAdapterAccessRequired.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="IMsgInLoginAndAdapterAccessRequired.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
-      <item path="IMsgInLoginRequired.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="IMsgInLoginRequired.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="IMsgInLoginUnwanted.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="IMsgInLoginUnwanted.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInAdapterListen.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInAdapterListen.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInAddAccount.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInAddAccount.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInAddAdapter.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInAddAdapter.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInAddRoom.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInAddRoom.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInAddView.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInAddView.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInAlgorithmsRedirect.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInAlgorithmsRedirect.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInChangeAccount.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInDelAccount.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInDelConAccount.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInDelDevice.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInDelDevice.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInDelGCMID.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInDelGCMID.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInDelRoom.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInDelRoom.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInDelView.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInDelView.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="MsgInFactory.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="MsgInFactory.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="MsgInGetAccount.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInGetAdapters.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInGetAdapters.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInGetAllDevices.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInGetAllDevices.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInGetConAccount.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInGetConditions.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInGetDevices.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInGetDevices.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInGetLog.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInGetLog.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInGetNewDevices.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInGetNewDevices.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInGetRooms.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInGetRooms.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInGetTimeZone.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInGetTimeZone.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInGetUserID.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInGetUserID.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInGetUserInfo.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInGetUserInfo.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInGetViews.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInGetViews.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInPartial.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInReinitAdapter.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInReinitAdapter.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInSetConAccount.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInSetDevices.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInSetGCMID.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInSetGCMID.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInSetRooms.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInSetTimeZone.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInSetTimeZone.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInSignMe.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInSignMe.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInSwitch.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInSwitch.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInUnknown.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInUnknown.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInUpdateRooms.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgInUpdateView.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgInUpdateView.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="MsgRightsChecker.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="MsgRightsChecker.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Msgs/MsgInDelAdapter.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="Msgs/MsgInDelAdapter.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Msgs/MsgInGamificationRedirect.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="Msgs/MsgInGamificationRedirect.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Msgs/MsgInGetNotifications.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="Msgs/MsgInGetNotifications.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Msgs/MsgInNotificationRead.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="Msgs/MsgInNotificationRead.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Msgs/MsgInSignUp.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="Msgs/MsgInSignUp.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="ServerException.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -2396,6 +2205,170 @@
       <item path="gTokenChecker.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="gTokenChecker.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/IMsgIn.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/IMsgIn.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/IMsgInLoginAndAdapterAccessRequired.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="msgs/IMsgInLoginAndAdapterAccessRequired.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="msgs/IMsgInLoginRequired.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/IMsgInLoginRequired.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/IMsgInLoginUnwanted.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/IMsgInLoginUnwanted.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInAdapterListen.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInAdapterListen.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInAddAccount.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInAddAccount.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInAddAdapter.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInAddAdapter.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInAddRoom.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInAddRoom.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInAddView.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInAddView.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInAlgorithmsRedirect.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInAlgorithmsRedirect.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInChangeAccount.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInChangeConAccount.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInDelAccount.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInDelAdapter.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInDelAdapter.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInDelConAccount.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInDelConAccount.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInDelDevice.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInDelDevice.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInDelGCMID.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInDelGCMID.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInDelRoom.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInDelRoom.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInDelView.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInDelView.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGamificationRedirect.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGamificationRedirect.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetAccount.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetAdapters.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetAdapters.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetAllDevices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetAllDevices.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetConAccount.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetConAccount.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetDevices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetDevices.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetNewDevices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetNewDevices.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetNotifications.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetNotifications.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetRooms.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetRooms.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetTimeZone.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetTimeZone.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetUserID.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetUserID.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetUserInfo.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetUserInfo.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetViews.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInGetViews.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInNotificationRead.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInNotificationRead.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInSetConAccount.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInSetGCMID.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInSetGCMID.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInSetRooms.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInSetRooms.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInSetTimeZone.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInSetTimeZone.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInSignMe.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInSignMe.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInSignUp.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInSignUp.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInSwitch.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInSwitch.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInUnknown.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInUnknown.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/MsgInUpdateView.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInUpdateView.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="pugiconfig.hpp" ex="false" tool="3" flavor2="0">
       </item>

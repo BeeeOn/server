@@ -7,27 +7,8 @@
 
 #include "MsgRightsChecker.h"
 
-#include "MsgInSignMe.h"
-#include "MsgInGetAdapters.h"
-#include "MsgInGetDevices.h"
-#include "MsgInGetLog.h"
-#include "MsgInPartial.h"
-#include "MsgInAddRoom.h"
-#include "MsgInGetAllDevices.h"
-#include "MsgInUpdateRooms.h"
-#include "MsgInDelRoom.h"
-#include "MsgInGetRooms.h"
-#include "MsgInAddView.h"
-#include "MsgInUpdateView.h"
-#include "MsgInDelView.h"
-#include "MsgInGetViews.h"
-#include "MsgInAddAccount.h"
-#include "MsgInChangeAccount.h"
-#include "MsgInDelAccount.h"
-#include "MsgInGetAccount.h"
-#include "MsgInSetTimeZone.h"
-#include "MsgInGetTimeZone.h"
-#include "IMsgIn.h"
+#include "msgs/IMsgIn.h"
+#include "msgs/IMsgInLoginAndAdapterAccessRequired.h"
 
 #include "../DAO/DAOUsers.h"
 #include <stdio.h>
@@ -54,34 +35,34 @@ MsgRightsChecker::MsgRightsChecker() {
     this->_rightsTable["user"] = USER;
     this->_rightsTable["admin"] = ADMIN;
     this->_rightsTable["superuser"] = SUPERUSER;
-    
-    /*MSGS*/
-    this->_msgRightsTable[MsgInSignMe::state] = EVERYONE;
-    this->_msgRightsTable[MsgInGetAdapters::state] = GUEST;
-    /*SENSORS*/
-    this->_msgRightsTable[MsgInGetAllDevices::state] = GUEST; 
-    this->_msgRightsTable[MsgInGetDevs::state] = GUEST;
-    this->_msgRightsTable[MsgInLogName::state] = GUEST;
-    this->_msgRightsTable[MsgInDevices::state] = ADMIN; // USER na prepinani aktoru
-    /*ROOMS*/
-    this->_msgRightsTable[MsgInAddRoom::state] = ADMIN;
-    this->_msgRightsTable[MsgInUpdateRooms::state] = ADMIN;
-    this->_msgRightsTable[MsgInDelRoom::state] = ADMIN;
-    this->_msgRightsTable[MsgInGetRooms::state] = GUEST;
-    /*VIEWS*/
-    this->_msgRightsTable[MsgInAddView::state] = GUEST;
-    this->_msgRightsTable[MsgInUpdateView::state] = GUEST;
-    this->_msgRightsTable[MsgInDelView::state] = GUEST;
-    this->_msgRightsTable[MsgInGetViews::state] = GUEST;
-    /*ACCOUNTS*/
-    this->_msgRightsTable[MsgInAddAccount::state] = SUPERUSER;
-    this->_msgRightsTable[MsgInChangeConAccount::state] = SUPERUSER;
-    this->_msgRightsTable[MsgInDelConAccount::state] = SUPERUSER;
-    this->_msgRightsTable[MsgInGetConAccount::state] = SUPERUSER;
-    /*TIME*/
-    this->_msgRightsTable[MsgInSetTimeZone::state] = ADMIN;
-    this->_msgRightsTable[MsgInGetTimeZone::state] = GUEST;
-    
+//    
+//    /*MSGS*/
+//    this->_msgRightsTable[MsgInSignMe::state] = EVERYONE;
+//    this->_msgRightsTable[MsgInGetAdapters::state] = GUEST;
+//    /*SENSORS*/
+//    this->_msgRightsTable[MsgInGetAllDevices::state] = GUEST; 
+//    this->_msgRightsTable[MsgInGetDevs::state] = GUEST;
+//    this->_msgRightsTable[MsgInLogName::state] = GUEST;
+//    this->_msgRightsTable[MsgInDevices::state] = ADMIN; // USER na prepinani aktoru
+//    /*ROOMS*/
+//    this->_msgRightsTable[MsgInAddRoom::state] = ADMIN;
+//    this->_msgRightsTable[MsgInUpdateRooms::state] = ADMIN;
+//    this->_msgRightsTable[MsgInDelRoom::state] = ADMIN;
+//    this->_msgRightsTable[MsgInGetRooms::state] = GUEST;
+//    /*VIEWS*/
+//    this->_msgRightsTable[MsgInAddView::state] = GUEST;
+//    this->_msgRightsTable[MsgInUpdateView::state] = GUEST;
+//    this->_msgRightsTable[MsgInDelView::state] = GUEST;
+//    this->_msgRightsTable[MsgInGetViews::state] = GUEST;
+//    /*ACCOUNTS*/
+//    this->_msgRightsTable[MsgInAddAccount::state] = SUPERUSER;
+//    this->_msgRightsTable[MsgInChangeConAccount::state] = SUPERUSER;
+//    this->_msgRightsTable[MsgInDelConAccount::state] = SUPERUSER;
+//    this->_msgRightsTable[MsgInGetConAccount::state] = SUPERUSER;
+//    /*TIME*/
+//    this->_msgRightsTable[MsgInSetTimeZone::state] = ADMIN;
+//    this->_msgRightsTable[MsgInGetTimeZone::state] = GUEST;
+//    
 }
 
 MsgRightsChecker::~MsgRightsChecker() {

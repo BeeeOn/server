@@ -2,7 +2,7 @@
 #define	MSGFACTORY_H
 
 #include <string>
-#include "IMsgIn.h"
+#include "msgs/IMsgIn.h"
 
 class MsgInFactory
 {
@@ -11,7 +11,7 @@ private:
 public:
         static MsgInFactory& getInstance();
 	~MsgInFactory(void);
-	IMsgIn* createMsg(char* msg);
+	IMsgIn* createMsg(const char* msg);
 };
 
 #endif /* MSGFACTORY_H */

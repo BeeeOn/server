@@ -171,7 +171,9 @@ char *sslRead (connection *c)
                 strcat (rc, buffer);
             
             if (received < readSize)
+            {
                 break;
+            }
             count++;
         }
     }

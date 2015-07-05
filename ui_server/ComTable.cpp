@@ -57,7 +57,7 @@ void ComTable::removeOldEntries(){
         
         if(chrono::duration_cast<std::chrono::milliseconds>(diff).count() > _maxInactivityMs){
             delete it->second;
-            it = _comInfos.erase(it);
+//compile err            it = _comInfos.erase(it);
         }else{
             it++;
         }

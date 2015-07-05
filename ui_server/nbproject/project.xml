@@ -12,7 +12,7 @@
             <sourceRootList>
                 <sourceRootElem>../ui_logger</sourceRootElem>
                 <sourceRootElem>../DAO</sourceRootElem>
-                <sourceRootElem>Msgs</sourceRootElem>
+                <sourceRootElem>msgs</sourceRootElem>
             </sourceRootList>
             <confList>
                 <confElem>

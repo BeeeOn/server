@@ -14,6 +14,8 @@
 using namespace std;
 
 SocketClient::SocketClient(int portNumber, string hostName) {
+   
+    
     struct sockaddr_in serv_addr;
     struct hostent *server;
     
@@ -153,7 +155,7 @@ string SocketClient::readUntilendTag(string endTag) {
                     break;
                 }
                 else{
-                    throw SocketClientException("ERROR reading from socket, recieved code:" + to_string(recieved));
+                    throw SocketClientException("ERROR reading from socket, recieved code:" + to_string((long long int)recieved));
                 }
     }
     std::cout<<"client done reading"<< data <<endl;
@@ -163,13 +165,13 @@ string SocketClient::readUntilendTag(string endTag) {
 
 
 SocketClientException::SocketClientException(string errText) : runtime_error(errText) {
-    
     _errText = errText;
 }
 
 const char* SocketClientException::what() const throw()
 {
-    string what = "SocketClient exception: ";
-    what.append( _errText);
-    return what.c_str();
+//    string what = "SocketClient exception: ";
+//    what.append( _errText);
+//    return what.c_str();
+    return "SocketClient exception: ";
 }
