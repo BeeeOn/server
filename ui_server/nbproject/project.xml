@@ -6,13 +6,14 @@
             <name>ui_server</name>
             <c-extensions/>
             <cpp-extensions>cpp</cpp-extensions>
-            <header-extensions>h,hpp</header-extensions>
+            <header-extensions>h</header-extensions>
             <sourceEncoding>UTF-8</sourceEncoding>
             <make-dep-projects/>
             <sourceRootList>
                 <sourceRootElem>../ui_logger</sourceRootElem>
                 <sourceRootElem>../DAO</sourceRootElem>
                 <sourceRootElem>msgs</sourceRootElem>
+                <sourceRootElem>../lib</sourceRootElem>
             </sourceRootList>
             <confList>
                 <confElem>

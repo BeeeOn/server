@@ -10,7 +10,10 @@
 #include "../DAO/DAOUsersAdapters.h"
 #include "../DAO/DAONotification.h"
 
+#include "save_custom_writer.h"
+
 #include "SocketServer.h"
+#include "pugixml.hpp"
 // uncoment if you want print debug reports
 //#define DEBUG 1
 
@@ -56,8 +59,7 @@ bool has_suffix1(const std::string &str, const std::string &suffix)
 
 
 int main(int argc, char** argv)
-{   
-    
+{  
     //http://pugixml.googlecode.com/svn-history/r605/trunk/docs/samples/modify_add.cpp
     //load XML file from argv[1]
 

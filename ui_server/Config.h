@@ -9,8 +9,8 @@
 #define	CONFIG_H
 
 #include "pugixml.hpp"
-
-
+#include <string>
+#include <iostream>
 class Config {
 private:
     Config();

@@ -612,6 +612,7 @@
     <Elem>../ui_logger</Elem>
     <Elem>../DAO</Elem>
     <Elem>msgs</Elem>
+    <Elem>../lib</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -638,10 +639,11 @@
             <pElem>/usr/include</pElem>
             <pElem>/usr/local/include/soci</pElem>
             <pElem>usr/include/openssl</pElem>
-            <pElem>../Server</pElem>
+            <pElem>../lib</pElem>
             <pElem>.</pElem>
             <pElem>/usr/pgsql-9.2/include</pElem>
             <pElem>/usr/pgsql-9.2</pElem>
+            <pElem>../Server</pElem>
           </incDir>
           <commandLine>-O0 -std=c++0x -D_GLIBCXX_USE_NANOSLEEP `cppunit-config --cflags`</commandLine>
           <warningLevel>2</warningLevel>
@@ -705,6 +707,8 @@
       <item path="../DAO/DAOUsersAdapters.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../DAO/DAOUsersAdapters.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../lib/pugixml.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../ui_logger/Logger.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -1372,12 +1376,6 @@
       </item>
       <item path="msgs/MsgInUpdateView.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="pugiconfig.hpp" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="pugixml.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="pugixml.hpp" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="save_custom_writer.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="save_custom_writer.h" ex="false" tool="3" flavor2="0">
@@ -1385,232 +1383,6 @@
       <item path="sslServlet.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="sslServlet.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="testHelper.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="testHelper.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/newtestclass.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/newtestclass.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/newtestrunner.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testChangeConAccount.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testChangeConAccount.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testGlobal.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testGlobal.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInAddAdapter.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInAddAdapter.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInAddConAcc.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInAddConAcc.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInAddRooms.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInAddRooms.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInDelAction.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInDelAction.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInDelConAcc.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInDelConAcc.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInDelDevice.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInDelDevice.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInDelRoom.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInDelRoom.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInDeleteCondition.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInDeleteCondition.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInGetAction.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInGetAction.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInGetActions.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInGetActions.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInGetAdapters.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInGetAdapters.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInGetConAcc.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInGetConAcc.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInGetConditions.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInGetConditions.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInGetDevs.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInGetDevs.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInGetRooms.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInGetRooms.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInGetTimeZone.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInGetTimeZone.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInLogName.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInLogName.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInPartial.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInPartial.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInSetAction.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInSetAction.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInSetCondition.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInSetCondition.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInSetTimeZone.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInSetTimeZone.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInSignIn.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInSignIn.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInSignUp.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInSignUp.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInSwitch.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInSwitch.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInUpdate.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInUpdate.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInUpdateAction.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInUpdateAction.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInUpdateCondition.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInUpdateCondition.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInUpdateRooms.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInUpdateRooms.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testrunnerChangeConAccount.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="tests/testrunnerGlobal.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInAddAdapter.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInAddConAcc.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInAddRooms.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInDelAction.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInDelConAcc.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInDelDevice.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInDelRoom.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInDeleteCondition.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInGetAction.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInGetActions.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInGetAdapters.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInGetConAcc.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInGetConditions.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInGetDevs.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInGetRooms.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInGetTimeZone.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInLogName.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInPartial.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInSetAction.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInSetCondition.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInSetTimeZone.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInSignIn.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInSignUp.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInSwitch.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInUpdate.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInUpdateAction.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInUpdateCondition.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInUpdateRooms.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
       </item>
       <item path="ui_server.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -1723,6 +1495,8 @@
       <item path="../DAO/DAOUsersAdapters.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../DAO/DAOUsersAdapters.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../lib/pugixml.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../ui_logger/Logger.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -2370,12 +2144,6 @@
       </item>
       <item path="msgs/MsgInUpdateView.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="pugiconfig.hpp" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="pugixml.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="pugixml.hpp" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="save_custom_writer.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="save_custom_writer.h" ex="false" tool="3" flavor2="0">
@@ -2383,232 +2151,6 @@
       <item path="sslServlet.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="sslServlet.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="testHelper.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="testHelper.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/newtestclass.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/newtestclass.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/newtestrunner.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testChangeConAccount.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testChangeConAccount.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testGlobal.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testGlobal.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInAddAdapter.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInAddAdapter.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInAddConAcc.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInAddConAcc.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInAddRooms.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInAddRooms.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInDelAction.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInDelAction.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInDelConAcc.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInDelConAcc.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInDelDevice.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInDelDevice.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInDelRoom.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInDelRoom.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInDeleteCondition.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInDeleteCondition.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInGetAction.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInGetAction.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInGetActions.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInGetActions.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInGetAdapters.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInGetAdapters.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInGetConAcc.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInGetConAcc.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInGetConditions.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInGetConditions.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInGetDevs.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInGetDevs.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInGetRooms.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInGetRooms.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInGetTimeZone.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInGetTimeZone.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInLogName.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInLogName.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInPartial.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInPartial.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInSetAction.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInSetAction.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInSetCondition.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInSetCondition.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInSetTimeZone.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInSetTimeZone.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInSignIn.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInSignIn.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInSignUp.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInSignUp.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInSwitch.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInSwitch.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInUpdate.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInUpdate.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInUpdateAction.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInUpdateAction.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInUpdateCondition.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInUpdateCondition.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testMsgInUpdateRooms.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testMsgInUpdateRooms.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="tests/testrunnerChangeConAccount.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="tests/testrunnerGlobal.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInAddAdapter.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInAddConAcc.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInAddRooms.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInDelAction.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInDelConAcc.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInDelDevice.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInDelRoom.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInDeleteCondition.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInGetAction.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInGetActions.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInGetAdapters.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInGetConAcc.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInGetConditions.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInGetDevs.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInGetRooms.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInGetTimeZone.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInLogName.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInPartial.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInSetAction.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInSetCondition.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInSetTimeZone.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInSignIn.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInSignUp.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInSwitch.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInUpdate.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInUpdateAction.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInUpdateCondition.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
-      <item path="tests/testrunnerMsgInUpdateRooms.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
       </item>
       <item path="ui_server.cpp" ex="false" tool="1" flavor2="0">
       </item>

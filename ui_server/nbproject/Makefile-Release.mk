@@ -43,6 +43,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/_ext/1360890531/DAORooms.o \
 	${OBJECTDIR}/_ext/1360890531/DAOUsers.o \
 	${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters.o \
+	${OBJECTDIR}/_ext/1360930230/pugixml.o \
 	${OBJECTDIR}/_ext/1154895860/Logger.o \
 	${OBJECTDIR}/Config.o \
 	${OBJECTDIR}/DBConnector.o \
@@ -92,10 +93,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/msgs/MsgInSwitch.o \
 	${OBJECTDIR}/msgs/MsgInUnknown.o \
 	${OBJECTDIR}/msgs/MsgInUpdateView.o \
-	${OBJECTDIR}/pugixml.o \
 	${OBJECTDIR}/save_custom_writer.o \
 	${OBJECTDIR}/sslServlet.o \
-	${OBJECTDIR}/testHelper.o \
 	${OBJECTDIR}/ui_server.o
 
 # Test Directory
@@ -198,6 +197,11 @@ ${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters.o: ../DAO/DAOUsersAdapters.cpp
 	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters.o ../DAO/DAOUsersAdapters.cpp
+
+${OBJECTDIR}/_ext/1360930230/pugixml.o: ../lib/pugixml.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1360930230
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360930230/pugixml.o ../lib/pugixml.cpp
 
 ${OBJECTDIR}/_ext/1154895860/Logger.o: ../ui_logger/Logger.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1154895860
@@ -444,11 +448,6 @@ ${OBJECTDIR}/msgs/MsgInUpdateView.o: msgs/MsgInUpdateView.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInUpdateView.o msgs/MsgInUpdateView.cpp
 
-${OBJECTDIR}/pugixml.o: pugixml.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/pugixml.o pugixml.cpp
-
 ${OBJECTDIR}/save_custom_writer.o: save_custom_writer.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
@@ -458,11 +457,6 @@ ${OBJECTDIR}/sslServlet.o: sslServlet.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/sslServlet.o sslServlet.cpp
-
-${OBJECTDIR}/testHelper.o: testHelper.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/testHelper.o testHelper.cpp
 
 ${OBJECTDIR}/ui_server.o: ui_server.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -474,501 +468,129 @@ ${OBJECTDIR}/ui_server.o: ui_server.cpp
 
 # Build Test Targets
 .build-tests-conf: .build-conf ${TESTFILES}
-${TESTDIR}/TestFiles/f21: ${TESTDIR}/tests/newtestclass.o ${TESTDIR}/tests/newtestrunner.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f21: ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f21 $^ ${LDLIBSOPTIONS} `cppunit-config --libs`   
 
-${TESTDIR}/TestFiles/f15: ${TESTDIR}/tests/testChangeConAccount.o ${TESTDIR}/tests/testrunnerChangeConAccount.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f15: ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f15 $^ ${LDLIBSOPTIONS} `cppunit-config --libs`   
 
-${TESTDIR}/TestFiles/f3: ${TESTDIR}/tests/testGlobal.o ${TESTDIR}/tests/testrunnerGlobal.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f3: ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f3 $^ ${LDLIBSOPTIONS} `cppunit-config --libs`   
 
-${TESTDIR}/TestFiles/f20: ${TESTDIR}/tests/testMsgInAddAdapter.o ${TESTDIR}/tests/testrunnerMsgInAddAdapter.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f20: ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f20 $^ ${LDLIBSOPTIONS} `cppunit-config --libs`   
 
-${TESTDIR}/TestFiles/f8: ${TESTDIR}/tests/testMsgInAddConAcc.o ${TESTDIR}/tests/testrunnerMsgInAddConAcc.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f8: ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f8 $^ ${LDLIBSOPTIONS} `cppunit-config --libs`   
 
-${TESTDIR}/TestFiles/f4: ${TESTDIR}/tests/testMsgInAddRooms.o ${TESTDIR}/tests/testrunnerMsgInAddRooms.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f4: ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f4 $^ ${LDLIBSOPTIONS} `cppunit-config --libs` `cppunit-config --libs`   
 
-${TESTDIR}/TestFiles/f31: ${TESTDIR}/tests/testMsgInDelAction.o ${TESTDIR}/tests/testrunnerMsgInDelAction.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f31: ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f31 $^ ${LDLIBSOPTIONS} `cppunit-config --libs`   
 
-${TESTDIR}/TestFiles/f16: ${TESTDIR}/tests/testMsgInDelConAcc.o ${TESTDIR}/tests/testrunnerMsgInDelConAcc.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f16: ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f16 $^ ${LDLIBSOPTIONS} `cppunit-config --libs`   
 
-${TESTDIR}/TestFiles/f9: ${TESTDIR}/tests/testMsgInDelDevice.o ${TESTDIR}/tests/testrunnerMsgInDelDevice.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f9: ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f9 $^ ${LDLIBSOPTIONS} `cppunit-config --libs`   
 
-${TESTDIR}/TestFiles/f26: ${TESTDIR}/tests/testMsgInDeleteCondition.o ${TESTDIR}/tests/testrunnerMsgInDeleteCondition.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f26: ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f26 $^ ${LDLIBSOPTIONS} `cppunit-config --libs`   
 
-${TESTDIR}/TestFiles/f5: ${TESTDIR}/tests/testMsgInDelRoom.o ${TESTDIR}/tests/testrunnerMsgInDelRoom.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f5: ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f5 $^ ${LDLIBSOPTIONS} `cppunit-config --libs`   
 
-${TESTDIR}/TestFiles/f19: ${TESTDIR}/tests/testMsgInPartial.o ${TESTDIR}/tests/testrunnerMsgInPartial.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f19: ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f19 $^ ${LDLIBSOPTIONS} `cppunit-config --libs`   
 
-${TESTDIR}/TestFiles/f29: ${TESTDIR}/tests/testMsgInGetAction.o ${TESTDIR}/tests/testrunnerMsgInGetAction.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f29: ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f29 $^ ${LDLIBSOPTIONS} `cppunit-config --libs`   
 
-${TESTDIR}/TestFiles/f28: ${TESTDIR}/tests/testMsgInGetActions.o ${TESTDIR}/tests/testrunnerMsgInGetActions.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f28: ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f28 $^ ${LDLIBSOPTIONS} `cppunit-config --libs`   
 
-${TESTDIR}/TestFiles/f18: ${TESTDIR}/tests/testMsgInGetAdapters.o ${TESTDIR}/tests/testrunnerMsgInGetAdapters.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f18: ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f18 $^ ${LDLIBSOPTIONS} `cppunit-config --libs`   
 
-${TESTDIR}/TestFiles/f17: ${TESTDIR}/tests/testMsgInGetConAcc.o ${TESTDIR}/tests/testrunnerMsgInGetConAcc.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f17: ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f17 $^ ${LDLIBSOPTIONS} `cppunit-config --libs`   
 
-${TESTDIR}/TestFiles/f24: ${TESTDIR}/tests/testMsgInGetConditions.o ${TESTDIR}/tests/testrunnerMsgInGetConditions.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f24: ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f24 $^ ${LDLIBSOPTIONS} `cppunit-config --libs`   
 
-${TESTDIR}/TestFiles/f23: ${TESTDIR}/tests/testMsgInGetDevs.o ${TESTDIR}/tests/testrunnerMsgInGetDevs.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f23: ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f23 $^ ${LDLIBSOPTIONS} `cppunit-config --libs`   
 
-${TESTDIR}/TestFiles/f7: ${TESTDIR}/tests/testMsgInGetRooms.o ${TESTDIR}/tests/testrunnerMsgInGetRooms.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f7: ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f7 $^ ${LDLIBSOPTIONS} `cppunit-config --libs`   
 
-${TESTDIR}/TestFiles/f14: ${TESTDIR}/tests/testMsgInGetTimeZone.o ${TESTDIR}/tests/testrunnerMsgInGetTimeZone.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f14: ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f14 $^ ${LDLIBSOPTIONS} `cppunit-config --libs`   
 
-${TESTDIR}/TestFiles/f11: ${TESTDIR}/tests/testMsgInLogName.o ${TESTDIR}/tests/testrunnerMsgInLogName.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f11: ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f11 $^ ${LDLIBSOPTIONS} `cppunit-config --libs` `cppunit-config --libs`   
 
-${TESTDIR}/TestFiles/f27: ${TESTDIR}/tests/testMsgInSetAction.o ${TESTDIR}/tests/testrunnerMsgInSetAction.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f27: ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f27 $^ ${LDLIBSOPTIONS} `cppunit-config --libs`   
 
-${TESTDIR}/TestFiles/f22: ${TESTDIR}/tests/testMsgInSetCondition.o ${TESTDIR}/tests/testrunnerMsgInSetCondition.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f22: ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f22 $^ ${LDLIBSOPTIONS} `cppunit-config --libs`   
 
-${TESTDIR}/TestFiles/f13: ${TESTDIR}/tests/testMsgInSetTimeZone.o ${TESTDIR}/tests/testrunnerMsgInSetTimeZone.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f13: ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f13 $^ ${LDLIBSOPTIONS} `cppunit-config --libs`   
 
-${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/testMsgInSignIn.o ${TESTDIR}/tests/testrunnerMsgInSignIn.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f1: ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} `cppunit-config --libs` `cppunit-config --libs`   
 
-${TESTDIR}/TestFiles/f2: ${TESTDIR}/tests/testMsgInSignUp.o ${TESTDIR}/tests/testrunnerMsgInSignUp.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f2: ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f2 $^ ${LDLIBSOPTIONS} `cppunit-config --libs` `cppunit-config --libs`   
 
-${TESTDIR}/TestFiles/f10: ${TESTDIR}/tests/testMsgInSwitch.o ${TESTDIR}/tests/testrunnerMsgInSwitch.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f10: ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f10 $^ ${LDLIBSOPTIONS} `cppunit-config --libs`   
 
-${TESTDIR}/TestFiles/f12: ${TESTDIR}/tests/testMsgInUpdate.o ${TESTDIR}/tests/testrunnerMsgInUpdate.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f12: ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f12 $^ ${LDLIBSOPTIONS} `cppunit-config --libs`   
 
-${TESTDIR}/TestFiles/f30: ${TESTDIR}/tests/testMsgInUpdateAction.o ${TESTDIR}/tests/testrunnerMsgInUpdateAction.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f30: ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f30 $^ ${LDLIBSOPTIONS} `cppunit-config --libs`   
 
-${TESTDIR}/TestFiles/f25: ${TESTDIR}/tests/testMsgInUpdateCondition.o ${TESTDIR}/tests/testrunnerMsgInUpdateCondition.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f25: ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f25 $^ ${LDLIBSOPTIONS} `cppunit-config --libs`   
 
-${TESTDIR}/TestFiles/f6: ${TESTDIR}/tests/testMsgInUpdateRooms.o ${TESTDIR}/tests/testrunnerMsgInUpdateRooms.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f6: ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f6 $^ ${LDLIBSOPTIONS} `cppunit-config --libs`   
-
-
-${TESTDIR}/tests/newtestclass.o: tests/newtestclass.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/newtestclass.o tests/newtestclass.cpp
-
-
-${TESTDIR}/tests/newtestrunner.o: tests/newtestrunner.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/newtestrunner.o tests/newtestrunner.cpp
-
-
-${TESTDIR}/tests/testChangeConAccount.o: tests/testChangeConAccount.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testChangeConAccount.o tests/testChangeConAccount.cpp
-
-
-${TESTDIR}/tests/testrunnerChangeConAccount.o: tests/testrunnerChangeConAccount.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testrunnerChangeConAccount.o tests/testrunnerChangeConAccount.cpp
-
-
-${TESTDIR}/tests/testGlobal.o: tests/testGlobal.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testGlobal.o tests/testGlobal.cpp
-
-
-${TESTDIR}/tests/testrunnerGlobal.o: tests/testrunnerGlobal.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testrunnerGlobal.o tests/testrunnerGlobal.cpp
-
-
-${TESTDIR}/tests/testMsgInAddAdapter.o: tests/testMsgInAddAdapter.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testMsgInAddAdapter.o tests/testMsgInAddAdapter.cpp
-
-
-${TESTDIR}/tests/testrunnerMsgInAddAdapter.o: tests/testrunnerMsgInAddAdapter.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testrunnerMsgInAddAdapter.o tests/testrunnerMsgInAddAdapter.cpp
-
-
-${TESTDIR}/tests/testMsgInAddConAcc.o: tests/testMsgInAddConAcc.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testMsgInAddConAcc.o tests/testMsgInAddConAcc.cpp
-
-
-${TESTDIR}/tests/testrunnerMsgInAddConAcc.o: tests/testrunnerMsgInAddConAcc.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testrunnerMsgInAddConAcc.o tests/testrunnerMsgInAddConAcc.cpp
-
-
-${TESTDIR}/tests/testMsgInAddRooms.o: tests/testMsgInAddRooms.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testMsgInAddRooms.o tests/testMsgInAddRooms.cpp
-
-
-${TESTDIR}/tests/testrunnerMsgInAddRooms.o: tests/testrunnerMsgInAddRooms.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testrunnerMsgInAddRooms.o tests/testrunnerMsgInAddRooms.cpp
-
-
-${TESTDIR}/tests/testMsgInDelAction.o: tests/testMsgInDelAction.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testMsgInDelAction.o tests/testMsgInDelAction.cpp
-
-
-${TESTDIR}/tests/testrunnerMsgInDelAction.o: tests/testrunnerMsgInDelAction.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testrunnerMsgInDelAction.o tests/testrunnerMsgInDelAction.cpp
-
-
-${TESTDIR}/tests/testMsgInDelConAcc.o: tests/testMsgInDelConAcc.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testMsgInDelConAcc.o tests/testMsgInDelConAcc.cpp
-
-
-${TESTDIR}/tests/testrunnerMsgInDelConAcc.o: tests/testrunnerMsgInDelConAcc.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testrunnerMsgInDelConAcc.o tests/testrunnerMsgInDelConAcc.cpp
-
-
-${TESTDIR}/tests/testMsgInDelDevice.o: tests/testMsgInDelDevice.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testMsgInDelDevice.o tests/testMsgInDelDevice.cpp
-
-
-${TESTDIR}/tests/testrunnerMsgInDelDevice.o: tests/testrunnerMsgInDelDevice.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testrunnerMsgInDelDevice.o tests/testrunnerMsgInDelDevice.cpp
-
-
-${TESTDIR}/tests/testMsgInDeleteCondition.o: tests/testMsgInDeleteCondition.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testMsgInDeleteCondition.o tests/testMsgInDeleteCondition.cpp
-
-
-${TESTDIR}/tests/testrunnerMsgInDeleteCondition.o: tests/testrunnerMsgInDeleteCondition.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testrunnerMsgInDeleteCondition.o tests/testrunnerMsgInDeleteCondition.cpp
-
-
-${TESTDIR}/tests/testMsgInDelRoom.o: tests/testMsgInDelRoom.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testMsgInDelRoom.o tests/testMsgInDelRoom.cpp
-
-
-${TESTDIR}/tests/testrunnerMsgInDelRoom.o: tests/testrunnerMsgInDelRoom.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testrunnerMsgInDelRoom.o tests/testrunnerMsgInDelRoom.cpp
-
-
-${TESTDIR}/tests/testMsgInPartial.o: tests/testMsgInPartial.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testMsgInPartial.o tests/testMsgInPartial.cpp
-
-
-${TESTDIR}/tests/testrunnerMsgInPartial.o: tests/testrunnerMsgInPartial.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testrunnerMsgInPartial.o tests/testrunnerMsgInPartial.cpp
-
-
-${TESTDIR}/tests/testMsgInGetAction.o: tests/testMsgInGetAction.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testMsgInGetAction.o tests/testMsgInGetAction.cpp
-
-
-${TESTDIR}/tests/testrunnerMsgInGetAction.o: tests/testrunnerMsgInGetAction.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testrunnerMsgInGetAction.o tests/testrunnerMsgInGetAction.cpp
-
-
-${TESTDIR}/tests/testMsgInGetActions.o: tests/testMsgInGetActions.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testMsgInGetActions.o tests/testMsgInGetActions.cpp
-
-
-${TESTDIR}/tests/testrunnerMsgInGetActions.o: tests/testrunnerMsgInGetActions.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testrunnerMsgInGetActions.o tests/testrunnerMsgInGetActions.cpp
-
-
-${TESTDIR}/tests/testMsgInGetAdapters.o: tests/testMsgInGetAdapters.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testMsgInGetAdapters.o tests/testMsgInGetAdapters.cpp
-
-
-${TESTDIR}/tests/testrunnerMsgInGetAdapters.o: tests/testrunnerMsgInGetAdapters.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testrunnerMsgInGetAdapters.o tests/testrunnerMsgInGetAdapters.cpp
-
-
-${TESTDIR}/tests/testMsgInGetConAcc.o: tests/testMsgInGetConAcc.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testMsgInGetConAcc.o tests/testMsgInGetConAcc.cpp
-
-
-${TESTDIR}/tests/testrunnerMsgInGetConAcc.o: tests/testrunnerMsgInGetConAcc.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testrunnerMsgInGetConAcc.o tests/testrunnerMsgInGetConAcc.cpp
-
-
-${TESTDIR}/tests/testMsgInGetConditions.o: tests/testMsgInGetConditions.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testMsgInGetConditions.o tests/testMsgInGetConditions.cpp
-
-
-${TESTDIR}/tests/testrunnerMsgInGetConditions.o: tests/testrunnerMsgInGetConditions.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testrunnerMsgInGetConditions.o tests/testrunnerMsgInGetConditions.cpp
-
-
-${TESTDIR}/tests/testMsgInGetDevs.o: tests/testMsgInGetDevs.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testMsgInGetDevs.o tests/testMsgInGetDevs.cpp
-
-
-${TESTDIR}/tests/testrunnerMsgInGetDevs.o: tests/testrunnerMsgInGetDevs.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testrunnerMsgInGetDevs.o tests/testrunnerMsgInGetDevs.cpp
-
-
-${TESTDIR}/tests/testMsgInGetRooms.o: tests/testMsgInGetRooms.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testMsgInGetRooms.o tests/testMsgInGetRooms.cpp
-
-
-${TESTDIR}/tests/testrunnerMsgInGetRooms.o: tests/testrunnerMsgInGetRooms.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testrunnerMsgInGetRooms.o tests/testrunnerMsgInGetRooms.cpp
-
-
-${TESTDIR}/tests/testMsgInGetTimeZone.o: tests/testMsgInGetTimeZone.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testMsgInGetTimeZone.o tests/testMsgInGetTimeZone.cpp
-
-
-${TESTDIR}/tests/testrunnerMsgInGetTimeZone.o: tests/testrunnerMsgInGetTimeZone.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testrunnerMsgInGetTimeZone.o tests/testrunnerMsgInGetTimeZone.cpp
-
-
-${TESTDIR}/tests/testMsgInLogName.o: tests/testMsgInLogName.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testMsgInLogName.o tests/testMsgInLogName.cpp
-
-
-${TESTDIR}/tests/testrunnerMsgInLogName.o: tests/testrunnerMsgInLogName.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testrunnerMsgInLogName.o tests/testrunnerMsgInLogName.cpp
-
-
-${TESTDIR}/tests/testMsgInSetAction.o: tests/testMsgInSetAction.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testMsgInSetAction.o tests/testMsgInSetAction.cpp
-
-
-${TESTDIR}/tests/testrunnerMsgInSetAction.o: tests/testrunnerMsgInSetAction.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testrunnerMsgInSetAction.o tests/testrunnerMsgInSetAction.cpp
-
-
-${TESTDIR}/tests/testMsgInSetCondition.o: tests/testMsgInSetCondition.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testMsgInSetCondition.o tests/testMsgInSetCondition.cpp
-
-
-${TESTDIR}/tests/testrunnerMsgInSetCondition.o: tests/testrunnerMsgInSetCondition.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testrunnerMsgInSetCondition.o tests/testrunnerMsgInSetCondition.cpp
-
-
-${TESTDIR}/tests/testMsgInSetTimeZone.o: tests/testMsgInSetTimeZone.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testMsgInSetTimeZone.o tests/testMsgInSetTimeZone.cpp
-
-
-${TESTDIR}/tests/testrunnerMsgInSetTimeZone.o: tests/testrunnerMsgInSetTimeZone.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testrunnerMsgInSetTimeZone.o tests/testrunnerMsgInSetTimeZone.cpp
-
-
-${TESTDIR}/tests/testMsgInSignIn.o: tests/testMsgInSignIn.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testMsgInSignIn.o tests/testMsgInSignIn.cpp
-
-
-${TESTDIR}/tests/testrunnerMsgInSignIn.o: tests/testrunnerMsgInSignIn.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testrunnerMsgInSignIn.o tests/testrunnerMsgInSignIn.cpp
-
-
-${TESTDIR}/tests/testMsgInSignUp.o: tests/testMsgInSignUp.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testMsgInSignUp.o tests/testMsgInSignUp.cpp
-
-
-${TESTDIR}/tests/testrunnerMsgInSignUp.o: tests/testrunnerMsgInSignUp.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testrunnerMsgInSignUp.o tests/testrunnerMsgInSignUp.cpp
-
-
-${TESTDIR}/tests/testMsgInSwitch.o: tests/testMsgInSwitch.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testMsgInSwitch.o tests/testMsgInSwitch.cpp
-
-
-${TESTDIR}/tests/testrunnerMsgInSwitch.o: tests/testrunnerMsgInSwitch.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testrunnerMsgInSwitch.o tests/testrunnerMsgInSwitch.cpp
-
-
-${TESTDIR}/tests/testMsgInUpdate.o: tests/testMsgInUpdate.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testMsgInUpdate.o tests/testMsgInUpdate.cpp
-
-
-${TESTDIR}/tests/testrunnerMsgInUpdate.o: tests/testrunnerMsgInUpdate.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testrunnerMsgInUpdate.o tests/testrunnerMsgInUpdate.cpp
-
-
-${TESTDIR}/tests/testMsgInUpdateAction.o: tests/testMsgInUpdateAction.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testMsgInUpdateAction.o tests/testMsgInUpdateAction.cpp
-
-
-${TESTDIR}/tests/testrunnerMsgInUpdateAction.o: tests/testrunnerMsgInUpdateAction.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testrunnerMsgInUpdateAction.o tests/testrunnerMsgInUpdateAction.cpp
-
-
-${TESTDIR}/tests/testMsgInUpdateCondition.o: tests/testMsgInUpdateCondition.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testMsgInUpdateCondition.o tests/testMsgInUpdateCondition.cpp
-
-
-${TESTDIR}/tests/testrunnerMsgInUpdateCondition.o: tests/testrunnerMsgInUpdateCondition.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testrunnerMsgInUpdateCondition.o tests/testrunnerMsgInUpdateCondition.cpp
-
-
-${TESTDIR}/tests/testMsgInUpdateRooms.o: tests/testMsgInUpdateRooms.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testMsgInUpdateRooms.o tests/testMsgInUpdateRooms.cpp
-
-
-${TESTDIR}/tests/testrunnerMsgInUpdateRooms.o: tests/testrunnerMsgInUpdateRooms.cpp 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/testrunnerMsgInUpdateRooms.o tests/testrunnerMsgInUpdateRooms.cpp
 
 
 ${OBJECTDIR}/_ext/1360890531/DAO_nomain.o: ${OBJECTDIR}/_ext/1360890531/DAO.o ../DAO/DAO.cpp 
@@ -1073,6 +695,19 @@ ${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters_nomain.o: ${OBJECTDIR}/_ext/136089
 	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters_nomain.o ../DAO/DAOUsersAdapters.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters.o ${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters_nomain.o;\
+	fi
+
+${OBJECTDIR}/_ext/1360930230/pugixml_nomain.o: ${OBJECTDIR}/_ext/1360930230/pugixml.o ../lib/pugixml.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1360930230
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/_ext/1360930230/pugixml.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360930230/pugixml_nomain.o ../lib/pugixml.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/_ext/1360930230/pugixml.o ${OBJECTDIR}/_ext/1360930230/pugixml_nomain.o;\
 	fi
 
 ${OBJECTDIR}/_ext/1154895860/Logger_nomain.o: ${OBJECTDIR}/_ext/1154895860/Logger.o ../ui_logger/Logger.cpp 
@@ -1712,19 +1347,6 @@ ${OBJECTDIR}/msgs/MsgInUpdateView_nomain.o: ${OBJECTDIR}/msgs/MsgInUpdateView.o 
 	    ${CP} ${OBJECTDIR}/msgs/MsgInUpdateView.o ${OBJECTDIR}/msgs/MsgInUpdateView_nomain.o;\
 	fi
 
-${OBJECTDIR}/pugixml_nomain.o: ${OBJECTDIR}/pugixml.o pugixml.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/pugixml.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/pugixml_nomain.o pugixml.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/pugixml.o ${OBJECTDIR}/pugixml_nomain.o;\
-	fi
-
 ${OBJECTDIR}/save_custom_writer_nomain.o: ${OBJECTDIR}/save_custom_writer.o save_custom_writer.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/save_custom_writer.o`; \
@@ -1749,19 +1371,6 @@ ${OBJECTDIR}/sslServlet_nomain.o: ${OBJECTDIR}/sslServlet.o sslServlet.cpp
 	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/sslServlet_nomain.o sslServlet.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/sslServlet.o ${OBJECTDIR}/sslServlet_nomain.o;\
-	fi
-
-${OBJECTDIR}/testHelper_nomain.o: ${OBJECTDIR}/testHelper.o testHelper.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/testHelper.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/testHelper_nomain.o testHelper.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/testHelper.o ${OBJECTDIR}/testHelper_nomain.o;\
 	fi
 
 ${OBJECTDIR}/ui_server_nomain.o: ${OBJECTDIR}/ui_server.o ui_server.cpp 
