@@ -1,7 +1,7 @@
 /**
 * @file framework.cpp
 *
-* Implementace modulárního prostøedí pro algoritmy
+* Implementace modulÃ¡rnÃ­ho prostÃ¸edÃ­ pro algoritmy
 *
 * @author xrasov01
 * @version 1.0
@@ -10,8 +10,8 @@
 #include "framework.h"
 
 //Konstanty
-#define UI_FRAMEWORK_PORT 7082 
-#define ADA_FRAMEWORK_PORT 7083 
+#define UI_FRAMEWORK_PORT 7082
+#define ADA_FRAMEWORK_PORT 7083
 #define ALG_FRAMEWORK_PORT 7084
 #define BUFSIZE 1000
 
@@ -22,13 +22,13 @@ using namespace pugi;
 namespace sc = std::chrono;
 
 // Globalni promenne
-FrameworkServer * UIServer;					
+FrameworkServer * UIServer;
 FrameworkServer * AdaServer;
 FrameworkServer * AlgServer;
-Loger *Log;									//Loger pro logování do souboru
+Loger *Log;									//Loger pro logovÃ¡nÃ­ do souboru
 DBConnectionsContainer *cont = NULL;		//Container pro DB
 FrameworkConfig *FConfig = NULL;
-sem_t connectionSem;						//Semafor pro maximální poèet pøipojení k Frameworku
+sem_t connectionSem;						//Semafor pro maximÃ¡lnÃ­ poÃ¨et pÃ¸ipojenÃ­ k Frameworku
 sem_t dbAccessSem;
 std::atomic<unsigned long> connCount;
 
@@ -43,8 +43,8 @@ FrameworkServer::~FrameworkServer(){
 }
 
 /**
-* Zacne naslouchat na drive specifikovanem portu v instanciaci objektu FrameworkServer 
-* 
+* Zacne naslouchat na drive specifikovanem portu v instanciaci objektu FrameworkServer
+*
 */
 void FrameworkServer::StartServer(){
 	this->SetUpSockets();
@@ -56,28 +56,28 @@ void FrameworkServer::StartServer(){
 */
 bool FrameworkServer::SetUpSockets(){
 
-	//Vytvoøení soketu
+	//VytvoÃ¸enÃ­ soketu
 	if ((serverSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == -1)
 	{
-		cerr << "Nelze vytvoøit soket" << endl;
+		cerr << "Nelze vytvoÃ¸it soket" << endl;
 		return false;
 	}
 
-	//Nastavení struktury portBind
+	//NastavenÃ­ struktury portBind
 	portBind.sin_family = AF_INET;
 	portBind.sin_port = htons(port);
 	portBind.sin_addr.s_addr = INADDR_ANY;
 
 	if (bind(serverSocket, (sockaddr *)&portBind, sizeof(portBind)) == -1)
 	{
-		cerr << "Problém s pojmenováním soketu." << endl;
+		cerr << "ProblÃ©m s pojmenovÃ¡nÃ­m soketu." << endl;
 		return false;
 	}
-	// Vytvoøíme frontu požadavkù na spojení. 
-	// Vytvoøíme frontu maximální velikosti 10 požadavkù.
+	// VytvoÃ¸Ã­me frontu poÅ¾adavkÃ¹ na spojenÃ­.
+	// VytvoÃ¸Ã­me frontu maximÃ¡lnÃ­ velikosti 10 poÅ¾adavkÃ¹.
 	if (listen(serverSocket, 10) == -1)
 	{
-		cerr << "Problém s vytvoøením fronty" << endl;
+		cerr << "ProblÃ©m s vytvoÃ¸enÃ­m fronty" << endl;
 		return false;
 	}
 	return true;
@@ -89,15 +89,15 @@ bool FrameworkServer::SetUpSockets(){
 int FrameworkServer::AcceptConnection(){
 
 	sockaddr_in clientInfo;			// Informace o klientovi
-	socklen_t addrlen;				// Velikost adresy vzdáleného poèítaèe
+	socklen_t addrlen;				// Velikost adresy vzdÃ¡lenÃ©ho poÃ¨Ã­taÃ¨e
 	addrlen = sizeof(clientInfo);
-	int newSocket;					//Socket spojení s klientem					
+	int newSocket;					//Socket spojenÃ­ s klientem
 
 	while (1)
 	{
 		if ((newSocket = accept(serverSocket, (sockaddr*)&clientInfo, &addrlen)) < 0)  //budeme na nom prijimat data
 		{
-			cerr << "Problém s pøijetím spojeni" << endl;
+			cerr << "ProblÃ©m s pÃ¸ijetÃ­m spojeni" << endl;
 			return 1;
 		}
 		sem_wait(&connectionSem);
@@ -151,7 +151,7 @@ void FrameworkServerHandle::HandleClientConnection(){
 	else{
 		Log->WriteMessage(ERR, "Something is wrong with Server port!");
 	}
-	//Ziskani spojení s DB
+	//Ziskani spojenÃ­ s DB
 	session *Conn = NULL;
 
 	Conn = cont->GetConnection();
@@ -287,7 +287,7 @@ void FrameworkServerHandle::HandleClientConnection(){
 	}
 	Log->WriteMessage(TRACE, "MESSAGE ACCEPTED: " + acceptedMessageString);
 
-	//zaèíná parser zprávy
+	//zaÃ¨Ã­nÃ¡ parser zprÃ¡vy
 	if (isAdapterServerMessage){
 		this->HandleAdapterMessage(data, Log, FConfig, database, &dbAccessSem);
 	}
@@ -312,7 +312,7 @@ void FrameworkServerHandle::HandleClientConnection(){
 * @param adapterId	id adapteru v DB
 * @param userId		id uzivatele v DB
 *
-* @return vektor struktur talg reprezentujici jeden algoritmus 
+* @return vektor struktur talg reprezentujici jeden algoritmus
 */
 vector<talg *> FrameworkServerHandle::getAllAlgsByAdapterIdAndUserId(string adapterId, string userId){
 	Log->WriteMessage(TRACE, "ENTERING FrameworkServerHandle::getAllAlgsByAdapterId");
@@ -453,11 +453,11 @@ bool FrameworkServerHandle::sendMessageToSocket(int socket, string xmlMessage){
 */
 bool FrameworkServerHandle::sendMessageToAdaServer(string xmlMessage){
 	Log->WriteMessage(TRACE, "ENTERING FrameworkServerHandle::sendMessageToAdaServer");
-	hostent *host;              
-	sockaddr_in serverSock;     
-	int socketToAdaServer;               
-	int port;                   // Èíslo portu
-	int size;                   // Poèet pøijatých a odeslaných bytù
+	hostent *host;
+	sockaddr_in serverSock;
+	int socketToAdaServer;
+	int port;                   // ÃˆÃ­slo portu
+	int size;                   // PoÃ¨et pÃ¸ijatÃ½ch a odeslanÃ½ch bytÃ¹
 	port = atoi(to_string(FConfig->portAdaSenderServer).c_str());
 	if ((host = gethostbyname("localhost")) == NULL)
 	{
@@ -530,7 +530,7 @@ bool FrameworkServerHandle::sendMessageToAdaServer(string xmlMessage){
 	close(socketToAdaServer);
 	Log->WriteMessage(INFO, "FrameworkServerHandle::sendMessageToAdaServer : DATA RECIEVED FROM ADA_SERVER :" + data);
 
-	
+
 	Log->WriteMessage(TRACE, "EXITING FrameworkServerHandle::sendMessageToAdaServer");
 	return true;
 }
@@ -573,9 +573,33 @@ int FrameworkServerHandle::spawn(char* programBinaryName, char** arg_list)
 {
 	pid_t childProcessId;
 	childProcessId = fork();
-	if (childProcessId != 0)
+	if (childProcessId != 0){
 		//Rodicovsky program
+
+        int childExitStatus;
+        pid_t ws = waitpid( childProcessId, &childExitStatus, 0);
+
+        if (programBinaryName != nullptr){
+                std::string programBinaryNameString(programBinaryName);
+        if( WIFEXITED(childExitStatus) )
+        {
+            // Child process exited thus exec failed.
+            // LOG failure of exec in child process.
+            Log->WriteMessage(ERR, "FrameworkServerHandle::spawn Result of Waitpid(): Child process exited thus exec failed! Binary name: " + programBinaryNameString);
+        }
+        else if( !WIFEXITED(childExitStatus) )
+        {
+            Log->WriteMessage(ERR, "FrameworkServerHandle::spawn Waitpid() exited with an error: Status= " +  to_string(WEXITSTATUS(childExitStatus))  + ". Binary of process name: " + programBinaryNameString);
+        }
+        else if( WIFSIGNALED(childExitStatus) ){
+            Log->WriteMessage(ERR, "FrameworkServerHandle::spawn exited due to a signal: " + to_string(WTERMSIG(childExitStatus)));
+        }
+        else{
+            Log->WriteMessage(TRACE, "FrameworkServerHandle::spawn Result of Waitpid(): Child process handled. Binary name: " + programBinaryNameString);
+        }
+        }
 		return childProcessId;
+	}
 	else {
 		//Program potomek - zde se vyvola program dle parametru
 		execvp(programBinaryName, arg_list);
@@ -614,7 +638,7 @@ FrameworkServerHandle::~FrameworkServerHandle(){
 
 //Zde jsou implementace zprav protokolu IOT - smerem k UI serveru a nasledne do mobilniho zarizeni
 
-/** Metoda vytvarejici zpravu algcreated dle algId 
+/** Metoda vytvarejici zpravu algcreated dle algId
 *
 * @param algId		ID vytvoreneho uzivatelskeho algoritmu
 *
@@ -668,7 +692,7 @@ string FrameworkServerHandle::createMessageFalse(string errcode){
 	//Nastav element algorithm_message
 	algorithm_message.attribute("ver") = "2.5";
 	algorithm_message.attribute("state") = "false";
-	algorithm_message.attribute("errcode") = errcode.c_str(); 
+	algorithm_message.attribute("errcode") = errcode.c_str();
 
 	string emptyString = " ";
 	pugi::xml_node nodechild = algorithm_message.append_child(pugi::node_pcdata);
@@ -689,7 +713,7 @@ string FrameworkServerHandle::createMessageFalse(string errcode){
 	return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + tmp;
 }
 
-/** Metoda vytvarejici zpravu true 
+/** Metoda vytvarejici zpravu true
 *
 * @return XML zprava v retezci
 */
@@ -805,13 +829,13 @@ string FrameworkServerHandle::createMessageAlgs(vector<talg *> allAlgs, string a
 
 //Zde jsou implementace zprav smerem na Adapter Server Sender
 
-/** Metoda vytvarejici zpravu o zmìnì aktoru z jednoho stavu na stav druhý.
+/** Metoda vytvarejici zpravu o zmÃ¬nÃ¬ aktoru z jednoho stavu na stav druhÃ½.
 *
 * @param id				id aktporu
 * @param type			typ aktoru
 * @param adapterId		Id adapteru
 *
-* @todo Zadny z oddeleni senzoru nebyl schopen zatim specifikovat presny tvar zpravy. Momentalne zprava pouze prepina z vypnuto na zapnuto. 
+* @todo Zadny z oddeleni senzoru nebyl schopen zatim specifikovat presny tvar zpravy. Momentalne zprava pouze prepina z vypnuto na zapnuto.
 *
 * @return XML zprava v retezci
 */
@@ -878,7 +902,7 @@ void sig_handler(int signo)
 	if (signo == SIGINT){
 		FConfig->ResetAlgorithms();
 		//Nastaveni seznamu algoritmu do tabulky u_algorithms do databaze
-		//Ziskani spojení s DB
+		//Ziskani spojenÃ­ s DB
 		session *Conn = NULL;
 		DBFWHandler * database = NULL;
 		sem_wait(&connectionSem);
@@ -912,7 +936,7 @@ int main()
 	{
 		std::cerr << "Unable to catch SIGINT";
 	}
-	//Loger pro logování do souboru
+	//Loger pro logovÃ¡nÃ­ do souboru
 	try
 	{
 		Log = new Loger();
@@ -949,7 +973,7 @@ int main()
 	//Nastaveni semaforu pro vylucny pristup prace s databazi
 	sem_init(&dbAccessSem, 0, 1);
 	//Nastaveni Loggeru
-	Log->SetLogger(	FConfig->loggerSettingVerbosity, 
+	Log->SetLogger(	FConfig->loggerSettingVerbosity,
 					FConfig->loggerSettingFilesCnt,
 					FConfig->loggerSettingLinesCnt,
 					FConfig->loggerSettingFileName,
@@ -959,7 +983,7 @@ int main()
 	FConfig->SetLogger(Log);
 
 	//Nastaveni seznamu algoritmu do tabulky u_algorithms do databaze
-	//Ziskani spojení s DB
+	//Ziskani spojenÃ­ s DB
 	session *Conn = NULL;
 	Conn = cont->GetConnection();
 	DBFWHandler * database = NULL;
