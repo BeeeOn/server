@@ -11,6 +11,30 @@
 using namespace std;
 using namespace soci;
 
+namespace soci
+{
+    template<>
+    struct type_conversion<Gate>
+    {
+        typedef values base_type;
+
+        static void from_base(values const & v, indicator /* ind */, Gate & gate)
+        {
+            gate.id = v.get<string>("adapter_id");
+            gate.name = v.get<std::string>("name","");
+            gate.timezone = v.get<int>("timezone");
+        }
+    
+        static void to_base(const Gate & gate, values & v, indicator & ind)
+        {           
+            v.set("adapter_id", gate.id);
+            v.set("name", gate.name);
+            v.set("timezone", gate.timezone);
+            ind = i_ok;
+        }
+    };
+}
+
 DAOAdapters::DAOAdapters(){
 }
 
@@ -21,6 +45,55 @@ DAOAdapters& DAOAdapters::getInstance(){
         static DAOAdapters instance;
         return instance;
 }
+
+Gate DAOAdapters::getAdapter(std::string adapterId) {
+    Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"get adapter : "<<adapterId<<"\n";
+    try{
+        soci::session sql(*_pool);
+        
+        Gate gate;
+        sql <<"select adapter_id::text, name, timezone from adapters where adapter_id = :adapter"
+                , use(adapterId,"adapter"), into(gate); 
+        return gate;
+    }
+    catch (soci::postgresql_soci_error& e)
+    {
+        Logger::getInstance(Logger::ERROR) << "Error: " << e.what() << '\n';
+        throw;
+    }
+}
+
+
+int DAOAdapters::updateAdapter(std::string adapterId, std::string newName, std::string newTimeZone) {
+    Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"update adapter : "<<adapterId<<"\n";
+    try{
+        soci::session sql(*_pool);
+        
+        string partialUpdateString;
+        if(newName != "")
+            partialUpdateString += "name = :aname";
+        if(newName != "" && newTimeZone != "")
+            partialUpdateString += ", ";
+        if(newTimeZone != "")
+            partialUpdateString += "timezone = :timezone";
+        
+        
+        //Logger::debug3()<<"DB:"<<"update with: "<<partialUpdateString<<"\n";
+       // Logger::debug3()<<"DB:"<<"update with: "<<newName << " " <<newTimeZone<<"\n";
+        
+        string xml;
+        sql <<"update adapters set " << partialUpdateString << " where adapter_id = :adapter"
+                ,use(newName, "aname"), use(newTimeZone, "timezone"), use(adapterId,"adapter"); 
+        
+        return 1;
+    }
+    catch (soci::postgresql_soci_error& e)
+    {
+        Logger::getInstance(Logger::ERROR) << "Error: " << e.what() << '\n';
+        throw;
+    }
+}
+
 
 int DAOAdapters::deleteAdapter(string adapterId){
     Logger::db()<< "delete adapter " << adapterId << endl;
@@ -44,6 +117,27 @@ int DAOAdapters::deleteAdapter(string adapterId){
         return 0;
     }
 }
+
+GateInfo DAOAdapters::getGateInfo(std::string gateId) {
+    Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"get gate info : "<<gateId<<"\n";
+    try{
+        soci::session sql(*_pool);
+        
+        GateInfo gateInfo;
+        sql <<"select adapter_id::text, count(distinct mac), count(distinct fk_user_id), name, socket, version, timezone "
+                "from adapters join facilities as f on f.fk_adapter_id = adapter_id join users_adapters as ua on ua.fk_adapter_id = adapter_id "
+                "where adapter_id = :adapter group by adapter_id"
+                , use(gateId,"adapter"), into(gateInfo.id), into(gateInfo.nFacilities), into(gateInfo.nUsers), into(gateInfo.name)
+                , into(gateInfo.socket), into(gateInfo.version), into(gateInfo.timezone); 
+        return gateInfo;
+    }
+    catch (soci::postgresql_soci_error& e)
+    {
+        Logger::getInstance(Logger::ERROR) << "Error: " << e.what() << '\n';
+        throw;
+    }
+}
+
 
 int DAOAdapters::parAdapterWithUserIfPossible(long long int adapterId, std::string adapterName, int userId) {
     

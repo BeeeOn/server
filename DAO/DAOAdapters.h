@@ -12,6 +12,22 @@
 
 #include "DAO.h"
 
+struct Gate {
+    std::string id;
+    std::string name;
+    int timezone;
+};
+
+struct GateInfo {
+    std::string id;
+    std::string name;
+    int socket;
+    int version; 
+    int nUsers;
+    int nFacilities;
+    int timezone;
+};
+
 class DAOAdapters : public DAO {
 private:
     DAOAdapters();
@@ -21,7 +37,11 @@ public:
     static DAOAdapters& getInstance();
     ~DAOAdapters(void);
     
+    Gate getAdapter(std::string adapterId);
+    int updateAdapter(std::string adapterId, std::string newName, std::string newTimeZone);
     int deleteAdapter(std::string adapterId);
+    
+    GateInfo getGateInfo(std::string gateId);
     int parAdapterWithUserIfPossible(long long int adapterId, std::string adapterName, int userId);
     int isAdapterInDB(long long int adapterId);
     std::string getTimeZone(std::string adapterId);

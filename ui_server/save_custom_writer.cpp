@@ -3,7 +3,7 @@
 
 #include "save_custom_writer.h"
 
-
+using namespace std;
 //[code_save_custom_writer
 struct xml_string_writer: pugi::xml_writer
 {

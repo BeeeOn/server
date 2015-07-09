@@ -8,7 +8,8 @@
 #ifndef CONFIG_H
 #define	CONFIG_H
 
-#include "pugixml.hpp"
+#include "../lib/pugixml.hpp"
+
 #include <string>
 #include <iostream>
 class Config {

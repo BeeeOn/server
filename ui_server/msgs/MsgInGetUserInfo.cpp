@@ -7,6 +7,7 @@
 
 #include "MsgInGetUserInfo.h"
 #include "../DAO/DAOUsers.h"
+#include "pugixml.hpp"
 
 using namespace std;
 
@@ -38,8 +39,25 @@ string MsgInGetUserInfo::createResponseMsgOut() {
     _outputMainNode.append_attribute(P_USER_SURNAME) = user.familyName.c_str();
     _outputMainNode.append_attribute(P_USER_GENDER) = user.gender.c_str();
     _outputMainNode.append_attribute(P_USER_EMAIL) = user.mail.c_str();
-    _outputMainNode.append_attribute(P_USER_PICTURE) = user.picture.c_str();    
-	
+    _outputMainNode.append_attribute(P_USER_PICTURE) = user.picture.c_str();
+
+    pugi::xml_node accountsNode = _outputMainNode.append_child();
+    accountsNode.set_name(P_USER_ACCOUNTS);
+    
+    pugi::xml_node serviceNode;
+    
+    serviceNode = accountsNode.append_child();
+    serviceNode.set_name(P_SERVICE);
+    serviceNode.append_attribute(P_SERVICE_NAME) = P_SERVICE_GOOGLE;
+    serviceNode.append_attribute(P_SERVICE_ID) = user.googleId.c_str();
+    
+    serviceNode = accountsNode.append_child();
+    serviceNode.set_name(P_SERVICE);
+    serviceNode.append_attribute(P_SERVICE_NAME) = P_SERVICE_FACEBOOK;
+    serviceNode.append_attribute(P_SERVICE_ID) = user.facebookId.c_str();
+    
+    //accountsNode.append_attribute(P_SERVICE_BEEEON)
+    
     return genOutputXMLwithVersionAndState(R_USER_INFO);
 }
 

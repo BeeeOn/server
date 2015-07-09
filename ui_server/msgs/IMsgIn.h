@@ -18,6 +18,10 @@
 #define P_ADAPTER_ID "aid"
 #define P_IN_ADAPTER_ID "id"
 #define P_ADAPTER_NAME "aname"
+#define P_ADAPTER_SOCKET "socket"
+#define P_ADAPTER_VERSION "aversion"
+#define P_ADAPTER_N_USERS "nusers"
+#define P_ADAPTER_N_FACILITIES "nfacs"
 
 #define P_FACILITY_ID "did"
 #define P_IN_FACILITY_ID "id"
@@ -58,6 +62,14 @@
 #define P_USER_GENDER "gender"
 #define P_USER_EMAIL "email"
 #define P_USER_PICTURE "imgurl"
+#define P_USER_ACCOUNTS "accounts"
+
+#define P_SERVICE "srv"
+#define P_SERVICE_NAME "name"
+#define P_SERVICE_ID "id"
+#define P_SERVICE_GOOGLE "google"
+#define P_SERVICE_FACEBOOK "facebook"
+#define P_SERVICE_BEEEON "beeeon"
 
 #define P_NOTIFICATION "notif"
 #define P_NOTIFICATION_ID "mid"
@@ -91,6 +103,7 @@
 #define R_DEVICES_ALL "alldevs"
 #define R_DEVICES "devs"
 #define R_ADAPTERS "adapters"
+#define R_GATEINFO "gateinfo"
 #define R_TIMEZONE "timezone"
 #define R_ROOM_CREATED "roomid"
 #define R_ROOMS "rooms"

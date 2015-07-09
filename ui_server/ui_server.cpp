@@ -14,6 +14,8 @@
 
 #include "SocketServer.h"
 #include "pugixml.hpp"
+#include "msgs/GateGetInfo.h"
+#include "msgs/MsgInSetAdapter.h"
 // uncoment if you want print debug reports
 //#define DEBUG 1
 
@@ -123,7 +125,25 @@ int main(int argc, char** argv)
         Logger::fatal()<< "DB error (soci), probably cant set connection, more:" << e.what()<< endl;
         return 1;
     }
-        
+ /*  
+    pugi::xml_document* doc = new pugi::xml_document();
+    pugi::xml_parse_result result = doc->load(
+"<com\n"
+"    ver=\"2.5\" \n"
+"    state=\"getgateinfo\" \n"
+"    bt=\"1026877\" \n"
+"    aid=\"9999\" \n"
+"    aname=\"Emil\" \n"
+//"    utc=\"5\"    \n"
+"/>"
+  );
+    
+    GateGetInfo msg(doc);
+    
+    cout << msg.createResponseMsgOut(); 
+    return 0;
+ */   
+    
 /*
         resolveMsg( "<?xml version='1.0' encoding='UTF-8' ?><com ver=\"2.5\" bt=\"9j6xC3Df9c\" state=\"getlog\" from=\"1431268648\" to=\"1431527848\" ftype=\"avg\" interval=\"600\" aid=\"52428\" did=\"7372\" dtype=\"10\"></com>");
         resolveMsg( "<?xml version='1.0' encoding='UTF-8' ?><com ver=\"2.5\" bt=\"9j6xC3Df9c\" state=\"getlog\" from=\"1431268648\" to=\"1431527848\" ftype=\"avg\" interval=\"600\" aid=\"52428\" did=\"7372\" dtype=\"10\"></com>");

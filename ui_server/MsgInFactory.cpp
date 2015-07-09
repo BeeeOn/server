@@ -40,7 +40,8 @@
 #include "msgs/MsgInGetUserInfo.h"
 #include "msgs/MsgInSignUp.h"
 #include "msgs/MsgInDelAdapter.h"
-
+#include "msgs/UserLogout.h"
+#include "msgs/GateGetInfo.h"
 
 
 MsgInFactory::MsgInFactory(void)
@@ -132,6 +133,10 @@ IMsgIn* MsgInFactory::createMsg(const char* msg)
         return new MsgInGetUserID(doc);
     if(state == MsgInGetUserInfo::state)
         return new MsgInGetUserInfo(doc);
+    if(state == UserLogout::state)
+        return new UserLogout(doc);
+    if(state == GateGetInfo::state)
+        return new GateGetInfo(doc);
    
     vector<string> algMsgs;
     algMsgs.push_back("addalg");

@@ -43,7 +43,6 @@ OBJECTFILES= \
 	${OBJECTDIR}/_ext/1360890531/DAORooms.o \
 	${OBJECTDIR}/_ext/1360890531/DAOUsers.o \
 	${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters.o \
-	${OBJECTDIR}/_ext/1360930230/pugixml.o \
 	${OBJECTDIR}/_ext/1154895860/Logger.o \
 	${OBJECTDIR}/Config.o \
 	${OBJECTDIR}/DBConnector.o \
@@ -55,6 +54,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/communication.o \
 	${OBJECTDIR}/fTokenChecker.o \
 	${OBJECTDIR}/gTokenChecker.o \
+	${OBJECTDIR}/msgs/GateGetInfo.o \
 	${OBJECTDIR}/msgs/IMsgIn.o \
 	${OBJECTDIR}/msgs/IMsgInLoginAndAdapterAccessRequired.o \
 	${OBJECTDIR}/msgs/IMsgInLoginRequired.o \
@@ -76,6 +76,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/msgs/MsgInGetAllDevices.o \
 	${OBJECTDIR}/msgs/MsgInGetConAccount.o \
 	${OBJECTDIR}/msgs/MsgInGetDevices.o \
+	${OBJECTDIR}/msgs/MsgInGetLog.o \
 	${OBJECTDIR}/msgs/MsgInGetNewDevices.o \
 	${OBJECTDIR}/msgs/MsgInGetNotifications.o \
 	${OBJECTDIR}/msgs/MsgInGetRooms.o \
@@ -84,7 +85,9 @@ OBJECTFILES= \
 	${OBJECTDIR}/msgs/MsgInGetUserInfo.o \
 	${OBJECTDIR}/msgs/MsgInGetViews.o \
 	${OBJECTDIR}/msgs/MsgInNotificationRead.o \
+	${OBJECTDIR}/msgs/MsgInSetAdapter.o \
 	${OBJECTDIR}/msgs/MsgInSetConAccount.o \
+	${OBJECTDIR}/msgs/MsgInSetDevices.o \
 	${OBJECTDIR}/msgs/MsgInSetGCMID.o \
 	${OBJECTDIR}/msgs/MsgInSetRooms.o \
 	${OBJECTDIR}/msgs/MsgInSetTimeZone.o \
@@ -93,6 +96,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/msgs/MsgInSwitch.o \
 	${OBJECTDIR}/msgs/MsgInUnknown.o \
 	${OBJECTDIR}/msgs/MsgInUpdateView.o \
+	${OBJECTDIR}/msgs/UserLogout.o \
+	${OBJECTDIR}/pugixml.o \
 	${OBJECTDIR}/save_custom_writer.o \
 	${OBJECTDIR}/sslServlet.o \
 	${OBJECTDIR}/ui_server.o
@@ -161,307 +166,332 @@ LDLIBSOPTIONS=-L/usr/local/lib -L/usr/local/lib64 -L/opt/centos/devtoolset-1.1/r
 ${OBJECTDIR}/_ext/1360890531/DAO.o: ../DAO/DAO.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAO.o ../DAO/DAO.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAO.o ../DAO/DAO.cpp
 
 ${OBJECTDIR}/_ext/1360890531/DAOAdapters.o: ../DAO/DAOAdapters.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOAdapters.o ../DAO/DAOAdapters.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOAdapters.o ../DAO/DAOAdapters.cpp
 
 ${OBJECTDIR}/_ext/1360890531/DAODevices.o: ../DAO/DAODevices.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAODevices.o ../DAO/DAODevices.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAODevices.o ../DAO/DAODevices.cpp
 
 ${OBJECTDIR}/_ext/1360890531/DAOMobileDevices.o: ../DAO/DAOMobileDevices.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOMobileDevices.o ../DAO/DAOMobileDevices.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOMobileDevices.o ../DAO/DAOMobileDevices.cpp
 
 ${OBJECTDIR}/_ext/1360890531/DAONotification.o: ../DAO/DAONotification.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAONotification.o ../DAO/DAONotification.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAONotification.o ../DAO/DAONotification.cpp
 
 ${OBJECTDIR}/_ext/1360890531/DAORooms.o: ../DAO/DAORooms.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAORooms.o ../DAO/DAORooms.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAORooms.o ../DAO/DAORooms.cpp
 
 ${OBJECTDIR}/_ext/1360890531/DAOUsers.o: ../DAO/DAOUsers.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOUsers.o ../DAO/DAOUsers.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOUsers.o ../DAO/DAOUsers.cpp
 
 ${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters.o: ../DAO/DAOUsersAdapters.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters.o ../DAO/DAOUsersAdapters.cpp
-
-${OBJECTDIR}/_ext/1360930230/pugixml.o: ../lib/pugixml.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1360930230
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360930230/pugixml.o ../lib/pugixml.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters.o ../DAO/DAOUsersAdapters.cpp
 
 ${OBJECTDIR}/_ext/1154895860/Logger.o: ../ui_logger/Logger.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1154895860
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1154895860/Logger.o ../ui_logger/Logger.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1154895860/Logger.o ../ui_logger/Logger.cpp
 
 ${OBJECTDIR}/Config.o: Config.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Config.o Config.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Config.o Config.cpp
 
 ${OBJECTDIR}/DBConnector.o: DBConnector.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/DBConnector.o DBConnector.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/DBConnector.o DBConnector.cpp
 
 ${OBJECTDIR}/MsgInFactory.o: MsgInFactory.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInFactory.o MsgInFactory.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInFactory.o MsgInFactory.cpp
 
 ${OBJECTDIR}/MsgRightsChecker.o: MsgRightsChecker.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgRightsChecker.o MsgRightsChecker.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgRightsChecker.o MsgRightsChecker.cpp
 
 ${OBJECTDIR}/ServerException.o: ServerException.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/ServerException.o ServerException.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/ServerException.o ServerException.cpp
 
 ${OBJECTDIR}/SocketClient.o: SocketClient.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/SocketClient.o SocketClient.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/SocketClient.o SocketClient.cpp
 
 ${OBJECTDIR}/SocketServer.o: SocketServer.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/SocketServer.o SocketServer.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/SocketServer.o SocketServer.cpp
 
 ${OBJECTDIR}/communication.o: communication.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/communication.o communication.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/communication.o communication.cpp
 
 ${OBJECTDIR}/fTokenChecker.o: fTokenChecker.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/fTokenChecker.o fTokenChecker.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/fTokenChecker.o fTokenChecker.cpp
 
 ${OBJECTDIR}/gTokenChecker.o: gTokenChecker.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/gTokenChecker.o gTokenChecker.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/gTokenChecker.o gTokenChecker.cpp
+
+${OBJECTDIR}/msgs/GateGetInfo.o: msgs/GateGetInfo.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/GateGetInfo.o msgs/GateGetInfo.cpp
 
 ${OBJECTDIR}/msgs/IMsgIn.o: msgs/IMsgIn.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/IMsgIn.o msgs/IMsgIn.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/IMsgIn.o msgs/IMsgIn.cpp
 
 ${OBJECTDIR}/msgs/IMsgInLoginAndAdapterAccessRequired.o: msgs/IMsgInLoginAndAdapterAccessRequired.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/IMsgInLoginAndAdapterAccessRequired.o msgs/IMsgInLoginAndAdapterAccessRequired.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/IMsgInLoginAndAdapterAccessRequired.o msgs/IMsgInLoginAndAdapterAccessRequired.cpp
 
 ${OBJECTDIR}/msgs/IMsgInLoginRequired.o: msgs/IMsgInLoginRequired.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/IMsgInLoginRequired.o msgs/IMsgInLoginRequired.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/IMsgInLoginRequired.o msgs/IMsgInLoginRequired.cpp
 
 ${OBJECTDIR}/msgs/IMsgInLoginUnwanted.o: msgs/IMsgInLoginUnwanted.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/IMsgInLoginUnwanted.o msgs/IMsgInLoginUnwanted.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/IMsgInLoginUnwanted.o msgs/IMsgInLoginUnwanted.cpp
 
 ${OBJECTDIR}/msgs/MsgInAdapterListen.o: msgs/MsgInAdapterListen.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAdapterListen.o msgs/MsgInAdapterListen.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAdapterListen.o msgs/MsgInAdapterListen.cpp
 
 ${OBJECTDIR}/msgs/MsgInAddAccount.o: msgs/MsgInAddAccount.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAddAccount.o msgs/MsgInAddAccount.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAddAccount.o msgs/MsgInAddAccount.cpp
 
 ${OBJECTDIR}/msgs/MsgInAddAdapter.o: msgs/MsgInAddAdapter.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAddAdapter.o msgs/MsgInAddAdapter.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAddAdapter.o msgs/MsgInAddAdapter.cpp
 
 ${OBJECTDIR}/msgs/MsgInAddRoom.o: msgs/MsgInAddRoom.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAddRoom.o msgs/MsgInAddRoom.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAddRoom.o msgs/MsgInAddRoom.cpp
 
 ${OBJECTDIR}/msgs/MsgInAddView.o: msgs/MsgInAddView.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAddView.o msgs/MsgInAddView.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAddView.o msgs/MsgInAddView.cpp
 
 ${OBJECTDIR}/msgs/MsgInAlgorithmsRedirect.o: msgs/MsgInAlgorithmsRedirect.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAlgorithmsRedirect.o msgs/MsgInAlgorithmsRedirect.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAlgorithmsRedirect.o msgs/MsgInAlgorithmsRedirect.cpp
 
 ${OBJECTDIR}/msgs/MsgInDelAdapter.o: msgs/MsgInDelAdapter.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelAdapter.o msgs/MsgInDelAdapter.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelAdapter.o msgs/MsgInDelAdapter.cpp
 
 ${OBJECTDIR}/msgs/MsgInDelConAccount.o: msgs/MsgInDelConAccount.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelConAccount.o msgs/MsgInDelConAccount.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelConAccount.o msgs/MsgInDelConAccount.cpp
 
 ${OBJECTDIR}/msgs/MsgInDelDevice.o: msgs/MsgInDelDevice.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelDevice.o msgs/MsgInDelDevice.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelDevice.o msgs/MsgInDelDevice.cpp
 
 ${OBJECTDIR}/msgs/MsgInDelGCMID.o: msgs/MsgInDelGCMID.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelGCMID.o msgs/MsgInDelGCMID.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelGCMID.o msgs/MsgInDelGCMID.cpp
 
 ${OBJECTDIR}/msgs/MsgInDelRoom.o: msgs/MsgInDelRoom.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelRoom.o msgs/MsgInDelRoom.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelRoom.o msgs/MsgInDelRoom.cpp
 
 ${OBJECTDIR}/msgs/MsgInDelView.o: msgs/MsgInDelView.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelView.o msgs/MsgInDelView.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelView.o msgs/MsgInDelView.cpp
 
 ${OBJECTDIR}/msgs/MsgInGamificationRedirect.o: msgs/MsgInGamificationRedirect.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGamificationRedirect.o msgs/MsgInGamificationRedirect.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGamificationRedirect.o msgs/MsgInGamificationRedirect.cpp
 
 ${OBJECTDIR}/msgs/MsgInGetAdapters.o: msgs/MsgInGetAdapters.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetAdapters.o msgs/MsgInGetAdapters.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetAdapters.o msgs/MsgInGetAdapters.cpp
 
 ${OBJECTDIR}/msgs/MsgInGetAllDevices.o: msgs/MsgInGetAllDevices.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetAllDevices.o msgs/MsgInGetAllDevices.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetAllDevices.o msgs/MsgInGetAllDevices.cpp
 
 ${OBJECTDIR}/msgs/MsgInGetConAccount.o: msgs/MsgInGetConAccount.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetConAccount.o msgs/MsgInGetConAccount.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetConAccount.o msgs/MsgInGetConAccount.cpp
 
 ${OBJECTDIR}/msgs/MsgInGetDevices.o: msgs/MsgInGetDevices.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetDevices.o msgs/MsgInGetDevices.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetDevices.o msgs/MsgInGetDevices.cpp
+
+${OBJECTDIR}/msgs/MsgInGetLog.o: msgs/MsgInGetLog.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetLog.o msgs/MsgInGetLog.cpp
 
 ${OBJECTDIR}/msgs/MsgInGetNewDevices.o: msgs/MsgInGetNewDevices.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetNewDevices.o msgs/MsgInGetNewDevices.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetNewDevices.o msgs/MsgInGetNewDevices.cpp
 
 ${OBJECTDIR}/msgs/MsgInGetNotifications.o: msgs/MsgInGetNotifications.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetNotifications.o msgs/MsgInGetNotifications.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetNotifications.o msgs/MsgInGetNotifications.cpp
 
 ${OBJECTDIR}/msgs/MsgInGetRooms.o: msgs/MsgInGetRooms.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetRooms.o msgs/MsgInGetRooms.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetRooms.o msgs/MsgInGetRooms.cpp
 
 ${OBJECTDIR}/msgs/MsgInGetTimeZone.o: msgs/MsgInGetTimeZone.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetTimeZone.o msgs/MsgInGetTimeZone.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetTimeZone.o msgs/MsgInGetTimeZone.cpp
 
 ${OBJECTDIR}/msgs/MsgInGetUserID.o: msgs/MsgInGetUserID.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetUserID.o msgs/MsgInGetUserID.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetUserID.o msgs/MsgInGetUserID.cpp
 
 ${OBJECTDIR}/msgs/MsgInGetUserInfo.o: msgs/MsgInGetUserInfo.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetUserInfo.o msgs/MsgInGetUserInfo.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetUserInfo.o msgs/MsgInGetUserInfo.cpp
 
 ${OBJECTDIR}/msgs/MsgInGetViews.o: msgs/MsgInGetViews.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetViews.o msgs/MsgInGetViews.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetViews.o msgs/MsgInGetViews.cpp
 
 ${OBJECTDIR}/msgs/MsgInNotificationRead.o: msgs/MsgInNotificationRead.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInNotificationRead.o msgs/MsgInNotificationRead.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInNotificationRead.o msgs/MsgInNotificationRead.cpp
+
+${OBJECTDIR}/msgs/MsgInSetAdapter.o: msgs/MsgInSetAdapter.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSetAdapter.o msgs/MsgInSetAdapter.cpp
 
 ${OBJECTDIR}/msgs/MsgInSetConAccount.o: msgs/MsgInSetConAccount.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSetConAccount.o msgs/MsgInSetConAccount.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSetConAccount.o msgs/MsgInSetConAccount.cpp
+
+${OBJECTDIR}/msgs/MsgInSetDevices.o: msgs/MsgInSetDevices.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSetDevices.o msgs/MsgInSetDevices.cpp
 
 ${OBJECTDIR}/msgs/MsgInSetGCMID.o: msgs/MsgInSetGCMID.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSetGCMID.o msgs/MsgInSetGCMID.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSetGCMID.o msgs/MsgInSetGCMID.cpp
 
 ${OBJECTDIR}/msgs/MsgInSetRooms.o: msgs/MsgInSetRooms.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSetRooms.o msgs/MsgInSetRooms.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSetRooms.o msgs/MsgInSetRooms.cpp
 
 ${OBJECTDIR}/msgs/MsgInSetTimeZone.o: msgs/MsgInSetTimeZone.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSetTimeZone.o msgs/MsgInSetTimeZone.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSetTimeZone.o msgs/MsgInSetTimeZone.cpp
 
 ${OBJECTDIR}/msgs/MsgInSignMe.o: msgs/MsgInSignMe.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSignMe.o msgs/MsgInSignMe.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSignMe.o msgs/MsgInSignMe.cpp
 
 ${OBJECTDIR}/msgs/MsgInSignUp.o: msgs/MsgInSignUp.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSignUp.o msgs/MsgInSignUp.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSignUp.o msgs/MsgInSignUp.cpp
 
 ${OBJECTDIR}/msgs/MsgInSwitch.o: msgs/MsgInSwitch.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSwitch.o msgs/MsgInSwitch.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSwitch.o msgs/MsgInSwitch.cpp
 
 ${OBJECTDIR}/msgs/MsgInUnknown.o: msgs/MsgInUnknown.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInUnknown.o msgs/MsgInUnknown.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInUnknown.o msgs/MsgInUnknown.cpp
 
 ${OBJECTDIR}/msgs/MsgInUpdateView.o: msgs/MsgInUpdateView.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInUpdateView.o msgs/MsgInUpdateView.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInUpdateView.o msgs/MsgInUpdateView.cpp
+
+${OBJECTDIR}/msgs/UserLogout.o: msgs/UserLogout.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/UserLogout.o msgs/UserLogout.cpp
+
+${OBJECTDIR}/pugixml.o: pugixml.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/pugixml.o pugixml.cpp
 
 ${OBJECTDIR}/save_custom_writer.o: save_custom_writer.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/save_custom_writer.o save_custom_writer.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/save_custom_writer.o save_custom_writer.cpp
 
 ${OBJECTDIR}/sslServlet.o: sslServlet.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/sslServlet.o sslServlet.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/sslServlet.o sslServlet.cpp
 
 ${OBJECTDIR}/ui_server.o: ui_server.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/ui_server.o ui_server.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/ui_server.o ui_server.cpp
 
 # Subprojects
 .build-subprojects:
@@ -601,7 +631,7 @@ ${OBJECTDIR}/_ext/1360890531/DAO_nomain.o: ${OBJECTDIR}/_ext/1360890531/DAO.o ..
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAO_nomain.o ../DAO/DAO.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAO_nomain.o ../DAO/DAO.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/_ext/1360890531/DAO.o ${OBJECTDIR}/_ext/1360890531/DAO_nomain.o;\
 	fi
@@ -614,7 +644,7 @@ ${OBJECTDIR}/_ext/1360890531/DAOAdapters_nomain.o: ${OBJECTDIR}/_ext/1360890531/
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOAdapters_nomain.o ../DAO/DAOAdapters.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOAdapters_nomain.o ../DAO/DAOAdapters.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/_ext/1360890531/DAOAdapters.o ${OBJECTDIR}/_ext/1360890531/DAOAdapters_nomain.o;\
 	fi
@@ -627,7 +657,7 @@ ${OBJECTDIR}/_ext/1360890531/DAODevices_nomain.o: ${OBJECTDIR}/_ext/1360890531/D
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAODevices_nomain.o ../DAO/DAODevices.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAODevices_nomain.o ../DAO/DAODevices.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/_ext/1360890531/DAODevices.o ${OBJECTDIR}/_ext/1360890531/DAODevices_nomain.o;\
 	fi
@@ -640,7 +670,7 @@ ${OBJECTDIR}/_ext/1360890531/DAOMobileDevices_nomain.o: ${OBJECTDIR}/_ext/136089
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOMobileDevices_nomain.o ../DAO/DAOMobileDevices.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOMobileDevices_nomain.o ../DAO/DAOMobileDevices.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/_ext/1360890531/DAOMobileDevices.o ${OBJECTDIR}/_ext/1360890531/DAOMobileDevices_nomain.o;\
 	fi
@@ -653,7 +683,7 @@ ${OBJECTDIR}/_ext/1360890531/DAONotification_nomain.o: ${OBJECTDIR}/_ext/1360890
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAONotification_nomain.o ../DAO/DAONotification.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAONotification_nomain.o ../DAO/DAONotification.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/_ext/1360890531/DAONotification.o ${OBJECTDIR}/_ext/1360890531/DAONotification_nomain.o;\
 	fi
@@ -666,7 +696,7 @@ ${OBJECTDIR}/_ext/1360890531/DAORooms_nomain.o: ${OBJECTDIR}/_ext/1360890531/DAO
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAORooms_nomain.o ../DAO/DAORooms.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAORooms_nomain.o ../DAO/DAORooms.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/_ext/1360890531/DAORooms.o ${OBJECTDIR}/_ext/1360890531/DAORooms_nomain.o;\
 	fi
@@ -679,7 +709,7 @@ ${OBJECTDIR}/_ext/1360890531/DAOUsers_nomain.o: ${OBJECTDIR}/_ext/1360890531/DAO
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOUsers_nomain.o ../DAO/DAOUsers.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOUsers_nomain.o ../DAO/DAOUsers.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/_ext/1360890531/DAOUsers.o ${OBJECTDIR}/_ext/1360890531/DAOUsers_nomain.o;\
 	fi
@@ -692,22 +722,9 @@ ${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters_nomain.o: ${OBJECTDIR}/_ext/136089
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters_nomain.o ../DAO/DAOUsersAdapters.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters_nomain.o ../DAO/DAOUsersAdapters.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters.o ${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters_nomain.o;\
-	fi
-
-${OBJECTDIR}/_ext/1360930230/pugixml_nomain.o: ${OBJECTDIR}/_ext/1360930230/pugixml.o ../lib/pugixml.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1360930230
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/_ext/1360930230/pugixml.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360930230/pugixml_nomain.o ../lib/pugixml.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/_ext/1360930230/pugixml.o ${OBJECTDIR}/_ext/1360930230/pugixml_nomain.o;\
 	fi
 
 ${OBJECTDIR}/_ext/1154895860/Logger_nomain.o: ${OBJECTDIR}/_ext/1154895860/Logger.o ../ui_logger/Logger.cpp 
@@ -718,7 +735,7 @@ ${OBJECTDIR}/_ext/1154895860/Logger_nomain.o: ${OBJECTDIR}/_ext/1154895860/Logge
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1154895860/Logger_nomain.o ../ui_logger/Logger.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1154895860/Logger_nomain.o ../ui_logger/Logger.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/_ext/1154895860/Logger.o ${OBJECTDIR}/_ext/1154895860/Logger_nomain.o;\
 	fi
@@ -731,7 +748,7 @@ ${OBJECTDIR}/Config_nomain.o: ${OBJECTDIR}/Config.o Config.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Config_nomain.o Config.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Config_nomain.o Config.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/Config.o ${OBJECTDIR}/Config_nomain.o;\
 	fi
@@ -744,7 +761,7 @@ ${OBJECTDIR}/DBConnector_nomain.o: ${OBJECTDIR}/DBConnector.o DBConnector.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/DBConnector_nomain.o DBConnector.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/DBConnector_nomain.o DBConnector.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/DBConnector.o ${OBJECTDIR}/DBConnector_nomain.o;\
 	fi
@@ -757,7 +774,7 @@ ${OBJECTDIR}/MsgInFactory_nomain.o: ${OBJECTDIR}/MsgInFactory.o MsgInFactory.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInFactory_nomain.o MsgInFactory.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgInFactory_nomain.o MsgInFactory.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/MsgInFactory.o ${OBJECTDIR}/MsgInFactory_nomain.o;\
 	fi
@@ -770,7 +787,7 @@ ${OBJECTDIR}/MsgRightsChecker_nomain.o: ${OBJECTDIR}/MsgRightsChecker.o MsgRight
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgRightsChecker_nomain.o MsgRightsChecker.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MsgRightsChecker_nomain.o MsgRightsChecker.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/MsgRightsChecker.o ${OBJECTDIR}/MsgRightsChecker_nomain.o;\
 	fi
@@ -783,7 +800,7 @@ ${OBJECTDIR}/ServerException_nomain.o: ${OBJECTDIR}/ServerException.o ServerExce
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/ServerException_nomain.o ServerException.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/ServerException_nomain.o ServerException.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/ServerException.o ${OBJECTDIR}/ServerException_nomain.o;\
 	fi
@@ -796,7 +813,7 @@ ${OBJECTDIR}/SocketClient_nomain.o: ${OBJECTDIR}/SocketClient.o SocketClient.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/SocketClient_nomain.o SocketClient.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/SocketClient_nomain.o SocketClient.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/SocketClient.o ${OBJECTDIR}/SocketClient_nomain.o;\
 	fi
@@ -809,7 +826,7 @@ ${OBJECTDIR}/SocketServer_nomain.o: ${OBJECTDIR}/SocketServer.o SocketServer.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/SocketServer_nomain.o SocketServer.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/SocketServer_nomain.o SocketServer.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/SocketServer.o ${OBJECTDIR}/SocketServer_nomain.o;\
 	fi
@@ -822,7 +839,7 @@ ${OBJECTDIR}/communication_nomain.o: ${OBJECTDIR}/communication.o communication.
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/communication_nomain.o communication.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/communication_nomain.o communication.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/communication.o ${OBJECTDIR}/communication_nomain.o;\
 	fi
@@ -835,7 +852,7 @@ ${OBJECTDIR}/fTokenChecker_nomain.o: ${OBJECTDIR}/fTokenChecker.o fTokenChecker.
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/fTokenChecker_nomain.o fTokenChecker.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/fTokenChecker_nomain.o fTokenChecker.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/fTokenChecker.o ${OBJECTDIR}/fTokenChecker_nomain.o;\
 	fi
@@ -848,9 +865,22 @@ ${OBJECTDIR}/gTokenChecker_nomain.o: ${OBJECTDIR}/gTokenChecker.o gTokenChecker.
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/gTokenChecker_nomain.o gTokenChecker.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/gTokenChecker_nomain.o gTokenChecker.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/gTokenChecker.o ${OBJECTDIR}/gTokenChecker_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/GateGetInfo_nomain.o: ${OBJECTDIR}/msgs/GateGetInfo.o msgs/GateGetInfo.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/GateGetInfo.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/GateGetInfo_nomain.o msgs/GateGetInfo.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/GateGetInfo.o ${OBJECTDIR}/msgs/GateGetInfo_nomain.o;\
 	fi
 
 ${OBJECTDIR}/msgs/IMsgIn_nomain.o: ${OBJECTDIR}/msgs/IMsgIn.o msgs/IMsgIn.cpp 
@@ -861,7 +891,7 @@ ${OBJECTDIR}/msgs/IMsgIn_nomain.o: ${OBJECTDIR}/msgs/IMsgIn.o msgs/IMsgIn.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/IMsgIn_nomain.o msgs/IMsgIn.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/IMsgIn_nomain.o msgs/IMsgIn.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/IMsgIn.o ${OBJECTDIR}/msgs/IMsgIn_nomain.o;\
 	fi
@@ -874,7 +904,7 @@ ${OBJECTDIR}/msgs/IMsgInLoginAndAdapterAccessRequired_nomain.o: ${OBJECTDIR}/msg
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/IMsgInLoginAndAdapterAccessRequired_nomain.o msgs/IMsgInLoginAndAdapterAccessRequired.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/IMsgInLoginAndAdapterAccessRequired_nomain.o msgs/IMsgInLoginAndAdapterAccessRequired.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/IMsgInLoginAndAdapterAccessRequired.o ${OBJECTDIR}/msgs/IMsgInLoginAndAdapterAccessRequired_nomain.o;\
 	fi
@@ -887,7 +917,7 @@ ${OBJECTDIR}/msgs/IMsgInLoginRequired_nomain.o: ${OBJECTDIR}/msgs/IMsgInLoginReq
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/IMsgInLoginRequired_nomain.o msgs/IMsgInLoginRequired.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/IMsgInLoginRequired_nomain.o msgs/IMsgInLoginRequired.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/IMsgInLoginRequired.o ${OBJECTDIR}/msgs/IMsgInLoginRequired_nomain.o;\
 	fi
@@ -900,7 +930,7 @@ ${OBJECTDIR}/msgs/IMsgInLoginUnwanted_nomain.o: ${OBJECTDIR}/msgs/IMsgInLoginUnw
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/IMsgInLoginUnwanted_nomain.o msgs/IMsgInLoginUnwanted.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/IMsgInLoginUnwanted_nomain.o msgs/IMsgInLoginUnwanted.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/IMsgInLoginUnwanted.o ${OBJECTDIR}/msgs/IMsgInLoginUnwanted_nomain.o;\
 	fi
@@ -913,7 +943,7 @@ ${OBJECTDIR}/msgs/MsgInAdapterListen_nomain.o: ${OBJECTDIR}/msgs/MsgInAdapterLis
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAdapterListen_nomain.o msgs/MsgInAdapterListen.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAdapterListen_nomain.o msgs/MsgInAdapterListen.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInAdapterListen.o ${OBJECTDIR}/msgs/MsgInAdapterListen_nomain.o;\
 	fi
@@ -926,7 +956,7 @@ ${OBJECTDIR}/msgs/MsgInAddAccount_nomain.o: ${OBJECTDIR}/msgs/MsgInAddAccount.o 
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAddAccount_nomain.o msgs/MsgInAddAccount.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAddAccount_nomain.o msgs/MsgInAddAccount.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInAddAccount.o ${OBJECTDIR}/msgs/MsgInAddAccount_nomain.o;\
 	fi
@@ -939,7 +969,7 @@ ${OBJECTDIR}/msgs/MsgInAddAdapter_nomain.o: ${OBJECTDIR}/msgs/MsgInAddAdapter.o 
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAddAdapter_nomain.o msgs/MsgInAddAdapter.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAddAdapter_nomain.o msgs/MsgInAddAdapter.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInAddAdapter.o ${OBJECTDIR}/msgs/MsgInAddAdapter_nomain.o;\
 	fi
@@ -952,7 +982,7 @@ ${OBJECTDIR}/msgs/MsgInAddRoom_nomain.o: ${OBJECTDIR}/msgs/MsgInAddRoom.o msgs/M
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAddRoom_nomain.o msgs/MsgInAddRoom.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAddRoom_nomain.o msgs/MsgInAddRoom.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInAddRoom.o ${OBJECTDIR}/msgs/MsgInAddRoom_nomain.o;\
 	fi
@@ -965,7 +995,7 @@ ${OBJECTDIR}/msgs/MsgInAddView_nomain.o: ${OBJECTDIR}/msgs/MsgInAddView.o msgs/M
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAddView_nomain.o msgs/MsgInAddView.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAddView_nomain.o msgs/MsgInAddView.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInAddView.o ${OBJECTDIR}/msgs/MsgInAddView_nomain.o;\
 	fi
@@ -978,7 +1008,7 @@ ${OBJECTDIR}/msgs/MsgInAlgorithmsRedirect_nomain.o: ${OBJECTDIR}/msgs/MsgInAlgor
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAlgorithmsRedirect_nomain.o msgs/MsgInAlgorithmsRedirect.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAlgorithmsRedirect_nomain.o msgs/MsgInAlgorithmsRedirect.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInAlgorithmsRedirect.o ${OBJECTDIR}/msgs/MsgInAlgorithmsRedirect_nomain.o;\
 	fi
@@ -991,7 +1021,7 @@ ${OBJECTDIR}/msgs/MsgInDelAdapter_nomain.o: ${OBJECTDIR}/msgs/MsgInDelAdapter.o 
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelAdapter_nomain.o msgs/MsgInDelAdapter.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelAdapter_nomain.o msgs/MsgInDelAdapter.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInDelAdapter.o ${OBJECTDIR}/msgs/MsgInDelAdapter_nomain.o;\
 	fi
@@ -1004,7 +1034,7 @@ ${OBJECTDIR}/msgs/MsgInDelConAccount_nomain.o: ${OBJECTDIR}/msgs/MsgInDelConAcco
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelConAccount_nomain.o msgs/MsgInDelConAccount.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelConAccount_nomain.o msgs/MsgInDelConAccount.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInDelConAccount.o ${OBJECTDIR}/msgs/MsgInDelConAccount_nomain.o;\
 	fi
@@ -1017,7 +1047,7 @@ ${OBJECTDIR}/msgs/MsgInDelDevice_nomain.o: ${OBJECTDIR}/msgs/MsgInDelDevice.o ms
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelDevice_nomain.o msgs/MsgInDelDevice.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelDevice_nomain.o msgs/MsgInDelDevice.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInDelDevice.o ${OBJECTDIR}/msgs/MsgInDelDevice_nomain.o;\
 	fi
@@ -1030,7 +1060,7 @@ ${OBJECTDIR}/msgs/MsgInDelGCMID_nomain.o: ${OBJECTDIR}/msgs/MsgInDelGCMID.o msgs
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelGCMID_nomain.o msgs/MsgInDelGCMID.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelGCMID_nomain.o msgs/MsgInDelGCMID.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInDelGCMID.o ${OBJECTDIR}/msgs/MsgInDelGCMID_nomain.o;\
 	fi
@@ -1043,7 +1073,7 @@ ${OBJECTDIR}/msgs/MsgInDelRoom_nomain.o: ${OBJECTDIR}/msgs/MsgInDelRoom.o msgs/M
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelRoom_nomain.o msgs/MsgInDelRoom.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelRoom_nomain.o msgs/MsgInDelRoom.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInDelRoom.o ${OBJECTDIR}/msgs/MsgInDelRoom_nomain.o;\
 	fi
@@ -1056,7 +1086,7 @@ ${OBJECTDIR}/msgs/MsgInDelView_nomain.o: ${OBJECTDIR}/msgs/MsgInDelView.o msgs/M
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelView_nomain.o msgs/MsgInDelView.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelView_nomain.o msgs/MsgInDelView.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInDelView.o ${OBJECTDIR}/msgs/MsgInDelView_nomain.o;\
 	fi
@@ -1069,7 +1099,7 @@ ${OBJECTDIR}/msgs/MsgInGamificationRedirect_nomain.o: ${OBJECTDIR}/msgs/MsgInGam
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGamificationRedirect_nomain.o msgs/MsgInGamificationRedirect.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGamificationRedirect_nomain.o msgs/MsgInGamificationRedirect.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInGamificationRedirect.o ${OBJECTDIR}/msgs/MsgInGamificationRedirect_nomain.o;\
 	fi
@@ -1082,7 +1112,7 @@ ${OBJECTDIR}/msgs/MsgInGetAdapters_nomain.o: ${OBJECTDIR}/msgs/MsgInGetAdapters.
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetAdapters_nomain.o msgs/MsgInGetAdapters.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetAdapters_nomain.o msgs/MsgInGetAdapters.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInGetAdapters.o ${OBJECTDIR}/msgs/MsgInGetAdapters_nomain.o;\
 	fi
@@ -1095,7 +1125,7 @@ ${OBJECTDIR}/msgs/MsgInGetAllDevices_nomain.o: ${OBJECTDIR}/msgs/MsgInGetAllDevi
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetAllDevices_nomain.o msgs/MsgInGetAllDevices.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetAllDevices_nomain.o msgs/MsgInGetAllDevices.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInGetAllDevices.o ${OBJECTDIR}/msgs/MsgInGetAllDevices_nomain.o;\
 	fi
@@ -1108,7 +1138,7 @@ ${OBJECTDIR}/msgs/MsgInGetConAccount_nomain.o: ${OBJECTDIR}/msgs/MsgInGetConAcco
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetConAccount_nomain.o msgs/MsgInGetConAccount.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetConAccount_nomain.o msgs/MsgInGetConAccount.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInGetConAccount.o ${OBJECTDIR}/msgs/MsgInGetConAccount_nomain.o;\
 	fi
@@ -1121,9 +1151,22 @@ ${OBJECTDIR}/msgs/MsgInGetDevices_nomain.o: ${OBJECTDIR}/msgs/MsgInGetDevices.o 
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetDevices_nomain.o msgs/MsgInGetDevices.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetDevices_nomain.o msgs/MsgInGetDevices.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInGetDevices.o ${OBJECTDIR}/msgs/MsgInGetDevices_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInGetLog_nomain.o: ${OBJECTDIR}/msgs/MsgInGetLog.o msgs/MsgInGetLog.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInGetLog.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetLog_nomain.o msgs/MsgInGetLog.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInGetLog.o ${OBJECTDIR}/msgs/MsgInGetLog_nomain.o;\
 	fi
 
 ${OBJECTDIR}/msgs/MsgInGetNewDevices_nomain.o: ${OBJECTDIR}/msgs/MsgInGetNewDevices.o msgs/MsgInGetNewDevices.cpp 
@@ -1134,7 +1177,7 @@ ${OBJECTDIR}/msgs/MsgInGetNewDevices_nomain.o: ${OBJECTDIR}/msgs/MsgInGetNewDevi
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetNewDevices_nomain.o msgs/MsgInGetNewDevices.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetNewDevices_nomain.o msgs/MsgInGetNewDevices.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInGetNewDevices.o ${OBJECTDIR}/msgs/MsgInGetNewDevices_nomain.o;\
 	fi
@@ -1147,7 +1190,7 @@ ${OBJECTDIR}/msgs/MsgInGetNotifications_nomain.o: ${OBJECTDIR}/msgs/MsgInGetNoti
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetNotifications_nomain.o msgs/MsgInGetNotifications.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetNotifications_nomain.o msgs/MsgInGetNotifications.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInGetNotifications.o ${OBJECTDIR}/msgs/MsgInGetNotifications_nomain.o;\
 	fi
@@ -1160,7 +1203,7 @@ ${OBJECTDIR}/msgs/MsgInGetRooms_nomain.o: ${OBJECTDIR}/msgs/MsgInGetRooms.o msgs
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetRooms_nomain.o msgs/MsgInGetRooms.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetRooms_nomain.o msgs/MsgInGetRooms.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInGetRooms.o ${OBJECTDIR}/msgs/MsgInGetRooms_nomain.o;\
 	fi
@@ -1173,7 +1216,7 @@ ${OBJECTDIR}/msgs/MsgInGetTimeZone_nomain.o: ${OBJECTDIR}/msgs/MsgInGetTimeZone.
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetTimeZone_nomain.o msgs/MsgInGetTimeZone.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetTimeZone_nomain.o msgs/MsgInGetTimeZone.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInGetTimeZone.o ${OBJECTDIR}/msgs/MsgInGetTimeZone_nomain.o;\
 	fi
@@ -1186,7 +1229,7 @@ ${OBJECTDIR}/msgs/MsgInGetUserID_nomain.o: ${OBJECTDIR}/msgs/MsgInGetUserID.o ms
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetUserID_nomain.o msgs/MsgInGetUserID.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetUserID_nomain.o msgs/MsgInGetUserID.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInGetUserID.o ${OBJECTDIR}/msgs/MsgInGetUserID_nomain.o;\
 	fi
@@ -1199,7 +1242,7 @@ ${OBJECTDIR}/msgs/MsgInGetUserInfo_nomain.o: ${OBJECTDIR}/msgs/MsgInGetUserInfo.
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetUserInfo_nomain.o msgs/MsgInGetUserInfo.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetUserInfo_nomain.o msgs/MsgInGetUserInfo.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInGetUserInfo.o ${OBJECTDIR}/msgs/MsgInGetUserInfo_nomain.o;\
 	fi
@@ -1212,7 +1255,7 @@ ${OBJECTDIR}/msgs/MsgInGetViews_nomain.o: ${OBJECTDIR}/msgs/MsgInGetViews.o msgs
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetViews_nomain.o msgs/MsgInGetViews.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetViews_nomain.o msgs/MsgInGetViews.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInGetViews.o ${OBJECTDIR}/msgs/MsgInGetViews_nomain.o;\
 	fi
@@ -1225,9 +1268,22 @@ ${OBJECTDIR}/msgs/MsgInNotificationRead_nomain.o: ${OBJECTDIR}/msgs/MsgInNotific
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInNotificationRead_nomain.o msgs/MsgInNotificationRead.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInNotificationRead_nomain.o msgs/MsgInNotificationRead.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInNotificationRead.o ${OBJECTDIR}/msgs/MsgInNotificationRead_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInSetAdapter_nomain.o: ${OBJECTDIR}/msgs/MsgInSetAdapter.o msgs/MsgInSetAdapter.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInSetAdapter.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSetAdapter_nomain.o msgs/MsgInSetAdapter.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInSetAdapter.o ${OBJECTDIR}/msgs/MsgInSetAdapter_nomain.o;\
 	fi
 
 ${OBJECTDIR}/msgs/MsgInSetConAccount_nomain.o: ${OBJECTDIR}/msgs/MsgInSetConAccount.o msgs/MsgInSetConAccount.cpp 
@@ -1238,9 +1294,22 @@ ${OBJECTDIR}/msgs/MsgInSetConAccount_nomain.o: ${OBJECTDIR}/msgs/MsgInSetConAcco
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSetConAccount_nomain.o msgs/MsgInSetConAccount.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSetConAccount_nomain.o msgs/MsgInSetConAccount.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInSetConAccount.o ${OBJECTDIR}/msgs/MsgInSetConAccount_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/MsgInSetDevices_nomain.o: ${OBJECTDIR}/msgs/MsgInSetDevices.o msgs/MsgInSetDevices.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInSetDevices.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSetDevices_nomain.o msgs/MsgInSetDevices.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/MsgInSetDevices.o ${OBJECTDIR}/msgs/MsgInSetDevices_nomain.o;\
 	fi
 
 ${OBJECTDIR}/msgs/MsgInSetGCMID_nomain.o: ${OBJECTDIR}/msgs/MsgInSetGCMID.o msgs/MsgInSetGCMID.cpp 
@@ -1251,7 +1320,7 @@ ${OBJECTDIR}/msgs/MsgInSetGCMID_nomain.o: ${OBJECTDIR}/msgs/MsgInSetGCMID.o msgs
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSetGCMID_nomain.o msgs/MsgInSetGCMID.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSetGCMID_nomain.o msgs/MsgInSetGCMID.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInSetGCMID.o ${OBJECTDIR}/msgs/MsgInSetGCMID_nomain.o;\
 	fi
@@ -1264,7 +1333,7 @@ ${OBJECTDIR}/msgs/MsgInSetRooms_nomain.o: ${OBJECTDIR}/msgs/MsgInSetRooms.o msgs
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSetRooms_nomain.o msgs/MsgInSetRooms.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSetRooms_nomain.o msgs/MsgInSetRooms.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInSetRooms.o ${OBJECTDIR}/msgs/MsgInSetRooms_nomain.o;\
 	fi
@@ -1277,7 +1346,7 @@ ${OBJECTDIR}/msgs/MsgInSetTimeZone_nomain.o: ${OBJECTDIR}/msgs/MsgInSetTimeZone.
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSetTimeZone_nomain.o msgs/MsgInSetTimeZone.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSetTimeZone_nomain.o msgs/MsgInSetTimeZone.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInSetTimeZone.o ${OBJECTDIR}/msgs/MsgInSetTimeZone_nomain.o;\
 	fi
@@ -1290,7 +1359,7 @@ ${OBJECTDIR}/msgs/MsgInSignMe_nomain.o: ${OBJECTDIR}/msgs/MsgInSignMe.o msgs/Msg
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSignMe_nomain.o msgs/MsgInSignMe.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSignMe_nomain.o msgs/MsgInSignMe.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInSignMe.o ${OBJECTDIR}/msgs/MsgInSignMe_nomain.o;\
 	fi
@@ -1303,7 +1372,7 @@ ${OBJECTDIR}/msgs/MsgInSignUp_nomain.o: ${OBJECTDIR}/msgs/MsgInSignUp.o msgs/Msg
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSignUp_nomain.o msgs/MsgInSignUp.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSignUp_nomain.o msgs/MsgInSignUp.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInSignUp.o ${OBJECTDIR}/msgs/MsgInSignUp_nomain.o;\
 	fi
@@ -1316,7 +1385,7 @@ ${OBJECTDIR}/msgs/MsgInSwitch_nomain.o: ${OBJECTDIR}/msgs/MsgInSwitch.o msgs/Msg
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSwitch_nomain.o msgs/MsgInSwitch.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSwitch_nomain.o msgs/MsgInSwitch.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInSwitch.o ${OBJECTDIR}/msgs/MsgInSwitch_nomain.o;\
 	fi
@@ -1329,7 +1398,7 @@ ${OBJECTDIR}/msgs/MsgInUnknown_nomain.o: ${OBJECTDIR}/msgs/MsgInUnknown.o msgs/M
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInUnknown_nomain.o msgs/MsgInUnknown.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInUnknown_nomain.o msgs/MsgInUnknown.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInUnknown.o ${OBJECTDIR}/msgs/MsgInUnknown_nomain.o;\
 	fi
@@ -1342,9 +1411,35 @@ ${OBJECTDIR}/msgs/MsgInUpdateView_nomain.o: ${OBJECTDIR}/msgs/MsgInUpdateView.o 
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInUpdateView_nomain.o msgs/MsgInUpdateView.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInUpdateView_nomain.o msgs/MsgInUpdateView.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInUpdateView.o ${OBJECTDIR}/msgs/MsgInUpdateView_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/UserLogout_nomain.o: ${OBJECTDIR}/msgs/UserLogout.o msgs/UserLogout.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/UserLogout.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/UserLogout_nomain.o msgs/UserLogout.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/UserLogout.o ${OBJECTDIR}/msgs/UserLogout_nomain.o;\
+	fi
+
+${OBJECTDIR}/pugixml_nomain.o: ${OBJECTDIR}/pugixml.o pugixml.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/pugixml.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/pugixml_nomain.o pugixml.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/pugixml.o ${OBJECTDIR}/pugixml_nomain.o;\
 	fi
 
 ${OBJECTDIR}/save_custom_writer_nomain.o: ${OBJECTDIR}/save_custom_writer.o save_custom_writer.cpp 
@@ -1355,7 +1450,7 @@ ${OBJECTDIR}/save_custom_writer_nomain.o: ${OBJECTDIR}/save_custom_writer.o save
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/save_custom_writer_nomain.o save_custom_writer.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/save_custom_writer_nomain.o save_custom_writer.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/save_custom_writer.o ${OBJECTDIR}/save_custom_writer_nomain.o;\
 	fi
@@ -1368,7 +1463,7 @@ ${OBJECTDIR}/sslServlet_nomain.o: ${OBJECTDIR}/sslServlet.o sslServlet.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/sslServlet_nomain.o sslServlet.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/sslServlet_nomain.o sslServlet.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/sslServlet.o ${OBJECTDIR}/sslServlet_nomain.o;\
 	fi
@@ -1381,7 +1476,7 @@ ${OBJECTDIR}/ui_server_nomain.o: ${OBJECTDIR}/ui_server.o ui_server.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include/soci -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I/usr/include -I/usr/local/include/soci -Iusr/include/openssl -I../lib -I. -I/usr/pgsql-9.2/include -I/usr/pgsql-9.2 -I../Server -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/ui_server_nomain.o ui_server.cpp;\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/ui_server_nomain.o ui_server.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/ui_server.o ${OBJECTDIR}/ui_server_nomain.o;\
 	fi
