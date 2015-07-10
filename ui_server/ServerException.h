@@ -63,7 +63,10 @@ public:
     static const int NOTREG_B;
     
     static  const int USER_DONOT_EXISTS;
-   static  const int WRONG_AUTH_PROVIDER;
+    static  const int WRONG_AUTH_PROVIDER;
+    static  const int NO_MAIL_PROVIDED;
+    static  const int EMAIL_ALREADY_TAKEN;
+    static  const int LOGOUT_ERROR;
 
     static const int ROOM_TYPE;
     static const int NOTIFICATION_ID;

@@ -49,30 +49,32 @@ OBJECTFILES= \
 	${OBJECTDIR}/MsgInFactory.o \
 	${OBJECTDIR}/MsgRightsChecker.o \
 	${OBJECTDIR}/ServerException.o \
+	${OBJECTDIR}/SessionsTable.o \
 	${OBJECTDIR}/SocketClient.o \
 	${OBJECTDIR}/SocketServer.o \
 	${OBJECTDIR}/communication.o \
 	${OBJECTDIR}/fTokenChecker.o \
 	${OBJECTDIR}/gTokenChecker.o \
+	${OBJECTDIR}/msgs/GateAdd.o \
+	${OBJECTDIR}/msgs/GateDelete.o \
 	${OBJECTDIR}/msgs/GateGetInfo.o \
+	${OBJECTDIR}/msgs/GateUpdate.o \
+	${OBJECTDIR}/msgs/GatesGetConnected.o \
 	${OBJECTDIR}/msgs/IMsgIn.o \
 	${OBJECTDIR}/msgs/IMsgInLoginAndAdapterAccessRequired.o \
 	${OBJECTDIR}/msgs/IMsgInLoginRequired.o \
 	${OBJECTDIR}/msgs/IMsgInLoginUnwanted.o \
 	${OBJECTDIR}/msgs/MsgInAdapterListen.o \
 	${OBJECTDIR}/msgs/MsgInAddAccount.o \
-	${OBJECTDIR}/msgs/MsgInAddAdapter.o \
 	${OBJECTDIR}/msgs/MsgInAddRoom.o \
 	${OBJECTDIR}/msgs/MsgInAddView.o \
 	${OBJECTDIR}/msgs/MsgInAlgorithmsRedirect.o \
-	${OBJECTDIR}/msgs/MsgInDelAdapter.o \
 	${OBJECTDIR}/msgs/MsgInDelConAccount.o \
 	${OBJECTDIR}/msgs/MsgInDelDevice.o \
 	${OBJECTDIR}/msgs/MsgInDelGCMID.o \
 	${OBJECTDIR}/msgs/MsgInDelRoom.o \
 	${OBJECTDIR}/msgs/MsgInDelView.o \
 	${OBJECTDIR}/msgs/MsgInGamificationRedirect.o \
-	${OBJECTDIR}/msgs/MsgInGetAdapters.o \
 	${OBJECTDIR}/msgs/MsgInGetAllDevices.o \
 	${OBJECTDIR}/msgs/MsgInGetConAccount.o \
 	${OBJECTDIR}/msgs/MsgInGetDevices.o \
@@ -80,23 +82,20 @@ OBJECTFILES= \
 	${OBJECTDIR}/msgs/MsgInGetNewDevices.o \
 	${OBJECTDIR}/msgs/MsgInGetNotifications.o \
 	${OBJECTDIR}/msgs/MsgInGetRooms.o \
-	${OBJECTDIR}/msgs/MsgInGetTimeZone.o \
-	${OBJECTDIR}/msgs/MsgInGetUserID.o \
-	${OBJECTDIR}/msgs/MsgInGetUserInfo.o \
 	${OBJECTDIR}/msgs/MsgInGetViews.o \
 	${OBJECTDIR}/msgs/MsgInNotificationRead.o \
-	${OBJECTDIR}/msgs/MsgInSetAdapter.o \
 	${OBJECTDIR}/msgs/MsgInSetConAccount.o \
 	${OBJECTDIR}/msgs/MsgInSetDevices.o \
 	${OBJECTDIR}/msgs/MsgInSetGCMID.o \
 	${OBJECTDIR}/msgs/MsgInSetRooms.o \
-	${OBJECTDIR}/msgs/MsgInSetTimeZone.o \
-	${OBJECTDIR}/msgs/MsgInSignMe.o \
-	${OBJECTDIR}/msgs/MsgInSignUp.o \
 	${OBJECTDIR}/msgs/MsgInSwitch.o \
 	${OBJECTDIR}/msgs/MsgInUnknown.o \
 	${OBJECTDIR}/msgs/MsgInUpdateView.o \
+	${OBJECTDIR}/msgs/UserGetID.o \
+	${OBJECTDIR}/msgs/UserGetInfo.o \
+	${OBJECTDIR}/msgs/UserLogIn.o \
 	${OBJECTDIR}/msgs/UserLogout.o \
+	${OBJECTDIR}/msgs/UserRegister.o \
 	${OBJECTDIR}/pugixml.o \
 	${OBJECTDIR}/save_custom_writer.o \
 	${OBJECTDIR}/sslServlet.o \
@@ -233,6 +232,11 @@ ${OBJECTDIR}/ServerException.o: ServerException.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/ServerException.o ServerException.cpp
 
+${OBJECTDIR}/SessionsTable.o: SessionsTable.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/SessionsTable.o SessionsTable.cpp
+
 ${OBJECTDIR}/SocketClient.o: SocketClient.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
@@ -258,10 +262,30 @@ ${OBJECTDIR}/gTokenChecker.o: gTokenChecker.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/gTokenChecker.o gTokenChecker.cpp
 
+${OBJECTDIR}/msgs/GateAdd.o: msgs/GateAdd.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/GateAdd.o msgs/GateAdd.cpp
+
+${OBJECTDIR}/msgs/GateDelete.o: msgs/GateDelete.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/GateDelete.o msgs/GateDelete.cpp
+
 ${OBJECTDIR}/msgs/GateGetInfo.o: msgs/GateGetInfo.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/GateGetInfo.o msgs/GateGetInfo.cpp
+
+${OBJECTDIR}/msgs/GateUpdate.o: msgs/GateUpdate.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/GateUpdate.o msgs/GateUpdate.cpp
+
+${OBJECTDIR}/msgs/GatesGetConnected.o: msgs/GatesGetConnected.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/GatesGetConnected.o msgs/GatesGetConnected.cpp
 
 ${OBJECTDIR}/msgs/IMsgIn.o: msgs/IMsgIn.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
@@ -293,11 +317,6 @@ ${OBJECTDIR}/msgs/MsgInAddAccount.o: msgs/MsgInAddAccount.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAddAccount.o msgs/MsgInAddAccount.cpp
 
-${OBJECTDIR}/msgs/MsgInAddAdapter.o: msgs/MsgInAddAdapter.cpp 
-	${MKDIR} -p ${OBJECTDIR}/msgs
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAddAdapter.o msgs/MsgInAddAdapter.cpp
-
 ${OBJECTDIR}/msgs/MsgInAddRoom.o: msgs/MsgInAddRoom.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
@@ -312,11 +331,6 @@ ${OBJECTDIR}/msgs/MsgInAlgorithmsRedirect.o: msgs/MsgInAlgorithmsRedirect.cpp
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAlgorithmsRedirect.o msgs/MsgInAlgorithmsRedirect.cpp
-
-${OBJECTDIR}/msgs/MsgInDelAdapter.o: msgs/MsgInDelAdapter.cpp 
-	${MKDIR} -p ${OBJECTDIR}/msgs
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelAdapter.o msgs/MsgInDelAdapter.cpp
 
 ${OBJECTDIR}/msgs/MsgInDelConAccount.o: msgs/MsgInDelConAccount.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
@@ -347,11 +361,6 @@ ${OBJECTDIR}/msgs/MsgInGamificationRedirect.o: msgs/MsgInGamificationRedirect.cp
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGamificationRedirect.o msgs/MsgInGamificationRedirect.cpp
-
-${OBJECTDIR}/msgs/MsgInGetAdapters.o: msgs/MsgInGetAdapters.cpp 
-	${MKDIR} -p ${OBJECTDIR}/msgs
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetAdapters.o msgs/MsgInGetAdapters.cpp
 
 ${OBJECTDIR}/msgs/MsgInGetAllDevices.o: msgs/MsgInGetAllDevices.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
@@ -388,21 +397,6 @@ ${OBJECTDIR}/msgs/MsgInGetRooms.o: msgs/MsgInGetRooms.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetRooms.o msgs/MsgInGetRooms.cpp
 
-${OBJECTDIR}/msgs/MsgInGetTimeZone.o: msgs/MsgInGetTimeZone.cpp 
-	${MKDIR} -p ${OBJECTDIR}/msgs
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetTimeZone.o msgs/MsgInGetTimeZone.cpp
-
-${OBJECTDIR}/msgs/MsgInGetUserID.o: msgs/MsgInGetUserID.cpp 
-	${MKDIR} -p ${OBJECTDIR}/msgs
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetUserID.o msgs/MsgInGetUserID.cpp
-
-${OBJECTDIR}/msgs/MsgInGetUserInfo.o: msgs/MsgInGetUserInfo.cpp 
-	${MKDIR} -p ${OBJECTDIR}/msgs
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetUserInfo.o msgs/MsgInGetUserInfo.cpp
-
 ${OBJECTDIR}/msgs/MsgInGetViews.o: msgs/MsgInGetViews.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
@@ -412,11 +406,6 @@ ${OBJECTDIR}/msgs/MsgInNotificationRead.o: msgs/MsgInNotificationRead.cpp
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInNotificationRead.o msgs/MsgInNotificationRead.cpp
-
-${OBJECTDIR}/msgs/MsgInSetAdapter.o: msgs/MsgInSetAdapter.cpp 
-	${MKDIR} -p ${OBJECTDIR}/msgs
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSetAdapter.o msgs/MsgInSetAdapter.cpp
 
 ${OBJECTDIR}/msgs/MsgInSetConAccount.o: msgs/MsgInSetConAccount.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
@@ -438,21 +427,6 @@ ${OBJECTDIR}/msgs/MsgInSetRooms.o: msgs/MsgInSetRooms.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSetRooms.o msgs/MsgInSetRooms.cpp
 
-${OBJECTDIR}/msgs/MsgInSetTimeZone.o: msgs/MsgInSetTimeZone.cpp 
-	${MKDIR} -p ${OBJECTDIR}/msgs
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSetTimeZone.o msgs/MsgInSetTimeZone.cpp
-
-${OBJECTDIR}/msgs/MsgInSignMe.o: msgs/MsgInSignMe.cpp 
-	${MKDIR} -p ${OBJECTDIR}/msgs
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSignMe.o msgs/MsgInSignMe.cpp
-
-${OBJECTDIR}/msgs/MsgInSignUp.o: msgs/MsgInSignUp.cpp 
-	${MKDIR} -p ${OBJECTDIR}/msgs
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSignUp.o msgs/MsgInSignUp.cpp
-
 ${OBJECTDIR}/msgs/MsgInSwitch.o: msgs/MsgInSwitch.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
@@ -468,10 +442,30 @@ ${OBJECTDIR}/msgs/MsgInUpdateView.o: msgs/MsgInUpdateView.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInUpdateView.o msgs/MsgInUpdateView.cpp
 
+${OBJECTDIR}/msgs/UserGetID.o: msgs/UserGetID.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/UserGetID.o msgs/UserGetID.cpp
+
+${OBJECTDIR}/msgs/UserGetInfo.o: msgs/UserGetInfo.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/UserGetInfo.o msgs/UserGetInfo.cpp
+
+${OBJECTDIR}/msgs/UserLogIn.o: msgs/UserLogIn.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/UserLogIn.o msgs/UserLogIn.cpp
+
 ${OBJECTDIR}/msgs/UserLogout.o: msgs/UserLogout.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/UserLogout.o msgs/UserLogout.cpp
+
+${OBJECTDIR}/msgs/UserRegister.o: msgs/UserRegister.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/UserRegister.o msgs/UserRegister.cpp
 
 ${OBJECTDIR}/pugixml.o: pugixml.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -805,6 +799,19 @@ ${OBJECTDIR}/ServerException_nomain.o: ${OBJECTDIR}/ServerException.o ServerExce
 	    ${CP} ${OBJECTDIR}/ServerException.o ${OBJECTDIR}/ServerException_nomain.o;\
 	fi
 
+${OBJECTDIR}/SessionsTable_nomain.o: ${OBJECTDIR}/SessionsTable.o SessionsTable.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/SessionsTable.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/SessionsTable_nomain.o SessionsTable.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/SessionsTable.o ${OBJECTDIR}/SessionsTable_nomain.o;\
+	fi
+
 ${OBJECTDIR}/SocketClient_nomain.o: ${OBJECTDIR}/SocketClient.o SocketClient.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/SocketClient.o`; \
@@ -870,6 +877,32 @@ ${OBJECTDIR}/gTokenChecker_nomain.o: ${OBJECTDIR}/gTokenChecker.o gTokenChecker.
 	    ${CP} ${OBJECTDIR}/gTokenChecker.o ${OBJECTDIR}/gTokenChecker_nomain.o;\
 	fi
 
+${OBJECTDIR}/msgs/GateAdd_nomain.o: ${OBJECTDIR}/msgs/GateAdd.o msgs/GateAdd.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/GateAdd.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/GateAdd_nomain.o msgs/GateAdd.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/GateAdd.o ${OBJECTDIR}/msgs/GateAdd_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/GateDelete_nomain.o: ${OBJECTDIR}/msgs/GateDelete.o msgs/GateDelete.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/GateDelete.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/GateDelete_nomain.o msgs/GateDelete.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/GateDelete.o ${OBJECTDIR}/msgs/GateDelete_nomain.o;\
+	fi
+
 ${OBJECTDIR}/msgs/GateGetInfo_nomain.o: ${OBJECTDIR}/msgs/GateGetInfo.o msgs/GateGetInfo.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/GateGetInfo.o`; \
@@ -881,6 +914,32 @@ ${OBJECTDIR}/msgs/GateGetInfo_nomain.o: ${OBJECTDIR}/msgs/GateGetInfo.o msgs/Gat
 	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/GateGetInfo_nomain.o msgs/GateGetInfo.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/GateGetInfo.o ${OBJECTDIR}/msgs/GateGetInfo_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/GateUpdate_nomain.o: ${OBJECTDIR}/msgs/GateUpdate.o msgs/GateUpdate.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/GateUpdate.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/GateUpdate_nomain.o msgs/GateUpdate.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/GateUpdate.o ${OBJECTDIR}/msgs/GateUpdate_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/GatesGetConnected_nomain.o: ${OBJECTDIR}/msgs/GatesGetConnected.o msgs/GatesGetConnected.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/GatesGetConnected.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/GatesGetConnected_nomain.o msgs/GatesGetConnected.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/GatesGetConnected.o ${OBJECTDIR}/msgs/GatesGetConnected_nomain.o;\
 	fi
 
 ${OBJECTDIR}/msgs/IMsgIn_nomain.o: ${OBJECTDIR}/msgs/IMsgIn.o msgs/IMsgIn.cpp 
@@ -961,19 +1020,6 @@ ${OBJECTDIR}/msgs/MsgInAddAccount_nomain.o: ${OBJECTDIR}/msgs/MsgInAddAccount.o 
 	    ${CP} ${OBJECTDIR}/msgs/MsgInAddAccount.o ${OBJECTDIR}/msgs/MsgInAddAccount_nomain.o;\
 	fi
 
-${OBJECTDIR}/msgs/MsgInAddAdapter_nomain.o: ${OBJECTDIR}/msgs/MsgInAddAdapter.o msgs/MsgInAddAdapter.cpp 
-	${MKDIR} -p ${OBJECTDIR}/msgs
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInAddAdapter.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAddAdapter_nomain.o msgs/MsgInAddAdapter.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/msgs/MsgInAddAdapter.o ${OBJECTDIR}/msgs/MsgInAddAdapter_nomain.o;\
-	fi
-
 ${OBJECTDIR}/msgs/MsgInAddRoom_nomain.o: ${OBJECTDIR}/msgs/MsgInAddRoom.o msgs/MsgInAddRoom.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInAddRoom.o`; \
@@ -1011,19 +1057,6 @@ ${OBJECTDIR}/msgs/MsgInAlgorithmsRedirect_nomain.o: ${OBJECTDIR}/msgs/MsgInAlgor
 	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInAlgorithmsRedirect_nomain.o msgs/MsgInAlgorithmsRedirect.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInAlgorithmsRedirect.o ${OBJECTDIR}/msgs/MsgInAlgorithmsRedirect_nomain.o;\
-	fi
-
-${OBJECTDIR}/msgs/MsgInDelAdapter_nomain.o: ${OBJECTDIR}/msgs/MsgInDelAdapter.o msgs/MsgInDelAdapter.cpp 
-	${MKDIR} -p ${OBJECTDIR}/msgs
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInDelAdapter.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInDelAdapter_nomain.o msgs/MsgInDelAdapter.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/msgs/MsgInDelAdapter.o ${OBJECTDIR}/msgs/MsgInDelAdapter_nomain.o;\
 	fi
 
 ${OBJECTDIR}/msgs/MsgInDelConAccount_nomain.o: ${OBJECTDIR}/msgs/MsgInDelConAccount.o msgs/MsgInDelConAccount.cpp 
@@ -1102,19 +1135,6 @@ ${OBJECTDIR}/msgs/MsgInGamificationRedirect_nomain.o: ${OBJECTDIR}/msgs/MsgInGam
 	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGamificationRedirect_nomain.o msgs/MsgInGamificationRedirect.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInGamificationRedirect.o ${OBJECTDIR}/msgs/MsgInGamificationRedirect_nomain.o;\
-	fi
-
-${OBJECTDIR}/msgs/MsgInGetAdapters_nomain.o: ${OBJECTDIR}/msgs/MsgInGetAdapters.o msgs/MsgInGetAdapters.cpp 
-	${MKDIR} -p ${OBJECTDIR}/msgs
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInGetAdapters.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetAdapters_nomain.o msgs/MsgInGetAdapters.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/msgs/MsgInGetAdapters.o ${OBJECTDIR}/msgs/MsgInGetAdapters_nomain.o;\
 	fi
 
 ${OBJECTDIR}/msgs/MsgInGetAllDevices_nomain.o: ${OBJECTDIR}/msgs/MsgInGetAllDevices.o msgs/MsgInGetAllDevices.cpp 
@@ -1208,45 +1228,6 @@ ${OBJECTDIR}/msgs/MsgInGetRooms_nomain.o: ${OBJECTDIR}/msgs/MsgInGetRooms.o msgs
 	    ${CP} ${OBJECTDIR}/msgs/MsgInGetRooms.o ${OBJECTDIR}/msgs/MsgInGetRooms_nomain.o;\
 	fi
 
-${OBJECTDIR}/msgs/MsgInGetTimeZone_nomain.o: ${OBJECTDIR}/msgs/MsgInGetTimeZone.o msgs/MsgInGetTimeZone.cpp 
-	${MKDIR} -p ${OBJECTDIR}/msgs
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInGetTimeZone.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetTimeZone_nomain.o msgs/MsgInGetTimeZone.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/msgs/MsgInGetTimeZone.o ${OBJECTDIR}/msgs/MsgInGetTimeZone_nomain.o;\
-	fi
-
-${OBJECTDIR}/msgs/MsgInGetUserID_nomain.o: ${OBJECTDIR}/msgs/MsgInGetUserID.o msgs/MsgInGetUserID.cpp 
-	${MKDIR} -p ${OBJECTDIR}/msgs
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInGetUserID.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetUserID_nomain.o msgs/MsgInGetUserID.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/msgs/MsgInGetUserID.o ${OBJECTDIR}/msgs/MsgInGetUserID_nomain.o;\
-	fi
-
-${OBJECTDIR}/msgs/MsgInGetUserInfo_nomain.o: ${OBJECTDIR}/msgs/MsgInGetUserInfo.o msgs/MsgInGetUserInfo.cpp 
-	${MKDIR} -p ${OBJECTDIR}/msgs
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInGetUserInfo.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInGetUserInfo_nomain.o msgs/MsgInGetUserInfo.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/msgs/MsgInGetUserInfo.o ${OBJECTDIR}/msgs/MsgInGetUserInfo_nomain.o;\
-	fi
-
 ${OBJECTDIR}/msgs/MsgInGetViews_nomain.o: ${OBJECTDIR}/msgs/MsgInGetViews.o msgs/MsgInGetViews.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInGetViews.o`; \
@@ -1271,19 +1252,6 @@ ${OBJECTDIR}/msgs/MsgInNotificationRead_nomain.o: ${OBJECTDIR}/msgs/MsgInNotific
 	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInNotificationRead_nomain.o msgs/MsgInNotificationRead.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/MsgInNotificationRead.o ${OBJECTDIR}/msgs/MsgInNotificationRead_nomain.o;\
-	fi
-
-${OBJECTDIR}/msgs/MsgInSetAdapter_nomain.o: ${OBJECTDIR}/msgs/MsgInSetAdapter.o msgs/MsgInSetAdapter.cpp 
-	${MKDIR} -p ${OBJECTDIR}/msgs
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInSetAdapter.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSetAdapter_nomain.o msgs/MsgInSetAdapter.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/msgs/MsgInSetAdapter.o ${OBJECTDIR}/msgs/MsgInSetAdapter_nomain.o;\
 	fi
 
 ${OBJECTDIR}/msgs/MsgInSetConAccount_nomain.o: ${OBJECTDIR}/msgs/MsgInSetConAccount.o msgs/MsgInSetConAccount.cpp 
@@ -1338,45 +1306,6 @@ ${OBJECTDIR}/msgs/MsgInSetRooms_nomain.o: ${OBJECTDIR}/msgs/MsgInSetRooms.o msgs
 	    ${CP} ${OBJECTDIR}/msgs/MsgInSetRooms.o ${OBJECTDIR}/msgs/MsgInSetRooms_nomain.o;\
 	fi
 
-${OBJECTDIR}/msgs/MsgInSetTimeZone_nomain.o: ${OBJECTDIR}/msgs/MsgInSetTimeZone.o msgs/MsgInSetTimeZone.cpp 
-	${MKDIR} -p ${OBJECTDIR}/msgs
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInSetTimeZone.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSetTimeZone_nomain.o msgs/MsgInSetTimeZone.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/msgs/MsgInSetTimeZone.o ${OBJECTDIR}/msgs/MsgInSetTimeZone_nomain.o;\
-	fi
-
-${OBJECTDIR}/msgs/MsgInSignMe_nomain.o: ${OBJECTDIR}/msgs/MsgInSignMe.o msgs/MsgInSignMe.cpp 
-	${MKDIR} -p ${OBJECTDIR}/msgs
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInSignMe.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSignMe_nomain.o msgs/MsgInSignMe.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/msgs/MsgInSignMe.o ${OBJECTDIR}/msgs/MsgInSignMe_nomain.o;\
-	fi
-
-${OBJECTDIR}/msgs/MsgInSignUp_nomain.o: ${OBJECTDIR}/msgs/MsgInSignUp.o msgs/MsgInSignUp.cpp 
-	${MKDIR} -p ${OBJECTDIR}/msgs
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInSignUp.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/MsgInSignUp_nomain.o msgs/MsgInSignUp.cpp;\
-	else  \
-	    ${CP} ${OBJECTDIR}/msgs/MsgInSignUp.o ${OBJECTDIR}/msgs/MsgInSignUp_nomain.o;\
-	fi
-
 ${OBJECTDIR}/msgs/MsgInSwitch_nomain.o: ${OBJECTDIR}/msgs/MsgInSwitch.o msgs/MsgInSwitch.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/MsgInSwitch.o`; \
@@ -1416,6 +1345,45 @@ ${OBJECTDIR}/msgs/MsgInUpdateView_nomain.o: ${OBJECTDIR}/msgs/MsgInUpdateView.o 
 	    ${CP} ${OBJECTDIR}/msgs/MsgInUpdateView.o ${OBJECTDIR}/msgs/MsgInUpdateView_nomain.o;\
 	fi
 
+${OBJECTDIR}/msgs/UserGetID_nomain.o: ${OBJECTDIR}/msgs/UserGetID.o msgs/UserGetID.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/UserGetID.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/UserGetID_nomain.o msgs/UserGetID.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/UserGetID.o ${OBJECTDIR}/msgs/UserGetID_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/UserGetInfo_nomain.o: ${OBJECTDIR}/msgs/UserGetInfo.o msgs/UserGetInfo.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/UserGetInfo.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/UserGetInfo_nomain.o msgs/UserGetInfo.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/UserGetInfo.o ${OBJECTDIR}/msgs/UserGetInfo_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/UserLogIn_nomain.o: ${OBJECTDIR}/msgs/UserLogIn.o msgs/UserLogIn.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/UserLogIn.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/UserLogIn_nomain.o msgs/UserLogIn.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/UserLogIn.o ${OBJECTDIR}/msgs/UserLogIn_nomain.o;\
+	fi
+
 ${OBJECTDIR}/msgs/UserLogout_nomain.o: ${OBJECTDIR}/msgs/UserLogout.o msgs/UserLogout.cpp 
 	${MKDIR} -p ${OBJECTDIR}/msgs
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/UserLogout.o`; \
@@ -1427,6 +1395,19 @@ ${OBJECTDIR}/msgs/UserLogout_nomain.o: ${OBJECTDIR}/msgs/UserLogout.o msgs/UserL
 	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/UserLogout_nomain.o msgs/UserLogout.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/msgs/UserLogout.o ${OBJECTDIR}/msgs/UserLogout_nomain.o;\
+	fi
+
+${OBJECTDIR}/msgs/UserRegister_nomain.o: ${OBJECTDIR}/msgs/UserRegister.o msgs/UserRegister.cpp 
+	${MKDIR} -p ${OBJECTDIR}/msgs
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/msgs/UserRegister.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I../lib -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/msgs/UserRegister_nomain.o msgs/UserRegister.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/msgs/UserRegister.o ${OBJECTDIR}/msgs/UserRegister_nomain.o;\
 	fi
 
 ${OBJECTDIR}/pugixml_nomain.o: ${OBJECTDIR}/pugixml.o pugixml.cpp 

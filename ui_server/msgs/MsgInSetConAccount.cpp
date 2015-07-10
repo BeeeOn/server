@@ -35,15 +35,13 @@ string MsgInChangeConAccount::createResponseMsgOut()
         newUserMail = userNode.attribute(P_EMAIL).value();
         newRole = userNode.attribute(P_ROLE).value();
         
+        //check role validity
         if(newRole != P_ROLE_GUEST && newRole != P_ROLE_USER && newRole !=P_ROLE_ADMIN && newRole != P_ROLE_SUPERUSER){
             errText += "<user email=\""+newUserMail+"\" role=\""+newRole+"\"/>";
             fail = ServerException::ROLE;
         }else{
-            if(!DAOUsers::getInstance().isMailRegistred(newUserMail)){
-                User user;
-                user.mail = newUserMail;
-                DAOUsers::getInstance().add(user);
-            }
+            if(newUserMail != _requesterMail)
+            //change users role
              if(DAOUsersAdapters::getInstance().changeConAccount(_adapterId, newUserMail, newRole) != 1){
                     errText += "<user email=\""+newUserMail+"\" role=\""+newRole+"\"/>";
                     fail = ServerException::EMAIL;

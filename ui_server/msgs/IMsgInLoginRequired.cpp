@@ -19,7 +19,11 @@ IMsgInLoginRequired::~IMsgInLoginRequired() {
 }
 
 bool IMsgInLoginRequired::isComIdValid(){
-    _userId = DAOUsers::getInstance().getUserIdbyIhaToken(_token);
+    
+    User user = DAOUsers::getInstance().getUserAssociatedWithToken(_token);
+    
+    _userId = user.user_id;
+    _requesterMail = user.mail;
     
     Logger::getInstance(Logger::DEBUG)<<"user:"<<_userId<<" token:"<<_token<<endl;
     

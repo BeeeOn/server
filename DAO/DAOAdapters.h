@@ -21,7 +21,7 @@ struct Gate {
 struct GateInfo {
     std::string id;
     std::string name;
-    int socket;
+    int ip;
     int version; 
     int nUsers;
     int nFacilities;

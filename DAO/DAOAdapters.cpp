@@ -128,7 +128,7 @@ GateInfo DAOAdapters::getGateInfo(std::string gateId) {
                 "from adapters join facilities as f on f.fk_adapter_id = adapter_id join users_adapters as ua on ua.fk_adapter_id = adapter_id "
                 "where adapter_id = :adapter group by adapter_id"
                 , use(gateId,"adapter"), into(gateInfo.id), into(gateInfo.nFacilities), into(gateInfo.nUsers), into(gateInfo.name)
-                , into(gateInfo.socket), into(gateInfo.version), into(gateInfo.timezone); 
+                , into(gateInfo.ip), into(gateInfo.version), into(gateInfo.timezone); 
         return gateInfo;
     }
     catch (soci::postgresql_soci_error& e)

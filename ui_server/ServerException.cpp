@@ -45,6 +45,10 @@ using namespace std;
      const int ServerException::USER_DONOT_EXISTS=24;
      
      const int ServerException::WRONG_AUTH_PROVIDER = 27;
+     const int ServerException::NO_MAIL_PROVIDED = 28;
+     
+     const int ServerException::EMAIL_ALREADY_TAKEN = 29;
+     const int ServerException::LOGOUT_ERROR = 30;
 
      const int  ServerException::ROOM_TYPE = 50;
     const int ServerException::NOTIFICATION_ID = 996;

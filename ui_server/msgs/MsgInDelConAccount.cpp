@@ -33,10 +33,11 @@ string MsgInDelConAccount::createResponseMsgOut()
     for (; userNode; userNode = userNode.next_sibling(P_USER))
     {
         userMail = userNode.attribute(P_EMAIL).value();
-        if(DAOUsersAdapters::getInstance().delConAccount(_adapterId, userMail) ==0){
-            //fail = true;
-            //errText += "<user email=\""+userMail+"\"/>";
-        }
+        if(userMail != _requesterMail)
+            if(DAOUsersAdapters::getInstance().delConAccount(_adapterId, userMail) == 0){
+                //fail = true;
+                //errText += "<user email=\""+userMail+"\"/>";
+            }
     }
     
     return envelopeResponse(R_TRUE);

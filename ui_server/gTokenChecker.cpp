@@ -191,12 +191,12 @@ void sslWrite (connection *c, char *text)
 
 bool isGTokenOk(string gToken, googleInfo &gInfo){
     //TODO !!!!!!!!!!!!!! pouze DEBUG - odstranit!
-    if(gToken == "1")
-        return true;
-    
+    //if(gToken == "1")
+    //    return true;
+    Logger::getInstance(Logger::DEBUG)<<"GToken: "<<gToken<<endl;
     connection *c;
     char *response;
-    char gRequest[1024]="GET https://www.googleapis.com/oauth2/v2/userinfo?access_token=";
+    char gRequest[2048]="GET https://www.googleapis.com/oauth2/v2/userinfo?access_token=";
     strcat(gRequest, gToken.c_str());
     strcat(gRequest, " \r\n\r\n");
     c = sslConnect ();

@@ -94,6 +94,10 @@ bool isFTokenOkay(string fToken, facebookInfo &fInfo) {
     data = json_object_get(root, "last_name");
     if (json_is_string(data))
         fInfo.last_name = json_string_value(data);
+    
+    data = json_object_get(root, "gender");
+    if (json_is_string(data))
+        fInfo.gender = json_string_value(data);
 
     data = json_object_get(root, "link");
     if (json_is_string(data))

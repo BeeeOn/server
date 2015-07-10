@@ -5,7 +5,7 @@
  * Created on 3. červen 2014, 8:03
  */
 
-#include "MsgInPartial.h"
+#include "MsgInSetDevices.h"
 #include "ServerException.h"
 #include "../DAO/DAODevices.h"
 using namespace std;

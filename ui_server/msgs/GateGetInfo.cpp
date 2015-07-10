@@ -32,7 +32,7 @@ string GateGetInfo::createResponseMsgOut()
     _outputMainNode.append_attribute(P_ROLE) = _role.c_str();
     _outputMainNode.append_attribute(P_ADAPTER_N_FACILITIES) = gateInfo.nFacilities;
     _outputMainNode.append_attribute(P_ADAPTER_N_USERS) = gateInfo.nUsers;
-    _outputMainNode.append_attribute(P_ADAPTER_SOCKET) = gateInfo.socket;
+    _outputMainNode.append_attribute(P_ADAPTER_IP) = gateInfo.ip;
     _outputMainNode.append_attribute(P_ADAPTER_VERSION) = gateInfo.version;
     _outputMainNode.append_attribute(P_TIME_UTC) = gateInfo.timezone;
     return genOutputXMLwithVersionAndState(R_GATEINFO);

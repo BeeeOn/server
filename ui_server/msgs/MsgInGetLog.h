@@ -12,10 +12,10 @@
 #include "pugixml.hpp"
 #include "IMsgInLoginAndAdapterAccessRequired.h"
 
-class MsgInLogName : public IMsgInLoginAndAdapterAccessRequired {
+class GetLog : public IMsgInLoginAndAdapterAccessRequired {
 public:
-    MsgInLogName(pugi::xml_document* doc);
-    virtual ~MsgInLogName();
+    GetLog(pugi::xml_document* doc);
+    virtual ~GetLog();
 
     virtual int getMsgAuthorization();
 

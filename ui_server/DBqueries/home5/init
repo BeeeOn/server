@@ -1,0 +1,24 @@
+
+  
+#create DB   
+su
+su postgres
+psql postgres
+create database home5prod;
+
+
+
+#goto DB home
+\c home5prod
+
+#create tables ...   (pokud postgres nemá práva chmod a+r create.sql...)
+\i home5_create.sql
+\i functions.sql
+\i users.sql
+
+INSERT INTO u_algorithms (algorithm_id,name) VALUES (1, 'Watch and notify');
+INSERT INTO u_algorithms (algorithm_id,name) VALUES (3, 'Geofencing');
+
+
+#quit
+\q

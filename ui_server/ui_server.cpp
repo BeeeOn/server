@@ -15,7 +15,13 @@
 #include "SocketServer.h"
 #include "pugixml.hpp"
 #include "msgs/GateGetInfo.h"
-#include "msgs/MsgInSetAdapter.h"
+#include "msgs/GateUpdate.h"
+#include "SessionsTable.h"
+
+#include <iostream>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sstream>
 // uncoment if you want print debug reports
 //#define DEBUG 1
 
@@ -61,10 +67,11 @@ bool has_suffix1(const std::string &str, const std::string &suffix)
 
 
 int main(int argc, char** argv)
-{  
+{   
     //http://pugixml.googlecode.com/svn-history/r605/trunk/docs/samples/modify_add.cpp
     //load XML file from argv[1]
 
+    
     if(argc>=2){
         try{
             Config::getInstance().loadXml(argv[1]);
@@ -80,7 +87,7 @@ int main(int argc, char** argv)
     {
             Logger::error()<< "unable to catch signal SIGINT "<<endl;
     }
-
+    
     if(Config::getInstance().isLogsPrintedToCout()){
         Logger::getInstance().setOutputToStdout();
     }else{
@@ -109,7 +116,7 @@ int main(int argc, char** argv)
         
         string conString = Config::getInstance().getDBConnectionString();
         
-        //DBConnector::getInstance().setConnectionStringAndOpenSessions( conString , Config::getInstance().getDBSessionsNumber());
+        DBConnector::getInstance().setConnectionStringAndOpenSessions( conString , Config::getInstance().getDBSessionsNumber());
         DAOUsers::getInstance().setConnectionStringAndOpenSessions(conString, 2);
         DAOAdapters::getInstance().setConnectionStringAndOpenSessions(conString, 2);
         DAODevices::getInstance().setConnectionStringAndOpenSessions(conString, 2);
@@ -143,7 +150,8 @@ int main(int argc, char** argv)
     cout << msg.createResponseMsgOut(); 
     return 0;
  */   
-    
+  
+            
 /*
         resolveMsg( "<?xml version='1.0' encoding='UTF-8' ?><com ver=\"2.5\" bt=\"9j6xC3Df9c\" state=\"getlog\" from=\"1431268648\" to=\"1431527848\" ftype=\"avg\" interval=\"600\" aid=\"52428\" did=\"7372\" dtype=\"10\"></com>");
         resolveMsg( "<?xml version='1.0' encoding='UTF-8' ?><com ver=\"2.5\" bt=\"9j6xC3Df9c\" state=\"getlog\" from=\"1431268648\" to=\"1431527848\" ftype=\"avg\" interval=\"600\" aid=\"52428\" did=\"7372\" dtype=\"10\"></com>");

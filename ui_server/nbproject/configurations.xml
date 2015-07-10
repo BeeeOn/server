@@ -10,6 +10,7 @@
       <itemPath>MsgInFactory.h</itemPath>
       <itemPath>MsgRightsChecker.h</itemPath>
       <itemPath>ServerException.h</itemPath>
+      <itemPath>SessionsTable.h</itemPath>
       <itemPath>SocketClient.h</itemPath>
       <itemPath>SocketServer.h</itemPath>
       <itemPath>communication.h</itemPath>
@@ -70,8 +71,8 @@
         <itemPath>msgs/MsgInGetLog.h</itemPath>
         <itemPath>msgs/MsgInGetNewDevices.cpp</itemPath>
         <itemPath>msgs/MsgInGetNewDevices.h</itemPath>
-        <itemPath>msgs/MsgInPartial.h</itemPath>
         <itemPath>msgs/MsgInSetDevices.cpp</itemPath>
+        <itemPath>msgs/MsgInSetDevices.h</itemPath>
         <itemPath>msgs/MsgInSwitch.cpp</itemPath>
         <itemPath>msgs/MsgInSwitch.h</itemPath>
       </logicalFolder>
@@ -116,34 +117,26 @@
         <itemPath>msgs/MsgInGamificationRedirect.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f3" displayName="sign_reg_adapters" projectFiles="true">
+        <itemPath>msgs/GateAdd.cpp</itemPath>
+        <itemPath>msgs/GateAdd.h</itemPath>
+        <itemPath>msgs/GateDelete.cpp</itemPath>
+        <itemPath>msgs/GateDelete.h</itemPath>
         <itemPath>msgs/GateGetInfo.cpp</itemPath>
         <itemPath>msgs/GateGetInfo.h</itemPath>
-        <itemPath>msgs/MsgInAddAdapter.cpp</itemPath>
-        <itemPath>msgs/MsgInAddAdapter.h</itemPath>
-        <itemPath>msgs/MsgInDelAdapter.cpp</itemPath>
-        <itemPath>msgs/MsgInDelAdapter.h</itemPath>
-        <itemPath>msgs/MsgInGetAdapters.cpp</itemPath>
-        <itemPath>msgs/MsgInGetAdapters.h</itemPath>
-        <itemPath>msgs/MsgInGetUserID.cpp</itemPath>
-        <itemPath>msgs/MsgInGetUserID.h</itemPath>
-        <itemPath>msgs/MsgInGetUserInfo.cpp</itemPath>
-        <itemPath>msgs/MsgInGetUserInfo.h</itemPath>
-        <itemPath>msgs/MsgInSetAdapter.cpp</itemPath>
-        <itemPath>msgs/MsgInSetAdapter.h</itemPath>
-        <itemPath>msgs/MsgInSignMe.cpp</itemPath>
-        <itemPath>msgs/MsgInSignMe.h</itemPath>
-        <itemPath>msgs/MsgInSignUp.cpp</itemPath>
-        <itemPath>msgs/MsgInSignUp.h</itemPath>
+        <itemPath>msgs/GateUpdate.cpp</itemPath>
+        <itemPath>msgs/GateUpdate.h</itemPath>
+        <itemPath>msgs/GatesGetConnected.cpp</itemPath>
+        <itemPath>msgs/GatesGetConnected.h</itemPath>
+        <itemPath>msgs/UserGetID.cpp</itemPath>
+        <itemPath>msgs/UserGetID.h</itemPath>
+        <itemPath>msgs/UserGetInfo.cpp</itemPath>
+        <itemPath>msgs/UserGetInfo.h</itemPath>
+        <itemPath>msgs/UserLogIn.cpp</itemPath>
+        <itemPath>msgs/UserLogIn.h</itemPath>
         <itemPath>msgs/UserLogout.cpp</itemPath>
         <itemPath>msgs/UserLogout.h</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f9" displayName="time" projectFiles="true">
-        <itemPath>msgs/MsgInGetTimeZone.cpp</itemPath>
-        <itemPath>msgs/MsgInGetTimeZone.h</itemPath>
-        <itemPath>msgs/MsgInSetTimeZone.cpp</itemPath>
-        <itemPath>msgs/MsgInSetTimeZone.h</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f10" displayName="todo" projectFiles="true">
+        <itemPath>msgs/UserRegister.cpp</itemPath>
+        <itemPath>msgs/UserRegister.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f6" displayName="views" projectFiles="true">
         <itemPath>msgs/MsgInAddView.cpp</itemPath>
@@ -159,6 +152,7 @@
       <itemPath>MsgInFactory.cpp</itemPath>
       <itemPath>MsgRightsChecker.cpp</itemPath>
       <itemPath>ServerException.cpp</itemPath>
+      <itemPath>SessionsTable.cpp</itemPath>
       <itemPath>SocketClient.cpp</itemPath>
       <itemPath>SocketServer.cpp</itemPath>
       <itemPath>communication.cpp</itemPath>
@@ -722,6 +716,10 @@
       </item>
       <item path="ServerException.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="SessionsTable.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="SessionsTable.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="SocketClient.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="SocketClient.h" ex="false" tool="3" flavor2="0">
@@ -1200,9 +1198,25 @@
       </item>
       <item path="gTokenChecker.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="msgs/GateAdd.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/GateAdd.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/GateDelete.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/GateDelete.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="msgs/GateGetInfo.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="msgs/GateGetInfo.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/GateUpdate.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/GateUpdate.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/GatesGetConnected.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/GatesGetConnected.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="msgs/IMsgIn.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -1234,10 +1248,6 @@
       </item>
       <item path="msgs/MsgInAddAccount.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="msgs/MsgInAddAdapter.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInAddAdapter.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="msgs/MsgInAddRoom.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="msgs/MsgInAddRoom.h" ex="false" tool="3" flavor2="0">
@@ -1251,10 +1261,6 @@
       <item path="msgs/MsgInAlgorithmsRedirect.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="msgs/MsgInDelAccount.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="msgs/MsgInDelAdapter.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInDelAdapter.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="msgs/MsgInDelConAccount.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -1279,10 +1285,6 @@
       <item path="msgs/MsgInGamificationRedirect.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="msgs/MsgInGamificationRedirect.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="msgs/MsgInGetAdapters.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInGetAdapters.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="msgs/MsgInGetAllDevices.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -1312,18 +1314,6 @@
       </item>
       <item path="msgs/MsgInGetRooms.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="msgs/MsgInGetTimeZone.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInGetTimeZone.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="msgs/MsgInGetUserID.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInGetUserID.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="msgs/MsgInGetUserInfo.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInGetUserInfo.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="msgs/MsgInGetViews.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="msgs/MsgInGetViews.h" ex="false" tool="3" flavor2="0">
@@ -1332,15 +1322,11 @@
       </item>
       <item path="msgs/MsgInNotificationRead.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="msgs/MsgInPartial.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="msgs/MsgInSetAdapter.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInSetAdapter.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="msgs/MsgInSetConAccount.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="msgs/MsgInSetDevices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInSetDevices.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="msgs/MsgInSetGCMID.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -1349,18 +1335,6 @@
       <item path="msgs/MsgInSetRooms.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="msgs/MsgInSetRooms.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="msgs/MsgInSetTimeZone.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInSetTimeZone.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="msgs/MsgInSignMe.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInSignMe.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="msgs/MsgInSignUp.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInSignUp.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="msgs/MsgInSwitch.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -1374,9 +1348,25 @@
       </item>
       <item path="msgs/MsgInUpdateView.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="msgs/UserGetID.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/UserGetID.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/UserGetInfo.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/UserGetInfo.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/UserLogIn.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/UserLogIn.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="msgs/UserLogout.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="msgs/UserLogout.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/UserRegister.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/UserRegister.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="pugixml.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -1523,6 +1513,10 @@
       <item path="ServerException.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="ServerException.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="SessionsTable.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="SessionsTable.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="SocketClient.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -1982,9 +1976,25 @@
       </item>
       <item path="gTokenChecker.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="msgs/GateAdd.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/GateAdd.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/GateDelete.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/GateDelete.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="msgs/GateGetInfo.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="msgs/GateGetInfo.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/GateUpdate.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/GateUpdate.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/GatesGetConnected.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/GatesGetConnected.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="msgs/IMsgIn.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -2016,10 +2026,6 @@
       </item>
       <item path="msgs/MsgInAddAccount.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="msgs/MsgInAddAdapter.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInAddAdapter.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="msgs/MsgInAddRoom.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="msgs/MsgInAddRoom.h" ex="false" tool="3" flavor2="0">
@@ -2033,10 +2039,6 @@
       <item path="msgs/MsgInAlgorithmsRedirect.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="msgs/MsgInDelAccount.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="msgs/MsgInDelAdapter.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInDelAdapter.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="msgs/MsgInDelConAccount.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -2061,10 +2063,6 @@
       <item path="msgs/MsgInGamificationRedirect.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="msgs/MsgInGamificationRedirect.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="msgs/MsgInGetAdapters.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInGetAdapters.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="msgs/MsgInGetAllDevices.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -2094,18 +2092,6 @@
       </item>
       <item path="msgs/MsgInGetRooms.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="msgs/MsgInGetTimeZone.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInGetTimeZone.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="msgs/MsgInGetUserID.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInGetUserID.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="msgs/MsgInGetUserInfo.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInGetUserInfo.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="msgs/MsgInGetViews.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="msgs/MsgInGetViews.h" ex="false" tool="3" flavor2="0">
@@ -2114,15 +2100,11 @@
       </item>
       <item path="msgs/MsgInNotificationRead.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="msgs/MsgInPartial.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="msgs/MsgInSetAdapter.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInSetAdapter.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="msgs/MsgInSetConAccount.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="msgs/MsgInSetDevices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/MsgInSetDevices.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="msgs/MsgInSetGCMID.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -2131,18 +2113,6 @@
       <item path="msgs/MsgInSetRooms.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="msgs/MsgInSetRooms.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="msgs/MsgInSetTimeZone.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInSetTimeZone.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="msgs/MsgInSignMe.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInSignMe.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="msgs/MsgInSignUp.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInSignUp.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="msgs/MsgInSwitch.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -2156,9 +2126,25 @@
       </item>
       <item path="msgs/MsgInUpdateView.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="msgs/UserGetID.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/UserGetID.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/UserGetInfo.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/UserGetInfo.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/UserLogIn.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/UserLogIn.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="msgs/UserLogout.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="msgs/UserLogout.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/UserRegister.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/UserRegister.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="pugixml.cpp" ex="false" tool="1" flavor2="0">
       </item>

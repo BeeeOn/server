@@ -11,19 +11,19 @@
 #include "../DAO/DAODevices.h"
 using namespace std;
 
-const string MsgInLogName::state = "getlog";
+const string GetLog::state = "getlog";
 
-MsgInLogName::MsgInLogName(pugi::xml_document* doc):IMsgInLoginAndAdapterAccessRequired(doc) {
+GetLog::GetLog(pugi::xml_document* doc):IMsgInLoginAndAdapterAccessRequired(doc) {
 }
 
-MsgInLogName::~MsgInLogName() {
+GetLog::~GetLog() {
 }
 
-int MsgInLogName::getMsgAuthorization() {
+int GetLog::getMsgAuthorization() {
     return GUEST;
 }
 
-string MsgInLogName::createResponseMsgOut()
+string GetLog::createResponseMsgOut()
 {                        
     pugi::xml_node comNode =  _doc->child(P_COMMUNICATION);
     string logFrom =  comNode.attribute(P_LOG_FROM).value();

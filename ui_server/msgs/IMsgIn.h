@@ -18,7 +18,7 @@
 #define P_ADAPTER_ID "aid"
 #define P_IN_ADAPTER_ID "id"
 #define P_ADAPTER_NAME "aname"
-#define P_ADAPTER_SOCKET "socket"
+#define P_ADAPTER_IP "ip"
 #define P_ADAPTER_VERSION "aversion"
 #define P_ADAPTER_N_USERS "nusers"
 #define P_ADAPTER_N_FACILITIES "nfacs"
