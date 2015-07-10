@@ -82,7 +82,7 @@ void FrameworkServerHandle::HandleAdapterMessage(std::string data, Loger *Log, F
 		Log->WriteMessage(TRACE, "Exiting " + this->_Name + "::HandleConnection");
 		return;
 	}
-	//this->MP->setAdapterIP(IP);  //ulozime IP adresu adapteru do spravy ODSTRANENO PROTOZE nepotøebuji IP adresu
+	//this->MP->setAdapterIP(IP);  //ulozime IP adresu adapteru do spravy ODSTRANENO PROTOZE nepotÃ¸ebuji IP adresu
 	parsedMessage = this->MP->ReturnMessage();
 	//----------------------Zde testovat obsah zpravy a na zaklade neho mathovat s db a pokud ano pak spustit Algoritmus-------------------
 	//Nejdrive match zda existuje zaznam v UserAlgorithm s algoritmem na dany adapter
@@ -165,4 +165,5 @@ void FrameworkServerHandle::HandleAdapterMessage(std::string data, Loger *Log, F
 			}
 		}
 	delete(MP);
+	//delete(this->parsedMessage);
 }

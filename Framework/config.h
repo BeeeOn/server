@@ -8,7 +8,7 @@
 */
 
 #include <string>
-#include <stdlib.h> 
+#include <stdlib.h>
 #include "loger.h"
 #include "DBFWHandler.h"
 
@@ -50,6 +50,7 @@ public:
 	int loggerSettingFilesCnt;				/** Maximalni pocet vytvorenych logovacich souboru. */
 	int loggerSettingLinesCnt;				/** Maximalni pocet radku v logovacim souboru. */
 	std::vector<talgorithm *> algorithms;	/** Kolekce struktur talgorithm uchovavajici informace o definicich aplikacnich modulu. */
+	int connectionPoolSize;
 
 	FrameworkConfig();
 	~FrameworkConfig();

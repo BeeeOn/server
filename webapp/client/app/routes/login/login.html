@@ -1,0 +1,14 @@
+<div flex layout="column" layout-gt-md="row" class="loginPanelWrapper" >
+    <!-- above on mobile, left on larger devices -->
+    <div flex layout="column" class="loginLogoPanel" layout-align="center center">
+        <div>
+            <md-icon class="loginLogoIcon" md-svg-icon="logo" style="height: auto;width: auto"></md-icon>
+        </div>
+    </div>
+    <!-- below on mobile, right on larger devices -->
+    <div flex layout="column" class="loginSignButtonsPanel" layout-align="center center">
+        <md-button class="md-raised loginGButton loginButton" aria-label="Sign in with G+ account" ng-click="openProgressModal(progressMessage)">G+ Login</md-button>
+        <md-button class="md-raised loginButton" aria-label="Sign in with Facebook account" >Facebook Login</md-button>
+        <md-button class="md-raised loginButton" aria-label="See application demo" ng-click="demoLogin()">Demo Login</md-button>
+    </div>
+</div>

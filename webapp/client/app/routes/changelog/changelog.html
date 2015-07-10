@@ -1,0 +1,19 @@
+<md-content>
+    <md-list>
+        <md-list-item ng-repeat="log in logs">
+            <section>
+                <div class="md-list-item-text">
+                    <h3>Date: {{log.date}}</h3>
+                    <p>Version: {{log.version}} | Author: {{log.author}}</p>
+                    <ul class="hasChangeLogChips">
+                        <li ng-repeat="point in log.points">
+                            <span class="{{point.level}}">{{point.level}}</span>
+                            {{point.text}}
+                        </li>
+                    </ul>
+                </div>
+                <md-divider ></md-divider>
+            </section>
+        </md-list-item>
+    </md-list>
+</md-content>

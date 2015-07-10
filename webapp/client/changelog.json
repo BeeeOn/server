@@ -1,0 +1,38 @@
+{
+  "logs": [
+  {
+    "date": "09-07-2015",
+    "version": "0.0.0",
+    "author": "Filip Sutovsky <xsutov00@stud.fit.vutbr.cz>",
+    "points": [{
+      "level" : "major",
+      "text" : "GUI - Login screen added -> accessible DEMO mod"
+    },{
+      "level" : "major",
+      "text" : "GUI - Overview screen added"
+    },{
+      "level" : "minor",
+      "text" : "GUI - Notification screen added"
+    },{
+      "level" : "major",
+      "text" : "GUI - navigation bar added to Overview and Notification"
+    },{
+      "level" : "major",
+      "text" : "GUI - added menu to navigation - locked on large devices(PC), responsible hiding on smaller devices (shown menu icon)"
+    },{
+      "level" : "minor",
+      "text" : "URL redirection (unknown URLs redirected to Overview);URL access - need to be logged in (currently demo mod) to access existing URLs, except \"Login\" URL"
+    },{
+      "level" : "minor",
+      "text" : "URL access - need to be logged in (currently demo mod) to access existing URLs, except \"Login\" URL"
+    }]
+  }, {
+    "date": "08-07-2015",
+    "version": "0.0.0",
+      "author": "Filip Sutovsky <xsutov00@stud.fit.vutbr.cz>",
+      "points": [{
+        "level" : "major",
+        "text" : "Change log created"
+      }]
+  }
+  ]}
