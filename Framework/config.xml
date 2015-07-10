@@ -7,7 +7,8 @@
 	DBName="home6"
 	maxNumDBConnections="10"
 	recieveBuffSize="5000"
-	algorithmsConfig="Algorithms/AlgsConfig.xml">
+	algorithmsConfig="Algorithms/AlgsConfig.xml"
+	connPoolSize="10">
 	<loger
 		fileName="log"
 		appName="FRAMEWORK"

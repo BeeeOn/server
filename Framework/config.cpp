@@ -56,9 +56,10 @@ void FrameworkConfig::SetConfig(std::string configPath){
 	this->dbName = frameworkConfig.attribute("DBName").value();
 	this->maxNumberDBConnections = frameworkConfig.attribute("maxNumDBConnections").as_int();
 	this->algorithmsConfig = frameworkConfig.attribute("algorithmsConfig").value();
+	this->connectionPoolSize = frameworkConfig.attribute("connPoolSize").as_int();
 
 	xml_node loger = frameworkConfig.child("loger");
-	
+
 	this->loggerSettingFileName = loger.attribute("fileName").value();
 	this->loggerSettingAppName = loger.attribute("appName").value();
 	this->loggerSettingVerbosity = loger.attribute("verbosity").as_int();
@@ -91,7 +92,7 @@ void FrameworkConfig::SetAlgorithms(){
 	}
 }
 /**
-* Nastaveni instance pro logovani do objektu FrameworkConfig 
+* Nastaveni instance pro logovani do objektu FrameworkConfig
 *
 * @param init_Log   instance tridy Loger, ktera umoznuje logovani do souboru
 * @return            nothing

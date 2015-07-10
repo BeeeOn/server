@@ -28,6 +28,7 @@ FrameworkServer * AlgServer;
 Loger *Log;									//Loger pro logování do souboru
 DBConnectionsContainer *cont = NULL;		//Container pro DB
 FrameworkConfig *FConfig = NULL;
+HandlePoolContainer* poolContainer = NULL;
 sem_t connectionSem;						//Semafor pro maximální poèet pøipojení k Frameworku
 sem_t dbAccessSem;
 std::atomic<unsigned long> connCount;
@@ -95,7 +96,7 @@ int FrameworkServer::AcceptConnection(){
 
 	while (1)
 	{
-		if ((newSocket = accept(serverSocket, (sockaddr*)&clientInfo, &addrlen)) < 0)  //budeme na nom prijimat data
+		if ((newSocket = accept(serverSocket, (sockaddr*)&clientInfo, &addrlen)) < 0)
 		{
 			cerr << "Problém s pøijetím spojeni" << endl;
 			return 1;
@@ -105,7 +106,10 @@ int FrameworkServer::AcceptConnection(){
 		Log->WriteMessage(INFO, "CONNECTION COUNT : " + std::to_string(connCount));
 		try
 		{
-			FrameworkServerHandle *FSH = new FrameworkServerHandle(newSocket, this->port);
+		    //Vybereme z poolu dostupnych obsluznych objektu
+			FrameworkServerHandle *FSH = poolContainer->GetConnectionHandler();
+			FSH->setSocket(newSocket);
+			FSH->setPort(this->port);
 			std::thread worker(&FrameworkServerHandle::HandleClientConnection, FSH);
 			worker.detach();
 		}
@@ -126,6 +130,13 @@ int FrameworkServer::AcceptConnection(){
 
 //---------------------------------------  BEGIN FRAMEWORK SERVER HANDLE METHODS IMPLEMENTATIONS ---------------------------------------
 
+void FrameworkServerHandle::setSocket(int init_socket){
+    this->handledSocket = init_socket;
+}
+
+void FrameworkServerHandle::setPort(int init_port){
+    this->port = init_port;
+}
 
 /** Metoda obsluhujici prichozi spojeni. Je rozdelena na tri casti, protoze je implementovana k obsluze tri serveru (3 portu). Tyto tri servery jsou: Server pro zpracovani zprav od UI serveru, Server pro zpracovani zprav od Adapter Reciever serveru a Server pro zpracovani zprav od Algoritmu
 *
@@ -303,7 +314,8 @@ void FrameworkServerHandle::HandleClientConnection(){
 	cont->ReturnConnection(database->GetConnectionSession());
 	connCount--;
 	sem_post(&connectionSem);
-	delete(this);
+	close(this->handledSocket);
+	poolContainer->ReturnConnectionHandler(this);
 }
 
 
@@ -629,7 +641,7 @@ FrameworkServerHandle::FrameworkServerHandle(int init_socket, int init_port){
 *
 */
 FrameworkServerHandle::~FrameworkServerHandle(){
-	close(this->handledSocket);
+
 }
 
 
@@ -998,6 +1010,16 @@ int main()
 	FConfig->SetUpAlgorithmsInDatabase(database);
 	cont->ReturnConnection(database->GetConnectionSession());
 	delete(database);
+
+    try
+	{
+        poolContainer = HandlePoolContainer::GetHandlePoolContainer(FConfig->connectionPoolSize,Log);
+	}
+	catch (std::exception &e)
+	{
+		std::cerr << "Framework: Unable to create memory space for HandlePoolContainer. Exiting!" << std::endl;
+		exit(EXIT_FAILURE);
+	}
 	//Instanciace serveru prijimajici zpravy od UI Serveru
 	try
 	{
