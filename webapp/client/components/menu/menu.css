@@ -1,0 +1,19 @@
+.md-locked-open{
+    margin-top:2px;
+}
+.menuUserPanel {
+    background-color: #e7e9ea;
+}
+
+.menuUserPanel .email {
+    color: #747474;
+}
+
+.menuUserPanel md-list-item.md-2-line .md-list-item-text h3 {
+    font-weight: bold;
+}
+
+.menuUserPanel md-list-item > .md-avatar:first-child {
+    width: 48px;
+    height: 48px;
+}

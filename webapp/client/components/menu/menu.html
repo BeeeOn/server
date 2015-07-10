@@ -1,0 +1,41 @@
+<!-- Left Menu panel. Locked on large screens, hiddable otherwise-->
+<md-sidenav flex class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-lg')" ng-cloak>
+    <!-- toolbar with menu hide button hidden on large screen, because menu is locked (not hiddable)-->
+    <md-toolbar hide-gt-lg>
+        <div class="md-toolbar-tools">
+            <location-button type="menu_close" location="BeeeOn" class="navbarLocationPanel"></location-button>
+        </div>
+    </md-toolbar>
+    <!-- User info panel-->
+    <div layout="row" layout-align="space-around center" class="menuUserPanel" ng-controller="MenuCtrl">
+        <md-list-item class="md-2-line" layout="row" layout-align="start center">
+            <!-- avatar -->
+            <img ng-src="{{user.pictureURL}}" class="md-avatar" alt="" ng-style="{'background-color': clr_primary}"/>
+            <!-- full name and email -->
+            <div class="md-list-item-text">
+                <h3 ng-style="{'color': clr_primary}" class="md-body-2 md-title">{{user.name}} {{user.surname}}</h3>
+                <p class="email">{{user.mail}}</p>
+            </div>
+        </md-list-item>
+        <!-- user profile button-->
+        <md-button class="md-icon-button" aria-label="User profile">
+            <md-icon md-svg-icon="b_info" ng-style="{'width': '48px','height': '48px','color':clr_accent}"></md-icon>
+        </md-button>
+    </div>
+    <!-- menu content -->
+    <md-content layout-padding ng-controller="MenuCtrl">
+        <!-- gateways -->
+        <md-list>
+            <md-subheader class="md-no-sticky">Gateways</md-subheader>
+                <div layout="row" layout-align="space-between center" >
+                    <md-list-item  class="md-2-line">
+                        <div class="md-list-item-text">
+                            <h3>Adapter</h3>
+                            <p>Secondary text</p>
+                        </div>
+                    </md-list-item>
+                    <md-icon md-svg-icon="done" ng-style="{'width': '48px','height': '48px','color': clr_accent}"></md-icon>
+                </div>
+        </md-list>
+    </md-content>
+</md-sidenav>
