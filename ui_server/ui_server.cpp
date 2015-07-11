@@ -17,6 +17,7 @@
 #include "msgs/GateGetInfo.h"
 #include "msgs/GateUpdate.h"
 #include "SessionsTable.h"
+#include "DBConnector.h"
 
 #include <iostream>
 #include <unistd.h>

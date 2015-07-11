@@ -31,7 +31,6 @@
 #include <signal.h>
 #include <atomic>
 
-#include "testHelper.h"
 #include "sslServlet.h"
 
 
