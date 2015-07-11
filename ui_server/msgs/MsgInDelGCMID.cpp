@@ -27,7 +27,7 @@ string MsgInDelGCMID::createResponseMsgOut() {
     int uid = _doc->child(P_COMMUNICATION).attribute(P_USER_ID).as_int(-1);
     DAOMobileDevices::getInstance().delGCMId(uid, gcmid);
     
-    return genOutputXMLwithVersionAndState(R_TRUE);
+    return getXMLreply(R_TRUE);
 }
 
 int MsgInDelGCMID::getMsgAuthorization() {

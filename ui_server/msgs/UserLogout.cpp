@@ -20,7 +20,7 @@ int UserLogout::getMsgAuthorization() {
 string UserLogout::createResponseMsgOut() {
     
     //TODO
-    return genOutputXMLwithVersionAndState(R_TRUE);
+    return getXMLreply(R_TRUE);
     
     //_outputMainNode.append_attribute(P_ERRCODE) = ServerException::LOGOUT_ERROR;
     //return genOutputXMLwithVersionAndState(R_FALSE);

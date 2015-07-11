@@ -83,10 +83,9 @@ public:
 
     static const int GCMID;
     
+    //static const int NOT_SUPPORTED_YET;
     static const int UNKNOWN_ERROR;
-    
     static const int RANDOMGEN;
-    
     static const int MSG_UNKNOWN;
     
 };

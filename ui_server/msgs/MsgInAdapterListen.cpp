@@ -34,7 +34,7 @@ string MsgInAdapterListen::createResponseMsgOut()
         r= sc.read();
     }catch(...){
         _outputMainNode.append_attribute(P_ERRCODE) = ServerException::SERVER2SERVER;
-        return genOutputXMLwithVersionAndState(R_FALSE);
+        return getXMLreply(R_FALSE);
     }
     
     Logger::getInstance(Logger::DEBUG3)<<"S2S communication: "<< r<<endl; 
@@ -46,6 +46,6 @@ string MsgInAdapterListen::createResponseMsgOut()
     else
     {
         _outputMainNode.append_attribute(P_ERRCODE) = ServerException::ADAPTER_LISTEN_FAIL;
-        return genOutputXMLwithVersionAndState(R_FALSE);
+        return getXMLreply(R_FALSE);
     }
 }

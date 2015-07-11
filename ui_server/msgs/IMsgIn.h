@@ -176,12 +176,15 @@ public:
     static const std::string VERSION;
 protected:
     std::string makeXMLattribute(std::string attr,std::string value);
-    std::string genOutputXMLwithVersionAndState(std::string responseState);
+    std::string getXMLreply(std::string responseState);
+    std::string getNegativeXMLReply(int errorCode);
+    std::string getNegativeXMLReply(int errorCode, char* errorInfo);
 
 private:
     t_version parseProtocolVersion(std::string version);
     std::string envelopeResponseSetAttributes(std::string state, std::string response, std::string attributes);
     
+    void makeCommunicationHeader(std::string responseState);
 };
 
 #endif /* IMSGIN_H */

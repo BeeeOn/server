@@ -30,7 +30,7 @@ string GateDelete::createResponseMsgOut() {
     {
         if (DAOAdapters::getInstance().delUsersAdapter(_adapterId, _userId) > 0)
         {
-            return genOutputXMLwithVersionAndState(R_TRUE);
+            return getXMLreply(R_TRUE);
         }
     }
     else
@@ -48,18 +48,16 @@ string GateDelete::createResponseMsgOut() {
             sc.write(request);
             r = sc.readUntilendTag("</reply>");
         }catch(...){
-            throw ServerException(ServerException::SERVER2SERVER);
+            return getNegativeXMLReply(ServerException::SERVER2SERVER);
         }
         Logger::getInstance(Logger::DEBUG3)<<"S2S communication: "<< r<<endl; 
 
         if(r == "<reply>true</reply>")
-        return envelopeResponse(R_TRUE);
+            return getXMLreply(R_TRUE);
         else
-             throw ServerException(ServerException::SERVER2SERVER);
+             return getNegativeXMLReply(ServerException::SERVER2SERVER);
     }
-        
-    _outputMainNode.append_attribute(P_ERRCODE) = ServerException::ROLE;
-    return genOutputXMLwithVersionAndState(R_FALSE);
+    return getNegativeXMLReply(ServerException::ROLE);
     
 }
 

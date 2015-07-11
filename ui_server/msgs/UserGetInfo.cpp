@@ -58,7 +58,7 @@ string UserGetInfo::createResponseMsgOut() {
     
     //accountsNode.append_attribute(P_SERVICE_BEEEON)
     
-    return genOutputXMLwithVersionAndState(R_USER_INFO);
+    return getXMLreply(R_USER_INFO);
 }
 
 

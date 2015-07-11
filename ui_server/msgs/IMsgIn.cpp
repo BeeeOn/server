@@ -137,18 +137,36 @@ string IMsgIn::makeXMLattribute(string attr, string value) {
     return attr+"=\""+value+"\"";
 }
 
-std::string IMsgIn::genOutputXMLwithVersionAndState(std::string responseState) {
-    
-        
+void IMsgIn::makeCommunicationHeader(std::string responseState) {
+    pugi::xml_node declaration = _outputDoc.append_child(pugi::node_declaration);
+    declaration.append_attribute("version") = "1.0";
+    declaration.append_attribute("encoding") = "UTF-8";
     
     _outputMainNode.prepend_attribute(P_STATE) = responseState.c_str();
     _outputMainNode.prepend_attribute(P_VERSION) = IMsgIn::VERSION.c_str();
     _outputMainNode.append_child(pugi::node_pcdata).set_value("");
+}
+
+
+std::string IMsgIn::getXMLreply(std::string responseState) {
+    
+    makeCommunicationHeader(responseState);
     //_outputDoc.print(std::cout);
     
-    return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + node_to_string(_outputDoc);
+    return node_to_string(_outputDoc);
    /* std:: ostringstream ss; 
-_outputDoc.save (ss); 
-std:: string s = ss.str (); 
-return s;*/
+    _outputDoc.save (ss); 
+    std:: string s = ss.str (); 
+    return s;*/
+}
+
+std::string IMsgIn::getNegativeXMLReply(int errorCode) {
+        _outputMainNode.append_attribute(P_ERRCODE) = errorCode;
+        return getXMLreply(R_FALSE);
+}
+
+std::string IMsgIn::getNegativeXMLReply(int errorCode, char* errorInfo) {
+        _outputMainNode.append_attribute(P_ERRCODE) = errorCode;
+        _outputMainNode.append_child(pugi::node_pcdata).set_value(errorInfo);
+        return getXMLreply(R_FALSE);
 }

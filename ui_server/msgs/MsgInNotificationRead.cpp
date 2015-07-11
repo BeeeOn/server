@@ -29,11 +29,11 @@ std::string MsgInNotificationRead::createResponseMsgOut() {
     
     if ( DAONotification::getInstance().setReaded(notif_id) > 0 )
     {
-        return genOutputXMLwithVersionAndState(R_TRUE);
+        return getXMLreply(R_TRUE);
     }
     else
     {
         _outputMainNode.append_attribute(P_ERRCODE) = ServerException::NOTIFICATION_ID;
-        return genOutputXMLwithVersionAndState(R_FALSE);
+        return getXMLreply(R_FALSE);
     }
 }

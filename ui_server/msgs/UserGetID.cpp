@@ -25,6 +25,6 @@ int UserGetID::getMsgAuthorization() {
 string UserGetID::createResponseMsgOut() {
     int UID = DAOUsers::getInstance().getUserIdbyIhaToken(_token);
     _outputMainNode.append_attribute(P_USER_ID) = UID;
-    return genOutputXMLwithVersionAndState(R_UID);
+    return getXMLreply(R_UID);
     
 }

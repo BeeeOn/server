@@ -31,17 +31,17 @@ string GateUpdate::createResponseMsgOut()
             tz = stoi(newTimeZone);
         }catch(...){
             _outputMainNode.append_attribute(P_ERRCODE) = ServerException::TIMEZONE_UTC;
-            return genOutputXMLwithVersionAndState(R_FALSE);
+            return getXMLreply(R_FALSE);
         }
         if(tz <= P_TIME_MIN || tz >= P_TIME_MAX)
         {
             _outputMainNode.append_attribute(P_ERRCODE) = ServerException::TIMEZONE_UTC;
-            return genOutputXMLwithVersionAndState(R_FALSE);
+            return getXMLreply(R_FALSE);
         }
     }
     string newName = _doc->child(P_COMMUNICATION).attribute(P_ADAPTER_NAME).value();
     
     DAOAdapters::getInstance().updateAdapter(_adapterId, newName, newTimeZone);
     
-    return genOutputXMLwithVersionAndState(R_TRUE);
+    return getXMLreply(R_TRUE);
 }

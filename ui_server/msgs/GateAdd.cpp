@@ -27,24 +27,29 @@ string GateAdd::createResponseMsgOut() {
     
     string adapterName = adapterNode.attribute(P_ADAPTER_NAME).value();
     
-    if(DAOAdapters::getInstance().parAdapterWithUserIfPossible(adapterId, adapterName, _userId) == 0){
+    if(DAOAdapters::getInstance().parAdapterWithUserIfPossible(adapterId, adapterName, _userId) == 0)
+    {
         if(DAOAdapters::getInstance().isAdapterInDB(adapterId) == 0)
-            throw ServerException(ServerException::ADAPTER_ID);
+        {
+            return getNegativeXMLReply(ServerException::ADAPTER_ID);
+        }
         else
-            throw ServerException(ServerException::ADAPTER_TAKEN);
+        {
+            //bool haveUserAccessDAOUsers::getInstance().getUserRoleM(_userId, adapterIDStr);
+            return getNegativeXMLReply(ServerException::ADAPTER_TAKEN);
+        }
     }
     
     
-        string r;
+    string r;
     try{
-        SocketClient sc(Config
-        ::getInstance().getGamificationPort());    
+        SocketClient sc(Config::getInstance().getGamificationPort());    
                         
         Logger::getInstance(Logger::DEBUG3)<<"Gami communication"<<endl; 
         
         pugi::xml_node node = _doc->child(P_COMMUNICATION);
         node.append_attribute("userid")=_userId;
-        node.append_attribute("id")="61";
+        node.append_attribute("id")="61";//Magic for gamification
         
         string algoStr = node_to_string(node);
         Logger::debug3() << "newadapter _ toGami: " << algoStr << endl;
@@ -53,7 +58,7 @@ string GateAdd::createResponseMsgOut() {
         Logger::debug3() << "newadapter _ toGami: FAIL" << endl;
     }
     
-    return genOutputXMLwithVersionAndState(R_TRUE);
+    return getXMLreply(R_TRUE);
 }
 
 int GateAdd::getMsgAuthorization() {

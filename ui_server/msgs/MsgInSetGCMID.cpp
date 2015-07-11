@@ -33,10 +33,10 @@ string MsgInSetGCMID::createResponseMsgOut() {
     if(DAOMobileDevices::getInstance().setGCMId(_token, gcmid) == 0)
     {
         _outputMainNode.append_attribute(P_ERRCODE) = ServerException::GCMID;
-        return genOutputXMLwithVersionAndState(R_FALSE);
+        return getXMLreply(R_FALSE);
     }
     
-    return genOutputXMLwithVersionAndState(R_TRUE); 
+    return getXMLreply(R_TRUE); 
 }
 
 

@@ -37,8 +37,7 @@ string UserRegister::createResponseMsgOut()
 
         if( !isGTokenOk(gToken, gInfo) )
         {
-            _outputMainNode.append_attribute(P_ERRCODE) = ServerException::TOKEN_EMAIL;
-            return genOutputXMLwithVersionAndState(R_FALSE);
+            return getNegativeXMLReply(ServerException::TOKEN_EMAIL);
         }
 
         user.familyName = gInfo.family_name;
@@ -55,7 +54,7 @@ string UserRegister::createResponseMsgOut()
                 
         string fbToken = parametersNode.attribute(P_FACEBOOK_TOKEN).value();   
         if ( !isFTokenOkay(fbToken, fInfo))
-            throw ServerException(ServerException::TOKEN_EMAIL);
+            return getNegativeXMLReply(ServerException::TOKEN_EMAIL);
 
         user.familyName = fInfo.last_name;
         //user.gender = fInfo.gender;
@@ -65,25 +64,23 @@ string UserRegister::createResponseMsgOut()
         //user.picture = fInfo.picture;
         
     }
-    else if(service == "beeeon")
+    /*else if(service == "beeeon")
     {
         
         //string userName = parametersNode.attribute("name").value();       
         //string userPassword = parametersNode.attribute("pswd").value();     
-        
-    }
+        return getNegativeXMLReply(ServerException::NOT_SUPPORTED_YET, (char*) "beeeon registration is not provided for now");
+    }*/
     else
     {
         Logger::error() << "unsupported provider : " << service <<endl;
-        _outputMainNode.append_attribute(P_ERRCODE) = ServerException::WRONG_AUTH_PROVIDER;
-        return genOutputXMLwithVersionAndState(R_FALSE);
+        return getNegativeXMLReply(ServerException::WRONG_AUTH_PROVIDER);
     }
               
     if(DAOUsers::getInstance().add(user) == 0)
     {
-        _outputMainNode.append_attribute(P_ERRCODE) = ServerException::IDENTIFICATION_TAKEN;
-        return genOutputXMLwithVersionAndState(R_FALSE);
+        return getNegativeXMLReply(ServerException::IDENTIFICATION_TAKEN);
     }
 
-    return genOutputXMLwithVersionAndState(R_TRUE);
+    return getXMLreply(R_TRUE);
 }

@@ -65,9 +65,10 @@ using namespace std;
      
      const int  ServerException::GCMID = 300;
      
+     //const int ServerException::NOT_SUPPORTED_YET = 996;
      const int ServerException::RANDOMGEN = 997;
 
-     const int  ServerException::UNKNOWN_ERROR =998;
+     const int  ServerException::UNKNOWN_ERROR = 998;
     
      const int ServerException::MSG_UNKNOWN = 999;
 

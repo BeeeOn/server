@@ -55,7 +55,7 @@ string UserLogIn::createResponseMsgOut()
         if( !isGTokenOk(gToken, gInfo) )
         {
             _outputMainNode.append_attribute(P_ERRCODE) = ServerException::TOKEN_EMAIL;
-            return genOutputXMLwithVersionAndState(R_FALSE);
+            return getXMLreply(R_FALSE);
         }
 
         user.familyName = gInfo.family_name;
@@ -75,13 +75,13 @@ string UserLogIn::createResponseMsgOut()
         if ( !isFTokenOkay(fbToken, fInfo))
         {
             _outputMainNode.append_attribute(P_ERRCODE) = ServerException::TOKEN_EMAIL;
-            return genOutputXMLwithVersionAndState(R_FALSE);
+            return getXMLreply(R_FALSE);
         }
 
         if ( fInfo.email == "" )
         {
             _outputMainNode.append_attribute(P_ERRCODE) = ServerException::NO_MAIL_PROVIDED;
-            return genOutputXMLwithVersionAndState(R_FALSE);
+            return getXMLreply(R_FALSE);
         }
         
         user.familyName = fInfo.last_name;
@@ -97,7 +97,7 @@ string UserLogIn::createResponseMsgOut()
     }else{
         Logger::error() << "unsupported provider : " << service <<endl;
         _outputMainNode.append_attribute(P_ERRCODE) = ServerException::WRONG_AUTH_PROVIDER;
-        return genOutputXMLwithVersionAndState(R_FALSE);
+        return getXMLreply(R_FALSE);
     }
     
     int userId = DAOUsers::getInstance().getUserIDbyAlternativeKeys(user.mail, user.googleId, user.facebookId);
@@ -106,16 +106,16 @@ string UserLogIn::createResponseMsgOut()
     if(userId < 0)
     {
         _outputMainNode.append_attribute(P_ERRCODE) = ServerException::USER_DONOT_EXISTS;
-        return genOutputXMLwithVersionAndState(R_FALSE);
+        return getXMLreply(R_FALSE);
     }
     if(DAOUsers::getInstance().upsertUserWithMobileDevice(user, mobile) == 0 )
     {
         _outputMainNode.append_attribute(P_ERRCODE) = ServerException::USER_DONOT_EXISTS;
-        return genOutputXMLwithVersionAndState(R_FALSE);
+        return getXMLreply(R_FALSE);
     }
 
     _outputMainNode.append_attribute(P_SESSION_ID) = _token.c_str();
-    return genOutputXMLwithVersionAndState(R_BEEEON_TOKEN);
+    return getXMLreply(R_BEEEON_TOKEN);
 }
 
 string UserLogIn::getnewIHAtoken() {

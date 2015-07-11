@@ -70,8 +70,7 @@ int main(int argc, char** argv)
 {   
     //http://pugixml.googlecode.com/svn-history/r605/trunk/docs/samples/modify_add.cpp
     //load XML file from argv[1]
-
-    
+     
     if(argc>=2){
         try{
             Config::getInstance().loadXml(argv[1]);
@@ -97,9 +96,6 @@ int main(int argc, char** argv)
 
     Logger::getInstance().setVerbose( Config::getInstance().getVerbosity() );
         
-        
-
-
 
     Logger::debug()<< "start with port"<<serverPort << endl ;
     Logger::debug()<< "threads: "<<Config::getInstance().getServerThreadsNumber() << endl;
