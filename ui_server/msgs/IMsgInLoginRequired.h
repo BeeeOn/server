@@ -19,7 +19,6 @@ public:
     virtual enumAccessStatus checkAccess();
 
     int _userId;
-    std::string _requesterMail;
 };
 
 #endif	/* IMSGINLOGINREQUIRED_H */

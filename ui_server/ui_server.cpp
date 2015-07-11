@@ -173,11 +173,10 @@ int main(int argc, char** argv)
         while (!serverStop) {
             struct sockaddr_in addr;
             socklen_t len = sizeof(addr);
-            
+              
             //wait for phone connection (unsecured))
             int client = accept(server, (struct sockaddr*)&addr, &len);  /* accept connection as usual */
             Logger::getInstance(Logger::DEBUG3)<<"socket accepted"<<endl;
-            
             
             //create secured connection
             SSL *ssl;
@@ -221,7 +220,7 @@ int main(int argc, char** argv)
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
         while(*threadCounter){
             Logger::getInstance(Logger::DEBUG2)<<"wait- threads c.:"<<(*threadCounter +1)<<endl;
-            std::this_thread::sleep_for(std::chrono::milliseconds(50));
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
         }
         
         delete threadCounter;

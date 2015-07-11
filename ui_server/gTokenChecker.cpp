@@ -283,59 +283,118 @@ bool isGTokenOk(string gToken, googleInfo &gInfo){
     }
     return false;   
 }
-/*
- {
- "family_name": "Vampola", 
- "name": "Pavel Vampola", 
- "picture": "https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg", 
- "locale": "cs", 
- "gender": "other", 
- "email": "pvampola@gmail.com", 
- "link": "https://plus.google.com/112433523823668947901", 
- "given_name": "Pavel", 
- "id": "112433523823668947901", 
- "verified_email": true
- }
- * 
- {
- "error": {
- "errors": [
- {
- "domain": "global",
- "reason": "authError",
- "message": "Invalid Credentials",
- "locationType": "header",
- "location": "Authorization"
- }
- ],
- "code": 401,
- "message": "Invalid Credentials"
- }
- }
- */
 
-/*�~�]HTTP/1.0 200 OK
- Cache-Control: no-cache, no-store, max-age=0, must-revalidate
- Pragma: no-cache
- Expires: Fri, 01 Jan 1990 00:00:00 GMT
- Date: Tue, 24 Jun 2014 11:16:39 GMT
- Content-Type: application/json; charset=UTF-8
- X-Content-Type-Options: nosniff
- X-Frame-Options: SAMEORIGIN
- X-XSS-Protection: 1; mode=block
- Server: GSE
- Alternate-Protocol: 443:quic
+
+// Write function for curl_easy_setopt CURLOPT_WRITEFUNCTION.
+static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp) {
+  
+    ((string*)userp)->append((char*)contents, size * nmemb);
+    return size * nmemb;
+}
+
+bool isGoogleTokenOkayCURL(string gToken, googleInfo &gInfo) {
+    CURL *curl;
+    CURLcode res;
+    
+    long http_code = 0; // Stores http response code.
+    string str_response; // std::string version of response
+    string str_request = "https://www.googleapis.com/oauth2/v2/userinfo?access_token="; // std::string version of request
+    str_request.append(gToken);
+
+    // Converts std::string to char*
+    char *request = new char[str_request.size() + 1];
+    strcpy (request, str_request.c_str());
+
+    curl_global_init(CURL_GLOBAL_DEFAULT);
  
- {
- "id": "112433523823668947901",
- "email": "pvampola@gmail.com",
- "verified_email": true,
- "name": "Pavel Vampola",
- "given_name": "Pavel",
- "family_name": "Vampola",
- "link": "https://plus.google.com/112433523823668947901",
- "picture": "https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg",
- "gender": "other",
- "locale": "cs"
- }
- */
+    curl = curl_easy_init();
+    
+    if (curl) {
+        curl_easy_setopt(curl, CURLOPT_URL, request);
+        
+        delete[] request; // deletes *char version of request
+
+        // Sets curl to write to string.
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+        
+        // Writes input data to string.
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &str_response);
+
+        // Perform the request, res will get the return code.
+        res = curl_easy_perform(curl);
+
+        // Check for errors.
+        if (res != CURLE_OK) {
+            cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << endl;
+            return false;        
+        }
+        // Gets response code, if not 200, error.
+        curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &http_code);
+        if (http_code != 200) {
+            cerr << "html response: " << http_code << endl;
+            return false;
+        }
+        // Cleanup.
+        curl_easy_cleanup(curl);
+    }
+    curl_global_cleanup();
+
+    // Converts std::string to char*
+    char *response = new char[str_response.size() + 1];
+    strcpy(response, str_response.c_str());
+    
+    // JSON part
+    json_t *root, *data;
+    json_error_t error;
+
+    root = json_loads(response, 0, &error);
+    delete[] response; // deletes char* version of response
+
+    if (!root) {
+        cerr << "bad json" << endl;
+        return false;
+    }
+        
+        data = json_object_get(root, "id");
+    if(json_is_string(data))
+        gInfo.id = json_string_value(data);
+
+    data = json_object_get(root, "email");
+    if(json_is_string(data))
+        gInfo.email = json_string_value(data);
+
+    data = json_object_get(root, "verified_email");
+    if(json_is_boolean(data))
+        gInfo.verified_email = json_boolean(data);
+
+    data = json_object_get(root, "name");
+    if(!json_is_string(data))
+        gInfo.name = json_string_value(data);
+
+    data = json_object_get(root, "given_name");
+    if(json_is_string(data))
+        gInfo.given_name = json_string_value(data);
+
+    data = json_object_get(root, "family_name");
+    if(json_is_string(data))
+        gInfo.family_name = json_string_value(data);
+
+    data = json_object_get(root, "link");
+    if(json_is_string(data))
+        gInfo.link = json_string_value(data);
+
+    data = json_object_get(root, "picture");
+    if(json_is_string(data))
+        gInfo.picture = json_string_value(data);
+
+    data = json_object_get(root, "gender");
+    if(json_is_string(data))
+        gInfo.gender = json_string_value(data);
+
+    data = json_object_get(root, "locale");
+    if(json_is_string(data))
+        gInfo.locale = json_string_value(data);
+        
+    json_decref(root);    
+    return true;
+}

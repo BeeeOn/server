@@ -40,7 +40,9 @@ string MsgInChangeConAccount::createResponseMsgOut()
             errText += "<user email=\""+newUserMail+"\" role=\""+newRole+"\"/>";
             fail = ServerException::ROLE;
         }else{
-            if(newUserMail != _requesterMail)
+            
+            User user = DAOUsers::getInstance().getUserByID(_userId);
+            if(newUserMail != user.mail)
             //change users role
              if(DAOUsersAdapters::getInstance().changeConAccount(_adapterId, newUserMail, newRole) != 1){
                     errText += "<user email=\""+newUserMail+"\" role=\""+newRole+"\"/>";

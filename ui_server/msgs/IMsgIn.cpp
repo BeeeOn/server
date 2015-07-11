@@ -138,7 +138,7 @@ string IMsgIn::makeXMLattribute(string attr, string value) {
 }
 
 void IMsgIn::makeCommunicationHeader(std::string responseState) {
-    pugi::xml_node declaration = _outputDoc.append_child(pugi::node_declaration);
+    pugi::xml_node declaration = _outputDoc.prepend_child(pugi::node_declaration);
     declaration.append_attribute("version") = "1.0";
     declaration.append_attribute("encoding") = "UTF-8";
     

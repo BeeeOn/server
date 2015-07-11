@@ -26,7 +26,7 @@ int UserGetInfo::getMsgAuthorization() {
 
 string UserGetInfo::createResponseMsgOut() {
     
-    User user = DAOUsers::getInstance().getUserAssociatedWithToken(_token);
+    User user = DAOUsers::getInstance().getUserByID(_userId);
  /*   string attr = string(P_USER_NAME)+"=\""+user.givenName+"\" "+
             P_USER_SURNAME+"=\""+user.familyName+"\" "+
             P_USER_GENDER+"=\""+user.gender+"\" "+

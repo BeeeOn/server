@@ -23,7 +23,7 @@ SocketServer::~SocketServer() {
 
 int SocketServer::start(int port){
     _port = port;
-        int socket_desc , client_sock , c , read_size;
+    int socket_desc , client_sock , c , read_size;
     struct sockaddr_in server , client;
     char client_message[2000];
      

@@ -18,10 +18,8 @@
 
 struct SessionsTableEntry {
     std::chrono::time_point<std::chrono::system_clock> lastActivity;
-    time_t t;
-    std::string mail;
-    std::string adapterId;
-    int id;
+
+    int userId;
 };
 
 class SessionsTable
@@ -39,7 +37,7 @@ public:
     void removeOldEntries();
     int getUserIdBySessionString(std::string sessionString);
     
-    int addNewSession(int userId);
+    std::string addNewSession(int userId);
     
     void printTable();
     void test();

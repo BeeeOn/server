@@ -39,13 +39,16 @@ public:
     ~DAOUsers(void);
     
     int add(User user);
+    
+    User getUserAssociatedWithToken(std::string token);
+    User getUserByID(int userId);
+    
     int getUserIdbyIhaToken(std::string token);
     int getUserIDbyAlternativeKeys(std::string mail, std::string google_id, std::string facebook_id);
     int upsertUserWithMobileDevice(User user, MobileDevice mobile);
     bool isMailRegistred(std::string mail);
     bool isNameRegistred(std::string name);
     bool isGoogleIdRegistred(std::string g_id);
-    User getUserAssociatedWithToken(std::string token);
     std::string getUserRoleM(int userId, std::string adapterId);
     std::string getXMLusersAdapters(int userId);
 };

@@ -35,7 +35,7 @@ string UserRegister::createResponseMsgOut()
                 
         googleInfo gInfo;
 
-        if( !isGTokenOk(gToken, gInfo) )
+        if( !isGoogleTokenOkayCURL(gToken, gInfo) )
         {
             return getNegativeXMLReply(ServerException::TOKEN_EMAIL);
         }

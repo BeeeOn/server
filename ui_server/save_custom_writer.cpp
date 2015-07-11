@@ -52,7 +52,7 @@ struct xml_memory_writer: pugi::xml_writer
 std::string node_to_string(pugi::xml_node node)
 {
     xml_string_writer writer;
-    node.print(writer);
+    node.print(writer, "", pugi::format_raw);
 
     return writer.result;
 }

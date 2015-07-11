@@ -1,7 +1,7 @@
 #ifndef GTOKENCHECKER_H
 #define	GTOKENCHECKER_H
 #include <string>
-
+#include <curl/curl.h>
 
 struct googleInfo {
     std::string id;
@@ -16,7 +16,7 @@ struct googleInfo {
     std::string locale;
 };
 
-bool isGTokenOk(std::string gToken, googleInfo &gInfo);;
-
+bool isGTokenOk(std::string gToken, googleInfo &gInfo);
+bool isGoogleTokenOkayCURL(std::string gToken, googleInfo &gInfo);
 #endif	/* GTOKENCHECKER_H */
 

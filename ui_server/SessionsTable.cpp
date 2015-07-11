@@ -117,22 +117,22 @@ int SessionsTable::findUserIdBySessionString(std::string sessionString) {
     }else{
         it->second->lastActivity = chrono::system_clock::now();
         
-        return it->second->id;
+        return it->second->userId;
     }
 }
 
 
-int SessionsTable::addNewSession(int userId) {
+string SessionsTable::addNewSession(int userId) {
     std::lock_guard<std::mutex> lck (_mtx);
     string sessionString = getNewSessionString();
     SessionsTableEntry* e = new SessionsTableEntry;
-    e->id = userId;
+    e->userId = userId;
     e->lastActivity = chrono::system_clock::now();
     
     map<string, SessionsTableEntry*>::iterator it = _sessionMap.begin();
     _sessionMap.insert(it,std::pair<string, SessionsTableEntry*>(sessionString,e));
     
-    return 1;
+    return sessionString;
 }
 
 string SessionsTable::getNewSessionString(){
@@ -194,7 +194,7 @@ void SessionsTable::printTable() {
     for (map<string, SessionsTableEntry*>::iterator it=_sessionMap.begin(); it!=_sessionMap.end(); ++it)
     {
         i++;
-        Logger::debug3() << "entry " << i << ":" << it->first << ", " << it->second->id << endl;    
+        Logger::debug3() << "entry " << i << ":" << it->first << ", " << it->second->userId << endl;    
     };
      Logger::debug3() << "---------- " << endl; 
     

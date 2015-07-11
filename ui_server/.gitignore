@@ -1,7 +1,12 @@
 /ui_server
+
 /Doxyfile
 /build/
 /html/
 /latex/
+
 /log
 
+/cert
+
+/core.*

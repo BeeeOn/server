@@ -7,6 +7,7 @@
 
 #include "MsgInDelAccount.h"
 #include "../DAO/DAOUsersAdapters.h"
+#include "../DAO/DAOUsers.h"
 
 
 using namespace std;
@@ -33,7 +34,10 @@ string MsgInDelConAccount::createResponseMsgOut()
     for (; userNode; userNode = userNode.next_sibling(P_USER))
     {
         userMail = userNode.attribute(P_EMAIL).value();
-        if(userMail != _requesterMail)
+        
+        User user = DAOUsers::getInstance().getUserByID(_userId);
+        
+        if(userMail != user.mail)
             if(DAOUsersAdapters::getInstance().delConAccount(_adapterId, userMail) == 0){
                 //fail = true;
                 //errText += "<user email=\""+userMail+"\"/>";

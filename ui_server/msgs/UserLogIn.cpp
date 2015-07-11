@@ -52,7 +52,7 @@ string UserLogIn::createResponseMsgOut()
         
         Logger::debug3()<<"isGTokenOk"<<endl;
         
-        if( !isGTokenOk(gToken, gInfo) )
+        if( !isGoogleTokenOkayCURL(gToken, gInfo) )
         {
             _outputMainNode.append_attribute(P_ERRCODE) = ServerException::TOKEN_EMAIL;
             return getXMLreply(R_FALSE);
@@ -114,6 +114,7 @@ string UserLogIn::createResponseMsgOut()
         return getXMLreply(R_FALSE);
     }
 
+    
     _outputMainNode.append_attribute(P_SESSION_ID) = _token.c_str();
     return getXMLreply(R_BEEEON_TOKEN);
 }

@@ -22,9 +22,9 @@ bool IMsgInLoginRequired::isComIdValid(){
     
     User user = DAOUsers::getInstance().getUserAssociatedWithToken(_token);
     
+    //_userId = SessionsTable::getInstance().getUserIdBySessionString(_token);
+    //_requesterMail = user.mail;
     _userId = user.user_id;
-    _requesterMail = user.mail;
-    
     Logger::getInstance(Logger::DEBUG)<<"user:"<<_userId<<" token:"<<_token<<endl;
     
     return (_userId > 0 );

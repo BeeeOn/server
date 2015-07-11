@@ -96,6 +96,42 @@ int DAOUsers::add(User user) {
         }
 }
 
+User DAOUsers::getUserAssociatedWithToken(std::string token) {
+    Logger::db()<<"DB: get user by token:"<<token << endl;
+    
+    try
+    {
+            session sql(*_pool);
+            User user;
+
+            sql << "select * from users join mobile_devices on user_id = fk_user_id where token = :btoken", use(token, "btoken"),into(user);
+            return user; 
+    }
+    catch (soci::postgresql_soci_error& e)
+    {
+            Logger::db() << "Error: " << e.what() << " sqlState: " << e.sqlstate() <<endl;
+            throw;
+    }   
+}
+
+User DAOUsers::getUserByID(int userId) {
+    Logger::db()<<"DB: get user by id:"<<userId << endl;
+    
+    try
+    {
+            session sql(*_pool);
+            User user;
+
+            sql << "select * from users where user_id = :id", use(userId, "id"),into(user);
+            return user; 
+    }
+    catch (soci::postgresql_soci_error& e)
+    {
+            Logger::db() << "Error: " << e.what() << " sqlState: " << e.sqlstate() <<endl;
+            throw;
+    }  
+}
+
 
 
 int DAOUsers::upsertUserWithMobileDevice(User user, MobileDevice mobile){
@@ -103,25 +139,25 @@ int DAOUsers::upsertUserWithMobileDevice(User user, MobileDevice mobile){
     Logger::db()<<"DB:"<<"upsertUserWithMobileDevice"<<endl;
     try
     {
-            soci::session sql(*_pool);
+        soci::session sql(*_pool);
 
-            int newUserID;
-            //d_mail TEXT, d_locale TEXT, d_ver BOOLEAN, d_name TEXT, d_g_name TEXT, d_f_name TEXT, d_link TEXT, d_picture TEXT, d_gender TEXT, d_g_loc TEXT, d_g_id TEXT
-            
-            //sql.begin(); 
-            sql << "select upsert_user_returning_uid(:mail,:given_name, :family_name, :picture, :gender, :google_id, :facebook_id)",
-                    use(user), into(newUserID);
-            
-            //bon_token TEXT, d_mobile_id TEXT,d_type TEXT, d_locale TEXT, d_push_n TEXT, d_uid integer
-            sql << "select upsert_mobile_device(:bt, :mobileID, :type, :loc, :pushN, :userID)",
-                    use(mobile.token), use(mobile.mobile_id), use(mobile.type), use(mobile.locale),use(mobile.push_notification),use(newUserID);
-            //sql.commit();
-            return 1;
+        int newUserID;
+        //d_mail TEXT, d_locale TEXT, d_ver BOOLEAN, d_name TEXT, d_g_name TEXT, d_f_name TEXT, d_link TEXT, d_picture TEXT, d_gender TEXT, d_g_loc TEXT, d_g_id TEXT
+
+        //sql.begin(); 
+        sql << "select upsert_user_returning_uid(:mail,:given_name, :family_name, :picture, :gender, :google_id, :facebook_id)",
+                use(user), into(newUserID);
+        Logger::debug3() << "uid:" << newUserID << endl;
+        //bon_token TEXT, d_mobile_id TEXT,d_type TEXT, d_locale TEXT, d_push_n TEXT, d_uid integer
+        sql << "select upsert_mobile_device(:bt, :mobileID, :type, :loc, :pushN, :userID)",
+                use(mobile.token), use(mobile.mobile_id), use(mobile.type), use(mobile.locale),use(mobile.push_notification),use(newUserID);
+        //sql.commit();
+        return 1;
     }
     catch (soci::postgresql_soci_error& e)
     {
-                Logger::db() << "Error: " << e.what() << " sqlState: " << e.sqlstate() <<endl;
-            return 0;
+        Logger::db() << "Error: " << e.what() << " sqlState: " << e.sqlstate() <<endl;
+        return 0;
     }
 }
 
@@ -219,24 +255,6 @@ int DAOUsers::getUserIdbyIhaToken(string token) {
                 Logger::getInstance(Logger::ERROR) << "Error: " << e.what() << '\n';
                 return -1;
         }
-}
-
-User DAOUsers::getUserAssociatedWithToken(std::string token) {
-    Logger::db()<<"DB: get user by token:"<<token << endl;
-    
-    try
-    {
-            session sql(*_pool);
-            User user;
-
-            sql << "select * from users join mobile_devices on user_id = fk_user_id where token = :btoken", use(token, "btoken"),into(user);
-            return user; 
-    }
-    catch (soci::postgresql_soci_error& e)
-    {
-            Logger::db() << "Error: " << e.what() << " sqlState: " << e.sqlstate() <<endl;
-            throw;
-    }   
 }
 
 

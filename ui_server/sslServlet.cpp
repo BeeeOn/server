@@ -2,9 +2,10 @@
 #include "sslServlet.h"
 #include "communication.h"
 #include <errno.h> 
-
+#include <fcntl.h>
 using namespace std;
-
+ // https://www-01.ibm.com/support/knowledgecenter/SSB23S_1.1.0.10/com.ibm.ztpf-ztpfdf.doc_put.10/gtps5/s5examp.html?cp=SSB23S_1.1.0.10%2F0-3-2-0
+//http://read.pudn.com/downloads85/sourcecode/crypt/ca/327017/openssl-examples-20020110/read_write.c__.htm
 int OpenListener(int port) {
         int sd;
         struct sockaddr_in addr;
@@ -126,8 +127,8 @@ int readMsgFromSSL(SSL* ssl, string & msg){
     int received = 0;  
     int readCount = 0;
     int sslWant = 0;
-    do{ 
-
+    do{         
+        
         received = SSL_read(ssl, buf, sizeof(buf)-1); // get request 
         if(received > 0)
         {
@@ -148,26 +149,25 @@ int readMsgFromSSL(SSL* ssl, string & msg){
             if(ssl_err == SSL_ERROR_WANT_WRITE || ssl_err == SSL_ERROR_WANT_READ){
                 Logger::getInstance(Logger::DEBUG3)<<"ssl read, want"<< ssl_err <<"_"<<SSL_get_shutdown(ssl) <<endl;
                 
-                usleep(100*1000);
                 sslWant++;
-                if(sslWant > 10)
+                if(sslWant > 1)
                     break;
                 continue;
             }
             logErrors(ssl, received);   
             break;
         }
-        if(readCount > 5){
-            Logger::getInstance(Logger::ERROR)<<"ssl incoming data are too big"<<endl;
-            break;
+            if(readCount > 5){
+                Logger::getInstance(Logger::ERROR)<<"ssl incoming data are too big"<<endl;
+                break;
         }
 
         readCount++;
-    Logger::getInstance(Logger::DEBUG3)<< "read:" << msg <<"|" <<msg[msg.length()-1]<<msg[msg.length()-2]<<endl; 
+    //Logger::getInstance(Logger::DEBUG3)<< "read:" << msg <<"|" <<msg[msg.length()-1]<<msg[msg.length()-2]<<endl; 
 
     }while( !has_suffix(msg,"</com>"));
     
-    Logger::getInstance(Logger::DEBUG3)<<"ssl whole read ("<<received<< " vs "<< msg.length() <<")result:"<< msg <<endl;
+    //Logger::getInstance(Logger::DEBUG3)<<"ssl whole read ("<<received<< " vs "<< msg.length() <<")result:"<< msg <<endl;
     
     
     return received;
@@ -178,12 +178,20 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
         Logger::getInstance(Logger::DEBUG3)<<"servlet start"<<endl;
         
         int fd = SSL_get_fd(ssl);
+                       
         struct timeval tv;
-        tv.tv_sec = 30;
+        tv.tv_sec = 1;
         tv.tv_usec = 0; 
         setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv,sizeof(struct timeval));
+        
         SSL_set_fd(ssl, fd);
         
+        
+        /*fcmode=fcntl(fd,F_GETFL,0);  
+        ofcmode|=O_NDELAY;  
+        if(fcntl(sock,F_SETFL,ofcmode))  
+        err_exit("Couldn't make socket nonblocking");  
+    */
         int sd, received;
         int ret;
         //char *rc=NULL;
@@ -205,7 +213,7 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
                msgIn="";
                 received = readMsgFromSSL(ssl, msgIn);
                 
-                Logger::getInstance(Logger::DEBUG3)<<"received"<< received << " : " <<msgIn<< endl;
+                //Logger::getInstance(Logger::DEBUG3)<<"received"<< received << " : " <<msgIn<< endl;
                 if ( received > 0) {
                     Logger::getInstance(Logger::DEBUG3)<<"Start resolve "<< burstMsgCount++ <<" msg in burst"<<endl;
                        
@@ -215,7 +223,7 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
                     if ( replyString[replyString.size()-1] != '\n' )
                         replyString.append("\n");
                     //replyString.insert(0, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"); 
-                    Logger::getInstance(Logger::DEBUG3)<<"last chars of reply:"<< replyString.substr(replyString.length()-10, 10)<<"<"<<endl;
+                    //Logger::getInstance(Logger::DEBUG3)<<"last chars of reply:"<< replyString.substr(replyString.length()-10, 10)<<"<"<<endl;
 
                     int writeBytes = SSL_write(ssl, replyString.c_str(), replyString.length() ); // send reply 
                     Logger::getInstance(Logger::DEBUG3)<<"write "<< writeBytes<<endl;

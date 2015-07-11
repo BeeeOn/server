@@ -10,5 +10,5 @@ while  [ -n "$portstatus" ]; do
     sleep 1
     portstatus=$( netstat -an | grep $port )
 done
-
+echo "starting ui_server"
 ./ui_server config_devel.xml >> log 2>&1
