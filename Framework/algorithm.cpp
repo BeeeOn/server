@@ -18,14 +18,14 @@ using namespace soci;
 *
 */
 Algorithm::Algorithm(std::string init_userID, std::string init_algID, std::string init_adapterID,
-	std::string init_offset, multimap<unsigned int, map<string, string>> init_values, 
+	std::string init_offset, multimap<unsigned int, map<string, string>> init_values,
 	std::vector<std::string> init_parameters, vector<tRidValues *> init_Rids, std::string init_nameOfDB){
 
 	this->userID = init_userID;
 	this->algID = init_algID;
 	this->adapterID = init_adapterID;
 	this->offset = init_offset;
-	this->values = init_values; 
+	this->values = init_values;
 	this->parameters = init_parameters;
 	this->Rids = init_Rids;
 	this->nameOfDB = init_nameOfDB;
@@ -118,7 +118,7 @@ bool Algorithm::AddNotify(unsigned short int type, std::string text, std::string
 * @return Boolean o vysledku oprerace.
 */
 bool Algorithm::ChangeActor(std::string id, std::string type){
-	
+
 	ttoggle * newToggle;
 	try
 	{
@@ -137,21 +137,21 @@ bool Algorithm::ChangeActor(std::string id, std::string type){
 	return true;
 }
 
-/** Funkce provede spojeni s modularnim prostredim, odesle zpravu. (Nasledne by se mela radne uvolnit pamet pred ukoncenim celeho aplikacniho modulu.) 
+/** Funkce provede spojeni s modularnim prostredim, odesle zpravu. (Nasledne by se mela radne uvolnit pamet pred ukoncenim celeho aplikacniho modulu.)
 *
 * @return Boolean o vysledku operace.
 */
 bool Algorithm::SendAndExit(){
-	
+
 	string ParsedMessage = this->CreateMessage();
-	hostent *host;              
-	sockaddr_in serverSock;     
-	int mySocket;               
-	int port;                   
-	int size;                   
+	hostent *host;
+	sockaddr_in serverSock;
+	int mySocket;
+	int port;
+	int size;
 	port = atoi(FW_PORT);
 	host = gethostbyname("localhost");
-	
+
 	if ((mySocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == -1)
 	{
 		cerr << "Nelze vytvoøit soket" << endl;
@@ -174,7 +174,7 @@ bool Algorithm::SendAndExit(){
 		return false;
 	}
 	close(mySocket);
-	
+
 	return true;
 }
 
@@ -248,7 +248,7 @@ std::string Algorithm::CreateMessage(){
 }
 /** Staticka metoda zpracujici parametry prikazoveho radku a vytvarejici objekt tridy Algorithm.
 *
-* @return Algorithm * Ukazatel na vytvoreny objekt tridy Algorithm. 
+* @return Algorithm * Ukazatel na vytvoreny objekt tridy Algorithm.
 */
 Algorithm * Algorithm::getCmdLineArgsAndCreateAlgorithm(int argc, char *argv[]){
 
@@ -266,7 +266,7 @@ Algorithm * Algorithm::getCmdLineArgsAndCreateAlgorithm(int argc, char *argv[]){
 		switch (opt)
 	{
 		case 'h':
-			cout << "print help" << endl;
+			Algorithm::usage(argv[0]);
 			return nullptr;
 			break;
 		case 'u': // userID
@@ -306,6 +306,12 @@ Algorithm * Algorithm::getCmdLineArgsAndCreateAlgorithm(int argc, char *argv[]){
 		return nullptr;
 	}
 
+	if(!e){
+        cerr << "Algorithm failure: Wrong command line arguments! No specified cmd arg for DB Name!\n";
+        cerr << "Algorithm failure: Wrong command line arguments! No specified cmd arg for DB Name!\n";
+		return nullptr;
+	}
+
 	//Deklarace promìnných pro uložení z operací parsování
 	multimap<unsigned int, map<string, string>> values;
 	vector<string> params;
@@ -320,6 +326,20 @@ Algorithm * Algorithm::getCmdLineArgsAndCreateAlgorithm(int argc, char *argv[]){
 	return new Algorithm(userIDString, algIDString, adapterIDString, UserAlgIdString, values, params, Rids, nameOfDB);
 }
 
+void Algorithm::usage(char* progName)
+{
+  cout << progName << "[options]" << endl <<
+      "Options:" << endl <<
+      "-h      Print this help" << endl <<
+      "-u      userID" << endl <<
+      "-a      algorithmID" << endl <<
+      "-d      adapterId" << endl <<
+      "-d      adapterId" << endl <<
+      "-v      senzor Values in format RidOrDevice=device#ID=3976200203#type=10#fval=23.900000#offset=0" << endl <<
+      "-p      user parameters in format 3976200203---10#lt#24#notif#mensi 24" << endl <<
+      "-e      name of Database" << endl;
+}
+
 /** Metoda, ktera vezme hodnotu parametru -v prikazove radky a zparsuje jej.
 *
 */
@@ -327,21 +347,21 @@ multimap<unsigned int, map<string, string>> Algorithm::parseValues(std::string v
 	vector<string> senzorValues = Algorithm::explode(values, '$');
 
 	multimap<unsigned int, map<string, string>> valuesTmp;
-	
+
 	for (auto it = senzorValues.begin(); it != senzorValues.end(); ++it){
-		
+
 		vector<string> tmp = Algorithm::explode(*it, '#');
 		map<string, string> tmpmap;
-		
+
 		for (auto it2 = tmp.begin(); it2 != tmp.end(); ++it2){
 			vector<string> tmp2 = Algorithm::explode(*it2, '=');
 			tmpmap[tmp2.front()] = tmp2.back();
 		}
-		
+
 		string RidOrDevice = tmpmap.at("RidOrDevice");
 		if (RidOrDevice.compare("device") == 0){
 			string newMultimapIndexStr = tmpmap.at("ID");
-			unsigned int newMultimapIndex = std::stoi(newMultimapIndexStr);
+			unsigned int newMultimapIndex = std::atoll(newMultimapIndexStr.c_str());
 			valuesTmp.insert(std::pair<unsigned int, map<string, string>>(newMultimapIndex, tmpmap));
 		}
 		else if (RidOrDevice.compare("rid") == 0){
@@ -360,7 +380,7 @@ multimap<unsigned int, map<string, string>> Algorithm::parseValues(std::string v
 *
 */
 vector<string> Algorithm::parseParams(std::string paramsInput){
-	
+
 	vector<string> params = Algorithm::explode(paramsInput, '#');
 	return params;
 }

@@ -2,7 +2,7 @@ CPPFLAGS= -Wall -W -std=c++11 -pthread -g
 BUILDER= g++
 FRAMEWORK= framework.cpp
 COMMON_FILES= handleAdapterMessage.cpp handleAlgorithmMessage.cpp handleUIServerMessage.cpp config.cpp pugixml.cpp loger.cpp DBConnectionsContainer.cpp DBFWHandler.cpp AdapterMessageParser.cpp handlePoolContainer.cpp
-LIBS_NEEDED= -I/usr/include/soci -L/usr/local/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -I/usr/pgsql-9.2/include -L/usr/pgsql-9.2/lib -lpq -L. -lnotif -lcurl
+LIBS_NEEDED= -I/usr/include/soci -L/usr/local/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -I/usr/pgsql-9.2/include -L/usr/pgsql-9.2/lib -lpq -L. -lnotif -lcurl -I../
 
 .PHONY: all run clean
 

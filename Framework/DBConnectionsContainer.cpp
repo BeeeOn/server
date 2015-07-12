@@ -1,7 +1,7 @@
 /**
 * @file databaseConnectionContainer.cpp
 *
-* Implementace kontejneru pro praci s databazi pomoci knihovny soci 
+* Implementace kontejneru pro praci s databazi pomoci knihovny soci
 *
 */
 
@@ -26,13 +26,14 @@ DBConnectionsContainer::DBConnectionsContainer(std::string NameOfDB, int ConnLim
 	_log->WriteMessage(TRACE,"Entering " + this->_Name + "::DBConnectionsContainer");
 	_NameOfDB = NameOfDB;
 	_log->WriteMessage(INFO,"Creating connections to DB");
+	int realFree = 0;
 	for (int i = 0; i < ConnLimit; i++)
 	{
 		try
 		{
 			session *SQL = new session(postgresql, "dbname=" + this->_NameOfDB);
 			this->connections[i] = SQL;
-			this->freeCount = i+1;
+            realFree++;
 		}
 		catch(std::exception const &e)
 		{
@@ -41,6 +42,7 @@ DBConnectionsContainer::DBConnectionsContainer(std::string NameOfDB, int ConnLim
 			this->_log->WriteMessage(ERR,ErrorMessage );
 		}
 	}
+	this->freeCount = realFree;
 	this->_log->WriteMessage(INFO,"Connections to DB created");
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::DBConnectionsContainer");
 }
@@ -91,7 +93,7 @@ int DBConnectionsContainer::Limit()
 /**
 * Vyda spojeni z kontejneru, se kterym je pak mozne pracovat.
 *
-* @return session Session je tedy spojeni s databazi, se kterym je mozno pracovat. 
+* @return session Session je tedy spojeni s databazi, se kterym je mozno pracovat.
 */
 session *DBConnectionsContainer::GetConnection()
 {

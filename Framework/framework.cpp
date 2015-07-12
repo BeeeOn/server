@@ -946,7 +946,7 @@ int main()
 {
 	if (signal(SIGINT, sig_handler) == SIG_ERR)
 	{
-		std::cerr << "Unable to catch SIGINT";
+		std::cerr << "Framework: Unable to catch SIGINT";
 	}
 	//Loger pro logování do souboru
 	try
@@ -956,7 +956,7 @@ int main()
 	catch (std::exception &e)
 	{
 		std::cerr << e.what() << std::endl;
-		std::cerr << "Unable to create memory space for Loger, exiting!" << std::endl;
+		std::cerr << "Framework: Unable to create memory space for Loger, exiting!" << std::endl;
 		exit(EXIT_FAILURE);
 	}
 	try{
@@ -964,7 +964,7 @@ int main()
 	}
 	catch (std::exception &e){
 		std::cerr << e.what() << std::endl;
-		std::cerr << "Unable to create memory space for FrameworkConfig, exiting!" << std::endl;
+		std::cerr << "Framework: Unable to create memory space for FrameworkConfig, exiting!" << std::endl;
 		exit(EXIT_FAILURE);
 	}
 	//Nastaveni configu
@@ -974,7 +974,7 @@ int main()
 	//Nastaveni kontejneru pro DB
 	cont = DBConnectionsContainer::GetConnectionContainer(Log, FConfig->dbName, FConfig->maxNumberDBConnections);
 	if (cont == nullptr){
-		std::cerr << "Unable to create memory space for DBConnectionsContainer, exiting!" << std::endl;
+		std::cerr << "Framework: Unable to create memory space for DBConnectionsContainer, exiting!" << std::endl;
 		exit(EXIT_FAILURE);
 	}
 
@@ -998,6 +998,12 @@ int main()
 	//Ziskani spojení s DB
 	session *Conn = NULL;
 	Conn = cont->GetConnection();
+	if(Conn == NULL){
+        std::cerr << "Framework: Unable to create sessions with the DATABASE! Probably wrong specified DB name or not set rights for the user to the database. Exiting!" << std::endl;
+        delete(Log);
+        delete(FConfig);
+        exit(EXIT_FAILURE);
+	}
 	DBFWHandler * database = NULL;
 	try
 	{
@@ -1005,7 +1011,10 @@ int main()
 	}
 	catch (std::exception &e)
 	{
-		Log->WriteMessage(ERR, "Unable to create DBHandler during inicialization of Application!");
+		Log->WriteMessage(ERR, "Framework: Unable to create DBHandler during inicialization of Application! Exiting!");
+		delete(Log);
+        delete(FConfig);
+        exit(EXIT_FAILURE);
 	}
 	FConfig->SetUpAlgorithmsInDatabase(database);
 	cont->ReturnConnection(database->GetConnectionSession());

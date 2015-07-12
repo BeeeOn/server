@@ -83,16 +83,16 @@ int main(int argc, char *argv[])
 	if (actorVersionOfAlgorithm){
 
 		std::string delimeter = "---";
-		idOfActor = notificationTextOrIdActor.substr(0, notificationTextOrIdActor.find(delimeter)); 
+		idOfActor = notificationTextOrIdActor.substr(0, notificationTextOrIdActor.find(delimeter));
 
-		std::string tmpString = notificationTextOrIdActor.substr(notificationTextOrIdActor.find(delimeter)); 
+		std::string tmpString = notificationTextOrIdActor.substr(notificationTextOrIdActor.find(delimeter));
 		typeOfActor = tmpString.erase(0, delimeter.length());
 	}
-	
+
 	//Zpracovani hodnot senzoru
 	multimap<unsigned int, map<string, string>> values = alg->getValues();
 	map<string, string> oneSenzor;
-	
+
 	for (auto it = values.begin(); it != values.end(); ++it)
 	{
 		unsigned int idOfSenzorFromValues = (*it).first;
@@ -155,7 +155,7 @@ int main(int argc, char *argv[])
 		}
 
 		//Zde ulozit aktualni prijata data
-		
+
 		if (alg->database->UpdateValueOfDevices(idOfSenzorString, typeOfSenzorString, to_string(fvalFromSenzor)))	   {
 		}
 	}
@@ -196,7 +196,7 @@ int main(int argc, char *argv[])
 		if (actorVersionOfAlgorithm){
 			//Zmenit aktor
 			alg->ChangeActor(idOfActor, typeOfActor);
-		}	
+		}
 	}
 	/*-----------------------------------Konec tìla programu-----------------------------------*/
 	//Odeslání dat do Frameworku a ukonèení algoritmu.

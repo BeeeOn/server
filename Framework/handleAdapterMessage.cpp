@@ -116,7 +116,7 @@ void FrameworkServerHandle::HandleAdapterMessage(std::string data, Loger *Log, F
 								string AlgId = database->SelectAlgIdByUsersAlgId(*idOfUsersAlgorithms);
 								string parametersTmp = database->SelectParametersByUsersAlgId(*idOfUsersAlgorithms);
 								string parameters = '"' + parametersTmp + '"';
-								int AlgIdInt = std::stoi(AlgId);
+								int AlgIdInt = std::atoll(AlgId.c_str());
 								talgorithm * algorithmSpecification = FConfig->GetAlgorithmById(AlgIdInt);
 
 								if (algorithmSpecification != NULL){

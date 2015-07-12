@@ -8,7 +8,7 @@
 #include "loger.h"
 
 /** Konstruktor objektu tridy Loger.
-* 
+*
 */
 Loger::Loger()
 {
@@ -34,7 +34,6 @@ Loger::~Loger()
 	this->_worker.join();
 	delete (this->_WriteSemaphore);
 	delete (this->_msgQueue);
-	std::cout<<this->_FileSize<<"\n";
 	sem_destroy(&(this->_msgCounter));
 }
 
