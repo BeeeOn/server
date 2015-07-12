@@ -54,6 +54,8 @@ void FrameworkConfig::SetConfig(std::string configPath){
 	this->portAlgorithmServer = frameworkConfig.attribute("portAlgorithmsServer").as_int();
 	this->recieveBuffSize = frameworkConfig.attribute("recieveBuffSize").as_int();
 	this->dbName = frameworkConfig.attribute("DBName").value();
+	this->dbUser = frameworkConfig.attribute("DBUser").value();
+	this->dbPassword = frameworkConfig.attribute("DBPassword").value();
 	this->maxNumberDBConnections = frameworkConfig.attribute("maxNumDBConnections").as_int();
 	this->algorithmsConfig = frameworkConfig.attribute("algorithmsConfig").value();
 	this->connectionPoolSize = frameworkConfig.attribute("connPoolSize").as_int();

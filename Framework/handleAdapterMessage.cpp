@@ -133,7 +133,7 @@ void FrameworkServerHandle::HandleAdapterMessage(std::string data, Loger *Log, F
 									}
 									senzorValues += "offset=" + to_string(this->parsedMessage->values[i].offset);
 
-									Log->WriteMessage(INFO, "EXECUTING ALGORITHM BINARY " + algorithmSpecification->name + " - AlgId: " + AlgId + " , userId: " + UserId + ", parameters: " + parametersTmp + ", senzorValues: " + senzorValues);
+									Log->WriteMessage(INFO, "EXECUTING ALGORITHM BINARY " + algorithmSpecification->name + " - AlgId: " + AlgId + " , userId: " + UserId + ", parameters: " + parametersTmp + ", senzorValues: " + senzorValues + ", DBName:" + FConfig->dbName + ", FWServerPort: " + to_string(FConfig->portAlgorithmServer));
 
 									char* arg_list[] = {
 										StringToChar(algorithmSpecification->name),
@@ -151,12 +151,12 @@ void FrameworkServerHandle::HandleAdapterMessage(std::string data, Loger *Log, F
 										StringToChar(parametersTmp),
 										StringToChar("-e"), // name of database
 										StringToChar(FConfig->dbName),
+										StringToChar("-s"), // name of database
+										StringToChar(to_string(FConfig->portAlgorithmServer)),
 										StringToChar("/"),
 										NULL
 									};
 									this->spawn(StringToChar(algorithmSpecification->pathOfBinary), arg_list);
-
-									Log->WriteMessage(INFO, "EXECUTED ALGORITHM BINARY " + algorithmSpecification->name + "- AlgId: " + AlgId + "userId: " + UserId + ", parameters: " + parametersTmp + ", senzorValues: " + senzorValues);
 								}
 							}
 						}

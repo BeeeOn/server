@@ -19,7 +19,7 @@ using namespace soci;
 */
 Algorithm::Algorithm(std::string init_userID, std::string init_algID, std::string init_adapterID,
 	std::string init_offset, multimap<unsigned int, map<string, string>> init_values,
-	std::vector<std::string> init_parameters, vector<tRidValues *> init_Rids, std::string init_nameOfDB){
+	std::vector<std::string> init_parameters, vector<tRidValues *> init_Rids, std::string init_nameOfDB, std::string init_frameworkServerPort){
 
 	this->userID = init_userID;
 	this->algID = init_algID;
@@ -29,6 +29,14 @@ Algorithm::Algorithm(std::string init_userID, std::string init_algID, std::strin
 	this->parameters = init_parameters;
 	this->Rids = init_Rids;
 	this->nameOfDB = init_nameOfDB;
+	try{
+        this->frameworkServerPort = init_frameworkServerPort;
+	}
+    catch(std::exception &e){
+		std::cerr << e.what() << std::endl;
+		std::cerr << "Algorithm::Algorithm Unable to convert port given to short int (16 bits)" << std::endl;
+		exit(EXIT_FAILURE);
+    }
 	try
 	{
 		this->Log = new Loger();
@@ -36,7 +44,7 @@ Algorithm::Algorithm(std::string init_userID, std::string init_algID, std::strin
 	catch (std::exception &e)
 	{
 		std::cerr << e.what() << std::endl;
-		std::cerr << "Unable to create memory space for logging exiting!" << std::endl;
+		std::cerr << "Algorithm::Algorithm Unable to create memory space for logging exiting!" << std::endl;
 		exit(EXIT_FAILURE);
 	}
 	//Nastaveni kontejneru pro DB
@@ -46,7 +54,7 @@ Algorithm::Algorithm(std::string init_userID, std::string init_algID, std::strin
 	Conn = cont->GetConnection();
 	if (Conn == NULL)
 	{
-		cout << "Unable to get Database connection!" << endl;
+		cout << "Algorithm::Algorithm Unable to get Database connection!" << endl;
 	}
 
 	try
@@ -55,7 +63,7 @@ Algorithm::Algorithm(std::string init_userID, std::string init_algID, std::strin
 	}
 	catch (std::exception &e)
 	{
-		cout << "Unable to create memory space for DBHandler!!!" << endl;
+		cout << "Algorithm::Algorithm Unable to create memory space for DBHandler!!!" << endl;
 	}
 }
 
@@ -149,13 +157,21 @@ bool Algorithm::SendAndExit(){
 	int mySocket;
 	int port;
 	int size;
-	port = atoi(FW_PORT);
+	try{
+        port = atoi(this->frameworkServerPort.c_str());
+	}
+    catch(std::exception &e){
+		std::cerr << e.what() << std::endl;
+		std::cerr << "Algorithm::SendAndExit Unable to convert port given to short int (16 bits), port using:"<< this->frameworkServerPort << std::endl;
+		return false;
+    }
+
 	host = gethostbyname("localhost");
 
 	if ((mySocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == -1)
 	{
-		cerr << "Nelze vytvoøit soket" << endl;
-		return -1;
+		cerr << "Algorithm::SendAndExit Cannot to create socket! (port using: "<< port << ")"<< endl;
+		return false;
 	}
 	serverSock.sin_family = AF_INET;
 	serverSock.sin_port = htons(port);
@@ -163,14 +179,14 @@ bool Algorithm::SendAndExit(){
 
 	if (connect(mySocket, (sockaddr *)&serverSock, sizeof(serverSock)) == -1)
 	{
-		cerr << "Algorithm failure: Cannot connect to Framework Server!" << endl;
+		cerr << "Algorithm::SendAndExit Algorithm failure! Cannot connect to Framework Server! (port using: "<< port << ")"<< endl;
 		return false;
 	}
 
 	// Odeslání dat
 	if ((size = send(mySocket, ParsedMessage.c_str(), ParsedMessage.size() + 1, 0)) == -1)
 	{
-		cerr << "Algorithm failure: Problem with sending message!" << endl;
+		cerr << "Algorithm::SendAndExit Algorithm failure! Problem with sending message!" << endl;
 		return false;
 	}
 	close(mySocket);
@@ -259,10 +275,11 @@ Algorithm * Algorithm::getCmdLineArgsAndCreateAlgorithm(int argc, char *argv[]){
 	string valuesString = "";
 	string parametersString = "";
 	string nameOfDB = "";
+	string portOfFrameworkServer = "";
 	int opt;
-	bool u, a, d, o, v, p, e;
-	u = a = d = o = v = p = e = false;
-	while ((opt = getopt(argc, argv, "hu:a:d:o:v:p:e:")) != EOF)
+	bool u, a, d, o, v, p, e, s;
+	u = a = d = o = v = p = e = s = false;
+	while ((opt = getopt(argc, argv, "hu:a:d:o:v:p:e:s:")) != EOF)
 		switch (opt)
 	{
 		case 'h':
@@ -297,6 +314,10 @@ Algorithm * Algorithm::getCmdLineArgsAndCreateAlgorithm(int argc, char *argv[]){
 			nameOfDB = optarg;
 			e = true;
 			break;
+		case 's': // socket port to send answer to framework server
+			portOfFrameworkServer = optarg;
+			s = true;
+			break;
 		default:
 			cerr << "Algorithm failure: Wrong command line arguments!\n";
 			return nullptr;
@@ -307,8 +328,11 @@ Algorithm * Algorithm::getCmdLineArgsAndCreateAlgorithm(int argc, char *argv[]){
 	}
 
 	if(!e){
-        cerr << "Algorithm failure: Wrong command line arguments! No specified cmd arg for DB Name!\n";
-        cerr << "Algorithm failure: Wrong command line arguments! No specified cmd arg for DB Name!\n";
+        cerr << "Algorithm failure: Wrong command line arguments! No specified -e cmd arg for DB Name!\n";
+		return nullptr;
+	}
+	if(!s){
+        cerr << "Algorithm failure: Wrong command line arguments! No specified -s cmd arg for port of Framework server!\n";
 		return nullptr;
 	}
 
@@ -323,7 +347,7 @@ Algorithm * Algorithm::getCmdLineArgsAndCreateAlgorithm(int argc, char *argv[]){
 	if (p){
 		params = Algorithm::parseParams(parametersString);
 	}
-	return new Algorithm(userIDString, algIDString, adapterIDString, UserAlgIdString, values, params, Rids, nameOfDB);
+	return new Algorithm(userIDString, algIDString, adapterIDString, UserAlgIdString, values, params, Rids, nameOfDB, portOfFrameworkServer);
 }
 
 void Algorithm::usage(char* progName)

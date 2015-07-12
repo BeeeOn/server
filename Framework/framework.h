@@ -154,6 +154,6 @@ class FrameworkServerHandle {
 		std::string createMessageFalse(string errcode);
 		std::string createMessageAlgs(vector<talg *> allAlgs, string adapterId);
 		std::string createMessageTrue();
-		string createMessageRequestSwitch(string id, string type, string adapterId);
+		string createMessageRequestSwitch(string id, string type, string adapterId, DBFWHandler *database);
 };
 #endif

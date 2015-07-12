@@ -30,7 +30,6 @@ int main(int argc, char *argv[])
 	string idOfSenzorString = "";
 	string typeOfSenzorString = "";
 	unsigned int idOfSenzor;
-	int typeOfSenzor;
 	int op;
 	double valueDefinedByUser;
 	string notificationTextOrIdActor = "";
@@ -153,11 +152,9 @@ int main(int argc, char *argv[])
 				isToBeSendNotificationOrChangeActor = true;
 			}
 		}
-
 		//Zde ulozit aktualni prijata data
+		//alg->database->UpdateValueOfDevices(idOfSenzorString, typeOfSenzorString, to_string(fvalFromSenzor))
 
-		if (alg->database->UpdateValueOfDevices(idOfSenzorString, typeOfSenzorString, to_string(fvalFromSenzor)))	   {
-		}
 	}
 
 	if (IsSetIval){

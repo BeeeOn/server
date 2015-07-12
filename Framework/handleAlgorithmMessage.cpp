@@ -120,7 +120,7 @@ void FrameworkServerHandle::HandleAlgorithmMessage(std::string data, Loger *Log,
 			string idOfActor = toggle.attribute("id").value();
 			string typeOfActor = toggle.attribute("type").value();
 			//Odeslat zpravu na adapter server
-			string messageToAdaServer = this->createMessageRequestSwitch(idOfActor, typeOfActor, adapterID);
+			string messageToAdaServer = this->createMessageRequestSwitch(idOfActor, typeOfActor, adapterID, database);
 			this->sendMessageToAdaServer(messageToAdaServer);
 			toggle = toggle.next_sibling();
 		}

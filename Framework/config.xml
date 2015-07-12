@@ -5,6 +5,8 @@
 	portAdaSenderServer="7081"
 	portAlgorithmsServer="7084"
 	DBName="home6"
+	DBUser="root"
+	DBPassword=""
 	maxNumDBConnections="10"
 	recieveBuffSize="5000"
 	algorithmsConfig="Algorithms/AlgsConfig.xml"

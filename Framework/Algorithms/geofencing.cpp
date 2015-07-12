@@ -26,7 +26,6 @@ int main(int argc, char *argv[])
 
 	//Zpracovani parametru
 	string idOfRIDParams;
-	int idOfRIDParamsInt;
 	string directionParams;
 	string notificationTextOrIdActor = "";
 	string toBeNotifiedOrChangeActor = "";
@@ -38,8 +37,6 @@ int main(int argc, char *argv[])
 	for (auto parameter = parameters.begin(); parameter != parameters.end(); ++parameter){
 		if (parameterCounter == 1){ //RID | STRING
 			idOfRIDParams = (*parameter);
-			//idOfRIDParamsInt = std::atoll(idOfRIDParams.c_str());
-
 		}
 		else if (parameterCounter == 2){ // TYPE | DIRECTION
 			directionParams = (*parameter);
@@ -72,9 +69,9 @@ int main(int argc, char *argv[])
 	if (actorVersionOfAlgorithm){
 
 		std::string delimeter = "---";
-		idOfActor = notificationTextOrIdActor.substr(0, notificationTextOrIdActor.find(delimeter)); 
+		idOfActor = notificationTextOrIdActor.substr(0, notificationTextOrIdActor.find(delimeter));
 
-		std::string tmpString = notificationTextOrIdActor.substr(notificationTextOrIdActor.find(delimeter)); 
+		std::string tmpString = notificationTextOrIdActor.substr(notificationTextOrIdActor.find(delimeter));
 		typeOfActor = tmpString.erase(0, delimeter.length());
 	}
 

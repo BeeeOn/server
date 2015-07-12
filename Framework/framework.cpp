@@ -57,13 +57,12 @@ void FrameworkServer::StartServer(){
 */
 bool FrameworkServer::SetUpSockets(){
 
-	//Vytvoøení soketu
+	//Vytvoreni soketu
 	if ((serverSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == -1)
 	{
-		cerr << "Nelze vytvoøit soket" << endl;
+		cerr << "FrameworkServer::SetUpSockets Unable to create socket!" << endl;
 		return false;
 	}
-
 	//Nastavení struktury portBind
 	portBind.sin_family = AF_INET;
 	portBind.sin_port = htons(port);
@@ -71,14 +70,13 @@ bool FrameworkServer::SetUpSockets(){
 
 	if (bind(serverSocket, (sockaddr *)&portBind, sizeof(portBind)) == -1)
 	{
-		cerr << "Problém s pojmenováním soketu." << endl;
+		cerr << "FrameworkServer::SetUpSockets Problem with bind(). Port using: " << port << endl;
 		return false;
 	}
-	// Vytvoøíme frontu požadavkù na spojení.
-	// Vytvoøíme frontu maximální velikosti 10 požadavkù.
-	if (listen(serverSocket, 10) == -1)
+	// Vytvoríme frontu požadavkù na spojení.
+	if (listen(serverSocket, FConfig->connectionPoolSize) == -1)
 	{
-		cerr << "Problém s vytvoøením fronty" << endl;
+		cerr << "FrameworkServer::SetUpSockets Problem with listen()! Port using: " << port << endl;
 		return false;
 	}
 	return true;
@@ -88,7 +86,7 @@ bool FrameworkServer::SetUpSockets(){
 *
 */
 int FrameworkServer::AcceptConnection(){
-
+    Log->WriteMessage(TRACE, "FrameworkServer::AcceptConnection ENTERING");
 	sockaddr_in clientInfo;			// Informace o klientovi
 	socklen_t addrlen;				// Velikost adresy vzdáleného poèítaèe
 	addrlen = sizeof(clientInfo);
@@ -98,7 +96,7 @@ int FrameworkServer::AcceptConnection(){
 	{
 		if ((newSocket = accept(serverSocket, (sockaddr*)&clientInfo, &addrlen)) < 0)
 		{
-			cerr << "Problém s pøijetím spojeni" << endl;
+			cerr << "FrameworkServer::AcceptConnection Problem with function accept()! FATAL ERROR! Exiting!" << endl;
 			return 1;
 		}
 		sem_wait(&connectionSem);
@@ -115,15 +113,16 @@ int FrameworkServer::AcceptConnection(){
 		}
 		catch (std::bad_alloc &e)
 		{
-			Log->WriteMessage(ERR, "Allocation error FrameworkServerHandle !");
+			Log->WriteMessage(ERR, "FrameworkServer::AcceptConnection Allocation error FrameworkServerHandle !");
 			close(newSocket);
 		}
 		catch (std::exception &e)
 		{
-			Log->WriteMessage(ERR, "Client won't be served unable to crate thread!");
+			Log->WriteMessage(ERR, "FrameworkServer::AcceptConnection Client won't be served! Unknown exception!");
 			close(newSocket);
 		}
 	}
+	Log->WriteMessage(TRACE, "FrameworkServer::AcceptConnection EXITING");
 	return 0;
 }
 //---------------------------------------  END FRAMEWORK SERVER METHODS IMPLEMENTATIONS ---------------------------------------
@@ -592,23 +591,17 @@ int FrameworkServerHandle::spawn(char* programBinaryName, char** arg_list)
         pid_t ws = waitpid( childProcessId, &childExitStatus, 0);
 
         if (programBinaryName != nullptr){
-                std::string programBinaryNameString(programBinaryName);
-        if( WIFEXITED(childExitStatus) )
-        {
-            // Child process exited thus exec failed.
-            // LOG failure of exec in child process.
-            Log->WriteMessage(ERR, "FrameworkServerHandle::spawn Result of Waitpid(): Child process exited thus exec failed! Binary name: " + programBinaryNameString);
-        }
-        else if( !WIFEXITED(childExitStatus) )
-        {
-            Log->WriteMessage(ERR, "FrameworkServerHandle::spawn Waitpid() exited with an error: Status= " +  to_string(WEXITSTATUS(childExitStatus))  + ". Binary of process name: " + programBinaryNameString);
-        }
-        else if( WIFSIGNALED(childExitStatus) ){
-            Log->WriteMessage(ERR, "FrameworkServerHandle::spawn exited due to a signal: " + to_string(WTERMSIG(childExitStatus)));
-        }
-        else{
-            Log->WriteMessage(TRACE, "FrameworkServerHandle::spawn Result of Waitpid(): Child process handled. Binary name: " + programBinaryNameString);
-        }
+            std::string programBinaryNameString(programBinaryName);
+            if( WIFEXITED(childExitStatus) )
+            {
+                Log->WriteMessage(ERR, "FrameworkServerHandle::spawn Waitpid() exited with a code: " +  to_string(childExitStatus)  + ". Binary of process name: " + programBinaryNameString);
+            }
+            else if( WIFSIGNALED(childExitStatus) ){
+                Log->WriteMessage(ERR, "FrameworkServerHandle::spawn exited due to a signal: " + to_string(WTERMSIG(childExitStatus)));
+            }
+            else{
+                Log->WriteMessage(TRACE, "FrameworkServerHandle::spawn Result of Waitpid(): Child process handled. Binary name: " + programBinaryNameString);
+            }
         }
 		return childProcessId;
 	}
@@ -851,7 +844,7 @@ string FrameworkServerHandle::createMessageAlgs(vector<talg *> allAlgs, string a
 *
 * @return XML zprava v retezci
 */
-string FrameworkServerHandle::createMessageRequestSwitch(string id, string type, string adapterId){
+string FrameworkServerHandle::createMessageRequestSwitch(string id, string type, string adapterId, DBFWHandler *database){
 	/*
 	<request type="switch">
     <sensor id="1.1.1.1" type="0x00" onAdapter=12345">
@@ -878,9 +871,22 @@ string FrameworkServerHandle::createMessageRequestSwitch(string id, string type,
 	sensor_node.attribute("type") = hexaType.c_str();
 	sensor_node.attribute("onAdapter") = adapterId.c_str();
 
-	pugi::xml_node sensor_value_node = sensor_node.append_child("value");
+    pugi::xml_node sensor_value_node = sensor_node.append_child("value");
 	pugi::xml_node sensor_value_node_pcdata = sensor_value_node.append_child(pugi::node_pcdata);
-	sensor_value_node_pcdata.set_value("ON");
+
+    float currentStateOfActor = database->GetValueFromDevices(id, type);
+
+    if(currentStateOfActor == 0){
+        sensor_value_node_pcdata.set_value("ON");
+    }
+    else{
+        sensor_value_node_pcdata.set_value("OFF");
+    }
+
+    cout << "currentStateOfActor: " << currentStateOfActor << endl;
+
+
+
 
 	tstringXMLwriter writer;
 	resp->print(writer);
@@ -972,7 +978,7 @@ int main()
 
 	connCount = 0;
 	//Nastaveni kontejneru pro DB
-	cont = DBConnectionsContainer::GetConnectionContainer(Log, FConfig->dbName, FConfig->maxNumberDBConnections);
+	cont = DBConnectionsContainer::GetConnectionContainer(FConfig->dbName, FConfig->dbUser, FConfig->dbPassword, FConfig->maxNumberDBConnections, Log);
 	if (cont == nullptr){
 		std::cerr << "Framework: Unable to create memory space for DBConnectionsContainer, exiting!" << std::endl;
 		exit(EXIT_FAILURE);
