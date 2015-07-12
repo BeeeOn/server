@@ -50,11 +50,11 @@ typedef struct {
 // For this example, we'll be testing on openssl.org
 #define SERVER  "www.googleapis.com"
 #define PORT 443
-
+/*
 // Establish a regular tcp connection
 int tcpConnect ()
 {
-    int error, handle;
+    int handle;
     struct hostent *host;
     struct sockaddr_in server;
     
@@ -72,7 +72,7 @@ int tcpConnect ()
         server.sin_addr = *((struct in_addr *) host->h_addr);
         bzero (&(server.sin_zero), 8);
         
-        error = connect (handle, (struct sockaddr *) &server,
+        int error = connect (handle, (struct sockaddr *) &server,
                 sizeof (struct sockaddr));
         if (error == -1)
         {
@@ -283,7 +283,7 @@ bool isGTokenOk(string gToken, googleInfo &gInfo){
     }
     return false;   
 }
-
+*/
 
 // Write function for curl_easy_setopt CURLOPT_WRITEFUNCTION.
 static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp) {

@@ -72,14 +72,11 @@ using namespace std;
     
      const int ServerException::MSG_UNKNOWN = 999;
 
-ServerException::ServerException(int errCode) : runtime_error("ui_server exc") {
-    _errCode = errCode;
-    _errText ="";
+ServerException::ServerException(int errCode) : runtime_error("ui_server exc"), _errCode(errCode), _errText("") {
 }
 
-ServerException::ServerException(int errCode, string errText)  : runtime_error("ui_server exc") {
-    _errCode = errCode;
-    _errText = errText;
+ServerException::ServerException(int errCode, string errText)  : runtime_error("ui_server exc"), _errCode(errCode), _errText(errText)  {
+
 }
 /*
 ServerException::ServerException(int errCode, string errText, string id, string state)  : runtime_error("x") {

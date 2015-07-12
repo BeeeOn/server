@@ -15,7 +15,6 @@ using namespace std;
 
 SocketClient::SocketClient(int portNumber, string hostName) {
    
-    
     struct sockaddr_in serv_addr;
     struct hostent *server;
     
@@ -60,14 +59,13 @@ string SocketClient::read(){
     
 
     string data;
-    int recieved;
     int bufferSize = 1000;
     char rc[bufferSize+2];
     while(1)
      {
         bzero(rc,bufferSize+1);
         //recieved = recv(_socketfd, rc, bufferSize,0);
-         recieved = ::read(_socketfd,rc,bufferSize);
+         int recieved = ::read(_socketfd,rc,bufferSize);
          
                 //    std::cout<<"|"<<rc<<"|"<<endl;
                 //printf("Bytes received: %d vs %d\n",recieved,strlen(rc));
@@ -119,13 +117,14 @@ string SocketClient::readUntilendTag(string endTag) {
     setsockopt(_socketfd, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv,sizeof(struct timeval));
     
     string data;
-    int recieved;
+    
     int bufferSize = 1000;
     char rc[bufferSize+1];
     while(1)
      {
         bzero(rc,bufferSize+1);
         //recieved = recv(_socketfd, rc, bufferSize,0);
+        int recieved;
          recieved = ::read(_socketfd,rc,bufferSize);
          
          
@@ -164,8 +163,7 @@ string SocketClient::readUntilendTag(string endTag) {
 
 
 
-SocketClientException::SocketClientException(string errText) : runtime_error(errText) {
-    _errText = errText;
+SocketClientException::SocketClientException(string errText) : runtime_error(errText), _errText(errText) {
 }
 
 const char* SocketClientException::what() const throw()

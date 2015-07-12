@@ -41,7 +41,6 @@ string GateAdd::createResponseMsgOut() {
     }
     
     
-    string r;
     try{
         SocketClient sc(Config::getInstance().getGamificationPort());    
                         

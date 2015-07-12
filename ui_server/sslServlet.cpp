@@ -180,7 +180,7 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
         int fd = SSL_get_fd(ssl);
                        
         struct timeval tv;
-        tv.tv_sec = 1;
+        tv.tv_sec = 10;
         tv.tv_usec = 0; 
         setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv,sizeof(struct timeval));
         
@@ -192,11 +192,10 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
         if(fcntl(sock,F_SETFL,ofcmode))  
         err_exit("Couldn't make socket nonblocking");  
     */
-        int sd, received;
+        int sd;
         int ret;
         //char *rc=NULL;
         string msgIn;
-        int burstMsgCount = 1;
         
         //http://comments.gmane.org/gmane.comp.encryption.openssl.user/49443
         if ( (ret = SSL_accept(ssl)) != 1 ) {     // do SSL-protocol accept 
@@ -206,7 +205,8 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
                 Logger::getInstance(Logger::DEBUG3)<<"ssl accepted"<<endl;
                 // print client certificate
                 //ShowCerts(ssl);
-           
+           int received;
+           int burstMsgCount = 1;
            do{
                Logger::getInstance(Logger::DEBUG3)<<"get msg"<< endl;
                

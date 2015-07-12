@@ -89,11 +89,11 @@ void SessionsTable::removeOldEntries(){
         
         if(chrono::duration_cast<std::chrono::milliseconds>(diff).count() > _maxInactivityMs){
             itToDel = it;
-            it++;
+            ++it;
             delete itToDel->second;
             _sessionMap.erase(itToDel);
         }else{
-            it++;
+            ++it;
         }
     }
     
@@ -143,7 +143,7 @@ string SessionsTable::getNewSessionString(){
     string sessionString;
     int i=0;
     do{
-        i++;
+        ++i;
         if(i >= 5)
             throw ServerException(ServerException::RANDOMGEN);
         
@@ -193,7 +193,7 @@ void SessionsTable::printTable() {
     int i=0;
     for (map<string, SessionsTableEntry*>::iterator it=_sessionMap.begin(); it!=_sessionMap.end(); ++it)
     {
-        i++;
+        ++i;
         Logger::debug3() << "entry " << i << ":" << it->first << ", " << it->second->userId << endl;    
     };
      Logger::debug3() << "---------- " << endl; 
@@ -206,17 +206,17 @@ void SessionsTable::test() {
     map<string, SessionsTableEntry*>::iterator itToDel;
     for (map<string, SessionsTableEntry*>::iterator it=_sessionMap.begin(); it!=_sessionMap.end();)
     {
-        i++;
+        ++i;
          
         if(i==1){
             Logger::debug3() << "del " << i <<endl;
             itToDel = it;
-            it++;
+            ++it;
             delete itToDel->second;
             _sessionMap.erase(itToDel);
             
         }else{
-            it++;
+            ++it;
         }
     };
 }

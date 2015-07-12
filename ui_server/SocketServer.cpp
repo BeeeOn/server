@@ -15,6 +15,7 @@
 #include<unistd.h>    //write
 
 SocketServer::SocketServer() {
+    _port = -1;
 }
 
 
@@ -25,7 +26,7 @@ int SocketServer::start(int port){
     _port = port;
     int socket_desc , client_sock , c , read_size;
     struct sockaddr_in server , client;
-    char client_message[2000];
+    
      
     //Create socket
     socket_desc = socket(AF_INET , SOCK_STREAM , 0);
@@ -68,7 +69,7 @@ int SocketServer::start(int port){
     //Receive a message from client
     //while( 1 )
     {
-        
+        char client_message[2000];
         bzero(client_message,2000);
         //Send the message back to client
         read_size = recv(client_sock , client_message , 2000 , 0);

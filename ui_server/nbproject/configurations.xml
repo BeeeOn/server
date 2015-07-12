@@ -8,7 +8,6 @@
       <itemPath>Config.h</itemPath>
       <itemPath>DBConnector.h</itemPath>
       <itemPath>MsgInFactory.h</itemPath>
-      <itemPath>MsgRightsChecker.h</itemPath>
       <itemPath>ServerException.h</itemPath>
       <itemPath>SessionsTable.h</itemPath>
       <itemPath>SocketClient.h</itemPath>
@@ -19,7 +18,6 @@
       <itemPath>pugixml.hpp</itemPath>
       <itemPath>save_custom_writer.h</itemPath>
       <itemPath>sslServlet.h</itemPath>
-      <itemPath>testHelper.h</itemPath>
       <itemPath>ui_server.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -150,7 +148,6 @@
       </logicalFolder>
       <itemPath>Config.cpp</itemPath>
       <itemPath>MsgInFactory.cpp</itemPath>
-      <itemPath>MsgRightsChecker.cpp</itemPath>
       <itemPath>ServerException.cpp</itemPath>
       <itemPath>SessionsTable.cpp</itemPath>
       <itemPath>SocketClient.cpp</itemPath>
@@ -707,10 +704,6 @@
       <item path="MsgInFactory.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="MsgInFactory.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgRightsChecker.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgRightsChecker.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="ServerException.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -1505,10 +1498,6 @@
       <item path="MsgInFactory.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="MsgInFactory.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MsgRightsChecker.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MsgRightsChecker.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="ServerException.cpp" ex="false" tool="1" flavor2="0">
       </item>
