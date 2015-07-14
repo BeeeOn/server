@@ -9,7 +9,7 @@
 #define	MSGINGETTIMEZONE_H
 
 #include "IMsgIn.h"
-#include "pugixml.hpp"
+#include "../lib/pugixml.hpp"
 #include "IMsgInLoginRequired.h"
 
 class MsgInGetTimeZone : public IMsgInLoginRequired{

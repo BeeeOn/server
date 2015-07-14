@@ -7,7 +7,7 @@
 
 #ifndef SAVE_CUSTOM_WRITER_H
 #define	SAVE_CUSTOM_WRITER_H
-#include "pugixml.hpp"
+#include "../lib/pugixml.hpp"
 #include <string>
 #include <iostream>
 #include <cstring>

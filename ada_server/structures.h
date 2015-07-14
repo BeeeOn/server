@@ -7,8 +7,8 @@
  * @version 1.0
  */
 
-#include "pugi/pugixml.hpp"
-#include "pugi/pugiconfig.hpp"
+#include "../lib/pugixml.hpp"
+#include "../lib/pugiconfig.hpp"
 #include <string>
 #include <ctime>
 #include <sys/types.h>

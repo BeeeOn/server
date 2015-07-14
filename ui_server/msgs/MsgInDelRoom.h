@@ -9,7 +9,7 @@
 #define	MSGINDELROOM_H
 
 #include "IMsgIn.h"
-#include "pugixml.hpp"
+#include "../lib/pugixml.hpp"
 #include "DBConnector.h"
 #include "IMsgInLoginRequired.h"
 

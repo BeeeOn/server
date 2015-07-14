@@ -27,8 +27,8 @@
 #include <thread>
 #include <arpa/inet.h>
 #include <exception>
-#include "pugi/pugixml.hpp"
-#include "pugi/pugiconfig.hpp"
+#include "../lib/pugixml.hpp"
+#include "../lib/pugiconfig.hpp"
 #include <soci.h>
 #include <postgresql/soci-postgresql.h>
 #include "config.h"

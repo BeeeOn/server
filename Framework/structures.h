@@ -5,8 +5,8 @@
  *      Author: tuso
  */
 
-#include "pugixml.hpp"
-#include "pugiconfig.hpp"
+#include "../lib/pugixml.hpp"
+#include "../lib/pugixml.hpp"
 #include <string>
 #include <ctime>
 #include <sys/types.h>

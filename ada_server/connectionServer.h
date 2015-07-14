@@ -25,8 +25,8 @@
 #include <unistd.h>  
 #include <signal.h>  
 #include <sys/wait.h> 
-#include "pugi/pugixml.hpp"
-#include "pugi/pugiconfig.hpp"
+#include "../lib/pugixml.hpp"
+#include "../lib/pugiconfig.hpp"
 #include "loger.h"
 #include "messageParsers.h"
 #include "SSLContainer.h"

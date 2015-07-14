@@ -3,7 +3,7 @@
 
 #include <string>
 #include "msgs/IMsgIn.h"
-#include "pugixml.hpp"
+#include "../lib/pugixml.hpp"
 class MsgInFactory
 {
 private:

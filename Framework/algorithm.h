@@ -27,7 +27,7 @@
 #include "DBConnectionsContainer.h"
 #include "DBFWHandler.h"
 #include "structures.h"
-#include "pugixml.hpp"
+#include "../lib/pugixml.hpp"
 
 /** Enum condition uchovavajici hodnoty reprezentujici operatory ci entity pouzivane v aplikacnich modulech (>, <, =, >=, <=, ...).
 *

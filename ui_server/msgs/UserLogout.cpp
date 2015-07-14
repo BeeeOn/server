@@ -1,7 +1,7 @@
 
 #include "UserLogout.h"
 #include "../DAO/DAOUsers.h"
-#include "pugixml.hpp"
+#include "../lib/pugixml.hpp"
 
 using namespace std;
 

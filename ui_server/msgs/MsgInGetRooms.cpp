@@ -6,7 +6,7 @@
  */
 
 #include "MsgInGetRooms.h"
-#include "pugixml.hpp"
+#include "../lib/pugixml.hpp"
 #include "../DAO/DAORooms.h"
 
 using namespace std;

@@ -6,8 +6,8 @@
  */
 
 #include "MsgInGetLog.h"
-#include "pugixml.hpp"
-#include "pugiconfig.hpp"
+#include "../lib/pugixml.hpp"
+#include "../lib/pugixml.hpp"
 #include "../DAO/DAODevices.h"
 using namespace std;
 

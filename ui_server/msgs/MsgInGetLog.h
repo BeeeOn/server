@@ -9,7 +9,7 @@
 #define	MSGINLOGNAME_H
 
 #include "IMsgIn.h"
-#include "pugixml.hpp"
+#include "../lib/pugixml.hpp"
 #include "IMsgInLoginAndAdapterAccessRequired.h"
 
 class GetLog : public IMsgInLoginAndAdapterAccessRequired {

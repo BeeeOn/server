@@ -9,7 +9,7 @@
 #define	MSGINADDROOM_H
 
 #include "IMsgIn.h"
-#include "pugixml.hpp"
+#include "../lib/pugixml.hpp"
 #include "IMsgInLoginRequired.h"
 #include "IMsgInLoginAndAdapterAccessRequired.h"
 class MsgInAddRoom : public IMsgInLoginAndAdapterAccessRequired{

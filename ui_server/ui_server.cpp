@@ -13,7 +13,7 @@
 #include "save_custom_writer.h"
 
 #include "SocketServer.h"
-#include "pugixml.hpp"
+#include "../lib/pugixml.hpp"
 #include "msgs/GateGetInfo.h"
 #include "msgs/GateUpdate.h"
 #include "SessionsTable.h"
