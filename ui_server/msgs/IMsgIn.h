@@ -124,8 +124,8 @@
 #include <inttypes.h>
         
 
-#include <pugiconfig.hpp>
-#include <pugixml.hpp>
+#include <../lib/pugiconfig.hpp>
+#include <../lib/pugixml.hpp>
 
 #include "../ui_logger/Logger.h"
 #include "ServerException.h"
