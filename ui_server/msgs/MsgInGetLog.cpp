@@ -6,11 +6,7 @@
  */
 
 #include "MsgInGetLog.h"
-<<<<<<< HEAD
-=======
 #include "../lib/pugixml.hpp"
-#include "../lib/pugixml.hpp"
->>>>>>> 5dc8f088d0b4585350a48f3f306f26862670287c
 #include "../DAO/DAODevices.h"
 using namespace std;
 

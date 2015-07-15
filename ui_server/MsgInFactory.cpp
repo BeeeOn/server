@@ -14,8 +14,6 @@
 #include "msgs/MsgInGetLog.h"
 #include "msgs/LocationAdd.h"
 #include "msgs/LocationDelete.h"
-#include "msgs/MsgInSetTimeZone.h"
-#include "msgs/MsgInGetTimeZone.h"
 #include "msgs/AccountDel.h"
 #include "msgs/AccountUpdate.h"
 #include "msgs/AccountAdd.h"
