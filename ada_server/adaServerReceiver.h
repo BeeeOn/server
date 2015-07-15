@@ -17,8 +17,8 @@
 #include <atomic>  // atomic library
 #include <exception> //exceptions library
 #include <semaphore.h>  //definitions of semaphore
-#include "pugi/pugixml.hpp"
-#include "pugi/pugiconfig.hpp"
+#include "../lib/pugixml.hpp"
+#include "../lib/pugiconfig.hpp"
 #include "loger.h"
 #include "config.h"
 #include "connectionHandler.h"
