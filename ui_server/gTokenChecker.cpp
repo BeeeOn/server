@@ -40,13 +40,13 @@ using namespace std;
 #include <jansson.h>
 #include "../ui_logger/Logger.h"
 
-
+/*
 typedef struct {
     int socket;
     SSL *sslHandle;
     SSL_CTX *sslContext;
 } connection;
-
+*/
 // For this example, we'll be testing on openssl.org
 #define SERVER  "www.googleapis.com"
 #define PORT 443

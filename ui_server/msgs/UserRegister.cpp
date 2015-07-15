@@ -29,6 +29,13 @@ string UserRegister::createResponseMsgOut()
     
     User user;
     
+    /*
+    TokenChecker *token_checker = new TokenChecker(service); 
+    
+    string fbToken = parametersNode.attribute(P_TOKEN).value();
+    if(!(token_checker->isTokenOkay(token)))
+    */
+        
     if(service == "google")
     {
         string gToken = parametersNode.attribute(P_GOOGLE_TOKEN).value();       

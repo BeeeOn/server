@@ -8,8 +8,6 @@
 #ifndef MSGINGETTIMEZONE_H
 #define	MSGINGETTIMEZONE_H
 
-#include "IMsgIn.h"
-#include "pugixml.hpp"
 #include "IMsgInLoginRequired.h"
 
 class MsgInGetTimeZone : public IMsgInLoginRequired{

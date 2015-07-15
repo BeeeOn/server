@@ -13,10 +13,10 @@
 #include "IMsgInLoginAndAdapterAccessRequired.h"
 
 
-class MsgInGetConAccount : public IMsgInLoginAndAdapterAccessRequired{
+class AccountGet : public IMsgInLoginAndAdapterAccessRequired{
 public:
-    MsgInGetConAccount(pugi::xml_document* doc);
-    virtual ~MsgInGetConAccount();
+    AccountGet(pugi::xml_document* doc);
+    virtual ~AccountGet();
 
     virtual int getMsgAuthorization();
 

@@ -165,8 +165,12 @@ std::string IMsgIn::getNegativeXMLReply(int errorCode) {
         return getXMLreply(R_FALSE);
 }
 
-std::string IMsgIn::getNegativeXMLReply(int errorCode, char* errorInfo) {
+std::string IMsgIn::getNegativeXMLReply(int errorCode, const char* errorInfo) {
         _outputMainNode.append_attribute(P_ERRCODE) = errorCode;
         _outputMainNode.append_child(pugi::node_pcdata).set_value(errorInfo);
         return getXMLreply(R_FALSE);
+}
+
+bool IMsgIn::isRoleValid(std::string role) {
+    return role == P_ROLE_GUEST || role == P_ROLE_USER || role ==P_ROLE_ADMIN || role == P_ROLE_SUPERUSER;
 }

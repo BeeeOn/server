@@ -10,16 +10,15 @@
 #include "msgs/MsgInGetDevices.h"
 #include "msgs/MsgInUnknown.h"
 #include "msgs/GatesGetConnected.h"
-#include "msgs/MsgInGetRooms.h"
+#include "msgs/LocationsGet.h"
 #include "msgs/MsgInGetLog.h"
-#include "msgs/MsgInAddRoom.h"
-#include "msgs/MsgInDelRoom.h"
+#include "msgs/LocationAdd.h"
+#include "msgs/LocationDelete.h"
 #include "msgs/MsgInSetTimeZone.h"
 #include "msgs/MsgInGetTimeZone.h"
-#include "msgs/MsgInGetAccount.h"
-#include "msgs/MsgInDelAccount.h"
-#include "msgs/MsgInChangeAccount.h"
-#include "msgs/MsgInAddAccount.h"
+#include "msgs/AccountDel.h"
+#include "msgs/AccountUpdate.h"
+#include "msgs/AccountAdd.h"
 #include "msgs/MsgInAddView.h"
 #include "msgs/MsgInUpdateView.h"
 #include "msgs/MsgInDelView.h"
@@ -30,12 +29,12 @@
 #include "msgs/MsgInSwitch.h"
 #include "msgs/GateAdd.h"
 #include "msgs/MsgInGetNewDevices.h"
-#include "msgs/MsgInSetGCMID.h"
-#include "msgs/MsgInDelGCMID.h"
+#include "msgs/NotificationSetGCMID.h"
+#include "msgs/NotificationEraseGCMID.h"
 #include "msgs/MsgInAlgorithmsRedirect.h"
 #include "msgs/MsgInGamificationRedirect.h"
-#include "msgs/MsgInGetNotifications.h"
-#include "msgs/MsgInNotificationRead.h"
+#include "msgs/NotificationsGet.h"
+#include "msgs/NotificationReaded.h"
 #include "msgs/UserGetID.h"
 #include "msgs/UserGetInfo.h"
 #include "msgs/UserRegister.h"
@@ -44,6 +43,7 @@
 #include "msgs/GateGetInfo.h"
 #include "msgs/MsgInSetDevices.h"
 #include "msgs/GateUpdate.h"
+#include "msgs/AccountGet.h"
 
 
 MsgInFactory::MsgInFactory(void)
@@ -91,18 +91,18 @@ IMsgIn* MsgInFactory::createMsg(const char* msg)
         return new UserLogIn(doc);
     if(state == UserRegister::state)
         return new UserRegister(doc);
-    if(state == MsgInGetRooms::state)
-        return new MsgInGetRooms(doc);
-    if(state == MsgInAddRoom::state)
-        return new MsgInAddRoom(doc);
-    if(state == MsgInDelRoom::state)
-        return new MsgInDelRoom(doc);
-    if(state == MsgInGetConAccount::state)
-        return new MsgInGetConAccount(doc);
-    if(state == MsgInDelConAccount::state)
-        return new MsgInDelConAccount(doc);
-    if(state == MsgInChangeConAccount::state)
-        return new MsgInChangeConAccount(doc);
+    if(state == LocationsGet::state)
+        return new LocationsGet(doc);
+    if(state == LocationAdd::state)
+        return new LocationAdd(doc);
+    if(state == LocationDelete::state)
+        return new LocationDelete(doc);
+    if(state == AccountGet::state)
+        return new AccountGet(doc);
+    if(state == AccountDel::state)
+        return new AccountDel(doc);
+    if(state == AccountUpdate::state)
+        return new AccountUpdate(doc);
     if(state == MsgInAddAccount::state)
         return new MsgInAddAccount(doc);
     if(state == MsgInAddView::state)
@@ -127,10 +127,10 @@ IMsgIn* MsgInFactory::createMsg(const char* msg)
         return new GateAdd(doc);
     if(state == MsgInGetNewDevices::state)
         return new MsgInGetNewDevices(doc);
-    if(state == MsgInSetGCMID::state)
-        return new MsgInSetGCMID(doc);
-    if(state == MsgInDelGCMID::state)
-        return new MsgInDelGCMID(doc);
+    if(state == NotificationSetGCMID::state)
+        return new NotificationSetGCMID(doc);
+    if(state == NotificationEraseGCMID::state)
+        return new NotificationEraseGCMID(doc);
     if(state == UserGetID::state)
         return new UserGetID(doc);
     if(state == UserGetInfo::state)
@@ -140,17 +140,15 @@ IMsgIn* MsgInFactory::createMsg(const char* msg)
     if(state == GateGetInfo::state)
         return new GateGetInfo(doc);
     if(state == GateUpdate::state)
-        return new GateUpdate(doc);
+        return new GateUpdate(doc); 
+    if(state == NotificationsGet::state)
+        return new NotificationsGet(doc);
+    if(state == NotificationReaded::state)
+        return new NotificationReaded(doc);    
+    if(state == GateDelete::state)
+        return new GateDelete(doc);
     
-   
-    vector<string> algMsgs;
-    algMsgs.push_back("addalg");
-    algMsgs.push_back("getalg");
-    algMsgs.push_back("getalgs");
-    algMsgs.push_back("setalg");
-    algMsgs.push_back("delalg");
-    algMsgs.push_back("getallalgs");
-    algMsgs.push_back("passborder");
+     vector<string> algMsgs = {"addalg", "getalg", "getalgs", "setalg", "delalg", "getallalgs", "passborder"};
     
     if(std::find(algMsgs.begin(), algMsgs.end(), state)!=algMsgs.end())
         return new MsgInAlgorithmsRedirect(doc);
@@ -158,65 +156,8 @@ IMsgIn* MsgInFactory::createMsg(const char* msg)
     vector<string> gamiMsgs = {"getallachievements","setprogresslvl"};
     
     if(std::find(gamiMsgs.begin(), gamiMsgs.end(), state) != gamiMsgs.end())
-        return new MsgInGamificationRedirect(doc);
-    
-    if(state == MsgInGetNotifications::state)
-        return new MsgInGetNotifications(doc);
-    
-    if(state == MsgInNotificationRead::state)
-        return new MsgInNotificationRead(doc);    
-    if(state == GateDelete::state)
-        return new GateDelete(doc);
-    
+        return new MsgInGamificationRedirect(doc);   
 
     Logger::getInstance(Logger::ERROR)<<"UNKNOWN MSG"<<endl;
     return new MsgInUnknown(doc);
 }
-/*
- switch ( state ) {
- case MsgInGetAdapters::state :
- return new MsgInGetAdapters(doc);
- case MsgInInit::state :
- return new MsgInInit(doc);
- case MsgInUpdate::state :
- return new MsgInUpdate(doc);
- case MsgInSignUp::state :
- return new MsgInSignUp(doc);
- case MsgInPartial::state :
- return new MsgInPartial(doc);
- case MsgInUpdateRooms::state :
- return new MsgInUpdateRooms(doc);
- case MsgInGetRooms::state :
- return new MsgInGetRooms(doc);
- case MsgInLogName::state :
- return new MsgInLogName(doc);
- case MsgInAddRoom::state :
- return new MsgInAddRoom(doc);
- case MsgInDelRoom::state :
- return new MsgInDelRoom(doc);
- case MsgInSetTimeZone::state :
- return new MsgInSetTimeZone(doc);
- case MsgInGetTimeZone::state :
- return new MsgInGetTimeZone(doc);
- case MsgInGetConAccount::state :
- return new MsgInGetConAccount(doc);
- case MsgInDelConAccount::state :
- return new MsgInDelConAccount(doc);
- case MsgInChangeConAccount::state :
- return new MsgInChangeConAccount(doc);
- case MsgInAddConAccount::state :
- return new MsgInAddConAccount(doc);
- case MsgInAddView::state :
- return new MsgInAddView(doc);
- case MsgInUpdateView::state :
- return new MsgInUpdateView(doc);
- case MsgInDelView::state :
- return new MsgInDelView(doc);
- case MsgInGetViews::state :
- return new MsgInGetViews(doc);
- default:
- Logger::getInstance(Logger::DEBUG)<<"UNKNOWN MSG"<<endl;
- return new MsgInUnknown(msg,doc);
- }
- */
-

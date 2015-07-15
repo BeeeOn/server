@@ -163,7 +163,7 @@ string SocketClient::readUntilendTag(string endTag) {
 
 
 
-SocketClientException::SocketClientException(string errText) : runtime_error(errText), _errText(errText) {
+SocketClientException::SocketClientException(string errText) : runtime_error(errText), _errCode(1),_errText(errText) {
 }
 
 const char* SocketClientException::what() const throw()

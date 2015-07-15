@@ -23,7 +23,7 @@
 #include "../ui_logger/Logger.h"
 
 #include "gTokenChecker.h"
-#include "pugixml.hpp"
+#include "../lib/pugixml.hpp"
 #include "MsgRightsChecker.h"
 #include "ServerException.h"
 #include "SocketClient.h"

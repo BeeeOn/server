@@ -123,11 +123,8 @@
 #include <iostream>
 #include <inttypes.h>
         
-
-#include <pugiconfig.hpp>
-#include <pugixml.hpp>
-
 #include "../ui_logger/Logger.h"
+#include "../lib/pugixml.hpp"
 #include "ServerException.h"
 
 struct t_version {
@@ -178,7 +175,9 @@ protected:
     std::string makeXMLattribute(std::string attr,std::string value);
     std::string getXMLreply(std::string responseState);
     std::string getNegativeXMLReply(int errorCode);
-    std::string getNegativeXMLReply(int errorCode, char* errorInfo);
+    std::string getNegativeXMLReply(int errorCode, const char* errorInfo);
+    
+    bool isRoleValid(std::string role);
 
 private:
     t_version parseProtocolVersion(std::string version);

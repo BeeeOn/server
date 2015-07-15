@@ -170,7 +170,8 @@ int readMsgFromSSL(SSL* ssl, string & msg){
     //Logger::getInstance(Logger::DEBUG3)<<"ssl whole read ("<<received<< " vs "<< msg.length() <<")result:"<< msg <<endl;
     
     
-    return received;
+    //return received;
+    return msg.length();
 }
 
 /* Serve the connection -- threadable */
@@ -213,7 +214,7 @@ void Servlet(SSL* ssl ,std::function<string(char*)> resolveFunc) {
                msgIn="";
                 received = readMsgFromSSL(ssl, msgIn);
                 
-                //Logger::getInstance(Logger::DEBUG3)<<"received"<< received << " : " <<msgIn<< endl;
+                Logger::getInstance(Logger::DEBUG3)<<"received"<< received << endl;
                 if ( received > 0) {
                     Logger::getInstance(Logger::DEBUG3)<<"Start resolve "<< burstMsgCount++ <<" msg in burst"<<endl;
                        

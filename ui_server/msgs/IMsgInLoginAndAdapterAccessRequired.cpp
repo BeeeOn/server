@@ -18,7 +18,6 @@ IMsgInLoginAndAdapterAccessRequired::~IMsgInLoginAndAdapterAccessRequired() {
 }
 
 enumAccessStatus IMsgInLoginAndAdapterAccessRequired::checkAccess(){
-    
     if( !isComIdValid() )
         return FORBIDDEN_NOT_LOGGED;
     

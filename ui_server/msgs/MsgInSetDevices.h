@@ -8,7 +8,7 @@
 #ifndef MSGINPARTIALL_H
 #define	MSGINPARTIALL_H
 
-#include "pugixml.hpp"
+#include "../lib/pugixml.hpp"
 #include <string>
 #include <iostream>
 #include "DBConnector.h"

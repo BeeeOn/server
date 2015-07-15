@@ -9,7 +9,7 @@
 #define	GATEINFO_H
 
 #include "IMsgIn.h"
-#include "pugixml.hpp"
+#include "../lib/pugixml.hpp"
 #include "IMsgInLoginAndAdapterAccessRequired.h"
 
 class GateGetInfo : public IMsgInLoginAndAdapterAccessRequired{
