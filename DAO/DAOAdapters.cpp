@@ -125,7 +125,7 @@ GateInfo DAOAdapters::getGateInfo(std::string gateId) {
         
         GateInfo gateInfo;
         sql <<"select adapter_id::text, count(distinct mac), count(distinct fk_user_id), name, socket, version, timezone "
-                "from adapters join facilities as f on f.fk_adapter_id = adapter_id join users_adapters as ua on ua.fk_adapter_id = adapter_id "
+                "from adapters left join facilities as f on f.fk_adapter_id = adapter_id left join users_adapters as ua on ua.fk_adapter_id = adapter_id "
                 "where adapter_id = :adapter group by adapter_id"
                 , use(gateId,"adapter"), into(gateInfo.id), into(gateInfo.nFacilities), into(gateInfo.nUsers), into(gateInfo.name)
                 , into(gateInfo.ip), into(gateInfo.version), into(gateInfo.timezone); 

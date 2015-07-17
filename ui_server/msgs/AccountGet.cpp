@@ -25,7 +25,7 @@ int AccountGet::getMsgAuthorization() {
 }
 
 string AccountGet::createResponseMsgOut()
-{     
+{     /*
     string xml = DAOUsersAdapters::getInstance().getXMLconAccounts(_adapterId);
     pugi::xml_document doc;
     cout<<xml<<endl;
@@ -47,6 +47,6 @@ string AccountGet::createResponseMsgOut()
     
     delete [] cstr;
     _outputMainNode.append_copy(doc.first_child());
-    return getXMLreply(R_ACCOUNTS);
-    //return envelopeResponse(R_ACCOUNTS, DAOUsersAdapters::getInstance().getXMLconAccounts(_adapterId));
+    return getXMLreply(R_ACCOUNTS);*/
+    return envelopeResponse(R_ACCOUNTS, DAOUsersAdapters::getInstance().getXMLconAccounts(_adapterId));
 }

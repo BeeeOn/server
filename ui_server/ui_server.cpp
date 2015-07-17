@@ -158,7 +158,7 @@ int main(int argc, char** argv)
         resolveMsg( "<com ver=\"2.4\" state=\"signup\" srv=\"facebook\"><par fbt=\"CAAMVd7mjduYBAKsnl5i2iJljZAG1A6PDraitTxF2v91iDDoOwZA5uOSxYCpo2a0WZC7ZB8I8n3hXEFrgBBZCEoO6HZAtENfNO72n8DmZAYdVYknltIY50g1ACzkhPavWnCtOkGBdD68VnwnfhLtZA00SjWw9QiZCzjg09ZBVKPSZBPqKZAGFDawZAWZBV82KWiCp4uMruh5AiBcs5ihHTsENM0d5CfGx0bfEwo0F7IIGHOUGv0IJYSZBOZCmZANPc\" /></com>");
         return 0;
         */
-resolveMsg( "<?xml version='1.0' encoding='UTF-8' ?><com ver=\"2.5\" bt=\"akpcWktvjF\" state=\"getaccs\" aid=\"52428\" ></com>");
+//resolveMsg( "<?xml version='1.0' encoding='UTF-8' ?><com ver=\"2.5\" bt=\"akpcWktvjF\" state=\"getaccs\" aid=\"52428\" ></com>");
         
         Logger::debug()<< "setting SSL context..."<< endl;
        SSL_CTX *ctx;

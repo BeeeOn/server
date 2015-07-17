@@ -21,12 +21,16 @@ GateGetInfo::~GateGetInfo() {
 }
 
 int GateGetInfo::getMsgAuthorization() {
-    return GUEST;
+    return ADMIN;
 }
 
 string GateGetInfo::createResponseMsgOut()
 { 
     GateInfo gateInfo = DAOAdapters::getInstance().getGateInfo(_adapterId);
+    
+    if(gateInfo.id == ""){
+        return getNegativeXMLReply(ServerException::ADAPTER_ID);
+    }
     _outputMainNode.append_attribute(P_ADAPTER_ID) = gateInfo.id.c_str();
     _outputMainNode.append_attribute(P_ADAPTER_NAME) = gateInfo.name.c_str();
     _outputMainNode.append_attribute(P_ROLE) = _role.c_str();
