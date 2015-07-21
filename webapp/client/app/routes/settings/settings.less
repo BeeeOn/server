@@ -1,0 +1,70 @@
+.settingsWrapper{
+  min-height: 400px;
+  min-width: 350px;
+  /* Right sidenav */
+  right-panel {
+    md-sidenav.md-locked-open {
+      @media screen and (min-width: 1200px) {
+        min-width: 500px !important;
+        width: 500px !important;
+        max-width: 500px !important;
+      }
+      @media screen and (min-width: 1400px) {
+        min-width: 600px !important;
+        width: 600px !important;
+        max-width: 600px !important;
+      }
+      @media screen and (min-width: 1600px) {
+        min-width: 700px !important;
+        width: 700px !important;
+        max-width: 700px !important;
+      }
+      @media screen and (min-width: 1800px) {
+        min-width: 900px !important;
+        width: 900px !important;
+        max-width: 900px !important;
+      }
+    }
+  }
+  /*right-panel{
+    ui-view{
+      md-sidenav {
+        .md-sidenav-right{
+          .md-locked-open{
+            min-width: 600px !important;
+            width: 600px !important;
+            max-width: 600px !important;
+          }
+        }
+      }
+    }
+  }*/
+
+  /* Settings list in middle section*/
+  .settingsList {
+    .md-button {
+      &:not([disabled]):hover {
+        background-color: @clr_background_gray;
+      }
+    }
+    h3 {
+      color: @clr_gray_dark;
+      font-size: 14pt;
+      margin: 10px 0 2px;
+    }
+    p{
+      line-height: normal;
+      font-size: 9pt;
+      color: @clr_gray_dark;
+    }
+    .selected {
+      h3 {
+        color: @clr_primary;
+      }
+    }
+  }
+}
+
+.vAccordion--default v-pane-header:focus {
+  color: @clr_primary;
+}

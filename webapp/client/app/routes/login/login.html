@@ -1,14 +1,72 @@
-<div flex layout="column" layout-gt-md="row" class="loginPanelWrapper" >
-    <!-- above on mobile, left on larger devices -->
-    <div flex layout="column" class="loginLogoPanel" layout-align="center center">
+<!-- Large devices (PC)-->
+<div flex layout="row" hide show-gt-md class="loginPanelWrapper" >
+    <div flex="33" layout="column" class="loginLogoPanel" layout-align="start center" layout-padding>
+        <div layout="column">
+            <h3>BeeeOn</h3>
+            <p>Home under your control</p>
+        </div>
         <div>
-            <md-icon class="loginLogoIcon" md-svg-icon="logo" style="height: auto;width: auto"></md-icon>
+            <md-icon class="loginLogoIconLarge" md-svg-icon="logo_reversed">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 64 64"
+                     height="100%" width="100%" />
+            </md-icon>
         </div>
     </div>
     <!-- below on mobile, right on larger devices -->
-    <div flex layout="column" class="loginSignButtonsPanel" layout-align="center center">
-        <md-button class="md-raised loginGButton loginButton" aria-label="Sign in with G+ account" ng-click="openProgressModal(progressMessage)">G+ Login</md-button>
-        <md-button class="md-raised loginButton" aria-label="Sign in with Facebook account" >Facebook Login</md-button>
-        <md-button class="md-raised loginButton" aria-label="See application demo" ng-click="demoLogin()">Demo Login</md-button>
+    <div flex layout="column" class="middlePanel">
+        <div flex layout="row" layout-align="start start" layout-wrap layout-margin class="loginSignButtonsPanel">
+            <p>Login or register with:</p>
+            <div layout="row" flex layout-align="space-around center">
+                <md-button aria-label="Sign in with G+ account" class="" title="Sign in with G+ account" md-no-ink>
+                    <md-icon md-svg-icon="g_plus_signin"></md-icon>
+                </md-button>
+                <md-button aria-label="Sign in with Facebook account" class="" title="Sign in with Facebook account" md-no-ink>
+                    <md-icon md-svg-icon="fb_signin"></md-icon>
+                </md-button>
+            </div>
+        </div>
+        <div class="demoModPanel" flex="10" layout="column">
+            <p>Or you can try offline:</p>
+            <div layout="row" style="">
+                <md-button flex md-no-ink ng-click="demoLogin()" aria-label="Start demo mode">Start in demo mode</md-button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Small, medium devices -->
+<div flex layout="column" hide-gt-md class="loginPanelWrapper" >
+    <div flex="20" layout="row" class="loginLogoPanel" layout-align="start center" layout-padding>
+        <div>
+            <md-icon class="loginLogoIconSmall" md-svg-icon="logo_reversed">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 64 64"
+                     height="100%" width="100%" />
+            </md-icon>
+        </div>
+        <div layout="column">
+            <h3>BeeeOn</h3>
+            <p>Home under your control</p>
+        </div>
+    </div>
+    <!-- below on mobile, right on larger devices -->
+    <div flex layout="column" class="middlePanel">
+        <div flex layout="row" layout-align="start start" layout-wrap layout-margin class="loginSignButtonsPanel">
+            <p>Login or register with:</p>
+            <div layout="row" flex layout-align="space-around center">
+                <md-button aria-label="Sign in with G+ account" class="" title="Sign in with G+ account" md-no-ink>
+                    <md-icon md-svg-icon="g_plus_signin"></md-icon>
+                </md-button>
+                <md-button aria-label="Sign in with Facebook account" class="" title="Sign in with Facebook account" md-no-ink>
+                    <md-icon md-svg-icon="fb_signin"></md-icon>
+                </md-button>
+            </div>
+        </div>
+        <div class="demoModPanel" flex="10" layout="column">
+            <p>Or you can try offline:</p>
+            <div layout="row" style="">
+                <md-button flex md-no-ink ng-click="demoLogin()" aria-label="Start demo mode">Start in demo mode</md-button>
+            </div>
+        </div>
     </div>
 </div>

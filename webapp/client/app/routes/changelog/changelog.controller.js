@@ -6,5 +6,6 @@ angular.module('beeeOnWebApp')
     $http.get('changelog.json')
       .then(function(res){
         $scope.logs = res.data.logs;
+        $log.debug($scope.logs);
       });
   }]);

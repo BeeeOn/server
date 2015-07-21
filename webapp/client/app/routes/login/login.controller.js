@@ -5,25 +5,16 @@ angular.module('beeeOnWebApp')
     function ($rootScope,$scope,$location,$log,$timeout,Modal,Auth){
 
     $scope.demoLogin = function(){
-      Auth.demoLogin();
-      if(Auth.getCurrentUser){
-        $location.path('/overview');
-      };
-    }
-
-    /*$scope.showAlert = function(){
-      Modal.information.progress("Logging in")();
+      Auth.login({demo:true})
+        .then( function() {
+          // Logged in, redirect to home
+          $log.debug('Redirecting to overview');
+          $location.path('/overview');
+        })
+        .catch( function(err) {
+          $scope.errors = err.message;
+          $log.error(err);
+        });
     };
-
-
-    $log.debug($scope.showAlert);
-
-    $scope.changeProgress = function(){
-      $rootScope.$broadcast('CHANGE_MESSAGE','asdasdasdasdasdasd');
-    };
-
-    $timeout(function(){
-      $scope.changeProgress();
-    },3000);*/
   }
 ]);

@@ -17,7 +17,8 @@ module.exports = function (grunt) {
     cdnify: 'grunt-google-cdn',
     protractor: 'grunt-protractor-runner',
     injector: 'grunt-asset-injector',
-    buildcontrol: 'grunt-build-control'
+    buildcontrol: 'grunt-build-control',
+    compress: 'grunt-contrib-compress'
   });
 
   // Time how long tasks take. Can help when optimizing build times
@@ -40,19 +41,19 @@ module.exports = function (grunt) {
       },
       dev: {
         options: {
-          script: 'server/app.js',
+          script: 'server/beeeonweb.app.js',
           debug: true
         }
       },
       prod: {
         options: {
-          script: 'dist/server/app.js'
+          script: 'dist/server/beeeonweb.app.js'
         }
       }
     },
     open: {
       server: {
-        url: 'http://<%= express.options.ip %>:<%= express.options.port %>'
+        url: 'http://localhost:<%= express.options.port %>'
       }
     },
     watch: {
@@ -80,6 +81,16 @@ module.exports = function (grunt) {
           '<%= yeoman.client %>/{app,components}/**/*.mock.js'
         ],
         tasks: ['newer:jshint:all', 'karma']
+      },
+      injectLess: {
+        files: [
+          '<%= yeoman.client %>/{app,components}/**/*.less'],
+        tasks: ['injector:less']
+      },
+      less: {
+        files: [
+          '<%= yeoman.client %>/{app,components}/**/*.less'],
+        tasks: ['less', 'autoprefixer']
       },
       gruntfile: {
         files: ['Gruntfile.js']
@@ -187,7 +198,7 @@ module.exports = function (grunt) {
     // Use nodemon to run server in debug mode with an initial breakpoint
     nodemon: {
       debug: {
-        script: 'server/app.js',
+        script: 'server/beeeonweb.app.js',
         options: {
           nodeArgs: ['--debug-brk'],
           env: {
@@ -214,7 +225,7 @@ module.exports = function (grunt) {
       target: {
         src: '<%= yeoman.client %>/index.html',
         ignorePath: '<%= yeoman.client %>/',
-        exclude: [/bootstrap-sass-official/, /bootstrap.js/, '/json3/', '/es5-shim/']
+        exclude: ['/json3/', '/es5-shim/']
       }
     },
 
@@ -397,8 +408,10 @@ module.exports = function (grunt) {
     // Run some tasks in parallel to speed up the build process
     concurrent: {
       server: [
+        'less',
       ],
       test: [
+        'less',
       ],
       debug: {
         tasks: [
@@ -410,6 +423,7 @@ module.exports = function (grunt) {
         }
       },
       dist: [
+        'less',
         'imagemin',
         'svgmin'
       ]
@@ -453,6 +467,22 @@ module.exports = function (grunt) {
       all: localConfig
     },
 
+    // Compiles Less to CSS
+    less: {
+      options: {
+        paths: [
+          '<%= yeoman.client %>/bower_components',
+          '<%= yeoman.client %>/app',
+          '<%= yeoman.client %>/components'
+        ]
+      },
+      server: {
+        files: {
+          '.tmp/app/app.css' : '<%= yeoman.client %>/app/app.less'
+        }
+      },
+    },
+
     injector: {
       options: {
 
@@ -478,6 +508,25 @@ module.exports = function (grunt) {
         }
       },
 
+      // Inject component less into app.less
+      less: {
+        options: {
+          transform: function(filePath) {
+            filePath = filePath.replace('/client/app/', '');
+            filePath = filePath.replace('/client/components/', '');
+            return '@import \'' + filePath + '\';';
+          },
+          starttag: '// injector',
+          endtag: '// endinjector'
+        },
+        files: {
+          '<%= yeoman.client %>/app/app.less': [
+            '<%= yeoman.client %>/{app,components}/**/*.less',
+            '!<%= yeoman.client %>/app/app.less'
+          ]
+        }
+      },
+
       // Inject component css into index.html
       css: {
         options: {
@@ -496,6 +545,16 @@ module.exports = function (grunt) {
         }
       }
     },
+    compress : {
+      main : {
+        options : {
+          archive : 'dist/compressed/beeeonweb_<%= pkg.version %>_alpha.tar'
+        },
+        files : [
+          { expand: true, src : "**/*", cwd : "dist/" }
+        ]
+      }
+    }
   });
 
   // Used for delaying livereload until after server has restarted
@@ -516,13 +575,14 @@ module.exports = function (grunt) {
 
   grunt.registerTask('serve', function (target) {
     if (target === 'dist') {
-      return grunt.task.run(['env:all', 'env:prod', 'express:prod', 'wait', 'open', 'express-keepalive']);
+      return grunt.task.run(['env:all', 'env:prod', 'express:prod', 'wait', 'express-keepalive']);
     }
 
     if (target === 'debug') {
       return grunt.task.run([
         'clean:server',
         'env:all',
+        'injector:less',
         'concurrent:server',
         'injector',
         'wiredep',
@@ -534,13 +594,13 @@ module.exports = function (grunt) {
     grunt.task.run([
       'clean:server',
       'env:all',
+      'injector:less',
       'concurrent:server',
       'injector',
       'wiredep',
       'autoprefixer',
       'express:dev',
       'wait',
-      'open',
       'watch'
     ]);
   });
@@ -563,6 +623,7 @@ module.exports = function (grunt) {
       return grunt.task.run([
         'clean:server',
         'env:all',
+        'injector:less',
         'concurrent:test',
         'injector',
         'autoprefixer',
@@ -575,6 +636,7 @@ module.exports = function (grunt) {
         'clean:server',
         'env:all',
         'env:test',
+        'injector:less',
         'concurrent:test',
         'injector',
         'wiredep',
@@ -592,6 +654,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
+    'injector:less',
     'concurrent:dist',
     'injector',
     'wiredep',
@@ -605,7 +668,8 @@ module.exports = function (grunt) {
     'cssmin',
     'uglify',
     'rev',
-    'usemin'
+    'usemin',
+    'compress'
   ]);
 
   grunt.registerTask('default', [

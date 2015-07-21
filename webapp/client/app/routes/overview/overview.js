@@ -8,9 +8,11 @@ angular.module('beeeOnWebApp')
         templateUrl: 'app/routes/overview/overview.html',
         controller: 'OverviewCtrl',
         params: {
+          locationId: 'overview',
           locationName: 'Overview',
-          locationButtonType: 'menu_toggle' //menu or location. see location-button directive
+          locationButtonType: 'panel_toggle_left' //see location-button directive
         },
         authenticate: true
-      });
+      })
+    ;
   }]);

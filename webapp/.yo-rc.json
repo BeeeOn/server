@@ -11,7 +11,7 @@
     "filters": {
       "js": true,
       "html": true,
-      "css": true,
+      "less": true,
       "uirouter": true,
       "bootstrap": true,
       "uibootstrap": true
@@ -30,7 +30,7 @@
     "extensions": [
       "js",
       "html",
-      "css"
+      "less"
     ],
     "directiveSimpleTemplates": "",
     "directiveComplexTemplates": "",

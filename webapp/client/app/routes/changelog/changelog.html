@@ -4,13 +4,15 @@
             <section>
                 <div class="md-list-item-text">
                     <h3>Date: {{log.date}}</h3>
-                    <p>Version: {{log.version}} | Author: {{log.author}}</p>
-                    <ul class="hasChangeLogChips">
-                        <li ng-repeat="point in log.points">
-                            <span class="{{point.level}}">{{point.level}}</span>
-                            {{point.text}}
-                        </li>
-                    </ul>
+                    <p>Version: {{log.version}}</p>
+                    <div class="hasChangeLogChips" layout="column" layout-margin>
+                        <div ng-repeat="point in log.points" layout="row" layout-margin>
+                            <div ng-repeat="chip in point.chips"  layout="row" layout-align="start center">
+                                <span class="{{chip}}" >{{chip}}</span>
+                            </div>
+                            <div>{{point.text}}</div>
+                        </div>
+                    </div>
                 </div>
                 <md-divider ></md-divider>
             </section>

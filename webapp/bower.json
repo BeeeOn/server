@@ -6,7 +6,7 @@
     "json3": "~3.3.1",
     "es5-shim": "~3.0.1",
     "jquery": "~1.11.0",
-    "bootstrap": "~3.1.1",
+    "bootstrap": "~3.3.5",
     "angular-resource": ">=1.2.*",
     "angular-cookies": ">=1.2.*",
     "angular-sanitize": ">=1.2.*",
@@ -15,7 +15,11 @@
     "lodash": "~2.4.1",
     "angular-ui-router": "~0.2.10",
     "angular-material": "~0.10.0",
-    "angular-aria": "~1.4.2"
+    "angular-aria": "~1.4.2",
+    "angular-modal-service": "~0.6.6",
+    "angular-dialog-service": "~5.2.8",
+    "v-accordion": "~1.2.7",
+    "ng-lodash": "~0.2.3"
   },
   "devDependencies": {
     "angular-mocks": ">=1.2.*",
