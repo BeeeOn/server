@@ -16,10 +16,10 @@
 #include "IMsgInLoginRequired.h"
 #include "IMsgInLoginAndAdapterAccessRequired.h"
 
-class MsgInDevices : public IMsgInLoginAndAdapterAccessRequired {
+class DevicesUpdate : public IMsgInLoginAndAdapterAccessRequired {
 public:
-    MsgInDevices(pugi::xml_document* doc);
-    virtual ~MsgInDevices();
+    DevicesUpdate(pugi::xml_document* doc);
+    virtual ~DevicesUpdate();
     
 
     virtual int getMsgAuthorization();

@@ -55,22 +55,22 @@
         <itemPath>DBConnector.cpp</itemPath>
       </logicalFolder>
       <logicalFolder name="f4" displayName="devices" projectFiles="true">
-        <itemPath>msgs/MsgInAdapterListen.cpp</itemPath>
-        <itemPath>msgs/MsgInAdapterListen.h</itemPath>
-        <itemPath>msgs/MsgInDelDevice.cpp</itemPath>
-        <itemPath>msgs/MsgInDelDevice.h</itemPath>
-        <itemPath>msgs/MsgInGetAllDevices.cpp</itemPath>
-        <itemPath>msgs/MsgInGetAllDevices.h</itemPath>
-        <itemPath>msgs/MsgInGetDevices.cpp</itemPath>
-        <itemPath>msgs/MsgInGetDevices.h</itemPath>
-        <itemPath>msgs/MsgInGetLog.cpp</itemPath>
-        <itemPath>msgs/MsgInGetLog.h</itemPath>
-        <itemPath>msgs/MsgInGetNewDevices.cpp</itemPath>
-        <itemPath>msgs/MsgInGetNewDevices.h</itemPath>
-        <itemPath>msgs/MsgInSetDevices.cpp</itemPath>
-        <itemPath>msgs/MsgInSetDevices.h</itemPath>
-        <itemPath>msgs/MsgInSwitch.cpp</itemPath>
-        <itemPath>msgs/MsgInSwitch.h</itemPath>
+        <itemPath>msgs/DeviceDelete.cpp</itemPath>
+        <itemPath>msgs/DeviceDelete.h</itemPath>
+        <itemPath>msgs/DevicesGet.cpp</itemPath>
+        <itemPath>msgs/DevicesGet.h</itemPath>
+        <itemPath>msgs/DevicesGetAll.cpp</itemPath>
+        <itemPath>msgs/DevicesGetAll.h</itemPath>
+        <itemPath>msgs/DevicesGetNew.cpp</itemPath>
+        <itemPath>msgs/DevicesGetNew.h</itemPath>
+        <itemPath>msgs/DevicesUpdate.cpp</itemPath>
+        <itemPath>msgs/DevicesUpdate.h</itemPath>
+        <itemPath>msgs/GateScanMode.cpp</itemPath>
+        <itemPath>msgs/GateScanMode.h</itemPath>
+        <itemPath>msgs/LogGet.cpp</itemPath>
+        <itemPath>msgs/LogGet.h</itemPath>
+        <itemPath>msgs/ModuleSwitchState.cpp</itemPath>
+        <itemPath>msgs/ModuleSwitchState.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f5" displayName="locations" projectFiles="true">
         <itemPath>msgs/LocationAdd.cpp</itemPath>
@@ -133,16 +133,6 @@
         <itemPath>msgs/UserLogout.h</itemPath>
         <itemPath>msgs/UserRegister.cpp</itemPath>
         <itemPath>msgs/UserRegister.h</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f6" displayName="views" projectFiles="true">
-        <itemPath>msgs/MsgInAddView.cpp</itemPath>
-        <itemPath>msgs/MsgInAddView.h</itemPath>
-        <itemPath>msgs/MsgInDelView.cpp</itemPath>
-        <itemPath>msgs/MsgInDelView.h</itemPath>
-        <itemPath>msgs/MsgInGetViews.cpp</itemPath>
-        <itemPath>msgs/MsgInGetViews.h</itemPath>
-        <itemPath>msgs/MsgInUpdateView.cpp</itemPath>
-        <itemPath>msgs/MsgInUpdateView.h</itemPath>
       </logicalFolder>
       <itemPath>Config.cpp</itemPath>
       <itemPath>MsgInFactory.cpp</itemPath>
@@ -429,161 +419,6 @@
                    displayName="Test Files"
                    projectFiles="false"
                    kind="TEST_LOGICAL_FOLDER">
-      <logicalFolder name="f21"
-                     displayName="AlfaTest"
-                     projectFiles="true"
-                     kind="TEST">
-      </logicalFolder>
-      <logicalFolder name="f15"
-                     displayName="testChangeConAccount"
-                     projectFiles="true"
-                     kind="TEST">
-      </logicalFolder>
-      <logicalFolder name="f3"
-                     displayName="testGlobal"
-                     projectFiles="true"
-                     kind="TEST">
-      </logicalFolder>
-      <logicalFolder name="f20"
-                     displayName="testMsgInAddAdapter"
-                     projectFiles="true"
-                     kind="TEST">
-      </logicalFolder>
-      <logicalFolder name="f8"
-                     displayName="testMsgInAddConAcc"
-                     projectFiles="true"
-                     kind="TEST">
-      </logicalFolder>
-      <logicalFolder name="f4"
-                     displayName="testMsgInAddRooms"
-                     projectFiles="true"
-                     kind="TEST">
-      </logicalFolder>
-      <logicalFolder name="f31"
-                     displayName="testMsgInDelAction"
-                     projectFiles="true"
-                     kind="TEST">
-      </logicalFolder>
-      <logicalFolder name="f16"
-                     displayName="testMsgInDelConAcc"
-                     projectFiles="true"
-                     kind="TEST">
-      </logicalFolder>
-      <logicalFolder name="f9"
-                     displayName="testMsgInDelDevice"
-                     projectFiles="true"
-                     kind="TEST">
-      </logicalFolder>
-      <logicalFolder name="f26"
-                     displayName="testMsgInDeleteCondition"
-                     projectFiles="true"
-                     kind="TEST">
-      </logicalFolder>
-      <logicalFolder name="f5"
-                     displayName="testMsgInDelRoom"
-                     projectFiles="true"
-                     kind="TEST">
-      </logicalFolder>
-      <logicalFolder name="f19"
-                     displayName="testMsgInDevices"
-                     projectFiles="true"
-                     kind="TEST">
-      </logicalFolder>
-      <logicalFolder name="f29"
-                     displayName="testMsgInGetAction"
-                     projectFiles="true"
-                     kind="TEST">
-      </logicalFolder>
-      <logicalFolder name="f28"
-                     displayName="testMsgInGetActions"
-                     projectFiles="true"
-                     kind="TEST">
-      </logicalFolder>
-      <logicalFolder name="f18"
-                     displayName="testMsgInGetAdapters"
-                     projectFiles="true"
-                     kind="TEST">
-      </logicalFolder>
-      <logicalFolder name="f17"
-                     displayName="testMsgInGetConAcc"
-                     projectFiles="true"
-                     kind="TEST">
-      </logicalFolder>
-      <logicalFolder name="f24"
-                     displayName="testMsgInGetConditions"
-                     projectFiles="true"
-                     kind="TEST">
-      </logicalFolder>
-      <logicalFolder name="f23"
-                     displayName="testMsgInGetDevs"
-                     projectFiles="true"
-                     kind="TEST">
-      </logicalFolder>
-      <logicalFolder name="f7"
-                     displayName="testMsgInGetRooms"
-                     projectFiles="true"
-                     kind="TEST">
-      </logicalFolder>
-      <logicalFolder name="f14"
-                     displayName="testMsgInGetTimeZone"
-                     projectFiles="true"
-                     kind="TEST">
-      </logicalFolder>
-      <logicalFolder name="f11"
-                     displayName="testMsgInLogName"
-                     projectFiles="true"
-                     kind="TEST">
-      </logicalFolder>
-      <logicalFolder name="f27"
-                     displayName="testMsgInSetAction"
-                     projectFiles="true"
-                     kind="TEST">
-      </logicalFolder>
-      <logicalFolder name="f22"
-                     displayName="testMsgInSetCondition"
-                     projectFiles="true"
-                     kind="TEST">
-      </logicalFolder>
-      <logicalFolder name="f13"
-                     displayName="testMsgInSetTimeZone"
-                     projectFiles="true"
-                     kind="TEST">
-      </logicalFolder>
-      <logicalFolder name="f1"
-                     displayName="testMsgInSignIn"
-                     projectFiles="true"
-                     kind="TEST">
-      </logicalFolder>
-      <logicalFolder name="f2"
-                     displayName="testMsgInSignUp"
-                     projectFiles="true"
-                     kind="TEST">
-      </logicalFolder>
-      <logicalFolder name="f10"
-                     displayName="testMsgInSwitch"
-                     projectFiles="true"
-                     kind="TEST">
-      </logicalFolder>
-      <logicalFolder name="f12"
-                     displayName="testMsgInUpdate"
-                     projectFiles="true"
-                     kind="TEST">
-      </logicalFolder>
-      <logicalFolder name="f30"
-                     displayName="testMsgInUpdateAction"
-                     projectFiles="true"
-                     kind="TEST">
-      </logicalFolder>
-      <logicalFolder name="f25"
-                     displayName="testMsgInUpdateCondition"
-                     projectFiles="true"
-                     kind="TEST">
-      </logicalFolder>
-      <logicalFolder name="f6"
-                     displayName="testMsgInUpdateRooms"
-                     projectFiles="true"
-                     kind="TEST">
-      </logicalFolder>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -1219,6 +1054,26 @@
       </item>
       <item path="msgs/AccountUpdate.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="msgs/DeviceDelete.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/DeviceDelete.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/DevicesGet.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/DevicesGet.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/DevicesGetAll.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/DevicesGetAll.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/DevicesGetNew.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/DevicesGetNew.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/DevicesUpdate.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/DevicesUpdate.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="msgs/GateAdd.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="msgs/GateAdd.h" ex="false" tool="3" flavor2="0">
@@ -1230,6 +1085,10 @@
       <item path="msgs/GateGetInfo.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="msgs/GateGetInfo.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/GateScanMode.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/GateScanMode.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="msgs/GateUpdate.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -1277,65 +1136,25 @@
       </item>
       <item path="msgs/LocationsUpdate.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="msgs/MsgInAdapterListen.cpp" ex="false" tool="1" flavor2="0">
+      <item path="msgs/LogGet.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="msgs/MsgInAdapterListen.h" ex="false" tool="3" flavor2="0">
+      <item path="msgs/LogGet.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="msgs/MsgInAddView.cpp" ex="false" tool="1" flavor2="0">
+      <item path="msgs/ModuleSwitchState.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="msgs/MsgInAddView.h" ex="false" tool="3" flavor2="0">
+      <item path="msgs/ModuleSwitchState.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="msgs/MsgInAlgorithmsRedirect.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="msgs/MsgInAlgorithmsRedirect.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="msgs/MsgInDelDevice.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInDelDevice.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="msgs/MsgInDelView.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInDelView.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="msgs/MsgInGamificationRedirect.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="msgs/MsgInGamificationRedirect.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="msgs/MsgInGetAllDevices.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInGetAllDevices.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="msgs/MsgInGetDevices.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInGetDevices.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="msgs/MsgInGetLog.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInGetLog.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="msgs/MsgInGetNewDevices.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInGetNewDevices.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="msgs/MsgInGetViews.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInGetViews.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="msgs/MsgInSetDevices.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInSetDevices.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="msgs/MsgInSwitch.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInSwitch.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="msgs/MsgInUnknown.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="msgs/MsgInUnknown.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="msgs/MsgInUpdateView.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInUpdateView.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="msgs/NotificationEraseGCMID.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -2001,6 +1820,26 @@
       </item>
       <item path="msgs/AccountUpdate.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="msgs/DeviceDelete.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/DeviceDelete.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/DevicesGet.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/DevicesGet.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/DevicesGetAll.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/DevicesGetAll.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/DevicesGetNew.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/DevicesGetNew.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/DevicesUpdate.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/DevicesUpdate.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="msgs/GateAdd.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="msgs/GateAdd.h" ex="false" tool="3" flavor2="0">
@@ -2012,6 +1851,10 @@
       <item path="msgs/GateGetInfo.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="msgs/GateGetInfo.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="msgs/GateScanMode.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="msgs/GateScanMode.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="msgs/GateUpdate.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -2059,65 +1902,25 @@
       </item>
       <item path="msgs/LocationsUpdate.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="msgs/MsgInAdapterListen.cpp" ex="false" tool="1" flavor2="0">
+      <item path="msgs/LogGet.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="msgs/MsgInAdapterListen.h" ex="false" tool="3" flavor2="0">
+      <item path="msgs/LogGet.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="msgs/MsgInAddView.cpp" ex="false" tool="1" flavor2="0">
+      <item path="msgs/ModuleSwitchState.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="msgs/MsgInAddView.h" ex="false" tool="3" flavor2="0">
+      <item path="msgs/ModuleSwitchState.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="msgs/MsgInAlgorithmsRedirect.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="msgs/MsgInAlgorithmsRedirect.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="msgs/MsgInDelDevice.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInDelDevice.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="msgs/MsgInDelView.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInDelView.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="msgs/MsgInGamificationRedirect.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="msgs/MsgInGamificationRedirect.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="msgs/MsgInGetAllDevices.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInGetAllDevices.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="msgs/MsgInGetDevices.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInGetDevices.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="msgs/MsgInGetLog.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInGetLog.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="msgs/MsgInGetNewDevices.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInGetNewDevices.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="msgs/MsgInGetViews.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInGetViews.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="msgs/MsgInSetDevices.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInSetDevices.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="msgs/MsgInSwitch.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInSwitch.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="msgs/MsgInUnknown.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="msgs/MsgInUnknown.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="msgs/MsgInUpdateView.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/MsgInUpdateView.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="msgs/NotificationEraseGCMID.cpp" ex="false" tool="1" flavor2="0">
       </item>

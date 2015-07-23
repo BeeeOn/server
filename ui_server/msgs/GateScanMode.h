@@ -12,10 +12,10 @@
 
 #include "SocketClient.h"
 
-class MsgInAdapterListen : public IMsgInLoginAndAdapterAccessRequired{
+class GateScanMode : public IMsgInLoginAndAdapterAccessRequired{
     public:
-        MsgInAdapterListen(pugi::xml_document* doc);
-        virtual ~MsgInAdapterListen();
+        GateScanMode(pugi::xml_document* doc);
+        virtual ~GateScanMode();
         
         virtual int getMsgAuthorization();
 

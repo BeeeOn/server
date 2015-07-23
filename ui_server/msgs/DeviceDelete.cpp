@@ -5,22 +5,22 @@
  * Created on 5. srpen 2014, 10:27
  */
 
-#include "MsgInDelDevice.h"
+#include "DeviceDelete.h"
 #include "Config.h"
 using namespace std;
-const string MsgInDelDevice::state = "deldev";
-MsgInDelDevice::MsgInDelDevice(pugi::xml_document* doc) : IMsgInLoginAndAdapterAccessRequired(doc)  {
+const string DeviceDelete::state = "deldev";
+DeviceDelete::DeviceDelete(pugi::xml_document* doc) : IMsgInLoginAndAdapterAccessRequired(doc)  {
 }
 
-MsgInDelDevice::~MsgInDelDevice(){
+DeviceDelete::~DeviceDelete(){
     
 }
 
-int MsgInDelDevice::getMsgAuthorization() {
+int DeviceDelete::getMsgAuthorization() {
     return SUPERUSER;
 }
 
-string MsgInDelDevice::createResponseMsgOut()
+string DeviceDelete::createResponseMsgOut()
 {
     
     pugi::xml_node deviceNode =  _doc->child(P_COMMUNICATION);

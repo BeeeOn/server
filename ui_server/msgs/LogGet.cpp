@@ -5,7 +5,7 @@
  * Created on 23. červen 2014, 11:57
  */
 
-#include "MsgInGetLog.h"
+#include "LogGet.h"
 #include "../lib/pugixml.hpp"
 #include "../DAO/DAODevices.h"
 using namespace std;

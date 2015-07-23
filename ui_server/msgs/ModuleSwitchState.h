@@ -11,10 +11,10 @@
 #include "IMsgInLoginAndAdapterAccessRequired.h"
 #include "SocketClient.h"
 
-class MsgInSwitch : public IMsgInLoginAndAdapterAccessRequired{
+class ModuleSwitchState : public IMsgInLoginAndAdapterAccessRequired{
 public:
-    MsgInSwitch(pugi::xml_document* doc);
-    virtual ~MsgInSwitch();
+    ModuleSwitchState(pugi::xml_document* doc);
+    virtual ~ModuleSwitchState();
 
     virtual int getMsgAuthorization();
     virtual std::string createResponseMsgOut();

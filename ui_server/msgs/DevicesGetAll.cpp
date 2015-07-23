@@ -5,26 +5,26 @@
  * Created on 3. červenec 2014, 13:03
  */
 
-#include "MsgInGetAllDevices.h"
+#include "DevicesGetAll.h"
 #include "IMsgInLoginAndAdapterAccessRequired.h"
 
 #include "../DAO/DAODevices.h"
 
 using namespace std;
 
-const std::string MsgInGetAllDevices::state = "getalldevs";
+const std::string DevicesGetAll::state = "getalldevs";
 
-MsgInGetAllDevices::MsgInGetAllDevices(pugi::xml_document* doc): IMsgInLoginAndAdapterAccessRequired(doc) {
+DevicesGetAll::DevicesGetAll(pugi::xml_document* doc): IMsgInLoginAndAdapterAccessRequired(doc) {
 }
 
-MsgInGetAllDevices::~MsgInGetAllDevices() {
+DevicesGetAll::~DevicesGetAll() {
 }
 
-int MsgInGetAllDevices::getMsgAuthorization() {
+int DevicesGetAll::getMsgAuthorization() {
     return GUEST;
 }
 
-string MsgInGetAllDevices::createResponseMsgOut()
+string DevicesGetAll::createResponseMsgOut()
 {          
         return envelopeResponseWithAdapterId(R_DEVICES_ALL, DAODevices::getInstance().getXMLAllDevs(_adapterId), _adapterId);
 }

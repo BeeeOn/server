@@ -5,23 +5,23 @@
  * Created on 22. červenec 2014, 10:15
  */
 
-#include "MsgInSwitch.h"
+#include "ModuleSwitchState.h"
 #include "Config.h"
 
 using namespace std;
 
-const string MsgInSwitch::state = "switch";
-MsgInSwitch::MsgInSwitch(pugi::xml_document* doc) : IMsgInLoginAndAdapterAccessRequired(doc) {
+const string ModuleSwitchState::state = "switch";
+ModuleSwitchState::ModuleSwitchState(pugi::xml_document* doc) : IMsgInLoginAndAdapterAccessRequired(doc) {
 }
 
-MsgInSwitch::~MsgInSwitch() {
+ModuleSwitchState::~ModuleSwitchState() {
 }
 
-int MsgInSwitch::getMsgAuthorization() {
+int ModuleSwitchState::getMsgAuthorization() {
     return USER;
 }
 
-string MsgInSwitch::createResponseMsgOut()
+string ModuleSwitchState::createResponseMsgOut()
 {    
     pugi::xml_node comNode =  _doc->child(P_COMMUNICATION);
     string deviceId = comNode.attribute(P_DEVICE_ID).value();

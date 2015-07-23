@@ -11,10 +11,10 @@
 #include "IMsgInLoginAndAdapterAccessRequired.h"
 #include "SocketClient.h"
 
-class MsgInDelDevice:public IMsgInLoginAndAdapterAccessRequired{
+class DeviceDelete:public IMsgInLoginAndAdapterAccessRequired{
 public:
-    MsgInDelDevice(pugi::xml_document* doc);
-    virtual ~MsgInDelDevice();
+    DeviceDelete(pugi::xml_document* doc);
+    virtual ~DeviceDelete();
 
     virtual int getMsgAuthorization();
 

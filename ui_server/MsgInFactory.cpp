@@ -7,26 +7,22 @@
 #include "msgs/IMsgIn.h"
 
 #include "msgs/UserLogIn.h"
-#include "msgs/MsgInGetDevices.h"
+#include "msgs/DevicesGet.h"
 #include "msgs/MsgInUnknown.h"
 #include "msgs/GatesGetConnected.h"
 #include "msgs/LocationsGet.h"
-#include "msgs/MsgInGetLog.h"
+#include "msgs/LogGet.h"
 #include "msgs/LocationAdd.h"
 #include "msgs/LocationDelete.h"
 #include "msgs/AccountDel.h"
 #include "msgs/AccountUpdate.h"
 #include "msgs/AccountAdd.h"
-#include "msgs/MsgInAddView.h"
-#include "msgs/MsgInUpdateView.h"
-#include "msgs/MsgInDelView.h"
-#include "msgs/MsgInGetViews.h"
-#include "msgs/MsgInGetAllDevices.h"
-#include "msgs/MsgInDelDevice.h"
-#include "msgs/MsgInAdapterListen.h"
-#include "msgs/MsgInSwitch.h"
+#include "msgs/DevicesGetAll.h"
+#include "msgs/DeviceDelete.h"
+#include "msgs/GateScanMode.h"
+#include "msgs/ModuleSwitchState.h"
 #include "msgs/GateAdd.h"
-#include "msgs/MsgInGetNewDevices.h"
+#include "msgs/DevicesGetNew.h"
 #include "msgs/NotificationSetGCMID.h"
 #include "msgs/NotificationEraseGCMID.h"
 #include "msgs/MsgInAlgorithmsRedirect.h"
@@ -39,7 +35,7 @@
 #include "msgs/GateDelete.h"
 #include "msgs/UserLogout.h"
 #include "msgs/GateGetInfo.h"
-#include "msgs/MsgInSetDevices.h"
+#include "msgs/DevicesUpdate.h"
 #include "msgs/GateUpdate.h"
 #include "msgs/AccountGet.h"
 
@@ -77,14 +73,14 @@ IMsgIn* MsgInFactory::createMsg(const char* msg)
     
     string state = doc->child(P_COMMUNICATION).attribute(P_STATE).value();
     
-    Logger::getInstance(Logger::DEBUG3) << "factory: msg= "<< state<< endl;
+    Logger::getInstance(Logger::DEBUG3) << "factory: creating msg "<< state<< endl;
 
     if(state == GatesGetConnected::state)
         return new GatesGetConnected(doc);
-    if(state == MsgInGetAllDevices::state)
-        return new MsgInGetAllDevices(doc);
-    if(state == MsgInGetDevs::state)
-        return new MsgInGetDevs(doc);
+    if(state == DevicesGetAll::state)
+        return new DevicesGetAll(doc);
+    if(state == DevicesGet::state)
+        return new DevicesGet(doc);
     if(state == UserLogIn::state)
         return new UserLogIn(doc);
     if(state == UserRegister::state)
@@ -103,28 +99,20 @@ IMsgIn* MsgInFactory::createMsg(const char* msg)
         return new AccountUpdate(doc);
     if(state == MsgInAddAccount::state)
         return new MsgInAddAccount(doc);
-    if(state == MsgInAddView::state)
-        return new MsgInAddView(doc);
-    if(state == MsgInUpdateView::state)
-        return new MsgInUpdateView(doc);
     if(state == GetLog::state)
         return new GetLog(doc);
-    if(state == MsgInDelView::state)
-        return new MsgInDelView(doc);
-    if(state == MsgInGetViews::state)
-        return new MsgInGetViews(doc);
-    if(state == MsgInDelDevice::state)
-        return new MsgInDelDevice(doc);
-    if(state == MsgInDevices::state)
-        return new MsgInDevices(doc);
-    if(state == MsgInAdapterListen::state)
-        return new MsgInAdapterListen(doc);
-    if(state == MsgInSwitch::state)
-        return new MsgInSwitch(doc);
+    if(state == DeviceDelete::state)
+        return new DeviceDelete(doc);
+    if(state == DevicesUpdate::state)
+        return new DevicesUpdate(doc);
+    if(state == GateScanMode::state)
+        return new GateScanMode(doc);
+    if(state == ModuleSwitchState::state)
+        return new ModuleSwitchState(doc);
     if(state == GateAdd::state)
         return new GateAdd(doc);
-    if(state == MsgInGetNewDevices::state)
-        return new MsgInGetNewDevices(doc);
+    if(state == DevicesGetNew::state)
+        return new DevicesGetNew(doc);
     if(state == NotificationSetGCMID::state)
         return new NotificationSetGCMID(doc);
     if(state == NotificationEraseGCMID::state)
@@ -150,12 +138,12 @@ IMsgIn* MsgInFactory::createMsg(const char* msg)
     
     if(std::find(algMsgs.begin(), algMsgs.end(), state)!=algMsgs.end())
         return new MsgInAlgorithmsRedirect(doc);
-    
+ /*   
     vector<string> gamiMsgs = {"getallachievements","setprogresslvl"};
     
     if(std::find(gamiMsgs.begin(), gamiMsgs.end(), state) != gamiMsgs.end())
         return new MsgInGamificationRedirect(doc);   
-
+*/
     Logger::getInstance(Logger::ERROR)<<"UNKNOWN MSG"<<endl;
     return new MsgInUnknown(doc);
 }

@@ -5,25 +5,25 @@
  * Created on 3. červen 2014, 8:03
  */
 
-#include "MsgInSetDevices.h"
+#include "DevicesUpdate.h"
 #include "ServerException.h"
 #include "../DAO/DAODevices.h"
 using namespace std;
-const string MsgInDevices::state = "setdevs";
+const string DevicesUpdate::state = "setdevs";
 
-MsgInDevices::MsgInDevices(pugi::xml_document* doc): IMsgInLoginAndAdapterAccessRequired(doc){
+DevicesUpdate::DevicesUpdate(pugi::xml_document* doc): IMsgInLoginAndAdapterAccessRequired(doc){
 }
 
 
-MsgInDevices::~MsgInDevices() {
+DevicesUpdate::~DevicesUpdate() {
 }
 
-int MsgInDevices::getMsgAuthorization() {
+int DevicesUpdate::getMsgAuthorization() {
     return ADMIN;
 }
 
 
-string MsgInDevices::createResponseMsgOut()
+string DevicesUpdate::createResponseMsgOut()
 {    
     bool error = false;
     string errorText;

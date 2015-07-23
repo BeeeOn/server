@@ -5,11 +5,11 @@
 #include "DBConnector.h"
 #include "IMsgInLoginAndAdapterAccessRequired.h"
 
-class MsgInGetDevs : public IMsgInLoginRequired
+class DevicesGet : public IMsgInLoginRequired
 {
 public:
-    MsgInGetDevs(pugi::xml_document* doc);
-    virtual ~MsgInGetDevs(void);
+    DevicesGet(pugi::xml_document* doc);
+    virtual ~DevicesGet(void);
     
     virtual int getMsgAuthorization();
     

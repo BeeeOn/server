@@ -1,23 +1,23 @@
-#include "MsgInGetDevices.h"
+#include "DevicesGet.h"
 
 using namespace std;
 
-const string MsgInGetDevs::state = "getdevs";
+const string DevicesGet::state = "getdevs";
 
-MsgInGetDevs::MsgInGetDevs(pugi::xml_document* doc): IMsgInLoginRequired(doc)
+DevicesGet::DevicesGet(pugi::xml_document* doc): IMsgInLoginRequired(doc)
 {
 }
 
-MsgInGetDevs::~MsgInGetDevs(void)
+DevicesGet::~DevicesGet(void)
 {
 }
 
-int MsgInGetDevs::getMsgAuthorization() {
+int DevicesGet::getMsgAuthorization() {
     return GUEST;
 }
 
 
-string MsgInGetDevs::createResponseMsgOut()
+string DevicesGet::createResponseMsgOut()
 {
     string adapterId;
     string facilityMac;

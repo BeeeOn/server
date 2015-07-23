@@ -6,23 +6,23 @@
  */
 
 
-#include "MsgInAdapterListen.h"
+#include "GateScanMode.h"
 #include "Config.h"
 
 using namespace std;
-const std::string MsgInAdapterListen::state = "scanmode";
+const std::string GateScanMode::state = "scanmode";
 
-MsgInAdapterListen::MsgInAdapterListen(pugi::xml_document* doc) : IMsgInLoginAndAdapterAccessRequired(doc) {
+GateScanMode::GateScanMode(pugi::xml_document* doc) : IMsgInLoginAndAdapterAccessRequired(doc) {
 }
 
-MsgInAdapterListen::~MsgInAdapterListen() {
+GateScanMode::~GateScanMode() {
 }
 
-int MsgInAdapterListen::getMsgAuthorization() {
+int GateScanMode::getMsgAuthorization() {
     return SUPERUSER;
 }
 
-string MsgInAdapterListen::createResponseMsgOut()
+string GateScanMode::createResponseMsgOut()
 {       
     string r ;
     try{

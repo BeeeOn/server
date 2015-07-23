@@ -9,18 +9,17 @@
 #define	MSGINGETXML_H
 
 #include "IMsgIn.h"
-#include "MsgOutCommunication.h"
 #include "DBConnector.h"
-#include "ComTable.h"
-#include "MsgOutFalse.h"
-#include "MsgOutReSign.h"
 #include "IMsgInLoginAndAdapterAccessRequired.h"
 
-class MsgInGetXml :public IMsgInLoginAndAdapterAccessRequired{
+class DevicesGetAll :public IMsgInLoginAndAdapterAccessRequired{
 public:
-    MsgInGetXml(char* msg, pugi::xml_document* doc);
-    virtual ~MsgInGetXml();
-    virtual IMsgOut* createResponseMsgOut();
+    DevicesGetAll(pugi::xml_document* doc);
+    virtual ~DevicesGetAll();
+
+    virtual int getMsgAuthorization();
+
+    virtual string createResponseMsgOut();
     
     static const std::string state;
     private:
