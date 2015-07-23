@@ -1,0 +1,56 @@
+@import 'bootstrap/less/bootstrap.less';
+@import 'font-awesome/less/font-awesome.less';
+
+@icon-font-path: '/bower_components/bootstrap/fonts/';
+@fa-font-path: '/bower_components/font-awesome/fonts';
+
+/**
+ * App-wide Styles
+ */
+
+.browsehappy {
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
+}
+/* IE workaround - applies only to IE10 and IE11 */
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  /* IE10+ CSS styles go here */
+  .main-window {
+    height: 100%;
+  }
+}
+
+.grayBackground {
+  background-color: @clr_background_gray;
+}
+
+.whiteBackground {
+  background-color: @clr_white;
+}
+
+
+// injector
+@import 'defaultTheme.less';
+@import 'routes/changelog/changelog.less';
+@import 'routes/graphs/graphs.less';
+@import 'routes/login/login.less';
+@import 'routes/notifications/notifications.less';
+@import 'routes/overview/description/description.less';
+@import 'routes/overview/list/list.less';
+@import 'routes/overview/overview.less';
+@import 'routes/settings/geolocation/geolocation.less';
+@import 'routes/settings/settings.less';
+@import 'routes/settings/timezone/timezone.less';
+@import 'routes/settings/units/units.less';
+@import 'routes/watchdog/watchdog.less';
+@import 'about/about.less';
+@import 'gateway/gateway-button/gateway-button.less';
+@import 'location-button/location-button.less';
+@import 'menu/menu.less';
+@import 'modal/modal.less';
+@import 'navbar/navbar.less';
+@import 'right-panel/right-panel.less';
+// endinjector
+

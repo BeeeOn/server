@@ -11,8 +11,9 @@ require('./google/passport').setup(config);
 
 var router = express.Router();
 
-/*router.use('/local', require('./local'));
-router.use('/facebook', require('./facebook'));*/
+router.use('/local', require('./local'));
+router.use('/logout', require('./logout'));
+/*router.use('/facebook', require('./facebook'));*/
 router.use('/google', require('./google/index'));
 
 module.exports = router;

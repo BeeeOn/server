@@ -1,38 +1,187 @@
 {
   "logs": [
-  {
-    "date": "09-07-2015",
-    "version": "0.0.0",
-    "author": "Filip Sutovsky <xsutov00@stud.fit.vutbr.cz>",
-    "points": [{
-      "level" : "major",
-      "text" : "GUI - Login screen added -> accessible DEMO mod"
-    },{
-      "level" : "major",
-      "text" : "GUI - Overview screen added"
-    },{
-      "level" : "minor",
-      "text" : "GUI - Notification screen added"
-    },{
-      "level" : "major",
-      "text" : "GUI - navigation bar added to Overview and Notification"
-    },{
-      "level" : "major",
-      "text" : "GUI - added menu to navigation - locked on large devices(PC), responsible hiding on smaller devices (shown menu icon)"
-    },{
-      "level" : "minor",
-      "text" : "URL redirection (unknown URLs redirected to Overview);URL access - need to be logged in (currently demo mod) to access existing URLs, except \"Login\" URL"
-    },{
-      "level" : "minor",
-      "text" : "URL access - need to be logged in (currently demo mod) to access existing URLs, except \"Login\" URL"
-    }]
-  }, {
-    "date": "08-07-2015",
-    "version": "0.0.0",
-      "author": "Filip Sutovsky <xsutov00@stud.fit.vutbr.cz>",
-      "points": [{
-        "level" : "major",
-        "text" : "Change log created"
-      }]
-  }
-  ]}
+    {
+      "date": "21-07-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["fixed","gui","func"],
+          "text" : " application fully functional on Internet Explorer"
+        },
+        {
+          "chips" : ["added","func"],
+          "text" : " API communication and request authorization. All information now goes through API.(even DEMO MOD)"
+        },
+        {
+          "chips" : ["added","func"],
+          "text" : " API documentation is located in git (http://ant2.fit.vutbr.cz:9000/api.html)"
+        },
+        {
+          "chips" : ["changed","func"],
+          "text" : " DEMO mod data moved to server side"
+        },
+        {
+          "chips" : ["added","gui","func"],
+          "text" : " \"Gateway description\" view"
+        },
+        {
+          "chips" : ["fixed","func"],
+          "text" : " routing issues and selected gateway persistence across views"
+        }
+      ]
+    },
+    {
+      "date": "16-07-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["fixed","gui","func"],
+          "text" : " application partially functional on Internet Explorer"
+        },
+        {
+          "chips" : ["added","gui","func"],
+          "text" : " \"Settings\" view and URL changes"
+        }
+      ]
+    },
+    {
+      "date": "15-07-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["changed","gui","func"],
+          "text" : " Login view now matching new version of android application"
+        },
+        {
+          "chips" : ["added","gui","func"],
+          "text" : " \"About\" modal dialog"
+        },
+        {
+          "chips" : ["fixed","func"],
+          "text" : " logout in Firefox"
+        },
+        {
+          "chips" : ["fixed","func"],
+          "text" : " selected adapter is now remembered when switching between \"Management\" views and \"Applications\" views"
+        },
+        {
+          "chips" : ["fixed","gui","func"],
+          "text" : " a few of IE bugs ( still not showing correctly, need more bug fixing )"
+        }
+      ]
+    },
+    {
+      "date": "14-07-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["added","gui","func"],
+          "text" : " menu structure and functionality -> switching between gateways changes URL"
+        },
+        {
+          "chips" : ["added","gui"],
+          "text" : "swipe left for hiding menu"
+        },
+        {
+          "chips" : ["added","gui","func"],
+          "text" : " menu buttons for management and applications -> switching changes URL and middle content"
+        },
+        {
+          "chips" : ["added","gui"],
+          "text" : " basic routes for Graphs and Watchdog views"
+        },
+        {
+          "chips" : ["changed","gui"],
+          "text" : " menu buttons behaviour for all screens"
+        },
+        {
+          "chips" : ["changed","gui","func"],
+          "text" : " replacing CSS with LESS for better style control"
+        },
+        {
+          "chips" : ["changed","gui"],
+          "text" : " new theme colors + added default theme file"
+        }
+      ]
+    },
+    {
+      "date": "13-07-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["added","gui"],
+          "text" : " basic menu structure"
+        },
+        {
+          "chips" : ["added","gui"],
+          "text" : " right panel ( need to change responsive logic )"
+        },
+        {
+          "chips" : ["added","gui"],
+          "text" : " preview of add gateway and module button"
+        },
+        {
+          "chips" : ["added","gui","func"],
+          "text" : " adapter selection changes url"
+        }
+      ]
+    },
+    {
+      "date": "10-07-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["fixed","gui"],
+          "text" : " logo .svg file now shows in Firefox"
+        },
+        {
+          "chips" : ["changed","gui","func"],
+          "text" : " more levels in changelog (primary: added,changed,fixed | secondary: gui,func,security)"
+        }
+      ]
+    },
+    {
+      "date": "09-07-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["added","gui"],
+          "text" : " Login screen -> accessible DEMO mod"
+        },
+        {
+          "chips" : ["added","gui"],
+          "text" : " Overview screen"
+        },
+        {
+          "chips" : ["added","gui"],
+          "text" : " Notification screen"
+        },
+        {
+          "chips" : ["added","gui"],
+          "text" : " navigation in Overview and Notifications"
+        },
+        {
+          "chips" : ["added","gui"],
+          "text" : " menu to navigation - locked on large devices(PC), responsible hiding on smaller devices (shown menu icon)"
+        },
+        {
+          "chips" : ["added","security"],
+          "text" : " URL redirection (unknown URLs redirected to Overview) "
+        },
+        {
+          "chips" : ["added","security"],
+          "text" : " URL access - need to be logged in (currently demo mod) to access existing URLs, except \"Login\" URL "
+        }
+      ]
+    },
+    {
+      "date": "08-07-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["added","gui"],
+          "text" : "Change log"
+        }
+      ]
+    }
+]}

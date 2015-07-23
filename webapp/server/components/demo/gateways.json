@@ -1,0 +1,32 @@
+[
+  {
+    "aid": "11111",
+    "role": "superuser",
+    "aname" : "Adapter #1",
+    "nfacs" : 4,
+    "nusers" : 1,
+    "ip" : "127.0.0.1",
+    "aversion" : "0",
+    "utc" : "60"
+  },
+  {
+    "aid": "22222",
+    "role": "admin",
+    "aname" : "Adapter #2",
+    "nfacs" : 2,
+    "nusers" : 1,
+    "ip" : "127.0.0.2",
+    "aversion" : "0",
+    "utc" : "60"
+  },
+  {
+    "aid": "33333",
+    "role": "admin",
+    "aname" : "Adapter #3",
+    "nfacs" : 1,
+    "nusers" : 1,
+    "ip" : "127.0.0.3",
+    "aversion" : "0",
+    "utc" : "60"
+  }
+]

@@ -3,34 +3,27 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <base href="/">
-    <title></title>
+    <title>BeeeOn</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <meta name="viewport" content="initial-scale=1" />
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(client) app/vendor.css -->
       <!-- bower:css -->
-      <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
       <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
       <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
+      <link rel="stylesheet" href="bower_components/angular-dialog-service/dist/dialogs.min.css" />
+      <link rel="stylesheet" href="bower_components/v-accordion/dist/v-accordion.css" />
       <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css({.tmp,client}) app/app.css -->
     <link rel="stylesheet" href="app/app.css">
       <!-- injector:css -->
-      <link rel="stylesheet" href="app/app.css">
-      <link rel="stylesheet" href="app/routes/changelog/changelog.css">
-      <link rel="stylesheet" href="app/routes/login/login.css">
-      <link rel="stylesheet" href="app/routes/notifications/notifications.css">
-      <link rel="stylesheet" href="app/routes/overview/overview.css">
-      <link rel="stylesheet" href="components/location-button/location-button.css">
-      <link rel="stylesheet" href="components/menu/menu.css">
-      <link rel="stylesheet" href="components/modal/modal.css">
-      <link rel="stylesheet" href="components/navbar/navbar.css">
       <!-- endinjector -->
     <!-- endbuild -->
     <style>
@@ -45,13 +38,13 @@
     </style>
   </head>
   <body ng-app="beeeOnWebApp">
-    <!--[if lt IE 7]>
-      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <!--[if lte IE 10]>
+      <p class="browsehappy">You are using a VERY <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> access this application.</p>
     <![endif]-->
-
     <!-- Add your site or application content here -->
-    <div ui-view="" layout-fill layout="column"></div>
-
+    <!--[if lte IE 10]><!-->
+    <div ui-view="" layout-fill layout="column" class="main-window"></div>
+    <!--<![endif]-->
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -71,6 +64,7 @@
       <!-- bower:js -->
       <script src="bower_components/jquery/dist/jquery.js"></script>
       <script src="bower_components/angular/angular.js"></script>
+      <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
       <script src="bower_components/angular-resource/angular-resource.js"></script>
       <script src="bower_components/angular-cookies/angular-cookies.js"></script>
       <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
@@ -80,6 +74,12 @@
       <script src="bower_components/angular-animate/angular-animate.js"></script>
       <script src="bower_components/angular-aria/angular-aria.js"></script>
       <script src="bower_components/angular-material/angular-material.js"></script>
+      <script src="bower_components/angular-modal-service/dst/angular-modal-service.js"></script>
+      <script src="bower_components/angular-translate/angular-translate.js"></script>
+      <script src="bower_components/angular-dialog-service/dist/dialogs.min.js"></script>
+      <script src="bower_components/angular-dialog-service/dist/dialogs-default-translations.min.js"></script>
+      <script src="bower_components/v-accordion/dist/v-accordion.js"></script>
+      <script src="bower_components/ng-lodash/build/ng-lodash.js"></script>
       <!-- endbower -->
     <!-- endbuild -->
 
@@ -88,19 +88,39 @@
           <!-- injector:js -->
           <script src="app/routes/changelog/changelog.controller.js"></script>
           <script src="app/routes/changelog/changelog.js"></script>
+          <script src="app/routes/graphs/graphs.controller.js"></script>
+          <script src="app/routes/graphs/graphs.js"></script>
           <script src="app/routes/login/login.controller.js"></script>
           <script src="app/routes/login/login.js"></script>
           <script src="app/routes/notifications/notifications.controller.js"></script>
           <script src="app/routes/notifications/notifications.js"></script>
+          <script src="app/routes/overview/description/description.controller.js"></script>
+          <script src="app/routes/overview/description/description.js"></script>
+          <script src="app/routes/overview/list/list.controller.js"></script>
+          <script src="app/routes/overview/list/list.js"></script>
           <script src="app/routes/overview/overview.controller.js"></script>
           <script src="app/routes/overview/overview.js"></script>
+          <script src="app/routes/settings/geolocation/geolocaiton.js"></script>
+          <script src="app/routes/settings/geolocation/geolocation.controller.js"></script>
+          <script src="app/routes/settings/settings.controller.js"></script>
+          <script src="app/routes/settings/settings.js"></script>
+          <script src="app/routes/settings/timezone/timezone.controller.js"></script>
+          <script src="app/routes/settings/timezone/timezone.js"></script>
+          <script src="app/routes/settings/units/units.controller.js"></script>
+          <script src="app/routes/settings/units/units.js"></script>
+          <script src="app/routes/watchdog/watchdog.controller.js"></script>
+          <script src="app/routes/watchdog/watchdog.js"></script>
+          <script src="components/about/about.controller.js"></script>
           <script src="components/auth/auth.service.js"></script>
+          <script src="components/gateway/gateway-button/gateway-button.directive.js"></script>
+          <script src="components/gateway/gateway.service.js"></script>
           <script src="components/location-button/location-button.directive.js"></script>
           <script src="components/menu/menu.controller.js"></script>
-          <script src="components/menu/menu.service.js"></script>
           <script src="components/modal/modal.controller.js"></script>
           <script src="components/modal/modal.service.js"></script>
           <script src="components/navbar/navbar.controller.js"></script>
+          <script src="components/right-panel/right-panel.directive.js"></script>
+          <script src="components/sidepanel/sidepanel.service.js"></script>
           <script src="components/user/user.service.js"></script>
           <!-- endinjector -->
         <!-- endbuild -->

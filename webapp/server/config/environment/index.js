@@ -26,11 +26,11 @@ var all = {
 
   // Secret for session, you will want to change this and make it an environment variable
   secrets: {
-    session: 'beee-on-web-secret'
+    session: '(!%zftrd-$k*f*3aqf)*wua8zd(d!b083j3gf6#l!e*y))=-*+'
   },
 
   // List of user roles
-  userRoles: ['guest', 'user', 'admin'],
+  userRoles: ['guest', 'user', 'admin','superuser'],
 
   // MongoDB connection options
   mongo: {

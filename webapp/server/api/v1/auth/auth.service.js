@@ -23,16 +23,6 @@ function isAuthenticated() {
 		})
 		// Attach user to request
 		.use(function(req, res, next) {
-			var user = {
-				id: 123121,
-				name: profile.displayName,
-				email: profile.emails[0].value,
-				role: 'quest',
-				username: profile.username,
-				provider: 'google',
-				google: profile._json
-			};
-			req.user =  user;
 			next();
 			/*User.findById(req.user._id, function (err, user) {
 				if (err) return next(err);
@@ -66,15 +56,15 @@ function hasRole(roleRequired) {
  * Returns a jwt token signed by the app secret
  */
 function signToken(id) {
-	return jwt.sign({ _id: id }, config.secrets.session, { expiresInMinutes: 60*5 });
+	return jwt.sign({ bt: id }, config.secrets.session, { expiresInMinutes: 60*24*2 });
 }
 
 /**
  * Set token cookie directly for oAuth strategies
  */
 function setTokenCookie(req, res) {
-	if (!req.user) return res.json(404, { message: 'Something went wrong, please try again.'});
-	var token = signToken(req.user._id, req.user.role);
+	if (!req.bt) return res.json(404, { message: 'Something went wrong, please try again.'});
+	var token = signToken(req.bt);
 	res.cookie('token', JSON.stringify(token));
 	res.redirect('/');
 }

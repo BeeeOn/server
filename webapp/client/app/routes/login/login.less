@@ -1,0 +1,83 @@
+.loginPanelWrapper{
+  min-height: 100%;
+  .loginLogoPanel{
+    background-color: @clr_primary;
+    min-height: 120px;
+    min-width: 250px;
+    color: @clr_white;
+    h3 {
+      margin-left: 20px;
+      font-size: 30pt;
+    }
+    p {
+      margin-left: 20px;
+      font-size: 15pt;
+    }
+    .loginLogoIconLarge {
+      min-width: 250px;
+      width: 250px;
+      min-height: 250px;
+      height: 250px;
+      margin-top: 20px;
+    }
+    .loginLogoIconSmall {
+      min-width: 100px;
+      width: 100px;
+      min-height: 100px;
+      height: 100px;
+      margin-left: 10px;
+    }
+  }
+  .middlePanel{
+    background-color: @clr_white;
+    min-width: 250px;
+    min-height: 250px;
+    md-icon {
+      width: 48px;
+      height: 48px;
+    }
+    .loginSignButtonsPanel{
+      max-width: 800px;
+      p {
+        margin-top: 5px;
+        color: @clr_primary_text;
+      }
+    }
+    .demoModPanel {
+      background-color: @clr_primary_medium;
+      min-height: 70px;
+      min-width: 250px;
+      color: @clr_white;
+      p {
+        padding-top: 8px;
+        padding-left: 10px;
+        margin-bottom: 5px;
+      }
+      div {
+        display: block;
+        text-align: center;
+      }
+      .md-button {
+        margin-top: 0;
+        margin-bottom: 0;
+        padding: 0 25%;
+        &:not([disabled]):active {
+          background-color: @clr_primary_light;
+        }
+        &:not([disabled]):hover {
+          background-color: @clr_primary_light;
+        }
+      }
+    }
+  }
+
+  .loginButton {
+    width: 150px;
+  }
+
+  .loginGButton {
+    background-color: #f73838;
+    color: #ffffff;
+  }
+
+}

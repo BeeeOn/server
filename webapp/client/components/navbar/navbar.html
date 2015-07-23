@@ -1,7 +1,7 @@
-<div ng-controller="NavbarCtrl">
+<div ng-controller="NavbarCtrl" class="navBar">
     <md-toolbar>
         <div class="md-toolbar-tools">
-            <location-button type="{{locationButtonType}}" location="{{locationName}}" class="navbarLocationPanel"></location-button>
+            <location-button options="locationOptions" class="navbarLocationPanel"></location-button>
             <span flex></span>
             <md-button hide show-gt-md ui-sref="overview" class="md-icon-button" aria-label="BeeeOnWeb">
                 <md-icon md-svg-icon="logo-icon" style="width: 48px;height: 48px;"></md-icon>

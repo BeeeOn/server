@@ -3,8 +3,22 @@
 CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.8.1-beta" last-position="0,41" last-zoom="0.9"
+<dbmodel pgmodeler-ver="0.8.1-beta1" last-position="0,0" last-zoom="0.8"
 	 default-schema="public" default-owner="postgres">
+<role name="ui_server"
+      login="true">
+	<roles names="hardware,user_data" role-type="member" />
+</role>
+
+<role name="hardware"
+      login="true">
+	<roles names="ui_server" role-type="refer" />
+</role>
+
+<role name="user_data">
+	<roles names="ui_server" role-type="refer" />
+</role>
+
 <database name="home6">
 </database>
 
@@ -43,7 +57,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<tag name="Users"/>
-	<position x="198.955" y="420.25"/>
+	<position x="167.705" y="421.5"/>
 	<column name="user_id" not-null="true">
 		<type name="integer"/>
 	</column>
@@ -224,18 +238,18 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="logs">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1262.25" y="847"/>
-	<column name="timestamp" not-null="true">
-		<type name="bigint"/>
-	</column>
-	<column name="value" not-null="true">
-		<type name="real"/>
-	</column>
+	<position x="1254.75" y="828.25"/>
 	<column name="fk_facilities_mac" not-null="true">
 		<type name="decimal" length="10"/>
 	</column>
 	<column name="fk_devices_type" not-null="true">
 		<type name="smallint"/>
+	</column>
+	<column name="timestamp" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="value" not-null="true">
+		<type name="real"/>
 	</column>
 	<constraint name="logs_pk" type="pk-constr" table="public.logs">
 		<columns names="timestamp,fk_facilities_mac,fk_devices_type" ref-type="src-columns"/>
@@ -280,14 +294,14 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<position x="211.75" y="712.5"/>
+	<column name="message_id" not-null="true">
+		<type name="bigint"/>
+	</column>
 	<column name="text" not-null="true">
 		<type name="xml"/>
 	</column>
 	<column name="level" not-null="true">
 		<type name="smallint"/>
-	</column>
-	<column name="message_id" not-null="true">
-		<type name="bigint"/>
 	</column>
 	<column name="timestamp" not-null="true">
 		<type name="bigint"/>
@@ -306,32 +320,17 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="views">
+<table name="mobile_devices">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="552.5" y="888.5"/>
-	<column name="name" not-null="true">
-		<type name="varchar" length="50"/>
+	<position x="176.25" y="130"/>
+	<column name="mobile_id" not-null="true">
+		<type name="text"/>
 	</column>
 	<column name="fk_user_id" not-null="true">
 		<type name="integer"/>
 	</column>
-	<column name="icon" not-null="true" default-value="0">
-		<type name="smallint"/>
-	</column>
-	<constraint name="views_pk" type="pk-constr" table="public.views">
-		<columns names="name,fk_user_id" ref-type="src-columns"/>
-	</constraint>
-</table>
-
-<table name="mobile_devices">
-	<schema name="public"/>
-	<role name="postgres"/>
-	<position x="183.75" y="145"/>
 	<column name="token">
-		<type name="text"/>
-	</column>
-	<column name="mobile_id" not-null="true">
 		<type name="text"/>
 	</column>
 	<column name="type">
@@ -343,30 +342,8 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="push_notification">
 		<type name="text"/>
 	</column>
-	<column name="fk_user_id" not-null="true">
-		<type name="integer"/>
-	</column>
 	<constraint name="mobile_devices_pk" type="pk-constr" table="public.mobile_devices">
 		<columns names="mobile_id,fk_user_id" ref-type="src-columns"/>
-	</constraint>
-</table>
-
-<table name="types">
-	<schema name="public"/>
-	<role name="postgres"/>
-	<tag name="Hardware"/>
-	<position x="1279.5" y="268"/>
-	<column name="type_id" not-null="true">
-		<type name="serial"/>
-	</column>
-	<column name="mac_range" not-null="true">
-		<type name="numrange"/>
-	</column>
-	<column name="default_name" not-null="true">
-		<type name="text"/>
-	</column>
-	<constraint name="types_pk" type="pk-constr" table="public.types">
-		<columns names="type_id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
@@ -514,26 +491,52 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="views_devices">
-	<schema name="public"/>
-	<role name="postgres"/>
-	<position x="907.5" y="981.5"/>
-	<column name="fk_view_name" not-null="true">
-		<type name="varchar" length="50"/>
-	</column>
-	<column name="fk_user_id" not-null="true">
-		<type name="integer"/>
-	</column>
-	<column name="fk_facilities_mac" not-null="true">
-		<type name="decimal" length="10"/>
-	</column>
-	<column name="fk_devices_type" not-null="true">
-		<type name="smallint"/>
-	</column>
-	<constraint name="views_devices_pk" type="pk-constr" table="public.views_devices">
-		<columns names="fk_view_name,fk_user_id,fk_facilities_mac,fk_devices_type" ref-type="src-columns"/>
-	</constraint>
-</table>
+<index name="index_fb_id" table="public.users"
+	 concurrent="false" unique="true" fast-update="false" buffering="false"
+	 index-type="btree" factor="0">
+		<idxelement use-sorting="true" nulls-first="true" asc-order="true">
+			<column name="facebook_id"/>
+		</idxelement>
+</index>
+
+<index name="index_mail" table="public.users"
+	 concurrent="false" unique="true" fast-update="false" buffering="false"
+	 index-type="btree" factor="0">
+		<idxelement use-sorting="true" nulls-first="true" asc-order="true">
+			<column name="google_id"/>
+		</idxelement>
+</index>
+
+<index name="index_google_id" table="public.users"
+	 concurrent="false" unique="true" fast-update="false" buffering="false"
+	 index-type="btree" factor="0">
+		<idxelement use-sorting="true" nulls-first="true" asc-order="true">
+			<column name="google_id"/>
+		</idxelement>
+</index>
+
+<index name="index_logs_mttv" table="public.logs"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="btree" factor="0">
+	<comment><![CDATA[mttv = mac, type, timestamp, value]]></comment>
+		<idxelement use-sorting="true" nulls-first="false" asc-order="true">
+			<column name="fk_facilities_mac"/>
+		</idxelement>
+		<idxelement use-sorting="true" nulls-first="false" asc-order="true">
+			<column name="fk_devices_type"/>
+		</idxelement>
+		<idxelement use-sorting="true" nulls-first="false" asc-order="true">
+			<column name="&quot;timestamp&quot;"/>
+		</idxelement>
+		<idxelement use-sorting="true" nulls-first="false" asc-order="true">
+			<column name="value"/>
+		</idxelement>
+</index>
+
+<textbox name="změny" font-size="9">
+	<position x="15" y="30"/>
+	<comment><![CDATA[mobile_devices - smazat mobile_id(posílaný z androidu), přidat name, PK = token (příp. mový serial mobile_id, který bude pouze pro potřeby DB)]]></comment>
+</textbox>
 
 <constraint name="adapters_users_adapters" type="fk-constr" comparison-type="MATCH FULL"
 	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.adapters" table="public.users_adapters">
@@ -585,12 +588,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <constraint name="notifications_users" type="fk-constr" comparison-type="MATCH FULL"
 	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.users" table="public.notifications">
-	<columns names="fk_user_id" ref-type="src-columns"/>
-	<columns names="user_id" ref-type="dst-columns"/>
-</constraint>
-
-<constraint name="views_users" type="fk-constr" comparison-type="MATCH FULL"
-	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.users" table="public.views">
 	<columns names="fk_user_id" ref-type="src-columns"/>
 	<columns names="user_id" ref-type="dst-columns"/>
 </constraint>
@@ -667,28 +664,16 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<columns names="adapter_id" ref-type="dst-columns"/>
 </constraint>
 
-<constraint name="views_devices_devices" type="fk-constr" comparison-type="MATCH FULL"
-	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.devices" table="public.views_devices">
-	<columns names="fk_facilities_mac,fk_devices_type" ref-type="src-columns"/>
-	<columns names="fk_facilities_mac,type" ref-type="dst-columns"/>
-</constraint>
-
-<constraint name="views_views_devices" type="fk-constr" comparison-type="MATCH FULL"
-	 upd-action="CASCADE" del-action="CASCADE" ref-table="public.views" table="public.views_devices">
-	<columns names="fk_view_name,fk_user_id" ref-type="src-columns"/>
-	<columns names="name,fk_user_id" ref-type="dst-columns"/>
-</constraint>
-
 <relationship name="mobile_devices_users" type="relfk"
 	 src-table="public.mobile_devices"
 	 dst-table="public.users"
 	 src-required="false" dst-required="false">
 	<line>
-		<position x="116" y="251"/>
-	<position x="117" y="450"/>
+		<position x="66.25" y="246.25"/>
+	<position x="68.75" y="420"/>
 	</line>
 	<label ref-type="src-label">
-		<position x="1.84" y="-1.2"/>
+		<position x="-25.11" y="36.3"/>
 	</label>
 	<label ref-type="dst-label">
 		<position x="3.635" y="-11.45"/>
@@ -760,9 +745,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 dst-table="public.achievements"
 	 src-required="false" dst-required="false">
 	<line>
-		<position x="1133.56" y="842.26"/>
-	<position x="1133.56" y="774.5"/>
-	<position x="1051.04" y="774.5"/>
+		<position x="1153.56" y="842.26"/>
+	<position x="1153.56" y="774.5"/>
+	<position x="1064.38" y="774.5"/>
 	</line>
 	<label ref-type="name-label">
 		<position x="-22.0868" y="-0.7"/>
@@ -1001,52 +986,49 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</label>
 </relationship>
 
-<relationship name="views_devices_devices" type="relfk"
-	 src-table="public.views_devices"
-	 dst-table="public.devices"
-	 src-required="false" dst-required="false">
-	<line>
-		<position x="1208" y="1000"/>
-	<position x="1204" y="715"/>
-	</line>
-	<label ref-type="name-label">
-		<position x="-6.02426" y="-1.34853"/>
-	</label>
-</relationship>
-
-<relationship name="views_users" type="relfk"
-	 src-table="public.views"
-	 dst-table="public.users"
-	 src-required="false" dst-required="false">
-	<line>
-		<position x="462" y="934"/>
-	<position x="459" y="512"/>
-	</line>
-	<label ref-type="dst-label">
-		<position x="21.5506" y="40.55"/>
-	</label>
-	<label ref-type="name-label">
-		<position x="0" y="0"/>
-	</label>
-</relationship>
-
-<relationship name="views_devices_views" type="relfk"
-	 src-table="public.views_devices"
-	 dst-table="public.views"
-	 src-required="false" dst-required="false">
-	<line>
-		<position x="834.045" y="1019.1"/>
-	<position x="834.045" y="926.1"/>
-	</line>
-	<label ref-type="src-label">
-		<position x="-13.91" y="-1.2"/>
-	</label>
-	<label ref-type="dst-label">
-		<position x="14.8494" y="0.8"/>
-	</label>
-	<label ref-type="name-label">
-		<position x="0" y="0"/>
-	</label>
-</relationship>
-
+<permission>
+	<object name="public.logs" type="table"/>
+	<roles names="hardware"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+<permission>
+	<object name="public.devices" type="table"/>
+	<roles names="hardware"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+<permission>
+	<object name="public.facilities" type="table"/>
+	<roles names="hardware"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+<permission>
+	<object name="public.adapters" type="table"/>
+	<roles names="hardware"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+<permission>
+	<object name="public.users" type="table"/>
+	<roles names="user_data"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+<permission>
+	<object name="public.notifications" type="table"/>
+	<roles names="user_data"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+<permission>
+	<object name="public.mobile_devices" type="table"/>
+	<roles names="user_data"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+<permission>
+	<object name="public.users_adapters" type="table"/>
+	<roles names="user_data"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+<permission>
+	<object name="public.rooms" type="table"/>
+	<roles names="user_data"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
 </dbmodel>

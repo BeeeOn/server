@@ -1,0 +1,123 @@
+gateway-button md-list-item.md-2-line .md-list-item-text, md-list-item.md-2-line > .md-no-style .md-list-item-text {
+    padding: 0;
+}
+
+gateway-button md-list-item.md-2-line .md-list-item-text h3, md-list-item.md-2-line > .md-no-style .md-list-item-text h3{
+    font-size: 14px;
+}
+
+gateway-button md-list-item.md-2-line .md-list-item-text p, md-list-item.md-2-line > .md-no-style .md-list-item-text p {
+    font-size: 12px;
+}
+
+gateway-button .md-button {
+    line-height: normal;
+}
+
+gateway-button .md-radio-button {
+    margin-top: 0px;
+}
+
+gateway-button md-list-item.md-2-line .md-list-item-text p, md-list-item.md-2-line > .md-no-style .md-list-item-text p{
+    line-height: inherit;
+}
+/* new*/
+gateway-button {
+    md-list {
+        padding: 0;
+        md-list-item {
+            margin: 0;
+            padding: 0;
+            min-height: 40px;
+            .md-list-item-inner {
+                min-height: 40px;
+            }
+            .md-button {
+                padding: 7px 6px;
+                padding-left: 15px;
+                border-radius: 0;
+                p{
+                    font-size: 12px;
+                    text-transform: none;
+                    margin-bottom: 0;
+                    color: @clr_secondary_text;
+                    &:first-letter {
+                        text-transform: uppercase
+                    }
+                }
+                h3 {
+                    font-size: 14px;
+                    margin-top: 4px;
+                    margin-bottom: 2px;
+                    text-transform: none;
+                    color: @clr_primary_text;
+                }
+                &:not([disabled]):hover {
+                    background-color: @clr_gray_light;
+                }
+                &:not([disabled]):active {
+                    background-color: @clr_primary;
+                    h3, p{
+                        color: @clr_white;
+                    }
+                }
+            }
+
+        }
+    }
+
+    .selected {
+        p{
+            color: @clr_accent !important;
+        }
+        h3 {
+            color: @clr_accent !important;
+        }
+    }
+    md-radio-button {
+        margin: 0;
+    }
+}
+
+/*
+gateway-button {
+    display: block;
+    .md-button {
+        text-align: left;
+        margin: 0;
+        padding: 7px 6px;
+        padding-left: 15px;
+        p{
+            font-size: 12px;
+            text-transform: none;
+            margin-bottom: 4px;
+            color: @clr_secondary_text;
+        }
+        h3 {
+            font-size: 14px;
+            margin-top: 4px;
+            margin-bottom: 2px;
+            text-transform: none;
+            color: @clr_primary_text;
+        }
+        &:not([disabled]):active {
+            background-color: @clr_primary;
+            h3, p{
+                color: @clr_white;
+            }
+        }
+    }
+
+    .selected {
+        p{
+            color: @clr_accent;
+        }
+        h3 {
+            color: @clr_accent;
+        }
+    }
+
+    md-radio-button {
+        margin: 0;
+    }
+}*/
