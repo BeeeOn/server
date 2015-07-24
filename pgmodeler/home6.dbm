@@ -3,20 +3,13 @@
 CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.8.1-beta1" last-position="0,0" last-zoom="0.8"
-	 default-schema="public" default-owner="postgres">
-<role name="ui_server"
-      login="true">
-	<roles names="hardware,user_data" role-type="member" />
+<dbmodel pgmodeler-ver="0.8.1-beta1" last-position="326,176" last-zoom="1"
+	 default-owner="postgres">
+<role name="uiserver">
 </role>
 
-<role name="hardware"
-      login="true">
-	<roles names="ui_server" role-type="refer" />
-</role>
-
-<role name="user_data">
-	<roles names="ui_server" role-type="refer" />
+<role name="hardware">
+	<roles names="uiserver" role-type="refer" />
 </role>
 
 <database name="home6">
@@ -664,335 +657,119 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<columns names="adapter_id" ref-type="dst-columns"/>
 </constraint>
 
-<relationship name="mobile_devices_users" type="relfk"
-	 src-table="public.mobile_devices"
-	 dst-table="public.users"
-	 src-required="false" dst-required="false">
-	<line>
-		<position x="66.25" y="246.25"/>
-	<position x="68.75" y="420"/>
-	</line>
-	<label ref-type="src-label">
-		<position x="-25.11" y="36.3"/>
-	</label>
-	<label ref-type="dst-label">
-		<position x="3.635" y="-11.45"/>
-	</label>
-	<label ref-type="name-label">
-		<position x="1.97574" y="5.65147"/>
-	</label>
-</relationship>
-
-<relationship name="user_algorithms_users" type="relfk"
-	 src-table="public.users_algorithms"
-	 dst-table="public.users"
-	 src-required="false" dst-required="false">
-	<line>
-		<position x="478" y="177"/>
-	<position x="481" y="402"/>
-	</line>
-	<label ref-type="dst-label">
-		<position x="24.5506" y="-26.45"/>
-	</label>
-	<label ref-type="name-label">
-		<position x="0" y="0"/>
-	</label>
-</relationship>
-
-<relationship name="user_algorithms_adapters" type="relfk"
-	 src-table="public.users_algorithms"
+<relationship name="rel_users_adapters_adapters" type="relfk"
+	 src-table="public.users_adapters"
 	 dst-table="public.adapters"
-	 src-required="false" dst-required="false">
-	<label ref-type="dst-label">
-		<position x="-10.751" y="-15.866"/>
-	</label>
-	<label ref-type="name-label">
-		<position x="-39.9354" y="-47.7815"/>
-	</label>
-</relationship>
+	 src-required="false" dst-required="false"/>
 
-<relationship name="users_achievements_achievements" type="relfk"
-	 src-table="public.users_achievements"
-	 dst-table="public.achievements"
-	 src-required="false" dst-required="false">
-	<line>
-		<position x="795" y="831"/>
-	<position x="877" y="832"/>
-	</line>
-	<label ref-type="name-label">
-		<position x="-33.5243" y="-2.34853"/>
-	</label>
-</relationship>
-
-<relationship name="users_achievements_users" type="relfk"
-	 src-table="public.users_achievements"
+<relationship name="rel_users_adapters_users" type="relfk"
+	 src-table="public.users_adapters"
 	 dst-table="public.users"
-	 src-required="false" dst-required="false">
-	<line>
-		<position x="486" y="791"/>
-	<position x="481" y="484"/>
-	</line>
-	<label ref-type="dst-label">
-		<position x="28.5506" y="17.55"/>
-	</label>
-	<label ref-type="name-label">
-		<position x="9.97574" y="17.6515"/>
-	</label>
-</relationship>
+	 src-required="false" dst-required="false"/>
 
-<relationship name="achievements_achievements" type="relfk"
+<relationship name="rel_facilities_adapters" type="relfk"
+	 src-table="public.facilities"
+	 dst-table="public.adapters"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_facilities_rooms" type="relfk"
+	 src-table="public.facilities"
+	 dst-table="public.rooms"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_devices_facilities" type="relfk"
+	 src-table="public.devices"
+	 dst-table="public.facilities"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_rooms_adapters" type="relfk"
+	 src-table="public.rooms"
+	 dst-table="public.adapters"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_logs_devices" type="relfk"
+	 src-table="public.logs"
+	 dst-table="public.devices"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_achievements_achievements" type="relfk"
 	 src-table="public.achievements"
 	 dst-table="public.achievements"
 	 src-required="false" dst-required="false">
 	<line>
-		<position x="1153.56" y="842.26"/>
-	<position x="1153.56" y="774.5"/>
-	<position x="1064.38" y="774.5"/>
+		<position x="1149.48" y="842.26"/>
+	<position x="1149.48" y="774.5"/>
+	<position x="1061.66" y="774.5"/>
 	</line>
-	<label ref-type="name-label">
-		<position x="-22.0868" y="-0.7"/>
-	</label>
 </relationship>
 
-<relationship name="adapters_achievements_achievements" type="relfk"
-	 src-table="public.adapters_achievements"
-	 dst-table="public.achievements"
-	 src-required="false" dst-required="false">
-	<line>
-		<position x="849.712" y="613.267"/>
-	<position x="855" y="765"/>
-	</line>
-	<label ref-type="src-label">
-		<position x="-5.98363" y="-1.367"/>
-	</label>
-	<label ref-type="name-label">
-		<position x="-6.38017" y="2.01797"/>
-	</label>
-</relationship>
-
-<relationship name="adapters_achievements_adapters" type="relfk"
-	 src-table="public.adapters_achievements"
-	 dst-table="public.adapters"
-	 src-required="false" dst-required="false">
-	<label ref-type="src-label">
-		<position x="-4.98363" y="4.633"/>
-	</label>
-	<label ref-type="dst-label">
-		<position x="-21.751" y="21.134"/>
-	</label>
-	<label ref-type="name-label">
-		<position x="-56.9066" y="-43.365"/>
-	</label>
-</relationship>
-
-<relationship name="users_adapters_adapters" type="relfk"
-	 src-table="public.users_adapters"
-	 dst-table="public.adapters"
-	 src-required="false" dst-required="false">
-	<label ref-type="dst-label">
-		<position x="-23.751" y="-1.866"/>
-	</label>
-	<label ref-type="name-label">
-		<position x="-13.542" y="-51.929"/>
-	</label>
-</relationship>
-
-<relationship name="algo_devices_devices" type="relfk"
-	 src-table="public.algo_devices"
-	 dst-table="public.devices"
-	 src-required="false" dst-required="false">
-	<line>
-		<position x="1563" y="193"/>
-	<position x="1566" y="639"/>
-	</line>
-	<label ref-type="dst-label">
-		<position x="17.0369" y="-11.95"/>
-	</label>
-	<label ref-type="name-label">
-		<position x="-1.02426" y="-52.8485"/>
-	</label>
-</relationship>
-
-<relationship name="algo_devices_user_algorithms" type="relfk"
-	 src-table="public.algo_devices"
-	 dst-table="public.users_algorithms"
-	 src-required="false" dst-required="false">
-	<line>
-		<position x="1183" y="189"/>
-	<position x="897" y="189"/>
-	</line>
-	<label ref-type="dst-label">
-		<position x="20.9587" y="0.8"/>
-	</label>
-	<label ref-type="name-label">
-		<position x="2.47574" y="-45.8485"/>
-	</label>
-</relationship>
-
-<relationship name="algorithms_adapters_adapters" type="relfk"
-	 src-table="public.algorithms_adapters"
-	 dst-table="public.adapters"
-	 src-required="false" dst-required="false">
-	<label ref-type="dst-label">
-		<position x="5.3365" y="-14.866"/>
-	</label>
-	<label ref-type="name-label">
-		<position x="1.30055" y="-47.7815"/>
-	</label>
-</relationship>
-
-<relationship name="algorithms_adapters_u_algorithms" type="relfk"
-	 src-table="public.algorithms_adapters"
-	 dst-table="public.u_algorithms"
-	 src-required="false" dst-required="false">
-	<label ref-type="dst-label">
-		<position x="-4.41" y="16.8"/>
-	</label>
-	<label ref-type="name-label">
-		<position x="28.9757" y="-0.448528"/>
-	</label>
-</relationship>
-
-<relationship name="devices_facilities" type="relfk"
-	 src-table="public.devices"
-	 dst-table="public.facilities"
-	 src-required="false" dst-required="false">
-	<line>
-		<position x="1548" y="635"/>
-	<position x="1546" y="447"/>
-	</line>
-	<label ref-type="src-label">
-		<position x="11.0369" y="-24.45"/>
-	</label>
-	<label ref-type="name-label">
-		<position x="11.4757" y="-46.8485"/>
-	</label>
-</relationship>
-
-<relationship name="facilities_adapters" type="relfk"
-	 src-table="public.facilities"
-	 dst-table="public.adapters"
-	 src-required="false" dst-required="false">
-	<line>
-		<position x="1222" y="542"/>
-	<position x="1225" y="471"/>
-	</line>
-	<label ref-type="src-label">
-		<position x="-28.91" y="-16.164"/>
-	</label>
-	<label ref-type="dst-label">
-		<position x="18.3365" y="0.134"/>
-	</label>
-	<label ref-type="name-label">
-		<position x="7.97574" y="-10.3485"/>
-	</label>
-</relationship>
-
-<relationship name="facilities_rooms" type="relfk"
-	 src-table="public.facilities"
-	 dst-table="public.rooms"
-	 src-required="false" dst-required="false">
-	<line>
-		<position x="1234" y="578"/>
-	<position x="1234" y="666"/>
-	</line>
-	<label ref-type="src-label">
-		<position x="-20.91" y="13.336"/>
-	</label>
-	<label ref-type="name-label">
-		<position x="2.47574" y="-47.3485"/>
-	</label>
-</relationship>
-
-<relationship name="logs_devices" type="relfk"
-	 src-table="public.logs"
-	 dst-table="public.devices"
-	 src-required="false" dst-required="false">
-	<line>
-		<position x="1564" y="915"/>
-	<position x="1563" y="699"/>
-	</line>
-	<label ref-type="dst-label">
-		<position x="21.0369" y="10.05"/>
-	</label>
-	<label ref-type="name-label">
-		<position x="0.475736" y="-49.8485"/>
-	</label>
-</relationship>
-
-<relationship name="notifications_users" type="relfk"
+<relationship name="rel_notifications_users" type="relfk"
 	 src-table="public.notifications"
 	 dst-table="public.users"
-	 src-required="false" dst-required="false">
-	<line>
-		<position x="142" y="803"/>
-	<position x="141" y="475"/>
-	</line>
-	<label ref-type="src-label">
-		<position x="2.84" y="-2.7"/>
-	</label>
-	<label ref-type="dst-label">
-		<position x="3.635" y="12.55"/>
-	</label>
-	<label ref-type="name-label">
-		<position x="4.47574" y="4.15147"/>
-	</label>
-</relationship>
+	 src-required="false" dst-required="false"/>
 
-<relationship name="rooms_adapters" type="relfk"
-	 src-table="public.rooms"
-	 dst-table="public.adapters"
-	 src-required="false" dst-required="false">
-	<label ref-type="dst-label">
-		<position x="-2.751" y="27.134"/>
-	</label>
-	<label ref-type="name-label">
-		<position x="6.05524" y="-3.65653"/>
-	</label>
-</relationship>
-
-<relationship name="users_adapters_users" type="relfk"
-	 src-table="public.users_adapters"
+<relationship name="rel_mobile_devices_users" type="relfk"
+	 src-table="public.mobile_devices"
 	 dst-table="public.users"
-	 src-required="false" dst-required="false">
-	<line>
-		<position x="535" y="452"/>
-	<position x="450" y="451"/>
-	</line>
-	<label ref-type="dst-label">
-		<position x="26.5506" y="-4.45"/>
-	</label>
-	<label ref-type="name-label">
-		<position x="35.4757" y="-59.3485"/>
-	</label>
-</relationship>
+	 src-required="false" dst-required="false"/>
 
-<relationship name="users_algorithms_u_algorithms" type="relfk"
+<relationship name="rel_users_algorithms_users" type="relfk"
+	 src-table="public.users_algorithms"
+	 dst-table="public.users"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_users_algorithms_u_algorithms" type="relfk"
 	 src-table="public.users_algorithms"
 	 dst-table="public.u_algorithms"
-	 src-required="false" dst-required="false">
-	<line>
-		<position x="869" y="165"/>
-	<position x="867" y="88"/>
-	</line>
-	<label ref-type="src-label">
-		<position x="18.9587" y="-16.2"/>
-	</label>
-	<label ref-type="dst-label">
-		<position x="-20.41" y="-2.2"/>
-	</label>
-	<label ref-type="name-label">
-		<position x="-63.5243" y="-49.3485"/>
-	</label>
-</relationship>
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_users_algorithms_adapters" type="relfk"
+	 src-table="public.users_algorithms"
+	 dst-table="public.adapters"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_algorithms_adapters_adapters" type="relfk"
+	 src-table="public.algorithms_adapters"
+	 dst-table="public.adapters"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_algorithms_adapters_u_algorithms" type="relfk"
+	 src-table="public.algorithms_adapters"
+	 dst-table="public.u_algorithms"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_algo_devices_devices" type="relfk"
+	 src-table="public.algo_devices"
+	 dst-table="public.devices"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_algo_devices_users_algorithms" type="relfk"
+	 src-table="public.algo_devices"
+	 dst-table="public.users_algorithms"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_users_achievements_achievements" type="relfk"
+	 src-table="public.users_achievements"
+	 dst-table="public.achievements"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_users_achievements_users" type="relfk"
+	 src-table="public.users_achievements"
+	 dst-table="public.users"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_adapters_achievements_achievements" type="relfk"
+	 src-table="public.adapters_achievements"
+	 dst-table="public.achievements"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_adapters_achievements_adapters" type="relfk"
+	 src-table="public.adapters_achievements"
+	 dst-table="public.adapters"
+	 src-required="false" dst-required="false"/>
 
 <permission>
-	<object name="public.logs" type="table"/>
-	<roles names="hardware"/>
-	<privileges select="true" delete="true" insert="true" update="true"/>
-</permission>
-<permission>
-	<object name="public.devices" type="table"/>
+	<object name="public.adapters" type="table"/>
 	<roles names="hardware"/>
 	<privileges select="true" delete="true" insert="true" update="true"/>
 </permission>
@@ -1002,33 +779,13 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<privileges select="true" delete="true" insert="true" update="true"/>
 </permission>
 <permission>
-	<object name="public.adapters" type="table"/>
+	<object name="public.devices" type="table"/>
 	<roles names="hardware"/>
 	<privileges select="true" delete="true" insert="true" update="true"/>
 </permission>
 <permission>
-	<object name="public.users" type="table"/>
-	<roles names="user_data"/>
-	<privileges select="true" delete="true" insert="true" update="true"/>
-</permission>
-<permission>
-	<object name="public.notifications" type="table"/>
-	<roles names="user_data"/>
-	<privileges select="true" delete="true" insert="true" update="true"/>
-</permission>
-<permission>
-	<object name="public.mobile_devices" type="table"/>
-	<roles names="user_data"/>
-	<privileges select="true" delete="true" insert="true" update="true"/>
-</permission>
-<permission>
-	<object name="public.users_adapters" type="table"/>
-	<roles names="user_data"/>
-	<privileges select="true" delete="true" insert="true" update="true"/>
-</permission>
-<permission>
-	<object name="public.rooms" type="table"/>
-	<roles names="user_data"/>
+	<object name="public.logs" type="table"/>
+	<roles names="hardware"/>
 	<privileges select="true" delete="true" insert="true" update="true"/>
 </permission>
 </dbmodel>
