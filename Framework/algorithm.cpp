@@ -18,8 +18,10 @@ using namespace soci;
 *
 */
 Algorithm::Algorithm(std::string init_userID, std::string init_algID, std::string init_adapterID,
-	std::string init_offset, multimap<unsigned int, map<string, string>> init_values,
-	std::vector<std::string> init_parameters, vector<tRidValues *> init_Rids, std::string init_nameOfDB, std::string init_frameworkServerPort){
+	std::string init_offset, std::multimap<unsigned int, std::map<std::string, std::string>> init_values,
+	std::vector<std::string> init_parameters, std::vector<tRidValues *> init_Rids, std::string init_nameOfDB, std::string init_frameworkServerPort,
+	, std::string init_DBUser, std::string init_DBPassword
+	){
 
 	this->userID = init_userID;
 	this->algID = init_algID;
@@ -29,6 +31,8 @@ Algorithm::Algorithm(std::string init_userID, std::string init_algID, std::strin
 	this->parameters = init_parameters;
 	this->Rids = init_Rids;
 	this->nameOfDB = init_nameOfDB;
+	this->DBUser = init_DBUser;
+	this->DBPassword = init_DBPassword;
 	try{
         this->frameworkServerPort = init_frameworkServerPort;
 	}
@@ -48,7 +52,7 @@ Algorithm::Algorithm(std::string init_userID, std::string init_algID, std::strin
 		exit(EXIT_FAILURE);
 	}
 	//Nastaveni kontejneru pro DB
-	this->cont = DBConnectionsContainer::GetConnectionContainer(Log, this->nameOfDB, 1);
+	this->cont = DBConnectionsContainer::GetConnectionContainer(this->nameOfDB ,this->DBUser, this->DBPassword,  Log, this->nameOfDB, 1);
 	this->Log->SetLogger(7, 5, 100, "algorithm_log",".", "ALGORITHM");
 	session *Conn = NULL;
 	Conn = cont->GetConnection();
@@ -276,9 +280,11 @@ Algorithm * Algorithm::getCmdLineArgsAndCreateAlgorithm(int argc, char *argv[]){
 	string parametersString = "";
 	string nameOfDB = "";
 	string portOfFrameworkServer = "";
+	string DBUser = "";
+	string DBPassword = "";
 	int opt;
 	bool u, a, d, o, v, p, e, s;
-	u = a = d = o = v = p = e = s = false;
+	u = a = d = o = v = p = e = s = x = z = false;
 	while ((opt = getopt(argc, argv, "hu:a:d:o:v:p:e:s:")) != EOF)
 		switch (opt)
 	{
@@ -318,6 +324,14 @@ Algorithm * Algorithm::getCmdLineArgsAndCreateAlgorithm(int argc, char *argv[]){
 			portOfFrameworkServer = optarg;
 			s = true;
 			break;
+        case 'x': // socket port to send answer to framework server
+			DBUser = optarg;
+			x = true;
+			break;
+        case 'z': // socket port to send answer to framework server
+			DBPassword = optarg;
+			z = true;
+			break;
 		default:
 			cerr << "Algorithm failure: Wrong command line arguments!\n";
 			return nullptr;
@@ -347,7 +361,7 @@ Algorithm * Algorithm::getCmdLineArgsAndCreateAlgorithm(int argc, char *argv[]){
 	if (p){
 		params = Algorithm::parseParams(parametersString);
 	}
-	return new Algorithm(userIDString, algIDString, adapterIDString, UserAlgIdString, values, params, Rids, nameOfDB, portOfFrameworkServer);
+	return new Algorithm(userIDString, algIDString, adapterIDString, UserAlgIdString, values, params, Rids, nameOfDB, DBUser, DBPassword );
 }
 
 void Algorithm::usage(char* progName)

@@ -345,6 +345,10 @@ void FrameworkServerHandle::HandleUIServerMessage(std::string data, Loger *Log, 
 					StringToChar(FConfig->dbName),
 					StringToChar("-s"), // name of database
 					StringToChar(to_string(FConfig->portAlgorithmServer)),
+					StringToChar("-x"), // name of DB user
+					StringToChar(to_string(FConfig->dbUser)),
+					StringToChar("-z"), // DB password
+					StringToChar(to_string(FConfig->dbPassword)),
 					StringToChar("/"),
 					NULL
 				};

@@ -27,7 +27,7 @@
 #include "DBConnectionsContainer.h"
 #include "DBFWHandler.h"
 #include "structures.h"
-#include "../lib/pugixml.hpp"
+#include "pugixml.hpp"
 
 /** Enum condition uchovavajici hodnoty reprezentujici operatory ci entity pouzivane v aplikacnich modulech (>, <, =, >=, <=, ...).
 *
@@ -97,6 +97,8 @@ private:
 	std::string adapterID;						/** ID adapteru	 */
 	std::string offset;							/** UsersAlgorithmsId */
 	std::string nameOfDB;						/** Nazev databaze k pripojeni. */
+	std::string DBUser;							/** ID uzivatele algoritmu */
+	std::string DBPassword;							/** ID uzivatele algoritmu */
 	std::multimap<unsigned int, std::map<std::string, std::string>> values;							/**Predane hodnoty do algoritmu. */
 	std::vector<std::string> parameters;		/** Parametry algoritmu, poøadí atd. si definuje autor algoritmu. */
 	std::vector<tnotify *> toNotify;			/** Vektor uchovavajici jednotlive notifikace (kdyby z nejakeho duvodu jich bylo vice). */
@@ -111,7 +113,9 @@ private:
 public:
 	Algorithm(std::string init_userID, std::string init_algID, std::string init_adapterID,
 	std::string init_offset, std::multimap<unsigned int, std::map<std::string, std::string>> init_values,
-	std::vector<std::string> init_parameters, std::vector<tRidValues *> init_Rids, std::string init_nameOfDB, std::string init_frameworkServerPort);
+	std::vector<std::string> init_parameters, std::vector<tRidValues *> init_Rids, std::string init_nameOfDB, std::string init_frameworkServerPort,
+	, std::string init_DBUser, std::string init_DBPassword
+	);
 	~Algorithm();
 	bool AddNotify(unsigned short int type, std::string text, std::string senzorId, std::string typeOfSenzor);
 	bool SendAndExit();
