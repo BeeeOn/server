@@ -1,0 +1,860 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="0.8.1-beta1" last-position="0,593" last-zoom="0.85"
+	 default-owner="postgres">
+<role name="uiserver">
+</role>
+
+<role name="hardware">
+	<roles names="uiserver" role-type="refer" />
+</role>
+
+<role name="user_data">
+</role>
+
+<role name="algorithms">
+</role>
+
+<database name="home6_1">
+</database>
+
+<tag name="Algorithms">
+	<style id="table-body" colors="#fcfcfc,#fcfcfc,#808080"/>
+	<style id="table-ext-body" colors="#fcfcfc,#fcfcfc,#808080"/>
+	<style id="table-name" colors="#000000"/>
+	<style id="table-schema-name" colors="#000000"/>
+	<style id="table-title" colors="#f6f8a7,#f6f8a7,#cdcf8f"/>
+</tag>
+<tag name="Hardware">
+	<style id="table-body" colors="#fcfcfc,#fcfcfc,#808080"/>
+	<style id="table-ext-body" colors="#fcfcfc,#fcfcfc,#808080"/>
+	<style id="table-name" colors="#000000"/>
+	<style id="table-schema-name" colors="#000000"/>
+	<style id="table-title" colors="#9789fe,#9789fe,#9789fe"/>
+</tag>
+<tag name="Users">
+	<style id="table-body" colors="#fcfcfc,#fcfcfc,#808080"/>
+	<style id="table-ext-body" colors="#fcfcfc,#fcfcfc,#808080"/>
+	<style id="table-name" colors="#000000"/>
+	<style id="table-schema-name" colors="#000000"/>
+	<style id="table-title" colors="#82fe72,#82fe72,#82fe72"/>
+</tag>
+<tag name="Achievements">
+	<style id="table-body" colors="#fcfcfc,#fcfcfc,#808080"/>
+	<style id="table-ext-body" colors="#fcfcfc,#fcfcfc,#808080"/>
+	<style id="table-name" colors="#000000"/>
+	<style id="table-schema-name" colors="#000000"/>
+	<style id="table-title" colors="#ff7b72,#ff7b72,#ff7b72"/>
+</tag>
+<schema name="public" protected="true" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<table name="users">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<tag name="Users"/>
+	<position x="164.848" y="482.929"/>
+	<column name="user_id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="signin_count" not-null="true" default-value="0">
+		<type name="integer"/>
+	</column>
+	<column name="given_name">
+		<type name="varchar" length="250"/>
+	</column>
+	<column name="family_name">
+		<type name="varchar" length="250"/>
+	</column>
+	<column name="picture">
+		<type name="varchar" length="250"/>
+	</column>
+	<column name="gender">
+		<type name="varchar" length="10"/>
+	</column>
+	<column name="mail">
+		<type name="varchar" length="250"/>
+	</column>
+	<column name="password">
+		<type name="text"/>
+	</column>
+	<column name="google_id">
+		<type name="text"/>
+	</column>
+	<column name="facebook_id">
+		<type name="text"/>
+	</column>
+	<constraint name="users_pk" type="pk-constr" table="public.users">
+		<columns names="user_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="gateway">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<tag name="Hardware"/>
+	<position x="882.341" y="439.666"/>
+	<column name="gateway_id" not-null="true">
+		<type name="decimal" length="20" precision="0"/>
+	</column>
+	<column name="home_name" not-null="true" default-value="''">
+		<type name="varchar" length="50"/>
+	</column>
+	<column name="version">
+		<type name="integer"/>
+	</column>
+	<column name="socket">
+		<type name="integer"/>
+	</column>
+	<column name="home_timezone" not-null="true" default-value="0">
+		<type name="smallint"/>
+	</column>
+	<column name="logging_days" not-null="true" default-value="7">
+		<type name="integer"/>
+	</column>
+	<constraint name="adapters_pk" type="pk-constr" table="public.gateway">
+		<columns names="gateway_id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="check_positive_gw_id" type="ck-constr" table="public.gateway">
+			<expression><![CDATA[gateway_id >= 0]]></expression>
+	</constraint>
+</table>
+
+<table name="user_gateway">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="520.218" y="486.581"/>
+	<column name="user_id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="gateway_id" not-null="true">
+		<type name="decimal" length="20" precision="0"/>
+	</column>
+	<column name="permission" not-null="true">
+		<type name="varchar" length="15"/>
+	</column>
+	<constraint name="users_adapters_pk" type="pk-constr" table="public.user_gateway">
+		<columns names="user_id,gateway_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="users_user_id_seq"
+	 start="1" increment="1"
+	 min-value="-2147483648" max-value="2147483647"
+	 cache="1" cycle="false">
+	<schema name="public"/>
+</sequence>
+
+<table name="device">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<tag name="Hardware"/>
+	<position x="1305.73" y="398.393"/>
+	<column name="mac" not-null="true">
+		<type name="decimal" length="10"/>
+	</column>
+	<column name="device_id" not-null="true">
+		<type name="smallint"/>
+	</column>
+	<column name="device_name" not-null="true" default-value="''">
+		<type name="varchar" length="50"/>
+	</column>
+	<column name="refresh" not-null="true" default-value="10">
+		<type name="integer"/>
+	</column>
+	<column name="battery" not-null="true" default-value="-1">
+		<type name="smallint"/>
+	</column>
+	<column name="quality" not-null="true" default-value="-1">
+		<type name="integer"/>
+	</column>
+	<column name="init" not-null="true" default-value="'0'">
+		<type name="char"/>
+	</column>
+	<column name="involved" not-null="true" default-value="0">
+		<type name="bigint"/>
+	</column>
+	<column name="measured_at" not-null="true" default-value="0">
+		<type name="bigint"/>
+	</column>
+	<column name="location_id">
+		<type name="bigint"/>
+	</column>
+	<column name="gateway_id" not-null="true">
+		<type name="decimal" length="20" precision="0"/>
+	</column>
+	<constraint name="check_positive_mac" type="ck-constr" table="public.device">
+			<expression><![CDATA[mac >= 0]]></expression>
+	</constraint>
+	<constraint name="facilities_pk" type="pk-constr" table="public.device">
+		<columns names="mac" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="module">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<tag name="Hardware"/>
+	<position x="1291.56" y="668.485"/>
+	<column name="device_mac" not-null="true">
+		<type name="decimal" length="10"/>
+	</column>
+	<column name="module_id" not-null="true">
+		<type name="smallint"/>
+	</column>
+	<column name="measured_value" not-null="true" default-value="0">
+		<type name="real"/>
+	</column>
+	<constraint name="devices_pk" type="pk-constr" table="public.module">
+		<columns names="device_mac,module_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="location">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="957.962" y="639.431"/>
+	<column name="location_id" not-null="true">
+		<type name="bigserial"/>
+	</column>
+	<column name="gateway_id" not-null="true">
+		<type name="decimal" length="20" precision="0"/>
+	</column>
+	<column name="kind" not-null="true">
+		<type name="smallint"/>
+	</column>
+	<column name="location_name" not-null="true" default-value="''">
+		<type name="varchar" length="50"/>
+	</column>
+	<constraint name="rooms_pk" type="pk-constr" table="public.location">
+		<columns names="location_id,gateway_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="log">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1275.52" y="822.788"/>
+	<column name="device_mac" not-null="true">
+		<type name="decimal" length="10"/>
+	</column>
+	<column name="module_id" not-null="true">
+		<type name="smallint"/>
+	</column>
+	<column name="measured_at" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="measured_value" not-null="true">
+		<type name="real"/>
+	</column>
+	<constraint name="logs_pk" type="pk-constr" table="public.log">
+		<columns names="measured_at,device_mac,module_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="achievements">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<tag name="Achievements"/>
+	<position x="870.286" y="850.214"/>
+	<column name="achievement_id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="parent_id">
+		<type name="integer"/>
+	</column>
+	<column name="category" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="points" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="progress_total" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="visibility" not-null="true">
+		<type name="boolean"/>
+	</column>
+	<column name="range" not-null="true">
+		<type name="boolean"/>
+	</column>
+	<column name="notification" not-null="true">
+		<type name="boolean"/>
+	</column>
+	<constraint name="achievements_pk" type="pk-constr" table="public.achievements">
+		<columns names="achievement_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="notifications">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="193.85" y="759.139"/>
+	<column name="message_id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="text" not-null="true">
+		<type name="xml"/>
+	</column>
+	<column name="level" not-null="true">
+		<type name="smallint"/>
+	</column>
+	<column name="timestamp" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="fk_user_id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="read" not-null="true">
+		<type name="boolean"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="text"/>
+	</column>
+	<constraint name="notifications_pk" type="pk-constr" table="public.notifications">
+		<columns names="message_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="mobile_devices">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="166.25" y="64.2857"/>
+	<column name="mobile_id" not-null="true">
+		<type name="text"/>
+	</column>
+	<column name="fk_user_id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="token">
+		<type name="text"/>
+	</column>
+	<column name="type">
+		<type name="varchar" length="255"/>
+	</column>
+	<column name="locale">
+		<type name="varchar" length="10"/>
+	</column>
+	<column name="push_notification">
+		<type name="text"/>
+	</column>
+	<constraint name="mobile_devices_pk" type="pk-constr" table="public.mobile_devices">
+		<columns names="mobile_id,fk_user_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="users_algorithms">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<tag name="Algorithms"/>
+	<position x="492.714" y="52.7143"/>
+	<column name="fk_user_id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="fk_algorithm_id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="users_algorithms_id" not-null="true">
+		<type name="serial"/>
+	</column>
+	<column name="parameters" not-null="true">
+		<type name="text"/>
+	</column>
+	<column name="data" not-null="true">
+		<type name="text"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="text"/>
+	</column>
+	<column name="fk_adapter_id" not-null="true">
+		<type name="decimal" length="20" precision="0"/>
+	</column>
+	<column name="state" not-null="true">
+		<type name="text"/>
+	</column>
+	<constraint name="users_algorithms_pk" type="pk-constr" table="public.users_algorithms">
+		<columns names="fk_user_id,fk_algorithm_id,users_algorithms_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="u_algorithms">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<tag name="Algorithms"/>
+	<position x="906.286" y="170.857"/>
+	<column name="algorithm_id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="varchar" length="50"/>
+	</column>
+	<column name="type" not-null="true">
+		<type name="integer"/>
+	</column>
+	<constraint name="u_algorithms_pk" type="pk-constr" table="public.u_algorithms">
+		<columns names="algorithm_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="algorithms_adapters">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<tag name="Algorithms"/>
+	<position x="936" y="293"/>
+	<column name="fk_adapter_id" not-null="true">
+		<type name="decimal" length="20" precision="0"/>
+	</column>
+	<column name="email_list" not-null="true">
+		<type name="text"/>
+	</column>
+	<column name="fk_algorithm_id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<constraint name="algorithms_adapters_pk" type="pk-constr" table="public.algorithms_adapters">
+		<columns names="fk_adapter_id,email_list" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="algo_devices">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<tag name="Algorithms"/>
+	<position x="1267.75" y="57"/>
+	<column name="fk_users_algorithms_id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="fk_user_id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="fk_algorithm_id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="fk_facilities_mac" not-null="true">
+		<type name="decimal" length="10"/>
+	</column>
+	<column name="fk_devices_type" not-null="true">
+		<type name="smallint"/>
+	</column>
+	<column name="algo_devices_id" not-null="true">
+		<type name="serial"/>
+	</column>
+	<constraint name="algo_devices_pk" type="pk-constr" table="public.algo_devices">
+		<columns names="fk_users_algorithms_id,fk_user_id,fk_algorithm_id,fk_facilities_mac,fk_devices_type,algo_devices_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="users_achievements">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<tag name="Achievements"/>
+	<position x="477.69" y="859.953"/>
+	<column name="fk_achievement_id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="fk_user_id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="progress_current" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="date">
+		<type name="bigint"/>
+	</column>
+	<constraint name="users_achievements_pk" type="pk-constr" table="public.users_achievements">
+		<columns names="fk_achievement_id,fk_user_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="adapters_achievements">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<tag name="Achievements"/>
+	<position x="482.762" y="694.596"/>
+	<column name="fk_achievement_id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="fk_adapter_id" not-null="true">
+		<type name="decimal" length="20" precision="0"/>
+	</column>
+	<column name="progress_current" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="date">
+		<type name="bigint"/>
+	</column>
+	<constraint name="adapters_achievements_pk" type="pk-constr" table="public.adapters_achievements">
+		<columns names="fk_achievement_id,fk_adapter_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<index name="index_fb_id" table="public.users"
+	 concurrent="false" unique="true" fast-update="false" buffering="false"
+	 index-type="btree" factor="0">
+		<idxelement use-sorting="true" nulls-first="true" asc-order="true">
+			<column name="facebook_id"/>
+		</idxelement>
+</index>
+
+<index name="index_mail" table="public.users"
+	 concurrent="false" unique="true" fast-update="false" buffering="false"
+	 index-type="btree" factor="0">
+		<idxelement use-sorting="true" nulls-first="true" asc-order="true">
+			<column name="google_id"/>
+		</idxelement>
+</index>
+
+<index name="index_google_id" table="public.users"
+	 concurrent="false" unique="true" fast-update="false" buffering="false"
+	 index-type="btree" factor="0">
+		<idxelement use-sorting="true" nulls-first="true" asc-order="true">
+			<column name="google_id"/>
+		</idxelement>
+</index>
+
+<index name="index_logs_mttv" table="public.log"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="btree" factor="0">
+	<comment><![CDATA[mttv = mac, type, timestamp, value]]></comment>
+		<idxelement use-sorting="true" nulls-first="false" asc-order="true">
+			<column name="device_mac"/>
+		</idxelement>
+		<idxelement use-sorting="true" nulls-first="false" asc-order="true">
+			<column name="module_id"/>
+		</idxelement>
+		<idxelement use-sorting="true" nulls-first="false" asc-order="true">
+			<column name="measured_at"/>
+		</idxelement>
+		<idxelement use-sorting="true" nulls-first="false" asc-order="true">
+			<column name="measured_value"/>
+		</idxelement>
+</index>
+
+<textbox name="změny" font-size="9">
+	<position x="41.4706" y="1027.14"/>
+	<comment><![CDATA[mobile_devices - smazat mobile_id(posílaný z androidu), přidat name, PK = token (příp. mový serial mobile_id, který bude pouze pro potřeby DB)]]></comment>
+</textbox>
+
+<textbox name="Zmeny" font-size="9">
+	<position x="88.5714" y="1078.57"/>
+	<comment><![CDATA[Pridani roli: hardware, user_data,algorithms (gamifikace se prestava pouzivat - zatim nedelam)
+Vymazani facility_type
+Zmena nazvu tabulek: 
+	facility->device
+	device->module
+	adapters->gateways
+Zmena nazvu sloupcu: mnoho
+]]></comment>
+</textbox>
+
+<textbox name="report" font-size="9">
+	<position x="65.8824" y="1244.71"/>
+	<comment><![CDATA[Špatná sprava roli
+mohly by být lepší čáry znázornující vztahy
+hloupý exit dialog]]></comment>
+</textbox>
+
+<constraint name="adapters_users_adapters" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.gateway" table="public.user_gateway">
+	<columns names="gateway_id" ref-type="src-columns"/>
+	<columns names="gateway_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="users_adapters_users" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.users" table="public.user_gateway">
+	<columns names="user_id" ref-type="src-columns"/>
+	<columns names="user_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="facilities_adapters" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.gateway" table="public.device">
+	<columns names="gateway_id" ref-type="src-columns"/>
+	<columns names="gateway_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="facilities_rooms" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="public.location" table="public.device">
+	<columns names="location_id,gateway_id" ref-type="src-columns"/>
+	<columns names="location_id,gateway_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="devices_facilities" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.device" table="public.module">
+	<columns names="device_mac" ref-type="src-columns"/>
+	<columns names="mac" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="rooms_adapters" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.gateway" table="public.location">
+	<columns names="gateway_id" ref-type="src-columns"/>
+	<columns names="gateway_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="logs_devices" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.module" table="public.log">
+	<columns names="device_mac,module_id" ref-type="src-columns"/>
+	<columns names="device_mac,module_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="achievements_achievements" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="public.achievements" table="public.achievements">
+	<columns names="parent_id" ref-type="src-columns"/>
+	<columns names="achievement_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="notifications_users" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.users" table="public.notifications">
+	<columns names="fk_user_id" ref-type="src-columns"/>
+	<columns names="user_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="mobile_devices_users" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.users" table="public.mobile_devices">
+	<columns names="fk_user_id" ref-type="src-columns"/>
+	<columns names="user_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="users_algorithms_users" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.users" table="public.users_algorithms">
+	<columns names="fk_user_id" ref-type="src-columns"/>
+	<columns names="user_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="users_algorithms_algorithms" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.u_algorithms" table="public.users_algorithms">
+	<columns names="fk_algorithm_id" ref-type="src-columns"/>
+	<columns names="algorithm_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="users_algorithms_adapters" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.gateway" table="public.users_algorithms">
+	<columns names="fk_adapter_id" ref-type="src-columns"/>
+	<columns names="gateway_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="algorithms_adapters_adapters" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.gateway" table="public.algorithms_adapters">
+	<columns names="fk_adapter_id" ref-type="src-columns"/>
+	<columns names="gateway_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="algorithms_adapters_u_algorithms" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.u_algorithms" table="public.algorithms_adapters">
+	<columns names="fk_algorithm_id" ref-type="src-columns"/>
+	<columns names="algorithm_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="algo_devices_devices" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.module" table="public.algo_devices">
+	<columns names="fk_facilities_mac,fk_devices_type" ref-type="src-columns"/>
+	<columns names="device_mac,module_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="algo_devices_users_algorithms" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.users_algorithms" table="public.algo_devices">
+	<columns names="fk_users_algorithms_id,fk_user_id,fk_algorithm_id" ref-type="src-columns"/>
+	<columns names="fk_user_id,fk_algorithm_id,users_algorithms_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="achievement_detail_achievements" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.achievements" table="public.users_achievements">
+	<columns names="fk_achievement_id" ref-type="src-columns"/>
+	<columns names="achievement_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="achievement_detail_users" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.users" table="public.users_achievements">
+	<columns names="fk_user_id" ref-type="src-columns"/>
+	<columns names="user_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="adapters_achievements_achievements" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.achievements" table="public.adapters_achievements">
+	<columns names="fk_achievement_id" ref-type="src-columns"/>
+	<columns names="achievement_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="adapters_achievements_adapters" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.gateway" table="public.adapters_achievements">
+	<columns names="fk_adapter_id" ref-type="src-columns"/>
+	<columns names="gateway_id" ref-type="dst-columns"/>
+</constraint>
+
+<relationship name="rel_users_adapters_adapters" type="relfk"
+	 src-table="public.user_gateway"
+	 dst-table="public.gateway"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_users_adapters_users" type="relfk"
+	 src-table="public.user_gateway"
+	 dst-table="public.users"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_facilities_adapters" type="relfk"
+	 src-table="public.device"
+	 dst-table="public.gateway"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_facilities_rooms" type="relfk"
+	 src-table="public.device"
+	 dst-table="public.location"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_devices_facilities" type="relfk"
+	 src-table="public.module"
+	 dst-table="public.device"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_rooms_adapters" type="relfk"
+	 src-table="public.location"
+	 dst-table="public.gateway"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_logs_devices" type="relfk"
+	 src-table="public.log"
+	 dst-table="public.module"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_achievements_achievements" type="relfk"
+	 src-table="public.achievements"
+	 dst-table="public.achievements"
+	 src-required="false" dst-required="false">
+	<line>
+		<position x="1117.85" y="907.974"/>
+	<position x="1117.85" y="840.214"/>
+	<position x="1028.66" y="840.214"/>
+	</line>
+</relationship>
+
+<relationship name="rel_notifications_users" type="relfk"
+	 src-table="public.notifications"
+	 dst-table="public.users"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_mobile_devices_users" type="relfk"
+	 src-table="public.mobile_devices"
+	 dst-table="public.users"
+	 src-required="false" dst-required="false">
+	<label ref-type="src-label">
+		<position x="-7.61" y="-7.62857"/>
+	</label>
+</relationship>
+
+<relationship name="rel_users_algorithms_users" type="relfk"
+	 src-table="public.users_algorithms"
+	 dst-table="public.users"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_users_algorithms_u_algorithms" type="relfk"
+	 src-table="public.users_algorithms"
+	 dst-table="public.u_algorithms"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_users_algorithms_adapters" type="relfk"
+	 src-table="public.users_algorithms"
+	 dst-table="public.gateway"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_algorithms_adapters_adapters" type="relfk"
+	 src-table="public.algorithms_adapters"
+	 dst-table="public.gateway"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_algorithms_adapters_u_algorithms" type="relfk"
+	 src-table="public.algorithms_adapters"
+	 dst-table="public.u_algorithms"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_algo_devices_devices" type="relfk"
+	 src-table="public.algo_devices"
+	 dst-table="public.module"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_algo_devices_users_algorithms" type="relfk"
+	 src-table="public.algo_devices"
+	 dst-table="public.users_algorithms"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_users_achievements_achievements" type="relfk"
+	 src-table="public.users_achievements"
+	 dst-table="public.achievements"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_users_achievements_users" type="relfk"
+	 src-table="public.users_achievements"
+	 dst-table="public.users"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_adapters_achievements_achievements" type="relfk"
+	 src-table="public.adapters_achievements"
+	 dst-table="public.achievements"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_adapters_achievements_adapters" type="relfk"
+	 src-table="public.adapters_achievements"
+	 dst-table="public.gateway"
+	 src-required="false" dst-required="false"/>
+
+<permission>
+	<object name="public.gateway" type="table"/>
+	<roles names="hardware"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+<permission>
+	<object name="public.device" type="table"/>
+	<roles names="hardware"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+<permission>
+	<object name="public.module" type="table"/>
+	<roles names="hardware"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+<permission>
+	<object name="public.log" type="table"/>
+	<roles names="hardware"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+<permission>
+	<object name="public.mobile_devices" type="table"/>
+	<roles names="user_data"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+<permission>
+	<object name="public.notifications" type="table"/>
+	<roles names="user_data"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+<permission>
+	<object name="public.users" type="table"/>
+	<roles names="user_data"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+<permission>
+	<object name="public.user_gateway" type="table"/>
+	<roles names="user_data"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+<permission>
+	<object name="public.location" type="table"/>
+	<roles names="user_data"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+<permission>
+	<object name="public.u_algorithms" type="table"/>
+	<roles names="algorithms"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+<permission>
+	<object name="public.algorithms_adapters" type="table"/>
+	<roles names="algorithms"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+<permission>
+	<object name="public.algo_devices" type="table"/>
+	<roles names="algorithms"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+</dbmodel>
