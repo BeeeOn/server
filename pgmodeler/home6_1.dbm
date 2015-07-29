@@ -3,7 +3,7 @@
 CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.8.1-beta1" last-position="0,593" last-zoom="0.85"
+<dbmodel pgmodeler-ver="0.8.1-beta1" last-position="2,406" last-zoom="0.85"
 	 default-owner="postgres">
 <role name="uiserver">
 </role>
@@ -58,7 +58,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<tag name="Users"/>
 	<position x="164.848" y="482.929"/>
 	<column name="user_id" not-null="true">
-		<type name="integer"/>
+		<type name="serial"/>
 	</column>
 	<column name="signin_count" not-null="true" default-value="0">
 		<type name="integer"/>
@@ -103,10 +103,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="home_name" not-null="true" default-value="''">
 		<type name="varchar" length="50"/>
 	</column>
-	<column name="version">
+	<column name="version" default-value="-1">
 		<type name="integer"/>
 	</column>
-	<column name="socket">
+	<column name="socket" default-value="-1">
 		<type name="integer"/>
 	</column>
 	<column name="home_timezone" not-null="true" default-value="0">
@@ -153,10 +153,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="postgres"/>
 	<tag name="Hardware"/>
 	<position x="1305.73" y="398.393"/>
-	<column name="mac" not-null="true">
+	<column name="device_mac" not-null="true">
 		<type name="decimal" length="10"/>
 	</column>
-	<column name="device_id" not-null="true">
+	<column name="device_type" not-null="true">
 		<type name="smallint"/>
 	</column>
 	<column name="device_name" not-null="true" default-value="''">
@@ -187,10 +187,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="decimal" length="20" precision="0"/>
 	</column>
 	<constraint name="check_positive_mac" type="ck-constr" table="public.device">
-			<expression><![CDATA[mac >= 0]]></expression>
+			<expression><![CDATA[device_mac >= 0]]></expression>
 	</constraint>
 	<constraint name="facilities_pk" type="pk-constr" table="public.device">
-		<columns names="mac" ref-type="src-columns"/>
+		<columns names="device_mac" ref-type="src-columns"/>
 	</constraint>
 </table>
 
@@ -237,7 +237,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="log">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1275.52" y="822.788"/>
+	<position x="1291.99" y="846.317"/>
 	<column name="device_mac" not-null="true">
 		<type name="decimal" length="10"/>
 	</column>
@@ -574,7 +574,7 @@ hloupý exit dialog]]></comment>
 	<columns names="gateway_id" ref-type="dst-columns"/>
 </constraint>
 
-<constraint name="facilities_rooms" type="fk-constr" comparison-type="MATCH FULL"
+<constraint name="facilities_rooms" type="fk-constr" comparison-type="MATCH SIMPLE"
 	 upd-action="NO ACTION" del-action="SET NULL" ref-table="public.location" table="public.device">
 	<columns names="location_id,gateway_id" ref-type="src-columns"/>
 	<columns names="location_id,gateway_id" ref-type="dst-columns"/>
@@ -583,7 +583,7 @@ hloupý exit dialog]]></comment>
 <constraint name="devices_facilities" type="fk-constr" comparison-type="MATCH FULL"
 	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.device" table="public.module">
 	<columns names="device_mac" ref-type="src-columns"/>
-	<columns names="mac" ref-type="dst-columns"/>
+	<columns names="device_mac" ref-type="dst-columns"/>
 </constraint>
 
 <constraint name="rooms_adapters" type="fk-constr" comparison-type="MATCH FULL"
