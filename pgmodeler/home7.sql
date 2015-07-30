@@ -1,23 +1,25 @@
 -- Database generated with pgModeler (PostgreSQL Database Modeler).
 -- pgModeler  version: 0.8.1-beta1
--- PostgreSQL version: 9.3
+-- PostgreSQL version: 9.4
 -- Project Site: pgmodeler.com.br
 -- Model Author: ---
 
--- object: uiserver | type: ROLE --
--- DROP ROLE IF EXISTS uiserver;
-CREATE ROLE uiserver WITH ;
--- ddl-end --
-
 -- object: hardware | type: ROLE --
 -- DROP ROLE IF EXISTS hardware;
-CREATE ROLE hardware WITH 
-	IN ROLE uiserver;
+CREATE ROLE hardware WITH ;
 -- ddl-end --
 
 -- object: user_data | type: ROLE --
 -- DROP ROLE IF EXISTS user_data;
 CREATE ROLE user_data WITH ;
+-- ddl-end --
+
+-- object: uiserver | type: ROLE --
+-- DROP ROLE IF EXISTS uiserver;
+CREATE ROLE uiserver WITH 
+	LOGIN
+	UNENCRYPTED PASSWORD '1234'
+	IN ROLE hardware,user_data;
 -- ddl-end --
 
 -- object: algorithms | type: ROLE --
@@ -28,9 +30,9 @@ CREATE ROLE algorithms WITH ;
 
 -- Database creation must be done outside an multicommand file.
 -- These commands were put in this file only for convenience.
--- -- object: home6_1 | type: DATABASE --
--- -- DROP DATABASE IF EXISTS home6_1;
--- CREATE DATABASE home6_1
+-- -- object: home7 | type: DATABASE --
+-- -- DROP DATABASE IF EXISTS home7;
+-- CREATE DATABASE home7
 -- ;
 -- -- ddl-end --
 -- 
@@ -38,7 +40,7 @@ CREATE ROLE algorithms WITH ;
 -- object: public.users | type: TABLE --
 -- DROP TABLE IF EXISTS public.users CASCADE;
 CREATE TABLE public.users(
-	user_id integer NOT NULL,
+	user_id serial NOT NULL,
 	signin_count integer NOT NULL DEFAULT 0,
 	given_name varchar(250),
 	family_name varchar(250),
@@ -60,8 +62,8 @@ ALTER TABLE public.users OWNER TO postgres;
 CREATE TABLE public.gateway(
 	gateway_id decimal(20,0) NOT NULL,
 	home_name varchar(50) NOT NULL DEFAULT '',
-	version integer,
-	socket integer,
+	version integer DEFAULT -1,
+	socket integer DEFAULT -1,
 	home_timezone smallint NOT NULL DEFAULT 0,
 	logging_days integer NOT NULL DEFAULT 7,
 	CONSTRAINT adapters_pk PRIMARY KEY (gateway_id),
@@ -100,8 +102,8 @@ CREATE SEQUENCE public.users_user_id_seq
 -- object: public.device | type: TABLE --
 -- DROP TABLE IF EXISTS public.device CASCADE;
 CREATE TABLE public.device(
-	mac decimal(10) NOT NULL,
-	device_id smallint NOT NULL,
+	device_mac decimal(10) NOT NULL,
+	device_type smallint NOT NULL,
 	device_name varchar(50) NOT NULL DEFAULT '',
 	refresh integer NOT NULL DEFAULT 10,
 	battery smallint NOT NULL DEFAULT -1,
@@ -111,8 +113,8 @@ CREATE TABLE public.device(
 	measured_at bigint NOT NULL DEFAULT 0,
 	location_id bigint,
 	gateway_id decimal(20,0) NOT NULL,
-	CONSTRAINT check_positive_mac CHECK (mac >= 0),
-	CONSTRAINT facilities_pk PRIMARY KEY (mac)
+	CONSTRAINT check_positive_mac CHECK (device_mac >= 0),
+	CONSTRAINT facilities_pk PRIMARY KEY (device_mac)
 
 );
 -- ddl-end --
@@ -364,14 +366,14 @@ ON DELETE CASCADE ON UPDATE NO ACTION;
 -- object: facilities_rooms | type: CONSTRAINT --
 -- ALTER TABLE public.device DROP CONSTRAINT IF EXISTS facilities_rooms CASCADE;
 ALTER TABLE public.device ADD CONSTRAINT facilities_rooms FOREIGN KEY (location_id,gateway_id)
-REFERENCES public.location (location_id,gateway_id) MATCH FULL
+REFERENCES public.location (location_id,gateway_id) MATCH SIMPLE
 ON DELETE SET NULL ON UPDATE NO ACTION;
 -- ddl-end --
 
 -- object: devices_facilities | type: CONSTRAINT --
 -- ALTER TABLE public.module DROP CONSTRAINT IF EXISTS devices_facilities CASCADE;
 ALTER TABLE public.module ADD CONSTRAINT devices_facilities FOREIGN KEY (device_mac)
-REFERENCES public.device (mac) MATCH FULL
+REFERENCES public.device (device_mac) MATCH FULL
 ON DELETE CASCADE ON UPDATE NO ACTION;
 -- ddl-end --
 
@@ -487,73 +489,73 @@ REFERENCES public.gateway (gateway_id) MATCH FULL
 ON DELETE CASCADE ON UPDATE NO ACTION;
 -- ddl-end --
 
--- object: grant_0a887f19ff | type: PERMISSION --
+-- object: grant_ad351977b0 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.gateway
    TO hardware;
 -- ddl-end --
 
--- object: grant_6333ccf61f | type: PERMISSION --
+-- object: grant_2915a3578a | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.device
    TO hardware;
 -- ddl-end --
 
--- object: grant_2027fd46cf | type: PERMISSION --
+-- object: grant_417ba757d3 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.module
    TO hardware;
 -- ddl-end --
 
--- object: grant_9764a8c91a | type: PERMISSION --
+-- object: grant_4c5946af16 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.log
    TO hardware;
 -- ddl-end --
 
--- object: grant_8d33f3b00d | type: PERMISSION --
+-- object: grant_23e1a082e7 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.mobile_devices
    TO user_data;
 -- ddl-end --
 
--- object: grant_1cc6595697 | type: PERMISSION --
+-- object: grant_a085e9d6a6 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.notifications
    TO user_data;
 -- ddl-end --
 
--- object: grant_2bff722c52 | type: PERMISSION --
+-- object: grant_8a170623dd | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.users
    TO user_data;
 -- ddl-end --
 
--- object: grant_e680b5451f | type: PERMISSION --
+-- object: grant_dcad6ab4bb | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.user_gateway
    TO user_data;
 -- ddl-end --
 
--- object: grant_9eb96491bb | type: PERMISSION --
+-- object: grant_404d0a79f7 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.location
    TO user_data;
 -- ddl-end --
 
--- object: grant_afa7ba8ee5 | type: PERMISSION --
+-- object: grant_3739249a6c | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.u_algorithms
    TO algorithms;
 -- ddl-end --
 
--- object: grant_b0a40b2e8f | type: PERMISSION --
+-- object: grant_24a44132b1 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.algorithms_adapters
    TO algorithms;
 -- ddl-end --
 
--- object: grant_8c5da89765 | type: PERMISSION --
+-- object: grant_637b8bca7c | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.algo_devices
    TO algorithms;

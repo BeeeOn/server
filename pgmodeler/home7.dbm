@@ -3,22 +3,24 @@
 CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.8.1-beta1" last-position="0,593" last-zoom="0.85"
+<dbmodel pgmodeler-ver="0.8.1-beta1" last-position="199,519" last-zoom="1"
 	 default-owner="postgres">
-<role name="uiserver">
-</role>
-
 <role name="hardware">
-	<roles names="uiserver" role-type="refer" />
 </role>
 
 <role name="user_data">
 </role>
 
+<role name="uiserver"
+      login="true"
+      password="1234">
+	<roles names="hardware,user_data" role-type="refer" />
+</role>
+
 <role name="algorithms">
 </role>
 
-<database name="home6_1">
+<database name="home7">
 </database>
 
 <tag name="Algorithms">
@@ -58,7 +60,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<tag name="Users"/>
 	<position x="164.848" y="482.929"/>
 	<column name="user_id" not-null="true">
-		<type name="integer"/>
+		<type name="serial"/>
 	</column>
 	<column name="signin_count" not-null="true" default-value="0">
 		<type name="integer"/>
@@ -103,10 +105,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="home_name" not-null="true" default-value="''">
 		<type name="varchar" length="50"/>
 	</column>
-	<column name="version">
+	<column name="version" default-value="-1">
 		<type name="integer"/>
 	</column>
-	<column name="socket">
+	<column name="socket" default-value="-1">
 		<type name="integer"/>
 	</column>
 	<column name="home_timezone" not-null="true" default-value="0">
@@ -153,10 +155,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="postgres"/>
 	<tag name="Hardware"/>
 	<position x="1305.73" y="398.393"/>
-	<column name="mac" not-null="true">
+	<column name="device_mac" not-null="true">
 		<type name="decimal" length="10"/>
 	</column>
-	<column name="device_id" not-null="true">
+	<column name="device_type" not-null="true">
 		<type name="smallint"/>
 	</column>
 	<column name="device_name" not-null="true" default-value="''">
@@ -187,10 +189,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="decimal" length="20" precision="0"/>
 	</column>
 	<constraint name="check_positive_mac" type="ck-constr" table="public.device">
-			<expression><![CDATA[mac >= 0]]></expression>
+			<expression><![CDATA[device_mac >= 0]]></expression>
 	</constraint>
 	<constraint name="facilities_pk" type="pk-constr" table="public.device">
-		<columns names="mac" ref-type="src-columns"/>
+		<columns names="device_mac" ref-type="src-columns"/>
 	</constraint>
 </table>
 
@@ -237,7 +239,8 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="log">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1275.52" y="822.788"/>
+	<tag name="Hardware"/>
+	<position x="1291.99" y="846.317"/>
 	<column name="device_mac" not-null="true">
 		<type name="decimal" length="10"/>
 	</column>
@@ -292,7 +295,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="notifications">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="193.85" y="759.139"/>
+	<position x="164.85" y="821.139"/>
 	<column name="message_id" not-null="true">
 		<type name="bigint"/>
 	</column>
@@ -574,7 +577,7 @@ hloupý exit dialog]]></comment>
 	<columns names="gateway_id" ref-type="dst-columns"/>
 </constraint>
 
-<constraint name="facilities_rooms" type="fk-constr" comparison-type="MATCH FULL"
+<constraint name="facilities_rooms" type="fk-constr" comparison-type="MATCH SIMPLE"
 	 upd-action="NO ACTION" del-action="SET NULL" ref-table="public.location" table="public.device">
 	<columns names="location_id,gateway_id" ref-type="src-columns"/>
 	<columns names="location_id,gateway_id" ref-type="dst-columns"/>
@@ -583,7 +586,7 @@ hloupý exit dialog]]></comment>
 <constraint name="devices_facilities" type="fk-constr" comparison-type="MATCH FULL"
 	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.device" table="public.module">
 	<columns names="device_mac" ref-type="src-columns"/>
-	<columns names="mac" ref-type="dst-columns"/>
+	<columns names="device_mac" ref-type="dst-columns"/>
 </constraint>
 
 <constraint name="rooms_adapters" type="fk-constr" comparison-type="MATCH FULL"
@@ -682,37 +685,37 @@ hloupý exit dialog]]></comment>
 	<columns names="gateway_id" ref-type="dst-columns"/>
 </constraint>
 
-<relationship name="rel_users_adapters_adapters" type="relfk"
+<relationship name="rel_user_gateway_gateway" type="relfk"
 	 src-table="public.user_gateway"
 	 dst-table="public.gateway"
 	 src-required="false" dst-required="false"/>
 
-<relationship name="rel_users_adapters_users" type="relfk"
+<relationship name="rel_user_gateway_users" type="relfk"
 	 src-table="public.user_gateway"
 	 dst-table="public.users"
 	 src-required="false" dst-required="false"/>
 
-<relationship name="rel_facilities_adapters" type="relfk"
+<relationship name="rel_device_gateway" type="relfk"
 	 src-table="public.device"
 	 dst-table="public.gateway"
 	 src-required="false" dst-required="false"/>
 
-<relationship name="rel_facilities_rooms" type="relfk"
+<relationship name="rel_device_location" type="relfk"
 	 src-table="public.device"
 	 dst-table="public.location"
 	 src-required="false" dst-required="false"/>
 
-<relationship name="rel_devices_facilities" type="relfk"
+<relationship name="rel_module_device" type="relfk"
 	 src-table="public.module"
 	 dst-table="public.device"
 	 src-required="false" dst-required="false"/>
 
-<relationship name="rel_rooms_adapters" type="relfk"
+<relationship name="rel_location_gateway" type="relfk"
 	 src-table="public.location"
 	 dst-table="public.gateway"
 	 src-required="false" dst-required="false"/>
 
-<relationship name="rel_logs_devices" type="relfk"
+<relationship name="rel_log_module" type="relfk"
 	 src-table="public.log"
 	 dst-table="public.module"
 	 src-required="false" dst-required="false"/>
@@ -736,11 +739,7 @@ hloupý exit dialog]]></comment>
 <relationship name="rel_mobile_devices_users" type="relfk"
 	 src-table="public.mobile_devices"
 	 dst-table="public.users"
-	 src-required="false" dst-required="false">
-	<label ref-type="src-label">
-		<position x="-7.61" y="-7.62857"/>
-	</label>
-</relationship>
+	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_users_algorithms_users" type="relfk"
 	 src-table="public.users_algorithms"
@@ -752,12 +751,12 @@ hloupý exit dialog]]></comment>
 	 dst-table="public.u_algorithms"
 	 src-required="false" dst-required="false"/>
 
-<relationship name="rel_users_algorithms_adapters" type="relfk"
+<relationship name="rel_users_algorithms_gateway" type="relfk"
 	 src-table="public.users_algorithms"
 	 dst-table="public.gateway"
 	 src-required="false" dst-required="false"/>
 
-<relationship name="rel_algorithms_adapters_adapters" type="relfk"
+<relationship name="rel_algorithms_adapters_gateway" type="relfk"
 	 src-table="public.algorithms_adapters"
 	 dst-table="public.gateway"
 	 src-required="false" dst-required="false"/>
@@ -767,7 +766,7 @@ hloupý exit dialog]]></comment>
 	 dst-table="public.u_algorithms"
 	 src-required="false" dst-required="false"/>
 
-<relationship name="rel_algo_devices_devices" type="relfk"
+<relationship name="rel_algo_devices_module" type="relfk"
 	 src-table="public.algo_devices"
 	 dst-table="public.module"
 	 src-required="false" dst-required="false"/>
@@ -792,7 +791,7 @@ hloupý exit dialog]]></comment>
 	 dst-table="public.achievements"
 	 src-required="false" dst-required="false"/>
 
-<relationship name="rel_adapters_achievements_adapters" type="relfk"
+<relationship name="rel_adapters_achievements_gateway" type="relfk"
 	 src-table="public.adapters_achievements"
 	 dst-table="public.gateway"
 	 src-required="false" dst-required="false"/>
