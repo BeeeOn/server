@@ -40,7 +40,7 @@ string DevicesUpdate::createResponseMsgOut()
         string refresh = facilityNode.attribute(P_FACILITY_REFRESH).value();
         
         if(init !="" || locationId!="" || refresh!="")
-            DAODevices::getInstance().updateFacility(_adapterId, id, init, locationId, refresh);
+            DAODevices::getInstance().updateFacility(_gatewayId, id, init, locationId, refresh);
         
         deviceNode =  facilityNode.child(P_DEVICE);
                 
@@ -51,7 +51,7 @@ string DevicesUpdate::createResponseMsgOut()
             string name = deviceNode.attribute(P_DEVICE_NAME).value();
             
             if(visibility !="" || name !="")
-                if( DAODevices::getInstance().updateDevice(_adapterId, id, type, name, visibility) == 0){
+                if( DAODevices::getInstance().updateDevice(_gatewayId, id, type, name, visibility) == 0){
                     error = true;
                     errorText += "<device id=\"" + id + "\" type=\"" + type + "\" />";
                 }

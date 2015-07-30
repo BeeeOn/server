@@ -30,7 +30,7 @@ string LocationDelete::createResponseMsgOut()
     
     //if(roomId == "0")
      //   return envelopeResponse(R_TRUE);
-    DAORooms::getInstance().deleteRoom(_adapterId, roomId);
+    DAORooms::getInstance().deleteRoom(_gatewayId, roomId);
     
     return getXMLreply(R_TRUE);
 }

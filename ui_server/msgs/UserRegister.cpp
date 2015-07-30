@@ -64,11 +64,11 @@ string UserRegister::createResponseMsgOut()
             return getNegativeXMLReply(ServerException::TOKEN_EMAIL);
 
         user.familyName = fInfo.last_name;
-        //user.gender = fInfo.gender;
+        user.gender = fInfo.gender;
         user.givenName = fInfo.first_name;
         user.googleId = fInfo.id;
         user.mail = fInfo.email;
-        //user.picture = fInfo.picture;
+        user.picture = fInfo.link;
         
     }
     /*else if(service == "beeeon")

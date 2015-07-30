@@ -28,8 +28,9 @@
           <runcommandpicklistitem>"${OUTPUT_PATH}"4546</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" 4546</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" config.xml</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" config_devel.xml</runcommandpicklistitem>
         </runcommandpicklist>
-        <runcommand>"${OUTPUT_PATH}" config.xml</runcommand>
+        <runcommand>"${OUTPUT_PATH}" config_devel.xml</runcommand>
         <rundir></rundir>
         <buildfirst>true</buildfirst>
         <terminal-type>0</terminal-type>

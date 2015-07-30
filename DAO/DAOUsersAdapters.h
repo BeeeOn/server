@@ -9,6 +9,19 @@
 #define	DAOUSERSADAPTERS_H
 #include "../ui_logger/Logger.h"
 #include "DAO.h"
+
+struct UserGatewaysColumns{
+    std::string user_id;
+    std::string gateway_id;
+    std::string permission;
+    
+    UserGatewaysColumns():
+            user_id("user_id"), 
+            gateway_id("gateway_id"), 
+            permission("permission")
+            { }
+};
+
 class DAOUsersAdapters : public DAO {
 private:
     DAOUsersAdapters();
@@ -17,19 +30,22 @@ private:
 public:
     static DAOUsersAdapters& getInstance();
     ~DAOUsersAdapters(void);
+    
+    static const std::string tableUsersGateways;
+    static const UserGatewaysColumns col;
     /**
      * 
      * @param adapterId 
      * @return XML in string with users which have access to specified adapter
      */
-    std::string getXMLconAccounts(std::string adapterId);
+    std::string getXMLconAccounts(long long adapterId);
     /**
     * 
     * @param adapterId
     * @param userMail
     * @return number of deleted rows in DB
     */
-    int delConAccount(std::string adapterId, std::string userMail);
+    int delConAccount(long long adapterId, std::string userMail);
     /**
     * Changing user's role on adapter 
     * @param adapterId
@@ -37,7 +53,7 @@ public:
     * @param newRole
     * @return number of changed rows in DB
     */
-    int changeConAccount(std::string adapterId, std::string userMail, std::string newRole);
+    int changeConAccount(long long adapterId, std::string userMail, std::string newRole);
     /**
     * Grant access to user on adapter, degree of access is given by role
     * @param adapterId
@@ -45,7 +61,10 @@ public:
     * @param newRole
     * @return number of added rows to DB (0 or 1)
     */
-    int addConAccount(std::string adapterId, std::string userMail, std::string newRole);
+    int addConAccount(long long adapterId, std::string userMail, std::string newRole);
+    
+    int parAdapterWithUserIfPossible(long long int adapterId, std::string adapterName, int userId);
+    
 };
 
 #endif	/* DAOUSERSADAPTERS_H */

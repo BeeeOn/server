@@ -84,6 +84,8 @@ string UserLogIn::createResponseMsgOut()
             return getXMLreply(R_FALSE);
         }
         
+        Logger::debug3() << "FB info: " << fInfo.first_name << " " << fInfo.last_name <<" " << fInfo.email << " " << fInfo.id << " " <<fInfo.link << endl;
+        
         user.familyName = fInfo.last_name;
         user.gender = fInfo.gender;
         user.givenName = fInfo.first_name;

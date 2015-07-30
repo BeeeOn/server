@@ -1,3 +1,5 @@
+                                                                                     
+-- --------------------------------------------------------------------
 CREATE OR REPLACE FUNCTION upsert_user_returning_uid(d_mail TEXT, d_g_name TEXT, d_f_name TEXT, d_picture TEXT, d_gender TEXT, d_g_id TEXT, d_f_id TEXT) RETURNS integer AS
   $$
   DECLARE

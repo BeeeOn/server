@@ -149,6 +149,7 @@ public:
         std::string _state;
         std::string _token;
         std::string _adapterId;
+        long long _gatewayId;
 protected:
         pugi::xml_document* _doc;
         std::string _msgOut;
@@ -161,8 +162,6 @@ public:
     std::string envelopeResponse(std::string state, std::string response);
     std::string envelopeResponse(std::string state, std::string response, int errcode);
     std::string envelopeResponseWithRole(std::string state, std::string response, std::string role);
-    std::string envelopeResponseWithAdapterId(std::string state, std::string response);
-    std::string envelopeResponseWithAdapterId(std::string state, std::string response, std::string adapterId);
     std::string envelopeResponseWithAttributes(std::string state, std::string attributes);
   /*  int _comId;
     string _additionalInfo;
@@ -179,7 +178,7 @@ protected:
     
     bool isRoleValid(std::string role);
 
-private:
+protected:
     t_version parseProtocolVersion(std::string version);
     std::string envelopeResponseSetAttributes(std::string state, std::string response, std::string attributes);
     

@@ -12,6 +12,9 @@
 using namespace std;
 using namespace soci;
 
+const LocationsColumns  DAORooms::col;
+const string DAORooms::tableLocations = "location";
+
 DAORooms::DAORooms(){
 }
 
@@ -25,7 +28,7 @@ DAORooms& DAORooms::getInstance(){
 }
 
 
-int DAORooms::insertNewRoom(string adapterId, string roomType, string roomName)
+int DAORooms::insertNewRoom(long long adapterId, string roomType, string roomName)
 {
     Logger::getInstance(Logger::DEBUG3)<< "insert new room\n";
     
@@ -36,7 +39,7 @@ int DAORooms::insertNewRoom(string adapterId, string roomType, string roomName)
        int newRoomId;
        /*  sql << "select max(room_id) from rooms where fk_adapter_id = "+adapterId, soci::into(newRoomId);
         newRoomId++;*/
-        sql << "insert into rooms (fk_adapter_id, type, name) values( :a_id, :type, :name) returning room_id",
+        sql << "insert into " << tableLocations << " (" << col.gateway_id << ", " << col.kind << ", " << col.name << ") values( :a_id, :type, :name) returning " << col.id << " ",
                 use(adapterId, "a_id"), use(roomType, "type"), use(roomName, "name"), into(newRoomId);
     
         Logger::getInstance(Logger::DEBUG3)<< "inserted\n";
@@ -49,14 +52,14 @@ int DAORooms::insertNewRoom(string adapterId, string roomType, string roomName)
     }   
 }
 
-void DAORooms::updateRoom(string adapterId, string roomId, string type, string name){
+void DAORooms::updateRoom(long long adapterId, string roomId, string type, string name){
     Logger::getInstance(Logger::DEBUG3)<<"DB: "<< "update room\n";
     
     try
     {
         soci::session sql(*_pool);
         
-        statement st = (sql.prepare <<  "update rooms set type=:type , name=:name where room_id=:id and fk_adapter_id= :a_id;",
+        statement st = (sql.prepare <<  "update " << tableLocations << " set " << col.kind << "=:type , " << col.name << "=:name where " << col.id << "=:id and " << col.gateway_id << "= :a_id;",
                 use(type, "type"),use(name, "name"), use(roomId, "id"), use(adapterId, "a_id") );
         st.execute(true);
         
@@ -71,14 +74,14 @@ void DAORooms::updateRoom(string adapterId, string roomId, string type, string n
         throw;
     }  
 }
-void DAORooms::deleteRoom(string adapterId, string roomId){
+void DAORooms::deleteRoom(long long adapterId, string roomId){
     Logger::getInstance(Logger::DEBUG3)<<"DB: "<< "delete room\n";
     
     try
     {
         soci::session sql(*_pool);
         
-        sql << "delete from rooms where room_id=:id and fk_adapter_id=:a_id ",
+        sql << "delete from " << tableLocations << " where " << col.id << "=:id and " << col.gateway_id << "=:a_id ",
                 use(roomId, "id"), use(adapterId, "a_id");
         
     }
@@ -88,7 +91,7 @@ void DAORooms::deleteRoom(string adapterId, string roomId){
         throw;
     }  
 }
-string DAORooms::getXMLrooms(string adapterId)
+string DAORooms::getXMLrooms(long long adapterId)
 {
     Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"roomsList (adapter="<<adapterId<<")\n";
     try{
@@ -98,10 +101,10 @@ string DAORooms::getXMLrooms(string adapterId)
             indicator ind;
             sql<<"select xmlagg("
                     "xmlelement(name loc , "
-                        "xmlattributes(room_id as id, type as type, name as name) "
+                        "xmlattributes(" << col.id << " as id, " << col.kind << " as type, " << col.name << " as name) "
                     ")" 
             ")"
-            "from rooms where fk_adapter_id =:adapter and room_id is not null" 
+            "from " << tableLocations << " where " << col.gateway_id << " =:adapter and " << col.id << " is not null" 
             ,use(adapterId,"adapter"),soci::into(xml, ind);
             //cout<<"xml"<<xml<<endl;
             if(ind != i_ok)

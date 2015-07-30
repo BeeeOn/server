@@ -25,8 +25,6 @@ IMsgIn::IMsgIn(pugi::xml_document* doc)
     }catch(...){
         _IHAtoken = -1;
     }*/
-    
-    _adapterId = _doc->child(P_COMMUNICATION).attribute(P_ADAPTER_ID).value();
         
 }
 IMsgIn::~IMsgIn(void)
@@ -114,20 +112,6 @@ string IMsgIn::envelopeResponseWithRole(string state, string response, string ro
     return envelopeResponseSetAttributes( state, response, additionalAttributes);
 }
 
-string IMsgIn::envelopeResponseWithAdapterId(string state, string response)
-{        
-    string additionalAttributes;
-    additionalAttributes = (string)P_ADAPTER_ID+"=\"" + _adapterId +"\"" ;
-    return envelopeResponseSetAttributes( state, response, additionalAttributes);
-}
-
-string IMsgIn::envelopeResponseWithAdapterId(string state, string response, string adapterId)
-{        
-    string additionalAttributes = "";
-    if(adapterId != "")
-        additionalAttributes = (string)P_ADAPTER_ID+"=\"" + adapterId +"\"" ;
-    return envelopeResponseSetAttributes( state, response, additionalAttributes);
-}
 
 string IMsgIn::envelopeResponseWithAttributes(string state, string attributes) {
     return envelopeResponseSetAttributes(state, "", attributes);

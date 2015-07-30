@@ -42,7 +42,7 @@ string LocationAdd::createResponseMsgOut()
 
     string roomName = roomNode.attribute(P_ROOM_NAME).value();
 
-    int newRoomId = DAORooms::getInstance().insertNewRoom(_adapterId, roomType, roomName);
+    int newRoomId = DAORooms::getInstance().insertNewRoom(_gatewayId, roomType, roomName);
 
     _outputMainNode.append_attribute(P_ROOM_ID) = newRoomId;
     return getXMLreply(R_ROOM_CREATED);

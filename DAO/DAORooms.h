@@ -10,6 +10,20 @@
 
 #include "DAO.h"
 
+struct LocationsColumns{
+    std::string id;
+    std::string gateway_id;
+    std::string kind;
+    std::string name;
+    
+    LocationsColumns():
+            id("location_id"), 
+            gateway_id("gateway_id"), 
+            kind("kind"), 
+            name("location_name")
+            { }
+};
+
 class DAORooms : public DAO {
 private:
     DAORooms();
@@ -18,11 +32,14 @@ private:
 public:
     static DAORooms& getInstance();
     ~DAORooms(void);
+    
+    static const std::string tableLocations;
+    static const LocationsColumns col;
 
-    int insertNewRoom(std::string adapterId, std::string roomType, std::string roomName);
-    void updateRoom(std::string adapterId, std::string roomId, std::string type, std::string name);
-    void deleteRoom(std::string adapterId, std::string roomId);
-    std::string getXMLrooms(std::string adapterId);
+    int insertNewRoom(long long adapterId, std::string roomType, std::string roomName);
+    void updateRoom(long long adapterId, std::string roomId, std::string type, std::string name);
+    void deleteRoom(long long adapterId, std::string roomId);
+    std::string getXMLrooms(long long adapterId);
 };
 
 #endif	/* DAOROOMS_H */

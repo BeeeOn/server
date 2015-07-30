@@ -27,7 +27,7 @@ string GateAdd::createResponseMsgOut() {
     
     string adapterName = adapterNode.attribute(P_ADAPTER_NAME).value();
     
-    if(DAOAdapters::getInstance().parAdapterWithUserIfPossible(adapterId, adapterName, _userId) == 0)
+    if(DAOUsersAdapters::getInstance().parAdapterWithUserIfPossible(adapterId, adapterName, _userId) == 0)
     {
         if(DAOAdapters::getInstance().isAdapterInDB(adapterId) == 0)
         {

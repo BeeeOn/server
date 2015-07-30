@@ -25,5 +25,5 @@ int LocationsGet::getMsgAuthorization() {
 
 string LocationsGet::createResponseMsgOut()
 {                        
-    return envelopeResponseWithAdapterId(R_ROOMS, DAORooms::getInstance().getXMLrooms(_adapterId));
+    return envelopeResponseWithAdapterId(R_ROOMS, DAORooms::getInstance().getXMLrooms(_gatewayId));
 }

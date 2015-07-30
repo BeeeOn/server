@@ -39,7 +39,7 @@ string MsgInAddAccount::createResponseMsgOut()
         if(!isRoleValid(newRole)){
             errText += "<" P_USER " " P_EMAIL "=\""+newUserMail+"\" " P_ROLE "=\""+newRole+"\" />";
             fail = ServerException::ROLE;
-        }else if(DAOUsersAdapters::getInstance().addConAccount(_adapterId, newUserMail, newRole) != 1){
+        }else if(DAOUsersAdapters::getInstance().addConAccount(_gatewayId, newUserMail, newRole) != 1){
             errText += "<" P_USER " " P_EMAIL "=\""+newUserMail+"\" " P_ROLE "=\""+newRole+"\" />";
             fail = ServerException::EMAIL;
         } 

@@ -7,11 +7,12 @@
 
 #include "GateUpdate.h"
 #include "IMsgIn.h"
+#include "IMsgInLoginAndAdapterAccessRequired.h"
 using namespace std;
 
 const string GateUpdate::state = "setgate";
 
-GateUpdate::GateUpdate(pugi::xml_document* doc): IMsgInLoginRequired(doc)  {
+GateUpdate::GateUpdate(pugi::xml_document* doc): IMsgInLoginAndAdapterAccessRequired(doc)  {
 }
 
 
@@ -41,7 +42,7 @@ string GateUpdate::createResponseMsgOut()
     }
     string newName = _doc->child(P_COMMUNICATION).attribute(P_ADAPTER_NAME).value();
     
-    DAOAdapters::getInstance().updateAdapter(_adapterId, newName, newTimeZone);
+    DAOAdapters::getInstance().updateAdapter(_gatewayId, newName, newTimeZone);
     
     return getXMLreply(R_TRUE);
 }

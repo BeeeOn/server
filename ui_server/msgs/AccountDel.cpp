@@ -38,7 +38,7 @@ string AccountDel::createResponseMsgOut()
         User user = DAOUsers::getInstance().getUserByID(_userId);
         
         if(userMail != user.mail)
-            if(DAOUsersAdapters::getInstance().delConAccount(_adapterId, userMail) == 0){
+            if(DAOUsersAdapters::getInstance().delConAccount(_gatewayId, userMail) == 0){
                 //fail = true;
                 //errText += "<user email=\""+userMail+"\"/>";
             }

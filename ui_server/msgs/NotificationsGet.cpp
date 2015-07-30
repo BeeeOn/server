@@ -23,5 +23,5 @@ int NotificationsGet::getMsgAuthorization() {
 }
 
 std::string NotificationsGet::createResponseMsgOut() {
-    return envelopeResponseWithAdapterId(R_NOTIFICATIONS, DAONotification::getInstance().getXMLNotifications(_userId));
+    return envelopeResponse(R_NOTIFICATIONS, DAONotification::getInstance().getXMLNotifications(_userId));
 }

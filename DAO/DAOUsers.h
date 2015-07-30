@@ -38,6 +38,8 @@ public:
     static DAOUsers& getInstance();
     ~DAOUsers(void);
     
+    std::string getDAOname();
+    
     int add(User user);
     
     User getUserAssociatedWithToken(std::string token);
@@ -49,7 +51,7 @@ public:
     bool isMailRegistred(std::string mail);
     bool isNameRegistred(std::string name);
     bool isGoogleIdRegistred(std::string g_id);
-    std::string getUserRoleM(int userId, std::string adapterId);
+    std::string getUserRoleM(int userId, long long adapterId);
     std::string getXMLusersAdapters(int userId);
 };
 

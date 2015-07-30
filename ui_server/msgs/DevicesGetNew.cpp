@@ -25,6 +25,6 @@ int DevicesGetNew::getMsgAuthorization() {
 
 string DevicesGetNew::createResponseMsgOut() {
     
-     return envelopeResponseWithAdapterId(R_DEVICES, DAODevices::getInstance().getXMLNewDevices(_adapterId) , _adapterId);
+     return envelopeResponseWithAdapterId(R_DEVICES, DAODevices::getInstance().getXMLNewDevices(_gatewayId) , _adapterId);
 }
 

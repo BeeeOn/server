@@ -48,5 +48,5 @@ string AccountGet::createResponseMsgOut()
     delete [] cstr;
     _outputMainNode.append_copy(doc.first_child());
     return getXMLreply(R_ACCOUNTS);*/
-    return envelopeResponse(R_ACCOUNTS, DAOUsersAdapters::getInstance().getXMLconAccounts(_adapterId));
+    return envelopeResponse(R_ACCOUNTS, DAOUsersAdapters::getInstance().getXMLconAccounts(_gatewayId));
 }

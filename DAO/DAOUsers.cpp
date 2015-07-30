@@ -8,6 +8,8 @@
 #include "DAOUsers.h"
 #include "../ui_logger/Logger.h"
 #include "Config.h"
+#include "DAOUsersAdapters.h"
+#include "DAOAdapters.h"
 
 using namespace std;
 using namespace soci;
@@ -71,6 +73,11 @@ DAOUsers& DAOUsers::getInstance(){
         static DAOUsers instance;
         return instance;
 }
+
+std::string DAOUsers::getDAOname() {
+    return "USER";
+}
+
 
 int DAOUsers::add(User user) {
         Logger::db() << "DB:" << "insertNewUser" << endl;
@@ -259,14 +266,15 @@ int DAOUsers::getUserIdbyIhaToken(string token) {
 
 
         
-string DAOUsers::getUserRoleM(int userId, string adapterId)
+string DAOUsers::getUserRoleM(int userId, long long adapterId)
 {
         Logger::getInstance(Logger::DEBUG3)<<"DB: get role "<<userId<<" on "<<adapterId<<endl;
         string role;
         try
         {
                 session sql(*_pool);
-                sql << "select role from users_adapters where fk_user_id= :guserid and fk_adapter_id = :adapter",
+                sql << "select " << DAOUsersAdapters::col.permission << " from " << DAOUsersAdapters::tableUsersGateways << 
+                        " where " << DAOUsersAdapters::col.user_id << "= :guserid and " << DAOUsersAdapters::col.gateway_id << " = :adapter",
                     use(userId, "guserid"), use(adapterId, "adapter"), into(role);
                 return role;
         }
@@ -280,14 +288,15 @@ string DAOUsers::getUserRoleM(int userId, string adapterId)
 
 std::string DAOUsers::getXMLusersAdapters(int userId)
 {
-        Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"make usersAdapterListXml\n";
+        Logger::getInstance(Logger::DEBUG3)<<"DB:"<<getDAOname()<<"make usersAdapterListXml\n";
         try
         {
                 soci::session sql(*_pool);
                 std::string xml;
                 indicator ind;
-                sql << "select xmlagg(xmlelement(name adapter, xmlattributes(adapter_id as id, adapters.name as name, role as role, timezone as utc)))"
-                                    "from users join users_adapters on user_id=fk_user_id join adapters on fk_adapter_id = adapter_id where user_id = :id"
+                sql << "select xmlagg(xmlelement(name adapter, xmlattributes(" << DAOAdapters::col.id << " as id, " << DAOAdapters::col.name << " as name, " << DAOUsersAdapters::col.permission << " as role, " << DAOAdapters::col.timezone << " as utc)))"
+                                    "from users join " << DAOUsersAdapters::tableUsersGateways << " using(user_id) " << 
+                                " join " << DAOAdapters::tableGateway << " using(" << DAOAdapters::col.id << ") where user_id = :id"
                             ,use(userId,"id"), soci::into(xml,ind);
                 Logger::getInstance(Logger::DEBUG3)<<"sql done result:"<<std::endl;
                 if(ind != i_ok)

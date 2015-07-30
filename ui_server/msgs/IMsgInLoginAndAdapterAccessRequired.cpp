@@ -11,6 +11,11 @@
 using namespace std;
 
 IMsgInLoginAndAdapterAccessRequired::IMsgInLoginAndAdapterAccessRequired(pugi::xml_document* doc) : IMsgInLoginRequired(doc) {
+    
+    _adapterId = _doc->child(P_COMMUNICATION).attribute(P_ADAPTER_ID).value();
+    
+    _gatewayId = _doc->child(P_COMMUNICATION).attribute(P_ADAPTER_ID).as_llong(-1);
+
 }
 
 
@@ -22,7 +27,7 @@ enumAccessStatus IMsgInLoginAndAdapterAccessRequired::checkAccess(){
         return FORBIDDEN_NOT_LOGGED;
     
     //TODO přístup do paměti bez try catch, ale je to mimo kontruktor, tak mozna to je OK
-    std::string role = DAOUsers::getInstance().getUserRoleM(_userId, _adapterId);
+    std::string role = DAOUsers::getInstance().getUserRoleM(_userId, _gatewayId);
     
     int roleId;
     if(role == P_ROLE_GUEST)
@@ -48,4 +53,21 @@ enumAccessStatus IMsgInLoginAndAdapterAccessRequired::checkAccess(){
         Logger::getInstance(Logger::ERROR) << " NOT OK "<< _userId <<" on "<<_state<<"("<<role<<"="<<roleId<<" "<<_state<<"="<<this->getMsgAuthorization() <<") "<<endl;
         return FORBIDDEN_WRONG_RIGHTS;
     }
+}
+
+
+
+string IMsgInLoginAndAdapterAccessRequired::envelopeResponseWithAdapterId(string state, string response)
+{        
+    string additionalAttributes;
+    additionalAttributes = (string)P_ADAPTER_ID+"=\"" + _adapterId +"\"" ;
+    return envelopeResponseSetAttributes( state, response, additionalAttributes);
+}
+
+string IMsgInLoginAndAdapterAccessRequired::envelopeResponseWithAdapterId(string state, string response, string adapterId)
+{        
+    string additionalAttributes = "";
+    if(adapterId != "")
+        additionalAttributes = (string)P_ADAPTER_ID+"=\"" + adapterId +"\"" ;
+    return envelopeResponseSetAttributes( state, response, additionalAttributes);
 }

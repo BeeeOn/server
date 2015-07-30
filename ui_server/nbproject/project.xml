@@ -13,6 +13,7 @@
                 <sourceRootElem>../lib</sourceRootElem>
                 <sourceRootElem>../ui_logger</sourceRootElem>
                 <sourceRootElem>msgs</sourceRootElem>
+                <sourceRootElem>../DAO</sourceRootElem>
             </sourceRootList>
             <confList>
                 <confElem>

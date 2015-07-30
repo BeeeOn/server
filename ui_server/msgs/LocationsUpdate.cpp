@@ -38,7 +38,7 @@ string LocationsUpdate::createResponseMsgOut()
             //TODO check type
             name = locationNode.attribute(P_IN_ROOM_NAME).value();
             try{
-                DAORooms::getInstance().updateRoom(_adapterId, id, type, name);
+                DAORooms::getInstance().updateRoom(_gatewayId, id, type, name);
             }catch(ServerException & e){
                 failed = true;
             }

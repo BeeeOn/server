@@ -9,6 +9,7 @@
 #include "../DAO/DAORooms.h"
 #include "../DAO/DAOUsersAdapters.h"
 #include "../DAO/DAONotification.h"
+#include "../DAO/DAOlogs.h"
 
 #include "save_custom_writer.h"
 
@@ -67,8 +68,10 @@ bool has_suffix1(const std::string &str, const std::string &suffix)
 }
 
 
+
 int main(int argc, char** argv)
 {   
+
     //http://pugixml.googlecode.com/svn-history/r605/trunk/docs/samples/modify_add.cpp
     //load XML file from argv[1]
      
@@ -106,14 +109,37 @@ int main(int argc, char** argv)
     }else{
         cout << "logs will be stored in : " << Logger::getInstance().getFileName() <<" and file will be changed every day "<< endl;
         Logger::debug()<< "logs will be stored in : " << Logger::getInstance().getFileName() <<" and file will be changed every day "<< endl;
-    }
-
+    }/*
+    string conString = Config::getInstance().getDBConnectionString();
+DAODevices::getInstance().setConnectionStringAndOpenSessions(conString, 2);    
+    cout << DAODevices::getInstance().getXMLAllDevs("4321");
+    return 0;
+    */
     try{      
         Logger::debug()<< "setting connections to DB..."<< endl;
         
         string conString = Config::getInstance().getDBConnectionString();
         
+        int sessionPoolSize = 3;
+        connection_pool *pool = new connection_pool(sessionPoolSize);
+        for (int i = 0; i != sessionPoolSize; ++i)
+        {
+            session & sql = pool->at(i);
+            sql.open(postgresql, conString);
+        }   
+        
         DBConnector::getInstance().setConnectionStringAndOpenSessions( conString , Config::getInstance().getDBSessionsNumber());
+        
+        DAOUsers::getInstance().setPool(pool);
+        DAOAdapters::getInstance().setPool(pool);
+        DAODevices::getInstance().setPool(pool);
+        DAORooms::getInstance().setPool(pool);
+        DAOMobileDevices::getInstance().setPool(pool);
+        DAOUsersAdapters::getInstance().setPool(pool);
+        DAONotification::getInstance().setPool(pool);
+        DAOlogs::getInstance().setPool(pool);
+        
+        /*
         DAOUsers::getInstance().setConnectionStringAndOpenSessions(conString, 2);
         DAOAdapters::getInstance().setConnectionStringAndOpenSessions(conString, 2);
         DAODevices::getInstance().setConnectionStringAndOpenSessions(conString, 2);
@@ -122,6 +148,7 @@ int main(int argc, char** argv)
         DAOUsersAdapters::getInstance().setConnectionStringAndOpenSessions(conString, 2);
         DAONotification::getInstance().setConnectionStringAndOpenSessions(conString, 2);
         
+         */
         Logger::debug()<< "connection to DB is set"<< endl;
     }
     catch (soci::soci_error const & e)
@@ -129,6 +156,7 @@ int main(int argc, char** argv)
         Logger::fatal()<< "DB error (soci), probably cant set connection, more:" << e.what()<< endl;
         return 1;
     }
+    
  /*  
     pugi::xml_document* doc = new pugi::xml_document();
     pugi::xml_parse_result result = doc->load(
@@ -160,6 +188,8 @@ int main(int argc, char** argv)
         */
 //resolveMsg( "<?xml version='1.0' encoding='UTF-8' ?><com ver=\"2.5\" bt=\"akpcWktvjF\" state=\"getaccs\" aid=\"52428\" ></com>");
         
+    
+    
         Logger::debug()<< "setting SSL context..."<< endl;
        SSL_CTX *ctx;
        int server;

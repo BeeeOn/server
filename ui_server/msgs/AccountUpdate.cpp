@@ -44,7 +44,7 @@ string AccountUpdate::createResponseMsgOut()
             User user = DAOUsers::getInstance().getUserByID(_userId);
             if(newUserMail != user.mail)
             //change users role
-             if(DAOUsersAdapters::getInstance().changeConAccount(_adapterId, newUserMail, newRole) != 1){
+             if(DAOUsersAdapters::getInstance().changeConAccount(_gatewayId, newUserMail, newRole) != 1){
                     errText += "<user email=\""+newUserMail+"\" role=\""+newRole+"\"/>";
                     fail = ServerException::EMAIL;
              }

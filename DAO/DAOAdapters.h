@@ -13,19 +13,39 @@
 #include "DAO.h"
 
 struct Gate {
-    std::string id;
+    long long int  id;
     std::string name;
     int timezone;
 };
 
 struct GateInfo {
-    std::string id;
+    long long int id;
     std::string name;
     int ip;
     int version; 
     int nUsers;
     int nFacilities;
     int timezone;
+    
+    GateInfo():id(-1) { }
+};
+
+struct GatewayColumns{
+    std::string id;
+    std::string name;
+    std::string version;
+    std::string socket;
+    std::string timezone;
+    std::string logging;
+    
+    GatewayColumns():
+            id("gateway_id"), 
+            name("home_name"), 
+            version("version"),
+            socket("socket"),
+            timezone("home_timezone"),
+            logging("logging_days")
+            { }
 };
 
 class DAOAdapters : public DAO {
@@ -37,17 +57,22 @@ public:
     static DAOAdapters& getInstance();
     ~DAOAdapters(void);
     
-    Gate getAdapter(std::string adapterId);
-    int updateAdapter(std::string adapterId, std::string newName, std::string newTimeZone);
-    int deleteAdapter(std::string adapterId);
+    Gate getAdapter(long long adapterId);
+    int updateAdapter(long long adapterId, std::string newName, std::string newTimeZone);
+    int deleteAdapter(long long adapterId);
     
-    GateInfo getGateInfo(std::string gateId);
-    int parAdapterWithUserIfPossible(long long int adapterId, std::string adapterName, int userId);
+    GateInfo getGateInfo(long long int gateId);
     int isAdapterInDB(long long int adapterId);
-    std::string getTimeZone(std::string adapterId);
+//    std::string getTimeZone(std::string adapterId);
     
     void updateAdaptersTimezone(std::string adapterId,  std::string newTimeZone);
-    int delUsersAdapter(std::string adapterId, int userId);
+    int delUsersAdapter(long long adapterId, int userId);
+    
+    static const std::string tableGateway;
+    static const std::string tableUsersGateway;
+    static const GatewayColumns col;
+    
+    
 };
 
 #endif	/* DAOADAPTERS_H */

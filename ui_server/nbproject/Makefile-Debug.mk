@@ -43,6 +43,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/_ext/1360890531/DAORooms.o \
 	${OBJECTDIR}/_ext/1360890531/DAOUsers.o \
 	${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters.o \
+	${OBJECTDIR}/_ext/1360890531/DAOlogs.o \
 	${OBJECTDIR}/_ext/1360930230/pugixml.o \
 	${OBJECTDIR}/_ext/1154895860/Logger.o \
 	${OBJECTDIR}/Config.o \
@@ -102,7 +103,6 @@ TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
 
 # Test Files
 TESTFILES= \
-	${TESTDIR}/TestFiles/f21 \
 	${TESTDIR}/TestFiles/f15 \
 	${TESTDIR}/TestFiles/f3 \
 	${TESTDIR}/TestFiles/f20 \
@@ -138,8 +138,8 @@ TESTFILES= \
 CFLAGS=`cppunit-config --cflags` 
 
 # CC Compiler Flags
-CCFLAGS=-O0 -std=c++0x -D_GLIBCXX_USE_NANOSLEEP `cppunit-config --cflags` 
-CXXFLAGS=-O0 -std=c++0x -D_GLIBCXX_USE_NANOSLEEP `cppunit-config --cflags` 
+CCFLAGS=`cppunit-config --cflags` -std=c++11 
+CXXFLAGS=`cppunit-config --cflags` -std=c++11 
 
 # Fortran Compiler Flags
 FFLAGS=
@@ -148,7 +148,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-L/usr/local/lib -L/usr/local/lib64 -L/opt/centos/devtoolset-1.1/root/usr/lib/gcc/x86_64-redhat-linux/4.7.2 -L/usr/pgsql-9.2/lib -L../lib -L/usr/lib64 -Wl,-rpath,/usr/local/lib -Wl,-rpath,/usr/local/lib64 -Wl,-rpath,../lib -Wl,-rpath,/usr/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -lpq -ljansson `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs`  
+LDLIBSOPTIONS=-L/usr/local/lib -L/usr/local/lib64 -L/opt/centos/devtoolset-1.1/root/usr/lib/gcc/x86_64-redhat-linux/4.7.2 -L/usr/pgsql-9.2/lib -L../lib -L/usr/lib64 -Wl,-rpath,/usr/local/lib -Wl,-rpath,/usr/local/lib64 -Wl,-rpath,../lib -Wl,-rpath,/usr/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -lpq -ljansson `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs`  
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
@@ -197,6 +197,11 @@ ${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters.o: ../DAO/DAOUsersAdapters.cpp
 	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters.o ../DAO/DAOUsersAdapters.cpp
+
+${OBJECTDIR}/_ext/1360890531/DAOlogs.o: ../DAO/DAOlogs.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOlogs.o ../DAO/DAOlogs.cpp
 
 ${OBJECTDIR}/_ext/1360930230/pugixml.o: ../lib/pugixml.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1360930230
@@ -468,10 +473,6 @@ ${OBJECTDIR}/ui_server.o: ui_server.cpp
 
 # Build Test Targets
 .build-tests-conf: .build-conf ${TESTFILES}
-${TESTDIR}/TestFiles/f21: ${OBJECTFILES:%.o=%_nomain.o}
-	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc}   -o ${TESTDIR}/TestFiles/f21 $^ ${LDLIBSOPTIONS} -L/usr/local/lib64 -L/usr/local/lib -Wl,-rpath,/usr/local/lib64 -Wl,-rpath,/usr/local/lib -lsoci_core `cppunit-config --libs`   
-
 ${TESTDIR}/TestFiles/f15: ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f15 $^ ${LDLIBSOPTIONS} -L/usr/local/lib64 -L/usr/local/lib -Wl,-rpath,/usr/local/lib64 -Wl,-rpath,/usr/local/lib -lsoci_core `cppunit-config --libs`   
@@ -695,6 +696,19 @@ ${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters_nomain.o: ${OBJECTDIR}/_ext/136089
 	    $(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters_nomain.o ../DAO/DAOUsersAdapters.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters.o ${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters_nomain.o;\
+	fi
+
+${OBJECTDIR}/_ext/1360890531/DAOlogs_nomain.o: ${OBJECTDIR}/_ext/1360890531/DAOlogs.o ../DAO/DAOlogs.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/_ext/1360890531/DAOlogs.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOlogs_nomain.o ../DAO/DAOlogs.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/_ext/1360890531/DAOlogs.o ${OBJECTDIR}/_ext/1360890531/DAOlogs_nomain.o;\
 	fi
 
 ${OBJECTDIR}/_ext/1360930230/pugixml_nomain.o: ${OBJECTDIR}/_ext/1360930230/pugixml.o ../lib/pugixml.cpp 
@@ -1390,7 +1404,6 @@ ${OBJECTDIR}/ui_server_nomain.o: ${OBJECTDIR}/ui_server.o ui_server.cpp
 .test-conf:
 	@if [ "${TEST}" = "" ]; \
 	then  \
-	    ${TESTDIR}/TestFiles/f21 || true; \
 	    ${TESTDIR}/TestFiles/f15 || true; \
 	    ${TESTDIR}/TestFiles/f3 || true; \
 	    ${TESTDIR}/TestFiles/f20 || true; \

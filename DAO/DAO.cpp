@@ -10,13 +10,35 @@
 using namespace std;
 using namespace soci;
 
+
+
 void DAO::setConnectionStringAndOpenSessions(string conString, int sessionPoolSize){
-_poolSize = sessionPoolSize;
-_connectionString = conString;
-_pool = new connection_pool(_poolSize);
-    for (size_t i = 0; i != _poolSize; ++i)
+_pool = new connection_pool(sessionPoolSize);
+    for (int i = 0; i != sessionPoolSize; ++i)
     {
         session & sql = _pool->at(i);
-        sql.open(postgresql, _connectionString);
+        sql.open(postgresql, conString);
     }
+}
+
+void DAO::setPool(soci::connection_pool* pool) {
+    _pool = pool;
+}
+
+string DAO::escapeString(string str) {
+    char escaped[300];
+    PQescapeString(escaped, str.c_str(), 300);
+    return escaped;
+}
+
+template <typename T>
+std::string DAO::selectCols(T t) 
+{
+    return t;
+}
+
+template<typename T, typename... Args>
+std::string DAO::selectCols(T t, Args... args)
+{
+    return  t + "," + selectCols(args...) ;
 }

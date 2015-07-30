@@ -43,6 +43,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/_ext/1360890531/DAORooms.o \
 	${OBJECTDIR}/_ext/1360890531/DAOUsers.o \
 	${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters.o \
+	${OBJECTDIR}/_ext/1360890531/DAOlogs.o \
 	${OBJECTDIR}/_ext/1360930230/pugixml.o \
 	${OBJECTDIR}/_ext/1154895860/Logger.o \
 	${OBJECTDIR}/Config.o \
@@ -102,7 +103,6 @@ TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
 
 # Test Files
 TESTFILES= \
-	${TESTDIR}/TestFiles/f21 \
 	${TESTDIR}/TestFiles/f15 \
 	${TESTDIR}/TestFiles/f3 \
 	${TESTDIR}/TestFiles/f20 \
@@ -148,15 +148,15 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-L../soci-3.2.2/build/lib -L/usr/local/include/soci -L../soci-3.2.2/soci-3.2.2/backends/postgresql -L../soci-3.2.2/soci-3.2.2/core -L/usr/include/postgresql -L/usr/include/postgresql/libpq -L. -L/usr/include -L/usr/local/include -L/usr/local/lib -L/usr/lib -Wl,-rpath,../soci-3.2.2/build/lib -Wl,-rpath,/usr/local/lib `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` -lpq `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs`  
+LDLIBSOPTIONS=-L../soci-3.2.2/build/lib -L/usr/local/include/soci -L../soci-3.2.2/soci-3.2.2/backends/postgresql -L../soci-3.2.2/soci-3.2.2/core -L/usr/include/postgresql -L/usr/include/postgresql/libpq -L. -L/usr/include -L/usr/local/include -L/usr/local/lib -L/usr/lib -Wl,-rpath,../soci-3.2.2/build/lib -Wl,-rpath,/usr/local/lib `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` -lpq `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs`  
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ./ui_server
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${TESTDIR}/TestFiles/f21
 
-./ui_server: ${OBJECTFILES}
-	${MKDIR} -p .
-	${LINK.cc} -o ./ui_server ${OBJECTFILES} ${LDLIBSOPTIONS} -lpq -lsoci_core -lsoci_empty -lsoci_postgresql -lcppunit -lssl -lcrypto -ljansson
+${TESTDIR}/TestFiles/f21: ${OBJECTFILES}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc} -o ${TESTDIR}/TestFiles/f21 ${OBJECTFILES} ${LDLIBSOPTIONS} -lpq -lsoci_core -lsoci_empty -lsoci_postgresql -lcppunit -lssl -lcrypto -ljansson
 
 ${OBJECTDIR}/_ext/1360890531/DAO.o: ../DAO/DAO.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
@@ -197,6 +197,11 @@ ${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters.o: ../DAO/DAOUsersAdapters.cpp
 	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters.o ../DAO/DAOUsersAdapters.cpp
+
+${OBJECTDIR}/_ext/1360890531/DAOlogs.o: ../DAO/DAOlogs.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOlogs.o ../DAO/DAOlogs.cpp
 
 ${OBJECTDIR}/_ext/1360930230/pugixml.o: ../lib/pugixml.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1360930230
@@ -468,10 +473,6 @@ ${OBJECTDIR}/ui_server.o: ui_server.cpp
 
 # Build Test Targets
 .build-tests-conf: .build-conf ${TESTFILES}
-${TESTDIR}/TestFiles/f21: ${OBJECTFILES:%.o=%_nomain.o}
-	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc}   -o ${TESTDIR}/TestFiles/f21 $^ ${LDLIBSOPTIONS} `cppunit-config --libs`   
-
 ${TESTDIR}/TestFiles/f15: ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc}   -o ${TESTDIR}/TestFiles/f15 $^ ${LDLIBSOPTIONS} `cppunit-config --libs`   
@@ -695,6 +696,19 @@ ${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters_nomain.o: ${OBJECTDIR}/_ext/136089
 	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters_nomain.o ../DAO/DAOUsersAdapters.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters.o ${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters_nomain.o;\
+	fi
+
+${OBJECTDIR}/_ext/1360890531/DAOlogs_nomain.o: ${OBJECTDIR}/_ext/1360890531/DAOlogs.o ../DAO/DAOlogs.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/_ext/1360890531/DAOlogs.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOlogs_nomain.o ../DAO/DAOlogs.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/_ext/1360890531/DAOlogs.o ${OBJECTDIR}/_ext/1360890531/DAOlogs_nomain.o;\
 	fi
 
 ${OBJECTDIR}/_ext/1360930230/pugixml_nomain.o: ${OBJECTDIR}/_ext/1360930230/pugixml.o ../lib/pugixml.cpp 
@@ -1390,7 +1404,6 @@ ${OBJECTDIR}/ui_server_nomain.o: ${OBJECTDIR}/ui_server.o ui_server.cpp
 .test-conf:
 	@if [ "${TEST}" = "" ]; \
 	then  \
-	    ${TESTDIR}/TestFiles/f21 || true; \
 	    ${TESTDIR}/TestFiles/f15 || true; \
 	    ${TESTDIR}/TestFiles/f3 || true; \
 	    ${TESTDIR}/TestFiles/f20 || true; \
@@ -1428,7 +1441,7 @@ ${OBJECTDIR}/ui_server_nomain.o: ${OBJECTDIR}/ui_server.o ui_server.cpp
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ./ui_server
+	${RM} ${TESTDIR}/TestFiles/f21
 
 # Subprojects
 .clean-subprojects:

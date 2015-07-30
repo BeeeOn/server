@@ -28,7 +28,7 @@ string GateDelete::createResponseMsgOut() {
     
     if(_role != "superuser")
     {
-        if (DAOAdapters::getInstance().delUsersAdapter(_adapterId, _userId) > 0)
+        if (DAOAdapters::getInstance().delUsersAdapter(_gatewayId, _userId) > 0)
         {
             return getXMLreply(R_TRUE);
         }

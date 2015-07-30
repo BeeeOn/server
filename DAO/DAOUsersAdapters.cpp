@@ -6,10 +6,12 @@
  */
 
 #include "DAOUsersAdapters.h"
+#include "DAOAdapters.h"
 
 using namespace std;
 using namespace soci;
-
+const UserGatewaysColumns DAOUsersAdapters::col;
+const string DAOUsersAdapters::tableUsersGateways = "user_gateway";
 DAOUsersAdapters::DAOUsersAdapters(){
 }
 
@@ -23,7 +25,7 @@ DAOUsersAdapters& DAOUsersAdapters::getInstance(){
 }
 
 
-string DAOUsersAdapters::getXMLconAccounts(string adapterId){
+string DAOUsersAdapters::getXMLconAccounts(long long adapterId){
     Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"conAccountList (adapter="<<adapterId<<")\n";
     try{
         soci::session sql(*_pool);
@@ -31,9 +33,9 @@ string DAOUsersAdapters::getXMLconAccounts(string adapterId){
         string xml;
         indicator ind;
         sql << "select xmlagg ("
-                              "xmlelement(name user, xmlattributes(user_id as userid, mail as email, role as role, given_name as name, family_name as surname , gender as gender))"
+                              "xmlelement(name user, xmlattributes(user_id as userid, mail as email, " << DAOUsersAdapters::col.permission << " as role, given_name as name, family_name as surname , gender as gender))"
                               ")"
-                "from users left join users_adapters on user_id = fk_user_id where fk_adapter_id = :adapter"
+                "from users left join " + tableUsersGateways + " using(" << DAOUsersAdapters::col.user_id << ") where " << DAOUsersAdapters::col.gateway_id << " = :adapter"
                 ,use(adapterId,"adapter"), into(xml, ind);
         
             if(ind != i_ok)
@@ -47,12 +49,12 @@ string DAOUsersAdapters::getXMLconAccounts(string adapterId){
     }
 }
 
-int DAOUsersAdapters::delConAccount(string adapterId, string userMail){
+int DAOUsersAdapters::delConAccount(long long adapterId, string userMail){
     Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"del acc (adapter="<<adapterId<<" acc:"<<userMail<<")\n";
     try{
         soci::session sql(*_pool);
         
-        statement st=(sql.prepare << "delete from users_adapters where fk_user_id=(select user_id from users where mail=:mail) and fk_adapter_id=:adapter"
+        statement st=(sql.prepare << "delete from " + tableUsersGateways + " where " << col.user_id << "=(select user_id from users where mail=:mail) and " << col.gateway_id << "=:adapter"
                 ,use(adapterId,"adapter"), use(userMail,"mail") );
         st.execute(true);
         return st.get_affected_rows();
@@ -65,11 +67,11 @@ int DAOUsersAdapters::delConAccount(string adapterId, string userMail){
     }
 }
 
-int DAOUsersAdapters::changeConAccount(string adapterId, string userMail, string newRole){
+int DAOUsersAdapters::changeConAccount(long long adapterId, string userMail, string newRole){
     Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"change acc (adapter="<<adapterId<<" acc:"<<userMail<<" role:"<<newRole<<")\n";
     try{
         soci::session sql(*_pool);
-        statement st = (sql.prepare << " update users_adapters set role=:role  where fk_user_id=(select user_id from users where mail=:mail) and fk_adapter_id=:adapter "
+        statement st = (sql.prepare << " update " + tableUsersGateways + " set " << col.permission << "=:role  where " << col.user_id << "=(select user_id from users where mail=:mail) and " << col.gateway_id << "=:adapter "
                 //"and check_downgrade_last_superuser(:adapter, (select user_id from users where mail=:mail))"
                 ,use(newRole, "role"),use(adapterId,"adapter"), use(userMail,"mail"));
         st.execute(true);
@@ -82,7 +84,7 @@ int DAOUsersAdapters::changeConAccount(string adapterId, string userMail, string
     }
 }
 
-int DAOUsersAdapters::addConAccount(string adapterId, string userMail, string newRole){
+int DAOUsersAdapters::addConAccount(long long adapterId, string userMail, string newRole){
     Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"change acc (adapter="<<adapterId<<" acc:"<<userMail<<" role:"<<newRole<<")\n";
     
     try{
@@ -96,7 +98,7 @@ int DAOUsersAdapters::addConAccount(string adapterId, string userMail, string ne
 	")",
                         use(userMail, "mail");   
         
-         statement st = (sql.prepare << "insert into users_adapters(fk_adapter_id, fk_user_id, role) values(:a_id, (select user_id from users where mail=:mail), :role)",
+         statement st = (sql.prepare << "insert into " << tableUsersGateways << "(" << col.gateway_id << ", " << col.user_id << ", " << col.permission << ") values(:a_id, (select user_id from users where mail=:mail), :role)",
                 use(adapterId, "a_id"), use(userMail, "mail"), use(newRole, "role") );
          st.execute(true);
          return st.get_affected_rows();
@@ -106,4 +108,36 @@ int DAOUsersAdapters::addConAccount(string adapterId, string userMail, string ne
         Logger::getInstance(Logger::ERROR) << "Error: " << e.what() << '\n';
         return 0;
     }
+}
+
+
+int DAOUsersAdapters::parAdapterWithUserIfPossible(long long int adapterId, std::string adapterName, int userId) {
+    
+    Logger::db()<< "par user - adapter (new user?)" << endl;
+    try
+    {
+        soci::session sql(*_pool);
+       
+        
+        string role = "superuser";
+        statement st = (sql.prepare <<  "insert into " << tableUsersGateways << "(" + col.gateway_id + ", " + col.user_id + ", " + col.permission + ") select :a_id , :gId, :role where not exists (select 1 from " << tableUsersGateways << " where "+col.gateway_id+"=:a_id)",// where fk_adapter_id=:a_id)
+                use(adapterId, "a_id"), use(role, "role"),  use(userId, "gId"));
+        st.execute(true);
+        
+        int updateCount = st.get_affected_rows();
+        if(updateCount == 0)
+            return 0;
+       
+        sql << "update " + DAOAdapters::tableGateway + " set " << DAOAdapters::col.name << "=:a_name where " << DAOAdapters::col.id << "=:a_id",
+                 use(adapterId, "a_id"), use(adapterName, "a_name");
+        
+        Logger::db()<< "parred"<< endl;
+        return 1;
+    }
+    catch (soci::postgresql_soci_error& e)
+    {
+        Logger::db() << "Error: " << e.what() << " sqlState: " << e.sqlstate() <<endl;
+        return 0;
+    }
+    
 }

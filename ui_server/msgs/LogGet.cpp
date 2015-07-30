@@ -7,7 +7,8 @@
 
 #include "LogGet.h"
 #include "../lib/pugixml.hpp"
-#include "../DAO/DAODevices.h"
+#include "../DAO/DAODevices.h" 
+#include "../DAO/DAOlogs.h"
 using namespace std;
 
 const string GetLog::state = "getlog";
@@ -34,5 +35,5 @@ string GetLog::createResponseMsgOut()
     d.id =  comNode.attribute(P_DEVICE_ID).value();
     d.type =  comNode.attribute(P_DEVICE_TYPE).value();
     
-    return envelopeResponse(R_LOG, DAODevices::getInstance().getXMLDeviceLog(_adapterId, d, logFrom, logTo, type , interval));
+    return envelopeResponse(R_LOG, DAOlogs::getInstance().getXMLDeviceLog(_gatewayId, d, logFrom, logTo, type , interval));
 }

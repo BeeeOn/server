@@ -52,6 +52,8 @@
         <itemPath>../DAO/DAOUsers.h</itemPath>
         <itemPath>../DAO/DAOUsersAdapters.cpp</itemPath>
         <itemPath>../DAO/DAOUsersAdapters.h</itemPath>
+        <itemPath>../DAO/DAOlogs.cpp</itemPath>
+        <itemPath>../DAO/DAOlogs.h</itemPath>
         <itemPath>DBConnector.cpp</itemPath>
       </logicalFolder>
       <logicalFolder name="f4" displayName="devices" projectFiles="true">
@@ -157,14 +159,6 @@
                    displayName="Test Files"
                    projectFiles="false"
                    kind="TEST_LOGICAL_FOLDER">
-      <logicalFolder name="f21"
-                     displayName="AlfaTest"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/newtestclass.cpp</itemPath>
-        <itemPath>tests/newtestclass.h</itemPath>
-        <itemPath>tests/newtestrunner.cpp</itemPath>
-      </logicalFolder>
       <logicalFolder name="f15"
                      displayName="testChangeConAccount"
                      projectFiles="true"
@@ -436,12 +430,13 @@
     <Elem>../lib</Elem>
     <Elem>../ui_logger</Elem>
     <Elem>msgs</Elem>
+    <Elem>../DAO</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
     <conf name="Debug" type="1">
       <toolsSet>
-        <compilerSet>default</compilerSet>
+        <compilerSet>GNU|GNU</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
@@ -461,7 +456,7 @@
             <pElem>../Server</pElem>
             <pElem>/usr/include/soci</pElem>
           </incDir>
-          <commandLine>-O0 -std=c++0x -D_GLIBCXX_USE_NANOSLEEP `cppunit-config --cflags`</commandLine>
+          <commandLine>`cppunit-config --cflags` -std=c++11</commandLine>
           <warningLevel>2</warningLevel>
         </ccTool>
         <linkerTool>
@@ -487,6 +482,7 @@
             <linkerLibLibItem>soci_postgresql</linkerLibLibItem>
             <linkerLibLibItem>pq</linkerLibLibItem>
             <linkerLibLibItem>jansson</linkerLibLibItem>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
             <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
             <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
             <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
@@ -525,6 +521,10 @@
       <item path="../DAO/DAOUsersAdapters.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../DAO/DAOUsersAdapters.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../DAO/DAOlogs.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAOlogs.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../lib/pugiconfig.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -772,20 +772,6 @@
         </ccTool>
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f20</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f21">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f21</output>
           <linkerLibItems>
             <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
           </linkerLibItems>
@@ -1241,7 +1227,7 @@
           <developmentMode>5</developmentMode>
         </asmTool>
         <linkerTool>
-          <output>./ui_server</output>
+          <output>${TESTDIR}/TestFiles/f21</output>
           <linkerAddLib>
             <pElem>../soci-3.2.2/build/lib</pElem>
             <pElem>/usr/local/include/soci</pElem>
@@ -1270,6 +1256,7 @@
             <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
             <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
             <linkerLibLibItem>pq</linkerLibLibItem>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
             <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
             <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
             <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
@@ -1311,6 +1298,10 @@
       <item path="../DAO/DAOUsersAdapters.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../DAO/DAOUsersAdapters.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../DAO/DAOlogs.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAOlogs.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../lib/pugiconfig.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -1538,20 +1529,6 @@
         </ccTool>
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f20</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f21">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f21</output>
           <linkerLibItems>
             <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
           </linkerLibItems>
