@@ -2,7 +2,7 @@
 <framework_config
 	portUIServer="7082"
 	portAdaRecieverServer="7083"
-	portAdaSenderServer="7081"
+	portAdaSenderServer="7091"
 	portAlgorithmsServer="7084"
 	DBName="home6"
 	DBUser="root"

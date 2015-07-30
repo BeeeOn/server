@@ -114,7 +114,7 @@ public:
 	Algorithm(std::string init_userID, std::string init_algID, std::string init_adapterID,
 	std::string init_offset, std::multimap<unsigned int, std::map<std::string, std::string>> init_values,
 	std::vector<std::string> init_parameters, std::vector<tRidValues *> init_Rids, std::string init_nameOfDB, std::string init_frameworkServerPort,
-	, std::string init_DBUser, std::string init_DBPassword
+	std::string init_DBUser, std::string init_DBPassword
 	);
 	~Algorithm();
 	bool AddNotify(unsigned short int type, std::string text, std::string senzorId, std::string typeOfSenzor);
