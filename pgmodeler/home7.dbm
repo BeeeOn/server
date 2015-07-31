@@ -3,7 +3,7 @@
 CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.8.1-beta1" last-position="199,519" last-zoom="1"
+<dbmodel pgmodeler-ver="0.8.1-beta1" last-position="0,131" last-zoom="1"
 	 default-owner="postgres">
 <role name="hardware">
 </role>
@@ -11,9 +11,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <role name="user_data">
 </role>
 
-<role name="uiserver"
+<role name="uiserver7"
       login="true"
       password="1234">
+	<appended-sql><![CDATA[GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public to www;]]></appended-sql>
 	<roles names="hardware,user_data" role-type="refer" />
 </role>
 
@@ -559,6 +560,21 @@ mohly by být lepší čáry znázornující vztahy
 hloupý exit dialog]]></comment>
 </textbox>
 
+<table name="push_notification">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="10" y="262"/>
+	<column name="user_id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="notification_id" not-null="true">
+		<type name="text"/>
+	</column>
+	<constraint name="pk_push_notification" type="pk-constr" table="public.push_notification">
+		<columns names="user_id,notification_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
 <constraint name="adapters_users_adapters" type="fk-constr" comparison-type="MATCH FULL"
 	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.gateway" table="public.user_gateway">
 	<columns names="gateway_id" ref-type="src-columns"/>
@@ -685,6 +701,12 @@ hloupý exit dialog]]></comment>
 	<columns names="gateway_id" ref-type="dst-columns"/>
 </constraint>
 
+<constraint name="fk_user_push_notification" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.users" table="public.push_notification">
+	<columns names="user_id" ref-type="src-columns"/>
+	<columns names="user_id" ref-type="dst-columns"/>
+</constraint>
+
 <relationship name="rel_user_gateway_gateway" type="relfk"
 	 src-table="public.user_gateway"
 	 dst-table="public.gateway"
@@ -744,7 +766,11 @@ hloupý exit dialog]]></comment>
 <relationship name="rel_users_algorithms_users" type="relfk"
 	 src-table="public.users_algorithms"
 	 dst-table="public.users"
-	 src-required="false" dst-required="false"/>
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="82.2377" y="1.42982"/>
+	</label>
+</relationship>
 
 <relationship name="rel_users_algorithms_u_algorithms" type="relfk"
 	 src-table="public.users_algorithms"
@@ -796,6 +822,15 @@ hloupý exit dialog]]></comment>
 	 dst-table="public.gateway"
 	 src-required="false" dst-required="false"/>
 
+<relationship name="rel_push_notification_users" type="relfk"
+	 src-table="public.push_notification"
+	 dst-table="public.users"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="-32.6123" y="-38.713"/>
+	</label>
+</relationship>
+
 <permission>
 	<object name="public.gateway" type="table"/>
 	<roles names="hardware"/>
@@ -814,11 +849,6 @@ hloupý exit dialog]]></comment>
 <permission>
 	<object name="public.log" type="table"/>
 	<roles names="hardware"/>
-	<privileges select="true" delete="true" insert="true" update="true"/>
-</permission>
-<permission>
-	<object name="public.mobile_devices" type="table"/>
-	<roles names="user_data"/>
 	<privileges select="true" delete="true" insert="true" update="true"/>
 </permission>
 <permission>
@@ -854,6 +884,11 @@ hloupý exit dialog]]></comment>
 <permission>
 	<object name="public.algo_devices" type="table"/>
 	<roles names="algorithms"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+<permission>
+	<object name="public.push_notification" type="table"/>
+	<roles names="user_data"/>
 	<privileges select="true" delete="true" insert="true" update="true"/>
 </permission>
 </dbmodel>

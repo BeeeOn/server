@@ -14,12 +14,16 @@ CREATE ROLE hardware WITH ;
 CREATE ROLE user_data WITH ;
 -- ddl-end --
 
--- object: uiserver | type: ROLE --
--- DROP ROLE IF EXISTS uiserver;
-CREATE ROLE uiserver WITH 
+-- object: uiserver7 | type: ROLE --
+-- DROP ROLE IF EXISTS uiserver7;
+CREATE ROLE uiserver7 WITH 
 	LOGIN
 	UNENCRYPTED PASSWORD '1234'
 	IN ROLE hardware,user_data;
+-- ddl-end --
+
+-- Appended SQL commands --
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public to www;
 -- ddl-end --
 
 -- object: algorithms | type: ROLE --
@@ -342,6 +346,18 @@ CREATE INDEX index_logs_mttv ON public.log
 COMMENT ON INDEX public.index_logs_mttv IS 'mttv = mac, type, timestamp, value';
 -- ddl-end --
 
+-- object: public.push_notification | type: TABLE --
+-- DROP TABLE IF EXISTS public.push_notification CASCADE;
+CREATE TABLE public.push_notification(
+	user_id integer NOT NULL,
+	notification_id text NOT NULL,
+	CONSTRAINT pk_push_notification PRIMARY KEY (user_id,notification_id)
+
+);
+-- ddl-end --
+ALTER TABLE public.push_notification OWNER TO postgres;
+-- ddl-end --
+
 -- object: adapters_users_adapters | type: CONSTRAINT --
 -- ALTER TABLE public.user_gateway DROP CONSTRAINT IF EXISTS adapters_users_adapters CASCADE;
 ALTER TABLE public.user_gateway ADD CONSTRAINT adapters_users_adapters FOREIGN KEY (gateway_id)
@@ -489,76 +505,83 @@ REFERENCES public.gateway (gateway_id) MATCH FULL
 ON DELETE CASCADE ON UPDATE NO ACTION;
 -- ddl-end --
 
--- object: grant_ad351977b0 | type: PERMISSION --
+-- object: fk_user_push_notification | type: CONSTRAINT --
+-- ALTER TABLE public.push_notification DROP CONSTRAINT IF EXISTS fk_user_push_notification CASCADE;
+ALTER TABLE public.push_notification ADD CONSTRAINT fk_user_push_notification FOREIGN KEY (user_id)
+REFERENCES public.users (user_id) MATCH FULL
+ON DELETE CASCADE ON UPDATE NO ACTION;
+-- ddl-end --
+
+-- object: grant_29093db42b | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.gateway
    TO hardware;
 -- ddl-end --
 
--- object: grant_2915a3578a | type: PERMISSION --
+-- object: grant_e7bf0c3913 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.device
    TO hardware;
 -- ddl-end --
 
--- object: grant_417ba757d3 | type: PERMISSION --
+-- object: grant_d9f7540a6e | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.module
    TO hardware;
 -- ddl-end --
 
--- object: grant_4c5946af16 | type: PERMISSION --
+-- object: grant_cccd0175fc | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.log
    TO hardware;
 -- ddl-end --
 
--- object: grant_23e1a082e7 | type: PERMISSION --
-GRANT SELECT,INSERT,UPDATE,DELETE
-   ON TABLE public.mobile_devices
-   TO user_data;
--- ddl-end --
-
--- object: grant_a085e9d6a6 | type: PERMISSION --
+-- object: grant_adfa217447 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.notifications
    TO user_data;
 -- ddl-end --
 
--- object: grant_8a170623dd | type: PERMISSION --
+-- object: grant_238cfd6a88 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.users
    TO user_data;
 -- ddl-end --
 
--- object: grant_dcad6ab4bb | type: PERMISSION --
+-- object: grant_0ff3591179 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.user_gateway
    TO user_data;
 -- ddl-end --
 
--- object: grant_404d0a79f7 | type: PERMISSION --
+-- object: grant_94c0f3a21f | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.location
    TO user_data;
 -- ddl-end --
 
--- object: grant_3739249a6c | type: PERMISSION --
+-- object: grant_b1ee3bed1d | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.u_algorithms
    TO algorithms;
 -- ddl-end --
 
--- object: grant_24a44132b1 | type: PERMISSION --
+-- object: grant_6d1362dc63 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.algorithms_adapters
    TO algorithms;
 -- ddl-end --
 
--- object: grant_637b8bca7c | type: PERMISSION --
+-- object: grant_fafacad87d | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.algo_devices
    TO algorithms;
+-- ddl-end --
+
+-- object: grant_928baaf0d1 | type: PERMISSION --
+GRANT SELECT,INSERT,UPDATE,DELETE
+   ON TABLE public.push_notification
+   TO user_data;
 -- ddl-end --
 
 
