@@ -33,35 +33,10 @@ public:
     
     static const std::string tableUsersGateways;
     static const UserGatewaysColumns col;
-    /**
-     * 
-     * @param adapterId 
-     * @return XML in string with users which have access to specified adapter
-     */
-    std::string getXMLconAccounts(long long adapterId);
-    /**
-    * 
-    * @param adapterId
-    * @param userMail
-    * @return number of deleted rows in DB
-    */
-    int delConAccount(long long adapterId, std::string userMail);
-    /**
-    * Changing user's role on adapter 
-    * @param adapterId
-    * @param userMail
-    * @param newRole
-    * @return number of changed rows in DB
-    */
-    int changeConAccount(long long adapterId, std::string userMail, std::string newRole);
-    /**
-    * Grant access to user on adapter, degree of access is given by role
-    * @param adapterId
-    * @param userMail
-    * @param newRole
-    * @return number of added rows to DB (0 or 1)
-    */
-    int addConAccount(long long adapterId, std::string userMail, std::string newRole);
+    std::string getXMLconAccounts(long long gatewayId);
+    int delConAccount(long long gatewayId, std::string userMail);
+    int changeConAccount(long long gatewayId, std::string userMail, std::string newRole);
+    int addConAccount(long long gatewayId, std::string userMail, std::string newRole);
     
     int parAdapterWithUserIfPossible(long long int adapterId, std::string adapterName, int userId);
     

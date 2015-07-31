@@ -11,20 +11,40 @@
 #include "DAO.h"
 
 #include "DAOMobileDevices.h"
+
+struct UsersColumns{
+    std::string id;
+    std::string first_name;
+    std::string surname;
+    std::string picture;
+    std::string gender;
+    std::string mail;
+    std::string password;
+    std::string google_id;
+    std::string facebook_id;
+    
+    UsersColumns():
+            id("user_id"), 
+            first_name("given_name"), 
+            surname("family_name"),
+            picture("picture"),
+            gender("gender"),
+            mail("mail"),
+            password("password"),
+            google_id("google_id"),
+            facebook_id("facebook_id")
+            { }
+};
+
 struct User
 {
    int user_id;
    std::string mail;
    std::string passwordMd5;
-   //std:: string phoneLocale;
-   //int verifiedMail;
-   //std::string name;
    std::string givenName;
    std::string familyName;
-   //std::string link;
    std::string picture;
    std::string gender;
-   //std::string googleLocale;
    std::string googleId;
    std::string facebookId;
 };
@@ -52,7 +72,11 @@ public:
     bool isNameRegistred(std::string name);
     bool isGoogleIdRegistred(std::string g_id);
     std::string getUserRoleM(int userId, long long adapterId);
+    bool isAdapterParred(int userId, long long adapterId);
     std::string getXMLusersAdapters(int userId);
+    
+    static const std::string tableUsers;
+    static const UsersColumns col;
 };
 
 

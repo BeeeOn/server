@@ -17,8 +17,10 @@
 #include <mutex>
 
 struct SessionsTableEntry {
+    std::string mobileName;
+    std::string locale;
+    std::string token;
     std::chrono::time_point<std::chrono::system_clock> lastActivity;
-
     int userId;
 };
 
@@ -36,8 +38,8 @@ public:
     int removeEntry(std::string sessionString);
     void removeOldEntries();
     int getUserIdBySessionString(std::string sessionString);
-    
-    std::string addNewSession(int userId);
+    SessionsTableEntry* getEntry(std::string sessionString);
+    std::string addNewSession(int userId, std::string mobileName);
     
     void printTable();
     void test();

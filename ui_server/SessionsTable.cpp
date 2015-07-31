@@ -121,16 +121,31 @@ int SessionsTable::findUserIdBySessionString(std::string sessionString) {
     }
 }
 
+SessionsTableEntry* SessionsTable::getEntry(std::string sessionString) {
+    map<string, SessionsTableEntry*>::iterator it;
+   
+    it = _sessionMap.find(sessionString);
+    if(it == _sessionMap.end()){
+        return nullptr;
+    }else{
+        it->second->lastActivity = chrono::system_clock::now();
+        
+        return it->second;
+    }
+}
 
-string SessionsTable::addNewSession(int userId) {
+
+
+string SessionsTable::addNewSession(int userId, string mobileName) {
     std::lock_guard<std::mutex> lck (_mtx);
     string sessionString = getNewSessionString();
-    SessionsTableEntry* e = new SessionsTableEntry;
-    e->userId = userId;
-    e->lastActivity = chrono::system_clock::now();
+    SessionsTableEntry* newEntry = new SessionsTableEntry;
+    newEntry->userId = userId;
+    newEntry->mobileName = mobileName;
+    newEntry->lastActivity = chrono::system_clock::now();
     
     map<string, SessionsTableEntry*>::iterator it = _sessionMap.begin();
-    _sessionMap.insert(it,std::pair<string, SessionsTableEntry*>(sessionString,e));
+    _sessionMap.insert(it,std::pair<string, SessionsTableEntry*>(sessionString,newEntry));
     
     return sessionString;
 }
@@ -168,19 +183,6 @@ string SessionsTable::getNewSessionString(){
                 continue;
             }
         }
-        
-     /*   ifstream urandom("/dev/random", ios::binary);
-        if(urandom.is_open())
-            cerr <<"!!!!!!!"<<endl;
-        urandom.read(block,len);
-        urandom.close();
-     
-        
-        for (int i = 0; i < len; ++i) {
-            newToken += alphanum[block[i] % (sizeof(alphanum) - 1)];  
-        }
- */
-        //r = DBConnector::getInstance().DEBUGexec("select  count(token)  from mobile_devices where token='"+sessionString+"'" );
         
     }while(findUserIdBySessionString(sessionString) != -1);
     

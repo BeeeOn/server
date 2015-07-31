@@ -27,6 +27,7 @@
 #define P_IN_FACILITY_ID "id"
 #define P_FACILITY_INIT "init"
 #define P_FACILITY_REFRESH "refresh"
+#define P_FACILITY_NAME "name"
 #define P_FACILITY_LOCATION_ID "lid"
 #define P_FACILITY_BATTERY "batt"
 #define P_FACILITY_QUALITY "rssi"

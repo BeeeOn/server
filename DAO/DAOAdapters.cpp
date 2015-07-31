@@ -72,7 +72,8 @@ Gate DAOAdapters::getAdapter(long long adapterId) {
         soci::session sql(*_pool);
         
         Gate gate;
-        sql <<"select " << col.id << "," << col.name << "," << col.timezone << " from " + tableGateway + " where " +col.id+ " = :gw"
+        sql <<"select " << col.id << "," << col.name << "," << col.timezone << 
+                " from " + tableGateway + " where " +col.id+ " = :gw"
                 , use(adapterId,"gw"),into(gate); 
         return gate;
     }
@@ -95,10 +96,6 @@ int DAOAdapters::updateAdapter(long long int adapterId, std::string newName, std
             partialUpdateString += ", ";
         if(newTimeZone != "")
             partialUpdateString += col.timezone +" = :timezone";
-        
-        
-        //Logger::debug3()<<"DB:"<<"update with: "<<partialUpdateString<<"\n";
-       // Logger::debug3()<<"DB:"<<"update with: "<<newName << " " <<newTimeZone<<"\n";
         
         string xml;
         sql <<"update " + tableGateway + " set " << partialUpdateString << " where "+col.id+" = :adapter"

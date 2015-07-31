@@ -11,6 +11,7 @@
 #include "IMsgInLoginRequired.h"
 #include "../DAO/DAOAdapters.h"
 #include "../DAO/DAOUsersAdapters.h"
+#include "../DAO/DAOUsers.h"
 #include "IMsgIn.h"
 
 class GateAdd : public IMsgInLoginRequired{

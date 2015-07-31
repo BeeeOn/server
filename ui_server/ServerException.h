@@ -41,6 +41,7 @@ public:
 
     static const int ADAPTER_ID;
     static const int ADAPTER_TAKEN;
+    static const int ADAPTER_ACCESSIBLE;
 
     static const int AGG_FUNCTION;
     static const int INTERVAL;

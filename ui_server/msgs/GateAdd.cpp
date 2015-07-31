@@ -22,8 +22,8 @@ GateAdd::~GateAdd() {
 
 string GateAdd::createResponseMsgOut() {
     pugi::xml_node adapterNode =  _doc->child(P_COMMUNICATION);
-    string adapterIDStr = adapterNode.attribute(P_ADAPTER_ID).as_string();
-    long long int adapterId = stoll(adapterIDStr);// TODO can throw exc: invalid argument
+    
+    long long int adapterId = adapterNode.attribute(P_ADAPTER_ID).as_llong();
     
     string adapterName = adapterNode.attribute(P_ADAPTER_NAME).value();
     
@@ -35,7 +35,8 @@ string GateAdd::createResponseMsgOut() {
         }
         else
         {
-            //bool haveUserAccessDAOUsers::getInstance().getUserRoleM(_userId, adapterIDStr);
+            if(DAOUsers::getInstance().isAdapterParred(_userId, adapterId))
+                return getNegativeXMLReply(ServerException::ADAPTER_ACCESSIBLE);;
             return getNegativeXMLReply(ServerException::ADAPTER_TAKEN);
         }
     }

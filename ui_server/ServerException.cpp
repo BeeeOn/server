@@ -49,6 +49,7 @@ using namespace std;
      
      const int ServerException::EMAIL_ALREADY_TAKEN = 29;
      const int ServerException::LOGOUT_ERROR = 30;
+     const int ServerException::ADAPTER_ACCESSIBLE = 31;
 
      const int  ServerException::ROOM_TYPE = 50;
     const int ServerException::NOTIFICATION_ID = 996;

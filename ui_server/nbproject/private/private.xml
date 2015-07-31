@@ -8,21 +8,27 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/DAO/DAOUsers.cpp</file>
-            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/DAO/DAORooms.h</file>
-            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/DAO/DAOlogs.cpp</file>
-            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/msgs/LogGet.cpp</file>
-            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/DAO/DAORooms.cpp</file>
-            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/DAO/DAOlogs.h</file>
-            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/DAO/DAO.h</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/msgs/DevicesUpdate.cpp</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/msgs/UserLogIn.cpp</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/msgs/IMsgIn.cpp</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/DAO/DAOUsers.h</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/SessionsTable.h</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/msgs/NotificationSetGCMID.cpp</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/DAO/DAOMobileDevices.h</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/msgs/NotificationEraseGCMID.cpp</file>
             <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/DAO/DAOAdapters.h</file>
             <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/DAO/DAOUsersAdapters.cpp</file>
-            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/ui_server.cpp</file>
             <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/DAO/DAOAdapters.cpp</file>
             <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/DAO/DAODevices.h</file>
-            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/msgs/GatesGetConnected.h</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/msgs/UserRegister.cpp</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/msgs/AccountAdd.cpp</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/SessionsTable.cpp</file>
             <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/DAO/DAOUsersAdapters.h</file>
-            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/DAO/DAO.cpp</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/msgs/IMsgInLoginRequired.cpp</file>
             <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/DAO/DAODevices.cpp</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/DAO/DAOMobileDevices.cpp</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/msgs/IMsgInLoginAndAdapterAccessRequired.cpp</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/msgs/IMsgIn.h</file>
         </group>
     </open-files>
 </project-private>

@@ -86,9 +86,9 @@ public:
      * @param visibility
      * @return number of updated rows in DB (0 or 1)
      */
-    int updateDevice(long long adapterId, std::string id, std::string type, std::string name, std::string visibility);
+//    int updateDevice(long long adapterId, std::string id, std::string type, std::string name, std::string visibility);
     std::string getXMLDeviceLog(long long adapterId, device device, std::string logFrom, std::string logTo, std::string dataType, std::string interval);
-    int updateFacility(long long adapterId, std::string id, std::string init, std::string locationId, std::string refresh) ;
+    int updateFacility(long long adapterId, std::string id, std::string init, std::string locationId, std::string refresh, std::string name) ;
     
 private: 
 

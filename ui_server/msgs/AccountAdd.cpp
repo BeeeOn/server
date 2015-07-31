@@ -26,26 +26,15 @@ string MsgInAddAccount::createResponseMsgOut()
     pugi::xml_node userNode =  _doc->child(P_COMMUNICATION).child(P_USER);
     string newUserMail;
     string newRole;
+
+    newUserMail = userNode.attribute(P_EMAIL).value();
+    newRole = userNode.attribute(P_ROLE).value();
     
-    string errText;
-    int fail = 0;
-    
-    for (; userNode; userNode = userNode.next_sibling(P_USER))
-    {
-        newUserMail = userNode.attribute(P_EMAIL).value();
-        newRole = userNode.attribute(P_ROLE).value();
-        
-        
-        if(!isRoleValid(newRole)){
-            errText += "<" P_USER " " P_EMAIL "=\""+newUserMail+"\" " P_ROLE "=\""+newRole+"\" />";
-            fail = ServerException::ROLE;
-        }else if(DAOUsersAdapters::getInstance().addConAccount(_gatewayId, newUserMail, newRole) != 1){
-            errText += "<" P_USER " " P_EMAIL "=\""+newUserMail+"\" " P_ROLE "=\""+newRole+"\" />";
-            fail = ServerException::EMAIL;
-        } 
-    }
-    if(fail != 0)
-        return getNegativeXMLReply(fail, errText.c_str());
+    if(!isRoleValid(newRole)){
+        return getNegativeXMLReply(ServerException::ROLE);
+    }else if(DAOUsersAdapters::getInstance().addConAccount(_gatewayId, newUserMail, newRole) != 1){
+        return getNegativeXMLReply(ServerException::EMAIL);
+    }        
     
     return getXMLreply(R_TRUE);
 }

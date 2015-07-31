@@ -3,6 +3,7 @@
 #include "ServerException.h"
 #include "../DAO/DAOUsers.h"
 #include "../DAO/DAOMobileDevices.h"
+#include "SessionsTable.h"
 
 #include <iostream>
 #include <unistd.h>
@@ -115,7 +116,8 @@ string UserLogIn::createResponseMsgOut()
         _outputMainNode.append_attribute(P_ERRCODE) = ServerException::USER_DONOT_EXISTS;
         return getXMLreply(R_FALSE);
     }
-
+    
+    string ttoken = SessionsTable::getInstance().addNewSession(userId, phoneId);
     
     _outputMainNode.append_attribute(P_SESSION_ID) = _token.c_str();
     return getXMLreply(R_BEEEON_TOKEN);
