@@ -35,8 +35,8 @@
 #include <stdlib.h>
 #include <chrono>
 #include <sstream>
-#include "../lib/pugixml.hpp"
-#include "../lib/pugixml.hpp"
+#include "pugixml.hpp"
+#include "pugiconfig.hpp"
 #include "loger.h"
 #include "structures.h"
 #include "Notificator/Notificator.h"

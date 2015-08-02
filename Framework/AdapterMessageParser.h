@@ -27,8 +27,8 @@
 #include <chrono>
 #include <sstream>
 #include "structures.h"
-#include "../lib/pugixml.hpp"
-#include "../lib/pugixml.hpp"
+#include "pugixml.hpp"
+#include "pugiconfig.hpp"
 
 #ifndef ADAPTER_MESSAGE_PARSER_
 #define ADAPTER_MESSAGE_PARSER_

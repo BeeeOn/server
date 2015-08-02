@@ -35,8 +35,8 @@ public:
 	~DBFWHandler();
 	DBFWHandler(soci::session *ses_init, Loger *loger);
 	soci::session *GetConnectionSession();
-	float GetValueFromDevices(std::string ID, std::string type);
-	bool UpdateValueOfDevices(std::string ID, std::string type, std::string value);
+	float GetValueFromModule(std::string ID);
+	bool UpdateValueOfModule(std::string ID,std::string value);
 	std::vector<std::string> GetNotifStringByUserId(std::string userId);
 	std::string GetUserIdByEmail(std::string Email);
 	std::string GetEmailByUserId(std::string UserID);

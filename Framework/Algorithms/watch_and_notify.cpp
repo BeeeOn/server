@@ -124,7 +124,7 @@ int main(int argc, char *argv[])
 
 	bool isToBeSendNotificationOrChangeActor = false;
 
-	float lastValue = alg->database->GetValueFromDevices(idOfSenzorString, typeOfSenzorString);
+	float lastValue = alg->database->GetValueFromModule(idOfSenzorString);
 
 	if (IsSetFval){
 		if (op == GT){

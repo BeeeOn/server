@@ -874,7 +874,7 @@ string FrameworkServerHandle::createMessageRequestSwitch(string id, string type,
     pugi::xml_node sensor_value_node = sensor_node.append_child("value");
 	pugi::xml_node sensor_value_node_pcdata = sensor_value_node.append_child(pugi::node_pcdata);
 
-    float currentStateOfActor = database->GetValueFromDevices(id, type);
+    float currentStateOfActor = database->GetValueFromModule(id);
 
     if(currentStateOfActor == 0){
         sensor_value_node_pcdata.set_value("ON");

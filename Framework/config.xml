@@ -2,9 +2,9 @@
 <framework_config
 	portUIServer="7082"
 	portAdaRecieverServer="7083"
-	portAdaSenderServer="7091"
+	portAdaSenderServer="7081"
 	portAlgorithmsServer="7084"
-	DBName="home6"
+	DBName="home7"
 	DBUser="root"
 	DBPassword=""
 	maxNumDBConnections="10"

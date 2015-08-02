@@ -46,16 +46,16 @@ DBFWHandler::~DBFWHandler()
 
 //---------------------------------------  BEGIN QUERY SECTION ---------------------------------------
 
-/** Dotaz ziskavajici posledni hodnotu z tabulky Devices (napr pro ziskani posledni teploty z teplotniho senzoru) 
+/** Dotaz ziskavajici posledni hodnotu z tabulky Devices (napr pro ziskani posledni teploty z teplotniho senzoru)
 *
 * @param ID			fk_facilities_mac
 * @param type		type
 */
-float DBFWHandler::GetValueFromDevices(std::string ID, std::string type)
+float DBFWHandler::GetValueFromModule(std::string ID)
 {
 	double retVal;
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::GetLastTemp");
-	std::string sqlQuery = "SELECT value FROM devices Where (fk_facilities_mac='" + ID + "' AND type =" + type + ");";
+	std::string sqlQuery = "SELECT measured_value FROM module Where (device_mac='" + ID + ");";
 	this->_log->WriteMessage(TRACE, sqlQuery);
 	try
 	{
@@ -72,7 +72,7 @@ float DBFWHandler::GetValueFromDevices(std::string ID, std::string type)
 	return (retVal);
 }
 
-/** Dotaz nastavujici posledni hodnotu (domena value) v tabulce Devices. (dle parametru)
+/** Dotaz nastavujici posledni hodnotu (domena value) v tabulce Module. (dle parametru)
 *
 * @param ID			fk_facilities_mac
 * @param type		type
@@ -80,13 +80,13 @@ float DBFWHandler::GetValueFromDevices(std::string ID, std::string type)
 *
 * @return boolean dle toho zda update probehl uspesne
 */
-bool DBFWHandler::UpdateValueOfDevices(std::string ID, std::string type, std::string value)
+bool DBFWHandler::UpdateValueOfModule(std::string ID, std::string value)
 {
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::UpdateLastTemp");
 	std::string retVal = "";
 	try
 	{
-		std::string sqlQuery = "UPDATE devices SET  value=" + value + " WHERE (fk_facilities_mac='" + ID + "' AND type =" + type + ");";
+		std::string sqlQuery = "UPDATE module SET  measured_value=" + value + "  Where (device_mac='" + ID + ");";
 		this->_log->WriteMessage(TRACE, sqlQuery);
 		*ses << sqlQuery,
 			into(retVal);
@@ -185,7 +185,7 @@ std::vector<std::string> DBFWHandler::GetNotifStringByUserId(std::string userId)
 	return (retVal);
 }
 
-/** Dotaz mazajici zaznam v tabulce mobile_devices dle GCM ID 
+/** Dotaz mazajici zaznam v tabulce mobile_devices dle GCM ID
 *
 * @param UsersAlgorithmsId			fk_users_algorithms_id
 *
@@ -454,7 +454,7 @@ std::string DBFWHandler::SelectNameByUsersAlgId(std::string UsersAlgId)
 	return (retVal);
 }
 
-/** Dotaz ziskavajici parametry uzivatelskeho algoritmu (users_algorithms) dle users_algorithms ID 
+/** Dotaz ziskavajici parametry uzivatelskeho algoritmu (users_algorithms) dle users_algorithms ID
 *
 * @param UsersAlgId			users_algorithms_id
 *
@@ -555,7 +555,7 @@ std::string DBFWHandler::InsertUserAlgorithm(std::string userId, std::string alg
 		*ses << sqlQuery,
 			into(retVal);
 		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::InsertUserAlgorithm");
-		
+
 	}
 	catch (std::exception const &e)
 	{
@@ -729,7 +729,7 @@ bool DBFWHandler::InsertNotification(std::string text, std::string level, std::s
 	}
 }
 
-/** Dotaz ziskajici maximalni hodnotu ID Notifikace dle ID Uzivatele 
+/** Dotaz ziskajici maximalni hodnotu ID Notifikace dle ID Uzivatele
 *
 * @param userId				fk_user_id
 *

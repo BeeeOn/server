@@ -20,8 +20,7 @@ using namespace soci;
 Algorithm::Algorithm(std::string init_userID, std::string init_algID, std::string init_adapterID,
 	std::string init_offset, std::multimap<unsigned int, std::map<std::string, std::string>> init_values,
 	std::vector<std::string> init_parameters, std::vector<tRidValues *> init_Rids, std::string init_nameOfDB, std::string init_frameworkServerPort,
-	std::string init_DBUser, std::string init_DBPassword
-	){
+	std::string init_DBUser, std::string init_DBPassword){
 
 	this->userID = init_userID;
 	this->algID = init_algID;
@@ -52,7 +51,7 @@ Algorithm::Algorithm(std::string init_userID, std::string init_algID, std::strin
 		exit(EXIT_FAILURE);
 	}
 	//Nastaveni kontejneru pro DB
-	this->cont = DBConnectionsContainer::GetConnectionContainer(this->nameOfDB ,this->DBUser, this->DBPassword, 1, Log);
+	this->cont = DBConnectionsContainer::GetConnectionContainer(this->nameOfDB ,this->DBUser, this->DBPassword,  1, this->Log);
 	this->Log->SetLogger(7, 5, 100, "algorithm_log",".", "ALGORITHM");
 	session *Conn = NULL;
 	Conn = cont->GetConnection();
@@ -285,62 +284,63 @@ Algorithm * Algorithm::getCmdLineArgsAndCreateAlgorithm(int argc, char *argv[]){
 	int opt;
 	bool u, a, d, o, v, p, e, s, x, z;
 	u = a = d = o = v = p = e = s = x = z = false;
-	while ((opt = getopt(argc, argv, "hu:a:d:o:v:p:e:s:")) != EOF)
+	while ((opt = getopt(argc, argv, "hu:a:d:o:v:p:e:s:")) != EOF){
+
 		switch (opt)
-	{
-		case 'h':
-			Algorithm::usage(argv[0]);
-			return nullptr;
-			break;
-		case 'u': // userID
-			userIDString = optarg;
-			u = true;
-			break;
-		case 'a': // algID
-			algIDString = optarg;
-			a = true;
-			break;
-		case 'd': // adapterID
-			adapterIDString = optarg;
-			d = true;
-			break;
-		case 'o': // offset
-			UserAlgIdString = optarg;
-			o = true;
-			break;
-		case 'v': // senzor values
-			valuesString = optarg;
-			v = true;
-			break;
-		case 'p': // parameters given by User
-			parametersString = optarg;
-			p = true;
-			break;
-		case 'e': // name of database to use
-			nameOfDB = optarg;
-			e = true;
-			break;
-		case 's': // socket port to send answer to framework server
-			portOfFrameworkServer = optarg;
-			s = true;
-			break;
-        case 'x': // socket port to send answer to framework server
-			DBUser = optarg;
-			x = true;
-			break;
-        case 'z': // socket port to send answer to framework server
-			DBPassword = optarg;
-			z = true;
-			break;
-		default:
-			cerr << "Algorithm failure: Wrong command line arguments!\n";
-			return nullptr;
+        {
+            case 'h':
+                Algorithm::usage(argv[0]);
+                return nullptr;
+                break;
+            case 'u': // userID
+                userIDString = optarg;
+                u = true;
+                break;
+            case 'a': // algID
+                algIDString = optarg;
+                a = true;
+                break;
+            case 'd': // adapterID
+                adapterIDString = optarg;
+                d = true;
+                break;
+            case 'o': // offset
+                UserAlgIdString = optarg;
+                o = true;
+                break;
+            case 'v': // senzor values
+                valuesString = optarg;
+                v = true;
+                break;
+            case 'p': // parameters given by User
+                parametersString = optarg;
+                p = true;
+                break;
+            case 'e': // name of database to use
+                nameOfDB = optarg;
+                e = true;
+                break;
+            case 's': // socket port to send answer to framework server
+                portOfFrameworkServer = optarg;
+                s = true;
+                break;
+            case 'x': // db user name
+                DBUser = optarg;
+                x = true;
+                break;
+            case 'z': // db password
+                DBPassword = optarg;
+                z = true;
+                break;
+            default:
+                cerr << "Algorithm failure: Wrong command line arguments!\n";
+                return nullptr;
+        }
 	}
 	if (!u || !a || !d || !o){
 		cerr << "Algorithm failure: Wrong command line arguments! You have to specify at least -u -a -d -o\n";
 		return nullptr;
 	}
-
 	if(!e){
         cerr << "Algorithm failure: Wrong command line arguments! No specified -e cmd arg for DB Name!\n";
 		return nullptr;
@@ -350,7 +350,7 @@ Algorithm * Algorithm::getCmdLineArgsAndCreateAlgorithm(int argc, char *argv[]){
 		return nullptr;
 	}
 
-	//Deklarace promìnných pro uložení z operací parsování
+	//Deklarace promenných pro uložení z operací parsování
 	multimap<unsigned int, map<string, string>> values;
 	vector<string> params;
 	vector<tRidValues *> Rids;
@@ -361,7 +361,7 @@ Algorithm * Algorithm::getCmdLineArgsAndCreateAlgorithm(int argc, char *argv[]){
 	if (p){
 		params = Algorithm::parseParams(parametersString);
 	}
-	return new Algorithm(userIDString, algIDString, adapterIDString, UserAlgIdString, values, params, Rids, nameOfDB, portOfFrameworkServer, DBUser, DBPassword );
+	return new Algorithm(userIDString, algIDString, adapterIDString, UserAlgIdString, values, params, Rids,  nameOfDB, portOfFrameworkServer, DBUser, DBPassword );
 }
 
 void Algorithm::usage(char* progName)
@@ -375,7 +375,9 @@ void Algorithm::usage(char* progName)
       "-d      adapterId" << endl <<
       "-v      senzor Values in format RidOrDevice=device#ID=3976200203#type=10#fval=23.900000#offset=0" << endl <<
       "-p      user parameters in format 3976200203---10#lt#24#notif#mensi 24" << endl <<
-      "-e      name of Database" << endl;
+      "-e      name of Database" << endl <<
+      "-x      Database User" << endl <<
+      "-z      Database Password" << endl;
 }
 
 /** Metoda, ktera vezme hodnotu parametru -v prikazove radky a zparsuje jej.
