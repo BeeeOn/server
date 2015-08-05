@@ -1,6 +1,6 @@
 CPPFLAGS= -Wall -W -std=c++11 -pthread -g
-BUILDER= g++
-COMMON_FILES= ../pugixml.cpp ../algorithm.cpp ../DBFWHandler.cpp ../loger.cpp ../DBConnectionsContainer.cpp
+BUILDER= /usr/bin/g++
+COMMON_FILES= ../../lib/pugixml.cpp ../algorithm.cpp ../DBFWHandler.cpp ../loger.cpp ../DBConnectionsContainer.cpp
 LIBS_NEEDED= -I/usr/include/soci -L/usr/local/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -I/usr/pgsql-9.2/include -L/usr/pgsql-9.2/lib -lpq -L../  -lnotif -lcurl
 
 WATCHNOTIF= watch_and_notify.cpp
