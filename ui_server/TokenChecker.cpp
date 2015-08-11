@@ -126,6 +126,8 @@ bool TokenChecker::parseResponse() {
         data = json_object_get(root, "last_name");
         if (json_is_string(data))
             family_name = json_string_value(data);
+        
+        picture = "http://graph.facebook.com/" + id + "/picture?width=100&height=100";
     }
     else if (service.compare("vkontakte") == 0) {
         ;

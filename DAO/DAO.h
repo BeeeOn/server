@@ -26,6 +26,22 @@ public:
     std::string selectCols(T t, Args... args);
     
     std::string escapeString(std::string str);
+    template <typename T>
+    std::string vectorToPsqlNotation(std::vector<T> vec){
+
+        std::stringstream ss;
+        typename std::vector<T>::iterator it;
+
+        for( it = vec.begin(); it < vec.end(); it++)
+        {
+            ss << *it;
+            ss << ",";
+        }
+        std::string ret = ss.str();
+        ret.pop_back();
+        return ret;
+    }
+    
 private:
 
     

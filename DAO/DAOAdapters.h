@@ -57,16 +57,16 @@ public:
     static DAOAdapters& getInstance();
     ~DAOAdapters(void);
     
-    Gate getAdapter(long long adapterId);
-    int updateAdapter(long long adapterId, std::string newName, std::string newTimeZone);
-    int deleteAdapter(long long adapterId);
+    Gate getAdapter(long long gateId);
+    int updateAdapter(long long gateId, std::string newName, std::string newTimeZone);
+    int deleteAdapter(long long gateId);
     
     GateInfo getGateInfo(long long int gateId);
-    int isAdapterInDB(long long int adapterId);
+    int isAdapterInDB(long long int gateId);
 //    std::string getTimeZone(std::string adapterId);
     
     void updateAdaptersTimezone(std::string adapterId,  std::string newTimeZone);
-    int delUsersAdapter(long long adapterId, int userId);
+    int delUsersAdapter(long long gateId, int userId);
     
     static const std::string tableGateway;
     static const std::string tableUsersGateway;

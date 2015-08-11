@@ -30,15 +30,17 @@ string NotificationSetGCMID::createResponseMsgOut() {
     //string mail = _doc->child(P_COMMUNICATION).attribute(P_EMAIL).value();
    // gcmid =   DBConnector::getInstance().DEBUGexec("select user_id from users where mail='"+mail+"';" );
     
-    DAOMobileDevices::getInstance().insertPushNotification(_userId, gcmid);
+//    if(DAOMobileDevices::getInstance().setGCMId(_token, gcmid) == 0)
+//    {
+//        _outputMainNode.append_attribute(P_ERRCODE) = ServerException::GCMID;
+//        return getXMLreply(R_FALSE);
+//    }
+//    
     
-    
-    if(DAOMobileDevices::getInstance().setGCMId(_token, gcmid) == 0)
+    if(DAOMobileDevices::getInstance().insertPushNotification(_userId, gcmid) == 0)
     {
-        _outputMainNode.append_attribute(P_ERRCODE) = ServerException::GCMID;
-        return getXMLreply(R_FALSE);
+        return getNegativeXMLReply(ServerException::GCMID);
     }
-    
     return getXMLreply(R_TRUE); 
 }
 

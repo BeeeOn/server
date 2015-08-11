@@ -127,7 +127,6 @@ DAODevices::getInstance().setConnectionStringAndOpenSessions(conString, 2);
             session & sql = pool->at(i);
             sql.open(postgresql, conString);
         }   
-        
         DBConnector::getInstance().setConnectionStringAndOpenSessions( conString , Config::getInstance().getDBSessionsNumber());
         
         DAOUsers::getInstance().setPool(pool);
@@ -150,12 +149,34 @@ DAODevices::getInstance().setConnectionStringAndOpenSessions(conString, 2);
         
          */
         Logger::debug()<< "connection to DB is set"<< endl;
+        
+        
+        
+        /*
+        session sql(*pool);
+        
+        vector<double> ids;
+vector<string> names;
+vector<indicator> nameIndicators;
+
+        vector<string> ret = {"1","2","3"};
+        vector<double> vec = {11,22};
+        sql << "select count(*) from gateway where gateway_id in (:vec)",use(vec),into(ret);
+        //sql << "insert into gateway(gateway_id) values(:i)",use(vec);
+        cout<<ret[1]<<endl;
+        return 1;
+        */
+//        vector<long long> gts = {1,20,10,100};
+//        vector<int> dvs = {1000,1234};
+//        cout<<DAODevices::getInstance().getXMLdevices(1,gts,dvs);
+//        return 0;
     }
     catch (soci::soci_error const & e)
     {
         Logger::fatal()<< "DB error (soci), probably cant set connection, more:" << e.what()<< endl;
         return 1;
     }
+    
     
  /*  
     pugi::xml_document* doc = new pugi::xml_document();

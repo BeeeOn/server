@@ -4,6 +4,7 @@
 #include "../DAO/DAOUsers.h"
 #include "../DAO/DAOMobileDevices.h"
 #include "SessionsTable.h"
+#include "TokenChecker.h"
 
 #include <iostream>
 #include <unistd.h>
@@ -40,68 +41,55 @@ string UserLogIn::createResponseMsgOut()
      mobile.mobile_id = phoneId;
      mobile.push_notification = "";
      
-     _token = getnewIHAtoken();
-     mobile.token = _token;
+     //_token = getnewIHAtoken();
+     //mobile.token = _token;
      mobile.type = "android";
-    Logger::debug3()<<"tok:"<< _token  <<endl;  
+    //Logger::debug3()<<"tok:"<< _token  <<endl;  
     User user;
     
-    if(service == "google"){
-        string gToken = parametersNode.attribute(P_GOOGLE_TOKEN).value();       
-                
-        googleInfo gInfo;
-        
-        Logger::debug3()<<"isGTokenOk"<<endl;
-        
-        if( !isGoogleTokenOkayCURL(gToken, gInfo) )
-        {
-            _outputMainNode.append_attribute(P_ERRCODE) = ServerException::TOKEN_EMAIL;
-            return getXMLreply(R_FALSE);
-        }
-
-        user.familyName = gInfo.family_name;
-        user.gender = gInfo.gender;
-        user.givenName = gInfo.given_name;
-        user.googleId = gInfo.id;
-        user.mail = gInfo.email;
-        user.picture = gInfo.picture;
-    
-    }else  if(service == "facebook"){
-        
-        facebookInfo fInfo;
-                
-        string fbToken = parametersNode.attribute(P_FACEBOOK_TOKEN).value(); 
-        
-        Logger::debug3()<<"isFBTokenOk"<<endl;       
-        if ( !isFTokenOkay(fbToken, fInfo))
-        {
-            _outputMainNode.append_attribute(P_ERRCODE) = ServerException::TOKEN_EMAIL;
-            return getXMLreply(R_FALSE);
-        }
-
-        if ( fInfo.email == "" )
-        {
-            _outputMainNode.append_attribute(P_ERRCODE) = ServerException::NO_MAIL_PROVIDED;
-            return getXMLreply(R_FALSE);
-        }
-        
-        Logger::debug3() << "FB info: " << fInfo.first_name << " " << fInfo.last_name <<" " << fInfo.email << " " << fInfo.id << " " <<fInfo.link << endl;
-        
-        user.familyName = fInfo.last_name;
-        user.gender = fInfo.gender;
-        user.givenName = fInfo.first_name;
-        user.facebookId = fInfo.id;
-        user.mail = fInfo.email;
-        user.picture = fInfo.link;
-        
-    }else  if(service == "beeeon"){
-        //string userName = parametersNode.attribute("name").value();       
-        //string userPassword = parametersNode.attribute("pswd").value();       
-    }else{
+    string token;
+    if(service == "google")
+    {
+        token = parametersNode.attribute(P_GOOGLE_TOKEN).value();    
+    }
+    else if(service == "facebook")
+    {
+        token = parametersNode.attribute(P_FACEBOOK_TOKEN).value(); 
+    }
+    else
+    {
         Logger::error() << "unsupported provider : " << service <<endl;
-        _outputMainNode.append_attribute(P_ERRCODE) = ServerException::WRONG_AUTH_PROVIDER;
+        return getNegativeXMLReply(ServerException::WRONG_AUTH_PROVIDER);
+    }
+    
+    TokenChecker tokenChecker(service);
+    
+    if( !tokenChecker.isTokenOkay(token) )
+    {
+        return getNegativeXMLReply(ServerException::TOKEN_EMAIL);
+    }
+    
+    if ( tokenChecker.email == "" )
+    {
+        _outputMainNode.append_attribute(P_ERRCODE) = ServerException::NO_MAIL_PROVIDED;
         return getXMLreply(R_FALSE);
     }
+    
+    if(service == "google")
+    {
+        user.googleId = tokenChecker.id;
+    }
+    else if(service == "facebook")
+    {
+        user.facebookId = tokenChecker.id;
+    }
+    
+    user.familyName = tokenChecker.family_name;
+    user.gender = tokenChecker.gender;
+    user.givenName = tokenChecker.given_name;
+    user.mail = tokenChecker.email;
+    user.picture = tokenChecker.picture;  
+    
     
     int userId = DAOUsers::getInstance().getUserIDbyAlternativeKeys(user.mail, user.googleId, user.facebookId);
     
@@ -119,10 +107,10 @@ string UserLogIn::createResponseMsgOut()
     
     string ttoken = SessionsTable::getInstance().addNewSession(userId, phoneId);
     
-    _outputMainNode.append_attribute(P_SESSION_ID) = _token.c_str();
+    _outputMainNode.append_attribute(P_SESSION_ID) = ttoken.c_str();
     return getXMLreply(R_BEEEON_TOKEN);
 }
-
+/*
 string UserLogIn::getnewIHAtoken() {
     
     string r;
@@ -153,17 +141,7 @@ string UserLogIn::getnewIHAtoken() {
             }
         }
         
-     /*   ifstream urandom("/dev/random", ios::binary);
-        if(urandom.is_open())
-            cerr <<"!!!!!!!"<<endl;
-        urandom.read(block,len);
-        urandom.close();
      
-        
-        for (int i = 0; i < len; ++i) {
-            newToken += alphanum[block[i] % (sizeof(alphanum) - 1)];  
-        }
- */
         Logger::debug3()<<"gen: " << newToken << endl;
         r = DBConnector::getInstance().DEBUGexec("select  count(token)  from mobile_devices where token='"+newToken+"'" );
         
@@ -171,3 +149,4 @@ string UserLogIn::getnewIHAtoken() {
     
     return newToken;
 }
+*/

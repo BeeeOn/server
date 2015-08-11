@@ -42,3 +42,4 @@ std::string DAO::selectCols(T t, Args... args)
 {
     return  t + "," + selectCols(args...) ;
 }
+

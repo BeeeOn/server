@@ -2,6 +2,7 @@
 #include "UserLogout.h"
 #include "../DAO/DAOUsers.h"
 #include "../lib/pugixml.hpp"
+#include "TokenChecker.h"
 
 using namespace std;
 
@@ -18,8 +19,8 @@ int UserLogout::getMsgAuthorization() {
 }
 
 string UserLogout::createResponseMsgOut() {
-    
-    //TODO
+    DAOMobileDevices::getInstance().deletepushNotification(_userId, "");
+
     return getXMLreply(R_TRUE);
     
     //_outputMainNode.append_attribute(P_ERRCODE) = ServerException::LOGOUT_ERROR;

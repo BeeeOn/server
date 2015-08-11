@@ -69,14 +69,15 @@ public:
      * @param adapterId
      * @return XML string with all devices on adapter
      */
-    std::string getXMLAllDevs(long long adapterId);
+    std::string getXMLAllDevs(long long gateId);
+    std::string getXMLdevices(int userId, std::vector<long long> gateVector, std::vector<int> devicesVec);
     std::string getXMLdevices(int userId, std::vector<std::string> adaptersVec, std::vector<device> devicesVec);
     /**
      * 
      * @param adapterId
      * @return XML string with devices on adapter which is not initialized 
      */
-    std::string getXMLNewDevices(long long adapterId);
+    std::string getXMLNewDevices(long long gateId);
     /**
      * 
      * @param adapterId
@@ -87,8 +88,8 @@ public:
      * @return number of updated rows in DB (0 or 1)
      */
 //    int updateDevice(long long adapterId, std::string id, std::string type, std::string name, std::string visibility);
-    std::string getXMLDeviceLog(long long adapterId, device device, std::string logFrom, std::string logTo, std::string dataType, std::string interval);
-    int updateFacility(long long adapterId, std::string id, std::string init, std::string locationId, std::string refresh, std::string name) ;
+    std::string getXMLDeviceLog(long long gateId, device device, std::string logFrom, std::string logTo, std::string dataType, std::string interval);
+    int updateFacility(long long gateId, std::string id, std::string init, std::string locationId, std::string refresh, std::string name) ;
     
 private: 
 

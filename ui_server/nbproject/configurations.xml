@@ -431,6 +431,7 @@
     <Elem>../ui_logger</Elem>
     <Elem>msgs</Elem>
     <Elem>../DAO</Elem>
+    <Elem>.</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>

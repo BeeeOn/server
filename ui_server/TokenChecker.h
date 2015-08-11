@@ -1,5 +1,5 @@
-#ifndef FTOKENCHECKER_H
-#define	FTOKENCHECKER_H
+#ifndef XXTOKENCHECKER_H
+#define	XXTOKENCHECKER_H
 #include <string>
 
 using namespace std;

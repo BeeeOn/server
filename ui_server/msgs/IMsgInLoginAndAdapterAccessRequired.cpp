@@ -26,7 +26,6 @@ enumAccessStatus IMsgInLoginAndAdapterAccessRequired::checkAccess(){
     if( !isComIdValid() )
         return FORBIDDEN_NOT_LOGGED;
     
-    //TODO přístup do paměti bez try catch, ale je to mimo kontruktor, tak mozna to je OK
     std::string role = DAOUsers::getInstance().getUserRoleM(_userId, _gatewayId);
     
     int roleId;

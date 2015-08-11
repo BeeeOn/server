@@ -66,15 +66,15 @@ DAOAdapters& DAOAdapters::getInstance(){
 }
 
 
-Gate DAOAdapters::getAdapter(long long adapterId) {
-    Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"get adapter : "<<adapterId<<"\n";
+Gate DAOAdapters::getAdapter(long long gateId) {
+    Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"get adapter : "<<gateId<<"\n";
     try{
         soci::session sql(*_pool);
         
         Gate gate;
         sql <<"select " << col.id << "," << col.name << "," << col.timezone << 
                 " from " + tableGateway + " where " +col.id+ " = :gw"
-                , use(adapterId,"gw"),into(gate); 
+                , use(gateId,"gw"),into(gate); 
         return gate;
     }
     catch (soci::postgresql_soci_error& e)
@@ -84,8 +84,8 @@ Gate DAOAdapters::getAdapter(long long adapterId) {
     }
 }
 
-int DAOAdapters::updateAdapter(long long int adapterId, std::string newName, std::string newTimeZone) {
-    Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"update adapter : "<<adapterId<<"\n";
+int DAOAdapters::updateAdapter(long long int gateId, std::string newName, std::string newTimeZone) {
+    Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"update adapter : "<<gateId<<"\n";
     try{
         soci::session sql(*_pool);
         
@@ -99,7 +99,7 @@ int DAOAdapters::updateAdapter(long long int adapterId, std::string newName, std
         
         string xml;
         sql <<"update " + tableGateway + " set " << partialUpdateString << " where "+col.id+" = :adapter"
-                ,use(newName, "aname"), use(newTimeZone, "timezone"), use(adapterId,"adapter"); 
+                ,use(newName, "aname"), use(newTimeZone, "timezone"), use(gateId,"adapter"); 
         
         return 1;
     }
@@ -111,15 +111,15 @@ int DAOAdapters::updateAdapter(long long int adapterId, std::string newName, std
 }
 
 
-int DAOAdapters::deleteAdapter(long long adapterId){
-    Logger::db()<< "delete adapter " << adapterId << endl;
+int DAOAdapters::deleteAdapter(long long gateId){
+    Logger::db()<< "delete adapter " << gateId << endl;
     try
     {
         soci::session sql(*_pool);
        
         statement st = (sql.prepare <<  
                 "delete from " + tableGateway + " where "+col.id+" = :a_id",
-                use(adapterId, "a_id"));
+                use(gateId, "a_id"));
         st.execute(true);
         
         int updateCount = st.get_affected_rows();
@@ -160,13 +160,13 @@ GateInfo DAOAdapters::getGateInfo(long long int gateId) {
 
 
 
-int DAOAdapters::isAdapterInDB(long long int adapterId) {
+int DAOAdapters::isAdapterInDB(long long int gateId) {
     Logger::db() << "isAdapterInDB" << endl;
     int c;
     try {
         soci::session sql(*_pool);
         sql << "select count(*) from " + tableGateway + " where " << col.id << "=:a_id",
-                use(adapterId, "a_id"), into(c);
+                use(gateId, "a_id"), into(c);
 
     }catch (soci::postgresql_soci_error& e) {
         Logger::db() << "Error: " << e.what() << " sqlState: " << e.sqlstate() << endl;
@@ -198,14 +198,14 @@ int DAOAdapters::isAdapterInDB(long long int adapterId) {
 //    }
 //}
 
-void DAOAdapters::updateAdaptersTimezone(string adapterId,  string newTimeZone){
-    Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"update time zone (adapter="<<adapterId<<")\n";
+void DAOAdapters::updateAdaptersTimezone(string gateId,  string newTimeZone){
+    Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"update time zone (adapter="<<gateId<<")\n";
     try{
         soci::session sql(*_pool);
         
         string xml;
         sql <<"update " + tableGateway + " set " << col.timezone << " = :timezone where " << col.id << " = :adapter"
-                ,use(newTimeZone, "timezone"),use(adapterId,"adapter");             
+                ,use(newTimeZone, "timezone"),use(gateId,"adapter");             
     }
     catch (soci::postgresql_soci_error& e)
     {
@@ -214,7 +214,7 @@ void DAOAdapters::updateAdaptersTimezone(string adapterId,  string newTimeZone){
     }
 }
 
-int DAOAdapters::delUsersAdapter(long long adapterId, int userId) {
+int DAOAdapters::delUsersAdapter(long long gateId, int userId) {
     Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"delUsersAdapter" << endl;
     try{
         soci::session sql(*_pool);
@@ -222,7 +222,7 @@ int DAOAdapters::delUsersAdapter(long long adapterId, int userId) {
         string xml;
         statement st = (sql.prepare <<  
         "delete from " + tableUsersGateway + " where " << DAOUsersAdapters::col.gateway_id << " = :adapter and " << DAOUsersAdapters::col.user_id << " = :user_id and " << DAOUsersAdapters::col.permission << " != 'superuser' "
-                ,use(userId, "user_id"),use(adapterId,"adapter"));         
+                ,use(userId, "user_id"),use(gateId,"adapter"));         
         st.execute(true);
         
         int deleteCount = st.get_affected_rows();

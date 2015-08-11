@@ -30,7 +30,7 @@ string NotificationEraseGCMID::createResponseMsgOut() {
     
     int uid = _doc->child(P_COMMUNICATION).attribute(P_USER_ID).as_int(-1);
     DAOMobileDevices::getInstance().deletepushNotification(uid, gcmid);
-    DAOMobileDevices::getInstance().delGCMId(uid, gcmid);
+    //DAOMobileDevices::getInstance().delGCMId(uid, gcmid);
     
     return getXMLreply(R_TRUE);
 }

@@ -34,7 +34,6 @@ DAODevices& DAODevices::getInstance(){
 
 string DAODevices::getXMLDevicesQueryString(string facilitiesCond)
 {
-    //TODO inv as involved tam nemá být pokud init = 1
     return " xmlagg("
                         "xmlelement(name  dev,xmlattributes(" + col.init + " as init, " + col.mac + " as did, " + col.id + " as type, " + col.location_id + " as lid, " + col.refresh + " as refresh, "
                                                 " " + col.measured_at + " as time, " + col.involved + "  as inv, " + col.name + "  as name),"
@@ -44,7 +43,7 @@ string DAODevices::getXMLDevicesQueryString(string facilitiesCond)
                 ;
 
 }
-std::string DAODevices::getXMLAllDevs(long long adapter)
+std::string DAODevices::getXMLAllDevs(long long gateId)
 {
         Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"getCommunicationXml"<<"\n";
         
@@ -58,7 +57,7 @@ std::string DAODevices::getXMLAllDevs(long long adapter)
             sql << "select " + getXMLDevicesQueryString() +
                     "from  " + DAOAdapters::tableGateway + " join " + tableDevices + " using( " + DAOAdapters::col.id + ") "
                     " where " + DAOAdapters::col.id + "=:adapter and " + DAODevices::col.init + "!='0' " 
-                    ,use(adapter,"adapter"),soci::into(xml,ind);
+                    ,use(gateId,"adapter"),soci::into(xml,ind);
             cout << sql.get_last_query();
 
         if(ind != i_ok){
@@ -75,7 +74,47 @@ std::string DAODevices::getXMLAllDevs(long long adapter)
         
 }
 
-string DAODevices::getXMLdevices(int userId, vector<string> adaptersVec, vector<device> devicesVec)
+string DAODevices::getXMLdevices(int userId, vector<long long> gateVector, vector<int> devicesVec)
+{
+    Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"getPartialDevices"<<"\n";
+    try
+    {
+        soci::session sql(*_pool);
+
+        string xml;
+        indicator ind;
+        Logger::debug3()<<"gates:"<<vectorToPsqlNotation(gateVector)<<"\n";
+        Logger::debug3()<<"devs:"<<vectorToPsqlNotation(devicesVec)<<"\n";
+        
+        string gates = vectorToPsqlNotation(gateVector);
+        string devices = vectorToPsqlNotation(devicesVec);
+        
+        statement st = (sql.prepare <<
+                
+                "select  xmlagg("
+		"xmlelement(name adapter, xmlattributes(" + DAOAdapters::col.id + " as id),"
+					    "(select  "
+                <<
+                getXMLDevicesQueryString(" and " + col.mac + " in(" + devices + ") " ) +
+               "from " + tableDevices + " " <<
+                "where " +col.gateway_id+" in(" + gates + ") and " + col.mac + " in(" + devices + ") and " <<
+                 DAOAdapters::tableGateway << "." << col.gateway_id << "=" << tableDevices << "." << col.gateway_id <<
+                "))) from gateway where " +col.gateway_id+" in(" + gates + ") ",
+                //use(gates,"gates"),use(devices,"devices"),
+                soci::into(xml, ind) );
+        //cout<<endl<<sql.get_last_query()<<endl;
+        st.execute(true);
+
+        return xml;
+    }
+    catch (postgresql_soci_error& e)
+    {
+            Logger::getInstance(Logger::ERROR) << "Error: " << e.what() << '\n';
+            throw;
+    }
+}
+
+string DAODevices::getXMLdevices(int userId, vector<string> gateVector, vector<device> devicesVec)
 {
          Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"getPartialDevices"<<"\n";
         try
@@ -101,10 +140,10 @@ string DAODevices::getXMLdevices(int userId, vector<string> adaptersVec, vector<
                 ssF<<")";
                  
                 ssA<<"(";
-                for (unsigned int i=0; i<adaptersVec.size(); i++){
-                    ssA << "'"<<adaptersVec[i]<<"'";
+                for (unsigned int i=0; i<gateVector.size(); i++){
+                    ssA << "'"<<gateVector[i]<<"'";
                     
-                    if( i != adaptersVec.size()-1){
+                    if( i != gateVector.size()-1){
                         ssA <<",";
                     }
                 }
@@ -153,7 +192,7 @@ string DAODevices::getXMLdevices(int userId, vector<string> adaptersVec, vector<
 }
 
 
-string DAODevices::getXMLNewDevices(long long adapterId)
+string DAODevices::getXMLNewDevices(long long gateId)
 {
          Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"getPartialDevices"<<"\n";
         try
@@ -167,7 +206,7 @@ string DAODevices::getXMLNewDevices(long long adapterId)
                 statement st = (sql.prepare <<"select " +
                         getXMLDevicesQueryString() +
                        "from " + DAOAdapters::tableGateway + " join " + tableDevices + " using(" +col.gateway_id+") where "+col.init+"='0' and " +col.gateway_id+" =:adapter" //join devices on mac=fk_facilities_mac
-                        ,use(adapterId, "adapter"),soci::into(xml, ind) );
+                        ,use(gateId, "adapter"),soci::into(xml, ind) );
                 
                 st.execute(true);
                              
@@ -214,7 +253,7 @@ string DAODevices::getXMLNewDevices(long long adapterId)
 
 
 
-int DAODevices::updateFacility(long long adapterId, string id, string init, string locationId, string refresh, string name) {
+int DAODevices::updateFacility(long long gateId, string id, string init, string locationId, string refresh, string name) {
     Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"update Facility"<<id<<"\n";
     try
     {      
