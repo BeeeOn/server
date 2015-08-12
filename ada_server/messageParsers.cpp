@@ -139,6 +139,7 @@ void ProtocolV1MessageParser::GetBattery()
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetBattery");
 	xml_node battery = (_device.child("battery"));
+	_message->battery=0;
 	_message->battery=battery.attribute("value").as_uint();
 	this->_log->WriteMessage(MSG,"Sensor battery :" + std::to_string(_message->battery));
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetBattery");

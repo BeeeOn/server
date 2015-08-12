@@ -31,8 +31,7 @@ bool Sender::Send(std::string Message,SSL *s) //pripojenie na server a komunikac
 		SSL_set_fd(s,-1);
 		return (false);
 	}
-	char x = 0;
-	Message+=x;
+	Message+="#";
 	 if((Err=SSL_write(s, Message.c_str(), Message.size()))<=0) //finally sent message
 	{
 		 std::string msg;
