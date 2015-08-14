@@ -14,48 +14,66 @@ angular.module('beeeOnWebApp')
       scope: {
         options: '='
       },
-      controller: function($scope){
-        $scope.hideBtn = true;
-        if(!angular.isDefined($scope.options)){
-          return;
-        }
-        if(angular.isDefined($scope.options.hideBtn)){
-          $scope.hideBtn = $scope.options.hideBtn;
-        }
-        //$log.debug($scope.options);
-        //console.log('Location-button-directive='+'type: ' + $scope.type + ' + location: ' + $scope.location);
-        $scope.icon = 'menu_stripes';
-        $scope.action = angular.noop;
-        switch ($scope.options.type){
-          case 'panel_toggle_left':
-            $scope.action = function(){
-              SidePanel.toggleLeft();
-            };
-            break;
-          case 'panel_close_left':
-            $scope.icon = 'arrow_back';
-            $scope.action = function(){
-              SidePanel.closeLeft();
-            };
-            break;
-          case 'panel_close_right':
-            $scope.icon = 'arrow_back';
-            $scope.action = function(){
-              SidePanel.closeRight();
-            };
-            break;
-          case 'change_state_right':
-            $scope.icon = 'arrow_back';
-            $scope.action = function(){
-              SidePanel.closeRight();
-              if(!angular.isDefined($scope.options.changeStateOptions)){
-                $log.error('Did not provide new state for location-button');
-                return;
-              }
-              $state.go($scope.options.changeStateOptions.newState,$scope.options.changeStateOptions.params);
-            };
-            break;
-        }
+      link : function(scope, element, attrs) {
+        var init = function(){
+          scope.hideBtn = true;
+          if(!angular.isDefined(scope.options)){
+            return;
+          }
+          if(angular.isDefined(scope.options.hideBtn)){
+            scope.hideBtn = scope.options.hideBtn;
+          }
+          scope.icon = 'menu_stripes';
+          scope.action = angular.noop;
+          switch (scope.options.type){
+            case 'panel_toggle_left':
+              scope.action = function(){
+                SidePanel.toggleLeft();
+              };
+              break;
+            case 'panel_close_left':
+              scope.icon = 'arrow_back';
+              scope.action = function(){
+                SidePanel.closeLeft();
+              };
+              break;
+            case 'panel_close_right':
+              scope.icon = 'arrow_back';
+              scope.action = function(){
+                SidePanel.closeRight();
+              };
+              SidePanel.setRightMainAction(scope.action);
+              break;
+            case 'change_state_right':
+              scope.icon = 'arrow_back';
+              scope.action = function(){
+                SidePanel.closeRight();
+                if(!angular.isDefined(scope.options.changeStateOptions)){
+                  $log.error('locationButton - Did not provide new state for location-button');
+                  return;
+                }
+                $state.go(scope.options.changeStateOptions.newState,scope.options.changeStateOptions.params);
+              };
+              SidePanel.setRightMainAction(scope.action);
+              break;
+            case 'cancel_and_return':
+              scope.icon = 'close';
+              scope.action = function(){
+                SidePanel.closeRight();
+                if(!angular.isDefined(scope.options.changeStateOptions)){
+                  $log.error('locationButton - Did not provide new state for location-button');
+                  return;
+                }
+                $state.go(scope.options.changeStateOptions.newState,scope.options.changeStateOptions.params);
+              };
+              SidePanel.setRightMainAction(scope.action);
+              break;
+          }
+        };
+        //initialize button settings when button type changes
+        scope.$watch('options.type',function(){
+          init();
+        });
       }
     };
   }]);

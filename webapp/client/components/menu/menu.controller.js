@@ -2,8 +2,8 @@
 
 angular.module('beeeOnWebApp')
   .controller('MenuCtrl',
-  [ '$scope','$location','$log','$state','Gateway','User','Auth','SidePanel','dialogs',
-    function ($scope,$location,$log,$state,Gateway,User,Auth,SidePanel,dialogs) {
+  [ '$scope','$location','$log','$state','$stateParams','Gateways','User','Auth','SidePanel','dialogs','Menu','loadingModal',
+    function ($scope,$location,$log,$state,$stateParams,Gateways,User,Auth,SidePanel,dialogs,Menu,loadingModal) {
       $scope.locationOptions = {
         location: 'BeeeOn',
         type: 'panel_close_left',
@@ -20,76 +20,51 @@ angular.module('beeeOnWebApp')
       //get current user
       $scope.user = Auth.getCurrentUser();
       //selected gateway from URL
-      $scope.selectedGateway = Gateway.getSelectedId();
+      $scope.selectedGateway = Gateways.getSelectedId();
       //current location from
       $scope.currentLocation = $state.current.name;
 
       $scope.avatar = $scope.user.pictureURL || '/assets/images/icons-svg/ic_person_white_24px.svg';
-
-      Gateway.getGateways().then(function(data){
+      Gateways.getGateways().then(function(data){
+        if(!data || angular.equals({}, data)){
+          $log.warn('No gateways');
+          return;
+        }
+        //assign retrieved gateway data
         $scope.gateways = data;
+        //if no gateway is selected, select first
+        if(!$scope.selectedGateway){
+          $scope.changeLocation($state.current.name.split('.')[0]+'.show',data[0].aid);
+        }
+        //check if gateway number in URL is in his gateways
+        if($stateParams.gatewayId && !Gateways.findGatewayById($stateParams.gatewayId)){
+          $log.warn('User doesn\'t own requested gateway ('+$stateParams.gatewayId+')');
+          $state.go('overview');
+        }
       });
 
-      $scope.management = [
-        {
-          id: 'overview',
-          enabled: true,
-          title: 'Overview',
-          img: [
-            '../assets/images/icons-png/ic_menu_overview.png',
-            '../assets/images/icons-png/ic_menu_overview_active.png'
-          ],
-          link:'overview.show'},
-        {
-          id: 'graphs',
-          enabled: true,
-          title: 'Graphs',
-          img:[
-            '../assets/images/icons-png/ic_menu_dashboard.png',
-            '../assets/images/icons-png/ic_menu_dashboard_active.png'
-            ],
-          link:'graphs.show'}
-      ];
+      $scope.management = Menu.getManagementItems();
+      $scope.applications = Menu.getApplicationsItems();
+      $scope.default = Menu.getDefaultItems();
 
-      $scope.applications = [
-        {
-          id: 'watchdog',
-          enabled: true,
-          title: 'Watchdog',
-          img: [
-            '../assets/images/icons-png/ic_menu_watchdog.png',
-            '../assets/images/icons-png/ic_menu_watchdog_active.png'
-          ],
-          link:'watchdog.show'
+      $scope.selectedGateway = Gateways.getSelectedId();
+
+      $scope.changeLocation = function(link,gateway){
+        //if no gateway is given get it from radio group
+        if(!gateway){
+          gateway = $scope.selectedGateway;
+        }else {
+          $scope.selectedGateway = gateway;
         }
-      ];
-
-      $scope.default = [
-        {
-          id: 'settings',
-          enabled: true,
-          title: 'Settings',
-          link: 'settings'
-        },
-        {
-          id: 'about',
-          enabled: true,
-          title: 'About',
-          link: 'about'
-        },
-        {
-          id: 'logout',
-          enabled: true,
-          title: 'Logout',
-          link: 'logout'
-        }
-      ];
-
-      $scope.changeLocation = function(link){
+        //save new gateway number
+        Gateways.setSelected(gateway);
+        //check, if desired state is in enabled locations (management, applications)
         if(checkIfCanChange($scope.management,link) || checkIfCanChange($scope.applications,link)){
-          $log.debug('Opening: /' + link+ '/' + $scope.selectedGateway);
-          $state.go(link,{gatewayId:$scope.selectedGateway});
+          $log.debug('MenuCtrl - Opening: /' + link+ '/' + $scope.selectedGateway);
+          SidePanel.closeLeft();
+          $state.go(link,{gatewayId:Gateways.getSelectedId()});
         }else{
+          //is desired state one of default ?
           switch (link){
             case 'settings':
               $state.go('settings');
@@ -105,8 +80,9 @@ angular.module('beeeOnWebApp')
       };
 
       var showAbout = function(){
+        //show about modal
         dialogs.create(
-          'components/about/about.html',
+          'components/modal/about/about.html',
           'AboutCtrl',
           {},
           {
@@ -129,7 +105,7 @@ angular.module('beeeOnWebApp')
           })
           .catch( function(err) {
             $scope.errors = err;
-            $log.error(err);
+            $log.error('MenuCtrl - ' + err);
           });
       };
 

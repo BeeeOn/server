@@ -1,8 +1,9 @@
 .md-locked-open{
-    margin-top:2px;
+    margin-top:8px;
 }
 
 .menuUserPanel {
+    min-height: 64px;
     background-color: @clr_primary;
     img {
         background-color: @clr_primary_medium;
@@ -20,7 +21,6 @@
             p {
                 color: @clr_white;
             }
-
         }
     }
     md-list-item > .md-avatar:first-child {
@@ -54,15 +54,6 @@
                     height: 24px;
                     margin-right:10px;
                 }
-                &:not([disabled]):hover {
-                    background-color: @clr_gray_light;
-                }
-                &:not([disabled]):active {
-                    background-color: @clr_primary;
-                    p{
-                        color: @clr_white;
-                    }
-                }
             }
         }
         .selected {
@@ -77,9 +68,14 @@
 
     }
     .gatewaySettings {
-        margin-right: 10px;
+        margin-right: 0;
         svg {
             fill: @clr_gray_dark;
         }
+    }
+    .no-gateways {
+        color: @clr_secondary_text;
+        font-weight: 400;
+        padding-bottom: 10px;
     }
 }

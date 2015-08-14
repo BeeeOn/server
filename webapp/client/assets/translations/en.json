@@ -1,0 +1,140 @@
+{
+  "GLOBAL" : {
+    "APP_NAME" : "BeeeOn(Web)",
+    "TIMEZONE" : "Timezone",
+    "READ_ONLY" : "read-only",
+    "CANCEL" : "Cancel",
+    "DELETE" : "Delete",
+    "GATEWAYS" : "Gateways",
+    "GATEWAY" : "Gateway",
+    "NO_GATEWAYS" : "NO GATEWAY",
+    "REFRESH_LIST": "Refresh list",
+    "REFRESH" : "Refresh",
+    "NOTIFICATIONS" : "Notifications",
+    "VERSION" : "Version",
+    "RIGHTS_RESERVED" : "All rights reserved",
+    "CLOSE" : "Close",
+    "EMAIL" : "Email",
+    "USER_LOWERCASE" : "user",
+    "USER_UPPERCASE" : "User",
+    "USERS" : "Users",
+    "USERS_LOWERCASE" : "users",
+    "ROLE" : "Role",
+    "ADD" : "Add",
+    "EDIT" : "Edit",
+    "LOCATION" : "Location",
+    "SAVE_CHANGES" : "Save changes"
+  },
+  "OVERVIEW" : {
+    "LOADING_GATEWAYS" : "Loading gateways...",
+    "LIST" : {
+      "LOADING_MODULES" : "Loading modules",
+      "NO_DEVICES": "NO DEVICES",
+      "BTNS": {
+        "REFRESH_MODULE_LIST": "@:GLOBAL.REFRESH_LIST",
+        "ADD_GATEWAY": "Add gateway",
+        "ADD_MODULE": "Add module"
+      }
+    },
+    "DESCRIPTION" : {
+      "LOADING_INFO" : "Loading gateway information...",
+      "LOADING_ACCOUNTS" : "Loading gateway accounts...",
+      "GATEWAY_ID" : "Gate Id",
+      "GATEWAY_NAME" : "Gate name",
+      "YOUR_ROLE" : "Your role",
+      "READ_ONLY" : "@:GLOBAL.READ_ONLY",
+      "TIMEZONE" : "@:GLOBAL.TIMEZONE",
+      "USERS_NUMBER" : "Number of users",
+      "DEVICES_NUMBER" : "Number of devices",
+      "IP_ADDRESS" : "IP address",
+      "COMM_VERSION" : "Communication version",
+      "ADD_NEW_USER" : "Add new user",
+      "DELETE" : "@:GLOBAL.DELETE",
+      "DELETE_GATEWAY_TEXT" : "You will lose access to gateway and it's modules. If you are owner, entire gateway will be deleted from server and all settings including users, modules and historical data will be deleted.",
+      "GATEWAY_USERS" : "Gateway users",
+      "BTNS" : {
+        "EDIT_SETTINGS" : "Edit settings",
+        "GATEWAY_USERS" : "Gateway users",
+        "DELETE_GATEWAY" : "Delete gateway",
+        "DETAILS" : "details",
+        "DELETE_CANCEL" : "@:GLOBAL.CANCEL",
+        "DELETE" : "@:GLOBAL.DELETE"
+      }
+    }
+  },
+  "WATCHDOG" : {
+    "RULE_SWITCH" : "Enable/disable rule",
+    "RULE_NAME" : "Rule name",
+    "WATCHDOG_RULE" : "Watchdog rule",
+    "IF" : "If",
+    "THEN" : "Then",
+    "SELECT_PLACEHOLDER" : "Devices",
+    "SEND_NOTIFICATION" : "Send notification",
+    "CHANGE_ACTUATOR" : "Change actuator state",
+    "MORE_THEN" : "More then",
+    "LESS_THEN" : "Less then",
+    "LIST" : {
+      "NO_RULES" : "NO RULES",
+      "BTNS" : {
+        "REFRESH_LIST" : "@:GLOBAL.REFRESH_LIST",
+        "ADD_RULE" : "Add rule"
+      }
+    }
+  },
+  "MENU" : {
+    "GATEWAYS_SUBHEADER" : "@:GLOBAL.GATEWAYS",
+    "MANAGEMENT_SUBHEADER" : "Management",
+    "APPLICATIONS_SUBHEADER" : "Applications",
+    "OVERVIEW" : "Overview",
+    "GRAPHS" : "Graphs",
+    "WATCHDOG" : "Watchdog",
+    "SETTINGS" : "Settings",
+    "ABOUT" : "About",
+    "LOGOUT" : "Logout",
+    "NO_GATEWAYS" : "No gateways found",
+    "BTNS" : {
+      "DESCRIPTION" : "Show description for selected gateway"
+    }
+  },
+  "LOGIN" : {
+    "LOGIN_OR_REGISTER" : "Login or register with",
+    "SIGN_G_PLUS" : "Sign in with G+ account",
+    "SIGN_FB" : "Sign in with Facebook account",
+    "TRY_OFFLINE" : "Or you can try offline",
+    "START_DEMO" : "Start in demo mode",
+    "MODAL_TEXT" : "Logging in..."
+  },
+  "SETTINGS" : {
+    "TIMEZONE": {
+      "TITLE" : "Timezone",
+      "CURRENT" : "Current time zone",
+      "GATEWAY" : "Gateway time zone"
+    },
+    "LANGUAGE" : {
+      "TITLE" : "Language",
+      "ENGLISH" : "English",
+      "SLOVAK" : "Slovak"
+    },
+    "UNITS" : {
+      "TITLE" : "Units",
+      "TEMPERATURE" : {
+        "TITLE" : "Temperature",
+        "CELSIUS" : "Celsius",
+        "FAHRENHEIT" : "Fahrenheit",
+        "KELVIN" : "Kelvin"
+      },
+      "NOISE" : {
+        "TITLE" : "Noise"
+      }
+    },
+    "GEOLOCATION" : {
+      "TITLE" : "Geolocation"
+    }
+  },
+  "ROLES" : {
+    "SUPERUSER" : "Superuser",
+    "ADMIN" : "Admin",
+    "USER" : "User",
+    "GUEST" : "Guest"
+  }
+}

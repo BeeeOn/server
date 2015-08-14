@@ -8,7 +8,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <base href="/">
-    <title>BeeeOn</title>
+    <title>BeeeOn(Alpha)</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <meta name="viewport" content="initial-scale=1" />
@@ -43,7 +43,7 @@
     <![endif]-->
     <!-- Add your site or application content here -->
     <!--[if lte IE 10]><!-->
-    <div ui-view="" layout-fill layout="column" class="main-window"></div>
+    <div ui-view="main" layout-fill layout="column" class="main-window"></div>
     <!--<![endif]-->
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
     <script>
@@ -80,48 +80,72 @@
       <script src="bower_components/angular-dialog-service/dist/dialogs-default-translations.min.js"></script>
       <script src="bower_components/v-accordion/dist/v-accordion.js"></script>
       <script src="bower_components/ng-lodash/build/ng-lodash.js"></script>
+      <script src="bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js"></script>
+      <script src="bower_components/angular-translate-storage-local/angular-translate-storage-local.js"></script>
+      <script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
+      <script src="bower_components/angular-translate-handler-log/angular-translate-handler-log.js"></script>
+      <script src="bower_components/angular-translate-loader-partial/angular-translate-loader-partial.js"></script>
       <!-- endbower -->
     <!-- endbuild -->
 
         <!-- build:js({.tmp,client}) app/app.js -->
         <script src="app/app.js"></script>
           <!-- injector:js -->
-          <script src="app/routes/changelog/changelog.controller.js"></script>
-          <script src="app/routes/changelog/changelog.js"></script>
-          <script src="app/routes/graphs/graphs.controller.js"></script>
-          <script src="app/routes/graphs/graphs.js"></script>
-          <script src="app/routes/login/login.controller.js"></script>
-          <script src="app/routes/login/login.js"></script>
-          <script src="app/routes/notifications/notifications.controller.js"></script>
-          <script src="app/routes/notifications/notifications.js"></script>
-          <script src="app/routes/overview/description/description.controller.js"></script>
-          <script src="app/routes/overview/description/description.js"></script>
-          <script src="app/routes/overview/list/list.controller.js"></script>
-          <script src="app/routes/overview/list/list.js"></script>
-          <script src="app/routes/overview/overview.controller.js"></script>
-          <script src="app/routes/overview/overview.js"></script>
-          <script src="app/routes/settings/geolocation/geolocaiton.js"></script>
-          <script src="app/routes/settings/geolocation/geolocation.controller.js"></script>
-          <script src="app/routes/settings/settings.controller.js"></script>
-          <script src="app/routes/settings/settings.js"></script>
-          <script src="app/routes/settings/timezone/timezone.controller.js"></script>
-          <script src="app/routes/settings/timezone/timezone.js"></script>
-          <script src="app/routes/settings/units/units.controller.js"></script>
-          <script src="app/routes/settings/units/units.js"></script>
-          <script src="app/routes/watchdog/watchdog.controller.js"></script>
-          <script src="app/routes/watchdog/watchdog.js"></script>
-          <script src="components/about/about.controller.js"></script>
-          <script src="components/auth/auth.service.js"></script>
+          <script src="app/changelog/changelog.controller.js"></script>
+          <script src="app/changelog/changelog.js"></script>
+          <script src="app/graphs/graphs.controller.js"></script>
+          <script src="app/graphs/graphs.js"></script>
+          <script src="app/login/login.controller.js"></script>
+          <script src="app/login/login.js"></script>
+          <script src="app/notifications/notifications.controller.js"></script>
+          <script src="app/notifications/notifications.js"></script>
+          <script src="app/overview/description/description.controller.js"></script>
+          <script src="app/overview/description/description.js"></script>
+          <script src="app/overview/description/edit/edit.controller.js"></script>
+          <script src="app/overview/description/edit/edit.js"></script>
+          <script src="app/overview/description/users/users.controller.js"></script>
+          <script src="app/overview/description/users/users.js"></script>
+          <script src="app/overview/list/list.controller.js"></script>
+          <script src="app/overview/list/list.js"></script>
+          <script src="app/overview/overview.controller.js"></script>
+          <script src="app/overview/overview.js"></script>
+          <script src="app/settings/geolocation/geolocation.controller.js"></script>
+          <script src="app/settings/geolocation/geolocation.js"></script>
+          <script src="app/settings/settings.controller.js"></script>
+          <script src="app/settings/settings.js"></script>
+          <script src="app/settings/timezone/timezone.controller.js"></script>
+          <script src="app/settings/timezone/timezone.js"></script>
+          <script src="app/settings/units/units.controller.js"></script>
+          <script src="app/settings/units/units.js"></script>
+          <script src="app/watchdog/add/add.controller.js"></script>
+          <script src="app/watchdog/add/add.js"></script>
+          <script src="app/watchdog/list/list.controller.js"></script>
+          <script src="app/watchdog/list/list.js"></script>
+          <script src="app/watchdog/watchdog.controller.js"></script>
+          <script src="app/watchdog/watchdog.js"></script>
+          <script src="components/auto-focus/focus.directive.js"></script>
+          <script src="components/empty/overview/gateway/gateway.controller.js"></script>
+          <script src="components/gateway/gateway-bottom-sheet/gateway-bottom-sheet.controller.js"></script>
           <script src="components/gateway/gateway-button/gateway-button.directive.js"></script>
-          <script src="components/gateway/gateway.service.js"></script>
           <script src="components/location-button/location-button.directive.js"></script>
           <script src="components/menu/menu.controller.js"></script>
-          <script src="components/modal/modal.controller.js"></script>
-          <script src="components/modal/modal.service.js"></script>
+          <script src="components/modal/about/about.controller.js"></script>
+          <script src="components/modal/accounts/add/add.controller.js"></script>
+          <script src="components/modal/gateway/delete/delete.controller.js"></script>
+          <script src="components/modal/loading/loading-modal.controller.js"></script>
+          <script src="components/modal/radio-button/radio-button.controller.js"></script>
           <script src="components/navbar/navbar.controller.js"></script>
           <script src="components/right-panel/right-panel.directive.js"></script>
-          <script src="components/sidepanel/sidepanel.service.js"></script>
-          <script src="components/user/user.service.js"></script>
+          <script src="components/user/user-role/user-role.directive.js"></script>
+          <script src="services/auth/auth.service.js"></script>
+          <script src="services/gateway/gateways.service.js"></script>
+          <script src="services/loading-modal/loading-modal.service.js"></script>
+          <script src="services/menu/menu.service.js"></script>
+          <script src="services/modal/modal.service.js"></script>
+          <script src="services/navbar/navbar.service.js"></script>
+          <script src="services/settings/settings.service.js"></script>
+          <script src="services/sidepanel/sidepanel.service.js"></script>
+          <script src="services/user/user.service.js"></script>
           <!-- endinjector -->
         <!-- endbuild -->
 </body>

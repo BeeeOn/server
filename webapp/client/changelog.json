@@ -1,6 +1,198 @@
 {
   "logs": [
     {
+      "date": "13-08-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["added","gui","func"],
+          "text" : " user role directive as a mediator for role translations"
+        },
+        {
+          "chips" : ["fixed","func"],
+          "text" : " Internet Explorer translation problem solved"
+        }
+      ]
+    },
+    {
+      "date": "12-08-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["added","gui","func"],
+          "text" : " loading modal for actions requiring API call"
+        },
+        {
+          "chips" : ["added","func"],
+          "text" : " auto-focus directive for forms"
+        }
+      ]
+    },
+    {
+      "date": "10-08-2015/11-08-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["changed","func"],
+          "text" : " services structure ( now factories )"
+        },
+        {
+          "chips" : ["fixed","func"],
+          "text" : " location buttons now shows right icon and executes right actions"
+        }
+      ]
+    },
+    {
+      "date": "06-08-2015/07-08-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["added","func"],
+          "text" : " browser remembers chosen language "
+        },
+        {
+          "chips" : ["fixed","func"],
+          "text" : " location buttons now shows right icon and executes right actions"
+        }
+      ]
+    },
+    {
+      "date": "03-08-2015/04-08-2015/05-08-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["added","func"],
+          "text" : " full application translation (en,sk)"
+        },
+        {
+          "chips" : ["added","gui","func"],
+          "text" : " language chooser in \"Settings\""
+        }
+      ]
+    },
+    {
+      "date": "30-07-2015/31-07-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["added","func"],
+          "text" : " i18n translation system integration"
+        },
+        {
+          "chips" : ["added","func"],
+          "text" : " \"Descrition\" view en/sk translation"
+        }
+      ]
+    },
+    {
+      "date": "27-07-2015/28-07-2015/29-07-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["added"],
+          "text" : " backend logging system (ELK) installation"
+        }
+      ]
+    },
+    {
+      "date": "26-07-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["changed","gui","func"],
+          "text" : " \"Settings -> Units/Timezone\" choice functional"
+        },
+        {
+          "chips" : ["added","gui"],
+          "text" : " \"Empty -> gateways/modules/rules\" views and showing logic (needs future URL logic)"
+        }
+      ]
+    },
+    {
+      "date": "25-07-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["added","gui","func"],
+          "text" : " \"Delete gateway\" modal window + API call"
+        },
+        {
+          "chips" : ["changed","gui"],
+          "text" : " gateway users temporary persistence"
+        },
+        {
+          "chips" : ["fixed","gui"],
+          "text" : " \"Watchdog list\" fully responsive"
+        },
+        {
+          "chips" : ["changed","func"],
+          "text" : " more detailed server logs = added IP address + changed structure"
+        }
+      ]
+    },
+    {
+      "date": "24-07-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["fixed","gui"],
+          "text" : " vertical offset when showing menu"
+        },
+        {
+          "chips" : ["fixed","changed","gui"],
+          "text" : " changed minimal width to 320px; fixed small device display"
+        },
+        {
+          "chips" : ["added","gui","func"],
+          "text" : " \"Add account to gateway\" dialog and API request"
+        },
+        {
+          "chips" : ["fixed","gui","func"],
+          "text" : " right panel haven't close on browser back button"
+        }
+      ]
+    },
+    {
+      "date": "23-07-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["added","gui"],
+          "text" : " \"Watchdog\" view with rules list (no logic, NOT responsive)"
+        },
+        {
+          "chips" : ["added","gui"],
+          "text" : " \"Rule add\" view (no logic,partial)"
+        },
+        {
+          "chips" : ["added","gui"],
+          "text" : " \"Settings Timezone/Units(partial inner gui)/geolocation\" view"
+        }
+      ]
+    },
+    {
+      "date": "22-07-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["added","gui","func"],
+          "text" : " \"Edit gateway description\" view + \"Gateway users list\"(partially)"
+        },
+        {
+          "chips" : ["changed","gui","func"],
+          "text" : " right panel responsive sizing"
+        },
+        {
+          "chips" : ["added","security"],
+          "text" : " cannot access gateway, that doesn't belong to user, through URL"
+        },
+        {
+          "chips" : ["changed","func"],
+          "text" : " DEMO mod data moved to server side"
+        }
+      ]
+    },
+    {
       "date": "21-07-2015",
       "version": "0.0.0",
       "points": [
@@ -9,12 +201,12 @@
           "text" : " application fully functional on Internet Explorer"
         },
         {
-          "chips" : ["added","func"],
+          "chips" : ["added","func","security"],
           "text" : " API communication and request authorization. All information now goes through API.(even DEMO MOD)"
         },
         {
           "chips" : ["added","func"],
-          "text" : " API documentation is located in git (http://ant2.fit.vutbr.cz:9000/api.html)"
+          "text" : " API documentation is located on address: http://ant-2.fit.vutbr.cz:9000/api.html"
         },
         {
           "chips" : ["changed","func"],

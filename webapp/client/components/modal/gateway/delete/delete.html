@@ -1,0 +1,10 @@
+<div layout="column" layout-padding layout-align="start start" layout-fill class="deleteGatewayWrapper">
+    <h3 flex>{{ 'OVERVIEW.DESCRIPTION.DELETE' | translate }} &quot;{{name}}&quot;</h3>
+    <div layout="row" layout-align="start center" layout-fill>
+        <p>{{ 'OVERVIEW.DESCRIPTION.DELETE_GATEWAY_TEXT' | translate }}</p>
+    </div>
+    <div layout="row" layout-align="end center" layout-fill>
+        <md-button class="md-accent" ng-click="cancel()">{{ 'OVERVIEW.DESCRIPTION.BTNS.DELETE_CANCEL' | translate }}</md-button>
+        <md-button class="md-accent" ng-click="delete()">{{ 'OVERVIEW.DESCRIPTION.BTNS.DELETE' | translate }}</md-button>
+    </div>
+</div>

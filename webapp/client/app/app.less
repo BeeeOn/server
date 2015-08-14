@@ -30,26 +30,107 @@
   background-color: @clr_white;
 }
 
+md-fab-speed-dial.md-fab-bottom-right {
+  top:auto;
+  right:20px;
+  bottom:20px;
+  left:auto;
+  position:absolute
+}
+
+md-fab-speed-dial.md-fab-bottom-left {
+  top:auto;
+  right:auto;
+  bottom:20px;
+  left:20px;
+  position:absolute
+}
+
+.md-fab.md-fab-bottom-right {
+  top:auto;
+  right:20px;
+  bottom:20px;
+  left:auto;
+  position:absolute
+}
+
+.md-fab.md-fab-bottom-left {
+  top:auto;
+  right:auto;
+  bottom:20px;
+  left:20px;
+  position:absolute
+}
+
+md-sidenav.md-sidenav-right {
+  @media screen and (max-width: 1200px) {
+    min-width: 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  @media screen and (min-width: 1200px) {
+    min-width: 700px !important;
+    width: 700px !important;
+    max-width: 700px !important;
+  }
+  @media screen and (min-width: 1400px) {
+    min-width: 800px !important;
+    width: 800px !important;
+    max-width: 800px !important;
+  }
+  @media screen and (min-width: 1600px) {
+    min-width: 900px !important;
+    width: 900px !important;
+    max-width: 900px !important;
+  }
+}
+
+.md-select-menu-container {
+  z-index: 10000;
+}
+
+.list-button {
+  .md-button{
+    &:not([disabled]):hover {
+      background-color: @clr_gray_light;
+    }
+    &:not([disabled]):active {
+      background-color: @clr_primary;
+      p,h3,h4{
+        color: @clr_white;
+      }
+    }
+  }
+}
 
 // injector
+@import 'changelog/changelog.less';
 @import 'defaultTheme.less';
-@import 'routes/changelog/changelog.less';
-@import 'routes/graphs/graphs.less';
-@import 'routes/login/login.less';
-@import 'routes/notifications/notifications.less';
-@import 'routes/overview/description/description.less';
-@import 'routes/overview/list/list.less';
-@import 'routes/overview/overview.less';
-@import 'routes/settings/geolocation/geolocation.less';
-@import 'routes/settings/settings.less';
-@import 'routes/settings/timezone/timezone.less';
-@import 'routes/settings/units/units.less';
-@import 'routes/watchdog/watchdog.less';
-@import 'about/about.less';
+@import 'graphs/graphs.less';
+@import 'login/login.less';
+@import 'notifications/notifications.less';
+@import 'overview/description/description.less';
+@import 'overview/description/edit/edit.less';
+@import 'overview/description/users/users.less';
+@import 'overview/list/list.less';
+@import 'overview/overview.less';
+@import 'settings/geolocation/geolocation.less';
+@import 'settings/settings.less';
+@import 'settings/timezone/timezone.less';
+@import 'settings/units/units.less';
+@import 'watchdog/add/add.less';
+@import 'watchdog/list/list.less';
+@import 'watchdog/watchdog.less';
+@import 'empty/overview/gateway/gateway.less';
+@import 'gateway/gateway-bottom-sheet/gateway-bottom-sheet.less';
 @import 'gateway/gateway-button/gateway-button.less';
 @import 'location-button/location-button.less';
 @import 'menu/menu.less';
-@import 'modal/modal.less';
+@import 'modal/about/about.less';
+@import 'modal/accounts/add/add.less';
+@import 'modal/gateway/delete/delete.less';
+@import 'modal/loading/loading-modal.less';
+@import 'modal/radio-button/radio-button.less';
 @import 'navbar/navbar.less';
 @import 'right-panel/right-panel.less';
 // endinjector

@@ -6,11 +6,12 @@
                 md-no-ink
                 aria-label="Select {{gateway.aname}}"
                 ng-class="{selected: selectedGateway === gateway.aid}"
+                class="list-button"
                 >
             <div layout="row" layout-align="space-between center" flex>
                 <div>
                     <h3>{{gateway.aname}}</h3>
-                    <p>{{gateway.role}}</p>
+                    <p user-role="gateway.role"></p>
                 </div>
                 <md-radio-button ng-value="gateway.aid" aria-label="Select {{gateway.aname}}"></md-radio-button>
             </div>

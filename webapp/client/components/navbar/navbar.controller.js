@@ -1,12 +1,16 @@
 'use strict';
 
 angular.module('beeeOnWebApp')
-  .controller('NavbarCtrl',[ '$scope', '$location', '$stateParams', '$log','SidePanel', function ($scope, $location,$stateParams,$log,SidePanel) {
+  .controller('NavbarCtrl',[ '$scope', '$location', '$stateParams', '$log','SidePanel','navbar', function ($scope, $location,$stateParams,$log,SidePanel,navbar) {
 
     $scope.locationOptions = {
-      location: $stateParams.locationName,
-      type: $stateParams.locationButtonType
+      location: '',
+      type: $stateParams.locationButtonType,
+      hideBtn : true
     };
+    navbar.getLocation().then(function(loc){
+      $scope.locationOptions.location = loc;
+    });
 
     $scope.isCollapsed = true;
 

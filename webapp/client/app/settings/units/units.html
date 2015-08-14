@@ -1,0 +1,11 @@
+<div flex layout="column" class="unitsWrapper" layout-align="start start">
+    <md-list class="unitsList" layout-fill>
+        <md-list-item class="md-2-line list-button" ng-repeat="option in units" ng-click="showModal(option)" md-no-ink>
+            <div class="md-list-item-text" ng-class="{'md-offset': true }">
+                <h3>{{option.title}}</h3>
+                <p> {{option.options[option.selected].name}}({{option.options[option.selected].unit}}) </p>
+            </div>
+            <md-divider></md-divider>
+        </md-list-item>
+    </md-list>
+</div>
