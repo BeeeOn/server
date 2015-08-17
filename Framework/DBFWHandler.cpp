@@ -1,4 +1,4 @@
-﻿/**
+/**
 * @file DBFWHandler.cpp
 *
 * Implementace metod, krete pracuji jiz primo nad DB. Jde o abstrakci dotazu nad Databazi nad tabulkami pro algoritmy a dalsimi na nich navazanymi. Vyuziva se knihovny soci (soci::session)
@@ -55,11 +55,11 @@ float DBFWHandler::GetValueFromModule(std::string ID)
 {
 	double retVal;
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::GetLastTemp");
-	std::string sqlQuery = "SELECT measured_value FROM module Where (device_mac='" + ID + ");";
+	std::string sqlQuery = "SELECT measured_value FROM module Where (device_mac=:mac);";
 	this->_log->WriteMessage(TRACE, sqlQuery);
 	try
 	{
-		*ses << sqlQuery, into(retVal);
+		*ses << sqlQuery, use(ID), into(retVal);
 	}
 	catch (std::exception const &e)
 	{
@@ -86,9 +86,9 @@ bool DBFWHandler::UpdateValueOfModule(std::string ID, std::string value)
 	std::string retVal = "";
 	try
 	{
-		std::string sqlQuery = "UPDATE module SET  measured_value=" + value + "  Where (device_mac='" + ID + ");";
+		std::string sqlQuery = "UPDATE module SET  measured_value=:value  Where (device_mac=:mac);";
 		this->_log->WriteMessage(TRACE, sqlQuery);
-		*ses << sqlQuery,
+		*ses << sqlQuery, use(value), use(ID),
 			into(retVal);
 		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::UpdateLastTemp");
 		return (true);
@@ -114,11 +114,11 @@ std::string DBFWHandler::GetEmailByUserId(std::string UserID)
 {
 	std::string retVal = "";
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::GetEmailByUserId");
-	std::string sqlQuery = "SELECT mail FROM users WHERE user_id=" + UserID + ";";
+	std::string sqlQuery = "SELECT mail FROM users WHERE user_id=:userId;";
 	this->_log->WriteMessage(TRACE, sqlQuery);
 	try
 	{
-		*ses << sqlQuery, into(retVal);
+		*ses << sqlQuery,use(UserID), into(retVal);
 	}
 	catch (std::exception const &e)
 	{
@@ -141,11 +141,11 @@ std::string DBFWHandler::GetUserIdByEmail(std::string Email)
 {
 	std::string retVal = "";
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::GetEmailByUserId");
-	std::string sqlQuery = "SELECT user_id FROM users WHERE mail = '" + Email + "';";
+	std::string sqlQuery = "SELECT user_id FROM users WHERE mail = :mail;";
 	this->_log->WriteMessage(TRACE, sqlQuery);
 	try
 	{
-		*ses << sqlQuery, into(retVal);
+		*ses << sqlQuery, use(Email), into(retVal);
 	}
 	catch (std::exception const &e)
 	{
@@ -168,12 +168,12 @@ std::string DBFWHandler::GetUserIdByEmail(std::string Email)
 std::vector<std::string> DBFWHandler::GetNotifStringByUserId(std::string userId)
 {
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::GetNotifString");
-	std::string sqlQuery = "SELECT push_notification FROM users INNER JOIN mobile_devices ON user_id=fk_user_id WHERE (user_id=" + userId + ");";
+	std::string sqlQuery = "SELECT push_notification FROM users INNER JOIN mobile_devices ON user_id=fk_user_id WHERE (user_id=:userId);";
 	this->_log->WriteMessage(TRACE, sqlQuery);
 	std::vector<std::string> retVal(20);
 	try
 	{
-		*ses << sqlQuery, into(retVal);
+		*ses << sqlQuery, use(userId), into(retVal);
 	}
 	catch (std::exception const &e)
 	{
@@ -197,9 +197,9 @@ bool DBFWHandler::DeleteMobileDeviceByGcmId(std::string GCMId)
 	std::string retVal = "";
 	try
 	{
-		std::string sqlQuery = "DELETE FROM mobile_devices WHERE push_notification = " + GCMId + ";";
+		std::string sqlQuery = "DELETE FROM mobile_devices WHERE push_notification = :gcmid;";
 		this->_log->WriteMessage(TRACE, sqlQuery);
-		*ses << sqlQuery,
+		*ses << sqlQuery, use(GCMId),
 			into(retVal);
 		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::DeleteMobileDeviceByGcmId");
 		return (true);
@@ -223,12 +223,12 @@ bool DBFWHandler::DeleteMobileDeviceByGcmId(std::string GCMId)
 std::vector<std::string> DBFWHandler::SelectAllIdsOfUsersAlgorithmsByAdapterId(std::string adapterId)
 {
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::SelectAllIdsOfUsersAlgorithmsByAdapterId");
-	std::string sqlQuery = "SELECT users_algorithms_id FROM users_algorithms WHERE (fk_adapter_id=" + adapterId + ");";
+	std::string sqlQuery = "SELECT users_algorithms_id FROM users_algorithms WHERE (fk_adapter_id=:adapterId);";
 	this->_log->WriteMessage(TRACE, sqlQuery);
 	std::vector<std::string> retVal(20);
 	try
 	{
-		*ses << sqlQuery, into(retVal);
+		*ses << sqlQuery, use(adapterId), into(retVal);
 	}
 	catch (std::exception const &e)
 	{
@@ -250,12 +250,12 @@ std::vector<std::string> DBFWHandler::SelectAllIdsOfUsersAlgorithmsByAdapterId(s
 std::vector<std::string> DBFWHandler::SelectAllIdsOfUsersAlgorithmsByAdapterIdAndUserId(std::string adapterId, std::string userId)
 {
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::SelectAllIdsOfUsersAlgorithmsByAdapterIdAndUserId");
-	std::string sqlQuery = "SELECT users_algorithms_id FROM users_algorithms WHERE (fk_adapter_id=" + adapterId + " AND fk_user_id = " + userId + ");";
+	std::string sqlQuery = "SELECT users_algorithms_id FROM users_algorithms WHERE (fk_adapter_id=:adapterId AND fk_user_id =:userId);";
 	this->_log->WriteMessage(TRACE, sqlQuery);
 	std::vector<std::string> retVal(20);
 	try
 	{
-		*ses << sqlQuery, into(retVal);
+		*ses << sqlQuery, use(adapterId), use(userId), into(retVal);
 	}
 	catch (std::exception const &e)
 	{
@@ -276,12 +276,12 @@ std::vector<std::string> DBFWHandler::SelectAllIdsOfUsersAlgorithmsByAdapterIdAn
 std::vector<std::string> DBFWHandler::SelectIdsEnabledAlgorithmsByAdapterId(std::string adapterId)
 {
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::SelectIdsEnabledAlgorithmsByAdapterId");
-	std::string sqlQuery = "SELECT users_algorithms_id FROM users_algorithms WHERE (fk_adapter_id=" + adapterId + " AND state = '1');";
+	std::string sqlQuery = "SELECT users_algorithms_id FROM users_algorithms WHERE (fk_adapter_id=:adapterId AND state = '1');";
 	this->_log->WriteMessage(TRACE, sqlQuery);
 	std::vector<std::string> retVal(20);
 	try
 	{
-		*ses << sqlQuery, into(retVal);
+		*ses << sqlQuery, use(adapterId), into(retVal);
 	}
 	catch (std::exception const &e)
 	{
@@ -302,12 +302,12 @@ std::vector<std::string> DBFWHandler::SelectIdsEnabledAlgorithmsByAdapterId(std:
 std::vector<std::string> DBFWHandler::SelectIdsAlgorithmsByAlgIdAndUserId(std::string userId, std::string algId)
 {
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::SelectIdsAlgorithmsByAlgId");
-	std::string sqlQuery = "SELECT users_algorithms_id FROM users_algorithms WHERE (fk_user_id = " + algId + " AND fk_algorithm_id=" + userId + "); ";
+	std::string sqlQuery = "SELECT users_algorithms_id FROM users_algorithms WHERE (fk_user_id = :algoId AND fk_algorithm_id=:userId); ";
 	this->_log->WriteMessage(TRACE, sqlQuery);
 	std::vector<std::string> retVal(20);
 	try
 	{
-		*ses << sqlQuery, into(retVal);
+		*ses << sqlQuery, use(algId), use(userId), into(retVal);
 	}
 	catch (std::exception const &e)
 	{
@@ -329,11 +329,11 @@ std::string DBFWHandler::SelectAlgIdByUsersAlgId(std::string UsersAlgId)
 {
 	std::string retVal = "";
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::SelectAlgIdByUsersAlgId");
-	std::string sqlQuery = "SELECT fk_algorithm_id FROM users_algorithms WHERE users_algorithms_id = " + UsersAlgId + ";";
+	std::string sqlQuery = "SELECT fk_algorithm_id FROM users_algorithms WHERE users_algorithms_id = :usersAlgoId;";
 	this->_log->WriteMessage(TRACE, sqlQuery);
 	try
 	{
-		*ses << sqlQuery, into(retVal);
+		*ses << sqlQuery, use(UsersAlgId), into(retVal);
 	}
 	catch (std::exception const &e)
 	{
@@ -356,11 +356,11 @@ std::string DBFWHandler::SelectStateByUsersAlgId(std::string UsersAlgId)
 {
 	std::string retVal = "";
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::SelectStateByUsersAlgId");
-	std::string sqlQuery = "SELECT state FROM users_algorithms WHERE users_algorithms_id = " + UsersAlgId + ";";
+	std::string sqlQuery = "SELECT state FROM users_algorithms WHERE users_algorithms_id = :usersAlgoId;";
 	this->_log->WriteMessage(TRACE, sqlQuery);
 	try
 	{
-		*ses << sqlQuery, into(retVal);
+		*ses << sqlQuery, use(UsersAlgId), into(retVal);
 	}
 	catch (std::exception const &e)
 	{
@@ -383,11 +383,11 @@ std::string DBFWHandler::SelectAdapterIdByUsersAlgId(std::string UsersAlgId)
 {
 	std::string retVal = "";
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::SelectStateByUsersAlgId");
-	std::string sqlQuery = "SELECT fk_adapter_id FROM users_algorithms WHERE users_algorithms_id = " + UsersAlgId + ";";
+	std::string sqlQuery = "SELECT fk_adapter_id FROM users_algorithms WHERE users_algorithms_id = :usersAlgoId;";
 	this->_log->WriteMessage(TRACE, sqlQuery);
 	try
 	{
-		*ses << sqlQuery, into(retVal);
+		*ses << sqlQuery, use(UsersAlgId), into(retVal);
 	}
 	catch (std::exception const &e)
 	{
@@ -410,11 +410,11 @@ std::string DBFWHandler::SelectUserIdByUsersAlgId(std::string UsersAlgId)
 {
 	std::string retVal = "";
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::SelectAlgIdByUsersAlgId");
-	std::string sqlQuery = "SELECT fk_user_id FROM users_algorithms WHERE users_algorithms_id = " + UsersAlgId + ";";
+	std::string sqlQuery = "SELECT fk_user_id FROM users_algorithms WHERE users_algorithms_id = :usersAlgoId;";
 	this->_log->WriteMessage(TRACE, sqlQuery);
 	try
 	{
-		*ses << sqlQuery, into(retVal);
+		*ses << sqlQuery, use(UsersAlgId), into(retVal);
 	}
 	catch (std::exception const &e)
 	{
@@ -437,11 +437,11 @@ std::string DBFWHandler::SelectNameByUsersAlgId(std::string UsersAlgId)
 {
 	std::string retVal = "";
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::SelectNameByUsersAlgId");
-	std::string sqlQuery = "SELECT name FROM users_algorithms WHERE users_algorithms_id = " + UsersAlgId + ";";
+	std::string sqlQuery = "SELECT name FROM users_algorithms WHERE users_algorithms_id = :usersAlgoId;";
 	this->_log->WriteMessage(TRACE, sqlQuery);
 	try
 	{
-		*ses << sqlQuery, into(retVal);
+		*ses << sqlQuery, use(UsersAlgId), into(retVal);
 	}
 	catch (std::exception const &e)
 	{
@@ -464,11 +464,11 @@ std::string DBFWHandler::SelectParametersByUsersAlgId(std::string UsersAlgId)
 {
 	std::string retVal = "";
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::SelectParametersByUsersAlgId");
-	std::string sqlQuery = "SELECT parameters FROM users_algorithms WHERE users_algorithms_id = " + UsersAlgId + ";";
+	std::string sqlQuery = "SELECT parameters FROM users_algorithms WHERE users_algorithms_id = :usersAlgoId;";
 	this->_log->WriteMessage(TRACE, sqlQuery);
 	try
 	{
-		*ses << sqlQuery, into(retVal);
+		*ses << sqlQuery, use(UsersAlgId),into(retVal);
 	}
 	catch (std::exception const &e)
 	{
@@ -490,12 +490,12 @@ std::string DBFWHandler::SelectParametersByUsersAlgId(std::string UsersAlgId)
 std::vector<std::string> DBFWHandler::SelectDevIdsByUsersAlgId(std::string UsersAlgId)
 {
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::SelectDevIdsByUsersAlgId");
-	std::string sqlQuery = "SELECT fk_facilities_mac FROM algo_devices WHERE (fk_users_algorithms_id=" + UsersAlgId + ");";
+	std::string sqlQuery = "SELECT fk_facilities_mac FROM algo_devices WHERE (fk_users_algorithms_id=:usersAlgoId);";
 	this->_log->WriteMessage(TRACE, sqlQuery);
 	std::vector<std::string> retVal(20);
 	try
 	{
-		*ses << sqlQuery, into(retVal);
+		*ses << sqlQuery, use(UsersAlgId),into(retVal);
 	}
 	catch (std::exception const &e)
 	{
@@ -517,11 +517,11 @@ std::string DBFWHandler::SelectDevTypeByDevId(std::string devId)
 {
 	std::string retVal = "";
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::SelectDevTypeByDevId");
-	std::string sqlQuery = "SELECT fk_devices_type FROM algo_devices WHERE fk_facilities_mac = " + devId + ";";
+	std::string sqlQuery = "SELECT fk_devices_type FROM algo_devices WHERE fk_facilities_mac = :mac;";
 	this->_log->WriteMessage(TRACE, sqlQuery);
 	try
 	{
-		*ses << sqlQuery, into(retVal);
+		*ses << sqlQuery, use(devId), into(retVal);
 	}
 	catch (std::exception const &e)
 	{
@@ -544,15 +544,17 @@ std::string DBFWHandler::SelectDevTypeByDevId(std::string devId)
 *
 * @return  ID noveho zaznamu users_algorithms v Databazi
 */
+
 std::string DBFWHandler::InsertUserAlgorithm(std::string userId, std::string algId, std::string parameters, std::string name, std::string adapterId)
 {
 	this->_log->WriteMessage(TRACE, "Entering " + this->_Name + "::InsertUserAlgorithm");
 	std::string retVal = "";
 	try
 	{
-		std::string sqlQuery = "INSERT into users_algorithms (fk_user_id,fk_algorithm_id, parameters,data,name,fk_adapter_id,state) values ( " + userId + ", " + algId + ", '" + parameters + "', '','" + name + "', "+ adapterId +", '1') returning users_algorithms_id;";
+		std::string sqlQuery = "INSERT into users_algorithms (fk_user_id,fk_algorithm_id, parameters,data,name,fk_adapter_id,state) values ( :userId, :algoId, :parameters, '',:anme, :adapterId, '1') returning users_algorithms_id;";
 		this->_log->WriteMessage(TRACE, sqlQuery);
 		*ses << sqlQuery,
+		 use(userId), use(algId), use(parameters), use(name), use(adapterId),
 			into(retVal);
 		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::InsertUserAlgorithm");
 
@@ -584,9 +586,10 @@ bool DBFWHandler::UpdateUserAlgorithm(std::string userAlgId, std::string AlgId, 
 	std::string retVal = "";
 	try
 	{
-		std::string sqlQuery = "UPDATE users_algorithms SET  fk_algorithm_id=" + AlgId + ", parameters = '" + parameters + "', name = '" + name + "', state = '" + state + "' WHERE (users_algorithms_id = " + userAlgId + ");";
+		std::string sqlQuery = "UPDATE users_algorithms SET  fk_algorithm_id=:algoId, parameters = :parameters, name = :name, state = :state WHERE (users_algorithms_id = :usersAlgoId);";
 		this->_log->WriteMessage(TRACE, sqlQuery);
 		*ses << sqlQuery,
+		 use(AlgId), use(parameters), use(name), use(state), use(userAlgId),
 			into(retVal);
 		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::UpdateUserAlgorithm");
 		return (true);
@@ -618,9 +621,10 @@ bool DBFWHandler::InsertAlgoDevices(std::string UsersAlgorithmsId, std::string U
 	std::string retVal = "";
 	try
 	{
-		std::string sqlQuery = "INSERT into algo_devices (fk_users_algorithms_id,fk_user_id,fk_algorithm_id,fk_facilities_mac,fk_devices_type) values ( " + UsersAlgorithmsId + ", " + UserId + ", " + AlgorithId + ", " + mac + ", " + type + " );";
+		std::string sqlQuery = "INSERT into algo_devices (fk_users_algorithms_id,fk_user_id,fk_algorithm_id,fk_facilities_mac,fk_devices_type) values ( :usersAlgoId, :userId, :algoId, :mac, :type );";
 		this->_log->WriteMessage(TRACE, sqlQuery);
 		*ses << sqlQuery,
+		 use(UsersAlgorithmsId), use(UserId), use(AlgorithId), use(mac), use(type), 
 			into(retVal);
 		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::InsertAlgoDevices");
 		return (true);
@@ -647,9 +651,10 @@ bool DBFWHandler::DeleteAlgoDevices(std::string UsersAlgorithmsId)
 	std::string retVal = "";
 	try
 	{
-		std::string sqlQuery = "DELETE FROM algo_devices WHERE fk_users_algorithms_id = " + UsersAlgorithmsId + ";";
+		std::string sqlQuery = "DELETE FROM algo_devices WHERE fk_users_algorithms_id = :usersAlgoId;";
 		this->_log->WriteMessage(TRACE, sqlQuery);
 		*ses << sqlQuery,
+		use(UsersAlgorithmsId),
 			into(retVal);
 		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::DeleteAlgoDevices");
 		return (true);
@@ -676,9 +681,9 @@ bool DBFWHandler::DeleteUsersAlgorithms(std::string UsersAlgorithmsId)
 	std::string retVal = "";
 	try
 	{
-		std::string sqlQuery = "DELETE FROM users_algorithms WHERE users_algorithms_id = " + UsersAlgorithmsId + ";";
+		std::string sqlQuery = "DELETE FROM users_algorithms WHERE users_algorithms_id = :usersAlgoId;";
 		this->_log->WriteMessage(TRACE, sqlQuery);
-		*ses << sqlQuery,
+		*ses << sqlQuery, use(UsersAlgorithmsId),
 			into(retVal);
 		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::DeleteUsersAlgorithms");
 		return (true);
@@ -712,9 +717,10 @@ bool DBFWHandler::InsertNotification(std::string text, std::string level, std::s
 	std::string retVal = "";
 	try
 	{
-		std::string sqlQuery = "INSERT into notifications (text,level,message_id,timestamp,fk_user_id,read,name) values ( '" + text + "', " + level + ", " + messageId + ", " + timestamp + ", " + userId + ", '" + read + "', '" + name + "' );";
+		std::string sqlQuery = "INSERT into notifications (text,level,message_id,timestamp,fk_user_id,read,name) values ( :text, :level, :msgId, :timestamp, :userId, :read, :name );";
 		this->_log->WriteMessage(TRACE, sqlQuery);
 		*ses << sqlQuery,
+		 use(text), use(level), use(messageId), use(timestamp), use(userId), use(read), use(name),
 			into(retVal);
 		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::InsertNotification");
 		return (true);
@@ -770,9 +776,9 @@ bool DBFWHandler::InsertAlgList(std::string algorithm_id, std::string name, std:
 	std::string retVal = "";
 	try
 	{
-		std::string sqlQuery = "INSERT into u_algorithms (algorithm_id,name, type) values ( " + algorithm_id + ", '" + name + "', " + type + "); ";
+		std::string sqlQuery = "INSERT into u_algorithms (algorithm_id,name, type) values ( :algoId, :name, :type); ";
 		this->_log->WriteMessage(TRACE, sqlQuery);
-		*ses << sqlQuery,
+		*ses << sqlQuery, use(algorithm_id), use(name), use(type),
 			into(retVal);
 		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::InsertAlgList");
 		return (true);
@@ -802,9 +808,9 @@ bool DBFWHandler::UpdateAlgList(std::string algorithm_id, std::string name, std:
 	std::string retVal = "";
 	try
 	{
-		std::string sqlQuery = "UPDATE u_algorithms SET name='" + name + "', type = " + type + " WHERE (algorithm_id=" + algorithm_id + ");";
+		std::string sqlQuery = "UPDATE u_algorithms SET name=:name, type = :type WHERE (algorithm_id=:algoId);";
 		this->_log->WriteMessage(TRACE, sqlQuery);
-		*ses << sqlQuery,
+		*ses << sqlQuery, use(name), use(type), use(algorithm_id),
 			into(retVal);
 		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::UpdateAlgList");
 		return (true);
