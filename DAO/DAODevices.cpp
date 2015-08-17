@@ -30,14 +30,29 @@ DAODevices& DAODevices::getInstance(){
         return instance;
 }
 
-
+//string DAODevices::getXMLDevicesQueryStringNewer(string facilitiesCond, string gateways)
+//{
+//    return "select "
+//            " xmlagg("
+//                        "xmlelement(name  dev,xmlattributes(" + col.init + " as init, " + col.mac + " as did, " + col.id + " as type, " + col.location_id + " as lid, " + col.refresh + " as refresh, "
+//                                                " " + col.measured_at + " as time, " + col.involved + "  as inv, " + col.name + "  as name),"
+//                                    "(select xmlagg(xmlelement(name part,xmlattributes(" + moduleCol.id + " as type, " + moduleCol.value + " as val))) "
+//                                            "from " + tableModule + " where " +tableModule+"."+ moduleCol.mac + "="+tableDevices+"."+ col.mac + " "+ facilitiesCond + ")"
+//                        ")"
+//            ") "
+//            "from " + tableDevices +
+//                    " where " + col.gateway_id + " in( " << gateways << " ) and " + DAODevices::col.init + "=':init' " 
+//                ;
+//
+//}
 
 string DAODevices::getXMLDevicesQueryString(string facilitiesCond)
 {
     return " xmlagg("
                         "xmlelement(name  dev,xmlattributes(" + col.init + " as init, " + col.mac + " as did, " + col.id + " as type, " + col.location_id + " as lid, " + col.refresh + " as refresh, "
                                                 " " + col.measured_at + " as time, " + col.involved + "  as inv, " + col.name + "  as name),"
-                                                 "(select xmlagg(xmlelement(name part,xmlattributes(" + moduleCol.id + " as type, " + moduleCol.value + " as val)))from " + tableModule + " where " +tableModule+"."+ moduleCol.mac + "="+tableDevices+"."+ col.mac + " "+ facilitiesCond + ")"
+                                    "(select xmlagg(xmlelement(name part,xmlattributes(" + moduleCol.id + " as type, " + moduleCol.value + " as val))) "
+                                            "from " + tableModule + " where " +tableModule+"."+ moduleCol.mac + "="+tableDevices+"."+ col.mac + " "+ facilitiesCond + ")"
                     ")"
                 ") "
                 ;
@@ -58,7 +73,7 @@ std::string DAODevices::getXMLAllDevs(long long gateId)
                     "from  " + DAOAdapters::tableGateway + " join " + tableDevices + " using( " + DAOAdapters::col.id + ") "
                     " where " + DAOAdapters::col.id + "=:adapter and " + DAODevices::col.init + "!='0' " 
                     ,use(gateId,"adapter"),soci::into(xml,ind);
-            cout << sql.get_last_query();
+            //cout << sql.get_last_query();
 
         if(ind != i_ok){
                 Logger::getInstance(Logger::DEBUG3)<<"query not ok"<<"\n";
@@ -71,7 +86,6 @@ std::string DAODevices::getXMLAllDevs(long long gateId)
             Logger::getInstance(Logger::ERROR) << "Error: " << e.what() << '\n';
             throw;
         }
-        
 }
 
 string DAODevices::getXMLdevices(int userId, vector<long long> gateVector, vector<int> devicesVec)
@@ -99,8 +113,9 @@ string DAODevices::getXMLdevices(int userId, vector<long long> gateVector, vecto
                "from " + tableDevices + " " <<
                 "where " +col.gateway_id+" in(" + gates + ") and " + col.mac + " in(" + devices + ") and " <<
                  DAOAdapters::tableGateway << "." << col.gateway_id << "=" << tableDevices << "." << col.gateway_id <<
-                "))) from gateway where " +col.gateway_id+" in(" + gates + ") ",
+                "))) from gateway left join user_gateway using(gateway_id) where user_id = :user and " +col.gateway_id+" in(" + gates + ") ",
                 //use(gates,"gates"),use(devices,"devices"),
+                use(userId),
                 soci::into(xml, ind) );
         //cout<<endl<<sql.get_last_query()<<endl;
         st.execute(true);
@@ -202,7 +217,6 @@ string DAODevices::getXMLNewDevices(long long gateId)
                 
                 string xml;
                 indicator ind;
-//TODO možná tady nemusi byt join na devices
                 statement st = (sql.prepare <<"select " +
                         getXMLDevicesQueryString() +
                        "from " + DAOAdapters::tableGateway + " join " + tableDevices + " using(" +col.gateway_id+") where "+col.init+"='0' and " +col.gateway_id+" =:adapter" //join devices on mac=fk_facilities_mac
@@ -220,57 +234,12 @@ string DAODevices::getXMLNewDevices(long long gateId)
         }
 }
 
-//int DAODevices::updateDevice(long long adapterId, string id, string type, string name, string visibility)
-//{
-//        Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"updateDevice"<<id<<"\n";
-//        try
-//        {       
-//                soci::session sql(*_pool);
-//                string query  = "update " + tableModule + " set ";
-//                if(name != "")query.append(col.name +"='"+escapeString(name)+"', ");
-//                
-//                query = query.substr(0,query.size()-2);//erase last ', '
-//                
-//                query.append(" where "+moduleCol.mac+"='"+escapeString(id)+"' and "+moduleCol.id+"='"+escapeString(type)+"' ");
-//                //and fk_adapter_id='"+escapeString(adapterId)+"'");
-//                
-//                Logger::getInstance(Logger::DEBUG3)<<"SQL partial update: "<<query<<"\n";
-//                
-//                statement st = (sql.prepare << query);
-//                st.execute(true);
-//                
-//                return st.get_affected_rows();
-//                                            
-//        }
-//        catch (soci::postgresql_soci_error& e)
-//        {
-//                Logger::getInstance(Logger::ERROR) << "Error: " << e.what() << '\n';
-//                return 0;
-//        }
-//}
-
-
-
-
-
 int DAODevices::updateFacility(long long gateId, string id, string init, string locationId, string refresh, string name) {
     Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"update Facility"<<id<<"\n";
     try
     {      
         
-        soci::session sql(*_pool);
-//        string query = "update " + tableDevices + " set";
-//        if(init != "")query.append(" "+col.init+"='"+escapeString(init)+"', ");
-//        if(locationId != "")query.append(" "+col.location_id+"="+escapeString(locationId)+", ");
-//        if(refresh != "")query.append(" "+col.refresh+"='"+escapeString(refresh)+"', ");
-//        if(name != "")query.append(" "+col.name+"='"+escapeString(name)+"', ");
-//        
-//        query = query.substr(0,query.size()-2);//erase last ', '
-//        query.append(" where "+col.mac+" ='"+escapeString(id)+"' ");
-//        //and fk_adapter_id='"+escapeString(adapterId)+"'");
-//        
-//        statement st = (sql.prepare << query);
-        
+        soci::session sql(*_pool);        
         
         string columnsToSet;
         if(init != "")columnsToSet.append(" "+col.init+"=:init', ");
@@ -278,7 +247,6 @@ int DAODevices::updateFacility(long long gateId, string id, string init, string 
         if(refresh != "")columnsToSet.append(" "+col.refresh+"=:refresh, ");
         if(name != "")columnsToSet.append(" "+col.name+"=:name, ");
         columnsToSet = columnsToSet.substr(0,columnsToSet.size()-2);//erase last ', '
-        
         
         statement st = (sql.prepare << "update " << tableDevices << " set " <<
                 columnsToSet <<

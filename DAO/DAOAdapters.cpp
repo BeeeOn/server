@@ -73,7 +73,8 @@ Gate DAOAdapters::getAdapter(long long gateId) {
         
         Gate gate;
         sql <<"select " << col.id << "," << col.name << "," << col.timezone << 
-                " from " + tableGateway + " where " +col.id+ " = :gw"
+                " from " << tableGateway << 
+                " where " << col.id << " = :gw"
                 , use(gateId,"gw"),into(gate); 
         return gate;
     }
@@ -98,7 +99,9 @@ int DAOAdapters::updateAdapter(long long int gateId, std::string newName, std::s
             partialUpdateString += col.timezone +" = :timezone";
         
         string xml;
-        sql <<"update " + tableGateway + " set " << partialUpdateString << " where "+col.id+" = :adapter"
+        sql <<"update " << tableGateway << 
+                " set " << partialUpdateString << 
+                " where " << col.id << " = :adapter"
                 ,use(newName, "aname"), use(newTimeZone, "timezone"), use(gateId,"adapter"); 
         
         return 1;
@@ -118,7 +121,8 @@ int DAOAdapters::deleteAdapter(long long gateId){
         soci::session sql(*_pool);
        
         statement st = (sql.prepare <<  
-                "delete from " + tableGateway + " where "+col.id+" = :a_id",
+                "delete from " + tableGateway + 
+                    " where "+col.id+" = :a_id",
                 use(gateId, "a_id"));
         st.execute(true);
         
@@ -144,8 +148,10 @@ GateInfo DAOAdapters::getGateInfo(long long int gateId) {
         
         GateInfo gateInfo;
         sql <<"select " << col.id << "," << "count(distinct " << DAODevices::col.mac << "),count(distinct " << DAOUsersAdapters::col.user_id << ")" << "," << col.name << "," << col.socket << "," << col.version << "," << col.timezone <<
-                " from " + tableGateway + " left join " + DAODevices::tableDevices + " using("+col.id+") left join " + tableUsersGateway+ " using("+col.id+") "
-                "where "+col.id+" = :adapter group by "+col.id
+                " from " << tableGateway << 
+                    " left join " << DAODevices::tableDevices << " using("+col.id+") " << 
+                    "left join " << tableUsersGateway << " using(" << col.id << ") "
+                "where " << col.id << " = :adapter group by " << col.id
                 , use(gateId,"adapter"), into(gateInfo.id), into(gateInfo.nFacilities), into(gateInfo.nUsers), into(gateInfo.name)
                 , into(gateInfo.ip), into(gateInfo.version), into(gateInfo.timezone); 
         
@@ -165,7 +171,8 @@ int DAOAdapters::isAdapterInDB(long long int gateId) {
     int c;
     try {
         soci::session sql(*_pool);
-        sql << "select count(*) from " + tableGateway + " where " << col.id << "=:a_id",
+        sql << "select count(*) from " << tableGateway << 
+                " where " << col.id << "=:a_id",
                 use(gateId, "a_id"), into(c);
 
     }catch (soci::postgresql_soci_error& e) {
@@ -204,7 +211,9 @@ void DAOAdapters::updateAdaptersTimezone(string gateId,  string newTimeZone){
         soci::session sql(*_pool);
         
         string xml;
-        sql <<"update " + tableGateway + " set " << col.timezone << " = :timezone where " << col.id << " = :adapter"
+        sql <<"update " << tableGateway << 
+                " set " << col.timezone << " = :timezone " <<
+                "where " << col.id << " = :adapter"
                 ,use(newTimeZone, "timezone"),use(gateId,"adapter");             
     }
     catch (soci::postgresql_soci_error& e)
@@ -221,7 +230,10 @@ int DAOAdapters::delUsersAdapter(long long gateId, int userId) {
         
         string xml;
         statement st = (sql.prepare <<  
-        "delete from " + tableUsersGateway + " where " << DAOUsersAdapters::col.gateway_id << " = :adapter and " << DAOUsersAdapters::col.user_id << " = :user_id and " << DAOUsersAdapters::col.permission << " != 'superuser' "
+        "delete from " << tableUsersGateway <<
+                " where " << DAOUsersAdapters::col.gateway_id << " = :adapter and " << 
+                    DAOUsersAdapters::col.user_id << " = :user_id and " <<
+                    DAOUsersAdapters::col.permission << " != 'superuser' "
                 ,use(userId, "user_id"),use(gateId,"adapter"));         
         st.execute(true);
         

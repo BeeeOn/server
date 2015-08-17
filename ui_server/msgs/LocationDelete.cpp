@@ -7,11 +7,12 @@
 
 #include "LocationDelete.h"
 #include "../DAO/DAORooms.h"
+#include "IMsgInLoginAndAdapterAccessRequired.h"
 
 
 const std::string LocationDelete::state = "delroom";
 
-LocationDelete::LocationDelete(pugi::xml_document* doc): IMsgInLoginRequired(doc){
+LocationDelete::LocationDelete(pugi::xml_document* doc): IMsgInLoginAndAdapterAccessRequired(doc){
 }
 
 

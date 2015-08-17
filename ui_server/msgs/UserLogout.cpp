@@ -3,6 +3,7 @@
 #include "../DAO/DAOUsers.h"
 #include "../lib/pugixml.hpp"
 #include "TokenChecker.h"
+#include "SessionsTable.h"
 
 using namespace std;
 
@@ -20,6 +21,7 @@ int UserLogout::getMsgAuthorization() {
 
 string UserLogout::createResponseMsgOut() {
     DAOMobileDevices::getInstance().deletepushNotification(_userId, "");
+    SessionsTable::getInstance().removeEntry(_token);
 
     return getXMLreply(R_TRUE);
     

@@ -6,14 +6,6 @@
     </data>
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/ui_server.cpp</file>
-            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/DAO/DAODevices.h</file>
-            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_logger/Logger.cpp</file>
-            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/DAO/DAO.cpp</file>
-            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_logger/Logger.h</file>
-            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/DAO/DAODevices.cpp</file>
-            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/DAO/DAO.h</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

@@ -166,10 +166,10 @@ vector<indicator> nameIndicators;
         cout<<ret[1]<<endl;
         return 1;
         */
-//        vector<long long> gts = {1,20,10,100};
-//        vector<int> dvs = {1000,1234};
-//        cout<<DAODevices::getInstance().getXMLdevices(1,gts,dvs);
-//        return 0;
+        vector<long long> gts = {1,20,10,100};
+        vector<int> dvs = {1000,1234};
+        cout<<DAODevices::getInstance().getXMLdevices(1,gts,dvs);
+        return 0;
     }
     catch (soci::soci_error const & e)
     {
