@@ -44,6 +44,6 @@ const string SelectTime = "select refresh from device where device_mac=:record;"
 const string SelectSocket = "SELECT socket FROM gateway where gateway_id=:ID;";
 /** Q to Delete facility uses (:ID) */
 const string DeleteDevice = "Delete from device where device_mac=:ID;";
-
+//hello
 }
 #endif /* SQLCOMMANDS_H_ */
