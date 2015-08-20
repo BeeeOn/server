@@ -3,7 +3,7 @@
 CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.8.1-beta1" last-position="0,131" last-zoom="1"
+<dbmodel pgmodeler-ver="0.8.1-beta1" last-position="0,479" last-zoom="1"
 	 default-owner="postgres">
 <role name="hardware">
 </role>
@@ -14,11 +14,21 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <role name="uiserver7"
       login="true"
       password="1234">
-	<appended-sql><![CDATA[GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public to www;]]></appended-sql>
+	<appended-sql><![CDATA[GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public to uiserver7;]]></appended-sql>
 	<roles names="hardware,user_data" role-type="refer" />
 </role>
 
 <role name="algorithms">
+</role>
+
+<role name="framework7">
+	<appended-sql><![CDATA[GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public to framework7;]]></appended-sql>
+	<roles names="algorithms,hardware,user_data" role-type="refer" />
+</role>
+
+<role name="adaserver7">
+	<appended-sql><![CDATA[GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public to adaserver7;]]></appended-sql>
+	<roles names="hardware" role-type="refer" />
 </role>
 
 <database name="home7">
@@ -59,7 +69,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<tag name="Users"/>
-	<position x="164.848" y="482.929"/>
+	<position x="158.848" y="448.929"/>
 	<column name="user_id" not-null="true">
 		<type name="serial"/>
 	</column>
@@ -89,6 +99,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<column name="facebook_id">
 		<type name="text"/>
+	</column>
+	<column name="verified" not-null="true" default-value="true">
+		<type name="bool"/>
 	</column>
 	<constraint name="users_pk" type="pk-constr" table="public.users">
 		<columns names="user_id" ref-type="src-columns"/>
@@ -138,6 +151,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<column name="permission" not-null="true">
 		<type name="varchar" length="15"/>
+	</column>
+	<column name="accepted" not-null="true" default-value="true">
+		<type name="bool"/>
 	</column>
 	<constraint name="users_adapters_pk" type="pk-constr" table="public.user_gateway">
 		<columns names="user_id,gateway_id" ref-type="src-columns"/>
@@ -536,23 +552,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		</idxelement>
 </index>
 
-<textbox name="změny" font-size="9">
-	<position x="41.4706" y="1027.14"/>
-	<comment><![CDATA[mobile_devices - smazat mobile_id(posílaný z androidu), přidat name, PK = token (příp. mový serial mobile_id, který bude pouze pro potřeby DB)]]></comment>
-</textbox>
-
-<textbox name="Zmeny" font-size="9">
-	<position x="88.5714" y="1078.57"/>
-	<comment><![CDATA[Pridani roli: hardware, user_data,algorithms (gamifikace se prestava pouzivat - zatim nedelam)
-Vymazani facility_type
-Zmena nazvu tabulek: 
-	facility->device
-	device->module
-	adapters->gateways
-Zmena nazvu sloupcu: mnoho
-]]></comment>
-</textbox>
-
 <textbox name="report" font-size="9">
 	<position x="65.8824" y="1244.71"/>
 	<comment><![CDATA[Špatná sprava roli
@@ -560,18 +559,21 @@ mohly by být lepší čáry znázornující vztahy
 hloupý exit dialog]]></comment>
 </textbox>
 
-<table name="push_notification">
+<table name="push_notification_service">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="10" y="262"/>
-	<column name="user_id" not-null="true">
+	<position x="10" y="261"/>
+	<column name="push_notification_service_id" not-null="true">
+		<type name="serial"/>
+	</column>
+	<column name="user_id">
 		<type name="integer"/>
 	</column>
-	<column name="notification_id" not-null="true">
+	<column name="service_reference_id">
 		<type name="text"/>
 	</column>
-	<constraint name="pk_push_notification" type="pk-constr" table="public.push_notification">
-		<columns names="user_id,notification_id" ref-type="src-columns"/>
+	<constraint name="pk_push_notification" type="pk-constr" table="public.push_notification_service">
+		<columns names="push_notification_service_id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
@@ -702,7 +704,7 @@ hloupý exit dialog]]></comment>
 </constraint>
 
 <constraint name="fk_user_push_notification" type="fk-constr" comparison-type="MATCH FULL"
-	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.users" table="public.push_notification">
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.users" table="public.push_notification_service">
 	<columns names="user_id" ref-type="src-columns"/>
 	<columns names="user_id" ref-type="dst-columns"/>
 </constraint>
@@ -823,11 +825,11 @@ hloupý exit dialog]]></comment>
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_push_notification_users" type="relfk"
-	 src-table="public.push_notification"
+	 src-table="public.push_notification_service"
 	 dst-table="public.users"
 	 src-required="false" dst-required="false">
 	<label ref-type="name-label">
-		<position x="-32.6123" y="-38.713"/>
+		<position x="-36.0655" y="-59.963"/>
 	</label>
 </relationship>
 
@@ -887,7 +889,7 @@ hloupý exit dialog]]></comment>
 	<privileges select="true" delete="true" insert="true" update="true"/>
 </permission>
 <permission>
-	<object name="public.push_notification" type="table"/>
+	<object name="public.push_notification_service" type="table"/>
 	<roles names="user_data"/>
 	<privileges select="true" delete="true" insert="true" update="true"/>
 </permission>
