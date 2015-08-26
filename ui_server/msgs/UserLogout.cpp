@@ -16,17 +16,17 @@ UserLogout::~UserLogout() {
 }
 
 int UserLogout::getMsgAuthorization() {
-    return GUEST;
+    return permissions::guest;
 }
 
 string UserLogout::createResponseMsgOut() {
     DAOMobileDevices::getInstance().deletepushNotification(_userId, "");
     SessionsTable::getInstance().removeEntry(_token);
 
-    return getXMLreply(R_TRUE);
+    return getXMLreply(proto::replyTrue);
     
-    //_outputMainNode.append_attribute(P_ERRCODE) = ServerException::LOGOUT_ERROR;
-    //return genOutputXMLwithVersionAndState(R_FALSE);
+    //_outputMainNode.append_attribute(proto::errorCodeAttr) = ServerException::LOGOUT_ERROR;
+    //return genOutputXMLwithVersionAndState(proto::replyFalse);
 }
 
 

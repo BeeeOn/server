@@ -20,20 +20,20 @@ NotificationSetGCMID::~NotificationSetGCMID() {
 }
 
 int NotificationSetGCMID::getMsgAuthorization() {
-    return USER;
+    return permissions::user;
 }
 
 string NotificationSetGCMID::createResponseMsgOut() {
-    string gcmid = _doc->child(P_COMMUNICATION).attribute(P_GOOGLE_CLOUD_MID).value();
+    string gcmid = _doc->child(proto::communicationNode).attribute(proto::googleCloudMessagingIdAttr).value();
     //string phoneid = _doc->child(P_COMMUNICATION).attribute(P_PHONE_ID).value();
     
-    //string mail = _doc->child(P_COMMUNICATION).attribute(P_EMAIL).value();
+    //string mail = _doc->child(P_COMMUNICATION).attribute(proto::emailAttr).value();
    // gcmid =   DBConnector::getInstance().DEBUGexec("select user_id from users where mail='"+mail+"';" );
     
 //    if(DAOMobileDevices::getInstance().setGCMId(_token, gcmid) == 0)
 //    {
-//        _outputMainNode.append_attribute(P_ERRCODE) = ServerException::GCMID;
-//        return getXMLreply(R_FALSE);
+//        _outputMainNode.append_attribute(proto::errorCodeAttr) = ServerException::GCMID;
+//        return getXMLreply(proto::replyFalse);
 //    }
 //    
     
@@ -41,7 +41,7 @@ string NotificationSetGCMID::createResponseMsgOut() {
     {
         return getNegativeXMLReply(ServerException::GCMID);
     }
-    return getXMLreply(R_TRUE); 
+    return getXMLreply(proto::replyTrue); 
 }
 
 

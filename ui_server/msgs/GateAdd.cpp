@@ -12,7 +12,7 @@
 
 using namespace std;
 
-const std::string GateAdd::state = "addadapter";
+const std::string GateAdd::state = "addgate";
 
 GateAdd::GateAdd(pugi::xml_document* doc): IMsgInLoginRequired(doc) {
 }
@@ -21,11 +21,10 @@ GateAdd::~GateAdd() {
 }
 
 string GateAdd::createResponseMsgOut() {
-    pugi::xml_node adapterNode =  _doc->child(P_COMMUNICATION);
+    pugi::xml_node adapterNode =  _doc->child(proto::communicationNode).child(proto::adapterNode);
     
-    long long int adapterId = adapterNode.attribute(P_ADAPTER_ID).as_llong();
-    
-    string adapterName = adapterNode.attribute(P_ADAPTER_NAME).value();
+    long long int adapterId = adapterNode.attribute(proto::gatewayIdAttr).as_llong();
+    string adapterName = adapterNode.attribute(proto::gatewayNameAttr).value();
     
     if(DAOUsersAdapters::getInstance().parAdapterWithUserIfPossible(adapterId, adapterName, _userId) == 0)
     {
@@ -47,7 +46,7 @@ string GateAdd::createResponseMsgOut() {
                         
         Logger::getInstance(Logger::DEBUG3)<<"Gami communication"<<endl; 
         
-        pugi::xml_node node = _doc->child(P_COMMUNICATION);
+        pugi::xml_node node = _doc->child(proto::communicationNode);
         node.append_attribute("userid")=_userId;
         node.append_attribute("id")="61";//Magic for gamification
         
@@ -58,10 +57,10 @@ string GateAdd::createResponseMsgOut() {
         Logger::debug3() << "newadapter _ toGami: FAIL" << endl;
     }
     
-    return getXMLreply(R_TRUE);
+    return getXMLreply(proto::replyTrue);
 }
 
 int GateAdd::getMsgAuthorization() {
-    return GUEST;
+    return permissions::guest;
 }
 

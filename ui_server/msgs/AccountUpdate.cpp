@@ -10,7 +10,7 @@
 #include "../DAO/DAOUsersAdapters.h"
 
 
-const std::string AccountUpdate::state = "setaccs";
+const std::string AccountUpdate::state = "updategateuser";
 
 AccountUpdate::AccountUpdate(pugi::xml_document* doc): IMsgInLoginAndAdapterAccessRequired(doc) {
 }
@@ -19,41 +19,34 @@ AccountUpdate::~AccountUpdate() {
 }
 
 int AccountUpdate::getMsgAuthorization() {
-    return SUPERUSER;
+    return permissions::superuser;
 }
 
 string AccountUpdate::createResponseMsgOut()
 {
-    pugi::xml_node userNode =  _doc->child(P_COMMUNICATION).child(P_USER);
-    string newUserMail;
+    
+    int newUserId;
     string newRole;
     string errText;
     int fail = 0;
     
-    for (; userNode; userNode = userNode.next_sibling(P_USER))
-    {
-        newUserMail = userNode.attribute(P_EMAIL).value();
-        newRole = userNode.attribute(P_ROLE).value();
-        
-        //check role validity
-        if(!isRoleValid(newRole)){
-            errText += "<user email=\""+newUserMail+"\" role=\""+newRole+"\"/>";
-            fail = ServerException::ROLE;
-        }else{
-            
-            User user = DAOUsers::getInstance().getUserByID(_userId);
-            if(newUserMail != user.mail)
-            //change users role
-             if(DAOUsersAdapters::getInstance().changeConAccount(_gatewayId, newUserMail, newRole) != 1){
-                    errText += "<user email=\""+newUserMail+"\" role=\""+newRole+"\"/>";
-                    fail = ServerException::EMAIL;
-             }
-        } 
-        
-    }
+    pugi::xml_node userNode =  _doc->child(proto::communicationNode).child(proto::userNode);
+    newUserId = userNode.attribute(proto::userIdAttr).as_int(-1);
+    newRole = userNode.attribute(proto::userRoleAttr).value();
+
+    //check role validity
+    if(!isRoleValid(newRole)){
+        fail = ServerException::ROLE;
+    }else{
+        if(newUserId != _userId)
+        //change users role
+         if(DAOUsersAdapters::getInstance().changeConAccount(_gatewayId, newUserId, newRole) != 1){
+                fail = ServerException::USER_ID;
+         }
+    } 
     
     if(fail != 0)
         return getNegativeXMLReply(fail, errText.c_str());
-    return getXMLreply(R_TRUE);
+    return getXMLreply(proto::replyTrue);
 }
 

@@ -10,7 +10,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <sstream>
-const std::string UserLogIn::state = "signin";
+const std::string UserLogIn::state = "login";
 
 
 UserLogIn::UserLogIn(pugi::xml_document* doc): IMsgInFreeAccess(doc)
@@ -23,21 +23,21 @@ UserLogIn::~UserLogIn(void)
 }
 
 int UserLogIn::getMsgAuthorization() {
-    return EVERYONE;
+    return permissions::everyone;
 }
 
 string UserLogIn::createResponseMsgOut()
 {
     Logger::debug()<<"loging in"<<endl;
-    pugi::xml_node parametersNode =  _doc->child(P_COMMUNICATION).child(P_SIGN_PARAMS);
+    pugi::xml_node providerNode =  _doc->child(proto::communicationNode).child(proto::authProviderNode);
     
-    string service = _doc->child(P_COMMUNICATION).attribute(P_SIGN_SERVICE).value();
+    string service = providerNode.attribute(proto::authProvideNameAttr).value();
     
-    string phoneId =  _doc->child(P_COMMUNICATION).attribute(P_PHONE_ID).value();
-    string phoneLocale =  _doc->child(P_COMMUNICATION).attribute(P_LOCALIZATION).value();
+    string phoneId =  _doc->child(proto::communicationNode).child(proto::phoneNode).attribute(proto::phoneNameAttr).value();
+    //string phoneLocale =  _doc->child(P_COMMUNICATION).attribute(P_LOCALIZATION).value();
             
      MobileDevice mobile;
-     mobile.locale = phoneLocale;
+     mobile.locale = "";
      mobile.mobile_id = phoneId;
      mobile.push_notification = "";
      
@@ -50,11 +50,11 @@ string UserLogIn::createResponseMsgOut()
     string token;
     if(service == "google")
     {
-        token = parametersNode.attribute(P_GOOGLE_TOKEN).value();    
+        token = providerNode.attribute(proto::authProvideTokenAttr).value();    
     }
     else if(service == "facebook")
     {
-        token = parametersNode.attribute(P_FACEBOOK_TOKEN).value(); 
+        token = providerNode.attribute(proto::authProvideTokenAttr).value(); 
     }
     else
     {
@@ -71,8 +71,8 @@ string UserLogIn::createResponseMsgOut()
     
     if ( tokenChecker.email == "" )
     {
-        _outputMainNode.append_attribute(P_ERRCODE) = ServerException::NO_MAIL_PROVIDED;
-        return getXMLreply(R_FALSE);
+        _outputMainNode.append_attribute(proto::errorCodeAttr) = ServerException::NO_MAIL_PROVIDED;
+        return getXMLreply(proto::replyFalse);
     }
     
     if(service == "google")
@@ -96,19 +96,19 @@ string UserLogIn::createResponseMsgOut()
     
     if(userId < 0)
     {
-        _outputMainNode.append_attribute(P_ERRCODE) = ServerException::USER_DONOT_EXISTS;
-        return getXMLreply(R_FALSE);
+        _outputMainNode.append_attribute(proto::errorCodeAttr) = ServerException::USER_DONOT_EXISTS;
+        return getXMLreply(proto::replyFalse);
     }
     if(DAOUsers::getInstance().upsertUserWithMobileDevice(user, mobile) == 0 )
     {
-        _outputMainNode.append_attribute(P_ERRCODE) = ServerException::USER_DONOT_EXISTS;
-        return getXMLreply(R_FALSE);
+        _outputMainNode.append_attribute(proto::errorCodeAttr) = ServerException::USER_DONOT_EXISTS;
+        return getXMLreply(proto::replyFalse);
     }
     
     string ttoken = SessionsTable::getInstance().addNewSession(userId, phoneId);
     
-    _outputMainNode.append_attribute(P_SESSION_ID) = ttoken.c_str();
-    return getXMLreply(R_BEEEON_TOKEN);
+    _outputMainNode.append_attribute(proto::sessionIdAttr) = ttoken.c_str();
+    return getXMLreply(proto::replySessionId);
 }
 /*
 string UserLogIn::getnewIHAtoken() {

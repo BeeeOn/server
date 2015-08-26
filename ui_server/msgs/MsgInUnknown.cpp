@@ -20,10 +20,10 @@ MsgInUnknown::~MsgInUnknown() {
 }
 
 int MsgInUnknown::getMsgAuthorization() {
-    return EVERYONE;
+    return permissions::everyone;
 }
 
 string MsgInUnknown::createResponseMsgOut()
 {
-        return envelopeResponse(R_FALSE, "not supported by server", ServerException::MSG_UNKNOWN);
+        return envelopeResponse(proto::replyFalse, "not supported by server", ServerException::MSG_UNKNOWN);
 }

@@ -12,7 +12,7 @@
 
 using namespace std;
 
-const string AccountDel::state = "delaccs";
+const string AccountDel::state = "deletegateuser";
 AccountDel::AccountDel(pugi::xml_document* doc): IMsgInLoginAndAdapterAccessRequired(doc)  {
 }
 
@@ -20,31 +20,23 @@ AccountDel::~AccountDel() {
 }
 
 int AccountDel::getMsgAuthorization() {
-    return SUPERUSER;
+    return permissions::superuser;
 }
 
 string AccountDel::createResponseMsgOut()
 {
+    int userId;
     
-    pugi::xml_node userNode =  _doc->child(P_COMMUNICATION).child(P_USER);
-    string userMail;
-    //bool fail=false;
-    //string errText;
+    pugi::xml_node userNode =  _doc->child(proto::communicationNode).child(proto::userNode);
     
-    for (; userNode; userNode = userNode.next_sibling(P_USER))
-    {
-        userMail = userNode.attribute(P_EMAIL).value();
-        
-        User user = DAOUsers::getInstance().getUserByID(_userId);
-        
-        if(userMail != user.mail)
-            if(DAOUsersAdapters::getInstance().delConAccount(_gatewayId, userMail) == 0){
-                //fail = true;
-                //errText += "<user email=\""+userMail+"\"/>";
+    userId = userNode.attribute(proto::userIdAttr).as_int();
+
+    if(userId != _userId)
+        if(DAOUsersAdapters::getInstance().delConAccount(_gatewayId, userId) == 0){
+            return getNegativeXMLReply(ServerException::USER_ID);
             }
-    }
     
-    return getXMLreply(R_TRUE);
+    return getXMLreply(proto::replyTrue);
 }
 
 

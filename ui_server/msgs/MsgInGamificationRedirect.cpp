@@ -24,7 +24,7 @@ string MsgInGamificationRedirect::createResponseMsgOut() {
         SocketClient sc(Config::getInstance().getGamificationPort());    
                         
         Logger::getInstance(Logger::DEBUG3)<<"Gami communication"<<endl; 
-        pugi::xml_node node = _doc->child(P_COMMUNICATION);
+        pugi::xml_node node = _doc->child(proto::communicationNode);
         node.append_attribute("userid")=_userId;
         string algoStr = node_to_string(node);
         Logger::debug3() << "toGami: " << algoStr << endl;
@@ -39,5 +39,5 @@ string MsgInGamificationRedirect::createResponseMsgOut() {
 }
 
 int MsgInGamificationRedirect::getMsgAuthorization() {
-    return GUEST;
+    return permissions::guest;
 }

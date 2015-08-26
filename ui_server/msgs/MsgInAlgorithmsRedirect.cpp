@@ -28,7 +28,7 @@ string MsgInAlgorithmsRedirect::createResponseMsgOut() {
         SocketClient sc(Config::getInstance().getAlgorithmPort());    
                         
         Logger::getInstance(Logger::DEBUG3)<<"Algo communication"<<endl; 
-       pugi::xml_node node = _doc->child(P_COMMUNICATION);
+       pugi::xml_node node = _doc->child(proto::communicationNode);
         node.append_attribute("userid")=_userId;
         string algoStr = node_to_string(node);
         Logger::debug3() << "toAlgo: " << algoStr << endl;
@@ -43,6 +43,6 @@ string MsgInAlgorithmsRedirect::createResponseMsgOut() {
 }
 
 int MsgInAlgorithmsRedirect::getMsgAuthorization() {
-    return GUEST;
+    return permissions::guest;
 }
 

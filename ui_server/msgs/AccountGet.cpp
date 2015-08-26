@@ -13,7 +13,7 @@
 
 using namespace std;
 
-const string AccountGet::state = "getaccs";
+const string AccountGet::state = "getgateusers";
 AccountGet::AccountGet(pugi::xml_document* doc): IMsgInLoginAndAdapterAccessRequired(doc)  {
 }
 
@@ -21,7 +21,7 @@ AccountGet::~AccountGet() {
 }
 
 int AccountGet::getMsgAuthorization() {
-    return GUEST;
+    return permissions::guest;
 }
 
 string AccountGet::createResponseMsgOut()
@@ -36,7 +36,7 @@ string AccountGet::createResponseMsgOut()
     // do stuff
     cout<< "cstr" <<  cstr <<endl; 
     pugi::xml_node n;
-    //pugi::xml_parse_result result = doc.load("<user userid=\"1\" email=\"pvampola@gmail.com\" role=\"superuser\" name=\"Pavel\" surname=\"Vampola\" gender=\"other\"/>");
+    //pugi::xml_parse_result result = doc.load("<user userid=\"1\" email=\"pvampola@gmail.com\" role=\"permissions::superuser\" name=\"Pavel\" surname=\"Vampola\" gender=\"other\"/>");
     pugi::xml_parse_result result = doc.load(cstr);
     if (!result)
     {
@@ -47,6 +47,6 @@ string AccountGet::createResponseMsgOut()
     
     delete [] cstr;
     _outputMainNode.append_copy(doc.first_child());
-    return getXMLreply(R_ACCOUNTS);*/
-    return envelopeResponse(R_ACCOUNTS, DAOUsersAdapters::getInstance().getXMLconAccounts(_gatewayId));
+    return getXMLreply(proto::replyAccounts);*/
+    return envelopeResponse(proto::replyAccounts, DAOUsersAdapters::getInstance().getXMLconAccounts(_gatewayId));
 }

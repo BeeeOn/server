@@ -10,7 +10,7 @@ portstatus=$( netstat -an | grep $port )
 while  [ -n "$portstatus" ]; do
     echo "port is occupied"
     sleep 1
-    portstatus=$( netstat -an | grep $port )
+    portstatus=$( netstat -an | grep "$port " )
 done
 
 

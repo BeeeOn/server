@@ -91,9 +91,7 @@ public:
     std::string getXMLDeviceLog(long long gateId, device device, std::string logFrom, std::string logTo, std::string dataType, std::string interval);
     int updateFacility(long long gateId, std::string id, std::string init, std::string locationId, std::string refresh, std::string name) ;
     
-private: 
-
-    std::string getXMLDevicesQueryString(std::string facilitiesCond="");
+    std::string getXMLDevicesQueryString2();
 };
 
 #endif	/* DAODEVICES_H */

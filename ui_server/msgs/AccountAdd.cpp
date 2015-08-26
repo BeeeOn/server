@@ -9,7 +9,7 @@
 #include "../DAO/DAOUsersAdapters.h"
 
 
-const std::string MsgInAddAccount::state = "addaccs";
+const std::string MsgInAddAccount::state = "invitegateuser";
 
 MsgInAddAccount::MsgInAddAccount(pugi::xml_document* doc): IMsgInLoginAndAdapterAccessRequired(doc) {
 }
@@ -18,23 +18,23 @@ MsgInAddAccount::~MsgInAddAccount() {
 }
 
 int MsgInAddAccount::getMsgAuthorization() {
-    return SUPERUSER;
+    return permissions::superuser;
 }
 
 string MsgInAddAccount::createResponseMsgOut()
 {    
-    pugi::xml_node userNode =  _doc->child(P_COMMUNICATION).child(P_USER);
-    string newUserMail;
+    pugi::xml_node userNode =  _doc->child(proto::communicationNode).child(proto::userNode);
+    string newUserId;
     string newRole;
 
-    newUserMail = userNode.attribute(P_EMAIL).value();
-    newRole = userNode.attribute(P_ROLE).value();
+    newUserId = userNode.attribute(proto::userIdAttr).as_int(-1);
+    newRole = userNode.attribute(proto::userRoleAttr).value();
     
     if(!isRoleValid(newRole)){
         return getNegativeXMLReply(ServerException::ROLE);
-    }else if(DAOUsersAdapters::getInstance().addConAccount(_gatewayId, newUserMail, newRole) != 1){
-        return getNegativeXMLReply(ServerException::EMAIL);
+    }else if(DAOUsersAdapters::getInstance().addConAccount(_gatewayId, newUserId, newRole) != 1){
+        return getNegativeXMLReply(ServerException::USER_ID);
     }        
     
-    return getXMLreply(R_TRUE);
+    return getXMLreply(proto::replyTrue);
 }

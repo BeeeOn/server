@@ -7,30 +7,35 @@
 
 #include "GateDelete.h"
 #include "../DAO/DAOAdapters.h"
+#include "../DAO/DAOUsers.h"
 #include "SocketClient.h"
 #include "Config.h"
 
 using namespace std;
 
-const string GateDelete::state = "deladapter";
+const string GateDelete::state = "deletegate";
 
-GateDelete::GateDelete(pugi::xml_document* doc): IMsgInLoginAndAdapterAccessRequired(doc) {
+GateDelete::GateDelete(pugi::xml_document* doc): IMsgInLoginRequired(doc) {
 }
 
 GateDelete::~GateDelete() {
 }
 
 int GateDelete::getMsgAuthorization() {
-    return GUEST;
+    return permissions::guest;
 }
 //Pokud je uživatel SU a tohle udělá, smaže se všechno, musím poslat ada_server zprávu 
 string GateDelete::createResponseMsgOut() {
     
-    if(_role != "superuser")
+    int gateId = _doc->child(proto::communicationNode).child(proto::adapterNode).attribute(proto::gatewayIdAttr).as_int(-1);
+    
+    string role = DAOUsers::getInstance().getUserRoleM(_userId, gateId);
+    
+    if(role != proto::roleSuperuserAttr)
     {
         if (DAOAdapters::getInstance().delUsersAdapter(_gatewayId, _userId) > 0)
         {
-            return getXMLreply(R_TRUE);
+            return getXMLreply(proto::replyTrue);
         }
     }
     else
@@ -53,7 +58,7 @@ string GateDelete::createResponseMsgOut() {
         Logger::getInstance(Logger::DEBUG3)<<"S2S communication: "<< r<<endl; 
 
         if(r == "<reply>true</reply>")
-            return getXMLreply(R_TRUE);
+            return getXMLreply(proto::replyTrue);
         else
              return getNegativeXMLReply(ServerException::SERVER2SERVER);
     }

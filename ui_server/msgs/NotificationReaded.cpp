@@ -11,7 +11,7 @@
 
 using namespace std;
 
-const std::string NotificationReaded::state = "notifread";
+const std::string NotificationReaded::state = "notificationreaded";
 
 NotificationReaded::NotificationReaded(pugi::xml_document* doc): IMsgInLoginRequired(doc) {
 }
@@ -21,19 +21,19 @@ NotificationReaded::~NotificationReaded() {
 }
 
 int NotificationReaded::getMsgAuthorization() {
-    return GUEST;
+    return permissions::guest;
 }
 
 std::string NotificationReaded::createResponseMsgOut() {
-    int notif_id = _doc->child(P_COMMUNICATION).child(P_NOTIFICATION).attribute(P_NOTIFICATION_ID).as_int(-1);
+    int notif_id = _doc->child(proto::communicationNode).child(proto::notificationNode).attribute(proto::locationTypeAttr).as_int(-1);
     
     if ( DAONotification::getInstance().setReaded(notif_id) > 0 )
     {
-        return getXMLreply(R_TRUE);
+        return getXMLreply(proto::replyTrue);
     }
     else
     {
-        _outputMainNode.append_attribute(P_ERRCODE) = ServerException::NOTIFICATION_ID;
-        return getXMLreply(R_FALSE);
+        _outputMainNode.append_attribute(proto::errorCodeAttr) = ServerException::NOTIFICATION_ID;
+        return getXMLreply(proto::replyFalse);
     }
 }

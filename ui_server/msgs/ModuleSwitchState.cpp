@@ -10,7 +10,7 @@
 
 using namespace std;
 
-const string ModuleSwitchState::state = "switch";
+const string ModuleSwitchState::state = "switchstate";
 ModuleSwitchState::ModuleSwitchState(pugi::xml_document* doc) : IMsgInLoginAndAdapterAccessRequired(doc) {
 }
 
@@ -18,15 +18,15 @@ ModuleSwitchState::~ModuleSwitchState() {
 }
 
 int ModuleSwitchState::getMsgAuthorization() {
-    return USER;
+    return permissions::user;
 }
 
 string ModuleSwitchState::createResponseMsgOut()
 {    
-    pugi::xml_node comNode =  _doc->child(P_COMMUNICATION);
-    string deviceId = comNode.attribute(P_DEVICE_ID).value();
-    string deviceType = comNode.attribute(P_DEVICE_TYPE).value();
-    string newValue = comNode.attribute(P_DEVICE_VALUE).value();
+    pugi::xml_node comNode =  _doc->child(proto::communicationNode);
+    string deviceId = comNode.attribute("deviceid").value();
+    string deviceType = comNode.attribute("moduleid").value();
+    string newValue = comNode.attribute(proto::moduleValueIdAttr).value();
     
     string r ;
     try{
@@ -46,7 +46,7 @@ string ModuleSwitchState::createResponseMsgOut()
     Logger::getInstance(Logger::DEBUG3)<<"S2S communication: "<< r<<endl; 
     
     if(r == "<reply>true</reply>")
-    return envelopeResponse(R_TRUE);
+    return envelopeResponse(proto::replyTrue);
     else
          throw ServerException(ServerException::SWITCH_FAIL);
         

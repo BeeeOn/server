@@ -12,9 +12,9 @@ using namespace std;
 
 IMsgInLoginAndAdapterAccessRequired::IMsgInLoginAndAdapterAccessRequired(pugi::xml_document* doc) : IMsgInLoginRequired(doc) {
     
-    _adapterId = _doc->child(P_COMMUNICATION).attribute(P_ADAPTER_ID).value();
+    _adapterId = _doc->child(proto::communicationNode).attribute(proto::headerGatewayIdAttr).value();
     
-    _gatewayId = _doc->child(P_COMMUNICATION).attribute(P_ADAPTER_ID).as_llong(-1);
+    _gatewayId = _doc->child(proto::communicationNode).attribute(proto::headerGatewayIdAttr).as_llong(-1);
 
 }
 
@@ -29,14 +29,14 @@ enumAccessStatus IMsgInLoginAndAdapterAccessRequired::checkAccess(){
     std::string role = DAOUsers::getInstance().getUserRoleM(_userId, _gatewayId);
     
     int roleId;
-    if(role == P_ROLE_GUEST)
-        roleId= GUEST;
-    else if(role == P_ROLE_USER)
-        roleId= USER;
-    else if(role == P_ROLE_ADMIN)
-        roleId= ADMIN;
-    else if(role == P_ROLE_SUPERUSER)
-        roleId= SUPERUSER;
+    if(role == proto::roleGuestAttr)
+        roleId= permissions::guest;
+    else if(role == proto::roleUserAttr)
+        roleId= permissions::user;
+    else if(role == proto::roleAdminAttr)
+        roleId= permissions::admin;
+    else if(role == proto::roleSuperuserAttr)
+        roleId= permissions::superuser;
     else {
         roleId = -1;
          Logger::getInstance(Logger::ERROR) << "undefined role:>"<<role <<"< ";
@@ -59,7 +59,7 @@ enumAccessStatus IMsgInLoginAndAdapterAccessRequired::checkAccess(){
 string IMsgInLoginAndAdapterAccessRequired::envelopeResponseWithAdapterId(string state, string response)
 {        
     string additionalAttributes;
-    additionalAttributes = (string)P_ADAPTER_ID+"=\"" + _adapterId +"\"" ;
+    additionalAttributes = (string)proto::headerGatewayIdAttr+"=\"" + _adapterId +"\"" ;
     return envelopeResponseSetAttributes( state, response, additionalAttributes);
 }
 
@@ -67,6 +67,6 @@ string IMsgInLoginAndAdapterAccessRequired::envelopeResponseWithAdapterId(string
 {        
     string additionalAttributes = "";
     if(adapterId != "")
-        additionalAttributes = (string)P_ADAPTER_ID+"=\"" + adapterId +"\"" ;
+        additionalAttributes = (string)proto::headerGatewayIdAttr+"=\"" + adapterId +"\"" ;
     return envelopeResponseSetAttributes( state, response, additionalAttributes);
 }

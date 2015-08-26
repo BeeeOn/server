@@ -52,7 +52,7 @@ int DAORooms::insertNewRoom(long long adapterId, string roomType, string roomNam
     }   
 }
 
-void DAORooms::updateRoom(long long adapterId, string roomId, string type, string name){
+void DAORooms::updateRoom(long long adapterId, int roomId, int type, string name){
     Logger::getInstance(Logger::DEBUG3)<<"DB: "<< "update room\n";
     
     try
@@ -100,7 +100,7 @@ string DAORooms::getXMLrooms(long long adapterId)
             string xml;
             indicator ind;
             sql<<"select xmlagg("
-                    "xmlelement(name loc , "
+                    "xmlelement(name location , "
                         "xmlattributes(" << col.id << " as id, " << col.kind << " as type, " << col.name << " as name) "
                     ")" 
             ")"

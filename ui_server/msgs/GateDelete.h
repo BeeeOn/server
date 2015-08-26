@@ -12,7 +12,7 @@
 #include "IMsgInLoginRequired.h"
 #include "IMsgInLoginAndAdapterAccessRequired.h"
 
-class GateDelete : public IMsgInLoginAndAdapterAccessRequired {
+class GateDelete : public IMsgInLoginRequired {
 public:
     GateDelete(pugi::xml_document* doc);
     virtual ~GateDelete();

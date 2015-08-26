@@ -10,7 +10,7 @@
 
 using namespace std;
 
-const string LocationsGet::state = "getrooms";
+const string LocationsGet::state = "getlocations";
 
 LocationsGet::LocationsGet(pugi::xml_document* doc): IMsgInLoginAndAdapterAccessRequired(doc) {
 }
@@ -20,10 +20,10 @@ LocationsGet::~LocationsGet() {
 }
 
 int LocationsGet::getMsgAuthorization() {
-    return GUEST;
+    return permissions::guest;
 }
 
 string LocationsGet::createResponseMsgOut()
 {                        
-    return envelopeResponseWithAdapterId(R_ROOMS, DAORooms::getInstance().getXMLrooms(_gatewayId));
+    return envelopeResponseWithAdapterId(proto::replyLocations, DAORooms::getInstance().getXMLrooms(_gatewayId));
 }

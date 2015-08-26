@@ -35,8 +35,11 @@ public:
     static const UserGatewaysColumns col;
     std::string getXMLconAccounts(long long gatewayId);
     int delConAccount(long long gatewayId, std::string userMail);
+    int delConAccount(long long gatewayId, int userId);
+    int changeConAccount(long long gatewayId, int userId, std::string newRole);
     int changeConAccount(long long gatewayId, std::string userMail, std::string newRole);
     int addConAccount(long long gatewayId, std::string userMail, std::string newRole);
+    int addConAccount(long long gatewayId, int userId, std::string newRole);
     
     int parAdapterWithUserIfPossible(long long int adapterId, std::string adapterName, int userId);
     

@@ -37,7 +37,7 @@ public:
     static const LocationsColumns col;
 
     int insertNewRoom(long long adapterId, std::string roomType, std::string roomName);
-    void updateRoom(long long adapterId, std::string roomId, std::string type, std::string name);
+    void updateRoom(long long adapterId, int roomId, int type, std::string name);
     void deleteRoom(long long adapterId, std::string roomId);
     std::string getXMLrooms(long long adapterId);
 };

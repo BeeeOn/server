@@ -35,7 +35,8 @@ public:
 public:
     static const int VERSION;
     static const int TOKEN_EMAIL;
-    static const int EMAIL; //+text
+    static const int EMAIL;
+    static const int USER_ID;
     static const int IDENTIFICATION_TAKEN;
     static const int LOCALE;
 

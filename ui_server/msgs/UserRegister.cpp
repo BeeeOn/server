@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <sstream>
-const std::string UserRegister::state = "signup";
+const std::string UserRegister::state = "register";
 
 
 UserRegister::UserRegister(pugi::xml_document* doc): IMsgInFreeAccess(doc)
@@ -19,24 +19,24 @@ UserRegister::~UserRegister(void)
 }
 
 int UserRegister::getMsgAuthorization() {
-    return EVERYONE;
+    return permissions::everyone;
 }
 
 string UserRegister::createResponseMsgOut()
 {
-    pugi::xml_node parametersNode =  _doc->child(P_COMMUNICATION).child(P_SIGN_PARAMS);
+    pugi::xml_node authProviderNode =  _doc->child(proto::communicationNode).child(proto::authProviderNode);
     
-    string service = _doc->child(P_COMMUNICATION).attribute(P_SIGN_SERVICE).value();
+    string service = authProviderNode.attribute(proto::authProvideNameAttr).value();
     
     User user;
     string token;
     if(service == "google")
     {
-        token = parametersNode.attribute(P_GOOGLE_TOKEN).value();      
+        token = authProviderNode.attribute(proto::authProvideTokenAttr).value();      
     }
     else if(service == "facebook")
     {
-        token = parametersNode.attribute(P_FACEBOOK_TOKEN).value();  
+        token = authProviderNode.attribute(proto::authProvideTokenAttr).value();  
     }
     else
     {
@@ -73,5 +73,5 @@ string UserRegister::createResponseMsgOut()
         return getNegativeXMLReply(ServerException::IDENTIFICATION_TAKEN);
     }
 
-    return getXMLreply(R_TRUE);
+    return getXMLreply(proto::replyTrue);
 }

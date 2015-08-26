@@ -71,7 +71,6 @@ bool has_suffix1(const std::string &str, const std::string &suffix)
 
 int main(int argc, char** argv)
 {   
-
     //http://pugixml.googlecode.com/svn-history/r605/trunk/docs/samples/modify_add.cpp
     //load XML file from argv[1]
      
@@ -166,10 +165,10 @@ vector<indicator> nameIndicators;
         cout<<ret[1]<<endl;
         return 1;
         */
-        vector<long long> gts = {1,20,10,100};
-        vector<int> dvs = {1000,1234};
-        cout<<DAODevices::getInstance().getXMLdevices(1,gts,dvs);
-        return 0;
+//        vector<long long> gts = {1,20};
+//        vector<int> dvs = {2000};
+//        cout<<DAODevices::getInstance().getXMLdevices(1,gts,dvs);
+//        return 0;
     }
     catch (soci::soci_error const & e)
     {
@@ -195,9 +194,20 @@ vector<indicator> nameIndicators;
     
     cout << msg.createResponseMsgOut(); 
     return 0;
- */   
-  
-            
+ */ 
+//        vector<long long> g = {100,10,20};
+//        vector<int> d = {1234};
+//    cout << DAODevices::getInstance().getXMLdevices(17,g,d);
+//    cout << endl;
+//    cout << DAODevices::getInstance().getXMLAllDevs(100);
+//    cout << endl;
+//    cout << DAODevices::getInstance().getXMLNewDevices(100);
+//    return 1;
+//    cout << DAODevices::getInstance().getXMLAllDevs(20);
+//    cout << endl;
+//    cout << DAODevices::getInstance().getXMLAllDevs(100);
+//    cout << endl;
+//    return 1;
 /*
         resolveMsg( "<?xml version='1.0' encoding='UTF-8' ?><com ver=\"2.5\" bt=\"9j6xC3Df9c\" state=\"getlog\" from=\"1431268648\" to=\"1431527848\" ftype=\"avg\" interval=\"600\" aid=\"52428\" did=\"7372\" dtype=\"10\"></com>");
         resolveMsg( "<?xml version='1.0' encoding='UTF-8' ?><com ver=\"2.5\" bt=\"9j6xC3Df9c\" state=\"getlog\" from=\"1431268648\" to=\"1431527848\" ftype=\"avg\" interval=\"600\" aid=\"52428\" did=\"7372\" dtype=\"10\"></com>");
@@ -210,7 +220,7 @@ vector<indicator> nameIndicators;
 //resolveMsg( "<?xml version='1.0' encoding='UTF-8' ?><com ver=\"2.5\" bt=\"akpcWktvjF\" state=\"getaccs\" aid=\"52428\" ></com>");
         
     
-    
+    cout<< DAODevices::getInstance().getXMLDevicesQueryString2();
         Logger::debug()<< "setting SSL context..."<< endl;
        SSL_CTX *ctx;
        int server;

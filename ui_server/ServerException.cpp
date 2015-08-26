@@ -14,9 +14,10 @@ using namespace std;
 
     const int  ServerException::VERSION = 1;
      const int  ServerException::TOKEN_EMAIL = 2;
-     const int  ServerException::EMAIL = 3; //+text
+     const int  ServerException::EMAIL = 3;
+     const int  ServerException::USER_ID = 3;
      
-     const int ServerException::IDENTIFICATION_TAKEN = 3;
+     const int  ServerException::IDENTIFICATION_TAKEN = 3;
      const int  ServerException::LOCALE = 4;
 
      const int  ServerException::ADAPTER_ID = 5;

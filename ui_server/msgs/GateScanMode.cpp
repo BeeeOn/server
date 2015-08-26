@@ -19,7 +19,7 @@ GateScanMode::~GateScanMode() {
 }
 
 int GateScanMode::getMsgAuthorization() {
-    return SUPERUSER;
+    return permissions::superuser;
 }
 
 string GateScanMode::createResponseMsgOut()
@@ -33,19 +33,19 @@ string GateScanMode::createResponseMsgOut()
                         "</request>");
         r= sc.read();
     }catch(...){
-        _outputMainNode.append_attribute(P_ERRCODE) = ServerException::SERVER2SERVER;
-        return getXMLreply(R_FALSE);
+        _outputMainNode.append_attribute(proto::errorCodeAttr) = ServerException::SERVER2SERVER;
+        return getXMLreply(proto::replyFalse);
     }
     
     Logger::getInstance(Logger::DEBUG3)<<"S2S communication: "<< r<<endl; 
     
     if(r == "<reply>true</reply>")
     {
-        return envelopeResponse(R_TRUE);
+        return envelopeResponse(proto::replyTrue);
     }
     else
     {
-        _outputMainNode.append_attribute(P_ERRCODE) = ServerException::ADAPTER_LISTEN_FAIL;
-        return getXMLreply(R_FALSE);
+        _outputMainNode.append_attribute(proto::errorCodeAttr) = ServerException::ADAPTER_LISTEN_FAIL;
+        return getXMLreply(proto::replyFalse);
     }
 }

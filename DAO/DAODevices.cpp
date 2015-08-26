@@ -46,18 +46,22 @@ DAODevices& DAODevices::getInstance(){
 //
 //}
 
-string DAODevices::getXMLDevicesQueryString(string facilitiesCond)
+
+string DAODevices::getXMLDevicesQueryString2()
 {
     return " xmlagg("
-                        "xmlelement(name  dev,xmlattributes(" + col.init + " as init, " + col.mac + " as did, " + col.id + " as type, " + col.location_id + " as lid, " + col.refresh + " as refresh, "
-                                                " " + col.measured_at + " as time, " + col.involved + "  as inv, " + col.name + "  as name),"
-                                    "(select xmlagg(xmlelement(name part,xmlattributes(" + moduleCol.id + " as type, " + moduleCol.value + " as val))) "
-                                            "from " + tableModule + " where " +tableModule+"."+ moduleCol.mac + "="+tableDevices+"."+ col.mac + " "+ facilitiesCond + ")"
+                        "xmlelement(name device,"
+                                    "xmlattributes(" + col.init + " as init, " + col.mac + " as id, " + col.id + " as type, " + col.location_id + " as locationid, " + col.refresh + " as refresh, "
+                                                " " + col.measured_at + " as time, " + col.involved + "  as involved, " + col.name + "  as name, " + col.gateway_id + " as gateid),"
+                                    "(select xmlagg(xmlelement(name module,xmlattributes(" + moduleCol.id + " as id, " + moduleCol.value + " as value))) "
+                                            "from " + tableModule + " where " +tableModule+"."+ moduleCol.mac + "="+tableDevices+"."+ col.mac + " )"
                     ")"
                 ") "
+//            from " + tableDevices + " ";
                 ;
 
 }
+
 std::string DAODevices::getXMLAllDevs(long long gateId)
 {
         Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"getCommunicationXml"<<"\n";
@@ -69,9 +73,9 @@ std::string DAODevices::getXMLAllDevs(long long gateId)
             std::string xml;
             indicator ind;
             
-            sql << "select " + getXMLDevicesQueryString() +
-                    "from  " + DAOAdapters::tableGateway + " join " + tableDevices + " using( " + DAOAdapters::col.id + ") "
-                    " where " + DAOAdapters::col.id + "=:adapter and " + DAODevices::col.init + "!='0' " 
+            sql << "select " + getXMLDevicesQueryString2() +
+                    "from  " +  tableDevices + 
+                    " where " + col.gateway_id + "=:adapter and " + DAODevices::col.init + "!='0' " 
                     ,use(gateId,"adapter"),soci::into(xml,ind);
             //cout << sql.get_last_query();
 
@@ -105,18 +109,15 @@ string DAODevices::getXMLdevices(int userId, vector<long long> gateVector, vecto
         
         statement st = (sql.prepare <<
                 
-                "select  xmlagg("
-		"xmlelement(name adapter, xmlattributes(" + DAOAdapters::col.id + " as id),"
-					    "(select  "
-                <<
-                getXMLDevicesQueryString(" and " + col.mac + " in(" + devices + ") " ) +
-               "from " + tableDevices + " " <<
-                "where " +col.gateway_id+" in(" + gates + ") and " + col.mac + " in(" + devices + ") and " <<
-                 DAOAdapters::tableGateway << "." << col.gateway_id << "=" << tableDevices << "." << col.gateway_id <<
-                "))) from gateway left join user_gateway using(gateway_id) where user_id = :user and " +col.gateway_id+" in(" + gates + ") ",
-                //use(gates,"gates"),use(devices,"devices"),
+                "select  " <<
+                getXMLDevicesQueryString2() +
+               "from user_gateway left join gateway using(gateway_id) left join " + tableDevices + " using(gateway_id)" <<
+                "where " +col.gateway_id+" in(" + gates + ") and " + col.mac + " in(" + devices + ") and user_id=:userId",
                 use(userId),
                 soci::into(xml, ind) );
+        
+        
+        
         //cout<<endl<<sql.get_last_query()<<endl;
         st.execute(true);
 
@@ -129,84 +130,6 @@ string DAODevices::getXMLdevices(int userId, vector<long long> gateVector, vecto
     }
 }
 
-string DAODevices::getXMLdevices(int userId, vector<string> gateVector, vector<device> devicesVec)
-{
-         Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"getPartialDevices"<<"\n";
-        try
-        {
-                soci::session sql(*_pool);
-                Logger::getInstance(Logger::DEBUG3)<<"devices n."<<devicesVec.size()<<"\n";
-                if( devicesVec.size() == 0)
-                    return "";
-                
-                stringstream ssD,ssF,ssA;
-                ssD<<"(";
-                 ssF<<"(";
-                for (unsigned int i=0; i<devicesVec.size(); i++){
-                    ssD << "("<<devicesVec[i].id<<","<<devicesVec[i].type<<")";
-                    ssF << ""<<devicesVec[i].id<<"";
-                    
-                    if( i != devicesVec.size()-1){
-                        ssD <<",";
-                        ssF <<",";
-                    }
-                }
-                ssD<<")";
-                ssF<<")";
-                 
-                ssA<<"(";
-                for (unsigned int i=0; i<gateVector.size(); i++){
-                    ssA << "'"<<gateVector[i]<<"'";
-                    
-                    if( i != gateVector.size()-1){
-                        ssA <<",";
-                    }
-                }
-                ssA<<")";
-                string devices = ssD.str();
-                string facs = ssF.str();
-                string adapters = ssA.str();
-              
-                Logger::getInstance(Logger::DEBUG3)<<"check ada string::"<<adapters<<endl;
-                Logger::getInstance(Logger::DEBUG3)<<"check devices string:"<<devices<<endl;
-                Logger::getInstance(Logger::DEBUG3)<<"check facilities string::"<<facs<<endl;
-                
-                string xml;
-                indicator ind;
-                //cout<<getXMLDevicesQueryString(" and concat(fk_facilities_mac,type) in "+devices);
-                statement st = (sql.prepare <<
-                        "select  xmlagg("
-		"xmlelement(name adapter, xmlattributes(" + DAOAdapters::col.id + " as id),"
-					    "(select  "
-						    "xmlagg(xmlelement(name  dev,xmlattributes(" + col.mac + " as did, " + col.location_id + " as lid, " + col.refresh + " as refresh, "
-                                                                                                                                     " " + col.measured_at + " as time, " + col.involved + "  as inv),"
-								"(select xmlagg(xmlelement(name part,xmlattributes(" + moduleCol.id + " as type, " + moduleCol.value + " as val))) from " + tableModule + " where "
-									"("+moduleCol.mac+" , "+col.id+") in "+devices+" "
-									"and " + tableModule + "."+moduleCol.mac+" = " + tableDevices + "." +col.mac+
-								")"								
-							   ")"
-						   " ) from " + tableDevices + " where " + tableDevices + "."+col.mac+" in "+facs +" and "
-						   +" "+DAOAdapters::tableGateway+"."+DAOAdapters::col.id+ "=" + tableDevices + "."+col.gateway_id +
-                        
-						")"
-		")"
-	") "
-"from " + DAOAdapters::tableGateway + " where "+DAOAdapters::col.id+" in "+adapters
-                        ,
-                        soci::into(xml, ind) );
-                //TODO napojeni na uživatlee
-                st.execute(true);
-                return xml;
-                
-        }
-        catch (postgresql_soci_error& e)
-        {
-                Logger::getInstance(Logger::ERROR) << "Error: " << e.what() << '\n';
-                throw;
-        }
-}
-
-
 string DAODevices::getXMLNewDevices(long long gateId)
 {
          Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"getPartialDevices"<<"\n";
@@ -218,8 +141,8 @@ string DAODevices::getXMLNewDevices(long long gateId)
                 string xml;
                 indicator ind;
                 statement st = (sql.prepare <<"select " +
-                        getXMLDevicesQueryString() +
-                       "from " + DAOAdapters::tableGateway + " join " + tableDevices + " using(" +col.gateway_id+") where "+col.init+"='0' and " +col.gateway_id+" =:adapter" //join devices on mac=fk_facilities_mac
+                        getXMLDevicesQueryString2() +
+                       "from " + tableDevices + " where "+col.init+"='0' and " +col.gateway_id+" =:adapter" 
                         ,use(gateId, "adapter"),soci::into(xml, ind) );
                 
                 st.execute(true);

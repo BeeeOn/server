@@ -303,7 +303,7 @@ std::string DAOUsers::getXMLusersAdapters(int userId)
                 soci::session sql(*_pool);
                 std::string xml;
                 indicator ind;
-                sql << "select xmlagg(xmlelement(name adapter, xmlattributes(" << DAOAdapters::col.id << " as id, " << DAOAdapters::col.name << " as name, " << DAOUsersAdapters::col.permission << " as role, " << DAOAdapters::col.timezone << " as utc)))"
+                sql << "select xmlagg(xmlelement(name gate, xmlattributes(" << DAOAdapters::col.id << " as id, " << DAOAdapters::col.name << " as name, " << DAOUsersAdapters::col.permission << " as role, " << DAOAdapters::col.timezone << " as utc)))"
                                     "from " << tableUsers << " join " << DAOUsersAdapters::tableUsersGateways << " using(" << col.id << ") " << 
                                 " join " << DAOAdapters::tableGateway << " using(" << DAOAdapters::col.id << ") where " << col.id << " = :id"
                             ,use(userId,"id"), soci::into(xml,ind);
