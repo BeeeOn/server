@@ -69,8 +69,8 @@ CREATE OR REPLACE FUNCTION remove_another_superuser() returns trigger
   $$
   
   BEGIN
-    UPDATE users_adapters set role = 'admin' where 
-     fk_adapter_id = NEW.fk_adapter_id AND fk_user_id != NEW.fk_user_id AND role = 'superuser';
+    UPDATE user_gateway set permission = 'admin' where 
+     gateway_id = NEW.gateway_id AND user_id != NEW.user_id AND permission = 'superuser';
     
   RETURN NEW;
   END;
