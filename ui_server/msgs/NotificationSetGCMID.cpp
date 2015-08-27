@@ -6,7 +6,7 @@
  */
 
 #include "NotificationSetGCMID.h"
-#include "../DAO/DAOMobileDevices.h"
+#include "../DAO/DAOPushNotificationService.h"
 
 using namespace std;
 
@@ -37,7 +37,7 @@ string NotificationSetGCMID::createResponseMsgOut() {
 //    }
 //    
     
-    if(DAOMobileDevices::getInstance().insertPushNotification(_userId, gcmid) == 0)
+    if(DAOPushNotificationService::getInstance().insertPushNotification(_userId, gcmid) == 0)
     {
         return getNegativeXMLReply(ServerException::GCMID);
     }

@@ -44,6 +44,9 @@ string LocationAdd::createResponseMsgOut()
 
     int newRoomId = DAORooms::getInstance().insertNewRoom(_gatewayId, roomType, roomName);
 
-    _outputMainNode.append_attribute(proto::locationIdAttr) = newRoomId;
+    
+    pugi::xml_node newLocationNode = _outputMainNode.append_child();
+    newLocationNode.set_name(proto::locationNode);
+    newLocationNode.append_attribute(proto::locationIdAttr) = newRoomId;
     return getXMLreply(proto::replyLocationCreated);
 }

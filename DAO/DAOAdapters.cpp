@@ -14,7 +14,6 @@ using namespace std;
 using namespace soci;
 
 const GatewayColumns DAOAdapters::col;
-
 namespace soci
 {
     template<>

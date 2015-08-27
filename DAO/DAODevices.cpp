@@ -101,6 +101,10 @@ string DAODevices::getXMLdevices(int userId, vector<long long> gateVector, vecto
 
         string xml;
         indicator ind;
+        
+        if(gateVector.size() == 0 || devicesVec.size() == 0)
+            return "";
+        
         Logger::debug3()<<"gates:"<<vectorToPsqlNotation(gateVector)<<"\n";
         Logger::debug3()<<"devs:"<<vectorToPsqlNotation(devicesVec)<<"\n";
         

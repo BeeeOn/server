@@ -46,6 +46,8 @@
         <itemPath>../DAO/DAOMobileDevices.h</itemPath>
         <itemPath>../DAO/DAONotification.cpp</itemPath>
         <itemPath>../DAO/DAONotification.h</itemPath>
+        <itemPath>../DAO/DAOPushNotificationService.cpp</itemPath>
+        <itemPath>../DAO/DAOPushNotificationService.h</itemPath>
         <itemPath>../DAO/DAORooms.cpp</itemPath>
         <itemPath>../DAO/DAORooms.h</itemPath>
         <itemPath>../DAO/DAOUsers.cpp</itemPath>
@@ -267,10 +269,132 @@
       <itemPath>config_devel.xml</itemPath>
       <itemPath>config_prod.xml</itemPath>
     </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+      <itemPath>config.xml</itemPath>
+      <itemPath>config_devel.xml</itemPath>
+      <itemPath>config_prod.xml</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+      <itemPath>config.xml</itemPath>
+      <itemPath>config_devel.xml</itemPath>
+      <itemPath>config_prod.xml</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+      <itemPath>config.xml</itemPath>
+      <itemPath>config_devel.xml</itemPath>
+      <itemPath>config_prod.xml</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+      <itemPath>config.xml</itemPath>
+      <itemPath>config_devel.xml</itemPath>
+      <itemPath>config_prod.xml</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+      <itemPath>config.xml</itemPath>
+      <itemPath>config_devel.xml</itemPath>
+      <itemPath>config_prod.xml</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+      <itemPath>config.xml</itemPath>
+      <itemPath>config_devel.xml</itemPath>
+      <itemPath>config_prod.xml</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+      <itemPath>config.xml</itemPath>
+      <itemPath>config_devel.xml</itemPath>
+      <itemPath>config_prod.xml</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+      <itemPath>config.xml</itemPath>
+      <itemPath>config_devel.xml</itemPath>
+      <itemPath>config_prod.xml</itemPath>
+    </logicalFolder>
     <itemPath>../ui_logger/Logger.cpp</itemPath>
     <itemPath>../ui_logger/Logger.h</itemPath>
   </logicalFolder>
   <sourceRootList>
+    <Elem>../lib</Elem>
+    <Elem>../ui_logger</Elem>
+    <Elem>msgs</Elem>
+    <Elem>../DAO</Elem>
+    <Elem>.</Elem>
+    <Elem>../lib</Elem>
+    <Elem>../ui_logger</Elem>
+    <Elem>msgs</Elem>
+    <Elem>../DAO</Elem>
+    <Elem>.</Elem>
     <Elem>../lib</Elem>
     <Elem>../ui_logger</Elem>
     <Elem>msgs</Elem>
@@ -393,6 +517,16 @@
       <item path="../DAO/DAONotification.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../DAO/DAONotification.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../DAO/DAOPushNotificationService.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../DAO/DAOPushNotificationService.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="../DAO/DAORooms.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -776,6 +910,16 @@
       <item path="../DAO/DAONotification.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../DAO/DAONotification.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../DAO/DAOPushNotificationService.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../DAO/DAOPushNotificationService.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="../DAO/DAORooms.cpp" ex="false" tool="1" flavor2="0">
       </item>

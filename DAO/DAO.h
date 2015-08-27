@@ -38,7 +38,9 @@ public:
             ss << ",";
         }
         std::string ret = ss.str();
-        ret.pop_back();
+        if(!ret.empty())
+            ret.pop_back();
+        
         return ret;
     }
     

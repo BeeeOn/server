@@ -6,7 +6,7 @@
  */
 
 #include "NotificationEraseGCMID.h"
-#include "../DAO/DAOMobileDevices.h"
+#include "../DAO/DAOPushNotificationService.h"
 #include "DBConnector.h"
 #include "IMsgInLoginUnwanted.h"
 
@@ -29,7 +29,7 @@ string NotificationEraseGCMID::createResponseMsgOut() {
     string gcmid = _doc->child(proto::communicationNode).attribute(proto::googleCloudMessagingIdAttr).value();
     
     int uid = _doc->child(proto::communicationNode).child(proto::userNode).attribute(proto::userIdAttr).as_int(-1);
-    DAOMobileDevices::getInstance().deletepushNotification(uid, gcmid);
+    DAOPushNotificationService::getInstance().deletepushNotification(uid, gcmid);
     //DAOMobileDevices::getInstance().delGCMId(uid, gcmid);
     
     return getXMLreply(proto::replyTrue);

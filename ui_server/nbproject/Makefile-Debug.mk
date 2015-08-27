@@ -40,6 +40,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/_ext/1360890531/DAODevices.o \
 	${OBJECTDIR}/_ext/1360890531/DAOMobileDevices.o \
 	${OBJECTDIR}/_ext/1360890531/DAONotification.o \
+	${OBJECTDIR}/_ext/1360890531/DAOPushNotificationService.o \
 	${OBJECTDIR}/_ext/1360890531/DAORooms.o \
 	${OBJECTDIR}/_ext/1360890531/DAOUsers.o \
 	${OBJECTDIR}/_ext/1360890531/DAOUsersAdapters.o \
@@ -146,6 +147,11 @@ ${OBJECTDIR}/_ext/1360890531/DAONotification.o: ../DAO/DAONotification.cpp
 	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAONotification.o ../DAO/DAONotification.cpp
+
+${OBJECTDIR}/_ext/1360890531/DAOPushNotificationService.o: ../DAO/DAOPushNotificationService.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOPushNotificationService.o ../DAO/DAOPushNotificationService.cpp
 
 ${OBJECTDIR}/_ext/1360890531/DAORooms.o: ../DAO/DAORooms.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531

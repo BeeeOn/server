@@ -157,7 +157,7 @@ int DAOUsersAdapters::parAdapterWithUserIfPossible(long long int adapterId, std:
         soci::session sql(*_pool);
        
         
-        string role = "permissions::superuser";
+        string role = "superuser";
         statement st = (sql.prepare <<  "insert into " << tableUsersGateways << "(" + col.gateway_id + ", " + col.user_id + ", " + col.permission + ") select :a_id , :gId, :role where not exists (select 1 from " << tableUsersGateways << " where "+col.gateway_id+"=:a_id)",// where fk_adapter_id=:a_id)
                 use(adapterId, "a_id"), use(role, "role"),  use(userId, "gId"));
         st.execute(true);

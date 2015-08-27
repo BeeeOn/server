@@ -42,7 +42,7 @@ namespace proto{
     static const char sessionIdAttr[] = "sessionid";
     
     static const char adapterNode[] = "gate";
-    static const char deviceNode[] = "dev";
+    static const char deviceNode[] = "device";
     static const char moduleNode[] = "part";
     
     static const char headerGatewayIdAttr[] = "gateid";
