@@ -3,7 +3,7 @@
 CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.8.1-beta1" last-position="0,0" last-zoom="1"
+<dbmodel pgmodeler-ver="0.8.1-beta1" last-position="15,803" last-zoom="1"
 	 default-owner="postgres">
 <role name="hardware">
 </role>
@@ -206,7 +206,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="decimal" length="20" precision="0"/>
 	</column>
 	<constraint name="check_positive_mac" type="ck-constr" table="public.device">
-			<expression><![CDATA[device_mac >= 0]]></expression>
+			<expression><![CDATA[device_euid>= 0]]></expression>
 	</constraint>
 	<constraint name="facilities_pk" type="pk-constr" table="public.device">
 		<columns names="device_euid" ref-type="src-columns"/>
@@ -342,7 +342,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="mobile_devices">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="166.25" y="64.2857"/>
+	<position x="157.25" y="99.2857"/>
 	<column name="mobile_id" not-null="true">
 		<type name="text"/>
 	</column>
@@ -366,18 +366,18 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="users_algorithms">
+<table name="user_algorithm">
 	<schema name="public"/>
 	<role name="postgres"/>
 	<tag name="Algorithms"/>
 	<position x="492.714" y="52.7143"/>
-	<column name="fk_user_id" not-null="true">
+	<column name="user_id" not-null="true">
 		<type name="integer"/>
 	</column>
-	<column name="fk_algorithm_id" not-null="true">
+	<column name="algorithm_id" not-null="true">
 		<type name="integer"/>
 	</column>
-	<column name="users_algorithms_id" not-null="true">
+	<column name="user_algorithm_id" not-null="true">
 		<type name="serial"/>
 	</column>
 	<column name="parameters" not-null="true">
@@ -389,22 +389,22 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="name" not-null="true">
 		<type name="text"/>
 	</column>
-	<column name="fk_adapter_id" not-null="true">
+	<column name="gateway_id" not-null="true">
 		<type name="decimal" length="20" precision="0"/>
 	</column>
 	<column name="state" not-null="true">
 		<type name="text"/>
 	</column>
-	<constraint name="users_algorithms_pk" type="pk-constr" table="public.users_algorithms">
-		<columns names="fk_user_id,fk_algorithm_id,users_algorithms_id" ref-type="src-columns"/>
+	<constraint name="users_algorithms_pk" type="pk-constr" table="public.user_algorithm">
+		<columns names="user_id,algorithm_id,user_algorithm_id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
-<table name="u_algorithms">
+<table name="algorithm">
 	<schema name="public"/>
 	<role name="postgres"/>
 	<tag name="Algorithms"/>
-	<position x="906.286" y="170.857"/>
+	<position x="947.286" y="144.857"/>
 	<column name="algorithm_id" not-null="true">
 		<type name="integer"/>
 	</column>
@@ -414,55 +414,55 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="type" not-null="true">
 		<type name="integer"/>
 	</column>
-	<constraint name="u_algorithms_pk" type="pk-constr" table="public.u_algorithms">
+	<constraint name="u_algorithms_pk" type="pk-constr" table="public.algorithm">
 		<columns names="algorithm_id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
-<table name="algorithms_adapters">
+<table name="algorithm_gateway">
 	<schema name="public"/>
 	<role name="postgres"/>
 	<tag name="Algorithms"/>
 	<position x="936" y="293"/>
-	<column name="fk_adapter_id" not-null="true">
+	<column name="gateway_id" not-null="true">
 		<type name="decimal" length="20" precision="0"/>
 	</column>
 	<column name="email_list" not-null="true">
 		<type name="text"/>
 	</column>
-	<column name="fk_algorithm_id" not-null="true">
+	<column name="algorithm_id" not-null="true">
 		<type name="integer"/>
 	</column>
-	<constraint name="algorithms_adapters_pk" type="pk-constr" table="public.algorithms_adapters">
-		<columns names="fk_adapter_id,email_list" ref-type="src-columns"/>
+	<constraint name="algorithms_adapters_pk" type="pk-constr" table="public.algorithm_gateway">
+		<columns names="gateway_id,email_list" ref-type="src-columns"/>
 	</constraint>
 </table>
 
-<table name="algo_devices">
+<table name="algorithm_device">
 	<schema name="public"/>
 	<role name="postgres"/>
 	<tag name="Algorithms"/>
 	<position x="1288.75" y="21"/>
-	<column name="fk_users_algorithms_id" not-null="true">
+	<column name="users_algorithm_id" not-null="true">
 		<type name="integer"/>
 	</column>
-	<column name="fk_user_id" not-null="true">
+	<column name="user_id" not-null="true">
 		<type name="integer"/>
 	</column>
-	<column name="fk_algorithm_id" not-null="true">
+	<column name="algorithm_id" not-null="true">
 		<type name="integer"/>
 	</column>
-	<column name="fk_facilities_mac" not-null="true">
+	<column name="device_euid" not-null="true">
 		<type name="decimal" length="10"/>
 	</column>
-	<column name="fk_devices_type" not-null="true">
+	<column name="module_type" not-null="true">
 		<type name="smallint"/>
 	</column>
 	<column name="algo_devices_id" not-null="true">
 		<type name="serial"/>
 	</column>
-	<constraint name="algo_devices_pk" type="pk-constr" table="public.algo_devices">
-		<columns names="fk_users_algorithms_id,fk_user_id,fk_algorithm_id,fk_facilities_mac,fk_devices_type,algo_devices_id" ref-type="src-columns"/>
+	<constraint name="algo_devices_pk" type="pk-constr" table="public.algorithm_device">
+		<columns names="users_algorithm_id,user_id,algorithm_id,device_euid,module_type,algo_devices_id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
@@ -492,7 +492,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<tag name="Achievements"/>
-	<position x="482.762" y="694.596"/>
+	<position x="514.762" y="646.596"/>
 	<column name="fk_achievement_id" not-null="true">
 		<type name="integer"/>
 	</column>
@@ -551,13 +551,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 			<column name="measured_value"/>
 		</idxelement>
 </index>
-
-<textbox name="report" font-size="9">
-	<position x="65.8824" y="1244.71"/>
-	<comment><![CDATA[Špatná sprava roli
-mohly by být lepší čáry znázornující vztahy
-hloupý exit dialog]]></comment>
-</textbox>
 
 <table name="push_notification_service">
 	<schema name="public"/>
@@ -638,45 +631,45 @@ hloupý exit dialog]]></comment>
 </constraint>
 
 <constraint name="users_algorithms_users" type="fk-constr" comparison-type="MATCH FULL"
-	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.users" table="public.users_algorithms">
-	<columns names="fk_user_id" ref-type="src-columns"/>
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.users" table="public.user_algorithm">
+	<columns names="user_id" ref-type="src-columns"/>
 	<columns names="user_id" ref-type="dst-columns"/>
 </constraint>
 
 <constraint name="users_algorithms_algorithms" type="fk-constr" comparison-type="MATCH FULL"
-	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.u_algorithms" table="public.users_algorithms">
-	<columns names="fk_algorithm_id" ref-type="src-columns"/>
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.algorithm" table="public.user_algorithm">
+	<columns names="algorithm_id" ref-type="src-columns"/>
 	<columns names="algorithm_id" ref-type="dst-columns"/>
 </constraint>
 
 <constraint name="users_algorithms_adapters" type="fk-constr" comparison-type="MATCH FULL"
-	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.gateway" table="public.users_algorithms">
-	<columns names="fk_adapter_id" ref-type="src-columns"/>
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.gateway" table="public.user_algorithm">
+	<columns names="gateway_id" ref-type="src-columns"/>
 	<columns names="gateway_id" ref-type="dst-columns"/>
 </constraint>
 
 <constraint name="algorithms_adapters_adapters" type="fk-constr" comparison-type="MATCH FULL"
-	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.gateway" table="public.algorithms_adapters">
-	<columns names="fk_adapter_id" ref-type="src-columns"/>
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.gateway" table="public.algorithm_gateway">
+	<columns names="gateway_id" ref-type="src-columns"/>
 	<columns names="gateway_id" ref-type="dst-columns"/>
 </constraint>
 
 <constraint name="algorithms_adapters_u_algorithms" type="fk-constr" comparison-type="MATCH FULL"
-	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.u_algorithms" table="public.algorithms_adapters">
-	<columns names="fk_algorithm_id" ref-type="src-columns"/>
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.algorithm" table="public.algorithm_gateway">
+	<columns names="algorithm_id" ref-type="src-columns"/>
 	<columns names="algorithm_id" ref-type="dst-columns"/>
 </constraint>
 
 <constraint name="algo_devices_devices" type="fk-constr" comparison-type="MATCH FULL"
-	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.module" table="public.algo_devices">
-	<columns names="fk_facilities_mac,fk_devices_type" ref-type="src-columns"/>
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.module" table="public.algorithm_device">
+	<columns names="device_euid,module_type" ref-type="src-columns"/>
 	<columns names="device_euid,module_id" ref-type="dst-columns"/>
 </constraint>
 
 <constraint name="fk_algo_devices_users_algorithms" type="fk-constr" comparison-type="MATCH FULL"
-	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.users_algorithms" table="public.algo_devices">
-	<columns names="fk_user_id,fk_algorithm_id,fk_users_algorithms_id" ref-type="src-columns"/>
-	<columns names="fk_user_id,fk_algorithm_id,users_algorithms_id" ref-type="dst-columns"/>
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.user_algorithm" table="public.algorithm_device">
+	<columns names="user_id,algorithm_id,users_algorithm_id" ref-type="src-columns"/>
+	<columns names="user_id,algorithm_id,user_algorithm_id" ref-type="dst-columns"/>
 </constraint>
 
 <constraint name="achievement_detail_achievements" type="fk-constr" comparison-type="MATCH FULL"
@@ -766,7 +759,7 @@ hloupý exit dialog]]></comment>
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_users_algorithms_users" type="relfk"
-	 src-table="public.users_algorithms"
+	 src-table="public.user_algorithm"
 	 dst-table="public.users"
 	 src-required="false" dst-required="false">
 	<label ref-type="name-label">
@@ -775,27 +768,27 @@ hloupý exit dialog]]></comment>
 </relationship>
 
 <relationship name="rel_users_algorithms_u_algorithms" type="relfk"
-	 src-table="public.users_algorithms"
-	 dst-table="public.u_algorithms"
+	 src-table="public.user_algorithm"
+	 dst-table="public.algorithm"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_users_algorithms_gateway" type="relfk"
-	 src-table="public.users_algorithms"
+	 src-table="public.user_algorithm"
 	 dst-table="public.gateway"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_algorithms_adapters_gateway" type="relfk"
-	 src-table="public.algorithms_adapters"
+	 src-table="public.algorithm_gateway"
 	 dst-table="public.gateway"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_algorithms_adapters_u_algorithms" type="relfk"
-	 src-table="public.algorithms_adapters"
-	 dst-table="public.u_algorithms"
+	 src-table="public.algorithm_gateway"
+	 dst-table="public.algorithm"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_algo_devices_module" type="relfk"
-	 src-table="public.algo_devices"
+	 src-table="public.algorithm_device"
 	 dst-table="public.module"
 	 src-required="false" dst-required="false"/>
 
@@ -829,8 +822,8 @@ hloupý exit dialog]]></comment>
 </relationship>
 
 <relationship name="rel_algo_devices_users_algorithms" type="relfk"
-	 src-table="public.algo_devices"
-	 dst-table="public.users_algorithms"
+	 src-table="public.algorithm_device"
+	 dst-table="public.user_algorithm"
 	 src-required="false" dst-required="false"/>
 
 <permission>
@@ -874,17 +867,17 @@ hloupý exit dialog]]></comment>
 	<privileges select="true" delete="true" insert="true" update="true"/>
 </permission>
 <permission>
-	<object name="public.u_algorithms" type="table"/>
+	<object name="public.algorithm" type="table"/>
 	<roles names="algorithms"/>
 	<privileges select="true" delete="true" insert="true" update="true"/>
 </permission>
 <permission>
-	<object name="public.algorithms_adapters" type="table"/>
+	<object name="public.algorithm_gateway" type="table"/>
 	<roles names="algorithms"/>
 	<privileges select="true" delete="true" insert="true" update="true"/>
 </permission>
 <permission>
-	<object name="public.algo_devices" type="table"/>
+	<object name="public.algorithm_device" type="table"/>
 	<roles names="algorithms"/>
 	<privileges select="true" delete="true" insert="true" update="true"/>
 </permission>

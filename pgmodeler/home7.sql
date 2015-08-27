@@ -239,27 +239,27 @@ CREATE TABLE public.mobile_devices(
 ALTER TABLE public.mobile_devices OWNER TO postgres;
 -- ddl-end --
 
--- object: public.users_algorithms | type: TABLE --
--- DROP TABLE IF EXISTS public.users_algorithms CASCADE;
-CREATE TABLE public.users_algorithms(
-	fk_user_id integer NOT NULL,
-	fk_algorithm_id integer NOT NULL,
-	users_algorithms_id serial NOT NULL,
+-- object: public.user_algorithm | type: TABLE --
+-- DROP TABLE IF EXISTS public.user_algorithm CASCADE;
+CREATE TABLE public.user_algorithm(
+	user_id integer NOT NULL,
+	algorithm_id integer NOT NULL,
+	user_algorithm_id serial NOT NULL,
 	parameters text NOT NULL,
 	data text NOT NULL,
 	name text NOT NULL,
-	fk_adapter_id decimal(20,0) NOT NULL,
+	gateway_id decimal(20,0) NOT NULL,
 	state text NOT NULL,
-	CONSTRAINT users_algorithms_pk PRIMARY KEY (fk_user_id,fk_algorithm_id,users_algorithms_id)
+	CONSTRAINT users_algorithms_pk PRIMARY KEY (user_id,algorithm_id,user_algorithm_id)
 
 );
 -- ddl-end --
-ALTER TABLE public.users_algorithms OWNER TO postgres;
+ALTER TABLE public.user_algorithm OWNER TO postgres;
 -- ddl-end --
 
--- object: public.u_algorithms | type: TABLE --
--- DROP TABLE IF EXISTS public.u_algorithms CASCADE;
-CREATE TABLE public.u_algorithms(
+-- object: public.algorithm | type: TABLE --
+-- DROP TABLE IF EXISTS public.algorithm CASCADE;
+CREATE TABLE public.algorithm(
 	algorithm_id integer NOT NULL,
 	name varchar(50) NOT NULL,
 	type integer NOT NULL,
@@ -267,36 +267,36 @@ CREATE TABLE public.u_algorithms(
 
 );
 -- ddl-end --
-ALTER TABLE public.u_algorithms OWNER TO postgres;
+ALTER TABLE public.algorithm OWNER TO postgres;
 -- ddl-end --
 
--- object: public.algorithms_adapters | type: TABLE --
--- DROP TABLE IF EXISTS public.algorithms_adapters CASCADE;
-CREATE TABLE public.algorithms_adapters(
-	fk_adapter_id decimal(20,0) NOT NULL,
+-- object: public.algorithm_gateway | type: TABLE --
+-- DROP TABLE IF EXISTS public.algorithm_gateway CASCADE;
+CREATE TABLE public.algorithm_gateway(
+	gateway_id decimal(20,0) NOT NULL,
 	email_list text NOT NULL,
-	fk_algorithm_id integer NOT NULL,
-	CONSTRAINT algorithms_adapters_pk PRIMARY KEY (fk_adapter_id,email_list)
+	algorithm_id integer NOT NULL,
+	CONSTRAINT algorithms_adapters_pk PRIMARY KEY (gateway_id,email_list)
 
 );
 -- ddl-end --
-ALTER TABLE public.algorithms_adapters OWNER TO postgres;
+ALTER TABLE public.algorithm_gateway OWNER TO postgres;
 -- ddl-end --
 
--- object: public.algo_devices | type: TABLE --
--- DROP TABLE IF EXISTS public.algo_devices CASCADE;
-CREATE TABLE public.algo_devices(
-	fk_users_algorithms_id integer NOT NULL,
-	fk_user_id integer NOT NULL,
-	fk_algorithm_id integer NOT NULL,
-	fk_facilities_mac decimal(10) NOT NULL,
-	fk_devices_type smallint NOT NULL,
+-- object: public.algorithm_device | type: TABLE --
+-- DROP TABLE IF EXISTS public.algorithm_device CASCADE;
+CREATE TABLE public.algorithm_device(
+	users_algorithm_id integer NOT NULL,
+	user_id integer NOT NULL,
+	algorithm_id integer NOT NULL,
+	device_euid decimal(10) NOT NULL,
+	module_type smallint NOT NULL,
 	algo_devices_id serial NOT NULL,
-	CONSTRAINT algo_devices_pk PRIMARY KEY (fk_users_algorithms_id,fk_user_id,fk_algorithm_id,fk_facilities_mac,fk_devices_type,algo_devices_id)
+	CONSTRAINT algo_devices_pk PRIMARY KEY (users_algorithm_id,user_id,algorithm_id,device_euid,module_type,algo_devices_id)
 
 );
 -- ddl-end --
-ALTER TABLE public.algo_devices OWNER TO postgres;
+ALTER TABLE public.algorithm_device OWNER TO postgres;
 -- ddl-end --
 
 -- object: public.users_achievements | type: TABLE --
@@ -452,51 +452,51 @@ ON DELETE CASCADE ON UPDATE NO ACTION;
 -- ddl-end --
 
 -- object: users_algorithms_users | type: CONSTRAINT --
--- ALTER TABLE public.users_algorithms DROP CONSTRAINT IF EXISTS users_algorithms_users CASCADE;
-ALTER TABLE public.users_algorithms ADD CONSTRAINT users_algorithms_users FOREIGN KEY (fk_user_id)
+-- ALTER TABLE public.user_algorithm DROP CONSTRAINT IF EXISTS users_algorithms_users CASCADE;
+ALTER TABLE public.user_algorithm ADD CONSTRAINT users_algorithms_users FOREIGN KEY (user_id)
 REFERENCES public.users (user_id) MATCH FULL
 ON DELETE CASCADE ON UPDATE NO ACTION;
 -- ddl-end --
 
 -- object: users_algorithms_algorithms | type: CONSTRAINT --
--- ALTER TABLE public.users_algorithms DROP CONSTRAINT IF EXISTS users_algorithms_algorithms CASCADE;
-ALTER TABLE public.users_algorithms ADD CONSTRAINT users_algorithms_algorithms FOREIGN KEY (fk_algorithm_id)
-REFERENCES public.u_algorithms (algorithm_id) MATCH FULL
+-- ALTER TABLE public.user_algorithm DROP CONSTRAINT IF EXISTS users_algorithms_algorithms CASCADE;
+ALTER TABLE public.user_algorithm ADD CONSTRAINT users_algorithms_algorithms FOREIGN KEY (algorithm_id)
+REFERENCES public.algorithm (algorithm_id) MATCH FULL
 ON DELETE CASCADE ON UPDATE NO ACTION;
 -- ddl-end --
 
 -- object: users_algorithms_adapters | type: CONSTRAINT --
--- ALTER TABLE public.users_algorithms DROP CONSTRAINT IF EXISTS users_algorithms_adapters CASCADE;
-ALTER TABLE public.users_algorithms ADD CONSTRAINT users_algorithms_adapters FOREIGN KEY (fk_adapter_id)
+-- ALTER TABLE public.user_algorithm DROP CONSTRAINT IF EXISTS users_algorithms_adapters CASCADE;
+ALTER TABLE public.user_algorithm ADD CONSTRAINT users_algorithms_adapters FOREIGN KEY (gateway_id)
 REFERENCES public.gateway (gateway_id) MATCH FULL
 ON DELETE CASCADE ON UPDATE NO ACTION;
 -- ddl-end --
 
 -- object: algorithms_adapters_adapters | type: CONSTRAINT --
--- ALTER TABLE public.algorithms_adapters DROP CONSTRAINT IF EXISTS algorithms_adapters_adapters CASCADE;
-ALTER TABLE public.algorithms_adapters ADD CONSTRAINT algorithms_adapters_adapters FOREIGN KEY (fk_adapter_id)
+-- ALTER TABLE public.algorithm_gateway DROP CONSTRAINT IF EXISTS algorithms_adapters_adapters CASCADE;
+ALTER TABLE public.algorithm_gateway ADD CONSTRAINT algorithms_adapters_adapters FOREIGN KEY (gateway_id)
 REFERENCES public.gateway (gateway_id) MATCH FULL
 ON DELETE CASCADE ON UPDATE NO ACTION;
 -- ddl-end --
 
 -- object: algorithms_adapters_u_algorithms | type: CONSTRAINT --
--- ALTER TABLE public.algorithms_adapters DROP CONSTRAINT IF EXISTS algorithms_adapters_u_algorithms CASCADE;
-ALTER TABLE public.algorithms_adapters ADD CONSTRAINT algorithms_adapters_u_algorithms FOREIGN KEY (fk_algorithm_id)
-REFERENCES public.u_algorithms (algorithm_id) MATCH FULL
+-- ALTER TABLE public.algorithm_gateway DROP CONSTRAINT IF EXISTS algorithms_adapters_u_algorithms CASCADE;
+ALTER TABLE public.algorithm_gateway ADD CONSTRAINT algorithms_adapters_u_algorithms FOREIGN KEY (algorithm_id)
+REFERENCES public.algorithm (algorithm_id) MATCH FULL
 ON DELETE NO ACTION ON UPDATE NO ACTION;
 -- ddl-end --
 
 -- object: algo_devices_devices | type: CONSTRAINT --
--- ALTER TABLE public.algo_devices DROP CONSTRAINT IF EXISTS algo_devices_devices CASCADE;
-ALTER TABLE public.algo_devices ADD CONSTRAINT algo_devices_devices FOREIGN KEY (fk_facilities_mac,fk_devices_type)
+-- ALTER TABLE public.algorithm_device DROP CONSTRAINT IF EXISTS algo_devices_devices CASCADE;
+ALTER TABLE public.algorithm_device ADD CONSTRAINT algo_devices_devices FOREIGN KEY (device_euid,module_type)
 REFERENCES public.module (device_euid,module_id) MATCH FULL
 ON DELETE CASCADE ON UPDATE NO ACTION;
 -- ddl-end --
 
 -- object: fk_algo_devices_users_algorithms | type: CONSTRAINT --
--- ALTER TABLE public.algo_devices DROP CONSTRAINT IF EXISTS fk_algo_devices_users_algorithms CASCADE;
-ALTER TABLE public.algo_devices ADD CONSTRAINT fk_algo_devices_users_algorithms FOREIGN KEY (fk_user_id,fk_algorithm_id,fk_users_algorithms_id)
-REFERENCES public.users_algorithms (fk_user_id,fk_algorithm_id,users_algorithms_id) MATCH FULL
+-- ALTER TABLE public.algorithm_device DROP CONSTRAINT IF EXISTS fk_algo_devices_users_algorithms CASCADE;
+ALTER TABLE public.algorithm_device ADD CONSTRAINT fk_algo_devices_users_algorithms FOREIGN KEY (user_id,algorithm_id,users_algorithm_id)
+REFERENCES public.user_algorithm (user_id,algorithm_id,user_algorithm_id) MATCH FULL
 ON DELETE NO ACTION ON UPDATE NO ACTION;
 -- ddl-end --
 
@@ -535,73 +535,73 @@ REFERENCES public.users (user_id) MATCH FULL
 ON DELETE CASCADE ON UPDATE NO ACTION;
 -- ddl-end --
 
--- object: grant_4176805d8d | type: PERMISSION --
+-- object: grant_ffd3e53498 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.gateway
    TO hardware;
 -- ddl-end --
 
--- object: grant_0d86c91320 | type: PERMISSION --
+-- object: grant_99f185579c | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.device
    TO hardware;
 -- ddl-end --
 
--- object: grant_9faea95904 | type: PERMISSION --
+-- object: grant_ce97cb2bbb | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.module
    TO hardware;
 -- ddl-end --
 
--- object: grant_074acc7a17 | type: PERMISSION --
+-- object: grant_332b17b42e | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.log
    TO hardware;
 -- ddl-end --
 
--- object: grant_52bcdeb885 | type: PERMISSION --
+-- object: grant_ec63facb13 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.notifications
    TO user_data;
 -- ddl-end --
 
--- object: grant_6ae571fe44 | type: PERMISSION --
+-- object: grant_a01370f465 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.users
    TO user_data;
 -- ddl-end --
 
--- object: grant_67d738ee48 | type: PERMISSION --
+-- object: grant_e8e5ba65b5 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.user_gateway
    TO user_data;
 -- ddl-end --
 
--- object: grant_cf9e4c8976 | type: PERMISSION --
+-- object: grant_07bd340d79 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.location
    TO user_data;
 -- ddl-end --
 
--- object: grant_b99b7a0c12 | type: PERMISSION --
+-- object: grant_1eae94b569 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
-   ON TABLE public.u_algorithms
+   ON TABLE public.algorithm
    TO algorithms;
 -- ddl-end --
 
--- object: grant_1c76dd8a4b | type: PERMISSION --
+-- object: grant_8f5f19ba03 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
-   ON TABLE public.algorithms_adapters
+   ON TABLE public.algorithm_gateway
    TO algorithms;
 -- ddl-end --
 
--- object: grant_eabd9a7576 | type: PERMISSION --
+-- object: grant_b6b95f5381 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
-   ON TABLE public.algo_devices
+   ON TABLE public.algorithm_device
    TO algorithms;
 -- ddl-end --
 
--- object: grant_7b7ca09149 | type: PERMISSION --
+-- object: grant_4c5961071e | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.push_notification_service
    TO user_data;
