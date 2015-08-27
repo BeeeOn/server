@@ -9,6 +9,7 @@
 #include "../DAO/DAORooms.h"
 #include "../DAO/DAOUsersAdapters.h"
 #include "../DAO/DAONotification.h"
+#include "../DAO/DAOPushNotificationService.h"
 #include "../DAO/DAOlogs.h"
 
 #include "save_custom_writer.h"
@@ -136,6 +137,7 @@ DAODevices::getInstance().setConnectionStringAndOpenSessions(conString, 2);
         DAOUsersAdapters::getInstance().setPool(pool);
         DAONotification::getInstance().setPool(pool);
         DAOlogs::getInstance().setPool(pool);
+        DAOPushNotificationService::getInstance().setPool(pool);
         
         /*
         DAOUsers::getInstance().setConnectionStringAndOpenSessions(conString, 2);
