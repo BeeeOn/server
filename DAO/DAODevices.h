@@ -17,7 +17,7 @@ struct device {
 };
 
 struct DeviceColumns{
-    std::string mac;
+    std::string euid;
     std::string id;
     std::string name;
     std::string refresh;
@@ -28,7 +28,7 @@ struct DeviceColumns{
     std::string gateway_id;
     
     DeviceColumns():
-            mac("device_mac"), 
+            euid("device_euid"), 
             id("device_type"), 
             name("device_name"),
             refresh("refresh"),
@@ -41,12 +41,12 @@ struct DeviceColumns{
 };
 
 struct ModuleColumns{
-    std::string mac;
+    std::string euid;
     std::string id;
     std::string value;
     
     ModuleColumns():
-            mac("device_mac"), 
+            euid("device_euid"), 
             id("module_id"), 
             value("measured_value")
             { }

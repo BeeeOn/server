@@ -12,13 +12,13 @@
 #include "DAODevices.h"
 
 struct LogsColumns{
-    std::string device_mac;
+    std::string device_euid;
     std::string module_id;
     std::string value;
     std::string time;
     
     LogsColumns():
-            device_mac("device_mac"), 
+            device_euid("device_euid"), 
             module_id("module_id"), 
             value("measured_at"), 
             time("measured_value")

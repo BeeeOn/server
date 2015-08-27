@@ -72,7 +72,7 @@ string DAOlogs::getXMLDeviceLog(long long adapterId, device device, string logFr
                 sql<<"select xmlagg("
                         " xmlelement(name row, " << col.time << "  || ' ' || " << col.value << " )"
                         ")"
-                        "from " << tableLogs << " where  " << col.device_mac << " =:d_id and  " << col.module_id << "= :d_type and "+ timeCond
+                        "from " << tableLogs << " where  " << col.device_euid << " =:d_id and  " << col.module_id << "= :d_type and "+ timeCond
                         ,use(device.id,"d_id"), use(device.type, "d_type"), soci::into(xml, ind);
             }else{
                 Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"data by "<< DBIntervalString <<" and " << timeCond <<"\n";
@@ -90,7 +90,7 @@ string DAOlogs::getXMLDeviceLog(long long adapterId, device device, string logFr
                  //TODO nezavisi na adapter_id        
                 
                 oss<<"select xmlagg( xmlelement(name row,a,' ',b ))from (select ceil(avg(" << col.time << ")) as a,  trunc("<<aggregationFunction<<"(" << col.value << ")::numeric,2) as b from "
-                         << tableLogs << " where  " << col.device_mac << "= :d_id and  " << col.module_id << "= :d_type and "<< timeCond<<" group by " << col.time << "/"<<intInterval<<") as innerQ";
+                         << tableLogs << " where  " << col.device_euid << "= :d_id and  " << col.module_id << "= :d_type and "<< timeCond<<" group by " << col.time << "/"<<intInterval<<") as innerQ";
                         //select xmlagg(xmlelement(name row,a,' ',b ))from (select ceil(avg(timestamp)) as a,min(value) as b from logs where timestamp between 0 and 10000000000 group by timestamp/2) as x;
                 string query;
                 query= oss.str();

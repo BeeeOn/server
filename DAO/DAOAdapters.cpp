@@ -147,7 +147,7 @@ GateInfo DAOAdapters::getGateInfo(long long int gateId) {
         soci::session sql(*_pool);
         
         GateInfo gateInfo;
-        sql <<"select " << col.id << "," << "count(distinct " << DAODevices::col.mac << "),count(distinct " << DAOUsersAdapters::col.user_id << ")" << "," << col.name << "," << col.socket << "," << col.version << "," << col.timezone <<
+        sql <<"select " << col.id << "," << "count(distinct " << DAODevices::col.euid << "),count(distinct " << DAOUsersAdapters::col.user_id << ")" << "," << col.name << "," << col.socket << "," << col.version << "," << col.timezone <<
                 " from " << tableGateway << 
                     " left join " << DAODevices::tableDevices << " using("+col.id+") " << 
                     "left join " << tableUsersGateway << " using(" << col.id << ") "

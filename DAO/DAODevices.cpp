@@ -51,10 +51,10 @@ string DAODevices::getXMLDevicesQueryString2()
 {
     return " xmlagg("
                         "xmlelement(name device,"
-                                    "xmlattributes(" + col.init + " as init, " + col.mac + " as id, " + col.id + " as type, " + col.location_id + " as locationid, " + col.refresh + " as refresh, "
+                                    "xmlattributes(" + col.init + " as init, " + col.euid + " as id, " + col.id + " as type, " + col.location_id + " as locationid, " + col.refresh + " as refresh, "
                                                 " " + col.measured_at + " as time, " + col.involved + "  as involved, " + col.name + "  as name, " + col.gateway_id + " as gateid),"
                                     "(select xmlagg(xmlelement(name module,xmlattributes(" + moduleCol.id + " as id, " + moduleCol.value + " as value))) "
-                                            "from " + tableModule + " where " +tableModule+"."+ moduleCol.mac + "="+tableDevices+"."+ col.mac + " )"
+                                            "from " + tableModule + " where " +tableModule+"."+ moduleCol.euid + "="+tableDevices+"."+ col.euid + " )"
                     ")"
                 ") "
 //            from " + tableDevices + " ";
@@ -112,7 +112,7 @@ string DAODevices::getXMLdevices(int userId, vector<long long> gateVector, vecto
                 "select  " <<
                 getXMLDevicesQueryString2() +
                "from user_gateway left join gateway using(gateway_id) left join " + tableDevices + " using(gateway_id)" <<
-                "where " +col.gateway_id+" in(" + gates + ") and " + col.mac + " in(" + devices + ") and user_id=:userId",
+                "where " +col.gateway_id+" in(" + gates + ") and " + col.euid + " in(" + devices + ") and user_id=:userId",
                 use(userId),
                 soci::into(xml, ind) );
         
@@ -173,7 +173,7 @@ int DAODevices::updateFacility(long long gateId, string id, string init, string 
         
         statement st = (sql.prepare << "update " << tableDevices << " set " <<
                 columnsToSet <<
-                " where "+col.mac+" = :mac ",
+                " where "+col.euid+" = :mac ",
                 use(init, "init"),use(locationId, "locId"),use(refresh, "refresh"),use(name, "name"),use(id, "mac")
                 );
         
