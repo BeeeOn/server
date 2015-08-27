@@ -3,7 +3,7 @@
 CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.8.1-beta1" last-position="0,479" last-zoom="1"
+<dbmodel pgmodeler-ver="0.8.1-beta1" last-position="0,0" last-zoom="1"
 	 default-owner="postgres">
 <role name="hardware">
 </role>
@@ -171,8 +171,8 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<tag name="Hardware"/>
-	<position x="1305.73" y="398.393"/>
-	<column name="device_mac" not-null="true">
+	<position x="1306.73" y="393.393"/>
+	<column name="device_euid" not-null="true">
 		<type name="decimal" length="10"/>
 	</column>
 	<column name="device_type" not-null="true">
@@ -209,7 +209,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 			<expression><![CDATA[device_mac >= 0]]></expression>
 	</constraint>
 	<constraint name="facilities_pk" type="pk-constr" table="public.device">
-		<columns names="device_mac" ref-type="src-columns"/>
+		<columns names="device_euid" ref-type="src-columns"/>
 	</constraint>
 </table>
 
@@ -217,8 +217,8 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<tag name="Hardware"/>
-	<position x="1291.56" y="668.485"/>
-	<column name="device_mac" not-null="true">
+	<position x="1404.56" y="665.485"/>
+	<column name="device_euid" not-null="true">
 		<type name="decimal" length="10"/>
 	</column>
 	<column name="module_id" not-null="true">
@@ -228,7 +228,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="real"/>
 	</column>
 	<constraint name="devices_pk" type="pk-constr" table="public.module">
-		<columns names="device_mac,module_id" ref-type="src-columns"/>
+		<columns names="device_euid,module_id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
@@ -258,7 +258,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="postgres"/>
 	<tag name="Hardware"/>
 	<position x="1291.99" y="846.317"/>
-	<column name="device_mac" not-null="true">
+	<column name="device_euid" not-null="true">
 		<type name="decimal" length="10"/>
 	</column>
 	<column name="module_id" not-null="true">
@@ -271,7 +271,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="real"/>
 	</column>
 	<constraint name="logs_pk" type="pk-constr" table="public.log">
-		<columns names="measured_at,device_mac,module_id" ref-type="src-columns"/>
+		<columns names="measured_at,device_euid,module_id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
@@ -442,7 +442,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<tag name="Algorithms"/>
-	<position x="1267.75" y="57"/>
+	<position x="1288.75" y="21"/>
 	<column name="fk_users_algorithms_id" not-null="true">
 		<type name="integer"/>
 	</column>
@@ -539,7 +539,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 index-type="btree" factor="0">
 	<comment><![CDATA[mttv = mac, type, timestamp, value]]></comment>
 		<idxelement use-sorting="true" nulls-first="false" asc-order="true">
-			<column name="device_mac"/>
+			<column name="device_euid"/>
 		</idxelement>
 		<idxelement use-sorting="true" nulls-first="false" asc-order="true">
 			<column name="module_id"/>
@@ -603,8 +603,8 @@ hloupý exit dialog]]></comment>
 
 <constraint name="devices_facilities" type="fk-constr" comparison-type="MATCH FULL"
 	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.device" table="public.module">
-	<columns names="device_mac" ref-type="src-columns"/>
-	<columns names="device_mac" ref-type="dst-columns"/>
+	<columns names="device_euid" ref-type="src-columns"/>
+	<columns names="device_euid" ref-type="dst-columns"/>
 </constraint>
 
 <constraint name="rooms_adapters" type="fk-constr" comparison-type="MATCH FULL"
@@ -615,8 +615,8 @@ hloupý exit dialog]]></comment>
 
 <constraint name="logs_devices" type="fk-constr" comparison-type="MATCH FULL"
 	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.module" table="public.log">
-	<columns names="device_mac,module_id" ref-type="src-columns"/>
-	<columns names="device_mac,module_id" ref-type="dst-columns"/>
+	<columns names="device_euid,module_id" ref-type="src-columns"/>
+	<columns names="device_euid,module_id" ref-type="dst-columns"/>
 </constraint>
 
 <constraint name="achievements_achievements" type="fk-constr" comparison-type="MATCH FULL"
@@ -670,12 +670,12 @@ hloupý exit dialog]]></comment>
 <constraint name="algo_devices_devices" type="fk-constr" comparison-type="MATCH FULL"
 	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.module" table="public.algo_devices">
 	<columns names="fk_facilities_mac,fk_devices_type" ref-type="src-columns"/>
-	<columns names="device_mac,module_id" ref-type="dst-columns"/>
+	<columns names="device_euid,module_id" ref-type="dst-columns"/>
 </constraint>
 
-<constraint name="algo_devices_users_algorithms" type="fk-constr" comparison-type="MATCH FULL"
-	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.users_algorithms" table="public.algo_devices">
-	<columns names="fk_users_algorithms_id,fk_user_id,fk_algorithm_id" ref-type="src-columns"/>
+<constraint name="fk_algo_devices_users_algorithms" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.users_algorithms" table="public.algo_devices">
+	<columns names="fk_user_id,fk_algorithm_id,fk_users_algorithms_id" ref-type="src-columns"/>
 	<columns names="fk_user_id,fk_algorithm_id,users_algorithms_id" ref-type="dst-columns"/>
 </constraint>
 
@@ -799,11 +799,6 @@ hloupý exit dialog]]></comment>
 	 dst-table="public.module"
 	 src-required="false" dst-required="false"/>
 
-<relationship name="rel_algo_devices_users_algorithms" type="relfk"
-	 src-table="public.algo_devices"
-	 dst-table="public.users_algorithms"
-	 src-required="false" dst-required="false"/>
-
 <relationship name="rel_users_achievements_achievements" type="relfk"
 	 src-table="public.users_achievements"
 	 dst-table="public.achievements"
@@ -832,6 +827,11 @@ hloupý exit dialog]]></comment>
 		<position x="-36.0655" y="-59.963"/>
 	</label>
 </relationship>
+
+<relationship name="rel_algo_devices_users_algorithms" type="relfk"
+	 src-table="public.algo_devices"
+	 dst-table="public.users_algorithms"
+	 src-required="false" dst-required="false"/>
 
 <permission>
 	<object name="public.gateway" type="table"/>

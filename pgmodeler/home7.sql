@@ -23,12 +23,32 @@ CREATE ROLE uiserver7 WITH
 -- ddl-end --
 
 -- Appended SQL commands --
-GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public to www;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public to uiserver7;
 -- ddl-end --
 
 -- object: algorithms | type: ROLE --
 -- DROP ROLE IF EXISTS algorithms;
 CREATE ROLE algorithms WITH ;
+-- ddl-end --
+
+-- object: framework7 | type: ROLE --
+-- DROP ROLE IF EXISTS framework7;
+CREATE ROLE framework7 WITH 
+	IN ROLE algorithms,hardware,user_data;
+-- ddl-end --
+
+-- Appended SQL commands --
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public to framework7;
+-- ddl-end --
+
+-- object: adaserver7 | type: ROLE --
+-- DROP ROLE IF EXISTS adaserver7;
+CREATE ROLE adaserver7 WITH 
+	IN ROLE hardware;
+-- ddl-end --
+
+-- Appended SQL commands --
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public to adaserver7;
 -- ddl-end --
 
 
@@ -54,6 +74,7 @@ CREATE TABLE public.users(
 	password text,
 	google_id text,
 	facebook_id text,
+	verified bool NOT NULL DEFAULT true,
 	CONSTRAINT users_pk PRIMARY KEY (user_id)
 
 );
@@ -84,6 +105,7 @@ CREATE TABLE public.user_gateway(
 	user_id integer NOT NULL,
 	gateway_id decimal(20,0) NOT NULL,
 	permission varchar(15) NOT NULL,
+	accepted bool NOT NULL DEFAULT true,
 	CONSTRAINT users_adapters_pk PRIMARY KEY (user_id,gateway_id)
 
 );
@@ -106,7 +128,7 @@ CREATE SEQUENCE public.users_user_id_seq
 -- object: public.device | type: TABLE --
 -- DROP TABLE IF EXISTS public.device CASCADE;
 CREATE TABLE public.device(
-	device_mac decimal(10) NOT NULL,
+	device_euid decimal(10) NOT NULL,
 	device_type smallint NOT NULL,
 	device_name varchar(50) NOT NULL DEFAULT '',
 	refresh integer NOT NULL DEFAULT 10,
@@ -118,7 +140,7 @@ CREATE TABLE public.device(
 	location_id bigint,
 	gateway_id decimal(20,0) NOT NULL,
 	CONSTRAINT check_positive_mac CHECK (device_mac >= 0),
-	CONSTRAINT facilities_pk PRIMARY KEY (device_mac)
+	CONSTRAINT facilities_pk PRIMARY KEY (device_euid)
 
 );
 -- ddl-end --
@@ -128,10 +150,10 @@ ALTER TABLE public.device OWNER TO postgres;
 -- object: public.module | type: TABLE --
 -- DROP TABLE IF EXISTS public.module CASCADE;
 CREATE TABLE public.module(
-	device_mac decimal(10) NOT NULL,
+	device_euid decimal(10) NOT NULL,
 	module_id smallint NOT NULL,
 	measured_value real NOT NULL DEFAULT 0,
-	CONSTRAINT devices_pk PRIMARY KEY (device_mac,module_id)
+	CONSTRAINT devices_pk PRIMARY KEY (device_euid,module_id)
 
 );
 -- ddl-end --
@@ -155,11 +177,11 @@ ALTER TABLE public.location OWNER TO postgres;
 -- object: public.log | type: TABLE --
 -- DROP TABLE IF EXISTS public.log CASCADE;
 CREATE TABLE public.log(
-	device_mac decimal(10) NOT NULL,
+	device_euid decimal(10) NOT NULL,
 	module_id smallint NOT NULL,
 	measured_at bigint NOT NULL,
 	measured_value real NOT NULL,
-	CONSTRAINT logs_pk PRIMARY KEY (measured_at,device_mac,module_id)
+	CONSTRAINT logs_pk PRIMARY KEY (measured_at,device_euid,module_id)
 
 );
 -- ddl-end --
@@ -337,7 +359,7 @@ CREATE UNIQUE INDEX index_google_id ON public.users
 CREATE INDEX index_logs_mttv ON public.log
 	USING btree
 	(
-	  device_mac ASC NULLS LAST,
+	  device_euid ASC NULLS LAST,
 	  module_id ASC NULLS LAST,
 	  measured_at ASC NULLS LAST,
 	  measured_value ASC NULLS LAST
@@ -346,16 +368,17 @@ CREATE INDEX index_logs_mttv ON public.log
 COMMENT ON INDEX public.index_logs_mttv IS 'mttv = mac, type, timestamp, value';
 -- ddl-end --
 
--- object: public.push_notification | type: TABLE --
--- DROP TABLE IF EXISTS public.push_notification CASCADE;
-CREATE TABLE public.push_notification(
-	user_id integer NOT NULL,
-	notification_id text NOT NULL,
-	CONSTRAINT pk_push_notification PRIMARY KEY (user_id,notification_id)
+-- object: public.push_notification_service | type: TABLE --
+-- DROP TABLE IF EXISTS public.push_notification_service CASCADE;
+CREATE TABLE public.push_notification_service(
+	push_notification_service_id serial NOT NULL,
+	user_id integer,
+	service_reference_id text,
+	CONSTRAINT pk_push_notification PRIMARY KEY (push_notification_service_id)
 
 );
 -- ddl-end --
-ALTER TABLE public.push_notification OWNER TO postgres;
+ALTER TABLE public.push_notification_service OWNER TO postgres;
 -- ddl-end --
 
 -- object: adapters_users_adapters | type: CONSTRAINT --
@@ -388,8 +411,8 @@ ON DELETE SET NULL ON UPDATE NO ACTION;
 
 -- object: devices_facilities | type: CONSTRAINT --
 -- ALTER TABLE public.module DROP CONSTRAINT IF EXISTS devices_facilities CASCADE;
-ALTER TABLE public.module ADD CONSTRAINT devices_facilities FOREIGN KEY (device_mac)
-REFERENCES public.device (device_mac) MATCH FULL
+ALTER TABLE public.module ADD CONSTRAINT devices_facilities FOREIGN KEY (device_euid)
+REFERENCES public.device (device_euid) MATCH FULL
 ON DELETE CASCADE ON UPDATE NO ACTION;
 -- ddl-end --
 
@@ -402,8 +425,8 @@ ON DELETE CASCADE ON UPDATE NO ACTION;
 
 -- object: logs_devices | type: CONSTRAINT --
 -- ALTER TABLE public.log DROP CONSTRAINT IF EXISTS logs_devices CASCADE;
-ALTER TABLE public.log ADD CONSTRAINT logs_devices FOREIGN KEY (device_mac,module_id)
-REFERENCES public.module (device_mac,module_id) MATCH FULL
+ALTER TABLE public.log ADD CONSTRAINT logs_devices FOREIGN KEY (device_euid,module_id)
+REFERENCES public.module (device_euid,module_id) MATCH FULL
 ON DELETE CASCADE ON UPDATE NO ACTION;
 -- ddl-end --
 
@@ -466,15 +489,15 @@ ON DELETE NO ACTION ON UPDATE NO ACTION;
 -- object: algo_devices_devices | type: CONSTRAINT --
 -- ALTER TABLE public.algo_devices DROP CONSTRAINT IF EXISTS algo_devices_devices CASCADE;
 ALTER TABLE public.algo_devices ADD CONSTRAINT algo_devices_devices FOREIGN KEY (fk_facilities_mac,fk_devices_type)
-REFERENCES public.module (device_mac,module_id) MATCH FULL
+REFERENCES public.module (device_euid,module_id) MATCH FULL
 ON DELETE CASCADE ON UPDATE NO ACTION;
 -- ddl-end --
 
--- object: algo_devices_users_algorithms | type: CONSTRAINT --
--- ALTER TABLE public.algo_devices DROP CONSTRAINT IF EXISTS algo_devices_users_algorithms CASCADE;
-ALTER TABLE public.algo_devices ADD CONSTRAINT algo_devices_users_algorithms FOREIGN KEY (fk_users_algorithms_id,fk_user_id,fk_algorithm_id)
+-- object: fk_algo_devices_users_algorithms | type: CONSTRAINT --
+-- ALTER TABLE public.algo_devices DROP CONSTRAINT IF EXISTS fk_algo_devices_users_algorithms CASCADE;
+ALTER TABLE public.algo_devices ADD CONSTRAINT fk_algo_devices_users_algorithms FOREIGN KEY (fk_user_id,fk_algorithm_id,fk_users_algorithms_id)
 REFERENCES public.users_algorithms (fk_user_id,fk_algorithm_id,users_algorithms_id) MATCH FULL
-ON DELETE CASCADE ON UPDATE NO ACTION;
+ON DELETE NO ACTION ON UPDATE NO ACTION;
 -- ddl-end --
 
 -- object: achievement_detail_achievements | type: CONSTRAINT --
@@ -506,81 +529,81 @@ ON DELETE CASCADE ON UPDATE NO ACTION;
 -- ddl-end --
 
 -- object: fk_user_push_notification | type: CONSTRAINT --
--- ALTER TABLE public.push_notification DROP CONSTRAINT IF EXISTS fk_user_push_notification CASCADE;
-ALTER TABLE public.push_notification ADD CONSTRAINT fk_user_push_notification FOREIGN KEY (user_id)
+-- ALTER TABLE public.push_notification_service DROP CONSTRAINT IF EXISTS fk_user_push_notification CASCADE;
+ALTER TABLE public.push_notification_service ADD CONSTRAINT fk_user_push_notification FOREIGN KEY (user_id)
 REFERENCES public.users (user_id) MATCH FULL
 ON DELETE CASCADE ON UPDATE NO ACTION;
 -- ddl-end --
 
--- object: grant_29093db42b | type: PERMISSION --
+-- object: grant_4176805d8d | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.gateway
    TO hardware;
 -- ddl-end --
 
--- object: grant_e7bf0c3913 | type: PERMISSION --
+-- object: grant_0d86c91320 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.device
    TO hardware;
 -- ddl-end --
 
--- object: grant_d9f7540a6e | type: PERMISSION --
+-- object: grant_9faea95904 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.module
    TO hardware;
 -- ddl-end --
 
--- object: grant_cccd0175fc | type: PERMISSION --
+-- object: grant_074acc7a17 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.log
    TO hardware;
 -- ddl-end --
 
--- object: grant_adfa217447 | type: PERMISSION --
+-- object: grant_52bcdeb885 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.notifications
    TO user_data;
 -- ddl-end --
 
--- object: grant_238cfd6a88 | type: PERMISSION --
+-- object: grant_6ae571fe44 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.users
    TO user_data;
 -- ddl-end --
 
--- object: grant_0ff3591179 | type: PERMISSION --
+-- object: grant_67d738ee48 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.user_gateway
    TO user_data;
 -- ddl-end --
 
--- object: grant_94c0f3a21f | type: PERMISSION --
+-- object: grant_cf9e4c8976 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.location
    TO user_data;
 -- ddl-end --
 
--- object: grant_b1ee3bed1d | type: PERMISSION --
+-- object: grant_b99b7a0c12 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.u_algorithms
    TO algorithms;
 -- ddl-end --
 
--- object: grant_6d1362dc63 | type: PERMISSION --
+-- object: grant_1c76dd8a4b | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.algorithms_adapters
    TO algorithms;
 -- ddl-end --
 
--- object: grant_fafacad87d | type: PERMISSION --
+-- object: grant_eabd9a7576 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.algo_devices
    TO algorithms;
 -- ddl-end --
 
--- object: grant_928baaf0d1 | type: PERMISSION --
+-- object: grant_7b7ca09149 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
-   ON TABLE public.push_notification
+   ON TABLE public.push_notification_service
    TO user_data;
 -- ddl-end --
 
