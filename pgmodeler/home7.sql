@@ -139,7 +139,7 @@ CREATE TABLE public.device(
 	measured_at bigint NOT NULL DEFAULT 0,
 	location_id bigint,
 	gateway_id decimal(20,0) NOT NULL,
-	CONSTRAINT check_positive_mac CHECK (device_mac >= 0),
+	CONSTRAINT check_positive_mac CHECK (device_euid>= 0),
 	CONSTRAINT facilities_pk PRIMARY KEY (device_euid)
 
 );
