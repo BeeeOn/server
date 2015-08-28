@@ -349,7 +349,7 @@ void ConnectionServer::StoreData()
 {
 	_log->WriteMessage(TRACE,"Entering " + this->_Name + "::StoreData");
 	database->UpdateAdapter(this->parsedMessage); 
-	if(!database->IsInDB("facilities","mac","'" + std::to_string(this->parsedMessage->sensor_id) + "'")) 
+	if(!database->IsInDB("facilities","mac","'" + std::to_string(this->parsedMessage->device_euid) + "'")) 
 	{
 		database->InsertSenAct(this->parsedMessage);
 	}
@@ -369,13 +369,13 @@ int ConnectionServer::GetData()
 {
 	_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetData");
 	int wakeUpTime = 5;
-	if(!database->IsInDB("facilities","mac","'" + std::to_string(this->parsedMessage->sensor_id) + "'"))
+	if(!database->IsInDB("facilities","mac","'" + std::to_string(this->parsedMessage->device_euid) + "'"))
 	{
 		wakeUpTime = 5;
 	}
 	else
 	{
-		wakeUpTime = database->GetWakeUpTime(std::to_string(this->parsedMessage->sensor_id));
+		wakeUpTime = database->GetWakeUpTime(std::to_string(this->parsedMessage->device_euid));
 	}
 	_log->WriteMessage(TRACE,"refresh:" + std::to_string(wakeUpTime));
 	if(wakeUpTime> 100000)

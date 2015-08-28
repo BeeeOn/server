@@ -93,12 +93,17 @@ std::string buildConnString(std::string DBName, std::string User, std::string Pa
 }
 
 
-int main()  //main body of application
+int main(int argc, char **argv)  //main body of application
 {
+	if (argc < 2) {
+		std::cerr<<"Path to configuration file was not given."<<std::endl;
+		exit(EXIT_FAILURE);
+	}
+
 	pid_t pid, sid;
 	std::cout<<"Reading configuration"<<std::endl;
 	c = new Config();
-	if (!c->setConfig("ada_server.config.xml"))
+	if (!c->setConfig(argv[1]))
 	{
 		std::cerr<<"Errors during configuration exiting"<<std::endl;
 		delete c;

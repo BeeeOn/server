@@ -82,10 +82,10 @@ class MessageParser
 		virtual void GetDeviceID()=0;
 		/**Pure virtual method to obtain battery value
 				*/
-		virtual void GetBattery()= 0;
+		//virtual void GetBattery()= 0;
 		/**Pure virtual method to obtain signal value
 				*/
-		virtual void GetSignal()= 0;
+		//virtual void GetSignal()= 0;
 
 		/**Pure virtual method to obtain values
 		 * @return bool true/false on success/failure
@@ -126,10 +126,10 @@ class ProtocolV1MessageParser :public MessageParser
 		virtual void GetDeviceID();
 		/**Virtual method to obtain battery value
 						*/
-		virtual void GetBattery();
+		//virtual void GetBattery();
 		/**Virtual method to obtain signal value
 						*/
-		virtual void GetSignal();
+		//virtual void GetSignal();
 		/**Virtual method to obtain values
 		 * @return bool true/false on success/failure
 				*/
