@@ -100,11 +100,11 @@ OBJECTFILES= \
 
 
 # C Compiler Flags
-CFLAGS=`cppunit-config --cflags` 
+CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=`cppunit-config --cflags` 
-CXXFLAGS=`cppunit-config --cflags` 
+CCFLAGS=
+CXXFLAGS=
 
 # Fortran Compiler Flags
 FFLAGS=
@@ -113,15 +113,15 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-L../soci-3.2.2/build/lib -L/usr/local/include/soci -L../soci-3.2.2/soci-3.2.2/backends/postgresql -L../soci-3.2.2/soci-3.2.2/core -L/usr/include/postgresql -L/usr/include/postgresql/libpq -L. -L/usr/include -L/usr/local/include -L/usr/local/lib -L/usr/lib -Wl,-rpath,../soci-3.2.2/build/lib -Wl,-rpath,/usr/local/lib `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` -lpq `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs` `cppunit-config --libs`  
+LDLIBSOPTIONS=-L../soci-3.2.2/build/lib -L/usr/local/include/soci -L../soci-3.2.2/soci-3.2.2/backends/postgresql -L../soci-3.2.2/soci-3.2.2/core -L/usr/include/postgresql -L/usr/include/postgresql/libpq -L. -L/usr/include -L/usr/local/include -L/usr/local/lib -L/usr/lib -Wl,-rpath,../soci-3.2.2/build/lib -Wl,-rpath,/usr/local/lib -lpq
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${TESTDIR}/TestFiles/f9
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ./ui_server
 
-${TESTDIR}/TestFiles/f9: ${OBJECTFILES}
-	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} -o ${TESTDIR}/TestFiles/f9 ${OBJECTFILES} ${LDLIBSOPTIONS} -lpq -lsoci_core -lsoci_empty -lsoci_postgresql -lcppunit -lssl -lcrypto -ljansson
+./ui_server: ${OBJECTFILES}
+	${MKDIR} -p .
+	${LINK.cc} -o ./ui_server ${OBJECTFILES} ${LDLIBSOPTIONS} -lpq -lsoci_core -lsoci_empty -lsoci_postgresql -lssl -lcrypto -ljansson
 
 ${OBJECTDIR}/_ext/1360890531/DAO.o: ../DAO/DAO.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
@@ -439,7 +439,7 @@ ${OBJECTDIR}/ui_server.o: ui_server.cpp
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${TESTDIR}/TestFiles/f9
+	${RM} ./ui_server
 
 # Subprojects
 .clean-subprojects:

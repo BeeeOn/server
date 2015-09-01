@@ -13,8 +13,8 @@ CND_BUILDDIR=build
 CND_DLIB_EXT=so
 NBTMPDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tmp-packaging
 TMPDIRNAME=tmp-packaging
-OUTPUT_PATH=${TESTDIR}/TestFiles/f9
-OUTPUT_BASENAME=f9
+OUTPUT_PATH=./ui_server
+OUTPUT_BASENAME=ui_server
 PACKAGE_TOP_DIR=uiserver/
 
 # Functions
