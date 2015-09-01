@@ -44,7 +44,7 @@ GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public to framework7;
 -- object: adaserver7 | type: ROLE --
 -- DROP ROLE IF EXISTS adaserver7;
 CREATE ROLE adaserver7 WITH 
-	IN ROLE hardware;
+	IN ROLE hardware,user_data;
 -- ddl-end --
 
 -- Appended SQL commands --
@@ -286,13 +286,13 @@ ALTER TABLE public.algorithm_gateway OWNER TO postgres;
 -- object: public.algorithm_device | type: TABLE --
 -- DROP TABLE IF EXISTS public.algorithm_device CASCADE;
 CREATE TABLE public.algorithm_device(
-	users_algorithm_id integer NOT NULL,
+	user_algorithm_id integer NOT NULL,
 	user_id integer NOT NULL,
 	algorithm_id integer NOT NULL,
 	device_euid decimal(10) NOT NULL,
 	module_type smallint NOT NULL,
 	algo_devices_id serial NOT NULL,
-	CONSTRAINT algo_devices_pk PRIMARY KEY (users_algorithm_id,user_id,algorithm_id,device_euid,module_type,algo_devices_id)
+	CONSTRAINT algo_devices_pk PRIMARY KEY (user_algorithm_id,user_id,algorithm_id,device_euid,module_type,algo_devices_id)
 
 );
 -- ddl-end --
@@ -495,7 +495,7 @@ ON DELETE CASCADE ON UPDATE NO ACTION;
 
 -- object: fk_algo_devices_users_algorithms | type: CONSTRAINT --
 -- ALTER TABLE public.algorithm_device DROP CONSTRAINT IF EXISTS fk_algo_devices_users_algorithms CASCADE;
-ALTER TABLE public.algorithm_device ADD CONSTRAINT fk_algo_devices_users_algorithms FOREIGN KEY (user_id,algorithm_id,users_algorithm_id)
+ALTER TABLE public.algorithm_device ADD CONSTRAINT fk_algo_devices_users_algorithms FOREIGN KEY (user_id,algorithm_id,user_algorithm_id)
 REFERENCES public.user_algorithm (user_id,algorithm_id,user_algorithm_id) MATCH FULL
 ON DELETE NO ACTION ON UPDATE NO ACTION;
 -- ddl-end --
@@ -535,73 +535,67 @@ REFERENCES public.users (user_id) MATCH FULL
 ON DELETE CASCADE ON UPDATE NO ACTION;
 -- ddl-end --
 
--- object: grant_ffd3e53498 | type: PERMISSION --
+-- object: grant_b8cdb58d0f | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.gateway
    TO hardware;
 -- ddl-end --
 
--- object: grant_99f185579c | type: PERMISSION --
+-- object: grant_d5aa0714b7 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.device
    TO hardware;
 -- ddl-end --
 
--- object: grant_ce97cb2bbb | type: PERMISSION --
+-- object: grant_e9d429f0e0 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.module
    TO hardware;
 -- ddl-end --
 
--- object: grant_332b17b42e | type: PERMISSION --
+-- object: grant_6cad8f1723 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.log
    TO hardware;
 -- ddl-end --
 
--- object: grant_ec63facb13 | type: PERMISSION --
-GRANT SELECT,INSERT,UPDATE,DELETE
-   ON TABLE public.notifications
-   TO user_data;
--- ddl-end --
-
--- object: grant_a01370f465 | type: PERMISSION --
+-- object: grant_5f42572af9 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.users
    TO user_data;
 -- ddl-end --
 
--- object: grant_e8e5ba65b5 | type: PERMISSION --
+-- object: grant_3be3efbbe8 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.user_gateway
    TO user_data;
 -- ddl-end --
 
--- object: grant_07bd340d79 | type: PERMISSION --
+-- object: grant_6bf4173d08 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.location
    TO user_data;
 -- ddl-end --
 
--- object: grant_1eae94b569 | type: PERMISSION --
+-- object: grant_72ab7fa449 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.algorithm
    TO algorithms;
 -- ddl-end --
 
--- object: grant_8f5f19ba03 | type: PERMISSION --
+-- object: grant_3b45d69d6e | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.algorithm_gateway
    TO algorithms;
 -- ddl-end --
 
--- object: grant_b6b95f5381 | type: PERMISSION --
+-- object: grant_8315ee0a96 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.algorithm_device
    TO algorithms;
 -- ddl-end --
 
--- object: grant_4c5961071e | type: PERMISSION --
+-- object: grant_379538b7d4 | type: PERMISSION --
 GRANT SELECT,INSERT,UPDATE,DELETE
    ON TABLE public.push_notification_service
    TO user_data;

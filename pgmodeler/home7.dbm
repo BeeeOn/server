@@ -3,7 +3,7 @@
 CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.8.1-beta1" last-position="15,803" last-zoom="1"
+<dbmodel pgmodeler-ver="0.8.1-beta1" last-position="0,44" last-zoom="1"
 	 default-owner="postgres">
 <role name="hardware">
 </role>
@@ -28,7 +28,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <role name="adaserver7">
 	<appended-sql><![CDATA[GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public to adaserver7;]]></appended-sql>
-	<roles names="hardware" role-type="refer" />
+	<roles names="hardware,user_data" role-type="refer" />
 </role>
 
 <database name="home7">
@@ -61,6 +61,13 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<style id="table-name" colors="#000000"/>
 	<style id="table-schema-name" colors="#000000"/>
 	<style id="table-title" colors="#ff7b72,#ff7b72,#ff7b72"/>
+</tag>
+<tag name="User_data">
+	<style id="table-body" colors="#fcfcfc,#fcfcfc,#808080"/>
+	<style id="table-ext-body" colors="#fcfcfc,#fcfcfc,#808080"/>
+	<style id="table-name" colors="#000000"/>
+	<style id="table-schema-name" colors="#000000"/>
+	<style id="table-title" colors="#4aa5ff,#4aa5ff,#20486f"/>
 </tag>
 <schema name="public" protected="true" fill-color="#e1e1e1" sql-disabled="true">
 </schema>
@@ -312,7 +319,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="notifications">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="164.85" y="821.139"/>
+	<position x="165.85" y="820.139"/>
 	<column name="message_id" not-null="true">
 		<type name="bigint"/>
 	</column>
@@ -443,7 +450,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<role name="postgres"/>
 	<tag name="Algorithms"/>
 	<position x="1288.75" y="21"/>
-	<column name="users_algorithm_id" not-null="true">
+	<column name="user_algorithm_id" not-null="true">
 		<type name="integer"/>
 	</column>
 	<column name="user_id" not-null="true">
@@ -462,7 +469,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="serial"/>
 	</column>
 	<constraint name="algo_devices_pk" type="pk-constr" table="public.algorithm_device">
-		<columns names="users_algorithm_id,user_id,algorithm_id,device_euid,module_type,algo_devices_id" ref-type="src-columns"/>
+		<columns names="user_algorithm_id,user_id,algorithm_id,device_euid,module_type,algo_devices_id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
@@ -668,7 +675,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <constraint name="fk_algo_devices_users_algorithms" type="fk-constr" comparison-type="MATCH FULL"
 	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.user_algorithm" table="public.algorithm_device">
-	<columns names="user_id,algorithm_id,users_algorithm_id" ref-type="src-columns"/>
+	<columns names="user_id,algorithm_id,user_algorithm_id" ref-type="src-columns"/>
 	<columns names="user_id,algorithm_id,user_algorithm_id" ref-type="dst-columns"/>
 </constraint>
 
@@ -844,11 +851,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <permission>
 	<object name="public.log" type="table"/>
 	<roles names="hardware"/>
-	<privileges select="true" delete="true" insert="true" update="true"/>
-</permission>
-<permission>
-	<object name="public.notifications" type="table"/>
-	<roles names="user_data"/>
 	<privileges select="true" delete="true" insert="true" update="true"/>
 </permission>
 <permission>
