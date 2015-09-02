@@ -135,9 +135,9 @@ DAODevices::getInstance().setConnectionStringAndOpenSessions(conString, 2);
         DAORooms::getInstance().setPool(pool);
         DAOMobileDevices::getInstance().setPool(pool);
         DAOUsersAdapters::getInstance().setPool(pool);
-        DAONotification::getInstance().setPool(pool);
         DAOlogs::getInstance().setPool(pool);
         DAOPushNotificationService::getInstance().setPool(pool);
+        DAONotification::getInstance().setPool(pool);
         
         /*
         DAOUsers::getInstance().setConnectionStringAndOpenSessions(conString, 2);

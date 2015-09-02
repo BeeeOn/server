@@ -169,7 +169,7 @@ int DAODevices::updateFacility(long long gateId, string id, string init, string 
         soci::session sql(*_pool);        
         
         string columnsToSet;
-        if(init != "")columnsToSet.append(" "+col.init+"=:init', ");
+        if(init != "")columnsToSet.append(" "+col.init+"=:init, ");
         if(locationId != "")columnsToSet.append(" "+col.location_id+"=:locId, ");
         if(refresh != "")columnsToSet.append(" "+col.refresh+"=:refresh, ");
         if(name != "")columnsToSet.append(" "+col.name+"=:name, ");
