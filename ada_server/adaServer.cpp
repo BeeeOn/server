@@ -7,9 +7,6 @@
  * @version 1.0
  */
 
-
-
-
 #include "loger.h"
 #include "config.h"
 #include "connectionHandler.h"

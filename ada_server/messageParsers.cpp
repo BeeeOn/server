@@ -3,10 +3,9 @@
  * 
  * @brief implementation of MessageParser UIServerMessageParser ProtocolV1MessageParser classes
  *
- * @author Matus Blaho, Martin Novak
+ * @author Matus Blaho
  * @version 1.0
  */
-
 
 #include "messageParsers.h"
 
@@ -31,8 +30,6 @@ tmessage* MessageParser::ReturnMessage()
  * @return na zaklade uspechu/neuspechu vrati true/false
     */
 
-
-
 bool ProtocolV1MessageParser::ParseMessage(xml_node *adapter,float FM,float CP)
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::parseMessage");
@@ -53,8 +50,6 @@ bool ProtocolV1MessageParser::ParseMessage(xml_node *adapter,float FM,float CP)
 		return (true);
 	}
 	this->GetDeviceID();
-	//this->GetBattery();
-	//this->GetSignal();
 	this->GetValues();
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::parseMessage");
 	return (true);
@@ -88,13 +83,10 @@ void ProtocolV1MessageParser::GetID()
 
 void ProtocolV1MessageParser::GetFM()
 {
-
 }
 
 void ProtocolV1MessageParser::GetCP()
 {
-
-
 }
 
 void ProtocolV1MessageParser::GetState()
@@ -136,25 +128,7 @@ void ProtocolV1MessageParser::GetDeviceID()
 	this->_message->DeviceIDstr = inet_ntoa (antelope.sin_addr);
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetDeviceID");
 }
-/*
-void ProtocolV1MessageParser::GetBattery()
-{
-	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetBattery");
-	xml_node battery = (_device.child("battery"));
-	_message->battery=0;
-	_message->battery=battery.attribute("value").as_uint();
-	this->_log->WriteMessage(MSG,"Sensor battery :" + std::to_string(_message->battery));
-	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetBattery");
-}
-void ProtocolV1MessageParser::GetSignal()
-{
-	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetSignal");
-	xml_node signal = (_device.child("rssi"));
-	_message->signal_strength=signal.attribute("value").as_uint();
-	this->_log->WriteMessage(MSG,"Sensor signal :" + std::to_string(_message->signal_strength));
-	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetSignal");
-}
-*/
+
 bool ProtocolV1MessageParser::GetValues()
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetValues");
@@ -186,11 +160,7 @@ bool ProtocolV1MessageParser::GetValues()
 
 		//for test purposes just float value
 		_message->values[i].measured_value = value.text().as_float();
-		this->_log->WriteMessage(MSG,"Value :" + std::to_string(_message->values[i].measured_value));		
-
-		//_message->values[i].type = static_cast<tvalueTypes>(module_id);
-		//this->_log->WriteMessage(MSG,"ModuleID :" + std::to_string(_message->values[i].type));
-
+		this->_log->WriteMessage(MSG,"Measured value :" + std::to_string(_message->values[i].measured_value));
 
 		/*
 		std::bitset<16> type (value.attribute("type").as_uint());
@@ -209,30 +179,6 @@ bool ProtocolV1MessageParser::GetValues()
 		
 		switch(_message->values[i].type)
 		{
-			//int
-			case ENUM:
-			case HUMIDITY:
-			case PRESSURE:
-			case CO2:
-			case BATTERY:
-			case RSSI:
-			case REFRESH:
-				_message->values[i].ival = value.text().as_int();
-				this->_log->WriteMessage(MSG,"Value :" + std::to_string(_message->values[i].ival));
-				break;
-			//float
-			case TEMPERATURE:
-			case LIGHT:
-			case NOISE:
-				_message->values[i].fval = value.text().as_float();
-				this->_log->WriteMessage(MSG,"Value :" + std::to_string(_message->values[i].fval));
-				break;
-			default:
-				_message->values[i].type = UNK;
-				this->_log->WriteMessage(WARN,"Received unknown value type from " + this->_message->DeviceIDstr);
-				break;
-		}
-		
 			case TEMP:
 			case LUM:
 			case REZ:
@@ -401,10 +347,8 @@ bool UIServerMessageParser::GetValue()
 	_Message->values = new tvalue[_Message->values_count];
 	for (int i = 0;i<n;i++)
 	{	
-
-		/////!!!!!!!!!!!! NEFUNGUJE !!!!!!!!!!!!! //////
-
 		/*
+		/////!!!!!!!!!!!! NEFUNGUJE !!!!!!!!!!!!! //////
 		std::bitset<16> type(value.parent().attribute("type").as_int()),typeoffset(value.parent().attribute("type").as_int());
 		type.reset(8);
 		type.reset(9);
@@ -414,9 +358,18 @@ bool UIServerMessageParser::GetValue()
 		_Message->values[i].type = static_cast<tvalueTypes>(type.to_ulong());
 		this->_Message->values[i].intType=type.to_ulong();
 		this->_Message->values[i].offset = typeoffset.to_ulong();
+
+
 		this->_log->WriteMessage(MSG,"offset : " + std::to_string(this->_Message->values[i].offset));
 		this->_log->WriteMessage(MSG,"type : " + std::to_string(this->_Message->values[i].intType));
-		
+		*/
+
+		this->_Message->values[i].module_id = value.parent().attribute("type").as_int();
+		this->_Message->values[i].measured_value = value.text().as_float();
+
+		this->_log->WriteMessage(MSG,"Module ID : " + std::to_string(this->_Message->values[i].module_id));
+
+		/*
 		switch(this->_Message->values[i].type)
 		{
 			case ONON:
@@ -439,12 +392,14 @@ bool UIServerMessageParser::GetValue()
 				break;
 			default:
 				_Message->values[i].type = UNK;
+				
 				this->_log->WriteMessage(WARN,"Unsupported type!");
 				this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetValue");
 				return (false);
 				break;
 		}
 		*/
+		
 	}
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetValue");
 	return (true);

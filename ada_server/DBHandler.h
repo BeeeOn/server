@@ -43,7 +43,7 @@ class DBHandler
 		 * @param message - pointer to message content
 		 * @return bool on success/failure true/false
 		    */
-		bool InsertAdapter(tmessage *message);
+		bool InsertGateway(tmessage *message);
 		/** Method for inserting new facility and device to database
 		 * @param message - pointer to message content
 		 * @return bool on success/failure true/false
@@ -53,7 +53,7 @@ class DBHandler
 		 * @param message - pointer to message content
 		 * @return bool on success/failure true/false
 			*/
-		bool UpdateAdapter(tmessage *message);
+		bool UpdateGateway(tmessage *message);
 		/** Method for updating facility and device in database
 		 * @param message - pointer to message content
 		 * @return bool on success/failure true/false

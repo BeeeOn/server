@@ -28,14 +28,14 @@ const string UpdateGatewaySocket = "update gateway set version = :FM_VERSION, so
 const string SelectSocket = "SELECT socket FROM gateway where gateway_id=:ID;";
 
 /**Q to insert facility uses ( ':deviceID',:battery, :signal, :adapterID, :timestamp , :timestamp)*/
-const string InsertDevice = "insert into device (device_type, device_euid,refresh,gateway_id,involved,measured_at) values (:DEVICE_TYPE,:DEVICE_EUID,5,:GATEWAY_ID,:TIMESTAMP,:TIMESTAMP);";  /*"insert into facilities (mac,refresh,battery,quality,fk_adapter_id,involved,timestamp) values
+const string InsertDevice = "insert into device (device_type,device_euid,refresh,gateway_id,involved,measured_at) values (:DEVICE_TYPE,:DEVICE_EUID,5,:GATEWAY_ID,:TIMESTAMP,:TIMESTAMP);";  /*"insert into facilities (mac,refresh,battery,quality,fk_adapter_id,involved,timestamp) values
 ( '" + message->DeviceIDstr + "', 5 ," + std::to_string(message->battery)+ ", " + std::to_string(message->signal_strength) +  ", " +std::to_string(message->adapterINTid)+ ", " +std::to_string(message->timestamp) + ", " + std::to_string(message->timestamp) +" );" ;*/
 /** Q to update facility uses ( :battery, :quality, :timestamp, :mac)*/
 const string UpdateDevice = "update device set measured_at = :MEASURED_AT where (device_euid = :DEVICE_EUID);"; //"update facilities set battery=" + std::to_string(message->battery) + ",quality=" + std::to_string(message->signal_strength) + ",timestamp=" + std::to_string(message->timestamp)  +" where (mac='" + message->DeviceIDstr + "');" ;
 /** Q to Delete facility uses (:ID) */
 const string DeleteDevice = "Delete from device where device_euid=:DEVICE_EUID;";
 /** Q to select wake up time of record uses ( :record)*/
-const string SelectTime = "select refresh from device where device_mac=:record;"; //"select refresh from facilities where mac = '" + record + "';";
+const string SelectTime = "select refresh from device where device_euid=:record;"; //"select refresh from facilities where mac = '" + record + "';";
 
 /**Q to insert device uses ( ':devID', :type, ':value')*/
 const string InsertModule = "insert into module (device_euid,module_id,measured_value) values (:DEVICE_EUID,:MODULE_ID,:MEASURED_VALUE);";  //"insert into devices (fk_facilities_mac,type,value) values ( '" + message->DeviceIDstr + "', " + std::to_string(message->values[i].intType) + ", '" + val + "');" ;

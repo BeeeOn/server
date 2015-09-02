@@ -124,12 +124,6 @@ class ProtocolV1MessageParser :public MessageParser
 		/**Virtual method to obtain device id
 						*/
 		virtual void GetDeviceID();
-		/**Virtual method to obtain battery value
-						*/
-		//virtual void GetBattery();
-		/**Virtual method to obtain signal value
-						*/
-		//virtual void GetSignal();
 		/**Virtual method to obtain values
 		 * @return bool true/false on success/failure
 				*/

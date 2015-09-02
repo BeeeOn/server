@@ -153,14 +153,10 @@ typedef struct message
 	float cp_version; /**< communication protocol version*/
 	time_t timestamp; /**< timestamp of message*/
 	int socket; /**< communication socket*/
-	unsigned long long int device_type; /**< ID of device*/
+	unsigned long long int device_type; /**< ID of device*/ // in protocol from senzor it's device_id, in database it's more fitting device_type
 	unsigned long long int device_euid;
 
-
 	std::string DeviceIDstr; /**< Device ID string*/
-	
-	//unsigned short int battery; /**< battery value percentage*/
-	//unsigned short int signal_strength; /**< signal strength percentage*/
 	
 	unsigned short int values_count; /**< count of values received*/
 	tvalue* values; /**< pointer to vales array*/
@@ -179,15 +175,13 @@ typedef struct message
 		this->DeviceIDstr = "";
 		this->adapterINTid = 0;
 		this->socket = 0;
-		//this->battery = 0;
 		this->cp_version = 0.0;
-		//this->signal_strength=0;
 		this->state = UNKNOWN;
 		this->values_count = 0;
 		this->fm_version = 0;
 		this->timestamp = 0;
-		this->device_type = 0; //device_id
-		this->device_euid = 0; //device_mac (device_euid)
+		this->device_type = 0; 
+		this->device_euid = 0;
 	}
 } tmessage;
 

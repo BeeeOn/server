@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
   <Database>
-    <Name>home5</Name> <!-- Database Name-->
+    <Name>home7</Name> <!-- Database Name-->
     <User></User> <!-- DB user name with admin rights to DB-->
     <Password></Password> <!-- user password -->
     <ConnectionsCount>15</ConnectionsCount> <!-- Number of connections count to DB -->
@@ -12,7 +12,7 @@
       <CrtFile>/etc/openvpn/server.crt</CrtFile> <!-- Path to sever private key file-->
       <CACrtFile>/etc/openvpn/ca.crt</CACrtFile> <!-- Path to CA certificate -->
     </Certificates>
-    <Mode>DEAMON</Mode> <!-- if set to DEAMON, server will start on background-->
+    <Mode>DAEMON</Mode> <!-- if set to DEAMON, server will start on background-->
   </Common>
   <Sender> <!-- Start of ada server sender congif section -->
     <LogConfig> <!-- Configuration of loging -->
@@ -20,7 +20,7 @@
       <FileNaming>ada_server_sender</FileNaming> <!-- Name of log file -->
       <FilesCount>5</FilesCount> <!-- Log files history count -->
       <MaxFileSize>100</MaxFileSize> <!-- Size of log file in MB -->
-      <LogPath>/home/xblaho03/logs/</LogPath> <!-- Path for log files -->
+      <LogPath>/home/xnovak1c/logs/</LogPath> <!-- Path for log files -->
     </LogConfig>
     <Port>7081</Port>  <!-- Port to listen on for ui_server request -->
     <AdapterPort>7978</AdapterPort> <!-- Port where is adapter listening -->
@@ -33,7 +33,7 @@
       <FileNaming>ada_server_receiver</FileNaming>
       <FilesCount>5</FilesCount>
       <MaxFileSize>100</MaxFileSize>
-      <LogPath>/home/xblaho03/logs/</LogPath>
+      <LogPath>/home/xnovak1c/logs/</LogPath>
     </LogConfig>
     </Receiver>
  </configuration>

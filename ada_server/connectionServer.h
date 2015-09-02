@@ -3,46 +3,43 @@
  * 
  * @brief definition of ConnectionServer Class
  *
- * @author Matus Blaho 
+ * @author Matus Blaho
  * @version 1.0
  */
 
 #ifndef CONNECTIONSERVER_H_
 #define CONNECTIONSERVER_H_
 
-#include<string>  
-#include<cstring>
-#include <arpa/inet.h> 
+#include <string>
+#include <cstring>
+#include <arpa/inet.h>
 #include <sys/poll.h>
-#include <chrono>  
-#include <iostream> 
-#include <netdb.h> 
-#include <cstdlib>  
-#include <netinet/in.h>  
-#include <sys/socket.h>  
-#include <sys/types.h>  
-#include <string.h>  
-#include <unistd.h>  
-#include <signal.h>  
-#include <sys/wait.h> 
-#include "../lib/pugixml.hpp"
-#include "../lib/pugiconfig.hpp"
-#include "loger.h"
-#include "messageParsers.h"
-#include "SSLContainer.h"
-#include "config.h"
-#include "DBHandler.h"
+#include <chrono>
+#include <iostream>
+#include <netdb.h>
+#include <cstdlib>
+#include <netinet/in.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <signal.h>
+#include <sys/wait.h>
 #include <errno.h>
 #include <string.h>
 #include <openssl/bio.h>
 #include <openssl/ssl.h>
 #include <openssl/err.h>
-
+#include "../lib/pugixml.hpp"
+#include "../lib/pugiconfig.hpp"
+#include "config.h"
+#include "DBHandler.h"
+#include "loger.h"
+#include "messageParsers.h"
+#include "SSLContainer.h"
 
 /** @class ConnectionServer
  *  @brief Class responsible for receiving and serving clients requests
  */
-
 class ConnectionServer
 {
 	private:

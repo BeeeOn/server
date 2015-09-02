@@ -78,6 +78,7 @@ bool ConnectionServer::LoadCertificates()
 void ConnectionServer::HandleConnection (in_addr IP)
 {
 	_log->WriteMessage(TRACE,"Entering " + this->_Name + "::HandleConnection");
+
 	char buffer[1024];
 	char errorBuffer[1000];
 	ssize_t DataSize=0;
@@ -123,6 +124,7 @@ void ConnectionServer::HandleConnection (in_addr IP)
 		if((DataSize = SSL_read(cSSL, buffer, 1024))>0) //read message
 		{
 			data.append(buffer,DataSize);
+			//_log->WriteMessage(MSG,"Message :" + data);
 			if ((data.find("</adapter_server>")!=std::string::npos)||((data[data.size()-2]=='/')&&(data[data.size()-2]=='>')))
 			{
 				break;
@@ -213,15 +215,19 @@ void ConnectionServer::HandleConnection (in_addr IP)
 		close(com_s);
 		_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::HandleConnection");
 		return;
-	}
 
+	}
 	parsedMessage = MP->ReturnMessage();
+
 	if (parsedMessage->state!=REGISTER) //on registration register agent
 	{
 		response = MP->CreateAnswer(this->GetData());
 		int Err;
 		_log->WriteMessage(MSG,"Response message: \n" + response);
-		response+="#";
+
+		// It was decided with adapter team, that at the end of each message will be \0
+		response.push_back('\0');
+
 		if((Err=SSL_write(cSSL, response.c_str(), response.size()))<=0)
 		{
 			_log->WriteMessage(ERR,"Writing to SSL failed :");
@@ -231,33 +237,38 @@ void ConnectionServer::HandleConnection (in_addr IP)
 	else
 	{
 	    std::string resp;
-	    if (!database->IsInDB("adapters","adapter_id",std::to_string(parsedMessage->adapterINTid)))
+	    if (!database->IsInDB("gateway","gateway_id",std::to_string(parsedMessage->adapterINTid)))
 	    {
-			if (database->InsertAdapter(this->parsedMessage))
+			if (database->InsertGateway(this->parsedMessage))
 			{
-			  resp="<server_adapter protocol_version=\"0.1\" state=\"register\" response=\"true\"/>#";
+			  resp="<server_adapter protocol_version=\"1.0\" state=\"register\" response=\"true\"/>";
 			}
 			else
 			{
-			  resp="<server_adapter protocol_version=\"0.1\" state=\"register\" response=\"false\"/>#";
+			  resp="<server_adapter protocol_version=\"1.0\" state=\"register\" response=\"false\"/>";
 			}
 	    }
 	    else
 	    {
-	    	if (database->UpdateAdapter(this->parsedMessage))
+	    	if (database->UpdateGateway(this->parsedMessage))
 			{
-			  resp="<server_adapter protocol_version=\"0.1\" state=\"register\" response=\"true\"/>";
+			  	resp="<server_adapter protocol_version=\"1.0\" state=\"register\" response=\"true\"/>";
 			}
 			else
 			{
-			  resp="<server_adapter protocol_version=\"0.1\" state=\"register\" response=\"false\"/>";
+			  	resp="<server_adapter protocol_version=\"1.0\" state=\"register\" response=\"false\"/>";
 			}
 
 	    }
+
 	    this->_sslcont->InsertSSL(parsedMessage->adapterINTid,cSSL);
 	    int Err;
 		_log->WriteMessage(INFO,"Going to send response to register MSG ");
 		_log->WriteMessage(INFO,"Response register MSG : " + resp);
+
+		// It was decided with adapter team, that at the end of each message will be \0
+	   	response.push_back('\0');
+
 	    if((Err=SSL_write(cSSL, resp.c_str(), resp.size()))<=0)
 		{
 			_log->WriteMessage(ERR,"Sending registration answer failed :");
@@ -329,13 +340,13 @@ ConnectionServer::~ConnectionServer()
 	_log->WriteMessage(TRACE,"Entering " + this->_Name + "::Destructor");
 	if (cSSL != NULL)
 	{
-	  close(SSL_get_fd(cSSL));
-	  SSL_shutdown(this->cSSL);
-	  SSL_free(this->cSSL);
+		close(SSL_get_fd(cSSL));
+		SSL_shutdown(this->cSSL);
+		SSL_free(this->cSSL);
 	}
 	if(sslctx!=NULL)
 	{
-	  SSL_CTX_free(this->sslctx);
+		SSL_CTX_free(this->sslctx);
 	}
 	CRYPTO_cleanup_all_ex_data();
 	ERR_remove_state(0);
@@ -348,8 +359,8 @@ ConnectionServer::~ConnectionServer()
 void ConnectionServer::StoreData()
 {
 	_log->WriteMessage(TRACE,"Entering " + this->_Name + "::StoreData");
-	database->UpdateAdapter(this->parsedMessage); 
-	if(!database->IsInDB("facilities","mac","'" + std::to_string(this->parsedMessage->device_euid) + "'")) 
+	database->UpdateGateway(this->parsedMessage); 
+	if(!database->IsInDB("device","device_euid","'" + std::to_string(this->parsedMessage->device_euid) + "'")) 
 	{
 		database->InsertSenAct(this->parsedMessage);
 	}
@@ -369,7 +380,7 @@ int ConnectionServer::GetData()
 {
 	_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetData");
 	int wakeUpTime = 5;
-	if(!database->IsInDB("facilities","mac","'" + std::to_string(this->parsedMessage->device_euid) + "'"))
+	if(!database->IsInDB("device","device_euid","'" + std::to_string(this->parsedMessage->device_euid) + "'"))
 	{
 		wakeUpTime = 5;
 	}

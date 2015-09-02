@@ -102,16 +102,16 @@ bool DBHandler::IsInDB(std::string tableName, std::string columnName, std::strin
 	}
 }
 
-bool DBHandler::InsertAdapter(tmessage *message)
+bool DBHandler::InsertGateway(tmessage *message)
 {
-	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::InsertAdapter");
+	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::InsertGateway");
 	try
 	{
 		*_sql << SQLQueries::InsertGateway,
 				use(message->adapterINTid,"GATEWAY_ID"),
 				use(std::to_string(message->fm_version),"FM_VERSION"),
 				use(message->socket,"SOCKET");
-		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::InsertAdapter");
+		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::InsertGateway");
 		return (true);
 	}
 	catch(std::exception const &e)
@@ -120,14 +120,14 @@ bool DBHandler::InsertAdapter(tmessage *message)
 		std::string ErrorMessage = "Database Error : ";
 		ErrorMessage.append (e.what());
 		this->_log->WriteMessage(ERR,ErrorMessage );
-		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::InsertAdapter");
+		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::InsertGateway");
 		return (false);
 	}
 }
 
-bool DBHandler::UpdateAdapter(tmessage *message)
+bool DBHandler::UpdateGateway(tmessage *message)
 {
-	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::UpdateAdapter");
+	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::UpdateGateway");
 	try
 	{
 		std::string retRec;
@@ -144,7 +144,7 @@ bool DBHandler::UpdateAdapter(tmessage *message)
 				use(message->adapterINTid,"GATEWAY_ID"),
 				use(std::to_string(message->fm_version),"FM_VERSION");
 		}
-		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::UpdateAdapter");
+		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::UpdateGateway");
 		return (true);
 	}
 	catch(std::exception const &e)
@@ -153,7 +153,7 @@ bool DBHandler::UpdateAdapter(tmessage *message)
 		std::string ErrorMessage = "Database Error : ";
 		ErrorMessage.append (e.what());
 		this->_log->WriteMessage(ERR,ErrorMessage );
-		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::UpdateAdapter");
+		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::UpdateGateway");
 		return (false);
 	}
 }
