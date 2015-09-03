@@ -20,7 +20,7 @@ DevicesGetNew::~DevicesGetNew() {
 }
 
 int DevicesGetNew::getMsgAuthorization() {
-    return permissions::admin;
+    return permissions::superuser;
 }
 
 string DevicesGetNew::createResponseMsgOut() {

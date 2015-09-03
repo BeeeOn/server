@@ -169,6 +169,9 @@ int DAODevices::updateFacility(long long gateId, string id, string init, string 
         soci::session sql(*_pool);        
         
         string columnsToSet;
+        indicator locationInd = i_ok;
+        if(locationId == "null")
+            locationInd = i_null;
         if(init != "")columnsToSet.append(" "+col.init+"=:init, ");
         if(locationId != "")columnsToSet.append(" "+col.location_id+"=:locId, ");
         if(refresh != "")columnsToSet.append(" "+col.refresh+"=:refresh, ");
@@ -178,7 +181,7 @@ int DAODevices::updateFacility(long long gateId, string id, string init, string 
         statement st = (sql.prepare << "update " << tableDevices << " set " <<
                 columnsToSet <<
                 " where "+col.euid+" = :mac ",
-                use(init, "init"),use(locationId, "locId"),use(refresh, "refresh"),use(name, "name"),use(id, "mac")
+                use(init, "init"),use(locationId, locationInd, "locId"),use(refresh, "refresh"),use(name, "name"),use(id, "mac")
                 );
         
         st.execute(true);
