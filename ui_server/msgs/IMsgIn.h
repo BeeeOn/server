@@ -58,7 +58,7 @@ namespace proto{
     static const char deviceIdAttr[] = "id";
     static const char deviceInitAttr[] = "init";
     static const char deviceNameAttr[] = "name";
-    static const char deviceLocationIdAttr[] = "lid";
+    static const char deviceLocationIdAttr[] = "locationid";
     
     static const char moduleIdAttr[] = "id";
     static const char moduleTypeAttr[] = "type";

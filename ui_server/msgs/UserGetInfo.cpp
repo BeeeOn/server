@@ -46,18 +46,21 @@ string UserGetInfo::createResponseMsgOut() {
     pugi::xml_node accountsNode = _outputMainNode.append_child();
     accountsNode.set_name(proto::userAccountsAttr);
     
-    pugi::xml_node serviceNode = _outputMainNode.append_child();
+    pugi::xml_node serviceNode;
     
-    serviceNode = accountsNode.append_child();
-    serviceNode.set_name(proto::authProviderNode);
-    serviceNode.append_attribute(proto::authProvideNameAttr) = proto::authServiceGoogleAttr;
-    serviceNode.append_attribute(proto::authProviderIdAttr) = user.googleId.c_str();
+    if(user.googleId != ""){
+        serviceNode = accountsNode.append_child();
+        serviceNode.set_name(proto::authProviderNode);
+        serviceNode.append_attribute(proto::authProvideNameAttr) = proto::authServiceGoogleAttr;
+        serviceNode.append_attribute(proto::authProviderIdAttr) = user.googleId.c_str();
+    }
     
-    serviceNode = accountsNode.append_child();
-    serviceNode.set_name(proto::authProviderNode);
-    serviceNode.append_attribute(proto::authProvideNameAttr) = proto::authServiceFacebookAttr;
-    serviceNode.append_attribute(proto::authProviderIdAttr) = user.facebookId.c_str();
-    
+    if(user.facebookId != ""){
+        serviceNode = accountsNode.append_child();
+        serviceNode.set_name(proto::authProviderNode);
+        serviceNode.append_attribute(proto::authProvideNameAttr) = proto::authServiceFacebookAttr;
+        serviceNode.append_attribute(proto::authProviderIdAttr) = user.facebookId.c_str();
+    }
     //accountsNode.append_attribute(proto::authServiceBeeeonAttr)
     
     return getXMLreply(proto::replyUserInfo);

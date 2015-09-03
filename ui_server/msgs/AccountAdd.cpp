@@ -24,15 +24,15 @@ int MsgInAddAccount::getMsgAuthorization() {
 string MsgInAddAccount::createResponseMsgOut()
 {    
     pugi::xml_node userNode =  _doc->child(proto::communicationNode).child(proto::userNode);
-    string newUserId;
+    string newUser;
     string newRole;
 
-    newUserId = userNode.attribute(proto::userIdAttr).as_int(-1);
+    newUser = userNode.attribute(proto::userEmailAttr).value();
     newRole = userNode.attribute(proto::userRoleAttr).value();
     
     if(!isRoleValid(newRole)){
         return getNegativeXMLReply(ServerException::ROLE);
-    }else if(DAOUsersAdapters::getInstance().addConAccount(_gatewayId, newUserId, newRole) != 1){
+    }else if(DAOUsersAdapters::getInstance().addConAccount(_gatewayId, newUser, newRole) != 1){
         return getNegativeXMLReply(ServerException::USER_ID);
     }        
     
