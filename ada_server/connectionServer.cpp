@@ -282,6 +282,7 @@ void ConnectionServer::HandleConnection (in_addr IP)
 	if (parsedMessage->state!=REGISTER) //we are receiving data so save them
 	{
 		this->Notify(data);
+		usleep(100000);
 		this->StoreData();
 		database->LogValue(parsedMessage);
 	}

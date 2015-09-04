@@ -218,6 +218,7 @@ bool DBHandler::InsertSenAct(tmessage *message)
 					use(message->values[i].module_id,"MODULE_ID"),
 					use(val,"MEASURED_VALUE");
 		}
+
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::InsertSenAct");
 		return (true);
 	}
