@@ -13,7 +13,7 @@
 
 using namespace std;
 
-const std::string LocationAdd::state = "addroom";
+const std::string LocationAdd::state = "addlocation";
 
 LocationAdd::LocationAdd(pugi::xml_document* doc): IMsgInLoginAndAdapterAccessRequired(doc){
 }
@@ -22,14 +22,14 @@ LocationAdd::~LocationAdd() {
 }
 
 int LocationAdd::getMsgAuthorization() {
-    return ADMIN;
+    return permissions::admin;
 }
 
 string LocationAdd::createResponseMsgOut()
 {
-    pugi::xml_node roomNode = _doc->child(P_COMMUNICATION);
+    pugi::xml_node locationNode = _doc->child(proto::communicationNode).child(proto::locationNode);
 
-    string roomType = roomNode.attribute(P_ROOM_TYPE).value();
+    string roomType = locationNode.attribute(proto::locationTypeAttr).value();
     int rt;
     try{
         rt = stoi(roomType);
@@ -37,13 +37,16 @@ string LocationAdd::createResponseMsgOut()
         return getNegativeXMLReply(ServerException::ROOM_TYPE);
     }
 
-    if(rt < P_ROOM_MIN_TYPE || rt > P_ROOM_MAX_TYPE)
+    if(rt < P_LOCATION_MIN_TYPE || rt > P_LOCATION_MAX_TYPE)
         return getNegativeXMLReply(ServerException::ROOM_TYPE);
 
-    string roomName = roomNode.attribute(P_ROOM_NAME).value();
+    string roomName = locationNode.attribute(proto::locationNameAttr).value();
 
-    int newRoomId = DAORooms::getInstance().insertNewRoom(_adapterId, roomType, roomName);
+    int newRoomId = DAORooms::getInstance().insertNewRoom(_gatewayId, roomType, roomName);
 
-    _outputMainNode.append_attribute(P_ROOM_ID) = newRoomId;
-    return getXMLreply(R_ROOM_CREATED);
+    
+    pugi::xml_node newLocationNode = _outputMainNode.append_child();
+    newLocationNode.set_name(proto::locationNode);
+    newLocationNode.append_attribute(proto::locationIdAttr) = newRoomId;
+    return getXMLreply(proto::replyLocationCreated);
 }

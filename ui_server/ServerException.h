@@ -35,12 +35,14 @@ public:
 public:
     static const int VERSION;
     static const int TOKEN_EMAIL;
-    static const int EMAIL; //+text
+    static const int EMAIL;
+    static const int USER_ID;
     static const int IDENTIFICATION_TAKEN;
     static const int LOCALE;
 
     static const int ADAPTER_ID;
     static const int ADAPTER_TAKEN;
+    static const int ADAPTER_ACCESSIBLE;
 
     static const int AGG_FUNCTION;
     static const int INTERVAL;

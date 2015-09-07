@@ -12,7 +12,7 @@
 
 using namespace std;
 
-const std::string DevicesGetAll::state = "getalldevs";
+const std::string DevicesGetAll::state = "getalldevices";
 
 DevicesGetAll::DevicesGetAll(pugi::xml_document* doc): IMsgInLoginAndAdapterAccessRequired(doc) {
 }
@@ -21,10 +21,12 @@ DevicesGetAll::~DevicesGetAll() {
 }
 
 int DevicesGetAll::getMsgAuthorization() {
-    return GUEST;
+    return permissions::guest;
 }
 
 string DevicesGetAll::createResponseMsgOut()
 {          
-        return envelopeResponseWithAdapterId(R_DEVICES_ALL, DAODevices::getInstance().getXMLAllDevs(_adapterId), _adapterId);
+        //return envelopeResponseWithAdapterId(proto::replyAllDevices, DAODevices::getInstance().getXMLAllDevs(_gatewayId), _adapterId);
+    return envelopeResponseWithAdapterId(proto::replyAllDevices, DAODevices::getInstance().getXMLAllDevs(_gatewayId), "");
+    
 }

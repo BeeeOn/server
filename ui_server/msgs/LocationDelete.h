@@ -10,10 +10,10 @@
 
 #include "IMsgIn.h"
 #include "DBConnector.h"
-#include "IMsgInLoginRequired.h"
+#include "IMsgInLoginAndAdapterAccessRequired.h"
 
 
-class LocationDelete : public IMsgInLoginRequired{
+class LocationDelete : public IMsgInLoginAndAdapterAccessRequired{
 public:
     LocationDelete(pugi::xml_document* doc);
     virtual ~LocationDelete();

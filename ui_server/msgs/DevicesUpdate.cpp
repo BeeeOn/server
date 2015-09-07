@@ -9,7 +9,7 @@
 #include "ServerException.h"
 #include "../DAO/DAODevices.h"
 using namespace std;
-const string DevicesUpdate::state = "setdevs";
+const string DevicesUpdate::state = "updatedevice";
 
 DevicesUpdate::DevicesUpdate(pugi::xml_document* doc): IMsgInLoginAndAdapterAccessRequired(doc){
 }
@@ -19,49 +19,23 @@ DevicesUpdate::~DevicesUpdate() {
 }
 
 int DevicesUpdate::getMsgAuthorization() {
-    return ADMIN;
+    return permissions::admin;
 }
 
 
 string DevicesUpdate::createResponseMsgOut()
 {    
-    bool error = false;
-    string errorText;
     
+    pugi::xml_node deviceNode =  _doc->child(proto::communicationNode).child(proto::deviceNode);
     
-    pugi::xml_node facilityNode =  _doc->child(P_COMMUNICATION).child(P_FACILITY);
-    pugi::xml_node deviceNode;
+    string id = deviceNode.attribute(proto::deviceIdAttr).value();
+    string init = deviceNode.attribute(proto::deviceInitAttr).value();
+    string locationId = deviceNode.attribute(proto::deviceLocationIdAttr).value();
+    string refresh = deviceNode.attribute(P_DEVICE_REFRESH_DEPRECATED).value();
+    string name = deviceNode.attribute(proto::deviceNameAttr).value();
+
+    if(init != "" || locationId != "" || refresh != "" || name != "")
+        DAODevices::getInstance().updateFacility(_gatewayId, id, init, locationId, refresh, name);
     
-    for (; facilityNode; facilityNode = facilityNode.next_sibling(P_FACILITY)){
-        
-        string id = facilityNode.attribute(P_FACILITY_ID).value();
-        string init = facilityNode.attribute(P_FACILITY_INIT).value();
-        string locationId = facilityNode.attribute(P_FACILITY_LOCATION_ID).value();
-        string refresh = facilityNode.attribute(P_FACILITY_REFRESH).value();
-        
-        if(init !="" || locationId!="" || refresh!="")
-            DAODevices::getInstance().updateFacility(_adapterId, id, init, locationId, refresh);
-        
-        deviceNode =  facilityNode.child(P_DEVICE);
-                
-        for (; deviceNode; deviceNode = deviceNode.next_sibling(P_DEVICE)){
-            
-            string type = deviceNode.attribute(P_IN_DEVICE_TYPE).value();
-            string visibility = deviceNode.attribute(P_DEVICE_VISIBILITY).value();
-            string name = deviceNode.attribute(P_DEVICE_NAME).value();
-            
-            if(visibility !="" || name !="")
-                if( DAODevices::getInstance().updateDevice(_adapterId, id, type, name, visibility) == 0){
-                    error = true;
-                    errorText += "<device id=\"" + id + "\" type=\"" + type + "\" />";
-                }
-        }
-            
-    }
-        
-    
-    if(error)   
-        throw ServerException(ServerException::DEVICE_ID_TYPE,errorText);
-    
-    return envelopeResponse(R_TRUE);
+    return envelopeResponse(proto::replyTrue);
 }

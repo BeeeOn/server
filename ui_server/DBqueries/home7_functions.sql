@@ -69,8 +69,8 @@ CREATE OR REPLACE FUNCTION remove_another_superuser() returns trigger
   $$
   
   BEGIN
-    UPDATE users_adapters set role = 'admin' where 
-     fk_adapter_id = NEW.fk_adapter_id AND fk_user_id != NEW.fk_user_id AND role = 'superuser';
+    UPDATE user_gateway set permission = 'admin' where 
+     gateway_id = NEW.gateway_id AND user_id != NEW.user_id AND permission = 'superuser';
     
   RETURN NEW;
   END;
@@ -81,61 +81,8 @@ CREATE OR REPLACE FUNCTION remove_another_superuser() returns trigger
 
 
 CREATE TRIGGER only_one_superuser
-    BEFORE INSERT OR UPDATE ON users_adapters
+    BEFORE INSERT OR UPDATE ON user_gateway
     FOR EACH ROW
-    WHEN (NEW.role = 'superuser')
+    WHEN (NEW.permission = 'superuser')
     EXECUTE PROCEDURE remove_another_superuser();
     
-    
-    
-    
-CREATE OR REPLACE FUNCTION devs_set_name() returns trigger
-  AS
-  $$
-    DECLARE
-  	def_name text;
-  BEGIN
-    IF NEW.fk_facilities_mac between 3232235519 AND 3232235776 THEN
-      CASE NEW.type 
-      
-            WHEN x'0B'::integer THEN def_name := 'Stav kotle'  ;
-            
-            WHEN x'A6'::integer THEN def_name := 'Z1: Typ provozu'  ;
-            WHEN x'A7'::integer THEN def_name := 'Z1: Režim provozu'  ;
-            WHEN x'A5'::integer THEN def_name := 'Z1: Žádaná teplota'  ;
-            WHEN x'0A'::integer THEN def_name := 'Z1: Aktuální teplota'  ;
-            
-            WHEN x'1A6'::integer THEN def_name := 'Z2: Typ provozu'  ;
-            WHEN x'1A7'::integer THEN def_name := 'Z2: Režim provozu'  ;
-            WHEN x'1A5'::integer THEN def_name := 'Z2: Žádaná teplota'  ;
-            WHEN x'10A'::integer THEN def_name := 'Z2: Aktuální teplota'  ;
-            
-            WHEN x'2A6'::integer THEN def_name := 'Z3: Typ provozu'  ;
-            WHEN x'2A7'::integer THEN def_name := 'Z3: Režim provozu'  ;
-            WHEN x'2A5'::integer THEN def_name := 'Z3: Žádaná teplota'  ;
-            WHEN x'20A'::integer THEN def_name := 'Z3: Aktuální teplota'  ;
-            
-            WHEN x'3A6'::integer THEN def_name := 'Z4: Typ provozu'  ;
-            WHEN x'3A7'::integer THEN def_name := 'Z4: Režim provozu'  ;
-            WHEN x'3A5'::integer THEN def_name := 'Z4: Žádaná teplota'  ;
-            WHEN x'30A'::integer THEN def_name := 'Z4: Aktuální teplota'  ;
-            
-            ELSE def_name := ''   ;
-       END CASE;
-      UPDATE devices set name = def_name where fk_facilities_mac = NEW.fk_facilities_mac AND type = NEW.type;
-      RETURN NEW;
-    END IF;  
-
-    
-  
-  RETURN NEW;
-  END;
-  
-  $$
-  LANGUAGE plpgsql;
-
-
-CREATE TRIGGER set_devs_type
-    AFTER INSERT ON devices
-    FOR EACH ROW
-    EXECUTE PROCEDURE devs_set_name();  

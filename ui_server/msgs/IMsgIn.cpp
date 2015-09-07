@@ -12,11 +12,11 @@ IMsgIn::IMsgIn(pugi::xml_document* doc)
     _doc = doc;
     
     _outputMainNode = _outputDoc.append_child();
-    _outputMainNode.set_name(P_COMMUNICATION);
+    _outputMainNode.set_name(proto::communicationNode);
     
     
-    _token = _doc->child(P_COMMUNICATION).attribute(P_SESSION_ID).value();
-    _state = _doc->child(P_COMMUNICATION).attribute(P_STATE).value();
+    _token = _doc->child(proto::communicationNode).attribute(proto::sessionIdAttr).value();
+    _state = _doc->child(proto::communicationNode).attribute(proto::stateAttr).value();
     
    /* try{
         _IHAtoken = stoi(IHAtoken);
@@ -25,8 +25,6 @@ IMsgIn::IMsgIn(pugi::xml_document* doc)
     }catch(...){
         _IHAtoken = -1;
     }*/
-    
-    _adapterId = _doc->child(P_COMMUNICATION).attribute(P_ADAPTER_ID).value();
         
 }
 IMsgIn::~IMsgIn(void)
@@ -57,7 +55,7 @@ t_version IMsgIn::parseProtocolVersion(std::string version) {
 
 
 bool IMsgIn::checkProtocolVersion(){
-    string protocolVersion = _doc->child(P_COMMUNICATION).attribute(P_VERSION).value();
+    string protocolVersion = _doc->child(proto::communicationNode).attribute(proto::versionAttr).value();
     
     t_version ver = parseProtocolVersion(protocolVersion);
     
@@ -79,10 +77,10 @@ string IMsgIn::envelopeResponseSetAttributes(string state, string response, stri
 { 
         std::stringstream ss;
         //std::cout<<"envelope Msg "<<getState()<<std::endl;
-        ss << "<?xml version=\"1.0\" encoding=\"UTF-8\"?><com "
-                        P_VERSION "="<<"\""<<VERSION<<"\" "<<
-                        //P_SESSION_ID "=\"" << this->_IHAtoken << "\" "<<
-                        P_STATE "=\"" << state <<  "\""<<
+        ss << "<?xml version=\"1.0\" encoding=\"UTF-8\"?><com " <<
+                        proto::versionAttr  << "="<<"\""<<VERSION<<"\" "<<
+                        //proto::sessionIdAttr "=\"" << this->_IHAtoken << "\" "<<
+                        proto::stateAttr <<"=\"" << state <<  "\""<<
                         " " << attributes<<
                         ">" 
                         << response << 
@@ -102,7 +100,7 @@ string IMsgIn::envelopeResponse(string state, string response)
 
 string IMsgIn::envelopeResponse(string state, string response, int errcode)
 {        
-    string additionalAttributes = (string)P_ERRCODE+"=\""+to_string((long long int)errcode)+"\"";
+    string additionalAttributes = (string)proto::errorCodeAttr+"=\""+to_string((long long int)errcode)+"\"";
     return envelopeResponseSetAttributes( state, response, additionalAttributes);
 }
 
@@ -110,24 +108,10 @@ string IMsgIn::envelopeResponseWithRole(string state, string response, string ro
 {        
     string additionalAttributes = "";
     if(role != "")
-        additionalAttributes = (string)P_ROLE+"=\"" + role +"\"" ;
+        additionalAttributes = (string)proto::userRoleAttr+"=\"" + role +"\"" ;
     return envelopeResponseSetAttributes( state, response, additionalAttributes);
 }
 
-string IMsgIn::envelopeResponseWithAdapterId(string state, string response)
-{        
-    string additionalAttributes;
-    additionalAttributes = (string)P_ADAPTER_ID+"=\"" + _adapterId +"\"" ;
-    return envelopeResponseSetAttributes( state, response, additionalAttributes);
-}
-
-string IMsgIn::envelopeResponseWithAdapterId(string state, string response, string adapterId)
-{        
-    string additionalAttributes = "";
-    if(adapterId != "")
-        additionalAttributes = (string)P_ADAPTER_ID+"=\"" + adapterId +"\"" ;
-    return envelopeResponseSetAttributes( state, response, additionalAttributes);
-}
 
 string IMsgIn::envelopeResponseWithAttributes(string state, string attributes) {
     return envelopeResponseSetAttributes(state, "", attributes);
@@ -142,8 +126,8 @@ void IMsgIn::makeCommunicationHeader(std::string responseState) {
     declaration.append_attribute("version") = "1.0";
     declaration.append_attribute("encoding") = "UTF-8";
     
-    _outputMainNode.prepend_attribute(P_STATE) = responseState.c_str();
-    _outputMainNode.prepend_attribute(P_VERSION) = IMsgIn::VERSION.c_str();
+    _outputMainNode.prepend_attribute(proto::stateAttr) = responseState.c_str();
+    _outputMainNode.prepend_attribute(proto::versionAttr) = IMsgIn::VERSION.c_str();
     _outputMainNode.append_child(pugi::node_pcdata).set_value("");
 }
 
@@ -161,16 +145,16 @@ std::string IMsgIn::getXMLreply(std::string responseState) {
 }
 
 std::string IMsgIn::getNegativeXMLReply(int errorCode) {
-        _outputMainNode.append_attribute(P_ERRCODE) = errorCode;
-        return getXMLreply(R_FALSE);
+        _outputMainNode.append_attribute(proto::errorCodeAttr) = errorCode;
+        return getXMLreply(proto::replyFalse);
 }
 
 std::string IMsgIn::getNegativeXMLReply(int errorCode, const char* errorInfo) {
-        _outputMainNode.append_attribute(P_ERRCODE) = errorCode;
+        _outputMainNode.append_attribute(proto::errorCodeAttr) = errorCode;
         _outputMainNode.append_child(pugi::node_pcdata).set_value(errorInfo);
-        return getXMLreply(R_FALSE);
+        return getXMLreply(proto::replyFalse);
 }
 
 bool IMsgIn::isRoleValid(std::string role) {
-    return role == P_ROLE_GUEST || role == P_ROLE_USER || role ==P_ROLE_ADMIN || role == P_ROLE_SUPERUSER;
+    return role == proto::roleGuestAttr || role == proto::roleUserAttr || role ==proto::roleAdminAttr || role == proto::roleSuperuserAttr;
 }

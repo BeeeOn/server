@@ -11,6 +11,11 @@
 using namespace std;
 
 IMsgInLoginAndAdapterAccessRequired::IMsgInLoginAndAdapterAccessRequired(pugi::xml_document* doc) : IMsgInLoginRequired(doc) {
+    
+    _adapterId = _doc->child(proto::communicationNode).attribute(proto::headerGatewayIdAttr).value();
+    
+    _gatewayId = _doc->child(proto::communicationNode).attribute(proto::headerGatewayIdAttr).as_llong(-1);
+
 }
 
 
@@ -21,18 +26,17 @@ enumAccessStatus IMsgInLoginAndAdapterAccessRequired::checkAccess(){
     if( !isComIdValid() )
         return FORBIDDEN_NOT_LOGGED;
     
-    //TODO přístup do paměti bez try catch, ale je to mimo kontruktor, tak mozna to je OK
-    std::string role = DAOUsers::getInstance().getUserRoleM(_userId, _adapterId);
+    std::string role = DAOUsers::getInstance().getUserRoleM(_userId, _gatewayId);
     
     int roleId;
-    if(role == P_ROLE_GUEST)
-        roleId= GUEST;
-    else if(role == P_ROLE_USER)
-        roleId= USER;
-    else if(role == P_ROLE_ADMIN)
-        roleId= ADMIN;
-    else if(role == P_ROLE_SUPERUSER)
-        roleId= SUPERUSER;
+    if(role == proto::roleGuestAttr)
+        roleId= permissions::guest;
+    else if(role == proto::roleUserAttr)
+        roleId= permissions::user;
+    else if(role == proto::roleAdminAttr)
+        roleId= permissions::admin;
+    else if(role == proto::roleSuperuserAttr)
+        roleId= permissions::superuser;
     else {
         roleId = -1;
          Logger::getInstance(Logger::ERROR) << "undefined role:>"<<role <<"< ";
@@ -48,4 +52,21 @@ enumAccessStatus IMsgInLoginAndAdapterAccessRequired::checkAccess(){
         Logger::getInstance(Logger::ERROR) << " NOT OK "<< _userId <<" on "<<_state<<"("<<role<<"="<<roleId<<" "<<_state<<"="<<this->getMsgAuthorization() <<") "<<endl;
         return FORBIDDEN_WRONG_RIGHTS;
     }
+}
+
+
+
+string IMsgInLoginAndAdapterAccessRequired::envelopeResponseWithAdapterId(string state, string response)
+{        
+    string additionalAttributes;
+    additionalAttributes = (string)proto::headerGatewayIdAttr+"=\"" + _adapterId +"\"" ;
+    return envelopeResponseSetAttributes( state, response, additionalAttributes);
+}
+
+string IMsgInLoginAndAdapterAccessRequired::envelopeResponseWithAdapterId(string state, string response, string adapterId)
+{        
+    string additionalAttributes = "";
+    if(adapterId != "")
+        additionalAttributes = (string)proto::headerGatewayIdAttr+"=\"" + adapterId +"\"" ;
+    return envelopeResponseSetAttributes( state, response, additionalAttributes);
 }

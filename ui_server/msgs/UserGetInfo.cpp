@@ -21,44 +21,49 @@ UserGetInfo::~UserGetInfo() {
 }
 
 int UserGetInfo::getMsgAuthorization() {
-    return GUEST;
+    return permissions::guest;
 }
 
 string UserGetInfo::createResponseMsgOut() {
     
     User user = DAOUsers::getInstance().getUserByID(_userId);
- /*   string attr = string(P_USER_NAME)+"=\""+user.givenName+"\" "+
-            P_USER_SURNAME+"=\""+user.familyName+"\" "+
-            P_USER_GENDER+"=\""+user.gender+"\" "+
-            P_USER_EMAIL+"=\""+user.mail+"\" ";
+ /*   string attr = string(proto::userNameAttr)+"=\""+user.givenName+"\" "+
+            proto::userSurnameAttr+"=\""+user.familyName+"\" "+
+            proto::userGenderAttr+"=\""+user.gender+"\" "+
+            proto::userEmailAttr+"=\""+user.mail+"\" ";
 
 
-     return envelopeResponseWithAttributes(R_USER_INFO, attr);*/
-    _outputMainNode.append_attribute(P_USER_ID) = user.user_id;
-    _outputMainNode.append_attribute(P_USER_NAME) = user.givenName.c_str();
-    _outputMainNode.append_attribute(P_USER_SURNAME) = user.familyName.c_str();
-    _outputMainNode.append_attribute(P_USER_GENDER) = user.gender.c_str();
-    _outputMainNode.append_attribute(P_USER_EMAIL) = user.mail.c_str();
-    _outputMainNode.append_attribute(P_USER_PICTURE) = user.picture.c_str();
+     return envelopeResponseWithAttributes(proto::replyUserInfo, attr);*/
+    pugi::xml_node userNode = _outputMainNode.append_child();
+    userNode.set_name(proto::userNode);
+    userNode.append_attribute(proto::userIdAttr) = user.user_id;
+    userNode.append_attribute(proto::userNameAttr) = user.givenName.c_str();
+    userNode.append_attribute(proto::userSurnameAttr) = user.familyName.c_str();
+    userNode.append_attribute(proto::userGenderAttr) = user.gender.c_str();
+    userNode.append_attribute(proto::userEmailAttr) = user.mail.c_str();
+    userNode.append_attribute(proto::userPictureAttr) = user.picture.c_str();
 
     pugi::xml_node accountsNode = _outputMainNode.append_child();
-    accountsNode.set_name(P_USER_ACCOUNTS);
+    accountsNode.set_name(proto::userAccountsAttr);
     
     pugi::xml_node serviceNode;
     
-    serviceNode = accountsNode.append_child();
-    serviceNode.set_name(P_SERVICE);
-    serviceNode.append_attribute(P_SERVICE_NAME) = P_SERVICE_GOOGLE;
-    serviceNode.append_attribute(P_SERVICE_ID) = user.googleId.c_str();
+    if(user.googleId != ""){
+        serviceNode = accountsNode.append_child();
+        serviceNode.set_name(proto::authProviderNode);
+        serviceNode.append_attribute(proto::authProvideNameAttr) = proto::authServiceGoogleAttr;
+        serviceNode.append_attribute(proto::authProviderIdAttr) = user.googleId.c_str();
+    }
     
-    serviceNode = accountsNode.append_child();
-    serviceNode.set_name(P_SERVICE);
-    serviceNode.append_attribute(P_SERVICE_NAME) = P_SERVICE_FACEBOOK;
-    serviceNode.append_attribute(P_SERVICE_ID) = user.facebookId.c_str();
+    if(user.facebookId != ""){
+        serviceNode = accountsNode.append_child();
+        serviceNode.set_name(proto::authProviderNode);
+        serviceNode.append_attribute(proto::authProvideNameAttr) = proto::authServiceFacebookAttr;
+        serviceNode.append_attribute(proto::authProviderIdAttr) = user.facebookId.c_str();
+    }
+    //accountsNode.append_attribute(proto::authServiceBeeeonAttr)
     
-    //accountsNode.append_attribute(P_SERVICE_BEEEON)
-    
-    return getXMLreply(R_USER_INFO);
+    return getXMLreply(proto::replyUserInfo);
 }
 
 

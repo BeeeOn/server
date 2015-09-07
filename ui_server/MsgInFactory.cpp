@@ -29,7 +29,6 @@
 #include "msgs/MsgInGamificationRedirect.h"
 #include "msgs/NotificationsGet.h"
 #include "msgs/NotificationReaded.h"
-#include "msgs/UserGetID.h"
 #include "msgs/UserGetInfo.h"
 #include "msgs/UserRegister.h"
 #include "msgs/GateDelete.h"
@@ -71,7 +70,7 @@ IMsgIn* MsgInFactory::createMsg(const char* msg)
     
     //doc->save(std::cout, "\t", pugi::format_indent);
     
-    string state = doc->child(P_COMMUNICATION).attribute(P_STATE).value();
+    string state = doc->child(proto::communicationNode).attribute(proto::stateAttr).value();
     
     Logger::getInstance(Logger::DEBUG3) << "factory: creating msg "<< state<< endl;
 
@@ -117,8 +116,6 @@ IMsgIn* MsgInFactory::createMsg(const char* msg)
         return new NotificationSetGCMID(doc);
     if(state == NotificationEraseGCMID::state)
         return new NotificationEraseGCMID(doc);
-    if(state == UserGetID::state)
-        return new UserGetID(doc);
     if(state == UserGetInfo::state)
         return new UserGetInfo(doc);
     if(state == UserLogout::state)

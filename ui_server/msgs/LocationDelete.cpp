@@ -7,11 +7,12 @@
 
 #include "LocationDelete.h"
 #include "../DAO/DAORooms.h"
+#include "IMsgInLoginAndAdapterAccessRequired.h"
 
 
-const std::string LocationDelete::state = "delroom";
+const std::string LocationDelete::state = "deletelocation";
 
-LocationDelete::LocationDelete(pugi::xml_document* doc): IMsgInLoginRequired(doc){
+LocationDelete::LocationDelete(pugi::xml_document* doc): IMsgInLoginAndAdapterAccessRequired(doc){
 }
 
 
@@ -19,19 +20,19 @@ LocationDelete::~LocationDelete() {
 }
 
 int LocationDelete::getMsgAuthorization() {
-    return ADMIN;
+    return permissions::admin;
 }
 
 string LocationDelete::createResponseMsgOut()
 {
-    pugi::xml_node roomNode = _doc->child(P_COMMUNICATION);
+    pugi::xml_node locationNode = _doc->child(proto::communicationNode).child(proto::locationNode);
     
-    string roomId = roomNode.attribute(P_ROOM_ID).value();
+    string locationId = locationNode.attribute(proto::locationIdAttr).value();
     
     //if(roomId == "0")
-     //   return envelopeResponse(R_TRUE);
-    DAORooms::getInstance().deleteRoom(_adapterId, roomId);
+     //   return envelopeResponse(proto::replyTrue);
+    DAORooms::getInstance().deleteRoom(_gatewayId, locationId);
     
-    return getXMLreply(R_TRUE);
+    return getXMLreply(proto::replyTrue);
 }
 

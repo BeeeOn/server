@@ -16,6 +16,42 @@ struct device {
     std::string type;
 };
 
+struct DeviceColumns{
+    std::string euid;
+    std::string id;
+    std::string name;
+    std::string refresh;
+    std::string init;
+    std::string involved;
+    std::string measured_at;
+    std::string location_id;
+    std::string gateway_id;
+    
+    DeviceColumns():
+            euid("device_euid"), 
+            id("device_type"), 
+            name("device_name"),
+            refresh("refresh"),
+            init("init"),
+            involved("involved"),
+            measured_at("measured_at"),
+            location_id("location_id"),
+            gateway_id("gateway_id")
+            { }
+};
+
+struct ModuleColumns{
+    std::string euid;
+    std::string id;
+    std::string value;
+    
+    ModuleColumns():
+            euid("device_euid"), 
+            id("module_id"), 
+            value("measured_value")
+            { }
+};
+
 class DAODevices : public DAO {
 private:
     DAODevices();
@@ -24,20 +60,24 @@ private:
 public:
     static DAODevices& getInstance();
     ~DAODevices(void);
-    
+    static const std::string tableModule;
+    static const std::string tableDevices;
+    static const DeviceColumns col;
+    static const ModuleColumns moduleCol;
     /**
      * 
      * @param adapterId
      * @return XML string with all devices on adapter
      */
-    std::string getXMLAllDevs(std::string adapterId);
+    std::string getXMLAllDevs(long long gateId);
+    std::string getXMLdevices(int userId, std::vector<long long> gateVector, std::vector<int> devicesVec);
     std::string getXMLdevices(int userId, std::vector<std::string> adaptersVec, std::vector<device> devicesVec);
     /**
      * 
      * @param adapterId
      * @return XML string with devices on adapter which is not initialized 
      */
-    std::string getXMLNewDevices(std::string adapterId);
+    std::string getXMLNewDevices(long long gateId);
     /**
      * 
      * @param adapterId
@@ -47,14 +87,11 @@ public:
      * @param visibility
      * @return number of updated rows in DB (0 or 1)
      */
-    int updateDevice(std::string adapterId, std::string id, std::string type, std::string name, std::string visibility);
-    std::string getXMLDeviceLog(std::string adapterId, device device, std::string logFrom, std::string logTo, std::string dataType, std::string interval);
-    int updateFacility(std::string adapterId, std::string id, std::string init, std::string locationId, std::string refresh) ;
+//    int updateDevice(long long adapterId, std::string id, std::string type, std::string name, std::string visibility);
+    std::string getXMLDeviceLog(long long gateId, device device, std::string logFrom, std::string logTo, std::string dataType, std::string interval);
+    int updateFacility(long long gateId, std::string id, std::string init, std::string locationId, std::string refresh, std::string name) ;
     
-private: 
-    std::string escapeString(std::string str);
-
-    std::string getXMLDevicesQueryString(std::string facilitiesCond="");
+    std::string getXMLDevicesQueryString2();
 };
 
 #endif	/* DAODEVICES_H */

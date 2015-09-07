@@ -2,6 +2,8 @@
 #include "UserLogout.h"
 #include "../DAO/DAOUsers.h"
 #include "../lib/pugixml.hpp"
+#include "TokenChecker.h"
+#include "SessionsTable.h"
 
 using namespace std;
 
@@ -14,16 +16,17 @@ UserLogout::~UserLogout() {
 }
 
 int UserLogout::getMsgAuthorization() {
-    return GUEST;
+    return permissions::guest;
 }
 
 string UserLogout::createResponseMsgOut() {
+    DAOMobileDevices::getInstance().deletepushNotification(_userId, "");
+    SessionsTable::getInstance().removeEntry(_token);
+
+    return getXMLreply(proto::replyTrue);
     
-    //TODO
-    return getXMLreply(R_TRUE);
-    
-    //_outputMainNode.append_attribute(P_ERRCODE) = ServerException::LOGOUT_ERROR;
-    //return genOutputXMLwithVersionAndState(R_FALSE);
+    //_outputMainNode.append_attribute(proto::errorCodeAttr) = ServerException::LOGOUT_ERROR;
+    //return genOutputXMLwithVersionAndState(proto::replyFalse);
 }
 
 

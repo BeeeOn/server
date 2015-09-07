@@ -10,9 +10,10 @@
 
 #include "IMsgInLoginRequired.h"
 #include "../../DAO/DAOAdapters.h"
+#include "IMsgInLoginAndAdapterAccessRequired.h"
 
 
-class GateUpdate : public IMsgInLoginRequired{
+class GateUpdate : public IMsgInLoginAndAdapterAccessRequired{
 public:
     GateUpdate(pugi::xml_document* doc);
 

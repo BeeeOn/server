@@ -23,5 +23,5 @@ enumAccessStatus IMsgInFreeAccess::checkAccess(){
 }
 
 int IMsgInFreeAccess::getMsgAuthorization() {
-    return EVERYONE;
+    return permissions::everyone;
 }

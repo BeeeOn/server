@@ -7,10 +7,11 @@
 
 #include "LogGet.h"
 #include "../lib/pugixml.hpp"
-#include "../DAO/DAODevices.h"
+#include "../DAO/DAODevices.h" 
+#include "../DAO/DAOlogs.h"
 using namespace std;
 
-const string GetLog::state = "getlog";
+const string GetLog::state = "getlogs";
 
 GetLog::GetLog(pugi::xml_document* doc):IMsgInLoginAndAdapterAccessRequired(doc) {
 }
@@ -19,20 +20,21 @@ GetLog::~GetLog() {
 }
 
 int GetLog::getMsgAuthorization() {
-    return GUEST;
+    return permissions::guest;
 }
 
 string GetLog::createResponseMsgOut()
 {                        
-    pugi::xml_node comNode =  _doc->child(P_COMMUNICATION);
-    string logFrom =  comNode.attribute(P_LOG_FROM).value();
-    string logTo = comNode.attribute(P_LOG_TO).value();
-    string type =  comNode.attribute(P_LOG_FUNC_TYPE).value();
-    string interval = comNode.attribute(P_LOG_INTERVAL).value();
+    pugi::xml_node logsNode =  _doc->child(proto::communicationNode).child(proto::logsNode);
+
+    string logFrom =  logsNode.attribute(proto::logsFromAttr).value();
+    string logTo = logsNode.attribute(proto::logsToAttr).value();
+    string type =  logsNode.attribute(proto::logsFunctionAttr).value();
+    string interval = logsNode.attribute(proto::logsIntervalAttr).value();
     
     device d;
-    d.id =  comNode.attribute(P_DEVICE_ID).value();
-    d.type =  comNode.attribute(P_DEVICE_TYPE).value();
+    d.id =  logsNode.attribute(proto::logsDeviceIdAttr).value();
+    d.type =  logsNode.attribute(proto::logsModuleIdAttr).value();
     
-    return envelopeResponse(R_LOG, DAODevices::getInstance().getXMLDeviceLog(_adapterId, d, logFrom, logTo, type , interval));
+    return envelopeResponse(proto::replyLogs, DAOlogs::getInstance().getXMLDeviceLog(_gatewayId, d, logFrom, logTo, type , interval));
 }

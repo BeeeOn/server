@@ -7,8 +7,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/msgs/AccountGet.cpp</file>
-            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/MsgInFactory.cpp</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/msgs/AccountAdd.cpp</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/DAO/DAOUsersAdapters.h</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/msgs/IMsgIn.cpp</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/msgs/UserGetInfo.cpp</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/ui_server/msgs/IMsgIn.h</file>
+            <file>rfs://xvampo01@ant-2.fit.vutbr.cz:22/home/xvampo01/server_devel/DAO/DAOUsersAdapters.cpp</file>
         </group>
     </open-files>
 </project-private>

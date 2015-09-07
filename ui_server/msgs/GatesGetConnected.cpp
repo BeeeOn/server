@@ -2,7 +2,7 @@
 
 using namespace std;
 
-const std::string GatesGetConnected::state = "getadapters";
+const std::string GatesGetConnected::state = "getgates";
 
 GatesGetConnected::GatesGetConnected(pugi::xml_document* doc): IMsgInLoginRequired(doc)
 {
@@ -12,10 +12,10 @@ GatesGetConnected::~GatesGetConnected(void)
 {
 }
 int GatesGetConnected::getMsgAuthorization() {
-    return GUEST;
+    return permissions::guest;
 }
 
 string GatesGetConnected::createResponseMsgOut()
 {
-    return envelopeResponse(R_ADAPTERS, DAOUsers::getInstance().getXMLusersAdapters(_userId));
+    return envelopeResponse(proto::replyGates, DAOUsers::getInstance().getXMLusersAdapters(_userId));
 }

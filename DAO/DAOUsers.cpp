@@ -8,11 +8,14 @@
 #include "DAOUsers.h"
 #include "../ui_logger/Logger.h"
 #include "Config.h"
+#include "DAOUsersAdapters.h"
+#include "DAOAdapters.h"
 
 using namespace std;
 using namespace soci;
 
-
+const std::string DAOUsers::tableUsers = "users";
+const UsersColumns DAOUsers::col;
 
 namespace soci
 {
@@ -23,38 +26,28 @@ namespace soci
 
         static void from_base(values const & v, indicator /* ind */, User & user)
         {
-            user.user_id = v.get<int>("user_id");
-            user.mail = v.get<std::string>("mail","");
-            user.passwordMd5 = v.get<std::string>("password","");
-            //user.phoneLocale = v.get<std::string>("phone_locale","");
-            //user.verifiedMail = v.get<int>("verified_email",1);
-            //user.name = v.get<std::string>("name","");
-            user.givenName = v.get<std::string>("given_name","");
-            user.familyName = v.get<std::string>("family_name","");
-            //user.link = v.get<std::string>("link","");
-            user.picture = v.get<std::string>("picture","");
-            user.gender = v.get<std::string>("gender","");
-            //user.googleLocale = v.get<std::string>("google_locale","");
-            user.googleId = v.get<std::string>("google_id","");
-            user.facebookId = v.get<std::string>("facebook_id","");
+            user.user_id = v.get<int>(DAOUsers::col.id);
+            user.mail = v.get<std::string>(DAOUsers::col.mail,"");
+            user.passwordMd5 = v.get<std::string>(DAOUsers::col.password,"");
+            user.givenName = v.get<std::string>(DAOUsers::col.first_name,"");
+            user.familyName = v.get<std::string>(DAOUsers::col.surname,"");
+            user.picture = v.get<std::string>(DAOUsers::col.picture,"");
+            user.gender = v.get<std::string>(DAOUsers::col.gender,"");
+            user.googleId = v.get<std::string>(DAOUsers::col.google_id,"");
+            user.facebookId = v.get<std::string>(DAOUsers::col.facebook_id,"");
         }
     
         static void to_base(const User & user, values & v, indicator & ind)
         {           
-            v.set("user_id", user.user_id);
-            v.set("mail", user.mail, user.mail.empty() ? i_null : i_ok);
-            v.set("password", user.passwordMd5, user.passwordMd5.empty() ? i_null : i_ok);
-            ///v.set("phone_locale", user.phoneLocale);
-            //v.set("verified_email", user.verifiedMail, user.name.empty() ? i_null : i_ok);
-            //v.set("name", user.name, user.name.empty() ? i_null : i_ok);
-            v.set("given_name", user.givenName, user.givenName.empty() ? i_null : i_ok);
-            v.set("family_name", user.familyName, user.familyName.empty() ? i_null : i_ok);
-            //v.set("link", user.link, user.link.empty() ? i_null : i_ok);
-            v.set("picture", user.picture, user.picture.empty() ? i_null : i_ok);
-            v.set("gender", user.gender, user.gender.empty() ? i_null : i_ok);
-            //v.set("google_locale", user.googleLocale, user.googleLocale.empty() ? i_null : i_ok);
-            v.set("google_id", user.googleId, user.googleId.empty() ? i_null : i_ok);
-            v.set("facebook_id", user.facebookId, user.facebookId.empty() ? i_null : i_ok);
+            v.set(DAOUsers::col.id, user.user_id);
+            v.set(DAOUsers::col.mail, user.mail, user.mail.empty() ? i_null : i_ok);
+            v.set(DAOUsers::col.password, user.passwordMd5, user.passwordMd5.empty() ? i_null : i_ok);
+            v.set(DAOUsers::col.first_name, user.givenName, user.givenName.empty() ? i_null : i_ok);
+            v.set(DAOUsers::col.surname, user.familyName, user.familyName.empty() ? i_null : i_ok);
+            v.set(DAOUsers::col.picture, user.picture, user.picture.empty() ? i_null : i_ok);
+            v.set(DAOUsers::col.gender, user.gender, user.gender.empty() ? i_null : i_ok);
+            v.set(DAOUsers::col.google_id, user.googleId, user.googleId.empty() ? i_null : i_ok);
+            v.set(DAOUsers::col.facebook_id, user.facebookId, user.facebookId.empty() ? i_null : i_ok);
             ind = i_ok;
         }
     };
@@ -72,19 +65,18 @@ DAOUsers& DAOUsers::getInstance(){
         return instance;
 }
 
+std::string DAOUsers::getDAOname() {
+    return "USER";
+}
+
+
 int DAOUsers::add(User user) {
         Logger::db() << "DB:" << "insertNewUser" << endl;
         try
         {
                 soci::session sql(*_pool);
                 
-                /*sql << "insert into users(mail, phone_locale, verified_email, name, given_name, family_name, link, picture, gender, google_locale, google_id) "
-                                                " values(:mail, :phoneLoc, :verMail,:name, "
-                                            " :name1, :name2, :link, :pic, :gen, :g_loc, gid)",
-                        use (user.mail,"mail"), use(user.phoneLocale, "phoneLoc"), use(user.verifiedMail, "verMail"), use(user.name, "name"),
-                        use(user.givenName, "name1"), use(user.familyName, "name2"), use(user.link, "link"),use(user.picture, "pic"), use(user.gender, "gen"), use(user.googleLocale, "g_loc"), use(user.googleId, "gid");   
-                */
-                sql << "insert into users(mail, password, given_name, family_name, picture, gender, google_id, facebook_id) "
+                sql << "insert into " << tableUsers << "(" << col.mail << ", " << col.password << ", " << col.first_name << ", " << col.surname<< ", " << col.picture << ", " << col.gender << ", " << col.google_id << ", " << col.facebook_id << ") "
                                                 " values(:mail, :password, "
                                             " :given_name, :family_name, :picture, :gender, :google_id, :facebook_id)", use(user);
                 return 1;
@@ -104,7 +96,7 @@ User DAOUsers::getUserAssociatedWithToken(std::string token) {
             session sql(*_pool);
             User user;
 
-            sql << "select * from users join mobile_devices on user_id = fk_user_id where token = :btoken", use(token, "btoken"),into(user);
+            sql << "select * from " << tableUsers << " join mobile_devices on " << col.id << " = fk_user_id where token = :btoken", use(token, "btoken"),into(user);
             return user; 
     }
     catch (soci::postgresql_soci_error& e)
@@ -122,7 +114,7 @@ User DAOUsers::getUserByID(int userId) {
             session sql(*_pool);
             User user;
 
-            sql << "select * from users where user_id = :id", use(userId, "id"),into(user);
+            sql << "select * from " << tableUsers << " where " << col.id << " = :id", use(userId, "id"),into(user);
             return user; 
     }
     catch (soci::postgresql_soci_error& e)
@@ -167,7 +159,7 @@ bool DAOUsers::isMailRegistred(std::string mail) {
     try
     {
             session sql(*_pool);
-            sql << "select count(*) from users where mail=:mail;", use(mail, "mail"),into(c);
+            sql << "select count(*) from " << tableUsers << " where " << col.mail << "=:mail;", use(mail, "mail"),into(c);
             Logger::getInstance(Logger::DEBUG3)<<mail<< c << endl;
             return c==1; 
     }
@@ -183,7 +175,7 @@ bool DAOUsers::isNameRegistred(std::string name) {
     try
     {
             session sql(*_pool);
-            sql << "select count(*) from users where name=:name;", use(name, "name"),into(c);
+            sql << "select count(*) from " << tableUsers << " where name=:name;", use(name, "name"),into(c);
             Logger::getInstance(Logger::DEBUG3)<<name<< c << endl;
             return c==1; 
     }
@@ -199,7 +191,7 @@ bool DAOUsers::isGoogleIdRegistred(std::string g_id) {
     try
     {
             session sql(*_pool);
-            sql << "select count(*) from users where google_id=:google_id;", use(g_id, "google_id"),into(c);
+            sql << "select count(*) from " << tableUsers << " where " << col.google_id << "=:google_id;", use(g_id, "google_id"),into(c);
             Logger::getInstance(Logger::DEBUG3)<<g_id<< c << endl;
             return c==1; 
     }
@@ -221,7 +213,7 @@ int DAOUsers::getUserIDbyAlternativeKeys(std::string mail, std::string google_id
             indicator i1 = mail.empty()?i_null:i_ok;
             indicator i2 = google_id.empty()?i_null:i_ok;
             indicator i3 = facebook_id.empty()?i_null:i_ok;
-            sql << "select user_id from users where "
+            sql << "select user_id from " << tableUsers << " where "
                                 "CASE WHEN :mail::text is not NULL THEN mail=:mail  "
                                             "WHEN :google_id::text is not NULL then google_id=:google_id "
                                             "WHEN :fb_id::text is not NULL then facebook_id=:fb_id "
@@ -259,14 +251,16 @@ int DAOUsers::getUserIdbyIhaToken(string token) {
 
 
         
-string DAOUsers::getUserRoleM(int userId, string adapterId)
+string DAOUsers::getUserRoleM(int userId, long long adapterId)
 {
         Logger::getInstance(Logger::DEBUG3)<<"DB: get role "<<userId<<" on "<<adapterId<<endl;
         string role;
         try
         {
                 session sql(*_pool);
-                sql << "select role from users_adapters where fk_user_id= :guserid and fk_adapter_id = :adapter",
+                sql << "select " << DAOUsersAdapters::col.permission << " from " << DAOUsersAdapters::tableUsersGateways << 
+                        " where " << DAOUsersAdapters::col.user_id << "= :guserid and " << DAOUsersAdapters::col.gateway_id << " = :adapter " <<
+                        "limit 1",
                     use(userId, "guserid"), use(adapterId, "adapter"), into(role);
                 return role;
         }
@@ -278,16 +272,40 @@ string DAOUsers::getUserRoleM(int userId, string adapterId)
         
 }
 
+bool DAOUsers::isAdapterParred(int userId, long long adapterId) {
+        Logger::getInstance(Logger::DEBUG3)<<"DB: get role "<<userId<<" on "<<adapterId<<endl;
+        int result = false;
+        try
+        {
+                session sql(*_pool);
+                sql << "select exists (" <<
+                            "select 1 from " << DAOUsersAdapters::tableUsersGateways << 
+                            " where " << DAOUsersAdapters::col.user_id << "= :guserid and " << DAOUsersAdapters::col.gateway_id << " = :adapter " <<
+                            "limit 1"
+                        ")",
+                        use(userId, "guserid"), use(adapterId, "adapter"), into(result);
+                return result != 0;
+        }
+        catch (soci::postgresql_soci_error& e)
+        {
+                Logger::getInstance(Logger::ERROR) << "Error: " << e.what() << '\n';
+                throw;
+        }
+        
+}
+
+
 std::string DAOUsers::getXMLusersAdapters(int userId)
 {
-        Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"make usersAdapterListXml\n";
+        Logger::getInstance(Logger::DEBUG3)<<"DB:"<<getDAOname()<<"make usersAdapterListXml\n";
         try
         {
                 soci::session sql(*_pool);
                 std::string xml;
                 indicator ind;
-                sql << "select xmlagg(xmlelement(name adapter, xmlattributes(adapter_id as id, adapters.name as name, role as role, timezone as utc)))"
-                                    "from users join users_adapters on user_id=fk_user_id join adapters on fk_adapter_id = adapter_id where user_id = :id"
+                sql << "select xmlagg(xmlelement(name gate, xmlattributes(" << DAOAdapters::col.id << " as id, " << DAOAdapters::col.name << " as name, " << DAOUsersAdapters::col.permission << " as role, " << DAOAdapters::col.timezone << " as utc)))"
+                                    "from " << tableUsers << " join " << DAOUsersAdapters::tableUsersGateways << " using(" << col.id << ") " << 
+                                " join " << DAOAdapters::tableGateway << " using(" << DAOAdapters::col.id << ") where " << col.id << " = :id"
                             ,use(userId,"id"), soci::into(xml,ind);
                 Logger::getInstance(Logger::DEBUG3)<<"sql done result:"<<std::endl;
                 if(ind != i_ok)

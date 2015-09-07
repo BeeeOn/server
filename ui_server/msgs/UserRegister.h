@@ -7,6 +7,7 @@
 #include "gTokenChecker.h"
 #include "../fTokenChecker.h"
 #include "IMsgInLoginUnwanted.h"
+#include "IMsgInLoginRequired.h"
 
 class UserRegister :
 	public IMsgInFreeAccess

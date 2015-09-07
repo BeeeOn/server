@@ -21,7 +21,7 @@ class UserLogIn :
                 
                 static const std::string state;
                 private :
-                    string getnewIHAtoken();
+                 //   string getnewIHAtoken();
         };
         
 #endif /* MSGINSIGNME_H */

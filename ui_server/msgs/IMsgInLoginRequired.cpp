@@ -8,6 +8,7 @@
 #include "IMsgInLoginRequired.h"
 #include "../DAO/DAOUsers.h"
 #include "IMsgInLoginUnwanted.h"
+#include "SessionsTable.h"
 
 using namespace std;
 
@@ -20,11 +21,13 @@ IMsgInLoginRequired::~IMsgInLoginRequired() {
 
 bool IMsgInLoginRequired::isComIdValid(){
     
-    User user = DAOUsers::getInstance().getUserAssociatedWithToken(_token);
+    //User user = DAOUsers::getInstance().getUserAssociatedWithToken(_token);
+    int userId = SessionsTable::getInstance().getUserIdBySessionString(_token);
     
     //_userId = SessionsTable::getInstance().getUserIdBySessionString(_token);
     //_requesterMail = user.mail;
-    _userId = user.user_id;
+    //_userId = user.user_id;
+    _userId = userId;
     Logger::getInstance(Logger::DEBUG)<<"user:"<<_userId<<" token:"<<_token<<endl;
     
     return (_userId > 0 );

@@ -1,3 +1,38 @@
+INSERT INTO gateway (gateway_id, home_name) VALUES (10, 'ad10');
+INSERT INTO gateway (gateway_id, home_name) VALUES (20, 'ad20');
+
+
+INSERT INTO location	(location_id, gateway_id,kind,location_name) VALUES(1000,10,1,'l1' );
+INSERT INTO location	(location_id, gateway_id,kind,location_name) VALUES(2000,20,2,'l2' );
+
+insert into device(device_euid, device_id, gateway_id,location_id) values
+			(1000, 1, 10, 1000),       
+			(2000, 2, 20, 2000);
+
+INSERT INTO module	(device_euid, module_id, measured_value) VALUES
+			(1000,1,101),
+      (1000,2,102);
+INSERT INTO module	(device_euid, module_id, measured_value) VALUES
+			(2000,1,101);
+
+
+insert into log (device_euid, module_id, measured_at, measured_value) values (1000,1,1414086984,10);
+insert into log (device_euid, module_id, measured_at, measured_value) values (1000,1,1414086922,20);
+
+
+
+
+INSERT INTO gateway (gateway_id, home_name) VALUES (100, 'ad100');
+INSERT INTO user_gateway (gateway_id, user_id, permission) VALUES (100, 5, 'superuser');
+insert into device(device_euid, device_type, gateway_id,location_id) values
+			(1234, 1, 100, null),
+			(1235, 2, 100, null);
+INSERT INTO module	(device_euid, module_id, measured_value) VALUES
+			(1234,1,101),
+      (1234,2,102);
+INSERT INTO module	(device_euid, module_id, measured_value) VALUES
+			(1235,1,101);
+-- --------------------------------------------------------------------------------------
 INSERT INTO USERS (user_id,MAIL) VALUES (1,'user1@gmail.com');
 INSERT INTO USERS (user_id,MAIL) VALUES (2,'user2@gmail.com');
 INSERT INTO USERS (user_id,MAIL) VALUES (3,'user2a@gmail.com');

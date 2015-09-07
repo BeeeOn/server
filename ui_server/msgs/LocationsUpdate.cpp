@@ -11,7 +11,7 @@
 #include "IMsgIn.h"
 using namespace std;
 
-const string LocationsUpdate::state = "setrooms";
+const string LocationsUpdate::state = "updatelocation";
 
 LocationsUpdate::LocationsUpdate(pugi::xml_document* doc): IMsgInLoginAndAdapterAccessRequired(doc) {
 }
@@ -20,31 +20,29 @@ LocationsUpdate::~LocationsUpdate() {
 }
 
 int LocationsUpdate::getMsgAuthorization() {
-    return ADMIN;
+    return permissions::admin;
 }
 
 string LocationsUpdate::createResponseMsgOut()
 {                
         //vector<device> devicesVec;
-        pugi::xml_node locationNode =  _doc->child(P_COMMUNICATION).child(P_ROOM);
+        pugi::xml_node locationNode =  _doc->child(proto::communicationNode).child(proto::locationNode);
         
-        string id,type,name;
-        bool failed = false;
+        string name;
+        int locationId, type;
         
-        for (; locationNode; locationNode = locationNode.next_sibling(P_ROOM))
-        {
-            id = locationNode.attribute(P_IN_ROOM_ID).value();
-            type = locationNode.attribute(P_IN_ROOM_TYPE).value();
-            //TODO check type
-            name = locationNode.attribute(P_IN_ROOM_NAME).value();
-            try{
-                DAORooms::getInstance().updateRoom(_adapterId, id, type, name);
-            }catch(ServerException & e){
-                failed = true;
-            }
-        }
-        if(failed)
+        locationId = locationNode.attribute(proto::locationIdAttr).as_int();
+        type = locationNode.attribute(proto::locationNameAttr).as_int(-1);
+        if(type < P_LOCATION_MIN_TYPE || type > P_LOCATION_MAX_TYPE)
+            return getNegativeXMLReply(ServerException::ROOM_TYPE);
+
+        name = locationNode.attribute(proto::locationTypeAttr).value();
+        try{
+            DAORooms::getInstance().updateRoom(_gatewayId, locationId, type, name);
+        }catch(ServerException & e){
             return getNegativeXMLReply(ServerException::MISSING_ENTITY);
-        return getXMLreply(R_TRUE);
+        }
+        
+        return getXMLreply(proto::replyTrue);
 }
 

@@ -10,7 +10,7 @@
 
 using namespace std;
 
-const string DevicesGetNew::state = "getnewdevs";
+const string DevicesGetNew::state = "getnewdevices";
 
 DevicesGetNew::DevicesGetNew(pugi::xml_document* doc) : IMsgInLoginAndAdapterAccessRequired(doc){
 }
@@ -20,11 +20,11 @@ DevicesGetNew::~DevicesGetNew() {
 }
 
 int DevicesGetNew::getMsgAuthorization() {
-    return ADMIN;
+    return permissions::superuser;
 }
 
 string DevicesGetNew::createResponseMsgOut() {
     
-     return envelopeResponseWithAdapterId(R_DEVICES, DAODevices::getInstance().getXMLNewDevices(_adapterId) , _adapterId);
+     return envelopeResponseWithAdapterId(proto::replyDevices, DAODevices::getInstance().getXMLNewDevices(_gatewayId) , _adapterId);
 }
 

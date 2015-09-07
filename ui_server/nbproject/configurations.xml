@@ -46,12 +46,16 @@
         <itemPath>../DAO/DAOMobileDevices.h</itemPath>
         <itemPath>../DAO/DAONotification.cpp</itemPath>
         <itemPath>../DAO/DAONotification.h</itemPath>
+        <itemPath>../DAO/DAOPushNotificationService.cpp</itemPath>
+        <itemPath>../DAO/DAOPushNotificationService.h</itemPath>
         <itemPath>../DAO/DAORooms.cpp</itemPath>
         <itemPath>../DAO/DAORooms.h</itemPath>
         <itemPath>../DAO/DAOUsers.cpp</itemPath>
         <itemPath>../DAO/DAOUsers.h</itemPath>
         <itemPath>../DAO/DAOUsersAdapters.cpp</itemPath>
         <itemPath>../DAO/DAOUsersAdapters.h</itemPath>
+        <itemPath>../DAO/DAOlogs.cpp</itemPath>
+        <itemPath>../DAO/DAOlogs.h</itemPath>
         <itemPath>DBConnector.cpp</itemPath>
       </logicalFolder>
       <logicalFolder name="f4" displayName="devices" projectFiles="true">
@@ -71,6 +75,18 @@
         <itemPath>msgs/LogGet.h</itemPath>
         <itemPath>msgs/ModuleSwitchState.cpp</itemPath>
         <itemPath>msgs/ModuleSwitchState.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f3" displayName="gates" projectFiles="true">
+        <itemPath>msgs/GateAdd.cpp</itemPath>
+        <itemPath>msgs/GateAdd.h</itemPath>
+        <itemPath>msgs/GateDelete.cpp</itemPath>
+        <itemPath>msgs/GateDelete.h</itemPath>
+        <itemPath>msgs/GateGetInfo.cpp</itemPath>
+        <itemPath>msgs/GateGetInfo.h</itemPath>
+        <itemPath>msgs/GateUpdate.cpp</itemPath>
+        <itemPath>msgs/GateUpdate.h</itemPath>
+        <itemPath>msgs/GatesGetConnected.cpp</itemPath>
+        <itemPath>msgs/GatesGetConnected.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f5" displayName="locations" projectFiles="true">
         <itemPath>msgs/LocationAdd.cpp</itemPath>
@@ -112,19 +128,7 @@
         <itemPath>msgs/MsgInGamificationRedirect.cpp</itemPath>
         <itemPath>msgs/MsgInGamificationRedirect.h</itemPath>
       </logicalFolder>
-      <logicalFolder name="f3" displayName="sign_reg_adapters" projectFiles="true">
-        <itemPath>msgs/GateAdd.cpp</itemPath>
-        <itemPath>msgs/GateAdd.h</itemPath>
-        <itemPath>msgs/GateDelete.cpp</itemPath>
-        <itemPath>msgs/GateDelete.h</itemPath>
-        <itemPath>msgs/GateGetInfo.cpp</itemPath>
-        <itemPath>msgs/GateGetInfo.h</itemPath>
-        <itemPath>msgs/GateUpdate.cpp</itemPath>
-        <itemPath>msgs/GateUpdate.h</itemPath>
-        <itemPath>msgs/GatesGetConnected.cpp</itemPath>
-        <itemPath>msgs/GatesGetConnected.h</itemPath>
-        <itemPath>msgs/UserGetID.cpp</itemPath>
-        <itemPath>msgs/UserGetID.h</itemPath>
+      <logicalFolder name="f6" displayName="user" projectFiles="true">
         <itemPath>msgs/UserGetInfo.cpp</itemPath>
         <itemPath>msgs/UserGetInfo.h</itemPath>
         <itemPath>msgs/UserLogIn.cpp</itemPath>
@@ -153,273 +157,6 @@
       <itemPath>sslServlet.cpp</itemPath>
       <itemPath>ui_server.cpp</itemPath>
     </logicalFolder>
-    <logicalFolder name="TestFiles"
-                   displayName="Test Files"
-                   projectFiles="false"
-                   kind="TEST_LOGICAL_FOLDER">
-      <logicalFolder name="f21"
-                     displayName="AlfaTest"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/newtestclass.cpp</itemPath>
-        <itemPath>tests/newtestclass.h</itemPath>
-        <itemPath>tests/newtestrunner.cpp</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f15"
-                     displayName="testChangeConAccount"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/testChangeConAccount.cpp</itemPath>
-        <itemPath>tests/testChangeConAccount.h</itemPath>
-        <itemPath>tests/testrunnerChangeConAccount.cpp</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f3"
-                     displayName="testGlobal"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/testGlobal.cpp</itemPath>
-        <itemPath>tests/testGlobal.h</itemPath>
-        <itemPath>tests/testrunnerGlobal.cpp</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f20"
-                     displayName="testMsgInAddAdapter"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/testMsgInAddAdapter.cpp</itemPath>
-        <itemPath>tests/testMsgInAddAdapter.h</itemPath>
-        <itemPath>tests/testrunnerMsgInAddAdapter.cpp</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f8"
-                     displayName="testMsgInAddConAcc"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/testMsgInAddConAcc.cpp</itemPath>
-        <itemPath>tests/testMsgInAddConAcc.h</itemPath>
-        <itemPath>tests/testrunnerMsgInAddConAcc.cpp</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f4"
-                     displayName="testMsgInAddRooms"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/testMsgInAddRooms.cpp</itemPath>
-        <itemPath>tests/testMsgInAddRooms.h</itemPath>
-        <itemPath>tests/testrunnerMsgInAddRooms.cpp</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f31"
-                     displayName="testMsgInDelAction"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/testMsgInDelAction.cpp</itemPath>
-        <itemPath>tests/testMsgInDelAction.h</itemPath>
-        <itemPath>tests/testrunnerMsgInDelAction.cpp</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f16"
-                     displayName="testMsgInDelConAcc"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/testMsgInDelConAcc.cpp</itemPath>
-        <itemPath>tests/testMsgInDelConAcc.h</itemPath>
-        <itemPath>tests/testrunnerMsgInDelConAcc.cpp</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f9"
-                     displayName="testMsgInDelDevice"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/testMsgInDelDevice.cpp</itemPath>
-        <itemPath>tests/testMsgInDelDevice.h</itemPath>
-        <itemPath>tests/testrunnerMsgInDelDevice.cpp</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f26"
-                     displayName="testMsgInDeleteCondition"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/testMsgInDeleteCondition.cpp</itemPath>
-        <itemPath>tests/testMsgInDeleteCondition.h</itemPath>
-        <itemPath>tests/testrunnerMsgInDeleteCondition.cpp</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f5"
-                     displayName="testMsgInDelRoom"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/testMsgInDelRoom.cpp</itemPath>
-        <itemPath>tests/testMsgInDelRoom.h</itemPath>
-        <itemPath>tests/testrunnerMsgInDelRoom.cpp</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f19"
-                     displayName="testMsgInDevices"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/testMsgInPartial.cpp</itemPath>
-        <itemPath>tests/testMsgInPartial.h</itemPath>
-        <itemPath>tests/testrunnerMsgInPartial.cpp</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f29"
-                     displayName="testMsgInGetAction"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/testMsgInGetAction.cpp</itemPath>
-        <itemPath>tests/testMsgInGetAction.h</itemPath>
-        <itemPath>tests/testrunnerMsgInGetAction.cpp</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f28"
-                     displayName="testMsgInGetActions"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/testMsgInGetActions.cpp</itemPath>
-        <itemPath>tests/testMsgInGetActions.h</itemPath>
-        <itemPath>tests/testrunnerMsgInGetActions.cpp</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f18"
-                     displayName="testMsgInGetAdapters"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/testMsgInGetAdapters.cpp</itemPath>
-        <itemPath>tests/testMsgInGetAdapters.h</itemPath>
-        <itemPath>tests/testrunnerMsgInGetAdapters.cpp</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f17"
-                     displayName="testMsgInGetConAcc"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/testMsgInGetConAcc.cpp</itemPath>
-        <itemPath>tests/testMsgInGetConAcc.h</itemPath>
-        <itemPath>tests/testrunnerMsgInGetConAcc.cpp</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f24"
-                     displayName="testMsgInGetConditions"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/testMsgInGetConditions.cpp</itemPath>
-        <itemPath>tests/testMsgInGetConditions.h</itemPath>
-        <itemPath>tests/testrunnerMsgInGetConditions.cpp</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f23"
-                     displayName="testMsgInGetDevs"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/testMsgInGetDevs.cpp</itemPath>
-        <itemPath>tests/testMsgInGetDevs.h</itemPath>
-        <itemPath>tests/testrunnerMsgInGetDevs.cpp</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f7"
-                     displayName="testMsgInGetRooms"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/testMsgInGetRooms.cpp</itemPath>
-        <itemPath>tests/testMsgInGetRooms.h</itemPath>
-        <itemPath>tests/testrunnerMsgInGetRooms.cpp</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f14"
-                     displayName="testMsgInGetTimeZone"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/testMsgInGetTimeZone.cpp</itemPath>
-        <itemPath>tests/testMsgInGetTimeZone.h</itemPath>
-        <itemPath>tests/testrunnerMsgInGetTimeZone.cpp</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f11"
-                     displayName="testMsgInLogName"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/testMsgInLogName.cpp</itemPath>
-        <itemPath>tests/testMsgInLogName.h</itemPath>
-        <itemPath>tests/testrunnerMsgInLogName.cpp</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f27"
-                     displayName="testMsgInSetAction"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/testMsgInSetAction.cpp</itemPath>
-        <itemPath>tests/testMsgInSetAction.h</itemPath>
-        <itemPath>tests/testrunnerMsgInSetAction.cpp</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f22"
-                     displayName="testMsgInSetCondition"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/testMsgInSetCondition.cpp</itemPath>
-        <itemPath>tests/testMsgInSetCondition.h</itemPath>
-        <itemPath>tests/testrunnerMsgInSetCondition.cpp</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f13"
-                     displayName="testMsgInSetTimeZone"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/testMsgInSetTimeZone.cpp</itemPath>
-        <itemPath>tests/testMsgInSetTimeZone.h</itemPath>
-        <itemPath>tests/testrunnerMsgInSetTimeZone.cpp</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f1"
-                     displayName="testMsgInSignIn"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/testMsgInSignIn.cpp</itemPath>
-        <itemPath>tests/testMsgInSignIn.h</itemPath>
-        <itemPath>tests/testrunnerMsgInSignIn.cpp</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f2"
-                     displayName="testMsgInSignUp"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/testMsgInSignUp.cpp</itemPath>
-        <itemPath>tests/testMsgInSignUp.h</itemPath>
-        <itemPath>tests/testrunnerMsgInSignUp.cpp</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f10"
-                     displayName="testMsgInSwitch"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/testMsgInSwitch.cpp</itemPath>
-        <itemPath>tests/testMsgInSwitch.h</itemPath>
-        <itemPath>tests/testrunnerMsgInSwitch.cpp</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f12"
-                     displayName="testMsgInUpdate"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/testMsgInUpdate.cpp</itemPath>
-        <itemPath>tests/testMsgInUpdate.h</itemPath>
-        <itemPath>tests/testrunnerMsgInUpdate.cpp</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f30"
-                     displayName="testMsgInUpdateAction"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/testMsgInUpdateAction.cpp</itemPath>
-        <itemPath>tests/testMsgInUpdateAction.h</itemPath>
-        <itemPath>tests/testrunnerMsgInUpdateAction.cpp</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f25"
-                     displayName="testMsgInUpdateCondition"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/testMsgInUpdateCondition.cpp</itemPath>
-        <itemPath>tests/testMsgInUpdateCondition.h</itemPath>
-        <itemPath>tests/testrunnerMsgInUpdateCondition.cpp</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f6"
-                     displayName="testMsgInUpdateRooms"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/testMsgInUpdateRooms.cpp</itemPath>
-        <itemPath>tests/testMsgInUpdateRooms.h</itemPath>
-        <itemPath>tests/testrunnerMsgInUpdateRooms.cpp</itemPath>
-      </logicalFolder>
-    </logicalFolder>
-    <logicalFolder name="ExternalFiles"
-                   displayName="Important Files"
-                   projectFiles="false"
-                   kind="IMPORTANT_FILES_FOLDER">
-      <itemPath>Makefile</itemPath>
-      <itemPath>config.xml</itemPath>
-      <itemPath>config_devel.xml</itemPath>
-      <itemPath>config_prod.xml</itemPath>
-    </logicalFolder>
-    <logicalFolder name="TestFiles"
-                   displayName="Test Files"
-                   projectFiles="false"
-                   kind="TEST_LOGICAL_FOLDER">
-    </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
                    projectFiles="false"
@@ -436,12 +173,14 @@
     <Elem>../lib</Elem>
     <Elem>../ui_logger</Elem>
     <Elem>msgs</Elem>
+    <Elem>../DAO</Elem>
+    <Elem>.</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
     <conf name="Debug" type="1">
       <toolsSet>
-        <compilerSet>default</compilerSet>
+        <compilerSet>GNU|GNU</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
@@ -451,7 +190,6 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
           </incDir>
-          <commandLine>`cppunit-config --cflags`</commandLine>
         </cTool>
         <ccTool>
           <commandlineTool>g++</commandlineTool>
@@ -461,7 +199,7 @@
             <pElem>../Server</pElem>
             <pElem>/usr/include/soci</pElem>
           </incDir>
-          <commandLine>-O0 -std=c++0x -D_GLIBCXX_USE_NANOSLEEP `cppunit-config --cflags`</commandLine>
+          <commandLine>-std=c++0x</commandLine>
           <warningLevel>2</warningLevel>
         </ccTool>
         <linkerTool>
@@ -487,9 +225,6 @@
             <linkerLibLibItem>soci_postgresql</linkerLibLibItem>
             <linkerLibLibItem>pq</linkerLibLibItem>
             <linkerLibLibItem>jansson</linkerLibLibItem>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
           </linkerLibItems>
           <commandLine>-lpq -lsoci_core -lsoci_empty -lsoci_postgresql -lcurl -lssl -lcrypto -ljansson -lstdc++</commandLine>
         </linkerTool>
@@ -514,6 +249,16 @@
       </item>
       <item path="../DAO/DAONotification.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="../DAO/DAOPushNotificationService.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../DAO/DAOPushNotificationService.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="../DAO/DAORooms.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../DAO/DAORooms.h" ex="false" tool="3" flavor2="0">
@@ -525,6 +270,10 @@
       <item path="../DAO/DAOUsersAdapters.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../DAO/DAOUsersAdapters.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../DAO/DAOlogs.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAOlogs.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../lib/pugiconfig.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -572,464 +321,6 @@
       </item>
       <item path="communication.h" ex="false" tool="3" flavor2="0">
       </item>
-      <folder path="TestFiles">
-        <ccTool>
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
-        </ccTool>
-        <linkerTool>
-          <linkerAddLib>
-            <pElem>/usr/local/lib64</pElem>
-            <pElem>/usr/local/lib</pElem>
-          </linkerAddLib>
-          <linkerDynSerch>
-            <pElem>/usr/local/lib64</pElem>
-            <pElem>/usr/local/lib</pElem>
-          </linkerDynSerch>
-          <linkerLibItems>
-            <linkerLibLibItem>soci_core</linkerLibLibItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f1">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f1</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f10">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f10</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f11">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f11</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f12">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f12</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f13">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f13</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f14">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f14</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f15">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f15</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f16">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f16</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f17">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f17</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f18">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f18</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f19">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f19</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f2">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f2</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f20">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f20</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f21">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f21</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f22">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f22</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f23">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f23</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f24">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f24</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f25">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f25</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f26">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f26</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f27">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f27</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f28">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f28</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f29">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f29</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f3">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f3</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f30">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f30</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f31">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f31</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f4">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f4</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f5">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f5</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f6">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f6</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f7">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f7</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f8">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f8</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f9">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f9</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
       <item path="fTokenChecker.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="fTokenChecker.h" ex="false" tool="3" flavor2="0">
@@ -1171,10 +462,6 @@
       <item path="msgs/NotificationsGet.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="msgs/NotificationsGet.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="msgs/UserGetID.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/UserGetID.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="msgs/UserGetInfo.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -1218,7 +505,6 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
           </incDir>
-          <commandLine>`cppunit-config --cflags`</commandLine>
         </cTool>
         <ccTool>
           <developmentMode>5</developmentMode>
@@ -1232,7 +518,6 @@
             <pElem>/usr/include</pElem>
             <pElem>.</pElem>
           </incDir>
-          <commandLine>`cppunit-config --cflags`</commandLine>
         </ccTool>
         <fortranCompilerTool>
           <developmentMode>5</developmentMode>
@@ -1260,24 +545,9 @@
             <pElem>/usr/local/lib</pElem>
           </linkerDynSerch>
           <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
             <linkerLibLibItem>pq</linkerLibLibItem>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
           </linkerLibItems>
-          <commandLine>-lpq -lsoci_core -lsoci_empty -lsoci_postgresql -lcppunit -lssl -lcrypto -ljansson</commandLine>
+          <commandLine>-lpq -lsoci_core -lsoci_empty -lsoci_postgresql -lssl -lcrypto -ljansson</commandLine>
         </linkerTool>
       </compileType>
       <item path="../DAO/DAO.cpp" ex="false" tool="1" flavor2="0">
@@ -1300,6 +570,16 @@
       </item>
       <item path="../DAO/DAONotification.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="../DAO/DAOPushNotificationService.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../DAO/DAOPushNotificationService.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="../DAO/DAORooms.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../DAO/DAORooms.h" ex="false" tool="3" flavor2="0">
@@ -1311,6 +591,10 @@
       <item path="../DAO/DAOUsersAdapters.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../DAO/DAOUsersAdapters.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../DAO/DAOlogs.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAOlogs.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../lib/pugiconfig.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -1358,444 +642,6 @@
       </item>
       <item path="communication.h" ex="false" tool="3" flavor2="0">
       </item>
-      <folder path="TestFiles/f1">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f1</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f10">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f10</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f11">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f11</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f12">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f12</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f13">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f13</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f14">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f14</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f15">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f15</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f16">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f16</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f17">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f17</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f18">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f18</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f19">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f19</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f2">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f2</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f20">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f20</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f21">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f21</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f22">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f22</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f23">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f23</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f24">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f24</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f25">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f25</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f26">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f26</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f27">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f27</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f28">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f28</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f29">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f29</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f3">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f3</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f30">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f30</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f31">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f31</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f4">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f4</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f5">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f5</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f6">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f6</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f7">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f7</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f8">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f8</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f9">
-        <cTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </cTool>
-        <ccTool>
-          <commandLine>`cppunit-config --cflags`</commandLine>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f9</output>
-          <linkerLibItems>
-            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
       <item path="fTokenChecker.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="fTokenChecker.h" ex="false" tool="3" flavor2="0">
@@ -1937,10 +783,6 @@
       <item path="msgs/NotificationsGet.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="msgs/NotificationsGet.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="msgs/UserGetID.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="msgs/UserGetID.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="msgs/UserGetInfo.cpp" ex="false" tool="1" flavor2="0">
       </item>

@@ -20,6 +20,11 @@ public:
     virtual enumAccessStatus checkAccess();
 
     std::string _role;
+
+    std::string _adapterId;
+    long long _gatewayId;    
+    std::string envelopeResponseWithAdapterId(std::string state, std::string response);
+    std::string envelopeResponseWithAdapterId(std::string state, std::string response, std::string adapterId);
     
 };
 

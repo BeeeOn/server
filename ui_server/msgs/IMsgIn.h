@@ -3,121 +3,20 @@
 
 
 
-#define P_COMMUNICATION "com"
-#define P_VERSION "ver"
-#define P_ERRCODE "errcode"
-#define P_STATE "state"
-#define P_EMAIL "email"
-#define P_SESSION_ID "bt"
-#define P_GOOGLE_ID "gid"
-
-#define P_ADAPTER "adapter"
-#define P_FACILITY "dev"
-#define P_DEVICE "part"
-
-#define P_ADAPTER_ID "aid"
-#define P_IN_ADAPTER_ID "id"
-#define P_ADAPTER_NAME "aname"
-#define P_ADAPTER_IP "ip"
-#define P_ADAPTER_VERSION "aversion"
-#define P_ADAPTER_N_USERS "nusers"
-#define P_ADAPTER_N_FACILITIES "nfacs"
-
-#define P_FACILITY_ID "did"
-#define P_IN_FACILITY_ID "id"
-#define P_FACILITY_INIT "init"
-#define P_FACILITY_REFRESH "refresh"
-#define P_FACILITY_LOCATION_ID "lid"
-#define P_FACILITY_BATTERY "batt"
-#define P_FACILITY_QUALITY "rssi"
-
-#define P_DEVICE_ID "did"
-#define P_IN_DEVICE_TYPE "type"
-#define P_DEVICE_TYPE "dtype"
-#define P_DEVICE_VALUE "val"
-#define P_DEVICE_VISIBILITY "vis"
-#define P_DEVICE_NAME "name"
-
-#define P_GOOGLE_TOKEN "gt"
-#define P_FACEBOOK_TOKEN "fbt"
-#define P_LOCALIZATION "loc"
-#define P_GOOGLE_CLOUD_MID "gcmid"
-
-#define P_LOG_FUNC_TYPE "ftype"
-#define P_LOG_INTERVAL "interval"
-#define P_LOG_FROM "from"
-#define P_LOG_TO "to"
-
-#define P_ROLE_GUEST "guest"
-#define P_ROLE_USER "user"
-#define P_ROLE_ADMIN "admin"
-#define P_ROLE_SUPERUSER "superuser"
-
-#define P_USER "user"
-#define P_ROLE "role"
-
-#define P_USER_ID "uid"
-#define P_USER_NAME "name"
-#define P_USER_SURNAME "surname"
-#define P_USER_GENDER "gender"
-#define P_USER_EMAIL "email"
-#define P_USER_PICTURE "imgurl"
-#define P_USER_ACCOUNTS "accounts"
-
-#define P_SERVICE "srv"
-#define P_SERVICE_NAME "name"
-#define P_SERVICE_ID "id"
-#define P_SERVICE_GOOGLE "google"
-#define P_SERVICE_FACEBOOK "facebook"
-#define P_SERVICE_BEEEON "beeeon"
-
-#define P_NOTIFICATION "notif"
-#define P_NOTIFICATION_ID "mid"
-
-#define P_ROOM "loc"
-#define P_ROOM_ID "lid"
-#define P_ROOM_NAME "lname"
-#define P_ROOM_TYPE "ltype"
-
-#define P_SIGN_PARAMS "par"
-#define P_SIGN_SERVICE "srv"
-
-#define P_IN_ROOM_ID "id"
-#define P_IN_ROOM_NAME "name"
-#define P_IN_ROOM_TYPE "type"
-#define P_ROOM_MIN_TYPE 1
-#define P_ROOM_MAX_TYPE 6
+#define P_LOCATION_MIN_TYPE 1
+#define P_LOCATION_MAX_TYPE 6
 
 #define P_TIME_UTC "utc"
 #define P_TIME_MIN -1000
 #define P_TIME_MAX 1000
 
-#define P_PHONE_ID "pid"
+
 
 /******************************************/
 
-#define R_TRUE "true"
-#define R_FALSE "false"
-#define R_UID "uid"
-#define R_ACCOUNTS "accounts"
-#define R_DEVICES_ALL "alldevs"
-#define R_DEVICES "devs"
-#define R_ADAPTERS "adapters"
-#define R_GATEINFO "gateinfo"
-#define R_TIMEZONE "timezone"
-#define R_ROOM_CREATED "roomid"
-#define R_ROOMS "rooms"
-#define R_VIEWS "views"
-#define R_LOG "logdata"
-#define R_BEEEON_TOKEN "bt"
-#define R_USER_INFO "userinfo"
-#define R_NOTIFICATIONS "notifs"
 
-#define EVERYONE 1
-#define GUEST 2
-#define USER 3
-#define ADMIN 4
-#define SUPERUSER 5
+
+
 
 #include <string>
 #include <iostream>
@@ -126,6 +25,116 @@
 #include "../ui_logger/Logger.h"
 #include "../lib/pugixml.hpp"
 #include "ServerException.h"
+
+enum permissions {
+    everyone=1, 
+    guest=2, 
+    user=3,
+    admin=4, 
+    superuser=5 
+};
+
+namespace proto{
+    static const char communicationNode[] = "com";
+    static const char versionAttr[] = "version";
+    static const char errorCodeAttr[] = "errcode";
+    static const char stateAttr[] = "state"; 
+    static const char sessionIdAttr[] = "sessionid";
+    
+    static const char adapterNode[] = "gate";
+    static const char deviceNode[] = "device";
+    static const char moduleNode[] = "part";
+    
+    static const char headerGatewayIdAttr[] = "gateid";
+    static const char gatewayIdAttr[] = "id";
+    static const char gatewayNameAttr[] = "name";
+    static const char gatewayUsersRole[] = "accessrole";
+    static const char gatewayUtcAttr[] = "utc";
+    static const char gatewayIpAttr[] = "ip";
+    static const char gatewayVersionAttr[] = "version";
+    static const char gatewayInfoNusersAttr[] = "users";
+    static const char gatewayInfoNdevicesAttr[] = "devices";
+    
+    static const char deviceIdAttr[] = "id";
+    static const char deviceInitAttr[] = "init";
+    static const char deviceNameAttr[] = "name";
+    static const char deviceLocationIdAttr[] = "locationid";
+    
+    static const char moduleIdAttr[] = "id";
+    static const char moduleTypeAttr[] = "type";
+    static const char moduleValueIdAttr[] = "value";
+    
+    static const char googleCloudMessagingIdAttr[] = "gcmid";
+
+    
+    static const char roleGuestAttr[] = "guest";
+    static const char roleUserAttr[] = "user";
+    static const char roleAdminAttr[] = "admin";
+    static const char roleSuperuserAttr[] = "superuser";
+    
+    static const char userNode[] = "user";
+    
+    static const char userIdAttr[] = "id";
+    static const char userRoleAttr[] = "role";
+    static const char userNameAttr[] = "name";
+    static const char userSurnameAttr[] = "surname";
+    static const char userGenderAttr[] = "gender";
+    static const char userEmailAttr[] = "email";
+    static const char userPictureAttr[] = "imgurl";
+    static const char userAccountsAttr[] = "accounts";
+    
+    static const char logsNode[] = "logs";
+    static const char logsFromAttr[] = "from";
+    static const char logsToAttr[] = "to";
+    static const char logsFunctionAttr[] = "ftype";
+    static const char logsIntervalAttr[] = "interval";
+    static const char logsDeviceIdAttr[] = "deviceid";
+    static const char logsModuleIdAttr[] = "moduleid";
+    
+    static const char notificationNode[] = "notification";
+    static const char notificationIdAttr[] = "id";
+    
+    static const char locationNode[] = "location";
+    static const char locationIdAttr[] = "id";
+    static const char locationNameAttr[] = "name";
+    static const char locationTypeAttr[] = "type";
+    
+    
+    static const char authProviderNode[] = "provider";
+    static const char authProvideNameAttr[] = "name";
+    static const char authProvideTokenAttr[] = "token";
+    static const char authProviderIdAttr[] = "id";
+    static const char phoneNode[] = "phone";
+    static const char phoneNameAttr[] = "name";
+    
+    
+//    static const char authServiceNode[] = "srv";
+//    static const char authServiceNameAttr[] = "name";
+//    static const char authServiceIdAttr[] = "id";
+    static const char authServiceGoogleAttr[] = "google";
+    static const char authServiceFacebookAttr[] = "facebook";
+    static const char authServiceBeeeonAttr[] = "beeeon";
+    
+    
+    static const char replyTrue[] = "true";
+    static const char replyFalse[] = "false";
+    static const char replyAccounts[] = "accounts";
+    static const char replyAllDevices[] = "alldevices";
+    static const char replyDevices[] = "devices";
+    static const char replyGates[] = "gates";
+    static const char replyGateInfo[] = "gateinfo";
+    static const char replyLocationCreated[] = "locationid";
+    static const char replyLocations[] = "locations";
+    static const char replyLogs[] = "logs";
+    static const char replySessionId[] = "sessionid";
+    static const char replyUserInfo[] = "userinfo";
+    static const char replyNotifications[] = "notifications";
+}
+
+
+#define P_DEVICE_REFRESH_DEPRECATED "refresh"
+#define P_DEVICE_BATTERY_DEPRECATED "batt"
+#define P_DEVICE_QUALITY_DEPRECATED "rssi"
 
 struct t_version {
     int majorVersion;
@@ -149,6 +158,7 @@ public:
         std::string _state;
         std::string _token;
         std::string _adapterId;
+        long long _gatewayId;
 protected:
         pugi::xml_document* _doc;
         std::string _msgOut;
@@ -161,8 +171,6 @@ public:
     std::string envelopeResponse(std::string state, std::string response);
     std::string envelopeResponse(std::string state, std::string response, int errcode);
     std::string envelopeResponseWithRole(std::string state, std::string response, std::string role);
-    std::string envelopeResponseWithAdapterId(std::string state, std::string response);
-    std::string envelopeResponseWithAdapterId(std::string state, std::string response, std::string adapterId);
     std::string envelopeResponseWithAttributes(std::string state, std::string attributes);
   /*  int _comId;
     string _additionalInfo;
@@ -179,7 +187,7 @@ protected:
     
     bool isRoleValid(std::string role);
 
-private:
+protected:
     t_version parseProtocolVersion(std::string version);
     std::string envelopeResponseSetAttributes(std::string state, std::string response, std::string attributes);
     

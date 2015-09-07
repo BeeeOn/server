@@ -35,8 +35,10 @@ public:
     int delGCMId(int oldUserId, std::string gcmid);
     int setGCMId(std::string token, std::string gcmid) ;
 
+    int upsertMobileDevice(MobileDevice mobile, int userId);
     
-int upsertMobileDevice(MobileDevice mobile, int userId);
+    int insertPushNotification(int userId, std::string push_notif);
+    int deletepushNotification(int oldUserId, std::string notification);
 };
 
 #endif	/* DAOMOBILEDEVICES_H */

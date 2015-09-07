@@ -9,7 +9,7 @@
 #include "IMsgInLoginRequired.h"
 #include "../DAO/DAONotification.h"
 
-const std::string NotificationsGet::state = "getnotifs";
+const std::string NotificationsGet::state = "getnotifications";
 
 NotificationsGet::NotificationsGet(pugi::xml_document* doc): IMsgInLoginRequired(doc) {
 }
@@ -19,9 +19,9 @@ NotificationsGet::~NotificationsGet() {
 }
 
 int NotificationsGet::getMsgAuthorization() {
-    return GUEST;
+    return permissions::guest;
 }
 
 std::string NotificationsGet::createResponseMsgOut() {
-    return envelopeResponseWithAdapterId(R_NOTIFICATIONS, DAONotification::getInstance().getXMLNotifications(_userId));
+    return envelopeResponse(proto::replyNotifications, DAONotification::getInstance().getXMLNotifications(_userId));
 }

@@ -62,6 +62,45 @@ int DAOMobileDevices::setGCMId(string token, string gcmid) {
     }
 }
 
+int DAOMobileDevices::insertPushNotification(int userId, string push_notif) {
+    Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"setGCMId"<<"gc"<<push_notif<<endl;
+    try{
+        soci::session sql(*_pool);
+        
+       statement st = (sql.prepare << 
+                "insert into push_notification(user_id, notification_id) values(:userId, :notif) ",
+                use(userId, "userId"), use(push_notif, "notif")
+             );
+        st.execute(true);
+        return st.get_affected_rows();
+    }
+    catch (soci::postgresql_soci_error& e)
+    {
+        Logger::getInstance(Logger::ERROR) << "Error: " << e.what() << '\n';
+        return 0;
+    }
+}
+
+int DAOMobileDevices::deletepushNotification(int oldUserId, string notification) {
+    Logger::getInstance(Logger::DEBUG3)<<"DB:"<<"delGCMId"<<oldUserId<<endl;
+    try{
+        soci::session sql(*_pool);
+        
+        statement st = (sql.prepare << 
+                "delete from push_notification where user_id = :user_id and notification_id =:notif",
+                use(oldUserId, "user_id"),use(notification,"notif")
+             );
+        st.execute(true);
+        return st.get_affected_rows();
+    }
+    catch (soci::postgresql_soci_error& e)
+    {
+        Logger::getInstance(Logger::ERROR) << "Error: " << e.what() << '\n';
+        return 0;
+    }
+}
+
+
 int DAOMobileDevices::upsertMobileDevice(MobileDevice mobile, int userId){
     session sql(*_pool);
     Logger::db()<<"DB:"<<"upsertMobileDevice"<<endl;
