@@ -35,12 +35,14 @@ public:
 public:
     static const int VERSION;
     static const int TOKEN_EMAIL;
-    static const int EMAIL; //+text
+    static const int EMAIL;
+    static const int USER_ID;
     static const int IDENTIFICATION_TAKEN;
     static const int LOCALE;
 
     static const int ADAPTER_ID;
     static const int ADAPTER_TAKEN;
+    static const int ADAPTER_ACCESSIBLE;
 
     static const int AGG_FUNCTION;
     static const int INTERVAL;
@@ -63,9 +65,13 @@ public:
     static const int NOTREG_B;
     
     static  const int USER_DONOT_EXISTS;
-   static  const int WRONG_AUTH_PROVIDER;
+    static  const int WRONG_AUTH_PROVIDER;
+    static  const int NO_MAIL_PROVIDED;
+    static  const int EMAIL_ALREADY_TAKEN;
+    static  const int LOGOUT_ERROR;
 
     static const int ROOM_TYPE;
+    static const int NOTIFICATION_ID;
 
     static const int SERVER2SERVER;
     static const int SWITCH_FAIL;
@@ -79,10 +85,9 @@ public:
 
     static const int GCMID;
     
+    //static const int NOT_SUPPORTED_YET;
     static const int UNKNOWN_ERROR;
-    
     static const int RANDOMGEN;
-    
     static const int MSG_UNKNOWN;
     
 };

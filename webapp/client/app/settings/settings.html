@@ -1,0 +1,33 @@
+<div flex layout="column" class="settingsWrapper">
+    <!-- Navigation bar-->
+    <div ng-include="'components/navbar/navbar.html'"></div>
+    <!-- App center-->
+    <div layout="row" flex class="geolocaRightPanel">
+        <!-- Menu (left side navigation)-->
+        <div ng-include="'components/menu/menu.html'" layout="column" class="grayBackground"></div>
+        <!-- Center -->
+        <md-content flex layout-padding class="grayBackground" layout="column" layout-align="top center">
+            <!-- settings raised white panel -->
+            <div flex class="md-whiteframe-z2 whiteBackground" layout="column">
+                <md-list flex class="settingsList">
+                    <md-list-item
+                            ng-repeat="place in settingsList"
+                            ng-click="show(place)"
+                            class="md-2-line"
+                            >
+                        <div>
+                            <h3>{{place.title}}</h3>
+                            <p ng-if="checkAdditional(place);">{{place.additional}}</p>
+                        </div>
+                        <md-divider></md-divider>
+                    </md-list-item>
+                </md-list>
+            </div>
+        </md-content>
+        <!-- Detail (right side navigation)-->
+        <right-panel layout="column" options="rightPanelOptions">
+            <div ui-view="right">
+            </div>
+        </right-panel>
+    </div>
+</div>

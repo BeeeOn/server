@@ -82,7 +82,7 @@ void FrameworkServerHandle::HandleAdapterMessage(std::string data, Loger *Log, F
 		Log->WriteMessage(TRACE, "Exiting " + this->_Name + "::HandleConnection");
 		return;
 	}
-	//this->MP->setAdapterIP(IP);  //ulozime IP adresu adapteru do spravy ODSTRANENO PROTOZE nepotøebuji IP adresu
+	//this->MP->setAdapterIP(IP);  //ulozime IP adresu adapteru do spravy ODSTRANENO PROTOZE nepotÃ¸ebuji IP adresu
 	parsedMessage = this->MP->ReturnMessage();
 	//----------------------Zde testovat obsah zpravy a na zaklade neho mathovat s db a pokud ano pak spustit Algoritmus-------------------
 	//Nejdrive match zda existuje zaznam v UserAlgorithm s algoritmem na dany adapter
@@ -116,7 +116,7 @@ void FrameworkServerHandle::HandleAdapterMessage(std::string data, Loger *Log, F
 								string AlgId = database->SelectAlgIdByUsersAlgId(*idOfUsersAlgorithms);
 								string parametersTmp = database->SelectParametersByUsersAlgId(*idOfUsersAlgorithms);
 								string parameters = '"' + parametersTmp + '"';
-								int AlgIdInt = std::stoi(AlgId);
+								int AlgIdInt = std::atoll(AlgId.c_str());
 								talgorithm * algorithmSpecification = FConfig->GetAlgorithmById(AlgIdInt);
 
 								if (algorithmSpecification != NULL){
@@ -133,7 +133,7 @@ void FrameworkServerHandle::HandleAdapterMessage(std::string data, Loger *Log, F
 									}
 									senzorValues += "offset=" + to_string(this->parsedMessage->values[i].offset);
 
-									Log->WriteMessage(INFO, "EXECUTING ALGORITHM BINARY " + algorithmSpecification->name + " - AlgId: " + AlgId + " , userId: " + UserId + ", parameters: " + parametersTmp + ", senzorValues: " + senzorValues);
+									Log->WriteMessage(INFO, "EXECUTING ALGORITHM BINARY " + algorithmSpecification->name + " - AlgId: " + AlgId + " , userId: " + UserId + ", parameters: " + parametersTmp + ", senzorValues: " + senzorValues + ", DBName:" + FConfig->dbName + ", FWServerPort: " + to_string(FConfig->portAlgorithmServer));
 
 									char* arg_list[] = {
 										StringToChar(algorithmSpecification->name),
@@ -151,12 +151,16 @@ void FrameworkServerHandle::HandleAdapterMessage(std::string data, Loger *Log, F
 										StringToChar(parametersTmp),
 										StringToChar("-e"), // name of database
 										StringToChar(FConfig->dbName),
+										StringToChar("-s"), // name of database
+										StringToChar(to_string(FConfig->portAlgorithmServer)),
+										StringToChar("-x"), // name of DB user
+										StringToChar(FConfig->dbUser),
+										StringToChar("-z"), // DB password
+										StringToChar(FConfig->dbPassword),
 										StringToChar("/"),
 										NULL
 									};
 									this->spawn(StringToChar(algorithmSpecification->pathOfBinary), arg_list);
-
-									Log->WriteMessage(INFO, "EXECUTED ALGORITHM BINARY " + algorithmSpecification->name + "- AlgId: " + AlgId + "userId: " + UserId + ", parameters: " + parametersTmp + ", senzorValues: " + senzorValues);
 								}
 							}
 						}
@@ -165,4 +169,5 @@ void FrameworkServerHandle::HandleAdapterMessage(std::string data, Loger *Log, F
 			}
 		}
 	delete(MP);
+	//delete(this->parsedMessage);
 }

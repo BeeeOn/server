@@ -23,12 +23,12 @@ class DBConnectionsContainer
 		Loger *_log;										/** Ukazatel na objekt pomoci nehoz se provadi logovani zaznamu do logovaciho souboru. */
 		const std::string _Name = "DBConnectionsContainer";	/** Nazev tridy pro lepsi pouziti v implementaci tridy. */
 		int freeCount;										/** Pocet volnych databazovych sezeni (uvnitr kontejneru). */
-		soci::session *connections[100];					
-		std::mutex semaphore;								
+		soci::session *connections[100];
+		std::mutex semaphore;
 		std::string _NameOfDB;								/** Nazev databaze. */
-		DBConnectionsContainer(std::string DBName, int ConnLimit, Loger *l); 
+		DBConnectionsContainer(std::string NameOfDB, std::string user,std::string password,int ConnLimit, Loger *l);
 	public:
-		static DBConnectionsContainer *GetConnectionContainer(Loger *l, std::string DBName, int ConnLimit);
+		static DBConnectionsContainer *GetConnectionContainer(std::string NameOfDB, std::string user,std::string password,int ConnLimit, Loger *l);
 		~DBConnectionsContainer();
 		soci::session *GetConnection();
 		void ReturnConnection(soci::session *conn);

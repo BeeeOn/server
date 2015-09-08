@@ -11,8 +11,8 @@
 #define MESSAGEPARSERS_H_
 
 #include "structures.h"
-#include "pugi/pugixml.hpp"
-#include "pugi/pugiconfig.hpp"
+#include "../lib/pugixml.hpp"
+#include "../lib/pugiconfig.hpp"
 #include <arpa/inet.h> 
 #include <netdb.h> 
 #include <cstdlib>  
@@ -82,10 +82,10 @@ class MessageParser
 		virtual void GetDeviceID()=0;
 		/**Pure virtual method to obtain battery value
 				*/
-		virtual void GetBattery()= 0;
+		//virtual void GetBattery()= 0;
 		/**Pure virtual method to obtain signal value
 				*/
-		virtual void GetSignal()= 0;
+		//virtual void GetSignal()= 0;
 
 		/**Pure virtual method to obtain values
 		 * @return bool true/false on success/failure
@@ -124,12 +124,6 @@ class ProtocolV1MessageParser :public MessageParser
 		/**Virtual method to obtain device id
 						*/
 		virtual void GetDeviceID();
-		/**Virtual method to obtain battery value
-						*/
-		virtual void GetBattery();
-		/**Virtual method to obtain signal value
-						*/
-		virtual void GetSignal();
 		/**Virtual method to obtain values
 		 * @return bool true/false on success/failure
 				*/

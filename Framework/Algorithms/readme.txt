@@ -17,7 +17,7 @@ Then try:
 
 ./name_of_algorithm -u 1 -a 1 -d 1 -o 1
 
-./example -u 1 -a 1 -d 1 -o 1 -v ID=1#type=1#bval=true#offset=1$ID=2#type=1#bval=true#offset=1  -p "param1#par am2#..."
+./watch_and_notify -u 7 -a 1 -d 1136640502157703 -o 70 -v RidOrDevice=device#ID=3976200203#type=10#fval=23.900000#offset=0  -p "3976200203---10#lt#24#notif#mensi 24"
 
 ./watch_and_notify -u 25 -a 1 -d 64206 -o 1 -v ID=16964877#type=10#fval=24.900000#offset=0  -p "16964877---10#gt#0#notif#mas tam nad nulou! jede to:)"
 

@@ -21,10 +21,9 @@
 #include <string>
 #include <iostream>
 #include "../ui_logger/Logger.h"
-#include "DBConnector.h"
+
 #include "gTokenChecker.h"
-#include "ComTable.h"
-#include "pugixml.hpp"
+#include "../lib/pugixml.hpp"
 #include "MsgRightsChecker.h"
 #include "ServerException.h"
 #include "SocketClient.h"
@@ -32,7 +31,6 @@
 #include <signal.h>
 #include <atomic>
 
-#include "testHelper.h"
 #include "sslServlet.h"
 
 

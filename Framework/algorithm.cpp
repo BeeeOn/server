@@ -18,17 +18,28 @@ using namespace soci;
 *
 */
 Algorithm::Algorithm(std::string init_userID, std::string init_algID, std::string init_adapterID,
-	std::string init_offset, multimap<unsigned int, map<string, string>> init_values, 
-	std::vector<std::string> init_parameters, vector<tRidValues *> init_Rids, std::string init_nameOfDB){
+	std::string init_offset, std::multimap<unsigned int, std::map<std::string, std::string>> init_values,
+	std::vector<std::string> init_parameters, std::vector<tRidValues *> init_Rids, std::string init_nameOfDB, std::string init_frameworkServerPort,
+	std::string init_DBUser, std::string init_DBPassword){
 
 	this->userID = init_userID;
 	this->algID = init_algID;
 	this->adapterID = init_adapterID;
 	this->offset = init_offset;
-	this->values = init_values; 
+	this->values = init_values;
 	this->parameters = init_parameters;
 	this->Rids = init_Rids;
 	this->nameOfDB = init_nameOfDB;
+	this->DBUser = init_DBUser;
+	this->DBPassword = init_DBPassword;
+	try{
+        this->frameworkServerPort = init_frameworkServerPort;
+	}
+    catch(std::exception &e){
+		std::cerr << e.what() << std::endl;
+		std::cerr << "Algorithm::Algorithm Unable to convert port given to short int (16 bits)" << std::endl;
+		exit(EXIT_FAILURE);
+    }
 	try
 	{
 		this->Log = new Loger();
@@ -36,17 +47,17 @@ Algorithm::Algorithm(std::string init_userID, std::string init_algID, std::strin
 	catch (std::exception &e)
 	{
 		std::cerr << e.what() << std::endl;
-		std::cerr << "Unable to create memory space for logging exiting!" << std::endl;
+		std::cerr << "Algorithm::Algorithm Unable to create memory space for logging exiting!" << std::endl;
 		exit(EXIT_FAILURE);
 	}
 	//Nastaveni kontejneru pro DB
-	this->cont = DBConnectionsContainer::GetConnectionContainer(Log, this->nameOfDB, 1);
+	this->cont = DBConnectionsContainer::GetConnectionContainer(this->nameOfDB ,this->DBUser, this->DBPassword,  1, this->Log);
 	this->Log->SetLogger(7, 5, 100, "algorithm_log",".", "ALGORITHM");
 	session *Conn = NULL;
 	Conn = cont->GetConnection();
 	if (Conn == NULL)
 	{
-		cout << "Unable to get Database connection!" << endl;
+		cout << "Algorithm::Algorithm Unable to get Database connection!" << endl;
 	}
 
 	try
@@ -55,7 +66,7 @@ Algorithm::Algorithm(std::string init_userID, std::string init_algID, std::strin
 	}
 	catch (std::exception &e)
 	{
-		cout << "Unable to create memory space for DBHandler!!!" << endl;
+		cout << "Algorithm::Algorithm Unable to create memory space for DBHandler!!!" << endl;
 	}
 }
 
@@ -118,7 +129,7 @@ bool Algorithm::AddNotify(unsigned short int type, std::string text, std::string
 * @return Boolean o vysledku oprerace.
 */
 bool Algorithm::ChangeActor(std::string id, std::string type){
-	
+
 	ttoggle * newToggle;
 	try
 	{
@@ -137,25 +148,33 @@ bool Algorithm::ChangeActor(std::string id, std::string type){
 	return true;
 }
 
-/** Funkce provede spojeni s modularnim prostredim, odesle zpravu. (Nasledne by se mela radne uvolnit pamet pred ukoncenim celeho aplikacniho modulu.) 
+/** Funkce provede spojeni s modularnim prostredim, odesle zpravu. (Nasledne by se mela radne uvolnit pamet pred ukoncenim celeho aplikacniho modulu.)
 *
 * @return Boolean o vysledku operace.
 */
 bool Algorithm::SendAndExit(){
-	
+
 	string ParsedMessage = this->CreateMessage();
-	hostent *host;              
-	sockaddr_in serverSock;     
-	int mySocket;               
-	int port;                   
-	int size;                   
-	port = atoi(FW_PORT);
+	hostent *host;
+	sockaddr_in serverSock;
+	int mySocket;
+	int port;
+	int size;
+	try{
+        port = atoi(this->frameworkServerPort.c_str());
+	}
+    catch(std::exception &e){
+		std::cerr << e.what() << std::endl;
+		std::cerr << "Algorithm::SendAndExit Unable to convert port given to short int (16 bits), port using:"<< this->frameworkServerPort << std::endl;
+		return false;
+    }
+
 	host = gethostbyname("localhost");
-	
+
 	if ((mySocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == -1)
 	{
-		cerr << "Nelze vytvoøit soket" << endl;
-		return -1;
+		cerr << "Algorithm::SendAndExit Cannot to create socket! (port using: "<< port << ")"<< endl;
+		return false;
 	}
 	serverSock.sin_family = AF_INET;
 	serverSock.sin_port = htons(port);
@@ -163,18 +182,18 @@ bool Algorithm::SendAndExit(){
 
 	if (connect(mySocket, (sockaddr *)&serverSock, sizeof(serverSock)) == -1)
 	{
-		cerr << "Algorithm failure: Cannot connect to Framework Server!" << endl;
+		cerr << "Algorithm::SendAndExit Algorithm failure! Cannot connect to Framework Server! (port using: "<< port << ")"<< endl;
 		return false;
 	}
 
 	// Odeslání dat
 	if ((size = send(mySocket, ParsedMessage.c_str(), ParsedMessage.size() + 1, 0)) == -1)
 	{
-		cerr << "Algorithm failure: Problem with sending message!" << endl;
+		cerr << "Algorithm::SendAndExit Algorithm failure! Problem with sending message!" << endl;
 		return false;
 	}
 	close(mySocket);
-	
+
 	return true;
 }
 
@@ -248,7 +267,7 @@ std::string Algorithm::CreateMessage(){
 }
 /** Staticka metoda zpracujici parametry prikazoveho radku a vytvarejici objekt tridy Algorithm.
 *
-* @return Algorithm * Ukazatel na vytvoreny objekt tridy Algorithm. 
+* @return Algorithm * Ukazatel na vytvoreny objekt tridy Algorithm.
 */
 Algorithm * Algorithm::getCmdLineArgsAndCreateAlgorithm(int argc, char *argv[]){
 
@@ -259,54 +278,79 @@ Algorithm * Algorithm::getCmdLineArgsAndCreateAlgorithm(int argc, char *argv[]){
 	string valuesString = "";
 	string parametersString = "";
 	string nameOfDB = "";
+	string portOfFrameworkServer = "";
+	string DBUser = "";
+	string DBPassword = "";
 	int opt;
-	bool u, a, d, o, v, p, e;
-	u = a = d = o = v = p = e = false;
-	while ((opt = getopt(argc, argv, "hu:a:d:o:v:p:e:")) != EOF)
+	bool u, a, d, o, v, p, e, s, x, z;
+	u = a = d = o = v = p = e = s = x = z = false;
+	while ((opt = getopt(argc, argv, "hu:a:d:o:v:p:e:s:")) != EOF){
+
 		switch (opt)
-	{
-		case 'h':
-			cout << "print help" << endl;
-			return nullptr;
-			break;
-		case 'u': // userID
-			userIDString = optarg;
-			u = true;
-			break;
-		case 'a': // algID
-			algIDString = optarg;
-			a = true;
-			break;
-		case 'd': // adapterID
-			adapterIDString = optarg;
-			d = true;
-			break;
-		case 'o': // offset
-			UserAlgIdString = optarg;
-			o = true;
-			break;
-		case 'v': // senzor values
-			valuesString = optarg;
-			v = true;
-			break;
-		case 'p': // parameters given by User
-			parametersString = optarg;
-			p = true;
-			break;
-		case 'e': // name of database to use
-			nameOfDB = optarg;
-			e = true;
-			break;
-		default:
-			cerr << "Algorithm failure: Wrong command line arguments!\n";
-			return nullptr;
+        {
+            case 'h':
+                Algorithm::usage(argv[0]);
+                return nullptr;
+                break;
+            case 'u': // userID
+                userIDString = optarg;
+                u = true;
+                break;
+            case 'a': // algID
+                algIDString = optarg;
+                a = true;
+                break;
+            case 'd': // adapterID
+                adapterIDString = optarg;
+                d = true;
+                break;
+            case 'o': // offset
+                UserAlgIdString = optarg;
+                o = true;
+                break;
+            case 'v': // senzor values
+                valuesString = optarg;
+                v = true;
+                break;
+            case 'p': // parameters given by User
+                parametersString = optarg;
+                p = true;
+                break;
+            case 'e': // name of database to use
+                nameOfDB = optarg;
+                e = true;
+                break;
+            case 's': // socket port to send answer to framework server
+                portOfFrameworkServer = optarg;
+                s = true;
+                break;
+            case 'x': // db user name
+                DBUser = optarg;
+                x = true;
+                break;
+            case 'z': // db password
+                DBPassword = optarg;
+                z = true;
+                break;
+            default:
+                cerr << "Algorithm failure: Wrong command line arguments!\n";
+                return nullptr;
+        }
 	}
 	if (!u || !a || !d || !o){
 		cerr << "Algorithm failure: Wrong command line arguments! You have to specify at least -u -a -d -o\n";
 		return nullptr;
 	}
+	if(!e){
+        cerr << "Algorithm failure: Wrong command line arguments! No specified -e cmd arg for DB Name!\n";
+		return nullptr;
+	}
+	if(!s){
+        cerr << "Algorithm failure: Wrong command line arguments! No specified -s cmd arg for port of Framework server!\n";
+		return nullptr;
+	}
 
-	//Deklarace promìnných pro uložení z operací parsování
+	//Deklarace promenných pro uložení z operací parsování
 	multimap<unsigned int, map<string, string>> values;
 	vector<string> params;
 	vector<tRidValues *> Rids;
@@ -317,7 +361,23 @@ Algorithm * Algorithm::getCmdLineArgsAndCreateAlgorithm(int argc, char *argv[]){
 	if (p){
 		params = Algorithm::parseParams(parametersString);
 	}
-	return new Algorithm(userIDString, algIDString, adapterIDString, UserAlgIdString, values, params, Rids, nameOfDB);
+	return new Algorithm(userIDString, algIDString, adapterIDString, UserAlgIdString, values, params, Rids,  nameOfDB, portOfFrameworkServer, DBUser, DBPassword );
+}
+
+void Algorithm::usage(char* progName)
+{
+  cout << progName << "[options]" << endl <<
+      "Options:" << endl <<
+      "-h      Print this help" << endl <<
+      "-u      userID" << endl <<
+      "-a      algorithmID" << endl <<
+      "-d      adapterId" << endl <<
+      "-d      adapterId" << endl <<
+      "-v      senzor Values in format RidOrDevice=device#ID=3976200203#type=10#fval=23.900000#offset=0" << endl <<
+      "-p      user parameters in format 3976200203---10#lt#24#notif#mensi 24" << endl <<
+      "-e      name of Database" << endl <<
+      "-x      Database User" << endl <<
+      "-z      Database Password" << endl;
 }
 
 /** Metoda, ktera vezme hodnotu parametru -v prikazove radky a zparsuje jej.
@@ -327,21 +387,21 @@ multimap<unsigned int, map<string, string>> Algorithm::parseValues(std::string v
 	vector<string> senzorValues = Algorithm::explode(values, '$');
 
 	multimap<unsigned int, map<string, string>> valuesTmp;
-	
+
 	for (auto it = senzorValues.begin(); it != senzorValues.end(); ++it){
-		
+
 		vector<string> tmp = Algorithm::explode(*it, '#');
 		map<string, string> tmpmap;
-		
+
 		for (auto it2 = tmp.begin(); it2 != tmp.end(); ++it2){
 			vector<string> tmp2 = Algorithm::explode(*it2, '=');
 			tmpmap[tmp2.front()] = tmp2.back();
 		}
-		
+
 		string RidOrDevice = tmpmap.at("RidOrDevice");
 		if (RidOrDevice.compare("device") == 0){
 			string newMultimapIndexStr = tmpmap.at("ID");
-			unsigned int newMultimapIndex = std::stoi(newMultimapIndexStr);
+			unsigned int newMultimapIndex = std::atoll(newMultimapIndexStr.c_str());
 			valuesTmp.insert(std::pair<unsigned int, map<string, string>>(newMultimapIndex, tmpmap));
 		}
 		else if (RidOrDevice.compare("rid") == 0){
@@ -360,7 +420,7 @@ multimap<unsigned int, map<string, string>> Algorithm::parseValues(std::string v
 *
 */
 vector<string> Algorithm::parseParams(std::string paramsInput){
-	
+
 	vector<string> params = Algorithm::explode(paramsInput, '#');
 	return params;
 }

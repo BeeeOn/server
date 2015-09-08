@@ -8,7 +8,7 @@
 */
 
 #include <string>
-#include <stdlib.h> 
+#include <stdlib.h>
 #include "loger.h"
 #include "DBFWHandler.h"
 
@@ -43,6 +43,8 @@ public:
 	int recieveBuffSize;					/** Maximalni velikost bufferu pri prijeti dat. */
 	int maxNumberDBConnections;				/** Pocet sezeni nad databazi ulozenych do kontejneru databazovych spojeni. */
 	std::string dbName;						/** Nazev lokalni databaze, na kterou se modularni prostredi pripojuje. */
+	std::string dbUser;
+	std::string dbPassword;
 	std::string algorithmsConfig;			/** Cesta ke konfiguracnimu souboru aplikacnich modulu se seznamem jejich definic. */
 	std::string loggerSettingFileName;		/** Prefix pro logovaci soubor. */
 	std::string loggerSettingAppName;		/** Nazev aplikace pro nastaveni pro logovani - v tomto pripade FRAMEWORK nebo MODULAR INTERFACE. */
@@ -50,6 +52,7 @@ public:
 	int loggerSettingFilesCnt;				/** Maximalni pocet vytvorenych logovacich souboru. */
 	int loggerSettingLinesCnt;				/** Maximalni pocet radku v logovacim souboru. */
 	std::vector<talgorithm *> algorithms;	/** Kolekce struktur talgorithm uchovavajici informace o definicich aplikacnich modulu. */
+	int connectionPoolSize;
 
 	FrameworkConfig();
 	~FrameworkConfig();

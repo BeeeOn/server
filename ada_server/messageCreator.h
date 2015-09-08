@@ -14,8 +14,8 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include "structures.h"
-#include "pugi/pugixml.hpp"
-#include "pugi/pugiconfig.hpp"
+#include "../lib/pugixml.hpp"
+#include "../lib/pugiconfig.hpp"
 #include "loger.h"
 #include "structures.h"
 

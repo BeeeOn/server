@@ -2,20 +2,20 @@
 #define	FTOKENCHECKER_H
 #include <string>
 
-using namespace std;
 
 struct facebookInfo {
-    string id;
-    string email; 
-    string first_name;
-    string last_name;
-    string link;
-    string name;
+    std::string id;
+    std::string email; 
+    std::string first_name;
+    std::string last_name;
+    std::string link;
+    std::string name;
+    std::string gender;
     int timezone;
-    string updated_time;
+    std::string updated_time;
     bool verified;
 };
 
-bool isFTokenOkay(string fToken, facebookInfo &fInfo);
+bool isFTokenOkay(std::string fToken, facebookInfo &fInfo);
 
 #endif

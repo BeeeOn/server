@@ -1,3 +1,5 @@
+                                                                                     
+-- --------------------------------------------------------------------
 CREATE OR REPLACE FUNCTION upsert_user_returning_uid(d_mail TEXT, d_g_name TEXT, d_f_name TEXT, d_picture TEXT, d_gender TEXT, d_g_id TEXT, d_f_id TEXT) RETURNS integer AS
   $$
   DECLARE
@@ -9,11 +11,12 @@ CREATE OR REPLACE FUNCTION upsert_user_returning_uid(d_mail TEXT, d_g_name TEXT,
               given_name = d_g_name, family_name = d_f_name, picture = d_picture,
               gender = d_gender, google_id = d_g_id
           WHERE 
-  			CASE  
-  				WHEN d_g_id is not NULL then google_id=d_g_id 
-  				WHEN d_f_id is not NULL then google_id=d_f_id  
-  			END
-  		returning user_id into t_out;
+  			   CASE  
+  				  WHEN d_mail is not NULL then mail = d_mail 
+  				  WHEN d_g_id is not NULL then google_id = d_g_id 
+  				  WHEN d_f_id is not NULL then facebook_id = d_f_id  
+  			   END
+  		    returning user_id into t_out;
   		
           IF found THEN
               RETURN t_out;
@@ -67,7 +70,7 @@ CREATE OR REPLACE FUNCTION remove_another_superuser() returns trigger
   
   BEGIN
     UPDATE users_adapters set role = 'admin' where 
-     fk_adapter_id = NEW.fk_adapter_id AND fk_user_id != NEW.fk_user_id;
+     fk_adapter_id = NEW.fk_adapter_id AND fk_user_id != NEW.fk_user_id AND role = 'superuser';
     
   RETURN NEW;
   END;

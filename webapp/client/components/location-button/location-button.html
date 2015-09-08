@@ -1,0 +1,15 @@
+<div layout="row" layout-align="start center">
+    <md-button hide-gt-lg ng-click="action()" class="md-icon-button" aria-label="{{ 'GLOBAL.LOCATION' | translate }}">
+            <md-icon md-svg-icon="{{icon}}"></md-icon>
+    </md-button>
+    <md-button ng-show="!hideBtn" hide show-gt-lg ng-click="action()" class="md-icon-button" aria-label="{{ 'GLOBAL.LOCATION' | translate }}">
+        <md-icon md-svg-icon="{{icon}}"></md-icon>
+    </md-button>
+    <h2>
+        <span class="locationName">{{options.location}}</span>
+    </h2>
+    <span flex></span>
+        <md-button ng-click="btn.action();" aria-label="{{btn.title}}" ng-repeat="btn in options.more" class="md-icon-button">
+            <md-icon md-svg-icon="{{btn.icon}}"></md-icon>
+        </md-button>
+</div>

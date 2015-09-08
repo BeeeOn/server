@@ -39,14 +39,12 @@ void FrameworkServerHandle::HandleAlgorithmMessage(std::string data, Loger *Log,
 	string userID = algMessage.attribute("userID").value();
 	int algID = algMessage.attribute("algID").as_int();
 	string adapterID = algMessage.attribute("adapterID").value();
-	
-	
+
+
 	int algTypeId = algMessage.attribute("algTypeId").as_int();
 	//float PV = algMessage.attribute("protocol_version").as_float();
 
-	int adapterIdInt = std::stoi(adapterID);
-
-
+	int adapterIdInt = std::atoll(adapterID.c_str());
 	xml_node notifications = algMessage.child("notifs");
 	int notifsCnt = notifications.attribute("count").as_uint();
 	xml_node notification = notifications.first_child();
@@ -71,7 +69,7 @@ void FrameworkServerHandle::HandleAlgorithmMessage(std::string data, Loger *Log,
 				int highestNotifId = atoi(currentHighestIdOfNotifPerUserString.c_str()) + 1;
 
 				Notification *notif = new WatchdogNotif(
-					std::stoi(userID),      // User ID ziskane
+					std::atoll(userID.c_str()),      // User ID ziskane
 					highestNotifId,			// Notification ID (melo by byt ve vetsine pripadu unikatni, jinak se prepise jiz existujici notifikace s existujicim ID)
 					now,					// Unix timestamp (ms), kdy byla zprava vytvorena; !!!!UTC format!!!
 					notifyText,				// Zprava, ktera bude zobrazena uzivateli
@@ -100,7 +98,7 @@ void FrameworkServerHandle::HandleAlgorithmMessage(std::string data, Loger *Log,
 					string read = to_string(0);
 					// ulozeni do DB
 					database->InsertNotification(text, level, timestamp, userId, message_id, read, name);
-				}  
+				}
 				sem_post(dbAccessSem);
 				delete notif;
 				notification = notification.next_sibling();
@@ -122,7 +120,7 @@ void FrameworkServerHandle::HandleAlgorithmMessage(std::string data, Loger *Log,
 			string idOfActor = toggle.attribute("id").value();
 			string typeOfActor = toggle.attribute("type").value();
 			//Odeslat zpravu na adapter server
-			string messageToAdaServer = this->createMessageRequestSwitch(idOfActor, typeOfActor, adapterID);
+			string messageToAdaServer = this->createMessageRequestSwitch(idOfActor, typeOfActor, adapterID, database);
 			this->sendMessageToAdaServer(messageToAdaServer);
 			toggle = toggle.next_sibling();
 		}

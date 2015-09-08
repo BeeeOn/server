@@ -1,0 +1,87 @@
+[
+  {
+    "aid": "11111",
+    "role": "superuser",
+    "aname" : "Adapter #1",
+    "nfacs" : 4,
+    "nusers" : 3,
+    "ip" : "127.0.0.1",
+    "aversion" : "0",
+    "utc" : "1",
+    "accounts" : [
+      {
+        "name": "Demo",
+        "surname": "Mod",
+        "gender": "male",
+        "email": "demo@mod.com",
+        "role" : "superuser"
+      },
+      {
+        "name": "Second",
+        "surname": "User",
+        "gender": "female",
+        "email": "second@user.com",
+        "role" : "admin"
+      },
+      {
+        "name": "Third",
+        "surname": "User",
+        "gender": "female",
+        "email": "third@user.com",
+        "role" : "admin"
+      }
+    ]
+  },
+  {
+    "aid": "22222",
+    "role": "admin",
+    "aname" : "Adapter #2",
+    "nfacs" : 2,
+    "nusers" : 2,
+    "ip" : "127.0.0.2",
+    "aversion" : "0",
+    "utc" : "1",
+    "accounts" : [
+      {
+        "name": "Second",
+        "surname": "User",
+        "gender": "female",
+        "email": "second@user.com",
+        "role" : "superuser"
+      },
+      {
+        "name": "Demo",
+        "surname": "Mod",
+        "gender": "male",
+        "email": "demo@mod.com",
+        "role" : "admin"
+      }
+    ]
+  },
+  {
+    "aid": "33333",
+    "role": "admin",
+    "aname" : "Adapter #3",
+    "nfacs" : 1,
+    "nusers" : 2,
+    "ip" : "127.0.0.3",
+    "aversion" : "0",
+    "utc" : "1",
+    "accounts" : [
+      {
+        "name": "Third",
+        "surname": "User",
+        "gender": "female",
+        "email": "third@user.com",
+        "role" : "superuser"
+      },
+      {
+        "name": "Demo",
+        "surname": "Mod",
+        "gender": "male",
+        "email": "demo@mod.com",
+        "role" : "admin"
+      }
+    ]
+  }
+]

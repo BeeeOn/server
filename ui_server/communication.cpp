@@ -44,32 +44,32 @@ string resolveMsg(char* msg)
     catch (ServerException & e)
     {
         Logger::getInstance(Logger::ERROR) << "Server error: " << e.getErrCode()<< endl;
-        response = msgIn->envelopeResponse(R_FALSE, e.getErrText(), e.getErrCode());
+        response = msgIn->envelopeResponse(proto::replyFalse, e.getErrText(), e.getErrCode());
     }
     catch (soci::postgresql_soci_error const & e)
     {
         Logger::getInstance(Logger::ERROR) << "DB error (psql_soci): " << e.what() <<"| sql state:"<<e.sqlstate()<< endl;
         
-        response = msgIn->envelopeResponse(R_FALSE);
+        response = msgIn->envelopeResponse(proto::replyFalse);
     }
     catch (soci::soci_error const & e)
     {
         //TODO  mozna nedelat false 
         Logger::getInstance(Logger::ERROR) << "DB error (soci): " << e.what() << endl;
         
-        response = msgIn->envelopeResponse(R_FALSE);
+        response = msgIn->envelopeResponse(proto::replyFalse);
     }catch (exception& e)
   {
             Logger::getInstance(Logger::FATAL) <<"ERROR ! :"<<e.what()<<endl;
         
-        response = msgIn->envelopeResponse(R_FALSE);
+        response = msgIn->envelopeResponse(proto::replyFalse);
   }
     catch (...)
     {
         //TODO  mozna nedelat false 
         Logger::getInstance(Logger::FATAL) <<"ERROR !!!!!!!!!!!!!!!!!!"<<endl;
         
-        response = msgIn->envelopeResponse(R_FALSE);
+        response = msgIn->envelopeResponse(proto::replyFalse);
     }
     
     Logger::getInstance(Logger::DEBUG)<< "MSGOUT: " << response<<"\n";
@@ -86,7 +86,7 @@ string resolveMsg(string msg){
     
     Logger::getInstance(Logger::DEBUG)<< "MSGIN: "<<msg<< endl;
     
-    msgIn = msgFactory.createMsg((char*)msg.c_str());
+    msgIn = msgFactory.createMsg(msg.c_str());
     
     try
     {     
@@ -116,32 +116,32 @@ string resolveMsg(string msg){
     catch (ServerException & e)
     {
         Logger::getInstance(Logger::ERROR) << "Server error: " << e.getErrCode()<< endl;
-        response = msgIn->envelopeResponse(R_FALSE, e.getErrText(), e.getErrCode());
+        response = msgIn->envelopeResponse(proto::replyFalse, e.getErrText(), e.getErrCode());
     }
     catch (soci::postgresql_soci_error const & e)
     {
         Logger::getInstance(Logger::ERROR) << "DB error (psql_soci): " << e.what() <<"| sql state:"<<e.sqlstate()<< endl;
         
-        response = msgIn->envelopeResponse(R_FALSE);
+        response = msgIn->envelopeResponse(proto::replyFalse);
     }
     catch (soci::soci_error const & e)
     {
         //TODO  mozna nedelat false 
         Logger::getInstance(Logger::ERROR) << "DB error (soci): " << e.what() << endl;
         
-        response = msgIn->envelopeResponse(R_FALSE);
+        response = msgIn->envelopeResponse(proto::replyFalse);
     }catch (exception& e)
   {
             Logger::getInstance(Logger::FATAL) <<"ERROR ! :"<<e.what()<<endl;
         
-        response = msgIn->envelopeResponse(R_FALSE);
+        response = msgIn->envelopeResponse(proto::replyFalse);
   }
     catch (...)
     {
         //TODO  mozna nedelat false 
         Logger::getInstance(Logger::FATAL) <<"ERROR !!!!!!!!!!!!!!!!!!"<<endl;
         
-        response = msgIn->envelopeResponse(R_FALSE);
+        response = msgIn->envelopeResponse(proto::replyFalse);
     }
     
     Logger::getInstance(Logger::DEBUG)<< "MSGOUT: " << response<<"\n";

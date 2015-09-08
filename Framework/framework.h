@@ -30,13 +30,13 @@
 #include <sys/wait.h>
 #include <atomic>
 #include <exception>
-#include <thread> 
+#include <thread>
 #include <semaphore.h>
-#include <stdlib.h> 
+#include <stdlib.h>
 #include <chrono>
 #include <sstream>
-#include "pugixml.hpp"
-#include "pugiconfig.hpp"
+#include "../lib/pugixml.hpp"
+#include "../lib/pugiconfig.hpp"
 #include "loger.h"
 #include "structures.h"
 #include "Notificator/Notificator.h"
@@ -45,6 +45,7 @@
 #include "DBFWHandler.h"
 #include "config.h"
 #include "AdapterMessageParser.h"
+#include "handlePoolContainer.h"
 
 #ifndef FRAMEWORK_HEADER_
 #define FRAMEWORK_HEADER_
@@ -66,7 +67,7 @@ typedef struct chldMsg
 */
 typedef struct alg
 {
-	std::string usersAlgorithmsId;	/** Primarni klic zaznamu.*/		
+	std::string usersAlgorithmsId;	/** Primarni klic zaznamu.*/
 	std::string atype;				/** Typ aplikacniho modulu. Definovany v konfiguracnim souboru a nasledne take ulozeny v tabulce u_algorithms.*/
 	std::string enable;				/** Urceni, zda se jedna o zapnuty ci vypnuty palikacni modul.*/
 	std::string name;				/** Nazev aplikacniho modulu definovany uzivatelem. (napr. Hlidani teploty)*/
@@ -101,15 +102,15 @@ typedef struct param
 	std::string text;				/** Obsah parametru ve formatu retezce. */
 } tparam;
 
-/** Trida slouzici pro pripravu schranek pro naslouchani a tvorbu procesu pro obsluhu projatych spojeni. 
+/** Trida slouzici pro pripravu schranek pro naslouchani a tvorbu procesu pro obsluhu projatych spojeni.
 *
 */
 class FrameworkServer {
 	private:
-		sockaddr_in portBind;			/** Nabindovani portu. */				
+		sockaddr_in portBind;			/** Nabindovani portu. */
 		int serverSocket;				/** Socket tcp serveru. */
 		int port;						/** Port, na kterem server nasloucha. */
-	public: 
+	public:
 		FrameworkServer(int init_port);
 		void StartServer();
 		bool SetUpSockets();
@@ -131,6 +132,8 @@ class FrameworkServerHandle {
 		DBFWHandler *database;				/** Prace s databazi. Je do nej predano sezeni. */
 	public:
 		FrameworkServerHandle(int init_socket, int init_port);
+		void setSocket(int init_socket);
+		void setPort(int init_port);
 		void HandleClientConnection();
 		//Handlers
 		void HandleAdapterMessage(std::string data, Loger *Log, FrameworkConfig *FConfig, DBFWHandler *database, sem_t* dbAccessSem);
@@ -151,6 +154,6 @@ class FrameworkServerHandle {
 		std::string createMessageFalse(string errcode);
 		std::string createMessageAlgs(vector<talg *> allAlgs, string adapterId);
 		std::string createMessageTrue();
-		string createMessageRequestSwitch(string id, string type, string adapterId);
+		string createMessageRequestSwitch(string id, string type, string adapterId, DBFWHandler *database);
 };
 #endif

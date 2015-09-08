@@ -41,3 +41,18 @@ std::string DAONotification::getXMLNotifications(int userId) {
     }
 }
 
+int DAONotification::setReaded(int notif) {
+    Logger::debug3()<<"DB:"<<"readednotif"<<endl;
+    try{
+        soci::session sql(*_pool);
+        sql << "update notifications set read = true where message_id = :not_id",       
+                use(notif, "not_id");
+        return 1;
+    }
+    catch (soci::postgresql_soci_error& e)
+    {
+        Logger::error() << "Error: " << e.what() << endl;
+        return 0;
+    }
+}
+

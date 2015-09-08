@@ -4,10 +4,13 @@
 	portAdaRecieverServer="7083"
 	portAdaSenderServer="7081"
 	portAlgorithmsServer="7084"
-	DBName="home6"
+	DBName="home7"
+	DBUser="root"
+	DBPassword=""
 	maxNumDBConnections="10"
 	recieveBuffSize="5000"
-	algorithmsConfig="Algorithms/AlgsConfig.xml">
+	algorithmsConfig="Algorithms/AlgsConfig.xml"
+	connPoolSize="10">
 	<loger
 		fileName="log"
 		appName="FRAMEWORK"

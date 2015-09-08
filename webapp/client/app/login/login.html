@@ -1,0 +1,72 @@
+<!-- Large devices (PC)-->
+<div flex layout="row" hide show-gt-md class="loginPanelWrapper" >
+    <div flex="33" layout="column" class="loginLogoPanel" layout-align="start center" layout-padding>
+        <div layout="column">
+            <h3>BeeeOn</h3>
+            <p>Home under your control</p>
+        </div>
+        <div>
+            <md-icon class="loginLogoIconLarge" md-svg-icon="logo_reversed">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 64 64"
+                     height="100%" width="100%" />
+            </md-icon>
+        </div>
+    </div>
+    <!-- below on mobile, right on larger devices -->
+    <div flex layout="column" class="middlePanel">
+        <div flex layout="row" layout-align="start start" layout-wrap layout-margin class="loginSignButtonsPanel">
+            <p>{{ 'LOGIN.LOGIN_OR_REGISTER' | translate }}:</p>
+            <div layout="row" flex layout-align="space-around center">
+                <md-button aria-label="{{ 'LOGIN.SIGN_G_PLUS' | translate }}" class="" title="{{ 'LOGIN.SIGN_G_PLUS' | translate }}" md-no-ink>
+                    <md-icon md-svg-icon="g_plus_signin"></md-icon>
+                </md-button>
+                <md-button aria-label="{{ 'LOGIN.SIGN_FB' | translate }}" class="" title="{{ 'LOGIN.SIGN_FB' | translate }}" md-no-ink>
+                    <md-icon md-svg-icon="fb_signin"></md-icon>
+                </md-button>
+            </div>
+        </div>
+        <div class="demoModPanel" flex="10" layout="column">
+            <p>{{ 'LOGIN.TRY_OFFLINE' | translate }}:</p>
+            <div layout="row" style="">
+                <md-button flex md-no-ink ng-click="demoLogin()" aria-label="{{ 'LOGIN.START_DEMO' | translate }}">{{ 'LOGIN.START_DEMO' | translate }}</md-button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Small, medium devices -->
+<div flex layout="column" hide-gt-md class="loginPanelWrapper" >
+    <div flex="20" layout="row" class="loginLogoPanel" layout-align="start center" layout-padding>
+        <div>
+            <md-icon class="loginLogoIconSmall" md-svg-icon="logo_reversed">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 64 64"
+                     height="100%" width="100%" />
+            </md-icon>
+        </div>
+        <div layout="column">
+            <h3>BeeeOn</h3>
+            <p>Home under your control</p>
+        </div>
+    </div>
+    <!-- below on mobile, right on larger devices -->
+    <div flex layout="column" class="middlePanel">
+        <div flex layout="row" layout-align="start start" layout-wrap layout-margin class="loginSignButtonsPanel">
+            <p>{{ 'LOGIN.LOGIN_OR_REGISTER' | translate }}:</p>
+            <div layout="row" flex layout-align="space-around center">
+                <md-button aria-label="{{ 'LOGIN.SIGN_G_PLUS' | translate }}" class="" title="{{ 'LOGIN.SIGN_G_PLUS' | translate }}" md-no-ink>
+                    <md-icon md-svg-icon="g_plus_signin"></md-icon>
+                </md-button>
+                <md-button aria-label="{{ 'LOGIN.SIGN_FB' | translate }}" class="" title="{{ 'LOGIN.SIGN_FB' | translate }}" md-no-ink>
+                    <md-icon md-svg-icon="fb_signin"></md-icon>
+                </md-button>
+            </div>
+        </div>
+        <div class="demoModPanel" flex="10" layout="column">
+            <p>{{ 'LOGIN.TRY_OFFLINE' | translate }}:</p>
+            <div layout="row" style="">
+                <md-button flex md-no-ink ng-click="demoLogin()" aria-label="{{ 'LOGIN.START_DEMO' | translate }}">{{ 'LOGIN.START_DEMO' | translate }}</md-button>
+            </div>
+        </div>
+    </div>
+</div>

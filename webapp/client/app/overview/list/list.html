@@ -1,0 +1,33 @@
+<div flex class="md-whiteframe-z2 whiteBackground listWrapper" layout="column">
+    <div flex ng-show="!showList" layout="column">
+        <div flex layout="column" layout-align="center center" class="emptyOverviewListWrapper whiteBackground md-whiteframe-z2">
+            <h3>{{ 'OVERVIEW.LIST.NO_DEVICES' | translate}}</h3>
+            <md-button class="refreshBtn" ng-click="refreshList()">{{ 'OVERVIEW.LIST.BTNS.REFRESH_MODULE_LIST' | translate}}</md-button>
+        </div>
+    </div>
+    <div flex ng-show="showList" layout="column">
+        List of modules...
+    </div>
+    <md-fab-speed-dial md-open="addFABisOpen" md-direction="up"
+                       ng-class="md-scale" class="md-primary md-fab-bottom-right">
+        <md-fab-trigger>
+            <md-button aria-label="menu" class="md-fab md-accent">
+                <md-icon md-svg-src="add"></md-icon>
+            </md-button>
+        </md-fab-trigger>
+        <md-fab-actions>
+            <md-button aria-label="{{ 'OVERVIEW.LIST.BTNS.ADD_GATEWAY' | translate}}" class="md-fab md-raised md-mini md-accent">
+                <md-tooltip md-direction="left" md-visible="addFABisOpen" md-autohide="false">
+                    {{ 'OVERVIEW.LIST.BTNS.ADD_GATEWAY' | translate}}
+                </md-tooltip>
+                <md-icon md-svg-src="add"></md-icon>
+            </md-button>
+            <md-button aria-label="{{ 'OVERVIEW.LIST.BTNS.ADD_GATEWAY' | translate}}" class="md-fab md-raised md-mini md-accent">
+                <md-tooltip md-direction="left" md-visible="addFABisOpen" md-autohide="false">
+                    {{ 'OVERVIEW.LIST.BTNS.ADD_MODULE' | translate}}
+                </md-tooltip>
+                <md-icon md-svg-src="add"></md-icon>
+            </md-button>
+        </md-fab-actions>
+    </md-fab-speed-dial>
+</div>

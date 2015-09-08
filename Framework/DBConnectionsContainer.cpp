@@ -1,7 +1,7 @@
 /**
 * @file databaseConnectionContainer.cpp
 *
-* Implementace kontejneru pro praci s databazi pomoci knihovny soci 
+* Implementace kontejneru pro praci s databazi pomoci knihovny soci
 *
 */
 
@@ -20,19 +20,19 @@ DBConnectionsContainer *DBConnectionsContainer::instance = NULL;
 * @param ConnLimit   pocet reprezentujici omezeni pripojeni k databazi
 * @param l			 instance pro nastaveni logovani v tride  DatabaseConnectionContainer
 */
-DBConnectionsContainer::DBConnectionsContainer(std::string NameOfDB, int ConnLimit, Loger *l)
+DBConnectionsContainer::DBConnectionsContainer(std::string NameOfDB, std::string user,std::string password,int ConnLimit, Loger *l)
 {
 	this->_log = l;
 	_log->WriteMessage(TRACE,"Entering " + this->_Name + "::DBConnectionsContainer");
 	_NameOfDB = NameOfDB;
 	_log->WriteMessage(INFO,"Creating connections to DB");
+	int realFree = 0;
 	for (int i = 0; i < ConnLimit; i++)
 	{
-		try
-		{
-			session *SQL = new session(postgresql, "dbname=" + this->_NameOfDB);
+		try{
+			session *SQL = new session(soci::postgresql, "dbname=" +this->_NameOfDB + " user="+user + " password="+password);
 			this->connections[i] = SQL;
-			this->freeCount = i+1;
+            realFree++;
 		}
 		catch(std::exception const &e)
 		{
@@ -41,6 +41,7 @@ DBConnectionsContainer::DBConnectionsContainer(std::string NameOfDB, int ConnLim
 			this->_log->WriteMessage(ERR,ErrorMessage );
 		}
 	}
+	this->freeCount = realFree;
 	this->_log->WriteMessage(INFO,"Connections to DB created");
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::DBConnectionsContainer");
 }
@@ -91,7 +92,7 @@ int DBConnectionsContainer::Limit()
 /**
 * Vyda spojeni z kontejneru, se kterym je pak mozne pracovat.
 *
-* @return session Session je tedy spojeni s databazi, se kterym je mozno pracovat. 
+* @return session Session je tedy spojeni s databazi, se kterym je mozno pracovat.
 */
 session *DBConnectionsContainer::GetConnection()
 {
@@ -117,11 +118,11 @@ session *DBConnectionsContainer::GetConnection()
 * @param ConnLimit   pocet reprezentujici omezeni pripojeni k databazi
 * @param l			 instance pro nastaveni logovani v tride  DatabaseConnectionContaineru
 */
-DBConnectionsContainer *DBConnectionsContainer::GetConnectionContainer(Loger *l, std::string NameOfDB, int ConnLimit)
+DBConnectionsContainer *DBConnectionsContainer::GetConnectionContainer(std::string NameOfDB, std::string user,std::string password,int ConnLimit, Loger *l)
 {
 	l->WriteMessage(TRACE,"Entering  DBConnectionsContainer::CreateContainer");
 	if (!instance)
-		instance = new DBConnectionsContainer(NameOfDB, ConnLimit, l);
+		instance = new DBConnectionsContainer(NameOfDB, user, password, ConnLimit, l);
 	l->WriteMessage(TRACE,"Exiting  DBConnectionsContainer::CreateContainer");
 	return instance;
 }

@@ -325,7 +325,7 @@ void FrameworkServerHandle::HandleUIServerMessage(std::string data, Loger *Log, 
 
 				string nameOfBinary = "geofencing";
 
-				Log->WriteMessage(INFO, "EXECUTING ALGORITHM BINARY " + nameOfBinary + " - AlgId: " + AlgId + " , userId: " + UserId + ", parameters: " + parametersTmp + ", senzorValues: " + senzorValues);
+                Log->WriteMessage(INFO, "EXECUTING ALGORITHM BINARY " + nameOfBinary + " - AlgId: " + AlgId + " , userId: " + UserId + ", parameters: " + parametersTmp + ", senzorValues: " + senzorValues + ", DBName:" + FConfig->dbName + ", FWServerPort: " + to_string(FConfig->portAlgorithmServer));
 
 				char* arg_list[] = {
 					StringToChar(nameOfBinary),
@@ -343,6 +343,12 @@ void FrameworkServerHandle::HandleUIServerMessage(std::string data, Loger *Log, 
 					StringToChar(parametersTmp),
 					StringToChar("-e"), // name of database
 					StringToChar(FConfig->dbName),
+					StringToChar("-s"), // name of database
+					StringToChar(to_string(FConfig->portAlgorithmServer)),
+					StringToChar("-x"), // name of DB user
+					StringToChar(FConfig->dbUser),
+					StringToChar("-z"), // DB password
+					StringToChar(FConfig->dbPassword),
 					StringToChar("/"),
 					NULL
 				};

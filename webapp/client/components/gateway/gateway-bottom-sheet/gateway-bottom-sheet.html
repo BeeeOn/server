@@ -1,0 +1,11 @@
+<div class="gatewayDescSheet">
+    <md-bottom-sheet class="md-grid">
+        <md-list>
+            <md-list-item ng-repeat="item in items">
+                <md-button class="md-grid-item-content" ng-click="listItemClick($index)" aria-label="{{ item.title }}">
+                    <md-icon md-svg-src="{{item.icon}}"></md-icon>
+                </md-button>
+            </md-list-item>
+        </md-list>
+    </md-bottom-sheet>
+</div>

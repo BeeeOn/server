@@ -10,9 +10,11 @@
             <sourceEncoding>UTF-8</sourceEncoding>
             <make-dep-projects/>
             <sourceRootList>
+                <sourceRootElem>../lib</sourceRootElem>
                 <sourceRootElem>../ui_logger</sourceRootElem>
+                <sourceRootElem>msgs</sourceRootElem>
                 <sourceRootElem>../DAO</sourceRootElem>
-                <sourceRootElem>Msgs</sourceRootElem>
+                <sourceRootElem>.</sourceRootElem>
             </sourceRootList>
             <confList>
                 <confElem>
