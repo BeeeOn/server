@@ -245,7 +245,8 @@ bool DBHandler::UpdateSenAct(tmessage *message)
 			//use(message->battery,"battery"),
 			//use(message->signal_strength, "quality"),
 			use(message->device_euid, "DEVICE_EUID"),
-			use(message->timestamp, "MEASURED_AT");
+			use(message->timestamp, "MEASURED_AT"),
+			use(message->adapterINTid,"GATEWAY_ID");
 		for (int i = 0;i<message->values_count;i++)  //for all values create text representation and call SQL querry
 		{
 			//std::string val = "0";

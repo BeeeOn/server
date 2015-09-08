@@ -31,7 +31,7 @@ const string SelectSocket = "SELECT socket FROM gateway where gateway_id=:ID;";
 const string InsertDevice = "insert into device (device_type,device_euid,refresh,gateway_id,involved,measured_at) values (:DEVICE_TYPE,:DEVICE_EUID,15,:GATEWAY_ID,:TIMESTAMP,:TIMESTAMP);";  /*"insert into facilities (mac,refresh,battery,quality,fk_adapter_id,involved,timestamp) values
 ( '" + message->DeviceIDstr + "', 5 ," + std::to_string(message->battery)+ ", " + std::to_string(message->signal_strength) +  ", " +std::to_string(message->adapterINTid)+ ", " +std::to_string(message->timestamp) + ", " + std::to_string(message->timestamp) +" );" ;*/
 /** Q to update facility uses ( :battery, :quality, :timestamp, :mac)*/
-const string UpdateDevice = "update device set measured_at = :MEASURED_AT where (device_euid = :DEVICE_EUID);"; //"update facilities set battery=" + std::to_string(message->battery) + ",quality=" + std::to_string(message->signal_strength) + ",timestamp=" + std::to_string(message->timestamp)  +" where (mac='" + message->DeviceIDstr + "');" ;
+const string UpdateDevice = "update device set gateway_id = :GATEWAY_ID, measured_at = :MEASURED_AT where (device_euid = :DEVICE_EUID);"; //"update facilities set battery=" + std::to_string(message->battery) + ",quality=" + std::to_string(message->signal_strength) + ",timestamp=" + std::to_string(message->timestamp)  +" where (mac='" + message->DeviceIDstr + "');" ;
 /** Q to Delete facility uses (:ID) */
 const string DeleteDevice = "Delete from device where device_euid=:DEVICE_EUID;";
 /** Q to select wake up time of record uses ( :record)*/
