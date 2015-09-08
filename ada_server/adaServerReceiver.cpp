@@ -12,31 +12,6 @@
 using namespace soci;
 using namespace pugi;
 
-
-message::message()
-{
-	this->values = NULL;
-	this->devType = UNDEF;
-	this->DeviceIDstr = "";
-	this->adapterINTid = 0;
-	this->socket = 0;
-	this->battery = 0;
-	this->cp_version = 0.0;
-	this->signal_strength=0;
-	this->state = UNKNOWN;
-	this->values_count = 0;
-	this->fm_version = 0;
-	this->sensor_id = 0;
-	this->timestamp = 0;
-
-}
-
-message::~message()
-{
-	delete [] values;
-	values= NULL;
-}
-
 AdaServerReceiver::AdaServerReceiver(sem_t *Sem, WorkerPool *workers, Loger *L,Config *c)
 {
 	L->WriteMessage(TRACE,"Entering " + this->_Name + "Constructor");

@@ -19,45 +19,37 @@ void DBHandler::LogValue (tmessage *message)
 		try
 		{
 			std::string retRec;
-			std::string val = "0";
-			switch(message->values[i].type)
+			//std::string val = "0";
+			std::string val = std::to_string(message->values[i].measured_value);
+			/*switch(message->values[i].type)
 			{
-				case TEMP:
-				case LUM:
-				case REZ:
-				case POS:
-				case BT:
-					val = std::to_string(message->values[i].fval);
-					break;
-				case ONON:
-				case TOG:
-				case ONOFFSEN:
-				case ONOFSW:
-
-						if(message->values[i].bval)
-							val = "1";
-					
-					break;
-				case EMI:
-				case HUM:
-				case BAR:
-				case RGB:
-				case RAN:
-				case BOT:
-				case BOM:
-				case BST:
+				//int
+				case ENUM:
+				case HUMIDITY:
+				case PRESSURE:
+				case CO2:
+				case BATTERY:
+				case RSSI:
+				case REFRESH:
 					val = std::to_string(message->values[i].ival);
+					break;
+				//float
+				case TEMPERATURE:
+				case LIGHT:
+				case NOISE:
+					val = std::to_string(message->values[i].fval);
 					break;
 				default:
 					this->_log->WriteMessage(WARN,"Unknown value type nothing will be saved to DB!");
 					continue;
 					break;
 			}
+			*/
 			*_sql << SQLQueries::InsertLog,
-					use (message->sensor_id,"deviceID"),
-					use(std::to_string(message->timestamp),"timeStamp"),
-					use (std::to_string(message->values[i].intType),"type"),
-					use (val,"value");
+					use (message->device_euid,"DEVICE_EUID"), // device_mac (device_euid)
+					use(std::to_string(message->timestamp),"MEASURED_AT"), // measured_at
+					use (std::to_string(message->values[i].module_id),"MODULE_ID"), // module_id
+					use (val,"MEASURED_VALUE"); //measured_value
 		}
 		catch(std::exception const &e)
 		{
@@ -110,16 +102,16 @@ bool DBHandler::IsInDB(std::string tableName, std::string columnName, std::strin
 	}
 }
 
-bool DBHandler::InsertAdapter(tmessage *message)
+bool DBHandler::InsertGateway(tmessage *message)
 {
-	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::InsertAdapter");
+	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::InsertGateway");
 	try
 	{
-		*_sql << SQLQueries::InsertAdapter,
-				use(message->adapterINTid,"AdapterID"),
-				use(std::to_string(message->fm_version),"FMver"),
-				use(message->socket,"socket");
-		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::InsertAdapter");
+		*_sql << SQLQueries::InsertGateway,
+				use(message->adapterINTid,"GATEWAY_ID"),
+				use(std::to_string(message->fm_version),"FM_VERSION"),
+				use(message->socket,"SOCKET");
+		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::InsertGateway");
 		return (true);
 	}
 	catch(std::exception const &e)
@@ -128,31 +120,31 @@ bool DBHandler::InsertAdapter(tmessage *message)
 		std::string ErrorMessage = "Database Error : ";
 		ErrorMessage.append (e.what());
 		this->_log->WriteMessage(ERR,ErrorMessage );
-		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::InsertAdapter");
+		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::InsertGateway");
 		return (false);
 	}
 }
 
-bool DBHandler::UpdateAdapter(tmessage *message)
+bool DBHandler::UpdateGateway(tmessage *message)
 {
-	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::UpdateAdapter");
+	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::UpdateGateway");
 	try
 	{
 		std::string retRec;
 		if (message->socket>0)
 		{
-		*_sql <<SQLQueries::UpdateAdapterSocket,
-				use(message->adapterINTid,"ID"),
-				use(std::to_string(message->fm_version),"FMver"),
-				use(message->socket,"socket");
+		*_sql <<SQLQueries::UpdateGatewaySocket,
+				use(message->adapterINTid,"GATEWAY_ID"),
+				use(std::to_string(message->fm_version),"FM_VERSION"),
+				use(message->socket,"SOCKET");
 		}
 		else
 		{
-			*_sql <<SQLQueries::UpdateAdapter,
-				use(message->adapterINTid,"ID"),
-				use(std::to_string(message->fm_version),"FMver");
+			*_sql <<SQLQueries::UpdateGateway,
+				use(message->adapterINTid,"GATEWAY_ID"),
+				use(std::to_string(message->fm_version),"FM_VERSION");
 		}
-		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::UpdateAdapter");
+		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::UpdateGateway");
 		return (true);
 	}
 	catch(std::exception const &e)
@@ -161,7 +153,7 @@ bool DBHandler::UpdateAdapter(tmessage *message)
 		std::string ErrorMessage = "Database Error : ";
 		ErrorMessage.append (e.what());
 		this->_log->WriteMessage(ERR,ErrorMessage );
-		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::UpdateAdapter");
+		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::UpdateGateway");
 		return (false);
 	}
 }
@@ -172,12 +164,13 @@ bool DBHandler::InsertSenAct(tmessage *message)
 	try
 	{
 		std::string retRec;
-		*_sql << SQLQueries::InsertFacility,
-					use(message->sensor_id,"deviceID"),
-					use(message->timestamp,"timestamp"),
-					use(message->battery,"battery"),
-					use(message->signal_strength,"signal"),
-					use(message->adapterINTid,"adapterID");
+		*_sql << SQLQueries::InsertDevice,
+					use(message->device_type, "DEVICE_TYPE"),
+					use(message->device_euid,"DEVICE_EUID"),
+					use(message->timestamp,"TIMESTAMP"),
+					//use(message->battery,"battery"),
+					//use(message->signal_strength,"signal"),
+					use(message->adapterINTid,"GATEWAY_ID");
 	}
 	catch (std::exception const &e)
 	{
@@ -193,43 +186,39 @@ bool DBHandler::InsertSenAct(tmessage *message)
 		for (int i=0;i<message->values_count;i++) //for all values create text representation and call SQL querry
 		{
 			std::string retRec;
-			std::string val = "0";
+			//std::string val = "0";
+			std::string val = std::to_string(message->values[i].measured_value);
+			/*
 			switch(message->values[i].type)
 			{
-				case TEMP:
-				case LUM:
-				case REZ:
-				case POS:
-				case BT:
-					val = std::to_string(message->values[i].fval);
-					break;
-				case ONON:
-				case TOG:
-				case ONOFFSEN:
-				case ONOFSW:
-						if(message->values[i].bval)
-							val = "1";
-					break;
-				case EMI:
-				case HUM:
-				case BAR:
-				case RGB:
-				case RAN:
-				case BOT:
-				case BOM:
-				case BST:
+				//int
+				case ENUM:
+				case HUMIDITY:
+				case PRESSURE:
+				case CO2:
+				case BATTERY:
+				case RSSI:
+				case REFRESH:
 					val = std::to_string(message->values[i].ival);
+					break;
+				//float
+				case TEMPERATURE:
+				case LIGHT:
+				case NOISE:
+					val = std::to_string(message->values[i].fval);
 					break;
 				default:
 					this->_log->WriteMessage(WARN,"Unknown value type nothing will be saved to DB!");
 					continue;
 					break;
 			}
-			*_sql << SQLQueries::InsertDevice,
-					use(message->sensor_id,"devID"),
-					use(message->values[i].intType,"type"),
-					use(val,"value");
+			*/
+			*_sql << SQLQueries::InsertModule,
+					use(message->device_euid,"DEVICE_EUID"),
+					use(message->values[i].module_id,"MODULE_ID"),
+					use(val,"MEASURED_VALUE");
 		}
+
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::InsertSenAct");
 		return (true);
 	}
@@ -251,18 +240,42 @@ bool DBHandler::UpdateSenAct(tmessage *message)
 	{
 
 		std::string retRec;
-		*_sql << SQLQueries::UpdateFacility,
+		*_sql << SQLQueries::UpdateDevice,
 			into(retRec),
-			use(message->battery,"battery"),
-			use(message->signal_strength, "quality"),
-			use(message->sensor_id, "mac"),
-			use(message->timestamp, "timestamp");
+			//use(message->battery,"battery"),
+			//use(message->signal_strength, "quality"),
+			use(message->device_euid, "DEVICE_EUID"),
+			use(message->timestamp, "MEASURED_AT"),
+			use(message->adapterINTid,"GATEWAY_ID");
 		for (int i = 0;i<message->values_count;i++)  //for all values create text representation and call SQL querry
 		{
-
-			std::string val = "0";
+			//std::string val = "0";
+			std::string val = std::to_string(message->values[i].measured_value);
+			/*
 			switch(message->values[i].type)
 			{
+
+				//int
+				case ENUM:
+				case HUMIDITY:
+				case PRESSURE:
+				case CO2:
+				case BATTERY:
+				case RSSI:
+				case REFRESH:
+					val = std::to_string(message->values[i].ival);
+					break;
+				//float
+				case TEMPERATURE:
+				case LIGHT:
+				case NOISE:
+					val = std::to_string(message->values[i].fval);
+					break;
+				default:
+					this->_log->WriteMessage(WARN,"Unknown value type nothing will be saved to DB!");
+					continue;
+					break;
+				
 				case TEMP:
 				case LUM:
 				case REZ:
@@ -292,18 +305,19 @@ bool DBHandler::UpdateSenAct(tmessage *message)
 					this->_log->WriteMessage(WARN,"Unknown value nothing will be saved to DB!");
 					continue;
 					break;
-			}
-			statement stl = (_sql->prepare <<SQLQueries::UpdateDevice,
-								use(message->sensor_id,"deviceID"),
-								use(val,"value"),
-								use(message->values[i].intType,"type"));
+				
+			}*/
+			statement stl = (_sql->prepare <<SQLQueries::UpdateModule,
+								use(message->device_euid,"DEVICE_EUID"),
+								use(val,"MEASURED_VALUE"),
+								use(message->values[i].module_id,"MODULE_ID"));
 			stl.execute(false);
 			if (stl.get_affected_rows()<=0)
 			{
 				this->_log->WriteMessage(INFO,"Update affected 0 rows going to insert");
 				*_sql << SQLQueries::InsertDevice,
-						use(message->sensor_id,"devID"),
-						use(message->values[i].intType,"type"),
+						use(message->device_euid,"devID"),
+						use(message->values[i].module_id,"type"),
 						use(val,"value");
 			}
 		}
@@ -374,7 +388,8 @@ float DBHandler::GetLastTemp(std::string ID, std::string type)
 {
 	double retVal;
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetLastTemp");
-	std::string sqlQuery = "SELECT value FROM devices Where (fk_facilities_mac='" + ID + "' AND type =" + type +");" ;
+	//std::string sqlQuery = "SELECT value FROM devices Where (fk_facilities_mac='" + ID + "' AND type =" + type +");" ;
+	std::string sqlQuery = "SELECT measured_value FROM module WHERE (device_euid='" + ID + "' AND module_id =" + type +");" ;
 	this->_log->WriteMessage(TRACE,sqlQuery);
 	try
 	{
@@ -394,7 +409,8 @@ float DBHandler::GetLastTemp(std::string ID, std::string type)
 std::vector<std::string> *DBHandler::GetEmails(std::string AdapterID)
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetEmails");
-	std::string sqlQuery = "SELECT mail FROM users INNER JOIN users_adapters ON user_id=fk_user_id WHERE (fk_adapter_id=" + AdapterID + ");" ;
+	//std::string sqlQuery = "SELECT mail FROM users INNER JOIN users_adapters ON user_id=fk_user_id WHERE (fk_adapter_id=" + AdapterID + ");" ;
+	std::string sqlQuery = "SELECT mail FROM users LEFT JOIN users_gateway USING(user_id) WHERE (gateway_id=" + AdapterID + ");" ;
 	this->_log->WriteMessage(TRACE,sqlQuery);
 	std::vector<std::string> * retVal = new std::vector<std::string>(10);
 	try
@@ -417,6 +433,7 @@ std::vector<std::string> *DBHandler::GetNotifString(std::string email)
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetNotifString");
 	std::string sqlQuery = "SELECT push_notification FROM users INNER JOIN mobile_devices ON user_id=fk_user_id WHERE (mail='" + email + "');" ;
+	//std::string sqlQuery = "SELECT service_reference_id FROM push_notification_service WHERE user_id=fk_user_id WHERE (mail='" + email + "');" ;
 	this->_log->WriteMessage(TRACE,sqlQuery);
 	std::vector<std::string> * retVal = new std::vector<std::string>(10);
 	try
@@ -445,7 +462,7 @@ bool DBHandler::DeleteFacility(std::string ID)
 	try
 	{
 		*_sql << SQLQueries::DeleteDevice,
-				use(ID,"ID");
+				use(ID,"DEVICE_EUID");
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::DeleteFacility");
 		return (true);
 	}
@@ -459,5 +476,3 @@ bool DBHandler::DeleteFacility(std::string ID)
 		return (false);
 	}
 }
-
-
