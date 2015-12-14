@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Properties>
+        <Property name="log-path">/home/xsutov00/emulator_server/logs</Property>
+    </Properties>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%highlight{%d{dd-MM-yyyy HH:mm:ss} %-5level %logger{1} - %msg%n}{FATAL=magenta, ERROR=red, WARN=yellow, INFO=white, DEBUG=bright green, TRACE=cyan}"/>
+        </Console>
+        <!--<File name="Es_log" fileName="es_log_${date:dd-MM-yyyy}.log">
+            <PatternLayout pattern="%d{dd-MM-yyyy HH:mm:ss} %-5level %logger{1} - %msg%n" />
+        </File>-->
+        <RollingFile name="RollingFile" fileName="${log-path}/es_log.log" filePattern="${log-path}/emu_log_%d{dd-MM-yyyy}-%i.log" >
+            <PatternLayout pattern="%d{dd-MM-yyyy HH:mm:ss} %-5level %logger{1} - %msg%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="50000 KB" />
+            </Policies>
+            <DefaultRolloverStrategy max="14"/>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="all">
+            <!--<AppenderRef ref="Console"/>-->
+            <AppenderRef ref="RollingFile"/>
+        </Root>
+    </Loggers>
+</Configuration>

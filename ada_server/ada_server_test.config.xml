@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <Database>
+    <Name>home7</Name> <!-- Database Name-->
+    <User></User> <!-- DB user name with admin rights to DB-->
+    <Password></Password> <!-- user password -->
+    <ConnectionsCount>15</ConnectionsCount> <!-- Number of connections count to DB -->
+  </Database>
+  <Common>  <!-- common properties for whole app -->
+    <Certificates> <!-- certificates properties -->
+      <KeyFile>/etc/openvpn/server.key</KeyFile> <!-- Path to sever certificate file-->
+      <CrtFile>/etc/openvpn/server.crt</CrtFile> <!-- Path to sever private key file-->
+      <CACrtFile>/etc/openvpn/ca.crt</CACrtFile> <!-- Path to CA certificate -->
+    </Certificates>
+    <Mode>DEBUG</Mode> <!-- if set to DEAMON, server will start on background (or DEBUG)-->
+  </Common>
+  <Sender> <!-- Start of ada server sender congif section -->
+    <LogConfig> <!-- Configuration of loging -->
+      <Level>4</Level>
+      <FileNaming>ada_server_sender</FileNaming> <!-- Name of log file -->
+      <FilesCount>5</FilesCount> <!-- Log files history count -->
+      <MaxFileSize>100</MaxFileSize> <!-- Size of log file in MB -->
+      <LogPath>/home/xvampo01/adalogs/</LogPath> <!-- Path for log files -->
+    </LogConfig>
+    <Port>7081</Port>  <!-- Port to listen on for ui_server request -->
+    <AdapterPort>10101</AdapterPort> <!-- Port where is adapter listening -->
+  </Sender>
+  <Receiver> <!-- Start of ada server receiver congif section -->
+    <Port>8453</Port> <!-- Port to listen for incoming connections from adapters -->
+    <ConnectionTimeOut>10</ConnectionTimeOut> <!-- time out for reading messages -->
+    <LogConfig> <!-- See config description in Sender section-->
+      <Level>8</Level>  
+      <FileNaming>ada_server_receiver</FileNaming>
+      <FilesCount>5</FilesCount>
+      <MaxFileSize>100</MaxFileSize>
+      <LogPath>/home/xvampo01/adalogs/</LogPath>
+    </LogConfig>
+    </Receiver>
+ </configuration>

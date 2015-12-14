@@ -1,0 +1,17 @@
+<md-list class="modulesList">
+    <section ng-repeat="location in locations" ng-show="(devices | filter: {locationid: location.id}).length > 0">
+        <md-subheader class="md-no-sticky">{{getLocationName(location)}}</md-subheader>
+        <div ng-repeat="device in devices | filter: {locationid: location.id}">
+            <md-list-item class="md-2-line list-button" ng-click="showDetail(device.id)" md-no-ink ng-repeat="module in device.modules | orderBy: ['model.order','model.group']" ng-if="module.isVisible">
+                <md-icon md-svg-icon="{{getIcon(module)}}"></md-icon>
+                <div class="md-list-item-text">
+                    <p class="moduleName" >{{getName(module) | translate}} {{module.id}}</p>
+                    <h3 class="updateTime">{{ device.time | date:'HH:mm:ss'}}</h3>
+                </div>
+                <md-button ng-if="!shouldTranslate(module)" class="md-accent valueButton" md-no-ink>{{module | moduleValue:device.type}}</md-button>
+                <md-button ng-if="shouldTranslate(module)" class="md-accent valueButton upperText" md-no-ink>{{module | moduleValue:device.type | translate}}</md-button>
+            </md-list-item>
+        </div>
+        <md-divider></md-divider>
+    </section>
+</md-list>

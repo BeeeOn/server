@@ -1,0 +1,14 @@
+<div layout="column" class="radioButtonModalWrapper">
+    <h3 class="unitTitle">{{title | translate}}</h3>
+    <md-divider></md-divider>
+    <md-radio-group ng-model="unit.selected">
+        <md-radio-button value="{{option.id}}" ng-repeat="option in unit.options" ng-click="save(option)">
+            {{unit.translationPrefix + option.name | translate}}
+            <span ng-if="option.unit">
+                ({{option.unit}})
+            </span>
+        </md-radio-button>
+    </md-radio-group>
+    <md-divider></md-divider>
+    <md-button class="md-accent" ng-click="cancel();">{{ 'GLOBAL.CANCEL' | translate }}</md-button>
+</div>

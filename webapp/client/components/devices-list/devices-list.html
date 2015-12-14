@@ -1,0 +1,15 @@
+<md-list class="devicesList">
+    <section ng-repeat="location in locations" ng-show="(devices | filter: {locationid: location.id}).length > 0">
+        <md-subheader class="md-no-sticky">{{getLocationName(location)}}</md-subheader>
+        <md-list-item class="md-3-line list-button" ng-click="showDetail(device.id)" md-no-ink ng-repeat="device in devices | filter: {locationid: location.id}">
+            <md-icon class="md-avatar" md-svg-icon="{{getIcon(device.type)}}"></md-icon>
+            <div class="md-list-item-text">
+                <p class="deviceName">{{(device.name && (!device.name === ""))? device.name : ('DEVICES.' + getDefaultDeviceName(device.type) | translate)}}</p>
+                <p class="manufacturer">{{ 'DEVICES.' + getManufacturer(device.type) | translate }}</p>
+                <h3 class="updateTime">{{ device.time | date:'HH:mm:ss'}}</h3>
+            </div>
+            <md-button class="valueButton" md-no-ink ng-if="showBatteryState(device.type)">{{getBatteryState(device.id)}}{{getModuleUnit("0x08")}}</md-button>
+        </md-list-item>
+        <md-divider></md-divider>
+    </section>
+</md-list>

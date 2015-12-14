@@ -1,0 +1,238 @@
+[
+  {
+    "aid": "11111",
+    "role": "admin",
+    "aname" : "Home",
+    "nfacs" : 4,
+    "nusers" : 3,
+    "ip" : "127.0.0.1",
+    "aversion" : "0",
+    "utc" : "1",
+    "accounts" : [
+      {
+        "name": "Demo",
+        "surname": "Mod",
+        "gender": "male",
+        "email": "demo@mod.com",
+        "role" : "superuser"
+      },
+      {
+        "name": "Second",
+        "surname": "User",
+        "gender": "female",
+        "email": "second@user.com",
+        "role" : "admin"
+      },
+      {
+        "name": "Third",
+        "surname": "User",
+        "gender": "female",
+        "email": "third@user.com",
+        "role" : "admin"
+      }
+    ],
+    "locations" : [
+      { "id":"1", "type": "5", "name": ""},
+      { "id":"2", "type": "2", "name": ""}
+    ],
+    "devices" : [
+      {
+        "init": 1,
+        "id": "1",
+        "type" : "0",
+        "locationid" : 2,
+        "name" : "",
+        "time" : "1443807212376",
+        "modules": [
+          {
+            "id" : 0,
+            "value" : "19.5"
+          },
+          {
+            "id" : 1,
+            "value" : "17"
+          },
+          {
+            "id" : 2,
+            "value" : "55"
+          },
+          {
+            "id" : 3,
+            "value" : "95"
+          },
+          {
+            "id" : 4,
+            "value" : "92"
+          },
+          {
+            "id" : 5,
+            "value" : "30"
+          }
+        ]
+      },
+      {
+        "init": 1,
+        "id": "2",
+        "type" : "2",
+        "locationid" : 1,
+        "name" : "",
+        "time" : "1443807212376",
+        "modules": [
+          {
+            "id" : 0,
+            "value" : "1120"
+          },
+          {
+            "id" : 1,
+            "value" : "5"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "aid": "22222",
+    "role": "superuser",
+    "aname" : "Regulator VPT",
+    "nfacs" : 2,
+    "nusers" : 2,
+    "ip" : "127.0.0.2",
+    "aversion" : "0",
+    "utc" : "1",
+    "accounts" : [
+      {
+        "name": "Second",
+        "surname": "User",
+        "gender": "female",
+        "email": "second@user.com",
+        "role" : "superuser"
+      },
+      {
+        "name": "Demo",
+        "surname": "Mod",
+        "gender": "male",
+        "email": "demo@mod.com",
+        "role" : "admin"
+      }
+    ],
+    "locations" : [
+      { "id":"3", "type": "3", "name": "Greenhouse"}
+    ],
+    "devices" : [
+      {
+        "init": 1,
+        "id": "3",
+        "type" : "1",
+        "locationid" : 3,
+        "name" : "",
+        "time" : "1443807212376",
+        "modules": [
+          {
+            "id" : 0,
+            "value" : "0"
+          },
+          {
+            "id" : 1,
+            "value" : "1"
+          },
+          {
+            "id" : 2,
+            "value" : "25"
+          },
+          {
+            "id" : 3,
+            "value" : "24"
+          },
+          {
+            "id" : 4,
+            "value" : "70"
+          },
+          {
+            "id" : 5,
+            "value" : "65"
+          },
+          {
+            "id" : 6,
+            "value" : "3"
+          },
+          {
+            "id" : 7,
+            "value" : "0"
+          },
+          {
+            "id" : 8,
+            "value" : "30"
+          },
+          {
+            "id" : 9,
+            "value" : "30"
+          },
+          {
+            "id" : 10,
+            "value" : "65"
+          },
+          {
+            "id" : 11,
+            "value" : "65"
+          },
+          {
+            "id" : 12,
+            "value" : "1"
+          },
+          {
+            "id" : 13,
+            "value" : "2"
+          },
+          {
+            "id" : 14,
+            "value" : "22"
+          },
+          {
+            "id" : 15,
+            "value" : "18"
+          },
+          {
+            "id" : 16,
+            "value" : "85"
+          },
+          {
+            "id" : 17,
+            "value" : "85"
+          },
+          {
+            "id" : 18,
+            "value" : "0"
+          },
+          {
+            "id" : 19,
+            "value" : "2"
+          },
+          {
+            "id" : 20,
+            "value" : "26"
+          },
+          {
+            "id" : 21,
+            "value" : "24"
+          },
+          {
+            "id" : 22,
+            "value" : "50"
+          },
+          {
+            "id" : 23,
+            "value" : "65"
+          },
+          {
+            "id" : 24,
+            "value" : "0"
+          },
+          {
+            "id" : 25,
+            "value" : "88"
+          }
+        ]
+      }
+    ]
+  }
+]

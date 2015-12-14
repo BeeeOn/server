@@ -1,0 +1,193 @@
+#%RAML 0.8
+title: BeeeOn Web
+version: "1.0.0"
+baseUri: "https://www.beeeon.com:443/api/v1"
+schemas: 
+    - 
+        User: '{"type":"object","title":"User","properties":{"uid":{"type":"integer","required":false,"title":"uid"},"name":{"type":"string","required":false,"title":"name"},"surname":{"type":"string","required":false,"title":"surname"},"gender":{"type":"string","required":false,"title":"gender"},"email":{"type":"string","required":false,"title":"email"},"pictureURL":{"type":"string","required":false,"title":"pictureURL"},"accounts":{"type":"array","required":false,"title":"accounts","items":{"type":"object","$ref":"#/schemas/Account"},"uniqueItems":false}}}'
+        Account: '{"type":"object","description":"Gateway user accounts","title":"Account","properties":{"email":{"type":"string","required":true,"title":"email"},"role":{"type":"string","required":true,"title":"role"},"name":{"type":"string","required":true,"title":"name"},"surname":{"type":"string","required":true,"title":"surname"},"gender":{"type":"string","required":true,"title":"gender"}}}'
+        Token: '{"type":"object","description":"Authorization JWT token","title":"Token","properties":{"token":{"type":"string","required":false,"title":"token"}}}'
+        Gateway: '{"type":"object","description":"Short information about gateway","title":"Gateway","properties":{"aid":{"type":"integer","required":true,"title":"aid"},"aname":{"type":"string","required":true,"title":"aname"},"role":{"type":"string","required":true,"title":"role"},"utc":{"type":"string","required":true,"title":"utc"}}}'
+        GatewayInfo: '{"type":"object","description":"Detailed information about gateway","title":"GatewayInfo","properties":{"aid":{"type":"integer","required":false,"title":"aid"},"role":{"type":"string","required":false,"title":"role"},"aname":{"type":"string","required":false,"title":"aname"},"nfacs":{"type":"integer","required":false,"title":"nfacs"},"nusers":{"type":"integer","required":false,"title":"nusers"},"ip":{"type":"string","required":false,"title":"ip"},"aversion":{"type":"string","required":false,"title":"aversion"},"utc":{"type":"string","required":false,"title":"utc"}}}'
+        Location: '{"type":"object","title":"Location","properties":{"id":{"type":"string","required":true,"title":"id"},"type":{"type":"string","required":true,"title":"type"},"name":{"type":"string","required":true,"title":"name"}}}'
+        Device: '{"type":"object","title":"Device","properties":{"init":{"type":"string","required":true,"title":"init"},"id":{"type":"string","required":true,"title":"id"},"type":{"type":"integer","required":true,"title":"type"},"locationid":{"type":"integer","required":true,"title":"locationid"},"name":{"type":"string","required":false,"title":"name"},"time":{"type":"integer","required":false,"title":"time"},"modules":{"type":"array","required":true,"title":"modules","items":{"type":"object","$ref":"#/schemas/Module"},"uniqueItems":false}}}'
+        Module: '{"type":"object","title":"Module","properties":{"id":{"type":"integer","required":true,"title":"id"},"value":{"type":"string","required":true,"title":"value"}}}'
+/user: 
+    displayName: User
+    description: Information about user
+    get: 
+        description: Get information about user
+        body: 
+            application/json: 
+                schema: User
+                example: '{"uid":1,"accounts":[],"email":"sample email","name":"sample name","gender":"sample gender","surname":"sample surname","pictureURL":"sample pictureURL"}'
+        responses: 
+            "200": 
+                description: Success
+                body: 
+                    application/json: 
+                        schema: User
+                        example: '{"uid":1,"accounts":[],"email":"sample email","name":"sample name","gender":"sample gender","surname":"sample surname","pictureURL":"sample pictureURL"}'
+            "401": 
+                description: Doesn't have permission to get user info or JWT token has expired
+                body: 
+                    application/json: 
+                        example: ""
+            "500": 
+                description: Wrong protocol number in communication with ui_server
+/auth/local: 
+    displayName: LocalAuthorization
+    description: Authorization using email and passord or DEMO mod
+    post: 
+        description: Authorization using email and passord or DEMO mod
+        queryParameters: 
+            bt: 
+                displayName: bt
+                description: |
+                    Empty if email and password are provided.
+                    "demo" if trying to start demo mod
+                type: string
+                required: false
+                repeat: false
+        responses: 
+            "200": 
+                description: Login successfull
+                body: 
+                    application/json: 
+                        schema: Token
+                        example: '{"token":"sample token"}'
+/auth/logout: 
+    displayName: Logout
+    description: Logout from system
+    post: 
+        description: Logout from system
+        responses: 
+            "200": 
+                description: Logout successful
+            "401": 
+                description: Doesn't have permission to get user info or JWT token has expired
+            "500": 
+                description: Wrong protocol number in communication with ui_server or logout failed
+/gateway: 
+    displayName: Gateway
+    description: Information about gateway
+    get: 
+        description: Get's list of user's gateway (short information)
+        responses: 
+            "200": 
+                body: 
+                    application/json: 
+                        schema: Gateway
+                        example: '[{"utc":"sample utc","role":"sample role","aid":1,"aname":"sample aname"}]'
+            "401": 
+                description: Doesn't have permission to get user info or JWT token has expired
+            "500": 
+                description: Wrong protocol number in communication with ui_server
+/gateway/{aid}: 
+    displayName: GatewayInfo
+    description: ""
+    uriParameters: 
+        aid: 
+            displayName: aid
+            description: Gateway identification
+            type: integer
+            required: false
+            repeat: false
+    get: 
+        description: Detailed information about given gateway
+        responses: 
+            "200": 
+                body: 
+                    application/json: 
+                        schema: GatewayInfo
+                        example: '{"utc":"sample utc","role":"sample role","nfacs":1,"aid":1,"aversion":"sample aversion","nusers":1,"aname":"sample aname","ip":"sample ip"}'
+            "401": 
+                description: Doesn't have permission to get user info or JWT token has expired
+            "500": 
+                description: Wrong protocol number in communication with ui_server
+    put: 
+        description: Update gateway information
+        body: 
+            application/json: 
+                schema: Gateway
+                example: '{"utc":"sample utc","role":"sample role","aid":1,"aname":"sample aname"}'
+        responses: 
+            "200": 
+            "401": 
+                description: Doesn't have permission to get user info or JWT token has expired
+            "500": 
+                description: Wrong protocol number in communication with ui_server
+    delete: 
+        description: Delete user from gateway
+        responses: 
+            "200": 
+            "401": 
+                description: Doesn't have permission to get user info or JWT token has expired
+            "404": 
+                description: Given gateway not found
+            "500": 
+                description: Wrong protocol number in communication with ui_server
+/gateway/{aid}/accounts: 
+    displayName: Accounts
+    uriParameters: 
+        aid: 
+            displayName: aid
+            description: Gateway number
+            type: integer
+            required: false
+            repeat: false
+    get: 
+        description: Get accounts for selected gateway
+        responses: 
+            "200": 
+                body: 
+                    application/json: 
+                        schema: Account
+                        example: '[{"email":"sample email","name":"sample name","gender":"sample gender","surname":"sample surname","role":"sample role"}]'
+            "401": 
+                description: Doesn't have permission to get user info or JWT token has expired
+            "404": 
+                description: Given gateway not found
+            "500": 
+                description: Wrong protocol number in communication with ui_server
+    post: 
+        description: Add user to selected gateway
+        queryParameters: 
+            email: 
+                displayName: email
+                description: New user's email
+                type: string
+                required: false
+                repeat: false
+            role: 
+                displayName: role
+                description: New user's role
+                type: string
+                required: false
+                repeat: false
+        responses: 
+            "200": 
+            "401": 
+                description: Doesn't have permission add account or JWT token has expired
+            "500": 
+                description: Wrong protocol number in communication with ui_server
+/gateway/{aid}/locations: 
+    displayName: Locations
+    get: 
+        description: Get locations for selected gateway
+        responses: 
+            "200": 
+                body: 
+                    application/json: 
+                        schema: Location
+                        example: '[{"id":"sample id","name":"sample name","type":"sample type"}]'
+            "401": 
+                description: Doesn't have permission to get user info or JWT token has expired
+            "404": 
+                description: Given gateway not found
+            "500": 
+                description: Wrong protocol number in communication with ui_server
+/gateway/{aid}/devices: 
+    displayName: Devices
+    get: 
+        description: Get devices for selected gateway

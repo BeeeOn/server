@@ -1,0 +1,33 @@
+.mainWrapper {
+  min-height: 400px;
+  min-width: 320px;
+  md-fab-speed-dial.md-fab-bottom-right {
+    top:auto;
+    right:20px;
+    bottom:20px;
+    left:auto;
+    position:absolute
+  }
+
+  md-fab-speed-dial.md-fab-bottom-left {
+    top:auto;
+    right:auto;
+    bottom:20px;
+    left:20px;
+    position:absolute
+  }
+  .mainContent {
+    padding: 8px;
+    position: absolute;
+    top: 64px;
+    @media screen and (max-width: 600px){
+      top: 56px;
+    }
+    left: 304px;
+    @media screen and (max-width: 1199px){
+      left: 0;
+    }
+    bottom: 0;
+    right: 0;
+  }
+}

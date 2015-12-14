@@ -1,0 +1,1226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="97">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <logicalFolder name="f2" displayName="DB" projectFiles="true">
+        <itemPath>../DAO/DAO.cpp</itemPath>
+        <itemPath>../DAO/DAO.h</itemPath>
+        <itemPath>../DAO/DAOContainer.cpp</itemPath>
+        <itemPath>../DAO/DAOContainer.h</itemPath>
+        <itemPath>../DAO/DAODevices.cpp</itemPath>
+        <itemPath>../DAO/DAODevices.h</itemPath>
+        <itemPath>../DAO/DAOGateways.cpp</itemPath>
+        <itemPath>../DAO/DAOGateways.h</itemPath>
+        <itemPath>../DAO/DAOLocations.cpp</itemPath>
+        <itemPath>../DAO/DAOLocations.h</itemPath>
+        <itemPath>../DAO/DAOMobileDevices.cpp</itemPath>
+        <itemPath>../DAO/DAOMobileDevices.h</itemPath>
+        <itemPath>../DAO/DAONotification.cpp</itemPath>
+        <itemPath>../DAO/DAONotification.h</itemPath>
+        <itemPath>../DAO/DAOPushNotificationService.cpp</itemPath>
+        <itemPath>../DAO/DAOPushNotificationService.h</itemPath>
+        <itemPath>../DAO/DAOUsers.cpp</itemPath>
+        <itemPath>../DAO/DAOUsers.h</itemPath>
+        <itemPath>../DAO/DAOUsersGateways.cpp</itemPath>
+        <itemPath>../DAO/DAOUsersGateways.h</itemPath>
+        <itemPath>../DAO/DAOlogs.cpp</itemPath>
+        <itemPath>../DAO/DAOlogs.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f1" displayName="lib" projectFiles="true">
+        <logicalFolder name="asio_layer" displayName="asio_layer" projectFiles="true">
+          <logicalFolder name="secure" displayName="secure" projectFiles="true">
+            <itemPath>../asio_layer/secure/Makefile</itemPath>
+            <itemPath>../asio_layer/secure/client</itemPath>
+            <itemPath>../asio_layer/secure/client.cpp</itemPath>
+            <itemPath>../asio_layer/secure/client.h</itemPath>
+            <itemPath>../asio_layer/secure/server</itemPath>
+            <itemPath>../asio_layer/secure/server.cpp</itemPath>
+            <itemPath>../asio_layer/secure/server.h</itemPath>
+            <itemPath>../asio_layer/secure/session.cpp</itemPath>
+            <itemPath>../asio_layer/secure/session.h</itemPath>
+          </logicalFolder>
+        </logicalFolder>
+        <itemPath>../lib/pugiconfig.hpp</itemPath>
+        <itemPath>../lib/pugixml.cpp</itemPath>
+        <itemPath>../lib/pugixml.hpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f3" displayName="network" projectFiles="true">
+        <itemPath>src/SecuredAsioServlet.cpp</itemPath>
+        <itemPath>src/SecuredAsioServlet.h</itemPath>
+        <itemPath>src/SocketClient.cpp</itemPath>
+        <itemPath>src/SocketClient.h</itemPath>
+        <itemPath>src/SocketServer.cpp</itemPath>
+        <itemPath>src/SocketServer.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="request_handlers"
+                     displayName="request_handlers"
+                     projectFiles="true">
+        <itemPath>src/request_handlers/AccountGetProfileRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/AccountGetProfileRequestHandler.h</itemPath>
+        <itemPath>src/request_handlers/AccountsLoginRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/AccountsLoginRequestHandler.h</itemPath>
+        <itemPath>src/request_handlers/AccountsLogoutRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/AccountsLogoutRequestHandler.h</itemPath>
+        <itemPath>src/request_handlers/AccountsRegisterRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/AccountsRegisterRequestHandler.h</itemPath>
+        <itemPath>src/request_handlers/DevicesGetAllRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/DevicesGetAllRequestHandler.h</itemPath>
+        <itemPath>src/request_handlers/DevicesGetLogRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/DevicesGetLogRequestHandler.h</itemPath>
+        <itemPath>src/request_handlers/DevicesGetNewRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/DevicesGetNewRequestHandler.h</itemPath>
+        <itemPath>src/request_handlers/DevicesGetRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/DevicesGetRequestHandler.h</itemPath>
+        <itemPath>src/request_handlers/DevicesSetStateRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/DevicesSetStateRequestHandler.h</itemPath>
+        <itemPath>src/request_handlers/DevicesUnregisterRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/DevicesUnregisterRequestHandler.h</itemPath>
+        <itemPath>src/request_handlers/DevicesUpdateRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/DevicesUpdateRequestHandler.h</itemPath>
+        <itemPath>src/request_handlers/GatesGetAllRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/GatesGetAllRequestHandler.h</itemPath>
+        <itemPath>src/request_handlers/GatesGetRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/GatesGetRequestHandler.h</itemPath>
+        <itemPath>src/request_handlers/GatesRegisterRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/GatesRegisterRequestHandler.h</itemPath>
+        <itemPath>src/request_handlers/GatesStartListenRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/GatesStartListenRequestHandler.h</itemPath>
+        <itemPath>src/request_handlers/GatesUnregisterRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/GatesUnregisterRequestHandler.h</itemPath>
+        <itemPath>src/request_handlers/GatesUpdateRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/GatesUpdateRequestHandler.h</itemPath>
+        <itemPath>src/request_handlers/GateusersGetAllRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/GateusersGetAllRequestHandler.h</itemPath>
+        <itemPath>src/request_handlers/GateusersInviteRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/GateusersInviteRequestHandler.h</itemPath>
+        <itemPath>src/request_handlers/GateusersRemoveRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/GateusersRemoveRequestHandler.h</itemPath>
+        <itemPath>src/request_handlers/GateusersUpdateRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/GateusersUpdateRequestHandler.h</itemPath>
+        <itemPath>src/request_handlers/IRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/IRequestHandler.h</itemPath>
+        <itemPath>src/request_handlers/IRequestHandlerWithLoginAndGateAccessRequired.cpp</itemPath>
+        <itemPath>src/request_handlers/IRequestHandlerWithLoginAndGateAccessRequired.h</itemPath>
+        <itemPath>src/request_handlers/IRequestHandlerWithLoginRequired.cpp</itemPath>
+        <itemPath>src/request_handlers/IRequestHandlerWithLoginRequired.h</itemPath>
+        <itemPath>src/request_handlers/IRequestHandlerWithoutUac.cpp</itemPath>
+        <itemPath>src/request_handlers/IRequestHandlerWithoutUac.h</itemPath>
+        <itemPath>src/request_handlers/LocationsAddRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/LocationsAddRequestHandler.h</itemPath>
+        <itemPath>src/request_handlers/LocationsDeleteRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/LocationsDeleteRequestHandler.h</itemPath>
+        <itemPath>src/request_handlers/LocationsGetAllRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/LocationsGetAllRequestHandler.h</itemPath>
+        <itemPath>src/request_handlers/LocationsUpdateRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/LocationsUpdateRequestHandler.h</itemPath>
+        <itemPath>src/request_handlers/NotificationRegisterServiceRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/NotificationRegisterServiceRequestHandler.h</itemPath>
+        <itemPath>src/request_handlers/NotificationsGetRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/NotificationsGetRequestHandler.h</itemPath>
+        <itemPath>src/request_handlers/NotificationsSetReadRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/NotificationsSetReadRequestHandler.h</itemPath>
+        <itemPath>src/request_handlers/NotificationsUnregisterServiceRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/NotificationsUnregisterServiceRequestHandler.h</itemPath>
+        <itemPath>src/request_handlers/UnknownRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/UnknownRequestHandler.h</itemPath>
+      </logicalFolder>
+      <itemPath>src/AdaServerCommunicator.cpp</itemPath>
+      <itemPath>src/AdaServerCommunicator.h</itemPath>
+      <itemPath>src/Config.cpp</itemPath>
+      <itemPath>src/Config.h</itemPath>
+      <itemPath>src/RequestHandlerFactory.cpp</itemPath>
+      <itemPath>src/RequestHandlerFactory.h</itemPath>
+      <itemPath>src/ServerException.cpp</itemPath>
+      <itemPath>src/ServerException.h</itemPath>
+      <itemPath>src/SessionsTable.cpp</itemPath>
+      <itemPath>src/SessionsTable.h</itemPath>
+      <itemPath>src/TokenChecker.cpp</itemPath>
+      <itemPath>src/TokenChecker.h</itemPath>
+      <itemPath>src/save_custom_writer.cpp</itemPath>
+      <itemPath>src/save_custom_writer.h</itemPath>
+      <itemPath>src/sslServlet.cpp</itemPath>
+      <itemPath>src/sslServlet.h</itemPath>
+      <itemPath>src/ui_server.cpp</itemPath>
+      <itemPath>src/ui_server.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+      <itemPath>config_devel.xml</itemPath>
+      <itemPath>config_prod.xml</itemPath>
+      <itemPath>config_test.xml</itemPath>
+    </logicalFolder>
+    <itemPath>../ui_logger/Logger.cpp</itemPath>
+    <itemPath>../ui_logger/Logger.h</itemPath>
+  </logicalFolder>
+  <sourceRootList>
+    <Elem>../lib</Elem>
+    <Elem>../ui_logger</Elem>
+    <Elem>msgs</Elem>
+    <Elem>../DAO</Elem>
+    <Elem>src</Elem>
+    <Elem>.</Elem>
+    <Elem>../asio_layer</Elem>
+    <Elem>src/request_handlers</Elem>
+  </sourceRootList>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="1">
+      <toolsSet>
+        <compilerSet>GNU|GNU</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <commandlineTool>g++</commandlineTool>
+          <incDir>
+            <pElem>/usr/include</pElem>
+            <pElem>.</pElem>
+            <pElem>../Server</pElem>
+            <pElem>/usr/include/soci</pElem>
+            <pElem>src/</pElem>
+            <pElem>../</pElem>
+          </incDir>
+          <commandLine>-std=c++0x</commandLine>
+          <warningLevel>2</warningLevel>
+        </ccTool>
+        <linkerTool>
+          <output>./ui_server</output>
+          <linkerAddLib>
+            <pElem>/usr/local/lib</pElem>
+            <pElem>/usr/local/lib64</pElem>
+            <pElem>/opt/centos/devtoolset-1.1/root/usr/lib/gcc/x86_64-redhat-linux/4.7.2</pElem>
+            <pElem>/usr/pgsql-9.2/lib</pElem>
+            <pElem>../lib</pElem>
+            <pElem>/usr/lib64</pElem>
+          </linkerAddLib>
+          <linkerDynSerch>
+            <pElem>/usr/local/lib</pElem>
+            <pElem>/usr/local/lib64</pElem>
+            <pElem>../lib</pElem>
+            <pElem>/usr/lib64</pElem>
+          </linkerDynSerch>
+          <commandlineTool>g++</commandlineTool>
+          <linkerLibItems>
+            <linkerLibLibItem>soci_core</linkerLibLibItem>
+            <linkerLibLibItem>soci_empty</linkerLibLibItem>
+            <linkerLibLibItem>soci_postgresql</linkerLibLibItem>
+            <linkerLibLibItem>pq</linkerLibLibItem>
+            <linkerLibLibItem>jansson</linkerLibLibItem>
+          </linkerLibItems>
+          <commandLine>-lpq -lsoci_core -lsoci_empty -lsoci_postgresql -lcurl -lssl -lcrypto -ljansson -lstdc++</commandLine>
+        </linkerTool>
+      </compileType>
+      <item path="../DAO/DAO.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAO.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../DAO/DAOContainer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAOContainer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../DAO/DAODevices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAODevices.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../DAO/DAOGateways.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAOGateways.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../DAO/DAOLocations.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAOLocations.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../DAO/DAOMobileDevices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAOMobileDevices.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../DAO/DAONotification.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAONotification.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../DAO/DAOPushNotificationService.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../DAO/DAOPushNotificationService.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../DAO/DAOUsers.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAOUsers.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../DAO/DAOUsersGateways.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAOUsersGateways.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../DAO/DAOlogs.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAOlogs.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../asio_layer/secure/Makefile" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../asio_layer/secure/client" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../asio_layer/secure/client.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../asio_layer/secure/client.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../asio_layer/secure/server" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../asio_layer/secure/server.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../asio_layer/secure/server.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../asio_layer/secure/session.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../asio_layer/secure/session.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../lib/pugiconfig.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../lib/pugixml.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../lib/pugixml.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../ui_logger/Logger.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../ui_logger/Logger.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/AdaServerCommunicator.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/AdaServerCommunicator.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/Config.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Config.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/RequestHandlerFactory.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/RequestHandlerFactory.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/SecuredAsioServlet.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/SecuredAsioServlet.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/ServerException.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/ServerException.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/SessionsTable.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/SessionsTable.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/SocketClient.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/SocketClient.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/SocketServer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/SocketServer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/TokenChecker.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/TokenChecker.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/request_handlers/AccountGetProfileRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/AccountGetProfileRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/AccountsLoginRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/AccountsLoginRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/AccountsLogoutRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/AccountsLogoutRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/AccountsRegisterRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/AccountsRegisterRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesGetAllRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesGetAllRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesGetLogRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesGetLogRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesGetNewRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesGetNewRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesGetRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesGetRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesSetStateRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesSetStateRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesUnregisterRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesUnregisterRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesUpdateRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesUpdateRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GatesGetAllRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GatesGetAllRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GatesGetRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GatesGetRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GatesRegisterRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GatesRegisterRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GatesStartListenRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GatesStartListenRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GatesUnregisterRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GatesUnregisterRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GatesUpdateRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GatesUpdateRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GateusersGetAllRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GateusersGetAllRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GateusersInviteRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GateusersInviteRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GateusersRemoveRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GateusersRemoveRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GateusersUpdateRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GateusersUpdateRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/IRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/IRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/IRequestHandlerWithLoginAndGateAccessRequired.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/IRequestHandlerWithLoginAndGateAccessRequired.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/IRequestHandlerWithLoginRequired.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/IRequestHandlerWithLoginRequired.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/IRequestHandlerWithoutUac.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/IRequestHandlerWithoutUac.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/LocationsAddRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/LocationsAddRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/LocationsDeleteRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/LocationsDeleteRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/LocationsGetAllRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/LocationsGetAllRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/LocationsUpdateRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/LocationsUpdateRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/NotificationRegisterServiceRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/NotificationRegisterServiceRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/NotificationsGetRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/NotificationsGetRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/NotificationsSetReadRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/NotificationsSetReadRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/NotificationsUnregisterServiceRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/NotificationsUnregisterServiceRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/UnknownRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/UnknownRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/save_custom_writer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/save_custom_writer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/sslServlet.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/sslServlet.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/ui_server.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/ui_server.h" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+          <incDir>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+          <commandlineTool>g++</commandlineTool>
+          <incDir>
+            <pElem>../soci-3.2.2/soci-3.2.2/backends/postgresql</pElem>
+            <pElem>../soci-3.2.2/soci-3.2.2/core</pElem>
+            <pElem>/usr/include/postgresql</pElem>
+            <pElem>/usr/include/postgresql/libpq</pElem>
+            <pElem>.</pElem>
+            <pElem>/usr/include</pElem>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+        <linkerTool>
+          <output>./ui_server</output>
+          <linkerAddLib>
+            <pElem>../soci-3.2.2/build/lib</pElem>
+            <pElem>/usr/local/include/soci</pElem>
+            <pElem>../soci-3.2.2/soci-3.2.2/backends/postgresql</pElem>
+            <pElem>../soci-3.2.2/soci-3.2.2/core</pElem>
+            <pElem>/usr/include/postgresql</pElem>
+            <pElem>/usr/include/postgresql/libpq</pElem>
+            <pElem>.</pElem>
+            <pElem>/usr/include</pElem>
+            <pElem>/usr/local/include</pElem>
+            <pElem>/usr/local/lib</pElem>
+            <pElem>/usr/lib</pElem>
+          </linkerAddLib>
+          <linkerDynSerch>
+            <pElem>../soci-3.2.2/build/lib</pElem>
+            <pElem>/usr/local/lib</pElem>
+          </linkerDynSerch>
+          <linkerLibItems>
+            <linkerLibLibItem>pq</linkerLibLibItem>
+          </linkerLibItems>
+          <commandLine>-lpq -lsoci_core -lsoci_empty -lsoci_postgresql -lssl -lcrypto -ljansson</commandLine>
+        </linkerTool>
+      </compileType>
+      <item path="../DAO/DAO.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAO.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../DAO/DAOContainer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAOContainer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../DAO/DAODevices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAODevices.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../DAO/DAOGateways.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAOGateways.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../DAO/DAOLocations.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAOLocations.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../DAO/DAOMobileDevices.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAOMobileDevices.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../DAO/DAONotification.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAONotification.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../DAO/DAOPushNotificationService.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../DAO/DAOPushNotificationService.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../DAO/DAOUsers.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAOUsers.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../DAO/DAOUsersGateways.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAOUsersGateways.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../DAO/DAOlogs.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAOlogs.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../asio_layer/secure/Makefile" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../asio_layer/secure/client" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../asio_layer/secure/client.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../asio_layer/secure/client.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../asio_layer/secure/server" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../asio_layer/secure/server.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../asio_layer/secure/server.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../asio_layer/secure/session.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../asio_layer/secure/session.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../lib/pugiconfig.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../lib/pugixml.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../lib/pugixml.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../ui_logger/Logger.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../ui_logger/Logger.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/AdaServerCommunicator.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/AdaServerCommunicator.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/Config.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Config.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/RequestHandlerFactory.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/RequestHandlerFactory.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/SecuredAsioServlet.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/SecuredAsioServlet.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/ServerException.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/ServerException.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/SessionsTable.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/SessionsTable.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/SocketClient.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/SocketClient.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/SocketServer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/SocketServer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/TokenChecker.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/TokenChecker.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/request_handlers/AccountGetProfileRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/AccountGetProfileRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/AccountsLoginRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/AccountsLoginRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/AccountsLogoutRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/AccountsLogoutRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/AccountsRegisterRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/AccountsRegisterRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesGetAllRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesGetAllRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesGetLogRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesGetLogRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesGetNewRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesGetNewRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesGetRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesGetRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesSetStateRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesSetStateRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesUnregisterRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesUnregisterRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesUpdateRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesUpdateRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GatesGetAllRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GatesGetAllRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GatesGetRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GatesGetRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GatesRegisterRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GatesRegisterRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GatesStartListenRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GatesStartListenRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GatesUnregisterRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GatesUnregisterRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GatesUpdateRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GatesUpdateRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GateusersGetAllRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GateusersGetAllRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GateusersInviteRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GateusersInviteRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GateusersRemoveRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GateusersRemoveRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GateusersUpdateRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GateusersUpdateRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/IRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/IRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/IRequestHandlerWithLoginAndGateAccessRequired.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/IRequestHandlerWithLoginAndGateAccessRequired.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/IRequestHandlerWithLoginRequired.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/IRequestHandlerWithLoginRequired.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/IRequestHandlerWithoutUac.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/IRequestHandlerWithoutUac.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/LocationsAddRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/LocationsAddRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/LocationsDeleteRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/LocationsDeleteRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/LocationsGetAllRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/LocationsGetAllRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/LocationsUpdateRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/LocationsUpdateRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/NotificationRegisterServiceRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/NotificationRegisterServiceRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/NotificationsGetRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/NotificationsGetRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/NotificationsSetReadRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/NotificationsSetReadRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/NotificationsUnregisterServiceRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/NotificationsUnregisterServiceRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/UnknownRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/UnknownRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/save_custom_writer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/save_custom_writer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/sslServlet.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/sslServlet.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/ui_server.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/ui_server.h" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>

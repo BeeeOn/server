@@ -1,0 +1,84 @@
+<div flex class="md-whiteframe-z2 whiteBackground descriptionOverview">
+    <md-toolbar class="md-primary">
+        <div class="md-toolbar-tools">
+            <h3>
+                <span>{{gatewayInfo.aname}}</span>
+            </h3>
+            <span flex></span>
+            <div hide-sm>
+                <md-button class="md-icon-button" aria-label="{{ 'OVERVIEW.DESCRIPTION.BTNS.EDIT_SETTINGS' | translate }}" ng-click="showRightPanel('edit')">
+                    <md-icon md-svg-icon="edit"></md-icon>
+                </md-button>
+                <md-button class="md-icon-button" aria-label="{{ 'OVERVIEW.DESCRIPTION.BTNS.GATEWAY_USERS' | translate }}" ng-click="showRightPanel('users')">
+                    <md-icon md-svg-icon="group"></md-icon>
+                </md-button>
+                <md-button class="md-icon-button" aria-label="{{ 'OVERVIEW.DESCRIPTION.BTNS.DELETE_GATEWAY' | translate }}" ng-click="showDeleteModal()">
+                    <md-icon md-svg-icon="delete"></md-icon>
+                </md-button>
+            </div>
+            <div hide-gt-sm>
+                <md-button class="md-icon-button" aria-label="Gateway settings" ng-click="showGridBottomSheet($event)">
+                    <md-icon md-svg-icon="more_vert"></md-icon>
+                </md-button>
+            </div>
+        </div>
+    </md-toolbar>
+    <md-list class="propertyList">
+        <md-list-item class="md-2-line">
+            <md-icon md-svg-icon="info"></md-icon>
+            <div class="md-list-item-text">
+                <p class="propertyName">{{ 'OVERVIEW.DESCRIPTION.GATEWAY_ID' | translate }}</p>
+                <h3 class="property"> {{gatewayInfo.aid}} </h3>
+            </div>
+        </md-list-item>
+        <md-divider></md-divider>
+        <md-list-item class="md-2-line">
+            <md-icon md-svg-icon="person"></md-icon>
+            <div class="md-list-item-text">
+                <p class="propertyName">{{ 'OVERVIEW.DESCRIPTION.YOUR_ROLE' | translate }}</p>
+                <h3 class="property"> {{gatewayInfo.role}} </h3>
+            </div>
+        </md-list-item>
+        <md-divider></md-divider>
+        <md-list-item class="md-2-line">
+            <md-icon md-svg-icon="language"></md-icon>
+            <div class="md-list-item-text">
+                <p class="propertyName">{{ 'OVERVIEW.DESCRIPTION.TIMEZONE' | translate }}</p>
+                <h3 class="property"> {{gatewayInfo.utc}} </h3>
+            </div>
+        </md-list-item>
+        <md-divider></md-divider>
+        <md-list-item class="md-2-line">
+            <md-icon md-svg-icon="supervisor"></md-icon>
+            <div class="md-list-item-text">
+                <p class="propertyName">{{ 'OVERVIEW.DESCRIPTION.USERS_NUMBER' | translate }}</p>
+                <h3 class="property"> {{gatewayInfo.nusers}} </h3>
+            </div>
+            <md-button class="md-accent" ng-click="showRightPanel('users');">{{ 'OVERVIEW.DESCRIPTION.BTNS.DETAILS' | translate }}</md-button>
+        </md-list-item>
+        <md-divider></md-divider>
+        <md-list-item class="md-2-line">
+            <md-icon md-svg-icon="router"></md-icon>
+            <div class="md-list-item-text">
+                    <p class="propertyName">{{ 'OVERVIEW.DESCRIPTION.DEVICES_NUMBER' | translate }}</p>
+                    <h3 class="property"> {{gatewayInfo.nfacs}} </h3>
+            </div>
+            <md-button class="md-accent" ng-click="showDevices();">{{ 'OVERVIEW.DESCRIPTION.BTNS.DETAILS' | translate }}</md-button>
+        </md-list-item>
+        <md-divider></md-divider>
+        <md-list-item class="md-2-line">
+            <div class="md-list-item-text" ng-class="{'md-offset':true}">
+                <p class="propertyName">{{ 'OVERVIEW.DESCRIPTION.IP_ADDRESS' | translate }}</p>
+                <h3 class="property"> {{gatewayInfo.ip}} </h3>
+            </div>
+        </md-list-item>
+        <md-divider></md-divider>
+        <md-list-item class="md-2-line">
+            <div class="md-list-item-text" ng-class="{'md-offset':true}">
+                <p class="propertyName">{{ 'OVERVIEW.DESCRIPTION.COMM_VERSION' | translate }}</p>
+                <h3 class="property"> {{gatewayInfo.aversion}} </h3>
+            </div>
+        </md-list-item>
+        <md-divider></md-divider>
+    </md-list>
+</div>

@@ -1,0 +1,134 @@
+<div flex layout="column" class="activeGatewayWrapper" layout-fill>
+    <!-- Navigation bar-->
+    <div ng-include="'components/navbar/navbar.html'"></div>
+    <!-- App center-->
+    <div layout="row" flex>
+        <!-- Menu (left side navigation)-->
+        <div ng-include="'components/menu/menu.html'" layout="column" class="grayBackground"></div>
+        <!-- Center -->
+        <md-content flex class="grayBackground activeGatewayContent" layout="column" layout-align="top center">
+            <div flex layout="column" class="content">
+                <div flex class="md-whiteframe-z2 whiteBackground activeGatewayOverview">
+                    <md-toolbar class="md-primary">
+                        <div class="md-toolbar-tools">
+                            <h3>
+                                <span>{{gatewayInfo.aname}}</span>
+                            </h3>
+                            <span flex></span>
+                            <div hide-sm>
+                                <md-button class="md-icon-button" aria-label="{{ 'ACTIVE_GATEWAY.BTNS.EDIT_SETTINGS' | translate }}" ng-click="showRightPanel('edit')">
+                                    <md-icon md-svg-icon="edit"></md-icon>
+                                </md-button>
+                                <md-button class="md-icon-button" aria-label="{{ 'ACTIVE_GATEWAY.BTNS.GATEWAY_USERS' | translate }}" ng-click="showRightPanel('users')">
+                                    <md-icon md-svg-icon="group"></md-icon>
+                                </md-button>
+                                <md-button class="md-icon-button" aria-label="{{ 'ACTIVE_GATEWAY.BTNS.DELETE_GATEWAY' | translate }}" ng-click="showDeleteModal()">
+                                    <md-icon md-svg-icon="delete"></md-icon>
+                                </md-button>
+                            </div>
+                            <div hide-gt-sm>
+                                <md-menu md-position-mode="target-right target">
+                                    <md-button aria-label="Open gateway menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                                        <md-icon md-menu-origin md-svg-icon="more_vert"></md-icon>
+                                    </md-button>
+                                    <md-menu-content width="4">
+                                        <md-menu-item>
+                                            <md-button ng-click="showRightPanel('edit')">
+                                                <div layout="row">
+                                                    <p flex>{{ 'ACTIVE_GATEWAY.BTNS.EDIT_SETTINGS' | translate }}</p>
+                                                    <md-icon md-menu-align-target class="darkIcon" md-svg-icon="edit" style="margin: auto 3px auto 0;"></md-icon>
+                                                </div>
+                                            </md-button>
+                                        </md-menu-item>
+                                        <md-menu-item>
+                                            <md-button ng-click="showRightPanel('users')">
+                                                <div layout="row">
+                                                    <p flex>{{ 'ACTIVE_GATEWAY.BTNS.GATEWAY_USERS' | translate }}</p>
+                                                    <md-icon md-menu-align-target class="darkIcon" md-svg-icon="group" style="margin: auto 3px auto 0;"></md-icon>
+                                                </div>
+                                            </md-button>
+                                        </md-menu-item>
+                                        <md-menu-item>
+                                            <md-button ng-click="showDeleteModal()">
+                                                <div layout="row">
+                                                    <p flex>{{ 'ACTIVE_GATEWAY.BTNS.DELETE_GATEWAY' | translate }}</p>
+                                                    <md-icon md-menu-align-target class="darkIcon" md-svg-icon="delete" style="margin: auto 3px auto 0;"></md-icon>
+                                                </div>
+                                            </md-button>
+                                        </md-menu-item>
+                                    </md-menu-content>
+                                </md-menu>
+                                <!--<md-button class="md-icon-button" aria-label="Gateway settings" ng-click="showGridBottomSheet($event)">
+                                    <md-icon md-svg-icon="more_vert"></md-icon>
+                                </md-button>-->
+                            </div>
+                        </div>
+                    </md-toolbar>
+                    <md-list class="propertyList">
+                        <md-list-item class="md-2-line">
+                            <md-icon md-svg-icon="info"></md-icon>
+                            <div class="md-list-item-text">
+                                <p class="propertyName">{{ 'ACTIVE_GATEWAY.GATEWAY_ID' | translate }}</p>
+                                <h3 class="property"> {{gatewayInfo.aid}} </h3>
+                            </div>
+                        </md-list-item>
+                        <md-divider></md-divider>
+                        <md-list-item class="md-2-line">
+                            <md-icon md-svg-icon="person"></md-icon>
+                            <div class="md-list-item-text">
+                                <p class="propertyName">{{ 'ACTIVE_GATEWAY.YOUR_ROLE' | translate }}</p>
+                                <h3 class="property"> {{gatewayInfo.role}} </h3>
+                            </div>
+                        </md-list-item>
+                        <md-divider></md-divider>
+                        <md-list-item class="md-2-line">
+                            <md-icon md-svg-icon="language"></md-icon>
+                            <div class="md-list-item-text">
+                                <p class="propertyName">{{ 'ACTIVE_GATEWAY.TIMEZONE' | translate }}</p>
+                                <h3 class="property"> {{gatewayInfo.utc}} </h3>
+                            </div>
+                        </md-list-item>
+                        <md-divider></md-divider>
+                        <md-list-item class="md-2-line">
+                            <md-icon md-svg-icon="supervisor"></md-icon>
+                            <div class="md-list-item-text">
+                                <p class="propertyName">{{ 'ACTIVE_GATEWAY.USERS_NUMBER' | translate }}</p>
+                                <h3 class="property"> {{gatewayInfo.nusers}} </h3>
+                            </div>
+                            <md-button class="md-accent" ng-click="showRightPanel('users');">{{ 'ACTIVE_GATEWAY.BTNS.DETAILS' | translate }}</md-button>
+                        </md-list-item>
+                        <md-divider></md-divider>
+                        <md-list-item class="md-2-line">
+                            <md-icon md-svg-icon="router"></md-icon>
+                            <div class="md-list-item-text">
+                                <p class="propertyName">{{ 'ACTIVE_GATEWAY.DEVICES_NUMBER' | translate }}</p>
+                                <h3 class="property"> {{gatewayInfo.nfacs}} </h3>
+                            </div>
+                            <md-button class="md-accent" ng-click="showDevices();">{{ 'ACTIVE_GATEWAY.BTNS.DETAILS' | translate }}</md-button>
+                        </md-list-item>
+                        <md-divider></md-divider>
+                        <md-list-item class="md-2-line">
+                            <div class="md-list-item-text" ng-class="{'md-offset':true}">
+                                <p class="propertyName">{{ 'ACTIVE_GATEWAY.IP_ADDRESS' | translate }}</p>
+                                <h3 class="property"> {{gatewayInfo.ip}} </h3>
+                            </div>
+                        </md-list-item>
+                        <md-divider></md-divider>
+                        <md-list-item class="md-2-line">
+                            <div class="md-list-item-text" ng-class="{'md-offset':true}">
+                                <p class="propertyName">{{ 'ACTIVE_GATEWAY.COMM_VERSION' | translate }}</p>
+                                <h3 class="property"> {{gatewayInfo.aversion}} </h3>
+                            </div>
+                        </md-list-item>
+                        <md-divider></md-divider>
+                    </md-list>
+                </div>
+            </div>
+        </md-content>
+        <!-- Detail (right side navigation)-->
+        <right-panel layout="column" options="rightPanelOptions" class="activeGatewayRightPanel">
+            <div ui-view="right" layout-fill>
+            </div>
+        </right-panel>
+    </div>
+</div>

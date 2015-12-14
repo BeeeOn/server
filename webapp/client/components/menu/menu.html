@@ -1,0 +1,97 @@
+<!-- Left Menu panel. Locked on large screens, hiddable otherwise-->
+<md-sidenav flex class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-lg')">
+    <!-- toolbar with menu hide button hidden on large screen, because menu is locked (not hiddable)-->
+    <md-toolbar hide-gt-lg>
+        <div class="md-toolbar-tools">
+            <location-button options="{location: 'BeeeOn' ,type:'panel_close_left',hideBtn: false}" class="navbarLocationPanel"></location-button>
+        </div>
+    </md-toolbar>
+    <div layout="column" ng-controller="MenuCtrl">
+        <!-- User info panel-->
+        <div layout="row" layout-align="space-around center" class="menuUserPanel"  md-swipe-left="onSwipeLeft()">
+            <md-list-item class="md-2-line" layout="row" layout-align="start center">
+                <!-- avatar -->
+                <img ng-src="{{avatar}}" class="md-avatar" alt="{{user.name}} {{user.surname}}" />
+                <!-- full name and email -->
+                <div class="md-list-item-text">
+                    <h3 class="md-body-2 md-title">{{user.name}} {{user.surname}}</h3>
+                    <p class="">{{user.email}}</p>
+                </div>
+            </md-list-item>
+        </div>
+        <!-- menu content -->
+        <md-content md-swipe-left="onSwipeLeft()" class="menuContent">
+            <!-- gateways -->
+            <md-list>
+                <div layout="row" layout-align="space-between center">
+                    <md-subheader class="md-no-sticky">{{ 'MENU.GATEWAYS_SUBHEADER' | translate }}</md-subheader>
+                    <!--<md-button ng-click="changeLocation('overview.description')" class="gatewaySettings md-icon-button">-->
+                        <md-icon
+                                class=" md-primary"
+                                ng-show="selectedGateway"
+                                md-svg-icon="description"
+                                aria-label="{{ 'MENU.BTNS.DESCRIPTION' | translate }}"
+                                >
+                            <md-tooltip md-direction="right" hide show-gt-lg>{{ 'MENU.BTNS.DESCRIPTION' | translate }}</md-tooltip>
+                        </md-icon>
+                    </md-button>
+                </div>
+                <div layout="row" layout-align="center center" layout-fill ng-hide="gateways">
+                    <span class="no-gateways">{{ 'MENU.NO_GATEWAYS' | translate }}</span>
+                </div>
+                <gateway-button ng-show="gateways"></gateway-button>
+            </md-list>
+            <md-divider></md-divider>
+            <!-- Management-->
+            <section ng-show="gateways">
+                <md-subheader class="md-no-sticky">{{ 'MENU.OVERVIEW_SUBHEADER' | translate }}</md-subheader>
+                <md-list class="menuButtons">
+                    <md-list-item
+                            ng-repeat="place in overview"
+                            ng-if="place.enabled"
+                            ng-click="changeLocation(place.link)"
+                            flex md-no-ink aria-label="{{place.title}}"
+                            ng-class="{selected:  place.link.split('.')[0].match(currentLocation.split('.')[0])}"
+                            class="list-button">
+                        <div layout="row" layout-align="start center">
+                            <img class="menuButtonIcon" alt="{{ place.title }}" ng-src="{{place.link.match(currentLocation) && place.img[1] || place.img[0]}}"/>
+                            <p>{{ place.title }}</p>
+                        </div>
+                    </md-list-item>
+                </md-list>
+                <md-divider></md-divider>
+            </section>
+            <!-- Applications -->
+            <section ng-show="gateways">
+                <md-subheader class="md-no-sticky">{{ 'MENU.MANAGEMENT_SUBHEADER' | translate }}</md-subheader>
+                <md-list class="menuButtons">
+                    <md-list-item
+                            ng-repeat="place in management"
+                            ng-click="changeLocation(place.link)"
+                            flex md-no-ink aria-label="{{place.title}}"
+                            ng-class="{selected:  place.link.match(currentLocation)}"
+                            class="list-button">
+                        <div layout="row" layout-align="start center">
+                            <img class="menuButtonIcon" alt="{{ place.title }}" ng-src="{{place.link.split('.')[0].match(currentLocation.split('.')[0]) && place.img[1] || place.img[0]}}"/>
+                            <p>{{ place.title }}</p>
+                        </div>
+                    </md-list-item>
+                </md-list>
+                <md-divider></md-divider>
+            </section>
+            <!-- Other -->
+            <md-list class="menuButtons">
+                <md-list-item
+                        ng-repeat="place in default"
+                        ng-click="changeLocation(place.link)"
+                        flex md-no-ink aria-label="{{place.title}}"
+                        ng-class="{selected:  currentLocation.match(place.link)}"
+                        class="list-button">
+                    <div layout="row" layout-align="start center">
+                        <p>{{place.title}}</p>
+                    </div>
+                </md-list-item>
+            </md-list>
+        </md-content>
+    </div>
+</md-sidenav>

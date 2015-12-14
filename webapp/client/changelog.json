@@ -1,0 +1,585 @@
+{
+  "logs": [
+    {
+      "date": "05-10-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["added","func"],
+          "text" : " \"Device Detail\" and \"Modules\" list hidding modules according to rules"
+        }
+      ]
+    },
+    {
+      "date": "05-10-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["added","func"],
+          "text" : " \"Device Detail\" renders automatically according to devices.xml and data about devices from server (NOT including hidding modules according to rules)"
+        },
+        {
+          "chips" : ["fixed","func"],
+          "text" : " translation issues in \"Settings\""
+        }
+      ]
+    },
+    {
+      "date": "03-10-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["added","func"],
+          "text" : " \"Modules\" list renders automatically according to devices.xml and data about devices from server (PARTIALLY including hidding modules according to rules)"
+        },
+        {
+          "chips" : ["added","func"],
+          "text" : " unit change in settings affects showed value"
+        }
+      ]
+    },
+    {
+      "date": "01-10-2015 - 02-10-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["added","func"],
+          "text" : " added API calls for \"locations\" and \"devices\" to backend and frontend"
+        },
+        {
+          "chips" : ["added","func"],
+          "text" : " demo data for devices"
+        },
+        {
+          "chips" : ["added","func"],
+          "text" : " \"Devices\" list renders automatically according to devices.xml and data about devices from server"
+        },
+        {
+          "chips" : ["added","func"],
+          "text" : " new devices service, modules service, locations service"
+        },
+        {
+          "chips" : ["added","gui","func"],
+          "text" : " \"Devices\" list directive"
+        }
+      ]
+    },
+    {
+      "date": "30-09-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["added","func"],
+          "text" : " device.xml formatter (in common.git) to transform device.xml to web acceptable format ( includes translations )"
+        }
+      ]
+    },
+    {
+      "date": "25-09-2015 - 29-09-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["fixed","gui","func"],
+          "text" : " multiple issues caused by \"Angular Material\" library update"
+        },
+        {
+          "chips" : ["fixed","func"],
+          "text" : " \"device detail\" routing change issue"
+        }
+      ]
+    },
+    {
+      "date": "24-09-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["changed","gui","func"],
+          "text" : " \"Requested temperature modal picker\" finished directive"
+        }
+      ]
+    },
+    {
+      "date": "22-09-2015 - 23-09-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["fixed","gui"],
+          "text" : " \"Device detail\" GUI cross-browser issues. Still cannot switch tabs in IE ( waiting on new angular-material library version)"
+        },
+        {
+          "chips" : ["fixed","gui"],
+          "text" : " \"Login\" screen and location-button weren't displaying correctly after library update"
+        }
+      ]
+    },
+    {
+      "date": "17-09-2015 - 18-09-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["added","gui"],
+          "text" : " \"Device detail\" basic GUI mockup for \"Regulator VPT\" and \"Temperature and humidity sensor\", no funcionality yet. Still has cross-browser issues as \"SET\" boiler operation mode doesn't bring up modal window in Firefox. Will be fixed"
+        }
+      ]
+    },
+    {
+      "date": "16-09-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["added","func"],
+          "text" : " \"Devices\" route and menu item"
+        },
+        {
+          "chips" : ["added","gui"],
+          "text" : " \"Devices\" list basic GUI, no funcionality yet"
+        },
+        {
+          "chips" : ["fixed","changed","gui"],
+          "text" : " routing changed because of issue with direct URL loading and removed depracated \"overview\" routes"
+        },
+        {
+          "chips" : ["fixed","gui","func"],
+          "text" : " fixed \"No gateway\" app behaviour (added route \"Home\", which serves as entry route )"
+        }
+      ]
+    },
+    {
+      "date": "10-09-2015 - 15-09-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["added","gui"],
+          "text" : " \"Modules\" list GUI, no functionality yet"
+        },
+        {
+          "chips" : ["fixed","gui"],
+          "text" : " \"Modules\" list scrolling issue, top bar and menu stays in fixed position, only middle content scrolls"
+        },
+        {
+          "chips" : ["added","gui"],
+          "text" : " \"Add button\" in \"Modules\" list now hiding when list is scrolled ( need fixing on mobile )"
+        }
+      ]
+    },
+    {
+      "date": "02-09-2015 / 03-09-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["changed","gui"],
+          "text" : " \"Active gateway\" menu on small devices, now material design style"
+        }
+      ]
+    },
+    {
+      "date": "24-08-2015 - 26-08-2015/ 31-8-2015 / 01-09-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["changed","gui","func"],
+          "text" : " changed structure and GUI to mirror new android app version"
+        },
+        {
+          "chips" : ["added","changed","func"],
+          "text" : " translation of new parts and fixed new translation structure"
+        }
+      ]
+    },
+    {
+      "date": "20-08-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["changed","gui"],
+          "text" : " \"Add gateway tutorial\" modal GUI fully responsive and IE compatible"
+        }
+      ]
+    },
+    {
+      "date": "17-08-2015 - 19-08-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["added","gui"],
+          "text" : " \"Add gateway tutorial\" modal GUI"
+        }
+      ]
+    },
+    {
+      "date": "13-08-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["added","gui","func"],
+          "text" : " user role directive as a mediator for role translations"
+        },
+        {
+          "chips" : ["fixed","func"],
+          "text" : " Internet Explorer translation problem solved"
+        }
+      ]
+    },
+    {
+      "date": "12-08-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["added","gui","func"],
+          "text" : " loading modal for actions requiring API call"
+        },
+        {
+          "chips" : ["added","func"],
+          "text" : " auto-focus directive for forms"
+        }
+      ]
+    },
+    {
+      "date": "10-08-2015 / 11-08-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["changed","func"],
+          "text" : " services structure ( now factories )"
+        },
+        {
+          "chips" : ["fixed","func"],
+          "text" : " location buttons now shows right icon and executes right actions"
+        }
+      ]
+    },
+    {
+      "date": "06-08-2015 / 07-08-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["added","func"],
+          "text" : " browser remembers chosen language "
+        },
+        {
+          "chips" : ["fixed","func"],
+          "text" : " location buttons now shows right icon and executes right actions"
+        }
+      ]
+    },
+    {
+      "date": "03-08-2015 / 04-08-2015 / 05-08-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["added","func"],
+          "text" : " full application translation (en,sk)"
+        },
+        {
+          "chips" : ["added","gui","func"],
+          "text" : " language chooser in \"Settings\""
+        }
+      ]
+    },
+    {
+      "date": "30-07-2015 / 31-07-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["added","func"],
+          "text" : " i18n translation system integration"
+        },
+        {
+          "chips" : ["added","func"],
+          "text" : " \"Descrition\" view en/sk translation"
+        }
+      ]
+    },
+    {
+      "date": "27-07-2015 / 28-07-2015 / 29-07-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["added"],
+          "text" : " backend logging system (ELK) installation"
+        }
+      ]
+    },
+    {
+      "date": "26-07-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["changed","gui","func"],
+          "text" : " \"Settings -> Units/Timezone\" choice functional"
+        },
+        {
+          "chips" : ["added","gui"],
+          "text" : " \"Empty -> gateways/modules/rules\" views and showing logic (needs future URL logic)"
+        }
+      ]
+    },
+    {
+      "date": "25-07-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["added","gui","func"],
+          "text" : " \"Delete gateway\" modal window + API call"
+        },
+        {
+          "chips" : ["changed","gui"],
+          "text" : " gateway users temporary persistence"
+        },
+        {
+          "chips" : ["fixed","gui"],
+          "text" : " \"Watchdog list\" fully responsive"
+        },
+        {
+          "chips" : ["changed","func"],
+          "text" : " more detailed server logs = added IP address + changed structure"
+        }
+      ]
+    },
+    {
+      "date": "24-07-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["fixed","gui"],
+          "text" : " vertical offset when showing menu"
+        },
+        {
+          "chips" : ["fixed","changed","gui"],
+          "text" : " changed minimal width to 320px; fixed small device display"
+        },
+        {
+          "chips" : ["added","gui","func"],
+          "text" : " \"Add account to gateway\" dialog and API request"
+        },
+        {
+          "chips" : ["fixed","gui","func"],
+          "text" : " right panel haven't close on browser back button"
+        }
+      ]
+    },
+    {
+      "date": "23-07-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["added","gui"],
+          "text" : " \"Watchdog\" view with rules list (no logic, NOT responsive)"
+        },
+        {
+          "chips" : ["added","gui"],
+          "text" : " \"Rule add\" view (no logic,partial)"
+        },
+        {
+          "chips" : ["added","gui"],
+          "text" : " \"Settings Timezone/Units(partial inner gui)/geolocation\" view"
+        }
+      ]
+    },
+    {
+      "date": "22-07-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["added","gui","func"],
+          "text" : " \"Edit gateway description\" view + \"Gateway users list\"(partially)"
+        },
+        {
+          "chips" : ["changed","gui","func"],
+          "text" : " right panel responsive sizing"
+        },
+        {
+          "chips" : ["added","security"],
+          "text" : " cannot access gateway, that doesn't belong to user, through URL"
+        },
+        {
+          "chips" : ["changed","func"],
+          "text" : " DEMO mod data moved to server side"
+        }
+      ]
+    },
+    {
+      "date": "21-07-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["fixed","gui","func"],
+          "text" : " application fully functional on Internet Explorer"
+        },
+        {
+          "chips" : ["added","func","security"],
+          "text" : " API communication and request authorization. All information now goes through API.(even DEMO MOD)"
+        },
+        {
+          "chips" : ["added","func"],
+          "text" : " API documentation is located on address: http://ant-2.fit.vutbr.cz:9000/api.html"
+        },
+        {
+          "chips" : ["changed","func"],
+          "text" : " DEMO mod data moved to server side"
+        },
+        {
+          "chips" : ["added","gui","func"],
+          "text" : " \"Gateway description\" view"
+        },
+        {
+          "chips" : ["fixed","func"],
+          "text" : " routing issues and selected gateway persistence across views"
+        }
+      ]
+    },
+    {
+      "date": "16-07-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["fixed","gui","func"],
+          "text" : " application partially functional on Internet Explorer"
+        },
+        {
+          "chips" : ["added","gui","func"],
+          "text" : " \"Settings\" view and URL changes"
+        }
+      ]
+    },
+    {
+      "date": "15-07-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["changed","gui","func"],
+          "text" : " Login view now matching new version of android application"
+        },
+        {
+          "chips" : ["added","gui","func"],
+          "text" : " \"About\" modal dialog"
+        },
+        {
+          "chips" : ["fixed","func"],
+          "text" : " logout in Firefox"
+        },
+        {
+          "chips" : ["fixed","func"],
+          "text" : " selected adapter is now remembered when switching between \"Management\" views and \"Applications\" views"
+        },
+        {
+          "chips" : ["fixed","gui","func"],
+          "text" : " a few of IE bugs ( still not showing correctly, need more bug fixing )"
+        }
+      ]
+    },
+    {
+      "date": "14-07-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["added","gui","func"],
+          "text" : " menu structure and functionality -> switching between gateways changes URL"
+        },
+        {
+          "chips" : ["added","gui"],
+          "text" : "swipe left for hiding menu"
+        },
+        {
+          "chips" : ["added","gui","func"],
+          "text" : " menu buttons for management and applications -> switching changes URL and middle content"
+        },
+        {
+          "chips" : ["added","gui"],
+          "text" : " basic routes for Graphs and Watchdog views"
+        },
+        {
+          "chips" : ["changed","gui"],
+          "text" : " menu buttons behaviour for all screens"
+        },
+        {
+          "chips" : ["changed","gui","func"],
+          "text" : " replacing CSS with LESS for better style control"
+        },
+        {
+          "chips" : ["changed","gui"],
+          "text" : " new theme colors + added default theme file"
+        }
+      ]
+    },
+    {
+      "date": "13-07-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["added","gui"],
+          "text" : " basic menu structure"
+        },
+        {
+          "chips" : ["added","gui"],
+          "text" : " right panel ( need to change responsive logic )"
+        },
+        {
+          "chips" : ["added","gui"],
+          "text" : " preview of add gateway and module button"
+        },
+        {
+          "chips" : ["added","gui","func"],
+          "text" : " adapter selection changes url"
+        }
+      ]
+    },
+    {
+      "date": "10-07-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["fixed","gui"],
+          "text" : " logo .svg file now shows in Firefox"
+        },
+        {
+          "chips" : ["changed","gui","func"],
+          "text" : " more levels in changelog (primary: added,changed,fixed | secondary: gui,func,security)"
+        }
+      ]
+    },
+    {
+      "date": "09-07-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["added","gui"],
+          "text" : " Login screen -> accessible DEMO mod"
+        },
+        {
+          "chips" : ["added","gui"],
+          "text" : " Overview screen"
+        },
+        {
+          "chips" : ["added","gui"],
+          "text" : " Notification screen"
+        },
+        {
+          "chips" : ["added","gui"],
+          "text" : " navigation in Overview and Notifications"
+        },
+        {
+          "chips" : ["added","gui"],
+          "text" : " menu to navigation - locked on large devices(PC), responsible hiding on smaller devices (shown menu icon)"
+        },
+        {
+          "chips" : ["added","security"],
+          "text" : " URL redirection (unknown URLs redirected to Overview) "
+        },
+        {
+          "chips" : ["added","security"],
+          "text" : " URL access - need to be logged in (currently demo mod) to access existing URLs, except \"Login\" URL "
+        }
+      ]
+    },
+    {
+      "date": "08-07-2015",
+      "version": "0.0.0",
+      "points": [
+        {
+          "chips" : ["added","gui"],
+          "text" : "Change log"
+        }
+      ]
+    }
+]}

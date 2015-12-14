@@ -1,0 +1,32 @@
+<div layout="row" layout-align="start center">
+    <md-button ng-hide="!hideBtn" hide-gt-lg ng-click="action()" class="md-icon-button" aria-label="{{ 'GLOBAL.LOCATION' | translate }}">
+            <md-icon md-svg-icon="{{icon}}"></md-icon>
+    </md-button>
+    <md-button ng-hide="hideBtn" show-gt-lg ng-click="action()" class="md-icon-button" aria-label="{{ 'GLOBAL.LOCATION' | translate }}">
+        <md-icon md-svg-icon="{{icon}}"></md-icon>
+    </md-button>
+    <h2>
+        <span class="locationName">{{options.location}}</span>
+    </h2>
+    <span flex></span>
+    <div ng-repeat="btn in options.more">
+        <md-menu ng-if="btn.hasSubmenu" md-position-mode="target-right target">
+            <md-button aria-label="{{btn.title}}" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                <md-icon md-menu-origin md-svg-icon="{{btn.icon}}"></md-icon>
+            </md-button>
+            <md-menu-content width="4">
+                <md-menu-item ng-repeat="subBtn in btn.submenu">
+                    <md-button ng-click="subBtn.action();" aria-label="{{subBtn.title}}">
+                        <div layout="row">
+                            <p flex ng-if="subBtn.showTitle">{{subBtn.title | translate}}</p>
+                            <md-icon md-menu-align-target class="darkIcon" md-svg-icon="{{subBtn.icon}}" style="margin: auto 3px auto 0;"></md-icon>
+                        </div>
+                    </md-button>
+                </md-menu-item>
+            </md-menu-content>
+        </md-menu>
+        <md-button ng-if="!btn.hasSubmenu" ng-click="btn.action();" aria-label="{{btn.title}}" class="md-icon-button">
+            <md-icon md-svg-icon="{{btn.icon}}"></md-icon>
+        </md-button>
+    </div>
+</div>

@@ -1,0 +1,11 @@
+<md-sidenav flex class="md-sidenav-right md-whiteframe-z2" md-component-id="right" md-is-locked-open="{{options.lockedMedia}}" layout="column" >
+    <!-- toolbar with menu hide button hidden on large screen, because menu is locked (not hiddable)-->
+    <md-toolbar class="md-primary">
+        <div class="md-toolbar-tools">
+            <location-button options="options" class="navbarLocationPanel" flex></location-button>
+        </div>
+    </md-toolbar>
+    <md-content flex>
+        <ng-transclude></ng-transclude>
+    </md-content>
+</md-sidenav>

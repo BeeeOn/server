@@ -1,0 +1,38 @@
+<component name="ArtifactManager">
+  <artifact type="javafx" build-on-make="true" name="GUI-emulator-v2">
+    <output-path>$PROJECT_DIR$/out/artifacts/GUI_emulator_v2</output-path>
+    <properties id="javafx-properties">
+      <options>
+        <option name="appClass" value="com.iha.emulator.Main" />
+        <option name="description" value="" />
+        <option name="htmlParamFile" value="" />
+        <option name="paramFile" value="" />
+        <option name="title" value="" />
+        <option name="vendor" value="" />
+      </options>
+    </properties>
+    <root id="root">
+      <element id="archive" name="SmartHomeEmulator.jar">
+        <element id="module-output" name="v2" />
+      </element>
+      <element id="directory" name="lib">
+        <element id="library" level="project" name="controlsfx-8.20.8" />
+        <element id="library" level="project" name="log4j-api-2.1" />
+        <element id="library" level="project" name="dom4j-2.0.0-ALPHA-2" />
+        <element id="library" level="project" name="jfxtras-common-8.0-r3" />
+        <element id="directory" name="certificates">
+          <element id="dir-copy" path="$PROJECT_DIR$/lib/certificates" />
+        </element>
+      </element>
+      <element id="directory" name="saved">
+        <element id="dir-copy" path="$PROJECT_DIR$/saved" />
+      </element>
+      <element id="directory" name="templates">
+        <element id="dir-copy" path="$PROJECT_DIR$/templates" />
+      </element>
+      <element id="directory" name="logs">
+        <element id="dir-copy" path="$PROJECT_DIR$/logs" />
+      </element>
+    </root>
+  </artifact>
+</component>

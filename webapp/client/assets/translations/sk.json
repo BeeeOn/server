@@ -1,0 +1,234 @@
+{
+  "GLOBAL" : {
+    "APP_NAME" : "BeeeOn(Web)",
+    "TIMEZONE" : "Časové pásmo",
+    "READ_ONLY" : "iba na čítanie",
+    "CANCEL" : "Zrušiť",
+    "DELETE" : "Zmazať",
+    "GATEWAYS" : "Brány",
+    "GATEWAY" : "Brána",
+    "ADD_GATEWAY": "Pridať bránu",
+    "NO_GATEWAYS" : "ŽIADNE BRÁNY",
+    "LOADING_GATEWAYS" : "Načítavam brány...",
+    "REFRESH_LIST": "Obnoviť zoznam",
+    "REFRESH" : "Obnoviť",
+    "NOTIFICATIONS" : "Notifikácie",
+    "VERSION" : "Verzia",
+    "RIGHTS_RESERVED" : "Všetky práva vyhradené",
+    "CLOSE" : "Zavrieť",
+    "EMAIL" : "Email",
+    "USER_LOWERCASE" : "užívateľ",
+    "USER_UPPERCASE" : "Užívateľ",
+    "USERS" : "Užívatelia",
+    "USERS_LOWERCASE" : "užívatelia",
+    "ROLE" : "Rola",
+    "ADD" : "Pridať",
+    "SET" : "Nastaviť",
+    "EDIT" : "Upraviť",
+    "LOCATION" : "Lokácia",
+    "SAVE_CHANGES" : "Uložiť zmeny",
+    "SKIP" : "Preskočiť",
+    "NEXT" : "Ďalej",
+    "HOME" : "Úvod",
+    "EMPTY_TRANSLATION" : "",
+    "ADD_GATEWAY_DIALOG" : {
+      "SKIP" : "@:GLOBAL.SKIP",
+      "CANCEL" : "@:GLOBAL.CANCEL",
+      "NEXT" : "@:GLOBAL.NEXT",
+      "ADD" : "@:GLOBAL.ADD",
+      "CONNECT_INTERNET_SHORT" : "Pripojte bránu k Internetu",
+      "CONNECT_INTERNET_FULL" : "Zapojte bránu do Internetu",
+      "CONNECT_AC_SHORT" : "Pripojte bránu do AC siete",
+      "CONNECT_AC_FULL" : "Zapojte bránu do elektrickej siete",
+      "ENTER_CODE_SHORT" : "Zadajte kód brány",
+      "ENTER_CODE_FULL" : "Napíšte kód brány",
+      "ENTER_CODE_BTN" : "Napísať kód",
+      "ENTER_CODE_ERROR" : "Kód brány musí byť číslo s najmenej piatimi číslicami"
+    },
+    "SECOND" : "sekunda",
+    "SECONDS" : "sekúnd",
+    "MINUTE" : "minúta",
+    "MINUTES" : "minút",
+    "HOUR" : "hodina",
+    "HOURS" : "hodín"
+  },
+  "DEVICES" : {
+    "NO_DEVICES": "ŽIADNE ZARIADENIA",
+    "LOADING_DEVICES" : "Načítavam zariadenia",
+    "LOADING_LOCATIONS" : "Načítavam lokácie",
+    "BTNS": {
+      "REFRESH_LIST": "@:GLOBAL.REFRESH_LIST",
+      "ADD_GATEWAY": "@:GLOBAL.ADD_GATEWAY",
+      "ADD_DEVICE": "Poslať požiadavku",
+      "EDIT_DEVICE" : "Editovať zariadenie"
+    },
+    "DEFAULT" : "Východzia",
+    "SET_NEW_VALUE" : "Nastaviť novú hodnotu",
+    "DEVICES__DEV_INTERNAL_PRESSURE" : "Senzor tlaku vzduchu",
+    "DEVICES__DEV_REGULATOR_VPT" : "Regulátor VPT",
+    "DEVICES__DEV_TEMPERATURE_HUMIDITY" : "Senzor teploty a vlhkosti",
+    "DEVICES__MANUFACTURER_BUT" : "VUT",
+    "DEVICES__MANUFACTURER_THERMONA" : "Thermona",
+    "DEVICES__MOD_BOILER_OPERATION_MODE" : "Režim prevádzky",
+    "DEVICES__MOD_BOILER_OPERATION_TYPE" : "Typ prevádzky",
+    "DEVICES__MOD_BOILER_STATUS" : "Stav kotla",
+    "DEVICES__MOD_CURRENT_ROOM_TEMPERATURE" : "Aktuálna teplota miestnosti",
+    "DEVICES__MOD_CURRENT_WATER_TEMPERATURE" : "Aktuálna teplota vody",
+    "DEVICES__MOD_OUTSIDE_TEMPERATURE" : "Teplota vonkajšia",
+    "DEVICES__MOD_REQUESTED_ROOM_TEMPERATURE" : "Žiadaná teplota miestnosti",
+    "DEVICES__MOD_REQUESTED_WATER_TEMPERATURE" : "Žiadaná teplota vody",
+    "DEVICES__MOD_ROOM_HUMIDITY" : "Vlhkosť v miestnosti",
+    "DEVICES__MOD_ROOM_TEMPERATURE" : "Teplota miestnosti",
+    "DEVICES__TYPE_BATTERY" : "Batéria",
+    "DEVICES__TYPE_CO2" : "Oxid uhličitý",
+    "DEVICES__TYPE_ENUM" : "Výčet",
+    "DEVICES__TYPE_HUMIDITY" : "Vlhkosť",
+    "DEVICES__TYPE_LIGHT" : "Svetelnosť",
+    "DEVICES__TYPE_NOISE" : "Hluk",
+    "DEVICES__TYPE_PRESSURE" : "Tlak",
+    "DEVICES__TYPE_REFRESH" : "Interval aktualizácie",
+    "DEVICES__TYPE_RSSI" : "Signál",
+    "DEVICES__TYPE_TEMPERATURE" : "Teplota",
+    "DEVICES__TYPE_UNKNOWN" : "Neznámy",
+    "DEVICES__VAL_BOILER_OPERATION_MODE_AUTOMATIC" : "Automaticky",
+    "DEVICES__VAL_BOILER_OPERATION_MODE_MANUAL" : "Manualne",
+    "DEVICES__VAL_BOILER_OPERATION_MODE_VACATION" : "Dovolenka",
+    "DEVICES__VAL_BOILER_OPERATION_TYPE_CONSTANT_WATER_TEMPERATURE" : "Regulácia na stálu teplotu vody",
+    "DEVICES__VAL_BOILER_OPERATION_TYPE_EQUITERM_REGULATOR" : "Ekvitermná regulácia",
+    "DEVICES__VAL_BOILER_OPERATION_TYPE_HOT_WATER" : "Ohrev TUV",
+    "DEVICES__VAL_BOILER_OPERATION_TYPE_OFF" : "Vypnuté",
+    "DEVICES__VAL_BOILER_OPERATION_TYPE_ROOM_REGULATOR" : "Izbový regulátor",
+    "DEVICES__VAL_BOILER_STATUS_FAILURE" : "Porucha",
+    "DEVICES__VAL_BOILER_STATUS_HEATING" : "Vyhrievanie",
+    "DEVICES__VAL_BOILER_STATUS_HOT_WATER" : "Ohrev TUV",
+    "DEVICES__VAL_BOILER_STATUS_SHUTDOWN" : "Odstavené",
+    "DEVICES__VAL_BOILER_STATUS_UNDEFINED" : "Nezistené",
+    "DEVICES__ZONE_1" : "Zóna 1",
+    "DEVICES__ZONE_2" : "Zóna 2",
+    "DEVICES__ZONE_3" : "Zóna 3",
+    "DEVICES__ZONE_4" : "Zóna 4"
+  },
+  "MODULES" : {
+    "NO_MODULES": "ŽIADNE MODULY",
+    "LOADING_MODULES" : "Načítavam moduly",
+    "BTNS": {
+      "REFRESH_LIST": "@:GLOBAL.REFRESH_LIST",
+      "ADD_GATEWAY": "@:GLOBAL.ADD_GATEWAY",
+      "ADD_MODULE": "Pridať modul"
+    }
+  },
+  "ACTIVE_GATEWAY" : {
+    "LOADING_INFO" : "Načítavam informácie o bráne...",
+    "LOADING_ACCOUNTS" : "Načítavam účty brány...",
+    "GATEWAY_ID" : "ID brány",
+    "GATEWAY_NAME" : "Názov brány",
+    "YOUR_ROLE" : "Vaša rola",
+    "READ_ONLY" : "@:GLOBAL.READ_ONLY",
+    "TIMEZONE" : "@:GLOBAL.TIMEZONE",
+    "USERS_NUMBER" : "Počet užívateľov",
+    "DEVICES_NUMBER" : "Počet zariadení",
+    "IP_ADDRESS" : "IP adresa",
+    "COMM_VERSION" : "Verzia komunikácie",
+    "ADD_NEW_USER" : "Pridať užívateľa",
+    "DELETE" : "@:GLOBAL.DELETE",
+    "DELETE_GATEWAY_TEXT" : "Stratíte prístup k bráne a jej modulom. Ak ste vlastník, celá brána bude vymazaná zo servera a všetky nastavenia, vrátane užívateľov, modulov a historických dát budú zmazané.",
+    "GATEWAY_USERS" : "Užívatelia brány",
+    "BTNS" : {
+      "EDIT_SETTINGS" : "Upraviť nastavenia",
+      "GATEWAY_USERS" : "Užívatelia brány",
+      "DELETE_GATEWAY" : "Zmazať bránu",
+      "DETAILS" : "detail",
+      "DELETE_CANCEL" : "@:GLOBAL.CANCEL",
+      "DELETE" : "@:GLOBAL.DELETE"
+    }
+  },
+  "WATCHDOG" : {
+    "RULE_SWITCH" : "Povoliť/zakázať pravidlo",
+    "RULE_NAME" : "Názov pravidla",
+    "WATCHDOG_RULE" : "Pravidlo sledovača",
+    "IF" : "Ak",
+    "THEN" : "Potom",
+    "SELECT_PLACEHOLDER" : "Zariadenia",
+    "SEND_NOTIFICATION" : "Poslať notifikáciu",
+    "CHANGE_ACTUATOR" : "Zmeniť stav aktuátora",
+    "MORE_THEN" : "Viac ako",
+    "LESS_THEN" : "Menej ako",
+    "LIST" : {
+      "NO_RULES" : "ŽIADNE PRAVIDLO",
+      "BTNS" : {
+        "REFRESH_LIST" : "@:GLOBAL.REFRESH_LIST",
+        "ADD_RULE" : "Pridať pravidlo"
+      }
+    }
+  },
+  "MENU" : {
+    "GATEWAYS_SUBHEADER" : "@:GLOBAL.GATEWAYS",
+    "OVERVIEW_SUBHEADER" : "Prehľad",
+    "MANAGEMENT_SUBHEADER" : "Správa domácnosti",
+    "MODULES" : "Moduly",
+    "GRAPHS" : "Grafy",
+    "WATCHDOG" : "Sledovač",
+    "ACTIVE_GATEWAY" : "Aktívna brána",
+    "DEVICES" : "Zariadenia",
+    "SETTINGS" : "Nastavenia",
+    "ABOUT" : "O aplikácii",
+    "LOGOUT" : "Odhlásenie",
+    "NO_GATEWAYS" : "Nemáte žiadne brány",
+    "BTNS" : {
+      "DESCRIPTION" : "Zobraziť podrobnosti o zvolenej bráne"
+    }
+  },
+  "LOGIN" : {
+    "LOGIN_OR_REGISTER" : "Prihláste/zaregistrujte sa s",
+    "SIGN_G_PLUS" : "Prihlásiť z účtom G+",
+    "SIGN_FB" : "Prihlásiť z účtom Facebook",
+    "TRY_OFFLINE" : "Alebo vyskúšajte aplikáciu offline",
+    "START_DEMO" : "Spustiť demo mód",
+    "MODAL_TEXT" : "Prihlasujem..."
+  },
+  "SETTINGS" : {
+    "TIMEZONE": {
+      "TITLE" : "Časové pásmo",
+      "CURRENT" : "Aktuálne časové pásmo",
+      "GATEWAY" : "Časové pásmo brány"
+    },
+    "LANGUAGE" : {
+      "TITLE" : "Jazyk",
+      "ENGLISH" : "Angličtina",
+      "SLOVAK" : "Slovenský jazyk"
+    },
+    "UNITS" : {
+      "TITLE" : "Jednotky",
+      "TEMPERATURE" : {
+        "TITLE" : "Teplota",
+        "CELSIUS" : "Celzia",
+        "FAHRENHEIT" : "Fahrenheit",
+        "KELVIN" : "Kelvin"
+      },
+      "NOISE" : {
+        "TITLE" : "Hluk",
+        "DECIBEL" : "Decibel",
+        "BEL" : "Bel",
+        "NEPER" : "Neper"
+      }
+    },
+    "GEOLOCATION" : {
+      "TITLE" : "Geolokácia"
+    }
+  },
+  "ROLES" : {
+    "SUPERUSER" : "Vlastník",
+    "ADMIN" : "Administrátor",
+    "USER" : "Užívateľ",
+    "GUEST" : "Hosť"
+  },
+  "LOCATIONS" : {
+    "UNKNOWN" : "- Žiadna -",
+    "BATHROOM" : "Kúpeľňa",
+    "BEDROOM" : "Spálňa",
+    "GARDEN":"Záhrada",
+    "DINING_ROOM":"Jedáleň",
+    "LIVING_ROOM":"Obývacia izba",
+    "WC":"WC"
+  }
+}

@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="v2" default="all">
+  
+  
+  <property file="build.properties"/>
+  <!-- Uncomment the following property if no tests compilation is needed -->
+  <!-- 
+  <property name="skip.tests" value="true"/>
+   -->
+  
+  <!-- Compiler options -->
+  
+  <property name="compiler.debug" value="on"/>
+  <property name="compiler.generate.no.warnings" value="off"/>
+  <property name="compiler.args" value=""/>
+  <property name="compiler.max.memory" value="700m"/>
+  <patternset id="ignored.files">
+    <exclude name="**/CVS/**"/>
+    <exclude name="**/SCCS/**"/>
+    <exclude name="**/RCS/**"/>
+    <exclude name="**/rcs/**"/>
+    <exclude name="**/.DS_Store/**"/>
+    <exclude name="**/.svn/**"/>
+    <exclude name="**/.pyc/**"/>
+    <exclude name="**/.pyo/**"/>
+    <exclude name="**/*.pyc/**"/>
+    <exclude name="**/*.pyo/**"/>
+    <exclude name="**/.git/**"/>
+    <exclude name="**/*.hprof/**"/>
+    <exclude name="**/_svn/**"/>
+    <exclude name="**/.hg/**"/>
+    <exclude name="**/*.lib/**"/>
+    <exclude name="**/*~/**"/>
+    <exclude name="**/__pycache__/**"/>
+    <exclude name="**/.bundle/**"/>
+    <exclude name="**/*.rbc/**"/>
+    <exclude name="**/vssver.scc/**"/>
+    <exclude name="**/vssver2.scc/**"/>
+  </patternset>
+  <patternset id="library.patterns">
+    <include name="*.war"/>
+    <include name="*.ear"/>
+    <include name="*.apk"/>
+    <include name="*.zip"/>
+    <include name="*.swc"/>
+    <include name="*.ane"/>
+    <include name="*.egg"/>
+    <include name="*.jar"/>
+  </patternset>
+  <patternset id="compiler.resources">
+    <exclude name="**/?*.java"/>
+    <exclude name="**/?*.form"/>
+    <exclude name="**/?*.class"/>
+    <exclude name="**/?*.groovy"/>
+    <exclude name="**/?*.scala"/>
+    <exclude name="**/?*.flex"/>
+    <exclude name="**/?*.kt"/>
+    <exclude name="**/?*.clj"/>
+  </patternset>
+  
+  <!-- JDK definitions -->
+  
+  <property name="jdk.bin.1.8" value="${jdk.home.1.8}/bin"/>
+  <path id="jdk.classpath.1.8">
+    <fileset dir="${jdk.home.1.8}">
+      <include name="jre/lib/management-agent.jar"/>
+      <include name="jre/lib/rt.jar"/>
+      <include name="jre/lib/plugin.jar"/>
+      <include name="jre/lib/jfr.jar"/>
+      <include name="jre/lib/javaws.jar"/>
+      <include name="jre/lib/deploy.jar"/>
+      <include name="jre/lib/resources.jar"/>
+      <include name="jre/lib/jce.jar"/>
+      <include name="jre/lib/jfxswt.jar"/>
+      <include name="jre/lib/charsets.jar"/>
+      <include name="jre/lib/jsse.jar"/>
+      <include name="jre/lib/ext/sunec.jar"/>
+      <include name="jre/lib/ext/zipfs.jar"/>
+      <include name="jre/lib/ext/sunpkcs11.jar"/>
+      <include name="jre/lib/ext/dnsns.jar"/>
+      <include name="jre/lib/ext/nashorn.jar"/>
+      <include name="jre/lib/ext/cldrdata.jar"/>
+      <include name="jre/lib/ext/sunjce_provider.jar"/>
+      <include name="jre/lib/ext/localedata.jar"/>
+      <include name="jre/lib/ext/jfxrt.jar"/>
+    </fileset>
+  </path>
+  
+  <property name="project.jdk.home" value="${jdk.home.1.8}"/>
+  <property name="project.jdk.bin" value="${jdk.bin.1.8}"/>
+  <property name="project.jdk.classpath" value="jdk.classpath.1.8"/>
+  
+  
+  <!-- Project Libraries -->
+  
+  <path id="library.controlsfx-8.20.8.classpath">
+    <pathelement location="${basedir}/resources/lib/controlsfx-8.20.8.jar"/>
+    <pathelement location="${basedir}/resources/lib/openjfx-dialogs-1.0.2.jar"/>
+  </path>
+  
+  <path id="library.dom4j-2.0.0-alpha-2.classpath">
+    <pathelement location="${basedir}/resources/lib/dom4j-2.0.0-ALPHA-2.jar"/>
+  </path>
+  
+  <path id="library.jfxtras-common-8.0-r3.classpath">
+    <pathelement location="${basedir}/resources/lib/jfxtras-common-8.0-r3.jar"/>
+    <pathelement location="${basedir}/resources/lib/jfxtras-controls-8.0-r3.jar"/>
+    <pathelement location="${basedir}/resources/lib/jfxtras-fxml-8.0-r3.jar"/>
+  </path>
+  
+  <path id="library.log4j-api-2.1.classpath">
+    <pathelement location="${basedir}/resources/lib/log4j-api-2.1.jar"/>
+    <pathelement location="${basedir}/resources/lib/log4j-core-2.1.jar"/>
+  </path>
+  
+  <!-- Modules -->
+  
+  
+  <!-- Module v2 -->
+  
+  <dirname property="module.v2.basedir" file="${ant.file}"/>
+  
+  
+  <property name="module.jdk.home.v2" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.v2" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.v2" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.v2" value="-encoding UTF-8 -source 8 ${compiler.args}"/>
+  
+  <property name="v2.output.dir" value="${module.v2.basedir}/out/production/v2"/>
+  <property name="v2.testoutput.dir" value="${module.v2.basedir}/out/test/v2"/>
+  
+  <path id="v2.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="v2.module.production.classpath">
+    <path refid="${module.jdk.classpath.v2}"/>
+    <path refid="library.dom4j-2.0.0-alpha-2.classpath"/>
+    <path refid="library.controlsfx-8.20.8.classpath"/>
+    <path refid="library.log4j-api-2.1.classpath"/>
+    <path refid="library.jfxtras-common-8.0-r3.classpath"/>
+  </path>
+  
+  <path id="v2.runtime.production.module.classpath">
+    <pathelement location="${v2.output.dir}"/>
+    <path refid="library.dom4j-2.0.0-alpha-2.classpath"/>
+    <path refid="library.controlsfx-8.20.8.classpath"/>
+    <path refid="library.log4j-api-2.1.classpath"/>
+    <path refid="library.jfxtras-common-8.0-r3.classpath"/>
+  </path>
+  
+  <path id="v2.module.classpath">
+    <path refid="${module.jdk.classpath.v2}"/>
+    <pathelement location="${v2.output.dir}"/>
+    <path refid="library.dom4j-2.0.0-alpha-2.classpath"/>
+    <path refid="library.controlsfx-8.20.8.classpath"/>
+    <path refid="library.log4j-api-2.1.classpath"/>
+    <path refid="library.jfxtras-common-8.0-r3.classpath"/>
+  </path>
+  
+  <path id="v2.runtime.module.classpath">
+    <pathelement location="${v2.testoutput.dir}"/>
+    <pathelement location="${v2.output.dir}"/>
+    <path refid="library.dom4j-2.0.0-alpha-2.classpath"/>
+    <path refid="library.controlsfx-8.20.8.classpath"/>
+    <path refid="library.log4j-api-2.1.classpath"/>
+    <path refid="library.jfxtras-common-8.0-r3.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.v2">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.v2">
+    <patternset refid="excluded.from.module.v2"/>
+  </patternset>
+  
+  <path id="v2.module.sourcepath">
+    <dirset dir="${module.v2.basedir}">
+      <include name="src"/>
+      <include name="resources"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.v2" depends="compile.module.v2.production,compile.module.v2.tests" description="Compile module v2"/>
+  
+  <target name="compile.module.v2.production" description="Compile module v2; production classes">
+    <mkdir dir="${v2.output.dir}"/>
+    <javac destdir="${v2.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.v2}/javac">
+      <compilerarg line="${compiler.args.v2}"/>
+      <bootclasspath refid="v2.module.bootclasspath"/>
+      <classpath refid="v2.module.production.classpath"/>
+      <src refid="v2.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.v2"/>
+    </javac>
+    
+    <copy todir="${v2.output.dir}">
+      <fileset dir="${module.v2.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.v2.basedir}/resources">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.v2.tests" depends="compile.module.v2.production" description="compile module v2; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.v2" description="cleanup module">
+    <delete dir="${v2.output.dir}"/>
+    <delete dir="${v2.testoutput.dir}"/>
+  </target>
+  
+  <target name="init" description="Build initialization">
+    <!-- Perform any build initialization in this target -->
+  </target>
+  
+  <target name="clean" depends="clean.module.v2, clean.artifact.gui-emulator-v2" description="cleanup all"/>
+  
+  <target name="build.modules" depends="init, clean, compile.module.v2" description="build all modules"/>
+  
+  <target name="init.artifacts">
+    <property name="artifacts.temp.dir" value="${basedir}/__artifacts_temp"/>
+    <property name="artifact.output.gui-emulator-v2" value="${basedir}/out/artifacts/GUI_emulator_v2"/>
+    <mkdir dir="${artifacts.temp.dir}"/>
+    <property name="artifact.temp.output.SmartHomeEmulator" value="${artifacts.temp.dir}/SmartHomeEmulator.jar"/>
+    <taskdef resource="com/sun/javafx/tools/ant/antlib.xml" uri="javafx:com.sun.javafx.tools.ant" classpath="${jdk.home.1.8}/lib/ant-javafx.jar"/>
+  </target>
+  
+  <target name="clean.artifact.gui-emulator-v2" description="clean GUI-emulator-v2 artifact output">
+    <delete dir="${artifact.output.gui-emulator-v2}"/>
+  </target>
+  
+  <target name="artifact.gui-emulator-v2" depends="init.artifacts, compile.module.v2" description="Build &#39;GUI-emulator-v2&#39; artifact" xmlns:fx="javafx:com.sun.javafx.tools.ant">
+    <mkdir dir="${artifact.output.gui-emulator-v2}"/>
+    <copy todir="${artifact.temp.output.SmartHomeEmulator}">
+      <fileset dir="${v2.output.dir}"/>
+    </copy>
+    <mkdir dir="${artifact.temp.output.SmartHomeEmulator}/lib"/>
+    <copy file="${basedir}/resources/lib/controlsfx-8.20.8.jar" tofile="${artifact.temp.output.SmartHomeEmulator}/lib/controlsfx-8.20.8.jar"/>
+    <copy file="${basedir}/resources/lib/openjfx-dialogs-1.0.2.jar" tofile="${artifact.temp.output.SmartHomeEmulator}/lib/openjfx-dialogs-1.0.2.jar"/>
+    <copy file="${basedir}/resources/lib/dom4j-2.0.0-ALPHA-2.jar" tofile="${artifact.temp.output.SmartHomeEmulator}/lib/dom4j-2.0.0-ALPHA-2.jar"/>
+    <copy file="${basedir}/resources/lib/log4j-api-2.1.jar" tofile="${artifact.temp.output.SmartHomeEmulator}/lib/log4j-api-2.1.jar"/>
+    <copy file="${basedir}/resources/lib/log4j-core-2.1.jar" tofile="${artifact.temp.output.SmartHomeEmulator}/lib/log4j-core-2.1.jar"/>
+    <copy file="${basedir}/resources/lib/jfxtras-common-8.0-r3.jar" tofile="${artifact.temp.output.SmartHomeEmulator}/lib/jfxtras-common-8.0-r3.jar"/>
+    <copy file="${basedir}/resources/lib/jfxtras-controls-8.0-r3.jar" tofile="${artifact.temp.output.SmartHomeEmulator}/lib/jfxtras-controls-8.0-r3.jar"/>
+    <copy file="${basedir}/resources/lib/jfxtras-fxml-8.0-r3.jar" tofile="${artifact.temp.output.SmartHomeEmulator}/lib/jfxtras-fxml-8.0-r3.jar"/>
+    <!--<mkdir dir="${artifact.temp.output.SmartHomeEmulator}/lib/certificates"/>
+    <copy todir="${artifact.temp.output.SmartHomeEmulator}/lib/certificates">
+      <fileset dir="${basedir}/resources/lib/certificates"/>
+    </copy>
+    <mkdir dir="${artifact.temp.output.SmartHomeEmulator}/lib/certificates"/>-->
+    <!--copy saved templates of tasks and sensors-->
+    <mkdir dir="${artifact.output.gui-emulator-v2}/templates"/>
+    <copydir src="${basedir}/templates" dest="${artifact.output.gui-emulator-v2}/templates" includes="**/*"/>
+    <!--copy saved adapters and tasks-->
+    <mkdir dir="${artifact.output.gui-emulator-v2}/saved"/>
+    <copydir src="${basedir}/saved" dest="${artifact.output.gui-emulator-v2}/saved" includes="**/*"/>
+    <!--copy logs-->
+    <mkdir dir="${artifact.output.gui-emulator-v2}/logs"/>
+    <copydir src="${basedir}/logs" dest="${artifact.output.gui-emulator-v2}/logs" includes="**/*"/>
+    <!--copy certificates-->
+    <mkdir dir="${artifact.output.gui-emulator-v2}/lib/certificates"/>
+    <copydir src="${basedir}/lib/certificates" dest="${artifact.output.gui-emulator-v2}/lib/certificates" includes="**/*"/>
+
+    <fx:fileset id="all_but_SmartHomeEmulator" dir="${artifact.temp.output.SmartHomeEmulator}" includes="**/*.jar">
+      <exclude name="SmartHomeEmulator.jar"/>
+    </fx:fileset>
+    <fx:fileset id="all_SmartHomeEmulator" dir="${artifact.temp.output.SmartHomeEmulator}" includes="**/*.jar"/>
+    <fx:application id="SmartHomeEmulator_id" name="GUI-emulator-v2" mainClass="com.iha.emulator.Main"/>
+    <fx:jar destfile="${artifact.temp.output.SmartHomeEmulator}/SmartHomeEmulator.jar">
+      <fx:application refid="SmartHomeEmulator_id"/>
+      <fileset dir="${artifact.temp.output.SmartHomeEmulator}" excludes="**/*.jar"/>
+      <fx:resources>
+        <fx:fileset refid="all_but_SmartHomeEmulator"/>
+      </fx:resources>
+      <manifest/>
+    </fx:jar>
+    <fx:deploy width="600" height="400" updatemode="background" outdir="${artifact.temp.output.SmartHomeEmulator}/deploy" outfile="SmartHomeEmulator">
+      <fx:application refid="SmartHomeEmulator_id"/>
+      <fx:resources>
+        <fx:fileset refid="all_SmartHomeEmulator"/>
+      </fx:resources>
+    </fx:deploy>
+    <copy todir="${artifact.output.gui-emulator-v2}">
+      <fileset dir="${artifact.temp.output.SmartHomeEmulator}/deploy"/>
+    </copy>
+    <!--<delete includeemptydirs="true">
+      <fileset dir="${artifact.temp.output.SmartHomeEmulator}"/>
+    </delete>-->
+  </target>
+  
+  <target name="build.all.artifacts" depends="artifact.gui-emulator-v2" description="Build all artifacts">
+    
+    <!-- Delete temporary files -->
+    <delete dir="${artifacts.temp.dir}"/>
+  </target>
+  
+  <target name="all" depends="build.modules, build.all.artifacts" description="build all"/>
+</project>

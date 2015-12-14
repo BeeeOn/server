@@ -1,0 +1,671 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.smarthome.emulator.simulations.forms.SensorOptions">
+  <grid id="cbd77" binding="contentPane" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="10" left="10" bottom="10" right="10"/>
+    <constraints>
+      <xy x="48" y="54" width="595" height="705"/>
+    </constraints>
+    <properties>
+      <background color="-1"/>
+    </properties>
+    <border type="none"/>
+    <children>
+      <grid id="94766" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <background color="-1"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <grid id="9538f" layout-manager="GridLayoutManager" row-count="1" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <background color="-1"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <component id="310cd" class="com.smarthome.emulator.design.JIOTButton" binding="buttonOK" custom-create="true">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="OK"/>
+                </properties>
+              </component>
+              <component id="dd6a6" class="com.smarthome.emulator.design.JIOTButton" binding="buttonCancel" custom-create="true">
+                <constraints>
+                  <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Cancel"/>
+                </properties>
+              </component>
+              <hspacer id="98af6">
+                <constraints>
+                  <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </hspacer>
+              <component id="d2b41" class="com.smarthome.emulator.design.JIOTButton" binding="buttonApply" custom-create="true">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Apply"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+        </children>
+      </grid>
+      <grid id="e3588" layout-manager="GridLayoutManager" row-count="2" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <background color="-1"/>
+        </properties>
+        <border type="none">
+          <color color="-16777216"/>
+        </border>
+        <children>
+          <component id="a6406" class="javax.swing.JLabel" binding="LblSensor">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <background color="-1"/>
+              <font name="Segoe UI" size="28" style="0"/>
+              <foreground color="-13127169"/>
+              <text value="Sensor Details"/>
+            </properties>
+          </component>
+          <scrollpane id="5e4dc" binding="sensorTreeScroller">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="7" hsize-policy="0" anchor="8" fill="2" indent="0" use-parent-layout="false">
+                <minimum-size width="200" height="-1"/>
+                <preferred-size width="200" height="-1"/>
+                <maximum-size width="200" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-1"/>
+              <horizontalScrollBarPolicy value="31"/>
+            </properties>
+            <border type="line">
+              <color color="-1052689"/>
+            </border>
+            <children>
+              <component id="c51fd" class="com.smarthome.emulator.design.tree.JIOTTree" binding="sensorTree" custom-create="true">
+                <constraints/>
+                <properties/>
+              </component>
+            </children>
+          </scrollpane>
+          <hspacer id="1bbb0">
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="2" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </hspacer>
+          <grid id="fb096" binding="panelContent" layout-manager="GridLayoutManager" row-count="3" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints>
+              <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <background color="-1"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <grid id="35f5c" binding="panelGeneralSettings" layout-manager="GridLayoutManager" row-count="11" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="10" bottom="0" right="10"/>
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <background color="-1"/>
+                </properties>
+                <border type="empty"/>
+                <children>
+                  <component id="316c5" class="javax.swing.JLabel" binding="LblGeneralSettings">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <font name="Segoe UI" size="18" style="1"/>
+                      <foreground color="-8224126"/>
+                      <text value="General Settings"/>
+                    </properties>
+                  </component>
+                  <vspacer id="92d33">
+                    <constraints>
+                      <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                  </vspacer>
+                  <component id="33e29" class="javax.swing.JLabel" binding="lblName">
+                    <constraints>
+                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <foreground color="-8224126"/>
+                      <text value="Name:"/>
+                    </properties>
+                  </component>
+                  <component id="d261f" class="javax.swing.JTextField" binding="txtFieldName">
+                    <constraints>
+                      <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <caretColor color="-8224126"/>
+                      <foreground color="-8224126"/>
+                      <margin top="0" left="5" bottom="0" right="10"/>
+                      <selectionColor color="-5841665"/>
+                    </properties>
+                  </component>
+                  <hspacer id="f89fb">
+                    <constraints>
+                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                  </hspacer>
+                  <component id="f34f1" class="javax.swing.JLabel" binding="lblProtocol">
+                    <constraints>
+                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <foreground color="-8224126"/>
+                      <text value="Protocol:"/>
+                    </properties>
+                  </component>
+                  <component id="3c11b" class="javax.swing.JLabel" binding="lblSignal">
+                    <constraints>
+                      <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <foreground color="-8224126"/>
+                      <text value="Signal:"/>
+                    </properties>
+                  </component>
+                  <component id="41c14" class="javax.swing.JLabel" binding="lblBattery">
+                    <constraints>
+                      <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <foreground color="-8224126"/>
+                      <text value="Battery:"/>
+                    </properties>
+                  </component>
+                  <component id="d498a" class="com.smarthome.emulator.design.JNumberTextField" binding="txtFieldProtocol" custom-create="true">
+                    <constraints>
+                      <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <caretColor color="-8224126"/>
+                      <disabledTextColor color="-8224126"/>
+                      <font name="Segoe UI" size="11" style="0"/>
+                      <foreground color="-8224126"/>
+                      <selectionColor color="-5841665"/>
+                      <text value=""/>
+                      <toolTipText value="Integer number"/>
+                    </properties>
+                  </component>
+                  <component id="af876" class="com.smarthome.emulator.design.JNumberTextField" binding="txtFieldSignal" custom-create="true">
+                    <constraints>
+                      <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <caretColor color="-8224126"/>
+                      <disabledTextColor color="-8224126"/>
+                      <font name="Segoe UI" size="11" style="0"/>
+                      <foreground color="-8224126"/>
+                      <selectionColor color="-5841665"/>
+                      <text value=""/>
+                      <toolTipText value="Only one or double digit number."/>
+                    </properties>
+                  </component>
+                  <component id="d6f96" class="com.smarthome.emulator.design.JNumberTextField" binding="txtFieldBattery" custom-create="true">
+                    <constraints>
+                      <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <caretColor color="-8224126"/>
+                      <disabledTextColor color="-8224126"/>
+                      <font name="Segoe UI" size="11" style="0"/>
+                      <foreground color="-8224126"/>
+                      <selectionColor color="-5841665"/>
+                      <text value=""/>
+                      <toolTipText value="Only one or double digit number."/>
+                    </properties>
+                  </component>
+                  <component id="7a22b" class="javax.swing.JLabel" binding="lblRefreshRate">
+                    <constraints>
+                      <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <foreground color="-8224126"/>
+                      <text value="Refresh Rate:"/>
+                    </properties>
+                  </component>
+                  <component id="3274f" class="com.smarthome.emulator.design.JNumberTextField" binding="txtFieldRefreshRate" custom-create="true">
+                    <constraints>
+                      <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <caretColor color="-8224126"/>
+                      <disabledTextColor color="-8224126"/>
+                      <font name="Segoe UI" size="11" style="0"/>
+                      <foreground color="-8224126"/>
+                      <selectionColor color="-5841665"/>
+                      <text value=""/>
+                      <toolTipText value="Integer number."/>
+                    </properties>
+                  </component>
+                  <component id="212a" class="javax.swing.JLabel" binding="lblSeparator">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="9092a" class="javax.swing.JLabel" binding="lblBackgroundColor">
+                    <constraints>
+                      <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <foreground color="-8224126"/>
+                      <text value="Background color:"/>
+                    </properties>
+                  </component>
+                  <component id="a1138" class="com.smarthome.emulator.design.JIOTButton" binding="btnBackgroundColor" custom-create="true">
+                    <constraints>
+                      <grid row="7" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="9da7e" class="javax.swing.JLabel" binding="lblLabelTextColor">
+                    <constraints>
+                      <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <foreground color="-8224126"/>
+                      <text value="Label text color:"/>
+                    </properties>
+                  </component>
+                  <component id="99eb6" class="javax.swing.JLabel" binding="lblTextColor">
+                    <constraints>
+                      <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <foreground color="-8224126"/>
+                      <text value="Text color:"/>
+                    </properties>
+                  </component>
+                  <component id="e3392" class="com.smarthome.emulator.design.JIOTButton" binding="btnLabelTextColor" custom-create="true">
+                    <constraints>
+                      <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="42ad3" class="com.smarthome.emulator.design.JIOTButton" binding="btnTextColor" custom-create="true">
+                    <constraints>
+                      <grid row="9" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
+              <hspacer id="4bd1d">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </hspacer>
+              <vspacer id="f6c49">
+                <constraints>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </vspacer>
+              <grid id="4bd31" binding="panelValueSettings" layout-manager="GridLayoutManager" row-count="9" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="10" bottom="0" right="10"/>
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="0" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <background color="-1"/>
+                </properties>
+                <border type="empty"/>
+                <children>
+                  <component id="36ff0" class="javax.swing.JLabel" binding="lblValueSettings">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <font name="Segoe UI" size="18" style="1"/>
+                      <foreground color="-8224126"/>
+                      <text value="Value Settings"/>
+                    </properties>
+                  </component>
+                  <hspacer id="d3d18">
+                    <constraints>
+                      <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                  </hspacer>
+                  <vspacer id="d784c">
+                    <constraints>
+                      <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                        <preferred-size width="82" height="14"/>
+                      </grid>
+                    </constraints>
+                  </vspacer>
+                  <component id="55549" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="77acb" class="javax.swing.JLabel" binding="lblValue">
+                    <constraints>
+                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="82" height="20"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <font name="Segoe UI" size="14" style="1"/>
+                      <foreground color="-8224126"/>
+                      <text value="Current Value:"/>
+                    </properties>
+                  </component>
+                  <component id="40deb" class="javax.swing.JLabel" binding="lblValueClass">
+                    <constraints>
+                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="82" height="16"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <foreground color="-8224126"/>
+                      <text value="Class:"/>
+                    </properties>
+                  </component>
+                  <component id="594b6" class="javax.swing.JLabel" binding="lblValueType">
+                    <constraints>
+                      <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="82" height="16"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <foreground color="-8224126"/>
+                      <text value="Type:"/>
+                    </properties>
+                  </component>
+                  <component id="6ed9b" class="javax.swing.JTextField" binding="txtFieldValue">
+                    <constraints>
+                      <grid row="2" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <caretColor color="-8224126"/>
+                      <foreground color="-8224126"/>
+                      <margin top="0" left="5" bottom="0" right="10"/>
+                      <selectionColor color="-5841665"/>
+                    </properties>
+                  </component>
+                  <component id="b55f7" class="javax.swing.JTextField" binding="txtFieldValueClass">
+                    <constraints>
+                      <grid row="3" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <caretColor color="-8224126"/>
+                      <foreground color="-8224126"/>
+                      <margin top="0" left="5" bottom="0" right="10"/>
+                      <selectionColor color="-5841665"/>
+                    </properties>
+                  </component>
+                  <component id="49a8a" class="com.smarthome.emulator.design.JNumberTextField" binding="txtFieldValueType" custom-create="true">
+                    <constraints>
+                      <grid row="4" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <caretColor color="-8224126"/>
+                      <disabledTextColor color="-5841665"/>
+                      <font name="Segoe UI" size="11" style="0"/>
+                      <foreground color="-8224126"/>
+                      <selectionColor color="-5841665"/>
+                      <text value=""/>
+                      <toolTipText value="Only one or double digit number."/>
+                    </properties>
+                  </component>
+                  <component id="bb143" class="javax.swing.JLabel" binding="lblGenerateValue">
+                    <constraints>
+                      <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <foreground color="-8224126"/>
+                      <text value="Generate value:"/>
+                    </properties>
+                  </component>
+                  <component id="cf431" class="javax.swing.JRadioButton" binding="radBtnGenerateYes">
+                    <constraints>
+                      <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <minimum-size width="-1" height="18"/>
+                        <preferred-size width="-1" height="18"/>
+                        <maximum-size width="-1" height="18"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <foreground color="-8224126"/>
+                      <icon value="img/radioButtonNotSelected.png"/>
+                      <pressedIcon value="img/radioButtonSelected.png"/>
+                      <selected value="true"/>
+                      <selectedIcon value="img/radioButtonSelected.png"/>
+                      <text value="Yes"/>
+                    </properties>
+                  </component>
+                  <component id="2bc57" class="javax.swing.JRadioButton" binding="radBtnGenerateNo">
+                    <constraints>
+                      <grid row="5" column="2" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <minimum-size width="-1" height="18"/>
+                        <preferred-size width="-1" height="18"/>
+                        <maximum-size width="-1" height="18"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <foreground color="-8224126"/>
+                      <icon value="img/radioButtonNotSelected.png"/>
+                      <pressedIcon value="img/radioButtonSelected.png"/>
+                      <selected value="false"/>
+                      <selectedIcon value="img/radioButtonSelected.png"/>
+                      <text value="No"/>
+                    </properties>
+                  </component>
+                  <component id="ddc99" class="javax.swing.JLabel" binding="lblValueMax">
+                    <constraints>
+                      <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <foreground color="-8224126"/>
+                      <text value="Max:"/>
+                    </properties>
+                  </component>
+                  <component id="1e8b1" class="com.smarthome.emulator.design.JNumberTextField" binding="txtFieldValueMax" custom-create="true">
+                    <constraints>
+                      <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <minimum-size width="30" height="-1"/>
+                        <preferred-size width="30" height="-1"/>
+                        <maximum-size width="30" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <caretColor color="-8224126"/>
+                      <font name="Segoe UI" size="11" style="0"/>
+                      <foreground color="-8224126"/>
+                      <selectionColor color="-5841665"/>
+                      <text value=""/>
+                      <toolTipText value="Only one or double digit number."/>
+                    </properties>
+                  </component>
+                  <component id="ba03b" class="javax.swing.JLabel" binding="lblValueMin">
+                    <constraints>
+                      <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <foreground color="-8224126"/>
+                      <text value="Min:"/>
+                    </properties>
+                  </component>
+                  <component id="47ada" class="com.smarthome.emulator.design.JNumberTextField" binding="txtFieldValueMin" custom-create="true">
+                    <constraints>
+                      <grid row="6" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <minimum-size width="30" height="-1"/>
+                        <preferred-size width="30" height="-1"/>
+                        <maximum-size width="30" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <caretColor color="-8224126"/>
+                      <font name="Segoe UI" size="11" style="0"/>
+                      <foreground color="-8224126"/>
+                      <selectionColor color="-5841665"/>
+                      <text value=""/>
+                      <toolTipText value="Only one or double digit number."/>
+                    </properties>
+                  </component>
+                  <component id="58329" class="javax.swing.JLabel" binding="lblValueAvg">
+                    <constraints>
+                      <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <foreground color="-8224126"/>
+                      <text value="Avg:"/>
+                    </properties>
+                  </component>
+                  <component id="33764" class="com.smarthome.emulator.design.JNumberTextField" binding="txtFieldValueAvg" custom-create="true">
+                    <constraints>
+                      <grid row="7" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <minimum-size width="30" height="-1"/>
+                        <preferred-size width="30" height="-1"/>
+                        <maximum-size width="30" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <caretColor color="-8224126"/>
+                      <font name="Segoe UI" size="11" style="0"/>
+                      <foreground color="-8224126"/>
+                      <selectionColor color="-5841665"/>
+                      <text value=""/>
+                      <toolTipText value="Only one or double digit number."/>
+                    </properties>
+                  </component>
+                  <component id="8366d" class="javax.swing.JLabel" binding="lblValueDev">
+                    <constraints>
+                      <grid row="7" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <foreground color="-8224126"/>
+                      <text value="Dev:"/>
+                    </properties>
+                  </component>
+                  <component id="d2464" class="com.smarthome.emulator.design.JNumberTextField" binding="txtFieldValueDev" custom-create="true">
+                    <constraints>
+                      <grid row="7" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <minimum-size width="30" height="-1"/>
+                        <preferred-size width="30" height="-1"/>
+                        <maximum-size width="30" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <caretColor color="-8224126"/>
+                      <font name="Segoe UI" size="11" style="0"/>
+                      <foreground color="-8224126"/>
+                      <selectionColor color="-5841665"/>
+                      <text value=""/>
+                      <toolTipText value="Only one or double digit number."/>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
+            </children>
+          </grid>
+        </children>
+      </grid>
+      <component id="e443d" class="javax.swing.JLabel" binding="lblWarning">
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <background color="-1"/>
+          <foreground color="-52429"/>
+          <text value=""/>
+          <visible value="false"/>
+        </properties>
+      </component>
+    </children>
+  </grid>
+  <buttonGroups>
+    <group name="radBtnGenerateGruop">
+      <member id="cf431"/>
+      <member id="2bc57"/>
+    </group>
+  </buttonGroups>
+</form>

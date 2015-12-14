@@ -1,0 +1,57 @@
+<div layout="column" layout-fill class="deviceDetailWrapper" >
+    <!-- TIME -->
+    <div class="lastUpdate primaryBackground">
+        <md-icon ng-class="{'md-offset':true}" md-svg-icon="query_builder"></md-icon> {{ device.time | date:'HH:mm:ss'}}
+    </div>
+    <!-- END TIME -->
+    <!-- DEVICE STATUS-->
+    <div layout="row" class="deviceStats">
+        <md-chips ng-model="chips" readonly="true">
+            <md-chip-template>
+                <md-icon md-svg-icon="{{$chip.icon}}"></md-icon>
+                <span>{{$chip.value}}</span>
+            </md-chip-template>
+        </md-chips>
+    </div>
+    <!-- END DEVICE STATUS-->
+    <!-- MODULES -->
+    <md-list class="detailedModulesList" ng-if="groups.length === 1">
+        <section>
+            <md-list-item class="md-2-line list-button" ng-click="showGraph()" md-no-ink ng-repeat="module in device.modules | orderBy: ['model.order']" ng-if="module.isVisible" aria-label="{{getName(module) | translate}}">
+                <md-icon md-svg-icon="{{module.model.icon}}"></md-icon>
+                <div class="md-list-item-text">
+                    <p class="moduleName">{{getName(module) | translate}} {{module.id}}</p>
+                    <h3 class="value" ng-if="shouldTranslate(device.type,module)"> {{module | moduleValue: device.type | translate}}</h3>
+                    <h3 class="value" ng-if="!shouldTranslate(device.type,module)"> {{module | moduleValue: device.type}}</h3>
+                </div>
+                <md-button aria-label="SET {{module.name}}" ng-if="module.model.isActuator" class="md-secondary valueButton " md-no-ink ng-click="actuatorAction(module)">SET</md-button>
+            </md-list-item>
+        </section>
+    </md-list>
+
+    <div layout="row" class="zoneTabs" ng-if="groups.length > 1">
+        <md-tabs md-selected="selectedIndex" md-border-bottom md-autoselect flex md-no-ink md-swipe-content="true" md-dynamic-height="true" md-stretch-tabs="auto">
+            <md-tab ng-repeat="tab in groups" label="{{ 'DEVICES.' + tab | translate}}"
+                    ng-init="filtered = ( device.modules |filter: {$:tab} | orderBy: ['model.order'])">
+                <md-list class="detailedModulesList">
+                    <section>
+                        <md-list-item class="md-2-line list-button" ng-click="showGraph()" md-no-ink
+                                      ng-repeat="module in filtered"
+                                      aria-label="{{getName(module) | translate}}"
+                                      ng-if="module.isVisible"
+                                >
+                            <md-icon md-svg-icon="{{module.model.icon}}"></md-icon>
+                            <div class="md-list-item-text">
+                                <p class="moduleName">{{getName(module) | translate}} {{module.id}} </p>
+                                <h3 class="value" ng-if="shouldTranslate(device.type,module)"> {{module | moduleValue: device.type | translate}}</h3>
+                                <h3 class="value" ng-if="!shouldTranslate(device.type,module)"> {{module | moduleValue: device.type}}</h3>
+                            </div>
+                            <md-button aria-label="SET {{module.name}}" ng-if="module.model.isActuator" class="md-secondary valueButton " md-no-ink ng-click="actuatorAction(module)">{{'GLOBAL.SET' | translate}}</md-button>
+                        </md-list-item>
+                    </section>
+                </md-list>
+            </md-tab>
+        </md-tabs>
+    </div>
+    <!-- END MODULES -->
+</div>

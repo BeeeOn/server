@@ -1,0 +1,92 @@
+INSERT INTO gateway (gateway_id, home_name) VALUES (10, 'ad10');
+INSERT INTO gateway (gateway_id, home_name) VALUES (20, 'ad20');
+
+
+INSERT INTO location	(location_id, gateway_id,kind,location_name) VALUES(1000,10,1,'l1' );
+INSERT INTO location	(location_id, gateway_id,kind,location_name) VALUES(2000,20,2,'l2' );
+
+insert into device(device_euid, device_id, gateway_id,location_id) values
+			(1000, 1, 10, 1000),       
+			(2000, 2, 20, 2000);
+
+INSERT INTO module	(device_euid, module_id, measured_value) VALUES
+			(1000,1,101),
+      (1000,2,102);
+INSERT INTO module	(device_euid, module_id, measured_value) VALUES
+			(2000,1,101);
+
+
+insert into log (device_euid, module_id, measured_at, measured_value) values (1000,1,1414086984,10);
+insert into log (device_euid, module_id, measured_at, measured_value) values (1000,1,1414086922,20);
+
+
+
+
+INSERT INTO gateway (gateway_id, home_name) VALUES (100, 'ad100');
+INSERT INTO user_gateway (gateway_id, user_id, permission) VALUES (100, 5, 'superuser');
+insert into device(device_euid, device_type, gateway_id,location_id) values
+			(1234, 1, 100, null),
+			(1235, 2, 100, null);
+INSERT INTO module	(device_euid, module_id, measured_value) VALUES
+			(1234,1,101),
+      (1234,2,102);
+INSERT INTO module	(device_euid, module_id, measured_value) VALUES
+			(1235,1,101);
+-- --------------------------------------------------------------------------------------
+INSERT INTO USERS (user_id,MAIL) VALUES (1,'user1@gmail.com');
+INSERT INTO USERS (user_id,MAIL) VALUES (2,'user2@gmail.com');
+INSERT INTO USERS (user_id,MAIL) VALUES (3,'user2a@gmail.com');
+INSERT INTO USERS (user_id,MAIL) VALUES (4,'user4@gmail.com');
+INSERT INTO USERS (user_id,MAIL) VALUES (5,'user1su@gmail.com');
+
+insert into mobile_devices(fk_user_id, id, token) values(1,1,1);
+insert into mobile_devices(fk_user_id, id, token) values(2,2,2);
+insert into mobile_devices(fk_user_id, id, token) values(3,3,3);
+insert into mobile_devices(fk_user_id, id, token) values(4,4,4);
+insert into mobile_devices(fk_user_id, id, token) values(5,5,5);
+
+INSERT INTO ADAPTERS (ADAPTER_ID,NAME,socket) VALUES (10, 'ad10', 10);
+INSERT INTO ADAPTERS (ADAPTER_ID,NAME,socket) VALUES (20, 'ad20', 20);
+INSERT INTO ADAPTERS (ADAPTER_ID,NAME,socket) VALUES (21, 'ad21', 21);
+INSERT INTO ADAPTERS (ADAPTER_ID,NAME,socket) VALUES (30, 'ad30', 30);
+INSERT INTO ADAPTERS (ADAPTER_ID,NAME,socket) VALUES (40, 'ad40', 40);
+
+INSERT INTO USERS_ADAPTERS (fk_adapter_id, fk_user_id, role) VALUES (10,1,'superuser');
+INSERT INTO USERS_ADAPTERS (fk_adapter_id, fk_user_id, role) VALUES (10,5,'superuser');
+INSERT INTO USERS_ADAPTERS (fk_adapter_id, fk_user_id, role) VALUES (20,2,'superuser');
+INSERT INTO USERS_ADAPTERS (fk_adapter_id, fk_user_id, role) VALUES (21,2,'superuser');
+INSERT INTO USERS_ADAPTERS (fk_adapter_id, fk_user_id, role) VALUES (21,3,'admin');
+INSERT INTO USERS_ADAPTERS (fk_adapter_id, fk_user_id, role) VALUES (40,4,'superuser');
+
+
+INSERT INTO ROOMS	(room_id, fk_adapter_id,type,name) VALUES(100,10,3,'room100' );
+INSERT INTO ROOMS	(room_id, fk_adapter_id,type,name) VALUES(200,20,3,'room200' );
+INSERT INTO ROOMS	(room_id, fk_adapter_id,type,name) VALUES(210,21,3,'room210' );
+INSERT INTO ROOMS	(room_id, fk_adapter_id,type,name) VALUES(211,21,3,'room211' );
+
+insert into facilities(mac, refresh, battery, quality, init, involved, timestamp, fk_room_id, fk_adapter_id) values
+			(1001, 100,110,120, 1,1414086934,1414086982,100,10),
+			(1002, 100,110,120, 1,1414086934,1414086982,null,10),
+			(2001, 100,110,120, 1,1414086934,1414086982,null,20),
+			(2101, 100,110,120, 1,1414086934,1414086982,210,21),
+			(2102, 100,110,120, 1,1414086934,1414086982,null,21),
+			(3001, 100,110,120, 1,1414086934,1414086982,null,30),
+			(4001, 100,110,120, 1,1414086934,1414086982,null,40);
+
+INSERT INTO DEVICES	(fk_facilities_mac, type, name,  value ) VALUES
+			(1001,1,'s101',101),
+			(1001,2,'s1012',1012),
+			(1002,1,'s102',102),
+			(2001,1,'s201',201),
+			(2101,1,'s211',211),
+			(2102,1,'s212',212),
+			(3001,1,'s301',301),
+			(4001,1,'s401',401);
+			
+insert into logs (fk_facilities_mac, fk_devices_type, timestamp, value) values (2101, 1,1414086983, 122.00);
+insert into logs (fk_facilities_mac, fk_devices_type, timestamp, value) values (2101, 1,1414086984, 50.00);			
+insert into logs (fk_facilities_mac, fk_devices_type, timestamp, value) values (2101, 1,1414086985, 100);
+insert into logs (fk_facilities_mac, fk_devices_type, timestamp, value) values (2101, 1,1414086986, 90);
+insert into logs (fk_facilities_mac, fk_devices_type, timestamp, value) values (2101, 1,1414086987, 110);
+
+

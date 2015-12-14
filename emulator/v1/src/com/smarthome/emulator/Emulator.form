@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.smarthome.emulator.Emulator">
+  <grid id="27dc6" binding="mainPanel" layout-manager="GridLayoutManager" row-count="2" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="15" left="15" bottom="15" right="15"/>
+    <constraints>
+      <xy x="20" y="20" width="538" height="343"/>
+    </constraints>
+    <properties>
+      <background color="-1"/>
+    </properties>
+    <border type="none"/>
+    <children>
+      <component id="316b9" class="javax.swing.JLabel" binding="mainLabel">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <font name="Segoe UI" size="24" style="0"/>
+          <foreground color="-13127169"/>
+          <text value="SmartHome Emulator"/>
+        </properties>
+      </component>
+      <vspacer id="94c08">
+        <constraints>
+          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+        </constraints>
+      </vspacer>
+      <component id="83f74" class="javax.swing.JButton" binding="btnDetailedSimulation">
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
+            <minimum-size width="200" height="147"/>
+            <preferred-size width="200" height="147"/>
+            <maximum-size width="200" height="147"/>
+          </grid>
+        </constraints>
+        <properties>
+          <background color="-13127169"/>
+          <borderPainted value="false"/>
+          <focusPainted value="false"/>
+          <font name="Segoe UI" size="24" style="0"/>
+          <foreground color="-1"/>
+          <hideActionText value="false"/>
+          <horizontalTextPosition value="0"/>
+          <margin top="8" left="14" bottom="8" right="14"/>
+          <opaque value="true"/>
+          <requestFocusEnabled value="true"/>
+          <text value="&lt;html&gt;&lt;center&gt;Detailed Simulation&lt;/center&gt;&lt;/html&gt;"/>
+        </properties>
+      </component>
+      <component id="d051d" class="javax.swing.JButton" binding="btnPerformanceSimulation">
+        <constraints>
+          <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false">
+            <minimum-size width="200" height="147"/>
+            <preferred-size width="200" height="147"/>
+            <maximum-size width="200" height="147"/>
+          </grid>
+        </constraints>
+        <properties>
+          <actionCommand value="&lt;html&gt;&lt;center&gt;Performance Simulation&lt;/center&gt;&lt;/html&gt;"/>
+          <background color="-13127169"/>
+          <borderPainted value="false"/>
+          <enabled value="false"/>
+          <focusPainted value="false"/>
+          <font name="Segoe UI" size="24" style="0"/>
+          <foreground color="-1"/>
+          <label value="&lt;html&gt;&lt;center&gt;Performance Simulation&lt;/center&gt;&lt;/html&gt;"/>
+          <margin top="8" left="14" bottom="8" right="14"/>
+          <text value="&lt;html&gt;&lt;center&gt;Performance Simulation&lt;/center&gt;&lt;/html&gt;"/>
+        </properties>
+      </component>
+    </children>
+  </grid>
+</form>

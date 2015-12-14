@@ -1,0 +1,119 @@
+.watchdogWrapper {
+  min-height: 500px;
+  min-width: 320px;
+  .watchdogContent {
+    position: absolute;
+    overflow: auto;
+    top: 64px;
+    @media screen and (max-width: 600px){
+      top: 56px;
+    }
+    left: 304px;
+    @media screen and (max-width: 1199px){
+      left: 0;
+    }
+    bottom: 0;
+    right: 0;
+    .rulesWrapper {
+      .rulesList {
+        md-list-item.md-3-line {
+          .md-button {
+            padding-right: 80px;
+          }
+          .md-list-item-inner {
+            > .md-avatar:first-child {
+              /* left image*/
+              width: 36px;
+              height: 36px;
+              background-color: @clr_white;
+              margin-left: 4px;
+              margin-right: 20px;
+              margin-top: -24px;
+              svg {
+                fill: @clr_secondary_text;
+              }
+            }
+          }
+        }
+
+        .md-list-item-text {
+          h3 {
+            color: @clr_primary_text;
+          }
+          h4 {
+            color: @clr_secondary_text;
+            margin-bottom: 8px !important;
+          }
+          p {
+            color: @clr_accent;
+            md-icon {
+              /* greater, lower image*/
+              width: 24px;
+              height: 24px;
+              background-color: @clr_primary_medium;
+              border-radius: 50%;
+              margin-right: 15px;
+              margin-left: 0;
+              svg {
+                fill: @clr_white;
+              }
+            }
+          }
+        }
+
+        md-divider {
+          margin-left: 72px;
+        }
+      }
+
+      @media screen and (max-width: 400px){
+        .rulesList {
+          md-list-item {
+            .md-secondary {
+              right: 0;
+            }
+          }
+          md-list-item.md-3-line {
+            .md-button {
+              padding-right: 52px;
+            }
+            .md-list-item-inner {
+              > .md-avatar:first-child {
+                width: 24px;
+                height: 24px;
+                margin-right: 12px;
+                margin-left: 0;
+                margin-top: -24px;
+              }
+            }
+          }
+
+          .md-list-item-text {
+            h3 {
+              font-size: 12pt !important;
+            }
+            h4 {
+              font-size: 10pt  !important;
+              margin-bottom: 8px !important;
+              overflow: hidden;
+              text-overflow: clip;
+            }
+          }
+
+          md-divider {
+            margin-left: 52px;
+          }
+        }
+      }
+    }
+
+    .emptyWatchdogListWrapper {
+      h3 {
+        color: @clr_gray_dark;
+      }
+      .refreshBtn {
+        background-color: @clr_gray_light;
+      }
+    }
+  }
+}

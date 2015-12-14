@@ -1,0 +1,30 @@
+<div flex layout="column" class="editWrapper" layout-align="start start">
+    <form name="gatewayEditForm" layout="column" layout-fill class="gatewayEditForm">
+        <div layout="row" ng-class="{'md-offset':true}" class="nameInput">
+            <md-input-container flex class="md-accent">
+                <label>{{ 'OVERVIEW.DESCRIPTION.GATEWAY_NAME' | translate }}</label>
+                <input ng-model="gatewayInfo.aname" md-sidenav-focus>
+            </md-input-container>
+        </div>
+        <md-list class="propertyList">
+            <div>
+                <md-list-item class="md-2-line">
+                    <div class="md-list-item-text" ng-class="{'md-offset':true}">
+                        <p class="propertyName">{{ 'OVERVIEW.DESCRIPTION.GATEWAY_ID' | translate }} ({{ 'OVERVIEW.DESCRIPTION.READ_ONLY' | translate }})</p>
+                        <h3 class="property"> {{gatewayInfo.aid}} </h3>
+                    </div>
+                </md-list-item>
+            </div>
+            <md-divider></md-divider>
+            <div>
+                <md-list-item class="md-2-line">
+                    <div class="md-list-item-text" ng-class="{'md-offset':true}">
+                        <p class="propertyName">{{ 'OVERVIEW.DESCRIPTION.TIMEZONE' | translate }}</p>
+                        <h3 class="property"> {{gatewayInfo.utc}} </h3>
+                    </div>
+                </md-list-item>
+            </div>
+        </md-list>
+            <md-divider></md-divider>
+    </form>
+</div>
