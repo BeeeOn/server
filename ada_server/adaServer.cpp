@@ -168,8 +168,8 @@ int main(int argc, char **argv)  //main body of application
 	}
 	SenderLog = new Loger();
 	ReceiverLog = new Loger();
-	SenderLog->SetLogger(c->SenderVerbosity(),c->SenderMaxFiles(),c->SenderMaxLines(),c->SenderFileNaming(),c->SenderPath(),"SENDER");
-	ReceiverLog->SetLogger(c->ReceiverVerbosity(),c->ReceiverMaxFiles(),c->ReceiverMaxLines(),c->ReceiverFileNaming(),c->SenderPath(),"RECEIVER");
+	SenderLog->SetLogger(c->SenderVerbosity(),c->SenderMaxFiles(),c->SenderMaxLines(),c->SenderFileNaming(),c->SenderPath(),"SENDER",c->SenderToSTD());
+	ReceiverLog->SetLogger(c->ReceiverVerbosity(),c->ReceiverMaxFiles(),c->ReceiverMaxLines(),c->ReceiverFileNaming(),c->SenderPath(),"RECEIVER",c->ReceiverToSTD());
 	if (signal(SIGINT, sig_handler) == SIG_ERR)
 	{
 		SenderLog->WriteMessage(ERR," [Main Process] Unable to catch SIGINT");

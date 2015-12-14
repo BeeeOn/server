@@ -37,7 +37,8 @@ class Listener
 		Loger *_log;	/**< reference to loger*/
 		sem_t *_semapohore;	/**< semaphore for free workers*/
 		WorkerPool *_workers; /**< reference to WorkerPool to obtain workers*/
-		std::atomic<bool> terminated; /**< member to store termination info*/
+		std::atomic<bool> _terminated; /**< member to store termination info*/
+		std::atomic<bool> _toBeTerminated;
 	public:
 		/**Constructor
 		 * @param l to set logger of class

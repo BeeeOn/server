@@ -31,7 +31,6 @@ Loger::~Loger()
 	this->_worker.join();  //wait for it
 	delete (this->_WriteSemaphore);
 	delete (this->_msgQueue);
-	std::cout<<this->_FileSize<<"\n";
 	sem_destroy(&(this->_msgCounter)); //delete counter
 }
 
@@ -90,7 +89,7 @@ void Loger::WriteMessage (tmessageType MT,std::string message)
 	}
 }
 
-void Loger::SetLogger(int Verbosity, int FilesCount, int LinesCount, std::string FileName, std::string Path ,std::string AppName)
+void Loger::SetLogger(int Verbosity, int FilesCount, int LinesCount, std::string FileName, std::string Path ,std::string AppName, bool ToSTD)
 {
 	this->_verbosity = Verbosity;
 	std::cout.precision(10);
@@ -101,6 +100,7 @@ void Loger::SetLogger(int Verbosity, int FilesCount, int LinesCount, std::string
 	this->_FilesCount = 0;
 	this->_appName = AppName;
 	this->_path = Path;
+	this->_toSTD = ToSTD;
 	if (_MaxFilesCount<=0)
 	{
 		_MaxFilesCount = 1;
@@ -120,11 +120,14 @@ void Loger::SetLogger(int Verbosity, int FilesCount, int LinesCount, std::string
 
 void Loger::OpenFile()
 {
-	int result;
-	result = mkdir(this->_path.c_str(),S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-	if (result==0||errno==EEXIST)
+	if (!_toSTD)
 	{
-		this->_Log.open(this->_path + "/" + this->_FileName + "." + std::to_string(this->_FilesCount) + ".log", std::ios::out|std::ios::trunc);
+		int result;
+		result = mkdir(this->_path.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+		if (result == 0 || errno == EEXIST) {
+			this->_Log.open(this->_path + "/" + this->_FileName + "." + std::to_string(this->_FilesCount) + ".log",
+							std::ios::out | std::ios::trunc);
+		}
 	}
 }
 
@@ -153,33 +156,37 @@ void Loger::Dequeue()
 		std::stringstream ss;
 		ss << message->_thrId;
 		std::string MSGstr = this->_appName + " [" + ss.str() + "] (" + timebuf + "." + std::to_string(message->_TimeStamp.tv_usec) +") " + message->_MsgType + " : " + message->_msg + "\n";
-		if ((this->_FileSize+=MSGstr.size())>this->_MaxFileSize) //verify size of file
-		{
-			this->_FileSize=0;
-			this->_Log.close();
-			if(++this->_FilesCount>=this->_MaxFilesCount) //verify count of files
-			{
-				this->_FilesCount=0;
-				this->OpenFile();
-			}
-		}
 		std::ostream *outp;
-		if (this->_Log.is_open()) //if opening succeded
+		if (!_toSTD)
 		{
-			outp = &_Log; 
-		}
-		else
-		{
-			this->OpenFile();
-			if(!this->_Log.is_open())
+			if ((this->_FileSize += MSGstr.size()) > this->_MaxFileSize) //verify size of file
 			{
-				std::cerr<<"Server Receiver ERROR : Unable to open Log file logging to screen!"<<std::endl;
-				outp = &(std::cout);
+				this->_FileSize = 0;
+				this->_Log.close();
+				if (++this->_FilesCount >= this->_MaxFilesCount) //verify count of files
+				{
+					this->_FilesCount = 0;
+					this->OpenFile();
+				}
 			}
-			else
+			if (this->_Log.is_open()) //if opening succeded
 			{
 				outp = &_Log;
 			}
+			else {
+				this->OpenFile();
+				if (!this->_Log.is_open()) {
+					std::cerr << "Server Receiver ERROR : Unable to open Log file logging to screen!" << std::endl;
+					outp = &(std::cout);
+				}
+				else {
+					outp = &_Log;
+				}
+			}
+		}
+		else
+		{
+			outp = &(std::cout);
 		}
 		*outp<<MSGstr;
 		outp->flush();

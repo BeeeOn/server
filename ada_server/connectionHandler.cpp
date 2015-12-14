@@ -56,23 +56,35 @@ int ConnectionHandler::ReciveConnection()
 	int com_s;
 	socklen_t s_size;
 	s_size=sizeof(sin);
+	int fail_count = 0;
 	while (1)
 	{
 		if ((com_s=accept(s,(struct sockaddr *)&sin ,&s_size )) < 0)
 		{
 			this->_log->WriteMessage(FATAL,"Unable to accept with code : " + std::to_string(errno) + " : " + std::strerror(errno));
-			this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::ReciveConnection");
-			//return (1);
+            fail_count++;
+            if (fail_count<=5)
+            {
+                usleep (5000);
+                this->_log->WriteMessage(FATAL,"Trying to retrieve from accept error try number :" + std::to_string(fail_count) + " of 5");
+            }
+            else
+            {
+                this->_log->WriteMessage(FATAL,"Unable to accept max count of consecutive failed retrievigs reached");
+                this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::ReciveConnection");
+                return (1);
+            }
 		}
 		else
 		{
-		  sem_wait((this->_semaphore));
-		  Worker *w  = NULL;
-		  while (w==NULL)
-		  {
-			  w = this->_workers->GetWorker(this->_log);
-		  }
-	      w->Unlock(com_s,sin.sin_addr);
+            fail_count = 0;
+            sem_wait((this->_semaphore));
+            Worker *w  = NULL;
+            while (w==NULL)
+            {
+                w = this->_workers->GetWorker(this->_log);
+            }
+            w->Unlock(com_s,sin.sin_addr);
 		}
 	}
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::ReciveConnection");

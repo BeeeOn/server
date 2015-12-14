@@ -38,9 +38,9 @@ int Listener::Listen ()
 	}
 	if ((listen (s,10))<0) //start listening on socket
 	{
-	  this->_log->WriteMessage(FATAL,"Unable to listen");
-	  this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Listen");
-	  return (1);
+		this->_log->WriteMessage(FATAL,"Unable to listen");
+		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Listen");
+		return (1);
 	}
 	else
 	{
@@ -60,15 +60,34 @@ int Listener::ReciveConnection()
 	int com_s;  //set communincation socket
 	socklen_t s_size;
 	s_size=sizeof(sin);
+	int failcounter = 0;
 	while (1)
 	{
 		if ((com_s=accept(s,(struct sockaddr *)&sin ,&s_size )) < 0)  //wait for client to connect
 		{
-			std::cerr<<std::strerror(errno);
 			this->_log->WriteMessage(FATAL,"Error when accepting code : " + std::to_string(errno) + " : " + std::strerror(errno) );
-			this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::ReciveConnection");
-			this->terminated = true;
-			return (1);
+			if (!this->_toBeTerminated)
+			{
+				failcounter++;
+				if (failcounter<=5)
+				{
+					usleep (5000);
+					this->_log->WriteMessage(FATAL,"Trying to retrieve from accept error try number :" + std::to_string(failcounter) + " of 5");
+				}
+				else
+				{
+					this->_log->WriteMessage(FATAL,"Unable to accept max count of consecutive failed retrievigs reached");
+					this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::ReciveConnection");
+					this->_terminated = true;
+					return (1);
+				}
+			}
+			else
+			{
+				this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::ReciveConnection");
+				this->_terminated = true;
+				return (1);
+			}
 		}
 		sem_wait((this->_semapohore)); //decrease count of workers or wait for free worker if there is none
 		Worker *w  = NULL;
@@ -92,8 +111,9 @@ Listener::Listener(Loger *l,int Port,sem_t *semaphore, WorkerPool *wp)
 	_port = Port;
 	_log = l;
 	s = -1;
+	this->_toBeTerminated=false;
 	this->_workers=wp;
-	this->terminated = false;
+	this->_terminated = false;
 	this->_semapohore = semaphore;
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Listener");
 }
@@ -103,8 +123,9 @@ Listener::Listener(Loger *l,int Port,sem_t *semaphore, WorkerPool *wp)
 Listener::~Listener()
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::~Listener");
+	this->_toBeTerminated = true;
 	this->UnAccept();
-	while (!this->terminated)
+	while (!this->_terminated)
 	{
 		sleep(1);
 	}

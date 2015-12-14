@@ -417,3 +417,26 @@ bool DBHandler::DeleteFacility(std::string ID, long long int gateway_id)
 		return (false);
 	}
 }
+
+time_t DBHandler::GetLastTimestamp(long long unsigned int dev_euid)
+{
+	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetLastTimestamp");
+	time_t retVal = -1;
+	try
+	{
+		*_sql << SQLQueries::SelectTimestamp,
+				into(retVal),
+				use(dev_euid,"DEVICE_EUID");
+		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetLastTimestamp");
+		return (retVal);
+	}
+	catch(std::exception const &e)
+	{
+		this->_log->WriteMessage(ERR, "Error in query : " + _sql->get_last_query() );
+		std::string ErrorMessage = "Database Error : ";
+		ErrorMessage.append (e.what());
+		this->_log->WriteMessage(ERR,ErrorMessage );
+		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetLastTimestamp");
+		return (retVal);
+	}
+}

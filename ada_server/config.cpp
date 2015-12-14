@@ -86,13 +86,17 @@ bool Config::setConfig(std::string File)
 	return (false);
 }
 
-bool Config::GetLogProperties(pugi::xml_node log,int *verbosity,int *maxFiles,int*maxLines,std::string *fileNaming,std::string *path)
+bool Config::GetLogProperties(pugi::xml_node log,int *verbosity,int *maxFiles,int*maxLines,std::string *fileNaming,std::string *path, bool *toSTD)
 {
+	*toSTD=log.child("ToSTD").text().as_bool();
 	*verbosity=log.child("Level").text().as_int();
-	*maxLines=log.child("MaxFileSize").text().as_int();
-	*maxFiles=log.child("FilesCount").text().as_int();
-	*fileNaming=log.child("FileNaming").text().as_string();
-	*path =log.child("LogPath").text().as_string();
+	if (!*toSTD)
+	{
+		*maxLines = log.child("MaxFileSize").text().as_int();
+		*maxFiles = log.child("FilesCount").text().as_int();
+		*fileNaming = log.child("FileNaming").text().as_string();
+		*path = log.child("LogPath").text().as_string();
+	}
 	return (true);
 }
 bool Config::GetDatabaseProperties (pugi::xml_node DB)
@@ -112,7 +116,7 @@ bool Config::GetReceiverProperties (pugi::xml_node receiver)
 	{
 		return (false);
 	}
-	this->GetLogProperties(log,&(this->_receiverVerbosity),&(this->_receiverMaxFiles),&(this->_receiverMaxLines),&(this->_receiverFileNaming),&(this->_receiverLogPath));
+	this->GetLogProperties(log,&(this->_receiverVerbosity),&(this->_receiverMaxFiles),&(this->_receiverMaxLines),&(this->_receiverFileNaming),&(this->_receiverLogPath),&(this->_RtoSTD));
 	return (true);
 }
 bool Config::GetSenderProperties (pugi::xml_node sender)
@@ -124,7 +128,7 @@ bool Config::GetSenderProperties (pugi::xml_node sender)
 	{
 		return (false);
 	}
-	this->GetLogProperties(log,&(this->_senderVerbosity),&(this->_senderMaxFiles),&(this->_senderMaxLines),&(this->_senderFileNaming),&(this->_senderLogPath));
+	this->GetLogProperties(log,&(this->_senderVerbosity),&(this->_senderMaxFiles),&(this->_senderMaxLines),&(this->_senderFileNaming),&(this->_senderLogPath),&(this->_StoSTD));
 	return (true);
 }
 

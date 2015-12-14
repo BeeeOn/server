@@ -93,6 +93,10 @@ class DBHandler
 				 * @return pointer to populated vector
 							*/
 		std::vector<std::string> *GetNotifString(std::string email);
+		/** Method for obtaining last timestamp
+		* @param long long unsigned int containing device identification
+		* @return time_t value of the timestamp from database*/
+		time_t GetLastTimestamp(long long unsigned int dev_euid);
 };
 
 

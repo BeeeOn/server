@@ -43,6 +43,8 @@ class Config
 		std::string _crtPath; /**< Member representing path to server public certificate file*/
 		std::string _keyPath; /**< Member representing path to server private key file*/
 		int _mode;
+		bool _RtoSTD;
+		bool _StoSTD;
 		/**Method parse configuration file
 		 * @param File pugi::xml_node common element of file
 		 * @return bool type representing success/failure of parsing*/
@@ -58,7 +60,7 @@ class Config
 		 * @param fileNaming pointer to std::string where is saved file naming setting
 		 * @param path pointer to integer where is saved path setting
 		 * @return bool type representing success/failure of parsing*/
-		bool GetLogProperties(pugi::xml_node log,int *verbosity,int *maxFiles,int*maxLines,std::string *fileNaming,std::string *path);
+		bool GetLogProperties(pugi::xml_node log,int *verbosity,int *maxFiles,int*maxLines,std::string *fileNaming,std::string *path, bool *toSTD);
 		/**Method to load and parse configuration file
 		 * @param File pugi::xml_node DB element of file
 		 * @return bool type representing success/failure of parsing*/
@@ -142,6 +144,12 @@ class Config
 		/**Getter for server mode to start in
 		 * @return int representing mode number*/
 		int Mode () const {return (_mode);};
+		/**Getter for server log to std::out
+		* @return bool representing decision*/
+		bool ReceiverToSTD () const {return (_RtoSTD);};
+		/**Getter for server log to std::out
+		* @return bool representing decision*/
+		bool SenderToSTD () const {return (_StoSTD);};
 
 };
 

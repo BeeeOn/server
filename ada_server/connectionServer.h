@@ -63,6 +63,7 @@ class ConnectionServer
 		* @param MSG std::string containng message text.
 		*/
 		void Notify(std::string MSG);
+		void Cleanup();
 		Loger *_log;	/**< reference to Loger object used for logging*/
 		int _timeTimeOut;	/**< timeout for unresponsive client*/
 		SSL_CTX *sslctx;	/**< SSL context of server*/

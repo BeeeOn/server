@@ -73,6 +73,7 @@ class Loger
 		int _MaxFileSize;  /**< maximal file size*/
 		int _MaxFilesCount; /**< maximal file size*/
 		int _ActualFile;  /**< number of file which is currently used for logging*/
+		bool _toSTD;
 		std::string _FileName; /**< File naming*/
 		std::ofstream _Log; /**< opened file stream*/
 		/**Method to open files
@@ -115,7 +116,7 @@ class Loger
 		 * @param Path std::string representing Path to folder where are logs stored
 		 * @param AppName std::string representing application name
 				 */
-		void SetLogger(int Verbosity, int FilesCount, int LinesCount, std::string FileName, std::string Path ,std::string AppName);
+		void SetLogger(int Verbosity, int FilesCount, int LinesCount, std::string FileName, std::string Path ,std::string AppName, bool ToSTD);
 
 };
 

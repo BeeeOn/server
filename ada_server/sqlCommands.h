@@ -47,5 +47,8 @@ const string InsertLog = "insert into log (device_euid,measured_at,module_id,mea
 
 /** Q to select count of record uses ( :coulmnName :tableName :coumnName :record)*/
 const string SelectCount = "select count(*) from :tableName where :columnName = :record;"; //"select count(*)" + columnName + " from " + tableName + " where " + columnName + " = "+ record + ";";
+
+/** Q to select timestamp of last value for device uses (:DEVICE_EUID)*/
+const string SelectTimestamp = "select measured_at from device where (device_euid = :DEVICE_EUID);";
 }
 #endif /* SQLCOMMANDS_H_ */

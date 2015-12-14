@@ -113,8 +113,6 @@ void ConnectionServer::HandleConnection (in_addr IP)
 		_log->WriteMessage(TRACE,"Clients hash is : " + hash);
 		char issuer[100];
 		X509_NAME_oneline(X509_get_issuer_name(peer), issuer, 100);
-		printf("issuer= %s\n", issuer);
-		std::cout<<issuer<<"\n";
 		std::string iss = issuer;
 		_log->WriteMessage(TRACE,"Certificate was issued by : " +  iss);
 		X509_free(peer);
@@ -140,10 +138,7 @@ void ConnectionServer::HandleConnection (in_addr IP)
 			std::string MSGbase = "SSL read error : ";
 			ERR_error_string_n(ssl_err,errorBuffer,1000);
 			_log->WriteMessage(ERR,MSGbase + errorBuffer);
-			close(com_s);
-			CRYPTO_cleanup_all_ex_data();
-			ERR_free_strings();
-			ERR_remove_state(0);
+            this->Cleanup();
 			 return;
 		}
 	}
@@ -156,10 +151,7 @@ void ConnectionServer::HandleConnection (in_addr IP)
 		tmp.append(result.description());
 		_log->WriteMessage(WARN,tmp);
 		_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::HandleConnection");
-		close(com_s);
-		CRYPTO_cleanup_all_ex_data();
-		ERR_free_strings();
-		ERR_remove_state(0);
+		this->Cleanup();
 		return;
 	}
 	xml_node adapter = doc.child("adapter_server");
@@ -183,11 +175,7 @@ void ConnectionServer::HandleConnection (in_addr IP)
 				{
 					_log->WriteMessage(ERR,"Unable to create space for Protocol parser exiting client won't be server!");
 					_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::HandleConnection");
-					delete this->MP;
-					CRYPTO_cleanup_all_ex_data();
-					ERR_free_strings();
-					ERR_remove_state(0);
-					close(com_s);
+                    this->Cleanup();
 					return;
 				}
 			}
@@ -201,11 +189,7 @@ void ConnectionServer::HandleConnection (in_addr IP)
 				{
 					_log->WriteMessage(ERR,"Unable to create space for Protocol parser exiting client won't be server!");
 					_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::HandleConnection");
-					delete this->MP;
-					CRYPTO_cleanup_all_ex_data();
-					ERR_free_strings();
-					ERR_remove_state(0);
-					close(com_s);
+                    this->Cleanup();
 					return;
 				}
 			}
@@ -215,22 +199,14 @@ void ConnectionServer::HandleConnection (in_addr IP)
 	{
 		_log->WriteMessage(WARN,"Unsupported protocol version");
 		_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::HandleConnection");
-		delete this->MP;
-		CRYPTO_cleanup_all_ex_data();
-		ERR_free_strings();
-		ERR_remove_state(0);
-		close(com_s);
+        this->Cleanup();
 		return;
 	}
 	if (!MP->ParseMessage(&adapter,FMversion,CPversion))  //parse message
 	{
 
 		_log->WriteMessage(WARN,"Wrong request format");
-		delete this->MP;
-		CRYPTO_cleanup_all_ex_data();
-		ERR_free_strings();
-		ERR_remove_state(0);
-		close(com_s);
+        this->Cleanup();
 		_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::HandleConnection");
 		return;
 
@@ -303,10 +279,7 @@ void ConnectionServer::HandleConnection (in_addr IP)
 		this->StoreData();
 		database->LogValue(parsedMessage);
 	}
-	CRYPTO_cleanup_all_ex_data();
-	ERR_free_strings();
-	ERR_remove_state(0);
-	delete this->MP;
+	this->Cleanup();
 	_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::HandleConnection");
 	return;
 }
@@ -319,7 +292,7 @@ void ConnectionServer::Notify(std::string MSG)
 	s = socket(AF_INET, SOCK_STREAM, 0);
 	if(s < 0)
 	{
-		std::cerr<<"Creating socket failed\n";
+		_log->WriteMessage(ERR,"Creating socket for communication with Framework failed");
 		return;
 	}
 	SvSoc.sin_port = htons(7083);
@@ -388,7 +361,14 @@ void ConnectionServer::StoreData()
 	}
 	else
 	{
-		database->UpdateSenAct(this->parsedMessage);
+		if (this->parsedMessage->timestamp>=this->database->GetLastTimestamp(this->parsedMessage->device_euid))
+		{
+			database->UpdateSenAct(this->parsedMessage);
+		}
+		else
+		{
+			_log->WriteMessage(TRACE,"TimeStamp is older than the previous one data will be saved only to log table");
+		}
 	}
 	_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::StoreData");
 }
@@ -415,4 +395,16 @@ int ConnectionServer::GetData()
 		wakeUpTime = 10;
 	_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetData");
 	return (wakeUpTime);
+}
+
+void ConnectionServer::Cleanup()
+{
+    if(this->MP!=nullptr)
+    {
+        delete (MP);
+        MP=nullptr;
+    }
+    CRYPTO_cleanup_all_ex_data();
+    ERR_free_strings();
+    ERR_remove_state(0);
 }
