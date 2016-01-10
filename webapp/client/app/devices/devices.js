@@ -12,8 +12,7 @@ angular.module('beeeOnWebApp')
           }
         },
         params: {
-          locationId: 'devices',
-          locationName: 'Devices',
+          message: null,
           locationButtonType: 'panel_toggle_left' //see location-button directive
         },
         authenticate: true

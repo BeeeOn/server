@@ -3,11 +3,12 @@
 // Development specific configuration
 // ==================================
 module.exports = {
-  // MongoDB connection options
-  mongo: {
-    uri: 'mongodb://localhost/beeeonweb-dev'
-  },
-  ip: "192.168.0.15",
-  /*ip: "0.0.0.0",*/
-  port: 9000
+  /*ip: "192.168.0.19",*/
+  url: "http://localhost:9000",
+  ip: "localhost",
+  port: 9000,
+  ui_protocol: "1.0",
+  ui_server: "127.0.0.1",
+  ui_server_port: 51111,
+  logger_level : 'TRACE'
 };

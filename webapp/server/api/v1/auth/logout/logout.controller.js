@@ -1,10 +1,12 @@
 'use strict';
 
 var _ = require('lodash');
+var transformer = require('../../../../components/transformer');
 
 // Get list of logouts
 exports.index = function(req, res) {
-  //TODO logout from ui_server
-
-  return res.send(200,'Logout successful');
+  if(req.user.bt === 'demo'){
+    return res.send(200);
+  }
+  return transformer.doRequest({ns:'accounts',type:'logout'},req,res);
 };

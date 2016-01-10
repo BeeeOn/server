@@ -2,18 +2,18 @@
     <md-radio-group ng-model="selectedGateway">
         <md-list-item
                 ng-repeat="gateway in gateways"
-                ng-click="select(gateway.aid)"
+                ng-click="select(gateway.id)"
                 md-no-ink
-                aria-label="Select {{gateway.aname}}"
-                ng-class="{selected: selectedGateway === gateway.aid}"
+                aria-label="Select {{gateway.name}}"
+                ng-class="{selected: selectedGateway === gateway.id}"
                 class="list-button"
                 >
             <div layout="row" layout-align="space-between center" flex>
                 <div>
-                    <h3>{{gateway.aname}}</h3>
-                    <p user-role="gateway.role"></p>
+                    <h3>{{gateway.name}}</h3>
+                    <p user-role="gateway.permission"></p>
                 </div>
-                <md-radio-button ng-value="gateway.aid" aria-label="Select {{gateway.aname}}"></md-radio-button>
+                <md-radio-button ng-value="gateway.id" aria-label="Select {{gateway.name}}"></md-radio-button>
             </div>
         </md-list-item>
     </md-radio-group>

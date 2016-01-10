@@ -20,6 +20,10 @@ angular.module('beeeOnWebApp')
     $scope.account = data.account;
 
     $scope.add = function(){
-      $modalInstance.close($scope.account);
+      if($scope.account.email===''){
+        $log.error("AddAccountCtrl - email must be filled");
+      }else{
+        $modalInstance.close($scope.account);
+      }
     }
   }]);

@@ -27,21 +27,21 @@ angular.module('beeeOnWebApp')
     });
 
     var findGatewayInfoById = function (id) {
-      return lodash.find(gatewaysInfo,{'aid':id});
+      return lodash.find(gatewaysInfo,{'id':id});
     };
 
     var findGatewayById = function (id) {
-      return lodash.find(gateways,{'aid':id});
+      return lodash.find(gateways,{'id':id});
     };
 
     /* Public Gateway service API*/
     return {
       findGatewayById : findGatewayById
       ,
-      getGateways : function(){
+      getGateways : function(forceGet){
         var deferred = $q.defer();
         // return local adapters, if exists
-        if(gateways){
+        if(gateways && !forceGet){
           $log.debug('Gateway - Getting local gateways');
           deferred.resolve(gateways);
         }else{
@@ -64,12 +64,27 @@ angular.module('beeeOnWebApp')
       refreshGateways : function() {
         return $http.get('api/v1/gateway').
           success(function(data) {
-            gateways = data;
+            if(gateways){
+              //clear existing information, but keep the reference to gateways array
+              gateways.length = 0;
+              gateways = gateways.concat(data);
+            }else{
+              gateways = data;
+            }
           }).
           error(function(err) {
-            //TODO error notification
-            $log.error('Gateway - '+err);
+            $log.error('Gateway - error code: ' + err.errcode);
           });
+      },
+
+      getGatewaysCount : function(){
+        var count;
+        if(gateways){
+          count = gateways.length;
+        }else{
+          count = 0;
+        }
+        return count;
       },
 
       getSelectedId : function(){
@@ -83,12 +98,12 @@ angular.module('beeeOnWebApp')
         selectedGateway = gatewayId;
       },
 
-      getSelectedInfo : function(gateway){
+      getSelectedInfo : function(gateway,force){
         var deferred = $q.defer();
         $log.debug('Gateway - Retrieving gateway info (' + gateway + ')');
         // return local adapters, if exists
         var info = findGatewayInfoById(gateway);
-        if((gatewaysInfo.length !== 0) && info){
+        if((gatewaysInfo.length !== 0) && info && !force){
           $log.debug('Gateway - Getting local gateway info');
           deferred.resolve(info);
         }else{
@@ -99,7 +114,7 @@ angular.module('beeeOnWebApp')
           //else get from server
           $http.get('api/v1/gateway/' + gateway).
             then(function(data){
-              lodash.mergeById(gatewaysInfo,data.data,"aid");
+              lodash.mergeById(gatewaysInfo,data.data,"id");
               deferred.resolve(data.data);
             },function(err){
               deferred.reject(err);
@@ -112,31 +127,36 @@ angular.module('beeeOnWebApp')
 
       setSelectedInfo : function(info){
         var deferred = $q.defer();
-        $log.debug('Gateway - trying to update info about gateway (' + info.aid + ')');
-        $http.put('api/v1/gateway/' + info.aid,info).
+        $log.debug('Gateway - trying to update info about gateway (' + info.id + ')');
+        $translate('ACTIVE_GATEWAY.UPDATING_GATEWAY').then(function(text){
+          loadingModal.show(text);
+        });
+        $http.put('api/v1/gateway/' + info.id,info).
           then(function(){
-            var oldInfo = findGatewayInfoById(info.aid);
-            oldInfo.aname = info.aname;
-            oldInfo.utc = info.utc;
-            oldInfo = findGatewayById(info.aid);
-            oldInfo.aname = info.aname;
-            oldInfo.utc = info.utc;
+            var oldInfo = findGatewayInfoById(info.id);
+            oldInfo.name = info.name;
+            oldInfo.timezone = info.timezone;
+            oldInfo = findGatewayById(info.id);
+            oldInfo.name = info.name;
+            oldInfo.timezone = info.timezone;
             deferred.resolve();
           },function(err){
             deferred.reject(err);
+          }).finally(function(){
+            loadingModal.hide();
           });
         return deferred.promise;
       },
 
       getSelectedRole : function () {
-        return lodash.result(lodash.find(gatewaysInfo,{'aid':this.getSelectedId()}),'role');
+        return lodash.result(lodash.find(gatewaysInfo,{'id':this.getSelectedId()}),'permission');
       },
 
-      getAccounts : function() {
+      getAccounts : function(force) {
         var deferred = $q.defer();
         var id = this.getSelectedId();
         var gateway = findGatewayInfoById(id);
-        if((gatewaysInfo.length !== 0) && gateway && gateway.accounts){
+        if((gatewaysInfo.length !== 0) && gateway && gateway.accounts && !force){
           $log.debug('Gateways - getting local accounts');
           deferred.resolve(gateway.accounts)
         }else{
@@ -146,8 +166,13 @@ angular.module('beeeOnWebApp')
           });
           $http.get('api/v1/gateway/' + id + '/accounts').
             then(function(res){
-              gateway.accounts = [];
-              gateway.accounts = res.data;
+              if(gateway.accounts){
+                gateway.accounts.length = 0;
+                gateway.accounts = gateway.accounts.concat(res.data);
+              }else {
+                gateway.accounts = [];
+                gateway.accounts = res.data;
+              }
               deferred.resolve(gateway.accounts);
             },function(err){
               deferred.reject(err);
@@ -159,7 +184,7 @@ angular.module('beeeOnWebApp')
       },
 
       isSuperuser : function () {
-        return lodash.result(lodash.find(gateways,{'aid':selectedGateway}),'role') === 'superuser';
+        return lodash.result(lodash.find(gateways,{'id':selectedGateway}),'permission') === 'owner';
       },
 
       addAccount : function(account) {
@@ -167,13 +192,16 @@ angular.module('beeeOnWebApp')
         var deferred = $q.defer();
         var id = this.getSelectedId();
         $log.debug('Gateway - trying add account for (' + id + ')');
+        $translate('ACTIVE_GATEWAY.ADDING_ACCOUNT').then(function(text){
+          loadingModal.show(text);
+        });
         $http.post('api/v1/gateway/' + id + '/accounts',account).
           then(function(){
-            account.name = account.email;
-            findGatewayInfoById(id).accounts.push(account);
             deferred.resolve();
           },function(err){
             deferred.reject(err);
+          }).finally(function(){
+            loadingModal.hide();
           });
         return deferred.promise;
       },
@@ -182,18 +210,23 @@ angular.module('beeeOnWebApp')
         var deferred = $q.defer();
         var id = this.getSelectedId();
         $log.debug('Gateway - trying add account for (' + id + ')');
+        $translate('ACTIVE_GATEWAY.DELETING_GATEWAY').then(function(text){
+          loadingModal.show(text);
+        });
         $http.delete('api/v1/gateway/' + id).
           then(function(){
             lodash.remove(gateways,function(g){
-              return g.aid === id;
+              return g.id === id;
             });
             lodash.remove(gatewaysInfo,function(g){
-              return g.aid === id;
+              return g.id === id;
             });
             $log.debug(gatewaysInfo);
             deferred.resolve();
           },function(err){
             deferred.reject(err);
+          }).finally(function(){
+            loadingModal.hide();
           });
         return deferred.promise;
       },
@@ -211,14 +244,19 @@ angular.module('beeeOnWebApp')
           });
           $http.get('api/v1/gateway/' + id + '/locations').
             then(function(res){
-              gateway.locations = [];
               //add default "Not Defined Location" to beginning of list
               res.data.push({
                 "id" : "0",
-                "name" : "Unknown",
+                "name" : "",
                 "type" : "0"
               });
-              gateway.locations = res.data;
+              if(gateway.locations){
+                gateway.locations.length = 0;
+                gateway.locations = gateway.locations.concat(res.data);
+              }else {
+                gateway.locations = [];
+                gateway.locations = res.data;
+              }
               deferred.resolve(gateway.locations);
             },function(err){
               deferred.reject(err);
@@ -241,8 +279,13 @@ angular.module('beeeOnWebApp')
           });
           $http.get('api/v1/gateway/' + id + '/devices').
             then(function(res){
-              gateway.devices = [];
-              gateway.devices = res.data;
+              if(gateway.devices){
+                gateway.devices.length = 0;
+                gateway.devices = gateway.devices.concat(res.data);
+              }else {
+                gateway.devices = [];
+                gateway.devices = res.data;
+              }
               deferred.resolve(gateway.devices);
             },function(err){
               deferred.reject(err);
@@ -250,6 +293,24 @@ angular.module('beeeOnWebApp')
               loadingModal.hide();
             });
         }
+        return deferred.promise;
+      },
+      clearLocalData : function(){
+        $log.debug("Clearing local gateways data");
+        gateways = null;
+        gatewaysInfo = [];
+        selectedGateway = null;
+      },
+      registerGateway : function(options){
+        var deferred = $q.defer();
+        $log.debug('Gateway - trying to add gateway (' + options.id + ')');
+        $http.post('api/v1/gateway',options).
+          then(function(){
+            $log.debug("Gateway registered successfully (" + options.id + ")");
+            deferred.resolve();
+          },function(err){
+            deferred.reject(err);
+          });
         return deferred.promise;
       }
     }

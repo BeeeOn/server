@@ -33,6 +33,10 @@ angular.module('beeeOnWebApp')
         if(currentLocations == null) return "";
         var location = lodash.find(currentLocations,{'id':id.toString()});
         return (location.name && location.name !== "") ? location.name : $translate.instant(locationDefaults[location.type].name);
+      },
+      clearLocalData : function () {
+        $log.debug("Clearing local locations data");
+        currentLocations = null;
       }
     }
   }]);

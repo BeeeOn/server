@@ -32,25 +32,18 @@ var all = {
   // List of user roles
   userRoles: ['guest', 'user', 'admin','superuser'],
 
-  // MongoDB connection options
-  mongo: {
-    options: {
-      db: {
-        safe: true
-      }
-    }
-  },
-
   google: {
     clientID:     process.env.GOOGLE_ID || 'id',
     clientSecret: process.env.GOOGLE_SECRET || 'secret',
-    callbackURL:  (process.env.DOMAIN || '') + '/api/v1/google/callback'
+    callbackURL:  (process.env.DOMAIN || '') + '/api/v1/auth/google/callback'
   }
 
 };
-
 // Export the config object based on the NODE_ENV
 // ==============================================
 module.exports = _.merge(
   all,
   require('./' + process.env.NODE_ENV + '.js') || {});
+
+all.google.callbackURL = all.env == 'development' ? all.ip+':'+all.port : 'ant-2.fit.vutbr.cz:9000';
+all.google.callbackURL = 'http://' + all.google.callbackURL + '/api/v1/auth/google/callback';

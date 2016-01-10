@@ -18,19 +18,13 @@ function isAuthenticated() {
 			// allow access_token to be passed through query parameter as well
 			if(req.query && req.query.hasOwnProperty('access_token')) {
 				req.headers.authorization = 'Bearer ' + req.query.access_token;
+        console.log(req.headers.authorization);
 			}
 			validateJwt(req, res, next);
 		})
 		// Attach user to request
 		.use(function(req, res, next) {
 			next();
-			/*User.findById(req.user._id, function (err, user) {
-				if (err) return next(err);
-				if (!user) return res.send(401);
-
-				req.user = user;
-				next();
-			});*/
 		});
 }
 
@@ -55,18 +49,18 @@ function hasRole(roleRequired) {
 /**
  * Returns a jwt token signed by the app secret
  */
-function signToken(id) {
-	return jwt.sign({ bt: id }, config.secrets.session, { expiresInMinutes: 60*24*2 });
+function signToken(id,provider,token) {
+	return jwt.sign({ bt: id ,provider:provider,access_token:token}, config.secrets.session, { expiresIn: 60*60*24*2 });
 }
 
 /**
  * Set token cookie directly for oAuth strategies
  */
 function setTokenCookie(req, res) {
-	if (!req.bt) return res.json(404, { message: 'Something went wrong, please try again.'});
-	var token = signToken(req.bt);
+	//if (!req.user.bt) return res.send(404, { message: 'Authentication wasn\'t successful, please try again later '});
+	var token = signToken(req.user.bt,req.user.provider,req.user.access_token);
 	res.cookie('token', JSON.stringify(token));
-	res.redirect('/');
+  return token;
 }
 
 exports.isAuthenticated = isAuthenticated;

@@ -43,8 +43,8 @@ angular.module('beeeOnWebApp')
       $log.debug("DeviceDetailCtrl - refresh");
     };
     var editDevice = function(){
-      $log.debug("DeviceDetailCtrl - Opening edit device for: " + $stateParams.deviceId);
-      $state.go($state.current.name.split('.')[0]+'.detail.edit', {deviceId: $stateParams.deviceId},{location:false});
+      //$log.debug("DeviceDetailCtrl - Opening edit device for: " + $stateParams.deviceId);
+      //$state.go($state.current.name.split('.')[0]+'.detail.edit', {deviceId: $stateParams.deviceId},{location:false});
     };
     rightPanelOptions.more = [
       {
@@ -76,6 +76,6 @@ angular.module('beeeOnWebApp')
 
     };
 
-    SidePanel.openRight();
+    SidePanel.toggleRight();
     $scope.selectedIndex = 0;
   }]);

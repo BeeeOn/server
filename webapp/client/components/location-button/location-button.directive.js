@@ -53,6 +53,7 @@ angular.module('beeeOnWebApp')
                   return;
                 }
                 $state.go(scope.options.changeStateOptions.newState,scope.options.changeStateOptions.params);
+
               };
               SidePanel.setRightMainAction(scope.action);
               break;

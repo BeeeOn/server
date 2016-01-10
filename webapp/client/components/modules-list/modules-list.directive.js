@@ -83,6 +83,10 @@ angular.module('beeeOnWebApp')
             $state.go(newLocation, {deviceId: deviceId});
           }
         };
+
+        scope.locationIdComparator = function(actual,expected){
+          return parseInt(actual)=== parseInt(expected);
+        };
       }
     };
   }]);

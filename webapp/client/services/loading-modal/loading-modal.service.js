@@ -44,7 +44,7 @@ angular.module('beeeOnWebApp')
           //fail safe, automatically hide after 10s
           $timeout(function(){
             hide();
-          },10000);
+          },25000);
         }
       },
       hide : hide

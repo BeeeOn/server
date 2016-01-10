@@ -11,7 +11,7 @@ angular.module('beeeOnWebApp')
       link: function (scope, element, attrs) {
         scope.$watch('type', function(value) {
           switch (value){
-            case 'superuser':
+            case 'owner':
               $translate('ROLES.SUPERUSER').then(function(text){
                 element.text(text);
               });

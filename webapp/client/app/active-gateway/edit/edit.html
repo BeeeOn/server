@@ -3,7 +3,7 @@
         <div layout="row" ng-class="{'md-offset':true}" class="nameInput">
             <md-input-container flex class="md-accent">
                 <label>{{ 'ACTIVE_GATEWAY.GATEWAY_NAME' | translate }}</label>
-                <input ng-model="gatewayInfo.aname" md-sidenav-focus>
+                <input ng-model="gatewayInfo.name" md-sidenav-focus>
             </md-input-container>
         </div>
         <md-list class="propertyList">
@@ -11,7 +11,7 @@
                 <md-list-item class="md-2-line">
                     <div class="md-list-item-text" ng-class="{'md-offset':true}">
                         <p class="propertyName">{{ 'ACTIVE_GATEWAY.GATEWAY_ID' | translate }} ({{ 'ACTIVE_GATEWAY.READ_ONLY' | translate }})</p>
-                        <h3 class="property"> {{gatewayInfo.aid}} </h3>
+                        <h3 class="property"> {{gatewayInfo.id}} </h3>
                     </div>
                 </md-list-item>
             </div>
@@ -20,7 +20,7 @@
                 <md-list-item class="md-2-line">
                     <div class="md-list-item-text" ng-class="{'md-offset':true}">
                         <p class="propertyName">{{ 'ACTIVE_GATEWAY.TIMEZONE' | translate }}</p>
-                        <h3 class="property"> {{gatewayInfo.utc}} </h3>
+                        <h3 class="property"> {{gatewayInfo.timezone}} </h3>
                     </div>
                 </md-list-item>
             </div>

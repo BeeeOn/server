@@ -10,16 +10,22 @@ angular.module('beeeOnWebApp')
       $scope.rightPanelOptions = SidePanel.getRightPanelOptions();
 
       navbar.setLocation('MENU.ACTIVE_GATEWAY');
+      var forceReload = false;
+      if($stateParams.reloadData){
+        forceReload = true;
+      }
       //retrieve gateway info
-      Gateways.getSelectedInfo($stateParams.gatewayId).then(function(data){
+      Gateways.getSelectedInfo($stateParams.gatewayId,forceReload).then(function(data){
         $scope.gatewayInfo = data;
       },function(err){
         //TODO error handling
-        $log.error('ActiveGatewayCtrl - ' + err.data);
+        $log.error(err);
       });
 
+
+
       $scope.showDevices = function(){
-        $state.go('overview.modules',{gatewayId:$scope.gatewayInfo.aid});
+        $state.go('devices',{gatewayId:$scope.gatewayInfo.id});
       };
 
       $scope.showRightPanel = function(option){
@@ -50,15 +56,14 @@ angular.module('beeeOnWebApp')
           'components/modal/gateway/delete/delete.html',
           'DeleteGatewayCtrl',
           {
-            name : Gateways.findGatewayById(Gateways.getSelectedId()).aname
+            name : Gateways.findGatewayById(Gateways.getSelectedId()).name
           },
           'lg'
         ).result.then(function(){
             Gateways.deleteGateway(Gateways.getSelectedId()).
               then(function(){
                 $log.info('Gateway successfully deleted.');
-                $state.go('overview');
-                $window.location.reload();
+                $state.go('home',{},{reload:true});
               },function(err){
                 $log.error(err);
               });

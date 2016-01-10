@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Vrstva_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="2024px" height="2024px" viewBox="0 0 2024 2024" enable-background="new 0 0 2024 2024" xml:space="preserve">
+<rect fill="#0097A7" width="2024" height="2024"/>
+<g id="Uhelnik">
+	<path fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="M1309.126,1420.82c-16.5,0-36.75-11.691-45-25.98l-205.62-356.139
+		c-8.25-14.289-8.25-37.672,0-51.961l205.62-356.145c8.25-14.289,28.5-25.98,45-25.98h411.242c16.5,0,36.75,11.691,45,25.98
+		l205.62,356.145c8.25,14.289,8.25,37.672,0,51.961l-205.62,356.139c-8.25,14.289-28.5,25.98-45,25.98H1309.126z"/>
+</g>
+<polygon id="Uhelnik_-_okraj" fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" points="1316.863,1355.463 1118.979,1012.72 
+	1316.863,669.974 1712.632,669.974 1910.518,1012.72 1712.632,1355.463 "/>
+<path fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="M501.387,782.943c0,21.712-17.601,39.313-39.313,39.313H110.662
+	c-21.711,0-39.313-17.601-39.313-39.313V294.455c0-21.712,17.601-39.313,39.313-39.313h351.413
+	c21.712,0,39.313,17.601,39.313,39.313V782.943z"/>
+<path fill="none" stroke="#FFFFFF" stroke-width="30" d="M286.368,1343.66c24.19,483.811,1230.985,549.15,1245.406,66.088"/>
+<circle fill-rule="evenodd" clip-rule="evenodd" fill="#0097A7" cx="286.368" cy="538.699" r="162.608"/>
+<circle fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" cx="205.735" cy="564.298" r="40.316"/>
+<circle fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" cx="286.368" cy="455.283" r="40.316"/>
+<circle fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" cx="367" cy="564.297" r="40.317"/>
+<path fill-rule="evenodd" clip-rule="evenodd" fill="#FFFFFF" d="M428.777,1317.623c0,14.379-11.657,26.037-26.038,26.037H169.997
+	c-14.38,0-26.037-11.658-26.037-26.037V994.092c0-14.379,11.657-26.037,26.037-26.037H402.74c14.38,0,26.038,11.657,26.038,26.037
+	V1317.623z"/>
+<rect x="38.011" y="919.014" fill="#0097A7" width="643.764" height="236.843"/>
+<path fill="#FFFFFF" d="M232.506,1203.914c0,10.391-8.423,18.814-18.814,18.814l0,0c-10.39,0-18.813-8.424-18.813-18.814v-128.09
+	c0-10.393,8.423-18.814,18.813-18.814l0,0c10.391,0,18.814,8.422,18.814,18.814V1203.914z"/>
+<path fill="#FFFFFF" d="M374.984,1203.914c0,10.391-8.423,18.814-18.815,18.814l0,0c-10.391,0-18.813-8.424-18.813-18.814v-128.09
+	c0-10.393,8.423-18.814,18.813-18.814l0,0c10.392,0,18.815,8.422,18.815,18.814V1203.914z"/>
+</svg>

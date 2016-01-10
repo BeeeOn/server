@@ -1,13 +1,14 @@
 'use strict';
 
 angular.module('beeeOnWebApp')
-  .factory('Auth', ['$log','$cookieStore','$q','$http','User', function ($log,$cookieStore,$q,$http,User) {
+  .factory('Auth', ['$log','$cookieStore','$q','$http','User','Gateways','Devices','Locations', function ($log,$cookieStore,$q,$http,User,Gateways,Devices,Locations) {
     var currentUser = {};
-    var roles = ['guest','user','admin','superuser'];
+    var roles = ['guest','user','admin','owner'];
     if($cookieStore.get('token')){
-      $log.debug('Auth - Gettings user from stored cookie.');
+      $log.debug('Auth - Getting user from stored cookie.');
       currentUser = User.get();
     }
+    var self = this;
     return {
 
       login: function(properties,callback){
@@ -17,22 +18,58 @@ angular.module('beeeOnWebApp')
           bt: ''
         };
         /* is user trying to start DEMO MOD ? */
-        if(angular.isDefined(properties) && angular.isDefined(properties.demo) && properties.demo === true){
-          args = {
-            bt: 'demo'
-          };
-          $log.info('Demo mod');
+        if(angular.isDefined(properties) && angular.isDefined(properties.mode)){
+          switch (properties.mode){
+            case 'demo':
+              args = {
+                bt: 'demo',
+                url: 'local',
+                provider: 'demo'
+              };
+              $log.info('Demo mod');
+              break;
+            case 'google':
+              $log.info('Trying to login with google account');
+              args = {
+                url: 'local',
+                provider: 'google',
+                access_token: properties.token
+              };
+              break;
+            default:
+              deferred.reject("Unknown provider");
+              return deferred.promise;
+          }
+
         }
-        $http.post('api/v1/auth/local', args).
+        $http.post('api/v1/auth/'+args.url, args).
           success(function(data) {
             $cookieStore.put('token', data.token);
-            $log.debug('Auth - Gettings user from login.');
+            $log.debug('Auth - Getting user from login.');
             currentUser = User.get();
+            currentUser.currentProvider = properties.mode;
             deferred.resolve(data);
             return cb();
           }).
           error(function(err) {
-            this.logout();
+            //this.logout();
+            deferred.reject(err);
+            return cb(err);
+          }.bind(this));
+        return deferred.promise;
+      },
+
+      register : function(options,callback){
+        var cb = callback || angular.noop;
+        var deferred = $q.defer();
+        $log.debug('Auth - Registering');
+        $http.post('api/v1/auth/register',options).
+          success(function(data){
+            $cookieStore.put('token', data.token);
+            deferred.resolve(data);
+            return cb();
+          }).
+          error(function(err){
             deferred.reject(err);
             return cb(err);
           }.bind(this));
@@ -46,7 +83,6 @@ angular.module('beeeOnWebApp')
         $http.post('api/v1/auth/logout',{}).
           success(function(data){
             $cookieStore.remove('token');
-            currentUser = {};
             $log.info('Logout successful');
             deferred.resolve(data);
             return cb();
@@ -56,7 +92,6 @@ angular.module('beeeOnWebApp')
             return cb(err);
           }.bind(this));
         return deferred.promise;
-
       },
 
       getCurrentUser: function(){
@@ -64,7 +99,7 @@ angular.module('beeeOnWebApp')
       },
       isLoggedIn: function(){
         $log.debug('Auth - Checking, if user is logged in (SYNC)!');
-        return currentUser.hasOwnProperty('uid');
+        return currentUser.hasOwnProperty('id');
       },
 
       isLoggedInAsync: function(cb){
@@ -76,7 +111,7 @@ angular.module('beeeOnWebApp')
           }).catch(function() {
             cb(false);
           });
-        } else if($cookieStore.get('token') && currentUser.hasOwnProperty('uid')) {
+        } else if($cookieStore.get('token') && currentUser.hasOwnProperty('id')) {
           cb(true);
         } else {
           cb(false);
@@ -84,6 +119,12 @@ angular.module('beeeOnWebApp')
       },
       getRoles : function (){
         return roles;
+      },
+      clearLocalData : function (){
+        currentUser = {};
+        Gateways.clearLocalData();
+        Devices.clearLocalData();
+        Locations.clearLocalData();
       }
     }
   }]);

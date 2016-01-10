@@ -6,7 +6,6 @@
 
 // Set default node environment to development
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-//require('look').start(5555,'192.168.1.175');
 var express = require('express');
 var config = require('./config/environment');
 // Setup server

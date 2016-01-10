@@ -11,7 +11,7 @@
             <div layout="row" class="roleInput">
                 <md-input-container flex>
                     <label>{{ 'GLOBAL.ROLE' | translate }}</label>
-                    <md-select ng-model="account.role" placeholder="Size" class="md-accent">
+                    <md-select ng-model="account.permission" placeholder="Size" class="md-accent">
                         <md-option ng-repeat="role in roles" value="{{role}}" class="md-accent">{{role.toUpperCase()}}</md-option>
                     </md-select>
                 </md-input-container>

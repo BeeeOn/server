@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('beeeOnWebApp')
-  .directive('devicesList',['$state','$stateParams','$log','$translate','lodash','SidePanel','Devices','Modules','Locations', function ($state,$stateParams,$log,$translate,lodash,SidePanel,Devices,Modules,Locations) {
+  .directive('devicesList',['$state','$stateParams','$log','$translate','lodash','SidePanel','Devices','Modules','MODULES','Locations', function ($state,$stateParams,$log,$translate,lodash,SidePanel,Devices,Modules,MODULES,Locations) {
     return {
       templateUrl: 'components/devices-list/devices-list.html',
       restrict: 'E',
@@ -58,6 +58,10 @@ angular.module('beeeOnWebApp')
 
         scope.hasLocationDevices = function(locationId){
           return true;
+        };
+
+        scope.locationIdComparator = function(actual,expected){
+          return parseInt(actual)=== parseInt(expected);
         };
       }
     };

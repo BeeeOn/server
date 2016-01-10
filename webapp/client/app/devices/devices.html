@@ -7,9 +7,9 @@
         <div ng-include="'components/menu/menu.html'" layout="column" class="grayBackground"></div>
         <!-- Center -->
         <md-content flex class="grayBackground devicesContent" layout="column" layout-align="top center" scroll="hideOnScroll">
-            <div flex class="md-whiteframe-z2 whiteBackground " layout="column">
+            <div class="md-whiteframe-z2 whiteBackground " layout="column" layout-fill>
                 <!-- EMPTY MODULES -->
-                <div flex ng-show="!showList()" layout="column">
+                <div flex ng-show="!showList()" layout="column" layout-fill>
                     <div flex layout="column" layout-align="center center" class="emptyDevicesWrapper whiteBackground md-whiteframe-z2">
                         <h3>{{ 'DEVICES.NO_DEVICES' | translate}}</h3>
                         <md-button class="refreshBtn" ng-click="refreshList()">{{ 'DEVICES.BTNS.REFRESH_LIST' | translate}}</md-button>

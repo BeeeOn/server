@@ -53,6 +53,7 @@ angular.module('beeeOnWebApp')
             Modules.initAllModuleModels(scope.device.type,scope.device.modules);
             initChips(scope.device);
             initGroups(scope.device);
+            //console.log(scope.device);
             //initialize modules visibility watch
             scope.$watch('device.modules',function(newval,oldval){
               if(newval){

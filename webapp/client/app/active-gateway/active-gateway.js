@@ -12,8 +12,8 @@ angular.module('beeeOnWebApp')
         }
       },
       params: {
-        locationId: 'active-gateway',
-        locationName: 'Active gateway',
+        message: null,
+        reloadData: false,
         locationButtonType: 'panel_toggle_left' //see location-button directive
       },
       authenticate: true

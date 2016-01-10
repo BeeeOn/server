@@ -23,10 +23,12 @@ angular.module('beeeOnWebApp')
       $scope.selectedGateway = Gateways.getSelectedId();
       //current location from
       $scope.currentLocation = $state.current.name;
-
-      $scope.avatar = $scope.user.pictureURL || '/assets/images/icons-svg/ic_person_white_24px.svg';
+      console.log($scope.user);
+      $scope.user.$promise.then(function(){
+        $scope.avatar = $scope.user.imgurl || '/assets/images/icons-svg/ic_person_white_24px.svg';
+      });
       Gateways.getGateways().then(function(data){
-        if(!data || angular.equals({}, data)){
+        if(!data || angular.equals([], data)){
           $log.info('No gateways');
           //url fail safe, if trying to access exact gateway, but no gateways are registered
           if($scope.selectedGateway){
@@ -36,19 +38,20 @@ angular.module('beeeOnWebApp')
         }
         //assign retrieved gateway data
         $scope.gateways = data;
+
         //if no gateway is selected, select first
         if(!$scope.selectedGateway){
           //if state is home and gateways exist, redirect to "modules" state
           if($state.current.name.match("home")){
-            $scope.changeLocation("modules",data[0].aid);
+            $scope.changeLocation("devices",data[0].id);
           }else {
-            $scope.changeLocation($state.current.name.split('.')[0],data[0].aid);
+            $scope.changeLocation($state.current.name.split('.')[0],data[0].id);
           }
         }
         //check if gateway number in URL is in his gateways
         if($stateParams.gatewayId && !Gateways.findGatewayById($stateParams.gatewayId)){
           $log.warn('User doesn\'t own requested gateway ('+$stateParams.gatewayId+')');
-          $scope.changeLocation($state.current.name.split('.')[0],data[0].aid);
+          $scope.changeLocation($state.current.name.split('.')[0],data[0].id);
           /*$state.go('modules');
           //FIXME find another way to reload page
           $window.location.reload();*/
@@ -113,6 +116,7 @@ angular.module('beeeOnWebApp')
       var logout = function(){
         Auth.logout()
           .then( function() {
+            Auth.clearLocalData();
             $location.path('/login');
           })
           .catch( function(err) {
