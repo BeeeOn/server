@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="97">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="f1" displayName="Algorithms" projectFiles="true">
+      <itemPath>algorithms/RefreshInstance.cpp</itemPath>
+      <itemPath>algorithms/RefreshInstance.h</itemPath>
+      <itemPath>algorithms/RefreshManager.cpp</itemPath>
+      <itemPath>algorithms/RefreshManager.h</itemPath>
+      <itemPath>algorithms/WatchdogInstance.cpp</itemPath>
+      <itemPath>algorithms/WatchdogInstance.h</itemPath>
+      <itemPath>algorithms/WatchdogManager.cpp</itemPath>
+      <itemPath>algorithms/WatchdogManager.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <itemPath>src/AlgorithmInstance.h</itemPath>
+      <itemPath>src/AlgorithmManager.h</itemPath>
+      <itemPath>src/Calendar.h</itemPath>
+      <itemPath>src/CalendarEvent.h</itemPath>
+      <itemPath>src/EventAlgorithmManager.h</itemPath>
+      <itemPath>src/Logger.h</itemPath>
+      <itemPath>src/ManagerLoader.h</itemPath>
+      <itemPath>src/MessageParser.h</itemPath>
+      <itemPath>src/MessageRegister.h</itemPath>
+      <itemPath>src/MessageSorter.h</itemPath>
+      <itemPath>src/ModuleData.h</itemPath>
+      <itemPath>src/Server.h</itemPath>
+      <itemPath>src/ServerSession.h</itemPath>
+      <itemPath>src/TimedAlgorithmManager.h</itemPath>
+      <itemPath>src/u_server.h</itemPath>
+      <itemPath>src/u_session.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <itemPath>src/AlgorithmInstance.cpp</itemPath>
+      <itemPath>src/AlgorithmManager.cpp</itemPath>
+      <itemPath>src/Calendar.cpp</itemPath>
+      <itemPath>src/CalendarEvent.cpp</itemPath>
+      <itemPath>src/EventAlgorithmManager.cpp</itemPath>
+      <itemPath>src/Logger.cpp</itemPath>
+      <itemPath>src/ManagerLoader.cpp</itemPath>
+      <itemPath>src/MessageParser.cpp</itemPath>
+      <itemPath>src/MessageRegister.cpp</itemPath>
+      <itemPath>src/MessageSorter.cpp</itemPath>
+      <itemPath>src/ModuleData.cpp</itemPath>
+      <itemPath>src/Server.cpp</itemPath>
+      <itemPath>src/ServerSession.cpp</itemPath>
+      <itemPath>src/TimedAlgorithmManager.cpp</itemPath>
+      <itemPath>src/framework.cpp</itemPath>
+      <itemPath>src/u_server.cpp</itemPath>
+      <itemPath>src/u_session.cpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <ccTool>
+          <commandLine>-std=c++11 -pthread</commandLine>
+        </ccTool>
+      </compileType>
+      <item path="algorithms/RefreshInstance.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="algorithms/RefreshInstance.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="algorithms/RefreshManager.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="algorithms/RefreshManager.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="algorithms/WatchdogInstance.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="algorithms/WatchdogInstance.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="algorithms/WatchdogManager.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="algorithms/WatchdogManager.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/AlgorithmInstance.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/AlgorithmInstance.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/AlgorithmManager.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/AlgorithmManager.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/Calendar.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Calendar.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/CalendarEvent.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/CalendarEvent.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/EventAlgorithmManager.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/EventAlgorithmManager.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/Logger.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Logger.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/ManagerLoader.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/ManagerLoader.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/MessageParser.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/MessageParser.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/MessageRegister.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/MessageRegister.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/MessageSorter.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/MessageSorter.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/ModuleData.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/ModuleData.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/Server.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Server.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/ServerSession.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/ServerSession.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/TimedAlgorithmManager.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/TimedAlgorithmManager.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/framework.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/u_server.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/u_server.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/u_session.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/u_session.h" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+      </compileType>
+      <item path="algorithms/RefreshInstance.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="algorithms/RefreshInstance.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="algorithms/RefreshManager.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="algorithms/RefreshManager.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="algorithms/WatchdogInstance.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="algorithms/WatchdogInstance.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="algorithms/WatchdogManager.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="algorithms/WatchdogManager.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/AlgorithmInstance.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/AlgorithmInstance.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/AlgorithmManager.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/AlgorithmManager.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/Calendar.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Calendar.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/CalendarEvent.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/CalendarEvent.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/EventAlgorithmManager.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/EventAlgorithmManager.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/Logger.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Logger.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/ManagerLoader.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/ManagerLoader.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/MessageParser.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/MessageParser.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/MessageRegister.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/MessageRegister.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/MessageSorter.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/MessageSorter.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/ModuleData.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/ModuleData.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/Server.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Server.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/ServerSession.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/ServerSession.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/TimedAlgorithmManager.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/TimedAlgorithmManager.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/framework.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/u_server.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/u_server.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/u_session.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/u_session.h" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
