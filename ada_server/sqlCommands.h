@@ -40,7 +40,9 @@ const string SelectTime = "select refresh from device where device_euid=:record 
 /**Q to insert device uses ( ':devID', :type, ':value')*/
 const string InsertModule = "insert into module (device_euid,module_id,measured_value, gateway_id) values (:DEVICE_EUID,:MODULE_ID,:MEASURED_VALUE, :GATEWAY_ID);";  //"insert into devices (fk_facilities_mac,type,value) values ( '" + message->DeviceIDstr + "', " + std::to_string(message->values[i].intType) + ", '" + val + "');" ;
 /** Q to update device  uses ( :value, :FMver, ':mac', :type)*/
-const string UpdateModule = "update module set measured_value = :MEASURED_VALUE where (device_euid = :DEVICE_EUID AND module_id = :MODULE_ID AND gateway_id=:GATEWAY_ID);";  //"update devices set value=" + val  +" where (fk_facilities_mac='" + message->DeviceIDstr + "' AND type =" + std::to_string(message->values[i].intType) +");" ;
+const string UpdateModule = "update module set measured_value = :MEASURED_VALUE, status = 'available' where (device_euid = :DEVICE_EUID AND module_id = :MODULE_ID AND gateway_id=:GATEWAY_ID);";  //"update devices set value=" + val  +" where (fk_facilities_mac='" + message->DeviceIDstr + "' AND type =" + std::to_string(message->values[i].intType) +");" ;
+/** Q to update device  uses ( :status, :FMver, ':mac', :type)*/                         
+const string UpdateModuleWithStatus = "update module set status = :STATUS where (device_euid = :DEVICE_EUID AND module_id = :MODULE_ID AND gateway_id=:GATEWAY_ID);";  
 
 /** Q to insert history row uses ( ':deviceID', :timeStamp , :type, :value)*/
 const string InsertLog = "insert into log (device_euid,measured_at,module_id,measured_value, gateway_id) values (:DEVICE_EUID,:MEASURED_AT,:MODULE_ID,:MEASURED_VALUE, :GATEWAY_ID);"; //"insert into logs (fk_facilities_mac,timestamp,fk_devices_type,value) values ( '"+ message->DeviceIDstr + "', " + std::to_string(message->timestamp) + " , " + std::to_string(message->values[i].intType) + ", " + val + " );" ;

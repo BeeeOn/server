@@ -21,7 +21,7 @@ FC=gfortran
 AS=as
 
 # Macros
-CND_PLATFORM=GNU-Linux
+CND_PLATFORM=GNU-Linux-x86
 CND_DLIB_EXT=so
 CND_CONF=Release
 CND_DISTDIR=dist
@@ -35,22 +35,22 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/_ext/511d8aa3/DAO.o \
-	${OBJECTDIR}/_ext/511d8aa3/DAOContainer.o \
-	${OBJECTDIR}/_ext/511d8aa3/DAODevices.o \
-	${OBJECTDIR}/_ext/511d8aa3/DAOGateways.o \
-	${OBJECTDIR}/_ext/511d8aa3/DAOLocations.o \
-	${OBJECTDIR}/_ext/511d8aa3/DAOMobileDevices.o \
-	${OBJECTDIR}/_ext/511d8aa3/DAONotification.o \
-	${OBJECTDIR}/_ext/511d8aa3/DAOPushNotificationService.o \
-	${OBJECTDIR}/_ext/511d8aa3/DAOUsers.o \
-	${OBJECTDIR}/_ext/511d8aa3/DAOUsersGateways.o \
-	${OBJECTDIR}/_ext/511d8aa3/DAOlogs.o \
-	${OBJECTDIR}/_ext/3dfcc76d/client.o \
-	${OBJECTDIR}/_ext/3dfcc76d/server.o \
-	${OBJECTDIR}/_ext/3dfcc76d/session.o \
-	${OBJECTDIR}/_ext/511e25b6/pugixml.o \
-	${OBJECTDIR}/_ext/bb29b00c/Logger.o \
+	${OBJECTDIR}/_ext/1360890531/DAO.o \
+	${OBJECTDIR}/_ext/1360890531/DAOContainer.o \
+	${OBJECTDIR}/_ext/1360890531/DAODevices.o \
+	${OBJECTDIR}/_ext/1360890531/DAOGateways.o \
+	${OBJECTDIR}/_ext/1360890531/DAOLocations.o \
+	${OBJECTDIR}/_ext/1360890531/DAOMobileDevices.o \
+	${OBJECTDIR}/_ext/1360890531/DAONotification.o \
+	${OBJECTDIR}/_ext/1360890531/DAOPushNotificationService.o \
+	${OBJECTDIR}/_ext/1360890531/DAOUsers.o \
+	${OBJECTDIR}/_ext/1360890531/DAOUsersGateways.o \
+	${OBJECTDIR}/_ext/1360890531/DAOlogs.o \
+	${OBJECTDIR}/_ext/1039976301/client.o \
+	${OBJECTDIR}/_ext/1039976301/server.o \
+	${OBJECTDIR}/_ext/1039976301/session.o \
+	${OBJECTDIR}/_ext/1360930230/pugixml.o \
+	${OBJECTDIR}/_ext/1154895860/Logger.o \
 	${OBJECTDIR}/src/AdaServerCommunicator.o \
 	${OBJECTDIR}/src/Config.o \
 	${OBJECTDIR}/src/RequestHandlerFactory.o \
@@ -123,85 +123,85 @@ LDLIBSOPTIONS=-L../soci-3.2.2/build/lib -L/usr/local/include/soci -L../soci-3.2.
 	${MKDIR} -p .
 	${LINK.cc} -o ./ui_server ${OBJECTFILES} ${LDLIBSOPTIONS} -lpq -lsoci_core -lsoci_empty -lsoci_postgresql -lssl -lcrypto -ljansson
 
-${OBJECTDIR}/_ext/511d8aa3/DAO.o: ../DAO/DAO.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/511d8aa3
+${OBJECTDIR}/_ext/1360890531/DAO.o: ../DAO/DAO.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/511d8aa3/DAO.o ../DAO/DAO.cpp
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAO.o ../DAO/DAO.cpp
 
-${OBJECTDIR}/_ext/511d8aa3/DAOContainer.o: ../DAO/DAOContainer.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/511d8aa3
+${OBJECTDIR}/_ext/1360890531/DAOContainer.o: ../DAO/DAOContainer.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/511d8aa3/DAOContainer.o ../DAO/DAOContainer.cpp
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOContainer.o ../DAO/DAOContainer.cpp
 
-${OBJECTDIR}/_ext/511d8aa3/DAODevices.o: ../DAO/DAODevices.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/511d8aa3
+${OBJECTDIR}/_ext/1360890531/DAODevices.o: ../DAO/DAODevices.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/511d8aa3/DAODevices.o ../DAO/DAODevices.cpp
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAODevices.o ../DAO/DAODevices.cpp
 
-${OBJECTDIR}/_ext/511d8aa3/DAOGateways.o: ../DAO/DAOGateways.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/511d8aa3
+${OBJECTDIR}/_ext/1360890531/DAOGateways.o: ../DAO/DAOGateways.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/511d8aa3/DAOGateways.o ../DAO/DAOGateways.cpp
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOGateways.o ../DAO/DAOGateways.cpp
 
-${OBJECTDIR}/_ext/511d8aa3/DAOLocations.o: ../DAO/DAOLocations.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/511d8aa3
+${OBJECTDIR}/_ext/1360890531/DAOLocations.o: ../DAO/DAOLocations.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/511d8aa3/DAOLocations.o ../DAO/DAOLocations.cpp
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOLocations.o ../DAO/DAOLocations.cpp
 
-${OBJECTDIR}/_ext/511d8aa3/DAOMobileDevices.o: ../DAO/DAOMobileDevices.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/511d8aa3
+${OBJECTDIR}/_ext/1360890531/DAOMobileDevices.o: ../DAO/DAOMobileDevices.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/511d8aa3/DAOMobileDevices.o ../DAO/DAOMobileDevices.cpp
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOMobileDevices.o ../DAO/DAOMobileDevices.cpp
 
-${OBJECTDIR}/_ext/511d8aa3/DAONotification.o: ../DAO/DAONotification.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/511d8aa3
+${OBJECTDIR}/_ext/1360890531/DAONotification.o: ../DAO/DAONotification.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/511d8aa3/DAONotification.o ../DAO/DAONotification.cpp
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAONotification.o ../DAO/DAONotification.cpp
 
-${OBJECTDIR}/_ext/511d8aa3/DAOPushNotificationService.o: ../DAO/DAOPushNotificationService.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/511d8aa3
+${OBJECTDIR}/_ext/1360890531/DAOPushNotificationService.o: ../DAO/DAOPushNotificationService.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/511d8aa3/DAOPushNotificationService.o ../DAO/DAOPushNotificationService.cpp
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOPushNotificationService.o ../DAO/DAOPushNotificationService.cpp
 
-${OBJECTDIR}/_ext/511d8aa3/DAOUsers.o: ../DAO/DAOUsers.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/511d8aa3
+${OBJECTDIR}/_ext/1360890531/DAOUsers.o: ../DAO/DAOUsers.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/511d8aa3/DAOUsers.o ../DAO/DAOUsers.cpp
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOUsers.o ../DAO/DAOUsers.cpp
 
-${OBJECTDIR}/_ext/511d8aa3/DAOUsersGateways.o: ../DAO/DAOUsersGateways.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/511d8aa3
+${OBJECTDIR}/_ext/1360890531/DAOUsersGateways.o: ../DAO/DAOUsersGateways.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/511d8aa3/DAOUsersGateways.o ../DAO/DAOUsersGateways.cpp
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOUsersGateways.o ../DAO/DAOUsersGateways.cpp
 
-${OBJECTDIR}/_ext/511d8aa3/DAOlogs.o: ../DAO/DAOlogs.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/511d8aa3
+${OBJECTDIR}/_ext/1360890531/DAOlogs.o: ../DAO/DAOlogs.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/511d8aa3/DAOlogs.o ../DAO/DAOlogs.cpp
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOlogs.o ../DAO/DAOlogs.cpp
 
-${OBJECTDIR}/_ext/3dfcc76d/client.o: ../asio_layer/secure/client.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/3dfcc76d
+${OBJECTDIR}/_ext/1039976301/client.o: ../asio_layer/secure/client.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1039976301
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/3dfcc76d/client.o ../asio_layer/secure/client.cpp
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1039976301/client.o ../asio_layer/secure/client.cpp
 
-${OBJECTDIR}/_ext/3dfcc76d/server.o: ../asio_layer/secure/server.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/3dfcc76d
+${OBJECTDIR}/_ext/1039976301/server.o: ../asio_layer/secure/server.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1039976301
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/3dfcc76d/server.o ../asio_layer/secure/server.cpp
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1039976301/server.o ../asio_layer/secure/server.cpp
 
-${OBJECTDIR}/_ext/3dfcc76d/session.o: ../asio_layer/secure/session.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/3dfcc76d
+${OBJECTDIR}/_ext/1039976301/session.o: ../asio_layer/secure/session.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1039976301
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/3dfcc76d/session.o ../asio_layer/secure/session.cpp
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1039976301/session.o ../asio_layer/secure/session.cpp
 
-${OBJECTDIR}/_ext/511e25b6/pugixml.o: ../lib/pugixml.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/511e25b6
+${OBJECTDIR}/_ext/1360930230/pugixml.o: ../lib/pugixml.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1360930230
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/511e25b6/pugixml.o ../lib/pugixml.cpp
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360930230/pugixml.o ../lib/pugixml.cpp
 
-${OBJECTDIR}/_ext/bb29b00c/Logger.o: ../ui_logger/Logger.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/bb29b00c
+${OBJECTDIR}/_ext/1154895860/Logger.o: ../ui_logger/Logger.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1154895860
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/bb29b00c/Logger.o ../ui_logger/Logger.cpp
+	$(COMPILE.cc) -O2 -I../soci-3.2.2/soci-3.2.2/backends/postgresql -I../soci-3.2.2/soci-3.2.2/core -I/usr/include/postgresql -I/usr/include/postgresql/libpq -I. -I/usr/include -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1154895860/Logger.o ../ui_logger/Logger.cpp
 
 ${OBJECTDIR}/src/AdaServerCommunicator.o: src/AdaServerCommunicator.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

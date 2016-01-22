@@ -19,6 +19,15 @@ tmessage* MessageParser::ReturnMessage()
 
 }
 
+template< typename T >
+std::string int_to_hex( T i )
+{
+  std::stringstream stream;
+  stream << "0x" 
+         << std::hex << i;
+  return stream.str();
+}
+
 	/**********************************************End of MessageParser section******************************************************/
 
 	/**********************************************Start of ProtocolV1MessageParser section******************************************************/
@@ -116,11 +125,12 @@ void ProtocolV1MessageParser::GetState()
 void ProtocolV1MessageParser::GetDeviceID()
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetDeviceID");
-	this->_message->device_type = _device.attribute("device_id").as_ullong();
-
-	this->_message->device_euid = _device.attribute("euid").as_ullong();
-
-			//std::stoll(_device.attribute("id").as_string(),nullptr,16);
+	
+	this->_message->device_type = std::stoll(_device.attribute("device_id").as_string(),nullptr,16);   
+	       
+	this->_message->device_euid = std::stoll(_device.attribute("euid").as_string(),nullptr,16);
+  
+  
 	in_addr_t temp = htonl (_message->device_euid);
 	this->_log->WriteMessage(MSG,"Device id :" + std::to_string(this->_message->device_euid));
 	struct sockaddr_in antelope;
@@ -162,94 +172,12 @@ bool ProtocolV1MessageParser::GetValues()
 		_message->values[i].measured_value = value.text().as_float();
 		this->_log->WriteMessage(MSG,"Measured value :" + std::to_string(_message->values[i].measured_value));
 
-		/*
-		std::bitset<16> type (value.attribute("type").as_uint());
-		std::bitset<16> offset (value.attribute("offset").as_uint());
-		std::bitset<16> result(0);
-		offset<<=(8); //shift offset 
-		result = offset | type; //and OR it with type for one number which is saved to DB
-		
-		_message->values[i].intType = (unsigned short int)result.to_ulong();
-		
-		this->_log->WriteMessage(MSG,"Type + offset :" + std::to_string(_message->values[i].intType));
-		
-		_message->values[i].type = static_cast<tvalueTypes>(type.to_ulong());
-		
-		this->_log->WriteMessage(MSG,"Type :" + std::to_string(_message->values[i].type));
-		
-		switch(_message->values[i].type)
-		{
-			case TEMP:
-			case LUM:
-			case REZ:
-			case POS:
-			case BT:
-				_message->values[i].fval = value.text().as_float();
-				this->_log->WriteMessage(MSG,"Value :" + std::to_string(_message->values[i].fval));
-				if (_message->devType==UNDEF)
-				{
-					_message->devType=SEN;
-				}
-				else
-				{
-					if (_message->devType==ACT)
-					{
-						_message->devType=SENACT;
-					}
-				}
-				break;
-			case ONON:
-			case TOG:
-			case ONOFFSEN:
-			case ONOFSW:
-			case OPCL:
-				_message->values[i].bval = false;
-				if (value.text().as_float()==1.0)
-					_message->values[i].bval = true;
-				this->_log->WriteMessage(MSG,"Value :" + std::to_string(_message->values[i].bval));
-				if (_message->devType==UNDEF)
-				{
-					if(_message->values[i].type==ONOFFSEN)
-						_message->devType=SEN;
-					else
-						_message->devType=ACT;
-				}
-				else
-				{
-					if (((_message->devType==ACT)&&(_message->values[i].type==ONOFFSEN))||((_message->devType==SEN)&&(_message->values[i].type==ONOFSW)))
-					{
-						_message->devType=SENACT;
-					}
-				}
-				break;
-			case EMI:
-			case HUM:
-			case BAR:
-			case RGB:
-			case RAN:
-			case BOT:
-			case BOM:
-			case BST:
-				_message->values[i].ival = value.text().as_int();
-				this->_log->WriteMessage(MSG,"Value :" + std::to_string(_message->values[i].ival));
-				if (_message->devType==UNDEF)
-				{
-					_message->devType=SEN;
-				}
-				else
-				{
-					if (_message->devType==ACT)
-					{
-						_message->devType=SENACT;
-					}
-				}
-				break;
-			default:
-				_message->values[i].type = UNK;
-				this->_log->WriteMessage(WARN,"Received unknown value type from " + this->_message->DeviceIDstr);
-				break;
-		}
-		*/
+		_message->values[i].status = value.attribute("status").value();
+    //set default status
+    if(_message->values[i].status == "")
+      _message->values[i].status = "available";
+		this->_log->WriteMessage(MSG,"status :" + std::to_string(_message->values[i].measured_value));
+
 	value = value.next_sibling();
 	}
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetValues");
@@ -270,14 +198,15 @@ std::string ProtocolV1MessageParser::CreateAnswer(int value)
 	//server_adapter->set_name("server_adapter");
 	server_adapter.append_attribute("protocol_version");
 	server_adapter.append_attribute("state");
-	server_adapter.append_attribute("id");
+	server_adapter.append_attribute("euid");
 	server_adapter.append_attribute("time");
 	std::stringstream s;
 	s.precision(2);
 	s << _message->cp_version;
 	server_adapter.attribute("protocol_version") = s.str().c_str();
 	server_adapter.attribute("state") = "update";
-	server_adapter.attribute("id") = std::to_string(_message->device_type).c_str();
+  
+	server_adapter.attribute("euid") = int_to_hex(_message->device_euid).c_str();
 	server_adapter.attribute("time") = std::to_string(value).c_str();
 	tstringXMLwriter writer;
 	resp->print(writer);

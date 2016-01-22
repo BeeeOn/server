@@ -41,12 +41,14 @@ struct ModuleColumns{
     std::string id;
     std::string value;
     std::string gateway_id;
+    std::string status;
     
     ModuleColumns():
             euid("device_euid"), 
             id("module_id"), 
             value("measured_value"),
-            gateway_id("gateway_id")
+            gateway_id("gateway_id"),
+            status("status")
             { }
 };
 

@@ -18,14 +18,14 @@ std::string MessageCreator::CreateDeleteMessage(std::string deviceID)
 	xml_node server_adapter = resp->append_child("server_adapter");
 	server_adapter.append_attribute("protocol_version");
 	server_adapter.append_attribute("state");
-	server_adapter.append_attribute("euid");
+	
 	server_adapter.attribute("protocol_version") = "1.0";
 	server_adapter.attribute("state") = "clean";
 	struct sockaddr_in antelope;
 	inet_aton(deviceID.c_str(), &antelope.sin_addr);
 	in_addr_t DeviceIP = antelope.sin_addr.s_addr;
 	unsigned int DeviceIPint = ntohl (DeviceIP);
-	server_adapter.attribute("id") = std::to_string(DeviceIPint).c_str();
+	server_adapter.attribute("euid") = std::to_string(DeviceIPint).c_str();
 	tstringXMLwriter writer;
 	resp->print(writer);
 	delete(resp);
