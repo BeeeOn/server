@@ -8,6 +8,7 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/home/mrmaidx/server/framework2/algorithms/RefreshManager.cpp</file>
+            <file>file:/home/mrmaidx/server/framework2/src/ModuleData.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/algorithms/WatchdogInstance.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/algorithms/WatchdogInstance.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/Logger.h</file>
@@ -23,11 +24,17 @@
             <file>file:/home/mrmaidx/server/framework2/src/MessageParser.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/Logger.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/AlgorithmManager.cpp</file>
+            <file>file:/home/mrmaidx/server/framework2/src/ModuleData.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/Server.h</file>
+            <file>file:/home/mrmaidx/server/framework2/src/ConfigMessage.h</file>
+            <file>file:/home/mrmaidx/server/framework2/src/TimedAlgorithmInstance.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/Makefile</file>
+            <file>file:/home/mrmaidx/server/framework2/src/EventAlgorithmInstance.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/algorithms/RefreshInstance.cpp</file>
+            <file>file:/home/mrmaidx/server/framework2/src/EventAlgorithmInstance.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/u_session.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/MessageRegister.h</file>
+            <file>file:/home/mrmaidx/server/framework2/src/ConfigMessage.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/AlgorithmInstance.h</file>
             <file>file:/home/mrmaidx/server/framework2/algorithms/WatchdogManager.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/AlgorithmInstance.cpp</file>
@@ -41,7 +48,9 @@
             <file>file:/home/mrmaidx/server/framework2/algorithms/RefreshManager.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/MessageSorter.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/Calendar.h</file>
+            <file>file:/home/mrmaidx/server/framework2/src/TimedAlgorithmInstance.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/TimedAlgorithmManager.cpp</file>
+            <file>file:/home/mrmaidx/server/framework2/src/u_server.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/MessageRegister.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/algorithms/RefreshInstance.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/EventAlgorithmManager.h</file>

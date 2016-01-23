@@ -1,3 +1,10 @@
+/* 
+ * File:   u_session.cpp
+ * Author: Marek Beno, xbenom01@stud.fit.vutbr.cz
+ *
+ * Created on 11. November 2015
+ */
+
 #include "u_session.h"
 
 u_session::u_session(asio::io_service& io_service,

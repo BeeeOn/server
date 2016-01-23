@@ -1,3 +1,10 @@
+/* 
+ * File:   u_server.cpp
+ * Author: Marek Beno, xbenom01@stud.fit.vutbr.cz
+ *
+ * Created on 11. November 2015
+ */
+
 #include "u_server.h"
 
   u_server::u_server(asio::io_service& io_service, unsigned short port,
@@ -12,7 +19,7 @@
         threadNum_(threadNum),
         timePeriod_(timePeriod)
   {
-    std::cout << "Server started on port: " << port << std::endl;
+    //std::cout << "Server started on port: " << port << std::endl;
     setSignals();
   }
 

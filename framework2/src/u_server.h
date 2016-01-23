@@ -1,3 +1,10 @@
+/* 
+ * File:   u_server.h
+ * Author: Marek Beno, xbenom01@stud.fit.vutbr.cz
+ *
+ * Created on 11. November 2015
+ */
+
 #ifndef U_SERVER_H
 #define U_SERVER_H
 

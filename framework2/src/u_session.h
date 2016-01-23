@@ -1,3 +1,10 @@
+/* 
+ * File:   u_session.h
+ * Author: Marek Beno, xbenom01@stud.fit.vutbr.cz
+ *
+ * Created on 11. November 2015
+ */
+
 #ifndef U_SESSION_H
 #define U_SESSION_H
 #include <iostream>

@@ -43,6 +43,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/AlgorithmManager.o \
 	${OBJECTDIR}/src/Calendar.o \
 	${OBJECTDIR}/src/CalendarEvent.o \
+	${OBJECTDIR}/src/ConfigMessage.o \
+	${OBJECTDIR}/src/EventAlgorithmInstance.o \
 	${OBJECTDIR}/src/EventAlgorithmManager.o \
 	${OBJECTDIR}/src/Logger.o \
 	${OBJECTDIR}/src/ManagerLoader.o \
@@ -52,6 +54,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/ModuleData.o \
 	${OBJECTDIR}/src/Server.o \
 	${OBJECTDIR}/src/ServerSession.o \
+	${OBJECTDIR}/src/TimedAlgorithmInstance.o \
 	${OBJECTDIR}/src/TimedAlgorithmManager.o \
 	${OBJECTDIR}/src/framework.o \
 	${OBJECTDIR}/src/u_server.o \
@@ -122,6 +125,16 @@ ${OBJECTDIR}/src/CalendarEvent.o: src/CalendarEvent.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/CalendarEvent.o src/CalendarEvent.cpp
 
+${OBJECTDIR}/src/ConfigMessage.o: src/ConfigMessage.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/ConfigMessage.o src/ConfigMessage.cpp
+
+${OBJECTDIR}/src/EventAlgorithmInstance.o: src/EventAlgorithmInstance.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/EventAlgorithmInstance.o src/EventAlgorithmInstance.cpp
+
 ${OBJECTDIR}/src/EventAlgorithmManager.o: src/EventAlgorithmManager.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
@@ -166,6 +179,11 @@ ${OBJECTDIR}/src/ServerSession.o: src/ServerSession.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/ServerSession.o src/ServerSession.cpp
+
+${OBJECTDIR}/src/TimedAlgorithmInstance.o: src/TimedAlgorithmInstance.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/TimedAlgorithmInstance.o src/TimedAlgorithmInstance.cpp
 
 ${OBJECTDIR}/src/TimedAlgorithmManager.o: src/TimedAlgorithmManager.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

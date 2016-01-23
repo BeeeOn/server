@@ -1,21 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /* 
  * File:   Logger.cpp
- * Author: mrmaidx
+ * Author: Martin Novak, xnovak1c@stud.fit.vutbr.cz
  * 
- * Created on 20. ledna 2016, 14:15
+ * Created on 20. January 2016
  */
 
 #include "Logger.h"
 
+#include <ctime>
 #include <iostream>
 #include <chrono>
-#include <ctime>
+#include <string>
+
+// Definitions of static variables.
+std::mutex Logger::logger_mutex;
 
 Logger::Logger() {
 }
@@ -27,8 +25,9 @@ Logger::~Logger() {
 }
 
 void Logger::logToCout(std::string log) {
-    time_t tn = getCurrentTime();
-    std::cout << ctime(&tn) << ": " << log << std::endl;
+    logger_mutex.lock();
+    std::cout << log << std::endl;
+    logger_mutex.unlock();
 }
 
 void Logger::logToCerr(std::string log) {

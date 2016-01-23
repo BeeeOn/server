@@ -1,14 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /* 
  * File:   TimedAlgorithmManager.h
- * Author: mrmaidx
+ * Author: Martin Novak, xnovak1c@stud.fit.vutbr.cz
  *
- * Created on 20. ledna 2016, 16:42
+ * Created on 20. January 2016
  */
 
 #ifndef TIMEDALGORITHMMANAGER_H
@@ -19,8 +13,11 @@
 class TimedAlgorithmManager : public AlgorithmManager
 {
 public:
-    TimedAlgorithmManager();
-    TimedAlgorithmManager(const TimedAlgorithmManager& orig);
+    
+    TimedAlgorithmManager(int id, MANAGER_TYPE type, std::string name);
+    
+    //TimedAlgorithmManager(const TimedAlgorithmManager& orig);
+    
     virtual ~TimedAlgorithmManager();
 private:
 
