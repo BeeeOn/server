@@ -6,8 +6,12 @@
  */
 
 #include "RefreshInstance.h"
+/*
+#include <string>
 
-RefreshInstance::RefreshInstance() {
+RefreshInstance::RefreshInstance(int instance_id, unsigned long user_id, unsigned int users_instance_personal_id, std::string text):
+    TimedAlgorithmInstance(instance_id, user_id, users_instance_personal_id, text)
+{
 }
 
 RefreshInstance::RefreshInstance(const RefreshInstance& orig) {
@@ -15,4 +19,4 @@ RefreshInstance::RefreshInstance(const RefreshInstance& orig) {
 
 RefreshInstance::~RefreshInstance() {
 }
-
+*/

@@ -7,15 +7,21 @@
 
 #ifndef REFRESHINSTANCE_H
 #define REFRESHINSTANCE_H
+/*
+#include <string>
 
-class RefreshInstance {
+#include "../src/TimedAlgorithmInstance.h"
+
+class RefreshInstance : public TimedAlgorithmInstance
+{
 public:
-    RefreshInstance();
-    RefreshInstance(const RefreshInstance& orig);
-    virtual ~RefreshInstance();
+    RefreshInstance(int instance_id, unsigned long user_id, unsigned int users_instance_personal_id, std::string text);
+    
+    //RefreshInstance(const RefreshInstance& orig);
+    //virtual ~RefreshInstance();
 private:
 
 };
-
+*/
 #endif /* REFRESHINSTANCE_H */
 

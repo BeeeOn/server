@@ -9,20 +9,26 @@
 #define CALENDAREVENT_H
 
 #include <chrono>
+#include <memory>
 #include <string>
+
+#include "TimedAlgorithmInstance.h"
 
 class CalendarEvent {
 public:
-    CalendarEvent(std::chrono::system_clock::time_point activation_time, std::string text);
+    // Test purpose constructor.
+    //CalendarEvent(std::chrono::system_clock::time_point activation_time, std::string text);
     
-    CalendarEvent(const CalendarEvent& orig);
+    CalendarEvent(std::chrono::system_clock::time_point activation_time, unsigned int manager_id, unsigned long instance_id);
+    
+    //CalendarEvent(const CalendarEvent& orig);
     
     virtual ~CalendarEvent();
     
     // Getters.
     std::chrono::system_clock::time_point getActivationTime() const {return m_activation_time;};
-    std::string getText() const {return m_text;};
-
+   
+    //std::string getText() const {return m_text;};
     
     // Determine priority.
   
@@ -35,11 +41,18 @@ public:
     {    
         return lhs.getActivationTime() > rhs.getActivationTime();
     }
+    
+    unsigned long m_instance_id;
+    
+    unsigned int m_manager_id;
+    
 private:
     
     std::chrono::system_clock::time_point m_activation_time;
     
-    std::string m_text;  
+    //std::string m_text; 
+    
+    
 };
 
 #endif /* CALENDAREVENT_H */

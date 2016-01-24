@@ -84,7 +84,7 @@
       </toolsSet>
       <compileType>
         <ccTool>
-          <commandLine>-std=c++11 -pthread</commandLine>
+          <commandLine>-std=c++14 -pthread</commandLine>
         </ccTool>
       </compileType>
       <item path="algorithms/RefreshInstance.cpp" ex="false" tool="1" flavor2="0">

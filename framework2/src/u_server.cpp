@@ -19,7 +19,7 @@
         threadNum_(threadNum),
         timePeriod_(timePeriod)
   {
-    //std::cout << "Server started on port: " << port << std::endl;
+    std::cout << "Server started on port: " << port << std::endl;
     setSignals();
   }
 

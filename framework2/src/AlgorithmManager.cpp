@@ -7,7 +7,10 @@
 
 #include "AlgorithmManager.h"
 
-AlgorithmManager::AlgorithmManager(int id, MANAGER_TYPE type, std::string name) :
+#include <iostream>
+
+
+AlgorithmManager::AlgorithmManager(unsigned int id, MANAGER_TYPE type, std::string name):
     m_id(id), m_type(type), m_name(name)
 {
 }
@@ -17,4 +20,3 @@ AlgorithmManager::AlgorithmManager(const AlgorithmManager& orig) {
 
 AlgorithmManager::~AlgorithmManager() {
 }
-

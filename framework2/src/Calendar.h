@@ -40,7 +40,7 @@ public:
     
     void run();
     
-    void executeEvents(std::vector<CalendarEvent> events_to_execute);
+    void executeEvents(std::vector<std::shared_ptr<CalendarEvent>> events_to_execute);
     
     long calculateSleepTimeMs();
     
@@ -54,7 +54,8 @@ public:
     static std::mutex m_calendar_events_mutex;
     
     // Emplaces event into multimap of events.
-    static void emplaceEvent(int seconds, std::string text);
+    //static void emplaceEvent(int seconds, std::string text);
+    static void emplaceEvent(int seconds, unsigned int manager_id, unsigned long instance_id);
     
     // Time when thread which activates events should run.
     static std::chrono::system_clock::time_point m_wakeup_time;

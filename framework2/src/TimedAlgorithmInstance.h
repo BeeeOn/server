@@ -8,11 +8,33 @@
 #ifndef TIMEDALGORITHMINSTANCE_H
 #define TIMEDALGORITHMINSTANCE_H
 
-class TimedAlgorithmInstance {
+#include <memory>
+#include <string>
+
+#include "AlgorithmInstance.h"
+
+class TimedAlgorithmInstance : public AlgorithmInstance//, std::enable_shared_from_this<TimedAlgorithmInstance>
+{
 public:
-    TimedAlgorithmInstance();
-    TimedAlgorithmInstance(const TimedAlgorithmInstance& orig);
-    virtual ~TimedAlgorithmInstance();
+    /*
+    std::shared_ptr<TimedAlgorithmInstance> getptr() {
+        return shared_from_this();
+    }
+    */
+    TimedAlgorithmInstance(unsigned int manager_id, unsigned long instance_id, unsigned long user_id, unsigned int users_instance_personal_id, std::string text);
+    
+    //TimedAlgorithmInstance(const TimedAlgorithmInstance& orig);
+    //virtual ~TimedAlgorithmInstance();
+
+    
+    //void emplaceToCalendar();
+    
+    // Plans to calendar when shoud be run again.
+    void planActivationForSeconds(int seconds);
+    
+    // Actualy runs code.
+    void activate();
+    
 private:
 
 };

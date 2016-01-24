@@ -6,7 +6,7 @@
  */
 
 #include "RefreshManager.h"
-
+/*
 RefreshManager::RefreshManager(int id, MANAGER_TYPE type, std::string name) :
     TimedAlgorithmManager(id, type, name)
 {
@@ -14,7 +14,8 @@ RefreshManager::RefreshManager(int id, MANAGER_TYPE type, std::string name) :
 /*
 RefreshManager::RefreshManager(const RefreshManager& orig) {
 }
-*/
+
 RefreshManager::~RefreshManager() {
 }
 
+*/

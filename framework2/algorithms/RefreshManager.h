@@ -7,7 +7,7 @@
 
 #ifndef REFRESHMANAGER_H
 #define REFRESHMANAGER_H
-
+/*
 #include <string>
 
 #include "../src/TimedAlgorithmManager.h"
@@ -24,6 +24,6 @@ public:
 private:
 
 };
-
+*/
 #endif /* REFRESHMANAGER_H */
 

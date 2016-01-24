@@ -12,6 +12,7 @@
 
 #include "Logger.h"
 
+/*
 CalendarEvent::CalendarEvent(std::chrono::system_clock::time_point activation_time, std::string text):
     m_activation_time(activation_time), m_text(text)
 {
@@ -23,9 +24,17 @@ CalendarEvent::CalendarEvent(std::chrono::system_clock::time_point activation_ti
     
 }
 
-CalendarEvent::CalendarEvent(const CalendarEvent& orig) {
+*/
+
+CalendarEvent::CalendarEvent(std::chrono::system_clock::time_point activation_time, unsigned int manager_id, unsigned long instance_id):
+    m_activation_time(activation_time), m_manager_id(manager_id), m_instance_id(instance_id)
+{
 }
 
+/*
+CalendarEvent::CalendarEvent(const CalendarEvent& orig) {
+}
+*/
 CalendarEvent::~CalendarEvent() {
 }
 

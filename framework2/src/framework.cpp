@@ -15,6 +15,8 @@
 #include "ManagerLoader.h"
 #include "Server.h"
 
+#include "TimedAlgorithmManager.h"
+
 int main(int argc, char** argv) {
 
     std::string clientDelim("</adapter_server>"); // konec xml od adapteru
@@ -29,14 +31,8 @@ int main(int argc, char** argv) {
     // In a future pass path to algorithm config file.
     manager_loader.loadAlgorithmManagers();
     
+
     Calendar calendar;
-    /*
-    Calendar::emplaceEvent(15, "Event 4");
-    Calendar::emplaceEvent(5, "Event 2.");
-    Calendar::emplaceEvent(3, "Event 1.");
-    Calendar::emplaceEvent(10, "Event 3");    
-    
-    */
 
     std::thread t_calendar(&Calendar::run, &calendar);
     t_calendar.detach();
@@ -45,16 +41,23 @@ int main(int argc, char** argv) {
     std::cout << "START: " << ctime(&tn) << std::endl;
     
     std::this_thread::sleep_for(std::chrono::seconds(2));
-    
-    Calendar::emplaceEvent(3, "Event 1.");
-    Calendar::emplaceEvent(13, "Event 3.");
-    
-    std::this_thread::sleep_for(std::chrono::seconds(7));
-    
-    Calendar::emplaceEvent(1, "Event 2.");
-    
-    //calendar.startTimedManagers(&);
     /*
+    Calendar::emplaceEvent(3, "Event 1.");
+    Calendar::emplaceEvent(3, "Event 2.");
+    
+    //std::this_thread::sleep_for(std::chrono::seconds(7));
+    
+    Calendar::emplaceEvent(3, "Event 3.");
+    Calendar::emplaceEvent(3, "Event 4.");
+    
+    //std::this_thread::sleep_for(std::chrono::seconds(15));
+    Calendar::emplaceEvent(3, "Event 5.");
+    //calendar.startTimedManagers(&);
+   
+    std::shared_ptr<TimedAlgorithmInstance> instance;
+    std::cout << "PTR:::::" << instance.get() << std::endl;
+    std::cout << "THIS::::" << instance->getptr().get() << std::endl;
+    */
     // Server part.
     asio::io_service io_service;
     
@@ -66,7 +69,7 @@ int main(int argc, char** argv) {
     s.run();
     
     //t_calendar.join();
-     */
+    
     std::this_thread::sleep_for(std::chrono::seconds(100));
     return 0;
 }

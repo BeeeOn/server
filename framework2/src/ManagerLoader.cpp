@@ -5,13 +5,22 @@
  * Created on 20. January 2016
  */
 
-#include <iostream>
-#include "ManagerLoader.h"
+
 
 // Algorithm includes.
-#include "../algorithms/RefreshManager.h"
-#include "../algorithms/WatchdogManager.h"
-#include "Logger.h"
+//#include "../algorithms/RefreshManager.h"
+//#include "../algorithms/WatchdogManager.h"
+//#include "Logger.h"
+
+#include "ManagerLoader.h"
+
+#include <chrono>
+#include <iostream>
+#include <thread>
+
+#include "TimedAlgorithmManager.h"
+
+std::map<int /*manager_id*/, std::shared_ptr<TimedAlgorithmManager>> ManagerLoader::m_timed_managers;
 
 ManagerLoader::ManagerLoader() {
 }
@@ -23,22 +32,17 @@ ManagerLoader::~ManagerLoader() {
 }
 
 void ManagerLoader::loadAlgorithmManagers() {
-    /*
-    std::cout << "watchdog load" << std::endl;
-    event_managers.emplace(1, WatchdogManager(1, MANAGER_TYPE::EVENT ,"Watchdog"));
     
-    std::cout << "refresh load" << std::endl;
-    timed_managers.emplace(2, RefreshManager(2, MANAGER_TYPE::TIMED ,"Refresh"));
-    */
-    /*
-    auto search = m_managers.find(1);
-    if(search != algorithm_managers.end()) {
-        std::cout << "Found " << search->first << " " << search->second.getName() << std::endl;
-    }
+    // Create test timed manager.
+    m_timed_managers.emplace(10, std::make_shared<TimedAlgorithmManager>(10, MANAGER_TYPE::TIMED, "Test"));
+    // Create test instance.
+    //std::cout << m_timed_managers.find(10)->second->getId() << std::endl;
+    m_timed_managers.find(10)->second->createInstance(1, 1, "Instance cislo 1 se spustila.");
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+    m_timed_managers.find(10)->second->createInstance(2, 2, "Instance cislo 2 se spustila.");
     
-    auto search2 = algorithm_managers.find(2);
-    if(search2 != algorithm_managers.end()) {
-        std::cout << "Found " << search2->first << std::endl;
-    }
-    */
+}
+
+void ManagerLoader::activateInstance(int manager_id, unsigned long instance_id) {
+    m_timed_managers.find(manager_id)->second->activateInstance(instance_id);
 }

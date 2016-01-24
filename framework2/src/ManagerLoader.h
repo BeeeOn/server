@@ -9,6 +9,7 @@
 #define MANAGERLOADER_H
 
 #include <map>
+#include <memory>
 
 #include "EventAlgorithmManager.h"
 #include "TimedAlgorithmManager.h"
@@ -27,10 +28,12 @@ public:
     
     void passConfigMessage();
     
+    static void activateInstance(int manager_id, unsigned long instance_id);
+    
 private:
     //std::map<int /*manager_id*/, AlgorithmManager> algorithm_managers;
     
-    std::map<int /*manager_id*/, TimedAlgorithmManager> timed_managers;
+    static std::map<int /*manager_id*/, std::shared_ptr<TimedAlgorithmManager>> m_timed_managers;
     
     std::map<int /*manager_id*/, EventAlgorithmManager> event_managers;
     
