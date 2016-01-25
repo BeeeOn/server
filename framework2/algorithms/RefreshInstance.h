@@ -9,15 +9,24 @@
 #define REFRESHINSTANCE_H
 
 #include <string>
+#include <memory>
 
 #include "../src/TimedAlgorithmInstance.h"
 
-class RefreshInstance : public TimedAlgorithmInstance
+class RefreshInstance: public TimedAlgorithmInstance
 {
 public:
+   
+    /*
+    std::shared_ptr<RefreshInstance> getptr() {
+        return shared_from_this();
+    }
+    */
     RefreshInstance(unsigned int manager_id, unsigned long instance_id, unsigned long user_id, unsigned int users_instance_personal_id, std::string text);
     
     //RefreshInstance(const RefreshInstance& orig);
+    
+    //void planActivationAfterSeconds(int seconds);
     
     virtual ~RefreshInstance();
     

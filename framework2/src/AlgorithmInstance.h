@@ -9,15 +9,21 @@
 #define ALGORITHMINSTANCE_H
 
 #include <map>
+#include <memory>
 #include <string>
 
-class AlgorithmInstance {
+class AlgorithmInstance
+{
 public:
+
+    
     AlgorithmInstance(unsigned int manager_id, unsigned long instance_id, unsigned long user_id, unsigned int users_instance_personal_id, std::string text);
     
     //AlgorithmInstance(const AlgorithmInstance& orig);
     
     //virtual ~AlgorithmInstance();
+    
+    std::string getText() const {return m_text;};
     
 protected:
     

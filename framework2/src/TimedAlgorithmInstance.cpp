@@ -7,8 +7,10 @@
 
 #include "TimedAlgorithmInstance.h"
 
+#include <chrono>
 #include <iostream>
 #include <string>
+#include <thread>
 
 #include "Calendar.h"
 
@@ -31,6 +33,10 @@ void TimedAlgorithmInstance::activate() {
 }
 
 void TimedAlgorithmInstance::planActivationAfterSeconds(int seconds) {
-    
-    Calendar::emplaceEvent(seconds, m_manager_id, m_instance_id);
+    //std::cout << "EMPLACING EVENT." << std::endl;
+    //Calendar::emplaceEvent(seconds, m_manager_id, m_instance_id);
+    //std::this_thread::sleep_for(std::chrono::seconds(10));
+    //std::cout <<  shared_from_this()->getText() << std::endl;
+    Calendar::emplaceEvent(seconds, this);
+    //std::cout << "EMPLACING EVENT2." << std::endl;
 }

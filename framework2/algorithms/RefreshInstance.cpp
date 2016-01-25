@@ -10,6 +10,8 @@
 #include <iostream>
 #include <string>
 
+#include "../src/Calendar.h"
+
 RefreshInstance::RefreshInstance(unsigned int manager_id, unsigned long instance_id, unsigned long user_id, unsigned int users_instance_personal_id, std::string text):
     TimedAlgorithmInstance(manager_id, instance_id, user_id, users_instance_personal_id, text)
 {
@@ -30,3 +32,10 @@ void RefreshInstance::activate() {
     
     planActivationAfterSeconds(4);
 }
+/*
+void RefreshInstance::planActivationAfterSeconds(int seconds) {
+    std::cout << "EMPLACING EVENT REFRESH." << std::endl;
+    //Calendar::emplaceEvent(seconds, m_manager_id, m_instance_id);
+    Calendar::emplaceEvent(seconds, getptr());
+    std::cout << "EMPLACING EVENT REFRESH2." << std::endl;
+}*/

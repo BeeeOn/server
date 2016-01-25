@@ -24,6 +24,10 @@ std::priority_queue<std::shared_ptr<CalendarEvent>, std::vector<std::shared_ptr<
 std::condition_variable Calendar::cv, Calendar::empty_queue_cv;
 std::mutex Calendar::cv_m , Calendar::empty_queue_m;
 
+//std::priority_queue<std::pair<std::chrono::system_clock::time_point /*activation_time*/, std::weak_ptr<TimedAlgorithmInstance> /*instance_ptr*/>,
+  //                             std::vector<std::pair<std::chrono::system_clock::time_point /*activation_time*/, std::weak_ptr<TimedAlgorithmInstance> /*instance_ptr*/>,
+//                               GreaterCalendarEvent> Calendar::m_calendar_events;
+
 Calendar::Calendar()
 {
 }
@@ -115,7 +119,17 @@ void Calendar::executeEvents(std::vector<std::shared_ptr<CalendarEvent>> events_
             
             time_t tn = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
             std::cout << "ACTION TIME: " << ctime(&tn) << std::endl;
-            ManagerLoader::activateInstance(event->m_manager_id, event->m_instance_id);
+            event->m_instance_ptr->activate();
+            
+            /*
+            if (auto locked_ptr = event->m_instance_ptr.lock()) {
+                locked_ptr->activate();
+            }
+            else {
+                std::cerr << "Instance was deleted. (Could have caused segfault)" << std::endl;
+            }
+             *  */
+            //ManagerLoader::activateInstance(event->m_manager_id, event->m_instance_id);
             //std::cout << "ACTIVATED" << std
         }
     }
@@ -129,56 +143,9 @@ void Calendar::waitUntilCalendarIsNotEmpty() {
         empty_queue_cv.wait(lk);
     }
     std::cout << "Calendar not empty, run." << std::endl;
-    /*
-    while(true) {
-        if (m_calendar_events.empty()) {
-            std::cout << "No event -> sleep a second." << std::endl;
-            std::this_thread::sleep_for(std::chrono::seconds(1));
-        }
-        else {
-            std::cout << "Event in queue -> wake up." << std::endl;
-            break;
-        }
-    } 
-    */ 
 }
+
 /*
-long Calendar::calculateSleepTimeMs() {
-    // Returns time for which should event picker sleep.
-    if(!m_calendar_events.empty()) {
-        return std::chrono::duration_cast<std::chrono::milliseconds>(m_calendar_events.top()->getActivationTime().time_since_epoch()).count()
-               - std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-    }
-    else {
-        return 0; // There are no events in calendar, thread starts to wait.
-    }
-}
-*/
-/*
-void Calendar::emplaceEvent(int wait_time, std::string text) {
-    
-    // Compute exact time when event should activate.
-    std::chrono::system_clock::time_point activation_time = std::chrono::system_clock::now() + std::chrono::seconds(wait_time);
-    
-    m_calendar_events_mutex.lock();
-    
-    if (!m_calendar_events.empty()) {
-        
-        // If calendar thread sleeps and new event should be executed before m_wakeup_time, wake up thread.
-        if (activation_time < m_wakeup_time ) {
-            cv.notify_all();
-        }
-    }
-    else {
-        // Wake up calendar thread from waiting for event, there is event waiting. 
-        empty_queue_cv.notify_all();
-    }
-    
-    m_calendar_events.push(std::make_shared<CalendarEvent>(activation_time, text));
-    
-    m_calendar_events_mutex.unlock();
-}
-*/
 void Calendar::emplaceEvent(int wait_time, unsigned int manager_id, unsigned long instance_id) {
     
     // Compute exact time when event should activate.
@@ -199,6 +166,33 @@ void Calendar::emplaceEvent(int wait_time, unsigned int manager_id, unsigned lon
     }
     
     m_calendar_events.push(std::make_shared<CalendarEvent>(activation_time, manager_id, instance_id));
+    
+    m_calendar_events_mutex.unlock();
+}
+*/
+void Calendar::emplaceEvent(int wait_time, TimedAlgorithmInstance *instance_ptr) {
+    
+    // Compute exact time when event should activate.
+    std::chrono::system_clock::time_point activation_time = std::chrono::system_clock::now() + std::chrono::seconds(wait_time);
+    
+    m_calendar_events_mutex.lock();
+    
+    std::cout << "Calendar emplace event." << std::endl;
+    
+    if (!m_calendar_events.empty()) {
+        
+        // If calendar thread sleeps and new event should be executed before m_wakeup_time, wake up thread.
+        if (activation_time < m_wakeup_time ) {
+            cv.notify_all();
+        }
+    }
+    else {
+        // Wake up calendar thread from waiting for event, there is event waiting. 
+        empty_queue_cv.notify_all();
+    }
+    
+    //m_calendar_events.push(std::make_shared<CalendarEvent>(activation_time, manager_id, instance_id));
+    m_calendar_events.push(std::make_shared<CalendarEvent>(activation_time, instance_ptr));
     
     m_calendar_events_mutex.unlock();
 }

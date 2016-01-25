@@ -13,14 +13,15 @@
 
 #include "AlgorithmInstance.h"
 
-class TimedAlgorithmInstance : public AlgorithmInstance//, std::enable_shared_from_this<TimedAlgorithmInstance>
+
+class TimedAlgorithmInstance: public AlgorithmInstance//, enable_shared_from_this<TimedAlgorithmInstance>
 {
 public:
-    /*
-    std::shared_ptr<TimedAlgorithmInstance> getptr() {
+    /*std::shared_ptr<TimedAlgorithmInstance> getptr() {
         return shared_from_this();
     }
     */
+    
     TimedAlgorithmInstance(unsigned int manager_id, unsigned long instance_id, unsigned long user_id, unsigned int users_instance_personal_id, std::string text);
     
     //TimedAlgorithmInstance(const TimedAlgorithmInstance& orig);
