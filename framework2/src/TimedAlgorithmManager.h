@@ -28,7 +28,7 @@ public:
     void activateInstance(unsigned long instance_id);
     
     // Creates an instance of algorithm.
-    void createInstance(unsigned long user_id, unsigned int users_instance_personal_id, std::string text);
+    virtual void createInstance(unsigned long user_id, unsigned int users_instance_personal_id, std::string text);
     
 protected:
 

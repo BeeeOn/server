@@ -7,7 +7,7 @@
 
 #ifndef REFRESHINSTANCE_H
 #define REFRESHINSTANCE_H
-/*
+
 #include <string>
 
 #include "../src/TimedAlgorithmInstance.h"
@@ -15,13 +15,17 @@
 class RefreshInstance : public TimedAlgorithmInstance
 {
 public:
-    RefreshInstance(int instance_id, unsigned long user_id, unsigned int users_instance_personal_id, std::string text);
+    RefreshInstance(unsigned int manager_id, unsigned long instance_id, unsigned long user_id, unsigned int users_instance_personal_id, std::string text);
     
     //RefreshInstance(const RefreshInstance& orig);
-    //virtual ~RefreshInstance();
+    
+    virtual ~RefreshInstance();
+    
+    void activate();
+
 private:
+    int m_activated_times = 0;
 
 };
-*/
 #endif /* REFRESHINSTANCE_H */
 

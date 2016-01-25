@@ -26,14 +26,13 @@ public:
     //TimedAlgorithmInstance(const TimedAlgorithmInstance& orig);
     //virtual ~TimedAlgorithmInstance();
 
-    
     //void emplaceToCalendar();
     
     // Plans to calendar when shoud be run again.
-    void planActivationForSeconds(int seconds);
+    void planActivationAfterSeconds(int seconds);
     
     // Actualy runs code.
-    void activate();
+    virtual void activate();
     
 private:
 

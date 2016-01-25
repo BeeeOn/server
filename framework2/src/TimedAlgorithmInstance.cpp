@@ -14,9 +14,7 @@
 
 TimedAlgorithmInstance::TimedAlgorithmInstance(unsigned int manager_id, unsigned long instance_id, unsigned long user_id, unsigned int users_instance_personal_id, std::string text):
     AlgorithmInstance(manager_id, instance_id, user_id, users_instance_personal_id, text)
-{
-    // Activate after 5 seconds.
-    planActivationForSeconds(4);
+{   
     
 }
 
@@ -28,11 +26,11 @@ TimedAlgorithmInstance::~TimedAlgorithmInstance() {
 }
 */
 void TimedAlgorithmInstance::activate() {
-    std::cout << "TIMED INSTANCE ACTIVATED: " <<  m_instance_id << ": " << m_text << std::endl;
-    planActivationForSeconds(4);
+    //std::cout << "TIMED INSTANCE ACTIVATED: " <<  m_instance_id << ": " << m_text << std::endl;
+    std::cout << "BASE TIMEDALGORITHMINSTANCE CLASS WAS ACTIVATED!" << std::endl;
 }
 
-void TimedAlgorithmInstance::planActivationForSeconds(int seconds) {
+void TimedAlgorithmInstance::planActivationAfterSeconds(int seconds) {
     
     Calendar::emplaceEvent(seconds, m_manager_id, m_instance_id);
 }

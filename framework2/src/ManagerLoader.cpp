@@ -19,6 +19,7 @@
 #include <thread>
 
 #include "TimedAlgorithmManager.h"
+#include "../algorithms/RefreshManager.h"
 
 std::map<int /*manager_id*/, std::shared_ptr<TimedAlgorithmManager>> ManagerLoader::m_timed_managers;
 
@@ -34,12 +35,12 @@ ManagerLoader::~ManagerLoader() {
 void ManagerLoader::loadAlgorithmManagers() {
     
     // Create test timed manager.
-    m_timed_managers.emplace(10, std::make_shared<TimedAlgorithmManager>(10, MANAGER_TYPE::TIMED, "Test"));
+    m_timed_managers.emplace(10, std::make_shared<RefreshManager>(10, MANAGER_TYPE::TIMED, "Refresh test"));
     // Create test instance.
     //std::cout << m_timed_managers.find(10)->second->getId() << std::endl;
-    m_timed_managers.find(10)->second->createInstance(1, 1, "Instance cislo 1 se spustila.");
+    m_timed_managers.find(10)->second->createInstance(1, 1, "Refresh instance cislo 1 se spustila.");
     std::this_thread::sleep_for(std::chrono::seconds(2));
-    m_timed_managers.find(10)->second->createInstance(2, 2, "Instance cislo 2 se spustila.");
+    m_timed_managers.find(10)->second->createInstance(2, 2, "Refresh instance cislo 2 se spustila.");
     
 }
 
