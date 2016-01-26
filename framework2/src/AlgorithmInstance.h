@@ -17,22 +17,13 @@ class AlgorithmInstance
 public:
 
     
-    AlgorithmInstance(unsigned int manager_id, unsigned long instance_id, unsigned long user_id, unsigned int users_instance_personal_id, std::string text);
+    AlgorithmInstance(unsigned long user_id, unsigned int users_instance_personal_id);
     
     //AlgorithmInstance(const AlgorithmInstance& orig);
     
     //virtual ~AlgorithmInstance();
     
-    std::string getText() const {return m_text;};
-    
 protected:
-    
-    unsigned int m_manager_id;
-    // Unique id for instance in a manager.
-    unsigned long m_instance_id;
-
-    std::string m_text;
-    
     // There can be multiple owners of one instance.
     // First is user_id from database, second is users personal users_instance_personal_id
     // (example: user can have a several running instances of one algorithm).

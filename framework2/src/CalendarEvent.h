@@ -9,56 +9,57 @@
 #define CALENDAREVENT_H
 
 #include <chrono>
-#include <memory>
-#include <string>
+//#include <memory>
 
 #include "TimedAlgorithmInstance.h"
 
 class CalendarEvent {
 public:
-    // Test purpose constructor.
-    //CalendarEvent(std::chrono::system_clock::time_point activation_time, std::string text);
-    
-    //CalendarEvent(std::chrono::system_clock::time_point activation_time, unsigned int manager_id, unsigned long instance_id);
-    //CalendarEvent(std::chrono::system_clock::time_point activation_time, std::weak_ptr<TimedAlgorithmInstance> instance_ptr);
+    /**
+     * Constructor of class CalendarEvent.
+     * @param activation_time Time at which should pointed instance activate.
+     * @param instance_ptr Pointer to instance which should be activated.
+     */
     CalendarEvent(std::chrono::system_clock::time_point activation_time, TimedAlgorithmInstance *instance_ptr);
-    //CalendarEvent(const CalendarEvent& orig);
-    
+
+    /**
+     * Destructor of class CalendarEvent.
+     */
     virtual ~CalendarEvent();
     
-    // Getters.
+    /**
+     * Dereferences instance pointer stored in m_instance_ptr and calls it's activate() function.
+     */
+    void activateInstance();
+    
+    /**
+     * Getter of member variable m_activation_time.
+     * @return Time at which should pointed instance activate.
+     */
     std::chrono::system_clock::time_point getActivationTime() const {return m_activation_time;};
    
-    //std::string getText() const {return m_text;};
-    
-    // Determine priority.
-  
+    /*
+     * Overloaded operators for comparison of CalendarEvent class by m_activation_time.
+     */
     friend bool operator <(const CalendarEvent& lhs, const CalendarEvent& rhs)
     {    
         return lhs.getActivationTime() < rhs.getActivationTime();
     }
-
+    
     friend bool operator >(const CalendarEvent& lhs, const CalendarEvent& rhs)
     {    
         return lhs.getActivationTime() > rhs.getActivationTime();
     }
-    
-    //unsigned long m_instance_id;
-    
-    //unsigned int m_manager_id;
-    
-    //std::weak_ptr<TimedAlgorithmInstance> m_instance_ptr;
-    TimedAlgorithmInstance *m_instance_ptr;
+
 private:
-    
+    /**
+     * Time at which should pointed instance activate.
+     */
     std::chrono::system_clock::time_point m_activation_time;
-    
-    
-    
-    //std::string m_text; 
-    
-    
+    /**
+     * Pointer to instance which should be activated.
+     */
+    TimedAlgorithmInstance *m_instance_ptr;
+    //std::weak_ptr<TimedAlgorithmInstance> m_instance_ptr;
 };
-
 #endif /* CALENDAREVENT_H */
-

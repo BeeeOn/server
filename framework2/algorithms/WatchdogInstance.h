@@ -7,7 +7,7 @@
 
 #ifndef WATCHDOGINSTANCE_H
 #define WATCHDOGINSTANCE_H
-
+/*
 class WatchdogInstance {
 public:
     WatchdogInstance();
@@ -19,6 +19,6 @@ private:
     
     
 };
-
+*/
 #endif /* WATCHDOGINSTANCE_H */
 

@@ -8,8 +8,8 @@
 #include "EventAlgorithmManager.h"
 
 
-EventAlgorithmManager::EventAlgorithmManager(int id, MANAGER_TYPE type, std::string name):
-    AlgorithmManager(id, type, name)
+EventAlgorithmManager::EventAlgorithmManager(MANAGER_TYPE type, std::string name):
+    AlgorithmManager(type, name)
 {
 }
 /*

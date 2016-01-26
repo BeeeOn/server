@@ -21,7 +21,7 @@ enum class MANAGER_TYPE {
 class AlgorithmManager {
 public:
     
-    AlgorithmManager(unsigned int id, MANAGER_TYPE type, std::string name);
+    AlgorithmManager(MANAGER_TYPE type, std::string name);
     
     AlgorithmManager(const AlgorithmManager& orig);
     virtual ~AlgorithmManager();
@@ -29,7 +29,7 @@ public:
     void processConfigMessage();
     
     // Getters.
-    unsigned int getId() const {return m_id;}
+    //unsigned int getId() const {return m_id;}
     std::string getName() const {return m_name;};
     MANAGER_TYPE getType() const {return m_type;};    
     
@@ -44,7 +44,7 @@ protected:
     unsigned long m_instance_id_counter = 1;
     
     // Id of manager.
-    unsigned int m_id;
+    //unsigned int m_id;
     
     std::string m_name;
     

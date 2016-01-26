@@ -7,8 +7,8 @@
 
 #include "MessageParser.h"
 
-#include "../../lib/pugixml.hpp"
-#include "../../lib/pugiconfig.hpp"
+//#include "../../lib/pugixml.hpp"
+//#include "../../lib/pugiconfig.hpp"
 
 MessageParser::MessageParser() {
 }

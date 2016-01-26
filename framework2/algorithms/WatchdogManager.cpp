@@ -6,15 +6,15 @@
  */
 
 #include "WatchdogManager.h"
-
+/*
 WatchdogManager::WatchdogManager(int id, MANAGER_TYPE type, std::string name) :
     EventAlgorithmManager(id, type, name)
 {
 }
-/*
+
 WatchdogManager::WatchdogManager(const WatchdogManager& orig) {
 }
-*/
+
 WatchdogManager::~WatchdogManager() {
 }
 
@@ -24,3 +24,4 @@ void WatchdogManager::processDataMessage() {
     
     
 }
+*/

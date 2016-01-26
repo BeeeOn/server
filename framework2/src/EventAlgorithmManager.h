@@ -14,7 +14,7 @@ class EventAlgorithmManager : public AlgorithmManager
 {
 public:
     
-    EventAlgorithmManager(int id, MANAGER_TYPE type, std::string name);
+    EventAlgorithmManager(MANAGER_TYPE type, std::string name);
     
     //EventAlgorithmManager(const EventAlgorithmManager& orig);
     

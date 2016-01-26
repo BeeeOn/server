@@ -7,25 +7,29 @@
 
 #include "CalendarEvent.h"
 
-#include <iostream>
-#include <string>
+//#include <iostream>
+//#include <memory>
 
-#include "Logger.h"
-/*
-CalendarEvent::CalendarEvent(std::chrono::system_clock::time_point activation_time, unsigned int manager_id, unsigned long instance_id):
-    m_activation_time(activation_time), m_manager_id(manager_id), m_instance_id(instance_id)
-{
-}
-*/
 //CalendarEvent::CalendarEvent(std::chrono::system_clock::time_point activation_time, std::weak_ptr<TimedAlgorithmInstance> instance_ptr):
 CalendarEvent::CalendarEvent(std::chrono::system_clock::time_point activation_time, TimedAlgorithmInstance *instance_ptr):
     m_activation_time(activation_time), m_instance_ptr(instance_ptr)
 {
-    std::cout << "EVENT CONSTRUCT: " << m_instance_ptr->getText() << std::endl;
 }
-/*
-CalendarEvent::CalendarEvent(const CalendarEvent& orig) {
-}
-*/
+
 CalendarEvent::~CalendarEvent() {
+}
+
+void CalendarEvent::activateInstance() {
+    // Activates instance (WARNING! Does not check if pointed instance still exists!).
+    m_instance_ptr->activate();
+
+    /*
+    // Activation when m_instance_ptr is std::weak_ptr. Checks instance existence.
+    if (auto locked_instance_ptr = m_instance_ptr.lock()) {
+        locked_instance_ptr->activate();
+    }
+    else {
+        std::cerr << "Instance was deleted before it could be activated." << std::endl;
+    }
+    */
 }

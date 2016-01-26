@@ -37,6 +37,8 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/algorithms/RefreshInstance.o \
 	${OBJECTDIR}/algorithms/RefreshManager.o \
+	${OBJECTDIR}/algorithms/TestInstance.o \
+	${OBJECTDIR}/algorithms/TestManager.o \
 	${OBJECTDIR}/algorithms/WatchdogInstance.o \
 	${OBJECTDIR}/algorithms/WatchdogManager.o \
 	${OBJECTDIR}/src/AlgorithmInstance.o \
@@ -94,6 +96,16 @@ ${OBJECTDIR}/algorithms/RefreshManager.o: algorithms/RefreshManager.cpp
 	${MKDIR} -p ${OBJECTDIR}/algorithms
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/algorithms/RefreshManager.o algorithms/RefreshManager.cpp
+
+${OBJECTDIR}/algorithms/TestInstance.o: algorithms/TestInstance.cpp 
+	${MKDIR} -p ${OBJECTDIR}/algorithms
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/algorithms/TestInstance.o algorithms/TestInstance.cpp
+
+${OBJECTDIR}/algorithms/TestManager.o: algorithms/TestManager.cpp 
+	${MKDIR} -p ${OBJECTDIR}/algorithms
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/algorithms/TestManager.o algorithms/TestManager.cpp
 
 ${OBJECTDIR}/algorithms/WatchdogInstance.o: algorithms/WatchdogInstance.cpp 
 	${MKDIR} -p ${OBJECTDIR}/algorithms

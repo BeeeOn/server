@@ -6,6 +6,10 @@
       <itemPath>algorithms/RefreshInstance.h</itemPath>
       <itemPath>algorithms/RefreshManager.cpp</itemPath>
       <itemPath>algorithms/RefreshManager.h</itemPath>
+      <itemPath>algorithms/TestInstance.cpp</itemPath>
+      <itemPath>algorithms/TestInstance.h</itemPath>
+      <itemPath>algorithms/TestManager.cpp</itemPath>
+      <itemPath>algorithms/TestManager.h</itemPath>
       <itemPath>algorithms/WatchdogInstance.cpp</itemPath>
       <itemPath>algorithms/WatchdogInstance.h</itemPath>
       <itemPath>algorithms/WatchdogManager.cpp</itemPath>
@@ -94,6 +98,14 @@
       <item path="algorithms/RefreshManager.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="algorithms/RefreshManager.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="algorithms/TestInstance.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="algorithms/TestInstance.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="algorithms/TestManager.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="algorithms/TestManager.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="algorithms/WatchdogInstance.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -209,6 +221,14 @@
       <item path="algorithms/RefreshManager.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="algorithms/RefreshManager.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="algorithms/TestInstance.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="algorithms/TestInstance.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="algorithms/TestManager.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="algorithms/TestManager.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="algorithms/WatchdogInstance.cpp" ex="false" tool="1" flavor2="0">
       </item>

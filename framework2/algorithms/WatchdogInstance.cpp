@@ -6,7 +6,7 @@
  */
 
 #include "WatchdogInstance.h"
-
+/*
 WatchdogInstance::WatchdogInstance() {
 }
 
@@ -15,4 +15,4 @@ WatchdogInstance::WatchdogInstance(const WatchdogInstance& orig) {
 
 WatchdogInstance::~WatchdogInstance() {
 }
-
+*/

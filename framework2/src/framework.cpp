@@ -39,6 +39,7 @@ int main(int argc, char** argv) {
     // In a future pass path to algorithm config file.
     manager_loader.loadAlgorithmManagers();
    
+    /*
     // Test of weak pointer.
     std::weak_ptr<int> weak_test;
 
@@ -53,7 +54,7 @@ int main(int argc, char** argv) {
     else { 
         std::cerr << "Pointer is not pointing to anything." << std::endl;
     }
-    
+    */
     // Initializes and starts server.
     asio::io_service io_service;
     

@@ -12,14 +12,14 @@
 
 #include "../src/TimedAlgorithmManager.h"
 
-class RefreshManager : public TimedAlgorithmManager
+class RefreshManager: public TimedAlgorithmManager
 {
 public:
     
-    RefreshManager(unsigned int id, MANAGER_TYPE type, std::string name);
+    RefreshManager(MANAGER_TYPE type, std::string name);
     
     //RefreshManager(const RefreshManager& orig);
-    void createInstance(unsigned long user_id, unsigned int users_instance_personal_id, std::string text);
+    void createInstance(unsigned long user_id, unsigned int users_instance_personal_id);
     
     virtual ~RefreshManager();
 private:

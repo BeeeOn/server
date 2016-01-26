@@ -7,7 +7,7 @@
 
 #ifndef WATCHDOGMANAGER_H
 #define WATCHDOGMANAGER_H
-
+/*
 #include <string>
 
 #include "../src/EventAlgorithmManager.h"
@@ -24,6 +24,6 @@ public:
 private:
 
 };
-
+*/
 #endif /* WATCHDOGMANAGER_H */
 

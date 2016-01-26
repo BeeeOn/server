@@ -9,6 +9,7 @@
 #define TIMEDALGORITHMINSTANCE_H
 
 #include <memory>
+#include <mutex>
 #include <string>
 
 #include "AlgorithmInstance.h"
@@ -22,7 +23,7 @@ public:
     }
     */
     
-    TimedAlgorithmInstance(unsigned int manager_id, unsigned long instance_id, unsigned long user_id, unsigned int users_instance_personal_id, std::string text);
+    TimedAlgorithmInstance(unsigned long user_id, unsigned int users_instance_personal_id);
     
     //TimedAlgorithmInstance(const TimedAlgorithmInstance& orig);
     //virtual ~TimedAlgorithmInstance();
@@ -32,10 +33,15 @@ public:
     // Plans to calendar when shoud be run again.
     void planActivationAfterSeconds(int seconds);
     
+    void planActivationNow();
+    
     // Actualy runs code.
-    virtual void activate();
+    void activate();
+    
+    virtual void run();
     
 private:
+    std::mutex m_activation_mx;
 
 };
 

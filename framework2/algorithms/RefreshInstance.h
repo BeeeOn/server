@@ -16,25 +16,18 @@
 class RefreshInstance: public TimedAlgorithmInstance
 {
 public:
-   
-    /*
-    std::shared_ptr<RefreshInstance> getptr() {
-        return shared_from_this();
-    }
-    */
-    RefreshInstance(unsigned int manager_id, unsigned long instance_id, unsigned long user_id, unsigned int users_instance_personal_id, std::string text);
-    
-    //RefreshInstance(const RefreshInstance& orig);
-    
-    //void planActivationAfterSeconds(int seconds);
+    RefreshInstance(unsigned long user_id, unsigned int users_instance_personal_id);
     
     virtual ~RefreshInstance();
     
-    void activate();
-
+    void run();
+    
 private:
-    int m_activated_times = 0;
+    const std::string m_text_to_write = "Custom message stored in RefreshInstance.";
+    
+    int m_activated_times = 1;
 
+    void refreshCustomFunction();
 };
 #endif /* REFRESHINSTANCE_H */
 

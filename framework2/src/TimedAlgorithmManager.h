@@ -19,16 +19,14 @@ class TimedAlgorithmManager : public AlgorithmManager
 {
 public:
     
-    TimedAlgorithmManager(unsigned int id, MANAGER_TYPE type, std::string name);
+    TimedAlgorithmManager(MANAGER_TYPE type, std::string name);
     
     //TimedAlgorithmManager(const TimedAlgorithmManager& orig);
     
     virtual ~TimedAlgorithmManager();
     
-    void activateInstance(unsigned long instance_id);
-    
     // Creates an instance of algorithm.
-    virtual void createInstance(unsigned long user_id, unsigned int users_instance_personal_id, std::string text);
+    virtual void createInstance(unsigned long user_id, unsigned int users_instance_personal_id);
     
 protected:
 
