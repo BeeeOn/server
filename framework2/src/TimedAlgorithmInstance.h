@@ -26,7 +26,7 @@ public:
     TimedAlgorithmInstance(unsigned long user_id, unsigned int users_instance_personal_id);
     
     //TimedAlgorithmInstance(const TimedAlgorithmInstance& orig);
-    //virtual ~TimedAlgorithmInstance();
+    virtual ~TimedAlgorithmInstance();
 
     //void emplaceToCalendar();
     

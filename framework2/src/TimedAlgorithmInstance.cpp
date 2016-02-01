@@ -23,10 +23,10 @@ TimedAlgorithmInstance::TimedAlgorithmInstance(unsigned long user_id, unsigned i
 /*
 TimedAlgorithmInstance::TimedAlgorithmInstance(const TimedAlgorithmInstance& orig) {
 }
-
+*/
 TimedAlgorithmInstance::~TimedAlgorithmInstance() {
 }
-*/
+
 
 void TimedAlgorithmInstance::activate() {
     

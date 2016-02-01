@@ -60,11 +60,11 @@ public:
      */
     static std::condition_variable m_new_wakeup_time_cv;
     static std::condition_variable m_queue_not_empty_cv;
-    
-    static std::mutex m_calendar_events_mx;
     static std::mutex m_new_wakeup_time_mx;
     static std::mutex m_queue_not_empty_mx;
-    static std::mutex m_mx;
+    
+    static std::mutex m_calendar_events_mx;
+    static std::mutex m_test_queue_empty_mx;
     
     //static void emplaceEvent(int wait_time, std::weak_ptr<TimedAlgorithmInstance> instance_ptr);
     /**

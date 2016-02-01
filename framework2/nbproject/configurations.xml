@@ -88,6 +88,7 @@
       </toolsSet>
       <compileType>
         <ccTool>
+          <commandlineTool>g++</commandlineTool>
           <commandLine>-std=c++14 -pthread</commandLine>
         </ccTool>
       </compileType>

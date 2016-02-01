@@ -8,29 +8,36 @@
 #include "RefreshInstance.h"
 
 #include <iostream>
-#include <string>
-#include <chrono>
-#include <thread>
+
+#include <soci.h>
+#include <postgresql/soci-postgresql.h>
+
+using namespace soci;
 
 RefreshInstance::RefreshInstance(unsigned long user_id, unsigned int users_instance_personal_id):
     TimedAlgorithmInstance(user_id, users_instance_personal_id)
 {
-    // Activate now.
-    
 }
 
 RefreshInstance::~RefreshInstance() {
 }
 
 void RefreshInstance::run() {
-    refreshCustomFunction();
-}
-
-void RefreshInstance::refreshCustomFunction() {
-    // Activate after 5 seconds.
     planActivationAfterSeconds(5);
     
-    std::cout << "REFRESH INSTANCE ACTIVATED: " << m_activated_times++ << " TIMES" << std::endl << m_text_to_write << std::endl;
-    std::this_thread::sleep_for(std::chrono::seconds(2));
-    std::cout << "REFRESH INSTANCE FINISHED" << std::endl << "-----------" << std::endl;
+    executeRefreshQuery();
+}
+
+void RefreshInstance::executeRefreshQuery() {
+
+    session sql(postgresql, "port = '5432' dbname = 'home7' user = 'uiserver7' password = '1234' connect_timeout = '3'");
+  
+    std::cout << "Update devices ... ";
+  
+    sql << "UPDATE device SET status = CASE measured_at + 3 * get_refresh(gateway_id, device_euid) > extract(epoch from now()) "
+           "WHEN true THEN 'available'::device_status "                                                                                                                                                  
+           "WHEN false THEN 'unavailable'::device_status " 
+           "ELSE 'available'::device_status "
+           "END;";
+    std::cout << "done" << std::endl;
 }

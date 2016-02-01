@@ -16,7 +16,7 @@
 #include "CalendarEvent.h"
 
 // Definition of static variables.
-std::mutex Calendar::m_calendar_events_mx, Calendar::m_new_wakeup_time_mx, Calendar::m_queue_not_empty_mx, Calendar::m_mx;
+std::mutex Calendar::m_calendar_events_mx, Calendar::m_new_wakeup_time_mx, Calendar::m_queue_not_empty_mx, Calendar::m_test_queue_empty_mx;
 std::condition_variable Calendar::m_new_wakeup_time_cv, Calendar::m_queue_not_empty_cv;
 std::chrono::system_clock::time_point Calendar::m_wakeup_time = std::chrono::system_clock::now();
 std::priority_queue<std::shared_ptr<CalendarEvent>, std::vector<std::shared_ptr<CalendarEvent>>, GreaterCalendarEventSharedPtr> Calendar::m_calendar_events;
@@ -95,7 +95,7 @@ void Calendar::executeEvents(std::vector<std::shared_ptr<CalendarEvent>> events_
 }
 
 void Calendar::waitUntilCalendarIsNotEmpty() {
-    m_mx.lock();
+    m_test_queue_empty_mx.lock();
     
     bool calendar_empty = m_calendar_events.empty();
     if (calendar_empty) {
@@ -104,11 +104,11 @@ void Calendar::waitUntilCalendarIsNotEmpty() {
         
         // Until it's not notified that there is an event in calendar, wait for event to be emplaced.
         std::unique_lock<std::mutex> lock(m_queue_not_empty_mx);
-        m_mx.unlock();
+        m_test_queue_empty_mx.unlock();
         m_queue_not_empty_cv.wait(lock);
     }
     if (!calendar_empty) {
-        m_mx.unlock();
+        m_test_queue_empty_mx.unlock();
         std::cout << "Calendar not empty, run." << m_calendar_events.size() << " ->" << std::chrono::system_clock::now().time_since_epoch().count() << std::endl;
     }
     
@@ -117,7 +117,7 @@ void Calendar::waitUntilCalendarIsNotEmpty() {
 void Calendar::pushEvent(std::chrono::system_clock::time_point activation_time, TimedAlgorithmInstance* instance_ptr) {
     
     m_calendar_events_mx.lock();
-    m_mx.lock();
+    m_test_queue_empty_mx.lock();
     // Before new event is created, check if queue is empty.
     bool calendar_empty = m_calendar_events.empty();
     
@@ -139,7 +139,7 @@ void Calendar::pushEvent(std::chrono::system_clock::time_point activation_time, 
         // in waitUntilCalendarIsNotEmpty() function and should be notified to wake up.
         m_queue_not_empty_cv.notify_all();
     }
-    m_mx.unlock();
+    m_test_queue_empty_mx.unlock();
     m_calendar_events_mx.unlock();
 }
 

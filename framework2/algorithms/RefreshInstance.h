@@ -23,11 +23,8 @@ public:
     void run();
     
 private:
-    const std::string m_text_to_write = "Custom message stored in RefreshInstance.";
-    
-    int m_activated_times = 1;
 
-    void refreshCustomFunction();
+    void executeRefreshQuery();
 };
 #endif /* REFRESHINSTANCE_H */
 
