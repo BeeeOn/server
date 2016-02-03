@@ -54,7 +54,7 @@ bool DBHandler::IsInDB(std::string tableName, std::string columnName, std::strin
 	try
 	{
 		int retRec;
-		std::string sqlQuery = "select count(*)" + columnName + " from " + tableName + " where " + columnName + " = "+ record + ";";
+		std::string sqlQuery = "select count(*) from " + tableName + " where " + columnName + " = "+ record + ";";
 		this->_log->WriteMessage(TRACE,sqlQuery);
 		*_sql<<sqlQuery,into(retRec);
 		if (retRec > 0)
