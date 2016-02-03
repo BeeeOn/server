@@ -21,30 +21,6 @@ void DBHandler::LogValue (tmessage *message)
 			std::string retRec;
 			//std::string val = "0";
 			std::string val = std::to_string(message->values[i].measured_value);
-			/*switch(message->values[i].type)
-			{
-				//int
-				case ENUM:
-				case HUMIDITY:
-				case PRESSURE:
-				case CO2:
-				case BATTERY:
-				case RSSI:
-				case REFRESH:
-					val = std::to_string(message->values[i].ival);
-					break;
-				//float
-				case TEMPERATURE:
-				case LIGHT:
-				case NOISE:
-					val = std::to_string(message->values[i].fval);
-					break;
-				default:
-					this->_log->WriteMessage(WARN,"Unknown value type nothing will be saved to DB!");
-					continue;
-					break;
-			}
-			*/
 			*_sql << SQLQueries::InsertLog,
 					use (message->device_euid,"DEVICE_EUID"), // device_mac (device_euid)
 					use(std::to_string(message->timestamp),"MEASURED_AT"), // measured_at
@@ -78,7 +54,7 @@ bool DBHandler::IsInDB(std::string tableName, std::string columnName, std::strin
 	try
 	{
 		int retRec;
-		std::string sqlQuery = "select count(*)" + columnName + " from " + tableName + " where " + columnName + " = "+ record + ";";
+		std::string sqlQuery = "select count(*) from " + tableName + " where " + columnName + " = "+ record + ";";
 		this->_log->WriteMessage(TRACE,sqlQuery);
 		*_sql<<sqlQuery,into(retRec);
 		if (retRec > 0)
@@ -182,7 +158,10 @@ bool DBHandler::InsertSenAct(tmessage *message)
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::InsertSenAct");
 		return (false);
 	}
-	try
+	return(true);
+  //following lines is replaced by DB trigger
+  /*
+  try
 	{
 		for (int i=0;i<message->values_count;i++) //for all values create text representation and call SQL querry
 		{
@@ -205,9 +184,11 @@ bool DBHandler::InsertSenAct(tmessage *message)
 		std::string ErrorMessage = "Database Error while inserting values : ";
 		ErrorMessage.append (e.what());
 		this->_log->WriteMessage(ERR,ErrorMessage );
-		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::InsertSenAct");
+		
+    this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::InsertSenAct");
+    
 		return (false);
-	}
+	} */
 }
 
 bool DBHandler::UpdateSenAct(tmessage *message)
@@ -240,25 +221,49 @@ bool DBHandler::UpdateSenAct(tmessage *message)
           
 		for (int i = 0;i<message->values_count;i++)  //for all values create text representation and call SQL querry
 		{
-			//std::string val = "0";
-			std::string val = std::to_string(message->values[i].measured_value);
+    
+      std::string moduleStatus = message->values[i].status;
+                                 
+  				this->_log->WriteMessage(INFO,moduleStatus);
+      if(moduleStatus == "available")
+      {
+      
+        //std::string val = "0";
+  			std::string val = std::to_string(message->values[i].measured_value);
+  			
+  			statement stl = (_sql->prepare <<SQLQueries::UpdateModule,
+  								use(message->device_euid,"DEVICE_EUID"),
+  								use(val,"MEASURED_VALUE"),
+  								use(message->values[i].module_id,"MODULE_ID"),
+                  use(message->adapterINTid, "GATEWAY_ID"));
+  			stl.execute(false);
+  			if (stl.get_affected_rows()<=0)
+  			{
+  				this->_log->WriteMessage(INFO,"Update affected 0 rows going to insert");
+  //                                std::cout << "modID: " << message->values[i].module_id << std::endl;
+  				*_sql << SQLQueries::InsertModule,
+  						use(message->device_euid,"DEVICE_EUID"),
+  						use(message->values[i].module_id,"MODULE_ID"),
+  						use(val,"MEASURED_VALUE"),
+                                                  use(message->adapterINTid, "GATEWAY_ID");
+  			}
+      
+      }
+      else if(moduleStatus == "unavailable")
+      {
+  			statement stl = (_sql->prepare <<SQLQueries::UpdateModuleWithStatus,
+  								use(message->device_euid,"DEVICE_EUID"),
+  								use(moduleStatus, "STATUS"),
+  								use(message->values[i].module_id,"MODULE_ID"),
+                  use(message->adapterINTid, "GATEWAY_ID"));
+  			stl.execute(false);
+      }
+      else
+      {
+           this->_log->WriteMessage(ERR, "unknown device status: " + moduleStatus);
+      }
+         
 			
-			statement stl = (_sql->prepare <<SQLQueries::UpdateModule,
-								use(message->device_euid,"DEVICE_EUID"),
-								use(val,"MEASURED_VALUE"),
-								use(message->values[i].module_id,"MODULE_ID"),
-                                                                use(message->adapterINTid, "GATEWAY_ID"));
-			stl.execute(false);
-			if (stl.get_affected_rows()<=0)
-			{
-				this->_log->WriteMessage(INFO,"Update affected 0 rows going to insert");
-//                                std::cout << "modID: " << message->values[i].module_id << std::endl;
-				*_sql << SQLQueries::InsertModule,
-						use(message->device_euid,"DEVICE_EUID"),
-						use(message->values[i].module_id,"MODULE_ID"),
-						use(val,"MEASURED_VALUE"),
-                                                use(message->adapterINTid, "GATEWAY_ID");
-			}
 		}
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::UpdateSenAct");
 		return (true);

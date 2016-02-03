@@ -109,6 +109,7 @@ typedef struct value
 {
 	unsigned short int module_id;
 	float measured_value;
+  std::string status;
 	//unsigned short int intType; /**< integer representation of type*/
 	//unsigned short int offset;  /**< offset of value in device*/
 	//tvalueTypes  type; /**< type of value*/

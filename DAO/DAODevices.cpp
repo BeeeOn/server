@@ -25,7 +25,7 @@ string DAODevices::getXMLDevicesQueryString()
                         "xmlelement(name device,"
                                     "xmlattributes(" + col.euid + " as euid, " + col.id + " as type, " + col.location_id + " as locationid, " + tableDevices+"."+col.status + " as status, "
                                                 " " + col.measured_at + " as time, " + col.involved + "  as involved, " + col.name + "  as name, " + col.gateway_id + " as gateid),"
-                                    "(select xmlagg(xmlelement(name module,xmlattributes(" + moduleCol.id + " as id, " + moduleCol.value + " as value))) "
+                                    "(select xmlagg(xmlelement(name module,xmlattributes(" + moduleCol.id + " as id, " + moduleCol.value + " as value, " + moduleCol.status + " as status))) "
                                             "from " + tableModule + " where " + tableModule+"."+moduleCol.euid + "=" + tableDevices+"."+ col.euid + 
                                                     " AND " + tableModule+"."+moduleCol.gateway_id +"="+tableDevices+"."+col.gateway_id + " )"
                     ")"
