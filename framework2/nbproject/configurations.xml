@@ -89,7 +89,7 @@
       <compileType>
         <ccTool>
           <commandlineTool>g++</commandlineTool>
-          <commandLine>-std=c++14 -pthread</commandLine>
+          <commandLine>-std=c++11 -pthread -I/usr/include/soci -L/usr/local/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -I/usr/pgsql-9.2/include -I../ -L/usr/pgsql-9.2/lib -lpq</commandLine>
         </ccTool>
       </compileType>
       <item path="algorithms/RefreshInstance.cpp" ex="false" tool="1" flavor2="0">

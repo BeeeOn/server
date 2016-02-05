@@ -6,7 +6,7 @@
 
 # Macros
 TOP=`pwd`
-CND_PLATFORM=GNU-Linux
+CND_PLATFORM=G++_4.9.3-Linux
 CND_CONF=Debug
 CND_DISTDIR=dist
 CND_BUILDDIR=build

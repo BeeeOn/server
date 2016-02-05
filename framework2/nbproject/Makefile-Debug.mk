@@ -14,14 +14,14 @@ GREP=grep
 NM=nm
 CCADMIN=CCadmin
 RANLIB=ranlib
-CC=gcc
+CC=gcc-4.9
 CCC=g++
 CXX=g++
 FC=gfortran
 AS=as
 
 # Macros
-CND_PLATFORM=GNU-Linux
+CND_PLATFORM=G++_4.9.3-Linux
 CND_DLIB_EXT=so
 CND_CONF=Debug
 CND_DISTDIR=dist
@@ -67,8 +67,8 @@ OBJECTFILES= \
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=-std=c++14 -pthread
-CXXFLAGS=-std=c++14 -pthread
+CCFLAGS=-std=c++11 -pthread -I/usr/include/soci -L/usr/local/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -I/usr/pgsql-9.2/include -I../ -L/usr/pgsql-9.2/lib -lpq
+CXXFLAGS=-std=c++11 -pthread -I/usr/include/soci -L/usr/local/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -I/usr/pgsql-9.2/include -I../ -L/usr/pgsql-9.2/lib -lpq
 
 # Fortran Compiler Flags
 FFLAGS=
