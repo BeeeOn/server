@@ -9,10 +9,10 @@
 
 #include <iostream>
 
-//#include <soci.h>
-//#include <postgresql/soci-postgresql.h>
+#include <soci.h>
+#include <postgresql/soci-postgresql.h>
 
-//using namespace soci;
+using namespace soci;
 
 RefreshInstance::RefreshInstance(unsigned long user_id, unsigned int users_instance_personal_id):
     TimedAlgorithmInstance(user_id, users_instance_personal_id)
