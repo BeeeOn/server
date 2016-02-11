@@ -4,6 +4,7 @@
     "TIMEZONE" : "Časové pásmo",
     "READ_ONLY" : "iba na čítanie",
     "CANCEL" : "Zrušiť",
+    "OK" : "OK",
     "DELETE" : "Zmazať",
     "GATEWAYS" : "Brány",
     "GATEWAY" : "Brána",
@@ -122,6 +123,7 @@
     "LOADING_ACCOUNTS" : "Načítavam účty brány...",
     "GATEWAY_ID" : "ID brány",
     "GATEWAY_NAME" : "Názov brány",
+    "OWNER" : "Vlastník",
     "YOUR_ROLE" : "Vaša rola",
     "READ_ONLY" : "@:GLOBAL.READ_ONLY",
     "TIMEZONE" : "@:GLOBAL.TIMEZONE",
@@ -133,6 +135,9 @@
     "DELETE" : "@:GLOBAL.DELETE",
     "DELETE_GATEWAY_TEXT" : "Stratíte prístup k bráne a jej modulom. Ak ste vlastník, celá brána bude vymazaná zo servera a všetky nastavenia, vrátane užívateľov, modulov a historických dát budú zmazané.",
     "GATEWAY_USERS" : "Užívatelia brány",
+    "ADDING_ACCOUNT" : "Pridávam účet...",
+    "DELETING_GATEWAY" : "Vymazávam bránu...",
+    "UPDATING_GATEWAY" : "Aktualizujem bránu...",
     "BTNS" : {
       "EDIT_SETTINGS" : "Upraviť nastavenia",
       "GATEWAY_USERS" : "Užívatelia brány",
@@ -168,7 +173,7 @@
     "MODULES" : "Moduly",
     "GRAPHS" : "Grafy",
     "WATCHDOG" : "Sledovač",
-    "ACTIVE_GATEWAY" : "Aktívna brána",
+    "ACTIVE_GATEWAY" : "Brána",
     "DEVICES" : "Zariadenia",
     "SETTINGS" : "Nastavenia",
     "ABOUT" : "O aplikácii",
@@ -184,7 +189,10 @@
     "SIGN_FB" : "Prihlásiť z účtom Facebook",
     "TRY_OFFLINE" : "Alebo vyskúšajte aplikáciu offline",
     "START_DEMO" : "Spustiť demo mód",
-    "MODAL_TEXT" : "Prihlasujem..."
+    "MODAL_TEXT" : "Prihlasujem...",
+    "REGISTERING" : "Registrujem...",
+    "NO_ACCOUNT" : "Nemáte vytvorený účet",
+    "REGISTER_MESSAGE" : "Doposiaľ nemáte BeeeOn účet, prajete si ho vytvoriť teraz?"
   },
   "SETTINGS" : {
     "TIMEZONE": {

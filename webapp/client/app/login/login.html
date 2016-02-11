@@ -18,7 +18,7 @@
         <div flex layout="row" layout-align="start start" layout-wrap layout-margin class="loginSignButtonsPanel">
             <p>{{ 'LOGIN.LOGIN_OR_REGISTER' | translate }}:</p>
             <div layout="row" flex layout-align="space-around center">
-                <md-button aria-label="{{ 'LOGIN.SIGN_G_PLUS' | translate }}" class="" title="{{ 'LOGIN.SIGN_G_PLUS' | translate }}" md-no-ink>
+                <md-button ng-click="loginWithOAuth('google')" aria-label="{{ 'LOGIN.SIGN_G_PLUS' | translate }}" class="" title="{{ 'LOGIN.SIGN_G_PLUS' | translate }}" md-no-ink>
                     <md-icon md-svg-icon="g_plus_signin"></md-icon>
                 </md-button>
                 <md-button aria-label="{{ 'LOGIN.SIGN_FB' | translate }}" class="" title="{{ 'LOGIN.SIGN_FB' | translate }}" md-no-ink>
@@ -29,7 +29,7 @@
         <div class="demoModPanel" flex="10" layout="column">
             <p>{{ 'LOGIN.TRY_OFFLINE' | translate }}:</p>
             <div layout="row" style="">
-                <md-button flex md-no-ink ng-click="demoLogin()" aria-label="{{ 'LOGIN.START_DEMO' | translate }}">{{ 'LOGIN.START_DEMO' | translate }}</md-button>
+                <md-button flex md-no-ink ng-click="logInMode('demo')" aria-label="{{ 'LOGIN.START_DEMO' | translate }}">{{ 'LOGIN.START_DEMO' | translate }}</md-button>
             </div>
         </div>
     </div>
@@ -54,7 +54,7 @@
         <div flex layout="row" layout-align="start start" layout-wrap layout-margin class="loginSignButtonsPanel">
             <p>{{ 'LOGIN.LOGIN_OR_REGISTER' | translate }}:</p>
             <div layout="row" flex layout-align="space-around center">
-                <md-button aria-label="{{ 'LOGIN.SIGN_G_PLUS' | translate }}" class="" title="{{ 'LOGIN.SIGN_G_PLUS' | translate }}" md-no-ink>
+                <md-button ng-click="loginWithOAuth('google')" aria-label="{{ 'LOGIN.SIGN_G_PLUS' | translate }}" class="" title="{{ 'LOGIN.SIGN_G_PLUS' | translate }}" md-no-ink>
                     <md-icon md-svg-icon="g_plus_signin"></md-icon>
                 </md-button>
                 <md-button aria-label="{{ 'LOGIN.SIGN_FB' | translate }}" class="" title="{{ 'LOGIN.SIGN_FB' | translate }}" md-no-ink>
@@ -65,7 +65,7 @@
         <div class="demoModPanel" flex="10" layout="column">
             <p>{{ 'LOGIN.TRY_OFFLINE' | translate }}:</p>
             <div layout="row" style="">
-                <md-button flex md-no-ink ng-click="demoLogin()" aria-label="{{ 'LOGIN.START_DEMO' | translate }}">{{ 'LOGIN.START_DEMO' | translate }}</md-button>
+                <md-button flex md-no-ink ng-click="logInMode('demo')" aria-label="{{ 'LOGIN.START_DEMO' | translate }}">{{ 'LOGIN.START_DEMO' | translate }}</md-button>
             </div>
         </div>
     </div>

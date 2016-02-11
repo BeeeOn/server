@@ -1,7 +1,7 @@
 <md-list class="devicesList">
-    <section ng-repeat="location in locations" ng-show="(devices | filter: {locationid: location.id}).length > 0">
+    <section ng-repeat="location in locations" ng-show="(devices | filter: {locationid: location.id}:locationIdComparator).length > 0">
         <md-subheader class="md-no-sticky">{{getLocationName(location)}}</md-subheader>
-        <md-list-item class="md-3-line list-button" ng-click="showDetail(device.id)" md-no-ink ng-repeat="device in devices | filter: {locationid: location.id}">
+        <md-list-item class="md-3-line list-button" ng-click="showDetail(device.id)" md-no-ink ng-repeat="device in devices | filter: {locationid: location.id} : locationIdComparator">
             <md-icon class="md-avatar" md-svg-icon="{{getIcon(device.type)}}"></md-icon>
             <div class="md-list-item-text">
                 <p class="deviceName">{{(device.name && (!device.name === ""))? device.name : ('DEVICES.' + getDefaultDeviceName(device.type) | translate)}}</p>

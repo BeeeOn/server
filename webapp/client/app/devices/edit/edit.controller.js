@@ -15,7 +15,7 @@ angular.module('beeeOnWebApp')
     };
     //panel buttons
     var save = function (){
-      Gateways.setSelectedInfo(lodash.pick($scope.gatewayInfo,['aid','aname','utc']))
+      Gateways.setSelectedInfo(lodash.pick($scope.gatewayInfo,['id','name','utc']))
         .then(function(){
         SidePanel.getRightMainAction()();
       },function(err){

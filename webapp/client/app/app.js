@@ -57,6 +57,7 @@ angular.module('beeeOnWebApp', [
             'hue-1': 'A100'   //accent light
           });
 
+
       /**
        * Define icons
        */
@@ -131,6 +132,8 @@ angular.module('beeeOnWebApp', [
        * Set message interceptor, which adds token to every message header
        */
       $httpProvider.interceptors.push('authInterceptor');
+      $httpProvider.defaults.useXDomain = true;
+      delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
       hammerDefaultOptsProvider.set({
         recognizers: [[Hammer.Swipe, {enable:true}]]
@@ -159,18 +162,27 @@ angular.module('beeeOnWebApp', [
           if ($cookieStore.get('token')) {
             config.headers.Authorization = 'Bearer ' + $cookieStore.get('token');
           }
+
           return config;
         },
 
         // Intercept 401s and redirect you to login
         responseError: function(response) {
-          if(response.status === 401) {
-            $location.path('/login');
+          if(response.status === 401 || (response.data.errcode && (response.data.errcode ==="2" || response.data.errcode === "20"))){
             // remove any stale tokens
             $cookieStore.remove('token');
+            if(response.data.errcode){
+              switch (response.data.errcode){
+                case "2":
+                case "20":
+                  $location.path('/login?errcode='+response.data.errcode);
+                  break;
+              }
+            }else{
+              $location.path('/login');
+            }
             return $q.reject(response);
-          }
-          else {
+          } else {
             return $q.reject(response);
           }
         }

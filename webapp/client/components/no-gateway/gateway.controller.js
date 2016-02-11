@@ -3,7 +3,6 @@
 angular.module('beeeOnWebApp')
   .controller('NoGatewaysCtrl',['$scope','dialogs', function ($scope,dialogs) {
     $scope.showAddGatewayModal = function(){
-      console.log("asdasd");
       //show about modal
       dialogs.create(
         'components/tutorial/add-gateway/add-gateway.html',

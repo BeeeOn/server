@@ -2,10 +2,10 @@
 
 var express = require('express');
 var passport = require('passport');
-var auth = require('../auth.service');
+var transformer = require('../../../../components/transformer');
+var wait = require('wait.for');
 
 var router = express.Router();
-
 router
 	.get('/', passport.authenticate('google', {
 		failureRedirect: '/login',
@@ -19,6 +19,9 @@ router
 	.get('/callback', passport.authenticate('google', {
 		failureRedirect: '/login',
 		session: false
-	}), auth.setTokenCookie);
+	}),function(req,res){
+    wait.launchFiber(transformer.login,req,res,true);
+  });
+
 
 module.exports = router;

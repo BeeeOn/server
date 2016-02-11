@@ -6,7 +6,7 @@
 // You will need to set these on the server you deploy to.
 
 module.exports = {
-  DOMAIN: 'ant-2.fit.vutbr.cz:9000',
+  DOMAIN: (process.env.NODE_ENV == 'development') ? process.env.IP+"9000" : 'ant-2.fit.vutbr.cz:9000',
   PORT: '9000',
   IP: '0.0.0.0',
   SESSION_SECRET: "beeeonweb-secret",
@@ -16,3 +16,5 @@ module.exports = {
   // Control debug level for modules using visionmedia/debug
   DEBUG: ''
 };
+
+

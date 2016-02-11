@@ -1,11 +1,11 @@
 {
-  "uid": 11111,
+  "id": 11111,
   "name": "Demo",
   "surname": "Mod",
   "gender": "male",
   "email": "demo@mod.com",
   "picture": null,
-  "pictureURL" : "",
+  "imgurl" : "",
   "accounts" : [
 
   ]

@@ -6,13 +6,23 @@ angular.module('beeeOnWebApp')
     var overview = [
       {
         id: 'modules',
-        enabled: true,
+        enabled: false,
         title: '',
         img: [
           '../assets/images/icons-png/ic_menu_overview.png',
           '../assets/images/icons-png/ic_menu_overview_active.png'
         ],
         link:'modules'
+      },
+      {
+        id: 'devices',
+        enabled: true,
+        title: '',
+        img: [
+          '../assets/images/icons-png/ic_menu_a_gate.png',
+          '../assets/images/icons-png/ic_menu_a_gate_active.png'
+        ],
+        link:'devices'
       },
       {
         id: 'graphs',
@@ -25,8 +35,18 @@ angular.module('beeeOnWebApp')
         link:'graphs'
       },
       {
-        id: 'watchdog',
+        id: 'active-gateway',
         enabled: true,
+        title: '',
+        img: [
+          '../assets/images/icons-png/ic_menu_a_gate.png',
+          '../assets/images/icons-png/ic_menu_a_gate_active.png'
+        ],
+        link:'active-gateway'
+      },
+      {
+        id: 'watchdog',
+        enabled: false,
         title: '',
         img: [
           '../assets/images/icons-png/ic_menu_watchdog.png',
@@ -35,13 +55,15 @@ angular.module('beeeOnWebApp')
         link:'watchdog'
       }
     ];
-    $translate(['MENU.MODULES','MENU.GRAPHS','MENU.WATCHDOG']).then(function(translations){
+    $translate(['MENU.MODULES','MENU.DEVICES','MENU.GRAPHS','MENU.ACTIVE_GATEWAY','MENU.WATCHDOG']).then(function(translations){
       overview[0].title  = translations['MENU.MODULES'];
-      overview[1].title  = translations['MENU.GRAPHS'];
-      overview[2].title  = translations['MENU.WATCHDOG'];
+      overview[1].title  = translations['MENU.DEVICES'];
+      overview[2].title  = translations['MENU.GRAPHS'];
+      overview[3].title  = translations['MENU.ACTIVE_GATEWAY'];
+      overview[4].title  = translations['MENU.WATCHDOG'];
     });
     var management = [
-      {
+      /*{
         id: 'active-gateway',
         enabled: true,
         title: '',
@@ -60,12 +82,12 @@ angular.module('beeeOnWebApp')
           '../assets/images/icons-png/ic_menu_a_gate_active.png'
         ],
         link:'devices'
-      }
+      }*/
     ];
-    $translate(['MENU.ACTIVE_GATEWAY','MENU.DEVICES']).then(function(translations){
+    /*$translate(['MENU.ACTIVE_GATEWAY','MENU.DEVICES']).then(function(translations){
       management[0].title  = translations['MENU.ACTIVE_GATEWAY'];
       management[1].title  = translations['MENU.DEVICES'];
-    });
+    });*/
     var defaultItems = [
       {
         id: 'settings',

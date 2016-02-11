@@ -7,12 +7,12 @@
         <div ng-include="'components/menu/menu.html'" layout="column" class="grayBackground"></div>
         <!-- Center -->
         <md-content flex class="grayBackground activeGatewayContent" layout="column" layout-align="top center">
-            <div flex layout="column" class="content">
-                <div flex class="md-whiteframe-z2 whiteBackground activeGatewayOverview">
+            <div layout="column" class="content" layout-fill>
+                <div class="md-whiteframe-z2 whiteBackground activeGatewayOverview" layout-fill>
                     <md-toolbar class="md-primary">
                         <div class="md-toolbar-tools">
                             <h3>
-                                <span>{{gatewayInfo.aname}}</span>
+                                <span>{{gatewayInfo.name}}</span>
                             </h3>
                             <span flex></span>
                             <div hide-sm>
@@ -69,15 +69,23 @@
                             <md-icon md-svg-icon="info"></md-icon>
                             <div class="md-list-item-text">
                                 <p class="propertyName">{{ 'ACTIVE_GATEWAY.GATEWAY_ID' | translate }}</p>
-                                <h3 class="property"> {{gatewayInfo.aid}} </h3>
+                                <h3 class="property"> {{gatewayInfo.id}} </h3>
                             </div>
                         </md-list-item>
                         <md-divider></md-divider>
+                      <md-list-item class="md-2-line">
+                        <md-icon md-svg-icon="person"></md-icon>
+                        <div class="md-list-item-text">
+                          <p class="propertyName">{{ 'ACTIVE_GATEWAY.OWNER' | translate }}</p>
+                          <h3 class="property">{{gatewayInfo.owner}}</h3>
+                        </div>
+                      </md-list-item>
+                      <md-divider></md-divider>
                         <md-list-item class="md-2-line">
                             <md-icon md-svg-icon="person"></md-icon>
                             <div class="md-list-item-text">
                                 <p class="propertyName">{{ 'ACTIVE_GATEWAY.YOUR_ROLE' | translate }}</p>
-                                <h3 class="property"> {{gatewayInfo.role}} </h3>
+                                <h3 class="property" user-role="gatewayInfo.permission"></h3>
                             </div>
                         </md-list-item>
                         <md-divider></md-divider>
@@ -85,7 +93,7 @@
                             <md-icon md-svg-icon="language"></md-icon>
                             <div class="md-list-item-text">
                                 <p class="propertyName">{{ 'ACTIVE_GATEWAY.TIMEZONE' | translate }}</p>
-                                <h3 class="property"> {{gatewayInfo.utc}} </h3>
+                                <h3 class="property"> {{gatewayInfo.timezone}} </h3>
                             </div>
                         </md-list-item>
                         <md-divider></md-divider>
@@ -93,7 +101,7 @@
                             <md-icon md-svg-icon="supervisor"></md-icon>
                             <div class="md-list-item-text">
                                 <p class="propertyName">{{ 'ACTIVE_GATEWAY.USERS_NUMBER' | translate }}</p>
-                                <h3 class="property"> {{gatewayInfo.nusers}} </h3>
+                                <h3 class="property"> {{gatewayInfo.users}} </h3>
                             </div>
                             <md-button class="md-accent" ng-click="showRightPanel('users');">{{ 'ACTIVE_GATEWAY.BTNS.DETAILS' | translate }}</md-button>
                         </md-list-item>
@@ -102,7 +110,7 @@
                             <md-icon md-svg-icon="router"></md-icon>
                             <div class="md-list-item-text">
                                 <p class="propertyName">{{ 'ACTIVE_GATEWAY.DEVICES_NUMBER' | translate }}</p>
-                                <h3 class="property"> {{gatewayInfo.nfacs}} </h3>
+                                <h3 class="property"> {{gatewayInfo.ndevices}} </h3>
                             </div>
                             <md-button class="md-accent" ng-click="showDevices();">{{ 'ACTIVE_GATEWAY.BTNS.DETAILS' | translate }}</md-button>
                         </md-list-item>
@@ -117,7 +125,7 @@
                         <md-list-item class="md-2-line">
                             <div class="md-list-item-text" ng-class="{'md-offset':true}">
                                 <p class="propertyName">{{ 'ACTIVE_GATEWAY.COMM_VERSION' | translate }}</p>
-                                <h3 class="property"> {{gatewayInfo.aversion}} </h3>
+                                <h3 class="property"> {{gatewayInfo.version}} </h3>
                             </div>
                         </md-list-item>
                         <md-divider></md-divider>

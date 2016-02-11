@@ -4,6 +4,7 @@
     "TIMEZONE" : "Timezone",
     "READ_ONLY" : "read-only",
     "CANCEL" : "Cancel",
+    "OK" : "OK",
     "DELETE" : "Delete",
     "GATEWAYS" : "Gateways",
     "GATEWAY" : "Gateway",
@@ -122,6 +123,7 @@
     "LOADING_ACCOUNTS" : "Loading gateway accounts...",
     "GATEWAY_ID" : "Gate Id",
     "GATEWAY_NAME" : "Gate name",
+    "OWNER" : "Owner",
     "YOUR_ROLE" : "Your role",
     "READ_ONLY" : "@:GLOBAL.READ_ONLY",
     "TIMEZONE" : "@:GLOBAL.TIMEZONE",
@@ -133,6 +135,9 @@
     "DELETE" : "@:GLOBAL.DELETE",
     "DELETE_GATEWAY_TEXT" : "You will lose access to gateway and it's modules. If you are owner, entire gateway will be deleted from server and all settings including users, modules and historical data will be deleted.",
     "GATEWAY_USERS" : "Gateway users",
+    "ADDING_ACCOUNT" : "Adding account...",
+    "DELETING_GATEWAY" : "Deleting gateway...",
+    "UPDATING_GATEWAY" : "Updating gateway...",
     "BTNS" : {
       "EDIT_SETTINGS" : "Edit settings",
       "GATEWAY_USERS" : "Gateway users",
@@ -168,7 +173,7 @@
     "MODULES" : "Modules",
     "GRAPHS" : "Charts",
     "WATCHDOG" : "Watchdog",
-    "ACTIVE_GATEWAY" : "Active gateway",
+    "ACTIVE_GATEWAY" : "Gateway",
     "DEVICES" : "Devices",
     "SETTINGS" : "Settings",
     "ABOUT" : "About",
@@ -184,7 +189,10 @@
     "SIGN_FB" : "Sign in with Facebook account",
     "TRY_OFFLINE" : "Or you can try offline",
     "START_DEMO" : "Start in demo mode",
-    "MODAL_TEXT" : "Logging in..."
+    "MODAL_TEXT" : "Logging in...",
+    "REGISTERING" : "Registering...",
+    "NO_ACCOUNT" : "No account yet",
+    "REGISTER_MESSAGE" : "You don't have a BeeeOn account yet, do you want to create it now?"
   },
   "SETTINGS" : {
     "TIMEZONE": {
@@ -217,7 +225,7 @@
     }
   },
   "ROLES" : {
-    "SUPERUSER" : "Superuser",
+    "SUPERUSER" : "Owner",
     "ADMIN" : "Admin",
     "USER" : "User",
     "GUEST" : "Guest"

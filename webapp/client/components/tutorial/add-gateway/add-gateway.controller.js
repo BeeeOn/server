@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('beeeOnWebApp')
-  .controller('AddGatewayCtrl', ['$scope','$modalInstance','dialogs', function ($scope,$modalInstance,dialogs) {
+  .controller('AddGatewayCtrl', ['$scope','$state','$log','$modalInstance','Gateways','Auth','dialogs','lodash', function ($scope,$state,$log,$modalInstance,Gateways,Auth,dialogs,lodash) {
     $scope.currentIndex = 0;
     $scope.close = function(){
       $modalInstance.close();
@@ -24,9 +24,26 @@ angular.module('beeeOnWebApp')
         'lg'
       ).result.then(function(gateId){
           //close the tutorial
-          $modalInstance.close();
+          addGateway(gateId);
           //try to add gateway
-          console.log("Adding gateway: " + gateId);
         });
+    };
+
+    var addGateway = function(id){
+      Gateways.registerGateway({id:id,name:composeNewGatewayName(),timezone:0})
+        .then(function(data){
+          $log.debug("AddGatewayCtrl - gateway added successfully.Refreshing gateways");
+          $modalInstance.close();
+          Gateways.getGateways(true).then(function(gateways){
+            $state.go('devices', {gatewayId:lodash.last(gateways).id,message:"Gateway successfully added"});
+          });
+        })
+        .catch(function(err){
+          $log.error(err);
+        });
+    };
+
+    var composeNewGatewayName = function(){
+      return Auth.getCurrentUser().name+'\'s gateway #' + (Gateways.getGatewaysCount()+1);
     };
   }]);

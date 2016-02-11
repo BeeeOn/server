@@ -10,6 +10,7 @@ angular.module('beeeOnWebApp')
           return value + " " + $translate.instant('GLOBAL.SECOND');
         case 5:
         case 10:
+        case 15:
         case 20:
         case 30:
           return value + " " + $translate.instant('GLOBAL.SECONDS');

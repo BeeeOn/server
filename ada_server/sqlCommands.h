@@ -36,6 +36,7 @@ const string UpdateDevice = "update device set measured_at = :MEASURED_AT where 
 const string DeleteDevice = "Delete from device where device_euid=:DEVICE_EUID AND gateway_id=_GATEWAY_ID;";
 /** Q to select wake up time of record uses ( :record)*/
 const string SelectTime = "select refresh from device where device_euid=:record AND gateway_id=:GATEWAY_ID;"; //"select refresh from facilities where mac = '" + record + "';";
+const string SelectDeviceParametersXml = "select xmlagg( xmlelement(name parameter, xmlattributes(parameter_key as key, parameter_value as value))) from device_parameter where device_euid=:record AND gateway_id=:GATEWAY_ID;";
 
 /**Q to insert device uses ( ':devID', :type, ':value')*/
 const string InsertModule = "insert into module (device_euid,module_id,measured_value, gateway_id) values (:DEVICE_EUID,:MODULE_ID,:MEASURED_VALUE, :GATEWAY_ID);";  //"insert into devices (fk_facilities_mac,type,value) values ( '" + message->DeviceIDstr + "', " + std::to_string(message->values[i].intType) + ", '" + val + "');" ;

@@ -2,8 +2,8 @@
 
 angular.module('beeeOnWebApp')
   .controller(
-  'UsersCtrl',['$scope','$translate','$log','$stateParams','$mdBottomSheet','SidePanel','Gateways','dialogs',
-    function ($scope,$translate,$log,$stateParams,$mdBottomSheet,SidePanel,Gateways,dialogs) {
+  'UsersCtrl',['$scope','$translate','$log','$stateParams','$mdBottomSheet','SidePanel','Gateways','dialogs','Auth',
+    function ($scope,$translate,$log,$stateParams,$mdBottomSheet,SidePanel,Gateways,dialogs,Auth) {
     var rightPanelOptions = SidePanel.getRightPanelOptions();
     //set right panel options
     //panel close action
@@ -13,7 +13,8 @@ angular.module('beeeOnWebApp')
     rightPanelOptions.changeStateOptions.newState = 'active-gateway';
     rightPanelOptions.type = 'change_state_right';
     rightPanelOptions.changeStateOptions.params = {
-      gatewayId:$stateParams.gatewayId
+      gatewayId:$stateParams.gatewayId,
+      reloadData : false
     };
 
     rightPanelOptions.more = [];
@@ -51,7 +52,7 @@ angular.module('beeeOnWebApp')
           action: 'add',
           account: {
             email: '',
-            role : 'guest'
+            permission : 'guest'
           }
         },
         {
@@ -64,9 +65,20 @@ angular.module('beeeOnWebApp')
       ).result.then(function(account){
         Gateways.addAccount(account).
           then(function () {
-            $log.debug('UsersCtrl - account added successfully')
+            if(Auth.getCurrentUser().name === 'Demo'){
+              $log.warn("Cannot add accounts in demo mod");
+            }else{
+              rightPanelOptions.changeStateOptions.params.reloadData = true;
+              $log.debug('UsersCtrl - account added successfully');
+              Gateways.getAccounts(true).
+                then(function(data){
+                  $scope.accounts = data;
+                },function(err){
+                  $log.error(err);
+                });
+            }
           }, function (err) {
-            $log.error('UsersCtrl - ' + err);
+            $log.error(err);
           })
         });
     };

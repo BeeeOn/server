@@ -1,34 +1,35 @@
 [
   {
-    "aid": "11111",
-    "role": "admin",
-    "aname" : "Home",
-    "nfacs" : 4,
-    "nusers" : 3,
+    "id": "11111",
+    "permission": "owner",
+    "name" : "Home",
+    "owner" : "Demo Mod",
+    "ndevices" : "2",
+    "users" : "3",
     "ip" : "127.0.0.1",
-    "aversion" : "0",
-    "utc" : "1",
+    "version" : "0",
+    "timezone" : "1",
     "accounts" : [
       {
         "name": "Demo",
         "surname": "Mod",
         "gender": "male",
         "email": "demo@mod.com",
-        "role" : "superuser"
+        "permission" : "owner"
       },
       {
         "name": "Second",
         "surname": "User",
         "gender": "female",
         "email": "second@user.com",
-        "role" : "admin"
+        "permission" : "admin"
       },
       {
         "name": "Third",
         "surname": "User",
         "gender": "female",
         "email": "third@user.com",
-        "role" : "admin"
+        "permission" : "admin"
       }
     ],
     "locations" : [
@@ -37,53 +38,51 @@
     ],
     "devices" : [
       {
-        "init": 1,
         "id": "1",
         "type" : "0",
-        "locationid" : 2,
+        "locationid" : "2",
         "name" : "",
         "time" : "1443807212376",
         "modules": [
           {
-            "id" : 0,
+            "id" : "0",
             "value" : "19.5"
           },
           {
-            "id" : 1,
+            "id" : "1",
             "value" : "17"
           },
           {
-            "id" : 2,
+            "id" : "2",
             "value" : "55"
           },
           {
-            "id" : 3,
+            "id" : "3",
             "value" : "95"
           },
           {
-            "id" : 4,
+            "id" : "4",
             "value" : "92"
           },
           {
-            "id" : 5,
+            "id" : "5",
             "value" : "30"
           }
         ]
       },
       {
-        "init": 1,
         "id": "2",
         "type" : "2",
-        "locationid" : 1,
+        "locationid" : "1",
         "name" : "",
         "time" : "1443807212376",
         "modules": [
           {
-            "id" : 0,
+            "id" : "0",
             "value" : "1120"
           },
           {
-            "id" : 1,
+            "id" : "1",
             "value" : "5"
           }
         ]
@@ -91,28 +90,29 @@
     ]
   },
   {
-    "aid": "22222",
-    "role": "superuser",
-    "aname" : "Regulator VPT",
-    "nfacs" : 2,
-    "nusers" : 2,
+    "id": "22222",
+    "permission": "admin",
+    "owner" : "Second User",
+    "name" : "Regulator VPT",
+    "ndevices" : "1",
+    "users" : "2",
     "ip" : "127.0.0.2",
-    "aversion" : "0",
-    "utc" : "1",
+    "version" : "0",
+    "timezone" : "1",
     "accounts" : [
       {
         "name": "Second",
         "surname": "User",
         "gender": "female",
         "email": "second@user.com",
-        "role" : "superuser"
+        "permission" : "owner"
       },
       {
         "name": "Demo",
         "surname": "Mod",
         "gender": "male",
         "email": "demo@mod.com",
-        "role" : "admin"
+        "permission" : "admin"
       }
     ],
     "locations" : [
@@ -120,115 +120,114 @@
     ],
     "devices" : [
       {
-        "init": 1,
         "id": "3",
         "type" : "1",
-        "locationid" : 3,
+        "locationid" : "3",
         "name" : "",
         "time" : "1443807212376",
         "modules": [
           {
-            "id" : 0,
+            "id" : "0",
             "value" : "0"
           },
           {
-            "id" : 1,
+            "id" : "1",
             "value" : "1"
           },
           {
-            "id" : 2,
+            "id" : "2",
             "value" : "25"
           },
           {
-            "id" : 3,
+            "id" : "3",
             "value" : "24"
           },
           {
-            "id" : 4,
+            "id" : "4",
             "value" : "70"
           },
           {
-            "id" : 5,
+            "id" : "5",
             "value" : "65"
           },
           {
-            "id" : 6,
+            "id" : "6",
             "value" : "3"
           },
           {
-            "id" : 7,
+            "id" : "7",
             "value" : "0"
           },
           {
-            "id" : 8,
+            "id" : "8",
             "value" : "30"
           },
           {
-            "id" : 9,
+            "id" : "9",
             "value" : "30"
           },
           {
-            "id" : 10,
+            "id" : "10",
             "value" : "65"
           },
           {
-            "id" : 11,
+            "id" : "11",
             "value" : "65"
           },
           {
-            "id" : 12,
+            "id" : "12",
             "value" : "1"
           },
           {
-            "id" : 13,
+            "id" : "13",
             "value" : "2"
           },
           {
-            "id" : 14,
+            "id" : "14",
             "value" : "22"
           },
           {
-            "id" : 15,
+            "id" : "15",
             "value" : "18"
           },
           {
-            "id" : 16,
+            "id" : "16",
             "value" : "85"
           },
           {
-            "id" : 17,
+            "id" : "17",
             "value" : "85"
           },
           {
-            "id" : 18,
+            "id" : "18",
             "value" : "0"
           },
           {
-            "id" : 19,
+            "id" : "19",
             "value" : "2"
           },
           {
-            "id" : 20,
+            "id" : "20",
             "value" : "26"
           },
           {
-            "id" : 21,
+            "id" : "21",
             "value" : "24"
           },
           {
-            "id" : 22,
+            "id" : "22",
             "value" : "50"
           },
           {
-            "id" : 23,
+            "id" : "23",
             "value" : "65"
           },
           {
-            "id" : 24,
+            "id" : "24",
             "value" : "0"
           },
           {
-            "id" : 25,
+            "id" : "25",
             "value" : "88"
           }
         ]

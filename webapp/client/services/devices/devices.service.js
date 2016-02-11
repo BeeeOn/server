@@ -595,10 +595,8 @@ angular.module('beeeOnWebApp')
           var device = this.getDeviceById(deviceId);
           var moduleTemplate = this.getModuleTemplate(device.type,MODULES.BATTERY);
           if(moduleTemplate){
-            return lodash.find(device.modules,{'id':parseInt(moduleTemplate.id)}).value;
+            return lodash.find(device.modules,{'id':moduleTemplate.id}).value;
           }
-        }else{
-          $log.warn("Devices - No current devices yet");
         }
         return null;
       },
@@ -624,6 +622,10 @@ angular.module('beeeOnWebApp')
             deferred.reject(err);
           });
         return deferred.promise;
+      },
+      clearLocalData : function () {
+        $log.debug("Clearing local devices data");
+        currentDevices = null;
       }
     }
   }]);

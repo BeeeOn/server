@@ -1,7 +1,7 @@
 <md-list class="modulesList">
-    <section ng-repeat="location in locations" ng-show="(devices | filter: {locationid: location.id}).length > 0">
+    <section ng-repeat="location in locations" ng-show="(devices | filter: {locationid: location.id}:locationIdComparator).length > 0">
         <md-subheader class="md-no-sticky">{{getLocationName(location)}}</md-subheader>
-        <div ng-repeat="device in devices | filter: {locationid: location.id}">
+        <div ng-repeat="device in devices | filter: {locationid: location.id}:locationIdComparator">
             <md-list-item class="md-2-line list-button" ng-click="showDetail(device.id)" md-no-ink ng-repeat="module in device.modules | orderBy: ['model.order','model.group']" ng-if="module.isVisible">
                 <md-icon md-svg-icon="{{getIcon(module)}}"></md-icon>
                 <div class="md-list-item-text">

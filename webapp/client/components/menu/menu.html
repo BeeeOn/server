@@ -11,7 +11,7 @@
         <div layout="row" layout-align="space-around center" class="menuUserPanel"  md-swipe-left="onSwipeLeft()">
             <md-list-item class="md-2-line" layout="row" layout-align="start center">
                 <!-- avatar -->
-                <img ng-src="{{avatar}}" class="md-avatar" alt="{{user.name}} {{user.surname}}" />
+                <img src="{{avatar}}" class="md-avatar" alt="{{user.name}} {{user.surname}}" />
                 <!-- full name and email -->
                 <div class="md-list-item-text">
                     <h3 class="md-body-2 md-title">{{user.name}} {{user.surname}}</h3>
@@ -62,7 +62,7 @@
                 <md-divider></md-divider>
             </section>
             <!-- Applications -->
-            <section ng-show="gateways">
+            <section ng-show="gateways && management.length > 0">
                 <md-subheader class="md-no-sticky">{{ 'MENU.MANAGEMENT_SUBHEADER' | translate }}</md-subheader>
                 <md-list class="menuButtons">
                     <md-list-item

@@ -13,9 +13,10 @@ angular.module('beeeOnWebApp')
     };
     //panel buttons
     var save = function (){
-      Gateways.setSelectedInfo(lodash.pick($scope.gatewayInfo,['aid','aname','utc']))
+      Gateways.setSelectedInfo(lodash.pick($scope.gatewayInfo,['id','name','timezone']))
         .then(function(){
-        SidePanel.getRightMainAction()();
+          $log.debug("EditCtrl - gateway info successfully updated");
+          SidePanel.getRightMainAction()();
       },function(err){
         $log.error('EditCtrl - ' + err);
       });

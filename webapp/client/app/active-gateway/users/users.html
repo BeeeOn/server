@@ -1,11 +1,11 @@
 <div flex layout="column" class="usersWrapper" layout-align="start start">
     <md-list class="usersList" layout-fill>
         <md-list-item class="md-3-line" ng-click="showUser();" ng-repeat="account in accounts">
-            <img ng-src="/assets/images/icons-svg/ic_person_white_24px.svg" class="md-avatar" alt="{{account.name}} {{account.surname}}" />
+            <img ng-src="{{account.imgurl ? account.imgurl : '/assets/images/icons-svg/ic_person_white_24px.svg'}}" class="md-avatar" alt="{{account.name}} {{account.surname}}" />
             <div class="md-list-item-text">
                 <h3>{{account.name}} {{account.surname}}</h3>
                 <h4>{{account.email}}</h4>
-                <p user-role="account.role"></p>
+                <p user-role="account.permission"></p>
             </div>
             <md-divider></md-divider>
         </md-list-item>

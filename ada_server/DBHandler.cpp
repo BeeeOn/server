@@ -54,7 +54,7 @@ bool DBHandler::IsInDB(std::string tableName, std::string columnName, std::strin
 	try
 	{
 		int retRec;
-		std::string sqlQuery = "select count(*)" + columnName + " from " + tableName + " where " + columnName + " = "+ record + ";";
+		std::string sqlQuery = "select count(*) from " + tableName + " where " + columnName + " = "+ record + ";";
 		this->_log->WriteMessage(TRACE,sqlQuery);
 		*_sql<<sqlQuery,into(retRec);
 		if (retRec > 0)
@@ -303,6 +303,32 @@ int DBHandler::GetWakeUpTime(std::string record, long long int gateway_id)
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetWakeUpTime");
 		return (5);
 	}
+}
+
+std::string DBHandler::GetXmlDeviceParameters(std::string device_euid, long long int adapterid)
+{        
+	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetXmlDeviceParameters");
+  
+  std::string xmlParameters;
+                                                                                           
+	try                                                                                      
+	{                                                                                        
+			indicator ind;                                                                       
+			*_sql << SQLQueries::SelectDeviceParametersXml,                                      
+					into(xmlParameters, ind),                                                        
+					use(adapterid), use(device_euid);                                                
+                                                                                           
+	}                                                                                        
+	catch(std::exception const &e)                                                           
+	{                                                                                        
+			this->_log->WriteMessage(ERR, "Error in query : " + _sql->get_last_query() );        
+			std::string ErrorMessage = "Database Error : ";                                      
+			ErrorMessage.append (e.what());                                                      
+			this->_log->WriteMessage(ERR,ErrorMessage );                                         
+			xmlParameters == "";                                                                 
+	}                                                                                        
+	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetXmlDeviceParameters");   
+  return xmlParameters; 
 }
 
 void DBHandler::GetAdapterData(int *soc, long int ID)

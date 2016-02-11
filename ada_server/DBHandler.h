@@ -64,7 +64,8 @@ class DBHandler
 		 * @return number of seconds to next wakeup on failure/missing record returns default value 5
 			*/
 		int GetWakeUpTime(std::string record, long long int gateway_id);
-		/** Method for creating history row in database
+		std::string GetXmlDeviceParameters(std::string device_euid, long long int adapterid);
+    /** Method for creating history row in database
 		 * @param message - pointer to message content
 			*/
 		void LogValue (tmessage *message);

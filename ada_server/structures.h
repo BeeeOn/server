@@ -98,6 +98,8 @@ typedef enum reqType
 	SWITCH, /**< switch*/
 	DELETE, /**< delete*/
 	LISTEN, /**< listen*/
+  SEARCH, /**< search*/
+  GET_PARAMS, /**< get parameters*/
 	UNKNOWN /**< unknown*/
 }treqType;
 
@@ -158,6 +160,7 @@ typedef struct message
 	unsigned long long int device_euid;
 
 	std::string DeviceIDstr; /**< Device ID string*/
+  std::string DeviceIPstr; /**< Device IP string*/
 	
 	unsigned short int values_count; /**< count of values received*/
 	tvalue* values; /**< pointer to vales array*/

@@ -8,7 +8,7 @@
 INSTALLATION:
 
  - prerequisites
- --- nodejs( https://nodejs.org/download/ ) 
+ --- nodejs( https://nodejs.org/download/ )
  --- npm ( https://www.npmjs.com/ ) - part of nodejs
  --- yeoman ( http://yeoman.io/ ),bower ,grunt - installation command: (possibly sudo) npm install -g yo bower grunt-cli gulp
 
@@ -88,3 +88,7 @@ TESTING
 
 **********************************************************************
 **********************************************************************
+
+UI_SERVER LOGS
+
+journalctl -f --unit beeeon-ui-server.service  --full
