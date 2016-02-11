@@ -23,7 +23,7 @@
       <MaxFileSize>100</MaxFileSize> <!-- Size of log file in MB -->
       <LogPath>/home/xvampo01/adalogs/</LogPath> <!-- Path for log files -->
     </LogConfig>
-    <Port>7081</Port>  <!-- Port to listen on for ui_server request -->
+    <Port>7083</Port>  <!-- Port to listen on for ui_server request -->
     <AdapterPort>10101</AdapterPort> <!-- Port where is adapter listening -->
   </Sender>
   <Receiver> <!-- Start of ada server receiver congif section -->

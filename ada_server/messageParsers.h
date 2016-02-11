@@ -50,7 +50,8 @@ class MessageParser
 		 * @param value time to next wakeup
 		*/
 		virtual std::string CreateAnswer(int value) = 0;
-		/**Method to set socket in message
+		virtual std::string CreateGetParametersAnswer(std::string xmlParameters) = 0;
+    /**Method to set socket in message
 		 * @param Soc int representation of sockett
 		*/
 		void setAdapterSocket(int Soc){this->_message->socket=Soc;};
@@ -149,7 +150,8 @@ class ProtocolV1MessageParser :public MessageParser
 		/**Virtual method to create answer
 		 * @param value time to next wakeup
 		*/
-		virtual std::string CreateAnswer(int value);
+		virtual std::string CreateAnswer(int value);  
+		virtual std::string CreateGetParametersAnswer(std::string xmlParameters);
 		/** Destructor
 		 */
 		~ProtocolV1MessageParser();

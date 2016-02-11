@@ -39,6 +39,10 @@ class MessageCreator
 	/**Method to create Listen message for adapter
 	 * @param std::string caring ID of adapter	 */
 	std::string CreateListenMessage(std::string AdapterID);
+	/**Method to create Search message for adapter
+	 * @param std::string caring ID of adapter	 
+	 * @param std::string caring IP of device	to search */
+	std::string CreateSearchMessage(std::string AdapterID, std::string deviceIp, std::string deviceId);
 	/**Method to create Switch message
 		 * @param tmessage caring details	 */
 	std::string CreateSwitchMessage(tmessage *Message);

@@ -60,6 +60,9 @@ bool RequestServer::HandleRequest ()
 		case LISTEN:
 			message = MC->CreateListenMessage(std::to_string(m->adapterINTid));
 			break;
+		case SEARCH:
+			message = MC->CreateSearchMessage(std::to_string(m->adapterINTid), m->DeviceIPstr, m->DeviceIDstr);
+			break;
 		default:
 			return (false);
 	}

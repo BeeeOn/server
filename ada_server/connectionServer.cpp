@@ -213,7 +213,7 @@ void ConnectionServer::HandleConnection (in_addr IP)
 	}
 	parsedMessage = MP->ReturnMessage();
 
-	if (parsedMessage->state!=REGISTER) //on registration register agent
+	if (parsedMessage->state==DATA) //on registration register agent
 	{
 		response = MP->CreateAnswer(this->GetData());
 		int Err;
@@ -228,7 +228,23 @@ void ConnectionServer::HandleConnection (in_addr IP)
 		}
 		close(com_s);
 	}
-	else
+  else if (parsedMessage->state==GET_PARAMS)
+	{
+    std::string xmlParameters = database->GetXmlDeviceParameters(std::to_string(this->parsedMessage->device_euid), this->parsedMessage->adapterINTid);
+		response = MP->CreateGetParametersAnswer(xmlParameters);
+		int Err;
+		_log->WriteMessage(MSG,"Response message: \n" + response);
+
+		// It was decided with adapter team, that at the end of each message will be \0
+		response.push_back('\0');
+
+		if((Err=SSL_write(cSSL, response.c_str(), response.size()))<=0)
+		{
+			_log->WriteMessage(ERR,"Writing to SSL failed :");
+		}
+		close(com_s);
+	}
+	else if (parsedMessage->state==REGISTER)
 	{
 	    std::string resp;
 	    if (!database->IsInDB("gateway","gateway_id",std::to_string(parsedMessage->adapterINTid)))
@@ -273,7 +289,7 @@ void ConnectionServer::HandleConnection (in_addr IP)
 		}
 	    cSSL = SSL_new(sslctx);
 	}
-	if (parsedMessage->state!=REGISTER) //we are receiving data so save them
+	if (parsedMessage->state==DATA) //we are receiving data so save them
 	{
 		this->Notify(data);
 		this->StoreData();

@@ -107,17 +107,19 @@ void ProtocolV1MessageParser::GetState()
 	{
 		_message->state = REGISTER;
 	}
+	else if (temp_state.compare("data")==0)
+	{
+		_message->state = DATA;
+	}
+  else if (temp_state.compare("getparameters") == 0)
+  {
+    _message->state = GET_PARAMS;
+  }
 	else
 	{
-		if (temp_state.compare("data")==0)
-		{
-			_message->state = DATA;
-		}
-		else
-		{
-			_message->state = UNKNOWN;
-		}
+		_message->state = UNKNOWN;
 	}
+
 	this->_log->WriteMessage(MSG,"STATE :" + std::to_string(this->_message->state));
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetState");
 }
@@ -220,6 +222,22 @@ std::string ProtocolV1MessageParser::CreateAnswer(int value)
 	return ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + tmp);
 };
 
+std::string ProtocolV1MessageParser::CreateGetParametersAnswer(std::string xmlParameters)
+{
+	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::CreateGetParametersAnswer");
+  std::stringstream s;
+	s.precision(2);
+	s << _message->cp_version;
+  std::string response = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" 
+                          "<server_adapter protocol_version=\"" + s.str() +"\" " 
+                                           "state=\"parameters\" >" +
+                          xmlParameters +
+                          "</server_adapter>";
+
+	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::CreateGetParametersAnswer");
+	return (response);
+};
+      
 
 ProtocolV1MessageParser::~ProtocolV1MessageParser()
 {
@@ -238,8 +256,8 @@ ProtocolV1MessageParser::ProtocolV1MessageParser(Loger *L)
 
 bool UIServerMessageParser::GetSubjectID()
 {
-	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetSubjectID");
-	this->_Message->DeviceIDstr= subject.attribute("id").as_string();
+	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetSubjectID");    
+	this->_Message->DeviceIDstr= subject.attribute("id").as_string();       
 	this->_log->WriteMessage(INFO,"Device ID : " + _Message->DeviceIDstr);
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetSubjectID");
 	return (true);
@@ -248,7 +266,7 @@ bool UIServerMessageParser::GetSubjectID()
 bool UIServerMessageParser::GetAdapterID()
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetAdapterID");
-	if(this->_Message->state==LISTEN)
+	if(this->_Message->state==LISTEN || this->_Message->state==SEARCH|| this->_Message->state==GET_PARAMS)
 	{
 		this->_Message->adapterINTid = subject.attribute("id").as_llong();
 	}
@@ -378,6 +396,13 @@ bool UIServerMessageParser::GetState()
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetState");
 		return (true);
 	}
+  if (reqType.compare("search")==0)
+	{
+		this->_log->WriteMessage(MSG,"Request type is SEARCH");
+		this->_Message->state=SEARCH;
+		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetState");
+		return (true);
+	}
 
 	this->_log->WriteMessage(WARN,"Request type is UNKNOWN");
 	this->_Message->state=UNKNOWN;
@@ -415,6 +440,11 @@ bool UIServerMessageParser::ParseMessage(std::string MSG)
 			break;
 		case LISTEN:
 			res=this->GetAdapterID();
+			break;
+		case SEARCH:
+			res=this->GetAdapterID();
+      this->_Message->DeviceIDstr = subject.attribute("deviceeuid").as_string();
+      this->_Message->DeviceIPstr = subject.attribute("deviceip").as_string();
 			break;
 		default:
 			this->_log->WriteMessage(WARN,"Something was wrong with request MSG!");

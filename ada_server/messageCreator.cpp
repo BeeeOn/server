@@ -53,6 +53,37 @@ std::string MessageCreator::CreateListenMessage(std::string AdapterID)
 
 };
 
+std::string MessageCreator::CreateSearchMessage(std::string AdapterID, std::string deviceIp, std::string deviceId)
+{
+	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::CreateListenMessage");
+	xml_document *resp = new xml_document();
+	xml_node server_adapter = resp->append_child("server_adapter");
+  
+	server_adapter.append_attribute("protocol_version");
+	server_adapter.append_attribute("state");
+	server_adapter.append_attribute("adapter_id");     
+  
+	server_adapter.attribute("protocol_version") = "1.0";
+	server_adapter.attribute("state") = "search";
+	server_adapter.attribute("adapter_id") = AdapterID.c_str();
+  
+  pugi::xml_node deviceNode = server_adapter.append_child();
+  deviceNode.set_name("device");  
+  
+	deviceNode.append_attribute("ip");
+	deviceNode.append_attribute("euid");
+  
+	deviceNode.attribute("ip") = deviceIp.c_str();
+	deviceNode.attribute("euid") = deviceId.c_str();
+  
+	tstringXMLwriter writer;
+	resp->print(writer);
+	delete(resp);
+	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::CreateListenMessage");
+	return ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + writer.result);
+
+};
+
 std::string MessageCreator::CreateSwitchMessage(tmessage *Message)
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::CreateSwitchMessage");
