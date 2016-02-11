@@ -19,6 +19,8 @@
         <itemPath>../DAO/DAOContainer.h</itemPath>
         <itemPath>../DAO/DAODevices.cpp</itemPath>
         <itemPath>../DAO/DAODevices.h</itemPath>
+        <itemPath>../DAO/DAODevicesParameters.cpp</itemPath>
+        <itemPath>../DAO/DAODevicesParameters.h</itemPath>
         <itemPath>../DAO/DAOGateways.cpp</itemPath>
         <itemPath>../DAO/DAOGateways.h</itemPath>
         <itemPath>../DAO/DAOLocations.cpp</itemPath>
@@ -73,18 +75,26 @@
         <itemPath>src/request_handlers/AccountsLogoutRequestHandler.h</itemPath>
         <itemPath>src/request_handlers/AccountsRegisterRequestHandler.cpp</itemPath>
         <itemPath>src/request_handlers/AccountsRegisterRequestHandler.h</itemPath>
+        <itemPath>src/request_handlers/DevicesCreateParameterRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/DevicesCreateParameterRequestHandler.h</itemPath>
+        <itemPath>src/request_handlers/DevicesDeleteParameterRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/DevicesDeleteParameterRequestHandler.h</itemPath>
         <itemPath>src/request_handlers/DevicesGetAllRequestHandler.cpp</itemPath>
         <itemPath>src/request_handlers/DevicesGetAllRequestHandler.h</itemPath>
         <itemPath>src/request_handlers/DevicesGetLogRequestHandler.cpp</itemPath>
         <itemPath>src/request_handlers/DevicesGetLogRequestHandler.h</itemPath>
         <itemPath>src/request_handlers/DevicesGetNewRequestHandler.cpp</itemPath>
         <itemPath>src/request_handlers/DevicesGetNewRequestHandler.h</itemPath>
+        <itemPath>src/request_handlers/DevicesGetParameterRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/DevicesGetParameterRequestHandler.h</itemPath>
         <itemPath>src/request_handlers/DevicesGetRequestHandler.cpp</itemPath>
         <itemPath>src/request_handlers/DevicesGetRequestHandler.h</itemPath>
         <itemPath>src/request_handlers/DevicesSetStateRequestHandler.cpp</itemPath>
         <itemPath>src/request_handlers/DevicesSetStateRequestHandler.h</itemPath>
         <itemPath>src/request_handlers/DevicesUnregisterRequestHandler.cpp</itemPath>
         <itemPath>src/request_handlers/DevicesUnregisterRequestHandler.h</itemPath>
+        <itemPath>src/request_handlers/DevicesUpdateParameterRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/DevicesUpdateParameterRequestHandler.h</itemPath>
         <itemPath>src/request_handlers/DevicesUpdateRequestHandler.cpp</itemPath>
         <itemPath>src/request_handlers/DevicesUpdateRequestHandler.h</itemPath>
         <itemPath>src/request_handlers/GatesGetAllRequestHandler.cpp</itemPath>
@@ -93,6 +103,8 @@
         <itemPath>src/request_handlers/GatesGetRequestHandler.h</itemPath>
         <itemPath>src/request_handlers/GatesRegisterRequestHandler.cpp</itemPath>
         <itemPath>src/request_handlers/GatesRegisterRequestHandler.h</itemPath>
+        <itemPath>src/request_handlers/GatesSearchRequestHandler.cpp</itemPath>
+        <itemPath>src/request_handlers/GatesSearchRequestHandler.h</itemPath>
         <itemPath>src/request_handlers/GatesStartListenRequestHandler.cpp</itemPath>
         <itemPath>src/request_handlers/GatesStartListenRequestHandler.h</itemPath>
         <itemPath>src/request_handlers/GatesUnregisterRequestHandler.cpp</itemPath>
@@ -242,6 +254,10 @@
       </item>
       <item path="../DAO/DAODevices.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="../DAO/DAODevicesParameters.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAODevicesParameters.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="../DAO/DAOGateways.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../DAO/DAOGateways.h" ex="false" tool="3" flavor2="0">
@@ -384,6 +400,26 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="src/request_handlers/DevicesCreateParameterRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesCreateParameterRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesDeleteParameterRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesDeleteParameterRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="src/request_handlers/DevicesGetAllRequestHandler.cpp"
             ex="false"
             tool="1"
@@ -414,6 +450,16 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="src/request_handlers/DevicesGetParameterRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesGetParameterRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="src/request_handlers/DevicesGetRequestHandler.cpp"
             ex="false"
             tool="1"
@@ -440,6 +486,16 @@
             flavor2="0">
       </item>
       <item path="src/request_handlers/DevicesUnregisterRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesUpdateParameterRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesUpdateParameterRequestHandler.h"
             ex="false"
             tool="3"
             flavor2="0">
@@ -480,6 +536,16 @@
             flavor2="0">
       </item>
       <item path="src/request_handlers/GatesRegisterRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GatesSearchRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GatesSearchRequestHandler.h"
             ex="false"
             tool="3"
             flavor2="0">
@@ -767,6 +833,10 @@
       </item>
       <item path="../DAO/DAODevices.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="../DAO/DAODevicesParameters.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../DAO/DAODevicesParameters.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="../DAO/DAOGateways.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../DAO/DAOGateways.h" ex="false" tool="3" flavor2="0">
@@ -909,6 +979,26 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="src/request_handlers/DevicesCreateParameterRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesCreateParameterRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesDeleteParameterRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesDeleteParameterRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="src/request_handlers/DevicesGetAllRequestHandler.cpp"
             ex="false"
             tool="1"
@@ -939,6 +1029,16 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="src/request_handlers/DevicesGetParameterRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesGetParameterRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="src/request_handlers/DevicesGetRequestHandler.cpp"
             ex="false"
             tool="1"
@@ -965,6 +1065,16 @@
             flavor2="0">
       </item>
       <item path="src/request_handlers/DevicesUnregisterRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesUpdateParameterRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/DevicesUpdateParameterRequestHandler.h"
             ex="false"
             tool="3"
             flavor2="0">
@@ -1005,6 +1115,16 @@
             flavor2="0">
       </item>
       <item path="src/request_handlers/GatesRegisterRequestHandler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GatesSearchRequestHandler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="src/request_handlers/GatesSearchRequestHandler.h"
             ex="false"
             tool="3"
             flavor2="0">

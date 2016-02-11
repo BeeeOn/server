@@ -105,4 +105,38 @@ int AdaServerCommunicator::sendGatewayStartListen(gatewayId_64b gatewayId)
         return ServerException::GATEWAY_ACTION_FAIL;
 }
 
+int AdaServerCommunicator::sendGatewayStartSearch(gatewayId_64b gatewayId, std::string ip, std::string deviceEuid)
+{
+    string r;
+    try
+    {
+        SocketClient sc(_port);    
+
+        string request = "<request type=\"search\">"
+                                "<adapter id=\"" + to_string(gatewayId) + "\" "
+                                        "deviceip=\"" + ip + "\" "
+                                        "deviceeuid=\"" + deviceEuid + "\" "
+                
+                                "/>"
+                            "</request>";
+        
+        sc.write(request);
+        r = sc.read();
+    }
+    catch(exception& e)
+    {
+        Logger::debug() << "ada_server comm err: " << e.what() << endl;
+        return ServerException::SERVER2SERVER;
+    }
+    
+    Logger::getInstance(Logger::DEBUG3) << "response from Ada " << r << endl; 
+    
+    if(r == "")
+        return ServerException::ADA_SERVER_TIMEOUT;
+    else if(r == "<reply>true</reply>")
+        return ServerException::OK;
+    else
+        return ServerException::GATEWAY_ACTION_FAIL;
+}
+
     

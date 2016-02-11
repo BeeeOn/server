@@ -36,6 +36,8 @@ namespace proto
     static const char headerGatewayIdAttr[] = "gateid";
     static const char gatewayIdAttr[] = "id";
     static const char gatewayNameAttr[] = "name";
+    static const char gatewayDeviceIpAttr[] = "deviceip";
+    static const char gatewayDeviceEuidpAttr[] = "deviceeuid";
 
     static const char gatewayUsersRole[] = "permission";
     static const char gatewayTimezoneAttr[] = "timezone";
@@ -56,6 +58,8 @@ namespace proto
     static const char deviceLocationIdAttr[] = "locationid";
     static const char deviceGateIdAttr[] = "gateid";
     static const char deviceModuleIdAttr[] = "moduleid";
+    static const char deviceParamKeyAttr[] = "parameterkey";
+    static const char deviceParamValueAttr[] = "parametervalue";
     
     static const char moduleIdAttr[] = "id";
     static const char moduleTypeAttr[] = "type";

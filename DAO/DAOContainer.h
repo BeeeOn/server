@@ -8,6 +8,7 @@
 #include "DAOPushNotificationService.h"
 #include "DAOUsersGateways.h"
 #include "DAOlogs.h"
+#include "DAODevicesParameters.h"
 
 #include <string>
 
@@ -26,17 +27,19 @@ public:
     DAOUsers & getDaoUsers();
     DAOUsersGateways & getDaoUsersGateway();
     DAOlogs & getDaoLogs();
+    DAODevicesParameters & getDaoDevicesParameters();
     
 private:
-    DAODevices  _daoDevices;
-    DAOGateways  _daoGateway;
-    DAOLocations  _daoLocations;
-    DAOMobileDevices  _daoMobileDevices;
-    DAONotification  _daoNotification;
-    DAOPushNotificationService  _daoPushNotification;
-    DAOUsers  _daoUsers;
-    DAOUsersGateways  _daoUsersGateway;
-    DAOlogs  _daoLogs;
+    DAODevices _daoDevices;
+    DAOGateways _daoGateway;
+    DAOLocations _daoLocations;
+    DAOMobileDevices _daoMobileDevices;
+    DAONotification _daoNotification;
+    DAOPushNotificationService _daoPushNotification;
+    DAOUsers _daoUsers;
+    DAOUsersGateways _daoUsersGateway;
+    DAOlogs _daoLogs;
+    DAODevicesParameters _daoDevPar;
 };
 
 #endif /* DAOCONTAINER_H */

@@ -21,7 +21,7 @@ FC=gfortran
 AS=as
 
 # Macros
-CND_PLATFORM=GNU-Linux-x86
+CND_PLATFORM=GNU-Linux
 CND_DLIB_EXT=so
 CND_CONF=Debug
 CND_DISTDIR=dist
@@ -35,22 +35,23 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/_ext/1360890531/DAO.o \
-	${OBJECTDIR}/_ext/1360890531/DAOContainer.o \
-	${OBJECTDIR}/_ext/1360890531/DAODevices.o \
-	${OBJECTDIR}/_ext/1360890531/DAOGateways.o \
-	${OBJECTDIR}/_ext/1360890531/DAOLocations.o \
-	${OBJECTDIR}/_ext/1360890531/DAOMobileDevices.o \
-	${OBJECTDIR}/_ext/1360890531/DAONotification.o \
-	${OBJECTDIR}/_ext/1360890531/DAOPushNotificationService.o \
-	${OBJECTDIR}/_ext/1360890531/DAOUsers.o \
-	${OBJECTDIR}/_ext/1360890531/DAOUsersGateways.o \
-	${OBJECTDIR}/_ext/1360890531/DAOlogs.o \
-	${OBJECTDIR}/_ext/1039976301/client.o \
-	${OBJECTDIR}/_ext/1039976301/server.o \
-	${OBJECTDIR}/_ext/1039976301/session.o \
-	${OBJECTDIR}/_ext/1360930230/pugixml.o \
-	${OBJECTDIR}/_ext/1154895860/Logger.o \
+	${OBJECTDIR}/_ext/511d8aa3/DAO.o \
+	${OBJECTDIR}/_ext/511d8aa3/DAOContainer.o \
+	${OBJECTDIR}/_ext/511d8aa3/DAODevices.o \
+	${OBJECTDIR}/_ext/511d8aa3/DAODevicesParameters.o \
+	${OBJECTDIR}/_ext/511d8aa3/DAOGateways.o \
+	${OBJECTDIR}/_ext/511d8aa3/DAOLocations.o \
+	${OBJECTDIR}/_ext/511d8aa3/DAOMobileDevices.o \
+	${OBJECTDIR}/_ext/511d8aa3/DAONotification.o \
+	${OBJECTDIR}/_ext/511d8aa3/DAOPushNotificationService.o \
+	${OBJECTDIR}/_ext/511d8aa3/DAOUsers.o \
+	${OBJECTDIR}/_ext/511d8aa3/DAOUsersGateways.o \
+	${OBJECTDIR}/_ext/511d8aa3/DAOlogs.o \
+	${OBJECTDIR}/_ext/3dfcc76d/client.o \
+	${OBJECTDIR}/_ext/3dfcc76d/server.o \
+	${OBJECTDIR}/_ext/3dfcc76d/session.o \
+	${OBJECTDIR}/_ext/511e25b6/pugixml.o \
+	${OBJECTDIR}/_ext/bb29b00c/Logger.o \
 	${OBJECTDIR}/src/AdaServerCommunicator.o \
 	${OBJECTDIR}/src/Config.o \
 	${OBJECTDIR}/src/RequestHandlerFactory.o \
@@ -64,16 +65,21 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/request_handlers/AccountsLoginRequestHandler.o \
 	${OBJECTDIR}/src/request_handlers/AccountsLogoutRequestHandler.o \
 	${OBJECTDIR}/src/request_handlers/AccountsRegisterRequestHandler.o \
+	${OBJECTDIR}/src/request_handlers/DevicesCreateParameterRequestHandler.o \
+	${OBJECTDIR}/src/request_handlers/DevicesDeleteParameterRequestHandler.o \
 	${OBJECTDIR}/src/request_handlers/DevicesGetAllRequestHandler.o \
 	${OBJECTDIR}/src/request_handlers/DevicesGetLogRequestHandler.o \
 	${OBJECTDIR}/src/request_handlers/DevicesGetNewRequestHandler.o \
+	${OBJECTDIR}/src/request_handlers/DevicesGetParameterRequestHandler.o \
 	${OBJECTDIR}/src/request_handlers/DevicesGetRequestHandler.o \
 	${OBJECTDIR}/src/request_handlers/DevicesSetStateRequestHandler.o \
 	${OBJECTDIR}/src/request_handlers/DevicesUnregisterRequestHandler.o \
+	${OBJECTDIR}/src/request_handlers/DevicesUpdateParameterRequestHandler.o \
 	${OBJECTDIR}/src/request_handlers/DevicesUpdateRequestHandler.o \
 	${OBJECTDIR}/src/request_handlers/GatesGetAllRequestHandler.o \
 	${OBJECTDIR}/src/request_handlers/GatesGetRequestHandler.o \
 	${OBJECTDIR}/src/request_handlers/GatesRegisterRequestHandler.o \
+	${OBJECTDIR}/src/request_handlers/GatesSearchRequestHandler.o \
 	${OBJECTDIR}/src/request_handlers/GatesStartListenRequestHandler.o \
 	${OBJECTDIR}/src/request_handlers/GatesUnregisterRequestHandler.o \
 	${OBJECTDIR}/src/request_handlers/GatesUpdateRequestHandler.o \
@@ -123,85 +129,90 @@ LDLIBSOPTIONS=-L/usr/local/lib -L/usr/local/lib64 -L/opt/centos/devtoolset-1.1/r
 	${MKDIR} -p .
 	g++ -o ./ui_server ${OBJECTFILES} ${LDLIBSOPTIONS} -lpq -lsoci_core -lsoci_empty -lsoci_postgresql -lcurl -lssl -lcrypto -ljansson -lstdc++
 
-${OBJECTDIR}/_ext/1360890531/DAO.o: ../DAO/DAO.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
+${OBJECTDIR}/_ext/511d8aa3/DAO.o: ../DAO/DAO.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/511d8aa3
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAO.o ../DAO/DAO.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/511d8aa3/DAO.o ../DAO/DAO.cpp
 
-${OBJECTDIR}/_ext/1360890531/DAOContainer.o: ../DAO/DAOContainer.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
+${OBJECTDIR}/_ext/511d8aa3/DAOContainer.o: ../DAO/DAOContainer.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/511d8aa3
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOContainer.o ../DAO/DAOContainer.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/511d8aa3/DAOContainer.o ../DAO/DAOContainer.cpp
 
-${OBJECTDIR}/_ext/1360890531/DAODevices.o: ../DAO/DAODevices.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
+${OBJECTDIR}/_ext/511d8aa3/DAODevices.o: ../DAO/DAODevices.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/511d8aa3
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAODevices.o ../DAO/DAODevices.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/511d8aa3/DAODevices.o ../DAO/DAODevices.cpp
 
-${OBJECTDIR}/_ext/1360890531/DAOGateways.o: ../DAO/DAOGateways.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
+${OBJECTDIR}/_ext/511d8aa3/DAODevicesParameters.o: ../DAO/DAODevicesParameters.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/511d8aa3
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOGateways.o ../DAO/DAOGateways.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/511d8aa3/DAODevicesParameters.o ../DAO/DAODevicesParameters.cpp
 
-${OBJECTDIR}/_ext/1360890531/DAOLocations.o: ../DAO/DAOLocations.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
+${OBJECTDIR}/_ext/511d8aa3/DAOGateways.o: ../DAO/DAOGateways.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/511d8aa3
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOLocations.o ../DAO/DAOLocations.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/511d8aa3/DAOGateways.o ../DAO/DAOGateways.cpp
 
-${OBJECTDIR}/_ext/1360890531/DAOMobileDevices.o: ../DAO/DAOMobileDevices.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
+${OBJECTDIR}/_ext/511d8aa3/DAOLocations.o: ../DAO/DAOLocations.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/511d8aa3
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOMobileDevices.o ../DAO/DAOMobileDevices.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/511d8aa3/DAOLocations.o ../DAO/DAOLocations.cpp
 
-${OBJECTDIR}/_ext/1360890531/DAONotification.o: ../DAO/DAONotification.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
+${OBJECTDIR}/_ext/511d8aa3/DAOMobileDevices.o: ../DAO/DAOMobileDevices.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/511d8aa3
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAONotification.o ../DAO/DAONotification.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/511d8aa3/DAOMobileDevices.o ../DAO/DAOMobileDevices.cpp
 
-${OBJECTDIR}/_ext/1360890531/DAOPushNotificationService.o: ../DAO/DAOPushNotificationService.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
+${OBJECTDIR}/_ext/511d8aa3/DAONotification.o: ../DAO/DAONotification.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/511d8aa3
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOPushNotificationService.o ../DAO/DAOPushNotificationService.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/511d8aa3/DAONotification.o ../DAO/DAONotification.cpp
 
-${OBJECTDIR}/_ext/1360890531/DAOUsers.o: ../DAO/DAOUsers.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
+${OBJECTDIR}/_ext/511d8aa3/DAOPushNotificationService.o: ../DAO/DAOPushNotificationService.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/511d8aa3
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOUsers.o ../DAO/DAOUsers.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/511d8aa3/DAOPushNotificationService.o ../DAO/DAOPushNotificationService.cpp
 
-${OBJECTDIR}/_ext/1360890531/DAOUsersGateways.o: ../DAO/DAOUsersGateways.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
+${OBJECTDIR}/_ext/511d8aa3/DAOUsers.o: ../DAO/DAOUsers.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/511d8aa3
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOUsersGateways.o ../DAO/DAOUsersGateways.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/511d8aa3/DAOUsers.o ../DAO/DAOUsers.cpp
 
-${OBJECTDIR}/_ext/1360890531/DAOlogs.o: ../DAO/DAOlogs.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1360890531
+${OBJECTDIR}/_ext/511d8aa3/DAOUsersGateways.o: ../DAO/DAOUsersGateways.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/511d8aa3
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360890531/DAOlogs.o ../DAO/DAOlogs.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/511d8aa3/DAOUsersGateways.o ../DAO/DAOUsersGateways.cpp
 
-${OBJECTDIR}/_ext/1039976301/client.o: ../asio_layer/secure/client.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1039976301
+${OBJECTDIR}/_ext/511d8aa3/DAOlogs.o: ../DAO/DAOlogs.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/511d8aa3
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1039976301/client.o ../asio_layer/secure/client.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/511d8aa3/DAOlogs.o ../DAO/DAOlogs.cpp
 
-${OBJECTDIR}/_ext/1039976301/server.o: ../asio_layer/secure/server.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1039976301
+${OBJECTDIR}/_ext/3dfcc76d/client.o: ../asio_layer/secure/client.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/3dfcc76d
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1039976301/server.o ../asio_layer/secure/server.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/3dfcc76d/client.o ../asio_layer/secure/client.cpp
 
-${OBJECTDIR}/_ext/1039976301/session.o: ../asio_layer/secure/session.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1039976301
+${OBJECTDIR}/_ext/3dfcc76d/server.o: ../asio_layer/secure/server.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/3dfcc76d
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1039976301/session.o ../asio_layer/secure/session.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/3dfcc76d/server.o ../asio_layer/secure/server.cpp
 
-${OBJECTDIR}/_ext/1360930230/pugixml.o: ../lib/pugixml.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1360930230
+${OBJECTDIR}/_ext/3dfcc76d/session.o: ../asio_layer/secure/session.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/3dfcc76d
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1360930230/pugixml.o ../lib/pugixml.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/3dfcc76d/session.o ../asio_layer/secure/session.cpp
 
-${OBJECTDIR}/_ext/1154895860/Logger.o: ../ui_logger/Logger.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1154895860
+${OBJECTDIR}/_ext/511e25b6/pugixml.o: ../lib/pugixml.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/511e25b6
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1154895860/Logger.o ../ui_logger/Logger.cpp
+	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/511e25b6/pugixml.o ../lib/pugixml.cpp
+
+${OBJECTDIR}/_ext/bb29b00c/Logger.o: ../ui_logger/Logger.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/bb29b00c
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/bb29b00c/Logger.o ../ui_logger/Logger.cpp
 
 ${OBJECTDIR}/src/AdaServerCommunicator.o: src/AdaServerCommunicator.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -268,6 +279,16 @@ ${OBJECTDIR}/src/request_handlers/AccountsRegisterRequestHandler.o: src/request_
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/request_handlers/AccountsRegisterRequestHandler.o src/request_handlers/AccountsRegisterRequestHandler.cpp
 
+${OBJECTDIR}/src/request_handlers/DevicesCreateParameterRequestHandler.o: src/request_handlers/DevicesCreateParameterRequestHandler.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src/request_handlers
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/request_handlers/DevicesCreateParameterRequestHandler.o src/request_handlers/DevicesCreateParameterRequestHandler.cpp
+
+${OBJECTDIR}/src/request_handlers/DevicesDeleteParameterRequestHandler.o: src/request_handlers/DevicesDeleteParameterRequestHandler.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src/request_handlers
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/request_handlers/DevicesDeleteParameterRequestHandler.o src/request_handlers/DevicesDeleteParameterRequestHandler.cpp
+
 ${OBJECTDIR}/src/request_handlers/DevicesGetAllRequestHandler.o: src/request_handlers/DevicesGetAllRequestHandler.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src/request_handlers
 	${RM} "$@.d"
@@ -283,6 +304,11 @@ ${OBJECTDIR}/src/request_handlers/DevicesGetNewRequestHandler.o: src/request_han
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/request_handlers/DevicesGetNewRequestHandler.o src/request_handlers/DevicesGetNewRequestHandler.cpp
 
+${OBJECTDIR}/src/request_handlers/DevicesGetParameterRequestHandler.o: src/request_handlers/DevicesGetParameterRequestHandler.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src/request_handlers
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/request_handlers/DevicesGetParameterRequestHandler.o src/request_handlers/DevicesGetParameterRequestHandler.cpp
+
 ${OBJECTDIR}/src/request_handlers/DevicesGetRequestHandler.o: src/request_handlers/DevicesGetRequestHandler.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src/request_handlers
 	${RM} "$@.d"
@@ -297,6 +323,11 @@ ${OBJECTDIR}/src/request_handlers/DevicesUnregisterRequestHandler.o: src/request
 	${MKDIR} -p ${OBJECTDIR}/src/request_handlers
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/request_handlers/DevicesUnregisterRequestHandler.o src/request_handlers/DevicesUnregisterRequestHandler.cpp
+
+${OBJECTDIR}/src/request_handlers/DevicesUpdateParameterRequestHandler.o: src/request_handlers/DevicesUpdateParameterRequestHandler.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src/request_handlers
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/request_handlers/DevicesUpdateParameterRequestHandler.o src/request_handlers/DevicesUpdateParameterRequestHandler.cpp
 
 ${OBJECTDIR}/src/request_handlers/DevicesUpdateRequestHandler.o: src/request_handlers/DevicesUpdateRequestHandler.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src/request_handlers
@@ -317,6 +348,11 @@ ${OBJECTDIR}/src/request_handlers/GatesRegisterRequestHandler.o: src/request_han
 	${MKDIR} -p ${OBJECTDIR}/src/request_handlers
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/request_handlers/GatesRegisterRequestHandler.o src/request_handlers/GatesRegisterRequestHandler.cpp
+
+${OBJECTDIR}/src/request_handlers/GatesSearchRequestHandler.o: src/request_handlers/GatesSearchRequestHandler.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src/request_handlers
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Wall -I/usr/include -I. -I../Server -I/usr/include/soci -Isrc/ -I../ -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/request_handlers/GatesSearchRequestHandler.o src/request_handlers/GatesSearchRequestHandler.cpp
 
 ${OBJECTDIR}/src/request_handlers/GatesStartListenRequestHandler.o: src/request_handlers/GatesStartListenRequestHandler.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src/request_handlers

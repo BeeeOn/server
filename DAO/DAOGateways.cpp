@@ -17,6 +17,7 @@ namespace soci
 
         static void from_base(values const & v, indicator /* ind */, Gate & gate)
         {  
+            throw "soci cast decimal(20,0) to double, which can lead to bad casting";
             gate.id = (gatewayId_64b) (v.get<gatewayId_64b>(DAOGateways::col.id));
             gate.name = v.get<std::string>(DAOGateways::col.name, "");
             gate.timezone = v.get<double>(DAOGateways::col.timezone, NAN);

@@ -43,6 +43,11 @@
 #include "DAO/DAONotification.h"
 #include "Config.h"
 #include "DAO/DAOContainer.h"
+#include "request_handlers/DevicesGetParameterRequestHandler.h"
+#include "request_handlers/DevicesDeleteParameterRequestHandler.h"
+#include "request_handlers/DevicesCreateParameterRequestHandler.h"
+#include "request_handlers/DevicesUpdateParameterRequestHandler.h"
+#include "request_handlers/GatesSearchRequestHandler.h"
 
 using namespace std;
 
@@ -56,6 +61,7 @@ RequestHandlerFactory::RequestHandlerFactory(DAOContainer & daoContainer, AdaSer
         _daoLogs(daoContainer.getDaoLogs()),
         _daoPushNofitication(daoContainer.getDaoPushNotification()),
         _daoNotification(daoContainer.getDaoNotification()),
+        _daoDevPar(daoContainer.getDaoDevicesParameters()),
         _adaServerCom(adaServerCom),
         _sessionTable(sessionTable)
 {
@@ -122,6 +128,8 @@ shared_ptr<IRequestHandler> RequestHandlerFactory::createMsg(const char* msg)
             return shared_ptr<IRequestHandler>(new GatesUnregisterRequestHandler(doc, _daoUsers, _daoGateways, _daoUsersGateways, _sessionTable));
         if(type == GatesGetAllRequestHandler::state)
             return shared_ptr<IRequestHandler>(new GatesGetAllRequestHandler(doc, _daoUsers, _sessionTable));
+        if(type == GatesSearchRequestHandler::state)
+            return shared_ptr<IRequestHandler>(new GatesSearchRequestHandler(doc, _daoUsers, _adaServerCom, _sessionTable));
     }
     else if(ns == "locations")
     {
@@ -150,6 +158,14 @@ shared_ptr<IRequestHandler> RequestHandlerFactory::createMsg(const char* msg)
             return shared_ptr<IRequestHandler>(new DevicesUpdateRequestHandler(doc, _daoUsers, _daoDevices, _sessionTable));
         if(type == DevicesSetStateRequestHandler::state)
             return shared_ptr<IRequestHandler>(new DevicesSetStateRequestHandler(doc, _daoUsers, _adaServerCom, _sessionTable));
+        if(type == DevicesGetParameterRequestHandler::state)
+            return shared_ptr<IRequestHandler>(new DevicesGetParameterRequestHandler(doc, _daoUsers, _daoDevPar, _sessionTable));
+        if(type == DevicesDeleteParameterRequestHandler::state)
+            return shared_ptr<IRequestHandler>(new DevicesDeleteParameterRequestHandler(doc, _daoUsers, _daoDevPar, _sessionTable));
+        if(type == DevicesCreateParameterRequestHandler::state)
+            return shared_ptr<IRequestHandler>(new DevicesCreateParameterRequestHandler(doc, _daoUsers, _daoDevPar, _sessionTable));
+        if(type == DevicesUpdateParameterRequestHandler::state)
+            return shared_ptr<IRequestHandler>(new DevicesUpdateParameterRequestHandler(doc, _daoUsers, _daoDevPar, _sessionTable));
     }
     else if(ns == "notifications")
     {

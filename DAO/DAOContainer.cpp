@@ -1,4 +1,5 @@
 #include "DAOContainer.h"
+#include "DAO.h"
 
 using namespace std;
 using namespace soci;
@@ -25,6 +26,7 @@ DAOContainer::DAOContainer(string dbConnectionString, int sessionPoolSize)
         _daoLogs.setPool(pool);
         _daoPushNotification.setPool(pool);
         _daoNotification.setPool(pool);
+        _daoDevPar.setPool(pool);
         
         Logger::debug()<< "connection to DB is set"<< endl;
         
@@ -92,4 +94,8 @@ DAOUsersGateways & DAOContainer::getDaoUsersGateway()
     return _daoUsersGateway;
 }
 
+DAODevicesParameters & DAOContainer::getDaoDevicesParameters() 
+{
+    return _daoDevPar;
+}
 

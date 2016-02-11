@@ -34,6 +34,7 @@ class RequestHandlerFactory
         DAOlogs & _daoLogs;
         DAOPushNotificationService & _daoPushNofitication;
         DAONotification & _daoNotification;
+        DAODevicesParameters & _daoDevPar;
         
         AdaServerCommunicator & _adaServerCom;
         SessionsTable &_sessionTable;

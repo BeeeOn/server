@@ -140,12 +140,6 @@ void startOpenSSLNetwork(Config & config){
     SSL_CTX_free(ctx);
 }
 
-void addSessionWrapper(vector<string> vs)
-{
-    cout << "adder hello" << vs[1] << endl;
-}
-
-
 int main(int argc, char** argv)
 {       
     
