@@ -182,16 +182,23 @@ int DAOUsers::getUserIDbyAlternativeKeys(std::string mail, std::string password,
             indicator i1 = mail.empty()?i_null:i_ok;
             indicator i2 = google_id.empty()?i_null:i_ok;
             indicator i3 = facebook_id.empty()?i_null:i_ok;
-            sql << "select user_id from " << tableUsers << " where "
+
+			statement st = (sql.prepare << "select user_id from " << tableUsers << " where "
                                 "CASE "
                                         "WHEN :google_id::text is not NULL then google_id=:google_id "
                                         "WHEN :fb_id::text is not NULL then facebook_id=:fb_id "
                                         "WHEN :mail::text is not NULL THEN mail=:mail and password=:password "
-                                        
                                 "END",
                     use(mail,i1,"mail"), use(password,"password"), use(google_id,i2,"google_id"),use(facebook_id,i3,"fb_id"),
-                    into(UID);
-            Logger::getInstance(Logger::DEBUG3)<<"uid is: "<<UID<< endl;
+                    into(UID));
+
+
+			Logger::db() << "Google ID: " << google_id << endl;
+ 			Logger::db() << endl << sql.get_last_query()<<endl;
+        	
+			st.execute(true);
+            
+			Logger::getInstance(Logger::DEBUG3)<<"uid is: "<<UID<< endl;
             return UID; 
     }
     catch (soci::postgresql_soci_error& e)
