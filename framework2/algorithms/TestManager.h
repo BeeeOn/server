@@ -10,9 +10,9 @@
 
 #include <string>
 
-#include "../src/TimedAlgorithmManager.h"
+#include "../src/TimedTaskManager.h"
 
-class TestManager: public TimedAlgorithmManager
+class TestManager: public TimedTaskManager
 {
 public:
     TestManager(MANAGER_TYPE type, std::string name);

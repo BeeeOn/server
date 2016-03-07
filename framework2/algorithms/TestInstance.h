@@ -11,9 +11,9 @@
 #include <string>
 #include <memory>
 
-#include "../src/TimedAlgorithmInstance.h"
+#include "../src/TimedTaskInstance.h"
 
-class TestInstance: public TimedAlgorithmInstance
+class TestInstance: public TimedTaskInstance
 {
 public:
     TestInstance(unsigned long user_id, unsigned int users_instance_personal_id);

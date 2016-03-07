@@ -15,7 +15,7 @@
 #include "../src/Calendar.h"
 
 TestInstance::TestInstance(unsigned long user_id, unsigned int users_instance_personal_id):
-    TimedAlgorithmInstance(user_id, users_instance_personal_id)
+    TimedTaskInstance(user_id, users_instance_personal_id)
 {
     // Activate now.
     

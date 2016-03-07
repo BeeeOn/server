@@ -10,7 +10,7 @@
 #include "TestInstance.h"
 
 TestManager::TestManager(MANAGER_TYPE type, std::string name) :
-    TimedAlgorithmManager(type, name)
+    TimedTaskManager(type, name)
 {
 }
 
