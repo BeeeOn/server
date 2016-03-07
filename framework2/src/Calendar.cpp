@@ -114,7 +114,7 @@ void Calendar::waitUntilCalendarIsNotEmpty() {
     
 }
 
-void Calendar::pushEvent(std::chrono::system_clock::time_point activation_time, TimedAlgorithmInstance* instance_ptr) {
+void Calendar::pushEvent(std::chrono::system_clock::time_point activation_time, TimedTaskInstance* instance_ptr) {
     
     m_calendar_events_mx.lock();
     m_test_queue_empty_mx.lock();
@@ -143,12 +143,12 @@ void Calendar::pushEvent(std::chrono::system_clock::time_point activation_time, 
     m_calendar_events_mx.unlock();
 }
 
-void Calendar::emplaceEvent(int seconds, TimedAlgorithmInstance *instance_ptr) {
+void Calendar::emplaceEvent(int seconds, TimedTaskInstance *instance_ptr) {
     // Compute exact time when event should activate and push event.
     pushEvent(std::chrono::system_clock::now() + std::chrono::seconds(seconds), instance_ptr);
 }
 
-void Calendar::emplaceEvent(TimedAlgorithmInstance* instance_ptr) {
+void Calendar::emplaceEvent(TimedTaskInstance* instance_ptr) {
     // Push event at current time.
     pushEvent(std::chrono::system_clock::now(), instance_ptr);
 }

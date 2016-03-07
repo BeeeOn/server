@@ -5,18 +5,18 @@
  * Created on 20. January 2016
  */
 
-#include "TimedAlgorithmManager.h"
+#include "TimedTaskManager.h"
 
 #include <iostream>
 #include <memory>
 #include <string>
 
-#include "TimedAlgorithmInstance.h"
+#include "TimedTaskInstance.h"
 
 //std::map<unsigned long /*instance_id*/, std::shared_ptr<TimedAlgorithmInstance>> TimedAlgorithmManager::m_algorithm_instances;
 
-TimedAlgorithmManager::TimedAlgorithmManager(MANAGER_TYPE type, std::string name) :
-    AlgorithmManager(type, name)
+TimedTaskManager::TimedTaskManager(MANAGER_TYPE type, std::string name) :
+    TaskManager(type, name)
 {
     //std::cout << "TimedAlgorithmManager::TimedAlgorithmManager >> m_id: " << m_id << std::endl;
 }
@@ -24,12 +24,12 @@ TimedAlgorithmManager::TimedAlgorithmManager(MANAGER_TYPE type, std::string name
 TimedAlgorithmManager::TimedAlgorithmManager(const TimedAlgorithmManager& orig) {
 }
 */
-TimedAlgorithmManager::~TimedAlgorithmManager() {
+TimedTaskManager::~TimedTaskManager() {
 }
 
-void TimedAlgorithmManager::createInstance(unsigned long user_id, unsigned int users_instance_personal_id) {
+void TimedTaskManager::createInstance(unsigned long user_id, unsigned int users_instance_personal_id) {
     //std::cout << "TimedAlgorithmManager::createInstance >> m_id: " << m_id << std::endl;
-    m_algorithm_instances.insert({m_instance_id_counter, std::make_shared<TimedAlgorithmInstance>(user_id, users_instance_personal_id)});
+    m_algorithm_instances.insert({m_instance_id_counter, std::make_shared<TimedTaskInstance>(user_id, users_instance_personal_id)});
     
     m_instance_id_counter++;
 }

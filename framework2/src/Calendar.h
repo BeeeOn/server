@@ -16,7 +16,7 @@
 #include <queue> //std::priority_queue
 
 #include "CalendarEvent.h"
-#include "TimedAlgorithmInstance.h"
+#include "TimedTaskInstance.h"
 
 // Class important for correct ordering of CalendarEvents in m_calendar_events priority_queue (event with lowest activation time at top).
 class GreaterCalendarEventSharedPtr {
@@ -72,20 +72,20 @@ public:
      * @param seconds Relative activation time (activate seconds from now).
      * @param instance_ptr Pointer to instance, which should be activated.
      */
-    static void emplaceEvent(int seconds, TimedAlgorithmInstance *instance_ptr);
+    static void emplaceEvent(int seconds, TimedTaskInstance *instance_ptr);
     
     /**
      * Immediately pushes event to queue with current time.
      * @param instance_ptr Pointer to instance, which should be activated.
      */
-    static void emplaceEvent(TimedAlgorithmInstance *instance_ptr);
+    static void emplaceEvent(TimedTaskInstance *instance_ptr);
     
     /**
      * Pushes event to queue.
      * @param activation_time Time at which should event activate.
      * @param instance_ptr Pointer to instance, which should be activated.
      */
-    static void pushEvent(std::chrono::system_clock::time_point activation_time, TimedAlgorithmInstance *instance_ptr);
+    static void pushEvent(std::chrono::system_clock::time_point activation_time, TimedTaskInstance *instance_ptr);
     
     // Time until main algorithm should wait.
     static std::chrono::system_clock::time_point m_wakeup_time;

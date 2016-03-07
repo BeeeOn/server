@@ -11,14 +11,13 @@
 //#include <asio.hpp>
 
 #include "Calendar.h"
-#include "Logger.h"
 #include "ManagerLoader.h"
 #include "Server.h"
 
-#include "TimedAlgorithmManager.h"
+#include "TimedTaskManager.h"
 
 int main(int argc, char** argv) {
-
+    
     std::string clientDelim("</adapter_server>"); // Delimeter of XML from gateway.
     std::string serverDelim("</end>");
     int threadCount = 10;
@@ -34,11 +33,17 @@ int main(int argc, char** argv) {
     std::thread t_calendar(&Calendar::run, &calendar);
     t_calendar.detach();
     
-    // Loads algorithm managers.
-    ManagerLoader manager_loader;
-    // In a future pass path to algorithm config file.
-    manager_loader.loadAlgorithmManagers();
-   
+    try {
+        // Loads algorithm managers.
+        ManagerLoader manager_loader;
+        // In a future pass path to algorithm config file.
+        //manager_loader.loadAlgorithmManagers();
+        manager_loader.loadAllTasks("/home/mrmaidx/server/framework2/tasks_conf.xml");
+    }
+    catch (...) {
+        std::cerr << "Framework could not load tasks. Shutting down." << std::endl; 
+        return 1;
+    }
     /*
     // Test of weak pointer.
     std::weak_ptr<int> weak_test;

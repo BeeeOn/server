@@ -1,21 +1,21 @@
 /* 
- * File:   TimedAlgorithmInstance.h
+ * File:   TimedTaskInstance.h
  * Author: Martin Novak, xnovak1c@stud.fit.vutbr.cz
  *
  * Created on 22. January 2016
  */
 
-#ifndef TIMEDALGORITHMINSTANCE_H
-#define TIMEDALGORITHMINSTANCE_H
+#ifndef TIMEDTASKINSTANCE_H
+#define TIMEDTASKINSTANCE_H
 
 #include <memory>
 #include <mutex>
 #include <string>
 
-#include "AlgorithmInstance.h"
+#include "TaskInstance.h"
 
 
-class TimedAlgorithmInstance: public AlgorithmInstance//, enable_shared_from_this<TimedAlgorithmInstance>
+class TimedTaskInstance: public TaskInstance//, enable_shared_from_this<TimedAlgorithmInstance>
 {
 public:
     /*std::shared_ptr<TimedAlgorithmInstance> getptr() {
@@ -23,10 +23,10 @@ public:
     }
     */
     
-    TimedAlgorithmInstance(unsigned long user_id, unsigned int users_instance_personal_id);
+    TimedTaskInstance(unsigned long user_id, unsigned int users_instance_personal_id);
     
     //TimedAlgorithmInstance(const TimedAlgorithmInstance& orig);
-    virtual ~TimedAlgorithmInstance();
+    virtual ~TimedTaskInstance();
 
     //void emplaceToCalendar();
     
@@ -45,5 +45,5 @@ private:
 
 };
 
-#endif /* TIMEDALGORITHMINSTANCE_H */
+#endif /* TIMEDTASKMINSTANCE_H */
 

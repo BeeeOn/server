@@ -1,30 +1,30 @@
 /* 
- * File:   AlgorithmManager.h
+ * File:   TaskManager.h
  * Author: Martin Novak, xnovak1c@stud.fit.vutbr.cz
  *
  * Created on 20. January 2016
  */
 
-#ifndef ALGORITHMMANAGER_H
-#define ALGORITHMMANAGER_H
+#ifndef TASKMANAGER_H
+#define TASKMANAGER_H
 
 #include <map>
 #include <memory> //std::shared_ptr
 //#include <utility> // std::pair
 
-#include "AlgorithmInstance.h"
+#include "TaskInstance.h"
 
 enum class MANAGER_TYPE {
-    EVENT, TIMED
+    TIMED, TRIGGER, COMBINED
 };
 
-class AlgorithmManager {
+class TaskManager {
 public:
     
-    AlgorithmManager(MANAGER_TYPE type, std::string name);
+    TaskManager(MANAGER_TYPE type, std::string name);
     
-    AlgorithmManager(const AlgorithmManager& orig);
-    virtual ~AlgorithmManager();
+    TaskManager(const TaskManager& orig);
+    virtual ~TaskManager();
         
     void processConfigMessage();
     
@@ -53,4 +53,4 @@ protected:
 
 };
 
-#endif /* ALGORITHMMANAGER_H */
+#endif /* TASKMANAGER_H */

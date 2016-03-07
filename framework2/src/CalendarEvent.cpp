@@ -11,7 +11,7 @@
 //#include <memory>
 
 //CalendarEvent::CalendarEvent(std::chrono::system_clock::time_point activation_time, std::weak_ptr<TimedAlgorithmInstance> instance_ptr):
-CalendarEvent::CalendarEvent(std::chrono::system_clock::time_point activation_time, TimedAlgorithmInstance *instance_ptr):
+CalendarEvent::CalendarEvent(std::chrono::system_clock::time_point activation_time, TimedTaskInstance *instance_ptr):
     m_activation_time(activation_time), m_instance_ptr(instance_ptr)
 {
 }

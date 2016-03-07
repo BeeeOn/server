@@ -5,7 +5,7 @@
  * Created on 22. January 2016
  */
 
-#include "TimedAlgorithmInstance.h"
+#include "TimedTaskInstance.h"
 
 #include <chrono>
 #include <iostream>
@@ -14,8 +14,8 @@
 
 #include "Calendar.h"
 
-TimedAlgorithmInstance::TimedAlgorithmInstance(unsigned long user_id, unsigned int users_instance_personal_id):
-    AlgorithmInstance(user_id, users_instance_personal_id)
+TimedTaskInstance::TimedTaskInstance(unsigned long user_id, unsigned int users_instance_personal_id):
+    TaskInstance(user_id, users_instance_personal_id)
 {   
     planActivationNow();
 }
@@ -24,11 +24,11 @@ TimedAlgorithmInstance::TimedAlgorithmInstance(unsigned long user_id, unsigned i
 TimedAlgorithmInstance::TimedAlgorithmInstance(const TimedAlgorithmInstance& orig) {
 }
 */
-TimedAlgorithmInstance::~TimedAlgorithmInstance() {
+TimedTaskInstance::~TimedTaskInstance() {
 }
 
 
-void TimedAlgorithmInstance::activate() {
+void TimedTaskInstance::activate() {
     
     m_activation_mx.lock();
         
@@ -39,14 +39,14 @@ void TimedAlgorithmInstance::activate() {
     m_activation_mx.unlock();
 }
 
-void TimedAlgorithmInstance::run() {
+void TimedTaskInstance::run() {
     std::cout << "WRONG RUN" << std::endl;
 }
 
-void TimedAlgorithmInstance::planActivationNow() {
+void TimedTaskInstance::planActivationNow() {
     Calendar::emplaceEvent(this);
 }
 
-void TimedAlgorithmInstance::planActivationAfterSeconds(int seconds) {
+void TimedTaskInstance::planActivationAfterSeconds(int seconds) {
     Calendar::emplaceEvent(seconds, this);
 }

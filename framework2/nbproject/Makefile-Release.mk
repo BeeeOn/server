@@ -35,20 +35,15 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/algorithms/RefreshInstance.o \
-	${OBJECTDIR}/algorithms/RefreshManager.o \
+	${OBJECTDIR}/_ext/511e25b6/pugixml.o \
 	${OBJECTDIR}/algorithms/TestInstance.o \
 	${OBJECTDIR}/algorithms/TestManager.o \
 	${OBJECTDIR}/algorithms/WatchdogInstance.o \
 	${OBJECTDIR}/algorithms/WatchdogManager.o \
-	${OBJECTDIR}/src/AlgorithmInstance.o \
-	${OBJECTDIR}/src/AlgorithmManager.o \
 	${OBJECTDIR}/src/Calendar.o \
 	${OBJECTDIR}/src/CalendarEvent.o \
 	${OBJECTDIR}/src/ConfigMessage.o \
-	${OBJECTDIR}/src/EventAlgorithmInstance.o \
-	${OBJECTDIR}/src/EventAlgorithmManager.o \
-	${OBJECTDIR}/src/Logger.o \
+	${OBJECTDIR}/src/LoadedTask.o \
 	${OBJECTDIR}/src/ManagerLoader.o \
 	${OBJECTDIR}/src/MessageParser.o \
 	${OBJECTDIR}/src/MessageRegister.o \
@@ -56,8 +51,13 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/ModuleData.o \
 	${OBJECTDIR}/src/Server.o \
 	${OBJECTDIR}/src/ServerSession.o \
-	${OBJECTDIR}/src/TimedAlgorithmInstance.o \
-	${OBJECTDIR}/src/TimedAlgorithmManager.o \
+	${OBJECTDIR}/src/TaskInstance.o \
+	${OBJECTDIR}/src/TaskManager.o \
+	${OBJECTDIR}/src/TasksConfigParser.o \
+	${OBJECTDIR}/src/TimedTaskInstance.o \
+	${OBJECTDIR}/src/TimedTaskManager.o \
+	${OBJECTDIR}/src/TriggerTaskInstance.o \
+	${OBJECTDIR}/src/TriggerTaskManager.o \
 	${OBJECTDIR}/src/framework.o \
 	${OBJECTDIR}/src/u_server.o \
 	${OBJECTDIR}/src/u_session.o
@@ -87,15 +87,10 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/framework2: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/framework2 ${OBJECTFILES} ${LDLIBSOPTIONS}
 
-${OBJECTDIR}/algorithms/RefreshInstance.o: algorithms/RefreshInstance.cpp 
-	${MKDIR} -p ${OBJECTDIR}/algorithms
+${OBJECTDIR}/_ext/511e25b6/pugixml.o: ../lib/pugixml.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/511e25b6
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/algorithms/RefreshInstance.o algorithms/RefreshInstance.cpp
-
-${OBJECTDIR}/algorithms/RefreshManager.o: algorithms/RefreshManager.cpp 
-	${MKDIR} -p ${OBJECTDIR}/algorithms
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/algorithms/RefreshManager.o algorithms/RefreshManager.cpp
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/511e25b6/pugixml.o ../lib/pugixml.cpp
 
 ${OBJECTDIR}/algorithms/TestInstance.o: algorithms/TestInstance.cpp 
 	${MKDIR} -p ${OBJECTDIR}/algorithms
@@ -117,16 +112,6 @@ ${OBJECTDIR}/algorithms/WatchdogManager.o: algorithms/WatchdogManager.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/algorithms/WatchdogManager.o algorithms/WatchdogManager.cpp
 
-${OBJECTDIR}/src/AlgorithmInstance.o: src/AlgorithmInstance.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/AlgorithmInstance.o src/AlgorithmInstance.cpp
-
-${OBJECTDIR}/src/AlgorithmManager.o: src/AlgorithmManager.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/AlgorithmManager.o src/AlgorithmManager.cpp
-
 ${OBJECTDIR}/src/Calendar.o: src/Calendar.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
@@ -142,20 +127,10 @@ ${OBJECTDIR}/src/ConfigMessage.o: src/ConfigMessage.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/ConfigMessage.o src/ConfigMessage.cpp
 
-${OBJECTDIR}/src/EventAlgorithmInstance.o: src/EventAlgorithmInstance.cpp 
+${OBJECTDIR}/src/LoadedTask.o: src/LoadedTask.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/EventAlgorithmInstance.o src/EventAlgorithmInstance.cpp
-
-${OBJECTDIR}/src/EventAlgorithmManager.o: src/EventAlgorithmManager.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/EventAlgorithmManager.o src/EventAlgorithmManager.cpp
-
-${OBJECTDIR}/src/Logger.o: src/Logger.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Logger.o src/Logger.cpp
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/LoadedTask.o src/LoadedTask.cpp
 
 ${OBJECTDIR}/src/ManagerLoader.o: src/ManagerLoader.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -192,15 +167,40 @@ ${OBJECTDIR}/src/ServerSession.o: src/ServerSession.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/ServerSession.o src/ServerSession.cpp
 
-${OBJECTDIR}/src/TimedAlgorithmInstance.o: src/TimedAlgorithmInstance.cpp 
+${OBJECTDIR}/src/TaskInstance.o: src/TaskInstance.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/TimedAlgorithmInstance.o src/TimedAlgorithmInstance.cpp
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/TaskInstance.o src/TaskInstance.cpp
 
-${OBJECTDIR}/src/TimedAlgorithmManager.o: src/TimedAlgorithmManager.cpp 
+${OBJECTDIR}/src/TaskManager.o: src/TaskManager.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/TimedAlgorithmManager.o src/TimedAlgorithmManager.cpp
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/TaskManager.o src/TaskManager.cpp
+
+${OBJECTDIR}/src/TasksConfigParser.o: src/TasksConfigParser.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/TasksConfigParser.o src/TasksConfigParser.cpp
+
+${OBJECTDIR}/src/TimedTaskInstance.o: src/TimedTaskInstance.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/TimedTaskInstance.o src/TimedTaskInstance.cpp
+
+${OBJECTDIR}/src/TimedTaskManager.o: src/TimedTaskManager.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/TimedTaskManager.o src/TimedTaskManager.cpp
+
+${OBJECTDIR}/src/TriggerTaskInstance.o: src/TriggerTaskInstance.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/TriggerTaskInstance.o src/TriggerTaskInstance.cpp
+
+${OBJECTDIR}/src/TriggerTaskManager.o: src/TriggerTaskManager.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/TriggerTaskManager.o src/TriggerTaskManager.cpp
 
 ${OBJECTDIR}/src/framework.o: src/framework.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

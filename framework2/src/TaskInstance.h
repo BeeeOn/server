@@ -1,23 +1,23 @@
 /* 
- * File:   AlgorithmInstance.h
+ * File:   TaskInstance.h
  * Author: Martin Novak, xnovak1c@stud.fit.vutbr.cz
  *
  * Created on 20. January 2016
  */
 
-#ifndef ALGORITHMINSTANCE_H
-#define ALGORITHMINSTANCE_H
+#ifndef TASKINSTANCE_H
+#define TASKINSTANCE_H
 
 #include <map>
 #include <memory>
 #include <string>
 
-class AlgorithmInstance
+class TaskInstance
 {
 public:
 
     
-    AlgorithmInstance(unsigned long user_id, unsigned int users_instance_personal_id);
+    TaskInstance(unsigned long user_id, unsigned int users_instance_personal_id);
     
     //AlgorithmInstance(const AlgorithmInstance& orig);
     
@@ -31,4 +31,4 @@ protected:
     std::map<unsigned long /*user_id*/, unsigned int /*users_instance_personal_id*/> m_owners;
 };
 
-#endif /* ALGORITHMINSTANCE_H */
+#endif /* TASKINSTANCE_H */
