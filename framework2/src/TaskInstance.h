@@ -15,9 +15,15 @@
 class TaskInstance
 {
 public:
-
-    
     TaskInstance(unsigned long user_id, unsigned int users_instance_personal_id);
+    
+    ~TaskInstance();
+   
+    /*
+     * Pure virtual function used for activating
+     */
+    virtual void activate() = 0;
+    
     
     //AlgorithmInstance(const AlgorithmInstance& orig);
     

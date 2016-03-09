@@ -10,12 +10,7 @@
 #include <iostream>
 
 
-TaskManager::TaskManager(MANAGER_TYPE type, std::string name):
-    m_type(type), m_name(name)
-{
-}
-
-TaskManager::TaskManager(const TaskManager& orig) {
+TaskManager::TaskManager() {
 }
 
 TaskManager::~TaskManager() {

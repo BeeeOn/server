@@ -18,7 +18,7 @@ TaskInstance::TaskInstance(unsigned long user_id, unsigned int users_instance_pe
 /*
 AlgorithmInstance::AlgorithmInstance(const AlgorithmInstance& orig) {
 }
-
-AlgorithmInstance::~AlgorithmInstance() {
-}
 */
+TaskInstance::~TaskInstance() {
+}
+

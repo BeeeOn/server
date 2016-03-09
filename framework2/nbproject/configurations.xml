@@ -1,37 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurationDescriptor version="97">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
-    <logicalFolder name="f1" displayName="Algorithms" projectFiles="true">
-      <itemPath>algorithms/TestInstance.cpp</itemPath>
-      <itemPath>algorithms/TestInstance.h</itemPath>
-      <itemPath>algorithms/TestManager.cpp</itemPath>
-      <itemPath>algorithms/TestManager.h</itemPath>
-      <itemPath>algorithms/WatchdogInstance.cpp</itemPath>
-      <itemPath>algorithms/WatchdogInstance.h</itemPath>
-      <itemPath>algorithms/WatchdogManager.cpp</itemPath>
-      <itemPath>algorithms/WatchdogManager.h</itemPath>
-    </logicalFolder>
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
       <itemPath>src/Calendar.h</itemPath>
       <itemPath>src/CalendarEvent.h</itemPath>
       <itemPath>src/ConfigMessage.h</itemPath>
-      <itemPath>src/LoadedTask.h</itemPath>
-      <itemPath>src/ManagerLoader.h</itemPath>
       <itemPath>src/MessageParser.h</itemPath>
       <itemPath>src/MessageRegister.h</itemPath>
       <itemPath>src/MessageSorter.h</itemPath>
       <itemPath>src/ModuleData.h</itemPath>
       <itemPath>src/Server.h</itemPath>
       <itemPath>src/ServerSession.h</itemPath>
+      <itemPath>src/Task.h</itemPath>
       <itemPath>src/TaskInstance.h</itemPath>
+      <itemPath>src/TaskLoader.h</itemPath>
       <itemPath>src/TaskManager.h</itemPath>
-      <itemPath>src/TasksConfigParser.h</itemPath>
       <itemPath>src/TimedTaskInstance.h</itemPath>
-      <itemPath>src/TimedTaskManager.h</itemPath>
       <itemPath>src/TriggerTaskInstance.h</itemPath>
-      <itemPath>src/TriggerTaskManager.h</itemPath>
       <itemPath>../lib/pugiconfig.hpp</itemPath>
       <itemPath>../lib/pugixml.hpp</itemPath>
       <itemPath>src/u_server.h</itemPath>
@@ -47,21 +34,18 @@
       <itemPath>src/Calendar.cpp</itemPath>
       <itemPath>src/CalendarEvent.cpp</itemPath>
       <itemPath>src/ConfigMessage.cpp</itemPath>
-      <itemPath>src/LoadedTask.cpp</itemPath>
-      <itemPath>src/ManagerLoader.cpp</itemPath>
       <itemPath>src/MessageParser.cpp</itemPath>
       <itemPath>src/MessageRegister.cpp</itemPath>
       <itemPath>src/MessageSorter.cpp</itemPath>
       <itemPath>src/ModuleData.cpp</itemPath>
       <itemPath>src/Server.cpp</itemPath>
       <itemPath>src/ServerSession.cpp</itemPath>
+      <itemPath>src/Task.cpp</itemPath>
       <itemPath>src/TaskInstance.cpp</itemPath>
+      <itemPath>src/TaskLoader.cpp</itemPath>
       <itemPath>src/TaskManager.cpp</itemPath>
-      <itemPath>src/TasksConfigParser.cpp</itemPath>
       <itemPath>src/TimedTaskInstance.cpp</itemPath>
-      <itemPath>src/TimedTaskManager.cpp</itemPath>
       <itemPath>src/TriggerTaskInstance.cpp</itemPath>
-      <itemPath>src/TriggerTaskManager.cpp</itemPath>
       <itemPath>src/framework.cpp</itemPath>
       <itemPath>../lib/pugixml.cpp</itemPath>
       <itemPath>src/u_server.cpp</itemPath>
@@ -103,22 +87,6 @@
       </item>
       <item path="../lib/pugixml.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="algorithms/TestInstance.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="algorithms/TestInstance.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="algorithms/TestManager.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="algorithms/TestManager.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="algorithms/WatchdogInstance.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="algorithms/WatchdogInstance.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="algorithms/WatchdogManager.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="algorithms/WatchdogManager.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="src/Calendar.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Calendar.h" ex="false" tool="3" flavor2="0">
@@ -130,14 +98,6 @@
       <item path="src/ConfigMessage.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/ConfigMessage.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="src/LoadedTask.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/LoadedTask.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="src/ManagerLoader.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/ManagerLoader.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/MessageParser.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -163,33 +123,29 @@
       </item>
       <item path="src/ServerSession.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="src/Task.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Task.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="src/TaskInstance.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/TaskInstance.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/TaskLoader.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/TaskLoader.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/TaskManager.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/TaskManager.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="src/TasksConfigParser.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/TasksConfigParser.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="src/TimedTaskInstance.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/TimedTaskInstance.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="src/TimedTaskManager.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/TimedTaskManager.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="src/TriggerTaskInstance.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/TriggerTaskInstance.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="src/TriggerTaskManager.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/TriggerTaskManager.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/framework.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -228,22 +184,6 @@
       </item>
       <item path="../lib/pugixml.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="algorithms/TestInstance.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="algorithms/TestInstance.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="algorithms/TestManager.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="algorithms/TestManager.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="algorithms/WatchdogInstance.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="algorithms/WatchdogInstance.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="algorithms/WatchdogManager.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="algorithms/WatchdogManager.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="src/Calendar.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Calendar.h" ex="false" tool="3" flavor2="0">
@@ -255,14 +195,6 @@
       <item path="src/ConfigMessage.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/ConfigMessage.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="src/LoadedTask.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/LoadedTask.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="src/ManagerLoader.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/ManagerLoader.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/MessageParser.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -288,33 +220,29 @@
       </item>
       <item path="src/ServerSession.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="src/Task.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Task.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="src/TaskInstance.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/TaskInstance.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/TaskLoader.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/TaskLoader.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/TaskManager.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/TaskManager.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="src/TasksConfigParser.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/TasksConfigParser.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="src/TimedTaskInstance.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/TimedTaskInstance.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="src/TimedTaskManager.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/TimedTaskManager.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="src/TriggerTaskInstance.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/TriggerTaskInstance.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="src/TriggerTaskManager.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/TriggerTaskManager.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/framework.cpp" ex="false" tool="1" flavor2="0">
       </item>

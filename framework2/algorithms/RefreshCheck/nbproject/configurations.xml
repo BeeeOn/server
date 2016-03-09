@@ -40,7 +40,6 @@
       <compileType>
         <ccTool>
           <standard>8</standard>
-          <commandLine>-pthread</commandLine>
         </ccTool>
       </compileType>
       <item path="src/RefreshCheckInstance.cpp" ex="false" tool="1" flavor2="0">

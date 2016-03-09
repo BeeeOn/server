@@ -6,15 +6,14 @@
  */
 
 #include <chrono>
+#include <stdexcept>
 #include <thread>
 
 //#include <asio.hpp>
 
 #include "Calendar.h"
-#include "ManagerLoader.h"
+#include "TaskLoader.h"
 #include "Server.h"
-
-#include "TimedTaskManager.h"
 
 int main(int argc, char** argv) {
     
@@ -33,17 +32,26 @@ int main(int argc, char** argv) {
     std::thread t_calendar(&Calendar::run, &calendar);
     t_calendar.detach();
     
+    // Loads algorithm managers.
+    TaskLoader task_loader;
     try {
-        // Loads algorithm managers.
-        ManagerLoader manager_loader;
         // In a future pass path to algorithm config file.
         //manager_loader.loadAlgorithmManagers();
-        manager_loader.loadAllTasks("/home/mrmaidx/server/framework2/tasks_conf.xml");
+        task_loader.createAllTasks("/home/mrmaidx/server/framework2/tasks_conf.xml");
     }
-    catch (...) {
-        std::cerr << "Framework could not load tasks. Shutting down." << std::endl; 
+    catch (const std::exception& e) {
+        std::cerr << e.what();
+        std::cerr << "Shutting down BAF." << std::endl;
         return 1;
     }
+    
+    std::cout << "Number of tasks: " << task_loader.m_tasks.size() << std::endl;
+    for (auto task: task_loader.m_tasks) {
+        std::cout << "Name: " << task.second->getTaskName() << std::endl;
+        std::cout << "Creating new instance!" << std::endl;
+        task.second->getTaskManagerPtr()->createInstance(1, 1);
+    }
+    
     /*
     // Test of weak pointer.
     std::weak_ptr<int> weak_test;

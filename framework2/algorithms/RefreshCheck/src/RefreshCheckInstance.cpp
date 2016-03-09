@@ -20,6 +20,8 @@ RefreshCheckInstance::RefreshCheckInstance(unsigned long user_id, unsigned int u
 }
 
 RefreshCheckInstance::~RefreshCheckInstance() {
+    std::cout << "RefreshCheckInstance::~RefreshCheckInstance - entered." << std::endl;
+    std::cout << "RefreshCheckInstance::~RefreshCheckInstance - finished." << std::endl;
 }
 
 void RefreshCheckInstance::run() {

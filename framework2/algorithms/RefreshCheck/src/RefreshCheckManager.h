@@ -8,18 +8,23 @@
 #ifndef REFRESHMANAGER_H
 #define REFRESHMANAGER_H
 
+#include <iostream>
 #include <string>
 
-#include "../../../src/TimedTaskManager.h"
+#include "../../../src/TaskManager.h"
 
-class RefreshCheckManager: public TimedTaskManager
+class RefreshCheckManager: public TaskManager
 {
 public:
     
-    RefreshCheckManager(MANAGER_TYPE type, std::string name);
+    RefreshCheckManager();
     
+    void createInstance(unsigned int user_id, unsigned short personal_id);
+    
+    void deleteInstance();
+
     //RefreshManager(const RefreshManager& orig);
-    void createInstance(unsigned long user_id, unsigned int users_instance_personal_id);
+    //void createInstance(unsigned long user_id, unsigned int users_instance_personal_id);
     
     virtual ~RefreshCheckManager();
 private:
