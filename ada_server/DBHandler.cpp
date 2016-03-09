@@ -289,7 +289,7 @@ int DBHandler::GetWakeUpTime(std::string record, long long int gateway_id)
 		*_sql << SQLQueries::SelectTime,
 				into(retRec, ind),
 				use(record),
-                                use(gateway_id);
+				use(gateway_id);
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetWakeUpTime");
 		return (retRec);
 
@@ -355,73 +355,6 @@ void DBHandler::GetAdapterData(int *soc, long int ID)
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetAdapterData");
 }
 
-float DBHandler::GetLastTemp(std::string ID, std::string type)
-{
-	double retVal;
-	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetLastTemp");
-	//std::string sqlQuery = "SELECT value FROM devices Where (fk_facilities_mac='" + ID + "' AND type =" + type +");" ;
-	std::string sqlQuery = "SELECT measured_value FROM module WHERE (device_euid='" + ID + "' AND module_id =" + type +");" ;
-	this->_log->WriteMessage(TRACE,sqlQuery);
-	try
-	{
-		*_sql<<sqlQuery, into(retVal);
-	}
-	catch(std::exception const &e)
-	{
-		std::string ErrorMessage = "Database Error : ";
-		ErrorMessage.append (e.what());
-		this->_log->WriteMessage(ERR,ErrorMessage );
-		retVal = 0.0;
-	}
-	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetLastTemp");
-	return (retVal);
-}
-
-std::vector<std::string> *DBHandler::GetEmails(std::string AdapterID)
-{
-	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetEmails");
-	//std::string sqlQuery = "SELECT mail FROM users INNER JOIN users_adapters ON user_id=fk_user_id WHERE (fk_adapter_id=" + AdapterID + ");" ;
-	std::string sqlQuery = "SELECT mail FROM users LEFT JOIN users_gateway USING(user_id) WHERE (gateway_id=" + AdapterID + ");" ;
-	this->_log->WriteMessage(TRACE,sqlQuery);
-	std::vector<std::string> * retVal = new std::vector<std::string>(10);
-	try
-	{
-		*_sql<<sqlQuery, into(*retVal) ;
-	}
-	catch(std::exception const &e)
-	{
-		std::string ErrorMessage = "Database Error : ";
-		ErrorMessage.append (e.what());
-		this->_log->WriteMessage(ERR,ErrorMessage );
-		delete (retVal);
-		retVal = nullptr;
-	}
-	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetEmails");
-	return (retVal);
-}
-
-std::vector<std::string> *DBHandler::GetNotifString(std::string email)
-{
-	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetNotifString");
-	std::string sqlQuery = "SELECT push_notification FROM users INNER JOIN mobile_devices ON user_id=fk_user_id WHERE (mail='" + email + "');" ;
-	//std::string sqlQuery = "SELECT service_reference_id FROM push_notification_service WHERE user_id=fk_user_id WHERE (mail='" + email + "');" ;
-	this->_log->WriteMessage(TRACE,sqlQuery);
-	std::vector<std::string> * retVal = new std::vector<std::string>(10);
-	try
-	{
-		*_sql<<sqlQuery, into(*retVal) ;
-	}
-	catch(std::exception const &e)
-	{
-		std::string ErrorMessage = "Database Error : ";
-		ErrorMessage.append (e.what());
-		this->_log->WriteMessage(ERR,ErrorMessage );
-		delete (retVal);
-		retVal = nullptr;
-	}
-	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetNotifString");
-	return (retVal);
-}
 
 DBHandler::~DBHandler()
 {
@@ -434,7 +367,7 @@ bool DBHandler::DeleteFacility(std::string ID, long long int gateway_id)
 	{
 		*_sql << SQLQueries::DeleteDevice,
 				use(ID,"DEVICE_EUID"),
-                                use(gateway_id, "GATEWAY_ID");
+				use(gateway_id, "GATEWAY_ID");
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::DeleteFacility");
 		return (true);
 	}

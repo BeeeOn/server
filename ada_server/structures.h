@@ -199,4 +199,6 @@ typedef struct testMessage : public message
 } ttestMessage;
 
 
+
+
 #endif /* STRUCTURES_H_ */

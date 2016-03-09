@@ -11,6 +11,15 @@
 
 using namespace pugi;
 
+template< typename T >
+std::string int_to_hex( T i )
+{
+    std::stringstream stream;
+    stream << "0x"
+    << std::hex << i;
+    return stream.str();
+}
+
 std::string MessageCreator::CreateDeleteMessage(std::string deviceID)
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::CreateDeleteMessage");
@@ -18,14 +27,17 @@ std::string MessageCreator::CreateDeleteMessage(std::string deviceID)
 	xml_node server_adapter = resp->append_child("server_adapter");
 	server_adapter.append_attribute("protocol_version");
 	server_adapter.append_attribute("state");
+    server_adapter.append_attribute("euid");
 	
 	server_adapter.attribute("protocol_version") = "1.0";
 	server_adapter.attribute("state") = "clean";
-	struct sockaddr_in antelope;
+	/*struct sockaddr_in antelope;
 	inet_aton(deviceID.c_str(), &antelope.sin_addr);
 	in_addr_t DeviceIP = antelope.sin_addr.s_addr;
-	unsigned int DeviceIPint = ntohl (DeviceIP);
-	server_adapter.attribute("euid") = std::to_string(DeviceIPint).c_str();
+	unsigned int DeviceIPint = ntohl (DeviceIP);*/
+	unsigned long long DeviceIPint = std::stoll(deviceID);
+    this->_log->WriteMessage(DEBUG,"Device euid in message will be:" + int_to_hex(DeviceIPint));
+	server_adapter.attribute("euid") = int_to_hex(DeviceIPint).c_str();
 	tstringXMLwriter writer;
 	resp->print(writer);
 	delete(resp);

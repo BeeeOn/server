@@ -78,8 +78,13 @@ void Loger::WriteMessage (tmessageType MT,std::string message)
 				this->QueueMsg(" MSG ",message);
 			}
 			break;
-		case TRACE:
+		case DEBUG:
 			if (_verbosity>4)  //on TRACE level
+			{
+				this->QueueMsg("DEBUG",message);
+			}
+		case TRACE:
+			if (_verbosity>5)  //on TRACE level
 			{
 				this->QueueMsg("TRACE",message);
 			}

@@ -17,7 +17,6 @@
 #include "../lib/pugixml.hpp"
 #include "../lib/pugiconfig.hpp"
 #include "loger.h"
-#include "structures.h"
 
 #ifndef MESSAGECREATOR_H_
 #define MESSAGECREATOR_H_

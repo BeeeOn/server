@@ -34,6 +34,7 @@ typedef enum messageType
 {
 	WARN,  /**< warning message type*/
 	MSG,	/**< message type representing messages from clients*/
+	DEBUG, /**< message type for debugging data*/
 	TRACE, /**< message type tracing application*/
 	INFO, /**< information messages*/
 	FATAL, /**< fatal errors of server*/

@@ -23,7 +23,7 @@ template< typename T >
 std::string int_to_hex( T i )
 {
   std::stringstream stream;
-  stream << "0x" 
+  stream << "0x"
          << std::hex << i;
   return stream.str();
 }
@@ -251,6 +251,7 @@ ProtocolV1MessageParser::ProtocolV1MessageParser(Loger *L)
 	L->WriteMessage(TRACE,"Entering " + this->_Name + "::Constructor");
 	this->_message = new tmessage();
 	this->_log = L;
+	this->version = "1.0";
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Constructor");
 }
 

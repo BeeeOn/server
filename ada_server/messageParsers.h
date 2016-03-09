@@ -110,6 +110,7 @@ class ProtocolV1MessageParser :public MessageParser
 	private:
 		const std::string _Name="ProtocolV1MessageParser";
 	protected:
+		std::string version;
 		/**Virtual method to obtain time stamp
 				*/
 		virtual void GetTimeStamp();
@@ -155,6 +156,14 @@ class ProtocolV1MessageParser :public MessageParser
 		/** Destructor
 		 */
 		~ProtocolV1MessageParser();
+};
+
+class ProtocolV1_1_MessageParser :public ProtocolV1MessageParser
+{
+	private:
+		const std::string _Name="ProtocolV1_1_MessageParser";
+	public:
+		ProtocolV1_1_MessageParser(Loger *L) : ProtocolV1MessageParser(L) {this->version="1.0";};
 };
 
 /** @Class UIServerMessageParser

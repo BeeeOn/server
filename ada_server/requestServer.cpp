@@ -67,7 +67,7 @@ bool RequestServer::HandleRequest ()
 			return (false);
 	}
 	bool res;
-	this->_log->WriteMessage(INFO,"Message: \n" + message);
+	this->_log->WriteMessage(MSG,"Message: \n" + message);
 	SSL *s = NULL;
 	if ((s = this->_sslcont->GetSSL(m->adapterINTid))==NULL)
 	{

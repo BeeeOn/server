@@ -33,7 +33,7 @@ const string InsertDevice = "insert into device (device_type,device_euid,refresh
 /** Q to update facility uses ( :battery, :quality, :timestamp, :mac)*/
 const string UpdateDevice = "update device set measured_at = :MEASURED_AT where (device_euid = :DEVICE_EUID) AND gateway_id = :GATEWAY_ID;"; //"update facilities set battery=" + std::to_string(message->battery) + ",quality=" + std::to_string(message->signal_strength) + ",timestamp=" + std::to_string(message->timestamp)  +" where (mac='" + message->DeviceIDstr + "');" ;
 /** Q to Delete facility uses (:ID) */
-const string DeleteDevice = "Delete from device where device_euid=:DEVICE_EUID AND gateway_id=_GATEWAY_ID;";
+const string DeleteDevice = "Delete from device where device_euid=:DEVICE_EUID AND gateway_id=:GATEWAY_ID;";
 /** Q to select wake up time of record uses ( :record)*/
 const string SelectTime = "select refresh from device where device_euid=:record AND gateway_id=:GATEWAY_ID;"; //"select refresh from facilities where mac = '" + record + "';";
 const string SelectDeviceParametersXml = "select xmlagg( xmlelement(name parameter, xmlattributes(parameter_key as key, parameter_value as value))) from device_parameter where device_euid=:record AND gateway_id=:GATEWAY_ID;";
