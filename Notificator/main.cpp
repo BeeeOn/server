@@ -14,7 +14,7 @@ int main()
     ids.push_back("APA91bF-u3AZ3bNl6jehq19oEhbVFGEaA_4x3jlzMtKwHzlakRcE9K_H_Rk8YuNSjp1K62dz-_sL09iQjlH8Z3JTsxbg1VbV_Gch0YhTuOg3U1bCib7pk4Xg4rHPeUrICiQ74RIB3qXxTjmTCeLBZor_Tr3pLuATUw");
    int i = 0;
     Notification *notif = new WatchdogNotif(
-        8,                    // user ID
+        9509,                    // user ID (MrMaidx -> Martin Novak)
         i,                  // message (notification) ID
         1431593526000,        // timestamp (ms)
         "Vlhkost v obýváku překročila 60%",   // message
