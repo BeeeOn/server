@@ -12,6 +12,9 @@
 using namespace soci;
 using namespace pugi;
 
+
+
+
 void apps_ssl_info_callback()
 {
 	std::cout<<"CAllback called!"<<"\n";
@@ -20,9 +23,6 @@ void apps_ssl_info_callback()
 bool ConnectionServer::LoadCertificates()
 {
 	_log->WriteMessage(TRACE,"Entering " + this->_Name + "::LoadCertificates");
-	SSL_load_error_strings();
-	SSL_library_init();
-	OpenSSL_add_all_algorithms();
 	sslctx = SSL_CTX_new( TLSv1_server_method());
 	char errorBuffer[1000];
 	std::string msgBase = "Certificate error ";
@@ -159,14 +159,13 @@ void ConnectionServer::HandleConnection (in_addr IP)
 	int FMversion =  adapter.attribute("fw_version").as_int();
 	if ((CPversion == (float)0.1)||(CPversion == (float)1.0))  //according to version create parser
 	{
+		this->_log->WriteMessage(INFO,"Adapter protocol version is 1.0");
 		if (FMversion == 0)
 		{
 			MP = new ProtocolV1MessageParser(_log);
 		}
 		else
 		{
-			if (FMversion == 1)
-			{
 				try
 				{
 					MP = new ProtocolV1MessageParser(_log);
@@ -178,30 +177,23 @@ void ConnectionServer::HandleConnection (in_addr IP)
                     this->Cleanup();
 					return;
 				}
+		}
+	}
+		else
+		{
+			if (CPversion == (float)1.1)
+			{
+				this->_log->WriteMessage(INFO,"Adapter protocol version is 1.1");
+				MP = new ProtocolV1_1_MessageParser(_log);
 			}
 			else
 			{
-				try
-				{
-					MP = new ProtocolV1MessageParser(_log);
-				}
-				catch (std::exception &e)
-				{
-					_log->WriteMessage(ERR,"Unable to create space for Protocol parser exiting client won't be server!");
-					_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::HandleConnection");
-                    this->Cleanup();
-					return;
-				}
+				_log->WriteMessage(WARN, "Unsupported protocol version");
+				_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::HandleConnection");
+				this->Cleanup();
+				return;
 			}
 		}
-	}
-	else
-	{
-		_log->WriteMessage(WARN,"Unsupported protocol version");
-		_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::HandleConnection");
-        this->Cleanup();
-		return;
-	}
 	if (!MP->ParseMessage(&adapter,FMversion,CPversion))  //parse message
 	{
 
@@ -215,85 +207,55 @@ void ConnectionServer::HandleConnection (in_addr IP)
 
 	if (parsedMessage->state==DATA) //on registration register agent
 	{
-		response = MP->CreateAnswer(this->GetData());
-		int Err;
-		_log->WriteMessage(MSG,"Response message: \n" + response);
-
-		// It was decided with adapter team, that at the end of each message will be \0
-		response.push_back('\0');
-
-		if((Err=SSL_write(cSSL, response.c_str(), response.size()))<=0)
-		{
-			_log->WriteMessage(ERR,"Writing to SSL failed :");
-		}
-		close(com_s);
+		this->GetData();
 	}
-  else if (parsedMessage->state==GET_PARAMS)
+    else
 	{
-    std::string xmlParameters = database->GetXmlDeviceParameters(std::to_string(this->parsedMessage->device_euid), this->parsedMessage->adapterINTid);
-		response = MP->CreateGetParametersAnswer(xmlParameters);
-		int Err;
-		_log->WriteMessage(MSG,"Response message: \n" + response);
-
-		// It was decided with adapter team, that at the end of each message will be \0
-		response.push_back('\0');
-
-		if((Err=SSL_write(cSSL, response.c_str(), response.size()))<=0)
+		if (parsedMessage->state == GET_PARAMS)
 		{
-			_log->WriteMessage(ERR,"Writing to SSL failed :");
-		}
-		close(com_s);
-	}
-	else if (parsedMessage->state==REGISTER)
-	{
-	    std::string resp;
-	    if (!database->IsInDB("gateway","gateway_id",std::to_string(parsedMessage->adapterINTid)))
-	    {
-			if (database->InsertGateway(this->parsedMessage))
-			{
-			  resp="<server_adapter protocol_version=\"1.0\" state=\"register\" response=\"true\"/>";
-			}
-			else
-			{
-			  resp="<server_adapter protocol_version=\"1.0\" state=\"register\" response=\"false\"/>";
-			}
-	    }
-	    else
-	    {
-	    	if (database->UpdateGateway(this->parsedMessage))
-			{
-			  	resp="<server_adapter protocol_version=\"1.0\" state=\"register\" response=\"true\"/>";
-			}
-			else
-			{
-			  	resp="<server_adapter protocol_version=\"1.0\" state=\"register\" response=\"false\"/>";
-			}
-
-	    }
-
-	    this->_sslcont->InsertSSL(parsedMessage->adapterINTid,cSSL);
-	    int Err;
-		_log->WriteMessage(INFO,"Going to send response to register MSG ");
-		_log->WriteMessage(INFO,"Response register MSG : " + resp);
-
-		// It was decided with adapter team, that at the end of each message will be \0
-	   	response.push_back('\0');
-
-	    if((Err=SSL_write(cSSL, resp.c_str(), resp.size()))<=0)
-		{
-			_log->WriteMessage(ERR,"Sending registration answer failed :");
+			this->GetData();
 		}
 		else
 		{
-			_log->WriteMessage(INFO,"Response msg successfully sent with number of bytes : " + std::to_string(Err));
+			if (parsedMessage->state == REGISTER)
+			{
+				if (!database->IsInDB("gateway", "gateway_id", std::to_string(parsedMessage->adapterINTid)))
+				{
+					this->parsedMessage->registerResult = database->InsertGateway(this->parsedMessage);
+				}
+				else
+				{
+					this->parsedMessage->registerResult = database->UpdateGateway(this->parsedMessage);
+				}
+
+				this->_sslcont->InsertSSL(parsedMessage->adapterINTid, cSSL);
+			}
 		}
-	    cSSL = SSL_new(sslctx);
 	}
-	if (parsedMessage->state==DATA) //we are receiving data so save them
+	int Err;
+	response = MP->CreateAnswer();
+	_log->WriteMessage(MSG,"Response message: \n" + response);
+
+	// It was decided with adapter team, that at the end of each message will be \0
+	response.push_back('\0');
+
+	if((Err=SSL_write(cSSL, response.c_str(), response.size()))<=0)
 	{
-		this->Notify(data);
-		this->StoreData();
-		database->LogValue(parsedMessage);
+		_log->WriteMessage(ERR,"Writing to SSL failed :");
+	}
+	if (parsedMessage->state==REGISTER)
+	{
+		cSSL = SSL_new(sslctx);
+	}
+	else
+	{
+		close(com_s);
+		if (parsedMessage->state==DATA) //we are receiving data so save them
+		{
+			this->Notify(data);
+			this->StoreData();
+			database->LogValue(parsedMessage);
+		}
 	}
 	this->Cleanup();
 	_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::HandleConnection");
@@ -351,7 +313,10 @@ ConnectionServer::~ConnectionServer()
 	_log->WriteMessage(TRACE,"Entering " + this->_Name + "::Destructor");
 	if (cSSL != NULL)
 	{
-		close(SSL_get_fd(cSSL));
+		if (SSL_get_fd(cSSL)!= -1)
+		{
+			close (SSL_get_fd(cSSL));
+		}
 		SSL_shutdown(this->cSSL);
 		SSL_free(this->cSSL);
 	}
@@ -359,7 +324,7 @@ ConnectionServer::~ConnectionServer()
 	{
 		SSL_CTX_free(this->sslctx);
 	}
-	CRYPTO_cleanup_all_ex_data();
+	//CRYPTO_cleanup_all_ex_data();
 	ERR_remove_state(0);
 	ERR_free_strings();
 	EVP_cleanup();
@@ -397,20 +362,47 @@ void ConnectionServer::SetSocket (int s)
 int ConnectionServer::GetData()
 {
 	_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetData");
-	int wakeUpTime = 5;
-	if(!database->IsInDB("device","device_euid","'" + std::to_string(this->parsedMessage->device_euid) + "' AND gateway_id=" + std::to_string(this->parsedMessage->adapterINTid) + ""))
+	switch (this->parsedMessage->state)
 	{
-		wakeUpTime = 5;
+		case DATA:
+			if (!database->IsInDB("device", "device_euid",
+								  "'" + std::to_string(this->parsedMessage->device_euid) + "' AND gateway_id=" +
+								  std::to_string(this->parsedMessage->adapterINTid) + "")) {
+				this->parsedMessage->refresh = 5;
+			}
+			else
+			{
+				this->parsedMessage->refresh = database->GetWakeUpTime(std::to_string(this->parsedMessage->device_euid),
+													 this->parsedMessage->adapterINTid);
+			}
+			_log->WriteMessage(DEBUG, "refresh:" + std::to_string(this->parsedMessage->refresh));
+			if (this->parsedMessage->refresh > 100000)
+				this->parsedMessage->refresh = 10;
+			_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::GetData");
+			return (0);
+		case GET_PARAMS:
+			for (size_t i=0;i<((messageV1_1*)this->parsedMessage)->params->size();i++)
+			{
+				switch (((messageV1_1 *) this->parsedMessage)->params->at(i)->id)
+				{
+					case 1001:
+						break;
+					case 1002:
+						break;
+					case 1000:
+						break;
+					case 1003:
+						database->GetDevices((messageV1_1 *) this->parsedMessage);
+						break;
+					default:
+						_log->WriteMessage(WARN, "Unsupported parameter id no routine to handle!");
+						break;
+				}
+			}
+			break;
+		default:
+			break;
 	}
-	else
-	{
-		wakeUpTime = database->GetWakeUpTime(std::to_string(this->parsedMessage->device_euid), this->parsedMessage->adapterINTid);
-	}
-	_log->WriteMessage(TRACE,"refresh:" + std::to_string(wakeUpTime));
-	if(wakeUpTime> 100000)
-		wakeUpTime = 10;
-	_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetData");
-	return (wakeUpTime);
 }
 
 void ConnectionServer::Cleanup()
@@ -420,7 +412,7 @@ void ConnectionServer::Cleanup()
         delete (MP);
         MP=nullptr;
     }
-    CRYPTO_cleanup_all_ex_data();
+    //CRYPTO_cleanup_all_ex_data();
     ERR_free_strings();
     ERR_remove_state(0);
 }

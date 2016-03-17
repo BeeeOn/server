@@ -43,8 +43,8 @@ class MessageCreator
 	 * @param std::string caring IP of device	to search */
 	std::string CreateSearchMessage(std::string AdapterID, std::string deviceIp, std::string deviceId);
 	/**Method to create Switch message
-		 * @param tmessage caring details	 */
-	std::string CreateSwitchMessage(tmessage *Message);
+		 * @param tmessageV1_0 caring details	 */
+	std::string CreateSwitchMessage(tmessageV1_0 *Message);
 	/**Constructor
 		 * @param l Loger used for logging	 */
 	MessageCreator(Loger *_l);

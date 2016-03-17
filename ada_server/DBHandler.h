@@ -43,32 +43,32 @@ class DBHandler
 		 * @param message - pointer to message content
 		 * @return bool on success/failure true/false
 		    */
-		bool InsertGateway(tmessage *message);
+		bool InsertGateway(tmessageV1_0 *message);
 		/** Method for inserting new facility and device to database
 		 * @param message - pointer to message content
 		 * @return bool on success/failure true/false
 			*/
-		bool InsertSenAct(tmessage *message);
+		bool InsertSenAct(tmessageV1_0 *message);
 		/** Method for updating adapter in database
 		 * @param message - pointer to message content
 		 * @return bool on success/failure true/false
 			*/
-		bool UpdateGateway(tmessage *message);
+		bool UpdateGateway(tmessageV1_0 *message);
 		/** Method for updating facility and device in database
 		 * @param message - pointer to message content
 		 * @return bool on success/failure true/false
 			*/
-		bool UpdateSenAct(tmessage *message);
+		bool UpdateSenAct(tmessageV1_0 *message);
 		/** Method for obtaining wakeup time from database
 		 * @param record - record which time are we looking for
 		 * @return number of seconds to next wakeup on failure/missing record returns default value 5
 			*/
-		int GetWakeUpTime(std::string record, long long int gateway_id);
+		unsigned int GetWakeUpTime(std::string record, long long int gateway_id);
 		std::string GetXmlDeviceParameters(std::string device_euid, long long int adapterid);
     /** Method for creating history row in database
 		 * @param message - pointer to message content
 			*/
-		void LogValue (tmessage *message);
+		void LogValue (tmessageV1_0 *message);
 		/** Method for obtaining socket number from DB
 		 * @param soc - pointer to int where is returned value
 		 * @param long int ID of adapter
@@ -78,12 +78,13 @@ class DBHandler
 		 * @param message - pointer to message content
 		 * @param long int ID of adapter
 			*/
-		bool UpdateAdapterPort(tmessage *message);
+		bool UpdateAdapterPort(tmessageV1_0 *message);
 
 		/** Method for obtaining last timestamp
 		* @param long long unsigned int containing device identification
 		* @return time_t value of the timestamp from database*/
 		time_t GetLastTimestamp(long long unsigned int dev_euid);
+        bool GetDevices(tmessageV1_1 *message);
 };
 
 

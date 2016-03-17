@@ -47,7 +47,7 @@ bool RequestServer::HandleRequest ()
 	{
 		return (false);
 	}
-	tmessage *m = UIp->ReturnMessage();
+	tmessageV1_0 *m = UIp->ReturnMessage();
 	switch(m->state)
 	{
 		case DELETE:

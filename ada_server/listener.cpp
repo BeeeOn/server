@@ -30,6 +30,7 @@ int Listener::Listen ()
 	{
 	  this->_log->WriteMessage(FATAL,"Error while binding socket");  //on error
 	  this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Listen");
+		this->_terminated = true;
 	  return (1);
 	}
 	else
@@ -40,6 +41,7 @@ int Listener::Listen ()
 	{
 		this->_log->WriteMessage(FATAL,"Unable to listen");
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Listen");
+		this->_terminated = true;
 		return (1);
 	}
 	else
@@ -134,6 +136,8 @@ Listener::~Listener()
 
 void Listener::UnAccept()
 {
+	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::UnAccept");
 	shutdown (s,SHUT_RDWR);
 	close(this->s);
+	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::UnAccept");
 }

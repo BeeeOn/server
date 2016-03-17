@@ -32,7 +32,7 @@ class MessageParser
 	private:
 		const std::string _Name="MessageParser"; /**< name of class*/
 	protected:
-		tmessage* _message;			/**< parsed message*/
+		tmessageV1_0 * _message;			/**< parsed message*/
 		int _AnswerSize;			/**< size of answer*/
 		pugi::xml_node *_adapter,_device; /**< xml nodes of device and adapter */
 		Loger *_log; /**<  Logger used to log */
@@ -49,7 +49,7 @@ class MessageParser
 		/**Pure virtual method to create answer
 		 * @param value time to next wakeup
 		*/
-		virtual std::string CreateAnswer(int value) = 0;
+		virtual std::string CreateAnswer() = 0;
 		virtual std::string CreateGetParametersAnswer(std::string xmlParameters) = 0;
     /**Method to set socket in message
 		 * @param Soc int representation of sockett
@@ -58,7 +58,7 @@ class MessageParser
 		/**Method to return pointer to parsed message
 		 * @return pointer to parsed message
 		*/
-		tmessage* ReturnMessage();
+		tmessageV1_0 * ReturnMessage();
 		/**Method to return size of answer
 		 * @return int representing number of bytes
 		*/
@@ -142,6 +142,7 @@ class ProtocolV1MessageParser :public MessageParser
 		 * @param l to use as loger
 		*/
 		ProtocolV1MessageParser(Loger *L) ;
+		ProtocolV1MessageParser() {};
 		/**Virtual method to parse message
 		 * @param adapter xml_node of adapter element in message
 		 * @param CP version of communication protocol
@@ -151,7 +152,7 @@ class ProtocolV1MessageParser :public MessageParser
 		/**Virtual method to create answer
 		 * @param value time to next wakeup
 		*/
-		virtual std::string CreateAnswer(int value);  
+		virtual std::string CreateAnswer();
 		virtual std::string CreateGetParametersAnswer(std::string xmlParameters);
 		/** Destructor
 		 */
@@ -162,8 +163,14 @@ class ProtocolV1_1_MessageParser :public ProtocolV1MessageParser
 {
 	private:
 		const std::string _Name="ProtocolV1_1_MessageParser";
+	protected:
+		virtual void GetState() override ;
+		virtual bool GetParams();
+		virtual std::string CreateAnswer() override ;
 	public:
-		ProtocolV1_1_MessageParser(Loger *L) : ProtocolV1MessageParser(L) {this->version="1.0";};
+		ProtocolV1_1_MessageParser(Loger *L) ;
+		~ProtocolV1_1_MessageParser();
+		virtual bool ParseMessage(pugi::xml_node *adapter,float FM,float CP) override;
 };
 
 /** @Class UIServerMessageParser
@@ -173,7 +180,7 @@ class ProtocolV1_1_MessageParser :public ProtocolV1MessageParser
 class UIServerMessageParser
 {
 	private:
-		tmessage *_Message; /**< parsed message*/
+		tmessageV1_0 *_Message; /**< parsed message*/
 		std::string _toParse; /**< string representation of message to parse*/
 		Loger* _log; /**< logger*/
 		pugi::xml_node request; /**< xml node representing request element*/
@@ -213,9 +220,9 @@ class UIServerMessageParser
 		 */
 		~UIServerMessageParser();
 		/**Method return parsed message
-				 * @return pointer to tmessage structure
+				 * @return pointer to tmessageV1_0 structure
 				 */
-		tmessage* ReturnMessage(){return (_Message);};
+		tmessageV1_0 * ReturnMessage(){return (_Message);};
 
 };
 

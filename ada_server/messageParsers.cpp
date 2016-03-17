@@ -11,7 +11,7 @@
 
 using namespace pugi;
 
-tmessage* MessageParser::ReturnMessage()
+tmessageV1_0 * MessageParser::ReturnMessage()
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::ReturnMessage");
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::ReturnMessage");
@@ -111,10 +111,6 @@ void ProtocolV1MessageParser::GetState()
 	{
 		_message->state = DATA;
 	}
-  else if (temp_state.compare("getparameters") == 0)
-  {
-    _message->state = GET_PARAMS;
-  }
 	else
 	{
 		_message->state = UNKNOWN;
@@ -127,12 +123,15 @@ void ProtocolV1MessageParser::GetState()
 void ProtocolV1MessageParser::GetDeviceID()
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetDeviceID");
-	
-	this->_message->device_type = std::stoll(_device.attribute("device_id").as_string(),nullptr,16);   
-	       
-	this->_message->device_euid = std::stoll(_device.attribute("euid").as_string(),nullptr,16);
-  
-  
+	try {
+		this->_message->device_type = std::stoull(_device.attribute("device_id").as_string(), nullptr, 16);
+
+		this->_message->device_euid = std::stoull(_device.attribute("euid").as_string(), nullptr, 16);
+	}
+	catch (std::exception const &e)
+	{
+		this->_log->WriteMessage(ERR,"Device id not parsable!");
+	}
 	in_addr_t temp = htonl (_message->device_euid);
 	this->_log->WriteMessage(MSG,"Device id :" + std::to_string(this->_message->device_euid));
 	struct sockaddr_in antelope;
@@ -192,24 +191,32 @@ void ProtocolV1MessageParser::GetValuesCount()
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetValuesCount");
 }
 
-std::string ProtocolV1MessageParser::CreateAnswer(int value)
+std::string ProtocolV1MessageParser::CreateAnswer()
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::CreateAnswer");
 	xml_document *resp = new xml_document();
 	xml_node server_adapter = resp->append_child("server_adapter");
 	//server_adapter->set_name("server_adapter");
-	server_adapter.append_attribute("protocol_version");
-	server_adapter.append_attribute("state");
-	server_adapter.append_attribute("euid");
-	server_adapter.append_attribute("time");
-	std::stringstream s;
-	s.precision(2);
-	s << _message->cp_version;
-	server_adapter.attribute("protocol_version") = s.str().c_str();
-	server_adapter.attribute("state") = "update";
-  
-	server_adapter.attribute("euid") = int_to_hex(_message->device_euid).c_str();
-	server_adapter.attribute("time") = std::to_string(value).c_str();
+	server_adapter.append_attribute("protocol_version")= std::to_string(_message->cp_version).c_str();
+	if (this->_message->state==DATA)
+	{
+		server_adapter.append_attribute("state") = "update";
+		server_adapter.append_attribute("euid") = int_to_hex(_message->device_euid).c_str();
+		server_adapter.append_attribute("time") = std::to_string(this->_message->refresh).c_str();
+	}
+	else
+	{
+		server_adapter.append_attribute("state") = "register";
+		server_adapter.append_attribute("response");
+		if(_message->registerResult)
+		{
+			server_adapter.attribute("response") = "true";
+		}
+		else
+		{
+			server_adapter.attribute("response") = "false";
+		}
+	}
 	tstringXMLwriter writer;
 	resp->print(writer);
 	delete(resp);
@@ -249,7 +256,7 @@ ProtocolV1MessageParser::~ProtocolV1MessageParser()
 ProtocolV1MessageParser::ProtocolV1MessageParser(Loger *L)
 {
 	L->WriteMessage(TRACE,"Entering " + this->_Name + "::Constructor");
-	this->_message = new tmessage();
+	this->_message = new tmessageV1_0();
 	this->_log = L;
 	this->version = "1.0";
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Constructor");
@@ -379,27 +386,27 @@ bool UIServerMessageParser::GetState()
 	if(reqType.compare("delete")==0)
 	{
 		this->_Message->state=DELETE;
-		this->_log->WriteMessage(MSG,"Request type is DELETE");
+		this->_log->WriteMessage(DEBUG,"Request type is DELETE");
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetState");
 		return (true);
 	}
 	if(reqType.compare("switch")==0)
 	{
 		this->_Message->state=SWITCH;
-		this->_log->WriteMessage(MSG,"Request type is SWITCH");
+		this->_log->WriteMessage(DEBUG,"Request type is SWITCH");
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetState");
 		return (true);
 	}
 	if (reqType.compare("listen")==0)
 	{
-		this->_log->WriteMessage(MSG,"Request type is LISTEN");
+		this->_log->WriteMessage(DEBUG,"Request type is LISTEN");
 		this->_Message->state=LISTEN;
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetState");
 		return (true);
 	}
   if (reqType.compare("search")==0)
 	{
-		this->_log->WriteMessage(MSG,"Request type is SEARCH");
+		this->_log->WriteMessage(DEBUG,"Request type is SEARCH");
 		this->_Message->state=SEARCH;
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetState");
 		return (true);
@@ -458,7 +465,7 @@ bool UIServerMessageParser::ParseMessage(std::string MSG)
 
 UIServerMessageParser::UIServerMessageParser(Loger *l)
 {
-	this->_Message = new tmessage();
+	this->_Message = new tmessageV1_0();
 	this->_log = l;
 }
 
@@ -467,4 +474,151 @@ UIServerMessageParser::~UIServerMessageParser()
 	delete this->_Message->values;
 	this->_Message->values =NULL;
 	delete this->_Message;
+}
+
+void ProtocolV1_1_MessageParser::GetState()
+{
+    this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetState");
+    std::string temp_state = _adapter->attribute("state").as_string();
+
+    if (temp_state.compare("register")==0)
+    {
+        _message->state = REGISTER;
+    }
+    else if (temp_state.compare("data")==0)
+    {
+        _message->state = DATA;
+    }
+    else if (temp_state.compare("getparameter")==0)
+    {
+        _message->state = GET_PARAMS;
+    }
+    else
+    {
+        _message->state = UNKNOWN;
+    }
+    this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetState");
+}
+
+bool ProtocolV1_1_MessageParser::ParseMessage(pugi::xml_node *adapter, float FM, float CP)
+{
+	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::parseMessage");
+	this->_adapter = adapter;
+	this->GetState();
+	switch (this->_message->state)
+	{
+		case DATA:
+		case REGISTER:
+			this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::parseMessage");
+			return ProtocolV1MessageParser::ParseMessage(adapter, FM, CP);
+		case GET_PARAMS:
+			this->GetID();
+			this->_message->fm_version = FM;
+			this->_message->cp_version = CP;
+			this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::parseMessage");
+			return this->GetParams();
+		default:
+			return false;
+	}
+}
+
+ProtocolV1_1_MessageParser::ProtocolV1_1_MessageParser(Loger *L)
+{
+		L->WriteMessage(TRACE,"Entering " + this->_Name + "::Constructor");
+		this->version="1.1";
+		this->_message = new tmessageV1_1;
+		this->_log = L;
+		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Constructor");
+};
+
+bool ProtocolV1_1_MessageParser::GetParams()
+{
+	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetParams");
+	xml_node parameter = this->_adapter->first_child();
+	while (parameter!=NULL)
+	{
+		tparams *param = new tparams();
+		param->id = parameter.attribute("id").as_int();
+		switch (param->id)
+		{
+			case 1001:
+			case 1002:
+				param->euid = parameter.attribute("euid").as_ullong();
+				break;
+			case 1000:
+			case 1003:
+				break;
+			default:
+				delete param;
+				this->_log->WriteMessage(WARN,"Unknown parameter id in gatparams message id " + std::to_string(param->id));
+		}
+		parameter = parameter.next_sibling();
+		((tmessageV1_1*)_message)->params->push_back(param);
+	}
+	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetParams");
+	return true;
+}
+
+std::string ProtocolV1_1_MessageParser::CreateAnswer()
+{
+	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::CreateAnswer");
+	if (this->_message->state != GET_PARAMS)
+	{
+		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::CreateAnswer");
+		return ProtocolV1MessageParser::CreateAnswer();
+	}
+	else
+	{
+		xml_document *resp = new xml_document();
+		xml_node server_adapter = resp->append_child("server_adapter");
+		//server_adapter->set_name("server_adapter");
+		server_adapter.append_attribute("protocol_version")= std::to_string(_message->cp_version).c_str();
+		server_adapter.append_attribute("state") = "parameters";
+		std::vector<tparams*> *parameters = ((tmessageV1_1*)(this->_message))->params;
+		if (parameters != nullptr)
+		for (size_t i = 0; i < parameters->size();i++)
+		{
+			xml_node parameterNode = server_adapter.append_child("parameter");
+			parameterNode.append_attribute("id") = std::to_string(parameters->at(i)->id).c_str();
+			switch (parameters->at(i)->id)
+			{
+				case 1001:
+					break;
+				case 1002:
+					break;
+				case 1000:
+					break;
+				case 1003:
+					if (parameters->at(i)->deviceList != nullptr)
+					{
+						for (size_t j = 0; j < parameters->at(i)->deviceList->size(); j++)
+							parameterNode.append_child("value").text().set(
+									int_to_hex(parameters->at(i)->deviceList->at(j)).c_str());
+					}
+					break;
+				default:
+					parameterNode.append_child("value").text().set("Not supported");
+					break;
+			}
+
+		}
+		tstringXMLwriter writer;
+		resp->print(writer);
+		delete(resp);
+		std::string tmp = writer.result;
+		if (tmp[tmp.length()-1]=='\n')
+		{
+			tmp.erase(tmp.length()-1,1);
+		}
+		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::CreateAnswer");
+		return ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + tmp);
+	}
+}
+
+ProtocolV1_1_MessageParser::~ProtocolV1_1_MessageParser()
+{
+	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::~ProtocolV1_1_MessageParser");
+	delete (messageV1_1*)(this->_message);
+	this->_message= nullptr;
+	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::~ProtocolV1_1_MessageParser");
 }

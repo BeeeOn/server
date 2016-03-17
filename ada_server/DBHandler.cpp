@@ -11,7 +11,7 @@
 
 using namespace soci;
 
-void DBHandler::LogValue (tmessage *message)
+void DBHandler::LogValue (tmessageV1_0 *message)
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::LogValue");
 	for (int i = 0; i<message->values_count;i++) //for all values create text representation and call SQL querry
@@ -79,7 +79,7 @@ bool DBHandler::IsInDB(std::string tableName, std::string columnName, std::strin
 	}
 }
 
-bool DBHandler::InsertGateway(tmessage *message)
+bool DBHandler::InsertGateway(tmessageV1_0 *message)
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::InsertGateway");
 	try
@@ -102,7 +102,7 @@ bool DBHandler::InsertGateway(tmessage *message)
 	}
 }
 
-bool DBHandler::UpdateGateway(tmessage *message)
+bool DBHandler::UpdateGateway(tmessageV1_0 *message)
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::UpdateGateway");
 	try
@@ -135,7 +135,7 @@ bool DBHandler::UpdateGateway(tmessage *message)
 	}
 }
 
-bool DBHandler::InsertSenAct(tmessage *message)
+bool DBHandler::InsertSenAct(tmessageV1_0 *message)
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::InsertSenAct");
 	try
@@ -191,7 +191,7 @@ bool DBHandler::InsertSenAct(tmessage *message)
 	} */
 }
 
-bool DBHandler::UpdateSenAct(tmessage *message)
+bool DBHandler::UpdateSenAct(tmessageV1_0 *message)
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::UpdateSenAct");
 	try
@@ -251,7 +251,7 @@ bool DBHandler::UpdateSenAct(tmessage *message)
       }
       else if(moduleStatus == "unavailable")
       {
-  			statement stl = (_sql->prepare <<SQLQueries::UpdateModuleWithStatus,
+  			statement stl = (_sql->prepare<<SQLQueries::UpdateModuleWithStatus,
   								use(message->device_euid,"DEVICE_EUID"),
   								use(moduleStatus, "STATUS"),
   								use(message->values[i].module_id,"MODULE_ID"),
@@ -279,13 +279,13 @@ bool DBHandler::UpdateSenAct(tmessage *message)
 	}
 }
 
-int DBHandler::GetWakeUpTime(std::string record, long long int gateway_id)
+unsigned int DBHandler::GetWakeUpTime(std::string record, long long int gateway_id)
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetWakeUpTime");
 	try
 	{
 		indicator ind;
-		int retRec;
+		unsigned int retRec;
 		*_sql << SQLQueries::SelectTime,
 				into(retRec, ind),
 				use(record),
@@ -402,5 +402,32 @@ time_t DBHandler::GetLastTimestamp(long long unsigned int dev_euid)
 		this->_log->WriteMessage(ERR,ErrorMessage );
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetLastTimestamp");
 		return (retVal);
+	}
+}
+
+bool DBHandler::GetDevices(tmessageV1_1 *message)
+{
+	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetDevices");
+	size_t count = 0;
+	try
+	{
+		*_sql << SQLQueries::SelectAllDevicesCount,
+				use(message->adapterINTid, "GATEWAY_ID"),
+				into(count);
+		message->params->at(message->processedParams)->deviceList = new std::vector<unsigned long long>(count);
+		*_sql << SQLQueries::SelectAllDevices,
+				use(message->adapterINTid, "GATEWAY_ID"),
+				into(*(message->params->at(message->processedParams)->deviceList));
+		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetDevices");
+		return (true);
+	}
+	catch(std::exception const &e)
+	{
+		this->_log->WriteMessage(ERR, "Error in query : " + _sql->get_last_query() );
+		std::string ErrorMessage = "Database Error : ";
+		ErrorMessage.append (e.what());
+		this->_log->WriteMessage(ERR,ErrorMessage );
+		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetDevices");
+		return (false);
 	}
 }

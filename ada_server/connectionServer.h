@@ -47,7 +47,7 @@ class ConnectionServer
 		int com_s;	/**< communication socket*/
 		DBHandler *database;    /**< reference to DBHandler object*/
 		MessageParser *MP;	/**< reference to MessageParser object*/
-		tmessage *parsedMessage; /**< reference to tmessage object for parsed meesage*/
+		tmessageV1_0 *parsedMessage; /**< reference to tmessageV1_0 object for parsed meesage*/
 		std::string response;		/**< text of response*/
 		 /**
 		   * Obtainng wakeup time

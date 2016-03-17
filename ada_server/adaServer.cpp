@@ -34,6 +34,31 @@ Loger *ReceiverLog;
 bool sigint =false;
 SSLContainer *sslCont;
 
+static void init_locks(void)
+{
+	int i;
+
+	lockarray=(pthread_mutex_t *)OPENSSL_malloc(CRYPTO_num_locks() *
+												sizeof(pthread_mutex_t));
+	for (i=0; i<CRYPTO_num_locks(); i++) {
+		pthread_mutex_init(&(lockarray[i]),NULL);
+	}
+
+	CRYPTO_set_id_callback((unsigned long (*)())thread_id);
+	CRYPTO_set_locking_callback((void (*)(int, int, const char*, int))lock_callback);
+}
+
+static void kill_locks(void)
+{
+	int i;
+
+	CRYPTO_set_locking_callback(NULL);
+	for (i=0; i<CRYPTO_num_locks(); i++)
+		pthread_mutex_destroy(&(lockarray[i]));
+
+	OPENSSL_free(lockarray);
+}
+
 void sig_handler(int signo) //on signals to turn of clear 
 {
 	if ((signo == SIGINT)||(signo == SIGTERM))
@@ -51,6 +76,7 @@ void sig_handler(int signo) //on signals to turn of clear
 		delete (SenderLog);
 		delete (ReceiverLog);
 		CRYPTO_cleanup_all_ex_data();
+		kill_locks();
 		ERR_remove_state(0);
 		ERR_free_strings();
 		EVP_cleanup();
@@ -166,6 +192,9 @@ int main(int argc, char **argv)  //main body of application
 		stopSCR<<"kill -SIGINT "<<proces_id<<std::endl;
 		stopSCR.close();
 	}
+	SSL_load_error_strings();
+	SSL_library_init();
+	OpenSSL_add_all_algorithms();
 	SenderLog = new Loger();
 	ReceiverLog = new Loger();
 	SenderLog->SetLogger(c->SenderVerbosity(),c->SenderMaxFiles(),c->SenderMaxLines(),c->SenderFileNaming(),c->SenderPath(),"SENDER",c->SenderToSTD());
@@ -188,6 +217,7 @@ int main(int argc, char **argv)  //main body of application
 	}
 	sslCont = new SSLContainer(ReceiverLog);
 	wpool = WorkerPool::CreatePool(ReceiverLog,SenderLog,connStr,c,sslCont);
+	init_locks();
 	if ((wpool==NULL)||(wpool->Limit()<=0))
 	{
 		SenderLog->WriteMessage(FATAL," [Main Process] 0 connections to DB unable to serve, terminating!");
@@ -224,7 +254,12 @@ int main(int argc, char **argv)  //main body of application
 		delete (wpool);
 		delete (sender);
 		delete (receiver);
-		//SenderThread->join();
+		CRYPTO_cleanup_all_ex_data();
+		kill_locks();
+		ERR_remove_state(0);
+		ERR_free_strings();
+		EVP_cleanup();
+		sem_destroy(&connectionSem);
 		delete (SenderThread);
 		delete (SenderLog);
 		delete (ReceiverLog);

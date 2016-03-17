@@ -24,3 +24,5 @@ clean:
 	
 cleanlogs:
 		rm *.log
+
+rebuild: clean all

@@ -124,6 +124,7 @@ void WorkerPool::ReturnWorker(Worker *worker, Loger *l)
 	this->semaphore.lock();
 	this->workers[this->freeCount] = worker; //give worker back to array
 	this->freeCount++;
+	l->WriteMessage(DEBUG,"Free connections on return: " + std::to_string(this->freeCount));
 	this->semaphore.unlock();
 	sem_post((this->Sem));
 	l->WriteMessage(TRACE,"Exiting " + this->_Name + "::ReturnConnection");

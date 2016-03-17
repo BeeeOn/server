@@ -53,5 +53,12 @@ const string SelectCount = "select count(*) from :tableName where :columnName = 
 
 /** Q to select timestamp of last value for device uses (:DEVICE_EUID)*/
 const string SelectTimestamp = "select measured_at from device where (device_euid = :DEVICE_EUID);";
+
+/** Q to select all devices for adapter uses (:GATEWAY_ID)*/
+const string SelectAllDevices = "select device_euid from device where (gateway_id = :GATEWAY_ID);";
+
+/** Q to select all devices for adapter uses (:GATEWAY_ID)*/
+const string SelectAllDevicesCount = "select count(*) from device where (gateway_id = :GATEWAY_ID);";
 }
+
 #endif /* SQLCOMMANDS_H_ */

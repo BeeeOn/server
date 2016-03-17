@@ -24,7 +24,9 @@ AdaServerSender::AdaServerSender(sem_t *Sem, WorkerPool *workers, Loger *L,Confi
 
 AdaServerSender::~AdaServerSender()
 {
+	_log->WriteMessage(TRACE,"Entering " + this->_Name + "Destructor");
 	delete this->_L;
+	_log->WriteMessage(TRACE,"Exiting " + this->_Name + "Destructor");
 }
 
 void AdaServerSender::Start()

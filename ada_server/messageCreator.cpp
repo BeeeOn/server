@@ -96,29 +96,32 @@ std::string MessageCreator::CreateSearchMessage(std::string AdapterID, std::stri
 
 };
 
-std::string MessageCreator::CreateSwitchMessage(tmessage *Message)
+std::string MessageCreator::CreateSwitchMessage(tmessageV1_0 *Message)
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::CreateSwitchMessage");
 	xml_document *resp = new xml_document();
 	xml_node server_adapter = resp->append_child("server_adapter");
-	struct sockaddr_in antelope;
+	/*struct sockaddr_in antelope;
 	inet_aton(Message->DeviceIDstr.c_str(), &antelope.sin_addr);
 	in_addr_t DeviceIP = antelope.sin_addr.s_addr;
-	unsigned int DeviceIPint = ntohl (DeviceIP);
+	unsigned int DeviceIPint = ntohl (DeviceIP);*/
 	server_adapter.append_attribute("protocol_version") = "1.0";
 	server_adapter.append_attribute("state") = "set";
-	server_adapter.append_attribute("euid") = std::to_string(DeviceIPint).c_str();
+    unsigned long long DeviceIPint = std::stoll(Message->DeviceIDstr);
+    this->_log->WriteMessage(DEBUG,"Device euid in swtich message will be:" + int_to_hex(DeviceIPint));
+    server_adapter.append_attribute("euid") = std::to_string(DeviceIPint).c_str();
 	server_adapter.append_attribute("adapter_id") = std::to_string(Message->adapterINTid).c_str();
 
 	for (int i = 0; i < Message->values_count; i++)
 	{
 		xml_node value_node = server_adapter.append_child("value");
-		std::string stringType;
+		/*std::string stringType;
 		std::ostringstream os;
 		os << std::hex << Message->values[i].module_id;
-		stringType = os.str();
-		value_node.append_attribute("module_id") = stringType.c_str();
-		value_node.text().set(Message->values[i].measured_value);
+		stringType = os.str();*/
+		value_node.append_attribute("module_id") = int_to_hex(Message->values[i].module_id).c_str();
+        this->_log->WriteMessage(DEBUG,"Module id in swtich message will be:" + int_to_hex(Message->values[i].module_id));
+        value_node.text().set(Message->values[i].measured_value);
 
 
 		//value_node.append_attribute("type") = stringType.c_str();

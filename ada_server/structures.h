@@ -16,6 +16,8 @@
 #include <netinet/in.h>
 #include <netinet/ip.h>
 #include <exception>
+#include <openssl/crypto.h>
+#include <vector>
 
 #ifndef STRUCTURES_H_
 #define STRUCTURES_H_
@@ -98,8 +100,9 @@ typedef enum reqType
 	SWITCH, /**< switch*/
 	DELETE, /**< delete*/
 	LISTEN, /**< listen*/
-  SEARCH, /**< search*/
-  GET_PARAMS, /**< get parameters*/
+  	SEARCH, /**< search*/
+  	GET_PARAMS, /**< get parameters*/
+	PING, /*< empty get parameters to adapter>*/
 	UNKNOWN /**< unknown*/
 }treqType;
 
@@ -111,7 +114,7 @@ typedef struct value
 {
 	unsigned short int module_id;
 	float measured_value;
-  std::string status;
+  	std::string status;
 	//unsigned short int intType; /**< integer representation of type*/
 	//unsigned short int offset;  /**< offset of value in device*/
 	//tvalueTypes  type; /**< type of value*/
@@ -125,6 +128,26 @@ typedef struct value
 	//	int ival; /**< integer type*/
 	//};
 } tvalue;
+
+typedef struct params
+{
+	int id;
+	unsigned long long int euid;
+	std::string value;
+	std::vector<unsigned long long> *deviceList;
+    params()
+    {
+        id = 0;
+        euid = 0;
+        value = "";
+		deviceList = nullptr;
+    };
+	~params()
+	{
+		if (this->deviceList!= nullptr)
+			delete deviceList;
+	}
+} tparams;
 
 /** @struct xml_string_writer
  *  @brief writes XML structure from memory to std::string
@@ -148,7 +171,7 @@ typedef struct xml_string_writer: pugi::xml_writer
  *  @brief Saving parsed message
  */
 
-typedef struct message
+typedef struct messageV1_0
 {
 	reqType state; /**< request type*/
 	long long int adapterINTid; /**< ID of adapter*/
@@ -158,22 +181,22 @@ typedef struct message
 	int socket; /**< communication socket*/
 	unsigned long long int device_type; /**< ID of device*/ // in protocol from senzor it's device_id, in database it's more fitting device_type
 	unsigned long long int device_euid;
-
+	unsigned int refresh;
 	std::string DeviceIDstr; /**< Device ID string*/
-  std::string DeviceIPstr; /**< Device IP string*/
-	
+  	std::string DeviceIPstr; /**< Device IP string*/
+	bool registerResult;
 	unsigned short int values_count; /**< count of values received*/
 	tvalue* values; /**< pointer to vales array*/
 	tdeviceType devType; /**< device type*/
 	/** Destructor
 	 */
-	~message() {
+	~messageV1_0() {
 		delete [] values;
 		values = NULL;
 	}
 	/** Constructor
 		 */
-	message() {
+	messageV1_0() {
 		this->values = NULL;
 		this->devType = UNDEF;
 		this->DeviceIDstr = "";
@@ -186,19 +209,61 @@ typedef struct message
 		this->timestamp = 0;
 		this->device_type = 0; 
 		this->device_euid = 0;
+		this->refresh = 5;
+		this->registerResult = false;
 	}
-} tmessage;
+} tmessageV1_0;
+
+typedef struct messageV1_1 : public messageV1_0
+{
+	size_t processedParams;
+	messageV1_1() : tmessageV1_0()
+	{
+		processedParams = 0;
+        params = new std::vector<tparams*>();
+	}
+    ~messageV1_1()
+    {
+        for (size_t i=0;i<this->params->size();i++)
+        {
+            delete params->at(i);
+        }
+        delete params;
+    }
+    std::vector<tparams*> *params;
+} tmessageV1_1;
 
 /** @struct testMessage
- *  message type used once for testing inherits from tmessage
+ *  message type used once for testing inherits from tmessageV1_0
  */
 
-typedef struct testMessage : public message
+typedef struct testMessage : public messageV1_0
 {
 	int sensor_port; /**< port of testing sensor*/
 } ttestMessage;
 
 
+static pthread_mutex_t *lockarray;
+
+static void lock_callback(int mode, int type, char *file, int line)
+{
+	(void)file;
+	(void)line;
+	if (mode & CRYPTO_LOCK) {
+		pthread_mutex_lock(&(lockarray[type]));
+	}
+	else {
+		pthread_mutex_unlock(&(lockarray[type]));
+	}
+}
+
+static unsigned long thread_id(void)
+{
+	unsigned long ret;
+
+	ret=(unsigned long)pthread_self();
+	return(ret);
+}
 
 
 #endif /* STRUCTURES_H_ */
