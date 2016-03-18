@@ -179,3 +179,18 @@ MessageCreator::MessageCreator(Loger *l)
 };
 
 
+std::string MessageCreator::CreatePingMessage(tadapter *adapter)
+{
+		this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::CreatePingMessage");
+		xml_document *resp = new xml_document();
+		xml_node server_adapter = resp->append_child("server_adapter");
+		server_adapter.append_attribute("protocol_version") = std::to_string(adapter->protocol_version).c_str();
+		server_adapter.append_attribute("state") = "getparameters";
+		xml_node parameter = server_adapter.append_child("parameter");
+		parameter.append_attribute("id") = "2000";
+		tstringXMLwriter writer;
+		resp->print(writer);
+		delete(resp);
+		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::CreatePingMessage");
+		return ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + writer.result);
+}

@@ -12,49 +12,59 @@
 SSLContainer::SSLContainer(Loger *l)
 {
 	l->WriteMessage(TRACE,"Entering " + this->_Name + "::Constructor");
-	this->size=0;
 	this->_log=l;
+	this->container = new std::map <unsigned long long int, tadapter*>();
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Constructor");
 }
 
 SSLContainer::~SSLContainer()
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::Destructor");
-	for (int i=0;i<size;i++) //free all SSLs
+	for (std::map<unsigned long long int, tadapter *>::iterator it = this->container->begin(); it != this->container->end(); ++it)
 	{
-		close(SSL_get_fd(SSLs[i]));
-		SSL_shutdown(SSLs[i]);
-		SSL_free(SSLs[i]);
+		close(SSL_get_fd(it->second->connection));
+		SSL_shutdown(it->second->connection);
+		SSL_free(it->second->connection);
+		it->second->connection = nullptr;
+		delete it->second;
 	}
-	size = 0;
+	delete container;
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Destructor");
 }
 
-void SSLContainer::InsertSSL(long long adapter,SSL *ssl)
+void SSLContainer::InsertSSL(unsigned long long adapterID,SSL *ssl,float cp)
 {
-	for (int i=0;i<size;i++) //go thorugh all SSLs
+	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::InsertSSL");
+	tadapter *adapter;
+	try
 	{
-		if (adapters[i]==adapter) //if you find it
-		{
-			close(SSL_get_fd(SSLs[i])); //delete old stuff
-			SSL_shutdown(SSLs[i]);
-			SSL_free(SSLs[i]);
-			SSLs[i] = ssl; //replace it with new one
-			return;
-		}
+		adapter = container->at(adapterID);
+		this->_log->WriteMessage(DEBUG,"Adapter found rewriting data");
+		close(SSL_get_fd(adapter->connection));
+		delete adapter->connection;
+		adapter->connection = ssl;
+		adapter->protocol_version = cp;
 	}
-	adapters[size]=adapter;
-	SSLs[size]=ssl;
-	size++;
-	this->_log->WriteMessage(INFO,"saved connections cout: " +std::to_string(size));
+	catch (const std::exception &e)
+	{
+		this->_log->WriteMessage(DEBUG,"Inserting new adapter");
+		adapter = new tadapter(ssl,cp);
+		container->insert(std::pair<unsigned long long int,tadapter*>(adapterID,adapter));
+	}
+	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::InsertSSL");
 }
 
-SSL* SSLContainer::GetSSL(long long adapter)
+tadapter* SSLContainer::GetSSL(unsigned long long adapter)
 {
-	for(int i=0; i<size;i++) //go through all ssls
+	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetSSL");
+	try
 	{
-		if (adapters[i]==adapter) //if there is return pointer to it
-			return(SSLs[i]);
+		return container->at(adapter);
 	}
-	return (NULL); //if there isn't return NULL
+	catch (const std::exception &e)
+	{
+		this->_log->WriteMessage(WARN,"Adapter not found");
+	}
+	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetSSL");
+	return nullptr;
 }

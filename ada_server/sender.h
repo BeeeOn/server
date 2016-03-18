@@ -40,10 +40,11 @@ class Sender
 		 * @param Message std::string text of message
 		 * @param s pointer to SSL connection to use for sending
 				 */
-		bool Send(std::string Message,SSL *s);
+		int Send(std::string Message,SSL *s);
 		/**Constructor
 		 * @param l Loger pointer to loger used for logging
 				 */
+		int Receveive (SSL *s);
 		Sender(Loger *l);
 		/**Destructor
 				 */

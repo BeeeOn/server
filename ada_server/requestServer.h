@@ -72,6 +72,7 @@ class RequestServer
 		/**Descrutor
 				 */
 		~RequestServer();
+		void SendResponse(int code);
 };
 
 

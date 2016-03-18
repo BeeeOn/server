@@ -10,7 +10,7 @@
 #include "sender.h"
 
 
-bool Sender::Send(std::string Message,SSL *s) //pripojenie na server a komunikacia s nim
+int Sender::Send(std::string Message,SSL *s) //pripojenie na server a komunikacia s nim
 {
 	int Err;
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::Send");
@@ -21,7 +21,7 @@ bool Sender::Send(std::string Message,SSL *s) //pripojenie na server a komunikac
 	{
 		this->_log->WriteMessage(ERR,"Unable to send message socket is closed");
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Send");
-		return (false);
+		return (2);
 	}
 	getsockopt(soc, SOL_SOCKET, SO_ERROR, &error_code, &error_code_size);  //check socket for errors before writing to it
 	if (error_code!=0)
@@ -29,7 +29,7 @@ bool Sender::Send(std::string Message,SSL *s) //pripojenie na server a komunikac
 		this->_log->WriteMessage(ERR,"Unable to send message socket is closed");
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Send");
 		SSL_set_fd(s,-1);
-		return (false);
+		return (2);
 	}
 	
 	// It was decided with adapter team, that at the end of each message will be \0
@@ -70,11 +70,10 @@ bool Sender::Send(std::string Message,SSL *s) //pripojenie na server a komunikac
 			 break;
 		 }
 		//close(com_s);
-		CRYPTO_cleanup_all_ex_data();
 		ERR_free_strings();
 		ERR_remove_state(0);
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Send");
-		return (false);
+		return (3);
 	}
 	else
 	{
@@ -84,7 +83,7 @@ bool Sender::Send(std::string Message,SSL *s) //pripojenie na server a komunikac
 	ERR_free_strings();
 	ERR_remove_state(0);
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::Send");
-	return (true);
+	return (0);
 }
 
 Sender::Sender(Loger *l)
@@ -98,4 +97,44 @@ Sender::Sender(Loger *l)
 Sender::~Sender()
 {
 
+}
+
+int Sender::Receveive(SSL *s)
+{
+	unsigned long ssl_err;
+	ssize_t DataSize=0;
+	std::string data;
+	data.clear();
+	char buffer[1024];
+	char errorBuffer[1000];
+	struct timeval interval = {5,  1000};
+	int socket = SSL_get_fd(s);
+	setsockopt(socket , SOL_SOCKET, SO_RCVTIMEO, (char *)&interval, sizeof(struct timeval));
+	while(1)
+	{
+		if((DataSize = SSL_read(s, buffer, 1024))>0) //read message
+		{
+			data.append(buffer,DataSize);
+			//_log->WriteMessage(MSG,"Message :" + data);
+			if ((data.find("</adapter_server>")!=std::string::npos)||((data[data.size()-2]=='/')&&(data[data.size()-2]=='>')))
+			{
+				break;
+			}
+			if(!SSL_pending(s)) //if there is nothing to read break;
+			{
+				break;
+			}
+		}
+		else
+		{
+			ssl_err = ERR_get_error();
+			std::string MSGbase = "SSL read error : ";
+			ERR_error_string_n(ssl_err,errorBuffer,1000);
+			_log->WriteMessage(ERR,MSGbase + errorBuffer);
+			ERR_free_strings();
+			ERR_remove_state(0);
+			return 4;
+		}
+	}
+	return 0;
 }

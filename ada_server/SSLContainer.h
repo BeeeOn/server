@@ -10,11 +10,13 @@
 #ifndef SSLCONTAINER_H_
 #define SSLCONTAINER_H_
 #include "loger.h"
+#include "structures.h"
 #include <string.h>
 #include <openssl/bio.h>
 #include <openssl/ssl.h>
 #include <openssl/err.h>
 #include <unistd.h>
+#include <map>
 
 /** @Class SSLContainer
  *  @brief Stores SSL connections with adapters
@@ -28,6 +30,7 @@ class SSLContainer
 		int size; /**< size of structure*/
 		const std::string _Name="SSLContainer"; /**< Class name*/
 		Loger *_log; /**< logger*/
+		std::map<unsigned long long int, tadapter*> *container;
 	public:
 		/**Constructor
 		 * @param l Loger used to log messages */
@@ -39,11 +42,11 @@ class SSLContainer
 		 * @param adapter ID
 		 * @ ssl connection pointer
 				 */
-		void InsertSSL(long long adapter,SSL *ssl);
+		void InsertSSL(unsigned long long adapterID,SSL *ssl,float cp);
 		/** Method to return SSL connection
 		 * @param adapter ID
 				 */
-		SSL* GetSSL(long long adapter);
+		tadapter* GetSSL(unsigned long long adapter);
 };
 
 

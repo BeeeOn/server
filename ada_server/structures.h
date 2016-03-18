@@ -243,27 +243,15 @@ typedef struct testMessage : public messageV1_0
 } ttestMessage;
 
 
-static pthread_mutex_t *lockarray;
-
-static void lock_callback(int mode, int type, char *file, int line)
-{
-	(void)file;
-	(void)line;
-	if (mode & CRYPTO_LOCK) {
-		pthread_mutex_lock(&(lockarray[type]));
+typedef struct adapter {
+	SSL* connection;
+	float protocol_version;
+	adapter(SSL *conn,float cp)
+	{
+		this->connection=conn;
+		protocol_version = cp;
 	}
-	else {
-		pthread_mutex_unlock(&(lockarray[type]));
-	}
-}
-
-static unsigned long thread_id(void)
-{
-	unsigned long ret;
-
-	ret=(unsigned long)pthread_self();
-	return(ret);
-}
+} tadapter;
 
 
 #endif /* STRUCTURES_H_ */

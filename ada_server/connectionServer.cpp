@@ -87,7 +87,7 @@ void ConnectionServer::HandleConnection (in_addr IP)
 	SSL_set_fd(cSSL, com_s );
 	//SSL_set_verify(cSSL,SSL_VERIFY_PEER|SSL_VERIFY_FAIL_IF_NO_PEER_CERT,NULL);
 	X509 *peer = NULL;
-	int ssl_err = SSL_accept(cSSL); //SSL handshake 
+	long ssl_err = SSL_accept(cSSL); //SSL handshake
 	if(ssl_err <= 0)
 	{
 		ssl_err = ERR_get_error();
@@ -228,7 +228,7 @@ void ConnectionServer::HandleConnection (in_addr IP)
 					this->parsedMessage->registerResult = database->UpdateGateway(this->parsedMessage);
 				}
 
-				this->_sslcont->InsertSSL(parsedMessage->adapterINTid, cSSL);
+				this->_sslcont->InsertSSL(parsedMessage->adapterINTid, cSSL,this->parsedMessage->cp_version);
 			}
 		}
 	}
@@ -403,6 +403,7 @@ int ConnectionServer::GetData()
 		default:
 			break;
 	}
+	return 0;
 }
 
 void ConnectionServer::Cleanup()

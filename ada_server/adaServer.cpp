@@ -10,16 +10,9 @@
 #include "loger.h"
 #include "config.h"
 #include "connectionHandler.h"
-#include "workerPool.h"
 #include "adaServerSender.h"
 #include "adaServerReceiver.h"
-#include "SSLContainer.h"
-#include <exception> 
-#include <semaphore.h>
-#include <iostream> 
 #include <termios.h>
-#include <unistd.h>
-#include <syslog.h>
 
 Config *c;
 
@@ -33,6 +26,29 @@ Loger *SenderLog;
 Loger *ReceiverLog;
 bool sigint =false;
 SSLContainer *sslCont;
+
+
+static pthread_mutex_t *lockarray;
+
+static void lock_callback(int mode, int type, char *file, int line)
+{
+	(void)file;
+	(void)line;
+	if (mode & CRYPTO_LOCK) {
+		pthread_mutex_lock(&(lockarray[type]));
+	}
+	else {
+		pthread_mutex_unlock(&(lockarray[type]));
+	}
+}
+
+static unsigned long thread_id(void)
+{
+	unsigned long ret;
+
+	ret=(unsigned long)pthread_self();
+	return(ret);
+}
 
 static void init_locks(void)
 {
@@ -75,11 +91,11 @@ void sig_handler(int signo) //on signals to turn of clear
 		delete (SenderThread);
 		delete (SenderLog);
 		delete (ReceiverLog);
-		CRYPTO_cleanup_all_ex_data();
 		kill_locks();
 		ERR_remove_state(0);
 		ERR_free_strings();
 		EVP_cleanup();
+		CRYPTO_cleanup_all_ex_data();
 	}
 	exit(EXIT_SUCCESS);
 }

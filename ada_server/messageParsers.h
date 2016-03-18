@@ -224,6 +224,8 @@ class UIServerMessageParser
 				 */
 		tmessageV1_0 * ReturnMessage(){return (_Message);};
 
+		std::string CreateReply(int code);
+
 };
 
 

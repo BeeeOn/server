@@ -17,6 +17,7 @@ bool RequestServer::HandleRequest ()
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::HandleConnection");
 	char buffer[1024];  //set buffer buffer
 	ssize_t DataSize=0;
+	int res = 0;
 	std::string data;
 	data.clear();
 	while (1)
@@ -41,20 +42,27 @@ bool RequestServer::HandleRequest ()
 	}
 	this->_log->WriteMessage(INFO,"Data: " + data);
 	std::string message;
-	std::string stringType;
-	std::ostringstream os;
 	if (!UIp->ParseMessage(data))
 	{
 		return (false);
 	}
 	tmessageV1_0 *m = UIp->ReturnMessage();
+	tadapter *ada = nullptr;
+	if ((ada = this->_sslcont->GetSSL(m->adapterINTid))==NULL)
+	{
+		this->_log->WriteMessage(ERR,"No connection for adapter in container");
+		res = 1;
+		this->SendResponse(res);
+		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::HandleConnection");
+		return (res);
+	}
+
 	switch(m->state)
 	{
 		case DELETE:
 			message = MC->CreateDeleteMessage(m->DeviceIDstr);
 			break;
 		case SWITCH:
-
 			message = this->MC->CreateSwitchMessage(m);
 			break;
 		case LISTEN:
@@ -63,39 +71,37 @@ bool RequestServer::HandleRequest ()
 		case SEARCH:
 			message = MC->CreateSearchMessage(std::to_string(m->adapterINTid), m->DeviceIPstr, m->DeviceIDstr);
 			break;
+		case PING:
+			if (ada->protocol_version<1.1)
+			{
+				res = 5;
+			}
+			else
+			{
+				message = MC->CreatePingMessage(ada);
+			}
+			break;
 		default:
+			close (com_s);
 			return (false);
 	}
-	bool res;
+
 	this->_log->WriteMessage(MSG,"Message: \n" + message);
-	SSL *s = NULL;
-	if ((s = this->_sslcont->GetSSL(m->adapterINTid))==NULL)
+
+	if (res==0)
 	{
-		this->_log->WriteMessage(ERR,"No connection for adapter in container");
-		res = false;
+		res = this->s->Send(message,ada->connection);
 	}
-	else
-	{
-		res = this->s->Send(message,s);
-	}
-	if ((res==true)&&(m->state==DELETE))
+	if ((res==0)&&(m->state==DELETE))
 	{
 		this->_log->WriteMessage(TRACE,"Deleting device ID" + m->DeviceIDstr);
 		this->database->DeleteFacility(m->DeviceIDstr, m->adapterINTid);
 	}
-	std::string Message = "<reply>true</reply>";
-	if (!res)
+	if ((res==0)&&(m->state==PING))
 	{
-		 Message = "<reply>false</reply>";
+		res = s->Receveive(ada->connection);
 	}
-	if ((send(com_s, Message.c_str(), Message.size(), 0))<0)  //se
-	{
-		char errorbuf[200];
-		strerror_r(errno,errorbuf,200);
-		close (com_s);
-		this->_log->WriteMessage(WARN,"Unable to send message to ui_server with code : " + std::to_string(errno) + " : " + errorbuf);
-		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::ReciveConnection");
-	}
+	this->SendResponse(res);
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::HandleConnection");
 	return (res);
 }
@@ -126,4 +132,18 @@ RequestServer::~RequestServer()
 void RequestServer::SetSocket(int Soc)
 {
 	this->com_s = Soc;
+}
+
+void RequestServer::SendResponse(int code)
+{
+	std::string Message = this->UIp->CreateReply(code);
+	this->_log->WriteMessage(MSG,"Message to ui_server: \n" + Message);
+	if ((send(com_s, Message.c_str(), Message.size(), 0))<0)  //se
+	{
+		char errorbuf[200];
+		strerror_r(errno,errorbuf,200);
+		close (com_s);
+		this->_log->WriteMessage(WARN,"Unable to send message to ui_server with code : " + std::to_string(errno) + " : " + errorbuf);
+		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::ReciveConnection");
+	}
 }

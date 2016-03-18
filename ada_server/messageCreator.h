@@ -47,6 +47,7 @@ class MessageCreator
 	std::string CreateSwitchMessage(tmessageV1_0 *Message);
 	/**Constructor
 		 * @param l Loger used for logging	 */
+	std::string CreatePingMessage(tadapter *adapter);
 	MessageCreator(Loger *_l);
 };
 

@@ -274,14 +274,16 @@ bool UIServerMessageParser::GetSubjectID()
 bool UIServerMessageParser::GetAdapterID()
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetAdapterID");
-	if(this->_Message->state==LISTEN || this->_Message->state==SEARCH|| this->_Message->state==GET_PARAMS)
+	switch (this->_Message->state)
 	{
-		this->_Message->adapterINTid = subject.attribute("id").as_llong();
-	}
-	else
-	{
-		this->_Message->adapterINTid = subject.attribute("onAdapter").as_llong();
-	}
+		case DELETE:
+		case SWITCH:
+			this->_Message->adapterINTid = subject.attribute("onAdapter").as_llong();
+			break;
+		default:
+			this->_Message->adapterINTid = subject.attribute("id").as_llong();
+			break;
+ 	}
 	this->_log->WriteMessage(INFO,"Adapter ID : " + std::to_string(_Message->adapterINTid));
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetAdapterID");
 	return (true);
@@ -404,10 +406,17 @@ bool UIServerMessageParser::GetState()
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetState");
 		return (true);
 	}
-  if (reqType.compare("search")==0)
+    if (reqType.compare("search")==0)
 	{
 		this->_log->WriteMessage(DEBUG,"Request type is SEARCH");
 		this->_Message->state=SEARCH;
+		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetState");
+		return (true);
+	}
+	if (reqType.compare("ping")==0)
+	{
+		this->_log->WriteMessage(DEBUG,"Request type is PING");
+		this->_Message->state=PING;
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetState");
 		return (true);
 	}
@@ -453,6 +462,9 @@ bool UIServerMessageParser::ParseMessage(std::string MSG)
 			res=this->GetAdapterID();
       this->_Message->DeviceIDstr = subject.attribute("deviceeuid").as_string();
       this->_Message->DeviceIPstr = subject.attribute("deviceip").as_string();
+			break;
+		case PING:
+			res=this->GetAdapterID();
 			break;
 		default:
 			this->_log->WriteMessage(WARN,"Something was wrong with request MSG!");
@@ -621,4 +633,24 @@ ProtocolV1_1_MessageParser::~ProtocolV1_1_MessageParser()
 	delete (messageV1_1*)(this->_message);
 	this->_message= nullptr;
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::~ProtocolV1_1_MessageParser");
+}
+
+std::string UIServerMessageParser::CreateReply(int code)
+{
+	xml_document *resp = new xml_document();
+	xml_node ada_to_ui = resp->append_child("reply");
+	if (code!=0)
+	{
+		ada_to_ui.text().set("false");
+	}
+	else
+	{
+		ada_to_ui.text().set("true");
+	}
+	ada_to_ui.append_attribute("errorCode") = std::to_string(code).c_str();
+	tstringXMLwriter writer;
+	resp->print(writer);
+	delete(resp);
+	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::CreateAnswer");
+	return ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + writer.result);
 }
