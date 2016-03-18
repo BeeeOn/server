@@ -14,8 +14,8 @@
 #include <stdexcept>
 #include <string>
 
-#include "../../lib/pugixml.hpp"
-#include "../../lib/pugiconfig.hpp"
+#include <pugixml.hpp>
+#include <pugiconfig.hpp>
 
 #include "Task.h"
 
