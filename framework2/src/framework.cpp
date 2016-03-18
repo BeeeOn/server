@@ -111,11 +111,6 @@ int main(int argc, char** argv) {
     std::string clientDelim("</adapter_server>"); // Delimeter of XML from gateway.
     std::string serverDelim("</end>");
    
-    unsigned short gateway_server_port = config_parser.m_gateway_server_port;
-    int gateway_server_threads = config_parser.m_gateway_server_threads;
-    unsigned short user_server_port = config_parser.m_user_server_port;
-    int user_server_threads = config_parser.m_user_server_threads;
-    
     // Initializes and starts server.
     asio::io_service io_service;
    

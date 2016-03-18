@@ -3,7 +3,7 @@
 	<!-- Path to tasks config file. -->
     <tasks_config path="./tasks_config.xml"/>
     <!-- Configuration of server receiving user messages. -->
-    <user_server threads="10" port="8940" />
+    <user_server threads="10" port="11234" />
     <!-- Configuration of server receiving data messages from gateways. -->
-    <gateway_server threads="10" port="7878" />
+    <gateway_server threads="10" port="11235" />
 </config>
