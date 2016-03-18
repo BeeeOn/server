@@ -72,8 +72,8 @@ void ConfigParser::parseConfigFile(char *config_file_path) {
         throw std::runtime_error("Parsing of config file was not successful.");
     }
     else {
-        m_user_server_port = current_node.attribute("threads").as_int();
-        m_user_server_threads = current_node.attribute("port").as_int();
+        m_user_server_port = current_node.attribute("port").as_int();
+        m_user_server_threads = current_node.attribute("threads").as_int();
     }
     
     // Find and parse <gateway_server> tag.
@@ -84,7 +84,7 @@ void ConfigParser::parseConfigFile(char *config_file_path) {
         throw std::runtime_error("Parsing of config file was not successful.");
     }
     else {
-        m_gateway_server_port = current_node.attribute("threads").as_int();
-        m_gateway_server_threads = current_node.attribute("port").as_int();
+        m_gateway_server_port = current_node.attribute("port").as_int();
+        m_gateway_server_threads = current_node.attribute("threads").as_int();
     }
 }

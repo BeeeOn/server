@@ -21,13 +21,13 @@
 #include "TaskLoader.h"
 #include "Server.h"
 
-void stopBAF(const asio::error_code& error, Server *user_server/*, Server *gateway_server*/)
+void stopBAF(const asio::error_code& error, Server *user_server, Server *gateway_server)
 {
   if (!error)
   {
     Calendar::stopCalendar();
     user_server->handleStop();
-    //gateway_server->handleStop();
+    gateway_server->handleStop();
   }
 }
 
@@ -111,9 +111,9 @@ int main(int argc, char** argv) {
     std::string clientDelim("</adapter_server>"); // Delimeter of XML from gateway.
     std::string serverDelim("</end>");
    
-    unsigned short gateway_server_port = 8924;
+    unsigned short gateway_server_port = config_parser.m_gateway_server_port;
     int gateway_server_threads = config_parser.m_gateway_server_threads;
-    unsigned short user_server_port = 8923;
+    unsigned short user_server_port = config_parser.m_user_server_port;
     int user_server_threads = config_parser.m_user_server_threads;
     
     // Initializes and starts server.
@@ -121,13 +121,11 @@ int main(int argc, char** argv) {
    
     std::cout << "START SERVERS" << std::endl;
     
-    /*
-    Server gateway_server(io_service, gateway_server_port, clientDelim, serverDelim, gateway_server_threads, 5);
+    Server gateway_server(io_service, config_parser.m_gateway_server_port, clientDelim, serverDelim, config_parser.m_gateway_server_threads, 5);
     gateway_server.startAccept();
     std::thread gateway_server_thread(&Server::run, &gateway_server);
-    */
     
-    Server user_server(io_service, user_server_port, clientDelim, serverDelim, user_server_threads, 5);
+    Server user_server(io_service, config_parser.m_user_server_port, clientDelim, serverDelim, config_parser.m_user_server_threads, 5);
     user_server.startAccept();
     
     asio::signal_set signals(io_service);
@@ -136,12 +134,12 @@ int main(int argc, char** argv) {
       #if defined(SIGQUIT)
     signals.add(SIGQUIT);
       #endif // defined(SIGQUIT)
-    signals.async_wait(boost::bind(stopBAF, asio::placeholders::error, &user_server/*, &gateway_server*/));
+    signals.async_wait(boost::bind(stopBAF, asio::placeholders::error, &user_server, &gateway_server));
     
     user_server.run();
     
     calendar_thread.join();
-    //gateway_server_thread.join();
+    gateway_server_thread.join();
     
     return 0;
 }
