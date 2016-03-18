@@ -98,8 +98,6 @@ void TaskLoader::processTasksConfigFileAndStoreInfo(std::string tasks_config_fil
         std::cout << "TYPE: " << (int)task_type << std::endl;
         std::cout << "PATH: " << task_path << std::endl;
         
-        
         m_tasks.emplace(task_id, std::make_shared<Task>(task_version, task_name, task_type, task_path));
-        
     }
 }
