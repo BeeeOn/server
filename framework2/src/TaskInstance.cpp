@@ -9,16 +9,15 @@
 
 #include <string>
 
-TaskInstance::TaskInstance(unsigned long user_id, unsigned int users_instance_personal_id)
+TaskInstance::TaskInstance(unsigned long user_id, unsigned int personal_id)
 {
-    // Insert owner information.
-    m_owners.insert({user_id, users_instance_personal_id});
+    // Save owner information to database.
+    
 }
 
-/*
-AlgorithmInstance::AlgorithmInstance(const AlgorithmInstance& orig) {
-}
-*/
 TaskInstance::~TaskInstance() {
+    
+    // Delete instance from database.
+    
 }
 

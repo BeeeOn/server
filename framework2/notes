@@ -1,0 +1,41 @@
+ -I/usr/include/soci -L/usr/local/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -I/usr/pgsql-9.2/include -I../ -L/usr/pgsql-9.2/lib -lpq
+
+-I/usr/local/include/soci        - pro g++ header folder
+-I/usr/include/postgresql/       - pro g++ header folder
+
+-L/usr/local/lib64/              - pro linker library folder
+-L/usr/lib/postgresql/9.3/lib/   - pro linker library folder
+
+- parametry pro linker
+-lsoci_core
+-lsoci_empty
+-lsoci_postgresql
+-ldl
+-lpq
+
+Není možné se přihlásit skrze soci:
+The problem is still your pg_hba.conf file (/etc/postgresql/9.1/main/pg_hba.conf). This line:
+local   all             postgres                                peer
+Should be:
+local   all             postgres                                md5
+
+^ pouze pro uživatele postgres
+
+Pro ostatní uživatele musí být i: 
+local   all             all                                     peer
+Přepsáno na:
+local   all             all                                     md5
+
+Potom restartovat postgresql:
+sudo service postgresql restart
+
+--INSERT INTO users (user_id, signin_count, given_name, family_name, mail, verified) VALUES (6, 0, 'George', 'Smith', 'george.smith@gmail.com', true);
+
+--UPDATE users SET signin_count = 2 WHERE user_id = 6;
+
+SELECT * FROM users;
+
+/usr/pgsql-9.5/bin/psql home7 -c -U george -c "SELECT * FROM USERS"
+george / d3lame.PGS
+
+Moje ID: 9509

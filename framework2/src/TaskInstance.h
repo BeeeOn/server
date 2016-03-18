@@ -15,26 +15,27 @@
 class TaskInstance
 {
 public:
-    TaskInstance(unsigned long user_id, unsigned int users_instance_personal_id);
+    /**
+     * Constuctor of class TaskInstance.
+     * @param user_id ID of a user creating an instance.
+     * @param personal_id ID of instance relative to instances of task already created by user (user can run more instances of one task).
+     */
+    TaskInstance(unsigned long user_id, unsigned int personal_id);
     
+    /**
+     * Destructor of class TaskInstance.
+     */
     ~TaskInstance();
    
-    /*
-     * Pure virtual function used for activating
+    /**
+     * Virtual function used for activating Timed instances (eventualy Combined instances).
      */
-    virtual void activate() = 0;
+    virtual void activate() {};
     
-    
-    //AlgorithmInstance(const AlgorithmInstance& orig);
-    
-    //virtual ~AlgorithmInstance();
-    
-protected:
-    // There can be multiple owners of one instance.
-    // First is user_id from database, second is users personal users_instance_personal_id
-    // (example: user can have a several running instances of one algorithm).
-    // THERE SHOULD BE ROLES FOR INSTANCES (OWNER? VIEWER?).
-    std::map<unsigned long /*user_id*/, unsigned int /*users_instance_personal_id*/> m_owners;
-};
+    /**
+     * Virtual function to activate Trigger instance.
+     */
+    //virtual void activate(message) {};
+ };
 
 #endif /* TASKINSTANCE_H */

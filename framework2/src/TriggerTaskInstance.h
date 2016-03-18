@@ -8,7 +8,9 @@
 #ifndef TRIGGERTASKINSTANCE_H
 #define TRIGGERTASKINSTANCE_H
 
-class TriggerTaskInstance {
+#include "TaskInstance.h"
+class TriggerTaskInstance//:public TaskInstance 
+{
 public:
     TriggerTaskInstance();
     TriggerTaskInstance(const TriggerTaskInstance& orig);

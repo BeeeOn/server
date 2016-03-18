@@ -13,6 +13,7 @@
 #include <thread>
 
 #include <boost/bind.hpp>
+//#include <functional> //std::bind
 #include <asio.hpp>
 #include "u_session.h"
 

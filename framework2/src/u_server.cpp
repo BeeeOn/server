@@ -1,7 +1,8 @@
 /* 
  * File:   u_server.cpp
  * Author: Marek Beno, xbenom01@stud.fit.vutbr.cz
- *
+ *         Martin Novák, xnovak1c@stud.fit.vutbr.cz
+ * 
  * Created on 11. November 2015
  */
 
@@ -29,8 +30,14 @@
 
     for (std::size_t i = 0; i < threadNum_; ++i) 
     {
-      std::shared_ptr<std::thread> thread(new std::thread(
-        boost::bind(&asio::io_service::run, &io_service_)));
+      //std::shared_ptr<std::thread> thread(new std::thread(
+       // boost::bind(&asio::io_service::run, &io_service_)));
+      
+      //std::thread t();
+      
+      
+      std::shared_ptr<std::thread> thread(std::make_shared<std::thread>([&](){ io_service_.run(); }));
+      
       threads.push_back(thread);
     }
 
@@ -42,13 +49,16 @@
 
   void u_server::setSignals()
   {
+      /*
     signals_.add(SIGINT);
     signals_.add(SIGTERM);
       #if defined(SIGQUIT)
     signals_.add(SIGQUIT);
       #endif // defined(SIGQUIT)
     signals_.async_wait(boost::bind(&u_server::handleStop, this));
-  }
+  
+       */
+    }
 
   void u_server::handleAccept(const asio::error_code& error)
   {

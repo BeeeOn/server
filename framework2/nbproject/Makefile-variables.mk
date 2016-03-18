@@ -22,6 +22,14 @@ CND_ARTIFACT_PATH_Release=dist/Release/G++_4.9.3-Linux/framework2
 CND_PACKAGE_DIR_Release=dist/Release/G++_4.9.3-Linux/package
 CND_PACKAGE_NAME_Release=framework2.tar
 CND_PACKAGE_PATH_Release=dist/Release/G++_4.9.3-Linux/package/framework2.tar
+# ant-2 configuration
+CND_PLATFORM_ant-2=GNU-Linux
+CND_ARTIFACT_DIR_ant-2=dist/ant-2/GNU-Linux
+CND_ARTIFACT_NAME_ant-2=framework2
+CND_ARTIFACT_PATH_ant-2=dist/ant-2/GNU-Linux/framework2
+CND_PACKAGE_DIR_ant-2=dist/ant-2/GNU-Linux/package
+CND_PACKAGE_NAME_ant-2=framework2.tar
+CND_PACKAGE_PATH_ant-2=dist/ant-2/GNU-Linux/package/framework2.tar
 #
 # include compiler specific variables
 #

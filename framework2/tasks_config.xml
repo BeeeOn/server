@@ -2,9 +2,9 @@
 <tasks>    
     <task id="1" version="1"> <!-- id and version should always be integer. -->
         <name>RefreshChecker</name>
-        <!-- Task can be of types: timed, trigger, combined. -->
+        <!-- Task must be of types: timed, trigger, combined. -->
         <type>timed</type>
         <!-- Path relative to binary. -->
-        <path>/home/mrmaidx/server/framework2/algorithms/RefreshCheck/dist/Debug/G++_4.9.3-Linux/libRefreshCheck.so</path>
+        <path>./algorithms/RefreshCheck/RefreshCheck.so</path>
     </task>
 </tasks>

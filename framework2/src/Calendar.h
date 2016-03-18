@@ -92,6 +92,12 @@ public:
     
     // Priority queue holding calendar events, those ones with smallest activation time are at top.
     static std::priority_queue<std::shared_ptr<CalendarEvent>, std::vector<std::shared_ptr<CalendarEvent>>, GreaterCalendarEventSharedPtr> m_calendar_events;
+
+    // Indicates if calendar algorithm should run.
+    static bool m_should_run;
+
+    // Stops calendar.
+    static void stopCalendar();
 };
 
 #endif /* CALENDAR_H */

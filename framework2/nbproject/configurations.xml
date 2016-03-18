@@ -4,23 +4,27 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>src/Calendar.h</itemPath>
-      <itemPath>src/CalendarEvent.h</itemPath>
-      <itemPath>src/ConfigMessage.h</itemPath>
-      <itemPath>src/MessageParser.h</itemPath>
-      <itemPath>src/MessageRegister.h</itemPath>
-      <itemPath>src/MessageSorter.h</itemPath>
-      <itemPath>src/ModuleData.h</itemPath>
+      <logicalFolder name="f1" displayName="Timed" projectFiles="true">
+        <itemPath>src/Calendar.h</itemPath>
+        <itemPath>src/CalendarEvent.h</itemPath>
+        <itemPath>src/TimedTaskInstance.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f2" displayName="Trigger" projectFiles="true">
+        <itemPath>src/ConfigMessage.h</itemPath>
+        <itemPath>src/MessageParser.h</itemPath>
+        <itemPath>src/MessageRegister.h</itemPath>
+        <itemPath>src/ModuleData.h</itemPath>
+        <itemPath>src/TriggerTaskInstance.h</itemPath>
+      </logicalFolder>
+      <itemPath>src/ConfigParser.h</itemPath>
       <itemPath>src/Server.h</itemPath>
       <itemPath>src/ServerSession.h</itemPath>
       <itemPath>src/Task.h</itemPath>
       <itemPath>src/TaskInstance.h</itemPath>
       <itemPath>src/TaskLoader.h</itemPath>
       <itemPath>src/TaskManager.h</itemPath>
-      <itemPath>src/TimedTaskInstance.h</itemPath>
-      <itemPath>src/TriggerTaskInstance.h</itemPath>
-      <itemPath>../lib/pugiconfig.hpp</itemPath>
-      <itemPath>../lib/pugixml.hpp</itemPath>
+      <itemPath>src/pugiconfig.hpp</itemPath>
+      <itemPath>src/pugixml.hpp</itemPath>
       <itemPath>src/u_server.h</itemPath>
       <itemPath>src/u_session.h</itemPath>
     </logicalFolder>
@@ -31,23 +35,27 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>src/Calendar.cpp</itemPath>
-      <itemPath>src/CalendarEvent.cpp</itemPath>
-      <itemPath>src/ConfigMessage.cpp</itemPath>
-      <itemPath>src/MessageParser.cpp</itemPath>
-      <itemPath>src/MessageRegister.cpp</itemPath>
-      <itemPath>src/MessageSorter.cpp</itemPath>
-      <itemPath>src/ModuleData.cpp</itemPath>
+      <logicalFolder name="f1" displayName="Timed" projectFiles="true">
+        <itemPath>src/Calendar.cpp</itemPath>
+        <itemPath>src/CalendarEvent.cpp</itemPath>
+        <itemPath>src/TimedTaskInstance.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f2" displayName="Trigger" projectFiles="true">
+        <itemPath>src/ConfigMessage.cpp</itemPath>
+        <itemPath>src/MessageParser.cpp</itemPath>
+        <itemPath>src/MessageRegister.cpp</itemPath>
+        <itemPath>src/ModuleData.cpp</itemPath>
+        <itemPath>src/TriggerTaskInstance.cpp</itemPath>
+      </logicalFolder>
+      <itemPath>src/ConfigParser.cpp</itemPath>
       <itemPath>src/Server.cpp</itemPath>
       <itemPath>src/ServerSession.cpp</itemPath>
       <itemPath>src/Task.cpp</itemPath>
       <itemPath>src/TaskInstance.cpp</itemPath>
       <itemPath>src/TaskLoader.cpp</itemPath>
       <itemPath>src/TaskManager.cpp</itemPath>
-      <itemPath>src/TimedTaskInstance.cpp</itemPath>
-      <itemPath>src/TriggerTaskInstance.cpp</itemPath>
       <itemPath>src/framework.cpp</itemPath>
-      <itemPath>../lib/pugixml.cpp</itemPath>
+      <itemPath>src/pugixml.cpp</itemPath>
       <itemPath>src/u_server.cpp</itemPath>
       <itemPath>src/u_session.cpp</itemPath>
     </logicalFolder>
@@ -75,18 +83,20 @@
         <ccTool>
           <standard>8</standard>
           <commandlineTool>g++</commandlineTool>
+          <incDir>
+            <pElem>/usr/local/include/soci</pElem>
+            <pElem>/usr/include/postgresql</pElem>
+          </incDir>
           <commandLine>-pthread -rdynamic</commandLine>
         </ccTool>
         <linkerTool>
-          <commandLine>-ldl</commandLine>
+          <linkerAddLib>
+            <pElem>/usr/local/lib64</pElem>
+            <pElem>/usr/lib/postgresql/9.3/lib</pElem>
+          </linkerAddLib>
+          <commandLine>-lsoci_core -lsoci_empty -lsoci_postgresql -ldl -lpq</commandLine>
         </linkerTool>
       </compileType>
-      <item path="../lib/pugiconfig.hpp" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../lib/pugixml.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../lib/pugixml.hpp" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="src/Calendar.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Calendar.h" ex="false" tool="3" flavor2="0">
@@ -99,6 +109,10 @@
       </item>
       <item path="src/ConfigMessage.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="src/ConfigParser.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/ConfigParser.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="src/MessageParser.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/MessageParser.h" ex="false" tool="3" flavor2="0">
@@ -106,10 +120,6 @@
       <item path="src/MessageRegister.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/MessageRegister.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="src/MessageSorter.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/MessageSorter.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/ModuleData.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -148,6 +158,12 @@
       <item path="src/TriggerTaskInstance.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/framework.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/pugiconfig.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/pugixml.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/pugixml.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/u_server.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -178,12 +194,6 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
-      <item path="../lib/pugiconfig.hpp" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../lib/pugixml.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="../lib/pugixml.hpp" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="src/Calendar.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Calendar.h" ex="false" tool="3" flavor2="0">
@@ -196,6 +206,10 @@
       </item>
       <item path="src/ConfigMessage.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="src/ConfigParser.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/ConfigParser.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="src/MessageParser.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/MessageParser.h" ex="false" tool="3" flavor2="0">
@@ -203,10 +217,6 @@
       <item path="src/MessageRegister.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/MessageRegister.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="src/MessageSorter.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/MessageSorter.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/ModuleData.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -245,6 +255,97 @@
       <item path="src/TriggerTaskInstance.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/framework.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/pugiconfig.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/pugixml.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/pugixml.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/u_server.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/u_server.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/u_session.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/u_session.h" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+    <conf name="ant-2" type="1">
+      <toolsSet>
+        <compilerSet>GNU|GNU</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+      </compileType>
+      <item path="src/Calendar.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Calendar.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/CalendarEvent.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/CalendarEvent.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/ConfigMessage.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/ConfigMessage.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/ConfigParser.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/ConfigParser.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/MessageParser.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/MessageParser.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/MessageRegister.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/MessageRegister.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/ModuleData.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/ModuleData.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/Server.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Server.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/ServerSession.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/ServerSession.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/Task.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/Task.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/TaskInstance.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/TaskInstance.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/TaskLoader.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/TaskLoader.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/TaskManager.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/TaskManager.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/TimedTaskInstance.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/TimedTaskInstance.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/TriggerTaskInstance.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/TriggerTaskInstance.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/framework.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/pugiconfig.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/pugixml.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/pugixml.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/u_server.cpp" ex="false" tool="1" flavor2="0">
       </item>

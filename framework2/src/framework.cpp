@@ -7,37 +7,76 @@
 
 #include <chrono>
 #include <stdexcept>
+#include <string>
 #include <thread>
 
-//#include <asio.hpp>
+#include <asio.hpp>
+#include <boost/bind.hpp>
+
+#include "pugixml.hpp"
+#include "pugiconfig.hpp"
 
 #include "Calendar.h"
+#include "ConfigParser.h"
 #include "TaskLoader.h"
 #include "Server.h"
 
+void stopBAF(const asio::error_code& error, Server *user_server/*, Server *gateway_server*/)
+{
+  if (!error)
+  {
+    Calendar::stopCalendar();
+    user_server->handleStop();
+    //gateway_server->handleStop();
+  }
+}
+
 int main(int argc, char** argv) {
-    
-    std::string clientDelim("</adapter_server>"); // Delimeter of XML from gateway.
-    std::string serverDelim("</end>");
-    int threadCount = 10;
-    int port = 8989;
-    int timePeriod = 5;
-  
     // Prints time at which was framework started.
     time_t tn = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-    std::cout << "Framework start time: " << ctime(&tn) << std::endl;   
+    std::cout << "Framework start time: " << ctime(&tn) << std::endl;
+    
+    if (argc == 1) {
+        std::cerr << "Path to config file must be provided in the first parameter." << std::endl;
+        std::cerr << "Shutting down BAF." << std::endl;
+        return 1;
+    }
+    else if (argc != 2) {
+        std::cerr << "Wrong number of parameters was given." << std::endl;
+        std::cerr << "Shutting down BAF." << std::endl;
+        return 1;
+    }
+    
+    ConfigParser config_parser;
+    try {
+        config_parser.parseConfigFile(argv[1]);
+        
+        std::cout << std::endl;
+        std::cout << "TASK CONFIG PATH: " << config_parser.m_tasks_config_path << std::endl;
+        std::cout << "USER SERVER THREADS: " << config_parser.m_user_server_threads << std::endl;
+        std::cout << "USER SERVER PORT: " << config_parser.m_user_server_port << std::endl;
+        std::cout << "GATEWAY SERVER THREADS: " << config_parser.m_gateway_server_threads << std::endl;
+        std::cout << "GATEWAY SERVER PORT: " << config_parser.m_gateway_server_port << std::endl;
+        std::cout << std::endl;
+        
+    }
+    catch (const std::exception& e) {
+        std::cerr << e.what();
+        std::cerr << "Shutting down BAF." << std::endl;
+        return 1;
+    }
     
     // Starts calendar algorithm.
     Calendar calendar;
-    std::thread t_calendar(&Calendar::run, &calendar);
-    t_calendar.detach();
+    std::thread calendar_thread(&Calendar::run, &calendar);
+    //t_calendar.detach();
     
     // Loads algorithm managers.
     TaskLoader task_loader;
     try {
         // In a future pass path to algorithm config file.
         //manager_loader.loadAlgorithmManagers();
-        task_loader.createAllTasks("/home/mrmaidx/server/framework2/tasks_conf.xml");
+        task_loader.createAllTasks(config_parser.m_tasks_config_path);
     }
     catch (const std::exception& e) {
         std::cerr << e.what();
@@ -68,15 +107,41 @@ int main(int argc, char** argv) {
         std::cerr << "Pointer is not pointing to anything." << std::endl;
     }
     */
+    
+    std::string clientDelim("</adapter_server>"); // Delimeter of XML from gateway.
+    std::string serverDelim("</end>");
+   
+    unsigned short gateway_server_port = 8924;
+    int gateway_server_threads = config_parser.m_gateway_server_threads;
+    unsigned short user_server_port = 8923;
+    int user_server_threads = config_parser.m_user_server_threads;
+    
     // Initializes and starts server.
     asio::io_service io_service;
+   
+    std::cout << "START SERVERS" << std::endl;
     
-    Server s(io_service, port,
-      clientDelim, serverDelim,
-      threadCount, timePeriod);
+    /*
+    Server gateway_server(io_service, gateway_server_port, clientDelim, serverDelim, gateway_server_threads, 5);
+    gateway_server.startAccept();
+    std::thread gateway_server_thread(&Server::run, &gateway_server);
+    */
     
-    s.startAccept();
-    s.run();
+    Server user_server(io_service, user_server_port, clientDelim, serverDelim, user_server_threads, 5);
+    user_server.startAccept();
+    
+    asio::signal_set signals(io_service);
+    signals.add(SIGINT);
+    signals.add(SIGTERM);
+      #if defined(SIGQUIT)
+    signals.add(SIGQUIT);
+      #endif // defined(SIGQUIT)
+    signals.async_wait(boost::bind(stopBAF, asio::placeholders::error, &user_server/*, &gateway_server*/));
+    
+    user_server.run();
+    
+    calendar_thread.join();
+    //gateway_server_thread.join();
     
     return 0;
 }

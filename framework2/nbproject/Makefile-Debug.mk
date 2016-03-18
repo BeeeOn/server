@@ -35,13 +35,12 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/_ext/511e25b6/pugixml.o \
 	${OBJECTDIR}/src/Calendar.o \
 	${OBJECTDIR}/src/CalendarEvent.o \
 	${OBJECTDIR}/src/ConfigMessage.o \
+	${OBJECTDIR}/src/ConfigParser.o \
 	${OBJECTDIR}/src/MessageParser.o \
 	${OBJECTDIR}/src/MessageRegister.o \
-	${OBJECTDIR}/src/MessageSorter.o \
 	${OBJECTDIR}/src/ModuleData.o \
 	${OBJECTDIR}/src/Server.o \
 	${OBJECTDIR}/src/ServerSession.o \
@@ -52,6 +51,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/TimedTaskInstance.o \
 	${OBJECTDIR}/src/TriggerTaskInstance.o \
 	${OBJECTDIR}/src/framework.o \
+	${OBJECTDIR}/src/pugixml.o \
 	${OBJECTDIR}/src/u_server.o \
 	${OBJECTDIR}/src/u_session.o
 
@@ -70,7 +70,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=
+LDLIBSOPTIONS=-L/usr/local/lib64 -L/usr/lib/postgresql/9.3/lib
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
@@ -78,102 +78,102 @@ LDLIBSOPTIONS=
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/framework2: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/framework2 ${OBJECTFILES} ${LDLIBSOPTIONS} -ldl
-
-${OBJECTDIR}/_ext/511e25b6/pugixml.o: ../lib/pugixml.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/511e25b6
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/511e25b6/pugixml.o ../lib/pugixml.cpp
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/framework2 ${OBJECTFILES} ${LDLIBSOPTIONS} -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -lpq
 
 ${OBJECTDIR}/src/Calendar.o: src/Calendar.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Calendar.o src/Calendar.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Calendar.o src/Calendar.cpp
 
 ${OBJECTDIR}/src/CalendarEvent.o: src/CalendarEvent.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/CalendarEvent.o src/CalendarEvent.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/CalendarEvent.o src/CalendarEvent.cpp
 
 ${OBJECTDIR}/src/ConfigMessage.o: src/ConfigMessage.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/ConfigMessage.o src/ConfigMessage.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/ConfigMessage.o src/ConfigMessage.cpp
+
+${OBJECTDIR}/src/ConfigParser.o: src/ConfigParser.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/ConfigParser.o src/ConfigParser.cpp
 
 ${OBJECTDIR}/src/MessageParser.o: src/MessageParser.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/MessageParser.o src/MessageParser.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/MessageParser.o src/MessageParser.cpp
 
 ${OBJECTDIR}/src/MessageRegister.o: src/MessageRegister.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/MessageRegister.o src/MessageRegister.cpp
-
-${OBJECTDIR}/src/MessageSorter.o: src/MessageSorter.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/MessageSorter.o src/MessageSorter.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/MessageRegister.o src/MessageRegister.cpp
 
 ${OBJECTDIR}/src/ModuleData.o: src/ModuleData.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/ModuleData.o src/ModuleData.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/ModuleData.o src/ModuleData.cpp
 
 ${OBJECTDIR}/src/Server.o: src/Server.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Server.o src/Server.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Server.o src/Server.cpp
 
 ${OBJECTDIR}/src/ServerSession.o: src/ServerSession.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/ServerSession.o src/ServerSession.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/ServerSession.o src/ServerSession.cpp
 
 ${OBJECTDIR}/src/Task.o: src/Task.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Task.o src/Task.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Task.o src/Task.cpp
 
 ${OBJECTDIR}/src/TaskInstance.o: src/TaskInstance.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/TaskInstance.o src/TaskInstance.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/TaskInstance.o src/TaskInstance.cpp
 
 ${OBJECTDIR}/src/TaskLoader.o: src/TaskLoader.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/TaskLoader.o src/TaskLoader.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/TaskLoader.o src/TaskLoader.cpp
 
 ${OBJECTDIR}/src/TaskManager.o: src/TaskManager.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/TaskManager.o src/TaskManager.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/TaskManager.o src/TaskManager.cpp
 
 ${OBJECTDIR}/src/TimedTaskInstance.o: src/TimedTaskInstance.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/TimedTaskInstance.o src/TimedTaskInstance.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/TimedTaskInstance.o src/TimedTaskInstance.cpp
 
 ${OBJECTDIR}/src/TriggerTaskInstance.o: src/TriggerTaskInstance.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/TriggerTaskInstance.o src/TriggerTaskInstance.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/TriggerTaskInstance.o src/TriggerTaskInstance.cpp
 
 ${OBJECTDIR}/src/framework.o: src/framework.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/framework.o src/framework.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/framework.o src/framework.cpp
+
+${OBJECTDIR}/src/pugixml.o: src/pugixml.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/pugixml.o src/pugixml.cpp
 
 ${OBJECTDIR}/src/u_server.o: src/u_server.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/u_server.o src/u_server.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/u_server.o src/u_server.cpp
 
 ${OBJECTDIR}/src/u_session.o: src/u_session.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/u_session.o src/u_session.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/u_session.o src/u_session.cpp
 
 # Subprojects
 .build-subprojects:

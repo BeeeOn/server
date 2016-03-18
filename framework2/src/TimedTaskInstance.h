@@ -22,7 +22,6 @@ public:
         return shared_from_this();
     }
     */
-    
     TimedTaskInstance(unsigned long user_id, unsigned int users_instance_personal_id);
     
     //TimedAlgorithmInstance(const TimedAlgorithmInstance& orig);
@@ -30,15 +29,17 @@ public:
 
     //void emplaceToCalendar();
     
-    // Plans to calendar when shoud be run again.
+    // Plans to calendar when this instance shoud be activated again.
     void planActivationAfterSeconds(int seconds);
     
+    // Plans to calendar activation of and instance to present time.
     void planActivationNow();
     
-    // Actualy runs code.
+    // Activates an instance (calls run() function, but protects it with mutex).
     void activate();
     
-    virtual void run();
+    // Entry point of instance.
+    virtual void run() = 0;
     
 private:
     std::mutex m_activation_mx;

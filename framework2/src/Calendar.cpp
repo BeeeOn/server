@@ -20,6 +20,7 @@ std::mutex Calendar::m_calendar_events_mx, Calendar::m_new_wakeup_time_mx, Calen
 std::condition_variable Calendar::m_new_wakeup_time_cv, Calendar::m_queue_not_empty_cv;
 std::chrono::system_clock::time_point Calendar::m_wakeup_time = std::chrono::system_clock::now();
 std::priority_queue<std::shared_ptr<CalendarEvent>, std::vector<std::shared_ptr<CalendarEvent>>, GreaterCalendarEventSharedPtr> Calendar::m_calendar_events;
+bool Calendar::m_should_run(true);
 
 Calendar::Calendar()
 {
@@ -33,7 +34,7 @@ void Calendar::run() {
     std::vector<std::shared_ptr<CalendarEvent>> events_to_execute;
     
     // Run for all eternity (until whole system shuts down).  
-    while(true) {
+    while(m_should_run) {
         
         // If event queue is empty, wait in thread until event comes.
         waitUntilCalendarIsNotEmpty();
@@ -81,6 +82,9 @@ void Calendar::run() {
         // Wait until the activation time of event with a lowest activation time in queue.
         m_new_wakeup_time_cv.wait_until(lock, m_wakeup_time);
     }
+    
+    std::cout << "CALENDAR ALGORITHM STOPPED!!." << std::endl;
+    // HERE CAN BE STORED EVERYTHING IN CALENDAR.
 }
 
 void Calendar::executeEvents(std::vector<std::shared_ptr<CalendarEvent>> events_to_execute) {
@@ -151,4 +155,10 @@ void Calendar::emplaceEvent(int seconds, TimedTaskInstance *instance_ptr) {
 void Calendar::emplaceEvent(TimedTaskInstance* instance_ptr) {
     // Push event at current time.
     pushEvent(std::chrono::system_clock::now(), instance_ptr);
+}
+
+void Calendar::stopCalendar() {
+    m_should_run = false;
+    // Wakeup calendar algorithm to end.
+    m_new_wakeup_time_cv.notify_all();
 }
