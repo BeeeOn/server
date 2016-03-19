@@ -18,11 +18,13 @@
       </logicalFolder>
       <itemPath>src/ConfigParser.h</itemPath>
       <itemPath>src/Server.h</itemPath>
-      <itemPath>src/ServerSession.h</itemPath>
+      <itemPath>src/Session.h</itemPath>
       <itemPath>src/Task.h</itemPath>
       <itemPath>src/TaskInstance.h</itemPath>
       <itemPath>src/TaskLoader.h</itemPath>
       <itemPath>src/TaskManager.h</itemPath>
+      <itemPath>src/UserServer.h</itemPath>
+      <itemPath>src/UserSession.h</itemPath>
       <itemPath>src/pugiconfig.hpp</itemPath>
       <itemPath>src/pugixml.hpp</itemPath>
       <itemPath>src/u_server.h</itemPath>
@@ -49,11 +51,13 @@
       </logicalFolder>
       <itemPath>src/ConfigParser.cpp</itemPath>
       <itemPath>src/Server.cpp</itemPath>
-      <itemPath>src/ServerSession.cpp</itemPath>
+      <itemPath>src/Session.cpp</itemPath>
       <itemPath>src/Task.cpp</itemPath>
       <itemPath>src/TaskInstance.cpp</itemPath>
       <itemPath>src/TaskLoader.cpp</itemPath>
       <itemPath>src/TaskManager.cpp</itemPath>
+      <itemPath>src/UserServer.cpp</itemPath>
+      <itemPath>src/UserSession.cpp</itemPath>
       <itemPath>src/framework.cpp</itemPath>
       <itemPath>src/pugixml.cpp</itemPath>
       <itemPath>src/u_server.cpp</itemPath>
@@ -129,9 +133,9 @@
       </item>
       <item path="src/Server.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="src/ServerSession.cpp" ex="false" tool="1" flavor2="0">
+      <item path="src/Session.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="src/ServerSession.h" ex="false" tool="3" flavor2="0">
+      <item path="src/Session.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/Task.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -156,6 +160,14 @@
       <item path="src/TriggerTaskInstance.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/TriggerTaskInstance.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/UserServer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/UserServer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/UserSession.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/UserSession.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/framework.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -226,9 +238,9 @@
       </item>
       <item path="src/Server.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="src/ServerSession.cpp" ex="false" tool="1" flavor2="0">
+      <item path="src/Session.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="src/ServerSession.h" ex="false" tool="3" flavor2="0">
+      <item path="src/Session.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/Task.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -253,6 +265,14 @@
       <item path="src/TriggerTaskInstance.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/TriggerTaskInstance.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/UserServer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/UserServer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/UserSession.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/UserSession.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/framework.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -311,9 +331,9 @@
       </item>
       <item path="src/Server.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="src/ServerSession.cpp" ex="false" tool="1" flavor2="0">
+      <item path="src/Session.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="src/ServerSession.h" ex="false" tool="3" flavor2="0">
+      <item path="src/Session.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/Task.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -338,6 +358,14 @@
       <item path="src/TriggerTaskInstance.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/TriggerTaskInstance.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/UserServer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/UserServer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/UserSession.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/UserSession.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/framework.cpp" ex="false" tool="1" flavor2="0">
       </item>

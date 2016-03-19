@@ -43,13 +43,15 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/MessageRegister.o \
 	${OBJECTDIR}/src/ModuleData.o \
 	${OBJECTDIR}/src/Server.o \
-	${OBJECTDIR}/src/ServerSession.o \
+	${OBJECTDIR}/src/Session.o \
 	${OBJECTDIR}/src/Task.o \
 	${OBJECTDIR}/src/TaskInstance.o \
 	${OBJECTDIR}/src/TaskLoader.o \
 	${OBJECTDIR}/src/TaskManager.o \
 	${OBJECTDIR}/src/TimedTaskInstance.o \
 	${OBJECTDIR}/src/TriggerTaskInstance.o \
+	${OBJECTDIR}/src/UserServer.o \
+	${OBJECTDIR}/src/UserSession.o \
 	${OBJECTDIR}/src/framework.o \
 	${OBJECTDIR}/src/pugixml.o \
 	${OBJECTDIR}/src/u_server.o \
@@ -120,10 +122,10 @@ ${OBJECTDIR}/src/Server.o: src/Server.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Server.o src/Server.cpp
 
-${OBJECTDIR}/src/ServerSession.o: src/ServerSession.cpp 
+${OBJECTDIR}/src/Session.o: src/Session.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/ServerSession.o src/ServerSession.cpp
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Session.o src/Session.cpp
 
 ${OBJECTDIR}/src/Task.o: src/Task.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -154,6 +156,16 @@ ${OBJECTDIR}/src/TriggerTaskInstance.o: src/TriggerTaskInstance.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/TriggerTaskInstance.o src/TriggerTaskInstance.cpp
+
+${OBJECTDIR}/src/UserServer.o: src/UserServer.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/UserServer.o src/UserServer.cpp
+
+${OBJECTDIR}/src/UserSession.o: src/UserSession.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/UserSession.o src/UserSession.cpp
 
 ${OBJECTDIR}/src/framework.o: src/framework.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

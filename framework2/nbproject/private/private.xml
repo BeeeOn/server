@@ -10,9 +10,14 @@
             <file>file:/home/mrmaidx/server/framework2/src/TaskInstance.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/ModuleData.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/TaskManager.h</file>
+            <file>file:/home/mrmaidx/server/framework2/src/UserSession.h</file>
+            <file>file:/home/mrmaidx/server/framework2/src/UserServer.h</file>
+            <file>file:/home/mrmaidx/server/framework2/src/UserServer.cpp</file>
+            <file>file:/home/mrmaidx/server/framework2/src/Session.cpp</file>
+            <file>file:/home/mrmaidx/server/framework2/src/ConfigParser.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/TriggerTaskInstance.h</file>
+            <file>file:/home/mrmaidx/server/framework2/src/UserSession.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/Calendar.cpp</file>
-            <file>file:/home/mrmaidx/server/framework2/src/ServerSession.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/u_session.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/CalendarEvent.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/MessageParser.h</file>
@@ -21,26 +26,26 @@
             <file>file:/home/mrmaidx/server/framework2/src/Task.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/ModuleData.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/ConfigMessage.h</file>
-            <file>file:/home/mrmaidx/server/framework2/src/Server.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/TaskInstance.cpp</file>
-            <file>file:/home/mrmaidx/server/framework2/Makefile</file>
+            <file>file:/home/mrmaidx/server/framework2/src/Server.h</file>
+            <file>file:/home/mrmaidx/server/framework2/src/pugixml.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/TriggerTaskInstance.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/TaskLoader.cpp</file>
+            <file>file:/home/mrmaidx/server/framework2/src/pugixml.hpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/u_session.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/TaskLoader.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/MessageRegister.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/ConfigMessage.cpp</file>
-            <file>file:/home/mrmaidx/server/framework2/src/Server.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/MessageParser.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/TaskManager.cpp</file>
+            <file>file:/home/mrmaidx/server/framework2/src/Server.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/framework.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/u_server.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/TimedTaskInstance.cpp</file>
-            <file>file:/home/mrmaidx/server/framework2/src/ServerSession.cpp</file>
+            <file>file:/home/mrmaidx/server/framework2/src/ConfigParser.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/Calendar.h</file>
-            <file>file:/home/mrmaidx/server/framework2/src/ConfigServer.h</file>
-            <file>file:/home/mrmaidx/server/framework2/src/ConfigServer.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/u_server.h</file>
+            <file>file:/home/mrmaidx/server/framework2/src/Session.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/MessageRegister.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/CalendarEvent.h</file>
         </group>

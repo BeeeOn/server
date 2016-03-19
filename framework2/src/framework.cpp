@@ -19,15 +19,15 @@
 #include "Calendar.h"
 #include "ConfigParser.h"
 #include "TaskLoader.h"
-#include "Server.h"
+#include "UserServer.h"
 
-void stopBAF(const asio::error_code& error, Server *user_server, Server *gateway_server)
+void stopBAF(const asio::error_code& error, UserServer *user_server/*, Server *gateway_server*/)
 {
   if (!error)
   {
     Calendar::stopCalendar();
     user_server->handleStop();
-    gateway_server->handleStop();
+    //gateway_server->handleStop();
   }
 }
 
@@ -116,11 +116,11 @@ int main(int argc, char** argv) {
    
     std::cout << "START SERVERS" << std::endl;
     
-    Server gateway_server(io_service, config_parser.m_gateway_server_port, clientDelim, serverDelim, config_parser.m_gateway_server_threads, 5);
-    gateway_server.startAccept();
-    std::thread gateway_server_thread(&Server::run, &gateway_server);
+    //Server gateway_server(io_service, config_parser.m_gateway_server_port, clientDelim, serverDelim, config_parser.m_gateway_server_threads, 5);
+    //gateway_server.startAccept();
+    //std::thread gateway_server_thread(&Server::run, &gateway_server);
     
-    Server user_server(io_service, config_parser.m_user_server_port, clientDelim, serverDelim, config_parser.m_user_server_threads, 5);
+    UserServer user_server(io_service, config_parser.m_user_server_port, config_parser.m_user_server_threads);
     user_server.startAccept();
     
     asio::signal_set signals(io_service);
@@ -129,12 +129,12 @@ int main(int argc, char** argv) {
       #if defined(SIGQUIT)
     signals.add(SIGQUIT);
       #endif // defined(SIGQUIT)
-    signals.async_wait(boost::bind(stopBAF, asio::placeholders::error, &user_server, &gateway_server));
+    signals.async_wait(boost::bind(stopBAF, asio::placeholders::error, &user_server/*, &gateway_server*/));
     
     user_server.run();
     
     calendar_thread.join();
-    gateway_server_thread.join();
+    //gateway_server_thread.join();
     
     return 0;
 }
