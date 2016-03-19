@@ -1,10 +1,36 @@
 #include "unified_logger.h"
 
+Unified_logger logger("out_prototype");
+
+void behavior(std::string id)
+{
+    std::unique_ptr<shard> l (logger.getShard(id));
+    l->setTag(id);
+    //l->log(1, "Test message 1");
+    for (int i = 0; i < 10; i++){
+        l->log(1, "Test message ");
+        //std::cout << id  << " " << std::this_thread::get_id() <<  " " << i << std::endl;
+    
+        //out_logger.log(1, id + " Test message" + i);
+    }
+}
+
 int main(void)
 {
 
+    std::vector<std::thread> threads;
+        
+    threads.push_back(std::thread(behavior,"humidity"));
+    threads.push_back(std::thread(behavior,"temperature"));
+    threads.push_back(std::thread(behavior,"pressure"));
+
+    for(auto& thread : threads){
+        thread.join();
+    }
+
+    /*
     //stdout logging
-    Unified_logger out_logger("out_prototype");
+    
 
     out_logger.log(1, "Test message 1");
     out_logger.log(2, "Test message 2");
@@ -22,7 +48,7 @@ int main(void)
     in_logger.log(4, "Test message 4");
     in_logger.log(5, "Test message 5");
     in_logger.log(6, "Test message 6");
-
+    */
 
 
     //std::ofstream logfile;

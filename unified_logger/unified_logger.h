@@ -6,9 +6,14 @@
 #include <thread>
 #include <string>
 #include <stdio.h>
-#include <sys/time.h>
+
 #include <fstream>
 #include <sstream>
+
+#include <thread>
+#include <vector>
+
+#include "utility.h"
 
 //Log levels
 #define TRACE 1
@@ -19,55 +24,85 @@
 #define FATAL 6
 #define NONE 1024
 
+class shard
+{
+public:
+    shard(std::string tag, int log_level, bool log_to_stdout ,
+        std::string log_folder_path, std::string log_file_path, std::string parent_logger_id);
 
+    void log(int level, std::string message);
+
+    void setTag(std::string tag);
+
+    void setLogLevel(int log_level);
+
+    std::string getLogFilePath(std::string tag);
+
+    void setLogFilePath(std::string log_file_path);
+
+    //Sets and opens log file
+    void setLogFile(std::string path);
+
+private:
+
+    //Data tag used to determine log source
+    std::string _tag;
+
+    //minimum level to collect logs
+    int _log_level;
+
+    bool _log_to_stdout;
+
+    //Path to logs
+    std::string _log_folder_path;
+    std::string _log_file_path;
+
+    //Current log file
+    std::ofstream _logfile;
+
+    std::string _parent_logger_id;
+};
 
 class Unified_logger
 {
 public:
     Unified_logger(bool stdout_logging, std::string log_folder_path, std::string data_tag, int log_level);
-    ~Unified_logger();
+    //~Unified_logger();
     //Minimum user input with default values
     Unified_logger(std::string data_tag);
 
     //Main logging function
-    void log(int level, std::string);
+    //void log(int level, std::string);
 
-    // gets literal representation from MACRO (int) level
-    std::string levelToString(int level);
+    std::unique_ptr<shard> getShard(std::string id, int log_level);
+    std::unique_ptr<shard> getShard(std::string id);
 
-    //get actual time
-    //Format: [7.3.2016 21:54:59:382]
-    std::string getTime(void);
-
-    //Sets and opens log file
-    void setLogFile(std::string path);
-
-    //Sets path to a log file
-    void setLogFilePath();
+    void setOutLogging(bool log_to_stdout);
 
     //Sets log level, all logs below this level are ignored
     void setLogLevel(int log_level);
 
-    //gets filename from date
-    //Format: [tag]yymmdd.log
-    std::string getFileNameByDate();
+    void setLogFolderPath(std::string folder_path);
+
+    std::string getLogFilePath(std::string tag);
+
+    // gets literal representation from MACRO (int) level
+    std::string levelToString(int level);
+
 
 private:
     //true when all output is logged to stdout
-    bool _stdout_logging;
+    bool _log_to_stdout;
 
     //Paths to logs
     std::string _log_folder_path;
-    std::string _log_file_path;
     
-    //Current log file
-    std::ofstream _logfile;
+    std::string _logger_id;
 
-    //Data tag used to determine log source
-    std::string _data_tag;
-    
     //minimum level to collect logs
-    int _log_level;
+    int _default_log_level;
+
+
 };
 
 #endif
