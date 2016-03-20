@@ -9,7 +9,7 @@
 
 Server::Server(asio::io_service& io_service, unsigned short port, unsigned int threads_count):
     m_io_service(io_service),
-    m_acceptor(io_service, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port)),
+    m_acceptor(io_service, asio::ip::tcp::endpoint(asio::ip::address::from_string("127.0.0.1"), port)),
     m_threads_count(threads_count)
 {
     std::cout << "Server started on port: " << port << std::endl;
