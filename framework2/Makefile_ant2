@@ -3,7 +3,7 @@ CPP_FILES := $(wildcard src/*.cpp)
 OBJ_FILES := $(addprefix obj/, $(notdir $(CPP_FILES:.cpp=.o)))
 
 CC_FLAGS := -std=c++11 -pthread -rdynamic -Wextra -pedantic
-I_DIRS := -I../lib -I/usr/include/soci -I/usr/pgsql-9.5/include
+I_DIRS := -I../lib -I/usr/include/soci -I/usr/pgsql-9.5/include -I../lib
 
 LD_FLAGS := -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -lpq
 L_DIRS := -L/usr/local/lib64 -L/usr/pgsql-9.5/lib

@@ -92,6 +92,7 @@
           <incDir>
             <pElem>/usr/local/include/soci</pElem>
             <pElem>/usr/include/postgresql</pElem>
+            <pElem>../lib</pElem>
           </incDir>
           <commandLine>-pthread -rdynamic</commandLine>
         </ccTool>
