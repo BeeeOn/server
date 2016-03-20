@@ -43,6 +43,7 @@
             <file>file:/home/mrmaidx/server/framework2/src/u_server.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/TimedTaskInstance.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/ConfigParser.cpp</file>
+            <file>file:/home/mrmaidx/server/framework2/src/rapidjson/document.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/Calendar.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/u_server.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/Session.h</file>

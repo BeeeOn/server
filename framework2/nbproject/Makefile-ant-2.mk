@@ -50,6 +50,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/TaskManager.o \
 	${OBJECTDIR}/src/TimedTaskInstance.o \
 	${OBJECTDIR}/src/TriggerTaskInstance.o \
+	${OBJECTDIR}/src/UserMessageParser.o \
 	${OBJECTDIR}/src/UserServer.o \
 	${OBJECTDIR}/src/UserSession.o \
 	${OBJECTDIR}/src/framework.o \
@@ -156,6 +157,11 @@ ${OBJECTDIR}/src/TriggerTaskInstance.o: src/TriggerTaskInstance.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/TriggerTaskInstance.o src/TriggerTaskInstance.cpp
+
+${OBJECTDIR}/src/UserMessageParser.o: src/UserMessageParser.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/UserMessageParser.o src/UserMessageParser.cpp
 
 ${OBJECTDIR}/src/UserServer.o: src/UserServer.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

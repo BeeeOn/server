@@ -1,0 +1,10 @@
+{
+    "baf": "config",
+    "user_id": 1,
+    "task_id": 1,
+    "individual_id": 1,
+    "parameters": {
+        "gateway_id": "1",
+        "notifications": "true"
+    }
+}

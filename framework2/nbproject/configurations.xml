@@ -23,6 +23,7 @@
       <itemPath>src/TaskInstance.h</itemPath>
       <itemPath>src/TaskLoader.h</itemPath>
       <itemPath>src/TaskManager.h</itemPath>
+      <itemPath>src/UserMessageParser.h</itemPath>
       <itemPath>src/UserServer.h</itemPath>
       <itemPath>src/UserSession.h</itemPath>
       <itemPath>src/pugiconfig.hpp</itemPath>
@@ -56,6 +57,7 @@
       <itemPath>src/TaskInstance.cpp</itemPath>
       <itemPath>src/TaskLoader.cpp</itemPath>
       <itemPath>src/TaskManager.cpp</itemPath>
+      <itemPath>src/UserMessageParser.cpp</itemPath>
       <itemPath>src/UserServer.cpp</itemPath>
       <itemPath>src/UserSession.cpp</itemPath>
       <itemPath>src/framework.cpp</itemPath>
@@ -160,6 +162,10 @@
       <item path="src/TriggerTaskInstance.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/TriggerTaskInstance.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/UserMessageParser.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/UserMessageParser.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/UserServer.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -266,6 +272,10 @@
       </item>
       <item path="src/TriggerTaskInstance.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="src/UserMessageParser.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/UserMessageParser.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="src/UserServer.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/UserServer.h" ex="false" tool="3" flavor2="0">
@@ -358,6 +368,10 @@
       <item path="src/TriggerTaskInstance.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/TriggerTaskInstance.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/UserMessageParser.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/UserMessageParser.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/UserServer.cpp" ex="false" tool="1" flavor2="0">
       </item>

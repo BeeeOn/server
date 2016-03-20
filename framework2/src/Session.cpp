@@ -7,6 +7,8 @@
 
 #include "Session.h"
 
+#include <stdexcept>
+
 Session::Session(asio::io_service& io_service):
     m_socket(io_service)
 {
