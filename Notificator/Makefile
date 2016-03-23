@@ -5,7 +5,7 @@
 ########################################################
 
 CC=g++
-CFLAGS=-Wall -std=c++98
+CFLAGS=-Wall -std=c++11
 LDLIBS=-lcurl
 DEPS=Notification.h
 SOURCES= AchievementNotif.cpp SensorLowSignalNotif.cpp SensorLowBatteryNotif.cpp AdapterOfflineNotif.cpp XmlHelper.cpp AdapterAddedNotif.cpp SensorAddedNotif.cpp UriNotif.cpp DeleteNotif.cpp AdvertNotification.cpp InfoNotification.cpp AlertNotification.cpp Notificator.cpp JsonNotificationBuilder.cpp BaseNotification.cpp JsonUtil.cpp ControlNotification.cpp WatchdogNotif.cpp Utils.cpp
