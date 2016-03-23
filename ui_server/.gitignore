@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-/ui_server
-=======
->>>>>>> 354b0ed... BUG#883 fixed
-
 /Doxyfile
 /build/
 /html/
@@ -21,4 +16,4 @@ api/lib/*
 api/api
 
 *.swp
->>>>>>> 354b0ed... BUG#883 fixed
+ui_server
