@@ -5,19 +5,17 @@
 #include "AchievementNotif.h"
 #include <vector>
 
-using namespace std;
-
 int main()
 {   
-
-    vector <string> ids;
-    ids.push_back("APA91bF-u3AZ3bNl6jehq19oEhbVFGEaA_4x3jlzMtKwHzlakRcE9K_H_Rk8YuNSjp1K62dz-_sL09iQjlH8Z3JTsxbg1VbV_Gch0YhTuOg3U1bCib7pk4Xg4rHPeUrICiQ74RIB3qXxTjmTCeLBZor_Tr3pLuATUw");
-   int i = 0;
+    std::vector<std::string> google_ids;
+    google_ids.push_back("117715460086737854270");
+    //ids.push_back("APA91bF-u3AZ3bNl6jehq19oEhbVFGEaA_4x3jlzMtKwHzlakRcE9K_H_Rk8YuNSjp1K62dz-_sL09iQjlH8Z3JTsxbg1VbV_Gch0YhTuOg3U1bCib7pk4Xg4rHPeUrICiQ74RIB3qXxTjmTCeLBZor_Tr3pLuATUw");
+   
     Notification *notif = new WatchdogNotif(
         9509,                    // user ID (MrMaidx -> Martin Novak)
-        i,                  // message (notification) ID
-        1431593526000,        // timestamp (ms)
-        "Vlhkost v obýváku překročila 60%",   // message
+        9999,                  // message (notification) ID
+        1458735373,        // timestamp (ms)
+        "Test notifikace watchdog.",   // message
         4321,                  // adadpter ID
         "",               // sensor ID
         10,                  // sensor type
@@ -35,6 +33,7 @@ int main()
 
     notif2->sendGcm(&ids);
    */ 
+    /*
     if (notif->saveToDb()) {
       cout << endl << "########   SAVING TO DATABASE ############" << endl;
       int userId = notif->getUserId();
@@ -44,7 +43,7 @@ int main()
       string name = notif->getName();
       cout << notif->getDbXml() << endl;
     }
-
+*/
     /*
     Notification *notif2 = new AchievementNotif(
         8,                  // user ID
