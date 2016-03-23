@@ -5,6 +5,8 @@
 #include "SecuredAsioServlet.h"
 #include <string>
 
+#include "../lib/pugixml.hpp"
+
 using namespace std;
 
 AdaServerCommunicator::AdaServerCommunicator(int port) 
@@ -76,6 +78,7 @@ int AdaServerCommunicator::sendUnregisterDevice(gatewayId_64b gatewayId, deviceI
 int AdaServerCommunicator::sendGatewayStartListen(gatewayId_64b gatewayId) 
 {
     string r;
+    pugi::xml_document reply;
     try
     {
         SocketClient sc(_port);    
@@ -96,10 +99,13 @@ int AdaServerCommunicator::sendGatewayStartListen(gatewayId_64b gatewayId)
     }
     
     Logger::getInstance(Logger::DEBUG3) << "response from Ada " << r << endl; 
+    pugi::xml_parse_result res = reply.load_string(r.c_str());
+    Logger::getInstance(Logger::DEBUG3) << "response from Ada in xml val: " << reply.child("reply") << endl; 
     
     if(r == "")
         return ServerException::ADA_SERVER_TIMEOUT;
-    else if(r == "<reply>true</reply>")
+    //else if(r == "<reply>true</reply>")
+    else if(reply.child("reply"))
         return ServerException::OK;
     else
         return ServerException::GATEWAY_ACTION_FAIL;

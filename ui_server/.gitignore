@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 /ui_server
+=======
+>>>>>>> 354b0ed... BUG#883 fixed
 
 /Doxyfile
 /build/
@@ -11,3 +14,11 @@
 /cert
 
 /core.*
+<<<<<<< HEAD
+=======
+
+api/lib/*
+api/api
+
+*.swp
+>>>>>>> 354b0ed... BUG#883 fixed

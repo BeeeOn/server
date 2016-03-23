@@ -4,6 +4,8 @@
 #include <iostream>
 #include "SocketClient.h"
 #include <unistd.h>
+#include <errno.h>
+
 using namespace std;
 
 SocketClient::SocketClient(int portNumber, string hostName) {
@@ -144,7 +146,7 @@ string SocketClient::readUntilendTag(string endTag) {
                     break;
                 }
                 else{
-                    throw SocketClientException("ERROR reading from socket, recieved code:" + to_string((long long int)recieved));
+                    throw SocketClientException("ERROR reading from socket, recieved code:" + to_string((long long int)recieved) + " errno: " + strerror(errno));
                 }
     }
     std::cout<<"client done reading"<< data <<endl;
