@@ -38,25 +38,26 @@ void Calendar::run() {
         
         // If event queue is empty, wait in thread until event comes.
         waitUntilCalendarIsNotEmpty();
-        
+     
         m_calendar_events_mx.lock(); 
         
         // Save current time.
         std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
         
+        
         while(m_calendar_events.top()->getActivationTime() <= now) {
-            
+
             // Stores every event with activation time less or equal to now.
             events_to_execute.push_back(m_calendar_events.top());
 
             // Pops stored event from queue.
             m_calendar_events.pop();
-            
+
             // If the queue is empty, stop loop immediately.
             if(m_calendar_events.empty())
                 break;
         }
-        
+       
         if(!m_calendar_events.empty()) {
             // Set the activation time of event with lowest activation time as time to wake up this thread.
             m_wakeup_time = m_calendar_events.top()->getActivationTime();
@@ -159,6 +160,8 @@ void Calendar::emplaceEvent(TimedTaskInstance* instance_ptr) {
 
 void Calendar::stopCalendar() {
     m_should_run = false;
-    // Wakeup calendar algorithm to end.
+    // Wakeup calendar algorithm  to end.
     m_new_wakeup_time_cv.notify_all();
+    
+    //m_queue_not_empty_cv.notify_all();
 }

@@ -6,6 +6,7 @@
  */
 
 #include <chrono>
+#include <memory>
 #include <stdexcept>
 #include <string>
 #include <thread>
@@ -13,11 +14,14 @@
 #include <asio.hpp>
 #include <boost/bind.hpp>
 
+#include <soci.h>
+
 #include "pugixml.hpp"
 #include "pugiconfig.hpp"
 
 #include "Calendar.h"
 #include "ConfigParser.h"
+#include "DatabaseInterface.h"
 #include "TaskLoader.h"
 #include "UserServer.h"
 
@@ -27,6 +31,7 @@ void stopBAF(const asio::error_code& error, UserServer *user_server/*, Server *g
   {
     Calendar::stopCalendar();
     user_server->handleStop();
+    
     //gateway_server->handleStop();
   }
 }
@@ -66,17 +71,36 @@ int main(int argc, char** argv) {
         return 1;
     }
     
+    std::cout << "Create database interface." << std::endl;
+    std::shared_ptr<DatabaseInterface> database_interface = DatabaseInterface::getInstance();
+    try {
+        std::cout << "Connecting to database." << std::endl;
+        DatabaseInterface::getInstance()->connectToDatabase(config_parser.m_database_sessions, config_parser.m_database_connection_string);
+        std::cout << "Connected to database." << std::endl;
+    }
+    catch (const std::exception& e) {
+        std::cerr << "Probably couldn't connect to database." << std::endl;
+        std::cerr << e.what();
+        std::cerr << "Shutting down BAF." << std::endl;
+        return 1;
+    }
+    
+    std::string given_name;
+    std::shared_ptr<soci::session> sql = DatabaseInterface::getInstance()->makeNewSession();
+    *sql << "SELECT given_name FROM users WHERE user_id=6", soci::into(given_name);
+    std::cout << "ZISKANE JMENO: " << given_name << std::endl;
+    
     // Starts calendar algorithm.
     Calendar calendar;
     std::thread calendar_thread(&Calendar::run, &calendar);
     //t_calendar.detach();
     
     // Loads algorithm managers.
-    TaskLoader task_loader;
+    std::shared_ptr<TaskLoader> task_loader = TaskLoader::getInstance();
     try {
         // In a future pass path to algorithm config file.
         //manager_loader.loadAlgorithmManagers();
-        task_loader.createAllTasks(config_parser.m_tasks_config_path);
+        TaskLoader::getInstance()->createAllTasks(config_parser.m_tasks_config_path);
     }
     catch (const std::exception& e) {
         std::cerr << e.what();
@@ -84,13 +108,14 @@ int main(int argc, char** argv) {
         return 1;
     }
     
-    std::cout << "Number of tasks: " << task_loader.m_tasks.size() << std::endl;
+    /*
     for (auto task: task_loader.m_tasks) {
         std::cout << "Name: " << task.second->getTaskName() << std::endl;
         std::cout << "Creating new instance!" << std::endl;
+        
         task.second->getTaskManagerPtr()->createInstance(1, 1);
     }
-    
+    */
     /*
     // Test of weak pointer.
     std::weak_ptr<int> weak_test;
@@ -136,5 +161,6 @@ int main(int argc, char** argv) {
     calendar_thread.join();
     //gateway_server_thread.join();
     
+    std::cout << "SERVER STOPED!" << std::endl;
     return 0;
 }

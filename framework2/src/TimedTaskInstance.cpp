@@ -14,10 +14,9 @@
 
 #include "Calendar.h"
 
-TimedTaskInstance::TimedTaskInstance(unsigned long user_id, unsigned int users_instance_personal_id):
-    TaskInstance(user_id, users_instance_personal_id)
+TimedTaskInstance::TimedTaskInstance() 
 {   
-    planActivationNow();
+    
 }
 
 /*

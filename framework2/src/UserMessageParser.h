@@ -20,16 +20,10 @@
 
 #include "rapidjson/document.h"
 
+#include "ConfigMessage.h"
+
 enum class USER_MESSAGE_TYPE {
     CONFIG, DELETE
-};
-
-struct ConfigData {
-    
-    int user_id;
-    int task_id;
-    unsigned short individual_id;
-    std::map<std::string /*name*/, std::string /*value*/> parameters;
 };
 
 class UserMessageParser {
@@ -42,7 +36,7 @@ public:
     
     USER_MESSAGE_TYPE getMessageType() const { return m_message_type; };
     
-    ConfigData getConfigData();
+    ConfigMessage getConfigData();
     
 private:
 
@@ -53,4 +47,3 @@ private:
 
 
 #endif /* USERMESSAGEPARSER_H */
-

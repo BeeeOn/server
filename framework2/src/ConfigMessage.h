@@ -2,26 +2,21 @@
  * File:   ConfigMessage.h
  * Author: Martin Novak, xnovak1c@stud.fit.vutbr.cz
  *
- * Created on 22. January 2016
+ * Created on 23. March 2016
  */
 
 #ifndef CONFIGMESSAGE_H
 #define CONFIGMESSAGE_H
 
-#include <map>
-#include <string>
+#include <map> //std::map
+#include <string> //std::string
 
-class ConfigMessage {
-public:
-    ConfigMessage();
-    ConfigMessage(const ConfigMessage& orig);
-    virtual ~ConfigMessage();
-private:
+struct ConfigMessage {
     
-    int manager_id;
-    
-    std::map<std::string /*tag_name*/, std::string /*value*/> configuration;
-    
+    unsigned int user_id;
+    short task_id;
+    unsigned short relative_id;
+    std::map<std::string /*name*/, std::string /*value*/> parameters;
 };
 
 #endif /* CONFIGMESSAGE_H */

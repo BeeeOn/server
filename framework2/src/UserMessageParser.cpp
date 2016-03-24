@@ -51,9 +51,9 @@ void UserMessageParser::parseMessage(std::string message) {
     }
 }
 
-ConfigData UserMessageParser::getConfigData() {
+ConfigMessage UserMessageParser::getConfigData() {
     
-    ConfigData config_data;
+    ConfigMessage config_message;
     
     if (m_document.HasMember("user_id")) {
         rapidjson::Value& user_id_value = m_document["user_id"];
@@ -63,7 +63,7 @@ ConfigData UserMessageParser::getConfigData() {
         }
         else {
             // Store user_id.
-            config_data.user_id = user_id_value.GetInt();
+            config_message.user_id = user_id_value.GetInt();
         }
     }
     else {
@@ -78,26 +78,26 @@ ConfigData UserMessageParser::getConfigData() {
         }
         else {
             // Store task_id.
-            config_data.task_id = task_id_value.GetInt();
+            config_message.task_id = task_id_value.GetInt();
         }
     }
     else {
         throw std::runtime_error("UserMessageParser: Received CONFIG message doesn't have member \"task_id\".");
     }
     
-    if (m_document.HasMember("individual_id")) {
-        rapidjson::Value& individual_id_value = m_document["individual_id"];
+    if (m_document.HasMember("relative_id")) {
+        rapidjson::Value& relative_id_value = m_document["relative_id"];
         
-        if (!individual_id_value.IsInt()) {
-            throw std::runtime_error("UserMessageParser: Received CONFIG message has member \"individual_id\", but it's not an integer.");
+        if (!relative_id_value.IsInt()) {
+            throw std::runtime_error("UserMessageParser: Received CONFIG message has member \"relative_id\", but it's not an integer.");
         }
         else {
             // Store task_id.
-            config_data.individual_id = individual_id_value.GetInt();
+            config_message.relative_id = relative_id_value.GetInt();
         }
     }
     else {
-        throw std::runtime_error("UserMessageParser: Received CONFIG message doesn't have member \"individual_id\".");
+        throw std::runtime_error("UserMessageParser: Received CONFIG message doesn't have member \"relative_id\".");
     }    
     
     
@@ -118,7 +118,7 @@ ConfigData UserMessageParser::getConfigData() {
                 }
                 else {
                     
-                    config_data.parameters.emplace(name, std::string(itr->value.GetString()));
+                    config_message.parameters.emplace(name, std::string(itr->value.GetString()));
                 }
             }
         }
@@ -127,5 +127,5 @@ ConfigData UserMessageParser::getConfigData() {
         throw std::runtime_error("UserMessageParser: Received CONFIG message doesn't have member object \"parameters\".");
     }
     
-    return config_data;
+    return config_message;
 }

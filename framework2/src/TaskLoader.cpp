@@ -7,7 +7,12 @@
 
 #include "TaskLoader.h"
 
+#include <sstream>
+
+#include "DatabaseInterface.h"
 #include "Task.h"
+
+std::shared_ptr<TaskLoader> TaskLoader::m_instance;
 
 TaskLoader::TaskLoader() {
 }
@@ -20,8 +25,22 @@ TaskLoader::~TaskLoader() {
     std::cout << "TaskLoader::~TaskLoader - finished." << std::endl;
 }
 
-void TaskLoader::createAllTasks(std::string tasks_config_file_path) {
+std::shared_ptr<TaskLoader> TaskLoader::getInstance()
+{
+    std::cout << "TaskLoader::getInstance()" << std::endl;
+    
+    if (!m_instance) {
+        std::cout << "Create TaskLoader:m_instance." << std::endl;
+        m_instance = std::make_shared<TaskLoader>();
+        std::cout << "Finished creation TaskLoader:m_instance." << std::endl;
+    }
+    else {
+        return m_instance;
+    }
+}
 
+void TaskLoader::createAllTasks(std::string tasks_config_file_path)
+{
     try {
         // Parse config file and create task objects.
         processTasksConfigFileAndStoreInfo(tasks_config_file_path);
@@ -44,8 +63,8 @@ void TaskLoader::createAllTasks(std::string tasks_config_file_path) {
     }
 }
 
-void TaskLoader::processTasksConfigFileAndStoreInfo(std::string tasks_config_file_path) {
-    
+void TaskLoader::processTasksConfigFileAndStoreInfo(std::string tasks_config_file_path)
+{
     unsigned int task_id;
     unsigned short task_version;
     std::string task_name;
@@ -66,8 +85,7 @@ void TaskLoader::processTasksConfigFileAndStoreInfo(std::string tasks_config_fil
     
     pugi::xml_node tasks = config_doc.child("tasks");
 
-    for (pugi::xml_node task = tasks.child("task"); task; task = task.next_sibling("task"))
-    { 
+    for (pugi::xml_node task = tasks.child("task"); task; task = task.next_sibling("task")) {
         
         task_id = task.attribute("id").as_int();
         task_version = task.attribute("version").as_int();
@@ -98,6 +116,26 @@ void TaskLoader::processTasksConfigFileAndStoreInfo(std::string tasks_config_fil
         std::cout << "TYPE: " << (int)task_type << std::endl;
         std::cout << "PATH: " << task_path << std::endl;
         
+        SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
+        *sql << "INSERT INTO task(task_id, name, version, type, library_path) VALUES(:task_id, :name, :version, :type, :library_path)",
+             soci::use(task_id, "task_id"), soci::use(task_name, "name"), soci::use(task_version, "version"),
+             soci::use(type_str, "type"), soci::use(task_path, "library_path");
+        
         m_tasks.emplace(task_id, std::make_shared<Task>(task_version, task_name, task_type, task_path));
+    }
+}
+
+std::shared_ptr<Task> TaskLoader::findTask(unsigned int task_id) {
+    auto found = m_tasks.find(task_id);
+    
+    if (found != m_tasks.end()) {
+        std::cout << "Task with id: " << task_id << " was found." << std::endl;
+        return found->second;
+    }
+    else {
+        // Task was not found.
+        std::stringstream error;
+        error << "Task with id: " << task_id << " was not found.";
+        throw std::runtime_error(error.str());
     }
 }

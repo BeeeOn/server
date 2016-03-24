@@ -4,19 +4,22 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <logicalFolder name="f3" displayName="Structures" projectFiles="true">
+        <itemPath>src/ConfigMessage.h</itemPath>
+      </logicalFolder>
       <logicalFolder name="f1" displayName="Timed" projectFiles="true">
         <itemPath>src/Calendar.h</itemPath>
         <itemPath>src/CalendarEvent.h</itemPath>
         <itemPath>src/TimedTaskInstance.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f2" displayName="Trigger" projectFiles="true">
-        <itemPath>src/ConfigMessage.h</itemPath>
         <itemPath>src/MessageParser.h</itemPath>
         <itemPath>src/MessageRegister.h</itemPath>
         <itemPath>src/ModuleData.h</itemPath>
         <itemPath>src/TriggerTaskInstance.h</itemPath>
       </logicalFolder>
       <itemPath>src/ConfigParser.h</itemPath>
+      <itemPath>src/DatabaseInterface.h</itemPath>
       <itemPath>src/Server.h</itemPath>
       <itemPath>src/Session.h</itemPath>
       <itemPath>src/Task.h</itemPath>
@@ -44,13 +47,13 @@
         <itemPath>src/TimedTaskInstance.cpp</itemPath>
       </logicalFolder>
       <logicalFolder name="f2" displayName="Trigger" projectFiles="true">
-        <itemPath>src/ConfigMessage.cpp</itemPath>
         <itemPath>src/MessageParser.cpp</itemPath>
         <itemPath>src/MessageRegister.cpp</itemPath>
         <itemPath>src/ModuleData.cpp</itemPath>
         <itemPath>src/TriggerTaskInstance.cpp</itemPath>
       </logicalFolder>
       <itemPath>src/ConfigParser.cpp</itemPath>
+      <itemPath>src/DatabaseInterface.cpp</itemPath>
       <itemPath>src/Server.cpp</itemPath>
       <itemPath>src/Session.cpp</itemPath>
       <itemPath>src/Task.cpp</itemPath>
@@ -112,13 +115,15 @@
       </item>
       <item path="src/CalendarEvent.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="src/ConfigMessage.cpp" ex="false" tool="1" flavor2="0">
-      </item>
       <item path="src/ConfigMessage.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/ConfigParser.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/ConfigParser.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/DatabaseInterface.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/DatabaseInterface.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/MessageParser.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -221,13 +226,15 @@
       </item>
       <item path="src/CalendarEvent.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="src/ConfigMessage.cpp" ex="false" tool="1" flavor2="0">
-      </item>
       <item path="src/ConfigMessage.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/ConfigParser.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/ConfigParser.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/DatabaseInterface.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/DatabaseInterface.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/MessageParser.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -318,13 +325,15 @@
       </item>
       <item path="src/CalendarEvent.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="src/ConfigMessage.cpp" ex="false" tool="1" flavor2="0">
-      </item>
       <item path="src/ConfigMessage.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/ConfigParser.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/ConfigParser.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/DatabaseInterface.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/DatabaseInterface.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/MessageParser.cpp" ex="false" tool="1" flavor2="0">
       </item>

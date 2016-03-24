@@ -24,6 +24,13 @@
 
 class TaskLoader {
 public:
+    
+    /**
+     * Returns pointer to singleton instance of class DatabaseInterface.
+     * @return Pointer to singleton instance.
+     */
+    static std::shared_ptr<TaskLoader> getInstance();
+    
     TaskLoader();
     
     virtual ~TaskLoader();
@@ -40,7 +47,18 @@ public:
      */
     void processTasksConfigFileAndStoreInfo(std::string tasks_config_file_path);
     
-//private:
+    /**
+     * Finds task in m_tasks and returns shared pointer to it.
+     * @param task_id ID of a task.
+     * @return Shared pointer to task.
+     */
+    std::shared_ptr<Task> findTask(unsigned int task_id);
+    
+private:
+    /**
+     * Singleton instance pointer.
+     */
+    static std::shared_ptr<TaskLoader> m_instance;
     
     /**
      * Container storing all loaded tasks.

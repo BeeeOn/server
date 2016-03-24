@@ -37,8 +37,8 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/src/Calendar.o \
 	${OBJECTDIR}/src/CalendarEvent.o \
-	${OBJECTDIR}/src/ConfigMessage.o \
 	${OBJECTDIR}/src/ConfigParser.o \
+	${OBJECTDIR}/src/DatabaseInterface.o \
 	${OBJECTDIR}/src/MessageParser.o \
 	${OBJECTDIR}/src/MessageRegister.o \
 	${OBJECTDIR}/src/ModuleData.o \
@@ -93,15 +93,15 @@ ${OBJECTDIR}/src/CalendarEvent.o: src/CalendarEvent.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -I../lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/CalendarEvent.o src/CalendarEvent.cpp
 
-${OBJECTDIR}/src/ConfigMessage.o: src/ConfigMessage.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -I../lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/ConfigMessage.o src/ConfigMessage.cpp
-
 ${OBJECTDIR}/src/ConfigParser.o: src/ConfigParser.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -I../lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/ConfigParser.o src/ConfigParser.cpp
+
+${OBJECTDIR}/src/DatabaseInterface.o: src/DatabaseInterface.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -I../lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/DatabaseInterface.o src/DatabaseInterface.cpp
 
 ${OBJECTDIR}/src/MessageParser.o: src/MessageParser.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

@@ -39,6 +39,12 @@ public:
     
     /** Port assigned to gateway server. */
     unsigned short m_gateway_server_port;
+    
+    /** Number of sessins wanted for communication with database. */
+    int m_database_sessions;
+    
+    /** String formatted to connect to database. */
+    std::string m_database_connection_string;
 };
 
 #endif /* CONFIGPARSER_H */

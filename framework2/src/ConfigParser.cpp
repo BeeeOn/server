@@ -87,4 +87,16 @@ void ConfigParser::parseConfigFile(char *config_file_path) {
         m_gateway_server_port = current_node.attribute("port").as_int();
         m_gateway_server_threads = current_node.attribute("threads").as_int();
     }
+    
+    // Find and parse <database> tag.
+    current_node = current_node.parent().child("database");
+    if ((current_node.attribute("sessions") == NULL) ||
+        (current_node.attribute("connection_string") == NULL)) {
+        std::cerr << "Config file doesn't contain tag <database sessions=\"...\" connection_string=\"...\"/> in correct form." << std::endl;
+        throw std::runtime_error("Parsing of config file was not successful.");
+    }
+    else {
+        m_database_sessions = current_node.attribute("sessions").as_int();
+        m_database_connection_string = current_node.attribute("connection_string").as_string();
+    }
 }

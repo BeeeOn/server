@@ -30,7 +30,6 @@ Task::~Task() {
     closeTaskLibrary();
     
     std::cout << "Task::~Task - finished." << std::endl;
-
 }
 
 void Task::openTaskLibrary() {

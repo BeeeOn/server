@@ -9,7 +9,7 @@
 
 #include <string>
 
-TaskInstance::TaskInstance(unsigned long user_id, unsigned int personal_id)
+TaskInstance::TaskInstance()
 {
     // Save owner information to database.
     

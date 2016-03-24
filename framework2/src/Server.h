@@ -20,7 +20,7 @@ class Server {
 public:
     Server(asio::io_service& io_service, unsigned short port,
     //std::string clientDelim, std::string serverDelim,
-    unsigned int threads);
+    unsigned int threads_count);
 
     void run();
   

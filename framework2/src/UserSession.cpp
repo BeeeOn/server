@@ -12,9 +12,12 @@
 
 #include "rapidjson/document.h"
 
+#include "ConfigMessage.h"
+#include "Task.h"
+#include "TaskLoader.h"
 #include "UserMessageParser.h"
 
- UserSession::UserSession(asio::io_service& io_service):
+UserSession::UserSession(asio::io_service& io_service):
     Session(io_service)
 {
 }
@@ -33,20 +36,30 @@ void UserSession::receivedMessage(size_t bytes_transferred)
         switch(user_message_parser.getMessageType()) {
             case(USER_MESSAGE_TYPE::CONFIG):
                 // Config message was received.
-                ConfigData config_data = user_message_parser.getConfigData();
+                ConfigMessage config_data = user_message_parser.getConfigData();
                 
                 std::cout << "---CONFIG DATA---" << std::endl;
                 std::cout << "USER ID: " << config_data.user_id << std::endl;
                 std::cout << "TASK ID: " << config_data.task_id << std::endl;
-                std::cout << "INDIVIDUAL ID: " << config_data.individual_id << std::endl;
+                std::cout << "INDIVIDUAL ID: " << config_data.relative_id << std::endl;
                 std::cout << "PARAMETERS:" << std::endl;
                 
                 for (auto parameter : config_data.parameters) {
                     std::cout << "P: " << parameter.first << ": " << parameter.second << std::endl; 
                 }
                 std::cout << std::endl;
-                // CREATE OR CHANGE NEW INSTANCE.
                 
+                std::shared_ptr<Task> task = TaskLoader::getInstance()->findTask(config_data.task_id);
+                
+                if(task->getTaskManagerPtr()->checkInstanceExistence(config_data)) {
+                    // Instance was found.
+                    unsigned int instance_id = task->getTaskManagerPtr()->getInstanceId(config_data.user_id, config_data.relative_id);
+                    //task->getTaskManagerPtr()->changeConfiguration(instance_id);
+                }
+                else {
+                    // Instance was not found. Create it.
+                    task->getTaskManagerPtr()->makeNewInstance(config_data);
+                }
                 break;
         };
     }
