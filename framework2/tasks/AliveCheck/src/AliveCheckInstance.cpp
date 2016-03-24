@@ -1,11 +1,11 @@
 /* 
- * File:   RefreshInstance.cpp
+ * File:   AliveCheckInstance.cpp
  * Author: Martin Novak, xnovak1c@stud.fit.vutbr.cz
  * 
  * Created on 21. January 2016
  */
 
-#include "RefreshCheckInstance.h"
+#include "AliveCheckInstance.h"
 
 #include <iostream>
 
@@ -14,23 +14,26 @@
 
 //using namespace soci;
 
-RefreshCheckInstance::RefreshCheckInstance(unsigned long user_id, unsigned int users_instance_personal_id):
-    TimedTaskInstance(user_id, users_instance_personal_id)
+AliveCheckInstance::AliveCheckInstance()
 {
+    planActivationNow();
 }
 
-RefreshCheckInstance::~RefreshCheckInstance() {
-    std::cout << "RefreshCheckInstance::~RefreshCheckInstance - entered." << std::endl;
-    std::cout << "RefreshCheckInstance::~RefreshCheckInstance - finished." << std::endl;
+AliveCheckInstance::~AliveCheckInstance()
+{
+    std::cout << "RefreshCheckInstance::~RefreshCheckInstance" << std::endl;
 }
 
-void RefreshCheckInstance::run() {
+void AliveCheckInstance::run()
+{
+    
     planActivationAfterSeconds(5);
     
     executeRefreshQuery();
 }
 
-void RefreshCheckInstance::executeRefreshQuery() {
+void AliveCheckInstance::executeRefreshQuery()
+{
     
     std::cout << "PLAY REFRESH CHECK" << std::endl;
     /*

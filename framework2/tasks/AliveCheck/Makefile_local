@@ -1,21 +1,21 @@
-CC := /usr/bin/g++
+CC := g++
 CPP_FILES := $(wildcard src/*.cpp)
 OBJ_FILES := $(addprefix obj/, $(notdir $(CPP_FILES:.cpp=.o)))
 
 CC_FLAGS := -std=c++11 -fPIC
-I_DIRS := -I../lib -I/usr/include/soci -I/usr/pgsql-9.5/include
+I_DIRS := -I/usr/local/include/soci -I/usr/include/postgresql
 
 LD_FLAGS := -fPIC -shared -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -lpq
-L_DIRS := -L/usr/local/lib64 -L/usr/pgsql-9.5/lib
+L_DIRS := -L/usr/local/lib64 -L/usr/lib/postgresql/9.3/lib
 
 .PHONY: all clean
 
-all: pre-build RefreshCheck.so
+all: pre-build AliveCheck.so
 
 pre-build:
 	mkdir -p ./obj
 
-RefreshCheck.so: $(OBJ_FILES)
+AliveCheck.so: $(OBJ_FILES)
 	$(CC) $(CC_FLAGS) -o $@ $^ $(L_DIRS) $(LD_FLAGS)
 
 obj/%.o: src/%.cpp

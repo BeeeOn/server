@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=RefreshCheck
+PROJECTNAME=AliveCheck
 
 # Active Configuration
 DEFAULTCONF=Debug
