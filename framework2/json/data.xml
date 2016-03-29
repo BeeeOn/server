@@ -3,7 +3,7 @@
     <device device_id="0x00" euid="0x01" name="own_name">
         <values count="6">
             <value module_id="0x00">25.19</value>
-            <value module_id="0x01">-0.01</value>
+            <value module_id="0x01">25.5</value>
             <value module_id="0x02">35.61</value>
             <value module_id="0x03">68.00</value>
             <value module_id="0x05" status="unavailable"></value>

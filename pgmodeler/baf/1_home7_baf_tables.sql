@@ -29,9 +29,10 @@ CREATE TABLE public.instance(
 CREATE TABLE public.user_instance(
 	user_id integer NOT NULL,
 	instance_id integer,
+	task_id smallint NOT NULL,
 	permission varchar(15),
 	relative_id smallint NOT NULL,
-	CONSTRAINT user_instance_pk PRIMARY KEY (user_id,relative_id)
+	CONSTRAINT user_instance_pk PRIMARY KEY (user_id,relative_id,task_id)
 );
 
 -- Set owner of tables.
@@ -49,4 +50,10 @@ ON DELETE NO ACTION ON UPDATE NO ACTION;
 -- ALTER TABLE public.user_instance DROP CONSTRAINT IF EXISTS instance_id_fk CASCADE;
 ALTER TABLE public.user_instance ADD CONSTRAINT instance_id_fk FOREIGN KEY (instance_id)
 REFERENCES public.instance (instance_id) MATCH FULL
+ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- object: rel_user_instance_task | type: CONSTRAINT --
+-- ALTER TABLE public.user_instance DROP CONSTRAINT IF EXISTS rel_user_instance_task CASCADE;
+ALTER TABLE public.user_instance ADD CONSTRAINT rel_user_instance_task FOREIGN KEY (task_id)
+REFERENCES public.task (task_id) MATCH FULL
 ON DELETE NO ACTION ON UPDATE NO ACTION;

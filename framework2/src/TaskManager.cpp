@@ -29,19 +29,20 @@ bool TaskManager::checkInstanceExistence(ConfigMessage config_message)
     
     try {
         instance_id = getInstanceId(config_message.user_id, config_message.relative_id);
+
+        // If found in database, check instance container to be sure it exists.
+        auto found = m_task_instances.find(instance_id);
+        if (found != m_task_instances.end()) {
+            return true;
+        }
+        else {
+            // Inconsistency of BAF and database should be resolved.
+
+            return false;
+        }
     }
     catch (const std::exception& e) {
         std::cout << e.what() << std::endl;
-        return false;
-    }
-    
-    // If found in database, check instance container to be sure it exists.
-    auto found = m_task_instances.find(instance_id);
-    if (found != m_task_instances.end()) {
-        return true;
-    }
-    else {
-        // Inconsistency of BAF and database should be resolved.
         return false;
     }
 }
@@ -73,8 +74,9 @@ void TaskManager::makeNewInstance(ConfigMessage config_message) {
     *sql << "INSERT INTO instance(task_id) VALUES (:task_id) RETURNING instance_id",
             soci::into(instance_id), soci::use(config_message.task_id);
     
-    *sql << "INSERT INTO user_instance(user_id, instance_id, relative_id) VALUES(:user_id, :instance_id, :relative_id)",
-            soci::use(config_message.user_id, "user_id"), soci::use(instance_id, "instance_id"), soci::use(config_message.relative_id, "relative_id");
+    *sql << "INSERT INTO user_instance(user_id, instance_id, task_id, relative_id) VALUES(:user_id, :instance_id, :task_id, :relative_id)",
+            soci::use(config_message.user_id, "user_id"), soci::use(instance_id, "instance_id"),
+            soci::use(config_message.task_id, "task_id"), soci::use(config_message.relative_id, "relative_id");
      
     createInstance(instance_id, config_message.parameters);
     

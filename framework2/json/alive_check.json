@@ -4,7 +4,7 @@
     "task_id": 1,
     "relative_id": 1,
     "parameters": {
-        "gateway_id": "10",
-        "notifications": "0"
+        "gateway_id": "100",
+        "notifications": "1"
     }
 }
