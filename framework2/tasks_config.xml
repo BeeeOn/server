@@ -7,4 +7,11 @@
         <!-- Path relative to binary. -->
         <path>./tasks/AliveCheck/AliveCheck.so</path>
     </task>
+    <task id="2" version="1"> <!-- id and version should always be integer. -->
+        <name>Watchdog</name>
+        <!-- Task must be of types: timed, trigger, combined. -->
+        <type>trigger</type>
+        <!-- Path relative to binary. -->
+        <path>./tasks/Watchdog/Watchdog.so</path>
+    </task>
 </tasks>

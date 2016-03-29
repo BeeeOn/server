@@ -22,7 +22,7 @@ public:
         return shared_from_this();
     }
     */
-    TimedTaskInstance();
+    TimedTaskInstance(unsigned int instance_id);
     
     //TimedAlgorithmInstance(const TimedAlgorithmInstance& orig);
     virtual ~TimedTaskInstance();

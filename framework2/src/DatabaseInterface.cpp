@@ -27,7 +27,7 @@ void DatabaseInterface::createInstance(int sessions_count) {
 */
 std::shared_ptr<DatabaseInterface> DatabaseInterface::getInstance()
 {
-    std::cout << "DatabaseInterface::getInstance()" << std::endl;
+    //std::cout << "DatabaseInterface::getInstance()" << std::endl;
     
     if (!m_instance) {
         std::cout << "Create DatabaseInterface:m_instance." << std::endl;

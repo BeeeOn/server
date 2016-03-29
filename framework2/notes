@@ -1,3 +1,10 @@
+DELETE FROM user_instance;
+DELETE FROM task_alive_check;
+DELETE FROM task_watchdog;
+DELETE FROM instance;
+DELETE FROM task;
+
+
  -I/usr/include/soci -L/usr/local/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -I/usr/pgsql-9.2/include -I../ -L/usr/pgsql-9.2/lib -lpq
 
 -I/usr/local/include/soci        - pro g++ header folder

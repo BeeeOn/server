@@ -3,9 +3,9 @@ CPP_FILES := $(wildcard src/*.cpp)
 OBJ_FILES := $(addprefix obj/, $(notdir $(CPP_FILES:.cpp=.o)))
 
 CC_FLAGS := -std=c++11 -pthread -rdynamic
-I_DIRS := -I../lib -I/usr/local/include/soci -I/usr/include/postgresql -I../lib
+I_DIRS := -I/usr/local/include/soci -I/usr/include/postgresql -I../lib
 
-LD_FLAGS := -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -lpq
+LD_FLAGS := -Wl,-rpath,/usr/local/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -lpq
 L_DIRS := -L/usr/local/lib64 -L/usr/lib/postgresql/9.3/lib
 
 .PHONY: all clean
@@ -19,7 +19,7 @@ baf: $(OBJ_FILES)
 	$(CC) $(CC_FLAGS) -o $@ $^ $(L_DIRS) $(LD_FLAGS)
 
 obj/%.o: src/%.cpp
-	$(CC) $(CC_FLAGS) -c -o $@ $< $(I_DIRS) 
+	$(CC) $(CC_FLAGS) -c $(I_DIRS) -o $@ $<
 
 clean:
 	rm -rf ./obj

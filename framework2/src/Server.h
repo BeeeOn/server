@@ -27,7 +27,7 @@ public:
     void virtual startAccept() = 0;
     
     void handleAccept(const asio::error_code& error);
-  
+    
     void handleStop();
 
 protected:

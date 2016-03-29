@@ -27,7 +27,7 @@ TaskLoader::~TaskLoader() {
 
 std::shared_ptr<TaskLoader> TaskLoader::getInstance()
 {
-    std::cout << "TaskLoader::getInstance()" << std::endl;
+    //std::cout << "TaskLoader::getInstance()" << std::endl;
     
     if (!m_instance) {
         std::cout << "Create TaskLoader:m_instance." << std::endl;
@@ -116,11 +116,17 @@ void TaskLoader::processTasksConfigFileAndStoreInfo(std::string tasks_config_fil
         std::cout << "TYPE: " << (int)task_type << std::endl;
         std::cout << "PATH: " << task_path << std::endl;
         
+        try {
         SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
         *sql << "INSERT INTO task(task_id, name, version, type, library_path) VALUES(:task_id, :name, :version, :type, :library_path)",
              soci::use(task_id, "task_id"), soci::use(task_name, "name"), soci::use(task_version, "version"),
              soci::use(type_str, "type"), soci::use(task_path, "library_path");
-        
+        }
+         catch (const std::exception& e) {
+            std::cerr << "DATABASE: " <<  e.what() << std::endl;
+             
+        }
+        std::cout << "Emplace task: " << task_name << " into BAF." << std::endl;
         m_tasks.emplace(task_id, std::make_shared<Task>(task_version, task_name, task_type, task_path));
     }
 }

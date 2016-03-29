@@ -16,7 +16,7 @@
 class AliveCheckInstance: public TimedTaskInstance
 {
 public:
-    AliveCheckInstance();
+    AliveCheckInstance(unsigned int instance_id);
     
     virtual ~AliveCheckInstance();
     
@@ -24,7 +24,7 @@ public:
     
 private:
 
-    void executeRefreshQuery();
+    void executeRefresh();
 };
 #endif /* ALIVECHECKINSTANCE_H */
 

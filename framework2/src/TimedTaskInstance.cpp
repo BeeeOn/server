@@ -14,20 +14,22 @@
 
 #include "Calendar.h"
 
-TimedTaskInstance::TimedTaskInstance() 
-{   
-    
+TimedTaskInstance::TimedTaskInstance(unsigned int instance_id):
+    TaskInstance(instance_id)
+{
 }
 
 /*
 TimedAlgorithmInstance::TimedAlgorithmInstance(const TimedAlgorithmInstance& orig) {
 }
 */
-TimedTaskInstance::~TimedTaskInstance() {
+TimedTaskInstance::~TimedTaskInstance()
+{
 }
 
 
-void TimedTaskInstance::activate() {
+void TimedTaskInstance::activate()
+{
     
     m_activation_mx.lock();
         
@@ -38,14 +40,17 @@ void TimedTaskInstance::activate() {
     m_activation_mx.unlock();
 }
 
-void TimedTaskInstance::run() {
+void TimedTaskInstance::run()
+{
     std::cout << "WRONG RUN" << std::endl;
 }
 
-void TimedTaskInstance::planActivationNow() {
+void TimedTaskInstance::planActivationNow()
+{
     Calendar::emplaceEvent(this);
 }
 
-void TimedTaskInstance::planActivationAfterSeconds(int seconds) {
+void TimedTaskInstance::planActivationAfterSeconds(int seconds)
+{
     Calendar::emplaceEvent(seconds, this);
 }

@@ -30,16 +30,16 @@ public:
     virtual void createInstance(unsigned int instance_id, std::map<std::string, std::string> configuration) = 0;
     
     // Prvotni ulozeni konfigurace ulohy.
-    //virtual void storeConfiguration(std::map<std::string, std::string> configuration) = 0;
+    //virtual void insertConfiguration(std::map<std::string, std::string> configuration) = 0;
     
     // Zmena uz existujici konfigurace.
-    virtual void changeConfiguration(unsigned int instance_id, std::map<std::string /*name*/, std::string /*value*/> configuration) = 0;
+    virtual void updateConfiguration(unsigned int instance_id, std::map<std::string /*name*/, std::string /*value*/> configuration) = 0;
    
     // Smazani konfigurace.
-    virtual void deleteConfiguration(unsigned int user_id, unsigned short personal_id) = 0;
+    //virtual void deleteConfiguration(unsigned int user_id, unsigned short personal_id) = 0;
     
     // Smazani instance.
-    void deleteInstance(unsigned int user_id, unsigned short personal_id);
+    //void deleteInstance(unsigned int user_id, unsigned short personal_id);
     
     /**
      * 

@@ -33,6 +33,10 @@ protected:
     
     void handleRead(const asio::error_code& error, size_t bytes_transferred);
 
+    void handleWrite(const asio::error_code& error);
+    
+    void send(std::string message);
+    
     //enum { max_length = 1024 };
     
     asio::ip::tcp::socket m_socket;

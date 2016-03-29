@@ -22,17 +22,18 @@
 #include "Calendar.h"
 #include "ConfigParser.h"
 #include "DatabaseInterface.h"
+#include "DataMessageRegister.h"
+#include "GatewayServer.h"
 #include "TaskLoader.h"
 #include "UserServer.h"
 
-void stopBAF(const asio::error_code& error, UserServer *user_server/*, Server *gateway_server*/)
+void stopBAF(const asio::error_code& error, UserServer *user_server, GatewayServer *gateway_server)
 {
   if (!error)
   {
     Calendar::stopCalendar();
     user_server->handleStop();
-    
-    //gateway_server->handleStop();
+    gateway_server->handleStop();
   }
 }
 
@@ -93,7 +94,10 @@ int main(int argc, char** argv) {
     // Starts calendar algorithm.
     Calendar calendar;
     std::thread calendar_thread(&Calendar::run, &calendar);
-    //t_calendar.detach();
+    calendar_thread.detach();
+    
+    // Create DataMessageRegister.
+    std::shared_ptr<DataMessageRegister> data_message_register = DataMessageRegister::getInstance();   
     
     // Loads algorithm managers.
     std::shared_ptr<TaskLoader> task_loader = TaskLoader::getInstance();
@@ -108,33 +112,17 @@ int main(int argc, char** argv) {
         return 1;
     }
     
-    /*
-    for (auto task: task_loader.m_tasks) {
+    std::cout << "Number of tasks: " << TaskLoader::getInstance()->m_tasks.size() << std::endl;
+    for (auto task : TaskLoader::getInstance()->m_tasks) {
         std::cout << "Name: " << task.second->getTaskName() << std::endl;
-        std::cout << "Creating new instance!" << std::endl;
         
-        task.second->getTaskManagerPtr()->createInstance(1, 1);
+        //std::cout << "Creating new instance!" << std::endl;
+        
+        //task.second->getTaskManagerPtr()->createInstance(1, 1);
     }
-    */
-    /*
-    // Test of weak pointer.
-    std::weak_ptr<int> weak_test;
-
-    std::shared_ptr<int> cislo(std::make_shared<int>(5));
-
-    weak_test = cislo;
-
-    if(auto ptr = weak_test.lock()) {
-        std::cerr << "Print pointer." << std::endl;
-        std::cout << *ptr << std::endl;
-    }
-    else { 
-        std::cerr << "Pointer is not pointing to anything." << std::endl;
-    }
-    */
     
-    std::string clientDelim("</adapter_server>"); // Delimeter of XML from gateway.
-    std::string serverDelim("</end>");
+    //std::string clientDelim("</adapter_server>"); // Delimeter of XML from gateway.
+    //std::string serverDelim("</end>");
    
     // Initializes and starts server.
     asio::io_service io_service;
@@ -145,6 +133,10 @@ int main(int argc, char** argv) {
     //gateway_server.startAccept();
     //std::thread gateway_server_thread(&Server::run, &gateway_server);
     
+    GatewayServer gateway_server(io_service, config_parser.m_gateway_server_port, config_parser.m_gateway_server_threads);
+    gateway_server.startAccept();
+    std::thread gateway_server_thread(&Server::run, &gateway_server);
+    
     UserServer user_server(io_service, config_parser.m_user_server_port, config_parser.m_user_server_threads);
     user_server.startAccept();
     
@@ -154,12 +146,12 @@ int main(int argc, char** argv) {
       #if defined(SIGQUIT)
     signals.add(SIGQUIT);
       #endif // defined(SIGQUIT)
-    signals.async_wait(boost::bind(stopBAF, asio::placeholders::error, &user_server/*, &gateway_server*/));
+    signals.async_wait(boost::bind(stopBAF, asio::placeholders::error, &user_server, &gateway_server));
     
     user_server.run();
     
-    calendar_thread.join();
-    //gateway_server_thread.join();
+    //calendar_thread.join();
+    gateway_server_thread.join();
     
     std::cout << "SERVER STOPED!" << std::endl;
     return 0;

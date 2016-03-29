@@ -52,18 +52,23 @@ void UserSession::receivedMessage(size_t bytes_transferred)
                 std::shared_ptr<Task> task = TaskLoader::getInstance()->findTask(config_data.task_id);
                 
                 if(task->getTaskManagerPtr()->checkInstanceExistence(config_data)) {
+                    std::cout << "Instance exists: user_id: " << config_data.user_id << " | task_id: " << config_data.task_id << " | config_data" << config_data.relative_id << std::endl;
                     // Instance was found.
                     unsigned int instance_id = task->getTaskManagerPtr()->getInstanceId(config_data.user_id, config_data.relative_id);
-                    //task->getTaskManagerPtr()->changeConfiguration(instance_id);
+                    task->getTaskManagerPtr()->updateConfiguration(instance_id, config_data.parameters);
+                    send("Instance already exists. Configuration was changed.");
                 }
                 else {
                     // Instance was not found. Create it.
                     task->getTaskManagerPtr()->makeNewInstance(config_data);
+                    send("Instance didn't exist and was created.");
                 }
                 break;
         };
     }
     catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;
+        send("Request was not fullfiled. Sorry.");
     }
 }
+

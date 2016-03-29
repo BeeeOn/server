@@ -26,6 +26,6 @@ then
 	printf "${L_GREEN}Removing BAF binary finished!${NC}\n"
 else
 	printf "${L_GREEN}Compiling BAF binary!${NC}\n"
-	make -f ./Makefile_local
+	make -j 4 -f ./Makefile_local
 	printf "${L_GREEN}Compiling BAF binary finished!${NC}\n"
 fi

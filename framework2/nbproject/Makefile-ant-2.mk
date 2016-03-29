@@ -38,10 +38,12 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/Calendar.o \
 	${OBJECTDIR}/src/CalendarEvent.o \
 	${OBJECTDIR}/src/ConfigParser.o \
+	${OBJECTDIR}/src/DataMessageParser.o \
+	${OBJECTDIR}/src/DataMessageRegister.o \
 	${OBJECTDIR}/src/DatabaseInterface.o \
-	${OBJECTDIR}/src/MessageParser.o \
-	${OBJECTDIR}/src/MessageRegister.o \
-	${OBJECTDIR}/src/ModuleData.o \
+	${OBJECTDIR}/src/GatewayServer.o \
+	${OBJECTDIR}/src/GatewaySession.o \
+	${OBJECTDIR}/src/RegisterEntry.o \
 	${OBJECTDIR}/src/Server.o \
 	${OBJECTDIR}/src/Session.o \
 	${OBJECTDIR}/src/Task.o \
@@ -54,9 +56,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/UserServer.o \
 	${OBJECTDIR}/src/UserSession.o \
 	${OBJECTDIR}/src/framework.o \
-	${OBJECTDIR}/src/pugixml.o \
-	${OBJECTDIR}/src/u_server.o \
-	${OBJECTDIR}/src/u_session.o
+	${OBJECTDIR}/src/pugixml.o
 
 
 # C Compiler Flags
@@ -98,25 +98,35 @@ ${OBJECTDIR}/src/ConfigParser.o: src/ConfigParser.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/ConfigParser.o src/ConfigParser.cpp
 
+${OBJECTDIR}/src/DataMessageParser.o: src/DataMessageParser.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/DataMessageParser.o src/DataMessageParser.cpp
+
+${OBJECTDIR}/src/DataMessageRegister.o: src/DataMessageRegister.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/DataMessageRegister.o src/DataMessageRegister.cpp
+
 ${OBJECTDIR}/src/DatabaseInterface.o: src/DatabaseInterface.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/DatabaseInterface.o src/DatabaseInterface.cpp
 
-${OBJECTDIR}/src/MessageParser.o: src/MessageParser.cpp 
+${OBJECTDIR}/src/GatewayServer.o: src/GatewayServer.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/MessageParser.o src/MessageParser.cpp
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/GatewayServer.o src/GatewayServer.cpp
 
-${OBJECTDIR}/src/MessageRegister.o: src/MessageRegister.cpp 
+${OBJECTDIR}/src/GatewaySession.o: src/GatewaySession.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/MessageRegister.o src/MessageRegister.cpp
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/GatewaySession.o src/GatewaySession.cpp
 
-${OBJECTDIR}/src/ModuleData.o: src/ModuleData.cpp 
+${OBJECTDIR}/src/RegisterEntry.o: src/RegisterEntry.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/ModuleData.o src/ModuleData.cpp
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/RegisterEntry.o src/RegisterEntry.cpp
 
 ${OBJECTDIR}/src/Server.o: src/Server.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -182,16 +192,6 @@ ${OBJECTDIR}/src/pugixml.o: src/pugixml.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/pugixml.o src/pugixml.cpp
-
-${OBJECTDIR}/src/u_server.o: src/u_server.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/u_server.o src/u_server.cpp
-
-${OBJECTDIR}/src/u_session.o: src/u_session.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/u_session.o src/u_session.cpp
 
 # Subprojects
 .build-subprojects:

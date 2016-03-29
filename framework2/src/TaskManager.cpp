@@ -79,7 +79,8 @@ void TaskManager::makeNewInstance(ConfigMessage config_message) {
     createInstance(instance_id, config_message.parameters);
     
 }
-
+/*
 void TaskManager::deleteInstance(unsigned int user_id, unsigned short personal_id) {
 
 }
+*/

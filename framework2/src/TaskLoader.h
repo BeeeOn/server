@@ -59,7 +59,7 @@ private:
      * Singleton instance pointer.
      */
     static std::shared_ptr<TaskLoader> m_instance;
-    
+public:    
     /**
      * Container storing all loaded tasks.
      */

@@ -7,35 +7,74 @@
 
 #include "AliveCheckInstance.h"
 
+#include <chrono>
 #include <iostream>
+#include <vector>
+#include <ctime>
 
-//#include <soci.h>
-//#include <postgresql/soci-postgresql.h>
+#include <soci.h>
 
-//using namespace soci;
+#include "../../../src/DatabaseInterface.h"
 
-AliveCheckInstance::AliveCheckInstance()
+AliveCheckInstance::AliveCheckInstance(unsigned int instance_id):
+    TimedTaskInstance(instance_id)
 {
     planActivationNow();
 }
 
 AliveCheckInstance::~AliveCheckInstance()
 {
-    std::cout << "RefreshCheckInstance::~RefreshCheckInstance" << std::endl;
 }
 
 void AliveCheckInstance::run()
 {
+    std::cout << "RUN ALIVE CHECK." << std::endl;
     
     planActivationAfterSeconds(5);
     
-    executeRefreshQuery();
+    executeRefresh();
 }
 
-void AliveCheckInstance::executeRefreshQuery()
+void AliveCheckInstance::executeRefresh()
 {
+    unsigned long long gateway_id;
+    int notifications;
     
-    std::cout << "PLAY REFRESH CHECK" << std::endl;
+    // Get gateway_id from table with configuration. 
+    SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
+    *sql << "SELECT gateway_id, notifications FROM task_alive_check WHERE instance_id = :instance_id",
+            soci::into(gateway_id), soci::into(notifications), soci::use(m_instance_id, "instance_id");
+    
+    std::cout << "gateway_id: " << gateway_id << " | notifications: " << notifications << std::endl;
+    
+    std::vector<unsigned long long> device_euid(100);
+    std::vector<unsigned long long> measured_at(100);
+    std::vector<int> refresh(100);
+    *sql << "SELECT device_euid, measured_at, refresh FROM device WHERE gateway_id = :gateway_id",
+            soci::into(device_euid), soci::into(measured_at), soci::into(refresh), soci::use(gateway_id, "gateway_id");
+    
+    long int now_timestamp = std::chrono::seconds(std::time(NULL)).count();
+    std::cout << "now: " << now_timestamp << std::endl;
+    
+    
+    
+    std::cout << "DEVICES:" << std::endl;
+    for (int i = 0; i < measured_at.size(); i++) {
+        std::cout << "measured_at: " << measured_at[i] << " | refresh: " << refresh[i] << std::endl;
+        if (measured_at[i] + (3 * refresh[i]) > now_timestamp) {
+            
+            *sql << "UPDATE device SET status = 'available'::device_status WHERE device_euid = :device_euid",
+                    soci::use(device_euid[i], "device_euid"); 
+        }
+        else {
+            *sql << "UPDATE device SET status = 'unavailable'::device_status WHERE device_euid = :device_euid",
+                    soci::use(device_euid[i], "device_euid"); 
+        }
+    }
+    
+    
+    //*sql << "SELECT notifications FROM task_alive_check WHERE instance_id = :"
+    
     /*
     session sql(postgresql, "port = '5432' dbname = 'home7' user = 'uiserver7' password = '1234' connect_timeout = '3'");
   

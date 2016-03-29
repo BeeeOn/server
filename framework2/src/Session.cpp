@@ -60,6 +60,8 @@ std::string Session::convertMessage(int msg_length) {
 void Session::handleRead(const asio::error_code& error, size_t bytes_transferred)
 {
     receivedMessage(bytes_transferred);
+    
+    
     /*
     if (!error) {
       
@@ -72,4 +74,22 @@ void Session::handleRead(const asio::error_code& error, size_t bytes_transferred
       //delete this;
     }
      */
-  }
+}
+
+void Session::handleWrite(const asio::error_code& error)
+{
+    if (!error) {
+        std::cout << "write was successful" << std::endl;
+    }
+    else {
+        std::cerr << "handle_write: " << error.message() << std::endl;
+    }
+}
+
+void Session::send(std::string message)
+{
+    size_t message_length = message.length();
+    
+    asio::async_write(m_socket, asio::buffer(message, message_length),
+          boost::bind(&Session::handleWrite, shared_from_this(), asio::placeholders::error));        
+}

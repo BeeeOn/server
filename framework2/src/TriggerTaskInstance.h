@@ -8,15 +8,30 @@
 #ifndef TRIGGERTASKINSTANCE_H
 #define TRIGGERTASKINSTANCE_H
 
+#include "DataMessage.h"
 #include "TaskInstance.h"
-class TriggerTaskInstance//:public TaskInstance 
+
+#include <mutex>
+
+class TriggerTaskInstance: public TaskInstance 
 {
 public:
-    TriggerTaskInstance();
+    TriggerTaskInstance(unsigned int instance_id);
+    
     TriggerTaskInstance(const TriggerTaskInstance& orig);
+    
     virtual ~TriggerTaskInstance();
-private:
 
+    void activate(DataMessage data_message) override;
+    
+    // Entry point of instance.
+    virtual void run(DataMessage data_message) = 0;
+
+    void registerDataMessage(unsigned long long device_euid);
+    
+private:
+        
+    std::mutex m_activation_mx;
 };
 
 #endif /* TRIGGERTASKINSTANCE_H */

@@ -1,0 +1,13 @@
+{
+    "baf": "config",
+    "user_id": 6,
+    "task_id": 2,
+    "relative_id": 2,
+    "parameters": {
+        "device_euid": "1",
+        "module_id": "1",
+        "operator": "lesser",
+        "value": "25.3",
+        "notification_text": "Hodnota teploty presahla 25.3 stupne!"
+    }
+}

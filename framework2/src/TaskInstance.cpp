@@ -9,10 +9,10 @@
 
 #include <string>
 
-TaskInstance::TaskInstance()
+TaskInstance::TaskInstance(unsigned int instance_id):
+    m_instance_id(instance_id)
 {
     // Save owner information to database.
-    
 }
 
 TaskInstance::~TaskInstance() {

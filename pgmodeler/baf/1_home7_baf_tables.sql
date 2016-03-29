@@ -11,7 +11,7 @@ CREATE TABLE public.task(
 	task_id smallint NOT NULL,
 	name varchar(20),
 	version smallint,
-	type varchar(6),
+	type varchar(8),
 	library_path text,
 	CONSTRAINT task_pk PRIMARY KEY (task_id)
 );
