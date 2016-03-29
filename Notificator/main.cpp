@@ -3,22 +3,44 @@
 #include <memory>
 
 #include <soci.h>
-#include <iostream>
+#include <postgresql/soci-postgresql.h>
 
 #include "WatchdogNotif.h"
 #include "DeleteNotif.h"
 #include "AchievementNotif.h"
 #include "UriNotif.h"
+#include "InfoNotification.h"
+#include "Utils.h"
+#include "JsonNotificationBuilder.h"
+#include "XmlHelper.h"
+#include "Constants.h"
 
+#include <sstream>
 #include <vector>
 #include <memory>
 
+class TestNotif: public InfoNotification {
+public:
+	TestNotif(int user_id, int notification_id, long time, std::string message) :
+		InfoNotification("Test Notif", user_id, notification_id, time), m_msg(message) {}
+	
+	void addGcmData(JsonNotificationBuilder *builder) {
+		builder->addData(JSON_DATA_MESSAGE, m_msg);
+	}
+	void addDbXmlData(stringstream *ss) {
+		XmlHelper::tagWithValue(ss, DATA_MESSAGE, m_msg);
+	}
+private:
+	std::string m_msg;	
+};
+
+
 int main()
 {   
-    soci::session sql("port = '5432' dbname = 'home7' user = 'uiserver7' password = '1234' connect_timeout = '3'");
+    soci::session sql(soci::postgresql, "port = '5432' dbname = 'home7' user = 'uiserver7' password = '1234' connect_timeout = '3'");
 
-    std::vector<std::string> service_reference_ids;
-    sql << "SELECT service_reference_ids FROM push_notification_service WHERE user_id = 9509",
+    std::vector<std::string> service_reference_ids(20);
+    sql << "SELECT service_reference_id FROM push_notification_service WHERE user_id = 9509",
            soci::into(service_reference_ids);
 
     std::cout << "Service ids of user 9509" << std::endl;
@@ -34,17 +56,17 @@ int main()
     std::string message = "Testovaci URI notifikace.";
     std::string uri = "www.google.cz";
 
-    std::shared_ptr<Notification> advert = new UriNotif(user_id, notif_id, timestamp, message, uri);
+    Notification *info = new TestNotif(user_id, notif_id, timestamp, message);
 
     std::vector<std::string> non_valid_ids;
-    non_valid_ids = advert->sendGcm(&service_reference_ids);
+    non_valid_ids = info->sendGcm(&service_reference_ids);
 
     std::cout << "Non valid ids: " << std::endl;
     for (std::string id : non_valid_ids) {
         std::cout << id << std::endl;
     }
 
-    delete(advert);
+    delete(info);
 
     //ids.push_back("APA91bF-u3AZ3bNl6jehq19oEhbVFGEaA_4x3jlzMtKwHzlakRcE9K_H_Rk8YuNSjp1K62dz-_sL09iQjlH8Z3JTsxbg1VbV_Gch0YhTuOg3U1bCib7pk4Xg4rHPeUrICiQ74RIB3qXxTjmTCeLBZor_Tr3pLuATUw");
     /*    
@@ -95,4 +117,5 @@ int main()
     delete(notif);
   
     return 0;
+	*/
 }
