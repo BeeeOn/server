@@ -13,25 +13,44 @@
 #include <thread>
 #include <vector>
 
-#include "CalendarEvent.h"
+#include "TaskInstance.h"
 
-// Definition of static variables.
-std::mutex Calendar::m_calendar_events_mx, Calendar::m_new_wakeup_time_mx, Calendar::m_queue_not_empty_mx, Calendar::m_test_queue_empty_mx;
-std::condition_variable Calendar::m_new_wakeup_time_cv, Calendar::m_queue_not_empty_cv;
-std::chrono::system_clock::time_point Calendar::m_wakeup_time = std::chrono::system_clock::now();
-std::priority_queue<std::shared_ptr<CalendarEvent>, std::vector<std::shared_ptr<CalendarEvent>>, GreaterCalendarEventSharedPtr> Calendar::m_calendar_events;
-bool Calendar::m_should_run(true);
+std::shared_ptr<Calendar> Calendar::m_instance;
 
-Calendar::Calendar()
+Calendar::Calendar():
+    m_wakeup_time(std::chrono::system_clock::now()),
+    m_should_run(true),
+    m_running(false)
 {
 }
 
-Calendar::~Calendar() {
+Calendar::~Calendar()
+{
 }
 
-void Calendar::run() {
+std::shared_ptr<Calendar> Calendar::getInstance()
+{
+    if (!m_instance) {
+        std::cout << "Create Calendar:m_instance." << std::endl;
+        m_instance = std::shared_ptr<Calendar>(new Calendar);
+        std::cout << "Finished creation Calendar:m_instance." << std::endl;
+        return m_instance;
+    }
+    else {
+        return m_instance;
+    }
+}
+
+void Calendar::runCalendar()
+{
+    if (m_running) {
+        return;
+    }
+    else {
+        m_running = true;
+    }
     // Stores all event which should be executed.
-    std::vector<std::shared_ptr<CalendarEvent>> events_to_execute;
+    std::vector<TaskInstance*> to_activate;
     
     // Run for all eternity (until whole system shuts down).  
     while(m_should_run) {
@@ -39,28 +58,31 @@ void Calendar::run() {
         // If event queue is empty, wait in thread until event comes.
         waitUntilCalendarIsNotEmpty();
      
+        if (m_calendar_events.empty()) {
+            break;
+        }
+        
         m_calendar_events_mx.lock(); 
         
         // Save current time.
         std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
         
-        
-        while(m_calendar_events.top()->getActivationTime() <= now) {
-
+        while (m_calendar_events.begin()->first <= now) {
             // Stores every event with activation time less or equal to now.
-            events_to_execute.push_back(m_calendar_events.top());
-
+            to_activate.push_back(m_calendar_events.begin()->second);
+            
             // Pops stored event from queue.
-            m_calendar_events.pop();
-
+            m_calendar_events.erase(m_calendar_events.begin());
+            
             // If the queue is empty, stop loop immediately.
-            if(m_calendar_events.empty())
+            if (m_calendar_events.empty()) {
                 break;
+            }
         }
-       
+
         if(!m_calendar_events.empty()) {
             // Set the activation time of event with lowest activation time as time to wake up this thread.
-            m_wakeup_time = m_calendar_events.top()->getActivationTime();
+            m_wakeup_time = m_calendar_events.begin()->first;
         }
         else {
             // If there is no event in queue this thread will won't wait in this iteration,
@@ -71,10 +93,10 @@ void Calendar::run() {
         m_calendar_events_mx.unlock();
         
         // Launch thread to execute stored events.
-        std::thread t_execute_events(&Calendar::executeEvents, this, events_to_execute);
+        std::thread t_execute_events(&Calendar::activateInstances, this, to_activate);
         t_execute_events.detach();
 
-        events_to_execute.clear();
+        to_activate.clear();
         
         // Creates lock by which can thread wake up if to queue comes event which has
         // lower activation time then the one for which thread waits now.
@@ -88,18 +110,22 @@ void Calendar::run() {
     // HERE CAN BE STORED EVERYTHING IN CALENDAR.
 }
 
-void Calendar::executeEvents(std::vector<std::shared_ptr<CalendarEvent>> events_to_execute) {
-    if(!events_to_execute.empty()) {
-        for (auto event : events_to_execute) {
+void Calendar::activateInstances(std::vector<TaskInstance*> to_activate)
+{
+    std::cout << "to_activate size: " << to_activate.size() << std::endl;
+    
+    if(!to_activate.empty()) {
+        for (auto instance : to_activate) {
             // Print time of activation and activate instances.
             time_t tn = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
             std::cout << "Instance activated at time: " << ctime(&tn) << std::endl;
-            event->activateInstance();
+            instance->activate();
         }
     }
 }
 
-void Calendar::waitUntilCalendarIsNotEmpty() {
+void Calendar::waitUntilCalendarIsNotEmpty()
+{
     m_test_queue_empty_mx.lock();
     
     bool calendar_empty = m_calendar_events.empty();
@@ -115,21 +141,23 @@ void Calendar::waitUntilCalendarIsNotEmpty() {
     if (!calendar_empty) {
         m_test_queue_empty_mx.unlock();
         std::cout << "Calendar not empty, run." << m_calendar_events.size() << " ->" << std::chrono::system_clock::now().time_since_epoch().count() << std::endl;
-    }
-    
+    }    
 }
 
-void Calendar::pushEvent(std::chrono::system_clock::time_point activation_time, TimedTaskInstance* instance_ptr) {
-    
+void Calendar::emplaceEvent(std::chrono::system_clock::time_point activation_time, TaskInstance* instance_ptr)
+{
     m_calendar_events_mx.lock();
     m_test_queue_empty_mx.lock();
     // Before new event is created, check if queue is empty.
     bool calendar_empty = m_calendar_events.empty();
     
     // Create new event and push to queue.
-    m_calendar_events.push(std::make_shared<CalendarEvent>(activation_time, instance_ptr));
+    //m_calendar_events.push(std::make_shared<CalendarEvent>(activation_time, instance_ptr));
+    m_calendar_events.emplace(activation_time, instance_ptr);
     
-    std::cout << "PUSH ->" << std::chrono::system_clock::now().time_since_epoch().count() << std::endl;
+    std::cout << "emplace size: " << m_calendar_events.size() << std::endl;
+    
+    //std::cout << "PUSH ->" << std::chrono::system_clock::now().time_since_epoch().count() << std::endl;
     
     if (!calendar_empty) {
        
@@ -148,20 +176,45 @@ void Calendar::pushEvent(std::chrono::system_clock::time_point activation_time, 
     m_calendar_events_mx.unlock();
 }
 
-void Calendar::emplaceEvent(int seconds, TimedTaskInstance *instance_ptr) {
+void Calendar::planActivation(int seconds, TaskInstance* instance_ptr)
+{
     // Compute exact time when event should activate and push event.
-    pushEvent(std::chrono::system_clock::now() + std::chrono::seconds(seconds), instance_ptr);
+    emplaceEvent(std::chrono::system_clock::now() + std::chrono::seconds(seconds), instance_ptr);
 }
 
-void Calendar::emplaceEvent(TimedTaskInstance* instance_ptr) {
+void Calendar::planActivation(TaskInstance* instance_ptr)
+{
     // Push event at current time.
-    pushEvent(std::chrono::system_clock::now(), instance_ptr);
+    emplaceEvent(std::chrono::system_clock::now(), instance_ptr);
 }
 
-void Calendar::stopCalendar() {
+void Calendar::stopCalendar()
+{
+    std::cout << "Calendar::stopCalendar - enter" << std::endl;
     m_should_run = false;
     // Wakeup calendar algorithm  to end.
+    if (m_calendar_events.empty()) {
+        m_queue_not_empty_cv.notify_all();
+    }
     m_new_wakeup_time_cv.notify_all();
     
-    //m_queue_not_empty_cv.notify_all();
+    std::cout << "Calendar::stopCalendar - leave" << std::endl;
+}
+
+void Calendar::removeAllActivations(TaskInstance* instance_ptr)
+{
+    for (auto iter = m_calendar_events.begin(); iter != m_calendar_events.end();) {
+        
+        std::cout << "removed from calendar" << std::endl;
+        // Important because iterators are invalidated.
+        auto erase_iter = iter;
+        iter++;
+        
+        if (erase_iter->second == instance_ptr) {
+            m_calendar_events.erase(erase_iter);
+        }
+    }
+    if (m_calendar_events.empty()) {
+        m_wakeup_time = std::chrono::system_clock::now();
+    }
 }

@@ -29,9 +29,9 @@
 
 void stopBAF(const asio::error_code& error, UserServer *user_server, GatewayServer *gateway_server)
 {
-  if (!error)
-  {
-    Calendar::stopCalendar();
+  if (!error) {
+    Calendar::getInstance()->stopCalendar(); 
+    //Calendar::stopCalendar();
     user_server->handleStop();
     gateway_server->handleStop();
   }
@@ -92,9 +92,10 @@ int main(int argc, char** argv) {
     std::cout << "ZISKANE JMENO: " << given_name << std::endl;
     
     // Starts calendar algorithm.
-    Calendar calendar;
-    std::thread calendar_thread(&Calendar::run, &calendar);
-    calendar_thread.detach();
+    //Calendar calendar;
+    //std::shared_ptr<Calendar> calendar = Calendar::getInstance();
+    std::thread calendar_thread(&Calendar::runCalendar, Calendar::getInstance());
+    //calendar_thread.detach();
     
     // Create DataMessageRegister.
     std::shared_ptr<DataMessageRegister> data_message_register = DataMessageRegister::getInstance();   
@@ -121,18 +122,11 @@ int main(int argc, char** argv) {
         //task.second->getTaskManagerPtr()->createInstance(1, 1);
     }
     
-    //std::string clientDelim("</adapter_server>"); // Delimeter of XML from gateway.
-    //std::string serverDelim("</end>");
-   
     // Initializes and starts server.
     asio::io_service io_service;
    
     std::cout << "START SERVERS" << std::endl;
-    
-    //Server gateway_server(io_service, config_parser.m_gateway_server_port, clientDelim, serverDelim, config_parser.m_gateway_server_threads, 5);
-    //gateway_server.startAccept();
-    //std::thread gateway_server_thread(&Server::run, &gateway_server);
-    
+
     GatewayServer gateway_server(io_service, config_parser.m_gateway_server_port, config_parser.m_gateway_server_threads);
     gateway_server.startAccept();
     std::thread gateway_server_thread(&Server::run, &gateway_server);
@@ -150,7 +144,7 @@ int main(int argc, char** argv) {
     
     user_server.run();
     
-    //calendar_thread.join();
+    calendar_thread.join();
     gateway_server_thread.join();
     
     std::cout << "SERVER STOPED!" << std::endl;

@@ -20,4 +20,3 @@ TaskInstance::~TaskInstance() {
     // Delete instance from database.
     
 }
-

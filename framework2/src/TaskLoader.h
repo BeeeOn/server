@@ -24,6 +24,17 @@
 
 class TaskLoader {
 public:
+    /**
+     * Delete copy constructor.
+     */
+    TaskLoader(const TaskLoader& orig) = delete;
+    
+    /**
+     * Delete assignment operator.
+     */
+    void operator=(const TaskLoader&) = delete;
+    
+    virtual ~TaskLoader();
     
     /**
      * Returns pointer to singleton instance of class DatabaseInterface.
@@ -31,10 +42,6 @@ public:
      */
     static std::shared_ptr<TaskLoader> getInstance();
     
-    TaskLoader();
-    
-    virtual ~TaskLoader();
-
     /**
      * Loads and runs all tasks defined in tasks config file.
      * @param tasks_config_file_path Path to tasks config file.
@@ -55,6 +62,12 @@ public:
     std::shared_ptr<Task> findTask(unsigned int task_id);
     
 private:
+    /** 
+     * Private constructor.
+     */
+    TaskLoader();
+    
+   
     /**
      * Singleton instance pointer.
      */

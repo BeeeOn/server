@@ -1,5 +1,5 @@
 /* 
- * File:   AlgorithmManager.cpp
+ * File:   TaskManager.cpp
  * Author: Martin Novak, xnovak1c@stud.fit.vutbr.cz
  * 
  * Created on 20. January 2016
@@ -13,7 +13,6 @@
 
 #include "DatabaseInterface.h"
 
-
 TaskManager::TaskManager()
 {
 }
@@ -22,7 +21,47 @@ TaskManager::~TaskManager()
 {
 }
 
-bool TaskManager::checkInstanceExistence(ConfigMessage config_message)
+std::string TaskManager::getData(GetDataMessage get_data_message)
+{
+    return "This task doesn't return any data";
+}
+
+long TaskManager::createInstanceInDB(CreateMessage create_message)
+{
+    long instance_id;
+    std::string permission("superuser");
+    
+    SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
+    soci::transaction tr(*sql);
+    
+    *sql << "INSERT INTO instance(task_id) VALUES (:task_id) RETURNING instance_id",
+            soci::into(instance_id), soci::use(create_message.task_id);
+    
+    *sql << "INSERT INTO user_instance(user_id, instance_id, permission) VALUES(:user_id, :instance_id, :permission)",
+            soci::use(create_message.user_id, "user_id"), soci::use(instance_id, "instance_id"), soci::use(permission, "permission");
+     
+    tr.commit();
+    
+    return instance_id;
+}
+
+void TaskManager::deleteInstance(DeleteMessage delete_message)
+{
+    SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
+    
+    *sql << "DELETE FROM instance WHERE instance_id = :instance_id",
+            soci::use(delete_message.instance_id, "instance_id");
+    
+    // Delete from calendar.
+    m_task_instances.find(delete_message.instance_id)->second->deleteInstance();
+    
+    m_task_instances.erase(delete_message.instance_id);
+}
+
+
+
+/*
+bool TaskManager::checkInstanceExistence(CreateMessage config_message)
 {
     // 
     unsigned int instance_id;
@@ -46,7 +85,8 @@ bool TaskManager::checkInstanceExistence(ConfigMessage config_message)
         return false;
     }
 }
-
+*/
+/*
 unsigned int TaskManager::getInstanceId(unsigned int user_id, unsigned short relative_id) {
     
     unsigned int instance_id;
@@ -65,9 +105,10 @@ unsigned int TaskManager::getInstanceId(unsigned int user_id, unsigned short rel
         throw std::runtime_error(error.str());
     }
     return instance_id;
-}
+}*/
 
-void TaskManager::makeNewInstance(ConfigMessage config_message) {
+/*
+void TaskManager::makeNewInstance(CreateMessage config_message) {
     
     unsigned int instance_id;
     SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
@@ -81,6 +122,7 @@ void TaskManager::makeNewInstance(ConfigMessage config_message) {
     createInstance(instance_id, config_message.parameters);
     
 }
+*/
 /*
 void TaskManager::deleteInstance(unsigned int user_id, unsigned short personal_id) {
 

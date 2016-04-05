@@ -30,14 +30,15 @@ TimedTaskInstance::~TimedTaskInstance()
 
 void TimedTaskInstance::activate()
 {
-    
+    std::cout << "TimedTaskInstance::activate() - enter" << std::endl;
     m_activation_mx.lock();
-        
+    
     //test.lock();
     run();
     
     //test.unlock();
     m_activation_mx.unlock();
+    std::cout << "TimedTaskInstance::activate() - leave" << std::endl;
 }
 
 void TimedTaskInstance::run()
@@ -47,10 +48,19 @@ void TimedTaskInstance::run()
 
 void TimedTaskInstance::planActivationNow()
 {
-    Calendar::emplaceEvent(this);
+    Calendar::getInstance()->planActivation(this);
+    //Calendar::emplaceEvent(this);
+    //Calendar::emplaceEvent(this->shared_from_this());
 }
 
 void TimedTaskInstance::planActivationAfterSeconds(int seconds)
 {
-    Calendar::emplaceEvent(seconds, this);
+    Calendar::getInstance()->planActivation(seconds, this);
+    //Calendar::emplaceEvent(seconds, this);
+    //Calendar::emplaceEvent(seconds, this->shared_from_this());
+}
+
+void TimedTaskInstance::deleteInstance()
+{
+    Calendar::getInstance()->removeAllActivations(this);
 }

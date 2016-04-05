@@ -31,8 +31,9 @@ std::shared_ptr<TaskLoader> TaskLoader::getInstance()
     
     if (!m_instance) {
         std::cout << "Create TaskLoader:m_instance." << std::endl;
-        m_instance = std::make_shared<TaskLoader>();
+        m_instance = std::shared_ptr<TaskLoader>(new TaskLoader);
         std::cout << "Finished creation TaskLoader:m_instance." << std::endl;
+        return m_instance;
     }
     else {
         return m_instance;
@@ -118,9 +119,9 @@ void TaskLoader::processTasksConfigFileAndStoreInfo(std::string tasks_config_fil
         
         try {
         SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
-        *sql << "INSERT INTO task(task_id, name, version, type, library_path) VALUES(:task_id, :name, :version, :type, :library_path)",
+        *sql << "INSERT INTO task(task_id, name, version, type) VALUES(:task_id, :name, :version, :type)",
              soci::use(task_id, "task_id"), soci::use(task_name, "name"), soci::use(task_version, "version"),
-             soci::use(type_str, "type"), soci::use(task_path, "library_path");
+             soci::use(type_str, "type");//, soci::use(task_path, "library_path");
         }
          catch (const std::exception& e) {
             std::cerr << "DATABASE: " <<  e.what() << std::endl;
@@ -141,7 +142,7 @@ std::shared_ptr<Task> TaskLoader::findTask(unsigned int task_id) {
     else {
         // Task was not found.
         std::stringstream error;
-        error << "Task with id: " << task_id << " was not found.";
+        error << "Task with id: " << task_id << " was not found in the BAF system.";
         throw std::runtime_error(error.str());
     }
 }

@@ -7,11 +7,11 @@
 
 #include "CalendarEvent.h"
 
-//#include <iostream>
-//#include <memory>
+#include <iostream>
+#include <memory>
 
 //CalendarEvent::CalendarEvent(std::chrono::system_clock::time_point activation_time, std::weak_ptr<TimedAlgorithmInstance> instance_ptr):
-CalendarEvent::CalendarEvent(std::chrono::system_clock::time_point activation_time, TimedTaskInstance *instance_ptr):
+CalendarEvent::CalendarEvent(std::chrono::system_clock::time_point activation_time, TaskInstance* instance_ptr):
     m_activation_time(activation_time), m_instance_ptr(instance_ptr)
 {
 }
@@ -21,7 +21,7 @@ CalendarEvent::~CalendarEvent() {
 
 void CalendarEvent::activateInstance() {
     // Activates instance (WARNING! Does not check if pointed instance still exists!).
-    m_instance_ptr->activate();
+   m_instance_ptr->activate();
 
     /*
     // Activation when m_instance_ptr is std::weak_ptr. Checks instance existence.

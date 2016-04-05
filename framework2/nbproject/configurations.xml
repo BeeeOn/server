@@ -4,10 +4,6 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <logicalFolder name="f3" displayName="Structures" projectFiles="true">
-        <itemPath>src/ConfigMessage.h</itemPath>
-        <itemPath>src/DataMessage.h</itemPath>
-      </logicalFolder>
       <logicalFolder name="f1" displayName="Timed" projectFiles="true">
         <itemPath>src/Calendar.h</itemPath>
         <itemPath>src/CalendarEvent.h</itemPath>
@@ -20,6 +16,7 @@
         <itemPath>src/TriggerTaskInstance.h</itemPath>
       </logicalFolder>
       <itemPath>src/ConfigParser.h</itemPath>
+      <itemPath>src/DataMessage.h</itemPath>
       <itemPath>src/DatabaseInterface.h</itemPath>
       <itemPath>src/GatewayServer.h</itemPath>
       <itemPath>src/GatewaySession.h</itemPath>
@@ -30,6 +27,7 @@
       <itemPath>src/TaskLoader.h</itemPath>
       <itemPath>src/TaskManager.h</itemPath>
       <itemPath>src/UserMessageParser.h</itemPath>
+      <itemPath>src/UserMessages.h</itemPath>
       <itemPath>src/UserServer.h</itemPath>
       <itemPath>src/UserSession.h</itemPath>
       <itemPath>src/pugiconfig.hpp</itemPath>
@@ -116,8 +114,6 @@
       </item>
       <item path="src/CalendarEvent.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="src/ConfigMessage.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="src/ConfigParser.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/ConfigParser.h" ex="false" tool="3" flavor2="0">
@@ -183,6 +179,8 @@
       <item path="src/UserMessageParser.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/UserMessageParser.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/UserMessages.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/UserServer.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -229,8 +227,6 @@
       </item>
       <item path="src/CalendarEvent.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="src/ConfigMessage.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="src/ConfigParser.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/ConfigParser.h" ex="false" tool="3" flavor2="0">
@@ -296,6 +292,8 @@
       <item path="src/UserMessageParser.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/UserMessageParser.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/UserMessages.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/UserServer.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -330,8 +328,6 @@
       </item>
       <item path="src/CalendarEvent.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="src/ConfigMessage.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="src/ConfigParser.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/ConfigParser.h" ex="false" tool="3" flavor2="0">
@@ -397,6 +393,8 @@
       <item path="src/UserMessageParser.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/UserMessageParser.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/UserMessages.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/UserServer.cpp" ex="false" tool="1" flavor2="0">
       </item>

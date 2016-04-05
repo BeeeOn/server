@@ -12,7 +12,7 @@
 #include <map>
 #include <string>
 
-#include "../../../src/ConfigMessage.h"
+#include "../../../src/UserMessages.h"
 #include "../../../src/TaskManager.h"
 
 struct AliveCheckConfig {
@@ -26,11 +26,17 @@ public:
     
     AliveCheckManager();
               
-    void createInstance(unsigned int instance_id, std::map<std::string, std::string> configuration) override;
+    void createConfiguration(long instance_id, std::map<std::string, std::string> config) override;
+
+    void changeConfiguration(ChangeMessage change_message) override;
+    
+    std::map<std::string, std::string> getConfiguration(GetConfMessage get_conf_message) override;    
+    
+    //void createInstance(unsigned int instance_id, std::map<std::string, std::string> configuration) override;
 
     //void storeConfiguration(std::map<std::string, std::string> configuration) override;
 
-    void updateConfiguration(unsigned int instance_id, std::map<std::string, std::string> configuration) override;
+    //void updateConfiguration(unsigned int instance_id, std::map<std::string, std::string> configuration) override;
 
     //void deleteConfiguration(unsigned int user_id, unsigned short personal_id) override;
     

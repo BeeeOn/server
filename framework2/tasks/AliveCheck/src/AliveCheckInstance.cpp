@@ -28,11 +28,12 @@ AliveCheckInstance::~AliveCheckInstance()
 
 void AliveCheckInstance::run()
 {
-    std::cout << "RUN ALIVE CHECK." << std::endl;
+    std::cout << "AliveCheckInstance::run() - enter" << std::endl;
     
     planActivationAfterSeconds(5);
     
     executeRefresh();
+    std::cout << "AliveCheckInstance::run() - leave" << std::endl;
 }
 
 void AliveCheckInstance::executeRefresh()
@@ -72,7 +73,7 @@ void AliveCheckInstance::executeRefresh()
         }
     }
     
-    
+    std::cout << "ID instance: " << m_instance_id << std::endl;
     //*sql << "SELECT notifications FROM task_alive_check WHERE instance_id = :"
     
     /*

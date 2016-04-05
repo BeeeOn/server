@@ -10,29 +10,21 @@
 
 #include <condition_variable> //std::condition_variable
 #include <chrono> //std::time_point
-#include <vector>
+#include <map>
 #include <memory> //std::weak_ptr
 #include <mutex> //std::mutex
-#include <queue> //std::priority_queue
+#include <vector>
 
-#include "CalendarEvent.h"
-#include "TimedTaskInstance.h"
+#include "TaskInstance.h"
 
-// Class important for correct ordering of CalendarEvents in m_calendar_events priority_queue (event with lowest activation time at top).
-class GreaterCalendarEventSharedPtr {
-public:
-    bool operator()(const std::shared_ptr<CalendarEvent> lhs, const std::shared_ptr<CalendarEvent> rhs)
-    {
-        return lhs->getActivationTime() > rhs->getActivationTime();
-    }
-};
-
+//class TaskInstance;
 class Calendar {
 public:
     /**
-     * Constructor of class Calendar.
+     * Create instance of Calendar singleton, or return it.
+     * @return Pointer to Calendar.
      */
-    Calendar();
+    static std::shared_ptr<Calendar> getInstance();
     
     /**
      * Destructor of class Calendar.
@@ -40,65 +32,92 @@ public:
     virtual ~Calendar();
     
     /*
-     * Main algorithm of calendar. Should run only once in a seperated thread.
+     * Main algorithm of calendar. Must run only once in a seperated thread.
      */
-    void run();
-    
-    /*
-     * Executes events passed in parameter (activates instances stored in passed events).
-     * @param events_to_execute Events which should be executed.
-     */
-    void executeEvents(std::vector<std::shared_ptr<CalendarEvent>> events_to_execute);
+    void runCalendar();
     
     /**
-     * If queue is empty causes wait until it is notified that new event was emplaced to queue.
+     * Calculates activation time: now + seconds and planes instance activation to calendar with calculated activation time.
+     * @param seconds Relative activation time (activate seconds from now).
+     * @param instance_ptr Pointer to instance, which should be activated.
+     */
+    void planActivation(int seconds, TaskInstance* instance_ptr);
+    
+    /**
+     * Immediately plans instance activation to calendar with current time.
+     * @param instance_ptr Pointer to instance, which should be activated.
+     */
+    void planActivation(TaskInstance* instance_ptr);
+  
+    /**
+     * Stops calendar and saves activation times.
+     */
+    void stopCalendar();
+
+    /**
+     * Deletes all planned activations from calendar of passed TaskInstance.
+     * @param instance_ptr Pointer to instance which should be deleted from calendar.
+     */
+    void removeAllActivations(TaskInstance* instance_ptr);
+    
+private:
+    /**
+     * Constructor of class Calendar.
+     */
+    Calendar();
+    /**
+     * Delete copy constructor.
+     */
+    Calendar(const Calendar& orig) = delete;
+    /**
+     * Delete assignment operator.
+     */
+    void operator=(const Calendar&) = delete;
+    /**
+     * Pointer to Calendar instance. 
+     */
+    static std::shared_ptr<Calendar> m_instance;   
+ 
+    /*
+     * Activates instances passed in parameter.
+     * @param to_activate Instances which should be activated.
+     */
+    void activateInstances(std::vector<TaskInstance*> to_activate);
+    
+    /**
+     * If calendar is empty causes wait until it is notified that new event was emplaced to queue.
      */
     void waitUntilCalendarIsNotEmpty();
+ 
+    /**
+     * Emplaces event to multimap.
+     * @param activation_time Time at which should event activate.
+     * @param instance_ptr Pointer to instance, which should be activated.
+     */
+    void emplaceEvent(std::chrono::system_clock::time_point activation_time, TaskInstance* instance_ptr);
+    
+    // Time until main algorithm should wait.
+    std::chrono::system_clock::time_point m_wakeup_time;
+    
+    // Priority queue holding calendar events, those ones with smallest activation time are at top.
+    //std::priority_queue<std::shared_ptr<CalendarEvent>, std::vector<std::shared_ptr<CalendarEvent>>, GreaterCalendarEventSharedPtr> m_calendar_events;
+    std::multimap<std::chrono::system_clock::time_point, TaskInstance*> m_calendar_events; 
     
     /**
      * Contition variables for waking up main algorithm.
      */
-    static std::condition_variable m_new_wakeup_time_cv;
-    static std::condition_variable m_queue_not_empty_cv;
-    static std::mutex m_new_wakeup_time_mx;
-    static std::mutex m_queue_not_empty_mx;
+    std::condition_variable m_new_wakeup_time_cv;
+    std::mutex m_new_wakeup_time_mx;
+    std::condition_variable m_queue_not_empty_cv;
+    std::mutex m_queue_not_empty_mx;
     
-    static std::mutex m_calendar_events_mx;
-    static std::mutex m_test_queue_empty_mx;
-    
-    //static void emplaceEvent(int wait_time, std::weak_ptr<TimedAlgorithmInstance> instance_ptr);
-    /**
-     * Calculates activation time: now + seconds and pushes event to queue with calculated activation time.
-     * @param seconds Relative activation time (activate seconds from now).
-     * @param instance_ptr Pointer to instance, which should be activated.
-     */
-    static void emplaceEvent(int seconds, TimedTaskInstance *instance_ptr);
-    
-    /**
-     * Immediately pushes event to queue with current time.
-     * @param instance_ptr Pointer to instance, which should be activated.
-     */
-    static void emplaceEvent(TimedTaskInstance *instance_ptr);
-    
-    /**
-     * Pushes event to queue.
-     * @param activation_time Time at which should event activate.
-     * @param instance_ptr Pointer to instance, which should be activated.
-     */
-    static void pushEvent(std::chrono::system_clock::time_point activation_time, TimedTaskInstance *instance_ptr);
-    
-    // Time until main algorithm should wait.
-    static std::chrono::system_clock::time_point m_wakeup_time;
-    
-    // Priority queue holding calendar events, those ones with smallest activation time are at top.
-    static std::priority_queue<std::shared_ptr<CalendarEvent>, std::vector<std::shared_ptr<CalendarEvent>>, GreaterCalendarEventSharedPtr> m_calendar_events;
+    std::mutex m_calendar_events_mx;
+    std::mutex m_test_queue_empty_mx;
 
     // Indicates if calendar algorithm should run.
-    static bool m_should_run;
-
-    // Stops calendar.
-    static void stopCalendar();
+    bool m_should_run;
+    
+    // Indicates if Calendar runns, so it can't be run again.
+    bool m_running;
 };
-
 #endif /* CALENDAR_H */
-

@@ -1,49 +1,96 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /* 
  * File:   UserMessageParser.h
- * Author: mrmaidx
+ * Author: Martin Novak, xnovak1c@stud.fit.vutbr.cz
  *
- * Created on 20. března 2016, 22:36
+ * Created on 23. March 2016
  */
 
 #ifndef USERMESSAGEPARSER_H
 #define USERMESSAGEPARSER_H
 
-#include <iostream>
-#include <string>
 #include <map>
+#include <string>
 
 #include "rapidjson/document.h"
 
-#include "ConfigMessage.h"
-
-enum class USER_MESSAGE_TYPE {
-    CONFIG, DELETE
-};
+#include "UserMessages.h"
 
 class UserMessageParser {
 public:
-    UserMessageParser();
+    /**
+     * Parses received message to DOM, and returns it's type.
+     * @param message Received message as std::string.
+     * @return Type of message.
+     */
+    USER_MESSAGE_TYPE parseMessage(std::string message);
     
-    virtual ~UserMessageParser();
+    /**
+     * Process parsed user message as CreateMessage.
+     * @return CreateMessage object filled with parsed data.
+     */
+    CreateMessage processCreateMessage();
     
-    void parseMessage(std::string message);
+    /**
+     * Process parsed user message as ChangeMessage.
+     * @return ChangeMessage object filled with parsed data.
+     */
+    ChangeMessage processChangeMessage();
+
+    /**
+     * Process parsed user message as DeleteMessage.
+     * @return DeleteMessage object filled with parsed data.
+     */
+    DeleteMessage processDeleteMessage();
     
-    USER_MESSAGE_TYPE getMessageType() const { return m_message_type; };
+    /**
+     * Process parsed user message as GivePermMessage.
+     * @return GivePermMessage object filled with parsed data.
+     */
+    GivePermMessage processGivePermMessage();
     
-    ConfigMessage getConfigData();
+    /**
+     * Process parsed user message as GetInstIdsMessage.
+     * @return GetInstIdsMessage object filled with parsed data.
+     */
+    GetInstIdsMessage processGetInstIdsMessage();
+    
+    /**
+     * Process parsed user message as GetConfMessage.
+     * @return GetConfMessage object filled with parsed data.
+     */
+    GetConfMessage processGetConfMessage();
+    
+    /**
+     * Process parsed user message as GetDataMessage.
+     * @return GetDataMessage object filled with parsed data.
+     */
+    GetDataMessage processGetDataMessage();
     
 private:
-
+    /** DOM document to store parsed message. */
     rapidjson::Document m_document;
     
-    USER_MESSAGE_TYPE m_message_type;
+    /**
+     * Returns value of key user_id from m_document.
+     */
+    long getUserId();
+    
+    /**
+     * Returns value of key task_id from m_document.
+     */
+    short getTaskId();
+    
+    /**
+     * Returns value of key instance_id from m_document.
+     */
+    long getInstanceId();
+    
+    /**
+     * Returns map of strings from m_document.
+     * @param key_name Name of parameter of string map.
+     * @return Map of configuration or parameters.
+     */
+    std::map<std::string /*name*/, std::string /*value*/> getStringMap(std::string key_name);
 };
-
 
 #endif /* USERMESSAGEPARSER_H */

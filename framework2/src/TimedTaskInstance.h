@@ -15,13 +15,11 @@
 #include "TaskInstance.h"
 
 
-class TimedTaskInstance: public TaskInstance//, enable_shared_from_this<TimedAlgorithmInstance>
+class TimedTaskInstance: public TaskInstance//, std::enable_shared_from_this<TimedTaskInstance>
 {
 public:
-    /*std::shared_ptr<TimedAlgorithmInstance> getptr() {
-        return shared_from_this();
-    }
-    */
+
+    
     TimedTaskInstance(unsigned int instance_id);
     
     //TimedAlgorithmInstance(const TimedAlgorithmInstance& orig);
@@ -36,7 +34,10 @@ public:
     void planActivationNow();
     
     // Activates an instance (calls run() function, but protects it with mutex).
-    void activate();
+    void activate() override;
+    
+    void deleteInstance() override;
+
     
     // Entry point of instance.
     virtual void run() = 0;

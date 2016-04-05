@@ -31,7 +31,6 @@
             <file>file:/home/mrmaidx/server/framework2/src/DataMessageParser.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/TaskInstance.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/Server.h</file>
-            <file>file:/home/mrmaidx/server/framework2/src/ConfigMessage.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/GatewaySession.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/pugixml.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/RegisterEntry.h</file>
@@ -48,6 +47,7 @@
             <file>file:/home/mrmaidx/server/framework2/src/GatewayServer.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/DatabaseInterface.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/TimedTaskInstance.cpp</file>
+            <file>file:/home/mrmaidx/server/framework2/src/UserMessages.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/ConfigParser.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/Calendar.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/Session.h</file>

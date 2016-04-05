@@ -9,9 +9,9 @@
 #define CALENDAREVENT_H
 
 #include <chrono>
-//#include <memory>
+#include <memory>
 
-#include "TimedTaskInstance.h"
+#include "TaskInstance.h"
 
 class CalendarEvent {
 public:
@@ -20,7 +20,7 @@ public:
      * @param activation_time Time at which should pointed instance activate.
      * @param instance_ptr Pointer to instance which should be activated.
      */
-    CalendarEvent(std::chrono::system_clock::time_point activation_time, TimedTaskInstance *instance_ptr);
+    CalendarEvent(std::chrono::system_clock::time_point activation_time, TaskInstance* instance_ptr);
 
     /**
      * Destructor of class CalendarEvent.
@@ -59,7 +59,7 @@ private:
     /**
      * Pointer to instance which should be activated.
      */
-    TimedTaskInstance *m_instance_ptr;
+    TaskInstance* m_instance_ptr;
     //std::weak_ptr<TimedAlgorithmInstance> m_instance_ptr;
 };
 #endif /* CALENDAREVENT_H */
