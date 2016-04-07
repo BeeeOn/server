@@ -10,10 +10,15 @@
 #include <fstream>
 #include <sstream>
 
+#include <mutex>
 #include <thread>
 #include <vector>
 
+#include "locked_stream.h"
 #include "utility.h"
+
+#define LOGOUT(tag, severity) \
+        out(__FILE__, __LINE__, tag, severity) 
 
 //Log levels
 #define TRACE 1
@@ -24,13 +29,18 @@
 #define FATAL 6
 #define NONE 1024
 
+/*
 class shard
 {
 public:
-    shard(std::string tag, int log_level, bool log_to_stdout ,
-        std::string log_folder_path, std::string log_file_path, std::string parent_logger_id);
+    shard(std::string id);
+
+    shard(std::string tag, int log_level, bool log_to_stdout , std::string log_folder_path, 
+        std::string log_file_path, std::string parent_logger_id);
 
     void log(int level, std::string message);
+
+    locked_stream out(std::string tag);
 
     void setTag(std::string tag);
 
@@ -43,10 +53,14 @@ public:
     //Sets and opens log file
     void setLogFile(std::string path);
 
-private:
+    //locked_stream& operator<<();
 
     //Data tag used to determine log source
     std::string _tag;
+
+private:
+
+
 
     //minimum level to collect logs
     int _log_level;
@@ -61,7 +75,9 @@ private:
     std::ofstream _logfile;
 
     std::string _parent_logger_id;
-};
+
+
+};*/
 
 class Unified_logger
 {
@@ -74,8 +90,10 @@ public:
     //Main logging function
     //void log(int level, std::string);
 
-    std::unique_ptr<shard> getShard(std::string id, int log_level);
-    std::unique_ptr<shard> getShard(std::string id);
+    //shard* getShard(std::string id, int log_level);
+    //shard* getShard();
+
+    locked_stream out(std::string location, int line, std::string tag, std::string level);
 
     void setOutLogging(bool log_to_stdout);
 
@@ -88,6 +106,7 @@ public:
 
     // gets literal representation from MACRO (int) level
     std::string levelToString(int level);
+
 
 
 private:

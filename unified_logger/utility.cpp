@@ -13,7 +13,7 @@ std::string getTime(void)
 
     std::ostringstream buff;
 
-    buff << "[" << curr_time->tm_mday << "." << curr_time->tm_mon+1 << "." << (curr_time->tm_year+1900) << " ";
+    buff << "(" << curr_time->tm_mday << "." << curr_time->tm_mon+1 << "." << (curr_time->tm_year+1900) << " ";
     if(curr_time->tm_hour<10){buff << "0";}
     buff << curr_time->tm_hour << ":";
 
@@ -21,7 +21,7 @@ std::string getTime(void)
     buff << curr_time->tm_min << ":";
 
     if(curr_time->tm_sec<10){buff << "0";}
-    buff << curr_time->tm_sec << ":" << now.tv_usec/1000 << "] ";
+    buff << curr_time->tm_sec << ":" << now.tv_usec/1000 << ")";
     return buff.str();
 }
 

@@ -1,5 +1,7 @@
 #include "unified_logger.h"
 
+
+
 Unified_logger::Unified_logger(bool log_to_stdout, std::string log_folder_path, std::string logger_id, int default_log_level):
 
     _log_to_stdout(log_to_stdout),
@@ -24,19 +26,19 @@ Unified_logger::~Unified_logger()
 }*/
 
 
-std::unique_ptr<shard> Unified_logger::getShard(std::string id, int log_level)
+/*shard* Unified_logger::getShard(std::string id, int log_level)
 {
-    std::unique_ptr<shard> tmp(new shard(id, log_level, this->_log_to_stdout, 
-        this->_log_folder_path, this->getLogFilePath(id), this->_logger_id));
-    return tmp;
-}
+    return new shard (id, log_level, this->_log_to_stdout, this->_log_folder_path, 
+        this->getLogFilePath(id), this->_logger_id);
+}*/
 
-std::unique_ptr<shard> Unified_logger::getShard(std::string id)
+/*
+shard* Unified_logger::getShard()
 {
-    std::unique_ptr<shard> tmp(new shard(id, this->_default_log_level, this->_log_to_stdout, 
-        this->_log_folder_path, this->getLogFilePath(id), this->_logger_id));
-    return tmp;
-}
+   //shard tmp (id);
+    return new shard(_tag, _default_log_level, _log_to_stdout,
+        _log_folder_path, getLogFilePath(_tag), _logger_id);
+}*/
 
 /**
  * @brief Set minimum level to collect logs
@@ -113,47 +115,24 @@ std::string Unified_logger::levelToString(int level)
     }
 }
 
-shard::shard(std::string tag, int log_level, bool log_to_stdout , std::string log_folder_path, std::string log_file_path, std::string parent_logger_id):
-_tag(tag),
-_log_level(log_level),
-_log_to_stdout(log_to_stdout),
-_log_folder_path(log_folder_path),
-_log_file_path(log_file_path),
-_parent_logger_id(parent_logger_id)
+
+locked_stream Unified_logger::out(std::string location, int line, std::string tag, std::string level)
 {
-    if(!_log_to_stdout)
-    {
-        _logfile.open(_log_file_path, std::ios::app);
-    }
+    //static std::mutex setup;
+    //std::unique_lock<std::mutex> lock(setup);
+    //std::cout << "STUFF ";
+    
+    return locked_stream(std::cout, tag, level, location, line);
 }
 
-void shard::log(int level, std::string message)
-{   
-    std::cout << level << " " << _tag << " " << message << std::endl;
-}
-
-void shard::setTag(std::string tag)
+/*
+locked_stream shard::operator<<()
 {
-    _tag = tag;
-}
+    //static std::mutex _out_mutex;
+    //std::unique_lock<std::mutex> lock(_out_mutex);
+    //std::lock_guard<std::mutex> lock (_out_mutex);
+    std::cout << "stuff";
 
-void shard::setLogLevel(int log_level)
-{
-    _log_level = log_level;
-}
+    return locked_stream(std::cout);
+}*/
 
-std::string shard::getLogFilePath(std::string tag)
-{
-    return (_log_folder_path + "/" + tag + getFileNameByDate() + ".log");
-}
-
-void shard::setLogFilePath(std::string log_file_path)
-{
-    _log_file_path = log_file_path;
-}
-
-//Sets and opens log file
-void shard::setLogFile(std::string path)
-{
-
-}
