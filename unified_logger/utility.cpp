@@ -13,7 +13,12 @@ std::string getTime(void)
 
     std::ostringstream buff;
 
-    buff << "(" << curr_time->tm_mday << "." << curr_time->tm_mon+1 << "." << (curr_time->tm_year+1900) << " ";
+    //buff << "(" << curr_time->tm_mday << "." << curr_time->tm_mon+1 << "." << (curr_time->tm_year+1900) << " ";
+    buff << "(" << (curr_time->tm_year+1900) <<  "-";
+    if(curr_time->tm_mon+1<10){buff << "0";}
+    buff << curr_time->tm_mon+1 << "-";
+    if(curr_time->tm_mday+1<10){buff << "0";}
+    buff << curr_time->tm_mday << " ";
     if(curr_time->tm_hour<10){buff << "0";}
     buff << curr_time->tm_hour << ":";
 
