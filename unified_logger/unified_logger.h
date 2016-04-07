@@ -1,6 +1,14 @@
 #ifndef UNIFIED_LOGGER_H
 #define UNIFIED_LOGGER_H
 
+/**
+ * unified_logger.h
+ * Library used for logging in unified format in multi-thread applications
+ * @author Marek Beňo, xbenom01 at stud.fit.vutbr.cz
+ * 7. April 2016
+ */  
+
+#include <unistd.h>
 #include <cstdlib>
 #include <iostream>
 #include <thread>
@@ -18,96 +26,42 @@
 #include "utility.h"
 
 #define LOGOUT(tag, severity) \
-        out(__FILE__, __LINE__, tag, severity) 
+    out(__FILE__, __LINE__, tag, severity) 
 
-//Log levels
-#define TRACE 1
-#define DEBUG 2
-#define WARN 3
-#define INFO 4
-#define ERROR 5
-#define FATAL 6
-#define NONE 1024
+#define LOGFILE(tag, severity) \
+    file(__FILE__, __LINE__, tag, severity) 
 
-/*
-class shard
-{
-public:
-    shard(std::string id);
-
-    shard(std::string tag, int log_level, bool log_to_stdout , std::string log_folder_path, 
-        std::string log_file_path, std::string parent_logger_id);
-
-    void log(int level, std::string message);
-
-    locked_stream out(std::string tag);
-
-    void setTag(std::string tag);
-
-    void setLogLevel(int log_level);
-
-    std::string getLogFilePath(std::string tag);
-
-    void setLogFilePath(std::string log_file_path);
-
-    //Sets and opens log file
-    void setLogFile(std::string path);
-
-    //locked_stream& operator<<();
-
-    //Data tag used to determine log source
-    std::string _tag;
-
-private:
-
-
-
-    //minimum level to collect logs
-    int _log_level;
-
-    bool _log_to_stdout;
-
-    //Path to logs
-    std::string _log_folder_path;
-    std::string _log_file_path;
-
-    //Current log file
-    std::ofstream _logfile;
-
-    std::string _parent_logger_id;
-
-
-};*/
+enum class LogSeverity {ALL, TRACE, DEBUG, WARN, INFO, ERROR, FATAL, NONE};
 
 class Unified_logger
 {
 public:
-    Unified_logger(bool stdout_logging, std::string log_folder_path, std::string data_tag, int log_level);
-    //~Unified_logger();
-    //Minimum user input with default values
-    Unified_logger(std::string data_tag);
+    Unified_logger(std::string logger_id, std::string log_folder_path = ".", LogSeverity default_log_level = LogSeverity::WARN);
+    ~Unified_logger();
 
-    //Main logging function
+    //logging function
     //void log(int level, std::string);
-
-    //shard* getShard(std::string id, int log_level);
-    //shard* getShard();
 
     locked_stream out(std::string location, int line, std::string tag, std::string level);
 
-    void setOutLogging(bool log_to_stdout);
+    locked_stream file(std::string location, int line, std::string tag, std::string level);
 
     //Sets log level, all logs below this level are ignored
-    void setLogLevel(int log_level);
+    void setLogLevel(LogSeverity log_level);
 
     void setLogFolderPath(std::string folder_path);
 
-    std::string getLogFilePath(std::string tag);
+    //returns path to output file
+    std::string getLogFilePath();
 
-    // gets literal representation from MACRO (int) level
-    std::string levelToString(int level);
+    //return tagname for log Format: beeeon.<hostname>.<_logger_id>.<tag>
+    std::string getTagHierarchy(std::string tag);
 
+    // gets literal representation from LogSeverity level
+    std::string levelToString(LogSeverity level);
 
+    //gets internal representation from log level
+    LogSeverity StringToLevel(std::string severity);
 
 private:
     //true when all output is logged to stdout
@@ -115,11 +69,18 @@ private:
 
     //Paths to logs
     std::string _log_folder_path;
-    
+
+    //logfile for output to file    
+    std::ofstream _logfile;
+
+    // file /dev/null for filtration
+    std::ofstream _filtered;
+
+    //representation of logger, should correspond to unit in BeeeOn system
     std::string _logger_id;
 
     //minimum level to collect logs
-    int _default_log_level;
+    LogSeverity _default_log_level;
 
 
 };
