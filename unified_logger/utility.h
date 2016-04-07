@@ -1,6 +1,13 @@
 #ifndef UNIFIED_LOGGER_UTILITY_H
 #define UNIFIED_LOGGER_UTILITY_H    
 
+/**
+ * utility.h
+ * utility class for unified logger library
+ * @author Marek Beňo, xbenom01 at stud.fit.vutbr.cz
+ * 7. April 2016
+ */ 
+
 #include <string>
 #include <sys/time.h>
 #include <iostream>

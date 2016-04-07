@@ -1,17 +1,16 @@
 #include "unified_logger.h"
 
-Unified_logger::Unified_logger(std::string log_folder_path, std::string logger_id, LogSeverity default_log_level):
+/**
+ * unified_logger.cpp
+ * Library used for logging in unified format in multi-thread applications
+ * @author Marek Beňo, xbenom01 at stud.fit.vutbr.cz
+ * 7. April 2016
+ */  
+
+Unified_logger::Unified_logger(std::string logger_id, std::string log_folder_path, LogSeverity default_log_level):
     _log_folder_path(log_folder_path),
     _logger_id(logger_id),
     _default_log_level(default_log_level)
-{
-}
-
-//Default values
-Unified_logger::Unified_logger(std::string logger_id):
-    _log_folder_path("."),
-    _logger_id(logger_id),
-    _default_log_level(LogSeverity::ERROR)
 {
     _logfile.open( getLogFilePath(), std::ios::app);
     _filtered.open( "/dev/null", std::ios::app);
@@ -39,7 +38,7 @@ void Unified_logger::setLogFolderPath(std::string folder_path)
 }
 
 /**
-* @brief Get inner string for log file path
+* @brief Get string representation of path to logfile
 */
 std::string Unified_logger::getLogFilePath()
 {
@@ -98,7 +97,12 @@ std::string Unified_logger::levelToString(LogSeverity level)
     }
 }
 
-
+/**
+ * @brief translates developer string level to internal type
+ * 
+ * @param severity log severity level
+ * @return internal type LogSeverity
+ */
 LogSeverity Unified_logger::StringToLevel(std::string severity)
 {
     if (severity == "TRACE")
@@ -152,7 +156,7 @@ std::string Unified_logger::getTagHierarchy(std::string tag)
 
 
 /**
- * @brief returns stream to handle message
+ * @brief returns std::cout stream to handle message
  * @details constructs locked stream which handles mutex moving and implements << operator
  * 
  * @param location file origin of event returned by __FILE__
@@ -165,14 +169,27 @@ locked_stream Unified_logger::out(std::string location, int line, std::string ta
 {
     if (StringToLevel(level) < _default_log_level)
     {
-        //std::cout << "Message silent" << std::endl;
         return locked_stream(_filtered, getTagHierarchy(tag), level, location, line);
     }
     return locked_stream(std::cout, getTagHierarchy(tag), level, location, line);
 }
 
+/**
+ * @brief returns file stream to handle message
+ * @details constructs locked stream which handles mutex moving and implements << operator
+ * 
+ * @param location file origin of event returned by __FILE__
+ * @param line line origin of event returned by __LINE__
+ * @param tag event tag
+ * @param level event severity level
+ * @return locked stream object
+ */
 locked_stream Unified_logger::file(std::string location, int line, std::string tag, std::string level)
 {
+    if (StringToLevel(level) < _default_log_level)
+    {
+        return locked_stream(_filtered, getTagHierarchy(tag), level, location, line);
+    }
     return locked_stream(_logfile, getTagHierarchy(tag), level, location, line);
 }
 

@@ -1,6 +1,13 @@
 #include "utility.h"
 
 /**
+ * utility.cpp
+ * utility class for unified logger library
+ * @author Marek Beňo, xbenom01 at stud.fit.vutbr.cz
+ * 7. April 2016
+ */  
+
+/**
  * @brief Gets time used in logs
  * @return string representation of current date
  * Format: [YYYY-MM-DD HH:MM:SS:mmm]

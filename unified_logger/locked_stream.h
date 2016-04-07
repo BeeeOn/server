@@ -1,5 +1,12 @@
 #ifndef LOCKED_STREAM_H
-#define LOCKED_STREAM_H    
+#define LOCKED_STREAM_H
+
+/**
+ * locked_stream.h
+ * class for handling locked stdout using operator << 
+ * @author Marek Beňo, xbenom01 at stud.fit.vutbr.cz
+ * 7. April 2016
+ */    
 
 #include <mutex>
 #include <string>
