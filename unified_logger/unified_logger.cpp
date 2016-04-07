@@ -1,44 +1,20 @@
 #include "unified_logger.h"
 
-
-
-Unified_logger::Unified_logger(bool log_to_stdout, std::string log_folder_path, std::string logger_id, int default_log_level):
-
-    _log_to_stdout(log_to_stdout),
+Unified_logger::Unified_logger(std::string log_folder_path, std::string logger_id, int default_log_level):
     _log_folder_path(log_folder_path),
     _logger_id(logger_id),
     _default_log_level(default_log_level)
 {
-};
+}
 
 //Default values
 Unified_logger::Unified_logger(std::string logger_id):
-    _log_to_stdout(true),
     _log_folder_path("."),
     _logger_id(logger_id),
     _default_log_level(ERROR)
 {
-};
-
-/*
-Unified_logger::~Unified_logger()
-{
-}*/
-
-
-/*shard* Unified_logger::getShard(std::string id, int log_level)
-{
-    return new shard (id, log_level, this->_log_to_stdout, this->_log_folder_path, 
-        this->getLogFilePath(id), this->_logger_id);
-}*/
-
-/*
-shard* Unified_logger::getShard()
-{
-   //shard tmp (id);
-    return new shard(_tag, _default_log_level, _log_to_stdout,
-        _log_folder_path, getLogFilePath(_tag), _logger_id);
-}*/
+    _logfile.open( getLogFilePath(), std::ios::app);
+}
 
 /**
  * @brief Set minimum level to collect logs
@@ -58,14 +34,14 @@ void Unified_logger::setLogFolderPath(std::string folder_path)
 /**
 * @brief Get inner string for log file path
 */
-std::string Unified_logger::getLogFilePath(std::string tag)
+std::string Unified_logger::getLogFilePath()
 {
-    return (_log_folder_path + "/" + tag + getFileNameByDate() + ".log");
+    return (_log_folder_path + "/" + _logger_id + getFileNameByDate() + ".log");
 }
 
 /**
  * @brief Log message function
- * @details Outputs given message
+ * @details deprecated
  * 
  * @param level log level
  * @param message log data
@@ -115,24 +91,41 @@ std::string Unified_logger::levelToString(int level)
     }
 }
 
-
-locked_stream Unified_logger::out(std::string location, int line, std::string tag, std::string level)
+/**
+ * @brief Gets tag name for log message
+ * @details Tag name is composed from machine name, logger id and message tag
+ * 
+ * @param tag message tag
+ * @return tag name for event
+ */
+std::string Unified_logger::getTagHierarchy(std::string tag)
 {
-    //static std::mutex setup;
-    //std::unique_lock<std::mutex> lock(setup);
-    //std::cout << "STUFF ";
-    
-    return locked_stream(std::cout, tag, level, location, line);
+    char myhost[20];
+
+    std::ostringstream id;
+    gethostname(myhost, sizeof(myhost));
+    id << "beeeon" << "." << myhost << "." << _logger_id << "." << tag;
+    return id.str();
 }
 
-/*
-locked_stream shard::operator<<()
-{
-    //static std::mutex _out_mutex;
-    //std::unique_lock<std::mutex> lock(_out_mutex);
-    //std::lock_guard<std::mutex> lock (_out_mutex);
-    std::cout << "stuff";
 
-    return locked_stream(std::cout);
-}*/
+/**
+ * @brief returns stream to handle message
+ * @details constructs locked stream which handles mutex moving and implements << operator
+ * 
+ * @param location file origin of event returned by __FILE__
+ * @param line line origin of event returned by __LINE__
+ * @param tag event tag
+ * @param level event severity level
+ * @return locked stream object
+ */
+locked_stream Unified_logger::out(std::string location, int line, std::string tag, std::string level)
+{
+    return locked_stream(std::cout, getTagHierarchy(tag), level, location, line);
+}
+
+locked_stream Unified_logger::file(std::string location, int line, std::string tag, std::string level)
+{
+    return locked_stream(_logfile, getTagHierarchy(tag), level, location, line);
+}
 

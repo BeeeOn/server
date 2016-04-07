@@ -10,8 +10,11 @@ logger:
 
 run: all
 	./$(NAME)
+	@echo "Log files tail:"
+	@tail -n 5 *.log
 
 clean:
 	rm -f $(NAME)
+	rm -f *.log
 
 .PHONY: run clean
