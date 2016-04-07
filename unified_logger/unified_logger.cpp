@@ -1,6 +1,6 @@
 #include "unified_logger.h"
 
-Unified_logger::Unified_logger(std::string log_folder_path, std::string logger_id, int default_log_level):
+Unified_logger::Unified_logger(std::string log_folder_path, std::string logger_id, LogSeverity default_log_level):
     _log_folder_path(log_folder_path),
     _logger_id(logger_id),
     _default_log_level(default_log_level)
@@ -11,9 +11,16 @@ Unified_logger::Unified_logger(std::string log_folder_path, std::string logger_i
 Unified_logger::Unified_logger(std::string logger_id):
     _log_folder_path("."),
     _logger_id(logger_id),
-    _default_log_level(ERROR)
+    _default_log_level(LogSeverity::ERROR)
 {
     _logfile.open( getLogFilePath(), std::ios::app);
+    _filtered.open( "/dev/null", std::ios::app);
+}
+
+Unified_logger::~Unified_logger()
+{
+    _logfile.close();
+    _filtered.close();
 }
 
 /**
@@ -21,7 +28,7 @@ Unified_logger::Unified_logger(std::string logger_id):
  * 
  * @param log_level int value 1-6
  */
-void Unified_logger::setLogLevel(int log_level)
+void Unified_logger::setLogLevel(LogSeverity log_level)
 {
     _default_log_level = log_level;
 }
@@ -68,27 +75,62 @@ std::string Unified_logger::getLogFilePath()
  * @param level log level MACRO (int 1-6 , 1024)
  * @return string representation of log level
  */
-std::string Unified_logger::levelToString(int level)
+std::string Unified_logger::levelToString(LogSeverity level)
 {
     switch(level)
     {
-        case TRACE:
+        case LogSeverity::TRACE:
             return "TRACE";
-        case DEBUG:
+        case LogSeverity::DEBUG:
             return "DEBUG";
-        case WARN:
+        case LogSeverity::WARN:
             return "WARN ";
-        case INFO:
+        case LogSeverity::INFO:
             return "INFO ";
-        case ERROR:
+        case LogSeverity::ERROR:
             return "ERROR";
-        case FATAL:
+        case LogSeverity::FATAL:
             return "FATAL";
-        case NONE:
-            return "NONE ";
+        //case LogSeverity::NONE:
+        //    return "NONE ";
         default:
-            return "Unknown";
+            return NULL;
     }
+}
+
+
+LogSeverity Unified_logger::StringToLevel(std::string severity)
+{
+    if (severity == "TRACE")
+    {
+        return LogSeverity::TRACE;
+    }
+    else if (severity == "DEBUG")
+    {
+        return LogSeverity::DEBUG;
+    }
+    else if (severity == "WARN")
+    {
+        return LogSeverity::WARN;
+    }
+    else if (severity == "INFO")    
+    {
+        return LogSeverity::INFO;  
+    }
+    else if (severity == "ERROR")
+    {
+        return LogSeverity::ERROR;
+    }
+    else if (severity == "FATAL")
+    {
+        return LogSeverity::FATAL;  
+    }
+    else
+    {
+        throw "Unexpected String representation of log level";
+    }
+        //case "NONE":
+        //    return LogSeverity::NONE;       
 }
 
 /**
@@ -121,6 +163,11 @@ std::string Unified_logger::getTagHierarchy(std::string tag)
  */
 locked_stream Unified_logger::out(std::string location, int line, std::string tag, std::string level)
 {
+    if (StringToLevel(level) < _default_log_level)
+    {
+        //std::cout << "Message silent" << std::endl;
+        return locked_stream(_filtered, getTagHierarchy(tag), level, location, line);
+    }
     return locked_stream(std::cout, getTagHierarchy(tag), level, location, line);
 }
 

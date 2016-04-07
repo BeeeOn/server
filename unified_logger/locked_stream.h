@@ -37,7 +37,6 @@ public:
 
     friend locked_stream&& operator << (locked_stream&& s, std::ostream& (*arg)(std::ostream&))
     {
-
         (*s.stream_) << arg;
         return std::move(s);
     }

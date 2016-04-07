@@ -25,22 +25,13 @@
 #define LOGFILE(tag, severity) \
     file(__FILE__, __LINE__, tag, severity) 
 
-//Log levels
-#define TRACE 1
-#define DEBUG 2
-#define WARN 3
-#define INFO 4
-#define ERROR 5
-#define FATAL 6
-#define NONE 1024
-
-
+enum class LogSeverity {ALL, TRACE, DEBUG, WARN, INFO, ERROR, FATAL, NONE};
 
 class Unified_logger
 {
 public:
-    Unified_logger(std::string log_folder_path, std::string logger_id, int default_log_level);
-    //~Unified_logger();
+    Unified_logger(std::string log_folder_path, std::string logger_id, LogSeverity default_log_level);
+    ~Unified_logger();
     //Minimum user input with default values
     Unified_logger(std::string logger_id);
 
@@ -55,7 +46,7 @@ public:
     void setOutLogging(bool log_to_stdout);
 
     //Sets log level, all logs below this level are ignored
-    void setLogLevel(int log_level);
+    void setLogLevel(LogSeverity log_level);
 
     void setLogFolderPath(std::string folder_path);
 
@@ -64,9 +55,9 @@ public:
     std::string getTagHierarchy(std::string tag);
 
     // gets literal representation from MACRO (int) level
-    std::string levelToString(int level);
+    std::string levelToString(LogSeverity level);
 
-
+    LogSeverity StringToLevel(std::string severity);
 
 private:
     //true when all output is logged to stdout
@@ -77,10 +68,12 @@ private:
     
     std::ofstream _logfile;
 
+    std::ofstream _filtered;
+
     std::string _logger_id;
 
     //minimum level to collect logs
-    int _default_log_level;
+    LogSeverity _default_log_level;
 
 
 };

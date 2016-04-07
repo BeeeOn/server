@@ -3,9 +3,9 @@ NAME=unified_logger
 SOURCES=$(wildcard *.cpp)
 CFLAGS=-std=c++11 -Wall -Wextra
 
-all: logger
+all: $(NAME)
 
-logger:
+$(NAME):
 	$(CC) -g -o $(NAME) $(SOURCES) -pthread $(CFLAGS)
 
 run: all
