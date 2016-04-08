@@ -1,9 +1,12 @@
 #include <string>
-#include<stdio.h>
-#include<string.h>  
+#include <stdio.h>
+#include <string.h>  
 #include <iostream>
-#include "SocketClient.h"
 #include <unistd.h>
+#include <errno.h>
+
+#include "SocketClient.h"
+
 using namespace std;
 
 SocketClient::SocketClient(int portNumber, string hostName) {
@@ -52,54 +55,56 @@ string SocketClient::read(){
     int bufferSize = 1000;
     char rc[bufferSize+2];
     while(1)
-     {
+    {
         bzero(rc,bufferSize+1);
-        //recieved = recv(_socketfd, rc, bufferSize,0);
-         int recieved = ::read(_socketfd,rc,bufferSize);
+        int recieved = ::read(_socketfd,rc,bufferSize);
          
-                //    std::cout<<"|"<<rc<<"|"<<endl;
-                //printf("Bytes received: %d vs %d\n",recieved,strlen(rc));
-                if ( recieved > 0 )
-                {
-                        rc[recieved] = '\0';
-		//std::cout << "data before append" << data << "|" << strlen(rc) << std::endl;           
-          data.append(rc, strlen(rc));
-		//std::cout << "after" << data << "|" << std::endl;
-                      if ( (data.find("</reply>")!=std::string::npos) ||
-                              (data.find("</com>")!=std::string::npos) ||
-                              ((data[data.size()-2]=='/')&&(data[data.size()-1]=='>'))
-                              ) 
-                            break; 
-                }
-                else if ( recieved == 0 )
-                {
-                    //std::cout<<"rec ==0"<<endl;
-                       if(data.length()>0)
-                       {
-                           break;
-                           //usleep(100*1000);
-                           //continue; //wait for end element
-                       }
-                       else{
-                            throw SocketClientException("ERROR reading from socket");
-                       }
-                       break;
-                }
-                else{
-                    throw SocketClientException("ERROR reading from socket");
-                }
+        if ( recieved > 0 ) {
+            rc[recieved] = '\0';
+            data.append(rc, strlen(rc));
+            
+            if ((data.find("</reply>")!=std::string::npos) ||
+                (data.find("</com>")!=std::string::npos) ||
+                ((data[data.size()-2]=='/')&&(data[data.size()-1]=='>'))
+                ) 
+                break; 
+        } else if ( recieved == 0 ) {
+            if(data.length()>0)
+                break;   
+            else
+                throw SocketClientException("ERROR reading from socket");
+            
+            break;
+        } else {
+            throw SocketClientException("ERROR reading from socket");
+        }
     }
-    std::cout<<"client done reading"<< data <<endl;
     
+    // Client done reading;
     return data;
 }
+
+// Check if the string ends with given ending
 bool hasEnding (std::string const &fullString, std::string const &ending) {
     if (fullString.length() >= ending.length()) {
-        return (0 == fullString.compare (fullString.length() - ending.length(), ending.length(), ending));
+
+        // Copy the string in order to remove endline from the end
+        string s = fullString;                                                                                                     
+        
+        // Remove endline from the end of the string
+        if (s[s.length()-1] == '\n') {                                                                                             
+            s.erase(s.length()-1);                                                                                             
+        }
+        
+        // Compare last chars with endTag
+        int res = s.compare (s.length() - ending.length(), ending.length(), ending);                                               
+        
+        return (0 == res); 
     } else {
         return false;
     }
 }
+
 string SocketClient::readUntilendTag(string endTag) {
     struct timeval tv;
     tv.tv_sec = 5;
@@ -144,7 +149,7 @@ string SocketClient::readUntilendTag(string endTag) {
                     break;
                 }
                 else{
-                    throw SocketClientException("ERROR reading from socket, recieved code:" + to_string((long long int)recieved));
+                    throw SocketClientException("ERROR reading from socket, recieved code:" + to_string((long long int)recieved) + " errno: " + strerror(errno));
                 }
     }
     std::cout<<"client done reading"<< data <<endl;

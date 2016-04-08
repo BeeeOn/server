@@ -1,5 +1,3 @@
-/ui_server
-
 /Doxyfile
 /build/
 /html/
@@ -11,3 +9,11 @@
 /cert
 
 /core.*
+<<<<<<< HEAD
+=======
+
+api/lib/*
+api/api
+
+*.swp
+ui_server
