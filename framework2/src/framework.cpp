@@ -27,14 +27,33 @@
 #include "TaskLoader.h"
 #include "UserServer.h"
 
+#include "../../unified_logger/unified_logger.h"
+
+Unified_logger logger("baf");
+std::mutex locked_stream::s_out_mutex{};
+
+
 void stopBAF(const asio::error_code& error, UserServer *user_server, GatewayServer *gateway_server)
 {
-  if (!error) {
-    Calendar::getInstance()->stopCalendar(); 
-    //Calendar::stopCalendar();
-    user_server->handleStop();
-    gateway_server->handleStop();
-  }
+    if (!error) {
+        Calendar::getInstance()->stopCalendar(); 
+        //Calendar::stopCalendar();
+        user_server->handleStop();
+        gateway_server->handleStop();
+    }
+}
+
+void reloadTasks(const asio::error_code& error, asio::signal_set *reload_signal) {
+    
+    if (!error) {  
+        try {
+            TaskLoader::getInstance()->reloadTasksConfigFileAndFindNewTasks();
+        }
+        catch (const std::exception& e) {
+            std::cerr << e.what() << std::endl;
+        }
+    }
+    reload_signal->async_wait(boost::bind(reloadTasks, asio::placeholders::error, reload_signal));
 }
 
 int main(int argc, char** argv) {
@@ -113,14 +132,14 @@ int main(int argc, char** argv) {
         return 1;
     }
     
-    std::cout << "Number of tasks: " << TaskLoader::getInstance()->m_tasks.size() << std::endl;
-    for (auto task : TaskLoader::getInstance()->m_tasks) {
-        std::cout << "Name: " << task.second->getTaskName() << std::endl;
+    //std::cout << "Number of tasks: " << TaskLoader::getInstance()->m_tasks.size() << std::endl;
+    //for (auto task : TaskLoader::getInstance()->m_tasks) {
+      //  std::cout << "Name: " << task.second->getTaskName() << std::endl;
         
         //std::cout << "Creating new instance!" << std::endl;
         
         //task.second->getTaskManagerPtr()->createInstance(1, 1);
-    }
+    //}
     
     // Initializes and starts server.
     asio::io_service io_service;
@@ -141,6 +160,10 @@ int main(int argc, char** argv) {
     signals.add(SIGQUIT);
       #endif // defined(SIGQUIT)
     signals.async_wait(boost::bind(stopBAF, asio::placeholders::error, &user_server, &gateway_server));
+    
+    asio::signal_set reload_signal(io_service);
+    reload_signal.add(SIGUSR1);
+    reload_signal.async_wait(boost::bind(reloadTasks, asio::placeholders::error, &reload_signal));
     
     user_server.run();
     

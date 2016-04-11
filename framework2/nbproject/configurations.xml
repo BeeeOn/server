@@ -4,15 +4,18 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <logicalFolder name="f3" displayName="Logger" projectFiles="true">
+        <itemPath>src/locked_stream.h</itemPath>
+        <itemPath>src/unified_logger.h</itemPath>
+        <itemPath>src/utility.h</itemPath>
+      </logicalFolder>
       <logicalFolder name="f1" displayName="Timed" projectFiles="true">
         <itemPath>src/Calendar.h</itemPath>
-        <itemPath>src/CalendarEvent.h</itemPath>
         <itemPath>src/TimedTaskInstance.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f2" displayName="Trigger" projectFiles="true">
         <itemPath>src/DataMessageParser.h</itemPath>
         <itemPath>src/DataMessageRegister.h</itemPath>
-        <itemPath>src/RegisterEntry.h</itemPath>
         <itemPath>src/TriggerTaskInstance.h</itemPath>
       </logicalFolder>
       <itemPath>src/ConfigParser.h</itemPath>
@@ -30,7 +33,6 @@
       <itemPath>src/UserMessages.h</itemPath>
       <itemPath>src/UserServer.h</itemPath>
       <itemPath>src/UserSession.h</itemPath>
-      <itemPath>src/pugiconfig.hpp</itemPath>
       <itemPath>src/pugixml.hpp</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -40,15 +42,18 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <logicalFolder name="f3" displayName="Logger" projectFiles="true">
+        <itemPath>src/locked_stream.cpp</itemPath>
+        <itemPath>src/unified_logger.cpp</itemPath>
+        <itemPath>src/utility.cpp</itemPath>
+      </logicalFolder>
       <logicalFolder name="f1" displayName="Timed" projectFiles="true">
         <itemPath>src/Calendar.cpp</itemPath>
-        <itemPath>src/CalendarEvent.cpp</itemPath>
         <itemPath>src/TimedTaskInstance.cpp</itemPath>
       </logicalFolder>
       <logicalFolder name="f2" displayName="Trigger" projectFiles="true">
         <itemPath>src/DataMessageParser.cpp</itemPath>
         <itemPath>src/DataMessageRegister.cpp</itemPath>
-        <itemPath>src/RegisterEntry.cpp</itemPath>
         <itemPath>src/TriggerTaskInstance.cpp</itemPath>
       </logicalFolder>
       <itemPath>src/ConfigParser.cpp</itemPath>
@@ -65,6 +70,7 @@
       <itemPath>src/UserServer.cpp</itemPath>
       <itemPath>src/UserSession.cpp</itemPath>
       <itemPath>src/framework.cpp</itemPath>
+      <itemPath>src/pugiconfig.hpp</itemPath>
       <itemPath>src/pugixml.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -110,10 +116,6 @@
       </item>
       <item path="src/Calendar.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="src/CalendarEvent.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/CalendarEvent.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="src/ConfigParser.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/ConfigParser.h" ex="false" tool="3" flavor2="0">
@@ -139,10 +141,6 @@
       <item path="src/GatewaySession.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/GatewaySession.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="src/RegisterEntry.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/RegisterEntry.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/Server.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -192,11 +190,23 @@
       </item>
       <item path="src/framework.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="src/locked_stream.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/locked_stream.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="src/pugiconfig.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/pugixml.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/pugixml.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/unified_logger.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/unified_logger.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/utility.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/utility.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -223,10 +233,6 @@
       </item>
       <item path="src/Calendar.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="src/CalendarEvent.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/CalendarEvent.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="src/ConfigParser.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/ConfigParser.h" ex="false" tool="3" flavor2="0">
@@ -252,10 +258,6 @@
       <item path="src/GatewaySession.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/GatewaySession.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="src/RegisterEntry.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/RegisterEntry.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/Server.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -305,11 +307,23 @@
       </item>
       <item path="src/framework.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="src/locked_stream.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/locked_stream.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="src/pugiconfig.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/pugixml.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/pugixml.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/unified_logger.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/unified_logger.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/utility.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/utility.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="ant-2" type="1">
@@ -324,10 +338,6 @@
       </item>
       <item path="src/Calendar.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="src/CalendarEvent.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/CalendarEvent.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="src/ConfigParser.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/ConfigParser.h" ex="false" tool="3" flavor2="0">
@@ -353,10 +363,6 @@
       <item path="src/GatewaySession.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/GatewaySession.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="src/RegisterEntry.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="src/RegisterEntry.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/Server.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -406,11 +412,23 @@
       </item>
       <item path="src/framework.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="src/locked_stream.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/locked_stream.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="src/pugiconfig.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/pugixml.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/pugixml.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/unified_logger.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/unified_logger.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/utility.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/utility.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>

@@ -46,13 +46,16 @@ public:
      * Loads and runs all tasks defined in tasks config file.
      * @param tasks_config_file_path Path to tasks config file.
      */
-    void createAllTasks(std::string tasks_config_file_path);
+    virtual void createAllTasks(std::string tasks_config_file_path);
     
     /**
      * Processes config file and creates new task entries in m_tasks containter (stores info from config file).
      * @param tasks_config_file_path Path to tasks config file.
      */
-    void processTasksConfigFileAndStoreInfo(std::string tasks_config_file_path);
+    virtual void processTasksConfigFileAndStoreInfo(std::string tasks_config_file_path);
+    
+    virtual void reloadTasksConfigFileAndFindNewTasks();
+    
     
     /**
      * Finds task in m_tasks and returns shared pointer to it.
@@ -61,37 +64,25 @@ public:
      */
     std::shared_ptr<Task> findTask(unsigned int task_id);
     
-private:
+protected:
     /** 
      * Private constructor.
      */
     TaskLoader();
+   
+    std::string m_tasks_config_file_path;
     
    
     /**
      * Singleton instance pointer.
      */
     static std::shared_ptr<TaskLoader> m_instance;
-public:    
+    
     /**
      * Container storing all loaded tasks.
      */
     std::map<unsigned int /* ID of task */, std::shared_ptr<Task>> m_tasks;
-    
-    
-    /////////// OLD //////////////////ú
-    //std::map<int /*manager_id*/, AlgorithmManager> algorithm_managers;
-    
-    //std::map<int /*manager_id*/, std::shared_ptr<TimedTaskManager>> m_timed_managers;
-    
-    //std::map<int /*manager_id*/, TimedTaskManager*> m_timed_managers;
-    
-    //std::map<int /*manager_id*/, TriggerTaskManager> event_managers;
-    
-    //std::vector<TaskConfigInfo> tasks_config_info;
-    
-    //std::map<int /*id*/, void* /*poiner to library*/> loaded_task_libraries;
-   
+
 };
 
 #endif /* TASKLOADER_H */

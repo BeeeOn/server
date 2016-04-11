@@ -50,7 +50,8 @@ void Calendar::runCalendar()
         m_running = true;
     }
     // Stores all event which should be executed.
-    std::vector<TaskInstance*> to_activate;
+    std::multimap<std::chrono::system_clock::time_point, TaskInstance*> to_activate;
+    //std::vector<std::shared_ptr<TaskInstance>> to_activate;
     
     // Run for all eternity (until whole system shuts down).  
     while(m_should_run) {
@@ -69,7 +70,7 @@ void Calendar::runCalendar()
         
         while (m_calendar_events.begin()->first <= now) {
             // Stores every event with activation time less or equal to now.
-            to_activate.push_back(m_calendar_events.begin()->second);
+            to_activate.emplace(m_calendar_events.begin()->first, m_calendar_events.begin()->second);
             
             // Pops stored event from queue.
             m_calendar_events.erase(m_calendar_events.begin());
@@ -110,8 +111,10 @@ void Calendar::runCalendar()
     // HERE CAN BE STORED EVERYTHING IN CALENDAR.
 }
 
-void Calendar::activateInstances(std::vector<TaskInstance*> to_activate)
+void Calendar::activateInstances(std::multimap<std::chrono::system_clock::time_point, TaskInstance*> to_activate)
+//void Calendar::activateInstances(std::vector<std::shared_ptr<TaskInstance>> to_activate)
 {
+    std::cout << "Calendar::activateInstances - enter" << std::endl;
     std::cout << "to_activate size: " << to_activate.size() << std::endl;
     
     if(!to_activate.empty()) {
@@ -119,9 +122,19 @@ void Calendar::activateInstances(std::vector<TaskInstance*> to_activate)
             // Print time of activation and activate instances.
             time_t tn = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
             std::cout << "Instance activated at time: " << ctime(&tn) << std::endl;
-            instance->activate();
+           
+            instance.second->activate(instance.first);
+            /*
+            if(auto locked = instance.lock()){
+                locked->activate();
+            }
+            else {
+                std::cout << "instance could not be activated, it was deleted" << std::endl;
+            }
+            */
         }
     }
+    std::cout << "Calendar::activateInstances - leave" << std::endl;
 }
 
 void Calendar::waitUntilCalendarIsNotEmpty()
@@ -145,7 +158,9 @@ void Calendar::waitUntilCalendarIsNotEmpty()
 }
 
 void Calendar::emplaceEvent(std::chrono::system_clock::time_point activation_time, TaskInstance* instance_ptr)
+//void Calendar::emplaceEvent(std::chrono::system_clock::time_point activation_time, std::shared_ptr<TaskInstance> instance_ptr)
 {
+    std::cout << "Calendar::emplaceEvent - enter" << std::endl;
     m_calendar_events_mx.lock();
     m_test_queue_empty_mx.lock();
     // Before new event is created, check if queue is empty.
@@ -174,18 +189,30 @@ void Calendar::emplaceEvent(std::chrono::system_clock::time_point activation_tim
     }
     m_test_queue_empty_mx.unlock();
     m_calendar_events_mx.unlock();
+    std::cout << "Calendar::emplaceEvent - leave" << std::endl;
 }
 
-void Calendar::planActivation(int seconds, TaskInstance* instance_ptr)
+std::chrono::system_clock::time_point Calendar::planActivation(int seconds, TaskInstance* instance_ptr)
+//void Calendar::planActivation(int seconds, std::shared_ptr<TaskInstance> instance_ptr)
 {
+    std::cout << "Calendar::planActivation - enter" << std::endl;
+    
+     std::chrono::system_clock::time_point activation_time = std::chrono::system_clock::now() + std::chrono::seconds(seconds);
     // Compute exact time when event should activate and push event.
-    emplaceEvent(std::chrono::system_clock::now() + std::chrono::seconds(seconds), instance_ptr);
+    emplaceEvent(activation_time, instance_ptr);
+    return activation_time;
+    std::cout << "Calendar::planActivation - leave" << std::endl;
 }
 
-void Calendar::planActivation(TaskInstance* instance_ptr)
+std::chrono::system_clock::time_point Calendar::planActivation(TaskInstance* instance_ptr)
+//void Calendar::planActivation(std::shared_ptr<TaskInstance> instance_ptr)
 {
+    std::cout << "Calendar::planActivation - enter" << std::endl;
     // Push event at current time.
-    emplaceEvent(std::chrono::system_clock::now(), instance_ptr);
+    std::chrono::system_clock::time_point activation_time = std::chrono::system_clock::now();
+    emplaceEvent(activation_time, instance_ptr);
+    return activation_time;
+    std::cout << "Calendar::planActivation - leave" << std::endl;
 }
 
 void Calendar::stopCalendar()
@@ -201,20 +228,21 @@ void Calendar::stopCalendar()
     std::cout << "Calendar::stopCalendar - leave" << std::endl;
 }
 
-void Calendar::removeAllActivations(TaskInstance* instance_ptr)
+void Calendar::removeAllActivationsOfInstance(std::set<std::chrono::system_clock::time_point> planned_times, TaskInstance* instance_ptr)
+//void Calendar::removeAllActivations(std::shared_ptr<TaskInstance> instance_ptr)
 {
-    for (auto iter = m_calendar_events.begin(); iter != m_calendar_events.end();) {
-        
-        std::cout << "removed from calendar" << std::endl;
-        // Important because iterators are invalidated.
-        auto erase_iter = iter;
-        iter++;
-        
-        if (erase_iter->second == instance_ptr) {
-            m_calendar_events.erase(erase_iter);
+    // Lock m_calendar_events container.
+    std::lock_guard<std::mutex> lock(m_calendar_events_mx);
+    
+    for (auto activation_time : planned_times) {
+        // Find range of elements containing activation_time as key. 
+        auto range_of_keys =  m_calendar_events.equal_range(activation_time);
+        // 
+        for (auto it = range_of_keys.first; it != range_of_keys.second; it++) {
+            
+            if (it->second == instance_ptr) {
+                m_calendar_events.erase(it);
+            }
         }
-    }
-    if (m_calendar_events.empty()) {
-        m_wakeup_time = std::chrono::system_clock::now();
     }
 }

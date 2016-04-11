@@ -66,6 +66,8 @@ void TaskLoader::createAllTasks(std::string tasks_config_file_path)
 
 void TaskLoader::processTasksConfigFileAndStoreInfo(std::string tasks_config_file_path)
 {
+    m_tasks_config_file_path = tasks_config_file_path;
+    
     unsigned int task_id;
     unsigned short task_version;
     std::string task_name;
@@ -144,5 +146,101 @@ std::shared_ptr<Task> TaskLoader::findTask(unsigned int task_id) {
         std::stringstream error;
         error << "Task with id: " << task_id << " was not found in the BAF system.";
         throw std::runtime_error(error.str());
+    }
+}
+
+void TaskLoader::reloadTasksConfigFileAndFindNewTasks()
+{
+    std::vector<int> new_tasks_ids;
+    
+    unsigned int task_id;
+    unsigned short task_version;
+    std::string task_name;
+    TASK_TYPE task_type;
+    std::string task_path;
+    
+    pugi::xml_document config_doc;
+    
+    pugi::xml_parse_result result = config_doc.load_file(m_tasks_config_file_path.c_str());
+    
+    if (!result) {
+        std::cerr << "Could not open tasks config file: " << m_tasks_config_file_path << std::endl;
+        std::cerr << "Error description: " << result.description() << std::endl;
+        std::cerr << "Error offset: " << result.offset << " (error at [..." << (m_tasks_config_file_path.c_str() + result.offset) << "]" << std::endl;
+        
+        throw std::runtime_error("Parsing of tasks was not successful.");
+    }
+    
+    pugi::xml_node tasks = config_doc.child("tasks");
+
+    for (pugi::xml_node task = tasks.child("task"); task; task = task.next_sibling("task")) {
+        
+        task_id = task.attribute("id").as_int();
+        
+        if (m_tasks.find(task_id) != m_tasks.end()) {
+            continue;
+        }
+        else {
+            new_tasks_ids.push_back(task_id);
+        }
+        
+        task_version = task.attribute("version").as_int();
+        task_name = task.child_value("name");
+        
+        std::string type_str = task.child_value("type");
+        if (type_str == "timed") {
+            task_type = TASK_TYPE::TIMED;
+        }
+        else if (type_str == "trigger") {
+            task_type = TASK_TYPE::TRIGGER;
+        }    
+        else if (type_str == "combined") {
+            task_type = TASK_TYPE::COMBINED;
+        }
+        else {
+            std::stringstream error;
+            error << "Type must be timed, trigger or combined: " << task_name << std::endl;
+            throw std::runtime_error(error.str());
+        }
+
+        task_path = task.child_value("path");
+        
+        std::cout << "-----TASK----- " << std::endl;
+        std::cout << "ID: " << task_id << std::endl;
+        std::cout << "VERSION: " << task_version << std::endl;
+        std::cout << "NAME: " << task_name << std::endl;
+        std::cout << "TYPE: " << (int)task_type << std::endl;
+        std::cout << "PATH: " << task_path << std::endl;
+        
+        try {
+        SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
+        *sql << "INSERT INTO task(task_id, name, version, type) VALUES(:task_id, :name, :version, :type)",
+             soci::use(task_id, "task_id"), soci::use(task_name, "name"), soci::use(task_version, "version"),
+             soci::use(type_str, "type");//, soci::use(task_path, "library_path");
+        }
+         catch (const std::exception& e) {
+            std::cerr << "DATABASE: " <<  e.what() << std::endl;
+             
+        }
+        std::cout << "Emplace task: " << task_name << " into BAF." << std::endl;
+        m_tasks.emplace(task_id, std::make_shared<Task>(task_version, task_name, task_type, task_path));
+    }
+    
+    if (new_tasks_ids.size() == 0) {
+        throw std::runtime_error("No new tasks in tasks config file.");
+    }
+    
+    for (auto new_task_id : new_tasks_ids) {
+        
+        auto task_ptr = m_tasks.find(new_task_id);
+        try {
+            // Open task library.
+            task_ptr->second->openTaskLibrary();
+            // Create task manager.
+            task_ptr->second->createTaskManager();
+        }
+        catch (const std::exception& e) {
+            std::cerr << e.what();
+        }
     }
 }

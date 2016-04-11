@@ -31,19 +31,25 @@ void GatewaySession::receivedMessage(size_t bytes_transferred)
     std::string message = convertMessage(bytes_transferred);
     std::cout << "Msg: " << message;
     
-    
     try {
         DataMessageParser data_message_parser;
         DataMessage data_message = data_message_parser.parseMessage(message);  
     
-        
         std::cout << "GATEWAY_ID: " << data_message.gateway_id << std::endl;
         std::cout << "DEVICE_EUID: " << data_message.device_euid << std::endl;
         std::cout << "TIME: " << data_message.time << std::endl;
 
         std::cout << "MODULES: " << std::endl;
+        std::string str_status;
         for (auto module : data_message.modules) {
-            std::cout << "module_id: " << module.first << " | value: " << module.second << std::endl;
+            
+            if (module.second.first == MODULE_STATUS::AVAILABLE) {
+                str_status = "available";
+            } 
+            else {
+                str_status = "unavailable";
+            }
+            std::cout << "module_id: " << module.first << " | status: " << str_status << " | value: " << module.second.second << std::endl;
 
         }
         

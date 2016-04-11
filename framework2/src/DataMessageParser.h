@@ -13,7 +13,7 @@
 class DataMessageParser {
 public:
     DataMessageParser();
-    DataMessageParser(const DataMessageParser& orig);
+    
     virtual ~DataMessageParser();
     
     DataMessage parseMessage(std::string received_data);

@@ -36,14 +36,12 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/src/Calendar.o \
-	${OBJECTDIR}/src/CalendarEvent.o \
 	${OBJECTDIR}/src/ConfigParser.o \
 	${OBJECTDIR}/src/DataMessageParser.o \
 	${OBJECTDIR}/src/DataMessageRegister.o \
 	${OBJECTDIR}/src/DatabaseInterface.o \
 	${OBJECTDIR}/src/GatewayServer.o \
 	${OBJECTDIR}/src/GatewaySession.o \
-	${OBJECTDIR}/src/RegisterEntry.o \
 	${OBJECTDIR}/src/Server.o \
 	${OBJECTDIR}/src/Session.o \
 	${OBJECTDIR}/src/Task.o \
@@ -56,7 +54,10 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/UserServer.o \
 	${OBJECTDIR}/src/UserSession.o \
 	${OBJECTDIR}/src/framework.o \
-	${OBJECTDIR}/src/pugixml.o
+	${OBJECTDIR}/src/locked_stream.o \
+	${OBJECTDIR}/src/pugixml.o \
+	${OBJECTDIR}/src/unified_logger.o \
+	${OBJECTDIR}/src/utility.o
 
 
 # C Compiler Flags
@@ -88,11 +89,6 @@ ${OBJECTDIR}/src/Calendar.o: src/Calendar.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -I../lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Calendar.o src/Calendar.cpp
 
-${OBJECTDIR}/src/CalendarEvent.o: src/CalendarEvent.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -I../lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/CalendarEvent.o src/CalendarEvent.cpp
-
 ${OBJECTDIR}/src/ConfigParser.o: src/ConfigParser.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
@@ -122,11 +118,6 @@ ${OBJECTDIR}/src/GatewaySession.o: src/GatewaySession.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -I../lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/GatewaySession.o src/GatewaySession.cpp
-
-${OBJECTDIR}/src/RegisterEntry.o: src/RegisterEntry.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -I../lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/RegisterEntry.o src/RegisterEntry.cpp
 
 ${OBJECTDIR}/src/Server.o: src/Server.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -188,10 +179,25 @@ ${OBJECTDIR}/src/framework.o: src/framework.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -I../lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/framework.o src/framework.cpp
 
+${OBJECTDIR}/src/locked_stream.o: src/locked_stream.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -I../lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/locked_stream.o src/locked_stream.cpp
+
 ${OBJECTDIR}/src/pugixml.o: src/pugixml.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -I../lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/pugixml.o src/pugixml.cpp
+
+${OBJECTDIR}/src/unified_logger.o: src/unified_logger.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -I../lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/unified_logger.o src/unified_logger.cpp
+
+${OBJECTDIR}/src/utility.o: src/utility.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -I../lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/utility.o src/utility.cpp
 
 # Subprojects
 .build-subprojects:

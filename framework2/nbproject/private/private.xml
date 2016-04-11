@@ -24,7 +24,6 @@
             <file>file:/home/mrmaidx/server/framework2/src/Calendar.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/DataMessageRegister.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/GatewayServer.h</file>
-            <file>file:/home/mrmaidx/server/framework2/src/CalendarEvent.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/TimedTaskInstance.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/Task.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/Task.cpp</file>
@@ -32,12 +31,10 @@
             <file>file:/home/mrmaidx/server/framework2/src/TaskInstance.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/Server.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/GatewaySession.h</file>
-            <file>file:/home/mrmaidx/server/framework2/src/pugixml.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/RegisterEntry.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/DataMessage.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/TriggerTaskInstance.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/TaskLoader.cpp</file>
-            <file>file:/home/mrmaidx/server/framework2/src/pugixml.hpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/DatabaseInterface.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/TaskLoader.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/RegisterEntry.cpp</file>
@@ -51,7 +48,6 @@
             <file>file:/home/mrmaidx/server/framework2/src/ConfigParser.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/Calendar.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/Session.h</file>
-            <file>file:/home/mrmaidx/server/framework2/src/CalendarEvent.h</file>
         </group>
     </open-files>
 </project-private>

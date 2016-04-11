@@ -39,6 +39,7 @@ AliveCheckManager::~AliveCheckManager()
 
 void AliveCheckManager::createConfiguration(long instance_id, std::map<std::string, std::string> config)
 {
+    std::cout << "AliveCheckManager::createConfiguration - enter" << std::endl;
     AliveCheckConfig alive_config = parseConfiguration(config);
     
     SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
@@ -47,7 +48,9 @@ void AliveCheckManager::createConfiguration(long instance_id, std::map<std::stri
             soci::use(alive_config.notifications, "notifications");
     
     std::cout << "Emplace instance with instance_id: " << instance_id << " into BAF." << std::endl;
-    m_task_instances.emplace(instance_id, std::make_shared<AliveCheckInstance>(instance_id));
+    m_task_instances.emplace(instance_id, std::make_shared<AliveCheckInstance>(instance_id, this));
+    
+    std::cout << "AliveCheckManager::createConfiguration - leave" << std::endl;
 }
 
 void AliveCheckManager::changeConfiguration(ChangeMessage change_message)
