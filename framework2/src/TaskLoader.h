@@ -16,13 +16,16 @@
 
 #include "pugixml.hpp"
 
+#include "BaseTaskLoader.h"
 #include "Task.h"
+
 
 //#include "TasksConfigParser.h"
 //#include "TriggerTaskManager.h"
 //#include "TimedTaskManager.h"
 
-class TaskLoader {
+class TaskLoader: public BaseTaskLoader
+{
 public:
     /**
      * Delete copy constructor.
@@ -40,21 +43,22 @@ public:
      * Returns pointer to singleton instance of class DatabaseInterface.
      * @return Pointer to singleton instance.
      */
-    static std::shared_ptr<TaskLoader> getInstance();
+    //static std::shared_ptr<TaskLoader> getInstance();
+    static void createInstance();
     
     /**
      * Loads and runs all tasks defined in tasks config file.
      * @param tasks_config_file_path Path to tasks config file.
      */
-    virtual void createAllTasks(std::string tasks_config_file_path);
+    void createAllTasks(std::string tasks_config_file_path);
     
     /**
      * Processes config file and creates new task entries in m_tasks containter (stores info from config file).
      * @param tasks_config_file_path Path to tasks config file.
      */
-    virtual void processTasksConfigFileAndStoreInfo(std::string tasks_config_file_path);
+    void processTasksConfigFileAndStoreInfo(std::string tasks_config_file_path);
     
-    virtual void reloadTasksConfigFileAndFindNewTasks();
+    void reloadTasksConfigFileAndFindNewTasks();
     
     
     /**
@@ -62,7 +66,7 @@ public:
      * @param task_id ID of a task.
      * @return Shared pointer to task.
      */
-    std::shared_ptr<Task> findTask(unsigned int task_id);
+    //std::shared_ptr<Task> findTask(unsigned int task_id);
     
 protected:
     /** 
@@ -70,18 +74,18 @@ protected:
      */
     TaskLoader();
    
-    std::string m_tasks_config_file_path;
+    //std::string m_tasks_config_file_path;
     
    
     /**
      * Singleton instance pointer.
      */
-    static std::shared_ptr<TaskLoader> m_instance;
+    //static std::shared_ptr<TaskLoader> m_instance;
     
     /**
      * Container storing all loaded tasks.
      */
-    std::map<unsigned int /* ID of task */, std::shared_ptr<Task>> m_tasks;
+    //std::map<unsigned int /* ID of task */, std::shared_ptr<Task>> m_tasks;
 
 };
 

@@ -22,11 +22,6 @@ TaskManager::~TaskManager()
 {
 }
 
-std::string TaskManager::getData(GetDataMessage get_data_message)
-{
-    return "This task doesn't return any data";
-}
-
 long TaskManager::createInstance(CreateMessage create_message)
 {
     long instance_id;

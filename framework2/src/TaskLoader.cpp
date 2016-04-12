@@ -12,12 +12,13 @@
 #include "DatabaseInterface.h"
 #include "Task.h"
 
-std::shared_ptr<TaskLoader> TaskLoader::m_instance;
 
-TaskLoader::TaskLoader() {
+TaskLoader::TaskLoader()
+{
 }
 
-TaskLoader::~TaskLoader() {
+TaskLoader::~TaskLoader()
+{
     std::cout << "TaskLoader::~TaskLoader - entered." << std::endl;
     // Close and delete all tasks.
     //closeAllTasks();
@@ -25,6 +26,7 @@ TaskLoader::~TaskLoader() {
     std::cout << "TaskLoader::~TaskLoader - finished." << std::endl;
 }
 
+/*
 std::shared_ptr<TaskLoader> TaskLoader::getInstance()
 {
     //std::cout << "TaskLoader::getInstance()" << std::endl;
@@ -39,6 +41,18 @@ std::shared_ptr<TaskLoader> TaskLoader::getInstance()
         return m_instance;
     }
 }
+ */
+
+void TaskLoader::createInstance()
+{
+    if (!m_instance) {
+        
+        std::cout << "Create TaskLoader:m_instance." << std::endl;
+        m_instance = std::shared_ptr<TaskLoader>(new TaskLoader);
+        std::cout << "Finished creation TaskLoader:m_instance." << std::endl;   
+    }
+}
+
 
 void TaskLoader::createAllTasks(std::string tasks_config_file_path)
 {
@@ -131,21 +145,6 @@ void TaskLoader::processTasksConfigFileAndStoreInfo(std::string tasks_config_fil
         }
         std::cout << "Emplace task: " << task_name << " into BAF." << std::endl;
         m_tasks.emplace(task_id, std::make_shared<Task>(task_version, task_name, task_type, task_path));
-    }
-}
-
-std::shared_ptr<Task> TaskLoader::findTask(unsigned int task_id) {
-    auto found = m_tasks.find(task_id);
-    
-    if (found != m_tasks.end()) {
-        std::cout << "Task with id: " << task_id << " was found." << std::endl;
-        return found->second;
-    }
-    else {
-        // Task was not found.
-        std::stringstream error;
-        error << "Task with id: " << task_id << " was not found in the BAF system.";
-        throw std::runtime_error(error.str());
     }
 }
 

@@ -35,6 +35,8 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/src/BaseTaskLoader.o \
+	${OBJECTDIR}/src/BaseTaskManager.o \
 	${OBJECTDIR}/src/Calendar.o \
 	${OBJECTDIR}/src/ConfigParser.o \
 	${OBJECTDIR}/src/DataMessageParser.o \
@@ -83,6 +85,16 @@ LDLIBSOPTIONS=-L/usr/local/lib64 -L/usr/lib/postgresql/9.3/lib
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/framework2: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/framework2 ${OBJECTFILES} ${LDLIBSOPTIONS} -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -lpq
+
+${OBJECTDIR}/src/BaseTaskLoader.o: src/BaseTaskLoader.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -I../lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/BaseTaskLoader.o src/BaseTaskLoader.cpp
+
+${OBJECTDIR}/src/BaseTaskManager.o: src/BaseTaskManager.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -I../lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/BaseTaskManager.o src/BaseTaskManager.cpp
 
 ${OBJECTDIR}/src/Calendar.o: src/Calendar.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

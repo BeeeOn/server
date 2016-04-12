@@ -120,7 +120,7 @@ int main(int argc, char** argv) {
     std::shared_ptr<DataMessageRegister> data_message_register = DataMessageRegister::getInstance();   
     
     // Loads algorithm managers.
-    std::shared_ptr<TaskLoader> task_loader = TaskLoader::getInstance();
+    TaskLoader::createInstance();
     try {
         // In a future pass path to algorithm config file.
         //manager_loader.loadAlgorithmManagers();
