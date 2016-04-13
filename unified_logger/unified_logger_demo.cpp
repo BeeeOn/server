@@ -6,8 +6,16 @@
  * 7. April 2016
  */  
 
+//default log folder ".", default log level WARN
+//Unified_logger logger("framework"); 
 
-Unified_logger logger("framework"); //default log folder ".", default log level WARN
+// See all messages
+//Unified_logger logger("framework", ".", LogSeverity::ALL);
+
+// See INFO and above, log to path
+Unified_logger logger("framework", "/var/log/mydebug", LogSeverity::INFO);
+
+
 std::mutex locked_stream::s_out_mutex{};
 
 void behavior1()
@@ -29,9 +37,14 @@ void behavior2()
 
 int main(void)
 {
+    // Minimum log level can be adjusted manually
+    logger.setLogLevel(LogSeverity::TRACE);
+
+    // Log folder path can be adjusted manually
+    logger.setLogFolderPath(".");
+
     std::vector<std::thread> threads;
-    threads.push_back(std::thread(behavior1));
-    
+    threads.push_back(std::thread(behavior1));    
     threads.push_back(std::thread(behavior2));
     for(auto& thread : threads){
         thread.join();
