@@ -95,7 +95,7 @@ std::string Unified_logger::levelToString(LogSeverity level)
         //case LogSeverity::NONE:
         //    return "NONE ";
         default:
-            return NULL;
+            throw "Unexpected enum representation of log level";
     }
 }
 
