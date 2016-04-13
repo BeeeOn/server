@@ -14,6 +14,7 @@ void behavior1()
 {
     logger.out(__FILE__, __LINE__, "manager", "TRACE") << __FUNCTION__   << std::endl;
     logger.LOGOUT("temperature", "DEBUG") << "Entered config state" << std::endl; 
+    logger.LOGOUT("temperature", "MSG") << "Received message: <msg>42</msg>" << std::endl;
     logger.LOGOUT("manager", "WARN") << "Non-standart task name: " << 10 << std::endl;
     logger.LOGOUT("temperature", "INFO") << "Parameters: unit id: " << 124 << " status: " << 42 << " message: " << "accepted" << std::endl;
     logger.LOGOUT("manager", "ERROR") << "Can't load humidity module" << std::endl;

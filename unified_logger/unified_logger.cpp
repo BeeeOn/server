@@ -90,6 +90,8 @@ std::string Unified_logger::levelToString(LogSeverity level)
             return "ERROR";
         case LogSeverity::FATAL:
             return "FATAL";
+        case LogSeverity::MSG:
+            return "MSG";
         //case LogSeverity::NONE:
         //    return "NONE ";
         default:
@@ -128,6 +130,10 @@ LogSeverity Unified_logger::StringToLevel(std::string severity)
     else if (severity == "FATAL")
     {
         return LogSeverity::FATAL;  
+    }
+    else if(severity == "MSG")
+    {
+        return LogSeverity::MSG;
     }
     else
     {
