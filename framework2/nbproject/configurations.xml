@@ -25,6 +25,7 @@
       <itemPath>src/DatabaseInterface.h</itemPath>
       <itemPath>src/GatewayServer.h</itemPath>
       <itemPath>src/GatewaySession.h</itemPath>
+      <itemPath>src/Logger.h</itemPath>
       <itemPath>src/Server.h</itemPath>
       <itemPath>src/Session.h</itemPath>
       <itemPath>src/Task.h</itemPath>
@@ -154,6 +155,8 @@
       </item>
       <item path="src/GatewaySession.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="src/Logger.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="src/Server.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Server.h" ex="false" tool="3" flavor2="0">
@@ -279,6 +282,8 @@
       </item>
       <item path="src/GatewaySession.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="src/Logger.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="src/Server.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/Server.h" ex="false" tool="3" flavor2="0">
@@ -391,6 +396,8 @@
       <item path="src/GatewaySession.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/GatewaySession.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/Logger.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/Server.cpp" ex="false" tool="1" flavor2="0">
       </item>

@@ -53,14 +53,8 @@ void GatewaySession::receivedMessage(size_t bytes_transferred)
 
         }
         
-        std::vector<TaskInstance*> to_activate = DataMessageRegister::getInstance()->returnAllEntries(data_message.device_euid);
-        std::cout << "to activate: " << to_activate.size() << std::endl;
-        
-        for (auto task_ptr : to_activate) {
-            
-            task_ptr->activate(data_message);
-        }
-        
+        // Activate all instances which are registered to receive this data.
+        DataMessageRegister::getInstance()->activateInstances(data_message);
     }
     catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;

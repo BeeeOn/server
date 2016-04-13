@@ -22,11 +22,11 @@
 
 #include "WatchdogManager.h"
 
-WatchdogInstance::WatchdogInstance(unsigned int instance_id, TaskManager* owning_manager, unsigned long long device_euid):
+WatchdogInstance::WatchdogInstance(int instance_id, TaskManager* owning_manager, long device_euid):
     TriggerTaskInstance(instance_id, owning_manager),
     m_received_data_once(false)
 {
-    registerDataMessage(device_euid);
+    registerToReceiveDataFromDevice(device_euid);
 }
 
 WatchdogInstance::~WatchdogInstance()
@@ -61,6 +61,10 @@ void WatchdogInstance::run(DataMessage data_message)
         }
     }
     else {
+        // Suicide.
+        //deleteItself();
+        //return;
+        
         WatchdogConfig config;
         
         // Get configuration of this instance from database.

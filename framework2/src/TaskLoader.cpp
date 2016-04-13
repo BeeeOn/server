@@ -9,6 +9,7 @@
 
 #include <sstream>
 
+#include "Logger.h"
 #include "DatabaseInterface.h"
 #include "Task.h"
 
@@ -26,23 +27,6 @@ TaskLoader::~TaskLoader()
     std::cout << "TaskLoader::~TaskLoader - finished." << std::endl;
 }
 
-/*
-std::shared_ptr<TaskLoader> TaskLoader::getInstance()
-{
-    //std::cout << "TaskLoader::getInstance()" << std::endl;
-    
-    if (!m_instance) {
-        std::cout << "Create TaskLoader:m_instance." << std::endl;
-        m_instance = std::shared_ptr<TaskLoader>(new TaskLoader);
-        std::cout << "Finished creation TaskLoader:m_instance." << std::endl;
-        return m_instance;
-    }
-    else {
-        return m_instance;
-    }
-}
- */
-
 void TaskLoader::createInstance()
 {
     if (!m_instance) {
@@ -52,7 +36,6 @@ void TaskLoader::createInstance()
         std::cout << "Finished creation TaskLoader:m_instance." << std::endl;   
     }
 }
-
 
 void TaskLoader::createAllTasks(std::string tasks_config_file_path)
 {
@@ -71,6 +54,8 @@ void TaskLoader::createAllTasks(std::string tasks_config_file_path)
             task_ptr.second->openTaskLibrary();
             // Create task manager.
             task_ptr.second->createTaskManager();
+            // Reload instances which already exists.
+            task_ptr.second->getTaskManagerPtr()->reloadInstances(task_ptr.first);
         }
         catch (const std::exception& e) {
             std::cerr << e.what();
@@ -80,6 +65,8 @@ void TaskLoader::createAllTasks(std::string tasks_config_file_path)
 
 void TaskLoader::processTasksConfigFileAndStoreInfo(std::string tasks_config_file_path)
 {
+    logger.LOGOUT("core", "INFO") << "Processing tasks config file." << std::endl;
+    
     m_tasks_config_file_path = tasks_config_file_path;
     
     unsigned int task_id;
@@ -141,6 +128,7 @@ void TaskLoader::processTasksConfigFileAndStoreInfo(std::string tasks_config_fil
         }
          catch (const std::exception& e) {
             std::cerr << "DATABASE: " <<  e.what() << std::endl;
+            std::cerr << "Task with this ID is probably already in database." << std::endl;
              
         }
         std::cout << "Emplace task: " << task_name << " into BAF." << std::endl;
@@ -237,6 +225,8 @@ void TaskLoader::reloadTasksConfigFileAndFindNewTasks()
             task_ptr->second->openTaskLibrary();
             // Create task manager.
             task_ptr->second->createTaskManager();
+            // Reload instances which already exists.
+            task_ptr->second->getTaskManagerPtr()->reloadInstances(task_ptr->first);
         }
         catch (const std::exception& e) {
             std::cerr << e.what();

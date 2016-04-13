@@ -50,6 +50,8 @@ void AliveCheckManager::createConfiguration(long instance_id, std::map<std::stri
     std::cout << "Emplace instance with instance_id: " << instance_id << " into BAF." << std::endl;
     m_task_instances.emplace(instance_id, std::make_shared<AliveCheckInstance>(instance_id, this));
     
+    debugPrintTaskInstances();
+    
     std::cout << "AliveCheckManager::createConfiguration - leave" << std::endl;
 }
 
@@ -89,44 +91,25 @@ std::map<std::string, std::string> AliveCheckManager::getConfiguration(GetConfMe
     return config_map;
 }
 
-
-/*
-void AliveCheckManager::createInstance(unsigned int instance_id, std::map<std::string, std::string> configuration)
+void AliveCheckManager::reloadInstances(int task_id)
 {
-    std::cout << "Instert instance with instance_id: " << instance_id << " into database." << std::endl;
-    AliveCheckConfig conf = parseConfiguration(configuration);
+    int instance_id;
     
-    // Configuration in special database table.
     SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
-    *sql << "INSERT INTO task_alive_check(instance_id, notifications, gateway_id) VALUES(:instance_id, :notifications, :gateway_id)",
-            soci::use(instance_id, "instance_id"), soci::use(conf.gateway_id, "gateway_id"), soci::use(conf.notifications, "notifications");
-            
-      
-    std::cout << "Emplace instance with instance_id: " << instance_id << " into BAF." << std::endl;
-    m_task_instances.emplace(instance_id, std::make_shared<AliveCheckInstance>(instance_id));
-}
-*/
-/*
-void RefreshCheckManager::storeConfiguration(std::map<std::string, std::string> configuration)
-{
+    
+    soci::rowset<soci::row> rows = (sql->prepare << "SELECT instance_id FROM instance WHERE task_id = :task_id",
+                                    soci::use(task_id, "task_id"));
 
+    for (soci::rowset<soci::row>::const_iterator it = rows.begin(); it != rows.end(); ++it) {   
+        
+        soci::row const& row = *it;
+        instance_id = row.get<int>(0);
+        
+        m_task_instances.emplace(instance_id, std::make_shared<AliveCheckInstance>(instance_id, this));
+        
+        std::cout << "Reload instance with instance_id: " << instance_id << " into BAF." << std::endl;
+    }
 }
-*/
-/*
-void AliveCheckManager::updateConfiguration(unsigned int instance_id, std::map<std::string, std::string> configuration)
-{
-    AliveCheckConfig conf = parseConfiguration(configuration);
-    // Update configuration of instance with given instance_id.
-    SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
-    *sql << "UPDATE task_alive_check SET notifications = :notifications, gateway_id = :gateway_id WHERE instance_id = :instance_id",
-            soci::use(conf.notifications, "notifications"), soci::use(conf.gateway_id, "gateway_id"),
-            soci::use(instance_id, "instance_id");
-}*/
-/*
-void AliveCheckManager::deleteConfiguration(unsigned int user_id, unsigned short personal_id) {
-
-}
-*/
 
 AliveCheckConfig AliveCheckManager::parseConfiguration(std::map<std::string, std::string> configuration)
 {

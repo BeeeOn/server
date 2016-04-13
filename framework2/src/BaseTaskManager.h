@@ -75,6 +75,18 @@ public:
     
     //virtual std::string givePermission(GivePermMessage give_perm_message);
     
+    /**
+     * To anable instance to delete itself.
+     * @param instance_id ID of instance to delete from system.
+     */
+    virtual void suicideInstance(long instance_id) = 0;
+    
+    /**
+     * On start of BAF reloads instances from database.
+     * In case when BAF needs to be restarted.
+     */
+    virtual void reloadInstances(int task_id) = 0;
+    
 protected:
     
     /**

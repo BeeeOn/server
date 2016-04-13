@@ -12,6 +12,7 @@
 #include <stdexcept>
 
 #include "DatabaseInterface.h"
+#include "Logger.h"
 #include "TaskLoader.h"
 
 TaskManager::TaskManager()
@@ -57,6 +58,8 @@ void TaskManager::deleteInstance(DeleteMessage delete_message)
     // m_task_instances.find(delete_message.instance_id)->second->removeFromCalendar();
     
     m_task_instances.erase(delete_message.instance_id);
+    
+    debugPrintTaskInstances(); 
 }
 
 std::vector<std::string> TaskManager::getInstanceIds(GetInstIdsMessage get_inst_ids_message)
@@ -78,3 +81,33 @@ std::vector<std::string> TaskManager::getInstanceIds(GetInstIdsMessage get_inst_
     
     return instance_ids;
 }
+
+void TaskManager::debugPrintTaskInstances()
+{
+    std::string task_instances;
+    if (m_task_instances.size() == 0) {
+        task_instances += "none";
+    }
+    else {
+        for (auto task_instance : m_task_instances) {
+        task_instances += std::to_string(task_instance.first);
+        task_instances += ", ";
+        }
+    }
+    
+    logger.LOGOUT("task_manager", "INFO") << "Task instances: " << task_instances << std::endl;
+}
+
+void TaskManager::suicideInstance(long instance_id)
+{
+    SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
+    
+    *sql << "DELETE FROM instance WHERE instance_id = :instance_id",
+            soci::use(instance_id, "instance_id");
+    
+    m_task_instances.erase(instance_id);
+    
+    debugPrintTaskInstances(); 
+}
+
+

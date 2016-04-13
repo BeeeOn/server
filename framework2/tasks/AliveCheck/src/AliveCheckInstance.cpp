@@ -39,6 +39,10 @@ void AliveCheckInstance::run(std::chrono::system_clock::time_point activation_ti
 
 void AliveCheckInstance::executeRefresh()
 {
+    // Suicide.
+    //deleteItself();
+    //return;
+    
     unsigned long long gateway_id;
     int notifications;
     

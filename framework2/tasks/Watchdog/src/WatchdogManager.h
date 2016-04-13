@@ -21,7 +21,7 @@
 #include <string>
 
 struct WatchdogConfig {
-    unsigned long long device_euid;
+    long device_euid;
     int module_id;
     std::string comp_operator;
     double value;
@@ -41,6 +41,9 @@ public:
     void changeConfiguration(ChangeMessage change_message) override;
     
     std::map<std::string, std::string> getConfiguration(GetConfMessage get_conf_message) override;
+    
+    void reloadInstances(int task_id) override;
+
     
     //long createInstance(CreateMessage create_message) override;
     

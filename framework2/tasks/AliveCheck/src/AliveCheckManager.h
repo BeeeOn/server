@@ -32,6 +32,9 @@ public:
     
     std::map<std::string, std::string> getConfiguration(GetConfMessage get_conf_message) override;    
     
+    void reloadInstances(int task_id) override;
+
+    
     //void createInstance(unsigned int instance_id, std::map<std::string, std::string> configuration) override;
 
     //void storeConfiguration(std::map<std::string, std::string> configuration) override;

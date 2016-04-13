@@ -23,7 +23,7 @@ class TimedTaskInstance: public TaskInstance//, std::enable_shared_from_this<Tim
 public:
 
     
-    TimedTaskInstance(unsigned int instance_id, TaskManager *owning_manager);
+    TimedTaskInstance(int instance_id, TaskManager *owning_manager);
     
     //TimedAlgorithmInstance(const TimedAlgorithmInstance& orig);
     virtual ~TimedTaskInstance();

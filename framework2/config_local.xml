@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-	<!-- Path to tasks config file. -->
+    <!-- Path to tasks config file. -->
     <tasks_config path="./tasks_config.xml"/>
     <!-- Configuration of server receiving user messages. -->
-    <user_server threads="10" port="11234" />
+    <user_server threads="10" port="7084" />
     <!-- Configuration of server receiving data messages from gateways. -->
     <gateway_server threads="10" port="7083" />
     <!-- Configuration of database interface -->
-    <database sessions="10" connection_string="port = '5432' dbname = 'home8' user = 'uiserver7' password = '1234' connect_timeout = '3'" />
+    <database sessions="10" connection_string="port = '5432' dbname = 'home8' user = 'framework8' password = '1234' connect_timeout = '3'" />
 </config>

@@ -35,10 +35,12 @@ extern "C" {
     }
 }
 
-WatchdogManager::WatchdogManager() {
+WatchdogManager::WatchdogManager()
+{
 }
 
-WatchdogManager::~WatchdogManager() {
+WatchdogManager::~WatchdogManager()
+{
 }
 
 void WatchdogManager::createConfiguration(long instance_id, std::map<std::string, std::string> config)
@@ -54,6 +56,8 @@ void WatchdogManager::createConfiguration(long instance_id, std::map<std::string
     
     std::cout << "Emplace instance with instance_id: " << instance_id << " into BAF." << std::endl;
     m_task_instances.emplace(instance_id, std::make_shared<WatchdogInstance>(instance_id, this, watchdog_config.device_euid));
+    
+    debugPrintTaskInstances();
 }
 
 void WatchdogManager::changeConfiguration(ChangeMessage change_message)
@@ -63,7 +67,7 @@ void WatchdogManager::changeConfiguration(ChangeMessage change_message)
     
     auto device_euid = change_message.config.find("device_euid");
     if (device_euid != change_message.config.end()) {
-        *sql << "UPDATE task_watchdog SET device_euid = :device_euid", soci::use(std::stoull(device_euid->second), "device_euid");
+        *sql << "UPDATE task_watchdog SET device_euid = :device_euid", soci::use(std::stol(device_euid->second), "device_euid");
     }
     
     auto module_id = change_message.config.find("module_id");
@@ -111,39 +115,30 @@ std::map<std::string, std::string> WatchdogManager::getConfiguration(GetConfMess
     return config_map;
 }
 
-
-/*
-
-void WatchdogManager::createInstance(unsigned int instance_id, std::map<std::string, std::string> configuration) {
-    
-    std::cout << "Insert instance with instance_id: " << instance_id << " into database." << std::endl;
-    WatchdogConfig conf = parseConfiguration(configuration);
-    
-    // Configuration in special database table.
-    SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
-    *sql << "INSERT INTO task_watchdog(instance_id, device_euid, module_id, operator, value, notification_text)"
-            "VALUES(:instance_id, :device_euid, :module_id, :operator, :value, :notification_text)",
-            soci::use(instance_id, "instance_id"), soci::use(conf.device_euid, "device_euid"),
-            soci::use(conf.module_id, "module_id"), soci::use(conf.comp_operator, "operator"),
-            soci::use(conf.value, "value"), soci::use(conf.notification_text, "notification_text");
-            
-    std::cout << "Emplace instance with instance_id: " << instance_id << " into BAF." << std::endl;
-    m_task_instances.emplace(instance_id, std::make_shared<WatchdogInstance>(instance_id, conf.device_euid));
-    
-}
-
-void WatchdogManager::updateConfiguration(unsigned int instance_id, std::map<std::string, std::string> configuration)
+void WatchdogManager::reloadInstances(int task_id)
 {
-    WatchdogConfig conf = parseConfiguration(configuration);
-    // Update configuration of instance with given instance_id.
+    int instance_id;
+    long device_euid;
+    
     SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
-    *sql << "UPDATE task_watchdog SET instance_id = :instance_id, device_euid = :device_euid, module_id = :module_id,"
-            "operator = :operator, value = :value, notification_text = :notification_text)",
-            soci::use(instance_id, "instance_id"), soci::use(conf.device_euid, "device_euid"),
-            soci::use(conf.module_id, "module_id"), soci::use(conf.comp_operator, "operator"),
-            soci::use(conf.value, "value"), soci::use(conf.notification_text, "notification_text");
+    
+    soci::rowset<soci::row> rows = (sql->prepare << "SELECT instance_id FROM instance WHERE task_id = :task_id",
+                                    soci::use(task_id, "task_id"));
+
+    for (soci::rowset<soci::row>::const_iterator it = rows.begin(); it != rows.end(); ++it) {   
+        
+        soci::row const& row = *it;
+        instance_id = row.get<int>(0);
+        
+        *sql << "SELECT device_euid FROM task_watchdog WHERE instance_id = :instance_id",
+                soci::into(device_euid), soci::use(instance_id, "instance_id");
+        
+        m_task_instances.emplace(instance_id, std::make_shared<WatchdogInstance>(instance_id, this, device_euid));
+        
+        std::cout << "Reload instance with instance_id: " << instance_id << " into BAF." << std::endl;
+    }
 }
-*/
+
 WatchdogConfig WatchdogManager::parseConfiguration(std::map<std::string, std::string> configuration)
 {
     WatchdogConfig conf;

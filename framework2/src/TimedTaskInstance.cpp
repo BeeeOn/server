@@ -14,7 +14,7 @@
 
 #include "Calendar.h"
 
-TimedTaskInstance::TimedTaskInstance(unsigned int instance_id, TaskManager *owning_manager):
+TimedTaskInstance::TimedTaskInstance(int instance_id, TaskManager *owning_manager):
     TaskInstance(instance_id, owning_manager)
 {
 }

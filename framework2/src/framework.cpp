@@ -14,8 +14,6 @@
 #include <asio.hpp>
 #include <boost/bind.hpp>
 
-#include <soci.h>
-
 #include "pugixml.hpp"
 #include "pugiconfig.hpp"
 
@@ -24,21 +22,21 @@
 #include "DatabaseInterface.h"
 #include "DataMessageRegister.h"
 #include "GatewayServer.h"
+#include "Logger.h"
 #include "TaskLoader.h"
 #include "UserServer.h"
 
-#include "../../unified_logger/unified_logger.h"
-
+// Definition of the extern logger object from Logger.h
 Unified_logger logger("baf");
 std::mutex locked_stream::s_out_mutex{};
-
 
 void stopBAF(const asio::error_code& error, UserServer *user_server, GatewayServer *gateway_server)
 {
     if (!error) {
-        Calendar::getInstance()->stopCalendar(); 
-        //Calendar::stopCalendar();
+        logger.LOGOUT("core", "INFO") << "BAF received SIGTERM, SIGINT or SIGQUIT signal. Shutting down BAF." << std::endl;
+        
         user_server->handleStop();
+        Calendar::getInstance()->stopCalendar(); 
         gateway_server->handleStop();
     }
 }
@@ -59,8 +57,8 @@ void reloadTasks(const asio::error_code& error, asio::signal_set *reload_signal)
 int main(int argc, char** argv) {
     // Prints time at which was framework started.
     time_t tn = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-    std::cout << "Framework start time: " << ctime(&tn) << std::endl;
-    
+    logger.LOGOUT("core", "INFO") << "Framework started." << std::endl;
+
     if (argc == 1) {
         std::cerr << "Path to config file must be provided in the first parameter." << std::endl;
         std::cerr << "Shutting down BAF." << std::endl;
@@ -117,7 +115,7 @@ int main(int argc, char** argv) {
     //calendar_thread.detach();
     
     // Create DataMessageRegister.
-    std::shared_ptr<DataMessageRegister> data_message_register = DataMessageRegister::getInstance();   
+    DataMessageRegister::createInstance();   
     
     // Loads algorithm managers.
     TaskLoader::createInstance();
@@ -127,19 +125,9 @@ int main(int argc, char** argv) {
         TaskLoader::getInstance()->createAllTasks(config_parser.m_tasks_config_path);
     }
     catch (const std::exception& e) {
-        std::cerr << e.what();
-        std::cerr << "Shutting down BAF." << std::endl;
+        logger.LOGOUT("core", "FATAL") <<  e.what() << ": Shutting down BAF." << std::endl;
         return 1;
     }
-    
-    //std::cout << "Number of tasks: " << TaskLoader::getInstance()->m_tasks.size() << std::endl;
-    //for (auto task : TaskLoader::getInstance()->m_tasks) {
-      //  std::cout << "Name: " << task.second->getTaskName() << std::endl;
-        
-        //std::cout << "Creating new instance!" << std::endl;
-        
-        //task.second->getTaskManagerPtr()->createInstance(1, 1);
-    //}
     
     // Initializes and starts server.
     asio::io_service io_service;
@@ -167,9 +155,8 @@ int main(int argc, char** argv) {
     
     user_server.run();
     
-    calendar_thread.join();
     gateway_server_thread.join();
-    
-    std::cout << "SERVER STOPED!" << std::endl;
+    calendar_thread.join();
+
     return 0;
 }
