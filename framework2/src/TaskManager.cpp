@@ -12,6 +12,7 @@
 #include <stdexcept>
 
 #include "DatabaseInterface.h"
+#include "TaskLoader.h"
 
 TaskManager::TaskManager()
 {
@@ -21,12 +22,7 @@ TaskManager::~TaskManager()
 {
 }
 
-std::string TaskManager::getData(GetDataMessage get_data_message)
-{
-    return "This task doesn't return any data";
-}
-
-long TaskManager::createInstanceInDB(CreateMessage create_message)
+long TaskManager::createInstance(CreateMessage create_message)
 {
     long instance_id;
     std::string permission("superuser");
@@ -52,79 +48,33 @@ void TaskManager::deleteInstance(DeleteMessage delete_message)
     *sql << "DELETE FROM instance WHERE instance_id = :instance_id",
             soci::use(delete_message.instance_id, "instance_id");
     
+    // Get task type of task from delete message.
+    //TASK_TYPE task_type = TaskLoader::getInstance()->m_tasks.find(delete_message.task_id)->second->m_task_type;
+    
+    
     // Delete from calendar.
-    m_task_instances.find(delete_message.instance_id)->second->deleteInstance();
+    // Obsolete, removing from calendar is handled in timed instance destructor.
+    // m_task_instances.find(delete_message.instance_id)->second->removeFromCalendar();
     
     m_task_instances.erase(delete_message.instance_id);
 }
 
-
-
-/*
-bool TaskManager::checkInstanceExistence(CreateMessage config_message)
+std::vector<std::string> TaskManager::getInstanceIds(GetInstIdsMessage get_inst_ids_message)
 {
-    // 
-    unsigned int instance_id;
-    
-    try {
-        instance_id = getInstanceId(config_message.user_id, config_message.relative_id);
-
-        // If found in database, check instance container to be sure it exists.
-        auto found = m_task_instances.find(instance_id);
-        if (found != m_task_instances.end()) {
-            return true;
-        }
-        else {
-            // Inconsistency of BAF and database should be resolved.
-
-            return false;
-        }
-    }
-    catch (const std::exception& e) {
-        std::cout << e.what() << std::endl;
-        return false;
-    }
-}
-*/
-/*
-unsigned int TaskManager::getInstanceId(unsigned int user_id, unsigned short relative_id) {
-    
-    unsigned int instance_id;
+    std::cout << "TaskManager::getInstanceIds - enter" << std::endl; 
+    std::vector<std::string> instance_ids(100);
     
     SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
-    soci::indicator ind;
+    *sql << "SELECT instance.instance_id "
+            "FROM user_instance INNER JOIN instance "
+            "ON user_instance.instance_id = instance.instance_id "
+            "WHERE task_id = :task_id AND user_id = :user_id",
+            soci::into(instance_ids),
+            soci::use(get_inst_ids_message.task_id, "task_id"),
+            soci::use(get_inst_ids_message.user_id, "user_id");
     
-    // Find instance in database.
-    *sql << "SELECT instance_id FROM user_instance WHERE user_id = :user_id AND relative_id = :relative_id",
-            soci::into(instance_id, ind), soci::use(user_id, "user_id"), soci::use(relative_id, "relative_id");
-
-    if (!sql->got_data() || (ind != soci::i_ok)) {
-        // If not found false.
-        std::stringstream error;
-        error << "Instance of user: " << user_id << " with relative_id: " << relative_id;
-        throw std::runtime_error(error.str());
-    }
-    return instance_id;
-}*/
-
-/*
-void TaskManager::makeNewInstance(CreateMessage config_message) {
     
-    unsigned int instance_id;
-    SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
-    *sql << "INSERT INTO instance(task_id) VALUES (:task_id) RETURNING instance_id",
-            soci::into(instance_id), soci::use(config_message.task_id);
+    std::cout << "TaskManager::getInstanceIds - leave" << std::endl; 
     
-    *sql << "INSERT INTO user_instance(user_id, instance_id, task_id, relative_id) VALUES(:user_id, :instance_id, :task_id, :relative_id)",
-            soci::use(config_message.user_id, "user_id"), soci::use(instance_id, "instance_id"),
-            soci::use(config_message.task_id, "task_id"), soci::use(config_message.relative_id, "relative_id");
-     
-    createInstance(instance_id, config_message.parameters);
-    
+    return instance_ids;
 }
-*/
-/*
-void TaskManager::deleteInstance(unsigned int user_id, unsigned short personal_id) {
-
-}
-*/

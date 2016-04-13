@@ -15,9 +15,10 @@
 #include <soci.h>
 
 #include "../../../src/DatabaseInterface.h"
+#include "../../../src/TaskManager.h"
 
-AliveCheckInstance::AliveCheckInstance(unsigned int instance_id):
-    TimedTaskInstance(instance_id)
+AliveCheckInstance::AliveCheckInstance(unsigned int instance_id, TaskManager* owning_manager):
+    TimedTaskInstance(instance_id, owning_manager)
 {
     planActivationNow();
 }
@@ -26,10 +27,10 @@ AliveCheckInstance::~AliveCheckInstance()
 {
 }
 
-void AliveCheckInstance::run()
+void AliveCheckInstance::run(std::chrono::system_clock::time_point activation_time)
 {
     std::cout << "AliveCheckInstance::run() - enter" << std::endl;
-    
+
     planActivationAfterSeconds(5);
     
     executeRefresh();

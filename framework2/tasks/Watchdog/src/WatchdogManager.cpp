@@ -53,7 +53,7 @@ void WatchdogManager::createConfiguration(long instance_id, std::map<std::string
             soci::use(watchdog_config.value, "value"), soci::use(watchdog_config.notification_text, "notification_text");
     
     std::cout << "Emplace instance with instance_id: " << instance_id << " into BAF." << std::endl;
-    m_task_instances.emplace(instance_id, std::make_shared<WatchdogInstance>(instance_id, watchdog_config.device_euid));
+    m_task_instances.emplace(instance_id, std::make_shared<WatchdogInstance>(instance_id, this, watchdog_config.device_euid));
 }
 
 void WatchdogManager::changeConfiguration(ChangeMessage change_message)

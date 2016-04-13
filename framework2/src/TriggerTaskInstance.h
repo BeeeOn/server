@@ -12,13 +12,14 @@
 #include "TaskInstance.h"
 
 #include <mutex>
+#include <set>
 
 class TriggerTaskInstance: public TaskInstance 
 {
 public:
-    TriggerTaskInstance(unsigned int instance_id);
+    TriggerTaskInstance(unsigned int instance_id, TaskManager *owning_manager);
     
-    TriggerTaskInstance(const TriggerTaskInstance& orig);
+    //TriggerTaskInstance(const TriggerTaskInstance& orig);
     
     virtual ~TriggerTaskInstance();
 
@@ -27,10 +28,14 @@ public:
     // Entry point of instance.
     virtual void run(DataMessage data_message) = 0;
 
-    void registerDataMessage(unsigned long long device_euid);
+    void registerDataMessage(long device_euid);
+    
+    void removeFromDataMessageRegister();
     
 private:
-        
+
+    std::set<long /*device_euid*/> m_registered_device_euids;
+    
     std::mutex m_activation_mx;
 };
 

@@ -11,13 +11,14 @@
 
 #include "DataMessageRegister.h"
 
-TriggerTaskInstance::TriggerTaskInstance(unsigned int instance_id):
-    TaskInstance(instance_id)
+TriggerTaskInstance::TriggerTaskInstance(unsigned int instance_id, TaskManager *owning_manager):
+    TaskInstance(instance_id, owning_manager)
 {
 }
 
-TriggerTaskInstance::~TriggerTaskInstance() {
-
+TriggerTaskInstance::~TriggerTaskInstance()
+{
+    removeFromDataMessageRegister();
 }
 
 void TriggerTaskInstance::activate(DataMessage data_message)
@@ -26,7 +27,14 @@ void TriggerTaskInstance::activate(DataMessage data_message)
     run(data_message);
 }
 
-void TriggerTaskInstance::registerDataMessage(unsigned long long device_euid) {
+void TriggerTaskInstance::registerDataMessage(long device_euid)
+{
     std::cout << "registerDataMessage: " << device_euid << std::endl;
     DataMessageRegister::getInstance()->insertEntry(device_euid, this);
+    m_registered_device_euids.insert(device_euid);
+}
+
+void TriggerTaskInstance::removeFromDataMessageRegister()
+{
+    DataMessageRegister::getInstance()->removeAllEntriesOfInstance(m_registered_device_euids, this);
 }

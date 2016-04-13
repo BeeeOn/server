@@ -8,116 +8,40 @@
 #ifndef TASKMANAGER_H
 #define TASKMANAGER_H
 
-#include <map>
-#include <memory> //std::shared_ptr
-//#include <utility> // std::pair
+#include <vector> //std::vector
 
 #include "UserMessages.h"
-#include "TaskInstance.h"
+#include "BaseTaskManager.h"
+//#include "TaskInstance.h"
 
-class TaskManager {
+class TaskManager: public BaseTaskManager
+{
 public:
-    
     TaskManager();
     
     virtual ~TaskManager();
     
-    long createInstanceInDB(CreateMessage create_message);
-    
-    virtual void createConfiguration(long instance_id, std::map<std::string, std::string> config) = 0;
-    
-    virtual void changeConfiguration(ChangeMessage change_message) = 0;
-    
-    void deleteInstance(DeleteMessage delete_message);
-    
-    
-    
-    
-    //  |virtual void deleteConfiguration(DeleteMessage delete_message) = 0; 
-    
-    virtual std::map<std::string, std::string> getConfiguration(GetConfMessage get_conf_message) = 0;
-    
-    virtual std::string getData(GetDataMessage get_data_message);
-    
-    
-    std::string getInstanceIds(GetInstIdsMessage get_inst_ids_message);
-    
-    std::string givePermission(GivePermMessage give_perm_message);
-    
+    /**
+     * Creates instance in database.
+     * @param create_message Message with info about instance.
+     * @return ID of instance from database.
+     */
+    virtual long createInstance(CreateMessage create_message);
     
     /**
-     * Crates new instance of instance.
-     * @param user_id ID of a user creating an instance.
-     * @param personal_id ID of instance relative to instances of task already created by user (user can run more instances of one task). 
+     * Deletes instance from BAF and from database.
+     * @param delete_message Message with info about which instance to delete.
      */
-    //virtual void createInstance(unsigned int instance_id, std::map<std::string, std::string> configuration) = 0;
-    
-    // Prvotni ulozeni konfigurace ulohy.
-    //virtual void insertConfiguration(std::map<std::string, std::string> configuration) = 0;
-    
-    // Zmena uz existujici konfigurace.
-    //virtual void updateConfiguration(unsigned int instance_id, std::map<std::string /*name*/, std::string /*value*/> configuration) = 0;
-   
-    // Smazani konfigurace.
-    //virtual void deleteConfiguration(unsigned int user_id, unsigned short personal_id) = 0;
-    
-    // Smazani instance.
-    //void deleteInstance(unsigned int user_id, unsigned short personal_id);
+    virtual void deleteInstance(DeleteMessage delete_message);
     
     /**
-     * 
-     * @param config_message
+     * Returns IDs of instances belonging to user and task given in message.
+     * @param get_inst_ids_message Message containing user_id and task_id.
+     * @return Vector with IDs of all instances owned by user. 
      */
-    //virtual void makeNewInstance(CreateMessage config_message) ;
+    virtual std::vector<std::string> getInstanceIds(GetInstIdsMessage get_inst_ids_message);
     
-    /**
-     * Checks if instance exists in database and BAF system.
-     * This function is little hacked through exception, it should be probably done without it.
-     * @param config_message Configuration data.
-     * @return True if found, false otherwise.
-     */
-    //bool checkInstanceExistence(CreateMessage config_message);
-    
-    //unsigned int getInstanceId(unsigned int user_id, unsigned short relative_id);
-    
-protected:
-
-    /**
-     * Stores all created instances of this task. TaskInstance is only an interface so stored instances 
-     * are either derived from TimedTaskInstance, TriggerTaskInstance or CombinedTaskInstance.
-     */
-    std::map<unsigned int /* ID of instance */, std::shared_ptr<TaskInstance>> m_task_instances;
-    
-    //TaskManager(MANAGER_TYPE type, std::string name);
-    
-    //TaskManager(const TaskManager& orig);
-    //virtual ~TaskManager();
-        
-    //void processConfigMessage();
-    
-    // Getters.
-    //unsigned int getId() const {return m_id;}
-    //std::string getName() const {return m_name;};
-    //MANAGER_TYPE getType() const {return m_type;};    
-    
-    // Setters.
-    //void setType(MANAGER_TYPE type) {m_type = type;}
-    
-    // Creates an instance of algorithm.
-    //virtual void createInstance();
-    
-//protected:
-    // Variable for generating unique ids for instances.  
-    //unsigned long m_instance_id_counter = 1;
-    
-    // Id of manager.
-    //unsigned int m_id;
-    
-    //std::string m_name;
-    
-    //MANAGER_TYPE m_type;
-    
-
+    //virtual std::string givePermission(GivePermMessage give_perm_message);
 };
 
 #endif /* TASKMANAGER_H */

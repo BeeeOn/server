@@ -10,6 +10,7 @@
 
 #include <map>
 #include <mutex>
+#include <set>
 #include <vector>
 
 #include "TaskInstance.h"
@@ -24,9 +25,11 @@ public:
 
     static std::shared_ptr<DataMessageRegister> getInstance();
 
-    void insertEntry(unsigned long long device_euid, TaskInstance* task_instance);
+    void insertEntry(long device_euid, TaskInstance* instance_ptr);
    
-    std::vector<TaskInstance*> returnAllEntries(unsigned long long device_euid); 
+    void removeAllEntriesOfInstance(std::set<long /*device_euid*/> registered_device_euids, TaskInstance* instance_ptr);
+    
+    std::vector<TaskInstance*> returnAllEntries(long device_euid); 
     
 private:
     
@@ -36,9 +39,7 @@ private:
      */
     static std::shared_ptr<DataMessageRegister> m_instance;
     
-    std::map<unsigned long long /*device_euid*/, std::vector<TaskInstance*> /*instances*/> m_msg_register;
-    
+    std::multimap<long /*device_euid*/, TaskInstance*/*instance*/> m_message_register; 
 };
 
 #endif /* DATAMESSAGEREGISTER_H */
-

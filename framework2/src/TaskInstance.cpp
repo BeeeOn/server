@@ -9,14 +9,14 @@
 
 #include <string>
 
-TaskInstance::TaskInstance(unsigned int instance_id):
-    m_instance_id(instance_id)
+#include "TaskManager.h"
+
+TaskInstance::TaskInstance(unsigned int instance_id, TaskManager* owning_manager):
+    m_instance_id(instance_id),
+    m_owning_manager(owning_manager)
 {
-    // Save owner information to database.
 }
 
-TaskInstance::~TaskInstance() {
-    
-    // Delete instance from database.
-    
+TaskInstance::~TaskInstance()
+{
 }

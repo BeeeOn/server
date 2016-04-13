@@ -14,53 +14,53 @@
 
 #include "Calendar.h"
 
-TimedTaskInstance::TimedTaskInstance(unsigned int instance_id):
-    TaskInstance(instance_id)
+TimedTaskInstance::TimedTaskInstance(unsigned int instance_id, TaskManager *owning_manager):
+    TaskInstance(instance_id, owning_manager)
 {
 }
 
-/*
-TimedAlgorithmInstance::TimedAlgorithmInstance(const TimedAlgorithmInstance& orig) {
-}
-*/
 TimedTaskInstance::~TimedTaskInstance()
 {
+    // Before destruction, remove the instance from calendar.
+    removeFromCalendar();
 }
 
-
-void TimedTaskInstance::activate()
+void TimedTaskInstance::activate(std::chrono::system_clock::time_point activation_time)
 {
     std::cout << "TimedTaskInstance::activate() - enter" << std::endl;
     m_activation_mx.lock();
     
+    
     //test.lock();
-    run();
+    run(activation_time);
     
     //test.unlock();
     m_activation_mx.unlock();
     std::cout << "TimedTaskInstance::activate() - leave" << std::endl;
 }
-
-void TimedTaskInstance::run()
+/*
+void TimedTaskInstance::run(std::chrono::system_clock::time_point activation_time)
 {
     std::cout << "WRONG RUN" << std::endl;
 }
-
+*/
 void TimedTaskInstance::planActivationNow()
 {
-    Calendar::getInstance()->planActivation(this);
+    std::chrono::system_clock::time_point activation_time = Calendar::getInstance()->planActivation(this);
+    m_activation_times.insert(activation_time);
     //Calendar::emplaceEvent(this);
     //Calendar::emplaceEvent(this->shared_from_this());
 }
 
 void TimedTaskInstance::planActivationAfterSeconds(int seconds)
 {
-    Calendar::getInstance()->planActivation(seconds, this);
+    std::chrono::system_clock::time_point activation_time = Calendar::getInstance()->planActivation(seconds, this);
+    m_activation_times.insert(activation_time);
     //Calendar::emplaceEvent(seconds, this);
     //Calendar::emplaceEvent(seconds, this->shared_from_this());
 }
 
-void TimedTaskInstance::deleteInstance()
+void TimedTaskInstance::removeFromCalendar()
 {
-    Calendar::getInstance()->removeAllActivations(this);
+    Calendar::getInstance()->removeAllActivationsOfInstance(m_activation_times, this);
 }

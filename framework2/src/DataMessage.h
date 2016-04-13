@@ -1,28 +1,28 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /* 
  * File:   DataMessage.h
- * Author: mrmaidx
+ * Author: Martin Novak, xnovak1c@stud.fit.vutbr.cz
  *
- * Created on 28. března 2016, 14:10
+ * Created on 28. March 2016
  */
 
 #ifndef DATAMESSAGE_H
 #define DATAMESSAGE_H
 
 #include <map>
-
-struct DataMessage {
-    unsigned long long gateway_id;
-    unsigned long long device_euid;
-    unsigned int time;
-    std::map<int /*module_id*/, double /*value*/> modules;
+ 
+enum class MODULE_STATUS {
+    AVAILABLE, UNAVAILABLE
 };
 
+struct DataMessage {
+    /** At least 8 bytes. Decimal(20,0) in database. */
+    long long gateway_id;
+    /** At least 4 bytes. Decimal(10) in database. */
+    long device_euid;
+    /** Unix timestamp. */ 
+    unsigned int time;
+    /** Map storing informations about modules.  */
+    std::map<int /*module_id*/, std::pair<MODULE_STATUS /*status of module*/, double /*value of module*/>> modules;
+};
 
 #endif /* DATAMESSAGE_H */
-

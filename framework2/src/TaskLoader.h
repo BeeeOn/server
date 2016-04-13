@@ -16,13 +16,16 @@
 
 #include "pugixml.hpp"
 
+#include "BaseTaskLoader.h"
 #include "Task.h"
+
 
 //#include "TasksConfigParser.h"
 //#include "TriggerTaskManager.h"
 //#include "TimedTaskManager.h"
 
-class TaskLoader {
+class TaskLoader: public BaseTaskLoader
+{
 public:
     /**
      * Delete copy constructor.
@@ -40,7 +43,8 @@ public:
      * Returns pointer to singleton instance of class DatabaseInterface.
      * @return Pointer to singleton instance.
      */
-    static std::shared_ptr<TaskLoader> getInstance();
+    //static std::shared_ptr<TaskLoader> getInstance();
+    static void createInstance();
     
     /**
      * Loads and runs all tasks defined in tasks config file.
@@ -54,44 +58,35 @@ public:
      */
     void processTasksConfigFileAndStoreInfo(std::string tasks_config_file_path);
     
+    void reloadTasksConfigFileAndFindNewTasks();
+    
+    
     /**
      * Finds task in m_tasks and returns shared pointer to it.
      * @param task_id ID of a task.
      * @return Shared pointer to task.
      */
-    std::shared_ptr<Task> findTask(unsigned int task_id);
+    //std::shared_ptr<Task> findTask(unsigned int task_id);
     
-private:
+protected:
     /** 
      * Private constructor.
      */
     TaskLoader();
+   
+    //std::string m_tasks_config_file_path;
     
    
     /**
      * Singleton instance pointer.
      */
-    static std::shared_ptr<TaskLoader> m_instance;
-public:    
+    //static std::shared_ptr<TaskLoader> m_instance;
+    
     /**
      * Container storing all loaded tasks.
      */
-    std::map<unsigned int /* ID of task */, std::shared_ptr<Task>> m_tasks;
-    
-    
-    /////////// OLD //////////////////ú
-    //std::map<int /*manager_id*/, AlgorithmManager> algorithm_managers;
-    
-    //std::map<int /*manager_id*/, std::shared_ptr<TimedTaskManager>> m_timed_managers;
-    
-    //std::map<int /*manager_id*/, TimedTaskManager*> m_timed_managers;
-    
-    //std::map<int /*manager_id*/, TriggerTaskManager> event_managers;
-    
-    //std::vector<TaskConfigInfo> tasks_config_info;
-    
-    //std::map<int /*id*/, void* /*poiner to library*/> loaded_task_libraries;
-   
+    //std::map<unsigned int /* ID of task */, std::shared_ptr<Task>> m_tasks;
+
 };
 
 #endif /* TASKLOADER_H */

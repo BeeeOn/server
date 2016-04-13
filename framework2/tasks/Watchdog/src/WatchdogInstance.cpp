@@ -17,14 +17,14 @@
 #include <stdexcept>
 #include <string>
 
-
 #include <soci.h>
 #include "../../../src/DatabaseInterface.h"
 
 #include "WatchdogManager.h"
 
-WatchdogInstance::WatchdogInstance(unsigned int instance_id, unsigned long long device_euid):
-    TriggerTaskInstance(instance_id), m_received_data_once(false)
+WatchdogInstance::WatchdogInstance(unsigned int instance_id, TaskManager* owning_manager, unsigned long long device_euid):
+    TriggerTaskInstance(instance_id, owning_manager),
+    m_received_data_once(false)
 {
     registerDataMessage(device_euid);
 }
@@ -35,7 +35,6 @@ WatchdogInstance::~WatchdogInstance()
 
 void WatchdogInstance::run(DataMessage data_message)
 {   
-    
     
     SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
     if (!m_received_data_once) {
@@ -52,7 +51,7 @@ void WatchdogInstance::run(DataMessage data_message)
             throw std::runtime_error("Run of watchdog was not successful.");      
         }
         else {
-            m_last_received_value = module->second;
+            m_last_received_value = module->second.second;
             m_received_data_once = true;
             
             std::cout << "||||||||||| WATCHDOG |||||||||||" << std::endl;
@@ -63,8 +62,6 @@ void WatchdogInstance::run(DataMessage data_message)
     }
     else {
         WatchdogConfig config;
-        
-        
         
         // Get configuration of this instance from database.
         *sql << "SELECT device_euid, module_id, operator, value, notification_text FROM task_watchdog WHERE instance_id = :instance_id",
@@ -78,7 +75,7 @@ void WatchdogInstance::run(DataMessage data_message)
             throw std::runtime_error("Run of watchdog was not successful.");  
         }
         else {
-            double current_value = module->second;
+            double current_value = module->second.second;
             
             std::cout << "||||||||||| WATCHDOG |||||||||||" << std::endl;
             std::cout << "Instance with ID: " << m_instance_id << " was activated." << std::endl;

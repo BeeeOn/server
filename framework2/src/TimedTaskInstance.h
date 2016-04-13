@@ -8,9 +8,12 @@
 #ifndef TIMEDTASKINSTANCE_H
 #define TIMEDTASKINSTANCE_H
 
+#include <chrono>
 #include <memory>
 #include <mutex>
+#include <set>
 #include <string>
+#include <vector>
 
 #include "TaskInstance.h"
 
@@ -20,7 +23,7 @@ class TimedTaskInstance: public TaskInstance//, std::enable_shared_from_this<Tim
 public:
 
     
-    TimedTaskInstance(unsigned int instance_id);
+    TimedTaskInstance(unsigned int instance_id, TaskManager *owning_manager);
     
     //TimedAlgorithmInstance(const TimedAlgorithmInstance& orig);
     virtual ~TimedTaskInstance();
@@ -34,15 +37,17 @@ public:
     void planActivationNow();
     
     // Activates an instance (calls run() function, but protects it with mutex).
-    void activate() override;
+    void activate(std::chrono::system_clock::time_point activation_time) override;
     
-    void deleteInstance() override;
+    void removeFromCalendar();
 
     
     // Entry point of instance.
-    virtual void run() = 0;
+    virtual void run(std::chrono::system_clock::time_point activation_time) = 0;
     
 private:
+    std::set<std::chrono::system_clock::time_point> m_activation_times;
+    
     std::mutex m_activation_mx;
 
 };

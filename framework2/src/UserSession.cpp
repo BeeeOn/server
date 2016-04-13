@@ -50,7 +50,7 @@ void UserSession::receivedMessage(size_t bytes_transferred)
                 // Find task and get pointer to it's object.
                 std::shared_ptr<Task> task = TaskLoader::getInstance()->findTask(create_message.task_id);
                 // Create instance in database.
-                long instance_id = task->getTaskManagerPtr()->createInstanceInDB(create_message);
+                long instance_id = task->getTaskManagerPtr()->createInstance(create_message);
                 // Create instance in program and store configuration.
                 task->getTaskManagerPtr()->createConfiguration(instance_id, create_message.config);
                 // Send back instance_id.
@@ -111,6 +111,19 @@ void UserSession::receivedMessage(size_t bytes_transferred)
                 GetInstIdsMessage get_inst_ids_message = user_message_parser.processGetInstIdsMessage();
                 
                 std::cout << "USER_ID: " << get_inst_ids_message.user_id << " | TASK_ID: " << get_inst_ids_message.task_id << std::endl;
+            
+                // Find task and get pointer to it's object.
+                std::shared_ptr<Task> task = TaskLoader::getInstance()->findTask(get_inst_ids_message.task_id);
+                std::vector<std::string> instance_ids = task->getTaskManagerPtr()->getInstanceIds(get_inst_ids_message);
+                
+                std::string response;
+                for (auto instance_id : instance_ids) {
+                    response += instance_id;
+                    response += " | ";
+                }
+                response += "\n";
+                send(response);
+                
             }
             break;
             case(USER_MESSAGE_TYPE::GET_CONF): {
