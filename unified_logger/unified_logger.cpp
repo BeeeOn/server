@@ -10,7 +10,7 @@
 Unified_logger::Unified_logger(std::string logger_id, std::string log_folder_path, LogSeverity default_log_level):
     _log_folder_path(log_folder_path),
     _logger_id(logger_id),
-    _default_log_level(default_log_level)
+    _minimum_log_level(default_log_level)
 {
     _logfile.open( getLogFilePath(), std::ios::app);
     _filtered.open( "/dev/null", std::ios::app);
@@ -29,12 +29,14 @@ Unified_logger::~Unified_logger()
  */
 void Unified_logger::setLogLevel(LogSeverity log_level)
 {
-    _default_log_level = log_level;
+    _minimum_log_level = log_level;
 }
 
 void Unified_logger::setLogFolderPath(std::string folder_path)
 {
     _log_folder_path = folder_path;
+    _logfile.close();
+    _logfile.open( getLogFilePath(), std::ios::app);
 }
 
 /**
@@ -45,28 +47,6 @@ std::string Unified_logger::getLogFilePath()
     return (_log_folder_path + "/" + _logger_id + getFileNameByDate() + ".log");
 }
 
-/**
- * @brief Log message function
- * @details deprecated
- * 
- * @param level log level
- * @param message log data
- */
-/*void Unified_logger::log(int level, std::string message)
-{   
-    if(level >= _log_level)
-    {
-        if(_log_to_stdout)
-        {
-            std::cout << getTime() << " " << levelToString(level) << " " << _data_tag << " " << message << std::endl;
-        }
-        else
-        {
-            _logfile << getTime() << " " << levelToString(level) << " " << _data_tag << " " << message << std::endl;
-        }
-    }
-}
-*/
 
 /**
  * @brief Gets string representation from int log level
@@ -98,6 +78,7 @@ std::string Unified_logger::levelToString(LogSeverity level)
             throw "Unexpected enum representation of log level";
     }
 }
+
 
 /**
  * @brief translates developer string level to internal type
@@ -143,6 +124,7 @@ LogSeverity Unified_logger::StringToLevel(std::string severity)
         //    return LogSeverity::NONE;       
 }
 
+
 /**
  * @brief Gets tag name for log message
  * @details Tag name is composed from machine name, logger id and message tag
@@ -173,12 +155,13 @@ std::string Unified_logger::getTagHierarchy(std::string tag)
  */
 locked_stream Unified_logger::out(std::string location, int line, std::string tag, std::string level)
 {
-    if (StringToLevel(level) < _default_log_level)
+    if (StringToLevel(level) < _minimum_log_level)
     {
         return locked_stream(_filtered, getTagHierarchy(tag), level, location, line);
     }
     return locked_stream(std::cout, getTagHierarchy(tag), level, location, line);
 }
+
 
 /**
  * @brief returns file stream to handle message
@@ -192,10 +175,12 @@ locked_stream Unified_logger::out(std::string location, int line, std::string ta
  */
 locked_stream Unified_logger::file(std::string location, int line, std::string tag, std::string level)
 {
-    if (StringToLevel(level) < _default_log_level)
+    if (StringToLevel(level) < _minimum_log_level)
     {
         return locked_stream(_filtered, getTagHierarchy(tag), level, location, line);
     }
     return locked_stream(_logfile, getTagHierarchy(tag), level, location, line);
 }
 
+
+/* End of unified_logger.cpp */
