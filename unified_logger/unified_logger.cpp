@@ -72,8 +72,6 @@ std::string Unified_logger::levelToString(LogSeverity level)
             return "FATAL";
         case LogSeverity::MSG:
             return "MSG";
-        //case LogSeverity::NONE:
-        //    return "NONE ";
         default:
             throw "Unexpected enum representation of log level";
     }
@@ -119,9 +117,7 @@ LogSeverity Unified_logger::StringToLevel(std::string severity)
     else
     {
         throw "Unexpected String representation of log level";
-    }
-        //case "NONE":
-        //    return LogSeverity::NONE;       
+    }     
 }
 
 
