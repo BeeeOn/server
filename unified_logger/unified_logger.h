@@ -30,7 +30,7 @@
 #define LOGFILE(tag, severity) \
     file(__FILE__, __LINE__, tag, severity) 
 
-enum class LogSeverity {ALL, TRACE, MSG, DEBUG, WARN, INFO, ERROR, FATAL, NONE};
+enum class LogSeverity {ALL, TRACE, DEBUG, MSG, WARN, INFO, ERROR, FATAL, NONE};
 
 
 /**
