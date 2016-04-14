@@ -42,7 +42,7 @@ Obdobné funkcie existujú pre logovanie do súboru:
 
 ###Log format:
 
-[dd.mm.yyyy hh:mm:ss:xxx] tag [thread_id] origin_file:origin_line severity message
+(dd.mm.yyyy hh:mm:ss:xxx) tag [thread_id] origin_file:origin_line severity message
 #### Datetime
 podľa normy ISO 8601
 
