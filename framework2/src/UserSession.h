@@ -14,7 +14,7 @@ class UserSession: public Session {
 public:
     UserSession(asio::io_service& io_service);
     
-    void receivedMessage(size_t bytes_transferred) override;
+    void processMessage(std::string message) override;
 };
 
 #endif /* USERSESSION_H */

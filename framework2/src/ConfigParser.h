@@ -24,27 +24,6 @@ public:
      * @param config_file_path Path to config file.
      */
     void parseConfigFile(char *config_file_path);
-    
-    /** Path to file containing configuration of tasks.*/
-    std::string m_tasks_config_path;
-    
-    /** Number of working threads user server is going to have. */
-    int m_user_server_threads;
-    
-    /** Port assigned to user server. */
-    unsigned short m_user_server_port;
-    
-    /** Number of working threads gateway server is going to have. */
-    int m_gateway_server_threads;
-    
-    /** Port assigned to gateway server. */
-    unsigned short m_gateway_server_port;
-    
-    /** Number of sessins wanted for communication with database. */
-    int m_database_sessions;
-    
-    /** String formatted to connect to database. */
-    std::string m_database_connection_string;
 };
 
 #endif /* CONFIGPARSER_H */

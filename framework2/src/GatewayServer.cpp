@@ -15,20 +15,19 @@
 
 #include "GatewaySession.h"
 
-GatewayServer::GatewayServer(asio::io_service& io_service, unsigned short port, unsigned int threads):
+GatewayServer::GatewayServer(asio::io_service& io_service,
+                             int port,
+                             int threads):
     Server(io_service, port, threads)
 {
 }
 
-void GatewayServer::startAccept() {
-    
-    //m_new_session = new UserSession(m_io_service);
+void GatewayServer::startAccept()
+{
+    // Create new session.
     m_new_session = std::make_shared<GatewaySession>(m_io_service);
-    /*
+
+    // Accept on the socket of the session.
     m_acceptor.async_accept(m_new_session->getSocket(),
-        boost::bind(&Server::handleAccept, this,
-        asio::placeholders::error));
-*/
-    m_acceptor.async_accept(m_new_session->getSocket(),
-    [&](const asio::error_code& error){ handleAccept(error); } );
+    [&](const asio::error_code& error){ handleAccept(error); });
 }

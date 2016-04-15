@@ -35,7 +35,12 @@ void DataMessageRegister::createInstance()
 
 std::shared_ptr<DataMessageRegister> DataMessageRegister::getInstance()
 {
-    return m_instance;
+    if (m_instance) {
+        return m_instance;
+    }
+    else {
+        throw std::runtime_error("DataMessageRegister singleton was not created or already destructed.");
+    }
 }
 
 void DataMessageRegister::activateInstances(DataMessage data_message)
@@ -51,11 +56,11 @@ void DataMessageRegister::activateInstances(DataMessage data_message)
 
 void DataMessageRegister::insertEntry(long device_euid, TaskInstance* task_instance)
 {
-    logger.LOGOUT("core", "TRACE") << "DataMessageRegister::insertEntry - enter" << std::endl;
+    logger.LOGFILE("core", "TRACE") << "DataMessageRegister::insertEntry - enter" << std::endl;
     std::lock_guard<std::mutex> lock(m_register_mx);
 
     m_message_register.emplace(device_euid, task_instance);
-    logger.LOGOUT("core", "TRACE") << "DataMessageRegister::insertEntry - leave" << std::endl;
+    logger.LOGFILE("core", "TRACE") << "DataMessageRegister::insertEntry - leave" << std::endl;
     
 }
 void DataMessageRegister::removeEntryOfInstance(long device_euid, TaskInstance* instance_ptr)

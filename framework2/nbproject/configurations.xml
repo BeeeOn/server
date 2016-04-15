@@ -21,8 +21,10 @@
       </logicalFolder>
       <itemPath>src/BaseTaskLoader.h</itemPath>
       <itemPath>src/BaseTaskManager.h</itemPath>
+      <itemPath>src/Config.h</itemPath>
       <itemPath>src/ConfigParser.h</itemPath>
       <itemPath>src/DatabaseInterface.h</itemPath>
+      <itemPath>src/GatewayInterface.h</itemPath>
       <itemPath>src/GatewayServer.h</itemPath>
       <itemPath>src/GatewaySession.h</itemPath>
       <itemPath>src/Logger.h</itemPath>
@@ -63,6 +65,7 @@
       <itemPath>src/BaseTaskManager.cpp</itemPath>
       <itemPath>src/ConfigParser.cpp</itemPath>
       <itemPath>src/DatabaseInterface.cpp</itemPath>
+      <itemPath>src/GatewayInterface.cpp</itemPath>
       <itemPath>src/GatewayServer.cpp</itemPath>
       <itemPath>src/GatewaySession.cpp</itemPath>
       <itemPath>src/Server.cpp</itemPath>
@@ -129,6 +132,8 @@
       </item>
       <item path="src/Calendar.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="src/Config.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="src/ConfigParser.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/ConfigParser.h" ex="false" tool="3" flavor2="0">
@@ -146,6 +151,10 @@
       <item path="src/DatabaseInterface.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/DatabaseInterface.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/GatewayInterface.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/GatewayInterface.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/GatewayServer.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -256,6 +265,8 @@
       </item>
       <item path="src/Calendar.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="src/Config.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="src/ConfigParser.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/ConfigParser.h" ex="false" tool="3" flavor2="0">
@@ -273,6 +284,10 @@
       <item path="src/DatabaseInterface.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/DatabaseInterface.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/GatewayInterface.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/GatewayInterface.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/GatewayServer.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -371,6 +386,8 @@
       </item>
       <item path="src/Calendar.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="src/Config.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="src/ConfigParser.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/ConfigParser.h" ex="false" tool="3" flavor2="0">
@@ -388,6 +405,10 @@
       <item path="src/DatabaseInterface.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="src/DatabaseInterface.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/GatewayInterface.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/GatewayInterface.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/GatewayServer.cpp" ex="false" tool="1" flavor2="0">
       </item>

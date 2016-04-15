@@ -8,4 +8,8 @@
     <gateway_server threads="10" port="7083" />
     <!-- Configuration of database interface -->
     <database sessions="10" connection_string="port = '5432' dbname = 'home8' user = 'uiserver7' password = '1234' connect_timeout = '3'" />
+    <!-- Configuration of logger. -->
+    <logger log_folder_path="/var/log/baf/" log_level="INFO" />
+    <!-- Port to ada_server_sender. -->
+    <ada_server_sender port="7081" />
 </config>

@@ -42,6 +42,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/DataMessageParser.o \
 	${OBJECTDIR}/src/DataMessageRegister.o \
 	${OBJECTDIR}/src/DatabaseInterface.o \
+	${OBJECTDIR}/src/GatewayInterface.o \
 	${OBJECTDIR}/src/GatewayServer.o \
 	${OBJECTDIR}/src/GatewaySession.o \
 	${OBJECTDIR}/src/Server.o \
@@ -120,6 +121,11 @@ ${OBJECTDIR}/src/DatabaseInterface.o: src/DatabaseInterface.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -I../lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/DatabaseInterface.o src/DatabaseInterface.cpp
+
+${OBJECTDIR}/src/GatewayInterface.o: src/GatewayInterface.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I/usr/local/include/soci -I/usr/include/postgresql -I../lib -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/GatewayInterface.o src/GatewayInterface.cpp
 
 ${OBJECTDIR}/src/GatewayServer.o: src/GatewayServer.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

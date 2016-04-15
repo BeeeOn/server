@@ -9,8 +9,10 @@
 
 #include <map>
 #include <memory>
+#include <mutex>
 #include <string>
 #include <soci.h>
+#include <iostream>
 
 #include "../../../src/DatabaseInterface.h"
 #include "AliveCheckInstance.h"
@@ -25,6 +27,7 @@ extern "C" {
     void deleteTaskManager(TaskManager* manager) {
         std::cout << "Deleting AliveCheckManager." << std::endl;
         delete static_cast<AliveCheckManager*>(manager);
+        std::cout << "Deleting AliveCheckManager." << std::endl;
     }
 }
 
@@ -40,6 +43,7 @@ AliveCheckManager::~AliveCheckManager()
 void AliveCheckManager::createConfiguration(long instance_id, std::map<std::string, std::string> config)
 {
     std::cout << "AliveCheckManager::createConfiguration - enter" << std::endl;
+    
     AliveCheckConfig alive_config = parseConfiguration(config);
     
     SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
@@ -48,11 +52,14 @@ void AliveCheckManager::createConfiguration(long instance_id, std::map<std::stri
             soci::use(alive_config.notifications, "notifications");
     
     std::cout << "Emplace instance with instance_id: " << instance_id << " into BAF." << std::endl;
+    
+    std::lock_guard<std::mutex> lock(m_task_instances_mx);
     m_task_instances.emplace(instance_id, std::make_shared<AliveCheckInstance>(instance_id, this));
     
     debugPrintTaskInstances();
     
     std::cout << "AliveCheckManager::createConfiguration - leave" << std::endl;
+    
 }
 
 void AliveCheckManager::changeConfiguration(ChangeMessage change_message)
@@ -93,6 +100,8 @@ std::map<std::string, std::string> AliveCheckManager::getConfiguration(GetConfMe
 
 void AliveCheckManager::reloadInstances(int task_id)
 {
+    
+     
     int instance_id;
     
     SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
@@ -100,15 +109,18 @@ void AliveCheckManager::reloadInstances(int task_id)
     soci::rowset<soci::row> rows = (sql->prepare << "SELECT instance_id FROM instance WHERE task_id = :task_id",
                                     soci::use(task_id, "task_id"));
 
+    std::lock_guard<std::mutex> lock(m_task_instances_mx);
     for (soci::rowset<soci::row>::const_iterator it = rows.begin(); it != rows.end(); ++it) {   
         
         soci::row const& row = *it;
         instance_id = row.get<int>(0);
         
         m_task_instances.emplace(instance_id, std::make_shared<AliveCheckInstance>(instance_id, this));
+
         
         std::cout << "Reload instance with instance_id: " << instance_id << " into BAF." << std::endl;
     }
+    
 }
 
 AliveCheckConfig AliveCheckManager::parseConfiguration(std::map<std::string, std::string> configuration)

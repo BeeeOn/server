@@ -14,7 +14,9 @@
 #include "WatchdogManager.h"
 
 #include <map>
+#include <mutex>
 #include <string>
+#include <iostream>
 
 #include <soci.h>
 
@@ -30,8 +32,9 @@ extern "C" {
     }
     
     void deleteTaskManager(TaskManager* manager) {
-        std::cout << "Deleting Manager." << std::endl;
+        std::cout << "Deleting WatchdogManager." << std::endl;
         delete static_cast<WatchdogManager*>(manager);
+        std::cout << "WatchdogManager deleted." << std::endl;
     }
 }
 
@@ -55,7 +58,10 @@ void WatchdogManager::createConfiguration(long instance_id, std::map<std::string
             soci::use(watchdog_config.value, "value"), soci::use(watchdog_config.notification_text, "notification_text");
     
     std::cout << "Emplace instance with instance_id: " << instance_id << " into BAF." << std::endl;
+    
+    std::lock_guard<std::mutex> lock(m_task_instances_mx);
     m_task_instances.emplace(instance_id, std::make_shared<WatchdogInstance>(instance_id, this, watchdog_config.device_euid));
+
     
     debugPrintTaskInstances();
 }
@@ -125,6 +131,7 @@ void WatchdogManager::reloadInstances(int task_id)
     soci::rowset<soci::row> rows = (sql->prepare << "SELECT instance_id FROM instance WHERE task_id = :task_id",
                                     soci::use(task_id, "task_id"));
 
+    std::lock_guard<std::mutex> lock(m_task_instances_mx);
     for (soci::rowset<soci::row>::const_iterator it = rows.begin(); it != rows.end(); ++it) {   
         
         soci::row const& row = *it;

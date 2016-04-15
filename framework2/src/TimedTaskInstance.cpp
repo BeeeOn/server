@@ -8,11 +8,10 @@
 #include "TimedTaskInstance.h"
 
 #include <chrono>
-#include <iostream>
-#include <string>
-#include <thread>
+#include <mutex>
 
 #include "Calendar.h"
+#include "Logger.h"
 
 TimedTaskInstance::TimedTaskInstance(int instance_id, TaskManager *owning_manager):
     TaskInstance(instance_id, owning_manager)
@@ -21,46 +20,62 @@ TimedTaskInstance::TimedTaskInstance(int instance_id, TaskManager *owning_manage
 
 TimedTaskInstance::~TimedTaskInstance()
 {
+    logger.LOGFILE("timed_instance", "TRACE") << "TimedTaskInstance::~TimedTaskInstance - enter" << std::endl;
     // Before destruction, remove the instance from calendar.
     removeFromCalendar();
+    
+    logger.LOGFILE("timed_instance", "TRACE") << "TimedTaskInstance::~TimedTaskInstance - leave" << std::endl;
 }
 
 void TimedTaskInstance::activate(std::chrono::system_clock::time_point activation_time)
 {
-    std::cout << "TimedTaskInstance::activate() - enter" << std::endl;
-    m_activation_mx.lock();
+    logger.LOGFILE("timed_instance", "TRACE") << "TimedTaskInstance::activate() - enter" << std::endl;
     
-    
-    //test.lock();
+    // Run instance, but protect it with lock_guard
+    // so two runs at the same time are not possible.
+    std::lock_guard<std::mutex> lock(m_activation_mx); 
     run(activation_time);
-    
-    //test.unlock();
-    m_activation_mx.unlock();
-    std::cout << "TimedTaskInstance::activate() - leave" << std::endl;
+
+    logger.LOGFILE("timed_instance", "TRACE") << "TimedTaskInstance::activate() - leave" << std::endl;
 }
-/*
-void TimedTaskInstance::run(std::chrono::system_clock::time_point activation_time)
-{
-    std::cout << "WRONG RUN" << std::endl;
-}
-*/
+
 void TimedTaskInstance::planActivationNow()
 {
-    std::chrono::system_clock::time_point activation_time = Calendar::getInstance()->planActivation(this);
-    m_activation_times.insert(activation_time);
-    //Calendar::emplaceEvent(this);
-    //Calendar::emplaceEvent(this->shared_from_this());
+    logger.LOGFILE("timed_instance", "TRACE") << "TimedTaskInstance::planActivationNow - enter" << std::endl;
+    
+    try {
+        std::chrono::system_clock::time_point activation_time = Calendar::getInstance()->planActivation(this);
+        m_activation_times.insert(activation_time);
+    }
+    catch (const std::exception& e) {
+        logger.LOGFILE("timed_instance", "WARN") << e.what() << std::endl;
+    }
+    logger.LOGFILE("timed_instance", "TRACE") << "TimedTaskInstance::planActivationNow - leave" << std::endl;
 }
 
 void TimedTaskInstance::planActivationAfterSeconds(int seconds)
 {
-    std::chrono::system_clock::time_point activation_time = Calendar::getInstance()->planActivation(seconds, this);
-    m_activation_times.insert(activation_time);
-    //Calendar::emplaceEvent(seconds, this);
-    //Calendar::emplaceEvent(seconds, this->shared_from_this());
+    logger.LOGFILE("timed_instance", "TRACE") << "TimedTaskInstance::planActivationAfterSeconds - enter" << std::endl;
+    
+    try {
+        std::chrono::system_clock::time_point activation_time = Calendar::getInstance()->planActivation(seconds, this);
+        m_activation_times.insert(activation_time);
+    }
+    catch (const std::exception& e) {
+        logger.LOGFILE("timed_instance", "WARN") << e.what() << std::endl;
+    }
+    logger.LOGFILE("timed_instance", "TRACE") << "TimedTaskInstance::planActivationAfterSeconds - leave" << std::endl;
 }
 
 void TimedTaskInstance::removeFromCalendar()
 {
-    Calendar::getInstance()->removeAllActivationsOfInstance(m_activation_times, this);
+    logger.LOGFILE("timed_instance", "TRACE") << "TimedTaskInstance::removeFromCalendar - enter" << std::endl;
+    
+    try {
+        Calendar::getInstance()->removeAllActivationsOfInstance(m_activation_times, this);
+    }
+    catch (const std::exception& e) {
+        logger.LOGFILE("timed_instance", "WARN") << e.what() << std::endl;
+    }
+    logger.LOGFILE("timed_instance", "TRACE") << "TimedTaskInstance::removeFromCalendar - leave" << std::endl;
 }

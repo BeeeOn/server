@@ -19,7 +19,7 @@
 class UserServer: public Server
 {
 public:   
-    UserServer(asio::io_service& io_service, unsigned short port, unsigned int threads);   
+    UserServer(asio::io_service& io_service, int port, int threads);   
     
     void startAccept() override;
 };

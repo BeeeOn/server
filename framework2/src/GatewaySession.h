@@ -21,7 +21,7 @@ class GatewaySession: public Session
 public:
     GatewaySession(asio::io_service& io_service);
     
-    void receivedMessage(size_t bytes_transferred) override;
+    void processMessage(std::string message) override;
 
 };
 

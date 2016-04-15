@@ -57,6 +57,7 @@ void TaskManager::deleteInstance(DeleteMessage delete_message)
     // Obsolete, removing from calendar is handled in timed instance destructor.
     // m_task_instances.find(delete_message.instance_id)->second->removeFromCalendar();
     
+    std::lock_guard<std::mutex> lock(m_task_instances_mx);
     m_task_instances.erase(delete_message.instance_id);
     
     debugPrintTaskInstances(); 
@@ -95,7 +96,7 @@ void TaskManager::debugPrintTaskInstances()
         }
     }
     
-    logger.LOGOUT("task_manager", "INFO") << "Task instances: " << task_instances << std::endl;
+    logger.LOGFILE("task_manager", "INFO") << "Task instances: " << task_instances << std::endl;
 }
 
 void TaskManager::suicideInstance(long instance_id)
@@ -105,6 +106,7 @@ void TaskManager::suicideInstance(long instance_id)
     *sql << "DELETE FROM instance WHERE instance_id = :instance_id",
             soci::use(instance_id, "instance_id");
     
+    std::lock_guard<std::mutex> lock(m_task_instances_mx);
     m_task_instances.erase(instance_id);
     
     debugPrintTaskInstances(); 

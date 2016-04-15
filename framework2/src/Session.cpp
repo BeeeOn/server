@@ -9,12 +9,15 @@
 
 #include <stdexcept>
 
+#include "Logger.h"
+
 Session::Session(asio::io_service& io_service):
     m_socket(io_service)
 {
 }
 
-Session::~Session() {
+Session::~Session()
+{
     try {
         if (m_socket.is_open()) {
             m_socket.close();            
@@ -22,29 +25,13 @@ Session::~Session() {
     }
     catch (asio::system_error const& e) {
         
-        std::cerr << "Session::stop exception: " << e.what() << std::endl;
+        logger.LOGFILE("session", "ERROR") << "Socket couldn't be closed: " << e.what() << std::endl;
     }
-    std::cerr << "Session::~Sessions - session stopped." << std::endl;
 }
 
-
-asio::ip::tcp::socket& Session::getSocket() {
-    return m_socket;
-}
-
-void Session::onStart()
+asio::ip::tcp::socket& Session::getSocket()
 {
-    async_read(m_socket, m_buffer,
-                boost::bind(&Session::handleRead, shared_from_this(),
-                asio::placeholders::error, asio::placeholders::bytes_transferred));
-
-
-    /*
-    m_socket.async_receive(m_buffer, 0,
-                boost::bind(&Session::handleRead, shared_from_this(),
-                asio::placeholders::error, asio::placeholders::bytes_transferred));
-
-     */
+    return m_socket;
 }
 
 std::string Session::convertMessage(int msg_length) {
@@ -52,44 +39,57 @@ std::string Session::convertMessage(int msg_length) {
     asio::streambuf::const_buffers_type bufstream = m_buffer.data();
     std::string message(asio::buffers_begin(bufstream), asio::buffers_begin(bufstream) + msg_length);
     
-    // Clear buffer.
+    // Clear message from buffer.
     m_buffer.consume(msg_length);
     return message;
 }
 
-void Session::handleRead(const asio::error_code& error, size_t bytes_transferred)
+void Session::onStart()
 {
-    receivedMessage(bytes_transferred);
-    
+    /*
+    async_read(m_socket, m_buffer,
+               [&](const asio::error_code& error, size_t bytes_transferred) {
+                   handleRead(error, bytes_transferred);
+               }
+    );
+    */
+    async_read(m_socket, m_buffer, boost::bind(&Session::handleRead, shared_from_this(),
+               asio::placeholders::error, asio::placeholders::bytes_transferred)); 
     
     /*
-    if (!error) {
-      
-        //bytes_transferred_ = bytes_transferred;
-        onRead(bytes_transferred);
-    }
-    else  //shortread
-    {
-        std::cerr << "Bytes: " << bytes_transferred << " handle_read: " << error.message() << std::endl;
-      //delete this;
-    }
+
+     * m_socket.async_receive(m_buffer, 0,
+                boost::bind(&Session::handleRead, shared_from_this(),
+                asio::placeholders::error, asio::placeholders::bytes_transferred));
+
      */
+}
+
+void Session::handleRead(const asio::error_code& error, size_t bytes_transferred)
+{
+    if (error && error != asio::error::eof) {
+
+        logger.LOGFILE("session", "ERROR") << "Read was not successful: " << error.message() << std::endl;;
+    }
+    else {
+        // If read was successful then process received message.
+        std::string message = convertMessage(bytes_transferred);
+        processMessage(message);
+    }
+}
+
+void Session::sendResponse(std::string message)
+{
+    size_t message_length = message.length();
+    // Send the message to client.
+    asio::async_write(m_socket, asio::buffer(message, message_length),
+          boost::bind(&Session::handleWrite, shared_from_this(), asio::placeholders::error));        
 }
 
 void Session::handleWrite(const asio::error_code& error)
 {
-    if (!error) {
-        std::cout << "write was successful" << std::endl;
+    if (error) {
+        // If responding to client was not successful.
+        logger.LOGFILE("session", "WARN") << "Writing to socket was not successful: " << error.message() << std::endl;
     }
-    else {
-        std::cerr << "handle_write: " << error.message() << std::endl;
-    }
-}
-
-void Session::send(std::string message)
-{
-    size_t message_length = message.length();
-    
-    asio::async_write(m_socket, asio::buffer(message, message_length),
-          boost::bind(&Session::handleWrite, shared_from_this(), asio::placeholders::error));        
 }

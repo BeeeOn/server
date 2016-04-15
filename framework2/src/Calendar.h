@@ -22,47 +22,42 @@
 class Calendar {
 public:
     /**
+     * Creates singleton instance. Must be called just once in entire program.
+     */
+    static void createInstance();    
+    /**
      * Create instance of Calendar singleton, or return it.
      * @return Pointer to Calendar.
      */
     static std::shared_ptr<Calendar> getInstance();
-    
     /**
      * Destructor of class Calendar.
      */
     virtual ~Calendar();
-    
     /*
      * Main algorithm of calendar. Must run only once in a seperated thread.
      */
     void runCalendar();
-    
     /**
      * Calculates activation time: now + seconds and planes instance activation to calendar with calculated activation time.
      * @param seconds Relative activation time (activate seconds from now).
      * @param instance_ptr Pointer to instance, which should be activated.
      */
     std::chrono::system_clock::time_point planActivation(int seconds, TaskInstance* instance_ptr);
-    //void planActivation(int seconds, std::shared_ptr<TaskInstance> instance_ptr);
-    
     /**
      * Immediately plans instance activation to calendar with current time.
      * @param instance_ptr Pointer to instance, which should be activated.
      */
     std::chrono::system_clock::time_point planActivation(TaskInstance* instance_ptr);
-    //void planActivation(std::shared_ptr<TaskInstance> instance_ptr);
-  
     /**
      * Stops calendar and saves activation times.
      */
     void stopCalendar();
-
     /**
      * Deletes all planned activations from calendar of passed TaskInstance.
      * @param instance_ptr Pointer to instance which should be deleted from calendar.
      */
     void removeAllActivationsOfInstance(std::set<std::chrono::system_clock::time_point> planned_times, TaskInstance* instance_ptr);
-    //void removeAllActivations(std::shared_ptr<TaskInstance> instance_ptr);
     
 private:
     /**
@@ -81,35 +76,27 @@ private:
      * Pointer to Calendar instance. 
      */
     static std::shared_ptr<Calendar> m_instance;   
- 
     /*
      * Activates instances passed in parameter.
      * @param to_activate Instances which should be activated.
      */
     void activateInstances(std::multimap<std::chrono::system_clock::time_point, TaskInstance*> to_activate);
-    //void activateInstances(std::vector<std::shared_ptr<TaskInstance>> to_activate);
-    
     /**
      * If calendar is empty causes wait until it is notified that new event was emplaced to queue.
      */
     void waitUntilCalendarIsNotEmpty();
- 
     /**
      * Emplaces event to multimap.
      * @param activation_time Time at which should event activate.
      * @param instance_ptr Pointer to instance, which should be activated.
      */
     void emplaceEvent(std::chrono::system_clock::time_point activation_time, TaskInstance* instance_ptr);
-    //void emplaceEvent(std::chrono::system_clock::time_point activation_time, std::shared_ptr<TaskInstance> instance_ptr);
-    
+
     // Time until main algorithm should wait.
     std::chrono::system_clock::time_point m_wakeup_time;
     
     // Priority queue holding calendar events, those ones with smallest activation time are at top.
-    //std::priority_queue<std::shared_ptr<CalendarEvent>, std::vector<std::shared_ptr<CalendarEvent>>, GreaterCalendarEventSharedPtr> m_calendar_events;
     std::multimap<std::chrono::system_clock::time_point, TaskInstance*> m_calendar_events;
-    //std::multimap<std::chrono::system_clock::time_point, std::shared_ptr<TaskInstance>> m_calendar_events;
-    
     /**
      * Contition variables for waking up main algorithm.
      */

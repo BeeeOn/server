@@ -19,19 +19,20 @@
 class DataMessageRegister {
 public:
     /**
-     * Virtual destructor.
-     */
-    virtual ~DataMessageRegister();
-    /**
      * Creates singleton instance. Must be called just once in entire program.
      */
     static void createInstance();
+    
     /**
      * Serves to access pointer to singleton object of this class.
      * @return Shared pointer to singleton instance.
      */
     static std::shared_ptr<DataMessageRegister> getInstance();
-
+    
+    /**
+     * Virtual destructor.
+     */
+    virtual ~DataMessageRegister();
     /**
      * Activates all instances which registered to receive data from device
      * which EUID is in passed DataMessage object.
@@ -44,9 +45,7 @@ public:
     void removeEntryOfInstance(long device_euid, TaskInstance* instance_ptr);
     
     void removeAllEntriesOfInstance(std::set<long /*device_euid*/> device_euids, TaskInstance* instance_ptr);
-    
-    
-    
+
 private:
     /**
      * Have constructor as private.

@@ -14,8 +14,8 @@ Task::Task(unsigned short task_version, std::string task_name, TASK_TYPE task_ty
     std::cout << "Task::Task - " << task_name << std::endl;
 }
 
-Task::~Task() {
-    
+Task::~Task()
+{
     std::cout << "Task::~Task - entered." << std::endl;
     
     // Dealloc this tasks manager.
@@ -32,7 +32,8 @@ Task::~Task() {
     std::cout << "Task::~Task - finished." << std::endl;
 }
 
-void Task::openTaskLibrary() {
+void Task::openTaskLibrary()
+{
     // Open dynamic library by path.
     m_task_library = dlopen(m_task_path.c_str(), RTLD_NOW);
     
@@ -49,8 +50,8 @@ void Task::openTaskLibrary() {
     }
 }
 
-void Task::closeTaskLibrary() {
-    
+void Task::closeTaskLibrary()
+{
     if (dlclose(m_task_library) != 0) {
         std::cerr << "dlclose(): Dynamic library of task " << m_task_name << " couldn't be closed." << std::endl;
     }
@@ -59,8 +60,8 @@ void Task::closeTaskLibrary() {
     }
 }
 
-void Task::createTaskManager() {
-    
+void Task::createTaskManager()
+{
     // Function pointer.
     typedef TaskManager*(*create_task_manager)();
     
@@ -88,11 +89,11 @@ void Task::createTaskManager() {
     }
 }
 
-void Task::deleteTaskManager() {
-    
+void Task::deleteTaskManager()
+{
     // Function pointer.
-    typedef void(*delete_task_manager)(TaskManager*);
-    
+    typedef void(*delete_task_manager)(void*);
+
     if (!m_task_library) {
         std::stringstream error;
         error << "Cannot delete task manager of task: " << m_task_name << ", because it's dynamic library was already closed." << std::endl;
@@ -113,7 +114,7 @@ void Task::deleteTaskManager() {
             std::cout << "dlsym(): Successfuly loaded deleteTaskManager function symbol of task: " << m_task_name << std::endl;
             
             deleteTaskManager(m_task_manager);
-            //std::cout << m_task_name << ": Manager was deleted." << std::endl;
+            std::cout << m_task_name << ": Manager was deleted." << std::endl;
         }
     }
 }

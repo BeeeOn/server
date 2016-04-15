@@ -65,7 +65,7 @@ void TaskLoader::createAllTasks(std::string tasks_config_file_path)
 
 void TaskLoader::processTasksConfigFileAndStoreInfo(std::string tasks_config_file_path)
 {
-    logger.LOGOUT("core", "INFO") << "Processing tasks config file." << std::endl;
+    logger.LOGFILE("core", "INFO") << "Processing tasks config file." << std::endl;
     
     m_tasks_config_file_path = tasks_config_file_path;
     

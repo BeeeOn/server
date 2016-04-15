@@ -19,24 +19,25 @@ DatabaseInterface::DatabaseInterface()
 DatabaseInterface::~DatabaseInterface()
 {
 }
+
 /*
 void DatabaseInterface::createInstance(int sessions_count) {
     // Create instance.
     m_instance = std::make_shared<DatabaseInterface>(sessions_count);
 }
-*/
-std::shared_ptr<DatabaseInterface> DatabaseInterface::getInstance()
+ */
+
+void DatabaseInterface::createInstance()
 {
-    //std::cout << "DatabaseInterface::getInstance()" << std::endl;
-    
     if (!m_instance) {
         std::cout << "Create DatabaseInterface:m_instance." << std::endl;
-        m_instance = std::make_shared<DatabaseInterface>();
-        std::cout << "Finished creation DatabaseInterface:m_instance." << std::endl;
+        m_instance = std::shared_ptr<DatabaseInterface>(new DatabaseInterface);
     }
-    else {
-        return m_instance;
-    }
+}
+
+std::shared_ptr<DatabaseInterface> DatabaseInterface::getInstance()
+{
+    return m_instance;
 }
 
 void DatabaseInterface::connectToDatabase(int sessions_count, std::string connection_string)

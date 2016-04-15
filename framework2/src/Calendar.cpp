@@ -28,16 +28,22 @@ Calendar::~Calendar()
 {
 }
 
-std::shared_ptr<Calendar> Calendar::getInstance()
+void Calendar::createInstance()
 {
     if (!m_instance) {
         std::cout << "Create Calendar:m_instance." << std::endl;
         m_instance = std::shared_ptr<Calendar>(new Calendar);
-        std::cout << "Finished creation Calendar:m_instance." << std::endl;
+    }
+}
+
+
+std::shared_ptr<Calendar> Calendar::getInstance()
+{
+    if (m_instance) {
         return m_instance;
     }
     else {
-        return m_instance;
+        throw std::runtime_error("Calendar singleton was not created or already destructed.");
     }
 }
 

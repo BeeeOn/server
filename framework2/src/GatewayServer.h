@@ -19,11 +19,9 @@
 class GatewayServer: public Server
 {
 public:
-    GatewayServer(asio::io_service& io_service, unsigned short port, unsigned int threads);   
+    GatewayServer(asio::io_service& io_service, int port, int threads);   
     
     void startAccept() override;
-
 };
 
 #endif /* DATAMSGSERVER_H */
-

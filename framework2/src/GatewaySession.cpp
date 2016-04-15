@@ -26,10 +26,8 @@ GatewaySession::GatewaySession(asio::io_service& io_service):
 {
 }
 
-void GatewaySession::receivedMessage(size_t bytes_transferred)
+void GatewaySession::processMessage(std::string message)
 {
-    std::string message = convertMessage(bytes_transferred);
-    std::cout << "Msg: " << message;
     
     try {
         DataMessageParser data_message_parser;

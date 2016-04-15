@@ -41,7 +41,6 @@ public:
     
     void removeFromCalendar();
 
-    
     // Entry point of instance.
     virtual void run(std::chrono::system_clock::time_point activation_time) = 0;
     

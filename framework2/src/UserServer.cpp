@@ -10,20 +10,19 @@
 #include "Server.h"
 #include "UserSession.h"
 
-UserServer::UserServer(asio::io_service& io_service, unsigned short port, unsigned int threads):
+UserServer::UserServer(asio::io_service& io_service, 
+                       int port,
+                       int threads):
     Server(io_service, port, threads)
 {
 }
 
-void UserServer::startAccept() {
-    
-    //m_new_session = new UserSession(m_io_service);
+void UserServer::startAccept()
+{
+    // Create new session.
     m_new_session = std::make_shared<UserSession>(m_io_service);
-    /*
+
+    // Accept on the socket of the session.
     m_acceptor.async_accept(m_new_session->getSocket(),
-        boost::bind(&Server::handleAccept, this,
-        asio::placeholders::error));
-*/
-    m_acceptor.async_accept(m_new_session->getSocket(),
-    [&](const asio::error_code& error){ handleAccept(error); } );
+    [&](const asio::error_code& error){ handleAccept(error); });
 }

@@ -19,26 +19,21 @@ typedef std::shared_ptr<soci::session> SessionSharedPtr;
 class DatabaseInterface{
 public:
     /**
-     * Constructor of class DatabaseInterface.
-     * DO NOT USE! Use getInstance() instad! Must be present for std::make_shared template.
+     * Creates singleton instance. Must be called just once in entire program.
      */
-    DatabaseInterface();
-    
-    /** Copy constructor is deleted. */
-    DatabaseInterface(const DatabaseInterface& orig) = delete;
-    
-    /** Destructor of class DatabaseInterface. */
-    virtual ~DatabaseInterface();
-    
-    /** Connection pool object. Maintains threads to connect to database. */
-    std::shared_ptr<soci::connection_pool> m_connection_pool;
-    
+    static void createInstance();
     /**
      * Returns pointer to singleton instance of class DatabaseInterface.
      * @return Pointer to singleton instance.
      */
     static std::shared_ptr<DatabaseInterface> getInstance();
 
+    /** Destructor of class DatabaseInterface. */
+    virtual ~DatabaseInterface();
+    
+    /** Connection pool object. Maintains threads to connect to database. */
+    std::shared_ptr<soci::connection_pool> m_connection_pool;
+    
     /**
      * Creates connectin pool and connects to database.
      * @param sessions_count Number of session threads.
@@ -53,7 +48,18 @@ public:
     std::shared_ptr<soci::session> makeNewSession();
     
 private:
-
+    /**
+     * Constructor of class DatabaseInterface.
+     */
+    DatabaseInterface();
+    /**
+     * Delete copy constructor.
+     */
+    DatabaseInterface(const DatabaseInterface& orig) = delete;
+    /**
+     * Delete assignment operator.
+     */
+    void operator=(const DatabaseInterface&) = delete;
     /**
      * Singleton instance pointer.
      */

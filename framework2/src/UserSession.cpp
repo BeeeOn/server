@@ -22,9 +22,9 @@ UserSession::UserSession(asio::io_service& io_service):
 {
 }
 
-void UserSession::receivedMessage(size_t bytes_transferred)
+void UserSession::processMessage(std::string message)
 {
-    std::string message = convertMessage(bytes_transferred);
+    
     //std::cout << "Msg: " << message;
     
     UserMessageParser user_message_parser;
@@ -54,7 +54,7 @@ void UserSession::receivedMessage(size_t bytes_transferred)
                 // Create instance in program and store configuration.
                 task->getTaskManagerPtr()->createConfiguration(instance_id, create_message.config);
                 // Send back instance_id.
-                send(std::string("instance_id: ") + std::to_string(instance_id) + std::string("\n"));
+                sendResponse(std::string("instance_id: ") + std::to_string(instance_id) + std::string("\n"));
             }
             break;
             case(USER_MESSAGE_TYPE::CHANGE):
@@ -122,7 +122,7 @@ void UserSession::receivedMessage(size_t bytes_transferred)
                     response += " | ";
                 }
                 response += "\n";
-                send(response);
+                sendResponse(response);
                 
             }
             break;
@@ -146,7 +146,7 @@ void UserSession::receivedMessage(size_t bytes_transferred)
                     response += key.second;
                     response += "\n";
                 }
-                send(response);
+                sendResponse(response);
             }
             break;
             case(USER_MESSAGE_TYPE::GET_DATA): {
@@ -167,7 +167,7 @@ void UserSession::receivedMessage(size_t bytes_transferred)
     }
     catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;
-        send("Request was not fullfiled. Sorry.");
+        sendResponse("Request was not fullfiled. Sorry.");
     }
 }
 

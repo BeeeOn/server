@@ -8,13 +8,12 @@
 #ifndef BASETASKMANAGER_H
 #define BASETASKMANAGER_H
 
-#include <map> //std::map
-#include <memory> //std::shared_ptr
-#include <vector> //std::vector
+#include <map> // std::map
+#include <memory> // std::shared_ptr
+#include <mutex> // std::mutex, std::lock_guard
+#include <vector> // std::vector
 
 #include "UserMessages.h"
-//#include "TaskInstance.h"
-//#include "TaskManager.h"
 
 class TaskInstance;
 class TaskManager;
@@ -94,6 +93,9 @@ protected:
      * are either derived from TimedTaskInstance, TriggerTaskInstance or CombinedTaskInstance.
      */
     std::map<unsigned int /* ID of instance */, std::shared_ptr<TaskInstance>> m_task_instances;
+    
+    /** Mutex to protect m_task_instances container. */
+    std::mutex m_task_instances_mx;
 };
 
 #endif /* BASETASKMANAGER_H */
