@@ -3,7 +3,7 @@
 
 /**
  * locked_stream.h
- * class for handling locked stdout using operator << 
+ * Header only class for handling locked stdout using operator << 
  * @author Marek Beňo, xbenom01 at stud.fit.vutbr.cz
  * 7. April 2016
  */    
@@ -14,28 +14,22 @@
 #include <fstream>
 #include <sstream>
 #include <thread>
+#include <sys/time.h>
 
-#include "utility.h"
+std::string getTime(void);
+std::string getFileNameByDate();
 
 class locked_stream
 {
-
-
 public:
 
-    locked_stream(std::ostream& stream, std::string tag, std::string severity, std::string location, int line)
-        : lock_(s_out_mutex),
-        stream_(&stream)
-    {
-        setup(stream, tag, severity, location, line);
-    }
+    //Initial stream, prints event header
+    locked_stream(std::ostream& stream, std::string tag, std::string severity, 
+        std::string location, int line);
 
-    locked_stream(locked_stream&& other)
-        : lock_(std::move(other.lock_))
-        , stream_(other.stream_)
-    {
-        other.stream_ = nullptr;
-    }
+    //handles all other <<
+    locked_stream(locked_stream&& other);
+
 
     void setup(std::ostream& stream, std::string tag, std::string severity, std::string location, int line)
     {

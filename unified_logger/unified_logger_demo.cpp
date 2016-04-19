@@ -18,6 +18,8 @@ Unified_logger logger("framework", "/var/log/mydebug", LogSeverity::INFO);
 
 std::mutex locked_stream::s_out_mutex{};
 
+
+//Demonstrates logging to stdout
 void behavior1()
 {
     logger.out(__FILE__, __LINE__, "manager", "TRACE") << __FUNCTION__   << std::endl;
@@ -29,6 +31,7 @@ void behavior1()
     logger.LOGOUT("pressure", "FATAL") << "Incorrect config: ID not positive value: " << 0 << std::endl;
 }
 
+//Demonstrates logginf to file
 void behavior2()
 {
     logger.file(__FILE__, __LINE__, "manager", "TRACE") << __FUNCTION__   << std::endl;
@@ -38,7 +41,7 @@ void behavior2()
 int main(void)
 {
     // Minimum log level can be adjusted manually
-    logger.setLogLevel(LogSeverity::TRACE);
+    logger.setLogLevel(LogSeverity::DEBUG);
 
     // Log folder path can be adjusted manually
     logger.setLogFolderPath(".");
@@ -52,3 +55,4 @@ int main(void)
     return 0;
 }
 
+/* End of unified_logger_demo.cpp */

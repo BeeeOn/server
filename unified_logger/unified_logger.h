@@ -10,11 +10,10 @@
 
 #include <unistd.h>
 #include <cstdlib>
-#include <iostream>
-#include <thread>
-#include <string>
 #include <stdio.h>
+#include <string>
 
+#include <iostream>
 #include <fstream>
 #include <sstream>
 
@@ -23,7 +22,7 @@
 #include <vector>
 
 #include "locked_stream.h"
-#include "utility.h"
+
 
 #define LOGOUT(tag, severity) \
     out(__FILE__, __LINE__, tag, severity) 
@@ -31,19 +30,23 @@
 #define LOGFILE(tag, severity) \
     file(__FILE__, __LINE__, tag, severity) 
 
-enum class LogSeverity {ALL, TRACE, MSG, DEBUG, WARN, INFO, ERROR, FATAL, NONE};
+enum class LogSeverity {ALL, TRACE, DEBUG, MSG, WARN, INFO, ERROR, FATAL, NONE};
 
+
+/**
+ * @brief Library used for logging in unified format in multi-thread applications
+ * @details demo usage in unified_logger_demo.cpp
+ */
 class Unified_logger
 {
 public:
     Unified_logger(std::string logger_id, std::string log_folder_path = ".", LogSeverity default_log_level = LogSeverity::WARN);
     ~Unified_logger();
 
-    //logging function
-    //void log(int level, std::string);
-
+    //Note: use macro  LOGOUT to avoid having to manually insert first two parameters
     locked_stream out(std::string location, int line, std::string tag, std::string level);
 
+    //Note: use macro  LOGFILE to avoid having to manually insert first two parameters
     locked_stream file(std::string location, int line, std::string tag, std::string level);
 
     //Sets log level, all logs below this level are ignored
@@ -80,9 +83,11 @@ private:
     std::string _logger_id;
 
     //minimum level to collect logs
-    LogSeverity _default_log_level;
+    LogSeverity _minimum_log_level;
 
 
 };
+
+
 
 #endif
