@@ -8,17 +8,16 @@
 #ifndef CALENDAR_H
 #define CALENDAR_H
 
-#include <condition_variable> //std::condition_variable
-#include <chrono> //std::time_point
+#include <condition_variable>
+#include <chrono>
 #include <map>
-#include <memory> //std::weak_ptr
-#include <mutex> //std::mutex
+#include <memory>
+#include <mutex>
 #include <set>
 #include <vector>
 
 #include "TaskInstance.h"
 
-//class TaskInstance;
 class Calendar {
 public:
     /**
@@ -91,11 +90,13 @@ private:
      * @param instance_ptr Pointer to instance, which should be activated.
      */
     void emplaceEvent(std::chrono::system_clock::time_point activation_time, TaskInstance* instance_ptr);
-
-    // Time until main algorithm should wait.
+    /**
+     *  Time until main algorithm should wait.
+     */
     std::chrono::system_clock::time_point m_wakeup_time;
-    
-    // Priority queue holding calendar events, those ones with smallest activation time are at top.
+    /**
+     *  Multimap holding calendar events, those ones with smallest activation time are at the beginning.
+     */
     std::multimap<std::chrono::system_clock::time_point, TaskInstance*> m_calendar_events;
     /**
      * Contition variables for waking up main algorithm.
@@ -107,11 +108,14 @@ private:
     
     std::mutex m_calendar_events_mx;
     std::mutex m_test_queue_empty_mx;
-
-    // Indicates if calendar algorithm should run.
+    /**
+     *  Indicates if calendar algorithm should run.
+     */
     bool m_should_run;
-    
-    // Indicates if Calendar runns, so it can't be run again.
+    /**
+     * Indicates if Calendar runns, so it can't be run again.
+     */
     bool m_running;
 };
+
 #endif /* CALENDAR_H */

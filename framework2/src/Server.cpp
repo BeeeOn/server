@@ -7,6 +7,8 @@
 
 #include "Server.h"
 
+#include <thread>
+
 #include "Logger.h"
 
 Server::Server(asio::io_service& io_service, int port, int threads):
@@ -17,11 +19,6 @@ Server::Server(asio::io_service& io_service, int port, int threads):
 {
     logger.LOGFILE("server", "INFO") << "Server started on port: " << port << std::endl;
 }
-
-Server::~Server() {
-    std::cout << "Server::~Server" << std::endl;
-}
-
 
 void Server::run()
 {

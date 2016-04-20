@@ -13,13 +13,16 @@
 class GatewaySession: public Session
 {
 public:
-    GatewaySession(asio::io_service& io_service);
-    
     /**
-     * Process message 
-     * @param message
+     * Constructor of class GatewaySession.
+     * @param io_service Input output service.
+     */
+    GatewaySession(asio::io_service& io_service);
+    /**
+     * Processes message received from user.
+     * @param message Received message.
      */
     void processMessage(std::string message) override;
-
 };
+
 #endif /* DATAMSGSESSION_H */

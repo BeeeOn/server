@@ -8,13 +8,14 @@
 #include "Calendar.h"
 
 #include <chrono>
-#include <iostream>
 #include <memory>
 #include <thread>
 #include <vector>
 
 #include "TaskInstance.h"
+#include "Logger.h"
 
+// Definition of singleton instance.
 std::shared_ptr<Calendar> Calendar::m_instance;
 
 Calendar::Calendar():
@@ -31,11 +32,10 @@ Calendar::~Calendar()
 void Calendar::createInstance()
 {
     if (!m_instance) {
-        std::cout << "Create Calendar:m_instance." << std::endl;
+        logger.LOGFILE("calendar", "INFO") << "Calendar created." << std::endl;
         m_instance = std::shared_ptr<Calendar>(new Calendar);
     }
 }
-
 
 std::shared_ptr<Calendar> Calendar::getInstance()
 {
@@ -57,7 +57,6 @@ void Calendar::runCalendar()
     }
     // Stores all event which should be executed.
     std::multimap<std::chrono::system_clock::time_point, TaskInstance*> to_activate;
-    //std::vector<std::shared_ptr<TaskInstance>> to_activate;
     
     // Run for all eternity (until whole system shuts down).  
     while(m_should_run) {
@@ -113,26 +112,20 @@ void Calendar::runCalendar()
         m_new_wakeup_time_cv.wait_until(lock, m_wakeup_time);
     }
     
-    std::cout << "CALENDAR ALGORITHM STOPPED!!." << std::endl;
+    logger.LOGFILE("calendar", "INFO") << "Calendar algorithm stopped." << std::endl;
     // HERE CAN BE STORED EVERYTHING IN CALENDAR.
 }
 
 void Calendar::activateInstances(std::multimap<std::chrono::system_clock::time_point, TaskInstance*> to_activate)
-//void Calendar::activateInstances(std::vector<std::shared_ptr<TaskInstance>> to_activate)
 {
-    std::cout << "Calendar::activateInstances - enter" << std::endl;
-    std::cout << "to_activate size: " << to_activate.size() << std::endl;
-    
     if(!to_activate.empty()) {
         for (auto instance : to_activate) {
             // Print time of activation and activate instances.
             time_t tn = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-            std::cout << "Instance activated at time: " << ctime(&tn) << std::endl;
            
             instance.second->activate(instance.first);
         }
     }
-    std::cout << "Calendar::activateInstances - leave" << std::endl;
 }
 
 void Calendar::waitUntilCalendarIsNotEmpty()
@@ -142,8 +135,6 @@ void Calendar::waitUntilCalendarIsNotEmpty()
     bool calendar_empty = m_calendar_events.empty();
     if (calendar_empty) {
         
-        std::cout << "Calendar empty, wait for event. " << m_calendar_events.size() << "->" << std::chrono::system_clock::now().time_since_epoch().count() << std::endl;
-        
         // Until it's not notified that there is an event in calendar, wait for event to be emplaced.
         std::unique_lock<std::mutex> lock(m_queue_not_empty_mx);
         m_test_queue_empty_mx.unlock();
@@ -151,27 +142,20 @@ void Calendar::waitUntilCalendarIsNotEmpty()
     }
     if (!calendar_empty) {
         m_test_queue_empty_mx.unlock();
-        std::cout << "Calendar not empty, run." << m_calendar_events.size() << " ->" << std::chrono::system_clock::now().time_since_epoch().count() << std::endl;
     }    
 }
 
 void Calendar::emplaceEvent(std::chrono::system_clock::time_point activation_time, TaskInstance* instance_ptr)
-//void Calendar::emplaceEvent(std::chrono::system_clock::time_point activation_time, std::shared_ptr<TaskInstance> instance_ptr)
 {
-    std::cout << "Calendar::emplaceEvent - enter" << std::endl;
     m_calendar_events_mx.lock();
     m_test_queue_empty_mx.lock();
     // Before new event is created, check if queue is empty.
     bool calendar_empty = m_calendar_events.empty();
     
     // Create new event and push to queue.
-    //m_calendar_events.push(std::make_shared<CalendarEvent>(activation_time, instance_ptr));
     m_calendar_events.emplace(activation_time, instance_ptr);
     
-    std::cout << "emplace size: " << m_calendar_events.size() << std::endl;
-    
-    //std::cout << "PUSH ->" << std::chrono::system_clock::now().time_since_epoch().count() << std::endl;
-    
+
     if (!calendar_empty) {
        
         // If activation time of pushed event is lower than time for which main calendar algorithm (run()) waits,
@@ -187,47 +171,35 @@ void Calendar::emplaceEvent(std::chrono::system_clock::time_point activation_tim
     }
     m_test_queue_empty_mx.unlock();
     m_calendar_events_mx.unlock();
-    std::cout << "Calendar::emplaceEvent - leave" << std::endl;
 }
 
 std::chrono::system_clock::time_point Calendar::planActivation(int seconds, TaskInstance* instance_ptr)
-//void Calendar::planActivation(int seconds, std::shared_ptr<TaskInstance> instance_ptr)
 {
-    std::cout << "Calendar::planActivation - enter" << std::endl;
-    
-     std::chrono::system_clock::time_point activation_time = std::chrono::system_clock::now() + std::chrono::seconds(seconds);
+    std::chrono::system_clock::time_point activation_time = std::chrono::system_clock::now() + std::chrono::seconds(seconds);
     // Compute exact time when event should activate and push event.
     emplaceEvent(activation_time, instance_ptr);
     return activation_time;
-    std::cout << "Calendar::planActivation - leave" << std::endl;
 }
 
 std::chrono::system_clock::time_point Calendar::planActivation(TaskInstance* instance_ptr)
-//void Calendar::planActivation(std::shared_ptr<TaskInstance> instance_ptr)
 {
-    std::cout << "Calendar::planActivation - enter" << std::endl;
     // Push event at current time.
     std::chrono::system_clock::time_point activation_time = std::chrono::system_clock::now();
     emplaceEvent(activation_time, instance_ptr);
     return activation_time;
-    std::cout << "Calendar::planActivation - leave" << std::endl;
 }
 
 void Calendar::stopCalendar()
 {
-    std::cout << "Calendar::stopCalendar - enter" << std::endl;
     m_should_run = false;
     // Wakeup calendar algorithm  to end.
     if (m_calendar_events.empty()) {
         m_queue_not_empty_cv.notify_all();
     }
     m_new_wakeup_time_cv.notify_all();
-    
-    std::cout << "Calendar::stopCalendar - leave" << std::endl;
 }
 
 void Calendar::removeAllActivationsOfInstance(std::set<std::chrono::system_clock::time_point> planned_times, TaskInstance* instance_ptr)
-//void Calendar::removeAllActivations(std::shared_ptr<TaskInstance> instance_ptr)
 {
     // Lock m_calendar_events container.
     std::lock_guard<std::mutex> lock(m_calendar_events_mx);

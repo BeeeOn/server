@@ -1,14 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /* 
  * File:   UserServer.h
- * Author: mrmaidx
+ * Author: Martin Novak, xnovak1c@stud.fit.vutbr.cz
  *
- * Created on 19. března 2016, 21:11
+ * Created on 19. March 2016
  */
 
 #ifndef USERSERVER_H
@@ -18,9 +12,17 @@
 
 class UserServer: public Server
 {
-public:   
+public:
+    /**
+     * Constructor of class UserServer.
+     * @param io_service Input output service.
+     * @param port Port number on which to estabilish server.
+     * @param threads Number of working threads for server.
+     */
     UserServer(asio::io_service& io_service, int port, int threads);   
-    
+    /**
+     * Function to start accepting connections.
+     */
     void startAccept() override;
 };
 

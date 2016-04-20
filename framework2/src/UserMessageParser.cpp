@@ -7,19 +7,20 @@
 
 #include "UserMessageParser.h"
 
-#include <iostream>
 #include <map>
 #include <sstream>
 #include <string>
 
 #include "rapidjson/document.h"
 
+#include "Logger.h"
+
 USER_MESSAGE_TYPE UserMessageParser::parseMessage(std::string message)
 {
     // Parse JSON message to DOM document.
     rapidjson::ParseResult result = m_document.Parse(message.c_str());
     if (!result) {
-        std::cerr << "UserMessageParser: JSON parsing error." << std::endl;
+        logger.LOGFILE("user_message_interface", "ERROR") << "UserMessageParser: JSON parsing error." << std::endl;
         throw std::runtime_error("UserMessageParser: Processing of received message was not successful.");
     }
     

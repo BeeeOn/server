@@ -7,30 +7,18 @@
 
 #include "Task.h"
 
+#include "Logger.h"
+
 Task::Task(unsigned short task_version, std::string task_name, TASK_TYPE task_type, std::string task_path):
     m_task_version(task_version), m_task_name(task_name), m_task_type(task_type), m_task_path(task_path),
     m_task_library(nullptr), m_task_manager(nullptr)
 {
-    std::cout << "Task::Task - " << task_name << std::endl;
 }
 
 Task::~Task()
 {
-    std::cout << "Task::~Task - entered." << std::endl;
-    
-    /*
-    // Dealloc this tasks manager.
-    try {
-        //deleteTaskManager();
-    }
-    catch (const std::exception& e) {
-        std::cerr << e.what();
-    }
-    */
     // Closes library.
     closeTaskLibrary();
-    
-    std::cout << "Task::~Task - finished." << std::endl;
 }
 
 void Task::openTaskLibrary()
@@ -45,7 +33,8 @@ void Task::openTaskLibrary()
         throw std::runtime_error(error.str());
     }
     else {
-        std::cout << "dlopen(): Dynamic library of task " << m_task_name << " was successfuly opened." << std::endl;
+        logger.LOGOUT("task_loader", "INFO") << "dlopen(): Dynamic library of task "
+                << m_task_name << " was successfuly opened." << std::endl;
         // Resets errors in dlfcn library.
         dlerror();
     }
@@ -54,10 +43,12 @@ void Task::openTaskLibrary()
 void Task::closeTaskLibrary()
 {
     if (dlclose(m_task_library) != 0) {
-        std::cerr << "dlclose(): Dynamic library of task " << m_task_name << " couldn't be closed." << std::endl;
+        logger.LOGOUT("task_loader", "ERROR") << "dlclose(): Dynamic library of task "
+                << m_task_name << " couldn't be closed." << std::endl;
     }
     else {
-        std::cout << "dlclose(): Dynamic library of task " << m_task_name << " was successfuly closed." << std::endl;
+        logger.LOGOUT("task_loader", "INFO") << "dlclose(): Dynamic library of task "
+                << m_task_name << " was successfuly closed." << std::endl;
     }
 }
 
@@ -83,8 +74,7 @@ void Task::createTaskManager()
             throw std::runtime_error(error.str());
         }
         else {
-            std::cout << "dlsym(): Successfuly loaded createTaskManager function symbol of task: " << m_task_name << std::endl;
-        
+            
             m_task_manager = createTaskManager();
         }
     }

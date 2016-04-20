@@ -46,23 +46,8 @@ std::string Session::convertMessage(int msg_length) {
 
 void Session::onStart()
 {
-    /*
-    async_read(m_socket, m_buffer,
-               [&](const asio::error_code& error, size_t bytes_transferred) {
-                   handleRead(error, bytes_transferred);
-               }
-    );
-    */
     async_read(m_socket, m_buffer, boost::bind(&Session::handleRead, shared_from_this(),
                asio::placeholders::error, asio::placeholders::bytes_transferred)); 
-    
-    /*
-
-     * m_socket.async_receive(m_buffer, 0,
-                boost::bind(&Session::handleRead, shared_from_this(),
-                asio::placeholders::error, asio::placeholders::bytes_transferred));
-
-     */
 }
 
 void Session::handleRead(const asio::error_code& error, size_t bytes_transferred)

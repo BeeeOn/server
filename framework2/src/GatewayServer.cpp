@@ -9,9 +9,7 @@
 
 #include "GatewaySession.h"
 
-GatewayServer::GatewayServer(asio::io_service& io_service,
-                             int port,
-                             int threads):
+GatewayServer::GatewayServer(asio::io_service& io_service, int port, int threads):
     Server(io_service, port, threads)
 {
 }

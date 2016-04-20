@@ -11,21 +11,14 @@
 #include <chrono>
 #include <map>
 #include <memory>
-#include <string>
 
 #include "DataMessage.h"
 
 class TaskManager;
 
-class TaskInstance//: public std::enable_shared_from_this<TaskInstance>
+class TaskInstance
 {
 public:
-    /*
-    std::shared_ptr<TaskInstance> weakFromThis()
-    {
-       return shared_from_this();
-    }
-    */
     /**
      * Constuctor of class TaskInstance.
      * @param user_id ID of a user creating an instance.
@@ -37,31 +30,32 @@ public:
      * Destructor of class TaskInstance.
      */
     virtual ~TaskInstance();
-   
     /**
-     * Virtual function used for activating Timed instance (eventualy Combined instances).
+     * Virtual function used for activating Timed instance.
      */
     virtual void activate(std::chrono::system_clock::time_point activation_time) {};
-    
     /**
      * Virtual function to activate Trigger instance.
      */
     virtual void activate(DataMessage data_message) {};
-    
-    
+    /**
+     * Getter for instance_id.
+     * @return ID of this instance.
+     */
     unsigned int getInstanceId() { return m_instance_id; };    
-
     /**
      * Suicide function. Deletes instance from baf and from database.
      */
     void deleteItself();
     
 protected:
-    
-    /** Unique ID of this instance in database (and in BAF system -> key value in map of manager) */
+    /**
+     * Unique ID of this instance in database (and in BAF system -> key value in map of manager)
+     */
     int m_instance_id;
-    
-    /** Pointer to manager of instance. */
+    /**
+     * Pointer to manager of instance.
+     */
     //TaskManager* m_owning_manager;
     std::weak_ptr<TaskManager> m_owning_manager;
  };

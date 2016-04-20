@@ -8,6 +8,7 @@
 #include "TimedTaskInstance.h"
 
 #include <chrono>
+#include <ctime>
 #include <mutex>
 
 #include "Calendar.h"
@@ -20,17 +21,12 @@ TimedTaskInstance::TimedTaskInstance(int instance_id, std::weak_ptr<TaskManager>
 
 TimedTaskInstance::~TimedTaskInstance()
 {
-    logger.LOGFILE("timed_instance", "TRACE") << "TimedTaskInstance::~TimedTaskInstance - enter" << std::endl;
     // Before destruction, remove the instance from calendar.
     removeFromCalendar();
-    
-    logger.LOGFILE("timed_instance", "TRACE") << "TimedTaskInstance::~TimedTaskInstance - leave" << std::endl;
 }
 
 void TimedTaskInstance::activate(std::chrono::system_clock::time_point activation_time)
 {
-    logger.LOGFILE("timed_instance", "TRACE") << "TimedTaskInstance::activate() - enter" << std::endl;
-    
     // Run instance, but protect it with lock_guard
     // so two runs at the same time are not possible.
     std::lock_guard<std::mutex> lock(m_activation_mx); 
@@ -41,14 +37,10 @@ void TimedTaskInstance::activate(std::chrono::system_clock::time_point activatio
     catch (const std::exception& e) {
         logger.LOGFILE("trigger_instance", "ERROR") << e.what() << std::endl;
     }
-    
-    logger.LOGFILE("timed_instance", "TRACE") << "TimedTaskInstance::activate() - leave" << std::endl;
 }
 
 void TimedTaskInstance::planActivationNow()
 {
-    logger.LOGFILE("timed_instance", "TRACE") << "TimedTaskInstance::planActivationNow - enter" << std::endl;
-    
     try {
         std::chrono::system_clock::time_point activation_time = Calendar::getInstance()->planActivation(this);
         m_activation_times.insert(activation_time);
@@ -56,13 +48,10 @@ void TimedTaskInstance::planActivationNow()
     catch (const std::exception& e) {
         logger.LOGFILE("timed_instance", "WARN") << e.what() << std::endl;
     }
-    logger.LOGFILE("timed_instance", "TRACE") << "TimedTaskInstance::planActivationNow - leave" << std::endl;
 }
 
 void TimedTaskInstance::planActivationAfterSeconds(int seconds)
 {
-    logger.LOGFILE("timed_instance", "TRACE") << "TimedTaskInstance::planActivationAfterSeconds - enter" << std::endl;
-    
     try {
         std::chrono::system_clock::time_point activation_time = Calendar::getInstance()->planActivation(seconds, this);
         m_activation_times.insert(activation_time);
@@ -70,18 +59,31 @@ void TimedTaskInstance::planActivationAfterSeconds(int seconds)
     catch (const std::exception& e) {
         logger.LOGFILE("timed_instance", "WARN") << e.what() << std::endl;
     }
-    logger.LOGFILE("timed_instance", "TRACE") << "TimedTaskInstance::planActivationAfterSeconds - leave" << std::endl;
 }
+
+void TimedTaskInstance::planToDateAndTime(std::string date_time)
+{
+    try {
+        std::tm tm = {};
+        strptime(date_time.c_str(), "%m %d %Y %H:%M:%S", &tm);
+        std::chrono::system_clock::time_point activation_time = std::chrono::system_clock::from_time_t(std::mktime(&tm));
+        
+        m_activation_times.insert(activation_time);
+    }
+    catch (const std::exception& e) {
+        logger.LOGFILE("timed_instance", "WARN") << e.what() << std::endl;
+    }
+    std::tm tm = {};
+
+}
+
 
 void TimedTaskInstance::removeFromCalendar()
 {
-    logger.LOGFILE("timed_instance", "TRACE") << "TimedTaskInstance::removeFromCalendar - enter" << std::endl;
-    
     try {
         Calendar::getInstance()->removeAllActivationsOfInstance(m_activation_times, this);
     }
     catch (const std::exception& e) {
         logger.LOGFILE("timed_instance", "WARN") << e.what() << std::endl;
     }
-    logger.LOGFILE("timed_instance", "TRACE") << "TimedTaskInstance::removeFromCalendar - leave" << std::endl;
 }

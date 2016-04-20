@@ -10,9 +10,7 @@
 #include "Server.h"
 #include "UserSession.h"
 
-UserServer::UserServer(asio::io_service& io_service, 
-                       int port,
-                       int threads):
+UserServer::UserServer(asio::io_service& io_service, int port, int threads):
     Server(io_service, port, threads)
 {
 }

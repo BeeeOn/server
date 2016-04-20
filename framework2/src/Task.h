@@ -83,12 +83,11 @@ private:
     std::string m_task_path;
     
 public:
-    // Getters.
+    /**
+     * Getter for task manager.
+     * @return Shared pointer to task
+     */
     std::shared_ptr<TaskManager> getTaskManagerPtr() { return m_task_manager; }
-    unsigned short getTaskVersion() { return m_task_version; }
-    std::string getTaskName() { return m_task_name; }
-    TASK_TYPE getTaskType() { return m_task_type; }
-    std::string getTaskPath() { return m_task_path; }
 };
 
 #endif /* TASK_H */

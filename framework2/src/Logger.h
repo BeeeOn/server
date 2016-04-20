@@ -10,6 +10,7 @@
 
 #include "../../unified_logger/unified_logger.h"
 
+// Extern global logger variable.
 extern Unified_logger logger;
 
 #endif /* LOGGER_H */

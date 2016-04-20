@@ -7,14 +7,13 @@
 
 #include "DataMessageRegister.h"
 
-#include <iostream>
 #include <stdexcept>
-
 
 #include "DataMessage.h"
 #include "Logger.h"
 #include "TaskInstance.h"
 
+// Definition of singleton instance.
 std::shared_ptr<DataMessageRegister> DataMessageRegister::m_instance;
 
 DataMessageRegister::DataMessageRegister()
@@ -28,7 +27,7 @@ DataMessageRegister::~DataMessageRegister()
 void DataMessageRegister::createInstance()
 {
     if (!m_instance) {
-        // Not using std::make_shared because it requires public constructor.
+        logger.LOGFILE("data_message_register", "INFO") << "DatabaseInterface created." << std::endl;
         m_instance = std::shared_ptr<DataMessageRegister>(new DataMessageRegister);
     }
 }
@@ -46,7 +45,6 @@ std::shared_ptr<DataMessageRegister> DataMessageRegister::getInstance()
 void DataMessageRegister::activateInstances(DataMessage data_message)
 {
         std::vector<TaskInstance*> to_activate = returnAllRegisteredInstances(data_message.device_euid);
-        std::cout << "to activate: " << to_activate.size() << std::endl;
         
         for (TaskInstance* task_ptr : to_activate) {
             
@@ -55,12 +53,10 @@ void DataMessageRegister::activateInstances(DataMessage data_message)
 }
 
 void DataMessageRegister::insertEntry(long device_euid, TaskInstance* task_instance)
-{
-    logger.LOGFILE("core", "TRACE") << "DataMessageRegister::insertEntry - enter" << std::endl;
+{ 
     std::lock_guard<std::mutex> lock(m_register_mx);
 
     m_message_register.emplace(device_euid, task_instance);
-    logger.LOGFILE("core", "TRACE") << "DataMessageRegister::insertEntry - leave" << std::endl;
     
 }
 void DataMessageRegister::removeEntryOfInstance(long device_euid, TaskInstance* instance_ptr)
@@ -97,7 +93,6 @@ std::vector<TaskInstance*> DataMessageRegister::returnAllRegisteredInstances(lon
 {
     std::lock_guard<std::mutex> lock(m_register_mx);
     
-    std::cout << "returnAllEntries device_euid: " << device_euid << std::endl;
     std::vector<TaskInstance*> to_return;
     
     // Find iterator to where device_euid appears first, and iterator where it appears last in m_message_register.
@@ -107,7 +102,5 @@ std::vector<TaskInstance*> DataMessageRegister::returnAllRegisteredInstances(lon
 
         to_return.push_back(it->second);
     }
-
-    std::cout << "to return: " << to_return.size() << std::endl;
     return to_return;
 }

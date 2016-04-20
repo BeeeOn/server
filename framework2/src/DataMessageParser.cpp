@@ -13,6 +13,8 @@
 #include "pugixml.hpp"
 #include "pugiconfig.hpp"
 
+#include "Logger.h"
+
 DataMessageParser::DataMessageParser() {
 }
 
@@ -31,28 +33,14 @@ DataMessage DataMessageParser::parseMessage(std::string received_data)
     pugi::xml_parse_result result = doc.load_buffer(received_data.c_str(), received_data.size());
     
     if (!result) {
-        std::cerr << "Could not parse received data message." << std::endl;
-        std::cerr << "Error description: " << result.description() << std::endl;
-        std::cerr << "Error offset: " << result.offset << " (error at [..." << (received_data.c_str() + result.offset) << "]" << std::endl;
+        logger.LOGFILE("config_parser", "FATAL") << "Could not open baf config file: "
+                << received_data << ". Error description: " << result.description()
+                << ", Error offset: " << result.offset << " (error at [..."
+                << (received_data.c_str() + result.offset) << "]" << std::endl;
         
         throw std::runtime_error("Parsing of data message was not successful.");
     }
 
-    /*
-    <adapter_server adapter_id="0x57d3e01695f35" fw_version="v1.5" protocol_version="1.1" state="data" time="1448964949">
-        <device device_id="0x00" euid="0xea000011" name="own_name">
-            <values count="6">
-                <value module_id="0x00">25.19</value>
-                <value module_id="0x01">-0.01</value>
-                <value module_id="0x02">35.61</value>
-                <value module_id="0x03">68.00</value>
-                <value module_id="0x05" status="unavailable"></value>
-                <value module_id="0x04">100.00</value>
-            </values>
-        </device>
-    </adapter_server>
-    */
-    
     current_node = doc.child("adapter_server");
     data_message.gateway_id = current_node.attribute("adapter_id").as_ullong();
     data_message.time = current_node.attribute("time").as_uint();

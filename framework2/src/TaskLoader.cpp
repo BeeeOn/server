@@ -8,6 +8,7 @@
 #include "TaskLoader.h"
 
 #include <sstream>
+#include <iostream>
 
 #include "Logger.h"
 #include "DatabaseInterface.h"
@@ -23,7 +24,8 @@ TaskLoader::~TaskLoader()
     std::cout << "TaskLoader::~TaskLoader - entered." << std::endl;
     // Close and delete all tasks.
     //closeAllTasks();
-    
+    std::cout << "size: " << m_tasks.size() << std::endl;
+
     std::cout << "TaskLoader::~TaskLoader - finished." << std::endl;
 }
 
@@ -31,9 +33,8 @@ void TaskLoader::createInstance()
 {
     if (!m_instance) {
         
-        std::cout << "Create TaskLoader:m_instance." << std::endl;
-        m_instance = std::shared_ptr<TaskLoader>(new TaskLoader);
-        std::cout << "Finished creation TaskLoader:m_instance." << std::endl;   
+        logger.LOGFILE("task_loader", "INFO") << "TaskLoader created." << std::endl;
+        m_instance = std::shared_ptr<TaskLoader>(new TaskLoader);   
     }
 }
 

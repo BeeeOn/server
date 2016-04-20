@@ -7,9 +7,11 @@
 
 #include "BaseTaskLoader.h"
 
-#include <iostream>
 #include <stdexcept>
 
+#include "Logger.h"
+
+// Definition of singleton instance.
 std::shared_ptr<BaseTaskLoader> BaseTaskLoader::m_instance;
 
 BaseTaskLoader::BaseTaskLoader()
@@ -18,7 +20,6 @@ BaseTaskLoader::BaseTaskLoader()
 
 BaseTaskLoader::~BaseTaskLoader()
 {
-    std::cout << "BaseTaskLoader::~BaseTaskLoader" << std::endl;
 }
 
 std::shared_ptr<Task> BaseTaskLoader::findTask(unsigned int task_id)
@@ -26,7 +27,7 @@ std::shared_ptr<Task> BaseTaskLoader::findTask(unsigned int task_id)
     auto found = m_tasks.find(task_id);
     
     if (found != m_tasks.end()) {
-        std::cout << "Task with id: " << task_id << " was found." << std::endl;
+        
         return found->second;
     }
     else {
@@ -37,11 +38,8 @@ std::shared_ptr<Task> BaseTaskLoader::findTask(unsigned int task_id)
     }
 }
 
-
 std::shared_ptr<BaseTaskLoader> BaseTaskLoader::getInstance()
 {
-    //std::cout << "TaskLoader::getInstance()" << std::endl;
-    
     if (m_instance) {
         return m_instance;
     }

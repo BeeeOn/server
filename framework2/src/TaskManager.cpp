@@ -7,7 +7,6 @@
 
 #include "TaskManager.h"
 
-#include <iostream>
 #include <sstream>
 #include <stdexcept>
 
@@ -22,12 +21,12 @@ TaskManager::TaskManager()
 
 TaskManager::~TaskManager()
 {
-    std::cout << "TaskManager::~TaskManager" << std::endl;
 }
 
 long TaskManager::createInstance(CreateMessage create_message)
 {
     long instance_id;
+    // Default is superuser. User roles are not yet supported.
     std::string permission("superuser");
     
     SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
@@ -50,14 +49,6 @@ void TaskManager::deleteInstance(DeleteMessage delete_message)
     
     *sql << "DELETE FROM instance WHERE instance_id = :instance_id",
             soci::use(delete_message.instance_id, "instance_id");
-    
-    // Get task type of task from delete message.
-    //TASK_TYPE task_type = TaskLoader::getInstance()->m_tasks.find(delete_message.task_id)->second->m_task_type;
-    
-    
-    // Delete from calendar.
-    // Obsolete, removing from calendar is handled in timed instance destructor.
-    // m_task_instances.find(delete_message.instance_id)->second->removeFromCalendar();
     
     std::lock_guard<std::mutex> lock(m_task_instances_mx);
     m_task_instances.erase(delete_message.instance_id);

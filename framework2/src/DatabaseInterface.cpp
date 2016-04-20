@@ -5,11 +5,11 @@
  * Created on 23. March 2016
  */
 
-#include <iostream>
-
 #include "DatabaseInterface.h"
-#include "Session.h"
 
+#include "Logger.h"
+
+// Definition of singleton instance.
 std::shared_ptr<DatabaseInterface> DatabaseInterface::m_instance;
 
 DatabaseInterface::DatabaseInterface()
@@ -18,14 +18,13 @@ DatabaseInterface::DatabaseInterface()
 
 DatabaseInterface::~DatabaseInterface()
 {
-    std::cout << "DatabaseInterface::~DatabaseInterface" << std::endl;
 }
 
 void DatabaseInterface::createInstance()
 {
     if (!m_instance) {
-        std::cout << "Create DatabaseInterface:m_instance." << std::endl;
         m_instance = std::shared_ptr<DatabaseInterface>(new DatabaseInterface);
+        logger.LOGFILE("database_interface", "INFO") << "DatabaseInterface created." << std::endl;
     }
 }
 
@@ -41,7 +40,8 @@ std::shared_ptr<DatabaseInterface> DatabaseInterface::getInstance()
 
 void DatabaseInterface::connectToDatabase(int sessions_count, std::string connection_string)
 {
-    std::cout << "Creating connection pool. Connecting to database." << std::endl;
+    logger.LOGFILE("database_interface", "INFO") << "Creating connection pool."
+            << "Connecting to database." << std::endl;
     
     m_connection_pool = std::make_shared<soci::connection_pool>(sessions_count);
     
@@ -54,6 +54,6 @@ void DatabaseInterface::connectToDatabase(int sessions_count, std::string connec
 }
 
 std::shared_ptr<soci::session> DatabaseInterface::makeNewSession()
-{ 
+{
     return std::make_shared<soci::session>(*m_connection_pool);
 }

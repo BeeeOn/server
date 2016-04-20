@@ -7,12 +7,8 @@
 
 #include "GatewayInterface.h"
 
-#include <iostream>
-#include <boost/bind.hpp>
-#include <memory>
 #include <sstream>
 #include <string>
-#include <stdexcept>
 
 #include "pugixml.hpp"
 
@@ -21,30 +17,13 @@ GatewayInterface::GatewayInterface():
     m_io_service(),
     m_socket(m_io_service)
 {
+    // Connect to ada_server_sender.
     connect();
 }
 
-GatewayInterface::~GatewayInterface()
-{
-}
-
-
 int GatewayInterface::sendPingGateway(long long gateway_id)
 {
-    std::cout << "GatewayInterface::sendPingGateway" << std::endl;
-    /*
-    <request type="ping">
-    <adapter id="1234"/>
-    </request>
-
-    <reply errorCode="0">true</reply>
-    <reply errorCode="X">false</reply>
-    X = 1 - adapter nikdy nebol pripojeny k serveru
-    X = 2 - spojenie s adapterom bolo prerusene
-    X = 3 - chyba pri posielani dat na adapter
-    X = 4 - odpoved na PING nedorazila (timeout alebo ina chyba)
-    X = 5 - sprava nie je podporovana verziou protocolu na adapteri
-*/
+    // Create message to send.
     pugi::xml_document doc;
     
     pugi::xml_node request_node = doc.append_child();
@@ -58,31 +37,21 @@ int GatewayInterface::sendPingGateway(long long gateway_id)
     std::ostringstream stream;
     doc.save(stream);
     
-    doc.print(std::cout);
+    // Receive response.
+    receive();
     
-    //std::strirequest = 
+    // Here will be parsing of response when it's
+    // implemented in the rest of the BeeeOn system.
+
+    // Clear response string.
+    m_response.clear();
     
-    send(stream.str());
-    
-    //receive();
-    
-    //std::cout << m_response << std::endl;
-    
-    //return 1;
+    return 1;
 }
 
 void GatewayInterface::sendSetState(long long gateway_id, long device_euid, int module_id, int new_value)
 {
-    std::cout << "GatewayInterface::sendSetState" << std::endl;
-    /*
-     <request type="switch">
-        <sensor id="1111" type="0" onAdapter="12345">
-            <value>ON</value>
-        </sensor>
-    </request>
-     
-     */
-    
+    // Create message to send.
     pugi::xml_document doc;
     
     pugi::xml_node request_node = doc.append_child();
@@ -99,8 +68,7 @@ void GatewayInterface::sendSetState(long long gateway_id, long device_euid, int 
     std::ostringstream stream;
     doc.save(stream);
     
-    doc.print(std::cout);
-    
+    // Send message.
     send(stream.str());
 }
 
@@ -112,31 +80,25 @@ void GatewayInterface::connect()
 
 void GatewayInterface::send(std::string request)
 {
-    std::cout << "GatewayInterface::send - enter" << std::endl;
-    
+    // Convert std::string to stream.
     asio::streambuf request_streambuf;
     std::ostream request_stream(&request_streambuf);
     request_stream << request;
 
     // Send the message.
     asio::write(m_socket, request_streambuf);
-    
-    std::cout << "GatewayInterface::send - leave" << std::endl;
 }
 
 void GatewayInterface::receive()
 {
-    std::cout << "GatewayInterface::receive - enter" << std::endl;
-   
     asio::streambuf response;
     asio::read_until(m_socket, response, "</reply>");
 
+    // Convert received message to std::string.
     std::iostream response_stream(&response);
 
     std::string content{ std::istreambuf_iterator<char>(response_stream),
                      std::istreambuf_iterator<char>() };
     
     m_response = content;
-    
-    std::cout << "GatewayInterface::receive - leave" << std::endl;
 }

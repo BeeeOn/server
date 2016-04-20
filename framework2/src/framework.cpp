@@ -52,6 +52,7 @@ void reloadTasks(const asio::error_code& error, asio::signal_set *reload_signal)
             std::cerr << e.what() << std::endl;
         }
     }
+    // Wait for another SIGUSR1 signal.
     reload_signal->async_wait(boost::bind(reloadTasks, asio::placeholders::error, reload_signal));
 }
 
@@ -98,7 +99,7 @@ int main(int argc, char** argv)
 
         logger.setLogFolderPath(Config::m_log_folder_path);
 
-        logger.LOGFILE("main", "INFO") << "Logger was set up. Folder path: " << Config::m_log_folder_path
+        logger.LOGFILE("core", "INFO") << "Logger was set up. Folder path: " << Config::m_log_folder_path
                                        << ", Log level: " << Config::m_log_level << std::endl; 
     }
     catch (const std::exception& e) {
@@ -107,29 +108,25 @@ int main(int argc, char** argv)
         return 1;
     }
     
-    std::cout << "Create database interface." << std::endl;
     DatabaseInterface::createInstance();
     try {
-        std::cout << "Connecting to database." << std::endl;
         DatabaseInterface::getInstance()->connectToDatabase(Config::m_database_sessions, Config::m_database_connection_string);
-        std::cout << "Connected to database." << std::endl;
+       
     }
     catch (const std::exception& e) {
-        std::cerr << "Probably couldn't connect to database." << std::endl;
-        std::cerr << e.what();
-        std::cerr << "Shutting down BAF." << std::endl;
+        logger.LOGFILE("core", "FATAL") << e.what()
+                << " Shutting down BAF." << std::endl;
         return 1;
     }
     
-    // Starts calendar algorithm.
+    // Create calendar and start calendar algorithm.
     Calendar::createInstance();
     std::thread calendar_thread(&Calendar::runCalendar, Calendar::getInstance());
-    //calendar_thread.detach();
     
     // Create DataMessageRegister.
     DataMessageRegister::createInstance();   
     
-    // Loads algorithm managers.
+    // Load algorithm managers.
     TaskLoader::createInstance();
     try {
         // In a future pass path to algorithm config file.
@@ -144,15 +141,19 @@ int main(int argc, char** argv)
     // Initializes and starts server.
     asio::io_service io_service;
    
-    std::cout << "START SERVERS" << std::endl;
+    logger.LOGFILE("core", "INFO") << "START SERVERS" << std::endl;
 
+    // Create data message interface.
     GatewayServer gateway_server(io_service, Config::m_gateway_server_port, Config::m_gateway_server_threads);
     gateway_server.startAccept();
+    // Start runnig gateway server.
     std::thread gateway_server_thread(&GatewayServer::run, &gateway_server);
     
+    // Create user message interface.
     UserServer user_server(io_service, Config::m_user_server_port, Config::m_user_server_threads);
     user_server.startAccept();
     
+    // Set signal_set to catch termination signals.
     asio::signal_set term_signals(io_service);
     term_signals.add(SIGINT);
     term_signals.add(SIGTERM);
@@ -161,25 +162,19 @@ int main(int argc, char** argv)
       #endif // defined(SIGQUIT)
     term_signals.async_wait(boost::bind(stopBAF, asio::placeholders::error, &user_server, &gateway_server));
     
-    /*
-    [](const asio::error_code& error, UserServer *user_server, GatewayServer *gateway_server)
-    {
-        stopBAF(error, user_server, gateway_server);
-    });
-    */
-    
-    //
-    
+    // Set signal_set to catch sigusr1 to reload new tasks.
     asio::signal_set reload_signal(io_service);
     reload_signal.add(SIGUSR1);
     reload_signal.async_wait(boost::bind(reloadTasks, asio::placeholders::error, &reload_signal));
     
+    // Start runnig user server.
     user_server.run();
     
+    // Join all threads.
     gateway_server_thread.join();
     calendar_thread.join();
     
-    std::cout << "END" << std::endl;
+    logger.LOGFILE("core", "INFO") << "BAF was shut down." << std::endl;
     
     return 0;
 }

@@ -12,15 +12,20 @@
 
 class DataMessageParser {
 public:
+    /**
+     * Constructor of class DataMessageParser.
+     */
     DataMessageParser();
-    
+    /**
+     * Destructor of class DataMessageParser.
+     */
     virtual ~DataMessageParser();
-    
+    /**
+     * Parses received XML data message to DataMessage object.
+     * @param received_data String with XML message.
+     * @return Parsed DataMessage object.
+     */
     DataMessage parseMessage(std::string received_data);
-    
-private:
-
 };
 
 #endif /* MESSAGEPARSER_H */
-
