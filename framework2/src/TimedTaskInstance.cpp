@@ -13,7 +13,7 @@
 #include "Calendar.h"
 #include "Logger.h"
 
-TimedTaskInstance::TimedTaskInstance(int instance_id, TaskManager *owning_manager):
+TimedTaskInstance::TimedTaskInstance(int instance_id, std::weak_ptr<TaskManager> owning_manager):
     TaskInstance(instance_id, owning_manager)
 {
 }
@@ -34,8 +34,14 @@ void TimedTaskInstance::activate(std::chrono::system_clock::time_point activatio
     // Run instance, but protect it with lock_guard
     // so two runs at the same time are not possible.
     std::lock_guard<std::mutex> lock(m_activation_mx); 
-    run(activation_time);
-
+    
+    try {
+        run(activation_time);
+    }
+    catch (const std::exception& e) {
+        logger.LOGFILE("trigger_instance", "ERROR") << e.what() << std::endl;
+    }
+    
     logger.LOGFILE("timed_instance", "TRACE") << "TimedTaskInstance::activate() - leave" << std::endl;
 }
 

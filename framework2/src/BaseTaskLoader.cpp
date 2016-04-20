@@ -18,6 +18,7 @@ BaseTaskLoader::BaseTaskLoader()
 
 BaseTaskLoader::~BaseTaskLoader()
 {
+    std::cout << "BaseTaskLoader::~BaseTaskLoader" << std::endl;
 }
 
 std::shared_ptr<Task> BaseTaskLoader::findTask(unsigned int task_id)
@@ -41,11 +42,10 @@ std::shared_ptr<BaseTaskLoader> BaseTaskLoader::getInstance()
 {
     //std::cout << "TaskLoader::getInstance()" << std::endl;
     
-    if (!m_instance) {
-        
-        throw std::runtime_error("Instance of TaskLoader must be created first - createInstance() function.");
+    if (m_instance) {
+        return m_instance;
     }
     else {
-        return m_instance;
+        throw std::runtime_error("BaseTaskLoader singleton was not created or already destructed.");
     }
 }

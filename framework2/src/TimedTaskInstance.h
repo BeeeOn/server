@@ -17,19 +17,14 @@
 
 #include "TaskInstance.h"
 
-
-class TimedTaskInstance: public TaskInstance//, std::enable_shared_from_this<TimedTaskInstance>
+class TimedTaskInstance: public TaskInstance
 {
 public:
 
+    TimedTaskInstance(int instance_id, std::weak_ptr<TaskManager> owning_manager);
     
-    TimedTaskInstance(int instance_id, TaskManager *owning_manager);
-    
-    //TimedAlgorithmInstance(const TimedAlgorithmInstance& orig);
     virtual ~TimedTaskInstance();
 
-    //void emplaceToCalendar();
-    
     // Plans to calendar when this instance shoud be activated again.
     void planActivationAfterSeconds(int seconds);
     

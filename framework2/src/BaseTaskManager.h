@@ -14,9 +14,7 @@
 #include <vector> // std::vector
 
 #include "UserMessages.h"
-
-class TaskInstance;
-class TaskManager;
+#include "TaskInstance.h"
 
 class BaseTaskManager
 {
@@ -70,7 +68,7 @@ public:
      * @param get_inst_ids_message Message containing user_id and task_id.
      * @return Vector with IDs of all instances owned by user. 
      */
-    virtual std::vector<std::string> getInstanceIds(GetInstIdsMessage get_inst_ids_message) = 0;
+    virtual std::vector<long> getInstanceIds(GetInstIdsMessage get_inst_ids_message) = 0;
     
     //virtual std::string givePermission(GivePermMessage give_perm_message);
     
@@ -84,7 +82,7 @@ public:
      * On start of BAF reloads instances from database.
      * In case when BAF needs to be restarted.
      */
-    virtual void reloadInstances(int task_id) = 0;
+    virtual void reloadInstances(unsigned int task_id) = 0;
     
 protected:
     

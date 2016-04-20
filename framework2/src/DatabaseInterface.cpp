@@ -18,14 +18,8 @@ DatabaseInterface::DatabaseInterface()
 
 DatabaseInterface::~DatabaseInterface()
 {
+    std::cout << "DatabaseInterface::~DatabaseInterface" << std::endl;
 }
-
-/*
-void DatabaseInterface::createInstance(int sessions_count) {
-    // Create instance.
-    m_instance = std::make_shared<DatabaseInterface>(sessions_count);
-}
- */
 
 void DatabaseInterface::createInstance()
 {
@@ -37,7 +31,12 @@ void DatabaseInterface::createInstance()
 
 std::shared_ptr<DatabaseInterface> DatabaseInterface::getInstance()
 {
-    return m_instance;
+    if (m_instance) {
+        return m_instance;
+    }
+    else {
+        throw std::runtime_error("DatabaseInterface singleton was not created or already destructed.");
+    }
 }
 
 void DatabaseInterface::connectToDatabase(int sessions_count, std::string connection_string)

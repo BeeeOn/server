@@ -16,6 +16,7 @@
             <file>file:/home/mrmaidx/server/framework2/src/UserSession.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/UserServer.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/UserServer.cpp</file>
+            <file>file:/home/mrmaidx/server/framework2/src/Session.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/ConfigParser.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/UserMessageParser.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/BaseTaskManager.cpp</file>
@@ -31,6 +32,7 @@
             <file>file:/home/mrmaidx/server/framework2/src/Task.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/DataMessageParser.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/TaskInstance.cpp</file>
+            <file>file:/home/mrmaidx/server/framework2/src/Server.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/GatewaySession.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/BaseTaskLoader.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/DataMessage.h</file>
@@ -40,6 +42,7 @@
             <file>file:/home/mrmaidx/server/framework2/src/DatabaseInterface.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/TaskLoader.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/TaskManager.cpp</file>
+            <file>file:/home/mrmaidx/server/framework2/src/Server.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/framework.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/GatewayServer.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/DatabaseInterface.cpp</file>
@@ -47,6 +50,7 @@
             <file>file:/home/mrmaidx/server/framework2/src/UserMessages.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/ConfigParser.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/Calendar.h</file>
+            <file>file:/home/mrmaidx/server/framework2/src/Session.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/BaseTaskManager.h</file>
         </group>
     </open-files>

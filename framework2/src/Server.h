@@ -19,6 +19,8 @@ class Server {
 public:
     Server(asio::io_service& io_service, int port, int threads);
 
+    virtual ~Server();
+    
     /**
      * Function which creates threads to run server
      * and then waits for connections.
@@ -52,6 +54,8 @@ protected:
     std::shared_ptr<Session> m_new_session;
     
     int m_threads;
+    
+    int m_port;
 };
 
 #endif /* SERVER_H */

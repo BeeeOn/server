@@ -59,8 +59,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/framework.o \
 	${OBJECTDIR}/src/locked_stream.o \
 	${OBJECTDIR}/src/pugixml.o \
-	${OBJECTDIR}/src/unified_logger.o \
-	${OBJECTDIR}/src/utility.o
+	${OBJECTDIR}/src/unified_logger.o
 
 
 # C Compiler Flags
@@ -211,11 +210,6 @@ ${OBJECTDIR}/src/unified_logger.o: src/unified_logger.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/unified_logger.o src/unified_logger.cpp
-
-${OBJECTDIR}/src/utility.o: src/utility.cpp 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/utility.o src/utility.cpp
 
 # Subprojects
 .build-subprojects:

@@ -12,9 +12,8 @@
 
 #include "UserMessages.h"
 #include "BaseTaskManager.h"
-//#include "TaskInstance.h"
 
-class TaskManager: public BaseTaskManager
+class TaskManager: public BaseTaskManager, public std::enable_shared_from_this<TaskManager>
 {
 public:
     TaskManager();
@@ -39,7 +38,7 @@ public:
      * @param get_inst_ids_message Message containing user_id and task_id.
      * @return Vector with IDs of all instances owned by user. 
      */
-    virtual std::vector<std::string> getInstanceIds(GetInstIdsMessage get_inst_ids_message) override;
+    virtual std::vector<long> getInstanceIds(GetInstIdsMessage get_inst_ids_message) override;
     
     //virtual std::string givePermission(GivePermMessage give_perm_message);
    

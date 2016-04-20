@@ -7,6 +7,9 @@
 
 #include "BaseTaskManager.h"
 
+#include <stdexcept>
+#include <iostream>
+
 BaseTaskManager::BaseTaskManager()
 {
 }
@@ -14,9 +17,10 @@ BaseTaskManager::BaseTaskManager()
 
 BaseTaskManager::~BaseTaskManager()
 {
+    std::cout << "BaseTaskManager::~BaseTaskManager" << std::endl;
 }
 
 std::string BaseTaskManager::getData(GetDataMessage get_data_message)
 {
-    return "This task doesn't return any data.";
+    throw std::runtime_error("getData() function not implemeted.");
 }

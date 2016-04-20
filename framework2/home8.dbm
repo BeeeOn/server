@@ -349,7 +349,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="mobile_devices">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="157.25" y="75.286"/>
+	<position x="94.25" y="84.286"/>
 	<column name="mobile_id" not-null="true">
 		<type name="text"/>
 	</column>
@@ -462,7 +462,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="push_notification_service">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="91" y="223"/>
+	<position x="78" y="313"/>
 	<column name="push_notification_service_id" not-null="true">
 		<type name="serial"/>
 	</column>
@@ -481,7 +481,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<tag name="Tasks"/>
-	<position x="790" y="298"/>
+	<position x="768" y="249"/>
 	<column name="task_id" not-null="true">
 		<type name="smallint"/>
 	</column>
@@ -503,7 +503,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<tag name="Tasks"/>
-	<position x="781" y="91"/>
+	<position x="766" y="69"/>
 	<column name="instance_id" not-null="true">
 		<type name="serial"/>
 	</column>
@@ -519,7 +519,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<tag name="Tasks"/>
-	<position x="525" y="347"/>
+	<position x="509" y="258"/>
 	<column name="user_id" not-null="true">
 		<type name="integer"/>
 	</column>
@@ -538,14 +538,14 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<tag name="Tasks"/>
-	<position x="1217" y="267"/>
+	<position x="1078" y="167"/>
 	<column name="instance_id" not-null="true">
 		<type name="integer"/>
 	</column>
 	<column name="gateway_id">
 		<type name="decimal" length="20" precision="0"/>
 	</column>
-	<column name="notifications" not-null="true">
+	<column name="notify" not-null="true">
 		<type name="bool"/>
 	</column>
 	<constraint name="task_alive_check_pk" type="pk-constr" table="public.task_alive_check">
@@ -557,7 +557,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<tag name="Tasks"/>
-	<position x="1392" y="91"/>
+	<position x="1403" y="71"/>
 	<column name="instance_id" not-null="true">
 		<type name="integer"/>
 	</column>
@@ -573,8 +573,20 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="value" not-null="true">
 		<type name="real"/>
 	</column>
-	<column name="notification_text">
+	<column name="notification">
 		<type name="text"/>
+	</column>
+	<column name="a_gateway_id">
+		<type name="decimal" length="20" precision="0"/>
+	</column>
+	<column name="a_device_euid">
+		<type name="decimal" length="10"/>
+	</column>
+	<column name="a_module_id">
+		<type name="smallint"/>
+	</column>
+	<column name="a_value">
+		<type name="integer"/>
 	</column>
 	<constraint name="task_watchdog_pk" type="pk-constr" table="public.task_watchdog">
 		<columns names="instance_id" ref-type="src-columns"/>
@@ -713,6 +725,18 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<columns names="device_euid" ref-type="dst-columns"/>
 </constraint>
 
+<constraint name="rel_task_watchdog_gateway" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="public.gateway" table="public.task_watchdog">
+	<columns names="a_gateway_id" ref-type="src-columns"/>
+	<columns names="gateway_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="rel_task_watchdog_device2" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="public.device" table="public.task_watchdog">
+	<columns names="a_device_euid" ref-type="src-columns"/>
+	<columns names="device_euid" ref-type="dst-columns"/>
+</constraint>
+
 <relationship name="rel_user_gateway_gateway" type="relfk"
 	 src-table="public.user_gateway"
 	 dst-table="public.gateway"
@@ -842,6 +866,11 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <relationship name="rel_watchdog_device" type="relfk"
 	 src-table="public.task_watchdog"
 	 dst-table="public.device"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_task_watchdog_gateway" type="relfk"
+	 src-table="public.task_watchdog"
+	 dst-table="public.gateway"
 	 src-required="false" dst-required="false"/>
 
 <permission>

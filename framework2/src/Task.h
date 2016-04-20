@@ -12,6 +12,7 @@
 #include <sstream>
 #include <string>
 #include <stdexcept>
+#include <memory>
 
 #include <dlfcn.h>
 
@@ -51,7 +52,7 @@ public:
     /**
      * Destroys this tasks manager.
      */
-    void deleteTaskManager();
+    //void deleteTaskManager();
     
 private:
     /**
@@ -63,7 +64,7 @@ private:
      * Manager of this task.
      * Using raw pointer because it's constructed inside .so library.
      */
-    TaskManager* m_task_manager;
+    std::shared_ptr<TaskManager> m_task_manager;
     /**
      * Version of this task.
      */
@@ -83,7 +84,7 @@ private:
     
 public:
     // Getters.
-    TaskManager* getTaskManagerPtr() { return m_task_manager; }
+    std::shared_ptr<TaskManager> getTaskManagerPtr() { return m_task_manager; }
     unsigned short getTaskVersion() { return m_task_version; }
     std::string getTaskName() { return m_task_name; }
     TASK_TYPE getTaskType() { return m_task_type; }

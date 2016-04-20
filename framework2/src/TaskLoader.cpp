@@ -55,6 +55,10 @@ void TaskLoader::createAllTasks(std::string tasks_config_file_path)
             // Create task manager.
             task_ptr.second->createTaskManager();
             // Reload instances which already exists.
+            std::cout << "reloading instances" << std::endl;
+            
+            //task_ptr.second->m_task_manager->reloadInstances();
+            
             task_ptr.second->getTaskManagerPtr()->reloadInstances(task_ptr.first);
         }
         catch (const std::exception& e) {

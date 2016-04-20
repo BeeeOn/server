@@ -26,13 +26,10 @@
 #include "Logger.h"
 #include "TaskLoader.h"
 #include "UserServer.h"
-#include "unified_logger.h"
 
 // Definition of the extern logger object from Logger.h
 Unified_logger logger("baf");
 std::mutex locked_stream::s_out_mutex{};
-
-
 
 void stopBAF(const asio::error_code& error, UserServer *user_server, GatewayServer *gateway_server)
 {
@@ -156,13 +153,22 @@ int main(int argc, char** argv)
     UserServer user_server(io_service, Config::m_user_server_port, Config::m_user_server_threads);
     user_server.startAccept();
     
-    asio::signal_set signals(io_service);
-    signals.add(SIGINT);
-    signals.add(SIGTERM);
+    asio::signal_set term_signals(io_service);
+    term_signals.add(SIGINT);
+    term_signals.add(SIGTERM);
       #if defined(SIGQUIT)
-    signals.add(SIGQUIT);
+    term_signals.add(SIGQUIT);
       #endif // defined(SIGQUIT)
-    signals.async_wait(boost::bind(stopBAF, asio::placeholders::error, &user_server, &gateway_server));
+    term_signals.async_wait(boost::bind(stopBAF, asio::placeholders::error, &user_server, &gateway_server));
+    
+    /*
+    [](const asio::error_code& error, UserServer *user_server, GatewayServer *gateway_server)
+    {
+        stopBAF(error, user_server, gateway_server);
+    });
+    */
+    
+    //
     
     asio::signal_set reload_signal(io_service);
     reload_signal.add(SIGUSR1);
@@ -172,7 +178,7 @@ int main(int argc, char** argv)
     
     gateway_server_thread.join();
     calendar_thread.join();
-
+    
     std::cout << "END" << std::endl;
     
     return 0;

@@ -13,7 +13,7 @@
 #include "DataMessageRegister.h"
 #include "Logger.h"
 
-TriggerTaskInstance::TriggerTaskInstance(int instance_id, TaskManager *owning_manager):
+TriggerTaskInstance::TriggerTaskInstance(int instance_id, std::weak_ptr<TaskManager> owning_manager):
     TaskInstance(instance_id, owning_manager)
 {
 }
@@ -29,7 +29,13 @@ void TriggerTaskInstance::activate(DataMessage data_message)
     logger.LOGFILE("trigger_instance", "TRACE") << "TriggerTaskInstance::activate - enter" << std::endl;
     
     std::lock_guard<std::mutex> lock(m_instance_mx);
-    run(data_message);
+    
+    try {
+        run(data_message);
+    }
+    catch (const std::exception& e) {
+        logger.LOGFILE("trigger_instance", "ERROR") << e.what() << std::endl;
+    }
     
     logger.LOGFILE("trigger_instance", "TRACE") << "TriggerTaskInstance::activate - leave" << std::endl;
 }

@@ -14,6 +14,7 @@
 #include "DatabaseInterface.h"
 #include "Logger.h"
 #include "TaskLoader.h"
+#include "TaskInstance.h"
 
 TaskManager::TaskManager()
 {
@@ -21,6 +22,7 @@ TaskManager::TaskManager()
 
 TaskManager::~TaskManager()
 {
+    std::cout << "TaskManager::~TaskManager" << std::endl;
 }
 
 long TaskManager::createInstance(CreateMessage create_message)
@@ -63,20 +65,27 @@ void TaskManager::deleteInstance(DeleteMessage delete_message)
     debugPrintTaskInstances(); 
 }
 
-std::vector<std::string> TaskManager::getInstanceIds(GetInstIdsMessage get_inst_ids_message)
+std::vector<long> TaskManager::getInstanceIds(GetInstIdsMessage get_inst_ids_message)
 {
     std::cout << "TaskManager::getInstanceIds - enter" << std::endl; 
-    std::vector<std::string> instance_ids(100);
+    std::vector<long> instance_ids;
     
     SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
-    *sql << "SELECT instance.instance_id "
-            "FROM user_instance INNER JOIN instance "
-            "ON user_instance.instance_id = instance.instance_id "
-            "WHERE task_id = :task_id AND user_id = :user_id",
-            soci::into(instance_ids),
-            soci::use(get_inst_ids_message.task_id, "task_id"),
-            soci::use(get_inst_ids_message.user_id, "user_id");
     
+    soci::rowset<soci::row> rows = (sql->prepare << "SELECT instance.instance_id "
+                                    "FROM user_instance INNER JOIN instance "
+                                    "ON user_instance.instance_id = instance.instance_id "
+                                    "WHERE task_id = :task_id AND user_id = :user_id",
+                                    soci::use(get_inst_ids_message.task_id, "task_id"),
+                                    soci::use(get_inst_ids_message.user_id, "user_id"));
+
+    for (soci::rowset<soci::row>::const_iterator it = rows.begin(); it != rows.end(); ++it) {   
+        
+        soci::row const& row = *it;
+        // For some reason, get<> doesn't support long.
+        // This could become problem on machine where int is smaller than serial in database.
+        instance_ids.push_back(row.get<int>(0)); 
+    }
     
     std::cout << "TaskManager::getInstanceIds - leave" << std::endl; 
     
@@ -111,5 +120,3 @@ void TaskManager::suicideInstance(long instance_id)
     
     debugPrintTaskInstances(); 
 }
-
-

@@ -25,7 +25,7 @@ struct WatchdogConfig {
     int module_id;
     std::string comp_operator;
     double value;
-    std::string notification_text;
+    std::string notification;
 };
 
 
@@ -34,7 +34,7 @@ class WatchdogManager: public TaskManager
 public:
     WatchdogManager();
     //WatchdogManager(const WatchdogManager& orig);
-    virtual ~WatchdogManager();
+    ~WatchdogManager();
     
     void createConfiguration(long instance_id, std::map<std::string, std::string> config) override;
 
@@ -42,7 +42,7 @@ public:
     
     std::map<std::string, std::string> getConfiguration(GetConfMessage get_conf_message) override;
     
-    void reloadInstances(int task_id) override;
+    void reloadInstances(unsigned int task_id) override;
 
     
     //long createInstance(CreateMessage create_message) override;

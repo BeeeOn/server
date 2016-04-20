@@ -18,14 +18,15 @@ Task::~Task()
 {
     std::cout << "Task::~Task - entered." << std::endl;
     
+    /*
     // Dealloc this tasks manager.
     try {
-        deleteTaskManager();
+        //deleteTaskManager();
     }
     catch (const std::exception& e) {
         std::cerr << e.what();
     }
-    
+    */
     // Closes library.
     closeTaskLibrary();
     
@@ -63,7 +64,7 @@ void Task::closeTaskLibrary()
 void Task::createTaskManager()
 {
     // Function pointer.
-    typedef TaskManager*(*create_task_manager)();
+    typedef std::shared_ptr<TaskManager>(*create_task_manager)();
     
     if (!m_task_library) {
         std::stringstream error;
@@ -88,11 +89,11 @@ void Task::createTaskManager()
         }
     }
 }
-
+/*
 void Task::deleteTaskManager()
 {
     // Function pointer.
-    typedef void(*delete_task_manager)(void*);
+    typedef void(*delete_task_manager)(TaskManager*);
 
     if (!m_task_library) {
         std::stringstream error;
@@ -118,3 +119,4 @@ void Task::deleteTaskManager()
         }
     }
 }
+*/

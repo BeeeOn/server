@@ -60,7 +60,6 @@ public:
     
     void reloadTasksConfigFileAndFindNewTasks();
     
-    
     /**
      * Finds task in m_tasks and returns shared pointer to it.
      * @param task_id ID of a task.

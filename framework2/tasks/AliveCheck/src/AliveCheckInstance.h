@@ -18,7 +18,7 @@
 class AliveCheckInstance: public TimedTaskInstance
 {
 public:
-    AliveCheckInstance(unsigned int instance_id, TaskManager* owning_manager);
+    AliveCheckInstance(unsigned int instance_id, std::weak_ptr<TaskManager> owning_manager);
     
     virtual ~AliveCheckInstance();
     

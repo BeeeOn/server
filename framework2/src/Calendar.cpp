@@ -130,14 +130,6 @@ void Calendar::activateInstances(std::multimap<std::chrono::system_clock::time_p
             std::cout << "Instance activated at time: " << ctime(&tn) << std::endl;
            
             instance.second->activate(instance.first);
-            /*
-            if(auto locked = instance.lock()){
-                locked->activate();
-            }
-            else {
-                std::cout << "instance could not be activated, it was deleted" << std::endl;
-            }
-            */
         }
     }
     std::cout << "Calendar::activateInstances - leave" << std::endl;

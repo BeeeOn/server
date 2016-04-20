@@ -16,7 +16,7 @@
 #include "../../../src/TaskManager.h"
 
 struct AliveCheckConfig {
-    short notifications;
+    short send_notif;
     unsigned int gateway_id;
 };
 
@@ -32,7 +32,7 @@ public:
     
     std::map<std::string, std::string> getConfiguration(GetConfMessage get_conf_message) override;    
     
-    void reloadInstances(int task_id) override;
+    void reloadInstances(unsigned int task_id) override;
 
     
     //void createInstance(unsigned int instance_id, std::map<std::string, std::string> configuration) override;
@@ -43,7 +43,7 @@ public:
 
     //void deleteConfiguration(unsigned int user_id, unsigned short personal_id) override;
     
-    virtual ~AliveCheckManager();
+    ~AliveCheckManager();
 private:
 
     AliveCheckConfig parseConfiguration(std::map<std::string, std::string> configuration);

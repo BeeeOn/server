@@ -14,9 +14,9 @@
 #include <string>
 
 #include "DataMessage.h"
-#include "TaskManager.h"
 
 class TaskManager;
+
 class TaskInstance//: public std::enable_shared_from_this<TaskInstance>
 {
 public:
@@ -31,8 +31,8 @@ public:
      * @param user_id ID of a user creating an instance.
      * @param personal_id ID of instance relative to instances of task already created by user (user can run more instances of one task).
      */
-    TaskInstance(int instance_id, TaskManager *owning_manager);
-    
+    //TaskInstance(int instance_id, TaskManager* owning_manager);
+    TaskInstance(int instance_id, std::weak_ptr<TaskManager> owning_manager);
     /**
      * Destructor of class TaskInstance.
      */
@@ -62,7 +62,8 @@ protected:
     int m_instance_id;
     
     /** Pointer to manager of instance. */
-    TaskManager* m_owning_manager;
+    //TaskManager* m_owning_manager;
+    std::weak_ptr<TaskManager> m_owning_manager;
  };
 
 #endif /* TASKINSTANCE_H */

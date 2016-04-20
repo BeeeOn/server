@@ -9,12 +9,11 @@
 #define GATEWAYINTERFACE_H
 
 #include <string>
-
-#include <asio.hpp>
+#include <memory>
 #include <sstream>
 #include <string>
 
-#define ADA_SERVER_SENDER_PORT 7081
+#include <asio.hpp>
 
 class GatewayInterface
 {
@@ -23,54 +22,22 @@ public:
     
     virtual ~GatewayInterface();
     
-    void connect();
-    
-    int sendPingGateway(long long gateway_id);
-    
-    void sendSetState(long long gateway_id, long device_euid, int module_id, std::string new_value);
-    
-    //std::string convertData(int reply_length);
-
-    //void onStart();
-    //void onWrite();
-    //void onRead(); 
-    
-    void send();
-    
-    void receive();
-    
-    std::string m_response;
+    void sendSetState(long long gateway_id, long device_euid, int module_id, int new_value);
     
 private:
+    int sendPingGateway(long long gateway_id);
     
-    void handleConnect(const asio::error_code& error);
+    void connect();
+
+    void send(std::string request);
     
-    void handleWrite(const asio::error_code& error,
-        size_t bytes_transferred);
-    
-    void handleRead(const asio::error_code& error,
-        size_t bytes_transferred);    
+    void receive();
     
     asio::io_service m_io_service;
     
     asio::ip::tcp::socket m_socket;
     
-    asio::ip::tcp::resolver m_resolver;
-    
-    asio::streambuf m_reply_buffer;
-    
-    std::string m_request;
-    
-    int m_port;
-    /*
-    std::string m_request;
- 
-    std::string m_reply;
-    
-    size_t m_bytes_transferred;
-    
-    */
+    std::string m_response;
 };
 
 #endif /* GATEWAYINTERFACE_H */
-

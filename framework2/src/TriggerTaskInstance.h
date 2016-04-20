@@ -19,7 +19,7 @@ class TriggerTaskInstance: public TaskInstance
 public:
     
     
-    TriggerTaskInstance(int instance_id, TaskManager *owning_manager);
+    TriggerTaskInstance(int instance_id, std::weak_ptr<TaskManager> owning_manager);
     
     /**
      * Virtual destructor of class TriggerTaskInstance. Removes all entries

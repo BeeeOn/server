@@ -22,7 +22,7 @@
 
 #include "WatchdogManager.h"
 
-WatchdogInstance::WatchdogInstance(int instance_id, TaskManager* owning_manager, long device_euid):
+WatchdogInstance::WatchdogInstance(int instance_id, std::weak_ptr<TaskManager> owning_manager, long device_euid):
     TriggerTaskInstance(instance_id, owning_manager),
     m_received_data_once(false)
 {
@@ -68,9 +68,9 @@ void WatchdogInstance::run(DataMessage data_message)
         WatchdogConfig config;
         
         // Get configuration of this instance from database.
-        *sql << "SELECT device_euid, module_id, operator, value, notification_text FROM task_watchdog WHERE instance_id = :instance_id",
+        *sql << "SELECT device_euid, module_id, operator, value, notification FROM task_watchdog WHERE instance_id = :instance_id",
                 soci::into(config.device_euid), soci::into(config.module_id), soci::into(config.comp_operator),
-                soci::into(config.value), soci::into(config.notification_text),
+                soci::into(config.value), soci::into(config.notification),
                 soci::use(m_instance_id, "instance_id");
 
         auto module = data_message.modules.find(config.module_id);
@@ -84,26 +84,26 @@ void WatchdogInstance::run(DataMessage data_message)
             std::cout << "||||||||||| WATCHDOG |||||||||||" << std::endl;
             std::cout << "Instance with ID: " << m_instance_id << " was activated." << std::endl;
             
-            if (config.comp_operator == "lesser") {
+            if (config.comp_operator == "LT") {
                 if ((current_value < m_last_received_value) &&
                     (config.value <= m_last_received_value) &&
                     (config.value >= current_value)) {
                     
                     std::cout << "Operation LESSER than WAS FULFILLED." << std::endl;
-                    std::cout << "Sending notification: " << config.notification_text << std::endl;
+                    std::cout << "Sending notification: " << config.notification << std::endl;
                 }
                 else {
                     std::cout << "Operation LESSER than WAS NOT FULFILLED." << std::endl;
                 }
                 
             }
-            else if (config.comp_operator == "greater") {
+            else if (config.comp_operator == "GT") {
                 if ((current_value > m_last_received_value) &&
                     (config.value <= current_value) &&
                     (config.value >= m_last_received_value)) {
                     
                     std::cout << "Operation GREATER than WAS FULFILLED." << std::endl;
-                    std::cout << "Sending notification: " << config.notification_text << std::endl;
+                    std::cout << "Sending notification: " << config.notification << std::endl;
                 }
                 else {
                     std::cout << "Operation GREATER than WAS NOT FULFILLED." << std::endl;

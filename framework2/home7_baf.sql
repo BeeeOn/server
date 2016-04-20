@@ -1,4 +1,4 @@
--- File:   home7_baf.sql
+﻿-- File:   home7_baf.sql
 -- Author: Martin Novak, xnovak1c@stud.fit.vutbr.cz
 -- Created on 4. April 2016
 
@@ -43,7 +43,7 @@ CREATE TABLE public.user_instance(
 CREATE TABLE public.task_alive_check(
 	instance_id integer NOT NULL,
 	gateway_id decimal(20,0),
-	notifications bool NOT NULL,
+	send_notif bool NOT NULL,
 	CONSTRAINT task_alive_check_pk PRIMARY KEY (instance_id)
 
 );
@@ -53,11 +53,14 @@ CREATE TABLE public.task_watchdog(
 	instance_id integer NOT NULL,
 	device_euid decimal(10),
 	module_id smallint NOT NULL,
-	operator varchar(7) NOT NULL,
+	operator varchar(2) NOT NULL,
 	value real NOT NULL,
-	notification_text text,
+	notification text,
+	a_gateway_id decimal(20,0),
+	a_device_euid decimal(10),
+	a_module_id smallint,
+	a_value integer,
 	CONSTRAINT task_watchdog_pk PRIMARY KEY (instance_id)
-
 );
 -- Set owner of tables
 ALTER TABLE public.task OWNER TO postgres;
@@ -107,6 +110,19 @@ ON DELETE CASCADE ON UPDATE NO ACTION;
 ALTER TABLE public.task_watchdog ADD CONSTRAINT rel_task_watchdog_device FOREIGN KEY (device_euid)
 REFERENCES public.device (device_euid) MATCH FULL
 ON DELETE SET NULL ON UPDATE NO ACTION;
+
+-- object: rel_task_watchdog_device2 | type: CONSTRAINT --
+-- ALTER TABLE public.task_watchdog DROP CONSTRAINT IF EXISTS rel_task_watchdog_device2 CASCADE;
+ALTER TABLE public.task_watchdog ADD CONSTRAINT rel_task_watchdog_device2 FOREIGN KEY (a_device_euid)
+REFERENCES public.device (device_euid) MATCH FULL
+ON DELETE SET NULL ON UPDATE NO ACTION;
+
+-- object: rel_task_watchdog_gateway | type: CONSTRAINT --
+-- ALTER TABLE public.task_watchdog DROP CONSTRAINT IF EXISTS rel_task_watchdog_gateway CASCADE;
+ALTER TABLE public.task_watchdog ADD CONSTRAINT rel_task_watchdog_gateway FOREIGN KEY (a_gateway_id)
+REFERENCES public.gateway (gateway_id) MATCH FULL
+ON DELETE SET NULL ON UPDATE NO ACTION;
+
 /*
 -- Grant priviledges to tasks role.
 GRANT SELECT,INSERT,UPDATE,DELETE

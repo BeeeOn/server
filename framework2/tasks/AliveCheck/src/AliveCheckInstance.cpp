@@ -17,7 +17,7 @@
 #include "../../../src/DatabaseInterface.h"
 #include "../../../src/TaskManager.h"
 
-AliveCheckInstance::AliveCheckInstance(unsigned int instance_id, TaskManager* owning_manager):
+AliveCheckInstance::AliveCheckInstance(unsigned int instance_id, std::weak_ptr<TaskManager> owning_manager):
     TimedTaskInstance(instance_id, owning_manager)
 {
     planActivationNow();
@@ -44,14 +44,14 @@ void AliveCheckInstance::executeRefresh()
     //return;
     
     unsigned long long gateway_id;
-    int notifications;
+    int send_notif;
     
     // Get gateway_id from table with configuration. 
     SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
-    *sql << "SELECT gateway_id, notifications FROM task_alive_check WHERE instance_id = :instance_id",
-            soci::into(gateway_id), soci::into(notifications), soci::use(m_instance_id, "instance_id");
+    *sql << "SELECT gateway_id, send_notif FROM task_alive_check WHERE instance_id = :instance_id",
+            soci::into(gateway_id), soci::into(send_notif), soci::use(m_instance_id, "instance_id");
     
-    std::cout << "gateway_id: " << gateway_id << " | notifications: " << notifications << std::endl;
+    std::cout << "gateway_id: " << gateway_id << " | send_notif: " << send_notif << std::endl;
     
     std::vector<unsigned long long> device_euid(100);
     std::vector<unsigned long long> measured_at(100);
@@ -61,8 +61,6 @@ void AliveCheckInstance::executeRefresh()
     
     long int now_timestamp = std::chrono::seconds(std::time(NULL)).count();
     std::cout << "now: " << now_timestamp << std::endl;
-    
-    
     
     std::cout << "DEVICES:" << std::endl;
     for (int i = 0; i < measured_at.size(); i++) {

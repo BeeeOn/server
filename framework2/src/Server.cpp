@@ -12,10 +12,16 @@
 Server::Server(asio::io_service& io_service, int port, int threads):
     m_io_service(io_service),
     m_acceptor(io_service, asio::ip::tcp::endpoint(asio::ip::address::from_string("127.0.0.1"), port)),
-    m_threads(threads)
+    m_threads(threads),
+    m_port(port)
 {
     logger.LOGFILE("server", "INFO") << "Server started on port: " << port << std::endl;
 }
+
+Server::~Server() {
+    std::cout << "Server::~Server" << std::endl;
+}
+
 
 void Server::run()
 {
@@ -52,5 +58,5 @@ void Server::handleAccept(const asio::error_code& error)
 void Server::stop()
 {
     m_io_service.stop();
-    logger.LOGFILE("server", "INFO") << "Server stopped!" << std::endl;
+    logger.LOGFILE("server", "INFO") << "Server on port: " << m_port << " stopped!" << std::endl;
 }

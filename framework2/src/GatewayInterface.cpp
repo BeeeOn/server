@@ -9,21 +9,25 @@
 
 #include <iostream>
 #include <boost/bind.hpp>
+#include <memory>
 #include <sstream>
+#include <string>
 #include <stdexcept>
 
 #include "pugixml.hpp"
 
+
 GatewayInterface::GatewayInterface():
-    m_socket(m_io_service),
-    m_resolver(m_io_service),
-    m_port(ADA_SERVER_SENDER_PORT)
+    m_io_service(),
+    m_socket(m_io_service)
 {
+    connect();
 }
 
 GatewayInterface::~GatewayInterface()
 {
 }
+
 
 int GatewayInterface::sendPingGateway(long long gateway_id)
 {
@@ -56,17 +60,18 @@ int GatewayInterface::sendPingGateway(long long gateway_id)
     
     doc.print(std::cout);
     
-    m_request = stream.str();
+    //std::strirequest = 
     
-    connect();
+    send(stream.str());
     
+    //receive();
     
-    std::cout << m_response << std::endl;
+    //std::cout << m_response << std::endl;
     
-    return 1;
+    //return 1;
 }
 
-void GatewayInterface::sendSetState(long long gateway_id, long device_euid, int module_id, std::string new_value)
+void GatewayInterface::sendSetState(long long gateway_id, long device_euid, int module_id, int new_value)
 {
     std::cout << "GatewayInterface::sendSetState" << std::endl;
     /*
@@ -80,145 +85,58 @@ void GatewayInterface::sendSetState(long long gateway_id, long device_euid, int 
     
     pugi::xml_document doc;
     
-    doc.print(std::cout); 
+    pugi::xml_node request_node = doc.append_child();
+    request_node.set_name("request");
+    request_node.append_attribute("type") = "switch";
+    
+    pugi::xml_node adapter_node = request_node.append_child();
+    adapter_node.set_name("sensor");
+    adapter_node.append_attribute("id") = static_cast<int>(device_euid);
+    // This attribute in protocol is outdated. It is used to describe device_euid.
+    adapter_node.append_attribute("type") = module_id;
+    adapter_node.append_attribute("onAdapter") = gateway_id;
+    
+    std::ostringstream stream;
+    doc.save(stream);
+    
+    doc.print(std::cout);
+    
+    send(stream.str());
 }
 
 void GatewayInterface::connect()
 {
-    std::cout << "GatewayInterface::connect" << std::endl;
-   
-    asio::ip::tcp::resolver::query query("127.0.0.1", std::to_string(m_port).c_str());
-    asio::ip::tcp::resolver resolver(m_io_service);
-    asio::ip::tcp::resolver::iterator destination = resolver.resolve(query);
-    asio::ip::tcp::endpoint endpoint;
-
-    while (destination != asio::ip::tcp::resolver::iterator()) {
-        
-        endpoint = *destination++;
-    }
-    
-    
-    
-    //asio::ip::tcp::resolver resolver(m_io_service);
-    //asio::ip::tcp::endpoint endpoint = resolver.resolve("127.0.0.1", m_port);
-    
-    //asio::error_code error;
-    //m_socket.connect(asio::ip::tcp::endpoint(asio::ip::address::from_string("127.0.0.1"), m_port), error);
-    //asio::ip::tcp::endpoint endpoint(asio::ip::address::from_string("127.0.0.1"), m_port);
-    m_socket.async_connect(endpoint,
-      boost::bind(&GatewayInterface::handleConnect, this,
-      asio::placeholders::error));
-            
-     /*       
-    asio::ip::tcp::endpoint endpoint = *(m_resolver.resolve({"127.0.0.1", m_port}));
-    m_socket.lowest_layer().async_connect(endpoint,
-      boost::bind(&GatewayInterface::handleConnect, this,
-      asio::placeholders::error));
-    
-      */ /*
-    asio::ip::tcp::endpoint endpoint = *(m_resolver.resolve({"127.0.0.1", m_port}));
-    m_socket.lowest_layer().async_connect(endpoint,
-      boost::bind(&GatewayInterface::handleConnect, this,
-      asio::placeholders::error));
-
-     */
+    // Connect to localhost and port of ada_server_sender.
+    m_socket.connect(asio::ip::tcp::endpoint(asio::ip::address::from_string("127.0.0.1"), 7081));
 }
 
-void GatewayInterface::handleConnect(const asio::error_code& error)
+void GatewayInterface::send(std::string request)
 {
-    std::cout << "GatewayInterface::handleConnect" << std::endl;
+    std::cout << "GatewayInterface::send - enter" << std::endl;
     
-    if (!error) {
-     std::cerr << "Connect failed: " << error.message() << std::endl;
-       
-      //std::cout << "Connect failed: " << error.message() << "\n";
-      
-    }
-    else {
-        std::cout << "connected" << std::endl;
-        send();
-    }
+    asio::streambuf request_streambuf;
+    std::ostream request_stream(&request_streambuf);
+    request_stream << request;
+
+    // Send the message.
+    asio::write(m_socket, request_streambuf);
+    
+    std::cout << "GatewayInterface::send - leave" << std::endl;
 }
-
-void GatewayInterface::send()
-{
-    std::cout << "GatewayInterface::send" << std::endl;
-    //asio::error_code error;
-    //asio::write(m_socket, asio::buffer(message), error);
-
-    asio::async_write(m_socket,
-      asio::buffer(m_request, m_request.length()),
-      boost::bind(&GatewayInterface::handleWrite, this,
-      asio::placeholders::error,
-      asio::placeholders::bytes_transferred));
-    
-    /*
-    if (error) {
-        throw std::runtime_error("GatewayInterface could not send a message.");
-    }
-    */
-    /*
-    //size_t request_length = request.length();
-    
-     */
-}
-
-
-void GatewayInterface::handleWrite(const asio::error_code& error,
-      size_t bytes_transferred)
-{
-    std::cout << "GatewayInterface::handleWrite" << std::endl;
-    
-    if (error) {
-       std::cerr << "Write failed " << error.message() << std::endl;
-    }
-    else {
-      //std::cout << "Write failed: " << error.message() << "\n";
-      
-     std::cout << "send successful" << std::endl;
-        receive();
-    }
-  }
-
 
 void GatewayInterface::receive()
 {
-    std::cout << "GatewayInterface::receive" << std::endl;
-    asio::async_read(m_socket, m_reply_buffer,
-                boost::bind(&GatewayInterface::handleRead, this,
-                asio::placeholders::error, asio::placeholders::bytes_transferred));
-    
-    
-    //size_t bytes_transferred = asio::read(m_socket, reply_buffer, asio::transfer_all(), error);
-    
+    std::cout << "GatewayInterface::receive - enter" << std::endl;
    
-    /*
-    asio::async_read(m_socket, m_reply_buffer,
-                boost::bind(&GatewayInterface::handleRead, this,
-                asio::placeholders::error, asio::placeholders::bytes_transferred));
-     */
-}
+    asio::streambuf response;
+    asio::read_until(m_socket, response, "</reply>");
 
-void GatewayInterface::handleRead(const asio::error_code& error,
-      size_t bytes_transferred)
-{
-    std::cout << "GatewayInterface::handleRead" << std::endl;
+    std::iostream response_stream(&response);
 
-    if (error && error != asio::error::eof) {
+    std::string content{ std::istreambuf_iterator<char>(response_stream),
+                     std::istreambuf_iterator<char>() };
     
-        throw std::runtime_error("GatewayInterface could not receive a message.");
-    }
-    else {
-        std::cout << "receive succesfull" << std::endl;
-        
-   asio::streambuf::const_buffers_type bufstream = m_reply_buffer.data();
+    m_response = content;
     
-    std::string response(asio::buffers_begin(bufstream), asio::buffers_begin(bufstream) + bytes_transferred);
-    // Vyčištění bufferu.
-    m_reply_buffer.consume(bytes_transferred);
-    
-    m_response = response;
-    
-    std::cout << "handleRead - response: " << response << std::endl;
-    }
+    std::cout << "GatewayInterface::receive - leave" << std::endl;
 }
