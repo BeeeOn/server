@@ -40,8 +40,8 @@ public:
     void planActivationNow();
     /**
      * Plans instance activation to calendar to exact date and time.
-     * It must have format: "1 9 2014 12:35:34"
-     * "month day_of_month year time"
+     * It must have format: "1 9 2014 12:35:34" -> "month day_of_month year time"
+     * Must be UTC.
      */
     void planToDateAndTime(std::string date_time);  
     /**

@@ -8,6 +8,7 @@
 #include "Calendar.h"
 
 #include <chrono>
+#include <ctime>
 #include <memory>
 #include <thread>
 #include <vector>
@@ -185,6 +186,17 @@ std::chrono::system_clock::time_point Calendar::planActivation(TaskInstance* ins
 {
     // Push event at current time.
     std::chrono::system_clock::time_point activation_time = std::chrono::system_clock::now();
+    emplaceEvent(activation_time, instance_ptr);
+    return activation_time;
+}
+
+std::chrono::system_clock::time_point Calendar::planActivation(std::string date_time, TaskInstance* instance_ptr)
+{
+    std::tm tm = {};
+    // Format: "1 9 2014 12:35:34" -> "month day_of_month year time"
+    strptime(date_time.c_str(), "%m %d %Y %H:%M:%S", &tm);
+    std::chrono::system_clock::time_point activation_time = std::chrono::system_clock::from_time_t(std::mktime(&tm));
+    
     emplaceEvent(activation_time, instance_ptr);
     return activation_time;
 }

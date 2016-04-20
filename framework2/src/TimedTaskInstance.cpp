@@ -8,7 +8,6 @@
 #include "TimedTaskInstance.h"
 
 #include <chrono>
-#include <ctime>
 #include <mutex>
 
 #include "Calendar.h"
@@ -64,19 +63,14 @@ void TimedTaskInstance::planActivationAfterSeconds(int seconds)
 void TimedTaskInstance::planToDateAndTime(std::string date_time)
 {
     try {
-        std::tm tm = {};
-        strptime(date_time.c_str(), "%m %d %Y %H:%M:%S", &tm);
-        std::chrono::system_clock::time_point activation_time = std::chrono::system_clock::from_time_t(std::mktime(&tm));
-        
+        std::chrono::system_clock::time_point activation_time = Calendar::getInstance()->planActivation(date_time, this);
         m_activation_times.insert(activation_time);
     }
     catch (const std::exception& e) {
         logger.LOGFILE("timed_instance", "WARN") << e.what() << std::endl;
     }
     std::tm tm = {};
-
 }
-
 
 void TimedTaskInstance::removeFromCalendar()
 {

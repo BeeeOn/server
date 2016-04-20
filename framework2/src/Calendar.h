@@ -49,6 +49,15 @@ public:
      */
     std::chrono::system_clock::time_point planActivation(TaskInstance* instance_ptr);
     /**
+     * Plans activation of instance on specific date and time.
+     * It must have format: "1 9 2014 12:35:34" -> "month day_of_month year time"
+     * Must be UTC.
+     * @param date_time Formatted string with date and time to activate.
+     * @param instance_ptr Poiter to instance which should be activated.
+     * @return Time of activation.
+     */
+    std::chrono::system_clock::time_point planActivation(std::string date_time, TaskInstance* instance_ptr);
+    /**
      * Stops calendar and saves activation times.
      */
     void stopCalendar();
