@@ -32,8 +32,8 @@ void AliveCheckInstance::run(std::chrono::system_clock::time_point activation_ti
     std::cout << "AliveCheckInstance::run() - enter" << std::endl;
 
     planActivationAfterSeconds(5);
-    
     executeRefresh();
+    
     std::cout << "AliveCheckInstance::run() - leave" << std::endl;
 }
 

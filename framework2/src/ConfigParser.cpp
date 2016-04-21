@@ -13,16 +13,16 @@
 #include "Logger.h"
 
 // Definition of static member variables of struct Config.
-std::string Config::m_tasks_config_path;
-int Config::m_user_server_threads;
-int Config::m_user_server_port;
-int Config::m_gateway_server_threads;
-int Config::m_gateway_server_port;
-int Config::m_database_sessions;
-std::string Config::m_database_connection_string;
-std::string Config::m_log_folder_path;
-std::string Config::m_log_level;
-int Config::m_ada_server_sender_port; 
+std::string Config::tasks_config_path;
+int Config::user_server_threads;
+int Config::user_server_port;
+int Config::gateway_server_threads;
+int Config::gateway_server_port;
+int Config::database_sessions;
+std::string Config::database_connection_string;
+std::string Config::log_folder_path;
+std::string Config::log_level;
+int Config::ada_server_sender_port; 
 
 ConfigParser::ConfigParser()
 {
@@ -67,7 +67,7 @@ void ConfigParser::parseConfigFile(char *config_file_path)
     }
     else {
         // Parse attribute as string.
-        Config::m_tasks_config_path = current_attribute.as_string();
+        Config::tasks_config_path = current_attribute.as_string();
     }
 
     // Find and parse <user_server> tag.
@@ -79,8 +79,8 @@ void ConfigParser::parseConfigFile(char *config_file_path)
         throw std::runtime_error("Parsing of config file was not successful.");
     }
     else {
-        Config::m_user_server_port = current_node.attribute("port").as_int();
-        Config::m_user_server_threads = current_node.attribute("threads").as_int();
+        Config::user_server_port = current_node.attribute("port").as_int();
+        Config::user_server_threads = current_node.attribute("threads").as_int();
     }
 
     // Find and parse <gateway_server> tag.
@@ -92,8 +92,8 @@ void ConfigParser::parseConfigFile(char *config_file_path)
         throw std::runtime_error("Parsing of config file was not successful.");
     }
     else {
-        Config::m_gateway_server_port = current_node.attribute("port").as_int();
-        Config::m_gateway_server_threads = current_node.attribute("threads").as_int();
+        Config::gateway_server_port = current_node.attribute("port").as_int();
+        Config::gateway_server_threads = current_node.attribute("threads").as_int();
     }
 
     // Find and parse <database> tag.
@@ -105,8 +105,8 @@ void ConfigParser::parseConfigFile(char *config_file_path)
         throw std::runtime_error("Parsing of config file was not successful.");
     }
     else {
-        Config::m_database_sessions = current_node.attribute("sessions").as_int();
-        Config::m_database_connection_string = current_node.attribute("connection_string").as_string();
+        Config::database_sessions = current_node.attribute("sessions").as_int();
+        Config::database_connection_string = current_node.attribute("connection_string").as_string();
     }
 
     // Find and parse <logger> tag.
@@ -118,8 +118,8 @@ void ConfigParser::parseConfigFile(char *config_file_path)
         throw std::runtime_error("Parsing of config file was not successful.");
     }
     else {
-        Config::m_log_folder_path = current_node.attribute("log_folder_path").as_string();
-        Config::m_log_level = current_node.attribute("log_level").as_string();
+        Config::log_folder_path = current_node.attribute("log_folder_path").as_string();
+        Config::log_level = current_node.attribute("log_level").as_string();
     }
 
     // Find and parse <tasks_config> tag. 
@@ -131,6 +131,6 @@ void ConfigParser::parseConfigFile(char *config_file_path)
     }
     else {
         // Parse attribute as string.
-        Config::m_ada_server_sender_port = current_attribute.as_int();
+        Config::ada_server_sender_port = current_attribute.as_int();
     }
 }

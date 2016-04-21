@@ -6,6 +6,7 @@
  */
 
 #include <chrono>
+#include <iostream>
 #include <memory>
 #include <stdexcept>
 #include <string>
@@ -42,14 +43,16 @@ void stopBAF(const asio::error_code& error, UserServer *user_server, GatewayServ
     }
 }
 
-void reloadTasks(const asio::error_code& error, asio::signal_set *reload_signal) {
-    
+void reloadTasks(const asio::error_code& error, asio::signal_set *reload_signal)
+{
+    logger.LOGFILE("core", "INFO") << "BAF received SIGUSR1, try to load new tasks from task config file."
+            << std::endl;
     if (!error) {  
         try {
-            TaskLoader::getInstance()->reloadTasksConfigFileAndFindNewTasks();
+            TaskLoader::getInstance()->createNewTasks();
         }
         catch (const std::exception& e) {
-            std::cerr << e.what() << std::endl;
+             logger.LOGFILE("core", "INFO") << e.what() << std::endl;
         }
     }
     // Wait for another SIGUSR1 signal.
@@ -81,26 +84,26 @@ int main(int argc, char** argv)
     }
     
     std::cout << "CONFIG: " << std::endl;
-    std::cout << "tasks_config_path: " << Config::m_tasks_config_path << std::endl;
-    std::cout << "user_server_threads: " << Config::m_user_server_threads << std::endl;
-    std::cout << "user_server_port: " << Config::m_user_server_port << std::endl;
-    std::cout << "gateway_server_threads: " << Config::m_gateway_server_threads << std::endl;
-    std::cout << "gateway_server_port: " << Config::m_gateway_server_port << std::endl;
-    std::cout << "database_sessions: " << Config::m_database_sessions << std::endl;
-    std::cout << "database_connection_string: " << Config::m_database_connection_string << std::endl;
-    std::cout << "log_folder_path: " << Config::m_log_folder_path << std::endl;
-    std::cout << "log_level: " << Config::m_log_level << std::endl;
-    std::cout << "ada_server_sender_port: " << Config::m_ada_server_sender_port << std::endl;
+    std::cout << "tasks_config_path: " << Config::tasks_config_path << std::endl;
+    std::cout << "user_server_threads: " << Config::user_server_threads << std::endl;
+    std::cout << "user_server_port: " << Config::user_server_port << std::endl;
+    std::cout << "gateway_server_threads: " << Config::gateway_server_threads << std::endl;
+    std::cout << "gateway_server_port: " << Config::gateway_server_port << std::endl;
+    std::cout << "database_sessions: " << Config::database_sessions << std::endl;
+    std::cout << "database_connection_string: " << Config::database_connection_string << std::endl;
+    std::cout << "log_folder_path: " << Config::log_folder_path << std::endl;
+    std::cout << "log_level: " << Config::log_level << std::endl;
+    std::cout << "ada_server_sender_port: " << Config::ada_server_sender_port << std::endl;
     
     // Setup Logger.
     try {
-        LogSeverity severity = logger.StringToLevel(Config::m_log_level);
+        LogSeverity severity = logger.StringToLevel(Config::log_level);
         logger.setLogLevel(severity);
 
-        logger.setLogFolderPath(Config::m_log_folder_path);
+        logger.setLogFolderPath(Config::log_folder_path);
 
-        logger.LOGFILE("core", "INFO") << "Logger was set up. Folder path: " << Config::m_log_folder_path
-                                       << ", Log level: " << Config::m_log_level << std::endl; 
+        logger.LOGFILE("core", "INFO") << "Logger was set up. Folder path: " << Config::log_folder_path
+                                       << ", Log level: " << Config::log_level << std::endl; 
     }
     catch (const std::exception& e) {
         std::cerr << e.what();
@@ -108,9 +111,12 @@ int main(int argc, char** argv)
         return 1;
     }
     
+    // Until this point it was not possible to use logger, because it was
+    // not setup with information from config file.
+    
     DatabaseInterface::createInstance();
     try {
-        DatabaseInterface::getInstance()->connectToDatabase(Config::m_database_sessions, Config::m_database_connection_string);
+        DatabaseInterface::getInstance()->connectToDatabase(Config::database_sessions, Config::database_connection_string);
        
     }
     catch (const std::exception& e) {
@@ -131,26 +137,25 @@ int main(int argc, char** argv)
     try {
         // In a future pass path to algorithm config file.
         //manager_loader.loadAlgorithmManagers();
-        TaskLoader::getInstance()->createAllTasks(Config::m_tasks_config_path);
+        TaskLoader::getInstance()->createAllTasks(Config::tasks_config_path);
     }
     catch (const std::exception& e) {
         logger.LOGFILE("core", "FATAL") <<  e.what() << ": Shutting down BAF." << std::endl;
         return 1;
     }
-    
     // Initializes and starts server.
     asio::io_service io_service;
    
     logger.LOGFILE("core", "INFO") << "START SERVERS" << std::endl;
 
     // Create data message interface.
-    GatewayServer gateway_server(io_service, Config::m_gateway_server_port, Config::m_gateway_server_threads);
+    GatewayServer gateway_server(io_service, Config::gateway_server_port, Config::gateway_server_threads);
     gateway_server.startAccept();
     // Start runnig gateway server.
     std::thread gateway_server_thread(&GatewayServer::run, &gateway_server);
     
     // Create user message interface.
-    UserServer user_server(io_service, Config::m_user_server_port, Config::m_user_server_threads);
+    UserServer user_server(io_service, Config::user_server_port, Config::user_server_threads);
     user_server.startAccept();
     
     // Set signal_set to catch termination signals.
@@ -173,6 +178,16 @@ int main(int argc, char** argv)
     // Join all threads.
     gateway_server_thread.join();
     calendar_thread.join();
+    
+    // Close all tasks.
+    try {
+        std::shared_ptr<TaskLoader> tl = std::dynamic_pointer_cast<TaskLoader>(TaskLoader::getInstance());
+        tl->closeAllTasks();
+    }
+    catch (const std::exception& e) {
+        logger.LOGFILE("core", "INFO") << e.what() << std::endl;
+        return 1;
+    }
     
     logger.LOGFILE("core", "INFO") << "BAF was shut down." << std::endl;
     

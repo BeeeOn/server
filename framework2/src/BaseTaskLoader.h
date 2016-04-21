@@ -8,7 +8,6 @@
 #ifndef BASETASKLOADER_H
 #define BASETASKLOADER_H
 
-#include <iostream>
 #include <map>
 #include <memory>
 #include <string>
@@ -27,14 +26,9 @@ public:
      */
     virtual void createAllTasks(std::string tasks_config_file_path) = 0;
     /**
-     * Processes config file and creates new task entries in m_tasks containter (stores info from config file).
-     * @param tasks_config_file_path Path to tasks config file.
+     * Loads tasks which IDs are new in tasks config file
      */
-    virtual void processTasksConfigFileAndStoreInfo(std::string tasks_config_file_path) = 0;
-    /**
-     * Reads again tasks config file and loads tasks with new ids.
-     */
-    virtual void reloadTasksConfigFileAndFindNewTasks() = 0;
+    virtual void createNewTasks() = 0;
     /**
      * Finds task in m_tasks and returns shared pointer to it.
      * @param task_id ID of a task.

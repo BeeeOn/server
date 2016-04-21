@@ -21,7 +21,7 @@ TimedTaskInstance::TimedTaskInstance(int instance_id, std::weak_ptr<TaskManager>
 TimedTaskInstance::~TimedTaskInstance()
 {
     // Before destruction, remove the instance from calendar.
-    removeFromCalendar();
+    //removeFromCalendar();
 }
 
 void TimedTaskInstance::activate(std::chrono::system_clock::time_point activation_time)
@@ -72,7 +72,7 @@ void TimedTaskInstance::planToDateAndTime(std::string date_time)
     std::tm tm = {};
 }
 
-void TimedTaskInstance::removeFromCalendar()
+void TimedTaskInstance::deleteFromControlComponent()
 {
     try {
         Calendar::getInstance()->removeAllActivationsOfInstance(m_activation_times, this);

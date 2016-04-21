@@ -56,7 +56,7 @@ public:
      * Removes all entries from DataMessageRegister of instance.
      * After this instance won't receive any data messages.
      */
-    void removeAllFromDataMessageRegister();
+    void deleteFromControlComponent() override;
     
 private:
     /**

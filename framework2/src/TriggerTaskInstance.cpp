@@ -21,7 +21,7 @@ TriggerTaskInstance::TriggerTaskInstance(int instance_id, std::weak_ptr<TaskMana
 TriggerTaskInstance::~TriggerTaskInstance()
 {
     // Before destruction remove instance from DataMessageRegister.
-    removeAllFromDataMessageRegister();
+    //deleteFromControlComponent();
 }
 
 void TriggerTaskInstance::activate(DataMessage data_message)
@@ -66,7 +66,7 @@ void TriggerTaskInstance::removeEntryFromDataMessageRegiser(long device_euid)
     }
 }
 
-void TriggerTaskInstance::removeAllFromDataMessageRegister()
+void TriggerTaskInstance::deleteFromControlComponent()
 {
     try {
         // Remove all entries of this instance from DataMessageRegister.

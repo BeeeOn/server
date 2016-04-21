@@ -8,12 +8,10 @@
 #include "TaskLoader.h"
 
 #include <sstream>
-#include <iostream>
 
-#include "Logger.h"
 #include "DatabaseInterface.h"
+#include "Logger.h"
 #include "Task.h"
-
 
 TaskLoader::TaskLoader()
 {
@@ -21,12 +19,6 @@ TaskLoader::TaskLoader()
 
 TaskLoader::~TaskLoader()
 {
-    std::cout << "TaskLoader::~TaskLoader - entered." << std::endl;
-    // Close and delete all tasks.
-    //closeAllTasks();
-    std::cout << "size: " << m_tasks.size() << std::endl;
-
-    std::cout << "TaskLoader::~TaskLoader - finished." << std::endl;
 }
 
 void TaskLoader::createInstance()
@@ -40,201 +32,182 @@ void TaskLoader::createInstance()
 
 void TaskLoader::createAllTasks(std::string tasks_config_file_path)
 {
-    try {
-        // Parse config file and create task objects.
-        processTasksConfigFileAndStoreInfo(tasks_config_file_path);
-    }
-    catch (const std::exception& e) {
-        std::cerr << e.what();
-    }
-    
-    for (auto task_ptr : m_tasks) {
-        
-        try {
-            // Open task library.
-            task_ptr.second->openTaskLibrary();
-            // Create task manager.
-            task_ptr.second->createTaskManager();
-            // Reload instances which already exists.
-            std::cout << "reloading instances" << std::endl;
-            
-            //task_ptr.second->m_task_manager->reloadInstances();
-            
-            task_ptr.second->getTaskManagerPtr()->reloadInstances(task_ptr.first);
-        }
-        catch (const std::exception& e) {
-            std::cerr << e.what();
-        }
-    }
-}
-
-void TaskLoader::processTasksConfigFileAndStoreInfo(std::string tasks_config_file_path)
-{
-    logger.LOGFILE("core", "INFO") << "Processing tasks config file." << std::endl;
-    
+    // Store path to config file in member variable.
     m_tasks_config_file_path = tasks_config_file_path;
     
-    unsigned int task_id;
-    unsigned short task_version;
-    std::string task_name;
-    TASK_TYPE task_type;
-    std::string task_path;
-    
-    pugi::xml_document config_doc;
-    
-    pugi::xml_parse_result result = config_doc.load_file(tasks_config_file_path.c_str());
-    
-    if (!result) {
-        std::cerr << "Could not open tasks config file: " << tasks_config_file_path << std::endl;
-        std::cerr << "Error description: " << result.description() << std::endl;
-        std::cerr << "Error offset: " << result.offset << " (error at [..." << (tasks_config_file_path.c_str() + result.offset) << "]" << std::endl;
+    std::vector<TaskInfo> tasks_info;
+    try {
+        // Parse config file and create task objects.
+        std::vector<TaskInfo> tasks_info = parseAllTasks();
+        // Create parsed tasks.
+        createParsedTasks(tasks_info);
         
-        throw std::runtime_error("Parsing of tasks was not successful.");
+        logger.LOGFILE("task_loader", "INFO") << "All tasks were succesfully created. Number of tasks: "
+                << tasks_info.size() << std::endl;
     }
-    
-    pugi::xml_node tasks = config_doc.child("tasks");
-
-    for (pugi::xml_node task = tasks.child("task"); task; task = task.next_sibling("task")) {
-        
-        task_id = task.attribute("id").as_int();
-        task_version = task.attribute("version").as_int();
-        task_name = task.child_value("name");
-        
-        std::string type_str = task.child_value("type");
-        if (type_str == "timed") {
-            task_type = TASK_TYPE::TIMED;
-        }
-        else if (type_str == "trigger") {
-            task_type = TASK_TYPE::TRIGGER;
-        }    
-        else if (type_str == "combined") {
-            task_type = TASK_TYPE::COMBINED;
-        }
-        else {
-            std::stringstream error;
-            error << "Type must be timed, trigger or combined: " << task_name << std::endl;
-            throw std::runtime_error(error.str());
-        }
-
-        task_path = task.child_value("path");
-        
-        std::cout << "-----TASK----- " << std::endl;
-        std::cout << "ID: " << task_id << std::endl;
-        std::cout << "VERSION: " << task_version << std::endl;
-        std::cout << "NAME: " << task_name << std::endl;
-        std::cout << "TYPE: " << (int)task_type << std::endl;
-        std::cout << "PATH: " << task_path << std::endl;
-        
-        try {
-        SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
-        *sql << "INSERT INTO task(task_id, name, version, type) VALUES(:task_id, :name, :version, :type)",
-             soci::use(task_id, "task_id"), soci::use(task_name, "name"), soci::use(task_version, "version"),
-             soci::use(type_str, "type");//, soci::use(task_path, "library_path");
-        }
-         catch (const std::exception& e) {
-            std::cerr << "DATABASE: " <<  e.what() << std::endl;
-            std::cerr << "Task with this ID is probably already in database." << std::endl;
-             
-        }
-        std::cout << "Emplace task: " << task_name << " into BAF." << std::endl;
-        m_tasks.emplace(task_id, std::make_shared<Task>(task_version, task_name, task_type, task_path));
+    catch (const std::exception& e) {
+        logger.LOGFILE("task_loader", "ERROR") << e.what() << std::endl;
     }
 }
 
-void TaskLoader::reloadTasksConfigFileAndFindNewTasks()
+void TaskLoader::createNewTasks()
 {
-    std::vector<int> new_tasks_ids;
+    std::vector<TaskInfo> tasks_info;
+    try {
+        // Parse config file and create task objects which are new.
+        std::vector<TaskInfo> tasks_info = parseAllTasks();
+        
+        if (tasks_info.size() != 0) {
+            // Create parsed tasks.
+            createParsedTasks(tasks_info);
+            logger.LOGFILE("task_loader", "INFO") << "New tasks were succesfully created."
+                    << "Number of new tasks: " << tasks_info.size() << std::endl;
+        }
+        else {
+            logger.LOGFILE("task_loader", "INFO") << "No new tasks in tasks config file." << std::endl;
+        }
+    }
+    catch (const std::exception& e) {
+        logger.LOGFILE("task_loader", "ERROR") << e.what();
+    }
+}
+
+void TaskLoader::createParsedTasks(std::vector<TaskInfo> tasks_info)
+{
+    logger.LOGFILE("task_loader", "INFO") << "Processing tasks config file." << std::endl;
     
-    unsigned int task_id;
-    unsigned short task_version;
-    std::string task_name;
-    TASK_TYPE task_type;
-    std::string task_path;
+    for (auto task_info : tasks_info) {
+        
+        try {
+            // Get type as string.
+            std::string type_str;
+            if (task_info.task_type == TASK_TYPE::TIMED) {
+                type_str = "timed";
+            }
+            else if (task_info.task_type == TASK_TYPE::TRIGGER) {
+                type_str = "trigger";
+            }
+            else {
+                type_str = "combined";
+            } 
+            
+            try {
+                // Insert task information to database.
+                SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
+                *sql << "INSERT INTO task(task_id, name, version, type) VALUES(:task_id, :name, :version, :type)",
+                     soci::use(task_info.task_id, "task_id"),
+                     soci::use(task_info.task_name, "name"),
+                     soci::use(task_info.task_version, "version"),
+                     soci::use(type_str, "type");
+
+                logger.LOGFILE("task_loader", "INFO") << "Task: " << task_info.task_name
+                        << " was inserted to database." << std::endl;
+            }
+            catch (const std::exception& e) {
+                logger.LOGFILE("task_loader", "WARN") << "Task: " << task_info.task_name
+                        << " is already in database: " << e.what() << std::endl;
+            }
+            
+            // Emplace task into BAF.
+            m_tasks.emplace(task_info.task_id, std::make_shared<Task>(task_info.task_version, task_info.task_name,
+                                                                      task_info.task_type, task_info.task_path));
+            
+            logger.LOGFILE("task_loader", "INFO") << "Task: " << task_info.task_name
+                    << " was emplaced into BAF." << std::endl;
+            
+            // Get pointer to iterator to emplaced task.
+            auto task_it = m_tasks.find(task_info.task_id);
+            // Open task library.
+            task_it->second->openTaskLibrary();
+            // Create task manager.
+            task_it->second->createTaskManager();
+            
+            logger.LOGFILE("task_loader", "INFO") << "Manager of task: " << task_info.task_name
+                    << " was created." << std::endl;
+            
+            // Reload instances which already exists.
+            task_it->second->getTaskManagerPtr()->reloadInstances(task_it->first);
+            
+            logger.LOGFILE("task_loader", "INFO") << "Instances of task: " << task_info.task_name
+                    << " were reloaded." << std::endl;
+        }
+        catch (const std::exception& e) {
+            logger.LOGFILE("task_loader", "ERROR") << e.what() << std::endl;
+        }
+    }
+}
+
+std::vector<TaskInfo> TaskLoader::parseAllTasks()
+{
+    logger.LOGFILE("task_loader", "INFO") << "Processing tasks config file." << std::endl;
+    
+    std::vector<TaskInfo> tasks_info;
     
     pugi::xml_document config_doc;
     
     pugi::xml_parse_result result = config_doc.load_file(m_tasks_config_file_path.c_str());
     
     if (!result) {
-        std::cerr << "Could not open tasks config file: " << m_tasks_config_file_path << std::endl;
-        std::cerr << "Error description: " << result.description() << std::endl;
-        std::cerr << "Error offset: " << result.offset << " (error at [..." << (m_tasks_config_file_path.c_str() + result.offset) << "]" << std::endl;
+        logger.LOGFILE("config_parser", "FATAL") << "Could not open baf config file: "
+                << m_tasks_config_file_path << ". Error description: " << result.description()
+                << ", Error offset: " << result.offset << " (error at [..."
+                << (m_tasks_config_file_path.c_str() + result.offset) << "]" << std::endl;
         
-        throw std::runtime_error("Parsing of tasks was not successful.");
+        throw std::runtime_error("Parsing of config file was not successful.");
     }
     
     pugi::xml_node tasks = config_doc.child("tasks");
-
+    
     for (pugi::xml_node task = tasks.child("task"); task; task = task.next_sibling("task")) {
         
-        task_id = task.attribute("id").as_int();
-        
-        if (m_tasks.find(task_id) != m_tasks.end()) {
-            continue;
-        }
-        else {
-            new_tasks_ids.push_back(task_id);
-        }
-        
-        task_version = task.attribute("version").as_int();
-        task_name = task.child_value("name");
-        
-        std::string type_str = task.child_value("type");
-        if (type_str == "timed") {
-            task_type = TASK_TYPE::TIMED;
-        }
-        else if (type_str == "trigger") {
-            task_type = TASK_TYPE::TRIGGER;
-        }    
-        else if (type_str == "combined") {
-            task_type = TASK_TYPE::COMBINED;
-        }
-        else {
-            std::stringstream error;
-            error << "Type must be timed, trigger or combined: " << task_name << std::endl;
-            throw std::runtime_error(error.str());
-        }
+        try {
+            TaskInfo task_info;
 
-        task_path = task.child_value("path");
-        
-        std::cout << "-----TASK----- " << std::endl;
-        std::cout << "ID: " << task_id << std::endl;
-        std::cout << "VERSION: " << task_version << std::endl;
-        std::cout << "NAME: " << task_name << std::endl;
-        std::cout << "TYPE: " << (int)task_type << std::endl;
-        std::cout << "PATH: " << task_path << std::endl;
-        
-        try {
-        SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
-        *sql << "INSERT INTO task(task_id, name, version, type) VALUES(:task_id, :name, :version, :type)",
-             soci::use(task_id, "task_id"), soci::use(task_name, "name"), soci::use(task_version, "version"),
-             soci::use(type_str, "type");//, soci::use(task_path, "library_path");
-        }
-         catch (const std::exception& e) {
-            std::cerr << "DATABASE: " <<  e.what() << std::endl;
-             
-        }
-        std::cout << "Emplace task: " << task_name << " into BAF." << std::endl;
-        m_tasks.emplace(task_id, std::make_shared<Task>(task_version, task_name, task_type, task_path));
-    }
-    
-    if (new_tasks_ids.size() == 0) {
-        throw std::runtime_error("No new tasks in tasks config file.");
-    }
-    
-    for (auto new_task_id : new_tasks_ids) {
-        
-        auto task_ptr = m_tasks.find(new_task_id);
-        try {
-            // Open task library.
-            task_ptr->second->openTaskLibrary();
-            // Create task manager.
-            task_ptr->second->createTaskManager();
-            // Reload instances which already exists.
-            task_ptr->second->getTaskManagerPtr()->reloadInstances(task_ptr->first);
+            task_info.task_id = task.attribute("id").as_int();
+            task_info.task_version = task.attribute("version").as_int();
+            task_info.task_name = task.child_value("name");
+
+            std::string type_str = task.child_value("type");
+            if (type_str == "timed") {
+                task_info.task_type = TASK_TYPE::TIMED;
+            }
+            else if (type_str == "trigger") {
+                task_info.task_type = TASK_TYPE::TRIGGER;
+            }    
+            else if (type_str == "combined") {
+                task_info.task_type = TASK_TYPE::COMBINED;
+            }
+            else {
+                std::stringstream error;
+                error << "Type must be timed, trigger or combined: " << task_info.task_name << std::endl;
+                throw std::runtime_error(error.str());
+            }
+            task_info.task_path = task.child_value("path");
+            
+            // Check if task is not already in BAF.
+            if (m_tasks.find(task_info.task_id) != m_tasks.end()) {
+                continue;
+            }
+            else {
+                tasks_info.push_back(task_info);
+            }
         }
         catch (const std::exception& e) {
-            std::cerr << e.what();
+            logger.LOGFILE("task_loader", "ERROR") <<  e.what() << std::endl;
+        }
+    }
+    return tasks_info;
+}
+
+void TaskLoader::closeAllTasks()
+{
+    for (auto task_ptr : m_tasks) {
+        
+        if (task_ptr.second->getTaskManagerPtr()) {
+            
+            task_ptr.second->getTaskManagerPtr()->deleteAllInstances();
+        }
+        else {
         }
     }
 }

@@ -50,6 +50,10 @@ public:
      */
     void suicideInstance(long instance_id) override;
     /**
+     * Deletes all instances from manager.     
+     */
+    void deleteAllInstances();
+    /**
      * Prints debug information about all instances in manager.
      */
     void debugPrintTaskInstances();

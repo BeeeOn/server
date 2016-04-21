@@ -8,44 +8,57 @@
 #ifndef TASKLOADER_H
 #define TASKLOADER_H
 
-#include <map>
 #include <memory>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 #include "pugixml.hpp"
 
 #include "BaseTaskLoader.h"
 #include "Task.h"
 
+struct TaskInfo {
+    unsigned int task_id;
+    unsigned short task_version;
+    std::string task_name;
+    TASK_TYPE task_type;
+    std::string task_path;
+};
+
 class TaskLoader: public BaseTaskLoader
 {
 public:
-
     /**
      * Destructor of class TaskLoader.
      */
     virtual ~TaskLoader();
     /**
-     * Returns pointer to singleton instance of class DatabaseInterface.
-     * @return Pointer to singleton instance.
+     * Creates singleton instance of class DatabaseInterface.
      */
-    //static std::shared_ptr<TaskLoader> getInstance();
     static void createInstance();
     /**
      * Loads and runs all tasks defined in tasks config file.
      * @param tasks_config_file_path Path to tasks config file.
      */
-    void createAllTasks(std::string tasks_config_file_path);
+    void createAllTasks(std::string tasks_config_file_path) override;
     /**
-     * Processes config file and creates new task entries in m_tasks containter (stores info from config file).
-     * @param tasks_config_file_path Path to tasks config file.
+     * Loads tasks which IDs are new in tasks config file.
      */
-    void processTasksConfigFileAndStoreInfo(std::string tasks_config_file_path);
+    void createNewTasks() override;
     /**
-     * Reads again tasks config file and loads tasks with new ids.
+     * Processes config file and return informations about all tasks.
+     * @return Vector of information about tasks.
      */
-    void reloadTasksConfigFileAndFindNewTasks();
+    std::vector<TaskInfo> parseAllTasks();
+    /**
+     * Inserts tasks into database and system and reloads instances.
+     */
+    void createParsedTasks(std::vector<TaskInfo> tasks_info);
+    /**
+     * Closes all tasks in TaskLoader.
+     */
+    void closeAllTasks();
     
 protected:
     /** 

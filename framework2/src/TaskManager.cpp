@@ -14,6 +14,7 @@
 #include "Logger.h"
 #include "TaskLoader.h"
 #include "TaskInstance.h"
+#include "Calendar.h"
 
 TaskManager::TaskManager()
 {
@@ -51,18 +52,22 @@ void TaskManager::deleteInstance(DeleteMessage delete_message)
             soci::use(delete_message.instance_id, "instance_id");
     
     std::lock_guard<std::mutex> lock(m_task_instances_mx);
+    
+    // Remove all entries of instance from its control component (Calendar or DataMessageRegister).
+    m_task_instances.find(delete_message.instance_id)->second->deleteFromControlComponent();
+    
     m_task_instances.erase(delete_message.instance_id);
     
-    debugPrintTaskInstances(); 
+    //debugPrintTaskInstances(); 
 }
 
 std::vector<long> TaskManager::getInstanceIds(GetInstIdsMessage get_inst_ids_message)
 {
-    std::cout << "TaskManager::getInstanceIds - enter" << std::endl; 
+    // Vector which will be returned.
     std::vector<long> instance_ids;
     
     SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
-    
+    // Using rowset, because we don't know how many rows will be returned.
     soci::rowset<soci::row> rows = (sql->prepare << "SELECT instance.instance_id "
                                     "FROM user_instance INNER JOIN instance "
                                     "ON user_instance.instance_id = instance.instance_id "
@@ -74,12 +79,9 @@ std::vector<long> TaskManager::getInstanceIds(GetInstIdsMessage get_inst_ids_mes
         
         soci::row const& row = *it;
         // For some reason, get<> doesn't support long.
-        // This could become problem on machine where int is smaller than serial in database.
+        // On 64bit Linux it shouldn't be a problem, because int is same size as serial in DB.
         instance_ids.push_back(row.get<int>(0)); 
     }
-    
-    std::cout << "TaskManager::getInstanceIds - leave" << std::endl; 
-    
     return instance_ids;
 }
 
@@ -95,7 +97,6 @@ void TaskManager::debugPrintTaskInstances()
         task_instances += ", ";
         }
     }
-    
     logger.LOGFILE("task_manager", "INFO") << "Task instances: " << task_instances << std::endl;
 }
 
@@ -107,7 +108,17 @@ void TaskManager::suicideInstance(long instance_id)
             soci::use(instance_id, "instance_id");
     
     std::lock_guard<std::mutex> lock(m_task_instances_mx);
+    
+    // Remove all entries of instance from its control component (Calendar or DataMessageRegister).
+    m_task_instances.find(instance_id)->second->deleteFromControlComponent();
+    
     m_task_instances.erase(instance_id);
     
-    debugPrintTaskInstances(); 
+    //debugPrintTaskInstances(); 
+}
+
+void TaskManager::deleteAllInstances()
+{
+    std::lock_guard<std::mutex> lock(m_task_instances_mx);
+    m_task_instances.clear();
 }

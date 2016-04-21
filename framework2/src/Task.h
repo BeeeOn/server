@@ -8,7 +8,6 @@
 #ifndef TASK_H
 #define TASK_H
 
-#include <iostream>
 #include <sstream>
 #include <string>
 #include <stdexcept>

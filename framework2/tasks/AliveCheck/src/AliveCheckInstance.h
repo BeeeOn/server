@@ -26,6 +26,9 @@ public:
     
 private:
     void executeRefresh();
+    
+    
+    bool runned;
 };
 #endif /* ALIVECHECKINSTANCE_H */
 

@@ -42,7 +42,11 @@ public:
      * Getter for instance_id.
      * @return ID of this instance.
      */
-    unsigned int getInstanceId() { return m_instance_id; };    
+    unsigned int getInstanceId() { return m_instance_id; };
+    /**
+     * Removes all entries of instance from control component (Calendar, DataMessageRegister).
+     */
+    virtual void deleteFromControlComponent() = 0;
     /**
      * Suicide function. Deletes instance from baf and from database.
      */

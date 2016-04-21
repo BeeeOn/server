@@ -52,7 +52,7 @@ public:
     /**
      * Removes all timed entries of instance from calendar.
      */
-    void removeFromCalendar();
+    void deleteFromControlComponent() override;
     /**
      * Function which contains all functionality.
      */

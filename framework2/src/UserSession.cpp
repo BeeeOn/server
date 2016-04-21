@@ -8,7 +8,6 @@
 #include "UserSession.h"
 
 #include <stdexcept>
-#include <iostream>
 #include <sstream>
 
 #include "rapidjson/document.h"

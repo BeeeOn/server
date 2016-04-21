@@ -7,7 +7,6 @@
 
 #include "DataMessageParser.h"
 
-#include <iostream>
 #include <utility>
 
 #include "pugixml.hpp"

@@ -17,14 +17,13 @@ Task::Task(unsigned short task_version, std::string task_name, TASK_TYPE task_ty
 
 Task::~Task()
 {
-    // Closes library.
-    closeTaskLibrary();
+    //closeTaskLibrary();
 }
 
 void Task::openTaskLibrary()
 {
     // Open dynamic library by path.
-    m_task_library = dlopen(m_task_path.c_str(), RTLD_NOW);
+    m_task_library = dlopen(m_task_path.c_str(), RTLD_NOW); //RTLD_NOW
     
     if (!m_task_library) {
         // Was not successfuly opened.
@@ -33,7 +32,7 @@ void Task::openTaskLibrary()
         throw std::runtime_error(error.str());
     }
     else {
-        logger.LOGOUT("task_loader", "INFO") << "dlopen(): Dynamic library of task "
+        logger.LOGFILE("task_loader", "INFO") << "dlopen(): Dynamic library of task "
                 << m_task_name << " was successfuly opened." << std::endl;
         // Resets errors in dlfcn library.
         dlerror();
@@ -42,14 +41,16 @@ void Task::openTaskLibrary()
 
 void Task::closeTaskLibrary()
 {
+    
     if (dlclose(m_task_library) != 0) {
-        logger.LOGOUT("task_loader", "ERROR") << "dlclose(): Dynamic library of task "
+        logger.LOGFILE("task_loader", "ERROR") << "dlclose(): Dynamic library of task "
                 << m_task_name << " couldn't be closed." << std::endl;
     }
     else {
-        logger.LOGOUT("task_loader", "INFO") << "dlclose(): Dynamic library of task "
+        logger.LOGFILE("task_loader", "INFO") << "dlclose(): Dynamic library of task "
                 << m_task_name << " was successfuly closed." << std::endl;
     }
+    
 }
 
 void Task::createTaskManager()
