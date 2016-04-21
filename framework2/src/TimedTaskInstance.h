@@ -16,7 +16,7 @@
 
 #include "TaskInstance.h"
 
-class TimedTaskInstance: public TaskInstance
+class TimedTaskInstance: public virtual TaskInstance
 {
 public:
     /**
@@ -52,21 +52,17 @@ public:
     /**
      * Removes all timed entries of instance from calendar.
      */
-    void deleteFromControlComponent() override;
+    virtual void deleteFromControlComponent() override;
     /**
      * Function which contains all functionality.
      */
     virtual void run(std::chrono::system_clock::time_point activation_time) = 0;
     
-private:
+protected:
     /**
      * Times at which was instance planned to calendar.
      */
     std::set<std::chrono::system_clock::time_point> m_activation_times;
-    /**
-     * Mutex which protects instance from being activated more than once.
-     */
-    std::mutex m_activation_mx;
 };
 
 #endif /* TIMEDTASKMINSTANCE_H */

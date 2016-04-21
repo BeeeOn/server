@@ -14,7 +14,7 @@
 #include <mutex>
 #include <set>
 
-class TriggerTaskInstance: public TaskInstance 
+class TriggerTaskInstance: public virtual TaskInstance 
 {
 public:
     /**
@@ -56,17 +56,14 @@ public:
      * Removes all entries from DataMessageRegister of instance.
      * After this instance won't receive any data messages.
      */
-    void deleteFromControlComponent() override;
+    virtual void deleteFromControlComponent() override;
     
-private:
+protected:
     /**
      * Set of all devices from which instance receives data messages. 
      */
     std::set<long /*device_euid*/> m_registered_device_euids;
-    /**
-     * Mutex which protects instance from being activated more than once.
-     */
-    std::mutex m_instance_mx;
+
 };
 
 #endif /* TRIGGERTASKINSTANCE_H */

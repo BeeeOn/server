@@ -38,6 +38,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/BaseTaskLoader.o \
 	${OBJECTDIR}/src/BaseTaskManager.o \
 	${OBJECTDIR}/src/Calendar.o \
+	${OBJECTDIR}/src/CombinedTaskInstance.o \
 	${OBJECTDIR}/src/ConfigParser.o \
 	${OBJECTDIR}/src/DataMessageParser.o \
 	${OBJECTDIR}/src/DataMessageRegister.o \
@@ -100,6 +101,11 @@ ${OBJECTDIR}/src/Calendar.o: src/Calendar.cpp
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/Calendar.o src/Calendar.cpp
+
+${OBJECTDIR}/src/CombinedTaskInstance.o: src/CombinedTaskInstance.cpp 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/CombinedTaskInstance.o src/CombinedTaskInstance.cpp
 
 ${OBJECTDIR}/src/ConfigParser.o: src/ConfigParser.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

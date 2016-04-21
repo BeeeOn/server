@@ -11,6 +11,7 @@
 #include <chrono>
 #include <map>
 #include <memory>
+#include <mutex>
 
 #include "DataMessage.h"
 
@@ -60,8 +61,11 @@ protected:
     /**
      * Pointer to manager of instance.
      */
-    //TaskManager* m_owning_manager;
     std::weak_ptr<TaskManager> m_owning_manager;
+    /**
+     * Mutex which protects instance from being activated more than once.
+     */
+    std::mutex m_activation_mx;
  };
 
 #endif /* TASKINSTANCE_H */

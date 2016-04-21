@@ -26,7 +26,7 @@ TriggerTaskInstance::~TriggerTaskInstance()
 
 void TriggerTaskInstance::activate(DataMessage data_message)
 {    
-    std::lock_guard<std::mutex> lock(m_instance_mx);
+    std::lock_guard<std::mutex> lock(m_activation_mx);
     
     try {
         run(data_message);

@@ -75,6 +75,7 @@ void TimedTaskInstance::planToDateAndTime(std::string date_time)
 void TimedTaskInstance::deleteFromControlComponent()
 {
     try {
+        // Remove all activations of instance from Calendar.
         Calendar::getInstance()->removeAllActivationsOfInstance(m_activation_times, this);
     }
     catch (const std::exception& e) {
