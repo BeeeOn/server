@@ -54,9 +54,19 @@ void TaskManager::deleteInstance(DeleteMessage delete_message)
     std::lock_guard<std::mutex> lock(m_task_instances_mx);
     
     // Remove all entries of instance from its control component (Calendar or DataMessageRegister).
-    m_task_instances.find(delete_message.instance_id)->second->deleteFromControlComponent();
+    auto instance_it = m_task_instances.find(delete_message.instance_id);
+    if (instance_it != m_task_instances.end()) {
+        
+        instance_it->second->deleteFromControlComponent();
+        
+        m_task_instances.erase(delete_message.instance_id);
+    }
+    else {
+        throw std::runtime_error(std::string("Instance with ID: ") + std::to_string(delete_message.instance_id)
+              + std::string(" doesn't exist in system. It could not be deleted."));
+    }    
     
-    m_task_instances.erase(delete_message.instance_id);
+    
     
     //debugPrintTaskInstances(); 
 }
@@ -110,10 +120,17 @@ void TaskManager::suicideInstance(long instance_id)
     std::lock_guard<std::mutex> lock(m_task_instances_mx);
     
     // Remove all entries of instance from its control component (Calendar or DataMessageRegister).
-    m_task_instances.find(instance_id)->second->deleteFromControlComponent();
-    
-    m_task_instances.erase(instance_id);
-    
+    auto instance_it = m_task_instances.find(instance_id);
+    if (instance_it != m_task_instances.end()) {
+        
+        instance_it->second->deleteFromControlComponent();
+        
+        m_task_instances.erase(instance_id);
+    }
+    else {
+        throw std::runtime_error(std::string("Instance with ID: ") + std::to_string(instance_id)
+              + std::string(" doesn't exist in system. It could not be deleted."));
+    }
     //debugPrintTaskInstances(); 
 }
 

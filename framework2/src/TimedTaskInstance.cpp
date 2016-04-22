@@ -13,7 +13,7 @@
 #include "Calendar.h"
 #include "Logger.h"
 
-TimedTaskInstance::TimedTaskInstance(int instance_id, std::weak_ptr<TaskManager> owning_manager):
+TimedTaskInstance::TimedTaskInstance(long instance_id, std::weak_ptr<TaskManager> owning_manager):
     TaskInstance(instance_id, owning_manager)
 {
 }

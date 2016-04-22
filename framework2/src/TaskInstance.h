@@ -25,8 +25,7 @@ public:
      * @param user_id ID of a user creating an instance.
      * @param personal_id ID of instance relative to instances of task already created by user (user can run more instances of one task).
      */
-    //TaskInstance(int instance_id, TaskManager* owning_manager);
-    TaskInstance(int instance_id, std::weak_ptr<TaskManager> owning_manager);
+    TaskInstance(long instance_id, std::weak_ptr<TaskManager> owning_manager);
     /**
      * Destructor of class TaskInstance.
      */
@@ -43,7 +42,7 @@ public:
      * Getter for instance_id.
      * @return ID of this instance.
      */
-    unsigned int getInstanceId() { return m_instance_id; };
+    long getInstanceId() { return m_instance_id; };
     /**
      * Removes all entries of instance from control component (Calendar, DataMessageRegister).
      */
@@ -57,7 +56,7 @@ protected:
     /**
      * Unique ID of this instance in database (and in BAF system -> key value in map of manager)
      */
-    int m_instance_id;
+    long m_instance_id;
     /**
      * Pointer to manager of instance.
      */

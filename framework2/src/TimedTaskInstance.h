@@ -24,7 +24,7 @@ public:
      * @param instance_id ID of instance.
      * @param owning_manager Pointer to manager of Task of this instance.
      */
-    TimedTaskInstance(int instance_id, std::weak_ptr<TaskManager> owning_manager);
+    TimedTaskInstance(long instance_id, std::weak_ptr<TaskManager> owning_manager);
     /**
      * Destructor of class TimedTaskInstance.
      */

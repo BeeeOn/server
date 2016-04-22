@@ -20,7 +20,7 @@
 
 #include "Logger.h"
 
-CombinedTaskInstance::CombinedTaskInstance(int instance_id, std::weak_ptr<TaskManager> owning_manager):
+CombinedTaskInstance::CombinedTaskInstance(long instance_id, std::weak_ptr<TaskManager> owning_manager):
     TaskInstance(instance_id, owning_manager),
     TimedTaskInstance(instance_id, owning_manager),
     TriggerTaskInstance(instance_id, owning_manager)

@@ -86,7 +86,7 @@ protected:
      * Stores all created instances of this task. TaskInstance is only an interface so stored instances 
      * are either derived from TimedTaskInstance, TriggerTaskInstance or CombinedTaskInstance.
      */
-    std::map<unsigned int /* ID of instance */, std::shared_ptr<TaskInstance>> m_task_instances;
+    std::map<long /* ID of instance */, std::shared_ptr<TaskInstance>> m_task_instances;
     /**
      * Mutex to protect m_task_instances container.
      */

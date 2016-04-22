@@ -13,7 +13,7 @@
 #include "DataMessageRegister.h"
 #include "Logger.h"
 
-TriggerTaskInstance::TriggerTaskInstance(int instance_id, std::weak_ptr<TaskManager> owning_manager):
+TriggerTaskInstance::TriggerTaskInstance(long instance_id, std::weak_ptr<TaskManager> owning_manager):
     TaskInstance(instance_id, owning_manager)
 {
 }

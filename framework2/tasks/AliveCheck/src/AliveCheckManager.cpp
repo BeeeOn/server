@@ -110,7 +110,7 @@ std::map<std::string, std::string> AliveCheckManager::getConfiguration(GetConfMe
 
 void AliveCheckManager::reloadInstances(unsigned int task_id)
 {
-    int instance_id;
+    long instance_id;
     
     SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
     

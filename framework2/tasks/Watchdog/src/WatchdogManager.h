@@ -44,19 +44,6 @@ public:
     
     void reloadInstances(unsigned int task_id) override;
 
-    
-    //long createInstance(CreateMessage create_message) override;
-    
-    //void changeInstance(ChangeMessage change_message) override;
-
-    //void deleteInstance(DeleteMessage delete_message) override;
-
-    
-    //void createInstance(unsigned int instance_id, std::map<std::string, std::string> configuration) override;
-
-    //void storeConfiguration(std::map<std::string, std::string> configuration) override;
-
-    //void updateConfiguration(unsigned int instance_id, std::map<std::string, std::string> configuration) override;
 private:
 
     WatchdogConfig parseConfiguration(std::map<std::string, std::string> configuration);

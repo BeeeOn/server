@@ -22,7 +22,7 @@ public:
      * @param instance_id
      * @param owning_manager
      */
-    TriggerTaskInstance(int instance_id, std::weak_ptr<TaskManager> owning_manager);
+    TriggerTaskInstance(long instance_id, std::weak_ptr<TaskManager> owning_manager);
     /**
      * Virtual destructor of class TriggerTaskInstance. Removes all entries
      * with this instance from DataMessageRegister before instance is deleted.

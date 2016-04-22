@@ -17,7 +17,8 @@
 #include "../../../src/DatabaseInterface.h"
 #include "../../../src/TaskManager.h"
 
-AliveCheckInstance::AliveCheckInstance(unsigned int instance_id, std::weak_ptr<TaskManager> owning_manager):
+AliveCheckInstance::AliveCheckInstance(long instance_id, std::weak_ptr<TaskManager> owning_manager):
+    TaskInstance(instance_id, owning_manager),
     TimedTaskInstance(instance_id, owning_manager)
 {
     planActivationNow();

@@ -22,7 +22,8 @@
 
 #include "WatchdogManager.h"
 
-WatchdogInstance::WatchdogInstance(int instance_id, std::weak_ptr<TaskManager> owning_manager, long device_euid):
+WatchdogInstance::WatchdogInstance(long instance_id, std::weak_ptr<TaskManager> owning_manager, long device_euid):
+    TaskInstance(instance_id, owning_manager),    
     TriggerTaskInstance(instance_id, owning_manager),
     m_received_data_once(false)
 {

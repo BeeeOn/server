@@ -140,7 +140,7 @@ std::map<std::string, std::string> WatchdogManager::getConfiguration(GetConfMess
 
 void WatchdogManager::reloadInstances(unsigned int task_id)
 {
-    int instance_id;
+    long instance_id;
     long device_euid;
     
     SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();

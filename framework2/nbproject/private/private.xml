@@ -24,9 +24,9 @@
             <file>file:/home/mrmaidx/server/framework2/src/Calendar.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/Logger.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/Config.h</file>
-            <file>file:/home/mrmaidx/server/framework2/src/CombinedInstance.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/DataMessageRegister.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/GatewayServer.h</file>
+            <file>file:/home/mrmaidx/server/framework2/src/CombinedTaskInstance.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/TimedTaskInstance.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/Task.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/Task.cpp</file>
@@ -40,12 +40,12 @@
             <file>file:/home/mrmaidx/server/framework2/src/BaseTaskLoader.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/DatabaseInterface.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/TaskLoader.h</file>
+            <file>file:/home/mrmaidx/server/framework2/src/CombinedTaskInstance.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/TaskManager.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/framework.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/GatewayServer.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/DatabaseInterface.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/TimedTaskInstance.cpp</file>
-            <file>file:/home/mrmaidx/server/framework2/src/CombinedInstance.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/UserMessages.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/ConfigParser.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/Calendar.h</file>

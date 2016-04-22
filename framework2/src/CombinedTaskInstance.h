@@ -17,7 +17,7 @@ public:
     /**
      * Constructor of class CombinedTaskInstance.
      */
-    CombinedTaskInstance(int instance_id, std::weak_ptr<TaskManager> owning_manager);
+    CombinedTaskInstance(long instance_id, std::weak_ptr<TaskManager> owning_manager);
 
     /**
      * Destructor of class CombinedTaskInstance.

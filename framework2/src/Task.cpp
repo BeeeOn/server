@@ -41,7 +41,6 @@ void Task::openTaskLibrary()
 
 void Task::closeTaskLibrary()
 {
-    
     if (dlclose(m_task_library) != 0) {
         logger.LOGFILE("task_loader", "ERROR") << "dlclose(): Dynamic library of task "
                 << m_task_name << " couldn't be closed." << std::endl;

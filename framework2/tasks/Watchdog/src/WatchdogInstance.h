@@ -25,7 +25,7 @@
 class WatchdogInstance: public TriggerTaskInstance
 {
 public:
-    WatchdogInstance(int instance_id, std::weak_ptr<TaskManager> owning_manager, long device_euid);
+    WatchdogInstance(long instance_id, std::weak_ptr<TaskManager> owning_manager, long device_euid);
     //WatchdogInstance(const WatchdogInstance& orig);
     virtual ~WatchdogInstance();
 
