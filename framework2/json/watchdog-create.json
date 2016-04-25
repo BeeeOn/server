@@ -1,0 +1,12 @@
+{
+    "msg": "create",
+    "user_id": 1,
+    "task_id": 2,
+    "config": {
+        "device_euid": "1",
+        "module_id": "1",
+        "operator": "LT",
+        "value": "25.3",
+        "notification": "Hodnota teploty stoupla nad 25.3 stupne!"
+    }
+}

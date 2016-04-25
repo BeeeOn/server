@@ -1,0 +1,8 @@
+{
+    "msg": "give_perm",
+    "user_id": 6,
+    "task_id": 2,
+    "instance_id": 2,
+    "friend_mail": "name@service.com",
+    "permission": "viewer" 
+}

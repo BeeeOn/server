@@ -190,6 +190,6 @@ int main(int argc, char** argv)
     }
     
     logger.LOGFILE("core", "INFO") << "BAF was shut down." << std::endl;
-    
+
     return 0;
 }

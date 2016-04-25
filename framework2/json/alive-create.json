@@ -1,0 +1,9 @@
+{
+    "msg": "create",
+    "user_id": 6,
+    "task_id": 1,
+    "config": {
+        "gateway_id": "10",
+        "send_notif": "1"
+    }
+}

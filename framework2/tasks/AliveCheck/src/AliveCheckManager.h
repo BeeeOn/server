@@ -17,7 +17,7 @@
 
 struct AliveCheckConfig {
     short send_notif;
-    unsigned int gateway_id;
+    long long gateway_id;
 };
 
 class AliveCheckManager: public TaskManager
@@ -35,13 +35,6 @@ public:
     void reloadInstances(unsigned int task_id) override;
 
     
-    //void createInstance(unsigned int instance_id, std::map<std::string, std::string> configuration) override;
-
-    //void storeConfiguration(std::map<std::string, std::string> configuration) override;
-
-    //void updateConfiguration(unsigned int instance_id, std::map<std::string, std::string> configuration) override;
-
-    //void deleteConfiguration(unsigned int user_id, unsigned short personal_id) override;
     
     ~AliveCheckManager();
 private:

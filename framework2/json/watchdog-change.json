@@ -1,0 +1,10 @@
+{
+    "msg": "change",
+    "user_id": 1,
+    "task_id": 2,
+    "instance_id": 53,
+    "config": {
+        "operator": "GT",
+        "notification": "Zmenena hodnota!"
+    }
+}
