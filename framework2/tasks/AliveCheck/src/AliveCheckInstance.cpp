@@ -42,7 +42,7 @@ void AliveCheckInstance::run(std::chrono::system_clock::time_point activation_ti
     logger.LOGFILE("alive_check", "INFO") << "AliveCheck instance with instance_id: "
             << m_instance_id << " has been run." << std::endl;
     
-    planActivationAfterSeconds(10);
+    planActivationAfterSeconds(30);
     
     runAliveCheck();
 }
@@ -74,8 +74,8 @@ void AliveCheckInstance::runAliveCheck()
             *sql << "UPDATE device SET status = 'unavailable'::device_status WHERE device_euid = :device_euid",
                     soci::use(device_euid, "device_euid");
             
-            if (m_send_notification) {
-                
+            if (m_send_notification == true) {
+                std::cout << "sending" << std::endl;
                 sendUnavailableNotification(now_timestamp, static_cast<long>(device_euid));
                 m_send_notification = false;
             }
@@ -107,8 +107,6 @@ void AliveCheckInstance::sendUnavailableNotification(long now_timestamp, long de
     soci::rowset<soci::row> user_rows = (sql->prepare << "SELECT user_id FROM user_gateway WHERE gateway_id = :gateway_id",
                                     soci::use(m_configuration.gateway_id, "gateway_id"));
 
-    std::cout << "not found " << std::endl;
-    
     for (soci::rowset<soci::row>::const_iterator user_it = user_rows.begin(); user_it != user_rows.end(); ++user_it) {   
         
         std::vector<std::string> sr_ids;
@@ -117,8 +115,6 @@ void AliveCheckInstance::sendUnavailableNotification(long now_timestamp, long de
         // Get all user ids.
         user_id = user_row.get<int>(0);
     
-        std::cout << "USER ID: " << user_id << std::endl;
-        
         // Find all service_reference_ids binded with user.
         soci::rowset<soci::row> sri_rows = (sql->prepare << "SELECT service_reference_id "
                 "FROM push_notification_service WHERE user_id = :user_id", soci::use(user_id, "user_id"));
@@ -132,8 +128,8 @@ void AliveCheckInstance::sendUnavailableNotification(long now_timestamp, long de
         // Get random ID.
         srand(time(NULL));
         // URI notif is just placeholder until AliveCheck notification is specified.
-        std::shared_ptr<UriNotif> notif = std::make_shared<UriNotif>(user_id, rand(), now_timestamp, notification, "");
+        //std::shared_ptr<UriNotif> notif = std::make_shared<UriNotif>(user_id, rand(), now_timestamp, notification, "");
         // Send notifications.
-        notif->sendGcm(&sr_ids);
+        //notif->sendGcm(&sr_ids);
     }
 }
