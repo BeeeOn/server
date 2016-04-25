@@ -20,26 +20,10 @@
 #include "../../../src/Logger.h"
 
 extern "C" {
-    std::shared_ptr<TaskManager> createTaskManager() {
-        
-        std::cout << "Creating AliveCheckManager." << std::endl;
-        //return new AliveCheckManager();
-        std::shared_ptr<TaskManager> manager = std::make_shared<AliveCheckManager>();
-        std::cout << "AliveCheckManager created." << std::endl;
-        return manager;
-    }
-    
-    void deleteTaskManager(TaskManager* manager) {
-        std::cout << "Deleting AliveCheckManager." << std::endl;
-        
-        manager->debugPrintTaskInstances();
-        /*
-        AliveCheckManager* alive_check_manager = reinterpret_cast<AliveCheckManager*>(manager);
-        if (alive_check_manager != nullptr) {
-            delete alive_check_manager;
-        }
-         * */
-        std::cout << "AliveCheckManager deleted." << std::endl;
+    std::shared_ptr<TaskManager> createTaskManager()
+    {
+        logger.LOGFILE("alive_check", "INFO") << "AliveCheck manager was created." << std::endl;
+        return std::make_shared<AliveCheckManager>();
     }
 }
 
@@ -63,9 +47,12 @@ void AliveCheckManager::createConfiguration(long instance_id, std::map<std::stri
             soci::use(parsed_config.gateway_id, "gateway_id"),
             soci::use(parsed_config.send_notif, "send_notif");
     
+    
+    
     // Create new instance of AliveCheck in system.
     std::lock_guard<std::mutex> lock(m_task_instances_mx);
     m_task_instances.emplace(instance_id, std::make_shared<AliveCheckInstance>(instance_id, shared_from_this(), parsed_config));
+    
     
     logger.LOGFILE("alive_check", "INFO") << "New instance of AliveCheck was created: instance_id: "
             << instance_id << std::endl;

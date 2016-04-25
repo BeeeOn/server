@@ -7,6 +7,11 @@
 
 #include "AliveCheckInstance.h"
 
+#include <iostream>
+#include <string>
+#include <memory>
+#include <sstream>
+
 #include <chrono>
 #include <iostream>
 #include <vector>
@@ -50,7 +55,7 @@ void AliveCheckInstance::runAliveCheck()
     long long measured_at;
     int refresh;
 
-    sql = DatabaseInterface::getInstance()->makeNewSession();
+    SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
     soci::rowset<soci::row> rows = (sql->prepare << "SELECT device_euid, measured_at, refresh FROM device WHERE gateway_id = :gateway_id",
                                     soci::use(m_configuration.gateway_id, "gateway_id"));
 
@@ -77,15 +82,15 @@ void AliveCheckInstance::runAliveCheck()
                 m_send_notification = false;
             }
             
-            logger.LOGFILE("alive_check", "INFO") << "Device with device_euid: " << device_euid
-                    << " is unavailable." << std::endl;
+            logger.LOGFILE("alive_check", "INFO") << "Instance: " << m_instance_id << " - Device with device_euid: "
+                    << device_euid << " is unavailable." << std::endl;
         }
         else {
             *sql << "UPDATE device SET status = 'available'::device_status WHERE device_euid = :device_euid",
                     soci::use(device_euid, "device_euid");
             
-            logger.LOGFILE("alive_check", "INFO") << "Device with device_euid: " << device_euid
-                    << " is available." << std::endl;
+            logger.LOGFILE("alive_check", "INFO") << "Instance: " << m_instance_id
+                    << "Device with device_euid: " << device_euid << " is available." << std::endl;
             
             m_send_notification = true;
         }
@@ -99,6 +104,7 @@ void AliveCheckInstance::sendUnavailableNotification(long now_timestamp, long de
     notification += device_euid;
     notification += " je nedostupné.";
     
+    SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
     // Find all users with this gateway.
     soci::rowset<soci::row> user_rows = (sql->prepare << "SELECT user_id FROM user_gateway WHERE gateway_id = :gateway_id",
                                     soci::use(m_configuration.gateway_id, "gateway_id"));
@@ -124,7 +130,7 @@ void AliveCheckInstance::sendUnavailableNotification(long now_timestamp, long de
         // Get random ID.
         srand(time(NULL));
         // URI notif is just placeholder until AliveCheck notification is specified.
-        std::shared_ptr<Notification> notif = std::make_shared<UriNotif>(user_id, rand(), now_timestamp, notification, std::string(""));
+        std::shared_ptr<UriNotif> notif = std::make_shared<UriNotif>(user_id, rand(), now_timestamp, notification, "");
         // Send notifications.
         notif->sendGcm(&sr_ids);
     }

@@ -28,7 +28,7 @@ void Task::openTaskLibrary()
     if (!m_task_library) {
         // Was not successfuly opened.
         std::stringstream error;
-        error << "dlopen(): Failed to open dynamic library of task: " << m_task_name << " . Path: " << m_task_path << std::endl;
+        error << "dlopen(): Failed to open dynamic library of task: " << m_task_name << ". Path: " << m_task_path << std::endl;
         throw std::runtime_error(error.str());
     }
     else {
@@ -79,34 +79,3 @@ void Task::createTaskManager()
         }
     }
 }
-/*
-void Task::deleteTaskManager()
-{
-    // Function pointer.
-    typedef void(*delete_task_manager)(TaskManager*);
-
-    if (!m_task_library) {
-        std::stringstream error;
-        error << "Cannot delete task manager of task: " << m_task_name << ", because it's dynamic library was already closed." << std::endl;
-        throw std::runtime_error(error.str());
-    }
-    else {
-        // Load symbol of createTaskManager function.
-        delete_task_manager deleteTaskManager = (delete_task_manager)dlsym(m_task_library, "deleteTaskManager");
-    
-        const char* dlsym_error = dlerror();
-        if (dlsym_error) {
-            // Loading of function symbol was not successful.
-            std::stringstream error;
-            error << "dlsym(): Cannot load deleteTaskManager function symbol of task: " << m_task_name << std::endl;
-            throw std::runtime_error(error.str());
-        }
-        else {
-            std::cout << "dlsym(): Successfuly loaded deleteTaskManager function symbol of task: " << m_task_name << std::endl;
-            
-            deleteTaskManager(m_task_manager);
-            std::cout << m_task_name << ": Manager was deleted." << std::endl;
-        }
-    }
-}
-*/

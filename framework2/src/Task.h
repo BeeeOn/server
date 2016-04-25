@@ -48,10 +48,6 @@ public:
      * Creates new task manager. Type depends on type in m_task_type.
      */
     void createTaskManager();
-    /**
-     * Destroys this tasks manager.
-     */
-    //void deleteTaskManager();
     
 private:
     /**
