@@ -11,8 +11,8 @@
 #include "XmlHelper.h"
 
 UriNotif::UriNotif(int userId, int notificationId,
-            long time, string message, string uri)
-:AdvertNotification(NAME_URI, userId, notificationId, time), 
+            long time, string message, string uri):
+InfoNotification(NAME_URI, userId, notificationId, time), 
 mMsg(message), mUri(uri)
 {
 }
