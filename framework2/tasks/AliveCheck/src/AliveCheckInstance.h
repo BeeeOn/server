@@ -11,7 +11,6 @@
 #include <chrono>
 #include <memory>
 
-#include "../../../src/DatabaseInterface.h"
 #include "../../../src/TimedTaskInstance.h"
 #include "../../../src/TaskManager.h"
 

@@ -7,22 +7,20 @@
 
 #include "AliveCheckInstance.h"
 
-#include <iostream>
-#include <string>
-#include <memory>
-#include <sstream>
-
 #include <chrono>
 #include <iostream>
 #include <vector>
 #include <ctime>
+#include <string>
 #include <memory>
 
 #include <soci.h>
 
+#include "../../../../Notificator/UriNotif.h"
+
+#include "../../../src/DatabaseInterface.h"
 #include "../../../src/Logger.h"
 #include "../../../src/TaskManager.h"
-#include "../../../../Notificator/UriNotif.h"
 
 AliveCheckInstance::AliveCheckInstance(long instance_id,
                                        std::weak_ptr<TaskManager> owning_manager,
@@ -44,7 +42,7 @@ void AliveCheckInstance::run(std::chrono::system_clock::time_point activation_ti
     logger.LOGFILE("alive_check", "INFO") << "AliveCheck instance with instance_id: "
             << m_instance_id << " has been run." << std::endl;
     
-    planActivationAfterSeconds(30);
+    planActivationAfterSeconds(10);
     
     runAliveCheck();
 }
@@ -90,7 +88,7 @@ void AliveCheckInstance::runAliveCheck()
                     soci::use(device_euid, "device_euid");
             
             logger.LOGFILE("alive_check", "INFO") << "Instance: " << m_instance_id
-                    << "Device with device_euid: " << device_euid << " is available." << std::endl;
+                    << " - Device with device_euid: " << device_euid << " is available." << std::endl;
             
             m_send_notification = true;
         }
@@ -109,6 +107,8 @@ void AliveCheckInstance::sendUnavailableNotification(long now_timestamp, long de
     soci::rowset<soci::row> user_rows = (sql->prepare << "SELECT user_id FROM user_gateway WHERE gateway_id = :gateway_id",
                                     soci::use(m_configuration.gateway_id, "gateway_id"));
 
+    std::cout << "not found " << std::endl;
+    
     for (soci::rowset<soci::row>::const_iterator user_it = user_rows.begin(); user_it != user_rows.end(); ++user_it) {   
         
         std::vector<std::string> sr_ids;
@@ -117,13 +117,15 @@ void AliveCheckInstance::sendUnavailableNotification(long now_timestamp, long de
         // Get all user ids.
         user_id = user_row.get<int>(0);
     
+        std::cout << "USER ID: " << user_id << std::endl;
+        
         // Find all service_reference_ids binded with user.
         soci::rowset<soci::row> sri_rows = (sql->prepare << "SELECT service_reference_id "
                 "FROM push_notification_service WHERE user_id = :user_id", soci::use(user_id, "user_id"));
     
         for (soci::rowset<soci::row>::const_iterator sri_it = sri_rows.begin(); sri_it != sri_rows.end(); ++sri_it) {   
     
-            soci::row const& sri_row = *user_it;
+            soci::row const& sri_row = *sri_it;
             // Get all service_reference_ids.
             sr_ids.push_back(sri_row.get<std::string>(0));
         }

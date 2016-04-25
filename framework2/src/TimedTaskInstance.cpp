@@ -34,7 +34,7 @@ void TimedTaskInstance::activate(std::chrono::system_clock::time_point activatio
         run(activation_time);
     }
     catch (const std::exception& e) {
-        logger.LOGFILE("trigger_instance", "ERROR") << e.what() << std::endl;
+        logger.LOGFILE("timed_instance", "ERROR") << e.what() << std::endl;
     }
 }
 
