@@ -7,14 +7,14 @@
 #ifndef URINOTIFICATION_H
 #define	URINOTIFICATION_H
 
-#include "AdvertNotification.h"
+#include "InfoNotification.h"
 #include <string>
 #include "Utils.h"
 #include <sstream>
 
-class UriNotif : public AdvertNotification {
+class UriNotif : public InfoNotification {
 public:
-    UriNotif(int userId, int notificationId,
+    UriNotif(int userId, int  notificationId,
             long time, string message, string uri);
     ~UriNotif();
 protected:

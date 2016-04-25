@@ -53,10 +53,11 @@ int main()
     int user_id = 9509;
     int notif_id = 84564;
     long timestamp = 1458737981;
+    
     std::string message = "Testovaci URI notifikace.";
-    std::string uri = "www.google.cz";
+    std::string uri = "http://www.google.cz";
 
-    Notification *info = new TestNotif(user_id, notif_id, timestamp, message);
+    Notification *info = new UriNotif(user_id, notif_id, timestamp, message, uri);
 
     std::vector<std::string> non_valid_ids;
     non_valid_ids = info->sendGcm(&service_reference_ids);
@@ -102,7 +103,7 @@ int main()
       int level = notif->getLevel();
       string name = notif->getName();
       cout << notif->getDbXml() << endl;
-    }
+   
 
  
     Notification *notif2 = new AchievementNotif(
