@@ -27,8 +27,7 @@ AliveCheckInstance::AliveCheckInstance(long instance_id,
                                        AliveCheckConfig parsed_config):
     TaskInstance(instance_id, owning_manager),
     TimedTaskInstance(instance_id, owning_manager),
-    m_configuration(parsed_config),
-    m_send_notification(true)
+    m_configuration(parsed_config)
 {
     planActivationNow();
 }
@@ -42,7 +41,7 @@ void AliveCheckInstance::run(std::chrono::system_clock::time_point activation_ti
     logger.LOGFILE("alive_check", "INFO") << "AliveCheck instance with instance_id: "
             << m_instance_id << " has been run." << std::endl;
     
-    planActivationAfterSeconds(30);
+    planActivationAfterSeconds(5);
     
     runAliveCheck();
 }
@@ -68,29 +67,34 @@ void AliveCheckInstance::runAliveCheck()
         // Get timestamp of current time.
         long now_timestamp = std::chrono::seconds(std::time(NULL)).count();
         
+        std::string status;
+        *sql << "SELECT status FROM device WHERE device_euid = :device_euid",
+                soci::into(status),
+                soci::use(device_euid, "device_euid");
+        
         // Three times refresh was chosen as the best value to test device availability.
         if ((measured_at + (3 * refresh)) < now_timestamp) {
             
-            *sql << "UPDATE device SET status = 'unavailable'::device_status WHERE device_euid = :device_euid",
-                    soci::use(device_euid, "device_euid");
-            
-            if (m_send_notification == true) {
-                std::cout << "sending" << std::endl;
+            if (status != "unavailable") {
+               
+                *sql << "UPDATE device SET status = 'unavailable'::device_status WHERE device_euid = :device_euid",
+                        soci::use(device_euid, "device_euid");
+
+                // Send notification
                 sendUnavailableNotification(now_timestamp, static_cast<long>(device_euid));
-                m_send_notification = false;
             }
             
             logger.LOGFILE("alive_check", "INFO") << "Instance: " << m_instance_id << " - Device with device_euid: "
                     << device_euid << " is unavailable." << std::endl;
         }
         else {
-            *sql << "UPDATE device SET status = 'available'::device_status WHERE device_euid = :device_euid",
+            if (status != "available") {
+                
+                *sql << "UPDATE device SET status = 'available'::device_status WHERE device_euid = :device_euid",
                     soci::use(device_euid, "device_euid");
-            
+            }
             logger.LOGFILE("alive_check", "INFO") << "Instance: " << m_instance_id
                     << " - Device with device_euid: " << device_euid << " is available." << std::endl;
-            
-            m_send_notification = true;
         }
     }
 }
@@ -98,8 +102,8 @@ void AliveCheckInstance::runAliveCheck()
 void AliveCheckInstance::sendUnavailableNotification(long now_timestamp, long device_euid)
 {
     int user_id;
-    std::string notification("Zařízení s EUID: ");
-    notification += device_euid;
+    std::string notification("Zařízení s euid: ");
+    notification += std::to_string(device_euid);
     notification += " je nedostupné.";
     
     SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();

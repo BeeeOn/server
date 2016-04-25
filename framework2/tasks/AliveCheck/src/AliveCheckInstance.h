@@ -42,11 +42,6 @@ public:
     
 private:
     /**
-     * Prevents instance to send more than
-     * one notification when device is unavailable.
-     */
-    bool m_send_notification;
-    /**
      * Contains main logic of task.
      */
     void runAliveCheck();
