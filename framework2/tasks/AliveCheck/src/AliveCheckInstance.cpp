@@ -41,7 +41,7 @@ void AliveCheckInstance::run(std::chrono::system_clock::time_point activation_ti
     logger.LOGFILE("alive_check", "INFO") << "AliveCheck instance with instance_id: "
             << m_instance_id << " has been run." << std::endl;
     
-    planActivationAfterSeconds(5);
+    planActivationAfterSeconds(30);
     
     runAliveCheck();
 }
