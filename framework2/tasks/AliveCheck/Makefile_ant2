@@ -5,8 +5,8 @@ OBJ_FILES := $(addprefix obj/, $(notdir $(CPP_FILES:.cpp=.o)))
 CC_FLAGS := -std=c++11 -fPIC
 I_DIRS := -I../lib -I/usr/include/soci -I/usr/pgsql-9.5/include
 
-LD_FLAGS := -fPIC -shared -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -lpq
-L_DIRS := -L/usr/local/lib64 -L/usr/pgsql-9.5/lib
+LD_FLAGS := -fPIC -shared -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -lpq -lcurl -lnotif
+L_DIRS := -L/usr/local/lib64 -L/usr/pgsql-9.5/lib -L../../../Notificator
 
 .PHONY: all clean
 

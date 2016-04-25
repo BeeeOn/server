@@ -49,8 +49,9 @@
           <linkerAddLib>
             <pElem>/usr/local/lib64</pElem>
             <pElem>/usr/lib/postgresql/9.3/lib</pElem>
+            <pElem>../../../Notificator</pElem>
           </linkerAddLib>
-          <commandLine>-lsoci_core -lsoci_empty -lsoci_postgresql -ldl -lpq</commandLine>
+          <commandLine>-lsoci_core -lsoci_empty -lsoci_postgresql -ldl -lpq -lnotif -lcurl</commandLine>
         </linkerTool>
       </compileType>
       <item path="src/AliveCheckInstance.cpp" ex="false" tool="1" flavor2="0">

@@ -12,6 +12,7 @@
 #include <string>
 #include <memory>
 
+#include "../../../src/DatabaseInterface.h"
 #include "../../../src/TimedTaskInstance.h"
 #include "../../../src/TaskManager.h"
 #include "AliveCheckManager.h"
@@ -35,8 +36,13 @@ public:
     
 private:
     
+    bool m_send_notification;
+    
+    SessionSharedPtr sql;
+    
     void runAliveCheck();
     
+    void sendUnavailableNotification(long now_timestamp, long device_euid);
     
 };
 #endif /* ALIVECHECKINSTANCE_H */
