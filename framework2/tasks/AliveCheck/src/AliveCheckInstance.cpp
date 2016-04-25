@@ -132,8 +132,8 @@ void AliveCheckInstance::sendUnavailableNotification(long now_timestamp, long de
         // Get random ID.
         srand(time(NULL));
         // URI notif is just placeholder until AliveCheck notification is specified.
-        //std::shared_ptr<UriNotif> notif = std::make_shared<UriNotif>(user_id, rand(), now_timestamp, notification, "");
+        std::shared_ptr<UriNotif> notif = std::make_shared<UriNotif>(user_id, rand(), now_timestamp, notification, "");
         // Send notifications.
-        //notif->sendGcm(&sr_ids);
+        notif->sendGcm(&sr_ids);
     }
 }
