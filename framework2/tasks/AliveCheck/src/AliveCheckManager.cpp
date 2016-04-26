@@ -176,7 +176,7 @@ AliveCheckConfig AliveCheckManager::parseConfiguration(std::map<std::string, std
         throw std::runtime_error("Could not parse received configuration.");
     }
     else {
-        parsed_config.send_notif = std::stoll(send_notif_it->second);
+        parsed_config.send_notif = std::stoi(send_notif_it->second);
     }
     return parsed_config;
 }

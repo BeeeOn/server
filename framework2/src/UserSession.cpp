@@ -62,9 +62,20 @@ void UserSession::processMessage(std::string message)
                 std::shared_ptr<Task> task = TaskLoader::getInstance()->findTask(create_message.task_id);
                 // Create instance in database.
                 long instance_id = task->getTaskManagerPtr()->createInstance(create_message);
-                // Create instance in BAF and store configuration.
-                task->getTaskManagerPtr()->createConfiguration(instance_id, create_message.config);
-
+                
+                try {
+                    // Create instance in BAF and store configuration.
+                    task->getTaskManagerPtr()->createConfiguration(instance_id, create_message.config);
+                } 
+                catch (const std::exception& e) {
+                    // If creating of configuration was unsuccessful (most common are wrong types).
+                    // Delete already created entry from database.
+                    SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
+                    *sql << "DELETE FROM instance WHERE instance_id = :instance_id",
+                    soci::use(instance_id, "instance_id");
+                    
+                    throw std::runtime_error(e.what());
+                }
                 // Construct message to send back to client.
                 response.AddMember("error", false, response.GetAllocator());
                 response.AddMember("instance_id", instance_id, response.GetAllocator());

@@ -81,9 +81,10 @@ void AliveCheckInstance::runAliveCheck()
                         soci::use(device_euid, "device_euid");
 
                 // Send notification
-                sendUnavailableNotification(now_timestamp, static_cast<long>(device_euid));
+                if (m_configuration.send_notif == 1) {
+                    sendUnavailableNotification(now_timestamp, static_cast<long>(device_euid));
+                }
             }
-            
             logger.LOGFILE("alive_check", "INFO") << "Instance: " << m_instance_id << " - Device with device_euid: "
                     << device_euid << " is unavailable." << std::endl;
         }
@@ -108,6 +109,8 @@ void AliveCheckInstance::sendUnavailableNotification(long now_timestamp, long de
     
     SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
     // Find all users with this gateway.
+    // In the future when instance sharing is available this should be only
+    // users with task instance shared. For now it sends notification to all users with gateway.
     soci::rowset<soci::row> user_rows = (sql->prepare << "SELECT user_id FROM user_gateway WHERE gateway_id = :gateway_id",
                                     soci::use(m_configuration.gateway_id, "gateway_id"));
 
