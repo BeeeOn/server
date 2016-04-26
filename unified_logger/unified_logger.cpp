@@ -12,7 +12,8 @@ Unified_logger::Unified_logger(std::string logger_id, std::string log_folder_pat
     _logger_id(logger_id),
     _minimum_log_level(default_log_level)
 {
-    _logfile.open( getLogFilePath(), std::ios::app);
+    _log_file_path = getLogFilePath();
+    _logfile.open( _log_file_path, std::ios::app);
     _filtered.open( "/dev/null", std::ios::app);
 }
 
@@ -36,7 +37,8 @@ void Unified_logger::setLogFolderPath(std::string folder_path)
 {
     _log_folder_path = folder_path;
     _logfile.close();
-    _logfile.open( getLogFilePath(), std::ios::app);
+    _log_file_path = getLogFilePath();
+    _logfile.open( _log_file_path, std::ios::app);
 }
 
 /**
@@ -154,6 +156,13 @@ locked_stream Unified_logger::out(std::string location, int line, std::string ta
     if (StringToLevel(level) < _minimum_log_level)
     {
         return locked_stream(_filtered, getTagHierarchy(tag), level, location, line);
+    }
+    std::string logpath =  getLogFilePath();
+    if (logpath != _log_file_path)
+    {
+        _log_file_path = logpath;
+        _logfile.close();
+        _logfile.open(_log_file_path , std::ios::app);
     }
     return locked_stream(std::cout, getTagHierarchy(tag), level, location, line);
 }

@@ -73,6 +73,8 @@ private:
     //Paths to logs
     std::string _log_folder_path;
 
+    std::string _log_file_path;
+
     //logfile for output to file    
     std::ofstream _logfile;
 
