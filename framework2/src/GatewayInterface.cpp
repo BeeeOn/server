@@ -14,7 +14,6 @@
 #include "pugixml.hpp"
 
 #include "Config.h"
-#include "Logger.h"
 
 GatewayInterface::GatewayInterface():
     m_io_service(),
@@ -35,17 +34,22 @@ void GatewayInterface::sendSetState(long long gateway_id, long device_euid, int 
     request_node.set_name("request");
     request_node.append_attribute("type") = "switch";
 
-    pugi::xml_node adapter_node = request_node.append_child();
-    adapter_node.set_name("sensor");
+    pugi::xml_node sensor_node = request_node.append_child();
+    sensor_node.set_name("sensor");
     // Cast is needed, because append_attribute doesn't support long for some reason.
-    adapter_node.append_attribute("id") = static_cast<long long>(device_euid);
+    sensor_node.append_attribute("id") = static_cast<long long>(device_euid);
     // This attribute in protocol is outdated. It is used to describe device_euid.
-    adapter_node.append_attribute("type") = module_id;
-    adapter_node.append_attribute("onAdapter") = gateway_id;
+    sensor_node.append_attribute("type") = module_id;
+    sensor_node.append_attribute("onAdapter") = gateway_id;
+
+    // Append value.
+    pugi::xml_node value_node = sensor_node.append_child();
+    value_node.set_name("value");
+    value_node.append_child(pugi::node_pcdata).set_value(std::to_string(new_value).c_str());
 
     // Convert DOM to XML into stream.
     std::ostringstream stream;
-    doc.save(stream);
+    doc.save(stream, "\t", pugi::format_raw | pugi::format_no_declaration);
     
     // Send request to ada_server_sender.
     send(stream.str());
@@ -69,11 +73,11 @@ bool GatewayInterface::pingGateway(long long gateway_id)
 
     pugi::xml_node adapter_node = request_node.append_child();
     adapter_node.set_name("adapter");
-    adapter_node.append_attribute("id") = static_cast<long long>(gateway_id);
+    adapter_node.append_attribute("id") = gateway_id;
 
     // Convert DOM to XML into stream.
     std::ostringstream stream;
-    doc.save(stream);
+    doc.save(stream, "\t", pugi::format_raw | pugi::format_no_declaration);
     
     // Send request to ada_server_sender.
     send(stream.str());
@@ -93,8 +97,8 @@ void GatewayInterface::connect()
 {
     // Connect to localhost and port of ada_server_sender.
     std::string localhost("127.0.0.1");
-    std::string ada_server_sender_port = std::to_string(Config::ada_server_sender_port);
-    
+    std::string ada_server_sender_port = std::to_string(7081);   
+ 
     asio::ip::tcp::resolver::query query(localhost, ada_server_sender_port);
 
     asio::connect(m_socket, m_resolver.resolve(query));
@@ -118,6 +122,7 @@ bool GatewayInterface::requestSuccessful()
                          std::istreambuf_iterator<char>()};
 
     int response_code = parseResponse(response);
+    // If response code is 0 request was correctly received, otherwise it's an error.
     if (response_code == 0) {
         return true;
     }
