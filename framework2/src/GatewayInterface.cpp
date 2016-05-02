@@ -9,96 +9,143 @@
 
 #include <sstream>
 #include <string>
+#include <stdexcept>
 
 #include "pugixml.hpp"
 
+#include "Config.h"
+#include "Logger.h"
 
 GatewayInterface::GatewayInterface():
     m_io_service(),
-    m_socket(m_io_service)
+    m_socket(m_io_service),
+    m_resolver(m_io_service)
 {
-    // Connect to ada_server_sender.
-    connect();
-}
-
-int GatewayInterface::sendPingGateway(long long gateway_id)
-{
-    // Create message to send.
-    pugi::xml_document doc;
-    
-    pugi::xml_node request_node = doc.append_child();
-    request_node.set_name("request");
-    request_node.append_attribute("type") = "ping";
-    
-    pugi::xml_node adapter_node = request_node.append_child();
-    adapter_node.set_name("adapter");
-    adapter_node.append_attribute("id") = gateway_id;
-     
-    std::ostringstream stream;
-    doc.save(stream);
-    
-    // Receive response.
-    receive();
-    
-    // Here will be parsing of response when it's
-    // implemented in the rest of the BeeeOn system.
-
-    // Clear response string.
-    m_response.clear();
-    
-    return 1;
 }
 
 void GatewayInterface::sendSetState(long long gateway_id, long device_euid, int module_id, int new_value)
-{
-    // Create message to send.
+{    
+    // Connect to ada_server_sender.
+    connect();
+
+    // Create switch message from ui_server-ada_server protocol.
     pugi::xml_document doc;
-    
+
     pugi::xml_node request_node = doc.append_child();
     request_node.set_name("request");
     request_node.append_attribute("type") = "switch";
-    
+
     pugi::xml_node adapter_node = request_node.append_child();
     adapter_node.set_name("sensor");
-    adapter_node.append_attribute("id") = static_cast<int>(device_euid);
+    // Cast is needed, because append_attribute doesn't support long for some reason.
+    adapter_node.append_attribute("id") = static_cast<long long>(device_euid);
     // This attribute in protocol is outdated. It is used to describe device_euid.
     adapter_node.append_attribute("type") = module_id;
     adapter_node.append_attribute("onAdapter") = gateway_id;
-    
+
+    // Convert DOM to XML into stream.
     std::ostringstream stream;
     doc.save(stream);
     
-    // Send message.
+    // Send request to ada_server_sender.
     send(stream.str());
+    // Receive and process response.
+    if (!requestSuccessful()) {
+        throw std::runtime_error("Request to set state of actuator was unsuccessful.");
+    }
+}
+
+bool GatewayInterface::pingGateway(long long gateway_id)
+{
+    // Connect to ada_server_sender.
+    connect();
+
+    // Create switch message from ui_server-ada_server protocol.
+    pugi::xml_document doc;
+
+    pugi::xml_node request_node = doc.append_child();
+    request_node.set_name("request");
+    request_node.append_attribute("type") = "ping";
+
+    pugi::xml_node adapter_node = request_node.append_child();
+    adapter_node.set_name("adapter");
+    adapter_node.append_attribute("id") = static_cast<long long>(gateway_id);
+
+    // Convert DOM to XML into stream.
+    std::ostringstream stream;
+    doc.save(stream);
+    
+    // Send request to ada_server_sender.
+    send(stream.str());
+    // Receive and process response.
+    
+    if (!requestSuccessful()) {
+        // Gateway is not available.
+        return false;
+    }
+    else {
+        // Gateway is not available.
+        return true;
+    }
 }
 
 void GatewayInterface::connect()
 {
     // Connect to localhost and port of ada_server_sender.
-    m_socket.connect(asio::ip::tcp::endpoint(asio::ip::address::from_string("127.0.0.1"), 7081));
+    std::string localhost("127.0.0.1");
+    std::string ada_server_sender_port = std::to_string(Config::ada_server_sender_port);
+    
+    asio::ip::tcp::resolver::query query(localhost, ada_server_sender_port);
+
+    asio::connect(m_socket, m_resolver.resolve(query));
 }
 
 void GatewayInterface::send(std::string request)
 {
-    // Convert std::string to stream.
-    asio::streambuf request_streambuf;
-    std::ostream request_stream(&request_streambuf);
-    request_stream << request;
-
-    // Send the message.
-    asio::write(m_socket, request_streambuf);
+    // Send the request to ada_server_sender.
+    asio::write(m_socket, asio::buffer(request, request.length()));
 }
 
-void GatewayInterface::receive()
+bool GatewayInterface::requestSuccessful()
 {
-    asio::streambuf response;
-    asio::read_until(m_socket, response, "</reply>");
+    asio::streambuf response_buffer;
+    asio::read_until(m_socket, response_buffer, "</reply>");
 
     // Convert received message to std::string.
-    std::iostream response_stream(&response);
+    std::iostream response_stream(&response_buffer);
 
-    std::string content{ std::istreambuf_iterator<char>(response_stream),
-                     std::istreambuf_iterator<char>() };
-    
-    m_response = content;
+    std::string response{std::istreambuf_iterator<char>(response_stream),
+                         std::istreambuf_iterator<char>()};
+
+    int response_code = parseResponse(response);
+    if (response_code == 0) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+int GatewayInterface::parseResponse(std::string response)
+{
+    // Parse received message.
+    pugi::xml_document doc;
+                      
+    pugi::xml_parse_result result = doc.load_buffer(response.c_str(), response.size());
+
+    if (!result) {
+        throw std::runtime_error("Response received from ada_server_sender was not correctly parsed.");
+    }
+    // Find <reply> tag.
+    pugi::xml_node reply_node = doc.child("reply");
+    if (reply_node == NULL) {
+        throw std::runtime_error("Response received from ada_server_sender doesn't contain reply tag.");
+    }
+    // Find errorCode attribute.
+    pugi::xml_attribute reply_code = reply_node.attribute("errorCode");
+    if (reply_code == NULL) {
+        throw std::runtime_error("Response received from ada_server_sender doesn't contain attribute errorCode.");
+    }
+    // Return parsed response code.
+    return reply_code.as_int();
 }

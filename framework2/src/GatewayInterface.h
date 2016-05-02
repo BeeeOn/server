@@ -21,21 +21,21 @@ public:
     GatewayInterface();
     /**
      * Sends message to ada_server_sender to change state of actuator.
-     * @param gateway_id ID of gateway on which actuator is.
-     * @param device_euid EUID of device on which actuator is.
+     * @param gateway_id ID of gateway on which is actuator present.
+     * @param device_euid EUID of device on which is actuator present.
      * @param module_id ID of actuator modul.
      * @param new_value New value to set on actuator.
      */
     void sendSetState(long long gateway_id, long device_euid, int module_id, int new_value);
     
-private:
     /**
-     * Sends message to ada_server_sender to ping a gateway.
-     * Functionality in BeeeOn is not ready yet, so it doesn't work yet.
-     * @param gateway_id ID of gateway to ping.
-     * @return Value about a state of gateway.
+     * Pings gateway.
+     * @param gateway_id ID of gateway on which is actuator present.
+     * @return If gateway is available returns true, otherwise false.
      */
-    int sendPingGateway(long long gateway_id);
+    bool pingGateway(long long gateway_id);
+    
+private:
     /**
      * Connects to ada_server_sender.
      */
@@ -46,10 +46,16 @@ private:
      */
     void send(std::string request);
     /**
-     * Receives message from ada_server_sender.
-     * Stores it in m_response.
+     * Receives message from ada_server_sender and processes it.
+     * @return If request was successfull true, else false.
      */
-    void receive();
+    bool requestSuccessful();
+    /**
+     * Parses response from ada_server_sender.
+     * @param response Received response.
+     * @return Code from response.
+     */
+    int parseResponse(std::string response);
     /**
      * Input output service.
      */
@@ -58,6 +64,11 @@ private:
      * Socket for connection.
      */
     asio::ip::tcp::socket m_socket;
+    /**
+     * Resolver for resolving of host and port.
+     */
+    asio::ip::tcp::resolver m_resolver;
+
     /**
      * Variable to store response from ada_server_sender.
      */
