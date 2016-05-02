@@ -1,28 +1,30 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /* 
  * File:   WatchdogInstance.cpp
- * Author: mrmaidx
- * 
- * Created on 29. března 2016, 12:52
+ * Author: Martin Novak, xnovak1c@stud.fit.vutbr.cz
+ *
+ * Created on 29. March 2016
  */
 
 #include "WatchdogInstance.h"
 
 #include <iostream>
+#include <chrono>
 #include <stdexcept>
 #include <string>
 
 #include <soci.h>
+
+#include "../../../../Notificator/UriNotif.h"
+
 #include "../../../src/DatabaseInterface.h"
+#include "../../../src/GatewayInterface.h"
+#include "../../../src/Logger.h"
 
 #include "WatchdogManager.h"
 
-WatchdogInstance::WatchdogInstance(long instance_id, std::weak_ptr<TaskManager> owning_manager, long device_euid):
+WatchdogInstance::WatchdogInstance(long instance_id,
+                                   std::weak_ptr<TaskManager> owning_manager,
+                                   long device_euid):
     TaskInstance(instance_id, owning_manager),    
     TriggerTaskInstance(instance_id, owning_manager),
     m_received_data_once(false)
@@ -35,92 +37,154 @@ WatchdogInstance::~WatchdogInstance()
 }
 
 void WatchdogInstance::run(DataMessage data_message)
-{   
-    
+{
     SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
     if (!m_received_data_once) {
-        // This instance haven't received any data messege before.
+        // Instance haven't received any data messege before, so it will just store it.
+        
         int module_id;
-        
         *sql << "SELECT module_id FROM task_watchdog WHERE instance_id = :instance_id",
-                soci::into(module_id), soci::use(m_instance_id, "instance_id");
+                soci::use(m_instance_id, "instance_id"), soci::into(module_id);
         
-        auto module = data_message.modules.find(module_id);
-        if (module == data_message.modules.end()) {
-            
-            std::cerr << "Wanted module_id: " << module_id << " was not found in received message." << std::endl;
-            throw std::runtime_error("Run of watchdog was not successful.");      
-        }
-        else {
-            m_last_received_value = module->second.second;
-            m_received_data_once = true;
-            
-            std::cout << "||||||||||| WATCHDOG |||||||||||" << std::endl;
-            std::cout << "Instance with ID: " << m_instance_id << " was activated for the first time." << std::endl;
-            std::cout << "Storing received value: " << m_last_received_value << std::endl;
-            std::cout << "||||||||||||||||||||||||||||||||" << std::endl;
-        }
+        m_last_received_value = getModuleValue(module_id, data_message);
+        m_received_data_once = true;
     }
     else {
-        // Suicide.
-        //deleteItself();
-        //return;
-        
-        WatchdogConfig config;
-        
-        // Get configuration of this instance from database.
-        *sql << "SELECT device_euid, module_id, operator, value, notification FROM task_watchdog WHERE instance_id = :instance_id",
-                soci::into(config.device_euid), soci::into(config.module_id), soci::into(config.comp_operator),
-                soci::into(config.value), soci::into(config.notification),
-                soci::use(m_instance_id, "instance_id");
-
-        auto module = data_message.modules.find(config.module_id);
-        if (module == data_message.modules.end()) {
-            std::cerr << "Wanted module_id: " << config.module_id << " was not found in received message." << std::endl;
-            throw std::runtime_error("Run of watchdog was not successful.");  
+        // This construction is to protect from running watchdog more than once
+        // in ten seconds. In a case that value from module oscilates around guarded value.
+        std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
+        if (now < (m_last_run_time + std::chrono::seconds(10))) {
+            return;
         }
         else {
-            double current_value = module->second.second;
-            
-            std::cout << "||||||||||| WATCHDOG |||||||||||" << std::endl;
-            std::cout << "Instance with ID: " << m_instance_id << " was activated." << std::endl;
-            
-            if (config.comp_operator == "LT") {
-                if ((current_value < m_last_received_value) &&
-                    (config.value <= m_last_received_value) &&
-                    (config.value >= current_value)) {
-                    
-                    std::cout << "Operation LESSER than WAS FULFILLED." << std::endl;
-                    std::cout << "Sending notification: " << config.notification << std::endl;
-                }
-                else {
-                    std::cout << "Operation LESSER than WAS NOT FULFILLED." << std::endl;
-                }
-                
-            }
-            else if (config.comp_operator == "GT") {
-                if ((current_value > m_last_received_value) &&
-                    (config.value <= current_value) &&
-                    (config.value >= m_last_received_value)) {
-                    
-                    std::cout << "Operation GREATER than WAS FULFILLED." << std::endl;
-                    std::cout << "Sending notification: " << config.notification << std::endl;
-                }
-                else {
-                    std::cout << "Operation GREATER than WAS NOT FULFILLED." << std::endl;
-                }
-            }
-            else {
-                throw std::runtime_error("Operator stored in Watchdog configuration was not defined.");
-            }
-            std::cout << "Configuration value: " << config.value << std::endl;
-            std::cout << "Last value: " << m_last_received_value << std::endl;
-            std::cout << "Current value: " << current_value << std::endl;
-            std::cout << "||||||||||||||||||||||||||||||||" << std::endl;
-            
-            m_last_received_value = current_value;
+            m_last_run_time = now;
         }
-        //std::cout << "WATCHDOG HAS RISEN! Device_euid: " << config.device_euid << " | module_id: " << config.module_id << " | received data message euid: " << data_message.device_euid << std::endl;
-
+        // Object to store configuration from database.
+        long device_euid;
+        int module_id;
+        std::string comp_operator;
+        double value;
+        
+        // Get base configuration of this instance from database.
+        *sql << "SELECT device_euid, module_id, comp_operator, value FROM task_watchdog WHERE instance_id = :instance_id",
+                soci::use(m_instance_id, "instance_id"),
+                soci::into(device_euid),
+                soci::into(module_id),
+                soci::into(comp_operator),
+                soci::into(value);
+        
+        double current_value = getModuleValue(module_id, data_message);
+            
+        if (comp_operator == "LT") {
+            if ((current_value < m_last_received_value) &&
+                (value <= m_last_received_value) &&
+                (value >= current_value)) {
+                    
+                // Condition of comp_operator was met.
+                operatorConditionMet();
+            }
+        }
+        else if (comp_operator == "GT") {
+            if ((current_value > m_last_received_value) &&
+                (value <= current_value) &&
+                (value >= m_last_received_value)) {
+                   
+                // Condition of comp_operator was met.
+                operatorConditionMet();
+            }
+        }
+        m_last_received_value = current_value;
     } 
+}
+
+void WatchdogInstance::operatorConditionMet()
+{
+    SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
+    
+    std::string type;
+    *sql << "SELECT type FROM task_watchdog WHERE instance_id = :instance_id",
+            soci::use(m_instance_id, "instance_id"),
+            soci::into(type);
+    
+    if (type == "NOTIF" || type == "BOTH") {
+        
+        std::string notification;
+        *sql << "SELECT notification FROM task_watchdog WHERE instance_id = :instance_id",
+                soci::use(m_instance_id, "instance_id"),
+                soci::into(notification);
+        
+        sendNotification(notification);
+    }
+    if (type == "SWITCH" || type == "BOTH") {
+
+        long a_device_euid;
+        int a_module_id;
+        int a_value;
+        
+        std::string notification;
+        *sql << "SELECT a_device_euid, a_module_id, a_value "
+                "FROM task_watchdog WHERE instance_id = :instance_id",
+                soci::use(m_instance_id, "instance_id"),
+                soci::into(a_device_euid),
+                soci::into(a_module_id),
+                soci::into(a_value);
+        
+        // Get ID of gateway from database.
+        long long a_gateway_id;
+        *sql << "SELECT gateway_id FROM device WHERE device_euid = :device_euid",
+                soci::use(a_device_euid, "device_euid"),
+                soci::into(a_gateway_id);
+        
+        GatewayInterface gi;
+        gi.sendSetState(a_gateway_id, a_device_euid, a_module_id, a_value);
+    }
+}
+
+void WatchdogInstance::sendNotification(std::string notification)
+{
+    long user_id;
+    SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
+
+    // Get ids of all users who own this instance. This is prepared for future, when instance sharing will be possible.
+    soci::rowset<soci::row> user_rows = (sql->prepare << "SELECT user_id FROM user_instance WHERE instance_id = :instance_id",
+                                                          soci::use(m_instance_id, "instance_id"));
+
+    for (soci::rowset<soci::row>::const_iterator user_it = user_rows.begin(); user_it != user_rows.end(); ++user_it) {   
+        
+        std::vector<std::string> sr_ids;
+        
+        soci::row const& user_row = *user_it;
+        // Get all user ids.
+        user_id = user_row.get<int>(0);
+    
+        // Find all service_reference_ids binded with user.
+        soci::rowset<soci::row> sri_rows = (sql->prepare << "SELECT service_reference_id "
+                "FROM push_notification_service WHERE user_id = :user_id", soci::use(user_id, "user_id"));
+    
+        for (soci::rowset<soci::row>::const_iterator sri_it = sri_rows.begin(); sri_it != sri_rows.end(); ++sri_it) {   
+    
+            soci::row const& sri_row = *sri_it;
+            // Get all service_reference_ids.
+            sr_ids.push_back(sri_row.get<std::string>(0));
+        }
+        int now_timestamp = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+        // URI notif is just placeholder until AliveCheck notification is specified.
+        std::shared_ptr<UriNotif> notif = std::make_shared<UriNotif>(user_id, m_instance_id, now_timestamp, notification, "");
+        // Send notifications.
+        //notif->sendGcm(&sr_ids); 
+        std::cout << "send notification: " << m_instance_id << " " << notification << " " << now_timestamp << std::endl;
+    }
+}
+
+double WatchdogInstance::getModuleValue(int module_id, DataMessage data_message)
+{
+    auto module_it = data_message.modules.find(module_id);
+    if (module_it == data_message.modules.end()) {
+            
+        logger.LOGFILE("watchdog", "ERROR") << "Wanted module_id: " << module_id <<" was not found in"
+                " received message: instance_id" << m_instance_id << std::endl; 
+        throw std::runtime_error("Run of watchdog was not successful.");      
+    }
+    // Return received value.
+    return module_it->second.second;
 }

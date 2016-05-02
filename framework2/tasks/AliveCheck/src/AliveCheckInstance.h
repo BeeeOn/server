@@ -50,7 +50,7 @@ private:
      * @param now_timestamp Timestamp of event.
      * @param device_euid EUID of device which is unavailable.
      */
-    void sendUnavailableNotification(long now_timestamp, long device_euid);
+    void sendUnavailableNotification(long device_euid);
     
 };
 #endif /* ALIVECHECKINSTANCE_H */

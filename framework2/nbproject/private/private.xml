@@ -33,10 +33,12 @@
             <file>file:/home/mrmaidx/server/framework2/src/DataMessageParser.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/TaskInstance.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/GatewaySession.h</file>
+            <file>file:/home/mrmaidx/server/framework2/src/unified_logger.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/BaseTaskLoader.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/DataMessage.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/TriggerTaskInstance.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/TaskLoader.cpp</file>
+            <file>file:/home/mrmaidx/server/framework2/src/locked_stream.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/BaseTaskLoader.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/DatabaseInterface.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/TaskLoader.h</file>
@@ -44,9 +46,12 @@
             <file>file:/home/mrmaidx/server/framework2/src/TaskManager.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/framework.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/GatewayServer.cpp</file>
+            <file>file:/home/mrmaidx/server/framework2/src/GatewayInterface.h</file>
+            <file>file:/home/mrmaidx/server/framework2/src/GatewayInterface.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/DatabaseInterface.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/TimedTaskInstance.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/UserMessages.h</file>
+            <file>file:/home/mrmaidx/server/framework2/src/unified_logger.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/ConfigParser.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/Calendar.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/BaseTaskManager.h</file>

@@ -38,21 +38,18 @@ AliveCheckManager::~AliveCheckManager()
 void AliveCheckManager::createConfiguration(long instance_id, std::map<std::string, std::string> config)
 {
     // Parse received configuration.
-    AliveCheckConfig parsed_config = parseConfiguration(config);
+    AliveCheckConfig parsed_config = parseConfiguration(instance_id, config);
     
-    // Store configuration to database.
+    // Store configuration to database. This also checks correct configuration data.
     SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
     *sql << "INSERT INTO task_alive_check(instance_id, send_notif, gateway_id) VALUES(:instance_id, :send_notif, :gateway_id)",
             soci::use(instance_id, "instance_id"),
             soci::use(parsed_config.gateway_id, "gateway_id"),
             soci::use(parsed_config.send_notif, "send_notif");
     
-    
-    
     // Create new instance of AliveCheck in system.
     std::lock_guard<std::mutex> lock(m_task_instances_mx);
     m_task_instances.emplace(instance_id, std::make_shared<AliveCheckInstance>(instance_id, shared_from_this(), parsed_config));
-    
     
     logger.LOGFILE("alive_check", "INFO") << "New instance of AliveCheck was created: instance_id: "
             << instance_id << std::endl;
@@ -61,7 +58,8 @@ void AliveCheckManager::createConfiguration(long instance_id, std::map<std::stri
 void AliveCheckManager::changeConfiguration(ChangeMessage change_message)
 {
     std::shared_ptr<AliveCheckInstance> instance;
-    
+
+    // Get instance pointer from system.
     auto instance_it = m_task_instances.find(change_message.instance_id);
     if (instance_it == m_task_instances.end()) {
         throw std::runtime_error(std::string("Instance with ID: ")
@@ -88,6 +86,7 @@ void AliveCheckManager::changeConfiguration(ChangeMessage change_message)
                 soci::use(change_message.instance_id, "instance_id");
         // Change local configuration.
         instance->m_configuration.gateway_id = gateway_id;
+        validateGatewayOwnership(change_message.instance_id, gateway_id);
     }
     
     auto send_notif_it = change_message.config.find("send_notif");
@@ -104,6 +103,9 @@ void AliveCheckManager::changeConfiguration(ChangeMessage change_message)
         instance->m_configuration.send_notif = send_notif;
     }
     tr.commit();
+    
+    logger.LOGFILE("alive_check", "INFO") << "Instance of AliveCheck was changed: instance_id: "
+            << change_message.instance_id << std::endl;
 }
 
 std::map<std::string, std::string> AliveCheckManager::getConfiguration(GetConfMessage get_conf_message)
@@ -139,7 +141,6 @@ void AliveCheckManager::reloadInstances(unsigned int task_id)
         
         // Get configuration from database.
         AliveCheckConfig configuration;
-        SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
         *sql << "SELECT gateway_id, send_notif FROM task_alive_check WHERE instance_id = :instance_id",
                 soci::into(configuration.gateway_id),
                 soci::into(configuration.send_notif),
@@ -153,7 +154,7 @@ void AliveCheckManager::reloadInstances(unsigned int task_id)
     }
 }
 
-AliveCheckConfig AliveCheckManager::parseConfiguration(std::map<std::string, std::string> configuration)
+AliveCheckConfig AliveCheckManager::parseConfiguration(long instance_id, std::map<std::string, std::string> configuration)
 {
     AliveCheckConfig parsed_config;
     
@@ -166,6 +167,7 @@ AliveCheckConfig AliveCheckManager::parseConfiguration(std::map<std::string, std
     }
     else {
         parsed_config.gateway_id = std::stoll(gateway_id_it->second);
+        validateGatewayOwnership(instance_id, parsed_config.gateway_id);
     }
 
     auto send_notif_it = configuration.find("send_notif");
@@ -179,4 +181,26 @@ AliveCheckConfig AliveCheckManager::parseConfiguration(std::map<std::string, std
         parsed_config.send_notif = std::stoi(send_notif_it->second);
     }
     return parsed_config;
+}
+
+void AliveCheckManager::validateGatewayOwnership(long instance_id, long long gateway_id)
+{
+    SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
+    // Get ID of user owning instance of Watchdog.
+    long user_id;
+    *sql << "SELECT user_id FROM user_instance WHERE instance_id = :instance_id",
+            soci::use(instance_id, "instance_id"),
+            soci::into(user_id);
+
+    short owns; 
+    *sql << "SELECT exists(SELECT 1 FROM user_gateway WHERE user_id = :user_id AND gateway_id = :gateway_id);",
+            soci::use(user_id, "user_id"),
+            soci::use(gateway_id, "gateway_id"),
+            soci::into(owns);
+                
+    if (!owns) {
+        logger.LOGFILE("alive_check", "ERROR") <<  "User with user_id: " << user_id << 
+                " tried to operate with device which is on gateway user doesn't own: " << gateway_id << ".";
+        throw std::runtime_error("Could not process received configuration.");
+    }
 }

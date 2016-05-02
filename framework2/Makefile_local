@@ -2,7 +2,7 @@ CC := g++
 CPP_FILES := $(wildcard src/*.cpp)
 OBJ_FILES := $(addprefix obj/, $(notdir $(CPP_FILES:.cpp=.o)))
 
-CC_FLAGS := -g -std=c++11 -pthread -rdynamic
+CC_FLAGS := -g -std=c++11 -pthread -rdynamic -pedantic
 I_DIRS := -I/usr/local/include/soci -I/usr/include/postgresql -I../lib
 
 LD_FLAGS := -Wl,-rpath,/usr/local/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -lpq

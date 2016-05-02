@@ -2,11 +2,11 @@ CC := g++
 CPP_FILES := $(wildcard src/*.cpp)
 OBJ_FILES := $(addprefix obj/, $(notdir $(CPP_FILES:.cpp=.o)))
 
-CC_FLAGS := -g -std=c++11 -fPIC
+CC_FLAGS := -g -std=c++11 -fPIC -pedantic
 I_DIRS := -I/usr/local/include/soci -I/usr/include/postgresql
 
-LD_FLAGS := -fPIC -shared -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -lpq
-L_DIRS := -L/usr/local/lib64 -L/usr/lib/postgresql/9.3/lib
+LD_FLAGS := -fPIC -shared -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -lpq -lnotif -lcurl
+L_DIRS := -L. -L/usr/local/lib64 -L/usr/lib/postgresql/9.3/lib
 
 .PHONY: all clean
 

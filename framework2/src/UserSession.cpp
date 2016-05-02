@@ -103,9 +103,10 @@ void UserSession::processMessage(std::string message)
                 
                 // Find task and get pointer to it's object.
                 std::shared_ptr<Task> task = TaskLoader::getInstance()->findTask(change_message.task_id);
+                
                 // Change instances configuration in database.
                 task->getTaskManagerPtr()->changeConfiguration(change_message);
-
+    
                 // Construct message to send back to client.
                 response.AddMember("error", false, response.GetAllocator());
             }
@@ -171,7 +172,7 @@ void UserSession::processMessage(std::string message)
                 // Add member error to response. Set to false.
                 response.AddMember("error", false, response.GetAllocator());
                 // Add array to response.
-                response.AddMember("config", instance_array, response.GetAllocator());
+                response.AddMember("instance_ids", instance_array, response.GetAllocator());
             }
             break;
             case(USER_MESSAGE_TYPE::GET_CONF):

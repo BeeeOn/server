@@ -1,4 +1,4 @@
-﻿-- File:   home7_baf.sql
+-- File:   home7_baf.sql
 -- Author: Martin Novak, xnovak1c@stud.fit.vutbr.cz
 -- Created on 4. April 2016
 
@@ -19,49 +19,51 @@ CREATE TABLE public.task(
 	version smallint NOT NULL,
 	type varchar(10) NOT NULL,
 	CONSTRAINT task_pk PRIMARY KEY (task_id)
-
 );
+
 -- object: public.instance | type: TABLE --
 -- DROP TABLE IF EXISTS public.instance CASCADE;
 CREATE TABLE public.instance(
-	instance_id serial NOT NULL,
-	task_id smallint,
-	CONSTRAINT instance_pk PRIMARY KEY (instance_id)
-
+instance_id serial NOT NULL,
+task_id smallint,
+CONSTRAINT instance_pk PRIMARY KEY (instance_id)
 );
+
 -- object: public.user_instance | type: TABLE --
 -- DROP TABLE IF EXISTS public.user_instance CASCADE;
 CREATE TABLE public.user_instance(
-	user_id integer NOT NULL,
-	instance_id integer NOT NULL,
-	permission varchar(10),
-	CONSTRAINT user_instance_pk PRIMARY KEY (user_id,instance_id)
-
+user_id integer NOT NULL,
+instance_id integer NOT NULL,
+permission varchar(10),
+CONSTRAINT user_instance_pk PRIMARY KEY (user_id,instance_id)
 );
+
 -- object: public.task_alive_check | type: TABLE --
 -- DROP TABLE IF EXISTS public.task_alive_check CASCADE;
 CREATE TABLE public.task_alive_check(
-	instance_id integer NOT NULL,
-	gateway_id decimal(20,0),
-	send_notif bool NOT NULL,
-	CONSTRAINT task_alive_check_pk PRIMARY KEY (instance_id)
-
+instance_id integer NOT NULL,
+gateway_id decimal(20,0),
+send_notif bool NOT NULL,
+CONSTRAINT task_alive_check_pk PRIMARY KEY (instance_id)
 );
+
 -- object: public.task_watchdog | type: TABLE --
 -- DROP TABLE IF EXISTS public.task_watchdog CASCADE;
 CREATE TABLE public.task_watchdog(
-	instance_id integer NOT NULL,
-	device_euid decimal(10),
-	module_id smallint NOT NULL,
-	operator varchar(2) NOT NULL,
-	value real NOT NULL,
-	notification text,
-	a_gateway_id decimal(20,0),
-	a_device_euid decimal(10),
-	a_module_id smallint,
-	a_value integer,
-	CONSTRAINT task_watchdog_pk PRIMARY KEY (instance_id)
+instance_id integer NOT NULL,
+type varchar(6) NOT NULL,
+device_euid decimal(10),
+module_id smallint NOT NULL,
+comp_operator varchar(2) NOT NULL,
+value real NOT NULL,
+notification text,
+a_gateway_id decimal(20,0),
+a_device_euid decimal(10),
+a_module_id smallint,
+a_value integer,
+CONSTRAINT task_watchdog_pk PRIMARY KEY (instance_id)
 );
+
 -- Set owner of tables
 ALTER TABLE public.task OWNER TO postgres;
 ALTER TABLE public.instance OWNER TO postgres;

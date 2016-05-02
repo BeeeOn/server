@@ -66,6 +66,12 @@ public:
      * @param instance_ptr Pointer to instance which should be deleted from calendar.
      */
     void removeAllActivationsOfInstance(std::set<std::chrono::system_clock::time_point> planned_times, TaskInstance* instance_ptr);
+    /**
+     * Removes one activation of instnace from Calendar.
+     * @param activation_time Time of activation.
+     * @param instance_ptr Pointer to instance which activation should be removed.
+     */
+    void removeActivation(std::chrono::system_clock::time_point activation_time, TaskInstance* instance_ptr);
     
 private:
     /**
@@ -83,7 +89,7 @@ private:
     /**
      * Pointer to Calendar instance. 
      */
-    static std::shared_ptr<Calendar> m_instance;   
+    static std::shared_ptr<Calendar> m_instance;
     /*
      * Activates instances passed in parameter.
      * @param to_activate Instances which should be activated.
@@ -98,7 +104,7 @@ private:
      * @param activation_time Time at which should event activate.
      * @param instance_ptr Pointer to instance, which should be activated.
      */
-    void emplaceEvent(std::chrono::system_clock::time_point activation_time, TaskInstance* instance_ptr);
+    void emplaceActivation(std::chrono::system_clock::time_point activation_time, TaskInstance* instance_ptr);
     /**
      *  Time until main algorithm should wait.
      */
@@ -112,11 +118,11 @@ private:
      */
     std::condition_variable m_new_wakeup_time_cv;
     std::mutex m_new_wakeup_time_mx;
-    std::condition_variable m_queue_not_empty_cv;
-    std::mutex m_queue_not_empty_mx;
+    std::condition_variable m_calendar_not_empty_cv;
+    std::mutex m_calendar_not_empty_mx;
     
     std::mutex m_calendar_events_mx;
-    std::mutex m_test_queue_empty_mx;
+    std::mutex m_test_calendar_empty_mx;
     /**
      *  Indicates if calendar algorithm should run.
      */

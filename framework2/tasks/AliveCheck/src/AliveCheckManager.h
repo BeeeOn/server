@@ -23,13 +23,13 @@ class AliveCheckManager: public TaskManager
 {
 public:
     /**
-     * Constructor of class AliveCheckManager().
+     * Constructor of class AliveCheckManager.
      */
     AliveCheckManager();
     /**
-     * Destructor of class AliveCheckManager().
+     * Destructor of class AliveCheckManager.
      */
-    ~AliveCheckManager();
+    virtual ~AliveCheckManager();
     /**
      * Stores configuration of given instance in database.
      * @param instance_id ID of instance which configuration should be stored.
@@ -59,6 +59,10 @@ private:
      * @param configuration Map of configuration to parse.
      * @return Parsed AliveCheckConfig object.
      */
-    AliveCheckConfig parseConfiguration(std::map<std::string, std::string> configuration);
+    AliveCheckConfig parseConfiguration(long instance_id, std::map<std::string, std::string> configuration);
+    /**
+     * Checks in database if owner of instance also have access to gateway.
+     */
+    void validateGatewayOwnership(long instance_id, long long gateway_id);
 };
 #endif /* ALIVECHECKMANAGER_H */

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
     <!-- Path to tasks config file. -->
-    <tasks_config path="./tasks_config.xml"/>
+    <tasks_config path="./tasks_config_local.xml"/>
     <!-- Configuration of server receiving user messages. -->
     <user_server threads="10" port="7084" />
     <!-- Configuration of server receiving data messages from gateways. -->

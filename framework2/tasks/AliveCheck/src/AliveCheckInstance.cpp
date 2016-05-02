@@ -13,6 +13,7 @@
 #include <ctime>
 #include <string>
 #include <memory>
+#include <random>
 
 #include <soci.h>
 
@@ -29,7 +30,13 @@ AliveCheckInstance::AliveCheckInstance(long instance_id,
     TimedTaskInstance(instance_id, owning_manager),
     m_configuration(parsed_config)
 {
-    planActivationNow();
+    // Plan this instance randomly between zero and one minute.
+    // This is because of reloading of instances from database,
+    // because they are loaded at the same time.
+    std::random_device rd;
+    std::mt19937 eng(rd());
+    std::uniform_int_distribution<> distr(0, 60);
+    planActivationAfterSeconds(distr(eng));
 }
 
 AliveCheckInstance::~AliveCheckInstance()
@@ -65,7 +72,7 @@ void AliveCheckInstance::runAliveCheck()
         refresh = row.get<int>(2);
         
         // Get timestamp of current time.
-        long now_timestamp = std::chrono::seconds(std::time(NULL)).count();
+        int now_timestamp = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
         
         std::string status;
         *sql << "SELECT status FROM device WHERE device_euid = :device_euid",
@@ -82,7 +89,7 @@ void AliveCheckInstance::runAliveCheck()
 
                 // Send notification
                 if (m_configuration.send_notif == 1) {
-                    sendUnavailableNotification(now_timestamp, static_cast<long>(device_euid));
+                    sendUnavailableNotification(static_cast<long>(device_euid));
                 }
             }
             logger.LOGFILE("alive_check", "INFO") << "Instance: " << m_instance_id << " - Device with device_euid: "
@@ -100,43 +107,34 @@ void AliveCheckInstance::runAliveCheck()
     }
 }
 
-void AliveCheckInstance::sendUnavailableNotification(long now_timestamp, long device_euid)
+void AliveCheckInstance::sendUnavailableNotification(long device_euid)
 {
-    int user_id;
     std::string notification("Zařízení s euid: ");
     notification += std::to_string(device_euid);
     notification += " je nedostupné.";
     
     SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
-    // Find all users with this gateway.
-    // In the future when instance sharing is available this should be only
-    // users with task instance shared. For now it sends notification to all users with gateway.
-    soci::rowset<soci::row> user_rows = (sql->prepare << "SELECT user_id FROM user_gateway WHERE gateway_id = :gateway_id",
-                                    soci::use(m_configuration.gateway_id, "gateway_id"));
-
-    for (soci::rowset<soci::row>::const_iterator user_it = user_rows.begin(); user_it != user_rows.end(); ++user_it) {   
-        
-        std::vector<std::string> sr_ids;
-        
-        soci::row const& user_row = *user_it;
-        // Get all user ids.
-        user_id = user_row.get<int>(0);
     
-        // Find all service_reference_ids binded with user.
-        soci::rowset<soci::row> sri_rows = (sql->prepare << "SELECT service_reference_id "
-                "FROM push_notification_service WHERE user_id = :user_id", soci::use(user_id, "user_id"));
+    long user_id;
+    *sql << "SELECT user_id FROM user_instance WHERE intance_id = :instance_id",
+            soci::use(m_instance_id, "instance_id"),
+            soci::into(user_id);
     
-        for (soci::rowset<soci::row>::const_iterator sri_it = sri_rows.begin(); sri_it != sri_rows.end(); ++sri_it) {   
+    // Find all service_reference_ids binded with user.
+    soci::rowset<soci::row> sri_rows = (sql->prepare << "SELECT service_reference_id "
+                "FROM push_notification_service WHERE user_id = :user_id",
+                 soci::use(user_id, "user_id"));
     
-            soci::row const& sri_row = *sri_it;
+    std::vector<std::string> sr_ids;
+    for (soci::rowset<soci::row>::const_iterator sri_it = sri_rows.begin(); sri_it != sri_rows.end(); ++sri_it) {   
+    
+        soci::row const& sri_row = *sri_it;
             // Get all service_reference_ids.
-            sr_ids.push_back(sri_row.get<std::string>(0));
-        }
-        // Get random ID.
-        srand(time(NULL));
-        // URI notif is just placeholder until AliveCheck notification is specified.
-        std::shared_ptr<UriNotif> notif = std::make_shared<UriNotif>(user_id, rand(), now_timestamp, notification, "");
-        // Send notifications.
-        notif->sendGcm(&sr_ids);
+        sr_ids.push_back(sri_row.get<std::string>(0));
     }
+    int now_timestamp = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    // URI notif is just placeholder until AliveCheck notification is specified.
+    std::shared_ptr<UriNotif> notif = std::make_shared<UriNotif>(user_id, m_instance_id, now_timestamp, notification, "");
+    // Send notifications.
+    notif->sendGcm(&sr_ids);
 }

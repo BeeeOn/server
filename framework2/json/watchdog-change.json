@@ -2,9 +2,10 @@
     "msg": "change",
     "user_id": 1,
     "task_id": 2,
-    "instance_id": 53,
+    "instance_id": 94,
     "config": {
-        "operator": "GT",
+        "type": "NOTIF",
+        "comp_operator": "LT",
         "notification": "Zmenena hodnota!"
     }
 }
