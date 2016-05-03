@@ -57,9 +57,10 @@ void UserSession::processMessage(std::string message)
                 logger.LOGFILE("user_message_interface", "MSG") << "Received message: CREATE | user_id: "
                         << create_message.user_id << ", task_id: " << create_message.task_id
                         << ", config: { " << log_config << "}" << std::endl;
-
+                
                 // Find task and get pointer to it's object.
                 std::shared_ptr<Task> task = TaskLoader::getInstance()->findTask(create_message.task_id);
+                
                 // Create instance in database.
                 long instance_id = task->getTaskManagerPtr()->createInstance(create_message);
                 

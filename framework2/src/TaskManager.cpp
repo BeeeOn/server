@@ -56,7 +56,6 @@ void TaskManager::deleteInstance(DeleteMessage delete_message)
     // Remove all entries of instance from its control component (Calendar or DataMessageRegister).
     auto instance_it = m_task_instances.find(delete_message.instance_id);
     if (instance_it != m_task_instances.end()) {
-        
         instance_it->second->deleteFromControlComponent();
         
         m_task_instances.erase(delete_message.instance_id);
@@ -64,11 +63,8 @@ void TaskManager::deleteInstance(DeleteMessage delete_message)
     else {
         throw std::runtime_error(std::string("Instance with ID: ") + std::to_string(delete_message.instance_id)
               + std::string(" doesn't exist in system. It could not be deleted."));
-    }    
-    
-    
-    
-    //debugPrintTaskInstances(); 
+    }
+    std::cout << "remove instance from control component finished" << std::endl;
 }
 
 std::vector<long> TaskManager::getInstanceIds(GetInstIdsMessage get_inst_ids_message)

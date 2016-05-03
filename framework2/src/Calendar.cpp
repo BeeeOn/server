@@ -224,7 +224,8 @@ void Calendar::removeAllActivationsOfInstance(std::set<std::chrono::system_clock
 void Calendar::removeActivation(std::chrono::system_clock::time_point activation_time, TaskInstance* instance_ptr)
 {
     // Lock m_calendar_events container.
-    std::lock_guard<std::mutex> lock(m_calendar_events_mx);
+    std::mutex remove_activation_mx;
+    std::lock_guard<std::mutex> lock(remove_activation_mx);
     
     // Find range of all activations containing activation_time as key. 
     auto range_of_keys =  m_calendar_events.equal_range(activation_time);
