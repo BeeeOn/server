@@ -160,7 +160,7 @@ void AliveCheckInstance::sendUnavailableNotification(long device_euid)
     for (soci::rowset<soci::row>::const_iterator sri_it = sri_rows.begin(); sri_it != sri_rows.end(); ++sri_it) {   
     
         soci::row const& sri_row = *sri_it;
-            // Get all service_reference_ids.
+        //Get all service_reference_ids.
         sr_ids.push_back(sri_row.get<std::string>(0));
     }
     
@@ -168,7 +168,7 @@ void AliveCheckInstance::sendUnavailableNotification(long device_euid)
     // URI notif is just placeholder until AliveCheck notification is specified.
     std::shared_ptr<UriNotif> notif = std::make_shared<UriNotif>(user_id, m_instance_id, now_timestamp, notification, "");
     // Send notifications.
-    //notif->sendGcm(&sr_ids);
-    std::cout << "Instance AliveCheck: " << m_instance_id << " sends notifification: [user_id: " << user_id
+    notif->sendGcm(&sr_ids);
+    logger.LOGFILE("watchdog", "INFO") << "Instance AliveCheck: " << m_instance_id << " sent notifification: [user_id: " << user_id
               << ", timestamp: " << now_timestamp << ", notification: " << notification << "]" << std::endl;
 }

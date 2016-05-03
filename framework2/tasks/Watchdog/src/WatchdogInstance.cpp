@@ -46,13 +46,10 @@ void WatchdogInstance::run(DataMessage data_message)
         *sql << "SELECT module_id FROM task_watchdog WHERE instance_id = :instance_id",
                 soci::use(m_instance_id, "instance_id"), soci::into(module_id);
         
-        std::cout << m_instance_id << " saved it's first value." << std::endl;
-        
         m_last_received_value = getModuleValue(module_id, data_message);
         m_received_data_once = true;
     }
     else {
-        std::cout << "run it" << std::endl;
         // Object to store configuration from database.
         soci::indicator ind_device_euid, ind_module_id;
         long device_euid;
@@ -148,8 +145,8 @@ void WatchdogInstance::operatorConditionMet()
 
             if (ind_a_gateway_id == soci::i_ok) {
                 GatewayInterface gi;
-                //gi.sendSetState(a_gateway_id, a_device_euid, a_module_id, a_value);
-                std::cout << "Instance Watchdog: " << m_instance_id << " switches actuator: [gateway_id: " << a_gateway_id << ", device_euid: "
+                gi.sendSetState(a_gateway_id, a_device_euid, a_module_id, a_value);
+                logger.LOGFILE("watchdog", "INFO") << "Instance Watchdog: " << m_instance_id << " switched actuator: [gateway_id: " << a_gateway_id << ", device_euid: "
                           << a_device_euid << ", module_id: " << a_module_id << ", value: " << a_value << "]" << std::endl;
             }
             else {
@@ -195,8 +192,8 @@ void WatchdogInstance::sendNotification(std::string notification)
         // URI notif is just placeholder until AliveCheck notification is specified.
         std::shared_ptr<UriNotif> notif = std::make_shared<UriNotif>(user_id, m_instance_id, now_timestamp, notification, "");
         // Send notifications.
-        //notif->sendGcm(&sr_ids); 
-        std::cout << "Instance Watchdog: " << m_instance_id << " sends notifification: [user_id: " << user_id
+        notif->sendGcm(&sr_ids); 
+        logger.LOGFILE("watchdog", "INFO") << "Instance Watchdog: " << m_instance_id << " sent notifification: [user_id: " << user_id
                   << ", timestamp: " << now_timestamp << ", notification: " << notification << "]" << std::endl;
     }
 }
@@ -221,7 +218,6 @@ bool WatchdogInstance::shouldAct()
     // oscilates around guarded value .
     std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
     if (now < (m_last_act_time + std::chrono::seconds(30))) {
-        std::cout << m_instance_id << " fired but it's not time" << std::endl;
          return false;
     }
     else {
