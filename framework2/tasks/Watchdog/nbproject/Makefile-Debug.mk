@@ -53,7 +53,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-L/usr/local/lib64 -L/usr/lib/postgresql/9.3/lib
+LDLIBSOPTIONS=-L/usr/local/lib64 -L/usr/lib/postgresql/9.3/lib -L.
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
@@ -61,7 +61,7 @@ LDLIBSOPTIONS=-L/usr/local/lib64 -L/usr/lib/postgresql/9.3/lib
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libWatchdog.${CND_DLIB_EXT}: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libWatchdog.${CND_DLIB_EXT} ${OBJECTFILES} ${LDLIBSOPTIONS} -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -lpq -shared -fPIC
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libWatchdog.${CND_DLIB_EXT} ${OBJECTFILES} ${LDLIBSOPTIONS} -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -lpq -lcurl -lnotif -shared -fPIC
 
 ${OBJECTDIR}/src/WatchdogInstance.o: src/WatchdogInstance.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

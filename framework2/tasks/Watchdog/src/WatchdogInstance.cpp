@@ -46,20 +46,15 @@ void WatchdogInstance::run(DataMessage data_message)
         *sql << "SELECT module_id FROM task_watchdog WHERE instance_id = :instance_id",
                 soci::use(m_instance_id, "instance_id"), soci::into(module_id);
         
+        std::cout << m_instance_id << " saved it's first value." << std::endl;
+        
         m_last_received_value = getModuleValue(module_id, data_message);
         m_received_data_once = true;
     }
     else {
-        // This construction is to protect from running watchdog more than once
-        // in ten seconds. In a case that value from module oscilates around guarded value.
-        std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
-        if (now < (m_last_run_time + std::chrono::seconds(10))) {
-            return;
-        }
-        else {
-            m_last_run_time = now;
-        }
+        std::cout << "run it" << std::endl;
         // Object to store configuration from database.
+        soci::indicator ind_device_euid, ind_module_id;
         long device_euid;
         int module_id;
         std::string comp_operator;
@@ -68,32 +63,43 @@ void WatchdogInstance::run(DataMessage data_message)
         // Get base configuration of this instance from database.
         *sql << "SELECT device_euid, module_id, comp_operator, value FROM task_watchdog WHERE instance_id = :instance_id",
                 soci::use(m_instance_id, "instance_id"),
-                soci::into(device_euid),
-                soci::into(module_id),
+                soci::into(device_euid, ind_device_euid),
+                soci::into(module_id, ind_module_id),
                 soci::into(comp_operator),
                 soci::into(value);
         
-        double current_value = getModuleValue(module_id, data_message);
+        if (ind_device_euid == soci::i_ok && ind_module_id == soci::i_ok) {
             
-        if (comp_operator == "LT") {
-            if ((current_value < m_last_received_value) &&
-                (value <= m_last_received_value) &&
-                (value >= current_value)) {
+            double current_value = getModuleValue(module_id, data_message);
+            
+            if (comp_operator == "LT") {
+                if ((current_value < m_last_received_value) &&
+                    (value <= m_last_received_value) &&
+                    (value >= current_value)) {
                     
-                // Condition of comp_operator was met.
-                operatorConditionMet();
+                    if (shouldAct()) {
+                        // Condition of comp_operator was met.
+                        operatorConditionMet();
+                    }
+                }
             }
-        }
-        else if (comp_operator == "GT") {
-            if ((current_value > m_last_received_value) &&
-                (value <= current_value) &&
-                (value >= m_last_received_value)) {
-                   
-                // Condition of comp_operator was met.
-                operatorConditionMet();
+            else if (comp_operator == "GT") {
+                if ((current_value > m_last_received_value) &&
+                    (value <= current_value) &&
+                    (value >= m_last_received_value)) {
+
+                    if (shouldAct()) {
+                        // Condition of comp_operator was met.
+                        operatorConditionMet();
+                    }
+                }
             }
+            m_last_received_value = current_value;  
         }
-        m_last_received_value = current_value;
+        else {
+            logger.LOGFILE("watchdog", "ERROR") << "Instance: " << m_instance_id << " tried to compare received value with "
+                    << "device which doesn't exist: device_euid: " << device_euid << ", module_id: " << module_id << std::endl;
+        }
     } 
 }
 
@@ -117,6 +123,7 @@ void WatchdogInstance::operatorConditionMet()
     }
     if (type == "SWITCH" || type == "BOTH") {
 
+        soci::indicator ind_a_device_euid, ind_a_module_id;
         long a_device_euid;
         int a_module_id;
         int a_value;
@@ -125,18 +132,35 @@ void WatchdogInstance::operatorConditionMet()
         *sql << "SELECT a_device_euid, a_module_id, a_value "
                 "FROM task_watchdog WHERE instance_id = :instance_id",
                 soci::use(m_instance_id, "instance_id"),
-                soci::into(a_device_euid),
-                soci::into(a_module_id),
+                soci::into(a_device_euid, ind_a_device_euid),
+                soci::into(a_module_id, ind_a_module_id),
                 soci::into(a_value);
         
-        // Get ID of gateway from database.
-        long long a_gateway_id;
-        *sql << "SELECT gateway_id FROM device WHERE device_euid = :device_euid",
-                soci::use(a_device_euid, "device_euid"),
-                soci::into(a_gateway_id);
-        
-        GatewayInterface gi;
-        gi.sendSetState(a_gateway_id, a_device_euid, a_module_id, a_value);
+        // Changing of state of actuator can continue only if fetched values exist.
+        if (ind_a_device_euid == soci::i_ok && ind_a_module_id == soci::i_ok) {
+            
+            soci::indicator ind_a_gateway_id;
+            // Get ID of gateway from database.
+            long long a_gateway_id;
+            *sql << "SELECT gateway_id FROM device WHERE device_euid = :device_euid",
+                    soci::use(a_device_euid, "device_euid"),
+                    soci::into(a_gateway_id, ind_a_gateway_id);
+
+            if (ind_a_gateway_id == soci::i_ok) {
+                GatewayInterface gi;
+                //gi.sendSetState(a_gateway_id, a_device_euid, a_module_id, a_value);
+                std::cout << "Instance Watchdog: " << m_instance_id << " switches actuator: [gateway_id: " << a_gateway_id << ", device_euid: "
+                          << a_device_euid << ", module_id: " << a_module_id << ", value: " << a_value << "]" << std::endl;
+            }
+            else {
+                logger.LOGFILE("watchdog", "ERROR") << "Instance: " << m_instance_id << " tried to switch actuator "
+                    << " on gateway which doesn't exist: " << a_gateway_id << std::endl;
+            }
+        }
+        else {
+            logger.LOGFILE("watchdog", "ERROR") << "Instance: " << m_instance_id << " tried to switch actuator which doesn't exist: "
+                    << "device_euid: " << a_device_euid << ", module_id: " << a_module_id << std::endl;
+        }
     }
 }
 
@@ -172,7 +196,8 @@ void WatchdogInstance::sendNotification(std::string notification)
         std::shared_ptr<UriNotif> notif = std::make_shared<UriNotif>(user_id, m_instance_id, now_timestamp, notification, "");
         // Send notifications.
         //notif->sendGcm(&sr_ids); 
-        std::cout << "send notification: " << m_instance_id << " " << notification << " " << now_timestamp << std::endl;
+        std::cout << "Instance Watchdog: " << m_instance_id << " sends notifification: [user_id: " << user_id
+                  << ", timestamp: " << now_timestamp << ", notification: " << notification << "]" << std::endl;
     }
 }
 
@@ -187,4 +212,20 @@ double WatchdogInstance::getModuleValue(int module_id, DataMessage data_message)
     }
     // Return received value.
     return module_it->second.second;
+}
+
+bool WatchdogInstance::shouldAct()
+{
+    // This construction is to protect from acting more than once in thirty seconds
+    // so it won't spam actuator or users device. In a case that value from module
+    // oscilates around guarded value .
+    std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
+    if (now < (m_last_act_time + std::chrono::seconds(30))) {
+        std::cout << m_instance_id << " fired but it's not time" << std::endl;
+         return false;
+    }
+    else {
+        m_last_act_time = now;
+        return true;
+    }
 }

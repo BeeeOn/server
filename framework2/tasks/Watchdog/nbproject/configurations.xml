@@ -49,8 +49,9 @@
           <linkerAddLib>
             <pElem>/usr/local/lib64</pElem>
             <pElem>/usr/lib/postgresql/9.3/lib</pElem>
+            <pElem>.</pElem>
           </linkerAddLib>
-          <commandLine>-lsoci_core -lsoci_empty -lsoci_postgresql -ldl -lpq</commandLine>
+          <commandLine>-lsoci_core -lsoci_empty -lsoci_postgresql -ldl -lpq -lcurl -lnotif</commandLine>
         </linkerTool>
       </compileType>
       <item path="src/WatchdogInstance.cpp" ex="false" tool="1" flavor2="0">

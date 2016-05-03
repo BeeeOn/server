@@ -63,6 +63,10 @@ private:
     /**
      * Checks in database if owner of instance also have access to gateway.
      */
-    void validateGatewayOwnership(long instance_id, long long gateway_id);
+    void validateGatewayOwnership(long instance_id, long long gateway_id); 
+    /**
+     * Validates if send_notif configuration item is 0 or 1.
+     */
+    void validateSendNotif(short send_notif);
 };
 #endif /* ALIVECHECKMANAGER_H */

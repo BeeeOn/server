@@ -45,6 +45,8 @@ private:
     
     double getModuleValue(int module_id, DataMessage data_message);
     
+    bool shouldAct();
+    
     /**
      * Variable indicates, that instance received atleast one data message.
      */
@@ -60,7 +62,7 @@ private:
     /**
      * Stores time when watchdog executed last time.
      */
-    std::chrono::system_clock::time_point m_last_run_time;
+    std::chrono::system_clock::time_point m_last_act_time;
     
 };
 

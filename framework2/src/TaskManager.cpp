@@ -64,7 +64,6 @@ void TaskManager::deleteInstance(DeleteMessage delete_message)
         throw std::runtime_error(std::string("Instance with ID: ") + std::to_string(delete_message.instance_id)
               + std::string(" doesn't exist in system. It could not be deleted."));
     }
-    std::cout << "remove instance from control component finished" << std::endl;
 }
 
 std::vector<long> TaskManager::getInstanceIds(GetInstIdsMessage get_inst_ids_message)

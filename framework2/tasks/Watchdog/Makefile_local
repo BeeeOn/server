@@ -2,7 +2,7 @@ CC := g++
 CPP_FILES := $(wildcard src/*.cpp)
 OBJ_FILES := $(addprefix obj/, $(notdir $(CPP_FILES:.cpp=.o)))
 
-CC_FLAGS := -g -std=c++11 -fPIC -pedantic
+CC_FLAGS := -g -std=c++11 -fPIC
 I_DIRS := -I/usr/local/include/soci -I/usr/include/postgresql
 
 LD_FLAGS := -fPIC -shared -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -lpq -lnotif -lcurl
@@ -23,3 +23,4 @@ obj/%.o: src/%.cpp
 
 clean:
 	rm -rf ./obj
+	rm ./Watchdog.so

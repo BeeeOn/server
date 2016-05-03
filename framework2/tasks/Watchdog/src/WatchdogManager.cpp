@@ -13,6 +13,7 @@
 
 #include <soci.h>
 
+#include "../../../src/DatabaseInterface.h"
 #include "../../../src/Logger.h"
 
 extern "C" {

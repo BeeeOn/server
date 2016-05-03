@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tasks>    
+<tasks>
+	<task id="1" version="1"> <!-- id and version should always be integer. -->
+        <name>AliveCheck</name>
+        <!-- Task must be of types: timed, trigger, combined. -->
+        <type>timed</type>
+        <!-- Path relative to binary. -->
+        <path>./tasks/AliveCheck/AliveCheck.so</path>
+    </task>
     <task id="2" version="1"> <!-- id and version should always be integer. -->
         <name>Watchdog</name>
         <!-- Task must be of types: timed, trigger, combined. -->

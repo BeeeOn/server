@@ -23,8 +23,7 @@ public:
      * Constructor of class AliveCheckInstance.
      */
     AliveCheckInstance(long instance_id,
-                       std::weak_ptr<TaskManager> owning_manager,
-                       AliveCheckConfig parsed_config);
+                       std::weak_ptr<TaskManager> owning_manager);
     /**
      * Destructor of class AliveCheckInstance.
      */
@@ -34,11 +33,6 @@ public:
      * @param activation_time Time at which was instance activated.
      */
     void run(std::chrono::system_clock::time_point activation_time) override;
-    /**
-     * Object with stored configuration.
-     * Serves to reduce load on database.
-     */
-    AliveCheckConfig m_configuration;
     
 private:
     /**
