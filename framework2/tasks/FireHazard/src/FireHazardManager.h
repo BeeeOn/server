@@ -1,12 +1,12 @@
 /* 
- * File:   WatchdogManager.h
+ * File:   FireHazardManager.h
  * Author: Martin Novak, xnovak1c@stud.fit.vutbr.cz
- *
- * Created on 29. March 2016
+ * 
+ * Created on 4. May 2016
  */
 
-#ifndef WATCHDOGMANAGER_H
-#define WATCHDOGMANAGER_H
+#ifndef FIREHAZARDMANAGER_H
+#define FIREHAZARDMANAGER_H
 
 #include <iostream>
 #include <map>
@@ -15,37 +15,30 @@
 #include "../../../src/DatabaseInterface.h"
 #include "../../../src/TaskManager.h"
 
-#include "WatchdogInstance.h"
+#include "FireHazardInstance.h"
 
 typedef std::map<std::string, std::string> ConfigurationMap;
 
-enum class WatchdogType {
-    NOTIF, SWITCH, BOTH
-};
 
-struct WatchdogConfig {
-    WatchdogType type;
+struct FireHazardConfig {
+    double value;
     long device_euid;
     int module_id;
-    std::string comp_operator;
-    double value;
-    std::string notification;
     long a_device_euid;
     int a_module_id;
-    int a_value;
 };
 
-class WatchdogManager: public TaskManager
+class FireHazardManager: public TaskManager
 {
 public:
     /**
-     * Constructor of class WatchdogManager.
+     * Constructor of class FireHazardManager.
      */
-    WatchdogManager();
+    FireHazardManager();
     /**
-     * Destructor of class  WatchdogManager.
+     * Destructor of class FireHazardManager.
      */
-    virtual ~WatchdogManager();
+    virtual ~FireHazardManager();
     /**
      *
      * Stores configuration of given instance in database.
@@ -71,28 +64,11 @@ public:
     void reloadInstances(unsigned int task_id) override;
 
 private:
-    /**
-     * Parses received configuration map.
-     * @param instance_id ID of instance which is created.
-     * @param configuration Configuration to be parsed.
-     * @return Object containing parsed configuration.
-     */
-    WatchdogConfig parseCreateConfiguration(long instance_id, ConfigurationMap configuration);
-    /**
-     * Converts std::string to WatchdogType.
-     */
-    WatchdogType convertStringToWatchdogType(std::string type_str);
-    /**
-     * Converts WatchdogType to std::string
-     */
-    std::string convertWatchdogTypeToString(WatchdogType type);
+    
+    FireHazardConfig parseConfiguration(long instance_id, ConfigurationMap configuration);
     
     ConfigurationMap::iterator findConfigurationItem(bool required, std::string item_name, ConfigurationMap* configuration);
-    /**
-     * Checks if passed comparation operator is valid.
-     * @param comp_operator Operator to validate.
-     */
-    void validateCompOperator(std::string comp_operator);
+    
     /**
      * Checks in database if owner of instance also have access to gateway on which device is.
      */
@@ -103,4 +79,4 @@ private:
     void validateModuleExistance(long device_euid, int module_id);
 };
 
-#endif /* WATCHDOGMANAGER_H */
+#endif /* FIREHAZARDMANAGER_H */

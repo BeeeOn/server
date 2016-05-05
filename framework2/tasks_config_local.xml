@@ -14,4 +14,11 @@
         <!-- Path relative to binary. -->
         <path>./tasks/Watchdog/Watchdog.so</path>
     </task>
+    <task id="3" version="1"> <!-- id and version should always be integer. -->
+        <name>FireHazard</name>
+        <!-- Task must be of types: timed, trigger, combined. -->
+        <type>combined</type>
+        <!-- Path relative to binary. -->
+        <path>./tasks/FireHazard/FireHazard.so</path>
+    </task>
 </tasks>

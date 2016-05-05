@@ -53,6 +53,8 @@ public:
      * Removes all timed entries of instance from calendar.
      */
     virtual void deleteFromControlComponent() override;
+    
+    void removePlanedTimeFromCalendar(std::chrono::system_clock::time_point activation_time);
     /**
      * Function which contains all functionality.
      */

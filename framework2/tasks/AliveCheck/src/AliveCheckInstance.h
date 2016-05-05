@@ -46,5 +46,7 @@ private:
      */
     void sendUnavailableNotification(long device_euid);
     
+    long long getGatewayId();
+    
 };
 #endif /* ALIVECHECKINSTANCE_H */

@@ -17,6 +17,11 @@ Task::Task(unsigned short task_version, std::string task_name, TASK_TYPE task_ty
 
 Task::~Task()
 {
+    // If library is closed at the end of the program, symbols in it are then lost and 
+    // when destructors try to delete them afterwards, it causes segfault.
+    // I was not yet able to solve how to specify order in which destructors should be called.
+    // So for now library is not closed at the end of the program, and it doesn't free a few blocks.
+    // In the runtime of BAF this doesn't cause any problems.
     //closeTaskLibrary();
 }
 

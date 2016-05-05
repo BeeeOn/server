@@ -47,12 +47,12 @@ public:
      * Removes all entries of instance from control component (Calendar, DataMessageRegister).
      */
     virtual void deleteFromControlComponent() = 0;
+    
+protected:
     /**
      * Suicide function. Deletes instance from baf and from database.
      */
     void deleteItself();
-    
-protected:
     /**
      * Unique ID of this instance in database (and in BAF system -> key value in map of manager)
      */

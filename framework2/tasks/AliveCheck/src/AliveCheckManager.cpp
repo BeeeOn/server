@@ -173,7 +173,8 @@ void AliveCheckManager::validateGatewayOwnership(long instance_id, long long gat
             soci::into(user_id);
 
     short owns;
-    *sql << "SELECT exists(SELECT 1 FROM user_gateway WHERE user_id = :user_id AND gateway_id = :gateway_id);",
+    *sql << "SELECT exists(SELECT 1 FROM user_gateway WHERE user_id = :user_id "
+            "AND gateway_id = :gateway_id AND permission = 'owner') ;",
             soci::use(user_id, "user_id"),
             soci::use(gateway_id, "gateway_id"),
             soci::into(owns);

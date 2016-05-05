@@ -3,7 +3,7 @@
 CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.8.2-beta1" last-position="0,0" last-zoom="1"
+<dbmodel pgmodeler-ver="0.8.2-beta1" last-position="0,0" last-zoom="0.8"
 	 default-owner="postgres">
 <role name="hardware">
 </role>
@@ -224,7 +224,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<tag name="Hardware"/>
-	<position x="1404.56" y="665.485"/>
+	<position x="1400.27" y="608.342"/>
 	<column name="device_euid" not-null="true">
 		<type name="decimal" length="10"/>
 	</column>
@@ -264,7 +264,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<tag name="Hardware"/>
-	<position x="1291.99" y="846.317"/>
+	<position x="1401.99" y="776.317"/>
 	<column name="device_euid" not-null="true">
 		<type name="decimal" length="10"/>
 	</column>
@@ -319,7 +319,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="notifications">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="165.85" y="820.139"/>
+	<position x="181.564" y="762.996"/>
 	<column name="message_id" not-null="true">
 		<type name="bigint"/>
 	</column>
@@ -349,7 +349,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="mobile_devices">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="94.25" y="84.286"/>
+	<position x="97.1071" y="152.857"/>
 	<column name="mobile_id" not-null="true">
 		<type name="text"/>
 	</column>
@@ -377,7 +377,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<tag name="Achievements"/>
-	<position x="477.69" y="859.953"/>
+	<position x="483.404" y="809.953"/>
 	<column name="fk_achievement_id" not-null="true">
 		<type name="integer"/>
 	</column>
@@ -462,7 +462,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="push_notification_service">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="78" y="313"/>
+	<position x="65.1429" y="340.143"/>
 	<column name="push_notification_service_id" not-null="true">
 		<type name="serial"/>
 	</column>
@@ -538,7 +538,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<tag name="Tasks"/>
-	<position x="1078" y="167"/>
+	<position x="1056.57" y="169.857"/>
 	<column name="instance_id" not-null="true">
 		<type name="integer"/>
 	</column>
@@ -557,7 +557,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<tag name="Tasks"/>
-	<position x="1403" y="71"/>
+	<position x="1407.29" y="62.4286"/>
 	<column name="instance_id" not-null="true">
 		<type name="integer"/>
 	</column>
@@ -576,9 +576,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="notification">
 		<type name="text"/>
 	</column>
-	<column name="a_gateway_id">
-		<type name="decimal" length="20" precision="0"/>
-	</column>
 	<column name="a_device_euid">
 		<type name="decimal" length="10"/>
 	</column>
@@ -589,6 +586,34 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="integer"/>
 	</column>
 	<constraint name="task_watchdog_pk" type="pk-constr" table="public.task_watchdog">
+		<columns names="instance_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="task_fire_hazard">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<tag name="Tasks"/>
+	<position x="1405.36" y="238.214"/>
+	<column name="instance_id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="value">
+		<type name="integer"/>
+	</column>
+	<column name="device_euid">
+		<type name="decimal" length="10"/>
+	</column>
+	<column name="module_id">
+		<type name="smallint"/>
+	</column>
+	<column name="a_device_euid">
+		<type name="decimal" length="10"/>
+	</column>
+	<column name="a_module_id">
+		<type name="smallint"/>
+	</column>
+	<constraint name="task_fire_hazard_pk" type="pk-constr" table="public.task_fire_hazard">
 		<columns names="instance_id" ref-type="src-columns"/>
 	</constraint>
 </table>
@@ -725,14 +750,26 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<columns names="device_euid" ref-type="dst-columns"/>
 </constraint>
 
-<constraint name="rel_task_watchdog_gateway" type="fk-constr" comparison-type="MATCH FULL"
-	 upd-action="NO ACTION" del-action="SET NULL" ref-table="public.gateway" table="public.task_watchdog">
-	<columns names="a_gateway_id" ref-type="src-columns"/>
-	<columns names="gateway_id" ref-type="dst-columns"/>
-</constraint>
-
 <constraint name="rel_task_watchdog_device2" type="fk-constr" comparison-type="MATCH FULL"
 	 upd-action="NO ACTION" del-action="SET NULL" ref-table="public.device" table="public.task_watchdog">
+	<columns names="a_device_euid" ref-type="src-columns"/>
+	<columns names="device_euid" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="rel_task_fire_hazard_instance" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.instance" table="public.task_fire_hazard">
+	<columns names="instance_id" ref-type="src-columns"/>
+	<columns names="instance_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="rel_task_fire_hazard_device" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="public.device" table="public.task_fire_hazard">
+	<columns names="device_euid" ref-type="src-columns"/>
+	<columns names="device_euid" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="rel_task_fire_hazard_device2" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="public.device" table="public.task_fire_hazard">
 	<columns names="a_device_euid" ref-type="src-columns"/>
 	<columns names="device_euid" ref-type="dst-columns"/>
 </constraint>
@@ -868,9 +905,14 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 dst-table="public.device"
 	 src-required="false" dst-required="false"/>
 
-<relationship name="rel_task_watchdog_gateway" type="relfk"
-	 src-table="public.task_watchdog"
-	 dst-table="public.gateway"
+<relationship name="rel_task_fire_hazard_instance" type="relfk"
+	 src-table="public.task_fire_hazard"
+	 dst-table="public.instance"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_task_fire_hazard_device" type="relfk"
+	 src-table="public.task_fire_hazard"
+	 dst-table="public.device"
 	 src-required="false" dst-required="false"/>
 
 <permission>

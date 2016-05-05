@@ -11,7 +11,7 @@
 #include "TimedTaskInstance.h"
 #include "TriggerTaskInstance.h"
 
-class CombinedTaskInstance: public TimedTaskInstance, TriggerTaskInstance
+class CombinedTaskInstance: public TimedTaskInstance, public TriggerTaskInstance
 {
 public:
     /**
@@ -30,6 +30,9 @@ public:
      */
     void deleteFromControlComponent() override; 
 
+    void deleteFromCalendar();
+    
+    void deleteFromDataMessageRegister();
 };
 
 #endif /* COMBINEDTASKINSTANCE_H */

@@ -125,7 +125,6 @@ void WatchdogInstance::operatorConditionMet()
         int a_module_id;
         int a_value;
         
-        std::string notification;
         *sql << "SELECT a_device_euid, a_module_id, a_value "
                 "FROM task_watchdog WHERE instance_id = :instance_id",
                 soci::use(m_instance_id, "instance_id"),
@@ -188,7 +187,7 @@ void WatchdogInstance::sendNotification(std::string notification)
             // Get all service_reference_ids.
             sr_ids.push_back(sri_row.get<std::string>(0));
         }
-        int now_timestamp = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+        int now_timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
         // URI notif is just placeholder until AliveCheck notification is specified.
         std::shared_ptr<UriNotif> notif = std::make_shared<UriNotif>(user_id, m_instance_id, now_timestamp, notification, "");
         // Send notifications.

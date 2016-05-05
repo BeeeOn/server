@@ -57,7 +57,6 @@ module_id smallint NOT NULL,
 comp_operator varchar(2) NOT NULL,
 value real NOT NULL,
 notification text,
-a_gateway_id decimal(20,0),
 a_device_euid decimal(10),
 a_module_id smallint,
 a_value integer,
@@ -117,12 +116,6 @@ ON DELETE SET NULL ON UPDATE NO ACTION;
 -- ALTER TABLE public.task_watchdog DROP CONSTRAINT IF EXISTS rel_task_watchdog_device2 CASCADE;
 ALTER TABLE public.task_watchdog ADD CONSTRAINT rel_task_watchdog_device2 FOREIGN KEY (a_device_euid)
 REFERENCES public.device (device_euid) MATCH FULL
-ON DELETE SET NULL ON UPDATE NO ACTION;
-
--- object: rel_task_watchdog_gateway | type: CONSTRAINT --
--- ALTER TABLE public.task_watchdog DROP CONSTRAINT IF EXISTS rel_task_watchdog_gateway CASCADE;
-ALTER TABLE public.task_watchdog ADD CONSTRAINT rel_task_watchdog_gateway FOREIGN KEY (a_gateway_id)
-REFERENCES public.gateway (gateway_id) MATCH FULL
 ON DELETE SET NULL ON UPDATE NO ACTION;
 
 /*

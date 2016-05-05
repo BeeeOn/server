@@ -14,6 +14,8 @@
 #include "../../../src/UserMessages.h"
 #include "../../../src/TaskManager.h"
 
+typedef std::map<std::string, std::string> ConfigurationMap;
+
 struct AliveCheckConfig {
     short send_notif;
     long long gateway_id;
@@ -35,7 +37,7 @@ public:
      * @param instance_id ID of instance which configuration should be stored.
      * @param config Configuration to store.
      */
-    void createConfiguration(long instance_id, std::map<std::string, std::string> config) override;
+    void createConfiguration(long instance_id, ConfigurationMap config) override;
     /**
      * Changes configuration of instance.
      * @param change_message Message with info about instance and changed configuration.
@@ -59,7 +61,7 @@ private:
      * @param configuration Map of configuration to parse.
      * @return Parsed AliveCheckConfig object.
      */
-    AliveCheckConfig parseConfiguration(long instance_id, std::map<std::string, std::string> configuration);
+    AliveCheckConfig parseConfiguration(long instance_id, ConfigurationMap configuration);
     /**
      * Checks in database if owner of instance also have access to gateway.
      */

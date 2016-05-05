@@ -32,17 +32,32 @@ CombinedTaskInstance::~CombinedTaskInstance() {
 
 void CombinedTaskInstance::deleteFromControlComponent()
 {
+    deleteFromCalendar();
+    deleteFromDataMessageRegister();
+}
+
+void CombinedTaskInstance::deleteFromCalendar()
+{
     try {
         // Remove all activations of instance from Calendar.
         Calendar::getInstance()->removeAllActivationsOfInstance(m_activation_times, this);
         // Remove all information about activations from internal container.
         m_activation_times.clear();
+    }
+    catch (const std::exception& e) {
+        logger.LOGFILE("combined_instance", "ERROR") << e.what() << std::endl;
+    }
+}
+
+void CombinedTaskInstance::deleteFromDataMessageRegister()
+{
+    try {
         // Remove all entries of this instance from DataMessageRegister.
         DataMessageRegister::getInstance()->removeAllEntriesOfInstance(m_registered_device_euids, this);
         // Remove all device euids of registered devices from internal container.
         m_registered_device_euids.clear();
     }
     catch (const std::exception& e) {
-        logger.LOGFILE("combined_instance", "WARN") << e.what() << std::endl;
+        logger.LOGFILE("combined_instance", "ERROR") << e.what() << std::endl;
     }
 }

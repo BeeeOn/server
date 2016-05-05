@@ -72,10 +72,20 @@ void TimedTaskInstance::planToDateAndTime(std::string date_time)
 
 void TimedTaskInstance::deleteFromControlComponent()
 {
-    std::lock_guard<std::mutex> lock(m_activation_mx);
     try {
         // Remove all activations of instance from Calendar.
         Calendar::getInstance()->removeAllActivationsOfInstance(m_activation_times, this);
+    }
+    catch (const std::exception& e) {
+        logger.LOGFILE("timed_instance", "WARN") << e.what() << std::endl;
+    }
+}
+
+void TimedTaskInstance::removePlanedTimeFromCalendar(std::chrono::system_clock::time_point activation_time)
+{
+    try {
+        // Remove activation of instance from Calendar.
+        Calendar::getInstance()->removeActivation(activation_time, this);
     }
     catch (const std::exception& e) {
         logger.LOGFILE("timed_instance", "WARN") << e.what() << std::endl;

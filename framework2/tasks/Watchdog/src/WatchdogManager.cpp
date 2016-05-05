@@ -197,7 +197,7 @@ void WatchdogManager::changeConfiguration(ChangeMessage change_message)
     // Store to database.
     tr.commit();
     
-    logger.LOGFILE("Watchdog", "INFO") << "Instance of Watchdog was changed: instance_id: "
+    logger.LOGFILE("watchdog", "INFO") << "Instance of Watchdog was changed: instance_id: "
             << change_message.instance_id << std::endl;
 }
 
@@ -269,9 +269,6 @@ void WatchdogManager::reloadInstances(unsigned int task_id)
         
         soci::row const& row = *it;
         instance_id = row.get<int>(0);
-        
-        WatchdogConfig configuration;
-        std::string type_str;
         
         *sql << "SELECT device_euid FROM task_watchdog WHERE instance_id = :instance_id",
                 soci::use(instance_id, "instance_id"),

@@ -66,7 +66,6 @@ void TriggerTaskInstance::removeEntryFromDataMessageRegiser(long device_euid)
 
 void TriggerTaskInstance::deleteFromControlComponent()
 {
-    std::lock_guard<std::mutex> lock(m_activation_mx);
     try {
         // Remove all entries of this instance from DataMessageRegister.
         DataMessageRegister::getInstance()->removeAllEntriesOfInstance(m_registered_device_euids, this);
