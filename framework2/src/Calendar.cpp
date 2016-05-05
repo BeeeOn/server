@@ -97,7 +97,7 @@ void Calendar::runCalendar()
             m_wakeup_time = std::chrono::system_clock::now();
         }
         
-        m_calendar_events_mx.unlock();
+        
         
         // Launch thread to execute stored events.
         std::thread t_execute_events(&Calendar::activateInstances, this, to_activate);
@@ -109,6 +109,7 @@ void Calendar::runCalendar()
         // lower activation time then the one for which thread waits now.
         std::unique_lock<std::mutex> lock(m_new_wakeup_time_mx);
         
+        m_calendar_events_mx.unlock();
         // Wait until the activation time of event with a lowest activation time in queue.
         m_new_wakeup_time_cv.wait_until(lock, m_wakeup_time);
     }
@@ -131,25 +132,25 @@ void Calendar::activateInstances(std::multimap<std::chrono::system_clock::time_p
 
 void Calendar::waitUntilCalendarIsNotEmpty()
 {
-    m_test_calendar_empty_mx.lock();
+    //m_test_calendar_empty_mx.lock();
     
     bool calendar_empty = m_calendar_events.empty();
     if (calendar_empty) {
         
         // Until it's not notified that there is an event in calendar, wait for event to be emplaced.
         std::unique_lock<std::mutex> lock(m_calendar_not_empty_mx);
-        m_test_calendar_empty_mx.unlock();
+        //m_test_calendar_empty_mx.unlock();
         m_calendar_not_empty_cv.wait(lock);
     }
     if (!calendar_empty) {
-        m_test_calendar_empty_mx.unlock();
+        //m_test_calendar_empty_mx.unlock();
     }    
 }
 
 void Calendar::emplaceActivation(std::chrono::system_clock::time_point activation_time, TaskInstance* instance_ptr)
 {
     m_calendar_events_mx.lock();
-    m_test_calendar_empty_mx.lock();
+    //m_test_calendar_empty_mx.lock();
     // Before new event is created, check if queue is empty.
     bool calendar_empty = m_calendar_events.empty();
     
@@ -170,7 +171,7 @@ void Calendar::emplaceActivation(std::chrono::system_clock::time_point activatio
         // in waitUntilCalendarIsNotEmpty() function and should be notified to wake up.
         m_calendar_not_empty_cv.notify_all();
     }
-    m_test_calendar_empty_mx.unlock();
+    //m_test_calendar_empty_mx.unlock();
     m_calendar_events_mx.unlock();
 }
 
@@ -214,7 +215,7 @@ void Calendar::stopCalendar()
 void Calendar::removeAllActivationsOfInstance(std::set<std::chrono::system_clock::time_point> planned_times, TaskInstance* instance_ptr)
 {
     // Lock m_calendar_events container.
-    std::lock_guard<std::mutex> lock(m_calendar_events_mx);
+    
     
     for (auto activation_time : planned_times) {
         removeActivation(activation_time, instance_ptr);
@@ -224,8 +225,9 @@ void Calendar::removeAllActivationsOfInstance(std::set<std::chrono::system_clock
 void Calendar::removeActivation(std::chrono::system_clock::time_point activation_time, TaskInstance* instance_ptr)
 {
     // Lock m_calendar_events container.
-    std::mutex remove_activation_mx;
-    std::lock_guard<std::mutex> lock(remove_activation_mx);
+    //std::mutex remove_activation_mx;
+    //std::lock_guard<std::mutex> lock(remove_activation_mx);
+    std::lock_guard<std::mutex> lock(m_calendar_events_mx);
     
     // Find range of all activations containing activation_time as key. 
     auto range_of_keys =  m_calendar_events.equal_range(activation_time);
