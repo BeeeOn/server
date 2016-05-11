@@ -94,18 +94,31 @@ void TaskLoader::createParsedTasks(std::vector<TaskInfo> tasks_info)
             try {
                 // Insert task information to database.
                 SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
-                *sql << "INSERT INTO task(task_id, name, version, type) VALUES(:task_id, :name, :version, :type)",
-                     soci::use(task_info.task_id, "task_id"),
-                     soci::use(task_info.task_name, "name"),
-                     soci::use(task_info.task_version, "version"),
-                     soci::use(type_str, "type");
+                
+                short exists;
+                *sql << "SELECT exists(SELECT 1 FROM task WHERE task_id = :task_id);",
+                        soci::use(task_info.task_id, "task_id"),
+                        soci::into(exists);
+                
+                if (!exists) {
+                    // Insert only if it doesn't exist.
+                    *sql << "INSERT INTO task(task_id, name, version, type) VALUES(:task_id, :name, :version, :type)",
+                             soci::use(task_info.task_id, "task_id"),
+                             soci::use(task_info.task_name, "name"),
+                             soci::use(task_info.task_version, "version"),
+                             soci::use(type_str, "type");
 
-                logger.LOGFILE("task_loader", "INFO") << "Task: " << task_info.task_name
-                        << " was inserted to database." << std::endl;
+                    logger.LOGFILE("task_loader", "INFO") << "Task: " << task_info.task_name
+                            << " was inserted to database." << std::endl;
+                }
+                else {
+                    logger.LOGFILE("task_loader", "INFO") << "Task with ID: " << task_info.task_id
+                            << " already is in database." << std::endl;
+                }
             }
             catch (const std::exception& e) {
-                logger.LOGFILE("task_loader", "WARN") << "Task: " << task_info.task_name
-                        << " is already in database: " << e.what() << std::endl;
+                logger.LOGFILE("task_loader", "ERROR") << "Task: " << task_info.task_name
+                        << " storing to database was unsuccessful: " << e.what() << std::endl;
             }
             
             // Emplace task into BAF.

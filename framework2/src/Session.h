@@ -61,6 +61,23 @@ protected:
      * Handler after asynchronous write was made.
      */
     void handleWrite(const asio::error_code& error);
+    
+    /**
+     * Sets deadline timeout of connection to 2 seconds.
+     */
+    void startTimeout();
+    /**
+     * Restarts deadline timeout to be able to send message.
+     */
+    void restartTimeout();
+    /*
+     * Handler in which is handled timeout of connection.
+     */
+    void timeoutExpired(const asio::error_code& error);
+    /**
+     * Stops connection. Called when it times out.
+     */
+    void stopConnection();
     /**
      * Socket object for communication.
      */
@@ -69,6 +86,14 @@ protected:
      * Buffer in which is stored received message.
      */
     asio::streambuf m_buffer;
+    /**
+     * If this deadline is met, connection times out.
+     */
+    asio::deadline_timer m_deadline;
+    /**
+     * Variable which indicates if deadline was met.
+     */
+    bool m_expired;
 };
 
 #endif /* SESSION_H */

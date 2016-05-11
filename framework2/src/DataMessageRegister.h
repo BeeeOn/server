@@ -48,14 +48,14 @@ public:
      * @param device_euid EUID of registered device.
      * @param instance_ptr Pointer to instance which deletes entry.
      */
-    void removeEntryOfInstance(long device_euid, TaskInstance* instance_ptr);
+    void removeEntry(long device_euid, TaskInstance* instance_ptr);
     
     /**
      * Removes all entries of instance from m_message_register.
      * @param device_euids Set of all EUIDs of registered devices.
      * @param instance_ptr Pointer to instance which deletes entries.
      */
-    void removeAllEntriesOfInstance(std::set<long /*device_euid*/> device_euids, TaskInstance* instance_ptr);
+    void removeAllEntries(std::set<long /*device_euid*/> device_euids, TaskInstance* instance_ptr);
 
 private:
     /**

@@ -144,7 +144,7 @@ void WatchdogInstance::operatorConditionMet()
 
             if (ind_a_gateway_id == soci::i_ok) {
                 GatewayInterface gi;
-                gi.sendSetState(a_gateway_id, a_device_euid, a_module_id, a_value);
+                //gi.sendSetState(a_gateway_id, a_device_euid, a_module_id, a_value);
                 logger.LOGFILE("watchdog", "INFO") << "Instance Watchdog: " << m_instance_id << " switched actuator: [gateway_id: " << a_gateway_id << ", device_euid: "
                           << a_device_euid << ", module_id: " << a_module_id << ", value: " << a_value << "]" << std::endl;
             }
@@ -166,7 +166,7 @@ void WatchdogInstance::sendNotification(std::string notification)
     SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
 
     // Get ids of all users who own this instance. This is prepared for future, when instance sharing will be possible.
-    soci::rowset<soci::row> user_rows = (sql->prepare << "SELECT user_id FROM user_instance WHERE instance_id = :instance_id",
+    soci::rowset<soci::row> user_rows = (sql->prepare << "SELECT user_id FROM instance WHERE instance_id = :instance_id",
                                                           soci::use(m_instance_id, "instance_id"));
 
     for (soci::rowset<soci::row>::const_iterator user_it = user_rows.begin(); user_it != user_rows.end(); ++user_it) {   
@@ -187,11 +187,11 @@ void WatchdogInstance::sendNotification(std::string notification)
             // Get all service_reference_ids.
             sr_ids.push_back(sri_row.get<std::string>(0));
         }
-        int now_timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+        long now_timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
         // URI notif is just placeholder until AliveCheck notification is specified.
         std::shared_ptr<UriNotif> notif = std::make_shared<UriNotif>(user_id, m_instance_id, now_timestamp, notification, "");
         // Send notifications.
-        notif->sendGcm(&sr_ids); 
+        //notif->sendGcm(&sr_ids); 
         logger.LOGFILE("watchdog", "INFO") << "Instance Watchdog: " << m_instance_id << " sent notifification: [user_id: " << user_id
                   << ", timestamp: " << now_timestamp << ", notification: " << notification << "]" << std::endl;
     }
@@ -212,11 +212,11 @@ double WatchdogInstance::getModuleValue(int module_id, DataMessage data_message)
 
 bool WatchdogInstance::shouldAct()
 {
-    // This construction is to protect from acting more than once in thirty seconds
+    // This construction is to protect from acting more than once in ten seconds
     // so it won't spam actuator or users device. In a case that value from module
     // oscilates around guarded value .
     std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
-    if (now < (m_last_act_time + std::chrono::seconds(30))) {
+    if (now < (m_last_act_time + std::chrono::seconds(10))) {
          return false;
     }
     else {

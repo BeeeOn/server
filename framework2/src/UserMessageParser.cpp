@@ -47,9 +47,6 @@ USER_MESSAGE_TYPE UserMessageParser::parseMessage(std::string message)
             else if (type_as_string == "delete") {
                 return USER_MESSAGE_TYPE::DELETE;
             }
-            else if (type_as_string == "give_perm") {
-                return USER_MESSAGE_TYPE::GIVE_PERM;
-            }
             else if (type_as_string == "get_inst_ids") {
                 return USER_MESSAGE_TYPE::GET_INST_IDS;
             }
@@ -182,46 +179,6 @@ DeleteMessage UserMessageParser::processDeleteMessage()
     message.user_id = getUserId();
     message.task_id = getTaskId();
     message.instance_id = getInstanceId();
-    return message;
-}
-
-GivePermMessage UserMessageParser::processGivePermMessage()
-{
-    GivePermMessage message;
-    message.user_id = getUserId();
-    message.task_id = getTaskId();
-    message.instance_id = getInstanceId();
-    
-    if (m_document.HasMember("friend_mail")) {
-        rapidjson::Value& friend_mail_value = m_document["friend_mail"];
-        
-        if (!friend_mail_value.IsString()) {
-            throw std::runtime_error("UserMessageParser: Received message has member \"friend_mail\", but it's not a string.");
-        }
-        else {
-            // Return task_id.
-            message.friend_mail = friend_mail_value.GetString();
-        }
-    }
-    else {
-        throw std::runtime_error("UserMessageParser: Received message doesn't have member \"friend_mail\".");
-    }
-    
-    if (m_document.HasMember("permission")) {
-        rapidjson::Value& permission_value = m_document["permission"];
-        
-        if (!permission_value.IsString()) {
-            throw std::runtime_error("UserMessageParser: Received message has member \"permission\", but it's not a string.");
-        }
-        else {
-            // Return task_id.
-            message.permission = permission_value.GetString();
-        }
-    }
-    else {
-        throw std::runtime_error("UserMessageParser: Received message doesn't have member \"permission\".");
-    }
-    
     return message;
 }
 

@@ -40,7 +40,7 @@ public:
      * Makes new session to database and returns poiter to it.
      * @return Shared pointer to new session.
      */
-    std::shared_ptr<soci::session> makeNewSession();
+    SessionSharedPtr makeNewSession();
 
 private:
     /**

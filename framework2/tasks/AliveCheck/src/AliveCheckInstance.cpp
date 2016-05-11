@@ -20,6 +20,7 @@
 #include "../../../../Notificator/UriNotif.h"
 
 #include "../../../src/DatabaseInterface.h"
+#include "../../../src/GatewayInterface.h"
 #include "../../../src/Logger.h"
 #include "../../../src/TaskManager.h"
 
@@ -43,8 +44,8 @@ AliveCheckInstance::~AliveCheckInstance()
 
 void AliveCheckInstance::run(std::chrono::system_clock::time_point activation_time)
 {
-    logger.LOGFILE("alive_check", "INFO") << "AliveCheck instance with instance_id: "
-            << m_instance_id << " has been run." << std::endl;
+    //logger.LOGFILE("alive_check", "INFO") << "AliveCheck instance with instance_id: "
+    //        << m_instance_id << " has been run." << std::endl;
     
     planActivationAfterSeconds(30);
     
@@ -53,15 +54,28 @@ void AliveCheckInstance::run(std::chrono::system_clock::time_point activation_ti
 
 void AliveCheckInstance::runAliveCheck()
 {
-    SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
-    
-    long long gateway_id = getGatewayId();
-    
     int device_id;
     double device_euid;
     long long measured_at;
     int refresh;
-
+    
+    SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
+    
+    // Find out from configuration if instance should send notification.
+    short send_notif;
+    *sql << "SELECT send_notif FROM task_alive_check WHERE instance_id = :instance_id",
+             soci::into(send_notif),
+             soci::use(m_instance_id, "instance_id");
+    
+    // Get identificator of gateway from configuration.
+    long long gateway_id = getGatewayId();
+    
+    // Check if gateway is online.
+    // This checking is temporary disabled, because ping functionality 
+    //is not yet supported by ADA Server Sender.
+    //checkGatewayStatus(gateway_id, send_notif);
+    
+    // Get information about devices.
     soci::rowset<soci::row> rows = (sql->prepare << "SELECT device_type, device_euid, measured_at, refresh FROM device WHERE gateway_id = :gateway_id",
                                     soci::use(gateway_id, "gateway_id"));
 
@@ -100,39 +114,35 @@ void AliveCheckInstance::runAliveCheck()
                 *sql << "UPDATE device SET status = 'unavailable'::device_status WHERE device_euid = :device_euid",
                         soci::use(device_euid, "device_euid");
 
-                // Find out from configuration if instance should send notification.
-                short send_notif;
-                *sql << "SELECT send_notif FROM task_alive_check WHERE instance_id = :instance_id",
-                        soci::into(send_notif),
-                        soci::use(m_instance_id, "instance_id");
                 // Send notification
                 if (send_notif == 1) {
                     // Only type in which soci can get device_euid from database is double,
                     // so it must be casted.
-                    sendUnavailableNotification(static_cast<long>(device_euid));
+                    std::string notification("Zařízení s euid: ");
+                    notification += std::to_string(static_cast<long>(device_euid));
+                    notification += " je nedostupné.";
+                    
+                    sendUnavailableNotification(notification);
                 }
+                logger.LOGFILE("alive_check", "INFO") << "Instance: " << m_instance_id << " - Device with device_euid: "
+                    << device_euid << " is now unavailable." << std::endl;
             }
-            logger.LOGFILE("alive_check", "INFO") << "Instance: " << m_instance_id << " - Device with device_euid: "
-                    << device_euid << " is unavailable." << std::endl;
         }
         else {
             if (status != "available") {
                 
                 *sql << "UPDATE device SET status = 'available'::device_status WHERE device_euid = :device_euid",
                     soci::use(device_euid, "device_euid");
-            }
-            logger.LOGFILE("alive_check", "INFO") << "Instance: " << m_instance_id
-                    << " - Device with device_euid: " << device_euid << " is available." << std::endl;
+                
+                logger.LOGFILE("alive_check", "INFO") << "Instance: " << m_instance_id
+                      << " - Device with device_euid: " << device_euid << " is now available." << std::endl;
+            }   
         }
     }
 }
 
-void AliveCheckInstance::sendUnavailableNotification(long device_euid)
+void AliveCheckInstance::sendUnavailableNotification(std::string notification)
 {
-    std::string notification("Zařízení s euid: ");
-    notification += std::to_string(device_euid);
-    notification += " je nedostupné.";
-    
     int user_id;
     // Get gateway_id from database.
     long long gateway_id = getGatewayId();
@@ -161,12 +171,12 @@ void AliveCheckInstance::sendUnavailableNotification(long device_euid)
             //Get all service_reference_ids.
             sr_ids.push_back(sri_row.get<std::string>(0));
         }
-
-        int now_timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+        
+        long now_timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
         // URI notif is just placeholder until AliveCheck notification is specified.
         std::shared_ptr<UriNotif> notif = std::make_shared<UriNotif>(user_id, m_instance_id, now_timestamp, notification, "");
         // Send notifications.
-        notif->sendGcm(&sr_ids);
+        //notif->sendGcm(&sr_ids);
         logger.LOGFILE("watchdog", "INFO") << "Instance AliveCheck: " << m_instance_id << " sent notifification: [user_id: " << user_id
                   << ", timestamp: " << now_timestamp << ", notification: " << notification << "]" << std::endl;
     }
@@ -187,4 +197,50 @@ long long AliveCheckInstance::getGatewayId()
                   << " which doesn't exist: gateway_id: " << gateway_id << std::endl;
     }
     return gateway_id;
+}
+
+void AliveCheckInstance::checkGatewayStatus(long long gateway_id, short send_notif)
+{
+    SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
+    GatewayInterface gi;
+    
+    std::string status;
+    *sql << "SELECT status FROM gateway WHERE gateway_id = :gateway_id",
+            soci::into(status),
+            soci::use(gateway_id, "gateway_id");
+    
+    
+    if (!gi.pingGateway(gateway_id)) {
+        
+        if (status != "unavailable") {
+               
+            // Gateway is unavailable.
+            *sql << "UPDATE gateway SET status = 'unavailable'::gateway_status WHERE gateway_id = :gateway_id",
+                     soci::use(gateway_id, "gateway_id");
+
+            // Send notification
+            if (send_notif == 1) {
+                // Only type in which soci can get device_euid from database is double,
+                // so it must be casted.
+                std::string notification("Brána s id: ");
+                notification += std::to_string(gateway_id);
+                notification += " je nedostupná.";
+                    
+                sendUnavailableNotification(notification);
+                
+                logger.LOGFILE("alive_check", "INFO") << "Instance: " << m_instance_id << " - Gateway with gateway_id: "
+                << gateway_id << " is now unavailable." << std::endl;  
+            }
+        }
+    }
+    else {
+        if (status != "available") {
+                
+            *sql << "UPDATE gateway SET status = 'available'::gateway_status WHERE gateway_id = :gateway_id",
+                     soci::use(gateway_id, "gateway_id");
+            
+            logger.LOGFILE("alive_check", "INFO") << "Instance: " << m_instance_id
+                    << " - Gateway with gateway_id: " << gateway_id << " is now available." << std::endl;
+        }
+    }    
 }

@@ -53,7 +53,7 @@ void DatabaseInterface::connectToDatabase(int sessions_count, std::string connec
     }
 }
 
-std::shared_ptr<soci::session> DatabaseInterface::makeNewSession()
+SessionSharedPtr DatabaseInterface::makeNewSession()
 {
     return std::make_shared<soci::session>(*m_connection_pool);
 }

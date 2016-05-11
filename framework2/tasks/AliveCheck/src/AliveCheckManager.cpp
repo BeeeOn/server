@@ -24,7 +24,6 @@
 extern "C" {
     std::shared_ptr<TaskManager> createTaskManager()
     {
-        logger.LOGFILE("alive_check", "INFO") << "AliveCheck manager was created." << std::endl;
         return std::make_shared<AliveCheckManager>();
     }
 }
@@ -168,20 +167,20 @@ void AliveCheckManager::validateGatewayOwnership(long instance_id, long long gat
     SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
     // Get ID of user owning instance of Watchdog.
     long user_id;
-    *sql << "SELECT user_id FROM user_instance WHERE instance_id = :instance_id",
+    *sql << "SELECT user_id FROM instance WHERE instance_id = :instance_id",
             soci::use(instance_id, "instance_id"),
             soci::into(user_id);
 
     short owns;
     *sql << "SELECT exists(SELECT 1 FROM user_gateway WHERE user_id = :user_id "
-            "AND gateway_id = :gateway_id AND permission = 'owner') ;",
+            "AND gateway_id = :gateway_id);",
             soci::use(user_id, "user_id"),
             soci::use(gateway_id, "gateway_id"),
             soci::into(owns);
                 
     if (!owns) {
         logger.LOGFILE("alive_check", "ERROR") <<  "User with user_id: " << user_id << 
-                " tried to operate with device which is on gateway user doesn't own: " << gateway_id << ".";
+                " tried to operate with device which is on gateway user doesn't own: " << gateway_id << "." << std::endl;
         throw std::runtime_error("Could not process received configuration.");
     }
 }

@@ -41,9 +41,6 @@ public:
      * @return Vector with IDs of all instances owned by user. 
      */
     virtual std::vector<long> getInstanceIds(GetInstIdsMessage get_inst_ids_message) override;
-    
-    //virtual std::string givePermission(GivePermMessage give_perm_message);
- 
     /**
      * To anable instance to delete itself.
      * @param instance_id ID of instance to delete from system.
@@ -53,10 +50,6 @@ public:
      * Deletes all instances from manager.     
      */
     void deleteAllInstances();
-    /**
-     * Prints debug information about all instances in manager.
-     */
-    void debugPrintTaskInstances();
 };
 
 #endif /* TASKMANAGER_H */

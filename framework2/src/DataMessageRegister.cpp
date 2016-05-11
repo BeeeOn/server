@@ -59,7 +59,7 @@ void DataMessageRegister::insertEntry(long device_euid, TaskInstance* task_insta
     m_message_register.emplace(device_euid, task_instance);
     
 }
-void DataMessageRegister::removeEntryOfInstance(long device_euid, TaskInstance* instance_ptr)
+void DataMessageRegister::removeEntry(long device_euid, TaskInstance* instance_ptr)
 {
     std::lock_guard<std::mutex> lock(m_register_mx);
     
@@ -72,7 +72,7 @@ void DataMessageRegister::removeEntryOfInstance(long device_euid, TaskInstance* 
     }
 }
 
-void DataMessageRegister::removeAllEntriesOfInstance(std::set<long> device_euids, TaskInstance* instance_ptr)
+void DataMessageRegister::removeAllEntries(std::set<long> device_euids, TaskInstance* instance_ptr)
 {
     std::lock_guard<std::mutex> lock(m_register_mx);
     

@@ -43,11 +43,6 @@ void GatewaySession::processMessage(std::string message)
             modules += module.second.second;
             modules += ", ";
         }
-        
-        logger.LOGFILE("data_message_interface", "MSG") << "Received data message | gateway_id: "
-                        << data_message.gateway_id << ", device_euid: " << data_message.device_euid
-                        << ", time: " << data_message.time << ", config: { " << modules << "}" << std::endl;
-
         // Activate all instances which are registered to receive this data.
         DataMessageRegister::getInstance()->activateInstances(data_message);
     }

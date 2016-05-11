@@ -20,7 +20,6 @@
 extern "C" {
     std::shared_ptr<TaskManager> createTaskManager()
     {
-        logger.LOGFILE("fire_hazard", "INFO") << "FireHazard manager was created." << std::endl;
         return std::make_shared<FireHazardManager>();
     }
 }
@@ -229,7 +228,7 @@ void FireHazardManager::validateDeviceOwnership(long instance_id, long device_eu
     SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
     // Get ID of user owning instance of Watchdog.
     long user_id;
-    *sql << "SELECT user_id FROM user_instance WHERE instance_id = :instance_id",
+    *sql << "SELECT user_id FROM instance WHERE instance_id = :instance_id",
             soci::use(instance_id, "instance_id"),
             soci::into(user_id);
     

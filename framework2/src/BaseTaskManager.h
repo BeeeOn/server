@@ -67,9 +67,6 @@ public:
      * @return Vector with IDs of all instances owned by user. 
      */
     virtual std::vector<long> getInstanceIds(GetInstIdsMessage get_inst_ids_message) = 0;
-    
-    //virtual std::string givePermission(GivePermMessage give_perm_message);
-    
     /**
      * Function which enables instance to delete itself.
      * @param instance_id ID of instance to delete from system.

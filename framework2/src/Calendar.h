@@ -120,9 +120,10 @@ private:
     std::mutex m_new_wakeup_time_mx;
     std::condition_variable m_calendar_not_empty_cv;
     std::mutex m_calendar_not_empty_mx;
-    
+    /**
+     * Binary semaphore to protect m_calendar_events multimap from data race.
+     */
     std::mutex m_calendar_events_mx;
-    std::mutex m_test_calendar_empty_mx;
     /**
      *  Indicates if calendar algorithm should run.
      */

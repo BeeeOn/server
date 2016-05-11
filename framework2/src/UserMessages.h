@@ -14,7 +14,7 @@
 #include <string> //std::string
 
 enum class USER_MESSAGE_TYPE {
-    CREATE, CHANGE, DELETE, GIVE_PERM, GET_INST_IDS, GET_CONF, GET_DATA
+    CREATE, CHANGE, DELETE, GET_INST_IDS, GET_CONF, GET_DATA
 };
 
 struct CreateMessage //"msg": "create"
@@ -47,20 +47,6 @@ struct DeleteMessage //"msg": "delete"
     short task_id;
     /** At least 4 bytes. Serial in database (4 bytes). */
     long instance_id;
-};
-
-struct GivePermMessage //"msg": "give_perm"
-{
-    /** At least 4 bytes. Serial in database (4 bytes). */
-    long user_id;
-    /** At least 2 bytes. Smallint in database (2 bytes). */
-    short task_id;
-    /** At least 4 bytes. Serial in database (4 bytes). */
-    long instance_id;
-    /** Stores e-mail of user to which should be given permission. */
-    std::string friend_mail;
-    /** Stores permission string. */
-    std::string permission;
 };
 
 struct GetInstIdsMessage //"msg": "get_inst_ids"

@@ -43,18 +43,21 @@ public:
      * It must have format: "1 9 2014 12:35:34" -> "month day_of_month year time"
      * Must be UTC.
      */
-    void planToDateAndTime(std::string date_time);  
+    void planActivationToDateAndTime(std::string date_time);  
     /**
      * Activates an instance (calls run() function, but protects it with mutex).
      * @param activation_time Time at which was instance activated.
      */
     void activate(std::chrono::system_clock::time_point activation_time) override;
     /**
-     * Removes all timed entries of instance from calendar.
+     * Removes all planned activations of instance from calendar.
      */
     virtual void deleteFromControlComponent() override;
-    
-    void removePlanedTimeFromCalendar(std::chrono::system_clock::time_point activation_time);
+    /**
+      * Removes planned activation of instance from calendar.
+     * @param activation_time Time of planned activation.
+     */
+    void removePlannedActivation(std::chrono::system_clock::time_point activation_time);
     /**
      * Function which contains all functionality.
      */

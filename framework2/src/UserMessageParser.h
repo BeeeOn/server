@@ -39,11 +39,6 @@ public:
      */
     DeleteMessage processDeleteMessage();
     /**
-     * Process parsed user message as GivePermMessage.
-     * @return GivePermMessage object filled with parsed data.
-     */
-    GivePermMessage processGivePermMessage();
-    /**
      * Process parsed user message as GetInstIdsMessage.
      * @return GetInstIdsMessage object filled with parsed data.
      */

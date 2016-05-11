@@ -23,7 +23,7 @@ FireHazardInstance::FireHazardInstance(long instance_id,
                                        long device_euid):
     TaskInstance(instance_id, owning_manager),    
     CombinedTaskInstance(instance_id, owning_manager),
-    m_sos_sequence(0),
+    m_blink_sequence(0),
     m_sequence_running(false)
 {
     registerToReceiveDataFromDevice(device_euid);
@@ -50,23 +50,28 @@ void FireHazardInstance::run(DataMessage data_message)
         
         if (!m_sequence_running) {
             // If received value is above guarded value, and sequence isn't
-            // already sending, start sending SOS sequence.
+            // already sending, start sending blink sequence.
             m_sequence_running = true;
             planActivationNow(); 
         }
     }
     else {
-        // If received value is below guarded value, stop sending SOS sequence.
-        deleteFromCalendar();
-        // Restart sequence of SOS signal.
-        m_sos_sequence = 0;
-        // Sequence was stopped.
-        m_sequence_running = false;
-        // Switch off actuator. In the case that sequence was stopped when it was on.
-        ActuatorInfo actuator_info = getActuatorInfo();
-        GatewayInterface gi;
-        gi.sendSetState(actuator_info.a_gateway_id, actuator_info.a_device_euid,
-                            actuator_info.a_module_id, 0);
+        if (m_sequence_running) {
+            // If received value is below guarded value, stop sending blink sequence.
+            deleteFromCalendar();
+            // Restart sequence of blink signal.
+            m_blink_sequence = 0;
+            // Sequence was stopped.
+            m_sequence_running = false;
+            // Switch off actuator. In the case that sequence was stopped when it was on.
+            ActuatorInfo actuator_info = getActuatorInfo();
+            GatewayInterface gi;
+            //gi.sendSetState(actuator_info.a_gateway_id, actuator_info.a_device_euid,
+                                //actuator_info.a_module_id, 0);
+            logger.LOGFILE("fire_hazard", "INFO") << "Instance FireHazard: " << m_instance_id << " switched OFF an actuator: [gateway_id: "
+                << actuator_info.a_gateway_id << ", device_euid: " << actuator_info.a_device_euid << ", module_id: "
+                << actuator_info.a_module_id << "]" << std::endl;
+        }
     }
 }
 
@@ -76,48 +81,33 @@ void FireHazardInstance::run(std::chrono::system_clock::time_point activation_ti
     ActuatorInfo actuator_info = getActuatorInfo();
 
     GatewayInterface gi;
-    switch (m_sos_sequence) {
-        case(0):
-        case(2):
-        case(4):
-        case(12):
-        case(14):
-        case(16):
-            gi.sendSetState(actuator_info.a_gateway_id, actuator_info.a_device_euid,
-                            actuator_info.a_module_id, 1);
-            planActivationAfterSeconds(1);
-            break;
-        case(1):
-        case(3):
-        case(5):
-        case(7):
-        case(9):
-        case(11):
-        case(13):
-        case(15):
-            gi.sendSetState(actuator_info.a_gateway_id, actuator_info.a_device_euid,
-                            actuator_info.a_module_id, 0);
-            planActivationAfterSeconds(1);
-            break;
-        case(6):
-        case(8):
-        case(10):
-            gi.sendSetState(actuator_info.a_gateway_id, actuator_info.a_device_euid,
-                            actuator_info.a_module_id, 1);
-            planActivationAfterSeconds(2);
-            break;
-        case(17):
-            gi.sendSetState(actuator_info.a_gateway_id, actuator_info.a_device_euid,
-                            actuator_info.a_module_id, 0);
-            planActivationAfterSeconds(2);
-            break;
-    } 
-    // Set next state of SOS sequence.
-    if (m_sos_sequence == 17) {
-        m_sos_sequence = 0;
+    if (m_blink_sequence == 0) {
+        
+        // Set actuator (power switch to ON).
+        //gi.sendSetState(actuator_info.a_gateway_id, actuator_info.a_device_euid,
+        //                    actuator_info.a_module_id, 1);
+        logger.LOGFILE("fire_hazard", "INFO") << "Instance FireHazard: " << m_instance_id << " switched ON an actuator: [gateway_id: "
+                << actuator_info.a_gateway_id << ", device_euid: " << actuator_info.a_device_euid << ", module_id: "
+                << actuator_info.a_module_id << "]" << std::endl;
+        planActivationAfterSeconds(2);
     }
     else {
-        m_sos_sequence++;
+        // Set actuator (power switch to OFF).
+        //gi.sendSetState(actuator_info.a_gateway_id, actuator_info.a_device_euid,
+        //                    actuator_info.a_module_id, 0);
+        logger.LOGFILE("fire_hazard", "INFO") << "Instance FireHazard: " << m_instance_id << " switched OFF an actuator: [gateway_id: "
+                << actuator_info.a_gateway_id << ", device_euid: " << actuator_info.a_device_euid << ", module_id: "
+                << actuator_info.a_module_id << "]" << std::endl;
+        planActivationAfterSeconds(1);
+        
+    }
+    
+    // Set next state of blink sequence.
+    if (m_blink_sequence == 1) {
+        m_blink_sequence = 0;
+    }
+    else {
+        m_blink_sequence = 1;
     }
 }
 
@@ -139,17 +129,14 @@ ActuatorInfo FireHazardInstance::getActuatorInfo()
     ActuatorInfo actuator_info;
     
     soci::indicator ind_a_device_euid, ind_a_module_id, ind_a_gateway_id;
-    long a_device_euid;
-    int a_module_id;
-    long long a_gateway_id;
     
     SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
     // Get actuator device_euid and module_id from database.
     *sql << "SELECT a_device_euid, a_module_id "
             "FROM task_fire_hazard WHERE instance_id = :instance_id",
              soci::use(m_instance_id, "instance_id"),
-             soci::into(a_device_euid, ind_a_device_euid),
-             soci::into(a_module_id, ind_a_module_id);
+             soci::into(actuator_info.a_device_euid, ind_a_device_euid),
+             soci::into(actuator_info.a_module_id, ind_a_module_id);
         
     if (ind_a_device_euid != soci::i_ok || ind_a_module_id != soci::i_ok) {
             
@@ -160,8 +147,8 @@ ActuatorInfo FireHazardInstance::getActuatorInfo()
     else {
         // Get ID of gateway on which actuator is from database. If device exists, gateway should too.
         *sql << "SELECT gateway_id FROM device WHERE device_euid = :device_euid",
-                 soci::use(a_device_euid, "device_euid"),
-                 soci::into(a_gateway_id, ind_a_gateway_id);
+                 soci::use(actuator_info.a_device_euid, "device_euid"),
+                 soci::into(actuator_info.a_gateway_id, ind_a_gateway_id);
     }
     return actuator_info;
 }

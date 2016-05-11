@@ -29,9 +29,13 @@ public:
      * After this instance won't receive any data messages or activations from Calendar.
      */
     void deleteFromControlComponent() override; 
-
+    /**
+     * Removes all planned activations of instance from Calendar.
+     */
     void deleteFromCalendar();
-    
+    /**
+     * Removes all entries from DataMessageRegister.
+     */
     void deleteFromDataMessageRegister();
 };
 

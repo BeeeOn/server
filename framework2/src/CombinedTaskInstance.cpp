@@ -53,7 +53,7 @@ void CombinedTaskInstance::deleteFromDataMessageRegister()
 {
     try {
         // Remove all entries of this instance from DataMessageRegister.
-        DataMessageRegister::getInstance()->removeAllEntriesOfInstance(m_registered_device_euids, this);
+        DataMessageRegister::getInstance()->removeAllEntries(m_registered_device_euids, this);
         // Remove all device euids of registered devices from internal container.
         m_registered_device_euids.clear();
     }

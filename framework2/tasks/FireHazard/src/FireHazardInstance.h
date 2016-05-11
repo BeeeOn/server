@@ -38,7 +38,7 @@ public:
 private:
     double getModuleValue(int module_id, DataMessage data_message);
       
-    short m_sos_sequence;
+    short m_blink_sequence;
     
     bool m_sequence_running;
     

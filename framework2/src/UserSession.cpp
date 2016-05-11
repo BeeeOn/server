@@ -48,9 +48,8 @@ void UserSession::processMessage(std::string message)
 
                 std::string log_config;
                 for (auto member: create_message.config) {
-                    log_config += "name: ";
                     log_config += member.first;
-                    log_config += " | value: ";
+                    log_config += " | ";
                     log_config += member.second;
                     log_config += ", ";
                 }
@@ -88,9 +87,8 @@ void UserSession::processMessage(std::string message)
                 
                 std::string log_config;
                 for (auto member: change_message.config) {
-                    log_config += "name: ";
                     log_config += member.first;
-                    log_config += " | value: ";
+                    log_config += " | ";
                     log_config += member.second;
                     log_config += ", ";
                 }
@@ -130,24 +128,6 @@ void UserSession::processMessage(std::string message)
 
                 // Construct message to send back to client.
                 response.AddMember("error", false, response.GetAllocator());
-            }
-            break;
-            case(USER_MESSAGE_TYPE::GIVE_PERM):
-            {
-                GivePermMessage give_perm_message = user_message_parser.processGivePermMessage();
-
-                logger.LOGFILE("user_message_interface", "MSG") << "Received message: GIVE_PERM | user_id: "
-                        << give_perm_message.user_id << ", task_id: " << give_perm_message.task_id
-                        << ", instance_id: " << give_perm_message.instance_id << ", friend_mail: "
-                        << give_perm_message.friend_mail << ", permission: "
-                        << give_perm_message.permission << std::endl;
-
-                // Check if user with user_id owns instance with instance_id.
-                checkIfUserOwnsInstance(give_perm_message.user_id, give_perm_message.instance_id);
-                
-                // Construct message to send back to client.
-                // Functionality is not yet implemented.
-                response.AddMember("error", true, response.GetAllocator());
             }
             break;
             case(USER_MESSAGE_TYPE::GET_INST_IDS):
@@ -272,7 +252,7 @@ void UserSession::checkIfUserOwnsInstance(long user_id, long instance_id)
 {
     SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
     short owns;
-    *sql << "SELECT exists(SELECT 1 FROM user_instance WHERE user_id = :user_id AND instance_id = :instance_id);",
+    *sql << "SELECT exists(SELECT 1 FROM instance WHERE user_id = :user_id AND instance_id = :instance_id);",
             soci::use(user_id, "user_id"),
             soci::use(instance_id, "instance_id"),
             soci::into(owns);

@@ -27,20 +27,14 @@ TaskManager::~TaskManager()
 long TaskManager::createInstance(CreateMessage create_message)
 {
     long instance_id;
-    // Default is superuser. User roles are not yet supported.
-    std::string permission("superuser");
     
     SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
-    soci::transaction tr(*sql);
-    
-    *sql << "INSERT INTO instance(task_id) VALUES (:task_id) RETURNING instance_id",
-            soci::into(instance_id), soci::use(create_message.task_id);
-    
-    *sql << "INSERT INTO user_instance(user_id, instance_id, permission) VALUES(:user_id, :instance_id, :permission)",
-            soci::use(create_message.user_id, "user_id"), soci::use(instance_id, "instance_id"), soci::use(permission, "permission");
-     
-    tr.commit();
-    
+ 
+    *sql << "INSERT INTO instance(user_id, task_id) VALUES (:user_id, :task_id) RETURNING instance_id",
+            soci::into(instance_id),
+            soci::use(create_message.user_id, "user_id"),
+            soci::use(create_message.task_id, "task_id");
+
     return instance_id;
 }
 
@@ -72,10 +66,9 @@ std::vector<long> TaskManager::getInstanceIds(GetInstIdsMessage get_inst_ids_mes
     std::vector<long> instance_ids;
     
     SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
+    
     // Using rowset, because we don't know how many rows will be returned.
-    soci::rowset<soci::row> rows = (sql->prepare << "SELECT instance.instance_id "
-                                    "FROM user_instance INNER JOIN instance "
-                                    "ON user_instance.instance_id = instance.instance_id "
+    soci::rowset<soci::row> rows = (sql->prepare << "SELECT instance_id FROM instance "
                                     "WHERE task_id = :task_id AND user_id = :user_id",
                                     soci::use(get_inst_ids_message.task_id, "task_id"),
                                     soci::use(get_inst_ids_message.user_id, "user_id"));
@@ -90,20 +83,6 @@ std::vector<long> TaskManager::getInstanceIds(GetInstIdsMessage get_inst_ids_mes
     return instance_ids;
 }
 
-void TaskManager::debugPrintTaskInstances()
-{
-    std::string task_instances;
-    if (m_task_instances.size() == 0) {
-        task_instances += "none";
-    }
-    else {
-        for (auto task_instance : m_task_instances) {
-        task_instances += std::to_string(task_instance.first);
-        task_instances += ", ";
-        }
-    }
-    logger.LOGFILE("task_manager", "INFO") << "Task instances: " << task_instances << std::endl;
-}
 
 void TaskManager::suicideInstance(long instance_id)
 {
@@ -126,7 +105,6 @@ void TaskManager::suicideInstance(long instance_id)
         throw std::runtime_error(std::string("Instance with ID: ") + std::to_string(instance_id)
               + std::string(" doesn't exist in system. It could not be deleted."));
     }
-    //debugPrintTaskInstances(); 
 }
 
 void TaskManager::deleteAllInstances()

@@ -30,6 +30,8 @@ void TimedTaskInstance::activate(std::chrono::system_clock::time_point activatio
     
     try {
         run(activation_time);
+        // Remove recently activated time.
+        m_activation_times.erase(activation_time);
     }
     catch (const std::exception& e) {
         logger.LOGFILE("timed_instance", "ERROR") << e.what() << std::endl;
@@ -58,7 +60,7 @@ void TimedTaskInstance::planActivationAfterSeconds(int seconds)
     }
 }
 
-void TimedTaskInstance::planToDateAndTime(std::string date_time)
+void TimedTaskInstance::planActivationToDateAndTime(std::string date_time)
 {
     try {
         std::chrono::system_clock::time_point activation_time = Calendar::getInstance()->planActivation(date_time, this);
@@ -81,7 +83,7 @@ void TimedTaskInstance::deleteFromControlComponent()
     }
 }
 
-void TimedTaskInstance::removePlanedTimeFromCalendar(std::chrono::system_clock::time_point activation_time)
+void TimedTaskInstance::removePlannedActivation(std::chrono::system_clock::time_point activation_time)
 {
     try {
         // Remove activation of instance from Calendar.

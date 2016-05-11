@@ -54,7 +54,7 @@ void TriggerTaskInstance::removeEntryFromDataMessageRegiser(long device_euid)
 {
     try {
         // Remove device_euid from DataMessageRegister.
-        DataMessageRegister::getInstance()->removeEntryOfInstance(device_euid, this);
+        DataMessageRegister::getInstance()->removeEntry(device_euid, this);
         // Remove device euid of registered device from internal container.
         m_registered_device_euids.erase(device_euid);
 
@@ -68,7 +68,7 @@ void TriggerTaskInstance::deleteFromControlComponent()
 {
     try {
         // Remove all entries of this instance from DataMessageRegister.
-        DataMessageRegister::getInstance()->removeAllEntriesOfInstance(m_registered_device_euids, this);
+        DataMessageRegister::getInstance()->removeAllEntries(m_registered_device_euids, this);
         // Remove all device euids of registered devices from internal container.
         m_registered_device_euids.clear();
 

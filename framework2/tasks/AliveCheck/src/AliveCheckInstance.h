@@ -40,13 +40,14 @@ private:
      */
     void runAliveCheck();
     /**
-     * Sends notification to all users who has gateway with connected device.
-     * @param now_timestamp Timestamp of event.
-     * @param device_euid EUID of device which is unavailable.
+     * Sends notification to all users who has access to gateway.
+     * @param notification Text of notification to send.
      */
-    void sendUnavailableNotification(long device_euid);
+    void sendUnavailableNotification(std::string notification);
     
     long long getGatewayId();
+    
+    void checkGatewayStatus(long long gateway_id, short send_notif);
     
 };
 #endif /* ALIVECHECKINSTANCE_H */
