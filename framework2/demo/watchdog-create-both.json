@@ -1,0 +1,16 @@
+{
+    "msg": "create",
+    "user_id": 9509,
+    "task_id": 2,
+    "config": {
+    	"type": "BOTH",
+        "device_euid": "3925868553",
+        "module_id": "0",
+        "comp_operator": "LT",
+        "value": "29.0",
+        "notification": "Teplota klesla pod 29 stupnu!",
+        "a_device_euid": "13571638",
+        "a_module_id": "0",
+        "a_value": "1"
+    }
+}
