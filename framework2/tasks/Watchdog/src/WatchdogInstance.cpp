@@ -144,7 +144,7 @@ void WatchdogInstance::operatorConditionMet()
 
             if (ind_a_gateway_id == soci::i_ok) {
                 GatewayInterface gi;
-                //gi.sendSetState(a_gateway_id, a_device_euid, a_module_id, a_value);
+                gi.sendSetState(a_gateway_id, a_device_euid, a_module_id, a_value);
                 logger.LOGFILE("watchdog", "INFO") << "Instance Watchdog: " << m_instance_id << " switched actuator: [gateway_id: " << a_gateway_id << ", device_euid: "
                           << a_device_euid << ", module_id: " << a_module_id << ", value: " << a_value << "]" << std::endl;
             }
@@ -191,7 +191,7 @@ void WatchdogInstance::sendNotification(std::string notification)
         // URI notif is just placeholder until AliveCheck notification is specified.
         std::shared_ptr<UriNotif> notif = std::make_shared<UriNotif>(user_id, m_instance_id, now_timestamp, notification, "");
         // Send notifications.
-        //notif->sendGcm(&sr_ids); 
+        notif->sendGcm(&sr_ids); 
         logger.LOGFILE("watchdog", "INFO") << "Instance Watchdog: " << m_instance_id << " sent notifification: [user_id: " << user_id
                   << ", timestamp: " << now_timestamp << ", notification: " << notification << "]" << std::endl;
     }

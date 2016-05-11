@@ -176,7 +176,7 @@ void AliveCheckInstance::sendUnavailableNotification(std::string notification)
         // URI notif is just placeholder until AliveCheck notification is specified.
         std::shared_ptr<UriNotif> notif = std::make_shared<UriNotif>(user_id, m_instance_id, now_timestamp, notification, "");
         // Send notifications.
-        //notif->sendGcm(&sr_ids);
+        notif->sendGcm(&sr_ids);
         logger.LOGFILE("watchdog", "INFO") << "Instance AliveCheck: " << m_instance_id << " sent notifification: [user_id: " << user_id
                   << ", timestamp: " << now_timestamp << ", notification: " << notification << "]" << std::endl;
     }
