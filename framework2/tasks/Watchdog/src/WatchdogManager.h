@@ -25,11 +25,13 @@ enum class WatchdogType {
 
 struct WatchdogConfig {
     WatchdogType type;
+    long long gateway_id;
     long device_euid;
     int module_id;
     std::string comp_operator;
     double value;
     std::string notification;
+    long long a_gateway_id;
     long a_device_euid;
     int a_module_id;
     int a_value;
@@ -54,7 +56,7 @@ public:
      */
     void createConfiguration(long instance_id, ConfigurationMap config) override;
     /**
-     * Changes configuration of instance.
+     * Changes configuration of instance in database.
      * @param change_message Message with info about instance and changed configuration.
      */
     void changeConfiguration(ChangeMessage change_message) override;
@@ -83,10 +85,14 @@ private:
      */
     WatchdogType convertStringToWatchdogType(std::string type_str);
     /**
-     * Converts WatchdogType to std::string
+     * Converts WatchdogType to std::string.
      */
     std::string convertWatchdogTypeToString(WatchdogType type);
-    
+    /**
+     * Finds by item name if it is present in received configuration, if it's it returns iterator to it.
+     * If item is not present and required is set to true it throws an exception,
+     * otherwise it returns iterator to end of configuration.
+     */
     ConfigurationMap::iterator findConfigurationItem(bool required, std::string item_name, ConfigurationMap* configuration);
     /**
      * Checks if passed comparation operator is valid.
@@ -94,13 +100,9 @@ private:
      */
     void validateCompOperator(std::string comp_operator);
     /**
-     * Checks in database if owner of instance also have access to gateway on which device is.
+     * Checks in database if owner of instance has rights to gateway.
      */
-    void validateDeviceOwnership(long instance_id, long device_euid);
-    /**
-     * Checks in database if device really contains passed module.
-     */
-    void validateModuleExistance(long device_euid, int module_id);
+    void validateGatewayOwnership(long instance_id, long long gateway_id); 
 };
 
 #endif /* WATCHDOGMANAGER_H */

@@ -165,7 +165,7 @@ AliveCheckConfig AliveCheckManager::parseConfiguration(long instance_id, std::ma
 void AliveCheckManager::validateGatewayOwnership(long instance_id, long long gateway_id)
 {
     SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
-    // Get ID of user owning instance of Watchdog.
+    // Get ID of user owning instance.
     long user_id;
     *sql << "SELECT user_id FROM instance WHERE instance_id = :instance_id",
             soci::use(instance_id, "instance_id"),

@@ -13,6 +13,7 @@
 
 #include <boost/bind.hpp>
 #include <asio.hpp>
+#include <asio/steady_timer.hpp>
 
 class Session: public std::enable_shared_from_this<Session>
 {
@@ -89,7 +90,7 @@ protected:
     /**
      * If this deadline is met, connection times out.
      */
-    asio::deadline_timer m_deadline;
+    asio::steady_timer m_deadline;
     /**
      * Variable which indicates if deadline was met.
      */

@@ -39,10 +39,11 @@ void WatchdogManager::createConfiguration(long instance_id, ConfigurationMap con
     // Store configuration to database. This also checks correct configuration data.
     SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
     
-    *sql << "INSERT INTO task_watchdog(instance_id, type, device_euid, module_id, comp_operator, "
-            "value) VALUES(:instance_id, :type, :device_euid, :module_id, :comp_operator, :value)",
+    *sql << "INSERT INTO task_watchdog(instance_id, type, gateway_id, device_euid, module_id, comp_operator, "
+            "value) VALUES(:instance_id, :type, :gateway_id, :device_euid, :module_id, :comp_operator, :value)",
             soci::use(instance_id, "instance_id"),
             soci::use(convertWatchdogTypeToString(parsed_config.type), "type"),
+            soci::use(parsed_config.gateway_id, "gateway_id"),
             soci::use(parsed_config.device_euid, "device_euid"),
             soci::use(parsed_config.module_id, "module_id"),
             soci::use(parsed_config.comp_operator, "comp_operator"),
@@ -57,9 +58,10 @@ void WatchdogManager::createConfiguration(long instance_id, ConfigurationMap con
     }
     if (parsed_config.type == WatchdogType::SWITCH || parsed_config.type == WatchdogType::BOTH) {
     
-        *sql << "UPDATE task_watchdog SET a_device_euid = :a_device_euid, a_module_id = :a_module_id, "
-                "a_value = :a_value WHERE instance_id = :instance_id",
+        *sql << "UPDATE task_watchdog SET a_gateway_id = :a_gateway_id, a_device_euid = :a_device_euid, "
+                "a_module_id = :a_module_id, a_value = :a_value WHERE instance_id = :instance_id",
                 soci::use(instance_id, "instance_id"),
+                soci::use(parsed_config.a_gateway_id, "a_gateway_id"),
                 soci::use(parsed_config.a_device_euid, "a_device_euid"),
                 soci::use(parsed_config.a_module_id, "a_module_id"),
                 soci::use(parsed_config.a_value, "a_value");
@@ -95,27 +97,67 @@ void WatchdogManager::changeConfiguration(ChangeMessage change_message)
                 soci::use(change_message.instance_id, "instance_id");
     }
 
-    // If exists get new device_euid.
+    long long gateway_id;
     long device_euid;
+    int module_id;
+    bool changed_gateway_id = false, changed_device_euid = false, changed_module_id = false;
+    
+    // If exists get new gateway_id.
+    auto gateway_id_it = findConfigurationItem(false, "gateway_id", &(change_message.config));
+    if (gateway_id_it != change_message.config.end()) {
+        
+        gateway_id = std::stol(gateway_id_it->second);
+        validateGatewayOwnership(change_message.instance_id, gateway_id);
+        changed_gateway_id = true;
+    }
+    
+    // If exists get new device_euid.
     auto device_euid_it = findConfigurationItem(false, "device_euid", &(change_message.config));
     if (device_euid_it != change_message.config.end()) {
         
         device_euid = std::stol(device_euid_it->second);
-        validateDeviceOwnership(change_message.instance_id, device_euid);
-        *sql << "UPDATE task_watchdog SET device_euid = :device_euid WHERE instance_id = :instance_id",
-                soci::use(device_euid, "device_euid"),
-                soci::use(change_message.instance_id, "instance_id");
+        changed_device_euid = true;
     }
     // If exists get new module_id.
     auto module_id_it = findConfigurationItem(false, "module_id", &(change_message.config));
     if (module_id_it != change_message.config.end()) {
         
+        module_id = std::stoi(module_id_it->second);
+        changed_module_id = true;
+    }
+    // Gateway, device and module must be updated in the single statement so database checks 
+    // foreign keys of new and old configuration at the same time. I know it looks horrible, but it works good.
+    if (changed_gateway_id || changed_device_euid || changed_module_id) {
+        long long new_gateway_id;
+        long new_device_euid;
+        int new_module_id;
+        // Get old configuration from database.
+        *sql << "SELECT gateway_id, device_euid, module_id FROM task_watchdog WHERE instance_id = :instance_id",
+                soci::use(change_message.instance_id),
+                soci::into(new_gateway_id),
+                soci::into(new_device_euid),
+                soci::into(new_module_id);
+        if (changed_gateway_id) {
+            new_gateway_id = gateway_id;
+        }
+        if (changed_device_euid) {
+            new_device_euid = device_euid;
+        }
+        if (changed_module_id) {
+            new_module_id = module_id;
+        }
+        *sql << "UPDATE task_watchdog SET gateway_id = :gateway_id, device_euid = :device_euid, "
+                "module_id = :module_id WHERE instance_id = :instance_id",
+                soci::use(change_message.instance_id, "instance_id"),
+                soci::use(new_gateway_id, "gateway_id"),
+                soci::use(new_device_euid, "device_euid"),
+                soci::use(new_module_id, "module_id");
         
-        int module_id = std::stoi(module_id_it->second);
-        validateModuleExistance(device_euid, module_id);
-        *sql << "UPDATE task_watchdog SET module_id = :module_id WHERE instance_id = :instance_id",
-                soci::use(module_id, "module_id"),
-                soci::use(change_message.instance_id, "instance_id");
+        if (changed_device_euid) {
+            // If update of new device_euid to database was successful, reregister instance in DataMessageRegister.
+            std::shared_ptr<WatchdogInstance> changed_instance = std::dynamic_pointer_cast<WatchdogInstance>(m_task_instances.find(change_message.instance_id)->second);
+            changed_instance->changeRegisteredDeviceEuid(new_device_euid);
+        }
     }
 
     auto comp_operator_it = findConfigurationItem(false, "comp_operator", &(change_message.config));
@@ -162,26 +204,68 @@ void WatchdogManager::changeConfiguration(ChangeMessage change_message)
     }
     if (new_type == WatchdogType::SWITCH || new_type == WatchdogType::BOTH) {
 
-        // If type changed to switch or both, this item must be present.
+        long long a_gateway_id;
         long a_device_euid;
+        int a_module_id;
+        bool changed_a_gateway_id = false, changed_a_device_euid = false, changed_a_module_id = false;
+        // If type changed to switch or both, this item must be present.
+        // If exists get new gateway_id.
+        auto a_gateway_id_it = findConfigurationItem(type_changed, "a_gateway_id", &(change_message.config));
+        if (a_gateway_id_it != change_message.config.end()) {
+
+            a_gateway_id = std::stol(a_gateway_id_it->second);
+            validateGatewayOwnership(change_message.instance_id, a_gateway_id);
+            changed_a_gateway_id = true;
+        }
+        // a_device_euid;
         auto a_device_euid_it = findConfigurationItem(type_changed, "a_device_euid", &(change_message.config));
         if (a_device_euid_it != change_message.config.end()) {
 
             a_device_euid = std::stol(a_device_euid_it->second);
-            validateDeviceOwnership(change_message.instance_id, a_device_euid);
+            changed_a_device_euid = true;
+            /*
             *sql << "UPDATE task_watchdog SET a_device_euid = :a_device_euid WHERE instance_id = :instance_id",
                     soci::use(a_device_euid, "a_device_euid"),
                     soci::use(change_message.instance_id, "instance_id");
+            */
         }
         // If type changed to switch or both, this item must be present.
         auto a_module_id_it = findConfigurationItem(type_changed, "a_module_id", &(change_message.config));
         if (a_module_id_it != change_message.config.end()) {
 
-            int a_module_id = std::stoi(a_module_id_it->second);
-            validateModuleExistance(a_device_euid, a_module_id);
+            a_module_id = std::stoi(a_module_id_it->second);
+            changed_a_module_id = true;
+            /*
             *sql << "UPDATE task_watchdog SET a_module_id = :a_module_id WHERE instance_id = :instance_id",
                     soci::use(a_module_id, "a_module_id"),
                     soci::use(change_message.instance_id, "instance_id");
+            */
+        }
+        if (changed_a_gateway_id || changed_a_device_euid || changed_a_module_id) {
+            long long new_a_gateway_id;
+            long new_a_device_euid;
+            int new_a_module_id;
+            // Get old configuration from database.
+            *sql << "SELECT a_gateway_id, a_device_euid, a_module_id FROM task_watchdog WHERE instance_id = :instance_id",
+                    soci::use(change_message.instance_id),
+                    soci::into(new_a_gateway_id),
+                    soci::into(new_a_device_euid),
+                    soci::into(new_a_module_id);
+            if (changed_a_gateway_id) {
+                new_a_gateway_id = a_gateway_id;
+            }
+            if (changed_device_euid) {
+                new_a_device_euid = a_device_euid;
+            }
+            if (changed_module_id) {
+                new_a_module_id = module_id;
+            }
+            *sql << "UPDATE task_watchdog SET a_gateway_id = :a_gateway_id, a_device_euid = :a_device_euid, "
+                    "a_module_id = :a_module_id WHERE instance_id = :instance_id",
+                    soci::use(change_message.instance_id, "instance_id"),
+                    soci::use(new_a_gateway_id, "a_gateway_id"),
+                    soci::use(new_a_device_euid, "a_device_euid"),
+                    soci::use(new_a_module_id, "a_module_id");
         }
         // If type changed to switch or both, this item must be present.
         auto a_value_it = findConfigurationItem(type_changed, "a_value", &(change_message.config));
@@ -208,16 +292,18 @@ std::map<std::string, std::string> WatchdogManager::getConfiguration(GetConfMess
     SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
     
     std::string type_str;
-    *sql << "SELECT type, device_euid, module_id, comp_operator, value " // It's crucial to have space at the end of string.
+    *sql << "SELECT type, gateway_id, device_euid, module_id, comp_operator, value " // It's crucial to have space at the end of string.
             "FROM task_watchdog WHERE instance_id = :instance_id",
             soci::use(get_conf_message.instance_id, "instance_id"),
             soci::into(type_str),
+            soci::into(watchdog_config.gateway_id),
             soci::into(watchdog_config.device_euid),
             soci::into(watchdog_config.module_id),
             soci::into(watchdog_config.comp_operator),
             soci::into(watchdog_config.value);
     
     config_map["type"] = type_str;
+    config_map["gateway_id"] = std::to_string(watchdog_config.gateway_id);
     config_map["device_euid"] = std::to_string(watchdog_config.device_euid);
     config_map["module_id"] = std::to_string(watchdog_config.module_id);
     config_map["comp_operator"] = watchdog_config.comp_operator;
@@ -235,13 +321,15 @@ std::map<std::string, std::string> WatchdogManager::getConfiguration(GetConfMess
     }
     if (type == WatchdogType::SWITCH || type == WatchdogType::BOTH) {
         
-        *sql << "SELECT a_device_euid, a_module_id, a_value " // It's crucial to have space at the end of string.
+        *sql << "SELECT a_gateway_id, a_device_euid, a_module_id, a_value " // It's crucial to have space at the end of string.
             "FROM task_watchdog WHERE instance_id = :instance_id",
             soci::use(get_conf_message.instance_id, "instance_id"),
+            soci::into(watchdog_config.a_gateway_id),
             soci::into(watchdog_config.a_device_euid),
             soci::into(watchdog_config.a_module_id),
             soci::into(watchdog_config.a_value);
         
+        config_map["a_gateway_id"] = std::to_string(watchdog_config.a_gateway_id);
         config_map["a_device_euid"] = std::to_string(watchdog_config.a_device_euid);
         config_map["a_module_id"] = std::to_string(watchdog_config.a_module_id);
         config_map["a_value"] = std::to_string(watchdog_config.a_value);
@@ -288,15 +376,19 @@ WatchdogConfig WatchdogManager::parseCreateConfiguration(long instance_id, Confi
     auto type_it = findConfigurationItem(true, "type", &configuration);
     parsed_config.type = convertStringToWatchdogType(type_it->second);
     
+    // Get item gateway_id.
+    auto gateway_id_it = findConfigurationItem(true, "gateway_id", &configuration);
+    parsed_config.gateway_id = std::stoll(gateway_id_it->second);
+    validateGatewayOwnership(instance_id, parsed_config.gateway_id);
+    
     // Get item device_euid.
     auto device_euid_it = findConfigurationItem(true, "device_euid", &configuration);
     parsed_config.device_euid = std::stol(device_euid_it->second);
-    validateDeviceOwnership(instance_id, parsed_config.device_euid);
     
     // Get item module_id.
     auto module_id_it = findConfigurationItem(true, "module_id", &configuration);
     parsed_config.module_id = std::stoi(module_id_it->second);
-    validateModuleExistance(parsed_config.device_euid, parsed_config.module_id);
+    //validateModuleExistence(parsed_config.device_euid, parsed_config.module_id);
     
     // Get item comp_operator.
     auto comp_operator_it = findConfigurationItem(true, "comp_operator", &configuration);
@@ -319,15 +411,20 @@ WatchdogConfig WatchdogManager::parseCreateConfiguration(long instance_id, Confi
     if (parsed_config.type == WatchdogType::SWITCH || parsed_config.type == WatchdogType::BOTH) {
         
         // If the type is SWITCH or BOTH, parse info about actuator.
+        // Get item a_gateway_id.
+        auto a_gateway_id_it = findConfigurationItem(true, "a_gateway_id", &configuration);
+        parsed_config.a_gateway_id = std::stoll(a_gateway_id_it->second);
+        validateGatewayOwnership(instance_id, parsed_config.a_gateway_id);
+        
         // Get item a_device_euid.
         auto a_device_euid_it = findConfigurationItem(true, "a_device_euid", &configuration);
         parsed_config.a_device_euid = std::stol(a_device_euid_it->second);
-        validateDeviceOwnership(instance_id, parsed_config.a_device_euid);
+        
         
         // Get item a_module_id.
         auto a_module_id_it = findConfigurationItem(true, "a_module_id", &configuration);
         parsed_config.a_module_id = std::stoi(a_module_id_it->second);
-        validateModuleExistance(parsed_config.a_device_euid, parsed_config.a_module_id);
+        //validateModuleExistence(parsed_config.a_device_euid, parsed_config.a_module_id);
         
         // Get item a_value.
         auto a_value_it = findConfigurationItem(true, "a_value", &configuration);
@@ -406,7 +503,7 @@ void WatchdogManager::validateCompOperator(std::string comp_operator)
     }
 }
 
-void WatchdogManager::validateDeviceOwnership(long instance_id, long device_euid)
+void WatchdogManager::validateGatewayOwnership(long instance_id, long long gateway_id)
 {
     SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
     // Get ID of user owning instance of Watchdog.
@@ -414,12 +511,6 @@ void WatchdogManager::validateDeviceOwnership(long instance_id, long device_euid
     *sql << "SELECT user_id FROM instance WHERE instance_id = :instance_id",
             soci::use(instance_id, "instance_id"),
             soci::into(user_id);
-    
-    // Get ID of gateway on which device is.
-    long long gateway_id;
-    *sql << "SELECT gateway_id FROM device WHERE device_euid = :device_euid",
-            soci::use(device_euid, "device_euid"),
-            soci::into(gateway_id);
     
     short owns; 
     *sql << "SELECT exists(SELECT 1 FROM user_gateway WHERE user_id = :user_id AND gateway_id = :gateway_id);",
@@ -429,23 +520,7 @@ void WatchdogManager::validateDeviceOwnership(long instance_id, long device_euid
                 
     if (!owns) {
         logger.LOGFILE("watchdog", "ERROR") <<  "User with user_id: " << user_id << 
-                " tried to operate with device which is on gateway user doesn't own: " << gateway_id << ".";
-        throw std::runtime_error("Could not process received configuration.");
-    }
-}
-
-void WatchdogManager::validateModuleExistance(long device_euid, int module_id)
-{
-    SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
-    short owns; 
-    *sql << "SELECT exists(SELECT 1 FROM module WHERE device_euid = :device_euid AND module_id = :module_id);",
-            soci::use(device_euid, "device_euid"),
-            soci::use(module_id, "module_id"),
-            soci::into(owns);
-                
-    if (!owns) {
-        logger.LOGFILE("watchdog", "ERROR") << "User tried to use module with id: "
-                << module_id << " which doesn't exist on device: " << device_euid << ".";
+                " tried to operate with gateway he doesn't own: " << gateway_id << ".";
         throw std::runtime_error("Could not process received configuration.");
     }
 }

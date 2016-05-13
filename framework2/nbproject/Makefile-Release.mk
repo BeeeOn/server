@@ -57,7 +57,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/UserMessageParser.o \
 	${OBJECTDIR}/src/UserServer.o \
 	${OBJECTDIR}/src/UserSession.o \
-	${OBJECTDIR}/src/framework.o \
+	${OBJECTDIR}/src/baf.o \
 	${OBJECTDIR}/src/locked_stream.o \
 	${OBJECTDIR}/src/pugixml.o \
 	${OBJECTDIR}/src/unified_logger.o
@@ -197,10 +197,10 @@ ${OBJECTDIR}/src/UserSession.o: src/UserSession.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/UserSession.o src/UserSession.cpp
 
-${OBJECTDIR}/src/framework.o: src/framework.cpp 
+${OBJECTDIR}/src/baf.o: src/baf.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/framework.o src/framework.cpp
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/baf.o src/baf.cpp
 
 ${OBJECTDIR}/src/locked_stream.o: src/locked_stream.cpp 
 	${MKDIR} -p ${OBJECTDIR}/src

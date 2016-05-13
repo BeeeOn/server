@@ -2,7 +2,7 @@
  * File:   FireHazardInstance.h
  * Author: Martin Novak, xnovak1c@stud.fit.vutbr.cz
  * 
- * Created on 4. May 2016
+ * Created on 1. May 2016
  */
 
 #ifndef FIREHAZARDINSTANCE_H
@@ -30,11 +30,23 @@ public:
                        long device_euid);
 
     virtual ~FireHazardInstance();
-    
+    /**
+     * Run function activated by received data.
+     * @param data_message Received senzoric data.
+     */
     void run(DataMessage data_message) override;
-    
+    /**
+     * Run function activated by time (calendar).
+     * @param activation_time Time of activation.
+     */
     void run(std::chrono::system_clock::time_point activation_time) override;
-    
+
+    /*
+     * This function is called when user changes device_euid from
+     * which instace should receive senzoric data.
+     * It unregisters old euid and registers new one to DataMessageRegister.
+     */
+    void changeRegisteredDeviceEuid(long device_euid);
 private:
     double getModuleValue(int module_id, DataMessage data_message);
       

@@ -2,7 +2,7 @@
  * File:   FireHazardInstance.cpp
  * Author: Martin Novak, xnovak1c@stud.fit.vutbr.cz
  * 
- * Created on 4. May 2016
+ * Created on 1. May 2016
  */
 
 #include "FireHazardInstance.h"
@@ -84,8 +84,8 @@ void FireHazardInstance::run(std::chrono::system_clock::time_point activation_ti
     if (m_blink_sequence == 0) {
         
         // Set actuator (power switch to ON).
-        gi.sendSetState(actuator_info.a_gateway_id, actuator_info.a_device_euid,
-                        actuator_info.a_module_id, 1);
+        //gi.sendSetState(actuator_info.a_gateway_id, actuator_info.a_device_euid,
+        //                actuator_info.a_module_id, 1);
         logger.LOGFILE("fire_hazard", "INFO") << "Instance FireHazard: " << m_instance_id << " switched ON an actuator: [gateway_id: "
                 << actuator_info.a_gateway_id << ", device_euid: " << actuator_info.a_device_euid << ", module_id: "
                 << actuator_info.a_module_id << "]" << std::endl;
@@ -93,8 +93,8 @@ void FireHazardInstance::run(std::chrono::system_clock::time_point activation_ti
     }
     else {
         // Set actuator (power switch to OFF).
-        gi.sendSetState(actuator_info.a_gateway_id, actuator_info.a_device_euid,
-                        actuator_info.a_module_id, 0);
+        //gi.sendSetState(actuator_info.a_gateway_id, actuator_info.a_device_euid,
+        //                actuator_info.a_module_id, 0);
         logger.LOGFILE("fire_hazard", "INFO") << "Instance FireHazard: " << m_instance_id << " switched OFF an actuator: [gateway_id: "
                 << actuator_info.a_gateway_id << ", device_euid: " << actuator_info.a_device_euid << ", module_id: "
                 << actuator_info.a_module_id << "]" << std::endl;
@@ -132,23 +132,24 @@ ActuatorInfo FireHazardInstance::getActuatorInfo()
     
     SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
     // Get actuator device_euid and module_id from database.
-    *sql << "SELECT a_device_euid, a_module_id "
+    *sql << "SELECT a_gateway_id, a_device_euid, a_module_id "
             "FROM task_fire_hazard WHERE instance_id = :instance_id",
              soci::use(m_instance_id, "instance_id"),
+            soci::into(actuator_info.a_gateway_id, ind_a_gateway_id),
              soci::into(actuator_info.a_device_euid, ind_a_device_euid),
              soci::into(actuator_info.a_module_id, ind_a_module_id);
         
     if (ind_a_device_euid != soci::i_ok || ind_a_module_id != soci::i_ok) {
             
-        logger.LOGFILE("fire_hazard", "ERROR") << "Wanted actuator device_euid and"
-                "module id doesn't exist in database! " << std::endl; 
+        logger.LOGFILE("fire_hazard", "ERROR") << "Wanted a_gateway_id, a_device_euid or"
+                "a_module_id don't exist in database! " << std::endl; 
         throw std::runtime_error("Run of FireHazard instance was not successful.");   
     }
-    else {
-        // Get ID of gateway on which actuator is from database. If device exists, gateway should too.
-        *sql << "SELECT gateway_id FROM device WHERE device_euid = :device_euid",
-                 soci::use(actuator_info.a_device_euid, "device_euid"),
-                 soci::into(actuator_info.a_gateway_id, ind_a_gateway_id);
-    }
     return actuator_info;
+}
+
+void FireHazardInstance::changeRegisteredDeviceEuid(long device_euid)
+{
+    deleteFromDataMessageRegister();
+    registerToReceiveDataFromDevice(device_euid);
 }

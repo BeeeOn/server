@@ -41,31 +41,41 @@ void WatchdogInstance::run(DataMessage data_message)
     SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
     if (!m_received_data_once) {
         // Instance haven't received any data messege before, so it will just store it.
-        
+        soci::indicator ind_module_id;
         int module_id;
-        *sql << "SELECT module_id FROM task_watchdog WHERE instance_id = :instance_id",
-                soci::use(m_instance_id, "instance_id"), soci::into(module_id);
         
-        m_last_received_value = getModuleValue(module_id, data_message);
-        m_received_data_once = true;
+        *sql << "SELECT module_id FROM task_watchdog WHERE instance_id = :instance_id",
+                soci::use(m_instance_id, "instance_id"),
+                soci::into(module_id, ind_module_id);
+        
+        if (ind_module_id == soci::i_ok) {
+            m_last_received_value = getModuleValue(module_id, data_message);
+            m_received_data_once = true;
+        }
+        else {
+            logger.LOGFILE("watchdog", "ERROR") << "Instance: " << m_instance_id
+                    << ": module_id in configuration is not valid. " << std::endl;
+        }
     }
     else {
         // Object to store configuration from database.
-        soci::indicator ind_device_euid, ind_module_id;
+        soci::indicator ind_gateway_id, ind_device_euid, ind_module_id;
+        long long gateway_id;
         long device_euid;
         int module_id;
         std::string comp_operator;
         double value;
         
         // Get base configuration of this instance from database.
-        *sql << "SELECT device_euid, module_id, comp_operator, value FROM task_watchdog WHERE instance_id = :instance_id",
+        *sql << "SELECT gateway_id, device_euid, module_id, comp_operator, value FROM task_watchdog WHERE instance_id = :instance_id",
                 soci::use(m_instance_id, "instance_id"),
+                soci::into(gateway_id, ind_gateway_id),
                 soci::into(device_euid, ind_device_euid),
                 soci::into(module_id, ind_module_id),
                 soci::into(comp_operator),
                 soci::into(value);
         
-        if (ind_device_euid == soci::i_ok && ind_module_id == soci::i_ok) {
+        if (ind_device_euid == soci::i_ok && ind_module_id == soci::i_ok && ind_gateway_id == soci::i_ok) {
             
             double current_value = getModuleValue(module_id, data_message);
             
@@ -94,8 +104,8 @@ void WatchdogInstance::run(DataMessage data_message)
             m_last_received_value = current_value;  
         }
         else {
-            logger.LOGFILE("watchdog", "ERROR") << "Instance: " << m_instance_id << " tried to compare received value with "
-                    << "device which doesn't exist: device_euid: " << device_euid << ", module_id: " << module_id << std::endl;
+            logger.LOGFILE("watchdog", "ERROR") << "Instance: " << m_instance_id
+                    << ": gateway_id, device_euid or module_id in configuration is not valid." << std::endl;
         }
     } 
 }
@@ -120,43 +130,7 @@ void WatchdogInstance::operatorConditionMet()
     }
     if (type == "SWITCH" || type == "BOTH") {
 
-        soci::indicator ind_a_device_euid, ind_a_module_id;
-        long a_device_euid;
-        int a_module_id;
-        int a_value;
-        
-        *sql << "SELECT a_device_euid, a_module_id, a_value "
-                "FROM task_watchdog WHERE instance_id = :instance_id",
-                soci::use(m_instance_id, "instance_id"),
-                soci::into(a_device_euid, ind_a_device_euid),
-                soci::into(a_module_id, ind_a_module_id),
-                soci::into(a_value);
-        
-        // Changing of state of actuator can continue only if fetched values exist.
-        if (ind_a_device_euid == soci::i_ok && ind_a_module_id == soci::i_ok) {
-            
-            soci::indicator ind_a_gateway_id;
-            // Get ID of gateway from database.
-            long long a_gateway_id;
-            *sql << "SELECT gateway_id FROM device WHERE device_euid = :device_euid",
-                    soci::use(a_device_euid, "device_euid"),
-                    soci::into(a_gateway_id, ind_a_gateway_id);
-
-            if (ind_a_gateway_id == soci::i_ok) {
-                GatewayInterface gi;
-                gi.sendSetState(a_gateway_id, a_device_euid, a_module_id, a_value);
-                logger.LOGFILE("watchdog", "INFO") << "Instance Watchdog: " << m_instance_id << " switched actuator: [gateway_id: " << a_gateway_id << ", device_euid: "
-                          << a_device_euid << ", module_id: " << a_module_id << ", value: " << a_value << "]" << std::endl;
-            }
-            else {
-                logger.LOGFILE("watchdog", "ERROR") << "Instance: " << m_instance_id << " tried to switch actuator "
-                    << " on gateway which doesn't exist: " << a_gateway_id << std::endl;
-            }
-        }
-        else {
-            logger.LOGFILE("watchdog", "ERROR") << "Instance: " << m_instance_id << " tried to switch actuator which doesn't exist: "
-                    << "device_euid: " << a_device_euid << ", module_id: " << a_module_id << std::endl;
-        }
+        switchActuator();
     }
 }
 
@@ -197,6 +171,39 @@ void WatchdogInstance::sendNotification(std::string notification)
     }
 }
 
+void WatchdogInstance::switchActuator()
+{
+    SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
+    
+    soci::indicator ind_a_gateway_id, ind_a_device_euid, ind_a_module_id;
+    long long a_gateway_id;
+    long a_device_euid;
+    int a_module_id;
+    int a_value;
+        
+    *sql << "SELECT a_gateway_id, a_device_euid, a_module_id, a_value "
+            "FROM task_watchdog WHERE instance_id = :instance_id",
+            soci::use(m_instance_id, "instance_id"),
+            soci::into(a_gateway_id, ind_a_gateway_id),
+            soci::into(a_device_euid, ind_a_device_euid),
+            soci::into(a_module_id, ind_a_module_id),
+            soci::into(a_value);
+        
+    // Changing of state of actuator can continue only if fetched values exist.
+    if (ind_a_device_euid == soci::i_ok && ind_a_module_id == soci::i_ok && ind_a_gateway_id == soci::i_ok) {
+
+        GatewayInterface gi;
+        gi.sendSetState(a_gateway_id, a_device_euid, a_module_id, a_value);
+        logger.LOGFILE("watchdog", "INFO") << "Instance Watchdog: " << m_instance_id << " switched actuator: [gateway_id: " << a_gateway_id << ", device_euid: "
+                << a_device_euid << ", module_id: " << a_module_id << ", value: " << a_value << "]" << std::endl;
+        }
+    else {
+        logger.LOGFILE("watchdog", "ERROR") << "Instance: " << m_instance_id
+                << ": a_gateway_id, a_device_euid or a_module_id in configuration is not valid." << std::endl;
+    }
+}
+
+
 double WatchdogInstance::getModuleValue(int module_id, DataMessage data_message)
 {
     auto module_it = data_message.modules.find(module_id);
@@ -223,4 +230,10 @@ bool WatchdogInstance::shouldAct()
         m_last_act_time = now;
         return true;
     }
+}
+
+void WatchdogInstance::changeRegisteredDeviceEuid(long device_euid)
+{
+    deleteFromControlComponent();
+    registerToReceiveDataFromDevice(device_euid);
 }

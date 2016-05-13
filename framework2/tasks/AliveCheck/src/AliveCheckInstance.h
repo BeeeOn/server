@@ -44,10 +44,16 @@ private:
      * @param notification Text of notification to send.
      */
     void sendUnavailableNotification(std::string notification);
-    
+    /**
+     * Gets gateway_id from configration from database.
+     * @return ID of checked gateway.
+     */
     long long getGatewayId();
-    
+    /**
+     * Checks if gateway is online.
+     * @param gateway_id ID of checked gateway.
+     * @param send_notif Item from configuration if user wants to receive notifications.
+     */
     void checkGatewayStatus(long long gateway_id, short send_notif);
-    
 };
 #endif /* ALIVECHECKINSTANCE_H */

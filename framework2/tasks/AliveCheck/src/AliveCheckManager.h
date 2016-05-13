@@ -39,7 +39,7 @@ public:
      */
     void createConfiguration(long instance_id, ConfigurationMap config) override;
     /**
-     * Changes configuration of instance.
+     * Changes configuration of instance in database.
      * @param change_message Message with info about instance and changed configuration.
      */
     void changeConfiguration(ChangeMessage change_message) override;

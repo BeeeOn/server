@@ -36,17 +36,39 @@ public:
      * @param data_message Received data message.
      */
     void run(DataMessage data_message) override;
-
+    /*
+     * This function is called when user changes device_euid from
+     * which watchdog instnace should receive senzoric data.
+     * It unregisters old euid and registers new one to DataMessageRegister.
+     */
+    void changeRegisteredDeviceEuid(long device_euid);
+    
 private:
-    
+    /**
+     * This function is called when comp_operator condition is met.
+     */
     void operatorConditionMet();
-    
+    /**
+     * Sends users notification to his device.
+     * @param notification
+     */
     void sendNotification(std::string notification);
-    
+    /**
+     * Switches user selected actuator.
+     */
+    void switchActuator();
+    /**
+     * Gets value of wanted module from received seonzoric data message.
+     * @param module_id ID of wanted module.
+     * @param data_message Received data message.
+     * @return Value of module.
+     */
     double getModuleValue(int module_id, DataMessage data_message);
-    
+    /**
+     * Decides if watchdog shoudl act. Depends if it ran before less than 10 seconds.
+     * @return Indication if watchdog istance should send notification, switch act, ...
+     */
     bool shouldAct();
-    
     /**
      * Variable indicates, that instance received atleast one data message.
      */

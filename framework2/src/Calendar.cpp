@@ -99,11 +99,19 @@ void Calendar::runCalendar()
             m_wakeup_time = std::chrono::system_clock::now();
         }
         
+        try {
+            // Launch thread to execute stored events.
+            std::thread t_execute_events(&Calendar::activateInstances, this, to_activate);
+            t_execute_events.detach();
+        }
+        catch (const std::exception& e) {
+            for(auto activation : to_activate) {
+                // If creating of thread fails, put activations back to calendar.
+                m_calendar_events.emplace(activation.first, activation.second);
+            }
+            logger.LOGFILE("calendar", "ERROR") << e.what() << std::endl;
+        }
         
-        // Launch thread to execute stored events.
-        std::thread t_execute_events(&Calendar::activateInstances, this, to_activate);
-        t_execute_events.detach();
-
         to_activate.clear();
         
         // Creates lock by which can thread wake up if to queue comes event which has

@@ -41,8 +41,8 @@
             <file>file:/home/mrmaidx/server/framework2/src/DatabaseInterface.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/TaskLoader.h</file>
             <file>file:/home/mrmaidx/server/framework2/src/CombinedTaskInstance.cpp</file>
+            <file>file:/home/mrmaidx/server/framework2/src/baf.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/TaskManager.cpp</file>
-            <file>file:/home/mrmaidx/server/framework2/src/framework.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/GatewayServer.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/DatabaseInterface.cpp</file>
             <file>file:/home/mrmaidx/server/framework2/src/TimedTaskInstance.cpp</file>

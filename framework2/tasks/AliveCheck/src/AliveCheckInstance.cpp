@@ -93,7 +93,6 @@ void AliveCheckInstance::runAliveCheck()
             device_id == 9 || device_id == 17) {
             continue;   
         }
-        
         device_euid = row.get<double>(1);
         measured_at = row.get<long long>(2);
         refresh = row.get<int>(3);
@@ -125,8 +124,9 @@ void AliveCheckInstance::runAliveCheck()
                     sendUnavailableNotification(notification);
                 }
                 logger.LOGFILE("alive_check", "INFO") << "Instance: " << m_instance_id << " - Device with device_euid: "
-                    << device_euid << " is now unavailable." << std::endl;
+                       << static_cast<long>(device_euid) << " is now unavailable." << std::endl;
             }
+            
         }
         else {
             if (status != "available") {
@@ -135,50 +135,10 @@ void AliveCheckInstance::runAliveCheck()
                     soci::use(device_euid, "device_euid");
                 
                 logger.LOGFILE("alive_check", "INFO") << "Instance: " << m_instance_id
-                      << " - Device with device_euid: " << device_euid << " is now available." << std::endl;
-            }   
+                        << " - Device with device_euid: " << static_cast<long>(device_euid) << " is now available." << std::endl;
+            }
+
         }
-    }
-}
-
-void AliveCheckInstance::sendUnavailableNotification(std::string notification)
-{
-    int user_id;
-    // Get gateway_id from database.
-    long long gateway_id = getGatewayId();
-    
-    SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
-    
-    // Find all users who have access to this gateway.
-    soci::rowset<soci::row> user_rows = (sql->prepare << "SELECT user_id FROM user_gateway WHERE gateway_id = :gateway_id",
-                                                          soci::use(gateway_id, "gateway_id"));
-
-    for (soci::rowset<soci::row>::const_iterator user_it = user_rows.begin(); user_it != user_rows.end(); ++user_it) {  
-    
-        soci::row const& user_row = *user_it;
-        //Get id of a first user.
-        user_id = user_row.get<int>(0);
-            
-        // Find all service_reference_ids binded with user.
-        soci::rowset<soci::row> sri_rows = (sql->prepare << "SELECT service_reference_id "
-                    "FROM push_notification_service WHERE user_id = :user_id",
-                     soci::use(user_id, "user_id"));
-
-        std::vector<std::string> sr_ids;
-        for (soci::rowset<soci::row>::const_iterator sri_it = sri_rows.begin(); sri_it != sri_rows.end(); ++sri_it) {
-
-            soci::row const& sri_row = *sri_it;
-            //Get all service_reference_ids.
-            sr_ids.push_back(sri_row.get<std::string>(0));
-        }
-        
-        long now_timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-        // URI notif is just placeholder until AliveCheck notification is specified.
-        std::shared_ptr<UriNotif> notif = std::make_shared<UriNotif>(user_id, m_instance_id, now_timestamp, notification, "");
-        // Send notifications.
-        notif->sendGcm(&sr_ids);
-        logger.LOGFILE("watchdog", "INFO") << "Instance AliveCheck: " << m_instance_id << " sent notifification: [user_id: " << user_id
-                  << ", timestamp: " << now_timestamp << ", notification: " << notification << "]" << std::endl;
     }
 }
 
@@ -243,4 +203,45 @@ void AliveCheckInstance::checkGatewayStatus(long long gateway_id, short send_not
                     << " - Gateway with gateway_id: " << gateway_id << " is now available." << std::endl;
         }
     }    
+}
+
+void AliveCheckInstance::sendUnavailableNotification(std::string notification)
+{
+    int user_id;
+    // Get gateway_id from database.
+    long long gateway_id = getGatewayId();
+    
+    SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
+    
+    // Find all users who have access to this gateway.
+    soci::rowset<soci::row> user_rows = (sql->prepare << "SELECT user_id FROM user_gateway WHERE gateway_id = :gateway_id",
+                                                          soci::use(gateway_id, "gateway_id"));
+
+    for (soci::rowset<soci::row>::const_iterator user_it = user_rows.begin(); user_it != user_rows.end(); ++user_it) {  
+    
+        soci::row const& user_row = *user_it;
+        //Get id of a first user.
+        user_id = user_row.get<int>(0);
+            
+        // Find all service_reference_ids binded with user.
+        soci::rowset<soci::row> sri_rows = (sql->prepare << "SELECT service_reference_id "
+                    "FROM push_notification_service WHERE user_id = :user_id",
+                     soci::use(user_id, "user_id"));
+
+        std::vector<std::string> sr_ids;
+        for (soci::rowset<soci::row>::const_iterator sri_it = sri_rows.begin(); sri_it != sri_rows.end(); ++sri_it) {
+
+            soci::row const& sri_row = *sri_it;
+            //Get all service_reference_ids.
+            sr_ids.push_back(sri_row.get<std::string>(0));
+        }
+        
+        long now_timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+        // URI notif is just placeholder until AliveCheck notification is specified.
+        std::shared_ptr<UriNotif> notif = std::make_shared<UriNotif>(user_id, m_instance_id, now_timestamp, notification, "");
+        // Send notifications.
+        notif->sendGcm(&sr_ids);
+        logger.LOGFILE("alive_check", "INFO") << "Instance AliveCheck: " << m_instance_id << " sent notifification: [user_id: " << user_id
+                  << ", timestamp: " << now_timestamp << ", notification: " << notification << "]" << std::endl;
+    }
 }

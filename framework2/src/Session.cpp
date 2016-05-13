@@ -7,6 +7,7 @@
 
 #include "Session.h"
 
+#include <chrono>
 #include <stdexcept>
 
 #include "Logger.h"
@@ -92,7 +93,7 @@ void Session::handleWrite(const asio::error_code& error)
 
 void Session::startTimeout()
 {
-    m_deadline.expires_from_now(boost::posix_time::seconds(2));
+    m_deadline.expires_from_now(std::chrono::seconds(2));
     m_deadline.async_wait(boost::bind(&Session::timeoutExpired, this, _1));
 }
 
@@ -129,7 +130,7 @@ void Session::restartTimeout()
     if (m_expired) {
         return;
     }
-    else if (m_deadline.expires_from_now(boost::posix_time::seconds(2)) > 0) {
+    else if (m_deadline.expires_from_now(std::chrono::seconds(2)) > 0) {
         m_deadline.async_wait(boost::bind(&Session::timeoutExpired, this, _1));
     }
     else {
