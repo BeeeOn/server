@@ -66,8 +66,8 @@ void FireHazardInstance::run(DataMessage data_message)
             // Switch off actuator. In the case that sequence was stopped when it was on.
             ActuatorInfo actuator_info = getActuatorInfo();
             GatewayInterface gi;
-            //gi.sendSetState(actuator_info.a_gateway_id, actuator_info.a_device_euid,
-                                //actuator_info.a_module_id, 0);
+            gi.sendSetState(actuator_info.a_gateway_id, actuator_info.a_device_euid,
+                            actuator_info.a_module_id, 0);
             logger.LOGFILE("fire_hazard", "INFO") << "Instance FireHazard: " << m_instance_id << " switched OFF an actuator: [gateway_id: "
                 << actuator_info.a_gateway_id << ", device_euid: " << actuator_info.a_device_euid << ", module_id: "
                 << actuator_info.a_module_id << "]" << std::endl;
@@ -84,8 +84,8 @@ void FireHazardInstance::run(std::chrono::system_clock::time_point activation_ti
     if (m_blink_sequence == 0) {
         
         // Set actuator (power switch to ON).
-        //gi.sendSetState(actuator_info.a_gateway_id, actuator_info.a_device_euid,
-        //                actuator_info.a_module_id, 1);
+        gi.sendSetState(actuator_info.a_gateway_id, actuator_info.a_device_euid,
+                        actuator_info.a_module_id, 1);
         logger.LOGFILE("fire_hazard", "INFO") << "Instance FireHazard: " << m_instance_id << " switched ON an actuator: [gateway_id: "
                 << actuator_info.a_gateway_id << ", device_euid: " << actuator_info.a_device_euid << ", module_id: "
                 << actuator_info.a_module_id << "]" << std::endl;
@@ -93,15 +93,14 @@ void FireHazardInstance::run(std::chrono::system_clock::time_point activation_ti
     }
     else {
         // Set actuator (power switch to OFF).
-        //gi.sendSetState(actuator_info.a_gateway_id, actuator_info.a_device_euid,
-        //                actuator_info.a_module_id, 0);
+        gi.sendSetState(actuator_info.a_gateway_id, actuator_info.a_device_euid,
+                        actuator_info.a_module_id, 0);
         logger.LOGFILE("fire_hazard", "INFO") << "Instance FireHazard: " << m_instance_id << " switched OFF an actuator: [gateway_id: "
                 << actuator_info.a_gateway_id << ", device_euid: " << actuator_info.a_device_euid << ", module_id: "
                 << actuator_info.a_module_id << "]" << std::endl;
         planActivationAfterSeconds(1);
         
     }
-    
     // Set next state of blink sequence.
     if (m_blink_sequence == 1) {
         m_blink_sequence = 0;

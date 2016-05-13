@@ -40,22 +40,34 @@ public:
      * @param activation_time Time of activation.
      */
     void run(std::chrono::system_clock::time_point activation_time) override;
-
     /*
      * This function is called when user changes device_euid from
      * which instace should receive senzoric data.
      * It unregisters old euid and registers new one to DataMessageRegister.
      */
     void changeRegisteredDeviceEuid(long device_euid);
+    
 private:
+    /**
+     * Gets value of wanted module from received seonzoric data message.
+     * @param module_id ID of wanted module.
+     * @param data_message Received data message.
+     * @return Value of module.
+     */
     double getModuleValue(int module_id, DataMessage data_message);
-      
+    /*
+     * Defines in which state sequence of switching actuator is.
+     */
     short m_blink_sequence;
-    
+    /**
+     * Defines if sequence is activated (actuator is beeing blinked with).
+     */
     bool m_sequence_running;
-    
-    ActuatorInfo getActuatorInfo();
-            
+    /**
+     * Gets information about actuator from database.
+     * @return Object with information about actuator.
+     */
+    ActuatorInfo getActuatorInfo();         
 };
 
 #endif /* FIREHAZARDINSTANCE_H */
