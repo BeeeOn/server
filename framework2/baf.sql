@@ -95,12 +95,12 @@ ALTER TABLE public.task_watchdog ADD CONSTRAINT rel_task_watchdog_device_act FOR
 REFERENCES public.device (gateway_id,device_euid) MATCH FULL
 ON DELETE SET NULL ON UPDATE NO ACTION;
 
-ALTER TABLE public.task_watchdog ADD CONSTRAINT rel_task_watchdog_module FOREIGN KEY (module_id, device_euid)
-REFERENCES public.module (module_id, device_euid) MATCH FULL
+ALTER TABLE public.task_watchdog ADD CONSTRAINT rel_task_watchdog_module FOREIGN KEY (module_id, device_euid,gateway_id)
+REFERENCES public.module (module_id, device_euid,gateway_id) MATCH FULL
 ON DELETE SET NULL ON UPDATE NO ACTION;
 
-ALTER TABLE public.task_watchdog ADD CONSTRAINT rel_task_watchdog_module_act FOREIGN KEY (a_module_id,a_device_euid)
-REFERENCES public.module (module_id,device_euid) MATCH FULL
+ALTER TABLE public.task_watchdog ADD CONSTRAINT rel_task_watchdog_module_act FOREIGN KEY (a_module_id,a_device_euid,a_gateway_id)
+REFERENCES public.module (module_id,device_euid,gateway_id) MATCH FULL
 ON DELETE SET NULL ON UPDATE NO ACTION;
 
 ALTER TABLE public.task_fire_hazard ADD CONSTRAINT rel_task_fire_hazard_instance FOREIGN KEY (instance_id)
@@ -115,10 +115,10 @@ ALTER TABLE public.task_fire_hazard ADD CONSTRAINT rel_task_fire_hazard_device_a
 REFERENCES public.device (gateway_id,device_euid) MATCH FULL
 ON DELETE SET NULL ON UPDATE NO ACTION;
 
-ALTER TABLE public.task_fire_hazard ADD CONSTRAINT rel_task_fire_hazard_module FOREIGN KEY (module_id, device_euid)
-REFERENCES public.module (module_id, device_euid) MATCH FULL
+ALTER TABLE public.task_fire_hazard ADD CONSTRAINT rel_task_fire_hazard_module FOREIGN KEY (module_id, device_euid,gateway_id)
+REFERENCES public.module (module_id, device_euid,gateway_id) MATCH FULL
 ON DELETE SET NULL ON UPDATE NO ACTION;
 
-ALTER TABLE public.task_fire_hazard ADD CONSTRAINT rel_task_fire_hazard_module_act FOREIGN KEY (a_module_id,a_device_euid)
-REFERENCES public.module (module_id,device_euid) MATCH FULL
+ALTER TABLE public.task_fire_hazard ADD CONSTRAINT rel_task_fire_hazard_module_act FOREIGN KEY (a_module_id,a_device_euid,a_gateway_id)
+REFERENCES public.module (module_id,device_euid,gateway_id) MATCH FULL
 ON DELETE SET NULL ON UPDATE NO ACTION;
