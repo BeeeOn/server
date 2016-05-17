@@ -49,7 +49,7 @@ CREATE TABLE public.task_watchdog(
  -- Table to store configuration of task FireHazard.
 CREATE TABLE public.task_fire_hazard(
 	instance_id integer NOT NULL,
-	value integer,
+	value integer NOT NULL,
 	gateway_id decimal(20,0),
 	device_euid decimal(10),
 	module_id smallint,

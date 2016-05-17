@@ -31,7 +31,7 @@ public:
      */
     virtual long createInstance(CreateMessage create_message) override;
     /**
-     * Deletes instance from BAF and from database.
+     * Deletes instance from manager and from database.
      * @param delete_message Message with info about which instance to delete.
      */
     virtual void deleteInstance(DeleteMessage delete_message) override;

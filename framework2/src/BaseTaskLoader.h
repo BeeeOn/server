@@ -36,8 +36,8 @@ public:
      */
     std::shared_ptr<Task> findTask(unsigned int task_id);
     /**
-     * Returns pointer to singleton instance.
-     * @return Singleton pointer.
+     * Returns pointer to BaseTaskLoader singleton instance.
+     * @return Singleton instance pointer.
      */
     static std::shared_ptr<BaseTaskLoader> getInstance();
     

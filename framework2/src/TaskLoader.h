@@ -35,6 +35,7 @@ public:
     virtual ~TaskLoader();
     /**
      * Creates singleton instance of class DatabaseInterface.
+     * Can be called only once at start of BAF.
      */
     static void createInstance();
     /**

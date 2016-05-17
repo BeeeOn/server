@@ -44,8 +44,8 @@ AliveCheckInstance::~AliveCheckInstance()
 
 void AliveCheckInstance::run(std::chrono::system_clock::time_point activation_time)
 {
-    //logger.LOGFILE("alive_check", "INFO") << "AliveCheck instance with instance_id: "
-    //        << m_instance_id << " has been run." << std::endl;
+    logger.LOGFILE("alive_check", "INFO") << "AliveCheck instance with instance_id: "
+            << m_instance_id << " has been run." << std::endl;
     
     planActivationAfterSeconds(30);
     
@@ -72,7 +72,7 @@ void AliveCheckInstance::runAliveCheck()
     
     // Check if gateway is online.
     // This checking is temporary disabled, because ping functionality 
-    //is not yet supported by ADA Server Sender.
+    // on ADA Server Sender doesn't work correctly.
     //checkGatewayStatus(gateway_id, send_notif);
     
     // Get information about devices.
@@ -85,8 +85,8 @@ void AliveCheckInstance::runAliveCheck()
         // Get values from rows.
         device_id = row.get<int>(0);
         
-        // Defined devices with these device ids (to be more confusing type in database
-        // is device id anywhere else) don't contain any sensors, so they don't send
+        // Defined devices with these device ids (type in database means device id anywhere else)
+        // don't contain any sensors, so they don't send
         // any sensoric data to server. That means this method of checking if they are
         // available will not work, and they would always be marked as unavailable.
         if (device_id == 7 || device_id == 8 ||
@@ -103,7 +103,7 @@ void AliveCheckInstance::runAliveCheck()
         std::string status;
         *sql << "SELECT status FROM device WHERE device_euid = :device_euid",
                 soci::into(status),
-                soci::use(device_euid, "device_euid");
+                soci::use(static_cast<long>(device_euid), "device_euid");
         
         // Three times refresh was chosen as the best value to test device availability.
         if ((measured_at + (3 * refresh)) < now_timestamp) {
@@ -111,7 +111,7 @@ void AliveCheckInstance::runAliveCheck()
             if (status != "unavailable") {
                
                 *sql << "UPDATE device SET status = 'unavailable'::device_status WHERE device_euid = :device_euid",
-                        soci::use(device_euid, "device_euid");
+                        soci::use(static_cast<long>(device_euid), "device_euid");
 
                 // Send notification
                 if (send_notif == 1) {
@@ -168,8 +168,7 @@ void AliveCheckInstance::checkGatewayStatus(long long gateway_id, short send_not
     *sql << "SELECT status FROM gateway WHERE gateway_id = :gateway_id",
             soci::into(status),
             soci::use(gateway_id, "gateway_id");
-    
-    
+
     if (!gi.pingGateway(gateway_id)) {
         
         if (status != "unavailable") {
@@ -178,10 +177,8 @@ void AliveCheckInstance::checkGatewayStatus(long long gateway_id, short send_not
             *sql << "UPDATE gateway SET status = 'unavailable'::gateway_status WHERE gateway_id = :gateway_id",
                      soci::use(gateway_id, "gateway_id");
 
-            // Send notification
             if (send_notif == 1) {
-                // Only type in which soci can get device_euid from database is double,
-                // so it must be casted.
+                // Send notification.
                 std::string notification("Brána s id: ");
                 notification += std::to_string(gateway_id);
                 notification += " je nedostupná.";

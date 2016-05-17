@@ -38,7 +38,7 @@ public:
     void run(DataMessage data_message) override;
     /*
      * This function is called when user changes device_euid from
-     * which watchdog instnace should receive senzoric data.
+     * which watchdog instance should receive senzory data.
      * It unregisters old euid and registers new one to DataMessageRegister.
      */
     void changeRegisteredDeviceEuid(long device_euid);
@@ -85,7 +85,6 @@ private:
      * Stores time when watchdog executed last time.
      */
     std::chrono::system_clock::time_point m_last_act_time;
-    
 };
 
 #endif /* WATCHDOGINSTANCE_H */

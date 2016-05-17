@@ -52,12 +52,11 @@ public:
 private:
     /**
      * Pointer to library (.so file) opened by dlopen().
-     * Using raw void pointer, because dlfcn.h is C library.
+     * Using raw void pointer, because dlopen loads it in C way.
      */
     void* m_task_library;
     /**
-     * Manager of this task.
-     * Using raw pointer because it's constructed inside .so library.
+     * Manager of loaded task.
      */
     std::shared_ptr<TaskManager> m_task_manager;
     /**

@@ -19,41 +19,41 @@
 class DataMessageRegister {
 public:
     /**
-     * Creates singleton instance. Must be called just once in entire program.
+     * Creates DataMessageRegister singleton instance.
+     * Must be called just once in entire program.
      */
     static void createInstance();
     /**
-     * Serves to access pointer to singleton object of this class.
-     * @return Shared pointer to singleton instance.
+     * Returns pointer to DataMessageRegister singleton instance.
+     * @return Pointer to DataMessageRegister instance.
      */
     static std::shared_ptr<DataMessageRegister> getInstance();
     /**
-     * Virtual destructor of class DataMessageRegister.
+     * Destructor of class DataMessageRegister.
      */
     virtual ~DataMessageRegister();
     /**
-     * Activates all instances which registered to receive data from device
-     * which EUID is in passed DataMessage object.
-     * @param data_message DataMessage received by GatewayServer.
+     * Activates all instances which should receive data 
+     * from device which EUID is in passed DataMessage object.
+     * @param data_message Parsed DataMessage.
      */
     void activateInstances(DataMessage data_message);
     /**
-     * Inserts new entry to m_message_register.
-     * @param device_euid EUID of registered device.
+     * Inserts new entry to DataMessageRegister.
+     * @param device_euid EUID of device from which should instance receive data.
      * @param instance_ptr Pointer to instance which should receive messages from device.
      */
     void insertEntry(long device_euid, TaskInstance* instance_ptr);
     /**
-     * Removes one entry from m_message_register.
-     * @param device_euid EUID of registered device.
+     * Removes one entry from DataMessageRegister.
+     * @param device_euid EUID of device from which should not instance receive data anymore.
      * @param instance_ptr Pointer to instance which deletes entry.
      */
     void removeEntry(long device_euid, TaskInstance* instance_ptr);
-    
     /**
-     * Removes all entries of instance from m_message_register.
-     * @param device_euids Set of all EUIDs of registered devices.
-     * @param instance_ptr Pointer to instance which deletes entries.
+     * Removes entries of instance from DataMessageRegister.
+     * @param device_euids Set of EUIDs of devices.
+     * @param instance_ptr Pointer to instance which should not receive data from devices.
      */
     void removeAllEntries(std::set<long /*device_euid*/> device_euids, TaskInstance* instance_ptr);
 
@@ -80,13 +80,13 @@ private:
      */
     std::mutex m_register_mx;
     /**
-     * Container storing which instance wants data message from which device.
+     * Container storing which instance wants sensory data from which device.
      */
     std::multimap<long /*device_euid*/, TaskInstance*/*instance*/> m_message_register; 
     /**
-     * Finds and returns all instances which are registered to receive data from device_euid.
+     * Finds and returns all instances which are registered to receive data from device.
      * @param device_euid Searched EUID of device.
-     * @return Vector of instances which are registered to receive data.
+     * @return Vector of instances which are registered to receive data from passed device.
      */
     std::vector<TaskInstance*> returnAllRegisteredInstances(long device_euid); 
 };

@@ -188,8 +188,6 @@ int main(int argc, char** argv)
         logger.LOGFILE("core", "INFO") << e.what() << std::endl;
         return 1;
     }
-    
     logger.LOGFILE("core", "INFO") << "BAF was shut down." << std::endl;
-
     return 0;
 }

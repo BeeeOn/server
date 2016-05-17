@@ -62,7 +62,6 @@ void TaskManager::deleteInstance(DeleteMessage delete_message)
 
 std::vector<long> TaskManager::getInstanceIds(GetInstIdsMessage get_inst_ids_message)
 {
-    // Vector which will be returned.
     std::vector<long> instance_ids;
     
     SessionSharedPtr sql = DatabaseInterface::getInstance()->makeNewSession();
@@ -77,7 +76,8 @@ std::vector<long> TaskManager::getInstanceIds(GetInstIdsMessage get_inst_ids_mes
         
         soci::row const& row = *it;
         // For some reason, get<> doesn't support long.
-        // On 64bit Linux it shouldn't be a problem, because int is same size as serial in DB.
+        // On 64bit Linux it shouldn't be a problem,
+        // because int is same size as serial in DB.
         instance_ids.push_back(row.get<int>(0)); 
     }
     return instance_ids;

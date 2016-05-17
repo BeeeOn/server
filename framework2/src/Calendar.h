@@ -21,12 +21,12 @@
 class Calendar {
 public:
     /**
-     * Creates singleton instance. Must be called just once in entire program.
+     * Creates Calendar singleton instance. Must be called just once in entire program.
      */
     static void createInstance();    
     /**
-     * Create instance of Calendar singleton, or return it.
-     * @return Pointer to Calendar.
+     * Returns pointer to Calendar singleton instance.
+     * @return Pointer to Calendar instance.
      */
     static std::shared_ptr<Calendar> getInstance();
     /**
@@ -38,32 +38,34 @@ public:
      */
     void runCalendar();
     /**
-     * Calculates activation time: now + seconds and planes instance activation to calendar with calculated activation time.
-     * @param seconds Relative activation time (activate seconds from now).
-     * @param instance_ptr Pointer to instance, which should be activated.
+     * Calculates activation time: now + seconds and plans instance activation to Calendar with calculated time.
+     * @param seconds Relative activation time (how many seconds from now).
+     * @param instance_ptr Pointer to instance which should be activated.
+     * @return Time of activation.
      */
     std::chrono::system_clock::time_point planActivation(int seconds, TaskInstance* instance_ptr);
     /**
-     * Immediately plans instance activation to calendar with current time.
-     * @param instance_ptr Pointer to instance, which should be activated.
+     * Immediately plans instance activation to Calendar with current time.
+     * @param instance_ptr Pointer to instance which should be activated.
+     * @return Time of activation.
      */
     std::chrono::system_clock::time_point planActivation(TaskInstance* instance_ptr);
     /**
-     * Plans activation of instance on specific date and time.
+     * Plans activation of instance to specific date and time.
      * It must have format: "1 9 2014 12:35:34" -> "month day_of_month year time"
-     * Must be UTC.
      * @param date_time Formatted string with date and time to activate.
      * @param instance_ptr Poiter to instance which should be activated.
      * @return Time of activation.
      */
     std::chrono::system_clock::time_point planActivation(std::string date_time, TaskInstance* instance_ptr);
     /**
-     * Stops calendar and saves activation times.
+     * Stops Calendar main algorithm.
      */
     void stopCalendar();
     /**
-     * Deletes all planned activations from calendar of passed TaskInstance.
-     * @param instance_ptr Pointer to instance which should be deleted from calendar.
+     * Deletes planned activations from passed container from Calendar of passed instance.
+     * @param planned_times Set of times which should be removed.
+     * @param instance_ptr Pointer to instance which activations should be removed.
      */
     void removeAllActivationsOfInstance(std::set<std::chrono::system_clock::time_point> planned_times, TaskInstance* instance_ptr);
     /**
@@ -87,34 +89,34 @@ private:
      */
     void operator=(const Calendar&) = delete;
     /**
-     * Pointer to Calendar instance. 
+     * Pointer to Calendar singleton instance. 
      */
     static std::shared_ptr<Calendar> m_instance;
     /*
-     * Activates instances passed in parameter.
+     * Activates instances passed in multimap.
      * @param to_activate Instances which should be activated.
      */
     void activateInstances(std::multimap<std::chrono::system_clock::time_point, TaskInstance*> to_activate);
     /**
-     * If calendar is empty causes wait until it is notified that new event was emplaced to queue.
+     * If Calendar is empty serves to main algorithm to wait until it is notified that new activation was emplaced.
      */
     void waitUntilCalendarIsNotEmpty();
     /**
      * Emplaces event to multimap.
-     * @param activation_time Time at which should event activate.
-     * @param instance_ptr Pointer to instance, which should be activated.
+     * @param activation_time Time at which should be instance activate.
+     * @param instance_ptr Pointer to instance which should be activated.
      */
     void emplaceActivation(std::chrono::system_clock::time_point activation_time, TaskInstance* instance_ptr);
     /**
-     *  Time until main algorithm should wait.
+     * Time to which main algorithm should sleep.
      */
     std::chrono::system_clock::time_point m_wakeup_time;
     /**
-     *  Multimap holding calendar events, those ones with smallest activation time are at the beginning.
+     *  Multimap holding Calendar events, those ones with smallest activation time are at the beginning.
      */
     std::multimap<std::chrono::system_clock::time_point, TaskInstance*> m_calendar_events;
     /**
-     * Contition variables for waking up main algorithm.
+     * Condition variables for waking up main algorithm.
      */
     std::condition_variable m_new_wakeup_time_cv;
     std::mutex m_new_wakeup_time_mx;
@@ -125,11 +127,11 @@ private:
      */
     std::mutex m_calendar_events_mx;
     /**
-     *  Indicates if calendar algorithm should run.
+     *  Indicatio to Calendar main algorithm to run.
      */
     bool m_should_run;
     /**
-     * Indicates if Calendar runns, so it can't be run again.
+     * Indicates if Calendar runs, so it can't be run again.
      */
     bool m_running;
 };

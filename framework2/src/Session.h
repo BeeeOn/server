@@ -62,7 +62,6 @@ protected:
      * Handler after asynchronous write was made.
      */
     void handleWrite(const asio::error_code& error);
-    
     /**
      * Sets deadline timeout of connection to 2 seconds.
      */

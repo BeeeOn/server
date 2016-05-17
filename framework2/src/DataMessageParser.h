@@ -21,8 +21,8 @@ public:
      */
     virtual ~DataMessageParser();
     /**
-     * Parses received XML data message to DataMessage object.
-     * @param received_data String with XML message.
+     * Parses received XML sensory data message to DataMessage object.
+     * @param received_data String with XML senzory data message.
      * @return Parsed DataMessage object.
      */
     DataMessage parseMessage(std::string received_data);

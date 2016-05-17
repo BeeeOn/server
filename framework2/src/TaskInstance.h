@@ -22,8 +22,8 @@ class TaskInstance
 public:
     /**
      * Constuctor of class TaskInstance.
-     * @param user_id ID of a user creating an instance.
-     * @param personal_id ID of instance relative to instances of task already created by user (user can run more instances of one task).
+     * @param instance_id Identificator of created instance.
+     * @param owning_manager Pointer to manager of this instance.
      */
     TaskInstance(long instance_id, std::weak_ptr<TaskManager> owning_manager);
     /**
@@ -50,11 +50,11 @@ public:
     
 protected:
     /**
-     * Suicide function. Deletes instance from baf and from database.
+     * Suicide function. Deletes instance from its manager and from database.
      */
     void deleteItself();
     /**
-     * Unique ID of this instance in database (and in BAF system -> key value in map of manager)
+     * Unique ID of this instance from database.
      */
     long m_instance_id;
     /**

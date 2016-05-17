@@ -18,7 +18,8 @@ typedef std::shared_ptr<soci::session> SessionSharedPtr;
 class DatabaseInterface{
 public:
     /**
-     * Creates singleton instance. Must be called just once in entire program.
+     * Creates DatabaseInterface singleton instance.
+     * Must be called just once in entire program.
      */
     static void createInstance();
     /**
@@ -31,13 +32,13 @@ public:
      */
     virtual ~DatabaseInterface();
     /**
-     * Creates connectin pool and connects to database.
+     * Creates connectin pool and connects all work threads to database.
      * @param sessions_count Number of session threads.
      * @param connection_string String containing formated information to connect to database.
      */
     void connectToDatabase(int sessions_count, std::string connection_string);
     /**
-     * Makes new session to database and returns poiter to it.
+     * Makes new session to database on pool and returns poiter to it.
      * @return Shared pointer to new session.
      */
     SessionSharedPtr makeNewSession();

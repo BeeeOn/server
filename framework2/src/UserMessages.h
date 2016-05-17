@@ -1,8 +1,6 @@
 /* 
  * File:   UserMessages.h
  * Author: Martin Novak, xnovak1c@stud.fit.vutbr.cz
- * Desc:   Structures to store parsed messages. Unique
- *         for everytype of message to be more clear.
  * 
  * Created on 23. March 2016
  */
@@ -19,63 +17,99 @@ enum class USER_MESSAGE_TYPE {
 
 struct CreateMessage //"msg": "create"
 {
-    /** At least 4 bytes. Serial in database (4 bytes). */
+    /**
+     * At least 4 bytes. Serial in database (4 bytes).
+     */
     long user_id;
-    /** At least 2 bytes. Smallint in database (2 bytes). */
+    /**
+     * At least 2 bytes. Smallint in database (2 bytes).
+     */
     short task_id;
+    /**
+     * Stored configuration.
+     */
+    std::map<std::string /*name*/, std::string /*value*/> config;
+};
+
+struct ChangeMessage
+{
+    /**
+     * At least 4 bytes. Serial in database (4 bytes).
+     */
+    long user_id;
+    /**
+     * At least 2 bytes. Smallint in database (2 bytes).
+     */
+    short task_id;
+    /**
+     * At least 4 bytes. Serial in database (4 bytes).
+     */
+    long instance_id;
     /** Stored configuration. */
     std::map<std::string /*name*/, std::string /*value*/> config;
 };
 
-struct ChangeMessage //"msg": "change"
+struct DeleteMessage
 {
-    /** At least 4 bytes. Serial in database (4 bytes). */
+    /**
+     * At least 4 bytes. Serial in database (4 bytes).
+     */
     long user_id;
-    /** At least 2 bytes. Smallint in database (2 bytes). */
+    /**
+     * At least 2 bytes. Smallint in database (2 bytes).
+     */
     short task_id;
-    /** At least 4 bytes. Serial in database (4 bytes). */
-    long instance_id;
-    /** Stored configuration. */
-    std::map<std::string /*name*/, std::string /*value*/> config;
-};
-
-struct DeleteMessage //"msg": "delete"
-{
-    /** At least 4 bytes. Serial in database (4 bytes). */
-    long user_id;
-    /** At least 2 bytes. Smallint in database (2 bytes). */
-    short task_id;
-    /** At least 4 bytes. Serial in database (4 bytes). */
+    /**
+     * At least 4 bytes. Serial in database (4 bytes).
+     */
     long instance_id;
 };
 
-struct GetInstIdsMessage //"msg": "get_inst_ids"
+struct GetInstIdsMessage
 {
-    /** At least 4 bytes. Serial in database (4 bytes). */
+    /**
+     * At least 4 bytes. Serial in database (4 bytes).
+     */
     long user_id;
-    /** At least 2 bytes. Smallint in database (2 bytes). */
+    /**
+     * At least 2 bytes. Smallint in database (2 bytes).
+     */
     short task_id;
 };
 
-struct GetConfMessage //"msg": "get_conf"
+struct GetConfMessage
 {
-    /** At least 4 bytes. Serial in database (4 bytes). */
+    /**
+     * At least 4 bytes. Serial in database (4 bytes).
+     */
     long user_id;
-    /** At least 2 bytes. Smallint in database (2 bytes). */
+    /**
+     * At least 2 bytes. Smallint in database (2 bytes).
+     */
     short task_id;
-    /** At least 4 bytes. Serial in database (4 bytes). */
+    /**
+     * At least 4 bytes. Serial in database (4 bytes).
+     */
     long instance_id;
 };
 
-struct GetDataMessage //"msg": "get_data"
+struct GetDataMessage
 {
-    /** At least 4 bytes. Serial in database (4 bytes). */
+    /**
+     * At least 4 bytes. Serial in database (4 bytes).
+     */
     long user_id;
-    /** At least 2 bytes. Smallint in database (2 bytes). */
+    /**
+     * At least 2 bytes. Smallint in database (2 bytes).
+     */
     short task_id;
-    /** At least 4 bytes. Serial in database (4 bytes). */
+    /**
+     * At least 4 bytes. Serial in database (4 bytes).
+     */
     long instance_id;
-    /** Parameters by which task knows what data to return. */
+    /**
+     * Parameters by which task knows what data to return.
+     */
     std::map<std::string /*name*/, std::string /*value*/> parameters;
 };
 

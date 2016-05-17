@@ -19,19 +19,18 @@ class TriggerTaskInstance: public virtual TaskInstance
 public:
     /**
      * Constructor of class TriggerTaskInstance.
-     * @param instance_id
-     * @param owning_manager
+     * @param instance_id Identificator of created instance.
+     * @param owning_manager Pointer to manager of this instance.
      */
     TriggerTaskInstance(long instance_id, std::weak_ptr<TaskManager> owning_manager);
     /**
-     * Virtual destructor of class TriggerTaskInstance. Removes all entries
-     * with this instance from DataMessageRegister before instance is deleted.
+     * Destructor of class TriggerTaskInstance.
      */
     virtual ~TriggerTaskInstance();
     /**
      * Activates instance. Protects run function with activation mutex,
      * so it's not possible to run one instance more times at the same time.
-     * @param data_message Message with data from registered device_euid.
+     * @param data_message Object with sensory data from device.
      */
     void activate(DataMessage data_message) override;
     /**
@@ -45,7 +44,6 @@ public:
      * @param device_euid EUID of device from which to receive messages.
      */
     void registerToReceiveDataFromDevice(long device_euid);
-    
     /**
      * Removes one entry from DataMessageRegister.
      * After this instance won't receive any data messages from device.
@@ -63,7 +61,6 @@ protected:
      * Set of all devices from which instance receives data messages. 
      */
     std::set<long /*device_euid*/> m_registered_device_euids;
-
 };
 
 #endif /* TRIGGERTASKINSTANCE_H */

@@ -57,7 +57,7 @@ private:
      */
     int parseResponse(std::string response);
     /**
-     * Input output service.
+     * Input output service to communicate with OS.
      */
     asio::io_service m_io_service;
     /**
@@ -65,12 +65,11 @@ private:
      */
     asio::ip::tcp::socket m_socket;
     /**
-     * Resolver for resolving of host and port.
+     * Object for resolving host and port.
      */
     asio::ip::tcp::resolver m_resolver;
-
     /**
-     * Variable to store response from ada_server_sender.
+     * String to store response from ada_server_sender.
      */
     std::string m_response;
 };

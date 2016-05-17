@@ -62,12 +62,12 @@ void Calendar::runCalendar()
     // Run for all eternity (until whole system shuts down).  
     while(m_should_run) {
         
-        // If event queue is empty, wait in thread until event comes.
+        // If Calendar is empty, wait in thread until new activation comes.
         waitUntilCalendarIsNotEmpty();
      
         if (m_should_run == false) {
             // When stopping calendar which was waiting on empty calendar,
-            // this safely stops algirithm.
+            // this safely stops algorithm.
             break;
         }
         
@@ -80,10 +80,10 @@ void Calendar::runCalendar()
             // Stores every event with activation time less or equal to now.
             to_activate.emplace(m_calendar_events.begin()->first, m_calendar_events.begin()->second);
             
-            // Pops stored event from queue.
+            // Erases stored event from Calendar.
             m_calendar_events.erase(m_calendar_events.begin());
             
-            // If the queue is empty, stop loop immediately.
+            // If the Calendar is empty, stop loop immediately.
             if (m_calendar_events.empty()) {
                 break;
             }
@@ -94,11 +94,10 @@ void Calendar::runCalendar()
             m_wakeup_time = m_calendar_events.begin()->first;
         }
         else {
-            // If there is no event in queue this thread will won't wait in this iteration,
+            // If there is no event in Calendar this thread will won't wait in this iteration,
             // but in next iteration waits at waitUntilCalendarIsNotEmpty().
             m_wakeup_time = std::chrono::system_clock::now();
         }
-        
         try {
             // Launch thread to execute stored events.
             std::thread t_execute_events(&Calendar::activateInstances, this, to_activate);
@@ -124,16 +123,13 @@ void Calendar::runCalendar()
     }
     
     logger.LOGFILE("calendar", "INFO") << "Calendar algorithm stopped." << std::endl;
-    // HERE CAN BE STORED EVERYTHING IN CALENDAR.
 }
 
 void Calendar::activateInstances(std::multimap<std::chrono::system_clock::time_point, TaskInstance*> to_activate)
 {
     if(!to_activate.empty()) {
         for (auto instance : to_activate) {
-            // Print time of activation and activate instances.
-            time_t tn = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-           
+
             instance.second->activate(instance.first);
         }
     }
@@ -153,23 +149,22 @@ void Calendar::waitUntilCalendarIsNotEmpty()
 void Calendar::emplaceActivation(std::chrono::system_clock::time_point activation_time, TaskInstance* instance_ptr)
 {
     m_calendar_events_mx.lock();
-    // Before new event is created, check if queue is empty.
+    // Before new event is created, check if Calendar is empty.
     bool calendar_empty = m_calendar_events.empty();
     
-    // Create new event and push to queue.
+    // Create new event and push to Calendar.
     m_calendar_events.emplace(activation_time, instance_ptr);
     
-
     if (!calendar_empty) {
        
-        // If activation time of pushed event is lower than time for which main calendar algorithm (run()) waits,
-        // it should wake up said thread so it can calculate new time to wake up.
+        // If activation time of pushed event is lower than time for which main Calendar
+        // algorithm (run()) waits, it should wake up said thread so it can calculate new time to wake up.
         if (activation_time < m_wakeup_time ) {
             m_new_wakeup_time_cv.notify_all();
         }
     }
     else {
-        // If queue is empty that means that main calendar algorithm (run())is waiting
+        // If Calendar is empty that means that main calendar algorithm (run())is waiting
         // in waitUntilCalendarIsNotEmpty() function and should be notified to wake up.
         m_calendar_not_empty_cv.notify_all();
     }
@@ -222,9 +217,9 @@ void Calendar::removeActivation(std::chrono::system_clock::time_point activation
 {
     std::lock_guard<std::mutex> lock(m_calendar_events_mx);
     
-    // Find range of all activations containing activation_time as key. 
+    // Find range of all events containing activation_time as key. 
     auto range_of_keys =  m_calendar_events.equal_range(activation_time);
-    // Iterate over all activations and remove those by instance_ptr.
+    // Iterate over all events and remove those by instance_ptr.
     for (auto it = range_of_keys.first; it != range_of_keys.second; it++) {
             
         if (it->second == instance_ptr) {

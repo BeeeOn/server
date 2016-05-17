@@ -42,7 +42,7 @@ public:
     void run(std::chrono::system_clock::time_point activation_time) override;
     /*
      * This function is called when user changes device_euid from
-     * which instace should receive senzoric data.
+     * which instace should receive senzory data.
      * It unregisters old euid and registers new one to DataMessageRegister.
      */
     void changeRegisteredDeviceEuid(long device_euid);
