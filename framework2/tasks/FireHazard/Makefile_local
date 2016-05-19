@@ -1,0 +1,26 @@
+CC := g++
+CPP_FILES := $(wildcard src/*.cpp)
+OBJ_FILES := $(addprefix obj/, $(notdir $(CPP_FILES:.cpp=.o)))
+
+CC_FLAGS := -g -std=c++11 -fPIC
+I_DIRS := -I/usr/local/include/soci -I/usr/include/postgresql
+
+LD_FLAGS := -fPIC -shared -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -lpq
+L_DIRS := -L/usr/local/lib64 -L/usr/lib/postgresql/9.3/lib
+
+.PHONY: all clean
+
+all: pre-build FireHazard.so
+
+pre-build:
+	mkdir -p ./obj
+
+FireHazard.so: $(OBJ_FILES)
+	$(CC) $(CC_FLAGS) -o $@ $^ $(L_DIRS) $(LD_FLAGS)
+
+obj/%.o: src/%.cpp
+	$(CC) $(CC_FLAGS) -c -o $@ $< $(I_DIRS) 
+
+clean:
+	rm -rf ./obj
+	rm ./FireHazard.so

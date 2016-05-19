@@ -1,0 +1,10 @@
+{
+    "msg": "get_data",
+    "user_id": 6,
+    "task_id": 2,
+    "instance_id": 1,
+    "parameters": {
+        "type": "graph",
+        "range": "month" 
+    }
+}

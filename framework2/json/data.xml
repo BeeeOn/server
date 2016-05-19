@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<adapter_server adapter_id="0x57d3e01695f35" fw_version="v1.5" protocol_version="1.1" state="data" time="1448964949">
+    <device device_id="0x00" euid="0x01" name="own_name">
+        <values count="6">
+            <value module_id="0x00">25.19</value>
+            <value module_id="0x01">20.5</value>
+            <value module_id="0x02">35.61</value>
+            <value module_id="0x03">68.00</value>
+            <value module_id="0x05" status="unavailable"></value>
+            <value module_id="0x04">100.00</value>
+        </values>
+    </device>
+</adapter_server>

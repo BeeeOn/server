@@ -4,9 +4,13 @@
 ## Date: 	 12/2014
 ########################################################
 
+I_DIRS := -I/usr/include/soci -I/usr/pgsql-9.5/include
+L_DIRS := -L/usr/local/lib64 -L/usr/pgsql-9.5/lib
+
 CC=g++
-CFLAGS=-Wall -std=c++98
-LDLIBS=-lcurl
+CFLAGS=-Wall -std=c++11
+L_LIBS = -lcurl
+LD_LIBS = -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -lpq
 DEPS=Notification.h
 SOURCES= AchievementNotif.cpp SensorLowSignalNotif.cpp SensorLowBatteryNotif.cpp AdapterOfflineNotif.cpp XmlHelper.cpp AdapterAddedNotif.cpp SensorAddedNotif.cpp UriNotif.cpp DeleteNotif.cpp AdvertNotification.cpp InfoNotification.cpp AlertNotification.cpp Notificator.cpp JsonNotificationBuilder.cpp BaseNotification.cpp JsonUtil.cpp ControlNotification.cpp WatchdogNotif.cpp Utils.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
@@ -39,7 +43,7 @@ libnotif.so: $(OBJECTS)
 #	$(CC) $(CFLAGS) -static main.cpp -L. -lnotif -o main
 
 main: all main.cpp
-	$(CC) $(CFLAGS) main.cpp -o main -L. -lnotif -lcurl
+	$(CC) $(CFLAGS) main.cpp -o main $(I_DIRS) $(L_DIRS) $(LD_LIBS) -L. -lnotif -lcurl
 
 ########################################################
 

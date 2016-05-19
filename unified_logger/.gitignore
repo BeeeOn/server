@@ -1,0 +1,5 @@
+### Log files
+*.log
+
+### Application
+unified_logger

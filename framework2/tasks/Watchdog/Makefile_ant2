@@ -1,0 +1,26 @@
+CC := /usr/bin/g++
+CPP_FILES := $(wildcard src/*.cpp)
+OBJ_FILES := $(addprefix obj/, $(notdir $(CPP_FILES:.cpp=.o)))
+
+CC_FLAGS := -std=c++11 -fPIC -pedantic
+I_DIRS := -I../lib -I/usr/include/soci -I/usr/pgsql-9.5/include
+
+LD_FLAGS := -fPIC -shared -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -lpq -lnotif -lcurl
+L_DIRS := -L. -L/usr/local/lib64 -L/usr/pgsql-9.5/lib
+
+.PHONY: all clean
+
+all: pre-build Watchdog.so
+
+pre-build:
+	mkdir -p ./obj
+
+Watchdog.so: $(OBJ_FILES)
+	$(CC) $(CC_FLAGS) -o $@ $^ $(L_DIRS) $(LD_FLAGS)
+
+obj/%.o: src/%.cpp
+	$(CC) $(CC_FLAGS) -c -o $@ $< $(I_DIRS) 
+
+clean:
+	rm -rf ./obj
+	rm ./Watchdog.so

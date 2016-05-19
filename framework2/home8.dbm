@@ -1,0 +1,980 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="0.8.2-beta1" last-position="0,0" last-zoom="0.8"
+	 default-owner="postgres">
+<role name="hardware">
+</role>
+
+<role name="user_data">
+</role>
+
+<role name="uiserver7"
+      login="true"
+      password="1234">
+	<appended-sql><![CDATA[GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public to uiserver7;]]></appended-sql>
+	<roles names="hardware,user_data" role-type="refer" />
+</role>
+
+<role name="algorithms">
+</role>
+
+<role name="framework7">
+	<appended-sql><![CDATA[GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public to framework7;]]></appended-sql>
+	<roles names="algorithms,hardware,user_data" role-type="refer" />
+</role>
+
+<role name="adaserver7">
+	<appended-sql><![CDATA[GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public to adaserver7;]]></appended-sql>
+	<roles names="hardware,user_data" role-type="refer" />
+</role>
+
+<database name="home8">
+</database>
+
+<tag name="Tasks">
+	<style id="table-body" colors="#fcfcfc,#fcfcfc,#808080"/>
+	<style id="table-ext-body" colors="#fcfcfc,#fcfcfc,#808080"/>
+	<style id="table-name" colors="#000000"/>
+	<style id="table-schema-name" colors="#000000"/>
+	<style id="table-title" colors="#f6f8a7,#f6f8a7,#cdcf8f"/>
+</tag>
+<tag name="Hardware">
+	<style id="table-body" colors="#fcfcfc,#fcfcfc,#808080"/>
+	<style id="table-ext-body" colors="#fcfcfc,#fcfcfc,#808080"/>
+	<style id="table-name" colors="#000000"/>
+	<style id="table-schema-name" colors="#000000"/>
+	<style id="table-title" colors="#9789fe,#9789fe,#9789fe"/>
+</tag>
+<tag name="Users">
+	<style id="table-body" colors="#fcfcfc,#fcfcfc,#808080"/>
+	<style id="table-ext-body" colors="#fcfcfc,#fcfcfc,#808080"/>
+	<style id="table-name" colors="#000000"/>
+	<style id="table-schema-name" colors="#000000"/>
+	<style id="table-title" colors="#82fe72,#82fe72,#82fe72"/>
+</tag>
+<tag name="Achievements">
+	<style id="table-body" colors="#fcfcfc,#fcfcfc,#808080"/>
+	<style id="table-ext-body" colors="#fcfcfc,#fcfcfc,#808080"/>
+	<style id="table-name" colors="#000000"/>
+	<style id="table-schema-name" colors="#000000"/>
+	<style id="table-title" colors="#ff7b72,#ff7b72,#ff7b72"/>
+</tag>
+<tag name="User_data">
+	<style id="table-body" colors="#fcfcfc,#fcfcfc,#808080"/>
+	<style id="table-ext-body" colors="#fcfcfc,#fcfcfc,#808080"/>
+	<style id="table-name" colors="#000000"/>
+	<style id="table-schema-name" colors="#000000"/>
+	<style id="table-title" colors="#4aa5ff,#4aa5ff,#20486f"/>
+</tag>
+<schema name="public" protected="true" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<table name="users">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<tag name="Users"/>
+	<position x="149.348" y="468.929"/>
+	<column name="user_id" not-null="true">
+		<type name="serial"/>
+	</column>
+	<column name="signin_count" not-null="true" default-value="0">
+		<type name="integer"/>
+	</column>
+	<column name="given_name">
+		<type name="varchar" length="250"/>
+	</column>
+	<column name="family_name">
+		<type name="varchar" length="250"/>
+	</column>
+	<column name="picture">
+		<type name="varchar" length="250"/>
+	</column>
+	<column name="gender">
+		<type name="varchar" length="10"/>
+	</column>
+	<column name="mail">
+		<type name="varchar" length="250"/>
+	</column>
+	<column name="password">
+		<type name="text"/>
+	</column>
+	<column name="google_id">
+		<type name="text"/>
+	</column>
+	<column name="facebook_id">
+		<type name="text"/>
+	</column>
+	<column name="verified" not-null="true" default-value="true">
+		<type name="bool"/>
+	</column>
+	<constraint name="users_pk" type="pk-constr" table="public.users">
+		<columns names="user_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="gateway">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<tag name="Hardware"/>
+	<position x="966.591" y="442.416"/>
+	<column name="gateway_id" not-null="true">
+		<type name="decimal" length="20" precision="0"/>
+	</column>
+	<column name="home_name" not-null="true" default-value="''">
+		<type name="varchar" length="50"/>
+	</column>
+	<column name="version" default-value="-1">
+		<type name="integer"/>
+	</column>
+	<column name="socket" default-value="-1">
+		<type name="integer"/>
+	</column>
+	<column name="home_timezone" not-null="true" default-value="0">
+		<type name="smallint"/>
+	</column>
+	<column name="logging_days" not-null="true" default-value="7">
+		<type name="integer"/>
+	</column>
+	<constraint name="adapters_pk" type="pk-constr" table="public.gateway">
+		<columns names="gateway_id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="check_positive_gw_id" type="ck-constr" table="public.gateway">
+			<expression><![CDATA[gateway_id >= 0]]></expression>
+	</constraint>
+</table>
+
+<table name="user_gateway">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="520.218" y="486.581"/>
+	<column name="user_id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="gateway_id" not-null="true">
+		<type name="decimal" length="20" precision="0"/>
+	</column>
+	<column name="permission" not-null="true">
+		<type name="varchar" length="15"/>
+	</column>
+	<column name="accepted" not-null="true" default-value="true">
+		<type name="bool"/>
+	</column>
+	<constraint name="users_adapters_pk" type="pk-constr" table="public.user_gateway">
+		<columns names="user_id,gateway_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="users_user_id_seq"
+	 start="1" increment="1"
+	 min-value="-2147483648" max-value="2147483647"
+	 cache="1" cycle="false">
+	<schema name="public"/>
+</sequence>
+
+<table name="device">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<tag name="Hardware"/>
+	<position x="1407.73" y="365.393"/>
+	<column name="device_euid" not-null="true">
+		<type name="decimal" length="10"/>
+	</column>
+	<column name="device_type" not-null="true">
+		<type name="smallint"/>
+	</column>
+	<column name="device_name" not-null="true" default-value="''">
+		<type name="varchar" length="50"/>
+	</column>
+	<column name="refresh" not-null="true" default-value="10">
+		<type name="integer"/>
+	</column>
+	<column name="battery" not-null="true" default-value="-1">
+		<type name="smallint"/>
+	</column>
+	<column name="quality" not-null="true" default-value="-1">
+		<type name="integer"/>
+	</column>
+	<column name="init" not-null="true" default-value="'0'">
+		<type name="char"/>
+	</column>
+	<column name="involved" not-null="true" default-value="0">
+		<type name="bigint"/>
+	</column>
+	<column name="measured_at" not-null="true" default-value="0">
+		<type name="bigint"/>
+	</column>
+	<column name="location_id">
+		<type name="bigint"/>
+	</column>
+	<column name="gateway_id" not-null="true">
+		<type name="decimal" length="20" precision="0"/>
+	</column>
+	<constraint name="check_positive_mac" type="ck-constr" table="public.device">
+			<expression><![CDATA[device_euid>= 0]]></expression>
+	</constraint>
+	<constraint name="device_pk" type="pk-constr" table="public.device">
+		<columns names="device_euid,gateway_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="module">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<tag name="Hardware"/>
+	<position x="1400.27" y="608.342"/>
+	<column name="device_euid" not-null="true">
+		<type name="decimal" length="10"/>
+	</column>
+	<column name="module_id" not-null="true">
+		<type name="smallint"/>
+	</column>
+	<column name="measured_value" not-null="true" default-value="0">
+		<type name="real"/>
+	</column>
+	<constraint name="devices_pk" type="pk-constr" table="public.module">
+		<columns names="device_euid,module_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="location">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="957.962" y="639.431"/>
+	<column name="location_id" not-null="true">
+		<type name="bigserial"/>
+	</column>
+	<column name="gateway_id" not-null="true">
+		<type name="decimal" length="20" precision="0"/>
+	</column>
+	<column name="kind" not-null="true">
+		<type name="smallint"/>
+	</column>
+	<column name="location_name" not-null="true" default-value="''">
+		<type name="varchar" length="50"/>
+	</column>
+	<constraint name="rooms_pk" type="pk-constr" table="public.location">
+		<columns names="location_id,gateway_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="log">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<tag name="Hardware"/>
+	<position x="1401.99" y="776.317"/>
+	<column name="device_euid" not-null="true">
+		<type name="decimal" length="10"/>
+	</column>
+	<column name="module_id" not-null="true">
+		<type name="smallint"/>
+	</column>
+	<column name="measured_at" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="measured_value" not-null="true">
+		<type name="real"/>
+	</column>
+	<constraint name="logs_pk" type="pk-constr" table="public.log">
+		<columns names="measured_at,device_euid,module_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="achievements">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<tag name="Achievements"/>
+	<position x="870.286" y="850.214"/>
+	<column name="achievement_id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="parent_id">
+		<type name="integer"/>
+	</column>
+	<column name="category" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="points" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="progress_total" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="visibility" not-null="true">
+		<type name="boolean"/>
+	</column>
+	<column name="range" not-null="true">
+		<type name="boolean"/>
+	</column>
+	<column name="notification" not-null="true">
+		<type name="boolean"/>
+	</column>
+	<constraint name="achievements_pk" type="pk-constr" table="public.achievements">
+		<columns names="achievement_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="notifications">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="167.814" y="791.746"/>
+	<column name="message_id" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="text" not-null="true">
+		<type name="xml"/>
+	</column>
+	<column name="level" not-null="true">
+		<type name="smallint"/>
+	</column>
+	<column name="timestamp" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="fk_user_id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="read" not-null="true">
+		<type name="boolean"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="text"/>
+	</column>
+	<constraint name="notifications_pk" type="pk-constr" table="public.notifications">
+		<columns names="message_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="mobile_devices">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="97.1071" y="152.857"/>
+	<column name="mobile_id" not-null="true">
+		<type name="text"/>
+	</column>
+	<column name="fk_user_id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="token">
+		<type name="text"/>
+	</column>
+	<column name="type">
+		<type name="varchar" length="255"/>
+	</column>
+	<column name="locale">
+		<type name="varchar" length="10"/>
+	</column>
+	<column name="push_notification">
+		<type name="text"/>
+	</column>
+	<constraint name="mobile_devices_pk" type="pk-constr" table="public.mobile_devices">
+		<columns names="mobile_id,fk_user_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="users_achievements">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<tag name="Achievements"/>
+	<position x="483.404" y="809.953"/>
+	<column name="fk_achievement_id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="fk_user_id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="progress_current" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="date">
+		<type name="bigint"/>
+	</column>
+	<constraint name="users_achievements_pk" type="pk-constr" table="public.users_achievements">
+		<columns names="fk_achievement_id,fk_user_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="adapters_achievements">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<tag name="Achievements"/>
+	<position x="514.762" y="646.596"/>
+	<column name="fk_achievement_id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="fk_adapter_id" not-null="true">
+		<type name="decimal" length="20" precision="0"/>
+	</column>
+	<column name="progress_current" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="date">
+		<type name="bigint"/>
+	</column>
+	<constraint name="adapters_achievements_pk" type="pk-constr" table="public.adapters_achievements">
+		<columns names="fk_achievement_id,fk_adapter_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<index name="index_fb_id" table="public.users"
+	 concurrent="false" unique="true" fast-update="false" buffering="false"
+	 index-type="btree" factor="0">
+		<idxelement use-sorting="true" nulls-first="true" asc-order="true">
+			<column name="facebook_id"/>
+		</idxelement>
+</index>
+
+<index name="index_mail" table="public.users"
+	 concurrent="false" unique="true" fast-update="false" buffering="false"
+	 index-type="btree" factor="0">
+		<idxelement use-sorting="true" nulls-first="true" asc-order="true">
+			<column name="google_id"/>
+		</idxelement>
+</index>
+
+<index name="index_google_id" table="public.users"
+	 concurrent="false" unique="true" fast-update="false" buffering="false"
+	 index-type="btree" factor="0">
+		<idxelement use-sorting="true" nulls-first="true" asc-order="true">
+			<column name="google_id"/>
+		</idxelement>
+</index>
+
+<index name="index_logs_mttv" table="public.log"
+	 concurrent="false" unique="false" fast-update="false" buffering="false"
+	 index-type="btree" factor="0">
+	<comment><![CDATA[mttv = mac, type, timestamp, value]]></comment>
+		<idxelement use-sorting="true" nulls-first="false" asc-order="true">
+			<column name="device_euid"/>
+		</idxelement>
+		<idxelement use-sorting="true" nulls-first="false" asc-order="true">
+			<column name="module_id"/>
+		</idxelement>
+		<idxelement use-sorting="true" nulls-first="false" asc-order="true">
+			<column name="measured_at"/>
+		</idxelement>
+		<idxelement use-sorting="true" nulls-first="false" asc-order="true">
+			<column name="measured_value"/>
+		</idxelement>
+</index>
+
+<table name="push_notification_service">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="65.1429" y="340.143"/>
+	<column name="push_notification_service_id" not-null="true">
+		<type name="serial"/>
+	</column>
+	<column name="user_id">
+		<type name="integer"/>
+	</column>
+	<column name="service_reference_id">
+		<type name="text"/>
+	</column>
+	<constraint name="pk_push_notification" type="pk-constr" table="public.push_notification_service">
+		<columns names="push_notification_service_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="task">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<tag name="Tasks"/>
+	<position x="490.5" y="349"/>
+	<column name="task_id" not-null="true">
+		<type name="smallint"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="varchar" length="20"/>
+	</column>
+	<column name="version" not-null="true">
+		<type name="smallint"/>
+	</column>
+	<column name="type" not-null="true">
+		<type name="varchar" length="10"/>
+	</column>
+	<constraint name="task_pk" type="pk-constr" table="public.task">
+		<columns names="task_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="instance">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<tag name="Tasks"/>
+	<position x="481" y="207.75"/>
+	<column name="instance_id" not-null="true">
+		<type name="serial"/>
+	</column>
+	<column name="user_id">
+		<type name="integer"/>
+	</column>
+	<column name="task_id">
+		<type name="smallint"/>
+	</column>
+	<constraint name="instance_pk" type="pk-constr" table="public.instance">
+		<columns names="instance_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="task_alive_check">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<tag name="Tasks"/>
+	<position x="694.07" y="42.357"/>
+	<column name="instance_id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="gateway_id">
+		<type name="decimal" length="20" precision="0"/>
+	</column>
+	<column name="send_notif" not-null="true">
+		<type name="bool"/>
+	</column>
+	<constraint name="task_alive_check_pk" type="pk-constr" table="public.task_alive_check">
+		<columns names="instance_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="task_watchdog">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<tag name="Tasks"/>
+	<position x="1387.29" y="106.179"/>
+	<column name="instance_id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="type" not-null="true">
+		<type name="varchar" length="6"/>
+	</column>
+	<column name="gateway_id">
+		<type name="decimal" length="20" precision="0"/>
+	</column>
+	<column name="device_euid">
+		<type name="decimal" length="10"/>
+	</column>
+	<column name="module_id" not-null="true">
+		<type name="smallint"/>
+	</column>
+	<column name="comp_operator" not-null="true">
+		<type name="varchar" length="2"/>
+	</column>
+	<column name="value" not-null="true">
+		<type name="real"/>
+	</column>
+	<column name="notification">
+		<type name="text"/>
+	</column>
+	<column name="a_gateway_id">
+		<type name="decimal" length="20" precision="0"/>
+	</column>
+	<column name="a_device_euid">
+		<type name="decimal" length="10"/>
+	</column>
+	<column name="a_module_id">
+		<type name="smallint"/>
+	</column>
+	<column name="a_value">
+		<type name="integer"/>
+	</column>
+	<constraint name="task_watchdog_pk" type="pk-constr" table="public.task_watchdog">
+		<columns names="instance_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="task_fire_hazard">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<tag name="Tasks"/>
+	<position x="985.36" y="246.964"/>
+	<column name="instance_id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="value">
+		<type name="integer"/>
+	</column>
+	<column name="gateway_id">
+		<type name="decimal" length="20" precision="0"/>
+	</column>
+	<column name="device_euid">
+		<type name="decimal" length="10"/>
+	</column>
+	<column name="module_id">
+		<type name="smallint"/>
+	</column>
+	<column name="a_gateway_id">
+		<type name="decimal" length="20" precision="0"/>
+	</column>
+	<column name="a_device_euid">
+		<type name="decimal" length="10"/>
+	</column>
+	<column name="a_module_id">
+		<type name="smallint"/>
+	</column>
+	<constraint name="task_fire_hazard_pk" type="pk-constr" table="public.task_fire_hazard">
+		<columns names="instance_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<constraint name="adapters_users_adapters" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.gateway" table="public.user_gateway">
+	<columns names="gateway_id" ref-type="src-columns"/>
+	<columns names="gateway_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="users_adapters_users" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.users" table="public.user_gateway">
+	<columns names="user_id" ref-type="src-columns"/>
+	<columns names="user_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="facilities_adapters" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.gateway" table="public.device">
+	<columns names="gateway_id" ref-type="src-columns"/>
+	<columns names="gateway_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="facilities_rooms" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="public.location" table="public.device">
+	<columns names="location_id,gateway_id" ref-type="src-columns"/>
+	<columns names="location_id,gateway_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="devices_facilities" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.device" table="public.module">
+	<columns names="device_euid" ref-type="src-columns"/>
+	<columns names="device_euid" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="rooms_adapters" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.gateway" table="public.location">
+	<columns names="gateway_id" ref-type="src-columns"/>
+	<columns names="gateway_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="logs_devices" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.module" table="public.log">
+	<columns names="device_euid,module_id" ref-type="src-columns"/>
+	<columns names="device_euid,module_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="achievements_achievements" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="public.achievements" table="public.achievements">
+	<columns names="parent_id" ref-type="src-columns"/>
+	<columns names="achievement_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="notifications_users" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.users" table="public.notifications">
+	<columns names="fk_user_id" ref-type="src-columns"/>
+	<columns names="user_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="mobile_devices_users" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.users" table="public.mobile_devices">
+	<columns names="fk_user_id" ref-type="src-columns"/>
+	<columns names="user_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="achievement_detail_achievements" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.achievements" table="public.users_achievements">
+	<columns names="fk_achievement_id" ref-type="src-columns"/>
+	<columns names="achievement_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="achievement_detail_users" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.users" table="public.users_achievements">
+	<columns names="fk_user_id" ref-type="src-columns"/>
+	<columns names="user_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="adapters_achievements_achievements" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.achievements" table="public.adapters_achievements">
+	<columns names="fk_achievement_id" ref-type="src-columns"/>
+	<columns names="achievement_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="adapters_achievements_adapters" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.gateway" table="public.adapters_achievements">
+	<columns names="fk_adapter_id" ref-type="src-columns"/>
+	<columns names="gateway_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="fk_user_push_notification" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.users" table="public.push_notification_service">
+	<columns names="user_id" ref-type="src-columns"/>
+	<columns names="user_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="task_id_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="public.task" table="public.instance">
+	<columns names="task_id" ref-type="src-columns"/>
+	<columns names="task_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="rel_user_instance" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.users" table="public.instance">
+	<columns names="user_id" ref-type="src-columns"/>
+	<columns names="user_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="instance_id_fk" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.instance" table="public.task_alive_check">
+	<columns names="instance_id" ref-type="src-columns"/>
+	<columns names="instance_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="rel_task_alive_check_gateway" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="public.gateway" table="public.task_alive_check">
+	<columns names="gateway_id" ref-type="src-columns"/>
+	<columns names="gateway_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="rel_task_watchdog_instance" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.instance" table="public.task_watchdog">
+	<columns names="instance_id" ref-type="src-columns"/>
+	<columns names="instance_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="rel_task_watchdog_device" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="public.device" table="public.task_watchdog">
+	<columns names="gateway_id,device_euid" ref-type="src-columns"/>
+	<columns names="gateway_id,device_euid" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="rel_task_watchdog_device_act" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="public.device" table="public.task_watchdog">
+	<columns names="a_gateway_id,a_device_euid" ref-type="src-columns"/>
+	<columns names="gateway_id,device_euid" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="rel_task_watchdog_module" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="public.module" table="public.task_watchdog">
+	<columns names="device_euid,module_id" ref-type="src-columns"/>
+	<columns names="device_euid,module_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="rel_task_watchdog_module_act" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="public.module" table="public.task_watchdog">
+	<columns names="a_module_id,a_device_euid" ref-type="src-columns"/>
+	<columns names="module_id,device_euid" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="rel_task_fire_hazard_instance" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="CASCADE" ref-table="public.instance" table="public.task_fire_hazard">
+	<columns names="instance_id" ref-type="src-columns"/>
+	<columns names="instance_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="rel_task_fire_hazard_device" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="public.device" table="public.task_fire_hazard">
+	<columns names="gateway_id,device_euid" ref-type="src-columns"/>
+	<columns names="gateway_id,device_euid" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="rel_task_fire_hazard_device_act" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="public.device" table="public.task_fire_hazard">
+	<columns names="a_gateway_id,a_device_euid" ref-type="src-columns"/>
+	<columns names="gateway_id,device_euid" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="rel_task_fire_hazard_module" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="public.module" table="public.task_fire_hazard">
+	<columns names="device_euid,module_id" ref-type="src-columns"/>
+	<columns names="device_euid,module_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="rel_task_fire_hazard_module_act" type="fk-constr" comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="SET NULL" ref-table="public.module" table="public.task_fire_hazard">
+	<columns names="a_module_id,a_device_euid" ref-type="src-columns"/>
+	<columns names="module_id,device_euid" ref-type="dst-columns"/>
+</constraint>
+
+<relationship name="rel_user_gateway_gateway" type="relfk"
+	 src-table="public.user_gateway"
+	 dst-table="public.gateway"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_user_gateway_users" type="relfk"
+	 src-table="public.user_gateway"
+	 dst-table="public.users"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_device_gateway" type="relfk"
+	 src-table="public.device"
+	 dst-table="public.gateway"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_device_location" type="relfk"
+	 src-table="public.device"
+	 dst-table="public.location"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<relationship name="rel_module_device" type="relfk"
+	 src-table="public.module"
+	 dst-table="public.device"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_location_gateway" type="relfk"
+	 src-table="public.location"
+	 dst-table="public.gateway"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_log_module" type="relfk"
+	 src-table="public.log"
+	 dst-table="public.module"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_achievements_achievements" type="relfk"
+	 src-table="public.achievements"
+	 dst-table="public.achievements"
+	 src-required="false" dst-required="false">
+	<line>
+		<position x="1096.85" y="907.974"/>
+	<position x="1096.85" y="841.214"/>
+	<position x="1015.33" y="841.214"/>
+	</line>
+</relationship>
+
+<relationship name="rel_notifications_users" type="relfk"
+	 src-table="public.notifications"
+	 dst-table="public.users"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_mobile_devices_users" type="relfk"
+	 src-table="public.mobile_devices"
+	 dst-table="public.users"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_users_achievements_achievements" type="relfk"
+	 src-table="public.users_achievements"
+	 dst-table="public.achievements"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_users_achievements_users" type="relfk"
+	 src-table="public.users_achievements"
+	 dst-table="public.users"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_adapters_achievements_achievements" type="relfk"
+	 src-table="public.adapters_achievements"
+	 dst-table="public.achievements"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_adapters_achievements_gateway" type="relfk"
+	 src-table="public.adapters_achievements"
+	 dst-table="public.gateway"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_push_notification_users" type="relfk"
+	 src-table="public.push_notification_service"
+	 dst-table="public.users"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="-36.0655" y="-59.963"/>
+	</label>
+</relationship>
+
+<relationship name="rel_refresh_check_instance" type="relfk"
+	 src-table="public.task_alive_check"
+	 dst-table="public.instance"
+	 src-required="false" dst-required="false">
+	<label ref-type="src-label">
+		<position x="0" y="0"/>
+	</label>
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<relationship name="rel_instance_task" type="relfk"
+	 src-table="public.instance"
+	 dst-table="public.task"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_alive_check_gateway" type="relfk"
+	 src-table="public.task_alive_check"
+	 dst-table="public.gateway"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_watchdog_instance" type="relfk"
+	 src-table="public.task_watchdog"
+	 dst-table="public.instance"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_watchdog_device" type="relfk"
+	 src-table="public.task_watchdog"
+	 dst-table="public.device"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_task_fire_hazard_instance" type="relfk"
+	 src-table="public.task_fire_hazard"
+	 dst-table="public.instance"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_task_fire_hazard_device" type="relfk"
+	 src-table="public.task_fire_hazard"
+	 dst-table="public.device"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_instance_users" type="relfk"
+	 src-table="public.instance"
+	 dst-table="public.users"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_task_watchdog_module" type="relfk"
+	 src-table="public.task_watchdog"
+	 dst-table="public.module"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_task_fire_hazard_module" type="relfk"
+	 src-table="public.task_fire_hazard"
+	 dst-table="public.module"
+	 src-required="false" dst-required="false"/>
+
+<permission>
+	<object name="public.gateway" type="table"/>
+	<roles names="hardware"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+<permission>
+	<object name="public.device" type="table"/>
+	<roles names="hardware"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+<permission>
+	<object name="public.module" type="table"/>
+	<roles names="hardware"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+<permission>
+	<object name="public.log" type="table"/>
+	<roles names="hardware"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+<permission>
+	<object name="public.users" type="table"/>
+	<roles names="user_data"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+<permission>
+	<object name="public.user_gateway" type="table"/>
+	<roles names="user_data"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+<permission>
+	<object name="public.location" type="table"/>
+	<roles names="user_data"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+<permission>
+	<object name="public.push_notification_service" type="table"/>
+	<roles names="user_data"/>
+	<privileges select="true" delete="true" insert="true" update="true"/>
+</permission>
+</dbmodel>

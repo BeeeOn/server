@@ -1,0 +1,17 @@
+{
+    "msg": "create",
+    "user_id": 6,
+    "task_id": 2,
+    "config": {
+    	"type": "BOTH",
+        "device_euid": "1",
+        "module_id": "1",
+        "comp_operator": "GT",
+        "value": "25.3",
+        "notification": "notifikace",
+        "a_gateway_id": "10",
+        "a_device_euid": "1",
+        "a_module_id": "1",
+        "a_value": "10"
+    }
+}
