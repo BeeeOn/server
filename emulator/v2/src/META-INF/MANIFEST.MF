@@ -1,6 +1,0 @@
-Manifest-Version: 1.0
-Class-Path: ./lib/controlsfx-8.20.8.jar ./lib/dom4j-2.0.0-ALPHA-2.jar 
- ./lib/log4j-api-2.1.jar ./lib/log4j-core-2.1.jar ./lib/openjfx-dialog
- s-1.0.2
-Main-Class: com.iha.emulator.Main
-
