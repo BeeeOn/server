@@ -413,6 +413,7 @@ bool DBHandler::GetDevices(tmessageV1_1 *message)
 	{
 		*_sql << SQLQueries::SelectAllDevicesCount,
 				use(message->adapterINTid, "GATEWAY_ID"),
+				use(DEVICE_INITIALIZED, "DEVICE_INITIALIZED"),
 				into(count);
 		message->params->at(message->processedParams)->deviceList = new std::vector<unsigned long long>(count);
 		*_sql << SQLQueries::SelectAllDevices,

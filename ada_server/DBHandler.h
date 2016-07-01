@@ -31,6 +31,7 @@ class DBHandler
 {
 	private:
 		const std::string _Name="DBHandler"; /**< name of class*/
+		const int DEVICE_INITIALIZED = 1; /**< device is paired in the database*/
 		soci::session *_sql;  /**< conncetion to dabase*/
 		std::string _DBName;  /**< name of database*/
 		Loger *_log; /**<reference to loger used for logging */
