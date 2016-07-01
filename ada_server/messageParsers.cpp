@@ -550,7 +550,7 @@ bool ProtocolV1_1_MessageParser::GetParams()
 	while (parameter!=NULL)
 	{
 		tparams *param = new tparams();
-		param->id = parameter.attribute("id").as_int();
+		param->id = parameter.attribute("param_id").as_int();
 		switch (param->id)
 		{
 			case 1001:
@@ -591,7 +591,7 @@ std::string ProtocolV1_1_MessageParser::CreateAnswer()
 		for (size_t i = 0; i < parameters->size();i++)
 		{
 			xml_node parameterNode = server_adapter.append_child("parameter");
-			parameterNode.append_attribute("id") = std::to_string(parameters->at(i)->id).c_str();
+			parameterNode.append_attribute("param_id") = std::to_string(parameters->at(i)->id).c_str();
 			switch (parameters->at(i)->id)
 			{
 				case 1001:
