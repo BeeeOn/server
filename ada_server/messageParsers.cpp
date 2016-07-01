@@ -501,7 +501,7 @@ void ProtocolV1_1_MessageParser::GetState()
     {
         _message->state = DATA;
     }
-    else if (temp_state.compare("getparameter")==0)
+    else if (temp_state.compare("getparameters")==0)
     {
         _message->state = GET_PARAMS;
     }
