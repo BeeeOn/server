@@ -601,12 +601,16 @@ std::string ProtocolV1_1_MessageParser::CreateAnswer()
 			switch (parameters->at(i)->id)
 			{
 				case 1001:
+					parameterNode.append_attribute("name") = "label";
 					break;
 				case 1002:
+					parameterNode.append_attribute("name") = "room";
 					break;
 				case 1000:
+					parameterNode.append_attribute("name") = "dummy";
 					break;
 				case 1003:
+					parameterNode.append_attribute("name") = "allsensors";
 					if (parameters->at(i)->deviceList != nullptr)
 					{
 						assert(parameters->at(i)->deviceList->size() == parameters->at(i)->deviceIDList->size());
@@ -616,6 +620,9 @@ std::string ProtocolV1_1_MessageParser::CreateAnswer()
 							value.append_attribute("device_id") = int_to_hex(parameters->at(i)->deviceIDList->at(j)).c_str();
 						}
 					}
+					break;
+				case 1004:
+					parameterNode.append_attribute("name") = "vptpasswd";
 					break;
 				case 1005:
 					parameterNode.append_attribute("name") = "getvalue";
