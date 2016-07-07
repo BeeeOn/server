@@ -59,6 +59,9 @@ const string SelectAllDevices = "select device_euid from device where (gateway_i
 
 /** Q to select all devices for adapter uses (:GATEWAY_ID, :DEVICE_INITIALIZED)*/
 const string SelectAllDevicesCount = "select count(*) from device where (gateway_id = :GATEWAY_ID) and (init = :DEVICE_INITIALIZED);";
+
+/** Q to select last value of the module from sensor uses (:GATEAY_ID, :DEVICE_EUID, :MODULE_ID)*/
+const string SelectLastModuleValue = "select measured_value from module where (gateway_id = :GATEWAY_ID) and (device_euid = :DEVICE_EUID) and (module_id = :MODULE_ID);";
 }
 
 #endif /* SQLCOMMANDS_H_ */

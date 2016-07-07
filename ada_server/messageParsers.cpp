@@ -560,6 +560,10 @@ bool ProtocolV1_1_MessageParser::GetParams()
 			case 1000:
 			case 1003:
 				break;
+			case 1005:
+				param->euid = parameter.attribute("euid").as_ullong();
+				param->module_id = parameter.attribute("module_id").as_ullong();
+				break;
 			default:
 				this->_log->WriteMessage(WARN,"Unknown parameter id in gatparams message id " + std::to_string(param->id));
 				parameter = parameter.next_sibling();
@@ -610,6 +614,25 @@ std::string ProtocolV1_1_MessageParser::CreateAnswer()
 									int_to_hex(parameters->at(i)->deviceList->at(j)).c_str());
 					}
 					break;
+				case 1005:
+					parameterNode.append_attribute("name") = "getvalue";
+					parameterNode.append_attribute("euid") = int_to_hex(parameters->at(i)->euid).c_str();
+
+                                        if (parameters->at(i)->deviceList != nullptr)
+                                        {
+						try
+						{
+							xml_node value = parameterNode.append_child("value");
+							value.text().set(std::to_string(parameters->at(i)->measured_value).c_str());
+							value.append_attribute("module_id") = int_to_hex(parameters->at(i)->module_id).c_str();
+						}
+						catch (std::exception const &e)
+						{
+							this->_log->WriteMessage(ERR,"Device id not parsable!");
+						}
+                                        }
+                                        break;
+
 				default:
 					parameterNode.append_child("value").text().set("Not supported");
 					break;

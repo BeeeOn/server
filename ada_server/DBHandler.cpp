@@ -418,6 +418,7 @@ bool DBHandler::GetDevices(tmessageV1_1 *message)
 		message->params->at(message->processedParams)->deviceList = new std::vector<unsigned long long>(count);
 		*_sql << SQLQueries::SelectAllDevices,
 				use(message->adapterINTid, "GATEWAY_ID"),
+				use(DEVICE_INITIALIZED, "DEVICE_INITIALIZED"),
 				into(*(message->params->at(message->processedParams)->deviceList));
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetDevices");
 		return (true);
@@ -431,4 +432,33 @@ bool DBHandler::GetDevices(tmessageV1_1 *message)
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetDevices");
 		return (false);
 	}
+}
+
+bool DBHandler::GetLastModuleValue(tmessageV1_1 *message)
+{
+        this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetLastModuleValue");
+        size_t count = 1;
+        try
+        {
+                std::string sqlTrace = "select measured_value from module where gateway_id = " + std::to_string(message->adapterINTid);
+                sqlTrace += " and device_euid = " + std::to_string(message->device_euid) + " and module_id = " + std::to_string(message->module_id);
+                this->_log->WriteMessage(TRACE, sqlTrace);
+                message->params->at(message->processedParams)->deviceList = new std::vector<unsigned long long>(count);
+                *_sql << SQLQueries::SelectLastModuleValue,
+                                use(message->adapterINTid, "GATEWAY_ID"),
+                                use(message->params->at(message->processedParams)->module_id, "MODULE_ID"),
+                                use(message->params->at(message->processedParams)->euid, "DEVICE_EUID"),
+                                into((message->params->at(message->processedParams)->measured_value)),
+                this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetLastModuleValue");
+                return (true);
+        }
+        catch(std::exception const &e)
+        {
+                this->_log->WriteMessage(ERR, "Error in query : " + _sql->get_last_query() );
+                std::string ErrorMessage = "Database Error : ";
+                ErrorMessage.append (e.what());
+                this->_log->WriteMessage(ERR,ErrorMessage );
+                this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetLastValue");
+                return (false);
+        }
 }

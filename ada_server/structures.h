@@ -135,12 +135,18 @@ typedef struct params
 	unsigned long long int euid;
 	std::string value;
 	std::vector<unsigned long long> *deviceList;
+	double measured_value;
+	unsigned int module_id;
+	bool valid_data;
     params()
     {
         id = 0;
         euid = 0;
         value = "";
+        module_id = 0;
+        measured_value = 0;
 		deviceList = nullptr;
+        valid_data = false;
     };
 	~params()
 	{
@@ -179,6 +185,7 @@ typedef struct messageV1_0
 	float cp_version; /**< communication protocol version*/
 	time_t timestamp; /**< timestamp of message*/
 	int socket; /**< communication socket*/
+	unsigned int module_id; /**< module ID*/
 	unsigned long long int device_type; /**< ID of device*/ // in protocol from senzor it's device_id, in database it's more fitting device_type
 	unsigned long long int device_euid;
 	unsigned int refresh;
@@ -207,6 +214,7 @@ typedef struct messageV1_0
 		this->values_count = 0;
 		this->fm_version = 0;
 		this->timestamp = 0;
+		this->module_id = 0;
 		this->device_type = 0; 
 		this->device_euid = 0;
 		this->refresh = 5;

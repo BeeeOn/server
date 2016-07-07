@@ -86,6 +86,7 @@ class DBHandler
 		* @return time_t value of the timestamp from database*/
 		time_t GetLastTimestamp(long long unsigned int dev_euid);
         bool GetDevices(tmessageV1_1 *message);
+        bool GetLastModuleValue(tmessageV1_1 *message);
 };
 
 

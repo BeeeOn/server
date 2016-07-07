@@ -396,6 +396,9 @@ int ConnectionServer::GetData()
 					case 1003:
 						database->GetDevices((messageV1_1 *) this->parsedMessage);
 						break;
+					case 1005:
+						database->GetLastModuleValue((messageV1_1 *) this->parsedMessage);
+						break;
 					default:
 						_log->WriteMessage(WARN, "Unsupported parameter id no routine to handle!");
 						break;
