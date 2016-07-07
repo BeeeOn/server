@@ -602,6 +602,8 @@ std::string ProtocolV1_1_MessageParser::CreateAnswer()
 			{
 				case 1001:
 					parameterNode.append_attribute("name") = "label";
+					parameterNode.append_attribute("euid") = int_to_hex(parameters->at(i)->euid).c_str();
+					parameterNode.append_child("value").text().set((parameters->at(i)->value).c_str());
 					break;
 				case 1002:
 					parameterNode.append_attribute("name") = "room";

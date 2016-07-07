@@ -87,6 +87,7 @@ class DBHandler
 		time_t GetLastTimestamp(long long unsigned int dev_euid);
         bool GetDevices(tmessageV1_1 *message);
         bool GetLastModuleValue(tmessageV1_1 *message);
+        bool GetUserLabelForDevice(tmessageV1_1 *message);
 };
 
 

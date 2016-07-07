@@ -464,3 +464,29 @@ bool DBHandler::GetLastModuleValue(tmessageV1_1 *message)
                 return (false);
         }
 }
+
+bool DBHandler::GetUserLabelForDevice(tmessageV1_1 *message)
+{
+        this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetUserLaberForDevice");
+        try
+        {
+                std::string sqlTrace = "select device_name from device where gateway_id = " + std::to_string(message->adapterINTid);
+                sqlTrace += " and device_euid = " + std::to_string(message->params->at(message->processedParams)->euid);
+                this->_log->WriteMessage(TRACE, sqlTrace);
+                *_sql << SQLQueries::SelectUserLabelForDeviceID,
+                                use(message->adapterINTid, "GATEWAY_ID"),
+                                use(message->params->at(message->processedParams)->euid, "DEVICE_EUID"),
+                                into((message->params->at(message->processedParams)->value));
+                this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetUserLaberForDevice");
+                return (true);
+        }
+        catch(std::exception const &e)
+        {
+                this->_log->WriteMessage(ERR, "Error in query : " + _sql->get_last_query() );
+                std::string ErrorMessage = "Database Error : ";
+                ErrorMessage.append (e.what());
+                this->_log->WriteMessage(ERR,ErrorMessage );
+                this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetUserLaberForDevice");
+                return (false);
+        }
+}

@@ -388,6 +388,7 @@ int ConnectionServer::GetData()
 				switch (((messageV1_1 *) this->parsedMessage)->params->at(i)->id)
 				{
 					case 1001:
+						database->GetUserLabelForDevice((messageV1_1 *) this->parsedMessage);
 						break;
 					case 1002:
 						break;
