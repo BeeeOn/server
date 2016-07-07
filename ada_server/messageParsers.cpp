@@ -561,8 +561,10 @@ bool ProtocolV1_1_MessageParser::GetParams()
 			case 1003:
 				break;
 			default:
-				delete param;
 				this->_log->WriteMessage(WARN,"Unknown parameter id in gatparams message id " + std::to_string(param->id));
+				parameter = parameter.next_sibling();
+				delete param;
+				continue;
 		}
 		parameter = parameter.next_sibling();
 		((tmessageV1_1*)_message)->params->push_back(param);
