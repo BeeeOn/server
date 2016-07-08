@@ -88,6 +88,7 @@ class DBHandler
         bool GetDevices(tmessageV1_1 *message);
         bool GetLastModuleValue(tmessageV1_1 *message);
         bool GetUserLabelForDevice(tmessageV1_1 *message);
+        bool GetUserRoomForDevice(tmessageV1_1 *message);
 };
 
 

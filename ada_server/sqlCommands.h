@@ -65,6 +65,9 @@ const string SelectLastModuleValue = "select measured_value from module where (g
 
 /** Q to select user's label for device uses (:GATEWAY_ID, :DEVICE_EUID)*/
 const string SelectUserLabelForDeviceID = "select device_name from device where (gateway_id = :GATEWAY_ID) and (device_euid = :DEVICE_EUID);";
+
+/** Q to select user's room for device uses (:GATEWAY_ID, :DEVICE_EUID)*/
+const string SelectUserRoomForDevice = "select location.location_name from device natural join location join gateway on location.gateway_id = gateway.gateway_id where device.gateway_id = :GATEWAY_ID and device.device_euid = :DEVICE_EUID;";
 }
 
 #endif /* SQLCOMMANDS_H_ */

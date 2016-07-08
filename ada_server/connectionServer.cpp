@@ -391,6 +391,7 @@ int ConnectionServer::GetData()
 						database->GetUserLabelForDevice((messageV1_1 *) this->parsedMessage);
 						break;
 					case 1002:
+						database->GetUserRoomForDevice((messageV1_1 *) this->parsedMessage);
 						break;
 					case 1000:
 						break;

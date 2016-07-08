@@ -607,6 +607,16 @@ std::string ProtocolV1_1_MessageParser::CreateAnswer()
 					break;
 				case 1002:
 					parameterNode.append_attribute("name") = "room";
+					try
+					{
+					       parameterNode.append_attribute("euid") = int_to_hex(parameters->at(i)->euid).c_str();
+					}
+					catch (std::exception const &e)
+					{
+						this->_log->WriteMessage(ERR,"Value not parsable!");
+					}
+
+					parameterNode.append_child("value").text().set((parameters->at(i)->value).c_str());
 					break;
 				case 1000:
 					parameterNode.append_attribute("name") = "dummy";
