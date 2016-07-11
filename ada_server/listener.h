@@ -63,6 +63,7 @@ class Listener
 		void UnAccept();
 	private:
 		int handleAcceptFailed(int &failcounter);
+		void acceptClient(int sock);
 };
 
 

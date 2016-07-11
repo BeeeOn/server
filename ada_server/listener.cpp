@@ -80,6 +80,18 @@ int Listener::handleAcceptFailed(int &failcounter)
 	}
 }
 
+void Listener::acceptClient(int sock)
+{
+	sem_wait((this->_semapohore)); //decrease count of workers or wait for free worker if there is none
+
+	Worker *w  = NULL;
+	while (w==NULL)  //just for sure try to get worker until it is not NULL
+	{
+		w = this->_workers->GetWorker(this->_log); //pick worker
+	}
+
+	w->Unlock(sock);
+}
 
 /** Metoda pre prijatie pripojenia na sockete servra
     */
@@ -98,14 +110,8 @@ int Listener::ReciveConnection()
 			if (handleAcceptFailed(failcounter) == 1)
 				return 1;
 		}
-		sem_wait((this->_semapohore)); //decrease count of workers or wait for free worker if there is none
-		Worker *w  = NULL;
-		while (w==NULL)  //just for sure try to get worker until it is not NULL
-		{
-			w = this->_workers->GetWorker(this->_log); //pick worker
-		}
-		w->Unlock(com_s);
 
+		acceptClient(com_s);
 	}
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::ReciveConnection");
 	return (0); 
