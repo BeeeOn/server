@@ -67,3 +67,5 @@ cleanlogs:
 		$(RM) *.log
 
 rebuild: clean all
+
+.PHONY: all run memtest clean cleanlogs rebuild
