@@ -103,32 +103,16 @@ void sig_handler(int signo) //on signals to turn of clear
 
 std::string buildConnString(std::string DBName, std::string User, std::string Password) //building connection string to database
 {
-	std::string result;
-	result.clear();
-
 	if(DBName.empty())
 		return "";
 
 	if (User.empty())
 		return "dbname=" + DBName;
 
-	if (Password.empty()) {
-		std::cout<<"Enter password for user :"<<User<<std::endl;
-		struct termios tty;
-		tcgetattr(STDIN_FILENO, &tty);
-		tty.c_lflag &= ~ECHO;
-		(void) tcsetattr(STDIN_FILENO, TCSANOW, &tty);
-		std::cin>>Password;
-		tcgetattr(STDIN_FILENO, &tty);
-		tty.c_lflag |= ECHO;
-		(void) tcsetattr(STDIN_FILENO, TCSANOW, &tty);
-		std::cout<<"Password readed"<<std::endl;
-		result = "dbname="+ DBName + " user=" + User + " password=" + Password;
-		return result;
-	}
+	if (Password.empty())
+		return "dbname=" + DBName + " user=" + User;
 
-	result = "dbname="+ DBName + " user=" + User + " password=" + Password;
-	return result;
+	return "dbname="+ DBName + " user=" + User + " password=" + Password;
 }
 
 static void startDaemon(void)
