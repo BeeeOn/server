@@ -134,6 +134,53 @@ std::string buildConnString(std::string DBName, std::string User, std::string Pa
 	return(result);
 }
 
+static void startDaemon(void)
+{
+	pid_t pid, sid;
+
+	std::cout<<"Starting deamonization"<<std::endl;
+	pid = fork();
+	if (pid < 0) {
+		std::cerr<<"Deamonzation failed! Running in teminal mode."<<std::endl;
+	} else {
+		/* If we got a good PID, then
+		   we can exit the parent process. */
+		if (pid > 0) {
+			delete(c);
+			exit(EXIT_SUCCESS);
+		}
+
+		/* Change the file mode mask */
+		umask(0);
+
+		/* Open any logs here */
+
+		/* Create a new SID for the child process */
+		sid = setsid();
+		if (sid < 0) {
+			/* Log the failure */
+			exit(EXIT_FAILURE);
+		}
+
+		int proces_id = getpid();
+		//std::cout<<"Creating stop script in current directory"<<std::endl;
+		std::ofstream stopSCR;
+		stopSCR.open("stop_ada_server.sh", std::ios::out|std::ios::trunc);
+		stopSCR<<"kill -SIGINT "<<proces_id<<std::endl;
+		stopSCR.close();
+
+		/* Change the current working directory */
+		if ((chdir("/")) < 0) {
+			/* Log the failure */
+			exit(EXIT_FAILURE);
+		}
+		//std::cout<<"Finishing deamonization"<<std::endl;
+		/* Close out the standard file descriptors */
+		close(STDIN_FILENO);
+		close(STDOUT_FILENO);
+		close(STDERR_FILENO);
+	}
+}
 
 int main(int argc, char **argv)  //main body of application
 {
@@ -142,7 +189,6 @@ int main(int argc, char **argv)  //main body of application
 		exit(EXIT_FAILURE);
 	}
 
-	pid_t pid, sid;
 	std::cout<<"Reading configuration"<<std::endl;
 	c = new Config();
 
@@ -158,51 +204,7 @@ int main(int argc, char **argv)  //main body of application
 	/* Fork off the parent process */
 	if (c->Mode()!=0)  //start as deamon
 	{
-		std::cout<<"Starting deamonization"<<std::endl;
-		pid = fork();
-		if (pid < 0)
-		{
-				std::cerr<<"Deamonzation failed! Running in teminal mode."<<std::endl;
-		}
-		else
-		{
-		/* If we got a good PID, then
-		   we can exit the parent process. */
-			if (pid > 0)
-			{
-				delete(c);
-				exit(EXIT_SUCCESS);
-			}
-
-			/* Change the file mode mask */
-			umask(0);
-
-			/* Open any logs here */
-
-			/* Create a new SID for the child process */
-			sid = setsid();
-			if (sid < 0) {
-					/* Log the failure */
-					exit(EXIT_FAILURE);
-			}
-			int proces_id=getpid();
-			//std::cout<<"Creating stop script in current directory"<<std::endl;
-			std::ofstream stopSCR;
-			stopSCR.open("stop_ada_server.sh", std::ios::out|std::ios::trunc);
-			stopSCR<<"kill -SIGINT "<<proces_id<<std::endl;
-			stopSCR.close();
-			/* Change the current working directory */
-			if ((chdir("/")) < 0)
-			{
-					/* Log the failure */
-					exit(EXIT_FAILURE);
-			}
-			//std::cout<<"Finishing deamonization"<<std::endl;
-			/* Close out the standard file descriptors */
-			close(STDIN_FILENO);
-			close(STDOUT_FILENO);
-			close(STDERR_FILENO);
-		}
+		startDaemon();
 	}
 	else
 	{
