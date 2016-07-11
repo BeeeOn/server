@@ -182,6 +182,21 @@ static void startDaemon(void)
 	}
 }
 
+static void trapSignals(void)
+{
+	if (signal(SIGINT, sig_handler) == SIG_ERR)
+		SenderLog->WriteMessage(ERR," [Main Process] Unable to catch SIGINT");
+
+	if (signal(SIGTERM, sig_handler) == SIG_ERR)
+		SenderLog->WriteMessage(ERR," [Main Process] Unable to catch SIGTERM");
+
+	if (signal(SIGHUP, SIG_IGN) == SIG_ERR)
+		SenderLog->WriteMessage(ERR," [Main Process] Unable to mask SIGHUP");
+
+	if (signal(SIGPIPE, SIG_IGN) == SIG_ERR)
+		SenderLog->WriteMessage(ERR," [Main Process] Unable to mask SIGPIPE");
+}
+
 int main(int argc, char **argv)  //main body of application
 {
 	if (argc < 2) {
@@ -223,22 +238,9 @@ int main(int argc, char **argv)  //main body of application
 	ReceiverLog = new Loger();
 	SenderLog->SetLogger(c->SenderVerbosity(),c->SenderMaxFiles(),c->SenderMaxLines(),c->SenderFileNaming(),c->SenderPath(),"SENDER",c->SenderToSTD());
 	ReceiverLog->SetLogger(c->ReceiverVerbosity(),c->ReceiverMaxFiles(),c->ReceiverMaxLines(),c->ReceiverFileNaming(),c->SenderPath(),"RECEIVER",c->ReceiverToSTD());
-	if (signal(SIGINT, sig_handler) == SIG_ERR)
-	{
-		SenderLog->WriteMessage(ERR," [Main Process] Unable to catch SIGINT");
-	}
-	if (signal(SIGTERM, sig_handler) == SIG_ERR)
-	{
-		SenderLog->WriteMessage(ERR," [Main Process] Unable to catch SIGTERM");
-	}
-	if (signal(SIGHUP, SIG_IGN) == SIG_ERR)
-	{
-		SenderLog->WriteMessage(ERR," [Main Process] Unable to mask SIGHUP");
-	}
-	if (signal(SIGPIPE, SIG_IGN) == SIG_ERR)
-	{
-		SenderLog->WriteMessage(ERR," [Main Process] Unable to mask SIGPIPE");
-	}
+
+	trapSignals();
+
 	sslCont = new SSLContainer(ReceiverLog);
 	wpool = WorkerPool::CreatePool(ReceiverLog,SenderLog,connStr,c,sslCont);
 	init_locks();
