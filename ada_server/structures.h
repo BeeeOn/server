@@ -139,6 +139,7 @@ typedef struct params
 	double measured_value;
 	unsigned int module_id;
 	bool valid_data;
+	int count_items;
     params()
     {
         id = 0;
@@ -148,6 +149,7 @@ typedef struct params
         measured_value = 0;
 		deviceList = nullptr;
         valid_data = false;
+        count_items = 0;
         deviceIDList = nullptr;
     };
 	~params()
