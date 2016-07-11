@@ -13,6 +13,9 @@
 #include "adaServerSender.h"
 #include "adaServerReceiver.h"
 #include <termios.h>
+#include <Poco/Exception.h>
+
+using namespace Poco;
 
 Config *c;
 
@@ -142,11 +145,14 @@ int main(int argc, char **argv)  //main body of application
 	pid_t pid, sid;
 	std::cout<<"Reading configuration"<<std::endl;
 	c = new Config();
-	if (!c->setConfig(argv[1]))
-	{
-		std::cerr<<"Errors during configuration exiting"<<std::endl;
+
+	try {
+		c->setConfig(argv[1]);
+	} catch(Exception &e) {
+		std::cerr << e.displayText() << std::endl;
+		std::cerr << "Failed to parse configuration" << std::endl;
 		delete c;
-		exit(EXIT_FAILURE);
+		return EXIT_FAILURE;
 	}
 	std::string connStr = buildConnString(c->DBName(),c->User(),c->Password());
 	/* Fork off the parent process */

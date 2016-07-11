@@ -29,7 +29,7 @@ static bool parseConfBool(AbstractConfiguration *cfg, const char *key, bool def)
 	return cfg->getBool(key, def);
 }
 
-bool Config::parseConfig(AbstractConfiguration *cfg)
+void Config::parseConfig(AbstractConfiguration *cfg)
 {
 	this->_ConnLimit = cfg->getInt("Database.ConnectionsCount");
 	this->_DBName = cfg->getString("Database.Name");
@@ -62,12 +62,10 @@ bool Config::parseConfig(AbstractConfiguration *cfg)
 	this->_CApath = cfg->getString("Common.Certificates.CACrtFile");
 	this->_crtPath = cfg->getString("Common.Certificates.CrtFile");
 	this->_keyPath = cfg->getString("Common.Certificates.KeyFile");
-
-	return true;
 }
 
-bool Config::setConfig(std::string file)
+void Config::setConfig(std::string file)
 {
 	AutoPtr<XMLConfiguration> cfg(new XMLConfiguration(file));
-	return parseConfig(cfg);
+	parseConfig(cfg);
 }

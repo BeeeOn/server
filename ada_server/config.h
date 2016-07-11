@@ -53,7 +53,7 @@ class Config
 		/**Method to load and parse configuration file
 		 * @param File std::string with name of configuration file
 		 * @return bool type representing success/failure of parsing*/
-		bool setConfig(std::string File);
+		void setConfig(std::string File);
 		/**Getter for database name from config file
 		 * @return std::string representation of database name*/
 		std::string DBName() const {return (this->_DBName);};
@@ -127,7 +127,7 @@ class Config
 		* @return bool representing decision*/
 		bool SenderToSTD () const {return (_StoSTD);};
 	private:
-		bool parseConfig(Poco::Util::AbstractConfiguration *cfg);
+		void parseConfig(Poco::Util::AbstractConfiguration *cfg);
 };
 
 
