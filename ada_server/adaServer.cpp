@@ -231,15 +231,17 @@ int main(int argc, char **argv)  //main body of application
 		stopSCR<<"kill -SIGINT "<<proces_id<<std::endl;
 		stopSCR.close();
 	}
-	SSL_load_error_strings();
-	SSL_library_init();
-	OpenSSL_add_all_algorithms();
+
 	SenderLog = new Loger();
 	ReceiverLog = new Loger();
 	SenderLog->SetLogger(c->SenderVerbosity(),c->SenderMaxFiles(),c->SenderMaxLines(),c->SenderFileNaming(),c->SenderPath(),"SENDER",c->SenderToSTD());
 	ReceiverLog->SetLogger(c->ReceiverVerbosity(),c->ReceiverMaxFiles(),c->ReceiverMaxLines(),c->ReceiverFileNaming(),c->SenderPath(),"RECEIVER",c->ReceiverToSTD());
 
 	trapSignals();
+
+	SSL_load_error_strings();
+	SSL_library_init();
+	OpenSSL_add_all_algorithms();
 
 	sslCont = new SSLContainer(ReceiverLog);
 	wpool = WorkerPool::CreatePool(ReceiverLog,SenderLog,connStr,c,sslCont);
