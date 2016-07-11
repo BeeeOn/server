@@ -48,9 +48,6 @@ pugi.o: ../lib/pugixml.cpp
 ada_old: $(ADA_SERVER) $(SOURCE_FILES) 
 	$(CXX) $(CXXFLAGS) -o $@ $^ -g -L/usr/local/lib -lssl -lcurl -lcrypto -I/usr/include/soci -L/usr/local/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -I/usr/pgsql-9.2/include -L/usr/pgsql-9.2/lib -lpq -Wl,-rpath,/usr/local/lib
 
-run:
-	./run_ada_server.sh
-
 memtest:
 	valgrind --tool=memcheck --trace-children=yes --leak-check=full --show-reachable=yes ./run_ada_server.sh
 
@@ -63,4 +60,4 @@ cleanlogs:
 
 rebuild: clean all
 
-.PHONY: all run memtest clean cleanlogs rebuild
+.PHONY: all memtest clean cleanlogs rebuild
