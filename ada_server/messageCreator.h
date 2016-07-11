@@ -14,8 +14,6 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include "structures.h"
-#include "../lib/pugixml.hpp"
-#include "../lib/pugiconfig.hpp"
 #include "loger.h"
 
 #ifndef MESSAGECREATOR_H_

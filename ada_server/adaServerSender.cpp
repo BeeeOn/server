@@ -10,7 +10,6 @@
 #include "adaServerSender.h"
 
 using namespace soci;
-using namespace pugi;
 
 AdaServerSender::AdaServerSender(sem_t *Sem, WorkerPool *workers, Loger *L,Config *c)
 {

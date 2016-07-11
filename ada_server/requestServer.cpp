@@ -10,8 +10,6 @@
 
 #include "requestServer.h"
 
-using namespace pugi;
-
 bool RequestServer::HandleRequest ()
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::HandleConnection");

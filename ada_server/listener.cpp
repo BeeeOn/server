@@ -11,8 +11,6 @@
 
 #include "listener.h"
 
-using namespace pugi;
-
 int Listener::Listen ()  
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::Listen");

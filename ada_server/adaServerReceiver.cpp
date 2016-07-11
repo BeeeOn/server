@@ -10,7 +10,6 @@
 #include "adaServerReceiver.h" 
 
 using namespace soci;
-using namespace pugi;
 
 AdaServerReceiver::AdaServerReceiver(sem_t *Sem, WorkerPool *workers, Loger *L,Config *c)
 {
