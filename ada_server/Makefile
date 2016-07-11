@@ -1,5 +1,5 @@
-CPPFLAGS= -Wall -W -std=c++11 -pthread -g
-BUILDER= /usr/bin/g++
+CXXFLAGS= -Wall -W -std=c++11 -pthread -g
+CXX= /usr/bin/g++
 ADA_SERVER= adaServer.cpp
 METHOD_TEST= methodTester.cpp
 SOURCE_FILES= ../lib/pugixml.cpp loger.cpp config.cpp SSLContainer.cpp worker.cpp workerPool.cpp DBHandler.cpp connectionServer.cpp connectionHandler.cpp messageParsers.cpp sender.cpp listener.cpp requestServer.cpp messageCreator.cpp adaServerReceiver.cpp adaServerSender.cpp
@@ -10,50 +10,50 @@ all:
 	make ada_server
 
 ada_server: $(ADA_SERVER) $(OBJS)
-	$(BUILDER) $(CPPFLAGS) $(OBJS) -o $@ -g $(LINKS)
+	$(CXX) $(CXXFLAGS) $(OBJS) -o $@ -g $(LINKS)
 	
 pugi.o:
-	$(BUILDER) $(CPPFLAGS) -c ../lib/pugixml.cpp -o $@
+	$(CXX) $(CXXFLAGS) -c ../lib/pugixml.cpp -o $@
 	
 loger.o:
-	$(BUILDER) $(CPPFLAGS) -c loger.cpp -o $@
+	$(CXX) $(CXXFLAGS) -c loger.cpp -o $@
 	
 config.o:
-	$(BUILDER) $(CPPFLAGS) -c config.cpp -o $@
+	$(CXX) $(CXXFLAGS) -c config.cpp -o $@
 SSLContainer.o:
-	$(BUILDER) $(CPPFLAGS) -c SSLContainer.cpp -o $@ $(LINKS)
+	$(CXX) $(CXXFLAGS) -c SSLContainer.cpp -o $@ $(LINKS)
 worker.o: 
-	$(BUILDER) $(CPPFLAGS) -c worker.cpp -o $@ $(LINKS)
+	$(CXX) $(CXXFLAGS) -c worker.cpp -o $@ $(LINKS)
 workerPool.o:
-	$(BUILDER) $(CPPFLAGS) -c workerPool.cpp -o $@ $(LINKS)
+	$(CXX) $(CXXFLAGS) -c workerPool.cpp -o $@ $(LINKS)
 DBHandler.o:
-	$(BUILDER) $(CPPFLAGS) -c DBHandler.cpp -o $@ $(LINKS)
+	$(CXX) $(CXXFLAGS) -c DBHandler.cpp -o $@ $(LINKS)
 messageCreator.o:
-	$(BUILDER) $(CPPFLAGS) -c messageCreator.cpp -o $@ $(LINKS)
+	$(CXX) $(CXXFLAGS) -c messageCreator.cpp -o $@ $(LINKS)
 connectionServer.o:
-	$(BUILDER) $(CPPFLAGS) -c connectionServer.cpp -o $@ $(LINKS)
+	$(CXX) $(CXXFLAGS) -c connectionServer.cpp -o $@ $(LINKS)
 connectionHandler.o:
-	$(BUILDER) $(CPPFLAGS) -c connectionHandler.cpp -o $@ $(LINKS)
+	$(CXX) $(CXXFLAGS) -c connectionHandler.cpp -o $@ $(LINKS)
 messageParsers.o:
-	$(BUILDER) $(CPPFLAGS) -c messageParsers.cpp -o $@ $(LINKS)
+	$(CXX) $(CXXFLAGS) -c messageParsers.cpp -o $@ $(LINKS)
 sender.o:
-	$(BUILDER) $(CPPFLAGS) -c sender.cpp -o $@ $(LINKS)
+	$(CXX) $(CXXFLAGS) -c sender.cpp -o $@ $(LINKS)
 listener.o:
-	$(BUILDER) $(CPPFLAGS) -c listener.cpp -o $@ $(LINKS)
+	$(CXX) $(CXXFLAGS) -c listener.cpp -o $@ $(LINKS)
 requestServer.o:
-	$(BUILDER) $(CPPFLAGS) -c requestServer.cpp -o $@ $(LINKS)
+	$(CXX) $(CXXFLAGS) -c requestServer.cpp -o $@ $(LINKS)
 adaServerReceiver.o:
-	$(BUILDER) $(CPPFLAGS) -c adaServerReceiver.cpp -o $@ $(LINKS)
+	$(CXX) $(CXXFLAGS) -c adaServerReceiver.cpp -o $@ $(LINKS)
 adaServerSender.o:
-	$(BUILDER) $(CPPFLAGS) -c adaServerSender.cpp -o $@ $(LINKS)
+	$(CXX) $(CXXFLAGS) -c adaServerSender.cpp -o $@ $(LINKS)
 adaServer.o:
-	$(BUILDER) $(CPPFLAGS) -c adaServer.cpp -o $@ $(LINKS)
+	$(CXX) $(CXXFLAGS) -c adaServer.cpp -o $@ $(LINKS)
 	
 ada_old: $(ADA_SERVER) $(SOURCE_FILES) 
-	$(BUILDER) $(CPPFLAGS) -o $@ $^ -g -L/usr/local/lib -lssl -lcurl -lcrypto -I/usr/include/soci -L/usr/local/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -I/usr/pgsql-9.2/include -L/usr/pgsql-9.2/lib -lpq -Wl,-rpath,/usr/local/lib
+	$(CXX) $(CXXFLAGS) -o $@ $^ -g -L/usr/local/lib -lssl -lcurl -lcrypto -I/usr/include/soci -L/usr/local/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -I/usr/pgsql-9.2/include -L/usr/pgsql-9.2/lib -lpq -Wl,-rpath,/usr/local/lib
 
 method_test: $(METHOD_TEST) $(SOURCE_FILES) 
-	$(BUILDER) $(CPPFLAGS) -o $@ $^  -g -L/usr/local/lib -lssl -lcurl -lcrypto -I/usr/include/soci -L/usr/local/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -L/usr/pgsql-9.2/lib -I/usr/local/pgsql/include -lpq 
+	$(CXX) $(CXXFLAGS) -o $@ $^  -g -L/usr/local/lib -lssl -lcurl -lcrypto -I/usr/include/soci -L/usr/local/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -L/usr/pgsql-9.2/lib -I/usr/local/pgsql/include -lpq 
 
 run:
 	./run_ada_server.sh
