@@ -54,7 +54,7 @@ clean:
 	$(RM) adaServer.o $(OBJS)
 	
 cleanlogs:
-		$(RM) *.log
+	$(RM) *.log
 
 rebuild: clean all
 
