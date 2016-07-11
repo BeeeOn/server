@@ -215,17 +215,14 @@ int main(int argc, char **argv)  //main body of application
 		delete c;
 		return EXIT_FAILURE;
 	}
+
 	std::string connStr = buildConnString(c->DBName(),c->User(),c->Password());
-	/* Fork off the parent process */
-	if (c->Mode()!=0)  //start as deamon
-	{
-		startDaemon();
-	}
-	else
-	{
-		std::cout<<"Server started in terminal(debug) mode"<<std::endl;
-		int proces_id=getpid();
-		//std::cout<<"Creating stop script in current directory"<<std::endl;
+
+	if (c->Mode())
+		startDaemon(); /* Fork off the parent process */
+	else {
+		std::cout << "Server started in terminal(debug) mode" << std::endl;
+		int proces_id = getpid();
 		std::ofstream stopSCR;
 		stopSCR.open("stop_ada_server.sh", std::ios::out|std::ios::trunc);
 		stopSCR<<"kill -SIGINT "<<proces_id<<std::endl;
