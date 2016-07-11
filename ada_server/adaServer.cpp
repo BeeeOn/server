@@ -49,8 +49,8 @@ static unsigned long thread_id(void)
 {
 	unsigned long ret;
 
-	ret=(unsigned long)pthread_self();
-	return(ret);
+	ret = (unsigned long)pthread_self();
+	return ret ;
 }
 
 static void init_locks(void)
@@ -59,9 +59,8 @@ static void init_locks(void)
 
 	lockarray=(pthread_mutex_t *)OPENSSL_malloc(CRYPTO_num_locks() *
 												sizeof(pthread_mutex_t));
-	for (i=0; i<CRYPTO_num_locks(); i++) {
-		pthread_mutex_init(&(lockarray[i]),NULL);
-	}
+	for (i = 0; i < CRYPTO_num_locks(); i++)
+		pthread_mutex_init(&(lockarray[i]), NULL);
 
 	CRYPTO_set_id_callback((unsigned long (*)())thread_id);
 	CRYPTO_set_locking_callback((void (*)(int, int, const char*, int))lock_callback);
@@ -72,7 +71,7 @@ static void kill_locks(void)
 	int i;
 
 	CRYPTO_set_locking_callback(NULL);
-	for (i=0; i<CRYPTO_num_locks(); i++)
+	for (i = 0; i < CRYPTO_num_locks(); i++)
 		pthread_mutex_destroy(&(lockarray[i]));
 
 	OPENSSL_free(lockarray);
@@ -80,8 +79,7 @@ static void kill_locks(void)
 
 void sig_handler(int signo) //on signals to turn of clear 
 {
-	if ((signo == SIGINT)||(signo == SIGTERM))
-	{
+	if (signo == SIGINT || signo == SIGTERM) {
 		sigint = true;
 		receiver->LogINT();
 		sender->LogINT();
@@ -107,16 +105,14 @@ std::string buildConnString(std::string DBName, std::string User, std::string Pa
 {
 	std::string result;
 	result.clear();
+
 	if(DBName.empty())
-	{
-		return ("");
-	}
+		return "";
+
 	if (User.empty())
-	{
-		return ("dbname=" + DBName);
-	}
-	if (Password.empty())
-	{
+		return "dbname=" + DBName;
+
+	if (Password.empty()) {
 		std::cout<<"Enter password for user :"<<User<<std::endl;
 		struct termios tty;
 		tcgetattr(STDIN_FILENO, &tty);
@@ -128,10 +124,11 @@ std::string buildConnString(std::string DBName, std::string User, std::string Pa
 		(void) tcsetattr(STDIN_FILENO, TCSANOW, &tty);
 		std::cout<<"Password readed"<<std::endl;
 		result = "dbname="+ DBName + " user=" + User + " password=" + Password;
-		return (result);
+		return result;
 	}
+
 	result = "dbname="+ DBName + " user=" + User + " password=" + Password;
-	return(result);
+	return result;
 }
 
 static void startDaemon(void)
@@ -266,8 +263,7 @@ int main(int argc, char **argv)  //main body of application
 	std::string connStr = buildConnString(c->DBName(),c->User(),c->Password());
 	wpool = WorkerPool::CreatePool(ReceiverLog,SenderLog,connStr,c,sslCont);
 	init_locks();
-	if ((wpool==NULL)||(wpool->Limit()<=0))
-	{
+	if (wpool ==NULL || wpool->Limit() <= 0) {
 		SenderLog->WriteMessage(FATAL," [Main Process] 0 connections to DB unable to serve, terminating!");
 		delete (c);
 		delete wpool;
@@ -275,8 +271,7 @@ int main(int argc, char **argv)  //main body of application
 		delete ReceiverLog;
 		exit(EXIT_FAILURE);
 	}
-	else
-	{
+	else {
 		sem_init(&connectionSem, 0, wpool->Limit());
 		wpool->SetSemaphore(&connectionSem);
 
@@ -287,8 +282,8 @@ int main(int argc, char **argv)  //main body of application
 		SenderThread->detach();
 		receiver->Start();
 	}
-	if (!sigint)
-	{
+
+	if (!sigint) {
 		delete (c);
 		delete (wpool);
 		delete (sender);
@@ -304,6 +299,7 @@ int main(int argc, char **argv)  //main body of application
 		delete (ReceiverLog);
 		exit(EXIT_FAILURE);
 	}
-	return (0);
+
+	return 0;
 }
 
