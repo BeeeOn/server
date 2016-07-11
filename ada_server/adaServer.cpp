@@ -216,8 +216,6 @@ int main(int argc, char **argv)  //main body of application
 		return EXIT_FAILURE;
 	}
 
-	std::string connStr = buildConnString(c->DBName(),c->User(),c->Password());
-
 	if (c->Mode())
 		startDaemon(); /* Fork off the parent process */
 	else {
@@ -241,6 +239,7 @@ int main(int argc, char **argv)  //main body of application
 	OpenSSL_add_all_algorithms();
 
 	sslCont = new SSLContainer(ReceiverLog);
+	std::string connStr = buildConnString(c->DBName(),c->User(),c->Password());
 	wpool = WorkerPool::CreatePool(ReceiverLog,SenderLog,connStr,c,sslCont);
 	init_locks();
 	if ((wpool==NULL)||(wpool->Limit()<=0))
