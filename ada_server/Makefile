@@ -1,5 +1,5 @@
 CXXFLAGS= -Wall -W -std=c++11 -pthread -g
-CXX= /usr/bin/g++
+CXX= g++
 ADA_SERVER= adaServer.cpp
 METHOD_TEST= methodTester.cpp
 SOURCE_FILES= ../lib/pugixml.cpp loger.cpp config.cpp SSLContainer.cpp worker.cpp workerPool.cpp DBHandler.cpp connectionServer.cpp connectionHandler.cpp messageParsers.cpp sender.cpp listener.cpp requestServer.cpp messageCreator.cpp adaServerReceiver.cpp adaServerSender.cpp
