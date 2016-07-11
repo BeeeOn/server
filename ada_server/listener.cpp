@@ -67,14 +67,14 @@ int Listener::handleAcceptFailed(int &failcounter)
 		else
 		{
 			this->_log->WriteMessage(FATAL,"Unable to accept max count of consecutive failed retrievigs reached");
-			this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::ReciveConnection");
+			this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::ReceiveConnection");
 			this->_terminated = true;
 			return (1);
 		}
 	}
 	else
 	{
-		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::ReciveConnection");
+		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::ReceiveConnection");
 		this->_terminated = true;
 		return (1);
 	}
@@ -95,9 +95,9 @@ void Listener::acceptClient(int sock)
 
 /** Metoda pre prijatie pripojenia na sockete servra
     */
-int Listener::ReciveConnection()
+int Listener::ReceiveConnection()
 {
-	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::ReciveConnection");
+	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::ReceiveConnection");
 	struct sockaddr_in sin;
 	int com_s;  //set communincation socket
 	socklen_t s_size;
@@ -113,7 +113,7 @@ int Listener::ReciveConnection()
 
 		acceptClient(com_s);
 	}
-	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::ReciveConnection");
+	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::ReceiveConnection");
 	return (0); 
 }
 

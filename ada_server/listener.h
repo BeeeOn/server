@@ -54,7 +54,7 @@ class Listener
 		/**Method to receive connections from clients
 		 * @return int representing success/failure
 		 */
-		int ReciveConnection();
+		int ReceiveConnection();
 		/**Destructor
 		 */
 		~Listener();

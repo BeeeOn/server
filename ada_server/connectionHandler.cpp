@@ -49,9 +49,9 @@ int ConnectionHandler::Listen ()
 
 
 
-int ConnectionHandler::ReciveConnection()
+int ConnectionHandler::ReceiveConnection()
 {
-	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::ReciveConnection");
+	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::ReceiveConnection");
 	struct sockaddr_in sin;
 	int com_s;
 	socklen_t s_size;
@@ -71,7 +71,7 @@ int ConnectionHandler::ReciveConnection()
             else
             {
                 this->_log->WriteMessage(FATAL,"Unable to accept max count of consecutive failed retrievigs reached");
-                this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::ReciveConnection");
+                this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::ReceiveConnection");
                 return (1);
             }
 		}
@@ -87,7 +87,7 @@ int ConnectionHandler::ReciveConnection()
             w->Unlock(com_s,sin.sin_addr);
 		}
 	}
-	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::ReciveConnection");
+	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::ReceiveConnection");
 	return (0);
 }
 

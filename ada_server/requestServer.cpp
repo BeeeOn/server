@@ -144,6 +144,6 @@ void RequestServer::SendResponse(int code)
 		strerror_r(errno,errorbuf,200);
 		close (com_s);
 		this->_log->WriteMessage(WARN,"Unable to send message to ui_server with code : " + std::to_string(errno) + " : " + errorbuf);
-		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::ReciveConnection");
+		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::ReceiveConnection");
 	}
 }
