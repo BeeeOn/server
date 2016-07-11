@@ -52,6 +52,34 @@ int Listener::Listen ()
 	return (0);
 }
 
+int Listener::handleAcceptFailed(int &failcounter)
+{
+	this->_log->WriteMessage(FATAL,"Error when accepting code : " + std::to_string(errno) + " : " + std::strerror(errno) );
+	if (!this->_toBeTerminated)
+	{
+		failcounter++;
+		if (failcounter<=5)
+		{
+			usleep (5000);
+			this->_log->WriteMessage(FATAL,"Trying to retrieve from accept error try number :" + std::to_string(failcounter) + " of 5");
+			return 0;
+		}
+		else
+		{
+			this->_log->WriteMessage(FATAL,"Unable to accept max count of consecutive failed retrievigs reached");
+			this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::ReciveConnection");
+			this->_terminated = true;
+			return (1);
+		}
+	}
+	else
+	{
+		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::ReciveConnection");
+		this->_terminated = true;
+		return (1);
+	}
+}
+
 
 /** Metoda pre prijatie pripojenia na sockete servra
     */
@@ -67,29 +95,8 @@ int Listener::ReciveConnection()
 	{
 		if ((com_s=accept(s,(struct sockaddr *)&sin ,&s_size )) < 0)  //wait for client to connect
 		{
-			this->_log->WriteMessage(FATAL,"Error when accepting code : " + std::to_string(errno) + " : " + std::strerror(errno) );
-			if (!this->_toBeTerminated)
-			{
-				failcounter++;
-				if (failcounter<=5)
-				{
-					usleep (5000);
-					this->_log->WriteMessage(FATAL,"Trying to retrieve from accept error try number :" + std::to_string(failcounter) + " of 5");
-				}
-				else
-				{
-					this->_log->WriteMessage(FATAL,"Unable to accept max count of consecutive failed retrievigs reached");
-					this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::ReciveConnection");
-					this->_terminated = true;
-					return (1);
-				}
-			}
-			else
-			{
-				this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::ReciveConnection");
-				this->_terminated = true;
-				return (1);
-			}
+			if (handleAcceptFailed(failcounter) == 1)
+				return 1;
 		}
 		sem_wait((this->_semapohore)); //decrease count of workers or wait for free worker if there is none
 		Worker *w  = NULL;

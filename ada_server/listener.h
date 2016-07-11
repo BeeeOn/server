@@ -61,6 +61,8 @@ class Listener
 		/**Method to destroy socket and stop receiving connection
 		 */
 		void UnAccept();
+	private:
+		int handleAcceptFailed(int &failcounter);
 };
 
 
