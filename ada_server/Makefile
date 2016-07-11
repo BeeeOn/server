@@ -93,10 +93,10 @@ memtest:
 	valgrind --tool=memcheck --trace-children=yes --leak-check=full --show-reachable=yes ./run_ada_server.sh
 
 clean:
-	rm ada_server
-	rm *.o
+	$(RM) ada_server
+	$(RM) *.o
 	
 cleanlogs:
-		rm *.log
+		$(RM) *.log
 
 rebuild: clean all
