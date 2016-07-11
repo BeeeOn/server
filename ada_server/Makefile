@@ -9,8 +9,6 @@ LDFLAGS += -L/usr/local/lib
 LDFLAGS += -L/usr/pgsql-9.2/lib
 LDFLAGS += -Wl,-rpath,/usr/local/lib
 
-METHOD_TEST= methodTester.cpp
-
 OBJS += pugi.o
 OBJS += loger.o
 OBJS += config.o
@@ -49,9 +47,6 @@ pugi.o: ../lib/pugixml.cpp
 	$(CXX) $(CXXFLAGS) -o $@ -c $^
 ada_old: $(ADA_SERVER) $(SOURCE_FILES) 
 	$(CXX) $(CXXFLAGS) -o $@ $^ -g -L/usr/local/lib -lssl -lcurl -lcrypto -I/usr/include/soci -L/usr/local/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -I/usr/pgsql-9.2/include -L/usr/pgsql-9.2/lib -lpq -Wl,-rpath,/usr/local/lib
-
-method_test: $(METHOD_TEST) $(SOURCE_FILES) 
-	$(CXX) $(CXXFLAGS) -o $@ $^  -g -L/usr/local/lib -lssl -lcurl -lcrypto -I/usr/include/soci -L/usr/local/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -L/usr/pgsql-9.2/lib -I/usr/local/pgsql/include -lpq 
 
 run:
 	./run_ada_server.sh
