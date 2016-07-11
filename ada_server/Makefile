@@ -36,6 +36,8 @@ LDLIBS += -lsoci_empty
 LDLIBS += -lsoci_postgresql
 LDLIBS += -ldl
 LDLIBS += -lpq
+LDLIBS += -lPocoFoundation
+LDLIBS += -lPocoUtil
 
 all: ada_server
 
