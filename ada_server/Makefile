@@ -18,7 +18,23 @@ SOURCE_FILES += requestServer.cpp
 SOURCE_FILES += messageCreator.cpp
 SOURCE_FILES += adaServerReceiver.cpp
 SOURCE_FILES += adaServerSender.cpp
-OBJS = pugi.o loger.o config.o SSLContainer.o worker.o workerPool.o DBHandler.o messageCreator.o connectionServer.o connectionHandler.o messageParsers.o sender.o listener.o requestServer.o adaServerReceiver.o adaServerSender.o adaServer.o
+OBJS += pugi.o
+OBJS += loger.o
+OBJS += config.o
+OBJS += SSLContainer.o
+OBJS += worker.o
+OBJS += workerPool.o
+OBJS += DBHandler.o
+OBJS += messageCreator.o
+OBJS += connectionServer.o
+OBJS += connectionHandler.o
+OBJS += messageParsers.o
+OBJS += sender.o
+OBJS += listener.o
+OBJS += requestServer.o
+OBJS += adaServerReceiver.o
+OBJS += adaServerSender.o
+OBJS += adaServer.o
 LINKS= -L/usr/local/lib -lssl -lcurl -lcrypto -I/usr/include/soci -L/usr/local/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -I/usr/pgsql-9.2/include -L/usr/pgsql-9.2/lib -lpq -Wl,-rpath,/usr/local/lib
 
 all:
