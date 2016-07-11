@@ -31,6 +31,7 @@ AdaServerSender::~AdaServerSender()
 
 void AdaServerSender::Start()
 {
+	_log->WriteMessage(INFO, "[Main Process] Starting Sender");
 	if (this->_L->Listen()==0)
 	this->_L->ReciveConnection();
 	return;

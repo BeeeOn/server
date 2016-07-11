@@ -197,6 +197,30 @@ static void trapSignals(void)
 		SenderLog->WriteMessage(ERR," [Main Process] Unable to mask SIGPIPE");
 }
 
+static AdaServerReceiver *createReceiver(sem_t *sem, WorkerPool *wpool,
+		Loger *logger, Config *c)
+{
+	AdaServerReceiver *receiver;
+
+	logger->WriteMessage(INFO,"[Main Process] Maximal connection count : " + std::to_string(wpool->Limit()));
+	logger->WriteMessage(TRACE,"[Main Process] Creating Receiver");
+	receiver = new AdaServerReceiver(sem, wpool, logger, c);
+
+	return receiver;
+}
+
+static AdaServerSender *createSender(sem_t *sem, WorkerPool *wpool,
+		Loger *logger, Config *c)
+{
+	AdaServerSender *sender;
+
+	logger->WriteMessage(INFO,"[Main Process] Maximal connection count : " + std::to_string(wpool->Limit()));
+	logger->WriteMessage(TRACE,"[Main Process] Creating Sender");
+	sender = new AdaServerSender(sem, wpool, logger, c);
+
+	return sender;
+}
+
 int main(int argc, char **argv)  //main body of application
 {
 	if (argc < 2) {
@@ -253,23 +277,14 @@ int main(int argc, char **argv)  //main body of application
 	}
 	else
 	{
-		int semVal = wpool->Limit();
-		SenderLog->WriteMessage(INFO,"[Main Process] Maximal connection count : " + std::to_string(semVal));
-		ReceiverLog->WriteMessage(INFO,"[Main Process] Maximal connection count : " + std::to_string(semVal));
-		sem_init(&connectionSem,0,semVal);
+		sem_init(&connectionSem, 0, wpool->Limit());
 		wpool->SetSemaphore(&connectionSem);
-		SenderLog->WriteMessage(TRACE,"[Main Process] Creating Sender");
-		ReceiverLog->WriteMessage(TRACE,"[Main Process] Creating Sender");
-		sender = new AdaServerSender(&connectionSem,wpool,SenderLog,c);
-		SenderLog->WriteMessage(TRACE,"[Main Process] Creating Receiver");
-		ReceiverLog->WriteMessage(TRACE,"[Main Process] Creating Receiver");
-		receiver = new AdaServerReceiver(&connectionSem,wpool,ReceiverLog,c);
-		SenderLog->WriteMessage(INFO,"[Main Process] Starting Sender");
-		ReceiverLog->WriteMessage(INFO,"[Main Process] Starting Sender");
+
+		receiver = createReceiver(&connectionSem, wpool, ReceiverLog, c);
+		sender   = createSender(&connectionSem, wpool, SenderLog, c);
+
 		SenderThread = new std::thread( [ ] { sender->Start(); });
 		SenderThread->detach();
-		ReceiverLog->WriteMessage(INFO,"[Main Process] Starting Receiver");
-		SenderLog->WriteMessage(INFO,"[Main Process] Starting Receiver");
 		receiver->Start();
 	}
 	if (!sigint)

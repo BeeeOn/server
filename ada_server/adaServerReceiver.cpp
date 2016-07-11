@@ -30,6 +30,7 @@ AdaServerReceiver::~AdaServerReceiver()
 
 void AdaServerReceiver::Start()
 {
+	_log->WriteMessage(INFO, "[Main Process] Starting Receiver");
 	if (this->_CH->Listen()==0)
 		this->_CH->ReciveConnection();
 	return;
