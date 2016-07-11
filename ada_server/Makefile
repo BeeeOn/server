@@ -2,7 +2,22 @@ CXXFLAGS= -Wall -W -std=c++11 -pthread -g
 CXX= g++
 ADA_SERVER= adaServer.cpp
 METHOD_TEST= methodTester.cpp
-SOURCE_FILES= ../lib/pugixml.cpp loger.cpp config.cpp SSLContainer.cpp worker.cpp workerPool.cpp DBHandler.cpp connectionServer.cpp connectionHandler.cpp messageParsers.cpp sender.cpp listener.cpp requestServer.cpp messageCreator.cpp adaServerReceiver.cpp adaServerSender.cpp
+SOURCE_FILES += ../lib/pugixml.cpp
+SOURCE_FILES += loger.cpp
+SOURCE_FILES += config.cpp
+SOURCE_FILES += SSLContainer.cpp
+SOURCE_FILES += worker.cpp
+SOURCE_FILES += workerPool.cpp
+SOURCE_FILES += DBHandler.cpp
+SOURCE_FILES += connectionServer.cpp
+SOURCE_FILES += connectionHandler.cpp
+SOURCE_FILES += messageParsers.cpp
+SOURCE_FILES += sender.cpp
+SOURCE_FILES += listener.cpp
+SOURCE_FILES += requestServer.cpp
+SOURCE_FILES += messageCreator.cpp
+SOURCE_FILES += adaServerReceiver.cpp
+SOURCE_FILES += adaServerSender.cpp
 OBJS = pugi.o loger.o config.o SSLContainer.o worker.o workerPool.o DBHandler.o messageCreator.o connectionServer.o connectionHandler.o messageParsers.o sender.o listener.o requestServer.o adaServerReceiver.o adaServerSender.o adaServer.o
 LINKS= -L/usr/local/lib -lssl -lcurl -lcrypto -I/usr/include/soci -L/usr/local/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -I/usr/pgsql-9.2/include -L/usr/pgsql-9.2/lib -lpq -Wl,-rpath,/usr/local/lib
 
