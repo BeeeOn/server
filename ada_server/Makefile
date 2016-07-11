@@ -35,7 +35,20 @@ OBJS += requestServer.o
 OBJS += adaServerReceiver.o
 OBJS += adaServerSender.o
 OBJS += adaServer.o
-LINKS= -L/usr/local/lib -lssl -lcurl -lcrypto -I/usr/include/soci -L/usr/local/lib64 -lsoci_core -lsoci_empty -lsoci_postgresql -ldl -I/usr/pgsql-9.2/include -L/usr/pgsql-9.2/lib -lpq -Wl,-rpath,/usr/local/lib
+LINKS += -L/usr/local/lib
+LINKS += -lssl
+LINKS += -lcurl
+LINKS += -lcrypto
+LINKS += -I/usr/include/soci
+LINKS += -L/usr/local/lib64
+LINKS += -lsoci_core
+LINKS += -lsoci_empty
+LINKS += -lsoci_postgresql
+LINKS += -ldl
+LINKS += -I/usr/pgsql-9.2/include
+LINKS += -L/usr/pgsql-9.2/lib
+LINKS += -lpq
+LINKS += -Wl,-rpath,/usr/local/lib
 
 all:
 	make ada_server
