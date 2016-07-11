@@ -7,6 +7,7 @@
  * @version 1.0
  */
 
+#include "util.h"
 #include "connectionHandler.h"
 
 
@@ -33,6 +34,10 @@ int ConnectionHandler::Listen ()
 	{
 		this->_log->WriteMessage(INFO,"Socket successfully binded");
 	}
+
+	if (makeSocketReusable(s) < 0)
+		this->_log->WriteMessage(ERR, "Failed to set socket reusable: " + std::to_string(errno));
+
 	if ((listen (s,100))<0)
 	{
 	  this->_log->WriteMessage(FATAL,"Error to listen with code : " + std::to_string(errno) + " : " + std::strerror(errno));

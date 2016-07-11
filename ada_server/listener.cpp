@@ -9,6 +9,7 @@
 
 
 
+#include "util.h"
 #include "listener.h"
 
 int Listener::Listen ()  
@@ -35,6 +36,10 @@ int Listener::Listen ()
 	{
 		this->_log->WriteMessage(MSG,"Socket successfully binded");
 	}
+
+	if (makeSocketReusable(s) < 0)
+		this->_log->WriteMessage(ERR, "Failed to set socket reusable: " + std::to_string(errno));
+
 	if ((listen (s,10))<0) //start listening on socket
 	{
 		this->_log->WriteMessage(FATAL,"Unable to listen");

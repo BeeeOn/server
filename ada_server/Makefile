@@ -9,6 +9,7 @@ LDFLAGS += -L/usr/local/lib
 LDFLAGS += -L/usr/pgsql-9.2/lib
 LDFLAGS += -Wl,-rpath,/usr/local/lib
 
+OBJS += util.o
 OBJS += pugi.o
 OBJS += loger.o
 OBJS += config.o
