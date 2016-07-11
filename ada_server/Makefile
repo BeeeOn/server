@@ -40,7 +40,6 @@ LINKS += -lssl
 LINKS += -lcurl
 LINKS += -lcrypto
 LINKS += -I/usr/include/soci
-LINKS += -L/usr/local/lib64
 LINKS += -lsoci_core
 LINKS += -lsoci_empty
 LINKS += -lsoci_postgresql
