@@ -14,6 +14,7 @@
 #include "adaServerReceiver.h"
 #include <termios.h>
 #include <Poco/Exception.h>
+#include "ping.h"
 
 using namespace Poco;
 
@@ -234,6 +235,9 @@ int main(int argc, char **argv)  //main body of application
 
 	SenderLog = new Loger();
 	ReceiverLog = new Loger();
+	PingService *ping;
+	ping = PingService::getInstance();
+
 	SenderLog->SetLogger(c->SenderVerbosity(),c->SenderMaxFiles(),c->SenderMaxLines(),c->SenderFileNaming(),c->SenderPath(),"SENDER",c->SenderToSTD());
 	ReceiverLog->SetLogger(c->ReceiverVerbosity(),c->ReceiverMaxFiles(),c->ReceiverMaxLines(),c->ReceiverFileNaming(),c->SenderPath(),"RECEIVER",c->ReceiverToSTD());
 
@@ -246,6 +250,9 @@ int main(int argc, char **argv)  //main body of application
 	sslCont = new SSLContainer(ReceiverLog);
 	std::string connStr = buildConnString(c->DBName(),c->User(),c->Password());
 	wpool = WorkerPool::CreatePool(ReceiverLog,SenderLog,connStr,c,sslCont);
+	ping->createConn(connStr);
+	ping->m_log = ReceiverLog;
+	ping->SQLUpdateAllGatewaysStatus("unavailable");
 	init_locks();
 	if (wpool ==NULL || wpool->Limit() <= 0) {
 		SenderLog->WriteMessage(FATAL," [Main Process] 0 connections to DB unable to serve, terminating!");
