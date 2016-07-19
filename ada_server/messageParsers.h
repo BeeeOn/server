@@ -21,6 +21,7 @@
 #include <string> 
 #include <cstring>
 #include <bitset>
+#include <cassert>
 
 
 /** @Class MessageParser

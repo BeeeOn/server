@@ -609,9 +609,12 @@ std::string ProtocolV1_1_MessageParser::CreateAnswer()
 				case 1003:
 					if (parameters->at(i)->deviceList != nullptr)
 					{
-						for (size_t j = 0; j < parameters->at(i)->deviceList->size(); j++)
-							parameterNode.append_child("value").text().set(
-									int_to_hex(parameters->at(i)->deviceList->at(j)).c_str());
+						assert(parameters->at(i)->deviceList->size() == parameters->at(i)->deviceIDList->size());
+						for (size_t j = 0; j < parameters->at(i)->deviceList->size(); j++) {
+							xml_node value = parameterNode.append_child("value");
+							value.text().set(int_to_hex(parameters->at(i)->deviceList->at(j)).c_str());
+							value.append_attribute("device_id") = int_to_hex(parameters->at(i)->deviceIDList->at(j)).c_str();
+						}
 					}
 					break;
 				case 1005:

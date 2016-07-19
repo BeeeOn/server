@@ -135,6 +135,7 @@ typedef struct params
 	unsigned long long int euid;
 	std::string value;
 	std::vector<unsigned long long> *deviceList;
+	std::vector<unsigned long long> *deviceIDList;
 	double measured_value;
 	unsigned int module_id;
 	bool valid_data;
@@ -147,11 +148,14 @@ typedef struct params
         measured_value = 0;
 		deviceList = nullptr;
         valid_data = false;
+        deviceIDList = nullptr;
     };
 	~params()
 	{
 		if (this->deviceList!= nullptr)
 			delete deviceList;
+		if (this->deviceIDList != nullptr)
+			delete deviceIDList;
 	}
 } tparams;
 

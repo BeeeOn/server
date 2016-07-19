@@ -416,10 +416,12 @@ bool DBHandler::GetDevices(tmessageV1_1 *message)
 				use(DEVICE_INITIALIZED, "DEVICE_INITIALIZED"),
 				into(count);
 		message->params->at(message->processedParams)->deviceList = new std::vector<unsigned long long>(count);
+		message->params->at(message->processedParams)->deviceIDList = new std::vector<unsigned long long>(count);
 		*_sql << SQLQueries::SelectAllDevices,
 				use(message->adapterINTid, "GATEWAY_ID"),
 				use(DEVICE_INITIALIZED, "DEVICE_INITIALIZED"),
-				into(*(message->params->at(message->processedParams)->deviceList));
+				into(*(message->params->at(message->processedParams)->deviceList)),
+				into(*(message->params->at(message->processedParams)->deviceIDList));
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetDevices");
 		return (true);
 	}
