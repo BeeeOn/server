@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   GatewayServer.cpp
  * Author: Martin Novak, xnovak1c@stud.fit.vutbr.cz
  *
@@ -10,16 +10,16 @@
 #include "GatewaySession.h"
 
 GatewayServer::GatewayServer(asio::io_service& io_service, int port, int threads):
-    Server(io_service, port, threads)
+	Server(io_service, port, threads)
 {
 }
 
 void GatewayServer::startAccept()
 {
-    // Create new session.
-    m_new_session = std::make_shared<GatewaySession>(m_io_service);
+	// Create new session.
+	m_new_session = std::make_shared<GatewaySession>(m_io_service);
 
-    // Accept on the socket of the session.
-    m_acceptor.async_accept(m_new_session->getSocket(),
-    [&](const asio::error_code& error){ handleAccept(error); });
+	// Accept on the socket of the session.
+	m_acceptor.async_accept(m_new_session->getSocket(),
+	[&](const asio::error_code& error){ handleAccept(error); });
 }
