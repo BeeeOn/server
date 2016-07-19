@@ -449,9 +449,10 @@ bool DBHandler::GetLastModuleValue(tmessageV1_1 *message)
         size_t count = 1;
         try
         {
-                std::string sqlTrace = "select measured_value from module where gateway_id = " + std::to_string(message->adapterINTid);
-                sqlTrace += " and device_euid = " + std::to_string(message->device_euid) + " and module_id = " + std::to_string(message->module_id);
-                this->_log->WriteMessage(TRACE, sqlTrace);
+		this->_log->WriteMessage (INFO, "select measured_value from module where gateway_id = "
+			+ std::to_string(message->adapterINTid)
+			+ " and device_euid = " + std::to_string(message->params->at(message->processedParams)->euid)
+			+ " and module_id = " + std::to_string(message->params->at(message->processedParams)->module_id));
                 message->params->at(message->processedParams)->deviceList = new std::vector<unsigned long long>(count);
                 *_sql << SQLQueries::SelectLastModuleValue,
                                 use(message->adapterINTid, "GATEWAY_ID"),
@@ -467,7 +468,7 @@ bool DBHandler::GetLastModuleValue(tmessageV1_1 *message)
                 std::string ErrorMessage = "Database Error : ";
                 ErrorMessage.append (e.what());
                 this->_log->WriteMessage(ERR,ErrorMessage );
-                this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetLastValue");
+                this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetLastModuleValue");
                 return (false);
         }
 }
@@ -477,9 +478,9 @@ bool DBHandler::GetUserLabelForDevice(tmessageV1_1 *message)
         this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetUserLaberForDevice");
         try
         {
-                std::string sqlTrace = "select device_name from device where gateway_id = " + std::to_string(message->adapterINTid);
-                sqlTrace += " and device_euid = " + std::to_string(message->params->at(message->processedParams)->euid);
-                this->_log->WriteMessage(TRACE, sqlTrace);
+		this->_log->WriteMessage(INFO, "select device_name from device where gateway_id = " + std::to_string(message->adapterINTid)
+                        + " and device_euid = " + std::to_string(message->params->at(message->processedParams)->euid));
+
                 *_sql << SQLQueries::SelectUserLabelForDeviceID,
                                 use(message->adapterINTid, "GATEWAY_ID"),
                                 use(message->params->at(message->processedParams)->euid, "DEVICE_EUID"),
@@ -503,9 +504,9 @@ bool DBHandler::GetUserRoomForDevice(tmessageV1_1 *message)
         this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetUserRoomForDevice");
         try
         {
-                std::string sqlTrace = "select device_ from device where gateway_id = " + std::to_string(message->adapterINTid);
-                sqlTrace += " and device_euid = " + std::to_string(message->params->at(message->processedParams)->euid);
-                this->_log->WriteMessage(INFO, sqlTrace);
+		this->_log->WriteMessage(INFO, "select device_ from device where gateway_id = " + std::to_string(message->adapterINTid)
+                        + " and device_euid = " + std::to_string(message->params->at(message->processedParams)->euid));
+
                 *_sql << SQLQueries::SelectUserRoomForDevice,
                                 use(message->adapterINTid, "GATEWAY_ID"),
                                 use(message->params->at(message->processedParams)->euid, "DEVICE_EUID"),
