@@ -77,6 +77,12 @@ const string SelectUserRoomForDevice = "select location.location_name from devic
 
 /** Q to select user's room for device uses (:GATEWAY_ID, :DEVICE_EUID)*/
 const string SelectUserRoomForDeviceCount = "select count(*) from device natural join location join gateway on location.gateway_id = gateway.gateway_id where device.gateway_id = :GATEWAY_ID and device.device_euid = :DEVICE_EUID;";
+
+/** Q to update gateway status uses (:STATUS, :GATEWAY_ID)*/
+const string UpdateGatewayStatus = "update gateway set status = :STATUS where gateway_id = :GATEWAY_ID;";
+
+/**Q to update all gateways status uses(:STATUS)*/
+const string UpdateAllGatewayStatus = "update gateway set status = :STATUS";
 }
 
 #endif /* SQLCOMMANDS_H_ */
