@@ -623,7 +623,9 @@ std::string ProtocolV1_1_MessageParser::CreateAnswer()
 					break;
 				case 1003:
 					parameterNode.append_attribute("name") = "allsensors";
-					if (parameters->at(i)->deviceList != nullptr)
+					if (parameters->at(i)->count_items < 1)
+						parameterNode.append_child("value");
+					else
 					{
 						assert(parameters->at(i)->deviceList->size() == parameters->at(i)->deviceIDList->size());
 						for (size_t j = 0; j < parameters->at(i)->deviceList->size(); j++) {
@@ -640,19 +642,21 @@ std::string ProtocolV1_1_MessageParser::CreateAnswer()
 					parameterNode.append_attribute("name") = "getvalue";
 					parameterNode.append_attribute("euid") = int_to_hex(parameters->at(i)->euid).c_str();
 
-                                        if (parameters->at(i)->deviceList != nullptr)
-                                        {
-						try
-						{
-							xml_node value = parameterNode.append_child("value");
-							value.text().set(std::to_string(parameters->at(i)->measured_value).c_str());
-							value.append_attribute("module_id") = int_to_hex(parameters->at(i)->module_id).c_str();
-						}
-						catch (std::exception const &e)
-						{
-							this->_log->WriteMessage(ERR,"Device id not parsable!");
-						}
-                                        }
+					if (parameters->at(i)->count_items < 1) {
+						xml_node value = parameterNode.append_child("value");
+						break;
+					}
+
+					try
+					{
+						xml_node value = parameterNode.append_child("value");
+						value.text().set(std::to_string(parameters->at(i)->measured_value).c_str());
+						value.append_attribute("module_id") = int_to_hex(parameters->at(i)->module_id).c_str();
+					}
+					catch (std::exception const &e)
+					{
+						this->_log->WriteMessage(ERR,"Device id not parsable!");
+					}
                                         break;
 
 				default:

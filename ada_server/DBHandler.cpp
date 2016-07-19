@@ -430,6 +430,7 @@ bool DBHandler::GetDevices(tmessageV1_1 *message)
 				into(*(message->params->at(message->processedParams)->deviceIDList));
 		}
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetDevices");
+		message->params->at(message->processedParams)->count_items = count;
 		return (true);
 	}
 	catch(std::exception const &e)
@@ -446,14 +447,19 @@ bool DBHandler::GetDevices(tmessageV1_1 *message)
 bool DBHandler::GetLastModuleValue(tmessageV1_1 *message)
 {
         this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetLastModuleValue");
-        size_t count = 1;
         try
         {
 		this->_log->WriteMessage (INFO, "select measured_value from module where gateway_id = "
 			+ std::to_string(message->adapterINTid)
 			+ " and device_euid = " + std::to_string(message->params->at(message->processedParams)->euid)
 			+ " and module_id = " + std::to_string(message->params->at(message->processedParams)->module_id));
-                message->params->at(message->processedParams)->deviceList = new std::vector<unsigned long long>(count);
+
+		*_sql << SQLQueries::SelectLastModuleValueCount,
+				use(message->adapterINTid, "GATEWAY_ID"),
+				use(message->params->at(message->processedParams)->module_id, "MODULE_ID"),
+				use(message->params->at(message->processedParams)->euid, "DEVICE_EUID"),
+				into(message->params->at(message->processedParams)->count_items);
+
                 *_sql << SQLQueries::SelectLastModuleValue,
                                 use(message->adapterINTid, "GATEWAY_ID"),
                                 use(message->params->at(message->processedParams)->module_id, "MODULE_ID"),
@@ -481,6 +487,11 @@ bool DBHandler::GetUserLabelForDevice(tmessageV1_1 *message)
 		this->_log->WriteMessage(INFO, "select device_name from device where gateway_id = " + std::to_string(message->adapterINTid)
                         + " and device_euid = " + std::to_string(message->params->at(message->processedParams)->euid));
 
+		*_sql << SQLQueries::SelectUserLabelForDeviceIDCount,
+                                use(message->adapterINTid, "GATEWAY_ID"),
+                                use(message->params->at(message->processedParams)->euid, "DEVICE_EUID"),
+                                into(message->params->at(message->processedParams)->count_items);
+
                 *_sql << SQLQueries::SelectUserLabelForDeviceID,
                                 use(message->adapterINTid, "GATEWAY_ID"),
                                 use(message->params->at(message->processedParams)->euid, "DEVICE_EUID"),
@@ -506,6 +517,11 @@ bool DBHandler::GetUserRoomForDevice(tmessageV1_1 *message)
         {
 		this->_log->WriteMessage(INFO, "select device_ from device where gateway_id = " + std::to_string(message->adapterINTid)
                         + " and device_euid = " + std::to_string(message->params->at(message->processedParams)->euid));
+
+                *_sql << SQLQueries::SelectUserRoomForDeviceCount,
+                                use(message->adapterINTid, "GATEWAY_ID"),
+                                use(message->params->at(message->processedParams)->euid, "DEVICE_EUID"),
+                                into(message->params->at(message->processedParams)->count_items);
 
                 *_sql << SQLQueries::SelectUserRoomForDevice,
                                 use(message->adapterINTid, "GATEWAY_ID"),
