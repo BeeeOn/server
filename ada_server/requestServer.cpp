@@ -9,6 +9,7 @@
 
 
 #include "requestServer.h"
+#include "ping.h"
 
 bool RequestServer::HandleRequest ()
 {
@@ -88,7 +89,14 @@ bool RequestServer::HandleRequest ()
 
 	if (res==0)
 	{
+		time_t rawtime;
+		time(&rawtime);
+		gmtime(&rawtime);
 		res = this->s->Send(message,ada->connection);
+		PingService *ping;
+		ping = PingService::getInstance();
+		ping->senderCheckRecord(m->adapterINTid);
+		ping->addRecord(m->adapterINTid, rawtime);
 	}
 	if ((res==0)&&(m->state==DELETE))
 	{
