@@ -1,0 +1,13 @@
+/build
+/html
+/latex
+
+/log
+
+core.*
+
+*.swp
+*.swo
+
+*.a
+
