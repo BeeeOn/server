@@ -12,3 +12,7 @@ include_directories(
 )
 
 add_executable(ui-server ui/main.cpp)
+target_link_libraries(ui-server
+	${POCO_FOUNDATION}
+	mongoose
+)
