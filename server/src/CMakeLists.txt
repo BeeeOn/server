@@ -18,7 +18,7 @@ include_directories(
 
 add_library(BeeeOnServer ${SOURCES})
 
-add_executable(ui-server ui/main.cpp)
+add_executable(ui-server ui/main.cpp ui/UIServerModule.cpp)
 target_link_libraries(ui-server
 	BeeeOnServer
 	${POCO_FOUNDATION}
