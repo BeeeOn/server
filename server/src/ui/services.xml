@@ -4,6 +4,7 @@
 			<set name="sessionManager" ref="sessionManager" />
 			<set name="userService" ref="userService" />
 			<set name="authService" ref="authService" />
+			<set name="deviceService" ref="deviceService" />
 		</instance>
 
 		<!-- Bussiness layer -->
@@ -16,6 +17,10 @@
 			<set name="userDao" ref="userDao" />
 			<set name="sessionManager" ref="sessionManager" />
 			<add name="providers" ref="permitAuthProvider" />
+		</instance>
+
+		<instance name="deviceService" class="BeeeOn::DeviceService">
+			<set name="deviceDao" ref="deviceDao" />
 		</instance>
 
 		<!-- Data access layer -->
@@ -42,5 +47,6 @@
 		</instance>
 
 		<instance name="userDao" class="BeeeOn::MockUserDao" />
+		<instance name="deviceDao" class="BeeeOn::MockDeviceDao" />
 	</services>
 </system>

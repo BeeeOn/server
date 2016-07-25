@@ -18,8 +18,10 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/provider/RandomProvider.cpp
 	${PROJECT_SOURCE_DIR}/server/SessionManager.cpp
 	${PROJECT_SOURCE_DIR}/dao/UserDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/DeviceDao.cpp
 	${PROJECT_SOURCE_DIR}/service/UserService.cpp
 	${PROJECT_SOURCE_DIR}/service/AuthService.cpp
+	${PROJECT_SOURCE_DIR}/service/DeviceService.cpp
 )
 
 include_directories(

@@ -99,6 +99,33 @@ static void handleCreateUser(UIRouteContext &context)
 	context.response().sendBuffer(result.c_str(), result.size());
 }
 
+static void handleGetDevice(UIRouteContext &context)
+{
+	UIRoute::Params::const_iterator it;
+
+	it = context.params().find("placeId");
+	if (it == context.params().end()) {
+		context.response().setStatus(UIResponse::HTTP_NOT_FOUND);
+		context.response().setReason("Not found");
+		return;
+	}
+
+	PlaceID placeId = stoi(it->second);
+
+	it = context.params().find("deviceId");
+	if (it == context.params().end()) {
+		context.response().setStatus(UIResponse::HTTP_NOT_FOUND);
+		context.response().setReason("Not found");
+		return;
+	}
+
+	UserID id = stoi(it->second);
+
+	const Device::Ptr device = context
+		.userData().deviceService().get(id, placeId);
+	context.response().send() << device;
+}
+
 namespace BeeeOn {
 
 void factorySetup(UIServerRequestHandlerFactory &factory)
@@ -110,6 +137,7 @@ void factorySetup(UIServerRequestHandlerFactory &factory)
 	factory.DELETE("/auth", handleAuth);
 	factory.POST("/users", handleCreateUser);
 	factory.GET("/users/:userId", handleGetUser);
+	factory.GET("/:placeId/devices/:deviceId", handleGetDevice);
 }
 
 BEEEON_OBJECT(UIServerModule, BeeeOn::UIServerModule)

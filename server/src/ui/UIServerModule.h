@@ -10,6 +10,7 @@
 #include "di/InjectorTarget.h"
 #include "service/UserService.h"
 #include "service/AuthService.h"
+#include "service/DeviceService.h"
 
 /**
  * Compilation-time configuration of the target underlying
@@ -85,6 +86,8 @@ public:
 				&UIServerModule::setUserService);
 		injector<UIServerModule, AuthService>("authService",
 				&UIServerModule::setAuthService);
+		injector<UIServerModule, DeviceService>("deviceService",
+				&UIServerModule::setDeviceService);
 	}
 
 	~UIServerModule() {
@@ -137,12 +140,23 @@ public:
 		return *m_authService;
 	}
 
+	void setDeviceService(DeviceService *service)
+	{
+		m_deviceService = service;
+	}
+
+	DeviceService &deviceService()
+	{
+		return *m_deviceService;
+	}
+
 private:
 	Poco::SharedPtr<UIServerRequestHandlerFactory> m_factory;
 	UIRestServer *m_server;
 	SessionManager *m_sessionManager;
 	UserService *m_userService;
 	AuthService *m_authService;
+	DeviceService *m_deviceService;
 };
 
 }
