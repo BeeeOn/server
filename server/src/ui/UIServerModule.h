@@ -6,7 +6,9 @@
 
 #include "server/RestRequestHandler.h"
 #include "server/SessionManager.h"
+#include "server/SessionManager.h"
 #include "di/InjectorTarget.h"
+#include "service/UserService.h"
 
 /**
  * Compilation-time configuration of the target underlying
@@ -78,6 +80,8 @@ public:
 		factorySetup(*m_factory);
 		injector<UIServerModule, SessionManager>("sessionManager",
 				&UIServerModule::setSessionManager);
+		injector<UIServerModule, UserService>("userService",
+				&UIServerModule::setUserService);
 	}
 
 	~UIServerModule() {
@@ -110,10 +114,21 @@ public:
 		return *m_sessionManager;
 	}
 
+	void setUserService(UserService *service)
+	{
+		m_userService = service;
+	}
+
+	UserService &userService()
+	{
+		return *m_userService;
+	}
+
 private:
 	Poco::SharedPtr<UIServerRequestHandlerFactory> m_factory;
 	UIRestServer *m_server;
 	SessionManager *m_sessionManager;
+	UserService *m_userService;
 };
 
 }

@@ -2,7 +2,16 @@
 	<services>
 		<instance name="main" class="BeeeOn::UIServerModule">
 			<set name="sessionManager" ref="sessionManager" />
+			<set name="userService" ref="userService" />
 		</instance>
+
+		<!-- Bussiness layer -->
+
+		<instance name="userService" class="BeeeOn::UserService">
+			<set name="userDao" ref="userDao" />
+		</instance>
+
+		<!-- Data access layer -->
 
 		<instance name="sessionManager" class="BeeeOn::SessionManager">
 			<set name="secureRandomProvider"
@@ -24,5 +33,7 @@
 				class="BeeeOn::InsecureRandomProvider">
 			<set name="providerImpl" ref="mockRandomProvider" />
 		</instance>
+
+		<instance name="userDao" class="BeeeOn::MockUserDao" />
 	</services>
 </system>
