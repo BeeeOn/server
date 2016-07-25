@@ -28,15 +28,18 @@ public:
 	using Route = TRoute<Request, Response, UserData>;
 	using Params = typename Route::Params;
 	using RouteContext = TRouteContext<Request, Response, UserData>;
+	using SessionVerifier = typename Factory::SessionVerifier;
 
 	TRestRequestHandler(const Route &route,
 			const Params &params,
 			UserData &userData,
-			const std::string &name):
+			const std::string &name,
+			SessionVerifier sessionVerifier = NULL):
 		m_route(route),
 		m_params(params),
 		m_userData(userData),
 		m_name(name),
+		m_sessionVerifier(sessionVerifier),
 		m_logger(LOGGER_CLASS(this))
 	{
 	}
@@ -53,6 +56,8 @@ public:
 			res.setVersion(Response::HTTP_1_1);
 			res.setStatusAndReason(Response::HTTP_OK);
 			m_route.debug(m_logger, m_params, __FILE__, __LINE__);
+
+			sessionVerify(req, m_route);
 			m_route.execute(req, res, m_params, m_userData);
 		}
 		catch (Poco::Net::NotAuthenticatedException &e) {
@@ -95,6 +100,21 @@ public:
 	}
 
 protected:
+	void sessionVerify(const Request &req,
+			const Route &route)
+	{
+		if (!route.isSecure())
+			return;
+
+		if (m_sessionVerifier == NULL) {
+			m_logger.warning("no session verifier installed, bypassing");
+			return;
+		}
+
+		m_sessionVerifier(req, route, m_userData);
+	}
+
+protected:
 	const Route &m_route;
 	const typename Route::Params m_params;
 	UserData &m_userData;
@@ -117,11 +137,16 @@ public:
 	using Handler = typename Route::Handler;
 	using Params = typename Route::Params;
 
+	typedef void (*SessionVerifier)(const Request &request,
+			const Route &route, UserData &userData);
+
 	TRestRequestHandlerFactory(UserData &userData,
-			const std::string &name):
+			const std::string &name,
+			SessionVerifier sessionVerifier = NULL):
 		m_noOperation(new Route("*", NULL, false)),
 		m_noRoute(new Route("*", NULL, false)),
 		m_name(name),
+		m_sessionVerifier(sessionVerifier),
 		m_userData(userData),
 		m_logger(LOGGER_CLASS(this))
 	{
@@ -131,11 +156,13 @@ public:
 			Handler noRouteHandler,
 			Handler noOperationHandler,
 			UserData &userData,
-			const std::string &name):
+			const std::string &name,
+			SessionVerifier sessionVerifier = NULL):
 		m_noOperation(new Route("*", noOperationHandler, false)),
 		m_noRoute(new Route("*", noRouteHandler, false)),
 		m_userData(userData),
 		m_name(name),
+		m_sessionVerifier(sessionVerifier),
 		m_logger(LOGGER_CLASS(this))
 	{
 	}
@@ -151,13 +178,18 @@ public:
 	void noRoute(Handler h)
 	{
 		delete m_noRoute;
-		m_noRoute = new Route("*", h);
+		m_noRoute = new Route("*", h, false);
 	}
 
 	void noOperation(Handler h)
 	{
 		delete m_noOperation;
-		m_noOperation = new Route("*", h);
+		m_noOperation = new Route("*", h, false);
+	}
+
+	void sessionVerifier(SessionVerifier sessionVerifier)
+	{
+		m_sessionVerifier = sessionVerifier;
 	}
 
 	void POST(const char *pattern, Handler handler, bool secure = true)
@@ -233,7 +265,7 @@ protected:
 				req.getURI());
 
 		return new RequestHandler(route, params, m_userData,
-				m_name);
+				m_name, m_sessionVerifier);
 	}
 
 	RequestHandler *createRequestHandler(const Request &req,
@@ -266,6 +298,7 @@ private:
 	Route *m_noOperation;
 	Route *m_noRoute;
 	const std::string m_name;
+	SessionVerifier m_sessionVerifier;
 	UserData &m_userData;
 	Poco::Logger &m_logger;
 };
