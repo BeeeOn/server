@@ -9,6 +9,7 @@
 #include "server/SessionManager.h"
 #include "di/InjectorTarget.h"
 #include "service/UserService.h"
+#include "service/AuthService.h"
 
 /**
  * Compilation-time configuration of the target underlying
@@ -82,6 +83,8 @@ public:
 				&UIServerModule::setSessionManager);
 		injector<UIServerModule, UserService>("userService",
 				&UIServerModule::setUserService);
+		injector<UIServerModule, AuthService>("authService",
+				&UIServerModule::setAuthService);
 	}
 
 	~UIServerModule() {
@@ -124,11 +127,22 @@ public:
 		return *m_userService;
 	}
 
+	void setAuthService(AuthService *service)
+	{
+		m_authService = service;
+	}
+
+	AuthService &authService()
+	{
+		return *m_authService;
+	}
+
 private:
 	Poco::SharedPtr<UIServerRequestHandlerFactory> m_factory;
 	UIRestServer *m_server;
 	SessionManager *m_sessionManager;
 	UserService *m_userService;
+	AuthService *m_authService;
 };
 
 }
