@@ -5,6 +5,7 @@
 			<set name="userService" ref="userService" />
 			<set name="authService" ref="authService" />
 			<set name="deviceService" ref="deviceService" />
+			<set name="gatewayService" ref="gatewayService" />
 		</instance>
 
 		<!-- Bussiness layer -->
@@ -21,6 +22,10 @@
 
 		<instance name="deviceService" class="BeeeOn::DeviceService">
 			<set name="deviceDao" ref="deviceDao" />
+		</instance>
+
+		<instance name="gatewayService" class="BeeeOn::GatewayService">
+			<set name="gatewayDao" ref="gatewayDao" />
 		</instance>
 
 		<!-- Data access layer -->
@@ -48,5 +53,6 @@
 
 		<instance name="userDao" class="BeeeOn::MockUserDao" />
 		<instance name="deviceDao" class="BeeeOn::MockDeviceDao" />
+		<instance name="gatewayDao" class="BeeeOn::MockGatewayDao" />
 	</services>
 </system>
