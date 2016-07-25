@@ -4,6 +4,7 @@ project (ui-server C CXX)
 find_library (POCO_FOUNDATION PocoFoundation)
 find_library (POCO_UTIL PocoUtil)
 find_library (POCO_NET PocoNet)
+find_library (POCO_JSON PocoJSON)
 
 set (CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -DBEEEON_SELECT_MONGOOSE")
 add_definitions(-std=c++11)
@@ -12,6 +13,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/mongoose/MongooseResponse.cpp
 	${PROJECT_SOURCE_DIR}/di/InjectorTarget.cpp
 	${PROJECT_SOURCE_DIR}/di/DependencyInjector.cpp
+	${PROJECT_SOURCE_DIR}/model/Entity.cpp
 )
 
 include_directories(
@@ -31,5 +33,6 @@ target_link_libraries(ui-server
 	${POCO_FOUNDATION}
 	${POCO_UTIL}
 	${POCO_NET}
+	${POCO_JSON}
 	mongoose
 )
