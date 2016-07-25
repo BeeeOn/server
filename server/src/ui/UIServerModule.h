@@ -5,17 +5,56 @@
 #include <Poco/SharedPtr.h>
 
 #include "server/RestRequestHandler.h"
-#include "server/MongooseServer.h"
+
+/**
+ * Compilation-time configuration of the target underlying
+ * HTTP server implementation.
+ */
+#if defined(BEEEON_SELECT_MONGOOSE)
+
+/**
+ * Use Mongoose server.
+ */
 #include "mongoose/MongooseRequest.h"
 #include "mongoose/MongooseResponse.h"
-#include "mongoose/Mongoose.h"
+#include "server/MongooseServer.h"
+#define config_module \
+typedef MongooseRequest UIRequest; \
+typedef MongooseResponse UIResponse; \
+typedef TRestRequestHandlerFactory \
+	<UIRequest, UIResponse, UIServerModule> \
+	UIServerRequestHandlerFactory; \
+typedef TMongooseServer<UIServerModule> UIRestServer
+
+#elif defined(BEEEON_SELECT_POCO)
+
+/**
+ * Use Poco HTTPServer.
+ */
+#include "server/PocoServer.h"
+#define config_module \
+	typedef Poco::Net::HTTPServerRequest  UIRequest; \
+	typedef Poco::Net::HTTPServerResponse UIResponse; \
+	typedef PocoRestRequestHandlerFactory<UIServerModule> \
+		UIServerRequestHandlerFactory; \
+	typedef TPocoServer<UIServerModule> UIRestServer
+
+#else
+
+#error No server implementation selected
+
+#endif
 
 namespace BeeeOn {
 
 class UIServerModule;
 
-typedef MongooseRequest  UIRequest;
-typedef MongooseResponse UIResponse;
+/**
+ * Import module configuration, e.g. server settings.
+ * This can change the HTTP server backend without
+ * affecting any other code.
+ */
+config_module;
 
 /**
  * UIRoute class built from TRoute template.
@@ -25,12 +64,6 @@ typedef TRoute<UIRequest, UIResponse, UIServerModule> UIRoute;
  * UIRouteContext class built from TRouteContext template.
  */
 typedef UIRoute::Context UIRouteContext;
-
-typedef TRestRequestHandlerFactory
-	<UIRequest, UIResponse, UIServerModule>
-	UIServerRequestHandlerFactory;
-
-typedef TMongooseServer<UIServerModule> UIRestServer;
 
 void factorySetup(UIServerRequestHandlerFactory &factory);
 
