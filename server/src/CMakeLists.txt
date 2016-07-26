@@ -16,6 +16,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/Entity.cpp
 	${PROJECT_SOURCE_DIR}/provider/AuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/RandomProvider.cpp
+	${PROJECT_SOURCE_DIR}/server/SessionManager.cpp
 )
 
 include_directories(

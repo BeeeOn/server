@@ -1,6 +1,12 @@
 <system>
 	<services>
 		<instance name="main" class="BeeeOn::UIServerModule">
+			<set name="sessionManager" ref="sessionManager" />
+		</instance>
+
+		<instance name="sessionManager" class="BeeeOn::SessionManager">
+			<set name="secureRandomProvider"
+				ref="pocoRandomProvider" />
 		</instance>
 
 		<instance name="permitAuthProvider"

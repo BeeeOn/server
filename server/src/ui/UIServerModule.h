@@ -5,6 +5,7 @@
 #include <Poco/SharedPtr.h>
 
 #include "server/RestRequestHandler.h"
+#include "server/SessionManager.h"
 #include "di/InjectorTarget.h"
 
 /**
@@ -75,6 +76,8 @@ public:
 				*this, "ui-server"))
 	{
 		factorySetup(*m_factory);
+		injector<UIServerModule, SessionManager>("sessionManager",
+				&UIServerModule::setSessionManager);
 	}
 
 	~UIServerModule() {
@@ -97,9 +100,20 @@ public:
 		return *m_server;
 	}
 
+	void setSessionManager(SessionManager *manager)
+	{
+		m_sessionManager = manager;
+	}
+
+	SessionManager &sessionManager()
+	{
+		return *m_sessionManager;
+	}
+
 private:
 	Poco::SharedPtr<UIServerRequestHandlerFactory> m_factory;
 	UIRestServer *m_server;
+	SessionManager *m_sessionManager;
 };
 
 }
