@@ -2,5 +2,8 @@
 	<services>
 		<instance name="main" class="BeeeOn::UIServerModule">
 		</instance>
+
+		<instance name="permitAuthProvider"
+				class="BeeeOn::PermitAuthProvider" />
 	</services>
 </system>
