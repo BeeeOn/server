@@ -12,6 +12,7 @@
 #include "service/AuthService.h"
 #include "service/DeviceService.h"
 #include "service/GatewayService.h"
+#include "service/LocationService.h"
 
 /**
  * Compilation-time configuration of the target underlying
@@ -91,6 +92,8 @@ public:
 				&UIServerModule::setDeviceService);
 		injector<UIServerModule, GatewayService>("gatewayService",
 				&UIServerModule::setGatewayService);
+		injector<UIServerModule, LocationService>("locationService",
+				&UIServerModule::setLocationService);
 	}
 
 	~UIServerModule() {
@@ -163,6 +166,16 @@ public:
 		return *m_gatewayService;
 	}
 
+	void setLocationService(LocationService *service)
+	{
+		m_locationService = service;
+	}
+
+	LocationService &locationService()
+	{
+		return *m_locationService;
+	}
+
 private:
 	Poco::SharedPtr<UIServerRequestHandlerFactory> m_factory;
 	UIRestServer *m_server;
@@ -171,6 +184,7 @@ private:
 	AuthService *m_authService;
 	DeviceService *m_deviceService;
 	GatewayService *m_gatewayService;
+	LocationService *m_locationService;
 };
 
 }

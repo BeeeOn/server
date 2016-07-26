@@ -20,10 +20,12 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/dao/UserDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/DeviceDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/GatewayDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/LocationDao.cpp
 	${PROJECT_SOURCE_DIR}/service/UserService.cpp
 	${PROJECT_SOURCE_DIR}/service/AuthService.cpp
 	${PROJECT_SOURCE_DIR}/service/DeviceService.cpp
 	${PROJECT_SOURCE_DIR}/service/GatewayService.cpp
+	${PROJECT_SOURCE_DIR}/service/LocationService.cpp
 )
 
 include_directories(
