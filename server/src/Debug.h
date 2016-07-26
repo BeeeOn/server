@@ -1,7 +1,7 @@
 #ifndef BEEEON_DEBUG_H
 #define BEEEON_DEBUG_H
 
-#ifdef defined(__clang__) || defined(__GLIBCXX__)
+#if defined(__clang__) || defined(__GLIBCXX__)
 #include <cxxabi.h> // abi::__cxa_demangle
 #endif
 
@@ -160,5 +160,80 @@ private:
 #define _TRACE_FUNC(logger) _INTERNAL_TRACE_FUNC(logger)
 
 }
+
+#ifdef __GLIBC__
+#include <execinfo.h>
+#include <unistd.h>
+#include <cstdio>
+
+namespace BeeeOn {
+
+/**
+ * Print backtrace of the current function call hierarchy
+ * to stdout. Useful for very unexpected states and exceptions
+ * and when even the logging facilities fail.
+ */
+inline void stdout_backtrace()
+{
+	void *addr[128];
+	size_t count = backtrace(addr, 128);
+
+	backtrace_symbols_fd(addr, count, STDOUT_FILENO);
+}
+
+/**
+ * Log backtrace of the current function call hierarchy
+ * to stdout. Useful for very unexpected states and exceptions.
+ * All lines are logged as critical and with prefix "Backtrace: ".
+ */
+inline void __log_backtrace(Poco::Logger &l, const char *file, size_t line)
+{
+	void *addr[128];
+	size_t count = backtrace(addr, 128);
+	char **strings = backtrace_symbols(addr, count);
+	size_t i;
+
+	l.critical(
+		Poco::Logger::format("Backtrace: size $0", std::to_string(count)),
+		file, line);
+
+	for (i = 0; i < count; ++i) {
+		l.critical(Poco::Logger::format(
+				"Backtrace: > $0", std::string(strings[i])),
+			file, line);
+	}
+}
+
+}
+
+#else // unknown libc/c++ library
+
+namespace BeeeOn {
+
+/**
+ * No idea how to support backtracing for an unknown libc/c++ library.
+ */
+inline void stdout_backtrace()
+{
+	const char *msg = "no backtrace available\n";
+	std::write(fd, msg, sizeof(msg));
+}
+
+/**
+ * No idea how to support backtracing for an unknown libc/c++ library.
+ */
+inline void __log_backtrace(Poco::Logger &l, const char *file, size_t line)
+{
+	l.critical("Backtrace: not available", file, line);
+}
+
+}
+
+#endif
+
+/**
+ * Log backtrace to the given logger with level critical.
+ */
+#define log_backtrace(l) BeeeOn::__log_backtrace(l, __FILE__, __LINE__)
 
 #endif
