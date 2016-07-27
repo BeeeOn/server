@@ -5,5 +5,8 @@
 
 		<instance name="permitAuthProvider"
 				class="BeeeOn::PermitAuthProvider" />
+
+		<instance name="pocoRandomProvider"
+				class="BeeeOn::PocoRandomProvider" />
 	</services>
 </system>

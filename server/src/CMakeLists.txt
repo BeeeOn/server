@@ -15,6 +15,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/di/DependencyInjector.cpp
 	${PROJECT_SOURCE_DIR}/model/Entity.cpp
 	${PROJECT_SOURCE_DIR}/provider/AuthProvider.cpp
+	${PROJECT_SOURCE_DIR}/provider/RandomProvider.cpp
 )
 
 include_directories(
