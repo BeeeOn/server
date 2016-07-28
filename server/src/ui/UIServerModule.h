@@ -5,6 +5,7 @@
 #include <Poco/SharedPtr.h>
 
 #include "server/RestRequestHandler.h"
+#include "di/InjectorTarget.h"
 
 /**
  * Compilation-time configuration of the target underlying
@@ -67,17 +68,24 @@ typedef UIRoute::Context UIRouteContext;
 
 void factorySetup(UIServerRequestHandlerFactory &factory);
 
-class UIServerModule {
+class UIServerModule : public AbstractInjectorTarget {
 public:
-	UIServerModule(unsigned int port):
+	UIServerModule(void):
 		m_factory(new UIServerRequestHandlerFactory(
-				*this, "ui-server")),
-		m_server(port, m_factory)
+				*this, "ui-server"))
 	{
 		factorySetup(*m_factory);
 	}
 
-	~UIServerModule() {}
+	~UIServerModule() {
+		if (m_server)
+			delete m_server;
+	}
+
+	void createServer(unsigned int port)
+	{
+		m_server = new UIRestServer(port, m_factory);
+	}
 
 	UIServerRequestHandlerFactory &factory()
 	{
@@ -86,12 +94,12 @@ public:
 
 	Server &server()
 	{
-		return m_server;
+		return *m_server;
 	}
 
 private:
 	Poco::SharedPtr<UIServerRequestHandlerFactory> m_factory;
-	UIRestServer m_server;
+	UIRestServer *m_server;
 };
 
 }

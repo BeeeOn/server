@@ -39,4 +39,6 @@ void factorySetup(UIServerRequestHandlerFactory &factory)
 	factory.sessionVerifier(verifyAuthorized);
 }
 
+BEEEON_OBJECT(UIServerModule, BeeeOn::UIServerModule)
+
 }

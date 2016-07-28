@@ -1,0 +1,6 @@
+<system>
+	<services>
+		<instance name="main" class="BeeeOn::UIServerModule">
+		</instance>
+	</services>
+</system>

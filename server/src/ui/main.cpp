@@ -8,6 +8,7 @@
 #include <Poco/Util/ServerApplication.h>
 
 #include "server/MongooseServer.h"
+#include "di/DependencyInjector.h"
 #include "UIServerModule.h"
 
 using namespace std;
@@ -20,6 +21,14 @@ using namespace BeeeOn;
 #define LOCAL_CONFIG_FILE  "logging.ini"
 #define SYSTEM_CONFIG_FILE "/etc/beeeon/ui-server/logging.ini"
 
+#define LOCAL_SERVICES_FILE  "services.xml"
+#define SYSTEM_SERVICES_FILE "/etc/beeeon/ui-server/services.xml"
+
+static Option optServices("services", "s",
+		"services configuration file to be used (xml, ini, properties)",
+		false,
+		"<file>",
+		true);
 static Option optLogging("logging", "l",
 		"logging configuration file to be used (xml, ini, properties)",
 		false,
@@ -43,6 +52,8 @@ public:
 protected:
 	void handleOption(const string &name, const string &value)
 	{
+		if (name == "services")
+			m_userServices = value;
 		if (name == "logging")
 			m_userLogging = value;
 		if (name == "help")
@@ -67,15 +78,43 @@ protected:
 			loadConfiguration(system.path());
 	}
 
+	void findAndLoadServices()
+	{
+		File user(m_userServices);
+		File local(LOCAL_SERVICES_FILE);
+		File system(SYSTEM_SERVICES_FILE);
+
+		if (!m_userServices.empty() && user.exists()) {
+			logger().notice(
+				"loading configuration from " + user.path(),
+				__FILE__, __LINE__);
+			loadConfiguration(user.path());
+		}
+		else if (local.exists()) {
+			logger().notice(
+				"loading configuration from " + local.path(),
+				__FILE__, __LINE__);
+			loadConfiguration(local.path());
+		}
+		else if (system.exists()) {
+			logger().notice(
+				"loading configuration from " + system.path(),
+				__FILE__, __LINE__);
+			loadConfiguration(system.path());
+		}
+	}
+
 	void initialize(Application &app)
 	{
 		Logger::root().setLevel(Logger::parseLevel("trace"));
 		findAndLoadLogging();
 		Application::initialize(app);
+		findAndLoadServices();
 	}
 
 	void defineOptions(OptionSet &options)
 	{
+		options.addOption(optServices);
 		options.addOption(optLogging);
 		options.addOption(optPort);
 		options.addOption(optHelp);
@@ -99,11 +138,18 @@ protected:
 		if (m_printHelp)
 			return printHelp();
 
-		UIServerModule module(m_serverPort);
-		module.server().start();
+		if (logger().debug())
+			ManifestSingleton::reportInfo(logger());
+
+		DependencyInjector injector(config().createView("services"));
+		UIServerModule *module = injector
+					.create<UIServerModule>("main");
+
+		module->createServer(m_serverPort);
+		module->server().start();
 
 		waitForTerminationRequest();
-		module.server().stop();
+		module->server().stop();
 		return EXIT_OK;
 	}
 
@@ -111,6 +157,7 @@ private:
 	bool m_printHelp;
 	unsigned int m_serverPort;
 	string m_userLogging;
+	string m_userServices;
 };
 
 int main(int argc, char **argv)
