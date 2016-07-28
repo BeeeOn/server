@@ -10,6 +10,7 @@ add_definitions(-std=c++11)
 
 file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/mongoose/MongooseResponse.cpp
+	${PROJECT_SOURCE_DIR}/di/InjectorTarget.cpp
 )
 
 include_directories(
@@ -19,8 +20,13 @@ include_directories(
 add_library(BeeeOnServer ${SOURCES})
 
 add_executable(ui-server ui/main.cpp ui/UIServerModule.cpp)
+
+# The -Wl,--whole-archive is necessary for all libraries defining
+# BEEEON_OBJECTs (see di/InjectorTarget.h).
 target_link_libraries(ui-server
+	-Wl,--whole-archive
 	BeeeOnServer
+	-Wl,--no-whole-archive
 	${POCO_FOUNDATION}
 	${POCO_UTIL}
 	${POCO_NET}
