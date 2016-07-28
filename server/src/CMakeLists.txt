@@ -11,6 +11,7 @@ add_definitions(-std=c++11)
 file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/mongoose/MongooseResponse.cpp
 	${PROJECT_SOURCE_DIR}/di/InjectorTarget.cpp
+	${PROJECT_SOURCE_DIR}/di/DependencyInjector.cpp
 )
 
 include_directories(

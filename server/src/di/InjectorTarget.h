@@ -8,7 +8,10 @@
 
 namespace BeeeOn {
 
+class DependencyInjector;
+
 class InjectorTarget {
+	friend DependencyInjector;
 public:
 	virtual ~InjectorTarget() {}
 
