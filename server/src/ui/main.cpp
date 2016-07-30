@@ -1,6 +1,7 @@
 #include <iostream>
 #include <Poco/Logger.h>
 #include <Poco/Message.h>
+#include <Poco/File.h>
 #include <Poco/Util/Option.h>
 #include <Poco/Util/OptionSet.h>
 #include <Poco/Util/HelpFormatter.h>
@@ -16,6 +17,14 @@ using namespace BeeeOn;
 
 #define DEFAULT_PORT 8000
 
+#define LOCAL_CONFIG_FILE  "logging.ini"
+#define SYSTEM_CONFIG_FILE "/etc/beeeon/ui-server/logging.ini"
+
+static Option optLogging("logging", "l",
+		"logging configuration file to be used (xml, ini, properties)",
+		false,
+		"<file>",
+		true);
 static Option optPort("port", "p",
 		"server port to listen on",
 		false,
@@ -34,6 +43,8 @@ public:
 protected:
 	void handleOption(const string &name, const string &value)
 	{
+		if (name == "logging")
+			m_userLogging = value;
 		if (name == "help")
 			m_printHelp = true;
 		if (name == "port")
@@ -42,14 +53,30 @@ protected:
 		Application::handleOption(name, value);
 	}
 
+	void findAndLoadLogging()
+	{
+		File user(m_userLogging);
+		File local(LOCAL_CONFIG_FILE);
+		File system(SYSTEM_CONFIG_FILE);
+
+		if (!m_userLogging.empty() && user.exists())
+			loadConfiguration(user.path());
+		if (local.exists())
+			loadConfiguration(local.path());
+		else if (system.exists())
+			loadConfiguration(system.path());
+	}
+
 	void initialize(Application &app)
 	{
 		Logger::root().setLevel(Logger::parseLevel("trace"));
+		findAndLoadLogging();
 		Application::initialize(app);
 	}
 
 	void defineOptions(OptionSet &options)
 	{
+		options.addOption(optLogging);
 		options.addOption(optPort);
 		options.addOption(optHelp);
 		Application::defineOptions(options);
@@ -83,6 +110,7 @@ protected:
 private:
 	bool m_printHelp;
 	unsigned int m_serverPort;
+	string m_userLogging;
 };
 
 int main(int argc, char **argv)
