@@ -6,6 +6,7 @@ find_library (POCO_FOUNDATION PocoFoundation)
 find_library (POCO_UTIL PocoUtil)
 
 file(GLOB TEST_SOURCES
+	${PROJECT_SOURCE_DIR}/server/RouteTest.cpp
 )
 
 include_directories(
