@@ -251,6 +251,15 @@ public:
 		return handler;
 	}
 
+	void reportRoutes() const
+	{
+		m_logger.information("POST routes: %lu", m_POST.size());
+		m_logger.information("PUT routes: %lu", m_PUT.size());
+		m_logger.information("GET routes: %lu", m_GET.size());
+		m_logger.information("DELETE routes: %lu", m_DELETE.size());
+		m_logger.information("OPTIONS routes: %lu", m_OPTIONS.size());
+	}
+
 protected:
 
 	RequestHandler *routeMatch(const Request &req, const Route &route)

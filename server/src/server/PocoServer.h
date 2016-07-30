@@ -135,6 +135,7 @@ public:
 
 	void start()
 	{
+		m_factory->reportRoutes();
 		m_server.start();
 	}
 
@@ -144,6 +145,7 @@ public:
 	}
 
 private:
+	Poco::SharedPtr<RequestHandlerFactory> m_factory;
 	Poco::Net::HTTPServer m_server;
 };
 

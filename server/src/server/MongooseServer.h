@@ -129,6 +129,7 @@ private:
 	void loop()
 	{
 		m_mg.bind();
+		m_factory->reportRoutes();
 
 		while (!m_activity.isStopped())
 			m_mg.poll(m_timeout);
