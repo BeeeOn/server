@@ -13,5 +13,10 @@
 				class="BeeeOn::MockRandomProvider">
 			<set name="nextRandom" text="0123456789abcdef" />
 		</instance>
+
+		<instance name="insecureRandomProvider"
+				class="BeeeOn::InsecureRandomProvider">
+			<set name="providerImpl" ref="mockRandomProvider" />
+		</instance>
 	</services>
 </system>

@@ -4,3 +4,4 @@
 
 BEEEON_OBJECT(PocoRandomProvider, BeeeOn::PocoRandomProvider)
 BEEEON_OBJECT(MockRandomProvider, BeeeOn::MockRandomProvider)
+BEEEON_OBJECT(InsecureRandomProvider, BeeeOn::InsecureRandomProvider)

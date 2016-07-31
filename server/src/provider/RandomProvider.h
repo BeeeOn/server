@@ -1,9 +1,13 @@
 #ifndef BEEEON_RANDOM_PROVIDER_H
 #define BEEEON_RANDOM_PROVIDER_H
 
+#include <Poco/Logger.h>
 #include <Poco/Random.h>
 #include <Poco/Timestamp.h>
 #include <Poco/Mutex.h>
+
+#include "di/InjectorTarget.h"
+#include "Debug.h"
 
 namespace BeeeOn {
 
@@ -33,6 +37,39 @@ private:
  * Provider of random values that are trusted to be secure.
  */
 class SecureRandomProvider : public RandomProvider {
+};
+
+/**
+ * Any random number provider can be used as a SecureRandomProvider.
+ * This is intended for testing only. Never run an InsecureRandomProvider
+ * in the production environment!
+ */
+class InsecureRandomProvider : public SecureRandomProvider,
+		public AbstractInjectorTarget {
+public:
+	InsecureRandomProvider()
+	{
+		LOGGER_CLASS(this)
+			.critical("AN INSECURE RANDOM PROVIDER IN USE",
+					__FILE__, __LINE__);
+
+		injector<InsecureRandomProvider, RandomProvider>(
+			"providerImpl",
+			&InsecureRandomProvider::setProviderImpl);
+	}
+
+	void setProviderImpl(RandomProvider *provider)
+	{
+		m_provider = provider;
+	}
+
+	std::string randomStringUnlocked(unsigned int length)
+	{
+		return m_provider->randomStringUnlocked(length);
+	}
+
+private:
+	RandomProvider *m_provider;
 };
 
 }
