@@ -8,5 +8,10 @@
 
 		<instance name="pocoRandomProvider"
 				class="BeeeOn::PocoRandomProvider" />
+
+		<instance name="mockRandomProvider"
+				class="BeeeOn::MockRandomProvider">
+			<set name="nextRandom" text="0123456789abcdef" />
+		</instance>
 	</services>
 </system>
