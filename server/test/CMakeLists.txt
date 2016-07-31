@@ -10,6 +10,7 @@ find_library (POCO_JSON PocoJSON)
 file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/server/RouteTest.cpp
 	${PROJECT_SOURCE_DIR}/di/DependencyInjectorTest.cpp
+	${PROJECT_SOURCE_DIR}/model/EntityTest.cpp
 )
 
 include_directories(
