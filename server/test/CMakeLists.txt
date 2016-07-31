@@ -11,6 +11,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/server/RouteTest.cpp
 	${PROJECT_SOURCE_DIR}/di/DependencyInjectorTest.cpp
 	${PROJECT_SOURCE_DIR}/model/EntityTest.cpp
+	${PROJECT_SOURCE_DIR}/model/EntityCollectionTest.cpp
 )
 
 include_directories(
