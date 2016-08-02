@@ -5,20 +5,20 @@
         <!-- Task must be of types: timed, trigger, combined. -->
         <type>timed</type>
         <!-- Path relative to binary. -->
-        <path>./tasks/AliveCheck/AliveCheck.so</path>
+        <path>bin/tasks/AliveCheck/libalivecheck.so</path>
     </task>
     <task id="2" version="1"> <!-- id and version should always be integer. -->
         <name>Watchdog</name>
         <!-- Task must be of types: timed, trigger, combined. -->
         <type>trigger</type>
         <!-- Path relative to binary. -->
-        <path>./tasks/Watchdog/Watchdog.so</path>
+        <path>bin/tasks/Watchdog/libwatchdog.so</path>
     </task>
     <task id="3" version="1"> <!-- id and version should always be integer. -->
         <name>FireHazard</name>
         <!-- Task must be of types: timed, trigger, combined. -->
         <type>combined</type>
         <!-- Path relative to binary. -->
-        <path>./tasks/FireHazard/FireHazard.so</path>
+        <path>bin/tasks/FireHazard/libfirehazard.so</path>
     </task>
 </tasks>
