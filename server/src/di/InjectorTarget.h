@@ -148,6 +148,14 @@ private:
 	static ManifestSingleton *singleton;
 };
 
+/**
+ * Register an object (inherited from InjectorTarget) to be available
+ * for dependency injection.
+ *
+ * Arguments:
+ * - name: a unique name among the system
+ * - type: class name with namespace (e.g. BeeeOn::MagicService)
+ */
 #define BEEEON_OBJECT(name, type)                       \
 POCO_BEGIN_NAMED_MANIFEST(name, BeeeOn::InjectorTarget) \
 POCO_EXPORT_CLASS(type)                                 \
