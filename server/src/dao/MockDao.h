@@ -82,7 +82,7 @@ public:
 		if (it == m_storage.end())
 			throw Poco::NotFoundException("no such ID ", id);
 
-		return it->second;
+		return new T(id, *it->second);
 	}
 
 	virtual bool has(ID id)
@@ -110,7 +110,7 @@ public:
 		TRACE_METHOD();
 
 		const ID id = m_id++;
-		m_storage.insert(std::make_pair(id, new T(t)));
+		m_storage.insert(std::make_pair(id, new T(id, t)));
 		return id;
 	}
 
@@ -123,7 +123,7 @@ public:
 		if (it == m_storage.end())
 			throw Poco::NotFoundException("no such ID ", id);
 
-		it->second = new T(t);
+		it->second = new T(id, t);
 		return it->second;
 	}
 
