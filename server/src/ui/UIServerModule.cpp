@@ -7,6 +7,7 @@
 
 #include "service/AuthService.h"
 #include "server/Route.h"
+#include "model/JSONSerializer.h"
 #include "UIServerModule.h"
 #include "Debug.h"
 
@@ -83,7 +84,10 @@ static void handleGetUser(UIRouteContext &context)
 
 	UserID id = stoi(it->second);
 	const User::Ptr user = context.userData().userService().get(id);
-	const string &userData = user->toString();
+
+	JSONObjectSerializer serializer;
+	user->toWeb(serializer);
+	const string &userData = serializer.toString();
 
 	context.response().sendBuffer(userData.c_str(), userData.size());
 }
@@ -92,10 +96,15 @@ static void handleCreateUser(UIRouteContext &context)
 {
 	std::string userData;
 	StreamCopier::copyToString(context.request().stream(), userData);
-	User user(userData);
+	JSONObjectSerializer deserializer;
+	User user;
+	user.fromWeb(deserializer);
 
 	User::Ptr created = context.userData().userService().create(user);
-	const string &result = created->toString();
+	JSONObjectSerializer serializer;
+	created->toWeb(serializer);
+	const string &result = serializer.toString();
+
 	context.response().sendBuffer(result.c_str(), result.size());
 }
 
