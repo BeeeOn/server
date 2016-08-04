@@ -2,6 +2,7 @@
 #define BEEEON_DEVICE_H
 
 #include <Poco/SharedPtr.h>
+#include <model/SimpleID.h>
 #include "model/Collection.h"
 
 namespace BeeeOn {
@@ -13,14 +14,24 @@ class Device {
 public:
 	typedef Poco::SharedPtr<Device> Ptr;
 	typedef BeeeOn::Collection<Device> Collection;
-	typedef long ID;
+	typedef SimpleID ID;
 
 	Device()
 	{
 	}
 
+	Device(const ID &id):
+		m_id(id)
+	{
+	}
+
 	Device(const Device &copy):
 		m_name(copy.m_name)
+	{
+	}
+
+	Device(const ID &id, const Device &copy):
+		m_id(id)
 	{
 	}
 
@@ -32,6 +43,11 @@ public:
 	const std::string &name() const
 	{
 		return m_name;
+	}
+
+	const ID &id() const
+	{
+		return m_id;
 	}
 
 	/**
@@ -53,6 +69,7 @@ public:
 	}
 
 private:
+	ID m_id;
 	std::string m_name;
 };
 

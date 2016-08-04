@@ -82,7 +82,7 @@ static void handleGetUser(UIRouteContext &context)
 		return;
 	}
 
-	UserID id = stoi(it->second);
+	UserID id = UserID::parse(it->second);
 	const User::Ptr user = context.userData().userService().get(id);
 
 	JSONObjectSerializer serializer;
@@ -119,7 +119,7 @@ static void handleGetDevice(UIRouteContext &context)
 		return;
 	}
 
-	PlaceID placeId = stoi(it->second);
+	Place place(PlaceID::parse(it->second));
 
 	it = context.params().find("deviceId");
 	if (it == context.params().end()) {
@@ -128,10 +128,10 @@ static void handleGetDevice(UIRouteContext &context)
 		return;
 	}
 
-	DeviceID id = stoi(it->second);
+	DeviceID id = DeviceID::parse(it->second);
 
 	const Device::Ptr device = context
-		.userData().deviceService().get(id, placeId);
+		.userData().deviceService().get(id, place.id());
 	JSONObjectSerializer serializer;
 	device->toWeb(serializer);
 	const string &result = serializer.toString();

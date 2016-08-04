@@ -39,7 +39,7 @@ const string AuthService::login(const Credentials &cred)
 	SessionManager::Info info;
 	info.insert(make_pair(SessionManager::INFO_EMAIL, email));
 	info.insert(make_pair(SessionManager::INFO_USER_ID,
-				to_string(user->id())));
+				user->id().toString()));
 	return m_sessionManager->open(info);
 }
 
