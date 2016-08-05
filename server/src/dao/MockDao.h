@@ -24,56 +24,58 @@ public:
 	typedef std::map<ID, typename T::Ptr> Storage;
 	typedef typename Storage::iterator Iterator;
 
-	MockDao(): m_id(0)
+	MockDao()
 	{
 	}
 
-	virtual typename T::Ptr get(ID id)
+	virtual bool fetch(T &t)
 	{
 		TRACE_METHOD();
 
-		Iterator it = m_storage.find(id);
+		Iterator it = m_storage.find(t.id());
 
 		if (it == m_storage.end())
-			throw Poco::NotFoundException("no such ID ", id);
+			return false;
 
-		return new T(id, *it->second);
+		t = T(t.id(), *it->second);
+		return true;
 	}
 
-	virtual bool has(ID id)
+	virtual bool has(const T &t)
 	{
 		TRACE_METHOD();
 
-		return m_storage.find(id) != m_storage.end();
+		return m_storage.find(t.id()) != m_storage.end();
 	}
 
-	virtual ID create(const T &t)
+	virtual void create(T &t)
 	{
 		TRACE_METHOD();
 
-		const ID id = m_id++;
-		m_storage.insert(std::make_pair(id, new T(id, t)));
-		return id;
+		const ID id = nextID();
+		m_storage[id] = new T(id, t);
+		t = T(id, *m_storage[id]);
 	}
 
-	virtual typename T::Ptr update(ID id, const T &t)
+	virtual bool update(T &t)
 	{
 		TRACE_METHOD();
 
-		Iterator it = m_storage.find(id);
+		Iterator it = m_storage.find(t.id());
 
 		if (it == m_storage.end())
-			throw Poco::NotFoundException("no such ID ", id);
+			return false;
 
-		it->second = new T(id, t);
-		return it->second;
+		it->second = new T(t.id(), t);
+		t = T(t.id(), *m_storage[t.id()]);
+		return true;
 	}
 
-	virtual bool remove(ID id)
+	virtual bool remove(const T &t)
 	{
 		TRACE_METHOD();
 
-		Iterator it = m_storage.find(id);
+		Iterator it = m_storage.find(t.id());
 
 		if (it == m_storage.end())
 			return false;
@@ -87,9 +89,11 @@ public:
 		return m_storage;
 	}
 
+protected:
+	virtual ID nextID() = 0;
+
 private:
 	Storage m_storage;
-	ID m_id;
 };
 
 }

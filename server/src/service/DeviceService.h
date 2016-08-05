@@ -25,10 +25,10 @@ public:
 		m_dao = dao;
 	}
 
-	Device::Ptr get(DeviceID id, PlaceID placeId)
+	bool fetch(Device &device)
 	{
 		TRACE_METHOD();
-		return m_dao->get(id);
+		return m_dao->fetch(device);
 	}
 
 private:

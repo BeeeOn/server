@@ -20,16 +20,16 @@ template <
 class NullDao : public P {
 public:
 	/**
-	 * Get single object T identified by its unique ID.
+	 * Fetch a single object T.
 	 */
-	virtual typename T::Ptr get(ID id)
+	virtual bool fetch(T &t)
 	{
 		TRACE_METHOD();
 		throw Poco::NotImplementedException(__func__);
 	}
 
 	/**
-	 * Test whether an object T with the given ID exists.
+	 * Test whether an object T exists in database.
 	 */
 	virtual bool has(const T &t)
 	{
@@ -38,30 +38,30 @@ public:
 	}
 
 	/**
-	 * Create object T and return a new ID for it.
+	 * Create object T in the database.
 	 */
-	virtual ID create(const T &t)
+	virtual void create(T &t)
 	{
 		TRACE_METHOD();
 		throw Poco::NotImplementedException(__func__);
 	}
 
 	/**
-	 * Update the object T identified by the ID.
-	 * Return the updated object.
+	 * Update the object T in database.
+	 * Return false if the object does not exists in database.
+	 * In case of an error, an exception is thrown.
 	 */
-	virtual typename T::Ptr update(ID id, const T &t)
+	virtual bool update(T &t)
 	{
 		TRACE_METHOD();
 		throw Poco::NotImplementedException(__func__);
 	}
 
 	/**
-	 * Remove object T by ID. Return true if successfully
-	 * removed. Otherwise, no such object exists. In case
-	 * of error, an exception is thrown.
+	 * Remove object T from database. Return false if no such
+	 * object exists. In case of an error, an exception is thrown.
 	 */
-	virtual bool remove(ID id)
+	virtual bool remove(const T &t)
 	{
 		TRACE_METHOD();
 		throw Poco::NotImplementedException(__func__);

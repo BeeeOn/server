@@ -25,10 +25,10 @@ public:
 		m_dao = dao;
 	}
 
-	Location::Ptr get(LocationID id, PlaceID placeId)
+	bool fetch(Location &location)
 	{
 		TRACE_METHOD();
-		return m_dao->get(id);
+		return m_dao->fetch(location);
 	}
 
 private:

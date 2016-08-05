@@ -82,11 +82,15 @@ static void handleGetUser(UIRouteContext &context)
 		return;
 	}
 
-	UserID id = UserID::parse(it->second);
-	const User::Ptr user = context.userData().userService().get(id);
+	User user(UserID::parse(it->second));
+	if (!context.userData().userService().fetch(user)) {
+		context.response().setStatus(UIResponse::HTTP_NOT_FOUND);
+		context.response().setReason("Not found");
+		return;
+	}
 
 	JSONObjectSerializer serializer;
-	user->toWeb(serializer);
+	user.toWeb(serializer);
 	const string &userData = serializer.toString();
 
 	context.response().sendBuffer(userData.c_str(), userData.size());
@@ -100,9 +104,9 @@ static void handleCreateUser(UIRouteContext &context)
 	User user;
 	user.fromWeb(deserializer);
 
-	User::Ptr created = context.userData().userService().create(user);
+	context.userData().userService().create(user);
 	JSONObjectSerializer serializer;
-	created->toWeb(serializer);
+	user.toWeb(serializer);
 	const string &result = serializer.toString();
 
 	context.response().sendBuffer(result.c_str(), result.size());
@@ -128,12 +132,15 @@ static void handleGetDevice(UIRouteContext &context)
 		return;
 	}
 
-	DeviceID id = DeviceID::parse(it->second);
+	Device device(DeviceID::parse(it->second));
+	if (!context.userData().deviceService().fetch(device)) {
+		context.response().setStatus(UIResponse::HTTP_NOT_FOUND);
+		context.response().setReason("Not found");
+		return;
+	}
 
-	const Device::Ptr device = context
-		.userData().deviceService().get(id, place.id());
 	JSONObjectSerializer serializer;
-	device->toWeb(serializer);
+	device.toWeb(serializer);
 	const string &result = serializer.toString();
 
 	context.response().sendBuffer(result.c_str(), result.size());

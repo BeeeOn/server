@@ -26,17 +26,16 @@ public:
 		m_dao = dao;
 	}
 
-	User::Ptr create(User &u)
+	void create(User &u)
 	{
 		TRACE_METHOD();
-		UserID id = m_dao->create(u);
-		return m_dao->get(id);
+		m_dao->create(u);
 	}
 
-	User::Ptr get(UserID id)
+	bool fetch(User &u)
 	{
 		TRACE_METHOD();
-		return m_dao->get(id);
+		return m_dao->fetch(u);
 	}
 
 private:
