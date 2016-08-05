@@ -11,57 +11,12 @@
 namespace BeeeOn {
 
 /**
- * Mock-specific collection of objects. It mimics EntityCollection.
- * It is intended for calls like Dao.all().
- */
-template <
-	typename T,
-	typename C = typename T::Collection
-	>
-class MockCollection : public C {
-public:
-	typedef std::vector<typename T::Ptr> Vector;
-	typedef typename Vector::const_iterator ConstIterator;
-
-	void mockAdd(typename T::Ptr &t)
-	{
-		m_vec.push_back(t);
-	}
-
-	typename T::Ptr mockGet(unsigned int i)
-	{
-		return m_vec[i];
-	}
-
-	std::vector<typename T::Ptr> &mockDirect()
-	{
-		return m_vec;
-	}
-
-protected:
-	void print(std::ostream &o) const
-	{
-		ConstIterator it;
-
-		o << "[" << std::endl;
-		for (it = m_vec.begin(); it != m_vec.end(); ++it) {
-			o << *it << std::endl;
-		}
-		o << "]" << std::endl;
-	}
-
-private:
-	Vector m_vec;
-};
-
-/**
  * Implements a memory-based Dao for a type T,
- * its collection C and identificator ID.
+ * identificator ID.
  */
 template <
 	typename T,
 	typename P,
-	typename C = typename T::Collection,
 	typename ID = typename T::ID
 	>
 class MockDao : public P {
@@ -90,19 +45,6 @@ public:
 		TRACE_METHOD();
 
 		return m_storage.find(id) != m_storage.end();
-	}
-
-	virtual C all(...)
-	{
-		TRACE_METHOD();
-
-		MockCollection<T, C> all;
-		Iterator it;
-
-		for (it = m_storage.begin(); it != m_storage.end(); ++it)
-			all.mockDirect().push_back(it->second);
-
-		return all;
 	}
 
 	virtual ID create(const T &t)
