@@ -31,17 +31,7 @@ public:
 	/**
 	 * Test whether an object T with the given ID exists.
 	 */
-	virtual bool has(ID id)
-	{
-		TRACE_METHOD();
-		throw Poco::NotImplementedException(__func__);
-	}
-
-	/**
-	 * Get a collection of objects T. It is possible to
-	 * filter them by criteria.
-	 */
-	virtual C all(...)
+	virtual bool has(const T &t)
 	{
 		TRACE_METHOD();
 		throw Poco::NotImplementedException(__func__);
