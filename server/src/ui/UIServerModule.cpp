@@ -128,7 +128,7 @@ static void handleGetDevice(UIRouteContext &context)
 		return;
 	}
 
-	UserID id = stoi(it->second);
+	DeviceID id = stoi(it->second);
 
 	const Device::Ptr device = context
 		.userData().deviceService().get(id, placeId);
