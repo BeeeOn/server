@@ -29,8 +29,6 @@
 #include <openssl/bio.h>
 #include <openssl/ssl.h>
 #include <openssl/err.h>
-#include "../lib/pugixml.hpp"
-#include "../lib/pugiconfig.hpp"
 #include "config.h"
 #include "DBHandler.h"
 #include "loger.h"

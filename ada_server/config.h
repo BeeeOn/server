@@ -7,12 +7,16 @@
  * @version 1.0
  */
 
-#include "../lib/pugixml.hpp"
-#include "../lib/pugiconfig.hpp"
 #include <iostream>
 
 #ifndef CONFIG_H_
 #define CONFIG_H_
+
+namespace Poco {
+	namespace Util {
+		class AbstractConfiguration;
+	}
+}
 
 /** @Class Config
  *  @brief Class parsing XML config file and storing data
@@ -45,39 +49,11 @@ class Config
 		int _mode;
 		bool _RtoSTD;
 		bool _StoSTD;
-		/**Method parse configuration file
-		 * @param File pugi::xml_node common element of file
-		 * @return bool type representing success/failure of parsing*/
-		bool GetCommonProperties(pugi::xml_node Common);
-		/**Method to parse configuration file
-		 * @param File pugi::xml_node certificates element of file
-		 * @return bool type representing success/failure of parsing*/
-		bool GetCertificatesProperties(pugi::xml_node Certificates);
-		/**Method parse configuration file
-		 * @param File pugi::xml_node log element of file
-		 * @param verbosity pointer to integer where is saved verbosity setting
-		 * @param maxFiles pointer to integer where is saved max Files setting
-		 * @param fileNaming pointer to std::string where is saved file naming setting
-		 * @param path pointer to integer where is saved path setting
-		 * @return bool type representing success/failure of parsing*/
-		bool GetLogProperties(pugi::xml_node log,int *verbosity,int *maxFiles,int*maxLines,std::string *fileNaming,std::string *path, bool *toSTD);
-		/**Method to load and parse configuration file
-		 * @param File pugi::xml_node DB element of file
-		 * @return bool type representing success/failure of parsing*/
-		bool GetDatabaseProperties (pugi::xml_node DB);
-		/**Method parse configuration file
-		 * @param File pugi::xml_node receiver element of file
-		 * @return bool type representing success/failure of parsing*/
-		bool GetReceiverProperties (pugi::xml_node receiver);
-		/**Method to parse configuration file
-		 * @param File pugi::xml_node sender element of file
-		 * @return bool type representing success/failure of parsing*/
-		bool GetSenderProperties (pugi::xml_node sender);
 	public:
 		/**Method to load and parse configuration file
 		 * @param File std::string with name of configuration file
 		 * @return bool type representing success/failure of parsing*/
-		bool setConfig(std::string File);
+		void setConfig(std::string File);
 		/**Getter for database name from config file
 		 * @return std::string representation of database name*/
 		std::string DBName() const {return (this->_DBName);};
@@ -150,7 +126,8 @@ class Config
 		/**Getter for server log to std::out
 		* @return bool representing decision*/
 		bool SenderToSTD () const {return (_StoSTD);};
-
+	private:
+		void parseConfig(Poco::Util::AbstractConfiguration *cfg);
 };
 
 

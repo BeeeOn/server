@@ -20,8 +20,6 @@
 #include <atomic>
 #include <exception> //kniznica pre bok try/catch
 #include <semaphore.h>
-#include "../lib/pugixml.hpp"
-#include "../lib/pugixml.hpp"
 #include "loger.h"
 #include "config.h"
 #include "connectionHandler.h"

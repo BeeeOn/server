@@ -10,7 +10,6 @@
 #include "adaServerReceiver.h" 
 
 using namespace soci;
-using namespace pugi;
 
 AdaServerReceiver::AdaServerReceiver(sem_t *Sem, WorkerPool *workers, Loger *L,Config *c)
 {
@@ -30,8 +29,9 @@ AdaServerReceiver::~AdaServerReceiver()
 
 void AdaServerReceiver::Start()
 {
+	_log->WriteMessage(INFO, "[Main Process] Starting Receiver");
 	if (this->_CH->Listen()==0)
-		this->_CH->ReciveConnection();
+		this->_CH->ReceiveConnection();
 	return;
 }
 

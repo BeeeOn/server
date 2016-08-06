@@ -53,7 +53,7 @@ class ConnectionHandler
 		int Listen();
 		/** Method to receive connections from adapters
 		    */
-		int ReciveConnection();
+		int ReceiveConnection();
 		/** Destructor
 		    */
 		~ConnectionHandler();

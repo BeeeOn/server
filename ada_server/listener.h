@@ -54,13 +54,16 @@ class Listener
 		/**Method to receive connections from clients
 		 * @return int representing success/failure
 		 */
-		int ReciveConnection();
+		int ReceiveConnection();
 		/**Destructor
 		 */
 		~Listener();
 		/**Method to destroy socket and stop receiving connection
 		 */
 		void UnAccept();
+	private:
+		int handleAcceptFailed(int &failcounter);
+		void acceptClient(int sock);
 };
 
 

@@ -8,6 +8,8 @@
  */
 
 #include "messageCreator.h"
+#include "../lib/pugixml.hpp"
+#include "../lib/pugiconfig.hpp"
 
 using namespace pugi;
 

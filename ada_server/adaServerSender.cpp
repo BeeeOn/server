@@ -10,7 +10,6 @@
 #include "adaServerSender.h"
 
 using namespace soci;
-using namespace pugi;
 
 AdaServerSender::AdaServerSender(sem_t *Sem, WorkerPool *workers, Loger *L,Config *c)
 {
@@ -31,8 +30,9 @@ AdaServerSender::~AdaServerSender()
 
 void AdaServerSender::Start()
 {
+	_log->WriteMessage(INFO, "[Main Process] Starting Sender");
 	if (this->_L->Listen()==0)
-	this->_L->ReciveConnection();
+	this->_L->ReceiveConnection();
 	return;
 }
 

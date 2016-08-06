@@ -11,8 +11,6 @@
 
 #include "listener.h"
 
-using namespace pugi;
-
 int Listener::Listen ()  
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::Listen");
@@ -52,12 +50,52 @@ int Listener::Listen ()
 	return (0);
 }
 
+int Listener::handleAcceptFailed(int &failcounter)
+{
+	this->_log->WriteMessage(FATAL,"Error when accepting code : " + std::to_string(errno) + " : " + std::strerror(errno) );
+	if (!this->_toBeTerminated)
+	{
+		failcounter++;
+		if (failcounter<=5)
+		{
+			usleep (5000);
+			this->_log->WriteMessage(FATAL,"Trying to retrieve from accept error try number :" + std::to_string(failcounter) + " of 5");
+			return 0;
+		}
+		else
+		{
+			this->_log->WriteMessage(FATAL,"Unable to accept max count of consecutive failed retrievigs reached");
+			this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::ReceiveConnection");
+			this->_terminated = true;
+			return (1);
+		}
+	}
+	else
+	{
+		this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::ReceiveConnection");
+		this->_terminated = true;
+		return (1);
+	}
+}
+
+void Listener::acceptClient(int sock)
+{
+	sem_wait((this->_semapohore)); //decrease count of workers or wait for free worker if there is none
+
+	Worker *w  = NULL;
+	while (w==NULL)  //just for sure try to get worker until it is not NULL
+	{
+		w = this->_workers->GetWorker(this->_log); //pick worker
+	}
+
+	w->Unlock(sock);
+}
 
 /** Metoda pre prijatie pripojenia na sockete servra
     */
-int Listener::ReciveConnection()
+int Listener::ReceiveConnection()
 {
-	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::ReciveConnection");
+	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::ReceiveConnection");
 	struct sockaddr_in sin;
 	int com_s;  //set communincation socket
 	socklen_t s_size;
@@ -67,40 +105,13 @@ int Listener::ReciveConnection()
 	{
 		if ((com_s=accept(s,(struct sockaddr *)&sin ,&s_size )) < 0)  //wait for client to connect
 		{
-			this->_log->WriteMessage(FATAL,"Error when accepting code : " + std::to_string(errno) + " : " + std::strerror(errno) );
-			if (!this->_toBeTerminated)
-			{
-				failcounter++;
-				if (failcounter<=5)
-				{
-					usleep (5000);
-					this->_log->WriteMessage(FATAL,"Trying to retrieve from accept error try number :" + std::to_string(failcounter) + " of 5");
-				}
-				else
-				{
-					this->_log->WriteMessage(FATAL,"Unable to accept max count of consecutive failed retrievigs reached");
-					this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::ReciveConnection");
-					this->_terminated = true;
-					return (1);
-				}
-			}
-			else
-			{
-				this->_log->WriteMessage(TRACE, "Exiting " + this->_Name + "::ReciveConnection");
-				this->_terminated = true;
-				return (1);
-			}
+			if (handleAcceptFailed(failcounter) == 1)
+				return 1;
 		}
-		sem_wait((this->_semapohore)); //decrease count of workers or wait for free worker if there is none
-		Worker *w  = NULL;
-		while (w==NULL)  //just for sure try to get worker until it is not NULL
-		{
-			w = this->_workers->GetWorker(this->_log); //pick worker
-		}
-		w->Unlock(com_s);
 
+		acceptClient(com_s);
 	}
-	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::ReciveConnection");
+	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::ReceiveConnection");
 	return (0); 
 }
 
