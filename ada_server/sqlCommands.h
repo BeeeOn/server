@@ -54,11 +54,29 @@ const string SelectCount = "select count(*) from :tableName where :columnName = 
 /** Q to select timestamp of last value for device uses (:DEVICE_EUID)*/
 const string SelectTimestamp = "select measured_at from device where (device_euid = :DEVICE_EUID);";
 
-/** Q to select all devices for adapter uses (:GATEWAY_ID)*/
-const string SelectAllDevices = "select device_euid from device where (gateway_id = :GATEWAY_ID);";
+/** Q to select all devices for adapter uses (:GATEWAY_ID, :DEVICE_INITIALIZED)*/
+const string SelectAllDevices = "select device_euid, device_type from device where (gateway_id = :GATEWAY_ID) and (init = :DEVICE_INITIALIZED);";
 
-/** Q to select all devices for adapter uses (:GATEWAY_ID)*/
-const string SelectAllDevicesCount = "select count(*) from device where (gateway_id = :GATEWAY_ID);";
+/** Q to select all devices for adapter uses (:GATEWAY_ID, :DEVICE_INITIALIZED)*/
+const string SelectAllDevicesCount = "select count(*) from device where (gateway_id = :GATEWAY_ID) and (init = :DEVICE_INITIALIZED);";
+
+/** Q to select last value of the module from sensor uses (:GATEAY_ID, :DEVICE_EUID, :MODULE_ID)*/
+const string SelectLastModuleValue = "select measured_value from module where (gateway_id = :GATEWAY_ID) and (device_euid = :DEVICE_EUID) and (module_id = :MODULE_ID);";
+
+/** Q to select last value of the module from sensor uses (:GATEAY_ID, :DEVICE_EUID, :MODULE_ID)*/
+const string SelectLastModuleValueCount = "select count(*) from module where (gateway_id = :GATEWAY_ID) and (device_euid = :DEVICE_EUID) and (module_id = :MODULE_ID);";
+
+/** Q to select user's label for device uses (:GATEWAY_ID, :DEVICE_EUID)*/
+const string SelectUserLabelForDeviceID = "select device_name from device where (gateway_id = :GATEWAY_ID) and (device_euid = :DEVICE_EUID);";
+
+/** Q to select user's label for device uses (:GATEWAY_ID, :DEVICE_EUID)*/
+const string SelectUserLabelForDeviceIDCount = "select count(*) from device where (gateway_id = :GATEWAY_ID) and (device_euid = :DEVICE_EUID);";
+
+/** Q to select user's room for device uses (:GATEWAT_ID, :DEVICE_EUID)*/
+const string SelectUserRoomForDevice = "select location.location_name from device natural join location join gateway on location.gateway_id = gateway.gateway_id where device.gateway_id = :GATEWAY_ID and device.device_euid = :DEVICE_EUID;";
+
+/** Q to select user's room for device uses (:GATEWAY_ID, :DEVICE_EUID)*/
+const string SelectUserRoomForDeviceCount = "select count(*) from device natural join location join gateway on location.gateway_id = gateway.gateway_id where device.gateway_id = :GATEWAY_ID and device.device_euid = :DEVICE_EUID;";
 }
 
 #endif /* SQLCOMMANDS_H_ */

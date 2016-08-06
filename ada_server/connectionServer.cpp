@@ -388,13 +388,18 @@ int ConnectionServer::GetData()
 				switch (((messageV1_1 *) this->parsedMessage)->params->at(i)->id)
 				{
 					case 1001:
+						database->GetUserLabelForDevice((messageV1_1 *) this->parsedMessage);
 						break;
 					case 1002:
+						database->GetUserRoomForDevice((messageV1_1 *) this->parsedMessage);
 						break;
 					case 1000:
 						break;
 					case 1003:
 						database->GetDevices((messageV1_1 *) this->parsedMessage);
+						break;
+					case 1005:
+						database->GetLastModuleValue((messageV1_1 *) this->parsedMessage);
 						break;
 					default:
 						_log->WriteMessage(WARN, "Unsupported parameter id no routine to handle!");

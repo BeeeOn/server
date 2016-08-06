@@ -189,7 +189,7 @@ std::string MessageCreator::CreatePingMessage(tadapter *adapter)
 		server_adapter.append_attribute("protocol_version") = std::to_string(adapter->protocol_version).c_str();
 		server_adapter.append_attribute("state") = "getparameters";
 		xml_node parameter = server_adapter.append_child("parameter");
-		parameter.append_attribute("id") = "2000";
+		parameter.append_attribute("param_id") = "2000";
 		tstringXMLwriter writer;
 		resp->print(writer);
 		delete(resp);

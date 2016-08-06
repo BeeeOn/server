@@ -501,7 +501,7 @@ void ProtocolV1_1_MessageParser::GetState()
     {
         _message->state = DATA;
     }
-    else if (temp_state.compare("getparameter")==0)
+    else if (temp_state.compare("getparameters")==0)
     {
         _message->state = GET_PARAMS;
     }
@@ -550,7 +550,7 @@ bool ProtocolV1_1_MessageParser::GetParams()
 	while (parameter!=NULL)
 	{
 		tparams *param = new tparams();
-		param->id = parameter.attribute("id").as_int();
+		param->id = parameter.attribute("param_id").as_int();
 		switch (param->id)
 		{
 			case 1001:
@@ -560,9 +560,15 @@ bool ProtocolV1_1_MessageParser::GetParams()
 			case 1000:
 			case 1003:
 				break;
+			case 1005:
+				param->euid = parameter.attribute("euid").as_ullong();
+				param->module_id = parameter.attribute("module_id").as_ullong();
+				break;
 			default:
-				delete param;
 				this->_log->WriteMessage(WARN,"Unknown parameter id in gatparams message id " + std::to_string(param->id));
+				parameter = parameter.next_sibling();
+				delete param;
+				continue;
 		}
 		parameter = parameter.next_sibling();
 		((tmessageV1_1*)_message)->params->push_back(param);
@@ -591,23 +597,68 @@ std::string ProtocolV1_1_MessageParser::CreateAnswer()
 		for (size_t i = 0; i < parameters->size();i++)
 		{
 			xml_node parameterNode = server_adapter.append_child("parameter");
-			parameterNode.append_attribute("id") = std::to_string(parameters->at(i)->id).c_str();
+			parameterNode.append_attribute("param_id") = std::to_string(parameters->at(i)->id).c_str();
 			switch (parameters->at(i)->id)
 			{
 				case 1001:
+					parameterNode.append_attribute("name") = "label";
+					parameterNode.append_attribute("euid") = int_to_hex(parameters->at(i)->euid).c_str();
+					parameterNode.append_child("value").text().set((parameters->at(i)->value).c_str());
 					break;
 				case 1002:
+					parameterNode.append_attribute("name") = "room";
+					try
+					{
+					       parameterNode.append_attribute("euid") = int_to_hex(parameters->at(i)->euid).c_str();
+					}
+					catch (std::exception const &e)
+					{
+						this->_log->WriteMessage(ERR,"Value not parsable!");
+					}
+
+					parameterNode.append_child("value").text().set((parameters->at(i)->value).c_str());
 					break;
 				case 1000:
+					parameterNode.append_attribute("name") = "dummy";
 					break;
 				case 1003:
-					if (parameters->at(i)->deviceList != nullptr)
+					parameterNode.append_attribute("name") = "allsensors";
+					if (parameters->at(i)->count_items < 1)
+						parameterNode.append_child("value");
+					else
 					{
-						for (size_t j = 0; j < parameters->at(i)->deviceList->size(); j++)
-							parameterNode.append_child("value").text().set(
-									int_to_hex(parameters->at(i)->deviceList->at(j)).c_str());
+						assert(parameters->at(i)->deviceList->size() == parameters->at(i)->deviceIDList->size());
+						for (size_t j = 0; j < parameters->at(i)->deviceList->size(); j++) {
+							xml_node value = parameterNode.append_child("value");
+							value.text().set(int_to_hex(parameters->at(i)->deviceList->at(j)).c_str());
+							value.append_attribute("device_id") = int_to_hex(parameters->at(i)->deviceIDList->at(j)).c_str();
+						}
 					}
 					break;
+				case 1004:
+					parameterNode.append_attribute("name") = "vptpasswd";
+					break;
+				case 1005:
+					parameterNode.append_attribute("name") = "getvalue";
+					parameterNode.append_attribute("euid") = int_to_hex(parameters->at(i)->euid).c_str();
+
+					if (parameters->at(i)->count_items < 1) {
+						xml_node value = parameterNode.append_child("value");
+						break;
+					}
+
+					try
+					{
+						xml_node value = parameterNode.append_child("value");
+						value.text().set(std::to_string(parameters->at(i)->measured_value).c_str());
+						value.append_attribute("module_id") = int_to_hex(parameters->at(i)->module_id).c_str();
+					}
+					catch (std::exception const &e)
+					{
+						this->_log->WriteMessage(ERR,"Device id not parsable!");
+					}
+                                        break;
+
 				default:
 					parameterNode.append_child("value").text().set("Not supported");
 					break;

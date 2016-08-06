@@ -31,6 +31,7 @@ class DBHandler
 {
 	private:
 		const std::string _Name="DBHandler"; /**< name of class*/
+		const int DEVICE_INITIALIZED = 1; /**< device is paired in the database*/
 		soci::session *_sql;  /**< conncetion to dabase*/
 		std::string _DBName;  /**< name of database*/
 		Loger *_log; /**<reference to loger used for logging */
@@ -85,6 +86,9 @@ class DBHandler
 		* @return time_t value of the timestamp from database*/
 		time_t GetLastTimestamp(long long unsigned int dev_euid);
         bool GetDevices(tmessageV1_1 *message);
+        bool GetLastModuleValue(tmessageV1_1 *message);
+        bool GetUserLabelForDevice(tmessageV1_1 *message);
+        bool GetUserRoomForDevice(tmessageV1_1 *message);
 };
 
 

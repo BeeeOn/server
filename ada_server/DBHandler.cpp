@@ -411,14 +411,26 @@ bool DBHandler::GetDevices(tmessageV1_1 *message)
 	size_t count = 0;
 	try
 	{
+		this->_log->WriteMessage (INFO, "select count(*)  from device where gateway_id = "
+                        + std::to_string(message->adapterINTid) + " and init = 1;");
+
 		*_sql << SQLQueries::SelectAllDevicesCount,
 				use(message->adapterINTid, "GATEWAY_ID"),
+				use(DEVICE_INITIALIZED, "DEVICE_INITIALIZED"),
 				into(count);
 		message->params->at(message->processedParams)->deviceList = new std::vector<unsigned long long>(count);
+		message->params->at(message->processedParams)->deviceIDList = new std::vector<unsigned long long>(count);
+
+		if (count > 0)
+		{
 		*_sql << SQLQueries::SelectAllDevices,
 				use(message->adapterINTid, "GATEWAY_ID"),
-				into(*(message->params->at(message->processedParams)->deviceList));
+				use(DEVICE_INITIALIZED, "DEVICE_INITIALIZED"),
+				into(*(message->params->at(message->processedParams)->deviceList)),
+				into(*(message->params->at(message->processedParams)->deviceIDList));
+		}
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetDevices");
+		message->params->at(message->processedParams)->count_items = count;
 		return (true);
 	}
 	catch(std::exception const &e)
@@ -430,4 +442,101 @@ bool DBHandler::GetDevices(tmessageV1_1 *message)
 		this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetDevices");
 		return (false);
 	}
+}
+
+bool DBHandler::GetLastModuleValue(tmessageV1_1 *message)
+{
+        this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetLastModuleValue");
+        try
+        {
+		this->_log->WriteMessage (INFO, "select measured_value from module where gateway_id = "
+			+ std::to_string(message->adapterINTid)
+			+ " and device_euid = " + std::to_string(message->params->at(message->processedParams)->euid)
+			+ " and module_id = " + std::to_string(message->params->at(message->processedParams)->module_id));
+
+		*_sql << SQLQueries::SelectLastModuleValueCount,
+				use(message->adapterINTid, "GATEWAY_ID"),
+				use(message->params->at(message->processedParams)->module_id, "MODULE_ID"),
+				use(message->params->at(message->processedParams)->euid, "DEVICE_EUID"),
+				into(message->params->at(message->processedParams)->count_items);
+
+                *_sql << SQLQueries::SelectLastModuleValue,
+                                use(message->adapterINTid, "GATEWAY_ID"),
+                                use(message->params->at(message->processedParams)->module_id, "MODULE_ID"),
+                                use(message->params->at(message->processedParams)->euid, "DEVICE_EUID"),
+                                into((message->params->at(message->processedParams)->measured_value)),
+                this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetLastModuleValue");
+                return (true);
+        }
+        catch(std::exception const &e)
+        {
+                this->_log->WriteMessage(ERR, "Error in query : " + _sql->get_last_query() );
+                std::string ErrorMessage = "Database Error : ";
+                ErrorMessage.append (e.what());
+                this->_log->WriteMessage(ERR,ErrorMessage );
+                this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetLastModuleValue");
+                return (false);
+        }
+}
+
+bool DBHandler::GetUserLabelForDevice(tmessageV1_1 *message)
+{
+        this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetUserLaberForDevice");
+        try
+        {
+		this->_log->WriteMessage(INFO, "select device_name from device where gateway_id = " + std::to_string(message->adapterINTid)
+                        + " and device_euid = " + std::to_string(message->params->at(message->processedParams)->euid));
+
+		*_sql << SQLQueries::SelectUserLabelForDeviceIDCount,
+                                use(message->adapterINTid, "GATEWAY_ID"),
+                                use(message->params->at(message->processedParams)->euid, "DEVICE_EUID"),
+                                into(message->params->at(message->processedParams)->count_items);
+
+                *_sql << SQLQueries::SelectUserLabelForDeviceID,
+                                use(message->adapterINTid, "GATEWAY_ID"),
+                                use(message->params->at(message->processedParams)->euid, "DEVICE_EUID"),
+                                into((message->params->at(message->processedParams)->value));
+                this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetUserLaberForDevice");
+                return (true);
+        }
+        catch(std::exception const &e)
+        {
+                this->_log->WriteMessage(ERR, "Error in query : " + _sql->get_last_query() );
+                std::string ErrorMessage = "Database Error : ";
+                ErrorMessage.append (e.what());
+                this->_log->WriteMessage(ERR,ErrorMessage );
+                this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetUserLaberForDevice");
+                return (false);
+        }
+}
+
+bool DBHandler::GetUserRoomForDevice(tmessageV1_1 *message)
+{
+        this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::GetUserRoomForDevice");
+        try
+        {
+		this->_log->WriteMessage(INFO, "select device_ from device where gateway_id = " + std::to_string(message->adapterINTid)
+                        + " and device_euid = " + std::to_string(message->params->at(message->processedParams)->euid));
+
+                *_sql << SQLQueries::SelectUserRoomForDeviceCount,
+                                use(message->adapterINTid, "GATEWAY_ID"),
+                                use(message->params->at(message->processedParams)->euid, "DEVICE_EUID"),
+                                into(message->params->at(message->processedParams)->count_items);
+
+                *_sql << SQLQueries::SelectUserRoomForDevice,
+                                use(message->adapterINTid, "GATEWAY_ID"),
+                                use(message->params->at(message->processedParams)->euid, "DEVICE_EUID"),
+                                into((message->params->at(message->processedParams)->value));
+                this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetUserRoomForDevice");
+                return (true);
+        }
+        catch(std::exception const &e)
+        {
+                this->_log->WriteMessage(ERR, "Error in query : " + _sql->get_last_query() );
+                std::string ErrorMessage = "Database Error : ";
+                ErrorMessage.append (e.what());
+                this->_log->WriteMessage(ERR,ErrorMessage );
+                this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetUserRoomForDevice");
+                return (false);
+        }
 }
