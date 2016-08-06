@@ -26,7 +26,6 @@ OBJS += listener.o
 OBJS += requestServer.o
 OBJS += adaServerReceiver.o
 OBJS += adaServerSender.o
-OBJS += adaServer.o
 
 LDLIBS += -lpthread
 LDLIBS += -lssl
