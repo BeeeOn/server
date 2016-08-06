@@ -2,7 +2,7 @@
 #define BEEEON_PLACE_H
 
 #include <Poco/SharedPtr.h>
-#include "model/SimpleID.h"
+#include "model/GlobalID.h"
 #include "model/Collection.h"
 
 namespace BeeeOn {
@@ -14,13 +14,13 @@ class Place {
 public:
 	typedef Poco::SharedPtr<Place> Ptr;
 	typedef BeeeOn::Collection<Place> Collection;
-	typedef SimpleID ID;
+	typedef GlobalID ID;
 
 	Place()
 	{
 	}
 
-	Place(ID id):
+	Place(const ID &id):
 		m_id(id)
 	{
 	}
@@ -31,13 +31,13 @@ public:
 	{
 	}
 
-	Place(ID id, const Place &copy):
+	Place(const ID &id, const Place &copy):
 		m_id(id),
 		m_name(copy.m_name)
 	{
 	}
 
-	ID id() const
+	const ID &id() const
 	{
 		return m_id;
 	}
@@ -71,7 +71,7 @@ public:
 	}
 
 private:
-	ID m_id = 0;
+	ID m_id;
 	std::string m_name;
 };
 
