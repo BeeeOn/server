@@ -132,7 +132,11 @@ static void handleGetDevice(UIRouteContext &context)
 
 	const Device::Ptr device = context
 		.userData().deviceService().get(id, placeId);
-	context.response().send() << device;
+	JSONObjectSerializer serializer;
+	device->toWeb(serializer);
+	const string &result = serializer.toString();
+
+	context.response().sendBuffer(result.c_str(), result.size());
 }
 
 namespace BeeeOn {
