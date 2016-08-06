@@ -17,6 +17,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/provider/AuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/RandomProvider.cpp
 	${PROJECT_SOURCE_DIR}/server/SessionManager.cpp
+	${PROJECT_SOURCE_DIR}/dao/PlaceDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/UserDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/DeviceDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/GatewayDao.cpp
