@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   Logger.h
  * Author: Martin Novak, xnovak1c@stud.fit.vutbr.cz
  *

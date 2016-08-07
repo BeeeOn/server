@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   BaseTaskManager.cpp
  * Author: Martin Novak, xnovak1c@stud.fit.vutbr.cz
  *
@@ -19,5 +19,5 @@ BaseTaskManager::~BaseTaskManager()
 
 std::string BaseTaskManager::getData(GetDataMessage get_data_message)
 {
-    throw std::runtime_error("Get data functionality is not implemeted in this task.");
+	throw std::runtime_error("Get data functionality is not implemeted in this task.");
 }

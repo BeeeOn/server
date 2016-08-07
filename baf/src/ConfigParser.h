@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   ConfigParser.h
  * Author: Martin Novak, xnovak1c@stud.fit.vutbr.cz
  *
@@ -15,19 +15,19 @@
 
 class ConfigParser {
 public:
-    /**
-     * Constructor of class ConfigParser.
-     */
-    ConfigParser();
-    /**
-     * Destructor of class ConfigParser.
-     */
-    virtual ~ConfigParser();
-    /**
-     * Parses config file and stores data in static Config object.
-     * @param config_file_path Path to config file.
-     */
-    void parseConfigFile(char *config_file_path);
+	/**
+	 * Constructor of class ConfigParser.
+	 */
+	ConfigParser();
+	/**
+	 * Destructor of class ConfigParser.
+	 */
+	virtual ~ConfigParser();
+	/**
+	 * Parses config file and stores data in static Config object.
+	 * @param config_file_path Path to config file.
+	 */
+	void parseConfigFile(char *config_file_path);
 };
 
 #endif /* CONFIGPARSER_H */
