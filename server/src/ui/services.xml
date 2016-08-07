@@ -1,0 +1,65 @@
+<system>
+	<services>
+		<instance name="main" class="BeeeOn::UIServerModule">
+			<set name="sessionManager" ref="sessionManager" />
+			<set name="userService" ref="userService" />
+			<set name="authService" ref="authService" />
+			<set name="deviceService" ref="deviceService" />
+			<set name="gatewayService" ref="gatewayService" />
+			<set name="locationService" ref="locationService" />
+		</instance>
+
+		<!-- Bussiness layer -->
+
+		<instance name="userService" class="BeeeOn::UserService">
+			<set name="userDao" ref="userDao" />
+		</instance>
+
+		<instance name="authService" class="BeeeOn::AuthService">
+			<set name="userDao" ref="userDao" />
+			<set name="sessionManager" ref="sessionManager" />
+			<add name="providers" ref="permitAuthProvider" />
+		</instance>
+
+		<instance name="deviceService" class="BeeeOn::DeviceService">
+			<set name="deviceDao" ref="deviceDao" />
+		</instance>
+
+		<instance name="gatewayService" class="BeeeOn::GatewayService">
+			<set name="gatewayDao" ref="gatewayDao" />
+		</instance>
+
+		<instance name="locationService"
+				class="BeeeOn::LocationService">
+			<set name="locationDao" ref="locationDao" />
+		</instance>
+
+		<!-- Data access layer -->
+
+		<instance name="sessionManager" class="BeeeOn::SessionManager">
+			<set name="secureRandomProvider"
+				ref="pocoRandomProvider" />
+		</instance>
+
+		<instance name="permitAuthProvider"
+				class="BeeeOn::PermitAuthProvider" />
+
+		<instance name="pocoRandomProvider"
+				class="BeeeOn::PocoRandomProvider" />
+
+		<instance name="mockRandomProvider"
+				class="BeeeOn::MockRandomProvider">
+			<set name="nextRandom" text="0123456789abcdef" />
+		</instance>
+
+		<instance name="insecureRandomProvider"
+				class="BeeeOn::InsecureRandomProvider">
+			<set name="providerImpl" ref="mockRandomProvider" />
+		</instance>
+
+		<instance name="userDao" class="BeeeOn::MockUserDao" />
+		<instance name="deviceDao" class="BeeeOn::MockDeviceDao" />
+		<instance name="gatewayDao" class="BeeeOn::MockGatewayDao" />
+		<instance name="locationDao" class="BeeeOn::MockLocationDao" />
+	</services>
+</system>
