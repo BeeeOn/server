@@ -11,6 +11,7 @@ LDFLAGS += -Wl,-rpath,/usr/local/lib
 
 OBJS += util.o
 OBJS += pugi.o
+OBJS += ping.o
 OBJS += loger.o
 OBJS += config.o
 OBJS += SSLContainer.o

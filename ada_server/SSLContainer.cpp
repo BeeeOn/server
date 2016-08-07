@@ -7,6 +7,7 @@
  * @version 1.0
  */
 #include "SSLContainer.h"
+#include "ping.h"
 
 
 SSLContainer::SSLContainer(Loger *l)
@@ -51,6 +52,9 @@ void SSLContainer::InsertSSL(unsigned long long adapterID,SSL *ssl,float cp)
 		adapter = new tadapter(ssl,cp);
 		container->insert(std::pair<unsigned long long int,tadapter*>(adapterID,adapter));
 	}
+	PingService *ping;
+	ping = PingService::getInstance();
+	ping->setStatus(adapterID, "available");
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::InsertSSL");
 }
 
@@ -63,6 +67,9 @@ tadapter* SSLContainer::GetSSL(unsigned long long adapter)
 	}
 	catch (const std::exception &e)
 	{
+		PingService *single;
+		single = PingService::getInstance();
+		single->setStatus(adapter, "unavailable");
 		this->_log->WriteMessage(WARN,"Adapter not found");
 	}
 	this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::GetSSL");

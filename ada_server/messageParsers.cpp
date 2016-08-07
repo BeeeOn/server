@@ -8,6 +8,7 @@
  */
 
 #include "messageParsers.h"
+#include "ping.h"
 
 using namespace pugi;
 
@@ -505,6 +506,10 @@ void ProtocolV1_1_MessageParser::GetState()
     {
         _message->state = GET_PARAMS;
     }
+    else if (temp_state.compare("parameters") == 0)
+    {
+        _message->state = PARAMETERS;
+    }
     else
     {
         _message->state = UNKNOWN;
@@ -517,6 +522,7 @@ bool ProtocolV1_1_MessageParser::ParseMessage(pugi::xml_node *adapter, float FM,
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::parseMessage");
 	this->_adapter = adapter;
 	this->GetState();
+
 	switch (this->_message->state)
 	{
 		case DATA:
@@ -529,6 +535,14 @@ bool ProtocolV1_1_MessageParser::ParseMessage(pugi::xml_node *adapter, float FM,
 			this->_message->cp_version = CP;
 			this->_log->WriteMessage(TRACE,"Exiting " + this->_Name + "::parseMessage");
 			return this->GetParams();
+		case PARAMETERS:
+			time_t rawtime;
+			gmtime(&rawtime);
+			PingService *ping;
+			ping = PingService::getInstance();
+			ProtocolV1MessageParser::GetID();
+			ping->receiverCheckRecord(this->_message->adapterINTid, rawtime);
+			return true;
 		default:
 			return false;
 	}

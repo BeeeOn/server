@@ -103,6 +103,7 @@ typedef enum reqType
   	SEARCH, /**< search*/
   	GET_PARAMS, /**< get parameters*/
 	PING, /*< empty get parameters to adapter>*/
+	PARAMETERS,
 	UNKNOWN /**< unknown*/
 }treqType;
 
