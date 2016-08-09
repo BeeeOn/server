@@ -2,37 +2,70 @@
 #define BEEEON_USER_H
 
 #include <Poco/SharedPtr.h>
-#include "model/Entity.h"
+#include "model/Collection.h"
 
 namespace BeeeOn {
 
 /**
  * Representation of the User application entity.
  */
-class User : public Entity {
+class User {
 public:
 	typedef Poco::SharedPtr<User> Ptr;
+	typedef BeeeOn::Collection<User> Collection;
 	typedef long ID;
 
-	User(const std::string &data):
-		Entity(data)
+	User()
 	{
 	}
 
-	User(const User &user):
-		Entity(user)
+	User(ID id):
+		m_id(id)
 	{
+	}
+
+	User(const User &copy):
+		m_id(copy.m_id),
+		m_email(copy.m_email)
+	{
+	}
+
+	void setEmail(const std::string &email)
+	{
+		m_email = email;
 	}
 
 	const std::string email() const
 	{
-		return get("email");
+		return m_email;
 	}
 
-	const User::ID id() const
+	User::ID id() const
 	{
-		return get<User::ID>("id");
+		return m_id;
 	}
+
+	/**
+	 * Frontend API only.
+	 */
+	template <typename Serializer>
+	void toWeb(Serializer &s) const
+	{
+		s.push("email", m_email);
+	}
+
+	/**
+	 * Frontend API only.
+	 */
+	template <typename Serializer>
+	void fromWeb(Serializer &s)
+	{
+		s.get("email", m_email);
+	}
+
+private:
+	ID m_id;
+	std::string m_email;
 };
 
 typedef User::Collection UserCollection;

@@ -53,9 +53,9 @@ void AuthServiceTest::testPermitAuth()
 	manager.setSecureRandomProvider(&randomProvider);
 
 	MockUserDao dao;
-	User::Ptr user(new User(
-			"{\"id\": 0, \"email\": \"permit@example.org\"}"));
-	dao.storage().insert(make_pair(0, user));
+	User::Ptr user(new User(0));
+	user->setEmail("permit@example.org");
+	dao.storage().insert(make_pair(user->id(), user));
 
 	AuthService service;
 	PermitAuthProvider provider;
