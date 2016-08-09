@@ -2,7 +2,7 @@
 #define BEEEON_GATEWAY_H
 
 #include <Poco/SharedPtr.h>
-#include "model/SimpleID.h"
+#include "model/GatewayID.h"
 #include "model/Collection.h"
 
 namespace BeeeOn {
@@ -14,7 +14,7 @@ class Gateway {
 public:
 	typedef Poco::SharedPtr<Gateway> Ptr;
 	typedef BeeeOn::Collection<Gateway> Collection;
-	typedef SimpleID ID;
+	typedef GatewayID ID;
 
 	Gateway()
 	{

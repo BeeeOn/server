@@ -23,7 +23,7 @@ class MockGatewayDao : public AbstractInjectorTarget,
 protected:
 	GatewayID nextID()
 	{
-		return ++m_id;
+		return GatewayID::random();
 	}
 
 private:
