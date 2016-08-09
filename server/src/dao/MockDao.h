@@ -11,57 +11,12 @@
 namespace BeeeOn {
 
 /**
- * Mock-specific collection of objects. It mimics EntityCollection.
- * It is intended for calls like Dao.all().
- */
-template <
-	typename T,
-	typename C = typename T::Collection
-	>
-class MockCollection : public C {
-public:
-	typedef std::vector<typename T::Ptr> Vector;
-	typedef typename Vector::const_iterator ConstIterator;
-
-	void mockAdd(typename T::Ptr &t)
-	{
-		m_vec.push_back(t);
-	}
-
-	typename T::Ptr mockGet(unsigned int i)
-	{
-		return m_vec[i];
-	}
-
-	std::vector<typename T::Ptr> &mockDirect()
-	{
-		return m_vec;
-	}
-
-protected:
-	void print(std::ostream &o) const
-	{
-		ConstIterator it;
-
-		o << "[" << std::endl;
-		for (it = m_vec.begin(); it != m_vec.end(); ++it) {
-			o << *it << std::endl;
-		}
-		o << "]" << std::endl;
-	}
-
-private:
-	Vector m_vec;
-};
-
-/**
  * Implements a memory-based Dao for a type T,
- * its collection C and identificator ID.
+ * identificator ID.
  */
 template <
 	typename T,
 	typename P,
-	typename C = typename T::Collection,
 	typename ID = typename T::ID
 	>
 class MockDao : public P {
@@ -69,69 +24,58 @@ public:
 	typedef std::map<ID, typename T::Ptr> Storage;
 	typedef typename Storage::iterator Iterator;
 
-	MockDao(): m_id(0)
+	MockDao()
 	{
 	}
 
-	virtual typename T::Ptr get(ID id)
+	virtual bool fetch(T &t)
 	{
 		TRACE_METHOD();
 
-		Iterator it = m_storage.find(id);
+		Iterator it = m_storage.find(t.id());
 
 		if (it == m_storage.end())
-			throw Poco::NotFoundException("no such ID ", id);
+			return false;
 
-		return it->second;
+		t = T(t.id(), *it->second);
+		return true;
 	}
 
-	virtual bool has(ID id)
+	virtual bool has(const T &t)
 	{
 		TRACE_METHOD();
 
-		return m_storage.find(id) != m_storage.end();
+		return m_storage.find(t.id()) != m_storage.end();
 	}
 
-	virtual C all(...)
+	virtual void create(T &t)
 	{
 		TRACE_METHOD();
 
-		MockCollection<T, C> all;
-		Iterator it;
-
-		for (it = m_storage.begin(); it != m_storage.end(); ++it)
-			all.mockDirect().push_back(it->second);
-
-		return all;
+		const ID id = nextID();
+		m_storage[id] = new T(id, t);
+		t = T(id, *m_storage[id]);
 	}
 
-	virtual ID create(const T &t)
+	virtual bool update(T &t)
 	{
 		TRACE_METHOD();
 
-		const ID id = m_id++;
-		m_storage.insert(std::make_pair(id, new T(t)));
-		return id;
-	}
-
-	virtual typename T::Ptr update(ID id, const T &t)
-	{
-		TRACE_METHOD();
-
-		Iterator it = m_storage.find(id);
+		Iterator it = m_storage.find(t.id());
 
 		if (it == m_storage.end())
-			throw Poco::NotFoundException("no such ID ", id);
+			return false;
 
-		it->second = new T(t);
-		return it->second;
+		it->second = new T(t.id(), t);
+		t = T(t.id(), *m_storage[t.id()]);
+		return true;
 	}
 
-	virtual bool remove(ID id)
+	virtual bool remove(const T &t)
 	{
 		TRACE_METHOD();
 
-		Iterator it = m_storage.find(id);
+		Iterator it = m_storage.find(t.id());
 
 		if (it == m_storage.end())
 			return false;
@@ -145,9 +89,11 @@ public:
 		return m_storage;
 	}
 
+protected:
+	virtual ID nextID() = 0;
+
 private:
 	Storage m_storage;
-	ID m_id;
 };
 
 }

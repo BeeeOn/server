@@ -2,6 +2,7 @@
 #define BEEEON_GATEWAY_H
 
 #include <Poco/SharedPtr.h>
+#include "model/SimpleID.h"
 #include "model/Collection.h"
 
 namespace BeeeOn {
@@ -13,14 +14,24 @@ class Gateway {
 public:
 	typedef Poco::SharedPtr<Gateway> Ptr;
 	typedef BeeeOn::Collection<Gateway> Collection;
-	typedef long ID;
+	typedef SimpleID ID;
 
 	Gateway()
 	{
 	}
 
+	Gateway(const ID &id):
+		m_id(id)
+	{
+	}
+
 	Gateway(const Gateway &copy):
 		m_name(copy.m_name)
+	{
+	}
+
+	Gateway(const ID &id, const Gateway &copy):
+		m_id(id)
 	{
 	}
 
@@ -32,6 +43,11 @@ public:
 	const std::string &name() const
 	{
 		return m_name;
+	}
+
+	const ID &id() const
+	{
+		return m_id;
 	}
 
 	/**
@@ -53,6 +69,7 @@ public:
 	}
 
 private:
+	ID m_id;
 	std::string m_name;
 };
 

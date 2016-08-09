@@ -22,10 +22,10 @@ public:
 		m_dao = dao;
 	}
 
-	Gateway::Ptr get(GatewayID id, PlaceID placeId)
+	bool fetch(Gateway &gateway)
 	{
 		TRACE_METHOD();
-		return m_dao->get(id);
+		return m_dao->fetch(gateway);
 	}
 
 private:

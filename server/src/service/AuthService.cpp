@@ -30,16 +30,15 @@ const string AuthService::login(const Credentials &cred)
 	if (resultIt == result.end())
 		throw NotAuthenticatedException("invalid result of authorization");
 
-	const string &email = resultIt->second;
-	User::Ptr user = m_userDao->getByEmail(email);
-
-	if (user.isNull())
+	User user;
+	user.setEmail(resultIt->second);
+	if (!m_userDao->fetch(user))
 		throw NotAuthenticatedException("unknown user e-mail");
 
 	SessionManager::Info info;
-	info.insert(make_pair(SessionManager::INFO_EMAIL, email));
+	info.insert(make_pair(SessionManager::INFO_EMAIL, user.email()));
 	info.insert(make_pair(SessionManager::INFO_USER_ID,
-				to_string(user->id())));
+				user.id().toString()));
 	return m_sessionManager->open(info);
 }
 

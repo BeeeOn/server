@@ -11,7 +11,7 @@ namespace BeeeOn {
 
 class LocationDao {
 public:
-	virtual Location::Ptr get(LocationID id) = 0;
+	virtual bool fetch(Location &l) = 0;
 };
 
 class NullLocationDao : public AbstractInjectorTarget,
@@ -19,6 +19,14 @@ class NullLocationDao : public AbstractInjectorTarget,
 };
 class MockLocationDao : public AbstractInjectorTarget,
 	public MockDao<Location, LocationDao> {
+protected:
+	LocationID nextID()
+	{
+		return ++m_id;
+	}
+
+private:
+	LocationID m_id;
 };
 
 }

@@ -11,7 +11,7 @@ namespace BeeeOn {
 
 class DeviceDao {
 public:
-	virtual Device::Ptr get(DeviceID id) = 0;
+	virtual bool fetch(Device &device) = 0;
 };
 
 class NullDeviceDao : public AbstractInjectorTarget,
@@ -20,6 +20,14 @@ class NullDeviceDao : public AbstractInjectorTarget,
 
 class MockDeviceDao : public AbstractInjectorTarget,
 	public MockDao<Device, DeviceDao> {
+protected:
+	DeviceID nextID()
+	{
+		return ++m_id;
+	}
+
+private:
+	DeviceID m_id;
 };
 
 }

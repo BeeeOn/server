@@ -2,6 +2,7 @@
 #define BEEEON_USER_H
 
 #include <Poco/SharedPtr.h>
+#include "model/GlobalID.h"
 #include "model/Collection.h"
 
 namespace BeeeOn {
@@ -13,19 +14,24 @@ class User {
 public:
 	typedef Poco::SharedPtr<User> Ptr;
 	typedef BeeeOn::Collection<User> Collection;
-	typedef long ID;
+	typedef GlobalID ID;
 
 	User()
 	{
 	}
 
-	User(ID id):
+	User(const ID &id):
 		m_id(id)
 	{
 	}
 
 	User(const User &copy):
-		m_id(copy.m_id),
+		m_email(copy.m_email)
+	{
+	}
+
+	User(const ID &id, const User &copy):
+		m_id(id),
 		m_email(copy.m_email)
 	{
 	}
@@ -40,7 +46,7 @@ public:
 		return m_email;
 	}
 
-	User::ID id() const
+	const ID &id() const
 	{
 		return m_id;
 	}

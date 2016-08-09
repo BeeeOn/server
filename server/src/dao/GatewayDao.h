@@ -11,7 +11,7 @@ namespace BeeeOn {
 
 class GatewayDao {
 public:
-	virtual Gateway::Ptr get(GatewayID id) = 0;
+	virtual bool fetch(Gateway &gateway) = 0;
 };
 
 class NullGatewayDao : public AbstractInjectorTarget,
@@ -20,6 +20,14 @@ class NullGatewayDao : public AbstractInjectorTarget,
 
 class MockGatewayDao : public AbstractInjectorTarget,
 	public MockDao<Gateway, GatewayDao> {
+protected:
+	GatewayID nextID()
+	{
+		return ++m_id;
+	}
+
+private:
+	GatewayID m_id;
 };
 
 }
