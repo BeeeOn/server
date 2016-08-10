@@ -72,7 +72,7 @@ protected:
 
 		if (!m_userLogging.empty() && user.exists())
 			loadConfiguration(user.path());
-		if (local.exists())
+		else if (local.exists())
 			loadConfiguration(local.path());
 		else if (system.exists())
 			loadConfiguration(system.path());
