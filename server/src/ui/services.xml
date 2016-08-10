@@ -70,5 +70,13 @@
 		<instance name="deviceDao" class="BeeeOn::MockDeviceDao" />
 		<instance name="gatewayDao" class="BeeeOn::MockGatewayDao" />
 		<instance name="locationDao" class="BeeeOn::MockLocationDao" />
+
+		<instance name="sociManager"
+				class="BeeeOn::SociManager">
+			<set name="backend" text="${database.backend}" />
+			<set name="connector" text="${database.connector}" />
+			<set name="poolSize" number="${database.pool}" />
+			<set name="initScript" text="${database.init}" />
+		</instance>
 	</services>
 </system>

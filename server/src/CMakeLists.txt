@@ -31,6 +31,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/service/GatewayService.cpp
 	${PROJECT_SOURCE_DIR}/service/LocationService.cpp
 	${PROJECT_SOURCE_DIR}/util/DAMM.cpp
+	${PROJECT_SOURCE_DIR}/dao/SociManager.cpp
 )
 
 include_directories(
