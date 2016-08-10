@@ -16,6 +16,9 @@ class DependencyInjectorTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST_SUITE(DependencyInjectorTest);
 	CPPUNIT_TEST(testDemangle);
 	CPPUNIT_TEST(testSimple);
+	CPPUNIT_TEST(testAlias);
+	CPPUNIT_TEST(testAliasLoop);
+	CPPUNIT_TEST(testAliasToAliasFails);
 	CPPUNIT_TEST(testExternalVariables);
 	CPPUNIT_TEST_SUITE_END();
 
@@ -29,6 +32,9 @@ public:
 	void tearDown();
 	void testDemangle();
 	void testSimple();
+	void testAlias();
+	void testAliasLoop();
+	void testAliasToAliasFails();
 	void testExternalVariables();
 
 private:
@@ -78,6 +84,12 @@ BEEEON_OBJECT(FakeObject, BeeeOn::FakeObject);
 void DependencyInjectorTest::setUp()
 {
 	m_config->loadEmpty("empty");
+	m_config->setString("alias[1][@name]", "simpleAlias");
+	m_config->setString("alias[1][@ref]", "simple");
+	m_config->setString("alias[2][@name]", "secondAlias");
+	m_config->setString("alias[2][@ref]", "secondAlias");
+	m_config->setString("alias[3][@name]", "aliasToAlias");
+	m_config->setString("alias[3][@ref]", "simpleAlias");
 	m_config->setString("instance[1][@name]", "simple");
 	m_config->setString("instance[1][@class]", "BeeeOn::FakeObject");
 	m_config->setString("instance[1].set[1][@name]", "self");
@@ -136,6 +148,47 @@ void DependencyInjectorTest::testSimple()
 	CPPUNIT_ASSERT(fake->m_self == fake);
 	CPPUNIT_ASSERT(fake->m_name.compare("fake") == 0);
 	CPPUNIT_ASSERT(fake->m_index == 5);
+}
+
+/**
+ * Test refering to an alias pointing to an instance.
+ * An alias points to an instance so it just uses a different name.
+ */
+void DependencyInjectorTest::testAlias()
+{
+	DependencyInjector injector(m_config);
+
+	FakeObject *fakeAlias = injector.create<FakeObject>("simpleAlias");
+	CPPUNIT_ASSERT(fakeAlias != NULL);
+
+	FakeObject *fake = injector.create<FakeObject>("simple");
+	CPPUNIT_ASSERT(fake != NULL);
+
+	CPPUNIT_ASSERT(fake == fakeAlias);
+}
+
+/**
+ * Test alias points to itself throws an exception.
+ */
+void DependencyInjectorTest::testAliasLoop()
+{
+	DependencyInjector injector(m_config);
+
+	CPPUNIT_ASSERT_THROW(injector.create<FakeObject>("secondAlias"),
+			IllegalStateException);
+}
+
+/**
+ * Alias cannot point to an alias.
+ * The NotFoundException is thrown because the DependencyInjector
+ * does not search the alias namespace recursively.
+ */
+void DependencyInjectorTest::testAliasToAliasFails()
+{
+	DependencyInjector injector(m_config);
+
+	CPPUNIT_ASSERT_THROW(injector.create<FakeObject>("aliasToAlias"),
+			NotFoundException);
 }
 
 /**
