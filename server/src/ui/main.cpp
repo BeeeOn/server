@@ -18,8 +18,8 @@ using namespace BeeeOn;
 
 #define DEFAULT_PORT 8000
 
-#define LOCAL_CONFIG_FILE  "logging.ini"
-#define SYSTEM_CONFIG_FILE "/etc/beeeon/ui-server/logging.ini"
+#define LOCAL_LOGGING_FILE  "logging.ini"
+#define SYSTEM_LOGGING_FILE "/etc/beeeon/ui-server/logging.ini"
 
 #define LOCAL_SERVICES_FILE  "services.xml"
 #define SYSTEM_SERVICES_FILE "/etc/beeeon/ui-server/services.xml"
@@ -67,8 +67,8 @@ protected:
 	void findAndLoadLogging()
 	{
 		File user(m_userLogging);
-		File local(LOCAL_CONFIG_FILE);
-		File system(SYSTEM_CONFIG_FILE);
+		File local(LOCAL_LOGGING_FILE);
+		File system(SYSTEM_LOGGING_FILE);
 
 		if (!m_userLogging.empty() && user.exists())
 			loadConfiguration(user.path());
