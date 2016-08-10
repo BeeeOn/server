@@ -21,9 +21,17 @@ using namespace BeeeOn;
 #define LOCAL_LOGGING_FILE  "logging.ini"
 #define SYSTEM_LOGGING_FILE "/etc/beeeon/ui-server/logging.ini"
 
+#define LOCAL_CONFIG_FILE  "server.ini"
+#define SYSTEM_CONFIG_FILE "/etc/beeeon/ui-server/server.ini"
+
 #define LOCAL_SERVICES_FILE  "services.xml"
 #define SYSTEM_SERVICES_FILE "/etc/beeeon/ui-server/services.xml"
 
+static Option optConfig("config", "c",
+		"general configuration file to be used (xml, ini, properties)",
+		false,
+		"<file>",
+		true);
 static Option optServices("services", "s",
 		"services configuration file to be used (xml, ini, properties)",
 		false,
@@ -56,12 +64,28 @@ protected:
 			m_userServices = value;
 		if (name == "logging")
 			m_userLogging = value;
+		if (name == "config")
+			m_userConfig = value;
 		if (name == "help")
 			m_printHelp = true;
 		if (name == "port")
 			m_serverPort = stoi(value);
 
 		Application::handleOption(name, value);
+	}
+
+	void findAndLoadConfig()
+	{
+		File user(m_userConfig);
+		File local(LOCAL_CONFIG_FILE);
+		File system(SYSTEM_CONFIG_FILE);
+
+		if (!m_userConfig.empty() && user.exists())
+			loadConfiguration(user.path());
+		else if (local.exists())
+			loadConfiguration(local.path());
+		else if (system.exists())
+			loadConfiguration(system.path());
 	}
 
 	void findAndLoadLogging()
@@ -107,6 +131,7 @@ protected:
 	void initialize(Application &app)
 	{
 		Logger::root().setLevel(Logger::parseLevel("trace"));
+		findAndLoadConfig();
 		findAndLoadLogging();
 		Application::initialize(app);
 		findAndLoadServices();
@@ -114,6 +139,7 @@ protected:
 
 	void defineOptions(OptionSet &options)
 	{
+		options.addOption(optConfig);
 		options.addOption(optServices);
 		options.addOption(optLogging);
 		options.addOption(optPort);
@@ -157,6 +183,7 @@ private:
 	bool m_printHelp;
 	unsigned int m_serverPort;
 	string m_userLogging;
+	string m_userConfig;
 	string m_userServices;
 };
 
