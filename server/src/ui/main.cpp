@@ -82,6 +82,20 @@ protected:
 		return path.parent().toString();
 	}
 
+	bool readConfiguration(const File &file)
+	{
+		if (!file.exists()) {
+			logger().debug("configuration file "
+					+ file.path() + " not found");
+			return false;
+		}
+
+		loadConfiguration(file.path());
+		logger().notice("configuration file "
+				+ file.path() + " loaded");
+		return true;
+	}
+
 	void findAndLoadConfig()
 	{
 		File user(m_userConfig);
@@ -90,14 +104,12 @@ protected:
 		config().setString("config.dir",
 			config().getString("application.dir"));
 
-		if (!m_userConfig.empty() && user.exists()) {
-			loadConfiguration(user.path());
+		if (!m_userConfig.empty() && readConfiguration(user))
 			config().setString("config.dir", parentPath(user));
-		}
-		else if (system.exists()) {
-			loadConfiguration(system.path());
+		else if (readConfiguration(system))
 			config().setString("config.dir", parentPath(system));
-		}
+		else
+			logger().warning("no main configration found");
 	}
 
 	void findAndLoadLogging()
@@ -106,10 +118,10 @@ protected:
 		File system(config().getString(
 				"ui.config.logging", SYSTEM_LOGGING_FILE));
 
-		if (!m_userLogging.empty() && user.exists())
-			loadConfiguration(user.path());
-		else if (system.exists())
-			loadConfiguration(system.path());
+		if (!m_userLogging.empty() && readConfiguration(user))
+			return;
+		else if (!readConfiguration(system.path()))
+			logger().warning("no logging configuration found");
 	}
 
 	void findAndLoadServices()
@@ -118,18 +130,10 @@ protected:
 		File system(config().getString(
 				"ui.config.services", SYSTEM_SERVICES_FILE));
 
-		if (!m_userServices.empty() && user.exists()) {
-			logger().notice(
-				"loading configuration from " + user.path(),
-				__FILE__, __LINE__);
-			loadConfiguration(user.path());
-		}
-		else if (system.exists()) {
-			logger().notice(
-				"loading configuration from " + system.path(),
-				__FILE__, __LINE__);
-			loadConfiguration(system.path());
-		}
+		if (!m_userServices.empty() && readConfiguration(user))
+			return;
+		else if (!readConfiguration(system))
+			logger().warning("no services configuration found");
 	}
 
 	void initialize(Application &app)
