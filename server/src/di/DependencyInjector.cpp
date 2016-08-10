@@ -218,5 +218,7 @@ InjectorTarget *DependencyInjector::injectDependencies(
 
 	m_logger.notice("successfully created " + info.name(),
 			__FILE__, __LINE__);
+
+	target->injectionDone();
 	return target;
 }
