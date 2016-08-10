@@ -81,18 +81,33 @@ protected:
 		findAndLoadServices();
 	}
 
+	string parentPath(const File &file)
+	{
+		Path path(file.path());
+		return path.parent().toString();
+	}
+
 	void findAndLoadConfig()
 	{
 		File user(m_userConfig);
 		File local(LOCAL_CONFIG_FILE);
 		File system(SYSTEM_CONFIG_FILE);
 
-		if (!m_userConfig.empty() && user.exists())
+		config().setString("config.dir",
+			config().getString("application.dir"));
+
+		if (!m_userConfig.empty() && user.exists()) {
 			loadConfiguration(user.path());
-		else if (local.exists())
+			config().setString("config.dir", parentPath(user));
+		}
+		else if (local.exists()) {
 			loadConfiguration(local.path());
-		else if (system.exists())
+			config().setString("config.dir", parentPath(local));
+		}
+		else if (system.exists()) {
 			loadConfiguration(system.path());
+			config().setString("config.dir", parentPath(system));
+		}
 	}
 
 	void findAndLoadLogging()
