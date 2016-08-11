@@ -18,13 +18,8 @@ using namespace BeeeOn;
 
 #define DEFAULT_PORT 8000
 
-#define LOCAL_LOGGING_FILE  "logging.ini"
 #define SYSTEM_LOGGING_FILE "/etc/beeeon/ui-server/logging.ini"
-
-#define LOCAL_CONFIG_FILE  "server.ini"
 #define SYSTEM_CONFIG_FILE "/etc/beeeon/ui-server/server.ini"
-
-#define LOCAL_SERVICES_FILE  "services.xml"
 #define SYSTEM_SERVICES_FILE "/etc/beeeon/ui-server/services.xml"
 
 static Option optConfig("config", "c",
@@ -90,7 +85,6 @@ protected:
 	void findAndLoadConfig()
 	{
 		File user(m_userConfig);
-		File local(LOCAL_CONFIG_FILE);
 		File system(SYSTEM_CONFIG_FILE);
 
 		config().setString("config.dir",
@@ -99,10 +93,6 @@ protected:
 		if (!m_userConfig.empty() && user.exists()) {
 			loadConfiguration(user.path());
 			config().setString("config.dir", parentPath(user));
-		}
-		else if (local.exists()) {
-			loadConfiguration(local.path());
-			config().setString("config.dir", parentPath(local));
 		}
 		else if (system.exists()) {
 			loadConfiguration(system.path());
@@ -113,14 +103,11 @@ protected:
 	void findAndLoadLogging()
 	{
 		File user(m_userLogging);
-		File local(LOCAL_LOGGING_FILE);
 		File system(config().getString(
 				"ui.config.logging", SYSTEM_LOGGING_FILE));
 
 		if (!m_userLogging.empty() && user.exists())
 			loadConfiguration(user.path());
-		else if (local.exists())
-			loadConfiguration(local.path());
 		else if (system.exists())
 			loadConfiguration(system.path());
 	}
@@ -128,7 +115,6 @@ protected:
 	void findAndLoadServices()
 	{
 		File user(m_userServices);
-		File local(LOCAL_SERVICES_FILE);
 		File system(config().getString(
 				"ui.config.services", SYSTEM_SERVICES_FILE));
 
@@ -137,12 +123,6 @@ protected:
 				"loading configuration from " + user.path(),
 				__FILE__, __LINE__);
 			loadConfiguration(user.path());
-		}
-		else if (local.exists()) {
-			logger().notice(
-				"loading configuration from " + local.path(),
-				__FILE__, __LINE__);
-			loadConfiguration(local.path());
 		}
 		else if (system.exists()) {
 			logger().notice(
