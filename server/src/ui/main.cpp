@@ -37,6 +37,12 @@ static Option optLogging("logging", "l",
 		false,
 		"<file>",
 		true);
+static Option optLogLevel("log-level", "L",
+		"change startup log-level (trace, debug, [info],"
+		" notice, warn, error, fatal, trace)",
+		false,
+		"<level>",
+		true);
 static Option optPort("port", "p",
 		"server port to listen on",
 		false,
@@ -53,6 +59,23 @@ public:
 	}
 
 protected:
+	/**
+	 * Extend log-level parsing by shortcuts: info, warn, err, cirt.
+	 */
+	int parseLogLevel(const string &level)
+	{
+		if (icompare(level, "info") == 0)
+			return Message::PRIO_INFORMATION;
+		if (icompare(level, "warn") == 0)
+			return Message::PRIO_WARNING;
+		if (icompare(level, "err") == 0)
+			return Message::PRIO_ERROR;
+		if (icompare(level, "crit") == 0)
+			return Message::PRIO_CRITICAL;
+
+		return Logger::parseLevel(level);
+	}
+
 	void handleOption(const string &name, const string &value)
 	{
 		if (name == "services")
@@ -63,6 +86,8 @@ protected:
 			m_userConfig = value;
 		if (name == "help")
 			m_printHelp = true;
+		if (name == "log-level")
+			logger().setLevel(parseLogLevel(value));
 		if (name == "port")
 			m_serverPort = stoi(value);
 
@@ -138,7 +163,6 @@ protected:
 
 	void initialize(Application &app)
 	{
-		Logger::root().setLevel(Logger::parseLevel("trace"));
 		loadAllConfiguration();
 		Application::initialize(app);
 	}
@@ -148,6 +172,7 @@ protected:
 		options.addOption(optConfig);
 		options.addOption(optServices);
 		options.addOption(optLogging);
+		options.addOption(optLogLevel);
 		options.addOption(optPort);
 		options.addOption(optHelp);
 		Application::defineOptions(options);
