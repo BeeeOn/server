@@ -114,7 +114,8 @@ protected:
 	{
 		File user(m_userLogging);
 		File local(LOCAL_LOGGING_FILE);
-		File system(SYSTEM_LOGGING_FILE);
+		File system(config().getString(
+				"ui.config.logging", SYSTEM_LOGGING_FILE));
 
 		if (!m_userLogging.empty() && user.exists())
 			loadConfiguration(user.path());
@@ -128,7 +129,8 @@ protected:
 	{
 		File user(m_userServices);
 		File local(LOCAL_SERVICES_FILE);
-		File system(SYSTEM_SERVICES_FILE);
+		File system(config().getString(
+				"ui.config.services", SYSTEM_SERVICES_FILE));
 
 		if (!m_userServices.empty() && user.exists()) {
 			logger().notice(
