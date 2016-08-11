@@ -91,6 +91,9 @@ protected:
 		if (name == "port")
 			m_serverPort = stoi(value);
 
+		if (m_printHelp)
+			stopOptionsProcessing();
+
 		Application::handleOption(name, value);
 	}
 
@@ -163,6 +166,9 @@ protected:
 
 	void initialize(Application &app)
 	{
+		if (m_printHelp)
+			return;
+
 		loadAllConfiguration();
 		Application::initialize(app);
 	}
