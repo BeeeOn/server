@@ -74,6 +74,13 @@ protected:
 		Application::handleOption(name, value);
 	}
 
+	void loadAllConfiguration()
+	{
+		findAndLoadConfig();
+		findAndLoadLogging();
+		findAndLoadServices();
+	}
+
 	void findAndLoadConfig()
 	{
 		File user(m_userConfig);
@@ -131,10 +138,8 @@ protected:
 	void initialize(Application &app)
 	{
 		Logger::root().setLevel(Logger::parseLevel("trace"));
-		findAndLoadConfig();
-		findAndLoadLogging();
+		loadAllConfiguration();
 		Application::initialize(app);
-		findAndLoadServices();
 	}
 
 	void defineOptions(OptionSet &options)
