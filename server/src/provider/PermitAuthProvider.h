@@ -21,7 +21,7 @@ public:
 		m_logger.critical("SOME AUTHS WILL BE PERMITTED");
 	}
 
-	bool authorize(const Credentials &Cred, Result &result)
+	bool authorize(const Credentials &cred, Result &result)
 	{
 		m_logger.critical("PERMIT AUTH");
 		result.insert(
