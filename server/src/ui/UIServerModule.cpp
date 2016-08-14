@@ -46,9 +46,16 @@ void handleAuth(UIRouteContext &context)
 {
 	TRACE_FUNC();
 
-	string scheme;
-	string authInfo;
-	context.request().getCredentials(scheme, authInfo);
+	if (context.request().hasCredentials()) {
+		string scheme;
+		string authInfo;
+		context.request().getCredentials(scheme, authInfo);
+
+		// TODO: user is already logged in? leave it
+		// XXX: is this secure to just echo the value?
+		context.response().sendBuffer(authInfo.c_str(), authInfo.size());
+		return;
+	}
 
 	string jsonData;
 	StreamCopier::copyToString(context.request().stream(), jsonData);
@@ -64,7 +71,7 @@ void handleAuth(UIRouteContext &context)
 	const string &sessionId = context.userData()
 					.authService().login(cred);
 
-	context.response().send() << sessionId;
+	context.response().sendBuffer(sessionId.c_str(), sessionId.size());
 }
 
 static void handleGetUser(UIRouteContext &context)
