@@ -65,7 +65,7 @@ void AuthServiceTest::testPermitAuth()
 	service.setSessionManager(&manager);
 	service.registerProvider(&provider);
 
-	AuthCodeCredentials cred("permit", "any");
+	AuthCodeCredentials cred("permit", "permit@example.org");
 
 	try {
 		const string &id = service.login(cred);
