@@ -2,6 +2,8 @@ cmake_minimum_required (VERSION 2.8.11)
 project (ui-server C CXX)
 
 find_library (POCO_FOUNDATION PocoFoundation)
+find_library (POCO_SSL PocoNetSSL)
+find_library (POCO_CRYPTO PocoCrypto)
 find_library (POCO_UTIL PocoUtil)
 find_library (POCO_NET PocoNet)
 find_library (POCO_JSON PocoJSON)
@@ -15,6 +17,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/di/DependencyInjector.cpp
 	${PROJECT_SOURCE_DIR}/provider/AuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/RandomProvider.cpp
+	${PROJECT_SOURCE_DIR}/provider/GoogleAuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/server/SessionManager.cpp
 	${PROJECT_SOURCE_DIR}/dao/PlaceDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/UserDao.cpp
@@ -43,6 +46,8 @@ target_link_libraries(ui-server
 	BeeeOnServer
 	-Wl,--no-whole-archive
 	${POCO_FOUNDATION}
+	${POCO_SSL}
+	${POCO_CRYPTO}
 	${POCO_UTIL}
 	${POCO_NET}
 	${POCO_JSON}

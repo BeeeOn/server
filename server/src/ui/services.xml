@@ -19,6 +19,7 @@
 			<set name="userDao" ref="userDao" />
 			<set name="sessionManager" ref="sessionManager" />
 			<add name="providers" ref="permitAuthProvider" />
+			<add name="providers" ref="googleAuthProvider" />
 		</instance>
 
 		<instance name="deviceService" class="BeeeOn::DeviceService">
@@ -43,6 +44,12 @@
 
 		<instance name="permitAuthProvider"
 				class="BeeeOn::PermitAuthProvider" />
+
+		<instance name="googleAuthProvider"
+				class="BeeeOn::GoogleAuthProvider">
+			<set name="client_secret" text="${google.client_secret}"/>
+			<set name="client_id" text="${google.client_id}"/>
+		</instance>
 
 		<instance name="pocoRandomProvider"
 				class="BeeeOn::PocoRandomProvider" />
