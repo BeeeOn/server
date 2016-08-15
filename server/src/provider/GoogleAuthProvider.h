@@ -11,10 +11,10 @@ namespace BeeeOn {
  * Verify the user access token against Google servers and obtain
  * information about her.
  */
-class GoogleAuthProvider : public TokenAuthProvider {
+class GoogleAuthProvider : public AuthCodeAuthProvider {
 public:
 	GoogleAuthProvider():
-		TokenAuthProvider("google")
+		AuthCodeAuthProvider("google")
 	{
 		textInjector("client_id",
 				(TextSetter) &GoogleAuthProvider::setClientId);
@@ -33,7 +33,7 @@ public:
 	}
 
 protected:
-	bool verifyToken(const std::string &token, Result &info);
+	bool verifyAuthCode(const std::string &authCode, Result &info);
 
 private:
 	/**

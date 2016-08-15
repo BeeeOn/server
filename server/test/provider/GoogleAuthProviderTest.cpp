@@ -19,13 +19,13 @@ bool skipWhenNoAuthCode()
 
 class GoogleAuthProviderTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST_SUITE(GoogleAuthProviderTest);
-	CPPUNIT_TEST(testVerifyToken);
+	CPPUNIT_TEST(testVerifyAuthCode);
 	CPPUNIT_TEST_SUITE_END();
 
 public:
 	void setUp();
 	void tearDown();
-	void testVerifyToken();
+	void testVerifyAuthCode();
 private:
 	std::string googleAuthCode;
 };
@@ -35,7 +35,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION_SKIPPABLE(GoogleAuthProviderTest,
 
 class TestableGoogleAuthProvider : public GoogleAuthProvider {
 public:
-	using GoogleAuthProvider::verifyToken;
+	using GoogleAuthProvider::verifyAuthCode;
 };
 
 void GoogleAuthProviderTest::setUp()
@@ -54,14 +54,14 @@ void GoogleAuthProviderTest::tearDown()
  *
  * TODO: obtain the authorization_code automatically (if it is even possible).
  */
-void GoogleAuthProviderTest::testVerifyToken()
+void GoogleAuthProviderTest::testVerifyAuthCode()
 {
 
 	TestableGoogleAuthProvider provider;
 	GoogleAuthProvider::Result info;
 
 	CPPUNIT_ASSERT_MESSAGE("failed to authenticate user",
-			provider.verifyToken(googleAuthCode, info));
+			provider.verifyAuthCode(googleAuthCode, info));
 
 	CPPUNIT_ASSERT_MESSAGE("missing email field",
 			info.find("email") != info.end());

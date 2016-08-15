@@ -21,41 +21,36 @@ public:
 	 * The scheme and authInfo are usually extracted
 	 * from a HTTP Request header Authorization.
 	 */
-	Credentials(const std::string &scheme,
-			const std::string authInfo,
-			const std::map<std::string, std::string> data):
-		m_scheme(scheme),
-		m_authInfo(authInfo),
-		m_data(data)
+	Credentials(const std::string &provider):
+		m_provider(provider)
 	{
 	}
 
-	const std::string &scheme() const
+	const std::string &provider() const
 	{
-		return m_scheme;
-	}
-
-	const std::string &authInfo() const
-	{
-		return m_authInfo;
-	}
-
-	const std::string &get(const std::string &key) const
-	{
-		std::map<std::string, std::string>::const_iterator it;
-		it = m_data.find(key);
-		return it->second;
-	}
-
-	bool has(const std::string &key) const
-	{
-		return m_data.find(key) != m_data.end();
+		return m_provider;
 	}
 
 private:
-	const std::string m_scheme;
-	const std::string m_authInfo;
-	const std::map<std::string, std::string> m_data;
+	const std::string m_provider;
+};
+
+class AuthCodeCredentials : public Credentials {
+public:
+	AuthCodeCredentials(const std::string &provider,
+			const std::string &authCode):
+		Credentials(provider),
+		m_authCode(authCode)
+	{
+	}
+
+	const std::string &authCode() const
+	{
+		return m_authCode;
+	}
+
+private:
+	const std::string m_authCode;
 };
 
 /**
@@ -110,9 +105,9 @@ protected:
  * by using a token. The abstract class extracts a token
  * and verifies it against a 3rd party authorization service.
  */
-class TokenAuthProvider : public AbstractAuthProvider {
+class AuthCodeAuthProvider : public AbstractAuthProvider {
 public:
-	TokenAuthProvider(const std::string &name):
+	AuthCodeAuthProvider(const std::string &name):
 		AbstractAuthProvider(name, LOGGER_CLASS(this))
 	{
 	}
@@ -121,18 +116,17 @@ public:
 	{
 		_TRACE_METHOD(m_logger);
 
-		if (!cred.has("token"))
-			return false;
+		const AuthCodeCredentials &tokenCredentials =
+			reinterpret_cast<const AuthCodeCredentials &>(cred);
 
-		const std::string &token(cred.get("token"));
-		return verifyToken(token, result);
+		return verifyAuthCode(tokenCredentials.authCode(), result);
 	}
 
 protected:
 	/**
 	 * Verification against a 3rd party.
 	 */
-	virtual bool verifyToken(const std::string &token,
+	virtual bool verifyAuthCode(const std::string &authCode,
 			Result &info) = 0;
 };
 
