@@ -20,14 +20,16 @@ public:
 		m_nextRandom = next;
 	}
 
-	std::string randomStringUnlocked(unsigned int length)
+	void randomBytesUnlocked(char *b, unsigned int length)
 	{
 		if (length != m_nextRandom.size()) {
 			throw Poco::AssertionViolationException(
 				"request length does not match the next random string length");
 		}
 
-		return m_nextRandom;
+		std::string::const_iterator it = m_nextRandom.begin();
+		for (int i = 0; it != m_nextRandom.end(); ++it, ++i)
+			b[i] = *it;
 	}
 
 private:

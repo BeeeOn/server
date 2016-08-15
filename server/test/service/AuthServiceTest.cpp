@@ -10,6 +10,7 @@
 #include "service/AuthService.h"
 #include "provider/PermitAuthProvider.h"
 #include "dao/UserDao.h"
+#include "util/Base64.h"
 
 using namespace std;
 using namespace Poco;
@@ -69,7 +70,7 @@ void AuthServiceTest::testPermitAuth()
 
 	try {
 		const string &id = service.login(cred);
-		CPPUNIT_ASSERT(id.compare(SESSION_ID64) == 0);
+		CPPUNIT_ASSERT(Base64::decode(id).compare(SESSION_ID64) == 0);
 		service.logout(id);
 	} catch(Exception &e) {
 		CPPUNIT_FAIL("unexpected exception: " + e.displayText());
