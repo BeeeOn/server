@@ -21,6 +21,7 @@ protected:
 	virtual void injectNumber(const std::string &key, int v) = 0;
 	virtual void injectText(const std::string &key,
 				const std::string &value) = 0;
+	virtual void injectionDone() = 0;
 };
 
 /**
@@ -109,6 +110,10 @@ protected:
 	void injectRef(const std::string &key, InjectorTarget *value);
 	void injectText(const std::string &key, const std::string &value);
 	void injectNumber(const std::string &key, int value);
+
+	virtual void injectionDone()
+	{
+	}
 
 protected:
 	RefSetterMap m_refSetter;

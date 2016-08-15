@@ -39,6 +39,10 @@ class InstanceInfo;
  *   + attribute text   - value to add is a string
  *   + attribute number - value to add is an integer
  *
+ * * alias: defines alias name of an existing instance
+ *   + attribute name   - name of the alias (new instance name)
+ *   + attribute ref    - name of an existing instance
+ *
  * The attributes can contain ${property} strings which are expanded
  * automatically.
  *
@@ -58,7 +62,9 @@ class InstanceInfo;
  *
  *	<instance name="userService" class="BeeeOn::UserService" />
  *	<instance name="loginListener" class="BeeeOn::LoginListener" />
- *	<instance name="errorListener" class="BeeeOn::ErrorListener" />
+ *	<instance name="stdoutErrorListener"
+ * 			class="BeeeOn::StdoutErrorListener" />
+ *	<alias name="errorListener" ref="stdoutErrorListener" />
  * </services>
  *
  * DependencyInjector di(config.createView("services"));
@@ -86,6 +92,7 @@ public:
 	}
 
 private:
+	InjectorTarget *createNoAlias(const InstanceInfo &info);
 	InjectorTarget *createNew(const InstanceInfo &info);
 	InjectorTarget *injectDependencies(
 			const InstanceInfo &info,

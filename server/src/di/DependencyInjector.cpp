@@ -38,6 +38,18 @@ public:
 		}
 	}
 
+	const string resolveAlias(AutoPtr<AbstractConfiguration> conf) const
+	{
+		const string ref("alias[@name='" + m_name + "'][@ref]");
+		const string &value = conf->getString(ref, "");
+
+		if (value.compare(m_name) == 0)
+			throw IllegalStateException("alias " + m_name
+					+ " refers to itself");
+
+		return value;
+	}
+
 	const string resolveClass(AutoPtr<AbstractConfiguration> conf) const
 	{
 		string entry("instance[@name='" + m_name + "'][@class]");
@@ -82,18 +94,40 @@ InjectorTarget *DependencyInjector::create(const string &name)
 	TRACE_METHOD();
 
 	InjectorSet::const_iterator it;
+
 	it = m_set.find(name);
 	if (it != m_set.end()) {
-		m_logger.debug("instance " + name + " reused");
+		m_logger.debug("instance " + name + " reused",
+				__FILE__, __LINE__);
 		return it->second;
 	}
 
 	InstanceInfo info(name);
+	const string &ref = info.resolveAlias(m_conf);
+
+	if (ref.empty())
+		return createNoAlias(info);
+
+	it = m_set.find(ref);
+	if (it != m_set.end()) {
+		m_logger.debug("instance " + name
+				+ " reused as alias to " + ref,
+				__FILE__, __LINE__);
+		return it->second;
+	}
+
+	InstanceInfo aliasInfo(ref);
+	return createNoAlias(aliasInfo);
+}
+
+InjectorTarget *DependencyInjector::createNoAlias(const InstanceInfo &info)
+{
 	InjectorTarget *t = createNew(info);
 	if (t == NULL)
-		throw Poco::NullPointerException("failed to create target " + name);
+		throw Poco::NullPointerException("failed to create target "
+				+ info.name());
 
-	m_set.insert(make_pair(name, t));
+	m_set.insert(make_pair(info.name(), t));
 	return injectDependencies(info, t);
 }
 
@@ -218,5 +252,7 @@ InjectorTarget *DependencyInjector::injectDependencies(
 
 	m_logger.notice("successfully created " + info.name(),
 			__FILE__, __LINE__);
+
+	target->injectionDone();
 	return target;
 }
