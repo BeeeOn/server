@@ -88,11 +88,24 @@ public:
 		injector<SessionManager, SecureRandomProvider>(
 			"secureRandomProvider",
 			&SessionManager::setSecureRandomProvider);
+		numberInjector("sessionExpireTime",
+				(NumberSetter) &SessionManager::setSessionExpireTime);
+		numberInjector("maxUserSessions",
+				(NumberSetter) &SessionManager::setMaxUserSessions);
 	}
 
 	void setSecureRandomProvider(SecureRandomProvider *provider)
 	{
 		m_random = provider;
+	}
+
+	void setSessionExpireTime(const int sessionExpireTime)
+	{
+		m_expireTime = sessionExpireTime;
+	}
+
+	void setMaxUserSessions(const int maxUserSessions)
+	{
 	}
 
 	/**
@@ -126,6 +139,7 @@ private:
 	IDTable m_idTable;
 	Poco::RWLock m_lock;
 	SecureRandomProvider *m_random;
+	unsigned int m_expireTime;
 };
 
 }

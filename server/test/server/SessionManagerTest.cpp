@@ -16,12 +16,20 @@ public:
 	void setUp();
 	void tearDown();
 	void testOpenClose();
+
+private:
+	SessionManager m_manager;
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SessionManagerTest);
 
 void SessionManagerTest::setUp()
 {
+	// Set how many sessions is user allowed to have
+	m_manager.setMaxUserSessions(10);
+
+	// Set session expire time in seconds
+	m_manager.setSessionExpireTime(1);
 }
 
 void SessionManagerTest::tearDown()
@@ -41,20 +49,19 @@ void SessionManagerTest::testOpenClose()
 	InsecureRandomProvider randomProvider;
 	randomProvider.setProviderImpl(&mockRandomProvider);
 
-	SessionManager manager;
-	manager.setSecureRandomProvider(&randomProvider);
+	m_manager.setSecureRandomProvider(&randomProvider);
 
 	User user;
 	user.setEmail("test@example.org");
 
-	SessionID id = manager.open(user);
+	SessionID id = m_manager.open(user);
 	CPPUNIT_ASSERT(Base64::decode(id).compare(SESSION_ID64) == 0);
 
 	User userLookup;
-	CPPUNIT_ASSERT(manager.lookup(id, userLookup));
+	CPPUNIT_ASSERT(m_manager.lookup(id, userLookup));
 
-	manager.close(id);
-	CPPUNIT_ASSERT(!manager.lookup(id, userLookup));
+	m_manager.close(id);
+	CPPUNIT_ASSERT(!m_manager.lookup(id, userLookup));
 }
 
 }
