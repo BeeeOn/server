@@ -2,6 +2,7 @@
 #define BEEEON_NULL_SESSION_MANAGER_H
 #include <map>
 #include <Poco/RWLock.h>
+#include <Poco/Timespan.h>
 
 #include "di/InjectorTarget.h"
 #include "provider/RandomProvider.h"
@@ -44,6 +45,30 @@ private:
 	Email m_email;
 	UserID m_userID;
 	SessionID m_sessionID;
+};
+
+/**
+ * Enables expirable session feature using Poco
+ */
+class ExpirableSession : public Session
+{
+public:
+	ExpirableSession(const UserID &userID, const SessionID &sessionID,
+			Poco::Timespan &timespan) :
+		Session(userID, sessionID),
+		m_tstamp()
+	{
+		// Set expiration time
+		m_tstamp += timespan;
+	}
+
+	const Poco::Timestamp& getExpiration() const
+	{
+		return m_tstamp;
+	}
+
+private:
+	Poco::Timestamp m_tstamp;
 };
 
 /**
