@@ -8,7 +8,7 @@ find_library (POCO_UTIL PocoUtil)
 find_library (POCO_NET PocoNet)
 find_library (POCO_JSON PocoJSON)
 
-set (CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -DBEEEON_SELECT_MONGOOSE")
+set (CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -DBEEEON_SELECT_POCO")
 add_definitions(-std=c++11)
 
 file(GLOB SOURCES
