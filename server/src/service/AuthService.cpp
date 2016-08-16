@@ -30,11 +30,7 @@ const string AuthService::login(const Credentials &cred)
 	if (!m_userDao->fetch(user))
 		throw NotAuthenticatedException("unknown user e-mail");
 
-	SessionManager::Info info;
-	info.insert(make_pair(SessionManager::INFO_EMAIL, user.email()));
-	info.insert(make_pair(SessionManager::INFO_USER_ID,
-				user.id().toString()));
-	return m_sessionManager->open(info);
+	return m_sessionManager->open(user);
 }
 
 void AuthService::logout(const std::string &id)

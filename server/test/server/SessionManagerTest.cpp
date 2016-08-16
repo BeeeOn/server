@@ -44,18 +44,17 @@ void SessionManagerTest::testOpenClose()
 	SessionManager manager;
 	manager.setSecureRandomProvider(&randomProvider);
 
-	SessionManager::Info info;
-	info.insert(make_pair(SessionManager::INFO_EMAIL,
-				"test@exmaple.org"));
+	User user;
+	user.setEmail("test@example.org");
 
-	SessionID id = manager.open(info);
+	SessionID id = manager.open(user);
 	CPPUNIT_ASSERT(Base64::decode(id).compare(SESSION_ID64) == 0);
 
-	SessionManager::Info infoLookup;
-	CPPUNIT_ASSERT(manager.lookup(id, infoLookup));
+	User userLookup;
+	CPPUNIT_ASSERT(manager.lookup(id, userLookup));
 
 	manager.close(id);
-	CPPUNIT_ASSERT(!manager.lookup(id, infoLookup));
+	CPPUNIT_ASSERT(!manager.lookup(id, userLookup));
 }
 
 }

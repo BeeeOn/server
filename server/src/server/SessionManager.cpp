@@ -8,17 +8,16 @@ using namespace BeeeOn;
 
 BEEEON_OBJECT(SessionManager, BeeeOn::SessionManager)
 
-const SessionID SessionManager::open(const Info &info)
+const SessionID SessionManager::open(const User &user)
 {
-	Info::const_iterator email = info.find(INFO_EMAIL);
-	if (email == info.end())
-		throw InvalidArgumentException("missing INFO_EMAIL");
+	if (user.email().empty())
+		throw InvalidArgumentException("missing user e-mail");
 
 	// lock here for the rest of the method
 	RWLock::ScopedLock guard(m_lock, true);
 
 	IDTable::const_iterator it;
-	it = m_idTable.find(email->second);
+	it = m_idTable.find(user.email());
 
 	if (it != m_idTable.end())
 		throw ExistsException("session already exists");
@@ -26,13 +25,13 @@ const SessionID SessionManager::open(const Info &info)
 	char b[ID_LENGTH64];
 	m_random->randomBytesUnlocked(b, sizeof(b));
 	SessionID id = Base64::encode(b, sizeof(b));
-	m_idTable.insert(make_pair(email->second, id));
-	m_table.insert(make_pair(id, info));
+	m_idTable.insert(make_pair(user.email(), id));
+	m_table.insert(make_pair(id, user));
 
-	return m_idTable.find(email->second)->second;
+	return m_idTable.find(user.email())->second;
 }
 
-bool SessionManager::lookup(const SessionID &id, Info &info)
+bool SessionManager::lookup(const SessionID &id, User &user)
 {
 	RWLock::ScopedLock guard(m_lock);
 
@@ -42,7 +41,7 @@ bool SessionManager::lookup(const SessionID &id, Info &info)
 	if (it == m_table.end())
 		return false;
 
-	info = it->second;
+	user = it->second;
 	return true;
 }
 
@@ -56,10 +55,10 @@ void SessionManager::close(const SessionID &id)
 	if (it == m_table.end())
 		return;
 
-	const Info &info = it->second;
+	const User &user = it->second;
 
 	IDTable::const_iterator email;
-	email = m_idTable.find(info.find(INFO_EMAIL)->second);
+	email = m_idTable.find(user.email());
 	if (email == m_idTable.end())
 		return;
 
