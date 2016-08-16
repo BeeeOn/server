@@ -51,17 +51,17 @@ void SessionManagerTest::testOpenClose()
 
 	m_manager.setSecureRandomProvider(&randomProvider);
 
-	User user;
-	user.setEmail("test@example.org");
+	UserID userID = UserID::parse("824b4831-6ce4-4614-8e02-8380d6d92f95");
+	User user(userID);
 
 	SessionID id = m_manager.open(user);
 	CPPUNIT_ASSERT(Base64::decode(id).compare(SESSION_ID64) == 0);
 
-	User userLookup;
-	CPPUNIT_ASSERT(m_manager.lookup(id, userLookup));
+	SessionManager::SessionPtr infoLookup;
+	CPPUNIT_ASSERT(m_manager.lookup(id, infoLookup));
 
 	m_manager.close(id);
-	CPPUNIT_ASSERT(!m_manager.lookup(id, userLookup));
+	CPPUNIT_ASSERT(!m_manager.lookup(id, infoLookup));
 }
 
 }

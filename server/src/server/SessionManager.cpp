@@ -10,58 +10,65 @@ BEEEON_OBJECT(SessionManager, BeeeOn::SessionManager)
 
 const SessionID SessionManager::open(const User &user)
 {
-	if (user.email().empty())
-		throw InvalidArgumentException("missing user e-mail");
+	TRACE_METHOD();
+
+	if (user.id().isNull()) {
+		if (m_logger.debug()) {
+			m_logger.debug("Missing user ID for: " + user.email(),
+					__FILE__, __LINE__);
+		}
+
+		throw InvalidArgumentException("missing user ID");
+	}
+
+	Timespan timespan(m_expireTime, 0);
+	char bSessionID[ID_LENGTH64];
 
 	// lock here for the rest of the method
 	RWLock::ScopedLock guard(m_lock, true);
 
-	IDTable::const_iterator it;
-	it = m_idTable.find(user.email());
+	m_random->randomBytesUnlocked(bSessionID, sizeof(bSessionID));
+	SessionID sessionID = Base64::encode(bSessionID, sizeof(bSessionID));
 
-	if (it != m_idTable.end())
-		throw ExistsException("session already exists");
+	ExpirableSession session(user.id(), sessionID, timespan);
 
 	char b[ID_LENGTH64];
 	m_random->randomBytesUnlocked(b, sizeof(b));
 	SessionID id = Base64::encode(b, sizeof(b));
-	m_idTable.insert(make_pair(user.email(), id));
-	m_table.insert(make_pair(id, user));
+	m_sessionCache->add(session.sessionID(), session);
 
-	return m_idTable.find(user.email())->second;
+	if (m_logger.debug()) {
+		m_logger.debug("Added session: " + session.sessionID(),
+				__FILE__, __LINE__);
+	}
+
+	return session.sessionID();
 }
 
-bool SessionManager::lookup(const SessionID &id, User &user)
+bool SessionManager::lookup(const SessionID &id, SessionPtr &session)
 {
+	TRACE_METHOD();
+
+	if (m_logger.debug())
+		m_logger.debug("Looking up session: " + id, __FILE__, __LINE__);
+
 	RWLock::ScopedLock guard(m_lock);
 
-	Table::const_iterator it;
-	it = m_table.find(id);
+	session = m_sessionCache->get(id);
 
-	if (it == m_table.end())
+	if (session.isNull())
 		return false;
 
-	user = it->second;
 	return true;
 }
 
 void SessionManager::close(const SessionID &id)
 {
+	TRACE_METHOD();
+
+	if (m_logger.debug())
+		m_logger.debug("Closing session: " + id, __FILE__, __LINE__);
+
 	RWLock::ScopedLock guard(m_lock, true);
-
-	Table::const_iterator it;
-	it = m_table.find(id);
-
-	if (it == m_table.end())
-		return;
-
-	const User &user = it->second;
-
-	IDTable::const_iterator email;
-	email = m_idTable.find(user.email());
-	if (email == m_idTable.end())
-		return;
-
-	m_table.erase(it);
-	m_idTable.erase(email);
+	m_sessionCache->remove(id);
 }
