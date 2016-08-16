@@ -8,7 +8,7 @@ using namespace BeeeOn;
 
 BEEEON_OBJECT(SessionManager, BeeeOn::SessionManager)
 
-const SessionID &SessionManager::open(const Info &info)
+const SessionID SessionManager::open(const Info &info)
 {
 	Info::const_iterator email = info.find(INFO_EMAIL);
 	if (email == info.end())

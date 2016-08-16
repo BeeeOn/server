@@ -109,7 +109,7 @@ public:
 	 * info, an exception is thrown.
 	 * Returns a new session ID.
 	 */
-	const SessionID &open(const Info &info);
+	const SessionID open(const Info &info);
 
 	/**
 	 * Lookup a session information by ID.
