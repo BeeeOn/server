@@ -7,6 +7,8 @@
 
 #include <typeinfo>
 #include <cstring>
+#include <cstdlib>
+#include <unistd.h>
 #include <Poco/Exception.h>
 #include <Poco/Logger.h>
 
@@ -50,7 +52,7 @@ static inline const std::string classDemangle(const char *name)
 	std::free(demangled);
 
 	std::size_t t;
-	
+
 	t = s.find("*<");
 	if (t != std::string::npos)
 		return s.substr(0, t);
@@ -163,7 +165,6 @@ private:
 
 #ifdef __GLIBC__
 #include <execinfo.h>
-#include <unistd.h>
 #include <cstdio>
 
 namespace BeeeOn {
@@ -216,7 +217,7 @@ namespace BeeeOn {
 inline void stdout_backtrace()
 {
 	const char *msg = "no backtrace available\n";
-	std::write(fd, msg, sizeof(msg));
+	write(STDOUT_FILENO, msg, sizeof(msg));
 }
 
 /**
