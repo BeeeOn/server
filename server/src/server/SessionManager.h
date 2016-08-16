@@ -182,6 +182,7 @@ public:
 	};
 
 	SessionManager() :
+		m_sessionCache(NULL),
 		m_logger(LOGGER_CLASS(this))
 	{
 		injector<SessionManager, SecureRandomProvider>(
@@ -195,7 +196,8 @@ public:
 
 	~SessionManager()
 	{
-		delete m_sessionCache;
+		if (m_sessionCache)
+			delete m_sessionCache;
 	}
 
 	void setSecureRandomProvider(SecureRandomProvider *provider)
@@ -210,6 +212,9 @@ public:
 
 	void setMaxUserSessions(const int maxUserSessions)
 	{
+		if (m_sessionCache)
+			delete m_sessionCache;
+
 		m_sessionCache = new SessionCache(maxUserSessions);
 	}
 
