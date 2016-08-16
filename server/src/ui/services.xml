@@ -39,6 +39,7 @@
 
 		<instance name="gatewayService" class="BeeeOn::GatewayService">
 			<set name="gatewayDao" ref="gatewayDao" />
+			<set name="gatewayRPC" ref="gatewayRPC" />
 		</instance>
 
 		<instance name="locationService"
@@ -78,6 +79,7 @@
 		</instance>
 
 		<instance name="nullGatewayRPC" class="BeeeOn::NullGatewayRPC" />
+		<alias name="gatewayRPC" ref="nullGatewayRPC" />
 
 		<instance name="mockPlaceDao" class="BeeeOn::MockPlaceDao" />
 		<instance name="mockUserDao" class="BeeeOn::MockUserDao" />
