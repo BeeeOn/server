@@ -77,6 +77,8 @@
 			<set name="providerImpl" ref="mockRandomProvider" />
 		</instance>
 
+		<instance name="nullGatewayRPC" class="BeeeOn::NullGatewayRPC" />
+
 		<instance name="mockPlaceDao" class="BeeeOn::MockPlaceDao" />
 		<instance name="mockUserDao" class="BeeeOn::MockUserDao" />
 		<instance name="deviceDao" class="BeeeOn::MockDeviceDao" />
