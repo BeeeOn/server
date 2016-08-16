@@ -41,7 +41,7 @@
 			<set name="secureRandomProvider"
 				ref="pocoRandomProvider" />
 			<set name="sessionExpireTime" number="${session.expire}" />
-			<set name="maxUserSession" number="${session.maxPerUser}" />
+			<set name="maxUserSessions" number="${session.maxPerUser}" />
 		</instance>
 
 		<instance name="permitAuthProvider"
