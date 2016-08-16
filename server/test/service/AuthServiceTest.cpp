@@ -65,10 +65,7 @@ void AuthServiceTest::testPermitAuth()
 	service.setSessionManager(&manager);
 	service.registerProvider(&provider);
 
-	map<string, string> data;
-	data["provider"] = "permit";
-	data["token"] = "any";
-	Credentials cred("", "", data);
+	AuthCodeCredentials cred("permit", "permit@example.org");
 
 	try {
 		const string &id = service.login(cred);

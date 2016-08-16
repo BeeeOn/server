@@ -20,7 +20,7 @@ using namespace Poco::JSON;
 using namespace Poco::Net;
 using namespace BeeeOn;
 
-bool GoogleAuthProvider::verifyToken(const string &token, Result &info)
+bool GoogleAuthProvider::verifyAuthCode(const string &authCode, Result &info)
 {
 	string idToken;
 	string rawInfo;
@@ -28,7 +28,7 @@ bool GoogleAuthProvider::verifyToken(const string &token, Result &info)
 	string email;
 
 	try {
-		idToken = requestIdToken(token);
+		idToken = requestIdToken(authCode);
 		rawInfo = fetchUserInfo(idToken);
 	} catch(const Exception &e) {
 		m_logger.log(e, __FILE__, __LINE__);
@@ -48,7 +48,7 @@ bool GoogleAuthProvider::verifyToken(const string &token, Result &info)
 	return true;
 }
 
-string GoogleAuthProvider::requestIdToken(const string &token)
+string GoogleAuthProvider::requestIdToken(const string &authCode)
 {
 	TRACE_METHOD();
 
@@ -63,7 +63,7 @@ string GoogleAuthProvider::requestIdToken(const string &token)
 		throw;
 	}
 
-	string requestRaw = "code=" + token + "&"
+	string requestRaw = "code=" + authCode + "&"
 		"redirect_uri=postmessage&"
 		"client_id=" + m_clientId + "&"
 		"client_secret=" + m_clientSecret + "&"

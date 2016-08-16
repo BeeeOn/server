@@ -11,12 +11,7 @@ const string AuthService::login(const Credentials &cred)
 {
 	TRACE_METHOD();
 
-	if (!cred.has("provider"))
-		throw NotAuthenticatedException("no provider specified");
-
-	const string providerName = cred.get("provider");
-
-	Providers::iterator it = m_providers.find(providerName);
+	Providers::iterator it = m_providers.find(cred.provider());
 	if (it == m_providers.end())
 		throw NotAuthenticatedException("no such provider");
 

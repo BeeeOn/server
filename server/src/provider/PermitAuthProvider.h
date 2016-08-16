@@ -13,19 +13,19 @@ namespace BeeeOn {
  * purposes. When it is activated a loud logs are
  * created on start and on every login.
  */
-class PermitAuthProvider : public AbstractAuthProvider {
+class PermitAuthProvider : public AuthCodeAuthProvider {
 public:
 	PermitAuthProvider():
-		AbstractAuthProvider("permit", LOGGER_CLASS(this))
+		AuthCodeAuthProvider("permit")
 	{
 		m_logger.critical("SOME AUTHS WILL BE PERMITTED");
 	}
 
-	bool authorize(const Credentials &Cred, Result &result)
+	bool verifyAuthCode(const std::string &authCode, Result &result)
 	{
 		m_logger.critical("PERMIT AUTH");
 		result.insert(
-			std::make_pair("email", "permit@example.org"));
+			std::make_pair("email", authCode));
 		return true;
 	}
 };
