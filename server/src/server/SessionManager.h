@@ -166,7 +166,6 @@ public:
 
 private:
 	std::map<UserID, std::set<SessionID>> m_userSessionSet;
-	Poco::RWLock m_lock;
 	unsigned int m_userSessions;
 };
 
