@@ -52,6 +52,8 @@ void AuthServiceTest::testPermitAuth()
 	randomProvider.setProviderImpl(&mockRandomProvider);
 	SessionManager manager;
 	manager.setSecureRandomProvider(&randomProvider);
+	manager.setMaxUserSessions(10);
+	manager.setSessionExpireTime(1);
 
 	MockUserDao dao;
 	UserID newID(UUIDGenerator::defaultGenerator().createRandom());
