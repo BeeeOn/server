@@ -14,8 +14,10 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/server/SessionManagerTest.cpp
 	${PROJECT_SOURCE_DIR}/di/DependencyInjectorTest.cpp
 	${PROJECT_SOURCE_DIR}/model/SerializerTest.cpp
+	${PROJECT_SOURCE_DIR}/model/GatewayIDTest.cpp
 	${PROJECT_SOURCE_DIR}/service/AuthServiceTest.cpp
 	${PROJECT_SOURCE_DIR}/provider/GoogleAuthProviderTest.cpp
+	${PROJECT_SOURCE_DIR}/util/DAMMTest.cpp
 )
 
 include_directories(
