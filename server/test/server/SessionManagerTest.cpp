@@ -13,12 +13,14 @@ class SessionManagerTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST_SUITE(SessionManagerTest);
 	CPPUNIT_TEST(testOpenClose);
 	CPPUNIT_TEST(testMaxUserSessions);
+	CPPUNIT_TEST(testSessionTimeout);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void setUp();
 	void tearDown();
 	void testOpenClose();
 	void testMaxUserSessions();
+	void testSessionTimeout();
 
 private:
 	SessionManager m_manager;
@@ -81,4 +83,19 @@ void SessionManagerTest::testMaxUserSessions()
 	CPPUNIT_ASSERT_THROW(m_manager.open(userID), Poco::IllegalStateException);
 }
 
+void SessionManagerTest::testSessionTimeout()
+{
+	// Sleep for 1 second + a little bit of overhead.
+	// Tests whether the session really expired.
+	SessionManager::SessionPtr infoLookup;
+	PocoRandomProvider pocoProvider;
+
+	m_manager.setSecureRandomProvider(&pocoProvider);
+
+	UserID userID = UserID::parse("824b4831-6ce4-4614-8e02-8380d6d92f95");
+	SessionID id = m_manager.open(userID);
+
+	usleep(1100000);
+	CPPUNIT_ASSERT(!m_manager.lookup(id, infoLookup));
+}
 }
