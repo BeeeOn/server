@@ -3,6 +3,7 @@
 #include "server/SessionManager.h"
 #include "provider/MockRandomProvider.h"
 #include "util/Base64.h"
+#include "provider/PocoRandomProvider.h"
 
 using namespace std;
 
@@ -11,11 +12,13 @@ namespace BeeeOn {
 class SessionManagerTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST_SUITE(SessionManagerTest);
 	CPPUNIT_TEST(testOpenClose);
+	CPPUNIT_TEST(testMaxUserSessions);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void setUp();
 	void tearDown();
 	void testOpenClose();
+	void testMaxUserSessions();
 
 private:
 	SessionManager m_manager;
@@ -62,6 +65,20 @@ void SessionManagerTest::testOpenClose()
 
 	m_manager.close(id);
 	CPPUNIT_ASSERT(!m_manager.lookup(id, infoLookup));
+}
+
+// Open 11 new sessions where 11th open should throw an exception
+void SessionManagerTest::testMaxUserSessions()
+{
+	PocoRandomProvider pocoProvider;
+	UserID userID = UserID::parse("824b4831-6ce4-4614-8e02-8380d6d92f95");
+
+	m_manager.setSecureRandomProvider(&pocoProvider);
+
+	for (int i = 10; i >= 0; --i)
+		CPPUNIT_ASSERT_NO_THROW(m_manager.open(userID));
+
+	CPPUNIT_ASSERT_THROW(m_manager.open(userID), Poco::IllegalStateException);
 }
 
 }
