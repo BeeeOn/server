@@ -41,12 +41,7 @@ add_library(BeeeOnServer ${SOURCES})
 
 add_executable(ui-server ui/main.cpp ui/UIServerModule.cpp)
 
-# The -Wl,--whole-archive is necessary for all libraries defining
-# BEEEON_OBJECTs (see di/InjectorTarget.h).
-target_link_libraries(ui-server
-	-Wl,--whole-archive
-	BeeeOnServer
-	-Wl,--no-whole-archive
+set(LIBS
 	${POCO_FOUNDATION}
 	${POCO_SSL}
 	${POCO_CRYPTO}
@@ -55,3 +50,21 @@ target_link_libraries(ui-server
 	${POCO_JSON}
 	mongoose
 )
+
+# Apple's linker doesn't support --whole-archive. Instead it uses -all_load.
+if (APPLE)
+	target_link_libraries(ui-server
+		-Wl,-all_load
+		BeeeOnServer
+		${LIBS}
+	)
+# The -Wl,--whole-archive is necessary for all libraries defining
+# BEEEON_OBJECTs (see di/InjectorTarget.h).
+else()
+	target_link_libraries(ui-server
+		-Wl,--whole-archive
+		BeeeOnServer
+		-Wl,--no-whole-archive
+		${LIBS}
+	)
+endif()

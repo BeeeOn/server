@@ -26,10 +26,8 @@ include_directories(
 )
 
 add_executable(test-suite test.cpp ${TEST_SOURCES})
-target_link_libraries(test-suite
-	-Wl,--whole-archive
-	BeeeOnServer
-	-Wl,--no-whole-archive
+
+set(LIBS
 	${POCO_FOUNDATION}
 	${POCO_SSL}
 	${POCO_CRYPTO}
@@ -39,3 +37,21 @@ target_link_libraries(test-suite
 	mongoose
 	${CPP_UNIT}
 )
+
+# Apple's linker doesn't support --whole-archive. Instead it uses -all_load.
+if (APPLE)
+	target_link_libraries(test-suite
+		-Wl,-all_load
+		BeeeOnServer
+		${LIBS}
+	)
+# The -Wl,--whole-archive is necessary for all libraries defining
+# BEEEON_OBJECTs (see di/InjectorTarget.h).
+else()
+	target_link_libraries(test-suite
+		-Wl,--whole-archive
+		BeeeOnServer
+		-Wl,--no-whole-archive
+		${LIBS}
+	)
+endif()
