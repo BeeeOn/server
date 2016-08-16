@@ -2,6 +2,7 @@
 
 #include "server/SessionManager.h"
 #include "provider/MockRandomProvider.h"
+#include "util/Base64.h"
 
 using namespace std;
 
@@ -48,7 +49,7 @@ void SessionManagerTest::testOpenClose()
 				"test@exmaple.org"));
 
 	SessionID id = manager.open(info);
-	CPPUNIT_ASSERT(id.compare(SESSION_ID64) == 0);
+	CPPUNIT_ASSERT(Base64::decode(id).compare(SESSION_ID64) == 0);
 
 	SessionManager::Info infoLookup;
 	CPPUNIT_ASSERT(manager.lookup(id, infoLookup));

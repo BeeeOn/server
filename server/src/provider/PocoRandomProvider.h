@@ -40,29 +40,26 @@ public:
 	}
 
 	/**
-	 * Generate a secure random string. Reseed first,
-	 * if the last reseed occured in les then m_reseed_us
+	 * Generate a secure random byte array. Reseed first,
+	 * if the last reseed occured in less then m_reseed_us
 	 * microseconds. When m_reseed_us is zero, reseeding
 	 * is performed on every call.
 	 */
-	std::string randomStringUnlocked(unsigned int length)
+	void randomBytesUnlocked(char *b, unsigned int length)
 	{
-		std::string value(length, '\0');
-
 		if (m_lastSeed.isElapsed(m_reseed_us)) {
 			m_random.seed();
 			m_lastSeed.update();
 		}
 
-		secureRandomString(value);
-		return value;
+		secureRandomBytes(b, length);
 	}
 
 private:
-	void secureRandomString(std::string &s)
+	void secureRandomBytes(char *b, unsigned int length)
 	{
-		for (unsigned int i = 0; i < s.size(); ++i)
-			s[i] = m_random.nextChar();
+		for (unsigned int i = 0; i < length; ++i)
+			b[i] = m_random.nextChar();
 	}
 
 private:

@@ -17,16 +17,16 @@ namespace BeeeOn {
 class RandomProvider {
 public:
 	/**
-	 * Return a random string of the given length.
+	 * Return a buffer of random bytes of the given length.
 	 * The quality of the randomness depends on implementation.
 	 * The function is not thread-safe.
 	 */
-	virtual std::string randomStringUnlocked(unsigned int length) = 0;
+	virtual void randomBytesUnlocked(char *b, unsigned int length) = 0;
 
-	std::string randomString(unsigned int length)
+	void randomBytes(char *b, unsigned int length)
 	{
 		Poco::Mutex::ScopedLock guard(m_lock);
-		return randomStringUnlocked(length);
+		return randomBytesUnlocked(b, length);
 	}
 
 private:
@@ -63,9 +63,9 @@ public:
 		m_provider = provider;
 	}
 
-	std::string randomStringUnlocked(unsigned int length)
+	void randomBytesUnlocked(char *b, unsigned int length)
 	{
-		return m_provider->randomStringUnlocked(length);
+		m_provider->randomBytesUnlocked(b, length);
 	}
 
 private:

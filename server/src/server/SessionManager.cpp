@@ -1,6 +1,7 @@
 #include <Poco/Exception.h>
 
 #include "server/SessionManager.h"
+#include "util/Base64.h"
 
 using namespace Poco;
 using namespace BeeeOn;
@@ -22,7 +23,9 @@ const SessionID &SessionManager::open(const Info &info)
 	if (it != m_idTable.end())
 		throw ExistsException("session already exists");
 
-	SessionID id = m_random->randomStringUnlocked(ID_LENGTH64);
+	char b[ID_LENGTH64];
+	m_random->randomBytesUnlocked(b, sizeof(b));
+	SessionID id = Base64::encode(b, sizeof(b));
 	m_idTable.insert(make_pair(email->second, id));
 	m_table.insert(make_pair(id, info));
 
