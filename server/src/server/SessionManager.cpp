@@ -32,23 +32,6 @@ const SessionID &SessionManager::open(const Info &info)
 	return m_idTable.find(email->second)->second;
 }
 
-bool SessionManager::update(const SessionID &id, const Info &info)
-{
-	RWLock::ScopedLock guard(m_lock, true);
-
-	Table::iterator it;
-	it = m_table.find(id);
-
-	if (it == m_table.end())
-		return false;
-
-	if (info.find(INFO_EMAIL) == info.end())
-		throw InvalidArgumentException("missing INFO_EMAIL");
-
-	it->second = info;
-	return true;
-}
-
 bool SessionManager::lookup(const SessionID &id, Info &info)
 {
 	RWLock::ScopedLock guard(m_lock);

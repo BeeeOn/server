@@ -112,12 +112,6 @@ public:
 	const SessionID &open(const Info &info);
 
 	/**
-	 * Update information of the session.
-	 * Returns false if there is no such session.
-	 */
-	bool update(const SessionID &id, const Info &info);
-
-	/**
 	 * Lookup a session information by ID.
 	 * Returns false if there is no such session.
 	 */
