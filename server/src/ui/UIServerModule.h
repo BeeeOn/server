@@ -78,8 +78,8 @@ void factorySetup(UIServerRequestHandlerFactory &factory);
 class UIServerModule : public AbstractInjectorTarget {
 public:
 	UIServerModule(void):
-		m_factory(new UIServerRequestHandlerFactory(
-				*this, "ui-server"))
+		m_factory(new UIServerRequestHandlerFactory(*this, "ui-server")),
+		m_logger(LOGGER_CLASS(this))
 	{
 		factorySetup(*m_factory);
 		injector<UIServerModule, SessionManager>("sessionManager",
@@ -176,6 +176,11 @@ public:
 		return *m_locationService;
 	}
 
+	Poco::Logger &logger()
+	{
+		return m_logger;
+	}
+
 private:
 	Poco::SharedPtr<UIServerRequestHandlerFactory> m_factory;
 	UIRestServer *m_server;
@@ -185,6 +190,7 @@ private:
 	DeviceService *m_deviceService;
 	GatewayService *m_gatewayService;
 	LocationService *m_locationService;
+	Poco::Logger &m_logger;
 };
 
 }
