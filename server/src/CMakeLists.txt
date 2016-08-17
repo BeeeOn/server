@@ -35,6 +35,7 @@ file(GLOB SOURCES
 
 include_directories(
 	${PROJECT_SOURCE_DIR}
+	${SOCI_INCLUDE_DIRS}
 )
 
 add_library(BeeeOnServer ${SOURCES})
@@ -49,6 +50,9 @@ set(LIBS
 	${POCO_NET}
 	${POCO_JSON}
 	mongoose
+	${SOCI_LIBRARY}
+	${SOCI_postgresql_PLUGIN}
+	${SOCI_sqlite3_PLUGIN}
 )
 
 # Apple's linker doesn't support --whole-archive. Instead it uses -all_load.
