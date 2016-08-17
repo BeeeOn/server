@@ -23,7 +23,7 @@ public:
 
 	bool verifyAuthCode(const std::string &authCode, Result &result)
 	{
-		m_logger.critical("PERMIT AUTH");
+		m_logger.critical("PERMIT AUTH: " + authCode);
 		result.insert(
 			std::make_pair("email", authCode));
 		return true;
