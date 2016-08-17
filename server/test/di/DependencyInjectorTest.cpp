@@ -20,6 +20,7 @@ class DependencyInjectorTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testAliasLoop);
 	CPPUNIT_TEST(testAliasToAliasFails);
 	CPPUNIT_TEST(testExternalVariables);
+	CPPUNIT_TEST(testEarly);
 	CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -36,6 +37,7 @@ public:
 	void testAliasLoop();
 	void testAliasToAliasFails();
 	void testExternalVariables();
+	void testEarly();
 
 private:
 	AutoPtr<XMLConfiguration> m_config;
@@ -106,6 +108,16 @@ void DependencyInjectorTest::setUp()
 	m_config->setString("instance[2].set[2][@number]", "${FakeNumber}");
 	m_config->setString("instance[2].set[3][@name]", "other");
 	m_config->setString("instance[2].set[3][@text]", "${NotExisting}");
+	m_config->setString("instance[3][@name]", "earlyInit0");
+	m_config->setString("instance[3][@class]", "BeeeOn::FakeObject");
+	m_config->setString("instance[3][@init]", "early");
+	m_config->setString("instance[3].set[1][@name]", "name");
+	m_config->setString("instance[3].set[1][@text]", "early0");
+	m_config->setString("instance[4][@name]", "earlyInit1");
+	m_config->setString("instance[4][@class]", "BeeeOn::FakeObject");
+	m_config->setString("instance[4][@init]", "early");
+	m_config->setString("instance[4].set[1][@name]", "name");
+	m_config->setString("instance[4].set[1][@text]", "early1");
 	m_config->setString("FakeText", "any string");
 	m_config->setInt("FakeNumber", 42);
 
@@ -214,6 +226,23 @@ void DependencyInjectorTest::testExternalVariables()
 	CPPUNIT_ASSERT(fake->m_name.compare("any string") == 0);
 	CPPUNIT_ASSERT(fake->m_other.compare("${NotExisting}") == 0);
 	CPPUNIT_ASSERT(fake->m_index == 42);
+}
+
+/**
+ * Test whether the init="early" instances are created automatically
+ * during DependencyInjector construction.
+ */
+void DependencyInjectorTest::testEarly()
+{
+	DependencyInjector injector(m_config);
+
+	FakeObject *early0 = injector.find<FakeObject>("earlyInit0");
+	CPPUNIT_ASSERT(early0 != NULL);
+
+	FakeObject *early1 = injector.find<FakeObject>("earlyInit1");
+	CPPUNIT_ASSERT(early1 != NULL);
+
+	CPPUNIT_ASSERT(early0 != early1);
 }
 
 }

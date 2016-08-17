@@ -89,6 +89,28 @@ DependencyInjector::~DependencyInjector()
 	}
 }
 
+void DependencyInjector::createEarly()
+{
+	AbstractConfiguration::Keys tmp;
+	m_conf->keys(tmp);
+
+	AbstractConfiguration::Keys::const_iterator it;
+	for (it = tmp.begin(); it != tmp.end(); ++it) {
+		const string &key = *it;
+
+		if (key.find("instance[") == string::npos)
+			continue;
+
+		const string &init = m_conf->getString(
+				key + "[@init]", "lazy");
+		if (init.compare("early"))
+			continue;
+
+		const string name = m_conf->getString(key + "[@name]");
+		(void) createNoAlias(name);
+	}
+}
+
 InjectorTarget *DependencyInjector::create(const string &name)
 {
 	TRACE_METHOD();
