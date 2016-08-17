@@ -142,7 +142,10 @@ void DependencyInjectorTest::testSimple()
 {
 	DependencyInjector injector(m_config);
 
-	FakeObject *fake = injector.create<FakeObject>("simple");
+	FakeObject *fake = injector.find<FakeObject>("simple");
+	CPPUNIT_ASSERT(fake == NULL);
+
+	fake = injector.create<FakeObject>("simple");
 
 	CPPUNIT_ASSERT(fake != NULL);
 	CPPUNIT_ASSERT(fake->m_self == fake);
@@ -158,13 +161,20 @@ void DependencyInjectorTest::testAlias()
 {
 	DependencyInjector injector(m_config);
 
-	FakeObject *fakeAlias = injector.create<FakeObject>("simpleAlias");
+	FakeObject *fakeAlias = injector.find<FakeObject>("simpleAlias");
+	CPPUNIT_ASSERT(fakeAlias == NULL);
+
+	fakeAlias = injector.create<FakeObject>("simpleAlias");
 	CPPUNIT_ASSERT(fakeAlias != NULL);
 
-	FakeObject *fake = injector.create<FakeObject>("simple");
+	FakeObject *fake = injector.find<FakeObject>("simple");
 	CPPUNIT_ASSERT(fake != NULL);
 
+	FakeObject *fakeCreated = injector.create<FakeObject>("simple");
+	CPPUNIT_ASSERT(fakeCreated != NULL);
+
 	CPPUNIT_ASSERT(fake == fakeAlias);
+	CPPUNIT_ASSERT(fake == fakeCreated);
 }
 
 /**

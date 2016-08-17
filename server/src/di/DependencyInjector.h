@@ -91,6 +91,18 @@ public:
 		return dynamic_cast<T *>(create(name));
 	}
 
+	InjectorTarget *find(const std::string &name);
+
+	template <typename T>
+	T *find(const std::string &name)
+	{
+		InjectorTarget *t = find(name);
+		if (t != NULL)
+			return dynamic_cast<T *>(t);
+
+		return NULL;
+	}
+
 private:
 	InjectorTarget *createNoAlias(const InstanceInfo &info);
 	InjectorTarget *createNew(const InstanceInfo &info);
