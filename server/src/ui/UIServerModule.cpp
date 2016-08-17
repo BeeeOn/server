@@ -11,6 +11,8 @@
 #include "UIServerModule.h"
 #include "Debug.h"
 
+#include "Auth.h"
+
 using namespace std;
 using namespace Poco;
 using namespace Poco::Net;
@@ -156,8 +158,8 @@ void factorySetup(UIServerRequestHandlerFactory &factory)
 	factory.noRoute(handleNoRoute);
 	factory.noOperation(handleNoOperation);
 	factory.sessionVerifier(verifyAuthorized);
-	factory.POST("/auth", handleAuth, false);
-	factory.DELETE("/auth", handleAuth);
+	factory.POST("/auth", Auth::handlePost, false);
+	factory.DELETE("/auth", Auth::handleDelete);
 	factory.POST("/users", handleCreateUser);
 	factory.GET("/users/:userId", handleGetUser);
 	factory.GET("/:placeId/devices/:deviceId", handleGetDevice);
