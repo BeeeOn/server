@@ -10,6 +10,8 @@
 
 namespace BeeeOn {
 
+class JSONArraySerializer;
+
 /**
  * Serialize or deserialize any object using the JSON format.
  */
@@ -18,27 +20,17 @@ public:
 	/**
 	 * Construct a serializer.
 	 */
-	JSONObjectSerializer():
-		m_object(new Poco::JSON::Object())
-	{
-	}
+	JSONObjectSerializer();
 
 	/**
 	 * Construct a deserializer from string.
 	 */
-	JSONObjectSerializer(const std::string &s):
-		m_object(Poco::JSON::Parser().parse(s)
-			.extract<Poco::JSON::Object::Ptr>())
-	{
-	}
+	JSONObjectSerializer(const std::string &s);
 
 	/**
 	 * Construct a deserializer.
 	 */
-	JSONObjectSerializer(Poco::JSON::Object::Ptr object):
-		m_object(object)
-	{
-	}
+	JSONObjectSerializer(Poco::JSON::Object::Ptr object);
 
 	/**
 	 * Serialize an instance attribute of type T by name.
@@ -65,14 +57,16 @@ public:
 	}
 
 	/**
+	 * Provides a deserializer for the array with name.
+	 */
+	JSONArraySerializer getArray(const std::string &name);
+
+	/**
 	 * Clear the serializer for another serialization.
 	 *
 	 * This is not a part of the serialization API.
 	 */
-	void clear()
-	{
-		m_object->clear();
-	}
+	void clear();
 
 	/**
 	 * Clear the deserializer for another deserialization.
@@ -80,20 +74,12 @@ public:
 	 *
 	 * This is not a part of the serialization API.
 	 */
-	void clearAndSetup(const Poco::JSON::Object::Ptr &o)
-	{
-		m_object = o;
-	}
+	void clearAndSetup(const Poco::JSON::Object::Ptr &o);
 
 	/**
 	 * Convert serialized object into string.
 	 */
-	std::string toString() const
-	{
-		std::ostringstream s;
-		m_object->stringify(s);
-		return s.str();
-	}
+	std::string toString() const;
 
 	/**
 	 * Obtain the JSON Object used for serialization
@@ -101,10 +87,7 @@ public:
 	 *
 	 * This is not a part of the serialization API.
 	 */
-	const Poco::JSON::Object::Ptr obtain()
-	{
-		return m_object;
-	}
+	const Poco::JSON::Object::Ptr obtain();
 
 private:
 	Poco::JSON::Object::Ptr m_object;
@@ -118,122 +101,82 @@ public:
 	/**
 	 * Construct a serializer.
 	 */
-	JSONArraySerializer():
-		m_array(new Poco::JSON::Array())
-	{
-	}
+	JSONArraySerializer();
 
 	/**
 	 * Construct a deserializer from string.
 	 */
-	JSONArraySerializer(const std::string &s):
-		m_array(Poco::JSON::Parser().parse(s)
-			.extract<Poco::JSON::Array::Ptr>())
-	{
-	}
+	JSONArraySerializer(const std::string &s);
 
 	/**
 	 * Construct a deserializer from JSON Array.
 	 */
-	JSONArraySerializer(Poco::JSON::Array::Ptr array):
-		m_array(array)
-	{
-	}
+	JSONArraySerializer(Poco::JSON::Array::Ptr array);
 
 	/**
 	 * Start serialization of a member of type Object.
 	 * Returns a serializer for this purpose.
 	 */
-	JSONObjectSerializer startObject()
-	{
-		return JSONObjectSerializer();
-	}
+	JSONObjectSerializer startObject();
 
 	/**
 	 * Finish serialization of an Object member.
 	 */
-	void endObject(JSONObjectSerializer &s)
-	{
-		Poco::Dynamic::Var object(s.obtain());
-		m_array->set(m_array->size(), object);
-	}
+	void endObject(JSONObjectSerializer &s);
 
 	/**
 	 * Serialize a value of the type T. It is appended to the
 	 * end of the Array.
 	 */
 	template <typename T>
-	void push(const T &v)
-	{
-		Poco::Dynamic::Var value(v);
-		m_array->set(m_array->size(), value);
-	}
+	void push(const T &v);
 
 	/**
 	 * Deserialize a value of type T at index i.
 	 */
 	template <typename T>
-	T get(const unsigned int i) const
-	{
-		return m_array->getElement<T>(i);
-	}
+	T get(const unsigned int i) const;
 
 	/**
 	 * Provides a deserializer for the object at index i.
 	 */
-	JSONObjectSerializer getObject(unsigned int i)
-	{
-		return JSONObjectSerializer(m_array->getObject(i));
-	}
+	JSONObjectSerializer getObject(unsigned int i);
 
 	/**
 	 * Test whether the element at index i is of type Object.
 	 */
-	bool isObject(const unsigned int i) const
-	{
-		return m_array->isObject(i);
-	}
+	bool isObject(const unsigned int i) const;
 
+	/*
+	 * Test whether the element at index i is of type Array.
+	 */
+	bool isArray(unsigned int i) const;
 	/**
 	 * Return the current size of the array being serialized
 	 * or deserialized. The size increases during serialization.
 	 * During deserialization it provides information about
 	 * the amount of elements to be extracted.
 	 */
-	unsigned int size() const
-	{
-		return m_array->size();
-	}
+	unsigned int size() const;
 
 	/**
 	 * Convert the serialized array into string.
 	 */
-	std::string toString() const
-	{
-		std::ostringstream s;
-		m_array->stringify(s);
-		return s.str();
-	}
+	std::string toString() const;
 
 	/**
 	 * Clear the serializer for another serialization.
 	 *
 	 * This is not a part of the serialization API.
 	 */
-	void clear()
-	{
-		m_array->clear();
-	}
+	void clear();
 
 	/**
 	 * Clear the deserializer for another deserialization.
 	 *
 	 * This is not a part of the serialization API.
 	 */
-	void clearAndSetup(Poco::JSON::Array::Ptr &a)
-	{
-		m_array = a;
-	}
+	void clearAndSetup(Poco::JSON::Array::Ptr &a);
 
 	/**
 	 * Obtain the JSON Array used for serialization
@@ -241,10 +184,7 @@ public:
 	 *
 	 * This is not a part of the serialization API.
 	 */
-	Poco::JSON::Array::Ptr obtain()
-	{
-		return m_array;
-	}
+	Poco::JSON::Array::Ptr obtain();
 
 private:
 	Poco::JSON::Array::Ptr m_array;

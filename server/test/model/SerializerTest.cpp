@@ -16,6 +16,7 @@ class SerializerTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testDeserializeObject);
 	CPPUNIT_TEST(testSerializeArray);
 	CPPUNIT_TEST(testDeserializeArray);
+	CPPUNIT_TEST(testDeserializeMemberArray);
 	CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -29,6 +30,7 @@ public:
 	void testDeserializeObject();
 	void testSerializeArray();
 	void testDeserializeArray();
+	void testDeserializeMemberArray();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SerializerTest);
@@ -147,6 +149,24 @@ void SerializerTest::testDeserializeArray()
 
 	CPPUNIT_ASSERT(e2.m_name.compare("Mickey Mouse") == 0);
 	CPPUNIT_ASSERT(e2.m_size == 99);
+}
+
+void SerializerTest::testDeserializeMemberArray()
+{
+	JSONObjectSerializer serializer(
+	"{"
+		"\"id\":42,"
+		"\"config\":["
+			"{\"name\":\"Michael God\",\"size\":250},"
+			"{\"name\":\"Mickey Mouse\",\"size\":99}"
+		"]"
+	"}");
+
+	JSONArraySerializer arraySerializer = serializer.getArray("config");
+	CPPUNIT_ASSERT(arraySerializer.size() == 2);
+
+	for (unsigned int i = 0; i < arraySerializer.size(); ++i)
+		CPPUNIT_ASSERT(arraySerializer.isObject(i));
 }
 
 }
