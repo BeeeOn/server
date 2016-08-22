@@ -14,6 +14,7 @@ class TestSelf(unittest.TestCase):
 	"""
 	def test2_prerequisites(self):
 		import http.client
+		import json
 
 if __name__ == '__main__':
 	import sys
