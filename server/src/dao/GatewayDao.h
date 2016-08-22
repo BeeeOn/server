@@ -16,6 +16,12 @@ public:
 
 class NullGatewayDao : public AbstractInjectorTarget,
 	public NullDao<Gateway, GatewayDao> {
+public:
+	/**
+	 * Provide a singleton instance to avoid
+	 * unnecessary allocations.
+	 */
+	static GatewayDao &instance();
 };
 
 class MockGatewayDao : public AbstractInjectorTarget,
