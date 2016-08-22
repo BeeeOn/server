@@ -1,0 +1,57 @@
+= Functional tests =
+
+This directory contains functional tests of the server. Each test suite
+usually require the server or some its parts to be started manually
+prior to testing.
+
+The tests are written in Python 3. Required Python libraries:
+
+* unittest-tap-reporting
+* see t0000-selftest.py for more required libraries
+
+
+== Install unittest-tap-reporting ==
+
+Via RPM:
+
+  $ https://github.com/vit1251/unittest-tap-reporting.git
+  # yum install python-babel
+  $ (cd unittest-tap-reporting && python2 setup.py bdist --formats=rpm)
+  # rpm -i unittest-tap-reporting/dist/unittest-tap-reporting-0.1-1.noarch.rpm
+
+Via easy_install:
+
+  # easy_install unittest-tap-reporting
+
+
+== Run tests ==
+
+Just start all the t####-* files:
+
+  $ for t in t[0-9]*; do
+      ./${t}
+    done
+
+
+== Run tests using prove ===
+
+  $ prove t[0-9]*
+
+
+== Run single test ==
+
+Simply execute the selected testing script:
+
+  $ ./t0000-selftest.py
+
+To execute a selected subtest, you can specify the subtest on
+the command line like:
+
+  $ ./t0000-selftest.py TestSelf.test1_self
+
+
+== New test template ==
+
+See t0000-selftest.py that test whether the testing environment is
+set up correctly. Use the t0000-selftest.py as the starting template
+for new tests.
