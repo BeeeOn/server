@@ -14,4 +14,10 @@ void UIMockInit::injectionDone()
 	user.setEmail("joe.doe@example.org");
 
 	m_userDao->create(user);
+
+	GatewayID id(GatewayID::random());
+	Gateway gateway(id);
+	gateway.setName("Joe Doe's Gateway");
+
+	m_gatewayDao->create(gateway);
 }
