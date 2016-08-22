@@ -2,6 +2,7 @@
 #define BEEEON_GATEWAY_H
 
 #include <Poco/SharedPtr.h>
+#include "model/Place.h"
 #include "model/GatewayID.h"
 #include "model/Collection.h"
 
@@ -45,6 +46,16 @@ public:
 		return m_name;
 	}
 
+	void setPlace(const Place &place)
+	{
+		m_place = place;
+	}
+
+	const Place &place() const
+	{
+		return m_place;
+	}
+
 	const ID &id() const
 	{
 		return m_id;
@@ -71,6 +82,7 @@ public:
 private:
 	ID m_id;
 	std::string m_name;
+	Place m_place;
 };
 
 typedef Gateway::Collection GatewayCollection;
