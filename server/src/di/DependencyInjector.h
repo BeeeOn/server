@@ -26,6 +26,7 @@ class InstanceInfo;
  * * instance: defines a new instance (singleton)
  *   + attribute name   - name of the instance
  *   + attribute class  - class name with namespace
+ *   + attribute init   - lazy (default), early
  *
  * * set: sets a property of an instance
  *   + attribute name   - name of the property to inject
@@ -79,6 +80,7 @@ public:
 		m_conf(conf),
 		m_logger(LOGGER_CLASS(this))
 	{
+		createEarly();
 	}
 
 	~DependencyInjector();
@@ -91,7 +93,24 @@ public:
 		return dynamic_cast<T *>(create(name));
 	}
 
+	InjectorTarget *find(const std::string &name);
+
+	template <typename T>
+	T *find(const std::string &name)
+	{
+		InjectorTarget *t = find(name);
+		if (t != NULL)
+			return dynamic_cast<T *>(t);
+
+		return NULL;
+	}
+
 private:
+	/**
+	 * Create instances that should be always created.
+	 */
+	void createEarly();
+
 	InjectorTarget *createNoAlias(const InstanceInfo &info);
 	InjectorTarget *createNew(const InstanceInfo &info);
 	InjectorTarget *injectDependencies(

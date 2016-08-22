@@ -89,17 +89,37 @@ DependencyInjector::~DependencyInjector()
 	}
 }
 
+void DependencyInjector::createEarly()
+{
+	AbstractConfiguration::Keys tmp;
+	m_conf->keys(tmp);
+
+	AbstractConfiguration::Keys::const_iterator it;
+	for (it = tmp.begin(); it != tmp.end(); ++it) {
+		const string &key = *it;
+
+		if (key.find("instance[") == string::npos)
+			continue;
+
+		const string &init = m_conf->getString(
+				key + "[@init]", "lazy");
+		if (init.compare("early"))
+			continue;
+
+		const string name = m_conf->getString(key + "[@name]");
+		(void) createNoAlias(name);
+	}
+}
+
 InjectorTarget *DependencyInjector::create(const string &name)
 {
 	TRACE_METHOD();
 
-	InjectorSet::const_iterator it;
-
-	it = m_set.find(name);
-	if (it != m_set.end()) {
+	InjectorTarget *existing = find(name);
+	if (existing != NULL) {
 		m_logger.debug("instance " + name + " reused",
 				__FILE__, __LINE__);
-		return it->second;
+		return existing;
 	}
 
 	InstanceInfo info(name);
@@ -108,16 +128,25 @@ InjectorTarget *DependencyInjector::create(const string &name)
 	if (ref.empty())
 		return createNoAlias(info);
 
-	it = m_set.find(ref);
-	if (it != m_set.end()) {
+	existing = find(ref);
+	if (existing != NULL) {
 		m_logger.debug("instance " + name
 				+ " reused as alias to " + ref,
 				__FILE__, __LINE__);
-		return it->second;
+		return existing;
 	}
 
 	InstanceInfo aliasInfo(ref);
 	return createNoAlias(aliasInfo);
+}
+
+InjectorTarget *DependencyInjector::find(const string &name)
+{
+	InjectorSet::const_iterator it = m_set.find(name);
+	if (it != m_set.end())
+		return it->second;
+
+	return NULL;
 }
 
 InjectorTarget *DependencyInjector::createNoAlias(const InstanceInfo &info)
