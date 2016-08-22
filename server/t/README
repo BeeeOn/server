@@ -27,14 +27,14 @@ Via easy_install:
 
 Just start all the t####-* files:
 
-  $ for t in t[0-9]*; do
+  $ for t in t[0-9]* ui/t[0-9]*; do
       ./${t}
     done
 
 
 == Run tests using prove ===
 
-  $ prove t[0-9]*
+  $ prove t[0-9]* ui/t[0-9]*
 
 
 == Run single test ==
