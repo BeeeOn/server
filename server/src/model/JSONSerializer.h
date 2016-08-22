@@ -57,6 +57,11 @@ public:
 	}
 
 	/**
+	 * Provides a deserializer for the array with name.
+	 */
+	JSONArraySerializer getArray(const std::string &name);
+
+	/**
 	 * Clear the serializer for another serialization.
 	 *
 	 * This is not a part of the serialization API.

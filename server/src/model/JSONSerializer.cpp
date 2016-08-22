@@ -18,6 +18,11 @@ JSONObjectSerializer::JSONObjectSerializer(Poco::JSON::Object::Ptr object):
 {
 }
 
+JSONArraySerializer JSONObjectSerializer::getArray(const std::string &name)
+{
+	return JSONArraySerializer(m_object->getArray(name));
+}
+
 void JSONObjectSerializer::clear()
 {
 	m_object->clear();
@@ -89,6 +94,11 @@ JSONObjectSerializer JSONArraySerializer::getObject(unsigned int i)
 bool JSONArraySerializer::isObject(const unsigned int i) const
 {
 	return m_array->isObject(i);
+}
+
+bool JSONArraySerializer::isArray(unsigned int i) const
+{
+	return m_array->isArray(i);
 }
 
 unsigned int JSONArraySerializer::size() const
