@@ -11,7 +11,8 @@ namespace BeeeOn {
 
 class GatewayService : public AbstractInjectorTarget {
 public:
-	GatewayService()
+	GatewayService():
+		m_dao(&NullGatewayDao::instance())
 	{
 		injector<GatewayService, GatewayDao>("gatewayDao",
 				&GatewayService::setGatewayDao);
@@ -19,7 +20,10 @@ public:
 
 	void setGatewayDao(GatewayDao *dao)
 	{
-		m_dao = dao;
+		if (dao == NULL)
+			m_dao = &NullGatewayDao::instance();
+		else
+			m_dao = dao;
 	}
 
 	bool fetch(Gateway &gateway)
