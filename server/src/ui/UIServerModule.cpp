@@ -41,7 +41,20 @@ static void verifyAuthorized(const UIRequest &request,
 {
 	TRACE_FUNC();
 
-	throw Poco::Net::NotAuthenticatedException("not implemented");
+	if (request.hasCredentials()) {
+		string scheme;
+		string authInfo;
+		Poco::SharedPtr<ExpirableSession> session;
+
+		request.getCredentials(scheme, authInfo);
+
+		if (!module.sessionManager().lookup(authInfo, session))
+			throw NotAuthenticatedException("Session not found");
+
+		return;
+	}
+
+	throw NotAuthenticatedException("credentials not found");
 }
 
 static void handleGetUser(UIRouteContext &context)
