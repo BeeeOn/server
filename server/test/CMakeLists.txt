@@ -20,6 +20,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/util/DAMMTest.cpp
 	${PROJECT_SOURCE_DIR}/util/Base64Test.cpp
 	${PROJECT_SOURCE_DIR}/dao/SociManagerTest.cpp
+	${PROJECT_SOURCE_DIR}/cppunit/TapTestProducer.cpp
 )
 
 include_directories(

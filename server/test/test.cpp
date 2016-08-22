@@ -1,7 +1,8 @@
 #include <iostream>
-#include <cppunit/CompilerOutputter.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
-#include <cppunit/ui/text/TestRunner.h>
+#include <cppunit/TestRunner.h>
+#include <cppunit/TestResult.h>
+#include <cppunit/TestResultCollector.h>
 
 #include <Poco/Logger.h>
 #include <Poco/AutoPtr.h>
@@ -9,6 +10,8 @@
 #include <Poco/Util/IniFileConfiguration.h>
 #include <Poco/Util/MapConfiguration.h>
 #include <Poco/Util/LoggingConfigurator.h>
+
+#include "cppunit/TapTestProducer.h"
 
 using namespace std;
 using namespace CppUnit;
@@ -39,13 +42,16 @@ int main(int argc, char **argv)
 {
 	setupLogger(argc > 1? argv[1] : "logging.ini");
 
+	TestResult controller;
+	BeeeOn::TapTestProducer tapProducer;
+	TestRunner runner;
+
+	controller.addListener(&tapProducer);
+
 	Test *suite = TestFactoryRegistry::getRegistry().makeTest();
-	TextUi::TestRunner runner;
 	runner.addTest(suite);
 
-	runner.setOutputter(
-		new CompilerOutputter(&runner.result(), cerr));
-	bool wasSucessful = runner.run();
+	runner.run(controller);
 
-	return wasSucessful? 0 : 1;
+	return tapProducer.wasSuccessful()? 0 : 1;
 }

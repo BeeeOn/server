@@ -5,7 +5,7 @@
 
 #include "provider/GoogleAuthProvider.h"
 #include "provider/AuthProvider.h"
-#include "SkippableAutoRegisterSuite.h"
+#include "cppunit/SkippableAutoRegisterSuite.h"
 
 using namespace std;
 using namespace Poco;
