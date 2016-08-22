@@ -7,6 +7,8 @@
 #include "rpc/GatewayRPC.h"
 #include "di/InjectorTarget.h"
 #include "Debug.h"
+#include "model/Place.h"
+#include "model/Gateway.h"
 
 namespace BeeeOn {
 
@@ -42,6 +44,32 @@ public:
 	{
 		TRACE_METHOD();
 		return m_dao->fetch(gateway);
+	}
+
+	bool fetchFromPlace(Gateway &gateway, Place &place)
+	{
+		return m_dao->fetchFromPlace(gateway, place);
+	}
+
+	bool update(Gateway &gateway)
+	{
+		return m_dao->update(gateway);
+	}
+
+	bool assignAndUpdate(Gateway &gateway, const Place &place)
+	{
+		if (gateway.hasPlace())
+			return false;
+
+		return m_dao->assignAndUpdate(gateway, place);
+	}
+
+	bool unassign(Gateway &gateway, Place &place)
+	{
+		if (!m_dao->fetchFromPlace(gateway, place))
+			return false;
+
+		return m_dao->unassign(gateway);
 	}
 
 	void scanDevices(Gateway &gateway)
