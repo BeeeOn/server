@@ -47,7 +47,9 @@ CPPUNIT_TEST_SUITE_REGISTRATION(DependencyInjectorTest);
 
 class FakeObject : public AbstractInjectorTarget {
 public:
-	FakeObject()
+	FakeObject():
+		m_self(NULL),
+		m_index(0)
 	{
 		injector<FakeObject, FakeObject>("self", &FakeObject::setSelf);
 		textInjector("name", (TextSetter) &FakeObject::setName);
