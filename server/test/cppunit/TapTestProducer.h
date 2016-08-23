@@ -97,11 +97,12 @@ public:
 
 	void startTest(CppUnit::Test *test)
 	{
-		m_name[m_current++] = test->getName();
+		m_name[m_current] = test->getName();
 	}
 
 	void endTest(CppUnit::Test *test)
 	{
+		m_current += 1;
 	}
 
 	void addFailure(const CppUnit::TestFailure &failure)
