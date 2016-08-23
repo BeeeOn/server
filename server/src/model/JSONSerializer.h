@@ -7,6 +7,7 @@
 #include <Poco/JSON/Array.h>
 #include <Poco/JSON/Parser.h>
 #include <Poco/Dynamic/Var.h>
+#include <Poco/StreamCopier.h>
 
 namespace BeeeOn {
 
@@ -26,6 +27,18 @@ public:
 	 * Construct a deserializer from string.
 	 */
 	JSONObjectSerializer(const std::string &s);
+
+	/**
+	 * Construct a deserializer from istream
+	 */
+	JSONObjectSerializer(std::istream &body)
+	{
+		std::string data;
+		Poco::StreamCopier::copyToString(body, data);
+
+		m_object = Poco::JSON::Parser().parse(data)
+			.extract<Poco::JSON::Object::Ptr>();
+	}
 
 	/**
 	 * Construct a deserializer.

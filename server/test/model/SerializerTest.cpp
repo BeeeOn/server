@@ -14,6 +14,7 @@ class SerializerTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST_SUITE(SerializerTest);
 	CPPUNIT_TEST(testSerializeObject);
 	CPPUNIT_TEST(testDeserializeObject);
+	CPPUNIT_TEST(testDeserializeObjectFromStream);
 	CPPUNIT_TEST(testSerializeArray);
 	CPPUNIT_TEST(testDeserializeArray);
 	CPPUNIT_TEST(testDeserializeMemberArray);
@@ -28,6 +29,7 @@ public:
 	void tearDown();
 	void testSerializeObject();
 	void testDeserializeObject();
+	void testDeserializeObjectFromStream();
 	void testSerializeArray();
 	void testDeserializeArray();
 	void testDeserializeMemberArray();
@@ -97,6 +99,18 @@ void SerializerTest::testDeserializeObject()
 
 	CPPUNIT_ASSERT(e.m_name.compare("Michael God") == 0);
 	CPPUNIT_ASSERT(e.m_size == 250);
+}
+
+void SerializerTest::testDeserializeObjectFromStream()
+{
+	istringstream s("{\"name\":\"Robbie Rock\",\"size\":110}");
+	JSONObjectSerializer serializer(s);
+
+	SerializableEntry e;
+	e.deserialize(serializer);
+
+	CPPUNIT_ASSERT(e.m_name.compare("Robbie Rock") == 0);
+	CPPUNIT_ASSERT(e.m_size == 110);
 }
 
 void SerializerTest::testSerializeArray()
