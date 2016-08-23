@@ -31,16 +31,18 @@ void Base64Test::testEncode()
 		'\x01', '\xdc', '\xc2', '\x47', '\x8b', '\x78', '\x77', '\x10',
 	};
 
-	const string expect =
-		"XHgwNVx4MTZceGFiXHhmZlx4MTJceDk"
-		"1XHg0OVx4OTBceDM0XHg0NFx4MTdceD"
-		"Q3XHg3N1x4NzhceDc3XHgxMFx4MDBce"
-		"GVkXHhjY1x4MTBceDg5XHhhOFx4YWFc"
-		"eGE4XHgwMVx4ZGNceGMyXHg0N1x4OGJ"
-		"ceDc4XHg3N1x4MTAK";
+	/**
+	 * Generated as (without the wrapping):
+	 *
+	 * $ echo -ne "\x05\x16\xab\xff\x12\x95\x49\x90\x34\x44
+	 *             \x17\x47\x77\x78\x77\x10\x00\xed\xcc\x10
+	 *             \x89\xa8\xaa\xa8\x01\xdc\xc2\x47\x8b\x78
+	 *             \x77\x10" | base64 -w 0
+	 */
+	const string expect = "BRar/xKVSZA0RBdHd3h3EADtzBCJqKqoAdzCR4t4dxA=";
 
 	const string &result = Base64::encode(buf, sizeof(buf));
-	CPPUNIT_ASSERT(result.compare(expect));
+	CPPUNIT_ASSERT(result.compare(expect) == 0);
 }
 
 void Base64Test::testDecode()
