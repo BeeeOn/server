@@ -12,6 +12,7 @@ class GatewayIDTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testCreate);
 	CPPUNIT_TEST(testParse);
 	CPPUNIT_TEST(testRandom);
+	CPPUNIT_TEST(testLeadingZeros);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void setUp();
@@ -19,6 +20,7 @@ public:
 	void testCreate();
 	void testParse();
 	void testRandom();
+	void testLeadingZeros();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(GatewayIDTest);
@@ -62,6 +64,12 @@ void GatewayIDTest::testRandom()
 		CPPUNIT_ASSERT(used.find(id.toString()) == used.end());
 		used.insert(id.toString());
 	}
+}
+
+void GatewayIDTest::testLeadingZeros()
+{
+	GatewayID id(1, 1);
+	CPPUNIT_ASSERT(id.toString().compare("1000000000000015") == 0);
 }
 
 }
