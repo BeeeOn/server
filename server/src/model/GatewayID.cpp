@@ -78,7 +78,7 @@ GatewayID GatewayID::random(int version, uint32_t seed)
 	uint64_t data = 0;
 
 	for (int i = 0; i < LENGTH - 2; ++i) {
-		int c = rnd.nextChar();
+		int c = rnd.next(10);
 		data *= 10;
 		data += c;
 	}
