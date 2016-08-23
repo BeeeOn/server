@@ -14,9 +14,8 @@ The tests are written in Python 3. Required Python libraries:
 
 Via RPM:
 
-  $ https://github.com/vit1251/unittest-tap-reporting.git
-  # yum install python-babel
-  $ (cd unittest-tap-reporting && python2 setup.py bdist --formats=rpm)
+  $ git clone https://github.com/vit1251/unittest-tap-reporting.git
+  $ (cd unittest-tap-reporting && python3 setup.py bdist --formats=rpm)
   # rpm -i unittest-tap-reporting/dist/unittest-tap-reporting-0.1-1.noarch.rpm
 
 Via easy_install:
