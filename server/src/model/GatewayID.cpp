@@ -1,6 +1,7 @@
 #include <Poco/Ascii.h>
 #include <Poco/Random.h>
 #include <Poco/Exception.h>
+#include <Poco/Format.h>
 
 #include "util/DAMM.h"
 #include "model/GatewayID.h"
@@ -18,7 +19,7 @@ GatewayID::GatewayID(int version, uint64_t data)
 
 	string tmp;
 	tmp.append(to_string(version));
-	tmp.append(to_string(data));
+	tmp.append(format("%014Lu", (Poco::UInt64) data));
 	tmp.append(to_string(DAMM::compute(tmp)));
 
 	try {
