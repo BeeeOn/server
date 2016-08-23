@@ -14,6 +14,7 @@ public:
 	{
 		std::ostringstream sOut;
 		Poco::Base64Encoder base64(sOut);
+		base64.rdbuf()->setLineLength(0);
 		base64.write(b, blen);
 		base64.close();
 
