@@ -1,6 +1,7 @@
 #include <Poco/Ascii.h>
 #include <Poco/Random.h>
 #include <Poco/Exception.h>
+#include <Poco/Format.h>
 
 #include "util/DAMM.h"
 #include "model/GatewayID.h"
@@ -18,10 +19,14 @@ GatewayID::GatewayID(int version, uint64_t data)
 
 	string tmp;
 	tmp.append(to_string(version));
-	tmp.append(to_string(data));
+	tmp.append(format("%014Lu", (Poco::UInt64) data));
 	tmp.append(to_string(DAMM::compute(tmp)));
 
-	m_value = stol(tmp);
+	try {
+		m_value = stol(tmp);
+	} catch(exception &e) {
+		throw SyntaxException("failed to stol: " + tmp);
+	}
 }
 
 GatewayID GatewayID::parse(const string &s)
@@ -62,15 +67,19 @@ GatewayID GatewayID::parse(const string &s)
 	return GatewayID(version, data);
 }
 
-GatewayID GatewayID::random(int version)
+GatewayID GatewayID::random(int version, uint32_t seed)
 {
 	Random rnd;
-	rnd.seed();
+
+	if (seed == 0)
+		rnd.seed();
+	else
+		rnd.seed(seed);
 
 	uint64_t data = 0;
 
 	for (int i = 0; i < LENGTH - 2; ++i) {
-		int c = rnd.nextChar();
+		int c = rnd.next(10);
 		data *= 10;
 		data += c;
 	}
