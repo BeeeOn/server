@@ -21,7 +21,11 @@ GatewayID::GatewayID(int version, uint64_t data)
 	tmp.append(to_string(data));
 	tmp.append(to_string(DAMM::compute(tmp)));
 
-	m_value = stol(tmp);
+	try {
+		m_value = stol(tmp);
+	} catch(exception &e) {
+		throw SyntaxException("failed to stol: " + tmp);
+	}
 }
 
 GatewayID GatewayID::parse(const string &s)
