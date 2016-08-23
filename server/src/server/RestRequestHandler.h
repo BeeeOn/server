@@ -48,6 +48,17 @@ public:
 	{
 	}
 
+	void handleNoContentLength(Request &req)
+	{
+		const std::string &method = req.getMethod();
+
+		if (!method.compare("POST") || !method.compare("PUT")) {
+			if (!req.hasContentLength())
+				throw Poco::InvalidArgumentException(
+						"no Content-Length header");
+		}
+	}
+
 	void handleRequest(Request &req, Response &res)
 	{
 		_TRACE_METHOD(m_logger);
@@ -57,6 +68,8 @@ public:
 			res.setStatusAndReason(Response::HTTP_OK);
 			m_route.debug(m_logger, m_params, __FILE__, __LINE__);
 
+			handleNoContentLength(req);
+
 			sessionVerify(req, m_route);
 			m_route.execute(req, res, m_params, m_userData);
 		}
@@ -64,32 +77,31 @@ public:
 			m_logger.log(e, __FILE__, __LINE__);
 			res.requireAuthentication(m_name);
 		}
+		catch (Poco::InvalidArgumentException &e) {
+			m_logger.log(e, __FILE__, __LINE__);
+			res.setStatusAndReason(
+				Response::HTTP_BAD_REQUEST);
+		}
 		catch (Poco::Exception &e) {
 			m_logger.log(e, __FILE__, __LINE__);
-			stdout_backtrace();
-			log_backtrace(m_logger);
 			res.setStatusAndReason(
 				Response::HTTP_INTERNAL_SERVER_ERROR);
 		}
 		catch (std::exception &e) {
 			m_logger.critical(e.what(), __FILE__, __LINE__);
-			stdout_backtrace();
-			log_backtrace(m_logger);
 			res.setStatusAndReason(
 				Response::HTTP_INTERNAL_SERVER_ERROR);
 			res.setReason("Server internal error");
 		}
 		catch (const char *s) {
 			m_logger.critical(s, __FILE__, __LINE__);
-			stdout_backtrace();
-			log_backtrace(m_logger);
 			res.setStatusAndReason(
 				Response::HTTP_INTERNAL_SERVER_ERROR);
 			res.setReason("Server internal error");
 		}
 		catch (...) {
-			stdout_backtrace();
-			log_backtrace(m_logger);
+			m_logger.critical("unknown error, caught '...'",
+					__FILE__, __LINE__);
 			res.setStatusAndReason(
 				Response::HTTP_INTERNAL_SERVER_ERROR);
 			res.setReason("Server internal error");

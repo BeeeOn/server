@@ -42,8 +42,6 @@ void mongoose_handler(struct mg_connection *conn, int ev, void *ev_data)
 	}
 	catch(...) {
 		LOGGER_FUNC(__func__).critical("unknown exception, something is really broken");
-		stdout_backtrace();
-		log_backtrace(LOGGER_FUNC(__func__));
 	}
 }
 
