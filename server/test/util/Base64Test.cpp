@@ -14,10 +14,12 @@ class Base64Test : public CppUnit::TestFixture {
 	CPPUNIT_TEST_SUITE(Base64Test);
 	CPPUNIT_TEST(testEncode);
 	CPPUNIT_TEST(testDecode);
+	CPPUNIT_TEST(testLongInput);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testEncode();
 	void testDecode();
+	void testLongInput();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Base64Test);
@@ -59,6 +61,19 @@ void Base64Test::testDecode()
 	len = Base64::decode(data, buf, sizeof(buf));
 	CPPUNIT_ASSERT_EQUAL(sizeof(expect), len);
 	CPPUNIT_ASSERT(std::memcmp(buf, expect, sizeof(expect)) == 0);
+}
+
+void Base64Test::testLongInput()
+{
+	char data[91] = "aGVsbG9teWxhZHloZWxsb215bGFkeWhlbGxvbXlsYWR5aGVsbG9teWxhZ"
+		"HloZWxsb215bGFkeWhlbGxvbXlsYWR5Cg";
+	const string expect = "YUdWc2JHOXRlV3hoWkhsb1pXeHNiMjE1YkdGa2VXaGxiR3h2Ylh"
+		"sc1lXUjVhR1ZzYkc5dGVXeGhaSGxvWld4c2IyMTViR0ZrZVdobGJHeHZiWGxzWVdSNUNn"
+		"AA==";
+
+	const string &result = Base64::encode(data, sizeof(data));
+
+	CPPUNIT_ASSERT(result.compare(expect) == 0);
 }
 
 }
