@@ -66,10 +66,14 @@ GatewayID GatewayID::parse(const string &s)
 	return GatewayID(version, data);
 }
 
-GatewayID GatewayID::random(int version)
+GatewayID GatewayID::random(int version, uint32_t seed)
 {
 	Random rnd;
-	rnd.seed();
+
+	if (seed == 0)
+		rnd.seed();
+	else
+		rnd.seed(seed);
 
 	uint64_t data = 0;
 

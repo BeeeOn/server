@@ -76,7 +76,12 @@ public:
 		return m_value >= id.m_value;
 	}
 
-	static GatewayID random(int version = 1);
+	/**
+	 * Generate a random ID. Seed the random generator with the
+	 * given seed. If the seed is 0 then the generator is possibly
+	 * seeded in another (more secure) way.
+	 */
+	static GatewayID random(int version = 1, uint32_t seed = 0);
 
 private:
 	uint64_t m_value;
