@@ -49,6 +49,7 @@ add_executable(ui-server
 	ui/UIServerModule.cpp
 	ui/Auth.cpp
 	ui/Serializing.cpp
+	ui/PlaceHandler.cpp
 	ui/UIMockInit.cpp
 )
 
