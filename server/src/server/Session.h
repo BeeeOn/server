@@ -10,7 +10,6 @@ typedef std::string Email;
 
 /**
  * Base class to hold session data (userID, sessionID).
- * Email is only for future use. Currently useless.
  */
 class Session
 {
