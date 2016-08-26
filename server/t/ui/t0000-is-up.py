@@ -29,6 +29,7 @@ class TestIsUp(unittest.TestCase):
 	"""
 	def test3_http_auth_POST_401(self):
 		req = POST(config.ui_host, config.ui_port, "/auth")
+		req.body("")
 		response = req()
 		self.assertEquals(401, response.status)
 
