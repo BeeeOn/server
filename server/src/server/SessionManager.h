@@ -6,7 +6,6 @@
 #include <Poco/RWLock.h>
 #include <Poco/AbstractCache.h>
 #include <Poco/UniqueExpireStrategy.h>
-#include <Poco/ExpirationDecorator.h>
 #include <Poco/Timespan.h>
 #include <Poco/SharedPtr.h>
 #include <Poco/Logger.h>
