@@ -72,11 +72,13 @@
 			<set name="providerImpl" ref="mockRandomProvider" />
 		</instance>
 
+		<instance name="mockPlaceDao" class="BeeeOn::MockPlaceDao" />
 		<instance name="mockUserDao" class="BeeeOn::MockUserDao" />
 		<instance name="deviceDao" class="BeeeOn::MockDeviceDao" />
 		<instance name="gatewayDao" class="BeeeOn::MockGatewayDao" />
 		<instance name="locationDao" class="BeeeOn::MockLocationDao" />
 
+		<alias name="placeDao" ref="mockPlaceDao" />
 		<alias name="userDao" ref="mockUserDao" />
 
 		<instance name="sociManager"
