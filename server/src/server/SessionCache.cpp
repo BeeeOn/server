@@ -1,11 +1,13 @@
 #include <Poco/Exception.h>
 
 #include "server/SessionCache.h"
+#include "Debug.h"
 
 using namespace Poco;
 using namespace BeeeOn;
 
-SessionCache::SessionCache(unsigned int maxUserSessions)
+SessionCache::SessionCache(unsigned int maxUserSessions):
+	m_logger(LOGGER_CLASS(this))
 {
 	m_userSessions = maxUserSessions;
 }
@@ -25,10 +27,26 @@ void SessionCache::add(const SessionID &sessionID, ExpirableSession &session)
 	auto userSession = m_userSessionSet.find(userID);
 
 	if (userSession == m_userSessionSet.end()) {
+		if (m_logger.debug()) {
+			m_logger.debug(
+				"user: " + userID.toString() +
+				" new session: " + sessionID,
+				__FILE__, __LINE__);
+		}
+
 		std::set<SessionID> sessionSet;
 		sessionSet.emplace(sessionID);
 		m_userSessionSet.emplace(std::make_pair(userID, sessionSet));
 	} else {
+		if (m_logger.debug()) {
+			m_logger.debug(
+				"user: " + userID.toString() +
+				" new session: " + sessionID +
+				" sessions: " +
+				std::to_string(userSession->second.size()),
+				__FILE__, __LINE__);
+		}
+
 		if (userSession->second.size() > m_userSessions)
 			throw IllegalStateException("Max session size reached");
 

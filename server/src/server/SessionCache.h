@@ -5,6 +5,7 @@
 
 #include <Poco/AbstractCache.h>
 #include <Poco/UniqueExpireStrategy.h>
+#include <Poco/Logger.h>
 
 #include "model/User.h"
 #include "server/Session.h"
@@ -46,6 +47,7 @@ public:
 private:
 	std::map<UserID, std::set<SessionID>> m_userSessionSet;
 	unsigned int m_userSessions;
+	Poco::Logger &m_logger;
 };
 
 }
