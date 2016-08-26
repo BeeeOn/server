@@ -21,6 +21,12 @@ public:
 
 class NullPlaceDao : public AbstractInjectorTarget,
 		public NullDao<Place, PlaceDao> {
+public:
+	/**
+	 * Provide a singleton instance to avoid
+	 * unnecessary allocations.
+	 */
+	static PlaceDao &instance();
 };
 
 class MockPlaceDao : public AbstractInjectorTarget,
