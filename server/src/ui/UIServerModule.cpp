@@ -8,10 +8,11 @@
 #include "service/AuthService.h"
 #include "server/Route.h"
 #include "model/JSONSerializer.h"
-#include "UIServerModule.h"
+#include "ui/UIServerModule.h"
 #include "Debug.h"
 
-#include "Auth.h"
+#include "ui/Auth.h"
+#include "ui/PlaceHandler.h"
 
 using namespace std;
 using namespace Poco;
@@ -141,6 +142,10 @@ void factorySetup(UIServerRequestHandlerFactory &factory)
 	factory.sessionVerifier(verifyAuthorized);
 	factory.POST("/auth", Auth::handlePost, false);
 	factory.DELETE("/auth", Auth::handleDelete);
+	factory.POST("/place", UI::PlaceHandler::handlePost);
+	factory.PUT("/place/:placeId", UI::PlaceHandler::handlePut);
+	factory.GET("/place/:placeId", UI::PlaceHandler::handleGet);
+	factory.DELETE("/place/:placeId", UI::PlaceHandler::handleDelete);
 	factory.POST("/users", handleCreateUser);
 	factory.GET("/users/:userId", handleGetUser);
 	factory.GET("/:placeId/devices/:deviceId", handleGetDevice);

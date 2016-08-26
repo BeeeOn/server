@@ -27,6 +27,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/dao/DeviceDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/GatewayDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/LocationDao.cpp
+	${PROJECT_SOURCE_DIR}/service/PlaceService.cpp
 	${PROJECT_SOURCE_DIR}/service/UserService.cpp
 	${PROJECT_SOURCE_DIR}/service/AuthService.cpp
 	${PROJECT_SOURCE_DIR}/service/DeviceService.cpp
@@ -47,6 +48,8 @@ add_executable(ui-server
 	ui/main.cpp
 	ui/UIServerModule.cpp
 	ui/Auth.cpp
+	ui/Serializing.cpp
+	ui/PlaceHandler.cpp
 	ui/UIMockInit.cpp
 )
 
