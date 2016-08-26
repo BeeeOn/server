@@ -62,7 +62,7 @@ void SessionManagerTest::testOpenClose()
 	SessionID id = m_manager.open(user);
 	CPPUNIT_ASSERT(Base64::decode(id).compare(SESSION_ID64) == 0);
 
-	SessionManager::SessionPtr infoLookup;
+	ExpirableSession::Ptr infoLookup;
 	CPPUNIT_ASSERT(m_manager.lookup(id, infoLookup));
 
 	m_manager.close(id);
@@ -87,7 +87,7 @@ void SessionManagerTest::testSessionTimeout()
 {
 	// Sleep for 1 second + a little bit of overhead.
 	// Tests whether the session really expired.
-	SessionManager::SessionPtr infoLookup;
+	ExpirableSession::Ptr infoLookup;
 	PocoRandomProvider pocoProvider;
 
 	m_manager.setSecureRandomProvider(&pocoProvider);

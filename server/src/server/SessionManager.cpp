@@ -41,7 +41,7 @@ const SessionID SessionManager::open(const User &user)
 	return session.sessionID();
 }
 
-bool SessionManager::lookup(const SessionID &id, SessionPtr &session)
+bool SessionManager::lookup(const SessionID &id, ExpirableSession::Ptr &session)
 {
 	TRACE_METHOD();
 

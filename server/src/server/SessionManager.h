@@ -6,7 +6,6 @@
 #include <Poco/RWLock.h>
 #include <Poco/AbstractCache.h>
 #include <Poco/UniqueExpireStrategy.h>
-#include <Poco/SharedPtr.h>
 #include <Poco/Logger.h>
 
 #include "di/InjectorTarget.h"
@@ -111,8 +110,6 @@ private:
 class SessionManager : public AbstractInjectorTarget
 {
 public:
-	typedef Poco::SharedPtr<ExpirableSession> SessionPtr;
-
 	enum {
 		ID_LENGTH64 = 64, /**< 512 bits long session ID */
 	};
@@ -166,7 +163,7 @@ public:
 	 * Lookup a session information by ID.
 	 * Returns false if there is no such session.
 	 */
-	bool lookup(const SessionID &id, SessionPtr &info);
+	bool lookup(const SessionID &id, ExpirableSession::Ptr &info);
 
 	/**
 	 * Close session of the given ID.

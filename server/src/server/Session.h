@@ -2,6 +2,7 @@
 #define BEEEON_SESSION_H
 
 #include <Poco/Timespan.h>
+#include <Poco/SharedPtr.h>
 
 namespace BeeeOn {
 
@@ -47,6 +48,8 @@ private:
 class ExpirableSession : public Session
 {
 public:
+	typedef Poco::SharedPtr<ExpirableSession> Ptr;
+
 	ExpirableSession(const UserID &userID, const SessionID &sessionID,
 			Poco::Timespan &timespan) :
 		Session(userID, sessionID),
