@@ -23,7 +23,7 @@ class TestNoContentLength(unittest.TestCase):
 		s.sendall(bytes(POST_WITHOUT_CONTENT_LENGTH, "utf-8"))
 		data = str(s.recv(4096), "utf-8").split("\r\n")
 		s.close()
-		self.assertEquals("HTTP/1.1 400 Bad Request", data[0])
+		self.assertEqual("HTTP/1.1 400 Bad Request", data[0])
 
 if __name__ == '__main__':
 	import sys

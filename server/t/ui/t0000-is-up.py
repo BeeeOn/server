@@ -22,7 +22,7 @@ class TestIsUp(unittest.TestCase):
 	def test2_http_auth_GET_404(self):
 		req = GET(config.ui_host, config.ui_port, "/auth")
 		response = req()
-		self.assertEquals(404, response.status)
+		self.assertEqual(404, response.status)
 
 	"""
 	Send POST to /auth. No authorization info is attached.
@@ -31,7 +31,7 @@ class TestIsUp(unittest.TestCase):
 		req = POST(config.ui_host, config.ui_port, "/auth")
 		req.body("")
 		response = req()
-		self.assertEquals(401, response.status)
+		self.assertEqual(401, response.status)
 
 if __name__ == '__main__':
 	import sys
