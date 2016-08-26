@@ -31,10 +31,6 @@ const SessionID SessionManager::open(const User &user)
 	SessionID sessionID = Base64::encode(bSessionID, sizeof(bSessionID));
 
 	ExpirableSession session(user.id(), sessionID, timespan);
-
-	char b[ID_LENGTH64];
-	m_random->randomBytesUnlocked(b, sizeof(b));
-	SessionID id = Base64::encode(b, sizeof(b));
 	m_sessionCache->add(session.sessionID(), session);
 
 	if (m_logger.debug()) {
