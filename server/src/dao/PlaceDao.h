@@ -15,6 +15,8 @@ class PlaceDao {
 public:
 	virtual void create(Place &place) = 0;
 	virtual bool fetch(Place &place) = 0;
+	virtual bool update(Place &place) = 0;
+	virtual bool remove(const Place &place) = 0;
 };
 
 class NullPlaceDao : public AbstractInjectorTarget,
