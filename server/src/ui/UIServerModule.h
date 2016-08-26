@@ -8,6 +8,7 @@
 #include "server/SessionManager.h"
 #include "server/SessionManager.h"
 #include "di/InjectorTarget.h"
+#include "service/PlaceService.h"
 #include "service/UserService.h"
 #include "service/AuthService.h"
 #include "service/DeviceService.h"
@@ -84,6 +85,8 @@ public:
 		factorySetup(*m_factory);
 		injector<UIServerModule, SessionManager>("sessionManager",
 				&UIServerModule::setSessionManager);
+		injector<UIServerModule, PlaceService>("placeService",
+				&UIServerModule::setPlaceService);
 		injector<UIServerModule, UserService>("userService",
 				&UIServerModule::setUserService);
 		injector<UIServerModule, AuthService>("authService",
@@ -124,6 +127,16 @@ public:
 	SessionManager &sessionManager()
 	{
 		return *m_sessionManager;
+	}
+
+	void setPlaceService(PlaceService *service)
+	{
+		m_placeService = service;
+	}
+
+	PlaceService &placeService()
+	{
+		return *m_placeService;
 	}
 
 	void setUserService(UserService *service)
@@ -185,6 +198,7 @@ private:
 	Poco::SharedPtr<UIServerRequestHandlerFactory> m_factory;
 	UIRestServer *m_server;
 	SessionManager *m_sessionManager;
+	PlaceService *m_placeService;
 	UserService *m_userService;
 	AuthService *m_authService;
 	DeviceService *m_deviceService;

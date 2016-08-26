@@ -2,6 +2,7 @@
 	<services>
 		<instance name="main" class="BeeeOn::UIServerModule">
 			<set name="sessionManager" ref="sessionManager" />
+			<set name="placeService" ref="placeService" />
 			<set name="userService" ref="userService" />
 			<set name="authService" ref="authService" />
 			<set name="deviceService" ref="deviceService" />
@@ -16,6 +17,10 @@
 		</instance>
 
 		<!-- Bussiness layer -->
+
+		<instance name="placeService" class="BeeeOn::PlaceService">
+			<set name="placeDao" ref="placeDao" />
+		</instance>
 
 		<instance name="userService" class="BeeeOn::UserService">
 			<set name="userDao" ref="userDao" />
