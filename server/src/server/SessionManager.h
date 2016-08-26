@@ -21,7 +21,7 @@ namespace BeeeOn {
  * SessionCache holds both session and its reverse records for each session
  * in relation with its user (by their UserID).
  *
- * Limits each user to have MAX_USER_SESSIONS to prevent DoS attacks.
+ * Limits each user to a number of sessions to prevent DoS attacks.
  *
  * This class is NOT thread-safe
  */
