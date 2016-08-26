@@ -77,7 +77,7 @@ void SessionManagerTest::testMaxUserSessions()
 
 	m_manager.setSecureRandomProvider(&pocoProvider);
 
-	for (int i = 10; i >= 0; --i)
+	for (int i = 0; i < 10; ++i)
 		CPPUNIT_ASSERT_NO_THROW(m_manager.open(userID));
 
 	CPPUNIT_ASSERT_THROW(m_manager.open(userID), Poco::IllegalStateException);
