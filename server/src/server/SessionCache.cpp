@@ -47,7 +47,7 @@ void SessionCache::add(const SessionID &sessionID, ExpirableSession &session)
 				__FILE__, __LINE__);
 		}
 
-		if (userSession->second.size() > m_userSessions)
+		if (userSession->second.size() >= m_userSessions)
 			throw IllegalStateException("Max session size reached");
 
 		userSession->second.emplace(sessionID);
