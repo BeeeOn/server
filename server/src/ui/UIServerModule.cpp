@@ -8,10 +8,10 @@
 #include "service/AuthService.h"
 #include "server/Route.h"
 #include "model/JSONSerializer.h"
-#include "UIServerModule.h"
+#include "ui/UIServerModule.h"
 #include "Debug.h"
 
-#include "Auth.h"
+#include "ui/Auth.h"
 
 using namespace std;
 using namespace Poco;
