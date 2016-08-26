@@ -44,7 +44,7 @@ class TestAuth(unittest.TestCase):
 	the test is skipped.
 	"""
 	@unittest.skipIf(not "GOOGLE_AUTH_CODE" in os.environ,
-			"not GOOGLE_AUTH_CODE specified")
+			"no GOOGLE_AUTH_CODE specified")
 	def test2_login_logout_google(self):
 		GOOGLE_LOGIN = json.dumps({
 			"provider": "google",
@@ -66,7 +66,7 @@ class TestAuth(unittest.TestCase):
 	the test is skipped.
 	"""
 	@unittest.skipIf(not "FACEBOOK_AUTH_CODE" in os.environ,
-			"not FACEBOOK_AUTH_CODE specified")
+			"no FACEBOOK_AUTH_CODE specified")
 	def test3_login_logout_facebook(self):
 		FACEBOOK_LOGIN = json.dumps({
 			"provider": "facebook",
