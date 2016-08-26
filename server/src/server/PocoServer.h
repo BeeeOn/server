@@ -1,6 +1,7 @@
 #ifndef BEEEON_POCO_SERVER
 #define BEEEON_POCO_SERVER
 
+#include <string>
 #include <Poco/Logger.h>
 #include <Poco/SharedPtr.h>
 #include <Poco/Net/HTTPServer.h>
@@ -135,13 +136,25 @@ public:
 
 	void start()
 	{
+		LOGGER_CLASS(this).information(
+			"starting server on port "
+			+ std::to_string(m_server.port()));
+
 		m_factory->reportRoutes();
 		m_server.start();
 	}
 
 	void stop()
 	{
+		LOGGER_CLASS(this).information(
+			"stopping server on port "
+			+ std::to_string(m_server.port()));
+
 		m_server.stop();
+
+		LOGGER_CLASS(this).information(
+			"server on port "
+			+ std::to_string(m_server.port()) + " stopped");
 	}
 
 private:
