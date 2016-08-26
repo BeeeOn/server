@@ -2,6 +2,7 @@
 #define BEEEON_PERMIT_AUTH_PROVIDER_H
 
 #include <Poco/Logger.h>
+#include <Poco/String.h>
 #include "provider/AuthProvider.h"
 #include "Debug.h"
 
@@ -23,7 +24,14 @@ public:
 
 	bool verifyAuthCode(const std::string &authCode, Result &result)
 	{
-		m_logger.critical("PERMIT AUTH");
+		const std::string &email = Poco::trim(authCode);
+
+		if (email.empty()) {
+			m_logger.warning("given authCode is empty");
+			return false;
+		}
+
+		m_logger.critical("PERMIT AUTH: " + authCode);
 		result.insert(
 			std::make_pair("email", authCode));
 		return true;

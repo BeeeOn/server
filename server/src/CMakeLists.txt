@@ -43,7 +43,12 @@ include_directories(
 
 add_library(BeeeOnServer ${SOURCES})
 
-add_executable(ui-server ui/main.cpp ui/UIServerModule.cpp)
+add_executable(ui-server
+	ui/main.cpp
+	ui/UIServerModule.cpp
+	ui/Auth.cpp
+	ui/UIMockInit.cpp
+)
 
 set(LIBS
 	${POCO_FOUNDATION}

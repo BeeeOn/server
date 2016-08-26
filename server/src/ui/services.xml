@@ -9,6 +9,12 @@
 			<set name="locationService" ref="locationService" />
 		</instance>
 
+		<instance name="uiMockInit"
+				class="BeeeOn::UIMockInit"
+				init="early">
+			<set name="mockUserDao" ref="mockUserDao" />
+		</instance>
+
 		<!-- Bussiness layer -->
 
 		<instance name="userService" class="BeeeOn::UserService">
@@ -66,10 +72,12 @@
 			<set name="providerImpl" ref="mockRandomProvider" />
 		</instance>
 
-		<instance name="userDao" class="BeeeOn::MockUserDao" />
+		<instance name="mockUserDao" class="BeeeOn::MockUserDao" />
 		<instance name="deviceDao" class="BeeeOn::MockDeviceDao" />
 		<instance name="gatewayDao" class="BeeeOn::MockGatewayDao" />
 		<instance name="locationDao" class="BeeeOn::MockLocationDao" />
+
+		<alias name="userDao" ref="mockUserDao" />
 
 		<instance name="sociManager"
 				class="BeeeOn::SociManager">

@@ -9,6 +9,13 @@ class TestSelf(unittest.TestCase):
 	def test1_self(self):
 		return
 
+	"""
+	Check the prerequisites are available.
+	"""
+	def test2_prerequisites(self):
+		import http.client
+		import json
+
 if __name__ == '__main__':
 	import sys
 	import taprunner

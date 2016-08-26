@@ -11,6 +11,8 @@
 #include "UIServerModule.h"
 #include "Debug.h"
 
+#include "Auth.h"
+
 using namespace std;
 using namespace Poco;
 using namespace Poco::Net;
@@ -39,39 +41,20 @@ static void verifyAuthorized(const UIRequest &request,
 {
 	TRACE_FUNC();
 
-	throw Poco::Net::NotAuthenticatedException("not implemented");
-}
-
-void handleAuth(UIRouteContext &context)
-{
-	TRACE_FUNC();
-
-	if (context.request().hasCredentials()) {
+	if (request.hasCredentials()) {
 		string scheme;
 		string authInfo;
-		context.request().getCredentials(scheme, authInfo);
+		Poco::SharedPtr<ExpirableSession> session;
 
-		// TODO: user is already logged in? leave it
-		// XXX: is this secure to just echo the value?
-		context.response().sendBuffer(authInfo.c_str(), authInfo.size());
+		request.getCredentials(scheme, authInfo);
+
+		if (!module.sessionManager().lookup(authInfo, session))
+			throw NotAuthenticatedException("Session not found");
+
 		return;
 	}
 
-	string jsonData;
-	StreamCopier::copyToString(context.request().stream(), jsonData);
-
-	Parser parser;
-	parser.parse(jsonData);
-	const Var result = parser.result();
-	const Object::Ptr data = result.extract<Object::Ptr>();
-	const Var provider = data->get("provider");
-	const Var authCode = data->get("authCode");
-
-	AuthCodeCredentials cred(provider.toString(), authCode.toString());
-	const string &sessionId = context.userData()
-					.authService().login(cred);
-
-	context.response().sendBuffer(sessionId.c_str(), sessionId.size());
+	throw NotAuthenticatedException("credentials not found");
 }
 
 static void handleGetUser(UIRouteContext &context)
@@ -156,8 +139,8 @@ void factorySetup(UIServerRequestHandlerFactory &factory)
 	factory.noRoute(handleNoRoute);
 	factory.noOperation(handleNoOperation);
 	factory.sessionVerifier(verifyAuthorized);
-	factory.POST("/auth", handleAuth, false);
-	factory.DELETE("/auth", handleAuth);
+	factory.POST("/auth", Auth::handlePost, false);
+	factory.DELETE("/auth", Auth::handleDelete);
 	factory.POST("/users", handleCreateUser);
 	factory.GET("/users/:userId", handleGetUser);
 	factory.GET("/:placeId/devices/:deviceId", handleGetDevice);
