@@ -2,6 +2,7 @@
 #include <Poco/Logger.h>
 #include <Poco/Message.h>
 #include <Poco/File.h>
+#include <Poco/SignalHandler.h>
 #include <Poco/Util/Option.h>
 #include <Poco/Util/OptionSet.h>
 #include <Poco/Util/HelpFormatter.h>
@@ -226,10 +227,12 @@ private:
 
 int main(int argc, char **argv)
 {
-	Startup server;
-	server.setUnixOptions(true);
-
 	try {
+		poco_throw_on_signal;
+
+		Startup server;
+		server.setUnixOptions(true);
+
 		return server.run(argc, argv);
 	} catch(Exception &e) {
 		cerr << e.displayText() << endl;
