@@ -13,6 +13,7 @@
 
 #include "ui/Auth.h"
 #include "ui/PlaceHandler.h"
+#include "ui/GatewayHandler.h"
 
 using namespace std;
 using namespace Poco;
@@ -146,6 +147,12 @@ void factorySetup(UIServerRequestHandlerFactory &factory)
 	factory.PUT("/place/:placeId", UI::PlaceHandler::handlePut);
 	factory.GET("/place/:placeId", UI::PlaceHandler::handleGet);
 	factory.DELETE("/place/:placeId", UI::PlaceHandler::handleDelete);
+
+	factory.POST("/place/:placeId/gateways/:gatewayId", UI::GatewayHandler::handlePost);
+	factory.PUT("/place/:placeId/gateways/:gatewayId", UI::GatewayHandler::handlePut);
+	factory.GET("/place/:placeId/gateways/:gatewayId", UI::GatewayHandler::handleGet);
+	factory.DELETE("/place/:placeId/gateways/:gatewayId", UI::GatewayHandler::handleDelete);
+
 	factory.POST("/users", handleCreateUser);
 	factory.GET("/users/:userId", handleGetUser);
 	factory.GET("/:placeId/devices/:deviceId", handleGetDevice);
