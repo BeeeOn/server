@@ -2,7 +2,7 @@
 #define BEEEON_DEVICE_H
 
 #include <Poco/SharedPtr.h>
-#include <model/SimpleID.h>
+#include "model/DeviceID.h"
 #include "model/Collection.h"
 
 namespace BeeeOn {
@@ -14,7 +14,7 @@ class Device {
 public:
 	typedef Poco::SharedPtr<Device> Ptr;
 	typedef BeeeOn::Collection<Device> Collection;
-	typedef SimpleID ID;
+	typedef DeviceID ID;
 
 	Device()
 	{

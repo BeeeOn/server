@@ -23,7 +23,7 @@ class MockDeviceDao : public AbstractInjectorTarget,
 protected:
 	DeviceID nextID()
 	{
-		return ++m_id;
+		return DeviceID::random();
 	}
 
 private:
