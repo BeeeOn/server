@@ -54,3 +54,27 @@ CREATE TABLE roles_in_place (
 	level        ${type_smallint} NOT NULL,
 	CONSTRAINT check_valid_level CHECK (level >= 0 AND level <= 100)
 );
+
+DROP TABLE IF EXISTS devices;
+CREATE TABLE devices (
+	id           ${type_int64} NOT NULL,
+	gateway_id   ${type_int64} NOT NULL REFERENCES gateways(id),
+	location_id  uuid REFERENCES locations(id),
+	name         varchar(250) NOT NULL,
+	type         smallint NOT NULL,
+	refresh      integer NOT NULL DEFAULT 10,
+	battery      smallint,
+	signal       smallint,
+	first_seen   bigint NOT NULL,
+	last_seen    bigint NOT NULL,
+	active_since bigint,
+	CONSTRAINT devices_pk PRIMARY KEY (id, gateway_id),
+	CONSTRAINT check_id_positive CHECK (id >= 0),
+	CONSTRAINT check_seen_valid CHECK (first_seen <= last_seen),
+	CONSTRAINT check_active_valid CHECK (
+		active_since IS NULL OR first_seen <= active_since),
+	CONSTRAINT check_battery_valid CHECK (
+		battery IS NULL OR (battery >= 0 AND battery <= 100)),
+	CONSTRAINT check_signal_valid CHECK (
+		signal IS NULL OR (signal >= 0 AND signal <= 100))
+);

@@ -2,6 +2,13 @@
 #define BEEEON_DEVICE_H
 
 #include <Poco/SharedPtr.h>
+#include <Poco/DateTime.h>
+#include <Poco/Timespan.h>
+#include <Poco/Nullable.h>
+#include <Poco/Util/Units.h>
+
+#include "model/Location.h"
+#include "model/Gateway.h"
 #include "model/DeviceID.h"
 #include "model/Collection.h"
 
@@ -16,45 +23,72 @@ public:
 	typedef BeeeOn::Collection<Device> Collection;
 	typedef DeviceID ID;
 
-	Device()
+	using percent = Poco::Util::Units::Values::percent;
+
+	Device();
+	Device(const ID &id);
+	Device(const Device &copy);
+	Device(const ID &id, const Device &copy);
+
+	const ID &id() const;
+
+	void setGateway(const Gateway &gateway);
+	const Gateway &gateway() const;
+
+	void setLocation(const Location &location);
+	const Location &location() const;
+
+	void setName(const std::string &name);
+	const std::string &name() const;
+
+	void setType(const unsigned int type);
+	unsigned int type() const;
+
+	void setRefresh(const unsigned int seconds)
 	{
+		setRefresh(Poco::Timespan(seconds, 0));
 	}
 
-	Device(const ID &id):
-		m_id(id)
+	void setRefresh(const Poco::Timespan &refresh);
+	const Poco::Timespan &refresh() const;
+
+	void setBattery(const unsigned int battery)
 	{
+		setBattery(percent(battery));
 	}
 
-	Device(const Device &copy):
-		m_id(copy.m_id),
-		m_name(copy.m_name)
+	void setBattery(const Poco::Nullable<percent> &battery);
+	const Poco::Nullable<percent> &battery() const;
+
+	void setSignal(const unsigned int signal)
 	{
+		setSignal(percent(signal));
 	}
 
-	Device(const ID &id, const Device &copy):
-		m_id(id),
-		m_name(copy.m_name)
-	{
-	}
+	void setSignal(const Poco::Nullable<percent> &signal);
+	const Poco::Nullable<percent> &signal() const;
 
-	void setName(const std::string &name)
-	{
-		m_name = name;
-	}
+	void setFirstSeen(const Poco::DateTime &at);
+	const Poco::DateTime &firstSeen() const;
 
-	const std::string &name() const
-	{
-		return m_name;
-	}
+	void setLastSeen(const Poco::DateTime &at);
+	const Poco::DateTime &lastSeen() const;
 
-	const ID &id() const
-	{
-		return m_id;
-	}
+	void setActiveSince(const Poco::Nullable<Poco::DateTime> &at);
+	const Poco::Nullable<Poco::DateTime> &activeSince() const;
 
 private:
 	ID m_id;
+	Gateway m_gateway;
+	Location m_location;
 	std::string m_name;
+	unsigned int m_type;
+	Poco::Timespan m_refresh;
+	Poco::Nullable<percent> m_battery;
+	Poco::Nullable<percent> m_signal;
+	Poco::DateTime m_firstSeen;
+	Poco::DateTime m_lastSeen;
+	Poco::Nullable<Poco::DateTime> m_activeSince;
 };
 
 typedef Device::Collection DeviceCollection;
