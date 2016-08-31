@@ -26,12 +26,14 @@ public:
 	}
 
 	Device(const Device &copy):
+		m_id(copy.m_id),
 		m_name(copy.m_name)
 	{
 	}
 
 	Device(const ID &id, const Device &copy):
-		m_id(id)
+		m_id(id),
+		m_name(copy.m_name)
 	{
 	}
 
