@@ -38,6 +38,16 @@ public:
 	}
 
 	/**
+	 * Insert object T in the database.
+	 * Apart from create this one doesn't generate new ID
+	 */
+	virtual bool insert(T &t)
+	{
+		TRACE_METHOD();
+		throw Poco::NotImplementedException(__func__);
+	}
+
+	/**
 	 * Create object T in the database.
 	 */
 	virtual void create(T &t)

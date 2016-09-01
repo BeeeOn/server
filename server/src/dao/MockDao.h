@@ -48,6 +48,18 @@ public:
 		return m_storage.find(t.id()) != m_storage.end();
 	}
 
+	virtual bool insert(T &t)
+	{
+		TRACE_METHOD();
+
+		if (t.id().isNull())
+			return false;
+
+		m_storage[t.id()] = new T(t.id(), t);
+
+		return true;
+	}
+
 	virtual void create(T &t)
 	{
 		TRACE_METHOD();
