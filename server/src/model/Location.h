@@ -65,24 +65,6 @@ public:
 		return m_place;
 	}
 
-	/**
-	 * Frontend API only.
-	 */
-	template <typename Serializer>
-	void toWeb(Serializer &s) const
-	{
-		s.push("name", m_name);
-	}
-
-	/**
-	 * Frontend API only.
-	 */
-	template <typename Serializer>
-	void fromWeb(Serializer &s)
-	{
-		s.get("name", m_name);
-	}
-
 private:
 	ID m_id;
 	std::string m_name;
