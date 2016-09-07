@@ -27,13 +27,15 @@ public:
 	}
 
 	Location(const Location &copy):
-		m_name(copy.m_name)
+		m_name(copy.m_name),
+		m_place(copy.m_place)
 	{
 	}
 
 	Location(const ID &id, const Location &copy):
 		m_id(id),
-		m_name(copy.m_name)
+		m_name(copy.m_name),
+		m_place(copy.m_place)
 	{
 	}
 
@@ -50,6 +52,16 @@ public:
 	const ID &id() const
 	{
 		return m_id;
+	}
+
+	void setPlace(const Place &place)
+	{
+		m_place = place;
+	}
+
+	const Place &place() const
+	{
+		return m_place;
 	}
 
 	/**
@@ -73,6 +85,7 @@ public:
 private:
 	ID m_id;
 	std::string m_name;
+	Place m_place;
 };
 
 typedef Location::Collection LocationCollection;
