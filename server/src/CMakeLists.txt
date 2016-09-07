@@ -52,6 +52,7 @@ add_executable(ui-server
 	ui/Serializing.cpp
 	ui/PlaceHandler.cpp
 	ui/GatewayHandler.cpp
+	ui/LocationHandler.cpp
 	ui/UIMockInit.cpp
 )
 
