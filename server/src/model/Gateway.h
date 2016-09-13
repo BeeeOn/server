@@ -33,6 +33,7 @@ public:
 	}
 
 	Gateway(const Gateway &copy):
+		m_id(copy.m_id),
 		m_name(copy.m_name),
 		m_place(copy.m_place),
 		m_altitude(copy.m_altitude),
