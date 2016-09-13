@@ -14,7 +14,8 @@ namespace BeeeOn {
  */
 class LocationService : public AbstractInjectorTarget {
 public:
-	LocationService()
+	LocationService():
+		m_dao(&NullLocationDao::instance())
 	{
 		injector<LocationService, LocationDao>("locationDao",
 				&LocationService::setLocationDao);
@@ -22,7 +23,10 @@ public:
 
 	void setLocationDao(LocationDao *dao)
 	{
-		m_dao = dao;
+		if (dao == NULL)
+			m_dao = &NullLocationDao::instance();
+		else
+			m_dao = dao;
 	}
 
 	bool fetch(Location &location)

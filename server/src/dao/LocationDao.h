@@ -16,6 +16,8 @@ public:
 
 class NullLocationDao : public AbstractInjectorTarget,
 	public NullDao<Location, LocationDao> {
+public:
+	static LocationDao &instance();
 };
 class MockLocationDao : public AbstractInjectorTarget,
 	public MockDao<Location, LocationDao> {
