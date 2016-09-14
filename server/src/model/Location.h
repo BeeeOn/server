@@ -27,6 +27,7 @@ public:
 	}
 
 	Location(const Location &copy):
+		m_id(copy.m_id),
 		m_name(copy.m_name),
 		m_place(copy.m_place)
 	{
