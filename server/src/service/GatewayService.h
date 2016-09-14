@@ -42,7 +42,6 @@ public:
 
 	bool fetch(Gateway &gateway)
 	{
-		TRACE_METHOD();
 		return m_dao->fetch(gateway);
 	}
 
