@@ -29,10 +29,36 @@ public:
 			m_dao = dao;
 	}
 
+	void createIn(Location &location, const Place &place)
+	{
+		TRACE_METHOD();
+
+		location.setPlace(place);
+		m_dao->create(location);
+	}
+
 	bool fetch(Location &location)
 	{
 		TRACE_METHOD();
 		return m_dao->fetch(location);
+	}
+
+	bool fetchFrom(Location &location, const Place &place)
+	{
+		TRACE_METHOD();
+		return m_dao->fetchFrom(location, place);
+	}
+
+	bool update(Location &location)
+	{
+		TRACE_METHOD();
+		return m_dao->update(location);
+	}
+
+	bool remove(const Location &location)
+	{
+		TRACE_METHOD();
+		return m_dao->remove(location);
 	}
 
 private:
