@@ -2,7 +2,6 @@
 #define BEEEON_PLACE_DAO_H
 
 #include <Poco/Exception.h>
-#include <Poco/UUIDGenerator.h>
 
 #include "di/InjectorTarget.h"
 #include "dao/NullDao.h"
@@ -35,8 +34,7 @@ class MockPlaceDao : public AbstractInjectorTarget,
 protected:
 	PlaceID nextID()
 	{
-		return PlaceID(Poco::UUIDGenerator::defaultGenerator()
-				.createRandom());
+		return PlaceID::random();
 	}
 };
 

@@ -9,8 +9,7 @@ using namespace BeeeOn;
 
 void UIMockInit::injectionDone()
 {
-	UserID id(Poco::UUIDGenerator
-			::defaultGenerator().createRandom());
+	UserID id(UserID::random());
 	User user(id);
 	user.setEmail("joe.doe@example.org");
 

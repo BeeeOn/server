@@ -2,7 +2,6 @@
 #define BEEEON_USER_DAO_H
 
 #include <Poco/Exception.h>
-#include <Poco/UUIDGenerator.h>
 
 #include "di/InjectorTarget.h"
 #include "dao/NullDao.h"
@@ -35,8 +34,7 @@ protected:
 
 	UserID nextID()
 	{
-		return UserID(Poco::UUIDGenerator::defaultGenerator()
-				.createRandom());
+		return UserID::random();
 	}
 };
 
