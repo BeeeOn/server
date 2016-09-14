@@ -2,7 +2,8 @@
 #define BEEEON_LOCATION_H
 
 #include <Poco/SharedPtr.h>
-#include "model/SimpleID.h"
+#include "model/GlobalID.h"
+#include "model/Place.h"
 #include "model/Collection.h"
 
 namespace BeeeOn {
@@ -14,7 +15,7 @@ class Location {
 public:
 	typedef Poco::SharedPtr<Location> Ptr;
 	typedef BeeeOn::Collection<Location> Collection;
-	typedef SimpleID ID;
+	typedef GlobalID ID;
 
 	Location()
 	{

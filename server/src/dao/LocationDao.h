@@ -22,11 +22,8 @@ class MockLocationDao : public AbstractInjectorTarget,
 protected:
 	LocationID nextID()
 	{
-		return ++m_id;
+		return LocationID::random();
 	}
-
-private:
-	LocationID m_id;
 };
 
 }
