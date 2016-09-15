@@ -29,17 +29,17 @@ public:
 
 	TapTestProducer():
 		m_output(std::cout),
-		m_success(true),
 		m_current(1),
-		m_stackDepth(0)
+		m_stackDepth(0),
+		m_success(true)
 	{
 	}
 
 	TapTestProducer(std::ostream &output):
 		m_output(output),
-		m_success(true),
 		m_current(1),
-		m_stackDepth(0)
+		m_stackDepth(0),
+		m_success(true)
 	{
 	}
 

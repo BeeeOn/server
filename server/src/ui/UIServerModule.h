@@ -79,8 +79,8 @@ void factorySetup(UIServerRequestHandlerFactory &factory);
 class UIServerModule : public AbstractInjectorTarget {
 public:
 	UIServerModule(void):
-		m_server(NULL),
 		m_factory(new UIServerRequestHandlerFactory(*this, "ui-server")),
+		m_server(NULL),
 		m_logger(LOGGER_CLASS(this))
 	{
 		factorySetup(*m_factory);
