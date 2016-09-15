@@ -27,6 +27,12 @@ public:
 		return m_uuid.isNull();
 	}
 
+	static GlobalID random()
+	{
+		return GlobalID(Poco::UUIDGenerator::defaultGenerator()
+				.createRandom());
+	}
+
 	static GlobalID parse(const std::string &s)
 	{
 		GlobalID gid;

@@ -79,7 +79,7 @@ class TestPlace(unittest.TestCase):
 		self.assertEqual(0, len(data))
 
 	"""
-	Request a non-existing place.
+	Request an existing place.
 	"""
 	def test3_get_existing(self):
 		req = GET(config.ui_host, config.ui_port,
