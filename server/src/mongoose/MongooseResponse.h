@@ -5,7 +5,6 @@
 #include <iostream>
 #include <Poco/NullStream.h>
 #include <Poco/Exception.h>
-#include <mongoose.h>
 
 #include "mongoose/MongooseOutputStream.h"
 
