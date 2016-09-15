@@ -129,8 +129,8 @@ public:
 	using RequestHandlerFactory = PocoRestRequestHandlerFactory<UserData>;
 	TPocoServer(unsigned int port,
 			Poco::SharedPtr<RequestHandlerFactory> factory):
-		m_server(factory, port),
-		m_factory(factory)
+		m_factory(factory),
+		m_server(factory, port)
 	{
 	}
 

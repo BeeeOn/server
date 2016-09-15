@@ -24,8 +24,8 @@ public:
 	};
 
 	SessionManager() :
-		m_sessionCache(NULL),
-		m_logger(LOGGER_CLASS(this))
+		m_logger(LOGGER_CLASS(this)),
+		m_sessionCache(NULL)
 	{
 		injector<SessionManager, SecureRandomProvider>(
 			"secureRandomProvider",

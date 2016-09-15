@@ -5,7 +5,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../lib/modules)
 
 find_package(Soci COMPONENTS postgresql sqlite3 REQUIRED)
 
-set (CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -lpthread -ggdb3")
+set (CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -pedantic -Wall -lpthread -ggdb3")
 add_definitions(-std=c++11)
 
 add_subdirectory(lib/mongoose)

@@ -31,6 +31,11 @@ void RouteTest::tearDown()
 }
 
 struct UserData {
+	UserData(bool succ = false):
+		success(succ)
+	{
+	}
+
 	bool success;
 };
 
@@ -48,7 +53,7 @@ void emptyHandler(RouteContext &)
  */
 void RouteTest::testExpectMatch()
 {
-	UserData data = {.success = false};
+	UserData data;
 	Params params;
 
 	Route r0("/", emptyHandler);
@@ -116,7 +121,7 @@ void RouteTest::testExpectMatch()
  */
 void RouteTest::testNotExpectMatch()
 {
-	UserData data = {.success = false};
+	UserData data;
 	Params params;
 
 	Route r0("", emptyHandler);
@@ -211,7 +216,7 @@ void RouteTest::testNotExpectMatch()
  */
 void RouteTest::testParams()
 {
-	UserData data = {.success = false};
+	UserData data;
 	Params params;
 
 	Route r0(":name", emptyHandler);

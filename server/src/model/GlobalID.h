@@ -79,6 +79,6 @@ private:
 	Poco::UUID m_uuid;
 };
 
-};
+}
 
 #endif
