@@ -28,6 +28,8 @@ public:
 	}
 
 protected:
+	void initUsers();
+	void initGateways();
 	void injectionDone();
 
 private:
