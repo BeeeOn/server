@@ -18,11 +18,17 @@ void UIMockInit::initUsers()
 
 void UIMockInit::initGateways()
 {
-	GatewayID id(GatewayID::random());
+	GatewayID id(GatewayID::parse("1284174504043136"));
 	Gateway gateway(id);
 	gateway.setName("Joe Doe's Gateway");
 
-	m_gatewayDao->create(gateway);
+	m_gatewayDao->insert(gateway);
+
+	GatewayID id2(GatewayID::parse("1780053541714013"));
+	Gateway gateway2(id2);
+	gateway2.setName("Gateway To Un/assign");
+
+	m_gatewayDao->insert(gateway2);
 }
 
 void UIMockInit::injectionDone()
