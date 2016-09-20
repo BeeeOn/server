@@ -55,6 +55,9 @@ class TestPlace(unittest.TestCase):
 		response = req()
 
 		self.assertEqual(200, response.status)
+		result = json.loads(str(response.read(), "utf-8"))
+		self.assertEqual("My Home", result["name"])
+		self.assertIn("id", result)
 
 		req = GET(config.ui_host, config.ui_port,
 				"/place/" + data["id"])
