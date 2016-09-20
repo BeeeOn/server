@@ -39,8 +39,11 @@ public:
 		return m_placeDao->update(place);
 	}
 
-	bool remove(const Place &place)
+	bool remove(Place &place)
 	{
+		if (!m_placeDao->fetch(place))
+			return false;
+
 		return m_placeDao->remove(place);
 	}
 
