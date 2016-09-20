@@ -59,12 +59,7 @@ void PlaceHandler::handlePut(Poco::Logger &logger,
 		PlaceService &placeService,
 		const UIRoute::Params &params)
 {
-	UIRoute::Params::const_iterator it;
-
-	if ((it = params.find("placeId")) == params.end())
-		throw InvalidArgumentException("missing placeId");
-
-	Place place(PlaceID::parse(it->second));
+	Place place(PlaceID::parse(params.at("placeId")));
 
 	if (!placeService.fetch(place)) {
 		response.setStatusAndReason(UIResponse::HTTP_NOT_FOUND);
@@ -101,12 +96,7 @@ void PlaceHandler::handleGet(Poco::Logger &logger,
 		PlaceService &placeService,
 		const UIRoute::Params &params)
 {
-	UIRoute::Params::const_iterator it;
-
-	if ((it = params.find("placeId")) == params.end())
-		throw InvalidArgumentException("missing placeId");
-
-	Place place(PlaceID::parse(it->second));
+	Place place(PlaceID::parse(params.at("placeId")));
 
 	if (!placeService.fetch(place)) {
 		response.setStatusAndReason(UIResponse::HTTP_NOT_FOUND);
@@ -139,12 +129,7 @@ void PlaceHandler::handleDelete(Poco::Logger &logger,
 		PlaceService &placeService,
 		const UIRoute::Params &params)
 {
-	UIRoute::Params::const_iterator it;
-
-	if ((it = params.find("placeId")) == params.end())
-		throw InvalidArgumentException("missing placeId");
-
-	Place place(PlaceID::parse(it->second));
+	Place place(PlaceID::parse(params.at("placeId")));
 
 	if (!placeService.remove(place)) {
 		response.setStatusAndReason(UIResponse::HTTP_NOT_FOUND);
