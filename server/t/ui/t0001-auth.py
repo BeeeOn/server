@@ -29,12 +29,10 @@ class TestAuth(unittest.TestCase):
 	@unittest.skipIf("PERMIT_UNAVAILABLE" in os.environ,
 			"permit provider is disabled")
 	def test1_login_logout_permit(self):
-		response = login(config.PERMIT_LOGIN)
+		response, session = login(config.PERMIT_LOGIN)
 		self.assertEqual(200, response.status)
 
-		session = str(response.read(), "utf-8")
-
-		response = logout(session)
+		response, _ = logout(session)
 		self.assertEqual(200, response.status)
 
 	"""
@@ -51,10 +49,8 @@ class TestAuth(unittest.TestCase):
 			"authCode": os.environ["GOOGLE_AUTH_CODE"]
 		})
 
-		response = login(GOOGLE_LOGIN)
+		response, session = login(GOOGLE_LOGIN)
 		self.assertEqual(200, response.status)
-
-		session = str(response.read(), "utf-8")
 
 		response = logout(session)
 		self.assertEqual(200, response.status)
@@ -73,10 +69,8 @@ class TestAuth(unittest.TestCase):
 			"authCode": os.environ["FACEBOOK_AUTH_CODE"]
 		})
 
-		response = login(FACEBOOK_LOGIN)
+		response, session = login(FACEBOOK_LOGIN)
 		self.assertEqual(200, response.status)
-
-		session = str(response.read(), "utf-8")
 
 		response = logout(session)
 		self.assertEqual(200, response.status)
@@ -91,15 +85,15 @@ class TestAuth(unittest.TestCase):
 		session = []
 
 		for i in range(0, config.ui_session_per_user):
-			response = login(config.PERMIT_LOGIN)
+			response, content = login(config.PERMIT_LOGIN)
 			self.assertEqual(200, response.status)
-			session.append(str(response.read(), "utf-8"))
+			session.append(content)
 
-		response = login(config.PERMIT_LOGIN)
+		response, _ = login(config.PERMIT_LOGIN)
 		self.assertEqual(401, response.status)
 
 		for s in session:
-			response = logout(s)
+			response, _ = logout(s)
 			self.assertEqual(200, response.status)
 
 if __name__ == '__main__':

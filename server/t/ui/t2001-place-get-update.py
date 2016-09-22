@@ -19,20 +19,20 @@ class TestPlace(unittest.TestCase):
 
 		req = POST(config.ui_host, config.ui_port, "/auth")
 		req.body(config.PERMIT_LOGIN)
-		response = req()
+		response, content = req()
 
 		self.assertEqual(200, response.status)
-		self.session = str(response.read(), "utf-8")
+		self.session = content
 		print("# got session: " + self.session)
 
 		place = json.dumps({"name": "My Home"})
 		req = POST(config.ui_host, config.ui_port, "/place")
 		req.authorize(self.session)
 		req.body(place)
-		response = req()
+		response, content = req()
 
 		self.assertEqual(200, response.status)
-		self.place = json.loads(str(response.read(), "utf-8"))
+		self.place = json.loads(content)
 		print("# got place: " + self.place["id"])
 
 	"""
@@ -44,13 +44,13 @@ class TestPlace(unittest.TestCase):
 		req = DELETE(config.ui_host, config.ui_port,
 				"/place/" + self.place["id"])
 		req.authorize(self.session)
-		response = req()
+		response, _ = req()
 
 		self.assertEqual(200, response.status)
 
 		req = DELETE(config.ui_host, config.ui_port, "/auth")
 		req.authorize(self.session)
-		response = req()
+		response, _ = req()
 
 		self.assertEqual(200, response.status)
 
@@ -60,23 +60,19 @@ class TestPlace(unittest.TestCase):
 	def test1_get_non_existing(self):
 		req = GET(config.ui_host, config.ui_port, "/place/any-id")
 		req.authorize(self.session)
-		response = req()
-
-		data = str(response.read(), "utf-8")
+		response, content = req()
 
 		self.assertEqual(400, response.status)
-		self.assertEqual(0, len(data))
+		self.assertEqual(0, len(content))
 
 	def test2_get_non_existing_uuid(self):
 		id = str(uuid.uuid4())
 		req = GET(config.ui_host, config.ui_port, "/place/" + id)
 		req.authorize(self.session)
-		response = req()
-
-		data = str(response.read(), "utf-8")
+		response, content = req()
 
 		self.assertEqual(404, response.status)
-		self.assertEqual(0, len(data))
+		self.assertEqual(0, len(content))
 
 	"""
 	Request an existing place.
@@ -85,10 +81,10 @@ class TestPlace(unittest.TestCase):
 		req = GET(config.ui_host, config.ui_port,
 				"/place/" + self.place["id"])
 		req.authorize(self.session)
-		response = req()
+		response, content = req()
 
 		self.assertEqual(200, response.status)
-		data = json.loads(str(response.read(), "utf-8"))
+		data = json.loads(content)
 		self.assertEqual(self.place["name"], data["name"])
 		self.assertIn(self.place["id"], data["id"])
 
@@ -106,17 +102,17 @@ class TestPlace(unittest.TestCase):
 
 		req.body(json.dumps(data))
 		req.authorize(self.session)
-		response = req()
+		response, content = req()
 
 		self.assertEqual(404, response.status)
-		self.assertEqual(0, len(response.read()))
+		self.assertEqual(0, len(content))
 
 		req = GET(config.ui_host, config.ui_port, "/place/" + id)
 		req.authorize(self.session)
-		response = req()
+		response, content = req()
 
 		self.assertEqual(404, response.status)
-		self.assertEqual(0, len(response.read()))
+		self.assertEqual(0, len(content))
 
 	"""
 	Test a regular place update.
@@ -125,9 +121,9 @@ class TestPlace(unittest.TestCase):
 		req = GET(config.ui_host, config.ui_port,
 				"/place/" + self.place["id"])
 		req.authorize(self.session)
-		response = req()
+		response, content = req()
 
-		data = json.loads(str(response.read(), "utf-8"))
+		data = json.loads(content)
 
 		self.assertEqual(200, response.status)
 		self.assertEqual(self.place["name"], data["name"])
@@ -140,9 +136,9 @@ class TestPlace(unittest.TestCase):
 				"/place/" + self.place["id"])
 		req.body(json.dumps(data))
 		req.authorize(self.session)
-		response = req()
+		response, content = req()
 
-		result = json.loads(str(response.read(), "utf-8"))
+		result = json.loads(content)
 
 		self.assertEqual(self.place["id"], result["id"])
 		self.assertEqual("XXXYYY", result["name"])
@@ -156,9 +152,9 @@ class TestPlace(unittest.TestCase):
 		req = POST(config.ui_host, config.ui_port, "/place")
 		req.authorize(self.session)
 		req.body(place)
-		response = req()
+		response, content = req()
 
-		secondHome = json.loads(str(response.read(), "utf-8"))
+		secondHome = json.loads(content)
 
 		self.assertEqual(200, response.status)
 		self.assertTrue(len(secondHome["id"]) > 0)
@@ -169,9 +165,9 @@ class TestPlace(unittest.TestCase):
 				"/place/" + self.place["id"])
 		req.body(json.dumps(secondHome))
 		req.authorize(self.session)
-		response = req()
+		response, content = req()
 
-		result = json.loads(str(response.read(), "utf-8"))
+		result = json.loads(content)
 
 		self.assertEqual(self.place["id"], result["id"])
 		self.assertNotEqual(self.place["id"], secondHome["id"])

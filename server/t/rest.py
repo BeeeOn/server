@@ -2,7 +2,8 @@ from http.client import HTTPConnection
 
 class Rest:
 	def __init__(self, host, port, uri, method):
-		self.m_conn = HTTPConnection(host, port, timeout = 1)
+		self.m_host = host
+		self.m_port = port
 		self.m_method = method
 		self.m_uri = uri
 		self.m_headers = {}
@@ -24,15 +25,16 @@ class Rest:
 		self.m_headers["Authorization"] = "Bearer " + sessionId
 
 	def perform(self):
-		self.m_conn.request(self.m_method, self.m_uri,
+		conn = HTTPConnection(self.m_host, self.m_port, timeout = 1)
+		conn.request(self.m_method, self.m_uri,
 			headers = self.m_headers, body = self.m_body)
-		return self.m_conn.getresponse()
+		response = conn.getresponse()
+		content = str(response.read(), "utf-8")
+		conn.close()
+		return response, content
 
 	def __call__(self):
 		return self.perform()
-
-	def __del__(self):
-		self.m_conn.close()
 
 class GET(Rest):
 	def __init__(self, host, port, uri):
