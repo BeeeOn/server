@@ -17,10 +17,10 @@ class TestPlace(unittest.TestCase):
 		print("# setup")
 		req = POST(config.ui_host, config.ui_port, "/auth")
 		req.body(config.PERMIT_LOGIN)
-		response = req()
+		response, content = req()
 
 		self.assertEqual(200, response.status)
-		self.session = str(response.read(), "utf-8")
+		self.session = content
 		print("# got session: " + self.session)
 
 	"""
@@ -30,7 +30,7 @@ class TestPlace(unittest.TestCase):
 		print("# teardown")
 		req = DELETE(config.ui_host, config.ui_port, "/auth")
 		req.authorize(self.session)
-		response = req()
+		response, _ = req()
 
 		self.assertEqual(200, response.status)
 
@@ -42,27 +42,27 @@ class TestPlace(unittest.TestCase):
 		req = POST(config.ui_host, config.ui_port, "/place")
 		req.authorize(self.session)
 		req.body(place)
-		response = req()
+		response, content = req()
 
 		self.assertEqual(200, response.status)
-		data = json.loads(str(response.read(), "utf-8"))
+		data = json.loads(content)
 		self.assertEqual("My Home", data["name"])
 		self.assertIn("id", data)
 
 		req = DELETE(config.ui_host, config.ui_port,
 				"/place/" + data["id"])
 		req.authorize(self.session)
-		response = req()
+		response, content = req()
 
 		self.assertEqual(200, response.status)
-		result = json.loads(str(response.read(), "utf-8"))
+		result = json.loads(content)
 		self.assertEqual("My Home", result["name"])
 		self.assertIn("id", result)
 
 		req = GET(config.ui_host, config.ui_port,
 				"/place/" + data["id"])
 		req.authorize(self.session)
-		response = req()
+		response, _ = req()
 
 		self.assertEqual(404, response.status)
 

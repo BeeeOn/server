@@ -21,7 +21,7 @@ class TestIsUp(unittest.TestCase):
 	"""
 	def test2_http_auth_GET_404(self):
 		req = GET(config.ui_host, config.ui_port, "/auth")
-		response = req()
+		response, _ = req()
 		self.assertEqual(404, response.status)
 
 	"""
@@ -30,7 +30,7 @@ class TestIsUp(unittest.TestCase):
 	def test3_http_auth_POST_401(self):
 		req = POST(config.ui_host, config.ui_port, "/auth")
 		req.body("")
-		response = req()
+		response, _ = req()
 		self.assertEqual(401, response.status)
 
 if __name__ == '__main__':
