@@ -16,7 +16,7 @@ public:
 	virtual bool update(Gateway &gateway) = 0;
 	virtual bool assignAndUpdate(Gateway &gateway, const Place &place) = 0;
 	virtual bool unassign(Gateway &gateway) = 0;
-	virtual bool fetchFromPlace(Gateway &gateway, Place &place) = 0;
+	virtual bool fetchFromPlace(Gateway &gateway, const Place &place) = 0;
 };
 
 class NullGatewayDao : public AbstractInjectorTarget,
@@ -38,7 +38,7 @@ public:
 		return update(gateway);
 	}
 
-	bool fetchFromPlace(Gateway &gateway, Place &place)
+	bool fetchFromPlace(Gateway &gateway, const Place &place)
 	{
 		return fetchFromPlace(gateway, place);
 	}
@@ -76,7 +76,7 @@ protected:
 	 * Fetch a gateway from DB and compare the given placeID with
 	 * the fetched one.
 	 */
-	bool fetchFromPlace(Gateway &gateway, Place &place)
+	bool fetchFromPlace(Gateway &gateway, const Place &place)
 	{
 		Gateway fetchedGateway(gateway);
 
