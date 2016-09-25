@@ -6,6 +6,12 @@
 
 namespace BeeeOn {
 
+/**
+ * Gateway ID is a globally unique ID generated during manufactoring
+ * of each device. The format of the ID is defined as 16 decadic
+ * digits: VDDD DDDD DDDD DDDC. The V denotes version, C is the DAMM
+ * checksum and D represents data digits which are generated randomly.
+ */
 class GatewayID {
 public:
 	enum {
