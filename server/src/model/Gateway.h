@@ -72,6 +72,11 @@ public:
 		return m_place;
 	}
 
+	bool hasPlace() const
+	{
+		return !m_place.id().isNull();
+	}
+
 	const ID &id() const
 	{
 		return m_id;
