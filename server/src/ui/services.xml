@@ -14,6 +14,7 @@
 				class="BeeeOn::UIMockInit"
 				init="early">
 			<set name="mockUserDao" ref="mockUserDao" />
+			<set name="mockGatewayDao" ref="mockGatewayDao" />
 		</instance>
 
 		<!-- Bussiness layer -->
@@ -84,11 +85,12 @@
 		<instance name="mockPlaceDao" class="BeeeOn::MockPlaceDao" />
 		<instance name="mockUserDao" class="BeeeOn::MockUserDao" />
 		<instance name="deviceDao" class="BeeeOn::MockDeviceDao" />
-		<instance name="gatewayDao" class="BeeeOn::MockGatewayDao" />
+		<instance name="mockGatewayDao" class="BeeeOn::MockGatewayDao" />
 		<instance name="locationDao" class="BeeeOn::MockLocationDao" />
 
 		<alias name="placeDao" ref="mockPlaceDao" />
 		<alias name="userDao" ref="mockUserDao" />
+		<alias name="gatewayDao" ref="mockGatewayDao" />
 
 		<instance name="sociManager"
 				class="BeeeOn::SociManager">

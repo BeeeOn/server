@@ -51,6 +51,7 @@ add_executable(ui-server
 	ui/Auth.cpp
 	ui/Serializing.cpp
 	ui/PlaceHandler.cpp
+	ui/GatewayHandler.cpp
 	ui/UIMockInit.cpp
 )
 
