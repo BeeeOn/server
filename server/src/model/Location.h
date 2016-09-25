@@ -2,7 +2,8 @@
 #define BEEEON_LOCATION_H
 
 #include <Poco/SharedPtr.h>
-#include "model/SimpleID.h"
+#include "model/GlobalID.h"
+#include "model/Place.h"
 #include "model/Collection.h"
 
 namespace BeeeOn {
@@ -14,7 +15,7 @@ class Location {
 public:
 	typedef Poco::SharedPtr<Location> Ptr;
 	typedef BeeeOn::Collection<Location> Collection;
-	typedef SimpleID ID;
+	typedef GlobalID ID;
 
 	Location()
 	{
@@ -26,13 +27,16 @@ public:
 	}
 
 	Location(const Location &copy):
-		m_name(copy.m_name)
+		m_id(copy.m_id),
+		m_name(copy.m_name),
+		m_place(copy.m_place)
 	{
 	}
 
 	Location(const ID &id, const Location &copy):
 		m_id(id),
-		m_name(copy.m_name)
+		m_name(copy.m_name),
+		m_place(copy.m_place)
 	{
 	}
 
@@ -51,27 +55,20 @@ public:
 		return m_id;
 	}
 
-	/**
-	 * Frontend API only.
-	 */
-	template <typename Serializer>
-	void toWeb(Serializer &s) const
+	void setPlace(const Place &place)
 	{
-		s.push("name", m_name);
+		m_place = place;
 	}
 
-	/**
-	 * Frontend API only.
-	 */
-	template <typename Serializer>
-	void fromWeb(Serializer &s)
+	const Place &place() const
 	{
-		s.get("name", m_name);
+		return m_place;
 	}
 
 private:
 	ID m_id;
 	std::string m_name;
+	Place m_place;
 };
 
 typedef Location::Collection LocationCollection;

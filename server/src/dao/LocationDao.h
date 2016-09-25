@@ -11,22 +11,48 @@ namespace BeeeOn {
 
 class LocationDao {
 public:
-	virtual bool fetch(Location &l) = 0;
+	virtual void create(Location &location) = 0;
+	virtual bool fetch(Location &location) = 0;
+	virtual bool fetchFrom(Location &location,
+			const Place &place) = 0;
+	virtual bool update(Location &location) = 0;
+	virtual bool remove(const Location &location) = 0;
 };
 
 class NullLocationDao : public AbstractInjectorTarget,
 	public NullDao<Location, LocationDao> {
+public:
+	bool fetchFrom(Location &location,
+			const Place &place)
+	{
+		return fetch(location);
+	}
+
+	static LocationDao &instance();
 };
 class MockLocationDao : public AbstractInjectorTarget,
 	public MockDao<Location, LocationDao> {
+public:
+	bool fetchFrom(Location &location,
+			const Place &place)
+	{
+		Location tmp(location.id());
+
+		if (!fetch(tmp))
+			return false;
+
+		if (tmp.place().id() != place.id())
+			return false;
+
+		location = tmp;
+		return true;
+	}
+
 protected:
 	LocationID nextID()
 	{
-		return ++m_id;
+		return LocationID::random();
 	}
-
-private:
-	LocationID m_id;
 };
 
 }

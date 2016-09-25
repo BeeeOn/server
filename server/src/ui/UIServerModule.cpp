@@ -14,6 +14,7 @@
 #include "ui/Auth.h"
 #include "ui/PlaceHandler.h"
 #include "ui/GatewayHandler.h"
+#include "ui/LocationHandler.h"
 
 using namespace std;
 using namespace Poco;
@@ -156,6 +157,11 @@ void factorySetup(UIServerRequestHandlerFactory &factory)
 	factory.POST("/users", handleCreateUser);
 	factory.GET("/users/:userId", handleGetUser);
 	factory.GET("/:placeId/devices/:deviceId", handleGetDevice);
+
+	factory.POST("/place/:placeId/locations", UI::LocationHandler::handlePost);
+	factory.GET("/place/:placeId/locations/:locationId", UI::LocationHandler::handleGet);
+	factory.PUT("/place/:placeId/locations/:locationId", UI::LocationHandler::handlePut);
+	factory.DELETE("/place/:placeId/locations/:locationId", UI::LocationHandler::handleDelete);
 }
 
 BEEEON_OBJECT(UIServerModule, BeeeOn::UIServerModule)

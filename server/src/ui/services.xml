@@ -86,11 +86,12 @@
 		<instance name="mockUserDao" class="BeeeOn::MockUserDao" />
 		<instance name="deviceDao" class="BeeeOn::MockDeviceDao" />
 		<instance name="mockGatewayDao" class="BeeeOn::MockGatewayDao" />
-		<instance name="locationDao" class="BeeeOn::MockLocationDao" />
+		<instance name="mockLocationDao" class="BeeeOn::MockLocationDao" />
 
 		<alias name="placeDao" ref="mockPlaceDao" />
 		<alias name="userDao" ref="mockUserDao" />
 		<alias name="gatewayDao" ref="mockGatewayDao" />
+		<alias name="locationDao" ref="mockLocationDao" />
 
 		<instance name="sociManager"
 				class="BeeeOn::SociManager">

@@ -6,6 +6,7 @@
 #include "ui/Serializing.h"
 #include "model/Place.h"
 #include "model/Gateway.h"
+#include "model/Location.h"
 
 using namespace std;
 using namespace Poco::JSON;
@@ -75,6 +76,34 @@ istream &UI::deserialize(istream &i, Gateway &gateway)
 
 	if (object->has("longitude"))
 		gateway.setLongitude(object->getValue<double>("longitude"));
+
+	return i;
+}
+
+string BeeeOn::UI::serialize(const Location &l)
+{
+	ostringstream s;
+	serialize(s, l);
+	return s.str();
+}
+
+std::ostream &BeeeOn::UI::serialize(std::ostream &o, const Location &location)
+{
+	Object::Ptr object(new Object);
+	object->set("id", location.id().toString());
+	object->set("name", location.name());
+	object->set("place_id", location.place().id().toString());
+	object->stringify(o);
+	return o;
+}
+
+istream &BeeeOn::UI::deserialize(istream &i, Location &location)
+{
+	Parser parser;
+	Object::Ptr object = parser.parse(i).extract<Object::Ptr>();
+
+	if (object->has("name"))
+		location.setName(object->getValue<string>("name"));
 
 	return i;
 }
