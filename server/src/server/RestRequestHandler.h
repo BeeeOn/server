@@ -107,6 +107,12 @@ public:
 			res.setReason("Server internal error");
 		}
 
+		if (m_logger.debug()) {
+			m_logger.debug("result: " + req.getURI() + " -> "
+				+ std::to_string(res.getStatus()),
+				__FILE__, __LINE__);
+		}
+
 		if (!res.sent())
 			res.send();
 	}
