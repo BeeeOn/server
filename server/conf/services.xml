@@ -34,6 +34,10 @@
 			<set name="sessionManager" ref="sessionManager" />
 		</instance>
 
+		<instance name="xmlui"
+				class="BeeeOn::XmlRequestHandlerFactory">
+		</instance>
+
 		<instance name="uiMockInit"
 				class="BeeeOn::UIMockInit"
 				init="early">
