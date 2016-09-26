@@ -101,9 +101,9 @@ protected:
 };
 
 /**
- * A token authorization provider performs authorization
- * by using a token. The abstract class extracts a token
- * and verifies it against a 3rd party authorization service.
+ * An auth code authorization provider performs authorization
+ * by using an auth code. The abstract class extracts the auth
+ * code and verifies it against a 3rd party authorization service.
  */
 class AuthCodeAuthProvider : public AbstractAuthProvider {
 public:
@@ -116,10 +116,10 @@ public:
 	{
 		_TRACE_METHOD(m_logger);
 
-		const AuthCodeCredentials &tokenCredentials =
+		const AuthCodeCredentials &authCodeCredentials =
 			reinterpret_cast<const AuthCodeCredentials &>(cred);
 
-		return verifyAuthCode(tokenCredentials.authCode(), result);
+		return verifyAuthCode(authCodeCredentials.authCode(), result);
 	}
 
 protected:
