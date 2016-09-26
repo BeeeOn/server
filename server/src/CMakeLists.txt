@@ -75,6 +75,7 @@ add_executable(ui-server
 
 add_executable(xmlui-server
 	xmlui/main.cpp
+	xmlui/AbstractXmlHandler.cpp
 	ui/UIMockInit.cpp
 )
 
@@ -99,10 +100,21 @@ if (APPLE)
 		BeeeOnServer
 		${LIBS}
 	)
+	target_link_libraries(xmlui-server
+		-Wl,-all_load
+		BeeeOnServer
+		${LIBS}
+	)
 # The -Wl,--whole-archive is necessary for all libraries defining
 # BEEEON_OBJECTs (see di/InjectorTarget.h).
 else()
 	target_link_libraries(ui-server
+		-Wl,--whole-archive
+		BeeeOnServer
+		-Wl,--no-whole-archive
+		${LIBS}
+	)
+	target_link_libraries(xmlui-server
 		-Wl,--whole-archive
 		BeeeOnServer
 		-Wl,--no-whole-archive
