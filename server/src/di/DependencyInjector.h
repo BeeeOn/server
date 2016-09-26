@@ -85,12 +85,12 @@ public:
 
 	~DependencyInjector();
 
-	InjectorTarget *create(const std::string &name);
+	InjectorTarget *create(const std::string &name, bool disown = false);
 
 	template <typename T>
-	T *create(const std::string &name)
+	T *create(const std::string &name, bool disown = false)
 	{
-		return dynamic_cast<T *>(create(name));
+		return dynamic_cast<T *>(create(name, disown));
 	}
 
 	InjectorTarget *find(const std::string &name);
@@ -111,7 +111,9 @@ private:
 	 */
 	void createEarly();
 
-	InjectorTarget *createNoAlias(const InstanceInfo &info);
+	InjectorTarget *createNoAlias(
+			const InstanceInfo &info,
+			bool disown = false);
 	InjectorTarget *createNew(const InstanceInfo &info);
 	InjectorTarget *injectDependencies(
 			const InstanceInfo &info,

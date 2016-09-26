@@ -111,7 +111,7 @@ void DependencyInjector::createEarly()
 	}
 }
 
-InjectorTarget *DependencyInjector::create(const string &name)
+InjectorTarget *DependencyInjector::create(const string &name, bool disown)
 {
 	TRACE_METHOD();
 
@@ -126,7 +126,7 @@ InjectorTarget *DependencyInjector::create(const string &name)
 	const string &ref = info.resolveAlias(m_conf);
 
 	if (ref.empty())
-		return createNoAlias(info);
+		return createNoAlias(info, disown);
 
 	existing = find(ref);
 	if (existing != NULL) {
@@ -137,7 +137,7 @@ InjectorTarget *DependencyInjector::create(const string &name)
 	}
 
 	InstanceInfo aliasInfo(ref);
-	return createNoAlias(aliasInfo);
+	return createNoAlias(aliasInfo, disown);
 }
 
 InjectorTarget *DependencyInjector::find(const string &name)
@@ -149,14 +149,18 @@ InjectorTarget *DependencyInjector::find(const string &name)
 	return NULL;
 }
 
-InjectorTarget *DependencyInjector::createNoAlias(const InstanceInfo &info)
+InjectorTarget *DependencyInjector::createNoAlias(
+		const InstanceInfo &info, bool disown)
 {
 	InjectorTarget *t = createNew(info);
 	if (t == NULL)
 		throw Poco::NullPointerException("failed to create target "
 				+ info.name());
 
-	m_set.insert(make_pair(info.name(), t));
+	if (!disown) {
+		m_set.insert(make_pair(info.name(), t));
+	}
+
 	return injectDependencies(info, t);
 }
 
