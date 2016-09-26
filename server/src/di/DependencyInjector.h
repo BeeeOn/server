@@ -74,6 +74,7 @@ class InstanceInfo;
 class DependencyInjector {
 public:
 	typedef std::map<std::string, InjectorTarget *> InjectorSet;
+	typedef std::vector<InjectorTarget *> InjectorVector;
 
 	DependencyInjector(
 		Poco::AutoPtr<Poco::Util::AbstractConfiguration> conf):
@@ -136,6 +137,7 @@ private:
 
 private:
 	InjectorSet m_set;
+	InjectorVector m_free;
 	Poco::Manifest<InjectorTarget> m_manifest;
 	Poco::AutoPtr<Poco::Util::AbstractConfiguration> m_conf;
 	Poco::Logger &m_logger;

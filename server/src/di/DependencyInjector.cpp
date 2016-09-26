@@ -82,10 +82,10 @@ private:
 
 DependencyInjector::~DependencyInjector()
 {
-	InjectorSet::iterator it;
-	for (it = m_set.begin(); it != m_set.end(); ++it) {
-		InjectorTarget *t = it->second;
-		delete t; // order is not preserved here
+	InjectorVector::reverse_iterator it;
+	for (it = m_free.rbegin(); it != m_free.rend(); ++it) {
+		InjectorTarget *t = *it;
+		delete t; // deleted in reverse order
 	}
 }
 
@@ -159,6 +159,7 @@ InjectorTarget *DependencyInjector::createNoAlias(
 
 	if (!disown) {
 		m_set.insert(make_pair(info.name(), t));
+		m_free.push_back(t);
 	}
 
 	return injectDependencies(info, t);
