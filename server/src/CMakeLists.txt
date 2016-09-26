@@ -27,6 +27,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/server/RestAuthHandler.cpp
 	${PROJECT_SOURCE_DIR}/server/AccessLevel.cpp
 	${PROJECT_SOURCE_DIR}/server/XmlRequestHandler.cpp
+	${PROJECT_SOURCE_DIR}/server/SocketServer.cpp
 	${PROJECT_SOURCE_DIR}/model/GatewayID.cpp
 	${PROJECT_SOURCE_DIR}/model/JSONSerializer.cpp
 	${PROJECT_SOURCE_DIR}/model/Identity.cpp
