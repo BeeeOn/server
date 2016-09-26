@@ -73,6 +73,11 @@ add_executable(ui-server
 	ui/UIMockInit.cpp
 )
 
+add_executable(xmlui-server
+	xmlui/main.cpp
+	ui/UIMockInit.cpp
+)
+
 set(LIBS
 	${POCO_FOUNDATION}
 	${POCO_SSL}
