@@ -77,6 +77,7 @@ add_executable(xmlui-server
 	xmlui/main.cpp
 	xmlui/AbstractXmlHandler.cpp
 	xmlui/AnyXmlHandler.cpp
+	xmlui/AuthXmlHandler.cpp
 	ui/UIMockInit.cpp
 )
 

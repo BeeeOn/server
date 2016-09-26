@@ -36,11 +36,17 @@
 
 		<instance name="xmlui"
 				class="BeeeOn::XmlRequestHandlerFactory">
+			<add name="resolvers" ref="authXmlHandler" />
 			<add name="resolvers" ref="anyXmlHandler" />
 		</instance>
 
 		<instance name="anyXmlHandler"
 				class="BeeeOn::XmlUI::AnyXmlHandlerResolver" />
+
+		<instance name="authXmlHandler"
+				class="BeeeOn::XmlUI::AuthXmlHandlerResolver">
+			<set name="authService" ref="authService" />
+		</instance>
 
 		<instance name="uiMockInit"
 				class="BeeeOn::UIMockInit"
