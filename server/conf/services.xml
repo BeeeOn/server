@@ -36,7 +36,11 @@
 
 		<instance name="xmlui"
 				class="BeeeOn::XmlRequestHandlerFactory">
+			<add name="resolvers" ref="anyXmlHandler" />
 		</instance>
+
+		<instance name="anyXmlHandler"
+				class="BeeeOn::XmlUI::AnyXmlHandlerResolver" />
 
 		<instance name="uiMockInit"
 				class="BeeeOn::UIMockInit"
