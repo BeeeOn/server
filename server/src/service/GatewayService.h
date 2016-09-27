@@ -45,7 +45,7 @@ public:
 		return m_dao->fetch(gateway);
 	}
 
-	bool fetchFromPlace(Gateway &gateway, Place &place)
+	bool fetchFromPlace(Gateway &gateway, const Place &place)
 	{
 		return m_dao->fetchFromPlace(gateway, place);
 	}
@@ -63,7 +63,7 @@ public:
 		return m_dao->assignAndUpdate(gateway, place);
 	}
 
-	bool unassign(Gateway &gateway, Place &place)
+	bool unassign(Gateway &gateway, const Place &place)
 	{
 		if (!m_dao->fetchFromPlace(gateway, place))
 			return false;
