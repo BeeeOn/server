@@ -37,6 +37,9 @@ class Response:
 	def ns(self):
 		return self.root.get("ns")
 
+	def sessionid(self):
+		return self.root.get("sessionid")
+
 	def is_ok(self):
 		return self.root.get("result") == "ok"
 
@@ -88,3 +91,8 @@ class Login(Request):
 		provider.set("name", self.provider)
 		provider.set("authCode", self.authCode)
 		return request
+
+class Logout(Request):
+	def __init__(self, sessionid):
+		Request.__init__(self, ns = "accounts",
+				type = "logout", sessionid = sessionid)
