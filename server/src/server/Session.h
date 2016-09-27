@@ -4,6 +4,8 @@
 #include <Poco/Timespan.h>
 #include <Poco/SharedPtr.h>
 
+#include "model/User.h"
+
 namespace BeeeOn {
 
 typedef std::string SessionID;

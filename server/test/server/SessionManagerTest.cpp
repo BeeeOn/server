@@ -1,3 +1,4 @@
+#include <vector>
 #include <cppunit/extensions/HelperMacros.h>
 
 #include "server/SessionManager.h"
@@ -74,13 +75,24 @@ void SessionManagerTest::testMaxUserSessions()
 {
 	PocoRandomProvider pocoProvider;
 	UserID userID = UserID::parse("824b4831-6ce4-4614-8e02-8380d6d92f95");
+	std::vector<SessionID> sessions;
 
 	m_manager.setSecureRandomProvider(&pocoProvider);
 
 	for (int i = 0; i < 10; ++i)
-		CPPUNIT_ASSERT_NO_THROW(m_manager.open(userID));
+		CPPUNIT_ASSERT_NO_THROW(
+			sessions.push_back(m_manager.open(userID)));
 
 	CPPUNIT_ASSERT_THROW(m_manager.open(userID), Poco::IllegalStateException);
+
+	// test we can close and open a session so we are sure
+	// that the 10 sessions does not last forever
+	SessionID last = sessions.back();
+	sessions.pop_back();
+
+	CPPUNIT_ASSERT_NO_THROW(m_manager.close(last));
+	CPPUNIT_ASSERT_NO_THROW(
+		sessions.push_back(m_manager.open(userID)));
 }
 
 void SessionManagerTest::testSessionTimeout()
