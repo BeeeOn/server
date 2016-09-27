@@ -63,8 +63,7 @@ void SessionCache::remove(const SessionID &sessionID)
 {
 	auto it = _data.find(sessionID);
 
-	if (it != _data.end())
-	{
+	if (it != _data.end()) {
 		UserID userID = it->second->userID();
 
 		// Remove session from user map
