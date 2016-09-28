@@ -1,6 +1,9 @@
+#include <sstream>
+
 #include <Poco/Exception.h>
 #include <Poco/FIFOBuffer.h>
 #include <Poco/Net/NetException.h>
+#include <Poco/DOM/DOMWriter.h>
 
 #include "Debug.h"
 #include "server/XmlRequestHandler.h"
@@ -74,10 +77,23 @@ TCPServerConnection *XmlRequestHandlerFactory::createConnection(
 	return NULL;
 }
 
+static string documentToString(const AutoPtr<Document> doc)
+{
+	DOMWriter writer;
+	ostringstream s;
+	writer.writeNode(s, doc);
+	return s.str();
+}
+
 XmlRequestHandler *XmlRequestHandlerFactory::resolveRequest(
 		const StreamSocket &socket,
 		const AutoPtr<Document> input)
 {
+	if (m_logger.debug()) {
+		m_logger.debug("document: " + documentToString(input),
+				__FILE__, __LINE__);
+	}
+
 	for (auto resolver : m_resolvers) {
 		if (!resolver->canHandle(*input))
 			continue;
