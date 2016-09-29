@@ -50,7 +50,6 @@ add_library(BeeeOnServer ${SOURCES})
 add_executable(ui-server
 	ui/main.cpp
 	ui/UIServerModule.cpp
-	ui/Auth.cpp
 	ui/Serializing.cpp
 	ui/PlaceHandler.cpp
 	ui/GatewayHandler.cpp

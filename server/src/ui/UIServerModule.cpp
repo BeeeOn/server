@@ -11,7 +11,6 @@
 #include "ui/UIServerModule.h"
 #include "Debug.h"
 
-#include "ui/Auth.h"
 #include "ui/PlaceHandler.h"
 #include "ui/GatewayHandler.h"
 #include "ui/LocationHandler.h"
@@ -53,11 +52,11 @@ void UIServerModule::injectionDone()
 		RestHandler::sendNoOperation(context.response());
 	});
 	m_factory->sessionVerifier(verifyAuthorized);
-	m_factory->POST("/auth", [](UIRouteContext &context) {
-		Auth::handlePost(context);
+	m_factory->POST("/auth", [&](UIRouteContext &context) {
+		m_authHandler->handleLogin(context);
 	}, false);
-	m_factory->DELETE("/auth", [](UIRouteContext &context) {
-		Auth::handleDelete(context);
+	m_factory->DELETE("/auth", [&](UIRouteContext &context) {
+		m_authHandler->handleLogout(context);
 	});
 	m_factory->POST("/place", [](UIRouteContext &context) {
 		UI::PlaceHandler::handlePost(context);

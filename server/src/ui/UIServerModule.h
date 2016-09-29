@@ -10,7 +10,6 @@
 #include "di/InjectorTarget.h"
 #include "service/PlaceService.h"
 #include "service/UserService.h"
-#include "service/AuthService.h"
 #include "service/DeviceService.h"
 #include "service/GatewayService.h"
 #include "service/LocationService.h"
@@ -87,16 +86,14 @@ public:
 				&UIServerModule::setPlaceService);
 		injector<UIServerModule, UserService>("userService",
 				&UIServerModule::setUserService);
-		injector<UIServerModule, AuthService>("authService",
-				&UIServerModule::setAuthService);
+		injector<UIServerModule, RestAuthHandler>("authHandler",
+				&UIServerModule::setAuthHandler);
 		injector<UIServerModule, DeviceService>("deviceService",
 				&UIServerModule::setDeviceService);
 		injector<UIServerModule, GatewayService>("gatewayService",
 				&UIServerModule::setGatewayService);
 		injector<UIServerModule, LocationService>("locationService",
 				&UIServerModule::setLocationService);
-		injector<UIServerModule, RestAuthHandler>("authHandler",
-				&UIServerModule::setAuthHandler);
 	}
 
 	/**
@@ -154,14 +151,9 @@ public:
 		return *m_userService;
 	}
 
-	void setAuthService(AuthService *service)
+	void setAuthHandler(RestAuthHandler *handler)
 	{
-		m_authService = service;
-	}
-
-	AuthService &authService()
-	{
-		return *m_authService;
+		m_authHandler = handler;
 	}
 
 	void setDeviceService(DeviceService *service)
@@ -194,11 +186,6 @@ public:
 		return *m_locationService;
 	}
 
-	void setAuthHandler(RestAuthHandler *handler)
-	{
-		m_authHandler = handler;
-	}
-
 	Poco::Logger &logger()
 	{
 		return m_logger;
@@ -210,11 +197,10 @@ private:
 	SessionManager *m_sessionManager;
 	PlaceService *m_placeService;
 	UserService *m_userService;
-	AuthService *m_authService;
+	RestAuthHandler *m_authHandler;
 	DeviceService *m_deviceService;
 	GatewayService *m_gatewayService;
 	LocationService *m_locationService;
-	RestAuthHandler *m_authHandler;
 	Poco::Logger &m_logger;
 };
 

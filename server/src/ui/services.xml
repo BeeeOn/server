@@ -4,11 +4,10 @@
 			<set name="sessionManager" ref="sessionManager" />
 			<set name="placeService" ref="placeService" />
 			<set name="userService" ref="userService" />
-			<set name="authService" ref="authService" />
+			<set name="authHandler" ref="authHandler" />
 			<set name="deviceService" ref="deviceService" />
 			<set name="gatewayService" ref="gatewayService" />
 			<set name="locationService" ref="locationService" />
-			<set name="authHandler" ref="authHandler" />
 		</instance>
 
 		<instance name="authHandler" class="BeeeOn::RestAuthHandler">
