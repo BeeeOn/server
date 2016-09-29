@@ -5,6 +5,7 @@
 #include <Poco/Net/NetException.h>
 #include <Poco/Logger.h>
 #include <vector>
+#include "server/Session.h"
 #include "server/Route.h"
 #include "Debug.h"
 
@@ -70,7 +71,9 @@ public:
 
 			handleNoContentLength(req);
 
-			sessionVerify(req, m_route);
+			ExpirableSession::Ptr session;
+			sessionVerify(req, m_route, session);
+
 			m_route.execute(req, res, m_params, m_userData);
 		}
 		catch (Poco::Net::NotAuthenticatedException &e) {
@@ -119,7 +122,8 @@ public:
 
 protected:
 	void sessionVerify(const Request &req,
-			const Route &route)
+			const Route &route,
+			ExpirableSession::Ptr &session)
 	{
 		if (!route.isSecure())
 			return;
@@ -129,7 +133,7 @@ protected:
 			return;
 		}
 
-		m_sessionVerifier(req, route, m_userData);
+		m_sessionVerifier(req, route, m_userData, session);
 	}
 
 protected:
@@ -156,7 +160,8 @@ public:
 	using Params = typename Route::Params;
 
 	typedef void (*SessionVerifier)(const Request &request,
-			const Route &route, UserData &userData);
+			const Route &route, UserData &userData,
+			ExpirableSession::Ptr &session);
 
 	TRestRequestHandlerFactory(UserData &userData,
 			const std::string &name,

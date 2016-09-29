@@ -7,6 +7,7 @@
 
 #include "service/AuthService.h"
 #include "server/Route.h"
+#include "server/Session.h"
 #include "model/JSONSerializer.h"
 #include "ui/UIServerModule.h"
 #include "Debug.h"
@@ -23,14 +24,14 @@ using namespace Poco::Dynamic;
 using namespace BeeeOn;
 
 static void verifyAuthorized(const UIRequest &request,
-		const UIRoute &route, UIServerModule &module)
+		const UIRoute &route, UIServerModule &module,
+		ExpirableSession::Ptr &session)
 {
 	TRACE_FUNC();
 
 	if (request.hasCredentials()) {
 		string scheme;
 		string authInfo;
-		Poco::SharedPtr<ExpirableSession> session;
 
 		request.getCredentials(scheme, authInfo);
 
