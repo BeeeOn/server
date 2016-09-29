@@ -2,152 +2,79 @@
 
 #include "ui/GatewayHandler.h"
 #include "ui/Serializing.h"
+#include "model/Place.h"
+#include "model/Gateway.h"
 
 using namespace std;
 using namespace Poco;
 using namespace BeeeOn;
 using namespace BeeeOn::UI;
 
-void GatewayHandler::handlePost(UIRouteContext &context)
+GatewayHandler::GatewayHandler()
 {
-	Logger &logger = context.userData().logger();
-	UIRequest &request = context.request();
-	UIResponse &response = context.response();
-	GatewayService &service = context.userData().gatewayService();
-
-	try {
-		handlePost(logger, request, response, service, context.params());
-	} catch (const Exception &e) {
-		logger.log(e, __FILE__, __LINE__);
-		response.setStatusAndReason(UIResponse::HTTP_BAD_REQUEST);
-	}
+	injector<GatewayHandler, GatewayService>("gatewayService",
+			&GatewayHandler::setGatewayService);
 }
 
-void GatewayHandler::handlePost(Poco::Logger &logger,
-		UIRequest &request,
-		UIResponse &response,
-		GatewayService &gatewayService,
-		const UIRoute::Params &params)
+const string GatewayHandler::handleAssign(istream &in,
+		const string &placeId, const string &gatewayId)
 {
-	Place place(PlaceID::parse(params.at("placeId")));
-	Gateway gateway(GatewayID::parse(params.at("gatewayId")));
+	Place place(PlaceID::parse(placeId));
+	Gateway gateway(GatewayID::parse(gatewayId));
 
-	if (!gatewayService.fetch(gateway)) {
-		response.setStatusAndReason(UIResponse::HTTP_NOT_FOUND);
-		return;
-	}
+	if (!m_gatewayService->fetch(gateway))
+		return "";
 
-	deserialize(request.stream(), gateway);
-	if (!gatewayService.assignAndUpdate(gateway, place)) {
-		response.setStatusAndReason(UIResponse::HTTP_NOT_FOUND);
-		return;
-	}
+	deserialize(in, gateway);
 
-	const string &result = serialize(gateway);
-	response.sendBuffer(result.c_str(), result.size());
+	if (!m_gatewayService->assignAndUpdate(gateway, place))
+		return "";
+
+	return serialize(gateway);
 }
 
-void GatewayHandler::handlePut(UIRouteContext &context)
+const string GatewayHandler::handleUpdate(istream &in,
+		const string &placeId,
+		const string &gatewayId)
 {
-	Logger &logger = context.userData().logger();
-	UIRequest &request = context.request();
-	UIResponse &response = context.response();
-	GatewayService &service = context.userData().gatewayService();
+	Place place(PlaceID::parse(placeId));
+	Gateway gateway(GatewayID::parse(gatewayId));
 
-	try {
-		handlePut(logger, request, response, service, context.params());
-	} catch (const Exception &e) {
-		logger.log(e, __FILE__, __LINE__);
-		response.setStatusAndReason(UIResponse::HTTP_BAD_REQUEST);
+	if (!m_gatewayService->fetchFromPlace(gateway, place))
+		return "";
+
+	deserialize(in, gateway);
+
+	if (!m_gatewayService->update(gateway)) {
+		throw Exception("failed to update gateway: "
+				+ gateway.id().toString());
 	}
+
+	return serialize(gateway);
 }
 
-void GatewayHandler::handlePut(Poco::Logger &logger,
-		UIRequest &request,
-		UIResponse &response,
-		GatewayService &gatewayService,
-		const UIRoute::Params &params)
+const string GatewayHandler::handleGet(const string &placeId,
+		const string &gatewayId)
 {
-	Gateway gateway(GatewayID::parse(params.at("gatewayId")));
-	Place place(PlaceID::parse(params.at("placeId")));
+	Place place(PlaceID::parse(placeId));
+	Gateway gateway(GatewayID::parse(gatewayId));
 
-	if (!gatewayService.fetchFromPlace(gateway, place)) {
-		response.setStatusAndReason(UIResponse::HTTP_NOT_FOUND);
-		return;
-	}
+	if (!m_gatewayService->fetchFromPlace(gateway, place))
+		return "";
 
-	deserialize(request.stream(), gateway);
-	if (!gatewayService.update(gateway)) {
-		response.setStatusAndReason(UIResponse::HTTP_BAD_REQUEST);
-		return;
-	}
-
-	const string &result = serialize(gateway);
-	response.sendBuffer(result.c_str(), result.size());
+	return serialize(gateway);
 }
 
-void GatewayHandler::handleGet(UIRouteContext &context)
+const string GatewayHandler::handleDelete(const string &placeId,
+		const string &gatewayId)
 {
-	Logger &logger = context.userData().logger();
-	UIRequest &request = context.request();
-	UIResponse &response = context.response();
-	GatewayService &service = context.userData().gatewayService();
+	Place place(PlaceID::parse(placeId));
+	Gateway gateway(GatewayID::parse(gatewayId));
 
-	try {
-		handleGet(logger, request, response, service, context.params());
-	} catch (const Exception &e) {
-		logger.log(e, __FILE__, __LINE__);
-		response.setStatusAndReason(UIResponse::HTTP_BAD_REQUEST);
-	}
+	if (!m_gatewayService->unassign(gateway, place))
+		return "";
+
+	return serialize(gateway);
 }
 
-void GatewayHandler::handleGet(Poco::Logger &logger,
-		UIRequest &request,
-		UIResponse &response,
-		GatewayService &gatewayService,
-		const UIRoute::Params &params)
-{
-	Gateway gateway(GatewayID::parse(params.at("gatewayId")));
-	Place place(PlaceID::parse(params.at("placeId")));
-
-	if (!gatewayService.fetchFromPlace(gateway, place)) {
-		response.setStatusAndReason(UIResponse::HTTP_NOT_FOUND);
-		return;
-	}
-
-	const string &result = serialize(gateway);
-	response.sendBuffer(result.c_str(), result.size());
-}
-
-void GatewayHandler::handleDelete(UIRouteContext &context)
-{
-	Logger &logger = context.userData().logger();
-	UIRequest &request = context.request();
-	UIResponse &response = context.response();
-	GatewayService &service = context.userData().gatewayService();
-
-	try {
-		handleDelete(logger, request, response, service, context.params());
-	} catch (const Exception &e) {
-		logger.log(e, __FILE__, __LINE__);
-		response.setStatusAndReason(UIResponse::HTTP_BAD_REQUEST);
-	}
-}
-
-void GatewayHandler::handleDelete(Poco::Logger &logger,
-		UIRequest &request,
-		UIResponse &response,
-		GatewayService &gatewayService,
-		const UIRoute::Params &params)
-{
-	Gateway gateway(GatewayID::parse(params.at("gatewayId")));
-	Place place(PlaceID::parse(params.at("placeId")));
-
-	if (!gatewayService.unassign(gateway, place)) {
-		response.setStatusAndReason(UIResponse::HTTP_NOT_FOUND);
-		return;
-	}
-
-	const string &result = serialize(gateway);
-	response.sendBuffer(result.c_str(), result.size());
-}
+BEEEON_OBJECT(GatewayHandler, BeeeOn::UI::GatewayHandler)

@@ -71,17 +71,17 @@ void UIServerModule::injectionDone()
 		m_placeHandler->handleDelete(context);
 	});
 
-	m_factory->POST("/place/:placeId/gateways/:gatewayId", [](UIRouteContext &context) {
-		UI::GatewayHandler::handlePost(context);
+	m_factory->POST("/place/:placeId/gateways/:gatewayId", [&](UIRouteContext &context) {
+		m_gatewayHandler->handleAssign(context);
 	});
-	m_factory->PUT("/place/:placeId/gateways/:gatewayId", [](UIRouteContext &context) {
-		UI::GatewayHandler::handlePut(context);
+	m_factory->PUT("/place/:placeId/gateways/:gatewayId", [&](UIRouteContext &context) {
+		m_gatewayHandler->handleUpdate(context);
 	});
-	m_factory->GET("/place/:placeId/gateways/:gatewayId", [](UIRouteContext &context) {
-		UI::GatewayHandler::handleGet(context);
+	m_factory->GET("/place/:placeId/gateways/:gatewayId", [&](UIRouteContext &context) {
+		m_gatewayHandler->handleGet(context);
 	});
-	m_factory->DELETE("/place/:placeId/gateways/:gatewayId", [](UIRouteContext &context) {
-		UI::GatewayHandler::handleDelete(context);
+	m_factory->DELETE("/place/:placeId/gateways/:gatewayId", [&](UIRouteContext &context) {
+		m_gatewayHandler->handleDelete(context);
 	});
 
 	m_factory->POST("/place/:placeId/locations", [](UIRouteContext &context) {

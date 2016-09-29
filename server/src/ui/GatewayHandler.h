@@ -1,60 +1,131 @@
 #ifndef BEEEON_UI_GATEWAY_HANDLER_H
 #define BEEEON_UI_GATEWAY_HANDLER_H
 
-#include "ui/Handler.h"
+#include <istream>
+#include <Poco/Exception.h>
 
-namespace Poco {
-	class Logger;
-}
+#include "di/InjectorTarget.h"
+#include "server/RestHandler.h"
+#include "service/GatewayService.h"
 
 namespace BeeeOn {
 namespace UI {
 
-class GatewayHandler : public Handler {
+class GatewayHandler : public RestHandler, public AbstractInjectorTarget {
 public:
+	GatewayHandler();
+
 	/**
 	  * Assign a gateway to a place both specified in URI.
 	  * If new values for gateway are included they will be updated as well
 	  * (i.e. name,location, altitude).
 	  */
-	static void handlePost(UIRouteContext &context);
+	template <typename Context>
+	void handleAssign(Context &context)
+	{
+		std::istream &in = context.request().stream();
+		const std::string placeId = param(context, "placeId");
+		const std::string gatewayId = param(context, "gatewayId");
+
+		try {
+			sendResultOrNotFound(
+				context.response(),
+				handleAssign(in, placeId, gatewayId)
+			);
+		}
+		catch (const Poco::Exception &e) {
+			m_logger.log(e, __FILE__, __LINE__);
+			sendInvalidInput(context.response());
+		}
+	}
+
+	const std::string handleAssign(std::istream &in,
+			const std::string &placeId,
+			const std::string &gatewayId);
 
 	/**
 	  * Update gateway properties.
 	  */
-	static void handlePut(UIRouteContext &context);
+	template <typename Context>
+	void handleUpdate(Context &context)
+	{
+		std::istream &in = context.request().stream();
+		const std::string &placeId = param(context, "placeId");
+		const std::string &gatewayId = param(context, "gatewayId");
+
+		try {
+			sendResultOrNotFound(
+				context.response(),
+				handleUpdate(in, placeId, gatewayId)
+			);
+		}
+		catch (const Poco::Exception &e) {
+			m_logger.log(e, __FILE__, __LINE__);
+			sendInvalidInput(context.response());
+		}
+	}
+
+	const std::string handleUpdate(std::istream &in,
+			const std::string &placeId,
+			const std::string &gatewayId);
 
 	/**
 	  * Fetch specified gateway.
 	  */
-	static void handleGet(UIRouteContext &context);
+	template <typename Context>
+	void handleGet(Context &context)
+	{
+		const std::string &placeId = param(context, "placeId");
+		const std::string &gatewayId = param(context, "gatewayId");
+
+		try {
+			sendResultOrNotFound(
+				context.response(),
+				handleGet(placeId, gatewayId)
+			);
+		}
+		catch (const Poco::Exception &e) {
+			m_logger.log(e, __FILE__, __LINE__);
+			sendInvalidInput(context.response());
+		}
+	}
+
+	const std::string handleGet(
+			const std::string &placeId,
+			const std::string &gatewayId);
 
 	/**
 	  * Unassign gateway from place. This does not delete the gateway from DB.
 	  */
-	static void handleDelete(UIRouteContext &context);
+	template <typename Context>
+	void handleDelete(Context &context)
+	{
+		const std::string &placeId = param(context, "placeId");
+		const std::string &gatewayId = param(context, "gatewayId");
 
-protected:
-	static void handlePost(Poco::Logger &logger,
-			UIRequest &request,
-			UIResponse &response,
-			GatewayService &gatewayService,
-			const UIRoute::Params &params);
-	static void handlePut(Poco::Logger &logger,
-			UIRequest &request,
-			UIResponse &response,
-			GatewayService &gatewayService,
-			const UIRoute::Params &params);
-	static void handleGet(Poco::Logger &logger,
-			UIRequest &request,
-			UIResponse &response,
-			GatewayService &gatewayService,
-			const UIRoute::Params &params);
-	static void handleDelete(Poco::Logger &logger,
-			UIRequest &request,
-			UIResponse &response,
-			GatewayService &gatewayService,
-			const UIRoute::Params &params);
+		try {
+			sendResultOrNotFound(
+				context.response(),
+				handleDelete(placeId, gatewayId)
+			);
+		}
+		catch (const Poco::Exception &e) {
+			m_logger.log(e, __FILE__, __LINE__);
+			sendInvalidInput(context.response());
+		}
+	}
+
+	const std::string handleDelete(
+			const std::string &placeId,
+			const std::string &gatewayId);
+
+	void setGatewayService(GatewayService *service)
+	{
+		m_gatewayService = service;
+	}
+
+private:
+	GatewayService *m_gatewayService;
 };
 
 }

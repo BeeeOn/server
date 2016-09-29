@@ -11,7 +11,7 @@
 #include "ui/PlaceHandler.h"
 #include "service/UserService.h"
 #include "service/DeviceService.h"
-#include "service/GatewayService.h"
+#include "ui/GatewayHandler.h"
 #include "service/LocationService.h"
 
 /**
@@ -92,8 +92,10 @@ public:
 				&UIServerModule::setAuthHandler);
 		injector<UIServerModule, DeviceService>("deviceService",
 				&UIServerModule::setDeviceService);
-		injector<UIServerModule, GatewayService>("gatewayService",
-				&UIServerModule::setGatewayService);
+		injector<UIServerModule, BeeeOn::UI::GatewayHandler>(
+				"gatewayHandler",
+				&UIServerModule::setGatewayHandler
+		);
 		injector<UIServerModule, LocationService>("locationService",
 				&UIServerModule::setLocationService);
 	}
@@ -168,14 +170,9 @@ public:
 		return *m_deviceService;
 	}
 
-	void setGatewayService(GatewayService *service)
+	void setGatewayHandler(BeeeOn::UI::GatewayHandler *handler)
 	{
-		m_gatewayService = service;
-	}
-
-	GatewayService &gatewayService()
-	{
-		return *m_gatewayService;
+		m_gatewayHandler = handler;
 	}
 
 	void setLocationService(LocationService *service)
@@ -201,7 +198,7 @@ private:
 	UserService *m_userService;
 	RestAuthHandler *m_authHandler;
 	DeviceService *m_deviceService;
-	GatewayService *m_gatewayService;
+	BeeeOn::UI::GatewayHandler *m_gatewayHandler;
 	LocationService *m_locationService;
 	Poco::Logger &m_logger;
 };
