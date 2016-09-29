@@ -60,81 +60,6 @@ static void verifyAuthorized(const UIRequest &request,
 	throw NotAuthenticatedException("credentials not found");
 }
 
-static void handleGetUser(UIRouteContext &context)
-{
-	UIRoute::Params::const_iterator it;
-
-	it = context.params().find("userId");
-	if (it == context.params().end()) {
-		context.response().setStatus(UIResponse::HTTP_NOT_FOUND);
-		context.response().setReason("Not found");
-		return;
-	}
-
-	User user(UserID::parse(it->second));
-	if (!context.userData().userService().fetch(user)) {
-		context.response().setStatus(UIResponse::HTTP_NOT_FOUND);
-		context.response().setReason("Not found");
-		return;
-	}
-
-	JSONObjectSerializer serializer;
-	user.toWeb(serializer);
-	const string &userData = serializer.toString();
-
-	context.response().sendBuffer(userData.c_str(), userData.size());
-}
-
-static void handleCreateUser(UIRouteContext &context)
-{
-	std::string userData;
-	StreamCopier::copyToString(context.request().stream(), userData);
-	JSONObjectSerializer deserializer;
-	User user;
-	user.fromWeb(deserializer);
-
-	context.userData().userService().create(user);
-	JSONObjectSerializer serializer;
-	user.toWeb(serializer);
-	const string &result = serializer.toString();
-
-	context.response().sendBuffer(result.c_str(), result.size());
-}
-
-static void handleGetDevice(UIRouteContext &context)
-{
-	UIRoute::Params::const_iterator it;
-
-	it = context.params().find("placeId");
-	if (it == context.params().end()) {
-		context.response().setStatus(UIResponse::HTTP_NOT_FOUND);
-		context.response().setReason("Not found");
-		return;
-	}
-
-	Place place(PlaceID::parse(it->second));
-
-	it = context.params().find("deviceId");
-	if (it == context.params().end()) {
-		context.response().setStatus(UIResponse::HTTP_NOT_FOUND);
-		context.response().setReason("Not found");
-		return;
-	}
-
-	Device device(DeviceID::parse(it->second));
-	if (!context.userData().deviceService().fetch(device)) {
-		context.response().setStatus(UIResponse::HTTP_NOT_FOUND);
-		context.response().setReason("Not found");
-		return;
-	}
-
-	JSONObjectSerializer serializer;
-	device.toWeb(serializer);
-	const string &result = serializer.toString();
-
-	context.response().sendBuffer(result.c_str(), result.size());
-}
-
 namespace BeeeOn {
 
 void factorySetup(UIServerRequestHandlerFactory &factory)
@@ -153,10 +78,6 @@ void factorySetup(UIServerRequestHandlerFactory &factory)
 	factory.PUT("/place/:placeId/gateways/:gatewayId", UI::GatewayHandler::handlePut);
 	factory.GET("/place/:placeId/gateways/:gatewayId", UI::GatewayHandler::handleGet);
 	factory.DELETE("/place/:placeId/gateways/:gatewayId", UI::GatewayHandler::handleDelete);
-
-	factory.POST("/users", handleCreateUser);
-	factory.GET("/users/:userId", handleGetUser);
-	factory.GET("/:placeId/devices/:deviceId", handleGetDevice);
 
 	factory.POST("/place/:placeId/locations", UI::LocationHandler::handlePost);
 	factory.GET("/place/:placeId/locations/:locationId", UI::LocationHandler::handleGet);
