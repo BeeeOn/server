@@ -12,7 +12,7 @@
 #include "service/UserService.h"
 #include "service/DeviceService.h"
 #include "ui/GatewayHandler.h"
-#include "service/LocationService.h"
+#include "ui/LocationHandler.h"
 
 /**
  * Compilation-time configuration of the target underlying
@@ -96,8 +96,10 @@ public:
 				"gatewayHandler",
 				&UIServerModule::setGatewayHandler
 		);
-		injector<UIServerModule, LocationService>("locationService",
-				&UIServerModule::setLocationService);
+		injector<UIServerModule, BeeeOn::UI::LocationHandler>(
+				"locationHandler",
+				&UIServerModule::setLocationHandler
+		);
 	}
 
 	/**
@@ -175,14 +177,9 @@ public:
 		m_gatewayHandler = handler;
 	}
 
-	void setLocationService(LocationService *service)
+	void setLocationHandler(BeeeOn::UI::LocationHandler *handler)
 	{
-		m_locationService = service;
-	}
-
-	LocationService &locationService()
-	{
-		return *m_locationService;
+		m_locationHandler = handler;
 	}
 
 	Poco::Logger &logger()
@@ -199,7 +196,7 @@ private:
 	RestAuthHandler *m_authHandler;
 	DeviceService *m_deviceService;
 	BeeeOn::UI::GatewayHandler *m_gatewayHandler;
-	LocationService *m_locationService;
+	BeeeOn::UI::LocationHandler *m_locationHandler;
 	Poco::Logger &m_logger;
 };
 

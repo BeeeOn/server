@@ -7,7 +7,7 @@
 			<set name="authHandler" ref="authHandler" />
 			<set name="deviceService" ref="deviceService" />
 			<set name="gatewayHandler" ref="gatewayHandler" />
-			<set name="locationService" ref="locationService" />
+			<set name="locationHandler" ref="locationHandler" />
 		</instance>
 
 		<instance name="authHandler" class="BeeeOn::RestAuthHandler">
@@ -20,6 +20,10 @@
 
 		<instance name="gatewayHandler" class="BeeeOn::UI::GatewayHandler">
 			<set name="gatewayService" ref="gatewayService" />
+		</instance>
+
+		<instance name="locationHandler" class="BeeeOn::UI::LocationHandler">
+			<set name="locationService" ref="locationService" />
 		</instance>
 
 		<instance name="uiMockInit"

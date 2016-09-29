@@ -84,17 +84,17 @@ void UIServerModule::injectionDone()
 		m_gatewayHandler->handleDelete(context);
 	});
 
-	m_factory->POST("/place/:placeId/locations", [](UIRouteContext &context) {
-		UI::LocationHandler::handlePost(context);
+	m_factory->POST("/place/:placeId/locations", [&](UIRouteContext &context) {
+		m_locationHandler->handleCreate(context);
 	});
-	m_factory->GET("/place/:placeId/locations/:locationId", [](UIRouteContext &context) {
-		UI::LocationHandler::handleGet(context);
+	m_factory->GET("/place/:placeId/locations/:locationId", [&](UIRouteContext &context) {
+		m_locationHandler->handleGet(context);
 	});
-	m_factory->PUT("/place/:placeId/locations/:locationId", [](UIRouteContext &context) {
-		UI::LocationHandler::handlePut(context);
+	m_factory->PUT("/place/:placeId/locations/:locationId", [&](UIRouteContext &context) {
+		m_locationHandler->handleUpdate(context);
 	});
-	m_factory->DELETE("/place/:placeId/locations/:locationId", [](UIRouteContext &context) {
-		UI::LocationHandler::handleDelete(context);
+	m_factory->DELETE("/place/:placeId/locations/:locationId", [&](UIRouteContext &context) {
+		m_locationHandler->handleDelete(context);
 	});
 }
 
