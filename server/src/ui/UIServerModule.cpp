@@ -64,25 +64,57 @@ namespace BeeeOn {
 
 void factorySetup(UIServerRequestHandlerFactory &factory)
 {
-	factory.noRoute(handleNoRoute);
-	factory.noOperation(handleNoOperation);
+	factory.noRoute([](UIRouteContext &context) {
+		handleNoRoute(context);
+	});
+	factory.noOperation([](UIRouteContext &context) {
+		handleNoOperation(context);
+	});
 	factory.sessionVerifier(verifyAuthorized);
-	factory.POST("/auth", Auth::handlePost, false);
-	factory.DELETE("/auth", Auth::handleDelete);
-	factory.POST("/place", UI::PlaceHandler::handlePost);
-	factory.PUT("/place/:placeId", UI::PlaceHandler::handlePut);
-	factory.GET("/place/:placeId", UI::PlaceHandler::handleGet);
-	factory.DELETE("/place/:placeId", UI::PlaceHandler::handleDelete);
+	factory.POST("/auth", [](UIRouteContext &context) {
+		Auth::handlePost(context);
+	}, false);
+	factory.DELETE("/auth", [](UIRouteContext &context) {
+		Auth::handleDelete(context);
+	});
+	factory.POST("/place", [](UIRouteContext &context) {
+		UI::PlaceHandler::handlePost(context);
+	});
+	factory.PUT("/place/:placeId", [](UIRouteContext &context) {
+		UI::PlaceHandler::handlePut(context);
+	});
+	factory.GET("/place/:placeId", [](UIRouteContext &context) {
+		UI::PlaceHandler::handleGet(context);
+	});
+	factory.DELETE("/place/:placeId", [](UIRouteContext &context) {
+		UI::PlaceHandler::handleDelete(context);
+	});
 
-	factory.POST("/place/:placeId/gateways/:gatewayId", UI::GatewayHandler::handlePost);
-	factory.PUT("/place/:placeId/gateways/:gatewayId", UI::GatewayHandler::handlePut);
-	factory.GET("/place/:placeId/gateways/:gatewayId", UI::GatewayHandler::handleGet);
-	factory.DELETE("/place/:placeId/gateways/:gatewayId", UI::GatewayHandler::handleDelete);
+	factory.POST("/place/:placeId/gateways/:gatewayId", [](UIRouteContext &context) {
+		UI::GatewayHandler::handlePost(context);
+	});
+	factory.PUT("/place/:placeId/gateways/:gatewayId", [](UIRouteContext &context) {
+		UI::GatewayHandler::handlePut(context);
+	});
+	factory.GET("/place/:placeId/gateways/:gatewayId", [](UIRouteContext &context) {
+		UI::GatewayHandler::handleGet(context);
+	});
+	factory.DELETE("/place/:placeId/gateways/:gatewayId", [](UIRouteContext &context) {
+		UI::GatewayHandler::handleDelete(context);
+	});
 
-	factory.POST("/place/:placeId/locations", UI::LocationHandler::handlePost);
-	factory.GET("/place/:placeId/locations/:locationId", UI::LocationHandler::handleGet);
-	factory.PUT("/place/:placeId/locations/:locationId", UI::LocationHandler::handlePut);
-	factory.DELETE("/place/:placeId/locations/:locationId", UI::LocationHandler::handleDelete);
+	factory.POST("/place/:placeId/locations", [](UIRouteContext &context) {
+		UI::LocationHandler::handlePost(context);
+	});
+	factory.GET("/place/:placeId/locations/:locationId", [](UIRouteContext &context) {
+		UI::LocationHandler::handleGet(context);
+	});
+	factory.PUT("/place/:placeId/locations/:locationId", [](UIRouteContext &context) {
+		UI::LocationHandler::handlePut(context);
+	});
+	factory.DELETE("/place/:placeId/locations/:locationId", [](UIRouteContext &context) {
+		UI::LocationHandler::handleDelete(context);
+	});
 }
 
 BEEEON_OBJECT(UIServerModule, BeeeOn::UIServerModule)
