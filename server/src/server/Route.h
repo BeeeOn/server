@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <map>
+#include <functional>
 #include <Poco/URI.h>
 #include <Poco/Exception.h>
 #include <Poco/Logger.h>
@@ -44,7 +45,7 @@ public:
 	 * Function for handling a routing request. The request
 	 * data is represented by the given context.
 	 */
-	typedef void (*Handler)(Context &context);
+	typedef std::function<void (Context &context)> Handler;
 
 	std::string getURI() const
 	{

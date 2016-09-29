@@ -6,14 +6,13 @@
 
 #include "server/RestRequestHandler.h"
 #include "server/SessionManager.h"
-#include "server/SessionManager.h"
+#include "server/RestAuthHandler.h"
 #include "di/InjectorTarget.h"
-#include "service/PlaceService.h"
+#include "ui/PlaceHandler.h"
 #include "service/UserService.h"
-#include "service/AuthService.h"
 #include "service/DeviceService.h"
-#include "service/GatewayService.h"
-#include "service/LocationService.h"
+#include "ui/GatewayHandler.h"
+#include "ui/LocationHandler.h"
 
 /**
  * Compilation-time configuration of the target underlying
@@ -74,8 +73,6 @@ typedef TRoute<UIRequest, UIResponse, UIServerModule> UIRoute;
  */
 typedef UIRoute::Context UIRouteContext;
 
-void factorySetup(UIServerRequestHandlerFactory &factory);
-
 class UIServerModule : public AbstractInjectorTarget {
 public:
 	UIServerModule(void):
@@ -83,22 +80,32 @@ public:
 		m_server(NULL),
 		m_logger(LOGGER_CLASS(this))
 	{
-		factorySetup(*m_factory);
 		injector<UIServerModule, SessionManager>("sessionManager",
 				&UIServerModule::setSessionManager);
-		injector<UIServerModule, PlaceService>("placeService",
-				&UIServerModule::setPlaceService);
+		injector<UIServerModule, BeeeOn::UI::PlaceHandler>(
+				"placeHandler",
+				&UIServerModule::setPlaceHandler
+		);
 		injector<UIServerModule, UserService>("userService",
 				&UIServerModule::setUserService);
-		injector<UIServerModule, AuthService>("authService",
-				&UIServerModule::setAuthService);
+		injector<UIServerModule, RestAuthHandler>("authHandler",
+				&UIServerModule::setAuthHandler);
 		injector<UIServerModule, DeviceService>("deviceService",
 				&UIServerModule::setDeviceService);
-		injector<UIServerModule, GatewayService>("gatewayService",
-				&UIServerModule::setGatewayService);
-		injector<UIServerModule, LocationService>("locationService",
-				&UIServerModule::setLocationService);
+		injector<UIServerModule, BeeeOn::UI::GatewayHandler>(
+				"gatewayHandler",
+				&UIServerModule::setGatewayHandler
+		);
+		injector<UIServerModule, BeeeOn::UI::LocationHandler>(
+				"locationHandler",
+				&UIServerModule::setLocationHandler
+		);
 	}
+
+	/**
+	 * Called when dependency injection sets all entries.
+	 */
+	void injectionDone() override;
 
 	~UIServerModule() {
 		if (m_server)
@@ -130,14 +137,14 @@ public:
 		return *m_sessionManager;
 	}
 
-	void setPlaceService(PlaceService *service)
+	void setPlaceHandler(BeeeOn::UI::PlaceHandler *handler)
 	{
-		m_placeService = service;
+		m_placeHandler = handler;
 	}
 
-	PlaceService &placeService()
+	BeeeOn::UI::PlaceHandler &placeHandler()
 	{
-		return *m_placeService;
+		return *m_placeHandler;
 	}
 
 	void setUserService(UserService *service)
@@ -150,14 +157,9 @@ public:
 		return *m_userService;
 	}
 
-	void setAuthService(AuthService *service)
+	void setAuthHandler(RestAuthHandler *handler)
 	{
-		m_authService = service;
-	}
-
-	AuthService &authService()
-	{
-		return *m_authService;
+		m_authHandler = handler;
 	}
 
 	void setDeviceService(DeviceService *service)
@@ -170,24 +172,14 @@ public:
 		return *m_deviceService;
 	}
 
-	void setGatewayService(GatewayService *service)
+	void setGatewayHandler(BeeeOn::UI::GatewayHandler *handler)
 	{
-		m_gatewayService = service;
+		m_gatewayHandler = handler;
 	}
 
-	GatewayService &gatewayService()
+	void setLocationHandler(BeeeOn::UI::LocationHandler *handler)
 	{
-		return *m_gatewayService;
-	}
-
-	void setLocationService(LocationService *service)
-	{
-		m_locationService = service;
-	}
-
-	LocationService &locationService()
-	{
-		return *m_locationService;
+		m_locationHandler = handler;
 	}
 
 	Poco::Logger &logger()
@@ -199,12 +191,12 @@ private:
 	Poco::SharedPtr<UIServerRequestHandlerFactory> m_factory;
 	UIRestServer *m_server;
 	SessionManager *m_sessionManager;
-	PlaceService *m_placeService;
+	BeeeOn::UI::PlaceHandler *m_placeHandler;
 	UserService *m_userService;
-	AuthService *m_authService;
+	RestAuthHandler *m_authHandler;
 	DeviceService *m_deviceService;
-	GatewayService *m_gatewayService;
-	LocationService *m_locationService;
+	BeeeOn::UI::GatewayHandler *m_gatewayHandler;
+	BeeeOn::UI::LocationHandler *m_locationHandler;
 	Poco::Logger &m_logger;
 };
 

@@ -8,144 +8,72 @@ using namespace Poco;
 using namespace BeeeOn;
 using namespace BeeeOn::UI;
 
-void LocationHandler::handlePost(UIRouteContext &context)
+LocationHandler::LocationHandler()
 {
-	Logger &logger = context.userData().logger();
-	UIRequest &request = context.request();
-	UIResponse &response = context.response();
-	LocationService &service = context.userData().locationService();
-
-	try {
-		handlePost(logger, request, response, service, context.params());
-	} catch (const Exception &e) {
-		logger.log(e, __FILE__, __LINE__);
-		response.setStatusAndReason(UIResponse::HTTP_BAD_REQUEST);
-	}
+	injector<LocationHandler, LocationService>("locationService",
+			&LocationHandler::setLocationService);
 }
 
-void LocationHandler::handlePost(Poco::Logger &logger,
-		UIRequest &request,
-		UIResponse &response,
-		LocationService &service,
-		const UIRoute::Params &params)
+const string LocationHandler::handleCreate(std::istream &in,
+			const std::string &placeId)
 {
-	Place place(PlaceID::parse(params.at("placeId")));
+	Place place(PlaceID::parse(placeId));
 
 	Location location;
-	deserialize(request.stream(), location);
+	deserialize(in, location);
 
-	service.createIn(location, place);
+	m_locationService->createIn(location, place);
 
-	const string &result = serialize(location);
-	response.sendBuffer(result.c_str(), result.size());
+	return serialize(location);
 }
 
-void LocationHandler::handlePut(UIRouteContext &context)
+const string LocationHandler::handleUpdate(std::istream &in,
+			const std::string &placeId,
+			const std::string &locationId)
 {
-	Logger &logger = context.userData().logger();
-	UIRequest &request = context.request();
-	UIResponse &response = context.response();
-	LocationService &service = context.userData().locationService();
+	Place place(PlaceID::parse(placeId));
+	Location location(LocationID::parse(locationId));
 
-	try {
-		handlePut(logger, request, response, service, context.params());
-	} catch (const Exception &e) {
-		logger.log(e, __FILE__, __LINE__);
-		response.setStatusAndReason(UIResponse::HTTP_BAD_REQUEST);
+	if (!m_locationService->fetchFrom(location, place))
+		return "";
+
+	deserialize(in, location);
+
+	if (!m_locationService->update(location)) {
+		throw InvalidArgumentException("failed to update location: "
+				+ location.id().toString());
 	}
+
+	return serialize(location);
 }
 
-void LocationHandler::handlePut(Poco::Logger &logger,
-		UIRequest &request,
-		UIResponse &response,
-		LocationService &service,
-		const UIRoute::Params &params)
-{;
-	Place place(PlaceID::parse(params.at("placeId")));
-	Location location(LocationID::parse(params.at("locationId")));
-
-	if (!service.fetchFrom(location, place)) {
-		response.setStatusAndReason(UIResponse::HTTP_NOT_FOUND);
-		return;
-	}
-
-	deserialize(request.stream(), location);
-	if (!service.update(location)) {
-		response.setStatusAndReason(UIResponse::HTTP_BAD_REQUEST);
-		return;
-	}
-
-	const string &result = serialize(location);
-	response.sendBuffer(result.c_str(), result.size());
-}
-
-void LocationHandler::handleGet(UIRouteContext &context)
+const string LocationHandler::handleGet(
+		const std::string &placeId,
+		const std::string &locationId)
 {
-	Logger &logger = context.userData().logger();
-	UIRequest &request = context.request();
-	UIResponse &response = context.response();
-	LocationService &service = context.userData().locationService();
+	Place place(PlaceID::parse(placeId));
+	Location location(LocationID::parse(locationId));
 
-	try {
-		handleGet(logger, request, response, service, context.params());
-	} catch (const Exception &e) {
-		logger.log(e, __FILE__, __LINE__);
-		response.setStatusAndReason(UIResponse::HTTP_BAD_REQUEST);
-	}
+	if (!m_locationService->fetchFrom(location, place))
+		return "";
+
+	return serialize(location);
 }
 
-void LocationHandler::handleGet(Poco::Logger &logger,
-		UIRequest &request,
-		UIResponse &response,
-		LocationService &service,
-		const UIRoute::Params &params)
+const string LocationHandler::handleDelete(
+		const std::string &placeId,
+		const std::string &locationId)
 {
-	Place place(PlaceID::parse(params.at("placeId")));
-	Location location(LocationID::parse(params.at("locationId")));
+	Place place(PlaceID::parse(placeId));
+	Location location(LocationID::parse(locationId));
 
-	if (!service.fetchFrom(location, place)) {
-		response.setStatusAndReason(UIResponse::HTTP_NOT_FOUND);
-		return;
-	}
+	if (!m_locationService->fetchFrom(location, place))
+		return "";
 
-	const string &result = serialize(location);
-	response.sendBuffer(result.c_str(), result.size());
+	if (!m_locationService->remove(location))
+		return "";
+
+	return serialize(location);
 }
 
-void LocationHandler::handleDelete(UIRouteContext &context)
-{
-	Logger &logger = context.userData().logger();
-	UIRequest &request = context.request();
-	UIResponse &response = context.response();
-	LocationService &service = context.userData().locationService();
-
-	try {
-		handleDelete(logger, request, response, service, context.params());
-	} catch (const Exception &e) {
-		logger.log(e, __FILE__, __LINE__);
-		response.setStatusAndReason(UIResponse::HTTP_BAD_REQUEST);
-	}
-}
-
-void LocationHandler::handleDelete(Poco::Logger &logger,
-		UIRequest &request,
-		UIResponse &response,
-		LocationService &service,
-		const UIRoute::Params &params)
-{
-	Place place(PlaceID::parse(params.at("placeId")));
-	Location location(LocationID::parse(params.at("locationId")));
-
-	if (!service.fetchFrom(location, place)) {
-		response.setStatusAndReason(UIResponse::HTTP_NOT_FOUND);
-		return;
-	}
-
-	if (!service.remove(location)) {
-		response.setStatusAndReason(UIResponse::HTTP_NOT_FOUND);
-		return;
-	}
-
-	const string &result = serialize(location);
-	response.sendBuffer(result.c_str(), result.size());
-}
+BEEEON_OBJECT(LocationHandler, BeeeOn::UI::LocationHandler)
