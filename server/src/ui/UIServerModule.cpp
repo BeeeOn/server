@@ -44,63 +44,59 @@ static void verifyAuthorized(const UIRequest &request,
 	throw NotAuthenticatedException("credentials not found");
 }
 
-namespace BeeeOn {
-
-void factorySetup(UIServerRequestHandlerFactory &factory)
+void UIServerModule::injectionDone()
 {
-	factory.noRoute([](UIRouteContext &context) {
+	m_factory->noRoute([](UIRouteContext &context) {
 		RestHandler::sendNoRoute(context.response());
 	});
-	factory.noOperation([](UIRouteContext &context) {
+	m_factory->noOperation([](UIRouteContext &context) {
 		RestHandler::sendNoOperation(context.response());
 	});
-	factory.sessionVerifier(verifyAuthorized);
-	factory.POST("/auth", [](UIRouteContext &context) {
+	m_factory->sessionVerifier(verifyAuthorized);
+	m_factory->POST("/auth", [](UIRouteContext &context) {
 		Auth::handlePost(context);
 	}, false);
-	factory.DELETE("/auth", [](UIRouteContext &context) {
+	m_factory->DELETE("/auth", [](UIRouteContext &context) {
 		Auth::handleDelete(context);
 	});
-	factory.POST("/place", [](UIRouteContext &context) {
+	m_factory->POST("/place", [](UIRouteContext &context) {
 		UI::PlaceHandler::handlePost(context);
 	});
-	factory.PUT("/place/:placeId", [](UIRouteContext &context) {
+	m_factory->PUT("/place/:placeId", [](UIRouteContext &context) {
 		UI::PlaceHandler::handlePut(context);
 	});
-	factory.GET("/place/:placeId", [](UIRouteContext &context) {
+	m_factory->GET("/place/:placeId", [](UIRouteContext &context) {
 		UI::PlaceHandler::handleGet(context);
 	});
-	factory.DELETE("/place/:placeId", [](UIRouteContext &context) {
+	m_factory->DELETE("/place/:placeId", [](UIRouteContext &context) {
 		UI::PlaceHandler::handleDelete(context);
 	});
 
-	factory.POST("/place/:placeId/gateways/:gatewayId", [](UIRouteContext &context) {
+	m_factory->POST("/place/:placeId/gateways/:gatewayId", [](UIRouteContext &context) {
 		UI::GatewayHandler::handlePost(context);
 	});
-	factory.PUT("/place/:placeId/gateways/:gatewayId", [](UIRouteContext &context) {
+	m_factory->PUT("/place/:placeId/gateways/:gatewayId", [](UIRouteContext &context) {
 		UI::GatewayHandler::handlePut(context);
 	});
-	factory.GET("/place/:placeId/gateways/:gatewayId", [](UIRouteContext &context) {
+	m_factory->GET("/place/:placeId/gateways/:gatewayId", [](UIRouteContext &context) {
 		UI::GatewayHandler::handleGet(context);
 	});
-	factory.DELETE("/place/:placeId/gateways/:gatewayId", [](UIRouteContext &context) {
+	m_factory->DELETE("/place/:placeId/gateways/:gatewayId", [](UIRouteContext &context) {
 		UI::GatewayHandler::handleDelete(context);
 	});
 
-	factory.POST("/place/:placeId/locations", [](UIRouteContext &context) {
+	m_factory->POST("/place/:placeId/locations", [](UIRouteContext &context) {
 		UI::LocationHandler::handlePost(context);
 	});
-	factory.GET("/place/:placeId/locations/:locationId", [](UIRouteContext &context) {
+	m_factory->GET("/place/:placeId/locations/:locationId", [](UIRouteContext &context) {
 		UI::LocationHandler::handleGet(context);
 	});
-	factory.PUT("/place/:placeId/locations/:locationId", [](UIRouteContext &context) {
+	m_factory->PUT("/place/:placeId/locations/:locationId", [](UIRouteContext &context) {
 		UI::LocationHandler::handlePut(context);
 	});
-	factory.DELETE("/place/:placeId/locations/:locationId", [](UIRouteContext &context) {
+	m_factory->DELETE("/place/:placeId/locations/:locationId", [](UIRouteContext &context) {
 		UI::LocationHandler::handleDelete(context);
 	});
 }
 
 BEEEON_OBJECT(UIServerModule, BeeeOn::UIServerModule)
-
-}

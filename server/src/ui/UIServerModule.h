@@ -73,8 +73,6 @@ typedef TRoute<UIRequest, UIResponse, UIServerModule> UIRoute;
  */
 typedef UIRoute::Context UIRouteContext;
 
-void factorySetup(UIServerRequestHandlerFactory &factory);
-
 class UIServerModule : public AbstractInjectorTarget {
 public:
 	UIServerModule(void):
@@ -82,7 +80,6 @@ public:
 		m_server(NULL),
 		m_logger(LOGGER_CLASS(this))
 	{
-		factorySetup(*m_factory);
 		injector<UIServerModule, SessionManager>("sessionManager",
 				&UIServerModule::setSessionManager);
 		injector<UIServerModule, PlaceService>("placeService",
@@ -98,6 +95,11 @@ public:
 		injector<UIServerModule, LocationService>("locationService",
 				&UIServerModule::setLocationService);
 	}
+
+	/**
+	 * Called when dependency injection sets all entries.
+	 */
+	void injectionDone() override;
 
 	~UIServerModule() {
 		if (m_server)
