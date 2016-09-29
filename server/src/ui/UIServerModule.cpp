@@ -58,17 +58,17 @@ void UIServerModule::injectionDone()
 	m_factory->DELETE("/auth", [&](UIRouteContext &context) {
 		m_authHandler->handleLogout(context);
 	});
-	m_factory->POST("/place", [](UIRouteContext &context) {
-		UI::PlaceHandler::handlePost(context);
+	m_factory->POST("/place", [&](UIRouteContext &context) {
+		m_placeHandler->handleCreate(context);
 	});
-	m_factory->PUT("/place/:placeId", [](UIRouteContext &context) {
-		UI::PlaceHandler::handlePut(context);
+	m_factory->PUT("/place/:placeId", [&](UIRouteContext &context) {
+		m_placeHandler->handleUpdate(context);
 	});
-	m_factory->GET("/place/:placeId", [](UIRouteContext &context) {
-		UI::PlaceHandler::handleGet(context);
+	m_factory->GET("/place/:placeId", [&](UIRouteContext &context) {
+		m_placeHandler->handleGet(context);
 	});
-	m_factory->DELETE("/place/:placeId", [](UIRouteContext &context) {
-		UI::PlaceHandler::handleDelete(context);
+	m_factory->DELETE("/place/:placeId", [&](UIRouteContext &context) {
+		m_placeHandler->handleDelete(context);
 	});
 
 	m_factory->POST("/place/:placeId/gateways/:gatewayId", [](UIRouteContext &context) {

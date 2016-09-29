@@ -2,7 +2,7 @@
 	<services>
 		<instance name="main" class="BeeeOn::UIServerModule">
 			<set name="sessionManager" ref="sessionManager" />
-			<set name="placeService" ref="placeService" />
+			<set name="placeHandler" ref="placeHandler" />
 			<set name="userService" ref="userService" />
 			<set name="authHandler" ref="authHandler" />
 			<set name="deviceService" ref="deviceService" />
@@ -12,6 +12,10 @@
 
 		<instance name="authHandler" class="BeeeOn::RestAuthHandler">
 			<set name="authService" ref="authService" />
+		</instance>
+
+		<instance name="placeHandler" class="BeeeOn::UI::PlaceHandler">
+			<set name="placeService" ref="placeService" />
 		</instance>
 
 		<instance name="uiMockInit"

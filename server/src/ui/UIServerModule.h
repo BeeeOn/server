@@ -8,7 +8,7 @@
 #include "server/SessionManager.h"
 #include "server/RestAuthHandler.h"
 #include "di/InjectorTarget.h"
-#include "service/PlaceService.h"
+#include "ui/PlaceHandler.h"
 #include "service/UserService.h"
 #include "service/DeviceService.h"
 #include "service/GatewayService.h"
@@ -82,8 +82,10 @@ public:
 	{
 		injector<UIServerModule, SessionManager>("sessionManager",
 				&UIServerModule::setSessionManager);
-		injector<UIServerModule, PlaceService>("placeService",
-				&UIServerModule::setPlaceService);
+		injector<UIServerModule, BeeeOn::UI::PlaceHandler>(
+				"placeHandler",
+				&UIServerModule::setPlaceHandler
+		);
 		injector<UIServerModule, UserService>("userService",
 				&UIServerModule::setUserService);
 		injector<UIServerModule, RestAuthHandler>("authHandler",
@@ -131,14 +133,14 @@ public:
 		return *m_sessionManager;
 	}
 
-	void setPlaceService(PlaceService *service)
+	void setPlaceHandler(BeeeOn::UI::PlaceHandler *handler)
 	{
-		m_placeService = service;
+		m_placeHandler = handler;
 	}
 
-	PlaceService &placeService()
+	BeeeOn::UI::PlaceHandler &placeHandler()
 	{
-		return *m_placeService;
+		return *m_placeHandler;
 	}
 
 	void setUserService(UserService *service)
@@ -195,7 +197,7 @@ private:
 	Poco::SharedPtr<UIServerRequestHandlerFactory> m_factory;
 	UIRestServer *m_server;
 	SessionManager *m_sessionManager;
-	PlaceService *m_placeService;
+	BeeeOn::UI::PlaceHandler *m_placeHandler;
 	UserService *m_userService;
 	RestAuthHandler *m_authHandler;
 	DeviceService *m_deviceService;
