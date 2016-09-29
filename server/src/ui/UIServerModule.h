@@ -6,7 +6,6 @@
 
 #include "server/RestRequestHandler.h"
 #include "server/SessionManager.h"
-#include "server/SessionManager.h"
 #include "di/InjectorTarget.h"
 #include "service/PlaceService.h"
 #include "service/UserService.h"
