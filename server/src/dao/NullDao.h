@@ -11,11 +11,7 @@ template <
 	/** Type (Entity) to work with. */
 	typename T,
 	/** Interface class. */
-	typename P,
-	/** Collection of T. */
-	typename C = typename T::Collection,
-	/** ID to identify T */
-	typename ID = typename T::ID
+	typename P
 	>
 class NullDao : public P {
 public:
