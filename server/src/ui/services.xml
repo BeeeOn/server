@@ -8,6 +8,11 @@
 			<set name="deviceService" ref="deviceService" />
 			<set name="gatewayService" ref="gatewayService" />
 			<set name="locationService" ref="locationService" />
+			<set name="authHandler" ref="authHandler" />
+		</instance>
+
+		<instance name="authHandler" class="BeeeOn::RestAuthHandler">
+			<set name="authService" ref="authService" />
 		</instance>
 
 		<instance name="uiMockInit"

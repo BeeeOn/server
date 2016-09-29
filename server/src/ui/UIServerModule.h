@@ -6,6 +6,7 @@
 
 #include "server/RestRequestHandler.h"
 #include "server/SessionManager.h"
+#include "server/RestAuthHandler.h"
 #include "di/InjectorTarget.h"
 #include "service/PlaceService.h"
 #include "service/UserService.h"
@@ -94,6 +95,8 @@ public:
 				&UIServerModule::setGatewayService);
 		injector<UIServerModule, LocationService>("locationService",
 				&UIServerModule::setLocationService);
+		injector<UIServerModule, RestAuthHandler>("authHandler",
+				&UIServerModule::setAuthHandler);
 	}
 
 	/**
@@ -191,6 +194,11 @@ public:
 		return *m_locationService;
 	}
 
+	void setAuthHandler(RestAuthHandler *handler)
+	{
+		m_authHandler = handler;
+	}
+
 	Poco::Logger &logger()
 	{
 		return m_logger;
@@ -206,6 +214,7 @@ private:
 	DeviceService *m_deviceService;
 	GatewayService *m_gatewayService;
 	LocationService *m_locationService;
+	RestAuthHandler *m_authHandler;
 	Poco::Logger &m_logger;
 };
 
