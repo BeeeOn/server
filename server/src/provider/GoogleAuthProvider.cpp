@@ -8,10 +8,11 @@
 #include <Poco/Net/SSLManager.h>
 #include <Poco/Net/InvalidCertificateHandler.h>
 #include <Poco/Net/AcceptCertificateHandler.h>
+#include <Poco/JSON/Parser.h>
+#include <Poco/JSON/Object.h>
 #include <Poco/StreamCopier.h>
 
 #include "Debug.h"
-#include "model/JSONSerializer.h"
 #include "provider/GoogleAuthProvider.h"
 
 using namespace std;
@@ -19,6 +20,35 @@ using namespace Poco;
 using namespace Poco::JSON;
 using namespace Poco::Net;
 using namespace BeeeOn;
+
+bool GoogleAuthProvider::parseIdentity(const std::string &userInfo,
+		AuthResult &result)
+{
+	Parser parser;
+	Object::Ptr info = parser.parse(userInfo).extract<Object::Ptr>();
+
+	if (info->has("sub"))
+		result.setProviderID(info->getValue<string>("sub"));
+
+	if (info->has("email"))
+		result.setEmail(info->getValue<string>("email"));
+
+	if (result.email().empty() || result.providerID().empty())
+		return false;
+
+	string firstName;
+	string lastName;
+	string picture;
+
+	if (info->has("given_name"))
+		result.setFirstName(firstName);
+	if (info->has("family_name"))
+		result.setLastName(lastName);
+	if (info->has("picture"))
+		result.setPicture(picture);
+
+	return true;
+}
 
 bool GoogleAuthProvider::verifyAuthCode(const string &authCode, AuthResult &info)
 {
@@ -35,30 +65,9 @@ bool GoogleAuthProvider::verifyAuthCode(const string &authCode, AuthResult &info
 		return false;
 	}
 
-	JSONObjectSerializer userInfo(rawInfo);
-
-	if (userInfo.get("sub", google_id))
-		info.setProviderID(google_id);
-	if (userInfo.get("email", email))
-		info.setEmail(email);
-
-	if (email.empty() || google_id.empty())
-		return false;
-
 	info.setAccessToken(idToken);
 
-	string firstName;
-	string lastName;
-	string picture;
-
-	if (userInfo.get("given_name", firstName))
-		info.setFirstName(firstName);
-	if (userInfo.get("family_name", lastName))
-		info.setLastName(lastName);
-	if (userInfo.get("picture", picture))
-		info.setPicture(picture);
-
-	return true;
+	return parseIdentity(rawInfo, info);
 }
 
 string GoogleAuthProvider::requestIdToken(const string &authCode)
@@ -96,12 +105,14 @@ string GoogleAuthProvider::requestIdToken(const string &authCode)
 
 	m_logger.debug("response: " + receiveResponse, __FILE__, __LINE__);
 
-	JSONObjectSerializer userTokens(receiveResponse);
+	Parser parser;
+	Object::Ptr object = parser.parse(receiveResponse)
+			.extract<Object::Ptr>();
 	string idToken;
 
 	// TODO: verify signature of the ID token by Google certificate
-	if (userTokens.get("id_token", idToken))
-		return idToken;
+	if (object->has("id_token"))
+		return object->getValue<string>("id_token");
 
 	m_logger.error("No ID token to obtain user data", __FILE__, __LINE__);
 

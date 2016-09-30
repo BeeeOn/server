@@ -47,6 +47,11 @@ private:
 	std::string requestIdToken(const std::string &token);
 
 	/**
+	 * Parse userInfo data and fill the AuthResult instance.
+	 */
+	bool parseIdentity(const std::string &userInfo, AuthResult &result);
+
+	/**
 	 * Handle response based on given session
 	 */
 	std::string handleResponse(Poco::Net::HTTPSClientSession &session);
