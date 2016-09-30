@@ -80,6 +80,11 @@ public:
 		m_status = status;
 	}
 
+	unsigned int getStatus() const
+	{
+		return m_status;
+	}
+
 	void setReason(const char *reason)
 	{
 		const std::string s(reason);
