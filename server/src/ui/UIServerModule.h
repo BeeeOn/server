@@ -29,10 +29,9 @@
 #define config_module \
 typedef MongooseRequest UIRequest; \
 typedef MongooseResponse UIResponse; \
-typedef TRestRequestHandlerFactory \
-	<UIRequest, UIResponse, UIServerModule> \
+typedef TRestRequestHandlerFactory<UIRequest, UIResponse> \
 	UIServerRequestHandlerFactory; \
-typedef TMongooseServer<UIServerModule> UIRestServer
+typedef MongooseServer UIRestServer
 
 #elif defined(BEEEON_SELECT_POCO)
 
@@ -43,9 +42,9 @@ typedef TMongooseServer<UIServerModule> UIRestServer
 #define config_module \
 	typedef Poco::Net::HTTPServerRequest  UIRequest; \
 	typedef Poco::Net::HTTPServerResponse UIResponse; \
-	typedef PocoRestRequestHandlerFactory<UIServerModule> \
+	typedef PocoRestRequestHandlerFactory \
 		UIServerRequestHandlerFactory; \
-	typedef TPocoServer<UIServerModule> UIRestServer
+	typedef PocoServer UIRestServer
 
 #else
 
@@ -67,7 +66,7 @@ config_module;
 /**
  * UIRoute class built from TRoute template.
  */
-typedef TRoute<UIRequest, UIResponse, UIServerModule> UIRoute;
+typedef TRoute<UIRequest, UIResponse, ExpirableSession::Ptr> UIRoute;
 /**
  * UIRouteContext class built from TRouteContext template.
  */
@@ -76,7 +75,7 @@ typedef UIRoute::Context UIRouteContext;
 class UIServerModule : public AbstractInjectorTarget {
 public:
 	UIServerModule(void):
-		m_factory(new UIServerRequestHandlerFactory(*this, "ui-server")),
+		m_factory(new UIServerRequestHandlerFactory("ui-server")),
 		m_server(NULL),
 		m_logger(LOGGER_CLASS(this))
 	{

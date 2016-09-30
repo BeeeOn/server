@@ -12,7 +12,7 @@
 
 namespace BeeeOn {
 
-template <typename Request, typename Response, typename UserData>
+template <typename Request, typename Response>
 class TRestRequestHandlerFactory;
 
 /**
@@ -20,25 +20,22 @@ class TRestRequestHandlerFactory;
  * and generates appropriate responses. The TRestRequestHandler
  * uses Route class to define actions for URI patterns.
  */
-template <typename Request, typename Response, typename UserData = void *>
+template <typename Request, typename Response>
 class TRestRequestHandler {
-	friend TRestRequestHandlerFactory<Request, Response, UserData>;
+	friend TRestRequestHandlerFactory<Request, Response>;
 public:
-	typedef TRestRequestHandlerFactory
-		<Request, Response, UserData> Factory;
+	typedef TRestRequestHandlerFactory<Request, Response> Factory;
 
-	using Route = TRoute<Request, Response, UserData>;
+	using Route = TRoute<Request, Response, ExpirableSession::Ptr>;
 	using Params = typename Route::Params;
-	using RouteContext = TRouteContext<Request, Response, UserData>;
+	using RouteContext = TRouteContext<Request, Response, ExpirableSession::Ptr>;
 
 	TRestRequestHandler(const Route &route,
 			const Params &params,
-			UserData &userData,
 			const std::string &name,
 			SessionVerifier *sessionVerifier = NULL):
 		m_route(route),
 		m_params(params),
-		m_userData(userData),
 		m_name(name),
 		m_sessionVerifier(sessionVerifier),
 		m_logger(LOGGER_CLASS(this))
@@ -74,7 +71,7 @@ public:
 			ExpirableSession::Ptr session =
 				sessionVerify(req, m_route);
 
-			m_route.execute(req, res, m_params, m_userData);
+			m_route.execute(req, res, m_params, session);
 		}
 		catch (Poco::Net::NotAuthenticatedException &e) {
 			m_logger.log(e, __FILE__, __LINE__);
@@ -138,7 +135,6 @@ protected:
 protected:
 	const Route &m_route;
 	const typename Route::Params m_params;
-	UserData &m_userData;
 	const std::string &m_name;
 	SessionVerifier *m_sessionVerifier;
 	Poco::Logger &m_logger;
@@ -147,25 +143,22 @@ protected:
 /**
  * Template factory class to create TRestRequestHandlers.
  */
-template <typename Request, typename Response, typename UserData = void *>
+template <typename Request, typename Response>
 class TRestRequestHandlerFactory {
 public:
-	using RequestHandler = TRestRequestHandler
-				<Request, Response, UserData>;
-	using Route = TRoute<Request, Response, UserData>;
+	using RequestHandler = TRestRequestHandler<Request, Response>;
+	using Route = TRoute<Request, Response, ExpirableSession::Ptr>;
 	using RouteVector = typename std::vector<Route>;
 	using RouteVectorIterator = typename RouteVector::iterator;
 	using Handler = typename Route::Handler;
 	using Params = typename Route::Params;
 
-	TRestRequestHandlerFactory(UserData &userData,
-			const std::string &name,
+	TRestRequestHandlerFactory(const std::string &name,
 			SessionVerifier *sessionVerifier = NULL):
 		m_noOperation(new Route("*", NULL, false)),
 		m_noRoute(new Route("*", NULL, false)),
 		m_name(name),
 		m_sessionVerifier(sessionVerifier),
-		m_userData(userData),
 		m_logger(LOGGER_CLASS(this))
 	{
 	}
@@ -173,12 +166,10 @@ public:
 	TRestRequestHandlerFactory(
 			Handler noRouteHandler,
 			Handler noOperationHandler,
-			UserData &userData,
 			const std::string &name,
 			SessionVerifier *sessionVerifier = NULL):
 		m_noOperation(new Route("*", noOperationHandler, false)),
 		m_noRoute(new Route("*", noRouteHandler, false)),
-		m_userData(userData),
 		m_name(name),
 		m_sessionVerifier(sessionVerifier),
 		m_logger(LOGGER_CLASS(this))
@@ -265,7 +256,7 @@ public:
 				req.getURI());
 		Params noParams;
 		RequestHandler *handler = new RequestHandler(
-				*m_noOperation, noParams, m_userData, m_name);
+				*m_noOperation, noParams, m_name);
 		return handler;
 	}
 
@@ -291,7 +282,7 @@ protected:
 				req.getMethod(),
 				req.getURI());
 
-		return new RequestHandler(route, params, m_userData,
+		return new RequestHandler(route, params,
 				m_name, m_sessionVerifier);
 	}
 
@@ -311,8 +302,7 @@ protected:
 				req.getMethod(),
 				req.getURI());
 		Params noParams;
-		handler = new RequestHandler(*m_noRoute, noParams,
-				m_userData, m_name);
+		handler = new RequestHandler(*m_noRoute, noParams, m_name);
 		return handler;
 	}
 
@@ -326,7 +316,6 @@ private:
 	Route *m_noRoute;
 	const std::string m_name;
 	SessionVerifier *m_sessionVerifier;
-	UserData &m_userData;
 	Poco::Logger &m_logger;
 };
 

@@ -18,14 +18,11 @@
 
 namespace BeeeOn {
 
-template <typename UserData = void *>
 class PocoRestRequestHandler : public Poco::Net::HTTPRequestHandler {
 public:
-	using RestRequestHandler =
-		TRestRequestHandler<
+	using RestRequestHandler = TRestRequestHandler<
 			Poco::Net::HTTPServerRequest,
-			Poco::Net::HTTPServerResponse,
-			UserData>;
+			Poco::Net::HTTPServerResponse>;
 
 	PocoRestRequestHandler(RestRequestHandler *impl):
 		m_impl(impl)
@@ -47,30 +44,27 @@ private:
 	RestRequestHandler *m_impl;
 };
 
-template <typename UserData = void *>
 class PocoRestRequestHandlerFactory : 
 	public Poco::Net::HTTPRequestHandlerFactory {
 public:
-	using RestRequestHandlerFactory =
-		TRestRequestHandlerFactory<
+	using RestRequestHandlerFactory = TRestRequestHandlerFactory<
 			Poco::Net::HTTPServerRequest,
-			Poco::Net::HTTPServerResponse,
-			UserData>;
+			Poco::Net::HTTPServerResponse>;
 	using Route = TRoute<
 			Poco::Net::HTTPServerRequest,
 			Poco::Net::HTTPServerResponse,
-			UserData>;
+			ExpirableSession::Ptr>;
 	using Handler = typename Route::Handler;
 
-	PocoRestRequestHandlerFactory(UserData &data, const std::string &name):
-		m_impl(data, name)
+	PocoRestRequestHandlerFactory(const std::string &name):
+		m_impl(name)
 	{
 	}
 
 	Poco::Net::HTTPRequestHandler *createRequestHandler(
 			const Poco::Net::HTTPServerRequest &req)
 	{
-		return new PocoRestRequestHandler<UserData>(
+		return new PocoRestRequestHandler(
 				m_impl.createRequestHandler(req));
 	}
 
@@ -123,11 +117,10 @@ private:
 	RestRequestHandlerFactory m_impl;
 };
 
-template <typename UserData = void *>
-class TPocoServer : public Server {
+class PocoServer : public Server {
 public:
-	using RequestHandlerFactory = PocoRestRequestHandlerFactory<UserData>;
-	TPocoServer(unsigned int port,
+	using RequestHandlerFactory = PocoRestRequestHandlerFactory;
+	PocoServer(unsigned int port,
 			Poco::SharedPtr<RequestHandlerFactory> factory):
 		m_factory(factory),
 		m_server(factory, port)

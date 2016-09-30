@@ -14,61 +14,20 @@
 
 namespace BeeeOn {
 
-template <typename UserData = void *>
-class TMongooseServer;
-
-/**
- * Low-level mongoose request handler. It just redirects requests
- * back to the C++ like style. The wrapper is necessary to bridge
- * with the C-implementation.
- *
- * The MongooseServer handles the actual request. We do some unpacking
- * for simplification.
- */
-template <typename UserData = void *>
-void mongoose_handler(struct mg_connection *conn, int ev, void *ev_data)
-{
-	using MongooseServer = TMongooseServer<UserData>;
-
-	if (ev != MG_EV_HTTP_REQUEST)
-		return;
-
-	assert(conn->mgr->user_data != NULL);
-	MongooseServer *server = (MongooseServer *) conn->mgr->user_data;
-	struct http_message *msg = (struct http_message *) ev_data;
-
-	try {
-		server->handle(conn, msg);
-	}
-	catch(...) {
-		LOGGER_FUNC(__func__).critical("unknown exception, something is really broken");
-	}
-}
-
 /**
  * Mongoose server representation. It just wraps the Mongoose into
  * the Server API to plug into the application
  */
-template <typename UserData>
-class TMongooseServer : public Server {
+class MongooseServer : public Server {
 public:
-	typedef TRestRequestHandler
-		<MongooseRequest, MongooseResponse, UserData>
+	typedef TRestRequestHandler<MongooseRequest, MongooseResponse>
 		RequestHandler;
-	typedef TRestRequestHandlerFactory
-		<MongooseRequest, MongooseResponse, UserData>
+	typedef TRestRequestHandlerFactory<MongooseRequest, MongooseResponse>
 		RequestHandlerFactory;
 
-	TMongooseServer(unsigned int port,
+	MongooseServer(unsigned int port,
 			Poco::SharedPtr<RequestHandlerFactory> factory,
-			unsigned int milis = 1000):
-		m_activity(this, &TMongooseServer<UserData>::loop),
-		m_mg(port, mongoose_handler<>, this),
-		m_factory(factory),
-		m_timeout(milis),
-		m_logger(LOGGER_CLASS(this))
-	{
-	}
+			unsigned int milis = 1000);
 
 	void start()
 	{
@@ -134,7 +93,7 @@ private:
 	}
 
 private:
-	Poco::Activity<TMongooseServer<UserData>> m_activity;
+	Poco::Activity<MongooseServer> m_activity;
 	Mongoose m_mg;
 	Poco::SharedPtr<RequestHandlerFactory> m_factory;
 	unsigned int m_timeout;
