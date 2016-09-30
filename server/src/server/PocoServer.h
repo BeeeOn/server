@@ -11,6 +11,8 @@
 #include <Poco/Net/HTTPRequestHandlerFactory.h>
 
 #include "server/Server.h"
+#include "server/Session.h"
+#include "server/SessionVerifier.h"
 #include "server/RestRequestHandler.h"
 #include "Debug.h"
 
@@ -59,8 +61,6 @@ public:
 			Poco::Net::HTTPServerResponse,
 			UserData>;
 	using Handler = typename Route::Handler;
-	using SessionVerifier =
-		typename RestRequestHandlerFactory::SessionVerifier;
 
 	PocoRestRequestHandlerFactory(UserData &data, const std::string &name):
 		m_impl(data, name)
@@ -84,7 +84,7 @@ public:
 		m_impl.noOperation(h);
 	}
 
-	void sessionVerifier(SessionVerifier sessionVerifier)
+	void sessionVerifier(SessionVerifier *sessionVerifier)
 	{
 		m_impl.sessionVerifier(sessionVerifier);
 	}

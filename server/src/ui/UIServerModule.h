@@ -5,7 +5,7 @@
 #include <Poco/SharedPtr.h>
 
 #include "server/RestRequestHandler.h"
-#include "server/SessionManager.h"
+#include "server/SessionVerifier.h"
 #include "server/RestAuthHandler.h"
 #include "di/InjectorTarget.h"
 #include "ui/PlaceHandler.h"
@@ -80,8 +80,8 @@ public:
 		m_server(NULL),
 		m_logger(LOGGER_CLASS(this))
 	{
-		injector<UIServerModule, SessionManager>("sessionManager",
-				&UIServerModule::setSessionManager);
+		injector<UIServerModule, SessionVerifier>("sessionVerifier",
+				&UIServerModule::setSessionVerifier);
 		injector<UIServerModule, BeeeOn::UI::PlaceHandler>(
 				"placeHandler",
 				&UIServerModule::setPlaceHandler
@@ -127,14 +127,9 @@ public:
 		return *m_server;
 	}
 
-	void setSessionManager(SessionManager *manager)
+	void setSessionVerifier(SessionVerifier *verifier)
 	{
-		m_sessionManager = manager;
-	}
-
-	SessionManager &sessionManager()
-	{
-		return *m_sessionManager;
+		m_factory->sessionVerifier(verifier);
 	}
 
 	void setPlaceHandler(BeeeOn::UI::PlaceHandler *handler)
@@ -190,7 +185,6 @@ public:
 private:
 	Poco::SharedPtr<UIServerRequestHandlerFactory> m_factory;
 	UIRestServer *m_server;
-	SessionManager *m_sessionManager;
 	BeeeOn::UI::PlaceHandler *m_placeHandler;
 	UserService *m_userService;
 	RestAuthHandler *m_authHandler;

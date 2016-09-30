@@ -1,7 +1,7 @@
 <system>
 	<services>
 		<instance name="main" class="BeeeOn::UIServerModule">
-			<set name="sessionManager" ref="sessionManager" />
+			<set name="sessionVerifier" ref="sessionVerifier" />
 			<set name="placeHandler" ref="placeHandler" />
 			<set name="userService" ref="userService" />
 			<set name="authHandler" ref="authHandler" />
