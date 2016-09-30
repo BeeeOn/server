@@ -5,12 +5,14 @@
 #include <Poco/Net/NetException.h>
 #include <Poco/Logger.h>
 #include <vector>
+#include "server/Session.h"
+#include "server/SessionVerifier.h"
 #include "server/Route.h"
 #include "Debug.h"
 
 namespace BeeeOn {
 
-template <typename Request, typename Response, typename UserData>
+template <typename Request, typename Response>
 class TRestRequestHandlerFactory;
 
 /**
@@ -18,26 +20,22 @@ class TRestRequestHandlerFactory;
  * and generates appropriate responses. The TRestRequestHandler
  * uses Route class to define actions for URI patterns.
  */
-template <typename Request, typename Response, typename UserData = void *>
+template <typename Request, typename Response>
 class TRestRequestHandler {
-	friend TRestRequestHandlerFactory<Request, Response, UserData>;
+	friend TRestRequestHandlerFactory<Request, Response>;
 public:
-	typedef TRestRequestHandlerFactory
-		<Request, Response, UserData> Factory;
+	typedef TRestRequestHandlerFactory<Request, Response> Factory;
 
-	using Route = TRoute<Request, Response, UserData>;
+	using Route = TRoute<Request, Response, ExpirableSession::Ptr>;
 	using Params = typename Route::Params;
-	using RouteContext = TRouteContext<Request, Response, UserData>;
-	using SessionVerifier = typename Factory::SessionVerifier;
+	using RouteContext = TRouteContext<Request, Response, ExpirableSession::Ptr>;
 
 	TRestRequestHandler(const Route &route,
 			const Params &params,
-			UserData &userData,
 			const std::string &name,
-			SessionVerifier sessionVerifier = NULL):
+			SessionVerifier *sessionVerifier = NULL):
 		m_route(route),
 		m_params(params),
-		m_userData(userData),
 		m_name(name),
 		m_sessionVerifier(sessionVerifier),
 		m_logger(LOGGER_CLASS(this))
@@ -70,8 +68,10 @@ public:
 
 			handleNoContentLength(req);
 
-			sessionVerify(req, m_route);
-			m_route.execute(req, res, m_params, m_userData);
+			ExpirableSession::Ptr session =
+				sessionVerify(req, m_route);
+
+			m_route.execute(req, res, m_params, session);
 		}
 		catch (Poco::Net::NotAuthenticatedException &e) {
 			m_logger.log(e, __FILE__, __LINE__);
@@ -118,54 +118,47 @@ public:
 	}
 
 protected:
-	void sessionVerify(const Request &req,
+	ExpirableSession::Ptr sessionVerify(const Request &req,
 			const Route &route)
 	{
 		if (!route.isSecure())
-			return;
+			return NULL;
 
 		if (m_sessionVerifier == NULL) {
 			m_logger.warning("no session verifier installed, bypassing");
-			return;
+			return NULL;
 		}
 
-		m_sessionVerifier(req, route, m_userData);
+		return m_sessionVerifier->verifyAuthorized(req);
 	}
 
 protected:
 	const Route &m_route;
 	const typename Route::Params m_params;
-	UserData &m_userData;
 	const std::string &m_name;
-	SessionVerifier m_sessionVerifier;
+	SessionVerifier *m_sessionVerifier;
 	Poco::Logger &m_logger;
 };
 
 /**
  * Template factory class to create TRestRequestHandlers.
  */
-template <typename Request, typename Response, typename UserData = void *>
+template <typename Request, typename Response>
 class TRestRequestHandlerFactory {
 public:
-	using RequestHandler = TRestRequestHandler
-				<Request, Response, UserData>;
-	using Route = TRoute<Request, Response, UserData>;
+	using RequestHandler = TRestRequestHandler<Request, Response>;
+	using Route = TRoute<Request, Response, ExpirableSession::Ptr>;
 	using RouteVector = typename std::vector<Route>;
 	using RouteVectorIterator = typename RouteVector::iterator;
 	using Handler = typename Route::Handler;
 	using Params = typename Route::Params;
 
-	typedef void (*SessionVerifier)(const Request &request,
-			const Route &route, UserData &userData);
-
-	TRestRequestHandlerFactory(UserData &userData,
-			const std::string &name,
-			SessionVerifier sessionVerifier = NULL):
+	TRestRequestHandlerFactory(const std::string &name,
+			SessionVerifier *sessionVerifier = NULL):
 		m_noOperation(new Route("*", NULL, false)),
 		m_noRoute(new Route("*", NULL, false)),
 		m_name(name),
 		m_sessionVerifier(sessionVerifier),
-		m_userData(userData),
 		m_logger(LOGGER_CLASS(this))
 	{
 	}
@@ -173,12 +166,10 @@ public:
 	TRestRequestHandlerFactory(
 			Handler noRouteHandler,
 			Handler noOperationHandler,
-			UserData &userData,
 			const std::string &name,
-			SessionVerifier sessionVerifier = NULL):
+			SessionVerifier *sessionVerifier = NULL):
 		m_noOperation(new Route("*", noOperationHandler, false)),
 		m_noRoute(new Route("*", noRouteHandler, false)),
-		m_userData(userData),
 		m_name(name),
 		m_sessionVerifier(sessionVerifier),
 		m_logger(LOGGER_CLASS(this))
@@ -205,7 +196,7 @@ public:
 		m_noOperation = new Route("*", h, false);
 	}
 
-	void sessionVerifier(SessionVerifier sessionVerifier)
+	void sessionVerifier(SessionVerifier *sessionVerifier)
 	{
 		m_sessionVerifier = sessionVerifier;
 	}
@@ -265,7 +256,7 @@ public:
 				req.getURI());
 		Params noParams;
 		RequestHandler *handler = new RequestHandler(
-				*m_noOperation, noParams, m_userData, m_name);
+				*m_noOperation, noParams, m_name);
 		return handler;
 	}
 
@@ -291,7 +282,7 @@ protected:
 				req.getMethod(),
 				req.getURI());
 
-		return new RequestHandler(route, params, m_userData,
+		return new RequestHandler(route, params,
 				m_name, m_sessionVerifier);
 	}
 
@@ -311,8 +302,7 @@ protected:
 				req.getMethod(),
 				req.getURI());
 		Params noParams;
-		handler = new RequestHandler(*m_noRoute, noParams,
-				m_userData, m_name);
+		handler = new RequestHandler(*m_noRoute, noParams, m_name);
 		return handler;
 	}
 
@@ -325,8 +315,7 @@ private:
 	Route *m_noOperation;
 	Route *m_noRoute;
 	const std::string m_name;
-	SessionVerifier m_sessionVerifier;
-	UserData &m_userData;
+	SessionVerifier *m_sessionVerifier;
 	Poco::Logger &m_logger;
 };
 

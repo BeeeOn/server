@@ -8,7 +8,6 @@
 #include <Poco/Util/HelpFormatter.h>
 #include <Poco/Util/ServerApplication.h>
 
-#include "server/MongooseServer.h"
 #include "di/DependencyInjector.h"
 #include "UIServerModule.h"
 

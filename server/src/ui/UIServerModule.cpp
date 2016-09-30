@@ -7,6 +7,7 @@
 
 #include "service/AuthService.h"
 #include "server/Route.h"
+#include "server/Session.h"
 #include "model/JSONSerializer.h"
 #include "ui/UIServerModule.h"
 #include "Debug.h"
@@ -22,27 +23,6 @@ using namespace Poco::JSON;
 using namespace Poco::Dynamic;
 using namespace BeeeOn;
 
-static void verifyAuthorized(const UIRequest &request,
-		const UIRoute &route, UIServerModule &module)
-{
-	TRACE_FUNC();
-
-	if (request.hasCredentials()) {
-		string scheme;
-		string authInfo;
-		Poco::SharedPtr<ExpirableSession> session;
-
-		request.getCredentials(scheme, authInfo);
-
-		if (!module.sessionManager().lookup(authInfo, session))
-			throw NotAuthenticatedException("Session not found");
-
-		return;
-	}
-
-	throw NotAuthenticatedException("credentials not found");
-}
-
 void UIServerModule::injectionDone()
 {
 	m_factory->noRoute([](UIRouteContext &context) {
@@ -51,7 +31,6 @@ void UIServerModule::injectionDone()
 	m_factory->noOperation([](UIRouteContext &context) {
 		RestHandler::sendNoOperation(context.response());
 	});
-	m_factory->sessionVerifier(verifyAuthorized);
 	m_factory->POST("/auth", [&](UIRouteContext &context) {
 		m_authHandler->handleLogin(context);
 	}, false);
