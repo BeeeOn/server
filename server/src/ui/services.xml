@@ -26,6 +26,10 @@
 			<set name="locationService" ref="locationService" />
 		</instance>
 
+		<instance name="sessionVerifier" class="BeeeOn::SessionVerifier">
+			<set name="sessionManager" ref="sessionManager" />
+		</instance>
+
 		<instance name="uiMockInit"
 				class="BeeeOn::UIMockInit"
 				init="early">

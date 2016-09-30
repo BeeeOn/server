@@ -20,6 +20,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/provider/GoogleAuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/server/SessionCache.cpp
 	${PROJECT_SOURCE_DIR}/server/SessionManager.cpp
+	${PROJECT_SOURCE_DIR}/server/SessionVerifier.cpp
 	${PROJECT_SOURCE_DIR}/server/RestHandler.cpp
 	${PROJECT_SOURCE_DIR}/server/RestAuthHandler.cpp
 	${PROJECT_SOURCE_DIR}/model/GatewayID.cpp
