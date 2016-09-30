@@ -35,6 +35,7 @@
 				init="early">
 			<set name="userDao" ref="mockUserDao" />
 			<set name="gatewayDao" ref="mockGatewayDao" />
+			<set name="identityDao" ref="identityDao" />
 		</instance>
 
 		<!-- Bussiness layer -->
