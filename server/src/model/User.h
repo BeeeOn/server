@@ -26,6 +26,7 @@ public:
 	}
 
 	User(const User &copy):
+		m_id(copy.m_id),
 		m_email(copy.m_email)
 	{
 	}
