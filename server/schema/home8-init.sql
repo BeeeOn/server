@@ -28,3 +28,10 @@ CREATE TABLE users (
 	first_name   varchar(250) NOT NULL,
 	last_name    varchar(250) NOT NULL
 );
+
+DROP TABLE IF EXISTS identities;
+CREATE TABLE identities (
+	id          uuid NOT NULL primary key,
+	email       varchar(250) NOT NULL,
+	CONSTRAINT unique_identity UNIQUE (email)
+);
