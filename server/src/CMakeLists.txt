@@ -32,6 +32,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/dao/DeviceDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/GatewayDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/LocationDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/IdentityDao.cpp
 	${PROJECT_SOURCE_DIR}/service/PlaceService.cpp
 	${PROJECT_SOURCE_DIR}/service/UserService.cpp
 	${PROJECT_SOURCE_DIR}/service/AuthService.cpp
