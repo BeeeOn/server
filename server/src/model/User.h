@@ -27,7 +27,6 @@ public:
 
 	User(const User &copy):
 		m_id(copy.m_id),
-		m_email(copy.m_email),
 		m_firstName(copy.m_firstName),
 		m_lastName(copy.m_lastName)
 	{
@@ -35,7 +34,6 @@ public:
 
 	User(const ID &id, const User &copy):
 		m_id(id),
-		m_email(copy.m_email),
 		m_firstName(copy.m_firstName),
 		m_lastName(copy.m_lastName)
 	{
@@ -61,16 +59,6 @@ public:
 		return m_lastName;
 	}
 
-	void setEmail(const std::string &email)
-	{
-		m_email = email;
-	}
-
-	const std::string email() const
-	{
-		return m_email;
-	}
-
 	void setID(const ID &id)
 	{
 		m_id = id;
@@ -83,7 +71,6 @@ public:
 
 private:
 	ID m_id;
-	std::string m_email;
 	std::string m_firstName;
 	std::string m_lastName;
 };

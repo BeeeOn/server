@@ -14,7 +14,6 @@ User AuthService::createUser(const AuthResult &result)
 	User user;
 	user.setFirstName(result.firstName());
 	user.setLastName(result.lastName());
-	user.setEmail(result.email());
 
 	m_userDao->create(user);
 	return user;

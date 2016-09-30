@@ -24,7 +24,6 @@ CREATE TABLE locations (
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
 	id           uuid NOT NULL primary key,
-	email        varchar(250) NOT NULL,
 	first_name   varchar(250) NOT NULL,
 	last_name    varchar(250) NOT NULL
 );

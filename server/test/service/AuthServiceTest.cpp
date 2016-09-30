@@ -67,7 +67,6 @@ void AuthServiceTest::testPermitAuth()
 {
 	UserID newID(UUIDGenerator::defaultGenerator().createRandom());
 	User::Ptr user(new User(newID));
-	user->setEmail("permit@example.org");
 	m_userDao.storage().insert(make_pair(user->id(), user));
 
 	Identity identity;
