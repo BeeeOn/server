@@ -5,11 +5,11 @@
 #include <Poco/SharedPtr.h>
 
 #include "model/User.h"
+#include "model/VerifiedIdentity.h"
 
 namespace BeeeOn {
 
 typedef std::string SessionID;
-typedef std::string Email;
 
 /**
  * Base class to hold session data (userID, sessionID).
@@ -23,14 +23,14 @@ public:
 	{
 	}
 
-	void setEmail(const Email &email)
+	void setIdentityID(const VerifiedIdentityID &id)
 	{
-		m_email = email;
+		m_identityID = id;
 	}
 
-	const Email email() const
+	const VerifiedIdentityID &identityID() const
 	{
-		return m_email;
+		return m_identityID;
 	}
 
 	void setUserId(const UserID &id)
@@ -49,7 +49,7 @@ public:
 	}
 
 private:
-	Email m_email;
+	VerifiedIdentityID m_identityID;
 	UserID m_userID;
 	SessionID m_sessionID;
 };
