@@ -50,7 +50,7 @@
 		<instance name="authService" class="BeeeOn::AuthService">
 			<set name="userDao" ref="userDao" />
 			<set name="sessionManager" ref="sessionManager" />
-			<add name="providers" ref="permitAuthProvider" />
+			<add name="providers" ref="googlePermitAuthProvider" />
 			<add name="providers" ref="googleAuthProvider" />
 		</instance>
 
@@ -77,8 +77,10 @@
 			<set name="maxUserSessions" number="${session.maxPerUser}" />
 		</instance>
 
-		<instance name="permitAuthProvider"
-				class="BeeeOn::PermitAuthProvider" />
+		<instance name="googlePermitAuthProvider"
+				class="BeeeOn::PermitAuthProvider">
+			<set name="resultProvider" text="google" />
+		</instance>
 
 		<instance name="googleAuthProvider"
 				class="BeeeOn::GoogleAuthProvider">

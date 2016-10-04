@@ -19,7 +19,15 @@ public:
 	PermitAuthProvider():
 		AuthCodeAuthProvider("permit")
 	{
+		textInjector("resultProvider", (TextSetter)
+				&PermitAuthProvider::setResultProvider);
+
 		m_logger.critical("SOME AUTHS WILL BE PERMITTED");
+	}
+
+	void setResultProvider(const std::string &provider)
+	{
+		m_resultProvider = provider;
 	}
 
 	bool verifyAuthCode(const std::string &authCode, AuthResult &result)
@@ -33,8 +41,12 @@ public:
 
 		m_logger.critical("PERMIT AUTH: " + authCode);
 		result.setEmail(authCode);
+		result.setProvider(m_resultProvider);
 		return true;
 	}
+
+private:
+	std::string m_resultProvider;
 };
 
 }
