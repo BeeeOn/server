@@ -33,6 +33,8 @@ string AuthService::loginAsNew(const AuthResult &result)
 	if (!verifyIdentity(verifiedIdentity, identity, result))
 		return "";
 
+	m_notificationService->notifyFirstLogin(verifiedIdentity);
+
 	return openSession(verifiedIdentity);
 }
 
@@ -69,6 +71,8 @@ string AuthService::verifyIdentityAndLogin(const AuthResult &result)
 
 	if (!verifyIdentity(verifiedIdentity, identity, result))
 		return "";
+
+	m_notificationService->notifyFirstLogin(verifiedIdentity);
 
 	return openSession(verifiedIdentity);
 }
