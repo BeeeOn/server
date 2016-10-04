@@ -49,6 +49,8 @@
 
 		<instance name="authService" class="BeeeOn::AuthService">
 			<set name="userDao" ref="userDao" />
+			<set name="identityDao" ref="identityDao" />
+			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
 			<set name="sessionManager" ref="sessionManager" />
 			<add name="providers" ref="googlePermitAuthProvider" />
 			<add name="providers" ref="googleAuthProvider" />

@@ -7,6 +7,8 @@
 #include "di/InjectorTarget.h"
 #include "provider/AuthProvider.h"
 #include "dao/UserDao.h"
+#include "dao/IdentityDao.h"
+#include "dao/VerifiedIdentityDao.h"
 #include "server/SessionManager.h"
 #include "Debug.h"
 
@@ -25,6 +27,10 @@ public:
 	{
 		injector<AuthService, UserDao>("userDao",
 				&AuthService::setUserDao);
+		injector<AuthService, IdentityDao>("identityDao",
+				&AuthService::setIdentityDao);
+		injector<AuthService, VerifiedIdentityDao>("verifiedIdentityDao",
+				&AuthService::setVerifiedIdentityDao);
 		injector<AuthService, SessionManager>("sessionManager",
 				&AuthService::setSessionManager);
 		injector<AuthService, AuthProvider>("providers",
@@ -34,6 +40,16 @@ public:
 	void setUserDao(UserDao *dao)
 	{
 		m_userDao = dao;
+	}
+
+	void setIdentityDao(IdentityDao *dao)
+	{
+		m_identityDao = dao;
+	}
+
+	void setVerifiedIdentityDao(VerifiedIdentityDao *dao)
+	{
+		m_verifiedIdentityDao = dao;
 	}
 
 	void setSessionManager(SessionManager *manager)
@@ -54,6 +70,8 @@ public:
 private:
 	SessionManager *m_sessionManager;
 	UserDao *m_userDao;
+	IdentityDao *m_identityDao;
+	VerifiedIdentityDao *m_verifiedIdentityDao;
 	Providers m_providers;
 };
 
