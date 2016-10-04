@@ -27,14 +27,38 @@ public:
 
 	User(const User &copy):
 		m_id(copy.m_id),
-		m_email(copy.m_email)
+		m_email(copy.m_email),
+		m_firstName(copy.m_firstName),
+		m_lastName(copy.m_lastName)
 	{
 	}
 
 	User(const ID &id, const User &copy):
 		m_id(id),
-		m_email(copy.m_email)
+		m_email(copy.m_email),
+		m_firstName(copy.m_firstName),
+		m_lastName(copy.m_lastName)
 	{
+	}
+
+	void setFirstName(const std::string &firstName)
+	{
+		m_firstName = firstName;
+	}
+
+	std::string firstName() const
+	{
+		return m_firstName;
+	}
+
+	void setLastName(const std::string &lastName)
+	{
+		m_lastName = lastName;
+	}
+
+	std::string lastName() const
+	{
+		return m_lastName;
 	}
 
 	void setEmail(const std::string &email)
@@ -73,6 +97,8 @@ public:
 private:
 	ID m_id;
 	std::string m_email;
+	std::string m_firstName;
+	std::string m_lastName;
 };
 
 typedef User::Collection UserCollection;
