@@ -9,11 +9,17 @@ using namespace BeeeOn;
 
 void UIMockInit::initUsers()
 {
-	UserID id(UserID::random());
-	User user(id);
-	user.setEmail("joe.doe@example.org");
+	User joeDoeUser(UserID::random());
+	joeDoeUser.setFirstName("Joe");
+	joeDoeUser.setLastName("Doe");
 
-	m_userDao->create(user);
+	m_userDao->create(joeDoeUser);
+
+	Identity joeDoe0;
+	joeDoe0.setEmail("joe.doe@example.org");
+	joeDoe0.setUser(joeDoeUser);
+
+	m_identityDao->create(joeDoe0);
 }
 
 void UIMockInit::initGateways()

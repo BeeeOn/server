@@ -6,7 +6,10 @@
 #include <Poco/Logger.h>
 #include "di/InjectorTarget.h"
 #include "provider/AuthProvider.h"
+#include "service/NotificationService.h"
 #include "dao/UserDao.h"
+#include "dao/IdentityDao.h"
+#include "dao/VerifiedIdentityDao.h"
 #include "server/SessionManager.h"
 #include "Debug.h"
 
@@ -25,15 +28,32 @@ public:
 	{
 		injector<AuthService, UserDao>("userDao",
 				&AuthService::setUserDao);
+		injector<AuthService, IdentityDao>("identityDao",
+				&AuthService::setIdentityDao);
+		injector<AuthService, VerifiedIdentityDao>("verifiedIdentityDao",
+				&AuthService::setVerifiedIdentityDao);
 		injector<AuthService, SessionManager>("sessionManager",
 				&AuthService::setSessionManager);
 		injector<AuthService, AuthProvider>("providers",
 				&AuthService::registerProvider);
+		injector<AuthService, NotificationService>(
+				"notificationService",
+				&AuthService::setNotificationService);
 	}
 
 	void setUserDao(UserDao *dao)
 	{
 		m_userDao = dao;
+	}
+
+	void setIdentityDao(IdentityDao *dao)
+	{
+		m_identityDao = dao;
+	}
+
+	void setVerifiedIdentityDao(VerifiedIdentityDao *dao)
+	{
+		m_verifiedIdentityDao = dao;
 	}
 
 	void setSessionManager(SessionManager *manager)
@@ -47,14 +67,30 @@ public:
 			std::make_pair(provider->name(), provider));
 	}
 
+	void setNotificationService(NotificationService *service)
+	{
+		m_notificationService = service;
+	}
+
 	const std::string login(const Credentials &cred);
 
 	void logout(const std::string &id);
 
+protected:
+	std::string openSession(const VerifiedIdentity &verifiedIdentity);
+	std::string verifyIdentityAndLogin(const AuthResult &result);
+	std::string loginAsNew(const AuthResult &result);
+	bool verifyIdentity(VerifiedIdentity &verifiedIdentity,
+			Identity &identity, const AuthResult &result);
+	User createUser(const AuthResult &result);
+
 private:
 	SessionManager *m_sessionManager;
 	UserDao *m_userDao;
+	IdentityDao *m_identityDao;
+	VerifiedIdentityDao *m_verifiedIdentityDao;
 	Providers m_providers;
+	NotificationService *m_notificationService;
 };
 
 }

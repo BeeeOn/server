@@ -53,6 +53,92 @@ private:
 	const std::string m_authCode;
 };
 
+class AuthResult {
+public:
+	AuthResult()
+	{
+	}
+
+	void setEmail(const std::string &email)
+	{
+		m_email = email;
+	}
+
+	std::string email() const
+	{
+		return m_email;
+	}
+
+	void setProvider(const std::string &provider)
+	{
+		m_provider = provider;
+	}
+
+	std::string provider() const
+	{
+		return m_provider;
+	}
+
+	void setAccessToken(const std::string &accessToken)
+	{
+		m_accessToken = accessToken;
+	}
+
+	std::string accessToken() const
+	{
+		return m_accessToken;
+	}
+
+	void setProviderID(const std::string &providerID)
+	{
+		m_providerID = providerID;
+	}
+
+	std::string providerID() const
+	{
+		return m_providerID;
+	}
+
+	void setFirstName(const std::string &firstName)
+	{
+		m_firstName = firstName;
+	}
+
+	std::string firstName() const
+	{
+		return m_firstName;
+	}
+
+	void setLastName(const std::string &lastName)
+	{
+		m_lastName = lastName;
+	}
+
+	std::string lastName() const
+	{
+		return m_lastName;
+	}
+
+	void setPicture(const std::string &picture)
+	{
+		m_picture = picture;
+	}
+
+	std::string picture() const
+	{
+		return m_picture;
+	}
+
+private:
+	std::string m_email;
+	std::string m_provider;
+	std::string m_accessToken;
+	std::string m_providerID;
+	std::string m_firstName;
+	std::string m_lastName;
+	std::string m_picture;
+};
+
 /**
  * An interface to an authorization provider.
  * An AuthProvider has always a name to select it from a set
@@ -60,8 +146,6 @@ private:
  */
 class AuthProvider {
 public:
-	typedef std::map<std::string, std::string> Result;
-
 	virtual ~AuthProvider() {}
 
 	/**
@@ -76,7 +160,7 @@ public:
 	 * (cannot perform the authorization operation itself).
 	 */
 	virtual bool authorize(
-		const Credentials &cred, Result &result) = 0;
+		const Credentials &cred, AuthResult &result) = 0;
 
 };
 
@@ -112,13 +196,14 @@ public:
 	{
 	}
 
-	bool authorize(const Credentials &cred, Result &result)
+	bool authorize(const Credentials &cred, AuthResult &result)
 	{
 		_TRACE_METHOD(m_logger);
 
 		const AuthCodeCredentials &authCodeCredentials =
 			reinterpret_cast<const AuthCodeCredentials &>(cred);
 
+		result.setProvider(name());
 		return verifyAuthCode(authCodeCredentials.authCode(), result);
 	}
 
@@ -127,7 +212,7 @@ protected:
 	 * Verification against a 3rd party.
 	 */
 	virtual bool verifyAuthCode(const std::string &authCode,
-			Result &info) = 0;
+			AuthResult &info) = 0;
 };
 
 }

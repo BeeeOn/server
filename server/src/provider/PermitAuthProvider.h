@@ -19,10 +19,18 @@ public:
 	PermitAuthProvider():
 		AuthCodeAuthProvider("permit")
 	{
+		textInjector("resultProvider", (TextSetter)
+				&PermitAuthProvider::setResultProvider);
+
 		m_logger.critical("SOME AUTHS WILL BE PERMITTED");
 	}
 
-	bool verifyAuthCode(const std::string &authCode, Result &result)
+	void setResultProvider(const std::string &provider)
+	{
+		m_resultProvider = provider;
+	}
+
+	bool verifyAuthCode(const std::string &authCode, AuthResult &result)
 	{
 		const std::string &email = Poco::trim(authCode);
 
@@ -32,10 +40,13 @@ public:
 		}
 
 		m_logger.critical("PERMIT AUTH: " + authCode);
-		result.insert(
-			std::make_pair("email", authCode));
+		result.setEmail(authCode);
+		result.setProvider(m_resultProvider);
 		return true;
 	}
+
+private:
+	std::string m_resultProvider;
 };
 
 }

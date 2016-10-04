@@ -33,7 +33,7 @@ public:
 	}
 
 protected:
-	bool verifyAuthCode(const std::string &authCode, Result &info);
+	bool verifyAuthCode(const std::string &authCode, AuthResult &info);
 
 private:
 	/**
@@ -45,6 +45,11 @@ private:
 	 * Get access token from Google APIs
 	 */
 	std::string requestIdToken(const std::string &token);
+
+	/**
+	 * Parse userInfo data and fill the AuthResult instance.
+	 */
+	bool parseIdentity(const std::string &userInfo, AuthResult &result);
 
 	/**
 	 * Handle response based on given session

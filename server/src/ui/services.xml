@@ -33,8 +33,9 @@
 		<instance name="uiMockInit"
 				class="BeeeOn::UIMockInit"
 				init="early">
-			<set name="mockUserDao" ref="mockUserDao" />
-			<set name="mockGatewayDao" ref="mockGatewayDao" />
+			<set name="userDao" ref="mockUserDao" />
+			<set name="gatewayDao" ref="mockGatewayDao" />
+			<set name="identityDao" ref="identityDao" />
 		</instance>
 
 		<!-- Bussiness layer -->
@@ -49,8 +50,11 @@
 
 		<instance name="authService" class="BeeeOn::AuthService">
 			<set name="userDao" ref="userDao" />
+			<set name="identityDao" ref="identityDao" />
+			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
 			<set name="sessionManager" ref="sessionManager" />
-			<add name="providers" ref="permitAuthProvider" />
+			<set name="notificationService" ref="notificationService" />
+			<add name="providers" ref="googlePermitAuthProvider" />
 			<add name="providers" ref="googleAuthProvider" />
 		</instance>
 
@@ -68,6 +72,10 @@
 			<set name="locationDao" ref="locationDao" />
 		</instance>
 
+		<instance name="fakeNotificationService"
+				class="BeeeOn::FakeNotificationService" />
+		<alias name="notificationService" ref="fakeNotificationService" />
+
 		<!-- Data access layer -->
 
 		<instance name="sessionManager" class="BeeeOn::SessionManager">
@@ -77,8 +85,10 @@
 			<set name="maxUserSessions" number="${session.maxPerUser}" />
 		</instance>
 
-		<instance name="permitAuthProvider"
-				class="BeeeOn::PermitAuthProvider" />
+		<instance name="googlePermitAuthProvider"
+				class="BeeeOn::PermitAuthProvider">
+			<set name="resultProvider" text="google" />
+		</instance>
 
 		<instance name="googleAuthProvider"
 				class="BeeeOn::GoogleAuthProvider">
@@ -107,11 +117,16 @@
 		<instance name="deviceDao" class="BeeeOn::MockDeviceDao" />
 		<instance name="mockGatewayDao" class="BeeeOn::MockGatewayDao" />
 		<instance name="mockLocationDao" class="BeeeOn::MockLocationDao" />
+		<instance name="mockIdentityDao" class="BeeeOn::MockIdentityDao" />
+		<instance name="mockVerifiedIdentityDao"
+				class="BeeeOn::MockVerifiedIdentityDao" />
 
 		<alias name="placeDao" ref="mockPlaceDao" />
 		<alias name="userDao" ref="mockUserDao" />
 		<alias name="gatewayDao" ref="mockGatewayDao" />
 		<alias name="locationDao" ref="mockLocationDao" />
+		<alias name="identityDao" ref="mockIdentityDao" />
+		<alias name="verifiedIdentityDao" ref="mockVerifiedIdentityDao" />
 
 		<instance name="sociManager"
 				class="BeeeOn::SociManager">

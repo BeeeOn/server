@@ -26,24 +26,42 @@ public:
 	}
 
 	User(const User &copy):
-		m_email(copy.m_email)
+		m_id(copy.m_id),
+		m_firstName(copy.m_firstName),
+		m_lastName(copy.m_lastName)
 	{
 	}
 
 	User(const ID &id, const User &copy):
 		m_id(id),
-		m_email(copy.m_email)
+		m_firstName(copy.m_firstName),
+		m_lastName(copy.m_lastName)
 	{
 	}
 
-	void setEmail(const std::string &email)
+	void setFirstName(const std::string &firstName)
 	{
-		m_email = email;
+		m_firstName = firstName;
 	}
 
-	const std::string email() const
+	std::string firstName() const
 	{
-		return m_email;
+		return m_firstName;
+	}
+
+	void setLastName(const std::string &lastName)
+	{
+		m_lastName = lastName;
+	}
+
+	std::string lastName() const
+	{
+		return m_lastName;
+	}
+
+	void setID(const ID &id)
+	{
+		m_id = id;
 	}
 
 	const ID &id() const
@@ -51,27 +69,10 @@ public:
 		return m_id;
 	}
 
-	/**
-	 * Frontend API only.
-	 */
-	template <typename Serializer>
-	void toWeb(Serializer &s) const
-	{
-		s.push("email", m_email);
-	}
-
-	/**
-	 * Frontend API only.
-	 */
-	template <typename Serializer>
-	void fromWeb(Serializer &s)
-	{
-		s.get("email", m_email);
-	}
-
 private:
 	ID m_id;
-	std::string m_email;
+	std::string m_firstName;
+	std::string m_lastName;
 };
 
 typedef User::Collection UserCollection;

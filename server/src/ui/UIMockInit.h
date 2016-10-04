@@ -4,6 +4,7 @@
 #include "di/InjectorTarget.h"
 #include "dao/UserDao.h"
 #include "dao/GatewayDao.h"
+#include "dao/IdentityDao.h"
 
 namespace BeeeOn {
 
@@ -11,20 +12,27 @@ class UIMockInit : public AbstractInjectorTarget {
 public:
 	UIMockInit()
 	{
-		injector<UIMockInit, MockUserDao>("mockUserDao",
-			&UIMockInit::setMockUserDao);
-		injector<UIMockInit, MockGatewayDao>("mockGatewayDao",
-			&UIMockInit::setMockGatewayDao);
+		injector<UIMockInit, UserDao>("userDao",
+			&UIMockInit::setUserDao);
+		injector<UIMockInit, GatewayDao>("gatewayDao",
+			&UIMockInit::setGatewayDao);
+		injector<UIMockInit, IdentityDao>("identityDao",
+			&UIMockInit::setIdentityDao);
 	}
 
-	void setMockUserDao(MockUserDao *dao)
+	void setUserDao(UserDao *dao)
 	{
 		m_userDao = dao;
 	}
 
-	void setMockGatewayDao(MockGatewayDao *dao)
+	void setGatewayDao(GatewayDao *dao)
 	{
 		m_gatewayDao = dao;
+	}
+
+	void setIdentityDao(IdentityDao *dao)
+	{
+		m_identityDao = dao;
 	}
 
 protected:
@@ -33,8 +41,9 @@ protected:
 	void injectionDone();
 
 private:
-	MockUserDao *m_userDao;
-	MockGatewayDao *m_gatewayDao;
+	UserDao *m_userDao;
+	GatewayDao *m_gatewayDao;
+	IdentityDao *m_identityDao;
 };
 
 }

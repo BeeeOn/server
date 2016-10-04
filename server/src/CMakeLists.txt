@@ -26,17 +26,22 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/server/RestAuthHandler.cpp
 	${PROJECT_SOURCE_DIR}/model/GatewayID.cpp
 	${PROJECT_SOURCE_DIR}/model/JSONSerializer.cpp
+	${PROJECT_SOURCE_DIR}/model/Identity.cpp
+	${PROJECT_SOURCE_DIR}/model/VerifiedIdentity.cpp
 	${PROJECT_SOURCE_DIR}/dao/PlaceDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/UserDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/DeviceDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/GatewayDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/LocationDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/IdentityDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/VerifiedIdentityDao.cpp
 	${PROJECT_SOURCE_DIR}/service/PlaceService.cpp
 	${PROJECT_SOURCE_DIR}/service/UserService.cpp
 	${PROJECT_SOURCE_DIR}/service/AuthService.cpp
 	${PROJECT_SOURCE_DIR}/service/DeviceService.cpp
 	${PROJECT_SOURCE_DIR}/service/GatewayService.cpp
 	${PROJECT_SOURCE_DIR}/service/LocationService.cpp
+	${PROJECT_SOURCE_DIR}/service/NotificationService.cpp
 	${PROJECT_SOURCE_DIR}/util/DAMM.cpp
 	${PROJECT_SOURCE_DIR}/dao/SociManager.cpp
 	${PROJECT_SOURCE_DIR}/rpc/GatewayRPC.cpp

@@ -58,15 +58,15 @@ void GoogleAuthProviderTest::testVerifyAuthCode()
 {
 
 	TestableGoogleAuthProvider provider;
-	GoogleAuthProvider::Result info;
+	AuthResult info;
 
 	CPPUNIT_ASSERT_MESSAGE("failed to authenticate user",
 			provider.verifyAuthCode(googleAuthCode, info));
 
 	CPPUNIT_ASSERT_MESSAGE("missing email field",
-			info.find("email") != info.end());
+			!info.email().empty());
 	CPPUNIT_ASSERT_MESSAGE("missing google_id field",
-			info.find("google_id") != info.end());
+			!info.providerID().empty());
 }
 }
 
