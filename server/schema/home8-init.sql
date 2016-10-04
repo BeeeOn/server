@@ -20,3 +20,11 @@ CREATE TABLE locations (
 	name        varchar(250),
 	place_id    uuid REFERENCES places(id)
 );
+
+DROP TABLE IF EXISTS users;
+CREATE TABLE users (
+	id           uuid NOT NULL primary key,
+	email        varchar(250) NOT NULL,
+	first_name   varchar(250) NOT NULL,
+	last_name    varchar(250) NOT NULL
+);
