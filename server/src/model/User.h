@@ -71,6 +71,11 @@ public:
 		return m_email;
 	}
 
+	void setID(const ID &id)
+	{
+		m_id = id;
+	}
+
 	const ID &id() const
 	{
 		return m_id;
