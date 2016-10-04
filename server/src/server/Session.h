@@ -23,9 +23,19 @@ public:
 	{
 	}
 
+	void setEmail(const Email &email)
+	{
+		m_email = email;
+	}
+
 	const Email email() const
 	{
 		return m_email;
+	}
+
+	void setUserId(const UserID &id)
+	{
+		m_userID = id;
 	}
 
 	const UserID userID() const
