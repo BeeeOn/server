@@ -81,24 +81,6 @@ public:
 		return m_id;
 	}
 
-	/**
-	 * Frontend API only.
-	 */
-	template <typename Serializer>
-	void toWeb(Serializer &s) const
-	{
-		s.push("email", m_email);
-	}
-
-	/**
-	 * Frontend API only.
-	 */
-	template <typename Serializer>
-	void fromWeb(Serializer &s)
-	{
-		s.get("email", m_email);
-	}
-
 private:
 	ID m_id;
 	std::string m_email;
