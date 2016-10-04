@@ -33,7 +33,7 @@ public:
 	}
 
 protected:
-	bool verifyAuthCode(const std::string &authCode, Result &info);
+	bool verifyAuthCode(const std::string &authCode, AuthResult &info);
 
 private:
 	/**

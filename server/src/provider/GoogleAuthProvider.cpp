@@ -20,7 +20,7 @@ using namespace Poco::JSON;
 using namespace Poco::Net;
 using namespace BeeeOn;
 
-bool GoogleAuthProvider::verifyAuthCode(const string &authCode, Result &info)
+bool GoogleAuthProvider::verifyAuthCode(const string &authCode, AuthResult &info)
 {
 	string idToken;
 	string rawInfo;
@@ -38,9 +38,9 @@ bool GoogleAuthProvider::verifyAuthCode(const string &authCode, Result &info)
 	JSONObjectSerializer userInfo(rawInfo);
 
 	if (userInfo.get("sub", google_id))
-		info.insert(make_pair("google_id", google_id));
+		info.setProviderID(google_id);
 	if (userInfo.get("email", email))
-		info.insert(make_pair("email", email));
+		info.setEmail(email);
 
 	if (email.empty() || google_id.empty())
 		return false;

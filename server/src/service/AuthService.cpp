@@ -16,17 +16,16 @@ const string AuthService::login(const Credentials &cred)
 		throw NotAuthenticatedException("no such provider");
 
 	AuthProvider *provider = it->second;
-	AuthProvider::Result result;
+	AuthResult result;
 
 	if (!provider->authorize(cred, result))
 		throw NotAuthenticatedException("authorization failed");
 
-	AuthProvider::Result::const_iterator resultIt = result.find("email");
-	if (resultIt == result.end())
+	if (result.email().empty())
 		throw NotAuthenticatedException("invalid result of authorization");
 
 	User user;
-	user.setEmail(resultIt->second);
+	user.setEmail(result.email());
 	if (!m_userDao->fetch(user))
 		throw NotAuthenticatedException("unknown user e-mail");
 
