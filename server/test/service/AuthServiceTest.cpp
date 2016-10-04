@@ -28,17 +28,17 @@ public:
 	void setUp();
 	void tearDown();
 	void testPermitAuth();
+
+private:
+	MockUserDao m_userDao;
+	MockIdentityDao m_identityDao;
+	MockVerifiedIdentityDao m_verifiedIdentityDao;
+	SessionManager m_manager;
+	MockRandomProvider m_mockRandomProvider;
+	InsecureRandomProvider m_insecureRandomProvider;
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(AuthServiceTest);
-
-void AuthServiceTest::setUp()
-{
-}
-
-void AuthServiceTest::tearDown()
-{
-}
 
 #define SESSION_ID64 string( \
 	"abcdef0123456789"   \
@@ -46,43 +46,48 @@ void AuthServiceTest::tearDown()
 	"abcdef0123456789"   \
 	"abcdef0123456789")
 
+void AuthServiceTest::setUp()
+{
+	m_userDao.storage().clear();
+	m_identityDao.storage().clear();
+	m_verifiedIdentityDao.storage().clear();
+
+	m_mockRandomProvider.setNextRandom(SESSION_ID64);
+	m_insecureRandomProvider.setProviderImpl(&m_mockRandomProvider);
+	m_manager.setSecureRandomProvider(&m_insecureRandomProvider);
+	m_manager.setMaxUserSessions(10);
+	m_manager.setSessionExpireTime(1);
+}
+
+void AuthServiceTest::tearDown()
+{
+}
+
 void AuthServiceTest::testPermitAuth()
 {
-	MockRandomProvider mockRandomProvider;
-	mockRandomProvider.setNextRandom(SESSION_ID64);
-	InsecureRandomProvider randomProvider;
-	randomProvider.setProviderImpl(&mockRandomProvider);
-	SessionManager manager;
-	manager.setSecureRandomProvider(&randomProvider);
-	manager.setMaxUserSessions(10);
-	manager.setSessionExpireTime(1);
-
-	MockUserDao userDao;
 	UserID newID(UUIDGenerator::defaultGenerator().createRandom());
 	User::Ptr user(new User(newID));
 	user->setEmail("permit@example.org");
-	userDao.storage().insert(make_pair(user->id(), user));
+	m_userDao.storage().insert(make_pair(user->id(), user));
 
-	MockIdentityDao identityDao;
 	Identity identity;
 	identity.setEmail("permit@example.org");
 	identity.setUser(*user);
-	identityDao.create(identity);
+	m_identityDao.create(identity);
 
-	MockVerifiedIdentityDao verifiedIdentityDao;
 	VerifiedIdentity verifiedIdentity;
 	verifiedIdentity.setIdentity(identity);
 	verifiedIdentity.setProvider("3rd-party");
-	verifiedIdentityDao.create(verifiedIdentity);
+	m_verifiedIdentityDao.create(verifiedIdentity);
 
 	AuthService service;
 	PermitAuthProvider provider;
 	provider.setResultProvider("3rd-party");
 
-	service.setUserDao(&userDao);
-	service.setIdentityDao(&identityDao);
-	service.setVerifiedIdentityDao(&verifiedIdentityDao);
-	service.setSessionManager(&manager);
+	service.setUserDao(&m_userDao);
+	service.setIdentityDao(&m_identityDao);
+	service.setVerifiedIdentityDao(&m_verifiedIdentityDao);
+	service.setSessionManager(&m_manager);
 	service.registerProvider(&provider);
 
 	AuthCodeCredentials cred("permit", "permit@example.org");
