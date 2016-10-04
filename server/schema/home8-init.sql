@@ -45,3 +45,12 @@ CREATE TABLE verified_identities (
 	accessToken varchar(250),
 	CONSTRAINT unique_verified_identity UNIQUE (identity_id, provider)
 );
+
+DROP TABLE IF EXISTS roles_in_place;
+CREATE TABLE roles_in_place (
+	id           uuid NOT NULL primary key,
+	place_id     uuid NOT NULL REFERENCES places(id),
+	identity_id  uuid NOT NULL REFERENCES identities(id),
+	level        smallint NOT NULL,
+	CONSTRAINT check_valid_level CHECK (level >= 0 AND level <= 100)
+);
