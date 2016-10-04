@@ -7,6 +7,28 @@ using namespace BeeeOn;
 
 BEEEON_OBJECT(AuthService, BeeeOn::AuthService)
 
+string AuthService::openSession(const VerifiedIdentity &verifiedIdentity)
+{
+	Identity identity(verifiedIdentity.identity().id());
+
+	if (!m_identityDao->fetch(identity)) {
+		throw NotAuthenticatedException(
+			"failed to find identity "
+				+ identity.id().toString()
+				+ " for "
+				+ verifiedIdentity.id().toString());
+	}
+
+	User user(identity.user());
+
+	if (!m_userDao->fetch(user)) {
+		throw NotAuthenticatedException("unknown user for identity "
+				+ identity.id().toString());
+	}
+
+	return m_sessionManager->open(user);
+}
+
 const string AuthService::login(const Credentials &cred)
 {
 	TRACE_METHOD();
@@ -24,12 +46,12 @@ const string AuthService::login(const Credentials &cred)
 	if (result.email().empty())
 		throw NotAuthenticatedException("invalid result of authorization");
 
-	User user;
-	user.setEmail(result.email());
-	if (!m_userDao->fetch(user))
-		throw NotAuthenticatedException("unknown user e-mail");
+	VerifiedIdentity identity;
+	if (!m_verifiedIdentityDao->fetchBy(identity,
+				result.email(), result.provider()))
+		return "";
 
-	return m_sessionManager->open(user);
+	return openSession(identity);
 }
 
 void AuthService::logout(const std::string &id)

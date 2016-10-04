@@ -67,6 +67,9 @@ public:
 
 	void logout(const std::string &id);
 
+protected:
+	std::string openSession(const VerifiedIdentity &verifiedIdentity);
+
 private:
 	SessionManager *m_sessionManager;
 	UserDao *m_userDao;

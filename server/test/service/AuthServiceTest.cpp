@@ -10,6 +10,8 @@
 #include "service/AuthService.h"
 #include "provider/PermitAuthProvider.h"
 #include "dao/UserDao.h"
+#include "dao/IdentityDao.h"
+#include "dao/VerifiedIdentityDao.h"
 #include "util/Base64.h"
 
 using namespace std;
@@ -55,16 +57,31 @@ void AuthServiceTest::testPermitAuth()
 	manager.setMaxUserSessions(10);
 	manager.setSessionExpireTime(1);
 
-	MockUserDao dao;
+	MockUserDao userDao;
 	UserID newID(UUIDGenerator::defaultGenerator().createRandom());
 	User::Ptr user(new User(newID));
 	user->setEmail("permit@example.org");
-	dao.storage().insert(make_pair(user->id(), user));
+	userDao.storage().insert(make_pair(user->id(), user));
+
+	MockIdentityDao identityDao;
+	Identity identity;
+	identity.setEmail("permit@example.org");
+	identity.setUser(*user);
+	identityDao.create(identity);
+
+	MockVerifiedIdentityDao verifiedIdentityDao;
+	VerifiedIdentity verifiedIdentity;
+	verifiedIdentity.setIdentity(identity);
+	verifiedIdentity.setProvider("3rd-party");
+	verifiedIdentityDao.create(verifiedIdentity);
 
 	AuthService service;
 	PermitAuthProvider provider;
+	provider.setResultProvider("3rd-party");
 
-	service.setUserDao(&dao);
+	service.setUserDao(&userDao);
+	service.setIdentityDao(&identityDao);
+	service.setVerifiedIdentityDao(&verifiedIdentityDao);
 	service.setSessionManager(&manager);
 	service.registerProvider(&provider);
 
