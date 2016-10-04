@@ -29,6 +29,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/JSONSerializer.cpp
 	${PROJECT_SOURCE_DIR}/model/Identity.cpp
 	${PROJECT_SOURCE_DIR}/model/VerifiedIdentity.cpp
+	${PROJECT_SOURCE_DIR}/model/RoleInPlace.cpp
 	${PROJECT_SOURCE_DIR}/dao/PlaceDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/UserDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/DeviceDao.cpp
