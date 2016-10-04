@@ -108,12 +108,15 @@
 		<instance name="mockGatewayDao" class="BeeeOn::MockGatewayDao" />
 		<instance name="mockLocationDao" class="BeeeOn::MockLocationDao" />
 		<instance name="mockIdentityDao" class="BeeeOn::MockIdentityDao" />
+		<instance name="mockVerifiedIdentityDao"
+				class="BeeeOn::MockVerifiedIdentityDao" />
 
 		<alias name="placeDao" ref="mockPlaceDao" />
 		<alias name="userDao" ref="mockUserDao" />
 		<alias name="gatewayDao" ref="mockGatewayDao" />
 		<alias name="locationDao" ref="mockLocationDao" />
 		<alias name="identityDao" ref="mockIdentityDao" />
+		<alias name="verifiedIdentityDao" ref="mockVerifiedIdentityDao" />
 
 		<instance name="sociManager"
 				class="BeeeOn::SociManager">
