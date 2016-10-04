@@ -203,6 +203,7 @@ public:
 		const AuthCodeCredentials &authCodeCredentials =
 			reinterpret_cast<const AuthCodeCredentials &>(cred);
 
+		result.setProvider(name());
 		return verifyAuthCode(authCodeCredentials.authCode(), result);
 	}
 
