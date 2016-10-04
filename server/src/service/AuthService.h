@@ -69,6 +69,11 @@ public:
 
 protected:
 	std::string openSession(const VerifiedIdentity &verifiedIdentity);
+	std::string verifyIdentityAndLogin(const AuthResult &result);
+	std::string loginAsNew(const AuthResult &result);
+	bool verifyIdentity(VerifiedIdentity &verifiedIdentity,
+			Identity &identity, const AuthResult &result);
+	User createUser(const AuthResult &result);
 
 private:
 	SessionManager *m_sessionManager;

@@ -1,11 +1,77 @@
+#include <Poco/URI.h>
 #include <Poco/Net/NetException.h>
 #include "service/AuthService.h"
 
 using namespace std;
+using namespace Poco;
 using namespace Poco::Net;
 using namespace BeeeOn;
 
 BEEEON_OBJECT(AuthService, BeeeOn::AuthService)
+
+User AuthService::createUser(const AuthResult &result)
+{
+	User user;
+	user.setFirstName(result.firstName());
+	user.setLastName(result.lastName());
+	user.setEmail(result.email());
+
+	m_userDao->create(user);
+	return user;
+}
+
+string AuthService::loginAsNew(const AuthResult &result)
+{
+	Identity identity;
+	identity.setEmail(result.email());
+	identity.setUser(createUser(result));
+
+	m_identityDao->create(identity);
+
+	VerifiedIdentity verifiedIdentity;
+
+	if (!verifyIdentity(verifiedIdentity, identity, result))
+		return "";
+
+	return openSession(verifiedIdentity);
+}
+
+bool AuthService::verifyIdentity(
+		VerifiedIdentity &verifiedIdentity,
+		Identity &identity,
+		const AuthResult &result)
+{
+	if (!identity.hasUser()) {
+		User user(createUser(result));
+		identity.setUser(user);
+
+		if (!m_identityDao->update(identity))
+			return false;
+	}
+
+	verifiedIdentity.setIdentity(identity);
+	verifiedIdentity.setProvider(result.provider());
+	verifiedIdentity.setAccessToken(result.accessToken());
+	verifiedIdentity.setPicture(URI(result.picture()));
+
+	m_verifiedIdentityDao->create(verifiedIdentity);
+	return true;
+}
+
+string AuthService::verifyIdentityAndLogin(const AuthResult &result)
+{
+	Identity identity;
+
+	if (!m_identityDao->fetchBy(identity, result.email()))
+		return loginAsNew(result);
+
+	VerifiedIdentity verifiedIdentity;
+
+	if (!verifyIdentity(verifiedIdentity, identity, result))
+		return "";
+
+	return openSession(verifiedIdentity);
+}
 
 string AuthService::openSession(const VerifiedIdentity &verifiedIdentity)
 {
@@ -49,7 +115,7 @@ const string AuthService::login(const Credentials &cred)
 	VerifiedIdentity identity;
 	if (!m_verifiedIdentityDao->fetchBy(identity,
 				result.email(), result.provider()))
-		return "";
+		return verifyIdentityAndLogin(result);
 
 	return openSession(identity);
 }
