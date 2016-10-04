@@ -70,6 +70,10 @@
 			<set name="locationDao" ref="locationDao" />
 		</instance>
 
+		<instance name="fakeNotificationService"
+				class="BeeeOn::FakeNotificationService" />
+		<alias name="notificationService" ref="fakeNotificationService" />
+
 		<!-- Data access layer -->
 
 		<instance name="sessionManager" class="BeeeOn::SessionManager">
