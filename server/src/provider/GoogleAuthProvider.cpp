@@ -45,6 +45,19 @@ bool GoogleAuthProvider::verifyAuthCode(const string &authCode, AuthResult &info
 	if (email.empty() || google_id.empty())
 		return false;
 
+	info.setAccessToken(idToken);
+
+	string firstName;
+	string lastName;
+	string picture;
+
+	if (userInfo.get("given_name", firstName))
+		info.setFirstName(firstName);
+	if (userInfo.get("family_name", lastName))
+		info.setLastName(lastName);
+	if (userInfo.get("picture", picture))
+		info.setPicture(picture);
+
 	return true;
 }
 
