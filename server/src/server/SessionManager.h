@@ -6,7 +6,7 @@
 
 #include "di/InjectorTarget.h"
 #include "provider/RandomProvider.h"
-#include "model/User.h"
+#include "model/VerifiedIdentity.h"
 #include "server/SessionCache.h"
 #include "server/Session.h"
 #include "Debug.h"
@@ -66,7 +66,7 @@ public:
 	 * info, an exception is thrown.
 	 * Returns a new session ID.
 	 */
-	const SessionID open(const User &user);
+	const SessionID open(const VerifiedIdentity &identity);
 
 	/**
 	 * Lookup a session information by ID.

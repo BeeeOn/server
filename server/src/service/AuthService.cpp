@@ -96,7 +96,11 @@ string AuthService::openSession(const VerifiedIdentity &verifiedIdentity)
 				+ identity.id().toString());
 	}
 
-	return m_sessionManager->open(user);
+	VerifiedIdentity copy(verifiedIdentity);
+	copy.setIdentity(identity);
+	copy.setUser(user);
+
+	return m_sessionManager->open(copy);
 }
 
 const string AuthService::login(const Credentials &cred)

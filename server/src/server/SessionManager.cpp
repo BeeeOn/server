@@ -8,18 +8,21 @@ using namespace BeeeOn;
 
 BEEEON_OBJECT(SessionManager, BeeeOn::SessionManager)
 
-const SessionID SessionManager::open(const User &user)
+const SessionID SessionManager::open(const VerifiedIdentity &identity)
 {
 	TRACE_METHOD();
 
-	if (user.id().isNull()) {
-		if (m_logger.debug()) {
-			m_logger.debug("Missing user ID for: " + user.email(),
-					__FILE__, __LINE__);
-		}
-
-		throw InvalidArgumentException("missing user ID");
+	if (identity.id().isNull()) {
+		throw InvalidArgumentException(
+				"missing verified identity ID");
 	}
+
+	if (identity.user().id().isNull()) {
+		throw InvalidArgumentException(
+				"missing verified identity user ID");
+	}
+
+	const User user(identity.user());
 
 	Timespan timespan(m_expireTime, 0);
 	char bSessionID[ID_LENGTH64];
@@ -31,6 +34,8 @@ const SessionID SessionManager::open(const User &user)
 	SessionID sessionID = Base64::encode(bSessionID, sizeof(bSessionID));
 
 	ExpirableSession session(user.id(), sessionID, timespan);
+	session.setIdentityID(identity.id());
+
 	m_sessionCache->add(session.sessionID(), session);
 
 	if (m_logger.debug()) {
