@@ -120,6 +120,8 @@
 		<instance name="mockIdentityDao" class="BeeeOn::MockIdentityDao" />
 		<instance name="mockVerifiedIdentityDao"
 				class="BeeeOn::MockVerifiedIdentityDao" />
+		<instance name="mockRoleInPlaceDao"
+				class="BeeeOn::MockRoleInPlaceDao" />
 
 		<alias name="placeDao" ref="mockPlaceDao" />
 		<alias name="userDao" ref="mockUserDao" />
@@ -127,6 +129,7 @@
 		<alias name="locationDao" ref="mockLocationDao" />
 		<alias name="identityDao" ref="mockIdentityDao" />
 		<alias name="verifiedIdentityDao" ref="mockVerifiedIdentityDao" />
+		<alias name="roleInPlaceDao" ref="mockRoleInPlaceDao" />
 
 		<instance name="sociManager"
 				class="BeeeOn::SociManager">
