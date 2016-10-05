@@ -81,6 +81,11 @@ public:
 			m_logger.log(e, __FILE__, __LINE__);
 			res.requireAuthentication(m_name);
 		}
+		catch (Poco::SyntaxException &e) {
+			m_logger.log(e, __FILE__, __LINE__);
+			res.setStatusAndReason(
+				Response::HTTP_BAD_REQUEST);
+		}
 		catch (Poco::InvalidArgumentException &e) {
 			m_logger.log(e, __FILE__, __LINE__);
 			res.setStatusAndReason(
