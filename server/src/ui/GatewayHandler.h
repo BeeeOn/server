@@ -7,6 +7,7 @@
 #include "di/InjectorTarget.h"
 #include "server/RestHandler.h"
 #include "service/GatewayService.h"
+#include "policy/GatewayAccessPolicy.h"
 
 namespace BeeeOn {
 namespace UI {
@@ -26,6 +27,9 @@ public:
 		std::istream &in = context.request().stream();
 		const std::string placeId = param(context, "placeId");
 		const std::string gatewayId = param(context, "gatewayId");
+
+		m_accessPolicy->assureAssignGateway(context.userData(),
+				Place(PlaceID::parse(placeId)));
 
 		try {
 			sendResultOrNotFound(
@@ -53,6 +57,9 @@ public:
 		const std::string &placeId = param(context, "placeId");
 		const std::string &gatewayId = param(context, "gatewayId");
 
+		m_accessPolicy->assureUpdate(context.userData(),
+				Gateway(GatewayID::parse(gatewayId)));
+
 		try {
 			sendResultOrNotFound(
 				context.response(),
@@ -77,6 +84,9 @@ public:
 	{
 		const std::string &placeId = param(context, "placeId");
 		const std::string &gatewayId = param(context, "gatewayId");
+
+		m_accessPolicy->assureGet(context.userData(),
+				Gateway(GatewayID::parse(gatewayId)));
 
 		try {
 			sendResultOrNotFound(
@@ -103,6 +113,9 @@ public:
 		const std::string &placeId = param(context, "placeId");
 		const std::string &gatewayId = param(context, "gatewayId");
 
+		m_accessPolicy->assureUnassign(context.userData(),
+				Gateway(GatewayID::parse(gatewayId)));
+
 		try {
 			sendResultOrNotFound(
 				context.response(),
@@ -124,8 +137,14 @@ public:
 		m_gatewayService = service;
 	}
 
+	void setAccessPolicy(GatewayAccessPolicy *policy)
+	{
+		m_accessPolicy = policy;
+	}
+
 private:
 	GatewayService *m_gatewayService;
+	GatewayAccessPolicy *m_accessPolicy;
 };
 
 }

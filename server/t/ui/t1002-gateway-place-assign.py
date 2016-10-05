@@ -100,7 +100,7 @@ class TestGatewayPlaceAssign(unittest.TestCase):
 		req.authorize(self.session)
 		response, content = req()
 
-		self.assertEqual(404, response.status)
+		self.assertEqual(403, response.status)
 		self.assertEqual(0, len(content))
 
 	"""

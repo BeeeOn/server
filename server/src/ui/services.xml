@@ -22,6 +22,7 @@
 
 		<instance name="gatewayHandler" class="BeeeOn::UI::GatewayHandler">
 			<set name="gatewayService" ref="gatewayService" />
+			<set name="accessPolicy" ref="accessPolicy" />
 		</instance>
 
 		<instance name="locationHandler" class="BeeeOn::UI::LocationHandler">

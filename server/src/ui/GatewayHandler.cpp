@@ -14,6 +14,8 @@ GatewayHandler::GatewayHandler()
 {
 	injector<GatewayHandler, GatewayService>("gatewayService",
 			&GatewayHandler::setGatewayService);
+	injector<GatewayHandler, GatewayAccessPolicy>("accessPolicy",
+			&GatewayHandler::setAccessPolicy);
 }
 
 const string GatewayHandler::handleAssign(istream &in,
