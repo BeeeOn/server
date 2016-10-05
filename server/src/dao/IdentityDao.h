@@ -27,7 +27,7 @@ public:
 		return fetch(identity);
 	}
 
-	IdentityDao &instance();
+	static IdentityDao &instance();
 };
 
 class MockIdentityDao : public AbstractInjectorTarget,
