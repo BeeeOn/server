@@ -42,3 +42,30 @@ void DefaultAccessPolicy::assureAtLeast(
 				+ ")");
 	}
 }
+
+void DefaultAccessPolicy::assureGet(
+		const ExpirableSession::Ptr session,
+		const Place &place)
+{
+	assureAtLeast(
+		fetchAccessLevel(session, place),
+		AccessLevel::guest());
+}
+
+void DefaultAccessPolicy::assureUpdate(
+		const ExpirableSession::Ptr session,
+		const Place &place)
+{
+	assureAtLeast(
+		fetchAccessLevel(session, place),
+		AccessLevel::user());
+}
+
+void DefaultAccessPolicy::assureRemove(
+		const ExpirableSession::Ptr session,
+		const Place &place)
+{
+	assureAtLeast(
+		fetchAccessLevel(session, place),
+		AccessLevel::admin());
+}
