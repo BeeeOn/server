@@ -7,6 +7,7 @@
 #include "di/InjectorTarget.h"
 #include "server/RestHandler.h"
 #include "service/LocationService.h"
+#include "policy/LocationAccessPolicy.h"
 
 namespace BeeeOn {
 namespace UI {
@@ -20,6 +21,9 @@ public:
 	{
 		std::istream &in = context.request().stream();
 		const std::string placeId = param(context, "placeId");
+
+		m_accessPolicy->assureCreateLocation(context.userData(),
+				Place(PlaceID::parse(placeId)));
 
 		try {
 			sendResultOrNotFound(
@@ -43,6 +47,9 @@ public:
 		const std::string placeId = param(context, "placeId");
 		const std::string locationId = param(context, "locationId");
 
+		m_accessPolicy->assureUpdate(context.userData(),
+				Location(LocationID::parse(locationId)));
+
 		try {
 			sendResultOrNotFound(
 				context.response(),
@@ -64,6 +71,9 @@ public:
 	{
 		const std::string placeId = param(context, "placeId");
 		const std::string locationId = param(context, "locationId");
+
+		m_accessPolicy->assureGet(context.userData(),
+				Location(LocationID::parse(locationId)));
 
 		try {
 			sendResultOrNotFound(
@@ -87,6 +97,9 @@ public:
 		const std::string placeId = param(context, "placeId");
 		const std::string locationId = param(context, "locationId");
 
+		m_accessPolicy->assureRemove(context.userData(),
+				Location(LocationID::parse(locationId)));
+
 		try {
 			sendResultOrNotFound(
 				context.response(),
@@ -108,8 +121,14 @@ public:
 		m_locationService = service;
 	}
 
+	void setAccessPolicy(LocationAccessPolicy *policy)
+	{
+		m_accessPolicy = policy;
+	}
+
 private:
 	LocationService *m_locationService;
+	LocationAccessPolicy *m_accessPolicy;
 };
 
 }

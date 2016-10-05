@@ -12,6 +12,8 @@ LocationHandler::LocationHandler()
 {
 	injector<LocationHandler, LocationService>("locationService",
 			&LocationHandler::setLocationService);
+	injector<LocationHandler, LocationAccessPolicy>("accessPolicy",
+			&LocationHandler::setAccessPolicy);
 }
 
 const string LocationHandler::handleCreate(std::istream &in,

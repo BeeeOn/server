@@ -27,6 +27,7 @@
 
 		<instance name="locationHandler" class="BeeeOn::UI::LocationHandler">
 			<set name="locationService" ref="locationService" />
+			<set name="accessPolicy" ref="accessPolicy" />
 		</instance>
 
 		<instance name="sessionVerifier" class="BeeeOn::SessionVerifier">
