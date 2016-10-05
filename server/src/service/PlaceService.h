@@ -4,6 +4,7 @@
 #include "di/InjectorTarget.h"
 #include "model/Place.h"
 #include "model/Identity.h"
+#include "model/User.h"
 #include "dao/PlaceDao.h"
 #include "dao/RoleInPlaceDao.h"
 
@@ -65,13 +66,7 @@ public:
 		return m_placeDao->update(place);
 	}
 
-	bool remove(Place &place)
-	{
-		if (!m_placeDao->fetch(place))
-			return false;
-
-		return m_placeDao->remove(place);
-	}
+	bool remove(Place &place, const User &owner);
 
 private:
 	PlaceDao *m_placeDao;
