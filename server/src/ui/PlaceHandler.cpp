@@ -76,4 +76,13 @@ const string PlaceHandler::handleDelete(const string &placeId,
 	return serialize(place);
 }
 
+const string PlaceHandler::handleGetAll(const UserID &userId)
+{
+	User user(userId);
+	std::vector<Place> places;
+
+	m_placeService->fetchAccessible(places, user);
+	return serialize(places);
+}
+
 BEEEON_OBJECT(PlaceHandler, BeeeOn::UI::PlaceHandler)

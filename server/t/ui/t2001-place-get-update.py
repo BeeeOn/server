@@ -180,8 +180,69 @@ class TestPlace(unittest.TestCase):
 
 		self.assertEqual(200, response.status)
 		deletedPlace = json.loads(content)
+
 		self.assertEqual(secondHome["id"], deletedPlace["id"])
 		self.assertEqual("My Second Home", deletedPlace["name"])
+
+	"""
+	Test listing of all places the current user can access.
+	Only one place is present from setUp.
+	"""
+	def test7_get_all_places(self):
+		req = GET(config.ui_host, config.ui_port, "/place")
+		req.authorize(self.session)
+		response, content = req()
+
+		self.assertEqual(200, response.status)
+		places = json.loads(content)
+
+		self.assertEqual(1, len(places))
+		self.assertEqual(self.place["id"], places[0]["id"])
+		self.assertEqual("My Home", places[0]["name"])
+
+	"""
+	Create some places and fetch all of them. Then delete them
+	and fetch to check they are gone.
+	"""
+	def test8_create_some_and_get_all_places(self):
+		for i in range(4):
+			place = json.dumps({"name": "Home " + str(i)})
+			req = POST(config.ui_host, config.ui_port, "/place")
+			req.authorize(self.session)
+			req.body(place)
+			response, content = req()
+
+			self.assertEqual(200, response.status)
+
+		req = GET(config.ui_host, config.ui_port, "/place")
+		req.authorize(self.session)
+		response, content = req()
+
+		self.assertEqual(200, response.status)
+		places = json.loads(content)
+		self.assertEqual(5, len(places))
+
+		for p in places:
+			if p["id"] == self.place["id"]:
+				continue
+
+			self.assertIn(p["name"],
+				["Home 0", "Home 1", "Home 2", "Home 3"])
+
+			req = DELETE(config.ui_host, config.ui_port,
+					"/place/" + p["id"])
+			req.authorize(self.session)
+			response, content = req()
+
+			self.assertEqual(200, response.status)
+
+		req = GET(config.ui_host, config.ui_port, "/place")
+		req.authorize(self.session)
+		response, content = req()
+
+		self.assertEqual(200, response.status)
+		places = json.loads(content)
+		self.assertEqual(1, len(places))
 
 if __name__ == '__main__':
 	import sys

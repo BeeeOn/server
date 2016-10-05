@@ -108,6 +108,23 @@ public:
 	const std::string handleDelete(const std::string &placeId,
 				const UserID &userID);
 
+	template <typename Context>
+	void handleGetAll(Context &context)
+	{
+		try {
+			sendResultOrNotFound(
+				context.response(),
+				handleGetAll(context.userData()->userID())
+			);
+		}
+		catch (const Poco::Exception &e) {
+			m_logger.log(e, __FILE__, __LINE__);
+			sendInvalidInput(context.response());
+		}
+	}
+
+	const std::string handleGetAll(const UserID &userId);
+
 	void setPlaceService(PlaceService *service)
 	{
 		m_placeService = service;
