@@ -1,3 +1,4 @@
+#include <Poco/Exception.h>
 #include <Poco/SingletonHolder.h>
 
 #include "dao/RoleInPlaceDao.h"
@@ -11,6 +12,12 @@ RoleInPlaceDao &NullRoleInPlaceDao::instance()
 {
 	static Poco::SingletonHolder<NullRoleInPlaceDao> singleton;
 	return *singleton.get();
+}
+
+MockRoleInPlaceDao::MockRoleInPlaceDao()
+{
+	injector<MockRoleInPlaceDao, PlaceDao>("placeDao",
+			&MockRoleInPlaceDao::setPlaceDao);
 }
 
 AccessLevel MockRoleInPlaceDao::fetchAccessLevel(
@@ -32,4 +39,29 @@ AccessLevel MockRoleInPlaceDao::fetchAccessLevel(
 	}
 
 	return AccessLevel::none();
+}
+
+void MockRoleInPlaceDao::fetchAccessiblePlaces(
+		std::vector<Place> &list,
+		const User &user)
+{
+	Iterator it = storage().begin();
+
+	for (; it != storage().end(); ++it) {
+		const RoleInPlace &role = *it->second;
+
+		if (role.identity().user().id() != user.id())
+			continue;
+
+		Place place = role.place();
+
+		if (m_placeDao->fetch(place)) {
+			list.push_back(place);
+		}
+		else {
+			throw Poco::IllegalStateException("place "
+					+ place.id().toString()
+					+ " not found in placeDao");
+		}
+	}
 }

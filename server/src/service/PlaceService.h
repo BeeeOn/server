@@ -49,6 +49,12 @@ public:
 		m_roleInPlaceDao->create(role);
 	}
 
+	void fetchAccessible(std::vector<Place> &places,
+			const User &user)
+	{
+		m_roleInPlaceDao->fetchAccessiblePlaces(places, user);
+	}
+
 	bool fetch(Place &place)
 	{
 		return m_placeDao->fetch(place);
