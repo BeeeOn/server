@@ -87,6 +87,7 @@
 		<instance name="accessPolicy"
 				class="BeeeOn::DefaultAccessPolicy">
 			<set name="userDao" ref="userDao" />
+			<set name="gatewayDao" ref="gatewayDao" />
 			<set name="roleInPlaceDao" ref="roleInPlaceDao" />
 		</instance>
 
