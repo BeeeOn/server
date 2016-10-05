@@ -1,6 +1,7 @@
 #include <sstream>
 
 #include <Poco/Exception.h>
+#include <Poco/Message.h>
 #include <Poco/FIFOBuffer.h>
 #include <Poco/Net/NetException.h>
 #include <Poco/DOM/DOMWriter.h>
@@ -20,9 +21,12 @@ XmlRequestHandler::XmlRequestHandler(
 	TCPServerConnection(socket),
 	m_logger(LOGGER_CLASS(this)),
 	m_input(input),
-	m_stream(socket),
+	m_socketStream(socket),
+	m_logStream(m_logger, Message::PRIO_DEBUG),
+	m_stream(m_socketStream),
 	m_output(m_stream, XMLWriter::Options::CANONICAL_XML)
 {
+	m_stream.addStream(m_logStream);
 }
 
 void XmlRequestHandler::run()
@@ -33,6 +37,7 @@ void XmlRequestHandler::run()
 		m_output.startDocument();
 		handleInput();
 		m_output.endDocument();
+		m_logStream << std::endl;
 	} catch (const Exception &e) {
 		m_logger.log(e, __FILE__, __LINE__);
 	}

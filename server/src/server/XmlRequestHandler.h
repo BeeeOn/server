@@ -4,7 +4,10 @@
 #include <unistd.h>
 
 #include <Poco/Logger.h>
+#include <Poco/Message.h>
 #include <Poco/Exception.h>
+#include <Poco/TeeStream.h>
+#include <Poco/LogStream.h>
 
 #include <Poco/Net/StreamSocket.h>
 #include <Poco/Net/SocketStream.h>
@@ -30,7 +33,9 @@ public:
 protected:
 	Poco::Logger &m_logger;
 	const Poco::AutoPtr<Poco::XML::Document> m_input;
-	Poco::Net::SocketOutputStream m_stream;
+	Poco::Net::SocketOutputStream m_socketStream;
+	Poco::LogStream m_logStream;
+	Poco::TeeOutputStream m_stream;
 	Poco::XML::XMLWriter m_output;
 };
 
