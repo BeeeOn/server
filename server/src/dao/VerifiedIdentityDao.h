@@ -30,7 +30,7 @@ public:
 		return fetch(identity);
 	}
 
-	VerifiedIdentityDao &instance();
+	static VerifiedIdentityDao &instance();
 };
 
 class MockVerifiedIdentityDao : public AbstractInjectorTarget,
