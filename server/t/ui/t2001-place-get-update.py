@@ -173,6 +173,16 @@ class TestPlace(unittest.TestCase):
 		self.assertNotEqual(self.place["id"], secondHome["id"])
 		self.assertEqual("My Second Home", result["name"])
 
+		req = DELETE(config.ui_host, config.ui_port,
+				"/place/" + secondHome["id"])
+		req.authorize(self.session)
+		response, content = req()
+
+		self.assertEqual(200, response.status)
+		deletedPlace = json.loads(content)
+		self.assertEqual(secondHome["id"], deletedPlace["id"])
+		self.assertEqual("My Second Home", deletedPlace["name"])
+
 if __name__ == '__main__':
 	import sys
 	import taprunner
