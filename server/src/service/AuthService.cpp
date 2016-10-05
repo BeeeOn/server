@@ -99,7 +99,7 @@ string AuthService::openSession(const VerifiedIdentity &verifiedIdentity)
 	copy.setIdentity(identity);
 	copy.setUser(user);
 
-	return m_sessionManager->open(copy);
+	return m_sessionManager->open(copy)->sessionID();
 }
 
 const string AuthService::login(const Credentials &cred)
