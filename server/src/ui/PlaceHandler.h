@@ -7,6 +7,7 @@
 #include "di/InjectorTarget.h"
 #include "server/RestHandler.h"
 #include "service/PlaceService.h"
+#include "service/IdentityService.h"
 
 namespace BeeeOn {
 namespace UI {
@@ -23,7 +24,7 @@ public:
 		try {
 			sendResult(
 				context.response(),
-				handleCreate(in)
+				handleCreate(in, context.userData()->identityID())
 			);
 		}
 		catch (const Poco::Exception &e) {
@@ -32,7 +33,8 @@ public:
 		}
 	}
 
-	const std::string handleCreate(std::istream &in);
+	const std::string handleCreate(std::istream &in,
+			const VerifiedIdentityID &identityID);
 
 	template <typename Context>
 	void handleUpdate(Context &context)
@@ -98,8 +100,14 @@ public:
 		m_placeService = service;
 	}
 
+	void setIdentityService(IdentityService *service)
+	{
+		m_identityService = service;
+	}
+
 private:
 	PlaceService *m_placeService;
+	IdentityService *m_identityService;
 };
 
 }
