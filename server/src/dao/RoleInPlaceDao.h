@@ -32,7 +32,8 @@ public:
 	 */
 	virtual void fetchAccessiblePlaces(
 			std::vector<Place> &list,
-			const User &user) = 0;
+			const User &user,
+			const AccessLevel &atLeast = AccessLevel::any()) = 0;
 };
 
 class NullRoleInPlaceDao : public AbstractInjectorTarget,
@@ -47,7 +48,8 @@ public:
 
 	void fetchAccessiblePlaces(
 			std::vector<Place> &list,
-			const User &user)
+			const User &user,
+			const AccessLevel &atLeast = AccessLevel::any())
 	{
 		throw Poco::NotImplementedException(__func__);
 	}
@@ -72,7 +74,8 @@ public:
 
 	void fetchAccessiblePlaces(
 			std::vector<Place> &list,
-			const User &user);
+			const User &user,
+			const AccessLevel &atLeast = AccessLevel::any());
 
 	void fetchBy(std::vector<RoleInPlace> &roles,
 			const Place &place);

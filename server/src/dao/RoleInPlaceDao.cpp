@@ -44,7 +44,8 @@ AccessLevel MockRoleInPlaceDao::fetchAccessLevel(
 
 void MockRoleInPlaceDao::fetchAccessiblePlaces(
 		std::vector<Place> &list,
-		const User &user)
+		const User &user,
+		const AccessLevel &atLeast)
 {
 	Iterator it = storage().begin();
 
@@ -52,6 +53,9 @@ void MockRoleInPlaceDao::fetchAccessiblePlaces(
 		const RoleInPlace &role = *it->second;
 
 		if (role.identity().user().id() != user.id())
+			continue;
+
+		if (role.level() >= atLeast)
 			continue;
 
 		Place place = role.place();
