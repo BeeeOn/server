@@ -73,6 +73,10 @@ public:
 
 			m_route.execute(req, res, m_params, session);
 		}
+		catch (Poco::InvalidAccessException &e) {
+			m_logger.log(e, __FILE__, __LINE__);
+			res.setStatusAndReason(Response::HTTP_FORBIDDEN);
+		}
 		catch (Poco::Net::NotAuthenticatedException &e) {
 			m_logger.log(e, __FILE__, __LINE__);
 			res.requireAuthentication(m_name);
