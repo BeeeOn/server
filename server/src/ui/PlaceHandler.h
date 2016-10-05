@@ -9,6 +9,7 @@
 #include "service/PlaceService.h"
 #include "service/IdentityService.h"
 #include "policy/PlaceAccessPolicy.h"
+#include "model/User.h"
 
 namespace BeeeOn {
 namespace UI {
@@ -94,7 +95,8 @@ public:
 		try {
 			sendResultOrNotFound(
 				context.response(),
-				handleDelete(placeId)
+				handleDelete(placeId,
+					context.userData()->userID())
 			);
 		}
 		catch (const Poco::Exception &e) {
@@ -103,7 +105,25 @@ public:
 		}
 	}
 
-	const std::string handleDelete(const std::string &placeId);
+	const std::string handleDelete(const std::string &placeId,
+				const UserID &userID);
+
+	template <typename Context>
+	void handleGetAll(Context &context)
+	{
+		try {
+			sendResultOrNotFound(
+				context.response(),
+				handleGetAll(context.userData()->userID())
+			);
+		}
+		catch (const Poco::Exception &e) {
+			m_logger.log(e, __FILE__, __LINE__);
+			sendInvalidInput(context.response());
+		}
+	}
+
+	const std::string handleGetAll(const UserID &userId);
 
 	void setPlaceService(PlaceService *service)
 	{

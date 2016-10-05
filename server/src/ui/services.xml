@@ -139,7 +139,9 @@
 		<instance name="mockVerifiedIdentityDao"
 				class="BeeeOn::MockVerifiedIdentityDao" />
 		<instance name="mockRoleInPlaceDao"
-				class="BeeeOn::MockRoleInPlaceDao" />
+				class="BeeeOn::MockRoleInPlaceDao">
+			<set name="placeDao" ref="placeDao" />
+		</instance>
 
 		<alias name="placeDao" ref="mockPlaceDao" />
 		<alias name="userDao" ref="mockUserDao" />

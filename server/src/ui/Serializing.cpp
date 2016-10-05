@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sstream>
 #include <Poco/JSON/Object.h>
+#include <Poco/JSON/Array.h>
 #include <Poco/JSON/Parser.h>
 
 #include "ui/Serializing.h"
@@ -12,12 +13,19 @@ using namespace std;
 using namespace Poco::JSON;
 using namespace BeeeOn;
 
-std::ostream &BeeeOn::UI::serialize(std::ostream &o, const Place &place)
+static Object::Ptr toObject(const Place &place)
 {
 	Object::Ptr object(new Object);
+
 	object->set("id", place.id().toString());
 	object->set("name", place.name());
-	object->stringify(o);
+
+	return object;
+}
+
+std::ostream &BeeeOn::UI::serialize(std::ostream &o, const Place &place)
+{
+	toObject(place)->stringify(o);
 	return o;
 }
 
@@ -35,6 +43,25 @@ istream &BeeeOn::UI::deserialize(istream &i, Place &place)
 	place.setName(object->getValue<string>("name"));
 
 	return i;
+}
+
+ostream &BeeeOn::UI::serialize(ostream &o, const vector<Place> &places)
+{
+	Array::Ptr array(new Array);
+
+	for (auto it : places) {
+	       array->add(toObject(it));
+	}
+
+	array->stringify(o);
+	return o;
+}
+
+string BeeeOn::UI::serialize(const vector<Place> &places)
+{
+	ostringstream s;
+	serialize(s, places);
+	return s.str();
 }
 
 ostream &UI::serialize(ostream &o, const Gateway &gateway)

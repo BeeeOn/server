@@ -4,6 +4,7 @@
 #include "di/InjectorTarget.h"
 #include "model/Place.h"
 #include "model/Identity.h"
+#include "model/User.h"
 #include "dao/PlaceDao.h"
 #include "dao/RoleInPlaceDao.h"
 
@@ -49,6 +50,12 @@ public:
 		m_roleInPlaceDao->create(role);
 	}
 
+	void fetchAccessible(std::vector<Place> &places,
+			const User &user)
+	{
+		m_roleInPlaceDao->fetchAccessiblePlaces(places, user);
+	}
+
 	bool fetch(Place &place)
 	{
 		return m_placeDao->fetch(place);
@@ -59,13 +66,7 @@ public:
 		return m_placeDao->update(place);
 	}
 
-	bool remove(Place &place)
-	{
-		if (!m_placeDao->fetch(place))
-			return false;
-
-		return m_placeDao->remove(place);
-	}
+	bool remove(Place &place, const User &owner);
 
 private:
 	PlaceDao *m_placeDao;

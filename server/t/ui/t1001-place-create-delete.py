@@ -64,7 +64,7 @@ class TestPlace(unittest.TestCase):
 		req.authorize(self.session)
 		response, _ = req()
 
-		self.assertEqual(404, response.status)
+		self.assertEqual(403, response.status)
 
 if __name__ == '__main__':
 	import sys

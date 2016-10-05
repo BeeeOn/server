@@ -40,6 +40,9 @@ void UIServerModule::injectionDone()
 	m_factory->POST("/place", [&](UIRouteContext &context) {
 		m_placeHandler->handleCreate(context);
 	});
+	m_factory->GET("/place", [&](UIRouteContext &context) {
+		m_placeHandler->handleGetAll(context);
+	});
 	m_factory->PUT("/place/:placeId", [&](UIRouteContext &context) {
 		m_placeHandler->handleUpdate(context);
 	});
