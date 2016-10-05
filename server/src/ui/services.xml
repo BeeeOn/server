@@ -72,6 +72,11 @@
 			<set name="locationDao" ref="locationDao" />
 		</instance>
 
+		<instance name="identityService" class="BeeeOn::IdentityService">
+			<set name="identityDao" ref="identityDao" />
+			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
+		</instance>
+
 		<instance name="fakeNotificationService"
 				class="BeeeOn::FakeNotificationService" />
 		<alias name="notificationService" ref="fakeNotificationService" />
