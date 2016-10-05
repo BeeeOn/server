@@ -8,6 +8,7 @@
 #include "server/RestHandler.h"
 #include "service/PlaceService.h"
 #include "service/IdentityService.h"
+#include "policy/PlaceAccessPolicy.h"
 
 namespace BeeeOn {
 namespace UI {
@@ -42,6 +43,9 @@ public:
 		std::istream &in = context.request().stream();
 		const std::string &placeId = param(context, "placeId");
 
+		m_accessPolicy->assureUpdate(context.userData(),
+				Place(PlaceID::parse(placeId)));
+
 		try {
 			sendResultOrNotFound(
 				context.response(),
@@ -62,6 +66,9 @@ public:
 	{
 		const std::string &placeId = param(context, "placeId");
 
+		m_accessPolicy->assureGet(context.userData(),
+				Place(PlaceID::parse(placeId)));
+
 		try {
 			sendResultOrNotFound(
 				context.response(),
@@ -80,6 +87,9 @@ public:
 	void handleDelete(Context &context)
 	{
 		const std::string &placeId = param(context, "placeId");
+
+		m_accessPolicy->assureRemove(context.userData(),
+				Place(PlaceID::parse(placeId)));
 
 		try {
 			sendResultOrNotFound(
@@ -105,9 +115,15 @@ public:
 		m_identityService = service;
 	}
 
+	void setAccessPolicy(PlaceAccessPolicy *accessPolicy)
+	{
+		m_accessPolicy = accessPolicy;
+	}
+
 private:
 	PlaceService *m_placeService;
 	IdentityService *m_identityService;
+	PlaceAccessPolicy *m_accessPolicy;
 };
 
 }

@@ -71,7 +71,7 @@ class TestPlace(unittest.TestCase):
 		req.authorize(self.session)
 		response, content = req()
 
-		self.assertEqual(404, response.status)
+		self.assertEqual(403, response.status)
 		self.assertEqual(0, len(content))
 
 	"""
@@ -104,14 +104,14 @@ class TestPlace(unittest.TestCase):
 		req.authorize(self.session)
 		response, content = req()
 
-		self.assertEqual(404, response.status)
+		self.assertEqual(403, response.status)
 		self.assertEqual(0, len(content))
 
 		req = GET(config.ui_host, config.ui_port, "/place/" + id)
 		req.authorize(self.session)
 		response, content = req()
 
-		self.assertEqual(404, response.status)
+		self.assertEqual(403, response.status)
 		self.assertEqual(0, len(content))
 
 	"""

@@ -14,6 +14,8 @@ PlaceHandler::PlaceHandler()
 			&PlaceHandler::setPlaceService);
 	injector<PlaceHandler, IdentityService>("identityService",
 			&PlaceHandler::setIdentityService);
+	injector<PlaceHandler, PlaceAccessPolicy>("accessPolicy",
+			&PlaceHandler::setAccessPolicy);
 }
 
 const string PlaceHandler::handleCreate(istream &in,

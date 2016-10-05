@@ -17,6 +17,7 @@
 		<instance name="placeHandler" class="BeeeOn::UI::PlaceHandler">
 			<set name="placeService" ref="placeService" />
 			<set name="identityService" ref="identityService" />
+			<set name="accessPolicy" ref="accessPolicy" />
 		</instance>
 
 		<instance name="gatewayHandler" class="BeeeOn::UI::GatewayHandler">
