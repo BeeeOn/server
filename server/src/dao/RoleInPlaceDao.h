@@ -15,6 +15,8 @@ class RoleInPlaceDao {
 public:
 	virtual void create(RoleInPlace &role) = 0;
 	virtual bool fetch(RoleInPlace &role) = 0;
+	virtual void fetchBy(std::vector<RoleInPlace> &roles,
+			const Place &place) = 0;
 	virtual bool update(RoleInPlace &role) = 0;
 	virtual bool remove(const RoleInPlace &role) = 0;
 
@@ -50,6 +52,12 @@ public:
 		throw Poco::NotImplementedException(__func__);
 	}
 
+	void fetchBy(std::vector<RoleInPlace> &roles,
+			const Place &place)
+	{
+		throw Poco::NotImplementedException(__func__);
+	}
+
 	static RoleInPlaceDao &instance();
 };
 
@@ -65,6 +73,9 @@ public:
 	void fetchAccessiblePlaces(
 			std::vector<Place> &list,
 			const User &user);
+
+	void fetchBy(std::vector<RoleInPlace> &roles,
+			const Place &place);
 
 	void setPlaceDao(PlaceDao *dao)
 	{

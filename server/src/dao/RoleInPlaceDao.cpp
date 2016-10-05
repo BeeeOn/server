@@ -6,6 +6,7 @@
 BEEEON_OBJECT(NullRoleInPlaceDao, BeeeOn::NullRoleInPlaceDao)
 BEEEON_OBJECT(MockRoleInPlaceDao, BeeeOn::MockRoleInPlaceDao)
 
+using namespace std;
 using namespace BeeeOn;
 
 RoleInPlaceDao &NullRoleInPlaceDao::instance()
@@ -63,5 +64,21 @@ void MockRoleInPlaceDao::fetchAccessiblePlaces(
 					+ place.id().toString()
 					+ " not found in placeDao");
 		}
+	}
+}
+
+void MockRoleInPlaceDao::fetchBy(
+		vector<RoleInPlace> &roles,
+		const Place &place)
+{
+	Iterator it = storage().begin();
+
+	for (; it != storage().end(); ++it) {
+		const RoleInPlace &role = *it->second;
+
+		if (role.place().id() != place.id())
+			continue;
+
+		roles.push_back(role);
 	}
 }
