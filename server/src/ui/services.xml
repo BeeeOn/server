@@ -81,6 +81,12 @@
 				class="BeeeOn::FakeNotificationService" />
 		<alias name="notificationService" ref="fakeNotificationService" />
 
+		<instance name="accessPolicy"
+				class="BeeeOn::DefaultAccessPolicy">
+			<set name="userDao" ref="userDao" />
+			<set name="roleInPlaceDao" ref="roleInPlaceDao" />
+		</instance>
+
 		<!-- Data access layer -->
 
 		<instance name="sessionManager" class="BeeeOn::SessionManager">
