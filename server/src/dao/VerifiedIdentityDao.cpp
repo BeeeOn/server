@@ -1,8 +1,17 @@
+#include <Poco/SingletonHolder.h>
+
 #include "dao/VerifiedIdentityDao.h"
 
+BEEEON_OBJECT(NullVerifiedIdentityDao, BeeeOn::NullVerifiedIdentityDao)
 BEEEON_OBJECT(MockVerifiedIdentityDao, BeeeOn::MockVerifiedIdentityDao)
 
 using namespace BeeeOn;
+
+VerifiedIdentityDao &NullVerifiedIdentityDao::instance()
+{
+	static Poco::SingletonHolder<NullVerifiedIdentityDao> singleton;
+	return *singleton.get();
+}
 
 bool MockVerifiedIdentityDao::fetchBy(VerifiedIdentity &identity,
 			const std::string email,

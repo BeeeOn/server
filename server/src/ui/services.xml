@@ -16,14 +16,18 @@
 
 		<instance name="placeHandler" class="BeeeOn::UI::PlaceHandler">
 			<set name="placeService" ref="placeService" />
+			<set name="identityService" ref="identityService" />
+			<set name="accessPolicy" ref="accessPolicy" />
 		</instance>
 
 		<instance name="gatewayHandler" class="BeeeOn::UI::GatewayHandler">
 			<set name="gatewayService" ref="gatewayService" />
+			<set name="accessPolicy" ref="accessPolicy" />
 		</instance>
 
 		<instance name="locationHandler" class="BeeeOn::UI::LocationHandler">
 			<set name="locationService" ref="locationService" />
+			<set name="accessPolicy" ref="accessPolicy" />
 		</instance>
 
 		<instance name="sessionVerifier" class="BeeeOn::SessionVerifier">
@@ -42,6 +46,7 @@
 
 		<instance name="placeService" class="BeeeOn::PlaceService">
 			<set name="placeDao" ref="placeDao" />
+			<set name="roleInPlaceDao" ref="roleInPlaceDao" />
 		</instance>
 
 		<instance name="userService" class="BeeeOn::UserService">
@@ -72,9 +77,22 @@
 			<set name="locationDao" ref="locationDao" />
 		</instance>
 
+		<instance name="identityService" class="BeeeOn::IdentityService">
+			<set name="identityDao" ref="identityDao" />
+			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
+		</instance>
+
 		<instance name="fakeNotificationService"
 				class="BeeeOn::FakeNotificationService" />
 		<alias name="notificationService" ref="fakeNotificationService" />
+
+		<instance name="accessPolicy"
+				class="BeeeOn::DefaultAccessPolicy">
+			<set name="userDao" ref="userDao" />
+			<set name="gatewayDao" ref="gatewayDao" />
+			<set name="locationDao" ref="locationDao" />
+			<set name="roleInPlaceDao" ref="roleInPlaceDao" />
+		</instance>
 
 		<!-- Data access layer -->
 
@@ -120,6 +138,8 @@
 		<instance name="mockIdentityDao" class="BeeeOn::MockIdentityDao" />
 		<instance name="mockVerifiedIdentityDao"
 				class="BeeeOn::MockVerifiedIdentityDao" />
+		<instance name="mockRoleInPlaceDao"
+				class="BeeeOn::MockRoleInPlaceDao" />
 
 		<alias name="placeDao" ref="mockPlaceDao" />
 		<alias name="userDao" ref="mockUserDao" />
@@ -127,6 +147,7 @@
 		<alias name="locationDao" ref="mockLocationDao" />
 		<alias name="identityDao" ref="mockIdentityDao" />
 		<alias name="verifiedIdentityDao" ref="mockVerifiedIdentityDao" />
+		<alias name="roleInPlaceDao" ref="mockRoleInPlaceDao" />
 
 		<instance name="sociManager"
 				class="BeeeOn::SociManager">

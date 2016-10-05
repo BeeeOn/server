@@ -7,6 +7,8 @@
 #include "di/InjectorTarget.h"
 #include "server/RestHandler.h"
 #include "service/PlaceService.h"
+#include "service/IdentityService.h"
+#include "policy/PlaceAccessPolicy.h"
 
 namespace BeeeOn {
 namespace UI {
@@ -23,7 +25,7 @@ public:
 		try {
 			sendResult(
 				context.response(),
-				handleCreate(in)
+				handleCreate(in, context.userData()->identityID())
 			);
 		}
 		catch (const Poco::Exception &e) {
@@ -32,13 +34,17 @@ public:
 		}
 	}
 
-	const std::string handleCreate(std::istream &in);
+	const std::string handleCreate(std::istream &in,
+			const VerifiedIdentityID &identityID);
 
 	template <typename Context>
 	void handleUpdate(Context &context)
 	{
 		std::istream &in = context.request().stream();
 		const std::string &placeId = param(context, "placeId");
+
+		m_accessPolicy->assureUpdate(context.userData(),
+				Place(PlaceID::parse(placeId)));
 
 		try {
 			sendResultOrNotFound(
@@ -60,6 +66,9 @@ public:
 	{
 		const std::string &placeId = param(context, "placeId");
 
+		m_accessPolicy->assureGet(context.userData(),
+				Place(PlaceID::parse(placeId)));
+
 		try {
 			sendResultOrNotFound(
 				context.response(),
@@ -78,6 +87,9 @@ public:
 	void handleDelete(Context &context)
 	{
 		const std::string &placeId = param(context, "placeId");
+
+		m_accessPolicy->assureRemove(context.userData(),
+				Place(PlaceID::parse(placeId)));
 
 		try {
 			sendResultOrNotFound(
@@ -98,8 +110,20 @@ public:
 		m_placeService = service;
 	}
 
+	void setIdentityService(IdentityService *service)
+	{
+		m_identityService = service;
+	}
+
+	void setAccessPolicy(PlaceAccessPolicy *accessPolicy)
+	{
+		m_accessPolicy = accessPolicy;
+	}
+
 private:
 	PlaceService *m_placeService;
+	IdentityService *m_identityService;
+	PlaceAccessPolicy *m_accessPolicy;
 };
 
 }

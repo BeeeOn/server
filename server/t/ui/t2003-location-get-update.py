@@ -111,7 +111,7 @@ class TestLocation(unittest.TestCase):
 		req.authorize(self.session)
 		response, content = req()
 
-		self.assertEqual(404, response.status)
+		self.assertEqual(403, response.status)
 		self.assertEqual(0, len(content))
 
 	"""
@@ -132,6 +132,7 @@ class TestLocation(unittest.TestCase):
 	"""
 	Request an existing location from wrong place.
 	We must not be successful here.
+	The user has permissions to both places.
 	"""
 	def test4_get_existing_from_wrong_place(self):
 		req = GET(config.ui_host, config.ui_port,
@@ -144,7 +145,7 @@ class TestLocation(unittest.TestCase):
 		self.assertEqual(0, len(content))
 
 	"""
-	Update a non-existing location. Should return 404 and it must
+	Update a non-existing location. Should return 403 and it must
 	not create such location.
 	"""
 	def test5_update_non_existing(self):
@@ -159,7 +160,7 @@ class TestLocation(unittest.TestCase):
 		}))
 		response, content = req()
 
-		self.assertEqual(404, response.status)
+		self.assertEqual(403, response.status)
 		self.assertEqual(0, len(content))
 
 		req = GET(config.ui_host, config.ui_port,
@@ -168,7 +169,7 @@ class TestLocation(unittest.TestCase):
 		req.authorize(self.session)
 		response, content = req()
 
-		self.assertEqual(404, response.status)
+		self.assertEqual(403, response.status)
 		self.assertEqual(0, len(content))
 
 	"""
@@ -204,6 +205,7 @@ class TestLocation(unittest.TestCase):
 	"""
 	Update the existing location 'My Livingroom' but in the wrong
 	place. Should return 404 and it must not update such location.
+	The user has permissions to both places.
 	"""
 	def test7_update_existing_in_wrong_place(self):
 		location = copy.copy(self.location)

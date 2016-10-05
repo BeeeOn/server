@@ -12,14 +12,23 @@ PlaceHandler::PlaceHandler()
 {
 	injector<PlaceHandler, PlaceService>("placeService",
 			&PlaceHandler::setPlaceService);
+	injector<PlaceHandler, IdentityService>("identityService",
+			&PlaceHandler::setIdentityService);
+	injector<PlaceHandler, PlaceAccessPolicy>("accessPolicy",
+			&PlaceHandler::setAccessPolicy);
 }
 
-const string PlaceHandler::handleCreate(istream &in)
+const string PlaceHandler::handleCreate(istream &in,
+		const VerifiedIdentityID &identityID)
 {
+	VerifiedIdentity identity(identityID);
+	if (!m_identityService->fetch(identity))
+		throw InvalidAccessException("no such identity");
+
 	Place place;
 	deserialize(in, place);
 
-	m_placeService->create(place);
+	m_placeService->create(place, identity.identity());
 	return serialize(place);
 }
 

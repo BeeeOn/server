@@ -92,7 +92,7 @@ class TestLocation(unittest.TestCase):
 		req.authorize(self.session)
 		response, content = req()
 
-		self.assertEqual(404, response.status)
+		self.assertEqual(403, response.status)
 		self.assertEqual(0, len(content))
 
 if __name__ == '__main__':

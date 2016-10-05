@@ -79,9 +79,8 @@ class TestGatewayPlaceAssign(unittest.TestCase):
 		req.authorize(self.session)
 		response, content = req()
 
-		gateway = json.loads(content)
-
 		self.assertEqual(200, response.status)
+		gateway = json.loads(content)
 		self.assertEqual("Test Gateway Assigned", gateway["name"])
 		self.assertEqual(self.place["id"], gateway["place_id"])
 
@@ -91,9 +90,8 @@ class TestGatewayPlaceAssign(unittest.TestCase):
 		req.authorize(self.session)
 		response, content = req()
 
-		gateway = json.loads(content)
-
 		self.assertEqual(200, response.status)
+		gateway = json.loads(content)
 		self.assertEqual(config.tmp_gateway_id, gateway["id"])
 
 		req = GET(config.ui_host, config.ui_port,
@@ -102,7 +100,7 @@ class TestGatewayPlaceAssign(unittest.TestCase):
 		req.authorize(self.session)
 		response, content = req()
 
-		self.assertEqual(404, response.status)
+		self.assertEqual(403, response.status)
 		self.assertEqual(0, len(content))
 
 	"""
@@ -120,9 +118,8 @@ class TestGatewayPlaceAssign(unittest.TestCase):
 		req.authorize(self.session)
 		response, content = req()
 
-		gateway = json.loads(content)
-
 		self.assertEqual(200, response.status)
+		gateway = json.loads(content)
 		self.assertEqual("Test Gateway Assigned", gateway["name"])
 		self.assertEqual(self.place["id"], gateway["place_id"])
 
@@ -146,9 +143,8 @@ class TestGatewayPlaceAssign(unittest.TestCase):
 		req.authorize(self.session)
 		response, content = req()
 
-		notStolen = json.loads(content)
-
 		self.assertEqual(200, response.status)
+		notStolen = json.loads(content)
 		self.assertEqual("Test Gateway Assigned", notStolen["name"])
 
 if __name__ == '__main__':
