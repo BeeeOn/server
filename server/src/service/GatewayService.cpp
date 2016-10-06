@@ -4,6 +4,7 @@
 
 BEEEON_OBJECT(GatewayService, BeeeOn::GatewayService)
 
+using namespace std;
 using namespace Poco;
 using namespace BeeeOn;
 
@@ -25,6 +26,12 @@ bool GatewayService::fetch(Gateway &gateway)
 bool GatewayService::fetchFromPlace(Gateway &gateway, const Place &place)
 {
 	return m_gatewayDao->fetchFromPlace(gateway, place);
+}
+
+void GatewayService::fetchAccessible(vector<Gateway> &gateways,
+		const User &user)
+{
+	m_gatewayDao->fetchAccessible(gateways, user);
 }
 
 bool GatewayService::update(Gateway &gateway)

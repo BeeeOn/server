@@ -1,6 +1,7 @@
 #ifndef BEEEON_GATEWAY_SERVICE_H
 #define BEEEON_GATEWAY_SERVICE_H
 
+#include <vector>
 #include <Poco/Exception.h>
 #include <Poco/Logger.h>
 #include "service/Deserializer.h"
@@ -8,6 +9,7 @@
 #include "rpc/GatewayRPC.h"
 #include "di/InjectorTarget.h"
 #include "Debug.h"
+#include "model/User.h"
 #include "model/Place.h"
 #include "model/Gateway.h"
 
@@ -35,6 +37,8 @@ public:
 
 	bool fetch(Gateway &gateway);
 	bool fetchFromPlace(Gateway &gateway, const Place &place);
+	void fetchAccessible(std::vector<Gateway> &gateways,
+			const User &user);
 
 	bool update(Gateway &gateway);
 	bool updateInPlace(Gateway &gateway,

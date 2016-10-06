@@ -1,9 +1,13 @@
 #ifndef BEEEON_GATEWAY_DAO_H
 #define BEEEON_GATEWAY_DAO_H
 
+#include <vector>
+
 #include "di/InjectorTarget.h"
 #include "dao/NullDao.h"
 #include "dao/MockDao.h"
+#include "dao/RoleInPlaceDao.h"
+#include "model/User.h"
 #include "model/Place.h"
 #include "model/Gateway.h"
 
@@ -17,6 +21,9 @@ public:
 	virtual bool assignAndUpdate(Gateway &gateway, const Place &place) = 0;
 	virtual bool unassign(Gateway &gateway) = 0;
 	virtual bool fetchFromPlace(Gateway &gateway, const Place &place) = 0;
+	virtual void fetchAccessible(
+			std::vector<Gateway> &gateways,
+			const User &user) = 0;
 };
 
 class NullGatewayDao : public AbstractInjectorTarget,
@@ -43,12 +50,19 @@ public:
 		return fetch(gateway);
 	}
 
+	void fetchAccessible(std::vector<Gateway> &gateways,
+			const User &user)
+	{
+		throw Poco::NotImplementedException(__func__);
+	}
 };
 
 
 class MockGatewayDao : public AbstractInjectorTarget,
 	public MockDao<Gateway, GatewayDao> {
 public:
+	MockGatewayDao();
+
 	bool assignAndUpdate(Gateway &gateway, const Place &place)
 	{
 		gateway.setPlace(place);
@@ -85,6 +99,17 @@ public:
 		return false;
 	}
 
+	void fetchAccessible(std::vector<Gateway> &gateways,
+			const User &user);
+
+	void setRoleInPlaceDao(RoleInPlaceDao *dao)
+	{
+		if (dao == NULL)
+			m_roleInPlaceDao = &NullRoleInPlaceDao::instance();
+		else
+			m_roleInPlaceDao = dao;
+	}
+
 protected:
 	GatewayID nextID()
 	{
@@ -93,6 +118,7 @@ protected:
 
 private:
 	GatewayID m_id;
+	RoleInPlaceDao *m_roleInPlaceDao;
 };
 
 }
