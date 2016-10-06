@@ -19,7 +19,7 @@ User AuthService::createUser(const AuthResult &result)
 	return user;
 }
 
-string AuthService::loginAsNew(const AuthResult &result)
+ExpirableSession::Ptr AuthService::loginAsNew(const AuthResult &result)
 {
 	Identity identity;
 	identity.setEmail(result.email());
@@ -30,7 +30,7 @@ string AuthService::loginAsNew(const AuthResult &result)
 	VerifiedIdentity verifiedIdentity;
 
 	if (!verifyIdentity(verifiedIdentity, identity, result))
-		return "";
+		return NULL;
 
 	m_notificationService->notifyFirstLogin(verifiedIdentity);
 
@@ -59,7 +59,8 @@ bool AuthService::verifyIdentity(
 	return true;
 }
 
-string AuthService::verifyIdentityAndLogin(const AuthResult &result)
+ExpirableSession::Ptr AuthService::verifyIdentityAndLogin(
+		const AuthResult &result)
 {
 	Identity identity;
 
@@ -69,14 +70,15 @@ string AuthService::verifyIdentityAndLogin(const AuthResult &result)
 	VerifiedIdentity verifiedIdentity;
 
 	if (!verifyIdentity(verifiedIdentity, identity, result))
-		return "";
+		return NULL;
 
 	m_notificationService->notifyFirstLogin(verifiedIdentity);
 
 	return openSession(verifiedIdentity);
 }
 
-string AuthService::openSession(const VerifiedIdentity &verifiedIdentity)
+ExpirableSession::Ptr AuthService::openSession(
+		const VerifiedIdentity &verifiedIdentity)
 {
 	Identity identity(verifiedIdentity.identity().id());
 
@@ -102,7 +104,7 @@ string AuthService::openSession(const VerifiedIdentity &verifiedIdentity)
 	return m_sessionManager->open(copy);
 }
 
-const string AuthService::login(const Credentials &cred)
+const ExpirableSession::Ptr AuthService::login(const Credentials &cred)
 {
 	TRACE_METHOD();
 

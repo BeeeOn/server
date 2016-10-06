@@ -8,7 +8,8 @@ using namespace BeeeOn;
 
 BEEEON_OBJECT(SessionManager, BeeeOn::SessionManager)
 
-const SessionID SessionManager::open(const VerifiedIdentity &identity)
+const ExpirableSession::Ptr SessionManager::open(
+		const VerifiedIdentity &identity)
 {
 	TRACE_METHOD();
 
@@ -43,7 +44,7 @@ const SessionID SessionManager::open(const VerifiedIdentity &identity)
 				__FILE__, __LINE__);
 	}
 
-	return session.sessionID();
+	return m_sessionCache->get(sessionID);
 }
 
 bool SessionManager::lookup(const SessionID &id, ExpirableSession::Ptr &session)

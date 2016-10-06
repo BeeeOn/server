@@ -8,6 +8,7 @@ find_library (POCO_SSL PocoNetSSL)
 find_library (POCO_CRYPTO PocoCrypto)
 find_library (POCO_NET PocoNet)
 find_library (POCO_JSON PocoJSON)
+find_library (POCO_XML PocoXML)
 
 file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/server/RouteTest.cpp
@@ -19,6 +20,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/provider/GoogleAuthProviderTest.cpp
 	${PROJECT_SOURCE_DIR}/util/DAMMTest.cpp
 	${PROJECT_SOURCE_DIR}/util/Base64Test.cpp
+	${PROJECT_SOURCE_DIR}/util/SecureXmlParserTest.cpp
 	${PROJECT_SOURCE_DIR}/dao/SociManagerTest.cpp
 	${PROJECT_SOURCE_DIR}/cppunit/TapTestProducer.cpp
 )
@@ -38,6 +40,7 @@ set(LIBS
 	${POCO_UTIL}
 	${POCO_NET}
 	${POCO_JSON}
+	${POCO_XML}
 	mongoose
 	${CPP_UNIT}
 	${SOCI_LIBRARY}

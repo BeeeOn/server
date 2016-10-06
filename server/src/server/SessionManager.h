@@ -66,7 +66,7 @@ public:
 	 * info, an exception is thrown.
 	 * Returns a new session ID.
 	 */
-	const SessionID open(const VerifiedIdentity &identity);
+	const ExpirableSession::Ptr open(const VerifiedIdentity &identity);
 
 	/**
 	 * Lookup a session information by ID.

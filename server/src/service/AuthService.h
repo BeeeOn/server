@@ -11,6 +11,7 @@
 #include "dao/IdentityDao.h"
 #include "dao/VerifiedIdentityDao.h"
 #include "server/SessionManager.h"
+#include "server/Session.h"
 #include "Debug.h"
 
 namespace BeeeOn {
@@ -72,14 +73,14 @@ public:
 		m_notificationService = service;
 	}
 
-	const std::string login(const Credentials &cred);
+	const ExpirableSession::Ptr login(const Credentials &cred);
 
 	void logout(const std::string &id);
 
 protected:
-	std::string openSession(const VerifiedIdentity &verifiedIdentity);
-	std::string verifyIdentityAndLogin(const AuthResult &result);
-	std::string loginAsNew(const AuthResult &result);
+	ExpirableSession::Ptr openSession(const VerifiedIdentity &verifiedIdentity);
+	ExpirableSession::Ptr verifyIdentityAndLogin(const AuthResult &result);
+	ExpirableSession::Ptr loginAsNew(const AuthResult &result);
 	bool verifyIdentity(VerifiedIdentity &verifiedIdentity,
 			Identity &identity, const AuthResult &result);
 	User createUser(const AuthResult &result);

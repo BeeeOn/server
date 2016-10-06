@@ -7,6 +7,7 @@ find_library (POCO_CRYPTO PocoCrypto)
 find_library (POCO_UTIL PocoUtil)
 find_library (POCO_NET PocoNet)
 find_library (POCO_JSON PocoJSON)
+find_library (POCO_XML PocoXML)
 
 set (CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -DBEEEON_SELECT_POCO")
 add_definitions(-std=c++11)
@@ -25,6 +26,8 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/server/RestHandler.cpp
 	${PROJECT_SOURCE_DIR}/server/RestAuthHandler.cpp
 	${PROJECT_SOURCE_DIR}/server/AccessLevel.cpp
+	${PROJECT_SOURCE_DIR}/server/XmlRequestHandler.cpp
+	${PROJECT_SOURCE_DIR}/server/SocketServer.cpp
 	${PROJECT_SOURCE_DIR}/model/GatewayID.cpp
 	${PROJECT_SOURCE_DIR}/model/JSONSerializer.cpp
 	${PROJECT_SOURCE_DIR}/model/Identity.cpp
@@ -48,6 +51,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/service/IdentityService.cpp
 	${PROJECT_SOURCE_DIR}/policy/DefaultAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/util/DAMM.cpp
+	${PROJECT_SOURCE_DIR}/util/SecureXmlParser.cpp
 	${PROJECT_SOURCE_DIR}/dao/SociManager.cpp
 	${PROJECT_SOURCE_DIR}/rpc/GatewayRPC.cpp
 )
@@ -69,6 +73,14 @@ add_executable(ui-server
 	ui/UIMockInit.cpp
 )
 
+add_executable(xmlui-server
+	xmlui/main.cpp
+	xmlui/AbstractXmlHandler.cpp
+	xmlui/AnyXmlHandler.cpp
+	xmlui/AuthXmlHandler.cpp
+	ui/UIMockInit.cpp
+)
+
 set(LIBS
 	${POCO_FOUNDATION}
 	${POCO_SSL}
@@ -76,6 +88,7 @@ set(LIBS
 	${POCO_UTIL}
 	${POCO_NET}
 	${POCO_JSON}
+	${POCO_XML}
 	mongoose
 	${SOCI_LIBRARY}
 	${SOCI_postgresql_PLUGIN}
@@ -89,10 +102,21 @@ if (APPLE)
 		BeeeOnServer
 		${LIBS}
 	)
+	target_link_libraries(xmlui-server
+		-Wl,-all_load
+		BeeeOnServer
+		${LIBS}
+	)
 # The -Wl,--whole-archive is necessary for all libraries defining
 # BEEEON_OBJECTs (see di/InjectorTarget.h).
 else()
 	target_link_libraries(ui-server
+		-Wl,--whole-archive
+		BeeeOnServer
+		-Wl,--no-whole-archive
+		${LIBS}
+	)
+	target_link_libraries(xmlui-server
 		-Wl,--whole-archive
 		BeeeOnServer
 		-Wl,--no-whole-archive

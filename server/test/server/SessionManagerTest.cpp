@@ -63,7 +63,8 @@ void SessionManagerTest::testOpenClose()
 	VerifiedIdentity identity(VerifiedIdentityID::random());
 	identity.setUser(user);
 
-	SessionID id = m_manager.open(identity);
+	ExpirableSession::Ptr newSession = m_manager.open(identity);
+	const SessionID &id = newSession->sessionID();
 	CPPUNIT_ASSERT(Base64::decode(id).compare(SESSION_ID64) == 0);
 
 	ExpirableSession::Ptr infoLookup;
@@ -82,7 +83,7 @@ void SessionManagerTest::testMaxUserSessions()
 	VerifiedIdentity identity(VerifiedIdentityID::random());
 	identity.setUser(user);
 
-	std::vector<SessionID> sessions;
+	std::vector<ExpirableSession::Ptr> sessions;
 
 	m_manager.setSecureRandomProvider(&pocoProvider);
 
@@ -94,7 +95,7 @@ void SessionManagerTest::testMaxUserSessions()
 
 	// test we can close and open a session so we are sure
 	// that the 10 sessions does not last forever
-	SessionID last = sessions.back();
+	const SessionID &last = sessions.back()->sessionID();
 	sessions.pop_back();
 
 	CPPUNIT_ASSERT_NO_THROW(m_manager.close(last));
@@ -116,9 +117,9 @@ void SessionManagerTest::testSessionTimeout()
 	VerifiedIdentity identity(VerifiedIdentityID::random());
 	identity.setUser(user);
 
-	SessionID id = m_manager.open(identity);
+	ExpirableSession::Ptr session = m_manager.open(identity);
 
 	usleep(1100000);
-	CPPUNIT_ASSERT(!m_manager.lookup(id, infoLookup));
+	CPPUNIT_ASSERT(!m_manager.lookup(session->sessionID(), infoLookup));
 }
 }

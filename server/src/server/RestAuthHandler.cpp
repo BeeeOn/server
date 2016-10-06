@@ -61,7 +61,13 @@ SessionID RestAuthHandler::handleLogin(istream &in)
 	extractAuthData(in, provider, authCode);
 	const AuthCodeCredentials credentials(provider, authCode);
 
-	return m_authService->login(credentials);
+	const ExpirableSession::Ptr session =
+		m_authService->login(credentials);
+
+	if (session.isNull())
+		throw NotAuthenticatedException("No session returned on login");
+
+	return session->sessionID();
 }
 
 BEEEON_OBJECT(RestAuthHandler, BeeeOn::RestAuthHandler)
