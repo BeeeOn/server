@@ -206,7 +206,7 @@ protected:
 
 		DependencyInjector injector(config().createView("services"));
 		UIServerModule *module = injector
-					.create<UIServerModule>("main");
+					.create<UIServerModule>("ui");
 
 		module->createServer(m_serverPort);
 		module->server().start();
