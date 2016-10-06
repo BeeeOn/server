@@ -40,7 +40,7 @@ public:
 
 	bool fetchFromPlace(Gateway &gateway, const Place &place)
 	{
-		return fetchFromPlace(gateway, place);
+		return fetch(gateway);
 	}
 
 };
