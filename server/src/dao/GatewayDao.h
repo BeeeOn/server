@@ -48,12 +48,7 @@ public:
 
 class MockGatewayDao : public AbstractInjectorTarget,
 	public MockDao<Gateway, GatewayDao> {
-protected:
-	GatewayID nextID()
-	{
-		return GatewayID::random();
-	}
-
+public:
 	bool assignAndUpdate(Gateway &gateway, const Place &place)
 	{
 		gateway.setPlace(place);
@@ -88,6 +83,12 @@ protected:
 		}
 
 		return false;
+	}
+
+protected:
+	GatewayID nextID()
+	{
+		return GatewayID::random();
 	}
 
 private:
