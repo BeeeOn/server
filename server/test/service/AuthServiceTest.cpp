@@ -92,7 +92,8 @@ void AuthServiceTest::testPermitAuth()
 	AuthCodeCredentials cred("permit", "permit@example.org");
 
 	try {
-		const string &id = service.login(cred);
+		const ExpirableSession::Ptr session = service.login(cred);
+		const SessionID id = session->sessionID();
 		CPPUNIT_ASSERT(Base64::decode(id).compare(SESSION_ID64) == 0);
 		service.logout(id);
 	} catch(Exception &e) {

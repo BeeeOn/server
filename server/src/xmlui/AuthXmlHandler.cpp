@@ -37,10 +37,17 @@ void AuthXmlHandler::handleInputImpl()
 			provider->getAttribute("authCode")
 		);
 
-		const string session = m_authService.login(credentials);
+		const ExpirableSession::Ptr session =
+			m_authService.login(credentials);
+
+		if (session.isNull()) {
+			resultNotAuthenticated();
+			return;
+		}
 	
 		AttributesImpl attrs;
-		attrs.addAttribute("", "sessionid", "sessionid", "", session);
+		attrs.addAttribute("", "sessionid", "sessionid", "",
+				session->sessionID());
 		resultSimple(attrs, "ok");
 	}
 	else
