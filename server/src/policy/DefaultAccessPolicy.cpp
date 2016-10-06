@@ -131,6 +131,22 @@ void DefaultAccessPolicy::assureUpdate(
 		AccessLevel::user());
 }
 
+void DefaultAccessPolicy::assureScanDevices(
+		const ExpirableSession::Ptr session,
+		const Gateway &gateway)
+{
+	Gateway tmp(gateway);
+	if (!m_gatewayDao->fetch(tmp))
+		throw InvalidAccessException("no such gateway "
+				+ gateway.id().toString());
+
+	const Place place(tmp.place());
+
+	assureAtLeast(
+		fetchAccessLevel(session, place),
+		AccessLevel::user());
+}
+
 void DefaultAccessPolicy::assureCreateLocation(
 		const ExpirableSession::Ptr session,
 		const Place &place)

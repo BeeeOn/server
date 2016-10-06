@@ -35,6 +35,8 @@ public:
 		const Gateway &gateway) override;
 	void assureUpdate(const ExpirableSession::Ptr session,
 		const Gateway &gateway) override;
+	void assureScanDevices(const ExpirableSession::Ptr session,
+		const Gateway &gateway) override;
 
 	void assureGet(const ExpirableSession::Ptr session,
 		const Location &location);

@@ -21,6 +21,9 @@ public:
 	virtual void assureUpdate(
 			const ExpirableSession::Ptr session,
 			const Gateway &gateway) = 0;
+	virtual void assureScanDevices(
+			const ExpirableSession::Ptr session,
+			const Gateway &gateway) = 0;
 };
 
 }
