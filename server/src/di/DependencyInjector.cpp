@@ -280,7 +280,15 @@ InjectorTarget *DependencyInjector::injectDependencies(
 		const string &key = *it;
 
 		m_logger.trace("visiting key " + key);
-		injectValue(info, target, key);
+
+		try {
+			injectValue(info, target, key);
+		} catch (const Poco::Exception &e) {
+			m_logger.error("failed inject value for "
+					+ info.name(), __FILE__, __LINE__);
+			throw e;
+		}
+
 		m_logger.trace("next key after " + key);
 	}
 
