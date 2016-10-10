@@ -15,7 +15,7 @@ namespace BeeeOn {
 class GatewayService : public AbstractInjectorTarget {
 public:
 	GatewayService():
-		m_dao(&NullGatewayDao::instance()),
+		m_gatewayDao(&NullGatewayDao::instance()),
 		m_rpc(&NullGatewayRPC::instance())
 	{
 		injector<GatewayService, GatewayDao>("gatewayDao",
@@ -27,9 +27,9 @@ public:
 	void setGatewayDao(GatewayDao *dao)
 	{
 		if (dao == NULL)
-			m_dao = &NullGatewayDao::instance();
+			m_gatewayDao = &NullGatewayDao::instance();
 		else
-			m_dao = dao;
+			m_gatewayDao = dao;
 	}
 
 	void setGatewayRPC(GatewayRPC *rpc)
@@ -42,17 +42,17 @@ public:
 
 	bool fetch(Gateway &gateway)
 	{
-		return m_dao->fetch(gateway);
+		return m_gatewayDao->fetch(gateway);
 	}
 
 	bool fetchFromPlace(Gateway &gateway, const Place &place)
 	{
-		return m_dao->fetchFromPlace(gateway, place);
+		return m_gatewayDao->fetchFromPlace(gateway, place);
 	}
 
 	bool update(Gateway &gateway)
 	{
-		return m_dao->update(gateway);
+		return m_gatewayDao->update(gateway);
 	}
 
 	bool assignAndUpdate(Gateway &gateway, const Place &place)
@@ -60,15 +60,15 @@ public:
 		if (gateway.hasPlace())
 			return false;
 
-		return m_dao->assignAndUpdate(gateway, place);
+		return m_gatewayDao->assignAndUpdate(gateway, place);
 	}
 
 	bool unassign(Gateway &gateway, const Place &place)
 	{
-		if (!m_dao->fetchFromPlace(gateway, place))
+		if (!m_gatewayDao->fetchFromPlace(gateway, place))
 			return false;
 
-		return m_dao->unassign(gateway);
+		return m_gatewayDao->unassign(gateway);
 	}
 
 	void scanDevices(Gateway &gateway)
@@ -87,7 +87,7 @@ public:
 	}
 
 private:
-	GatewayDao *m_dao;
+	GatewayDao *m_gatewayDao;
 	GatewayRPC *m_rpc;
 };
 
