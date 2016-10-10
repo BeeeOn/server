@@ -1,7 +1,10 @@
+#include <Poco/Exception.h>
+
 #include "service/GatewayService.h"
 
 BEEEON_OBJECT(GatewayService, BeeeOn::GatewayService)
 
+using namespace Poco;
 using namespace BeeeOn;
 
 GatewayService::GatewayService():
@@ -34,7 +37,7 @@ bool GatewayService::updateInPlace(Gateway &gateway,
 		const Place &place)
 {
 	if (!m_gatewayDao->fetchFromPlace(gateway, place))
-		return false;
+		throw NotFoundException("gateway does not exist");
 
 	update.partial(gateway);
 

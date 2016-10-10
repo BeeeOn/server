@@ -1,5 +1,6 @@
 #include <Poco/Exception.h>
 
+#include "service/JSONGatewayDeserializer.h"
 #include "ui/GatewayHandler.h"
 #include "ui/Serializing.h"
 #include "model/Place.h"
@@ -47,16 +48,12 @@ const string GatewayHandler::handleUpdate(istream &in,
 {
 	Place place(PlaceID::parse(placeId));
 	Gateway gateway(GatewayID::parse(gatewayId));
+	JSONGatewayDeserializer update(in);
 	User user(userId);
 
 	m_accessPolicy->assureUpdate(user, gateway);
 
-	if (!m_gatewayService->fetchFromPlace(gateway, place))
-		return "";
-
-	deserialize(in, gateway);
-
-	if (!m_gatewayService->update(gateway)) {
+	if (!m_gatewayService->updateInPlace(gateway, update, place)) {
 		throw Exception("failed to update gateway: "
 				+ gateway.id().toString());
 	}
