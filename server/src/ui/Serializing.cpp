@@ -36,15 +36,6 @@ string BeeeOn::UI::serialize(const Place &place)
 	return s.str();
 }
 
-istream &BeeeOn::UI::deserialize(istream &i, Place &place)
-{
-	Parser parser;
-	Object::Ptr object = parser.parse(i).extract<Object::Ptr>();
-	place.setName(object->getValue<string>("name"));
-
-	return i;
-}
-
 ostream &BeeeOn::UI::serialize(ostream &o, const vector<Place> &places)
 {
 	Array::Ptr array(new Array);
@@ -86,27 +77,6 @@ string UI::serialize(const Gateway &g)
 	return s.str();
 }
 
-istream &UI::deserialize(istream &i, Gateway &gateway)
-{
-	Parser parser;
-
-	Object::Ptr object = parser.parse(i).extract<Object::Ptr>();
-
-	if (object->has("name"))
-		gateway.setName(object->getValue<string>("name"));
-
-	if (object->has("altitude"))
-		gateway.setAltitude(object->getValue<double>("altitude"));
-
-	if (object->has("latitude"))
-		gateway.setLatitude(object->getValue<double>("latitude"));
-
-	if (object->has("longitude"))
-		gateway.setLongitude(object->getValue<double>("longitude"));
-
-	return i;
-}
-
 string BeeeOn::UI::serialize(const Location &l)
 {
 	ostringstream s;
@@ -122,15 +92,4 @@ std::ostream &BeeeOn::UI::serialize(std::ostream &o, const Location &location)
 	object->set("place_id", location.place().id().toString());
 	object->stringify(o);
 	return o;
-}
-
-istream &BeeeOn::UI::deserialize(istream &i, Location &location)
-{
-	Parser parser;
-	Object::Ptr object = parser.parse(i).extract<Object::Ptr>();
-
-	if (object->has("name"))
-		location.setName(object->getValue<string>("name"));
-
-	return i;
 }

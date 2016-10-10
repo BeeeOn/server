@@ -1,5 +1,6 @@
 #include <Poco/Exception.h>
 
+#include "service/JSONLocationDeserializer.h"
 #include "ui/LocationHandler.h"
 #include "ui/Serializing.h"
 
@@ -22,13 +23,12 @@ const string LocationHandler::handleCreate(std::istream &in,
 {
 	Place place(PlaceID::parse(placeId));
 	User user(userId);
+	JSONLocationDeserializer data(in);
+	Location location;
 
 	m_accessPolicy->assureCreateLocation(user, place);
 
-	Location location;
-	deserialize(in, location);
-
-	m_locationService->createIn(location, place);
+	m_locationService->createIn(location, data, place);
 
 	return serialize(location);
 }
@@ -40,16 +40,12 @@ const string LocationHandler::handleUpdate(std::istream &in,
 {
 	Place place(PlaceID::parse(placeId));
 	Location location(LocationID::parse(locationId));
+	JSONLocationDeserializer update(in);
 	User user(userId);
 
 	m_accessPolicy->assureUpdate(user, location);
 
-	if (!m_locationService->fetchFrom(location, place))
-		return "";
-
-	deserialize(in, location);
-
-	if (!m_locationService->update(location)) {
+	if (!m_locationService->updateIn(location, update, place)) {
 		throw InvalidArgumentException("failed to update location: "
 				+ location.id().toString());
 	}
@@ -85,10 +81,7 @@ const string LocationHandler::handleDelete(
 
 	m_accessPolicy->assureRemove(user, location);
 
-	if (!m_locationService->fetchFrom(location, place))
-		return "";
-
-	if (!m_locationService->remove(location))
+	if (!m_locationService->removeFrom(location, place))
 		return "";
 
 	return serialize(location);

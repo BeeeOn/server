@@ -3,6 +3,7 @@
 
 #include <Poco/Exception.h>
 #include <Poco/Logger.h>
+#include "service/Deserializer.h"
 #include "dao/GatewayDao.h"
 #include "rpc/GatewayRPC.h"
 #include "di/InjectorTarget.h"
@@ -14,22 +15,14 @@ namespace BeeeOn {
 
 class GatewayService : public AbstractInjectorTarget {
 public:
-	GatewayService():
-		m_dao(&NullGatewayDao::instance()),
-		m_rpc(&NullGatewayRPC::instance())
-	{
-		injector<GatewayService, GatewayDao>("gatewayDao",
-				&GatewayService::setGatewayDao);
-		injector<GatewayService, GatewayRPC>("gatewayRPC",
-				&GatewayService::setGatewayRPC);
-	}
+	GatewayService();
 
 	void setGatewayDao(GatewayDao *dao)
 	{
 		if (dao == NULL)
-			m_dao = &NullGatewayDao::instance();
+			m_gatewayDao = &NullGatewayDao::instance();
 		else
-			m_dao = dao;
+			m_gatewayDao = dao;
 	}
 
 	void setGatewayRPC(GatewayRPC *rpc)
@@ -40,54 +33,24 @@ public:
 			m_rpc = rpc;
 	}
 
-	bool fetch(Gateway &gateway)
-	{
-		return m_dao->fetch(gateway);
-	}
+	bool fetch(Gateway &gateway);
+	bool fetchFromPlace(Gateway &gateway, const Place &place);
 
-	bool fetchFromPlace(Gateway &gateway, const Place &place)
-	{
-		return m_dao->fetchFromPlace(gateway, place);
-	}
+	bool update(Gateway &gateway);
+	bool updateInPlace(Gateway &gateway,
+			const Deserializer<Gateway> &update,
+			const Place &place);
+	bool assignAndUpdate(Gateway &gateway,
+			const Deserializer<Gateway> &update,
+			const Place &place);
+	bool unassign(Gateway &gateway, const Place &place);
 
-	bool update(Gateway &gateway)
-	{
-		return m_dao->update(gateway);
-	}
-
-	bool assignAndUpdate(Gateway &gateway, const Place &place)
-	{
-		if (gateway.hasPlace())
-			return false;
-
-		return m_dao->assignAndUpdate(gateway, place);
-	}
-
-	bool unassign(Gateway &gateway, const Place &place)
-	{
-		if (!m_dao->fetchFromPlace(gateway, place))
-			return false;
-
-		return m_dao->unassign(gateway);
-	}
-
-	void scanDevices(Gateway &gateway)
-	{
-		m_rpc->sendListen(gateway);
-	}
-
-	void unpairDevice(Gateway &gateway, Device &device)
-	{
-		m_rpc->unpairDevice(gateway, device);
-	}
-
-	void pingGateway(Gateway &gateway)
-	{
-		m_rpc->pingGateway(gateway);
-	}
+	void scanDevices(Gateway &gateway);
+	void unpairDevice(Gateway &gateway, Device &device);
+	void pingGateway(Gateway &gateway);
 
 private:
-	GatewayDao *m_dao;
+	GatewayDao *m_gatewayDao;
 	GatewayRPC *m_rpc;
 };
 

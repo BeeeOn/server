@@ -2,11 +2,14 @@
 #define BEEEON_PLACE_SERVICE_H
 
 #include "di/InjectorTarget.h"
+#include "service/Deserializer.h"
 #include "model/Place.h"
+#include "model/VerifiedIdentity.h"
 #include "model/Identity.h"
 #include "model/User.h"
 #include "dao/PlaceDao.h"
 #include "dao/RoleInPlaceDao.h"
+#include "dao/VerifiedIdentityDao.h"
 
 namespace BeeeOn {
 
@@ -20,6 +23,10 @@ public:
 			&PlaceService::setPlaceDao);
 		injector<PlaceService, RoleInPlaceDao>("roleInPlaceDao",
 			&PlaceService::setRoleInPlaceDao);
+		injector<PlaceService, VerifiedIdentityDao>(
+			"verifiedIdentityDao",
+			&PlaceService::setVerifiedIdentityDao
+		);
 	}
 
 	void setPlaceDao(PlaceDao *dao)
@@ -38,39 +45,29 @@ public:
 			m_roleInPlaceDao = dao;
 	}
 
-	void create(Place &place, const Identity &identity)
+	void setVerifiedIdentityDao(VerifiedIdentityDao *dao)
 	{
-		m_placeDao->create(place);
-
-		RoleInPlace role;
-		role.setPlace(place);
-		role.setIdentity(identity);
-		role.setLevel(AccessLevel::admin());
-
-		m_roleInPlaceDao->create(role);
+		if (dao == NULL)
+			m_verifiedIdentityDao = &NullVerifiedIdentityDao::instance();
+		else
+			m_verifiedIdentityDao = dao;
 	}
 
-	void fetchAccessible(std::vector<Place> &places,
-			const User &user)
-	{
-		m_roleInPlaceDao->fetchAccessiblePlaces(places, user);
-	}
-
-	bool fetch(Place &place)
-	{
-		return m_placeDao->fetch(place);
-	}
-
-	bool update(Place &place)
-	{
-		return m_placeDao->update(place);
-	}
-
+	void create(Place &place,
+			const Deserializer<Place> &data,
+			const Identity &identity);
+	void create(Place &place,
+			const Deserializer<Place> &data,
+			VerifiedIdentity &identity);
+	void fetchAccessible(std::vector<Place> &places, const User &user);
+	bool fetch(Place &place);
+	bool update(Place &place, const Deserializer<Place> &update);
 	bool remove(Place &place, const User &owner);
 
 private:
 	PlaceDao *m_placeDao;
 	RoleInPlaceDao *m_roleInPlaceDao;
+	VerifiedIdentityDao *m_verifiedIdentityDao;
 };
 
 }
