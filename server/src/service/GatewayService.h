@@ -40,7 +40,9 @@ public:
 	bool updateInPlace(Gateway &gateway,
 			const Deserializer<Gateway> &update,
 			const Place &place);
-	bool assignAndUpdate(Gateway &gateway, const Place &place);
+	bool assignAndUpdate(Gateway &gateway,
+			const Deserializer<Gateway> &update,
+			const Place &place);
 	bool unassign(Gateway &gateway, const Place &place);
 
 	void scanDevices(Gateway &gateway);

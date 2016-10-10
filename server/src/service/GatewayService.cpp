@@ -44,10 +44,17 @@ bool GatewayService::updateInPlace(Gateway &gateway,
 	return m_gatewayDao->update(gateway);
 }
 
-bool GatewayService::assignAndUpdate(Gateway &gateway, const Place &place)
+bool GatewayService::assignAndUpdate(Gateway &gateway,
+		const Deserializer<Gateway> &update,
+		const Place &place)
 {
-	if (gateway.hasPlace())
-		return false;
+	if (!m_gatewayDao->fetch(gateway))
+		throw NotFoundException("gateway does not exist");
+
+	if (gateway.hasPlace()) // do not leak it exists
+		throw NotFoundException("gateway is already assigned");
+
+	update.partial(gateway);
 
 	return m_gatewayDao->assignAndUpdate(gateway, place);
 }

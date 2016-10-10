@@ -26,16 +26,12 @@ const string GatewayHandler::handleAssign(istream &in,
 {
 	Place place(PlaceID::parse(placeId));
 	Gateway gateway(GatewayID::parse(gatewayId));
+	JSONGatewayDeserializer update(in);
 	User user(userId);
 
 	m_accessPolicy->assureAssignGateway(user, place);
 
-	if (!m_gatewayService->fetch(gateway))
-		return "";
-
-	deserialize(in, gateway);
-
-	if (!m_gatewayService->assignAndUpdate(gateway, place))
+	if (!m_gatewayService->assignAndUpdate(gateway, update, place))
 		return "";
 
 	return serialize(gateway);
