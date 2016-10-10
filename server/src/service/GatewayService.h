@@ -14,6 +14,7 @@
 #include "di/InjectorTarget.h"
 #include "Debug.h"
 #include "model/User.h"
+#include "model/VerifiedIdentity.h"
 #include "model/Place.h"
 #include "model/Gateway.h"
 
@@ -72,6 +73,23 @@ public:
 			m_rpc = rpc;
 	}
 
+	/**
+	 * Register the given gateway to be owned by the given identity.
+	 * If there is no place for this identity (or its assocated user)
+	 * create a new implicit one.
+	 *
+	 * @throw NotFoundException when the gateway does not exist
+	 * @throw IllegalStateException when there are more then 1 place
+	 *	associated with the identity
+	 * @throw InvalidArgumentException for invalid identity
+	 * @throw ExistsException when the place is already registered
+	 *
+	 * @return false when assignment fails (update operation fails)
+	 */
+	bool registerGateway(Gateway &gateway,
+			const Deserializer<Gateway> &data,
+			const VerifiedIdentity &verifiedIdentity);
+
 	bool fetch(Gateway &gateway);
 	bool fetchFromPlace(Gateway &gateway, const Place &place);
 	void fetchAccessible(std::vector<Gateway> &gateways,
@@ -89,6 +107,9 @@ public:
 	void scanDevices(Gateway &gateway);
 	void unpairDevice(Gateway &gateway, Device &device);
 	void pingGateway(Gateway &gateway);
+
+protected:
+	void createImplicitPlace(Place &place, Identity &identity);
 
 private:
 	GatewayDao *m_gatewayDao;
