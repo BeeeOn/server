@@ -27,15 +27,15 @@ public:
 	void assureRemove(const ExpirableSession::Ptr session,
 		const Place &place) override;
 
-	void assureGet(const ExpirableSession::Ptr session,
+	void assureGet(const User &user,
 		const Gateway &gateway) override;
-	void assureAssignGateway(const ExpirableSession::Ptr session,
+	void assureAssignGateway(const User &user,
 		const Place &place) override;
-	void assureUnassign(const ExpirableSession::Ptr session,
+	void assureUnassign(const User &user,
 		const Gateway &gateway) override;
-	void assureUpdate(const ExpirableSession::Ptr session,
+	void assureUpdate(const User &user,
 		const Gateway &gateway) override;
-	void assureScanDevices(const ExpirableSession::Ptr session,
+	void assureScanDevices(const User &user,
 		const Gateway &gateway) override;
 
 	void assureGet(const ExpirableSession::Ptr session,
@@ -71,6 +71,7 @@ protected:
 	AccessLevel fetchAccessLevel(
 			const ExpirableSession::Ptr session,
 			const Place &place);
+	AccessLevel fetchAccessLevel(const User &user, const Place &place);
 	void assureAtLeast(
 			const AccessLevel &current,
 			const AccessLevel &required);

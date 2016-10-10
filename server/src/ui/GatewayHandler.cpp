@@ -19,10 +19,15 @@ GatewayHandler::GatewayHandler()
 }
 
 const string GatewayHandler::handleAssign(istream &in,
-		const string &placeId, const string &gatewayId)
+		const UserID &userId,
+		const string &placeId,
+		const string &gatewayId)
 {
 	Place place(PlaceID::parse(placeId));
 	Gateway gateway(GatewayID::parse(gatewayId));
+	User user(userId);
+
+	m_accessPolicy->assureAssignGateway(user, place);
 
 	if (!m_gatewayService->fetch(gateway))
 		return "";
@@ -36,11 +41,15 @@ const string GatewayHandler::handleAssign(istream &in,
 }
 
 const string GatewayHandler::handleUpdate(istream &in,
+		const UserID &userId,
 		const string &placeId,
 		const string &gatewayId)
 {
 	Place place(PlaceID::parse(placeId));
 	Gateway gateway(GatewayID::parse(gatewayId));
+	User user(userId);
+
+	m_accessPolicy->assureUpdate(user, gateway);
 
 	if (!m_gatewayService->fetchFromPlace(gateway, place))
 		return "";
@@ -55,11 +64,16 @@ const string GatewayHandler::handleUpdate(istream &in,
 	return serialize(gateway);
 }
 
-const string GatewayHandler::handleGet(const string &placeId,
+const string GatewayHandler::handleGet(
+		const UserID &userId,
+		const string &placeId,
 		const string &gatewayId)
 {
 	Place place(PlaceID::parse(placeId));
 	Gateway gateway(GatewayID::parse(gatewayId));
+	User user(userId);
+
+	m_accessPolicy->assureGet(user, gateway);
 
 	if (!m_gatewayService->fetchFromPlace(gateway, place))
 		return "";
@@ -67,11 +81,16 @@ const string GatewayHandler::handleGet(const string &placeId,
 	return serialize(gateway);
 }
 
-const string GatewayHandler::handleDelete(const string &placeId,
+const string GatewayHandler::handleDelete(
+		const UserID &userId,
+		const string &placeId,
 		const string &gatewayId)
 {
 	Place place(PlaceID::parse(placeId));
 	Gateway gateway(GatewayID::parse(gatewayId));
+	User user(userId);
+
+	m_accessPolicy->assureUnassign(user, gateway);
 
 	if (!m_gatewayService->unassign(gateway, place))
 		return "";

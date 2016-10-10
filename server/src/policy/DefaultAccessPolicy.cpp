@@ -20,18 +20,26 @@ DefaultAccessPolicy::DefaultAccessPolicy()
 }
 
 AccessLevel DefaultAccessPolicy::fetchAccessLevel(
+		const User &user,
+		const Place &place)
+{
+	User tmp(user);
+
+	if (!m_userDao->fetch(tmp))
+		throw InvalidAccessException("user does not exist");
+
+	const AccessLevel level =
+		m_roleInPlaceDao->fetchAccessLevel(place, tmp);
+
+	return level;
+}
+
+AccessLevel DefaultAccessPolicy::fetchAccessLevel(
 		const ExpirableSession::Ptr session,
 		const Place &place)
 {
 	User user(session->userID());
-
-	if (!m_userDao->fetch(user))
-		throw InvalidAccessException("user does not exist");
-
-	const AccessLevel level =
-		m_roleInPlaceDao->fetchAccessLevel(place, user);
-
-	return level;
+	return fetchAccessLevel(user, place);
 }
 
 void DefaultAccessPolicy::assureAtLeast(
@@ -75,16 +83,15 @@ void DefaultAccessPolicy::assureRemove(
 }
 
 void DefaultAccessPolicy::assureAssignGateway(
-		const ExpirableSession::Ptr session,
+		const User &user,
 		const Place &place)
 {
 	assureAtLeast(
-		fetchAccessLevel(session, place),
-		AccessLevel::admin());
+		fetchAccessLevel(user, place), AccessLevel::admin());
 }
 
 void DefaultAccessPolicy::assureGet(
-		const ExpirableSession::Ptr session,
+		const User &user,
 		const Gateway &gateway)
 {
 	Gateway tmp(gateway);
@@ -95,12 +102,11 @@ void DefaultAccessPolicy::assureGet(
 	const Place place(tmp.place());
 
 	assureAtLeast(
-		fetchAccessLevel(session, place),
-		AccessLevel::guest());
+		fetchAccessLevel(user, place), AccessLevel::guest());
 }
 
 void DefaultAccessPolicy::assureUnassign(
-		const ExpirableSession::Ptr session,
+		const User &user,
 		const Gateway &gateway)
 {
 	Gateway tmp(gateway);
@@ -111,12 +117,11 @@ void DefaultAccessPolicy::assureUnassign(
 	const Place place(tmp.place());
 
 	assureAtLeast(
-		fetchAccessLevel(session, place),
-		AccessLevel::admin());
+		fetchAccessLevel(user, place), AccessLevel::admin());
 }
 
 void DefaultAccessPolicy::assureUpdate(
-		const ExpirableSession::Ptr session,
+		const User &user,
 		const Gateway &gateway)
 {
 	Gateway tmp(gateway);
@@ -127,12 +132,11 @@ void DefaultAccessPolicy::assureUpdate(
 	const Place place(tmp.place());
 
 	assureAtLeast(
-		fetchAccessLevel(session, place),
-		AccessLevel::user());
+		fetchAccessLevel(user, place), AccessLevel::user());
 }
 
 void DefaultAccessPolicy::assureScanDevices(
-		const ExpirableSession::Ptr session,
+		const User &user,
 		const Gateway &gateway)
 {
 	Gateway tmp(gateway);
@@ -143,8 +147,7 @@ void DefaultAccessPolicy::assureScanDevices(
 	const Place place(tmp.place());
 
 	assureAtLeast(
-		fetchAccessLevel(session, place),
-		AccessLevel::user());
+		fetchAccessLevel(user, place), AccessLevel::user());
 }
 
 void DefaultAccessPolicy::assureCreateLocation(
