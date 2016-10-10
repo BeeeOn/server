@@ -33,7 +33,7 @@ public:
 	bool updateIn(Location &location,
 			const Deserializer<Location> &update,
 			const Place &place);
-	bool remove(const Location &location);
+	bool remove(Location &location);
 	bool removeFrom(Location &location, const Place &place);
 
 private:

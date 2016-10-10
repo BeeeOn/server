@@ -45,8 +45,11 @@ bool LocationService::updateIn(Location &location,
 	return m_dao->update(location);
 }
 
-bool LocationService::remove(const Location &location)
+bool LocationService::remove(Location &location)
 {
+	if (!m_dao->fetch(location))
+		throw NotFoundException("location does not exist");
+
 	return m_dao->remove(location);
 }
 
