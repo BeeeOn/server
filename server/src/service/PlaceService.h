@@ -38,34 +38,10 @@ public:
 			m_roleInPlaceDao = dao;
 	}
 
-	void create(Place &place, const Identity &identity)
-	{
-		m_placeDao->create(place);
-
-		RoleInPlace role;
-		role.setPlace(place);
-		role.setIdentity(identity);
-		role.setLevel(AccessLevel::admin());
-
-		m_roleInPlaceDao->create(role);
-	}
-
-	void fetchAccessible(std::vector<Place> &places,
-			const User &user)
-	{
-		m_roleInPlaceDao->fetchAccessiblePlaces(places, user);
-	}
-
-	bool fetch(Place &place)
-	{
-		return m_placeDao->fetch(place);
-	}
-
-	bool update(Place &place)
-	{
-		return m_placeDao->update(place);
-	}
-
+	void create(Place &place, const Identity &identity);
+	void fetchAccessible(std::vector<Place> &places, const User &user);
+	bool fetch(Place &place);
+	bool update(Place &place);
 	bool remove(Place &place, const User &owner);
 
 private:
