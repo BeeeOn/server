@@ -62,6 +62,11 @@ public:
 		return m_id;
 	}
 
+	const std::string repr() const
+	{
+		return "'" + m_email + "', '" + m_id.toString() + "'";
+	}
+
 private:
 	ID          m_id;
 	std::string m_email;
