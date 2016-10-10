@@ -19,6 +19,7 @@ public:
 	virtual bool fetch(Gateway &gateway) = 0;
 	virtual bool update(Gateway &gateway) = 0;
 	virtual bool assignAndUpdate(Gateway &gateway, const Place &place) = 0;
+	virtual bool assign(Gateway &gateway, const Place &place) = 0;
 	virtual bool unassign(Gateway &gateway) = 0;
 	virtual bool fetchFromPlace(Gateway &gateway, const Place &place) = 0;
 	virtual void fetchAccessible(
@@ -36,6 +37,11 @@ public:
 	static GatewayDao &instance();
 
 	bool assignAndUpdate(Gateway &gateway, const Place &place)
+	{
+		return update(gateway);
+	}
+
+	bool assign(Gateway &gateway, const Place &place)
 	{
 		return update(gateway);
 	}
@@ -65,6 +71,15 @@ public:
 
 	bool assignAndUpdate(Gateway &gateway, const Place &place)
 	{
+		gateway.setPlace(place);
+		return update(gateway);
+	}
+
+	bool assign(Gateway &gateway, const Place &place)
+	{
+		if (!fetchFromPlace(gateway, place))
+			return false;
+
 		gateway.setPlace(place);
 		return update(gateway);
 	}
