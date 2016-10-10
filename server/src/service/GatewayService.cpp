@@ -23,6 +23,8 @@ GatewayService::GatewayService():
 			&GatewayService::setPlaceDao);
 	injector<GatewayService, IdentityDao>("identityDao",
 			&GatewayService::setIdentityDao);
+	injector<GatewayService, VerifiedIdentityDao>("verifiedIdentityDao",
+			&GatewayService::setVerifiedIdentityDao);
 	injector<GatewayService, GatewayRPC>("gatewayRPC",
 			&GatewayService::setGatewayRPC);
 }

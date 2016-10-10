@@ -9,6 +9,7 @@
 #include "dao/RoleInPlaceDao.h"
 #include "dao/PlaceDao.h"
 #include "dao/IdentityDao.h"
+#include "dao/VerifiedIdentityDao.h"
 #include "rpc/GatewayRPC.h"
 #include "di/InjectorTarget.h"
 #include "Debug.h"
@@ -54,6 +55,15 @@ public:
 			m_identityDao = dao;
 	}
 
+	void setVerifiedIdentityDao(VerifiedIdentityDao *dao)
+	{
+		if (dao == NULL)
+			m_verifiedIdentityDao =
+				&NullVerifiedIdentityDao::instance();
+		else
+			m_verifiedIdentityDao = dao;
+	}
+
 	void setGatewayRPC(GatewayRPC *rpc)
 	{
 		if (rpc == NULL)
@@ -85,6 +95,7 @@ private:
 	RoleInPlaceDao *m_roleInPlaceDao;
 	PlaceDao *m_placeDao;
 	IdentityDao *m_identityDao;
+	VerifiedIdentityDao *m_verifiedIdentityDao;
 	GatewayRPC *m_rpc;
 };
 

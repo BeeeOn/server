@@ -87,6 +87,7 @@
 			<set name="roleInPlaceDao" ref="roleInPlaceDao" />
 			<set name="placeDao" ref="placeDao" />
 			<set name="identityDao" ref="identityDao" />
+			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
 			<set name="gatewayRPC" ref="gatewayRPC" />
 		</instance>
 
