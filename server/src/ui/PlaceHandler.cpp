@@ -1,5 +1,6 @@
 #include <Poco/Exception.h>
 
+#include "service/JSONPlaceDeserializer.h"
 #include "ui/PlaceHandler.h"
 #include "ui/Serializing.h"
 
@@ -22,13 +23,10 @@ const string PlaceHandler::handleCreate(istream &in,
 		const VerifiedIdentityID &identityID)
 {
 	VerifiedIdentity identity(identityID);
-	if (!m_identityService->fetch(identity))
-		throw InvalidAccessException("no such identity");
-
+	JSONPlaceDeserializer data(in);
 	Place place;
-	deserialize(in, place);
 
-	m_placeService->create(place, identity.identity());
+	m_placeService->create(place, data, identity);
 	return serialize(place);
 }
 

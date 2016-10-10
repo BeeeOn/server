@@ -9,8 +9,12 @@ using namespace std;
 using namespace Poco;
 using namespace BeeeOn;
 
-void PlaceService::create(Place &place, const Identity &identity)
+void PlaceService::create(Place &place,
+		const Deserializer<Place> &data,
+		const Identity &identity)
 {
+	data.full(place);
+
 	m_placeDao->create(place);
 
 	RoleInPlace role;
@@ -19,6 +23,16 @@ void PlaceService::create(Place &place, const Identity &identity)
 	role.setLevel(AccessLevel::admin());
 
 	m_roleInPlaceDao->create(role);
+}
+
+void PlaceService::create(Place &place,
+		const Deserializer<Place> &data,
+		VerifiedIdentity &verifiedIdentity)
+{
+	if (!m_verifiedIdentityDao->fetch(verifiedIdentity))
+		throw InvalidAccessException("no such identity");
+
+	create(place, data, verifiedIdentity.identity());
 }
 
 void PlaceService::fetchAccessible(std::vector<Place> &places,
