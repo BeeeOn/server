@@ -3,6 +3,7 @@
 
 #include <Poco/Exception.h>
 #include <Poco/Logger.h>
+#include "service/Deserializer.h"
 #include "dao/GatewayDao.h"
 #include "rpc/GatewayRPC.h"
 #include "di/InjectorTarget.h"
@@ -36,6 +37,9 @@ public:
 	bool fetchFromPlace(Gateway &gateway, const Place &place);
 
 	bool update(Gateway &gateway);
+	bool updateInPlace(Gateway &gateway,
+			const Deserializer<Gateway> &update,
+			const Place &place);
 	bool assignAndUpdate(Gateway &gateway, const Place &place);
 	bool unassign(Gateway &gateway, const Place &place);
 

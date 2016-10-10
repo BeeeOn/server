@@ -29,6 +29,18 @@ bool GatewayService::update(Gateway &gateway)
 	return m_gatewayDao->update(gateway);
 }
 
+bool GatewayService::updateInPlace(Gateway &gateway,
+		const Deserializer<Gateway> &update,
+		const Place &place)
+{
+	if (!m_gatewayDao->fetchFromPlace(gateway, place))
+		return false;
+
+	update.partial(gateway);
+
+	return m_gatewayDao->update(gateway);
+}
+
 bool GatewayService::assignAndUpdate(Gateway &gateway, const Place &place)
 {
 	if (gateway.hasPlace())
