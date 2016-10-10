@@ -11,12 +11,15 @@ using namespace BeeeOn;
 GatewayService::GatewayService():
 	m_gatewayDao(&NullGatewayDao::instance()),
 	m_roleInPlaceDao(&NullRoleInPlaceDao::instance()),
+	m_placeDao(&NullPlaceDao::instance()),
 	m_rpc(&NullGatewayRPC::instance())
 {
 	injector<GatewayService, GatewayDao>("gatewayDao",
 			&GatewayService::setGatewayDao);
 	injector<GatewayService, RoleInPlaceDao>("roleInPlaceDao",
 			&GatewayService::setRoleInPlaceDao);
+	injector<GatewayService, PlaceDao>("placeDao",
+			&GatewayService::setPlaceDao);
 	injector<GatewayService, GatewayRPC>("gatewayRPC",
 			&GatewayService::setGatewayRPC);
 }

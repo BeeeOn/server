@@ -85,6 +85,7 @@
 		<instance name="gatewayService" class="BeeeOn::GatewayService">
 			<set name="gatewayDao" ref="gatewayDao" />
 			<set name="roleInPlaceDao" ref="roleInPlaceDao" />
+			<set name="placeDao" ref="placeDao" />
 			<set name="gatewayRPC" ref="gatewayRPC" />
 		</instance>
 

@@ -7,6 +7,7 @@
 #include "service/Deserializer.h"
 #include "dao/GatewayDao.h"
 #include "dao/RoleInPlaceDao.h"
+#include "dao/PlaceDao.h"
 #include "rpc/GatewayRPC.h"
 #include "di/InjectorTarget.h"
 #include "Debug.h"
@@ -34,6 +35,14 @@ public:
 			m_roleInPlaceDao = &NullRoleInPlaceDao::instance();
 		else
 			m_roleInPlaceDao = dao;
+	}
+
+	void setPlaceDao(PlaceDao *dao)
+	{
+		if (dao == NULL)
+			m_placeDao = &NullPlaceDao::instance();
+		else
+			m_placeDao = dao;
 	}
 
 	void setGatewayRPC(GatewayRPC *rpc)
@@ -65,6 +74,7 @@ public:
 private:
 	GatewayDao *m_gatewayDao;
 	RoleInPlaceDao *m_roleInPlaceDao;
+	PlaceDao *m_placeDao;
 	GatewayRPC *m_rpc;
 };
 
