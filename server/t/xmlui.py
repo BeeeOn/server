@@ -139,3 +139,43 @@ class GatewayGet(Request):
 		gate = xml.SubElement(request, "gate")
 		gate.set("id", self.gateway)
 		return request
+
+class GatewayUpdate(Request):
+	def __init__(self, gateway, sessionid, **kwargs):
+		Request.__init__(self, ns = "gates",
+			type = "update", sessionid = sessionid)
+		self.gateway = gateway
+
+		if "name" in kwargs:
+			self.name = kwargs["name"]
+		if "altitude" in kwargs:
+			self.altitude = kwargs["altitude"]
+		if "latitude" in kwargs:
+			self.latitude = kwargs["latitude"]
+		if "longitude" in kwargs:
+			self.longitude = kwargs["longitude"]
+
+	def xml(self):
+		request = Request.xml(self)
+		gate = xml.SubElement(request, "gate")
+		gate.set("id", self.gateway)
+
+		if hasattr(self, "name"):
+			gate.set("name", self.name)
+		if hasattr(self, "altitude"):
+			gate.set("altitude", str(self.altitude))
+		if hasattr(self, "latitude"):
+			gate.set("latitude", str(self.latitude))
+		if hasattr(self, "longitude"):
+			gate.set("longitude", str(self.longitude))
+
+		return request
+
+class GatewayGetAll(Request):
+	def __init__(self, sessionid):
+		Request.__init__(self, ns = "gates",
+			type = "getall", sessionid = sessionid)
+
+	def xml(self):
+		request = Request.xml(self)
+		return request
