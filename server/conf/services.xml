@@ -86,6 +86,7 @@
 			<set name="gatewayDao" ref="gatewayDao" />
 			<set name="roleInPlaceDao" ref="roleInPlaceDao" />
 			<set name="placeDao" ref="placeDao" />
+			<set name="identityDao" ref="identityDao" />
 			<set name="gatewayRPC" ref="gatewayRPC" />
 		</instance>
 

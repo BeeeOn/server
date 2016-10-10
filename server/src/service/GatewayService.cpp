@@ -12,6 +12,7 @@ GatewayService::GatewayService():
 	m_gatewayDao(&NullGatewayDao::instance()),
 	m_roleInPlaceDao(&NullRoleInPlaceDao::instance()),
 	m_placeDao(&NullPlaceDao::instance()),
+	m_identityDao(&NullIdentityDao::instance()),
 	m_rpc(&NullGatewayRPC::instance())
 {
 	injector<GatewayService, GatewayDao>("gatewayDao",
@@ -20,6 +21,8 @@ GatewayService::GatewayService():
 			&GatewayService::setRoleInPlaceDao);
 	injector<GatewayService, PlaceDao>("placeDao",
 			&GatewayService::setPlaceDao);
+	injector<GatewayService, IdentityDao>("identityDao",
+			&GatewayService::setIdentityDao);
 	injector<GatewayService, GatewayRPC>("gatewayRPC",
 			&GatewayService::setGatewayRPC);
 }
