@@ -77,9 +77,6 @@ const string PlaceHandler::handleDelete(const UserID &userId,
 
 	m_accessPolicy->assureRemove(user, place);
 
-	if (!m_placeService->fetch(place))
-		return "";
-
 	if (!m_placeService->remove(place, user))
 		return "";
 
