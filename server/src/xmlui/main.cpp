@@ -8,14 +8,20 @@
 #include <Poco/Util/OptionSet.h>
 #include <Poco/Util/HelpFormatter.h>
 #include <Poco/Util/ServerApplication.h>
+#include <Poco/Net/Context.h>
+#include <Poco/Net/SSLManager.h>
+#include <Poco/Net/PrivateKeyPassphraseHandler.h>
+#include <Poco/Net/RejectCertificateHandler.h>
 
 #include "di/DependencyInjector.h"
 #include "server/SocketServer.h"
 #include "server/XmlRequestHandler.h"
+#include "util/NoKeyPassphraseHandler.h"
 
 using namespace std;
 using namespace Poco;
 using namespace Poco::Util;
+using namespace Poco::Net;
 using namespace BeeeOn;
 
 #define DEFAULT_PORT 8001
@@ -198,9 +204,53 @@ protected:
 		return EXIT_OK;
 	}
 
+	void initSSL()
+	{
+		const string &certificate = config()
+			.getString("xmlui.ssl.certificate");
+		const string &key = config()
+			.getString("xmlui.ssl.key");
+		const string &authority = config()
+			.getString("xmlui.ssl.authority");
+		int mode = config().getInt("xmlui.ssl.verify_level",
+					Context::VERIFY_STRICT);
+
+		Context::Ptr context = new Context(
+				Context::SERVER_USE,
+				key,
+				certificate,
+				authority,
+				(Context::VerificationMode) mode);
+
+		logger().debug("key: " + key, __FILE__, __LINE__);
+		logger().debug("certificate: " + certificate,
+				__FILE__, __LINE__);
+		logger().debug("authority: " + authority,
+				__FILE__, __LINE__);
+		logger().debug("verify_level: " + to_string(mode),
+				__FILE__, __LINE__);
+
+		SharedPtr<PrivateKeyPassphraseHandler> pkeyHandler =
+				new NoKeyPassphraseHandler();
+		SharedPtr<InvalidCertificateHandler> certHandler =
+				new RejectCertificateHandler(true);
+		SSLManager::instance().initializeServer(
+				pkeyHandler, certHandler, context);
+
+		logger().notice("SSL context initialized");
+	}
+
 	SocketServer *createSocketServer(XmlRequestHandlerFactory *factory)
 	{
-		return SocketServer::createDefault(factory, m_serverPort);
+		if (config().getBool("xmlui.ssl.enable", false)) {
+			initSSL();
+			return SocketServer::createSecure(factory,
+					m_serverPort);
+		}
+		else {
+			return SocketServer::createDefault(factory,
+					m_serverPort);
+		}
 	}
 
 	int main(const std::vector <std::string> &args)

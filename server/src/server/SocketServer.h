@@ -24,6 +24,9 @@ public:
 		Poco::Net::TCPServerConnectionFactory::Ptr factory,
 		Poco::UInt16 port);
 
+	static SocketServer *createSecure(
+		Poco::Net::TCPServerConnectionFactory::Ptr factory,
+		Poco::UInt16 port = 443);
 
 private:
 	Poco::Net::TCPServer m_server;
