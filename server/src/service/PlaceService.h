@@ -61,7 +61,7 @@ public:
 			VerifiedIdentity &identity);
 	void fetchAccessible(std::vector<Place> &places, const User &user);
 	bool fetch(Place &place);
-	bool update(Place &place);
+	bool update(Place &place, const Deserializer<Place> &update);
 	bool remove(Place &place, const User &owner);
 
 private:

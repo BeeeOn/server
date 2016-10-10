@@ -46,8 +46,13 @@ bool PlaceService::fetch(Place &place)
 	return m_placeDao->fetch(place);
 }
 
-bool PlaceService::update(Place &place)
+bool PlaceService::update(Place &place, const Deserializer<Place> &update)
 {
+	if (!m_placeDao->fetch(place))
+		throw NotFoundException("place does not exist");
+
+	update.partial(place);
+
 	return m_placeDao->update(place);
 }
 

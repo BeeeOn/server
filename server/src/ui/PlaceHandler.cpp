@@ -35,16 +35,12 @@ const string PlaceHandler::handleUpdate(istream &in,
 		const string &placeId)
 {
 	Place place(PlaceID::parse(placeId));
+	JSONPlaceDeserializer update(in);
 	User user(userId);
 
 	m_accessPolicy->assureUpdate(user, place);
 
-	if (!m_placeService->fetch(place))
-		return "";
-
-	deserialize(in, place);
-
-	if (!m_placeService->update(place)) {
+	if (!m_placeService->update(place, update)) {
 		throw Exception("failed to update place: "
 				+ place.id().toString());
 	}
