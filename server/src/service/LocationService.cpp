@@ -1,7 +1,10 @@
+#include <Poco/Exception.h>
+
 #include "service/LocationService.h"
 
 BEEEON_OBJECT(LocationService, BeeeOn::LocationService)
 
+using namespace Poco;
 using namespace BeeeOn;
 
 LocationService::LocationService():
@@ -27,8 +30,15 @@ bool LocationService::fetchFrom(Location &location, const Place &place)
 	return m_dao->fetchFrom(location, place);
 }
 
-bool LocationService::update(Location &location)
+bool LocationService::updateIn(Location &location,
+		const Deserializer<Location> &update,
+		const Place &place)
 {
+	if (!m_dao->fetchFrom(location, place))
+		throw NotFoundException("location does not exist");
+
+	update.partial(location);
+
 	return m_dao->update(location);
 }
 

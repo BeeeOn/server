@@ -3,6 +3,7 @@
 
 #include <Poco/Exception.h>
 #include <Poco/Logger.h>
+#include "service/Deserializer.h"
 #include "dao/LocationDao.h"
 #include "di/InjectorTarget.h"
 #include "Debug.h"
@@ -27,7 +28,9 @@ public:
 	void createIn(Location &location, const Place &place);
 	bool fetch(Location &location);
 	bool fetchFrom(Location &location, const Place &place);
-	bool update(Location &location);
+	bool updateIn(Location &location,
+			const Deserializer<Location> &update,
+			const Place &place);
 	bool remove(const Location &location);
 
 private:
