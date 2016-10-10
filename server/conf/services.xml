@@ -61,6 +61,7 @@
 		<instance name="placeService" class="BeeeOn::PlaceService">
 			<set name="placeDao" ref="placeDao" />
 			<set name="roleInPlaceDao" ref="roleInPlaceDao" />
+			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
 		</instance>
 
 		<instance name="userService" class="BeeeOn::UserService">

@@ -7,6 +7,7 @@
 #include "model/User.h"
 #include "dao/PlaceDao.h"
 #include "dao/RoleInPlaceDao.h"
+#include "dao/VerifiedIdentityDao.h"
 
 namespace BeeeOn {
 
@@ -20,6 +21,10 @@ public:
 			&PlaceService::setPlaceDao);
 		injector<PlaceService, RoleInPlaceDao>("roleInPlaceDao",
 			&PlaceService::setRoleInPlaceDao);
+		injector<PlaceService, VerifiedIdentityDao>(
+			"verifiedIdentityDao",
+			&PlaceService::setVerifiedIdentityDao
+		);
 	}
 
 	void setPlaceDao(PlaceDao *dao)
@@ -38,6 +43,14 @@ public:
 			m_roleInPlaceDao = dao;
 	}
 
+	void setVerifiedIdentityDao(VerifiedIdentityDao *dao)
+	{
+		if (dao == NULL)
+			m_verifiedIdentityDao = &NullVerifiedIdentityDao::instance();
+		else
+			m_verifiedIdentityDao = dao;
+	}
+
 	void create(Place &place, const Identity &identity);
 	void fetchAccessible(std::vector<Place> &places, const User &user);
 	bool fetch(Place &place);
@@ -47,6 +60,7 @@ public:
 private:
 	PlaceDao *m_placeDao;
 	RoleInPlaceDao *m_roleInPlaceDao;
+	VerifiedIdentityDao *m_verifiedIdentityDao;
 };
 
 }
