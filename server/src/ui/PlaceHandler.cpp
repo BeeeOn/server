@@ -33,9 +33,13 @@ const string PlaceHandler::handleCreate(istream &in,
 }
 
 const string PlaceHandler::handleUpdate(istream &in,
+		const UserID &userId,
 		const string &placeId)
 {
 	Place place(PlaceID::parse(placeId));
+	User user(userId);
+
+	m_accessPolicy->assureUpdate(user, place);
 
 	if (!m_placeService->fetch(place))
 		return "";
@@ -50,9 +54,13 @@ const string PlaceHandler::handleUpdate(istream &in,
 	return serialize(place);
 }
 
-const string PlaceHandler::handleGet(const string &placeId)
+const string PlaceHandler::handleGet(const UserID &userId,
+		const string &placeId)
 {
 	Place place(PlaceID::parse(placeId));
+	User user(userId);
+
+	m_accessPolicy->assureGet(user, place);
 
 	if (!m_placeService->fetch(place)) {
 		return "";
@@ -61,11 +69,13 @@ const string PlaceHandler::handleGet(const string &placeId)
 	return serialize(place);
 }
 
-const string PlaceHandler::handleDelete(const string &placeId,
-			const UserID &userID)
+const string PlaceHandler::handleDelete(const UserID &userId,
+		const string &placeId)
 {
 	Place place(PlaceID::parse(placeId));
-	User user(userID);
+	User user(userId);
+
+	m_accessPolicy->assureRemove(user, place);
 
 	if (!m_placeService->fetch(place))
 		return "";

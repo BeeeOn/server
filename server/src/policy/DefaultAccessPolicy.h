@@ -20,11 +20,11 @@ class DefaultAccessPolicy : public AbstractInjectorTarget,
 public:
 	DefaultAccessPolicy();
 
-	void assureGet(const ExpirableSession::Ptr session,
+	void assureGet(const User &user,
 		const Place &place) override;
-	void assureUpdate(const ExpirableSession::Ptr session,
+	void assureUpdate(const User &user,
 		const Place &place) override;
-	void assureRemove(const ExpirableSession::Ptr session,
+	void assureRemove(const User &user,
 		const Place &place) override;
 
 	void assureGet(const User &user,

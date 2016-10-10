@@ -56,29 +56,29 @@ void DefaultAccessPolicy::assureAtLeast(
 }
 
 void DefaultAccessPolicy::assureGet(
-		const ExpirableSession::Ptr session,
+		const User &user,
 		const Place &place)
 {
 	assureAtLeast(
-		fetchAccessLevel(session, place),
+		fetchAccessLevel(user, place),
 		AccessLevel::guest());
 }
 
 void DefaultAccessPolicy::assureUpdate(
-		const ExpirableSession::Ptr session,
+		const User &user,
 		const Place &place)
 {
 	assureAtLeast(
-		fetchAccessLevel(session, place),
+		fetchAccessLevel(user, place),
 		AccessLevel::user());
 }
 
 void DefaultAccessPolicy::assureRemove(
-		const ExpirableSession::Ptr session,
+		const User &user,
 		const Place &place)
 {
 	assureAtLeast(
-		fetchAccessLevel(session, place),
+		fetchAccessLevel(user, place),
 		AccessLevel::admin());
 }
 
