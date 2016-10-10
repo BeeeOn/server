@@ -14,8 +14,11 @@ LocationService::LocationService():
 			&LocationService::setLocationDao);
 }
 
-void LocationService::createIn(Location &location, const Place &place)
+void LocationService::createIn(Location &location,
+		const Deserializer<Location> &data,
+		const Place &place)
 {
+	data.full(location);
 	location.setPlace(place);
 	m_dao->create(location);
 }

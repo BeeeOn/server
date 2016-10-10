@@ -23,13 +23,12 @@ const string LocationHandler::handleCreate(std::istream &in,
 {
 	Place place(PlaceID::parse(placeId));
 	User user(userId);
+	JSONLocationDeserializer data(in);
+	Location location;
 
 	m_accessPolicy->assureCreateLocation(user, place);
 
-	Location location;
-	deserialize(in, location);
-
-	m_locationService->createIn(location, place);
+	m_locationService->createIn(location, data, place);
 
 	return serialize(location);
 }

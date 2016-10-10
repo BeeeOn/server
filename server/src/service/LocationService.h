@@ -25,7 +25,9 @@ public:
 			m_dao = dao;
 	}
 
-	void createIn(Location &location, const Place &place);
+	void createIn(Location &location,
+			const Deserializer<Location> &data,
+			const Place &place);
 	bool fetch(Location &location);
 	bool fetchFrom(Location &location, const Place &place);
 	bool updateIn(Location &location,
