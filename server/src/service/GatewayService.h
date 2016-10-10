@@ -6,6 +6,7 @@
 #include <Poco/Logger.h>
 #include "service/Deserializer.h"
 #include "dao/GatewayDao.h"
+#include "dao/RoleInPlaceDao.h"
 #include "rpc/GatewayRPC.h"
 #include "di/InjectorTarget.h"
 #include "Debug.h"
@@ -25,6 +26,14 @@ public:
 			m_gatewayDao = &NullGatewayDao::instance();
 		else
 			m_gatewayDao = dao;
+	}
+
+	void setRoleInPlaceDao(RoleInPlaceDao *dao)
+	{
+		if (dao == NULL)
+			m_roleInPlaceDao = &NullRoleInPlaceDao::instance();
+		else
+			m_roleInPlaceDao = dao;
 	}
 
 	void setGatewayRPC(GatewayRPC *rpc)
@@ -55,6 +64,7 @@ public:
 
 private:
 	GatewayDao *m_gatewayDao;
+	RoleInPlaceDao *m_roleInPlaceDao;
 	GatewayRPC *m_rpc;
 };
 
