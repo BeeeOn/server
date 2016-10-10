@@ -82,10 +82,7 @@ const string LocationHandler::handleDelete(
 
 	m_accessPolicy->assureRemove(user, location);
 
-	if (!m_locationService->fetchFrom(location, place))
-		return "";
-
-	if (!m_locationService->remove(location))
+	if (!m_locationService->removeFrom(location, place))
 		return "";
 
 	return serialize(location);
