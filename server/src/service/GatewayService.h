@@ -103,6 +103,7 @@ public:
 			const Deserializer<Gateway> &update,
 			const Place &place);
 	bool unassign(Gateway &gateway, const Place &place);
+	bool unassign(Gateway &gateway, const User &user);
 
 	void scanDevices(Gateway &gateway);
 	void unpairDevice(Gateway &gateway, Device &device);

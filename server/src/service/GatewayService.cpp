@@ -149,6 +149,17 @@ bool GatewayService::unassign(Gateway &gateway, const Place &place)
 	return m_gatewayDao->unassign(gateway);
 }
 
+bool GatewayService::unassign(Gateway &gateway, const User &user)
+{
+	if (!m_gatewayDao->fetch(gateway))
+		throw NotFoundException("gateway does not exist");
+
+	if (!gateway.hasPlace()) // do not leak that this gateway exists
+		throw NotFoundException("gateway is not assigned");
+
+	return m_gatewayDao->unassign(gateway);
+}
+
 void GatewayService::scanDevices(Gateway &gateway)
 {
 	m_rpc->sendListen(gateway);
