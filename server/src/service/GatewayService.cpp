@@ -109,8 +109,13 @@ void GatewayService::fetchAccessible(vector<Gateway> &gateways,
 	m_gatewayDao->fetchAccessible(gateways, user);
 }
 
-bool GatewayService::update(Gateway &gateway)
+bool GatewayService::update(Gateway &gateway,
+		const Deserializer<Gateway> &update)
 {
+	if (!m_gatewayDao->fetch(gateway))
+		throw NotFoundException("gateway does not exist");
+
+	update.partial(gateway);
 	return m_gatewayDao->update(gateway);
 }
 

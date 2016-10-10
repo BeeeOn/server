@@ -95,7 +95,8 @@ public:
 	void fetchAccessible(std::vector<Gateway> &gateways,
 			const User &user);
 
-	bool update(Gateway &gateway);
+	bool update(Gateway &gateway,
+			const Deserializer<Gateway> &update);
 	bool updateInPlace(Gateway &gateway,
 			const Deserializer<Gateway> &update,
 			const Place &place);
