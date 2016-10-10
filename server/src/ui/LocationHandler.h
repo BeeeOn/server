@@ -29,13 +29,9 @@ public:
 				handleCreate(in, session->userID(), placeId)
 			);
 		}
-		catch (const Poco::InvalidAccessException &e) {
-			m_logger.log(e, __FILE__, __LINE__);
-			throw e;
-		}
 		catch (const Poco::Exception &e) {
 			m_logger.log(e, __FILE__, __LINE__);
-			sendInvalidInput(context.response());
+			throw;
 		}
 	}
 
@@ -58,13 +54,9 @@ public:
 					placeId, locationId)
 			);
 		}
-		catch (const Poco::InvalidAccessException &e) {
-			m_logger.log(e, __FILE__, __LINE__);
-			throw e;
-		}
 		catch (const Poco::Exception &e) {
 			m_logger.log(e, __FILE__, __LINE__);
-			sendInvalidInput(context.response());
+			throw;
 		}
 	}
 
@@ -87,13 +79,9 @@ public:
 					placeId, locationId)
 			);
 		}
-		catch (const Poco::InvalidAccessException &e) {
-			m_logger.log(e, __FILE__, __LINE__);
-			throw e;
-		}
 		catch (const Poco::Exception &e) {
 			m_logger.log(e, __FILE__, __LINE__);
-			sendInvalidInput(context.response());
+			throw;
 		}
 	}
 
@@ -116,13 +104,9 @@ public:
 					placeId, locationId)
 			);
 		}
-		catch (const Poco::InvalidAccessException &e) {
-			m_logger.log(e, __FILE__, __LINE__);
-			throw e;
-		}
 		catch (const Poco::Exception &e) {
 			m_logger.log(e, __FILE__, __LINE__);
-			sendInvalidInput(context.response());
+			throw;
 		}
 	}
 
