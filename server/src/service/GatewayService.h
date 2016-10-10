@@ -14,15 +14,7 @@ namespace BeeeOn {
 
 class GatewayService : public AbstractInjectorTarget {
 public:
-	GatewayService():
-		m_gatewayDao(&NullGatewayDao::instance()),
-		m_rpc(&NullGatewayRPC::instance())
-	{
-		injector<GatewayService, GatewayDao>("gatewayDao",
-				&GatewayService::setGatewayDao);
-		injector<GatewayService, GatewayRPC>("gatewayRPC",
-				&GatewayService::setGatewayRPC);
-	}
+	GatewayService();
 
 	void setGatewayDao(GatewayDao *dao)
 	{
@@ -40,51 +32,16 @@ public:
 			m_rpc = rpc;
 	}
 
-	bool fetch(Gateway &gateway)
-	{
-		return m_gatewayDao->fetch(gateway);
-	}
+	bool fetch(Gateway &gateway);
+	bool fetchFromPlace(Gateway &gateway, const Place &place);
 
-	bool fetchFromPlace(Gateway &gateway, const Place &place)
-	{
-		return m_gatewayDao->fetchFromPlace(gateway, place);
-	}
+	bool update(Gateway &gateway);
+	bool assignAndUpdate(Gateway &gateway, const Place &place);
+	bool unassign(Gateway &gateway, const Place &place);
 
-	bool update(Gateway &gateway)
-	{
-		return m_gatewayDao->update(gateway);
-	}
-
-	bool assignAndUpdate(Gateway &gateway, const Place &place)
-	{
-		if (gateway.hasPlace())
-			return false;
-
-		return m_gatewayDao->assignAndUpdate(gateway, place);
-	}
-
-	bool unassign(Gateway &gateway, const Place &place)
-	{
-		if (!m_gatewayDao->fetchFromPlace(gateway, place))
-			return false;
-
-		return m_gatewayDao->unassign(gateway);
-	}
-
-	void scanDevices(Gateway &gateway)
-	{
-		m_rpc->sendListen(gateway);
-	}
-
-	void unpairDevice(Gateway &gateway, Device &device)
-	{
-		m_rpc->unpairDevice(gateway, device);
-	}
-
-	void pingGateway(Gateway &gateway)
-	{
-		m_rpc->pingGateway(gateway);
-	}
+	void scanDevices(Gateway &gateway);
+	void unpairDevice(Gateway &gateway, Device &device);
+	void pingGateway(Gateway &gateway);
 
 private:
 	GatewayDao *m_gatewayDao;
