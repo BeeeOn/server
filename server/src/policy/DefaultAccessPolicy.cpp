@@ -151,16 +151,15 @@ void DefaultAccessPolicy::assureScanDevices(
 }
 
 void DefaultAccessPolicy::assureCreateLocation(
-		const ExpirableSession::Ptr session,
+		const User &user,
 		const Place &place)
 {
 	assureAtLeast(
-		fetchAccessLevel(session, place),
-		AccessLevel::user());
+		fetchAccessLevel(user, place), AccessLevel::user());
 }
 
 void DefaultAccessPolicy::assureGet(
-		const ExpirableSession::Ptr session,
+		const User &user,
 		const Location &location)
 {
 	Location tmp(location);
@@ -171,12 +170,11 @@ void DefaultAccessPolicy::assureGet(
 	const Place place(tmp.place());
 
 	assureAtLeast(
-		fetchAccessLevel(session, place),
-		AccessLevel::guest());
+		fetchAccessLevel(user, place), AccessLevel::guest());
 }
 
 void DefaultAccessPolicy::assureUpdate(
-		const ExpirableSession::Ptr session,
+		const User &user,
 		const Location &location)
 {
 	Location tmp(location);
@@ -187,12 +185,11 @@ void DefaultAccessPolicy::assureUpdate(
 	const Place place(tmp.place());
 
 	assureAtLeast(
-		fetchAccessLevel(session, place),
-		AccessLevel::user());
+		fetchAccessLevel(user, place), AccessLevel::user());
 }
 
 void DefaultAccessPolicy::assureRemove(
-		const ExpirableSession::Ptr session,
+		const User &user,
 		const Location &location)
 {
 	Location tmp(location);
@@ -203,6 +200,5 @@ void DefaultAccessPolicy::assureRemove(
 	const Place place(tmp.place());
 
 	assureAtLeast(
-		fetchAccessLevel(session, place),
-		AccessLevel::user());
+		fetchAccessLevel(user, place), AccessLevel::user());
 }

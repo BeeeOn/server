@@ -21,15 +21,17 @@ public:
 	{
 		std::istream &in = context.request().stream();
 		const std::string placeId = param(context, "placeId");
-
-		m_accessPolicy->assureCreateLocation(context.userData(),
-				Place(PlaceID::parse(placeId)));
+		const ExpirableSession::Ptr session = context.userData();
 
 		try {
 			sendResultOrNotFound(
 				context.response(),
-				handleCreate(in, placeId)
+				handleCreate(in, session->userID(), placeId)
 			);
+		}
+		catch (const Poco::InvalidAccessException &e) {
+			m_logger.log(e, __FILE__, __LINE__);
+			throw e;
 		}
 		catch (const Poco::Exception &e) {
 			m_logger.log(e, __FILE__, __LINE__);
@@ -38,6 +40,7 @@ public:
 	}
 
 	const std::string handleCreate(std::istream &in,
+			const UserID &userId,
 			const std::string &placeId);
 
 	template <typename Context>
@@ -46,15 +49,18 @@ public:
 		std::istream &in = context.request().stream();
 		const std::string placeId = param(context, "placeId");
 		const std::string locationId = param(context, "locationId");
-
-		m_accessPolicy->assureUpdate(context.userData(),
-				Location(LocationID::parse(locationId)));
+		const ExpirableSession::Ptr session = context.userData();
 
 		try {
 			sendResultOrNotFound(
 				context.response(),
-				handleUpdate(in, placeId, locationId)
+				handleUpdate(in, session->userID(),
+					placeId, locationId)
 			);
+		}
+		catch (const Poco::InvalidAccessException &e) {
+			m_logger.log(e, __FILE__, __LINE__);
+			throw e;
 		}
 		catch (const Poco::Exception &e) {
 			m_logger.log(e, __FILE__, __LINE__);
@@ -63,6 +69,7 @@ public:
 	}
 
 	const std::string handleUpdate(std::istream &in,
+			const UserID &userId,
 			const std::string &placeId,
 			const std::string &locationId);
 
@@ -71,15 +78,18 @@ public:
 	{
 		const std::string placeId = param(context, "placeId");
 		const std::string locationId = param(context, "locationId");
-
-		m_accessPolicy->assureGet(context.userData(),
-				Location(LocationID::parse(locationId)));
+		const ExpirableSession::Ptr session = context.userData();
 
 		try {
 			sendResultOrNotFound(
 				context.response(),
-				handleGet(placeId, locationId)
+				handleGet(session->userID(),
+					placeId, locationId)
 			);
+		}
+		catch (const Poco::InvalidAccessException &e) {
+			m_logger.log(e, __FILE__, __LINE__);
+			throw e;
 		}
 		catch (const Poco::Exception &e) {
 			m_logger.log(e, __FILE__, __LINE__);
@@ -88,6 +98,7 @@ public:
 	}
 
 	const std::string handleGet(
+			const UserID &userId,
 			const std::string &placeId,
 			const std::string &locationId);
 
@@ -96,15 +107,18 @@ public:
 	{
 		const std::string placeId = param(context, "placeId");
 		const std::string locationId = param(context, "locationId");
-
-		m_accessPolicy->assureRemove(context.userData(),
-				Location(LocationID::parse(locationId)));
+		const ExpirableSession::Ptr session = context.userData();
 
 		try {
 			sendResultOrNotFound(
 				context.response(),
-				handleDelete(placeId, locationId)
+				handleDelete(session->userID(),
+					placeId, locationId)
 			);
+		}
+		catch (const Poco::InvalidAccessException &e) {
+			m_logger.log(e, __FILE__, __LINE__);
+			throw e;
 		}
 		catch (const Poco::Exception &e) {
 			m_logger.log(e, __FILE__, __LINE__);
@@ -113,6 +127,7 @@ public:
 	}
 
 	const std::string handleDelete(
+			const UserID &userId,
 			const std::string &placeId,
 			const std::string &locationId);
 

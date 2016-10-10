@@ -38,13 +38,13 @@ public:
 	void assureScanDevices(const User &user,
 		const Gateway &gateway) override;
 
-	void assureGet(const ExpirableSession::Ptr session,
+	void assureGet(const User &user,
 		const Location &location);
-	void assureCreateLocation(const ExpirableSession::Ptr session,
+	void assureCreateLocation(const User &user,
 		const Place &place);
-	void assureUpdate(const ExpirableSession::Ptr session,
+	void assureUpdate(const User &user,
 		const Location &location);
-	void assureRemove(const ExpirableSession::Ptr session,
+	void assureRemove(const User &user,
 		const Location &location);
 
 	void setUserDao(UserDao *dao)
