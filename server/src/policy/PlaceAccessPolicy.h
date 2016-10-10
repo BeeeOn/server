@@ -3,19 +3,20 @@
 
 #include "server/Session.h"
 #include "model/Place.h"
+#include "model/User.h"
 
 namespace BeeeOn {
 
 class PlaceAccessPolicy {
 public:
 	virtual void assureGet(
-			const ExpirableSession::Ptr session,
+			const User &user,
 			const Place &place) = 0;
 	virtual void assureUpdate(
-			const ExpirableSession::Ptr session,
+			const User &user,
 			const Place &place) = 0;
 	virtual void assureRemove(
-			const ExpirableSession::Ptr session,
+			const User &user,
 			const Place &place) = 0;
 };
 

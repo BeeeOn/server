@@ -5,6 +5,7 @@
 #include <Poco/Exception.h>
 
 #include "di/InjectorTarget.h"
+#include "server/Session.h"
 #include "server/RestHandler.h"
 #include "service/GatewayService.h"
 #include "policy/GatewayAccessPolicy.h"
@@ -27,15 +28,18 @@ public:
 		std::istream &in = context.request().stream();
 		const std::string placeId = param(context, "placeId");
 		const std::string gatewayId = param(context, "gatewayId");
-
-		m_accessPolicy->assureAssignGateway(context.userData(),
-				Place(PlaceID::parse(placeId)));
+		const ExpirableSession::Ptr session = context.userData();
 
 		try {
 			sendResultOrNotFound(
 				context.response(),
-				handleAssign(in, placeId, gatewayId)
+				handleAssign(in, session->userID(),
+					placeId, gatewayId)
 			);
+		}
+		catch (const Poco::InvalidAccessException &e) {
+			m_logger.log(e, __FILE__, __LINE__);
+			throw e;
 		}
 		catch (const Poco::Exception &e) {
 			m_logger.log(e, __FILE__, __LINE__);
@@ -44,6 +48,7 @@ public:
 	}
 
 	const std::string handleAssign(std::istream &in,
+			const UserID &userId,
 			const std::string &placeId,
 			const std::string &gatewayId);
 
@@ -56,15 +61,18 @@ public:
 		std::istream &in = context.request().stream();
 		const std::string &placeId = param(context, "placeId");
 		const std::string &gatewayId = param(context, "gatewayId");
-
-		m_accessPolicy->assureUpdate(context.userData(),
-				Gateway(GatewayID::parse(gatewayId)));
+		const ExpirableSession::Ptr session = context.userData();
 
 		try {
 			sendResultOrNotFound(
 				context.response(),
-				handleUpdate(in, placeId, gatewayId)
+				handleUpdate(in, session->userID(),
+					placeId, gatewayId)
 			);
+		}
+		catch (const Poco::InvalidAccessException &e) {
+			m_logger.log(e, __FILE__, __LINE__);
+			throw e;
 		}
 		catch (const Poco::Exception &e) {
 			m_logger.log(e, __FILE__, __LINE__);
@@ -73,6 +81,7 @@ public:
 	}
 
 	const std::string handleUpdate(std::istream &in,
+			const UserID &userId,
 			const std::string &placeId,
 			const std::string &gatewayId);
 
@@ -84,15 +93,18 @@ public:
 	{
 		const std::string &placeId = param(context, "placeId");
 		const std::string &gatewayId = param(context, "gatewayId");
-
-		m_accessPolicy->assureGet(context.userData(),
-				Gateway(GatewayID::parse(gatewayId)));
+		const ExpirableSession::Ptr session = context.userData();
 
 		try {
 			sendResultOrNotFound(
 				context.response(),
-				handleGet(placeId, gatewayId)
+				handleGet(session->userID(),
+					placeId, gatewayId)
 			);
+		}
+		catch (const Poco::InvalidAccessException &e) {
+			m_logger.log(e, __FILE__, __LINE__);
+			throw e;
 		}
 		catch (const Poco::Exception &e) {
 			m_logger.log(e, __FILE__, __LINE__);
@@ -101,6 +113,7 @@ public:
 	}
 
 	const std::string handleGet(
+			const UserID &userId,
 			const std::string &placeId,
 			const std::string &gatewayId);
 
@@ -112,15 +125,18 @@ public:
 	{
 		const std::string &placeId = param(context, "placeId");
 		const std::string &gatewayId = param(context, "gatewayId");
-
-		m_accessPolicy->assureUnassign(context.userData(),
-				Gateway(GatewayID::parse(gatewayId)));
+		const ExpirableSession::Ptr session = context.userData();
 
 		try {
 			sendResultOrNotFound(
 				context.response(),
-				handleDelete(placeId, gatewayId)
+				handleDelete(session->userID(),
+					placeId, gatewayId)
 			);
+		}
+		catch (const Poco::InvalidAccessException &e) {
+			m_logger.log(e, __FILE__, __LINE__);
+			throw e;
 		}
 		catch (const Poco::Exception &e) {
 			m_logger.log(e, __FILE__, __LINE__);
@@ -129,6 +145,7 @@ public:
 	}
 
 	const std::string handleDelete(
+			const UserID &userId,
 			const std::string &placeId,
 			const std::string &gatewayId);
 

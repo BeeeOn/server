@@ -2,7 +2,6 @@
 #define BEEEON_DEFAULT_ACCESS_POLICY_H
 
 #include "di/InjectorTarget.h"
-#include "server/Session.h"
 #include "policy/PlaceAccessPolicy.h"
 #include "policy/GatewayAccessPolicy.h"
 #include "policy/LocationAccessPolicy.h"
@@ -20,29 +19,31 @@ class DefaultAccessPolicy : public AbstractInjectorTarget,
 public:
 	DefaultAccessPolicy();
 
-	void assureGet(const ExpirableSession::Ptr session,
+	void assureGet(const User &user,
 		const Place &place) override;
-	void assureUpdate(const ExpirableSession::Ptr session,
+	void assureUpdate(const User &user,
 		const Place &place) override;
-	void assureRemove(const ExpirableSession::Ptr session,
+	void assureRemove(const User &user,
 		const Place &place) override;
 
-	void assureGet(const ExpirableSession::Ptr session,
+	void assureGet(const User &user,
 		const Gateway &gateway) override;
-	void assureAssignGateway(const ExpirableSession::Ptr session,
+	void assureAssignGateway(const User &user,
 		const Place &place) override;
-	void assureUnassign(const ExpirableSession::Ptr session,
+	void assureUnassign(const User &user,
 		const Gateway &gateway) override;
-	void assureUpdate(const ExpirableSession::Ptr session,
+	void assureUpdate(const User &user,
+		const Gateway &gateway) override;
+	void assureScanDevices(const User &user,
 		const Gateway &gateway) override;
 
-	void assureGet(const ExpirableSession::Ptr session,
+	void assureGet(const User &user,
 		const Location &location);
-	void assureCreateLocation(const ExpirableSession::Ptr session,
+	void assureCreateLocation(const User &user,
 		const Place &place);
-	void assureUpdate(const ExpirableSession::Ptr session,
+	void assureUpdate(const User &user,
 		const Location &location);
-	void assureRemove(const ExpirableSession::Ptr session,
+	void assureRemove(const User &user,
 		const Location &location);
 
 	void setUserDao(UserDao *dao)
@@ -66,9 +67,7 @@ public:
 	}
 
 protected:
-	AccessLevel fetchAccessLevel(
-			const ExpirableSession::Ptr session,
-			const Place &place);
+	AccessLevel fetchAccessLevel(const User &user, const Place &place);
 	void assureAtLeast(
 			const AccessLevel &current,
 			const AccessLevel &required);

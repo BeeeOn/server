@@ -17,9 +17,13 @@ LocationHandler::LocationHandler()
 }
 
 const string LocationHandler::handleCreate(std::istream &in,
+			const UserID &userId,
 			const std::string &placeId)
 {
 	Place place(PlaceID::parse(placeId));
+	User user(userId);
+
+	m_accessPolicy->assureCreateLocation(user, place);
 
 	Location location;
 	deserialize(in, location);
@@ -30,11 +34,15 @@ const string LocationHandler::handleCreate(std::istream &in,
 }
 
 const string LocationHandler::handleUpdate(std::istream &in,
+			const UserID &userId,
 			const std::string &placeId,
 			const std::string &locationId)
 {
 	Place place(PlaceID::parse(placeId));
 	Location location(LocationID::parse(locationId));
+	User user(userId);
+
+	m_accessPolicy->assureUpdate(user, location);
 
 	if (!m_locationService->fetchFrom(location, place))
 		return "";
@@ -50,11 +58,15 @@ const string LocationHandler::handleUpdate(std::istream &in,
 }
 
 const string LocationHandler::handleGet(
+		const UserID &userId,
 		const std::string &placeId,
 		const std::string &locationId)
 {
 	Place place(PlaceID::parse(placeId));
 	Location location(LocationID::parse(locationId));
+	User user(userId);
+
+	m_accessPolicy->assureGet(user, location);
 
 	if (!m_locationService->fetchFrom(location, place))
 		return "";
@@ -63,11 +75,15 @@ const string LocationHandler::handleGet(
 }
 
 const string LocationHandler::handleDelete(
+		const UserID &userId,
 		const std::string &placeId,
 		const std::string &locationId)
 {
 	Place place(PlaceID::parse(placeId));
 	Location location(LocationID::parse(locationId));
+	User user(userId);
+
+	m_accessPolicy->assureRemove(user, location);
 
 	if (!m_locationService->fetchFrom(location, place))
 		return "";
