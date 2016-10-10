@@ -34,14 +34,6 @@ AccessLevel DefaultAccessPolicy::fetchAccessLevel(
 	return level;
 }
 
-AccessLevel DefaultAccessPolicy::fetchAccessLevel(
-		const ExpirableSession::Ptr session,
-		const Place &place)
-{
-	User user(session->userID());
-	return fetchAccessLevel(user, place);
-}
-
 void DefaultAccessPolicy::assureAtLeast(
 		const AccessLevel &current,
 		const AccessLevel &required)

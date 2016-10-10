@@ -2,7 +2,6 @@
 #define BEEEON_DEFAULT_ACCESS_POLICY_H
 
 #include "di/InjectorTarget.h"
-#include "server/Session.h"
 #include "policy/PlaceAccessPolicy.h"
 #include "policy/GatewayAccessPolicy.h"
 #include "policy/LocationAccessPolicy.h"
@@ -68,9 +67,6 @@ public:
 	}
 
 protected:
-	AccessLevel fetchAccessLevel(
-			const ExpirableSession::Ptr session,
-			const Place &place);
 	AccessLevel fetchAccessLevel(const User &user, const Place &place);
 	void assureAtLeast(
 			const AccessLevel &current,
