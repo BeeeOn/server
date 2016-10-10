@@ -198,6 +198,11 @@ protected:
 		return EXIT_OK;
 	}
 
+	SocketServer *createSocketServer(XmlRequestHandlerFactory *factory)
+	{
+		return SocketServer::createDefault(factory, m_serverPort);
+	}
+
 	int main(const std::vector <std::string> &args)
 	{
 		if (m_printHelp)
@@ -210,8 +215,7 @@ protected:
 		XmlRequestHandlerFactory *factory = injector
 			.create<XmlRequestHandlerFactory>("xmlui", true);
 
-		SocketServer *server = SocketServer::createDefault(
-				factory, m_serverPort);
+		SocketServer *server = createSocketServer(factory);
 		server->start();
 
 		waitForTerminationRequest();
