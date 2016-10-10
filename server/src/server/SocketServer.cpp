@@ -1,3 +1,5 @@
+#include <Poco/Net/SecureServerSocket.h>
+
 #include "server/SocketServer.h"
 #include "Debug.h"
 
@@ -18,6 +20,15 @@ SocketServer *SocketServer::createDefault(
 	UInt16 port)
 {
 	ServerSocket socket(port);
+	TCPServerParams::Ptr params = new TCPServerParams();
+	return new SocketServer(factory, socket, params);
+}
+
+SocketServer *SocketServer::createSecure(
+	TCPServerConnectionFactory::Ptr factory,
+	UInt16 port)
+{
+	SecureServerSocket socket(port);
 	TCPServerParams::Ptr params = new TCPServerParams();
 	return new SocketServer(factory, socket, params);
 }
