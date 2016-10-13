@@ -47,6 +47,7 @@ public:
 			const Gateway &gateway);
 	bool remove(Location &location);
 	bool removeFrom(Location &location, const Place &place);
+	bool removeFrom(Location &location, const Gateway &gateway);
 
 private:
 	LocationDao *m_dao;

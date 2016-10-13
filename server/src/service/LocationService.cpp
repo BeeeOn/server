@@ -97,3 +97,11 @@ bool LocationService::removeFrom(Location &location, const Place &place)
 
 	return m_dao->remove(location);
 }
+
+bool LocationService::removeFrom(Location &location, const Gateway &gateway)
+{
+	if (!m_dao->fetchFrom(location, gateway))
+		throw NotFoundException("location does not exist");
+
+	return m_dao->remove(location);
+}
