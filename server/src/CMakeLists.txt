@@ -84,6 +84,7 @@ add_executable(xmlui-server
 	xmlui/AnyXmlHandler.cpp
 	xmlui/AuthXmlHandler.cpp
 	xmlui/XmlGatewayDeserializer.cpp
+	xmlui/XmlLocationDeserializer.cpp
 	xmlui/GatewayXmlHandler.cpp
 	ui/UIMockInit.cpp
 )
