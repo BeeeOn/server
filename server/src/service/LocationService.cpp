@@ -71,6 +71,17 @@ bool LocationService::updateIn(Location &location,
 	return m_dao->update(location);
 }
 
+bool LocationService::updateIn(Location &location,
+		const Deserializer<Location> &update,
+		const Gateway &gateway)
+{
+	if (!m_dao->fetchFrom(location, gateway))
+		throw NotFoundException("location does not exist");
+
+	update.partial(location);
+	return m_dao->update(location);
+}
+
 bool LocationService::remove(Location &location)
 {
 	if (!m_dao->fetch(location))

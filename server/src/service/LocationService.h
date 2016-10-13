@@ -42,6 +42,9 @@ public:
 	bool updateIn(Location &location,
 			const Deserializer<Location> &update,
 			const Place &place);
+	bool updateIn(Location &location,
+			const Deserializer<Location> &update,
+			const Gateway &gateway);
 	bool remove(Location &location);
 	bool removeFrom(Location &location, const Place &place);
 
