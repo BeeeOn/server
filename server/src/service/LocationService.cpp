@@ -5,6 +5,7 @@
 
 BEEEON_OBJECT(LocationService, BeeeOn::LocationService)
 
+using namespace std;
 using namespace Poco;
 using namespace BeeeOn;
 
@@ -57,6 +58,12 @@ bool LocationService::fetch(Location &location)
 bool LocationService::fetchFrom(Location &location, const Place &place)
 {
 	return m_dao->fetchFrom(location, place);
+}
+
+void LocationService::fetchBy(vector<Location> &locations,
+		const Gateway &gateway)
+{
+	m_dao->fetchBy(locations, gateway);
 }
 
 bool LocationService::updateIn(Location &location,

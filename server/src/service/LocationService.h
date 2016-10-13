@@ -1,6 +1,8 @@
 #ifndef BEEEON_LOCATION_SERVICE_H
 #define BEEEON_LOCATION_SERVICE_H
 
+#include <vector>
+
 #include <Poco/Exception.h>
 #include <Poco/Logger.h>
 #include "service/Deserializer.h"
@@ -39,6 +41,7 @@ public:
 			const Gateway &gateway);
 	bool fetch(Location &location);
 	bool fetchFrom(Location &location, const Place &place);
+	void fetchBy(std::vector<Location> &locations, const Gateway &gateway);
 	bool updateIn(Location &location,
 			const Deserializer<Location> &update,
 			const Place &place);
