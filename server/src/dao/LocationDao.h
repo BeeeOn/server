@@ -1,6 +1,8 @@
 #ifndef BEEEON_LOCATION_DAO_H
 #define BEEEON_LOCATION_DAO_H
 
+#include <vector>
+
 #include "di/InjectorTarget.h"
 #include "dao/NullDao.h"
 #include "dao/MockDao.h"
@@ -19,6 +21,8 @@ public:
 			const Place &place) = 0;
 	virtual bool fetchFrom(Location &location,
 			const Gateway &gateway) = 0;
+	virtual void fetchBy(std::vector<Location> &locations,
+			const Place &place) = 0;
 	virtual bool update(Location &location) = 0;
 	virtual bool remove(const Location &location) = 0;
 };
@@ -36,6 +40,12 @@ public:
 			const Gateway &gateway)
 	{
 		return fetch(location);
+	}
+
+	void fetchBy(std::vector<Location> &locations,
+			const Place &place)
+	{
+		throw Poco::NotImplementedException(__func__);
 	}
 
 	static LocationDao &instance();
@@ -77,6 +87,17 @@ public:
 
 		location = tmp;
 		return true;
+	}
+
+	void fetchBy(std::vector<Location> &locations,
+			const Place &place)
+	{
+		for (auto pair : storage()) {
+			Location &location = *pair.second;
+
+			if (location.place().id() == place.id())
+				locations.push_back(location);
+		}
 	}
 
 	void setGatewayDao(GatewayDao *dao)
