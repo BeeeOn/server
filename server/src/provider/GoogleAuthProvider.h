@@ -3,7 +3,7 @@
 
 #include <Poco/Net/HTTPSClientSession.h>
 
-#include "provider/AuthProvider.h"
+#include "provider/OAuth2AuthProvider.h"
 
 namespace BeeeOn {
 
@@ -11,25 +11,11 @@ namespace BeeeOn {
  * Verify the user access token against Google servers and obtain
  * information about her.
  */
-class GoogleAuthProvider : public AuthCodeAuthProvider {
+class GoogleAuthProvider : public OAuth2AuthProvider {
 public:
 	GoogleAuthProvider():
-		AuthCodeAuthProvider("google")
+		OAuth2AuthProvider("google")
 	{
-		textInjector("client_id",
-				(TextSetter) &GoogleAuthProvider::setClientId);
-		textInjector("client_secret",
-				(TextSetter) &GoogleAuthProvider::setClientSecret);
-	}
-
-	void setClientId(const std::string &clientId)
-	{
-		m_clientId = clientId;
-	}
-
-	void setClientSecret(const std::string &clientSecret)
-	{
-		m_clientSecret = clientSecret;
 	}
 
 protected:
@@ -65,9 +51,6 @@ private:
 	 * Convert istream response body to string
 	 */
 	std::string convertResponseToString(std::istream &rs);
-
-	std::string m_clientId;
-	std::string m_clientSecret;
 
 	// URL to get access and ID token from Google API
 	const std::string m_tokenUrl = "https://www.googleapis.com/oauth2/v4/token";
