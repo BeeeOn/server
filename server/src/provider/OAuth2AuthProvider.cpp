@@ -10,4 +10,6 @@ OAuth2AuthProvider::OAuth2AuthProvider(const string &name):
 			(TextSetter) &OAuth2AuthProvider::setClientId);
 	textInjector("client_secret",
 			(TextSetter) &OAuth2AuthProvider::setClientSecret);
+	textInjector("redirect_uri",
+			(TextSetter) &OAuth2AuthProvider::setRedirectURI);
 }

@@ -86,7 +86,7 @@ string GoogleAuthProvider::requestIdToken(const string &authCode)
 	}
 
 	string requestRaw = "code=" + authCode + "&"
-		"redirect_uri=postmessage&"
+		"redirect_uri=" + m_redirectURI + "&"
 		"client_id=" + m_clientId + "&"
 		"client_secret=" + m_clientSecret + "&"
 		"scope=&"	// No need to specify, defaults to userinfo.profile,userinfo.email

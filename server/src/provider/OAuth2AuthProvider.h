@@ -19,9 +19,15 @@ public:
 		m_clientSecret = clientSecret;
 	}
 
+	void setRedirectURI(const std::string &uri)
+	{
+		m_redirectURI = uri;
+	}
+
 protected:
 	std::string m_clientId;
 	std::string m_clientSecret;
+	std::string m_redirectURI;
 };
 
 }
