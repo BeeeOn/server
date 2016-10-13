@@ -63,6 +63,11 @@ public:
 		return m_place;
 	}
 
+	bool hasPlace() const
+	{
+		return !m_place.id().isNull();
+	}
+
 private:
 	ID m_id;
 	std::string m_name;
