@@ -1,9 +1,13 @@
 #ifndef BEEEON_GATEWAY_DAO_H
 #define BEEEON_GATEWAY_DAO_H
 
+#include <vector>
+
 #include "di/InjectorTarget.h"
 #include "dao/NullDao.h"
 #include "dao/MockDao.h"
+#include "dao/RoleInPlaceDao.h"
+#include "model/User.h"
 #include "model/Place.h"
 #include "model/Gateway.h"
 
@@ -15,8 +19,12 @@ public:
 	virtual bool fetch(Gateway &gateway) = 0;
 	virtual bool update(Gateway &gateway) = 0;
 	virtual bool assignAndUpdate(Gateway &gateway, const Place &place) = 0;
+	virtual bool assign(Gateway &gateway, const Place &place) = 0;
 	virtual bool unassign(Gateway &gateway) = 0;
 	virtual bool fetchFromPlace(Gateway &gateway, const Place &place) = 0;
+	virtual void fetchAccessible(
+			std::vector<Gateway> &gateways,
+			const User &user) = 0;
 };
 
 class NullGatewayDao : public AbstractInjectorTarget,
@@ -33,6 +41,11 @@ public:
 		return update(gateway);
 	}
 
+	bool assign(Gateway &gateway, const Place &place)
+	{
+		return update(gateway);
+	}
+
 	bool unassign(Gateway &gateway)
 	{
 		return update(gateway);
@@ -40,22 +53,33 @@ public:
 
 	bool fetchFromPlace(Gateway &gateway, const Place &place)
 	{
-		return fetchFromPlace(gateway, place);
+		return fetch(gateway);
 	}
 
+	void fetchAccessible(std::vector<Gateway> &gateways,
+			const User &user)
+	{
+		throw Poco::NotImplementedException(__func__);
+	}
 };
 
 
 class MockGatewayDao : public AbstractInjectorTarget,
 	public MockDao<Gateway, GatewayDao> {
-protected:
-	GatewayID nextID()
-	{
-		return GatewayID::random();
-	}
+public:
+	MockGatewayDao();
 
 	bool assignAndUpdate(Gateway &gateway, const Place &place)
 	{
+		gateway.setPlace(place);
+		return update(gateway);
+	}
+
+	bool assign(Gateway &gateway, const Place &place)
+	{
+		if (!fetchFromPlace(gateway, place))
+			return false;
+
 		gateway.setPlace(place);
 		return update(gateway);
 	}
@@ -90,8 +114,26 @@ protected:
 		return false;
 	}
 
+	void fetchAccessible(std::vector<Gateway> &gateways,
+			const User &user);
+
+	void setRoleInPlaceDao(RoleInPlaceDao *dao)
+	{
+		if (dao == NULL)
+			m_roleInPlaceDao = &NullRoleInPlaceDao::instance();
+		else
+			m_roleInPlaceDao = dao;
+	}
+
+protected:
+	GatewayID nextID()
+	{
+		return GatewayID::random();
+	}
+
 private:
 	GatewayID m_id;
+	RoleInPlaceDao *m_roleInPlaceDao;
 };
 
 }

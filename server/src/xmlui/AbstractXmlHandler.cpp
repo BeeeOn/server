@@ -39,6 +39,10 @@ void AbstractXmlHandler::handleInput()
 	try {
 		handleInputImpl();
 	}
+	catch (const NotFoundException &e) {
+		m_logger.log(e, __FILE__, __LINE__);
+		resultNotFound();
+	}
 	catch (const NotAuthenticatedException &e) {
 		m_logger.log(e, __FILE__, __LINE__);
 		resultNotAuthenticated();

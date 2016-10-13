@@ -15,3 +15,4 @@ gateway_id = "1284174504043136"
 tmp_gateway_id = "1780053541714013"
 
 PERMIT_LOGIN = xmlui.Login("permit", "joe.doe@example.org")
+PERMIT_LOGIN2 = xmlui.Login("permit", "john.smith@example.org")
