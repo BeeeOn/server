@@ -32,6 +32,23 @@ void LocationService::createIn(Location &location,
 	m_dao->create(location);
 }
 
+void LocationService::createIn(Location &location,
+		const Deserializer<Location> &data,
+		const Gateway &gateway)
+{
+	Gateway tmp(gateway);
+
+	if (!m_gatewayDao->fetch(tmp))
+		throw NotFoundException("gateway does not exist");
+
+	if (!tmp.hasPlace()) // do not leak it exists
+		throw NotFoundException("gateway is not assigned");
+
+	data.full(location);
+	location.setPlace(tmp.place());
+	m_dao->create(location);
+}
+
 bool LocationService::fetch(Location &location)
 {
 	return m_dao->fetch(location);

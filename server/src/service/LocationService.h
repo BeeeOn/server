@@ -6,6 +6,8 @@
 #include "service/Deserializer.h"
 #include "dao/LocationDao.h"
 #include "di/InjectorTarget.h"
+#include "model/Place.h"
+#include "model/Gateway.h"
 #include "Debug.h"
 
 namespace BeeeOn {
@@ -32,6 +34,9 @@ public:
 	void createIn(Location &location,
 			const Deserializer<Location> &data,
 			const Place &place);
+	void createIn(Location &location,
+			const Deserializer<Location> &data,
+			const Gateway &gateway);
 	bool fetch(Location &location);
 	bool fetchFrom(Location &location, const Place &place);
 	bool updateIn(Location &location,
