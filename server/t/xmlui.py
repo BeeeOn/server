@@ -224,3 +224,24 @@ class LocationGetAll(Request):
 		request.set("gateid", self.gateway)
 
 		return request
+
+class LocationUpdate(Request):
+	def __init__(self, gateway, location, sessionid, **kwargs):
+		Request.__init__(self, ns = "locations",
+			type = "update", sessionid = sessionid)
+		self.location = location
+		self.gateway = gateway
+
+		if "name" in kwargs:
+			self.name = kwargs["name"]
+
+	def xml(self):
+		request = Request.xml(self)
+		request.set("gateid", self.gateway)
+		location = xml.SubElement(request, "location")
+		location.set("locationid", self.location)
+
+		if hasattr(self, "name"):
+			location.set("name", self.name)
+
+		return request
