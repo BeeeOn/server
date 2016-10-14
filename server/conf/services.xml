@@ -103,6 +103,7 @@
 		<instance name="locationService"
 				class="BeeeOn::LocationService">
 			<set name="locationDao" ref="locationDao" />
+			<set name="gatewayDao" ref="gatewayDao" />
 		</instance>
 
 		<instance name="identityService" class="BeeeOn::IdentityService">

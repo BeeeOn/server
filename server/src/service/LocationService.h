@@ -10,6 +10,8 @@
 
 namespace BeeeOn {
 
+class GatewayDao;
+
 /**
  * Locations management.
  */
@@ -25,6 +27,8 @@ public:
 			m_dao = dao;
 	}
 
+	void setGatewayDao(GatewayDao *dao);
+
 	void createIn(Location &location,
 			const Deserializer<Location> &data,
 			const Place &place);
@@ -38,6 +42,7 @@ public:
 
 private:
 	LocationDao *m_dao;
+	GatewayDao *m_gatewayDao;
 };
 
 }
