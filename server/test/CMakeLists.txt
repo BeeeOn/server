@@ -22,14 +22,12 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/util/DAMMTest.cpp
 	${PROJECT_SOURCE_DIR}/util/Base64Test.cpp
 	${PROJECT_SOURCE_DIR}/util/SecureXmlParserTest.cpp
-	${PROJECT_SOURCE_DIR}/dao/SociManagerTest.cpp
 	${PROJECT_SOURCE_DIR}/cppunit/TapTestProducer.cpp
 )
 
 include_directories(
 	${PROJECT_SOURCE_DIR}
 	${CMAKE_SOURCE_DIR}/src
-	${SOCI_INCLUDE_DIRS}
 )
 
 add_executable(test-suite test.cpp ${TEST_SOURCES})
@@ -44,8 +42,6 @@ set(LIBS
 	${POCO_XML}
 	mongoose
 	${CPP_UNIT}
-	${SOCI_LIBRARY}
-	${SOCI_sqlite3_PLUGIN}
 )
 
 # Apple's linker doesn't support --whole-archive. Instead it uses -all_load.
