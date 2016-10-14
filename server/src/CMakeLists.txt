@@ -90,6 +90,7 @@ add_executable(xmlui-server
 	xmlui/XmlLocationDeserializer.cpp
 	xmlui/GatewayXmlHandler.cpp
 	xmlui/LocationXmlHandler.cpp
+	xmlui/ProfileXmlHandler.cpp
 	ui/UIMockInit.cpp
 )
 
