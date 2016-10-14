@@ -175,6 +175,9 @@ GatewayXmlHandlerResolver::GatewayXmlHandlerResolver():
 bool GatewayXmlHandlerResolver::canHandle(
 		const Element &root)
 {
+	if (!AbstractXmlHandlerResolver::canHandle(root))
+		return false;
+
 	const string &type = root.getAttribute("type");
 
 	if (type == "register")
