@@ -23,6 +23,8 @@ public:
 			const Gateway &gateway) = 0;
 	virtual void fetchBy(std::vector<Location> &locations,
 			const Place &place) = 0;
+	virtual void fetchBy(std::vector<Location> &locations,
+			const Gateway &gateway) = 0;
 	virtual bool update(Location &location) = 0;
 	virtual bool remove(const Location &location) = 0;
 };
@@ -44,6 +46,12 @@ public:
 
 	void fetchBy(std::vector<Location> &locations,
 			const Place &place)
+	{
+		throw Poco::NotImplementedException(__func__);
+	}
+
+	void fetchBy(std::vector<Location> &locations,
+			const Gateway &gateway)
 	{
 		throw Poco::NotImplementedException(__func__);
 	}
@@ -98,6 +106,17 @@ public:
 			if (location.place().id() == place.id())
 				locations.push_back(location);
 		}
+	}
+
+	void fetchBy(std::vector<Location> &locations,
+			const Gateway &gateway)
+	{
+		Gateway owner(gateway.id());
+
+		if (!m_gatewayDao->fetch(owner))
+			return;
+
+		fetchBy(locations, owner.place());
 	}
 
 	void setGatewayDao(GatewayDao *dao)
