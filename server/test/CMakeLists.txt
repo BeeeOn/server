@@ -9,6 +9,7 @@ find_library (POCO_CRYPTO PocoCrypto)
 find_library (POCO_NET PocoNet)
 find_library (POCO_JSON PocoJSON)
 find_library (POCO_XML PocoXML)
+find_library (POCO_DATA PocoData)
 
 file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/DebugTest.cpp
@@ -40,6 +41,7 @@ set(LIBS
 	${POCO_NET}
 	${POCO_JSON}
 	${POCO_XML}
+	${POCO_DATA}
 	mongoose
 	${CPP_UNIT}
 )

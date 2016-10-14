@@ -8,6 +8,7 @@ find_library (POCO_UTIL PocoUtil)
 find_library (POCO_NET PocoNet)
 find_library (POCO_JSON PocoJSON)
 find_library (POCO_XML PocoXML)
+find_library (POCO_DATA PocoData)
 
 set (CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -DBEEEON_SELECT_POCO")
 add_definitions(-std=c++11)
@@ -61,6 +62,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/SecureXmlParser.cpp
 	${PROJECT_SOURCE_DIR}/util/Template.cpp
 	${PROJECT_SOURCE_DIR}/util/Occasionally.cpp
+	${PROJECT_SOURCE_DIR}/dao/PocoDaoManager.cpp
 	${PROJECT_SOURCE_DIR}/rpc/GatewayRPC.cpp
 )
 
@@ -102,6 +104,7 @@ set(LIBS
 	${POCO_NET}
 	${POCO_JSON}
 	${POCO_XML}
+	${POCO_DATA}
 	mongoose
 )
 
