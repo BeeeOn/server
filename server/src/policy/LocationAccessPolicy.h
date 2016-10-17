@@ -26,6 +26,24 @@ public:
 			const Location &location) = 0;
 };
 
+class NullLocationAccessPolicy : public LocationAccessPolicy {
+public:
+	void assureGet(
+		const PolicyContext &context,
+		const Location &location) override;
+	void assureCreateLocation(
+		const PolicyContext &context,
+		const Place &place) override;
+	void assureUpdate(
+		const PolicyContext &context,
+		const Location &location) override;
+	void assureRemove(
+		const PolicyContext &context,
+		const Location &location) override;
+
+	static LocationAccessPolicy &instance();
+};
+
 }
 
 #endif
