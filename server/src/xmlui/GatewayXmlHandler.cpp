@@ -19,12 +19,10 @@ GatewayXmlHandler::GatewayXmlHandler(
 		const AutoPtr<Document> input,
 		ExpirableSession::Ptr session,
 		GatewayService &gatewayService,
-		PlaceService &placeService,
-		GatewayAccessPolicy &policy):
+		PlaceService &placeService):
 	AbstractXmlHandler("gates", socket, input, session),
 	m_gatewayService(gatewayService),
-	m_placeService(placeService),
-	m_accessPolicy(policy)
+	m_placeService(placeService)
 {
 }
 
@@ -87,8 +85,6 @@ void GatewayXmlHandler::handleUnregister(Element *gatewayNode)
 	Relation<Gateway, User> input(gateway, user);
 	input.setUser(user);
 
-	m_accessPolicy.assureUnassign(input, gateway);
-
 	if (!m_gatewayService.unassign(input)) {
 		resultNotOwned();
 		return;
@@ -104,8 +100,6 @@ void GatewayXmlHandler::handleListen(Element *gatewayNode)
 	User user(session()->userID());
 	input.setUser(user);
 
-	m_accessPolicy.assureScanDevices(input, gateway);
-
 	m_gatewayService.scanDevices(input);
 	resultSuccess();
 }
@@ -116,8 +110,6 @@ void GatewayXmlHandler::handleGet(Element *gatewayNode)
 	Single<Gateway> input(gateway);
 	User user(session()->userID());
 	input.setUser(user);
-
-	m_accessPolicy.assureGet(input, gateway);
 
 	if (!m_gatewayService.fetch(input)) {
 		resultNotFound();
@@ -141,8 +133,6 @@ void GatewayXmlHandler::handleUpdate(Element *gatewayNode)
 	SingleWithData<Gateway> input(gateway, update);
 	User user(session()->userID());
 	input.setUser(user);
-
-	m_accessPolicy.assureUpdate(input, gateway);
 
 	if (!m_gatewayService.update(input)) {
 		resultNotFound();
@@ -175,9 +165,6 @@ GatewayXmlHandlerResolver::GatewayXmlHandlerResolver():
 	injector<GatewayXmlHandlerResolver, PlaceService>(
 			"placeService",
 			&GatewayXmlHandlerResolver::setPlaceService);
-	injector<GatewayXmlHandlerResolver, GatewayAccessPolicy>(
-			"accessPolicy",
-			&GatewayXmlHandlerResolver::setAccessPolicy);
 	injector<GatewayXmlHandlerResolver, SessionManager>(
 			"sessionManager",
 			&GatewayXmlHandlerResolver::setSessionManager);
@@ -215,8 +202,7 @@ XmlRequestHandler *GatewayXmlHandlerResolver::createHandler(
 			*m_sessionManager, input);
 	return new GatewayXmlHandler(
 			socket, input, session,
-			*m_gatewayService, *m_placeService,
-			*m_accessPolicy);
+			*m_gatewayService, *m_placeService);
 }
 
 BEEEON_OBJECT(GatewayXmlHandlerResolver,

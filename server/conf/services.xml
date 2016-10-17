@@ -21,7 +21,6 @@
 
 		<instance name="gatewayHandler" class="BeeeOn::UI::GatewayHandler">
 			<set name="gatewayService" ref="gatewayService" />
-			<set name="accessPolicy" ref="accessPolicy" />
 		</instance>
 
 		<instance name="locationHandler" class="BeeeOn::UI::LocationHandler">
@@ -53,7 +52,6 @@
 				class="BeeeOn::XmlUI::GatewayXmlHandlerResolver">
 			<set name="gatewayService" ref="gatewayService" />
 			<set name="placeService" ref="placeService" />
-			<set name="accessPolicy" ref="accessPolicy" />
 			<set name="sessionManager" ref="sessionManager" />
 		</instance>
 

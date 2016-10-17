@@ -122,6 +122,8 @@ bool GatewayService::registerGateway(SingleWithData<Gateway> &input,
 		places.push_back(place);
 	}
 
+	m_accessPolicy->assureAssignGateway(input, places.front());
+
 	input.data().full(gateway);
 	return m_gatewayDao->assignAndUpdate(gateway, places.front());
 }
@@ -142,11 +144,15 @@ void GatewayService::createImplicitPlace(Place &place, Identity &identity)
 
 bool GatewayService::fetch(Single<Gateway> &input)
 {
+	m_accessPolicy->assureGet(input, input.target());
+
 	return m_gatewayDao->fetch(input.target());
 }
 
 bool GatewayService::fetchFromPlace(Relation<Gateway, Place> &input)
 {
+	m_accessPolicy->assureGet(input, input.target());
+
 	return m_gatewayDao->fetchFromPlace(input.target(), input.base());
 }
 
@@ -159,6 +165,8 @@ bool GatewayService::update(SingleWithData<Gateway> &input)
 {
 	Gateway &gateway = input.target();
 
+	m_accessPolicy->assureUpdate(input, gateway);
+
 	if (!m_gatewayDao->fetch(gateway))
 		throw NotFoundException("gateway does not exist");
 
@@ -169,6 +177,8 @@ bool GatewayService::update(SingleWithData<Gateway> &input)
 bool GatewayService::updateInPlace(RelationWithData<Gateway, Place> &input)
 {
 	Gateway &gateway = input.target();
+
+	m_accessPolicy->assureUpdate(input, gateway);
 
 	if (!m_gatewayDao->fetchFromPlace(gateway, input.base()))
 		throw NotFoundException("gateway does not exist");
@@ -182,6 +192,8 @@ bool GatewayService::assignAndUpdate(
 		RelationWithData<Gateway, Place> &input)
 {
 	Gateway &gateway = input.target();
+
+	m_accessPolicy->assureAssignGateway(input, input.base());
 
 	if (!m_gatewayDao->fetch(gateway))
 		throw NotFoundException("gateway does not exist");
@@ -198,6 +210,8 @@ bool GatewayService::unassign(Relation<Gateway, Place> &input)
 {
 	Gateway &gateway = input.target();
 
+	m_accessPolicy->assureUnassign(input, input.target());
+
 	if (!m_gatewayDao->fetchFromPlace(gateway, input.base()))
 		return false;
 
@@ -207,6 +221,8 @@ bool GatewayService::unassign(Relation<Gateway, Place> &input)
 bool GatewayService::unassign(Relation<Gateway, User> &input)
 {
 	Gateway &gateway = input.target();
+
+	m_accessPolicy->assureUnassign(input, input.target());
 
 	if (!m_gatewayDao->fetch(gateway))
 		throw NotFoundException("gateway does not exist");
@@ -219,6 +235,8 @@ bool GatewayService::unassign(Relation<Gateway, User> &input)
 
 void GatewayService::scanDevices(Single<Gateway> &input)
 {
+	m_accessPolicy->assureScanDevices(input, input.target());
+
 	m_rpc->sendListen(input.target());
 }
 

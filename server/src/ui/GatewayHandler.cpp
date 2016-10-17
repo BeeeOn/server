@@ -15,8 +15,6 @@ GatewayHandler::GatewayHandler()
 {
 	injector<GatewayHandler, GatewayService>("gatewayService",
 			&GatewayHandler::setGatewayService);
-	injector<GatewayHandler, GatewayAccessPolicy>("accessPolicy",
-			&GatewayHandler::setAccessPolicy);
 }
 
 const string GatewayHandler::handleAssign(istream &in,
@@ -30,8 +28,6 @@ const string GatewayHandler::handleAssign(istream &in,
 	RelationWithData<Gateway, Place> input(gateway, update, place);
 	User user(userId);
 	input.setUser(user);
-
-	m_accessPolicy->assureAssignGateway(input, place);
 
 	if (!m_gatewayService->assignAndUpdate(input))
 		return "";
@@ -50,8 +46,6 @@ const string GatewayHandler::handleUpdate(istream &in,
 	RelationWithData<Gateway, Place> input(gateway, update, place);
 	User user(userId);
 	input.setUser(user);
-
-	m_accessPolicy->assureUpdate(input, gateway);
 
 	if (!m_gatewayService->updateInPlace(input)) {
 		throw Exception("failed to update gateway: "
@@ -72,8 +66,6 @@ const string GatewayHandler::handleGet(
 	User user(userId);
 	input.setUser(user);
 
-	m_accessPolicy->assureGet(input, gateway);
-
 	if (!m_gatewayService->fetchFromPlace(input))
 		return "";
 
@@ -90,8 +82,6 @@ const string GatewayHandler::handleDelete(
 	Relation<Gateway, Place> input(gateway, place);
 	User user(userId);
 	input.setUser(user);
-
-	m_accessPolicy->assureUnassign(input, gateway);
 
 	if (!m_gatewayService->unassign(input))
 		return "";

@@ -3,7 +3,6 @@
 
 #include "service/GatewayService.h"
 #include "service/PlaceService.h"
-#include "policy/GatewayAccessPolicy.h"
 #include "xmlui/AbstractXmlHandler.h"
 
 namespace BeeeOn {
@@ -15,8 +14,7 @@ public:
 			const Poco::AutoPtr<Poco::XML::Document> input,
 			BeeeOn::ExpirableSession::Ptr session,
 			BeeeOn::GatewayService &gatewayService,
-			BeeeOn::PlaceService &placeService,
-			BeeeOn::GatewayAccessPolicy &policy);
+			BeeeOn::PlaceService &placeService);
 	void handleInputImpl() override;
 	void handleRegister(Poco::XML::Element *gatewayNode);
 	void handleUnregister(Poco::XML::Element *gatewayNode);
@@ -28,7 +26,6 @@ public:
 private:
 	GatewayService &m_gatewayService;
 	PlaceService &m_placeService;
-	GatewayAccessPolicy &m_accessPolicy;
 };
 
 class GatewayXmlHandlerResolver : public AbstractXmlHandlerResolver {
@@ -55,16 +52,10 @@ public:
 		m_sessionManager = manager;
 	}
 
-	void setAccessPolicy(BeeeOn::GatewayAccessPolicy *policy)
-	{
-		m_accessPolicy = policy;
-	}
-
 private:
 	BeeeOn::PlaceService *m_placeService;
 	BeeeOn::GatewayService *m_gatewayService;
 	BeeeOn::SessionManager *m_sessionManager;
-	BeeeOn::GatewayAccessPolicy *m_accessPolicy;
 };
 
 }
