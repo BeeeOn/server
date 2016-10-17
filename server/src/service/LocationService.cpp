@@ -24,20 +24,17 @@ void LocationService::setGatewayDao(GatewayDao *dao)
 	m_gatewayDao = dao? dao : &NullGatewayDao::instance();
 }
 
-void LocationService::createIn(Location &location,
-		const Deserializer<Location> &data,
-		const Place &place)
+void LocationService::createIn(RelationWithData<Location, Place> &input)
 {
-	data.full(location);
-	location.setPlace(place);
+	Location &location = input.target();
+	input.data().full(location);
+	location.setPlace(input.base());
 	m_dao->create(location);
 }
 
-void LocationService::createIn(Location &location,
-		const Deserializer<Location> &data,
-		const Gateway &gateway)
+void LocationService::createIn(RelationWithData<Location, Gateway> &input)
 {
-	Gateway tmp(gateway);
+	Gateway tmp(input.base());
 
 	if (!m_gatewayDao->fetch(tmp))
 		throw NotFoundException("gateway does not exist");
@@ -45,8 +42,10 @@ void LocationService::createIn(Location &location,
 	if (!tmp.hasPlace()) // do not leak it exists
 		throw NotFoundException("gateway is not assigned");
 
-	data.full(location);
+	Location &location = input.target();
+	input.data().full(location);
 	location.setPlace(tmp.place());
+
 	m_dao->create(location);
 }
 
@@ -55,37 +54,36 @@ bool LocationService::fetch(Single<Location> &input)
 	return m_dao->fetch(input.target());
 }
 
-bool LocationService::fetchFrom(Location &location, const Place &place)
+bool LocationService::fetchFrom(Relation<Location, Place> &input)
 {
-	return m_dao->fetchFrom(location, place);
+	return m_dao->fetchFrom(input.target(), input.base());
 }
 
-void LocationService::fetchBy(vector<Location> &locations,
-		const Gateway &gateway)
+void LocationService::fetchBy(Relation<vector<Location>, Gateway> &input)
 {
-	m_dao->fetchBy(locations, gateway);
+	m_dao->fetchBy(input.target(), input.base());
 }
 
-bool LocationService::updateIn(Location &location,
-		const Deserializer<Location> &update,
-		const Place &place)
+bool LocationService::updateIn(RelationWithData<Location, Place> &input)
 {
-	if (!m_dao->fetchFrom(location, place))
+	Location &location = input.target();
+
+	if (!m_dao->fetchFrom(location, input.base()))
 		throw NotFoundException("location does not exist");
 
-	update.partial(location);
+	input.data().partial(location);
 
 	return m_dao->update(location);
 }
 
-bool LocationService::updateIn(Location &location,
-		const Deserializer<Location> &update,
-		const Gateway &gateway)
+bool LocationService::updateIn(RelationWithData<Location, Gateway> &input)
 {
-	if (!m_dao->fetchFrom(location, gateway))
+	Location &location = input.target();
+
+	if (!m_dao->fetchFrom(location, input.base()))
 		throw NotFoundException("location does not exist");
 
-	update.partial(location);
+	input.data().partial(location);
 	return m_dao->update(location);
 }
 
@@ -99,17 +97,21 @@ bool LocationService::remove(Single<Location> &input)
 	return m_dao->remove(location);
 }
 
-bool LocationService::removeFrom(Location &location, const Place &place)
+bool LocationService::removeFrom(Relation<Location, Place> &input)
 {
-	if (!m_dao->fetchFrom(location, place))
+	Location &location = input.target();
+
+	if (!m_dao->fetchFrom(location, input.base()))
 		throw NotFoundException("location does not exist");
 
 	return m_dao->remove(location);
 }
 
-bool LocationService::removeFrom(Location &location, const Gateway &gateway)
+bool LocationService::removeFrom(Relation<Location, Gateway> &input)
 {
-	if (!m_dao->fetchFrom(location, gateway))
+	Location &location = input.target();
+
+	if (!m_dao->fetchFrom(location, input.base()))
 		throw NotFoundException("location does not exist");
 
 	return m_dao->remove(location);
