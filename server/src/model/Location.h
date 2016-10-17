@@ -4,7 +4,6 @@
 #include <Poco/SharedPtr.h>
 #include "model/GlobalID.h"
 #include "model/Place.h"
-#include "model/Collection.h"
 
 namespace BeeeOn {
 
@@ -14,7 +13,6 @@ namespace BeeeOn {
 class Location {
 public:
 	typedef Poco::SharedPtr<Location> Ptr;
-	typedef BeeeOn::Collection<Location> Collection;
 	typedef GlobalID ID;
 
 	Location()
@@ -65,13 +63,17 @@ public:
 		return m_place;
 	}
 
+	bool hasPlace() const
+	{
+		return !m_place.id().isNull();
+	}
+
 private:
 	ID m_id;
 	std::string m_name;
 	Place m_place;
 };
 
-typedef Location::Collection LocationCollection;
 typedef Location::ID LocationID;
 
 }

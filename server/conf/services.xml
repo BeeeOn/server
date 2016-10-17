@@ -38,6 +38,7 @@
 				class="BeeeOn::XmlRequestHandlerFactory">
 			<add name="resolvers" ref="authXmlHandler" />
 			<add name="resolvers" ref="gatewayXmlHandler" />
+			<add name="resolvers" ref="locationXmlHandler" />
 			<add name="resolvers" ref="anyXmlHandler" />
 		</instance>
 
@@ -54,6 +55,12 @@
 			<set name="gatewayService" ref="gatewayService" />
 			<set name="placeService" ref="placeService" />
 			<set name="accessPolicy" ref="accessPolicy" />
+			<set name="sessionManager" ref="sessionManager" />
+		</instance>
+
+		<instance name="locationXmlHandler"
+				class="BeeeOn::XmlUI::LocationXmlHandlerResolver">
+			<set name="locationService" ref="locationService" />
 			<set name="sessionManager" ref="sessionManager" />
 		</instance>
 
@@ -103,6 +110,7 @@
 		<instance name="locationService"
 				class="BeeeOn::LocationService">
 			<set name="locationDao" ref="locationDao" />
+			<set name="gatewayDao" ref="gatewayDao" />
 		</instance>
 
 		<instance name="identityService" class="BeeeOn::IdentityService">
@@ -165,7 +173,9 @@
 		<instance name="mockGatewayDao" class="BeeeOn::MockGatewayDao">
 			<set name="roleInPlaceDao" ref="roleInPlaceDao" />
 		</instance>
-		<instance name="mockLocationDao" class="BeeeOn::MockLocationDao" />
+		<instance name="mockLocationDao" class="BeeeOn::MockLocationDao">
+			<set name="gatewayDao" ref="gatewayDao" />
+		</instance>
 		<instance name="mockIdentityDao" class="BeeeOn::MockIdentityDao" />
 		<instance name="mockVerifiedIdentityDao"
 				class="BeeeOn::MockVerifiedIdentityDao" />

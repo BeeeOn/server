@@ -4,6 +4,7 @@
 
 #include "xmlui/Serializing.h"
 #include "model/Gateway.h"
+#include "model/Location.h"
 
 using namespace std;
 using namespace Poco;
@@ -30,4 +31,23 @@ void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
 {
 	for (auto gateway : gateways)
 		serialize(output, gateway);
+}
+
+void BeeeOn::XmlUI::serialize(XMLWriter &output, const Location &location)
+{
+	AttributesImpl attrs;
+	attrs.addAttribute("", "id", "id", "", location.id().toString());
+	attrs.addAttribute("", "locationid", "locationid", "",
+			location.id().toString());
+	attrs.addAttribute("", "name", "name", "", location.name());
+	attrs.addAttribute("", "type", "type", "", "0"); // FIXME
+
+	output.emptyElement("", "location", "location", attrs);
+}
+
+void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
+		const std::vector<Location> &locations)
+{
+	for (auto location : locations)
+		serialize(output, location);
 }
