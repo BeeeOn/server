@@ -1,5 +1,6 @@
 #include <Poco/Exception.h>
 
+#include "server/Session.h"
 #include "service/JSONLocationDeserializer.h"
 #include "ui/LocationHandler.h"
 #include "ui/Serializing.h"
@@ -13,8 +14,6 @@ LocationHandler::LocationHandler()
 {
 	injector<LocationHandler, LocationService>("locationService",
 			&LocationHandler::setLocationService);
-	injector<LocationHandler, LocationAccessPolicy>("accessPolicy",
-			&LocationHandler::setAccessPolicy);
 }
 
 const string LocationHandler::handleCreate(std::istream &in,
@@ -27,8 +26,6 @@ const string LocationHandler::handleCreate(std::istream &in,
 	Location location;
 	RelationWithData<Location, Place> input(location, data, place);
 	input.setUser(user);
-
-	m_accessPolicy->assureCreateLocation(input, place);
 
 	m_locationService->createIn(input);
 
@@ -46,8 +43,6 @@ const string LocationHandler::handleUpdate(std::istream &in,
 	RelationWithData<Location, Place> input(location, update, place);
 	User user(userId);
 	input.setUser(user);
-
-	m_accessPolicy->assureUpdate(input, location);
 
 	if (!m_locationService->updateIn(input)) {
 		throw InvalidArgumentException("failed to update location: "
@@ -68,8 +63,6 @@ const string LocationHandler::handleGet(
 	Relation<Location, Place> input(location, place);
 	input.setUser(user);
 
-	m_accessPolicy->assureGet(input, location);
-
 	if (!m_locationService->fetchFrom(input))
 		return "";
 
@@ -86,8 +79,6 @@ const string LocationHandler::handleDelete(
 	Relation<Location, Place> input(location, place);
 	User user(userId);
 	input.setUser(user);
-
-	m_accessPolicy->assureRemove(input, location);
 
 	if (!m_locationService->removeFrom(input))
 		return "";
