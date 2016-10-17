@@ -28,6 +28,27 @@ public:
 			const Gateway &gateway) = 0;
 };
 
+class NullGatewayAccessPolicy : public GatewayAccessPolicy {
+public:
+	void assureGet(
+		const PolicyContext &context,
+		const Gateway &gateway) override;
+	void assureAssignGateway(
+		const PolicyContext &context,
+		const Place &place) override;
+	void assureUnassign(
+		const PolicyContext &context,
+		const Gateway &gateway) override;
+	void assureUpdate(
+		const PolicyContext &context,
+		const Gateway &gateway) override;
+	void assureScanDevices(
+		const PolicyContext &context,
+		const Gateway &gateway) override;
+
+	static GatewayAccessPolicy &instance();
+};
+
 }
 
 #endif
