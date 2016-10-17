@@ -37,13 +37,13 @@ public:
 	void assureScanDevices(const PolicyContext &context,
 		const Gateway &gateway) override;
 
-	void assureGet(const User &user,
+	void assureGet(const PolicyContext &context,
 		const Location &location);
-	void assureCreateLocation(const User &user,
+	void assureCreateLocation(const PolicyContext &context,
 		const Place &place);
-	void assureUpdate(const User &user,
+	void assureUpdate(const PolicyContext &context,
 		const Location &location);
-	void assureRemove(const User &user,
+	void assureRemove(const PolicyContext &context,
 		const Location &location);
 
 	void setUserDao(UserDao *dao)

@@ -144,15 +144,15 @@ void DefaultAccessPolicy::assureScanDevices(
 }
 
 void DefaultAccessPolicy::assureCreateLocation(
-		const User &user,
+		const PolicyContext &context,
 		const Place &place)
 {
 	assureAtLeast(
-		fetchAccessLevel(user, place), AccessLevel::user());
+		fetchAccessLevel(context.user(), place), AccessLevel::user());
 }
 
 void DefaultAccessPolicy::assureGet(
-		const User &user,
+		const PolicyContext &context,
 		const Location &location)
 {
 	Location tmp(location);
@@ -163,11 +163,11 @@ void DefaultAccessPolicy::assureGet(
 	const Place place(tmp.place());
 
 	assureAtLeast(
-		fetchAccessLevel(user, place), AccessLevel::guest());
+		fetchAccessLevel(context.user(), place), AccessLevel::guest());
 }
 
 void DefaultAccessPolicy::assureUpdate(
-		const User &user,
+		const PolicyContext &context,
 		const Location &location)
 {
 	Location tmp(location);
@@ -178,11 +178,11 @@ void DefaultAccessPolicy::assureUpdate(
 	const Place place(tmp.place());
 
 	assureAtLeast(
-		fetchAccessLevel(user, place), AccessLevel::user());
+		fetchAccessLevel(context.user(), place), AccessLevel::user());
 }
 
 void DefaultAccessPolicy::assureRemove(
-		const User &user,
+		const PolicyContext &context,
 		const Location &location)
 {
 	Location tmp(location);
@@ -193,5 +193,5 @@ void DefaultAccessPolicy::assureRemove(
 	const Place place(tmp.place());
 
 	assureAtLeast(
-		fetchAccessLevel(user, place), AccessLevel::user());
+		fetchAccessLevel(context.user(), place), AccessLevel::user());
 }
