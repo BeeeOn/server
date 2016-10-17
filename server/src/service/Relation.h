@@ -2,6 +2,7 @@
 #define BEEEON_RELATION_H
 
 #include "service/Deserializer.h"
+#include "policy/PolicyContext.h"
 
 namespace BeeeOn {
 
@@ -9,7 +10,7 @@ namespace BeeeOn {
  * Relation from a target to its base.
  */
 template <typename T, typename Base>
-class Relation {
+class Relation : public AbstractPolicyContext {
 public:
 	Relation(T &target, const Base &base):
 		m_target(target),
