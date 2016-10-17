@@ -27,11 +27,12 @@ const string GatewayHandler::handleAssign(istream &in,
 	Place place(PlaceID::parse(placeId));
 	Gateway gateway(GatewayID::parse(gatewayId));
 	JSONGatewayDeserializer update(in);
+	RelationWithData<Gateway, Place> input(gateway, update, place);
 	User user(userId);
 
 	m_accessPolicy->assureAssignGateway(user, place);
 
-	if (!m_gatewayService->assignAndUpdate(gateway, update, place))
+	if (!m_gatewayService->assignAndUpdate(input))
 		return "";
 
 	return serialize(gateway);
@@ -45,11 +46,12 @@ const string GatewayHandler::handleUpdate(istream &in,
 	Place place(PlaceID::parse(placeId));
 	Gateway gateway(GatewayID::parse(gatewayId));
 	JSONGatewayDeserializer update(in);
+	RelationWithData<Gateway, Place> input(gateway, update, place);
 	User user(userId);
 
 	m_accessPolicy->assureUpdate(user, gateway);
 
-	if (!m_gatewayService->updateInPlace(gateway, update, place)) {
+	if (!m_gatewayService->updateInPlace(input)) {
 		throw Exception("failed to update gateway: "
 				+ gateway.id().toString());
 	}
@@ -64,11 +66,12 @@ const string GatewayHandler::handleGet(
 {
 	Place place(PlaceID::parse(placeId));
 	Gateway gateway(GatewayID::parse(gatewayId));
+	Relation<Gateway, Place> input(gateway, place);
 	User user(userId);
 
 	m_accessPolicy->assureGet(user, gateway);
 
-	if (!m_gatewayService->fetchFromPlace(gateway, place))
+	if (!m_gatewayService->fetchFromPlace(input))
 		return "";
 
 	return serialize(gateway);
@@ -81,11 +84,12 @@ const string GatewayHandler::handleDelete(
 {
 	Place place(PlaceID::parse(placeId));
 	Gateway gateway(GatewayID::parse(gatewayId));
+	Relation<Gateway, Place> input(gateway, place);
 	User user(userId);
 
 	m_accessPolicy->assureUnassign(user, gateway);
 
-	if (!m_gatewayService->unassign(gateway, place))
+	if (!m_gatewayService->unassign(input))
 		return "";
 
 	return serialize(gateway);

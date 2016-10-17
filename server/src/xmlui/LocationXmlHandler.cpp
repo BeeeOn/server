@@ -64,8 +64,10 @@ void LocationXmlHandler::handleAdd(
 
 	Location location;
 	XmlLocationDeserializer deserializer(*locationNode);
+	RelationWithData<Location, Gateway> input(
+			location, deserializer, gateway);
 	
-	m_locationService.createIn(location, deserializer, gateway);
+	m_locationService.createIn(input);
 	resultSuccess();
 }
 
@@ -76,8 +78,9 @@ void LocationXmlHandler::handleDelete(
 	Gateway gateway(GatewayID::parse(gateid));
 	Location location(LocationID::parse(
 			locationNode->getAttribute("locationid")));
+	Relation<Location, Gateway> input(location, gateway);
 
-	if (!m_locationService.removeFrom(location, gateway)) {
+	if (!m_locationService.removeFrom(input)) {
 		resultNotFound();
 		return;
 	}
@@ -93,8 +96,10 @@ void LocationXmlHandler::handleUpdate(
 	Location location(LocationID::parse(
 			locationNode->getAttribute("locationid")));
 	XmlLocationDeserializer update(*locationNode);
+	RelationWithData<Location, Gateway> input(
+			location, update, gateway);
 
-	if (!m_locationService.updateIn(location, update, gateway)) {
+	if (!m_locationService.updateIn(input)) {
 		resultNotFound();
 		return;
 	}
@@ -106,8 +111,9 @@ void LocationXmlHandler::handleGetAll(const string &gateid)
 {
 	Gateway gateway(GatewayID::parse(gateid));
 	vector<Location> locations;
+	Relation<vector<Location>, Gateway> input(locations, gateway);
 
-	m_locationService.fetchBy(locations, gateway);
+	m_locationService.fetchBy(input);
 
 	resultDataStart();
 	serialize(m_output, locations);

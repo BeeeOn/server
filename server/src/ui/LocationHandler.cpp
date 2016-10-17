@@ -25,10 +25,11 @@ const string LocationHandler::handleCreate(std::istream &in,
 	User user(userId);
 	JSONLocationDeserializer data(in);
 	Location location;
+	RelationWithData<Location, Place> input(location, data, place);
 
 	m_accessPolicy->assureCreateLocation(user, place);
 
-	m_locationService->createIn(location, data, place);
+	m_locationService->createIn(input);
 
 	return serialize(location);
 }
@@ -41,11 +42,12 @@ const string LocationHandler::handleUpdate(std::istream &in,
 	Place place(PlaceID::parse(placeId));
 	Location location(LocationID::parse(locationId));
 	JSONLocationDeserializer update(in);
+	RelationWithData<Location, Place> input(location, update, place);
 	User user(userId);
 
 	m_accessPolicy->assureUpdate(user, location);
 
-	if (!m_locationService->updateIn(location, update, place)) {
+	if (!m_locationService->updateIn(input)) {
 		throw InvalidArgumentException("failed to update location: "
 				+ location.id().toString());
 	}
@@ -61,10 +63,11 @@ const string LocationHandler::handleGet(
 	Place place(PlaceID::parse(placeId));
 	Location location(LocationID::parse(locationId));
 	User user(userId);
+	Relation<Location, Place> input(location, place);
 
 	m_accessPolicy->assureGet(user, location);
 
-	if (!m_locationService->fetchFrom(location, place))
+	if (!m_locationService->fetchFrom(input))
 		return "";
 
 	return serialize(location);
@@ -77,11 +80,12 @@ const string LocationHandler::handleDelete(
 {
 	Place place(PlaceID::parse(placeId));
 	Location location(LocationID::parse(locationId));
+	Relation<Location, Place> input(location, place);
 	User user(userId);
 
 	m_accessPolicy->assureRemove(user, location);
 
-	if (!m_locationService->removeFrom(location, place))
+	if (!m_locationService->removeFrom(input))
 		return "";
 
 	return serialize(location);

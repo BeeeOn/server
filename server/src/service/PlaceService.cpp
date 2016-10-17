@@ -9,12 +9,11 @@ using namespace std;
 using namespace Poco;
 using namespace BeeeOn;
 
-void PlaceService::create(Place &place,
-		const Deserializer<Place> &data,
+void PlaceService::create(SingleWithData<Place> &input,
 		const Identity &identity)
 {
-	data.full(place);
-
+	Place &place = input.target();
+	input.data().full(place);
 	m_placeDao->create(place);
 
 	RoleInPlace role;
@@ -25,49 +24,50 @@ void PlaceService::create(Place &place,
 	m_roleInPlaceDao->create(role);
 }
 
-void PlaceService::create(Place &place,
-		const Deserializer<Place> &data,
+void PlaceService::create(SingleWithData<Place> &input,
 		VerifiedIdentity &verifiedIdentity)
 {
 	if (!m_verifiedIdentityDao->fetch(verifiedIdentity))
 		throw InvalidAccessException("no such identity");
 
-	create(place, data, verifiedIdentity.identity());
+	create(input, verifiedIdentity.identity());
 }
 
-void PlaceService::fetchAccessible(std::vector<Place> &places,
-		const User &user)
+void PlaceService::fetchAccessible(Relation<std::vector<Place>, User> &input)
 {
-	m_roleInPlaceDao->fetchAccessiblePlaces(places, user);
+	m_roleInPlaceDao->fetchAccessiblePlaces(input.target(), input.base());
 }
 
-bool PlaceService::fetch(Place &place)
+bool PlaceService::fetch(Single<Place> &input)
 {
-	return m_placeDao->fetch(place);
+	return m_placeDao->fetch(input.target());
 }
 
-bool PlaceService::update(Place &place, const Deserializer<Place> &update)
+bool PlaceService::update(SingleWithData<Place> &input)
 {
+	Place &place = input.target();
+
 	if (!m_placeDao->fetch(place))
 		throw NotFoundException("place does not exist");
 
-	update.partial(place);
-
+	input.data().partial(place);
 	return m_placeDao->update(place);
 }
 
-bool PlaceService::remove(Place &place, const User &owner)
+bool PlaceService::remove(Relation<Place, User> &input)
 {
+	Place &place = input.target();
+
 	vector<RoleInPlace> roles;
 	m_roleInPlaceDao->fetchBy(roles, place);
 
 	for (auto role : roles) {
-		if (role.identity().user().id() != owner.id()) {
+		if (role.identity().user().id() != input.base().id()) {
 			throw IllegalStateException(
 				"cannot delete place "
 				+ place.id().toString()
 				+ " because it contains users other then "
-				+ owner.id().toString());
+				+ input.base().id().toString());
 		}
 
 		if (!m_roleInPlaceDao->remove(role)) {
