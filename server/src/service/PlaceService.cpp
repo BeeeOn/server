@@ -33,10 +33,9 @@ void PlaceService::create(SingleWithData<Place> &input,
 	create(input, verifiedIdentity.identity());
 }
 
-void PlaceService::fetchAccessible(std::vector<Place> &places,
-		const User &user)
+void PlaceService::fetchAccessible(Relation<std::vector<Place>, User> &input)
 {
-	m_roleInPlaceDao->fetchAccessiblePlaces(places, user);
+	m_roleInPlaceDao->fetchAccessiblePlaces(input.target(), input.base());
 }
 
 bool PlaceService::fetch(Single<Place> &input)
@@ -55,18 +54,20 @@ bool PlaceService::update(SingleWithData<Place> &input)
 	return m_placeDao->update(place);
 }
 
-bool PlaceService::remove(Place &place, const User &owner)
+bool PlaceService::remove(Relation<Place, User> &input)
 {
+	Place &place = input.target();
+
 	vector<RoleInPlace> roles;
 	m_roleInPlaceDao->fetchBy(roles, place);
 
 	for (auto role : roles) {
-		if (role.identity().user().id() != owner.id()) {
+		if (role.identity().user().id() != input.base().id()) {
 			throw IllegalStateException(
 				"cannot delete place "
 				+ place.id().toString()
 				+ " because it contains users other then "
-				+ owner.id().toString());
+				+ input.base().id().toString());
 		}
 
 		if (!m_roleInPlaceDao->remove(role)) {

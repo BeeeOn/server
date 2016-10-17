@@ -72,10 +72,11 @@ const string PlaceHandler::handleDelete(const UserID &userId,
 {
 	Place place(PlaceID::parse(placeId));
 	User user(userId);
+	Relation<Place, User> input(place, user);
 
 	m_accessPolicy->assureRemove(user, place);
 
-	if (!m_placeService->remove(place, user))
+	if (!m_placeService->remove(input))
 		return "";
 
 	return serialize(place);
@@ -85,8 +86,9 @@ const string PlaceHandler::handleGetAll(const UserID &userId)
 {
 	User user(userId);
 	std::vector<Place> places;
+	Relation<vector<Place>, User> input(places, user);
 
-	m_placeService->fetchAccessible(places, user);
+	m_placeService->fetchAccessible(input);
 	return serialize(places);
 }
 

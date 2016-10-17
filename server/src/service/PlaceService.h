@@ -3,6 +3,7 @@
 
 #include "di/InjectorTarget.h"
 #include "service/Single.h"
+#include "service/Relation.h"
 #include "model/Place.h"
 #include "model/VerifiedIdentity.h"
 #include "model/Identity.h"
@@ -57,10 +58,10 @@ public:
 			const Identity &identity);
 	void create(SingleWithData<Place> &input,
 			VerifiedIdentity &identity);
-	void fetchAccessible(std::vector<Place> &places, const User &user);
+	void fetchAccessible(Relation<std::vector<Place>, User> &input);
 	bool fetch(Single<Place> &input);
 	bool update(SingleWithData<Place> &input);
-	bool remove(Place &place, const User &owner);
+	bool remove(Relation<Place, User> &input);
 
 private:
 	PlaceDao *m_placeDao;
