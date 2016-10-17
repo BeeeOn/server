@@ -16,8 +16,6 @@ PlaceHandler::PlaceHandler()
 			&PlaceHandler::setPlaceService);
 	injector<PlaceHandler, IdentityService>("identityService",
 			&PlaceHandler::setIdentityService);
-	injector<PlaceHandler, PlaceAccessPolicy>("accessPolicy",
-			&PlaceHandler::setAccessPolicy);
 }
 
 const string PlaceHandler::handleCreate(istream &in,
@@ -42,8 +40,6 @@ const string PlaceHandler::handleUpdate(istream &in,
 	SingleWithData<Place> input(place, update);
 	input.setUser(user);
 
-	m_accessPolicy->assureUpdate(input, place);
-
 	if (!m_placeService->update(input)) {
 		throw Exception("failed to update place: "
 				+ place.id().toString());
@@ -60,8 +56,6 @@ const string PlaceHandler::handleGet(const UserID &userId,
 	User user(userId);
 	input.setUser(user);
 
-	m_accessPolicy->assureGet(input, place);
-
 	if (!m_placeService->fetch(input)) {
 		return "";
 	}
@@ -76,8 +70,6 @@ const string PlaceHandler::handleDelete(const UserID &userId,
 	User user(userId);
 	Relation<Place, User> input(place, user);
 	input.setUser(user);
-
-	m_accessPolicy->assureRemove(input, place);
 
 	if (!m_placeService->remove(input))
 		return "";

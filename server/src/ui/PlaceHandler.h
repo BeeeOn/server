@@ -6,9 +6,9 @@
 
 #include "di/InjectorTarget.h"
 #include "server/RestHandler.h"
+#include "server/Session.h"
 #include "service/PlaceService.h"
 #include "service/IdentityService.h"
-#include "policy/PlaceAccessPolicy.h"
 #include "model/User.h"
 
 namespace BeeeOn {
@@ -130,15 +130,9 @@ public:
 		m_identityService = service;
 	}
 
-	void setAccessPolicy(PlaceAccessPolicy *accessPolicy)
-	{
-		m_accessPolicy = accessPolicy;
-	}
-
 private:
 	PlaceService *m_placeService;
 	IdentityService *m_identityService;
-	PlaceAccessPolicy *m_accessPolicy;
 };
 
 }

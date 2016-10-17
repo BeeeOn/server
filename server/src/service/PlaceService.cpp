@@ -89,12 +89,15 @@ void PlaceService::fetchAccessible(Relation<std::vector<Place>, User> &input)
 
 bool PlaceService::fetch(Single<Place> &input)
 {
+	m_accessPolicy->assureGet(input, input.target());
 	return m_placeDao->fetch(input.target());
 }
 
 bool PlaceService::update(SingleWithData<Place> &input)
 {
 	Place &place = input.target();
+
+	m_accessPolicy->assureUpdate(input, place);
 
 	if (!m_placeDao->fetch(place))
 		throw NotFoundException("place does not exist");
@@ -106,6 +109,8 @@ bool PlaceService::update(SingleWithData<Place> &input)
 bool PlaceService::remove(Relation<Place, User> &input)
 {
 	Place &place = input.target();
+
+	m_accessPolicy->assureRemove(input, place);
 
 	vector<RoleInPlace> roles;
 	m_roleInPlaceDao->fetchBy(roles, place);
