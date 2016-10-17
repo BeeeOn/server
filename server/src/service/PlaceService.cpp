@@ -2,6 +2,9 @@
 #include <Poco/Exception.h>
 
 #include "service/PlaceService.h"
+#include "dao/PlaceDao.h"
+#include "dao/RoleInPlaceDao.h"
+#include "dao/VerifiedIdentityDao.h"
 
 BEEEON_OBJECT(PlaceService, BeeeOn::PlaceService)
 

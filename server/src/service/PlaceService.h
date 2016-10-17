@@ -8,11 +8,12 @@
 #include "model/VerifiedIdentity.h"
 #include "model/Identity.h"
 #include "model/User.h"
-#include "dao/PlaceDao.h"
-#include "dao/RoleInPlaceDao.h"
-#include "dao/VerifiedIdentityDao.h"
 
 namespace BeeeOn {
+
+class PlaceDao;
+class RoleInPlaceDao;
+class VerifiedIdentityDao;
 
 class PlaceService : public AbstractInjectorTarget {
 public:
