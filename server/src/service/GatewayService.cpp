@@ -3,6 +3,11 @@
 
 #include "service/GatewayService.h"
 #include "server/AccessLevel.h"
+#include "dao/GatewayDao.h"
+#include "dao/RoleInPlaceDao.h"
+#include "dao/PlaceDao.h"
+#include "dao/IdentityDao.h"
+#include "dao/VerifiedIdentityDao.h"
 
 BEEEON_OBJECT(GatewayService, BeeeOn::GatewayService)
 
@@ -29,6 +34,55 @@ GatewayService::GatewayService():
 			&GatewayService::setVerifiedIdentityDao);
 	injector<GatewayService, GatewayRPC>("gatewayRPC",
 			&GatewayService::setGatewayRPC);
+}
+
+void GatewayService::setGatewayDao(GatewayDao *dao)
+{
+	if (dao == NULL)
+		m_gatewayDao = &NullGatewayDao::instance();
+	else
+		m_gatewayDao = dao;
+}
+
+void GatewayService::setRoleInPlaceDao(RoleInPlaceDao *dao)
+{
+	if (dao == NULL)
+		m_roleInPlaceDao = &NullRoleInPlaceDao::instance();
+	else
+		m_roleInPlaceDao = dao;
+}
+
+void GatewayService::setPlaceDao(PlaceDao *dao)
+{
+	if (dao == NULL)
+		m_placeDao = &NullPlaceDao::instance();
+	else
+		m_placeDao = dao;
+}
+
+void GatewayService::setIdentityDao(IdentityDao *dao)
+{
+	if (dao == NULL)
+		m_identityDao = &NullIdentityDao::instance();
+	else
+		m_identityDao = dao;
+}
+
+void GatewayService::setVerifiedIdentityDao(VerifiedIdentityDao *dao)
+{
+	if (dao == NULL)
+		m_verifiedIdentityDao =
+			&NullVerifiedIdentityDao::instance();
+	else
+		m_verifiedIdentityDao = dao;
+}
+
+void GatewayService::setGatewayRPC(GatewayRPC *rpc)
+{
+	if (rpc == NULL)
+		m_rpc = &NullGatewayRPC::instance();
+	else
+		m_rpc = rpc;
 }
 
 bool GatewayService::registerGateway(SingleWithData<Gateway> &input,
