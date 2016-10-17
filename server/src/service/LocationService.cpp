@@ -3,6 +3,7 @@
 #include "service/LocationService.h"
 #include "dao/LocationDao.h"
 #include "dao/GatewayDao.h"
+#include "policy/LocationAccessPolicy.h"
 
 BEEEON_OBJECT(LocationService, BeeeOn::LocationService)
 
@@ -12,12 +13,15 @@ using namespace BeeeOn;
 
 LocationService::LocationService():
 	m_dao(&NullLocationDao::instance()),
-	m_gatewayDao(&NullGatewayDao::instance())
+	m_gatewayDao(&NullGatewayDao::instance()),
+	m_accessPolicy(&NullLocationAccessPolicy::instance())
 {
 	injector<LocationService, LocationDao>("locationDao",
 			&LocationService::setLocationDao);
 	injector<LocationService, GatewayDao>("gatewayDao",
 			&LocationService::setGatewayDao);
+	injector<LocationService, LocationAccessPolicy>("accessPolicy",
+			&LocationService::setAccessPolicy);
 }
 
 void LocationService::setLocationDao(LocationDao *dao)
@@ -28,6 +32,12 @@ void LocationService::setLocationDao(LocationDao *dao)
 void LocationService::setGatewayDao(GatewayDao *dao)
 {
 	m_gatewayDao = dao? dao : &NullGatewayDao::instance();
+}
+
+void LocationService::setAccessPolicy(LocationAccessPolicy *policy)
+{
+	m_accessPolicy = policy? policy :
+		&NullLocationAccessPolicy::instance();
 }
 
 void LocationService::createIn(RelationWithData<Location, Place> &input)

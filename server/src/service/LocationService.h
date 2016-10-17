@@ -17,6 +17,7 @@ namespace BeeeOn {
 
 class LocationDao;
 class GatewayDao;
+class LocationAccessPolicy;
 
 /**
  * Locations management.
@@ -27,6 +28,7 @@ public:
 
 	void setLocationDao(LocationDao *dao);
 	void setGatewayDao(GatewayDao *dao);
+	void setAccessPolicy(LocationAccessPolicy *policy);
 
 	void createIn(RelationWithData<Location, Place> &input);
 	void createIn(RelationWithData<Location, Gateway> &input);
@@ -42,6 +44,7 @@ public:
 private:
 	LocationDao *m_dao;
 	GatewayDao *m_gatewayDao;
+	LocationAccessPolicy *m_accessPolicy;
 };
 
 }

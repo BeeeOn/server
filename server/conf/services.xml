@@ -110,6 +110,7 @@
 				class="BeeeOn::LocationService">
 			<set name="locationDao" ref="locationDao" />
 			<set name="gatewayDao" ref="gatewayDao" />
+			<set name="accessPolicy" ref="accessPolicy" />
 		</instance>
 
 		<instance name="identityService" class="BeeeOn::IdentityService">
