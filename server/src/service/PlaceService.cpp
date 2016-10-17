@@ -16,10 +16,14 @@ PlaceService::PlaceService():
 	m_placeDao(&NullPlaceDao::instance()),
 	m_roleInPlaceDao(&NullRoleInPlaceDao::instance())
 {
-	injector<PlaceService, PlaceDao>("placeDao",
-		&PlaceService::setPlaceDao);
-	injector<PlaceService, RoleInPlaceDao>("roleInPlaceDao",
-		&PlaceService::setRoleInPlaceDao);
+	injector<PlaceService, PlaceDao>(
+		"placeDao",
+		&PlaceService::setPlaceDao
+	);
+	injector<PlaceService, RoleInPlaceDao>(
+		"roleInPlaceDao",
+		&PlaceService::setRoleInPlaceDao
+	);
 	injector<PlaceService, VerifiedIdentityDao>(
 		"verifiedIdentityDao",
 		&PlaceService::setVerifiedIdentityDao
