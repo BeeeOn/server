@@ -9,6 +9,44 @@ using namespace std;
 using namespace Poco;
 using namespace BeeeOn;
 
+PlaceService::PlaceService():
+	m_placeDao(&NullPlaceDao::instance()),
+	m_roleInPlaceDao(&NullRoleInPlaceDao::instance())
+{
+	injector<PlaceService, PlaceDao>("placeDao",
+		&PlaceService::setPlaceDao);
+	injector<PlaceService, RoleInPlaceDao>("roleInPlaceDao",
+		&PlaceService::setRoleInPlaceDao);
+	injector<PlaceService, VerifiedIdentityDao>(
+		"verifiedIdentityDao",
+		&PlaceService::setVerifiedIdentityDao
+	);
+}
+
+void PlaceService::setPlaceDao(PlaceDao *dao)
+{
+	if (dao == NULL)
+		m_placeDao = &NullPlaceDao::instance();
+	else
+		m_placeDao = dao;
+}
+
+void PlaceService::setRoleInPlaceDao(RoleInPlaceDao *dao)
+{
+	if (dao == NULL)
+		m_roleInPlaceDao = &NullRoleInPlaceDao::instance();
+	else
+		m_roleInPlaceDao = dao;
+}
+
+void PlaceService::setVerifiedIdentityDao(VerifiedIdentityDao *dao)
+{
+	if (dao == NULL)
+		m_verifiedIdentityDao = &NullVerifiedIdentityDao::instance();
+	else
+		m_verifiedIdentityDao = dao;
+}
+
 void PlaceService::create(SingleWithData<Place> &input,
 		const Identity &identity)
 {
