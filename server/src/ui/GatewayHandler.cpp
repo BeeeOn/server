@@ -29,8 +29,9 @@ const string GatewayHandler::handleAssign(istream &in,
 	JSONGatewayDeserializer update(in);
 	RelationWithData<Gateway, Place> input(gateway, update, place);
 	User user(userId);
+	input.setUser(user);
 
-	m_accessPolicy->assureAssignGateway(user, place);
+	m_accessPolicy->assureAssignGateway(input, place);
 
 	if (!m_gatewayService->assignAndUpdate(input))
 		return "";
@@ -48,8 +49,9 @@ const string GatewayHandler::handleUpdate(istream &in,
 	JSONGatewayDeserializer update(in);
 	RelationWithData<Gateway, Place> input(gateway, update, place);
 	User user(userId);
+	input.setUser(user);
 
-	m_accessPolicy->assureUpdate(user, gateway);
+	m_accessPolicy->assureUpdate(input, gateway);
 
 	if (!m_gatewayService->updateInPlace(input)) {
 		throw Exception("failed to update gateway: "
@@ -68,8 +70,9 @@ const string GatewayHandler::handleGet(
 	Gateway gateway(GatewayID::parse(gatewayId));
 	Relation<Gateway, Place> input(gateway, place);
 	User user(userId);
+	input.setUser(user);
 
-	m_accessPolicy->assureGet(user, gateway);
+	m_accessPolicy->assureGet(input, gateway);
 
 	if (!m_gatewayService->fetchFromPlace(input))
 		return "";
@@ -86,8 +89,9 @@ const string GatewayHandler::handleDelete(
 	Gateway gateway(GatewayID::parse(gatewayId));
 	Relation<Gateway, Place> input(gateway, place);
 	User user(userId);
+	input.setUser(user);
 
-	m_accessPolicy->assureUnassign(user, gateway);
+	m_accessPolicy->assureUnassign(input, gateway);
 
 	if (!m_gatewayService->unassign(input))
 		return "";

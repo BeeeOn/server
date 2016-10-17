@@ -84,8 +84,9 @@ void GatewayXmlHandler::handleUnregister(Element *gatewayNode)
 	Gateway gateway(GatewayID::parse(gatewayNode->getAttribute("id")));
 	User user(session()->userID());
 	Relation<Gateway, User> input(gateway, user);
+	input.setUser(user);
 
-	m_accessPolicy.assureUnassign(user, gateway);
+	m_accessPolicy.assureUnassign(input, gateway);
 
 	if (!m_gatewayService.unassign(input)) {
 		resultNotOwned();
@@ -100,8 +101,9 @@ void GatewayXmlHandler::handleListen(Element *gatewayNode)
 	Gateway gateway(GatewayID::parse(gatewayNode->getAttribute("id")));
 	Single<Gateway> input(gateway);
 	User user(session()->userID());
+	input.setUser(user);
 
-	m_accessPolicy.assureScanDevices(user, gateway);
+	m_accessPolicy.assureScanDevices(input, gateway);
 
 	m_gatewayService.scanDevices(input);
 	resultSuccess();
@@ -112,8 +114,9 @@ void GatewayXmlHandler::handleGet(Element *gatewayNode)
 	Gateway gateway(GatewayID::parse(gatewayNode->getAttribute("id")));
 	Single<Gateway> input(gateway);
 	User user(session()->userID());
+	input.setUser(user);
 
-	m_accessPolicy.assureGet(user, gateway);
+	m_accessPolicy.assureGet(input, gateway);
 
 	if (!m_gatewayService.fetch(input)) {
 		resultNotFound();
@@ -136,8 +139,9 @@ void GatewayXmlHandler::handleUpdate(Element *gatewayNode)
 	XmlGatewayDeserializer update(*gatewayNode);
 	SingleWithData<Gateway> input(gateway, update);
 	User user(session()->userID());
+	input.setUser(user);
 
-	m_accessPolicy.assureUpdate(user, gateway);
+	m_accessPolicy.assureUpdate(input, gateway);
 
 	if (!m_gatewayService.update(input)) {
 		resultNotFound();

@@ -26,8 +26,9 @@ const string LocationHandler::handleCreate(std::istream &in,
 	JSONLocationDeserializer data(in);
 	Location location;
 	RelationWithData<Location, Place> input(location, data, place);
+	input.setUser(user);
 
-	m_accessPolicy->assureCreateLocation(user, place);
+	m_accessPolicy->assureCreateLocation(input, place);
 
 	m_locationService->createIn(input);
 
@@ -44,8 +45,9 @@ const string LocationHandler::handleUpdate(std::istream &in,
 	JSONLocationDeserializer update(in);
 	RelationWithData<Location, Place> input(location, update, place);
 	User user(userId);
+	input.setUser(user);
 
-	m_accessPolicy->assureUpdate(user, location);
+	m_accessPolicy->assureUpdate(input, location);
 
 	if (!m_locationService->updateIn(input)) {
 		throw InvalidArgumentException("failed to update location: "
@@ -64,8 +66,9 @@ const string LocationHandler::handleGet(
 	Location location(LocationID::parse(locationId));
 	User user(userId);
 	Relation<Location, Place> input(location, place);
+	input.setUser(user);
 
-	m_accessPolicy->assureGet(user, location);
+	m_accessPolicy->assureGet(input, location);
 
 	if (!m_locationService->fetchFrom(input))
 		return "";
@@ -82,8 +85,9 @@ const string LocationHandler::handleDelete(
 	Location location(LocationID::parse(locationId));
 	Relation<Location, Place> input(location, place);
 	User user(userId);
+	input.setUser(user);
 
-	m_accessPolicy->assureRemove(user, location);
+	m_accessPolicy->assureRemove(input, location);
 
 	if (!m_locationService->removeFrom(input))
 		return "";

@@ -1,5 +1,6 @@
 #include <Poco/Exception.h>
 
+#include "policy/PolicyContext.h"
 #include "policy/DefaultAccessPolicy.h"
 
 BEEEON_OBJECT(DefaultAccessPolicy, BeeeOn::DefaultAccessPolicy)
@@ -48,42 +49,42 @@ void DefaultAccessPolicy::assureAtLeast(
 }
 
 void DefaultAccessPolicy::assureGet(
-		const User &user,
+		const PolicyContext &context,
 		const Place &place)
 {
 	assureAtLeast(
-		fetchAccessLevel(user, place),
+		fetchAccessLevel(context.user(), place),
 		AccessLevel::guest());
 }
 
 void DefaultAccessPolicy::assureUpdate(
-		const User &user,
+		const PolicyContext &context,
 		const Place &place)
 {
 	assureAtLeast(
-		fetchAccessLevel(user, place),
+		fetchAccessLevel(context.user(), place),
 		AccessLevel::user());
 }
 
 void DefaultAccessPolicy::assureRemove(
-		const User &user,
+		const PolicyContext &context,
 		const Place &place)
 {
 	assureAtLeast(
-		fetchAccessLevel(user, place),
+		fetchAccessLevel(context.user(), place),
 		AccessLevel::admin());
 }
 
 void DefaultAccessPolicy::assureAssignGateway(
-		const User &user,
+		const PolicyContext &context,
 		const Place &place)
 {
 	assureAtLeast(
-		fetchAccessLevel(user, place), AccessLevel::admin());
+		fetchAccessLevel(context.user(), place), AccessLevel::admin());
 }
 
 void DefaultAccessPolicy::assureGet(
-		const User &user,
+		const PolicyContext &context,
 		const Gateway &gateway)
 {
 	Gateway tmp(gateway);
@@ -94,11 +95,11 @@ void DefaultAccessPolicy::assureGet(
 	const Place place(tmp.place());
 
 	assureAtLeast(
-		fetchAccessLevel(user, place), AccessLevel::guest());
+		fetchAccessLevel(context.user(), place), AccessLevel::guest());
 }
 
 void DefaultAccessPolicy::assureUnassign(
-		const User &user,
+		const PolicyContext &context,
 		const Gateway &gateway)
 {
 	Gateway tmp(gateway);
@@ -109,11 +110,11 @@ void DefaultAccessPolicy::assureUnassign(
 	const Place place(tmp.place());
 
 	assureAtLeast(
-		fetchAccessLevel(user, place), AccessLevel::admin());
+		fetchAccessLevel(context.user(), place), AccessLevel::admin());
 }
 
 void DefaultAccessPolicy::assureUpdate(
-		const User &user,
+		const PolicyContext &context,
 		const Gateway &gateway)
 {
 	Gateway tmp(gateway);
@@ -124,11 +125,11 @@ void DefaultAccessPolicy::assureUpdate(
 	const Place place(tmp.place());
 
 	assureAtLeast(
-		fetchAccessLevel(user, place), AccessLevel::user());
+		fetchAccessLevel(context.user(), place), AccessLevel::user());
 }
 
 void DefaultAccessPolicy::assureScanDevices(
-		const User &user,
+		const PolicyContext &context,
 		const Gateway &gateway)
 {
 	Gateway tmp(gateway);
@@ -139,19 +140,19 @@ void DefaultAccessPolicy::assureScanDevices(
 	const Place place(tmp.place());
 
 	assureAtLeast(
-		fetchAccessLevel(user, place), AccessLevel::user());
+		fetchAccessLevel(context.user(), place), AccessLevel::user());
 }
 
 void DefaultAccessPolicy::assureCreateLocation(
-		const User &user,
+		const PolicyContext &context,
 		const Place &place)
 {
 	assureAtLeast(
-		fetchAccessLevel(user, place), AccessLevel::user());
+		fetchAccessLevel(context.user(), place), AccessLevel::user());
 }
 
 void DefaultAccessPolicy::assureGet(
-		const User &user,
+		const PolicyContext &context,
 		const Location &location)
 {
 	Location tmp(location);
@@ -162,11 +163,11 @@ void DefaultAccessPolicy::assureGet(
 	const Place place(tmp.place());
 
 	assureAtLeast(
-		fetchAccessLevel(user, place), AccessLevel::guest());
+		fetchAccessLevel(context.user(), place), AccessLevel::guest());
 }
 
 void DefaultAccessPolicy::assureUpdate(
-		const User &user,
+		const PolicyContext &context,
 		const Location &location)
 {
 	Location tmp(location);
@@ -177,11 +178,11 @@ void DefaultAccessPolicy::assureUpdate(
 	const Place place(tmp.place());
 
 	assureAtLeast(
-		fetchAccessLevel(user, place), AccessLevel::user());
+		fetchAccessLevel(context.user(), place), AccessLevel::user());
 }
 
 void DefaultAccessPolicy::assureRemove(
-		const User &user,
+		const PolicyContext &context,
 		const Location &location)
 {
 	Location tmp(location);
@@ -192,5 +193,5 @@ void DefaultAccessPolicy::assureRemove(
 	const Place place(tmp.place());
 
 	assureAtLeast(
-		fetchAccessLevel(user, place), AccessLevel::user());
+		fetchAccessLevel(context.user(), place), AccessLevel::user());
 }

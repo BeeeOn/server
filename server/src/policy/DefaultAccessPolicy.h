@@ -19,31 +19,31 @@ class DefaultAccessPolicy : public AbstractInjectorTarget,
 public:
 	DefaultAccessPolicy();
 
-	void assureGet(const User &user,
+	void assureGet(const PolicyContext &context,
 		const Place &place) override;
-	void assureUpdate(const User &user,
+	void assureUpdate(const PolicyContext &context,
 		const Place &place) override;
-	void assureRemove(const User &user,
+	void assureRemove(const PolicyContext &context,
 		const Place &place) override;
 
-	void assureGet(const User &user,
+	void assureGet(const PolicyContext &context,
 		const Gateway &gateway) override;
-	void assureAssignGateway(const User &user,
+	void assureAssignGateway(const PolicyContext &context,
 		const Place &place) override;
-	void assureUnassign(const User &user,
+	void assureUnassign(const PolicyContext &context,
 		const Gateway &gateway) override;
-	void assureUpdate(const User &user,
+	void assureUpdate(const PolicyContext &context,
 		const Gateway &gateway) override;
-	void assureScanDevices(const User &user,
+	void assureScanDevices(const PolicyContext &context,
 		const Gateway &gateway) override;
 
-	void assureGet(const User &user,
+	void assureGet(const PolicyContext &context,
 		const Location &location);
-	void assureCreateLocation(const User &user,
+	void assureCreateLocation(const PolicyContext &context,
 		const Place &place);
-	void assureUpdate(const User &user,
+	void assureUpdate(const PolicyContext &context,
 		const Location &location);
-	void assureRemove(const User &user,
+	void assureRemove(const PolicyContext &context,
 		const Location &location);
 
 	void setUserDao(UserDao *dao)

@@ -2,6 +2,7 @@
 #define BEEEON_SINGLE_H
 
 #include "service/Deserializer.h"
+#include "policy/PolicyContext.h"
 
 namespace BeeeOn {
 
@@ -9,7 +10,7 @@ namespace BeeeOn {
  * Single entity representation.
  */
 template <typename T>
-class Single {
+class Single : public AbstractPolicyContext {
 public:
 	Single(T &target):
 		m_target(target)
