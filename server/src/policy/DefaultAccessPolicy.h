@@ -26,15 +26,15 @@ public:
 	void assureRemove(const PolicyContext &context,
 		const Place &place) override;
 
-	void assureGet(const User &user,
+	void assureGet(const PolicyContext &context,
 		const Gateway &gateway) override;
-	void assureAssignGateway(const User &user,
+	void assureAssignGateway(const PolicyContext &context,
 		const Place &place) override;
-	void assureUnassign(const User &user,
+	void assureUnassign(const PolicyContext &context,
 		const Gateway &gateway) override;
-	void assureUpdate(const User &user,
+	void assureUpdate(const PolicyContext &context,
 		const Gateway &gateway) override;
-	void assureScanDevices(const User &user,
+	void assureScanDevices(const PolicyContext &context,
 		const Gateway &gateway) override;
 
 	void assureGet(const User &user,

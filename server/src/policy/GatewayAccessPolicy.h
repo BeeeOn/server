@@ -7,22 +7,24 @@
 
 namespace BeeeOn {
 
+class PolicyContext;
+
 class GatewayAccessPolicy {
 public:
 	virtual void assureGet(
-			const User &user,
+			const PolicyContext &context,
 			const Gateway &gateway) = 0;
 	virtual void assureAssignGateway(
-			const User &user,
+			const PolicyContext &context,
 			const Place &place) = 0;
 	virtual void assureUnassign(
-			const User &user,
+			const PolicyContext &context,
 			const Gateway &gateway) = 0;
 	virtual void assureUpdate(
-			const User &user,
+			const PolicyContext &context,
 			const Gateway &gateway) = 0;
 	virtual void assureScanDevices(
-			const User &user,
+			const PolicyContext &context,
 			const Gateway &gateway) = 0;
 };
 
