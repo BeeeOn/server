@@ -5,6 +5,7 @@
 #include <Poco/Exception.h>
 #include <Poco/Logger.h>
 #include "service/Deserializer.h"
+#include "service/Single.h"
 #include "dao/GatewayDao.h"
 #include "dao/RoleInPlaceDao.h"
 #include "dao/PlaceDao.h"
@@ -86,17 +87,15 @@ public:
 	 *
 	 * @return false when assignment fails (update operation fails)
 	 */
-	bool registerGateway(Gateway &gateway,
-			const Deserializer<Gateway> &data,
+	bool registerGateway(SingleWithData<Gateway> &input,
 			const VerifiedIdentity &verifiedIdentity);
 
-	bool fetch(Gateway &gateway);
+	bool fetch(Single<Gateway> &input);
 	bool fetchFromPlace(Gateway &gateway, const Place &place);
 	void fetchAccessible(std::vector<Gateway> &gateways,
 			const User &user);
 
-	bool update(Gateway &gateway,
-			const Deserializer<Gateway> &update);
+	bool update(SingleWithData<Gateway> &input);
 	bool updateInPlace(Gateway &gateway,
 			const Deserializer<Gateway> &update,
 			const Place &place);
@@ -106,9 +105,9 @@ public:
 	bool unassign(Gateway &gateway, const Place &place);
 	bool unassign(Gateway &gateway, const User &user);
 
-	void scanDevices(Gateway &gateway);
-	void unpairDevice(Gateway &gateway, Device &device);
-	void pingGateway(Gateway &gateway);
+	void scanDevices(Single<Gateway> &input);
+	void unpairDevice(Single<Gateway> &input, Device &device);
+	void pingGateway(Single<Gateway> &input);
 
 protected:
 	void createImplicitPlace(Place &place, Identity &identity);

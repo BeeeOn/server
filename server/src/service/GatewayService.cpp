@@ -31,8 +31,7 @@ GatewayService::GatewayService():
 			&GatewayService::setGatewayRPC);
 }
 
-bool GatewayService::registerGateway(Gateway &gateway,
-		const Deserializer<Gateway> &data,
+bool GatewayService::registerGateway(SingleWithData<Gateway> &input,
 		const VerifiedIdentity &verifiedIdentity)
 {
 	VerifiedIdentity tmp(verifiedIdentity);
@@ -48,6 +47,8 @@ bool GatewayService::registerGateway(Gateway &gateway,
 
 	if (!identity.hasUser())
 		throw InvalidArgumentException("identity with no user");
+
+	Gateway &gateway = input.target();
 
 	if (!m_gatewayDao->fetch(gateway))
 		throw NotFoundException("gateway was not found");
@@ -75,7 +76,7 @@ bool GatewayService::registerGateway(Gateway &gateway,
 		places.push_back(place);
 	}
 
-	data.full(gateway);
+	input.data().full(gateway);
 	return m_gatewayDao->assignAndUpdate(gateway, places.front());
 }
 
@@ -93,9 +94,9 @@ void GatewayService::createImplicitPlace(Place &place, Identity &identity)
 	m_roleInPlaceDao->create(role);
 }
 
-bool GatewayService::fetch(Gateway &gateway)
+bool GatewayService::fetch(Single<Gateway> &input)
 {
-	return m_gatewayDao->fetch(gateway);
+	return m_gatewayDao->fetch(input.target());
 }
 
 bool GatewayService::fetchFromPlace(Gateway &gateway, const Place &place)
@@ -109,13 +110,14 @@ void GatewayService::fetchAccessible(vector<Gateway> &gateways,
 	m_gatewayDao->fetchAccessible(gateways, user);
 }
 
-bool GatewayService::update(Gateway &gateway,
-		const Deserializer<Gateway> &update)
+bool GatewayService::update(SingleWithData<Gateway> &input)
 {
+	Gateway &gateway = input.target();
+
 	if (!m_gatewayDao->fetch(gateway))
 		throw NotFoundException("gateway does not exist");
 
-	update.partial(gateway);
+	input.data().partial(gateway);
 	return m_gatewayDao->update(gateway);
 }
 
@@ -165,17 +167,17 @@ bool GatewayService::unassign(Gateway &gateway, const User &user)
 	return m_gatewayDao->unassign(gateway);
 }
 
-void GatewayService::scanDevices(Gateway &gateway)
+void GatewayService::scanDevices(Single<Gateway> &input)
 {
-	m_rpc->sendListen(gateway);
+	m_rpc->sendListen(input.target());
 }
 
-void GatewayService::unpairDevice(Gateway &gateway, Device &device)
+void GatewayService::unpairDevice(Single<Gateway> &input, Device &device)
 {
-	m_rpc->unpairDevice(gateway, device);
+	m_rpc->unpairDevice(input.target(), device);
 }
 
-void GatewayService::pingGateway(Gateway &gateway)
+void GatewayService::pingGateway(Single<Gateway> &input)
 {
-	m_rpc->pingGateway(gateway);
+	m_rpc->pingGateway(input.target());
 }

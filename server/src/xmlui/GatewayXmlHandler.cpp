@@ -66,12 +66,12 @@ void GatewayXmlHandler::handleRegister(Element *gatewayNode)
 	Gateway gateway(GatewayID::parse(gatewayNode->getAttribute("id")));
 	VerifiedIdentity identity(session()->identityID());
 	XmlGatewayDeserializer deserializer(*gatewayNode);
+	SingleWithData<Gateway> input(gateway, deserializer);
 	User user(session()->userID());
 
 	// approved to everybody, such gateway is associated with a
 	// place where the user is admin or to a new implicit place
-	if (!m_gatewayService.registerGateway(
-			gateway, deserializer, identity)) {
+	if (!m_gatewayService.registerGateway(input, identity)) {
 		resultNotOwned();
 		return;
 	}
@@ -97,22 +97,24 @@ void GatewayXmlHandler::handleUnregister(Element *gatewayNode)
 void GatewayXmlHandler::handleListen(Element *gatewayNode)
 {
 	Gateway gateway(GatewayID::parse(gatewayNode->getAttribute("id")));
+	Single<Gateway> input(gateway);
 	User user(session()->userID());
 
 	m_accessPolicy.assureScanDevices(user, gateway);
 
-	m_gatewayService.scanDevices(gateway);
+	m_gatewayService.scanDevices(input);
 	resultSuccess();
 }
 
 void GatewayXmlHandler::handleGet(Element *gatewayNode)
 {
 	Gateway gateway(GatewayID::parse(gatewayNode->getAttribute("id")));
+	Single<Gateway> input(gateway);
 	User user(session()->userID());
 
 	m_accessPolicy.assureGet(user, gateway);
 
-	if (!m_gatewayService.fetch(gateway)) {
+	if (!m_gatewayService.fetch(input)) {
 		resultNotFound();
 		return;
 	}
@@ -131,11 +133,12 @@ void GatewayXmlHandler::handleUpdate(Element *gatewayNode)
 {
 	Gateway gateway(GatewayID::parse(gatewayNode->getAttribute("id")));
 	XmlGatewayDeserializer update(*gatewayNode);
+	SingleWithData<Gateway> input(gateway, update);
 	User user(session()->userID());
 
 	m_accessPolicy.assureUpdate(user, gateway);
 
-	if (!m_gatewayService.update(gateway, update)) {
+	if (!m_gatewayService.update(input)) {
 		resultNotFound();
 		return;
 	}
