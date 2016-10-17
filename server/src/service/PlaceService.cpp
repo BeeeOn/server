@@ -9,12 +9,11 @@ using namespace std;
 using namespace Poco;
 using namespace BeeeOn;
 
-void PlaceService::create(Place &place,
-		const Deserializer<Place> &data,
+void PlaceService::create(SingleWithData<Place> &input,
 		const Identity &identity)
 {
-	data.full(place);
-
+	Place &place = input.target();
+	input.data().full(place);
 	m_placeDao->create(place);
 
 	RoleInPlace role;
@@ -25,14 +24,13 @@ void PlaceService::create(Place &place,
 	m_roleInPlaceDao->create(role);
 }
 
-void PlaceService::create(Place &place,
-		const Deserializer<Place> &data,
+void PlaceService::create(SingleWithData<Place> &input,
 		VerifiedIdentity &verifiedIdentity)
 {
 	if (!m_verifiedIdentityDao->fetch(verifiedIdentity))
 		throw InvalidAccessException("no such identity");
 
-	create(place, data, verifiedIdentity.identity());
+	create(input, verifiedIdentity.identity());
 }
 
 void PlaceService::fetchAccessible(std::vector<Place> &places,
@@ -41,18 +39,19 @@ void PlaceService::fetchAccessible(std::vector<Place> &places,
 	m_roleInPlaceDao->fetchAccessiblePlaces(places, user);
 }
 
-bool PlaceService::fetch(Place &place)
+bool PlaceService::fetch(Single<Place> &input)
 {
-	return m_placeDao->fetch(place);
+	return m_placeDao->fetch(input.target());
 }
 
-bool PlaceService::update(Place &place, const Deserializer<Place> &update)
+bool PlaceService::update(SingleWithData<Place> &input)
 {
+	Place &place = input.target();
+
 	if (!m_placeDao->fetch(place))
 		throw NotFoundException("place does not exist");
 
-	update.partial(place);
-
+	input.data().partial(place);
 	return m_placeDao->update(place);
 }
 

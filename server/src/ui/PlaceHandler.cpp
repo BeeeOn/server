@@ -1,6 +1,7 @@
 #include <Poco/Exception.h>
 
 #include "service/JSONPlaceDeserializer.h"
+#include "service/Single.h"
 #include "ui/PlaceHandler.h"
 #include "ui/Serializing.h"
 
@@ -25,8 +26,9 @@ const string PlaceHandler::handleCreate(istream &in,
 	VerifiedIdentity identity(identityID);
 	JSONPlaceDeserializer data(in);
 	Place place;
+	SingleWithData<Place> input(place, data);
 
-	m_placeService->create(place, data, identity);
+	m_placeService->create(input, identity);
 	return serialize(place);
 }
 
@@ -37,10 +39,11 @@ const string PlaceHandler::handleUpdate(istream &in,
 	Place place(PlaceID::parse(placeId));
 	JSONPlaceDeserializer update(in);
 	User user(userId);
+	SingleWithData<Place> input(place, update);
 
 	m_accessPolicy->assureUpdate(user, place);
 
-	if (!m_placeService->update(place, update)) {
+	if (!m_placeService->update(input)) {
 		throw Exception("failed to update place: "
 				+ place.id().toString());
 	}
@@ -52,11 +55,12 @@ const string PlaceHandler::handleGet(const UserID &userId,
 		const string &placeId)
 {
 	Place place(PlaceID::parse(placeId));
+	Single<Place> input(place);
 	User user(userId);
 
 	m_accessPolicy->assureGet(user, place);
 
-	if (!m_placeService->fetch(place)) {
+	if (!m_placeService->fetch(input)) {
 		return "";
 	}
 

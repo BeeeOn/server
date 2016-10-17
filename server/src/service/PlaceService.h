@@ -2,7 +2,7 @@
 #define BEEEON_PLACE_SERVICE_H
 
 #include "di/InjectorTarget.h"
-#include "service/Deserializer.h"
+#include "service/Single.h"
 #include "model/Place.h"
 #include "model/VerifiedIdentity.h"
 #include "model/Identity.h"
@@ -53,15 +53,13 @@ public:
 			m_verifiedIdentityDao = dao;
 	}
 
-	void create(Place &place,
-			const Deserializer<Place> &data,
+	void create(SingleWithData<Place> &input,
 			const Identity &identity);
-	void create(Place &place,
-			const Deserializer<Place> &data,
+	void create(SingleWithData<Place> &input,
 			VerifiedIdentity &identity);
 	void fetchAccessible(std::vector<Place> &places, const User &user);
-	bool fetch(Place &place);
-	bool update(Place &place, const Deserializer<Place> &update);
+	bool fetch(Single<Place> &input);
+	bool update(SingleWithData<Place> &input);
 	bool remove(Place &place, const User &owner);
 
 private:
