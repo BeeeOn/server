@@ -245,3 +245,12 @@ class LocationUpdate(Request):
 			location.set("name", self.name)
 
 		return request
+
+class GetMyProfile(Request):
+	def __init__(self, sessionid, **kwargs):
+		Request.__init__(self, ns = "accounts",
+			type = "getmyprofile", sessionid = sessionid)
+
+	def xml(self):
+		request = Request.xml(self)
+		return request
