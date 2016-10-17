@@ -53,6 +53,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/service/JSONPlaceDeserializer.cpp
 	${PROJECT_SOURCE_DIR}/service/JSONGatewayDeserializer.cpp
 	${PROJECT_SOURCE_DIR}/service/JSONLocationDeserializer.cpp
+	${PROJECT_SOURCE_DIR}/policy/PlaceAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/DefaultAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/util/DAMM.cpp
 	${PROJECT_SOURCE_DIR}/util/SecureXmlParser.cpp

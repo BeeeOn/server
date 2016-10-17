@@ -14,6 +14,7 @@ namespace BeeeOn {
 class PlaceDao;
 class RoleInPlaceDao;
 class VerifiedIdentityDao;
+class PlaceAccessPolicy;
 
 class PlaceService : public AbstractInjectorTarget {
 public:
@@ -22,6 +23,7 @@ public:
 	void setPlaceDao(PlaceDao *dao);
 	void setRoleInPlaceDao(RoleInPlaceDao *dao);
 	void setVerifiedIdentityDao(VerifiedIdentityDao *dao);
+	void setAccessPolicy(PlaceAccessPolicy *policy);
 
 	void create(SingleWithData<Place> &input,
 			const Identity &identity);
@@ -36,6 +38,7 @@ private:
 	PlaceDao *m_placeDao;
 	RoleInPlaceDao *m_roleInPlaceDao;
 	VerifiedIdentityDao *m_verifiedIdentityDao;
+	PlaceAccessPolicy *m_accessPolicy;
 };
 
 }

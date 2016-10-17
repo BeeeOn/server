@@ -78,6 +78,7 @@
 			<set name="placeDao" ref="placeDao" />
 			<set name="roleInPlaceDao" ref="roleInPlaceDao" />
 			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
+			<set name="accessPolicy" ref="accessPolicy" />
 		</instance>
 
 		<instance name="userService" class="BeeeOn::UserService">
