@@ -7,7 +7,6 @@
 #include "di/InjectorTarget.h"
 #include "server/RestHandler.h"
 #include "service/LocationService.h"
-#include "policy/LocationAccessPolicy.h"
 
 namespace BeeeOn {
 namespace UI {
@@ -120,14 +119,8 @@ public:
 		m_locationService = service;
 	}
 
-	void setAccessPolicy(LocationAccessPolicy *policy)
-	{
-		m_accessPolicy = policy;
-	}
-
 private:
 	LocationService *m_locationService;
-	LocationAccessPolicy *m_accessPolicy;
 };
 
 }

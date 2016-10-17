@@ -138,14 +138,8 @@ public:
 		m_gatewayService = service;
 	}
 
-	void setAccessPolicy(GatewayAccessPolicy *policy)
-	{
-		m_accessPolicy = policy;
-	}
-
 private:
 	GatewayService *m_gatewayService;
-	GatewayAccessPolicy *m_accessPolicy;
 };
 
 }

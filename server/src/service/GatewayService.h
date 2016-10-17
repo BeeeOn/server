@@ -6,11 +6,6 @@
 #include <Poco/Logger.h>
 #include "service/Single.h"
 #include "service/Relation.h"
-#include "dao/GatewayDao.h"
-#include "dao/RoleInPlaceDao.h"
-#include "dao/PlaceDao.h"
-#include "dao/IdentityDao.h"
-#include "dao/VerifiedIdentityDao.h"
 #include "rpc/GatewayRPC.h"
 #include "di/InjectorTarget.h"
 #include "Debug.h"
@@ -21,58 +16,25 @@
 
 namespace BeeeOn {
 
+class GatewayDao;
+class RoleInPlaceDao;
+class PlaceDao;
+class IdentityDao;
+class VerifiedIdentityDao;
+class GatewayRPC;
+class GatewayAccessPolicy;
+
 class GatewayService : public AbstractInjectorTarget {
 public:
 	GatewayService();
 
-	void setGatewayDao(GatewayDao *dao)
-	{
-		if (dao == NULL)
-			m_gatewayDao = &NullGatewayDao::instance();
-		else
-			m_gatewayDao = dao;
-	}
-
-	void setRoleInPlaceDao(RoleInPlaceDao *dao)
-	{
-		if (dao == NULL)
-			m_roleInPlaceDao = &NullRoleInPlaceDao::instance();
-		else
-			m_roleInPlaceDao = dao;
-	}
-
-	void setPlaceDao(PlaceDao *dao)
-	{
-		if (dao == NULL)
-			m_placeDao = &NullPlaceDao::instance();
-		else
-			m_placeDao = dao;
-	}
-
-	void setIdentityDao(IdentityDao *dao)
-	{
-		if (dao == NULL)
-			m_identityDao = &NullIdentityDao::instance();
-		else
-			m_identityDao = dao;
-	}
-
-	void setVerifiedIdentityDao(VerifiedIdentityDao *dao)
-	{
-		if (dao == NULL)
-			m_verifiedIdentityDao =
-				&NullVerifiedIdentityDao::instance();
-		else
-			m_verifiedIdentityDao = dao;
-	}
-
-	void setGatewayRPC(GatewayRPC *rpc)
-	{
-		if (rpc == NULL)
-			m_rpc = &NullGatewayRPC::instance();
-		else
-			m_rpc = rpc;
-	}
+	void setGatewayDao(GatewayDao *dao);
+	void setRoleInPlaceDao(RoleInPlaceDao *dao);
+	void setPlaceDao(PlaceDao *dao);
+	void setIdentityDao(IdentityDao *dao);
+	void setVerifiedIdentityDao(VerifiedIdentityDao *dao);
+	void setGatewayRPC(GatewayRPC *rpc);
+	void setAccessPolicy(GatewayAccessPolicy *policy);
 
 	/**
 	 * Register the given gateway to be owned by the given identity.
@@ -114,6 +76,7 @@ private:
 	IdentityDao *m_identityDao;
 	VerifiedIdentityDao *m_verifiedIdentityDao;
 	GatewayRPC *m_rpc;
+	GatewayAccessPolicy *m_accessPolicy;
 };
 
 }

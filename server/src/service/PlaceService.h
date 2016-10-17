@@ -8,51 +8,22 @@
 #include "model/VerifiedIdentity.h"
 #include "model/Identity.h"
 #include "model/User.h"
-#include "dao/PlaceDao.h"
-#include "dao/RoleInPlaceDao.h"
-#include "dao/VerifiedIdentityDao.h"
 
 namespace BeeeOn {
 
+class PlaceDao;
+class RoleInPlaceDao;
+class VerifiedIdentityDao;
+class PlaceAccessPolicy;
+
 class PlaceService : public AbstractInjectorTarget {
 public:
-	PlaceService():
-		m_placeDao(&NullPlaceDao::instance()),
-		m_roleInPlaceDao(&NullRoleInPlaceDao::instance())
-	{
-		injector<PlaceService, PlaceDao>("placeDao",
-			&PlaceService::setPlaceDao);
-		injector<PlaceService, RoleInPlaceDao>("roleInPlaceDao",
-			&PlaceService::setRoleInPlaceDao);
-		injector<PlaceService, VerifiedIdentityDao>(
-			"verifiedIdentityDao",
-			&PlaceService::setVerifiedIdentityDao
-		);
-	}
+	PlaceService();
 
-	void setPlaceDao(PlaceDao *dao)
-	{
-		if (dao == NULL)
-			m_placeDao = &NullPlaceDao::instance();
-		else
-			m_placeDao = dao;
-	}
-
-	void setRoleInPlaceDao(RoleInPlaceDao *dao)
-	{
-		if (dao == NULL)
-			m_roleInPlaceDao = &NullRoleInPlaceDao::instance();
-		else
-			m_roleInPlaceDao = dao;
-	}
-
-	void setVerifiedIdentityDao(VerifiedIdentityDao *dao)
-	{
-		if (dao == NULL)
-			m_verifiedIdentityDao = &NullVerifiedIdentityDao::instance();
-		else
-			m_verifiedIdentityDao = dao;
-	}
+	void setPlaceDao(PlaceDao *dao);
+	void setRoleInPlaceDao(RoleInPlaceDao *dao);
+	void setVerifiedIdentityDao(VerifiedIdentityDao *dao);
+	void setAccessPolicy(PlaceAccessPolicy *policy);
 
 	void create(SingleWithData<Place> &input,
 			const Identity &identity);
@@ -67,6 +38,7 @@ private:
 	PlaceDao *m_placeDao;
 	RoleInPlaceDao *m_roleInPlaceDao;
 	VerifiedIdentityDao *m_verifiedIdentityDao;
+	PlaceAccessPolicy *m_accessPolicy;
 };
 
 }

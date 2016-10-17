@@ -17,17 +17,14 @@
 		<instance name="placeHandler" class="BeeeOn::UI::PlaceHandler">
 			<set name="placeService" ref="placeService" />
 			<set name="identityService" ref="identityService" />
-			<set name="accessPolicy" ref="accessPolicy" />
 		</instance>
 
 		<instance name="gatewayHandler" class="BeeeOn::UI::GatewayHandler">
 			<set name="gatewayService" ref="gatewayService" />
-			<set name="accessPolicy" ref="accessPolicy" />
 		</instance>
 
 		<instance name="locationHandler" class="BeeeOn::UI::LocationHandler">
 			<set name="locationService" ref="locationService" />
-			<set name="accessPolicy" ref="accessPolicy" />
 		</instance>
 
 		<instance name="sessionVerifier" class="BeeeOn::SessionVerifier">
@@ -54,7 +51,6 @@
 				class="BeeeOn::XmlUI::GatewayXmlHandlerResolver">
 			<set name="gatewayService" ref="gatewayService" />
 			<set name="placeService" ref="placeService" />
-			<set name="accessPolicy" ref="accessPolicy" />
 			<set name="sessionManager" ref="sessionManager" />
 		</instance>
 
@@ -78,6 +74,7 @@
 			<set name="placeDao" ref="placeDao" />
 			<set name="roleInPlaceDao" ref="roleInPlaceDao" />
 			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
+			<set name="accessPolicy" ref="accessPolicy" />
 		</instance>
 
 		<instance name="userService" class="BeeeOn::UserService">
@@ -105,12 +102,14 @@
 			<set name="identityDao" ref="identityDao" />
 			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
 			<set name="gatewayRPC" ref="gatewayRPC" />
+			<set name="accessPolicy" ref="accessPolicy" />
 		</instance>
 
 		<instance name="locationService"
 				class="BeeeOn::LocationService">
 			<set name="locationDao" ref="locationDao" />
 			<set name="gatewayDao" ref="gatewayDao" />
+			<set name="accessPolicy" ref="accessPolicy" />
 		</instance>
 
 		<instance name="identityService" class="BeeeOn::IdentityService">
