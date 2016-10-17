@@ -99,15 +99,14 @@ bool GatewayService::fetch(Single<Gateway> &input)
 	return m_gatewayDao->fetch(input.target());
 }
 
-bool GatewayService::fetchFromPlace(Gateway &gateway, const Place &place)
+bool GatewayService::fetchFromPlace(Relation<Gateway, Place> &input)
 {
-	return m_gatewayDao->fetchFromPlace(gateway, place);
+	return m_gatewayDao->fetchFromPlace(input.target(), input.base());
 }
 
-void GatewayService::fetchAccessible(vector<Gateway> &gateways,
-		const User &user)
+void GatewayService::fetchAccessible(Relation<vector<Gateway>, User> &input)
 {
-	m_gatewayDao->fetchAccessible(gateways, user);
+	m_gatewayDao->fetchAccessible(input.target(), input.base());
 }
 
 bool GatewayService::update(SingleWithData<Gateway> &input)
@@ -121,43 +120,48 @@ bool GatewayService::update(SingleWithData<Gateway> &input)
 	return m_gatewayDao->update(gateway);
 }
 
-bool GatewayService::updateInPlace(Gateway &gateway,
-		const Deserializer<Gateway> &update,
-		const Place &place)
+bool GatewayService::updateInPlace(RelationWithData<Gateway, Place> &input)
 {
-	if (!m_gatewayDao->fetchFromPlace(gateway, place))
+	Gateway &gateway = input.target();
+
+	if (!m_gatewayDao->fetchFromPlace(gateway, input.base()))
 		throw NotFoundException("gateway does not exist");
 
-	update.partial(gateway);
+	input.data().partial(gateway);
 
 	return m_gatewayDao->update(gateway);
 }
 
-bool GatewayService::assignAndUpdate(Gateway &gateway,
-		const Deserializer<Gateway> &update,
-		const Place &place)
+bool GatewayService::assignAndUpdate(
+		RelationWithData<Gateway, Place> &input)
 {
+	Gateway &gateway = input.target();
+
 	if (!m_gatewayDao->fetch(gateway))
 		throw NotFoundException("gateway does not exist");
 
 	if (gateway.hasPlace()) // do not leak it exists
 		throw NotFoundException("gateway is already assigned");
 
-	update.partial(gateway);
+	input.data().partial(gateway);
 
-	return m_gatewayDao->assignAndUpdate(gateway, place);
+	return m_gatewayDao->assignAndUpdate(gateway, input.base());
 }
 
-bool GatewayService::unassign(Gateway &gateway, const Place &place)
+bool GatewayService::unassign(Relation<Gateway, Place> &input)
 {
-	if (!m_gatewayDao->fetchFromPlace(gateway, place))
+	Gateway &gateway = input.target();
+
+	if (!m_gatewayDao->fetchFromPlace(gateway, input.base()))
 		return false;
 
 	return m_gatewayDao->unassign(gateway);
 }
 
-bool GatewayService::unassign(Gateway &gateway, const User &user)
+bool GatewayService::unassign(Relation<Gateway, User> &input)
 {
+	Gateway &gateway = input.target();
+
 	if (!m_gatewayDao->fetch(gateway))
 		throw NotFoundException("gateway does not exist");
 

@@ -83,10 +83,11 @@ void GatewayXmlHandler::handleUnregister(Element *gatewayNode)
 {
 	Gateway gateway(GatewayID::parse(gatewayNode->getAttribute("id")));
 	User user(session()->userID());
+	Relation<Gateway, User> input(gateway, user);
 
 	m_accessPolicy.assureUnassign(user, gateway);
 
-	if (!m_gatewayService.unassign(gateway, user)) {
+	if (!m_gatewayService.unassign(input)) {
 		resultNotOwned();
 		return;
 	}
@@ -150,8 +151,9 @@ void GatewayXmlHandler::handleGetAll()
 {
 	vector<Gateway> gateways;
 	User user(session()->userID());
+	Relation<vector<Gateway>, User> input(gateways, user);
 
-	m_gatewayService.fetchAccessible(gateways, user);
+	m_gatewayService.fetchAccessible(input);
 
 	resultDataStart();
 	serialize(m_output, gateways);
