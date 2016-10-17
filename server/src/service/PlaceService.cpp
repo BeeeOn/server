@@ -28,26 +28,18 @@ PlaceService::PlaceService():
 
 void PlaceService::setPlaceDao(PlaceDao *dao)
 {
-	if (dao == NULL)
-		m_placeDao = &NullPlaceDao::instance();
-	else
-		m_placeDao = dao;
+	m_placeDao = dao? dao : &NullPlaceDao::instance();
 }
 
 void PlaceService::setRoleInPlaceDao(RoleInPlaceDao *dao)
 {
-	if (dao == NULL)
-		m_roleInPlaceDao = &NullRoleInPlaceDao::instance();
-	else
-		m_roleInPlaceDao = dao;
+	m_roleInPlaceDao = dao? dao : &NullRoleInPlaceDao::instance();
 }
 
 void PlaceService::setVerifiedIdentityDao(VerifiedIdentityDao *dao)
 {
-	if (dao == NULL)
-		m_verifiedIdentityDao = &NullVerifiedIdentityDao::instance();
-	else
-		m_verifiedIdentityDao = dao;
+	m_verifiedIdentityDao = dao? dao :
+		&NullVerifiedIdentityDao::instance();
 }
 
 void PlaceService::create(SingleWithData<Place> &input,
