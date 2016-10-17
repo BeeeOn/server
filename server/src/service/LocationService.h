@@ -7,14 +7,15 @@
 #include <Poco/Logger.h>
 #include "service/Single.h"
 #include "service/Relation.h"
-#include "dao/LocationDao.h"
 #include "di/InjectorTarget.h"
+#include "model/Location.h"
 #include "model/Place.h"
 #include "model/Gateway.h"
 #include "Debug.h"
 
 namespace BeeeOn {
 
+class LocationDao;
 class GatewayDao;
 
 /**
@@ -24,14 +25,7 @@ class LocationService : public AbstractInjectorTarget {
 public:
 	LocationService();
 
-	void setLocationDao(LocationDao *dao)
-	{
-		if (dao == NULL)
-			m_dao = &NullLocationDao::instance();
-		else
-			m_dao = dao;
-	}
-
+	void setLocationDao(LocationDao *dao);
 	void setGatewayDao(GatewayDao *dao);
 
 	void createIn(RelationWithData<Location, Place> &input);

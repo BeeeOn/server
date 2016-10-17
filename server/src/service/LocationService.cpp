@@ -1,6 +1,7 @@
 #include <Poco/Exception.h>
 
 #include "service/LocationService.h"
+#include "dao/LocationDao.h"
 #include "dao/GatewayDao.h"
 
 BEEEON_OBJECT(LocationService, BeeeOn::LocationService)
@@ -17,6 +18,11 @@ LocationService::LocationService():
 			&LocationService::setLocationDao);
 	injector<LocationService, GatewayDao>("gatewayDao",
 			&LocationService::setGatewayDao);
+}
+
+void LocationService::setLocationDao(LocationDao *dao)
+{
+	m_dao = dao? dao : &NullLocationDao::instance();
 }
 
 void LocationService::setGatewayDao(GatewayDao *dao)
