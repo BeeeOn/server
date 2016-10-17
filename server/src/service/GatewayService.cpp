@@ -38,51 +38,33 @@ GatewayService::GatewayService():
 
 void GatewayService::setGatewayDao(GatewayDao *dao)
 {
-	if (dao == NULL)
-		m_gatewayDao = &NullGatewayDao::instance();
-	else
-		m_gatewayDao = dao;
+	m_gatewayDao = dao? dao : &NullGatewayDao::instance();
 }
 
 void GatewayService::setRoleInPlaceDao(RoleInPlaceDao *dao)
 {
-	if (dao == NULL)
-		m_roleInPlaceDao = &NullRoleInPlaceDao::instance();
-	else
-		m_roleInPlaceDao = dao;
+	m_roleInPlaceDao = dao? dao :&NullRoleInPlaceDao::instance();
 }
 
 void GatewayService::setPlaceDao(PlaceDao *dao)
 {
-	if (dao == NULL)
-		m_placeDao = &NullPlaceDao::instance();
-	else
-		m_placeDao = dao;
+	m_placeDao = dao? dao : &NullPlaceDao::instance();
 }
 
 void GatewayService::setIdentityDao(IdentityDao *dao)
 {
-	if (dao == NULL)
-		m_identityDao = &NullIdentityDao::instance();
-	else
-		m_identityDao = dao;
+	m_identityDao = dao? dao :&NullIdentityDao::instance();
 }
 
 void GatewayService::setVerifiedIdentityDao(VerifiedIdentityDao *dao)
 {
-	if (dao == NULL)
-		m_verifiedIdentityDao =
+	m_verifiedIdentityDao = dao? dao :
 			&NullVerifiedIdentityDao::instance();
-	else
-		m_verifiedIdentityDao = dao;
 }
 
 void GatewayService::setGatewayRPC(GatewayRPC *rpc)
 {
-	if (rpc == NULL)
-		m_rpc = &NullGatewayRPC::instance();
-	else
-		m_rpc = rpc;
+	m_rpc = rpc? rpc : &NullGatewayRPC::instance();
 }
 
 bool GatewayService::registerGateway(SingleWithData<Gateway> &input,
