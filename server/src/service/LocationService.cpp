@@ -50,9 +50,9 @@ void LocationService::createIn(Location &location,
 	m_dao->create(location);
 }
 
-bool LocationService::fetch(Location &location)
+bool LocationService::fetch(Single<Location> &input)
 {
-	return m_dao->fetch(location);
+	return m_dao->fetch(input.target());
 }
 
 bool LocationService::fetchFrom(Location &location, const Place &place)
@@ -89,8 +89,10 @@ bool LocationService::updateIn(Location &location,
 	return m_dao->update(location);
 }
 
-bool LocationService::remove(Location &location)
+bool LocationService::remove(Single<Location> &input)
 {
+	Location &location = input.target();
+
 	if (!m_dao->fetch(location))
 		throw NotFoundException("location does not exist");
 

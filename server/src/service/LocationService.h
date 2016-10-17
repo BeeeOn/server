@@ -5,6 +5,7 @@
 
 #include <Poco/Exception.h>
 #include <Poco/Logger.h>
+#include "service/Single.h"
 #include "service/Deserializer.h"
 #include "dao/LocationDao.h"
 #include "di/InjectorTarget.h"
@@ -39,7 +40,7 @@ public:
 	void createIn(Location &location,
 			const Deserializer<Location> &data,
 			const Gateway &gateway);
-	bool fetch(Location &location);
+	bool fetch(Single<Location> &input);
 	bool fetchFrom(Location &location, const Place &place);
 	void fetchBy(std::vector<Location> &locations, const Gateway &gateway);
 	bool updateIn(Location &location,
@@ -48,7 +49,7 @@ public:
 	bool updateIn(Location &location,
 			const Deserializer<Location> &update,
 			const Gateway &gateway);
-	bool remove(Location &location);
+	bool remove(Single<Location> &input);
 	bool removeFrom(Location &location, const Place &place);
 	bool removeFrom(Location &location, const Gateway &gateway);
 
