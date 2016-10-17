@@ -14,6 +14,7 @@ namespace BeeeOn {
 
 class Gateway;
 class Location;
+class VerifiedIdentity;
 
 namespace XmlUI {
 
@@ -24,6 +25,9 @@ void serialize(Poco::XML::XMLWriter &output,
 void serialize(Poco::XML::XMLWriter &output, const Location &location);
 void serialize(Poco::XML::XMLWriter &output,
 		const std::vector<Location> &locations);
+
+void serializeMyself(Poco::XML::XMLWriter &output,
+		const VerifiedIdentity &identity);
 
 }
 }

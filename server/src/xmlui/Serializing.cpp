@@ -5,6 +5,7 @@
 #include "xmlui/Serializing.h"
 #include "model/Gateway.h"
 #include "model/Location.h"
+#include "model/VerifiedIdentity.h"
 
 using namespace std;
 using namespace Poco;
@@ -50,4 +51,25 @@ void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
 {
 	for (auto location : locations)
 		serialize(output, location);
+}
+
+void BeeeOn::XmlUI::serializeMyself(
+		Poco::XML::XMLWriter &output,
+		const VerifiedIdentity &identity)
+{
+	const User &user = identity.user();
+
+	AttributesImpl attrs;
+	attrs.addAttribute("", "id", "id", "", identity.id().toString());
+	attrs.addAttribute("", "name", "name", "", user.firstName());
+	attrs.addAttribute("", "first_name", "first_name", "",
+			user.firstName());
+	attrs.addAttribute("", "surname", "surname", "", user.lastName());
+	attrs.addAttribute("", "last_name", "last_name", "",
+			user.lastName());
+	attrs.addAttribute("", "gender", "gender", "", "unknown");
+	attrs.addAttribute("", "email", "email", "", identity.email());
+	attrs.addAttribute("", "imgurl", "imgurl", "",
+			identity.picture().toString());
+	output.emptyElement("", "user", "user", attrs);
 }
