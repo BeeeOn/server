@@ -7,16 +7,18 @@
 
 namespace BeeeOn {
 
+class PolicyContext;
+
 class PlaceAccessPolicy {
 public:
 	virtual void assureGet(
-			const User &user,
+			const PolicyContext &context,
 			const Place &place) = 0;
 	virtual void assureUpdate(
-			const User &user,
+			const PolicyContext &context,
 			const Place &place) = 0;
 	virtual void assureRemove(
-			const User &user,
+			const PolicyContext &context,
 			const Place &place) = 0;
 };
 

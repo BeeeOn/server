@@ -40,8 +40,9 @@ const string PlaceHandler::handleUpdate(istream &in,
 	JSONPlaceDeserializer update(in);
 	User user(userId);
 	SingleWithData<Place> input(place, update);
+	input.setUser(user);
 
-	m_accessPolicy->assureUpdate(user, place);
+	m_accessPolicy->assureUpdate(input, place);
 
 	if (!m_placeService->update(input)) {
 		throw Exception("failed to update place: "
@@ -57,8 +58,9 @@ const string PlaceHandler::handleGet(const UserID &userId,
 	Place place(PlaceID::parse(placeId));
 	Single<Place> input(place);
 	User user(userId);
+	input.setUser(user);
 
-	m_accessPolicy->assureGet(user, place);
+	m_accessPolicy->assureGet(input, place);
 
 	if (!m_placeService->fetch(input)) {
 		return "";
@@ -73,8 +75,9 @@ const string PlaceHandler::handleDelete(const UserID &userId,
 	Place place(PlaceID::parse(placeId));
 	User user(userId);
 	Relation<Place, User> input(place, user);
+	input.setUser(user);
 
-	m_accessPolicy->assureRemove(user, place);
+	m_accessPolicy->assureRemove(input, place);
 
 	if (!m_placeService->remove(input))
 		return "";

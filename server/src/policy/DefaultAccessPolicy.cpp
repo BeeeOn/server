@@ -1,5 +1,6 @@
 #include <Poco/Exception.h>
 
+#include "policy/PolicyContext.h"
 #include "policy/DefaultAccessPolicy.h"
 
 BEEEON_OBJECT(DefaultAccessPolicy, BeeeOn::DefaultAccessPolicy)
@@ -48,29 +49,29 @@ void DefaultAccessPolicy::assureAtLeast(
 }
 
 void DefaultAccessPolicy::assureGet(
-		const User &user,
+		const PolicyContext &context,
 		const Place &place)
 {
 	assureAtLeast(
-		fetchAccessLevel(user, place),
+		fetchAccessLevel(context.user(), place),
 		AccessLevel::guest());
 }
 
 void DefaultAccessPolicy::assureUpdate(
-		const User &user,
+		const PolicyContext &context,
 		const Place &place)
 {
 	assureAtLeast(
-		fetchAccessLevel(user, place),
+		fetchAccessLevel(context.user(), place),
 		AccessLevel::user());
 }
 
 void DefaultAccessPolicy::assureRemove(
-		const User &user,
+		const PolicyContext &context,
 		const Place &place)
 {
 	assureAtLeast(
-		fetchAccessLevel(user, place),
+		fetchAccessLevel(context.user(), place),
 		AccessLevel::admin());
 }
 

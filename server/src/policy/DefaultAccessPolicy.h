@@ -19,11 +19,11 @@ class DefaultAccessPolicy : public AbstractInjectorTarget,
 public:
 	DefaultAccessPolicy();
 
-	void assureGet(const User &user,
+	void assureGet(const PolicyContext &context,
 		const Place &place) override;
-	void assureUpdate(const User &user,
+	void assureUpdate(const PolicyContext &context,
 		const Place &place) override;
-	void assureRemove(const User &user,
+	void assureRemove(const PolicyContext &context,
 		const Place &place) override;
 
 	void assureGet(const User &user,
