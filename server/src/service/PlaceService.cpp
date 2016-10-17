@@ -14,7 +14,8 @@ using namespace BeeeOn;
 
 PlaceService::PlaceService():
 	m_placeDao(&NullPlaceDao::instance()),
-	m_roleInPlaceDao(&NullRoleInPlaceDao::instance())
+	m_roleInPlaceDao(&NullRoleInPlaceDao::instance()),
+	m_verifiedIdentityDao(&NullVerifiedIdentityDao::instance())
 {
 	injector<PlaceService, PlaceDao>(
 		"placeDao",
