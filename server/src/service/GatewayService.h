@@ -22,6 +22,7 @@ class PlaceDao;
 class IdentityDao;
 class VerifiedIdentityDao;
 class GatewayRPC;
+class GatewayAccessPolicy;
 
 class GatewayService : public AbstractInjectorTarget {
 public:
@@ -33,6 +34,7 @@ public:
 	void setIdentityDao(IdentityDao *dao);
 	void setVerifiedIdentityDao(VerifiedIdentityDao *dao);
 	void setGatewayRPC(GatewayRPC *rpc);
+	void setAccessPolicy(GatewayAccessPolicy *policy);
 
 	/**
 	 * Register the given gateway to be owned by the given identity.
@@ -74,6 +76,7 @@ private:
 	IdentityDao *m_identityDao;
 	VerifiedIdentityDao *m_verifiedIdentityDao;
 	GatewayRPC *m_rpc;
+	GatewayAccessPolicy *m_accessPolicy;
 };
 
 }

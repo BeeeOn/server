@@ -105,6 +105,7 @@
 			<set name="identityDao" ref="identityDao" />
 			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
 			<set name="gatewayRPC" ref="gatewayRPC" />
+			<set name="accessPolicy" ref="accessPolicy" />
 		</instance>
 
 		<instance name="locationService"

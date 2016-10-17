@@ -8,6 +8,7 @@
 #include "dao/PlaceDao.h"
 #include "dao/IdentityDao.h"
 #include "dao/VerifiedIdentityDao.h"
+#include "policy/GatewayAccessPolicy.h"
 
 BEEEON_OBJECT(GatewayService, BeeeOn::GatewayService)
 
@@ -20,7 +21,8 @@ GatewayService::GatewayService():
 	m_roleInPlaceDao(&NullRoleInPlaceDao::instance()),
 	m_placeDao(&NullPlaceDao::instance()),
 	m_identityDao(&NullIdentityDao::instance()),
-	m_rpc(&NullGatewayRPC::instance())
+	m_rpc(&NullGatewayRPC::instance()),
+	m_accessPolicy(&NullGatewayAccessPolicy::instance())
 {
 	injector<GatewayService, GatewayDao>("gatewayDao",
 			&GatewayService::setGatewayDao);
@@ -34,6 +36,8 @@ GatewayService::GatewayService():
 			&GatewayService::setVerifiedIdentityDao);
 	injector<GatewayService, GatewayRPC>("gatewayRPC",
 			&GatewayService::setGatewayRPC);
+	injector<GatewayService, GatewayAccessPolicy>("accessPolicy",
+			&GatewayService::setAccessPolicy);
 }
 
 void GatewayService::setGatewayDao(GatewayDao *dao)
@@ -65,6 +69,12 @@ void GatewayService::setVerifiedIdentityDao(VerifiedIdentityDao *dao)
 void GatewayService::setGatewayRPC(GatewayRPC *rpc)
 {
 	m_rpc = rpc? rpc : &NullGatewayRPC::instance();
+}
+
+void GatewayService::setAccessPolicy(GatewayAccessPolicy *policy)
+{
+	m_accessPolicy = policy? policy :
+		&NullGatewayAccessPolicy::instance();
 }
 
 bool GatewayService::registerGateway(SingleWithData<Gateway> &input,
