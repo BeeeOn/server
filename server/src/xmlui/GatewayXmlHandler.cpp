@@ -68,6 +68,7 @@ void GatewayXmlHandler::handleRegister(Element *gatewayNode)
 	XmlGatewayDeserializer deserializer(*gatewayNode);
 	SingleWithData<Gateway> input(gateway, deserializer);
 	User user(session()->userID());
+	input.setUser(user);
 
 	// approved to everybody, such gateway is associated with a
 	// place where the user is admin or to a new implicit place
@@ -156,6 +157,7 @@ void GatewayXmlHandler::handleGetAll()
 	vector<Gateway> gateways;
 	User user(session()->userID());
 	Relation<vector<Gateway>, User> input(gateways, user);
+	input.setUser(user);
 
 	m_gatewayService.fetchAccessible(input);
 
