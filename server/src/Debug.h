@@ -18,7 +18,7 @@ namespace BeeeOn {
  * Return the appropriate logger for the given class instance.
  */
 #define LOGGER_CLASS(this) \
-	(Poco::Logger::get(BeeeOn::classDemangle(typeid((this)).name())))
+	(Poco::Logger::get(BeeeOn::classDemangle(typeid((*this)).name())))
 
 /**
  * Return the appropriate logger for the given function name.
