@@ -198,7 +198,7 @@
 		<alias name="locationDao" ref="mockLocationDao" />
 		<alias name="identityDao" ref="sqlIdentityDao" />
 		<alias name="verifiedIdentityDao" ref="sqlVerifiedIdentityDao" />
-		<alias name="roleInPlaceDao" ref="mockRoleInPlaceDao" />
+		<alias name="roleInPlaceDao" ref="sqlRoleInPlaceDao" />
 
 		<instance name="pocoDaoManager"
 				class="BeeeOn::PocoDaoManager">
