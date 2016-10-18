@@ -196,7 +196,7 @@
 		<alias name="userDao" ref="sqlUserDao" />
 		<alias name="gatewayDao" ref="mockGatewayDao" />
 		<alias name="locationDao" ref="mockLocationDao" />
-		<alias name="identityDao" ref="mockIdentityDao" />
+		<alias name="identityDao" ref="sqlIdentityDao" />
 		<alias name="verifiedIdentityDao" ref="mockVerifiedIdentityDao" />
 		<alias name="roleInPlaceDao" ref="mockRoleInPlaceDao" />
 
