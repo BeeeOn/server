@@ -192,7 +192,7 @@
 			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
 		</instance>
 
-		<alias name="placeDao" ref="mockPlaceDao" />
+		<alias name="placeDao" ref="sqlPlaceDao" />
 		<alias name="userDao" ref="mockUserDao" />
 		<alias name="gatewayDao" ref="mockGatewayDao" />
 		<alias name="locationDao" ref="mockLocationDao" />
