@@ -197,7 +197,7 @@
 		<alias name="gatewayDao" ref="mockGatewayDao" />
 		<alias name="locationDao" ref="mockLocationDao" />
 		<alias name="identityDao" ref="sqlIdentityDao" />
-		<alias name="verifiedIdentityDao" ref="mockVerifiedIdentityDao" />
+		<alias name="verifiedIdentityDao" ref="sqlVerifiedIdentityDao" />
 		<alias name="roleInPlaceDao" ref="mockRoleInPlaceDao" />
 
 		<instance name="pocoDaoManager"
