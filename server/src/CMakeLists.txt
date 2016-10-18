@@ -46,6 +46,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/dao/VerifiedIdentityDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/RoleInPlaceDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/PocoAbstractDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/PocoSQLPlaceDao.cpp
 	${PROJECT_SOURCE_DIR}/service/PlaceService.cpp
 	${PROJECT_SOURCE_DIR}/service/UserService.cpp
 	${PROJECT_SOURCE_DIR}/service/AuthService.cpp

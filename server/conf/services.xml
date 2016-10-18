@@ -227,5 +227,9 @@
 			<set name="type_int64" text="bigint" />
 		</instance>
 
+		<instance name="sqlPlaceDao" class="BeeeOn::PocoSQLPlaceDao">
+			<set name="daoManager" ref="pocoDaoManager" />
+		</instance>
+
 	</services>
 </system>
