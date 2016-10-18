@@ -70,8 +70,8 @@
 		<instance name="uiMockInit"
 				class="BeeeOn::UIMockInit"
 				init="early">
-			<set name="userDao" ref="mockUserDao" />
-			<set name="gatewayDao" ref="mockGatewayDao" />
+			<set name="userDao" ref="userDao" />
+			<set name="gatewayDao" ref="gatewayDao" />
 			<set name="identityDao" ref="identityDao" />
 			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
 		</instance>
