@@ -37,7 +37,7 @@ CREATE TABLE identities (
 
 DROP TABLE IF EXISTS verified_identities;
 CREATE TABLE verified_identities (
-	id          ${type_uuid} NOT NOT primary key;
+	id          ${type_uuid} NOT NULL primary key,
 	identity_id ${type_uuid} NOT NULL REFERENCES identities(id),
 	user_id     ${type_uuid} NOT NULL REFERENCES users(id),
 	provider    varchar(250) NOT NULL,
