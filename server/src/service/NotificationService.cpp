@@ -13,12 +13,18 @@ NotificationService::NotificationService():
 void FakeNotificationService::notifyFirstLogin(
 		const VerifiedIdentity &identity)
 {
+	const User &user = identity.user();
+
 	m_logger.information("first login of "
 			+ identity.identity().email()
 			+ ", "
 			+ identity.provider()
 			+ ", "
-			+ identity.id().toString(),
+			+ identity.id().toString()
+			+ ", "
+			+ user.firstName()
+			+ " "
+			+ user.lastName(),
 			__FILE__, __LINE__);
 
 }
