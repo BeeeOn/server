@@ -44,7 +44,7 @@ void AuthXmlHandler::handleInputImpl()
 			resultNotAuthenticated();
 			return;
 		}
-	
+
 		AttributesImpl attrs;
 		attrs.addAttribute("", "sessionid", "sessionid", "",
 				session->sessionID());
