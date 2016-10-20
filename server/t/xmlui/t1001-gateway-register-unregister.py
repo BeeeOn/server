@@ -16,11 +16,11 @@ class TestGatewayPlaceAssign(unittest.TestCase):
 		c = Connector(config.xmlui_host, config.xmlui_port)
 
 		response = c.request(config.PERMIT_LOGIN)
-		self.assertTrue(response.is_ok())
+		self.assertTrue(response.is_data())
 		self.session = response.sessionid()
 
 		response = c.request(config.PERMIT_LOGIN2)
-		self.assertTrue(response.is_ok())
+		self.assertTrue(response.is_data())
 		self.session2 = response.sessionid()
 
 	"""

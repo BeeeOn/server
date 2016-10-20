@@ -15,6 +15,9 @@ def login(login):
 	if response.is_error():
 		return False, response.error_code()
 
+	if not response.is_data():
+		raise Exception("unexpected result of login: " + str(response))
+
 	return True, response.sessionid()
 
 def logout(session):

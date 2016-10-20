@@ -45,7 +45,11 @@ class Response:
 		return self.root.get("ns")
 
 	def sessionid(self):
-		return self.root.get("sessionid")
+		if self.root[0].tag != "session":
+			raise Exception("no 'session' tag: " +
+					self.root[0].tag)
+
+		return self.root[0].get("id")
 
 	def is_ok(self):
 		return self.root.get("result") == "ok"

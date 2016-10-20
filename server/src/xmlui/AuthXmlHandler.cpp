@@ -45,10 +45,13 @@ void AuthXmlHandler::handleInputImpl()
 			return;
 		}
 
+		resultDataStart();
+
 		AttributesImpl attrs;
-		attrs.addAttribute("", "sessionid", "sessionid", "",
-				session->sessionID());
-		resultSimple(attrs, "ok");
+		attrs.addAttribute("", "id", "id", "", session->sessionID());
+		m_output.emptyElement("", "session", "session", attrs);
+
+		resultDataEnd();
 	}
 	else
 		resultInvalidInput();
