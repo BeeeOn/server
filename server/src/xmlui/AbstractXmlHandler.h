@@ -38,6 +38,8 @@ public:
 		return m_session;
 	}
 
+	void deriveType(Poco::XML::AttributesImpl &attrs);
+
 	void resultSimple(Poco::XML::AttributesImpl &attrs,
 			const std::string &result);
 	void resultSuccess();
