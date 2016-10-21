@@ -26,10 +26,17 @@ class Request:
 		return request
 
 class Response:
-	def __init__(self, root):
+	def __init__(self, root, expectType = None):
 		if root.tag != "response":
 			raise Exception("unexpected tag: " + root.tag)
 		self.root = root
+
+		if expectType is None:
+			return
+
+		if root.get("type") != expectType:
+			raise Exception("unexpected response type: %s" %
+					(root.get("type")))
 
 	def version(self):
 		return self.root.get("version")
@@ -77,7 +84,10 @@ class Connector:
 		s.close()
 
 		result = xml.fromstring(raw)
-		return Response(result)
+		if hasattr(request, "type"):
+			return Response(result, request.type)
+		else:
+			return Response(result)
 
 class Login(Request):
 	def __init__(self, provider, authCode):
