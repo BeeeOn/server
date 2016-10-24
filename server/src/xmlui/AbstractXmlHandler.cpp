@@ -84,12 +84,20 @@ bool AbstractXmlHandler::requireSession()
 	return true;
 }
 
+void AbstractXmlHandler::deriveType(Poco::XML::AttributesImpl &attrs)
+{
+	const Element *root = m_input->documentElement();
+	attrs.addAttribute("", "type", "type", "",
+			root->getAttribute("type"));
+}
+
 void AbstractXmlHandler::resultSimple(AttributesImpl &attrs,
 		const std::string &result)
 {
 	attrs.addAttribute("", "ns", "ns", "", m_ns);
 	attrs.addAttribute("", "version", "version", "", "1.0.0");
 	attrs.addAttribute("", "result", "result", "", result);
+	deriveType(attrs);
 
 	m_output.emptyElement("", "response", "response", attrs);
 }
@@ -106,6 +114,7 @@ void AbstractXmlHandler::resultDataStart()
 	attrs.addAttribute("", "ns", "ns", "", m_ns);
 	attrs.addAttribute("", "version", "version", "", "1.0.0");
 	attrs.addAttribute("", "result", "result", "", "data");
+	deriveType(attrs);
 
 	m_output.startElement("", "response", "response", attrs);
 }
