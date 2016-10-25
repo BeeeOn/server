@@ -114,6 +114,7 @@ add_executable(xmlui-server
 	xmlui/GatewayXmlHandler.cpp
 	xmlui/LocationXmlHandler.cpp
 	xmlui/ProfileXmlHandler.cpp
+	xmlui/DeviceXmlHandler.cpp
 	ui/UIMockInit.cpp
 	dao/PocoSQLiteConnectorLoader.cpp
 )

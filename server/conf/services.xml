@@ -35,6 +35,7 @@
 				class="BeeeOn::XmlRequestHandlerFactory">
 			<add name="resolvers" ref="authXmlHandler" />
 			<add name="resolvers" ref="gatewayXmlHandler" />
+			<add name="resolvers" ref="deviceXmlHandler" />
 			<add name="resolvers" ref="locationXmlHandler" />
 			<add name="resolvers" ref="profileXmlHandler" />
 			<add name="resolvers" ref="anyXmlHandler" />
@@ -58,6 +59,12 @@
 		<instance name="locationXmlHandler"
 				class="BeeeOn::XmlUI::LocationXmlHandlerResolver">
 			<set name="locationService" ref="locationService" />
+			<set name="sessionManager" ref="sessionManager" />
+		</instance>
+
+		<instance name="deviceXmlHandler"
+				class="BeeeOn::XmlUI::DeviceXmlHandlerResolver">
+			<set name="deviceService" ref="deviceService" />
 			<set name="sessionManager" ref="sessionManager" />
 		</instance>
 
