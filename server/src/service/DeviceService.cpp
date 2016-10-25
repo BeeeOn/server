@@ -4,6 +4,7 @@
 #include <Poco/DateTime.h>
 
 #include "service/DeviceService.h"
+#include "policy/DeviceAccessPolicy.h"
 #include "model/Device.h"
 #include "model/Gateway.h"
 #include "dao/DeviceDao.h"
@@ -18,12 +19,15 @@ using namespace BeeeOn;
 
 DeviceService::DeviceService():
 	m_dao(&NullDeviceDao::instance()),
-	m_gatewayRPC(&NullGatewayRPC::instance())
+	m_gatewayRPC(&NullGatewayRPC::instance()),
+	m_policy(&NullDeviceAccessPolicy::instance())
 {
 	injector<DeviceService, DeviceDao>("deviceDao",
 			&DeviceService::setDeviceDao);
 	injector<DeviceService, GatewayRPC>("gatewayRPC",
 			&DeviceService::setGatewayRPC);
+	injector<DeviceService, DeviceAccessPolicy>("accessPolicy",
+			&DeviceService::setAccessPolicy);
 }
 
 void DeviceService::setDeviceDao(DeviceDao *dao)
@@ -36,10 +40,16 @@ void DeviceService::setGatewayRPC(GatewayRPC *rpc)
 	m_gatewayRPC = rpc? rpc : &NullGatewayRPC::instance();
 }
 
+void DeviceService::setAccessPolicy(DeviceAccessPolicy *policy)
+{
+	m_policy = policy? policy : &NullDeviceAccessPolicy::instance();
+}
+
 bool DeviceService::fetch(Relation<Device, Gateway> &input)
 {
 	TRACE_METHOD();
 
+	m_policy->assureGet(input, input.target(), input.base());
 	return m_dao->fetch(input.target(), input.base());
 }
 
@@ -52,25 +62,40 @@ void DeviceService::fetchMany(Relation<list<Device>, Gateway> &input)
 	while (it != devices.end()) {
 		Device &device = *it;
 
-		if (!m_dao->fetch(device, input.base()))
+		try {
+			m_policy->assureGet(input, device, input.base());
+
+			if (!m_dao->fetch(device, input.base())) {
+				it = devices.erase(it);
+				continue;
+			}
+
+		} catch (const InvalidAccessException &e) {
+			// drop inaccessible devices
 			it = devices.erase(it);
-		else
-			++it;
+			continue;
+		}
+
+		++it; // no erase occured, continue
 	}
 }
 
 void DeviceService::fetchActiveBy(Relation<vector<Device>, Gateway> &input)
 {
+	m_policy->assureListActiveDevices(input, input.base());
 	m_dao->fetchActiveBy(input.target(), input.base());
 }
 
 void DeviceService::fetchInactiveBy(Relation<vector<Device>, Gateway> &input)
 {
+	m_policy->assureListInactiveDevices(input, input.base());
 	m_dao->fetchInactiveBy(input.target(), input.base());
 }
 
 bool DeviceService::unregister(Relation<Device, Gateway> &input)
 {
+	m_policy->assureUnregister(input, input.target(), input.base());
+
 	try {
 		m_gatewayRPC->unpairDevice(input.base(), input.target());
 		return true;
@@ -83,6 +108,8 @@ bool DeviceService::unregister(Relation<Device, Gateway> &input)
 
 bool DeviceService::activate(Relation<Device, Gateway> &input)
 {
+	m_policy->assureActivate(input, input.target(), input.base());
+
 	Device &device = input.target();
 
 	if (!m_dao->fetch(device, input.base()))
@@ -113,6 +140,8 @@ bool DeviceService::prepareUpdate(RelationWithData<Device, Gateway> &input)
 
 bool DeviceService::update(RelationWithData<Device, Gateway> &input)
 {
+	m_policy->assureUpdate(input, input.target(), input.base());
+
 	if (!prepareUpdate(input))
 		return false;
 
@@ -122,6 +151,9 @@ bool DeviceService::update(RelationWithData<Device, Gateway> &input)
 bool DeviceService::updateAndActivate(
 		RelationWithData<Device, Gateway> &input)
 {
+	m_policy->assureUpdateAndActivate(input,
+			input.target(), input.base());
+
 	if (!prepareUpdate(input))
 		return false;
 
