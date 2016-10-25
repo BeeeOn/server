@@ -1,6 +1,8 @@
 #ifndef BEEEON_DEVICE_DAO_H
 #define BEEEON_DEVICE_DAO_H
 
+#include <vector>
+
 #include "di/InjectorTarget.h"
 #include "dao/NullDao.h"
 #include "dao/MockDao.h"
@@ -10,9 +12,15 @@
 
 namespace BeeeOn {
 
+class Gateway;
+
 class DeviceDao {
 public:
 	virtual bool fetch(Device &device, const Gateway &gateway) = 0;
+	virtual void fetchActiveBy(std::vector<Device> &devices,
+			const Gateway &gateway) = 0;
+	virtual void fetchInactiveBy(std::vector<Device> &devices,
+			const Gateway &gateway) = 0;
 };
 
 class NullDeviceDao : public AbstractInjectorTarget,
@@ -23,12 +31,26 @@ public:
 		return NullDao<Device, DeviceDao>::fetch(device);
 	}
 
+	void fetchActiveBy(std::vector<Device> &devices,
+			const Gateway &gateway);
+	void fetchInactiveBy(std::vector<Device> &devices,
+			const Gateway &gateway);
+
 	static DeviceDao &instance();
 };
 
 class MockDeviceDao : public AbstractInjectorTarget,
 	public MockRelationDao<Device, Gateway, DeviceDao> {
+public:
+	void fetchActiveBy(std::vector<Device> &devices,
+			const Gateway &gateway);
+	void fetchInactiveBy(std::vector<Device> &devices,
+			const Gateway &gateway);
+
 protected:
+	void fetchBy(std::vector<Device> &devices,
+			const Gateway &gateway, bool active);
+
 	DeviceID nextID()
 	{
 		return DeviceID::random();
