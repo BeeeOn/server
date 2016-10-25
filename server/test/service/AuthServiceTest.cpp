@@ -7,6 +7,7 @@
 
 #include "provider/MockRandomProvider.h"
 #include "provider/RandomProvider.h"
+#include "service/NotificationService.h"
 #include "service/AuthService.h"
 #include "provider/PermitAuthProvider.h"
 #include "dao/UserDao.h"
@@ -20,11 +21,13 @@ using namespace Poco;
 namespace BeeeOn {
 
 class TestableAuthService;
+class MockNotificationService;
 
 class AuthServiceTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST_SUITE(AuthServiceTest);
 	CPPUNIT_TEST(testPermitAuth);
 	CPPUNIT_TEST(testCreateUser);
+	CPPUNIT_TEST(testLoginAsNew);
 	CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -32,6 +35,7 @@ public:
 	void tearDown();
 	void testPermitAuth();
 	void testCreateUser();
+	void testLoginAsNew();
 
 private:
 	MockUserDao m_userDao;
@@ -40,6 +44,7 @@ private:
 	SessionManager m_manager;
 	MockRandomProvider m_mockRandomProvider;
 	InsecureRandomProvider m_insecureRandomProvider;
+	MockNotificationService *m_notificationService;
 	TestableAuthService *m_service;
 };
 
@@ -48,6 +53,23 @@ CPPUNIT_TEST_SUITE_REGISTRATION(AuthServiceTest);
 class TestableAuthService : public AuthService {
 public:
 	using AuthService::createUser;
+	using AuthService::loginAsNew;
+};
+
+class MockNotificationService : public NotificationService {
+public:
+	void notifyFirstLogin(const VerifiedIdentity &identity) override
+	{
+		m_identity = identity;
+	}
+
+	const VerifiedIdentity &lastIdentity()
+	{
+		return m_identity;
+	}
+
+private:
+	VerifiedIdentity m_identity;
 };
 
 #define SESSION_ID64 string( \
@@ -68,16 +90,20 @@ void AuthServiceTest::setUp()
 	m_manager.setMaxUserSessions(10);
 	m_manager.setSessionExpireTime(1);
 
+	m_notificationService = new MockNotificationService();
+
 	m_service = new TestableAuthService();
 	m_service->setUserDao(&m_userDao);
 	m_service->setIdentityDao(&m_identityDao);
 	m_service->setVerifiedIdentityDao(&m_verifiedIdentityDao);
 	m_service->setSessionManager(&m_manager);
+	m_service->setNotificationService(m_notificationService);
 }
 
 void AuthServiceTest::tearDown()
 {
 	delete m_service;
+	delete m_notificationService;
 }
 
 void AuthServiceTest::testPermitAuth()
@@ -127,6 +153,37 @@ void AuthServiceTest::testCreateUser()
 	CPPUNIT_ASSERT(m_userDao.fetch(hasUser));
 	CPPUNIT_ASSERT(hasUser.firstName() == "Freddie");
 	CPPUNIT_ASSERT(hasUser.lastName() == "Mercury");
+}
+
+void AuthServiceTest::testLoginAsNew()
+{
+	AuthResult result;
+	result.setEmail("freddie@example.org");
+	result.setFirstName("Freddie");
+	result.setLastName("Mercury");
+
+	ExpirableSession::Ptr session = m_service->loginAsNew(result);
+	CPPUNIT_ASSERT(!session.isNull());
+
+	Identity identity;
+	CPPUNIT_ASSERT(m_identityDao.fetchBy(identity,
+				"freddie@example.org"));
+	CPPUNIT_ASSERT(!identity.id().isNull());
+	CPPUNIT_ASSERT(identity.email() == "freddie@example.org");
+	CPPUNIT_ASSERT(!identity.user().id().isNull());
+	CPPUNIT_ASSERT(identity.user().firstName() == "Freddie");
+	CPPUNIT_ASSERT(identity.user().lastName() == "Mercury");
+
+	const VerifiedIdentity &verifiedIdentity =
+		m_notificationService->lastIdentity();
+
+	CPPUNIT_ASSERT(!verifiedIdentity.id().isNull());
+	CPPUNIT_ASSERT(verifiedIdentity.id() == session->identityID());
+	CPPUNIT_ASSERT(verifiedIdentity.identity().id() == identity.id());
+	CPPUNIT_ASSERT(verifiedIdentity.user().id() == identity.user().id());
+	CPPUNIT_ASSERT(verifiedIdentity.user().firstName() == "Freddie");
+	CPPUNIT_ASSERT(verifiedIdentity.user().lastName() == "Mercury");
+	CPPUNIT_ASSERT(verifiedIdentity.email() == "freddie@example.org");
 }
 
 }
