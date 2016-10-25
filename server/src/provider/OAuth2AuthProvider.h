@@ -45,6 +45,16 @@ protected:
 			const std::string &host,
 			unsigned int port);
 
+	/**
+	 * Handle response based on given session.
+	 */
+	std::string handleResponse(Poco::Net::HTTPSClientSession &session);
+
+	/**
+	 * Convert istream response body to string
+	 */
+	std::string convertResponseToString(std::istream &rs);
+
 protected:
 	std::string m_clientId;
 	std::string m_clientSecret;

@@ -2,11 +2,9 @@
 #include <Poco/URI.h>
 #include <Poco/Net/NetException.h>
 #include <Poco/Net/HTTPRequest.h>
-#include <Poco/Net/HTTPResponse.h>
 #include <Poco/Net/HTTPSClientSession.h>
 #include <Poco/JSON/Parser.h>
 #include <Poco/JSON/Object.h>
-#include <Poco/StreamCopier.h>
 
 #include "Debug.h"
 #include "provider/GoogleAuthProvider.h"
@@ -124,40 +122,4 @@ string GoogleAuthProvider::fetchUserInfo(const string &token)
 
 	session->sendRequest(req);
 	return handleResponse(*session);
-}
-
-string GoogleAuthProvider::convertResponseToString(istream &rs)
-{
-	string response;
-	stringstream ss;
-	StreamCopier::copyToString(rs, response);
-
-	return response;
-}
-
-string GoogleAuthProvider::handleResponse(HTTPSClientSession &session)
-{
-	HTTPResponse response;
-	istream &rs = session.receiveResponse(response);
-
-	if (m_logger.debug()) {
-		m_logger.debug("response status: "
-			+ to_string(response.getStatus())
-			+ " "
-			+ response.getReason(), __FILE__, __LINE__);
-	}
-
-	string receiveResponse = convertResponseToString(rs);
-
-	if (m_logger.debug()) {
-		m_logger.debug("response: "
-			+ receiveResponse, __FILE__, __LINE__);
-	}
-
-	if (response.getStatus() != HTTPResponse::HTTP_OK) {
-		throw NotAuthenticatedException(
-			"failed to retrieve access token from Google APIs");
-	}
-
-	return receiveResponse;
 }

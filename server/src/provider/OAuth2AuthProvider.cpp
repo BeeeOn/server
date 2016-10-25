@@ -1,9 +1,14 @@
+#include <sstream>
+
 #include <Poco/Exception.h>
 #include <Poco/Net/Context.h>
 #include <Poco/Net/SSLManager.h>
 #include <Poco/Net/InvalidCertificateHandler.h>
 #include <Poco/Net/AcceptCertificateHandler.h>
+#include <Poco/Net/HTTPResponse.h>
 #include <Poco/Net/HTTPSClientSession.h>
+#include <Poco/Net/NetException.h>
+#include <Poco/StreamCopier.h>
 
 #include "provider/OAuth2AuthProvider.h"
 #include "Debug.h"
@@ -50,4 +55,40 @@ HTTPSClientSession *OAuth2AuthProvider::connectSecure(
 		m_logger.log(e, __FILE__, __LINE__);
 		throw;
 	}
+}
+
+string OAuth2AuthProvider::handleResponse(HTTPSClientSession &session)
+{
+	HTTPResponse response;
+	istream &rs = session.receiveResponse(response);
+
+	if (m_logger.debug()) {
+		m_logger.debug("response status: "
+			+ to_string(response.getStatus())
+			+ " "
+			+ response.getReason(), __FILE__, __LINE__);
+	}
+
+	string receiveResponse = convertResponseToString(rs);
+
+	if (m_logger.debug()) {
+		m_logger.debug("response: "
+			+ receiveResponse, __FILE__, __LINE__);
+	}
+
+	if (response.getStatus() != HTTPResponse::HTTP_OK) {
+		throw NotAuthenticatedException(
+			"failed to retrieve access token from Google APIs");
+	}
+
+	return receiveResponse;
+}
+
+string OAuth2AuthProvider::convertResponseToString(istream &rs)
+{
+	string response;
+	stringstream ss;
+	StreamCopier::copyToString(rs, response);
+
+	return response;
 }
