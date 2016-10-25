@@ -109,6 +109,7 @@ add_executable(xmlui-server
 	xmlui/AuthXmlHandler.cpp
 	xmlui/XmlGatewayDeserializer.cpp
 	xmlui/XmlLocationDeserializer.cpp
+	xmlui/XmlDeviceDeserializer.cpp
 	xmlui/GatewayXmlHandler.cpp
 	xmlui/LocationXmlHandler.cpp
 	xmlui/ProfileXmlHandler.cpp

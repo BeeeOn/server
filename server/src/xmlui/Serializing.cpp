@@ -5,6 +5,7 @@
 #include "xmlui/Serializing.h"
 #include "model/Gateway.h"
 #include "model/Location.h"
+#include "model/Device.h"
 #include "model/VerifiedIdentity.h"
 
 using namespace std;
@@ -51,6 +52,41 @@ void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
 {
 	for (auto location : locations)
 		serialize(output, location);
+}
+
+void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
+		const Device &device)
+{
+	AttributesImpl attrs;
+	attrs.addAttribute("", "id", "id", "", device.id().toString());
+	attrs.addAttribute("", "euid", "euid", "", device.id().toString());
+	attrs.addAttribute("", "type", "type", "", to_string(device.type()));
+	attrs.addAttribute("", "locationid", "locationid", "",
+			device.location().id().toString());
+	attrs.addAttribute("", "gateid", "gateid", "",
+			device.gateway().id().toString());
+	attrs.addAttribute("", "name", "name", "", device.name());
+	attrs.addAttribute("", "status", "status", "",
+			device.available()? "available" : "unavailable");
+	attrs.addAttribute("", "time", "time", "",
+			to_string(device.lastSeen().timestamp().epochTime()));
+	attrs.addAttribute("", "init", "init", "",
+			device.active()? "1" : "0");
+	output.emptyElement("", "device", "device", attrs);
+}
+
+void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
+		const std::vector<Device> &devices)
+{
+	for (auto device : devices)
+		serialize(output, device);
+}
+
+void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
+		const std::list<Device> &devices)
+{
+	for (auto device : devices)
+		serialize(output, device);
 }
 
 void BeeeOn::XmlUI::serializeMyself(
