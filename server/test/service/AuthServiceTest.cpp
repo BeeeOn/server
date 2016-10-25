@@ -19,6 +19,8 @@ using namespace Poco;
 
 namespace BeeeOn {
 
+class TestableAuthService;
+
 class AuthServiceTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST_SUITE(AuthServiceTest);
 	CPPUNIT_TEST(testPermitAuth);
@@ -36,10 +38,14 @@ private:
 	SessionManager m_manager;
 	MockRandomProvider m_mockRandomProvider;
 	InsecureRandomProvider m_insecureRandomProvider;
-	AuthService *m_service;
+	TestableAuthService *m_service;
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(AuthServiceTest);
+
+class TestableAuthService : public AuthService {
+public:
+};
 
 #define SESSION_ID64 string( \
 	"abcdef0123456789"   \
@@ -59,7 +65,7 @@ void AuthServiceTest::setUp()
 	m_manager.setMaxUserSessions(10);
 	m_manager.setSessionExpireTime(1);
 
-	m_service = new AuthService();
+	m_service = new TestableAuthService();
 	m_service->setUserDao(&m_userDao);
 	m_service->setIdentityDao(&m_identityDao);
 	m_service->setVerifiedIdentityDao(&m_verifiedIdentityDao);
