@@ -36,6 +36,7 @@ private:
 	SessionManager m_manager;
 	MockRandomProvider m_mockRandomProvider;
 	InsecureRandomProvider m_insecureRandomProvider;
+	AuthService *m_service;
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(AuthServiceTest);
@@ -57,10 +58,17 @@ void AuthServiceTest::setUp()
 	m_manager.setSecureRandomProvider(&m_insecureRandomProvider);
 	m_manager.setMaxUserSessions(10);
 	m_manager.setSessionExpireTime(1);
+
+	m_service = new AuthService();
+	m_service->setUserDao(&m_userDao);
+	m_service->setIdentityDao(&m_identityDao);
+	m_service->setVerifiedIdentityDao(&m_verifiedIdentityDao);
+	m_service->setSessionManager(&m_manager);
 }
 
 void AuthServiceTest::tearDown()
 {
+	delete m_service;
 }
 
 void AuthServiceTest::testPermitAuth()
@@ -79,23 +87,18 @@ void AuthServiceTest::testPermitAuth()
 	verifiedIdentity.setProvider("3rd-party");
 	m_verifiedIdentityDao.create(verifiedIdentity);
 
-	AuthService service;
 	PermitAuthProvider provider;
 	provider.setResultProvider("3rd-party");
 
-	service.setUserDao(&m_userDao);
-	service.setIdentityDao(&m_identityDao);
-	service.setVerifiedIdentityDao(&m_verifiedIdentityDao);
-	service.setSessionManager(&m_manager);
-	service.registerProvider(&provider);
+	m_service->registerProvider(&provider);
 
 	AuthCodeCredentials cred("permit", "permit@example.org");
 
 	try {
-		const ExpirableSession::Ptr session = service.login(cred);
+		const ExpirableSession::Ptr session = m_service->login(cred);
 		const SessionID id = session->sessionID();
 		CPPUNIT_ASSERT(Base64::decode(id).compare(SESSION_ID64) == 0);
-		service.logout(id);
+		m_service->logout(id);
 	} catch(Exception &e) {
 		CPPUNIT_FAIL("unexpected exception: " + e.displayText());
 	}
