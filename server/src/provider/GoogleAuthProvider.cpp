@@ -73,13 +73,7 @@ string GoogleAuthProvider::requestIdToken(const string &authCode)
 	HTTPSClientSession *session;
 	URI uri(m_tokenUrl);
 
-	try {
-		initSSL();
-		session = new HTTPSClientSession(uri.getHost(), uri.getPort());
-	} catch (const Exception &e) {
-		m_logger.log(e, __FILE__, __LINE__);
-		throw;
-	}
+	session = connectSecure(uri.getHost(), uri.getPort());
 
 	string requestRaw = "code=" + authCode + "&"
 		"redirect_uri=" + m_redirectURI + "&"
@@ -122,13 +116,7 @@ string GoogleAuthProvider::fetchUserInfo(const string &token)
 	URI uri(m_tokenInfoUrl + token);
 	HTTPSClientSession *session;
 
-	try {
-		initSSL();
-		session = new HTTPSClientSession(uri.getHost(), uri.getPort());
-	} catch (const Exception &e) {
-		m_logger.log(e, __FILE__, __LINE__);
-		throw;
-	}
+	session = connectSecure(uri.getHost(), uri.getPort());
 
 	HTTPRequest req(HTTPRequest::HTTP_GET,
 			uri.getPathAndQuery(),
