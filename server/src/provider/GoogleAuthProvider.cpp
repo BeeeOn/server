@@ -30,16 +30,12 @@ bool GoogleAuthProvider::parseIdentity(const std::string &userInfo,
 	if (result.email().empty() || result.providerID().empty())
 		return false;
 
-	string firstName;
-	string lastName;
-	string picture;
-
 	if (info->has("given_name"))
-		result.setFirstName(firstName);
+		result.setFirstName(info->getValue<string>("given_name"));
 	if (info->has("family_name"))
-		result.setLastName(lastName);
+		result.setLastName(info->getValue<string>("family_name"));
 	if (info->has("picture"))
-		result.setPicture(picture);
+		result.setPicture(info->getValue<string>("picture"));
 
 	return true;
 }
