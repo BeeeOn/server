@@ -9,6 +9,7 @@
 
 BEEEON_OBJECT(DeviceService, BeeeOn::DeviceService)
 
+using namespace std;
 using namespace BeeeOn;
 
 DeviceService::DeviceService():
@@ -28,4 +29,14 @@ bool DeviceService::fetch(Relation<Device, Gateway> &input)
 	TRACE_METHOD();
 
 	return m_dao->fetch(input.target(), input.base());
+}
+
+void DeviceService::fetchActiveBy(Relation<vector<Device>, Gateway> &input)
+{
+	m_dao->fetchActiveBy(input.target(), input.base());
+}
+
+void DeviceService::fetchInactiveBy(Relation<vector<Device>, Gateway> &input)
+{
+	m_dao->fetchInactiveBy(input.target(), input.base());
 }

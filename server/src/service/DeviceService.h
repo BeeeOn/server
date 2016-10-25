@@ -22,6 +22,8 @@ public:
 	void setDeviceDao(DeviceDao *dao);
 
 	bool fetch(Relation<Device, Gateway> &input);
+	void fetchActiveBy(Relation<std::vector<Device>, Gateway> &input);
+	void fetchInactiveBy(Relation<std::vector<Device>, Gateway> &input);
 
 private:
 	DeviceDao *m_dao;
