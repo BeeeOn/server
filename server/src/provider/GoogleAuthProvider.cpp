@@ -92,7 +92,8 @@ string GoogleAuthProvider::requestIdToken(const string &authCode)
 		"scope=&"	// No need to specify, defaults to userinfo.profile,userinfo.email
 		"grant_type=authorization_code";
 
-	m_logger.debug("request: " + requestRaw, __FILE__, __LINE__) ;
+	if (m_logger.debug())
+		m_logger.debug("request: " + requestRaw, __FILE__, __LINE__);
 
 	HTTPRequest req(HTTPRequest::HTTP_POST,
 			uri.getPathAndQuery(),
@@ -170,11 +171,19 @@ string GoogleAuthProvider::handleResponse(HTTPSClientSession &session)
 	HTTPResponse response;
 	istream &rs = session.receiveResponse(response);
 
-	m_logger.debug("response status: " + to_string(response.getStatus())
-			+ " " +	response.getReason(), __FILE__, __LINE__);
+	if (m_logger.debug()) {
+		m_logger.debug("response status: "
+			+ to_string(response.getStatus())
+			+ " "
+			+ response.getReason(), __FILE__, __LINE__);
+	}
 
 	string receiveResponse = convertResponseToString(rs);
-	m_logger.debug("response: " + receiveResponse, __FILE__, __LINE__);
+
+	if (m_logger.debug()) {
+		m_logger.debug("response: "
+			+ receiveResponse, __FILE__, __LINE__);
+	}
 
 	if (response.getStatus() != HTTPResponse::HTTP_OK) {
 		throw NotAuthenticatedException(
