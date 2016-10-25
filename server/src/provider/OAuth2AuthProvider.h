@@ -25,6 +25,12 @@ public:
 	}
 
 protected:
+	/**
+	 * Initialize SSL context for upcoming HTTPS requests
+	 */
+	void initSSL();
+
+protected:
 	std::string m_clientId;
 	std::string m_clientSecret;
 	std::string m_redirectURI;

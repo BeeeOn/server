@@ -43,11 +43,6 @@ private:
 	std::string handleResponse(Poco::Net::HTTPSClientSession &session);
 
 	/**
-	 * Initialize SSL context for upcoming HTTPS requests
-	 */
-	void initSSL();
-
-	/**
 	 * Convert istream response body to string
 	 */
 	std::string convertResponseToString(std::istream &rs);

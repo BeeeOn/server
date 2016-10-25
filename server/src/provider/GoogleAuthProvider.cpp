@@ -1,13 +1,9 @@
 #include <Poco/Logger.h>
 #include <Poco/URI.h>
-#include <Poco/Net/Context.h>
 #include <Poco/Net/NetException.h>
 #include <Poco/Net/HTTPRequest.h>
 #include <Poco/Net/HTTPResponse.h>
 #include <Poco/Net/HTTPSClientSession.h>
-#include <Poco/Net/SSLManager.h>
-#include <Poco/Net/InvalidCertificateHandler.h>
-#include <Poco/Net/AcceptCertificateHandler.h>
 #include <Poco/JSON/Parser.h>
 #include <Poco/JSON/Object.h>
 #include <Poco/StreamCopier.h>
@@ -140,21 +136,6 @@ string GoogleAuthProvider::fetchUserInfo(const string &token)
 
 	session->sendRequest(req);
 	return handleResponse(*session);
-}
-
-void GoogleAuthProvider::initSSL()
-{
-	TRACE_METHOD();
-
-	initializeSSL();
-
-	/* Handles certificates for HTTPS communication
-	 * TODO: accept only google certificate, now accepts all certs!!!
-	 */
-	SSLManager::InvalidCertificateHandlerPtr ptrHandler (
-			new Poco::Net::AcceptCertificateHandler(false));
-	const Context::Ptr context = new Context(Context::CLIENT_USE, "");
-	SSLManager::instance().initializeClient(0, ptrHandler, context);
 }
 
 string GoogleAuthProvider::convertResponseToString(istream &rs)
