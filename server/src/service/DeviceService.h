@@ -1,35 +1,23 @@
 #ifndef BEEEON_DEVICE_SERVICE_H
 #define BEEEON_DEVICE_SERVICE_H
 
-#include <Poco/Exception.h>
-#include <Poco/Logger.h>
-#include "dao/DeviceDao.h"
 #include "di/InjectorTarget.h"
-#include "Debug.h"
 
 namespace BeeeOn {
+
+class DeviceDao;
+class Device;
 
 /**
  * Service for devices management.
  */
 class DeviceService : public AbstractInjectorTarget {
 public:
-	DeviceService()
-	{
-		injector<DeviceService, DeviceDao>("deviceDao",
-				&DeviceService::setDeviceDao);
-	}
+	DeviceService();
 
-	void setDeviceDao(DeviceDao *dao)
-	{
-		m_dao = dao;
-	}
+	void setDeviceDao(DeviceDao *dao);
 
-	bool fetch(Device &device)
-	{
-		TRACE_METHOD();
-		return m_dao->fetch(device);
-	}
+	bool fetch(Device &device);
 
 private:
 	DeviceDao *m_dao;
