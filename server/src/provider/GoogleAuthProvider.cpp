@@ -103,8 +103,6 @@ string GoogleAuthProvider::requestIdToken(const string &authCode)
 	session->sendRequest(req) << requestRaw;
 	string receiveResponse = handleResponse(*session);
 
-	m_logger.debug("response: " + receiveResponse, __FILE__, __LINE__);
-
 	Parser parser;
 	Object::Ptr object = parser.parse(receiveResponse)
 			.extract<Object::Ptr>();
@@ -140,11 +138,7 @@ string GoogleAuthProvider::fetchUserInfo(const string &token)
 			HTTPMessage::HTTP_1_1);
 
 	session->sendRequest(req);
-	string receiveResponse = handleResponse(*session);
-
-	m_logger.debug("response: " + receiveResponse, __FILE__, __LINE__);
-
-	return receiveResponse;
+	return handleResponse(*session);
 }
 
 void GoogleAuthProvider::initSSL()
