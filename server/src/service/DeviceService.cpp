@@ -3,6 +3,7 @@
 
 #include "service/DeviceService.h"
 #include "model/Device.h"
+#include "model/Gateway.h"
 #include "dao/DeviceDao.h"
 #include "Debug.h"
 
@@ -22,8 +23,9 @@ void DeviceService::setDeviceDao(DeviceDao *dao)
 	m_dao = dao? dao : &NullDeviceDao::instance();
 }
 
-bool DeviceService::fetch(Device &device)
+bool DeviceService::fetch(Relation<Device, Gateway> &input)
 {
 	TRACE_METHOD();
-	return m_dao->fetch(device, device.gateway());
+
+	return m_dao->fetch(input.target(), input.base());
 }

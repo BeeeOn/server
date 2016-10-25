@@ -1,12 +1,16 @@
 #ifndef BEEEON_DEVICE_SERVICE_H
 #define BEEEON_DEVICE_SERVICE_H
 
+#include <vector>
+
 #include "di/InjectorTarget.h"
+#include "service/Relation.h"
+#include "model/Device.h"
+#include "model/Gateway.h"
 
 namespace BeeeOn {
 
 class DeviceDao;
-class Device;
 
 /**
  * Service for devices management.
@@ -17,7 +21,7 @@ public:
 
 	void setDeviceDao(DeviceDao *dao);
 
-	bool fetch(Device &device);
+	bool fetch(Relation<Device, Gateway> &input);
 
 private:
 	DeviceDao *m_dao;
