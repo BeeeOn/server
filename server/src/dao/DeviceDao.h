@@ -16,6 +16,8 @@ public:
 
 class NullDeviceDao : public AbstractInjectorTarget,
 	public NullDao<Device, DeviceDao> {
+public:
+	static DeviceDao &instance();
 };
 
 class MockDeviceDao : public AbstractInjectorTarget,

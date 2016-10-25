@@ -10,7 +10,8 @@ BEEEON_OBJECT(DeviceService, BeeeOn::DeviceService)
 
 using namespace BeeeOn;
 
-DeviceService::DeviceService()
+DeviceService::DeviceService():
+	m_dao(&NullDeviceDao::instance())
 {
 	injector<DeviceService, DeviceDao>("deviceDao",
 			&DeviceService::setDeviceDao);
@@ -18,7 +19,7 @@ DeviceService::DeviceService()
 
 void DeviceService::setDeviceDao(DeviceDao *dao)
 {
-	m_dao = dao;
+	m_dao = dao? dao : &NullDeviceDao::instance();
 }
 
 bool DeviceService::fetch(Device &device)
