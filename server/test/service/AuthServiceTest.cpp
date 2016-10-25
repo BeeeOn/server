@@ -24,12 +24,14 @@ class TestableAuthService;
 class AuthServiceTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST_SUITE(AuthServiceTest);
 	CPPUNIT_TEST(testPermitAuth);
+	CPPUNIT_TEST(testCreateUser);
 	CPPUNIT_TEST_SUITE_END();
 
 public:
 	void setUp();
 	void tearDown();
 	void testPermitAuth();
+	void testCreateUser();
 
 private:
 	MockUserDao m_userDao;
@@ -45,6 +47,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(AuthServiceTest);
 
 class TestableAuthService : public AuthService {
 public:
+	using AuthService::createUser;
 };
 
 #define SESSION_ID64 string( \
@@ -108,6 +111,22 @@ void AuthServiceTest::testPermitAuth()
 	} catch(Exception &e) {
 		CPPUNIT_FAIL("unexpected exception: " + e.displayText());
 	}
+}
+
+void AuthServiceTest::testCreateUser()
+{
+	AuthResult result;
+	result.setFirstName("Freddie");
+	result.setLastName("Mercury");
+
+	const User &user = m_service->createUser(result);
+	CPPUNIT_ASSERT(user.firstName() == "Freddie");
+	CPPUNIT_ASSERT(user.lastName() == "Mercury");
+
+	User hasUser(user.id());
+	CPPUNIT_ASSERT(m_userDao.fetch(hasUser));
+	CPPUNIT_ASSERT(hasUser.firstName() == "Freddie");
+	CPPUNIT_ASSERT(hasUser.lastName() == "Mercury");
 }
 
 }
