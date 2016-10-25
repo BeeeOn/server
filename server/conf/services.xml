@@ -72,6 +72,7 @@
 				init="early">
 			<set name="userDao" ref="userDao" />
 			<set name="gatewayDao" ref="gatewayDao" />
+			<set name="deviceDao" ref="deviceDao" />
 			<set name="identityDao" ref="identityDao" />
 			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
 		</instance>
@@ -182,7 +183,7 @@
 
 		<instance name="mockPlaceDao" class="BeeeOn::MockPlaceDao" />
 		<instance name="mockUserDao" class="BeeeOn::MockUserDao" />
-		<instance name="deviceDao" class="BeeeOn::MockDeviceDao" />
+		<instance name="mockDeviceDao" class="BeeeOn::MockDeviceDao" />
 		<instance name="mockGatewayDao" class="BeeeOn::MockGatewayDao">
 			<set name="roleInPlaceDao" ref="roleInPlaceDao" />
 		</instance>
@@ -202,6 +203,7 @@
 		<alias name="userDao" ref="sqlUserDao" />
 		<alias name="gatewayDao" ref="sqlGatewayDao" />
 		<alias name="locationDao" ref="sqlLocationDao" />
+		<alias name="deviceDao" ref="mockDeviceDao" />
 		<alias name="identityDao" ref="sqlIdentityDao" />
 		<alias name="verifiedIdentityDao" ref="sqlVerifiedIdentityDao" />
 		<alias name="roleInPlaceDao" ref="sqlRoleInPlaceDao" />
