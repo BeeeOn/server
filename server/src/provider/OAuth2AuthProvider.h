@@ -3,6 +3,14 @@
 
 #include "provider/AuthProvider.h"
 
+namespace Poco {
+namespace Net {
+
+class HTTPSClientSession;
+
+}
+}
+
 namespace BeeeOn {
 
 class OAuth2AuthProvider : public AuthCodeAuthProvider {
@@ -23,6 +31,29 @@ public:
 	{
 		m_redirectURI = uri;
 	}
+
+protected:
+	/**
+	 * Initialize SSL context for upcoming HTTPS requests
+	 */
+	void initSSL();
+
+	/**
+	 * Open HTTPS connection to the given host:port.
+	 */
+	Poco::Net::HTTPSClientSession *connectSecure(
+			const std::string &host,
+			unsigned int port);
+
+	/**
+	 * Handle response based on given session.
+	 */
+	std::string handleResponse(Poco::Net::HTTPSClientSession &session);
+
+	/**
+	 * Convert istream response body to string
+	 */
+	std::string convertResponseToString(std::istream &rs);
 
 protected:
 	std::string m_clientId;

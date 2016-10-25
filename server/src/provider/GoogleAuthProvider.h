@@ -37,21 +37,6 @@ private:
 	 */
 	bool parseIdentity(const std::string &userInfo, AuthResult &result);
 
-	/**
-	 * Handle response based on given session
-	 */
-	std::string handleResponse(Poco::Net::HTTPSClientSession &session);
-
-	/**
-	 * Initialize SSL context for upcoming HTTPS requests
-	 */
-	void initSSL();
-
-	/**
-	 * Convert istream response body to string
-	 */
-	std::string convertResponseToString(std::istream &rs);
-
 	// URL to get access and ID token from Google API
 	const std::string m_tokenUrl = "https://www.googleapis.com/oauth2/v4/token";
 	// URL to get user info using ID token

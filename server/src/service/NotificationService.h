@@ -11,6 +11,9 @@ namespace BeeeOn {
 class NotificationService {
 public:
 	NotificationService();
+	virtual ~NotificationService()
+	{
+	}
 
 	virtual void notifyFirstLogin(const VerifiedIdentity &identity) = 0;
 
