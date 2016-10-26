@@ -141,6 +141,16 @@ const DateTime &Device::lastSeen() const
 	return m_lastSeen;
 }
 
+bool Device::available(const unsigned int multiple,
+		const DateTime &ref) const
+{
+	Timespan diff;
+	for (unsigned int i = 0; i < multiple; ++i)
+		diff += refresh();
+
+	return lastSeen() + diff >= ref;
+}
+
 void Device::setActiveSince(const Nullable<DateTime> &at)
 {
 	m_activeSince = at;

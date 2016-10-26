@@ -74,6 +74,13 @@ public:
 	void setLastSeen(const Poco::DateTime &at);
 	const Poco::DateTime &lastSeen() const;
 
+	/**
+	 * A device is available when it has been last seen
+	 * after a certain multiple of refresh time.
+	 */
+	bool available(const unsigned int multiple = 3,
+			const Poco::DateTime &ref = Poco::DateTime()) const;
+
 	void setActiveSince(const Poco::Nullable<Poco::DateTime> &at);
 	const Poco::Nullable<Poco::DateTime> &activeSince() const;
 
