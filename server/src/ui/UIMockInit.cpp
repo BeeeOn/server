@@ -1,5 +1,6 @@
 #include <Poco/UUIDGenerator.h>
 #include <Poco/DateTime.h>
+#include <Poco/Timespan.h>
 
 #include "dao/DeviceDao.h"
 #include "ui/UIMockInit.h"
@@ -105,6 +106,16 @@ void UIMockInit::initDevices()
 	multi.setActiveSince(DateTime(2016, 9, 10, 11, 30, 1));
 
 	m_deviceDao->insert(multi, gateway);
+
+	Device unknown(DeviceID::random(0x44));
+	unknown.setName("Unknown");
+	unknown.setGateway(gateway);
+	unknown.setType(0);
+	unknown.setRefresh(20);
+	unknown.setFirstSeen(DateTime() - Timespan(100, 0));
+	unknown.setLastSeen(DateTime());
+
+	m_deviceDao->insert(unknown, gateway);
 }
 
 void UIMockInit::injectionDone()
