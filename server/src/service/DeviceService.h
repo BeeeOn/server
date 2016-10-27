@@ -29,9 +29,13 @@ public:
 
 	bool activate(Relation<Device, Gateway> &input);
 	bool unregister(Relation<Device, Gateway> &input);
+	bool update(RelationWithData<Device, Gateway> &input);
+	bool updateAndActivate(RelationWithData<Device, Gateway> &input);
 
 protected:
-	bool tryActivateAndUpdate(Device &device, const Gateway &gateway);
+	bool prepareUpdate(RelationWithData<Device, Gateway> &input);
+	bool tryActivateAndUpdate(Device &device,
+			const Gateway &gateway, bool forceUpdate = false);
 
 private:
 	DeviceDao *m_dao;

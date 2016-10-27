@@ -76,12 +76,38 @@ bool DeviceService::activate(Relation<Device, Gateway> &input)
 }
 
 bool DeviceService::tryActivateAndUpdate(Device &device,
-		const Gateway &gateway)
+		const Gateway &gateway, bool forceUpdate)
 {
 	if (!device.active()) {
 		device.setActiveSince(DateTime());
 		return m_dao->update(device, gateway);
 	}
 
-	return false;
+	return forceUpdate? m_dao->update(device, gateway) : false;
+}
+
+bool DeviceService::prepareUpdate(RelationWithData<Device, Gateway> &input)
+{
+	if (!m_dao->fetch(input.target(), input.base()))
+		return false;
+
+	input.data().partial(input.target());
+	return true;
+}
+
+bool DeviceService::update(RelationWithData<Device, Gateway> &input)
+{
+	if (!prepareUpdate(input))
+		return false;
+
+	return m_dao->update(input.target(), input.base());
+}
+
+bool DeviceService::updateAndActivate(
+		RelationWithData<Device, Gateway> &input)
+{
+	if (!prepareUpdate(input))
+		return false;
+
+	return tryActivateAndUpdate(input.target(), input.base(), true);
 }
