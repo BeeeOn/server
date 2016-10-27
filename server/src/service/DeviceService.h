@@ -27,7 +27,11 @@ public:
 	void fetchActiveBy(Relation<std::vector<Device>, Gateway> &input);
 	void fetchInactiveBy(Relation<std::vector<Device>, Gateway> &input);
 
+	bool activate(Relation<Device, Gateway> &input);
 	bool unregister(Relation<Device, Gateway> &input);
+
+protected:
+	bool tryActivateAndUpdate(Device &device, const Gateway &gateway);
 
 private:
 	DeviceDao *m_dao;

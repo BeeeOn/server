@@ -1,5 +1,7 @@
 #include <Poco/Exception.h>
 #include <Poco/Logger.h>
+#include <Poco/Nullable.h>
+#include <Poco/DateTime.h>
 
 #include "service/DeviceService.h"
 #include "model/Device.h"
@@ -11,6 +13,7 @@
 BEEEON_OBJECT(DeviceService, BeeeOn::DeviceService)
 
 using namespace std;
+using namespace Poco;
 using namespace BeeeOn;
 
 DeviceService::DeviceService():
@@ -60,4 +63,25 @@ bool DeviceService::unregister(Relation<Device, Gateway> &input)
 		LOGGER_CLASS(this).log(e, __FILE__, __LINE__);
 		return false;
 	}
+}
+
+bool DeviceService::activate(Relation<Device, Gateway> &input)
+{
+	Device &device = input.target();
+
+	if (!m_dao->fetch(device, input.base()))
+		return false;
+
+	return tryActivateAndUpdate(device, input.base());
+}
+
+bool DeviceService::tryActivateAndUpdate(Device &device,
+		const Gateway &gateway)
+{
+	if (!device.active()) {
+		device.setActiveSince(DateTime());
+		return m_dao->update(device, gateway);
+	}
+
+	return false;
 }
