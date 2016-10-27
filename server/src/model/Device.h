@@ -84,6 +84,11 @@ public:
 	void setActiveSince(const Poco::Nullable<Poco::DateTime> &at);
 	const Poco::Nullable<Poco::DateTime> &activeSince() const;
 
+	bool active() const
+	{
+		return !activeSince().isNull();
+	}
+
 private:
 	ID m_id;
 	Gateway m_gateway;
