@@ -5,6 +5,7 @@
 #include "model/Device.h"
 #include "model/Gateway.h"
 #include "dao/DeviceDao.h"
+#include "rpc/GatewayRPC.h"
 #include "Debug.h"
 
 BEEEON_OBJECT(DeviceService, BeeeOn::DeviceService)
@@ -13,15 +14,23 @@ using namespace std;
 using namespace BeeeOn;
 
 DeviceService::DeviceService():
-	m_dao(&NullDeviceDao::instance())
+	m_dao(&NullDeviceDao::instance()),
+	m_gatewayRPC(&NullGatewayRPC::instance())
 {
 	injector<DeviceService, DeviceDao>("deviceDao",
 			&DeviceService::setDeviceDao);
+	injector<DeviceService, GatewayRPC>("gatewayRPC",
+			&DeviceService::setGatewayRPC);
 }
 
 void DeviceService::setDeviceDao(DeviceDao *dao)
 {
 	m_dao = dao? dao : &NullDeviceDao::instance();
+}
+
+void DeviceService::setGatewayRPC(GatewayRPC *rpc)
+{
+	m_gatewayRPC = rpc? rpc : &NullGatewayRPC::instance();
 }
 
 bool DeviceService::fetch(Relation<Device, Gateway> &input)
@@ -39,4 +48,16 @@ void DeviceService::fetchActiveBy(Relation<vector<Device>, Gateway> &input)
 void DeviceService::fetchInactiveBy(Relation<vector<Device>, Gateway> &input)
 {
 	m_dao->fetchInactiveBy(input.target(), input.base());
+}
+
+bool DeviceService::unregister(Relation<Device, Gateway> &input)
+{
+	try {
+		m_gatewayRPC->unpairDevice(input.base(), input.target());
+		return true;
+	}
+	catch (const Poco::Exception &e) {
+		LOGGER_CLASS(this).log(e, __FILE__, __LINE__);
+		return false;
+	}
 }

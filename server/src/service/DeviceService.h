@@ -11,6 +11,7 @@
 namespace BeeeOn {
 
 class DeviceDao;
+class GatewayRPC;
 
 /**
  * Service for devices management.
@@ -20,13 +21,17 @@ public:
 	DeviceService();
 
 	void setDeviceDao(DeviceDao *dao);
+	void setGatewayRPC(GatewayRPC *rpc);
 
 	bool fetch(Relation<Device, Gateway> &input);
 	void fetchActiveBy(Relation<std::vector<Device>, Gateway> &input);
 	void fetchInactiveBy(Relation<std::vector<Device>, Gateway> &input);
 
+	bool unregister(Relation<Device, Gateway> &input);
+
 private:
 	DeviceDao *m_dao;
+	GatewayRPC *m_gatewayRPC;
 };
 
 }
