@@ -173,7 +173,11 @@
 		</instance>
 
 		<instance name="nullGatewayRPC" class="BeeeOn::NullGatewayRPC" />
-		<alias name="gatewayRPC" ref="nullGatewayRPC" />
+		<instance name="fakeGatewayRPC" class="BeeeOn::FakeGatewayRPC">
+			<set name="deviceDao" ref="deviceDao" />
+		</instance>
+
+		<alias name="gatewayRPC" ref="fakeGatewayRPC" />
 
 		<instance name="mockPlaceDao" class="BeeeOn::MockPlaceDao" />
 		<instance name="mockUserDao" class="BeeeOn::MockUserDao" />

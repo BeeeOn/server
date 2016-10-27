@@ -82,6 +82,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/SSLServer.cpp
 	${PROJECT_SOURCE_DIR}/dao/PocoDaoManager.cpp
 	${PROJECT_SOURCE_DIR}/rpc/GatewayRPC.cpp
+	${PROJECT_SOURCE_DIR}/rpc/FakeGatewayRPC.cpp
 )
 
 include_directories(
