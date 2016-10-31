@@ -17,6 +17,7 @@ class Gateway;
 class DeviceDao {
 public:
 	virtual bool insert(Device &device, const Gateway &gateway) = 0;
+	virtual bool update(Device &device, const Gateway &gateway) = 0;
 	virtual bool fetch(Device &device, const Gateway &gateway) = 0;
 	virtual void fetchActiveBy(std::vector<Device> &devices,
 			const Gateway &gateway) = 0;
@@ -30,6 +31,11 @@ public:
 	bool insert(Device &device, const Gateway &gateway)
 	{
 		return NullDao<Device, DeviceDao>::insert(device);
+	}
+
+	bool update(Device &device, const Gateway &gateway)
+	{
+		return NullDao<Device, DeviceDao>::update(device);
 	}
 
 	bool fetch(Device &device, const Gateway &gateway)
