@@ -110,6 +110,7 @@
 		<instance name="deviceService" class="BeeeOn::DeviceService">
 			<set name="deviceDao" ref="deviceDao" />
 			<set name="gatewayRPC" ref="gatewayRPC" />
+			<set name="accessPolicy" ref="accessPolicy" />
 		</instance>
 
 		<instance name="gatewayService" class="BeeeOn::GatewayService">
@@ -143,6 +144,7 @@
 			<set name="userDao" ref="userDao" />
 			<set name="gatewayDao" ref="gatewayDao" />
 			<set name="locationDao" ref="locationDao" />
+			<set name="deviceDao" ref="deviceDao" />
 			<set name="roleInPlaceDao" ref="roleInPlaceDao" />
 		</instance>
 

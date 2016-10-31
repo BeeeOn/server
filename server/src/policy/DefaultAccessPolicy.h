@@ -5,9 +5,11 @@
 #include "policy/PlaceAccessPolicy.h"
 #include "policy/GatewayAccessPolicy.h"
 #include "policy/LocationAccessPolicy.h"
+#include "policy/DeviceAccessPolicy.h"
 #include "dao/RoleInPlaceDao.h"
 #include "dao/GatewayDao.h"
 #include "dao/LocationDao.h"
+#include "dao/DeviceDao.h"
 #include "dao/UserDao.h"
 
 namespace BeeeOn {
@@ -15,7 +17,8 @@ namespace BeeeOn {
 class DefaultAccessPolicy : public AbstractInjectorTarget,
 		public PlaceAccessPolicy,
 		public GatewayAccessPolicy,
-		public LocationAccessPolicy {
+		public LocationAccessPolicy,
+		public DeviceAccessPolicy {
 public:
 	DefaultAccessPolicy();
 
@@ -46,6 +49,19 @@ public:
 	void assureRemove(const PolicyContext &context,
 		const Location &location);
 
+	void assureGet(const PolicyContext &context,
+		const Device &device, const Gateway &gateway);
+	void assureListActiveDevices(const PolicyContext &context,
+		const Gateway &gateway);
+	void assureListInactiveDevices(const PolicyContext &context,
+		const Gateway &gateway);
+	void assureUnregister(const PolicyContext &context,
+		const Device &device, const Gateway &gateway);
+	void assureActivate(const PolicyContext &context,
+		const Device &device, const Gateway &gateway);
+	void assureUpdate(const PolicyContext &context,
+		const Device &device, const Gateway &gateway);
+
 	void setUserDao(UserDao *dao)
 	{
 		m_userDao = dao;
@@ -61,6 +77,11 @@ public:
 		m_locationDao = dao;
 	}
 
+	void setDeviceDao(DeviceDao *dao)
+	{
+		m_deviceDao = dao;
+	}
+
 	void setRoleInPlaceDao(RoleInPlaceDao *dao)
 	{
 		m_roleInPlaceDao = dao;
@@ -68,6 +89,7 @@ public:
 
 protected:
 	AccessLevel fetchAccessLevel(const User &user, const Place &place);
+	AccessLevel fetchAccessLevel(const User &user, const Gateway &gateway);
 	void assureAtLeast(
 			const AccessLevel &current,
 			const AccessLevel &required);
@@ -76,6 +98,7 @@ private:
 	UserDao *m_userDao;
 	GatewayDao *m_gatewayDao;
 	LocationDao *m_locationDao;
+	DeviceDao *m_deviceDao;
 	RoleInPlaceDao *m_roleInPlaceDao;
 };
 
