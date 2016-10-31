@@ -25,5 +25,5 @@ void DeviceService::setDeviceDao(DeviceDao *dao)
 bool DeviceService::fetch(Device &device)
 {
 	TRACE_METHOD();
-	return m_dao->fetch(device);
+	return m_dao->fetch(device, device.gateway());
 }

@@ -6,26 +6,37 @@
 #include "dao/MockDao.h"
 #include "model/Place.h"
 #include "model/Device.h"
+#include "model/Gateway.h"
 
 namespace BeeeOn {
 
 class DeviceDao {
 public:
-	virtual bool fetch(Device &device) = 0;
+	virtual bool fetch(Device &device, const Gateway &gateway) = 0;
 };
 
 class NullDeviceDao : public AbstractInjectorTarget,
 	public NullDao<Device, DeviceDao> {
 public:
+	bool fetch(Device &device, const Gateway &gateway)
+	{
+		return NullDao<Device, DeviceDao>::fetch(device);
+	}
+
 	static DeviceDao &instance();
 };
 
 class MockDeviceDao : public AbstractInjectorTarget,
-	public MockDao<Device, DeviceDao> {
+	public MockRelationDao<Device, Gateway, DeviceDao> {
 protected:
 	DeviceID nextID()
 	{
 		return DeviceID::random();
+	}
+
+	void setBase(Device &device, const Gateway &gateway)
+	{
+		device.setGateway(gateway);
 	}
 
 private:
