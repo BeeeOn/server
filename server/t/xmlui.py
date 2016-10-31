@@ -268,3 +268,84 @@ class GetMyProfile(Request):
 	def xml(self):
 		request = Request.xml(self)
 		return request
+
+class DeviceGetAll(Request):
+	def __init__(self, gateway, sessionid, **kwargs):
+		Request.__init__(self, ns = "devices",
+			type = "getall", sessionid = sessionid)
+		self.gateway = gateway
+
+	def xml(self):
+		request = Request.xml(self)
+		request.set("gateid", self.gateway)
+
+		return request
+
+class DeviceGetNew(Request):
+	def __init__(self, gateway, sessionid, **kwargs):
+		Request.__init__(self, ns = "devices",
+			type = "getnew", sessionid = sessionid)
+		self.gateway = gateway
+
+	def xml(self):
+		request = Request.xml(self)
+		request.set("gateid", self.gateway)
+
+		return request
+
+class DeviceGet(Request):
+	def __init__(self, gateway, sessionid, *devices, **kwargs):
+		Request.__init__(self, ns = "devices",
+			type = "get", sessionid = sessionid)
+		self.gateway = gateway
+		self.devices = devices
+
+	def xml(self):
+		request = Request.xml(self)
+		request.set("gateid", self.gateway)
+
+		for device in self.devices:
+			e = xml.SubElement(request, "device")
+			e.set("euid", device)
+
+		return request
+
+class DeviceUpdate(Request):
+	def __init__(self, gateway, device, sessionid, **kwargs):
+		Request.__init__(self, ns = "devices",
+			type = "update", sessionid = sessionid)
+		self.gateway = gateway
+		self.device = device
+
+		if "name" in kwargs:
+			self.name = kwargs["name"]
+		if "locationid" in kwargs:
+			self.locationid = kwargs["locationid"]
+
+	def xml(self):
+		request = Request.xml(self)
+		request.set("gateid", self.gateway)
+		device = xml.SubElement(request, "device")
+		device.set("euid", self.device)
+
+		if hasattr(self, "name"):
+			device.set("name", self.name)
+		if hasattr(self, "locationid"):
+			device.set("locationid", self.locationid)
+
+		return request
+
+class DeviceUnregister(Request):
+	def __init__(self, gateway, device, sessionid, **kwargs):
+		Request.__init__(self, ns = "devices",
+			type = "unregister", sessionid = sessionid)
+		self.gateway = gateway
+		self.device = device
+
+	def xml(self):
+		request = Request.xml(self)
+		request.set("gateid", self.gateway)
+		device = xml.SubElement(request, "device")
+		device.set("euid", self.device)
+
+		return request
