@@ -23,43 +23,35 @@ ExpirableSession::Ptr AuthService::loginAsNew(const AuthResult &result)
 {
 	Identity identity;
 	identity.setEmail(result.email());
-	identity.setUser(createUser(result));
 
 	m_identityDao->create(identity);
 
 	VerifiedIdentity verifiedIdentity;
-
-	if (!verifyIdentity(verifiedIdentity, identity, result))
-		return NULL;
+	verifyIdentity(verifiedIdentity, identity, result);
 
 	m_notificationService->notifyFirstLogin(verifiedIdentity);
 
 	return openSession(verifiedIdentity);
 }
 
-bool AuthService::createUserAndVerify(
+void AuthService::createUserAndVerify(
 		VerifiedIdentity &verifiedIdentity,
 		Identity &identity,
 		const AuthResult &result)
 {
-	if (!identity.hasUser()) {
-		User user(createUser(result));
-		identity.setUser(user);
+	User user(createUser(result));
 
-		if (!m_identityDao->update(identity))
-			return false;
-	}
-
-	approveIdentity(verifiedIdentity, identity, result);
-	return true;
+	approveIdentity(verifiedIdentity, identity, user, result);
 }
 
 void AuthService::approveIdentity(
 		VerifiedIdentity &verifiedIdentity,
 		const Identity &identity,
+		const User &user,
 		const AuthResult &result)
 {
 	verifiedIdentity.setIdentity(identity);
+	verifiedIdentity.setUser(user);
 	verifiedIdentity.setProvider(result.provider());
 	verifiedIdentity.setAccessToken(result.accessToken());
 	verifiedIdentity.setPicture(URI(result.picture()));
@@ -67,7 +59,7 @@ void AuthService::approveIdentity(
 	m_verifiedIdentityDao->create(verifiedIdentity);
 }
 
-bool AuthService::verifyIdentity(
+void AuthService::verifyIdentity(
 		VerifiedIdentity &verifiedIdentity,
 		Identity &identity,
 		const AuthResult &result)
@@ -75,12 +67,13 @@ bool AuthService::verifyIdentity(
 	vector<VerifiedIdentity> identities;
 	m_verifiedIdentityDao->fetchBy(identities, identity.email());
 
-	if (identities.empty())
-		return createUserAndVerify(verifiedIdentity, identity, result);
+	if (identities.empty()) {
+		createUserAndVerify(verifiedIdentity, identity, result);
+		return;
+	}
 
 	const VerifiedIdentity &existing = identities.front();
-	approveIdentity(verifiedIdentity, existing.identity(), result);
-	return true;
+	approveIdentity(verifiedIdentity, identity, existing.user(), result);
 }
 
 ExpirableSession::Ptr AuthService::verifyIdentityAndLogin(
@@ -92,9 +85,12 @@ ExpirableSession::Ptr AuthService::verifyIdentityAndLogin(
 		return loginAsNew(result);
 
 	VerifiedIdentity verifiedIdentity;
+	if (m_verifiedIdentityDao->fetchBy(verifiedIdentity,
+				result.email(),
+				result.provider()))
+		return openSession(verifiedIdentity);
 
-	if (!verifyIdentity(verifiedIdentity, identity, result))
-		return NULL;
+	verifyIdentity(verifiedIdentity, identity, result);
 
 	m_notificationService->notifyFirstLogin(verifiedIdentity);
 
@@ -104,25 +100,14 @@ ExpirableSession::Ptr AuthService::verifyIdentityAndLogin(
 ExpirableSession::Ptr AuthService::openSession(
 		const VerifiedIdentity &verifiedIdentity)
 {
-	Identity identity(verifiedIdentity.identity().id());
-
-	if (!m_identityDao->fetch(identity)) {
-		throw NotAuthenticatedException(
-			"failed to find identity "
-				+ identity.id().toString()
-				+ " for "
-				+ verifiedIdentity.id().toString());
-	}
-
-	User user(identity.user());
+	User user(verifiedIdentity.user());
 
 	if (!m_userDao->fetch(user)) {
 		throw NotAuthenticatedException("unknown user for identity "
-				+ identity.id().toString());
+				+ verifiedIdentity.id().toString());
 	}
 
 	VerifiedIdentity copy(verifiedIdentity);
-	copy.setIdentity(identity);
 	copy.setUser(user);
 
 	return m_sessionManager->open(copy);
