@@ -11,6 +11,8 @@
 
 namespace BeeeOn {
 
+class User;
+
 class RoleInPlaceDao {
 public:
 	virtual void create(RoleInPlace &role) = 0;

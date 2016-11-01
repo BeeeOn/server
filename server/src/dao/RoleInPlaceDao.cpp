@@ -1,6 +1,7 @@
 #include <Poco/Exception.h>
 #include <Poco/SingletonHolder.h>
 
+#include "model/User.h"
 #include "dao/RoleInPlaceDao.h"
 
 BEEEON_OBJECT(NullRoleInPlaceDao, BeeeOn::NullRoleInPlaceDao)
