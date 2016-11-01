@@ -253,5 +253,9 @@
 			<set name="daoManager" ref="pocoDaoManager" />
 		</instance>
 
+		<instance name="sqlLocationDao" class="BeeeOn::PocoSQLLocationDao">
+			<set name="daoManager" ref="pocoDaoManager" />
+		</instance>
+
 	</services>
 </system>
