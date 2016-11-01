@@ -244,5 +244,9 @@
 			<set name="daoManager" ref="pocoDaoManager" />
 		</instance>
 
+		<instance name="sqlGatewayDao" class="BeeeOn::PocoSQLGatewayDao">
+			<set name="daoManager" ref="pocoDaoManager" />
+		</instance>
+
 	</services>
 </system>
