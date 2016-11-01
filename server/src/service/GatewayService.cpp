@@ -85,15 +85,6 @@ bool GatewayService::registerGateway(SingleWithData<Gateway> &input,
 	if (!m_verifiedIdentityDao->fetch(tmp))
 		throw InvalidArgumentException("invalid verified identity");
 
-	Identity identity(tmp.identity());
-
-	if (!m_identityDao->fetch(identity))
-		throw InvalidArgumentException("invalid identity given: "
-				+ identity.repr());
-
-	if (!identity.hasUser())
-		throw InvalidArgumentException("identity with no user");
-
 	Gateway &gateway = input.target();
 
 	if (!m_gatewayDao->fetch(gateway))
@@ -101,7 +92,7 @@ bool GatewayService::registerGateway(SingleWithData<Gateway> &input,
 
 	if (gateway.hasPlace()) {
 		const AccessLevel &level = m_roleInPlaceDao->
-			fetchAccessLevel(gateway.place(), identity.user());
+			fetchAccessLevel(gateway.place(), tmp.user());
 
 		if (level <= AccessLevel::admin()) // is owner
 			throw ExistsException("gateway is already assigned");
@@ -111,14 +102,14 @@ bool GatewayService::registerGateway(SingleWithData<Gateway> &input,
 
 	vector<Place> places;
 	m_roleInPlaceDao->fetchAccessiblePlaces(
-			places, identity.user(), AccessLevel::admin());
+			places, tmp.user(), AccessLevel::admin());
 
 	if (places.size() > 1)
 		throw IllegalStateException("too many places, incompatible");
 
 	if (places.size() == 0) {
 		Place place;
-		createImplicitPlace(place, identity);
+		createImplicitPlace(place, tmp.identity());
 		places.push_back(place);
 	}
 
@@ -128,7 +119,7 @@ bool GatewayService::registerGateway(SingleWithData<Gateway> &input,
 	return m_gatewayDao->assignAndUpdate(gateway, places.front());
 }
 
-void GatewayService::createImplicitPlace(Place &place, Identity &identity)
+void GatewayService::createImplicitPlace(Place &place, const Identity &identity)
 {
 	place.setName("Implicit");
 
