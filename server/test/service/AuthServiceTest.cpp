@@ -195,11 +195,11 @@ void AuthServiceTest::testFirstLoginBySecondProvider()
 
 	Identity identity;
 	identity.setEmail("freddie@example.org");
-	identity.setUser(user);
 	m_identityDao.create(identity);
 
 	VerifiedIdentity firstProvider;
 	firstProvider.setIdentity(identity);
+	firstProvider.setUser(user);
 	firstProvider.setProvider("first-provider");
 	m_verifiedIdentityDao.create(firstProvider);
 

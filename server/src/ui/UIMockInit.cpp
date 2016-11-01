@@ -17,7 +17,6 @@ void UIMockInit::initUsers()
 
 	Identity joeDoe0;
 	joeDoe0.setEmail("joe.doe@example.org");
-	joeDoe0.setUser(joeDoeUser);
 
 	m_identityDao->create(joeDoe0);
 
@@ -36,7 +35,6 @@ void UIMockInit::initUsers()
 
 	Identity johnsmith0;
 	johnsmith0.setEmail("john.smith@example.org");
-	johnsmith0.setUser(johnsmithUser);
 
 	m_identityDao->create(johnsmith0);
 
