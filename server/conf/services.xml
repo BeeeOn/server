@@ -235,5 +235,9 @@
 			<set name="daoManager" ref="pocoDaoManager" />
 		</instance>
 
+		<instance name="sqlIdentityDao" class="BeeeOn::PocoSQLIdentityDao">
+			<set name="daoManager" ref="pocoDaoManager" />
+		</instance>
+
 	</services>
 </system>
