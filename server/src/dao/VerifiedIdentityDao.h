@@ -1,6 +1,8 @@
 #ifndef BEEEON_VERIFIED_IDENTITY_DAO_H
 #define BEEEON_VERIFIED_IDENTITY_DAO_H
 
+#include <vector>
+
 #include "di/InjectorTarget.h"
 #include "dao/IdentityDao.h"
 #include "dao/NullDao.h"
@@ -16,6 +18,8 @@ public:
 	virtual bool fetchBy(VerifiedIdentity &identity,
 			const std::string email,
 			const std::string provider) = 0;
+	virtual void fetchBy(std::vector<VerifiedIdentity> &identities,
+			const std::string email) = 0;
 	virtual bool update(VerifiedIdentity &identity) = 0;
 	virtual bool remove(const VerifiedIdentity &identity) = 0;
 };
@@ -30,6 +34,9 @@ public:
 		return fetch(identity);
 	}
 
+	void fetchBy(std::vector<VerifiedIdentity> &identities,
+			const std::string email);
+
 	static VerifiedIdentityDao &instance();
 };
 
@@ -39,6 +46,9 @@ public:
 	bool fetchBy(VerifiedIdentity &identity,
 			const std::string email,
 			const std::string provider);
+
+	void fetchBy(std::vector<VerifiedIdentity> &identities,
+			const std::string email);
 
 protected:
 	VerifiedIdentityID nextID()
