@@ -12,6 +12,7 @@
 namespace BeeeOn {
 
 class User;
+class VerifiedIdentityDao;
 
 class RoleInPlaceDao {
 public:
@@ -87,13 +88,22 @@ public:
 		m_placeDao = dao;
 	}
 
+	void setVerifiedIdentityDao(VerifiedIdentityDao *dao)
+	{
+		m_verifiedIdentityDao = dao;
+	}
+
 protected:
 	RoleInPlaceID nextID()
 	{
 		return RoleInPlaceID::random();
 	}
 
+	bool roleRefersToUser(const RoleInPlace &role,
+			const User &user);
+
 	PlaceDao *m_placeDao;
+	VerifiedIdentityDao *m_verifiedIdentityDao;
 };
 
 }
