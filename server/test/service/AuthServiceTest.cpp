@@ -117,11 +117,11 @@ void AuthServiceTest::testPermitAuth()
 
 	Identity identity;
 	identity.setEmail("permit@example.org");
-	identity.setUser(*user);
 	m_identityDao.create(identity);
 
 	VerifiedIdentity verifiedIdentity;
 	verifiedIdentity.setIdentity(identity);
+	verifiedIdentity.setUser(*user);
 	verifiedIdentity.setProvider("3rd-party");
 	m_verifiedIdentityDao.create(verifiedIdentity);
 
@@ -173,11 +173,6 @@ void AuthServiceTest::testLoginAsNew()
 				"freddie@example.org"));
 	CPPUNIT_ASSERT(!identity.id().isNull());
 	CPPUNIT_ASSERT(identity.email() == "freddie@example.org");
-	/*
-	CPPUNIT_ASSERT(!identity.user().id().isNull());
-	CPPUNIT_ASSERT(identity.user().firstName() == "Freddie");
-	CPPUNIT_ASSERT(identity.user().lastName() == "Mercury");
-	*/
 
 	const VerifiedIdentity &verifiedIdentity =
 		m_notificationService->lastIdentity();
@@ -185,7 +180,7 @@ void AuthServiceTest::testLoginAsNew()
 	CPPUNIT_ASSERT(!verifiedIdentity.id().isNull());
 	CPPUNIT_ASSERT(verifiedIdentity.id() == session->identityID());
 	CPPUNIT_ASSERT(verifiedIdentity.identity().id() == identity.id());
-	/*CPPUNIT_ASSERT(verifiedIdentity.user().id() == identity.user().id());*/
+	CPPUNIT_ASSERT(!verifiedIdentity.user().id().isNull());
 	CPPUNIT_ASSERT(verifiedIdentity.user().firstName() == "Freddie");
 	CPPUNIT_ASSERT(verifiedIdentity.user().lastName() == "Mercury");
 	CPPUNIT_ASSERT(verifiedIdentity.email() == "freddie@example.org");
