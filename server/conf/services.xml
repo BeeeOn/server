@@ -244,6 +244,11 @@
 			<set name="daoManager" ref="pocoDaoManager" />
 		</instance>
 
+		<instance name="sqlRoleInPlaceDao"
+				class="BeeeOn::PocoSQLRoleInPlaceDao">
+			<set name="daoManager" ref="pocoDaoManager" />
+		</instance>
+
 		<instance name="sqlGatewayDao" class="BeeeOn::PocoSQLGatewayDao">
 			<set name="daoManager" ref="pocoDaoManager" />
 		</instance>
