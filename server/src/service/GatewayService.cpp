@@ -100,23 +100,13 @@ bool GatewayService::registerGateway(SingleWithData<Gateway> &input,
 		throw NotFoundException("gateway is owned by somebody else");
 	}
 
-	vector<Place> places;
-	m_roleInPlaceDao->fetchAccessiblePlaces(
-			places, tmp.user(), AccessLevel::admin());
+	Place place;
+	createImplicitPlace(place, tmp.identity());
 
-	if (places.size() > 1)
-		throw IllegalStateException("too many places, incompatible");
-
-	if (places.size() == 0) {
-		Place place;
-		createImplicitPlace(place, tmp.identity());
-		places.push_back(place);
-	}
-
-	m_accessPolicy->assureAssignGateway(input, places.front());
+	m_accessPolicy->assureAssignGateway(input, place);
 
 	input.data().full(gateway);
-	return m_gatewayDao->assignAndUpdate(gateway, places.front());
+	return m_gatewayDao->assignAndUpdate(gateway, place);
 }
 
 void GatewayService::createImplicitPlace(Place &place, const Identity &identity)
