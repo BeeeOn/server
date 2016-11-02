@@ -28,6 +28,7 @@ class AuthServiceTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testPermitAuth);
 	CPPUNIT_TEST(testCreateUser);
 	CPPUNIT_TEST(testLoginAsNew);
+	CPPUNIT_TEST(testFirstLoginBySecondProvider);
 	CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -36,6 +37,7 @@ public:
 	void testPermitAuth();
 	void testCreateUser();
 	void testLoginAsNew();
+	void testFirstLoginBySecondProvider();
 
 private:
 	MockUserDao m_userDao;
@@ -54,6 +56,7 @@ class TestableAuthService : public AuthService {
 public:
 	using AuthService::createUser;
 	using AuthService::loginAsNew;
+	using AuthService::verifyIdentityAndLogin;
 };
 
 class MockNotificationService : public NotificationService {
@@ -181,6 +184,45 @@ void AuthServiceTest::testLoginAsNew()
 	CPPUNIT_ASSERT(verifiedIdentity.id() == session->identityID());
 	CPPUNIT_ASSERT(verifiedIdentity.identity().id() == identity.id());
 	CPPUNIT_ASSERT(verifiedIdentity.user().id() == identity.user().id());
+	CPPUNIT_ASSERT(verifiedIdentity.user().firstName() == "Freddie");
+	CPPUNIT_ASSERT(verifiedIdentity.user().lastName() == "Mercury");
+	CPPUNIT_ASSERT(verifiedIdentity.email() == "freddie@example.org");
+}
+
+void AuthServiceTest::testFirstLoginBySecondProvider()
+{
+	User user;
+	user.setFirstName("Freddie");
+	user.setLastName("Mercury");
+	m_userDao.create(user);
+
+	Identity identity;
+	identity.setEmail("freddie@example.org");
+	identity.setUser(user);
+	m_identityDao.create(identity);
+
+	VerifiedIdentity firstProvider;
+	firstProvider.setIdentity(identity);
+	firstProvider.setProvider("first-provider");
+	m_verifiedIdentityDao.create(firstProvider);
+
+	AuthResult result;
+	result.setEmail("freddie@example.org");
+	result.setProvider("second-provider");
+	result.setFirstName("Freddie 2");
+	result.setLastName("Mercury 2");
+
+	ExpirableSession::Ptr session =
+		m_service->verifyIdentityAndLogin(result);
+	CPPUNIT_ASSERT(!session.isNull());
+
+	const VerifiedIdentity &verifiedIdentity =
+		m_notificationService->lastIdentity();
+
+	CPPUNIT_ASSERT(!verifiedIdentity.id().isNull());
+	CPPUNIT_ASSERT(verifiedIdentity.id() == session->identityID());
+	CPPUNIT_ASSERT(verifiedIdentity.identity().id() == identity.id());
+	CPPUNIT_ASSERT(verifiedIdentity.user().id() == user.id());
 	CPPUNIT_ASSERT(verifiedIdentity.user().firstName() == "Freddie");
 	CPPUNIT_ASSERT(verifiedIdentity.user().lastName() == "Mercury");
 	CPPUNIT_ASSERT(verifiedIdentity.email() == "freddie@example.org");
