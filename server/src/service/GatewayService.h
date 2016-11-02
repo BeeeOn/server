@@ -67,7 +67,9 @@ public:
 	void pingGateway(Single<Gateway> &input);
 
 protected:
-	void createImplicitPlace(Place &place, const Identity &identity);
+	void createImplicitPlace(Place &place,
+			const Gateway &gateway,
+			const Identity &identity);
 
 private:
 	GatewayDao *m_gatewayDao;

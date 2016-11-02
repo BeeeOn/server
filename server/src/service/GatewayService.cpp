@@ -100,18 +100,21 @@ bool GatewayService::registerGateway(SingleWithData<Gateway> &input,
 		throw NotFoundException("gateway is owned by somebody else");
 	}
 
+	input.data().full(gateway);
+
 	Place place;
-	createImplicitPlace(place, tmp.identity());
+	createImplicitPlace(place, gateway, tmp.identity());
 
 	m_accessPolicy->assureAssignGateway(input, place);
-
-	input.data().full(gateway);
 	return m_gatewayDao->assignAndUpdate(gateway, place);
 }
 
-void GatewayService::createImplicitPlace(Place &place, const Identity &identity)
+void GatewayService::createImplicitPlace(
+		Place &place,
+		const Gateway &gateway,
+		const Identity &identity)
 {
-	place.setName("Implicit");
+	place.setName(string("Place for ") + gateway.name());
 
 	m_placeDao->create(place);
 
