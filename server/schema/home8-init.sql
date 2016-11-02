@@ -42,7 +42,7 @@ CREATE TABLE verified_identities (
 	user_id     ${type_uuid} NOT NULL REFERENCES users(id),
 	provider    varchar(250) NOT NULL,
 	picture     varchar(250),
-	accessToken varchar(250),
+	access_token varchar(250),
 	CONSTRAINT unique_verified_identity UNIQUE (identity_id, provider)
 );
 
