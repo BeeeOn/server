@@ -107,3 +107,18 @@ void MockRoleInPlaceDao::fetchBy(
 		roles.push_back(role);
 	}
 }
+
+bool MockRoleInPlaceDao::hasUsersExcept(
+		const Place &place,
+		const User &user)
+{
+	vector<RoleInPlace> roles;
+	fetchBy(roles, place);
+
+	for (auto role : roles) {
+		if (!roleRefersToUser(role, user))
+			return true;
+	}
+
+	return false;
+}

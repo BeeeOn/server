@@ -20,6 +20,8 @@ public:
 	virtual bool fetch(RoleInPlace &role) = 0;
 	virtual void fetchBy(std::vector<RoleInPlace> &roles,
 			const Place &place) = 0;
+	virtual bool hasUsersExcept(const Place &place,
+			const User &user) = 0;
 	virtual bool update(RoleInPlace &role) = 0;
 	virtual bool remove(const RoleInPlace &role) = 0;
 
@@ -63,6 +65,10 @@ public:
 		throw Poco::NotImplementedException(__func__);
 	}
 
+	bool hasUsersExcept(const Place &place, const User &user) {
+		throw Poco::NotImplementedException(__func__);
+	}
+
 	static RoleInPlaceDao &instance();
 };
 
@@ -82,6 +88,8 @@ public:
 
 	void fetchBy(std::vector<RoleInPlace> &roles,
 			const Place &place);
+
+	bool hasUsersExcept(const Place &place, const User &user);
 
 	void setPlaceDao(PlaceDao *dao)
 	{
