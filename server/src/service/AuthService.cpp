@@ -37,7 +37,7 @@ ExpirableSession::Ptr AuthService::loginAsNew(const AuthResult &result)
 	return openSession(verifiedIdentity);
 }
 
-bool AuthService::verifyIdentity(
+bool AuthService::createUserAndVerify(
 		VerifiedIdentity &verifiedIdentity,
 		Identity &identity,
 		const AuthResult &result)
@@ -50,12 +50,36 @@ bool AuthService::verifyIdentity(
 			return false;
 	}
 
+	approveIdentity(verifiedIdentity, identity, result);
+	return true;
+}
+
+void AuthService::approveIdentity(
+		VerifiedIdentity &verifiedIdentity,
+		const Identity &identity,
+		const AuthResult &result)
+{
 	verifiedIdentity.setIdentity(identity);
 	verifiedIdentity.setProvider(result.provider());
 	verifiedIdentity.setAccessToken(result.accessToken());
 	verifiedIdentity.setPicture(URI(result.picture()));
 
 	m_verifiedIdentityDao->create(verifiedIdentity);
+}
+
+bool AuthService::verifyIdentity(
+		VerifiedIdentity &verifiedIdentity,
+		Identity &identity,
+		const AuthResult &result)
+{
+	vector<VerifiedIdentity> identities;
+	m_verifiedIdentityDao->fetchBy(identities, identity.email());
+
+	if (identities.empty())
+		return createUserAndVerify(verifiedIdentity, identity, result);
+
+	const VerifiedIdentity &existing = identities.front();
+	approveIdentity(verifiedIdentity, existing.identity(), result);
 	return true;
 }
 

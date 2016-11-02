@@ -4,6 +4,7 @@
 #include <string>
 #include <Poco/URI.h>
 #include <Poco/SharedPtr.h>
+#include <Poco/Exception.h>
 
 #include "model/GlobalID.h"
 #include "model/Identity.h"
@@ -84,6 +85,9 @@ public:
 
 	const User &user() const
 	{
+		if (!m_identity.hasUser())
+			throw Poco::IllegalStateException("missing a user");
+
 		return m_identity.user();
 	}
 

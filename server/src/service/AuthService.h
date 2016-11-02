@@ -83,6 +83,10 @@ protected:
 	ExpirableSession::Ptr loginAsNew(const AuthResult &result);
 	bool verifyIdentity(VerifiedIdentity &verifiedIdentity,
 			Identity &identity, const AuthResult &result);
+	void approveIdentity(VerifiedIdentity &verifiedIdentity,
+		const Identity &identity, const AuthResult &result);
+	bool createUserAndVerify(VerifiedIdentity &verifiedIdentity,
+			Identity &identity, const AuthResult &result);
 	User createUser(const AuthResult &result);
 
 private:
