@@ -104,8 +104,6 @@ bool GatewayService::registerGateway(SingleWithData<Gateway> &input,
 
 	Place place;
 	createImplicitPlace(place, gateway, tmp.identity());
-
-	m_accessPolicy->assureAssignGateway(input, place);
 	return m_gatewayDao->assignAndUpdate(gateway, place);
 }
 
