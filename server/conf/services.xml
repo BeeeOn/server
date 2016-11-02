@@ -215,6 +215,7 @@
 			<set name="type_uuid" text="varchar(36)" />
 			<set name="type_double" text="real" />
 			<set name="type_smallint" text="integer" />
+			<set name="type_int64" text="varchar(20)" />
 		</instance>
 
 		<instance name="postgreDialect"
@@ -223,6 +224,7 @@
 			<set name="type_uuid" text="uuid" />
 			<set name="type_double" text="double precision" />
 			<set name="type_smallint" text="smallint" />
+			<set name="type_int64" text="bigint" />
 		</instance>
 
 	</services>
