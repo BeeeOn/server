@@ -56,14 +56,3 @@ bool MockIdentityDao::fetchBy(Identity &identity,
 	identity = *it->second;
 	return true;
 }
-
-bool MockIdentityDao::update(Identity &identity)
-{
-	Identity tmp;
-
-	if (!fetch(tmp))
-		return false;
-
-	identity.setEmail(tmp.email()); // avoid changing e-mail
-	return update(identity);
-}
