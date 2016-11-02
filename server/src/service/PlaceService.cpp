@@ -112,18 +112,15 @@ bool PlaceService::remove(Relation<Place, User> &input)
 
 	m_accessPolicy->assureRemove(input, place);
 
+	if (m_roleInPlaceDao->hasUsersExcept(place, input.base())) {
+		throw IllegalStateException("cannot delete place,"
+				" there are still some users");
+	}
+
 	vector<RoleInPlace> roles;
 	m_roleInPlaceDao->fetchBy(roles, place);
 
 	for (auto role : roles) {
-		if (role.identity().user().id() != input.base().id()) {
-			throw IllegalStateException(
-				"cannot delete place "
-				+ place.id().toString()
-				+ " because it contains users other then "
-				+ input.base().id().toString());
-		}
-
 		if (!m_roleInPlaceDao->remove(role)) {
 			throw IllegalStateException(
 				"failed to drop role "

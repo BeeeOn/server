@@ -3,14 +3,14 @@
 
 #include <Poco/SharedPtr.h>
 
-#include "model/User.h"
 #include "model/GlobalID.h"
 
 namespace BeeeOn {
 
 /**
- * User identity representation. A user can have a number
- * of identities. An identity can be verified or non-verified.
+ * Non-verified identity representation. Before a user is registered
+ * in the system, it is possible to represent it as an identity.
+ * An identity can be verified or non-verified.
  * An identity is verified when a user logs into the system
  * by using the identity's email and some 3rd party service
  * (Google, Facebook, ...). This class represents any identity
@@ -37,21 +37,6 @@ public:
 		return m_email;
 	}
 
-	bool hasUser() const
-	{
-		return !m_user.id().isNull();
-	}
-
-	void setUser(const User &user)
-	{
-		m_user = user;
-	}
-
-	const User &user() const
-	{
-		return m_user;
-	}
-
 	void setID(const ID &id)
 	{
 		m_id = id;
@@ -70,7 +55,6 @@ public:
 private:
 	ID          m_id;
 	std::string m_email;
-	User        m_user;
 };
 
 typedef Identity::ID IdentityID;

@@ -4,9 +4,9 @@
 #include <string>
 #include <Poco/URI.h>
 #include <Poco/SharedPtr.h>
-#include <Poco/Exception.h>
 
 #include "model/GlobalID.h"
+#include "model/User.h"
 #include "model/Identity.h"
 
 namespace BeeeOn {
@@ -80,15 +80,12 @@ public:
 
 	void setUser(const User &user)
 	{
-		m_identity.setUser(user);
+		m_user = user;
 	}
 
 	const User &user() const
 	{
-		if (!m_identity.hasUser())
-			throw Poco::IllegalStateException("missing a user");
-
-		return m_identity.user();
+		return m_user;
 	}
 
 	void setID(const ID &id)
@@ -106,6 +103,7 @@ private:
 	std::string m_provider;
 	std::string m_accessToken;
 	Poco::URI   m_picture;
+	User        m_user;
 	Identity    m_identity;
 };
 

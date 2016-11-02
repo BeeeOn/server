@@ -73,6 +73,7 @@
 			<set name="userDao" ref="mockUserDao" />
 			<set name="gatewayDao" ref="mockGatewayDao" />
 			<set name="identityDao" ref="identityDao" />
+			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
 		</instance>
 
 		<!-- Bussiness layer -->
@@ -188,6 +189,7 @@
 		<instance name="mockRoleInPlaceDao"
 				class="BeeeOn::MockRoleInPlaceDao">
 			<set name="placeDao" ref="placeDao" />
+			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
 		</instance>
 
 		<alias name="placeDao" ref="mockPlaceDao" />

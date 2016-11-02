@@ -1,7 +1,9 @@
 #include <Poco/Exception.h>
 #include <Poco/SingletonHolder.h>
 
+#include "model/User.h"
 #include "dao/RoleInPlaceDao.h"
+#include "dao/VerifiedIdentityDao.h"
 
 BEEEON_OBJECT(NullRoleInPlaceDao, BeeeOn::NullRoleInPlaceDao)
 BEEEON_OBJECT(MockRoleInPlaceDao, BeeeOn::MockRoleInPlaceDao)
@@ -19,6 +21,25 @@ MockRoleInPlaceDao::MockRoleInPlaceDao()
 {
 	injector<MockRoleInPlaceDao, PlaceDao>("placeDao",
 			&MockRoleInPlaceDao::setPlaceDao);
+	injector<MockRoleInPlaceDao, VerifiedIdentityDao>(
+		"verifiedIdentityDao",
+		&MockRoleInPlaceDao::setVerifiedIdentityDao
+	);
+}
+
+bool MockRoleInPlaceDao::roleRefersToUser(
+		const RoleInPlace &role,
+		const User &user)
+{
+	vector<VerifiedIdentity> identities;
+	m_verifiedIdentityDao->fetchBy(identities, role.identity().email());
+
+	for (auto identity : identities) {
+		if (identity.user().id() == user.id())
+			return true;
+	}
+
+	return false;
 }
 
 AccessLevel MockRoleInPlaceDao::fetchAccessLevel(
@@ -33,7 +54,7 @@ AccessLevel MockRoleInPlaceDao::fetchAccessLevel(
 		if (role.place().id() != place.id())
 			continue;
 
-		if (role.identity().user().id() != user.id())
+		if (!roleRefersToUser(role, user))
 			continue;
 
 		return role.level();
@@ -52,7 +73,7 @@ void MockRoleInPlaceDao::fetchAccessiblePlaces(
 	for (; it != storage().end(); ++it) {
 		const RoleInPlace &role = *it->second;
 
-		if (role.identity().user().id() != user.id())
+		if (!roleRefersToUser(role, user))
 			continue;
 
 		if (role.level() >= atLeast)
@@ -85,4 +106,19 @@ void MockRoleInPlaceDao::fetchBy(
 
 		roles.push_back(role);
 	}
+}
+
+bool MockRoleInPlaceDao::hasUsersExcept(
+		const Place &place,
+		const User &user)
+{
+	vector<RoleInPlace> roles;
+	fetchBy(roles, place);
+
+	for (auto role : roles) {
+		if (!roleRefersToUser(role, user))
+			return true;
+	}
+
+	return false;
 }

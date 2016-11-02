@@ -81,11 +81,11 @@ protected:
 	ExpirableSession::Ptr openSession(const VerifiedIdentity &verifiedIdentity);
 	ExpirableSession::Ptr verifyIdentityAndLogin(const AuthResult &result);
 	ExpirableSession::Ptr loginAsNew(const AuthResult &result);
-	bool verifyIdentity(VerifiedIdentity &verifiedIdentity,
+	void verifyIdentity(VerifiedIdentity &verifiedIdentity,
 			Identity &identity, const AuthResult &result);
 	void approveIdentity(VerifiedIdentity &verifiedIdentity,
-		const Identity &identity, const AuthResult &result);
-	bool createUserAndVerify(VerifiedIdentity &verifiedIdentity,
+		const Identity &identity, const User &user, const AuthResult &result);
+	void createUserAndVerify(VerifiedIdentity &verifiedIdentity,
 			Identity &identity, const AuthResult &result);
 	User createUser(const AuthResult &result);
 
