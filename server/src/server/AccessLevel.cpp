@@ -23,8 +23,8 @@ AccessLevel::AccessLevel(const AccessLevel &level):
 
 const string AccessLevel::toString() const
 {
-	if (m_value <= NONE)
-		return "none";
+	if (m_value <= ANY)
+		return "any";
 
 	if (m_value <= ADMIN)
 		return "admin";
@@ -35,7 +35,7 @@ const string AccessLevel::toString() const
 	if (m_value <= GUEST)
 		return "guest";
 
-	return "any";
+	return "none";
 }
 
 const AccessLevel &AccessLevel::any()
