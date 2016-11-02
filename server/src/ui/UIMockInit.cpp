@@ -21,6 +21,13 @@ void UIMockInit::initUsers()
 
 	m_identityDao->create(joeDoe0);
 
+	VerifiedIdentity preparedJoeDoe0;
+	preparedJoeDoe0.setIdentity(joeDoe0);
+	preparedJoeDoe0.setUser(joeDoeUser);
+	preparedJoeDoe0.setProvider("prepared");
+
+	m_verifiedIdentityDao->create(preparedJoeDoe0);
+
 	User johnsmithUser(UserID::random());
 	johnsmithUser.setFirstName("John");
 	johnsmithUser.setLastName("Smith");
@@ -32,6 +39,13 @@ void UIMockInit::initUsers()
 	johnsmith0.setUser(johnsmithUser);
 
 	m_identityDao->create(johnsmith0);
+
+	VerifiedIdentity preparedJohnSmith0;
+	preparedJohnSmith0.setIdentity(johnsmith0);
+	preparedJohnSmith0.setUser(johnsmithUser);
+	preparedJohnSmith0.setProvider("prepared");
+
+	m_verifiedIdentityDao->create(preparedJohnSmith0);
 }
 
 void UIMockInit::initGateways()

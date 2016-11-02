@@ -5,6 +5,7 @@
 #include "dao/UserDao.h"
 #include "dao/GatewayDao.h"
 #include "dao/IdentityDao.h"
+#include "dao/VerifiedIdentityDao.h"
 
 namespace BeeeOn {
 
@@ -18,6 +19,8 @@ public:
 			&UIMockInit::setGatewayDao);
 		injector<UIMockInit, IdentityDao>("identityDao",
 			&UIMockInit::setIdentityDao);
+		injector<UIMockInit, VerifiedIdentityDao>("verifiedIdentityDao",
+			&UIMockInit::setVerifiedIdentityDao);
 	}
 
 	void setUserDao(UserDao *dao)
@@ -35,6 +38,11 @@ public:
 		m_identityDao = dao;
 	}
 
+	void setVerifiedIdentityDao(VerifiedIdentityDao *dao)
+	{
+		m_verifiedIdentityDao = dao;
+	}
+
 protected:
 	void initUsers();
 	void initGateways();
@@ -44,6 +52,7 @@ private:
 	UserDao *m_userDao;
 	GatewayDao *m_gatewayDao;
 	IdentityDao *m_identityDao;
+	VerifiedIdentityDao *m_verifiedIdentityDao;
 };
 
 }
