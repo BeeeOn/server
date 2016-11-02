@@ -9,7 +9,7 @@
 #include <stdint.h>
  
 using gatewayId_64b = long long uint;
-using deviceId_64b = long long uint;
+using deviceId_64b = unsigned long long;
 
 class DAO {
 public:
