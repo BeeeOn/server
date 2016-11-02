@@ -6,7 +6,7 @@ CREATE TABLE places (
 
 DROP TABLE IF EXISTS gateways;
 CREATE TABLE gateways (
-	id          decimal(16, 0) NOT NULL primary key,
+	id          ${type_int64} NOT NULL primary key,
 	name        varchar(250),
 	place_id    ${type_uuid} REFERENCES places(id),
 	altitude    ${type_double},
