@@ -34,7 +34,8 @@ GatewayID GatewayID::parse(const string &s)
 	if (s.size() != GatewayID::LENGTH) {
 		throw InvalidArgumentException(
 			"expected string of length "
-			+ std::to_string(LENGTH));
+			+ std::to_string(LENGTH)
+			+ ", got: " + s.substr(0, 64) + "...");
 	}
 
 	if (!Ascii::isDigit(s.at(0))) {
