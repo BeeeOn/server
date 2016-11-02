@@ -82,6 +82,16 @@ public:
 		return m_value >= id.m_value;
 	}
 
+	operator unsigned long long() const
+	{
+		return (unsigned long long) m_value;
+	}
+
+	operator uint64_t() const
+	{
+		return m_value;
+	}
+
 	/**
 	 * Generate a random ID. Seed the random generator with the
 	 * given seed. If the seed is 0 then the generator is possibly
