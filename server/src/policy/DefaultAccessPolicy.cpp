@@ -92,6 +92,9 @@ void DefaultAccessPolicy::assureGet(
 		throw InvalidAccessException("no such gateway "
 				+ gateway.id().toString());
 
+	if (!tmp.hasPlace())
+		throw InvalidAccessException("gateways has no place");
+
 	const Place place(tmp.place());
 
 	assureAtLeast(
