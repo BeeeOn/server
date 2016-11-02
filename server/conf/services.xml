@@ -200,12 +200,30 @@
 		<alias name="verifiedIdentityDao" ref="mockVerifiedIdentityDao" />
 		<alias name="roleInPlaceDao" ref="mockRoleInPlaceDao" />
 
-		<instance name="sociManager"
-				class="BeeeOn::SociManager">
-			<set name="backend" text="${database.backend}" />
-			<set name="connector" text="${database.connector}" />
-			<set name="poolSize" number="${database.pool}" />
+		<instance name="pocoDaoManager"
+				class="BeeeOn::PocoDaoManager">
+			<set name="connector" text="${database.backend}" />
+			<set name="connectionString" text="${database.connector}" />
+			<set name="maxSessions" number="${database.pool}" />
 			<set name="initScript" text="${database.init}" />
+			<set name="dialect" ref="${database.dialect}Dialect" />
 		</instance>
+
+		<instance name="sqliteDialect"
+				class="BeeeOn::CustomSQLDialect">
+			<set name="name" text="sqlite" />
+			<set name="type_uuid" text="varchar(36)" />
+			<set name="type_double" text="real" />
+			<set name="type_smallint" text="integer" />
+		</instance>
+
+		<instance name="postgreDialect"
+				class="BeeeOn::CustomSQLDialect">
+			<set name="name" text="postgre" />
+			<set name="type_uuid" text="uuid" />
+			<set name="type_double" text="double precision" />
+			<set name="type_smallint" text="smallint" />
+		</instance>
+
 	</services>
 </system>

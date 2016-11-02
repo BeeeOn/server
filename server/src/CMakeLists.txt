@@ -8,6 +8,8 @@ find_library (POCO_UTIL PocoUtil)
 find_library (POCO_NET PocoNet)
 find_library (POCO_JSON PocoJSON)
 find_library (POCO_XML PocoXML)
+find_library (POCO_DATA PocoData)
+find_library (POCO_SQLITE PocoDataSQLite)
 
 set (CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -DBEEEON_SELECT_POCO")
 add_definitions(-std=c++11)
@@ -34,6 +36,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/Identity.cpp
 	${PROJECT_SOURCE_DIR}/model/VerifiedIdentity.cpp
 	${PROJECT_SOURCE_DIR}/model/RoleInPlace.cpp
+	${PROJECT_SOURCE_DIR}/dao/SQLDialect.cpp
 	${PROJECT_SOURCE_DIR}/dao/PlaceDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/UserDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/DeviceDao.cpp
@@ -59,13 +62,14 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/policy/DefaultAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/util/DAMM.cpp
 	${PROJECT_SOURCE_DIR}/util/SecureXmlParser.cpp
-	${PROJECT_SOURCE_DIR}/dao/SociManager.cpp
+	${PROJECT_SOURCE_DIR}/util/Template.cpp
+	${PROJECT_SOURCE_DIR}/util/Occasionally.cpp
+	${PROJECT_SOURCE_DIR}/dao/PocoDaoManager.cpp
 	${PROJECT_SOURCE_DIR}/rpc/GatewayRPC.cpp
 )
 
 include_directories(
 	${PROJECT_SOURCE_DIR}
-	${SOCI_INCLUDE_DIRS}
 )
 
 add_library(BeeeOnServer ${SOURCES})
@@ -102,10 +106,9 @@ set(LIBS
 	${POCO_NET}
 	${POCO_JSON}
 	${POCO_XML}
+	${POCO_DATA}
+	${POCO_SQLITE}
 	mongoose
-	${SOCI_LIBRARY}
-	${SOCI_postgresql_PLUGIN}
-	${SOCI_sqlite3_PLUGIN}
 )
 
 # Apple's linker doesn't support --whole-archive. Instead it uses -all_load.
