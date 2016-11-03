@@ -14,7 +14,6 @@ public:
 	virtual bool fetch(Identity &identity) = 0;
 	virtual bool fetchBy(Identity &identity,
 			const std::string &email) = 0;
-	virtual bool update(Identity &identity) = 0;
 	virtual bool remove(const Identity &identity) = 0;
 };
 
@@ -36,7 +35,6 @@ public:
 	void create(Identity &identity);
 	bool fetchBy(Identity &identity,
 			const std::string &email);
-	bool update(Identity &identity);
 protected:
 	IdentityID nextID()
 	{

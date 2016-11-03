@@ -2,6 +2,7 @@
 #include <Poco/StreamCopier.h>
 
 #include "util/Template.h"
+#include "Debug.h"
 
 using namespace std;
 using namespace Poco;
@@ -27,10 +28,17 @@ void Template::subst(string &s, const string &key, const string &value)
 
 string Template::apply(const map<string, string> &context)
 {
+	Logger &logger = LOGGER_CLASS(this);
 	std::string text(m_content);
 
-	for (auto pair : context)
+	for (auto pair : context) {
+		if (logger.debug()) {
+			logger.debug(pair.first + " => " + pair.second,
+					__FILE__, __LINE__);
+		}
+
 		subst(text, "${" + pair.first + "}", pair.second);
+	}
 
 	return text;
 }

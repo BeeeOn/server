@@ -20,6 +20,9 @@ public:
 	template <typename Response>
 	void sendResult(Response &response, const std::string &data)
 	{
+		if (m_logger.debug())
+			m_logger.debug(data.c_str(), __FILE__, __LINE__);
+
 		response.sendBuffer(data.c_str(), data.size());
 		response.setStatusAndReason(
 			Response::HTTP_OK);
@@ -33,8 +36,7 @@ public:
 			sendNotFound(response);
 		}
 		else {
-			response.sendBuffer(data.c_str(), data.size());
-			sendSuccess(response);
+			sendResult(response, data);
 		}
 	}
 

@@ -21,6 +21,7 @@ public:
 	static const std::string TYPE_UUID;
 	static const std::string TYPE_DOUBLE;
 	static const std::string TYPE_SMALLINT;
+	static const std::string TYPE_INT64;
 };
 
 class CustomSQLDialect :
@@ -44,6 +45,7 @@ public:
 	void setTypeUUID(const std::string &value);
 	void setDouble(const std::string &value);
 	void setSmallInt(const std::string &value);
+	void setInt64(const std::string &value);
 
 private:
 	std::string m_name;
