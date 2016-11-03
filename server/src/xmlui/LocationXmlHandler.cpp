@@ -70,7 +70,10 @@ void LocationXmlHandler::handleAdd(
 	input.setUser(user);
 	
 	m_locationService.createIn(input);
-	resultSuccess();
+
+	resultDataStart();
+	serialize(m_output, location);
+	resultDataEnd();
 }
 
 void LocationXmlHandler::handleDelete(

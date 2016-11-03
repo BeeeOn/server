@@ -54,14 +54,9 @@ class TestLocationAddDelete(unittest.TestCase):
 			self.session,
 			name = "Livingroom"
 		))
-		self.assertTrue(response.is_ok())
-
-		response = c.request(LocationGetAll(
-			config.gateway_id,
-			self.session
-		))
 		self.assertTrue(response.is_data())
 		self.assertEqual(1, len(response.root))
+
 		self.assertEqual("Livingroom", response.root[0].get("name"))
 
 		response = c.request(LocationDelete(

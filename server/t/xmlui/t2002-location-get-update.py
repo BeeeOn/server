@@ -28,13 +28,17 @@ class TestLocationGetUpdate(unittest.TestCase):
 		self.assertTrue(response.is_ok())
 
 		names = ["Livingroom", "Kitchen", "Bathroom"]
+		self.locations = []
+
 		for name in names:
 			response = c.request(LocationAdd(
 				config.gateway_id,
 				self.session,
 				name = name
 			))
-			self.assertTrue(response.is_ok())
+			self.assertTrue(response.is_data())
+			self.assertEqual(1, len(response.root))
+			self.locations.append(response.root[0].get("id"))
 
 	"""
 	Remove the locations, unregister the gateway and destroy the session.
@@ -42,17 +46,10 @@ class TestLocationGetUpdate(unittest.TestCase):
 	def tearDown(self):
 		c = Connector(config.xmlui_host, config.xmlui_port)
 
-		response = c.request(LocationGetAll(
-			config.gateway_id,
-			self.session
-		))
-		self.assertTrue(response.is_data())
-		self.assertEqual(3, len(response.root))
-
-		for l in response.root:
+		for location in self.locations:
 			response = c.request(LocationDelete(
 				config.gateway_id,
-				l.get("locationid"),
+				location,
 				self.session
 			))
 			self.assertTrue(response.is_ok())
