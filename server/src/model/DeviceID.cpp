@@ -17,9 +17,12 @@ DeviceID::DeviceID():
 DeviceID::DeviceID(uint64_t value):
 	m_value(value)
 {
-	if ((m_value >> 56) == 0) {
+	const int shift = is32bit()? 24 : 56;
+
+	if ((m_value >> shift) == 0) {
 		throw InvalidArgumentException(
-			"no prefix present in the given device ID");
+			"no prefix present in the given device ID: "
+			+ to_string(m_value));
 	}
 }
 
@@ -61,7 +64,14 @@ DeviceID DeviceID::parse(const string &s)
 string DeviceID::toString() const
 {
 	ostringstream ss;
-	ss << "0x" << std::hex << m_value;
+
+	ss << "0x" << std::hex;
+
+	if (is32bit())
+		ss << (uint32_t) m_value;
+	else
+		ss << m_value;
+
 	return ss.str();
 }
 
