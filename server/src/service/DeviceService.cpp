@@ -43,6 +43,22 @@ bool DeviceService::fetch(Relation<Device, Gateway> &input)
 	return m_dao->fetch(input.target(), input.base());
 }
 
+void DeviceService::fetchMany(Relation<list<Device>, Gateway> &input)
+{
+	list<Device> &devices = input.target();
+	list<Device>::iterator it = devices.begin();
+
+	// TODO: move to Dao layer
+	while (it != devices.end()) {
+		Device &device = *it;
+
+		if (!m_dao->fetch(device, input.base()))
+			it = devices.erase(it);
+		else
+			++it;
+	}
+}
+
 void DeviceService::fetchActiveBy(Relation<vector<Device>, Gateway> &input)
 {
 	m_dao->fetchActiveBy(input.target(), input.base());

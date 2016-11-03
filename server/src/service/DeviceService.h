@@ -1,6 +1,7 @@
 #ifndef BEEEON_DEVICE_SERVICE_H
 #define BEEEON_DEVICE_SERVICE_H
 
+#include <list>
 #include <vector>
 
 #include "di/InjectorTarget.h"
@@ -24,6 +25,7 @@ public:
 	void setGatewayRPC(GatewayRPC *rpc);
 
 	bool fetch(Relation<Device, Gateway> &input);
+	void fetchMany(Relation<std::list<Device>, Gateway> &input);
 	void fetchActiveBy(Relation<std::vector<Device>, Gateway> &input);
 	void fetchInactiveBy(Relation<std::vector<Device>, Gateway> &input);
 
