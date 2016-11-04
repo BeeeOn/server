@@ -111,6 +111,16 @@ protected:
 	void injectText(const std::string &key, const std::string &value);
 	void injectNumber(const std::string &key, int value);
 
+	virtual bool injectRefFallback(
+			const std::string &key,
+			InjectorTarget *value);
+	virtual bool injectTextFallback(
+			const std::string &key,
+			const std::string &value);
+	virtual bool injectNumberFallback(
+			const std::string &key,
+			int value);
+
 	virtual void injectionDone()
 	{
 	}
