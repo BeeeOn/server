@@ -75,6 +75,8 @@ SSLFacility::SSLFacility():
 			&SSLFacility::setLoadDefaultCA);
 	textInjector("privateKey", (TextSetter)
 			&SSLFacility::setPrivateKey);
+	textInjector("passphrase", (TextSetter)
+			&SSLFacility::setPassphrase);
 	textInjector("certificate", (TextSetter)
 			&SSLFacility::setCertificate);
 	textInjector("verificationMode", (TextSetter)
@@ -99,7 +101,12 @@ void SSLFacility::initContext()
 	if (!m_context.isNull())
 		return;
 
-	m_context = createContext();
+	if (!m_passphrase.empty()) {
+		PrivateKeyPassphraseProvider provider(m_passphrase);
+		m_context = createContext();
+	} else {
+		m_context = createContext();
+	}
 }
 
 Context::Ptr SSLFacility::context()
@@ -131,6 +138,11 @@ void SSLFacility::setLoadDefaultCA(const string &enable)
 void SSLFacility::setPrivateKey(const string &file)
 {
 	m_privateKey = file;
+}
+
+void SSLFacility::setPassphrase(const std::string &passphrase)
+{
+	m_passphrase = passphrase;
 }
 
 void SSLFacility::setCertificate(const string &file)

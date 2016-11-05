@@ -74,6 +74,7 @@ public:
 	void setCALocation(const std::string &caLocation);
 	void setLoadDefaultCA(const std::string &enable);
 	void setPrivateKey(const std::string &file);
+	void setPassphrase(const std::string &passphrase);
 	void setCertificate(const std::string &file);
 	void setVerificationMode(const std::string &mode);
 	void setVerificationDepth(int depth);
@@ -96,6 +97,7 @@ protected:
 	std::string m_caLocation;
 	bool m_loadDefaultCA;
 	std::string m_privateKey;
+	std::string m_passphrase;
 	std::string m_certificate;
 	VerificationMode m_verificationMode;
 	int m_verificationDepth;
