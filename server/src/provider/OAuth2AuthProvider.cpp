@@ -11,6 +11,7 @@
 #include <Poco/StreamCopier.h>
 
 #include "provider/OAuth2AuthProvider.h"
+#include "util/SSLClient.h"
 #include "Debug.h"
 
 using namespace std;
@@ -19,7 +20,8 @@ using namespace Poco;
 using namespace Poco::Net;
 
 OAuth2AuthProvider::OAuth2AuthProvider(const string &name):
-		AuthCodeAuthProvider(name)
+		AuthCodeAuthProvider(name),
+		m_sslConfig(0)
 {
 	textInjector("client_id",
 			(TextSetter) &OAuth2AuthProvider::setClientId);
@@ -27,19 +29,15 @@ OAuth2AuthProvider::OAuth2AuthProvider(const string &name):
 			(TextSetter) &OAuth2AuthProvider::setClientSecret);
 	textInjector("redirect_uri",
 			(TextSetter) &OAuth2AuthProvider::setRedirectURI);
+	textInjector("sslConfig",
+			(TextSetter) &OAuth2AuthProvider::setSSLConfig);
 }
 
 void OAuth2AuthProvider::initSSL()
 {
-	TRACE_METHOD();
-
-	/* Handles certificates for HTTPS communication
-	 * TODO: accept only google certificate, now accepts all certs!!!
-	 */
-	SSLManager::InvalidCertificateHandlerPtr ptrHandler (
-			new Poco::Net::AcceptCertificateHandler(false));
-	const Context::Ptr context = new Context(Context::CLIENT_USE, "");
-	SSLManager::instance().initializeClient(0, ptrHandler, context);
+	if (m_sslConfig == 0)
+		throw IllegalStateException(
+				"missing sslConfig, cannot use OAuth");
 }
 
 HTTPSClientSession *OAuth2AuthProvider::connectSecure(
@@ -48,7 +46,8 @@ HTTPSClientSession *OAuth2AuthProvider::connectSecure(
 {
 	try {
 		initSSL();
-		return new HTTPSClientSession(host, port);
+		return new HTTPSClientSession(
+				host, port, m_sslConfig->context());
 	} catch (const Exception &e) {
 		m_logger.log(e, __FILE__, __LINE__);
 		throw;

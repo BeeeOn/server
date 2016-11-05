@@ -5,6 +5,7 @@
 
 #include "provider/GoogleAuthProvider.h"
 #include "provider/AuthProvider.h"
+#include "util/SSLClient.h"
 #include "cppunit/SkippableAutoRegisterSuite.h"
 
 using namespace std;
@@ -28,6 +29,7 @@ public:
 	void testVerifyAuthCode();
 private:
 	std::string googleAuthCode;
+	SSLClient *m_sslConfig;
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION_SKIPPABLE(GoogleAuthProviderTest,
@@ -59,6 +61,9 @@ void GoogleAuthProviderTest::testVerifyAuthCode()
 
 	TestableGoogleAuthProvider provider;
 	AuthResult info;
+	SSLClient sslConfig;
+
+	provider.setSSLConfig(&sslConfig);
 
 	CPPUNIT_ASSERT_MESSAGE("failed to authenticate user",
 			provider.verifyAuthCode(googleAuthCode, info));

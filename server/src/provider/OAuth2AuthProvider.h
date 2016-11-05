@@ -1,6 +1,8 @@
 #ifndef BEEEON_OAUTH2_AUTH_PROVIDER_H
 #define BEEEON_OAUTH2_AUTH_PROVIDER_H
 
+#include <Poco/Net/Context.h>
+
 #include "provider/AuthProvider.h"
 
 namespace Poco {
@@ -12,6 +14,8 @@ class HTTPSClientSession;
 }
 
 namespace BeeeOn {
+
+class SSLClient;
 
 class OAuth2AuthProvider : public AuthCodeAuthProvider {
 public:
@@ -32,12 +36,12 @@ public:
 		m_redirectURI = uri;
 	}
 
-protected:
-	/**
-	 * Initialize SSL context for upcoming HTTPS requests
-	 */
-	void initSSL();
+	void setSSLConfig(SSLClient *config)
+	{
+		m_sslConfig = config;
+	}
 
+protected:
 	/**
 	 * Open HTTPS connection to the given host:port.
 	 */
@@ -55,10 +59,17 @@ protected:
 	 */
 	std::string convertResponseToString(std::istream &rs);
 
+private:
+	/**
+	 * Initialize SSL context for upcoming HTTPS requests
+	 */
+	void initSSL();
+
 protected:
 	std::string m_clientId;
 	std::string m_clientSecret;
 	std::string m_redirectURI;
+	SSLClient *m_sslConfig;
 };
 
 }
