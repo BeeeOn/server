@@ -5,13 +5,15 @@
 #include <Poco/Net/SSLManager.h>
 
 #include "util/SSLClient.h"
+#include "util/RejectCertificateHandler.h"
 
 using namespace std;
 using namespace Poco;
 using namespace Poco::Net;
 using namespace BeeeOn;
 
-SSLClient::SSLClient()
+SSLClient::SSLClient():
+	m_certHandler(new BetterRejectCertificateHandler(false))
 {
 }
 

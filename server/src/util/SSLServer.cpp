@@ -5,13 +5,15 @@
 #include <Poco/Net/SSLManager.h>
 
 #include "util/SSLServer.h"
+#include "util/RejectCertificateHandler.h"
 
 using namespace std;
 using namespace Poco;
 using namespace Poco::Net;
 using namespace BeeeOn;
 
-SSLServer::SSLServer()
+SSLServer::SSLServer():
+	m_certHandler(new BetterRejectCertificateHandler(true))
 {
 }
 

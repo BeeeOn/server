@@ -6,6 +6,7 @@
 #include <Poco/Net/SSLManager.h>
 
 #include "util/SSLFacility.h"
+#include "util/RejectCertificateHandler.h"
 #include "Debug.h"
 
 using namespace std;
