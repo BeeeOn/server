@@ -33,8 +33,6 @@ void OAuth2AuthProvider::initSSL()
 {
 	TRACE_METHOD();
 
-	initializeSSL();
-
 	/* Handles certificates for HTTPS communication
 	 * TODO: accept only google certificate, now accepts all certs!!!
 	 */
