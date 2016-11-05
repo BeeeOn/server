@@ -73,6 +73,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/Template.cpp
 	${PROJECT_SOURCE_DIR}/util/Occasionally.cpp
 	${PROJECT_SOURCE_DIR}/util/SSLFacility.cpp
+	${PROJECT_SOURCE_DIR}/util/SSLClient.cpp
 	${PROJECT_SOURCE_DIR}/dao/PocoDaoManager.cpp
 	${PROJECT_SOURCE_DIR}/rpc/GatewayRPC.cpp
 )
