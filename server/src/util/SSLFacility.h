@@ -10,6 +10,44 @@
 namespace BeeeOn {
 
 /**
+ * Passphrase provider intended for the next private key being load.
+ * If multiple private keys share the same passphrase (not recommended)
+ * then it is possible to reuse the created instance. It avoids collisions
+ * of passwords when multiple private keys are loaded by independent
+ * threads. Also it ensures that the given password is used for the
+ * private key until the provider instance is destroyed.
+ *
+ * Typical usage:
+ *
+ *   {
+ *       PrivateKeyPassphraseProvider provider("secret passphrase");
+ *       Context::Ptr c = new Context(...);
+ *   }
+ *
+ * If a private key is being load by the Context it the provider
+ * provides the preset password. It is required that every Context
+ * creation is done by using the PrivateKeyPassphraseProvider or
+ * all such places share the same Mutex.
+ */
+class PrivateKeyPassphraseProvider {
+public:
+	PrivateKeyPassphraseProvider(const std::string &passphrase);
+	PrivateKeyPassphraseProvider(const std::string &passphrase,
+				Poco::Mutex &lock);
+	~PrivateKeyPassphraseProvider();
+
+	void onRequest(const void *sender, std::string &passphrase);
+
+private:
+	void init();
+
+private:
+	const std::string m_passphrase;
+	Poco::Mutex &m_lock;
+	static Poco::Mutex defaultLock;
+};
+
+/**
  * Abstract class for configuration of SSL context. It allows
  * to set the most common settings of the Context. Properties
  * specific to client or server context are to be added by

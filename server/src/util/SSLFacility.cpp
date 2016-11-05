@@ -1,4 +1,5 @@
 #include <Poco/String.h>
+#include <Poco/Delegate.h>
 #include <Poco/StringTokenizer.h>
 #include <Poco/NumberParser.h>
 #include <Poco/Net/Utility.h>
@@ -10,6 +11,54 @@ using namespace std;
 using namespace Poco;
 using namespace Poco::Net;
 using namespace BeeeOn;
+
+Mutex PrivateKeyPassphraseProvider::defaultLock;
+
+PrivateKeyPassphraseProvider::PrivateKeyPassphraseProvider(
+		const std::string &passphrase):
+	m_passphrase(passphrase),
+	m_lock(PrivateKeyPassphraseProvider::defaultLock)
+{
+	init();
+}
+
+PrivateKeyPassphraseProvider::PrivateKeyPassphraseProvider(
+		const std::string &passphrase, Mutex &lock):
+	m_passphrase(passphrase),
+	m_lock(lock)
+{
+	init();
+}
+
+void PrivateKeyPassphraseProvider::init()
+{
+	m_lock.lock();
+
+	SSLManager &manager = SSLManager::instance();
+	manager.PrivateKeyPassphraseRequired +=
+		Delegate<PrivateKeyPassphraseProvider, string>(
+			this,
+			&PrivateKeyPassphraseProvider::onRequest
+		);
+}
+
+PrivateKeyPassphraseProvider::~PrivateKeyPassphraseProvider()
+{
+	SSLManager &manager = SSLManager::instance();
+	manager.PrivateKeyPassphraseRequired -=
+		Delegate<PrivateKeyPassphraseProvider, string>(
+			this,
+			&PrivateKeyPassphraseProvider::onRequest
+		);
+
+	m_lock.unlock();
+}
+
+void PrivateKeyPassphraseProvider::onRequest(
+		const void *sender, string &passphrase)
+{
+	passphrase = m_passphrase;
+}
 
 SSLFacility::SSLFacility():
 	m_loadDefaultCA(false),
