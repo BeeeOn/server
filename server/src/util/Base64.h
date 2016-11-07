@@ -42,7 +42,7 @@ public:
 		Poco::Base64Decoder base64(sIn);
 
 		std::string result;
-		base64 >> result;
+		Poco::StreamCopier::copyToString(base64, result);
 		return result;
 	}
 };
