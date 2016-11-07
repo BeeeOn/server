@@ -6,6 +6,7 @@
 #include <Poco/Net/SSLManager.h>
 
 #include "util/SSLFacility.h"
+#include "Debug.h"
 
 using namespace std;
 using namespace Poco;
@@ -107,6 +108,20 @@ void SSLFacility::initContext()
 	} else {
 		m_context = createContext();
 	}
+
+	Logger &logger = LOGGER_CLASS(this);
+	logger.information("SSL context initialized",
+				__FILE__, __LINE__);
+
+	logger.debug("caLocation: " + m_caLocation);
+	logger.debug("loadDefaultCA: " + to_string(m_loadDefaultCA));
+	logger.debug("privateKey: " + m_privateKey);
+	logger.debug("passphrase: " + to_string(!m_passphrase.empty()));
+	logger.debug("certificate: " + m_certificate);
+	logger.debug("verificationMode: " + to_string(m_verificationMode));
+	logger.debug("verificationDepth: " + to_string(m_verificationDepth));
+	logger.debug("cihperList: " + m_cipherList);
+	logger.debug("sessionCache: " + to_string(m_sessionCache));
 }
 
 Context::Ptr SSLFacility::context()
