@@ -16,7 +16,7 @@
 #include "di/DependencyInjector.h"
 #include "server/SocketServer.h"
 #include "server/XmlRequestHandler.h"
-#include "util/NoKeyPassphraseHandler.h"
+#include "util/SSLServer.h"
 
 using namespace std;
 using namespace Poco;
@@ -204,48 +204,21 @@ protected:
 		return EXIT_OK;
 	}
 
-	void initSSL()
+	Context::Ptr initSSL(DependencyInjector &injector)
 	{
-		const string &certificate = config()
-			.getString("xmlui.ssl.certificate");
-		const string &key = config()
-			.getString("xmlui.ssl.key");
-		const string &authority = config()
-			.getString("xmlui.ssl.authority");
-		int mode = config().getInt("xmlui.ssl.verify_level",
-					Context::VERIFY_STRICT);
-
-		Context::Ptr context = new Context(
-				Context::SERVER_USE,
-				key,
-				certificate,
-				authority,
-				(Context::VerificationMode) mode);
-
-		logger().debug("key: " + key, __FILE__, __LINE__);
-		logger().debug("certificate: " + certificate,
-				__FILE__, __LINE__);
-		logger().debug("authority: " + authority,
-				__FILE__, __LINE__);
-		logger().debug("verify_level: " + to_string(mode),
-				__FILE__, __LINE__);
-
-		SharedPtr<PrivateKeyPassphraseHandler> pkeyHandler =
-				new NoKeyPassphraseHandler();
-		SharedPtr<InvalidCertificateHandler> certHandler =
-				new RejectCertificateHandler(true);
-		SSLManager::instance().initializeServer(
-				pkeyHandler, certHandler, context);
-
-		logger().notice("SSL context initialized");
+		SSLServer *sslServer = injector
+				.create<SSLServer>("xmluiSSLServer");
+		return sslServer->context();
 	}
 
-	SocketServer *createSocketServer(XmlRequestHandlerFactory *factory)
+	SocketServer *createSocketServer(
+			DependencyInjector &injector,
+			XmlRequestHandlerFactory *factory)
 	{
 		if (config().getBool("xmlui.ssl.enable", false)) {
-			initSSL();
+			Context::Ptr context = initSSL(injector);
 			return SocketServer::createSecure(factory,
-					m_serverPort);
+					context, m_serverPort);
 		}
 		else {
 			return SocketServer::createDefault(factory,
@@ -265,7 +238,7 @@ protected:
 		XmlRequestHandlerFactory *factory = injector
 			.create<XmlRequestHandlerFactory>("xmlui", true);
 
-		SocketServer *server = createSocketServer(factory);
+		SocketServer *server = createSocketServer(injector, factory);
 		server->start();
 
 		waitForTerminationRequest();

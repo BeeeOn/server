@@ -257,5 +257,15 @@
 			<set name="daoManager" ref="pocoDaoManager" />
 		</instance>
 
+		<!-- SSL configurations -->
+
+		<instance name="xmluiSSLServer" class="BeeeOn::SSLServer">
+			<set name="certificate" text="${xmlui.ssl.certificate}" />
+			<set name="privateKey" text="${xmlui.ssl.key}" />
+			<set name="authority" text="${xmlui.ssl.authority}" />
+			<set name="verificationMode" text="${xmlui.ssl.verify_level}" />
+			<set name="loadDefaultCA" text="false" />
+		</instance>
+
 	</services>
 </system>
