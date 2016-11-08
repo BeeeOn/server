@@ -6,6 +6,7 @@
 #include <Poco/Net/TCPServerParams.h>
 #include <Poco/Net/TCPServerConnection.h>
 #include <Poco/Net/TCPServerConnectionFactory.h>
+#include <Poco/Net/Context.h>
 
 #include "server/Server.h"
 
@@ -26,6 +27,7 @@ public:
 
 	static SocketServer *createSecure(
 		Poco::Net::TCPServerConnectionFactory::Ptr factory,
+		Poco::Net::Context::Ptr context,
 		Poco::UInt16 port = 443);
 
 private:

@@ -5,6 +5,7 @@
 
 #include "provider/GoogleAuthProvider.h"
 #include "provider/AuthProvider.h"
+#include "util/SSLClient.h"
 #include "cppunit/SkippableAutoRegisterSuite.h"
 
 using namespace std;
@@ -14,7 +15,14 @@ namespace BeeeOn {
 
 bool skipWhenNoAuthCode()
 {
-	return !Environment::has("GOOGLE_AUTH_CODE");
+	if (!Environment::has("GOOGLE_AUTH_CODE"))
+		return true;
+	if (!Environment::has("GOOGLE_CLIENT_ID"))
+		return true;
+	if (!Environment::has("GOOGLE_CLIENT_SECRET"))
+		return true;
+
+	return false;
 }
 
 class GoogleAuthProviderTest : public CppUnit::TestFixture {
@@ -28,6 +36,7 @@ public:
 	void testVerifyAuthCode();
 private:
 	std::string googleAuthCode;
+	SSLClient *m_sslConfig;
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION_SKIPPABLE(GoogleAuthProviderTest,
@@ -59,6 +68,21 @@ void GoogleAuthProviderTest::testVerifyAuthCode()
 
 	TestableGoogleAuthProvider provider;
 	AuthResult info;
+	SSLClient sslConfig;
+
+	if (Environment::has("GOOGLE_CA_LOCATION"))
+		sslConfig.setCALocation(Environment::get("GOOGLE_CA_LOCATION"));
+	else
+		sslConfig.setCALocation("cert/mozilla-cacert-2016-11-02.pem");
+
+	provider.setSSLConfig(&sslConfig);
+	provider.setClientId(Environment::get("GOOGLE_CLIENT_ID"));
+	provider.setClientSecret(Environment::get("GOOGLE_CLIENT_SECRET"));
+
+	if (Environment::has("GOOGLE_REDIRECT_URI"))
+		provider.setRedirectURI(Environment::get("GOOGLE_REDIRECT_URI"));
+	else
+		provider.setRedirectURI("http://localhost");
 
 	CPPUNIT_ASSERT_MESSAGE("failed to authenticate user",
 			provider.verifyAuthCode(googleAuthCode, info));

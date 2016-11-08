@@ -26,9 +26,10 @@ SocketServer *SocketServer::createDefault(
 
 SocketServer *SocketServer::createSecure(
 	TCPServerConnectionFactory::Ptr factory,
+	Context::Ptr context,
 	UInt16 port)
 {
-	SecureServerSocket socket(port);
+	SecureServerSocket socket(port, 64, context);
 	TCPServerParams::Ptr params = new TCPServerParams();
 	return new SocketServer(factory, socket, params);
 }

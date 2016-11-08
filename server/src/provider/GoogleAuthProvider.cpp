@@ -93,7 +93,6 @@ string GoogleAuthProvider::requestIdToken(const string &authCode)
 			.extract<Object::Ptr>();
 	string idToken;
 
-	// TODO: verify signature of the ID token by Google certificate
 	if (object->has("id_token"))
 		return object->getValue<string>("id_token");
 

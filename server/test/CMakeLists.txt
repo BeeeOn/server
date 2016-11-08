@@ -23,6 +23,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/util/DAMMTest.cpp
 	${PROJECT_SOURCE_DIR}/util/Base64Test.cpp
 	${PROJECT_SOURCE_DIR}/util/SecureXmlParserTest.cpp
+	${PROJECT_SOURCE_DIR}/util/X509FingerprintTest.cpp
 	${PROJECT_SOURCE_DIR}/cppunit/TapTestProducer.cpp
 )
 
