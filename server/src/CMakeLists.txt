@@ -10,6 +10,7 @@ find_library (POCO_JSON PocoJSON)
 find_library (POCO_XML PocoXML)
 find_library (POCO_DATA PocoData)
 find_library (POCO_SQLITE PocoDataSQLite)
+find_library (POCO_ODBC PocoDataODBC)
 
 set (CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -DBEEEON_SELECT_POCO")
 add_definitions(-std=c++11)
@@ -132,6 +133,11 @@ file(GLOB RESTUI_SOURCES
 	dao/poco/PocoSQLiteConnectorLoader.cpp
 )
 
+if (POCO_ODBC)
+	list(APPEND XMLUI_SOURCES  dao/poco/PocoODBCConnectorLoader.cpp)
+	list(APPEND RESTUI_SOURCES dao/poco/PocoODBCConnectorLoader.cpp)
+endif()
+
 include_directories(
 	${PROJECT_SOURCE_DIR}
 	${CMAKE_SOURCE_DIR}/base/src
@@ -175,6 +181,12 @@ else()
 		-Wl,--no-whole-archive
 		${LIBS}
 	)
+endif()
+
+if (NOT POCO_ODBC)
+	message(WARNING "ODBC is NOT compiled in")
+else()
+	target_link_libraries(beeeon-server ${POCO_ODBC})
 endif()
 
 install(TARGETS beeeon-server BeeeOnServer
