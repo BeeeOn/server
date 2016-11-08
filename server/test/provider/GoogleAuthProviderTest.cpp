@@ -15,7 +15,16 @@ namespace BeeeOn {
 
 bool skipWhenNoAuthCode()
 {
-	return !Environment::has("GOOGLE_AUTH_CODE");
+	if (!Environment::has("GOOGLE_AUTH_CODE"))
+		return true;
+	if (!Environment::has("GOOGLE_CLIENT_ID"))
+		return true;
+	if (!Environment::has("GOOGLE_CLIENT_SECRET"))
+		return true;
+	if (!Environment::has("GOOGLE_CA_LOCATION"))
+		return true;
+
+	return false;
 }
 
 class GoogleAuthProviderTest : public CppUnit::TestFixture {
@@ -62,8 +71,16 @@ void GoogleAuthProviderTest::testVerifyAuthCode()
 	TestableGoogleAuthProvider provider;
 	AuthResult info;
 	SSLClient sslConfig;
+	sslConfig.setCALocation(Environment::get("GOOGLE_CA_LOCATION"));
 
 	provider.setSSLConfig(&sslConfig);
+	provider.setClientId(Environment::get("GOOGLE_CLIENT_ID"));
+	provider.setClientSecret(Environment::get("GOOGLE_CLIENT_SECRET"));
+
+	if (Environment::has("GOOGLE_REDIRECT_URI"))
+		provider.setRedirectURI(Environment::get("GOOGLE_REDIRECT_URI"));
+	else
+		provider.setRedirectURI("http://localhost");
 
 	CPPUNIT_ASSERT_MESSAGE("failed to authenticate user",
 			provider.verifyAuthCode(googleAuthCode, info));
