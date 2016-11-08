@@ -1,6 +1,8 @@
 #ifndef BEEEON_POCO_DAO_MANAGER_H
 #define BEEEON_POCO_DAO_MANAGER_H
 
+#include <map>
+
 #include <Poco/SharedPtr.h>
 #include <Poco/Data/SessionPool.h>
 #include "util/Loggable.h"
@@ -19,6 +21,7 @@ public:
 	void setMaxSessions(const int sessions);
 	void setIdleTime(const int seconds);
 	void setInitScript(const std::string &script);
+	void setFeatures(const std::string &features);
 
 	Poco::Data::SessionPool &pool();
 
@@ -35,6 +38,7 @@ private:
 	int m_idleTime;
 	std::string m_script;
 	Poco::SharedPtr<Poco::Data::SessionPool> m_pool;
+	std::map<std::string, bool> m_features;
 };
 
 }

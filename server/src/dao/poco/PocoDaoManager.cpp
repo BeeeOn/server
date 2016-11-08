@@ -2,6 +2,8 @@
 #include <Poco/Exception.h>
 #include <Poco/FileStream.h>
 #include <Poco/StreamCopier.h>
+#include <Poco/NumberParser.h>
+#include <Poco/StringTokenizer.h>
 #include <Poco/Data/Session.h>
 #include <Poco/Data/SessionPool.h>
 
@@ -17,6 +19,7 @@ BEEEON_OBJECT_TEXT("connectionString", &PocoDaoManager::setConnectionString)
 BEEEON_OBJECT_NUMBER("minSessions", &PocoDaoManager::setMinSessions)
 BEEEON_OBJECT_NUMBER("maxSessions", &PocoDaoManager::setMaxSessions)
 BEEEON_OBJECT_NUMBER("idleTime", &PocoDaoManager::setIdleTime)
+BEEEON_OBJECT_TEXT("features", &PocoDaoManager::setFeatures)
 BEEEON_OBJECT_TEXT("initScript", &PocoDaoManager::setInitScript)
 BEEEON_OBJECT_HOOK("done", &PocoDaoManager::connectAndPrepare)
 BEEEON_OBJECT_END(BeeeOn, PocoDaoManager)
@@ -81,6 +84,28 @@ void PocoDaoManager::setInitScript(const std::string &script)
 	m_script = script;
 }
 
+void PocoDaoManager::setFeatures(const std::string &features)
+{
+	StringTokenizer tokenizer(features, ";",
+			StringTokenizer::TOK_IGNORE_EMPTY
+			| StringTokenizer::TOK_TRIM);
+	m_features.clear();
+
+	for (auto feature : tokenizer) {
+		StringTokenizer featureTokenizer(feature, "=",
+			StringTokenizer::TOK_IGNORE_EMPTY
+			| StringTokenizer::TOK_TRIM);
+
+		if (featureTokenizer.count() != 2) {
+			throw InvalidArgumentException(
+					"invalid feature: " + feature);
+		}
+
+		m_features[featureTokenizer[0]] =
+			NumberParser::parseBool(featureTokenizer[1]);
+	}
+}
+
 Poco::Data::SessionPool &PocoDaoManager::pool()
 {
 	static Occasionally occasionally;
@@ -128,6 +153,9 @@ void PocoDaoManager::initPool()
 			m_minSessions,
 			m_maxSessions,
 			m_idleTime);
+
+	for (auto feature : m_features)
+		m_pool->setFeature(feature.first, feature.second);
 
 	logger().notice("database pool initialized", __FILE__, __LINE__);
 }
