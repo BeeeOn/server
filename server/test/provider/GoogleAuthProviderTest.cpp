@@ -21,8 +21,6 @@ bool skipWhenNoAuthCode()
 		return true;
 	if (!Environment::has("GOOGLE_CLIENT_SECRET"))
 		return true;
-	if (!Environment::has("GOOGLE_CA_LOCATION"))
-		return true;
 
 	return false;
 }
@@ -71,7 +69,11 @@ void GoogleAuthProviderTest::testVerifyAuthCode()
 	TestableGoogleAuthProvider provider;
 	AuthResult info;
 	SSLClient sslConfig;
-	sslConfig.setCALocation(Environment::get("GOOGLE_CA_LOCATION"));
+
+	if (Environment::has("GOOGLE_CA_LOCATION"))
+		sslConfig.setCALocation(Environment::get("GOOGLE_CA_LOCATION"));
+	else
+		sslConfig.setCALocation("cert/mozilla-cacert-2016-11-02.pem");
 
 	provider.setSSLConfig(&sslConfig);
 	provider.setClientId(Environment::get("GOOGLE_CLIENT_ID"));
