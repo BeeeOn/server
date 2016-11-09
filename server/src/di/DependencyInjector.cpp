@@ -308,6 +308,13 @@ InjectorTarget *DependencyInjector::injectDependencies(
 	m_logger.notice("successfully created " + info.name(),
 			__FILE__, __LINE__);
 
-	target->injectionDone();
+	try {
+		target->injectionDone();
+	} catch (const Exception &e) {
+		m_logger.error("injectionDone() failed for " + info.name(),
+				__FILE__, __LINE__);
+		e.rethrow();
+	}
+
 	return target;
 }
