@@ -96,6 +96,7 @@ add_executable(ui-server
 	ui/GatewayHandler.cpp
 	ui/LocationHandler.cpp
 	ui/UIMockInit.cpp
+	dao/PocoSQLiteConnectorLoader.cpp
 )
 
 add_executable(xmlui-server
@@ -110,6 +111,7 @@ add_executable(xmlui-server
 	xmlui/LocationXmlHandler.cpp
 	xmlui/ProfileXmlHandler.cpp
 	ui/UIMockInit.cpp
+	dao/PocoSQLiteConnectorLoader.cpp
 )
 
 set(LIBS

@@ -210,6 +210,9 @@
 			<set name="dialect" ref="${database.dialect}Dialect" />
 		</instance>
 
+		<instance name="sqliteConnector"
+				class="BeeeOn::PocoSQLiteConnectorLoader" />
+
 		<instance name="sqliteDialect"
 				class="BeeeOn::CustomSQLDialect">
 			<set name="name" text="sqlite" />
