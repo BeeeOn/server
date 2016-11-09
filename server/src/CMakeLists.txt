@@ -53,6 +53,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/dao/PocoSQLRoleInPlaceDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/PocoSQLGatewayDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/PocoSQLLocationDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/ConnectorLoader.cpp
 	${PROJECT_SOURCE_DIR}/service/PlaceService.cpp
 	${PROJECT_SOURCE_DIR}/service/UserService.cpp
 	${PROJECT_SOURCE_DIR}/service/AuthService.cpp
