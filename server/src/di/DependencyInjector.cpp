@@ -247,13 +247,9 @@ bool DependencyInjector::tryInjectText(
 void DependencyInjector::injectValue(
 		const InstanceInfo &info,
 		InjectorTarget *target,
-		const string &key)
+		const string &key,
+		const string &name)
 {
-	if (!m_conf->has(key + "[@name]"))
-		return;
-
-	const string name = m_conf->getString(key + "[@name]");
-
 	if (tryInjectRef(info, target, key, name))
 		return;
 
@@ -281,10 +277,18 @@ InjectorTarget *DependencyInjector::injectDependencies(
 
 		m_logger.trace("visiting key " + key);
 
+		if (!m_conf->has(key + "[@name]")) {
+			m_logger.warning("missing @name for " + key,
+					__FILE__, __LINE__);
+			continue;
+		}
+
+		const string name = m_conf->getString(key + "[@name]");
+
 		try {
-			injectValue(info, target, key);
+			injectValue(info, target, key, name);
 		} catch (const Poco::Exception &e) {
-			m_logger.error("failed inject value for "
+			m_logger.error("failed inject " + name + " for "
 					+ info.name(), __FILE__, __LINE__);
 			e.rethrow();
 		}
