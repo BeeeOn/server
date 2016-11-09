@@ -16,13 +16,14 @@ class SessionPool;
 
 namespace BeeeOn {
 
+class ConnectorLoader;
 class SQLDialect;
 
 class PocoDaoManager : public AbstractInjectorTarget {
 public:
 	PocoDaoManager();
 
-	void setConnector(const std::string &connector);
+	void setConnector(ConnectorLoader *loader);
 	void setConnectionString(const std::string &conn);
 	void setMinSessions(const int sessions);
 	void setMaxSessions(const int sessions);
@@ -38,7 +39,7 @@ protected:
 
 private:
 	Poco::Logger &m_logger;
-	std::string m_connector;
+	ConnectorLoader *m_connector;
 	std::string m_connectionString;
 	int m_minSessions;
 	int m_maxSessions;

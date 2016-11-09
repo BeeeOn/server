@@ -6,6 +6,7 @@
 #include <Poco/Data/SessionPool.h>
 
 #include "dao/PocoDaoManager.h"
+#include "dao/ConnectorLoader.h"
 #include "dao/SQLDialect.h"
 #include "util/Template.h"
 #include "util/Occasionally.h"
@@ -21,13 +22,14 @@ using namespace BeeeOn;
 
 PocoDaoManager::PocoDaoManager():
 	m_logger(LOGGER_CLASS(this)),
+	m_connector(&ConnectorLoader::null()),
 	m_minSessions(1),
 	m_maxSessions(32),
 	m_idleTime(60),
 	m_dialect(NULL),
 	m_pool(NULL)
 {
-	textInjector("connector", (TextSetter)
+	injector<PocoDaoManager, ConnectorLoader>("connector",
 			&PocoDaoManager::setConnector);
 	textInjector("connectionString", (TextSetter)
 			&PocoDaoManager::setConnectionString);
@@ -43,9 +45,10 @@ PocoDaoManager::PocoDaoManager():
 			&PocoDaoManager::setDialect);
 }
 
-void PocoDaoManager::setConnector(const std::string &connector)
+void PocoDaoManager::setConnector(ConnectorLoader *connector)
 {
-	m_connector = connector;
+	m_connector = connector == NULL?
+		&ConnectorLoader::null() : connector;
 }
 
 void PocoDaoManager::setConnectionString(const std::string &conn)
@@ -123,19 +126,19 @@ void PocoDaoManager::initPool()
 		throw InvalidArgumentException("minSessions > maxSessions");
 
 	m_logger.notice("initialize database pool ("
-			+ m_connector + ", "
+			+ m_connector->name() + ", "
 			+ to_string(m_maxSessions) + ")",
 			__FILE__, __LINE__);
 
 	m_logger.debug("connection: "
-			+ m_connector + ", "
+			+ m_connector->name() + ", "
 			+ to_string(m_minSessions) + ", "
 			+ to_string(m_maxSessions) + ", "
 			+ to_string(m_idleTime),
 			__FILE__, __LINE__);
 
 	m_pool = new SessionPool(
-			m_connector,
+			m_connector->name(),
 			m_connectionString,
 			m_minSessions,
 			m_maxSessions,
