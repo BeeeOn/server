@@ -286,7 +286,7 @@ InjectorTarget *DependencyInjector::injectDependencies(
 		} catch (const Poco::Exception &e) {
 			m_logger.error("failed inject value for "
 					+ info.name(), __FILE__, __LINE__);
-			throw e;
+			e.rethrow();
 		}
 
 		m_logger.trace("next key after " + key);
