@@ -121,7 +121,8 @@ private:
 			InjectorTarget *target);
 	void injectValue(const InstanceInfo &info,
 			InjectorTarget *target,
-			const std::string &key);
+			const std::string &key,
+			const std::string &name);
 	bool tryInjectRef(const InstanceInfo &info,
 			InjectorTarget *target,
 			const std::string &key,

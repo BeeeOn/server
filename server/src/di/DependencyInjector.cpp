@@ -193,7 +193,16 @@ bool DependencyInjector::tryInjectRef(
 		m_logger.debug("injecting " + value + " as " + name
 				+ " into " + info.name());
 
-		InjectorTarget *ref = create(value);
+		InjectorTarget *ref;
+
+		try {
+			ref = create(value);
+		} catch (const Exception &e) {
+			m_logger.error("failed to create ref " + value,
+					__FILE__, __LINE__);
+			e.rethrow();
+		}
+
 		if (ref == NULL) {
 			throw NullPointerException(
 					"failed to create ref " + value);
@@ -247,13 +256,9 @@ bool DependencyInjector::tryInjectText(
 void DependencyInjector::injectValue(
 		const InstanceInfo &info,
 		InjectorTarget *target,
-		const string &key)
+		const string &key,
+		const string &name)
 {
-	if (!m_conf->has(key + "[@name]"))
-		return;
-
-	const string name = m_conf->getString(key + "[@name]");
-
 	if (tryInjectRef(info, target, key, name))
 		return;
 
@@ -281,12 +286,20 @@ InjectorTarget *DependencyInjector::injectDependencies(
 
 		m_logger.trace("visiting key " + key);
 
+		if (!m_conf->has(key + "[@name]")) {
+			m_logger.warning("missing @name for " + key,
+					__FILE__, __LINE__);
+			continue;
+		}
+
+		const string name = m_conf->getString(key + "[@name]");
+
 		try {
-			injectValue(info, target, key);
+			injectValue(info, target, key, name);
 		} catch (const Poco::Exception &e) {
-			m_logger.error("failed inject value for "
+			m_logger.error("failed inject " + name + " for "
 					+ info.name(), __FILE__, __LINE__);
-			throw e;
+			e.rethrow();
 		}
 
 		m_logger.trace("next key after " + key);
@@ -295,6 +308,13 @@ InjectorTarget *DependencyInjector::injectDependencies(
 	m_logger.notice("successfully created " + info.name(),
 			__FILE__, __LINE__);
 
-	target->injectionDone();
+	try {
+		target->injectionDone();
+	} catch (const Exception &e) {
+		m_logger.error("injectionDone() failed for " + info.name(),
+				__FILE__, __LINE__);
+		e.rethrow();
+	}
+
 	return target;
 }
