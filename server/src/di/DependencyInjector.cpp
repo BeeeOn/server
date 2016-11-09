@@ -193,7 +193,16 @@ bool DependencyInjector::tryInjectRef(
 		m_logger.debug("injecting " + value + " as " + name
 				+ " into " + info.name());
 
-		InjectorTarget *ref = create(value);
+		InjectorTarget *ref;
+
+		try {
+			ref = create(value);
+		} catch (const Exception &e) {
+			m_logger.error("failed to create ref " + value,
+					__FILE__, __LINE__);
+			e.rethrow();
+		}
+
 		if (ref == NULL) {
 			throw NullPointerException(
 					"failed to create ref " + value);
