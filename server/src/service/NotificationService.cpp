@@ -1,30 +1,35 @@
+#include <Poco/AbstractObserver.h>
+
 #include "service/NotificationService.h"
+#include "notification/FirstLoginNotification.h"
+#include "model/VerifiedIdentity.h"
 #include "Debug.h"
 
-BEEEON_OBJECT(FakeNotificationService, BeeeOn::FakeNotificationService)
+BEEEON_OBJECT(NotificationService, BeeeOn::NotificationService)
 
+using namespace Poco;
 using namespace BeeeOn;
 
 NotificationService::NotificationService():
 	m_logger(LOGGER_CLASS(this))
 {
+	injector<NotificationService, AbstractObserver>(
+		"observer",
+		&NotificationService::addObserver
+	);
 }
 
-void FakeNotificationService::notifyFirstLogin(
+NotificationService::~NotificationService()
+{
+}
+
+void NotificationService::addObserver(AbstractObserver *o)
+{
+	m_center.addObserver(*o);
+}
+
+void NotificationService::notifyFirstLogin(
 		const VerifiedIdentity &identity)
 {
-	const User &user = identity.user();
-
-	m_logger.information("first login of "
-			+ identity.identity().email()
-			+ ", "
-			+ identity.provider()
-			+ ", "
-			+ identity.id().toString()
-			+ ", "
-			+ user.firstName()
-			+ " "
-			+ user.lastName(),
-			__FILE__, __LINE__);
-
+	m_center.postNotification(new FirstLoginNotification(identity));
 }

@@ -137,9 +137,10 @@
 
 		<instance name="loggingObserver" class="BeeeOn::LoggingObserver" />
 
-		<instance name="fakeNotificationService"
-				class="BeeeOn::FakeNotificationService" />
-		<alias name="notificationService" ref="fakeNotificationService" />
+		<instance name="notificationService"
+				class="BeeeOn::NotificationService">
+			<add name="observer" ref="loggingObserver" />
+		</instance>
 
 		<instance name="accessPolicy"
 				class="BeeeOn::DefaultAccessPolicy">

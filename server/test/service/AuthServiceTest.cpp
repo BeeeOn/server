@@ -2,6 +2,7 @@
 #define BEEEON_AUTH_SERVICE_TEST_H
 
 #include <Poco/Exception.h>
+#include <Poco/Notification.h>
 
 #include <cppunit/extensions/HelperMacros.h>
 
@@ -13,6 +14,8 @@
 #include "dao/UserDao.h"
 #include "dao/IdentityDao.h"
 #include "dao/VerifiedIdentityDao.h"
+#include "notification/NotificationObserver.h"
+#include "notification/FirstLoginNotification.h"
 #include "util/Base64.h"
 
 using namespace std;
@@ -21,7 +24,7 @@ using namespace Poco;
 namespace BeeeOn {
 
 class TestableAuthService;
-class MockNotificationService;
+class MockNotificationObserver;
 
 class AuthServiceTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST_SUITE(AuthServiceTest);
@@ -46,7 +49,8 @@ private:
 	SessionManager m_manager;
 	MockRandomProvider m_mockRandomProvider;
 	InsecureRandomProvider m_insecureRandomProvider;
-	MockNotificationService *m_notificationService;
+	NotificationService *m_notificationService;
+	VerifiedIdentity m_lastIdentity;
 	TestableAuthService *m_service;
 };
 
@@ -59,20 +63,33 @@ public:
 	using AuthService::verifyIdentityAndLogin;
 };
 
-class MockNotificationService : public NotificationService {
+class MockNotificationObserver : public NotificationObserver {
 public:
-	void notifyFirstLogin(const VerifiedIdentity &identity) override
+	MockNotificationObserver(VerifiedIdentity &identity):
+		m_identity(&identity)
 	{
-		m_identity = identity;
+		m_accepts.insert("first-login");
 	}
 
-	const VerifiedIdentity &lastIdentity()
+	MockNotificationObserver(const MockNotificationObserver &copy):
+		m_identity(copy.m_identity)
 	{
-		return m_identity;
+	}
+
+	void notify(Notification *n) const
+	{
+		const FirstLoginNotification *fn =
+				FirstLoginNotification::cast(n);
+		*m_identity = fn->identity();
+	}
+
+	Poco::AbstractObserver *clone() const
+	{
+		return new MockNotificationObserver(*this);
 	}
 
 private:
-	VerifiedIdentity m_identity;
+	mutable VerifiedIdentity *m_identity;
 };
 
 #define SESSION_ID64 string( \
@@ -93,7 +110,10 @@ void AuthServiceTest::setUp()
 	m_manager.setMaxUserSessions(10);
 	m_manager.setSessionExpireTime(1);
 
-	m_notificationService = new MockNotificationService();
+	m_notificationService = new NotificationService();
+
+	MockNotificationObserver observer(m_lastIdentity);
+	m_notificationService->addObserver(&observer);
 
 	m_service = new TestableAuthService();
 	m_service->setUserDao(&m_userDao);
@@ -174,8 +194,7 @@ void AuthServiceTest::testLoginAsNew()
 	CPPUNIT_ASSERT(!identity.id().isNull());
 	CPPUNIT_ASSERT(identity.email() == "freddie@example.org");
 
-	const VerifiedIdentity &verifiedIdentity =
-		m_notificationService->lastIdentity();
+	const VerifiedIdentity &verifiedIdentity = m_lastIdentity;
 
 	CPPUNIT_ASSERT(!verifiedIdentity.id().isNull());
 	CPPUNIT_ASSERT(verifiedIdentity.id() == session->identityID());
@@ -213,8 +232,7 @@ void AuthServiceTest::testFirstLoginBySecondProvider()
 		m_service->verifyIdentityAndLogin(result);
 	CPPUNIT_ASSERT(!session.isNull());
 
-	const VerifiedIdentity &verifiedIdentity =
-		m_notificationService->lastIdentity();
+	const VerifiedIdentity &verifiedIdentity = m_lastIdentity;
 
 	CPPUNIT_ASSERT(!verifiedIdentity.id().isNull());
 	CPPUNIT_ASSERT(verifiedIdentity.id() == session->identityID());
