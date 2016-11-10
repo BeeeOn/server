@@ -9,6 +9,8 @@
 
 namespace BeeeOn {
 
+class DeviceDao;
+
 class UIMockInit : public AbstractInjectorTarget {
 public:
 	UIMockInit()
@@ -17,6 +19,8 @@ public:
 			&UIMockInit::setUserDao);
 		injector<UIMockInit, GatewayDao>("gatewayDao",
 			&UIMockInit::setGatewayDao);
+		injector<UIMockInit, DeviceDao>("deviceDao",
+			&UIMockInit::setDeviceDao);
 		injector<UIMockInit, IdentityDao>("identityDao",
 			&UIMockInit::setIdentityDao);
 		injector<UIMockInit, VerifiedIdentityDao>("verifiedIdentityDao",
@@ -33,6 +37,11 @@ public:
 		m_gatewayDao = dao;
 	}
 
+	void setDeviceDao(DeviceDao *dao)
+	{
+		m_deviceDao = dao;
+	}
+
 	void setIdentityDao(IdentityDao *dao)
 	{
 		m_identityDao = dao;
@@ -46,11 +55,13 @@ public:
 protected:
 	void initUsers();
 	void initGateways();
+	void initDevices();
 	void injectionDone();
 
 private:
 	UserDao *m_userDao;
 	GatewayDao *m_gatewayDao;
+	DeviceDao *m_deviceDao;
 	IdentityDao *m_identityDao;
 	VerifiedIdentityDao *m_verifiedIdentityDao;
 };

@@ -1,6 +1,7 @@
 #ifndef BEEEON_XMLUI_SERIALIZING_H
 #define BEEEON_XMLUI_SERIALIZING_H
 
+#include <list>
 #include <vector>
 
 namespace Poco {
@@ -14,6 +15,7 @@ namespace BeeeOn {
 
 class Gateway;
 class Location;
+class Device;
 class VerifiedIdentity;
 
 namespace XmlUI {
@@ -25,6 +27,12 @@ void serialize(Poco::XML::XMLWriter &output,
 void serialize(Poco::XML::XMLWriter &output, const Location &location);
 void serialize(Poco::XML::XMLWriter &output,
 		const std::vector<Location> &locations);
+
+void serialize(Poco::XML::XMLWriter &output, const Device &device);
+void serialize(Poco::XML::XMLWriter &output,
+		const std::vector<Device> &devices);
+void serialize(Poco::XML::XMLWriter &output,
+		const std::list<Device> &devices);
 
 void serializeMyself(Poco::XML::XMLWriter &output,
 		const VerifiedIdentity &identity);

@@ -16,6 +16,8 @@ DefaultAccessPolicy::DefaultAccessPolicy()
 			&DefaultAccessPolicy::setGatewayDao);
 	injector<DefaultAccessPolicy, LocationDao>("locationDao",
 			&DefaultAccessPolicy::setLocationDao);
+	injector<DefaultAccessPolicy, DeviceDao>("deviceDao",
+			&DefaultAccessPolicy::setDeviceDao);
 	injector<DefaultAccessPolicy, RoleInPlaceDao>("roleInPlaceDao",
 			&DefaultAccessPolicy::setRoleInPlaceDao);
 }
@@ -33,6 +35,18 @@ AccessLevel DefaultAccessPolicy::fetchAccessLevel(
 		m_roleInPlaceDao->fetchAccessLevel(place, tmp);
 
 	return level;
+}
+
+AccessLevel DefaultAccessPolicy::fetchAccessLevel(
+		const User &user,
+		const Gateway &gateway)
+{
+	Gateway tmp(gateway);
+
+	if (!m_gatewayDao->fetch(tmp))
+		throw InvalidAccessException("gateway does not exist");
+
+	return fetchAccessLevel(user, tmp.place());
 }
 
 void DefaultAccessPolicy::assureAtLeast(
@@ -197,4 +211,106 @@ void DefaultAccessPolicy::assureRemove(
 
 	assureAtLeast(
 		fetchAccessLevel(context.user(), place), AccessLevel::user());
+}
+
+void DefaultAccessPolicy::assureGet(
+		const PolicyContext &context,
+		const Device &device,
+		const Gateway &gateway)
+{
+	Device tmp(device);
+
+	if (!m_deviceDao->fetch(tmp, gateway)) {
+		throw InvalidAccessException("no such device "
+				+ device.id().toString()
+				+ " for gateway "
+				+ gateway.id().toString());
+	}
+
+	assureAtLeast(fetchAccessLevel(context.user(), gateway),
+			AccessLevel::guest());
+}
+
+void DefaultAccessPolicy::assureListActiveDevices(
+		const PolicyContext &context,
+		const Gateway &gateway)
+{
+	Gateway tmp(gateway);
+	if (!m_gatewayDao->fetch(tmp))
+		throw InvalidAccessException("no such gateway "
+				+ gateway.id().toString());
+
+	const Place place(tmp.place());
+
+	assureAtLeast(
+		fetchAccessLevel(context.user(), place), AccessLevel::guest());
+}
+
+void DefaultAccessPolicy::assureListInactiveDevices(
+		const PolicyContext &context,
+		const Gateway &gateway)
+{
+	Gateway tmp(gateway);
+	if (!m_gatewayDao->fetch(tmp))
+		throw InvalidAccessException("no such gateway "
+				+ gateway.id().toString());
+
+	const Place place(tmp.place());
+
+	assureAtLeast(
+		fetchAccessLevel(context.user(), place), AccessLevel::admin());
+}
+
+void DefaultAccessPolicy::assureUnregister(
+		const PolicyContext &context,
+		const Device &device,
+		const Gateway &gateway)
+{
+	Device tmp(device);
+
+	if (!m_deviceDao->fetch(tmp, gateway)) {
+		throw InvalidAccessException("no such device "
+				+ device.id().toString()
+				+ " for gateway "
+				+ gateway.id().toString());
+	}
+
+	assureAtLeast(fetchAccessLevel(context.user(), gateway),
+			AccessLevel::admin());
+}
+
+void DefaultAccessPolicy::assureActivate(
+		const PolicyContext &context,
+		const Device &device,
+		const Gateway &gateway)
+{
+	Device tmp(device);
+
+	if (!m_deviceDao->fetch(tmp, gateway)) {
+		throw InvalidAccessException("no such device "
+				+ device.id().toString()
+				+ " for gateway "
+				+ gateway.id().toString());
+	}
+
+	assureAtLeast(fetchAccessLevel(context.user(), gateway),
+			AccessLevel::admin());
+}
+
+void DefaultAccessPolicy::assureUpdate(
+		const PolicyContext &context,
+		const Device &device,
+		const Gateway &gateway)
+{
+	Device tmp(device);
+
+	if (!m_deviceDao->fetch(tmp, gateway)) {
+		throw InvalidAccessException("no such device "
+				+ device.id().toString()
+				+ " for gateway "
+				+ gateway.id().toString());
+	}
+
+	assureAtLeast(fetchAccessLevel(context.user(), gateway),
+			AccessLevel::user());
 }

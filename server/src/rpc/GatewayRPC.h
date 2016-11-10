@@ -20,32 +20,33 @@ public:
 	/**
 	 * Send listen command.
 	 */
-	virtual void sendListen(Gateway &gateway) = 0;
+	virtual void sendListen(const Gateway &gateway) = 0;
 
 	/**
 	 * Send unpair device command to the selected gateway.
 	 */
-	virtual void unpairDevice(Gateway &gateway, Device &device) = 0;
+	virtual void unpairDevice(const Gateway &gateway,
+			const Device &device) = 0;
 
 	/**
 	 * Send ping command to the gateway.
 	 */
-	virtual void pingGateway(Gateway &gateway) = 0;
+	virtual void pingGateway(const Gateway &gateway) = 0;
 };
 
 class NullGatewayRPC : public GatewayRPC, public AbstractInjectorTarget {
 public:
-	void sendListen(Gateway &gateway)
+	void sendListen(const Gateway &gateway)
 	{
 		throw Poco::NotImplementedException(__func__);
 	}
 
-	void unpairDevice(Gateway &gateway, Device &device)
+	void unpairDevice(const Gateway &gateway, const Device &device)
 	{
 		throw Poco::NotImplementedException(__func__);
 	}
 
-	void pingGateway(Gateway &gateway)
+	void pingGateway(const Gateway &gateway)
 	{
 		throw Poco::NotImplementedException(__func__);
 	}

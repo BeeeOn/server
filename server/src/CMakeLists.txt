@@ -32,10 +32,12 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/server/XmlRequestHandler.cpp
 	${PROJECT_SOURCE_DIR}/server/SocketServer.cpp
 	${PROJECT_SOURCE_DIR}/model/GatewayID.cpp
+	${PROJECT_SOURCE_DIR}/model/DeviceID.cpp
 	${PROJECT_SOURCE_DIR}/model/JSONSerializer.cpp
 	${PROJECT_SOURCE_DIR}/model/Identity.cpp
 	${PROJECT_SOURCE_DIR}/model/VerifiedIdentity.cpp
 	${PROJECT_SOURCE_DIR}/model/RoleInPlace.cpp
+	${PROJECT_SOURCE_DIR}/model/Device.cpp
 	${PROJECT_SOURCE_DIR}/dao/SQLDialect.cpp
 	${PROJECT_SOURCE_DIR}/dao/PlaceDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/UserDao.cpp
@@ -68,6 +70,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/policy/PlaceAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/GatewayAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/LocationAccessPolicy.cpp
+	${PROJECT_SOURCE_DIR}/policy/DeviceAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/DefaultAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/util/DAMM.cpp
 	${PROJECT_SOURCE_DIR}/util/SecureXmlParser.cpp
@@ -80,6 +83,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/SSLServer.cpp
 	${PROJECT_SOURCE_DIR}/dao/PocoDaoManager.cpp
 	${PROJECT_SOURCE_DIR}/rpc/GatewayRPC.cpp
+	${PROJECT_SOURCE_DIR}/rpc/FakeGatewayRPC.cpp
 )
 
 include_directories(
@@ -107,9 +111,11 @@ add_executable(xmlui-server
 	xmlui/AuthXmlHandler.cpp
 	xmlui/XmlGatewayDeserializer.cpp
 	xmlui/XmlLocationDeserializer.cpp
+	xmlui/XmlDeviceDeserializer.cpp
 	xmlui/GatewayXmlHandler.cpp
 	xmlui/LocationXmlHandler.cpp
 	xmlui/ProfileXmlHandler.cpp
+	xmlui/DeviceXmlHandler.cpp
 	ui/UIMockInit.cpp
 	dao/PocoSQLiteConnectorLoader.cpp
 )

@@ -1,5 +1,8 @@
 #include <Poco/UUIDGenerator.h>
+#include <Poco/DateTime.h>
+#include <Poco/Timespan.h>
 
+#include "dao/DeviceDao.h"
 #include "ui/UIMockInit.h"
 
 BEEEON_OBJECT(UIMockInit, BeeeOn::UIMockInit)
@@ -61,8 +64,63 @@ void UIMockInit::initGateways()
 	m_gatewayDao->insert(gateway2);
 }
 
+void UIMockInit::initDevices()
+{
+	Gateway gateway(GatewayID::parse("1284174504043136"));
+
+	Device temperature(DeviceID::random(0x41));
+	temperature.setName("Temperature");
+	temperature.setGateway(gateway);
+	temperature.setType(0);
+	temperature.setRefresh(5);
+	temperature.setBattery(50.0);
+	temperature.setSignal(90.0);
+	temperature.setFirstSeen(DateTime(2015, 4, 9, 15, 43, 1));
+	temperature.setLastSeen(DateTime(2016, 9, 1, 13, 27, 18));
+	temperature.setActiveSince(DateTime(2015, 5, 2, 17, 59, 59));
+
+	m_deviceDao->insert(temperature, gateway);
+
+	Device humidity(DeviceID::random(0x42));
+	humidity.setName("Humidity");
+	humidity.setGateway(gateway);
+	humidity.setType(0);
+	humidity.setRefresh(1000);
+	humidity.setBattery(99.0);
+	humidity.setSignal(45.0);
+	humidity.setFirstSeen(DateTime(2016, 8, 8, 8, 8, 8));
+	humidity.setLastSeen(DateTime());
+	humidity.setActiveSince(DateTime(2016, 8, 9, 8, 9, 8));
+
+	m_deviceDao->insert(humidity, gateway);
+
+	Device multi(DeviceID::random(0x43));
+	multi.setName("Multi-sensor");
+	multi.setGateway(gateway);
+	multi.setType(0);
+	multi.setRefresh(15);
+	multi.setBattery(90.0);
+	multi.setSignal(90.0);
+	multi.setFirstSeen(DateTime(2016, 9, 10, 11, 12, 13));
+	multi.setLastSeen(DateTime(2016, 10, 10, 11, 11, 22));
+	multi.setActiveSince(DateTime(2016, 9, 10, 11, 30, 1));
+
+	m_deviceDao->insert(multi, gateway);
+
+	Device unknown(DeviceID::random(0x44));
+	unknown.setName("Unknown");
+	unknown.setGateway(gateway);
+	unknown.setType(0);
+	unknown.setRefresh(20);
+	unknown.setFirstSeen(DateTime() - Timespan(100, 0));
+	unknown.setLastSeen(DateTime());
+
+	m_deviceDao->insert(unknown, gateway);
+}
+
 void UIMockInit::injectionDone()
 {
 	initUsers();
 	initGateways();
+	initDevices();
 }
