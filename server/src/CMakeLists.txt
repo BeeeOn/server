@@ -53,6 +53,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/dao/PocoSQLRoleInPlaceDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/PocoSQLGatewayDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/PocoSQLLocationDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/ConnectorLoader.cpp
 	${PROJECT_SOURCE_DIR}/service/PlaceService.cpp
 	${PROJECT_SOURCE_DIR}/service/UserService.cpp
 	${PROJECT_SOURCE_DIR}/service/AuthService.cpp
@@ -95,6 +96,7 @@ add_executable(ui-server
 	ui/GatewayHandler.cpp
 	ui/LocationHandler.cpp
 	ui/UIMockInit.cpp
+	dao/PocoSQLiteConnectorLoader.cpp
 )
 
 add_executable(xmlui-server
@@ -109,6 +111,7 @@ add_executable(xmlui-server
 	xmlui/LocationXmlHandler.cpp
 	xmlui/ProfileXmlHandler.cpp
 	ui/UIMockInit.cpp
+	dao/PocoSQLiteConnectorLoader.cpp
 )
 
 set(LIBS
