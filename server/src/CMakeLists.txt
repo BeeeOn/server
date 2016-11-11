@@ -84,6 +84,9 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/dao/PocoDaoManager.cpp
 	${PROJECT_SOURCE_DIR}/rpc/GatewayRPC.cpp
 	${PROJECT_SOURCE_DIR}/rpc/FakeGatewayRPC.cpp
+	${PROJECT_SOURCE_DIR}/notification/FirstLoginNotification.cpp
+	${PROJECT_SOURCE_DIR}/notification/NotificationObserver.cpp
+	${PROJECT_SOURCE_DIR}/notification/LoggingObserver.cpp
 )
 
 include_directories(
