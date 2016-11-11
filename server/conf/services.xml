@@ -289,7 +289,7 @@
 
 		<instance name="googleOAuthSSL" class="BeeeOn::SSLClient">
 			<set name="verificationMode" text="${google.ssl.verify_mode}" />
-			<set name="authority" text="${google.ssl.authority}" />
+			<set name="caLocation" text="${google.ssl.authority}" />
 		</instance>
 
 	</services>
