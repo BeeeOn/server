@@ -2,6 +2,7 @@
 #define BEEEON_ROLE_IN_PLACE_H
 
 #include <Poco/SharedPtr.h>
+#include <Poco/DateTime.h>
 
 #include "model/GlobalID.h"
 #include "model/Place.h"
@@ -50,6 +51,16 @@ public:
 		return m_level;
 	}
 
+	void setCreated(const Poco::DateTime &created)
+	{
+		m_created = created;
+	}
+
+	const Poco::DateTime &created() const
+	{
+		return m_created;
+	}
+
 	void setID(const ID &id)
 	{
 		m_id = id;
@@ -65,6 +76,7 @@ private:
 	Place m_place;
 	Identity m_identity;
 	AccessLevel m_level;
+	Poco::DateTime m_created;
 };
 
 typedef RoleInPlace::ID RoleInPlaceID;

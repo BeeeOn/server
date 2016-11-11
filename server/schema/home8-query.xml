@@ -69,36 +69,36 @@
 					'test')</sql>
 		</setup>
 		<setup name="global roles for tests">
-			<!-- pepa@example.org is admin of Test Place 1 -->
-			<sql>INSERT INTO roles_in_place (id, place_id, identity_id, level) VALUES (
+			<!-- pepa@example.org is admin (and owner) of Test Place 1 -->
+			<sql>INSERT INTO roles_in_place (id, place_id, identity_id, level, created) VALUES (
 					'faabc96a-12b4-421a-8f4b-00ae1f75c11f',
 					'16de2f05-8af7-4729-8479-1973590cfa54',
 					'4264d04a-4a50-4a53-a765-dc5a7cdce6f1',
-					10)</sql>
+					10, 1483456377)</sql>
 			<!-- pepa2@example.org is user of Test Place 1 -->
-			<sql>INSERT INTO roles_in_place (id, place_id, identity_id, level) VALUES (
+			<sql>INSERT INTO roles_in_place (id, place_id, identity_id, level, created) VALUES (
 					'f3733b47-d47c-4fa1-b2ce-2101dfa33ca1',
 					'16de2f05-8af7-4729-8479-1973590cfa54',
 					'cd8c611b-7e8a-43ff-8d35-9e92c74f003d',
-					20)</sql>
+					20, 1483456378)</sql>
 			<!-- jack.sparrow@example.org is guest of Test Place 1 -->
-			<sql>INSERT INTO roles_in_place (id, place_id, identity_id, level) VALUES (
+			<sql>INSERT INTO roles_in_place (id, place_id, identity_id, level, created) VALUES (
 					'aee235a1-ac89-4553-b185-d689faeeeee3',
 					'16de2f05-8af7-4729-8479-1973590cfa54',
 					'b5696add-11c4-4b51-834a-c14ddd672db4',
-					30)</sql>
-			<!-- franta@example.org is admin of Test Place 2 -->
-			<sql>INSERT INTO roles_in_place (id, place_id, identity_id, level) VALUES (
+					30, 1483456379)</sql>
+			<!-- franta@example.org is admin (and owner) of Test Place 2 -->
+			<sql>INSERT INTO roles_in_place (id, place_id, identity_id, level, created) VALUES (
 					'e01b65c0-5815-4f5b-a172-1dce164ef3d9',
 					'bd8ea40c-91c9-4d8c-8c13-a8332c39a437',
 					'd184702c-7003-49a7-9ded-4c4fe5d88881',
-					10)</sql>
+					10, 1483456375)</sql>
 			<!-- pepa2@example.org is admin of Test Place 2 -->
-			<sql>INSERT INTO roles_in_place (id, place_id, identity_id, level) VALUES (
+			<sql>INSERT INTO roles_in_place (id, place_id, identity_id, level, created) VALUES (
 					'4564a87e-d3e0-48a7-a29a-1ee0f9b111a1',
 					'bd8ea40c-91c9-4d8c-8c13-a8332c39a437',
 					'cd8c611b-7e8a-43ff-8d35-9e92c74f003d',
-					10)</sql>
+					10, 1483456379)</sql>
 		</setup>
 		<teardown name="delete global roles">
 			<sql>DELETE FROM roles_in_place WHERE id = '4564a87e-d3e0-48a7-a29a-1ee0f9b111a1'</sql>
@@ -1073,11 +1073,12 @@
 	</query>
 
 	<query id="roles_in_place.create">
-		<define>INSERT INTO roles_in_place (id, place_id, identity_id, level) VALUES (
+		<define>INSERT INTO roles_in_place (id, place_id, identity_id, level, created) VALUES (
 			<value name="id" type="uuid" />,
 			<value name="place_id" type="uuid" />,
 			<value name="identity_id" type="uuid" />,
-			<value name="level" type="integer" />)</define>
+			<value name="level" type="integer" />,
+			<value name="created" type="bigint" />)</define>
 	</query>
 
 	<query id="roles_in_place.fetch.by.id">
@@ -1086,6 +1087,7 @@
 			r.place_id AS place_id,
 			r.identity_id AS identity_id,
 			r.level AS level,
+			r.created AS created,
 			i.email AS identity_email,
 			p.name AS place_name
 		FROM roles_in_place AS r
@@ -1104,6 +1106,7 @@
 						<value name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
 						<value name="identity_id">4264d04a-4a50-4a53-a765-dc5a7cdce6f1</value>
 						<value name="level">10</value>
+						<value name="created">1483456377</value>
 						<value name="identity_email">pepa@example.org</value>
 						<value name="place_name">Test Place 1</value>
 					</row>
@@ -1119,6 +1122,7 @@
 			r.place_id AS place_id,
 			r.identity_id AS identity_id,
 			r.level AS level,
+			r.created AS created,
 			i.email AS identity_email,
 			p.name AS place_name
 		FROM roles_in_place AS r
@@ -1139,6 +1143,7 @@
 						<value name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
 						<value name="identity_id">4264d04a-4a50-4a53-a765-dc5a7cdce6f1</value>
 						<value name="level">10</value>
+						<value name="created">1483456377</value>
 						<value name="identity_email">pepa@example.org</value>
 						<value name="place_name">Test Place 1</value>
 					</row>
@@ -1147,6 +1152,7 @@
 						<value name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
 						<value name="identity_id">cd8c611b-7e8a-43ff-8d35-9e92c74f003d</value>
 						<value name="level">20</value>
+						<value name="created">1483456378</value>
 						<value name="identity_email">pepa2@example.org</value>
 						<value name="place_name">Test Place 1</value>
 					</row>
@@ -1155,6 +1161,7 @@
 						<value name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
 						<value name="identity_id">b5696add-11c4-4b51-834a-c14ddd672db4</value>
 						<value name="level">30</value>
+						<value name="created">1483456379</value>
 						<value name="identity_email">jack.sparrow@example.org</value>
 						<value name="place_name">Test Place 1</value>
 					</row>

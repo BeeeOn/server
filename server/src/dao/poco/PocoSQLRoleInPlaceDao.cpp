@@ -87,13 +87,15 @@ void PocoSQLRoleInPlaceDao::create(Session &session, RoleInPlace &role)
 	string placeID(role.place().id().toString());
 	string identityID(role.identity().id().toString());
 	unsigned int level = role.level();
+	unsigned long created = role.created().timestamp().epochTime();
 
 	Statement sql(session);
 	sql << findQuery("roles_in_place.create"),
 		use(id, "id"),
 		use(placeID, "place_id"),
 		use(identityID, "identity_id"),
-		use(level, "level");
+		use(level, "level"),
+		use(created, "created");
 
 	execute(sql);
 }
@@ -241,6 +243,7 @@ bool PocoSQLRoleInPlaceDao::parseSingle(Row &result,
 		role = RoleInPlace(RoleInPlaceID::parse(result[prefix + "id"]));
 
 	role.setLevel(AccessLevel(result[prefix + "level"].convert<unsigned int>()));
+	role.setCreated(Timestamp::fromEpochTime(result[prefix + "created"]));
 
 	Place place;
 	if (!PocoSQLPlaceDao::parseIfIDNotNull(result, place, prefix + "place_"))

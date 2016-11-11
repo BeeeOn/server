@@ -67,6 +67,7 @@
 		<column name="place_id" type="uuid" not-null="yes" />
 		<column name="identity_id" type="uuid" not-null="yes" />
 		<column name="level" type="smallint" not-null="yes" />
+		<column name="created" type="bigint" not-null="yes" />
 
 		<primary-key ref="id" />
 		<foreign-key table="places" local="place_id" remote="id" />
