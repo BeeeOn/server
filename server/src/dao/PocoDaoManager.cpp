@@ -26,8 +26,7 @@ PocoDaoManager::PocoDaoManager():
 	m_minSessions(1),
 	m_maxSessions(32),
 	m_idleTime(60),
-	m_dialect(NULL),
-	m_pool(NULL)
+	m_dialect(NULL)
 {
 	injector<PocoDaoManager, ConnectorLoader>("connector",
 			&PocoDaoManager::setConnector);
@@ -100,7 +99,7 @@ Poco::Data::SessionPool &PocoDaoManager::pool()
 {
 	static Occasionally occasionally;
 
-	if (m_pool == NULL)
+	if (m_pool.isNull())
 		initPool();
 
 	occasionally.execute([&]() {
