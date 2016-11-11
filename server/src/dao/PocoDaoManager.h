@@ -1,17 +1,14 @@
 #ifndef BEEEON_POCO_DAO_MANAGER_H
 #define BEEEON_POCO_DAO_MANAGER_H
 
+#include <Poco/SharedPtr.h>
+#include <Poco/Data/SessionPool.h>
 #include "di/InjectorTarget.h"
 
 namespace Poco {
 
 class Logger;
 
-namespace Data {
-
-class SessionPool;
-
-}
 }
 
 namespace BeeeOn {
@@ -46,7 +43,7 @@ private:
 	int m_idleTime;
 	std::string m_script;
 	SQLDialect *m_dialect;
-	Poco::Data::SessionPool *m_pool;
+	Poco::SharedPtr<Poco::Data::SessionPool> m_pool;
 };
 
 }
