@@ -102,7 +102,7 @@
 			<set name="identityDao" ref="identityDao" />
 			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
 			<set name="sessionManager" ref="sessionManager" />
-			<set name="notificationService" ref="notificationService" />
+			<set name="notificationDispatcher" ref="notificationDispatcher" />
 			<add name="providers" ref="googlePermitAuthProvider" />
 			<add name="providers" ref="googleAuthProvider" />
 		</instance>
@@ -137,8 +137,8 @@
 
 		<instance name="loggingObserver" class="BeeeOn::LoggingObserver" />
 
-		<instance name="notificationService"
-				class="BeeeOn::NotificationService">
+		<instance name="notificationDispatcher"
+				class="BeeeOn::NotificationDispatcher">
 			<add name="observer" ref="loggingObserver" />
 		</instance>
 

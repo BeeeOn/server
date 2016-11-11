@@ -6,7 +6,7 @@
 #include <Poco/Logger.h>
 #include "di/InjectorTarget.h"
 #include "provider/AuthProvider.h"
-#include "service/NotificationService.h"
+#include "notification/NotificationDispatcher.h"
 #include "dao/UserDao.h"
 #include "dao/IdentityDao.h"
 #include "dao/VerifiedIdentityDao.h"
@@ -37,9 +37,9 @@ public:
 				&AuthService::setSessionManager);
 		injector<AuthService, AuthProvider>("providers",
 				&AuthService::registerProvider);
-		injector<AuthService, NotificationService>(
-				"notificationService",
-				&AuthService::setNotificationService);
+		injector<AuthService, NotificationDispatcher>(
+				"notificationDispatcher",
+				&AuthService::setNotificationDispatcher);
 	}
 
 	void setUserDao(UserDao *dao)
@@ -68,7 +68,7 @@ public:
 			std::make_pair(provider->name(), provider));
 	}
 
-	void setNotificationService(NotificationService *service)
+	void setNotificationDispatcher(NotificationDispatcher *service)
 	{
 		m_notificationService = service;
 	}
@@ -95,7 +95,7 @@ private:
 	IdentityDao *m_identityDao;
 	VerifiedIdentityDao *m_verifiedIdentityDao;
 	Providers m_providers;
-	NotificationService *m_notificationService;
+	NotificationDispatcher *m_notificationService;
 };
 
 }

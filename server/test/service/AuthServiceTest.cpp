@@ -8,7 +8,7 @@
 
 #include "provider/MockRandomProvider.h"
 #include "provider/RandomProvider.h"
-#include "service/NotificationService.h"
+#include "notification/NotificationDispatcher.h"
 #include "service/AuthService.h"
 #include "provider/PermitAuthProvider.h"
 #include "dao/UserDao.h"
@@ -49,7 +49,7 @@ private:
 	SessionManager m_manager;
 	MockRandomProvider m_mockRandomProvider;
 	InsecureRandomProvider m_insecureRandomProvider;
-	NotificationService *m_notificationService;
+	NotificationDispatcher *m_notifiactionDispatcher;
 	VerifiedIdentity m_lastIdentity;
 	TestableAuthService *m_service;
 };
@@ -110,23 +110,23 @@ void AuthServiceTest::setUp()
 	m_manager.setMaxUserSessions(10);
 	m_manager.setSessionExpireTime(1);
 
-	m_notificationService = new NotificationService();
+	m_notifiactionDispatcher = new NotificationDispatcher();
 
 	MockNotificationObserver observer(m_lastIdentity);
-	m_notificationService->addObserver(&observer);
+	m_notifiactionDispatcher->addObserver(&observer);
 
 	m_service = new TestableAuthService();
 	m_service->setUserDao(&m_userDao);
 	m_service->setIdentityDao(&m_identityDao);
 	m_service->setVerifiedIdentityDao(&m_verifiedIdentityDao);
 	m_service->setSessionManager(&m_manager);
-	m_service->setNotificationService(m_notificationService);
+	m_service->setNotificationDispatcher(m_notifiactionDispatcher);
 }
 
 void AuthServiceTest::tearDown()
 {
 	delete m_service;
-	delete m_notificationService;
+	delete m_notifiactionDispatcher;
 }
 
 void AuthServiceTest::testPermitAuth()
