@@ -1,5 +1,5 @@
-#ifndef BEEEON_NOTIFICATION_SERVICE_H
-#define BEEEON_NOTIFICATION_SERVICE_H
+#ifndef BEEEON_NOTIFICATION_DISPATCHER_H
+#define BEEEON_NOTIFICATION_DISPATCHER_H
 
 #include <Poco/Logger.h>
 #include <Poco/NotificationCenter.h>
@@ -15,10 +15,10 @@ class AbstractObserver;
 
 namespace BeeeOn {
 
-class NotificationService : public AbstractInjectorTarget {
+class NotificationDispatcher : public AbstractInjectorTarget {
 public:
-	NotificationService();
-	virtual ~NotificationService();
+	NotificationDispatcher();
+	virtual ~NotificationDispatcher();
 
 	void addObserver(Poco::AbstractObserver *o);
 

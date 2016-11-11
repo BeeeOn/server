@@ -62,7 +62,6 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/service/DeviceService.cpp
 	${PROJECT_SOURCE_DIR}/service/GatewayService.cpp
 	${PROJECT_SOURCE_DIR}/service/LocationService.cpp
-	${PROJECT_SOURCE_DIR}/service/NotificationService.cpp
 	${PROJECT_SOURCE_DIR}/service/IdentityService.cpp
 	${PROJECT_SOURCE_DIR}/service/JSONPlaceDeserializer.cpp
 	${PROJECT_SOURCE_DIR}/service/JSONGatewayDeserializer.cpp
@@ -84,6 +83,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/dao/PocoDaoManager.cpp
 	${PROJECT_SOURCE_DIR}/rpc/GatewayRPC.cpp
 	${PROJECT_SOURCE_DIR}/rpc/FakeGatewayRPC.cpp
+	${PROJECT_SOURCE_DIR}/notification/NotificationDispatcher.cpp
 	${PROJECT_SOURCE_DIR}/notification/FirstLoginNotification.cpp
 	${PROJECT_SOURCE_DIR}/notification/NotificationObserver.cpp
 	${PROJECT_SOURCE_DIR}/notification/LoggingObserver.cpp
