@@ -22,7 +22,7 @@ public:
 	void handleUpdate(const std::string &gateid,
 			Poco::XML::Element *deviceNode);
 	void handleGet(const std::string &gateid,
-			Poco::XML::NodeList *deviceNode);
+			Poco::AutoPtr<Poco::XML::NodeList> deviceNode);
 	void handleGetAll(const std::string &gateid);
 	void handleGetNew(const std::string &gateid);
 

@@ -92,12 +92,12 @@ void DeviceXmlHandler::handleUpdate(const string &gateid,
 }
 
 void DeviceXmlHandler::handleGet(const string &gateid,
-		NodeList *nodes)
+		AutoPtr<NodeList> nodes)
 {
 	Gateway gateway(GatewayID::parse(gateid));
 	list<Device> devices;
 
-	if (nodes == NULL) {
+	if (nodes.isNull()) {
 		resultInvalidInput();
 		return;
 	}
