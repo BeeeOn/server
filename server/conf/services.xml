@@ -135,6 +135,8 @@
 			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
 		</instance>
 
+		<instance name="loggingObserver" class="BeeeOn::LoggingObserver" />
+
 		<instance name="fakeNotificationService"
 				class="BeeeOn::FakeNotificationService" />
 		<alias name="notificationService" ref="fakeNotificationService" />
