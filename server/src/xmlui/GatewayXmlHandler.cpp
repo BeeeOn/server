@@ -18,11 +18,9 @@ GatewayXmlHandler::GatewayXmlHandler(
 		const StreamSocket &socket,
 		const AutoPtr<Document> input,
 		ExpirableSession::Ptr session,
-		GatewayService &gatewayService,
-		PlaceService &placeService):
+		GatewayService &gatewayService):
 	AbstractXmlHandler("gates", socket, input, session),
-	m_gatewayService(gatewayService),
-	m_placeService(placeService)
+	m_gatewayService(gatewayService)
 {
 }
 
@@ -162,9 +160,6 @@ GatewayXmlHandlerResolver::GatewayXmlHandlerResolver():
 	injector<GatewayXmlHandlerResolver, GatewayService>(
 			"gatewayService",
 			&GatewayXmlHandlerResolver::setGatewayService);
-	injector<GatewayXmlHandlerResolver, PlaceService>(
-			"placeService",
-			&GatewayXmlHandlerResolver::setPlaceService);
 	injector<GatewayXmlHandlerResolver, SessionManager>(
 			"sessionManager",
 			&GatewayXmlHandlerResolver::setSessionManager);
@@ -202,7 +197,7 @@ XmlRequestHandler *GatewayXmlHandlerResolver::createHandler(
 			*m_sessionManager, input);
 	return new GatewayXmlHandler(
 			socket, input, session,
-			*m_gatewayService, *m_placeService);
+			*m_gatewayService);
 }
 
 BEEEON_OBJECT(GatewayXmlHandlerResolver,

@@ -2,7 +2,6 @@
 #define BEEEON_XMLUI_GATEWAY_XML_HANDLER_H
 
 #include "service/GatewayService.h"
-#include "service/PlaceService.h"
 #include "xmlui/AbstractXmlHandler.h"
 
 namespace BeeeOn {
@@ -13,8 +12,7 @@ public:
 	GatewayXmlHandler(const Poco::Net::StreamSocket &socket,
 			const Poco::AutoPtr<Poco::XML::Document> input,
 			BeeeOn::ExpirableSession::Ptr session,
-			BeeeOn::GatewayService &gatewayService,
-			BeeeOn::PlaceService &placeService);
+			BeeeOn::GatewayService &gatewayService);
 	void handleInputImpl() override;
 	void handleRegister(Poco::XML::Element *gatewayNode);
 	void handleUnregister(Poco::XML::Element *gatewayNode);
@@ -25,7 +23,6 @@ public:
 
 private:
 	GatewayService &m_gatewayService;
-	PlaceService &m_placeService;
 };
 
 class GatewayXmlHandlerResolver : public AbstractXmlHandlerResolver {
@@ -36,11 +33,6 @@ public:
 	XmlRequestHandler *createHandler(
 			const Poco::Net::StreamSocket &socket,
 			const Poco::AutoPtr<Poco::XML::Document> input);
-
-	void setPlaceService(BeeeOn::PlaceService *service)
-	{
-		m_placeService = service;
-	}
 
 	void setGatewayService(BeeeOn::GatewayService *service)
 	{
@@ -53,7 +45,6 @@ public:
 	}
 
 private:
-	BeeeOn::PlaceService *m_placeService;
 	BeeeOn::GatewayService *m_gatewayService;
 	BeeeOn::SessionManager *m_sessionManager;
 };
