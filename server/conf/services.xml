@@ -225,29 +225,10 @@
 			<set name="connectionString" text="${database.connector}" />
 			<set name="maxSessions" number="${database.pool}" />
 			<set name="initScript" text="${database.init}" />
-			<set name="dialect" ref="${database.dialect}Dialect" />
 		</instance>
 
 		<instance name="sqliteConnector"
 				class="BeeeOn::PocoSQLiteConnectorLoader" />
-
-		<instance name="sqliteDialect"
-				class="BeeeOn::CustomSQLDialect">
-			<set name="name" text="sqlite" />
-			<set name="type_uuid" text="varchar(36)" />
-			<set name="type_double" text="real" />
-			<set name="type_smallint" text="integer" />
-			<set name="type_int64" text="varchar(20)" />
-		</instance>
-
-		<instance name="postgreDialect"
-				class="BeeeOn::CustomSQLDialect">
-			<set name="name" text="postgre" />
-			<set name="type_uuid" text="uuid" />
-			<set name="type_double" text="double precision" />
-			<set name="type_smallint" text="smallint" />
-			<set name="type_int64" text="bigint" />
-		</instance>
 
 		<instance name="sqlPlaceDao" class="BeeeOn::PocoSQLPlaceDao">
 			<set name="daoManager" ref="pocoDaoManager" />

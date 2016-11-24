@@ -14,7 +14,6 @@ class Logger;
 namespace BeeeOn {
 
 class ConnectorLoader;
-class SQLDialect;
 
 class PocoDaoManager : public AbstractInjectorTarget {
 public:
@@ -26,7 +25,6 @@ public:
 	void setMaxSessions(const int sessions);
 	void setIdleTime(const int seconds);
 	void setInitScript(const std::string &script);
-	void setDialect(SQLDialect *dialect);
 
 	Poco::Data::SessionPool &pool();
 
@@ -42,7 +40,6 @@ private:
 	int m_maxSessions;
 	int m_idleTime;
 	std::string m_script;
-	SQLDialect *m_dialect;
 	Poco::SharedPtr<Poco::Data::SessionPool> m_pool;
 };
 
