@@ -29,8 +29,10 @@ OAuth2AuthProvider::OAuth2AuthProvider(const string &name):
 			(TextSetter) &OAuth2AuthProvider::setClientSecret);
 	textInjector("redirect_uri",
 			(TextSetter) &OAuth2AuthProvider::setRedirectURI);
-	textInjector("sslConfig",
-			(TextSetter) &OAuth2AuthProvider::setSSLConfig);
+	injector<OAuth2AuthProvider, SSLClient>(
+		"sslConfig",
+		&OAuth2AuthProvider::setSSLConfig
+	);
 }
 
 void OAuth2AuthProvider::initSSL()
