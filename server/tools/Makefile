@@ -11,7 +11,7 @@ CONF_XSLT += xsl/conf.dot.xsl
 
 CONF = ../conf/services.xml
 
-all: services.png home8-sqlite.sql home8-postgre.sql
+all: services.png home8-schema.png home8-sqlite.sql home8-postgre.sql
 
 services.png: $(CONF) $(CONF_XSLT)
 	$(XSLTP) xsl/conf.dot.xsl $< | $(DOT) -Tpng > $@
@@ -25,8 +25,13 @@ SCHEMA_XML = ../schema
 %-postgre.sql: $(SCHEMA_XML)/%.xml $(SCHEMA_XSL) xsl/schema.postgre.xsl
 	$(XSLTP) --stringparam codebase.version "$(GIT_ID)" xsl/schema.postgre.xsl $<
 
+%-schema.png: $(SCHEMA_XML)/%.xml $(CONF_XSLT) xsl/schema.dot.xsl
+	$(XSLTP) xsl/schema.dot.xsl $< | $(DOT) -Tpng > $@
+	@ls -lh $@
+
 clean:
 	$(RM) services.png
+	$(RM) home8-schema.png
 	$(RM) home8-sqlite.sql
 	$(RM) home8-postgre.sql
 
