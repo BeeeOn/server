@@ -170,7 +170,7 @@
 			<set name="client_secret" text="${google.client_secret}"/>
 			<set name="client_id" text="${google.client_id}"/>
 			<set name="redirect_uri" text="${google.redirect_uri}"/>
-			<set name="sslConfig" text="googleOAuthSSL"/>
+			<set name="sslConfig" ref="googleOAuthSSL"/>
 		</instance>
 
 		<instance name="pocoRandomProvider"
