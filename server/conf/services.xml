@@ -52,7 +52,6 @@
 		<instance name="gatewayXmlHandler"
 				class="BeeeOn::XmlUI::GatewayXmlHandlerResolver">
 			<set name="gatewayService" ref="gatewayService" />
-			<set name="placeService" ref="placeService" />
 			<set name="sessionManager" ref="sessionManager" />
 		</instance>
 
