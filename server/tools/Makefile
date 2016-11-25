@@ -1,6 +1,8 @@
 XSLTP = xsltproc
 DOT = dot
 
+GIT_ID = $(shell git describe --always --tags 2>/dev/null)
+
 XSLT += xsl/conf.group.xsl
 XSLT += xsl/conf.params.xsl
 XSLT += xsl/conf.properties.xsl
