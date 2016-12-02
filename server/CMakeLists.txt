@@ -19,3 +19,4 @@ add_definitions(-DGIT_ID="${GIT_ID}")
 
 add_subdirectory(src)
 add_subdirectory(test)
+add_subdirectory(schema)
