@@ -80,6 +80,13 @@ class TestGatewayGetUpdate(unittest.TestCase):
 		self.assertEqual("nan", response.root[0].get("latitude"))
 		self.assertEqual("nan", response.root[0].get("longitude"))
 		self.assertEqual("nan", response.root[0].get("altitude"))
+		self.assertEqual("0", response.root[0].get("devices"))
+		self.assertEqual("1", response.root[0].get("users"))
+		self.assertEqual("0", response.root[0].get("version"))
+		self.assertEqual("admin", response.root[0].get("permission"))
+		self.assertIsNotNone(response.root[0].get("owner"))
+		self.assertEqual("0", response.root[0].get("timezone"))
+		self.assertEqual("available", response.root[0].get("status"))
 
 	"""
 	Get the single implicit gateway by getall.
@@ -112,6 +119,18 @@ class TestGatewayGetUpdate(unittest.TestCase):
 		self.assertTrue(response.is_data())
 
 		self.assertEqual(2, len(response.root))
+
+		for gateway in response.root:
+			self.assertIsNotNone(gateway.get("latitude"))
+			self.assertIsNotNone(gateway.get("altitude"))
+			self.assertIsNotNone(gateway.get("longitude"))
+			self.assertIsNotNone(gateway.get("devices"))
+			self.assertIsNotNone(gateway.get("users"))
+			self.assertIsNotNone(gateway.get("version"))
+			self.assertIsNotNone(gateway.get("permission"))
+			self.assertIsNotNone(gateway.get("owner"))
+			self.assertIsNotNone(gateway.get("timezone"))
+			self.assertIsNotNone(gateway.get("status"))
 
 		if response.root[0].get("id") == config.tmp_gateway_id:
 			self.assertEqual("Another Gateway",
@@ -155,6 +174,12 @@ class TestGatewayGetUpdate(unittest.TestCase):
 		self.assertEqual(10, float(response.root[0].get("altitude")))
 		self.assertEqual(15, float(response.root[0].get("latitude")))
 		self.assertEqual(20, float(response.root[0].get("longitude")))
+		self.assertEqual("0", response.root[0].get("devices"))
+		self.assertEqual("1", response.root[0].get("users"))
+		self.assertEqual("0", response.root[0].get("version"))
+		self.assertEqual("admin", response.root[0].get("permission"))
+		self.assertEqual("0", response.root[0].get("timezone"))
+		self.assertEqual("available", response.root[0].get("status"))
 
 if __name__ == '__main__':
 	import sys
