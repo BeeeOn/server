@@ -7,7 +7,6 @@
 
 #include "dao/PocoDaoManager.h"
 #include "dao/ConnectorLoader.h"
-#include "dao/SQLDialect.h"
 #include "util/Template.h"
 #include "util/Occasionally.h"
 #include "Debug.h"
@@ -25,8 +24,7 @@ PocoDaoManager::PocoDaoManager():
 	m_connector(&ConnectorLoader::null()),
 	m_minSessions(1),
 	m_maxSessions(32),
-	m_idleTime(60),
-	m_dialect(NULL)
+	m_idleTime(60)
 {
 	injector<PocoDaoManager, ConnectorLoader>("connector",
 			&PocoDaoManager::setConnector);
@@ -40,8 +38,6 @@ PocoDaoManager::PocoDaoManager():
 			&PocoDaoManager::setIdleTime);
 	textInjector("initScript", (TextSetter)
 			&PocoDaoManager::setInitScript);
-	injector<PocoDaoManager, SQLDialect>("dialect",
-			&PocoDaoManager::setDialect);
 }
 
 void PocoDaoManager::setConnector(ConnectorLoader *connector)
@@ -88,11 +84,6 @@ void PocoDaoManager::setIdleTime(const int seconds)
 void PocoDaoManager::setInitScript(const std::string &script)
 {
 	m_script = script;
-}
-
-void PocoDaoManager::setDialect(SQLDialect *dialect)
-{
-	m_dialect = dialect;
 }
 
 Poco::Data::SessionPool &PocoDaoManager::pool()
@@ -163,13 +154,7 @@ void PocoDaoManager::injectionDone()
 	Template script(inputStream);
 	map<string, string> context;
 
-	if (!m_dialect) {
-		m_logger.warning("SQL dialect is not set",
-				__FILE__, __LINE__);
-	} else {
-		m_logger.notice("apply SQL dialect: " + m_dialect->name());
-		m_dialect->specifics(context);
-	}
+	// XXX: no context for now, this feature will be probably dropped
 
 	const string &text = script.apply(context);
 	m_logger.trace(text, __FILE__, __LINE__);
