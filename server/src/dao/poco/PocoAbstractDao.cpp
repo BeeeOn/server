@@ -67,7 +67,7 @@ void PocoAbstractDao::throwMissingId(const type_info &t)
 			+ BeeeOn::classDemangle(t.name()));
 }
 
-double PocoAbstractDao::nanWhenEmpty(const Poco::Dynamic::Var &v) const
+double PocoAbstractDao::nanWhenEmpty(const Poco::Dynamic::Var &v)
 {
 	return v.isEmpty()? (double) NAN : v.convert<double>();
 }

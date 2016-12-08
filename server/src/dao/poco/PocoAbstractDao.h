@@ -30,7 +30,7 @@ protected:
 			throwMissingId(typeid(&t));
 	}
 
-	double nanWhenEmpty(const Poco::Dynamic::Var &v) const;
+	static double nanWhenEmpty(const Poco::Dynamic::Var &v);
 
 	std::size_t execute(Poco::Data::Statement &sql);
 	void throwMissingId(const std::type_info &t);
