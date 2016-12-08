@@ -5,6 +5,8 @@ namespace Poco {
 namespace Data {
 
 class Session;
+class RecordSet;
+class Row;
 
 }
 }
@@ -19,6 +21,11 @@ public:
 	bool fetch(Place &place) override;
 	bool update(Place &place) override;
 	bool remove(const Place &place) override;
+
+	static bool parseSingle(Poco::Data::RecordSet &result,
+			Place &place, const std::string &prefix = "");
+	static bool parseSingle(Poco::Data::Row &result,
+			Place &place, const std::string &prefix = "");
 
 protected:
 	void create(Poco::Data::Session &session, Place &place);

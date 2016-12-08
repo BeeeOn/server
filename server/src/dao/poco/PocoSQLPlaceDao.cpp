@@ -2,6 +2,8 @@
 #include <Poco/Data/Session.h>
 #include <Poco/Data/SessionPool.h>
 #include <Poco/Data/Statement.h>
+#include <Poco/Data/RecordSet.h>
+#include <Poco/Data/Row.h>
 
 #include "dao/poco/PocoSQLPlaceDao.h"
 #include "dao/poco/PocoDaoManager.h"
@@ -59,19 +61,17 @@ bool PocoSQLPlaceDao::fetch(Session &session, Place &place)
 {
 	assureHasId(place);
 	string id(place.id().toString());
-	string name;
 
 	Statement sql(session);
 	sql << "SELECT name FROM places"
 		" WHERE id = :id",
-		use(id, "id"),
-		into(name);
+		use(id, "id");
 
 	if (execute(sql) == 0)
 		return false;
 
-	place.setName(name);
-	return true;
+	RecordSet result(sql);
+	return parseSingle(result, place);
 }
 
 bool PocoSQLPlaceDao::update(Session &session, Place &place)
@@ -101,4 +101,23 @@ bool PocoSQLPlaceDao::remove(Session &session, const Place &place)
 		use(id, "id");
 
 	return execute(sql) > 0;
+}
+
+bool PocoSQLPlaceDao::parseSingle(RecordSet &result,
+		Place &place, const string &prefix)
+{
+	if (result.begin() == result.end())
+		return false;
+
+	return parseSingle(*result.begin(), place, prefix);
+}
+
+bool PocoSQLPlaceDao::parseSingle(Row &result,
+		Place &place, const string &prefix)
+{
+	if (hasColumn(result, prefix + "id"))
+		place = Place(PlaceID::parse(result[prefix + "id"]));
+
+	place.setName(emptyWhenNull(result[prefix + "name"]));
+	return true;
 }
