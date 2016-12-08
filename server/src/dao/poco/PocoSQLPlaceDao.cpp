@@ -121,3 +121,15 @@ bool PocoSQLPlaceDao::parseSingle(Row &result,
 	place.setName(emptyWhenNull(result[prefix + "name"]));
 	return true;
 }
+
+bool PocoSQLPlaceDao::parseIfIDNotNull(Row &result,
+			Place &place, const string &prefix)
+{
+	const string id = emptyWhenNull(result[prefix + "id"]);
+	if (id.empty())
+		return false;
+
+	place = Place(PlaceID::parse(id));
+	place.setName(result[prefix + "name"]);
+	return true;
+}
