@@ -7,8 +7,8 @@
 #include <Poco/Data/RecordSet.h>
 
 #include "dao/RoleInPlaceDao.h"
-#include "dao/PocoAbstractDao.h"
-#include "dao/PocoDaoManager.h"
+#include "dao/poco/PocoAbstractDao.h"
+#include "dao/poco/PocoDaoManager.h"
 #include "model/User.h"
 #include "model/Place.h"
 

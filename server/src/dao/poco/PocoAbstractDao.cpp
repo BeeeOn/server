@@ -1,7 +1,7 @@
 #include <Poco/Exception.h>
 
-#include "dao/PocoAbstractDao.h"
-#include "dao/PocoDaoManager.h"
+#include "dao/poco/PocoAbstractDao.h"
+#include "dao/poco/PocoDaoManager.h"
 #include "Debug.h"
 
 using namespace std;

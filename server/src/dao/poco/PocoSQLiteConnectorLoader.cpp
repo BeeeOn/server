@@ -1,6 +1,6 @@
 #include <Poco/Data/SQLite/Connector.h>
 
-#include "dao/PocoSQLiteConnectorLoader.h"
+#include "dao/poco/PocoSQLiteConnectorLoader.h"
 
 using namespace std;
 using namespace BeeeOn;

@@ -9,8 +9,8 @@
 #include <Poco/Data/RowIterator.h>
 
 #include "dao/GatewayDao.h"
-#include "dao/PocoAbstractDao.h"
-#include "dao/PocoDaoManager.h"
+#include "dao/poco/PocoAbstractDao.h"
+#include "dao/poco/PocoDaoManager.h"
 
 using namespace std;
 using namespace Poco;

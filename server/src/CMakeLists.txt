@@ -46,14 +46,14 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/dao/IdentityDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/VerifiedIdentityDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/RoleInPlaceDao.cpp
-	${PROJECT_SOURCE_DIR}/dao/PocoAbstractDao.cpp
-	${PROJECT_SOURCE_DIR}/dao/PocoSQLPlaceDao.cpp
-	${PROJECT_SOURCE_DIR}/dao/PocoSQLUserDao.cpp
-	${PROJECT_SOURCE_DIR}/dao/PocoSQLVerifiedIdentityDao.cpp
-	${PROJECT_SOURCE_DIR}/dao/PocoSQLIdentityDao.cpp
-	${PROJECT_SOURCE_DIR}/dao/PocoSQLRoleInPlaceDao.cpp
-	${PROJECT_SOURCE_DIR}/dao/PocoSQLGatewayDao.cpp
-	${PROJECT_SOURCE_DIR}/dao/PocoSQLLocationDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoAbstractDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLPlaceDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLUserDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLVerifiedIdentityDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLIdentityDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLRoleInPlaceDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLGatewayDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLLocationDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/ConnectorLoader.cpp
 	${PROJECT_SOURCE_DIR}/service/PlaceService.cpp
 	${PROJECT_SOURCE_DIR}/service/UserService.cpp
@@ -79,7 +79,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/SSLFacility.cpp
 	${PROJECT_SOURCE_DIR}/util/SSLClient.cpp
 	${PROJECT_SOURCE_DIR}/util/SSLServer.cpp
-	${PROJECT_SOURCE_DIR}/dao/PocoDaoManager.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoDaoManager.cpp
 	${PROJECT_SOURCE_DIR}/rpc/GatewayRPC.cpp
 	${PROJECT_SOURCE_DIR}/rpc/FakeGatewayRPC.cpp
 	${PROJECT_SOURCE_DIR}/notification/NotificationDispatcher.cpp
@@ -102,7 +102,7 @@ add_executable(ui-server
 	ui/GatewayHandler.cpp
 	ui/LocationHandler.cpp
 	ui/UIMockInit.cpp
-	dao/PocoSQLiteConnectorLoader.cpp
+	dao/poco/PocoSQLiteConnectorLoader.cpp
 )
 
 add_executable(xmlui-server
@@ -119,7 +119,7 @@ add_executable(xmlui-server
 	xmlui/ProfileXmlHandler.cpp
 	xmlui/DeviceXmlHandler.cpp
 	ui/UIMockInit.cpp
-	dao/PocoSQLiteConnectorLoader.cpp
+	dao/poco/PocoSQLiteConnectorLoader.cpp
 )
 
 set(LIBS
