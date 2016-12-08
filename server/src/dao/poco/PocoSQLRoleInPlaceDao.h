@@ -5,6 +5,8 @@ namespace Poco {
 namespace Data {
 
 class Session;
+class RecordSet;
+class Row;
 
 }
 }
@@ -31,6 +33,11 @@ public:
 			std::vector<Place> &list,
 			const User &user,
 			const AccessLevel &atLeast = AccessLevel::any()) override;
+
+	static bool parseSingle(Poco::Data::RecordSet &result,
+			RoleInPlace &role, const std::string &prefix = "");
+	static bool parseSingle(Poco::Data::Row &result,
+			RoleInPlace &role, const std::string &prefix = "");
 
 protected:
 	void create(Poco::Data::Session &session, RoleInPlace &role);
