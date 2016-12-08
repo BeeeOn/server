@@ -6,8 +6,7 @@
 #include <Poco/Data/Row.h>
 #include <Poco/Data/RowIterator.h>
 
-#include "dao/LocationDao.h"
-#include "dao/poco/PocoAbstractDao.h"
+#include "dao/poco/PocoSQLLocationDao.h"
 #include "dao/poco/PocoDaoManager.h"
 
 using namespace std;
@@ -15,42 +14,6 @@ using namespace Poco;
 using namespace Poco::Data;
 using namespace Poco::Data::Keywords;
 using namespace BeeeOn;
-
-namespace BeeeOn {
-
-class PocoSQLLocationDao :
-		public PocoAbstractDao,
-		public LocationDao {
-public:
-	void create(Location &location) override;
-	bool fetch(Location &location) override;
-	bool fetchFrom(Location &location,
-			const Place &place) override;
-	bool fetchFrom(Location &location,
-			const Gateway &gateway) override;
-	void fetchBy(std::vector<Location> &locations,
-			const Place &place) override;
-	void fetchBy(std::vector<Location> &locations,
-			const Gateway &gateway) override;
-	bool update(Location &location) override;
-	bool remove(const Location &location) override;
-
-protected:
-	void create(Session &session, Location &location);
-	bool fetch(Session &session, Location &location);
-	bool fetchFrom(Session &session, Location &location,
-			const Place &place);
-	bool fetchFrom(Session &session, Location &location,
-			const Gateway &gateway);
-	void fetchBy(Session &session, std::vector<Location> &locations,
-			const Place &place);
-	void fetchBy(Session &session, std::vector<Location> &locations,
-			const Gateway &gateway);
-	bool update(Session &session, Location &location);
-	bool remove(Session &session, const Location &location);
-};
-
-}
 
 BEEEON_OBJECT(PocoSQLLocationDao, BeeeOn::PocoSQLLocationDao)
 
