@@ -5,6 +5,8 @@ namespace Poco {
 namespace Data {
 
 class Session;
+class RecordSet;
+class Row;
 
 }
 }
@@ -25,6 +27,11 @@ public:
 	void fetchAccessible(
 			std::vector<Gateway> &gateways,
 			const User &user) override;
+
+	static bool parseSingle(Poco::Data::RecordSet &result,
+			Gateway &gateway, const std::string &prefix = "");
+	static bool parseSingle(Poco::Data::Row &result,
+			Gateway &gateway, const std::string &prefix = "");
 
 protected:
 	bool insert(Poco::Data::Session &session, Gateway &gateway);
