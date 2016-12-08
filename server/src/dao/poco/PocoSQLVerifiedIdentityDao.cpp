@@ -6,8 +6,7 @@
 #include <Poco/Data/Row.h>
 #include <Poco/Data/RecordSet.h>
 
-#include "dao/VerifiedIdentityDao.h"
-#include "dao/poco/PocoAbstractDao.h"
+#include "dao/poco/PocoSQLVerifiedIdentityDao.h"
 #include "dao/poco/PocoDaoManager.h"
 
 using namespace std;
@@ -15,37 +14,6 @@ using namespace Poco;
 using namespace Poco::Data;
 using namespace Poco::Data::Keywords;
 using namespace BeeeOn;
-
-namespace BeeeOn {
-
-class PocoSQLVerifiedIdentityDao :
-		public PocoAbstractDao,
-		public VerifiedIdentityDao {
-public:
-	void create(VerifiedIdentity &identity) override;
-	bool fetch(VerifiedIdentity &identity) override;
-	bool fetchBy(VerifiedIdentity &identity,
-			const std::string email,
-			const std::string provider) override;
-	void fetchBy(std::vector<VerifiedIdentity> &identities,
-			const std::string email) override;
-	bool update(VerifiedIdentity &identity) override;
-	bool remove(const VerifiedIdentity &identity) override;
-
-protected:
-	void create(Session &session, VerifiedIdentity &identity);
-	bool fetch(Session &session, VerifiedIdentity &identity);
-	bool fetchBy(Session &session, VerifiedIdentity &identity,
-			const std::string &email,
-			const std::string &provider);
-	void fetchBy(Session &session, 
-			std::vector<VerifiedIdentity> &identities,
-			const std::string &email);
-	bool update(Session &session, VerifiedIdentity &identity);
-	bool remove(Session &session, const VerifiedIdentity &identity);
-};
-
-}
 
 BEEEON_OBJECT(PocoSQLVerifiedIdentityDao, BeeeOn::PocoSQLVerifiedIdentityDao)
 
