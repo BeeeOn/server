@@ -126,3 +126,15 @@ bool PocoSQLIdentityDao::parseSingle(Row &result,
 	identity.setEmail(result[prefix + "email"]);
 	return true;
 }
+
+bool PocoSQLIdentityDao::parseIfIDNotNull(Row &result,
+			Identity &identity, const string &prefix)
+{
+	const string id = emptyWhenNull(result[prefix + "id"]);
+	if (id.empty())
+		return false;
+
+	identity = Identity(IdentityID::parse(id));
+	identity.setEmail(result[prefix + "email"]);
+	return true;
+}
