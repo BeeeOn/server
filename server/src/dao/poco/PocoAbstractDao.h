@@ -32,6 +32,7 @@ protected:
 	}
 
 	static double nanWhenEmpty(const Poco::Dynamic::Var &v);
+	static std::string emptyWhenNull(const Poco::Dynamic::Var &v);
 	static bool hasColumn(const Poco::Data::RecordSet &result, const std::string &name);
 	static bool hasColumn(const Poco::Data::Row &result, const std::string &name);
 

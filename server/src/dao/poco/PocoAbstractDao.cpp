@@ -72,6 +72,11 @@ double PocoAbstractDao::nanWhenEmpty(const Poco::Dynamic::Var &v)
 	return v.isEmpty()? (double) NAN : v.convert<double>();
 }
 
+std::string PocoAbstractDao::emptyWhenNull(const Poco::Dynamic::Var &v)
+{
+	return v.isEmpty()? "" : v.toString();
+}
+
 bool PocoAbstractDao::hasColumn(const RecordSet &result, const std::string &name)
 {
 	const size_t count = result.columnCount();
