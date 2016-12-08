@@ -5,6 +5,8 @@ namespace Poco {
 namespace Data {
 
 class Session;
+class RecordSet;
+class Row;
 
 }
 }
@@ -24,6 +26,11 @@ public:
 			const std::string email) override;
 	bool update(VerifiedIdentity &identity) override;
 	bool remove(const VerifiedIdentity &identity) override;
+
+	static bool parseSingle(Poco::Data::RecordSet &result,
+			VerifiedIdentity &identity, const std::string &prefix = "");
+	static bool parseSingle(Poco::Data::Row &result,
+			VerifiedIdentity &identity, const std::string &prefix = "");
 
 protected:
 	void create(Poco::Data::Session &session, VerifiedIdentity &identity);
