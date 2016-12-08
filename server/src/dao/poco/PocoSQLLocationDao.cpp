@@ -7,6 +7,7 @@
 #include <Poco/Data/RowIterator.h>
 
 #include "dao/poco/PocoSQLLocationDao.h"
+#include "dao/poco/PocoSQLPlaceDao.h"
 #include "dao/poco/PocoDaoManager.h"
 
 using namespace std;
@@ -94,9 +95,6 @@ bool PocoSQLLocationDao::fetch(Session &session,
 {
 	assureHasId(location);
 	string id(location.id().toString());
-	string name;
-	string placeName;
-	string placeID;
 
 	Statement sql(session);
 	sql << "SELECT"
@@ -106,20 +104,13 @@ bool PocoSQLLocationDao::fetch(Session &session,
 		" FROM locations AS l"
 		" JOIN places AS p ON l.place_id = p.id"
 		" WHERE l.id = :id",
-		use(id, "id"),
-		into(name),
-		into(placeName),
-		into(placeID);
+		use(id, "id");
 
 	if (execute(sql) == 0)
 		return false;
 
-	Place place(PlaceID::parse(placeID));
-	place.setName(placeName);
-
-	location.setName(name);
-	location.setPlace(place);
-	return true;
+	RecordSet result(sql);
+	return parseSingle(result, location);
 }
 
 bool PocoSQLLocationDao::fetchFrom(Session &session,
@@ -130,30 +121,23 @@ bool PocoSQLLocationDao::fetchFrom(Session &session,
 
 	string id(location.id().toString());
 	string placeID(place.id().toString());
-	string name;
-	string placeName;
 
 	Statement sql(session);
 	sql << "SELECT"
 		" l.name AS name,"
-		" p.name AS place_name"
+		" p.name AS place_name,"
+		" l.place_id AS place_id"
 		" FROM locations AS l"
 		" JOIN places AS p ON l.place_id = p.id"
 		" WHERE l.id = :id AND p.id = :place_id",
 		use(id, "id"),
-		use(placeID, "place_id"),
-		into(name),
-		into(placeName);
+		use(placeID, "place_id");
 
 	if (execute(sql) == 0)
 		return false;
 
-	Place freshPlace(PlaceID::parse(placeID));
-	freshPlace.setName(placeName);
-
-	location.setName(name);
-	location.setPlace(freshPlace);
-	return true;
+	RecordSet result(sql);
+	return parseSingle(result, location);
 }
 
 bool PocoSQLLocationDao::fetchFrom(Session &session,
@@ -164,9 +148,6 @@ bool PocoSQLLocationDao::fetchFrom(Session &session,
 
 	string id(location.id().toString());
 	string gatewayID(gateway.id().toString());
-	string name;
-	string placeID;
-	string placeName;
 
 	Statement sql(session);
 	sql << "SELECT"
@@ -178,20 +159,13 @@ bool PocoSQLLocationDao::fetchFrom(Session &session,
 		" JOIN gateways AS g ON g.place_id = p.id"
 		" WHERE l.id = :id AND g.id = :gateway_id",
 		use(id, "id"),
-		use(gatewayID, "gateway_id"),
-		into(name),
-		into(placeName),
-		into(placeID);
+		use(gatewayID, "gateway_id");
 
 	if (execute(sql) == 0)
 		return false;
 
-	Place place(PlaceID::parse(placeID));
-	place.setName(placeName);
-
-	location.setName(name);
-	location.setPlace(place);
-	return true;
+	RecordSet result(sql);
+	return parseSingle(result, location);
 }
 
 void PocoSQLLocationDao::fetchBy(Session &session,
@@ -204,9 +178,10 @@ void PocoSQLLocationDao::fetchBy(Session &session,
 
 	Statement sql(session);
 	sql << "SELECT"
-		" l.id,"
-		" l.name,"
-		" p.name"
+		" l.id AS id,"
+		" l.name AS name,"
+		" l.place_id AS place_id,"
+		" p.name AS place_name"
 		" FROM locations AS l"
 		" JOIN places AS p ON p.id = l.place_id"
 		" WHERE place_id = :place_id",
@@ -216,12 +191,13 @@ void PocoSQLLocationDao::fetchBy(Session &session,
 	RecordSet result(sql);
 
 	for (auto row : result) {
-		Place freshPlace(place.id());
-		freshPlace.setName(row.get(2));
+		Location location;
 
-		Location location(LocationID::parse(row.get(0)));
-		location.setName(row.get(1));
-		location.setPlace(freshPlace);
+		if (!parseSingle(row, location)) {
+			m_logger.warning("skipping malformed location, query result: "
+					+ row.valuesToString(), __FILE__, __LINE__)
+			continue;
+		}
 
 		locations.push_back(location);
 	}
@@ -237,10 +213,10 @@ void PocoSQLLocationDao::fetchBy(Session &session,
 
 	Statement sql(session);
 	sql << "SELECT"
-		" l.id,"
-		" l.name,"
-		" l.place_id,"
-		" p.name"
+		" l.id as id,"
+		" l.name as name,"
+		" l.place_id as place_id,"
+		" p.name as place_name"
 		" FROM locations AS l"
 		" JOIN gateways AS g ON g.place_id = l.place_id"
 		" JOIN places AS p ON p.id = l.place_id"
@@ -251,12 +227,13 @@ void PocoSQLLocationDao::fetchBy(Session &session,
 	RecordSet result(sql);
 
 	for (auto row : result) {
-		Location location(LocationID::parse(row.get(0)));
-		location.setName(row.get(1));
+		Location location;
 
-		Place place(PlaceID::parse(row.get(2)));
-		place.setName(row.get(3));
-		location.setPlace(place);
+		if (!parseSingle(row, location)) {
+			m_logger.warning("skipping malformed location, query result: "
+					+ row.valuesToString(), __FILE__, __LINE__)
+			continue;
+		}
 
 		locations.push_back(location);
 	}
@@ -293,4 +270,28 @@ bool PocoSQLLocationDao::remove(Session &session, const Location &location)
 		use(id, "id");
 
 	return execute(sql) > 0;
+}
+
+bool PocoSQLLocationDao::parseSingle(RecordSet &result, Location &location,
+		const string &prefix)
+{
+	if (result.begin() == result.end())
+		return false;
+
+	return parseSingle(*result.begin(), location, prefix);
+}
+
+bool PocoSQLLocationDao::parseSingle(Row &result, Location &location,
+		const string &prefix)
+{
+	if (hasColumn(result, prefix + "id"))
+		location = Location(LocationID::parse(result[prefix + "id"]));
+
+	location.setName(result[prefix + "name"]);
+
+	Place place;
+	if (PocoSQLPlaceDao::parseIfIDNotNull(result, place, prefix + "place_"))
+		location.setPlace(place);
+
+	return true;
 }

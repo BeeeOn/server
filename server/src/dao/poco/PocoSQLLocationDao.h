@@ -5,6 +5,8 @@ namespace Poco {
 namespace Data {
 
 class Session;
+class RecordSet;
+class Row;
 
 }
 }
@@ -27,6 +29,11 @@ public:
 			const Gateway &gateway) override;
 	bool update(Location &location) override;
 	bool remove(const Location &location) override;
+
+	static bool parseSingle(Poco::Data::RecordSet &result,
+			Location &location, const std::string &prefix = "");
+	static bool parseSingle(Poco::Data::Row &result,
+			Location &location, const std::string &prefix = "");
 
 protected:
 	void create(Poco::Data::Session &session, Location &location);
