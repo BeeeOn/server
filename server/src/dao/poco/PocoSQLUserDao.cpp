@@ -49,20 +49,36 @@ bool PocoSQLUserDao::fetch(Session &session, User &user)
 {
 	assureHasId(user);
 	string id(user.id().toString());
-	string firstName;
-	string lastName;
 
 	Statement sql(session);
 	sql << "SELECT first_name, last_name FROM users"
 		" WHERE id = :id",
-		use(id, "id"),
-		into(firstName),
-		into(lastName);
+		use(id, "id");
 
 	if (execute(sql) == 0)
 		return false;
 
-	user.setFirstName(firstName);
-	user.setLastName(lastName);
+	RecordSet result(sql);
+	return parseSingle(result, user);
+}
+
+bool PocoSQLUserDao::parseSingle(RecordSet &result,
+		User &user, const string &prefix)
+{
+	if (result.begin() == result.end())
+		return false;
+
+	return parseSingle(*result.begin(), user, prefix);
+}
+
+bool PocoSQLUserDao::parseSingle(Row &result,
+		User &user, const string &prefix)
+{
+	if (hasColumn(result, prefix + "id"))
+		user = User(UserID::parse(result[prefix + "id"]));
+
+	user.setFirstName(result[prefix + "first_name"]);
+	user.setLastName(result[prefix + "last_name"]);
+
 	return true;
 }
