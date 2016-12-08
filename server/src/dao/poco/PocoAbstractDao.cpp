@@ -71,3 +71,27 @@ double PocoAbstractDao::nanWhenEmpty(const Poco::Dynamic::Var &v)
 {
 	return v.isEmpty()? (double) NAN : v.convert<double>();
 }
+
+bool PocoAbstractDao::hasColumn(const RecordSet &result, const std::string &name)
+{
+	const size_t count = result.columnCount();
+
+	for (size_t i = 0; i < count; ++i) {
+		if (result.columnName(i) == name)
+			return true;
+	}
+
+	return false;
+}
+
+bool PocoAbstractDao::hasColumn(const Row &result, const std::string &name)
+{
+	const Row::NameVecPtr columns = result.names();
+
+	for (auto column : *columns) {
+		if (name == column)
+			return true;
+	}
+
+	return false;
+}
