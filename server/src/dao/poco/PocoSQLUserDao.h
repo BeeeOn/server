@@ -24,6 +24,8 @@ public:
 			User &user, const std::string &prefix = "");
 	static bool parseSingle(Poco::Data::Row &result,
 			User &user, const std::string &prefix = "");
+	static bool parseIfIDNotNull(Poco::Data::Row &result,
+			User &user, const std::string &prefix = "");
 
 protected:
 	void create(Poco::Data::Session &session, User &user);

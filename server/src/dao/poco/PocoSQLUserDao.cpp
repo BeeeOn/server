@@ -82,3 +82,16 @@ bool PocoSQLUserDao::parseSingle(Row &result,
 
 	return true;
 }
+
+bool PocoSQLUserDao::parseIfIDNotNull(Row &result,
+			User &user, const string &prefix)
+{
+	const string id = emptyWhenNull(result[prefix + "id"]);
+	if (id.empty())
+		return false;
+
+	user = User(UserID::parse(id));
+	user.setFirstName(result[prefix + "first_name"]);
+	user.setLastName(result[prefix + "last_name"]);
+	return true;
+}
