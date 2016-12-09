@@ -67,7 +67,36 @@ void PocoAbstractDao::throwMissingId(const type_info &t)
 			+ BeeeOn::classDemangle(t.name()));
 }
 
-double PocoAbstractDao::nanWhenEmpty(const Poco::Dynamic::Var &v) const
+double PocoAbstractDao::nanWhenEmpty(const Poco::Dynamic::Var &v)
 {
 	return v.isEmpty()? (double) NAN : v.convert<double>();
+}
+
+std::string PocoAbstractDao::emptyWhenNull(const Poco::Dynamic::Var &v)
+{
+	return v.isEmpty()? "" : v.toString();
+}
+
+bool PocoAbstractDao::hasColumn(const RecordSet &result, const std::string &name)
+{
+	const size_t count = result.columnCount();
+
+	for (size_t i = 0; i < count; ++i) {
+		if (result.columnName(i) == name)
+			return true;
+	}
+
+	return false;
+}
+
+bool PocoAbstractDao::hasColumn(const Row &result, const std::string &name)
+{
+	const Row::NameVecPtr columns = result.names();
+
+	for (auto column : *columns) {
+		if (name == column)
+			return true;
+	}
+
+	return false;
 }

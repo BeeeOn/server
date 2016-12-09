@@ -1,10 +1,13 @@
 #include "dao/LocationDao.h"
 #include "dao/poco/PocoAbstractDao.h"
+#include "Debug.h"
 
 namespace Poco {
 namespace Data {
 
 class Session;
+class RecordSet;
+class Row;
 
 }
 }
@@ -27,6 +30,28 @@ public:
 			const Gateway &gateway) override;
 	bool update(Location &location) override;
 	bool remove(const Location &location) override;
+
+	static bool parseSingle(Poco::Data::RecordSet &result,
+			Location &location, const std::string &prefix = "");
+	static bool parseSingle(Poco::Data::Row &result,
+			Location &location, const std::string &prefix = "");
+
+	template <typename C>
+	static void parseMany(Poco::Data::RecordSet &result, C &collection)
+	{
+		for (auto row : result) {
+			Location location;
+
+			if (!parseSingle(row, location)) {
+				LOGGER_FUNC(__func__)
+					.warning("skipping malformed data, query result: "
+						+ row.valuesToString(), __FILE__, __LINE__);
+				continue;
+			}
+
+			collection.push_back(location);
+		}
+	}
 
 protected:
 	void create(Poco::Data::Session &session, Location &location);

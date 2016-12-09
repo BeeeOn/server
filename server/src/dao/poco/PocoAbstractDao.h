@@ -6,6 +6,7 @@
 #include <Poco/Logger.h>
 #include <Poco/Dynamic/Var.h>
 #include <Poco/Data/Statement.h>
+#include <Poco/Data/RecordSet.h>
 
 #include "di/InjectorTarget.h"
 
@@ -30,7 +31,10 @@ protected:
 			throwMissingId(typeid(&t));
 	}
 
-	double nanWhenEmpty(const Poco::Dynamic::Var &v) const;
+	static double nanWhenEmpty(const Poco::Dynamic::Var &v);
+	static std::string emptyWhenNull(const Poco::Dynamic::Var &v);
+	static bool hasColumn(const Poco::Data::RecordSet &result, const std::string &name);
+	static bool hasColumn(const Poco::Data::Row &result, const std::string &name);
 
 	std::size_t execute(Poco::Data::Statement &sql);
 	void throwMissingId(const std::type_info &t);

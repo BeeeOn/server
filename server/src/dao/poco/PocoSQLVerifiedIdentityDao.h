@@ -1,10 +1,13 @@
 #include "dao/VerifiedIdentityDao.h"
 #include "dao/poco/PocoAbstractDao.h"
+#include "Debug.h"
 
 namespace Poco {
 namespace Data {
 
 class Session;
+class RecordSet;
+class Row;
 
 }
 }
@@ -24,6 +27,28 @@ public:
 			const std::string email) override;
 	bool update(VerifiedIdentity &identity) override;
 	bool remove(const VerifiedIdentity &identity) override;
+
+	static bool parseSingle(Poco::Data::RecordSet &result,
+			VerifiedIdentity &identity, const std::string &prefix = "");
+	static bool parseSingle(Poco::Data::Row &result,
+			VerifiedIdentity &identity, const std::string &prefix = "");
+
+	template <typename C>
+	static void parseMany(Poco::Data::RecordSet &result, C &collection)
+	{
+		for (auto row : result) {
+			VerifiedIdentity identity;
+
+			if (!parseSingle(row, identity)) {
+				LOGGER_FUNC(__func__
+					).warning("skipping malformed data, query result: "
+						+ row.valuesToString(), __FILE__, __LINE__);
+				continue;
+			}
+
+			collection.push_back(identity);
+		}
+	}
 
 protected:
 	void create(Poco::Data::Session &session, VerifiedIdentity &identity);

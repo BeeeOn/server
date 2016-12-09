@@ -9,6 +9,7 @@
 #include <Poco/Data/RowIterator.h>
 
 #include "dao/poco/PocoSQLGatewayDao.h"
+#include "dao/poco/PocoSQLPlaceDao.h"
 #include "dao/poco/PocoDaoManager.h"
 
 using namespace std;
@@ -126,48 +127,25 @@ bool PocoSQLGatewayDao::fetch(Session &session, Gateway &gateway)
 	assureHasId(gateway);
 
 	string id(gateway.id().toString());
-	string name;
-	Nullable<string> placeID;
-	Nullable<string> placeName;
-	Nullable<double> altitude;
-	Nullable<double> latitude;
-	Nullable<double> longitude;
 
 	Statement sql(session);
 	sql << "SELECT"
-		" g.name,"
-		" g.altitude,"
-		" g.latitude,"
-		" g.longitude,"
-		" p.id,"
-		" p.name"
+		" g.name AS name,"
+		" g.altitude AS altitude,"
+		" g.latitude AS latitude,"
+		" g.longitude AS longitude,"
+		" p.id AS place_id,"
+		" p.name AS place_name"
 		" FROM gateways AS g"
 		" LEFT JOIN places AS p ON g.place_id = p.id"
 		" WHERE g.id = :id",
-		use(id, "id"),
-		into(name),
-		into(altitude),
-		into(latitude),
-		into(longitude),
-		into(placeID),
-		into(placeName);
+		use(id, "id");
 
 	if (execute(sql) == 0)
 		return false;
 
-	if (!placeID.isNull()) {
-		Place place(PlaceID::parse(placeID));
-		place.setName(placeName);
-
-		gateway.setPlace(place);
-	}
-
-	gateway.setName(name);
-	gateway.setAltitude(altitude.isNull()? NAN : altitude.value());
-	gateway.setLatitude(latitude.isNull()? NAN : latitude.value());
-	gateway.setLongitude(longitude.isNull()? NAN : longitude.value());
-
-	return true;
+	RecordSet result(sql);
+	return parseSingle(result, gateway);
 }
 
 bool PocoSQLGatewayDao::update(Session &session, Gateway &gateway)
@@ -293,43 +271,26 @@ bool PocoSQLGatewayDao::fetchFromPlace(Session &session,
 
 	string id(gateway.id().toString());
 	string placeID(place.id().toString());
-	string name;
-	Nullable<double> altitude;
-	Nullable<double> latitude;
-	Nullable<double> longitude;
-	string placeName;
 
 	Statement sql(session);
 	sql << "SELECT"
-		" g.name,"
-		" g.altitude,"
-		" g.latitude,"
-		" g.longitude,"
-		" p.name"
+		" g.name AS name,"
+		" g.altitude AS altitude,"
+		" g.latitude AS latitude,"
+		" g.longitude AS longitude,"
+		" g.place_id AS place_id,"
+		" p.name AS place_name"
 		" FROM gateways AS g"
 		" JOIN places AS p ON g.place_id = p.id"
 		" WHERE g.id = :id AND g.place_id = :place_id",
 		use(id, "id"),
-		use(placeID, "place_id"),
-		into(name),
-		into(altitude),
-		into(latitude),
-		into(longitude),
-		into(placeName);
+		use(placeID, "place_id");
 
 	if (execute(sql) == 0)
 		return false;
 
-	Place freshPlace(PlaceID::parse(placeID));
-	freshPlace.setName(placeName);
-	gateway.setPlace(place);
-
-	gateway.setName(name);
-	gateway.setAltitude(altitude.isNull()? NAN : altitude.value());
-	gateway.setLatitude(latitude.isNull()? NAN : latitude.value());
-	gateway.setLongitude(longitude.isNull()? NAN : longitude.value());
-
-	return true;
+	RecordSet result(sql);
+	return parseSingle(result, gateway);
 }
 
 void PocoSQLGatewayDao::fetchAccessible(Session &session,
@@ -342,13 +303,13 @@ void PocoSQLGatewayDao::fetchAccessible(Session &session,
 
 	Statement sql(session);
 	sql << "SELECT"
-		" DISTINCT g.id,"
-		" g.name,"
-		" g.altitude,"
-		" g.latitude,"
-		" g.longitude,"
-		" p.id,"
-		" p.name"
+		" DISTINCT g.id AS id,"
+		" g.name AS name,"
+		" g.altitude AS altitude,"
+		" g.latitude AS latitude,"
+		" g.longitude AS longitude,"
+		" p.id AS place_id,"
+		" p.name AS place_name"
 		" FROM gateways AS g"
 		" JOIN places AS p ON g.place_id = p.id"
 		" JOIN roles_in_place AS r ON g.place_id = r.place_id"
@@ -359,18 +320,32 @@ void PocoSQLGatewayDao::fetchAccessible(Session &session,
 
 	execute(sql);
 	RecordSet result(sql);
+	parseMany(result, gateways);
+}
 
-	for (auto row : result) {
-		Place place(PlaceID::parse(row.get(5)));
-		place.setName(row.get(6));
+bool PocoSQLGatewayDao::parseSingle(RecordSet &result, Gateway &gateway,
+		const string &prefix)
+{
+	if (result.begin() == result.end())
+		return false;
 
-		Gateway gateway(GatewayID::parse(row.get(0)));
-		gateway.setName(row.get(1));
-		gateway.setAltitude(nanWhenEmpty(row.get(2)));
-		gateway.setLatitude(nanWhenEmpty(row.get(3)));
-		gateway.setLongitude(nanWhenEmpty(row.get(4)));
+	return parseSingle(*result.begin(), gateway, prefix);
+}
+
+bool PocoSQLGatewayDao::parseSingle(Row &result, Gateway &gateway,
+		const string &prefix)
+{
+	if (hasColumn(result, prefix + "id"))
+		gateway = Gateway(GatewayID::parse(result[prefix + "id"]));
+
+	gateway.setName(emptyWhenNull(result[prefix + "name"]));
+	gateway.setAltitude(nanWhenEmpty(result[prefix + "altitude"]));
+	gateway.setLatitude(nanWhenEmpty(result[prefix + "latitude"]));
+	gateway.setLongitude(nanWhenEmpty(result[prefix + "longitude"]));
+
+	Place place;
+	if (PocoSQLPlaceDao::parseIfIDNotNull(result, place, prefix + "place_"))
 		gateway.setPlace(place);
 
-		gateways.push_back(gateway);
-	}
+	return true;
 }

@@ -7,6 +7,8 @@
 #include <Poco/Data/RecordSet.h>
 
 #include "dao/poco/PocoSQLRoleInPlaceDao.h"
+#include "dao/poco/PocoSQLPlaceDao.h"
+#include "dao/poco/PocoSQLIdentityDao.h"
 #include "dao/poco/PocoDaoManager.h"
 #include "model/User.h"
 #include "model/Place.h"
@@ -104,44 +106,25 @@ bool PocoSQLRoleInPlaceDao::fetch(Session &session, RoleInPlace &role)
 	assureHasId(role);
 
 	string id(role.id().toString());
-	string placeID;
-	string placeName;
-	string identityID;
-	string email;
-	unsigned int level;
 
 	Statement sql(session);
 	sql << "SELECT"
-		" r.place_id,"
-		" r.identity_id,"
-		" r.level,"
-		" i.email,"
-		" p.name"
+		" r.place_id AS place_id,"
+		" r.identity_id AS identity_id,"
+		" r.level AS level,"
+		" i.email AS identity_email,"
+		" p.name AS place_name"
 		" FROM roles_in_place AS r"
 		" JOIN identities AS i ON r.identity_id = i.id"
 		" JOIN places AS p ON r.place_id = p.id"
 		" WHERE id = :id",
-		use(id, "id"),
-		into(placeID),
-		into(identityID),
-		into(level),
-		into(email),
-		into(placeName);
+		use(id, "id");
 
 	if (execute(sql) == 0)
 		return false;
 
-	Place place(PlaceID::parse(placeID));
-	place.setName(placeName);
-
-	Identity identity(IdentityID::parse(identityID));
-	identity.setEmail(email);
-
-	role.setPlace(place);
-	role.setIdentity(identity);
-	role.setLevel(level);
-
-	return true;
+	RecordSet result(sql);
+	return parseSingle(result, role);
 }
 
 void PocoSQLRoleInPlaceDao::fetchBy(Session &session,
@@ -154,11 +137,12 @@ void PocoSQLRoleInPlaceDao::fetchBy(Session &session,
 
 	Statement sql(session);
 	sql << "SELECT"
-		" r.id,"
-		" r.identity_id,"
-		" r.level,"
-		" i.email,"
-		" p.name"
+		" r.id AS id,"
+		" r.identity_id AS identity_id,"
+		" r.level AS level,"
+		" i.email AS identity_email,"
+		" r.place_id AS place_id,"
+		" p.name AS place_name"
 		" FROM roles_in_place AS r"
 		" JOIN identities AS i ON r.identity_id = i.id"
 		" JOIN places AS p ON r.place_id = p.id"
@@ -167,21 +151,7 @@ void PocoSQLRoleInPlaceDao::fetchBy(Session &session,
 
 	execute(sql);
 	RecordSet result(sql);
-
-	for (auto row : result) {
-		Place freshPlace(place.id());
-		freshPlace.setName(row.get(4));
-
-		Identity identity(IdentityID::parse(row.get(1)));
-		identity.setEmail(row.get(3));
-		
-		RoleInPlace role(RoleInPlaceID::parse(row.get(0)));
-		role.setPlace(place);
-		role.setIdentity(identity);
-		role.setLevel(AccessLevel((int) row.get(2)));
-
-		roles.push_back(role);
-	}
+	parseMany(result, roles);
 }
 
 bool PocoSQLRoleInPlaceDao::hasUsersExcept(
@@ -280,8 +250,8 @@ void PocoSQLRoleInPlaceDao::fetchAccessiblePlaces(
 
 	Statement sql(session);
 	sql << "SELECT"
-		" DISTINCT p.id,"
-		" p.name"
+		" DISTINCT p.id AS id,"
+		" p.name AS name"
 		" FROM places AS p"
 		" JOIN roles_in_place AS r ON r.place_id = p.id"
 		" JOIN verified_identities AS v"
@@ -292,11 +262,37 @@ void PocoSQLRoleInPlaceDao::fetchAccessiblePlaces(
 
 	execute(sql);
 	RecordSet result(sql);
+	PocoSQLPlaceDao::parseMany(result, list);
+}
 
-	for (auto row : result) {
-		Place place(PlaceID::parse(row.get(0)));
-		place.setName(row.get(1));
+bool PocoSQLRoleInPlaceDao::parseSingle(RecordSet &result,
+		RoleInPlace &role, const string &prefix)
+{
+	if (result.begin() == result.end())
+		return false;
 
-		list.push_back(place);
-	}
+	return parseSingle(*result.begin(), role, prefix);
+}
+
+bool PocoSQLRoleInPlaceDao::parseSingle(Row &result,
+		RoleInPlace &role, const string &prefix)
+{
+	if (hasColumn(result, prefix + "id"))
+		role = RoleInPlace(RoleInPlaceID::parse(result[prefix + "id"]));
+
+	role.setLevel(AccessLevel(result[prefix + "level"].convert<unsigned int>()));
+
+	Place place;
+	if (!PocoSQLPlaceDao::parseIfIDNotNull(result, place, prefix + "place_"))
+		throw IllegalStateException("place is incomplete in query request");
+
+	role.setPlace(place);
+
+	Identity identity;
+	if (!PocoSQLIdentityDao::parseIfIDNotNull(result, identity, prefix + "identity_"))
+		throw IllegalStateException("identity is incomplete in query request");
+
+	role.setIdentity(identity);
+
+	return true;
 }

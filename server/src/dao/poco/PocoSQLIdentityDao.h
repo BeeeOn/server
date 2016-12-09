@@ -5,6 +5,8 @@ namespace Poco {
 namespace Data {
 
 class Session;
+class RecordSet;
+class Row;
 
 }
 }
@@ -20,6 +22,13 @@ public:
 	bool fetchBy(Identity &identity,
 			const std::string &email) override;
 	bool remove(const Identity &identity) override;
+
+	static bool parseSingle(Poco::Data::RecordSet &result,
+			Identity &identity, const std::string &prefix = "");
+	static bool parseSingle(Poco::Data::Row &result,
+			Identity &identity, const std::string &prefix = "");
+	static bool parseIfIDNotNull(Poco::Data::Row &result,
+			Identity &identity, const std::string &prefix = "");
 
 protected:
 	void create(Poco::Data::Session &session, Identity &identity);

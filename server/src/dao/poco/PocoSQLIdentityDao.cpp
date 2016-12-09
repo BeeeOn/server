@@ -2,6 +2,8 @@
 #include <Poco/Data/Session.h>
 #include <Poco/Data/SessionPool.h>
 #include <Poco/Data/Statement.h>
+#include <Poco/Data/RecordSet.h>
+#include <Poco/Data/Row.h>
 
 #include "dao/poco/PocoSQLIdentityDao.h"
 #include "dao/poco/PocoDaoManager.h"
@@ -71,8 +73,8 @@ bool PocoSQLIdentityDao::fetch(Session &session, Identity &identity)
 	if (execute(sql) == 0)
 		return false;
 
-	identity.setEmail(email);
-	return true;
+	RecordSet result(sql);
+	return parseSingle(result, identity);
 }
 
 bool PocoSQLIdentityDao::fetchBy(Session &session,
@@ -82,17 +84,15 @@ bool PocoSQLIdentityDao::fetchBy(Session &session,
 	string id;
 
 	Statement sql(session);
-	sql << "SELECT id FROM identities"
+	sql << "SELECT id, email FROM identities"
 		" WHERE email = :email",
-		use(searchEmail, "email"),
-		into(id);
+		use(searchEmail, "email");
 
 	if (execute(sql) == 0)
 		return false;
 
-	identity = Identity(IdentityID::parse(id));
-	identity.setEmail(email);
-	return true;
+	RecordSet result(sql);
+	return parseSingle(result, identity);
 }
 
 bool PocoSQLIdentityDao::remove(Session &session, const Identity &identity)
@@ -106,4 +106,35 @@ bool PocoSQLIdentityDao::remove(Session &session, const Identity &identity)
 		use(id, "id");
 
 	return execute(sql) > 0;
+}
+
+bool PocoSQLIdentityDao::parseSingle(RecordSet &result,
+		Identity &identity, const string &prefix)
+{
+	if (result.begin() == result.end())
+		return false;
+
+	return parseSingle(*result.begin(), identity, prefix);
+}
+
+bool PocoSQLIdentityDao::parseSingle(Row &result,
+		Identity &identity, const string &prefix)
+{
+	if (hasColumn(result, prefix + "id"))
+		identity = Identity(IdentityID::parse(result[prefix + "id"]));
+
+	identity.setEmail(result[prefix + "email"]);
+	return true;
+}
+
+bool PocoSQLIdentityDao::parseIfIDNotNull(Row &result,
+			Identity &identity, const string &prefix)
+{
+	const string id = emptyWhenNull(result[prefix + "id"]);
+	if (id.empty())
+		return false;
+
+	identity = Identity(IdentityID::parse(id));
+	identity.setEmail(result[prefix + "email"]);
+	return true;
 }

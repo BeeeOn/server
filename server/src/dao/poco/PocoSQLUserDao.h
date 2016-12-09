@@ -5,6 +5,8 @@ namespace Poco {
 namespace Data {
 
 class Session;
+class RecordSet;
+class Row;
 
 }
 }
@@ -17,6 +19,13 @@ class PocoSQLUserDao :
 public:
 	void create(User &user) override;
 	bool fetch(User &user) override;
+
+	static bool parseSingle(Poco::Data::RecordSet &result,
+			User &user, const std::string &prefix = "");
+	static bool parseSingle(Poco::Data::Row &result,
+			User &user, const std::string &prefix = "");
+	static bool parseIfIDNotNull(Poco::Data::Row &result,
+			User &user, const std::string &prefix = "");
 
 protected:
 	void create(Poco::Data::Session &session, User &user);
