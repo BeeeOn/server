@@ -250,8 +250,8 @@ void PocoSQLRoleInPlaceDao::fetchAccessiblePlaces(
 
 	Statement sql(session);
 	sql << "SELECT"
-		" DISTINCT p.id,"
-		" p.name"
+		" DISTINCT p.id AS id,"
+		" p.name AS name"
 		" FROM places AS p"
 		" JOIN roles_in_place AS r ON r.place_id = p.id"
 		" JOIN verified_identities AS v"
@@ -262,13 +262,7 @@ void PocoSQLRoleInPlaceDao::fetchAccessiblePlaces(
 
 	execute(sql);
 	RecordSet result(sql);
-
-	for (auto row : result) {
-		Place place(PlaceID::parse(row.get(0)));
-		place.setName(row.get(1));
-
-		list.push_back(place);
-	}
+	PocoSQLPlaceDao::parseMany(result, list);
 }
 
 bool PocoSQLRoleInPlaceDao::parseSingle(RecordSet &result,
