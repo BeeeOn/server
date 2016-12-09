@@ -255,16 +255,7 @@ void PocoSQLGatewayDao::fetchAccessible(Session &session,
 
 	execute(sql);
 	RecordSet result(sql);
-	parseMany(result, gateways);
-}
-
-bool PocoSQLGatewayDao::parseSingle(RecordSet &result, Gateway &gateway,
-		const string &prefix)
-{
-	if (result.begin() == result.end())
-		return false;
-
-	return parseSingle(*result.begin(), gateway, prefix);
+	parseMany<Gateway>(result, gateways);
 }
 
 bool PocoSQLGatewayDao::parseSingle(Row &result, Gateway &gateway,
@@ -281,6 +272,24 @@ bool PocoSQLGatewayDao::parseSingle(Row &result, Gateway &gateway,
 	Place place;
 	if (PocoSQLPlaceDao::parseIfIDNotNull(result, place, prefix + "place_"))
 		gateway.setPlace(place);
+
+	return true;
+}
+
+bool PocoSQLGatewayDao::parseSingle(Row &result, LegacyGateway &gateway,
+		const string &prefix)
+{
+	if (!parseSingle(result, static_cast<Gateway &>(gateway)))
+		return false;
+
+	Poco::Dynamic::Var &accessLevel = result[prefix + "access_level"];
+	if (!accessLevel.isEmpty())
+		gateway.setAccessLevel(AccessLevel(accessLevel.convert<unsigned int>()));
+
+	User owner(UserID::parse(result[prefix + "owner_id"]));
+	gateway.setOwner(owner);
+	gateway.setUserCount(result[prefix + "roles_count"].convert<unsigned int>());
+	gateway.setDeviceCount(result[prefix + "devices_count"].convert<unsigned int>());
 
 	return true;
 }

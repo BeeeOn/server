@@ -29,16 +29,26 @@ public:
 			std::vector<Gateway> &gateways,
 			const User &user) override;
 
+	template <typename G>
 	static bool parseSingle(Poco::Data::RecordSet &result,
-			Gateway &gateway, const std::string &prefix = "");
+			G &gateway, const std::string &prefix = "")
+	{
+		if (result.begin() == result.end())
+			return false;
+
+		return parseSingle(*result.begin(), gateway, prefix);
+	}
+
 	static bool parseSingle(Poco::Data::Row &result,
 			Gateway &gateway, const std::string &prefix = "");
+	static bool parseSingle(Poco::Data::Row &result,
+			LegacyGateway &gateway, const std::string &prefix = "");
 
-	template <typename C>
+	template <typename G, typename C>
 	static void parseMany(Poco::Data::RecordSet &result, C &collection)
 	{
 		for (auto row : result) {
-			Gateway gateway;
+			G gateway;
 
 			if (!parseSingle(row, gateway)) {
 				LOGGER_FUNC(__func__)
