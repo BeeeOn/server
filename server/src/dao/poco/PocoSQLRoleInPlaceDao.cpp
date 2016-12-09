@@ -6,9 +6,8 @@
 #include <Poco/Data/Row.h>
 #include <Poco/Data/RecordSet.h>
 
-#include "dao/RoleInPlaceDao.h"
-#include "dao/PocoAbstractDao.h"
-#include "dao/PocoDaoManager.h"
+#include "dao/poco/PocoSQLRoleInPlaceDao.h"
+#include "dao/poco/PocoDaoManager.h"
 #include "model/User.h"
 #include "model/Place.h"
 
@@ -17,53 +16,6 @@ using namespace Poco;
 using namespace Poco::Data;
 using namespace Poco::Data::Keywords;
 using namespace BeeeOn;
-
-namespace BeeeOn {
-
-class PocoSQLRoleInPlaceDao :
-		public PocoAbstractDao,
-		public RoleInPlaceDao {
-public:
-	void create(RoleInPlace &role) override;
-	bool fetch(RoleInPlace &role) override;
-	void fetchBy(std::vector<RoleInPlace> &roles,
-			const Place &place) override;
-	bool hasUsersExcept(const Place &place, const User &user) override;
-	bool update(RoleInPlace &role) override;
-	bool remove(const RoleInPlace &role) override;
-
-	AccessLevel fetchAccessLevel(
-			const Place &place,
-			const User &user) override;
-
-	void fetchAccessiblePlaces(
-			std::vector<Place> &list,
-			const User &user,
-			const AccessLevel &atLeast = AccessLevel::any()) override;
-
-protected:
-	void create(Session &session, RoleInPlace &role);
-	bool fetch(Session &session, RoleInPlace &role);
-	void fetchBy(Session &session,
-			std::vector<RoleInPlace> &roles,
-			const Place &place);
-	bool hasUsersExcept(Session &session,
-			const Place &place,
-			const User &user);
-	bool update(Session &session, RoleInPlace &role);
-	bool remove(Session &session, const RoleInPlace &role);
-
-	AccessLevel fetchAccessLevel(Session &session,
-			const Place &place,
-			const User &user);
-
-	void fetchAccessiblePlaces(Session &session,
-			std::vector<Place> &list,
-			const User &user,
-			const AccessLevel &atLeast);
-};
-
-}
 
 BEEEON_OBJECT(PocoSQLRoleInPlaceDao, BeeeOn::PocoSQLRoleInPlaceDao)
 

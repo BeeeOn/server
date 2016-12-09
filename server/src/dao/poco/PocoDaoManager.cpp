@@ -5,7 +5,7 @@
 #include <Poco/Data/Session.h>
 #include <Poco/Data/SessionPool.h>
 
-#include "dao/PocoDaoManager.h"
+#include "dao/poco/PocoDaoManager.h"
 #include "dao/ConnectorLoader.h"
 #include "util/Template.h"
 #include "util/Occasionally.h"

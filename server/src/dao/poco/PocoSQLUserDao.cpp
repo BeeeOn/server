@@ -3,31 +3,14 @@
 #include <Poco/Data/SessionPool.h>
 #include <Poco/Data/Statement.h>
 
-#include "dao/UserDao.h"
-#include "dao/PocoAbstractDao.h"
-#include "dao/PocoDaoManager.h"
+#include "dao/poco/PocoSQLUserDao.h"
+#include "dao/poco/PocoDaoManager.h"
 
 using namespace std;
 using namespace Poco;
 using namespace Poco::Data;
 using namespace Poco::Data::Keywords;
 using namespace BeeeOn;
-
-namespace BeeeOn {
-
-class PocoSQLUserDao :
-		public PocoAbstractDao,
-		public UserDao {
-public:
-	void create(User &user) override;
-	bool fetch(User &user) override;
-
-protected:
-	void create(Session &session, User &user);
-	bool fetch(Session &session, User &user);
-};
-
-}
 
 BEEEON_OBJECT(PocoSQLUserDao, BeeeOn::PocoSQLUserDao)
 

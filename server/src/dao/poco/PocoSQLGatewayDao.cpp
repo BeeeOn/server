@@ -8,50 +8,14 @@
 #include <Poco/Data/Row.h>
 #include <Poco/Data/RowIterator.h>
 
-#include "dao/GatewayDao.h"
-#include "dao/PocoAbstractDao.h"
-#include "dao/PocoDaoManager.h"
+#include "dao/poco/PocoSQLGatewayDao.h"
+#include "dao/poco/PocoDaoManager.h"
 
 using namespace std;
 using namespace Poco;
 using namespace Poco::Data;
 using namespace Poco::Data::Keywords;
 using namespace BeeeOn;
-
-namespace BeeeOn {
-
-class PocoSQLGatewayDao :
-		public PocoAbstractDao,
-		public GatewayDao {
-public:
-	bool insert(Gateway &gateway) override;
-	bool fetch(Gateway &gateway) override;
-	bool update(Gateway &gateway) override;
-	bool assignAndUpdate(Gateway &gateway, const Place &place) override;
-	bool assign(Gateway &gateway, const Place &place) override;
-	bool unassign(Gateway &gateway) override;
-	bool fetchFromPlace(Gateway &gateway, const Place &place) override;
-	void fetchAccessible(
-			std::vector<Gateway> &gateways,
-			const User &user) override;
-
-protected:
-	bool insert(Session &session, Gateway &gateway);
-	bool fetch(Session &session, Gateway &gateway);
-	bool update(Session &session, Gateway &gateway);
-	bool assignAndUpdate(Session &session,
-			Gateway &gateway, const Place &place);
-	bool assign(Session &session,
-			Gateway &gateway, const Place &place);
-	bool unassign(Session &session, Gateway &gateway);
-	bool fetchFromPlace(Session &session,
-			Gateway &gateway, const Place &place);
-	void fetchAccessible(Session &session,
-			std::vector<Gateway> &gateways,
-			const User &user);
-};
-
-}
 
 BEEEON_OBJECT(PocoSQLGatewayDao, BeeeOn::PocoSQLGatewayDao)
 
