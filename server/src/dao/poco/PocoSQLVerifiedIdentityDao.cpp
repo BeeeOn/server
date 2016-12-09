@@ -178,13 +178,15 @@ void PocoSQLVerifiedIdentityDao::fetchBy(Session &session,
 
 	Statement sql(session);
 	sql << "SELECT "
-		" v.id,"
-		" v.identity_id,"
-		" v.user_id,"
-		" v.picture,"
-		" v.access_token,"
-		" u.first_name,"
-		" u.last_name"
+		" v.id AS id,"
+		" v.identity_id AS identity_id,"
+		" v.user_id AS user_id,"
+		" v.picture AS picture,"
+		" v.access_token AS access_token,"
+		" v.provider AS provider,"
+		" u.first_name AS user_first_name,"
+		" u.last_name AS user_last_name,"
+		" i.email AS identity_email"
 		" FROM verified_identities AS v"
 		" JOIN identities AS i ON v.identity_id = i.id"
 		" JOIN users AS u ON v.user_id = u.id"
@@ -193,26 +195,7 @@ void PocoSQLVerifiedIdentityDao::fetchBy(Session &session,
 
 	execute(sql);
 	RecordSet result(sql);
-
-	for (auto row : result) {
-		Identity freshIdentity(IdentityID::parse(row.get(1)));
-		freshIdentity.setEmail(email);
-
-		User freshUser(UserID::parse(row.get(2)));
-		freshUser.setFirstName(row.get(5));
-		freshUser.setLastName(row.get(6));
-
-		VerifiedIdentity identity(
-				VerifiedIdentityID::parse(row.get(0)));
-		identity.setIdentity(freshIdentity);
-		identity.setUser(freshUser);
-		identity.setPicture(row.get(3).isEmpty()?
-				URI() : URI(row.get(3).toString()));
-		identity.setAccessToken(row.get(4).isEmpty()?
-				"" : row.get(4));
-
-		identities.push_back(identity);
-	}
+	parseMany(result, identities);
 }
 
 bool PocoSQLVerifiedIdentityDao::update(Session &session,

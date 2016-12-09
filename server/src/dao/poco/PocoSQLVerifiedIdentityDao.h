@@ -1,5 +1,6 @@
 #include "dao/VerifiedIdentityDao.h"
 #include "dao/poco/PocoAbstractDao.h"
+#include "Debug.h"
 
 namespace Poco {
 namespace Data {
@@ -31,6 +32,23 @@ public:
 			VerifiedIdentity &identity, const std::string &prefix = "");
 	static bool parseSingle(Poco::Data::Row &result,
 			VerifiedIdentity &identity, const std::string &prefix = "");
+
+	template <typename C>
+	static void parseMany(Poco::Data::RecordSet &result, C &collection)
+	{
+		for (auto row : result) {
+			VerifiedIdentity identity;
+
+			if (!parseSingle(row, identity)) {
+				LOGGER_FUNC(__func__
+					).warning("skipping malformed data, query result: "
+						+ row.valuesToString(), __FILE__, __LINE__);
+				continue;
+			}
+
+			collection.push_back(identity);
+		}
+	}
 
 protected:
 	void create(Poco::Data::Session &session, VerifiedIdentity &identity);
