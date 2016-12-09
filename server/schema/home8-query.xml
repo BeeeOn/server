@@ -1,0 +1,7 @@
+<query-set for-database="home8">
+
+	<query id="places.fetch.by.id">
+		<define>SELECT name FROM places WHERE id = <value name="id" type="uuid" /></define>
+	</query>
+
+</query-set>
