@@ -303,13 +303,13 @@ void PocoSQLGatewayDao::fetchAccessible(Session &session,
 
 	Statement sql(session);
 	sql << "SELECT"
-		" DISTINCT g.id,"
-		" g.name,"
-		" g.altitude,"
-		" g.latitude,"
-		" g.longitude,"
-		" p.id,"
-		" p.name"
+		" DISTINCT g.id AS id,"
+		" g.name AS name,"
+		" g.altitude AS altitude,"
+		" g.latitude AS latitude,"
+		" g.longitude AS longitude,"
+		" p.id AS place_id,"
+		" p.name AS place_name"
 		" FROM gateways AS g"
 		" JOIN places AS p ON g.place_id = p.id"
 		" JOIN roles_in_place AS r ON g.place_id = r.place_id"
@@ -320,20 +320,7 @@ void PocoSQLGatewayDao::fetchAccessible(Session &session,
 
 	execute(sql);
 	RecordSet result(sql);
-
-	for (auto row : result) {
-		Place place(PlaceID::parse(row.get(5)));
-		place.setName(row.get(6));
-
-		Gateway gateway(GatewayID::parse(row.get(0)));
-		gateway.setName(row.get(1));
-		gateway.setAltitude(nanWhenEmpty(row.get(2)));
-		gateway.setLatitude(nanWhenEmpty(row.get(3)));
-		gateway.setLongitude(nanWhenEmpty(row.get(4)));
-		gateway.setPlace(place);
-
-		gateways.push_back(gateway);
-	}
+	parseMany(result, gateways);
 }
 
 bool PocoSQLGatewayDao::parseSingle(RecordSet &result, Gateway &gateway,

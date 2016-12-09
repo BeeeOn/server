@@ -1,5 +1,6 @@
 #include "dao/GatewayDao.h"
 #include "dao/poco/PocoAbstractDao.h"
+#include "Debug.h"
 
 namespace Poco {
 namespace Data {
@@ -32,6 +33,24 @@ public:
 			Gateway &gateway, const std::string &prefix = "");
 	static bool parseSingle(Poco::Data::Row &result,
 			Gateway &gateway, const std::string &prefix = "");
+
+	template <typename C>
+	static void parseMany(Poco::Data::RecordSet &result, C &collection)
+	{
+		for (auto row : result) {
+			Gateway gateway;
+
+			if (!parseSingle(row, gateway)) {
+				LOGGER_FUNC(__func__)
+					.warning("skipping malformed data, query result: "
+						+ row.valuesToString(), __FILE__, __LINE__);
+				continue;
+			}
+
+			collection.push_back(gateway);
+		}
+	}
+
 
 protected:
 	bool insert(Poco::Data::Session &session, Gateway &gateway);
