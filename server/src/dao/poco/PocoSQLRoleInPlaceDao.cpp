@@ -137,11 +137,12 @@ void PocoSQLRoleInPlaceDao::fetchBy(Session &session,
 
 	Statement sql(session);
 	sql << "SELECT"
-		" r.id,"
-		" r.identity_id,"
-		" r.level,"
-		" i.email,"
-		" p.name"
+		" r.id AS id,"
+		" r.identity_id AS identity_id,"
+		" r.level AS level,"
+		" i.email AS identity_email,"
+		" r.place_id AS place_id,"
+		" p.name AS place_name"
 		" FROM roles_in_place AS r"
 		" JOIN identities AS i ON r.identity_id = i.id"
 		" JOIN places AS p ON r.place_id = p.id"
@@ -150,21 +151,7 @@ void PocoSQLRoleInPlaceDao::fetchBy(Session &session,
 
 	execute(sql);
 	RecordSet result(sql);
-
-	for (auto row : result) {
-		Place freshPlace(place.id());
-		freshPlace.setName(row.get(4));
-
-		Identity identity(IdentityID::parse(row.get(1)));
-		identity.setEmail(row.get(3));
-		
-		RoleInPlace role(RoleInPlaceID::parse(row.get(0)));
-		role.setPlace(place);
-		role.setIdentity(identity);
-		role.setLevel(AccessLevel((int) row.get(2)));
-
-		roles.push_back(role);
-	}
+	parseMany(result, roles);
 }
 
 bool PocoSQLRoleInPlaceDao::hasUsersExcept(
