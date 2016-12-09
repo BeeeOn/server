@@ -2,6 +2,44 @@
 
 	<query id="places.fetch.by.id">
 		<define>SELECT name FROM places WHERE id = <value name="id" type="uuid" /></define>
+		<test name="simple test">
+			<setup name="places to select">
+				<sql>INSERT INTO places (id, name)
+					VALUES ('16de2f05-8af7-4729-8479-1973590cfa54', 'Test Place 1')</sql>
+				<sql>INSERT INTO places (id, name)
+					VALUES ('bd8ea40c-91c9-4d8c-8c13-a8332c39a437', 'Test Place 2')</sql>
+			</setup>
+			<check name="select 'Test Place 1'">
+				<call-query>
+					<arg name="id">'16de2f05-8af7-4729-8479-1973590cfa54'</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="name">Test Place 1</value>
+					</row>
+				</expect>
+			</check>
+			<check name="select 'Test Place 2'">
+				<call-query>
+					<arg name="id">'bd8ea40c-91c9-4d8c-8c13-a8332c39a437'</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="name">Test Place 2</value>
+					</row>
+				</expect>
+			</check>
+			<check name="select non-existing">
+				<call-query>
+					<arg name="id">'db1c2915-9ddd-40d6-b1d5-ad92b1a3c30a'</arg>
+				</call-query>
+				<expect />
+			</check>
+			<teardown name="delete places">
+				<sql>DELETE FROM places WHERE id = 'bd8ea40c-91c9-4d8c-8c13-a8332c39a437'</sql>
+				<sql>DELETE FROM places WHERE id = '16de2f05-8af7-4729-8479-1973590cfa54'</sql>
+			</teardown>
+		</test>
 	</query>
 
 </query-set>
