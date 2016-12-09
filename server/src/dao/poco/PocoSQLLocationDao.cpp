@@ -189,18 +189,7 @@ void PocoSQLLocationDao::fetchBy(Session &session,
 
 	execute(sql);
 	RecordSet result(sql);
-
-	for (auto row : result) {
-		Location location;
-
-		if (!parseSingle(row, location)) {
-			m_logger.warning("skipping malformed location, query result: "
-					+ row.valuesToString(), __FILE__, __LINE__)
-			continue;
-		}
-
-		locations.push_back(location);
-	}
+	parseMany(result, locations);
 }
 
 void PocoSQLLocationDao::fetchBy(Session &session,
@@ -225,18 +214,7 @@ void PocoSQLLocationDao::fetchBy(Session &session,
 
 	execute(sql);
 	RecordSet result(sql);
-
-	for (auto row : result) {
-		Location location;
-
-		if (!parseSingle(row, location)) {
-			m_logger.warning("skipping malformed location, query result: "
-					+ row.valuesToString(), __FILE__, __LINE__)
-			continue;
-		}
-
-		locations.push_back(location);
-	}
+	parseMany(result, locations);
 }
 
 bool PocoSQLLocationDao::update(Session &session,
