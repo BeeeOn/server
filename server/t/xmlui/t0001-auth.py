@@ -6,6 +6,7 @@ config.import_libs()
 import unittest
 import os
 
+import google
 from xmlui import Connector, Response, Login, Logout
 
 def login(login):
@@ -48,10 +49,9 @@ class TestAuth(unittest.TestCase):
 	environment variable GOOGLE_AUTH_CODE otherwise
 	the test is skipped.
 	"""
-	@unittest.skipIf(not "GOOGLE_AUTH_CODE" in os.environ,
-			"no GOOGLE_AUTH_CODE specified")
+	@unittest.skipIf(google.skip_login(), "no GOOGLE_AUTH_CODE specified")
 	def test2_login_logout_google(self):
-		GOOGLE_LOGIN = Login("google", os.environ["GOOGLE_AUTH_CODE"])
+		GOOGLE_LOGIN = Login("google", google.login_auth_code())
 
 		ok, session = login(GOOGLE_LOGIN)
 		self.assertTrue(ok)
