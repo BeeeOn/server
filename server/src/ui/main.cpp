@@ -3,6 +3,7 @@
 #include <Poco/Message.h>
 #include <Poco/File.h>
 #include <Poco/SignalHandler.h>
+#include <Poco/StringTokenizer.h>
 #include <Poco/Util/Option.h>
 #include <Poco/Util/OptionSet.h>
 #include <Poco/Util/HelpFormatter.h>
@@ -48,6 +49,11 @@ static Option optPort("port", "p",
 		false,
 		"<port>",
 		true);
+static Option optDefine("define", "D",
+		"define configuration options (to override configuration files)",
+		false,
+		"<key>=<value>",
+		true);
 static Option optHelp("help", "h", "print help");
 
 class Startup : public ServerApplication {
@@ -76,6 +82,20 @@ protected:
 		return Logger::parseLevel(level);
 	}
 
+	/**
+	 * Override a configuration option given as <key>=<value>.
+	 */
+	void overrideConfig(const string text)
+	{
+		StringTokenizer tokenizer(text, "=", StringTokenizer::TOK_TRIM);
+		if (tokenizer.count() != 2)
+			throw InvalidArgumentException("-D option requires a <key>=<value> pair");
+
+		logger().debug("overriding " + tokenizer[0] + " = " + tokenizer[1],
+				__FILE__, __LINE__);
+		config().setString(tokenizer[0], tokenizer[1]);
+	}
+
 	void handleOption(const string &name, const string &value)
 	{
 		if (name == "services")
@@ -90,6 +110,8 @@ protected:
 			logger().setLevel(parseLogLevel(value));
 		if (name == "port")
 			m_serverPort = stoi(value);
+		if (name == "define")
+			overrideConfig(value);
 
 		if (m_printHelp)
 			stopOptionsProcessing();
@@ -180,6 +202,7 @@ protected:
 		options.addOption(optLogging);
 		options.addOption(optLogLevel);
 		options.addOption(optPort);
+		options.addOption(optDefine);
 		options.addOption(optHelp);
 		Application::defineOptions(options);
 	}
