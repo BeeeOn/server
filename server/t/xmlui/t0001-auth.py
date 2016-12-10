@@ -44,12 +44,16 @@ class TestAuth(unittest.TestCase):
 		self.assertTrue(logout(session))
 
 	"""
-	Test login & logout with the Google provider.
-	Provide the authCode (obtained manually) in the
-	environment variable GOOGLE_AUTH_CODE otherwise
-	the test is skipped.
+	Test login & logout with the Google provider. The test
+	is skipped unless either:
+
+	1) GOOGLE_AUTH_CODE is provided as an environment variable.
+
+	2) GOOGLE_USER, GOOGLE_PASSWORD and GOOGLE_CLIENT_ID are
+	   provided as environment variables and oauth2 provides
+	   automatic login capabilities (via Selenium).
 	"""
-	@unittest.skipIf(google.skip_login(), "no GOOGLE_AUTH_CODE specified")
+	@unittest.skipIf(google.skip_login(), "Missing configuration to perform Google login")
 	def test2_login_logout_google(self):
 		GOOGLE_LOGIN = Login("google", google.login_auth_code())
 
