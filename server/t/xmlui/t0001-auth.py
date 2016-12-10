@@ -51,10 +51,7 @@ class TestAuth(unittest.TestCase):
 	@unittest.skipIf(not "GOOGLE_AUTH_CODE" in os.environ,
 			"no GOOGLE_AUTH_CODE specified")
 	def test2_login_logout_google(self):
-		GOOGLE_LOGIN = json.dumps({
-			"provider": "google",
-			"authCode": os.environ["GOOGLE_AUTH_CODE"]
-		})
+		GOOGLE_LOGIN = Login("google", os.environ["GOOGLE_AUTH_CODE"])
 
 		ok, session = login(GOOGLE_LOGIN)
 		self.assertTrue(ok)
@@ -69,10 +66,7 @@ class TestAuth(unittest.TestCase):
 	@unittest.skipIf(not "FACEBOOK_AUTH_CODE" in os.environ,
 			"no FACEBOOK_AUTH_CODE specified")
 	def test3_login_logout_facebook(self):
-		FACEBOOK_LOGIN = json.dumps({
-			"provider": "facebook",
-			"authCode": os.environ["FACEBOOK_AUTH_CODE"]
-		})
+		FACEBOOK_LOGIN = Login("facebook", os.environ["FACEBOOK_AUTH_CODE"])
 
 		ok, session = login(FACEBOOK_AUTH_CODE)
 		self.assertTrue(ok)
