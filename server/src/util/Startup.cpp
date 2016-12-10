@@ -221,3 +221,22 @@ int ServerStartup::main(const vector<string> &args)
 
 	return execute();
 }
+
+
+int BeeeOn::generic_main(int argc, char **argv, ServerApplication &app)
+{
+	try {
+		poco_throw_on_signal;
+
+		app.setUnixOptions(true);
+		return app.run(argc, argv);
+	} catch(Exception &e) {
+		cerr << e.displayText() << endl;
+	} catch(exception &e) {
+		cerr << e.what() << endl;
+	} catch(const char *s) {
+		cerr << s << endl;
+	}
+
+	return -1;
+}

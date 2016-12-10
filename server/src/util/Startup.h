@@ -60,6 +60,8 @@ protected:
 	std::string m_userServices;
 };
 
+int generic_main(int argc, char **argv, Poco::Util::ServerApplication &app);
+
 }
 
 #endif

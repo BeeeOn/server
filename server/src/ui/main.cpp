@@ -1,5 +1,4 @@
 #include <Poco/Logger.h>
-#include <Poco/SignalHandler.h>
 
 #include "util/Startup.h"
 #include "di/DependencyInjector.h"
@@ -38,18 +37,6 @@ protected:
 
 int main(int argc, char **argv)
 {
-	try {
-		poco_throw_on_signal;
-
-		Startup server;
-		server.setUnixOptions(true);
-
-		return server.run(argc, argv);
-	} catch(Exception &e) {
-		cerr << e.displayText() << endl;
-	} catch(exception &e) {
-		cerr << e.what() << endl;
-	} catch(const char *s) {
-		cerr << s << endl;
-	}
+	Startup startup;
+	return generic_main(argc, argv, startup);
 }
