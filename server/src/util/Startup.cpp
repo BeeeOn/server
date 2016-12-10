@@ -179,6 +179,7 @@ void ServerStartup::defineOptions(OptionSet &options)
 	options.addOption(optLogging);
 	options.addOption(optLogLevel);
 	options.addOption(optPort);
+	optDefine.repeatable(true);
 	options.addOption(optDefine);
 	options.addOption(optHelp);
 	Application::defineOptions(options);
