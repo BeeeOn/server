@@ -79,10 +79,7 @@ void PocoSQLLocationDao::create(Session &session,
 	string placeID(location.place().id().toString());
 
 	Statement sql(session);
-	sql << "INSERT INTO locations"
-		" (id, name, place_id)"
-		" VALUES"
-		" (:id, :name, :place_id)",
+	sql << findQuery("locations.create"),
 		use(id, "id"),
 		use(name, "name"),
 		use(placeID, "place_id");
@@ -97,13 +94,7 @@ bool PocoSQLLocationDao::fetch(Session &session,
 	string id(location.id().toString());
 
 	Statement sql(session);
-	sql << "SELECT"
-		" l.name AS name,"
-		" p.name AS place_name,"
-		" p.id AS place_id"
-		" FROM locations AS l"
-		" JOIN places AS p ON l.place_id = p.id"
-		" WHERE l.id = :id",
+	sql << findQuery("locations.fetch.by.id"),
 		use(id, "id");
 
 	if (execute(sql) == 0)
@@ -123,13 +114,7 @@ bool PocoSQLLocationDao::fetchFrom(Session &session,
 	string placeID(place.id().toString());
 
 	Statement sql(session);
-	sql << "SELECT"
-		" l.name AS name,"
-		" p.name AS place_name,"
-		" l.place_id AS place_id"
-		" FROM locations AS l"
-		" JOIN places AS p ON l.place_id = p.id"
-		" WHERE l.id = :id AND p.id = :place_id",
+	sql << findQuery("locations.fetch.by.id.and.place_id"),
 		use(id, "id"),
 		use(placeID, "place_id");
 
@@ -150,14 +135,7 @@ bool PocoSQLLocationDao::fetchFrom(Session &session,
 	string gatewayID(gateway.id().toString());
 
 	Statement sql(session);
-	sql << "SELECT"
-		" l.name AS name,"
-		" p.name AS place_name,"
-		" p.id AS place_id"
-		" FROM locations AS l"
-		" JOIN places AS p ON l.place_id = p.id"
-		" JOIN gateways AS g ON g.place_id = p.id"
-		" WHERE l.id = :id AND g.id = :gateway_id",
+	sql << findQuery("locations.fetch.by.id.and.gateway_id"),
 		use(id, "id"),
 		use(gatewayID, "gateway_id");
 
@@ -177,14 +155,7 @@ void PocoSQLLocationDao::fetchBy(Session &session,
 	string placeID(place.id().toString());
 
 	Statement sql(session);
-	sql << "SELECT"
-		" l.id AS id,"
-		" l.name AS name,"
-		" l.place_id AS place_id,"
-		" p.name AS place_name"
-		" FROM locations AS l"
-		" JOIN places AS p ON p.id = l.place_id"
-		" WHERE place_id = :place_id",
+	sql << findQuery("locations.fetch.by.place_id"),
 		use(placeID, "place_id");
 
 	execute(sql);
@@ -201,15 +172,7 @@ void PocoSQLLocationDao::fetchBy(Session &session,
 	string gatewayID(gateway.id().toString());
 
 	Statement sql(session);
-	sql << "SELECT"
-		" l.id as id,"
-		" l.name as name,"
-		" l.place_id as place_id,"
-		" p.name as place_name"
-		" FROM locations AS l"
-		" JOIN gateways AS g ON g.place_id = l.place_id"
-		" JOIN places AS p ON p.id = l.place_id"
-		" WHERE g.id = :gateway_id",
+	sql << findQuery("locations.fetch.by.gateway_id"),
 		use(gatewayID, "gateway_id");
 
 	execute(sql);
@@ -228,9 +191,7 @@ bool PocoSQLLocationDao::update(Session &session,
 	string placeID(location.place().id().toString());
 
 	Statement sql(session);
-	sql << "UPDATE locations"
-		" SET name = :name"
-		" WHERE id = :id",
+	sql << findQuery("locations.update"),
 		use(name, "name"),
 		use(id, "id");
 
@@ -243,8 +204,7 @@ bool PocoSQLLocationDao::remove(Session &session, const Location &location)
 	string id(location.id().toString());
 
 	Statement sql(session);
-	sql << "DELETE FROM locations"
-		" WHERE id = :id",
+	sql << findQuery("locations.remove"),
 		use(id, "id");
 
 	return execute(sql) > 0;

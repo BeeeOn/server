@@ -1,5 +1,6 @@
 #include <Poco/Exception.h>
 
+#include "dao/SQLLoader.h"
 #include "dao/poco/PocoAbstractDao.h"
 #include "dao/poco/PocoDaoManager.h"
 #include "Debug.h"
@@ -11,11 +12,16 @@ using namespace BeeeOn;
 
 PocoAbstractDao::PocoAbstractDao():
 	m_logger(LOGGER_CLASS(this)),
-	m_manager(NULL)
+	m_manager(NULL),
+	m_loader(NULL)
 {
 	injector<PocoAbstractDao, PocoDaoManager>(
 		"daoManager",
 		&PocoAbstractDao::setDaoManager
+	);
+	injector<PocoAbstractDao, SQLLoader>(
+		"sqlLoader",
+		&PocoAbstractDao::setSQLLoader
 	);
 }
 
@@ -28,12 +34,25 @@ void PocoAbstractDao::setDaoManager(PocoDaoManager *manager)
 	m_manager = manager;
 }
 
+void PocoAbstractDao::setSQLLoader(SQLLoader *loader)
+{
+	m_loader = loader;
+}
+
 PocoDaoManager &PocoAbstractDao::manager()
 {
 	if (m_manager)
 		return *m_manager;
 
 	throw IllegalStateException("missing manager");
+}
+
+string PocoAbstractDao::findQuery(const string &key) const
+{
+	if (m_loader)
+		return m_loader->find(key);
+
+	throw IllegalStateException("missing sql loader");
 }
 
 size_t PocoAbstractDao::execute(Statement &sql)

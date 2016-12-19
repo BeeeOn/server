@@ -81,22 +81,7 @@ void PocoSQLVerifiedIdentityDao::create(Session &session,
 		accessToken = identity.accessToken();
 
 	Statement sql(session);
-	sql << "INSERT INTO verified_identities ("
-		" id,"
-		" identity_id,"
-		" user_id,"
-		" provider,"
-		" picture,"
-		" access_token"
-		")"
-		" VALUES ("
-		" :id,"
-		" :identity_id,"
-		" :user_id,"
-		" :provider,"
-		" :picture,"
-		" :access_token"
-		")",
+	sql << findQuery("verified_identities.create"),
 		use(id, "id"),
 		use(identityID, "identity_id"),
 		use(userID, "user_id"),
@@ -115,19 +100,7 @@ bool PocoSQLVerifiedIdentityDao::fetch(Session &session,
 	string id(identity.id().toString());
 
 	Statement sql(session);
-	sql << "SELECT "
-		" v.identity_id AS identity_id,"
-		" v.user_id AS user_id,"
-		" v.provider AS provider,"
-		" v.picture AS picture,"
-		" v.access_token AS access_token,"
-		" i.email AS identity_email,"
-		" u.first_name AS user_first_name,"
-		" u.last_name AS user_last_name"
-		" FROM verified_identities AS v"
-		" JOIN identities AS i ON v.identity_id = i.id"
-		" JOIN users AS u ON v.user_id = u.id"
-		" WHERE v.id = :id",
+	sql << findQuery("verified_identities.fetch.by.id"),
 		use(id, "id");
 
 	if (execute(sql) == 0)
@@ -146,20 +119,7 @@ bool PocoSQLVerifiedIdentityDao::fetchBy(Session &session,
 	string searchProvider(provider);
 
 	Statement sql(session);
-	sql << "SELECT "
-		" v.id AS id,"
-		" v.identity_id AS identity_id,"
-		" v.user_id AS user_id,"
-		" v.picture AS picture,"
-		" v.provider AS provider,"
-		" v.access_token AS access_token,"
-		" i.email AS identity_email,"
-		" u.first_name AS user_first_name,"
-		" u.last_name AS user_last_name"
-		" FROM verified_identities AS v"
-		" JOIN identities AS i ON v.identity_id = i.id"
-		" JOIN users AS u ON v.user_id = u.id"
-		" WHERE i.email = :email AND v.provider = :provider",
+	sql << findQuery("verified_identities.fetch.by.email.and.provider"),
 		use(searchEmail, "email"),
 		use(searchProvider, "provider");
 
@@ -177,20 +137,7 @@ void PocoSQLVerifiedIdentityDao::fetchBy(Session &session,
 	string searchEmail(email);
 
 	Statement sql(session);
-	sql << "SELECT "
-		" v.id AS id,"
-		" v.identity_id AS identity_id,"
-		" v.user_id AS user_id,"
-		" v.picture AS picture,"
-		" v.access_token AS access_token,"
-		" v.provider AS provider,"
-		" u.first_name AS user_first_name,"
-		" u.last_name AS user_last_name,"
-		" i.email AS identity_email"
-		" FROM verified_identities AS v"
-		" JOIN identities AS i ON v.identity_id = i.id"
-		" JOIN users AS u ON v.user_id = u.id"
-		" WHERE i.email = :email",
+	sql << findQuery("verified_identities.fetch.by.email"),
 		use(searchEmail, "email");
 
 	execute(sql);
@@ -213,10 +160,7 @@ bool PocoSQLVerifiedIdentityDao::update(Session &session,
 		accessToken = identity.accessToken();
 
 	Statement sql(session);
-	sql << "UPDATE verified_identities SET"
-		" picture = :picture,"
-		" access_token = :access_token"
-		" WHERE id = :id",
+	sql << findQuery("verified_identities.update"),
 		use(picture, "picture"),
 		use(accessToken, "access_token"),
 		use(id, "id");
@@ -232,8 +176,7 @@ bool PocoSQLVerifiedIdentityDao::remove(Session &session,
 	string id(identity.id().toString());
 
 	Statement sql(session);
-	sql << "DELETE FROM verified_identities"
-		" WHERE id = :id",
+	sql << findQuery("verified_identities.remove"),
 		use(id, "id");
 
 	return execute(sql) > 0;

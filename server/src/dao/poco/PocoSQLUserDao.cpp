@@ -34,10 +34,7 @@ void PocoSQLUserDao::create(Session &session, User &user)
 	string lastName(user.lastName());
 
 	Statement sql(session);
-	sql << "INSERT INTO users"
-		" (id, first_name, last_name)"
-		" VALUES"
-		" (:id, :first_name, :last_name)",
+	sql << findQuery("users.create"),
 		use(id, "id"),
 		use(firstName),
 		use(lastName);
@@ -51,8 +48,7 @@ bool PocoSQLUserDao::fetch(Session &session, User &user)
 	string id(user.id().toString());
 
 	Statement sql(session);
-	sql << "SELECT first_name, last_name FROM users"
-		" WHERE id = :id",
+	sql << findQuery("users.fetch.by.id"),
 		use(id, "id");
 
 	if (execute(sql) == 0)

@@ -96,22 +96,7 @@ bool PocoSQLGatewayDao::insert(Session &session, Gateway &gateway)
 		longitude = gateway.longitude();
 
 	Statement sql(session);
-	sql << "INSERT INTO gateways ("
-		" id,"
-		" name,"
-		" place_id,"
-		" altitude,"
-		" latitude,"
-		" longitude"
-		")"
-		" VALUES ("
-		" :id,"
-		" :name,"
-		" :place_id,"
-		" :altitude,"
-		" :latitude,"
-		" :longitude"
-		")",
+	sql << findQuery("gateways.create"),
 		use(id, "id"),
 		use(name, "name"),
 		use(placeID, "place_id"),
@@ -129,16 +114,7 @@ bool PocoSQLGatewayDao::fetch(Session &session, Gateway &gateway)
 	string id(gateway.id().toString());
 
 	Statement sql(session);
-	sql << "SELECT"
-		" g.name AS name,"
-		" g.altitude AS altitude,"
-		" g.latitude AS latitude,"
-		" g.longitude AS longitude,"
-		" p.id AS place_id,"
-		" p.name AS place_name"
-		" FROM gateways AS g"
-		" LEFT JOIN places AS p ON g.place_id = p.id"
-		" WHERE g.id = :id",
+	sql << findQuery("gateways.fetch.by.id"),
 		use(id, "id");
 
 	if (execute(sql) == 0)
@@ -168,13 +144,7 @@ bool PocoSQLGatewayDao::update(Session &session, Gateway &gateway)
 		longitude = gateway.longitude();
 
 	Statement sql(session);
-	sql << "UPDATE gateways"
-		" SET"
-		" name = :name,"
-		" altitude = :altitude,"
-		" latitude = :latitude,"
-		" longitude = :longitude"
-		" WHERE id = :id",
+	sql << findQuery("gateways.update"),
 		use(name, "name"),
 		use(altitude, "altitude"),
 		use(latitude, "latitude"),
@@ -207,14 +177,7 @@ bool PocoSQLGatewayDao::assignAndUpdate(Session &session,
 		longitude = gateway.longitude();
 
 	Statement sql(session);
-	sql << "UPDATE gateways"
-		" SET"
-		" name = :name,"
-		" altitude = :altitude,"
-		" latitude = :latitude,"
-		" longitude = :longitude,"
-		" place_id = :place_id"
-		" WHERE id = :id",
+	sql << findQuery("gateways.assign.and.update"),
 		use(name, "name"),
 		use(altitude, "altitude"),
 		use(latitude, "latitude"),
@@ -236,10 +199,7 @@ bool PocoSQLGatewayDao::assign(Session &session,
 	string placeID(place.id().toString());
 
 	Statement sql(session);
-	sql << "UPDATE gateways"
-		" SET"
-		" place_id = :place_id"
-		" WHERE id = :id",
+	sql << findQuery("gateways.assign"),
 		use(placeID, "place_id"),
 		use(id, "id");
 
@@ -254,10 +214,7 @@ bool PocoSQLGatewayDao::unassign(Session &session, Gateway &gateway)
 	string id(gateway.id().toString());
 
 	Statement sql(session);
-	sql << "UPDATE gateways"
-		" SET"
-		" place_id = NULL"
-		" WHERE id = :id",
+	sql << findQuery("gateways.unassign"),
 		use(id, "id");
 
 	return execute(sql) > 0;
@@ -273,16 +230,7 @@ bool PocoSQLGatewayDao::fetchFromPlace(Session &session,
 	string placeID(place.id().toString());
 
 	Statement sql(session);
-	sql << "SELECT"
-		" g.name AS name,"
-		" g.altitude AS altitude,"
-		" g.latitude AS latitude,"
-		" g.longitude AS longitude,"
-		" g.place_id AS place_id,"
-		" p.name AS place_name"
-		" FROM gateways AS g"
-		" JOIN places AS p ON g.place_id = p.id"
-		" WHERE g.id = :id AND g.place_id = :place_id",
+	sql << findQuery("gateways.fetch.by.place_id"),
 		use(id, "id"),
 		use(placeID, "place_id");
 
@@ -302,20 +250,7 @@ void PocoSQLGatewayDao::fetchAccessible(Session &session,
 	string userID(user.id().toString());
 
 	Statement sql(session);
-	sql << "SELECT"
-		" DISTINCT g.id AS id,"
-		" g.name AS name,"
-		" g.altitude AS altitude,"
-		" g.latitude AS latitude,"
-		" g.longitude AS longitude,"
-		" p.id AS place_id,"
-		" p.name AS place_name"
-		" FROM gateways AS g"
-		" JOIN places AS p ON g.place_id = p.id"
-		" JOIN roles_in_place AS r ON g.place_id = r.place_id"
-		" JOIN verified_identities AS v"
-		"   ON v.identity_id = r.identity_id"
-		" WHERE v.user_id = :user_id",
+	sql << findQuery("gateways.fetch.accessible"),
 		use(userID, "user_id");
 
 	execute(sql);

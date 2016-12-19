@@ -89,10 +89,7 @@ void PocoSQLRoleInPlaceDao::create(Session &session, RoleInPlace &role)
 	unsigned int level = role.level();
 
 	Statement sql(session);
-	sql << "INSERT INTO roles_in_place"
-		" (id, place_id, identity_id, level)"
-		" VALUES"
-		" (:id, :place_id, :identity_id, :level)",
+	sql << findQuery("roles_in_place.create"),
 		use(id, "id"),
 		use(placeID, "place_id"),
 		use(identityID, "identity_id"),
@@ -108,16 +105,7 @@ bool PocoSQLRoleInPlaceDao::fetch(Session &session, RoleInPlace &role)
 	string id(role.id().toString());
 
 	Statement sql(session);
-	sql << "SELECT"
-		" r.place_id AS place_id,"
-		" r.identity_id AS identity_id,"
-		" r.level AS level,"
-		" i.email AS identity_email,"
-		" p.name AS place_name"
-		" FROM roles_in_place AS r"
-		" JOIN identities AS i ON r.identity_id = i.id"
-		" JOIN places AS p ON r.place_id = p.id"
-		" WHERE id = :id",
+	sql << findQuery("roles_in_place.fetch.by.id"),
 		use(id, "id");
 
 	if (execute(sql) == 0)
@@ -136,17 +124,7 @@ void PocoSQLRoleInPlaceDao::fetchBy(Session &session,
 	string placeID(place.id().toString());
 
 	Statement sql(session);
-	sql << "SELECT"
-		" r.id AS id,"
-		" r.identity_id AS identity_id,"
-		" r.level AS level,"
-		" i.email AS identity_email,"
-		" r.place_id AS place_id,"
-		" p.name AS place_name"
-		" FROM roles_in_place AS r"
-		" JOIN identities AS i ON r.identity_id = i.id"
-		" JOIN places AS p ON r.place_id = p.id"
-		" WHERE r.place_id = :place_id",
+	sql << findQuery("roles_in_place.fetch.by.place_id"),
 		use(placeID, "place_id");
 
 	execute(sql);
@@ -167,11 +145,7 @@ bool PocoSQLRoleInPlaceDao::hasUsersExcept(
 	unsigned long count;
 
 	Statement sql(session);
-	sql << "SELECT COUNT(*)"
-		" FROM roles_in_place AS r"
-		" JOIN verified_identities AS v"
-		"   ON v.identity_id = r.identity_id"
-		" WHERE r.place_id = :place_id AND v.user_id <> :user_id",
+	sql << findQuery("roles_in_place.count.users.except"),
 		use(placeID, "place_id"),
 		use(userID, "user_id"),
 		into(count);
@@ -188,9 +162,7 @@ bool PocoSQLRoleInPlaceDao::update(Session &session, RoleInPlace &role)
 	unsigned int level = role.level();
 
 	Statement sql(session);
-	sql << "UPDATE roles_in_place"
-		" SET level = :level"
-		" WHERE id = :id",
+	sql << findQuery("roles_in_place.update"),
 		use(level, "level"),
 		use(id, "id");
 
@@ -204,8 +176,7 @@ bool PocoSQLRoleInPlaceDao::remove(Session &session, const RoleInPlace &role)
 	string id(role.id().toString());
 
 	Statement sql(session);
-	sql << "DELETE FROM roles_in_place"
-		" WHERE id = :id",
+	sql << findQuery("roles_in_place.remove"),
 		use(id, "id");
 
 	return execute(sql) > 0;
@@ -224,11 +195,7 @@ AccessLevel PocoSQLRoleInPlaceDao::fetchAccessLevel(
 	Nullable<unsigned int> level;
 
 	Statement sql(session);
-	sql << "SELECT MIN(r.level)"
-		" FROM roles_in_place AS r"
-		" JOIN verified_identities AS v"
-		"   ON v.identity_id = r.identity_id"
-		" WHERE r.place_id = :place_id AND v.user_id = :user_id",
+	sql << findQuery("roles_in_place.fetch.access_level"),
 		use(placeID, "place_id"),
 		use(userID, "user_id"),
 		into(level);
@@ -249,14 +216,7 @@ void PocoSQLRoleInPlaceDao::fetchAccessiblePlaces(
 	unsigned int level = atLeast;
 
 	Statement sql(session);
-	sql << "SELECT"
-		" DISTINCT p.id AS id,"
-		" p.name AS name"
-		" FROM places AS p"
-		" JOIN roles_in_place AS r ON r.place_id = p.id"
-		" JOIN verified_identities AS v"
-		"   ON v.identity_id = r.identity_id"
-		" WHERE r.level >= :at_least AND v.user_id = :user_id",
+	sql << findQuery("roles_in_place.fetch.accessible.places"),
 		use(level, "at_least"),
 		use(userID, "user_id");
 

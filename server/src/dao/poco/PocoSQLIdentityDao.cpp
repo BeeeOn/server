@@ -47,10 +47,7 @@ void PocoSQLIdentityDao::create(Session &session, Identity &identity)
 	string email(identity.email());
 
 	Statement sql(session);
-	sql << "INSERT INTO identities"
-		" (id, email)"
-		" VALUES"
-		" (:id, :email)",
+	sql << findQuery("identities.create"),
 		use(id, "id"),
 		use(email, "email");
 
@@ -62,13 +59,10 @@ bool PocoSQLIdentityDao::fetch(Session &session, Identity &identity)
 	assureHasId(identity);
 
 	string id(identity.id().toString());
-	string email;
 
 	Statement sql(session);
-	sql << "SELECT email FROM identities"
-		" WHERE id = :id",
-		use(id, "id"),
-		into(email);
+	sql << findQuery("identities.fetch.by.id"),
+		use(id, "id");
 
 	if (execute(sql) == 0)
 		return false;
@@ -84,8 +78,7 @@ bool PocoSQLIdentityDao::fetchBy(Session &session,
 	string id;
 
 	Statement sql(session);
-	sql << "SELECT id, email FROM identities"
-		" WHERE email = :email",
+	sql << findQuery("identities.fetch.by.email"),
 		use(searchEmail, "email");
 
 	if (execute(sql) == 0)
@@ -101,8 +94,7 @@ bool PocoSQLIdentityDao::remove(Session &session, const Identity &identity)
 	string id(identity.id().toString());
 
 	Statement sql(session);
-	sql << "DELETE FROM identities"
-		" WHERE id = :id",
+	sql << findQuery("identities.remove"),
 		use(id, "id");
 
 	return execute(sql) > 0;

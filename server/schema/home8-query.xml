@@ -1,0 +1,534 @@
+<query-set for-database="home8">
+
+	<query id="places.create">
+		<define>INSERT INTO places (id, name) VALUES (
+				<value name="id" type="uuid" />,
+				<value name="name" type="varchar" />)</define>
+	</query>
+
+	<query id="places.update">
+		<define>UPDATE places SET name = <value name="name" type="varchar" />
+				WHERE id = <value name="id" type="uuid" /></define>
+	</query>
+
+	<query id="places.remove">
+		<define>DELETE FROM places WHERE id = <value name="id" type="uuid" /></define>
+	</query>
+
+	<query id="places.fetch.by.id">
+		<define>SELECT name FROM places WHERE id = <value name="id" type="uuid" /></define>
+		<test name="simple test">
+			<setup name="places to select">
+				<sql>INSERT INTO places (id, name)
+					VALUES ('16de2f05-8af7-4729-8479-1973590cfa54', 'Test Place 1')</sql>
+				<sql>INSERT INTO places (id, name)
+					VALUES ('bd8ea40c-91c9-4d8c-8c13-a8332c39a437', 'Test Place 2')</sql>
+			</setup>
+			<check name="select 'Test Place 1'">
+				<call-query>
+					<arg name="id">'16de2f05-8af7-4729-8479-1973590cfa54'</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="name">Test Place 1</value>
+					</row>
+				</expect>
+			</check>
+			<check name="select 'Test Place 2'">
+				<call-query>
+					<arg name="id">'bd8ea40c-91c9-4d8c-8c13-a8332c39a437'</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="name">Test Place 2</value>
+					</row>
+				</expect>
+			</check>
+			<check name="select non-existing">
+				<call-query>
+					<arg name="id">'db1c2915-9ddd-40d6-b1d5-ad92b1a3c30a'</arg>
+				</call-query>
+				<expect />
+			</check>
+			<teardown name="delete places">
+				<sql>DELETE FROM places WHERE id = 'bd8ea40c-91c9-4d8c-8c13-a8332c39a437'</sql>
+				<sql>DELETE FROM places WHERE id = '16de2f05-8af7-4729-8479-1973590cfa54'</sql>
+			</teardown>
+		</test>
+	</query>
+
+	<query id="gateways.create">
+		<define>INSERT INTO gateways (
+				id, name, place_id, altitude, latitude, longitude
+			) VALUES (
+				<value name="id" type="uuid" />,
+				<value name="name" type="varchar" />,
+				<value name="place_id" type="uuid" />,
+				<value name="altitude" type="double" />,
+				<value name="latitude" type="double" />,
+				<value name="longitude" type="double" />
+			)</define>
+	</query>
+
+	<query id="gateways.fetch.by.id">
+		<define>
+		SELECT
+			g.name AS name,
+			g.altitude AS altitude,
+			g.latitude AS latitude,
+			g.longitude AS longitude,
+			p.id AS place_id,
+			p.name AS place_name
+		FROM gateways AS g
+		LEFT JOIN places AS p ON g.place_id = p.id
+		WHERE g.id = <value name="id" type="uuid" />
+		</define>
+	</query>
+
+	<query id="gateways.update">
+		<define>
+		UPDATE gateways SET
+			name = <value name="name" type="varchar" />,
+			altitude = <value name="altitude" type="double" />,
+			latitude = <value name="latitude" type="double" />,
+			longitude = <value name="longitude" type="double" />
+		WHERE
+			id = <value name="id" type="uuid" />
+		</define>
+	</query>
+
+	<query id="gateways.assign.and.update">
+		<define>
+		UPDATE gateways SET
+			name = <value name="name" type="varchar" />,
+			altitude = <value name="altitude" type="double" />,
+			latitude = <value name="latitude" type="double" />,
+			longitude = <value name="longitude" type="double" />,
+			place_id = <value name="place_id" type="uuid" />
+		WHERE
+			id = <value name="id" type="uuid" />
+		</define>
+	</query>
+
+	<query id="gateways.assign">
+		<define>
+		UPDATE gateways SET
+			place_id = <value name="place_id" type="uuid" />
+		WHERE
+			id = <value name="id" type="uuid" />
+		</define>
+	</query>
+
+	<query id="gateways.unassign">
+		<define>
+		UPDATE gateways SET
+			place_id = NULL
+		WHERE
+			id = <value name="id" type="uuid" />
+		</define>
+	</query>
+
+	<query id="gateways.fetch.by.place_id">
+		<define>
+		SELECT
+			g.name AS name,
+			g.altitude AS altitude,
+			g.latitude AS latitude,
+			g.longitude AS longitude,
+			g.place_id AS place_id,
+			p.name AS place_name
+		FROM gateways AS g
+		JOIN places AS p ON g.place_id = p.id
+		WHERE
+			g.id = <value name="id" type="uuid" />
+			AND
+			g.place_id = <value name="place_id" type="uuid" />
+		</define>
+	</query>
+
+	<query id="gateways.fetch.accessible">
+		<define>
+		SELECT
+			DISTINCT g.id AS id,
+			g.name AS name,
+			g.altitude AS altitude,
+			g.latitude AS latitude,
+			g.longitude AS longitude,
+			p.id AS place_id,
+			p.name AS place_name
+		FROM gateways AS g
+		JOIN places AS p ON g.place_id = p.id
+		JOIN roles_in_place AS r ON g.place_id = r.place_id
+		JOIN verified_identities AS v ON v.identity_id = r.identity_id
+		WHERE
+			v.user_id = <value name="user_id" type="uuid" />
+		</define>
+	</query>
+
+	<query id="locations.create">
+		<define>INSERT INTO locations (id, name, place_id) VALUES (
+				<value name="id" type="uuid" />,
+				<value name="name" type="varchar" />,
+				<value name="place_id" type="uuid" />)</define>
+	</query>
+
+	<query id="locations.fetch.by.id">
+		<define>
+		SELECT
+			l.name AS name,
+			p.name AS place_name,
+			p.id AS place_id
+		FROM locations AS l
+		JOIN places AS p ON l.place_id = p.id
+		WHERE l.id = <value name="id" type="uuid" />
+		</define>
+		<!-- TODO: place_id should be not-null -->
+		<test name="simple test">
+			<setup name="create places">
+				<sql>INSERT INTO places (id, name)
+					VALUES ('16de2f05-8af7-4729-8479-1973590cfa54', 'Test Place 1')</sql>
+				<sql>INSERT INTO places (id, name)
+					VALUES ('bd8ea40c-91c9-4d8c-8c13-a8332c39a437', 'Test Place 2')</sql>
+			</setup>
+			<setup name="create locations">
+				<sql>INSERT INTO locations (id, name, place_id)
+					VALUES ('0a2000c7-420a-4558-a981-1c67e36c2ee4', 'Test Location 1', '16de2f05-8af7-4729-8479-1973590cfa54')</sql>
+				<sql>INSERT INTO locations (id, name, place_id)
+					VALUES ('966d40f3-3967-4a4b-8ad6-40bad688008b', 'Test Location 2', '16de2f05-8af7-4729-8479-1973590cfa54')</sql>
+				<sql>INSERT INTO locations (id, name, place_id)
+					VALUES ('dc761ed8-baa3-434a-b5c0-b23a80859efe', 'Test Location 3', 'bd8ea40c-91c9-4d8c-8c13-a8332c39a437')</sql>
+			</setup>
+			<check name="select 'Test Location 1'">
+				<call-query>
+					<arg name="id">'0a2000c7-420a-4558-a981-1c67e36c2ee4'</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="name">Test Location 1</value>
+						<value name="place_name">Test Place 1</value>
+						<value name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
+					</row>
+				</expect>
+			</check>
+			<check name="select 'Test Location 2'">
+				<call-query>
+					<arg name="id">'966d40f3-3967-4a4b-8ad6-40bad688008b'</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="name">Test Location 2</value>
+						<value name="place_name">Test Place 1</value>
+						<value name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
+					</row>
+				</expect>
+			</check>
+			<check name="select 'Test Location 3'">
+				<call-query>
+					<arg name="id">'dc761ed8-baa3-434a-b5c0-b23a80859efe'</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="name">Test Location 3</value>
+						<value name="place_name">Test Place 2</value>
+						<value name="place_id">bd8ea40c-91c9-4d8c-8c13-a8332c39a437</value>
+					</row>
+				</expect>
+			</check>
+			<check name="select non-existing">
+				<call-query>
+					<arg name="id">'eb3b29b5-53b4-4052-b2e7-06177fb66a0a'</arg>
+				</call-query>
+				<expect />
+			</check>
+			<teardown name="delete locations">
+				<sql>DELETE FROM locations WHERE id = '0a2000c7-420a-4558-a981-1c67e36c2ee4'</sql>
+				<sql>DELETE FROM locations WHERE id = '966d40f3-3967-4a4b-8ad6-40bad688008b'</sql>
+				<sql>DELETE FROM locations WHERE id = 'dc761ed8-baa3-434a-b5c0-b23a80859efe'</sql>
+			</teardown>
+			<teardown name="delete places">
+				<sql>DELETE FROM places WHERE id = 'bd8ea40c-91c9-4d8c-8c13-a8332c39a437'</sql>
+				<sql>DELETE FROM places WHERE id = '16de2f05-8af7-4729-8479-1973590cfa54'</sql>
+			</teardown>
+		</test>
+	</query>
+
+	<query id="locations.fetch.by.id.and.place_id">
+		<define>
+		SELECT
+			l.name AS name,
+			p.name AS place_name,
+			l.place_id AS place_id
+		FROM locations AS l
+		JOIN places AS p ON l.place_id = p.id
+		WHERE
+			l.id = <value name="id" type="uuid" />
+			AND
+			p.id = <value name="place_id" type="uuid" />
+		</define>
+	</query>
+
+	<query id="locations.fetch.by.id.and.gateway_id">
+		<define>
+		SELECT
+			l.name AS name,
+			p.name AS place_name,
+			l.place_id AS place_id
+		FROM locations AS l
+		JOIN places AS p ON l.place_id = p.id
+		JOIN gateways AS g ON g.place_id = p.id
+		WHERE
+			l.id = <value name="id" type="uuid" />
+			AND
+			g.id = <value name="gateway_id" type="uuid" />
+		</define>
+	</query>
+
+	<query id="locations.fetch.by.place_id">
+		<define>
+		SELECT
+			l.id AS id,
+			l.name AS name,
+			p.name AS place_name,
+			l.place_id AS place_id
+		FROM locations AS l
+		JOIN places AS p ON l.place_id = p.id
+		WHERE
+			place_id = <value name="place_id" type="uuid" />
+		</define>
+	</query>
+
+	<query id="locations.fetch.by.gateway_id">
+		<define>
+		SELECT
+			l.id AS id,
+			l.name AS name,
+			p.name AS place_name,
+			l.place_id AS place_id
+		FROM locations AS l
+		JOIN gateways AS g ON g.place_id = l.place_id
+		JOIN places AS p ON p.id = l.place_id
+		WHERE
+			g.id = <value name="gateway_id" type="uuid" />
+		</define>
+	</query>
+
+	<query id="locations.update">
+		<define>UPDATE locations SET name = <value name="name" type="varchar" />
+				WHERE id = <value name="id" type="uuid" /></define>
+	</query>
+
+	<query id="locations.remove">
+		<define>DELETE FROM locations WHERE id = <value name="id" type="uuid" /></define>
+	</query>
+
+	<query id="users.create">
+		<define>INSERT INTO users (id, first_name, last_name) VALUES (
+				<value name="id" type="uuid" />,
+				<value name="first_name" type="varchar" />,
+				<value name="last_name" type="varchar" />)</define>
+	</query>
+
+	<query id="users.fetch.by.id">
+		<define>SELECT first_name, last_name FROM users
+				WHERE id = <value name="id" type="uuid" /></define>
+	</query>
+
+	<query id="identities.create">
+		<define>INSERT INTO identities (id, email) VALUES (
+				<value name="id" type="uuid" />,
+				<value name="email" type="varchar" />)</define>
+	</query>
+
+	<query id="identities.fetch.by.id">
+		<define>SELECT email FROM identities WHERE id = <value name="id" type="uuid" /></define>
+	</query>
+
+	<query id="identities.fetch.by.email">
+		<define>SELECT id, email FROM identities WHERE email = <value name="email" type="varchar" /></define>
+	</query>
+
+	<query id="identities.remove">
+		<define>DELETE FROM identities WHERE id = <value name="id" type="uuid" /></define>
+	</query>
+
+	<query id="verified_identities.create">
+		<define>
+		INSERT INTO verified_identities (
+			id, identity_id, user_id, provider, picture, access_token
+		) VALUES (
+			<value name="id" type="uuid" />,
+			<value name="identity_id" type="uuid" />,
+			<value name="user_id" type="uuid" />,
+			<value name="provider" type="varchar" />,
+			<value name="picture" type="varchar" />,
+			<value name="access_token" type="varchar" />
+		)
+		</define>
+	</query>
+
+	<query id="verified_identities.fetch.by.id">
+		<define>
+		SELECT
+			v.identity_id AS identity_id,
+			v.user_id AS user_id,
+			v.provider AS provider,
+			v.picture AS picture,
+			v.access_token AS access_token,
+			i.email AS identity_email,
+			u.first_name AS user_first_name,
+			u.last_name AS user_last_name
+		FROM verified_identities AS v
+		JOIN identities AS i ON v.identity_id = i.id
+		JOIN users AS u ON v.user_id = u.id
+		WHERE
+			v.id = <value name="id" type="uuid" />
+		</define>
+	</query>
+
+	<query id="verified_identities.fetch.by.email.and.provider">
+		<define>
+		SELECT
+			v.id AS id,
+			v.identity_id AS identity_id,
+			v.user_id AS user_id,
+			v.picture AS picture,
+			v.provider AS provider,
+			v.access_token AS access_token,
+			i.email AS identity_email,
+			u.first_name AS user_first_name,
+			u.last_name AS user_last_name
+		FROM verified_identities AS v
+		JOIN identities AS i ON v.identity_id = i.id
+		JOIN users AS u ON v.user_id = u.id
+		WHERE
+			i.email = <value name="email" type="varchar" />
+			AND
+			v.provider = <value name="provider" type="varchar" />
+		</define>
+	</query>
+
+	<query id="verified_identities.fetch.by.email">
+		<define>
+		SELECT
+			v.id AS id,
+			v.identity_id AS identity_id,
+			v.user_id AS user_id,
+			v.picture AS picture,
+			v.provider AS provider,
+			v.access_token AS access_token,
+			i.email AS identity_email,
+			u.first_name AS user_first_name,
+			u.last_name AS user_last_name
+		FROM verified_identities AS v
+		JOIN identities AS i ON v.identity_id = i.id
+		JOIN users AS u ON v.user_id = u.id
+		WHERE
+			i.email = <value name="email" type="varchar" />
+		</define>
+	</query>
+
+	<query id="verified_identities.update">
+		<define>
+		UPDATE verified_identities SET
+			picture = <value name="picture" type="varchar" />,
+			access_token = <value name="access_token" type="varchar" />
+		WHERE
+			id = <value name="id" type="uuid" />
+		</define>
+	</query>
+
+	<query id="verified_identities.remove">
+		<define>DELETE FROM verified_identities
+				WHERE id = <value name="id" type="uuid" /></define>
+	</query>
+
+	<query id="roles_in_place.create">
+		<define>INSERT INTO roles_in_place (id, place_id, identity_id, level) VALUES (
+			<value name="id" type="uuid" />,
+			<value name="place_id" type="uuid" />,
+			<value name="identity_id" type="uuid" />,
+			<value name="level" type="integer" />)</define>
+	</query>
+
+	<query id="roles_in_place.fetch.by.id">
+		<define>
+		SELECT
+			r.place_id AS place_id,
+			r.identity_id AS identity_id,
+			r.level AS level,
+			i.email AS identity_email,
+			p.name AS place_name
+		FROM roles_in_place AS r
+		JOIN identities AS i ON r.identity_id = i.id
+		JOIN places AS p ON r.place_id = p.id
+		WHERE
+			id = <value name="id" type="uuid" />
+		</define>
+	</query>
+
+	<query id="roles_in_place.fetch.by.place_id">
+		<define>
+		SELECT
+			r.id AS id,
+			r.place_id AS place_id,
+			r.identity_id AS identity_id,
+			r.level AS level,
+			i.email AS identity_email,
+			p.name AS place_name
+		FROM roles_in_place AS r
+		JOIN identities AS i ON r.identity_id = i.id
+		JOIN places AS p ON r.place_id = p.id
+		WHERE
+			r.place_id = <value name="place_id" type="uuid" />
+		</define>
+	</query>
+
+	<query id="roles_in_place.count.users.except">
+		<define>
+		SELECT COUNT(*) FROM roles_in_place AS r
+		JOIN verified_identities AS v ON v.identity_id = r.identity_id
+		WHERE
+			r.place_id = <value name="place_id" type="uuid" />
+			AND
+			v.user_id &lt;&gt; <value name="user_id" type="uuid" />
+		</define>
+	</query>
+
+	<query id="roles_in_place.update">
+		<define>UPDATE roles_in_place SET name level <value name="level" type="integer" />
+				WHERE id = <value name="id" type="uuid" /></define>
+	</query>
+
+	<query id="roles_in_place.remove">
+		<define>DELETE FROM roles_in_place WHERE id = <value name="id" type="uuid" /></define>
+	</query>
+
+	<query id="roles_in_place.fetch.access_level">
+		<define>
+		SELECT
+			MIN(r.level)
+		FROM roles_in_place AS r
+		JOIN verified_identities AS v ON v.identity_id = r.identity_id
+		WHERE
+			r.place_id = <value name="place_id" type="uuid" />
+			AND
+			v.user_id = <value name="user_id" type="uuid" />
+		</define>
+	</query>
+
+	<query id="roles_in_place.fetch.accessible.places">
+		<define>
+		SELECT
+			DISTINCT p.id AS id,
+			p.name AS name
+		FROM places AS p
+		JOIN roles_in_place AS r ON r.place_id = p.id
+		JOIN verified_identities AS v ON v.identity_id = r.identity_id
+		WHERE
+			r.level &gt;= <value name="at_least" type="integer" />
+			AND
+			v.user_id = <value name="user_id" type="uuid" />
+		</define>
+	</query>
+
+</query-set>
