@@ -57,6 +57,13 @@
 		</test>
 	</query>
 
+	<query id="locations.create">
+		<define>INSERT INTO locations (id, name, place_id) VALUES (
+				<value name="id" type="uuid" />,
+				<value name="name" type="varchar" />,
+				<value name="place_id" type="uuid" />)</define>
+	</query>
+
 	<query id="locations.fetch.by.id">
 		<define>
 		SELECT
@@ -135,6 +142,75 @@
 				<sql>DELETE FROM places WHERE id = '16de2f05-8af7-4729-8479-1973590cfa54'</sql>
 			</teardown>
 		</test>
+	</query>
+
+	<query id="locations.fetch.by.id.and.place_id">
+		<define>
+		SELECT
+			l.name AS name,
+			p.name AS place_name,
+			l.place_id AS place_id
+		FROM locations AS l
+		JOIN places AS p ON l.place_id = p.id
+		WHERE
+			l.id = <value name="id" type="uuid" />
+			AND
+			p.id = <value name="place_id" type="uuid" />
+		</define>
+	</query>
+
+	<query id="locations.fetch.by.id.and.gateway_id">
+		<define>
+		SELECT
+			l.name AS name,
+			p.name AS place_name,
+			l.place_id AS place_id
+		FROM locations AS l
+		JOIN places AS p ON l.place_id = p.id
+		JOIN gateways AS g ON g.place_id = p.id
+		WHERE
+			l.id = <value name="id" type="uuid" />
+			AND
+			g.id = <value name="gateway_id" type="uuid" />
+		</define>
+	</query>
+
+	<query id="locations.fetch.by.place_id">
+		<define>
+		SELECT
+			l.id AS id,
+			l.name AS name,
+			p.name AS place_name,
+			l.place_id AS place_id
+		FROM locations AS l
+		JOIN places AS p ON l.place_id = p.id
+		WHERE
+			place_id = <value name="place_id" type="uuid" />
+		</define>
+	</query>
+
+	<query id="locations.fetch.by.gateway_id">
+		<define>
+		SELECT
+			l.id AS id,
+			l.name AS name,
+			p.name AS place_name,
+			l.place_id AS place_id
+		FROM locations AS l
+		JOIN gateways AS g ON g.place_id = l.place_id
+		JOIN places AS p ON p.id = l.place_id
+		WHERE
+			g.id = <value name="gateway_id" type="uuid" />
+		</define>
+	</query>
+
+	<query id="locations.update">
+		<define>UPDATE locations SET name = <value name="name" type="varchar" />
+				WHERE id = <value name="id" type="uuid" /></define>
+	</query>
+
+	<query id="locations.remove">
+		<define>DELETE FROM locations WHERE id = <value name="id" type="uuid" /></define>
 	</query>
 
 </query-set>
