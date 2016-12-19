@@ -57,6 +57,114 @@
 		</test>
 	</query>
 
+	<query id="gateways.create">
+		<define>INSERT INTO gateways (
+				id, name, place_id, altitude, latitude, longitude
+			) VALUES (
+				<value name="id" type="uuid" />,
+				<value name="name" type="varchar" />,
+				<value name="place_id" type="uuid" />,
+				<value name="altitude" type="double" />,
+				<value name="latitude" type="double" />,
+				<value name="longitude" type="double" />
+			)</define>
+	</query>
+
+	<query id="gateways.fetch.by.id">
+		<define>
+		SELECT
+			g.name AS name,
+			g.altitude AS altitude,
+			g.latitude AS latitude,
+			g.longitude AS longitude,
+			p.id AS place_id,
+			p.name AS place_name
+		FROM gateways AS g
+		LEFT JOIN places AS p ON g.place_id = p.id
+		WHERE g.id = <value name="id" type="uuid" />
+		</define>
+	</query>
+
+	<query id="gateways.update">
+		<define>
+		UPDATE gateways SET
+			name = <value name="name" type="varchar" />,
+			altitude = <value name="altitude" type="double" />,
+			latitude = <value name="latitude" type="double" />,
+			longitude = <value name="longitude" type="double" />
+		WHERE
+			id = <value name="id" type="uuid" />
+		</define>
+	</query>
+
+	<query id="gateways.assign.and.update">
+		<define>
+		UPDATE gateways SET
+			name = <value name="name" type="varchar" />,
+			altitude = <value name="altitude" type="double" />,
+			latitude = <value name="latitude" type="double" />,
+			longitude = <value name="longitude" type="double" />,
+			place_id = <value name="place_id" type="uuid" />
+		WHERE
+			id = <value name="id" type="uuid" />
+		</define>
+	</query>
+
+	<query id="gateways.assign">
+		<define>
+		UPDATE gateways SET
+			place_id = <value name="place_id" type="uuid" />
+		WHERE
+			id = <value name="id" type="uuid" />
+		</define>
+	</query>
+
+	<query id="gateways.unassign">
+		<define>
+		UPDATE gateways SET
+			place_id = NULL
+		WHERE
+			id = <value name="id" type="uuid" />
+		</define>
+	</query>
+
+	<query id="gateways.fetch.by.place_id">
+		<define>
+		SELECT
+			g.name AS name,
+			g.altitude AS altitude,
+			g.latitude AS latitude,
+			g.longitude AS longitude,
+			g.place_id AS place_id,
+			p.name AS place_name
+		FROM gateways AS g
+		JOIN places AS p ON g.place_id = p.id
+		WHERE
+			g.id = <value name="id" type="uuid" />
+			AND
+			g.place_id = <value name="place_id" type="uuid" />
+		</define>
+	</query>
+
+	<query id="gateways.fetch.accessible">
+		<define>
+		SELECT
+			DISTINCT g.id AS id,
+			g.name AS name,
+			g.altitude AS altitude,
+			g.latitude AS latitude,
+			g.longitude AS longitude,
+			p.id AS place_id,
+			p.name AS place_name
+		FROM gateways AS g
+		JOIN places AS p ON g.place_id = p.id
+		JOIN roles_in_place AS r ON g.place_id = r.place_id
+		JOIN verified_identities AS v ON v.identity_id = r.identity_id
+		WHERE
+			v.user_id = <value name="user_id" type="uuid" />
+		</define>
+	</query>
+
 	<query id="locations.create">
 		<define>INSERT INTO locations (id, name, place_id) VALUES (
 				<value name="id" type="uuid" />,

@@ -255,6 +255,7 @@
 
 		<instance name="sqlGatewayDao" class="BeeeOn::PocoSQLGatewayDao">
 			<set name="daoManager" ref="pocoDaoManager" />
+			<set name="sqlLoader" ref="queries" />
 		</instance>
 
 		<instance name="sqlLocationDao" class="BeeeOn::PocoSQLLocationDao">
