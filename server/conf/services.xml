@@ -247,6 +247,7 @@
 		<instance name="sqlVerifiedIdentityDao"
 				class="BeeeOn::PocoSQLVerifiedIdentityDao">
 			<set name="daoManager" ref="pocoDaoManager" />
+			<set name="sqlLoader" ref="queries" />
 		</instance>
 
 		<instance name="sqlRoleInPlaceDao"

@@ -339,6 +339,97 @@
 		<define>DELETE FROM identities WHERE id = <value name="id" type="uuid" /></define>
 	</query>
 
+	<query id="verified_identities.create">
+		<define>
+		INSERT INTO verified_identities (
+			id, identity_id, user_id, provider, picture, access_token
+		) VALUES (
+			<value name="id" type="uuid" />,
+			<value name="identity_id" type="uuid" />,
+			<value name="user_id" type="uuid" />,
+			<value name="provider" type="varchar" />,
+			<value name="picture" type="varchar" />,
+			<value name="access_token" type="varchar" />
+		)
+		</define>
+	</query>
+
+	<query id="verified_identities.fetch.by.id">
+		<define>
+		SELECT
+			v.identity_id AS identity_id,
+			v.user_id AS user_id,
+			v.provider AS provider,
+			v.picture AS picture,
+			v.access_token AS access_token,
+			i.email AS identity_email,
+			u.first_name AS user_first_name,
+			u.last_name AS user_last_name
+		FROM verified_identities AS v
+		JOIN identities AS i ON v.identity_id = i.id
+		JOIN users AS u ON v.user_id = u.id
+		WHERE
+			v.id = <value name="id" type="uuid" />
+		</define>
+	</query>
+
+	<query id="verified_identities.fetch.by.email.and.provider">
+		<define>
+		SELECT
+			v.id AS id,
+			v.identity_id AS identity_id,
+			v.user_id AS user_id,
+			v.picture AS picture,
+			v.provider AS provider,
+			v.access_token AS access_token,
+			i.email AS identity_email,
+			u.first_name AS user_first_name,
+			u.last_name AS user_last_name
+		FROM verified_identities AS v
+		JOIN identities AS i ON v.identity_id = i.id
+		JOIN users AS u ON v.user_id = u.id
+		WHERE
+			i.email = <value name="email" type="varchar" />
+			AND
+			v.provider = <value name="provider" type="varchar" />
+		</define>
+	</query>
+
+	<query id="verified_identities.fetch.by.email">
+		<define>
+		SELECT
+			v.id AS id,
+			v.identity_id AS identity_id,
+			v.user_id AS user_id,
+			v.picture AS picture,
+			v.provider AS provider,
+			v.access_token AS access_token,
+			i.email AS identity_email,
+			u.first_name AS user_first_name,
+			u.last_name AS user_last_name
+		FROM verified_identities AS v
+		JOIN identities AS i ON v.identity_id = i.id
+		JOIN users AS u ON v.user_id = u.id
+		WHERE
+			i.email = <value name="email" type="varchar" />
+		</define>
+	</query>
+
+	<query id="verified_identities.update">
+		<define>
+		UPDATE verified_identities SET
+			picture = <value name="picture" type="varchar" />,
+			access_token = <value name="access_token" type="varchar" />
+		WHERE
+			id = <value name="id" type="uuid" />
+		</define>
+	</query>
+
+	<query id="verified_identities.remove">
+		<define>DELETE FROM verified_identities
+				WHERE id = <value name="id" type="uuid" /></define>
+	</query>
+
 	<query id="roles_in_place.create">
 		<define>INSERT INTO roles_in_place (id, place_id, identity_id, level) VALUES (
 			<value name="id" type="uuid" />,
