@@ -13,6 +13,7 @@
 namespace BeeeOn {
 
 class PocoDaoManager;
+class SQLLoader;
 
 class PocoAbstractDao : public AbstractInjectorTarget {
 public:
@@ -20,9 +21,12 @@ public:
 	virtual ~PocoAbstractDao();
 
 	void setDaoManager(PocoDaoManager *manager);
+	void setSQLLoader(SQLLoader *loader);
 
 protected:
 	PocoDaoManager &manager();
+
+	std::string findQuery(const std::string &key) const;
 
 	template <typename T>
 	void assureHasId(const T &t)
@@ -44,6 +48,7 @@ protected:
 
 private:
 	PocoDaoManager *m_manager;
+	SQLLoader *m_loader;
 };
 
 }
