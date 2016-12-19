@@ -260,6 +260,11 @@
 			<set name="daoManager" ref="pocoDaoManager" />
 		</instance>
 
+		<instance name="queries" class="BeeeOn::SQLLoader">
+			<set name="database" text="home8" />
+			<add name="file" text="${database.queries}" />
+		</instance>
+
 		<!-- SSL configurations -->
 
 		<instance name="xmluiSSLServer" class="BeeeOn::SSLServer">
