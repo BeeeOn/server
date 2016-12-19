@@ -321,6 +321,18 @@
 		<define>DELETE FROM locations WHERE id = <value name="id" type="uuid" /></define>
 	</query>
 
+	<query id="users.create">
+		<define>INSERT INTO users (id, first_name, last_name) VALUES (
+				<value name="id" type="uuid" />,
+				<value name="first_name" type="varchar" />,
+				<value name="last_name" type="varchar" />)</define>
+	</query>
+
+	<query id="users.fetch.by.id">
+		<define>SELECT first_name, last_name FROM users
+				WHERE id = <value name="id" type="uuid" /></define>
+	</query>
+
 	<query id="identities.create">
 		<define>INSERT INTO identities (id, email) VALUES (
 				<value name="id" type="uuid" />,
