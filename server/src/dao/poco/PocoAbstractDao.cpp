@@ -34,7 +34,7 @@ void PocoAbstractDao::setDaoManager(PocoDaoManager *manager)
 	m_manager = manager;
 }
 
-void PocoDaoManager::setSQLLoader(SQLLoader *loader)
+void PocoAbstractDao::setSQLLoader(SQLLoader *loader)
 {
 	m_loader = loader;
 }

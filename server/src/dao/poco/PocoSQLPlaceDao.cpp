@@ -47,10 +47,7 @@ void PocoSQLPlaceDao::create(Session &session, Place &place)
 	string name(place.name());
 
 	Statement sql(session);
-	sql << "INSERT INTO places"
-		" (id, name)"
-		" VALUES"
-		" (:id, :name)",
+	sql << findQuery("places.create"),
 		use(id, "id"),
 		use(name, "name");
 
@@ -63,8 +60,7 @@ bool PocoSQLPlaceDao::fetch(Session &session, Place &place)
 	string id(place.id().toString());
 
 	Statement sql(session);
-	sql << "SELECT name FROM places"
-		" WHERE id = :id",
+	sql << findQuery("places.fetch.by.id"),
 		use(id, "id");
 
 	if (execute(sql) == 0)
@@ -81,9 +77,7 @@ bool PocoSQLPlaceDao::update(Session &session, Place &place)
 	string name(place.name());
 
 	Statement sql(session);
-	sql << "UPDATE places"
-		" SET name = :name"
-		" WHERE id = :id",
+	sql << findQuery("places.update"),
 		use(name, "name"),
 		use(id, "id");
 
@@ -96,8 +90,7 @@ bool PocoSQLPlaceDao::remove(Session &session, const Place &place)
 	string id(place.id().toString());
 
 	Statement sql(session);
-	sql << "DELETE FROM places"
-		" WHERE id = :id",
+	sql << findQuery("places.remove"),
 		use(id, "id");
 
 	return execute(sql) > 0;

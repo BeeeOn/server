@@ -232,6 +232,7 @@
 
 		<instance name="sqlPlaceDao" class="BeeeOn::PocoSQLPlaceDao">
 			<set name="daoManager" ref="pocoDaoManager" />
+			<set name="sqlLoader" ref="queries" />
 		</instance>
 
 		<instance name="sqlUserDao" class="BeeeOn::PocoSQLUserDao">

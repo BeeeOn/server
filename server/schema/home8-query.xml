@@ -1,5 +1,20 @@
 <query-set for-database="home8">
 
+	<query id="places.create">
+		<define>INSERT INTO places (id, name) VALUES (
+				<value name="id" type="uuid" />,
+				<value name="name" type="varchar" />)</define>
+	</query>
+
+	<query id="places.update">
+		<define>UPDATE places SET name = <value name="name" type="varchar" />
+				WHERE id = <value name="id" type="uuid" /></define>
+	</query>
+
+	<query id="places.remove">
+		<define>DELETE FROM places WHERE id = <value name="id" type="uuid" /></define>
+	</query>
+
 	<query id="places.fetch.by.id">
 		<define>SELECT name FROM places WHERE id = <value name="id" type="uuid" /></define>
 		<test name="simple test">
