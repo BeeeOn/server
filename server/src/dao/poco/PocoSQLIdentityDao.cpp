@@ -59,12 +59,10 @@ bool PocoSQLIdentityDao::fetch(Session &session, Identity &identity)
 	assureHasId(identity);
 
 	string id(identity.id().toString());
-	string email;
 
 	Statement sql(session);
 	sql << findQuery("identities.fetch.by.id"),
-		use(id, "id"),
-		into(email);
+		use(id, "id");
 
 	if (execute(sql) == 0)
 		return false;
