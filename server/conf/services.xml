@@ -252,6 +252,7 @@
 		<instance name="sqlRoleInPlaceDao"
 				class="BeeeOn::PocoSQLRoleInPlaceDao">
 			<set name="daoManager" ref="pocoDaoManager" />
+			<set name="sqlLoader" ref="queries" />
 		</instance>
 
 		<instance name="sqlGatewayDao" class="BeeeOn::PocoSQLGatewayDao">

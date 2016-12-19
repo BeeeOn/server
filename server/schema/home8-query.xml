@@ -339,4 +339,93 @@
 		<define>DELETE FROM identities WHERE id = <value name="id" type="uuid" /></define>
 	</query>
 
+	<query id="roles_in_place.create">
+		<define>INSERT INTO roles_in_place (id, place_id, identity_id, level) VALUES (
+			<value name="id" type="uuid" />,
+			<value name="place_id" type="uuid" />,
+			<value name="identity_id" type="uuid" />,
+			<value name="level" type="integer" />)</define>
+	</query>
+
+	<query id="roles_in_place.fetch.by.id">
+		<define>
+		SELECT
+			r.place_id AS place_id,
+			r.identity_id AS identity_id,
+			r.level AS level,
+			i.email AS identity_email,
+			p.name AS place_name
+		FROM roles_in_place AS r
+		JOIN identities AS i ON r.identity_id = i.id
+		JOIN places AS p ON r.place_id = p.id
+		WHERE
+			id = <value name="id" type="uuid" />
+		</define>
+	</query>
+
+	<query id="roles_in_place.fetch.by.place_id">
+		<define>
+		SELECT
+			r.id AS id,
+			r.place_id AS place_id,
+			r.identity_id AS identity_id,
+			r.level AS level,
+			i.email AS identity_email,
+			p.name AS place_name
+		FROM roles_in_place AS r
+		JOIN identities AS i ON r.identity_id = i.id
+		JOIN places AS p ON r.place_id = p.id
+		WHERE
+			r.place_id = <value name="place_id" type="uuid" />
+		</define>
+	</query>
+
+	<query id="roles_in_place.count.users.except">
+		<define>
+		SELECT COUNT(*) FROM roles_in_place AS r
+		JOIN verified_identities AS v ON v.identity_id = r.identity_id
+		WHERE
+			r.place_id = <value name="place_id" type="uuid" />
+			AND
+			v.user_id &lt;&gt; <value name="user_id" type="uuid" />
+		</define>
+	</query>
+
+	<query id="roles_in_place.update">
+		<define>UPDATE roles_in_place SET name level <value name="level" type="integer" />
+				WHERE id = <value name="id" type="uuid" /></define>
+	</query>
+
+	<query id="roles_in_place.remove">
+		<define>DELETE FROM roles_in_place WHERE id = <value name="id" type="uuid" /></define>
+	</query>
+
+	<query id="roles_in_place.fetch.access_level">
+		<define>
+		SELECT
+			MIN(r.level)
+		FROM roles_in_place AS r
+		JOIN verified_identities AS v ON v.identity_id = r.identity_id
+		WHERE
+			r.place_id = <value name="place_id" type="uuid" />
+			AND
+			v.user_id = <value name="user_id" type="uuid" />
+		</define>
+	</query>
+
+	<query id="roles_in_place.fetch.accessible.places">
+		<define>
+		SELECT
+			DISTINCT p.id AS id,
+			p.name AS name
+		FROM places AS p
+		JOIN roles_in_place AS r ON r.place_id = p.id
+		JOIN verified_identities AS v ON v.identity_id = r.identity_id
+		WHERE
+			r.level &gt;= <value name="at_least" type="integer" />
+			AND
+			v.user_id = <value name="user_id" type="uuid" />
+		</define>
+	</query>
+
 </query-set>
