@@ -321,4 +321,22 @@
 		<define>DELETE FROM locations WHERE id = <value name="id" type="uuid" /></define>
 	</query>
 
+	<query id="identities.create">
+		<define>INSERT INTO identities (id, email) VALUES (
+				<value name="id" type="uuid" />,
+				<value name="email" type="varchar" />)</define>
+	</query>
+
+	<query id="identities.fetch.by.id">
+		<define>SELECT email FROM identities WHERE id = <value name="id" type="uuid" /></define>
+	</query>
+
+	<query id="identities.fetch.by.email">
+		<define>SELECT id, email FROM identities WHERE email = <value name="email" type="varchar" /></define>
+	</query>
+
+	<query id="identities.remove">
+		<define>DELETE FROM identities WHERE id = <value name="id" type="uuid" /></define>
+	</query>
+
 </query-set>
