@@ -30,9 +30,15 @@
 			<x:if test="$engine = 'sqlite'">
 				<x:text>.mode csv&#xA;</x:text>
 				<x:text>.headers on&#xA;</x:text>
+				<x:text>.output </x:text>
+				<x:value-of select="concat(@for-database, '-', $engine, '-test.csv', '&#xA;')" />
 			</x:if>
 
 			<x:apply-templates select="query" />
+		</c:document>
+
+		<c:document href="{@for-database}-{$engine}-expect.csv" method="text" encoding="utf-8">
+			<x:apply-templates select="query/test/check/expect" mode="csv" />
 		</c:document>
 	</x:template>
 
@@ -158,6 +164,55 @@
 			<x:value-of select="." />
 			<x:text>'&#xA;</x:text>
 		</x:for-each>
+	</x:template>
+
+	<x:template name="csv-new-line">
+		<x:text>&#xA;</x:text>
+	</x:template>
+
+	<x:template name="csv-separator">
+		<x:text>,</x:text>
+	</x:template>
+
+	<x:template name="csv-quote-value">
+		<x:param name="value" select="." />
+
+		<x:choose>
+			<x:when test="contains($value, ' ')">
+				<x:text>"</x:text>
+				<x:value-of select="$value" />
+				<x:text>"</x:text>
+			</x:when>
+			<x:otherwise>
+				<x:value-of select="$value" />
+			</x:otherwise>
+		</x:choose>
+	</x:template>
+
+	<x:template match="expect" mode="csv">
+		<x:if test="row">
+			<x:for-each select="row[position() = 1]/value">
+				<x:value-of select="@name" />
+
+				<x:if test="position() &lt; last()">
+					<x:call-template name="csv-separator" />
+				</x:if>
+			</x:for-each>
+
+			<x:call-template name="csv-new-line" />
+
+			<x:for-each select="row">
+				<x:for-each select="value">
+					<x:call-template name="csv-quote-value" />
+
+					<x:if test="position() &lt; last()">
+						<x:call-template name="csv-separator" />
+					</x:if>
+				</x:for-each>
+			</x:for-each>
+
+			<x:call-template name="csv-new-line" />
+		</x:if>
 	</x:template>
 
 </x:stylesheet>
