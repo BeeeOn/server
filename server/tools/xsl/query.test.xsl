@@ -25,14 +25,26 @@
 		<x:apply-templates select="query-set" />
 	</x:template>
 
+	<x:template name="test-preamble">
+		<x:if test="$engine = 'sqlite'">
+			<x:text>.mode csv&#xA;</x:text>
+			<x:text>.headers on&#xA;</x:text>
+			<x:text>.output </x:text>
+			<x:value-of select="concat(@for-database, '-', $engine, '-test.csv', '&#xA;')" />
+		</x:if>
+		<x:if test="$engine = 'postgre'">
+			<x:text>\f ','&#xA;</x:text>
+			<x:text>\a&#xA;</x:text>
+			<x:text>\t on&#xA;</x:text>
+			<x:text>\o '</x:text>
+			<x:value-of select="concat(@for-database, '-', $engine, '-test.csv')" />
+			<x:text>'&#xA;</x:text>
+		</x:if>
+	</x:template>
+
 	<x:template match="query-set">
 		<c:document href="{@for-database}-{$engine}-test.sql" method="text" encoding="utf-8">
-			<x:if test="$engine = 'sqlite'">
-				<x:text>.mode csv&#xA;</x:text>
-				<x:text>.headers on&#xA;</x:text>
-				<x:text>.output </x:text>
-				<x:value-of select="concat(@for-database, '-', $engine, '-test.csv', '&#xA;')" />
-			</x:if>
+			<x:call-template name="test-preamble" />
 
 			<x:apply-templates select="query" />
 		</c:document>
@@ -178,6 +190,9 @@
 		<x:param name="value" select="." />
 
 		<x:choose>
+			<x:when test="$engine = 'postgre'">
+				<x:value-of select="$value" />
+			</x:when>
 			<x:when test="contains($value, ' ')">
 				<x:text>"</x:text>
 				<x:value-of select="$value" />
@@ -189,18 +204,31 @@
 		</x:choose>
 	</x:template>
 
+	<x:template name="print-csv-header">
+		<x:for-each select="row[position() = 1]/value">
+			<x:value-of select="@name" />
+
+			<x:if test="position() &lt; last()">
+				<x:call-template name="csv-separator" />
+			</x:if>
+		</x:for-each>
+
+		<x:call-template name="csv-new-line" />
+	</x:template>
+
+	<x:template name="expect-header">
+		<x:if test="row and $engine = 'sqlite'">
+			<x:call-template name="print-csv-header" />
+		</x:if>
+	</x:template>
+
+	<x:template name="expect-footer">
+	</x:template>
+
 	<x:template match="expect" mode="csv">
+		<x:call-template name="expect-header" />
+
 		<x:if test="row">
-			<x:for-each select="row[position() = 1]/value">
-				<x:value-of select="@name" />
-
-				<x:if test="position() &lt; last()">
-					<x:call-template name="csv-separator" />
-				</x:if>
-			</x:for-each>
-
-			<x:call-template name="csv-new-line" />
-
 			<x:for-each select="row">
 				<x:for-each select="value">
 					<x:call-template name="csv-quote-value" />
@@ -213,6 +241,8 @@
 
 			<x:call-template name="csv-new-line" />
 		</x:if>
+
+		<x:call-template name="expect-footer" />
 	</x:template>
 
 </x:stylesheet>
