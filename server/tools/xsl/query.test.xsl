@@ -25,14 +25,18 @@
 		<x:apply-templates select="query-set" />
 	</x:template>
 
+	<x:template name="test-preamble">
+		<x:if test="$engine = 'sqlite'">
+			<x:text>.mode csv&#xA;</x:text>
+			<x:text>.headers on&#xA;</x:text>
+			<x:text>.output </x:text>
+			<x:value-of select="concat(@for-database, '-', $engine, '-test.csv', '&#xA;')" />
+		</x:if>
+	</x:template>
+
 	<x:template match="query-set">
 		<c:document href="{@for-database}-{$engine}-test.sql" method="text" encoding="utf-8">
-			<x:if test="$engine = 'sqlite'">
-				<x:text>.mode csv&#xA;</x:text>
-				<x:text>.headers on&#xA;</x:text>
-				<x:text>.output </x:text>
-				<x:value-of select="concat(@for-database, '-', $engine, '-test.csv', '&#xA;')" />
-			</x:if>
+			<x:call-template name="test-preamble" />
 
 			<x:apply-templates select="query" />
 		</c:document>
