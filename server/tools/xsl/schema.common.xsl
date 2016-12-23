@@ -37,7 +37,7 @@
 	<x:template name="print-default">
 		<x:if test="@default">
 			<x:text> DEFAULT </x:text>
-			<x:value-of select="@name" />
+			<x:value-of select="@default" />
 		</x:if>
 	</x:template>
 
@@ -161,7 +161,7 @@
 		</x:if>
 
 		<x:if test="not(@name)">
-			<x:value-of select="concat(../@name, '_fk')" />
+			<x:value-of select="concat(../@name, '_', @table, '_fk')" />
 		</x:if>
 	</x:template>
 
