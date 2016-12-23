@@ -37,7 +37,7 @@
 	<x:template name="print-default">
 		<x:if test="@default">
 			<x:text> DEFAULT </x:text>
-			<x:value-of select="@name" />
+			<x:value-of select="@default" />
 		</x:if>
 	</x:template>
 
