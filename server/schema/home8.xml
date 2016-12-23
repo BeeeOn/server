@@ -76,8 +76,8 @@
 	</table>
 
 	<table name="devices">
-		<column name="id" type="uuid" not-null="yes" />
-		<column name="gateway_id" type="uuid" not-null="yes" />
+		<column name="id" type="int64" not-null="yes" />
+		<column name="gateway_id" type="int64" not-null="yes" />
 		<column name="location_id" type="uuid" />
 		<column name="name" type="varchar" size="250" not-null="yes" />
 		<column name="type" type="smallint" not-null="yes" />
