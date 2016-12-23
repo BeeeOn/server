@@ -204,20 +204,31 @@
 		</x:choose>
 	</x:template>
 
-	<x:template match="expect" mode="csv">
-		<x:if test="row">
-			<x:if test="$engine != 'postgre'">
-				<x:for-each select="row[position() = 1]/value">
-					<x:value-of select="@name" />
+	<x:template name="print-csv-header">
+		<x:for-each select="row[position() = 1]/value">
+			<x:value-of select="@name" />
 
-					<x:if test="position() &lt; last()">
-						<x:call-template name="csv-separator" />
-					</x:if>
-				</x:for-each>
-
-				<x:call-template name="csv-new-line" />
+			<x:if test="position() &lt; last()">
+				<x:call-template name="csv-separator" />
 			</x:if>
+		</x:for-each>
 
+		<x:call-template name="csv-new-line" />
+	</x:template>
+
+	<x:template name="expect-header">
+		<x:if test="row and $engine = 'sqlite'">
+			<x:call-template name="print-csv-header" />
+		</x:if>
+	</x:template>
+
+	<x:template name="expect-footer">
+	</x:template>
+
+	<x:template match="expect" mode="csv">
+		<x:call-template name="expect-header" />
+
+		<x:if test="row">
 			<x:for-each select="row">
 				<x:for-each select="value">
 					<x:call-template name="csv-quote-value" />
@@ -230,6 +241,8 @@
 
 			<x:call-template name="csv-new-line" />
 		</x:if>
+
+		<x:call-template name="expect-footer" />
 	</x:template>
 
 </x:stylesheet>
