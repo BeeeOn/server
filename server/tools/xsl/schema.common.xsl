@@ -161,7 +161,7 @@
 		</x:if>
 
 		<x:if test="not(@name)">
-			<x:value-of select="concat(../@name, '_fk')" />
+			<x:value-of select="concat(../@name, '_', @table, '_fk')" />
 		</x:if>
 	</x:template>
 
