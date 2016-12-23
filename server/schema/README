@@ -56,10 +56,14 @@ Steps:
   $ ls
   home8.xml  home8-query.xml  home8-sqlite-test.sql  home8-sqlite-expect.csv  README
 
+  $ xsltproc --stringparam engine postgre ../tools/xsl/query.test.xsl home8-query.xml
+  $ ls
+  home8.xml  home8-query.xml  home8-postgre-test.sql  home8-postgre-expect.csv  README
+
 
 == Execute sqlite tests ==
 
-First, generate testing files and SQL schema for the sqlite engine descripted earlier.
+First, generate testing files and SQL schema for the sqlite engine as described earlier.
 
   $ ls
   home8.xml  home8-query.xml  home8-sqlite.sql  home8-sqlite-test.sql  README
