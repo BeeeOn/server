@@ -31,6 +31,7 @@
 			<x:text>.headers on&#xA;</x:text>
 			<x:text>.output </x:text>
 			<x:value-of select="concat(@for-database, '-', $engine, '-test.csv', '&#xA;')" />
+			<x:text>PRAGMA foreign_keys = ON;&#xA;</x:text>
 		</x:if>
 		<x:if test="$engine = 'postgre'">
 			<x:text>\f ','&#xA;</x:text>
