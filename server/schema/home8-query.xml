@@ -51,6 +51,28 @@
 	<query id="places.update">
 		<define>UPDATE places SET name = <value name="name" type="varchar" />
 				WHERE id = <value name="id" type="uuid" /></define>
+		<test name="update of place works">
+			<setup name="prepare a testing place to avoid conflicts with the global ones">
+				<sql>INSERT INTO places (id, name)
+					VALUES ('e834712f-1a31-48c0-a01b-cecde260ecea', 'Test Place 12')</sql>
+			</setup>
+			<check name="update testing place, rename to 'Test Place 13'">
+				<call-query>
+					<arg name="id">'e834712f-1a31-48c0-a01b-cecde260ecea'</arg>
+					<arg name="name">'Test Place 13'</arg>
+				</call-query>
+				<sql>SELECT id, name FROM places WHERE id = 'e834712f-1a31-48c0-a01b-cecde260ecea'</sql>
+				<expect>
+					<row>
+						<value name="id">e834712f-1a31-48c0-a01b-cecde260ecea</value>
+						<value name="name">Test Place 13</value>
+					</row>
+				</expect>
+			</check>
+			<teardown name="delete testing place">
+				<sql>DELETE FROM places WHERE id = 'e834712f-1a31-48c0-a01b-cecde260ecea'</sql>
+			</teardown>
+		</test>
 	</query>
 
 	<query id="places.remove">
