@@ -266,6 +266,42 @@
 					</row>
 				</expect>
 			</check>
+			<teardown name="clean up 'living room'">
+				<sql>DELETE FROM locations WHERE id = 'c94d43df-84da-4200-b5a2-1d3594ac7645'</sql>
+			</teardown>
+		</test>
+		<test name="insert conflicting location">
+			<setup name="prepare a conflicting location">
+				<sql>INSERT INTO locations (id, name, place_id) VALUES (
+						'c94d43df-84da-4200-b5a2-1d3594ac7645',
+						'living room',
+						'bd8ea40c-91c9-4d8c-8c13-a8332c39a437')</sql>
+			</setup>
+			<check name="same id fails">
+				<call-query>
+					<arg name="id">'c94d43df-84da-4200-b5a2-1d3594ac7645'</arg>
+					<arg name="name">'kitchen'</arg>
+					<arg name="place_id">'bd8ea40c-91c9-4d8c-8c13-a8332c39a437'</arg>
+				</call-query>
+				<expect>
+					<fail-insert table="locations" conflict="id" />
+				</expect>
+			</check>
+			<teardown name="clean up 'living room'">
+				<sql>DELETE FROM locations WHERE id = 'c94d43df-84da-4200-b5a2-1d3594ac7645'</sql>
+			</teardown>
+		</test>
+		<test name="insert location for non-existing place">
+			<check name="fail with non-existing place">
+				<call-query>
+					<arg name="id">'c94d43df-84da-4200-b5a2-1d3594ac7645'</arg>
+					<arg name="name">'kitchen'</arg>
+					<arg name="place_id">'50ffebba-3e18-4f62-9538-4629dce051cf'</arg>
+				</call-query>
+				<expect>
+					<fail-insert table="locations" conflict="place_id" />
+				</expect>
+			</check>
 		</test>
 	</query>
 
