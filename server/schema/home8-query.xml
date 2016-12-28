@@ -250,6 +250,23 @@
 				<value name="id" type="uuid" />,
 				<value name="name" type="varchar" />,
 				<value name="place_id" type="uuid" />)</define>
+		<test name="insert location works">
+			<check name="simple insert">
+				<call-query>
+					<arg name="id">'c94d43df-84da-4200-b5a2-1d3594ac7645'</arg>
+					<arg name="name">'living room'</arg>
+					<arg name="place_id">'bd8ea40c-91c9-4d8c-8c13-a8332c39a437'</arg>
+				</call-query>
+				<sql>SELECT id, name, place_id FROM locations WHERE id = 'c94d43df-84da-4200-b5a2-1d3594ac7645'</sql>
+				<expect>
+					<row>
+						<value name="id">c94d43df-84da-4200-b5a2-1d3594ac7645</value>
+						<value name="name">living room</value>
+						<value name="place_id">bd8ea40c-91c9-4d8c-8c13-a8332c39a437</value>
+					</row>
+				</expect>
+			</check>
+		</test>
 	</query>
 
 	<query id="locations.fetch.by.id">
