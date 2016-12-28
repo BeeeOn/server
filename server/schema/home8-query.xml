@@ -77,6 +77,32 @@
 
 	<query id="places.remove">
 		<define>DELETE FROM places WHERE id = <value name="id" type="uuid" /></define>
+		<test name="delete of place works">
+			<setup name="prepare a testing place to avoid conflicts with the global ones">
+				<sql>INSERT INTO places (id, name)
+					VALUES ('e834712f-1a31-48c0-a01b-cecde260ecea', 'Test Place 12')</sql>
+			</setup>
+			<check name="delete testing place">
+				<call-query>
+					<arg name="id">'e834712f-1a31-48c0-a01b-cecde260ecea'</arg>
+				</call-query>
+				<sql>SELECT id, name FROM places WHERE id = 'e834712f-1a31-48c0-a01b-cecde260ecea'</sql>
+				<expect />
+			</check>
+		</test>
+		<test name="delete non-existing place">
+			<check name="delete and expect failure">
+				<call-query>
+					<arg name="id">'e834712f-1a31-48c0-a01b-cecde260ecea'</arg>
+				</call-query>
+				<sql>SELECT COUNT(*) AS count FROM places</sql>
+				<expect>
+					<row>
+						<value name="count">2</value>
+					</row>
+				</expect>
+			</check>
+		</test>
 	</query>
 
 	<query id="places.fetch.by.id">
