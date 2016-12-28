@@ -136,6 +136,7 @@
 		<x:text>&#xA;</x:text>
 
 		<x:apply-templates select="call-query" />
+		<x:apply-templates select="sql" mode="simple" />
 		<x:apply-templates select="expect" />
 	</x:template>
 

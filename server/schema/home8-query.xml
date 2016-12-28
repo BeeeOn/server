@@ -17,6 +17,24 @@
 		<define>INSERT INTO places (id, name) VALUES (
 				<value name="id" type="uuid" />,
 				<value name="name" type="varchar" />)</define>
+		<test name="test insert works">
+			<check name="insert 'Test Place 10'">
+				<call-query>
+					<arg name="id">'6a3ebd1f-9dc2-48e0-85b4-f0880eb3e334'</arg>
+					<arg name="name">'Test Place 10'</arg>
+				</call-query>
+				<sql>SELECT id, name FROM places WHERE id = '6a3ebd1f-9dc2-48e0-85b4-f0880eb3e334'</sql>
+				<expect>
+					<row>
+						<value name="id">6a3ebd1f-9dc2-48e0-85b4-f0880eb3e334</value>
+						<value name="name">Test Place 10</value>
+					</row>
+				</expect>
+			</check>
+			<teardown name="delete 'Test Place 10'">
+				<sql>DELETE FROM places WHERE id = '6a3ebd1f-9dc2-48e0-85b4-f0880eb3e334'</sql>
+			</teardown>
+		</test>
 	</query>
 
 	<query id="places.update">
