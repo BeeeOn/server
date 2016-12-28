@@ -187,6 +187,36 @@
 				<sql>DELETE FROM gateways WHERE id = 161762224815122</sql>
 			</teardown>
 		</test>
+		<test name="fail on duplicate id">
+			<check name="insert must fail">
+				<call-query>
+					<arg name="id">181462068183316</arg>
+					<arg name="name">'Test Gateway 10'</arg>
+					<arg name="place_id">'bd8ea40c-91c9-4d8c-8c13-a8332c39a437'</arg>
+					<arg name="altitude">0.63</arg>
+					<arg name="latitude">0.71</arg>
+					<arg name="longitude">0.23</arg>
+				</call-query>
+				<expect>
+					<fail-insert table="gateways" conflict="id" />
+				</expect>
+			</check>
+		</test>
+		<test name="fail on non-existing place">
+			<check name="insert must fail">
+				<call-query>
+					<arg name="id">181462068183316</arg>
+					<arg name="name">'Test Gateway 11'</arg>
+					<arg name="place_id">'6f190529-f4be-4e4d-995d-cb1f6d826d0a'</arg>
+					<arg name="altitude">0.33</arg>
+					<arg name="latitude">0.41</arg>
+					<arg name="longitude">0.53</arg>
+				</call-query>
+				<expect>
+					<fail-insert table="gateways" conflict="place_id" />
+				</expect>
+			</check>
+		</test>
 	</query>
 
 	<query id="gateways.fetch.by.id">
