@@ -35,6 +35,17 @@
 				<sql>DELETE FROM places WHERE id = '6a3ebd1f-9dc2-48e0-85b4-f0880eb3e334'</sql>
 			</teardown>
 		</test>
+		<test name="test conflicting place">
+			<check name="insert 'Test Place 11' with conflicting ID">
+				<call-query>
+					<arg name="id">'16de2f05-8af7-4729-8479-1973590cfa54'</arg>
+					<arg name="name">'Test Place 11'</arg>
+				</call-query>
+				<expect>
+					<fail-insert table="places" conflict="id" />
+				</expect>
+			</check>
+		</test>
 	</query>
 
 	<query id="places.update">

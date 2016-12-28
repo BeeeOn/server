@@ -135,12 +135,14 @@
 		<x:call-template name="name-sequential-item" />
 		<x:text>&#xA;</x:text>
 
+		<x:apply-templates select="expect/fail-insert" mode="before-call" />
 		<x:apply-templates select="call-query" />
 		<x:apply-templates select="sql" mode="simple" />
 		<x:apply-templates select="expect" />
 	</x:template>
 
 	<x:template match="call-query">
+		<x:text>-- Call query under test&#xA;</x:text>
 		<x:apply-templates select="../../../define" mode="check">
 			<x:with-param name="args" select="arg" />
 		</x:apply-templates>
@@ -182,6 +184,43 @@
 		<x:value-of select="$arg" />
 	</x:template>
 
+	<x:template match="expect/fail-insert" mode="before-call">
+		<x:text>-- Prepare for checking failing insert&#xA;</x:text>
+		<x:if test="$engine = 'sqlite'">
+			<x:text>CREATE TABLE insert_should_fail (error text);&#xA;</x:text>
+			<x:text>CREATE TRIGGER trigger_after_insert AFTER INSERT ON </x:text>
+			<x:value-of select="@table" />
+			<x:text> BEGIN INSERT INTO insert_should_fail (error) VALUES ('</x:text>
+			<x:value-of select="concat(../../../@name, ' did not fail for query ', ../../../../@id, ' conflicting on ', @conflict)" />
+			<x:text>'); END;&#xA;</x:text>
+		</x:if>
+		<x:if test="$engine = 'postgre'">
+			<x:text>CREATE TABLE insert_should_fail (error text);&#xA;</x:text>
+			<x:text>CREATE OR REPLACE FUNCTION fail_after_insert() RETURNS trigger AS $xxx$&#xA;</x:text>
+			<x:text>  BEGIN INSERT INTO insert_should_fail (error) VALUES ('</x:text>
+			<x:value-of select="concat(../../../@name, ' did not fail for query ', ../../../../@id, ' conflicting on ', @conflict)" />
+			<x:text>'); RETURN NULL; END; $xxx$ LANGUAGE plpgsql;&#xA;</x:text>
+			<x:text>CREATE TRIGGER trigger_after_insert AFTER INSERT ON </x:text>
+			<x:value-of select="@table" />
+			<x:text> EXECUTE PROCEDURE fail_after_insert();&#xA;</x:text>
+		</x:if>
+	</x:template>
+
+	<x:template match="expect/fail-insert" mode="after-call">
+		<x:text>-- Test insert has failed (no output)&#xA;</x:text>
+		<x:text>SELECT error from insert_should_fail;&#xA;</x:text>
+		<x:if test="$engine = 'sqlite'">
+			<x:text>DROP TRIGGER trigger_after_insert;&#xA;</x:text>
+		</x:if>
+		<x:if test="$engine = 'postgre'">
+			<x:text>DROP TRIGGER trigger_after_insert ON </x:text>
+			<x:value-of select="@table" />
+			<x:text>;&#xA;</x:text>
+			<x:text>DROP FUNCTION fail_after_insert();&#xA;</x:text>
+		</x:if>
+		<x:text>DROP TABLE insert_should_fail;&#xA;</x:text>
+	</x:template>
+
 	<x:template match="expect">
 		<x:text>-- Expect</x:text>
 		<x:value-of select="concat(' ', count(row))" />
@@ -189,6 +228,7 @@
 		<x:text>&#xA;</x:text>
 
 		<x:apply-templates select="row" mode="describe-expect" />
+		<x:apply-templates select="fail-insert" mode="after-call" />
 	</x:template>
 
 	<x:template match="row" mode="describe-expect">
