@@ -7,6 +7,12 @@
 
 #include "di/InjectorTarget.h"
 
+namespace Poco {
+
+class Logger;
+
+}
+
 namespace BeeeOn {
 
 /**
@@ -80,6 +86,7 @@ public:
 	void setVerificationDepth(int depth);
 	void setCipherList(const std::string &list);
 	void setSessionCache(const std::string &enable);
+	void setDisabledProtocols(const std::string &protocols);
 
 	Poco::Net::Context::Ptr context();
 
@@ -92,6 +99,7 @@ protected:
 	using VerificationMode =
 		typename Poco::Net::Context::VerificationMode;
 
+	Poco::Logger &m_logger;
 	Poco::Mutex m_lock;
 	Poco::Net::Context::Ptr m_context;
 	std::string m_caLocation;
@@ -103,6 +111,7 @@ protected:
 	int m_verificationDepth;
 	std::string m_cipherList;
 	bool m_sessionCache;
+	unsigned int m_disabledProtocols;
 };
 
 }
