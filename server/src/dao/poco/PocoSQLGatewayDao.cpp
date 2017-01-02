@@ -32,6 +32,12 @@ bool PocoSQLGatewayDao::fetch(Gateway &gateway)
 	return fetch(session, gateway);
 }
 
+bool PocoSQLGatewayDao::fetch(LegacyGateway &gateway, const User &user)
+{
+	Session session(manager().pool().get());
+	return fetch(session, gateway, user);
+}
+
 bool PocoSQLGatewayDao::update(Gateway &gateway)
 {
 	Session session(manager().pool().get());
@@ -115,6 +121,26 @@ bool PocoSQLGatewayDao::fetch(Session &session, Gateway &gateway)
 
 	Statement sql(session);
 	sql << findQuery("gateways.fetch.by.id"),
+		use(id, "id");
+
+	if (execute(sql) == 0)
+		return false;
+
+	RecordSet result(sql);
+	return parseSingle(result, gateway);
+}
+
+bool PocoSQLGatewayDao::fetch(Session &session, LegacyGateway &gateway, const User &user)
+{
+	assureHasId(gateway);
+	assureHasId(user);
+
+	string id(gateway.id().toString());
+	string userID(user.id().toString());
+
+	Statement sql(session);
+	sql << findQuery("legacy_gateways.fetch.by.id"),
+		use(userID, "user_id"),
 		use(id, "id");
 
 	if (execute(sql) == 0)

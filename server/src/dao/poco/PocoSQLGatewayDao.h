@@ -20,6 +20,7 @@ class PocoSQLGatewayDao :
 public:
 	bool insert(Gateway &gateway) override;
 	bool fetch(Gateway &gateway) override;
+	bool fetch(LegacyGateway &gateway, const User &user) override;
 	bool update(Gateway &gateway) override;
 	bool assignAndUpdate(Gateway &gateway, const Place &place) override;
 	bool assign(Gateway &gateway, const Place &place) override;
@@ -65,6 +66,7 @@ public:
 protected:
 	bool insert(Poco::Data::Session &session, Gateway &gateway);
 	bool fetch(Poco::Data::Session &session, Gateway &gateway);
+	bool fetch(Poco::Data::Session &session, LegacyGateway &gateway, const User &user);
 	bool update(Poco::Data::Session &session, Gateway &gateway);
 	bool assignAndUpdate(Poco::Data::Session &session,
 			Gateway &gateway, const Place &place);

@@ -8,6 +8,7 @@
 #include "model/User.h"
 #include "model/Place.h"
 #include "model/Gateway.h"
+#include "model/LegacyGateway.h"
 
 namespace BeeeOn {
 
@@ -15,6 +16,7 @@ class GatewayDao {
 public:
 	virtual bool insert(Gateway &gateway) = 0;
 	virtual bool fetch(Gateway &gateway) = 0;
+	virtual bool fetch(LegacyGateway &gateway, const User &user) = 0;
 	virtual bool update(Gateway &gateway) = 0;
 	virtual bool assignAndUpdate(Gateway &gateway, const Place &place) = 0;
 	virtual bool assign(Gateway &gateway, const Place &place) = 0;
@@ -34,6 +36,11 @@ public:
 	 */
 	static GatewayDao &instance();
 
+	bool fetch(LegacyGateway &gateway, const User &user)
+	{
+		throw Poco::NotImplementedException(__func__);
+	}
+
 	bool assignAndUpdate(Gateway &gateway, const Place &place)
 	{
 		return update(gateway);
@@ -51,7 +58,7 @@ public:
 
 	bool fetchFromPlace(Gateway &gateway, const Place &place)
 	{
-		return fetch(gateway);
+		throw Poco::NotImplementedException(__func__);
 	}
 
 	void fetchAccessible(std::vector<Gateway> &gateways,

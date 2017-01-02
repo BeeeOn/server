@@ -1272,4 +1272,70 @@
 		</test>
 	</query>
 
+	<query id="legacy_gateways.fetch.by.id">
+		<define>
+		SELECT
+			g.name AS name,
+			g.place_id AS place_id,
+			p.name AS place_name,
+			g.altitude AS altitude,
+			g.latitude AS latitude,
+			g.longitude AS longitude,
+			g.roles_count AS roles_count,
+			g.devices_count AS devices_count,
+			g.owner_id AS owner_id,
+			(SELECT level FROM users_of_gateway
+				WHERE
+					gateway_id = g.id
+					AND
+					user_id = <value name="user_id" type="uuid" />)
+			AS access_level
+		FROM legacy_gateways AS g
+		LEFT JOIN places AS p ON g.place_id = p.id
+		WHERE g.id = <value name="id" type="int64" />
+		</define>
+		<test name="simple test">
+			<check name="fetch Test Gateway 2 as Pepa Goodman and check it is owned by Franta Kutil">
+				<call-query>
+					<arg name="user_id">'29d214d4-2057-4e06-b003-b839d0bb1df6'</arg>
+					<arg name="id">140548523101825</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="name">Test Gateway 2</value>
+						<value name="place_id">bd8ea40c-91c9-4d8c-8c13-a8332c39a437</value>
+						<value name="place_name">Test Place 2</value>
+						<value name="altitude">-0.2</value>
+						<value name="latitude">0.2</value>
+						<value name="longitude">0.22</value>
+						<value name="roles_count">2</value>
+						<value name="devices_count">0</value>
+						<value name="owner_id">014ca448-26d7-4051-ad11-8c9e37343f0d</value>
+						<value name="access_level">10</value>
+					</row>
+				</expect>
+			</check>
+			<check name="fetch Test Gateway 1 as Jack Sparrow and check it is owned by Pepa Goodman">
+				<call-query>
+					<arg name="user_id">'d67713ff-de75-43c4-917b-88f0048b7ccf'</arg>
+					<arg name="id">181462068183316</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="name">Test Gateway 1</value>
+						<value name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
+						<value name="place_name">Test Place 1</value>
+						<value name="altitude">-0.1</value>
+						<value name="latitude">0.1</value>
+						<value name="longitude">0.11</value>
+						<value name="roles_count">3</value>
+						<value name="devices_count">0</value>
+						<value name="owner_id">29d214d4-2057-4e06-b003-b839d0bb1df6</value>
+						<value name="access_level">30</value>
+					</row>
+				</expect>
+			</check>
+		</test>
+	</query>
+
 </query-set>

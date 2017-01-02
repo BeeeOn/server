@@ -5,6 +5,7 @@
 #include "xmlui/Serializing.h"
 #include "model/VerifiedIdentity.h"
 #include "model/Gateway.h"
+#include "model/LegacyGateway.h"
 #include "model/Place.h"
 
 using namespace std;
@@ -104,8 +105,9 @@ void GatewayXmlHandler::handleListen(Element *gatewayNode)
 
 void GatewayXmlHandler::handleGet(Element *gatewayNode)
 {
-	Gateway gateway(GatewayID::parse(gatewayNode->getAttribute("id")));
-	Single<Gateway> input(gateway);
+	LegacyGateway gateway(GatewayID::parse(
+			gatewayNode->getAttribute("id")));
+	Single<LegacyGateway> input(gateway);
 	User user(session()->userID());
 	input.setUser(user);
 
