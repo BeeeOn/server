@@ -63,6 +63,7 @@ void PrivateKeyPassphraseProvider::onRequest(
 }
 
 SSLFacility::SSLFacility():
+	m_logger(LOGGER_CLASS(this)),
 	m_loadDefaultCA(false),
 	m_verificationMode(VerificationMode::VERIFY_RELAXED),
 	m_verificationDepth(9),
@@ -110,19 +111,19 @@ void SSLFacility::initContext()
 		m_context = createContext();
 	}
 
-	Logger &logger = LOGGER_CLASS(this);
-	logger.information("SSL context initialized",
+	m_logger.information("SSL context initialized",
 				__FILE__, __LINE__);
 
-	logger.debug("caLocation: " + m_caLocation);
-	logger.debug("loadDefaultCA: " + to_string(m_loadDefaultCA));
-	logger.debug("privateKey: " + m_privateKey);
-	logger.debug("passphrase: " + to_string(!m_passphrase.empty()));
-	logger.debug("certificate: " + m_certificate);
-	logger.debug("verificationMode: " + to_string(m_verificationMode));
-	logger.debug("verificationDepth: " + to_string(m_verificationDepth));
-	logger.debug("cihperList: " + m_cipherList);
-	logger.debug("sessionCache: " + to_string(m_sessionCache));
+	m_logger.debug("caLocation: " + m_caLocation);
+	m_logger.debug("loadDefaultCA: " + to_string(m_loadDefaultCA));
+	m_logger.debug("privateKey: " + m_privateKey);
+	m_logger.debug("passphrase: " + to_string(!m_passphrase.empty()));
+	m_logger.debug("certificate: " + m_certificate);
+	m_logger.debug("verificationMode: " + to_string(m_verificationMode));
+	m_logger.debug("verificationDepth: " + to_string(m_verificationDepth));
+	m_logger.debug("cihperList: " + m_cipherList);
+	m_logger.debug("sessionCache: " + to_string(m_sessionCache));
+	m_logger.debug("disableProtocols: " + to_string(m_disabledProtocols));
 }
 
 Context::Ptr SSLFacility::context()

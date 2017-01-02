@@ -7,6 +7,12 @@
 
 #include "di/InjectorTarget.h"
 
+namespace Poco {
+
+class Logger;
+
+}
+
 namespace BeeeOn {
 
 /**
@@ -92,6 +98,7 @@ protected:
 	using VerificationMode =
 		typename Poco::Net::Context::VerificationMode;
 
+	Poco::Logger &m_logger;
 	Poco::Mutex m_lock;
 	Poco::Net::Context::Ptr m_context;
 	std::string m_caLocation;
