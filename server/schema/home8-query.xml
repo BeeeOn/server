@@ -7,6 +7,18 @@
 			<sql>INSERT INTO places (id, name)
 				VALUES ('bd8ea40c-91c9-4d8c-8c13-a8332c39a437', 'Test Place 2')</sql>
 		</setup>
+		<setup name="global gateways for tests">
+			<sql>INSERT INTO gateways (id, name, place_id, altitude, latitude, longitude)
+				VALUES (181462068183316, 'Test Gateway 1',
+						'16de2f05-8af7-4729-8479-1973590cfa54', -0.1, 0.1, 0.11)</sql>
+			<sql>INSERT INTO gateways (id, name, place_id, altitude, latitude, longitude)
+				VALUES (140548523101825, 'Test Gateway 2',
+						'bd8ea40c-91c9-4d8c-8c13-a8332c39a437', -0.2, 0.2, 0.22)</sql>
+		</setup>
+		<teardown name="delete global gateways">
+			<sql>DELETE FROM gateways WHERE id = 140548523101825</sql>
+			<sql>DELETE FROM gateways WHERE id = 181462068183316</sql>
+		</teardown>
 		<teardown name="delete global places">
 			<sql>DELETE FROM places WHERE id = 'bd8ea40c-91c9-4d8c-8c13-a8332c39a437'</sql>
 			<sql>DELETE FROM places WHERE id = '16de2f05-8af7-4729-8479-1973590cfa54'</sql>
