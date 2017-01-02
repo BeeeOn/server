@@ -33,6 +33,12 @@ set (TEST_SQLITE_ARGS
 	"${TOOLS_DIR}/xsl/query.test.xsl"
 	"${SCHEMA}-query.xml")
 
+set (TEST_POSTGRE_ARGS
+	--stringparam codebase.version "${GIT_ID}"
+	--stringparam engine "postgre"
+	"${TOOLS_DIR}/xsl/query.test.xsl"
+	"${SCHEMA}-query.xml")
+
 # create schema/${SCHEMA}-sqlite.sql
 exec_program(
 	"${XSLTP}"
@@ -62,3 +68,9 @@ exec_program(
 	"${XSLTP}"
 	${CMAKE_CURRENT_SOURCE_DIR}
 	ARGS ${TEST_SQLITE_ARGS})
+
+# create schema/${SCHEMA}-postgre-expect.csv and schema/${SCHEMA}-postgre-test.sql
+exec_program(
+	"${XSLTP}"
+	${CMAKE_CURRENT_SOURCE_DIR}
+	ARGS ${TEST_POSTGRE_ARGS})
