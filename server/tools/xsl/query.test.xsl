@@ -46,7 +46,9 @@
 		<c:document href="{@for-database}-{$engine}-test.sql" method="text" encoding="utf-8">
 			<x:call-template name="test-preamble" />
 
+			<x:apply-templates select="test-global/setup" />
 			<x:apply-templates select="query" />
+			<x:apply-templates select="test-global/teardown" />
 		</c:document>
 
 		<c:document href="{@for-database}-{$engine}-expect.csv" method="text" encoding="utf-8">
@@ -72,18 +74,40 @@
 		<x:apply-templates select="teardown" />
 	</x:template>
 
+	<x:template name="setup-name">
+		<x:choose>
+			<x:when test="local-name(..) = 'test-global'">
+				<x:text>-- Global setup </x:text>
+			</x:when>
+			<x:otherwise>
+				<x:text>-- Setup </x:text>
+			</x:otherwise>
+		</x:choose>
+	</x:template>
+
 	<x:template match="setup">
 		<x:text>&#xA;</x:text>
-		<x:text>-- Setup </x:text>
+		<x:call-template name="setup-name" />
 		<x:call-template name="name-sequential-item" />
 		<x:text>&#xA;</x:text>
 
 		<x:apply-templates select="sql" mode="simple" />
 	</x:template>
 
+	<x:template name="teardown-name">
+		<x:choose>
+			<x:when test="local-name(..) = 'test-global'">
+				<x:text>-- Global teardown </x:text>
+			</x:when>
+			<x:otherwise>
+				<x:text>-- Teardown </x:text>
+			</x:otherwise>
+		</x:choose>
+	</x:template>
+
 	<x:template match="teardown">
 		<x:text>&#xA;</x:text>
-		<x:text>-- Teardown </x:text>
+		<x:call-template name="teardown-name" />
 		<x:call-template name="name-sequential-item" />
 		<x:text>&#xA;</x:text>
 

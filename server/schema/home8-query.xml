@@ -1,5 +1,18 @@
 <query-set for-database="home8">
 
+	<test-global>
+		<setup name="global places for tests">
+			<sql>INSERT INTO places (id, name)
+				VALUES ('16de2f05-8af7-4729-8479-1973590cfa54', 'Test Place 1')</sql>
+			<sql>INSERT INTO places (id, name)
+				VALUES ('bd8ea40c-91c9-4d8c-8c13-a8332c39a437', 'Test Place 2')</sql>
+		</setup>
+		<teardown name="delete global places">
+			<sql>DELETE FROM places WHERE id = 'bd8ea40c-91c9-4d8c-8c13-a8332c39a437'</sql>
+			<sql>DELETE FROM places WHERE id = '16de2f05-8af7-4729-8479-1973590cfa54'</sql>
+		</teardown>
+	</test-global>
+
 	<query id="places.create">
 		<define>INSERT INTO places (id, name) VALUES (
 				<value name="id" type="uuid" />,
@@ -18,12 +31,6 @@
 	<query id="places.fetch.by.id">
 		<define>SELECT name FROM places WHERE id = <value name="id" type="uuid" /></define>
 		<test name="simple test">
-			<setup name="places to select">
-				<sql>INSERT INTO places (id, name)
-					VALUES ('16de2f05-8af7-4729-8479-1973590cfa54', 'Test Place 1')</sql>
-				<sql>INSERT INTO places (id, name)
-					VALUES ('bd8ea40c-91c9-4d8c-8c13-a8332c39a437', 'Test Place 2')</sql>
-			</setup>
 			<check name="select 'Test Place 1'">
 				<call-query>
 					<arg name="id">'16de2f05-8af7-4729-8479-1973590cfa54'</arg>
@@ -50,10 +57,6 @@
 				</call-query>
 				<expect />
 			</check>
-			<teardown name="delete places">
-				<sql>DELETE FROM places WHERE id = 'bd8ea40c-91c9-4d8c-8c13-a8332c39a437'</sql>
-				<sql>DELETE FROM places WHERE id = '16de2f05-8af7-4729-8479-1973590cfa54'</sql>
-			</teardown>
 		</test>
 	</query>
 
@@ -184,12 +187,6 @@
 		</define>
 		<!-- TODO: place_id should be not-null -->
 		<test name="simple test">
-			<setup name="create places">
-				<sql>INSERT INTO places (id, name)
-					VALUES ('16de2f05-8af7-4729-8479-1973590cfa54', 'Test Place 1')</sql>
-				<sql>INSERT INTO places (id, name)
-					VALUES ('bd8ea40c-91c9-4d8c-8c13-a8332c39a437', 'Test Place 2')</sql>
-			</setup>
 			<setup name="create locations">
 				<sql>INSERT INTO locations (id, name, place_id)
 					VALUES ('0a2000c7-420a-4558-a981-1c67e36c2ee4', 'Test Location 1', '16de2f05-8af7-4729-8479-1973590cfa54')</sql>
@@ -244,10 +241,6 @@
 				<sql>DELETE FROM locations WHERE id = '0a2000c7-420a-4558-a981-1c67e36c2ee4'</sql>
 				<sql>DELETE FROM locations WHERE id = '966d40f3-3967-4a4b-8ad6-40bad688008b'</sql>
 				<sql>DELETE FROM locations WHERE id = 'dc761ed8-baa3-434a-b5c0-b23a80859efe'</sql>
-			</teardown>
-			<teardown name="delete places">
-				<sql>DELETE FROM places WHERE id = 'bd8ea40c-91c9-4d8c-8c13-a8332c39a437'</sql>
-				<sql>DELETE FROM places WHERE id = '16de2f05-8af7-4729-8479-1973590cfa54'</sql>
 			</teardown>
 		</test>
 	</query>
