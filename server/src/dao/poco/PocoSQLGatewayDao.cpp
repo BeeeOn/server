@@ -78,6 +78,14 @@ void PocoSQLGatewayDao::fetchAccessible(
 	return fetchAccessible(session, gateways, user);
 }
 
+void PocoSQLGatewayDao::fetchAccessible(
+		std::vector<LegacyGateway> &gateways,
+		const User &user)
+{
+	Session session(manager().pool().get());
+	return fetchAccessible(session, gateways, user);
+}
+
 bool PocoSQLGatewayDao::insert(Session &session, Gateway &gateway)
 {
 	assureHasId(gateway);
@@ -282,6 +290,23 @@ void PocoSQLGatewayDao::fetchAccessible(Session &session,
 	execute(sql);
 	RecordSet result(sql);
 	parseMany<Gateway>(result, gateways);
+}
+
+void PocoSQLGatewayDao::fetchAccessible(Session &session,
+		std::vector<LegacyGateway> &gateways,
+		const User &user)
+{
+	assureHasId(user);
+
+	string userID(user.id().toString());
+
+	Statement sql(session);
+	sql << findQuery("legacy_gateways.fetch.accessible"),
+		use(userID, "user_id");
+
+	execute(sql);
+	RecordSet result(sql);
+	parseMany<LegacyGateway>(result, gateways);
 }
 
 bool PocoSQLGatewayDao::parseSingle(Row &result, Gateway &gateway,

@@ -144,9 +144,9 @@ void GatewayXmlHandler::handleUpdate(Element *gatewayNode)
 
 void GatewayXmlHandler::handleGetAll()
 {
-	vector<Gateway> gateways;
+	vector<LegacyGateway> gateways;
 	User user(session()->userID());
-	Relation<vector<Gateway>, User> input(gateways, user);
+	Relation<vector<LegacyGateway>, User> input(gateways, user);
 	input.setUser(user);
 
 	m_gatewayService.fetchAccessible(input);

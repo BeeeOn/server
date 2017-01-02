@@ -25,6 +25,9 @@ public:
 	virtual void fetchAccessible(
 			std::vector<Gateway> &gateways,
 			const User &user) = 0;
+	virtual void fetchAccessible(
+			std::vector<LegacyGateway> &gateways,
+			const User &user) = 0;
 };
 
 class NullGatewayDao : public AbstractInjectorTarget,
@@ -62,6 +65,12 @@ public:
 	}
 
 	void fetchAccessible(std::vector<Gateway> &gateways,
+			const User &user)
+	{
+		throw Poco::NotImplementedException(__func__);
+	}
+
+	void fetchAccessible(std::vector<LegacyGateway> &gateways,
 			const User &user)
 	{
 		throw Poco::NotImplementedException(__func__);

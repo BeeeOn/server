@@ -57,6 +57,7 @@ public:
 	bool fetch(Single<LegacyGateway> &input);
 	bool fetchFromPlace(Relation<Gateway, Place> &input);
 	void fetchAccessible(Relation<std::vector<Gateway>, User> &input);
+	void fetchAccessible(Relation<std::vector<LegacyGateway>, User> &input);
 
 	bool update(SingleWithData<Gateway> &input);
 	bool updateInPlace(RelationWithData<Gateway, Place> &input);

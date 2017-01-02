@@ -150,6 +150,12 @@ void GatewayService::fetchAccessible(Relation<vector<Gateway>, User> &input)
 	m_gatewayDao->fetchAccessible(input.target(), input.base());
 }
 
+void GatewayService::fetchAccessible(
+		Relation<vector<LegacyGateway>, User> &input)
+{
+	m_gatewayDao->fetchAccessible(input.target(), input.base());
+}
+
 bool GatewayService::update(SingleWithData<Gateway> &input)
 {
 	Gateway &gateway = input.target();

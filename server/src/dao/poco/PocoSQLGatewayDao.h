@@ -29,6 +29,9 @@ public:
 	void fetchAccessible(
 			std::vector<Gateway> &gateways,
 			const User &user) override;
+	void fetchAccessible(
+			std::vector<LegacyGateway> &gateways,
+			const User &user) override;
 
 	template <typename G>
 	static bool parseSingle(Poco::Data::RecordSet &result,
@@ -77,6 +80,9 @@ protected:
 			Gateway &gateway, const Place &place);
 	void fetchAccessible(Poco::Data::Session &session,
 			std::vector<Gateway> &gateways,
+			const User &user);
+	void fetchAccessible(Poco::Data::Session &session,
+			std::vector<LegacyGateway> &gateways,
 			const User &user);
 };
 
