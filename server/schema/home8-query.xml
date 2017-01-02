@@ -232,6 +232,29 @@
 		LEFT JOIN places AS p ON g.place_id = p.id
 		WHERE g.id = <value name="id" type="uuid" />
 		</define>
+		<test name="simple tests">
+			<check name="find 'Test Gateway 1'">
+				<call-query>
+					<arg name="id">181462068183316</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="name">Test Gateway 1</value>
+						<value name="altitude">-0.1</value>
+						<value name="latitude">0.1</value>
+						<value name="longitude">0.11</value>
+						<value name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
+						<value name="place_name">Test Place 1</value>
+					</row>
+				</expect>
+			</check>
+			<check name="find non-existing">
+				<call-query>
+					<arg name="id">118453478507226</arg>
+				</call-query>
+				<expect />
+			</check>
+		</test>
 	</query>
 
 	<query id="gateways.update">
