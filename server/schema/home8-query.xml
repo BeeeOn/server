@@ -160,6 +160,33 @@
 				<value name="latitude" type="double" />,
 				<value name="longitude" type="double" />
 			)</define>
+		<test name="simple test">
+			<check name="insert 'Test Gateway 10' works">
+				<call-query>
+					<arg name="id">161762224815122</arg>
+					<arg name="name">'Test Gateway 10'</arg>
+					<arg name="place_id">'bd8ea40c-91c9-4d8c-8c13-a8332c39a437'</arg>
+					<arg name="altitude">0.54</arg>
+					<arg name="latitude">0.45</arg>
+					<arg name="longitude">0.15</arg>
+				</call-query>
+				<sql>SELECT id, name, place_id, altitude, latitude, longitude
+					FROM gateways WHERE id = 161762224815122</sql>
+				<expect>
+					<row>
+						<value name="id">161762224815122</value>
+						<value name="name">Test Gateway 10</value>
+						<value name="place_id">bd8ea40c-91c9-4d8c-8c13-a8332c39a437</value>
+						<value name="altitude">0.54</value>
+						<value name="latitude">0.45</value>
+						<value name="longitude">0.15</value>
+					</row>
+				</expect>
+			</check>
+			<teardown name="delete 'Test Gateway 10'">
+				<sql>DELETE FROM gateways WHERE id = 161762224815122</sql>
+			</teardown>
+		</test>
 	</query>
 
 	<query id="gateways.fetch.by.id">
