@@ -86,6 +86,7 @@ public:
 	void setVerificationDepth(int depth);
 	void setCipherList(const std::string &list);
 	void setSessionCache(const std::string &enable);
+	void setDisabledProtocols(const std::string &protocols);
 
 	Poco::Net::Context::Ptr context();
 
@@ -110,6 +111,7 @@ protected:
 	int m_verificationDepth;
 	std::string m_cipherList;
 	bool m_sessionCache;
+	unsigned int m_disabledProtocols;
 };
 
 }
