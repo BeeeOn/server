@@ -3,6 +3,7 @@
 #include <Poco/Logger.h>
 #include <Poco/String.h>
 #include <Poco/Message.h>
+#include <Poco/Environment.h>
 #include <Poco/Exception.h>
 #include <Poco/StringTokenizer.h>
 #include <Poco/Util/Option.h>
@@ -215,8 +216,26 @@ string ServerStartup::defaultServicesFile() const
 	return path + "/" + m_appGroup + "/" + m_appName + "/services.xml";
 }
 
+static string pocoVersion(void)
+{
+	unsigned long version = Environment::libraryVersion();
+
+	unsigned int major = (version >> 24) & 0xff;
+	unsigned int minor = (version >> 16) & 0xff;
+	unsigned int alpha = (version >>  8) & 0xff;
+	unsigned int  beta = (version >>  0) & 0xff;
+
+	return to_string(major) + "." + to_string(minor) + "." + to_string(alpha) + "-" + to_string(beta);
+}
+
 int ServerStartup::main(const vector<string> &args)
 {
+	logger().notice("Poco library " + pocoVersion());
+	logger().notice("OS " + Environment::osDisplayName()
+		+ " (" + Environment::osName() + " " + Environment::osVersion() + ")");
+	logger().notice("Machine " + Environment::osArchitecture() + " (cores: " + to_string(Environment::processorCount()) + ")");
+	logger().debug("Node " +  Environment::nodeName() + " (" + Environment::nodeId() + ")");
+
 	if (m_printHelp)
 		return printHelp();
 
