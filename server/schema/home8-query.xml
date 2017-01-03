@@ -1013,6 +1013,22 @@
 		WHERE
 			r.id = <value name="id" type="uuid" />
 		</define>
+		<test name="simple">
+			<check name="pepa@example.org is admin of Test Place 1">
+				<call-query>
+					<arg name="id">'faabc96a-12b4-421a-8f4b-00ae1f75c11f'</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
+						<value name="identity_id">4264d04a-4a50-4a53-a765-dc5a7cdce6f1</value>
+						<value name="level">10</value>
+						<value name="identity_email">pepa@example.org</value>
+						<value name="place_name">Test Place 1</value>
+					</row>
+				</expect>
+			</check>
+		</test>
 	</query>
 
 	<query id="roles_in_place.fetch.by.place_id">
