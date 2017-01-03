@@ -691,6 +691,26 @@
 		<define>INSERT INTO identities (id, email) VALUES (
 				<value name="id" type="uuid" />,
 				<value name="email" type="varchar" />)</define>
+		<test name="fail on integrity">
+			<check name="duplicate id">
+				<call-query>
+					<arg name="id">'d184702c-7003-49a7-9ded-4c4fe5d88881'</arg>
+					<arg name="email">'another_franta@example.org'</arg>
+				</call-query>
+				<expect>
+					<fail-insert table="identities" conflict="id" />
+				</expect>
+			</check>
+			<check name="duplicate e-mail">
+				<call-query>
+					<arg name="id">'abfda3cd-01e2-4b8a-8eb7-be1af49b0da8'</arg>
+					<arg name="email">'franta@example.org'</arg>
+				</call-query>
+				<expect>
+					<fail-insert table="identities" conflict="email" />
+				</expect>
+			</check>
+		</test>
 	</query>
 
 	<query id="identities.fetch.by.id">
