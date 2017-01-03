@@ -394,9 +394,9 @@
 						<x:call-template name="csv-separator" />
 					</x:if>
 				</x:for-each>
-			</x:for-each>
 
-			<x:call-template name="csv-new-line" />
+				<x:call-template name="csv-new-line" />
+			</x:for-each>
 		</x:if>
 
 		<x:call-template name="expect-footer" />
