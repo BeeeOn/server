@@ -185,6 +185,55 @@
 		</x:if>
 	</x:template>
 
+	<x:template name="print-remote">
+		<x:if test="not(@remote)">
+			<x:message terminate="yes">Missing remote for <x:value-of select="local-name()" /></x:message>
+		</x:if>
+
+		<x:value-of select="@remote" />
+	</x:template>
+
+	<x:template name="print-base">
+		<x:if test="not(@base)">
+			<x:message terminate="yes">Missing base for <x:value-of select="local-name()" /></x:message>
+		</x:if>
+
+		<x:value-of select="@base" />
+	</x:template>
+
+	<x:template name="print-view-map-ref-as">
+		<x:param name="context" />
+
+		<x:if test="not(@ref)">
+			<x:message terminate="yes">Missing ref of map <x:value-of select="position()" /> of view <x:value-of select="@name" /></x:message>
+		</x:if>
+
+		<x:variable name="as">
+			<x:if test="@as">
+				<x:value-of select="@as" />
+			</x:if>
+			<x:if test="not(@as)">
+				<x:value-of select="@ref" />
+			</x:if>
+		</x:variable>
+
+		<x:value-of select="concat($context, '.', @ref, ' AS ', $as)" />
+	</x:template>
+
+	<x:template name="print-view-map">
+		<x:param name="context" />
+
+		<x:text>        </x:text>
+
+		<x:call-template name="print-view-map-ref-as">
+			<x:with-param name="context" select="$context" />
+		</x:call-template>
+
+		<x:if test="position() != last()">
+			<x:text>,&#xA;</x:text>
+		</x:if>
+	</x:template>
+
 	<x:template name="if-not-last">
 		<x:param name="text" />
 
@@ -202,6 +251,18 @@
 	<x:template name="comma-if-not-last">
 		<x:call-template name="if-not-last">
 			<x:with-param name="text" select="','" />
+		</x:call-template>
+	</x:template>
+
+	<x:template name="comma-eol-if-not-last">
+		<x:call-template name="if-not-last">
+			<x:with-param name="text" select="',&#xA;'" />
+		</x:call-template>
+	</x:template>
+
+	<x:template name="eol-if-not-last">
+		<x:call-template name="if-not-last">
+			<x:with-param name="text" select="'&#xA;'" />
 		</x:call-template>
 	</x:template>
 
@@ -344,6 +405,7 @@
 		<x:call-template name="drop-tables" />
 		<x:text>&#xA;</x:text>
 		<x:apply-templates select="table" />
+		<x:apply-templates select="view" />
 	</x:template>
 
 	<x:template match="database/table">
@@ -409,6 +471,78 @@
 		<x:value-of select="@expression" />
 		<x:text>)</x:text>
 		<x:call-template name="comma-if-not-last-eol" />
+	</x:template>
+
+	<x:template match="database/view">
+		<x:text>CREATE VIEW </x:text>
+		<x:call-template name="print-name" />
+		<x:text> AS&#xA;</x:text>
+		<x:text>    SELECT&#xA;</x:text>
+
+		<x:apply-templates select="map|join/map|sub-query" />
+
+		<x:text>&#xA;</x:text>
+		<x:text>    FROM </x:text>
+		<x:call-template name="print-base" />
+
+		<x:if test="join">
+			<x:text>&#xA;</x:text>
+			<x:apply-templates select="join" />
+		</x:if>
+
+		<x:text>;&#xA;</x:text>
+		<x:text>&#xA;</x:text>
+	</x:template>
+
+	<x:template match="view/map">
+		<x:call-template name="print-view-map">
+			<x:with-param name="context" select="../@base" />
+		</x:call-template>
+	</x:template>
+
+	<x:template match="view/join/map">
+		<x:call-template name="print-view-map">
+			<x:with-param name="context" select="../@remote" />
+		</x:call-template>
+	</x:template>
+
+	<x:template match="view/sub-query">
+		<x:text>        </x:text>
+		<x:text>(</x:text>
+		<x:value-of select="normalize-space(sql)" />
+		<x:text>)</x:text>
+		<x:text>&#xA;</x:text>
+		<x:text>            </x:text>
+		<x:text>AS </x:text>
+		<x:value-of select="@as" />
+
+		<x:call-template name="comma-eol-if-not-last" />
+	</x:template>
+
+	<x:template name="view-join">
+		<x:param name="base" />
+
+		<x:text>    JOIN </x:text>
+		<x:call-template name="print-remote" />
+		<x:text> ON </x:text>
+
+		<x:value-of select="concat($base, '.', @on-base)" />
+		<x:text> = </x:text>
+		<x:value-of select="concat(@remote, '.', @on-remote)" />
+
+		<x:call-template name="eol-if-not-last" />
+	</x:template>
+
+	<x:template match="view/join[@with-base]">
+		<x:call-template name="view-join">
+			<x:with-param name="base" select="@with-base" />
+		</x:call-template>
+	</x:template>
+
+	<x:template match="view/join[not(@with-base)]">
+		<x:call-template name="view-join">
+			<x:with-param name="base" select="../@base" />
+		</x:call-template>
 	</x:template>
 
 </x:stylesheet>
