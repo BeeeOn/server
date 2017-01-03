@@ -1011,7 +1011,7 @@
 		JOIN identities AS i ON r.identity_id = i.id
 		JOIN places AS p ON r.place_id = p.id
 		WHERE
-			id = <value name="id" type="uuid" />
+			r.id = <value name="id" type="uuid" />
 		</define>
 	</query>
 
