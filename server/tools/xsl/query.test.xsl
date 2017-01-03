@@ -273,13 +273,21 @@
 	<x:template match="row" mode="describe-expect">
 		<x:variable name="i" select="position()" />
 
-		<x:for-each select="value">
+		<x:for-each select="value|null">
 			<x:text>-- </x:text>
 			<x:value-of select="concat('[', $i, '] ')" />
 			<x:value-of select="concat(@name, ' = ')" />
-			<x:text>'</x:text>
-			<x:value-of select="." />
-			<x:text>'&#xA;</x:text>
+			<x:choose>
+				<x:when test="local-name() = 'value'">
+					<x:text>'</x:text>
+					<x:value-of select="." />
+					<x:text>'</x:text>
+				</x:when>
+				<x:otherwise>
+					<x:text>NULL</x:text>
+				</x:otherwise>
+			</x:choose>
+			<x:text>&#xA;</x:text>
 		</x:for-each>
 	</x:template>
 
@@ -293,10 +301,13 @@
 
 	<x:template name="csv-quote-value">
 		<x:param name="value" select="." />
+		<x:variable name="is.null" select="local-name() = 'null'" />
 
 		<x:choose>
 			<x:when test="$engine = 'postgre'">
-				<x:value-of select="$value" />
+				<x:if test="not($is.null)">
+					<x:value-of select="$value" />
+				</x:if>
 			</x:when>
 			<x:when test="contains($value, ' ')">
 				<x:text>"</x:text>
@@ -304,13 +315,15 @@
 				<x:text>"</x:text>
 			</x:when>
 			<x:otherwise>
-				<x:value-of select="$value" />
+				<x:if test="not($is.null)">
+					<x:value-of select="$value" />
+				</x:if>
 			</x:otherwise>
 		</x:choose>
 	</x:template>
 
 	<x:template name="print-csv-header">
-		<x:for-each select="row[position() = 1]/value">
+		<x:for-each select="row[position() = 1]/value|row[position() = 1]/null">
 			<x:value-of select="@name" />
 
 			<x:if test="position() &lt; last()">
@@ -335,7 +348,7 @@
 
 		<x:if test="row">
 			<x:for-each select="row">
-				<x:for-each select="value">
+				<x:for-each select="value|null">
 					<x:call-template name="csv-quote-value" />
 
 					<x:if test="position() &lt; last()">
