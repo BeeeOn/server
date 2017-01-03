@@ -731,6 +731,19 @@
 
 	<query id="identities.fetch.by.email">
 		<define>SELECT id, email FROM identities WHERE email = <value name="email" type="varchar" /></define>
+		<test name="simple">
+			<check name="fetch 'jack.sparrow@example.org'">
+				<call-query>
+					<arg name="email">'jack.sparrow@example.org'</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="id">b5696add-11c4-4b51-834a-c14ddd672db4</value>
+						<value name="email">jack.sparrow@example.org</value>
+					</row>
+				</expect>
+			</check>
+		</test>
 	</query>
 
 	<query id="identities.remove">
