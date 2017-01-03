@@ -890,6 +890,51 @@
 			i.email = <value name="email" type="varchar" />
 		ORDER BY provider
 		</define>
+		<test name="show we may have more valid results">
+			<setup name="verify existing identity with different provider">
+				<sql>INSERT INTO users (id, first_name, last_name) VALUES
+					('c99bdcca-e0f7-47fe-ad09-eb43e7854799', 'Attacker', 'Coming')</sql>
+				<!-- verify franta2@example.org by 'fake-provider' -->
+				<sql>INSERT INTO verified_identities (id, identity_id, user_id, provider) VALUES (
+					'8ec6ca32-9f2b-430b-8b7e-e54a726fde87',
+					'aeec55a1-b8f5-4ae8-b8a9-1a35781b01d1',
+					'c99bdcca-e0f7-47fe-ad09-eb43e7854799',
+					'fake-provider')</sql>
+			</setup>
+			<check name="we get 2 users, one with fake-provider">
+				<call-query>
+					<arg name="email">'franta2@example.org'</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="id">8ec6ca32-9f2b-430b-8b7e-e54a726fde87</value>
+						<value name="identity_id">aeec55a1-b8f5-4ae8-b8a9-1a35781b01d1</value>
+						<value name="user_id">c99bdcca-e0f7-47fe-ad09-eb43e7854799</value>
+						<null name="picture" />
+						<value name="provider">fake-provider</value>
+						<null name="access_token" />
+						<value name="identity_email">franta2@example.org</value>
+						<value name="user_first_name">Attacker</value>
+						<value name="user_last_name">Coming</value>
+					</row>
+					<row>
+						<value name="id">453ddb82-76ee-437a-b058-64998193a05c</value>
+						<value name="identity_id">aeec55a1-b8f5-4ae8-b8a9-1a35781b01d1</value>
+						<value name="user_id">014ca448-26d7-4051-ad11-8c9e37343f0d</value>
+						<null name="picture" />
+						<value name="provider">test</value>
+						<null name="access_token" />
+						<value name="identity_email">franta2@example.org</value>
+						<value name="user_first_name">Franta</value>
+						<value name="user_last_name">Kutil</value>
+					</row>
+				</expect>
+			</check>
+			<teardown name="delete the Attacker Coming">
+				<sql>DELETE FROM verified_identities WHERE id = '8ec6ca32-9f2b-430b-8b7e-e54a726fde87'</sql>
+				<sql>DELETE FROM users WHERE id = 'c99bdcca-e0f7-47fe-ad09-eb43e7854799'</sql>
+			</teardown>
+		</test>
 	</query>
 
 	<query id="verified_identities.update">
