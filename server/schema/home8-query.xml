@@ -7,6 +7,128 @@
 			<sql>INSERT INTO places (id, name)
 				VALUES ('bd8ea40c-91c9-4d8c-8c13-a8332c39a437', 'Test Place 2')</sql>
 		</setup>
+		<setup name="global gateways for tests">
+			<sql>INSERT INTO gateways (id, name, place_id, altitude, latitude, longitude)
+				VALUES (181462068183316, 'Test Gateway 1',
+						'16de2f05-8af7-4729-8479-1973590cfa54', -0.1, 0.1, 0.11)</sql>
+			<sql>INSERT INTO gateways (id, name, place_id, altitude, latitude, longitude)
+				VALUES (140548523101825, 'Test Gateway 2',
+						'bd8ea40c-91c9-4d8c-8c13-a8332c39a437', -0.2, 0.2, 0.22)</sql>
+		</setup>
+		<setup name="global identities and users for tests">
+			<!-- Jack Sparrow -->
+			<sql>INSERT INTO identities (id, email) VALUES
+				('b5696add-11c4-4b51-834a-c14ddd672db4', 'jack.sparrow@example.org')</sql>
+			<sql>INSERT INTO users (id, first_name, last_name) VALUES
+				('d67713ff-de75-43c4-917b-88f0048b7ccf', 'Jack', 'Sparrow')</sql>
+			<!-- Franta Kutil -->
+			<sql>INSERT INTO identities (id, email) VALUES
+				('d184702c-7003-49a7-9ded-4c4fe5d88881', 'franta@example.org')</sql>
+			<sql>INSERT INTO identities (id, email) VALUES
+				('aeec55a1-b8f5-4ae8-b8a9-1a35781b01d1', 'franta2@example.org')</sql>
+			<sql>INSERT INTO users (id, first_name, last_name) VALUES
+				('014ca448-26d7-4051-ad11-8c9e37343f0d', 'Franta', 'Kutil')</sql>
+			<!-- Pepa Goodman -->
+			<sql>INSERT INTO identities (id, email) VALUES
+				('4264d04a-4a50-4a53-a765-dc5a7cdce6f1', 'pepa@example.org')</sql>
+			<sql>INSERT INTO identities (id, email) VALUES
+				('cd8c611b-7e8a-43ff-8d35-9e92c74f003d', 'pepa2@example.org')</sql>
+			<sql>INSERT INTO identities (id, email) VALUES
+				('2c663e6b-d995-44f1-bc41-f8b12b2acbc2', 'pepa_nonverified@example.org')</sql>
+			<sql>INSERT INTO users (id, first_name, last_name) VALUES
+				('29d214d4-2057-4e06-b003-b839d0bb1df6', 'Pepa', 'Goodman')</sql>
+		</setup>
+		<setup name="global verified identities for tests">
+			<!-- Jack Sparrow -->
+			<sql>INSERT INTO verified_identities (id, identity_id, user_id, provider) VALUES (
+					'b6e70e5a-dccd-4898-8c17-114160a808c6',
+					'b5696add-11c4-4b51-834a-c14ddd672db4',
+					'd67713ff-de75-43c4-917b-88f0048b7ccf',
+					'test')</sql>
+			<!-- Franta Kutil -->
+			<sql>INSERT INTO verified_identities (id, identity_id, user_id, provider) VALUES (
+					'a08909d5-0d59-4605-b1cb-99d9d813f657',
+					'd184702c-7003-49a7-9ded-4c4fe5d88881',
+					'014ca448-26d7-4051-ad11-8c9e37343f0d',
+					'test')</sql>
+			<sql>INSERT INTO verified_identities (id, identity_id, user_id, provider) VALUES (
+					'453ddb82-76ee-437a-b058-64998193a05c',
+					'aeec55a1-b8f5-4ae8-b8a9-1a35781b01d1',
+					'014ca448-26d7-4051-ad11-8c9e37343f0d',
+					'test')</sql>
+			<!-- Pepa Goodman -->
+			<sql>INSERT INTO verified_identities (id, identity_id, user_id, provider) VALUES (
+					'6dc7eeb2-4e7d-48dd-9c6a-5f8738410fa2',
+					'4264d04a-4a50-4a53-a765-dc5a7cdce6f1',
+					'29d214d4-2057-4e06-b003-b839d0bb1df6',
+					'test')</sql>
+			<sql>INSERT INTO verified_identities (id, identity_id, user_id, provider) VALUES (
+					'1d26df6a-c05c-4003-8759-fa8c05e86081',
+					'cd8c611b-7e8a-43ff-8d35-9e92c74f003d',
+					'29d214d4-2057-4e06-b003-b839d0bb1df6',
+					'test')</sql>
+		</setup>
+		<setup name="global roles for tests">
+			<!-- pepa@example.org is admin of Test Place 1 -->
+			<sql>INSERT INTO roles_in_place (id, place_id, identity_id, level) VALUES (
+					'faabc96a-12b4-421a-8f4b-00ae1f75c11f',
+					'16de2f05-8af7-4729-8479-1973590cfa54',
+					'4264d04a-4a50-4a53-a765-dc5a7cdce6f1',
+					10)</sql>
+			<!-- pepa2@example.org is user of Test Place 1 -->
+			<sql>INSERT INTO roles_in_place (id, place_id, identity_id, level) VALUES (
+					'f3733b47-d47c-4fa1-b2ce-2101dfa33ca1',
+					'16de2f05-8af7-4729-8479-1973590cfa54',
+					'cd8c611b-7e8a-43ff-8d35-9e92c74f003d',
+					20)</sql>
+			<!-- jack.sparrow@example.org is guest of Test Place 1 -->
+			<sql>INSERT INTO roles_in_place (id, place_id, identity_id, level) VALUES (
+					'aee235a1-ac89-4553-b185-d689faeeeee3',
+					'16de2f05-8af7-4729-8479-1973590cfa54',
+					'b5696add-11c4-4b51-834a-c14ddd672db4',
+					30)</sql>
+			<!-- franta@example.org is admin of Test Place 2 -->
+			<sql>INSERT INTO roles_in_place (id, place_id, identity_id, level) VALUES (
+					'e01b65c0-5815-4f5b-a172-1dce164ef3d9',
+					'bd8ea40c-91c9-4d8c-8c13-a8332c39a437',
+					'd184702c-7003-49a7-9ded-4c4fe5d88881',
+					10)</sql>
+			<!-- pepa2@example.org is admin of Test Place 2 -->
+			<sql>INSERT INTO roles_in_place (id, place_id, identity_id, level) VALUES (
+					'4564a87e-d3e0-48a7-a29a-1ee0f9b111a1',
+					'bd8ea40c-91c9-4d8c-8c13-a8332c39a437',
+					'cd8c611b-7e8a-43ff-8d35-9e92c74f003d',
+					10)</sql>
+		</setup>
+		<teardown name="delete global roles">
+			<sql>DELETE FROM roles_in_place WHERE id = '4564a87e-d3e0-48a7-a29a-1ee0f9b111a1'</sql>
+			<sql>DELETE FROM roles_in_place WHERE id = 'e01b65c0-5815-4f5b-a172-1dce164ef3d9'</sql>
+			<sql>DELETE FROM roles_in_place WHERE id = 'aee235a1-ac89-4553-b185-d689faeeeee3'</sql>
+			<sql>DELETE FROM roles_in_place WHERE id = 'f3733b47-d47c-4fa1-b2ce-2101dfa33ca1'</sql>
+			<sql>DELETE FROM roles_in_place WHERE id = 'faabc96a-12b4-421a-8f4b-00ae1f75c11f'</sql>
+		</teardown>
+		<teardown name="delete global verified identities">
+			<sql>DELETE FROM verified_identities WHERE id = '1d26df6a-c05c-4003-8759-fa8c05e86081'</sql>
+			<sql>DELETE FROM verified_identities WHERE id = '6dc7eeb2-4e7d-48dd-9c6a-5f8738410fa2'</sql>
+			<sql>DELETE FROM verified_identities WHERE id = '453ddb82-76ee-437a-b058-64998193a05c'</sql>
+			<sql>DELETE FROM verified_identities WHERE id = 'a08909d5-0d59-4605-b1cb-99d9d813f657'</sql>
+			<sql>DELETE FROM verified_identities WHERE id = 'b6e70e5a-dccd-4898-8c17-114160a808c6'</sql>
+		</teardown>
+		<teardown name="delete global identities and users">
+			<sql>DELETE FROM users WHERE id = '29d214d4-2057-4e06-b003-b839d0bb1df6'</sql>
+			<sql>DELETE FROM identities WHERE id = '2c663e6b-d995-44f1-bc41-f8b12b2acbc2'</sql>
+			<sql>DELETE FROM identities WHERE id = 'cd8c611b-7e8a-43ff-8d35-9e92c74f003d'</sql>
+			<sql>DELETE FROM identities WHERE id = '4264d04a-4a50-4a53-a765-dc5a7cdce6f1'</sql>
+			<sql>DELETE FROM users WHERE id = '014ca448-26d7-4051-ad11-8c9e37343f0d'</sql>
+			<sql>DELETE FROM identities WHERE id = 'aeec55a1-b8f5-4ae8-b8a9-1a35781b01d1'</sql>
+			<sql>DELETE FROM identities WHERE id = 'd184702c-7003-49a7-9ded-4c4fe5d88881'</sql>
+			<sql>DELETE FROM users WHERE id = 'd67713ff-de75-43c4-917b-88f0048b7ccf'</sql>
+			<sql>DELETE FROM identities WHERE id = 'b5696add-11c4-4b51-834a-c14ddd672db4'</sql>
+		</teardown>
+		<teardown name="delete global gateways">
+			<sql>DELETE FROM gateways WHERE id = 140548523101825</sql>
+			<sql>DELETE FROM gateways WHERE id = 181462068183316</sql>
+		</teardown>
 		<teardown name="delete global places">
 			<sql>DELETE FROM places WHERE id = 'bd8ea40c-91c9-4d8c-8c13-a8332c39a437'</sql>
 			<sql>DELETE FROM places WHERE id = '16de2f05-8af7-4729-8479-1973590cfa54'</sql>
@@ -17,15 +139,92 @@
 		<define>INSERT INTO places (id, name) VALUES (
 				<value name="id" type="uuid" />,
 				<value name="name" type="varchar" />)</define>
+		<test name="test insert works">
+			<check name="insert 'Test Place 10'">
+				<call-query>
+					<arg name="id">'6a3ebd1f-9dc2-48e0-85b4-f0880eb3e334'</arg>
+					<arg name="name">'Test Place 10'</arg>
+				</call-query>
+				<sql>SELECT id, name FROM places WHERE id = '6a3ebd1f-9dc2-48e0-85b4-f0880eb3e334'</sql>
+				<expect>
+					<row>
+						<value name="id">6a3ebd1f-9dc2-48e0-85b4-f0880eb3e334</value>
+						<value name="name">Test Place 10</value>
+					</row>
+				</expect>
+			</check>
+			<teardown name="delete 'Test Place 10'">
+				<sql>DELETE FROM places WHERE id = '6a3ebd1f-9dc2-48e0-85b4-f0880eb3e334'</sql>
+			</teardown>
+		</test>
+		<test name="test conflicting place">
+			<check name="insert 'Test Place 11' with conflicting ID">
+				<call-query>
+					<arg name="id">'16de2f05-8af7-4729-8479-1973590cfa54'</arg>
+					<arg name="name">'Test Place 11'</arg>
+				</call-query>
+				<expect>
+					<fail-insert table="places" conflict="id" />
+				</expect>
+			</check>
+		</test>
 	</query>
 
 	<query id="places.update">
 		<define>UPDATE places SET name = <value name="name" type="varchar" />
 				WHERE id = <value name="id" type="uuid" /></define>
+		<test name="update of place works">
+			<setup name="prepare a testing place to avoid conflicts with the global ones">
+				<sql>INSERT INTO places (id, name)
+					VALUES ('e834712f-1a31-48c0-a01b-cecde260ecea', 'Test Place 12')</sql>
+			</setup>
+			<check name="update testing place, rename to 'Test Place 13'">
+				<call-query>
+					<arg name="id">'e834712f-1a31-48c0-a01b-cecde260ecea'</arg>
+					<arg name="name">'Test Place 13'</arg>
+				</call-query>
+				<sql>SELECT id, name FROM places WHERE id = 'e834712f-1a31-48c0-a01b-cecde260ecea'</sql>
+				<expect>
+					<row>
+						<value name="id">e834712f-1a31-48c0-a01b-cecde260ecea</value>
+						<value name="name">Test Place 13</value>
+					</row>
+				</expect>
+			</check>
+			<teardown name="delete testing place">
+				<sql>DELETE FROM places WHERE id = 'e834712f-1a31-48c0-a01b-cecde260ecea'</sql>
+			</teardown>
+		</test>
 	</query>
 
 	<query id="places.remove">
 		<define>DELETE FROM places WHERE id = <value name="id" type="uuid" /></define>
+		<test name="delete of place works">
+			<setup name="prepare a testing place to avoid conflicts with the global ones">
+				<sql>INSERT INTO places (id, name)
+					VALUES ('e834712f-1a31-48c0-a01b-cecde260ecea', 'Test Place 12')</sql>
+			</setup>
+			<check name="delete testing place">
+				<call-query>
+					<arg name="id">'e834712f-1a31-48c0-a01b-cecde260ecea'</arg>
+				</call-query>
+				<sql>SELECT id, name FROM places WHERE id = 'e834712f-1a31-48c0-a01b-cecde260ecea'</sql>
+				<expect />
+			</check>
+		</test>
+		<test name="delete non-existing place">
+			<check name="delete and expect failure">
+				<call-query>
+					<arg name="id">'e834712f-1a31-48c0-a01b-cecde260ecea'</arg>
+				</call-query>
+				<sql>SELECT COUNT(*) AS count FROM places</sql>
+				<expect>
+					<row>
+						<value name="count">2</value>
+					</row>
+				</expect>
+			</check>
+		</test>
 	</query>
 
 	<query id="places.fetch.by.id">
@@ -71,6 +270,63 @@
 				<value name="latitude" type="double" />,
 				<value name="longitude" type="double" />
 			)</define>
+		<test name="simple test">
+			<check name="insert 'Test Gateway 10' works">
+				<call-query>
+					<arg name="id">161762224815122</arg>
+					<arg name="name">'Test Gateway 10'</arg>
+					<arg name="place_id">'bd8ea40c-91c9-4d8c-8c13-a8332c39a437'</arg>
+					<arg name="altitude">0.54</arg>
+					<arg name="latitude">0.45</arg>
+					<arg name="longitude">0.15</arg>
+				</call-query>
+				<sql>SELECT id, name, place_id, altitude, latitude, longitude
+					FROM gateways WHERE id = 161762224815122</sql>
+				<expect>
+					<row>
+						<value name="id">161762224815122</value>
+						<value name="name">Test Gateway 10</value>
+						<value name="place_id">bd8ea40c-91c9-4d8c-8c13-a8332c39a437</value>
+						<value name="altitude">0.54</value>
+						<value name="latitude">0.45</value>
+						<value name="longitude">0.15</value>
+					</row>
+				</expect>
+			</check>
+			<teardown name="delete 'Test Gateway 10'">
+				<sql>DELETE FROM gateways WHERE id = 161762224815122</sql>
+			</teardown>
+		</test>
+		<test name="fail on duplicate id">
+			<check name="insert must fail">
+				<call-query>
+					<arg name="id">181462068183316</arg>
+					<arg name="name">'Test Gateway 10'</arg>
+					<arg name="place_id">'bd8ea40c-91c9-4d8c-8c13-a8332c39a437'</arg>
+					<arg name="altitude">0.63</arg>
+					<arg name="latitude">0.71</arg>
+					<arg name="longitude">0.23</arg>
+				</call-query>
+				<expect>
+					<fail-insert table="gateways" conflict="id" />
+				</expect>
+			</check>
+		</test>
+		<test name="fail on non-existing place">
+			<check name="insert must fail">
+				<call-query>
+					<arg name="id">181462068183316</arg>
+					<arg name="name">'Test Gateway 11'</arg>
+					<arg name="place_id">'6f190529-f4be-4e4d-995d-cb1f6d826d0a'</arg>
+					<arg name="altitude">0.33</arg>
+					<arg name="latitude">0.41</arg>
+					<arg name="longitude">0.53</arg>
+				</call-query>
+				<expect>
+					<fail-insert table="gateways" conflict="place_id" />
+				</expect>
+			</check>
+		</test>
 	</query>
 
 	<query id="gateways.fetch.by.id">
@@ -86,6 +342,29 @@
 		LEFT JOIN places AS p ON g.place_id = p.id
 		WHERE g.id = <value name="id" type="uuid" />
 		</define>
+		<test name="simple tests">
+			<check name="find 'Test Gateway 1'">
+				<call-query>
+					<arg name="id">181462068183316</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="name">Test Gateway 1</value>
+						<value name="altitude">-0.1</value>
+						<value name="latitude">0.1</value>
+						<value name="longitude">0.11</value>
+						<value name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
+						<value name="place_name">Test Place 1</value>
+					</row>
+				</expect>
+			</check>
+			<check name="find non-existing">
+				<call-query>
+					<arg name="id">118453478507226</arg>
+				</call-query>
+				<expect />
+			</check>
+		</test>
 	</query>
 
 	<query id="gateways.update">
@@ -120,6 +399,44 @@
 		WHERE
 			id = <value name="id" type="uuid" />
 		</define>
+		<test name="can assign gateway to a place">
+			<setup name="prepare a gateway without place">
+				<sql>INSERT INTO gateways (id, name, place_id, altitude, latitude, longitude)
+					VALUES (116084064167771, 'Test Gateway 12', NULL, -5.1, 4.1, 7.11)</sql>
+			</setup>
+			<check name="assign works">
+				<call-query>
+					<arg name="id">116084064167771</arg>
+					<arg name="place_id">'bd8ea40c-91c9-4d8c-8c13-a8332c39a437'</arg>
+				</call-query>
+				<sql>SELECT id, place_id FROM gateways WHERE id = 116084064167771</sql>
+				<expect>
+					<row>
+						<value name="id">116084064167771</value>
+						<value name="place_id">bd8ea40c-91c9-4d8c-8c13-a8332c39a437</value>
+					</row>
+				</expect>
+			</check>
+			<teardown name="delete the testing gateway">
+				<sql>DELETE FROM gateways WHERE id = 116084064167771</sql>
+			</teardown>
+		</test>
+		<test name="assign to non-existing place">
+			<check name="assign fails due to non-existing place">
+				<call-query>
+					<arg name="id">181462068183316</arg>
+					<arg name="place_id">'85ffbb60-2438-4bd5-9cce-1de6521487db'</arg>
+				</call-query>
+				<sql>SELECT id, place_id FROM gateways WHERE id = 181462068183316</sql>
+				<expect>
+					<fail-update table="gateways" conflict="place_id" />
+					<row>
+						<value name="id">181462068183316</value>
+						<value name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
+					</row>
+				</expect>
+			</check>
+		</test>
 	</query>
 
 	<query id="gateways.unassign">
@@ -129,6 +446,23 @@
 		WHERE
 			id = <value name="id" type="uuid" />
 		</define>
+		<test name="unassign place from existing gateway">
+			<check name="unassign works">
+				<call-query>
+					<arg name="id">140548523101825</arg>
+				</call-query>
+				<sql>SELECT id, place_id FROM gateways WHERE id = 140548523101825</sql>
+				<expect>
+					<row>
+						<value name="id">140548523101825</value>
+						<null name="place_id" />
+					</row>
+				</expect>
+			</check>
+			<teardown name="reassign place bd8ea40c-91c9-4d8c-8c13-a8332c39a437">
+				<sql>UPDATE gateways SET place_id = 'bd8ea40c-91c9-4d8c-8c13-a8332c39a437' WHERE id = 140548523101825</sql>
+			</teardown>
+		</test>
 	</query>
 
 	<query id="gateways.fetch.by.place_id">
@@ -165,7 +499,88 @@
 		JOIN verified_identities AS v ON v.identity_id = r.identity_id
 		WHERE
 			v.user_id = <value name="user_id" type="uuid" />
+		ORDER BY g.name
 		</define>
+		<test name="gateways of Pepa Goodman">
+			<setup name="another testing gateway Test Gateway 13">
+				<sql>INSERT INTO gateways (id, name, place_id, altitude, latitude, longitude)
+					VALUES (116084064167771, 'Test Gateway 13',
+							'bd8ea40c-91c9-4d8c-8c13-a8332c39a437', 20.5, 10.1, 10.22)</sql>
+			</setup>
+			<check name="3 gateways of Pepa Goodman">
+				<call-query>
+					<arg name="user_id">'29d214d4-2057-4e06-b003-b839d0bb1df6'</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="id">181462068183316</value>
+						<value name="name">Test Gateway 1</value>
+						<value name="altitude">-0.1</value>
+						<value name="latitude">0.1</value>
+						<value name="longitude">0.11</value>
+						<value name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
+						<value name="place_name">Test Place 1</value>
+					</row>
+					<row>
+						<value name="id">116084064167771</value>
+						<value name="name">Test Gateway 13</value>
+						<value name="altitude">20.5</value>
+						<value name="latitude">10.1</value>
+						<value name="longitude">10.22</value>
+						<value name="place_id">bd8ea40c-91c9-4d8c-8c13-a8332c39a437</value>
+						<value name="place_name">Test Place 2</value>
+					</row>
+					<row>
+						<value name="id">140548523101825</value>
+						<value name="name">Test Gateway 2</value>
+						<value name="altitude">-0.2</value>
+						<value name="latitude">0.2</value>
+						<value name="longitude">0.22</value>
+						<value name="place_id">bd8ea40c-91c9-4d8c-8c13-a8332c39a437</value>
+						<value name="place_name">Test Place 2</value>
+					</row>
+				</expect>
+			</check>
+			<teardown name="delete Test Gateway 13">
+				<sql>DELETE FROM gateways WHERE id = 116084064167771</sql>
+			</teardown>
+		</test>
+		<test name="gateways of Franta Kutil">
+			<check name="1 gateway of Franta Kutil">
+				<call-query>
+					<arg name="user_id">'014ca448-26d7-4051-ad11-8c9e37343f0d'</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="id">140548523101825</value>
+						<value name="name">Test Gateway 2</value>
+						<value name="altitude">-0.2</value>
+						<value name="latitude">0.2</value>
+						<value name="longitude">0.22</value>
+						<value name="place_id">bd8ea40c-91c9-4d8c-8c13-a8332c39a437</value>
+						<value name="place_name">Test Place 2</value>
+					</row>
+				</expect>
+			</check>
+		</test>
+		<test name="gateways of Jack Sparrow">
+			<check name="1 gateway of Jack Sparrow">
+				<call-query>
+					<arg name="user_id">'d67713ff-de75-43c4-917b-88f0048b7ccf'</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="id">181462068183316</value>
+						<value name="name">Test Gateway 1</value>
+						<value name="altitude">-0.1</value>
+						<value name="latitude">0.1</value>
+						<value name="longitude">0.11</value>
+						<value name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
+						<value name="place_name">Test Place 1</value>
+					</row>
+				</expect>
+			</check>
+		</test>
 	</query>
 
 	<query id="locations.create">
@@ -173,6 +588,59 @@
 				<value name="id" type="uuid" />,
 				<value name="name" type="varchar" />,
 				<value name="place_id" type="uuid" />)</define>
+		<test name="insert location works">
+			<check name="simple insert">
+				<call-query>
+					<arg name="id">'c94d43df-84da-4200-b5a2-1d3594ac7645'</arg>
+					<arg name="name">'living room'</arg>
+					<arg name="place_id">'bd8ea40c-91c9-4d8c-8c13-a8332c39a437'</arg>
+				</call-query>
+				<sql>SELECT id, name, place_id FROM locations WHERE id = 'c94d43df-84da-4200-b5a2-1d3594ac7645'</sql>
+				<expect>
+					<row>
+						<value name="id">c94d43df-84da-4200-b5a2-1d3594ac7645</value>
+						<value name="name">living room</value>
+						<value name="place_id">bd8ea40c-91c9-4d8c-8c13-a8332c39a437</value>
+					</row>
+				</expect>
+			</check>
+			<teardown name="clean up 'living room'">
+				<sql>DELETE FROM locations WHERE id = 'c94d43df-84da-4200-b5a2-1d3594ac7645'</sql>
+			</teardown>
+		</test>
+		<test name="insert conflicting location">
+			<setup name="prepare a conflicting location">
+				<sql>INSERT INTO locations (id, name, place_id) VALUES (
+						'c94d43df-84da-4200-b5a2-1d3594ac7645',
+						'living room',
+						'bd8ea40c-91c9-4d8c-8c13-a8332c39a437')</sql>
+			</setup>
+			<check name="same id fails">
+				<call-query>
+					<arg name="id">'c94d43df-84da-4200-b5a2-1d3594ac7645'</arg>
+					<arg name="name">'kitchen'</arg>
+					<arg name="place_id">'bd8ea40c-91c9-4d8c-8c13-a8332c39a437'</arg>
+				</call-query>
+				<expect>
+					<fail-insert table="locations" conflict="id" />
+				</expect>
+			</check>
+			<teardown name="clean up 'living room'">
+				<sql>DELETE FROM locations WHERE id = 'c94d43df-84da-4200-b5a2-1d3594ac7645'</sql>
+			</teardown>
+		</test>
+		<test name="insert location for non-existing place">
+			<check name="fail with non-existing place">
+				<call-query>
+					<arg name="id">'c94d43df-84da-4200-b5a2-1d3594ac7645'</arg>
+					<arg name="name">'kitchen'</arg>
+					<arg name="place_id">'50ffebba-3e18-4f62-9538-4629dce051cf'</arg>
+				</call-query>
+				<expect>
+					<fail-insert table="locations" conflict="place_id" />
+				</expect>
+			</check>
+		</test>
 	</query>
 
 	<query id="locations.fetch.by.id">
@@ -324,24 +792,97 @@
 	<query id="users.fetch.by.id">
 		<define>SELECT first_name, last_name FROM users
 				WHERE id = <value name="id" type="uuid" /></define>
+		<test name="simple">
+			<check name="fetch 'Pepa Goodman'">
+				<call-query>
+					<arg name="id">'29d214d4-2057-4e06-b003-b839d0bb1df6'</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="first_name">Pepa</value>
+						<value name="last_name">Goodman</value>
+					</row>
+				</expect>
+			</check>
+		</test>
 	</query>
 
 	<query id="identities.create">
 		<define>INSERT INTO identities (id, email) VALUES (
 				<value name="id" type="uuid" />,
 				<value name="email" type="varchar" />)</define>
+		<test name="fail on integrity">
+			<check name="duplicate id">
+				<call-query>
+					<arg name="id">'d184702c-7003-49a7-9ded-4c4fe5d88881'</arg>
+					<arg name="email">'another_franta@example.org'</arg>
+				</call-query>
+				<expect>
+					<fail-insert table="identities" conflict="id" />
+				</expect>
+			</check>
+			<check name="duplicate e-mail">
+				<call-query>
+					<arg name="id">'abfda3cd-01e2-4b8a-8eb7-be1af49b0da8'</arg>
+					<arg name="email">'franta@example.org'</arg>
+				</call-query>
+				<expect>
+					<fail-insert table="identities" conflict="email" />
+				</expect>
+			</check>
+		</test>
 	</query>
 
 	<query id="identities.fetch.by.id">
 		<define>SELECT email FROM identities WHERE id = <value name="id" type="uuid" /></define>
+		<test name="simple">
+			<check name="fetch 'pepa2@example.org'">
+				<call-query>
+					<arg name="id">'cd8c611b-7e8a-43ff-8d35-9e92c74f003d'</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="email">pepa2@example.org</value>
+					</row>
+				</expect>
+			</check>
+		</test>
 	</query>
 
 	<query id="identities.fetch.by.email">
 		<define>SELECT id, email FROM identities WHERE email = <value name="email" type="varchar" /></define>
+		<test name="simple">
+			<check name="fetch 'jack.sparrow@example.org'">
+				<call-query>
+					<arg name="email">'jack.sparrow@example.org'</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="id">b5696add-11c4-4b51-834a-c14ddd672db4</value>
+						<value name="email">jack.sparrow@example.org</value>
+					</row>
+				</expect>
+			</check>
+		</test>
 	</query>
 
 	<query id="identities.remove">
 		<define>DELETE FROM identities WHERE id = <value name="id" type="uuid" /></define>
+		<test name="fail on integrity">
+			<check name="cannot remove referenced identity">
+				<call-query>
+					<arg name="id">'b5696add-11c4-4b51-834a-c14ddd672db4'</arg>
+				</call-query>
+				<sql>SELECT id, email FROM identities WHERE id = 'b5696add-11c4-4b51-834a-c14ddd672db4'</sql>
+				<expect>
+					<fail-delete table="identities" conflict="referenced by verified_identities" />
+					<row>
+						<value name="id">b5696add-11c4-4b51-834a-c14ddd672db4</value>
+						<value name="email">jack.sparrow@example.org</value>
+					</row>
+				</expect>
+			</check>
+		</test>
 	</query>
 
 	<query id="verified_identities.create">
@@ -376,6 +917,35 @@
 		WHERE
 			v.id = <value name="id" type="uuid" />
 		</define>
+		<test name="simple">
+			<check name="Jack Sparrow">
+				<call-query>
+					<arg name="id">'b6e70e5a-dccd-4898-8c17-114160a808c6'</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="identity_id">b5696add-11c4-4b51-834a-c14ddd672db4</value>
+						<value name="user_id">d67713ff-de75-43c4-917b-88f0048b7ccf</value>
+						<value name="provider">test</value>
+						<null name="picture" />
+						<null name="access_token" />
+						<value name="identity_email">jack.sparrow@example.org</value>
+						<value name="user_first_name">Jack</value>
+						<value name="user_last_name">Sparrow</value>
+					</row>
+				</expect>
+			</check>
+			<check name="assure picture and access_token are really NULL and not just empty">
+				<sql>SELECT 'picture and access_token are NULL' AS null_check FROM verified_identities
+					WHERE id = 'b6e70e5a-dccd-4898-8c17-114160a808c6'
+					AND picture IS NULL and access_token is NULL</sql>
+				<expect>
+					<row>
+						<value name="null_check">picture and access_token are NULL</value>
+					</row>
+				</expect>
+			</check>
+		</test>
 	</query>
 
 	<query id="verified_identities.fetch.by.email.and.provider">
@@ -398,6 +968,27 @@
 			AND
 			v.provider = <value name="provider" type="varchar" />
 		</define>
+		<test name="simple">
+			<check name="franta@example.org via provider test">
+				<call-query>
+					<arg name="email">'franta@example.org'</arg>
+					<arg name="provider">'test'</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="id">a08909d5-0d59-4605-b1cb-99d9d813f657</value>
+						<value name="identity_id">d184702c-7003-49a7-9ded-4c4fe5d88881</value>
+						<value name="user_id">014ca448-26d7-4051-ad11-8c9e37343f0d</value>
+						<null name="picture" />
+						<value name="provider">test</value>
+						<null name="access_token" />
+						<value name="identity_email">franta@example.org</value>
+						<value name="user_first_name">Franta</value>
+						<value name="user_last_name">Kutil</value>
+					</row>
+				</expect>
+			</check>
+		</test>
 	</query>
 
 	<query id="verified_identities.fetch.by.email">
@@ -417,7 +1008,53 @@
 		JOIN users AS u ON v.user_id = u.id
 		WHERE
 			i.email = <value name="email" type="varchar" />
+		ORDER BY provider
 		</define>
+		<test name="show we may have more valid results">
+			<setup name="verify existing identity with different provider">
+				<sql>INSERT INTO users (id, first_name, last_name) VALUES
+					('c99bdcca-e0f7-47fe-ad09-eb43e7854799', 'Attacker', 'Coming')</sql>
+				<!-- verify franta2@example.org by 'fake-provider' -->
+				<sql>INSERT INTO verified_identities (id, identity_id, user_id, provider) VALUES (
+					'8ec6ca32-9f2b-430b-8b7e-e54a726fde87',
+					'aeec55a1-b8f5-4ae8-b8a9-1a35781b01d1',
+					'c99bdcca-e0f7-47fe-ad09-eb43e7854799',
+					'fake-provider')</sql>
+			</setup>
+			<check name="we get 2 users, one with fake-provider">
+				<call-query>
+					<arg name="email">'franta2@example.org'</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="id">8ec6ca32-9f2b-430b-8b7e-e54a726fde87</value>
+						<value name="identity_id">aeec55a1-b8f5-4ae8-b8a9-1a35781b01d1</value>
+						<value name="user_id">c99bdcca-e0f7-47fe-ad09-eb43e7854799</value>
+						<null name="picture" />
+						<value name="provider">fake-provider</value>
+						<null name="access_token" />
+						<value name="identity_email">franta2@example.org</value>
+						<value name="user_first_name">Attacker</value>
+						<value name="user_last_name">Coming</value>
+					</row>
+					<row>
+						<value name="id">453ddb82-76ee-437a-b058-64998193a05c</value>
+						<value name="identity_id">aeec55a1-b8f5-4ae8-b8a9-1a35781b01d1</value>
+						<value name="user_id">014ca448-26d7-4051-ad11-8c9e37343f0d</value>
+						<null name="picture" />
+						<value name="provider">test</value>
+						<null name="access_token" />
+						<value name="identity_email">franta2@example.org</value>
+						<value name="user_first_name">Franta</value>
+						<value name="user_last_name">Kutil</value>
+					</row>
+				</expect>
+			</check>
+			<teardown name="delete the Attacker Coming">
+				<sql>DELETE FROM verified_identities WHERE id = '8ec6ca32-9f2b-430b-8b7e-e54a726fde87'</sql>
+				<sql>DELETE FROM users WHERE id = 'c99bdcca-e0f7-47fe-ad09-eb43e7854799'</sql>
+			</teardown>
+		</test>
 	</query>
 
 	<query id="verified_identities.update">
@@ -455,8 +1092,24 @@
 		JOIN identities AS i ON r.identity_id = i.id
 		JOIN places AS p ON r.place_id = p.id
 		WHERE
-			id = <value name="id" type="uuid" />
+			r.id = <value name="id" type="uuid" />
 		</define>
+		<test name="simple">
+			<check name="pepa@example.org is admin of Test Place 1">
+				<call-query>
+					<arg name="id">'faabc96a-12b4-421a-8f4b-00ae1f75c11f'</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
+						<value name="identity_id">4264d04a-4a50-4a53-a765-dc5a7cdce6f1</value>
+						<value name="level">10</value>
+						<value name="identity_email">pepa@example.org</value>
+						<value name="place_name">Test Place 1</value>
+					</row>
+				</expect>
+			</check>
+		</test>
 	</query>
 
 	<query id="roles_in_place.fetch.by.place_id">
@@ -473,7 +1126,41 @@
 		JOIN places AS p ON r.place_id = p.id
 		WHERE
 			r.place_id = <value name="place_id" type="uuid" />
+		ORDER BY level
 		</define>
+		<test name="fetch roles of place">
+			<check name="Test Place 1 has 3 users">
+				<call-query>
+					<arg name="place_id">'16de2f05-8af7-4729-8479-1973590cfa54'</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="id">faabc96a-12b4-421a-8f4b-00ae1f75c11f</value>
+						<value name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
+						<value name="identity_id">4264d04a-4a50-4a53-a765-dc5a7cdce6f1</value>
+						<value name="level">10</value>
+						<value name="identity_email">pepa@example.org</value>
+						<value name="place_name">Test Place 1</value>
+					</row>
+					<row>
+						<value name="id">f3733b47-d47c-4fa1-b2ce-2101dfa33ca1</value>
+						<value name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
+						<value name="identity_id">cd8c611b-7e8a-43ff-8d35-9e92c74f003d</value>
+						<value name="level">20</value>
+						<value name="identity_email">pepa2@example.org</value>
+						<value name="place_name">Test Place 1</value>
+					</row>
+					<row>
+						<value name="id">aee235a1-ac89-4553-b185-d689faeeeee3</value>
+						<value name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
+						<value name="identity_id">b5696add-11c4-4b51-834a-c14ddd672db4</value>
+						<value name="level">30</value>
+						<value name="identity_email">jack.sparrow@example.org</value>
+						<value name="place_name">Test Place 1</value>
+					</row>
+				</expect>
+			</check>
+		</test>
 	</query>
 
 	<query id="roles_in_place.count.users.except">
@@ -488,8 +1175,30 @@
 	</query>
 
 	<query id="roles_in_place.update">
-		<define>UPDATE roles_in_place SET name level <value name="level" type="integer" />
+		<define>UPDATE roles_in_place SET level = <value name="level" type="integer" />
 				WHERE id = <value name="id" type="uuid" /></define>
+		<test name="simple">
+			<check name="make jack.sparrow@example.org a user in Test Place 1">
+				<call-query>
+					<arg name="level">20</arg>
+					<arg name="id">'aee235a1-ac89-4553-b185-d689faeeeee3'</arg>
+				</call-query>
+				<sql>SELECT id, place_id, identity_id, level FROM roles_in_place
+					WHERE id = 'aee235a1-ac89-4553-b185-d689faeeeee3'</sql>
+
+				<expect>
+					<row>
+						<value name="id">aee235a1-ac89-4553-b185-d689faeeeee3</value>
+						<value name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
+						<value name="identity_id">b5696add-11c4-4b51-834a-c14ddd672db4</value>
+						<value name="level">20</value>
+					</row>
+				</expect>
+			</check>
+			<teardown name="return jack.sparrow@example.org to be guest in Test Place 1">
+				<sql>UPDATE roles_in_place SET level = 30 WHERE id = 'aee235a1-ac89-4553-b185-d689faeeeee3'</sql>
+			</teardown>
+		</test>
 	</query>
 
 	<query id="roles_in_place.remove">
@@ -499,7 +1208,7 @@
 	<query id="roles_in_place.fetch.access_level">
 		<define>
 		SELECT
-			MIN(r.level)
+			MIN(r.level) AS level
 		FROM roles_in_place AS r
 		JOIN verified_identities AS v ON v.identity_id = r.identity_id
 		WHERE
@@ -507,6 +1216,19 @@
 			AND
 			v.user_id = <value name="user_id" type="uuid" />
 		</define>
+		<test name="fetch minimal access_level">
+			<check test=" Pepa Goodman is both admin and user for Test Place 1, resolve to admin">
+				<call-query>
+					<arg name="place_id">'16de2f05-8af7-4729-8479-1973590cfa54'</arg>
+					<arg name="user_id">'29d214d4-2057-4e06-b003-b839d0bb1df6'</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="level">10</value>
+					</row>
+				</expect>
+			</check>
+		</test>
 	</query>
 
 	<query id="roles_in_place.fetch.accessible.places">
@@ -521,7 +1243,26 @@
 			r.level &gt;= <value name="at_least" type="integer" />
 			AND
 			v.user_id = <value name="user_id" type="uuid" />
+		ORDER BY p.name
 		</define>
+		<test name="find places of Pepa Goodman">
+			<check name="expect both Test Place 1 and Test Place 2">
+				<call-query>
+					<arg name="at_least">10</arg>
+					<arg name="user_id">'29d214d4-2057-4e06-b003-b839d0bb1df6'</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="id">16de2f05-8af7-4729-8479-1973590cfa54</value>
+						<value name="name">Test Place 1</value>
+					</row>
+					<row>
+						<value name="id">bd8ea40c-91c9-4d8c-8c13-a8332c39a437</value>
+						<value name="name">Test Place 2</value>
+					</row>
+				</expect>
+			</check>
+		</test>
 	</query>
 
 </query-set>
