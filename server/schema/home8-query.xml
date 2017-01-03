@@ -336,6 +336,23 @@
 		WHERE
 			id = <value name="id" type="uuid" />
 		</define>
+		<test name="unassign place from existing gateway">
+			<check name="unassign works">
+				<call-query>
+					<arg name="id">140548523101825</arg>
+				</call-query>
+				<sql>SELECT id, place_id FROM gateways WHERE id = 140548523101825</sql>
+				<expect>
+					<row>
+						<value name="id">140548523101825</value>
+						<null name="place_id" />
+					</row>
+				</expect>
+			</check>
+			<teardown name="reassign place bd8ea40c-91c9-4d8c-8c13-a8332c39a437">
+				<sql>UPDATE gateways SET place_id = 'bd8ea40c-91c9-4d8c-8c13-a8332c39a437' WHERE id = 140548523101825</sql>
+			</teardown>
+		</test>
 	</query>
 
 	<query id="gateways.fetch.by.place_id">
