@@ -1096,6 +1096,28 @@
 	<query id="roles_in_place.update">
 		<define>UPDATE roles_in_place SET level = <value name="level" type="integer" />
 				WHERE id = <value name="id" type="uuid" /></define>
+		<test name="simple">
+			<check name="make jack.sparrow@example.org a user in Test Place 1">
+				<call-query>
+					<arg name="level">20</arg>
+					<arg name="id">'aee235a1-ac89-4553-b185-d689faeeeee3'</arg>
+				</call-query>
+				<sql>SELECT id, place_id, identity_id, level FROM roles_in_place
+					WHERE id = 'aee235a1-ac89-4553-b185-d689faeeeee3'</sql>
+
+				<expect>
+					<row>
+						<value name="id">aee235a1-ac89-4553-b185-d689faeeeee3</value>
+						<value name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
+						<value name="identity_id">b5696add-11c4-4b51-834a-c14ddd672db4</value>
+						<value name="level">20</value>
+					</row>
+				</expect>
+			</check>
+			<teardown name="return jack.sparrow@example.org to be guest in Test Place 1">
+				<sql>UPDATE roles_in_place SET level = 30 WHERE id = 'aee235a1-ac89-4553-b185-d689faeeeee3'</sql>
+			</teardown>
+		</test>
 	</query>
 
 	<query id="roles_in_place.remove">
