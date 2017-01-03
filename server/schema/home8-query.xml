@@ -289,6 +289,44 @@
 		WHERE
 			id = <value name="id" type="uuid" />
 		</define>
+		<test name="can assign gateway to a place">
+			<setup name="prepare a gateway without place">
+				<sql>INSERT INTO gateways (id, name, place_id, altitude, latitude, longitude)
+					VALUES (116084064167771, 'Test Gateway 12', NULL, -5.1, 4.1, 7.11)</sql>
+			</setup>
+			<check name="assign works">
+				<call-query>
+					<arg name="id">116084064167771</arg>
+					<arg name="place_id">'bd8ea40c-91c9-4d8c-8c13-a8332c39a437'</arg>
+				</call-query>
+				<sql>SELECT id, place_id FROM gateways WHERE id = 116084064167771</sql>
+				<expect>
+					<row>
+						<value name="id">116084064167771</value>
+						<value name="place_id">bd8ea40c-91c9-4d8c-8c13-a8332c39a437</value>
+					</row>
+				</expect>
+			</check>
+			<teardown name="delete the testing gateway">
+				<sql>DELETE FROM gateways WHERE id = 116084064167771</sql>
+			</teardown>
+		</test>
+		<test name="assign to non-existing place">
+			<check name="assign fails due to non-existing place">
+				<call-query>
+					<arg name="id">181462068183316</arg>
+					<arg name="place_id">'85ffbb60-2438-4bd5-9cce-1de6521487db'</arg>
+				</call-query>
+				<sql>SELECT id, place_id FROM gateways WHERE id = 181462068183316</sql>
+				<expect>
+					<fail-update table="gateways" conflict="place_id" />
+					<row>
+						<value name="id">181462068183316</value>
+						<value name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
+					</row>
+				</expect>
+			</check>
+		</test>
 	</query>
 
 	<query id="gateways.unassign">
