@@ -1094,7 +1094,7 @@
 	</query>
 
 	<query id="roles_in_place.update">
-		<define>UPDATE roles_in_place SET name level <value name="level" type="integer" />
+		<define>UPDATE roles_in_place SET level = <value name="level" type="integer" />
 				WHERE id = <value name="id" type="uuid" /></define>
 	</query>
 
