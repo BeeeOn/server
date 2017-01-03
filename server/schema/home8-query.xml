@@ -715,6 +715,18 @@
 
 	<query id="identities.fetch.by.id">
 		<define>SELECT email FROM identities WHERE id = <value name="id" type="uuid" /></define>
+		<test name="simple">
+			<check name="fetch 'pepa2@example.org'">
+				<call-query>
+					<arg name="id">'cd8c611b-7e8a-43ff-8d35-9e92c74f003d'</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="email">pepa2@example.org</value>
+					</row>
+				</expect>
+			</check>
+		</test>
 	</query>
 
 	<query id="identities.fetch.by.email">
