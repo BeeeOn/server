@@ -286,57 +286,154 @@
 		</x:for-each>
 	</x:template>
 
-	<x:template name="drop-tables-recursive">
-		<x:param name="dropped" select="''" />
-		<x:param name="tables" select="/database/table/@name" />
+	<x:template match="*" mode="cascade-dependencies">
+		<x:message terminate="yes">Unexpected element for cascade-dependencies: <x:value-of select="local-name()" /></x:message>
+	</x:template>
 
-		<x:if test="count($tables) &gt; 0">
-			<x:variable name="table" select="$tables[position() = 1]" />
+	<x:template match="database/table" mode="cascade-dependencies">
+		<x:for-each select="foreign-key/@table">
+			<dependency><x:value-of select="." /></dependency>
+		</x:for-each>
+	</x:template>
 
-			<x:variable name="dependencies" select="$table/foreign-key/@table" />
-			<x:for-each select="$dependencies">
-				<x:call-template name="drop-tables">
-					<x:variable name="current" select="position()" />
+	<x:template match="entry[@type='table']" mode="drop">
+		<x:text>DROP TABLE IF EXISTS </x:text>
+		<x:value-of select="." />
+		<x:text>;&#xA;</x:text>
+	</x:template>
 
-					<x:with-param name="dropped">
-						<x:value-of select="$dropped" />
+	<x:template match="table/@name|view/@name" mode="extracted-from-text">
+		<x:param name="context" />
 
-						<!-- add all previously dropped in this loop -->
-						<x:for-each select="$dependencies[position() &lt; $current]">
+		<dependency><x:value-of select="." /></dependency>
+	</x:template>
+
+	<x:template match="database/view" mode="cascade-dependencies">
+		<x:for-each select="join/@remote|@base">
+			<dependency><x:value-of select="." /></dependency>
+		</x:for-each>
+
+		<x:for-each select="sub-query">
+			<x:call-template name="extract-table-and-view-names">
+				<x:with-param name="text" select="sql" />
+			</x:call-template>
+		</x:for-each>
+	</x:template>
+
+	<x:template match="entry[@type='view']" mode="drop">
+		<x:text>DROP VIEW IF EXISTS </x:text>
+		<x:value-of select="." />
+		<x:text>;&#xA;</x:text>
+	</x:template>
+
+	<x:template match="entry" mode="drop">
+		<x:message terminate="yes">Unexpected entry in drop: <x:value-of select="." /></x:message>
+	</x:template>
+
+	<x:template name="cascade-head">
+		<x:param name="head" />
+		<x:param name="queue" />
+		<x:param name="visited" />
+
+		<x:choose>
+			<x:when test="contains($visited, concat(' ', $head/@name, ' '))">
+				<!-- head was already visited (we probably go again because of some delayed head) -->
+				<x:call-template name="cascade-top">
+					<x:with-param name="queue" select="$queue" />
+					<x:with-param name="visited" select="$visited" />
+				</x:call-template>
+			</x:when>
+			<x:otherwise>
+				<!-- resolve current head's dependencies and filter them to not-visited ones -->
+				<x:variable name="dependencies-data">
+					<x:apply-templates select="$head" mode="cascade-dependencies" />
+				</x:variable>
+
+				<x:variable name="next-visited" select="concat($visited, ' ', $head/@name, ' ')" />
+				<x:variable name="not-visited-data">
+					<x:for-each select="c:node-set($dependencies-data)/dependency">
+						<x:if test="not(contains($next-visited, concat(' ', ., ' ')))">
+							<dependency><x:value-of select="." /></dependency>
+						</x:if>
+					</x:for-each>
+				</x:variable>
+				<!-- cosntruct node-set for the next processing -->
+				<x:variable name="dependencies" select="c:node-set($not-visited-data)/dependency" />
+
+				<x:if test="count($dependencies) = 0">
+					<!-- no dependencies, create entry -->
+					<entry type="{local-name($head)}"><x:value-of select="$head/@name" /></entry>
+
+					<!-- continue to the next element in the queue -->
+					<x:call-template name="cascade-top">
+						<x:with-param name="queue" select="$queue" />
+						<x:with-param name="visited" select="$next-visited" />
+					</x:call-template>
+				</x:if>
+
+				<x:if test="count($dependencies) &gt; 0">
+					<!-- delay processing of current head as there are dependencies -->
+
+					<x:variable name="entries-data">
+						<!-- continue with the next element in the queue -->
+						<x:call-template name="cascade-top">
+							<x:with-param name="queue" select="$queue" />
+							<x:with-param name="visited" select="$visited" />
+						</x:call-template>
+					</x:variable>
+					<x:variable name="entries" select="c:node-set($entries-data)/entry" />
+
+					<!-- bypass already generated entries -->
+					<x:for-each select="$entries">
+						<entry type="{@type}"><x:value-of select="." /></entry>
+					</x:for-each>
+
+					<!-- derive from entries all visited nodes -->
+					<x:variable name="retry-visited">
+						<x:value-of select="$visited" />
+						<x:text> </x:text>
+						<x:for-each select="$entries">
 							<x:value-of select="concat(' ', .)" />
 						</x:for-each>
-					</x:with-param>
-					<x:with-param name="tables" select="$table" />
-				</x:call-template>
-			</x:for-each>
+						<x:text> </x:text>
+					</x:variable>
 
-			<x:if test="not(contains(concat(' ', $dropped, ' '), concat(' ', $table, ' ')))">
-				<table><x:value-of select="$table" /></table>
-			</x:if>
+					<!-- retry current head (self) again and cascade the queue again -->
+					<x:call-template name="cascade-head">
+						<x:with-param name="head" select="$head" />
+						<x:with-param name="queue" select="$queue" />
+						<x:with-param name="visited" select="$retry-visited" />
+					</x:call-template>
+				</x:if>
+			</x:otherwise>
+		</x:choose>
+	</x:template>
 
-			<x:call-template name="drop-tables-recursive">
-				<x:with-param name="dropped">
-					<x:value-of select="$dropped" />
-					<x:for-each select="$dependencies">
-						<x:value-of select="concat(' ', .)" />
-					</x:for-each>
-					<x:value-of select="concat(' ', $table)" />
-				</x:with-param>
-				<x:with-param name="tables" select="$tables[position() &gt; 1]" />
+	<x:template name="cascade-top">
+		<x:param name="queue" />
+		<x:param name="visited" select="''" />
+
+		<x:if test="count($queue) &gt; 0">
+			<x:variable name="head" select="$queue[position() = 1]" />
+
+			<x:call-template name="cascade-head">
+				<x:with-param name="head" select="$head" />
+				<x:with-param name="queue" select="$queue[position() &gt; 1]" />
+				<x:with-param name="visited" select="$visited" />
 			</x:call-template>
 		</x:if>
 	</x:template>
 
-	<x:template name="drop-tables">
-		<x:variable name="tables-to-drop">
-			<x:call-template name="drop-tables-recursive" />
+	<x:template name="drop-tables-and-views">
+		<x:variable name="result-data">
+			<x:call-template name="cascade-top">
+				<x:with-param name="queue" select="/database/table|/database/view" />
+			</x:call-template>
 		</x:variable>
 
-		<x:for-each select="c:node-set($tables-to-drop)/table">
+		<x:for-each select="c:node-set($result-data)/entry">
 			<x:sort select="position()" data-type="number" order="descending" />
-			<x:text>DROP TABLE IF EXISTS </x:text>
-			<x:value-of select="." />
-			<x:text>;&#xA;</x:text>
+			<x:apply-templates select="." mode="drop" />
 		</x:for-each>
 	</x:template>
 
@@ -417,7 +514,7 @@
 
 	<x:template match="database">
 		<x:call-template name="print-header" />
-		<x:call-template name="drop-tables" />
+		<x:call-template name="drop-tables-and-views" />
 		<x:text>&#xA;</x:text>
 		<x:apply-templates select="table" />
 		<x:apply-templates select="view" />
