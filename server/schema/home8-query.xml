@@ -748,6 +748,21 @@
 
 	<query id="identities.remove">
 		<define>DELETE FROM identities WHERE id = <value name="id" type="uuid" /></define>
+		<test name="fail on integrity">
+			<check name="cannot remove referenced identity">
+				<call-query>
+					<arg name="id">'b5696add-11c4-4b51-834a-c14ddd672db4'</arg>
+				</call-query>
+				<sql>SELECT id, email FROM identities WHERE id = 'b5696add-11c4-4b51-834a-c14ddd672db4'</sql>
+				<expect>
+					<fail-delete table="identities" conflict="referenced by verified_identities" />
+					<row>
+						<value name="id">b5696add-11c4-4b51-834a-c14ddd672db4</value>
+						<value name="email">jack.sparrow@example.org</value>
+					</row>
+				</expect>
+			</check>
+		</test>
 	</query>
 
 	<query id="verified_identities.create">
