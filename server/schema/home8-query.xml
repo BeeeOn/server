@@ -1162,6 +1162,7 @@
 			r.level &gt;= <value name="at_least" type="integer" />
 			AND
 			v.user_id = <value name="user_id" type="uuid" />
+		ORDER BY p.name
 		</define>
 	</query>
 
