@@ -271,6 +271,21 @@
 		<x:text>&#xA;</x:text>
 	</x:template>
 
+	<x:template name="extract-table-and-view-names">
+		<x:param name="text" />
+		<x:param name="context" select="." />
+
+		<x:variable name="searchable" select="concat(' ', normalize-space($text), ' ')" />
+
+		<x:for-each select="/database/table/@name|/database/view/@name">
+			<x:if test="contains($searchable, concat(' ', ., ' '))">
+				<x:apply-templates select="." mode="extracted-from-text">
+					<x:with-param name="context" select="$context" />
+				</x:apply-templates>
+			</x:if>
+		</x:for-each>
+	</x:template>
+
 	<x:template name="drop-tables-recursive">
 		<x:param name="dropped" select="''" />
 		<x:param name="tables" select="/database/table/@name" />
