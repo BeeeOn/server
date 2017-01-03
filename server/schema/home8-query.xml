@@ -1045,6 +1045,7 @@
 		JOIN places AS p ON r.place_id = p.id
 		WHERE
 			r.place_id = <value name="place_id" type="uuid" />
+		ORDER BY level
 		</define>
 	</query>
 
