@@ -848,6 +848,27 @@
 			AND
 			v.provider = <value name="provider" type="varchar" />
 		</define>
+		<test name="simple">
+			<check name="franta@example.org via provider test">
+				<call-query>
+					<arg name="email">'franta@example.org'</arg>
+					<arg name="provider">'test'</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="id">a08909d5-0d59-4605-b1cb-99d9d813f657</value>
+						<value name="identity_id">d184702c-7003-49a7-9ded-4c4fe5d88881</value>
+						<value name="user_id">014ca448-26d7-4051-ad11-8c9e37343f0d</value>
+						<null name="picture" />
+						<value name="provider">test</value>
+						<null name="access_token" />
+						<value name="identity_email">franta@example.org</value>
+						<value name="user_first_name">Franta</value>
+						<value name="user_last_name">Kutil</value>
+					</row>
+				</expect>
+			</check>
+		</test>
 	</query>
 
 	<query id="verified_identities.fetch.by.email">
