@@ -1047,6 +1047,39 @@
 			r.place_id = <value name="place_id" type="uuid" />
 		ORDER BY level
 		</define>
+		<test name="fetch roles of place">
+			<check name="Test Place 1 has 3 users">
+				<call-query>
+					<arg name="place_id">'16de2f05-8af7-4729-8479-1973590cfa54'</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="id">faabc96a-12b4-421a-8f4b-00ae1f75c11f</value>
+						<value name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
+						<value name="identity_id">4264d04a-4a50-4a53-a765-dc5a7cdce6f1</value>
+						<value name="level">10</value>
+						<value name="identity_email">pepa@example.org</value>
+						<value name="place_name">Test Place 1</value>
+					</row>
+					<row>
+						<value name="id">f3733b47-d47c-4fa1-b2ce-2101dfa33ca1</value>
+						<value name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
+						<value name="identity_id">cd8c611b-7e8a-43ff-8d35-9e92c74f003d</value>
+						<value name="level">20</value>
+						<value name="identity_email">pepa2@example.org</value>
+						<value name="place_name">Test Place 1</value>
+					</row>
+					<row>
+						<value name="id">aee235a1-ac89-4553-b185-d689faeeeee3</value>
+						<value name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
+						<value name="identity_id">b5696add-11c4-4b51-834a-c14ddd672db4</value>
+						<value name="level">30</value>
+						<value name="identity_email">jack.sparrow@example.org</value>
+						<value name="place_name">Test Place 1</value>
+					</row>
+				</expect>
+			</check>
+		</test>
 	</query>
 
 	<query id="roles_in_place.count.users.except">
