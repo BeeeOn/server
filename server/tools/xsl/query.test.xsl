@@ -165,7 +165,16 @@
 
 	<x:template match="define/text()" mode="sql-direct">
 		<x:param name="args" />
+
+		<x:if test="position() &gt; 1">
+			<x:text> </x:text>
+		</x:if>
+
 		<x:value-of select="normalize-space(.)" />
+
+		<x:if test="position() != last()">
+			<x:text> </x:text>
+		</x:if>
 	</x:template>
 
 	<x:template match="define/raw" mode="sql-direct">
