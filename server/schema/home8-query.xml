@@ -499,6 +499,7 @@
 		JOIN verified_identities AS v ON v.identity_id = r.identity_id
 		WHERE
 			v.user_id = <value name="user_id" type="uuid" />
+		ORDER BY g.name
 		</define>
 	</query>
 
