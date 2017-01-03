@@ -797,6 +797,35 @@
 		WHERE
 			v.id = <value name="id" type="uuid" />
 		</define>
+		<test name="simple">
+			<check name="Jack Sparrow">
+				<call-query>
+					<arg name="id">'b6e70e5a-dccd-4898-8c17-114160a808c6'</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="identity_id">b5696add-11c4-4b51-834a-c14ddd672db4</value>
+						<value name="user_id">d67713ff-de75-43c4-917b-88f0048b7ccf</value>
+						<value name="provider">test</value>
+						<null name="picture" />
+						<null name="access_token" />
+						<value name="identity_email">jack.sparrow@example.org</value>
+						<value name="user_first_name">Jack</value>
+						<value name="user_last_name">Sparrow</value>
+					</row>
+				</expect>
+			</check>
+			<check name="assure picture and access_token are really NULL and not just empty">
+				<sql>SELECT 'picture and access_token are NULL' AS null_check FROM verified_identities
+					WHERE id = 'b6e70e5a-dccd-4898-8c17-114160a808c6'
+					AND picture IS NULL and access_token is NULL</sql>
+				<expect>
+					<row>
+						<value name="null_check">picture and access_token are NULL</value>
+					</row>
+				</expect>
+			</check>
+		</test>
 	</query>
 
 	<query id="verified_identities.fetch.by.email.and.provider">
