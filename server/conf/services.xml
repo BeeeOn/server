@@ -204,11 +204,6 @@
 		<instance name="mockIdentityDao" class="BeeeOn::MockIdentityDao" />
 		<instance name="mockVerifiedIdentityDao"
 				class="BeeeOn::MockVerifiedIdentityDao" />
-		<instance name="mockRoleInPlaceDao"
-				class="BeeeOn::MockRoleInPlaceDao">
-			<set name="placeDao" ref="placeDao" />
-			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
-		</instance>
 
 		<alias name="placeDao" ref="sqlPlaceDao" />
 		<alias name="userDao" ref="sqlUserDao" />
