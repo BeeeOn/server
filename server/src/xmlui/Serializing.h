@@ -14,6 +14,7 @@ namespace XML {
 namespace BeeeOn {
 
 class Gateway;
+class LegacyGateway;
 class Location;
 class Device;
 class VerifiedIdentity;
@@ -23,6 +24,10 @@ namespace XmlUI {
 void serialize(Poco::XML::XMLWriter &output, const Gateway &gateway);
 void serialize(Poco::XML::XMLWriter &output,
 		const std::vector<Gateway> &gateways);
+
+void serialize(Poco::XML::XMLWriter &output, const LegacyGateway &gateway);
+void serialize(Poco::XML::XMLWriter &output,
+		const std::vector<LegacyGateway> &gateways);
 
 void serialize(Poco::XML::XMLWriter &output, const Location &location);
 void serialize(Poco::XML::XMLWriter &output,

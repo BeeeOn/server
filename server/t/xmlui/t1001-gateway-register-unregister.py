@@ -63,6 +63,13 @@ class TestGatewayPlaceAssign(unittest.TestCase):
 		self.assertEqual("nan", response.root[0].get("latitude"))
 		self.assertEqual("nan", response.root[0].get("longitude"))
 		self.assertEqual("nan", response.root[0].get("altitude"))
+		self.assertEqual("0", response.root[0].get("devices"))
+		self.assertEqual("1", response.root[0].get("users"))
+		self.assertEqual("0", response.root[0].get("version"))
+		self.assertEqual("admin", response.root[0].get("permission"))
+		self.assertIsNotNone(response.root[0].get("owner"))
+		self.assertEqual("0", response.root[0].get("timezone"))
+		self.assertEqual("available", response.root[0].get("status"))
 
 		response = c.request(GatewayUnregister(
 			config.tmp_gateway_id,
@@ -127,6 +134,13 @@ class TestGatewayPlaceAssign(unittest.TestCase):
 		self.assertEqual("nan", response.root[0].get("latitude"))
 		self.assertEqual("nan", response.root[0].get("longitude"))
 		self.assertEqual("nan", response.root[0].get("altitude"))
+		self.assertEqual("0", response.root[0].get("devices"))
+		self.assertEqual("1", response.root[0].get("users"))
+		self.assertEqual("0", response.root[0].get("version"))
+		self.assertEqual("admin", response.root[0].get("permission"))
+		self.assertIsNotNone(response.root[0].get("owner"))
+		self.assertEqual("0", response.root[0].get("timezone"))
+		self.assertEqual("available", response.root[0].get("status"))
 
 		response = c.request(GatewayUnregister(
 			config.tmp_gateway_id,

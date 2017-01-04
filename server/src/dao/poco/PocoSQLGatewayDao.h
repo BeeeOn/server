@@ -20,6 +20,7 @@ class PocoSQLGatewayDao :
 public:
 	bool insert(Gateway &gateway) override;
 	bool fetch(Gateway &gateway) override;
+	bool fetch(LegacyGateway &gateway, const User &user) override;
 	bool update(Gateway &gateway) override;
 	bool assignAndUpdate(Gateway &gateway, const Place &place) override;
 	bool assign(Gateway &gateway, const Place &place) override;
@@ -28,17 +29,30 @@ public:
 	void fetchAccessible(
 			std::vector<Gateway> &gateways,
 			const User &user) override;
+	void fetchAccessible(
+			std::vector<LegacyGateway> &gateways,
+			const User &user) override;
 
+	template <typename G>
 	static bool parseSingle(Poco::Data::RecordSet &result,
-			Gateway &gateway, const std::string &prefix = "");
+			G &gateway, const std::string &prefix = "")
+	{
+		if (result.begin() == result.end())
+			return false;
+
+		return parseSingle(*result.begin(), gateway, prefix);
+	}
+
 	static bool parseSingle(Poco::Data::Row &result,
 			Gateway &gateway, const std::string &prefix = "");
+	static bool parseSingle(Poco::Data::Row &result,
+			LegacyGateway &gateway, const std::string &prefix = "");
 
-	template <typename C>
+	template <typename G, typename C>
 	static void parseMany(Poco::Data::RecordSet &result, C &collection)
 	{
 		for (auto row : result) {
-			Gateway gateway;
+			G gateway;
 
 			if (!parseSingle(row, gateway)) {
 				LOGGER_FUNC(__func__)
@@ -55,6 +69,7 @@ public:
 protected:
 	bool insert(Poco::Data::Session &session, Gateway &gateway);
 	bool fetch(Poco::Data::Session &session, Gateway &gateway);
+	bool fetch(Poco::Data::Session &session, LegacyGateway &gateway, const User &user);
 	bool update(Poco::Data::Session &session, Gateway &gateway);
 	bool assignAndUpdate(Poco::Data::Session &session,
 			Gateway &gateway, const Place &place);
@@ -65,6 +80,9 @@ protected:
 			Gateway &gateway, const Place &place);
 	void fetchAccessible(Poco::Data::Session &session,
 			std::vector<Gateway> &gateways,
+			const User &user);
+	void fetchAccessible(Poco::Data::Session &session,
+			std::vector<LegacyGateway> &gateways,
 			const User &user);
 };
 

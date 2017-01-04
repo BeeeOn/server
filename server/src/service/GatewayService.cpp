@@ -131,6 +131,13 @@ bool GatewayService::fetch(Single<Gateway> &input)
 	return m_gatewayDao->fetch(input.target());
 }
 
+bool GatewayService::fetch(Single<LegacyGateway> &input)
+{
+	m_accessPolicy->assureGet(input, input.target());
+
+	return m_gatewayDao->fetch(input.target(), input.user());
+}
+
 bool GatewayService::fetchFromPlace(Relation<Gateway, Place> &input)
 {
 	m_accessPolicy->assureGet(input, input.target());
@@ -139,6 +146,12 @@ bool GatewayService::fetchFromPlace(Relation<Gateway, Place> &input)
 }
 
 void GatewayService::fetchAccessible(Relation<vector<Gateway>, User> &input)
+{
+	m_gatewayDao->fetchAccessible(input.target(), input.base());
+}
+
+void GatewayService::fetchAccessible(
+		Relation<vector<LegacyGateway>, User> &input)
 {
 	m_gatewayDao->fetchAccessible(input.target(), input.base());
 }

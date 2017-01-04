@@ -32,6 +32,12 @@ bool PocoSQLGatewayDao::fetch(Gateway &gateway)
 	return fetch(session, gateway);
 }
 
+bool PocoSQLGatewayDao::fetch(LegacyGateway &gateway, const User &user)
+{
+	Session session(manager().pool().get());
+	return fetch(session, gateway, user);
+}
+
 bool PocoSQLGatewayDao::update(Gateway &gateway)
 {
 	Session session(manager().pool().get());
@@ -66,6 +72,14 @@ bool PocoSQLGatewayDao::fetchFromPlace(
 
 void PocoSQLGatewayDao::fetchAccessible(
 		std::vector<Gateway> &gateways,
+		const User &user)
+{
+	Session session(manager().pool().get());
+	return fetchAccessible(session, gateways, user);
+}
+
+void PocoSQLGatewayDao::fetchAccessible(
+		std::vector<LegacyGateway> &gateways,
 		const User &user)
 {
 	Session session(manager().pool().get());
@@ -115,6 +129,26 @@ bool PocoSQLGatewayDao::fetch(Session &session, Gateway &gateway)
 
 	Statement sql(session);
 	sql << findQuery("gateways.fetch.by.id"),
+		use(id, "id");
+
+	if (execute(sql) == 0)
+		return false;
+
+	RecordSet result(sql);
+	return parseSingle(result, gateway);
+}
+
+bool PocoSQLGatewayDao::fetch(Session &session, LegacyGateway &gateway, const User &user)
+{
+	assureHasId(gateway);
+	assureHasId(user);
+
+	string id(gateway.id().toString());
+	string userID(user.id().toString());
+
+	Statement sql(session);
+	sql << findQuery("legacy_gateways.fetch.by.id"),
+		use(userID, "user_id"),
 		use(id, "id");
 
 	if (execute(sql) == 0)
@@ -255,16 +289,24 @@ void PocoSQLGatewayDao::fetchAccessible(Session &session,
 
 	execute(sql);
 	RecordSet result(sql);
-	parseMany(result, gateways);
+	parseMany<Gateway>(result, gateways);
 }
 
-bool PocoSQLGatewayDao::parseSingle(RecordSet &result, Gateway &gateway,
-		const string &prefix)
+void PocoSQLGatewayDao::fetchAccessible(Session &session,
+		std::vector<LegacyGateway> &gateways,
+		const User &user)
 {
-	if (result.begin() == result.end())
-		return false;
+	assureHasId(user);
 
-	return parseSingle(*result.begin(), gateway, prefix);
+	string userID(user.id().toString());
+
+	Statement sql(session);
+	sql << findQuery("legacy_gateways.fetch.accessible"),
+		use(userID, "user_id");
+
+	execute(sql);
+	RecordSet result(sql);
+	parseMany<LegacyGateway>(result, gateways);
 }
 
 bool PocoSQLGatewayDao::parseSingle(Row &result, Gateway &gateway,
@@ -281,6 +323,24 @@ bool PocoSQLGatewayDao::parseSingle(Row &result, Gateway &gateway,
 	Place place;
 	if (PocoSQLPlaceDao::parseIfIDNotNull(result, place, prefix + "place_"))
 		gateway.setPlace(place);
+
+	return true;
+}
+
+bool PocoSQLGatewayDao::parseSingle(Row &result, LegacyGateway &gateway,
+		const string &prefix)
+{
+	if (!parseSingle(result, static_cast<Gateway &>(gateway)))
+		return false;
+
+	Poco::Dynamic::Var &accessLevel = result[prefix + "access_level"];
+	if (!accessLevel.isEmpty())
+		gateway.setAccessLevel(AccessLevel(accessLevel.convert<unsigned int>()));
+
+	User owner(UserID::parse(result[prefix + "owner_id"]));
+	gateway.setOwner(owner);
+	gateway.setUserCount(result[prefix + "roles_count"].convert<unsigned int>());
+	gateway.setDeviceCount(result[prefix + "devices_count"].convert<unsigned int>());
 
 	return true;
 }

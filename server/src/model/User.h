@@ -59,6 +59,14 @@ public:
 		return m_lastName;
 	}
 
+	std::string fullName() const
+	{
+		if (m_firstName.empty() && m_lastName.empty())
+			return "";
+
+		return m_firstName + " " + m_lastName;
+	}
+
 	void setID(const ID &id)
 	{
 		m_id = id;

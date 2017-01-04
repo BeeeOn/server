@@ -4,6 +4,7 @@
 
 #include "xmlui/Serializing.h"
 #include "model/Gateway.h"
+#include "model/LegacyGateway.h"
 #include "model/Location.h"
 #include "model/Device.h"
 #include "model/VerifiedIdentity.h"
@@ -13,9 +14,8 @@ using namespace Poco;
 using namespace Poco::XML;
 using namespace BeeeOn;
 
-void BeeeOn::XmlUI::serialize(XMLWriter &output, const Gateway &gateway)
+static void prepare(AttributesImpl &attrs, const Gateway &gateway)
 {
-	AttributesImpl attrs;
 	attrs.addAttribute("", "id", "id", "", gateway.id().toString());
 	attrs.addAttribute("", "name", "name", "", gateway.name());
 	attrs.addAttribute("", "longitude", "longitude", "",
@@ -24,12 +24,44 @@ void BeeeOn::XmlUI::serialize(XMLWriter &output, const Gateway &gateway)
 			std::to_string(gateway.latitude()));
 	attrs.addAttribute("", "altitude", "altitude", "",
 			std::to_string(gateway.altitude()));
+}
 
+void BeeeOn::XmlUI::serialize(XMLWriter &output, const Gateway &gateway)
+{
+	AttributesImpl attrs;
+	prepare(attrs, gateway);
 	output.emptyElement("", "gate", "gate", attrs);
 }
 
 void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
 		const std::vector<Gateway> &gateways)
+{
+	for (auto gateway : gateways)
+		serialize(output, gateway);
+}
+
+void BeeeOn::XmlUI::serialize(XMLWriter &output, const LegacyGateway &gateway)
+{
+	AttributesImpl attrs;
+	prepare(attrs, gateway);
+
+	attrs.addAttribute("", "owner", "owner", "",
+			gateway.owner().fullName());
+	attrs.addAttribute("", "permission", "permission", "",
+			gateway.accessLevel().toString());
+	attrs.addAttribute("", "devices", "devices", "",
+			to_string(gateway.deviceCount()));
+	attrs.addAttribute("", "users", "users", "",
+			to_string(gateway.userCount()));
+	attrs.addAttribute("", "version", "version", "", "0");
+	attrs.addAttribute("", "timezone", "timezone", "", "0");
+	attrs.addAttribute("", "status", "status", "", "available");
+
+	output.emptyElement("", "gate", "gate", attrs);
+}
+
+void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
+		const std::vector<LegacyGateway> &gateways)
 {
 	for (auto gateway : gateways)
 		serialize(output, gateway);
