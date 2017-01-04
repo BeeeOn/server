@@ -6,6 +6,8 @@
 				VALUES ('16de2f05-8af7-4729-8479-1973590cfa54', 'Test Place 1')</sql>
 			<sql>INSERT INTO places (id, name)
 				VALUES ('bd8ea40c-91c9-4d8c-8c13-a8332c39a437', 'Test Place 2')</sql>
+			<sql>INSERT INTO places (id, name)
+				VALUES ('c1a23a50-4734-43ed-bc96-2a39704c1f41', 'Test Place 3')</sql>
 		</setup>
 		<setup name="global gateways for tests">
 			<!-- Test Gateway 1 in place Test Place 1 -->
@@ -230,7 +232,7 @@
 				<sql>SELECT COUNT(*) AS count FROM places</sql>
 				<expect>
 					<row>
-						<value name="count">2</value>
+						<value name="count">3</value>
 					</row>
 				</expect>
 			</check>
