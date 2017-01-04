@@ -55,8 +55,9 @@
 
 	<x:template name="expect-header" />
 
-	<x:template match="value" mode="csv">
-		<x:value-of select="." />
+	<x:template name="csv-quote">
+		<x:param name="value" select="." />
+		<x:value-of select="$value" />
 	</x:template>
 
 	<x:template match="/query-set">

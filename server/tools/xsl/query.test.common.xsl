@@ -268,17 +268,23 @@
 		<x:text>,</x:text>
 	</x:template>
 
-	<x:template match="value" mode="csv">
+	<x:template name="csv-quote">
+		<x:param name="value" select="." />
+
 		<x:choose>
-			<x:when test="contains(., ' ')">
+			<x:when test="contains($value, ' ')">
 				<x:text>"</x:text>
-				<x:value-of select="." />
+				<x:value-of select="$value" />
 				<x:text>"</x:text>
 			</x:when>
 			<x:otherwise>
-				<x:value-of select="." />
+				<x:value-of select="$value" />
 			</x:otherwise>
 		</x:choose>
+	</x:template>
+
+	<x:template match="value" mode="csv">
+		<x:call-template name="csv-quote" />
 	</x:template>
 
 	<x:template match="null" mode="csv" />
