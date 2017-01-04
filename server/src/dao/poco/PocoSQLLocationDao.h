@@ -1,4 +1,5 @@
 #include "dao/LocationDao.h"
+#include "dao/SQLQuery.h"
 #include "dao/poco/PocoAbstractDao.h"
 #include "Debug.h"
 
@@ -18,6 +19,8 @@ class PocoSQLLocationDao :
 		public PocoAbstractDao,
 		public LocationDao {
 public:
+	PocoSQLLocationDao();
+
 	void create(Location &location) override;
 	bool fetch(Location &location) override;
 	bool fetchFrom(Location &location,
@@ -66,6 +69,16 @@ protected:
 			const Gateway &gateway);
 	bool update(Poco::Data::Session &session, Location &location);
 	bool remove(Poco::Data::Session &session, const Location &location);
+
+private:
+	SQLQuery m_queryCreate    {"locations.create"};
+	SQLQuery m_queryUpdate    {"locations.update"};
+	SQLQuery m_queryRemove    {"locations.remove"};
+	SQLQuery m_queryFetchById {"locations.fetch.by.id"};
+	SQLQuery m_queryFetchByIdAndPlaceId {"locations.fetch.by.id.and.place_id"};
+	SQLQuery m_queryFetchByIdAndGatewayId {"locations.fetch.by.id.and.gateway_id"};
+	SQLQuery m_queryFetchByPlaceId   {"locations.fetch.by.place_id"};
+	SQLQuery m_queryFetchByGatewayId {"locations.fetch.by.gateway_id"};
 };
 
 }
