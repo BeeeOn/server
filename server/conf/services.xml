@@ -192,7 +192,6 @@
 
 		<alias name="gatewayRPC" ref="fakeGatewayRPC" />
 
-		<instance name="mockUserDao" class="BeeeOn::MockUserDao" />
 		<instance name="mockDeviceDao" class="BeeeOn::MockDeviceDao" />
 
 		<alias name="placeDao" ref="sqlPlaceDao" />
