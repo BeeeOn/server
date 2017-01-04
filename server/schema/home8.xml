@@ -19,6 +19,19 @@
 		<foreign-key table="places" local="place_id" remote="id" />
 	</table>
 
+	<table name="gateways_status">
+		<column name="gateway_id" type="int64" not-null="yes" />
+		<column name="at" type="bigint" not-null="yes" />
+		<column name="version" type="varchar" size="40" />
+		<column name="ip" type="varchar" size="45" />
+
+		<primary-key>
+			<ref>gateway_id</ref>
+			<ref>at</ref>
+		</primary-key>
+		<foreign-key table="gateways" local="gateway_id" remote="id" />
+	</table>
+
 	<view name="users_of_gateway" base="gateways">
 		<map ref="id" as="gateway_id" />
 		<join remote="roles_in_place" on-base="place_id" on-remote="place_id">
