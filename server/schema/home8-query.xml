@@ -466,6 +466,7 @@
 	</query>
 
 	<query id="gateways.fetch.by.place_id">
+		<!-- TODO: remove this query, it is redundant -->
 		<define>
 		SELECT
 			g.name AS name,
