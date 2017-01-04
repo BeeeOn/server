@@ -41,6 +41,19 @@
 		<x:value-of select="translate($value, $quotes, '')" />
 	</x:template>
 
+	<x:template name="sql-print">
+		<x:param name="value" />
+		<x:param name="as" />
+
+		<x:text>SELECT '</x:text>
+		<x:call-template name="remove-string-quotes">
+			<x:with-param name="value" select="$value" />
+		</x:call-template>
+		<x:text>' AS </x:text>
+		<x:value-of select="$as" />
+		<x:text>;&#xA;</x:text>
+	</x:template>
+
 	<x:template match="query">
 		<x:text>-- Tests for </x:text>
 		<x:value-of select="@id" />
