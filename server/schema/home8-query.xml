@@ -26,6 +26,10 @@
 						'bd8ea40c-91c9-4d8c-8c13-a8332c39a437', -2.5, 2.5, 22.5)</sql>
 			<sql>INSERT INTO gateways_status (gateway_id, at, version, ip)
 				VALUES (140548523101825, 1483454300, '1.0-master', '192.168.11.1')</sql>
+			<!-- unused gateway Test Gateway 3 with no status -->
+			<sql>INSERT INTO gateways (id, name, place_id, altitude, latitude, longitude)
+				VALUES (144426044538750, 'Test Gateway 3',
+						'c1a23a50-4734-43ed-bc96-2a39704c1f41', -3.5, 3.5, 33.5)</sql>
 		</setup>
 		<setup name="global identities and users for tests">
 			<!-- Jack Sparrow -->
@@ -386,6 +390,26 @@
 					<arg name="id">118453478507226</arg>
 				</call-query>
 				<expect />
+			</check>
+		</test>
+		<test name="fetch gateway with no status">
+			<check name="find 'Test Gateway 3'">
+				<call-query>
+					<arg name="id">144426044538750</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="name">Test Gateway 3</value>
+						<value name="altitude">-3.5</value>
+						<value name="latitude">3.5</value>
+						<value name="longitude">33.5</value>
+						<null name="last_changed" />
+						<null name="version" />
+						<null name="ip" />
+						<value type="uuid" name="place_id">c1a23a50-4734-43ed-bc96-2a39704c1f41</value>
+						<value name="place_name">Test Place 3</value>
+					</row>
+				</expect>
 			</check>
 		</test>
 	</query>
