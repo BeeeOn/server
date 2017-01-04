@@ -19,6 +19,16 @@ using namespace BeeeOn;
 
 BEEEON_OBJECT(PocoSQLVerifiedIdentityDao, BeeeOn::PocoSQLVerifiedIdentityDao)
 
+PocoSQLVerifiedIdentityDao::PocoSQLVerifiedIdentityDao()
+{
+	registerQuery(m_queryCreate);
+	registerQuery(m_queryUpdate);
+	registerQuery(m_queryRemove);
+	registerQuery(m_queryFetchById);
+	registerQuery(m_queryFetchByEmail);
+	registerQuery(m_queryFetchByEmailAndProvider);
+}
+
 void PocoSQLVerifiedIdentityDao::create(VerifiedIdentity &identity)
 {
 	Session session(manager().pool().get());
@@ -81,7 +91,7 @@ void PocoSQLVerifiedIdentityDao::create(Session &session,
 		accessToken = identity.accessToken();
 
 	Statement sql(session);
-	sql << findQuery("verified_identities.create"),
+	sql << m_queryCreate(),
 		use(id, "id"),
 		use(identityID, "identity_id"),
 		use(userID, "user_id"),
@@ -100,7 +110,7 @@ bool PocoSQLVerifiedIdentityDao::fetch(Session &session,
 	string id(identity.id().toString());
 
 	Statement sql(session);
-	sql << findQuery("verified_identities.fetch.by.id"),
+	sql << m_queryFetchById(),
 		use(id, "id");
 
 	if (execute(sql) == 0)
@@ -119,7 +129,7 @@ bool PocoSQLVerifiedIdentityDao::fetchBy(Session &session,
 	string searchProvider(provider);
 
 	Statement sql(session);
-	sql << findQuery("verified_identities.fetch.by.email.and.provider"),
+	sql << m_queryFetchByEmailAndProvider(),
 		use(searchEmail, "email"),
 		use(searchProvider, "provider");
 
@@ -137,7 +147,7 @@ void PocoSQLVerifiedIdentityDao::fetchBy(Session &session,
 	string searchEmail(email);
 
 	Statement sql(session);
-	sql << findQuery("verified_identities.fetch.by.email"),
+	sql << m_queryFetchByEmail(),
 		use(searchEmail, "email");
 
 	execute(sql);
@@ -160,7 +170,7 @@ bool PocoSQLVerifiedIdentityDao::update(Session &session,
 		accessToken = identity.accessToken();
 
 	Statement sql(session);
-	sql << findQuery("verified_identities.update"),
+	sql << m_queryUpdate(),
 		use(picture, "picture"),
 		use(accessToken, "access_token"),
 		use(id, "id");
@@ -176,7 +186,7 @@ bool PocoSQLVerifiedIdentityDao::remove(Session &session,
 	string id(identity.id().toString());
 
 	Statement sql(session);
-	sql << findQuery("verified_identities.remove"),
+	sql << m_queryRemove(),
 		use(id, "id");
 
 	return execute(sql) > 0;

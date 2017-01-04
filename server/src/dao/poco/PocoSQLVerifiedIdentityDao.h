@@ -1,4 +1,5 @@
 #include "dao/VerifiedIdentityDao.h"
+#include "dao/SQLQuery.h"
 #include "dao/poco/PocoAbstractDao.h"
 #include "Debug.h"
 
@@ -18,6 +19,8 @@ class PocoSQLVerifiedIdentityDao :
 		public PocoAbstractDao,
 		public VerifiedIdentityDao {
 public:
+	PocoSQLVerifiedIdentityDao();
+
 	void create(VerifiedIdentity &identity) override;
 	bool fetch(VerifiedIdentity &identity) override;
 	bool fetchBy(VerifiedIdentity &identity,
@@ -61,6 +64,14 @@ protected:
 			const std::string &email);
 	bool update(Poco::Data::Session &session, VerifiedIdentity &identity);
 	bool remove(Poco::Data::Session &session, const VerifiedIdentity &identity);
+
+private:
+	SQLQuery m_queryCreate       {"verified_identities.create"};
+	SQLQuery m_queryUpdate       {"verified_identities.update"};
+	SQLQuery m_queryRemove       {"verified_identities.remove"};
+	SQLQuery m_queryFetchById    {"verified_identities.fetch.by.id"};
+	SQLQuery m_queryFetchByEmail {"verified_identities.fetch.by.email"};
+	SQLQuery m_queryFetchByEmailAndProvider {"verified_identities.fetch.by.email.and.provider"};
 };
 
 }
