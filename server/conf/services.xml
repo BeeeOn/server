@@ -192,23 +192,7 @@
 
 		<alias name="gatewayRPC" ref="fakeGatewayRPC" />
 
-		<instance name="mockPlaceDao" class="BeeeOn::MockPlaceDao" />
-		<instance name="mockUserDao" class="BeeeOn::MockUserDao" />
 		<instance name="mockDeviceDao" class="BeeeOn::MockDeviceDao" />
-		<instance name="mockGatewayDao" class="BeeeOn::MockGatewayDao">
-			<set name="roleInPlaceDao" ref="roleInPlaceDao" />
-		</instance>
-		<instance name="mockLocationDao" class="BeeeOn::MockLocationDao">
-			<set name="gatewayDao" ref="gatewayDao" />
-		</instance>
-		<instance name="mockIdentityDao" class="BeeeOn::MockIdentityDao" />
-		<instance name="mockVerifiedIdentityDao"
-				class="BeeeOn::MockVerifiedIdentityDao" />
-		<instance name="mockRoleInPlaceDao"
-				class="BeeeOn::MockRoleInPlaceDao">
-			<set name="placeDao" ref="placeDao" />
-			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
-		</instance>
 
 		<alias name="placeDao" ref="sqlPlaceDao" />
 		<alias name="userDao" ref="sqlUserDao" />

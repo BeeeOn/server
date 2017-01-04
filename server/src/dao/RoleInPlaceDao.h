@@ -6,8 +6,6 @@
 #include "di/InjectorTarget.h"
 #include "model/RoleInPlace.h"
 #include "dao/NullDao.h"
-#include "dao/MockDao.h"
-#include "dao/PlaceDao.h"
 
 namespace BeeeOn {
 
@@ -70,48 +68,6 @@ public:
 	}
 
 	static RoleInPlaceDao &instance();
-};
-
-class MockRoleInPlaceDao : public AbstractInjectorTarget,
-		public MockDao<RoleInPlace, RoleInPlaceDao> {
-public:
-	MockRoleInPlaceDao();
-
-	AccessLevel fetchAccessLevel(
-			const Place &place,
-			const User &user);
-
-	void fetchAccessiblePlaces(
-			std::vector<Place> &list,
-			const User &user,
-			const AccessLevel &atLeast = AccessLevel::any());
-
-	void fetchBy(std::vector<RoleInPlace> &roles,
-			const Place &place);
-
-	bool hasUsersExcept(const Place &place, const User &user);
-
-	void setPlaceDao(PlaceDao *dao)
-	{
-		m_placeDao = dao;
-	}
-
-	void setVerifiedIdentityDao(VerifiedIdentityDao *dao)
-	{
-		m_verifiedIdentityDao = dao;
-	}
-
-protected:
-	RoleInPlaceID nextID()
-	{
-		return RoleInPlaceID::random();
-	}
-
-	bool roleRefersToUser(const RoleInPlace &role,
-			const User &user);
-
-	PlaceDao *m_placeDao;
-	VerifiedIdentityDao *m_verifiedIdentityDao;
 };
 
 }
