@@ -194,9 +194,6 @@
 
 		<instance name="mockUserDao" class="BeeeOn::MockUserDao" />
 		<instance name="mockDeviceDao" class="BeeeOn::MockDeviceDao" />
-		<instance name="mockGatewayDao" class="BeeeOn::MockGatewayDao">
-			<set name="roleInPlaceDao" ref="roleInPlaceDao" />
-		</instance>
 		<instance name="mockIdentityDao" class="BeeeOn::MockIdentityDao" />
 		<instance name="mockVerifiedIdentityDao"
 				class="BeeeOn::MockVerifiedIdentityDao" />
