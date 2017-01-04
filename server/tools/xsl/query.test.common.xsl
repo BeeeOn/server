@@ -33,11 +33,51 @@
 		</x:choose>
 	</x:template>
 
+	<x:template name="remove-string-quotes">
+		<x:param name="value" />
+		<x:variable name="quotes">
+			<x:text>&#x27;&quot;</x:text>
+		</x:variable>
+		<x:value-of select="translate($value, $quotes, '')" />
+	</x:template>
+
+	<x:template name="sql-print">
+		<x:param name="value" />
+		<x:param name="as" />
+
+		<x:text>SELECT '</x:text>
+		<x:call-template name="remove-string-quotes">
+			<x:with-param name="value" select="$value" />
+		</x:call-template>
+		<x:text>' AS </x:text>
+		<x:value-of select="$as" />
+		<x:text>;&#xA;</x:text>
+	</x:template>
+
+	<x:template name="sql-print-id">
+		<x:param name="as" select="concat(local-name(), '_id')" />
+
+		<x:call-template name="sql-print">
+			<x:with-param name="value" select="@id" />
+			<x:with-param name="as" select="$as" />
+		</x:call-template>
+	</x:template>
+
+	<x:template name="sql-print-name">
+		<x:param name="as" select="concat(local-name(), '_name')" />
+
+		<x:call-template name="sql-print">
+			<x:with-param name="value" select="@name" />
+			<x:with-param name="as" select="$as" />
+		</x:call-template>
+	</x:template>
+
 	<x:template match="query">
 		<x:text>-- Tests for </x:text>
 		<x:value-of select="@id" />
 		<x:text>&#xA;</x:text>
 
+		<x:call-template name="sql-print-id" />
 		<x:apply-templates select="test" />
 	</x:template>
 
@@ -45,6 +85,8 @@
 		<x:text>-- Test </x:text>
 		<x:call-template name="name-sequential-item" />
 		<x:text>&#xA;</x:text>
+
+		<x:call-template name="sql-print-name" />
 
 		<x:apply-templates select="setup" />
 		<x:apply-templates select="check" />
@@ -96,6 +138,8 @@
 		<x:text>-- Check </x:text>
 		<x:call-template name="name-sequential-item" />
 		<x:text>&#xA;</x:text>
+
+		<x:call-template name="sql-print-name" />
 
 		<x:apply-templates select="expect/fail-insert" mode="before-call" />
 		<x:apply-templates select="expect/fail-update" mode="before-call" />
@@ -216,15 +260,78 @@
 
 	<x:template name="generate-expect-values">
 		<c:document href="{@for-database}-{$engine}-expect.csv" method="text" encoding="utf-8">
-			<x:apply-templates select="query/test/check/expect" mode="csv" />
+			<x:apply-templates select="query" mode="csv" />
 		</c:document>
 	</x:template>
 
 	<x:template name="expect-header">
-		<x:call-template name="print-csv-header" />
+		<x:if test="row">
+			<x:call-template name="print-csv-header">
+				<x:with-param name="header">
+					<x:for-each select="row[position() = 1]/value|row[position() = 1]/null">
+						<x:value-of select="@name" />
+
+						<x:if test="position() &lt; last()">
+							<x:call-template name="csv-separator" />
+						</x:if>
+					</x:for-each>
+				</x:with-param>
+			</x:call-template>
+		</x:if>
 	</x:template>
 
 	<x:template name="expect-footer" />
+
+	<x:template match="query" mode="csv">
+		<x:call-template name="print-csv-header">
+			<x:with-param name="header" select="'query_id'" />
+		</x:call-template>
+
+		<x:call-template name="csv-quote">
+			<x:with-param name="value">
+				<x:call-template name="remove-string-quotes">
+					<x:with-param name="value" select="@id" />
+				</x:call-template>
+			</x:with-param>
+		</x:call-template>
+		<x:text>&#xA;</x:text>
+
+		<x:apply-templates select="test" mode="csv" />
+	</x:template>
+
+	<x:template match="test" mode="csv">
+		<x:call-template name="print-csv-header">
+			<x:with-param name="header" select="'test_name'" />
+		</x:call-template>
+
+		<x:call-template name="csv-quote">
+			<x:with-param name="value">
+				<x:call-template name="remove-string-quotes">
+					<x:with-param name="value" select="@name" />
+				</x:call-template>
+			</x:with-param>
+		</x:call-template>
+		<x:text>&#xA;</x:text>
+
+		<x:apply-templates select="check" mode="csv" />
+	</x:template>
+
+	<x:template match="check" mode="csv">
+		<x:call-template name="print-csv-header">
+			<x:with-param name="header" select="'check_name'" />
+		</x:call-template>
+
+		<x:call-template name="csv-quote">
+			<x:with-param name="value">
+				<x:call-template name="remove-string-quotes">
+					<x:with-param name="value" select="@name" />
+				</x:call-template>
+			</x:with-param>
+		</x:call-template>
+		<x:text>&#xA;</x:text>
+
+		<x:apply-templates select="expect" mode="csv" />
+	</x:template>
 
 	<x:template match="expect" mode="csv">
 		<x:call-template name="expect-header" />
@@ -247,17 +354,10 @@
 	</x:template>
 
 	<x:template name="print-csv-header">
-		<x:if test="row">
-			<x:for-each select="row[position() = 1]/value|row[position() = 1]/null">
-				<x:value-of select="@name" />
+		<x:param name="header" select="''" />
 
-				<x:if test="position() &lt; last()">
-					<x:call-template name="csv-separator" />
-				</x:if>
-			</x:for-each>
-
-			<x:call-template name="csv-new-line" />
-		</x:if>
+		<x:value-of select="$header" />
+		<x:call-template name="csv-new-line" />
 	</x:template>
 
 	<x:template name="csv-new-line">
@@ -268,17 +368,26 @@
 		<x:text>,</x:text>
 	</x:template>
 
-	<x:template match="value" mode="csv">
+	<x:template name="csv-quote">
+		<x:param name="value" select="." />
+
 		<x:choose>
-			<x:when test="contains(., ' ')">
+			<x:when test="contains($value, ' ')">
 				<x:text>"</x:text>
-				<x:value-of select="." />
+				<x:value-of select="$value" />
 				<x:text>"</x:text>
 			</x:when>
+			<x:when test="string-length($value) = 0">
+				<x:text>""</x:text>
+			</x:when>
 			<x:otherwise>
-				<x:value-of select="." />
+				<x:value-of select="$value" />
 			</x:otherwise>
 		</x:choose>
+	</x:template>
+
+	<x:template match="value" mode="csv">
+		<x:call-template name="csv-quote" />
 	</x:template>
 
 	<x:template match="null" mode="csv" />
