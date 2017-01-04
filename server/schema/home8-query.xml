@@ -481,6 +481,33 @@
 			AND
 			g.place_id = <value name="place_id" type="uuid" />
 		</define>
+		<test name="fetch gateway Test Gateway 2 from Test Place 2">
+			<check name="obtain Test Gateway 2">
+				<call-query>
+					<arg name="id">140548523101825</arg>
+					<arg name="place_id">'bd8ea40c-91c9-4d8c-8c13-a8332c39a437'</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="name">Test Gateway 2</value>
+						<value name="altitude">-2.5</value>
+						<value name="latitude">2.5</value>
+						<value name="longitude">22.5</value>
+						<value type="uuid" name="place_id">bd8ea40c-91c9-4d8c-8c13-a8332c39a437</value>
+						<value name="place_name">Test Place 2</value>
+					</row>
+				</expect>
+			</check>
+		</test>
+		<test name="fetch gateway Test Gateway 2 from Test Place 1">
+			<check name="obtain no result">
+				<call-query>
+					<arg name="id">140548523101825</arg>
+					<arg name="place_id">'16de2f05-8af7-4729-8479-1973590cfa54'</arg>
+				</call-query>
+				<expect />
+			</check>
+		</test>
 	</query>
 
 	<query id="gateways.fetch.accessible">
