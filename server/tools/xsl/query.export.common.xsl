@@ -6,6 +6,7 @@
 		version="1.0">
 
 	<x:import href="util.codebase.xsl" />
+	<x:import href="query.sql.xsl" />
 
 	<x:param name="engine" select="'unknown'" />
 
@@ -36,22 +37,6 @@
 		<x:value-of select="concat(@id, ' = ')" />
 		<x:apply-templates select="define" mode="export" />
 		<x:text>&#xA;</x:text>
-	</x:template>
-
-	<x:template match="define" mode="export">
-		<x:apply-templates mode="export" />
-	</x:template>
-
-	<x:template match="define/text()" mode="export">
-		<x:value-of select="normalize-space(.)" />
-	</x:template>
-
-	<x:template match="define/raw" mode="export">
-		<x:value-of select="." />
-	</x:template>
-
-	<x:template match="define/value" mode="export">
-		<x:text> ? </x:text>
 	</x:template>
 
 </x:stylesheet>
