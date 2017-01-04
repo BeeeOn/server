@@ -2,6 +2,7 @@
 #define BEEEON_POCO_ABSTRACT_DAO_H
 
 #include <typeinfo>
+#include <list>
 
 #include <Poco/Logger.h>
 #include <Poco/Dynamic/Var.h>
@@ -14,6 +15,7 @@ namespace BeeeOn {
 
 class PocoDaoManager;
 class SQLLoader;
+class SQLQuery;
 
 class PocoAbstractDao : public AbstractInjectorTarget {
 public:
@@ -27,6 +29,7 @@ protected:
 	PocoDaoManager &manager();
 
 	std::string findQuery(const std::string &key) const;
+	void registerQuery(SQLQuery &query);
 
 	template <typename T>
 	void assureHasId(const T &t)
@@ -44,11 +47,15 @@ protected:
 	void throwMissingId(const std::type_info &t);
 
 protected:
+	virtual void injectionDone();
+
+protected:
 	Poco::Logger &m_logger;
 
 private:
 	PocoDaoManager *m_manager;
 	SQLLoader *m_loader;
+	std::list<SQLQuery *> m_queries;
 };
 
 }

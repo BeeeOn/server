@@ -1,6 +1,7 @@
 #include <Poco/Exception.h>
 
 #include "dao/SQLLoader.h"
+#include "dao/SQLQuery.h"
 #include "dao/poco/PocoAbstractDao.h"
 #include "dao/poco/PocoDaoManager.h"
 #include "Debug.h"
@@ -53,6 +54,11 @@ string PocoAbstractDao::findQuery(const string &key) const
 		return m_loader->find(key);
 
 	throw IllegalStateException("missing sql loader");
+}
+
+void PocoAbstractDao::registerQuery(SQLQuery &query)
+{
+	m_queries.push_back(&query);
 }
 
 size_t PocoAbstractDao::execute(Statement &sql)
@@ -118,4 +124,20 @@ bool PocoAbstractDao::hasColumn(const Row &result, const std::string &name)
 	}
 
 	return false;
+}
+
+void PocoAbstractDao::injectionDone()
+{
+	if (m_loader == NULL) {
+		m_logger.warning("missing SQLLoader instance",
+				__FILE__, __LINE__);
+		return;
+	}
+
+	for (auto query : m_queries) {
+		m_logger.debug("loading query " + query->key(),
+				__FILE__, __LINE__);
+
+		query->load(*m_loader);
+	}
 }
