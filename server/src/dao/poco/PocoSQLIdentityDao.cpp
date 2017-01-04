@@ -16,6 +16,14 @@ using namespace BeeeOn;
 
 BEEEON_OBJECT(PocoSQLIdentityDao, BeeeOn::PocoSQLIdentityDao)
 
+PocoSQLIdentityDao::PocoSQLIdentityDao()
+{
+	registerQuery(m_queryCreate);
+	registerQuery(m_queryRemove);
+	registerQuery(m_queryFetchById);
+	registerQuery(m_queryFetchByEmail);
+}
+
 void PocoSQLIdentityDao::create(Identity &identity)
 {
 	Session session(manager().pool().get());
@@ -47,7 +55,7 @@ void PocoSQLIdentityDao::create(Session &session, Identity &identity)
 	string email(identity.email());
 
 	Statement sql(session);
-	sql << findQuery("identities.create"),
+	sql << m_queryCreate(),
 		use(id, "id"),
 		use(email, "email");
 
@@ -61,7 +69,7 @@ bool PocoSQLIdentityDao::fetch(Session &session, Identity &identity)
 	string id(identity.id().toString());
 
 	Statement sql(session);
-	sql << findQuery("identities.fetch.by.id"),
+	sql << m_queryFetchById(),
 		use(id, "id");
 
 	if (execute(sql) == 0)
@@ -78,7 +86,7 @@ bool PocoSQLIdentityDao::fetchBy(Session &session,
 	string id;
 
 	Statement sql(session);
-	sql << findQuery("identities.fetch.by.email"),
+	sql << m_queryFetchByEmail(),
 		use(searchEmail, "email");
 
 	if (execute(sql) == 0)
@@ -94,7 +102,7 @@ bool PocoSQLIdentityDao::remove(Session &session, const Identity &identity)
 	string id(identity.id().toString());
 
 	Statement sql(session);
-	sql << findQuery("identities.remove"),
+	sql << m_queryRemove(),
 		use(id, "id");
 
 	return execute(sql) > 0;
