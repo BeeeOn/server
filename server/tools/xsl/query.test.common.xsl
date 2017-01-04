@@ -119,12 +119,12 @@
 
 	<x:template match="call-query">
 		<x:text>-- Call query under test&#xA;</x:text>
-		<x:apply-templates select="../../../define" mode="check">
+		<x:apply-templates select="../../../define" mode="sql-direct">
 			<x:with-param name="args" select="arg" />
 		</x:apply-templates>
 	</x:template>
 
-	<x:template match="define" mode="check">
+	<x:template match="define" mode="sql-direct">
 		<x:param name="args" />
 
 		<x:if test="not(@engine) or $engine = @engine">
