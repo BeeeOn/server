@@ -21,6 +21,18 @@ using namespace BeeeOn;
 
 BEEEON_OBJECT(PocoSQLRoleInPlaceDao, BeeeOn::PocoSQLRoleInPlaceDao)
 
+PocoSQLRoleInPlaceDao::PocoSQLRoleInPlaceDao()
+{
+	registerQuery(m_queryCreate);
+	registerQuery(m_queryUpdate);
+	registerQuery(m_queryRemove);
+	registerQuery(m_queryFetchById);
+	registerQuery(m_queryFetchByPlaceId);
+	registerQuery(m_queryFetchAccessLevel);
+	registerQuery(m_queryCountUsersExcept);
+	registerQuery(m_queryFetchAccessiblePlaces);
+}
+
 void PocoSQLRoleInPlaceDao::create(RoleInPlace &role)
 {
 	Session session(manager().pool().get());
@@ -90,7 +102,7 @@ void PocoSQLRoleInPlaceDao::create(Session &session, RoleInPlace &role)
 	unsigned long created = role.created().timestamp().epochTime();
 
 	Statement sql(session);
-	sql << findQuery("roles_in_place.create"),
+	sql << m_queryCreate(),
 		use(id, "id"),
 		use(placeID, "place_id"),
 		use(identityID, "identity_id"),
@@ -107,7 +119,7 @@ bool PocoSQLRoleInPlaceDao::fetch(Session &session, RoleInPlace &role)
 	string id(role.id().toString());
 
 	Statement sql(session);
-	sql << findQuery("roles_in_place.fetch.by.id"),
+	sql << m_queryFetchById(),
 		use(id, "id");
 
 	if (execute(sql) == 0)
@@ -126,7 +138,7 @@ void PocoSQLRoleInPlaceDao::fetchBy(Session &session,
 	string placeID(place.id().toString());
 
 	Statement sql(session);
-	sql << findQuery("roles_in_place.fetch.by.place_id"),
+	sql << m_queryFetchByPlaceId(),
 		use(placeID, "place_id");
 
 	execute(sql);
@@ -147,7 +159,7 @@ bool PocoSQLRoleInPlaceDao::hasUsersExcept(
 	unsigned long count;
 
 	Statement sql(session);
-	sql << findQuery("roles_in_place.count.users.except"),
+	sql << m_queryCountUsersExcept(),
 		use(placeID, "place_id"),
 		use(userID, "user_id"),
 		into(count);
@@ -164,7 +176,7 @@ bool PocoSQLRoleInPlaceDao::update(Session &session, RoleInPlace &role)
 	unsigned int level = role.level();
 
 	Statement sql(session);
-	sql << findQuery("roles_in_place.update"),
+	sql << m_queryUpdate(),
 		use(level, "level"),
 		use(id, "id");
 
@@ -178,7 +190,7 @@ bool PocoSQLRoleInPlaceDao::remove(Session &session, const RoleInPlace &role)
 	string id(role.id().toString());
 
 	Statement sql(session);
-	sql << findQuery("roles_in_place.remove"),
+	sql << m_queryRemove(),
 		use(id, "id");
 
 	return execute(sql) > 0;
@@ -197,7 +209,7 @@ AccessLevel PocoSQLRoleInPlaceDao::fetchAccessLevel(
 	Nullable<unsigned int> level;
 
 	Statement sql(session);
-	sql << findQuery("roles_in_place.fetch.access_level"),
+	sql << m_queryFetchAccessLevel(),
 		use(placeID, "place_id"),
 		use(userID, "user_id"),
 		into(level);
@@ -218,7 +230,7 @@ void PocoSQLRoleInPlaceDao::fetchAccessiblePlaces(
 	unsigned int level = atLeast;
 
 	Statement sql(session);
-	sql << findQuery("roles_in_place.fetch.accessible.places"),
+	sql << m_queryFetchAccessiblePlaces(),
 		use(level, "at_least"),
 		use(userID, "user_id");
 
