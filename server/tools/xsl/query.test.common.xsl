@@ -321,6 +321,9 @@
 				<x:value-of select="$value" />
 				<x:text>"</x:text>
 			</x:when>
+			<x:when test="string-length($value) = 0">
+				<x:text>""</x:text>
+			</x:when>
 			<x:otherwise>
 				<x:value-of select="$value" />
 			</x:otherwise>
