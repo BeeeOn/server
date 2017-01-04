@@ -8,9 +8,11 @@
 				VALUES ('bd8ea40c-91c9-4d8c-8c13-a8332c39a437', 'Test Place 2')</sql>
 		</setup>
 		<setup name="global gateways for tests">
+			<!-- Test Gateway 1 in place Test Place 1 -->
 			<sql>INSERT INTO gateways (id, name, place_id, altitude, latitude, longitude)
 				VALUES (181462068183316, 'Test Gateway 1',
 						'16de2f05-8af7-4729-8479-1973590cfa54', -1.5, 1.5, 11.5)</sql>
+			<!-- Test Gateway 2 in place Test Place 2 -->
 			<sql>INSERT INTO gateways (id, name, place_id, altitude, latitude, longitude)
 				VALUES (140548523101825, 'Test Gateway 2',
 						'bd8ea40c-91c9-4d8c-8c13-a8332c39a437', -2.5, 2.5, 22.5)</sql>
