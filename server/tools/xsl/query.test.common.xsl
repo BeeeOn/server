@@ -10,6 +10,27 @@
 
 	<x:template name="print-preamble" />
 
+	<x:template name="print-plain-stats">
+		<x:text>Queries: </x:text>
+		<x:value-of select="count(query)" />
+		<x:text>&#xA;</x:text>
+		<x:text>Tests: </x:text>
+		<x:value-of select="count(query/test)" />
+		<x:text>&#xA;</x:text>
+		<x:text>Not-tested: </x:text>
+		<x:value-of select="count(query[not(test)])" />
+		<x:text>&#xA;</x:text>
+
+		<x:text>Missing tests for: </x:text>
+		<x:for-each select="query[not(test)]">
+			<x:value-of select="@id" />
+			<x:if test="position() != last()">
+				<x:text>, </x:text>
+			</x:if>
+		</x:for-each>
+		<x:text>&#xA;</x:text>
+	</x:template>
+
 	<x:template name="generate-sql-tests">
 		<c:document href="{@for-database}-{$engine}-test.sql" method="text" encoding="utf-8">
 			<x:call-template name="print-preamble" />
@@ -18,6 +39,8 @@
 			<x:apply-templates select="query" />
 			<x:apply-templates select="test-global/teardown" />
 		</c:document>
+
+		<x:call-template name="print-plain-stats" />
 	</x:template>
 
 	<x:template name="name-sequential-item">
