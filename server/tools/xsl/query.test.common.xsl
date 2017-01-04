@@ -54,6 +54,24 @@
 		<x:text>;&#xA;</x:text>
 	</x:template>
 
+	<x:template name="sql-print-id">
+		<x:param name="as" select="concat(local-name(), '_id')" />
+
+		<x:call-template name="sql-print">
+			<x:with-param name="value" select="@id" />
+			<x:with-param name="as" select="$as" />
+		</x:call-template>
+	</x:template>
+
+	<x:template name="sql-print-name">
+		<x:param name="as" select="concat(local-name(), '_name')" />
+
+		<x:call-template name="sql-print">
+			<x:with-param name="value" select="@name" />
+			<x:with-param name="as" select="$as" />
+		</x:call-template>
+	</x:template>
+
 	<x:template match="query">
 		<x:text>-- Tests for </x:text>
 		<x:value-of select="@id" />
