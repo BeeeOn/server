@@ -5,7 +5,6 @@
 
 #include "di/InjectorTarget.h"
 #include "dao/NullDao.h"
-#include "dao/MockDao.h"
 #include "model/Place.h"
 
 namespace BeeeOn {
@@ -26,16 +25,6 @@ public:
 	 * unnecessary allocations.
 	 */
 	static PlaceDao &instance();
-};
-
-class MockPlaceDao : public AbstractInjectorTarget,
-		public MockDao<Place, PlaceDao> {
-
-protected:
-	PlaceID nextID()
-	{
-		return PlaceID::random();
-	}
 };
 
 }
