@@ -221,7 +221,19 @@
 	</x:template>
 
 	<x:template name="expect-header">
-		<x:call-template name="print-csv-header" />
+		<x:if test="row">
+			<x:call-template name="print-csv-header">
+				<x:with-param name="header">
+					<x:for-each select="row[position() = 1]/value|row[position() = 1]/null">
+						<x:value-of select="@name" />
+
+						<x:if test="position() &lt; last()">
+							<x:call-template name="csv-separator" />
+						</x:if>
+					</x:for-each>
+				</x:with-param>
+			</x:call-template>
+		</x:if>
 	</x:template>
 
 	<x:template name="expect-footer" />
@@ -247,17 +259,10 @@
 	</x:template>
 
 	<x:template name="print-csv-header">
-		<x:if test="row">
-			<x:for-each select="row[position() = 1]/value|row[position() = 1]/null">
-				<x:value-of select="@name" />
+		<x:param name="header" select="''" />
 
-				<x:if test="position() &lt; last()">
-					<x:call-template name="csv-separator" />
-				</x:if>
-			</x:for-each>
-
-			<x:call-template name="csv-new-line" />
-		</x:if>
+		<x:value-of select="$header" />
+		<x:call-template name="csv-new-line" />
 	</x:template>
 
 	<x:template name="csv-new-line">

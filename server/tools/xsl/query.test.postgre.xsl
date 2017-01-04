@@ -53,7 +53,7 @@
 		<x:text>();&#xA;</x:text>
 	</x:template>
 
-	<x:template name="expect-header" />
+	<x:template name="print-csv-header" />
 
 	<x:template name="csv-quote">
 		<x:param name="value" select="." />
