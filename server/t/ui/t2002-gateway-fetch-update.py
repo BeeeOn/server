@@ -114,6 +114,9 @@ class TestFetchUpdateGateway(unittest.TestCase):
 
 		self.assertEqual(config.gateway_id, gate["id"])
 		self.assertEqual("Joe Doe's Gateway", gate["name"])
+		self.assertEqual("0.0.0.0", gate["ip"])
+		self.assertEqual("", gate["version"])
+		self.assertFalse("last_changed" in gate)
 
 	"""
 	Request an existing gateway but from wrong context.
@@ -173,6 +176,9 @@ class TestFetchUpdateGateway(unittest.TestCase):
 		self.assertEqual(100, gateway["altitude"])
 		self.assertEqual(0, gateway["longitude"])
 		self.assertEqual(0, gateway["latitude"])
+		self.assertEqual("0.0.0.0", gateway["ip"])
+		self.assertEqual("", gateway["version"])
+		self.assertFalse("last_changed" in gateway)
 
 		# Test if the values were really updated
 		req = GET(config.ui_host, config.ui_port,
@@ -189,6 +195,9 @@ class TestFetchUpdateGateway(unittest.TestCase):
 		self.assertEqual(100, gateway["altitude"])
 		self.assertEqual(0, gateway["longitude"])
 		self.assertEqual(0, gateway["latitude"])
+		self.assertEqual("0.0.0.0", gateway["ip"])
+		self.assertEqual("", gateway["version"])
+		self.assertFalse("last_changed" in gateway)
 
 		# Revert edits on gateway
 		req = PUT(config.ui_host, config.ui_port,
@@ -231,6 +240,9 @@ class TestFetchUpdateGateway(unittest.TestCase):
 		self.assertEqual(100, gateway["altitude"])
 		self.assertEqual(48.0673357, gateway["latitude"])
 		self.assertEqual(12.8600699, gateway["longitude"])
+		self.assertEqual("0.0.0.0", gateway["ip"])
+		self.assertEqual("", gateway["version"])
+		self.assertFalse("last_changed" in gateway)
 
 		# Fetch the gateway once again
 		req = GET(config.ui_host, config.ui_port,
@@ -248,6 +260,9 @@ class TestFetchUpdateGateway(unittest.TestCase):
 		self.assertEqual(100, gateway["altitude"])
 		self.assertEqual(48.0673357, gateway["latitude"])
 		self.assertEqual(12.8600699, gateway["longitude"])
+		self.assertEqual("0.0.0.0", gateway["ip"])
+		self.assertEqual("", gateway["version"])
+		self.assertFalse("last_changed" in gateway)
 
 		# Revert edits on gateway
 		req = PUT(config.ui_host, config.ui_port,
@@ -287,6 +302,9 @@ class TestFetchUpdateGateway(unittest.TestCase):
 		self.assertEqual(0, gateway["altitude"])
 		self.assertEqual(0, gateway["longitude"])
 		self.assertEqual(0, gateway["latitude"])
+		self.assertEqual("0.0.0.0", gateway["ip"])
+		self.assertEqual("", gateway["version"])
+		self.assertFalse("last_changed" in gateway)
 
 	"""
 	Test we cannot update a gateway in place it is not assigned to.
@@ -319,6 +337,9 @@ class TestFetchUpdateGateway(unittest.TestCase):
 		self.assertEqual(0, gateway["altitude"])
 		self.assertEqual(0, gateway["longitude"])
 		self.assertEqual(0, gateway["latitude"])
+		self.assertEqual("0.0.0.0", gateway["ip"])
+		self.assertEqual("", gateway["version"])
+		self.assertFalse("last_changed" in gateway)
 
 if __name__ == '__main__':
 	import sys

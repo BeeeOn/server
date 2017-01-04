@@ -65,6 +65,11 @@ ostream &UI::serialize(ostream &o, const Gateway &gateway)
 	object->set("altitude", gateway.altitude());
 	object->set("latitude", gateway.latitude());
 	object->set("longitude", gateway.longitude());
+	object->set("version", gateway.version());
+	object->set("ip", gateway.ipAddress().toString());
+
+	if (!gateway.lastChanged().isNull())
+		object->set("last_changed", gateway.lastChanged().value().timestamp().epochTime());
 
 	object->stringify(o);
 	return o;
