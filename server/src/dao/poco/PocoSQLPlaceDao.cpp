@@ -16,6 +16,14 @@ using namespace BeeeOn;
 
 BEEEON_OBJECT(PocoSQLPlaceDao, BeeeOn::PocoSQLPlaceDao)
 
+PocoSQLPlaceDao::PocoSQLPlaceDao()
+{
+	registerQuery(m_queryCreate);
+	registerQuery(m_queryUpdate);
+	registerQuery(m_queryRemove);
+	registerQuery(m_queryFetchById);
+}
+
 void PocoSQLPlaceDao::create(Place &place)
 {
 	Session session(manager().pool().get());
@@ -47,7 +55,7 @@ void PocoSQLPlaceDao::create(Session &session, Place &place)
 	string name(place.name());
 
 	Statement sql(session);
-	sql << findQuery("places.create"),
+	sql << m_queryCreate(),
 		use(id, "id"),
 		use(name, "name");
 
@@ -60,7 +68,7 @@ bool PocoSQLPlaceDao::fetch(Session &session, Place &place)
 	string id(place.id().toString());
 
 	Statement sql(session);
-	sql << findQuery("places.fetch.by.id"),
+	sql << m_queryFetchById(),
 		use(id, "id");
 
 	if (execute(sql) == 0)
@@ -77,7 +85,7 @@ bool PocoSQLPlaceDao::update(Session &session, Place &place)
 	string name(place.name());
 
 	Statement sql(session);
-	sql << findQuery("places.update"),
+	sql << m_queryUpdate(),
 		use(name, "name"),
 		use(id, "id");
 
@@ -90,7 +98,7 @@ bool PocoSQLPlaceDao::remove(Session &session, const Place &place)
 	string id(place.id().toString());
 
 	Statement sql(session);
-	sql << findQuery("places.remove"),
+	sql << m_queryRemove(),
 		use(id, "id");
 
 	return execute(sql) > 0;

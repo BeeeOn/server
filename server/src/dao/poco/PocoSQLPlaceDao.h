@@ -1,4 +1,5 @@
 #include "dao/PlaceDao.h"
+#include "dao/SQLQuery.h"
 #include "dao/poco/PocoAbstractDao.h"
 #include "Debug.h"
 
@@ -18,6 +19,8 @@ class PocoSQLPlaceDao :
 		public PocoAbstractDao,
 		public PlaceDao {
 public:
+	PocoSQLPlaceDao();
+
 	void create(Place &place) override;
 	bool fetch(Place &place) override;
 	bool update(Place &place) override;
@@ -52,6 +55,12 @@ protected:
 	bool fetch(Poco::Data::Session &session, Place &place);
 	bool update(Poco::Data::Session &session, Place &place);
 	bool remove(Poco::Data::Session &session, const Place &place);
+
+private:
+	SQLQuery m_queryCreate {"places.create"};
+	SQLQuery m_queryUpdate {"places.update"};
+	SQLQuery m_queryRemove {"places.remove"};
+	SQLQuery m_queryFetchById {"places.fetch.by.id"};
 };
 
 }
