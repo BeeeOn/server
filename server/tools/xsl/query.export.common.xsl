@@ -34,23 +34,23 @@
 
 	<x:template match="query">
 		<x:value-of select="concat(@id, ' = ')" />
-		<x:apply-templates select="define" />
+		<x:apply-templates select="define" mode="export" />
 		<x:text>&#xA;</x:text>
 	</x:template>
 
-	<x:template match="define">
-		<x:apply-templates />
+	<x:template match="define" mode="export">
+		<x:apply-templates mode="export" />
 	</x:template>
 
-	<x:template match="define/text()">
+	<x:template match="define/text()" mode="export">
 		<x:value-of select="normalize-space(.)" />
 	</x:template>
 
-	<x:template match="define/raw">
+	<x:template match="define/raw" mode="export">
 		<x:value-of select="." />
 	</x:template>
 
-	<x:template match="define/value">
+	<x:template match="define/value" mode="export">
 		<x:text> ? </x:text>
 	</x:template>
 
