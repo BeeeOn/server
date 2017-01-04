@@ -33,6 +33,14 @@
 		</x:choose>
 	</x:template>
 
+	<x:template name="remove-string-quotes">
+		<x:param name="value" />
+		<x:variable name="quotes">
+			<x:text>&#x27;&quot;</x:text>
+		</x:variable>
+		<x:value-of select="translate($value, $quotes, '')" />
+	</x:template>
+
 	<x:template match="query">
 		<x:text>-- Tests for </x:text>
 		<x:value-of select="@id" />
