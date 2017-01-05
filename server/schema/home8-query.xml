@@ -10,10 +10,10 @@
 		<setup name="global gateways for tests">
 			<sql>INSERT INTO gateways (id, name, place_id, altitude, latitude, longitude)
 				VALUES (181462068183316, 'Test Gateway 1',
-						'16de2f05-8af7-4729-8479-1973590cfa54', -0.1, 0.1, 0.11)</sql>
+						'16de2f05-8af7-4729-8479-1973590cfa54', -1.5, 1.5, 11.5)</sql>
 			<sql>INSERT INTO gateways (id, name, place_id, altitude, latitude, longitude)
 				VALUES (140548523101825, 'Test Gateway 2',
-						'bd8ea40c-91c9-4d8c-8c13-a8332c39a437', -0.2, 0.2, 0.22)</sql>
+						'bd8ea40c-91c9-4d8c-8c13-a8332c39a437', -2.5, 2.5, 22.5)</sql>
 		</setup>
 		<setup name="global identities and users for tests">
 			<!-- Jack Sparrow -->
@@ -276,9 +276,9 @@
 					<arg name="id">161762224815122</arg>
 					<arg name="name">'Test Gateway 10'</arg>
 					<arg name="place_id">'bd8ea40c-91c9-4d8c-8c13-a8332c39a437'</arg>
-					<arg name="altitude">0.54</arg>
-					<arg name="latitude">0.45</arg>
-					<arg name="longitude">0.15</arg>
+					<arg name="altitude">54.5</arg>
+					<arg name="latitude">45.5</arg>
+					<arg name="longitude">15.5</arg>
 				</call-query>
 				<sql>SELECT id, name, place_id, altitude, latitude, longitude
 					FROM gateways WHERE id = 161762224815122</sql>
@@ -287,9 +287,9 @@
 						<value type="uuid" name="id">161762224815122</value>
 						<value name="name">Test Gateway 10</value>
 						<value type="uuid" name="place_id">bd8ea40c-91c9-4d8c-8c13-a8332c39a437</value>
-						<value name="altitude">0.54</value>
-						<value name="latitude">0.45</value>
-						<value name="longitude">0.15</value>
+						<value name="altitude">54.5</value>
+						<value name="latitude">45.5</value>
+						<value name="longitude">15.5</value>
 					</row>
 				</expect>
 			</check>
@@ -350,9 +350,9 @@
 				<expect>
 					<row>
 						<value name="name">Test Gateway 1</value>
-						<value name="altitude">-0.1</value>
-						<value name="latitude">0.1</value>
-						<value name="longitude">0.11</value>
+						<value name="altitude">-1.5</value>
+						<value name="latitude">1.5</value>
+						<value name="longitude">11.5</value>
 						<value type="uuid" name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
 						<value name="place_name">Test Place 1</value>
 					</row>
@@ -505,7 +505,7 @@
 			<setup name="another testing gateway Test Gateway 13">
 				<sql>INSERT INTO gateways (id, name, place_id, altitude, latitude, longitude)
 					VALUES (116084064167771, 'Test Gateway 13',
-							'bd8ea40c-91c9-4d8c-8c13-a8332c39a437', 20.5, 10.1, 10.22)</sql>
+							'bd8ea40c-91c9-4d8c-8c13-a8332c39a437', 20.5, 10.1, 10.24)</sql>
 			</setup>
 			<check name="3 gateways of Pepa Goodman">
 				<call-query>
@@ -515,9 +515,9 @@
 					<row>
 						<value type="uuid" name="id">181462068183316</value>
 						<value name="name">Test Gateway 1</value>
-						<value name="altitude">-0.1</value>
-						<value name="latitude">0.1</value>
-						<value name="longitude">0.11</value>
+						<value name="altitude">-1.5</value>
+						<value name="latitude">1.5</value>
+						<value name="longitude">11.5</value>
 						<value type="uuid" name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
 						<value name="place_name">Test Place 1</value>
 					</row>
@@ -526,16 +526,16 @@
 						<value name="name">Test Gateway 13</value>
 						<value name="altitude">20.5</value>
 						<value name="latitude">10.1</value>
-						<value name="longitude">10.22</value>
+						<value name="longitude">10.24</value>
 						<value type="uuid" name="place_id">bd8ea40c-91c9-4d8c-8c13-a8332c39a437</value>
 						<value name="place_name">Test Place 2</value>
 					</row>
 					<row>
 						<value type="uuid" name="id">140548523101825</value>
 						<value name="name">Test Gateway 2</value>
-						<value name="altitude">-0.2</value>
-						<value name="latitude">0.2</value>
-						<value name="longitude">0.22</value>
+						<value name="altitude">-2.5</value>
+						<value name="latitude">2.5</value>
+						<value name="longitude">22.5</value>
 						<value type="uuid" name="place_id">bd8ea40c-91c9-4d8c-8c13-a8332c39a437</value>
 						<value name="place_name">Test Place 2</value>
 					</row>
@@ -554,9 +554,9 @@
 					<row>
 						<value type="uuid" name="id">140548523101825</value>
 						<value name="name">Test Gateway 2</value>
-						<value name="altitude">-0.2</value>
-						<value name="latitude">0.2</value>
-						<value name="longitude">0.22</value>
+						<value name="altitude">-2.5</value>
+						<value name="latitude">2.5</value>
+						<value name="longitude">22.5</value>
 						<value type="uuid" name="place_id">bd8ea40c-91c9-4d8c-8c13-a8332c39a437</value>
 						<value name="place_name">Test Place 2</value>
 					</row>
@@ -572,9 +572,9 @@
 					<row>
 						<value type="uuid" name="id">181462068183316</value>
 						<value name="name">Test Gateway 1</value>
-						<value name="altitude">-0.1</value>
-						<value name="latitude">0.1</value>
-						<value name="longitude">0.11</value>
+						<value name="altitude">-1.5</value>
+						<value name="latitude">1.5</value>
+						<value name="longitude">11.5</value>
 						<value type="uuid" name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
 						<value name="place_name">Test Place 1</value>
 					</row>
@@ -1305,9 +1305,9 @@
 						<value name="name">Test Gateway 2</value>
 						<value type="uuid" name="place_id">bd8ea40c-91c9-4d8c-8c13-a8332c39a437</value>
 						<value name="place_name">Test Place 2</value>
-						<value name="altitude">-0.2</value>
-						<value name="latitude">0.2</value>
-						<value name="longitude">0.22</value>
+						<value name="altitude">-2.5</value>
+						<value name="latitude">2.5</value>
+						<value name="longitude">22.5</value>
 						<value name="roles_count">2</value>
 						<value name="devices_count">0</value>
 						<value type="uuid" name="owner_id">014ca448-26d7-4051-ad11-8c9e37343f0d</value>
@@ -1325,9 +1325,9 @@
 						<value name="name">Test Gateway 1</value>
 						<value type="uuid" name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
 						<value name="place_name">Test Place 1</value>
-						<value name="altitude">-0.1</value>
-						<value name="latitude">0.1</value>
-						<value name="longitude">0.11</value>
+						<value name="altitude">-1.5</value>
+						<value name="latitude">1.5</value>
+						<value name="longitude">11.5</value>
 						<value name="roles_count">3</value>
 						<value name="devices_count">0</value>
 						<value type="uuid" name="owner_id">29d214d4-2057-4e06-b003-b839d0bb1df6</value>
@@ -1368,9 +1368,9 @@
 					<row>
 						<value type="uuid" name="id">181462068183316</value>
 						<value name="name">Test Gateway 1</value>
-						<value name="altitude">-0.1</value>
-						<value name="latitude">0.1</value>
-						<value name="longitude">0.11</value>
+						<value name="altitude">-1.5</value>
+						<value name="latitude">1.5</value>
+						<value name="longitude">11.5</value>
 						<value type="uuid" name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
 						<value name="place_name">Test Place 1</value>
 						<value name="roles_count">3</value>
