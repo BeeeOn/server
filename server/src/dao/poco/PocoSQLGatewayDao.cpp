@@ -16,6 +16,7 @@ using namespace std;
 using namespace Poco;
 using namespace Poco::Data;
 using namespace Poco::Data::Keywords;
+using namespace Poco::Net;
 using namespace BeeeOn;
 
 BEEEON_OBJECT(PocoSQLGatewayDao, BeeeOn::PocoSQLGatewayDao)
@@ -333,6 +334,14 @@ bool PocoSQLGatewayDao::parseSingle(Row &result, Gateway &gateway,
 	gateway.setAltitude(nanWhenEmpty(result[prefix + "altitude"]));
 	gateway.setLatitude(nanWhenEmpty(result[prefix + "latitude"]));
 	gateway.setLongitude(nanWhenEmpty(result[prefix + "longitude"]));
+	gateway.setVersion(emptyWhenNull(result[prefix + "version"]));
+	gateway.setIPAddress(whenNull(result[prefix + "ip"], string("0.0.0.0")));
+
+	Nullable<Poco::DateTime> lastChanged;
+	if (!result[prefix + "last_changed"].isEmpty())
+		lastChanged = Timestamp::fromEpochTime(result[prefix + "last_changed"]);
+
+	gateway.setLastChanged(lastChanged);
 
 	Place place;
 	if (PocoSQLPlaceDao::parseIfIDNotNull(result, place, prefix + "place_"))

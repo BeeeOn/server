@@ -24,6 +24,8 @@ static void prepare(AttributesImpl &attrs, const Gateway &gateway)
 			std::to_string(gateway.latitude()));
 	attrs.addAttribute("", "altitude", "altitude", "",
 			std::to_string(gateway.altitude()));
+	attrs.addAttribute("", "version", "version", "", gateway.version());
+	attrs.addAttribute("", "ip", "ip", "", gateway.ipAddress().toString());
 }
 
 void BeeeOn::XmlUI::serialize(XMLWriter &output, const Gateway &gateway)
@@ -53,7 +55,6 @@ void BeeeOn::XmlUI::serialize(XMLWriter &output, const LegacyGateway &gateway)
 			to_string(gateway.deviceCount()));
 	attrs.addAttribute("", "users", "users", "",
 			to_string(gateway.userCount()));
-	attrs.addAttribute("", "version", "version", "", "0");
 	attrs.addAttribute("", "timezone", "timezone", "", "0");
 	attrs.addAttribute("", "status", "status", "", "available");
 
