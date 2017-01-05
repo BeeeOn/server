@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include <Poco/Version.h>
 #include <Poco/Logger.h>
 #include <Poco/String.h>
 #include <Poco/Message.h>
@@ -10,6 +11,7 @@
 #include <Poco/Util/HelpFormatter.h>
 
 #include "util/Startup.h"
+#include "util/PocoVersion.h"
 
 using namespace std;
 using namespace Poco;
@@ -216,9 +218,9 @@ string ServerStartup::defaultServicesFile() const
 	return path + "/" + m_appGroup + "/" + m_appName + "/services.xml";
 }
 
-static string pocoVersion(void)
+static string pocoVersion(unsigned long version = 0)
 {
-	unsigned long version = Environment::libraryVersion();
+	version = version == 0? Environment::libraryVersion() : version;
 
 	unsigned int major = (version >> 24) & 0xff;
 	unsigned int minor = (version >> 16) & 0xff;
@@ -228,9 +230,42 @@ static string pocoVersion(void)
 	return to_string(major) + "." + to_string(minor) + "." + to_string(alpha) + "-" + to_string(beta);
 }
 
+static string pocoLinkedVersion(void)
+{
+	return pocoVersion(POCO_VERSION);
+}
+
+static void warnAboutPocoVersion(Logger &logger)
+{
+	bool upgrade = false;
+
+	if (Environment::libraryVersion() > POCO_VERSION)
+		logger.warning("runtime Poco library is newer than built-in headers", __FILE__, __LINE__);
+
+	if (POCO_VERSION < RECOMMENDED_POCO_VERSION) {
+		logger.warning("Poco library headers are older then recommended",
+				__FILE__, __LINE__);
+		upgrade = true;
+	}
+
+	if (Environment::libraryVersion() < RECOMMENDED_POCO_VERSION) {
+		logger.warning("runtime Poco library is older then recommended",
+				__FILE__, __LINE__);
+		upgrade = true;
+	}
+
+	if (upgrade) {
+		logger.warning("recommended to upgrade to Poco library "
+				+ pocoVersion(RECOMMENDED_POCO_VERSION) + " or newer",
+				__FILE__, __LINE__);
+	}
+}
+
 int ServerStartup::main(const vector<string> &args)
 {
-	logger().notice("Poco library " + pocoVersion());
+	logger().notice("Poco library " + pocoVersion() + " (headers " + pocoLinkedVersion() + ")");
+	warnAboutPocoVersion(logger());
+
 	logger().notice("OS " + Environment::osDisplayName()
 		+ " (" + Environment::osName() + " " + Environment::osVersion() + ")");
 	logger().notice("Machine " + Environment::osArchitecture() + " (cores: " + to_string(Environment::processorCount()) + ")");

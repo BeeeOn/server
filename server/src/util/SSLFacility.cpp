@@ -70,7 +70,8 @@ SSLFacility::SSLFacility():
 	m_verificationMode(VerificationMode::VERIFY_RELAXED),
 	m_verificationDepth(9),
 	m_cipherList("ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH"),
-	m_sessionCache(false)
+	m_sessionCache(false),
+	m_disabledProtocols(-1)
 {
 	initializeSSL();
 
@@ -123,7 +124,8 @@ void SSLFacility::initContext()
 	m_context->disableProtocols(m_disabledProtocols);
 #else
 	if (m_disabledProtocols)
-		m_logger.warning("protocols are not disabled, Poco library is too old",
+		m_logger.warning("protocols are not disabled, linked against too old Poco library: "
+				+ NumberFormatter::formatHex(POCO_VERSION, 10, true),
 				__FILE__, __LINE__);
 #endif
 
