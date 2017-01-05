@@ -251,6 +251,11 @@
 			<set name="sqlLoader" ref="queries" />
 		</instance>
 
+		<instance name="sqlDeviceDao" class="BeeeOn::PocoSQLDeviceDao">
+			<set name="daoManager" ref="pocoDaoManager" />
+			<set name="sqlLoader" ref="queries" />
+		</instance>
+
 		<instance name="queries" class="BeeeOn::SQLLoader">
 			<set name="database" text="home8" />
 			<add name="file" text="${database.queries}" />
