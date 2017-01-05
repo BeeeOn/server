@@ -58,4 +58,21 @@
 		<x:call-template name="new-line" />
 	</x:template>
 
+	<x:template match="value" mode="csv">
+		<x:variable name="value">
+			<x:choose>
+				<x:when test="@type = 'uuid'">
+					<x:call-template name="to-upper" />
+				</x:when>
+				<x:otherwise>
+					<x:value-of select="." />
+				</x:otherwise>
+			</x:choose>
+		</x:variable>
+
+		<x:call-template name="csv-quote">
+			<x:with-param name="value" select="$value" />
+		</x:call-template>
+	</x:template>
+
 </x:stylesheet>
