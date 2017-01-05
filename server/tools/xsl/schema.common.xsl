@@ -7,21 +7,28 @@
 
 	<x:import href="util.codebase.xsl" />
 
+	<x:param name="new.line" select="'&#xA;'" />
+
+	<x:template name="new-line">
+		<x:value-of select="$new.line" />
+	</x:template>
+
 	<x:template name="print-header">
-		<x:text>-- Auto-generated header&#xA;</x:text>
-		<x:value-of select="concat('-- ', d:date-time(), '&#xA;')" />
+		<x:text>-- Auto-generated header</x:text>
+		<x:call-template name="new-line" />
+		<x:value-of select="concat('-- ', d:date-time(), $new.line)" />
 
 		<x:call-template name="print-codebase-version">
 			<x:with-param name="prefix" select="'-- '" />
-			<x:with-param name="suffix" select="'&#xA;'" />
+			<x:with-param name="suffix" select="$new.line" />
 		</x:call-template>
 
 		<x:if test="@name">
 			<x:text>-- Database: </x:text>
 			<x:value-of select="@name" />
-			<x:text>&#xA;</x:text>
+			<x:call-template name="new-line" />
 		</x:if>
-		<x:text>&#xA;</x:text>
+		<x:call-template name="new-line" />
 	</x:template>
 
 	<x:template name="print-name">
@@ -230,7 +237,8 @@
 		</x:call-template>
 
 		<x:if test="position() != last()">
-			<x:text>,&#xA;</x:text>
+			<x:text>,</x:text>
+			<x:call-template name="new-line" />
 		</x:if>
 	</x:template>
 
@@ -256,19 +264,19 @@
 
 	<x:template name="comma-eol-if-not-last">
 		<x:call-template name="if-not-last">
-			<x:with-param name="text" select="',&#xA;'" />
+			<x:with-param name="text" select="concat(',', $new.line)" />
 		</x:call-template>
 	</x:template>
 
 	<x:template name="eol-if-not-last">
 		<x:call-template name="if-not-last">
-			<x:with-param name="text" select="'&#xA;'" />
+			<x:with-param name="text" select="$new.line" />
 		</x:call-template>
 	</x:template>
 
 	<x:template name="comma-if-not-last-eol">
 		<x:call-template name="comma-if-not-last" />
-		<x:text>&#xA;</x:text>
+		<x:call-template name="new-line" />
 	</x:template>
 
 	<x:template name="extract-table-and-view-names">
@@ -301,7 +309,8 @@
 
 		<x:text>DROP TABLE IF EXISTS </x:text>
 		<x:value-of select="." />
-		<x:text>;&#xA;</x:text>
+		<x:text>;</x:text>
+		<x:call-template name="new-line" />
 	</x:template>
 
 	<x:template match="entry[@type='table']" mode="drop">
@@ -333,7 +342,8 @@
 
 		<x:text>DROP VIEW IF EXISTS </x:text>
 		<x:value-of select="." />
-		<x:text>;&#xA;</x:text>
+		<x:text>;</x:text>
+		<x:call-template name="new-line" />
 	</x:template>
 
 	<x:template match="entry[@type='view']" mode="drop">
@@ -531,7 +541,7 @@
 	<x:template match="database">
 		<x:call-template name="print-header" />
 		<x:call-template name="drop-tables-and-views" />
-		<x:text>&#xA;</x:text>
+		<x:call-template name="new-line" />
 		<x:apply-templates select="table" />
 		<x:apply-templates select="view" />
 	</x:template>
@@ -539,10 +549,12 @@
 	<x:template match="database/table">
 		<x:text>CREATE TABLE </x:text>
 		<x:call-template name="print-name" />
-		<x:text> (&#xA;</x:text>
+		<x:text> (</x:text>
+		<x:call-template name="new-line" />
 		<x:apply-templates select="column|primary-key|foreign-key|unique|check" />
-		<x:text>);&#xA;</x:text>
-		<x:text>&#xA;</x:text>
+		<x:text>);</x:text>
+		<x:call-template name="new-line" />
+		<x:call-template name="new-line" />
 	</x:template>
 
 	<x:template match="database/table/column">
@@ -604,22 +616,25 @@
 	<x:template match="database/view">
 		<x:text>CREATE VIEW </x:text>
 		<x:call-template name="print-name" />
-		<x:text> AS&#xA;</x:text>
-		<x:text>    SELECT&#xA;</x:text>
+		<x:text> AS</x:text>
+		<x:call-template name="new-line" />
+		<x:text>    SELECT</x:text>
+		<x:call-template name="new-line" />
 
 		<x:apply-templates select="map|join/map|sub-query" />
 
-		<x:text>&#xA;</x:text>
+		<x:call-template name="new-line" />
 		<x:text>    FROM </x:text>
 		<x:call-template name="print-base" />
 
 		<x:if test="join">
-			<x:text>&#xA;</x:text>
+			<x:call-template name="new-line" />
 			<x:apply-templates select="join" />
 		</x:if>
 
-		<x:text>;&#xA;</x:text>
-		<x:text>&#xA;</x:text>
+		<x:text>;</x:text>
+		<x:call-template name="new-line" />
+		<x:call-template name="new-line" />
 	</x:template>
 
 	<x:template match="view/map">
@@ -639,7 +654,7 @@
 		<x:text>(</x:text>
 		<x:value-of select="normalize-space(sql)" />
 		<x:text>)</x:text>
-		<x:text>&#xA;</x:text>
+		<x:call-template name="new-line" />
 		<x:text>            </x:text>
 		<x:text>AS </x:text>
 		<x:value-of select="@as" />
