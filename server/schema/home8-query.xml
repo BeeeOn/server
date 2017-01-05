@@ -1812,4 +1812,45 @@
 		</test>
 	</query>
 
+	<query id="devices.fetch.inactive.by.gateway">
+		<define>SELECT
+				id,
+				location_id,
+				name,
+				type,
+				refresh,
+				battery,
+				signal,
+				first_seen,
+				last_seen,
+				active_since
+			FROM devices
+			WHERE
+				active_since IS NULL
+				AND
+				gateway_id = <value name="gateway_id" type="int64" />
+		</define>
+		<test name="fetch existing">
+			<check name="Test Device A">
+				<call-query>
+					<arg name="gateway_id">181462068183316</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="id">2731287621</value>
+						<null name="location_id" />
+						<value name="name">Test Device A</value>
+						<value name="type">0</value>
+						<value name="refresh">5</value>
+						<value name="battery">95</value>
+						<value name="signal">80</value>
+						<value name="first_seen">1483416275</value>
+						<value name="last_seen">1483448120</value>
+						<null name="active_since" />
+					</row>
+				</expect>
+			</check>
+		</test>
+	</query>
+
 </query-set>
