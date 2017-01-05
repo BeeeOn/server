@@ -70,7 +70,8 @@ SSLFacility::SSLFacility():
 	m_verificationMode(VerificationMode::VERIFY_RELAXED),
 	m_verificationDepth(9),
 	m_cipherList("ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH"),
-	m_sessionCache(false)
+	m_sessionCache(false),
+	m_disabledProtocols(-1)
 {
 	initializeSSL();
 
