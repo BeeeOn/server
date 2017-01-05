@@ -1653,4 +1653,50 @@
 		</test>
 	</query>
 
+	<query id="devices.update">
+		<define>UPDATE devices SET
+				location_id = <value name="location_id" type="uuid" />,
+				name = <value name="name" type="varchar" />,
+				type = <value name="type" type="smallint" />,
+				refresh = <value name="refresh" type="integer" />,
+				battery = <value name="battery" type="smallint" />,
+				signal = <value name="signal" type="smallint" />,
+				active_since = <value name="active_since" type="smallint" />
+			WHERE
+				id = <value name="id" type="int64" />
+				AND
+				gateway_id = <value name="gateway_id" type="int64" />
+		</define>
+		<test name="update Test Device A">
+			<check name="update refresh and battery, leave inactive">
+				<call-query>
+					<arg name="location_id">NULL</arg>
+					<arg name="name">'Test Device A'</arg>
+					<arg name="type">0</arg>
+					<arg name="refresh">20</arg>
+					<arg name="battery">40</arg>
+					<arg name="signal">80</arg>
+					<arg name="id">2731287621</arg>
+					<arg name="gateway_id">181462068183316</arg>
+					<arg name="active_since">NULL</arg>
+				</call-query>
+				<sql>SELECT id, gateway_id, refresh, battery
+					FROM devices
+					WHERE id = 2731287621 AND gateway_id = 181462068183316</sql>
+				<expect>
+					<row>
+						<value name="id">2731287621</value>
+						<value name="gateway_id">181462068183316</value>
+						<value name="refresh">20</value>
+						<value name="battery">40</value>
+					</row>
+				</expect>
+			</check>
+			<teardown name="revert refresh and battery of Test Device A">
+				<sql>UPDATE devices SET battery = 95, refresh = 5
+					WHERE id = 2731287621 AND gateway_id = 181462068183316</sql>
+			</teardown>
+		</test>
+	</query>
+
 </query-set>
