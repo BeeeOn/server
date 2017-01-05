@@ -13,6 +13,14 @@
 		<x:value-of select="$new.line" />
 	</x:template>
 
+	<x:variable name="lower" select="'abcdefghijklmnopqrstuvwxyz'" />
+	<x:variable name="upper" select="'ABCDEFGHIJKLMNOPQRSTUVWXYZ'" />
+
+	<x:template name="to-upper">
+		<x:param name="text" select="." />
+		<x:value-of select="translate($text, $lower, $upper)" />
+	</x:template>
+
 	<x:template name="print-preamble" />
 
 	<x:template name="print-plain-stats">
