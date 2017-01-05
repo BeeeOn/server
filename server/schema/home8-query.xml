@@ -1699,4 +1699,63 @@
 		</test>
 	</query>
 
+	<query id="devices.fetch.from.gateway">
+		<define>SELECT
+				location_id,
+				name,
+				type,
+				refresh,
+				battery,
+				signal,
+				first_seen,
+				last_seen,
+				active_since
+			FROM devices
+			WHERE
+				id = <value name="id" type="int64" />
+				AND
+				gateway_id = <value name="gateway_id" type="int64" />
+		</define>
+		<test name="fetch existing">
+			<check name="Test Device A">
+				<call-query>
+					<arg name="id">2731287621</arg>
+					<arg name="gateway_id">181462068183316</arg>
+				</call-query>
+				<expect>
+					<row>
+						<null name="location_id" />
+						<value name="name">Test Device A</value>
+						<value name="type">0</value>
+						<value name="refresh">5</value>
+						<value name="battery">95</value>
+						<value name="signal">80</value>
+						<value name="first_seen">1483416275</value>
+						<value name="last_seen">1483448120</value>
+						<null name="active_since" />
+					</row>
+				</expect>
+			</check>
+			<check name="Test Device B">
+				<call-query>
+					<arg name="id">2728733371</arg>
+					<arg name="gateway_id">181462068183316</arg>
+				</call-query>
+				<expect>
+					<row>
+						<null name="location_id" />
+						<value name="name">Test Device B</value>
+						<value name="type">0</value>
+						<value name="refresh">15</value>
+						<null name="battery" />
+						<null name="signal" />
+						<value name="first_seen">1483424265</value>
+						<value name="last_seen">1483453120</value>
+						<value name="active_since">1483434265</value>
+					</row>
+				</expect>
+			</check>
+		</test>
+	</query>
+
 </query-set>
