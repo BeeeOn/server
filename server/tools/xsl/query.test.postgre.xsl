@@ -21,8 +21,7 @@
 		<x:call-template name="new-line" />
 	</x:template>
 
-	<x:template name="create-fail-trigger">
-		<x:param name="target" />
+	<x:template name="create-psql-fail-trigger-function">
 		<x:param name="label" />
 
 		<x:text>CREATE OR REPLACE FUNCTION fail_after_</x:text>
@@ -34,7 +33,11 @@
 		<x:text>_should_fail (error) VALUES (</x:text>
 		<x:call-template name="fail-query-message" />
 		<x:text>); RETURN NULL; END; $xxx$ LANGUAGE plpgsql;</x:text>
-		<x:call-template name="new-line" />
+	</x:template>
+
+	<x:template name="create-psql-fail-trigger">
+		<x:param name="target" />
+		<x:param name="label" />
 
 		<x:text>CREATE TRIGGER trigger_after_</x:text>
 		<x:value-of select="$label" />
@@ -42,11 +45,33 @@
 		<x:text> EXECUTE PROCEDURE fail_after_</x:text>
 		<x:value-of select="$label" />
 		<x:text>();</x:text>
+	</x:template>
+
+	<x:template name="create-fail-trigger">
+		<x:param name="target" />
+		<x:param name="label" />
+
+		<x:call-template name="create-psql-fail-trigger-function">
+			<x:with-param name="label" select="$label" />
+		</x:call-template>
+		<x:call-template name="new-line" />
+
+		<x:call-template name="create-psql-fail-trigger">
+			<x:with-param name="target" select="$target" />
+			<x:with-param name="label" select="$label" />
+		</x:call-template>
 		<x:call-template name="new-line" />
 	</x:template>
 
-	<x:template name="drop-fail-trigger">
-		<x:param name="target" />
+	<x:template name="drop-psql-fail-trigger-function">
+		<x:param name="label" />
+
+		<x:text>DROP FUNCTION fail_after_</x:text>
+		<x:value-of select="$label" />
+		<x:text>();</x:text>
+	</x:template>
+
+	<x:template name="drop-psql-fail-trigger">
 		<x:param name="label" />
 
 		<x:text>DROP TRIGGER trigger_after_</x:text>
@@ -54,11 +79,20 @@
 		<x:text> ON </x:text>
 		<x:value-of select="@table" />
 		<x:text>;</x:text>
+	</x:template>
+
+	<x:template name="drop-fail-trigger">
+		<x:param name="target" />
+		<x:param name="label" />
+
+		<x:call-template name="drop-psql-fail-trigger">
+			<x:with-param name="label" select="$label" />
+		</x:call-template>
 		<x:call-template name="new-line" />
 
-		<x:text>DROP FUNCTION fail_after_</x:text>
-		<x:value-of select="$label" />
-		<x:text>();</x:text>
+		<x:call-template name="drop-psql-fail-trigger-function">
+			<x:with-param name="label" select="$label" />
+		</x:call-template>
 		<x:call-template name="new-line" />
 	</x:template>
 
