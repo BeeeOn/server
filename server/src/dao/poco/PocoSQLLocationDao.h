@@ -38,6 +38,8 @@ public:
 			Location &location, const std::string &prefix = "");
 	static bool parseSingle(Poco::Data::Row &result,
 			Location &location, const std::string &prefix = "");
+	static bool parseIfIDNotNull(Poco::Data::Row &result,
+			Location &location, const std::string &prefix = "");
 
 	template <typename C>
 	static void parseMany(Poco::Data::RecordSet &result, C &collection)

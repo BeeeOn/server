@@ -198,7 +198,7 @@
 		<alias name="userDao" ref="sqlUserDao" />
 		<alias name="gatewayDao" ref="sqlGatewayDao" />
 		<alias name="locationDao" ref="sqlLocationDao" />
-		<alias name="deviceDao" ref="mockDeviceDao" />
+		<alias name="deviceDao" ref="sqlDeviceDao" />
 		<alias name="identityDao" ref="sqlIdentityDao" />
 		<alias name="verifiedIdentityDao" ref="sqlVerifiedIdentityDao" />
 		<alias name="roleInPlaceDao" ref="sqlRoleInPlaceDao" />
@@ -247,6 +247,11 @@
 		</instance>
 
 		<instance name="sqlLocationDao" class="BeeeOn::PocoSQLLocationDao">
+			<set name="daoManager" ref="pocoDaoManager" />
+			<set name="sqlLoader" ref="queries" />
+		</instance>
+
+		<instance name="sqlDeviceDao" class="BeeeOn::PocoSQLDeviceDao">
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="sqlLoader" ref="queries" />
 		</instance>
