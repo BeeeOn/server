@@ -7,6 +7,11 @@
 	<x:import href="query.sql.xsl" />
 
 	<x:param name="engine" select="'unknown'" />
+	<x:param name="new.line" select="'&#xA;'" />
+
+	<x:template name="new-line">
+		<x:value-of select="$new.line" />
+	</x:template>
 
 	<x:template name="print-preamble" />
 
@@ -74,7 +79,8 @@
 		</x:call-template>
 		<x:text>' AS </x:text>
 		<x:value-of select="$as" />
-		<x:text>;&#xA;</x:text>
+		<x:text>;</x:text>
+		<x:call-template name="new-line" />
 	</x:template>
 
 	<x:template name="sql-print-id">
@@ -98,7 +104,7 @@
 	<x:template match="query">
 		<x:text>-- Tests for </x:text>
 		<x:value-of select="@id" />
-		<x:text>&#xA;</x:text>
+		<x:call-template name="new-line" />
 
 		<x:call-template name="sql-print-id" />
 		<x:apply-templates select="test" />
@@ -107,7 +113,7 @@
 	<x:template match="test">
 		<x:text>-- Test </x:text>
 		<x:call-template name="name-sequential-item" />
-		<x:text>&#xA;</x:text>
+		<x:call-template name="new-line" />
 
 		<x:call-template name="sql-print-name" />
 
@@ -128,10 +134,10 @@
 	</x:template>
 
 	<x:template match="setup">
-		<x:text>&#xA;</x:text>
+		<x:call-template name="new-line" />
 		<x:call-template name="setup-name" />
 		<x:call-template name="name-sequential-item" />
-		<x:text>&#xA;</x:text>
+		<x:call-template name="new-line" />
 
 		<x:apply-templates select="sql" mode="simple" />
 	</x:template>
@@ -148,19 +154,19 @@
 	</x:template>
 
 	<x:template match="teardown">
-		<x:text>&#xA;</x:text>
+		<x:call-template name="new-line" />
 		<x:call-template name="teardown-name" />
 		<x:call-template name="name-sequential-item" />
-		<x:text>&#xA;</x:text>
+		<x:call-template name="new-line" />
 
 		<x:apply-templates select="sql" mode="simple" />
 	</x:template>
 
 	<x:template match="check">
-		<x:text>&#xA;</x:text>
+		<x:call-template name="new-line" />
 		<x:text>-- Check </x:text>
 		<x:call-template name="name-sequential-item" />
-		<x:text>&#xA;</x:text>
+		<x:call-template name="new-line" />
 
 		<x:call-template name="sql-print-name" />
 
@@ -173,7 +179,8 @@
 	</x:template>
 
 	<x:template match="call-query">
-		<x:text>-- Call query under test&#xA;</x:text>
+		<x:text>-- Call query under test</x:text>
+		<x:call-template name="new-line" />
 		<x:apply-templates select="../../../define" mode="sql-direct">
 			<x:with-param name="args" select="arg" />
 		</x:apply-templates>
@@ -183,7 +190,7 @@
 		<x:text>-- Expect</x:text>
 		<x:value-of select="concat(' ', count(row))" />
 		<x:text> results</x:text>
-		<x:text>&#xA;</x:text>
+		<x:call-template name="new-line" />
 
 		<x:apply-templates select="row" mode="describe-expect" />
 		<x:apply-templates select="fail-insert" mode="after-call" />
@@ -210,7 +217,8 @@
 	</x:template>
 
 	<x:template match="expect/fail-insert" mode="before-call">
-		<x:text>CREATE TABLE insert_should_fail (error text);&#xA;</x:text>
+		<x:text>CREATE TABLE insert_should_fail (error text);</x:text>
+		<x:call-template name="new-line" />
 		<x:call-template name="create-fail-trigger">
 			<x:with-param name="target" select="'INSERT'" />
 			<x:with-param name="label" select="'insert'" />
@@ -218,16 +226,19 @@
 	</x:template>
 
 	<x:template match="expect/fail-insert" mode="after-call">
-		<x:text>SELECT error from insert_should_fail;&#xA;</x:text>
+		<x:text>SELECT error from insert_should_fail;</x:text>
+		<x:call-template name="new-line" />
 		<x:call-template name="drop-fail-trigger">
 			<x:with-param name="target" select="'INSERT'" />
 			<x:with-param name="label" select="'insert'" />
 		</x:call-template>
-		<x:text>DROP TABLE insert_should_fail;&#xA;</x:text>
+		<x:text>DROP TABLE insert_should_fail;</x:text>
+		<x:call-template name="new-line" />
 	</x:template>
 
 	<x:template match="expect/fail-update" mode="before-call">
-		<x:text>CREATE TABLE update_should_fail (error text);&#xA;</x:text>
+		<x:text>CREATE TABLE update_should_fail (error text);</x:text>
+		<x:call-template name="new-line" />
 		<x:call-template name="create-fail-trigger">
 			<x:with-param name="target" select="'UPDATE'" />
 			<x:with-param name="label" select="'update'" />
@@ -235,16 +246,19 @@
 	</x:template>
 
 	<x:template match="expect/fail-update" mode="after-call">
-		<x:text>SELECT error from update_should_fail;&#xA;</x:text>
+		<x:text>SELECT error from update_should_fail;</x:text>
+		<x:call-template name="new-line" />
 		<x:call-template name="drop-fail-trigger">
 			<x:with-param name="target" select="'UPDATE'" />
 			<x:with-param name="label" select="'update'" />
 		</x:call-template>
-		<x:text>DROP TABLE update_should_fail;&#xA;</x:text>
+		<x:text>DROP TABLE update_should_fail;</x:text>
+		<x:call-template name="new-line" />
 	</x:template>
 
 	<x:template match="expect/fail-delete" mode="before-call">
-		<x:text>CREATE TABLE delete_should_fail (error text);&#xA;</x:text>
+		<x:text>CREATE TABLE delete_should_fail (error text);</x:text>
+		<x:call-template name="new-line" />
 		<x:call-template name="create-fail-trigger">
 			<x:with-param name="target" select="'DELETE'" />
 			<x:with-param name="label" select="'delete'" />
@@ -252,12 +266,14 @@
 	</x:template>
 
 	<x:template match="expect/fail-delete" mode="after-call">
-		<x:text>SELECT error from delete_should_fail;&#xA;</x:text>
+		<x:text>SELECT error from delete_should_fail;</x:text>
+		<x:call-template name="new-line" />
 		<x:call-template name="drop-fail-trigger">
 			<x:with-param name="target" select="'DELETE'" />
 			<x:with-param name="label" select="'delete'" />
 		</x:call-template>
-		<x:text>DROP TABLE delete_should_fail;&#xA;</x:text>
+		<x:text>DROP TABLE delete_should_fail;</x:text>
+		<x:call-template name="new-line" />
 	</x:template>
 
 	<x:template match="row" mode="describe-expect">
@@ -277,7 +293,7 @@
 					<x:text>NULL</x:text>
 				</x:otherwise>
 			</x:choose>
-			<x:text>&#xA;</x:text>
+			<x:call-template name="new-line" />
 		</x:for-each>
 	</x:template>
 
@@ -317,7 +333,7 @@
 				</x:call-template>
 			</x:with-param>
 		</x:call-template>
-		<x:text>&#xA;</x:text>
+		<x:call-template name="csv-new-line" />
 
 		<x:apply-templates select="test" mode="csv" />
 	</x:template>
@@ -334,7 +350,7 @@
 				</x:call-template>
 			</x:with-param>
 		</x:call-template>
-		<x:text>&#xA;</x:text>
+		<x:call-template name="csv-new-line" />
 
 		<x:apply-templates select="check" mode="csv" />
 	</x:template>
@@ -351,7 +367,7 @@
 				</x:call-template>
 			</x:with-param>
 		</x:call-template>
-		<x:text>&#xA;</x:text>
+		<x:call-template name="csv-new-line" />
 
 		<x:apply-templates select="expect" mode="csv" />
 	</x:template>
