@@ -9,11 +9,14 @@
 	<x:output method="text" />
 
 	<x:template name="print-preamble">
-		<x:text>.mode csv&#xA;</x:text>
-		<x:text>.headers on&#xA;</x:text>
+		<x:text>.mode csv</x:text>
+		<x:call-template name="new-line" />
+		<x:text>.headers on</x:text>
+		<x:call-template name="new-line" />
 		<x:text>.output </x:text>
-		<x:value-of select="concat(@for-database, '-', $engine, '-test.csv', '&#xA;')" />
-		<x:text>PRAGMA foreign_keys = ON;&#xA;</x:text>
+		<x:value-of select="concat(@for-database, '-', $engine, '-test.csv', $new.line)" />
+		<x:text>PRAGMA foreign_keys = ON;</x:text>
+		<x:call-template name="new-line" />
 	</x:template>
 
 	<x:template name="create-fail-trigger">
@@ -27,7 +30,8 @@
 		<x:value-of select="$label" />
 		<x:text>_should_fail (error) VALUES (</x:text>
 		<x:call-template name="fail-query-message" />
-		<x:text>); END;&#xA;</x:text>
+		<x:text>); END;</x:text>
+		<x:call-template name="new-line" />
 	</x:template>
 
 	<x:template name="drop-fail-trigger">
@@ -36,7 +40,8 @@
 
 		<x:text>DROP TRIGGER trigger_after_</x:text>
 		<x:value-of select="$label" />
-		<x:text>;&#xA;</x:text>
+		<x:text>;</x:text>
+		<x:call-template name="new-line" />
 	</x:template>
 
 	<x:template match="/query-set">
