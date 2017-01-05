@@ -245,3 +245,18 @@ bool PocoSQLLocationDao::parseSingle(Row &result, Location &location,
 
 	return true;
 }
+
+bool PocoSQLLocationDao::parseIfIDNotNull(Row &result, Location &location,
+		const string &prefix)
+{
+	const string id = emptyWhenNull(result[prefix + "id"]);
+	if (id.empty())
+		return false;
+
+	location = Location(LocationID::parse(id));
+
+	if (hasColumn(result, prefix + "name"))
+		location.setName(result[prefix + "name"]);
+
+	return true;
+}
