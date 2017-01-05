@@ -1758,4 +1758,58 @@
 		</test>
 	</query>
 
+	<query id="devices.fetch.active.by.gateway">
+		<define>SELECT
+				id,
+				location_id,
+				name,
+				type,
+				refresh,
+				battery,
+				signal,
+				first_seen,
+				last_seen,
+				active_since
+			FROM devices
+			WHERE
+				active_since IS NOT NULL
+				AND
+				gateway_id = <value name="gateway_id" type="int64" />
+			ORDER BY id
+		</define>
+		<test name="fetch active devices of Test Gateway 1">
+			<check name="Test Device B and Test Device C">
+				<call-query>
+					<arg name="gateway_id">181462068183316</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="id">2728733371</value>
+						<null name="location_id" />
+						<value name="name">Test Device B</value>
+						<value name="type">0</value>
+						<value name="refresh">15</value>
+						<null name="battery" />
+						<null name="signal" />
+						<value name="first_seen">1483424265</value>
+						<value name="last_seen">1483453120</value>
+						<value name="active_since">1483434265</value>
+					</row>
+					<row>
+						<value name="id">2751463465</value>
+						<null name="location_id" />
+						<value name="name">Test Device C</value>
+						<value name="type">0</value>
+						<value name="refresh">15</value>
+						<null name="battery" />
+						<value name="signal">99</value>
+						<value name="first_seen">1483422145</value>
+						<value name="last_seen">1483541120</value>
+						<value name="active_since">1483444265</value>
+					</row>
+				</expect>
+			</check>
+		</test>
+	</query>
+
 </query-set>
