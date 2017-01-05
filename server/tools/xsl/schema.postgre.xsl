@@ -25,6 +25,22 @@
 		</x:choose>
 	</x:template>
 
+	<x:template name="sql-drop-table">
+		<x:param name="name" />
+
+		<x:text>DROP TABLE IF EXISTS </x:text>
+		<x:value-of select="." />
+		<x:text> CASCADE;&#xA;</x:text>
+	</x:template>
+
+	<x:template name="sql-drop-view">
+		<x:param name="name" />
+
+		<x:text>DROP VIEW IF EXISTS </x:text>
+		<x:value-of select="." />
+		<x:text> CASCADE;&#xA;</x:text>
+	</x:template>
+
 	<x:template match="/">
 		<x:apply-templates select="database" mode="to-file">
 			<x:with-param name="suffix" select="'-postgre'" />
