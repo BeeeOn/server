@@ -28,7 +28,6 @@ public:
 protected:
 	PocoDaoManager &manager();
 
-	std::string findQuery(const std::string &key) const;
 	void registerQuery(SQLQuery &query);
 
 	template <typename T>

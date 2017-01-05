@@ -48,14 +48,6 @@ PocoDaoManager &PocoAbstractDao::manager()
 	throw IllegalStateException("missing manager");
 }
 
-string PocoAbstractDao::findQuery(const string &key) const
-{
-	if (m_loader)
-		return m_loader->find(key);
-
-	throw IllegalStateException("missing sql loader");
-}
-
 void PocoAbstractDao::registerQuery(SQLQuery &query)
 {
 	m_queries.push_back(&query);
