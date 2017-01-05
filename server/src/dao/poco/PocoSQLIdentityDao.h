@@ -1,4 +1,5 @@
 #include "dao/IdentityDao.h"
+#include "dao/SQLQuery.h"
 #include "dao/poco/PocoAbstractDao.h"
 
 namespace Poco {
@@ -17,6 +18,8 @@ class PocoSQLIdentityDao :
 		public PocoAbstractDao,
 		public IdentityDao {
 public:
+	PocoSQLIdentityDao();
+
 	void create(Identity &identity) override;
 	bool fetch(Identity &identity) override;
 	bool fetchBy(Identity &identity,
@@ -36,6 +39,12 @@ protected:
 	bool fetchBy(Poco::Data::Session &session, Identity &identity,
 			const std::string &email);
 	bool remove(Poco::Data::Session &session, const Identity &identity);
+
+private:
+	SQLQuery m_queryCreate       {"identities.create"};
+	SQLQuery m_queryRemove       {"identities.remove"};
+	SQLQuery m_queryFetchById    {"identities.fetch.by.id"};
+	SQLQuery m_queryFetchByEmail {"identities.fetch.by.email"};
 };
 
 }

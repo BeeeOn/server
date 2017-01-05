@@ -14,6 +14,12 @@ using namespace BeeeOn;
 
 BEEEON_OBJECT(PocoSQLUserDao, BeeeOn::PocoSQLUserDao)
 
+PocoSQLUserDao::PocoSQLUserDao()
+{
+	registerQuery(m_queryCreate);
+	registerQuery(m_queryFetch);
+}
+
 void PocoSQLUserDao::create(User &user)
 {
 	Session session(manager().pool().get());
@@ -34,7 +40,7 @@ void PocoSQLUserDao::create(Session &session, User &user)
 	string lastName(user.lastName());
 
 	Statement sql(session);
-	sql << findQuery("users.create"),
+	sql << m_queryCreate(),
 		use(id, "id"),
 		use(firstName),
 		use(lastName);
@@ -48,7 +54,7 @@ bool PocoSQLUserDao::fetch(Session &session, User &user)
 	string id(user.id().toString());
 
 	Statement sql(session);
-	sql << findQuery("users.fetch.by.id"),
+	sql << m_queryFetch(),
 		use(id, "id");
 
 	if (execute(sql) == 0)

@@ -20,6 +20,20 @@ using namespace BeeeOn;
 
 BEEEON_OBJECT(PocoSQLGatewayDao, BeeeOn::PocoSQLGatewayDao)
 
+PocoSQLGatewayDao::PocoSQLGatewayDao()
+{
+	registerQuery(m_queryCreate);
+	registerQuery(m_queryUpdate);
+	registerQuery(m_queryAssignAndUpdate);
+	registerQuery(m_queryAssign);
+	registerQuery(m_queryUnassign);
+	registerQuery(m_queryFetchById);
+	registerQuery(m_queryFetchByPlaceId);
+	registerQuery(m_queryFetchAccessible);
+	registerQuery(m_queryLegacyFetchById);
+	registerQuery(m_queryLegacyFetchAccessible);
+}
+
 bool PocoSQLGatewayDao::insert(Gateway &gateway)
 {
 	Session session(manager().pool().get());
@@ -110,7 +124,7 @@ bool PocoSQLGatewayDao::insert(Session &session, Gateway &gateway)
 		longitude = gateway.longitude();
 
 	Statement sql(session);
-	sql << findQuery("gateways.create"),
+	sql << m_queryCreate(),
 		use(id, "id"),
 		use(name, "name"),
 		use(placeID, "place_id"),
@@ -128,7 +142,7 @@ bool PocoSQLGatewayDao::fetch(Session &session, Gateway &gateway)
 	string id(gateway.id().toString());
 
 	Statement sql(session);
-	sql << findQuery("gateways.fetch.by.id"),
+	sql << m_queryFetchById(),
 		use(id, "id");
 
 	if (execute(sql) == 0)
@@ -147,7 +161,7 @@ bool PocoSQLGatewayDao::fetch(Session &session, LegacyGateway &gateway, const Us
 	string userID(user.id().toString());
 
 	Statement sql(session);
-	sql << findQuery("legacy_gateways.fetch.by.id"),
+	sql << m_queryLegacyFetchById(),
 		use(userID, "user_id"),
 		use(id, "id");
 
@@ -178,7 +192,7 @@ bool PocoSQLGatewayDao::update(Session &session, Gateway &gateway)
 		longitude = gateway.longitude();
 
 	Statement sql(session);
-	sql << findQuery("gateways.update"),
+	sql << m_queryUpdate(),
 		use(name, "name"),
 		use(altitude, "altitude"),
 		use(latitude, "latitude"),
@@ -211,7 +225,7 @@ bool PocoSQLGatewayDao::assignAndUpdate(Session &session,
 		longitude = gateway.longitude();
 
 	Statement sql(session);
-	sql << findQuery("gateways.assign.and.update"),
+	sql << m_queryAssignAndUpdate(),
 		use(name, "name"),
 		use(altitude, "altitude"),
 		use(latitude, "latitude"),
@@ -233,7 +247,7 @@ bool PocoSQLGatewayDao::assign(Session &session,
 	string placeID(place.id().toString());
 
 	Statement sql(session);
-	sql << findQuery("gateways.assign"),
+	sql << m_queryAssign(),
 		use(placeID, "place_id"),
 		use(id, "id");
 
@@ -248,7 +262,7 @@ bool PocoSQLGatewayDao::unassign(Session &session, Gateway &gateway)
 	string id(gateway.id().toString());
 
 	Statement sql(session);
-	sql << findQuery("gateways.unassign"),
+	sql << m_queryUnassign(),
 		use(id, "id");
 
 	return execute(sql) > 0;
@@ -264,7 +278,7 @@ bool PocoSQLGatewayDao::fetchFromPlace(Session &session,
 	string placeID(place.id().toString());
 
 	Statement sql(session);
-	sql << findQuery("gateways.fetch.by.place_id"),
+	sql << m_queryFetchByPlaceId(),
 		use(id, "id"),
 		use(placeID, "place_id");
 
@@ -284,7 +298,7 @@ void PocoSQLGatewayDao::fetchAccessible(Session &session,
 	string userID(user.id().toString());
 
 	Statement sql(session);
-	sql << findQuery("gateways.fetch.accessible"),
+	sql << m_queryFetchAccessible(),
 		use(userID, "user_id");
 
 	execute(sql);
@@ -301,7 +315,7 @@ void PocoSQLGatewayDao::fetchAccessible(Session &session,
 	string userID(user.id().toString());
 
 	Statement sql(session);
-	sql << findQuery("legacy_gateways.fetch.accessible"),
+	sql << m_queryLegacyFetchAccessible(),
 		use(userID, "user_id");
 
 	execute(sql);

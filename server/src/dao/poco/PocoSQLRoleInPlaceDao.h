@@ -1,4 +1,5 @@
 #include "dao/RoleInPlaceDao.h"
+#include "dao/SQLQuery.h"
 #include "dao/poco/PocoAbstractDao.h"
 #include "Debug.h"
 
@@ -18,6 +19,8 @@ class PocoSQLRoleInPlaceDao :
 		public PocoAbstractDao,
 		public RoleInPlaceDao {
 public:
+	PocoSQLRoleInPlaceDao();
+
 	void create(RoleInPlace &role) override;
 	bool fetch(RoleInPlace &role) override;
 	void fetchBy(std::vector<RoleInPlace> &roles,
@@ -77,6 +80,16 @@ protected:
 			std::vector<Place> &list,
 			const User &user,
 			const AccessLevel &atLeast);
+
+private:
+	SQLQuery m_queryCreate           {"roles_in_place.create"};
+	SQLQuery m_queryUpdate           {"roles_in_place.update"};
+	SQLQuery m_queryRemove           {"roles_in_place.remove"};
+	SQLQuery m_queryFetchById        {"roles_in_place.fetch.by.id"};
+	SQLQuery m_queryFetchByPlaceId   {"roles_in_place.fetch.by.place_id"};
+	SQLQuery m_queryFetchAccessLevel {"roles_in_place.fetch.access_level"};
+	SQLQuery m_queryCountUsersExcept {"roles_in_place.count.users.except"};
+	SQLQuery m_queryFetchAccessiblePlaces {"roles_in_place.fetch.accessible.places"};
 };
 
 }

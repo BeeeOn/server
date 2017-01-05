@@ -1,4 +1,5 @@
 #include "dao/UserDao.h"
+#include "dao/SQLQuery.h"
 #include "dao/poco/PocoAbstractDao.h"
 
 namespace Poco {
@@ -17,6 +18,8 @@ class PocoSQLUserDao :
 		public PocoAbstractDao,
 		public UserDao {
 public:
+	PocoSQLUserDao();
+
 	void create(User &user) override;
 	bool fetch(User &user) override;
 
@@ -30,6 +33,10 @@ public:
 protected:
 	void create(Poco::Data::Session &session, User &user);
 	bool fetch(Poco::Data::Session &session, User &user);
+
+private:
+	SQLQuery m_queryCreate {"users.create"};
+	SQLQuery m_queryFetch  {"users.fetch.by.id"};
 };
 
 }

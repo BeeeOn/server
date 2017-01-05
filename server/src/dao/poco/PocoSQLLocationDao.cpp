@@ -18,6 +18,18 @@ using namespace BeeeOn;
 
 BEEEON_OBJECT(PocoSQLLocationDao, BeeeOn::PocoSQLLocationDao)
 
+PocoSQLLocationDao::PocoSQLLocationDao()
+{
+	registerQuery(m_queryCreate);
+	registerQuery(m_queryUpdate);
+	registerQuery(m_queryRemove);
+	registerQuery(m_queryFetchById);
+	registerQuery(m_queryFetchByIdAndPlaceId);
+	registerQuery(m_queryFetchByIdAndGatewayId);
+	registerQuery(m_queryFetchByPlaceId);
+	registerQuery(m_queryFetchByGatewayId);
+}
+
 void PocoSQLLocationDao::create(Location &location)
 {
 	Session session(manager().pool().get());
@@ -79,7 +91,7 @@ void PocoSQLLocationDao::create(Session &session,
 	string placeID(location.place().id().toString());
 
 	Statement sql(session);
-	sql << findQuery("locations.create"),
+	sql << m_queryCreate(),
 		use(id, "id"),
 		use(name, "name"),
 		use(placeID, "place_id");
@@ -94,7 +106,7 @@ bool PocoSQLLocationDao::fetch(Session &session,
 	string id(location.id().toString());
 
 	Statement sql(session);
-	sql << findQuery("locations.fetch.by.id"),
+	sql << m_queryFetchById(),
 		use(id, "id");
 
 	if (execute(sql) == 0)
@@ -114,7 +126,7 @@ bool PocoSQLLocationDao::fetchFrom(Session &session,
 	string placeID(place.id().toString());
 
 	Statement sql(session);
-	sql << findQuery("locations.fetch.by.id.and.place_id"),
+	sql << m_queryFetchByIdAndPlaceId(),
 		use(id, "id"),
 		use(placeID, "place_id");
 
@@ -135,7 +147,7 @@ bool PocoSQLLocationDao::fetchFrom(Session &session,
 	string gatewayID(gateway.id().toString());
 
 	Statement sql(session);
-	sql << findQuery("locations.fetch.by.id.and.gateway_id"),
+	sql << m_queryFetchByIdAndGatewayId(),
 		use(id, "id"),
 		use(gatewayID, "gateway_id");
 
@@ -155,7 +167,7 @@ void PocoSQLLocationDao::fetchBy(Session &session,
 	string placeID(place.id().toString());
 
 	Statement sql(session);
-	sql << findQuery("locations.fetch.by.place_id"),
+	sql << m_queryFetchByPlaceId(),
 		use(placeID, "place_id");
 
 	execute(sql);
@@ -172,7 +184,7 @@ void PocoSQLLocationDao::fetchBy(Session &session,
 	string gatewayID(gateway.id().toString());
 
 	Statement sql(session);
-	sql << findQuery("locations.fetch.by.gateway_id"),
+	sql << m_queryFetchByGatewayId(),
 		use(gatewayID, "gateway_id");
 
 	execute(sql);
@@ -191,7 +203,7 @@ bool PocoSQLLocationDao::update(Session &session,
 	string placeID(location.place().id().toString());
 
 	Statement sql(session);
-	sql << findQuery("locations.update"),
+	sql << m_queryUpdate(),
 		use(name, "name"),
 		use(id, "id");
 
@@ -204,7 +216,7 @@ bool PocoSQLLocationDao::remove(Session &session, const Location &location)
 	string id(location.id().toString());
 
 	Statement sql(session);
-	sql << findQuery("locations.remove"),
+	sql << m_queryRemove(),
 		use(id, "id");
 
 	return execute(sql) > 0;
