@@ -123,7 +123,8 @@ void SSLFacility::initContext()
 	m_context->disableProtocols(m_disabledProtocols);
 #else
 	if (m_disabledProtocols)
-		m_logger.warning("protocols are not disabled, Poco library is too old",
+		m_logger.warning("protocols are not disabled, linked against too old Poco library: "
+				+ NumberFormatter::formatHex(POCO_VERSION, 10, true),
 				__FILE__, __LINE__);
 #endif
 
