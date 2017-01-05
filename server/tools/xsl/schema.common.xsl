@@ -546,7 +546,7 @@
 		<x:apply-templates select="view" />
 	</x:template>
 
-	<x:template match="database/table">
+	<x:template name="create-table">
 		<x:text>CREATE TABLE </x:text>
 		<x:call-template name="print-name" />
 		<x:text> (</x:text>
@@ -554,6 +554,10 @@
 		<x:apply-templates select="column|primary-key|foreign-key|unique|check" />
 		<x:text>);</x:text>
 		<x:call-template name="new-line" />
+	</x:template>
+
+	<x:template match="database/table">
+		<x:call-template name="create-table" />
 		<x:call-template name="new-line" />
 	</x:template>
 
@@ -613,7 +617,7 @@
 		<x:call-template name="comma-if-not-last-eol" />
 	</x:template>
 
-	<x:template match="database/view">
+	<x:template name="create-view">
 		<x:text>CREATE VIEW </x:text>
 		<x:call-template name="print-name" />
 		<x:text> AS</x:text>
@@ -634,6 +638,10 @@
 
 		<x:text>;</x:text>
 		<x:call-template name="new-line" />
+	</x:template>
+
+	<x:template match="database/view">
+		<x:call-template name="create-view" />
 		<x:call-template name="new-line" />
 	</x:template>
 
