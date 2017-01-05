@@ -1542,4 +1542,115 @@
 		</test>
 	</query>
 
+	<query id="devices.create">
+		<define>INSERT INTO devices (
+				id,
+				gateway_id,
+				location_id,
+				name,
+				type,
+				refresh,
+				battery,
+				signal,
+				first_seen,
+				last_seen,
+				active_since)
+			VALUES (
+				<value name="id" type="int64" />,
+				<value name="gateway_id" type="int64" />,
+				<value name="location_id" type="uuid" />,
+				<value name="name" type="varchar" />,
+				<value name="type" type="smallint" />,
+				<value name="refresh" type="integer" />,
+				<value name="battery" type="smallint" />,
+				<value name="signal" type="smallint" />,
+				<value name="first_seen" type="bigint" />,
+				<value name="last_seen" type="bigint" />,
+				<value name="active_since" type="bigint" />
+			)
+		</define>
+		<test name="create inactive wired device">
+			<check name="can create inactive device">
+				<call-query>
+					<arg name="id">2727934709</arg>
+					<arg name="gateway_id">140548523101825</arg>
+					<arg name="location_id">NULL</arg>
+					<arg name="name">'Test Device X'</arg>
+					<arg name="type">0</arg>
+					<arg name="refresh">25</arg>
+					<arg name="battery">NULL</arg>
+					<arg name="signal">NULL</arg>
+					<arg name="first_seen">1483553308</arg>
+					<arg name="last_seen">1483553308</arg>
+					<arg name="active_since">NULL</arg>
+				</call-query>
+				<sql>SELECT
+						id, gateway_id, location_id, name, type,
+						refresh, battery, signal, first_seen,
+						last_seen, active_since
+					FROM devices
+					WHERE id = 2727934709 AND gateway_id = 140548523101825</sql>
+				<expect>
+					<row>
+						<value name="id">2727934709</value>
+						<value name="gateway_id">140548523101825</value>
+						<null name="location_id" />
+						<value name="name">Test Device X</value>
+						<value name="type">0</value>
+						<value name="refresh">25</value>
+						<null name="battery" />
+						<null name="signal" />
+						<value name="first_seen">1483553308</value>
+						<value name="last_seen">1483553308</value>
+						<null name="active_since" />
+					</row>
+				</expect>
+				<teardown name="delete Test Device X">
+					<sql>DELETE FROM devices WHERE id = 2727934709 AND gateway_id = 140548523101825</sql>
+				</teardown>
+			</check>
+		</test>
+		<test name="create active wireless device">
+			<check name="can create active device">
+				<call-query>
+					<arg name="id">2751463465</arg>
+					<arg name="gateway_id">140548523101825</arg>
+					<arg name="location_id">NULL</arg>
+					<arg name="name">'Test Device Y'</arg>
+					<arg name="type">0</arg>
+					<arg name="refresh">35</arg>
+					<arg name="battery">100</arg>
+					<arg name="signal">50</arg>
+					<arg name="first_seen">1483553308</arg>
+					<arg name="last_seen">1483553308</arg>
+					<arg name="active_since">1483553308</arg>
+				</call-query>
+				<sql>SELECT
+						id, gateway_id, location_id, name, type,
+						refresh, battery, signal, first_seen,
+						last_seen, active_since
+					FROM devices
+					WHERE id = 2751463465 AND gateway_id = 140548523101825</sql>
+				<expect>
+					<row>
+						<value name="id">2751463465</value>
+						<value name="gateway_id">140548523101825</value>
+						<null name="location_id" />
+						<value name="name">Test Device Y</value>
+						<value name="type">0</value>
+						<value name="refresh">35</value>
+						<value name="battery">100</value>
+						<value name="signal">50</value>
+						<value name="first_seen">1483553308</value>
+						<value name="last_seen">1483553308</value>
+						<value name="active_since">1483553308</value>
+					</row>
+				</expect>
+				<teardown name="delete Test Device Y">
+					<sql>DELETE FROM devices WHERE id = 2751463465 AND gateway_id = 140548523101825</sql>
+				</teardown>
+			</check>
+		</test>
+	</query>
+
 </query-set>
