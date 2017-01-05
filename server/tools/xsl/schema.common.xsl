@@ -296,10 +296,18 @@
 		</x:for-each>
 	</x:template>
 
-	<x:template match="entry[@type='table']" mode="drop">
+	<x:template name="sql-drop-table">
+		<x:param name="name" />
+
 		<x:text>DROP TABLE IF EXISTS </x:text>
 		<x:value-of select="." />
 		<x:text>;&#xA;</x:text>
+	</x:template>
+
+	<x:template match="entry[@type='table']" mode="drop">
+		<x:call-template name="sql-drop-table">
+			<x:with-param name="name" select="." />
+		</x:call-template>
 	</x:template>
 
 	<x:template match="table/@name|view/@name" mode="extracted-from-text">
@@ -320,10 +328,18 @@
 		</x:for-each>
 	</x:template>
 
-	<x:template match="entry[@type='view']" mode="drop">
+	<x:template name="sql-drop-view">
+		<x:param name="name" />
+
 		<x:text>DROP VIEW IF EXISTS </x:text>
 		<x:value-of select="." />
 		<x:text>;&#xA;</x:text>
+	</x:template>
+
+	<x:template match="entry[@type='view']" mode="drop">
+		<x:call-template name="sql-drop-view">
+			<x:with-param name="name" select="." />
+		</x:call-template>
 	</x:template>
 
 	<x:template match="entry" mode="drop">
