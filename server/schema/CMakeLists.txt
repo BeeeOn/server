@@ -15,6 +15,11 @@ set (SCHEMA_POSTGRE_ARGS
 	"${TOOLS_DIR}/xsl/schema.postgre.xsl"
 	"${SCHEMA}.xml")
 
+set (SCHEMA_POSTGRE_ISQL_ARGS
+	--stringparam codebase.version "${GIT_ID}"
+	"${TOOLS_DIR}/xsl/schema.postgre.isql.xsl"
+	"${SCHEMA}.xml")
+
 set (QUERIES_SQLITE_ARGS
 	--stringparam codebase.version "${GIT_ID}"
 	"${TOOLS_DIR}/xsl/query.export.sqlite.xsl"
@@ -46,6 +51,12 @@ exec_program(
 	"${XSLTP}"
 	${CMAKE_CURRENT_SOURCE_DIR}
 	ARGS ${SCHEMA_POSTGRE_ARGS})
+
+# create schema/${SCHEMA}-postgre-isql.sql
+exec_program(
+	"${XSLTP}"
+	${CMAKE_CURRENT_SOURCE_DIR}
+	ARGS ${SCHEMA_POSTGRE_ISQL_ARGS})
 
 # create schema/${SCHEMA}-sqlite-queries.ini
 exec_program(
