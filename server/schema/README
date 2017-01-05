@@ -64,6 +64,14 @@ Steps:
   $ ls
   home8.xml  home8-query.xml  home8-postgre-test.sql  home8-postgre-expect.csv  README
 
+  $ xsltproc ../tools/xsl/query.test.postgre.isql.xsl home8-query.xml
+  $ ls
+  home8.xml  home8-query.xml  home8-postgre-isql-test.sql  home8-postgre-isql-expect.csv  README
+
+
+Note: using postgre-isql (ODBC) uses PostgreSQL queries, however, the tool isql requires
+to handle new-lines as MS-DOS and has some other pitfalls we have to take care of.
+
 
 == Execute sqlite tests ==
 
@@ -114,3 +122,21 @@ Execute tests on the selected database:
 Check test results:
 
   $ diff -u home8-postgre-expect.csv home8-postgre-test.csv
+
+
+== Execute postgre tests over ODBC (isql) ==
+
+The unixODBC contains a CLI client isql with quite wierd properties.
+It requires CR-LF as a single query delimiter and all queries must
+be single-line.
+
+Assuming that unixODBC is properly installed and a database named
+${DBNAME} exists and the schema and test SQL files are generated
+for postgre-isql, run:
+
+  $ cat home8-postgre-isql.sql home8-postgre-isql-test.sql \
+	  | isql -d, -b ${DBNAME} > home8-postgre-isql-test.csv
+
+Check test results:
+
+  $ diff -u home8-postgre-isql-expect.csv home8-postgre-isql-test.csv
