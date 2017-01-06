@@ -58,7 +58,7 @@ void PlaceService::setAccessPolicy(PlaceAccessPolicy *policy)
 	m_accessPolicy = policy? policy : &NullPlaceAccessPolicy::instance();
 }
 
-void PlaceService::create(SingleWithData<Place> &input,
+void PlaceService::doCreate(SingleWithData<Place> &input,
 		const Identity &identity)
 {
 	Place &place = input.target();
@@ -73,27 +73,27 @@ void PlaceService::create(SingleWithData<Place> &input,
 	m_roleInPlaceDao->create(role);
 }
 
-void PlaceService::create(SingleWithData<Place> &input,
+void PlaceService::doCreate(SingleWithData<Place> &input,
 		VerifiedIdentity &verifiedIdentity)
 {
 	if (!m_verifiedIdentityDao->fetch(verifiedIdentity))
 		throw InvalidAccessException("no such identity");
 
-	create(input, verifiedIdentity.identity());
+	doCreate(input, verifiedIdentity.identity());
 }
 
-void PlaceService::fetchAccessible(Relation<std::vector<Place>, User> &input)
+void PlaceService::doFetchAccessible(Relation<std::vector<Place>, User> &input)
 {
 	m_roleInPlaceDao->fetchAccessiblePlaces(input.target(), input.base());
 }
 
-bool PlaceService::fetch(Single<Place> &input)
+bool PlaceService::doFetch(Single<Place> &input)
 {
 	m_accessPolicy->assureGet(input, input.target());
 	return m_placeDao->fetch(input.target());
 }
 
-bool PlaceService::update(SingleWithData<Place> &input)
+bool PlaceService::doUpdate(SingleWithData<Place> &input)
 {
 	Place &place = input.target();
 
@@ -106,7 +106,7 @@ bool PlaceService::update(SingleWithData<Place> &input)
 	return m_placeDao->update(place);
 }
 
-bool PlaceService::remove(Relation<Place, User> &input)
+bool PlaceService::doRemove(Relation<Place, User> &input)
 {
 	Place &place = input.target();
 
