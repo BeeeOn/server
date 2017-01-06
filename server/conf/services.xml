@@ -129,6 +129,7 @@
 			<set name="locationDao" ref="locationDao" />
 			<set name="gatewayDao" ref="gatewayDao" />
 			<set name="accessPolicy" ref="accessPolicy" />
+			<set name="transactionManager" ref="transactionManager" />
 		</instance>
 
 		<instance name="identityService" class="BeeeOn::IdentityService">
