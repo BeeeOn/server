@@ -47,6 +47,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/dao/IdentityDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/VerifiedIdentityDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/RoleInPlaceDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoTransactionImpl.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoAbstractDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLPlaceDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLUserDao.cpp
