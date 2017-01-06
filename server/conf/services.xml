@@ -111,6 +111,7 @@
 			<set name="deviceDao" ref="deviceDao" />
 			<set name="gatewayRPC" ref="gatewayRPC" />
 			<set name="accessPolicy" ref="accessPolicy" />
+			<set name="transactionManager" ref="transactionManager" />
 		</instance>
 
 		<instance name="gatewayService" class="BeeeOn::GatewayService">
