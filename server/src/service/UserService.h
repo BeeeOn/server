@@ -15,28 +15,13 @@ namespace BeeeOn {
  */
 class UserService : public AbstractInjectorTarget {
 public:
-	UserService()
-	{
-		injector<UserService, UserDao>("userDao",
-				&UserService::setUserDao);
-	}
+	UserService();
 
-	void setUserDao(UserDao *dao)
-	{
-		m_dao = dao;
-	}
+	void setUserDao(UserDao *dao);
 
-	void create(User &u)
-	{
-		TRACE_METHOD();
-		m_dao->create(u);
-	}
+	void create(User &u);
 
-	bool fetch(User &u)
-	{
-		TRACE_METHOD();
-		return m_dao->fetch(u);
-	}
+	bool fetch(User &u);
 
 private:
 	UserDao *m_dao;
