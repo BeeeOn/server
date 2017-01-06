@@ -48,6 +48,11 @@ PocoDaoManager &PocoAbstractDao::manager()
 	throw IllegalStateException("missing manager");
 }
 
+Poco::Data::Session PocoAbstractDao::session()
+{
+	return manager().pool().get();
+}
+
 void PocoAbstractDao::registerQuery(SQLQuery &query)
 {
 	m_queries.push_back(&query);

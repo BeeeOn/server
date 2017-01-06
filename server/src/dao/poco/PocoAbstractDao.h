@@ -11,6 +11,14 @@
 
 #include "di/InjectorTarget.h"
 
+namespace Poco {
+namespace Data {
+
+class Session;
+
+}
+}
+
 namespace BeeeOn {
 
 class PocoDaoManager;
@@ -27,6 +35,7 @@ public:
 
 protected:
 	PocoDaoManager &manager();
+	Poco::Data::Session session();
 
 	void registerQuery(SQLQuery &query);
 
