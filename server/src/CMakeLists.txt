@@ -61,6 +61,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/dao/SQLQuery.cpp
 	${PROJECT_SOURCE_DIR}/dao/TransactionManager.cpp
 	${PROJECT_SOURCE_DIR}/dao/ThreadLocalTransactionManager.cpp
+	${PROJECT_SOURCE_DIR}/dao/NullTransactionManager.cpp
 	${PROJECT_SOURCE_DIR}/service/PlaceService.cpp
 	${PROJECT_SOURCE_DIR}/service/UserService.cpp
 	${PROJECT_SOURCE_DIR}/service/AuthService.cpp
