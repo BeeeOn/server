@@ -1,5 +1,7 @@
 #include "service/UserService.h"
 
+using namespace BeeeOn;
+
 BEEEON_OBJECT(UserService, BeeeOn::UserService)
 
 UserService::UserService()
@@ -13,13 +15,13 @@ void UserService::setUserDao(UserDao *dao)
 	m_dao = dao;
 }
 
-void UserService::create(User &u)
+void UserService::doCreate(User &u)
 {
 	TRACE_METHOD();
 	m_dao->create(u);
 }
 
-bool UserService::fetch(User &u)
+bool UserService::doFetch(User &u)
 {
 	TRACE_METHOD();
 	return m_dao->fetch(u);

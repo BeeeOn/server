@@ -95,6 +95,7 @@
 
 		<instance name="userService" class="BeeeOn::UserService">
 			<set name="userDao" ref="userDao" />
+			<set name="transactionManager" ref="transactionManager" />
 		</instance>
 
 		<instance name="authService" class="BeeeOn::AuthService">
