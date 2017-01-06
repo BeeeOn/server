@@ -2,6 +2,9 @@
 
 #include "dao/SQLLoader.h"
 #include "dao/SQLQuery.h"
+#include "dao/TransactionManager.h"
+#include "dao/NullTransactionManager.h"
+#include "dao/poco/PocoTransactionImpl.h"
 #include "dao/poco/PocoAbstractDao.h"
 #include "dao/poco/PocoDaoManager.h"
 #include "Debug.h"
@@ -14,11 +17,16 @@ using namespace BeeeOn;
 PocoAbstractDao::PocoAbstractDao():
 	m_logger(LOGGER_CLASS(this)),
 	m_manager(NULL),
+	m_transactionManager(&NullTransactionManager::instance()),
 	m_loader(NULL)
 {
 	injector<PocoAbstractDao, PocoDaoManager>(
 		"daoManager",
 		&PocoAbstractDao::setDaoManager
+	);
+	injector<PocoAbstractDao, TransactionManager>(
+		"transactionManager",
+		&PocoAbstractDao::setTransactionManager
 	);
 	injector<PocoAbstractDao, SQLLoader>(
 		"sqlLoader",
@@ -35,6 +43,12 @@ void PocoAbstractDao::setDaoManager(PocoDaoManager *manager)
 	m_manager = manager;
 }
 
+void PocoAbstractDao::setTransactionManager(TransactionManager *manager)
+{
+	m_transactionManager = manager == NULL?
+		&NullTransactionManager::instance() : manager;
+}
+
 void PocoAbstractDao::setSQLLoader(SQLLoader *loader)
 {
 	m_loader = loader;
@@ -48,9 +62,20 @@ PocoDaoManager &PocoAbstractDao::manager()
 	throw IllegalStateException("missing manager");
 }
 
-Poco::Data::Session PocoAbstractDao::session()
+Poco::Data::Session PocoAbstractDao::session(bool transact)
 {
-	return manager().pool().get();
+	Transaction *t = m_transactionManager->current();
+
+	if (t == NULL) {
+		if (transact && m_logger.warning()) {
+			m_logger.warning("session is out of transaction management",
+					__FILE__, __LINE__);
+		}
+
+		return manager().pool().get();
+	}
+	else
+		return t->impl<PocoTransactionImpl>().session();
 }
 
 void PocoAbstractDao::registerQuery(SQLQuery &query)

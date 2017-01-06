@@ -223,43 +223,51 @@
 
 		<instance name="sqlPlaceDao" class="BeeeOn::PocoSQLPlaceDao">
 			<set name="daoManager" ref="pocoDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
 			<set name="sqlLoader" ref="queries" />
 		</instance>
 
 		<instance name="sqlUserDao" class="BeeeOn::PocoSQLUserDao">
 			<set name="daoManager" ref="pocoDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
 			<set name="sqlLoader" ref="queries" />
 		</instance>
 
 		<instance name="sqlIdentityDao" class="BeeeOn::PocoSQLIdentityDao">
 			<set name="daoManager" ref="pocoDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
 			<set name="sqlLoader" ref="queries" />
 		</instance>
 
 		<instance name="sqlVerifiedIdentityDao"
 				class="BeeeOn::PocoSQLVerifiedIdentityDao">
 			<set name="daoManager" ref="pocoDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
 			<set name="sqlLoader" ref="queries" />
 		</instance>
 
 		<instance name="sqlRoleInPlaceDao"
 				class="BeeeOn::PocoSQLRoleInPlaceDao">
 			<set name="daoManager" ref="pocoDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
 			<set name="sqlLoader" ref="queries" />
 		</instance>
 
 		<instance name="sqlGatewayDao" class="BeeeOn::PocoSQLGatewayDao">
 			<set name="daoManager" ref="pocoDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
 			<set name="sqlLoader" ref="queries" />
 		</instance>
 
 		<instance name="sqlLocationDao" class="BeeeOn::PocoSQLLocationDao">
 			<set name="daoManager" ref="pocoDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
 			<set name="sqlLoader" ref="queries" />
 		</instance>
 
 		<instance name="sqlDeviceDao" class="BeeeOn::PocoSQLDeviceDao">
 			<set name="daoManager" ref="pocoDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
 			<set name="sqlLoader" ref="queries" />
 		</instance>
 
