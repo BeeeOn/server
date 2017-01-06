@@ -9,7 +9,6 @@
 namespace Poco {
 namespace Data {
 
-class Session;
 class RecordSet;
 class Row;
 
@@ -56,20 +55,6 @@ public:
 			collection.push_back(device);
 		}
 	}
-
-protected:
-	bool insert(Poco::Data::Session &session, Device &device,
-			const Gateway &gateway);
-	bool update(Poco::Data::Session &session, Device &device,
-			const Gateway &gateway);
-	bool fetch(Poco::Data::Session &session, Device &device,
-			const Gateway &gateway);
-	void fetchActiveBy(Poco::Data::Session &session,
-			std::vector<Device> &devices,
-			const Gateway &gateway);
-	void fetchInactiveBy(Poco::Data::Session &session,
-			std::vector<Device> &devices,
-			const Gateway &gateway);
 
 private:
 	SQLQuery m_queryInsert           {"devices.create"};
