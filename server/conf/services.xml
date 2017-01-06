@@ -211,6 +211,13 @@
 			<set name="initScript" text="${database.init}" />
 		</instance>
 
+		<instance name="pocoTransactionManager"
+				class="BeeeOn::PocoTransactionManager">
+			<set name="daoManager" ref="pocoDaoManager" />
+		</instance>
+
+		<alias name="transactionManager" ref="pocoTransactionManager" />
+
 		<instance name="sqliteConnector"
 				class="BeeeOn::PocoSQLiteConnectorLoader" />
 
