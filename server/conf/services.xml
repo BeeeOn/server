@@ -135,6 +135,7 @@
 		<instance name="identityService" class="BeeeOn::IdentityService">
 			<set name="identityDao" ref="identityDao" />
 			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
+			<set name="transactionManager" ref="transactionManager" />
 		</instance>
 
 		<instance name="loggingObserver" class="BeeeOn::LoggingObserver" />
