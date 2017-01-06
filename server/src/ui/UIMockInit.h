@@ -6,12 +6,13 @@
 #include "dao/GatewayDao.h"
 #include "dao/IdentityDao.h"
 #include "dao/VerifiedIdentityDao.h"
+#include "dao/Transactional.h"
 
 namespace BeeeOn {
 
 class DeviceDao;
 
-class UIMockInit : public AbstractInjectorTarget {
+class UIMockInit : public Transactional {
 public:
 	UIMockInit()
 	{

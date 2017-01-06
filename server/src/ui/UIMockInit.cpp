@@ -120,7 +120,9 @@ void UIMockInit::initDevices()
 
 void UIMockInit::injectionDone()
 {
-	initUsers();
-	initGateways();
-	initDevices();
+	BEEEON_TRANSACTION(
+		initUsers();
+		initGateways();
+		initDevices();
+	);
 }
