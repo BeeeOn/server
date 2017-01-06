@@ -77,7 +77,7 @@ void GatewayService::setAccessPolicy(GatewayAccessPolicy *policy)
 		&NullGatewayAccessPolicy::instance();
 }
 
-bool GatewayService::registerGateway(SingleWithData<Gateway> &input,
+bool GatewayService::doRegisterGateway(SingleWithData<Gateway> &input,
 		const VerifiedIdentity &verifiedIdentity)
 {
 	VerifiedIdentity tmp(verifiedIdentity);
@@ -124,39 +124,39 @@ void GatewayService::createImplicitPlace(
 	m_roleInPlaceDao->create(role);
 }
 
-bool GatewayService::fetch(Single<Gateway> &input)
+bool GatewayService::doFetch(Single<Gateway> &input)
 {
 	m_accessPolicy->assureGet(input, input.target());
 
 	return m_gatewayDao->fetch(input.target());
 }
 
-bool GatewayService::fetch(Single<LegacyGateway> &input)
+bool GatewayService::doFetch(Single<LegacyGateway> &input)
 {
 	m_accessPolicy->assureGet(input, input.target());
 
 	return m_gatewayDao->fetch(input.target(), input.user());
 }
 
-bool GatewayService::fetchFromPlace(Relation<Gateway, Place> &input)
+bool GatewayService::doFetchFromPlace(Relation<Gateway, Place> &input)
 {
 	m_accessPolicy->assureGet(input, input.target());
 
 	return m_gatewayDao->fetchFromPlace(input.target(), input.base());
 }
 
-void GatewayService::fetchAccessible(Relation<vector<Gateway>, User> &input)
+void GatewayService::doFetchAccessible(Relation<vector<Gateway>, User> &input)
 {
 	m_gatewayDao->fetchAccessible(input.target(), input.base());
 }
 
-void GatewayService::fetchAccessible(
+void GatewayService::doFetchAccessible(
 		Relation<vector<LegacyGateway>, User> &input)
 {
 	m_gatewayDao->fetchAccessible(input.target(), input.base());
 }
 
-bool GatewayService::update(SingleWithData<Gateway> &input)
+bool GatewayService::doUpdate(SingleWithData<Gateway> &input)
 {
 	Gateway &gateway = input.target();
 
@@ -169,7 +169,7 @@ bool GatewayService::update(SingleWithData<Gateway> &input)
 	return m_gatewayDao->update(gateway);
 }
 
-bool GatewayService::updateInPlace(RelationWithData<Gateway, Place> &input)
+bool GatewayService::doUpdateInPlace(RelationWithData<Gateway, Place> &input)
 {
 	Gateway &gateway = input.target();
 
@@ -183,7 +183,7 @@ bool GatewayService::updateInPlace(RelationWithData<Gateway, Place> &input)
 	return m_gatewayDao->update(gateway);
 }
 
-bool GatewayService::assignAndUpdate(
+bool GatewayService::doAssignAndUpdate(
 		RelationWithData<Gateway, Place> &input)
 {
 	Gateway &gateway = input.target();
@@ -201,7 +201,7 @@ bool GatewayService::assignAndUpdate(
 	return m_gatewayDao->assignAndUpdate(gateway, input.base());
 }
 
-bool GatewayService::unassign(Relation<Gateway, Place> &input)
+bool GatewayService::doUnassign(Relation<Gateway, Place> &input)
 {
 	Gateway &gateway = input.target();
 
@@ -213,7 +213,7 @@ bool GatewayService::unassign(Relation<Gateway, Place> &input)
 	return m_gatewayDao->unassign(gateway);
 }
 
-bool GatewayService::unassign(Relation<Gateway, User> &input)
+bool GatewayService::doUnassign(Relation<Gateway, User> &input)
 {
 	Gateway &gateway = input.target();
 
@@ -228,19 +228,19 @@ bool GatewayService::unassign(Relation<Gateway, User> &input)
 	return m_gatewayDao->unassign(gateway);
 }
 
-void GatewayService::scanDevices(Single<Gateway> &input)
+void GatewayService::doScanDevices(Single<Gateway> &input)
 {
 	m_accessPolicy->assureScanDevices(input, input.target());
 
 	m_rpc->sendListen(input.target());
 }
 
-void GatewayService::unpairDevice(Single<Gateway> &input, Device &device)
+void GatewayService::doUnpairDevice(Single<Gateway> &input, Device &device)
 {
 	m_rpc->unpairDevice(input.target(), device);
 }
 
-void GatewayService::pingGateway(Single<Gateway> &input)
+void GatewayService::doPingGateway(Single<Gateway> &input)
 {
 	m_rpc->pingGateway(input.target());
 }

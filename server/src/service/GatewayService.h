@@ -6,6 +6,7 @@
 #include <Poco/Logger.h>
 #include "service/Single.h"
 #include "service/Relation.h"
+#include "dao/Transactional.h"
 #include "rpc/GatewayRPC.h"
 #include "di/InjectorTarget.h"
 #include "Debug.h"
@@ -25,7 +26,7 @@ class VerifiedIdentityDao;
 class GatewayRPC;
 class GatewayAccessPolicy;
 
-class GatewayService : public AbstractInjectorTarget {
+class GatewayService : public Transactional {
 public:
 	GatewayService();
 
@@ -51,25 +52,94 @@ public:
 	 * @return false when assignment fails (update operation fails)
 	 */
 	bool registerGateway(SingleWithData<Gateway> &input,
-			const VerifiedIdentity &verifiedIdentity);
+			const VerifiedIdentity &verifiedIdentity)
+	{
+		return BEEEON_TRANSACTION_RETURN(bool,
+				doRegisterGateway(input, verifiedIdentity));
+	}
 
-	bool fetch(Single<Gateway> &input);
-	bool fetch(Single<LegacyGateway> &input);
-	bool fetchFromPlace(Relation<Gateway, Place> &input);
-	void fetchAccessible(Relation<std::vector<Gateway>, User> &input);
-	void fetchAccessible(Relation<std::vector<LegacyGateway>, User> &input);
+	bool fetch(Single<Gateway> &input)
+	{
+		return BEEEON_TRANSACTION_RETURN(bool, doFetch(input));
+	}
 
-	bool update(SingleWithData<Gateway> &input);
-	bool updateInPlace(RelationWithData<Gateway, Place> &input);
-	bool assignAndUpdate(RelationWithData<Gateway, Place> &input);
-	bool unassign(Relation<Gateway, Place> &input);
-	bool unassign(Relation<Gateway, User> &input);
+	bool fetch(Single<LegacyGateway> &input)
+	{
+		return BEEEON_TRANSACTION_RETURN(bool, doFetch(input));
+	}
 
-	void scanDevices(Single<Gateway> &input);
-	void unpairDevice(Single<Gateway> &input, Device &device);
-	void pingGateway(Single<Gateway> &input);
+	bool fetchFromPlace(Relation<Gateway, Place> &input)
+	{
+		return BEEEON_TRANSACTION_RETURN(bool, doFetchFromPlace(input));
+	}
+
+	void fetchAccessible(Relation<std::vector<Gateway>, User> &input)
+	{
+		BEEEON_TRANSACTION(doFetchAccessible(input));
+	}
+
+	void fetchAccessible(Relation<std::vector<LegacyGateway>, User> &input)
+	{
+		BEEEON_TRANSACTION(doFetchAccessible(input));
+	}
+
+	bool update(SingleWithData<Gateway> &input)
+	{
+		return BEEEON_TRANSACTION_RETURN(bool, doUpdate(input));
+	}
+
+	bool updateInPlace(RelationWithData<Gateway, Place> &input)
+	{
+		return BEEEON_TRANSACTION_RETURN(bool, doUpdateInPlace(input));
+	}
+
+	bool assignAndUpdate(RelationWithData<Gateway, Place> &input)
+	{
+		return BEEEON_TRANSACTION_RETURN(bool, doAssignAndUpdate(input));
+	}
+
+	bool unassign(Relation<Gateway, Place> &input)
+	{
+		return BEEEON_TRANSACTION_RETURN(bool, doUnassign(input));
+	}
+
+	bool unassign(Relation<Gateway, User> &input)
+	{
+		return BEEEON_TRANSACTION_RETURN(bool, doUnassign(input));
+	}
+
+	void scanDevices(Single<Gateway> &input)
+	{
+		doScanDevices(input);
+	}
+
+	void unpairDevice(Single<Gateway> &input, Device &device)
+	{
+		doUnpairDevice(input, device);
+	}
+
+	void pingGateway(Single<Gateway> &input)
+	{
+		doPingGateway(input);
+	}
 
 protected:
+	bool doRegisterGateway(SingleWithData<Gateway> &input,
+			const VerifiedIdentity &verifiedIdentity);
+	bool doFetch(Single<Gateway> &input);
+	bool doFetch(Single<LegacyGateway> &input);
+	bool doFetchFromPlace(Relation<Gateway, Place> &input);
+	void doFetchAccessible(Relation<std::vector<Gateway>, User> &input);
+	void doFetchAccessible(Relation<std::vector<LegacyGateway>, User> &input);
+	bool doUpdate(SingleWithData<Gateway> &input);
+	bool doUpdateInPlace(RelationWithData<Gateway, Place> &input);
+	bool doAssignAndUpdate(RelationWithData<Gateway, Place> &input);
+	bool doUnassign(Relation<Gateway, Place> &input);
+	bool doUnassign(Relation<Gateway, User> &input);
+	void doScanDevices(Single<Gateway> &input);
+	void doUnpairDevice(Single<Gateway> &input, Device &device);
+	void doPingGateway(Single<Gateway> &input);
+
 	void createImplicitPlace(Place &place,
 			const Gateway &gateway,
 			const Identity &identity);

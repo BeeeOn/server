@@ -121,6 +121,7 @@
 			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
 			<set name="gatewayRPC" ref="gatewayRPC" />
 			<set name="accessPolicy" ref="accessPolicy" />
+			<set name="transactionManager" ref="transactionManager" />
 		</instance>
 
 		<instance name="locationService"
