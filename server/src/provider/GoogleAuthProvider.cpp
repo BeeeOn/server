@@ -51,7 +51,7 @@ bool GoogleAuthProvider::verifyAuthCode(const string &authCode, AuthResult &info
 		idToken = requestIdToken(authCode);
 		rawInfo = fetchUserInfo(idToken);
 	} catch(const Exception &e) {
-		m_logger.log(e, __FILE__, __LINE__);
+		logger().log(e, __FILE__, __LINE__);
 		return false;
 	}
 
@@ -76,8 +76,8 @@ string GoogleAuthProvider::requestIdToken(const string &authCode)
 		"scope=&"	// No need to specify, defaults to userinfo.profile,userinfo.email
 		"grant_type=authorization_code";
 
-	if (m_logger.debug())
-		m_logger.debug("request: " + requestRaw, __FILE__, __LINE__);
+	if (logger().debug())
+		logger().debug("request: " + requestRaw, __FILE__, __LINE__);
 
 	HTTPRequest req(HTTPRequest::HTTP_POST,
 			uri.getPathAndQuery(),
@@ -96,7 +96,7 @@ string GoogleAuthProvider::requestIdToken(const string &authCode)
 	if (object->has("id_token"))
 		return object->getValue<string>("id_token");
 
-	m_logger.error("No ID token to obtain user data", __FILE__, __LINE__);
+	logger().error("No ID token to obtain user data", __FILE__, __LINE__);
 
 	throw NotAuthenticatedException("Missing id_token field in response.");
 
