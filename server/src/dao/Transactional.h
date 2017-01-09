@@ -3,12 +3,7 @@
 
 #include "di/InjectorTarget.h"
 #include "dao/TransactionManager.h"
-
-namespace Poco {
-
-class Logger;
-
-}
+#include "util/Loggable.h"
 
 namespace BeeeOn {
 
@@ -17,7 +12,8 @@ namespace BeeeOn {
 #define BEEEON_TRANSACTION_RETURN(type, code) \
 	this->transaction<type>([&]() {return code;});
 
-class Transactional : public AbstractInjectorTarget {
+class Transactional : public AbstractInjectorTarget,
+		public Loggable {
 public:
 	Transactional();
 
@@ -73,8 +69,8 @@ protected:
 	{
 		transactionNotNull(t);
 
-		if (m_logger.debug())
-			m_logger.debug(transactionStarted(*t), file, line);
+		if (logger().debug())
+			logger().debug(transactionStarted(*t), file, line);
 	}
 
 	void logTransactionCommit(const Transaction *t,
@@ -82,8 +78,8 @@ protected:
 	{
 		transactionNotNull(t);
 
-		if (m_logger.debug())
-			m_logger.debug(transactionCommit(*t), file, line);
+		if (logger().debug())
+			logger().debug(transactionCommit(*t), file, line);
 	}
 
 	void logTransactionRollback(const Transaction *t,
@@ -91,8 +87,8 @@ protected:
 	{
 		transactionNotNull(t);
 
-		if (m_logger.error())
-			m_logger.error(transactionRollback(*t), file, line);
+		if (logger().error())
+			logger().error(transactionRollback(*t), file, line);
 	}
 
 	void transactionNotNull(const Transaction *t);
@@ -101,7 +97,6 @@ protected:
 	const std::string transactionRollback(const Transaction &t);
 
 private:
-	Poco::Logger &m_logger;
 	TransactionManager *m_transactionManager;
 };
 
