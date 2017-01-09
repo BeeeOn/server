@@ -4,15 +4,12 @@
 #include <set>
 #include <Poco/AbstractObserver.h>
 
-namespace Poco {
-
-class Logger;
-
-}
+#include "util/Loggable.h"
 
 namespace BeeeOn {
 
-class NotificationObserver : public Poco::AbstractObserver {
+class NotificationObserver : public Poco::AbstractObserver,
+		public Loggable {
 public:
 	NotificationObserver();
 	NotificationObserver(const NotificationObserver &copy);
@@ -25,7 +22,6 @@ public:
 	void disable() override;
 
 protected:
-	Poco::Logger &m_logger;
 	std::set<std::string> m_accepts;
 };
 
