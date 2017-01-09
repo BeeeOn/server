@@ -5,10 +5,10 @@
 
 #include <Poco/AbstractCache.h>
 #include <Poco/UniqueExpireStrategy.h>
-#include <Poco/Logger.h>
 
 #include "model/User.h"
 #include "server/Session.h"
+#include "util/Loggable.h"
 
 namespace BeeeOn {
 
@@ -22,7 +22,8 @@ namespace BeeeOn {
  */
 class SessionCache : public Poco::AbstractCache<SessionID,
 	ExpirableSession,
-	Poco::UniqueExpireStrategy<SessionID, ExpirableSession>>
+	Poco::UniqueExpireStrategy<SessionID, ExpirableSession>>,
+	public Loggable
 {
 public:
 	SessionCache(unsigned int maxUserSessions);
@@ -47,7 +48,6 @@ public:
 private:
 	std::map<UserID, std::set<SessionID>> m_userSessionSet;
 	unsigned int m_userSessions;
-	Poco::Logger &m_logger;
 };
 
 }

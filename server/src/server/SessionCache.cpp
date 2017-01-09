@@ -1,4 +1,5 @@
 #include <Poco/Exception.h>
+#include <Poco/Logger.h>
 
 #include "server/SessionCache.h"
 #include "Debug.h"
@@ -6,8 +7,7 @@
 using namespace Poco;
 using namespace BeeeOn;
 
-SessionCache::SessionCache(unsigned int maxUserSessions):
-	m_logger(LOGGER_CLASS(this))
+SessionCache::SessionCache(unsigned int maxUserSessions)
 {
 	m_userSessions = maxUserSessions;
 }
@@ -27,8 +27,8 @@ void SessionCache::add(const SessionID &sessionID, ExpirableSession &session)
 	auto userSession = m_userSessionSet.find(userID);
 
 	if (userSession == m_userSessionSet.end()) {
-		if (m_logger.debug()) {
-			m_logger.debug(
+		if (logger().debug()) {
+			logger().debug(
 				"user: " + userID.toString() +
 				" new session: " + sessionID,
 				__FILE__, __LINE__);
@@ -38,8 +38,8 @@ void SessionCache::add(const SessionID &sessionID, ExpirableSession &session)
 		sessionSet.emplace(sessionID);
 		m_userSessionSet.emplace(std::make_pair(userID, sessionSet));
 	} else {
-		if (m_logger.debug()) {
-			m_logger.debug(
+		if (logger().debug()) {
+			logger().debug(
 				"user: " + userID.toString() +
 				" new session: " + sessionID +
 				" sessions: " +
@@ -90,8 +90,8 @@ void SessionCache::removeSession(const SessionID &sessionID, const UserID &userI
 		if (itUser->second.size() == 0)
 			m_userSessionSet.erase(itUser);
 
-		if (m_logger.debug()) {
-			m_logger.debug("user: " + userID.toString() +
+		if (logger().debug()) {
+			logger().debug("user: " + userID.toString() +
 					" remove session, sessions: " +
 					std::to_string(itUser->second.size()),
 					__FILE__, __LINE__);
