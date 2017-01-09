@@ -9,6 +9,7 @@
 
 #include "server/Server.h"
 #include "server/RestRequestHandler.h"
+#include "util/Loggable.h"
 #include "Debug.h"
 #include "mongoose/Mongoose.h"
 
@@ -18,7 +19,7 @@ namespace BeeeOn {
  * Mongoose server representation. It just wraps the Mongoose into
  * the Server API to plug into the application
  */
-class MongooseServer : public Server {
+class MongooseServer : public Server, public Loggable {
 public:
 	typedef TRestRequestHandler<MongooseRequest, MongooseResponse>
 		RequestHandler;
@@ -46,13 +47,13 @@ public:
 		try {
 			m_activity.wait(milis);
 		} catch(Poco::TimeoutException &e) {
-			m_logger.log(e, __FILE__, __LINE__);
+			logger().log(e, __FILE__, __LINE__);
 		}
 	}
 
 	void handle(struct mg_connection *conn, struct http_message *msg)
 	{
-		_TRACE_METHOD(m_logger);
+		_TRACE_METHOD(logger());
 
 		bool isHead = !std::strncmp(
 				msg->method.p, "HEAD", msg->method.len);
@@ -67,7 +68,7 @@ public:
 
 		/* There should never be handler == NULL */
 		if (handler == NULL) {
-			m_logger.warning("factory returned NULL",
+			logger().warning("factory returned NULL",
 					__FILE__, __LINE__);
 			response.setStatusAndReason(
 				MongooseResponse::HTTP_INTERNAL_SERVER_ERROR);
@@ -97,7 +98,6 @@ private:
 	Mongoose m_mg;
 	Poco::SharedPtr<RequestHandlerFactory> m_factory;
 	unsigned int m_timeout;
-	Poco::Logger &m_logger;
 };
 
 }
