@@ -3,9 +3,9 @@
 
 #include <Poco/Net/InvalidCertificateHandler.h>
 
-namespace Poco {
+#include "util/Loggable.h"
 
-class Logger;
+namespace Poco {
 
 namespace Net {
 
@@ -16,15 +16,14 @@ class VerificationErrorArgs;
 
 namespace BeeeOn {
 
-class BetterRejectCertificateHandler
-	: public Poco::Net::InvalidCertificateHandler {
+class BetterRejectCertificateHandler :
+	public Poco::Net::InvalidCertificateHandler,
+	public Loggable {
 public:
 	BetterRejectCertificateHandler(bool server);
 
 	void onInvalidCertificate(const void *sender,
 		Poco::Net::VerificationErrorArgs &errorCert) override;
-private:
-	Poco::Logger &m_logger;
 };
 
 }
