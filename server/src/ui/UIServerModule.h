@@ -13,6 +13,7 @@
 #include "service/DeviceService.h"
 #include "ui/GatewayHandler.h"
 #include "ui/LocationHandler.h"
+#include "util/Loggable.h"
 
 /**
  * Compilation-time configuration of the target underlying
@@ -72,12 +73,12 @@ typedef TRoute<UIRequest, UIResponse, ExpirableSession::Ptr> UIRoute;
  */
 typedef UIRoute::Context UIRouteContext;
 
-class UIServerModule : public AbstractInjectorTarget {
+class UIServerModule : public AbstractInjectorTarget,
+		public Loggable {
 public:
 	UIServerModule(void):
 		m_factory(new UIServerRequestHandlerFactory("ui-server")),
-		m_server(NULL),
-		m_logger(LOGGER_CLASS(this))
+		m_server(NULL)
 	{
 		injector<UIServerModule, SessionVerifier>("sessionVerifier",
 				&UIServerModule::setSessionVerifier);
@@ -176,11 +177,6 @@ public:
 		m_locationHandler = handler;
 	}
 
-	Poco::Logger &logger()
-	{
-		return m_logger;
-	}
-
 private:
 	Poco::SharedPtr<UIServerRequestHandlerFactory> m_factory;
 	UIRestServer *m_server;
@@ -190,7 +186,6 @@ private:
 	DeviceService *m_deviceService;
 	BeeeOn::UI::GatewayHandler *m_gatewayHandler;
 	BeeeOn::UI::LocationHandler *m_locationHandler;
-	Poco::Logger &m_logger;
 };
 
 }
