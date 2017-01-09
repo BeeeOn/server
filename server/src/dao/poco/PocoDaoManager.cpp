@@ -161,7 +161,7 @@ void PocoDaoManager::injectionDone()
 
 	Session session(pool().get());
 
-	m_logger.notice("Session %s transact (isolation: %u) "
+	m_logger.notice("Session %s transact (isolation: 0x%04x) "
 			"login timeout: %z, "
 			"connection timeout: %z",
 			string(session.canTransact()? "can" : "cannot"),
