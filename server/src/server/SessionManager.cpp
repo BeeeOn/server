@@ -39,8 +39,8 @@ const ExpirableSession::Ptr SessionManager::open(
 
 	m_sessionCache->add(session.sessionID(), session);
 
-	if (m_logger.debug()) {
-		m_logger.debug("Added session: " + session.sessionID(),
+	if (logger().debug()) {
+		logger().debug("Added session: " + session.sessionID(),
 				__FILE__, __LINE__);
 	}
 
@@ -51,8 +51,8 @@ bool SessionManager::lookup(const SessionID &id, ExpirableSession::Ptr &session)
 {
 	TRACE_METHOD();
 
-	if (m_logger.debug())
-		m_logger.debug("Looking up session: " + id, __FILE__, __LINE__);
+	if (logger().debug())
+		logger().debug("Looking up session: " + id, __FILE__, __LINE__);
 
 	RWLock::ScopedLock guard(m_lock);
 
@@ -68,8 +68,8 @@ void SessionManager::close(const SessionID &id)
 {
 	TRACE_METHOD();
 
-	if (m_logger.debug())
-		m_logger.debug("Closing session: " + id, __FILE__, __LINE__);
+	if (logger().debug())
+		logger().debug("Closing session: " + id, __FILE__, __LINE__);
 
 	RWLock::ScopedLock guard(m_lock, true);
 	m_sessionCache->remove(id);
