@@ -3,7 +3,7 @@
 #include "di/InjectorTarget.h"
 #include "rpc/GatewayRPC.h"
 #include "dao/DeviceDao.h"
-#include "Debug.h"
+#include "util/Loggable.h"
 
 using namespace Poco;
 
@@ -12,7 +12,8 @@ namespace BeeeOn {
 /**
  * Fake RPC with no communication to Ada Server at all.
  */
-class FakeGatewayRPC : public GatewayRPC, public AbstractInjectorTarget {
+class FakeGatewayRPC : public GatewayRPC, public AbstractInjectorTarget,
+		public Loggable {
 public:
 	FakeGatewayRPC();
 
@@ -24,12 +25,10 @@ public:
 	void pingGateway(const Gateway &gateway) override;
 
 private:
-	Logger &m_logger;
 	DeviceDao *m_deviceDao;
 };
 
 FakeGatewayRPC::FakeGatewayRPC():
-	m_logger(LOGGER_CLASS(this)),
 	m_deviceDao(&NullDeviceDao::instance())
 {
 	injector<FakeGatewayRPC, DeviceDao>(
@@ -45,7 +44,7 @@ void FakeGatewayRPC::setDeviceDao(DeviceDao *dao)
 
 void FakeGatewayRPC::sendListen(const Gateway &gateway)
 {
-	m_logger.warning("send listen to gateway",
+	logger().warning("send listen to gateway",
 			__FILE__, __LINE__);
 }
 
@@ -55,7 +54,7 @@ void FakeGatewayRPC::unpairDevice(const Gateway &gateway,
 	Device device(target);
 
 	if (!m_deviceDao->fetch(device, gateway)) {
-		m_logger.warning("failed to fetch device "
+		logger().warning("failed to fetch device "
 				+ device.id().toString(),
 				__FILE__, __LINE__);
 		return;
@@ -64,7 +63,7 @@ void FakeGatewayRPC::unpairDevice(const Gateway &gateway,
 	device.setActiveSince(Nullable<DateTime>());
 
 	if (!m_deviceDao->update(device, gateway)) {
-		m_logger.warning("failed to update device "
+		logger().warning("failed to update device "
 				+ device.id().toString(),
 				__FILE__, __LINE__);
 	}
@@ -72,7 +71,7 @@ void FakeGatewayRPC::unpairDevice(const Gateway &gateway,
 
 void FakeGatewayRPC::pingGateway(const Gateway &gateway)
 {
-	m_logger.warning("ping gateway",
+	logger().warning("ping gateway",
 			__FILE__, __LINE__);
 }
 
