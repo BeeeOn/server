@@ -1,6 +1,4 @@
 #include <Poco/Exception.h>
-#include <Poco/Data/Session.h>
-#include <Poco/Data/SessionPool.h>
 #include <Poco/Data/Statement.h>
 #include <Poco/Data/RowIterator.h>
 #include <Poco/Data/Row.h>
@@ -31,48 +29,6 @@ PocoSQLVerifiedIdentityDao::PocoSQLVerifiedIdentityDao()
 
 void PocoSQLVerifiedIdentityDao::create(VerifiedIdentity &identity)
 {
-	Session session(manager().pool().get());
-	create(session, identity);
-}
-
-bool PocoSQLVerifiedIdentityDao::fetch(VerifiedIdentity &identity)
-{
-	Session session(manager().pool().get());
-	return fetch(session, identity);
-}
-
-bool PocoSQLVerifiedIdentityDao::fetchBy(
-		VerifiedIdentity &identity,
-		const string email,
-		const string provider)
-{
-	Session session(manager().pool().get());
-	return fetchBy(session, identity, email, provider);
-}
-
-void PocoSQLVerifiedIdentityDao::fetchBy(
-		std::vector<VerifiedIdentity> &identities,
-		const string email)
-{
-	Session session(manager().pool().get());
-	return fetchBy(session, identities, email);
-}
-
-bool PocoSQLVerifiedIdentityDao::update(VerifiedIdentity &identity)
-{
-	Session session(manager().pool().get());
-	return update(session, identity);
-}
-
-bool PocoSQLVerifiedIdentityDao::remove(const VerifiedIdentity &identity)
-{
-	Session session(manager().pool().get());
-	return remove(session, identity);
-}
-
-void PocoSQLVerifiedIdentityDao::create(Session &session,
-		VerifiedIdentity &identity)
-{
 	assureHasId(identity.identity());
 	assureHasId(identity.user());
 
@@ -90,28 +46,27 @@ void PocoSQLVerifiedIdentityDao::create(Session &session,
 	if (!identity.accessToken().empty())
 		accessToken = identity.accessToken();
 
-	Statement sql(session);
-	sql << m_queryCreate(),
+	Statement sql = (session() << m_queryCreate(),
 		use(id, "id"),
 		use(identityID, "identity_id"),
 		use(userID, "user_id"),
 		use(provider, "provider"),
 		use(picture, "picture"),
-		use(accessToken, "access_token");
+		use(accessToken, "access_token")
+	);
 
 	execute(sql);
 }
 
-bool PocoSQLVerifiedIdentityDao::fetch(Session &session,
-		VerifiedIdentity &identity)
+bool PocoSQLVerifiedIdentityDao::fetch(VerifiedIdentity &identity)
 {
 	assureHasId(identity);
 
 	string id(identity.id().toString());
 
-	Statement sql(session);
-	sql << m_queryFetchById(),
-		use(id, "id");
+	Statement sql = (session() << m_queryFetchById(),
+		use(id, "id")
+	);
 
 	if (execute(sql) == 0)
 		return false;
@@ -120,18 +75,18 @@ bool PocoSQLVerifiedIdentityDao::fetch(Session &session,
 	return parseSingle(result, identity);
 }
 
-bool PocoSQLVerifiedIdentityDao::fetchBy(Session &session,
+bool PocoSQLVerifiedIdentityDao::fetchBy(
 		VerifiedIdentity &identity,
-		const string &email,
-		const string &provider)
+		const string email,
+		const string provider)
 {
 	string searchEmail(email);
 	string searchProvider(provider);
 
-	Statement sql(session);
-	sql << m_queryFetchByEmailAndProvider(),
+	Statement sql = (session() << m_queryFetchByEmailAndProvider(),
 		use(searchEmail, "email"),
-		use(searchProvider, "provider");
+		use(searchProvider, "provider")
+	);
 
 	if (execute(sql) == 0)
 		return false;
@@ -140,23 +95,22 @@ bool PocoSQLVerifiedIdentityDao::fetchBy(Session &session,
 	return parseSingle(result, identity);
 }
 
-void PocoSQLVerifiedIdentityDao::fetchBy(Session &session,
+void PocoSQLVerifiedIdentityDao::fetchBy(
 		std::vector<VerifiedIdentity> &identities,
-		const string &email)
+		const string email)
 {
 	string searchEmail(email);
 
-	Statement sql(session);
-	sql << m_queryFetchByEmail(),
-		use(searchEmail, "email");
+	Statement sql = (session() << m_queryFetchByEmail(),
+		use(searchEmail, "email")
+	);
 
 	execute(sql);
 	RecordSet result(sql);
 	parseMany(result, identities);
 }
 
-bool PocoSQLVerifiedIdentityDao::update(Session &session,
-		VerifiedIdentity &identity)
+bool PocoSQLVerifiedIdentityDao::update(VerifiedIdentity &identity)
 {
 	assureHasId(identity);
 
@@ -169,25 +123,24 @@ bool PocoSQLVerifiedIdentityDao::update(Session &session,
 	if (!identity.accessToken().empty())
 		accessToken = identity.accessToken();
 
-	Statement sql(session);
-	sql << m_queryUpdate(),
+	Statement sql = (session() << m_queryUpdate(),
 		use(picture, "picture"),
 		use(accessToken, "access_token"),
-		use(id, "id");
+		use(id, "id")
+	);
 
 	return execute(sql) > 0;
 }
 
-bool PocoSQLVerifiedIdentityDao::remove(Session &session,
-		const VerifiedIdentity &identity)
+bool PocoSQLVerifiedIdentityDao::remove(const VerifiedIdentity &identity)
 {
 	assureHasId(identity);
 
 	string id(identity.id().toString());
 
-	Statement sql(session);
-	sql << m_queryRemove(),
-		use(id, "id");
+	Statement sql = (session() << m_queryRemove(),
+		use(id, "id")
+	);
 
 	return execute(sql) > 0;
 }

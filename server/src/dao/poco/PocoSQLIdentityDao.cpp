@@ -1,6 +1,4 @@
 #include <Poco/Exception.h>
-#include <Poco/Data/Session.h>
-#include <Poco/Data/SessionPool.h>
 #include <Poco/Data/Statement.h>
 #include <Poco/Data/RecordSet.h>
 #include <Poco/Data/Row.h>
@@ -26,51 +24,27 @@ PocoSQLIdentityDao::PocoSQLIdentityDao()
 
 void PocoSQLIdentityDao::create(Identity &identity)
 {
-	Session session(manager().pool().get());
-	create(session, identity);
-}
-
-bool PocoSQLIdentityDao::fetch(Identity &identity)
-{
-	Session session(manager().pool().get());
-	return fetch(session, identity);
-}
-
-bool PocoSQLIdentityDao::fetchBy(Identity &identity, const string &email)
-{
-	Session session(manager().pool().get());
-	return fetchBy(session, identity, email);
-}
-
-bool PocoSQLIdentityDao::remove(const Identity &identity)
-{
-	Session session(manager().pool().get());
-	return remove(session, identity);
-}
-
-void PocoSQLIdentityDao::create(Session &session, Identity &identity)
-{
 	identity = Identity(IdentityID::random(), identity);
 	string id(identity.id().toString());
 	string email(identity.email());
 
-	Statement sql(session);
-	sql << m_queryCreate(),
+	Statement sql = (session() << m_queryCreate(),
 		use(id, "id"),
-		use(email, "email");
+		use(email, "email")
+	);
 
 	execute(sql);
 }
 
-bool PocoSQLIdentityDao::fetch(Session &session, Identity &identity)
+bool PocoSQLIdentityDao::fetch(Identity &identity)
 {
 	assureHasId(identity);
 
 	string id(identity.id().toString());
 
-	Statement sql(session);
-	sql << m_queryFetchById(),
-		use(id, "id");
+	Statement sql = (session() << m_queryFetchById(),
+		use(id, "id")
+	);
 
 	if (execute(sql) == 0)
 		return false;
@@ -79,15 +53,14 @@ bool PocoSQLIdentityDao::fetch(Session &session, Identity &identity)
 	return parseSingle(result, identity);
 }
 
-bool PocoSQLIdentityDao::fetchBy(Session &session,
-		Identity &identity, const string &email)
+bool PocoSQLIdentityDao::fetchBy(Identity &identity, const string &email)
 {
 	string searchEmail(email);
 	string id;
 
-	Statement sql(session);
-	sql << m_queryFetchByEmail(),
-		use(searchEmail, "email");
+	Statement sql = (session() << m_queryFetchByEmail(),
+		use(searchEmail, "email")
+	);
 
 	if (execute(sql) == 0)
 		return false;
@@ -96,14 +69,14 @@ bool PocoSQLIdentityDao::fetchBy(Session &session,
 	return parseSingle(result, identity);
 }
 
-bool PocoSQLIdentityDao::remove(Session &session, const Identity &identity)
+bool PocoSQLIdentityDao::remove(const Identity &identity)
 {
 	assureHasId(identity);
 	string id(identity.id().toString());
 
-	Statement sql(session);
-	sql << m_queryRemove(),
-		use(id, "id");
+	Statement sql = (session() << m_queryRemove(),
+		use(id, "id")
+	);
 
 	return execute(sql) > 0;
 }

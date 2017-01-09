@@ -1,6 +1,4 @@
 #include <Poco/Exception.h>
-#include <Poco/Data/Session.h>
-#include <Poco/Data/SessionPool.h>
 #include <Poco/Data/Statement.h>
 #include <Poco/Data/RecordSet.h>
 #include <Poco/Data/Row.h>
@@ -26,50 +24,26 @@ PocoSQLPlaceDao::PocoSQLPlaceDao()
 
 void PocoSQLPlaceDao::create(Place &place)
 {
-	Session session(manager().pool().get());
-	create(session, place);
-}
-
-bool PocoSQLPlaceDao::fetch(Place &place)
-{
-	Session session(manager().pool().get());
-	return fetch(session, place);
-}
-
-bool PocoSQLPlaceDao::update(Place &place)
-{
-	Session session(manager().pool().get());
-	return update(session, place);
-}
-
-bool PocoSQLPlaceDao::remove(const Place &place)
-{
-	Session session(manager().pool().get());
-	return remove(session, place);
-}
-
-void PocoSQLPlaceDao::create(Session &session, Place &place)
-{
 	place = Place(PlaceID::random(), place);
 	string id(place.id().toString());
 	string name(place.name());
 
-	Statement sql(session);
-	sql << m_queryCreate(),
+	Statement sql = (session() << m_queryCreate(),
 		use(id, "id"),
-		use(name, "name");
+		use(name, "name")
+	);
 
 	execute(sql);
 }
 
-bool PocoSQLPlaceDao::fetch(Session &session, Place &place)
+bool PocoSQLPlaceDao::fetch(Place &place)
 {
 	assureHasId(place);
 	string id(place.id().toString());
 
-	Statement sql(session);
-	sql << m_queryFetchById(),
-		use(id, "id");
+	Statement sql = (session() << m_queryFetchById(),
+		use(id, "id")
+	);
 
 	if (execute(sql) == 0)
 		return false;
@@ -78,28 +52,28 @@ bool PocoSQLPlaceDao::fetch(Session &session, Place &place)
 	return parseSingle(result, place);
 }
 
-bool PocoSQLPlaceDao::update(Session &session, Place &place)
+bool PocoSQLPlaceDao::update(Place &place)
 {
 	assureHasId(place);
 	string id(place.id().toString());
 	string name(place.name());
 
-	Statement sql(session);
-	sql << m_queryUpdate(),
+	Statement sql = (session() << m_queryUpdate(),
 		use(name, "name"),
-		use(id, "id");
+		use(id, "id")
+	);
 
 	return execute(sql) > 0;
 }
 
-bool PocoSQLPlaceDao::remove(Session &session, const Place &place)
+bool PocoSQLPlaceDao::remove(const Place &place)
 {
 	assureHasId(place);
 	string id(place.id().toString());
 
-	Statement sql(session);
-	sql << m_queryRemove(),
-		use(id, "id");
+	Statement sql = (session() << m_queryRemove(),
+		use(id, "id")
+	);
 
 	return execute(sql) > 0;
 }

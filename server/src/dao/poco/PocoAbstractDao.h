@@ -11,9 +11,18 @@
 
 #include "di/InjectorTarget.h"
 
+namespace Poco {
+namespace Data {
+
+class Session;
+
+}
+}
+
 namespace BeeeOn {
 
 class PocoDaoManager;
+class TransactionManager;
 class SQLLoader;
 class SQLQuery;
 
@@ -23,10 +32,12 @@ public:
 	virtual ~PocoAbstractDao();
 
 	void setDaoManager(PocoDaoManager *manager);
+	void setTransactionManager(TransactionManager *manager);
 	void setSQLLoader(SQLLoader *loader);
 
 protected:
 	PocoDaoManager &manager();
+	Poco::Data::Session session(bool transact = true);
 
 	void registerQuery(SQLQuery &query);
 
@@ -59,6 +70,7 @@ protected:
 
 private:
 	PocoDaoManager *m_manager;
+	TransactionManager *m_transactionManager;
 	SQLLoader *m_loader;
 	std::list<SQLQuery *> m_queries;
 };

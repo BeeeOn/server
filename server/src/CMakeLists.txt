@@ -47,6 +47,8 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/dao/IdentityDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/VerifiedIdentityDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/RoleInPlaceDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoTransactionImpl.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoTransactionManager.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoAbstractDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLPlaceDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLUserDao.cpp
@@ -59,6 +61,11 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/dao/ConnectorLoader.cpp
 	${PROJECT_SOURCE_DIR}/dao/SQLLoader.cpp
 	${PROJECT_SOURCE_DIR}/dao/SQLQuery.cpp
+	${PROJECT_SOURCE_DIR}/dao/TransactionManager.cpp
+	${PROJECT_SOURCE_DIR}/dao/ThreadLocalTransactionManager.cpp
+	${PROJECT_SOURCE_DIR}/dao/NullTransactionManager.cpp
+	${PROJECT_SOURCE_DIR}/dao/NoTransactionManager.cpp
+	${PROJECT_SOURCE_DIR}/dao/Transactional.cpp
 	${PROJECT_SOURCE_DIR}/service/PlaceService.cpp
 	${PROJECT_SOURCE_DIR}/service/UserService.cpp
 	${PROJECT_SOURCE_DIR}/service/AuthService.cpp

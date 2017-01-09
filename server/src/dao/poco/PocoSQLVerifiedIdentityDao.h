@@ -6,7 +6,6 @@
 namespace Poco {
 namespace Data {
 
-class Session;
 class RecordSet;
 class Row;
 
@@ -52,18 +51,6 @@ public:
 			collection.push_back(identity);
 		}
 	}
-
-protected:
-	void create(Poco::Data::Session &session, VerifiedIdentity &identity);
-	bool fetch(Poco::Data::Session &session, VerifiedIdentity &identity);
-	bool fetchBy(Poco::Data::Session &session, VerifiedIdentity &identity,
-			const std::string &email,
-			const std::string &provider);
-	void fetchBy(Poco::Data::Session &session, 
-			std::vector<VerifiedIdentity> &identities,
-			const std::string &email);
-	bool update(Poco::Data::Session &session, VerifiedIdentity &identity);
-	bool remove(Poco::Data::Session &session, const VerifiedIdentity &identity);
 
 private:
 	SQLQuery m_queryCreate       {"verified_identities.create"};

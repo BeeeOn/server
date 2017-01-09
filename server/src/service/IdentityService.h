@@ -4,18 +4,30 @@
 #include "di/InjectorTarget.h"
 #include "dao/IdentityDao.h"
 #include "dao/VerifiedIdentityDao.h"
+#include "dao/Transactional.h"
 
 namespace BeeeOn {
 
-class IdentityService : public AbstractInjectorTarget {
+class IdentityService : public Transactional {
 public:
 	IdentityService();
 
 	void setIdentityDao(IdentityDao *dao);
 	void setVerifiedIdentityDao(VerifiedIdentityDao *dao);
 
-	bool fetch(VerifiedIdentity &identity);
-	bool fetch(Identity &identity);
+	bool fetch(VerifiedIdentity &identity)
+	{
+		return BEEEON_TRANSACTION_RETURN(bool, doFetch(identity));
+	}
+
+	bool fetch(Identity &identity)
+	{
+		return BEEEON_TRANSACTION_RETURN(bool, doFetch(identity));
+	}
+
+protected:
+	bool doFetch(VerifiedIdentity &identity);
+	bool doFetch(Identity &identity);
 
 private:
 	IdentityDao *m_identityDao;

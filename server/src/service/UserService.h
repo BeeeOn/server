@@ -4,6 +4,7 @@
 #include <Poco/Exception.h>
 #include <Poco/Logger.h>
 #include "dao/UserDao.h"
+#include "dao/Transactional.h"
 #include "di/InjectorTarget.h"
 #include "Debug.h"
 
@@ -13,30 +14,25 @@ namespace BeeeOn {
  * User management service. Its purpose is to ensure creating
  * user profiles and operations strongly related to a user.
  */
-class UserService : public AbstractInjectorTarget {
+class UserService : public Transactional {
 public:
-	UserService()
-	{
-		injector<UserService, UserDao>("userDao",
-				&UserService::setUserDao);
-	}
+	UserService();
 
-	void setUserDao(UserDao *dao)
-	{
-		m_dao = dao;
-	}
+	void setUserDao(UserDao *dao);
 
 	void create(User &u)
 	{
-		TRACE_METHOD();
-		m_dao->create(u);
+		BEEEON_TRANSACTION(doCreate(u));
 	}
 
 	bool fetch(User &u)
 	{
-		TRACE_METHOD();
-		return m_dao->fetch(u);
+		return BEEEON_TRANSACTION_RETURN(bool, doFetch(u));
 	}
+
+protected:
+	void doCreate(User &u);
+	bool doFetch(User &u);
 
 private:
 	UserDao *m_dao;

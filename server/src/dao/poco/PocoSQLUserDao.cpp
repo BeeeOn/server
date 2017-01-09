@@ -1,6 +1,4 @@
 #include <Poco/Exception.h>
-#include <Poco/Data/Session.h>
-#include <Poco/Data/SessionPool.h>
 #include <Poco/Data/Statement.h>
 
 #include "dao/poco/PocoSQLUserDao.h"
@@ -22,40 +20,28 @@ PocoSQLUserDao::PocoSQLUserDao()
 
 void PocoSQLUserDao::create(User &user)
 {
-	Session session(manager().pool().get());
-	create(session, user);
-}
-
-bool PocoSQLUserDao::fetch(User &user)
-{
-	Session session(manager().pool().get());
-	return fetch(session, user);
-}
-
-void PocoSQLUserDao::create(Session &session, User &user)
-{
 	user = User(UserID::random(), user);
 	string id(user.id().toString());
 	string firstName(user.firstName());
 	string lastName(user.lastName());
 
-	Statement sql(session);
-	sql << m_queryCreate(),
+	Statement sql = (session() << m_queryCreate(),
 		use(id, "id"),
 		use(firstName),
-		use(lastName);
+		use(lastName)
+	);
 
 	execute(sql);
 }
 
-bool PocoSQLUserDao::fetch(Session &session, User &user)
+bool PocoSQLUserDao::fetch(User &user)
 {
 	assureHasId(user);
 	string id(user.id().toString());
 
-	Statement sql(session);
-	sql << m_queryFetch(),
-		use(id, "id");
+	Statement sql = (session() << m_queryFetch(),
+		use(id, "id")
+	);
 
 	if (execute(sql) == 0)
 		return false;

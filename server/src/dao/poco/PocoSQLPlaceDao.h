@@ -6,7 +6,6 @@
 namespace Poco {
 namespace Data {
 
-class Session;
 class RecordSet;
 class Row;
 
@@ -49,12 +48,6 @@ public:
 			collection.push_back(place);
 		}
 	}
-
-protected:
-	void create(Poco::Data::Session &session, Place &place);
-	bool fetch(Poco::Data::Session &session, Place &place);
-	bool update(Poco::Data::Session &session, Place &place);
-	bool remove(Poco::Data::Session &session, const Place &place);
 
 private:
 	SQLQuery m_queryCreate {"places.create"};

@@ -10,6 +10,7 @@
 #include "dao/UserDao.h"
 #include "dao/IdentityDao.h"
 #include "dao/VerifiedIdentityDao.h"
+#include "dao/Transactional.h"
 #include "server/SessionManager.h"
 #include "server/Session.h"
 #include "Debug.h"
@@ -21,7 +22,7 @@ namespace BeeeOn {
  * A user login operation is performed by utilizing AuthProviders.
  * This makes possible to choose the provider by user.
  */
-class AuthService : public AbstractInjectorTarget {
+class AuthService : public Transactional {
 public:
 	typedef std::map<const std::string, AuthProvider *> Providers;
 
@@ -73,11 +74,21 @@ public:
 		m_notificationService = service;
 	}
 
-	const ExpirableSession::Ptr login(const Credentials &cred);
+	const ExpirableSession::Ptr login(const Credentials &cred)
+	{
+		return BEEEON_TRANSACTION_RETURN(ExpirableSession::Ptr, doLogin(cred));
+	}
 
-	void logout(const std::string &id);
+	void logout(const std::string &id)
+	{
+		// non-transactional as it does not access to database
+		doLogout(id);
+	}
 
 protected:
+	const ExpirableSession::Ptr doLogin(const Credentials &cred);
+	void doLogout(const std::string &id);
+
 	ExpirableSession::Ptr openSession(const VerifiedIdentity &verifiedIdentity);
 	ExpirableSession::Ptr verifyIdentityAndLogin(const AuthResult &result);
 	ExpirableSession::Ptr loginAsNew(const AuthResult &result);

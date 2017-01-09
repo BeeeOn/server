@@ -6,7 +6,6 @@
 namespace Poco {
 namespace Data {
 
-class Session;
 class RecordSet;
 class Row;
 
@@ -57,20 +56,6 @@ public:
 			collection.push_back(location);
 		}
 	}
-
-protected:
-	void create(Poco::Data::Session &session, Location &location);
-	bool fetch(Poco::Data::Session &session, Location &location);
-	bool fetchFrom(Poco::Data::Session &session, Location &location,
-			const Place &place);
-	bool fetchFrom(Poco::Data::Session &session, Location &location,
-			const Gateway &gateway);
-	void fetchBy(Poco::Data::Session &session, std::vector<Location> &locations,
-			const Place &place);
-	void fetchBy(Poco::Data::Session &session, std::vector<Location> &locations,
-			const Gateway &gateway);
-	bool update(Poco::Data::Session &session, Location &location);
-	bool remove(Poco::Data::Session &session, const Location &location);
 
 private:
 	SQLQuery m_queryCreate    {"locations.create"};

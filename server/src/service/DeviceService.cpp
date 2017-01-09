@@ -45,7 +45,7 @@ void DeviceService::setAccessPolicy(DeviceAccessPolicy *policy)
 	m_policy = policy? policy : &NullDeviceAccessPolicy::instance();
 }
 
-bool DeviceService::fetch(Relation<Device, Gateway> &input)
+bool DeviceService::doFetch(Relation<Device, Gateway> &input)
 {
 	TRACE_METHOD();
 
@@ -53,7 +53,7 @@ bool DeviceService::fetch(Relation<Device, Gateway> &input)
 	return m_dao->fetch(input.target(), input.base());
 }
 
-void DeviceService::fetchMany(Relation<list<Device>, Gateway> &input)
+void DeviceService::doFetchMany(Relation<list<Device>, Gateway> &input)
 {
 	list<Device> &devices = input.target();
 	list<Device>::iterator it = devices.begin();
@@ -80,19 +80,19 @@ void DeviceService::fetchMany(Relation<list<Device>, Gateway> &input)
 	}
 }
 
-void DeviceService::fetchActiveBy(Relation<vector<Device>, Gateway> &input)
+void DeviceService::doFetchActiveBy(Relation<vector<Device>, Gateway> &input)
 {
 	m_policy->assureListActiveDevices(input, input.base());
 	m_dao->fetchActiveBy(input.target(), input.base());
 }
 
-void DeviceService::fetchInactiveBy(Relation<vector<Device>, Gateway> &input)
+void DeviceService::doFetchInactiveBy(Relation<vector<Device>, Gateway> &input)
 {
 	m_policy->assureListInactiveDevices(input, input.base());
 	m_dao->fetchInactiveBy(input.target(), input.base());
 }
 
-bool DeviceService::unregister(Relation<Device, Gateway> &input)
+bool DeviceService::doUnregister(Relation<Device, Gateway> &input)
 {
 	m_policy->assureUnregister(input, input.target(), input.base());
 
@@ -106,7 +106,7 @@ bool DeviceService::unregister(Relation<Device, Gateway> &input)
 	}
 }
 
-bool DeviceService::activate(Relation<Device, Gateway> &input)
+bool DeviceService::doActivate(Relation<Device, Gateway> &input)
 {
 	m_policy->assureActivate(input, input.target(), input.base());
 
@@ -138,7 +138,7 @@ bool DeviceService::prepareUpdate(RelationWithData<Device, Gateway> &input)
 	return true;
 }
 
-bool DeviceService::update(RelationWithData<Device, Gateway> &input)
+bool DeviceService::doUpdate(RelationWithData<Device, Gateway> &input)
 {
 	m_policy->assureUpdate(input, input.target(), input.base());
 
@@ -148,7 +148,7 @@ bool DeviceService::update(RelationWithData<Device, Gateway> &input)
 	return m_dao->update(input.target(), input.base());
 }
 
-bool DeviceService::updateAndActivate(
+bool DeviceService::doUpdateAndActivate(
 		RelationWithData<Device, Gateway> &input)
 {
 	m_policy->assureUpdateAndActivate(input,

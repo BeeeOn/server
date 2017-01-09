@@ -5,7 +5,6 @@
 namespace Poco {
 namespace Data {
 
-class Session;
 class RecordSet;
 class Row;
 
@@ -32,13 +31,6 @@ public:
 			Identity &identity, const std::string &prefix = "");
 	static bool parseIfIDNotNull(Poco::Data::Row &result,
 			Identity &identity, const std::string &prefix = "");
-
-protected:
-	void create(Poco::Data::Session &session, Identity &identity);
-	bool fetch(Poco::Data::Session &session, Identity &identity);
-	bool fetchBy(Poco::Data::Session &session, Identity &identity,
-			const std::string &email);
-	bool remove(Poco::Data::Session &session, const Identity &identity);
 
 private:
 	SQLQuery m_queryCreate       {"identities.create"};

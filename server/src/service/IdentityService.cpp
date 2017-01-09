@@ -37,12 +37,12 @@ void IdentityService::setVerifiedIdentityDao(VerifiedIdentityDao *dao)
 	}
 }
 
-bool IdentityService::fetch(VerifiedIdentity &identity)
+bool IdentityService::doFetch(VerifiedIdentity &identity)
 {
 	return m_verifiedIdentityDao->fetch(identity);
 }
 
-bool IdentityService::fetch(Identity &identity)
+bool IdentityService::doFetch(Identity &identity)
 {
 	return m_identityDao->fetch(identity);
 }

@@ -81,6 +81,7 @@
 			<set name="deviceDao" ref="deviceDao" />
 			<set name="identityDao" ref="identityDao" />
 			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
+			<set name="transactionManager" ref="transactionManager" />
 		</instance>
 
 		<!-- Bussiness layer -->
@@ -90,10 +91,12 @@
 			<set name="roleInPlaceDao" ref="roleInPlaceDao" />
 			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
 			<set name="accessPolicy" ref="accessPolicy" />
+			<set name="transactionManager" ref="transactionManager" />
 		</instance>
 
 		<instance name="userService" class="BeeeOn::UserService">
 			<set name="userDao" ref="userDao" />
+			<set name="transactionManager" ref="transactionManager" />
 		</instance>
 
 		<instance name="authService" class="BeeeOn::AuthService">
@@ -101,6 +104,7 @@
 			<set name="identityDao" ref="identityDao" />
 			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
 			<set name="sessionManager" ref="sessionManager" />
+			<set name="transactionManager" ref="transactionManager" />
 			<set name="notificationDispatcher" ref="notificationDispatcher" />
 			<add name="providers" ref="googlePermitAuthProvider" />
 			<add name="providers" ref="googleAuthProvider" />
@@ -110,6 +114,7 @@
 			<set name="deviceDao" ref="deviceDao" />
 			<set name="gatewayRPC" ref="gatewayRPC" />
 			<set name="accessPolicy" ref="accessPolicy" />
+			<set name="transactionManager" ref="transactionManager" />
 		</instance>
 
 		<instance name="gatewayService" class="BeeeOn::GatewayService">
@@ -120,6 +125,7 @@
 			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
 			<set name="gatewayRPC" ref="gatewayRPC" />
 			<set name="accessPolicy" ref="accessPolicy" />
+			<set name="transactionManager" ref="transactionManager" />
 		</instance>
 
 		<instance name="locationService"
@@ -127,11 +133,13 @@
 			<set name="locationDao" ref="locationDao" />
 			<set name="gatewayDao" ref="gatewayDao" />
 			<set name="accessPolicy" ref="accessPolicy" />
+			<set name="transactionManager" ref="transactionManager" />
 		</instance>
 
 		<instance name="identityService" class="BeeeOn::IdentityService">
 			<set name="identityDao" ref="identityDao" />
 			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
+			<set name="transactionManager" ref="transactionManager" />
 		</instance>
 
 		<instance name="loggingObserver" class="BeeeOn::LoggingObserver" />
@@ -211,48 +219,63 @@
 			<set name="initScript" text="${database.init}" />
 		</instance>
 
+		<instance name="pocoTransactionManager"
+				class="BeeeOn::PocoTransactionManager">
+			<set name="daoManager" ref="pocoDaoManager" />
+		</instance>
+
+		<alias name="transactionManager" ref="pocoTransactionManager" />
+
 		<instance name="sqliteConnector"
 				class="BeeeOn::PocoSQLiteConnectorLoader" />
 
 		<instance name="sqlPlaceDao" class="BeeeOn::PocoSQLPlaceDao">
 			<set name="daoManager" ref="pocoDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
 			<set name="sqlLoader" ref="queries" />
 		</instance>
 
 		<instance name="sqlUserDao" class="BeeeOn::PocoSQLUserDao">
 			<set name="daoManager" ref="pocoDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
 			<set name="sqlLoader" ref="queries" />
 		</instance>
 
 		<instance name="sqlIdentityDao" class="BeeeOn::PocoSQLIdentityDao">
 			<set name="daoManager" ref="pocoDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
 			<set name="sqlLoader" ref="queries" />
 		</instance>
 
 		<instance name="sqlVerifiedIdentityDao"
 				class="BeeeOn::PocoSQLVerifiedIdentityDao">
 			<set name="daoManager" ref="pocoDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
 			<set name="sqlLoader" ref="queries" />
 		</instance>
 
 		<instance name="sqlRoleInPlaceDao"
 				class="BeeeOn::PocoSQLRoleInPlaceDao">
 			<set name="daoManager" ref="pocoDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
 			<set name="sqlLoader" ref="queries" />
 		</instance>
 
 		<instance name="sqlGatewayDao" class="BeeeOn::PocoSQLGatewayDao">
 			<set name="daoManager" ref="pocoDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
 			<set name="sqlLoader" ref="queries" />
 		</instance>
 
 		<instance name="sqlLocationDao" class="BeeeOn::PocoSQLLocationDao">
 			<set name="daoManager" ref="pocoDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
 			<set name="sqlLoader" ref="queries" />
 		</instance>
 
 		<instance name="sqlDeviceDao" class="BeeeOn::PocoSQLDeviceDao">
 			<set name="daoManager" ref="pocoDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
 			<set name="sqlLoader" ref="queries" />
 		</instance>
 

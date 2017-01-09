@@ -40,7 +40,7 @@ void LocationService::setAccessPolicy(LocationAccessPolicy *policy)
 		&NullLocationAccessPolicy::instance();
 }
 
-void LocationService::createIn(RelationWithData<Location, Place> &input)
+void LocationService::doCreateIn(RelationWithData<Location, Place> &input)
 {
 	Location &location = input.target();
 
@@ -51,7 +51,7 @@ void LocationService::createIn(RelationWithData<Location, Place> &input)
 	m_dao->create(location);
 }
 
-void LocationService::createIn(RelationWithData<Location, Gateway> &input)
+void LocationService::doCreateIn(RelationWithData<Location, Gateway> &input)
 {
 	Gateway tmp(input.base());
 
@@ -70,26 +70,26 @@ void LocationService::createIn(RelationWithData<Location, Gateway> &input)
 	m_dao->create(location);
 }
 
-bool LocationService::fetch(Single<Location> &input)
+bool LocationService::doFetch(Single<Location> &input)
 {
 	m_accessPolicy->assureGet(input, input.target());
 
 	return m_dao->fetch(input.target());
 }
 
-bool LocationService::fetchFrom(Relation<Location, Place> &input)
+bool LocationService::doFetchFrom(Relation<Location, Place> &input)
 {
 	m_accessPolicy->assureGet(input, input.target());
 
 	return m_dao->fetchFrom(input.target(), input.base());
 }
 
-void LocationService::fetchBy(Relation<vector<Location>, Gateway> &input)
+void LocationService::doFetchBy(Relation<vector<Location>, Gateway> &input)
 {
 	m_dao->fetchBy(input.target(), input.base());
 }
 
-bool LocationService::updateIn(RelationWithData<Location, Place> &input)
+bool LocationService::doUpdateIn(RelationWithData<Location, Place> &input)
 {
 	Location &location = input.target();
 
@@ -103,7 +103,7 @@ bool LocationService::updateIn(RelationWithData<Location, Place> &input)
 	return m_dao->update(location);
 }
 
-bool LocationService::updateIn(RelationWithData<Location, Gateway> &input)
+bool LocationService::doUpdateIn(RelationWithData<Location, Gateway> &input)
 {
 	Location &location = input.target();
 
@@ -116,7 +116,7 @@ bool LocationService::updateIn(RelationWithData<Location, Gateway> &input)
 	return m_dao->update(location);
 }
 
-bool LocationService::remove(Single<Location> &input)
+bool LocationService::doRemove(Single<Location> &input)
 {
 	Location &location = input.target();
 
@@ -128,7 +128,7 @@ bool LocationService::remove(Single<Location> &input)
 	return m_dao->remove(location);
 }
 
-bool LocationService::removeFrom(Relation<Location, Place> &input)
+bool LocationService::doRemoveFrom(Relation<Location, Place> &input)
 {
 	Location &location = input.target();
 
@@ -140,7 +140,7 @@ bool LocationService::removeFrom(Relation<Location, Place> &input)
 	return m_dao->remove(location);
 }
 
-bool LocationService::removeFrom(Relation<Location, Gateway> &input)
+bool LocationService::doRemoveFrom(Relation<Location, Gateway> &input)
 {
 	Location &location = input.target();
 
