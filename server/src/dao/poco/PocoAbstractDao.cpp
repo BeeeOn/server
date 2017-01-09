@@ -15,7 +15,6 @@ using namespace Poco::Data;
 using namespace BeeeOn;
 
 PocoAbstractDao::PocoAbstractDao():
-	m_logger(LOGGER_CLASS(this)),
 	m_manager(NULL),
 	m_transactionManager(&NullTransactionManager::instance()),
 	m_loader(NULL)
@@ -67,8 +66,8 @@ Poco::Data::Session PocoAbstractDao::session(bool transact)
 	Transaction *t = m_transactionManager->current();
 
 	if (t == NULL) {
-		if (transact && m_logger.warning()) {
-			m_logger.warning("session is out of transaction management",
+		if (transact && logger().warning()) {
+			logger().warning("session is out of transaction management",
 					__FILE__, __LINE__);
 		}
 
@@ -90,26 +89,26 @@ size_t PocoAbstractDao::execute(Statement &sql)
 	try {
 		result = sql.execute();
 
-		if (m_logger.debug()) {
+		if (logger().debug()) {
 			string prefix("[result: ");
 			prefix += to_string(result) + "] ";
-			m_logger.debug(prefix + sql.toString(),
+			logger().debug(prefix + sql.toString(),
 					__FILE__, __LINE__);
 		}
 
 		return result;
 	}
 	catch (const Exception &e) {
-		m_logger.log(e, __FILE__, __LINE__);
-		m_logger.error(sql.toString(), __FILE__, __LINE__);
-		log_backtrace(m_logger);
+		logger().log(e, __FILE__, __LINE__);
+		logger().error(sql.toString(), __FILE__, __LINE__);
+		log_backtrace(logger());
 		throw;
 	}
 }
 
 void PocoAbstractDao::throwMissingId(const type_info &t)
 {
-	log_backtrace(m_logger);
+	log_backtrace(logger());
 	throw InvalidArgumentException("missing id for "
 			+ BeeeOn::classDemangle(t.name()));
 }
@@ -151,13 +150,13 @@ bool PocoAbstractDao::hasColumn(const Row &result, const std::string &name)
 void PocoAbstractDao::injectionDone()
 {
 	if (m_loader == NULL) {
-		m_logger.warning("missing SQLLoader instance",
+		logger().warning("missing SQLLoader instance",
 				__FILE__, __LINE__);
 		return;
 	}
 
 	for (auto query : m_queries) {
-		m_logger.debug("loading query " + query->key(),
+		logger().debug("loading query " + query->key(),
 				__FILE__, __LINE__);
 
 		query->load(*m_loader);

@@ -10,6 +10,7 @@
 #include <Poco/Data/RecordSet.h>
 
 #include "di/InjectorTarget.h"
+#include "util/Loggable.h"
 
 namespace Poco {
 namespace Data {
@@ -26,7 +27,8 @@ class TransactionManager;
 class SQLLoader;
 class SQLQuery;
 
-class PocoAbstractDao : public AbstractInjectorTarget {
+class PocoAbstractDao : public AbstractInjectorTarget,
+		public Loggable {
 public:
 	PocoAbstractDao();
 	virtual ~PocoAbstractDao();
@@ -64,9 +66,6 @@ protected:
 
 protected:
 	virtual void injectionDone();
-
-protected:
-	Poco::Logger &m_logger;
 
 private:
 	PocoDaoManager *m_manager;
