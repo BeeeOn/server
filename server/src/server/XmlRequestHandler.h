@@ -18,11 +18,13 @@
 #include <Poco/XML/XMLWriter.h>
 
 #include "util/SecureXmlParser.h"
+#include "util/Loggable.h"
 #include "di/InjectorTarget.h"
 
 namespace BeeeOn {
 
-class XmlRequestHandler : public Poco::Net::TCPServerConnection {
+class XmlRequestHandler : public Poco::Net::TCPServerConnection,
+			public Loggable {
 public:
 	XmlRequestHandler(
 		const Poco::Net::StreamSocket &socket,
@@ -31,15 +33,16 @@ public:
 	virtual void handleInput() = 0;
 
 protected:
-	Poco::Logger &m_logger;
 	const Poco::AutoPtr<Poco::XML::Document> m_input;
 	Poco::Net::SocketOutputStream m_socketStream;
+	Poco::Logger &m_logStreamLogger;
 	Poco::LogStream m_logStream;
 	Poco::TeeOutputStream m_stream;
 	Poco::XML::XMLWriter m_output;
 };
 
-class XmlRequestHandlerResolver : public BeeeOn::AbstractInjectorTarget {
+class XmlRequestHandlerResolver : public BeeeOn::AbstractInjectorTarget,
+		public Loggable {
 public:
 	virtual bool canHandle(const Poco::XML::Document &input) = 0;
 	virtual XmlRequestHandler *createHandler(
@@ -49,7 +52,8 @@ public:
 
 class XmlRequestHandlerFactory :
 	public Poco::Net::TCPServerConnectionFactory,
-	public BeeeOn::AbstractInjectorTarget {
+	public BeeeOn::AbstractInjectorTarget,
+	public Loggable {
 private:
 	void init();
 public:
@@ -79,7 +83,6 @@ public:
 	}
 
 private:
-	Poco::Logger &m_logger;
 	std::vector<XmlRequestHandlerResolver *> m_resolvers;
 	BeeeOn::SecureXmlParser m_parser;
 	std::size_t m_maxLength;

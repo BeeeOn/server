@@ -55,8 +55,6 @@ public:
 	void resultDataStart();
 	void resultDataEnd();
 
-protected:
-	Poco::Logger &m_logger;
 	const std::string m_ns;
 	BeeeOn::ExpirableSession::Ptr m_session;
 };

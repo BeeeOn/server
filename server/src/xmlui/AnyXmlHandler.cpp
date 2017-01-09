@@ -17,7 +17,7 @@ AnyXmlHandler::AnyXmlHandler(
 
 void AnyXmlHandler::handleInputImpl()
 {
-	_TRACE_METHOD(m_logger);
+	_TRACE_METHOD(logger());
 	resultInvalidInput();
 }
 

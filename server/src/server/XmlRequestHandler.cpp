@@ -19,10 +19,10 @@ XmlRequestHandler::XmlRequestHandler(
 		const StreamSocket &socket,
 		const AutoPtr<Document> input):
 	TCPServerConnection(socket),
-	m_logger(LOGGER_CLASS(this)),
 	m_input(input),
 	m_socketStream(socket),
-	m_logStream(m_logger, Message::PRIO_DEBUG),
+	m_logStreamLogger(LOGGER_CLASS(this)),
+	m_logStream(m_logStreamLogger, Message::PRIO_DEBUG),
 	m_stream(m_socketStream),
 	m_output(m_stream, XMLWriter::Options::CANONICAL_XML)
 {
@@ -31,7 +31,7 @@ XmlRequestHandler::XmlRequestHandler(
 
 void XmlRequestHandler::run()
 {
-	_TRACE_METHOD(m_logger);
+	_TRACE_METHOD(logger());
 
 	try {
 		m_output.startDocument();
@@ -39,19 +39,17 @@ void XmlRequestHandler::run()
 		m_output.endDocument();
 		m_logStream << std::endl;
 	} catch (const Exception &e) {
-		m_logger.log(e, __FILE__, __LINE__);
+		logger().log(e, __FILE__, __LINE__);
 	}
 }
 
 XmlRequestHandlerFactory::XmlRequestHandlerFactory():
-	m_logger(LOGGER_CLASS(this)),
 	m_maxLength(4096)
 {
 	init();
 }
 
 XmlRequestHandlerFactory::XmlRequestHandlerFactory(size_t maxLength):
-	m_logger(LOGGER_CLASS(this)),
 	m_maxLength(maxLength)
 {
 	init();
@@ -73,10 +71,10 @@ TCPServerConnection *XmlRequestHandlerFactory::createConnection(
 		return resolveRequest(socket, parseDocument(readableSocket));
 	}
 	catch (const Exception &e) {
-		m_logger.log(e, __FILE__, __LINE__);
+		logger().log(e, __FILE__, __LINE__);
 	}
 	catch (const exception &e) {
-		m_logger.critical(e.what(), __FILE__, __LINE__);
+		logger().critical(e.what(), __FILE__, __LINE__);
 	}
 
 	return NULL;
@@ -94,8 +92,8 @@ XmlRequestHandler *XmlRequestHandlerFactory::resolveRequest(
 		const StreamSocket &socket,
 		const AutoPtr<Document> input)
 {
-	if (m_logger.debug()) {
-		m_logger.debug("document: " + documentToString(input),
+	if (logger().debug()) {
+		logger().debug("document: " + documentToString(input),
 				__FILE__, __LINE__);
 	}
 
@@ -106,7 +104,7 @@ XmlRequestHandler *XmlRequestHandlerFactory::resolveRequest(
 		return resolver->createHandler(socket, input);
 	}
 
-	m_logger.critical("could not resolve handler", __FILE__, __LINE__);
+	logger().critical("could not resolve handler", __FILE__, __LINE__);
 	return NULL;
 }
 
