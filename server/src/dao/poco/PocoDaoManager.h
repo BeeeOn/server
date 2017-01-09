@@ -4,18 +4,14 @@
 #include <Poco/SharedPtr.h>
 #include <Poco/Data/SessionPool.h>
 #include "di/InjectorTarget.h"
-
-namespace Poco {
-
-class Logger;
-
-}
+#include "util/Loggable.h"
 
 namespace BeeeOn {
 
 class ConnectorLoader;
 
-class PocoDaoManager : public AbstractInjectorTarget {
+class PocoDaoManager : public AbstractInjectorTarget,
+		public Loggable {
 public:
 	PocoDaoManager();
 
@@ -33,7 +29,6 @@ protected:
 	void injectionDone() override;
 
 private:
-	Poco::Logger &m_logger;
 	ConnectorLoader *m_connector;
 	std::string m_connectionString;
 	int m_minSessions;

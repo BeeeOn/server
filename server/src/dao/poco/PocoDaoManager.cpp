@@ -9,7 +9,6 @@
 #include "dao/ConnectorLoader.h"
 #include "util/Template.h"
 #include "util/Occasionally.h"
-#include "Debug.h"
 
 BEEEON_OBJECT(PocoDaoManager, BeeeOn::PocoDaoManager)
 
@@ -20,7 +19,6 @@ using namespace Poco::Data::Keywords;
 using namespace BeeeOn;
 
 PocoDaoManager::PocoDaoManager():
-	m_logger(LOGGER_CLASS(this)),
 	m_connector(&ConnectorLoader::null()),
 	m_minSessions(1),
 	m_maxSessions(32),
@@ -94,7 +92,7 @@ Poco::Data::SessionPool &PocoDaoManager::pool()
 		initPool();
 
 	occasionally.execute([&]() {
-		m_logger.notice(
+		logger().notice(
 			"[%s] "
 			"allocated: %d, "
 			"available: %d, "
@@ -115,12 +113,12 @@ void PocoDaoManager::initPool()
 	if (m_minSessions > m_maxSessions)
 		throw InvalidArgumentException("minSessions > maxSessions");
 
-	m_logger.notice("initialize database pool ("
+	logger().notice("initialize database pool ("
 			+ m_connector->name() + ", "
 			+ to_string(m_maxSessions) + ")",
 			__FILE__, __LINE__);
 
-	m_logger.debug("connection: "
+	logger().debug("connection: "
 			+ m_connector->name() + ", "
 			+ to_string(m_minSessions) + ", "
 			+ to_string(m_maxSessions) + ", "
@@ -134,7 +132,7 @@ void PocoDaoManager::initPool()
 			m_maxSessions,
 			m_idleTime);
 
-	m_logger.notice("database pool initialized", __FILE__, __LINE__);
+	logger().notice("database pool initialized", __FILE__, __LINE__);
 }
 
 void PocoDaoManager::injectionDone()
@@ -142,12 +140,12 @@ void PocoDaoManager::injectionDone()
 	initPool();
 
 	if (m_script.empty()) {
-		m_logger.debug("no initialization script, skipping",
+		logger().debug("no initialization script, skipping",
 				__FILE__, __LINE__);
 		return;
 	}
 
-	m_logger.debug("executing initialization script: " + m_script,
+	logger().debug("executing initialization script: " + m_script,
 			__FILE__, __LINE__);
 
 	FileInputStream inputStream(m_script);
@@ -157,11 +155,11 @@ void PocoDaoManager::injectionDone()
 	// XXX: no context for now, this feature will be probably dropped
 
 	const string &text = script.apply(context);
-	m_logger.trace(text, __FILE__, __LINE__);
+	logger().trace(text, __FILE__, __LINE__);
 
 	Session session(pool().get());
 
-	m_logger.notice("Session %s transact (isolation: 0x%04x) "
+	logger().notice("Session %s transact (isolation: 0x%04x) "
 			"login timeout: %z, "
 			"connection timeout: %z",
 			string(session.canTransact()? "can" : "cannot"),
@@ -170,7 +168,7 @@ void PocoDaoManager::injectionDone()
 			session.getConnectionTimeout());
 
 	if (!session.canTransact()) {
-		m_logger.warning("Session cannot perform transactions",
+		logger().warning("Session cannot perform transactions",
 				__FILE__, __LINE__);
 	}
 
@@ -178,6 +176,6 @@ void PocoDaoManager::injectionDone()
 	session << (text), now;
 	session.commit();
 
-	m_logger.information("database has been initialized successfully",
+	logger().information("database has been initialized successfully",
 			__FILE__, __LINE__);
 }
