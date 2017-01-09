@@ -91,6 +91,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/SSLClient.cpp
 	${PROJECT_SOURCE_DIR}/util/SSLServer.cpp
 	${PROJECT_SOURCE_DIR}/util/Startup.cpp
+	${PROJECT_SOURCE_DIR}/util/Loggable.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoDaoManager.cpp
 	${PROJECT_SOURCE_DIR}/rpc/GatewayRPC.cpp
 	${PROJECT_SOURCE_DIR}/rpc/FakeGatewayRPC.cpp
