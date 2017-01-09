@@ -10,8 +10,7 @@ BEEEON_OBJECT(NotificationDispatcher, BeeeOn::NotificationDispatcher)
 using namespace Poco;
 using namespace BeeeOn;
 
-NotificationDispatcher::NotificationDispatcher():
-	m_logger(LOGGER_CLASS(this))
+NotificationDispatcher::NotificationDispatcher()
 {
 	injector<NotificationDispatcher, AbstractObserver>(
 		"observer",
