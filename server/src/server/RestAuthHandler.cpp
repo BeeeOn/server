@@ -31,10 +31,10 @@ void RestAuthHandler::extractAuthData(std::istream &in,
 	try {
 		object = parser.parse(data).extract<Object::Ptr>();
 	} catch (const JSONException &e) {
-		m_logger.log(e, __FILE__, __LINE__);
+		logger().log(e, __FILE__, __LINE__);
 
-		if (m_logger.debug()) {
-			m_logger.debug("JSON dump: '" + data + "'",
+		if (logger().debug()) {
+			logger().debug("JSON dump: '" + data + "'",
 					__FILE__, __LINE__);
 		}
 
