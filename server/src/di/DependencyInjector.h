@@ -7,7 +7,7 @@
 #include <Poco/Logger.h>
 #include <Poco/Util/AbstractConfiguration.h>
 #include "di/InjectorTarget.h"
-#include "Debug.h"
+#include "util/Loggable.h"
 
 namespace BeeeOn {
 
@@ -71,15 +71,14 @@ class InstanceInfo;
  * DependencyInjector di(config.createView("services"));
  * Main *main = di.create("main");
  */
-class DependencyInjector {
+class DependencyInjector : public Loggable {
 public:
 	typedef std::map<std::string, InjectorTarget *> InjectorSet;
 	typedef std::vector<InjectorTarget *> InjectorVector;
 
 	DependencyInjector(
 		Poco::AutoPtr<Poco::Util::AbstractConfiguration> conf):
-		m_conf(conf),
-		m_logger(LOGGER_CLASS(this))
+		m_conf(conf)
 	{
 		createEarly();
 	}
@@ -141,7 +140,6 @@ private:
 	InjectorVector m_free;
 	Poco::Manifest<InjectorTarget> m_manifest;
 	Poco::AutoPtr<Poco::Util::AbstractConfiguration> m_conf;
-	Poco::Logger &m_logger;
 };
 
 }

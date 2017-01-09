@@ -5,6 +5,7 @@
 
 #include "di/InjectorTarget.h"
 #include "di/DependencyInjector.h"
+#include "Debug.h"
 
 using namespace std;
 using namespace Poco;
