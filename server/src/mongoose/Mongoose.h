@@ -11,6 +11,7 @@
 
 #include "mongoose/MongooseRequest.h"
 #include "mongoose/MongooseResponse.h"
+#include "util/Loggable.h"
 #include "Debug.h"
 
 namespace BeeeOn {
@@ -18,7 +19,7 @@ namespace BeeeOn {
 /**
  * Wrapper around the C-implementation of mongoose.
  */
-class Mongoose {
+class Mongoose : public Loggable {
 public:
 	/**
 	 * C-handler for mongoose to be used.
@@ -34,8 +35,7 @@ public:
 	 */
 	Mongoose(unsigned int port, Handler handler, void *user):
 		m_address("localhost", port),
-		m_handler(handler),
-		m_logger(LOGGER_CLASS(this))
+		m_handler(handler)
 	{
 		m_mgr = new mg_mgr;
 		mg_mgr_init(m_mgr, user);
@@ -49,7 +49,7 @@ public:
 
 	void bind()
 	{
-		_TRACE_METHOD(m_logger);
+		_TRACE_METHOD(logger());
 
 		const std::string address = m_address.toString();
 		m_conn = mg_bind(m_mgr, address.c_str(), m_handler);
@@ -72,7 +72,6 @@ private:
 	struct mg_mgr *m_mgr;
 	struct mg_connection *m_conn;
 	Handler m_handler;
-	Poco::Logger &m_logger;
 };
 
 }

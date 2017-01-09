@@ -33,7 +33,6 @@ MongooseServer::MongooseServer(unsigned int port,
 	m_activity(this, &MongooseServer::loop),
 	m_mg(port, mongoose_handler, this),
 	m_factory(factory),
-	m_timeout(milis),
-	m_logger(LOGGER_CLASS(this))
+	m_timeout(milis)
 {
 }

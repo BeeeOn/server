@@ -49,7 +49,7 @@ public:
 			);
 		}
 		catch (const Poco::Exception &e) {
-			m_logger.log(e, __FILE__, __LINE__);
+			logger().log(e, __FILE__, __LINE__);
 			sendUnauthorized(context.response());
 		}
 	}
@@ -65,7 +65,7 @@ public:
 		try {
 			context.request().getCredentials(scheme, session);
 		} catch(const Poco::Exception &e) {
-			m_logger.log(e, __FILE__, __LINE__);
+			logger().log(e, __FILE__, __LINE__);
 			sendUnauthorized(context.response());
 		}
 

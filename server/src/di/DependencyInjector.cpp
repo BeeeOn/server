@@ -117,7 +117,7 @@ InjectorTarget *DependencyInjector::create(const string &name, bool disown)
 
 	InjectorTarget *existing = find(name);
 	if (existing != NULL) {
-		m_logger.debug("instance " + name + " reused",
+		logger().debug("instance " + name + " reused",
 				__FILE__, __LINE__);
 		return existing;
 	}
@@ -130,7 +130,7 @@ InjectorTarget *DependencyInjector::create(const string &name, bool disown)
 
 	existing = find(ref);
 	if (existing != NULL) {
-		m_logger.debug("instance " + name
+		logger().debug("instance " + name
 				+ " reused as alias to " + ref,
 				__FILE__, __LINE__);
 		return existing;
@@ -170,7 +170,7 @@ InjectorTarget *DependencyInjector::createNew(const InstanceInfo &info)
 	info.validate(m_conf);
 	const string cls = info.resolveClass(m_conf);
 
-	m_logger.debug("creating " + info.name() + " as " + cls);
+	logger().debug("creating " + info.name() + " as " + cls);
 
 	Manifest<InjectorTarget>::Iterator it =
 		ManifestSingleton::manifest().find(cls);
@@ -190,7 +190,7 @@ bool DependencyInjector::tryInjectRef(
 	if (m_conf->has(key + "[@ref]")) {
 		const string value = m_conf->getString(key + "[@ref]");
 
-		m_logger.debug("injecting " + value + " as " + name
+		logger().debug("injecting " + value + " as " + name
 				+ " into " + info.name());
 
 		InjectorTarget *ref;
@@ -198,7 +198,7 @@ bool DependencyInjector::tryInjectRef(
 		try {
 			ref = create(value);
 		} catch (const Exception &e) {
-			m_logger.error("failed to create ref " + value,
+			logger().error("failed to create ref " + value,
 					__FILE__, __LINE__);
 			e.rethrow();
 		}
@@ -224,7 +224,7 @@ bool DependencyInjector::tryInjectNumber(
 	if (m_conf->has(key + "[@number]")) {
 		const int value = m_conf->getInt(key + "[@number]");
 
-		m_logger.debug("injecting number " + to_string(value)
+		logger().debug("injecting number " + to_string(value)
 				+ " as " + name + " into " + info.name());
 
 		target->injectNumber(name, value);
@@ -243,7 +243,7 @@ bool DependencyInjector::tryInjectText(
 	if (m_conf->has(key + "[@text]")) {
 		const string value = m_conf->getString(key + "[@text]");
 
-		m_logger.debug("injecting " + value + " as " + name
+		logger().debug("injecting " + value + " as " + name
 				+ " into " + info.name());
 
 		target->injectText(name, value);
@@ -268,7 +268,7 @@ void DependencyInjector::injectValue(
 	if (tryInjectText(info, target, key, name))
 		return;
 
-	m_logger.error("malformed configuration entry "
+	logger().error("malformed configuration entry "
 			+ key + " for " + info.name(),
 			__FILE__, __LINE__);
 }
@@ -284,10 +284,10 @@ InjectorTarget *DependencyInjector::injectDependencies(
 	for (it = keys.begin(); it != keys.end(); ++it) {
 		const string &key = *it;
 
-		m_logger.trace("visiting key " + key);
+		logger().trace("visiting key " + key);
 
 		if (!m_conf->has(key + "[@name]")) {
-			m_logger.warning("missing @name for " + key,
+			logger().warning("missing @name for " + key,
 					__FILE__, __LINE__);
 			continue;
 		}
@@ -297,21 +297,21 @@ InjectorTarget *DependencyInjector::injectDependencies(
 		try {
 			injectValue(info, target, key, name);
 		} catch (const Poco::Exception &e) {
-			m_logger.error("failed inject " + name + " for "
+			logger().error("failed inject " + name + " for "
 					+ info.name(), __FILE__, __LINE__);
 			e.rethrow();
 		}
 
-		m_logger.trace("next key after " + key);
+		logger().trace("next key after " + key);
 	}
 
-	m_logger.notice("successfully created " + info.name(),
+	logger().notice("successfully created " + info.name(),
 			__FILE__, __LINE__);
 
 	try {
 		target->injectionDone();
 	} catch (const Exception &e) {
-		m_logger.error("injectionDone() failed for " + info.name(),
+		logger().error("injectionDone() failed for " + info.name(),
 				__FILE__, __LINE__);
 		e.rethrow();
 	}

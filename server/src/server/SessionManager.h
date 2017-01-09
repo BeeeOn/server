@@ -9,14 +9,15 @@
 #include "model/VerifiedIdentity.h"
 #include "server/SessionCache.h"
 #include "server/Session.h"
-#include "Debug.h"
+#include "util/Loggable.h"
 
 namespace BeeeOn {
 
 /**
  * A user session management.
  */
-class SessionManager : public AbstractInjectorTarget
+class SessionManager : public AbstractInjectorTarget,
+		public Loggable
 {
 public:
 	enum {
@@ -24,7 +25,6 @@ public:
 	};
 
 	SessionManager() :
-		m_logger(LOGGER_CLASS(this)),
 		m_sessionCache(NULL)
 	{
 		injector<SessionManager, SecureRandomProvider>(
@@ -82,7 +82,6 @@ public:
 
 private:
 	Poco::RWLock m_lock;
-	Poco::Logger &m_logger;
 	SecureRandomProvider *m_random;
 	SessionCache *m_sessionCache;
 	unsigned int m_expireTime;

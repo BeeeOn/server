@@ -4,6 +4,7 @@
 #include <map>
 #include <Poco/Logger.h>
 #include "di/InjectorTarget.h"
+#include "util/Loggable.h"
 #include "Debug.h"
 
 namespace BeeeOn {
@@ -165,12 +166,11 @@ public:
 };
 
 class AbstractAuthProvider : public virtual AuthProvider,
-		public AbstractInjectorTarget {
+		public AbstractInjectorTarget,
+		public Loggable {
 public:
-	AbstractAuthProvider(const std::string &name,
-			Poco::Logger &logger):
-		m_name(name),
-		m_logger(logger)
+	AbstractAuthProvider(const std::string &name):
+		m_name(name)
 	{
 	}
 
@@ -181,7 +181,6 @@ public:
 
 protected:
 	const std::string m_name;
-	Poco::Logger &m_logger;
 };
 
 /**
@@ -192,13 +191,13 @@ protected:
 class AuthCodeAuthProvider : public AbstractAuthProvider {
 public:
 	AuthCodeAuthProvider(const std::string &name):
-		AbstractAuthProvider(name, LOGGER_CLASS(this))
+		AbstractAuthProvider(name)
 	{
 	}
 
 	bool authorize(const Credentials &cred, AuthResult &result)
 	{
-		_TRACE_METHOD(m_logger);
+		_TRACE_METHOD(logger());
 
 		const AuthCodeCredentials &authCodeCredentials =
 			reinterpret_cast<const AuthCodeCredentials &>(cred);

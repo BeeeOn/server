@@ -9,7 +9,6 @@
 
 #include "util/SSLFacility.h"
 #include "util/RejectCertificateHandler.h"
-#include "Debug.h"
 
 using namespace std;
 using namespace Poco;
@@ -65,7 +64,6 @@ void PrivateKeyPassphraseProvider::onRequest(
 }
 
 SSLFacility::SSLFacility():
-	m_logger(LOGGER_CLASS(this)),
 	m_loadDefaultCA(false),
 	m_verificationMode(VerificationMode::VERIFY_RELAXED),
 	m_verificationDepth(9),
@@ -124,24 +122,24 @@ void SSLFacility::initContext()
 	m_context->disableProtocols(m_disabledProtocols);
 #else
 	if (m_disabledProtocols)
-		m_logger.warning("protocols are not disabled, linked against too old Poco library: "
+		logger().warning("protocols are not disabled, linked against too old Poco library: "
 				+ NumberFormatter::formatHex(POCO_VERSION, 10, true),
 				__FILE__, __LINE__);
 #endif
 
-	m_logger.information("SSL context initialized",
+	logger().information("SSL context initialized",
 				__FILE__, __LINE__);
 
-	m_logger.debug("caLocation: " + m_caLocation);
-	m_logger.debug("loadDefaultCA: " + to_string(m_loadDefaultCA));
-	m_logger.debug("privateKey: " + m_privateKey);
-	m_logger.debug("passphrase: " + to_string(!m_passphrase.empty()));
-	m_logger.debug("certificate: " + m_certificate);
-	m_logger.debug("verificationMode: " + to_string(m_verificationMode));
-	m_logger.debug("verificationDepth: " + to_string(m_verificationDepth));
-	m_logger.debug("cihperList: " + m_cipherList);
-	m_logger.debug("sessionCache: " + to_string(m_sessionCache));
-	m_logger.debug("disableProtocols: " + NumberFormatter::formatHex(m_disabledProtocols, 10, true));
+	logger().debug("caLocation: " + m_caLocation);
+	logger().debug("loadDefaultCA: " + to_string(m_loadDefaultCA));
+	logger().debug("privateKey: " + m_privateKey);
+	logger().debug("passphrase: " + to_string(!m_passphrase.empty()));
+	logger().debug("certificate: " + m_certificate);
+	logger().debug("verificationMode: " + to_string(m_verificationMode));
+	logger().debug("verificationDepth: " + to_string(m_verificationDepth));
+	logger().debug("cihperList: " + m_cipherList);
+	logger().debug("sessionCache: " + to_string(m_sessionCache));
+	logger().debug("disableProtocols: " + NumberFormatter::formatHex(m_disabledProtocols, 10, true));
 }
 
 Context::Ptr SSLFacility::context()
@@ -226,12 +224,12 @@ void SSLFacility::setDisabledProtocols(const string &protocols)
 	unsigned int disable = 0;
 
 	for (auto tok : tokenizer) {
-		m_logger.debug("parsing SSL protocol: " + tok,
+		logger().debug("parsing SSL protocol: " + tok,
 				__FILE__, __LINE__);
 
 		unsigned int ret = parseProtocol(tok);
 		if (ret == 0) {
-			m_logger.warning("failed to recognize SSL protocol: " + tok,
+			logger().warning("failed to recognize SSL protocol: " + tok,
 					__FILE__, __LINE__);
 		}
 

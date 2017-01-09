@@ -6,6 +6,7 @@
 #include <Poco/Net/Context.h>
 
 #include "di/InjectorTarget.h"
+#include "util/Loggable.h"
 
 namespace Poco {
 
@@ -72,7 +73,8 @@ private:
  * - cipherList - string ("ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH")
  * - sessionCache - string ("false")
  */
-class SSLFacility : public AbstractInjectorTarget {
+class SSLFacility : public AbstractInjectorTarget,
+		public Loggable {
 public:
 	SSLFacility();
 	virtual ~SSLFacility();
@@ -99,7 +101,6 @@ protected:
 	using VerificationMode =
 		typename Poco::Net::Context::VerificationMode;
 
-	Poco::Logger &m_logger;
 	Poco::Mutex m_lock;
 	Poco::Net::Context::Ptr m_context;
 	std::string m_caLocation;

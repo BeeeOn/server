@@ -1,7 +1,6 @@
 #ifndef BEEEON_NOTIFICATION_DISPATCHER_H
 #define BEEEON_NOTIFICATION_DISPATCHER_H
 
-#include <Poco/Logger.h>
 #include <Poco/NotificationCenter.h>
 
 #include "di/InjectorTarget.h"
@@ -25,7 +24,6 @@ public:
 	void notifyFirstLogin(const VerifiedIdentity &identity);
 
 protected:
-	Poco::Logger &m_logger;
 	Poco::NotificationCenter m_center;
 };
 

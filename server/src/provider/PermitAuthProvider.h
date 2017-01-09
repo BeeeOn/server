@@ -22,7 +22,7 @@ public:
 		textInjector("resultProvider", (TextSetter)
 				&PermitAuthProvider::setResultProvider);
 
-		m_logger.critical("SOME AUTHS WILL BE PERMITTED");
+		logger().critical("SOME AUTHS WILL BE PERMITTED");
 	}
 
 	void setResultProvider(const std::string &provider)
@@ -35,11 +35,11 @@ public:
 		const std::string &email = Poco::trim(authCode);
 
 		if (email.empty()) {
-			m_logger.warning("given authCode is empty");
+			logger().warning("given authCode is empty");
 			return false;
 		}
 
-		m_logger.critical("PERMIT AUTH: " + authCode);
+		logger().critical("PERMIT AUTH: " + authCode);
 		result.setEmail(authCode);
 		result.setProvider(m_resultProvider);
 		return true;

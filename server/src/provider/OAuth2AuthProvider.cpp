@@ -51,7 +51,7 @@ HTTPSClientSession *OAuth2AuthProvider::connectSecure(
 		return new HTTPSClientSession(
 				host, port, m_sslConfig->context());
 	} catch (const Exception &e) {
-		m_logger.log(e, __FILE__, __LINE__);
+		logger().log(e, __FILE__, __LINE__);
 		throw;
 	}
 }
@@ -61,8 +61,8 @@ string OAuth2AuthProvider::handleResponse(HTTPSClientSession &session)
 	HTTPResponse response;
 	istream &rs = session.receiveResponse(response);
 
-	if (m_logger.debug()) {
-		m_logger.debug("response status: "
+	if (logger().debug()) {
+		logger().debug("response status: "
 			+ to_string(response.getStatus())
 			+ " "
 			+ response.getReason(), __FILE__, __LINE__);
@@ -70,8 +70,8 @@ string OAuth2AuthProvider::handleResponse(HTTPSClientSession &session)
 
 	string receiveResponse = convertResponseToString(rs);
 
-	if (m_logger.debug()) {
-		m_logger.debug("response: "
+	if (logger().debug()) {
+		logger().debug("response: "
 			+ receiveResponse, __FILE__, __LINE__);
 	}
 

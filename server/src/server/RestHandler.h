@@ -3,11 +3,12 @@
 
 #include <Poco/Logger.h>
 
+#include "util/Loggable.h"
 #include "Debug.h"
 
 namespace BeeeOn {
 
-class RestHandler {
+class RestHandler : public Loggable {
 public:
 	RestHandler();
 
@@ -20,8 +21,8 @@ public:
 	template <typename Response>
 	void sendResult(Response &response, const std::string &data)
 	{
-		if (m_logger.debug())
-			m_logger.debug(data.c_str(), __FILE__, __LINE__);
+		if (logger().debug())
+			logger().debug(data.c_str(), __FILE__, __LINE__);
 
 		response.sendBuffer(data.c_str(), data.size());
 		response.setStatusAndReason(
@@ -93,9 +94,6 @@ public:
 		response.setStatusAndReason(
 			Response::HTTP_BAD_REQUEST);
 	}
-
-protected:
-	Poco::Logger &m_logger;
 };
 
 }

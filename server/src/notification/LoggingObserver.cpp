@@ -49,7 +49,7 @@ static void notify(Logger &logger, const FirstLoginNotification *n)
 
 void LoggingObserver::notify(Notification *n) const
 {
-	::notify(m_logger, FirstLoginNotification::cast(n));
+	::notify(logger(), FirstLoginNotification::cast(n));
 }
 
 AbstractObserver *LoggingObserver::clone() const

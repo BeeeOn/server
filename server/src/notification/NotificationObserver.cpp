@@ -8,13 +8,11 @@ using namespace std;
 using namespace Poco;
 using namespace BeeeOn;
 
-NotificationObserver::NotificationObserver():
-	m_logger(LOGGER_CLASS(this))
+NotificationObserver::NotificationObserver()
 {
 }
 
 NotificationObserver::NotificationObserver(const NotificationObserver &copy):
-	m_logger(copy.m_logger),
 	m_accepts(copy.m_accepts)
 {
 }

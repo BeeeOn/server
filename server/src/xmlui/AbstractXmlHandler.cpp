@@ -17,7 +17,6 @@ AbstractXmlHandler::AbstractXmlHandler(
 		const StreamSocket &socket,
 		const AutoPtr<Document> input):
 	BeeeOn::XmlRequestHandler(socket, input),
-	m_logger(LOGGER_CLASS(this)),
 	m_ns(ns)
 {
 }
@@ -28,7 +27,6 @@ AbstractXmlHandler::AbstractXmlHandler(
 		const AutoPtr<Document> input,
 		BeeeOn::ExpirableSession::Ptr session):
 	BeeeOn::XmlRequestHandler(socket, input),
-	m_logger(LOGGER_CLASS(this)),
 	m_ns(ns),
 	m_session(session)
 {
@@ -40,35 +38,35 @@ void AbstractXmlHandler::handleInput()
 		handleInputImpl();
 	}
 	catch (const NotFoundException &e) {
-		m_logger.log(e, __FILE__, __LINE__);
+		logger().log(e, __FILE__, __LINE__);
 		resultNotFound();
 	}
 	catch (const NotAuthenticatedException &e) {
-		m_logger.log(e, __FILE__, __LINE__);
+		logger().log(e, __FILE__, __LINE__);
 		resultNotAuthenticated();
 	}
 	catch (const InvalidAccessException &e) {
-		m_logger.log(e, __FILE__, __LINE__);
+		logger().log(e, __FILE__, __LINE__);
 		resultForbidden();
 	}
 	catch (const InvalidArgumentException &e) {
-		m_logger.log(e, __FILE__, __LINE__);
+		logger().log(e, __FILE__, __LINE__);
 		resultInvalidInput();
 	}
 	catch (const Exception &e) {
-		m_logger.log(e, __FILE__, __LINE__);
+		logger().log(e, __FILE__, __LINE__);
 		resultUnexpected();
 	}
 	catch (const exception &e) {
-		m_logger.critical(e.what(), __FILE__, __LINE__);
+		logger().critical(e.what(), __FILE__, __LINE__);
 		resultUnexpected();
 	}
 	catch (const char *s) {
-		m_logger.critical(s, __FILE__, __LINE__);
+		logger().critical(s, __FILE__, __LINE__);
 		resultUnexpected();
 	}
 	catch (...) {
-		m_logger.critical("unknown error, cought '...'",
+		logger().critical("unknown error, cought '...'",
 				__FILE__, __LINE__);
 		resultUnexpected();
 	}

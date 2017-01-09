@@ -2,12 +2,10 @@
 
 #include "dao/NullTransactionManager.h"
 #include "dao/Transactional.h"
-#include "Debug.h"
 
 using namespace BeeeOn;
 
 Transactional::Transactional():
-	m_logger(LOGGER_CLASS(this)),
 	m_transactionManager(&NullTransactionManager::instance())
 {
 	injector<Transactional, TransactionManager>(

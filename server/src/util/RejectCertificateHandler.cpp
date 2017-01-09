@@ -6,15 +6,13 @@
 
 #include "util/RejectCertificateHandler.h"
 #include "util/X509Fingerprint.h"
-#include "Debug.h"
 
 using namespace Poco;
 using namespace Poco::Net;
 using namespace BeeeOn;
 
 BetterRejectCertificateHandler::BetterRejectCertificateHandler(bool server):
-	InvalidCertificateHandler(server),
-	m_logger(LOGGER_CLASS(this))
+	InvalidCertificateHandler(server)
 {
 }
 
@@ -26,7 +24,7 @@ void BetterRejectCertificateHandler::onInvalidCertificate(
 
 	error.setIgnoreError(false);
 
-	m_logger.warning(
+	logger().warning(
 		"rejecting certificate:\n"
 		+ format("Name: %s\nIssuer: %s\nSubject: %s\n"
 			"Valid from: %s\nSHA256: %s\ndue to: %s",

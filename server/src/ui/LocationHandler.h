@@ -29,7 +29,7 @@ public:
 			);
 		}
 		catch (const Poco::Exception &e) {
-			m_logger.log(e, __FILE__, __LINE__);
+			logger().log(e, __FILE__, __LINE__);
 			throw;
 		}
 	}
@@ -54,7 +54,7 @@ public:
 			);
 		}
 		catch (const Poco::Exception &e) {
-			m_logger.log(e, __FILE__, __LINE__);
+			logger().log(e, __FILE__, __LINE__);
 			throw;
 		}
 	}
@@ -79,7 +79,7 @@ public:
 			);
 		}
 		catch (const Poco::Exception &e) {
-			m_logger.log(e, __FILE__, __LINE__);
+			logger().log(e, __FILE__, __LINE__);
 			throw;
 		}
 	}
@@ -104,7 +104,7 @@ public:
 			);
 		}
 		catch (const Poco::Exception &e) {
-			m_logger.log(e, __FILE__, __LINE__);
+			logger().log(e, __FILE__, __LINE__);
 			throw;
 		}
 	}
