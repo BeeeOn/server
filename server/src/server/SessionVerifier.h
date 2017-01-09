@@ -7,6 +7,7 @@
 #include "di/InjectorTarget.h"
 #include "server/Session.h"
 #include "server/SessionManager.h"
+#include "util/Loggable.h"
 #include "Debug.h"
 
 namespace BeeeOn {
@@ -14,7 +15,8 @@ namespace BeeeOn {
 /**
  * Abstract class providing access to sessions.
  */
-class SessionVerifier : public AbstractInjectorTarget {
+class SessionVerifier : public AbstractInjectorTarget,
+		public Loggable {
 public:
 	SessionVerifier();
 
@@ -24,7 +26,7 @@ public:
 	template <typename Request>
 	ExpirableSession::Ptr verifyAuthorized(const Request &request)
 	{
-		_TRACE_METHOD(m_logger);
+		_TRACE_METHOD(logger());
 
 		if (!request.hasCredentials()) {
 			throw Poco::Net::NotAuthenticatedException(
@@ -48,7 +50,6 @@ public:
 	}
 
 protected:
-	Poco::Logger &m_logger;
 	SessionManager *m_sessionManager;
 };
 

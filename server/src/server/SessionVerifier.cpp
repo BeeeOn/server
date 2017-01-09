@@ -7,8 +7,7 @@ using namespace Poco;
 using namespace Poco::Net;
 using namespace BeeeOn;
 
-SessionVerifier::SessionVerifier():
-	m_logger(LOGGER_CLASS(this))
+SessionVerifier::SessionVerifier()
 {
 	injector<SessionVerifier, SessionManager>("sessionManager",
 			&SessionVerifier::setSessionManager);
