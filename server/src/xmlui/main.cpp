@@ -58,6 +58,8 @@ protected:
 		SocketServer *server = createSocketServer(injector, factory);
 		server->start();
 
+		notifyStarted();
+
 		waitForTerminationRequest();
 		server->stop();
 		delete server;
