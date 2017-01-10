@@ -1,6 +1,7 @@
 #ifndef BEEEON_OAUTH2_AUTH_PROVIDER_H
 #define BEEEON_OAUTH2_AUTH_PROVIDER_H
 
+#include <Poco/SharedPtr.h>
 #include <Poco/Net/Context.h>
 
 #include "provider/AuthProvider.h"
@@ -45,7 +46,7 @@ protected:
 	/**
 	 * Open HTTPS connection to the given host:port.
 	 */
-	Poco::Net::HTTPSClientSession *connectSecure(
+	Poco::SharedPtr<Poco::Net::HTTPSClientSession> connectSecure(
 			const std::string &host,
 			unsigned int port);
 

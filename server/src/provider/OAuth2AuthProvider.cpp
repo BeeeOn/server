@@ -42,7 +42,7 @@ void OAuth2AuthProvider::initSSL()
 				"missing sslConfig, cannot use OAuth");
 }
 
-HTTPSClientSession *OAuth2AuthProvider::connectSecure(
+SharedPtr<HTTPSClientSession> OAuth2AuthProvider::connectSecure(
 		const std::string &host,
 		unsigned int port)
 {

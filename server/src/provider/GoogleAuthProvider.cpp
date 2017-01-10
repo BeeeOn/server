@@ -64,7 +64,7 @@ string GoogleAuthProvider::requestIdToken(const string &authCode)
 {
 	TRACE_METHOD();
 
-	HTTPSClientSession *session;
+	SharedPtr<HTTPSClientSession> session;
 	URI uri(m_tokenUrl);
 
 	session = connectSecure(uri.getHost(), uri.getPort());
@@ -107,7 +107,7 @@ string GoogleAuthProvider::fetchUserInfo(const string &token)
 	TRACE_METHOD();
 
 	URI uri(m_tokenInfoUrl + token);
-	HTTPSClientSession *session;
+	SharedPtr<HTTPSClientSession> session;
 
 	session = connectSecure(uri.getHost(), uri.getPort());
 
