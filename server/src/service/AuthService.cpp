@@ -113,7 +113,7 @@ ExpirableSession::Ptr AuthService::openSession(
 	return m_sessionManager->open(copy);
 }
 
-const ExpirableSession::Ptr AuthService::doLogin(const Credentials &cred)
+const ExpirableSession::Ptr AuthService::login(const Credentials &cred)
 {
 	TRACE_METHOD();
 
@@ -138,7 +138,7 @@ const ExpirableSession::Ptr AuthService::doLogin(const Credentials &cred)
 	return openSession(identity);
 }
 
-void AuthService::doLogout(const std::string &id)
+void AuthService::logout(const std::string &id)
 {
 	TRACE_METHOD();
 	m_sessionManager->close(id);
