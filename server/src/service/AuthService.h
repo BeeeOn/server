@@ -79,6 +79,7 @@ public:
 	void logout(const std::string &id);
 
 protected:
+	ExpirableSession::Ptr loginAuthorized(const AuthResult &result);
 	ExpirableSession::Ptr openSession(const VerifiedIdentity &verifiedIdentity);
 	ExpirableSession::Ptr verifyIdentityAndLogin(const AuthResult &result);
 	ExpirableSession::Ptr loginAsNew(const AuthResult &result);

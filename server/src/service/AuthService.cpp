@@ -113,6 +113,16 @@ ExpirableSession::Ptr AuthService::openSession(
 	return m_sessionManager->open(copy);
 }
 
+ExpirableSession::Ptr AuthService::loginAuthorized(const AuthResult &result)
+{
+	VerifiedIdentity identity;
+	if (!m_verifiedIdentityDao->fetchBy(identity,
+				result.email(), result.provider()))
+		return verifyIdentityAndLogin(result);
+
+	return openSession(identity);
+}
+
 const ExpirableSession::Ptr AuthService::login(const Credentials &cred)
 {
 	TRACE_METHOD();
@@ -130,12 +140,7 @@ const ExpirableSession::Ptr AuthService::login(const Credentials &cred)
 	if (result.email().empty())
 		throw NotAuthenticatedException("invalid result of authorization");
 
-	VerifiedIdentity identity;
-	if (!m_verifiedIdentityDao->fetchBy(identity,
-				result.email(), result.provider()))
-		return verifyIdentityAndLogin(result);
-
-	return openSession(identity);
+	return loginAuthorized(result);
 }
 
 void AuthService::logout(const std::string &id)
