@@ -16,7 +16,8 @@ public:
 		m_appGroup(appGroup),
 		m_appName(appName),
 		m_printHelp(false),
-		m_serverPort(port)
+		m_serverPort(port),
+		m_notifyPid(-1)
 	{
 	}
 
@@ -42,6 +43,7 @@ protected:
 	void initialize(Poco::Util::Application &app) override;
 	void defineOptions(Poco::Util::OptionSet &options) override;
 	int printHelp();
+	void notifyStarted();
 	int main(const std::vector <std::string> &args) override;
 
 	virtual int execute() = 0;
@@ -58,6 +60,7 @@ protected:
 	std::string m_userLogging;
 	std::string m_userConfig;
 	std::string m_userServices;
+	long m_notifyPid;
 };
 
 int generic_main(int argc, char **argv, Poco::Util::ServerApplication &app);
