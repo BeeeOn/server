@@ -113,7 +113,7 @@ ExpirableSession::Ptr AuthService::openSession(
 	return m_sessionManager->open(copy);
 }
 
-ExpirableSession::Ptr AuthService::loginAuthorized(const AuthResult &result)
+ExpirableSession::Ptr AuthService::doLoginAuthorized(const AuthResult &result)
 {
 	VerifiedIdentity identity;
 	if (!m_verifiedIdentityDao->fetchBy(identity,

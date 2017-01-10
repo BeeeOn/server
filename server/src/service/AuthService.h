@@ -79,7 +79,16 @@ public:
 	void logout(const std::string &id);
 
 protected:
-	ExpirableSession::Ptr loginAuthorized(const AuthResult &result);
+	ExpirableSession::Ptr loginAuthorized(const AuthResult &result)
+	{
+		return BEEEON_TRANSACTION_RETURN(
+			ExpirableSession::Ptr,
+			doLoginAuthorized(result)
+		);
+	}
+
+	ExpirableSession::Ptr doLoginAuthorized(const AuthResult &result);
+
 	ExpirableSession::Ptr openSession(const VerifiedIdentity &verifiedIdentity);
 	ExpirableSession::Ptr verifyIdentityAndLogin(const AuthResult &result);
 	ExpirableSession::Ptr loginAsNew(const AuthResult &result);
