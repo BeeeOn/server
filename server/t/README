@@ -9,6 +9,13 @@ The tests are written in Python 3. Required Python libraries:
 * unittest-tap-reporting
 * see t0000-selftest.py for more required libraries
 
+Optional libraries:
+
+* selenium (OAuth2 tests)
+* phantomjs (OAuth2 tests)
+* python-selenium (OAuth2 tests)
+* python-oauth2client (OAuth2 tests)
+
 
 == Install unittest-tap-reporting ==
 
@@ -21,6 +28,17 @@ Via RPM:
 Via easy_install:
 
   # easy_install unittest-tap-reporting
+
+
+== Install phantomjs ==
+
+If not found in your distribution, this is the alternative way:
+
+  $ wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2
+  $ tar -xf phantomjs-2.1.1-linux-x86_64.tar.bz2
+  $ sudo cp phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/bin/phantomjs
+
+It might require freetype and fontconfig packages.
 
 
 == Run tests ==
