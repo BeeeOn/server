@@ -56,7 +56,7 @@ class TestAuth(unittest.TestCase):
 		response, session = login(GOOGLE_LOGIN)
 		self.assertEqual(200, response.status)
 
-		response = logout(session)
+		response, _ = logout(session)
 		self.assertEqual(200, response.status)
 
 	"""
@@ -76,7 +76,7 @@ class TestAuth(unittest.TestCase):
 		response, session = login(FACEBOOK_LOGIN)
 		self.assertEqual(200, response.status)
 
-		response = logout(session)
+		response, _ = logout(session)
 		self.assertEqual(200, response.status)
 
 	"""
