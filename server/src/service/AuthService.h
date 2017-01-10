@@ -10,6 +10,7 @@
 #include "dao/UserDao.h"
 #include "dao/IdentityDao.h"
 #include "dao/VerifiedIdentityDao.h"
+#include "dao/Transactional.h"
 #include "server/SessionManager.h"
 #include "server/Session.h"
 #include "Debug.h"
@@ -21,7 +22,7 @@ namespace BeeeOn {
  * A user login operation is performed by utilizing AuthProviders.
  * This makes possible to choose the provider by user.
  */
-class AuthService : public AbstractInjectorTarget {
+class AuthService : public Transactional {
 public:
 	typedef std::map<const std::string, AuthProvider *> Providers;
 
