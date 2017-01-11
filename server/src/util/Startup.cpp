@@ -11,6 +11,7 @@
 #include <Poco/Util/HelpFormatter.h>
 
 #include "util/Startup.h"
+#include "util/PosixSignal.h"
 #include "util/PocoVersion.h"
 
 using namespace std;
@@ -43,6 +44,11 @@ static Option optPort("port", "p",
 		"server port to listen on",
 		false,
 		"<port>",
+		true);
+static Option optNotifyStarted("notify-started", "N",
+		"notify process given as PID by sending it SIGINT when the application started up",
+		false,
+		"<PID>",
 		true);
 static Option optDefine("define", "D",
 		"define configuration options (to override configuration files)",
@@ -92,6 +98,8 @@ void ServerStartup::handleOption(const string &name, const string &value)
 		m_serverPort = stoi(value);
 	if (name == "define")
 		overrideConfig(value);
+	if (name == "notify-started")
+		m_notifyPid = stoi(value);
 
 	if (m_printHelp)
 		stopOptionsProcessing();
@@ -182,6 +190,7 @@ void ServerStartup::defineOptions(OptionSet &options)
 	options.addOption(optLogging);
 	options.addOption(optLogLevel);
 	options.addOption(optPort);
+	options.addOption(optNotifyStarted);
 	optDefine.repeatable(true);
 	options.addOption(optDefine);
 	options.addOption(optHelp);
@@ -258,6 +267,19 @@ static void warnAboutPocoVersion(Logger &logger)
 		logger.warning("recommended to upgrade to Poco library "
 				+ pocoVersion(RECOMMENDED_POCO_VERSION) + " or newer",
 				__FILE__, __LINE__);
+	}
+}
+
+void ServerStartup::notifyStarted()
+{
+	if (m_notifyPid >= 0) {
+		try {
+			PosixSignal::send(m_notifyPid, "SIGTERM");
+			logger().debug("started, notify process " + to_string(m_notifyPid),
+					__FILE__, __LINE__);
+		} catch (const Exception &e) {
+			logger().log(e, __FILE__, __LINE__);
+		}
 	}
 }
 

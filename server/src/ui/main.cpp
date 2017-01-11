@@ -29,6 +29,8 @@ protected:
 		module->createServer(m_serverPort);
 		module->server().start();
 
+		notifyStarted();
+
 		waitForTerminationRequest();
 		module->server().stop();
 		return EXIT_OK;
