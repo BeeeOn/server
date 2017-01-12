@@ -9,11 +9,15 @@ add_definitions(-std=c++11)
 add_subdirectory(lib/mongoose)
 include_directories(lib/mongoose)
 
-exec_program(
-	"git"
-	${CMAKE_CURRENT_SOURCE_DIR}
-	ARGS "describe --always --tags"
-	OUTPUT_VARIABLE GIT_ID)
+if(DEFINED ENV{GIT_ID})
+	set (GIT_ID $ENV{GIT_ID})
+else()
+	exec_program(
+		"git"
+		${CMAKE_CURRENT_SOURCE_DIR}
+		ARGS "describe --always --tags"
+		OUTPUT_VARIABLE GIT_ID)
+endif()
 
 add_definitions(-DGIT_ID="${GIT_ID}")
 
