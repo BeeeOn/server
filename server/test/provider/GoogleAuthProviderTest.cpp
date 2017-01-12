@@ -5,7 +5,7 @@
 
 #include "provider/GoogleAuthProvider.h"
 #include "provider/AuthProvider.h"
-#include "util/SSLClient.h"
+#include "ssl/SSLClient.h"
 #include "cppunit/SkippableAutoRegisterSuite.h"
 
 using namespace std;

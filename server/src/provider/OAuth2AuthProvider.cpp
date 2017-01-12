@@ -11,7 +11,7 @@
 #include <Poco/StreamCopier.h>
 
 #include "provider/OAuth2AuthProvider.h"
-#include "util/SSLClient.h"
+#include "ssl/SSLClient.h"
 #include "Debug.h"
 
 using namespace std;

@@ -7,7 +7,7 @@
 #include <Poco/Crypto/X509Certificate.h>
 
 #include "util/Base64.h"
-#include "util/X509Fingerprint.h"
+#include "ssl/X509Fingerprint.h"
 
 using namespace std;
 using namespace Poco;

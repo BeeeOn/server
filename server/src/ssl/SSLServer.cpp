@@ -4,8 +4,8 @@
 #include <Poco/Net/Utility.h>
 #include <Poco/Net/SSLManager.h>
 
-#include "util/SSLServer.h"
-#include "util/RejectCertificateHandler.h"
+#include "ssl/SSLServer.h"
+#include "ssl/RejectCertificateHandler.h"
 
 using namespace std;
 using namespace Poco;

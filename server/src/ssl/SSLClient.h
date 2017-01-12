@@ -4,7 +4,7 @@
 #include <Poco/SharedPtr.h>
 #include <Poco/Net/InvalidCertificateHandler.h>
 
-#include "util/SSLFacility.h"
+#include "ssl/SSLFacility.h"
 
 namespace BeeeOn {
 
