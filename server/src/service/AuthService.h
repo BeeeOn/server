@@ -74,20 +74,20 @@ public:
 		m_notificationService = service;
 	}
 
-	const ExpirableSession::Ptr login(const Credentials &cred)
-	{
-		return BEEEON_TRANSACTION_RETURN(ExpirableSession::Ptr, doLogin(cred));
-	}
+	const ExpirableSession::Ptr login(const Credentials &cred);
 
-	void logout(const std::string &id)
-	{
-		// non-transactional as it does not access to database
-		doLogout(id);
-	}
+	void logout(const std::string &id);
 
 protected:
-	const ExpirableSession::Ptr doLogin(const Credentials &cred);
-	void doLogout(const std::string &id);
+	ExpirableSession::Ptr loginAuthorized(const AuthResult &result)
+	{
+		return BEEEON_TRANSACTION_RETURN(
+			ExpirableSession::Ptr,
+			doLoginAuthorized(result)
+		);
+	}
+
+	ExpirableSession::Ptr doLoginAuthorized(const AuthResult &result);
 
 	ExpirableSession::Ptr openSession(const VerifiedIdentity &verifiedIdentity);
 	ExpirableSession::Ptr verifyIdentityAndLogin(const AuthResult &result);

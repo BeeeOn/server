@@ -25,7 +25,7 @@ class Rest:
 		self.m_headers["Authorization"] = "Bearer " + sessionId
 
 	def perform(self):
-		conn = HTTPConnection(self.m_host, self.m_port, timeout = 1)
+		conn = HTTPConnection(self.m_host, self.m_port, timeout = 10)
 		conn.request(self.m_method, self.m_uri,
 			headers = self.m_headers, body = self.m_body)
 		response = conn.getresponse()

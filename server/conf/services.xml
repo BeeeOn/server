@@ -104,8 +104,8 @@
 			<set name="identityDao" ref="identityDao" />
 			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
 			<set name="sessionManager" ref="sessionManager" />
-			<set name="transactionManager" ref="transactionManager" />
 			<set name="notificationDispatcher" ref="notificationDispatcher" />
+			<set name="transactionManager" ref="transactionManager" />
 			<add name="providers" ref="googlePermitAuthProvider" />
 			<add name="providers" ref="googleAuthProvider" />
 		</instance>

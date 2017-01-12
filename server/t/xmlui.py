@@ -74,7 +74,7 @@ class Connector:
 	def request(self, request, maxlen = 1024):
 		s = socket.socket()
 		s.connect((self.host, self.port))
-		s.settimeout(1)
+		s.settimeout(10)
 
 		if isinstance(request, Request):
 			root = request.xml()
