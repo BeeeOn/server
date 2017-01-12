@@ -87,15 +87,15 @@ void SessionCache::removeSession(const SessionID &sessionID, const UserID &userI
 		if (itSession != itUser->second.end())
 			itUser->second.erase(itSession);
 
-		if (itUser->second.size() == 0)
-			m_userSessionSet.erase(itUser);
-
 		if (logger().debug()) {
 			logger().debug("user: " + userID.toString() +
 					" remove session, sessions: " +
 					std::to_string(itUser->second.size()),
 					__FILE__, __LINE__);
 		}
+
+		if (itUser->second.size() == 0)
+			m_userSessionSet.erase(itUser);
 	}
 }
 
