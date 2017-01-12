@@ -119,6 +119,9 @@
 			<set name="transactionManager" ref="transactionManager" />
 		</instance>
 
+		<instance name="typeInfoProvider" class="BeeeOn::TypeInfoProvider">
+		</instance>
+
 		<instance name="loggingObserver" class="BeeeOn::LoggingObserver" />
 
 		<instance name="notificationDispatcher"
