@@ -1,12 +1,14 @@
 #! /usr/bin/env python3
 
+import config
+config.import_libs()
+
 import unittest
 import socket
-import ui.config
 
 POST_WITHOUT_CONTENT_LENGTH = "\r\n".join([
 	"POST /auth HTTP/1.1",
-	"Host: " + ui.config.ui_host + ":" + str(ui.config.ui_port),
+	"Host: " + config.ui_host + ":" + str(config.ui_port),
 	"\r\n"
 ])
 
@@ -18,7 +20,7 @@ class TestNoContentLength(unittest.TestCase):
 	"""
 	def test1_ui_no_content_length(self):
 		s = socket.socket()
-		s.connect((ui.config.ui_host, ui.config.ui_port))
+		s.connect((config.ui_host, config.ui_port))
 		s.settimeout(1)
 		s.sendall(bytes(POST_WITHOUT_CONTENT_LENGTH, "utf-8"))
 		data = str(s.recv(4096), "utf-8").split("\r\n")
