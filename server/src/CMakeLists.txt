@@ -85,14 +85,14 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/SecureXmlParser.cpp
 	${PROJECT_SOURCE_DIR}/util/Template.cpp
 	${PROJECT_SOURCE_DIR}/util/Occasionally.cpp
-	${PROJECT_SOURCE_DIR}/util/X509Fingerprint.cpp
-	${PROJECT_SOURCE_DIR}/util/RejectCertificateHandler.cpp
-	${PROJECT_SOURCE_DIR}/util/SSLFacility.cpp
-	${PROJECT_SOURCE_DIR}/util/SSLClient.cpp
-	${PROJECT_SOURCE_DIR}/util/SSLServer.cpp
 	${PROJECT_SOURCE_DIR}/util/Startup.cpp
 	${PROJECT_SOURCE_DIR}/util/Loggable.cpp
 	${PROJECT_SOURCE_DIR}/util/PosixSignal.cpp
+	${PROJECT_SOURCE_DIR}/ssl/X509Fingerprint.cpp
+	${PROJECT_SOURCE_DIR}/ssl/RejectCertificateHandler.cpp
+	${PROJECT_SOURCE_DIR}/ssl/SSLFacility.cpp
+	${PROJECT_SOURCE_DIR}/ssl/SSLClient.cpp
+	${PROJECT_SOURCE_DIR}/ssl/SSLServer.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoDaoManager.cpp
 	${PROJECT_SOURCE_DIR}/rpc/GatewayRPC.cpp
 	${PROJECT_SOURCE_DIR}/rpc/FakeGatewayRPC.cpp

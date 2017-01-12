@@ -7,7 +7,7 @@
 #include "di/DependencyInjector.h"
 #include "server/SocketServer.h"
 #include "server/XmlRequestHandler.h"
-#include "util/SSLServer.h"
+#include "ssl/SSLServer.h"
 #include "util/Startup.h"
 
 using namespace std;

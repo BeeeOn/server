@@ -4,8 +4,8 @@
 #include <Poco/Net/CertificateHandlerFactory.h>
 #include <Poco/Net/VerificationErrorArgs.h>
 
-#include "util/RejectCertificateHandler.h"
-#include "util/X509Fingerprint.h"
+#include "ssl/RejectCertificateHandler.h"
+#include "ssl/X509Fingerprint.h"
 
 using namespace Poco;
 using namespace Poco::Net;

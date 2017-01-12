@@ -7,7 +7,7 @@
 
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "util/X509Fingerprint.h"
+#include "ssl/X509Fingerprint.h"
 
 using namespace std;
 using namespace Poco;
