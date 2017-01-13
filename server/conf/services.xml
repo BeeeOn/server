@@ -78,6 +78,7 @@
 				init="early">
 			<set name="userDao" ref="userDao" />
 			<set name="gatewayDao" ref="gatewayDao" />
+			<set name="locationDao" ref="locationDao" />
 			<set name="deviceDao" ref="deviceDao" />
 			<set name="identityDao" ref="identityDao" />
 			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />

@@ -21,7 +21,7 @@ class TestLocationAddDelete(unittest.TestCase):
 		self.session = response.sessionid()
 
 		response = c.request(GatewayRegister(
-			config.gateway_id,
+			config.tmp_gateway_id,
 			self.session,
 			name = "Gateway For Locations"
 		))
@@ -35,7 +35,7 @@ class TestLocationAddDelete(unittest.TestCase):
 		c = Connector(config.xmlui_host, config.xmlui_port)
 
 		response = c.request(GatewayUnregister(
-			config.gateway_id,
+			config.tmp_gateway_id,
 			self.session
 		))
 		self.assertTrue(response.is_ok())
@@ -50,7 +50,7 @@ class TestLocationAddDelete(unittest.TestCase):
 		c = Connector(config.xmlui_host, config.xmlui_port)
 
 		response = c.request(LocationAdd(
-			config.gateway_id,
+			config.tmp_gateway_id,
 			self.session,
 			name = "Livingroom"
 		))
@@ -60,13 +60,13 @@ class TestLocationAddDelete(unittest.TestCase):
 		self.assertEqual("Livingroom", response.root[0].get("name"))
 
 		response = c.request(LocationDelete(
-			config.gateway_id,
+			config.tmp_gateway_id,
 			response.root[0].get("locationid"),
 			self.session
 		))
 
 		response = c.request(LocationGetAll(
-			config.gateway_id,
+			config.tmp_gateway_id,
 			self.session
 		))
 		self.assertTrue(response.is_data())

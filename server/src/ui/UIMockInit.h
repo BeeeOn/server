@@ -1,12 +1,16 @@
 #ifndef BEEEON_MOCK_INIT_H
 #define BEEEON_MOCK_INIT_H
 
+#include <vector>
+
 #include "di/InjectorTarget.h"
 #include "dao/UserDao.h"
 #include "dao/GatewayDao.h"
+#include "dao/LocationDao.h"
 #include "dao/IdentityDao.h"
 #include "dao/VerifiedIdentityDao.h"
 #include "dao/Transactional.h"
+#include "model/Location.h"
 
 namespace BeeeOn {
 
@@ -20,6 +24,8 @@ public:
 			&UIMockInit::setUserDao);
 		injector<UIMockInit, GatewayDao>("gatewayDao",
 			&UIMockInit::setGatewayDao);
+		injector<UIMockInit, LocationDao>("locationDao",
+			&UIMockInit::setLocationDao);
 		injector<UIMockInit, DeviceDao>("deviceDao",
 			&UIMockInit::setDeviceDao);
 		injector<UIMockInit, IdentityDao>("identityDao",
@@ -36,6 +42,11 @@ public:
 	void setGatewayDao(GatewayDao *dao)
 	{
 		m_gatewayDao = dao;
+	}
+
+	void setLocationDao(LocationDao *dao)
+	{
+		m_locationDao = dao;
 	}
 
 	void setDeviceDao(DeviceDao *dao)
@@ -56,12 +67,14 @@ public:
 protected:
 	void initUsers();
 	void initGateways();
-	void initDevices();
+	void initLocations(std::vector<Location> &locations);
+	void initDevices(const std::vector<Location> &locations);
 	void injectionDone();
 
 private:
 	UserDao *m_userDao;
 	GatewayDao *m_gatewayDao;
+	LocationDao *m_locationDao;
 	DeviceDao *m_deviceDao;
 	IdentityDao *m_identityDao;
 	VerifiedIdentityDao *m_verifiedIdentityDao;

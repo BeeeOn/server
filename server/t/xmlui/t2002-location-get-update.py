@@ -21,7 +21,7 @@ class TestLocationGetUpdate(unittest.TestCase):
 		self.session = response.sessionid()
 
 		response = c.request(GatewayRegister(
-			config.gateway_id,
+			config.tmp_gateway_id,
 			self.session,
 			name = "Gateway with locations"
 		))
@@ -32,7 +32,7 @@ class TestLocationGetUpdate(unittest.TestCase):
 
 		for name in names:
 			response = c.request(LocationAdd(
-				config.gateway_id,
+				config.tmp_gateway_id,
 				self.session,
 				name = name
 			))
@@ -48,14 +48,14 @@ class TestLocationGetUpdate(unittest.TestCase):
 
 		for location in self.locations:
 			response = c.request(LocationDelete(
-				config.gateway_id,
+				config.tmp_gateway_id,
 				location,
 				self.session
 			))
 			self.assertTrue(response.is_ok())
 
 		response = c.request(GatewayUnregister(
-			config.gateway_id,
+			config.tmp_gateway_id,
 			self.session
 		))
 		self.assertTrue(response.is_ok())
@@ -67,7 +67,7 @@ class TestLocationGetUpdate(unittest.TestCase):
 		c = Connector(config.xmlui_host, config.xmlui_port)
 
 		response = c.request(LocationGetAll(
-			config.gateway_id,
+			config.tmp_gateway_id,
 			self.session
 		))
 		self.assertTrue(response.is_data())

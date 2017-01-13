@@ -1,12 +1,14 @@
 #include <Poco/UUIDGenerator.h>
 #include <Poco/DateTime.h>
 #include <Poco/Timespan.h>
+#include <Poco/Exception.h>
 
 #include "dao/DeviceDao.h"
 #include "ui/UIMockInit.h"
 
 BEEEON_OBJECT(UIMockInit, BeeeOn::UIMockInit)
 
+using namespace std;
 using namespace Poco;
 using namespace BeeeOn;
 
@@ -64,13 +66,50 @@ void UIMockInit::initGateways()
 	m_gatewayDao->insert(gateway2);
 }
 
-void UIMockInit::initDevices()
+void UIMockInit::initLocations(vector<Location> &locations)
+{
+	Gateway gateway(GatewayID::parse("1284174504043136"));
+
+	if (!m_gatewayDao->fetch(gateway))
+		throw IllegalStateException("no such gateway " + gateway.id().toString());
+
+	Location kitchen(LocationID::random());
+	kitchen.setName("Kitchen #1");
+	kitchen.setPlace(gateway.place());
+
+	m_locationDao->create(kitchen);
+	locations.push_back(kitchen);
+
+	Location livingroom(LocationID::random());
+	livingroom.setName("Livingroom #1");
+	livingroom.setPlace(gateway.place());
+
+	m_locationDao->create(livingroom);
+	locations.push_back(livingroom);
+
+	Location bathroom(LocationID::random());
+	bathroom.setName("Bathroom #1");
+	bathroom.setPlace(gateway.place());
+
+	m_locationDao->create(bathroom);
+	locations.push_back(bathroom);
+
+	Location hall(LocationID::random());
+	hall.setName("Hall #1");
+	hall.setPlace(gateway.place());
+
+	m_locationDao->create(hall);
+	locations.push_back(hall);
+}
+
+void UIMockInit::initDevices(const vector<Location> &locations)
 {
 	Gateway gateway(GatewayID::parse("1284174504043136"));
 
 	Device temperature(DeviceID::random(0x41));
 	temperature.setName("Temperature");
 	temperature.setGateway(gateway);
+	temperature.setLocation(locations[0]);
 	temperature.setType(0);
 	temperature.setRefresh(5);
 	temperature.setBattery(50.0);
@@ -84,6 +123,7 @@ void UIMockInit::initDevices()
 	Device humidity(DeviceID::random(0x42));
 	humidity.setName("Humidity");
 	humidity.setGateway(gateway);
+	humidity.setLocation(locations[1]);
 	humidity.setType(0);
 	humidity.setRefresh(1000);
 	humidity.setBattery(99.0);
@@ -97,6 +137,7 @@ void UIMockInit::initDevices()
 	Device multi(DeviceID::random(0x43));
 	multi.setName("Multi-sensor");
 	multi.setGateway(gateway);
+	multi.setLocation(locations[2]);
 	multi.setType(0);
 	multi.setRefresh(15);
 	multi.setBattery(90.0);
@@ -120,9 +161,12 @@ void UIMockInit::initDevices()
 
 void UIMockInit::injectionDone()
 {
+	vector<Location> locations;
+
 	BEEEON_TRANSACTION(
 		initUsers();
 		initGateways();
-		initDevices();
+		initLocations(locations);
+		initDevices(locations);
 	);
 }
