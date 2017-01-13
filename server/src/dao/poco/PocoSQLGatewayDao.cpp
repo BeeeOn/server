@@ -8,6 +8,7 @@
 
 #include "dao/poco/PocoSQLGatewayDao.h"
 #include "dao/poco/PocoSQLPlaceDao.h"
+#include "dao/poco/PocoSQLUserDao.h"
 #include "dao/poco/PocoDaoManager.h"
 
 using namespace std;
@@ -287,8 +288,10 @@ bool PocoSQLGatewayDao::parseSingle(Row &result, LegacyGateway &gateway,
 	if (!accessLevel.isEmpty())
 		gateway.setAccessLevel(AccessLevel(accessLevel.convert<unsigned int>()));
 
-	User owner(UserID::parse(result[prefix + "owner_id"]));
-	gateway.setOwner(owner);
+	User owner;
+	if (PocoSQLUserDao::parseIfIDNotNull(result, owner, prefix + "owner_"))
+		gateway.setOwner(owner);
+
 	gateway.setUserCount(result[prefix + "roles_count"].convert<unsigned int>());
 	gateway.setDeviceCount(result[prefix + "devices_count"].convert<unsigned int>());
 
