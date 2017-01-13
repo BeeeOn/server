@@ -122,6 +122,10 @@
 		<instance name="typeInfoProvider" class="BeeeOn::TypeInfoProvider">
 		</instance>
 
+		<instance name="deviceInfoProvider" class="BeeeOn::DeviceInfoProvider">
+			<set name="typeInfoProvider" ref="typeInfoProvider" />
+		</instance>
+
 		<instance name="loggingObserver" class="BeeeOn::LoggingObserver" />
 
 		<instance name="notificationDispatcher"

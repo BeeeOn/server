@@ -23,6 +23,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/provider/OAuth2AuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/GoogleAuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/TypeInfoProvider.cpp
+	${PROJECT_SOURCE_DIR}/provider/DeviceInfoProvider.cpp
 	${PROJECT_SOURCE_DIR}/server/MongooseServer.cpp
 	${PROJECT_SOURCE_DIR}/server/SessionCache.cpp
 	${PROJECT_SOURCE_DIR}/server/SessionManager.cpp
