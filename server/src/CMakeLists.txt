@@ -84,6 +84,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/SecureXmlParser.cpp
 	${PROJECT_SOURCE_DIR}/util/SAXHelper.cpp
 	${PROJECT_SOURCE_DIR}/util/TypesSAXHandler.cpp
+	${PROJECT_SOURCE_DIR}/util/DevicesSAXHandler.cpp
 	${PROJECT_SOURCE_DIR}/util/Template.cpp
 	${PROJECT_SOURCE_DIR}/util/Occasionally.cpp
 	${PROJECT_SOURCE_DIR}/util/Startup.cpp
