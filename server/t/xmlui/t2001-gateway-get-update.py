@@ -85,7 +85,7 @@ class TestGatewayGetUpdate(unittest.TestCase):
 		self.assertEqual("", response.root[0].get("version"))
 		self.assertEqual("0.0.0.0", response.root[0].get("ip"))
 		self.assertEqual("admin", response.root[0].get("permission"))
-		self.assertIsNotNone(response.root[0].get("owner"))
+		self.assertEqual("Joe Doe", response.root[0].get("owner"))
 		self.assertEqual("0", response.root[0].get("timezone"))
 		self.assertEqual("available", response.root[0].get("status"))
 
