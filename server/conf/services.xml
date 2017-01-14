@@ -1,3 +1,4 @@
+<!DOCTYPE system SYSTEM "services.dtd">
 <system>
 	<services>
 		<instance name="ui" class="BeeeOn::UIServerModule">
