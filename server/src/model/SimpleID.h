@@ -43,6 +43,14 @@ public:
 		return (int) m_value;
 	}
 
+	operator unsigned int() const
+	{
+		if (m_value < 0 || m_value > INT_MAX)
+			throw Poco::BadCastException("out of range of unsigned int");
+
+		return (unsigned int) m_value;
+	}
+
 	static SimpleID parse(const std::string &s)
 	{
 		if (s[0] == '0' && s[1] == 'x')
