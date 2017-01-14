@@ -108,7 +108,7 @@
 			<set name="sessionManager" ref="sessionManager" />
 			<set name="notificationDispatcher" ref="notificationDispatcher" />
 			<set name="transactionManager" ref="transactionManager" />
-			<add name="providers" ref="googlePermitAuthProvider" />
+			<add name="providers" ref="googlePermitAuthProvider" if-yes="${ui.debug}" />
 			<add name="providers" ref="googleAuthProvider" />
 		</instance>
 
