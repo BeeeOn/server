@@ -133,6 +133,49 @@ InfoProvider<T> &NullInfoProvider<T>::instance()
 	return *singleton.get();
 }
 
+template <typename T, typename SAXHandler>
+class XmlInfoProvider : public InfoProvider<T> {
+public:
+	virtual ~XmlInfoProvider();
+
+protected:
+	void parseFile(const std::string &path,
+			const std::string &infoLabel) override;
+};
+
+template <typename T, typename SAXHandler>
+XmlInfoProvider<T, SAXHandler>::~XmlInfoProvider()
+{
+}
+
+template <typename T, typename SAXHandler>
+void XmlInfoProvider<T, SAXHandler>::parseFile(const std::string &path,
+		const std::string &infoLabel)
+{
+	if (path.empty())
+		return;
+
+	Poco::Path file(path);
+	SAXHandler handler;
+
+	SAXHelper::parse(file, handler);
+
+	for (const auto &info : handler) {
+		this->logger().information("register " + infoLabel
+				+ " " + info.name()
+				+ " with ID " + info.id().toString(),
+				__FILE__, __LINE__);
+
+		if (this->registerInfo(info))
+			continue;
+
+		this->logger().error(infoLabel + " " + info.name()
+				+ " with ID " + info.id().toString()
+				+ " is already registered",
+				__FILE__, __LINE__);
+	}
+}
+
 }
 
 #endif
