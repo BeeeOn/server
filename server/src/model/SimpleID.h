@@ -4,6 +4,7 @@
 #include <string>
 #include <climits>
 #include <Poco/Exception.h>
+#include <Poco/NumberParser.h>
 
 namespace BeeeOn {
 
@@ -44,7 +45,10 @@ public:
 
 	static SimpleID parse(const std::string &s)
 	{
-		return SimpleID(std::stoi(s));
+		if (s[0] == '0' && s[1] == 'x')
+			return SimpleID(Poco::NumberParser::parseHex(s));
+
+		return SimpleID(Poco::NumberParser::parse(s));
 	}
 
 	std::string toString() const
