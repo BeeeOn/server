@@ -11,6 +11,7 @@
 #include "model/Location.h"
 #include "model/Gateway.h"
 #include "model/DeviceID.h"
+#include "model/DeviceInfo.h"
 
 namespace BeeeOn {
 
@@ -35,8 +36,8 @@ public:
 	void setName(const std::string &name);
 	const std::string &name() const;
 
-	void setType(const unsigned int type);
-	unsigned int type() const;
+	void setType(const Poco::SharedPtr<DeviceInfo> type);
+	const Poco::SharedPtr<DeviceInfo> type() const;
 
 	void setRefresh(const unsigned int seconds)
 	{
@@ -87,7 +88,7 @@ private:
 	Gateway m_gateway;
 	Location m_location;
 	std::string m_name;
-	unsigned int m_type;
+	Poco::SharedPtr<DeviceInfo> m_type;
 	Poco::Timespan m_refresh;
 	Poco::Nullable<percent> m_battery;
 	Poco::Nullable<percent> m_signal;

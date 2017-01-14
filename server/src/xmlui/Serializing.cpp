@@ -7,6 +7,7 @@
 #include "model/LegacyGateway.h"
 #include "model/Location.h"
 #include "model/Device.h"
+#include "model/DeviceInfo.h"
 #include "model/VerifiedIdentity.h"
 
 using namespace std;
@@ -93,7 +94,7 @@ void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
 	AttributesImpl attrs;
 	attrs.addAttribute("", "id", "id", "", device.id().toString());
 	attrs.addAttribute("", "euid", "euid", "", device.id().toString());
-	attrs.addAttribute("", "type", "type", "", to_string(device.type()));
+	attrs.addAttribute("", "type", "type", "", device.type()->id().toString());
 	attrs.addAttribute("", "locationid", "locationid", "",
 			device.location().id().toString());
 	attrs.addAttribute("", "gateid", "gateid", "",
@@ -105,7 +106,36 @@ void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
 			to_string(device.lastSeen().timestamp().epochTime()));
 	attrs.addAttribute("", "init", "init", "",
 			device.active()? "1" : "0");
-	output.emptyElement("", "device", "device", attrs);
+
+	const Poco::SharedPtr<DeviceInfo> info = device.type();
+
+	attrs.addAttribute("", "displayName", "displayName", "", info->displayName());
+	attrs.addAttribute("", "name", "name", "", info->name());
+	attrs.addAttribute("", "vendor", "vendor", "", info->vendor());
+
+	output.startElement("", "device", "device", attrs);
+
+	for (auto module : *info) {
+		AttributesImpl attrs;
+
+		attrs.addAttribute("", "id", "id", "", module.id().toString());
+		// FIXME: just copy device status for now
+		attrs.addAttribute("", "status", "status", "",
+				device.available()? "available" : "unavailable");
+		// FIXME: no values implemented, send neutral 0
+		attrs.addAttribute("", "value", "value", "", "0");
+
+		attrs.addAttribute("", "type", "type", "", module.type()->id().toString());
+
+		if (!module.name().empty())
+			attrs.addAttribute("", "name", "name", "", module.name());
+		if (!module.group().empty())
+			attrs.addAttribute("", "group", "group", "", module.group());
+
+		output.emptyElement("", "module", "module", attrs);
+	}
+
+	output.endElement("", "device", "device");
 }
 
 void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,

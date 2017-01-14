@@ -48,7 +48,7 @@ bool PocoSQLDeviceDao::insert(Device &device, const Gateway &gateway)
 		locationID = device.location().id().toString();
 
 	string name = device.name();
-	unsigned int type = device.type();
+	unsigned int type = device.type()->id();
 	unsigned int refresh = device.refresh().totalSeconds();
 
 	Nullable<unsigned int> battery;
@@ -96,7 +96,7 @@ bool PocoSQLDeviceDao::update(Device &device, const Gateway &gateway)
 		locationID = device.location().id().toString();
 
 	string name = device.name();
-	unsigned int type = device.type();
+	unsigned int type = device.type()->id();
 	unsigned int refresh = device.refresh().totalSeconds();
 
 	Nullable<unsigned int> battery;
@@ -235,7 +235,7 @@ bool PocoSQLDeviceDao::parseSingle(Row &result, Device &device,
 		device.setLocation(location);
 
 	device.setName(result[prefix + "name"]);
-	device.setType(result[prefix + "type"]);
+	device.setType(new DeviceInfo(DeviceInfoID::parse(result[prefix + "type"])));
 	device.setRefresh(result[prefix + "refresh"].convert<unsigned int>());
 	device.setBattery(whenNull(result[prefix + "battery"], 0));
 	device.setSignal(whenNull(result[prefix + "signal"], 0));
