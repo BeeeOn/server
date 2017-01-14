@@ -5,6 +5,7 @@
 #include "provider/MockRandomProvider.h"
 #include "util/Base64.h"
 #include "provider/PocoRandomProvider.h"
+#include "cppunit/BetterAssert.h"
 
 using namespace std;
 
