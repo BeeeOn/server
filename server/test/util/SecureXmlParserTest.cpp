@@ -6,6 +6,7 @@
 #include <Poco/DOM/Document.h>
 
 #include "util/SecureXmlParser.h"
+#include "cppunit/BetterAssert.h"
 
 using namespace std;
 using namespace Poco;
