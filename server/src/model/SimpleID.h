@@ -110,6 +110,11 @@ private:
 	long m_value = 0;
 };
 
+inline std::ostream & operator <<(std::ostream &s, const SimpleID &id)
+{
+	return s << id.toString();
+}
+
 }
 
 #endif
