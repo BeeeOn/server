@@ -33,12 +33,14 @@ class InstanceInfo;
  *   + attribute ref    - value to set is a reference to an instance by name
  *   + attribute text   - value to set is a string
  *   + attribute number - value to set is an integer
+ *   + attribute if-yes - optional condition to avoid applying the "set"
  *
  * * add: adds a value to a property list
  *   + attribute name   - name of the property to inject
  *   + attribute ref    - value to add is a reference to an instance by name
  *   + attribute text   - value to add is a string
  *   + attribute number - value to add is an integer
+ *   + attribute if-yes - optional condition to avoid applying the "add"
  *
  * * alias: defines alias name of an existing instance
  *   + attribute name   - name of the alias (new instance name)
