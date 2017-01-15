@@ -1617,10 +1617,10 @@
 						<null name="active_since" />
 					</row>
 				</expect>
-				<teardown name="delete Test Device X">
-					<sql>DELETE FROM devices WHERE id = 2727934709 AND gateway_id = 140548523101825</sql>
-				</teardown>
 			</check>
+			<teardown name="delete Test Device X">
+				<sql>DELETE FROM devices WHERE id = 2727934709 AND gateway_id = 140548523101825</sql>
+			</teardown>
 		</test>
 		<test name="create active wireless device">
 			<check name="can create active device">
@@ -1658,10 +1658,10 @@
 						<value name="active_since">1483553308</value>
 					</row>
 				</expect>
-				<teardown name="delete Test Device Y">
-					<sql>DELETE FROM devices WHERE id = 2751463465 AND gateway_id = 140548523101825</sql>
-				</teardown>
 			</check>
+			<teardown name="delete Test Device Y">
+				<sql>DELETE FROM devices WHERE id = 2751463465 AND gateway_id = 140548523101825</sql>
+			</teardown>
 		</test>
 	</query>
 
