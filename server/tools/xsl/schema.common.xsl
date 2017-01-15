@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <x:stylesheet xmlns:x="http://www.w3.org/1999/XSL/Transform"
 		xmlns:c="http://exslt.org/common"
+		xmlns:s="http://exslt.org/strings"
 		xmlns:d="http://exslt.org/dates-and-times"
-                extension-element-prefixes="c d"
+		extension-element-prefixes="c s d"
 		version="1.0">
 
 	<x:import href="util.codebase.xsl" />
@@ -357,78 +358,70 @@
 	</x:template>
 
 	<x:template name="cascade-head">
-		<x:param name="head" />
+		<x:param name="index" />
 		<x:param name="queue" />
-		<x:param name="visited" />
+		<x:param name="elements" />
+		<x:param name="visited" select="''" />
 
 		<x:choose>
-			<x:when test="contains($visited, concat(' ', $head/@name, ' '))">
-				<!-- head was already visited (we probably go again because of some delayed head) -->
+			<x:when test="contains(concat(' ', $visited), concat(' ', $index, ' '))">
+				<!-- already visited node, skip -->
 				<x:call-template name="cascade-top">
 					<x:with-param name="queue" select="$queue" />
+					<x:with-param name="elements" select="$elements" />
 					<x:with-param name="visited" select="$visited" />
 				</x:call-template>
 			</x:when>
 			<x:otherwise>
+				<x:variable name="head" select="$elements[number($index)]" />
+
 				<!-- resolve current head's dependencies and filter them to not-visited ones -->
 				<x:variable name="dependencies-data">
 					<x:apply-templates select="$head" mode="cascade-dependencies" />
 				</x:variable>
 
-				<x:variable name="next-visited" select="concat($visited, ' ', $head/@name, ' ')" />
-				<x:variable name="not-visited-data">
+				<!-- convert dependencies-data to indices to elements -->
+				<x:variable name="dependencies">
 					<x:for-each select="c:node-set($dependencies-data)/dependency">
-						<x:if test="not(contains($next-visited, concat(' ', ., ' ')))">
-							<dependency><x:value-of select="." /></dependency>
+						<x:variable name="name" select="." />
+
+						<x:for-each select="$elements">
+							<x:if test="@name = $name">
+								<x:value-of select="concat(position(), ' ')" />
+							</x:if>
+						</x:for-each>
+					</x:for-each>
+				</x:variable>
+
+				<x:variable name="not-visited">
+					<x:for-each select="s:split($dependencies, ' ')">
+						<x:if test="not(contains(concat(' ', $visited), concat(' ', ., ' ')))">
+							<!-- break self-dependency, otherwise we loop infinitely -->
+							<x:if test=". != $index">
+								<x:value-of select="concat(., ' ')" />
+							</x:if>
 						</x:if>
 					</x:for-each>
 				</x:variable>
-				<!-- cosntruct node-set for the next processing -->
-				<x:variable name="dependencies" select="c:node-set($not-visited-data)/dependency" />
 
-				<x:if test="count($dependencies) = 0">
+				<x:if test="count(s:split(normalize-space($not-visited), ' ')) = 0">
 					<!-- no dependencies, create entry -->
 					<entry type="{local-name($head)}"><x:value-of select="$head/@name" /></entry>
 
 					<!-- continue to the next element in the queue -->
 					<x:call-template name="cascade-top">
 						<x:with-param name="queue" select="$queue" />
-						<x:with-param name="visited" select="$next-visited" />
+						<x:with-param name="elements" select="$elements" />
+						<x:with-param name="visited" select="concat($visited, $index, ' ')" />
 					</x:call-template>
 				</x:if>
 
-				<x:if test="count($dependencies) &gt; 0">
-					<!-- delay processing of current head as there are dependencies -->
-
-					<x:variable name="entries-data">
-						<!-- continue with the next element in the queue -->
-						<x:call-template name="cascade-top">
-							<x:with-param name="queue" select="$queue" />
-							<x:with-param name="visited" select="$visited" />
-						</x:call-template>
-					</x:variable>
-					<x:variable name="entries" select="c:node-set($entries-data)/entry" />
-
-					<!-- bypass already generated entries -->
-					<x:for-each select="$entries">
-						<entry type="{@type}"><x:value-of select="." /></entry>
-					</x:for-each>
-
-					<!-- derive from entries all visited nodes -->
-					<x:variable name="retry-visited">
-						<x:value-of select="$visited" />
-						<x:text> </x:text>
-						<x:for-each select="$entries">
-							<x:value-of select="concat(' ', .)" />
-						</x:for-each>
-						<x:text> </x:text>
-					</x:variable>
-
-					<!-- retry current head (self) again and cascade the queue again -->
-					<x:call-template name="cascade-head">
-						<x:with-param name="head" select="$head" />
-						<x:with-param name="queue" select="$queue" />
-						<x:with-param name="visited" select="$retry-visited" />
+				<!-- append to queue to delay processing -->
+				<x:if test="count(s:split(normalize-space($not-visited), ' ')) &gt; 0">
+					<x:call-template name="cascade-top">
+						<x:with-param name="queue" select="concat($queue, $index, ' ')" />
+						<x:with-param name="elements" select="$elements" />
+						<x:with-param name="visited" select="$visited" />
 					</x:call-template>
 				</x:if>
 			</x:otherwise>
@@ -436,15 +429,19 @@
 	</x:template>
 
 	<x:template name="cascade-top">
-		<x:param name="queue" />
+		<x:param name="elements" />
 		<x:param name="visited" select="''" />
+		<x:param name="queue">
+			<x:for-each select="$elements">
+				<x:value-of select="concat(position(), ' ')" />
+			</x:for-each>
+		</x:param>
 
-		<x:if test="count($queue) &gt; 0">
-			<x:variable name="head" select="$queue[position() = 1]" />
-
+		<x:if test="count(s:split(normalize-space($queue), ' ')) &gt; 0">
 			<x:call-template name="cascade-head">
-				<x:with-param name="head" select="$head" />
-				<x:with-param name="queue" select="$queue[position() &gt; 1]" />
+				<x:with-param name="index" select="number(substring-before($queue, ' '))" />
+				<x:with-param name="queue" select="substring-after($queue, ' ')" />
+				<x:with-param name="elements" select="$elements" />
 				<x:with-param name="visited" select="$visited" />
 			</x:call-template>
 		</x:if>
@@ -453,7 +450,7 @@
 	<x:template name="drop-tables-and-views">
 		<x:variable name="result-data">
 			<x:call-template name="cascade-top">
-				<x:with-param name="queue" select="/database/table|/database/view" />
+				<x:with-param name="elements" select="/database/table|/database/view" />
 			</x:call-template>
 		</x:variable>
 
