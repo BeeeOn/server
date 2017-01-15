@@ -1,3 +1,4 @@
+<!DOCTYPE query-set SYSTEM "query-set.dtd">
 <query-set for-database="home8">
 
 	<test-global>
