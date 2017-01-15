@@ -1,0 +1,77 @@
+<!ELEMENT database (table|view)*>
+<!ATTLIST database
+	name       NMTOKEN   #REQUIRED
+>
+
+<!ELEMENT table (column|primary-key|foreign-key|unique|check)*>
+<!ATTLIST table
+	name       ID        #REQUIRED
+>
+
+<!ELEMENT view (map|join|sub-query)*>
+<!ATTLIST view
+	name       ID        #REQUIRED
+	base       IDREF     #REQUIRED
+>
+
+
+<!ELEMENT column EMPTY>
+<!ATTLIST column
+	name       NMTOKEN   #REQUIRED
+	type       NMTOKEN   #REQUIRED
+	not-null   (yes|no) "no"
+	size       NMTOKEN   #IMPLIED
+	precision  NMTOKEN   #IMPLIED
+	scale      NMTOKEN   #IMPLIED
+	default    CDATA     #IMPLIED
+>
+
+<!ELEMENT primary-key (ref*)>
+<!ATTLIST primary-key
+	ref        NMTOKEN   #IMPLIED
+>
+
+<!ELEMENT foreign-key EMPTY>
+<!ATTLIST foreign-key
+	table      IDREF     #REQUIRED
+	local      NMTOKEN   #REQUIRED
+	remote     NMTOKEN   #REQUIRED
+>
+
+<!ELEMENT unique      (ref*)>
+<!ATTLIST unique
+	name       NMTOKEN   #IMPLIED
+	ref        NMTOKEN   #IMPLIED
+>
+
+<!ELEMENT check       EMPTY>
+<!ATTLIST check
+	name       NMTOKEN   #REQUIRED
+	expression CDATA     #REQUIRED
+>
+
+<!ELEMENT ref (#PCDATA)>
+
+<!ELEMENT map EMPTY>
+<!ATTLIST map
+	ref       NMTOKEN    #REQUIRED
+	as        NMTOKEN    #REQUIRED
+>
+
+<!ELEMENT join (map)*>
+<!ATTLIST join
+	remote    IDREF      #REQUIRED
+	with-base IDREF      #IMPLIED
+	on-base   NMTOKEN    #REQUIRED
+	on-remote NMTOKEN    #REQUIRED
+>
+
+<!ELEMENT sub-query (sql)*>
+<!ATTLIST sub-query
+	as       NMTOKEN     #REQUIRED
+>
+
+<!ELEMENT sql (#PCDATA)>
+<!ATTLIST sql
+	engine   NMTOKEN     #IMPLIED
+>

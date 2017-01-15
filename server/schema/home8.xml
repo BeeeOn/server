@@ -1,3 +1,4 @@
+<!DOCTYPE database SYSTEM "database.dtd">
 <database name="home8">
 
 	<table name="places">
