@@ -254,6 +254,7 @@
 		<instance name="sqlDeviceDao" class="BeeeOn::PocoSQLDeviceDao">
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="transactionManager" ref="transactionManager" />
+			<set name="deviceInfoProvider" ref="deviceInfoProvider" />
 			<set name="sqlLoader" ref="queries" />
 		</instance>
 
