@@ -130,6 +130,7 @@ add_executable(ui-server
 add_executable(xmlui-server
 	xmlui/main.cpp
 	xmlui/Serializing.cpp
+	xmlui/XmlValueConsumer.cpp
 	xmlui/AbstractXmlHandler.cpp
 	xmlui/AnyXmlHandler.cpp
 	xmlui/AuthXmlHandler.cpp
