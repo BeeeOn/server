@@ -1,4 +1,7 @@
+#include <string>
+
 #include <Poco/Exception.h>
+#include <Poco/NumberFormatter.h>
 
 #include "model/TypeInfo.h"
 
@@ -69,4 +72,17 @@ void TypeInfo::setWidth(const unsigned int width)
 unsigned int TypeInfo::width() const
 {
 	return m_width;
+}
+
+std::string TypeInfo::asString(const double v) const
+{
+	switch (cType()) {
+	case CTYPE_FLOAT:
+		return NumberFormatter::format(v);
+	case CTYPE_INT:
+		return to_string((int) v);
+	default:
+		throw IllegalStateException("ctype is invalid: "
+				+ to_string(cType()));
+	}
 }
