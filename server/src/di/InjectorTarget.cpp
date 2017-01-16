@@ -38,8 +38,12 @@ void AbstractInjectorTarget::injectRef(
 {
 	RefSetterMap::iterator it = m_refSetter.find(key);
 
-	if (it == m_refSetter.end())
+	if (it == m_refSetter.end()) {
+		if (injectRefFallback(key, value))
+			return;
+
 		throw NotFoundException("missing setter in " + key);
+	}
 
 	it->second->call(this, value);
 }
@@ -51,8 +55,12 @@ void AbstractInjectorTarget::injectText(
 
 	TextSetterMap::iterator it = m_textSetter.find(key);
 
-	if (it == m_textSetter.end())
+	if (it == m_textSetter.end()) {
+		if (injectTextFallback(key, value))
+			return;
+
 		throw NotFoundException("missing text setter " + key);
+	}
 
 	TextSetter func = it->second;
 	(this->*func)(value);
@@ -65,9 +73,34 @@ void AbstractInjectorTarget::injectNumber(
 
 	NumberSetterMap::iterator it = m_numberSetter.find(key);
 
-	if (it == m_numberSetter.end())
+	if (it == m_numberSetter.end()) {
+		if (injectNumberFallback(key, value))
+			return;
+
 		throw NotFoundException("missing number setter " + key);
+	}
 
 	NumberSetter func = it->second;
 	(this->*func)(value);
+}
+
+bool AbstractInjectorTarget::injectRefFallback(
+			const std::string &key,
+			InjectorTarget *value)
+{
+	return false;
+}
+
+bool AbstractInjectorTarget::injectTextFallback(
+			const std::string &key,
+			const std::string &value)
+{
+	return false;
+}
+
+bool AbstractInjectorTarget::injectNumberFallback(
+			const std::string &key,
+			int value)
+{
+	return false;
 }

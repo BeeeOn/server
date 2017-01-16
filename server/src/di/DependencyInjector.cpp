@@ -56,6 +56,19 @@ public:
 		return conf->getString(entry);
 	}
 
+	bool testConditions(AutoPtr<AbstractConfiguration> conf,
+			const string &key) const
+	{
+		const string if_yes(key + "[@if-yes]");
+
+		/* no such condition */
+		if (!conf->has(if_yes))
+			return true;
+
+		const string &value = conf->getString(if_yes);
+		return value == "y" || value == "yes" || value == "true";
+	}
+
 	void resolveKeys(AutoPtr<AbstractConfiguration> conf,
 			AbstractConfiguration::Keys &keys) const
 	{
@@ -68,6 +81,9 @@ public:
 		for (it = tmp.begin(); it != tmp.end(); ++it) {
 			const string &key = *it;
 			if (key.find("set") != 0 && key.find("add") != 0)
+				continue;
+
+			if (!testConditions(conf, base + "." + key))
 				continue;
 
 			keys.push_back(base + "." + key);
