@@ -11,6 +11,8 @@
 #include "dao/VerifiedIdentityDao.h"
 #include "dao/Transactional.h"
 #include "model/Location.h"
+#include "model/DeviceInfo.h"
+#include "provider/InfoProvider.h"
 
 namespace BeeeOn {
 
@@ -32,6 +34,8 @@ public:
 			&UIMockInit::setIdentityDao);
 		injector<UIMockInit, VerifiedIdentityDao>("verifiedIdentityDao",
 			&UIMockInit::setVerifiedIdentityDao);
+		injector<UIMockInit, InfoProvider<DeviceInfo>>("deviceInfoProvider",
+			&UIMockInit::setDeviceInfoProvider);
 	}
 
 	void setUserDao(UserDao *dao)
@@ -64,6 +68,11 @@ public:
 		m_verifiedIdentityDao = dao;
 	}
 
+	void setDeviceInfoProvider(InfoProvider<DeviceInfo> *provider)
+	{
+		m_infoProvider = provider;
+	}
+
 protected:
 	void initUsers();
 	void initGateways();
@@ -78,6 +87,7 @@ private:
 	DeviceDao *m_deviceDao;
 	IdentityDao *m_identityDao;
 	VerifiedIdentityDao *m_verifiedIdentityDao;
+	InfoProvider<DeviceInfo> *m_infoProvider;
 };
 
 }

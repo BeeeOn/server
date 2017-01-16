@@ -3,6 +3,7 @@
 #include <Poco/Timespan.h>
 #include <Poco/Exception.h>
 
+#include "model/DeviceInfo.h"
 #include "dao/DeviceDao.h"
 #include "ui/UIMockInit.h"
 
@@ -110,7 +111,7 @@ void UIMockInit::initDevices(const vector<Location> &locations)
 	temperature.setName("Temperature");
 	temperature.setGateway(gateway);
 	temperature.setLocation(locations[0]);
-	temperature.setType(0);
+	temperature.setType(m_infoProvider->findById(0));
 	temperature.setRefresh(5);
 	temperature.setBattery(50.0);
 	temperature.setSignal(90.0);
@@ -124,7 +125,7 @@ void UIMockInit::initDevices(const vector<Location> &locations)
 	humidity.setName("Humidity");
 	humidity.setGateway(gateway);
 	humidity.setLocation(locations[1]);
-	humidity.setType(0);
+	humidity.setType(m_infoProvider->findById(0));
 	humidity.setRefresh(1000);
 	humidity.setBattery(99.0);
 	humidity.setSignal(45.0);
@@ -138,7 +139,7 @@ void UIMockInit::initDevices(const vector<Location> &locations)
 	multi.setName("Multi-sensor");
 	multi.setGateway(gateway);
 	multi.setLocation(locations[2]);
-	multi.setType(0);
+	multi.setType(m_infoProvider->findById(3));
 	multi.setRefresh(15);
 	multi.setBattery(90.0);
 	multi.setSignal(90.0);
@@ -151,7 +152,7 @@ void UIMockInit::initDevices(const vector<Location> &locations)
 	Device unknown(DeviceID::random(0x44));
 	unknown.setName("Unknown");
 	unknown.setGateway(gateway);
-	unknown.setType(0);
+	unknown.setType(m_infoProvider->findById(4));
 	unknown.setRefresh(20);
 	unknown.setFirstSeen(DateTime() - Timespan(100, 0));
 	unknown.setLastSeen(DateTime());
