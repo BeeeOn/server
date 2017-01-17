@@ -16,6 +16,11 @@ public:
 		 * E-mail addresses should not be longer.
 		 */
 		SIZE_LIMIT_EMAIL  = 512,
+		/**
+		 * Common text (single field) to be inserted into an XML.
+		 * We can consider longer texts (like for <textarea>).
+		 */
+		SIZE_LIMIT_XML    = 4096,
 	};
 
 	/**
@@ -38,6 +43,14 @@ public:
 	 */
 	static std::string email(const std::string &bytes,
 			const unsigned long sizeLimit = SIZE_LIMIT_EMAIL,
+			const std::string &inputEncoding = "UTF-8");
+
+	/**
+	 * Sanitize XML content. Convert to UTF-8 and convert non-standard characters
+	 * to entities. Useful especially for output sanitization.
+	 */
+	static std::string xml(const std::string &bytes,
+			const unsigned long sizeLimit = SIZE_LIMIT_XML,
 			const std::string &inputEncoding = "UTF-8");
 };
 

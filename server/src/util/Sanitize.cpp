@@ -1,8 +1,12 @@
+#include <Poco/NumberFormatter.h>
+#include <Poco/NumberParser.h>
 #include <Poco/RegularExpression.h>
 #include <Poco/TextEncoding.h>
 #include <Poco/TextConverter.h>
+#include <Poco/TextIterator.h>
 #include <Poco/UTF8Encoding.h>
 #include <Poco/UTF8String.h>
+#include <Poco/Ascii.h>
 
 #include "util/Sanitize.h"
 
@@ -83,4 +87,104 @@ string Sanitize::email(const string &bytes,
 		throw InvalidAccessException("e-mail is invalid: bad domain-part");
 
 	return email;
+}
+
+static void xmlNonAmpersand(string &result, int c)
+{
+	if (c == '<') {
+		result.append("&#60;");
+	}
+	else if (c == '>') {
+		result.append("&#62;");
+	}
+	else if (c == '\"') {
+		result.append("&#34;");
+	}
+	else if (c == '\'') {
+		result.append("&#39;");
+	}
+	else if (c == '/') {
+		result.append("&#47;");
+	}
+	else if (c < 128) {
+		result += ((unsigned char) c);
+	}
+	else {
+		result.append("&#");
+		NumberFormatter::append(result, c);
+		result.append(";");
+	}
+}
+
+static void xmlAfterAmpersand(string &result, TextIterator &it, const TextIterator &end)
+{
+	string number;
+
+	if (it == end) {
+		result.append("&#38;");
+		return;
+	}
+
+	int c = *it;
+
+	// skip non-decadic entity
+	if (c != '#') {
+		result.append("&#38;");
+		xmlNonAmpersand(result, c);
+		return;
+	}
+
+	c = *(++it);
+	for (int i = 0; i < 4 && Ascii::isDigit(c) && it != end; ++i) {
+		number += ((unsigned char) c);
+		c = *(it++);
+	}
+
+	if (c != ';') { // at &#_ or &#D_ or &#DD_ or &#DDD_ or &#DDDD_
+		result.append("&#38;");
+		result.append("#");
+		result.append(number);
+		xmlNonAmpersand(result, c);
+		return;
+	}
+
+	// at &#[:digit:]{0,4};
+	if (number.size() == 0) {
+		result.append("&#38;#;");
+		return;
+	}
+
+	// bypass decadic entity
+	result.append("&#");
+	result.append(number);
+	result.append(";");
+}
+
+string Sanitize::xml(const string &bytes,
+		const unsigned long sizeLimit,
+		const string &inputEncoding)
+{
+	const string xml(Sanitize::encoding(bytes, sizeLimit, inputEncoding));
+	string result;
+
+	const UTF8Encoding utf8;
+	TextIterator it(xml, utf8);
+	TextIterator end(xml);
+
+	for (; it != end; ++it) {
+		int c = *it;
+	
+		if (c == '&') {
+			if (++it == end) {
+				result.append("&#38;");
+				break;
+			}
+
+			xmlAfterAmpersand(result, it, end);
+		}
+		else
+			xmlNonAmpersand(result, c);
+	}
+
+	return result;
 }

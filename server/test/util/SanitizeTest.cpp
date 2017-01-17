@@ -24,6 +24,8 @@ class SanitizeTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testBOMIsNotRemoved);
 	CPPUNIT_TEST(testSanitizeEmail);
 	CPPUNIT_TEST(testInvalidEmail);
+	CPPUNIT_TEST(testXMLEntities);
+	CPPUNIT_TEST(testNonAscii);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testSanitizeSizeLimit();
@@ -33,6 +35,8 @@ public:
 	void testBOMIsNotRemoved();
 	void testSanitizeEmail();
 	void testInvalidEmail();
+	void testXMLEntities();
+	void testNonAscii();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SanitizeTest);
@@ -191,6 +195,43 @@ void SanitizeTest::testInvalidEmail()
 	CPPUNIT_ASSERT_THROW(Sanitize::email("<script>@Example.org"), InvalidAccessException);
 	CPPUNIT_ASSERT_THROW(Sanitize::email("example@Example.org\xc0\xae"), InvalidAccessException);
 	CPPUNIT_ASSERT_THROW(Sanitize::email("example@Example.org***"), InvalidAccessException);
+}
+
+void SanitizeTest::testXMLEntities()
+{
+	CPPUNIT_ASSERT_EQUAL(string("&#38;"), Sanitize::xml("&"));
+	CPPUNIT_ASSERT_EQUAL(string("&#60;"), Sanitize::xml("<"));
+	CPPUNIT_ASSERT_EQUAL(string("&#62;"), Sanitize::xml(">"));
+	CPPUNIT_ASSERT_EQUAL(string("&#34;"), Sanitize::xml("\""));
+	CPPUNIT_ASSERT_EQUAL(string("&#39;"), Sanitize::xml("\'"));
+	CPPUNIT_ASSERT_EQUAL(string("&#47;"), Sanitize::xml("/"));
+
+	CPPUNIT_ASSERT_EQUAL(string("&#38;amp;"), Sanitize::xml("&amp;"));
+	CPPUNIT_ASSERT_EQUAL(string("&#38;lt;"), Sanitize::xml("&lt;"));
+	CPPUNIT_ASSERT_EQUAL(string("&#38;gt;"), Sanitize::xml("&gt;"));
+	CPPUNIT_ASSERT_EQUAL(string("&#38;quot;"), Sanitize::xml("&quot;"));
+
+	CPPUNIT_ASSERT_EQUAL(string("&#38;#x26;"), Sanitize::xml("&#x26;"));
+	CPPUNIT_ASSERT_EQUAL(string("&#38;#x3C;"), Sanitize::xml("&#x3C;"));
+	CPPUNIT_ASSERT_EQUAL(string("&#38;#x3E;"), Sanitize::xml("&#x3E;"));
+	CPPUNIT_ASSERT_EQUAL(string("&#38;#x27;"), Sanitize::xml("&#x27;"));
+	CPPUNIT_ASSERT_EQUAL(string("&#38;#x22;"), Sanitize::xml("&#x22;"));
+	CPPUNIT_ASSERT_EQUAL(string("&#38;#x2F;"), Sanitize::xml("&#x2F;"));
+}
+
+void SanitizeTest::testNonAscii()
+{
+	// alpha
+	CPPUNIT_ASSERT_EQUAL(string("&#945;"), Sanitize::xml("\xce\xb1"));
+	// beta
+	CPPUNIT_ASSERT_EQUAL(string("&#946;"), Sanitize::xml("\xce\xb2"));
+	// gamma
+	CPPUNIT_ASSERT_EQUAL(string("&#947;"), Sanitize::xml("\xce\xb3"));
+	// all at once
+	CPPUNIT_ASSERT_EQUAL(string("&#945;&#946;&#947;"), Sanitize::xml("\xce\xb1\xce\xb2\xce\xb3"));
+
+	// euro
+	CPPUNIT_ASSERT_EQUAL(string("&#8364;"), Sanitize::xml("\xe2\x82\xac"));
 }
 
 }
