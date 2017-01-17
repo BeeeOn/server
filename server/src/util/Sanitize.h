@@ -12,6 +12,10 @@ public:
 		 * When we have *really* no idea about maximal length.
 		 */
 		SIZE_LIMIT_NONE   = 0,
+		/**
+		 * E-mail addresses should not be longer.
+		 */
+		SIZE_LIMIT_EMAIL  = 512,
 	};
 
 	/**
@@ -27,6 +31,13 @@ public:
 	 */
 	static std::string encoding(const std::string &bytes,
 			const unsigned long sizeLimit = SIZE_LIMIT_NONE,
+			const std::string &inputEncoding = "UTF-8");
+
+	/**
+	 * Sanitize e-mail address. Convert to UTF-8 and check length and format.
+	 */
+	static std::string email(const std::string &bytes,
+			const unsigned long sizeLimit = SIZE_LIMIT_EMAIL,
 			const std::string &inputEncoding = "UTF-8");
 };
 

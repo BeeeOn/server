@@ -7,6 +7,7 @@
 #include <Poco/Exception.h>
 #include <Poco/Unicode.h>
 
+#include "cppunit/BetterAssert.h"
 #include "util/Sanitize.h"
 
 using namespace std;
@@ -21,6 +22,8 @@ class SanitizeTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testSanitizeAttacks);
 	CPPUNIT_TEST(testNonShortestUTF8Forms);
 	CPPUNIT_TEST(testBOMIsNotRemoved);
+	CPPUNIT_TEST(testSanitizeEmail);
+	CPPUNIT_TEST(testInvalidEmail);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testSanitizeSizeLimit();
@@ -28,6 +31,8 @@ public:
 	void testSanitizeAttacks();
 	void testNonShortestUTF8Forms();
 	void testBOMIsNotRemoved();
+	void testSanitizeEmail();
+	void testInvalidEmail();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SanitizeTest);
@@ -164,6 +169,28 @@ void SanitizeTest::testNonShortestUTF8Forms()
 		Sanitize::encoding("\xc1\x9c"));
 	CPPUNIT_ASSERT_EQUAL(string("?"),
 		Sanitize::encoding("\xe0\x81\x9c"));
+}
+
+void SanitizeTest::testSanitizeEmail()
+{
+	CPPUNIT_ASSERT_EQUAL(string("example@example.org"),
+		Sanitize::email("Example@Example.org"));
+
+	CPPUNIT_ASSERT_EQUAL(string("example.account@gmail.com"),
+		Sanitize::email("Example.Account@gmail.com"));
+
+	CPPUNIT_ASSERT_EQUAL(string(".!#$%&'*+\\/=?^_`{|}~-@.-.ab"),
+		Sanitize::email(".!#$%&'*+\\/=?^_`{|}~-@.-.ab"));
+}
+
+void SanitizeTest::testInvalidEmail()
+{
+	CPPUNIT_ASSERT_THROW(Sanitize::email("noemail"), InvalidAccessException);
+	CPPUNIT_ASSERT_THROW(Sanitize::email("too-long-local-part-with-more-then-64-characters-well-there-is-65@"), InvalidAccessException);
+	CPPUNIT_ASSERT_THROW(Sanitize::email("..@Example.org"), InvalidAccessException);
+	CPPUNIT_ASSERT_THROW(Sanitize::email("<script>@Example.org"), InvalidAccessException);
+	CPPUNIT_ASSERT_THROW(Sanitize::email("example@Example.org\xc0\xae"), InvalidAccessException);
+	CPPUNIT_ASSERT_THROW(Sanitize::email("example@Example.org***"), InvalidAccessException);
 }
 
 }
