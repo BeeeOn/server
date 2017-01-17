@@ -26,6 +26,7 @@ class SanitizeTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testInvalidEmail);
 	CPPUNIT_TEST(testXMLEntities);
 	CPPUNIT_TEST(testNonAscii);
+	CPPUNIT_TEST(testSanitizeCommon);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testSanitizeSizeLimit();
@@ -37,6 +38,7 @@ public:
 	void testInvalidEmail();
 	void testXMLEntities();
 	void testNonAscii();
+	void testSanitizeCommon();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SanitizeTest);
@@ -232,6 +234,38 @@ void SanitizeTest::testNonAscii()
 
 	// euro
 	CPPUNIT_ASSERT_EQUAL(string("&#8364;"), Sanitize::xml("\xe2\x82\xac"));
+}
+
+void SanitizeTest::testSanitizeCommon()
+{
+	CPPUNIT_ASSERT_NO_THROW(Sanitize::common("abcdefghijklmnopqrstuvwxyz"));
+	CPPUNIT_ASSERT_NO_THROW(Sanitize::common("ABCDEFGHIJKLMNOPQRSTUVWXYZ"));
+	CPPUNIT_ASSERT_NO_THROW(Sanitize::common("0123456789"));
+	CPPUNIT_ASSERT_NO_THROW(Sanitize::common(".:!?()/,-#'$€¥£©®"));
+	CPPUNIT_ASSERT_NO_THROW(Sanitize::common("My Common Place #1"));
+	CPPUNIT_ASSERT_NO_THROW(Sanitize::common("Frank O'Neil"));
+	CPPUNIT_ASSERT_NO_THROW(Sanitize::common("ěščřžýáíéůúóňďľĚŠČŘŽÝÁÍÉŮÚÓŇĎĽ"));
+	CPPUNIT_ASSERT_NO_THROW(Sanitize::common("ßàäæçèëöŰű"));
+
+	// examples not accepted:
+	CPPUNIT_ASSERT_THROW(Sanitize::common("&"),  InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::common("%"),  InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::common("@"),  InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::common("~"),  InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::common(";"),  InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::common("\\"), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::common("\""), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::common("*"),  InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::common("+"),  InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::common("|"),  InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::common("\n"), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::common("\t"), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::common("\b"), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::common("\r"), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::common("¬"),  InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::common("§"),  InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::common("¶"),  InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::common("¼"),  InvalidArgumentException);
 }
 
 }

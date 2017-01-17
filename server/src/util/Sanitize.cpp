@@ -188,3 +188,26 @@ string Sanitize::xml(const string &bytes,
 
 	return result;
 }
+
+static RegularExpression commonRegex(
+	"[\\p{L}\\p{Nd} \\.:!?()/,\\-_#'$€¥£©®]*",
+	RegularExpression::RE_DOLLAR_ENDONLY  |
+	RegularExpression::RE_NO_AUTO_CAPTURE |
+	RegularExpression::RE_UTF8,
+	true
+);
+
+string Sanitize::common(const string &bytes,
+		const unsigned long sizeLimit,
+		const string &inputEncoding)
+{
+	string result(Sanitize::encoding(bytes, sizeLimit, inputEncoding));
+
+	if (result.size() == 0)
+		return "";
+
+	if (match(commonRegex, result))
+		return result;
+
+	throw InvalidArgumentException("detected unexpected content");
+}

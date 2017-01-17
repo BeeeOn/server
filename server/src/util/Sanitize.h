@@ -21,6 +21,10 @@ public:
 		 * We can consider longer texts (like for <textarea>).
 		 */
 		SIZE_LIMIT_XML    = 4096,
+		/**
+		 * Common names are pretty short.
+		 */
+		SIZE_LIMIT_COMMON = 1024,
 	};
 
 	/**
@@ -51,6 +55,15 @@ public:
 	 */
 	static std::string xml(const std::string &bytes,
 			const unsigned long sizeLimit = SIZE_LIMIT_XML,
+			const std::string &inputEncoding = "UTF-8");
+
+	/**
+	 * Sanitization of common text input. It is suitable for non-rich text
+	 * with alpha-numeric characters, spaces and a small subset of punctation
+	 * symbols.
+	 */
+	static std::string common(const std::string &bytes,
+			const unsigned long sizeLimit = SIZE_LIMIT_COMMON,
 			const std::string &inputEncoding = "UTF-8");
 };
 
