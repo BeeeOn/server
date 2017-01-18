@@ -36,6 +36,11 @@ public:
 		 * quite high.
 		 */
 		SIZE_LIMIT_URI    = 1024,
+		/**
+		 * Base64-encoded data are usually short or of a medium
+		 * size. Session IDs are not longer then 1024 characters.
+		 */
+		SIZE_LIMIT_BASE64 = 1024,
 	};
 
 	/**
@@ -92,6 +97,16 @@ public:
 	 */
 	static Poco::URI uri(const std::string &bytes,
 			const unsigned long sizeLimit = SIZE_LIMIT_URI,
+			const std::string &inputEncoding = "UTF-8");
+
+	/**
+	 * Sanitize the Base64 formatted input. Convert the contents to UTF-8
+	 * and allow only Base64 symbols. Whitespace is denied and thus it must
+	 * not be included. Padding '=' symbols can be included at the end.
+	 * The method does NOT perform decoding.
+	 */
+	static std::string base64(const std::string &bytes,
+			const unsigned long sizeLimit = SIZE_LIMIT_BASE64,
 			const std::string &inputEncoding = "UTF-8");
 };
 

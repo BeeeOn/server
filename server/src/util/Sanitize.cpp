@@ -250,3 +250,26 @@ URI Sanitize::uri(const string &bytes,
 
 	return URI(result);
 }
+
+static RegularExpression base64Regex(
+	"[+a-zA-Z0-9/]+={0,2}",
+	RegularExpression::RE_DOLLAR_ENDONLY  |
+	RegularExpression::RE_NO_AUTO_CAPTURE |
+	RegularExpression::RE_UTF8,
+	true
+);
+
+string Sanitize::base64(const string &bytes,
+		const unsigned long sizeLimit,
+		const string &inputEncoding)
+{
+	string base64(Sanitize::encoding(bytes, sizeLimit, inputEncoding));
+
+	if (base64.empty())
+		return "";
+
+	if (!match(base64Regex, base64))
+		throw InvalidArgumentException("invalid base64 content");
+
+	return base64;
+}

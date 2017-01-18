@@ -30,6 +30,7 @@ class SanitizeTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testSanitizeCommon);
 	CPPUNIT_TEST(testSanitizeStrict);
 	CPPUNIT_TEST(testSanitizeUri);
+	CPPUNIT_TEST(testSanitizeBase64);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testSanitizeSizeLimit();
@@ -44,6 +45,7 @@ public:
 	void testSanitizeCommon();
 	void testSanitizeStrict();
 	void testSanitizeUri();
+	void testSanitizeBase64();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SanitizeTest);
@@ -298,6 +300,26 @@ void SanitizeTest::testSanitizeUri()
 
 	result = Sanitize::uri("http://www.example.org/%ffx=6");
 	CPPUNIT_ASSERT_EQUAL(string("http://www.example.org/?x=6"), result.toString());
+}
+
+void SanitizeTest::testSanitizeBase64()
+{
+	CPPUNIT_ASSERT_NO_THROW(Sanitize::base64(""));
+	CPPUNIT_ASSERT_NO_THROW(Sanitize::base64("abcdefghijklmnopqrstuvwxyz"));
+	CPPUNIT_ASSERT_NO_THROW(Sanitize::base64("ABCDEFGHIJKLMNOPQRSTUVWXYZ"));
+	CPPUNIT_ASSERT_NO_THROW(Sanitize::base64("0123456789+/"));
+	CPPUNIT_ASSERT_NO_THROW(Sanitize::base64("0="));
+	CPPUNIT_ASSERT_NO_THROW(Sanitize::base64("0=="));
+
+	CPPUNIT_ASSERT_THROW(Sanitize::base64("="), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::base64("=="), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::base64("0==1"), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::base64("0==="), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::base64(" "), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::base64("\n"), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::base64("\r"), InvalidArgumentException);
+
+	CPPUNIT_ASSERT_EQUAL(string(""), Sanitize::base64("\x00"));
 }
 
 }
