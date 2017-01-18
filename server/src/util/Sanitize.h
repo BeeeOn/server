@@ -2,6 +2,7 @@
 #define BEEEON_SANITIZE_H
 
 #include <string>
+#include <Poco/URI.h>
 
 namespace BeeeOn {
 
@@ -30,6 +31,11 @@ public:
 		 * longer then necessary. Usually max 32 characters.
 		 */
 		SIZE_LIMIT_STRICT = 128,
+		/**
+		 * It is difficult to limit URIs. The limit should be
+		 * quite high.
+		 */
+		SIZE_LIMIT_URI    = 1024,
 	};
 
 	/**
@@ -77,6 +83,15 @@ public:
 	 */
 	static std::string strict(const std::string &bytes,
 			const unsigned long sizeLimit = SIZE_LIMIT_STRICT,
+			const std::string &inputEncoding = "UTF-8");
+
+	/**
+	 * Sanitize URI. It is URL-decoded and checked to be UTF-8 valid.
+	 * Finally it is encoded back (after UTF-8 validation) and passed
+	 * into Poco::URI.
+	 */
+	static Poco::URI uri(const std::string &bytes,
+			const unsigned long sizeLimit = SIZE_LIMIT_URI,
 			const std::string &inputEncoding = "UTF-8");
 };
 

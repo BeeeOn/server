@@ -235,3 +235,18 @@ string Sanitize::strict(const string &bytes,
 
 	return text;
 }
+
+URI Sanitize::uri(const string &bytes,
+		const unsigned long sizeLimit,
+		const string &inputEncoding)
+{
+	string decoded;
+	URI::decode(bytes, decoded);
+
+	const string utf8(Sanitize::encoding(decoded, sizeLimit, inputEncoding));
+
+	string result;
+	URI::encode(utf8, "", result);
+
+	return URI(result);
+}

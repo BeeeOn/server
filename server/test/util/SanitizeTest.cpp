@@ -6,6 +6,7 @@
 
 #include <Poco/Exception.h>
 #include <Poco/Unicode.h>
+#include <Poco/URI.h>
 
 #include "cppunit/BetterAssert.h"
 #include "util/Sanitize.h"
@@ -28,6 +29,7 @@ class SanitizeTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testNonAscii);
 	CPPUNIT_TEST(testSanitizeCommon);
 	CPPUNIT_TEST(testSanitizeStrict);
+	CPPUNIT_TEST(testSanitizeUri);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testSanitizeSizeLimit();
@@ -41,6 +43,7 @@ public:
 	void testNonAscii();
 	void testSanitizeCommon();
 	void testSanitizeStrict();
+	void testSanitizeUri();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SanitizeTest);
@@ -278,6 +281,23 @@ void SanitizeTest::testSanitizeStrict()
 
 	CPPUNIT_ASSERT_THROW(Sanitize::strict("?"), InvalidArgumentException);
 	CPPUNIT_ASSERT_THROW(Sanitize::strict("\n"), InvalidArgumentException);
+}
+
+void SanitizeTest::testSanitizeUri()
+{
+	URI result;
+
+	result = Sanitize::uri("http://www.example.org/%c0%ae");
+	CPPUNIT_ASSERT_EQUAL(string("http://www.example.org/"), result.toString());
+
+	result = Sanitize::uri("http://www.example.org/%25c0%25ae");
+	CPPUNIT_ASSERT_EQUAL(string("http://www.example.org/%25c0%25ae"), result.toString());
+
+	result = Sanitize::uri("http://www.example.org/%25");
+	CPPUNIT_ASSERT_EQUAL(string("http://www.example.org/%25"), result.toString());
+
+	result = Sanitize::uri("http://www.example.org/%ffx=6");
+	CPPUNIT_ASSERT_EQUAL(string("http://www.example.org/?x=6"), result.toString());
 }
 
 }
