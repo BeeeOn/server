@@ -25,6 +25,11 @@ public:
 		 * Common names are pretty short.
 		 */
 		SIZE_LIMIT_COMMON = 1024,
+		/**
+		 * Be strict, we do not expect this kind of data to be
+		 * longer then necessary. Usually max 32 characters.
+		 */
+		SIZE_LIMIT_STRICT = 128,
 	};
 
 	/**
@@ -64,6 +69,14 @@ public:
 	 */
 	static std::string common(const std::string &bytes,
 			const unsigned long sizeLimit = SIZE_LIMIT_COMMON,
+			const std::string &inputEncoding = "UTF-8");
+
+	/**
+	 * Sanitize the text input. Convert the contents to UTF-8
+	 * and allow only basic symbols like: [-a-zA-Z0-9 \t]*.
+	 */
+	static std::string strict(const std::string &bytes,
+			const unsigned long sizeLimit = SIZE_LIMIT_STRICT,
 			const std::string &inputEncoding = "UTF-8");
 };
 

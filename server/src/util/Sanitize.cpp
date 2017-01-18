@@ -211,3 +211,27 @@ string Sanitize::common(const string &bytes,
 
 	throw InvalidArgumentException("detected unexpected content");
 }
+
+static RegularExpression strictRegex(
+	"[-a-zA-Z0-9 \t]+",
+	RegularExpression::RE_DOLLAR_ENDONLY  |
+	RegularExpression::RE_NO_AUTO_CAPTURE |
+	RegularExpression::RE_UTF8,
+	true
+);
+
+string Sanitize::strict(const string &bytes,
+		const unsigned long sizeLimit,
+		const string &inputEncoding)
+{
+	const string text(Sanitize::encoding(bytes, sizeLimit, inputEncoding));
+
+	if (text.empty())
+		return "";
+
+	if (!match(strictRegex, text))
+		throw InvalidArgumentException(
+			"unexpected content for strictly-validated data");
+
+	return text;
+}

@@ -27,6 +27,7 @@ class SanitizeTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testXMLEntities);
 	CPPUNIT_TEST(testNonAscii);
 	CPPUNIT_TEST(testSanitizeCommon);
+	CPPUNIT_TEST(testSanitizeStrict);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testSanitizeSizeLimit();
@@ -39,6 +40,7 @@ public:
 	void testXMLEntities();
 	void testNonAscii();
 	void testSanitizeCommon();
+	void testSanitizeStrict();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SanitizeTest);
@@ -266,6 +268,16 @@ void SanitizeTest::testSanitizeCommon()
 	CPPUNIT_ASSERT_THROW(Sanitize::common("§"),  InvalidArgumentException);
 	CPPUNIT_ASSERT_THROW(Sanitize::common("¶"),  InvalidArgumentException);
 	CPPUNIT_ASSERT_THROW(Sanitize::common("¼"),  InvalidArgumentException);
+}
+
+void SanitizeTest::testSanitizeStrict()
+{
+	CPPUNIT_ASSERT_NO_THROW(Sanitize::strict(" \tabcdefghijk \tlmnopqrstuvwxyz"));
+	CPPUNIT_ASSERT_NO_THROW(Sanitize::strict(" \tABCDEFGHIJK \tLMNOPQRSTUVWXYZ"));
+	CPPUNIT_ASSERT_NO_THROW(Sanitize::strict(" \t01234 \t56789- \t"));
+
+	CPPUNIT_ASSERT_THROW(Sanitize::strict("?"), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::strict("\n"), InvalidArgumentException);
 }
 
 }
