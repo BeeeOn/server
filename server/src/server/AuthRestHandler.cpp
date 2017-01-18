@@ -12,6 +12,7 @@
 #include "server/AuthRestHandler.h"
 #include "service/AuthService.h"
 #include "util/JsonUtil.h"
+#include "util/Sanitize.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, AuthRestHandler)
 BEEEON_OBJECT_CASTABLE(RestHandler)
@@ -86,7 +87,7 @@ void AuthRestHandler::login(RestFlow &flow)
 		throw NotAuthenticatedException("malformed input, missing provider or code");
 
 	AuthCodeCredentials credentials(
-		JsonUtil::extract<std::string>(object, "provider"),
+		Sanitize::strict(JsonUtil::extract<std::string>(object, "provider")),
 		JsonUtil::extract<std::string>(object, "code")
 	);
 

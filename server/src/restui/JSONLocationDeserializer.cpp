@@ -2,6 +2,7 @@
 #include <Poco/JSON/Parser.h>
 
 #include "restui/JSONLocationDeserializer.h"
+#include "util/Sanitize.h"
 
 using namespace std;
 using namespace Poco;
@@ -28,7 +29,7 @@ JSONLocationDeserializer::JSONLocationDeserializer(const Object::Ptr data):
 void JSONLocationDeserializer::partial(Location &location) const
 {
 	if (m_data->has("name"))
-		location.setName(m_data->getValue<string>("name"));
+		location.setName(Sanitize::common(m_data->getValue<string>("name")));
 }
 
 void JSONLocationDeserializer::full(Location &location) const
@@ -36,5 +37,5 @@ void JSONLocationDeserializer::full(Location &location) const
 	if (!m_data->has("name"))
 		throw InvalidArgumentException("missing name for location");
 
-	location.setName(m_data->getValue<string>("name"));
+	location.setName(Sanitize::common(m_data->getValue<string>("name")));
 }

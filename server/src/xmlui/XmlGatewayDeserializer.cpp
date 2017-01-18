@@ -5,6 +5,7 @@
 #include <Poco/DOM/Element.h>
 
 #include "xmlui/XmlGatewayDeserializer.h"
+#include "util/Sanitize.h"
 
 using namespace Poco;
 using namespace Poco::XML;
@@ -33,7 +34,7 @@ static Nullable<int> attributeNullable(const std::string &value)
 void XmlGatewayDeserializer::partial(Gateway &gateway) const
 {
 	if (m_node.hasAttribute("name"))
-		gateway.setName(m_node.getAttribute("name"));
+		gateway.setName(Sanitize::common(m_node.getAttribute("name")));
 
 	if (m_node.hasAttribute("longitude"))
 		gateway.setLongitude(attributeAsDouble(m_node, "longitude"));
@@ -50,7 +51,7 @@ void XmlGatewayDeserializer::full(Gateway &gateway) const
 	if (!m_node.hasAttribute("name"))
 		throw InvalidArgumentException("missing name for gateway");
 
-	gateway.setName(m_node.getAttribute("name"));
+	gateway.setName(Sanitize::common(m_node.getAttribute("name")));
 
 	if (!m_node.hasAttribute("longitude"))
 		gateway.setLongitude(NAN);
