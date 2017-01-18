@@ -152,7 +152,7 @@ bool FacebookAuthProvider::parseIdentity(const string &userInfo, const string &a
 		if (pictData->has("data")) {
 			Object::Ptr picture  = pictData->getObject("data");
 			if (picture->has("url"))
-				result.setPicture(picture->getValue<string>("url"));
+				result.setPicture(URI(picture->getValue<string>("url")));
 		}
 	}
 

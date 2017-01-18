@@ -49,7 +49,7 @@ bool GoogleAuthProvider::parseIdentity(const std::string &userInfo,
 	if (info->has("family_name"))
 		result.setLastName(info->getValue<string>("family_name"));
 	if (info->has("picture"))
-		result.setPicture(info->getValue<string>("picture"));
+		result.setPicture(URI(info->getValue<string>("picture")));
 
 	result.setAccessToken(tokens.accessToken);
 
