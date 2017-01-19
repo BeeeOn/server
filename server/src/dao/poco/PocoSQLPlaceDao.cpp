@@ -24,7 +24,7 @@ PocoSQLPlaceDao::PocoSQLPlaceDao()
 
 void PocoSQLPlaceDao::create(Place &place)
 {
-	place = Place(PlaceID::random(), place);
+	place.setId(PlaceID::random());
 	string id(place.id().toString());
 	string name(place.name());
 

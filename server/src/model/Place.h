@@ -23,18 +23,6 @@ public:
 	{
 	}
 
-	Place(const Place &copy):
-		Entity(copy),
-		m_name(copy.m_name)
-	{
-	}
-
-	Place(const ID &id, const Place &copy):
-		Entity(id, copy),
-		m_name(copy.m_name)
-	{
-	}
-
 	void setName(const std::string &name)
 	{
 		m_name = name;
