@@ -24,8 +24,6 @@ public:
 	Identity();
 	Identity(const ID &id);
 	Identity(const std::string &email);
-	Identity(const Identity &copy);
-	Identity(const ID &id, const Identity &copy);
 
 	void setEmail(const std::string email)
 	{

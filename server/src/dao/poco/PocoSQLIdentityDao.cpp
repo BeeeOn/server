@@ -24,7 +24,7 @@ PocoSQLIdentityDao::PocoSQLIdentityDao()
 
 void PocoSQLIdentityDao::create(Identity &identity)
 {
-	identity = Identity(IdentityID::random(), identity);
+	identity.setId(IdentityID::random());
 	string id(identity.id().toString());
 	string email(identity.email());
 
