@@ -922,6 +922,28 @@
 			AND
 			g.id = <value name="gateway_id" type="uuid" />
 		</define>
+		<test name="simple test">
+			<check name="find the Kitchen by Test Gateway 1">
+				<call-query>
+					<arg name="id">'f5ad3e17-aa65-4291-8916-1d21cdf6b4bb'</arg>
+					<arg name="gateway_id">181462068183316</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="name">Kitchen</value>
+						<value name="place_name">Test Place 1</value>
+						<value type="uuid" name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
+					</row>
+				</expect>
+			</check>
+			<check name="find the Kitchen in Test Gateway 2 (it is not there)">
+				<call-query>
+					<arg name="id">'f5ad3e17-aa65-4291-8916-1d21cdf6b4bb'</arg>
+					<arg name="gateway_id">140548523101825</arg>
+				</call-query>
+				<expect />
+			</check>
+		</test>
 	</query>
 
 	<query id="locations.fetch.by.place_id">
