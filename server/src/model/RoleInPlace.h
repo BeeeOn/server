@@ -18,8 +18,6 @@ public:
 
 	RoleInPlace();
 	RoleInPlace(const ID &id);
-	RoleInPlace(const RoleInPlace &copy);
-	RoleInPlace(const ID &id, const RoleInPlace &copy);
 
 	void setPlace(const Place &place)
 	{

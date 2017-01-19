@@ -36,7 +36,7 @@ void PocoSQLRoleInPlaceDao::create(RoleInPlace &role)
 	assureHasId(role.place());
 	assureHasId(role.identity());
 
-	role = RoleInPlace(RoleInPlaceID::random(), role);
+	role.setId(RoleInPlaceID::random());
 	string id(role.id().toString());
 	string placeID(role.place().id().toString());
 	string identityID(role.identity().id().toString());
