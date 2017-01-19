@@ -120,6 +120,15 @@
 			<set name="transactionManager" ref="transactionManager" />
 		</instance>
 
+		<instance name="roleService" class="BeeeOn::RoleService">
+			<set name="identityDao" ref="identityDao" />
+			<set name="gatewayDao" ref="gatewayDao" />
+			<set name="roleInGatewayDao" ref="roleInGatewayDao" />
+			<set name="accessPolicy" ref="accessPolicy" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="notificationDispatcher" ref="notificationDispatcher" />
+		</instance>
+
 		<instance name="typeInfoProvider" class="BeeeOn::TypeInfoProvider">
 			<set name="typesFile" text="${spec.types.xml}" />
 		</instance>
