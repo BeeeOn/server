@@ -136,6 +136,7 @@ add_executable(xmlui-server
 	xmlui/LocationXmlHandler.cpp
 	xmlui/ProfileXmlHandler.cpp
 	xmlui/DeviceXmlHandler.cpp
+	xmlui/RoleXmlHandler.cpp
 	ui/UIMockInit.cpp
 	dao/poco/PocoSQLiteConnectorLoader.cpp
 )
