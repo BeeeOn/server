@@ -91,9 +91,11 @@ bool PocoSQLPlaceDao::parseSingle(Row &result,
 		Place &place, const string &prefix)
 {
 	if (hasColumn(result, prefix + "id"))
-		place = Place(PlaceID::parse(result[prefix + "id"]));
+		place.setId(PlaceID::parse(result[prefix + "id"]));
 
 	place.setName(emptyWhenNull(result[prefix + "name"]));
+
+	markLoaded(place);
 	return true;
 }
 
@@ -104,7 +106,9 @@ bool PocoSQLPlaceDao::parseIfIDNotNull(Row &result,
 	if (id.empty())
 		return false;
 
-	place = Place(PlaceID::parse(id));
+	place.setId(PlaceID::parse(id));
 	place.setName(result[prefix + "name"]);
+
+	markLoaded(place);
 	return true;
 }
