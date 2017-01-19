@@ -8,7 +8,6 @@
 #include "service/AuthService.h"
 #include "server/Route.h"
 #include "server/Session.h"
-#include "model/JSONSerializer.h"
 #include "ui/UIServerModule.h"
 #include "Debug.h"
 
