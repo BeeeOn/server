@@ -11,29 +11,6 @@ LegacyGateway::LegacyGateway(const GatewayID &id):
 {
 }
 
-LegacyGateway::LegacyGateway(const LegacyGateway &copy):
-	Gateway(copy),
-	m_owner(copy.m_owner),
-	m_accessLevel(copy.m_accessLevel),
-	m_deviceCount(copy.m_deviceCount),
-	m_userCount(copy.m_userCount)
-{
-}
-
-LegacyGateway::LegacyGateway(const GatewayID &id, const LegacyGateway &copy):
-	Gateway(id, copy),
-	m_owner(copy.m_owner),
-	m_accessLevel(copy.m_accessLevel),
-	m_deviceCount(copy.m_deviceCount),
-	m_userCount(copy.m_userCount)
-{
-}
-
-LegacyGateway::LegacyGateway(const Gateway &copy):
-	Gateway(copy)
-{
-}
-
 void LegacyGateway::setOwner(const User &owner)
 {
 	m_owner = owner;
