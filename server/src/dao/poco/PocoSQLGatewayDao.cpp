@@ -256,7 +256,7 @@ bool PocoSQLGatewayDao::parseSingle(Row &result, Gateway &gateway,
 		const string &prefix)
 {
 	if (hasColumn(result, prefix + "id"))
-		gateway = Gateway(GatewayID::parse(result[prefix + "id"]));
+		gateway.setId(GatewayID::parse(result[prefix + "id"]));
 
 	gateway.setName(emptyWhenNull(result[prefix + "name"]));
 	gateway.setAltitude(nanWhenEmpty(result[prefix + "altitude"]));
@@ -275,6 +275,7 @@ bool PocoSQLGatewayDao::parseSingle(Row &result, Gateway &gateway,
 	if (PocoSQLPlaceDao::parseIfIDNotNull(result, place, prefix + "place_"))
 		gateway.setPlace(place);
 
+	markLoaded(gateway);
 	return true;
 }
 

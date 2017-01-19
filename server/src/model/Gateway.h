@@ -6,6 +6,7 @@
 #include <Poco/Nullable.h>
 #include <Poco/Net/IPAddress.h>
 
+#include "model/Entity.h"
 #include "model/Place.h"
 #include "model/GatewayID.h"
 
@@ -14,10 +15,9 @@ namespace BeeeOn {
 /**
  * Representation of a Gateway application entity.
  */
-class Gateway {
+class Gateway : public Entity<GatewayID> {
 public:
 	typedef Poco::SharedPtr<Gateway> Ptr;
-	typedef GatewayID ID;
 
 	Gateway():
 		m_altitude(0),
@@ -27,7 +27,7 @@ public:
 	}
 
 	Gateway(const ID &id):
-		m_id(id),
+		Entity<GatewayID>(id),
 		m_altitude(0),
 		m_latitude(0),
 		m_longitude(0)
@@ -35,7 +35,7 @@ public:
 	}
 
 	Gateway(const Gateway &copy):
-		m_id(copy.m_id),
+		Entity<GatewayID>(copy),
 		m_name(copy.m_name),
 		m_place(copy.m_place),
 		m_altitude(copy.m_altitude),
@@ -45,7 +45,7 @@ public:
 	}
 
 	Gateway(const ID &id, const Gateway &copy):
-		m_id(id),
+		Entity<GatewayID>(id, copy),
 		m_name(copy.m_name),
 		m_place(copy.m_place),
 		m_altitude(copy.m_altitude),
@@ -77,11 +77,6 @@ public:
 	bool hasPlace() const
 	{
 		return !m_place.id().isNull();
-	}
-
-	const ID &id() const
-	{
-		return m_id;
 	}
 
 	void setAltitude(double alt)
@@ -150,7 +145,6 @@ public:
 	}
 
 private:
-	ID m_id;
 	std::string m_name;
 	Place m_place;
 	double m_altitude;
