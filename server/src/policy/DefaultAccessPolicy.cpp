@@ -237,3 +237,54 @@ void DefaultAccessPolicy::assureUpdate(
 	assureAtLeast(fetchAccessLevel(context.user(), gateway),
 			AccessLevel::user());
 }
+
+void DefaultAccessPolicy::assureInvite(
+	const PolicyContext &context,
+	const Gateway &gateway,
+	const AccessLevel &as)
+{
+	/**
+	 * Only admin can invite others.
+	 */
+	assureAtLeast(
+		fetchAccessLevel(context.user(), gateway),
+		AccessLevel::admin());
+}
+
+void DefaultAccessPolicy::assureList(
+	const PolicyContext &context,
+	const Gateway &gateway)
+{
+	assureAtLeast(
+		fetchAccessLevel(context.user(), gateway),
+		AccessLevel::guest());
+}
+
+void DefaultAccessPolicy::assureRemove(
+	const PolicyContext &context,
+	const RoleInGateway &role)
+{
+	RoleInGateway tmp(role);
+	if (!m_roleInGatewayDao->fetch(tmp))
+		throw InvalidAccessException("no such role " + tmp);
+
+	assureAtLeast(
+		fetchAccessLevel(context.user(), tmp.gateway()),
+		AccessLevel::admin());
+}
+
+void DefaultAccessPolicy::assureUpdate(
+	const PolicyContext &context,
+	const RoleInGateway &role)
+{
+	if (m_roleInGatewayDao->isUser(role, context.user()))
+		throw InvalidAccessException("cannot change own access level");
+
+	RoleInGateway tmp(role);
+	if (!m_roleInGatewayDao->fetch(tmp))
+		throw InvalidAccessException("no such role " + tmp);
+
+	assureAtLeast(
+		fetchAccessLevel(context.user(), tmp.gateway()),
+		AccessLevel::admin());
+}
