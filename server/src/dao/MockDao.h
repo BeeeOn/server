@@ -119,7 +119,7 @@ template <
 	typename ID = typename T::ID,
 	typename BID = typename B::ID
 	>
-class MockRelationDao : public P {
+class MockRelationDao : public P, public EntityLoader {
 public:
 	struct Key {
 		ID id;
