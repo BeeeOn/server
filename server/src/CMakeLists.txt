@@ -102,6 +102,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/rpc/FakeGatewayRPC.cpp
 	${PROJECT_SOURCE_DIR}/notification/NotificationDispatcher.cpp
 	${PROJECT_SOURCE_DIR}/notification/FirstLoginNotification.cpp
+	${PROJECT_SOURCE_DIR}/notification/InvitedNotification.cpp
 	${PROJECT_SOURCE_DIR}/notification/NotificationObserver.cpp
 	${PROJECT_SOURCE_DIR}/notification/LoggingObserver.cpp
 )

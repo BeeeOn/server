@@ -2,7 +2,11 @@
 
 #include "notification/NotificationDispatcher.h"
 #include "notification/FirstLoginNotification.h"
+#include "notification/InvitedNotification.h"
+#include "model/Identity.h"
 #include "model/VerifiedIdentity.h"
+#include "model/Gateway.h"
+#include "model/User.h"
 #include "Debug.h"
 
 BEEEON_OBJECT(NotificationDispatcher, BeeeOn::NotificationDispatcher)
@@ -31,4 +35,14 @@ void NotificationDispatcher::notifyFirstLogin(
 		const VerifiedIdentity &identity)
 {
 	m_center.postNotification(new FirstLoginNotification(identity));
+}
+
+void NotificationDispatcher::notifyInvited(
+		const Identity &identity,
+		const Gateway &gateway,
+		const User &by)
+{
+	m_center.postNotification(new InvitedNotification(
+		identity, gateway, by
+	));
 }

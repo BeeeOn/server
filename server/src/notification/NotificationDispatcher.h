@@ -14,6 +14,10 @@ class AbstractObserver;
 
 namespace BeeeOn {
 
+class Identity;
+class Gateway;
+class User;
+
 class NotificationDispatcher : public AbstractInjectorTarget {
 public:
 	NotificationDispatcher();
@@ -22,6 +26,7 @@ public:
 	void addObserver(Poco::AbstractObserver *o);
 
 	void notifyFirstLogin(const VerifiedIdentity &identity);
+	void notifyInvited(const Identity &identity, const Gateway &gateway, const User &by);
 
 protected:
 	Poco::NotificationCenter m_center;
