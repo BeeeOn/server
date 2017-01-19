@@ -120,10 +120,12 @@
 		</instance>
 
 		<instance name="typeInfoProvider" class="BeeeOn::TypeInfoProvider">
+			<set name="typesFile" text="${spec.types.xml}" />
 		</instance>
 
 		<instance name="deviceInfoProvider" class="BeeeOn::DeviceInfoProvider">
 			<set name="typeInfoProvider" ref="typeInfoProvider" />
+			<set name="devicesFile" text="${spec.devices.xml}" />
 		</instance>
 
 		<instance name="loggingObserver" class="BeeeOn::LoggingObserver" />
