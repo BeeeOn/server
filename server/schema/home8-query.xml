@@ -957,7 +957,42 @@
 		JOIN places AS p ON l.place_id = p.id
 		WHERE
 			place_id = <value name="place_id" type="uuid" />
+		ORDER BY l.id
 		</define>
+		<test name="simple test">
+			<check name="list locations in Test Place 1">
+				<call-query>
+					<arg name="place_id">'16de2f05-8af7-4729-8479-1973590cfa54'</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value type="uuid" name="id">3a91f58e-579e-41f2-a17b-3fb6166abb69</value>
+						<value name="name">Livingroom</value>
+						<value name="place_name">Test Place 1</value>
+						<value type="uuid" name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
+					</row>
+					<row>
+						<value type="uuid" name="id">f5ad3e17-aa65-4291-8916-1d21cdf6b4bb</value>
+						<value name="name">Kitchen</value>
+						<value name="place_name">Test Place 1</value>
+						<value type="uuid" name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
+					</row>
+				</expect>
+			</check>
+			<check name="list locations in Test Place 2">
+				<call-query>
+					<arg name="place_id">'bd8ea40c-91c9-4d8c-8c13-a8332c39a437'</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value type="uuid" name="id">7a336a66-da55-4bf0-ba37-00461845823b</value>
+						<value name="name">Bedroom</value>
+						<value name="place_name">Test Place 2</value>
+						<value type="uuid" name="place_id">bd8ea40c-91c9-4d8c-8c13-a8332c39a437</value>
+					</row>
+				</expect>
+			</check>
+		</test>
 	</query>
 
 	<query id="locations.fetch.by.gateway_id">
