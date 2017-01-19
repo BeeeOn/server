@@ -94,9 +94,11 @@ bool PocoSQLIdentityDao::parseSingle(Row &result,
 		Identity &identity, const string &prefix)
 {
 	if (hasColumn(result, prefix + "id"))
-		identity = Identity(IdentityID::parse(result[prefix + "id"]));
+		identity.setId(IdentityID::parse(result[prefix + "id"]));
 
 	identity.setEmail(result[prefix + "email"]);
+
+	markLoaded(identity);
 	return true;
 }
 
@@ -107,7 +109,9 @@ bool PocoSQLIdentityDao::parseIfIDNotNull(Row &result,
 	if (id.empty())
 		return false;
 
-	identity = Identity(IdentityID::parse(id));
+	identity.setId(IdentityID::parse(id));
 	identity.setEmail(result[prefix + "email"]);
+
+	markLoaded(identity);
 	return true;
 }

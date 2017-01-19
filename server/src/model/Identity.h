@@ -3,6 +3,7 @@
 
 #include <Poco/SharedPtr.h>
 
+#include "model/Entity.h"
 #include "model/GlobalID.h"
 
 namespace BeeeOn {
@@ -16,10 +17,9 @@ namespace BeeeOn {
  * (Google, Facebook, ...). This class represents any identity
  * in the system and has a globally unique e-mail.
  */
-class Identity {
+class Identity : public Entity<GlobalID> {
 public:
 	typedef Poco::SharedPtr<Identity> Ptr;
-	typedef GlobalID ID;
 
 	Identity();
 	Identity(const ID &id);
@@ -37,23 +37,12 @@ public:
 		return m_email;
 	}
 
-	void setID(const ID &id)
+	const std::string toString() const override
 	{
-		m_id = id;
-	}
-
-	const ID &id() const
-	{
-		return m_id;
-	}
-
-	const std::string repr() const
-	{
-		return "'" + m_email + "', '" + m_id.toString() + "'";
+		return "'" + m_email + "', '" + id().toString() + "'";
 	}
 
 private:
-	ID          m_id;
 	std::string m_email;
 };
 
