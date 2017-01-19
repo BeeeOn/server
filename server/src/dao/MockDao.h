@@ -6,6 +6,8 @@
 #include <ostream>
 #include <Poco/Exception.h>
 #include <Poco/Logger.h>
+
+#include "dao/EntityLoader.h"
 #include "Debug.h"
 
 namespace BeeeOn {
@@ -19,7 +21,7 @@ template <
 	typename P,
 	typename ID = typename T::ID
 	>
-class MockDao : public P {
+class MockDao : public P, public EntityLoader {
 public:
 	typedef std::map<ID, typename T::Ptr> Storage;
 	typedef typename Storage::iterator Iterator;
@@ -38,6 +40,7 @@ public:
 			return false;
 
 		t = T(t.id(), *it->second);
+		markLoaded(t);
 		return true;
 	}
 
@@ -171,6 +174,7 @@ public:
 
 		t = T(t.id(), *it->second);
 		setBase(t, b);
+		markLoaded(t);
 		return true;
 	}
 
