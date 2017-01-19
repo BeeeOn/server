@@ -18,7 +18,7 @@ public:
 
 	Entity();
 	Entity(const TypeID &id);
-	Entity(const TypeID &id, const Entity<TypeID> &copy);
+
 	virtual ~Entity()
 	{
 	}
@@ -61,13 +61,6 @@ template <typename TypeID>
 Entity<TypeID>::Entity(const TypeID &id):
 	m_id(id),
 	m_loaded(false)
-{
-}
-
-template <typename TypeID>
-Entity<TypeID>::Entity(const TypeID &id, const Entity<TypeID> &copy):
-	m_id(id),
-	m_loaded(copy.m_loaded)
 {
 }
 
