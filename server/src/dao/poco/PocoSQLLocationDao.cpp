@@ -30,7 +30,7 @@ PocoSQLLocationDao::PocoSQLLocationDao()
 
 void PocoSQLLocationDao::create(Location &location)
 {
-	location = Location(LocationID::random(), location);
+	location.setId(LocationID::random());
 	string id(location.id().toString());
 	string name(location.name());
 	string placeID(location.place().id().toString());
