@@ -8,7 +8,6 @@
 
 #include "model/Place.h"
 #include "model/GatewayID.h"
-#include "model/Collection.h"
 
 namespace BeeeOn {
 
@@ -18,7 +17,6 @@ namespace BeeeOn {
 class Gateway {
 public:
 	typedef Poco::SharedPtr<Gateway> Ptr;
-	typedef BeeeOn::Collection<Gateway> Collection;
 	typedef GatewayID ID;
 
 	Gateway():
@@ -163,7 +161,6 @@ private:
 	Poco::Net::IPAddress m_ipAddress;
 };
 
-typedef Gateway::Collection GatewayCollection;
 typedef Gateway::ID GatewayID;
 
 }

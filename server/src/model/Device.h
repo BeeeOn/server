@@ -10,7 +10,6 @@
 #include "model/Location.h"
 #include "model/Gateway.h"
 #include "model/DeviceID.h"
-#include "model/Collection.h"
 
 namespace BeeeOn {
 
@@ -20,7 +19,6 @@ namespace BeeeOn {
 class Device {
 public:
 	typedef Poco::SharedPtr<Device> Ptr;
-	typedef BeeeOn::Collection<Device> Collection;
 	typedef DeviceID ID;
 
 	using percent = Poco::Util::Units::Values::percent;
@@ -103,7 +101,6 @@ private:
 	Poco::Nullable<Poco::DateTime> m_activeSince;
 };
 
-typedef Device::Collection DeviceCollection;
 typedef Device::ID DeviceID;
 
 }
