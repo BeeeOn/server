@@ -25,8 +25,6 @@ public:
 
 	VerifiedIdentity();
 	VerifiedIdentity(const ID &id);
-	VerifiedIdentity(const VerifiedIdentity &copy);
-	VerifiedIdentity(const ID &id, const VerifiedIdentity &copy);
 
 	void setProvider(const std::string &provider)
 	{

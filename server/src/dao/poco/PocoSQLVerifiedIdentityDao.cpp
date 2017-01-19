@@ -32,7 +32,7 @@ void PocoSQLVerifiedIdentityDao::create(VerifiedIdentity &identity)
 	assureHasId(identity.identity());
 	assureHasId(identity.user());
 
-	identity = VerifiedIdentity(VerifiedIdentityID::random(), identity);
+	identity.setId(VerifiedIdentityID::random());
 	string id(identity.id().toString());
 	string identityID(identity.identity().id().toString());
 	string userID(identity.user().id().toString());
