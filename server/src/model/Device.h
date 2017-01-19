@@ -25,8 +25,6 @@ public:
 
 	Device();
 	Device(const ID &id);
-	Device(const Device &copy);
-	Device(const ID &id, const Device &copy);
 
 	void setGateway(const Gateway &gateway);
 	const Gateway &gateway() const;

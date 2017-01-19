@@ -15,37 +15,6 @@ Device::Device(const ID &id):
 {
 }
 
-Device::Device(const Device &copy):
-	Entity(copy),
-	m_gateway(copy.m_gateway),
-	m_location(copy.m_location),
-	m_name(copy.m_name),
-	m_type(copy.m_type),
-	m_refresh(copy.m_refresh),
-	m_battery(copy.m_battery),
-	m_signal(copy.m_signal),
-	m_firstSeen(copy.m_firstSeen),
-	m_lastSeen(copy.m_lastSeen),
-	m_activeSince(copy.m_activeSince)
-
-{
-}
-
-Device::Device(const ID &id, const Device &copy):
-	Entity(id, copy),
-	m_gateway(copy.m_gateway),
-	m_location(copy.m_location),
-	m_name(copy.m_name),
-	m_type(copy.m_type),
-	m_refresh(copy.m_refresh),
-	m_battery(copy.m_battery),
-	m_signal(copy.m_signal),
-	m_firstSeen(copy.m_firstSeen),
-	m_lastSeen(copy.m_lastSeen),
-	m_activeSince(copy.m_activeSince)
-{
-}
-
 void Device::setGateway(const Gateway &gateway)
 {
 	m_gateway = gateway;
