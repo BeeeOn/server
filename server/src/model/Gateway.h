@@ -34,26 +34,6 @@ public:
 	{
 	}
 
-	Gateway(const Gateway &copy):
-		Entity<GatewayID>(copy),
-		m_name(copy.m_name),
-		m_place(copy.m_place),
-		m_altitude(copy.m_altitude),
-		m_latitude(copy.m_latitude),
-		m_longitude(copy.m_longitude)
-	{
-	}
-
-	Gateway(const ID &id, const Gateway &copy):
-		Entity<GatewayID>(id, copy),
-		m_name(copy.m_name),
-		m_place(copy.m_place),
-		m_altitude(copy.m_altitude),
-		m_latitude(copy.m_latitude),
-		m_longitude(copy.m_longitude)
-	{
-	}
-
 	void setName(const std::string &name)
 	{
 		m_name = name;
