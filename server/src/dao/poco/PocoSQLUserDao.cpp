@@ -20,7 +20,7 @@ PocoSQLUserDao::PocoSQLUserDao()
 
 void PocoSQLUserDao::create(User &user)
 {
-	user = User(UserID::random(), user);
+	user.setId(UserID::random());
 	string id(user.id().toString());
 	string firstName(user.firstName());
 	string lastName(user.lastName());

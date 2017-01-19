@@ -23,20 +23,6 @@ public:
 	{
 	}
 
-	User(const User &copy):
-		Entity(copy),
-		m_firstName(copy.m_firstName),
-		m_lastName(copy.m_lastName)
-	{
-	}
-
-	User(const ID &id, const User &copy):
-		Entity(id, copy),
-		m_firstName(copy.m_firstName),
-		m_lastName(copy.m_lastName)
-	{
-	}
-
 	void setFirstName(const std::string &firstName)
 	{
 		m_firstName = firstName;
