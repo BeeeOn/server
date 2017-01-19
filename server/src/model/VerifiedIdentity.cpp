@@ -7,12 +7,12 @@ VerifiedIdentity::VerifiedIdentity()
 }
 
 VerifiedIdentity::VerifiedIdentity(const ID &id):
-	m_id(id)
+	Entity(id)
 {
 }
 
 VerifiedIdentity::VerifiedIdentity(const VerifiedIdentity &copy):
-	m_id(copy.m_id),
+	Entity(copy),
 	m_provider(copy.m_provider),
 	m_accessToken(copy.m_accessToken),
 	m_picture(copy.m_picture),
@@ -23,7 +23,7 @@ VerifiedIdentity::VerifiedIdentity(const VerifiedIdentity &copy):
 
 VerifiedIdentity::VerifiedIdentity(const ID &id,
 		const VerifiedIdentity &copy):
-	m_id(id),
+	Entity(id, copy),
 	m_provider(copy.m_provider),
 	m_accessToken(copy.m_accessToken),
 	m_picture(copy.m_picture),
