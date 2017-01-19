@@ -2,6 +2,7 @@
 #define BEEEON_USER_H
 
 #include <Poco/SharedPtr.h>
+#include "model/Entity.h"
 #include "model/GlobalID.h"
 
 namespace BeeeOn {
@@ -9,29 +10,28 @@ namespace BeeeOn {
 /**
  * Representation of the User application entity.
  */
-class User {
+class User : public Entity<GlobalID> {
 public:
 	typedef Poco::SharedPtr<User> Ptr;
-	typedef GlobalID ID;
 
 	User()
 	{
 	}
 
 	User(const ID &id):
-		m_id(id)
+		Entity(id)
 	{
 	}
 
 	User(const User &copy):
-		m_id(copy.m_id),
+		Entity(copy),
 		m_firstName(copy.m_firstName),
 		m_lastName(copy.m_lastName)
 	{
 	}
 
 	User(const ID &id, const User &copy):
-		m_id(id),
+		Entity(id, copy),
 		m_firstName(copy.m_firstName),
 		m_lastName(copy.m_lastName)
 	{
@@ -65,18 +65,7 @@ public:
 		return m_firstName + " " + m_lastName;
 	}
 
-	void setID(const ID &id)
-	{
-		m_id = id;
-	}
-
-	const ID &id() const
-	{
-		return m_id;
-	}
-
 private:
-	ID m_id;
 	std::string m_firstName;
 	std::string m_lastName;
 };
