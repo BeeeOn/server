@@ -123,10 +123,8 @@ bool PlaceService::doRemove(Relation<Place, User> &input)
 	for (auto role : roles) {
 		if (!m_roleInPlaceDao->remove(role)) {
 			throw IllegalStateException(
-				"failed to drop role "
-				+ role.id().toString()
-				+ "from place "
-				+ place.id().toString());
+				"failed to drop role " + role
+				+ "from place " + place);
 		}
 	}
 

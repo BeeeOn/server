@@ -104,7 +104,7 @@ ExpirableSession::Ptr AuthService::openSession(
 
 	if (!m_userDao->fetch(user)) {
 		throw NotAuthenticatedException("unknown user for identity "
-				+ verifiedIdentity.id().toString());
+				+ verifiedIdentity);
 	}
 
 	VerifiedIdentity copy(verifiedIdentity);

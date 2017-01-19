@@ -103,8 +103,7 @@ void DefaultAccessPolicy::assureGet(
 {
 	Gateway tmp(gateway);
 	if (!m_gatewayDao->fetch(tmp))
-		throw InvalidAccessException("no such gateway "
-				+ gateway.id().toString());
+		throw InvalidAccessException("no such gateway " + gateway);
 
 	if (!tmp.hasPlace())
 		throw InvalidAccessException("gateways has no place");
@@ -121,8 +120,7 @@ void DefaultAccessPolicy::assureUnassign(
 {
 	Gateway tmp(gateway);
 	if (!m_gatewayDao->fetch(tmp))
-		throw InvalidAccessException("no such gateway "
-				+ gateway.id().toString());
+		throw InvalidAccessException("no such gateway " + gateway);
 
 	const Place place(tmp.place());
 
@@ -136,8 +134,7 @@ void DefaultAccessPolicy::assureUpdate(
 {
 	Gateway tmp(gateway);
 	if (!m_gatewayDao->fetch(tmp))
-		throw InvalidAccessException("no such gateway "
-				+ gateway.id().toString());
+		throw InvalidAccessException("no such gateway " + gateway);
 
 	const Place place(tmp.place());
 
@@ -151,8 +148,7 @@ void DefaultAccessPolicy::assureScanDevices(
 {
 	Gateway tmp(gateway);
 	if (!m_gatewayDao->fetch(tmp))
-		throw InvalidAccessException("no such gateway "
-				+ gateway.id().toString());
+		throw InvalidAccessException("no such gateway " + gateway);
 
 	const Place place(tmp.place());
 
@@ -174,8 +170,7 @@ void DefaultAccessPolicy::assureGet(
 {
 	Location tmp(location);
 	if (!m_locationDao->fetch(tmp))
-		throw InvalidAccessException("no such location "
-				+ location.id().toString());
+		throw InvalidAccessException("no such location " + location);
 
 	const Place place(tmp.place());
 
@@ -189,8 +184,7 @@ void DefaultAccessPolicy::assureUpdate(
 {
 	Location tmp(location);
 	if (!m_locationDao->fetch(tmp))
-		throw InvalidAccessException("no such location "
-				+ location.id().toString());
+		throw InvalidAccessException("no such location " + location);
 
 	const Place place(tmp.place());
 
@@ -204,8 +198,7 @@ void DefaultAccessPolicy::assureRemove(
 {
 	Location tmp(location);
 	if (!m_locationDao->fetch(tmp))
-		throw InvalidAccessException("no such location "
-				+ location.id().toString());
+		throw InvalidAccessException("no such location " + location);
 
 	const Place place(tmp.place());
 
@@ -222,9 +215,7 @@ void DefaultAccessPolicy::assureGet(
 
 	if (!m_deviceDao->fetch(tmp, gateway)) {
 		throw InvalidAccessException("no such device "
-				+ device.id().toString()
-				+ " for gateway "
-				+ gateway.id().toString());
+				+ device + " for gateway " + gateway);
 	}
 
 	assureAtLeast(fetchAccessLevel(context.user(), gateway),
@@ -237,8 +228,7 @@ void DefaultAccessPolicy::assureListActiveDevices(
 {
 	Gateway tmp(gateway);
 	if (!m_gatewayDao->fetch(tmp))
-		throw InvalidAccessException("no such gateway "
-				+ gateway.id().toString());
+		throw InvalidAccessException("no such gateway " + gateway);
 
 	const Place place(tmp.place());
 
@@ -252,8 +242,7 @@ void DefaultAccessPolicy::assureListInactiveDevices(
 {
 	Gateway tmp(gateway);
 	if (!m_gatewayDao->fetch(tmp))
-		throw InvalidAccessException("no such gateway "
-				+ gateway.id().toString());
+		throw InvalidAccessException("no such gateway " + gateway);
 
 	const Place place(tmp.place());
 
@@ -270,9 +259,7 @@ void DefaultAccessPolicy::assureUnregister(
 
 	if (!m_deviceDao->fetch(tmp, gateway)) {
 		throw InvalidAccessException("no such device "
-				+ device.id().toString()
-				+ " for gateway "
-				+ gateway.id().toString());
+				+ device + " for gateway " + gateway);
 	}
 
 	assureAtLeast(fetchAccessLevel(context.user(), gateway),
@@ -288,9 +275,7 @@ void DefaultAccessPolicy::assureActivate(
 
 	if (!m_deviceDao->fetch(tmp, gateway)) {
 		throw InvalidAccessException("no such device "
-				+ device.id().toString()
-				+ " for gateway "
-				+ gateway.id().toString());
+				+ device + " for gateway " + gateway);
 	}
 
 	assureAtLeast(fetchAccessLevel(context.user(), gateway),
@@ -306,9 +291,7 @@ void DefaultAccessPolicy::assureUpdate(
 
 	if (!m_deviceDao->fetch(tmp, gateway)) {
 		throw InvalidAccessException("no such device "
-				+ device.id().toString()
-				+ " for gateway "
-				+ gateway.id().toString());
+				+ device + " for gateway " + gateway);
 	}
 
 	assureAtLeast(fetchAccessLevel(context.user(), gateway),
