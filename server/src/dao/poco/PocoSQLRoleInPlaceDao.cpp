@@ -188,7 +188,7 @@ bool PocoSQLRoleInPlaceDao::parseSingle(Row &result,
 		RoleInPlace &role, const string &prefix)
 {
 	if (hasColumn(result, prefix + "id"))
-		role = RoleInPlace(RoleInPlaceID::parse(result[prefix + "id"]));
+		role.setId(RoleInPlaceID::parse(result[prefix + "id"]));
 
 	role.setLevel(AccessLevel(result[prefix + "level"].convert<unsigned int>()));
 	role.setCreated(Timestamp::fromEpochTime(result[prefix + "created"]));
@@ -205,5 +205,6 @@ bool PocoSQLRoleInPlaceDao::parseSingle(Row &result,
 
 	role.setIdentity(identity);
 
+	markLoaded(role);
 	return true;
 }
