@@ -11,12 +11,12 @@ Device::Device()
 }
 
 Device::Device(const ID &id):
-	m_id(id)
+	Entity(id)
 {
 }
 
 Device::Device(const Device &copy):
-	m_id(copy.m_id),
+	Entity(copy),
 	m_gateway(copy.m_gateway),
 	m_location(copy.m_location),
 	m_name(copy.m_name),
@@ -32,7 +32,7 @@ Device::Device(const Device &copy):
 }
 
 Device::Device(const ID &id, const Device &copy):
-	m_id(id),
+	Entity(id, copy),
 	m_gateway(copy.m_gateway),
 	m_location(copy.m_location),
 	m_name(copy.m_name),
@@ -44,11 +44,6 @@ Device::Device(const ID &id, const Device &copy):
 	m_lastSeen(copy.m_lastSeen),
 	m_activeSince(copy.m_activeSince)
 {
-}
-
-const Device::ID &Device::id() const
-{
-	return m_id;
 }
 
 void Device::setGateway(const Gateway &gateway)
