@@ -39,7 +39,7 @@ public:
 		if (it == m_storage.end())
 			return false;
 
-		t = T(t.id(), *it->second);
+		t = copyWithID(t.id(), *it->second);
 		markLoaded(t);
 		return true;
 	}
@@ -58,7 +58,7 @@ public:
 		if (t.id().isNull())
 			return false;
 
-		m_storage[t.id()] = new T(t.id(), t);
+		m_storage[t.id()] = new T(t);
 
 		return true;
 	}
@@ -68,8 +68,8 @@ public:
 		TRACE_METHOD();
 
 		const ID id = nextID();
-		m_storage[id] = new T(id, t);
-		t = T(id, *m_storage[id]);
+		m_storage[id] = newWithID(id, t);
+		t = *m_storage[id];
 	}
 
 	virtual bool update(T &t)
@@ -81,8 +81,8 @@ public:
 		if (it == m_storage.end())
 			return false;
 
-		it->second = new T(t.id(), t);
-		t = T(t.id(), *m_storage[t.id()]);
+		it->second = new T(t);
+		t = *m_storage[t.id()];
 		return true;
 	}
 
@@ -106,6 +106,20 @@ public:
 
 protected:
 	virtual ID nextID() = 0;
+
+	T copyWithID(const ID &id, const T &t)
+	{
+		T copy(t);
+		copy.setId(id);
+		return copy;
+	}
+
+	T *newWithID(const ID &id, const T &t)
+	{
+		T *copy(new T(t));
+		copy->setId(id);
+		return copy;
+	}
 
 private:
 	Storage m_storage;
@@ -172,7 +186,7 @@ public:
 		if (it == m_storage.end())
 			return false;
 
-		t = T(t.id(), *it->second);
+		t = copyWithID(t.id(), *it->second);
 		setBase(t, b);
 		markLoaded(t);
 		return true;
@@ -196,7 +210,7 @@ public:
 			return false;
 
 		Key key(t.id(), b.id());
-		m_storage[key] = new T(t.id(), t);
+		m_storage[key] = new T(t);
 		setBase(m_storage[key], b);
 
 		return true;
@@ -208,9 +222,9 @@ public:
 
 		const ID id = nextID();
 		Key key(id, b.id());
-		m_storage[key] = new T(id, t);
+		m_storage[key] = newWithID(id, t);
 		setBase(m_storage[key], b);
-		t = T(id, *m_storage[key]);
+		t = *m_storage[key];
 	}
 
 	virtual bool update(T &t, const B &b)
@@ -223,9 +237,9 @@ public:
 		if (it == m_storage.end())
 			return false;
 
-		it->second = new T(t.id(), t);
+		it->second = new T(t);
 		setBase(it->second, b);
-		t = T(t.id(), *m_storage[key]);
+		t = *m_storage[key];
 		return true;
 	}
 
@@ -258,6 +272,19 @@ protected:
 		setBase(*ptr, b);
 	}
 
+	T copyWithID(const ID &id, const T &t)
+	{
+		T copy(t);
+		copy.setId(id);
+		return copy;
+	}
+
+	T *newWithID(const ID &id, const T &t)
+	{
+		T *copy(new T(t));
+		copy->setId(id);
+		return copy;
+	}
 
 private:
 	Storage m_storage;
