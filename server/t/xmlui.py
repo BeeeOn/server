@@ -197,7 +197,7 @@ class GatewayGetAll(Request):
 class LocationAdd(Request):
 	def __init__(self, gateway, sessionid, **kwargs):
 		Request.__init__(self, ns = "locations",
-			type = "add", sessionid = sessionid)
+			type = "create", sessionid = sessionid)
 		self.gateway = gateway
 
 		if "name" in kwargs:
