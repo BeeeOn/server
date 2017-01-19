@@ -174,7 +174,7 @@ bool PocoSQLLocationDao::parseSingle(Row &result, Location &location,
 		const string &prefix)
 {
 	if (hasColumn(result, prefix + "id"))
-		location = Location(LocationID::parse(result[prefix + "id"]));
+		location.setId(LocationID::parse(result[prefix + "id"]));
 
 	location.setName(result[prefix + "name"]);
 
@@ -182,6 +182,7 @@ bool PocoSQLLocationDao::parseSingle(Row &result, Location &location,
 	if (PocoSQLPlaceDao::parseIfIDNotNull(result, place, prefix + "place_"))
 		location.setPlace(place);
 
+	markLoaded(location);
 	return true;
 }
 
@@ -192,10 +193,11 @@ bool PocoSQLLocationDao::parseIfIDNotNull(Row &result, Location &location,
 	if (id.empty())
 		return false;
 
-	location = Location(LocationID::parse(id));
+	location.setId(LocationID::parse(id));
 
 	if (hasColumn(result, prefix + "name"))
 		location.setName(result[prefix + "name"]);
 
+	markLoaded(location);
 	return true;
 }
