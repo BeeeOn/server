@@ -9,6 +9,7 @@
 #include <Poco/Data/Statement.h>
 #include <Poco/Data/RecordSet.h>
 
+#include "dao/EntityLoader.h"
 #include "di/InjectorTarget.h"
 #include "util/Loggable.h"
 
@@ -28,6 +29,7 @@ class SQLLoader;
 class SQLQuery;
 
 class PocoAbstractDao : public AbstractInjectorTarget,
+		public EntityLoader,
 		public Loggable {
 public:
 	PocoAbstractDao();
