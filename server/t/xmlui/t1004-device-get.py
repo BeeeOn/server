@@ -54,20 +54,31 @@ class TestDeviceGet(unittest.TestCase):
 		self.assertIsNotNone(e.get("locationid", None))
 
 	def assertKnownDevice(self, e, gatewayId = None):
-		name = e.get("name")
+		id = e.get("euid")
 		self.assertDeviceIsComplete(e)
 
 		if gatewayId is not None:
 			self.assertEqual(gatewayId, e.get("gateid"))
 
-		if name in ["Temperature", "Multi-sensor"]:
+		if id == "0x4135d00019f5234e":
+			self.assertEqual("Temperature", e.get("name"))
 			self.assertEqual("1", e.get("init"))
 			self.assertEqual("unavailable", e.get("status"))
-		elif name == "Humidity":
+			self.assertEqual("0", e.get("type"))
+		elif id == "0x432d27aa5e94ecfd":
+			self.assertEqual("Multi-sensor", e.get("name"))
+			self.assertEqual("1", e.get("init"))
+			self.assertEqual("unavailable", e.get("status"))
+			self.assertEqual("3", e.get("type"))
+		elif id == "0x427e0f7f0302324d":
+			self.assertEqual("Humidity", e.get("name"))
 			self.assertEqual("available", e.get("status"))
-		elif name == "Unknown":
+			self.assertEqual("0", e.get("type"))
+		elif id == "0x4471959aad24618e":
+			self.assertEqual("Unknown", e.get("name"))
 			self.assertEqual("0", e.get("init"))
 			self.assertEqual("available", e.get("status"))
+			self.assertEqual("4", e.get("type"))
 		else:
 			self.assertTrue(False, "unknown device: %s", (element))
 

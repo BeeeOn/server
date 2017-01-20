@@ -107,7 +107,7 @@ void UIMockInit::initDevices(const vector<Location> &locations)
 {
 	Gateway gateway(GatewayID::parse("1284174504043136"));
 
-	Device temperature(DeviceID::random(0x41));
+	Device temperature(DeviceID::parse("0x4135d00019f5234e"));
 	temperature.setName("Temperature");
 	temperature.setGateway(gateway);
 	temperature.setLocation(locations[0]);
@@ -121,7 +121,7 @@ void UIMockInit::initDevices(const vector<Location> &locations)
 
 	m_deviceDao->insert(temperature, gateway);
 
-	Device humidity(DeviceID::random(0x42));
+	Device humidity(DeviceID::parse("0x427e0f7f0302324d"));
 	humidity.setName("Humidity");
 	humidity.setGateway(gateway);
 	humidity.setLocation(locations[1]);
@@ -135,7 +135,7 @@ void UIMockInit::initDevices(const vector<Location> &locations)
 
 	m_deviceDao->insert(humidity, gateway);
 
-	Device multi(DeviceID::random(0x43));
+	Device multi(DeviceID::parse("0x432d27aa5e94ecfd"));
 	multi.setName("Multi-sensor");
 	multi.setGateway(gateway);
 	multi.setLocation(locations[2]);
@@ -149,7 +149,7 @@ void UIMockInit::initDevices(const vector<Location> &locations)
 
 	m_deviceDao->insert(multi, gateway);
 
-	Device unknown(DeviceID::random(0x44));
+	Device unknown(DeviceID::parse("0x4471959aad24618e"));
 	unknown.setName("Unknown");
 	unknown.setGateway(gateway);
 	unknown.setType(m_infoProvider->findById(4));
