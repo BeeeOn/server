@@ -14,6 +14,7 @@ class DeviceIDTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testCreateFromParts);
 	CPPUNIT_TEST(testParse);
 	CPPUNIT_TEST(testParse32);
+	CPPUNIT_TEST(testRandom);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void setUp();
@@ -23,6 +24,7 @@ public:
 	void testCreateFromParts();
 	void testParse();
 	void testParse32();
+	void testRandom();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DeviceIDTest);
@@ -87,6 +89,22 @@ void DeviceIDTest::testParse32()
 	CPPUNIT_ASSERT(id.is32bit());
 	CPPUNIT_ASSERT_EQUAL((uint8_t) 0xac, id.prefix());
 	CPPUNIT_ASSERT_EQUAL((uint64_t) 0x112233UL, id.ident());
+}
+
+void DeviceIDTest::testRandom()
+{
+	set<DeviceID> generated;
+
+	for (unsigned int i = 0; i < 1000; ++i) {
+		const DeviceID id(DeviceID::random(0x10));
+		const set<DeviceID>::size_type count = generated.size();
+
+		CPPUNIT_ASSERT(generated.find(id) == generated.end());
+
+		generated.insert(id);
+
+		CPPUNIT_ASSERT_EQUAL(count + 1, generated.size());
+	}
 }
 
 }
