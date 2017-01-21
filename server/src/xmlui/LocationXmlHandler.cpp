@@ -46,8 +46,8 @@ void LocationXmlHandler::handleInputImpl()
 		return;
 	}
 
-	if (type == "add")
-		handleAdd(gateid, locationNode);
+	if (type == "create")
+		handleCreate(gateid, locationNode);
 	else if (type == "delete")
 		handleDelete(gateid, locationNode);
 	else if (type == "update")
@@ -56,7 +56,7 @@ void LocationXmlHandler::handleInputImpl()
 		resultInvalidInput();
 }
 
-void LocationXmlHandler::handleAdd(
+void LocationXmlHandler::handleCreate(
 		const string &gateid,
 		Element *locationNode)
 {
@@ -148,7 +148,7 @@ bool LocationXmlHandlerResolver::canHandle(
 	if (!AbstractXmlHandlerResolver::canHandle(root))
 		return false;
 
-	if (root.getAttribute("type") == "add")
+	if (root.getAttribute("type") == "create")
 		return true;
 	if (root.getAttribute("type") == "delete")
 		return true;

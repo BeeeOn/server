@@ -14,7 +14,7 @@ public:
 			BeeeOn::ExpirableSession::Ptr session,
 			BeeeOn::LocationService &locationService);
 	void handleInputImpl() override;
-	void handleAdd(const std::string &gateid,
+	void handleCreate(const std::string &gateid,
 			Poco::XML::Element *locationNode);
 	void handleDelete(const std::string &gateid,
 			Poco::XML::Element *locationNode);
