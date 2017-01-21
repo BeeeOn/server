@@ -32,7 +32,7 @@ void PocoSQLVerifiedIdentityDao::create(VerifiedIdentity &identity)
 	assureHasId(identity.identity());
 	assureHasId(identity.user());
 
-	identity = VerifiedIdentity(VerifiedIdentityID::random(), identity);
+	identity.setId(VerifiedIdentityID::random());
 	string id(identity.id().toString());
 	string identityID(identity.identity().id().toString());
 	string userID(identity.user().id().toString());
@@ -158,7 +158,7 @@ bool PocoSQLVerifiedIdentityDao::parseSingle(Row &result,
 		VerifiedIdentity &identity, const string &prefix)
 {
 	if (hasColumn(result, prefix + "id"))
-		identity = VerifiedIdentity(VerifiedIdentityID::parse(result[prefix + "id"]));
+		identity.setId(VerifiedIdentityID::parse(result[prefix + "id"]));
 
 	const Poco::Dynamic::Var &picture = result[prefix + "picture"];
 	identity.setPicture(picture.isEmpty()? URI() : URI(picture.toString()));
@@ -178,5 +178,6 @@ bool PocoSQLVerifiedIdentityDao::parseSingle(Row &result,
 
 	identity.setUser(user);
 
+	markLoaded(identity);
 	return true;
 }

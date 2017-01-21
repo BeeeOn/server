@@ -20,7 +20,7 @@ PocoSQLUserDao::PocoSQLUserDao()
 
 void PocoSQLUserDao::create(User &user)
 {
-	user = User(UserID::random(), user);
+	user.setId(UserID::random());
 	string id(user.id().toString());
 	string firstName(user.firstName());
 	string lastName(user.lastName());
@@ -63,11 +63,12 @@ bool PocoSQLUserDao::parseSingle(Row &result,
 		User &user, const string &prefix)
 {
 	if (hasColumn(result, prefix + "id"))
-		user = User(UserID::parse(result[prefix + "id"]));
+		user.setId(UserID::parse(result[prefix + "id"]));
 
 	user.setFirstName(result[prefix + "first_name"]);
 	user.setLastName(result[prefix + "last_name"]);
 
+	markLoaded(user);
 	return true;
 }
 
@@ -78,8 +79,10 @@ bool PocoSQLUserDao::parseIfIDNotNull(Row &result,
 	if (id.empty())
 		return false;
 
-	user = User(UserID::parse(id));
+	user.setId(UserID::parse(id));
 	user.setFirstName(result[prefix + "first_name"]);
 	user.setLastName(result[prefix + "last_name"]);
+
+	markLoaded(user);
 	return true;
 }

@@ -4,6 +4,7 @@
 #include <Poco/SharedPtr.h>
 #include <Poco/DateTime.h>
 
+#include "model/Entity.h"
 #include "model/GlobalID.h"
 #include "model/Place.h"
 #include "model/Identity.h"
@@ -11,15 +12,12 @@
 
 namespace BeeeOn {
 
-class RoleInPlace {
+class RoleInPlace : public Entity<GlobalID> {
 public:
 	typedef Poco::SharedPtr<RoleInPlace> Ptr;
-	typedef GlobalID ID;
 
 	RoleInPlace();
 	RoleInPlace(const ID &id);
-	RoleInPlace(const RoleInPlace &copy);
-	RoleInPlace(const ID &id, const RoleInPlace &copy);
 
 	void setPlace(const Place &place)
 	{
@@ -61,18 +59,7 @@ public:
 		return m_created;
 	}
 
-	void setID(const ID &id)
-	{
-		m_id = id;
-	}
-
-	const ID &id() const
-	{
-		return m_id;
-	}
-
 private:
-	ID m_id;
 	Place m_place;
 	Identity m_identity;
 	AccessLevel m_level;

@@ -190,7 +190,7 @@ bool PocoSQLDeviceDao::parseSingle(Row &result, Device &device,
 		const Gateway &gateway, const string &prefix)
 {
 	if (hasColumn(result, prefix + "id"))
-		device = Device(DeviceID::parse(result[prefix + "id"]));
+		device.setId(DeviceID::parse(result[prefix + "id"]));
 
 	device.setGateway(gateway); // device is always associated to a gateway
 
@@ -212,5 +212,6 @@ bool PocoSQLDeviceDao::parseSingle(Row &result, Device &device,
 
 	device.setActiveSince(activeSince);
 
+	markLoaded(device);
 	return true;
 }

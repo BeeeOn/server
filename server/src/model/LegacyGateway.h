@@ -16,9 +16,6 @@ class LegacyGateway : public Gateway {
 public:
 	LegacyGateway();
 	LegacyGateway(const GatewayID &id);
-	LegacyGateway(const LegacyGateway &copy);
-	LegacyGateway(const GatewayID &id, const LegacyGateway &copy);
-	LegacyGateway(const Gateway &copy);
 
 	void setOwner(const User &owner);
 	const User &owner() const;

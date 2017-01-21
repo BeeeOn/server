@@ -5,6 +5,7 @@
 #include <Poco/URI.h>
 #include <Poco/SharedPtr.h>
 
+#include "model/Entity.h"
 #include "model/GlobalID.h"
 #include "model/User.h"
 #include "model/Identity.h"
@@ -18,15 +19,12 @@ namespace BeeeOn {
  * identities with the same e-mail (multiple authentication services
  * created for the same e-mail address).
  */
-class VerifiedIdentity {
+class VerifiedIdentity : public Entity<GlobalID> {
 public:
 	typedef Poco::SharedPtr<VerifiedIdentity> Ptr;
-	typedef GlobalID ID;
 
 	VerifiedIdentity();
 	VerifiedIdentity(const ID &id);
-	VerifiedIdentity(const VerifiedIdentity &copy);
-	VerifiedIdentity(const ID &id, const VerifiedIdentity &copy);
 
 	void setProvider(const std::string &provider)
 	{
@@ -88,18 +86,7 @@ public:
 		return m_user;
 	}
 
-	void setID(const ID &id)
-	{
-		m_id = id;
-	}
-
-	const ID &id() const
-	{
-		return m_id;
-	}
-
 private:
-	ID          m_id;
 	std::string m_provider;
 	std::string m_accessToken;
 	Poco::URI   m_picture;

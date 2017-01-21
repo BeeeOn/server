@@ -2,40 +2,24 @@
 #define BEEEON_USER_H
 
 #include <Poco/SharedPtr.h>
+#include "model/Entity.h"
 #include "model/GlobalID.h"
-#include "model/Collection.h"
 
 namespace BeeeOn {
 
 /**
  * Representation of the User application entity.
  */
-class User {
+class User : public Entity<GlobalID> {
 public:
 	typedef Poco::SharedPtr<User> Ptr;
-	typedef BeeeOn::Collection<User> Collection;
-	typedef GlobalID ID;
 
 	User()
 	{
 	}
 
 	User(const ID &id):
-		m_id(id)
-	{
-	}
-
-	User(const User &copy):
-		m_id(copy.m_id),
-		m_firstName(copy.m_firstName),
-		m_lastName(copy.m_lastName)
-	{
-	}
-
-	User(const ID &id, const User &copy):
-		m_id(id),
-		m_firstName(copy.m_firstName),
-		m_lastName(copy.m_lastName)
+		Entity(id)
 	{
 	}
 
@@ -67,23 +51,11 @@ public:
 		return m_firstName + " " + m_lastName;
 	}
 
-	void setID(const ID &id)
-	{
-		m_id = id;
-	}
-
-	const ID &id() const
-	{
-		return m_id;
-	}
-
 private:
-	ID m_id;
 	std::string m_firstName;
 	std::string m_lastName;
 };
 
-typedef User::Collection UserCollection;
 typedef User::ID UserID;
 
 }

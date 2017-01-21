@@ -7,30 +7,24 @@
 #include <Poco/Nullable.h>
 #include <Poco/Util/Units.h>
 
+#include "model/Entity.h"
 #include "model/Location.h"
 #include "model/Gateway.h"
 #include "model/DeviceID.h"
-#include "model/Collection.h"
 
 namespace BeeeOn {
 
 /**
  * Representation of the Device application entity.
  */
-class Device {
+class Device : public Entity<DeviceID> {
 public:
 	typedef Poco::SharedPtr<Device> Ptr;
-	typedef BeeeOn::Collection<Device> Collection;
-	typedef DeviceID ID;
 
 	using percent = Poco::Util::Units::Values::percent;
 
 	Device();
 	Device(const ID &id);
-	Device(const Device &copy);
-	Device(const ID &id, const Device &copy);
-
-	const ID &id() const;
 
 	void setGateway(const Gateway &gateway);
 	const Gateway &gateway() const;
@@ -90,7 +84,6 @@ public:
 	}
 
 private:
-	ID m_id;
 	Gateway m_gateway;
 	Location m_location;
 	std::string m_name;
@@ -103,7 +96,6 @@ private:
 	Poco::Nullable<Poco::DateTime> m_activeSince;
 };
 
-typedef Device::Collection DeviceCollection;
 typedef Device::ID DeviceID;
 
 }
