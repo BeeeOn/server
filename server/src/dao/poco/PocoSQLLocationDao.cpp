@@ -22,9 +22,7 @@ PocoSQLLocationDao::PocoSQLLocationDao()
 	registerQuery(m_queryUpdate);
 	registerQuery(m_queryRemove);
 	registerQuery(m_queryFetchById);
-	registerQuery(m_queryFetchByIdAndPlaceId);
 	registerQuery(m_queryFetchByIdAndGatewayId);
-	registerQuery(m_queryFetchByPlaceId);
 	registerQuery(m_queryFetchByGatewayId);
 }
 
@@ -60,26 +58,6 @@ bool PocoSQLLocationDao::fetch(Location &location)
 	return parseSingle(result, location);
 }
 
-bool PocoSQLLocationDao::fetchFrom(Location &location, const Place &place)
-{
-	assureHasId(location);
-	assureHasId(place);
-
-	string id(location.id().toString());
-	string placeID(place.id().toString());
-
-	Statement sql = (session() << m_queryFetchByIdAndPlaceId(),
-		use(id, "id"),
-		use(placeID, "place_id")
-	);
-
-	if (execute(sql) == 0)
-		return false;
-
-	RecordSet result(sql);
-	return parseSingle(result, location);
-}
-
 bool PocoSQLLocationDao::fetchFrom(Location &location, const Gateway &gateway)
 {
 	assureHasId(location);
@@ -98,22 +76,6 @@ bool PocoSQLLocationDao::fetchFrom(Location &location, const Gateway &gateway)
 
 	RecordSet result(sql);
 	return parseSingle(result, location);
-}
-
-void PocoSQLLocationDao::fetchBy(std::vector<Location> &locations,
-		const Place &place)
-{
-	assureHasId(place);
-
-	string placeID(place.id().toString());
-
-	Statement sql = (session() << m_queryFetchByPlaceId(),
-		use(placeID, "place_id")
-	);
-
-	execute(sql);
-	RecordSet result(sql);
-	parseMany(result, locations);
 }
 
 void PocoSQLLocationDao::fetchBy(std::vector<Location> &locations,
