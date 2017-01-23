@@ -20,35 +20,16 @@ DefaultAccessPolicy::DefaultAccessPolicy()
 			&DefaultAccessPolicy::setLocationDao);
 	injector<DefaultAccessPolicy, DeviceDao>("deviceDao",
 			&DefaultAccessPolicy::setDeviceDao);
-	injector<DefaultAccessPolicy, RoleInPlaceDao>("roleInPlaceDao",
-			&DefaultAccessPolicy::setRoleInPlaceDao);
-}
-
-AccessLevel DefaultAccessPolicy::fetchAccessLevel(
-		const User &user,
-		const Place &place)
-{
-	User tmp(user);
-
-	if (!m_userDao->fetch(tmp))
-		throw InvalidAccessException("user does not exist");
-
-	const AccessLevel level =
-		m_roleInPlaceDao->fetchAccessLevel(place, tmp);
-
-	return level;
+	injector<DefaultAccessPolicy, RoleInGatewayDao>("roleInGatewayDao",
+			&DefaultAccessPolicy::setRoleInGatewayDao);
 }
 
 AccessLevel DefaultAccessPolicy::fetchAccessLevel(
 		const User &user,
 		const Gateway &gateway)
 {
-	Gateway tmp(gateway);
-
-	if (!m_gatewayDao->fetch(tmp))
-		throw InvalidAccessException("gateway does not exist");
-
-	return fetchAccessLevel(user, tmp.place());
+	const AccessLevel level = m_roleInGatewayDao->fetchAccessLevel(gateway, user);
+	return level;
 }
 
 void DefaultAccessPolicy::assureAtLeast(
@@ -68,59 +49,32 @@ void DefaultAccessPolicy::assureGet(
 		const PolicyContext &context,
 		const Gateway &gateway)
 {
-	Gateway tmp(gateway);
-	if (!m_gatewayDao->fetch(tmp))
-		throw InvalidAccessException("no such gateway " + gateway);
-
-	if (!tmp.hasPlace())
-		throw InvalidAccessException("gateways has no place");
-
-	const Place place(tmp.place());
-
 	assureAtLeast(
-		fetchAccessLevel(context.user(), place), AccessLevel::guest());
+		fetchAccessLevel(context.user(), gateway), AccessLevel::guest());
 }
 
 void DefaultAccessPolicy::assureUnregister(
 		const PolicyContext &context,
 		const Gateway &gateway)
 {
-	Gateway tmp(gateway);
-	if (!m_gatewayDao->fetch(tmp))
-		throw InvalidAccessException("no such gateway " + gateway);
-
-	const Place place(tmp.place());
-
 	assureAtLeast(
-		fetchAccessLevel(context.user(), place), AccessLevel::admin());
+		fetchAccessLevel(context.user(), gateway), AccessLevel::admin());
 }
 
 void DefaultAccessPolicy::assureUpdate(
 		const PolicyContext &context,
 		const Gateway &gateway)
 {
-	Gateway tmp(gateway);
-	if (!m_gatewayDao->fetch(tmp))
-		throw InvalidAccessException("no such gateway " + gateway);
-
-	const Place place(tmp.place());
-
 	assureAtLeast(
-		fetchAccessLevel(context.user(), place), AccessLevel::user());
+		fetchAccessLevel(context.user(), gateway), AccessLevel::user());
 }
 
 void DefaultAccessPolicy::assureScanDevices(
 		const PolicyContext &context,
 		const Gateway &gateway)
 {
-	Gateway tmp(gateway);
-	if (!m_gatewayDao->fetch(tmp))
-		throw InvalidAccessException("no such gateway " + gateway);
-
-	const Place place(tmp.place());
-
 	assureAtLeast(
-		fetchAccessLevel(context.user(), place), AccessLevel::user());
+		fetchAccessLevel(context.user(), gateway), AccessLevel::user());
 }
 
 void DefaultAccessPolicy::assureCreateLocation(
@@ -215,28 +169,16 @@ void DefaultAccessPolicy::assureListActiveDevices(
 		const PolicyContext &context,
 		const Gateway &gateway)
 {
-	Gateway tmp(gateway);
-	if (!m_gatewayDao->fetch(tmp))
-		throw InvalidAccessException("no such gateway " + gateway);
-
-	const Place place(tmp.place());
-
 	assureAtLeast(
-		fetchAccessLevel(context.user(), place), AccessLevel::guest());
+		fetchAccessLevel(context.user(), gateway), AccessLevel::guest());
 }
 
 void DefaultAccessPolicy::assureListInactiveDevices(
 		const PolicyContext &context,
 		const Gateway &gateway)
 {
-	Gateway tmp(gateway);
-	if (!m_gatewayDao->fetch(tmp))
-		throw InvalidAccessException("no such gateway " + gateway);
-
-	const Place place(tmp.place());
-
 	assureAtLeast(
-		fetchAccessLevel(context.user(), place), AccessLevel::admin());
+		fetchAccessLevel(context.user(), gateway), AccessLevel::admin());
 }
 
 void DefaultAccessPolicy::assureUnregister(

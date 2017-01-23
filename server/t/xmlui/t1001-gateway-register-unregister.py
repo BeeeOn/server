@@ -85,7 +85,7 @@ class TestGatewayRegisterUnregister(unittest.TestCase):
 		))
 
 		self.assertTrue(response.is_error())
-		self.assertEqual("1001", response.error_code())
+		self.assertEqual("13", response.error_code())
 
 	"""
 	Test cannot register an already registered gateway. To register

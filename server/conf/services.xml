@@ -134,7 +134,7 @@
 			<set name="gatewayDao" ref="gatewayDao" />
 			<set name="locationDao" ref="locationDao" />
 			<set name="deviceDao" ref="deviceDao" />
-			<set name="roleInPlaceDao" ref="roleInPlaceDao" />
+			<set name="roleInGatewayDao" ref="sqlRoleInGatewayDao" />
 		</instance>
 
 		<!-- Data access layer -->
