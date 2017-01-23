@@ -40,17 +40,6 @@ void LocationService::setAccessPolicy(LocationAccessPolicy *policy)
 		&NullLocationAccessPolicy::instance();
 }
 
-void LocationService::doCreateIn(RelationWithData<Location, Place> &input)
-{
-	Location &location = input.target();
-
-	m_accessPolicy->assureCreateLocation(input, input.base());
-
-	input.data().full(location);
-	location.setPlace(input.base());
-	m_dao->create(location);
-}
-
 void LocationService::doCreateIn(RelationWithData<Location, Gateway> &input)
 {
 	Gateway tmp(input.base());
@@ -77,30 +66,9 @@ bool LocationService::doFetch(Single<Location> &input)
 	return m_dao->fetch(input.target());
 }
 
-bool LocationService::doFetchFrom(Relation<Location, Place> &input)
-{
-	m_accessPolicy->assureGet(input, input.target());
-
-	return m_dao->fetchFrom(input.target(), input.base());
-}
-
 void LocationService::doFetchBy(Relation<vector<Location>, Gateway> &input)
 {
 	m_dao->fetchBy(input.target(), input.base());
-}
-
-bool LocationService::doUpdateIn(RelationWithData<Location, Place> &input)
-{
-	Location &location = input.target();
-
-	m_accessPolicy->assureUpdate(input, location);
-
-	if (!m_dao->fetchFrom(location, input.base()))
-		throw NotFoundException("location does not exist");
-
-	input.data().partial(location);
-
-	return m_dao->update(location);
 }
 
 bool LocationService::doUpdateIn(RelationWithData<Location, Gateway> &input)
@@ -123,18 +91,6 @@ bool LocationService::doRemove(Single<Location> &input)
 	m_accessPolicy->assureRemove(input, location);
 
 	if (!m_dao->fetch(location))
-		throw NotFoundException("location does not exist");
-
-	return m_dao->remove(location);
-}
-
-bool LocationService::doRemoveFrom(Relation<Location, Place> &input)
-{
-	Location &location = input.target();
-
-	m_accessPolicy->assureRemove(input, location);
-
-	if (!m_dao->fetchFrom(location, input.base()))
 		throw NotFoundException("location does not exist");
 
 	return m_dao->remove(location);
