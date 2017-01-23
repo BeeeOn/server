@@ -58,7 +58,7 @@ void DefaultAccessPolicy::assureUnregister(
 		const Gateway &gateway)
 {
 	assureAtLeast(
-		fetchAccessLevel(context.user(), gateway), AccessLevel::admin());
+		fetchAccessLevel(context.user(), gateway), AccessLevel::guest());
 }
 
 void DefaultAccessPolicy::assureUpdate(
