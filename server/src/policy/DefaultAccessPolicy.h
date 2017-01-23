@@ -22,7 +22,7 @@ public:
 
 	void assureGet(const PolicyContext &context,
 		const Gateway &gateway) override;
-	void assureUnassign(const PolicyContext &context,
+	void assureUnregister(const PolicyContext &context,
 		const Gateway &gateway) override;
 	void assureUpdate(const PolicyContext &context,
 		const Gateway &gateway) override;

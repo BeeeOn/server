@@ -13,7 +13,7 @@ void NullGatewayAccessPolicy::assureGet(
 	throw NotImplementedException(__func__);
 }
 
-void NullGatewayAccessPolicy::assureUnassign(
+void NullGatewayAccessPolicy::assureUnregister(
 	const PolicyContext &context,
 	const Gateway &gateway)
 {

@@ -14,7 +14,7 @@ public:
 	virtual void assureGet(
 			const PolicyContext &context,
 			const Gateway &gateway) = 0;
-	virtual void assureUnassign(
+	virtual void assureUnregister(
 			const PolicyContext &context,
 			const Gateway &gateway) = 0;
 	virtual void assureUpdate(
@@ -30,7 +30,7 @@ public:
 	void assureGet(
 		const PolicyContext &context,
 		const Gateway &gateway) override;
-	void assureUnassign(
+	void assureUnregister(
 		const PolicyContext &context,
 		const Gateway &gateway) override;
 	void assureUpdate(

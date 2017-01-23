@@ -81,7 +81,7 @@ void DefaultAccessPolicy::assureGet(
 		fetchAccessLevel(context.user(), place), AccessLevel::guest());
 }
 
-void DefaultAccessPolicy::assureUnassign(
+void DefaultAccessPolicy::assureUnregister(
 		const PolicyContext &context,
 		const Gateway &gateway)
 {

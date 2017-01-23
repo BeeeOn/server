@@ -162,11 +162,11 @@ bool GatewayService::doUpdate(SingleWithData<Gateway> &input)
 	return m_gatewayDao->update(gateway);
 }
 
-bool GatewayService::doUnassign(Relation<Gateway, User> &input)
+bool GatewayService::doUnregister(Relation<Gateway, User> &input)
 {
 	Gateway &gateway = input.target();
 
-	m_accessPolicy->assureUnassign(input, input.target());
+	m_accessPolicy->assureUnregister(input, input.target());
 
 	if (!m_gatewayDao->fetch(gateway))
 		throw NotFoundException("gateway does not exist");

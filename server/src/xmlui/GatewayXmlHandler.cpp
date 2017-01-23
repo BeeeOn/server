@@ -84,7 +84,7 @@ void GatewayXmlHandler::handleUnregister(Element *gatewayNode)
 	Relation<Gateway, User> input(gateway, user);
 	input.setUser(user);
 
-	if (!m_gatewayService.unassign(input)) {
+	if (!m_gatewayService.unregister(input)) {
 		resultNotOwned();
 		return;
 	}

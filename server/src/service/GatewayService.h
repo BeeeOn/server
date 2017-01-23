@@ -83,9 +83,9 @@ public:
 		return BEEEON_TRANSACTION_RETURN(bool, doUpdate(input));
 	}
 
-	bool unassign(Relation<Gateway, User> &input)
+	bool unregister(Relation<Gateway, User> &input)
 	{
-		return BEEEON_TRANSACTION_RETURN(bool, doUnassign(input));
+		return BEEEON_TRANSACTION_RETURN(bool, doUnregister(input));
 	}
 
 	void scanDevices(Single<Gateway> &input)
@@ -111,7 +111,7 @@ protected:
 	void doFetchAccessible(Relation<std::vector<Gateway>, User> &input);
 	void doFetchAccessible(Relation<std::vector<LegacyGateway>, User> &input);
 	bool doUpdate(SingleWithData<Gateway> &input);
-	bool doUnassign(Relation<Gateway, User> &input);
+	bool doUnregister(Relation<Gateway, User> &input);
 	void doScanDevices(Single<Gateway> &input);
 	void doUnpairDevice(Single<Gateway> &input, Device &device);
 	void doPingGateway(Single<Gateway> &input);
