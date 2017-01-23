@@ -5,6 +5,7 @@
 #include "server/AccessLevel.h"
 #include "dao/GatewayDao.h"
 #include "dao/RoleInPlaceDao.h"
+#include "dao/RoleInGatewayDao.h"
 #include "dao/PlaceDao.h"
 #include "dao/IdentityDao.h"
 #include "dao/VerifiedIdentityDao.h"
@@ -19,6 +20,7 @@ using namespace BeeeOn;
 GatewayService::GatewayService():
 	m_gatewayDao(&NullGatewayDao::instance()),
 	m_roleInPlaceDao(&NullRoleInPlaceDao::instance()),
+	m_roleInGatewayDao(&NullRoleInGatewayDao::instance()),
 	m_placeDao(&NullPlaceDao::instance()),
 	m_identityDao(&NullIdentityDao::instance()),
 	m_rpc(&NullGatewayRPC::instance()),
@@ -28,6 +30,8 @@ GatewayService::GatewayService():
 			&GatewayService::setGatewayDao);
 	injector<GatewayService, RoleInPlaceDao>("roleInPlaceDao",
 			&GatewayService::setRoleInPlaceDao);
+	injector<GatewayService, RoleInGatewayDao>("roleInGatewayDao",
+			&GatewayService::setRoleInGatewayDao);
 	injector<GatewayService, PlaceDao>("placeDao",
 			&GatewayService::setPlaceDao);
 	injector<GatewayService, IdentityDao>("identityDao",
@@ -48,6 +52,11 @@ void GatewayService::setGatewayDao(GatewayDao *dao)
 void GatewayService::setRoleInPlaceDao(RoleInPlaceDao *dao)
 {
 	m_roleInPlaceDao = dao? dao :&NullRoleInPlaceDao::instance();
+}
+
+void GatewayService::setRoleInGatewayDao(RoleInGatewayDao *dao)
+{
+	m_roleInGatewayDao = dao? dao :&NullRoleInGatewayDao::instance();
 }
 
 void GatewayService::setPlaceDao(PlaceDao *dao)
@@ -101,6 +110,12 @@ bool GatewayService::doRegisterGateway(SingleWithData<Gateway> &input,
 	}
 
 	input.data().full(gateway);
+
+	RoleInGateway role;
+	role.setGateway(gateway);
+	role.setIdentity(tmp.identity());
+	role.setLevel(AccessLevel::admin());
+	m_roleInGatewayDao->create(role);
 
 	Place place;
 	createImplicitPlace(place, gateway, tmp.identity());
