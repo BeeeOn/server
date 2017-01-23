@@ -25,10 +25,8 @@ PocoSQLGatewayDao::PocoSQLGatewayDao()
 	registerQuery(m_queryCreate);
 	registerQuery(m_queryUpdate);
 	registerQuery(m_queryAssignAndUpdate);
-	registerQuery(m_queryAssign);
 	registerQuery(m_queryUnassign);
 	registerQuery(m_queryFetchById);
-	registerQuery(m_queryFetchByPlaceId);
 	registerQuery(m_queryFetchAccessible);
 	registerQuery(m_queryLegacyFetchById);
 	registerQuery(m_queryLegacyFetchAccessible);
@@ -170,23 +168,6 @@ bool PocoSQLGatewayDao::assignAndUpdate(Gateway &gateway, const Place &place)
 	return execute(sql) > 0;
 }
 
-bool PocoSQLGatewayDao::assign(Gateway &gateway, const Place &place)
-{
-	assureHasId(gateway);
-	assureHasId(place);
-
-	string id(gateway.id().toString());
-	string placeID(place.id().toString());
-
-	Statement sql = (session() << m_queryAssign(),
-		use(placeID, "place_id"),
-		use(id, "id")
-	);
-
-	gateway.setPlace(place);
-	return execute(sql) > 0;
-}
-
 bool PocoSQLGatewayDao::unassign(Gateway &gateway)
 {
 	assureHasId(gateway);
@@ -198,26 +179,6 @@ bool PocoSQLGatewayDao::unassign(Gateway &gateway)
 	);
 
 	return execute(sql) > 0;
-}
-
-bool PocoSQLGatewayDao::fetchFromPlace(Gateway &gateway, const Place &place)
-{
-	assureHasId(gateway);
-	assureHasId(place);
-
-	string id(gateway.id().toString());
-	string placeID(place.id().toString());
-
-	Statement sql = (session() << m_queryFetchByPlaceId(),
-		use(id, "id"),
-		use(placeID, "place_id")
-	);
-
-	if (execute(sql) == 0)
-		return false;
-
-	RecordSet result(sql);
-	return parseSingle(result, gateway);
 }
 
 void PocoSQLGatewayDao::fetchAccessible(std::vector<Gateway> &gateways,
