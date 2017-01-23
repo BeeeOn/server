@@ -2,7 +2,6 @@
 #define BEEEON_XMLUI_DEVICE_XML_HANDLER_H
 
 #include "service/DeviceService.h"
-#include "service/PlaceService.h"
 #include "xmlui/AbstractXmlHandler.h"
 
 namespace BeeeOn {
@@ -13,8 +12,7 @@ public:
 	DeviceXmlHandler(const Poco::Net::StreamSocket &socket,
 			const Poco::AutoPtr<Poco::XML::Document> input,
 			BeeeOn::ExpirableSession::Ptr session,
-			BeeeOn::DeviceService &deviceService,
-			BeeeOn::PlaceService &placeService);
+			BeeeOn::DeviceService &deviceService);
 	void handleInputImpl() override;
 
 	void handleUnregister(const std::string &gateid,
@@ -27,7 +25,6 @@ public:
 
 private:
 	DeviceService &m_deviceService;
-	PlaceService &m_placeService;
 };
 
 class DeviceXmlHandlerResolver : public AbstractXmlHandlerResolver {
@@ -38,11 +35,6 @@ public:
 	XmlRequestHandler *createHandler(
 			const Poco::Net::StreamSocket &socket,
 			const Poco::AutoPtr<Poco::XML::Document> input);
-
-	void setPlaceService(BeeeOn::PlaceService *service)
-	{
-		m_placeService = service;
-	}
 
 	void setDeviceService(BeeeOn::DeviceService *service)
 	{
@@ -55,7 +47,6 @@ public:
 	}
 
 private:
-	BeeeOn::PlaceService *m_placeService;
 	BeeeOn::DeviceService *m_deviceService;
 	BeeeOn::SessionManager *m_sessionManager;
 };
