@@ -25,7 +25,6 @@ PocoSQLGatewayDao::PocoSQLGatewayDao()
 	registerQuery(m_queryCreate);
 	registerQuery(m_queryUpdate);
 	registerQuery(m_queryAssignAndUpdate);
-	registerQuery(m_queryUnassign);
 	registerQuery(m_queryFetchById);
 	registerQuery(m_queryFetchAccessible);
 	registerQuery(m_queryLegacyFetchById);
@@ -165,19 +164,6 @@ bool PocoSQLGatewayDao::assignAndUpdate(Gateway &gateway, const Place &place)
 	);
 
 	gateway.setPlace(place);
-	return execute(sql) > 0;
-}
-
-bool PocoSQLGatewayDao::unassign(Gateway &gateway)
-{
-	assureHasId(gateway);
-
-	string id(gateway.id().toString());
-
-	Statement sql = (session() << m_queryUnassign(),
-		use(id, "id")
-	);
-
 	return execute(sql) > 0;
 }
 

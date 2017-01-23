@@ -18,7 +18,6 @@ public:
 	virtual bool fetch(LegacyGateway &gateway, const User &user) = 0;
 	virtual bool update(Gateway &gateway) = 0;
 	virtual bool assignAndUpdate(Gateway &gateway, const Place &place) = 0;
-	virtual bool unassign(Gateway &gateway) = 0;
 	virtual void fetchAccessible(
 			std::vector<Gateway> &gateways,
 			const User &user) = 0;
@@ -42,11 +41,6 @@ public:
 	}
 
 	bool assignAndUpdate(Gateway &gateway, const Place &place)
-	{
-		return update(gateway);
-	}
-
-	bool unassign(Gateway &gateway)
 	{
 		return update(gateway);
 	}
