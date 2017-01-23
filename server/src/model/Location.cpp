@@ -31,10 +31,3 @@ const Gateway &Location::gateway() const
 {
 	return m_gateway;
 }
-
-bool Location::hasGateway() const
-{
-	return !m_gateway.id().isNull();
-}
-
-

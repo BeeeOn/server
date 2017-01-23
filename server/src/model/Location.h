@@ -23,7 +23,6 @@ public:
 
 	void setGateway(const Gateway &gateway);
 	const Gateway &gateway() const;
-	bool hasGateway() const;
 
 private:
 	std::string m_name;
