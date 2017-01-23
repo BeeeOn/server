@@ -490,53 +490,6 @@
 		</define>
 	</query>
 
-	<query id="gateways.assign">
-		<define>
-		UPDATE gateways SET
-			place_id = <value name="place_id" type="uuid" />
-		WHERE
-			id = <value name="id" type="uuid" />
-		</define>
-		<test name="can assign gateway to a place">
-			<setup name="prepare a gateway without place">
-				<sql>INSERT INTO gateways (id, name, place_id, altitude, latitude, longitude)
-					VALUES (116084064167771, 'Test Gateway 12', NULL, -5.1, 4.1, 7.11)</sql>
-			</setup>
-			<check name="assign works">
-				<call-query>
-					<arg name="id">116084064167771</arg>
-					<arg name="place_id">'bd8ea40c-91c9-4d8c-8c13-a8332c39a437'</arg>
-				</call-query>
-				<sql>SELECT id, place_id FROM gateways WHERE id = 116084064167771</sql>
-				<expect>
-					<row>
-						<value type="uuid" name="id">116084064167771</value>
-						<value type="uuid" name="place_id">bd8ea40c-91c9-4d8c-8c13-a8332c39a437</value>
-					</row>
-				</expect>
-			</check>
-			<teardown name="delete the testing gateway">
-				<sql>DELETE FROM gateways WHERE id = 116084064167771</sql>
-			</teardown>
-		</test>
-		<test name="assign to non-existing place">
-			<check name="assign fails due to non-existing place">
-				<call-query>
-					<arg name="id">181462068183316</arg>
-					<arg name="place_id">'85ffbb60-2438-4bd5-9cce-1de6521487db'</arg>
-				</call-query>
-				<sql>SELECT id, place_id FROM gateways WHERE id = 181462068183316</sql>
-				<expect>
-					<fail-update table="gateways" conflict="place_id" />
-					<row>
-						<value type="uuid" name="id">181462068183316</value>
-						<value type="uuid" name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
-					</row>
-				</expect>
-			</check>
-		</test>
-	</query>
-
 	<query id="gateways.unassign">
 		<define>
 		UPDATE gateways SET
@@ -560,62 +513,6 @@
 			<teardown name="reassign place bd8ea40c-91c9-4d8c-8c13-a8332c39a437">
 				<sql>UPDATE gateways SET place_id = 'bd8ea40c-91c9-4d8c-8c13-a8332c39a437' WHERE id = 140548523101825</sql>
 			</teardown>
-		</test>
-	</query>
-
-	<query id="gateways.fetch.by.place_id">
-		<!-- TODO: remove this query, it is redundant -->
-		<define>
-		SELECT
-			g.name AS name,
-			g.altitude AS altitude,
-			g.latitude AS latitude,
-			g.longitude AS longitude,
-			s.at AS last_changed,
-			s.version AS version,
-			s.ip AS ip,
-			g.place_id AS place_id,
-			p.name AS place_name
-		FROM gateways AS g
-		JOIN places AS p ON g.place_id = p.id
-		LEFT JOIN gateways_status AS s ON s.gateway_id = g.id
-		WHERE
-			g.id = <value name="id" type="uuid" />
-			AND
-			g.place_id = <value name="place_id" type="uuid" />
-			AND
-			(s.at IS NULL OR s.at =
-				(SELECT MAX(at) FROM gateways_status WHERE gateway_id = g.id))
-		</define>
-		<test name="fetch gateway Test Gateway 2 from Test Place 2">
-			<check name="obtain Test Gateway 2">
-				<call-query>
-					<arg name="id">140548523101825</arg>
-					<arg name="place_id">'bd8ea40c-91c9-4d8c-8c13-a8332c39a437'</arg>
-				</call-query>
-				<expect>
-					<row>
-						<value name="name">Test Gateway 2</value>
-						<value name="altitude">-2.5</value>
-						<value name="latitude">2.5</value>
-						<value name="longitude">22.5</value>
-						<value name="last_changed">1483454300</value>
-						<value name="version">1.0-master</value>
-						<value name="ip">192.168.11.1</value>
-						<value type="uuid" name="place_id">bd8ea40c-91c9-4d8c-8c13-a8332c39a437</value>
-						<value name="place_name">Test Place 2</value>
-					</row>
-				</expect>
-			</check>
-		</test>
-		<test name="fetch gateway Test Gateway 2 from Test Place 1">
-			<check name="obtain no result">
-				<call-query>
-					<arg name="id">140548523101825</arg>
-					<arg name="place_id">'16de2f05-8af7-4729-8479-1973590cfa54'</arg>
-				</call-query>
-				<expect />
-			</check>
 		</test>
 	</query>
 
@@ -871,43 +768,6 @@
 		</test>
 	</query>
 
-	<query id="locations.fetch.by.id.and.place_id">
-		<define>
-		SELECT
-			l.name AS name,
-			p.name AS place_name,
-			l.place_id AS place_id
-		FROM locations AS l
-		JOIN places AS p ON l.place_id = p.id
-		WHERE
-			l.id = <value name="id" type="uuid" />
-			AND
-			p.id = <value name="place_id" type="uuid" />
-		</define>
-		<test name="simple test">
-			<check name="find the Kitchen in Test Place 1">
-				<call-query>
-					<arg name="id">'f5ad3e17-aa65-4291-8916-1d21cdf6b4bb'</arg>
-					<arg name="place_id">'16de2f05-8af7-4729-8479-1973590cfa54'</arg>
-				</call-query>
-				<expect>
-					<row>
-						<value name="name">Kitchen</value>
-						<value name="place_name">Test Place 1</value>
-						<value type="uuid" name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
-					</row>
-				</expect>
-			</check>
-			<check name="find the Kitchen in Test Place 2 (it is not there)">
-				<call-query>
-					<arg name="id">'f5ad3e17-aa65-4291-8916-1d21cdf6b4bb'</arg>
-					<arg name="place_id">'bd8ea40c-91c9-4d8c-8c13-a8332c39a437'</arg>
-				</call-query>
-				<expect />
-			</check>
-		</test>
-	</query>
-
 	<query id="locations.fetch.by.id.and.gateway_id">
 		<define>
 		SELECT
@@ -942,55 +802,6 @@
 					<arg name="gateway_id">140548523101825</arg>
 				</call-query>
 				<expect />
-			</check>
-		</test>
-	</query>
-
-	<query id="locations.fetch.by.place_id">
-		<define>
-		SELECT
-			l.id AS id,
-			l.name AS name,
-			p.name AS place_name,
-			l.place_id AS place_id
-		FROM locations AS l
-		JOIN places AS p ON l.place_id = p.id
-		WHERE
-			place_id = <value name="place_id" type="uuid" />
-		ORDER BY l.id
-		</define>
-		<test name="simple test">
-			<check name="list locations in Test Place 1">
-				<call-query>
-					<arg name="place_id">'16de2f05-8af7-4729-8479-1973590cfa54'</arg>
-				</call-query>
-				<expect>
-					<row>
-						<value type="uuid" name="id">3a91f58e-579e-41f2-a17b-3fb6166abb69</value>
-						<value name="name">Livingroom</value>
-						<value name="place_name">Test Place 1</value>
-						<value type="uuid" name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
-					</row>
-					<row>
-						<value type="uuid" name="id">f5ad3e17-aa65-4291-8916-1d21cdf6b4bb</value>
-						<value name="name">Kitchen</value>
-						<value name="place_name">Test Place 1</value>
-						<value type="uuid" name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
-					</row>
-				</expect>
-			</check>
-			<check name="list locations in Test Place 2">
-				<call-query>
-					<arg name="place_id">'bd8ea40c-91c9-4d8c-8c13-a8332c39a437'</arg>
-				</call-query>
-				<expect>
-					<row>
-						<value type="uuid" name="id">7a336a66-da55-4bf0-ba37-00461845823b</value>
-						<value name="name">Bedroom</value>
-						<value name="place_name">Test Place 2</value>
-						<value type="uuid" name="place_id">bd8ea40c-91c9-4d8c-8c13-a8332c39a437</value>
-					</row>
-				</expect>
 			</check>
 		</test>
 	</query>

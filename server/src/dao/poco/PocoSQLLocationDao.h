@@ -23,11 +23,7 @@ public:
 	void create(Location &location) override;
 	bool fetch(Location &location) override;
 	bool fetchFrom(Location &location,
-			const Place &place) override;
-	bool fetchFrom(Location &location,
 			const Gateway &gateway) override;
-	void fetchBy(std::vector<Location> &locations,
-			const Place &place) override;
 	void fetchBy(std::vector<Location> &locations,
 			const Gateway &gateway) override;
 	bool update(Location &location) override;
@@ -62,9 +58,7 @@ private:
 	SQLQuery m_queryUpdate    {"locations.update"};
 	SQLQuery m_queryRemove    {"locations.remove"};
 	SQLQuery m_queryFetchById {"locations.fetch.by.id"};
-	SQLQuery m_queryFetchByIdAndPlaceId {"locations.fetch.by.id.and.place_id"};
 	SQLQuery m_queryFetchByIdAndGatewayId {"locations.fetch.by.id.and.gateway_id"};
-	SQLQuery m_queryFetchByPlaceId   {"locations.fetch.by.place_id"};
 	SQLQuery m_queryFetchByGatewayId {"locations.fetch.by.gateway_id"};
 };
 
