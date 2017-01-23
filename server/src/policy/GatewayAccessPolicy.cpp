@@ -13,13 +13,6 @@ void NullGatewayAccessPolicy::assureGet(
 	throw NotImplementedException(__func__);
 }
 
-void NullGatewayAccessPolicy::assureAssignGateway(
-	const PolicyContext &context,
-	const Place &place)
-{
-	throw NotImplementedException(__func__);
-}
-
 void NullGatewayAccessPolicy::assureUnassign(
 	const PolicyContext &context,
 	const Gateway &gateway)

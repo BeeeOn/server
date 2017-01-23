@@ -64,14 +64,6 @@ void DefaultAccessPolicy::assureAtLeast(
 	}
 }
 
-void DefaultAccessPolicy::assureAssignGateway(
-		const PolicyContext &context,
-		const Place &place)
-{
-	assureAtLeast(
-		fetchAccessLevel(context.user(), place), AccessLevel::admin());
-}
-
 void DefaultAccessPolicy::assureGet(
 		const PolicyContext &context,
 		const Gateway &gateway)

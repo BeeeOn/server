@@ -14,9 +14,6 @@ public:
 	virtual void assureGet(
 			const PolicyContext &context,
 			const Gateway &gateway) = 0;
-	virtual void assureAssignGateway(
-			const PolicyContext &context,
-			const Place &place) = 0;
 	virtual void assureUnassign(
 			const PolicyContext &context,
 			const Gateway &gateway) = 0;
@@ -33,9 +30,6 @@ public:
 	void assureGet(
 		const PolicyContext &context,
 		const Gateway &gateway) override;
-	void assureAssignGateway(
-		const PolicyContext &context,
-		const Place &place) override;
 	void assureUnassign(
 		const PolicyContext &context,
 		const Gateway &gateway) override;
