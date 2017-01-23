@@ -72,14 +72,6 @@
 
 		<!-- Bussiness layer -->
 
-		<instance name="placeService" class="BeeeOn::PlaceService">
-			<set name="placeDao" ref="placeDao" />
-			<set name="roleInPlaceDao" ref="roleInPlaceDao" />
-			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
-			<set name="accessPolicy" ref="accessPolicy" />
-			<set name="transactionManager" ref="transactionManager" />
-		</instance>
-
 		<instance name="userService" class="BeeeOn::UserService">
 			<set name="userDao" ref="userDao" />
 			<set name="transactionManager" ref="transactionManager" />
