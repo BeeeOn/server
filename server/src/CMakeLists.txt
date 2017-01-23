@@ -73,7 +73,6 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/service/IdentityService.cpp
 	${PROJECT_SOURCE_DIR}/service/JSONGatewayDeserializer.cpp
 	${PROJECT_SOURCE_DIR}/service/JSONLocationDeserializer.cpp
-	${PROJECT_SOURCE_DIR}/policy/PlaceAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/GatewayAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/LocationAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/DeviceAccessPolicy.cpp
