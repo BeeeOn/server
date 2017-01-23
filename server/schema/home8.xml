@@ -138,6 +138,20 @@
 		<check name="check_valid_level" expression="level &gt;= 0 AND level &lt;= 100" />
 	</table>
 
+	<table name="roles_in_gateway">
+		<column name="id" type="uuid" not-null="yes" />
+		<column name="gateway_id" type="int64" not-null="yes" />
+		<column name="identity_id" type="uuid" not-null="yes" />
+		<column name="level" type="smallint" not-null="yes" />
+		<column name="created" type="bigint" not-null="yes" />
+
+		<primary-key ref="id" />
+		<foreign-key table="gateways" local="gateway_id" remote="id" />
+		<foreign-key table="identities" local="identity_id" remote="id" />
+
+		<check name="check_valid_level" expression="level &gt;= 0 AND level &lt;= 100" />
+	</table>
+
 	<table name="devices">
 		<column name="id" type="int64" not-null="yes" />
 		<column name="gateway_id" type="int64" not-null="yes" />
