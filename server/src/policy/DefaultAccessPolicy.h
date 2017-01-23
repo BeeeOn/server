@@ -2,7 +2,6 @@
 #define BEEEON_DEFAULT_ACCESS_POLICY_H
 
 #include "di/InjectorTarget.h"
-#include "policy/PlaceAccessPolicy.h"
 #include "policy/GatewayAccessPolicy.h"
 #include "policy/LocationAccessPolicy.h"
 #include "policy/DeviceAccessPolicy.h"
@@ -15,19 +14,11 @@
 namespace BeeeOn {
 
 class DefaultAccessPolicy : public AbstractInjectorTarget,
-		public PlaceAccessPolicy,
 		public GatewayAccessPolicy,
 		public LocationAccessPolicy,
 		public DeviceAccessPolicy {
 public:
 	DefaultAccessPolicy();
-
-	void assureGet(const PolicyContext &context,
-		const Place &place) override;
-	void assureUpdate(const PolicyContext &context,
-		const Place &place) override;
-	void assureRemove(const PolicyContext &context,
-		const Place &place) override;
 
 	void assureGet(const PolicyContext &context,
 		const Gateway &gateway) override;

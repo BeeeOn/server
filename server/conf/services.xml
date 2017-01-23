@@ -3,29 +3,13 @@
 	<services>
 		<instance name="ui" class="BeeeOn::UIServerModule">
 			<set name="sessionVerifier" ref="sessionVerifier" />
-			<set name="placeHandler" ref="placeHandler" />
 			<set name="userService" ref="userService" />
 			<set name="authHandler" ref="authHandler" />
 			<set name="deviceService" ref="deviceService" />
-			<set name="gatewayHandler" ref="gatewayHandler" />
-			<set name="locationHandler" ref="locationHandler" />
 		</instance>
 
 		<instance name="authHandler" class="BeeeOn::RestAuthHandler">
 			<set name="authService" ref="authService" />
-		</instance>
-
-		<instance name="placeHandler" class="BeeeOn::UI::PlaceHandler">
-			<set name="placeService" ref="placeService" />
-			<set name="identityService" ref="identityService" />
-		</instance>
-
-		<instance name="gatewayHandler" class="BeeeOn::UI::GatewayHandler">
-			<set name="gatewayService" ref="gatewayService" />
-		</instance>
-
-		<instance name="locationHandler" class="BeeeOn::UI::LocationHandler">
-			<set name="locationService" ref="locationService" />
 		</instance>
 
 		<instance name="sessionVerifier" class="BeeeOn::SessionVerifier">
@@ -87,14 +71,6 @@
 		</instance>
 
 		<!-- Bussiness layer -->
-
-		<instance name="placeService" class="BeeeOn::PlaceService">
-			<set name="placeDao" ref="placeDao" />
-			<set name="roleInPlaceDao" ref="roleInPlaceDao" />
-			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
-			<set name="accessPolicy" ref="accessPolicy" />
-			<set name="transactionManager" ref="transactionManager" />
-		</instance>
 
 		<instance name="userService" class="BeeeOn::UserService">
 			<set name="userDao" ref="userDao" />

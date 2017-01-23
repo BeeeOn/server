@@ -65,17 +65,14 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/dao/NullTransactionManager.cpp
 	${PROJECT_SOURCE_DIR}/dao/NoTransactionManager.cpp
 	${PROJECT_SOURCE_DIR}/dao/Transactional.cpp
-	${PROJECT_SOURCE_DIR}/service/PlaceService.cpp
 	${PROJECT_SOURCE_DIR}/service/UserService.cpp
 	${PROJECT_SOURCE_DIR}/service/AuthService.cpp
 	${PROJECT_SOURCE_DIR}/service/DeviceService.cpp
 	${PROJECT_SOURCE_DIR}/service/GatewayService.cpp
 	${PROJECT_SOURCE_DIR}/service/LocationService.cpp
 	${PROJECT_SOURCE_DIR}/service/IdentityService.cpp
-	${PROJECT_SOURCE_DIR}/service/JSONPlaceDeserializer.cpp
 	${PROJECT_SOURCE_DIR}/service/JSONGatewayDeserializer.cpp
 	${PROJECT_SOURCE_DIR}/service/JSONLocationDeserializer.cpp
-	${PROJECT_SOURCE_DIR}/policy/PlaceAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/GatewayAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/LocationAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/DeviceAccessPolicy.cpp
@@ -111,9 +108,6 @@ add_executable(ui-server
 	ui/main.cpp
 	ui/UIServerModule.cpp
 	ui/Serializing.cpp
-	ui/PlaceHandler.cpp
-	ui/GatewayHandler.cpp
-	ui/LocationHandler.cpp
 	ui/UIMockInit.cpp
 	dao/poco/PocoSQLiteConnectorLoader.cpp
 )
