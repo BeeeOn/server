@@ -138,13 +138,6 @@ bool GatewayService::doFetch(Single<LegacyGateway> &input)
 	return m_gatewayDao->fetch(input.target(), input.user());
 }
 
-bool GatewayService::doFetchFromPlace(Relation<Gateway, Place> &input)
-{
-	m_accessPolicy->assureGet(input, input.target());
-
-	return m_gatewayDao->fetchFromPlace(input.target(), input.base());
-}
-
 void GatewayService::doFetchAccessible(Relation<vector<Gateway>, User> &input)
 {
 	m_gatewayDao->fetchAccessible(input.target(), input.base());
@@ -167,50 +160,6 @@ bool GatewayService::doUpdate(SingleWithData<Gateway> &input)
 
 	input.data().partial(gateway);
 	return m_gatewayDao->update(gateway);
-}
-
-bool GatewayService::doUpdateInPlace(RelationWithData<Gateway, Place> &input)
-{
-	Gateway &gateway = input.target();
-
-	m_accessPolicy->assureUpdate(input, gateway);
-
-	if (!m_gatewayDao->fetchFromPlace(gateway, input.base()))
-		throw NotFoundException("gateway does not exist");
-
-	input.data().partial(gateway);
-
-	return m_gatewayDao->update(gateway);
-}
-
-bool GatewayService::doAssignAndUpdate(
-		RelationWithData<Gateway, Place> &input)
-{
-	Gateway &gateway = input.target();
-
-	m_accessPolicy->assureAssignGateway(input, input.base());
-
-	if (!m_gatewayDao->fetch(gateway))
-		throw NotFoundException("gateway does not exist");
-
-	if (gateway.hasPlace()) // do not leak it exists
-		throw NotFoundException("gateway is already assigned");
-
-	input.data().partial(gateway);
-
-	return m_gatewayDao->assignAndUpdate(gateway, input.base());
-}
-
-bool GatewayService::doUnassign(Relation<Gateway, Place> &input)
-{
-	Gateway &gateway = input.target();
-
-	m_accessPolicy->assureUnassign(input, input.target());
-
-	if (!m_gatewayDao->fetchFromPlace(gateway, input.base()))
-		return false;
-
-	return m_gatewayDao->unassign(gateway);
 }
 
 bool GatewayService::doUnassign(Relation<Gateway, User> &input)
