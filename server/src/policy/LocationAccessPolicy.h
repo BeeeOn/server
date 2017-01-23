@@ -2,7 +2,7 @@
 #define BEEEON_LOCATION_ACCESS_POLICY_H
 
 #include "server/Session.h"
-#include "model/Place.h"
+#include "model/Gateway.h"
 #include "model/Location.h"
 #include "model/User.h"
 
@@ -17,7 +17,7 @@ public:
 			const Location &location) = 0;
 	virtual void assureCreateLocation(
 			const PolicyContext &context,
-			const Place &place) = 0;
+			const Gateway &gateway) = 0;
 	virtual void assureUpdate(
 			const PolicyContext &context,
 			const Location &location) = 0;
@@ -33,7 +33,7 @@ public:
 		const Location &location) override;
 	void assureCreateLocation(
 		const PolicyContext &context,
-		const Place &place) override;
+		const Gateway &gateway) override;
 	void assureUpdate(
 		const PolicyContext &context,
 		const Location &location) override;

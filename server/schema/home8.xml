@@ -84,10 +84,10 @@
 	<table name="locations">
 		<column name="id" type="uuid" not-null="yes" />
 		<column name="name" type="varchar" size="250" />
-		<column name="place_id" type="uuid" />
+		<column name="gateway_id" type="int64" />
 
 		<primary-key ref="id" />
-		<foreign-key table="places" local="place_id" remote="id" />
+		<foreign-key table="gateways" local="gateway_id" remote="id" />
 	</table>
 
 	<table name="users">

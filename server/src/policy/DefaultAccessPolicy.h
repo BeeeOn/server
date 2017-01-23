@@ -34,7 +34,7 @@ public:
 	void assureGet(const PolicyContext &context,
 		const Location &location);
 	void assureCreateLocation(const PolicyContext &context,
-		const Place &place);
+		const Gateway &gateway);
 	void assureUpdate(const PolicyContext &context,
 		const Location &location);
 	void assureRemove(const PolicyContext &context,

@@ -47,14 +47,11 @@ void LocationService::doCreateIn(RelationWithData<Location, Gateway> &input)
 	if (!m_gatewayDao->fetch(tmp))
 		throw NotFoundException("gateway does not exist");
 
-	if (!tmp.hasPlace()) // do not leak it exists
-		throw NotFoundException("gateway is not assigned");
-
-	m_accessPolicy->assureCreateLocation(input, tmp.place());
+	m_accessPolicy->assureCreateLocation(input, tmp);
 
 	Location &location = input.target();
 	input.data().full(location);
-	location.setPlace(tmp.place());
+	location.setGateway(tmp);
 
 	m_dao->create(location);
 }

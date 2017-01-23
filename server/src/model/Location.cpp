@@ -22,19 +22,19 @@ const string &Location::name() const
 	return m_name;
 }
 
-void Location::setPlace(const Place &place)
+void Location::setGateway(const Gateway &gateway)
 {
-	m_place = place;
+	m_gateway = gateway;
 }
 
-const Place &Location::place() const
+const Gateway &Location::gateway() const
 {
-	return m_place;
+	return m_gateway;
 }
 
-bool Location::hasPlace() const
+bool Location::hasGateway() const
 {
-	return !m_place.id().isNull();
+	return !m_gateway.id().isNull();
 }
 
 

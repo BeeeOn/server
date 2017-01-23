@@ -94,7 +94,7 @@ std::ostream &BeeeOn::UI::serialize(std::ostream &o, const Location &location)
 	Object::Ptr object(new Object);
 	object->set("id", location.id().toString());
 	object->set("name", location.name());
-	object->set("place_id", location.place().id().toString());
+	object->set("gateway_id", location.gateway().id().toString());
 	object->stringify(o);
 	return o;
 }

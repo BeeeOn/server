@@ -4,7 +4,7 @@
 #include <Poco/SharedPtr.h>
 #include "model/Entity.h"
 #include "model/GlobalID.h"
-#include "model/Place.h"
+#include "model/Gateway.h"
 
 namespace BeeeOn {
 
@@ -21,13 +21,13 @@ public:
 	void setName(const std::string &name);
 	const std::string &name() const;
 
-	void setPlace(const Place &place);
-	const Place &place() const;
-	bool hasPlace() const;
+	void setGateway(const Gateway &gateway);
+	const Gateway &gateway() const;
+	bool hasGateway() const;
 
 private:
 	std::string m_name;
-	Place m_place;
+	Gateway m_gateway;
 };
 
 typedef Location::ID LocationID;

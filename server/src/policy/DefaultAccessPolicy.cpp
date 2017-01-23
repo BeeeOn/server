@@ -133,10 +133,10 @@ void DefaultAccessPolicy::assureScanDevices(
 
 void DefaultAccessPolicy::assureCreateLocation(
 		const PolicyContext &context,
-		const Place &place)
+		const Gateway &gateway)
 {
 	assureAtLeast(
-		fetchAccessLevel(context.user(), place), AccessLevel::user());
+		fetchAccessLevel(context.user(), gateway), AccessLevel::user());
 }
 
 void DefaultAccessPolicy::assureGet(
@@ -147,10 +147,8 @@ void DefaultAccessPolicy::assureGet(
 	if (!m_locationDao->fetch(tmp))
 		throw InvalidAccessException("no such location " + location);
 
-	const Place place(tmp.place());
-
 	assureAtLeast(
-		fetchAccessLevel(context.user(), place), AccessLevel::guest());
+		fetchAccessLevel(context.user(), tmp.gateway()), AccessLevel::guest());
 }
 
 void DefaultAccessPolicy::assureUpdate(
@@ -161,10 +159,8 @@ void DefaultAccessPolicy::assureUpdate(
 	if (!m_locationDao->fetch(tmp))
 		throw InvalidAccessException("no such location " + location);
 
-	const Place place(tmp.place());
-
 	assureAtLeast(
-		fetchAccessLevel(context.user(), place), AccessLevel::user());
+		fetchAccessLevel(context.user(), tmp.gateway()), AccessLevel::user());
 }
 
 void DefaultAccessPolicy::assureRemove(
@@ -175,10 +171,8 @@ void DefaultAccessPolicy::assureRemove(
 	if (!m_locationDao->fetch(tmp))
 		throw InvalidAccessException("no such location " + location);
 
-	const Place place(tmp.place());
-
 	assureAtLeast(
-		fetchAccessLevel(context.user(), place), AccessLevel::user());
+		fetchAccessLevel(context.user(), tmp.gateway()), AccessLevel::user());
 }
 
 void DefaultAccessPolicy::assureGet(
