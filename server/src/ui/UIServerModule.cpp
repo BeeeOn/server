@@ -11,10 +11,6 @@
 #include "ui/UIServerModule.h"
 #include "Debug.h"
 
-#include "ui/PlaceHandler.h"
-#include "ui/GatewayHandler.h"
-#include "ui/LocationHandler.h"
-
 using namespace std;
 using namespace Poco;
 using namespace Poco::Net;
@@ -35,47 +31,6 @@ void UIServerModule::injectionDone()
 	}, false);
 	m_factory->DELETE("/auth", [&](UIRouteContext &context) {
 		m_authHandler->handleLogout(context);
-	});
-	m_factory->POST("/place", [&](UIRouteContext &context) {
-		m_placeHandler->handleCreate(context);
-	});
-	m_factory->GET("/place", [&](UIRouteContext &context) {
-		m_placeHandler->handleGetAll(context);
-	});
-	m_factory->PUT("/place/:placeId", [&](UIRouteContext &context) {
-		m_placeHandler->handleUpdate(context);
-	});
-	m_factory->GET("/place/:placeId", [&](UIRouteContext &context) {
-		m_placeHandler->handleGet(context);
-	});
-	m_factory->DELETE("/place/:placeId", [&](UIRouteContext &context) {
-		m_placeHandler->handleDelete(context);
-	});
-
-	m_factory->POST("/place/:placeId/gateways/:gatewayId", [&](UIRouteContext &context) {
-		m_gatewayHandler->handleAssign(context);
-	});
-	m_factory->PUT("/place/:placeId/gateways/:gatewayId", [&](UIRouteContext &context) {
-		m_gatewayHandler->handleUpdate(context);
-	});
-	m_factory->GET("/place/:placeId/gateways/:gatewayId", [&](UIRouteContext &context) {
-		m_gatewayHandler->handleGet(context);
-	});
-	m_factory->DELETE("/place/:placeId/gateways/:gatewayId", [&](UIRouteContext &context) {
-		m_gatewayHandler->handleDelete(context);
-	});
-
-	m_factory->POST("/place/:placeId/locations", [&](UIRouteContext &context) {
-		m_locationHandler->handleCreate(context);
-	});
-	m_factory->GET("/place/:placeId/locations/:locationId", [&](UIRouteContext &context) {
-		m_locationHandler->handleGet(context);
-	});
-	m_factory->PUT("/place/:placeId/locations/:locationId", [&](UIRouteContext &context) {
-		m_locationHandler->handleUpdate(context);
-	});
-	m_factory->DELETE("/place/:placeId/locations/:locationId", [&](UIRouteContext &context) {
-		m_locationHandler->handleDelete(context);
 	});
 }
 

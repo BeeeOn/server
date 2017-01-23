@@ -111,9 +111,6 @@ add_executable(ui-server
 	ui/main.cpp
 	ui/UIServerModule.cpp
 	ui/Serializing.cpp
-	ui/PlaceHandler.cpp
-	ui/GatewayHandler.cpp
-	ui/LocationHandler.cpp
 	ui/UIMockInit.cpp
 	dao/poco/PocoSQLiteConnectorLoader.cpp
 )
