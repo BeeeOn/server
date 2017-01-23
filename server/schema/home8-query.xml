@@ -33,21 +33,21 @@
 						'c1a23a50-4734-43ed-bc96-2a39704c1f41', -3.5, 3.5, 33.5)</sql>
 		</setup>
 		<setup name="global locations for tests">
-			<!-- kitchen of Test Place 1 -->
-			<sql>INSERT INTO locations (id, name, place_id)
+			<!-- kitchen of Test Gateway 1 -->
+			<sql>INSERT INTO locations (id, name, gateway_id)
 				VALUES ('f5ad3e17-aa65-4291-8916-1d21cdf6b4bb',
 					'Kitchen',
-					'16de2f05-8af7-4729-8479-1973590cfa54')</sql>
-			<!-- livingroom of Test Place 1 -->
-			<sql>INSERT INTO locations (id, name, place_id)
+					181462068183316)</sql>
+			<!-- livingroom of Test Gateway 1 -->
+			<sql>INSERT INTO locations (id, name, gateway_id)
 				VALUES ('3a91f58e-579e-41f2-a17b-3fb6166abb69',
 					'Livingroom',
-					'16de2f05-8af7-4729-8479-1973590cfa54')</sql>
-			<!-- bedroom of Test Place 2 -->
-			<sql>INSERT INTO locations (id, name, place_id)
+					181462068183316)</sql>
+			<!-- bedroom of Test Gateway 2 -->
+			<sql>INSERT INTO locations (id, name, gateway_id)
 				VALUES ('7a336a66-da55-4bf0-ba37-00461845823b',
 					'Bedroom',
-					'bd8ea40c-91c9-4d8c-8c13-a8332c39a437')</sql>
+					140548523101825)</sql>
 		</setup>
 		<setup name="global devices for test">
 			<!-- Test Device A on Test Gateway 1 (inactive) -->
@@ -639,23 +639,23 @@
 	</query>
 
 	<query id="locations.create">
-		<define>INSERT INTO locations (id, name, place_id) VALUES (
+		<define>INSERT INTO locations (id, name, gateway_id) VALUES (
 				<value name="id" type="uuid" />,
 				<value name="name" type="varchar" />,
-				<value name="place_id" type="uuid" />)</define>
+				<value name="gateway_id" type="int64" />)</define>
 		<test name="insert location works">
 			<check name="simple insert">
 				<call-query>
 					<arg name="id">'c94d43df-84da-4200-b5a2-1d3594ac7645'</arg>
 					<arg name="name">'living room'</arg>
-					<arg name="place_id">'bd8ea40c-91c9-4d8c-8c13-a8332c39a437'</arg>
+					<arg name="gateway_id">140548523101825</arg>
 				</call-query>
-				<sql>SELECT id, name, place_id FROM locations WHERE id = 'c94d43df-84da-4200-b5a2-1d3594ac7645'</sql>
+				<sql>SELECT id, name, gateway_id FROM locations WHERE id = 'c94d43df-84da-4200-b5a2-1d3594ac7645'</sql>
 				<expect>
 					<row>
 						<value type="uuid" name="id">c94d43df-84da-4200-b5a2-1d3594ac7645</value>
 						<value name="name">living room</value>
-						<value type="uuid" name="place_id">bd8ea40c-91c9-4d8c-8c13-a8332c39a437</value>
+						<value type="uuid" name="gateway_id">140548523101825</value>
 					</row>
 				</expect>
 			</check>
@@ -665,16 +665,16 @@
 		</test>
 		<test name="insert conflicting location">
 			<setup name="prepare a conflicting location">
-				<sql>INSERT INTO locations (id, name, place_id) VALUES (
+				<sql>INSERT INTO locations (id, name, gateway_id) VALUES (
 						'c94d43df-84da-4200-b5a2-1d3594ac7645',
 						'living room',
-						'bd8ea40c-91c9-4d8c-8c13-a8332c39a437')</sql>
+						140548523101825)</sql>
 			</setup>
 			<check name="same id fails">
 				<call-query>
 					<arg name="id">'c94d43df-84da-4200-b5a2-1d3594ac7645'</arg>
 					<arg name="name">'kitchen'</arg>
-					<arg name="place_id">'bd8ea40c-91c9-4d8c-8c13-a8332c39a437'</arg>
+					<arg name="gateway_id">140548523101825</arg>
 				</call-query>
 				<expect>
 					<fail-insert table="locations" conflict="id" />
@@ -684,15 +684,15 @@
 				<sql>DELETE FROM locations WHERE id = 'c94d43df-84da-4200-b5a2-1d3594ac7645'</sql>
 			</teardown>
 		</test>
-		<test name="insert location for non-existing place">
-			<check name="fail with non-existing place">
+		<test name="insert location for non-existing gateway">
+			<check name="fail with non-existing gateway">
 				<call-query>
 					<arg name="id">'c94d43df-84da-4200-b5a2-1d3594ac7645'</arg>
 					<arg name="name">'kitchen'</arg>
-					<arg name="place_id">'50ffebba-3e18-4f62-9538-4629dce051cf'</arg>
+					<arg name="gateway_id">118453478507226</arg>
 				</call-query>
 				<expect>
-					<fail-insert table="locations" conflict="place_id" />
+					<fail-insert table="locations" conflict="gateway_id" />
 				</expect>
 			</check>
 		</test>
@@ -702,21 +702,19 @@
 		<define>
 		SELECT
 			l.name AS name,
-			p.name AS place_name,
-			p.id AS place_id
+			l.gateway_id AS gateway_id
 		FROM locations AS l
-		JOIN places AS p ON l.place_id = p.id
 		WHERE l.id = <value name="id" type="uuid" />
 		</define>
 		<!-- TODO: place_id should be not-null -->
 		<test name="simple test">
 			<setup name="create locations">
-				<sql>INSERT INTO locations (id, name, place_id)
-					VALUES ('0a2000c7-420a-4558-a981-1c67e36c2ee4', 'Test Location 1', '16de2f05-8af7-4729-8479-1973590cfa54')</sql>
-				<sql>INSERT INTO locations (id, name, place_id)
-					VALUES ('966d40f3-3967-4a4b-8ad6-40bad688008b', 'Test Location 2', '16de2f05-8af7-4729-8479-1973590cfa54')</sql>
-				<sql>INSERT INTO locations (id, name, place_id)
-					VALUES ('dc761ed8-baa3-434a-b5c0-b23a80859efe', 'Test Location 3', 'bd8ea40c-91c9-4d8c-8c13-a8332c39a437')</sql>
+				<sql>INSERT INTO locations (id, name, gateway_id)
+					VALUES ('0a2000c7-420a-4558-a981-1c67e36c2ee4', 'Test Location 1', 181462068183316)</sql>
+				<sql>INSERT INTO locations (id, name, gateway_id)
+					VALUES ('966d40f3-3967-4a4b-8ad6-40bad688008b', 'Test Location 2', 140548523101825)</sql>
+				<sql>INSERT INTO locations (id, name, gateway_id)
+					VALUES ('dc761ed8-baa3-434a-b5c0-b23a80859efe', 'Test Location 3', 144426044538750)</sql>
 			</setup>
 			<check name="select 'Test Location 1'">
 				<call-query>
@@ -725,8 +723,7 @@
 				<expect>
 					<row>
 						<value name="name">Test Location 1</value>
-						<value name="place_name">Test Place 1</value>
-						<value type="uuid" name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
+						<value name="gateway_id">181462068183316</value>
 					</row>
 				</expect>
 			</check>
@@ -737,8 +734,7 @@
 				<expect>
 					<row>
 						<value name="name">Test Location 2</value>
-						<value name="place_name">Test Place 1</value>
-						<value type="uuid" name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
+						<value name="gateway_id">140548523101825</value>
 					</row>
 				</expect>
 			</check>
@@ -749,8 +745,7 @@
 				<expect>
 					<row>
 						<value name="name">Test Location 3</value>
-						<value name="place_name">Test Place 2</value>
-						<value type="uuid" name="place_id">bd8ea40c-91c9-4d8c-8c13-a8332c39a437</value>
+						<value name="gateway_id">144426044538750</value>
 					</row>
 				</expect>
 			</check>
@@ -772,15 +767,12 @@
 		<define>
 		SELECT
 			l.name AS name,
-			p.name AS place_name,
-			l.place_id AS place_id
+			l.gateway_id AS gateway_id
 		FROM locations AS l
-		JOIN places AS p ON l.place_id = p.id
-		JOIN gateways AS g ON g.place_id = p.id
 		WHERE
 			l.id = <value name="id" type="uuid" />
 			AND
-			g.id = <value name="gateway_id" type="uuid" />
+			l.gateway_id = <value name="gateway_id" type="uuid" />
 		</define>
 		<test name="simple test">
 			<check name="find the Kitchen by Test Gateway 1">
@@ -791,8 +783,7 @@
 				<expect>
 					<row>
 						<value name="name">Kitchen</value>
-						<value name="place_name">Test Place 1</value>
-						<value type="uuid" name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
+						<value name="gateway_id">181462068183316</value>
 					</row>
 				</expect>
 			</check>
@@ -811,13 +802,10 @@
 		SELECT
 			l.id AS id,
 			l.name AS name,
-			p.name AS place_name,
-			l.place_id AS place_id
+			l.gateway_id AS gateway_id
 		FROM locations AS l
-		JOIN gateways AS g ON g.place_id = l.place_id
-		JOIN places AS p ON p.id = l.place_id
 		WHERE
-			g.id = <value name="gateway_id" type="uuid" />
+			l.gateway_id = <value name="gateway_id" type="uuid" />
 		ORDER BY l.id
 		</define>
 		<test name="simple test">
@@ -829,14 +817,12 @@
 					<row>
 						<value type="uuid" name="id">3a91f58e-579e-41f2-a17b-3fb6166abb69</value>
 						<value name="name">Livingroom</value>
-						<value name="place_name">Test Place 1</value>
-						<value type="uuid" name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
+						<value name="gateway_id">181462068183316</value>
 					</row>
 					<row>
 						<value type="uuid" name="id">f5ad3e17-aa65-4291-8916-1d21cdf6b4bb</value>
 						<value name="name">Kitchen</value>
-						<value name="place_name">Test Place 1</value>
-						<value type="uuid" name="place_id">16de2f05-8af7-4729-8479-1973590cfa54</value>
+						<value name="gateway_id">181462068183316</value>
 					</row>
 				</expect>
 			</check>
@@ -848,8 +834,7 @@
 					<row>
 						<value type="uuid" name="id">7a336a66-da55-4bf0-ba37-00461845823b</value>
 						<value name="name">Bedroom</value>
-						<value name="place_name">Test Place 2</value>
-						<value type="uuid" name="place_id">bd8ea40c-91c9-4d8c-8c13-a8332c39a437</value>
+						<value name="gateway_id">140548523101825</value>
 					</row>
 				</expect>
 			</check>
