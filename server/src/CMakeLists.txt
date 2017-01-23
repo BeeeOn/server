@@ -36,6 +36,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/Identity.cpp
 	${PROJECT_SOURCE_DIR}/model/VerifiedIdentity.cpp
 	${PROJECT_SOURCE_DIR}/model/RoleInPlace.cpp
+	${PROJECT_SOURCE_DIR}/model/RoleInGateway.cpp
 	${PROJECT_SOURCE_DIR}/model/LegacyGateway.cpp
 	${PROJECT_SOURCE_DIR}/model/Device.cpp
 	${PROJECT_SOURCE_DIR}/model/Location.cpp
