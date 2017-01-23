@@ -177,7 +177,7 @@ bool GatewayService::doUpdate(SingleWithData<Gateway> &input)
 	return m_gatewayDao->update(gateway);
 }
 
-bool GatewayService::doUnregister(Relation<Gateway, User> &input)
+bool GatewayService::doUnregister(Single<Gateway> &input)
 {
 	Gateway &gateway = input.target();
 

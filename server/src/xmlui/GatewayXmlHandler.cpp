@@ -80,8 +80,8 @@ void GatewayXmlHandler::handleRegister(Element *gatewayNode)
 void GatewayXmlHandler::handleUnregister(Element *gatewayNode)
 {
 	Gateway gateway(GatewayID::parse(gatewayNode->getAttribute("id")));
+	Single<Gateway> input(gateway);
 	User user(session()->userID());
-	Relation<Gateway, User> input(gateway, user);
 	input.setUser(user);
 
 	if (!m_gatewayService.unregister(input)) {
