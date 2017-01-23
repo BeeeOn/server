@@ -157,6 +157,45 @@
 					'cd8c611b-7e8a-43ff-8d35-9e92c74f003d',
 					10, 1483456379)</sql>
 		</setup>
+		<setup name="global gateway roles for tests">
+			<!-- pepa@example.org is admin (and owner) of Test Gateway 1 -->
+			<sql>INSERT INTO roles_in_gateway (id, gateway_id, identity_id, level, created) VALUES (
+					'faabc96a-12b4-421a-8f4b-00ae1f75c11f',
+					181462068183316,
+					'4264d04a-4a50-4a53-a765-dc5a7cdce6f1',
+					10, 1483456377)</sql>
+			<!-- pepa2@example.org is user of Test Gateway 1 -->
+			<sql>INSERT INTO roles_in_gateway (id, gateway_id, identity_id, level, created) VALUES (
+					'f3733b47-d47c-4fa1-b2ce-2101dfa33ca1',
+					181462068183316,
+					'cd8c611b-7e8a-43ff-8d35-9e92c74f003d',
+					20, 1483456378)</sql>
+			<!-- jack.sparrow@example.org is guest of Test Gateway 1 -->
+			<sql>INSERT INTO roles_in_gateway (id, gateway_id, identity_id, level, created) VALUES (
+					'aee235a1-ac89-4553-b185-d689faeeeee3',
+					181462068183316,
+					'b5696add-11c4-4b51-834a-c14ddd672db4',
+					30, 1483456379)</sql>
+			<!-- franta@example.org is admin (and owner) of Test Gateway 2 -->
+			<sql>INSERT INTO roles_in_gateway (id, gateway_id, identity_id, level, created) VALUES (
+					'e01b65c0-5815-4f5b-a172-1dce164ef3d9',
+					140548523101825,
+					'd184702c-7003-49a7-9ded-4c4fe5d88881',
+					10, 1483456375)</sql>
+			<!-- pepa2@example.org is admin of Test Gateway 2 -->
+			<sql>INSERT INTO roles_in_gateway (id, gateway_id, identity_id, level, created) VALUES (
+					'4564a87e-d3e0-48a7-a29a-1ee0f9b111a1',
+					140548523101825,
+					'cd8c611b-7e8a-43ff-8d35-9e92c74f003d',
+					10, 1483456379)</sql>
+		</setup>
+		<teardown name="delete global gateway roles">
+			<sql>DELETE FROM roles_in_gateway WHERE id = '4564a87e-d3e0-48a7-a29a-1ee0f9b111a1'</sql>
+			<sql>DELETE FROM roles_in_gateway WHERE id = 'e01b65c0-5815-4f5b-a172-1dce164ef3d9'</sql>
+			<sql>DELETE FROM roles_in_gateway WHERE id = 'aee235a1-ac89-4553-b185-d689faeeeee3'</sql>
+			<sql>DELETE FROM roles_in_gateway WHERE id = 'f3733b47-d47c-4fa1-b2ce-2101dfa33ca1'</sql>
+			<sql>DELETE FROM roles_in_gateway WHERE id = 'faabc96a-12b4-421a-8f4b-00ae1f75c11f'</sql>
+		</teardown>
 		<teardown name="delete global roles">
 			<sql>DELETE FROM roles_in_place WHERE id = '4564a87e-d3e0-48a7-a29a-1ee0f9b111a1'</sql>
 			<sql>DELETE FROM roles_in_place WHERE id = 'e01b65c0-5815-4f5b-a172-1dce164ef3d9'</sql>
@@ -1334,6 +1373,210 @@
 					<row>
 						<value type="uuid" name="id">bd8ea40c-91c9-4d8c-8c13-a8332c39a437</value>
 						<value name="name">Test Place 2</value>
+					</row>
+				</expect>
+			</check>
+		</test>
+	</query>
+
+	<query id="roles_in_gateway.create">
+		<define>INSERT INTO roles_in_gateway (id, gateway_id, identity_id, level, created) VALUES (
+			<value name="id" type="uuid" />,
+			<value name="gateway_id" type="uuid" />,
+			<value name="identity_id" type="uuid" />,
+			<value name="level" type="integer" />,
+			<value name="created" type="bigint" />)</define>
+	</query>
+
+	<query id="roles_in_gateway.fetch.by.id">
+		<define>
+		SELECT
+			r.gateway_id AS gateway_id,
+			r.identity_id AS identity_id,
+			r.level AS level,
+			r.created AS created,
+			i.email AS identity_email
+		FROM roles_in_gateway AS r
+		JOIN identities AS i ON r.identity_id = i.id
+		WHERE
+			r.id = <value name="id" type="uuid" />
+		</define>
+		<test name="simple">
+			<check name="pepa@example.org is admin of Test Gateway 1">
+				<call-query>
+					<arg name="id">'faabc96a-12b4-421a-8f4b-00ae1f75c11f'</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="gateway_id">181462068183316</value>
+						<value type="uuid" name="identity_id">4264d04a-4a50-4a53-a765-dc5a7cdce6f1</value>
+						<value name="level">10</value>
+						<value name="created">1483456377</value>
+						<value name="identity_email">pepa@example.org</value>
+					</row>
+				</expect>
+			</check>
+		</test>
+	</query>
+
+	<query id="roles_in_gateway.fetch.by.gateway_id">
+		<define>
+		SELECT
+			r.id AS id,
+			r.gateway_id AS gateway_id,
+			r.identity_id AS identity_id,
+			r.level AS level,
+			r.created AS created,
+			i.email AS identity_email
+		FROM roles_in_gateway AS r
+		JOIN identities AS i ON r.identity_id = i.id
+		WHERE
+			r.gateway_id = <value name="gateway_id" type="int64" />
+		ORDER BY level
+		</define>
+		<test name="fetch roles of gateway">
+			<check name="Test Gateway 1 has 3 users">
+				<call-query>
+					<arg name="gateway_id">181462068183316</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value type="uuid" name="id">faabc96a-12b4-421a-8f4b-00ae1f75c11f</value>
+						<value name="gateway_id">181462068183316</value>
+						<value type="uuid" name="identity_id">4264d04a-4a50-4a53-a765-dc5a7cdce6f1</value>
+						<value name="level">10</value>
+						<value name="created">1483456377</value>
+						<value name="identity_email">pepa@example.org</value>
+					</row>
+					<row>
+						<value type="uuid" name="id">f3733b47-d47c-4fa1-b2ce-2101dfa33ca1</value>
+						<value name="gateway_id">181462068183316</value>
+						<value type="uuid" name="identity_id">cd8c611b-7e8a-43ff-8d35-9e92c74f003d</value>
+						<value name="level">20</value>
+						<value name="created">1483456378</value>
+						<value name="identity_email">pepa2@example.org</value>
+					</row>
+					<row>
+						<value type="uuid" name="id">aee235a1-ac89-4553-b185-d689faeeeee3</value>
+						<value name="gateway_id">181462068183316</value>
+						<value type="uuid" name="identity_id">b5696add-11c4-4b51-834a-c14ddd672db4</value>
+						<value name="level">30</value>
+						<value name="created">1483456379</value>
+						<value name="identity_email">jack.sparrow@example.org</value>
+					</row>
+				</expect>
+			</check>
+		</test>
+	</query>
+
+	<query id="roles_in_gateway.remove">
+		<define>DELETE FROM roles_in_gateway WHERE id = <value name="id" type="uuid" /></define>
+	</query>
+
+	<query id="roles_in_gateway.is.registered">
+		<define>SELECT COUNT(*) > 0 AS registered FROM roles_in_gateway
+			WHERE gateway_id = <value name="gateway_id" type="int64" /></define>
+		<test name="simple test">
+			<check name="Test Gateway 1 is registered">
+				<call-query>
+					<arg name="gateway_id">181462068183316</arg>
+				</call-query>
+				<expect>
+					<row>
+						<true name="registered" />
+					</row>
+				</expect>
+			</check>
+			<check name="Test Gateway 3 is not registered">
+				<call-query>
+					<arg name="gateway_id">144426044538750</arg>
+				</call-query>
+				<expect>
+					<row>
+						<false name="registered" />
+					</row>
+				</expect>
+			</check>
+
+		</test>
+	</query>
+
+	<query id="roles_in_gateway.fetch.access_level">
+		<define>
+		SELECT
+			MIN(r.level) AS level
+		FROM roles_in_gateway AS r
+		JOIN verified_identities AS v ON v.identity_id = r.identity_id
+		WHERE
+			r.gateway_id = <value name="gateway_id" type="int64" />
+			AND
+			v.user_id = <value name="user_id" type="uuid" />
+		</define>
+		<test name="fetch minimal access_level">
+			<check name="Pepa Goodman is both admin and user for Test Gateway 1, resolve to admin">
+				<call-query>
+					<arg name="gateway_id">181462068183316</arg>
+					<arg name="user_id">'29d214d4-2057-4e06-b003-b839d0bb1df6'</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="level">10</value>
+					</row>
+				</expect>
+			</check>
+		</test>
+	</query>
+
+	<query id="roles_in_gateway.fetch.accessible.gateways">
+		<define>
+		SELECT
+			DISTINCT g.id AS id,
+			g.name AS name,
+			g.altitude AS altitude,
+			g.latitude AS latitude,
+			g.longitude AS longitude,
+			s.at AS last_changed,
+			s.version AS version,
+			s.ip AS ip
+		FROM gateways AS g
+		JOIN gateways_status AS s ON s.gateway_id = g.id
+		JOIN roles_in_gateway AS r ON r.gateway_id = g.id
+		JOIN verified_identities AS v ON v.identity_id = r.identity_id
+		WHERE
+			r.level &gt;= <value name="at_least" type="integer" />
+			AND
+			v.user_id = <value name="user_id" type="uuid" />
+			AND
+			(s.at IS NULL OR s.at =
+				(SELECT MAX(at) FROM gateways_status WHERE gateway_id = g.id))
+		ORDER BY g.name
+		</define>
+		<test name="find places of Pepa Goodman">
+			<check name="expect both Test Gateway 1 and Test Gateway 2">
+				<call-query>
+					<arg name="at_least">10</arg>
+					<arg name="user_id">'29d214d4-2057-4e06-b003-b839d0bb1df6'</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="id">181462068183316</value>
+						<value name="name">Test Gateway 1</value>
+						<value name="altitude">-1.5</value>
+						<value name="latitude">1.5</value>
+						<value name="longitude">11.5</value>
+						<value name="last_changed">1483553208</value>
+						<value name="version">1.0-testing</value>
+						<value name="ip">192.168.12.2</value>
+					</row>
+					<row>
+						<value name="id">140548523101825</value>
+						<value name="name">Test Gateway 2</value>
+						<value name="altitude">-2.5</value>
+						<value name="latitude">2.5</value>
+						<value name="longitude">22.5</value>
+						<value name="last_changed">1483454300</value>
+						<value name="version">1.0-master</value>
+						<value name="ip">192.168.11.1</value>
 					</row>
 				</expect>
 			</check>
