@@ -12,12 +12,12 @@
 #include "Debug.h"
 #include "model/User.h"
 #include "model/VerifiedIdentity.h"
-#include "model/Place.h"
 #include "model/Gateway.h"
 #include "model/LegacyGateway.h"
 
 namespace BeeeOn {
 
+class Place;
 class GatewayDao;
 class RoleInPlaceDao;
 class PlaceDao;
@@ -68,11 +68,6 @@ public:
 		return BEEEON_TRANSACTION_RETURN(bool, doFetch(input));
 	}
 
-	bool fetchFromPlace(Relation<Gateway, Place> &input)
-	{
-		return BEEEON_TRANSACTION_RETURN(bool, doFetchFromPlace(input));
-	}
-
 	void fetchAccessible(Relation<std::vector<Gateway>, User> &input)
 	{
 		BEEEON_TRANSACTION(doFetchAccessible(input));
@@ -86,21 +81,6 @@ public:
 	bool update(SingleWithData<Gateway> &input)
 	{
 		return BEEEON_TRANSACTION_RETURN(bool, doUpdate(input));
-	}
-
-	bool updateInPlace(RelationWithData<Gateway, Place> &input)
-	{
-		return BEEEON_TRANSACTION_RETURN(bool, doUpdateInPlace(input));
-	}
-
-	bool assignAndUpdate(RelationWithData<Gateway, Place> &input)
-	{
-		return BEEEON_TRANSACTION_RETURN(bool, doAssignAndUpdate(input));
-	}
-
-	bool unassign(Relation<Gateway, Place> &input)
-	{
-		return BEEEON_TRANSACTION_RETURN(bool, doUnassign(input));
 	}
 
 	bool unassign(Relation<Gateway, User> &input)
@@ -128,13 +108,9 @@ protected:
 			const VerifiedIdentity &verifiedIdentity);
 	bool doFetch(Single<Gateway> &input);
 	bool doFetch(Single<LegacyGateway> &input);
-	bool doFetchFromPlace(Relation<Gateway, Place> &input);
 	void doFetchAccessible(Relation<std::vector<Gateway>, User> &input);
 	void doFetchAccessible(Relation<std::vector<LegacyGateway>, User> &input);
 	bool doUpdate(SingleWithData<Gateway> &input);
-	bool doUpdateInPlace(RelationWithData<Gateway, Place> &input);
-	bool doAssignAndUpdate(RelationWithData<Gateway, Place> &input);
-	bool doUnassign(Relation<Gateway, Place> &input);
 	bool doUnassign(Relation<Gateway, User> &input);
 	void doScanDevices(Single<Gateway> &input);
 	void doUnpairDevice(Single<Gateway> &input, Device &device);
