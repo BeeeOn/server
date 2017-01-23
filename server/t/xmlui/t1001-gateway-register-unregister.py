@@ -8,7 +8,7 @@ import unittest
 from xmlui import Connector, Response, Login, Logout
 from xmlui import GatewayRegister, GatewayUnregister, GatewayGet
 
-class TestGatewayPlaceAssign(unittest.TestCase):
+class TestGatewayRegisterUnregister(unittest.TestCase):
 	"""
 	Create 2 sessions for 2 different users.
 	"""
