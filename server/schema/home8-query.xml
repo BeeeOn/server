@@ -570,7 +570,7 @@
 			p.name AS place_name
 		FROM gateways AS g
 		JOIN places AS p ON g.place_id = p.id
-		JOIN roles_in_place AS r ON g.place_id = r.place_id
+		JOIN roles_in_gateway AS r ON g.id = r.gateway_id
 		JOIN verified_identities AS v ON v.identity_id = r.identity_id
 		LEFT JOIN gateways_status AS s ON s.gateway_id = g.id
 		WHERE
@@ -585,6 +585,11 @@
 				<sql>INSERT INTO gateways (id, name, place_id, altitude, latitude, longitude)
 					VALUES (116084064167771, 'Test Gateway 13',
 							'bd8ea40c-91c9-4d8c-8c13-a8332c39a437', 20.5, 10.1, 10.24)</sql>
+				<sql>INSERT INTO roles_in_gateway (id, gateway_id, identity_id, level, created) VALUES (
+						'60c4e3aa-25a7-448d-9a04-5f2194e4ed00',
+						116084064167771,
+						'cd8c611b-7e8a-43ff-8d35-9e92c74f003d',
+						20, 1483456491)</sql>
 			</setup>
 			<check name="3 gateways of Pepa Goodman">
 				<call-query>
@@ -630,6 +635,7 @@
 				</expect>
 			</check>
 			<teardown name="delete Test Gateway 13">
+				<sql>DELETE FROM roles_in_gateway WHERE id = '60c4e3aa-25a7-448d-9a04-5f2194e4ed00'</sql>
 				<sql>DELETE FROM gateways WHERE id = 116084064167771</sql>
 			</teardown>
 		</test>
