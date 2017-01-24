@@ -5,7 +5,6 @@
 
 #include "di/InjectorTarget.h"
 #include "dao/NullDao.h"
-#include "dao/MockDao.h"
 #include "model/Place.h"
 #include "model/Device.h"
 #include "model/Gateway.h"
@@ -49,32 +48,6 @@ public:
 			const Gateway &gateway);
 
 	static DeviceDao &instance();
-};
-
-class MockDeviceDao : public AbstractInjectorTarget,
-	public MockRelationDao<Device, Gateway, DeviceDao> {
-public:
-	void fetchActiveBy(std::vector<Device> &devices,
-			const Gateway &gateway);
-	void fetchInactiveBy(std::vector<Device> &devices,
-			const Gateway &gateway);
-
-protected:
-	void fetchBy(std::vector<Device> &devices,
-			const Gateway &gateway, bool active);
-
-	DeviceID nextID()
-	{
-		return DeviceID::random();
-	}
-
-	void setBase(Device &device, const Gateway &gateway)
-	{
-		device.setGateway(gateway);
-	}
-
-private:
-	DeviceID m_id;
 };
 
 }
