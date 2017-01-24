@@ -1,3 +1,4 @@
+#include <set>
 #include <Poco/Exception.h>
 
 #include "policy/PolicyContext.h"
@@ -5,6 +6,7 @@
 
 BEEEON_OBJECT(DefaultAccessPolicy, BeeeOn::DefaultAccessPolicy)
 
+using namespace std;
 using namespace Poco;
 using namespace BeeeOn;
 
@@ -220,6 +222,34 @@ void DefaultAccessPolicy::assureGet(
 
 	assureAtLeast(fetchAccessLevel(context.user(), gateway),
 			AccessLevel::guest());
+}
+
+void DefaultAccessPolicy::assureGetMany(
+		const PolicyContext &context,
+		const list<Device> &devices)
+{
+	set<GatewayID> seen;
+
+	for (auto &device : devices) {
+		const GatewayID &id = device.gateway().id();
+
+		if (!device.hasId())
+			throw InvalidAccessException(
+				"no id specified for device");
+
+		if (id.isNull())
+			throw InvalidAccessException(
+				"no id specified for gateway");
+
+		if (seen.find(id) != seen.end())
+			continue;
+
+		Gateway gateway(id);
+		assureAtLeast(fetchAccessLevel(context.user(), gateway),
+				AccessLevel::guest());
+
+		seen.insert(id);
+	}
 }
 
 void DefaultAccessPolicy::assureListActiveDevices(

@@ -51,6 +51,8 @@ public:
 
 	void assureGet(const PolicyContext &context,
 		const Device &device, const Gateway &gateway);
+	void assureGetMany(const PolicyContext &context,
+		const std::list<Device> &devices);
 	void assureListActiveDevices(const PolicyContext &context,
 		const Gateway &gateway);
 	void assureListInactiveDevices(const PolicyContext &context,

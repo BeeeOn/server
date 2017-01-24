@@ -3,6 +3,7 @@
 
 #include "policy/DeviceAccessPolicy.h"
 
+using namespace std;
 using namespace Poco;
 using namespace BeeeOn;
 
@@ -10,6 +11,13 @@ void NullDeviceAccessPolicy::assureGet(
 		const PolicyContext &context,
 		const Device &device,
 		const Gateway &gateway)
+{
+	throw NotImplementedException(__func__);
+}
+
+void NullDeviceAccessPolicy::assureGetMany(
+		const PolicyContext &context,
+		const list<Device> &devices)
 {
 	throw NotImplementedException(__func__);
 }
