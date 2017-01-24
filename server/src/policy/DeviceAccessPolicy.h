@@ -1,6 +1,8 @@
 #ifndef BEEEON_DEVICE_ACCESS_POLICY_H
 #define BEEEON_DEVICE_ACCESS_POLICY_H
 
+#include <list>
+
 namespace BeeeOn {
 
 class Device;
@@ -13,6 +15,10 @@ public:
 		const PolicyContext &context,
 		const Device &device,
 		const Gateway &gateway) = 0;
+
+	virtual void assureGetMany(
+		const PolicyContext &context,
+		const std::list<Device> &devices) = 0;
 
 	virtual void assureListActiveDevices(
 		const PolicyContext &context,
@@ -54,6 +60,10 @@ public:
 		const PolicyContext &context,
 		const Device &device,
 		const Gateway &gateway) override;
+
+	void assureGetMany(
+		const PolicyContext &context,
+		const std::list<Device> &devices) override;
 
 	void assureListActiveDevices(
 		const PolicyContext &context,

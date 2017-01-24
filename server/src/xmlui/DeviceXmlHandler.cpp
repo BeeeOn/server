@@ -32,6 +32,12 @@ void DeviceXmlHandler::handleInputImpl()
 
 	Element *root = m_input->documentElement();
 	const string &type = root->getAttribute("type");
+
+	if (type == "get") {
+		handleGet(root->childNodes());
+		return;
+	}
+
 	const string &gateid = root->getAttribute("gateid");
 
 	if (type == "getall") {
@@ -49,9 +55,7 @@ void DeviceXmlHandler::handleInputImpl()
 		return;
 	}
 
-	if (type == "get")
-		handleGet(gateid, root->childNodes());
-	else if (type == "unregister")
+	if (type == "unregister")
 		handleUnregister(gateid, deviceNode);
 	else if (type == "update")
 		handleUpdate(gateid, deviceNode);
@@ -91,10 +95,8 @@ void DeviceXmlHandler::handleUpdate(const string &gateid,
 		resultUnexpected();
 }
 
-void DeviceXmlHandler::handleGet(const string &gateid,
-		AutoPtr<NodeList> nodes)
+void DeviceXmlHandler::handleGet(AutoPtr<NodeList> nodes)
 {
-	Gateway gateway(GatewayID::parse(gateid));
 	list<Device> devices;
 
 	if (nodes.isNull()) {
@@ -113,11 +115,13 @@ void DeviceXmlHandler::handleGet(const string &gateid,
 
 		const Element *e = dynamic_cast<const Element *>(node);
 
+		Gateway gateway(GatewayID::parse(e->getAttribute("gateid")));
 		Device device(DeviceID::parse(e->getAttribute("euid")));
+		device.setGateway(gateway);
 		devices.push_back(device);
 	}
 
-	Relation<list<Device>, Gateway> input(devices, gateway);
+	Single<list<Device>> input(devices);
 	User user(session()->userID());
 	input.setUser(user);
 

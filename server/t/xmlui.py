@@ -302,10 +302,10 @@ class DeviceGet(Request):
 
 	def xml(self):
 		request = Request.xml(self)
-		request.set("gateid", self.gateway)
 
 		for device in self.devices:
 			e = xml.SubElement(request, "device")
+			e.set("gateid", self.gateway)
 			e.set("euid", device)
 
 		return request

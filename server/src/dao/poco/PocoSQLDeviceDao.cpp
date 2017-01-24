@@ -146,6 +146,42 @@ bool PocoSQLDeviceDao::fetch(Device &device, const Gateway &gateway)
 	return parseSingle(result, device, gateway);
 }
 
+void PocoSQLDeviceDao::fetchMany(std::list<Device> &devices)
+{
+	auto it = devices.begin();
+
+	while (it != devices.end()) {
+		Device &device = *it;
+
+		if (!device.hasId() || !device.gateway().hasId()) {
+			it = devices.erase(it);
+			continue;
+		}
+
+		string id(device.id().toString());
+		string gatewayID(device.gateway().id().toString());
+
+		Statement sql = (session() << m_queryFetchFromGateway(),
+			use(id, "id"),
+			use(gatewayID, "gateway_id")
+		);
+
+		if (execute(sql) == 0) {
+			it = devices.erase(it);
+			continue;
+		}
+
+		RecordSet result(sql);
+		if (!parseSingle(result, device, device.gateway())) {
+			it = devices.erase(it);
+			continue;
+		}
+
+		++it;
+	}
+
+}
+
 void PocoSQLDeviceDao::fetchActiveBy(std::vector<Device> &devices,
 		const Gateway &gateway)
 {

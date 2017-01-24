@@ -53,6 +53,15 @@ bool DeviceService::doFetch(Relation<Device, Gateway> &input)
 	return m_dao->fetch(input.target(), input.base());
 }
 
+void DeviceService::doFetchMany(Single<list<Device>> &input)
+{
+	m_policy->assureGetMany(input, input.target());
+
+	list<Device> &devices = input.target();
+	m_dao->fetchMany(devices);
+}
+
+
 void DeviceService::doFetchMany(Relation<list<Device>, Gateway> &input)
 {
 	list<Device> &devices = input.target();

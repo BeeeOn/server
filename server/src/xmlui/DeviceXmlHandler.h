@@ -21,8 +21,7 @@ public:
 			Poco::XML::Element *deviceNode);
 	void handleUpdate(const std::string &gateid,
 			Poco::XML::Element *deviceNode);
-	void handleGet(const std::string &gateid,
-			Poco::AutoPtr<Poco::XML::NodeList> deviceNode);
+	void handleGet(Poco::AutoPtr<Poco::XML::NodeList> deviceNode);
 	void handleGetAll(const std::string &gateid);
 	void handleGetNew(const std::string &gateid);
 

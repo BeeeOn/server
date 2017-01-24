@@ -2,10 +2,10 @@
 #define BEEEON_DEVICE_DAO_H
 
 #include <vector>
+#include <list>
 
 #include "di/InjectorTarget.h"
 #include "dao/NullDao.h"
-#include "dao/MockDao.h"
 #include "model/Place.h"
 #include "model/Device.h"
 #include "model/Gateway.h"
@@ -19,6 +19,7 @@ public:
 	virtual bool insert(Device &device, const Gateway &gateway) = 0;
 	virtual bool update(Device &device, const Gateway &gateway) = 0;
 	virtual bool fetch(Device &device, const Gateway &gateway) = 0;
+	virtual void fetchMany(std::list<Device> &devices) = 0;
 	virtual void fetchActiveBy(std::vector<Device> &devices,
 			const Gateway &gateway) = 0;
 	virtual void fetchInactiveBy(std::vector<Device> &devices,
@@ -38,6 +39,8 @@ public:
 		return NullDao<Device, DeviceDao>::update(device);
 	}
 
+	void fetchMany(std::list<Device> &devices) override;
+
 	bool fetch(Device &device, const Gateway &gateway)
 	{
 		return NullDao<Device, DeviceDao>::fetch(device);
@@ -49,32 +52,6 @@ public:
 			const Gateway &gateway);
 
 	static DeviceDao &instance();
-};
-
-class MockDeviceDao : public AbstractInjectorTarget,
-	public MockRelationDao<Device, Gateway, DeviceDao> {
-public:
-	void fetchActiveBy(std::vector<Device> &devices,
-			const Gateway &gateway);
-	void fetchInactiveBy(std::vector<Device> &devices,
-			const Gateway &gateway);
-
-protected:
-	void fetchBy(std::vector<Device> &devices,
-			const Gateway &gateway, bool active);
-
-	DeviceID nextID()
-	{
-		return DeviceID::random();
-	}
-
-	void setBase(Device &device, const Gateway &gateway)
-	{
-		device.setGateway(gateway);
-	}
-
-private:
-	DeviceID m_id;
 };
 
 }
