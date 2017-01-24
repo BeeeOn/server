@@ -185,7 +185,6 @@
 		<alias name="deviceDao" ref="sqlDeviceDao" />
 		<alias name="identityDao" ref="sqlIdentityDao" />
 		<alias name="verifiedIdentityDao" ref="sqlVerifiedIdentityDao" />
-		<alias name="roleInPlaceDao" ref="sqlRoleInPlaceDao" />
 		<alias name="roleInGatewayDao" ref="sqlRoleInGatewayDao" />
 
 		<instance name="pocoDaoManager"
@@ -226,13 +225,6 @@
 
 		<instance name="sqlVerifiedIdentityDao"
 				class="BeeeOn::PocoSQLVerifiedIdentityDao">
-			<set name="daoManager" ref="pocoDaoManager" />
-			<set name="transactionManager" ref="transactionManager" />
-			<set name="sqlLoader" ref="queries" />
-		</instance>
-
-		<instance name="sqlRoleInPlaceDao"
-				class="BeeeOn::PocoSQLRoleInPlaceDao">
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="sqlLoader" ref="queries" />
