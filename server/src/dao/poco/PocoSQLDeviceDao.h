@@ -26,6 +26,7 @@ public:
 	bool insert(Device &device, const Gateway &gateway) override;
 	bool update(Device &device, const Gateway &gateway) override;
 	bool fetch(Device &device, const Gateway &gateway) override;
+	void fetchMany(std::list<Device> &devices) override;
 	void fetchActiveBy(std::vector<Device> &devices,
 			const Gateway &gateway) override;
 	void fetchInactiveBy(std::vector<Device> &devices,

@@ -2,6 +2,7 @@
 #define BEEEON_DEVICE_DAO_H
 
 #include <vector>
+#include <list>
 
 #include "di/InjectorTarget.h"
 #include "dao/NullDao.h"
@@ -18,6 +19,7 @@ public:
 	virtual bool insert(Device &device, const Gateway &gateway) = 0;
 	virtual bool update(Device &device, const Gateway &gateway) = 0;
 	virtual bool fetch(Device &device, const Gateway &gateway) = 0;
+	virtual void fetchMany(std::list<Device> &devices) = 0;
 	virtual void fetchActiveBy(std::vector<Device> &devices,
 			const Gateway &gateway) = 0;
 	virtual void fetchInactiveBy(std::vector<Device> &devices,
@@ -36,6 +38,8 @@ public:
 	{
 		return NullDao<Device, DeviceDao>::update(device);
 	}
+
+	void fetchMany(std::list<Device> &devices) override;
 
 	bool fetch(Device &device, const Gateway &gateway)
 	{

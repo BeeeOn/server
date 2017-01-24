@@ -26,3 +26,8 @@ void NullDeviceDao::fetchInactiveBy(vector<Device> &devices,
 {
 	throw NotImplementedException(__func__);
 }
+
+void NullDeviceDao::fetchMany(std::list<Device> &devices)
+{
+	throw NotImplementedException(__func__);
+}
