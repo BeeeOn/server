@@ -6,6 +6,7 @@
 
 #include "di/InjectorTarget.h"
 #include "dao/Transactional.h"
+#include "service/Single.h"
 #include "service/Relation.h"
 #include "model/Device.h"
 #include "model/Gateway.h"
@@ -30,6 +31,11 @@ public:
 	bool fetch(Relation<Device, Gateway> &input)
 	{
 		return BEEEON_TRANSACTION_RETURN(bool, doFetch(input));
+	}
+
+	void fetchMany(Single<std::list<Device>> &input)
+	{
+		BEEEON_TRANSACTION(doFetchMany(input));
 	}
 
 	void fetchMany(Relation<std::list<Device>, Gateway> &input)
@@ -69,6 +75,7 @@ public:
 
 protected:
 	bool doFetch(Relation<Device, Gateway> &input);
+	void doFetchMany(Single<std::list<Device>> &input);
 	void doFetchMany(Relation<std::list<Device>, Gateway> &input);
 	void doFetchActiveBy(Relation<std::vector<Device>, Gateway> &input);
 	void doFetchInactiveBy(Relation<std::vector<Device>, Gateway> &input);
