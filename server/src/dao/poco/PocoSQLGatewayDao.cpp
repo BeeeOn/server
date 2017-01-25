@@ -7,7 +7,6 @@
 #include <Poco/Data/RowIterator.h>
 
 #include "dao/poco/PocoSQLGatewayDao.h"
-#include "dao/poco/PocoSQLPlaceDao.h"
 #include "dao/poco/PocoSQLUserDao.h"
 #include "dao/poco/PocoDaoManager.h"
 
@@ -182,10 +181,6 @@ bool PocoSQLGatewayDao::parseSingle(Row &result, Gateway &gateway,
 		lastChanged = Timestamp::fromEpochTime(result[prefix + "last_changed"]);
 
 	gateway.setLastChanged(lastChanged);
-
-	Place place;
-	if (PocoSQLPlaceDao::parseIfIDNotNull(result, place, prefix + "place_"))
-		gateway.setPlace(place);
 
 	markLoaded(gateway);
 	return true;
