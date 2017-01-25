@@ -11,6 +11,9 @@ class PolicyContext;
 
 class GatewayAccessPolicy {
 public:
+	virtual void assureRegister(
+			const PolicyContext &context,
+			const Gateway &gateway) = 0;
 	virtual void assureGet(
 			const PolicyContext &context,
 			const Gateway &gateway) = 0;
@@ -27,6 +30,9 @@ public:
 
 class NullGatewayAccessPolicy : public GatewayAccessPolicy {
 public:
+	void assureRegister(
+		const PolicyContext &context,
+		const Gateway &gateway) override;
 	void assureGet(
 		const PolicyContext &context,
 		const Gateway &gateway) override;

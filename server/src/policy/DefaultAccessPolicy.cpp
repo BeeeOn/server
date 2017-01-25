@@ -45,6 +45,15 @@ void DefaultAccessPolicy::assureAtLeast(
 	}
 }
 
+void DefaultAccessPolicy::assureRegister(
+		const PolicyContext &context,
+		const Gateway &gateway)
+{
+	if (m_roleInGatewayDao->isRegistered(gateway))
+		throw InvalidAccessException("gateway "
+				+ gateway + " is already registered");
+}
+
 void DefaultAccessPolicy::assureGet(
 		const PolicyContext &context,
 		const Gateway &gateway)

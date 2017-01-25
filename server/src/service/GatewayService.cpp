@@ -89,6 +89,8 @@ void GatewayService::setAccessPolicy(GatewayAccessPolicy *policy)
 bool GatewayService::doRegisterGateway(SingleWithData<Gateway> &input,
 		const VerifiedIdentity &verifiedIdentity)
 {
+	m_accessPolicy->assureRegister(input, input.target());
+
 	VerifiedIdentity tmp(verifiedIdentity);
 
 	if (!m_verifiedIdentityDao->fetch(tmp))
@@ -99,16 +101,6 @@ bool GatewayService::doRegisterGateway(SingleWithData<Gateway> &input,
 	if (!m_gatewayDao->fetch(gateway))
 		throw NotFoundException("gateway was not found");
 
-	if (gateway.hasPlace()) {
-		const AccessLevel &level = m_roleInPlaceDao->
-			fetchAccessLevel(gateway.place(), tmp.user());
-
-		if (level <= AccessLevel::admin()) // is owner
-			throw ExistsException("gateway is already assigned");
-
-		throw NotFoundException("gateway is owned by somebody else");
-	}
-
 	input.data().full(gateway);
 
 	RoleInGateway role;
@@ -117,26 +109,7 @@ bool GatewayService::doRegisterGateway(SingleWithData<Gateway> &input,
 	role.setLevel(AccessLevel::admin());
 	m_roleInGatewayDao->create(role);
 
-	Place place;
-	createImplicitPlace(place, gateway, tmp.identity());
-	return m_gatewayDao->assignAndUpdate(gateway, place);
-}
-
-void GatewayService::createImplicitPlace(
-		Place &place,
-		const Gateway &gateway,
-		const Identity &identity)
-{
-	place.setName(string("Place for ") + gateway.name());
-
-	m_placeDao->create(place);
-
-	RoleInPlace role;
-	role.setPlace(place);
-	role.setIdentity(identity);
-	role.setLevel(AccessLevel::admin());
-
-	m_roleInPlaceDao->create(role);
+	return m_gatewayDao->update(gateway);
 }
 
 bool GatewayService::doFetch(Single<Gateway> &input)
@@ -183,13 +156,16 @@ bool GatewayService::doUnregister(Single<Gateway> &input)
 
 	m_accessPolicy->assureUnregister(input, input.target());
 
-	if (!m_gatewayDao->fetch(gateway))
-		throw NotFoundException("gateway does not exist");
+	// if there would be only roles without admin access level
+	// remove all the roles (unregister fro mthe gateway entirely)
+	if (m_roleInGatewayDao->hasOnlyNonAdminExcept(gateway, input.user()))
+		m_roleInGatewayDao->removeAll(gateway);
+	// if there are admins or current user is the last user
+	// remove only the current user's roles
+	else
+		return m_roleInGatewayDao->remove(gateway, input.user());
 
-	if (!gateway.hasPlace()) // do not leak that this gateway exists
-		throw NotFoundException("gateway is not assigned");
-
-	return m_gatewayDao->unassign(gateway);
+	return true;
 }
 
 void GatewayService::doScanDevices(Single<Gateway> &input)

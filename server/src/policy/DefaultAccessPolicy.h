@@ -20,6 +20,8 @@ class DefaultAccessPolicy : public AbstractInjectorTarget,
 public:
 	DefaultAccessPolicy();
 
+	void assureRegister(const PolicyContext &context,
+		const Gateway &gateway) override;
 	void assureGet(const PolicyContext &context,
 		const Gateway &gateway) override;
 	void assureUnregister(const PolicyContext &context,

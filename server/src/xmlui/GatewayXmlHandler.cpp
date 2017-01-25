@@ -116,11 +116,6 @@ void GatewayXmlHandler::handleGet(Element *gatewayNode)
 		return;
 	}
 
-	if (!gateway.hasPlace()) {
-		resultNotFound();
-		return;
-	}
-
 	resultDataStart();
 	serialize(m_output, gateway);
 	resultDataEnd();
