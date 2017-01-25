@@ -18,6 +18,8 @@ public:
 	virtual void fetchBy(std::vector<RoleInGateway> &roles,
 			const Gateway &gateway) = 0;
 	virtual bool remove(const RoleInGateway &gateway) = 0;
+	virtual bool remove(const Gateway &gateway,
+			const User &user) = 0;
 
 	virtual bool isRegistered(const Gateway &gateway) = 0;
 
@@ -45,6 +47,8 @@ public:
 	void fetchBy(std::vector<RoleInGateway> &roles,
 			const Gateway &gateway) override;
 	bool remove(const RoleInGateway &role) override;
+	bool remove(const Gateway &gateway,
+			const User &user)  override;
 
 	bool isRegistered(const Gateway &gateway) override;
 

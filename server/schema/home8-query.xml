@@ -1473,6 +1473,121 @@
 		<define>DELETE FROM roles_in_gateway WHERE id = <value name="id" type="uuid" /></define>
 	</query>
 
+	<query id="roles_in_gateway.remove.user">
+		<define>
+		DELETE FROM roles_in_gateway
+			WHERE identity_id IN
+				(SELECT identity_id
+					FROM verified_identities
+					WHERE user_id = <value name="user_id" type="uuid" />)
+				AND
+				gateway_id = <value name="gateway_id" type="int64" />
+		</define>
+		<test name="simple test">
+			<setup name="prepare a user to unregister">
+				<sql>INSERT INTO users (id, first_name, last_name) VALUES
+					('d708df0f-39a3-4df1-a758-194f5321755f', 'Random', 'Human')</sql>
+				<sql>INSERT INTO identities (id, email) VALUES
+					('47daa797-5684-4a52-9e71-1207121e93b1', 'human@example.org')</sql>
+				<sql>INSERT INTO verified_identities (id, identity_id, user_id, provider) VALUES (
+						'183ac47e-e37a-4820-9793-c98a50e8911d',
+						'47daa797-5684-4a52-9e71-1207121e93b1',
+						'd708df0f-39a3-4df1-a758-194f5321755f',
+						'test')</sql>
+				<sql>INSERT INTO roles_in_gateway (id, gateway_id, identity_id, level, created) VALUES (
+						'087d9181-2b9c-40c1-8cd6-93c3c02c0e7b',
+						144426044538750,
+						'47daa797-5684-4a52-9e71-1207121e93b1',
+						10, 1483426313)</sql>
+			</setup>
+			<check name="Check before trivial remove">
+				<sql>SELECT COUNT(*) AS before_remove FROM roles_in_gateway WHERE gateway_id = 144426044538750</sql>
+				<expect>
+					<row>
+						<value name="before_remove">1</value>
+					</row>
+				</expect>
+			</check>
+			<check name="Check trivial remove">
+				<call-query>
+					<arg name="user_id">'d708df0f-39a3-4df1-a758-194f5321755f'</arg>
+					<arg name="gateway_id">144426044538750</arg>
+				</call-query>
+
+				<sql>SELECT COUNT(*) AS after_remove FROM roles_in_gateway WHERE gateway_id = 144426044538750</sql>
+				<expect>
+					<row>
+						<value name="after_remove">0</value>
+					</row>
+				</expect>
+			</check>
+			<teardown name="clean up user to unregister">
+				<sql>DELETE FROM verified_identities WHERE id = '183ac47e-e37a-4820-9793-c98a50e8911d'</sql>
+				<sql>DELETE FROM identities WHERE id = '47daa797-5684-4a52-9e71-1207121e93b1'</sql>
+				<sql>DELETE FROM users WHERE id = 'd708df0f-39a3-4df1-a758-194f5321755f'</sql>
+			</teardown>
+		</test>
+		<test name="multiple roles to be deleted">
+			<setup name="prepare roles to unregister">
+				<sql>INSERT INTO users (id, first_name, last_name) VALUES
+					('d708df0f-39a3-4df1-a758-194f5321755f', 'Random', 'Human')</sql>
+				<sql>INSERT INTO identities (id, email) VALUES
+					('47daa797-5684-4a52-9e71-1207121e93b1', 'human@example.org')</sql>
+				<sql>INSERT INTO identities (id, email) VALUES
+					('5c62555d-62b9-4295-8be9-1d03f746f855', 'human2@example.org')</sql>
+				<sql>INSERT INTO identities (id, email) VALUES
+					('75509c32-941e-4aa0-beee-5162fefe1e30', 'not-delete@example.org')</sql>
+				<sql>INSERT INTO verified_identities (id, identity_id, user_id, provider) VALUES (
+						'183ac47e-e37a-4820-9793-c98a50e8911d',
+						'47daa797-5684-4a52-9e71-1207121e93b1',
+						'd708df0f-39a3-4df1-a758-194f5321755f',
+						'test')</sql>
+				<sql>INSERT INTO verified_identities (id, identity_id, user_id, provider) VALUES (
+						'5e50f717-236b-4c3a-84ba-26baa17920b1',
+						'5c62555d-62b9-4295-8be9-1d03f746f855',
+						'd708df0f-39a3-4df1-a758-194f5321755f',
+						'alternative')</sql>
+				<sql>INSERT INTO roles_in_gateway (id, gateway_id, identity_id, level, created) VALUES (
+						'087d9181-2b9c-40c1-8cd6-93c3c02c0e7b',
+						144426044538750,
+						'5c62555d-62b9-4295-8be9-1d03f746f855',
+						10, 1483426311)</sql>
+				<sql>INSERT INTO roles_in_gateway (id, gateway_id, identity_id, level, created) VALUES (
+						'37cd7de9-8bb2-469d-8b24-b951666b7d3a',
+						144426044538750,
+						'47daa797-5684-4a52-9e71-1207121e93b1',
+						20, 1483426312)</sql>
+				<sql>INSERT INTO roles_in_gateway (id, gateway_id, identity_id, level, created) VALUES (
+						'edbf94e4-f313-4f20-9a33-6e27e6ef9f44',
+						144426044538750,
+						'75509c32-941e-4aa0-beee-5162fefe1e30',
+						10, 1483426313)</sql>
+			</setup>
+			<check name="delete roles for user Random Human only">
+				<call-query>
+					<arg name="user_id">'d708df0f-39a3-4df1-a758-194f5321755f'</arg>
+					<arg name="gateway_id">144426044538750</arg>
+				</call-query>
+
+				<sql>SELECT id FROM roles_in_gateway WHERE gateway_id = 144426044538750</sql>
+				<expect>
+					<row>
+						<value type="uuid" name="id">edbf94e4-f313-4f20-9a33-6e27e6ef9f44</value>
+					</row>
+				</expect>
+			</check>
+			<teardown name="cleanup roles to unregister">
+				<sql>DELETE FROM roles_in_gateway WHERE id = 'edbf94e4-f313-4f20-9a33-6e27e6ef9f44'</sql>
+				<sql>DELETE FROM verified_identities WHERE id = '5e50f717-236b-4c3a-84ba-26baa17920b1'</sql>
+				<sql>DELETE FROM verified_identities WHERE id = '183ac47e-e37a-4820-9793-c98a50e8911d'</sql>
+				<sql>DELETE FROM identities WHERE id = '75509c32-941e-4aa0-beee-5162fefe1e30'</sql>
+				<sql>DELETE FROM identities WHERE id = '5c62555d-62b9-4295-8be9-1d03f746f855'</sql>
+				<sql>DELETE FROM identities WHERE id = '47daa797-5684-4a52-9e71-1207121e93b1'</sql>
+				<sql>DELETE FROM users WHERE id = 'd708df0f-39a3-4df1-a758-194f5321755f'</sql>
+			</teardown>
+		</test>
+	</query>
+
 	<query id="roles_in_gateway.is.registered">
 		<define>SELECT COUNT(*) > 0 AS registered FROM roles_in_gateway
 			WHERE gateway_id = <value name="gateway_id" type="int64" /></define>

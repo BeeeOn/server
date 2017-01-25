@@ -24,6 +24,8 @@ public:
 	void fetchBy(std::vector<RoleInGateway> &roles,
 			const Gateway &gateway) override;
 	bool remove(const RoleInGateway &role) override;
+	bool remove(const Gateway &gateway,
+			const User &user) override;
 
 	bool isRegistered(const Gateway &gateway) override;
 
@@ -61,6 +63,7 @@ public:
 private:
 	SQLQuery m_queryCreate           {"roles_in_gateway.create"};
 	SQLQuery m_queryRemove           {"roles_in_gateway.remove"};
+	SQLQuery m_queryRemoveUser       {"roles_in_gateway.remove.user"};
 	SQLQuery m_queryIsRegistered     {"roles_in_gateway.is.registered"};
 	SQLQuery m_queryFetchByGatewayId   {"roles_in_gateway.fetch.by.gateway_id"};
 	SQLQuery m_queryFetchAccessLevel {"roles_in_gateway.fetch.access_level"};
