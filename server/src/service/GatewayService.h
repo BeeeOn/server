@@ -20,7 +20,6 @@ namespace BeeeOn {
 class Place;
 class GatewayDao;
 class RoleInGatewayDao;
-class PlaceDao;
 class IdentityDao;
 class VerifiedIdentityDao;
 class GatewayRPC;
@@ -32,7 +31,6 @@ public:
 
 	void setGatewayDao(GatewayDao *dao);
 	void setRoleInGatewayDao(RoleInGatewayDao *dao);
-	void setPlaceDao(PlaceDao *dao);
 	void setIdentityDao(IdentityDao *dao);
 	void setVerifiedIdentityDao(VerifiedIdentityDao *dao);
 	void setGatewayRPC(GatewayRPC *rpc);
@@ -114,7 +112,6 @@ protected:
 private:
 	GatewayDao *m_gatewayDao;
 	RoleInGatewayDao *m_roleInGatewayDao;
-	PlaceDao *m_placeDao;
 	IdentityDao *m_identityDao;
 	VerifiedIdentityDao *m_verifiedIdentityDao;
 	GatewayRPC *m_rpc;

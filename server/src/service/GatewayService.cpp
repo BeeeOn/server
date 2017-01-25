@@ -5,7 +5,6 @@
 #include "server/AccessLevel.h"
 #include "dao/GatewayDao.h"
 #include "dao/RoleInGatewayDao.h"
-#include "dao/PlaceDao.h"
 #include "dao/IdentityDao.h"
 #include "dao/VerifiedIdentityDao.h"
 #include "policy/GatewayAccessPolicy.h"
@@ -19,7 +18,6 @@ using namespace BeeeOn;
 GatewayService::GatewayService():
 	m_gatewayDao(&NullGatewayDao::instance()),
 	m_roleInGatewayDao(&NullRoleInGatewayDao::instance()),
-	m_placeDao(&NullPlaceDao::instance()),
 	m_identityDao(&NullIdentityDao::instance()),
 	m_rpc(&NullGatewayRPC::instance()),
 	m_accessPolicy(&NullGatewayAccessPolicy::instance())
@@ -28,8 +26,6 @@ GatewayService::GatewayService():
 			&GatewayService::setGatewayDao);
 	injector<GatewayService, RoleInGatewayDao>("roleInGatewayDao",
 			&GatewayService::setRoleInGatewayDao);
-	injector<GatewayService, PlaceDao>("placeDao",
-			&GatewayService::setPlaceDao);
 	injector<GatewayService, IdentityDao>("identityDao",
 			&GatewayService::setIdentityDao);
 	injector<GatewayService, VerifiedIdentityDao>("verifiedIdentityDao",
@@ -48,11 +44,6 @@ void GatewayService::setGatewayDao(GatewayDao *dao)
 void GatewayService::setRoleInGatewayDao(RoleInGatewayDao *dao)
 {
 	m_roleInGatewayDao = dao? dao :&NullRoleInGatewayDao::instance();
-}
-
-void GatewayService::setPlaceDao(PlaceDao *dao)
-{
-	m_placeDao = dao? dao : &NullPlaceDao::instance();
 }
 
 void GatewayService::setIdentityDao(IdentityDao *dao)
