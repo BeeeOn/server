@@ -35,10 +35,6 @@ bool PocoSQLGatewayDao::insert(Gateway &gateway)
 
 	string id(gateway.id().toString());
 	string name(gateway.name());
-	Nullable<string> placeID;
-
-	if (gateway.hasPlace())
-		placeID = gateway.place().id().toString();
 
 	Nullable<double> altitude;
 	if (!std::isnan(gateway.altitude()))
@@ -55,7 +51,6 @@ bool PocoSQLGatewayDao::insert(Gateway &gateway)
 	Statement sql = (session() << m_queryCreate(),
 		use(id, "id"),
 		use(name, "name"),
-		use(placeID, "place_id"),
 		use(altitude, "altitude"),
 		use(latitude, "latitude"),
 		use(longitude, "longitude")
