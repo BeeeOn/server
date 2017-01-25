@@ -6,7 +6,6 @@
 #include "model/VerifiedIdentity.h"
 #include "model/Gateway.h"
 #include "model/LegacyGateway.h"
-#include "model/Place.h"
 
 using namespace std;
 using namespace Poco;
@@ -67,8 +66,6 @@ void GatewayXmlHandler::handleRegister(Element *gatewayNode)
 	User user(session()->userID());
 	input.setUser(user);
 
-	// approved to everybody, such gateway is associated with a
-	// place where the user is admin or to a new implicit place
 	if (!m_gatewayService.registerGateway(input, identity)) {
 		resultNotOwned();
 		return;

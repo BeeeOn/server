@@ -7,7 +7,6 @@
 #include <Poco/Net/IPAddress.h>
 
 #include "model/Entity.h"
-#include "model/Place.h"
 #include "model/GatewayID.h"
 
 namespace BeeeOn {
@@ -42,21 +41,6 @@ public:
 	const std::string &name() const
 	{
 		return m_name;
-	}
-
-	void setPlace(const Place &place)
-	{
-		m_place = place;
-	}
-
-	const Place &place() const
-	{
-		return m_place;
-	}
-
-	bool hasPlace() const
-	{
-		return !m_place.id().isNull();
 	}
 
 	void setAltitude(double alt)
@@ -126,7 +110,6 @@ public:
 
 private:
 	std::string m_name;
-	Place m_place;
 	double m_altitude;
 	double m_latitude;
 	double m_longitude;

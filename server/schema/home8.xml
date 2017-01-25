@@ -1,23 +1,14 @@
 <!DOCTYPE database SYSTEM "database.dtd">
 <database name="home8">
 
-	<table name="places">
-		<column name="id" type="uuid" not-null="yes" />
-		<column name="name" type="varchar" size="250" />
-
-		<primary-key ref="id" />
-	</table>
-
 	<table name="gateways">
 		<column name="id" type="int64" not-null="yes" />
 		<column name="name" type="varchar" size="250" />
-		<column name="place_id" type="uuid" />
 		<column name="altitude" type="double" />
 		<column name="latitude" type="double" />
 		<column name="longitude" type="double" />
 
 		<primary-key ref="id" />
-		<foreign-key table="places" local="place_id" remote="id" />
 	</table>
 
 	<table name="gateways_status">
@@ -50,7 +41,6 @@
 	<view name="legacy_gateways" base="gateways">
 		<map ref="id" as="id" />
 		<map ref="name" as="name" />
-		<map ref="place_id" as="place_id" />
 		<map ref="altitude" as="altitude" />
 		<map ref="latitude" as="latitude" />
 		<map ref="longitude" as="longitude" />

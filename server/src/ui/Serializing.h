@@ -5,18 +5,10 @@
 
 namespace BeeeOn {
 
-class Place;
 class Gateway;
 class Location;
 
 namespace UI {
-
-std::string serialize(const Place &p);
-std::ostream &serialize(std::ostream &o, const Place &place);
-std::istream &deserialize(std::istream &i, Place &place);
-
-std::ostream &serialize(std::ostream &o, const std::vector<Place> &places);
-std::string serialize(const std::vector<Place> &places);
 
 std::string serialize(const Gateway &g);
 std::ostream &serialize(std::ostream &o, const Gateway &gateway);

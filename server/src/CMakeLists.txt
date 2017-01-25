@@ -39,7 +39,6 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/LegacyGateway.cpp
 	${PROJECT_SOURCE_DIR}/model/Device.cpp
 	${PROJECT_SOURCE_DIR}/model/Location.cpp
-	${PROJECT_SOURCE_DIR}/dao/PlaceDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/UserDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/DeviceDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/GatewayDao.cpp
@@ -50,7 +49,6 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoTransactionImpl.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoTransactionManager.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoAbstractDao.cpp
-	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLPlaceDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLUserDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLVerifiedIdentityDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLIdentityDao.cpp

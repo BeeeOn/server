@@ -2,7 +2,6 @@
 #define BEEEON_GATEWAY_ACCESS_POLICY_H
 
 #include "model/User.h"
-#include "model/Place.h"
 #include "model/Gateway.h"
 
 namespace BeeeOn {

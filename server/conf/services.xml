@@ -98,7 +98,6 @@
 		<instance name="gatewayService" class="BeeeOn::GatewayService">
 			<set name="gatewayDao" ref="gatewayDao" />
 			<set name="roleInGatewayDao" ref="roleInGatewayDao" />
-			<set name="placeDao" ref="placeDao" />
 			<set name="identityDao" ref="identityDao" />
 			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
 			<set name="gatewayRPC" ref="gatewayRPC" />
@@ -178,7 +177,6 @@
 
 		<alias name="gatewayRPC" ref="fakeGatewayRPC" />
 
-		<alias name="placeDao" ref="sqlPlaceDao" />
 		<alias name="userDao" ref="sqlUserDao" />
 		<alias name="gatewayDao" ref="sqlGatewayDao" />
 		<alias name="locationDao" ref="sqlLocationDao" />
@@ -204,12 +202,6 @@
 
 		<instance name="sqliteConnector"
 				class="BeeeOn::PocoSQLiteConnectorLoader" />
-
-		<instance name="sqlPlaceDao" class="BeeeOn::PocoSQLPlaceDao">
-			<set name="daoManager" ref="pocoDaoManager" />
-			<set name="transactionManager" ref="transactionManager" />
-			<set name="sqlLoader" ref="queries" />
-		</instance>
 
 		<instance name="sqlUserDao" class="BeeeOn::PocoSQLUserDao">
 			<set name="daoManager" ref="pocoDaoManager" />

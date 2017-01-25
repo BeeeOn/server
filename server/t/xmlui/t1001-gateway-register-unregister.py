@@ -37,8 +37,7 @@ class TestGatewayRegisterUnregister(unittest.TestCase):
 
 	"""
 	Test register and unregister the well-known virtual testing
-	gateway	1780053541714013. Assume there is an implicit place
-	created for the user.
+	gateway	1780053541714013.
 	"""
 	def test1_register_unregister(self):
 		c = Connector(config.xmlui_host, config.xmlui_port)
