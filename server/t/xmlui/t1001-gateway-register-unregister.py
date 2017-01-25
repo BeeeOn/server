@@ -119,7 +119,7 @@ class TestGatewayRegisterUnregister(unittest.TestCase):
 		))
 
 		self.assertTrue(response.is_error())
-		self.assertEqual("13", response.error_code())
+		self.assertEqual("1001", response.error_code())
 
 		# check the gateway was not changed
 		response = c.request(GatewayGet(

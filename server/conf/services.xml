@@ -97,7 +97,7 @@
 
 		<instance name="gatewayService" class="BeeeOn::GatewayService">
 			<set name="gatewayDao" ref="gatewayDao" />
-			<set name="roleInPlaceDao" ref="roleInPlaceDao" />
+			<set name="roleInGatewayDao" ref="roleInGatewayDao" />
 			<set name="placeDao" ref="placeDao" />
 			<set name="identityDao" ref="identityDao" />
 			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
@@ -133,7 +133,7 @@
 			<set name="gatewayDao" ref="gatewayDao" />
 			<set name="locationDao" ref="locationDao" />
 			<set name="deviceDao" ref="deviceDao" />
-			<set name="roleInPlaceDao" ref="roleInPlaceDao" />
+			<set name="roleInGatewayDao" ref="sqlRoleInGatewayDao" />
 		</instance>
 
 		<!-- Data access layer -->
@@ -185,7 +185,7 @@
 		<alias name="deviceDao" ref="sqlDeviceDao" />
 		<alias name="identityDao" ref="sqlIdentityDao" />
 		<alias name="verifiedIdentityDao" ref="sqlVerifiedIdentityDao" />
-		<alias name="roleInPlaceDao" ref="sqlRoleInPlaceDao" />
+		<alias name="roleInGatewayDao" ref="sqlRoleInGatewayDao" />
 
 		<instance name="pocoDaoManager"
 				class="BeeeOn::PocoDaoManager">
@@ -230,8 +230,8 @@
 			<set name="sqlLoader" ref="queries" />
 		</instance>
 
-		<instance name="sqlRoleInPlaceDao"
-				class="BeeeOn::PocoSQLRoleInPlaceDao">
+		<instance name="sqlRoleInGatewayDao"
+				class="BeeeOn::PocoSQLRoleInGatewayDao">
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="sqlLoader" ref="queries" />

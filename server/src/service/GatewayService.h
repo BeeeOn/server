@@ -19,7 +19,7 @@ namespace BeeeOn {
 
 class Place;
 class GatewayDao;
-class RoleInPlaceDao;
+class RoleInGatewayDao;
 class PlaceDao;
 class IdentityDao;
 class VerifiedIdentityDao;
@@ -31,7 +31,7 @@ public:
 	GatewayService();
 
 	void setGatewayDao(GatewayDao *dao);
-	void setRoleInPlaceDao(RoleInPlaceDao *dao);
+	void setRoleInGatewayDao(RoleInGatewayDao *dao);
 	void setPlaceDao(PlaceDao *dao);
 	void setIdentityDao(IdentityDao *dao);
 	void setVerifiedIdentityDao(VerifiedIdentityDao *dao);
@@ -40,14 +40,9 @@ public:
 
 	/**
 	 * Register the given gateway to be owned by the given identity.
-	 * If there is no place for this identity (or its assocated user)
-	 * create a new implicit one.
 	 *
 	 * @throw NotFoundException when the gateway does not exist
-	 * @throw IllegalStateException when there are more then 1 place
-	 *	associated with the identity
 	 * @throw InvalidArgumentException for invalid identity
-	 * @throw ExistsException when the place is already registered
 	 *
 	 * @return false when assignment fails (update operation fails)
 	 */
@@ -83,9 +78,9 @@ public:
 		return BEEEON_TRANSACTION_RETURN(bool, doUpdate(input));
 	}
 
-	bool unassign(Relation<Gateway, User> &input)
+	bool unregister(Single<Gateway> &input)
 	{
-		return BEEEON_TRANSACTION_RETURN(bool, doUnassign(input));
+		return BEEEON_TRANSACTION_RETURN(bool, doUnregister(input));
 	}
 
 	void scanDevices(Single<Gateway> &input)
@@ -111,18 +106,14 @@ protected:
 	void doFetchAccessible(Relation<std::vector<Gateway>, User> &input);
 	void doFetchAccessible(Relation<std::vector<LegacyGateway>, User> &input);
 	bool doUpdate(SingleWithData<Gateway> &input);
-	bool doUnassign(Relation<Gateway, User> &input);
+	bool doUnregister(Single<Gateway> &input);
 	void doScanDevices(Single<Gateway> &input);
 	void doUnpairDevice(Single<Gateway> &input, Device &device);
 	void doPingGateway(Single<Gateway> &input);
 
-	void createImplicitPlace(Place &place,
-			const Gateway &gateway,
-			const Identity &identity);
-
 private:
 	GatewayDao *m_gatewayDao;
-	RoleInPlaceDao *m_roleInPlaceDao;
+	RoleInGatewayDao *m_roleInGatewayDao;
 	PlaceDao *m_placeDao;
 	IdentityDao *m_identityDao;
 	VerifiedIdentityDao *m_verifiedIdentityDao;

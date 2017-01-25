@@ -5,7 +5,7 @@
 #include "policy/GatewayAccessPolicy.h"
 #include "policy/LocationAccessPolicy.h"
 #include "policy/DeviceAccessPolicy.h"
-#include "dao/RoleInPlaceDao.h"
+#include "dao/RoleInGatewayDao.h"
 #include "dao/GatewayDao.h"
 #include "dao/LocationDao.h"
 #include "dao/DeviceDao.h"
@@ -20,11 +20,11 @@ class DefaultAccessPolicy : public AbstractInjectorTarget,
 public:
 	DefaultAccessPolicy();
 
+	void assureRegister(const PolicyContext &context,
+		const Gateway &gateway) override;
 	void assureGet(const PolicyContext &context,
 		const Gateway &gateway) override;
-	void assureAssignGateway(const PolicyContext &context,
-		const Place &place) override;
-	void assureUnassign(const PolicyContext &context,
+	void assureUnregister(const PolicyContext &context,
 		const Gateway &gateway) override;
 	void assureUpdate(const PolicyContext &context,
 		const Gateway &gateway) override;
@@ -75,13 +75,12 @@ public:
 		m_deviceDao = dao;
 	}
 
-	void setRoleInPlaceDao(RoleInPlaceDao *dao)
+	void setRoleInGatewayDao(RoleInGatewayDao *dao)
 	{
-		m_roleInPlaceDao = dao;
+		m_roleInGatewayDao = dao;
 	}
 
 protected:
-	AccessLevel fetchAccessLevel(const User &user, const Place &place);
 	AccessLevel fetchAccessLevel(const User &user, const Gateway &gateway);
 	void assureAtLeast(
 			const AccessLevel &current,
@@ -92,7 +91,7 @@ private:
 	GatewayDao *m_gatewayDao;
 	LocationDao *m_locationDao;
 	DeviceDao *m_deviceDao;
-	RoleInPlaceDao *m_roleInPlaceDao;
+	RoleInGatewayDao *m_roleInGatewayDao;
 };
 
 }

@@ -70,10 +70,20 @@
 	conflict       CDATA       #REQUIRED
 >
 
-<!ELEMENT row ((value|null)*)>
+<!ELEMENT row ((value|null|true|false)*)>
 
 <!ELEMENT null EMPTY>
 <!ATTLIST null
 	name           NMTOKEN     #REQUIRED
 	type           NMTOKEN     #IMPLIED
+>
+
+<!ELEMENT true EMPTY>
+<!ATTLIST true
+	name           NMTOKEN     #REQUIRED
+>
+
+<!ELEMENT false EMPTY>
+<!ATTLIST false
+	name           NMTOKEN     #REQUIRED
 >

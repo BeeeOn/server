@@ -80,11 +80,11 @@ void GatewayXmlHandler::handleRegister(Element *gatewayNode)
 void GatewayXmlHandler::handleUnregister(Element *gatewayNode)
 {
 	Gateway gateway(GatewayID::parse(gatewayNode->getAttribute("id")));
+	Single<Gateway> input(gateway);
 	User user(session()->userID());
-	Relation<Gateway, User> input(gateway, user);
 	input.setUser(user);
 
-	if (!m_gatewayService.unassign(input)) {
+	if (!m_gatewayService.unregister(input)) {
 		resultNotOwned();
 		return;
 	}
@@ -112,11 +112,6 @@ void GatewayXmlHandler::handleGet(Element *gatewayNode)
 	input.setUser(user);
 
 	if (!m_gatewayService.fetch(input)) {
-		resultNotFound();
-		return;
-	}
-
-	if (!gateway.hasPlace()) {
 		resultNotFound();
 		return;
 	}

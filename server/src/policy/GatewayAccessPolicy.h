@@ -11,13 +11,13 @@ class PolicyContext;
 
 class GatewayAccessPolicy {
 public:
+	virtual void assureRegister(
+			const PolicyContext &context,
+			const Gateway &gateway) = 0;
 	virtual void assureGet(
 			const PolicyContext &context,
 			const Gateway &gateway) = 0;
-	virtual void assureAssignGateway(
-			const PolicyContext &context,
-			const Place &place) = 0;
-	virtual void assureUnassign(
+	virtual void assureUnregister(
 			const PolicyContext &context,
 			const Gateway &gateway) = 0;
 	virtual void assureUpdate(
@@ -30,13 +30,13 @@ public:
 
 class NullGatewayAccessPolicy : public GatewayAccessPolicy {
 public:
+	void assureRegister(
+		const PolicyContext &context,
+		const Gateway &gateway) override;
 	void assureGet(
 		const PolicyContext &context,
 		const Gateway &gateway) override;
-	void assureAssignGateway(
-		const PolicyContext &context,
-		const Place &place) override;
-	void assureUnassign(
+	void assureUnregister(
 		const PolicyContext &context,
 		const Gateway &gateway) override;
 	void assureUpdate(

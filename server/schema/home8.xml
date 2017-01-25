@@ -35,13 +35,13 @@
 
 	<view name="users_of_gateway" base="gateways">
 		<map ref="id" as="gateway_id" />
-		<join remote="roles_in_place" on-base="place_id" on-remote="place_id">
+		<join remote="roles_in_gateway" on-base="id" on-remote="gateway_id">
 			<map ref="id" as="role_id" />
 			<map ref="identity_id" as="identity_id" />
 			<map ref="created" as="created" />
 			<map ref="level" as="level" />
 		</join>
-		<join remote="verified_identities" with-base="roles_in_place"
+		<join remote="verified_identities" with-base="roles_in_gateway"
 				on-base="identity_id" on-remote="identity_id">
 			<map ref="user_id" as="user_id" />
 		</join>
@@ -56,8 +56,8 @@
 		<map ref="longitude" as="longitude" />
 
 		<sub-query as="roles_count">
-			<sql>SELECT COUNT(*) FROM roles_in_place WHERE
-				roles_in_place.place_id = gateways.place_id</sql>
+			<sql>SELECT COUNT(*) FROM roles_in_gateway WHERE
+				roles_in_gateway.gateway_id = gateways.id</sql>
 		</sub-query>
 
 		<sub-query as="devices_count">
@@ -69,14 +69,14 @@
 
 		<sub-query as="owner_id">
 			<sql>SELECT user_id FROM verified_identities
-				JOIN roles_in_place ON
-					roles_in_place.identity_id = verified_identities.identity_id
+				JOIN roles_in_gateway ON
+					roles_in_gateway.identity_id = verified_identities.identity_id
 				WHERE
-					roles_in_place.level &lt;= 10
+					roles_in_gateway.level &lt;= 10
 					AND
-					roles_in_place.place_id = gateways.place_id
+					roles_in_gateway.gateway_id = gateways.id
 				ORDER BY
-					roles_in_place.created ASC
+					roles_in_gateway.created ASC
 				LIMIT 1</sql>
 		</sub-query>
 	</view>
@@ -124,15 +124,15 @@
 		</unique>
 	</table>
 
-	<table name="roles_in_place">
+	<table name="roles_in_gateway">
 		<column name="id" type="uuid" not-null="yes" />
-		<column name="place_id" type="uuid" not-null="yes" />
+		<column name="gateway_id" type="int64" not-null="yes" />
 		<column name="identity_id" type="uuid" not-null="yes" />
 		<column name="level" type="smallint" not-null="yes" />
 		<column name="created" type="bigint" not-null="yes" />
 
 		<primary-key ref="id" />
-		<foreign-key table="places" local="place_id" remote="id" />
+		<foreign-key table="gateways" local="gateway_id" remote="id" />
 		<foreign-key table="identities" local="identity_id" remote="id" />
 
 		<check name="check_valid_level" expression="level &gt;= 0 AND level &lt;= 100" />
