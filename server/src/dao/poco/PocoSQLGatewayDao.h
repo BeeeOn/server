@@ -24,7 +24,6 @@ public:
 	bool fetch(Gateway &gateway) override;
 	bool fetch(LegacyGateway &gateway, const User &user) override;
 	bool update(Gateway &gateway) override;
-	bool assignAndUpdate(Gateway &gateway, const Place &place) override;
 	void fetchAccessible(
 			std::vector<Gateway> &gateways,
 			const User &user) override;
@@ -67,7 +66,6 @@ public:
 private:
 	SQLQuery m_queryCreate          {"gateways.create"};
 	SQLQuery m_queryUpdate          {"gateways.update"};
-	SQLQuery m_queryAssignAndUpdate {"gateways.assign.and.update"};
 	SQLQuery m_queryFetchById       {"gateways.fetch.by.id"};
 	SQLQuery m_queryFetchAccessible {"gateways.fetch.accessible"};
 	SQLQuery m_queryLegacyFetchById {"legacy_gateways.fetch.by.id"};

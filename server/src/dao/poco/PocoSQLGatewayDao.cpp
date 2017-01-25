@@ -24,7 +24,6 @@ PocoSQLGatewayDao::PocoSQLGatewayDao()
 {
 	registerQuery(m_queryCreate);
 	registerQuery(m_queryUpdate);
-	registerQuery(m_queryAssignAndUpdate);
 	registerQuery(m_queryFetchById);
 	registerQuery(m_queryFetchAccessible);
 	registerQuery(m_queryLegacyFetchById);
@@ -130,40 +129,6 @@ bool PocoSQLGatewayDao::update(Gateway &gateway)
 		use(id, "id")
 	);
 
-	return execute(sql) > 0;
-}
-
-bool PocoSQLGatewayDao::assignAndUpdate(Gateway &gateway, const Place &place)
-{
-	assureHasId(gateway);
-	assureHasId(place);
-
-	string id(gateway.id().toString());
-	string name(gateway.name());
-	string placeID(place.id().toString());
-
-	Nullable<double> altitude;
-	if (!std::isnan(gateway.altitude()))
-		altitude = gateway.altitude();
-
-	Nullable<double> latitude;
-	if (!std::isnan(gateway.latitude()))
-		latitude = gateway.latitude();
-
-	Nullable<double> longitude;
-	if (!std::isnan(gateway.longitude()))
-		longitude = gateway.longitude();
-
-	Statement sql = (session() << m_queryAssignAndUpdate(),
-		use(name, "name"),
-		use(altitude, "altitude"),
-		use(latitude, "latitude"),
-		use(longitude, "longitude"),
-		use(placeID, "place_id"),
-		use(id, "id")
-	);
-
-	gateway.setPlace(place);
 	return execute(sql) > 0;
 }
 

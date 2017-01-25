@@ -17,7 +17,6 @@ public:
 	virtual bool fetch(Gateway &gateway) = 0;
 	virtual bool fetch(LegacyGateway &gateway, const User &user) = 0;
 	virtual bool update(Gateway &gateway) = 0;
-	virtual bool assignAndUpdate(Gateway &gateway, const Place &place) = 0;
 	virtual void fetchAccessible(
 			std::vector<Gateway> &gateways,
 			const User &user) = 0;
@@ -38,11 +37,6 @@ public:
 	bool fetch(LegacyGateway &gateway, const User &user)
 	{
 		throw Poco::NotImplementedException(__func__);
-	}
-
-	bool assignAndUpdate(Gateway &gateway, const Place &place)
-	{
-		return update(gateway);
 	}
 
 	void fetchAccessible(std::vector<Gateway> &gateways,

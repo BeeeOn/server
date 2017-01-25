@@ -516,19 +516,6 @@
 		</define>
 	</query>
 
-	<query id="gateways.assign.and.update">
-		<define>
-		UPDATE gateways SET
-			name = <value name="name" type="varchar" />,
-			altitude = <value name="altitude" type="double" />,
-			latitude = <value name="latitude" type="double" />,
-			longitude = <value name="longitude" type="double" />,
-			place_id = <value name="place_id" type="uuid" />
-		WHERE
-			id = <value name="id" type="uuid" />
-		</define>
-	</query>
-
 	<query id="gateways.fetch.accessible">
 		<define>
 		SELECT
