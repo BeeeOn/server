@@ -17,7 +17,6 @@
 
 namespace BeeeOn {
 
-class Place;
 class GatewayDao;
 class RoleInGatewayDao;
 class IdentityDao;

@@ -6,7 +6,6 @@
 #include "model/VerifiedIdentity.h"
 #include "model/Gateway.h"
 #include "model/LegacyGateway.h"
-#include "model/Place.h"
 
 using namespace std;
 using namespace Poco;
