@@ -1588,6 +1588,13 @@
 		</test>
 	</query>
 
+	<query id="roles_in_gateway.remove.all">
+		<define>
+		DELETE FROM roles_in_gateway
+		WHERE gateway_id = <value name="gateway_id" type="int64" />
+		</define>
+	</query>
+
 	<query id="roles_in_gateway.is.registered">
 		<define>SELECT COUNT(*) > 0 AS registered FROM roles_in_gateway
 			WHERE gateway_id = <value name="gateway_id" type="int64" /></define>

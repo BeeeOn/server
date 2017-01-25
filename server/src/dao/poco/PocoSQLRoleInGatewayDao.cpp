@@ -24,6 +24,7 @@ PocoSQLRoleInGatewayDao::PocoSQLRoleInGatewayDao()
 	registerQuery(m_queryCreate);
 	registerQuery(m_queryRemove);
 	registerQuery(m_queryRemoveUser);
+	registerQuery(m_queryRemoveAll);
 	registerQuery(m_queryIsRegistered);
 	registerQuery(m_queryFetchByGatewayId);
 	registerQuery(m_queryFetchAccessLevel);
@@ -97,6 +98,19 @@ bool PocoSQLRoleInGatewayDao::remove(
 	);
 
 	return execute(sql) > 0;
+}
+
+void PocoSQLRoleInGatewayDao::removeAll(const Gateway &gateway)
+{
+	assureHasId(gateway);
+
+	string gatewayID(gateway.id().toString());
+
+	Statement sql = (session() << m_queryRemoveAll(),
+		use(gatewayID, "gateway_id")
+	);
+
+	execute(sql);
 }
 
 bool PocoSQLRoleInGatewayDao::isRegistered(

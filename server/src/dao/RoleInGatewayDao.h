@@ -20,6 +20,7 @@ public:
 	virtual bool remove(const RoleInGateway &gateway) = 0;
 	virtual bool remove(const Gateway &gateway,
 			const User &user) = 0;
+	virtual void removeAll(const Gateway &gateway) = 0;
 
 	virtual bool isRegistered(const Gateway &gateway) = 0;
 
@@ -49,6 +50,7 @@ public:
 	bool remove(const RoleInGateway &role) override;
 	bool remove(const Gateway &gateway,
 			const User &user)  override;
+	void removeAll(const Gateway &gateway) override;
 
 	bool isRegistered(const Gateway &gateway) override;
 

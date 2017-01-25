@@ -33,6 +33,11 @@ bool NullRoleInGatewayDao::remove(
 	throw NotImplementedException(__func__);
 }
 
+void NullRoleInGatewayDao::removeAll(const Gateway &gateway)
+{
+	throw NotImplementedException(__func__);
+}
+
 bool NullRoleInGatewayDao::isRegistered(
 		const Gateway &gateway)
 {
