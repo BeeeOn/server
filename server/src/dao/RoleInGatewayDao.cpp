@@ -44,6 +44,13 @@ bool NullRoleInGatewayDao::isRegistered(
 	throw NotImplementedException(__func__);
 }
 
+bool NullRoleInGatewayDao::hasOnlyNonAdminExcept(
+		const Gateway &gateway,
+		const User &user)
+{
+	throw NotImplementedException(__func__);
+}
+
 AccessLevel NullRoleInGatewayDao::fetchAccessLevel(
 	const Gateway &gateway,
 	const User &user)

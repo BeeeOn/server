@@ -29,6 +29,7 @@ PocoSQLRoleInGatewayDao::PocoSQLRoleInGatewayDao()
 	registerQuery(m_queryFetchByGatewayId);
 	registerQuery(m_queryFetchAccessLevel);
 	registerQuery(m_queryFetchAccessibleGateways);
+	registerQuery(m_queryHasOnlyNonAdminExcept);
 }
 
 void PocoSQLRoleInGatewayDao::create(RoleInGateway &role)
@@ -123,6 +124,28 @@ bool PocoSQLRoleInGatewayDao::isRegistered(
 
 	Statement sql = (session() << m_queryIsRegistered(),
 		use(gatewayID, "gateway_id"),
+		into(result)
+	);
+
+	execute(sql);
+	return result;
+}
+
+bool PocoSQLRoleInGatewayDao::hasOnlyNonAdminExcept(
+		const Gateway &gateway, const User &user)
+{
+	assureHasId(gateway);
+	assureHasId(user);
+
+	string gatewayID(gateway.id().toString());
+	string userID(user.id().toString());
+	unsigned int level = AccessLevel::admin();
+	bool result = false;
+
+	Statement sql = (session() << m_queryHasOnlyNonAdminExcept(),
+		use(level, "level"),
+		use(gatewayID, "gateway_id"),
+		use(userID, "user_id"),
 		into(result)
 	);
 

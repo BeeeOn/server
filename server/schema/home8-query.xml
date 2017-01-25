@@ -1623,6 +1623,21 @@
 		</test>
 	</query>
 
+	<query id="roles_in_gateway.has.only.given.level.except">
+		<define>
+		SELECT COUNT(*) > 0 AS result
+			FROM roles_in_gateway
+			WHERE level > <value name="level" type="integer" />
+				AND
+				gateway_id = <value name="gateway_id" type="int64" />
+				AND
+				identity_id NOT IN
+				(SELECT identity_id
+					FROM verified_identities
+					WHERE user_id = <value name="user_id" type="uuid" />)
+		</define>
+	</query>
+
 	<query id="roles_in_gateway.fetch.access_level">
 		<define>
 		SELECT

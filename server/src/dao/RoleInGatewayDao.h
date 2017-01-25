@@ -23,6 +23,9 @@ public:
 	virtual void removeAll(const Gateway &gateway) = 0;
 
 	virtual bool isRegistered(const Gateway &gateway) = 0;
+	virtual bool hasOnlyNonAdminExcept(
+			const Gateway &gateway,
+			const User &user) = 0;
 
 	virtual AccessLevel fetchAccessLevel(
 			const Gateway &gateway,
@@ -53,6 +56,9 @@ public:
 	void removeAll(const Gateway &gateway) override;
 
 	bool isRegistered(const Gateway &gateway) override;
+	bool hasOnlyNonAdminExcept(
+			const Gateway &gateway,
+			const User &user) override;
 
 	AccessLevel fetchAccessLevel(
 		const Gateway &gateway,
