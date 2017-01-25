@@ -287,7 +287,7 @@
 	<x:template match="row" mode="describe-expect">
 		<x:variable name="i" select="position()" />
 
-		<x:for-each select="value|null">
+		<x:for-each select="value|null|true|false">
 			<x:text>-- </x:text>
 			<x:value-of select="concat('[', $i, '] ')" />
 			<x:value-of select="concat(@name, ' = ')" />
@@ -296,6 +296,12 @@
 					<x:text>'</x:text>
 					<x:value-of select="." />
 					<x:text>'</x:text>
+				</x:when>
+				<x:when test="local-name() = 'true'">
+					<x:text>true</x:text>
+				</x:when>
+				<x:when test="local-name() = 'false'">
+					<x:text>false</x:text>
 				</x:when>
 				<x:otherwise>
 					<x:text>NULL</x:text>
@@ -315,7 +321,9 @@
 		<x:if test="row">
 			<x:call-template name="print-csv-header">
 				<x:with-param name="header">
-					<x:for-each select="row[position() = 1]/value|row[position() = 1]/null">
+					<x:variable name="row" select="row[position() = 1]" />
+
+					<x:for-each select="$row/value|$row/null|$row/true|$row/false">
 						<x:value-of select="@name" />
 
 						<x:if test="position() &lt; last()">
@@ -385,7 +393,7 @@
 
 		<x:if test="row">
 			<x:for-each select="row">
-				<x:for-each select="value|null">
+				<x:for-each select="value|null|true|false">
 					<x:apply-templates select="." mode="csv" />
 
 					<x:if test="position() &lt; last()">
@@ -438,5 +446,13 @@
 	</x:template>
 
 	<x:template match="null" mode="csv" />
+
+	<x:template match="true" mode="csv">
+		<x:text>1</x:text>
+	</x:template>
+
+	<x:template match="false" mode="csv">
+		<x:text>0</x:text>
+	</x:template>
 
 </x:stylesheet>

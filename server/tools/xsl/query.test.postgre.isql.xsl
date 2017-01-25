@@ -75,4 +75,12 @@
 		</x:call-template>
 	</x:template>
 
+	<x:template match="true" mode="csv">
+		<x:text>1</x:text>
+	</x:template>
+
+	<x:template match="false" mode="csv">
+		<x:text>0</x:text>
+	</x:template>
+
 </x:stylesheet>
