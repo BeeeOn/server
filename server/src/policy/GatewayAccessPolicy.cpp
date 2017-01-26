@@ -6,6 +6,13 @@
 using namespace Poco;
 using namespace BeeeOn;
 
+void NullGatewayAccessPolicy::assureRegister(
+	const PolicyContext &context,
+	const Gateway &gateway)
+{
+	throw NotImplementedException(__func__);
+}
+
 void NullGatewayAccessPolicy::assureGet(
 	const PolicyContext &context,
 	const Gateway &gateway)
@@ -13,14 +20,7 @@ void NullGatewayAccessPolicy::assureGet(
 	throw NotImplementedException(__func__);
 }
 
-void NullGatewayAccessPolicy::assureAssignGateway(
-	const PolicyContext &context,
-	const Place &place)
-{
-	throw NotImplementedException(__func__);
-}
-
-void NullGatewayAccessPolicy::assureUnassign(
+void NullGatewayAccessPolicy::assureUnregister(
 	const PolicyContext &context,
 	const Gateway &gateway)
 {

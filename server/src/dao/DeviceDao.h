@@ -6,7 +6,6 @@
 
 #include "di/InjectorTarget.h"
 #include "dao/NullDao.h"
-#include "model/Place.h"
 #include "model/Device.h"
 #include "model/Gateway.h"
 

@@ -3,29 +3,13 @@
 	<services>
 		<instance name="ui" class="BeeeOn::UIServerModule">
 			<set name="sessionVerifier" ref="sessionVerifier" />
-			<set name="placeHandler" ref="placeHandler" />
 			<set name="userService" ref="userService" />
 			<set name="authHandler" ref="authHandler" />
 			<set name="deviceService" ref="deviceService" />
-			<set name="gatewayHandler" ref="gatewayHandler" />
-			<set name="locationHandler" ref="locationHandler" />
 		</instance>
 
 		<instance name="authHandler" class="BeeeOn::RestAuthHandler">
 			<set name="authService" ref="authService" />
-		</instance>
-
-		<instance name="placeHandler" class="BeeeOn::UI::PlaceHandler">
-			<set name="placeService" ref="placeService" />
-			<set name="identityService" ref="identityService" />
-		</instance>
-
-		<instance name="gatewayHandler" class="BeeeOn::UI::GatewayHandler">
-			<set name="gatewayService" ref="gatewayService" />
-		</instance>
-
-		<instance name="locationHandler" class="BeeeOn::UI::LocationHandler">
-			<set name="locationService" ref="locationService" />
 		</instance>
 
 		<instance name="sessionVerifier" class="BeeeOn::SessionVerifier">
@@ -88,14 +72,6 @@
 
 		<!-- Bussiness layer -->
 
-		<instance name="placeService" class="BeeeOn::PlaceService">
-			<set name="placeDao" ref="placeDao" />
-			<set name="roleInPlaceDao" ref="roleInPlaceDao" />
-			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
-			<set name="accessPolicy" ref="accessPolicy" />
-			<set name="transactionManager" ref="transactionManager" />
-		</instance>
-
 		<instance name="userService" class="BeeeOn::UserService">
 			<set name="userDao" ref="userDao" />
 			<set name="transactionManager" ref="transactionManager" />
@@ -121,8 +97,7 @@
 
 		<instance name="gatewayService" class="BeeeOn::GatewayService">
 			<set name="gatewayDao" ref="gatewayDao" />
-			<set name="roleInPlaceDao" ref="roleInPlaceDao" />
-			<set name="placeDao" ref="placeDao" />
+			<set name="roleInGatewayDao" ref="roleInGatewayDao" />
 			<set name="identityDao" ref="identityDao" />
 			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
 			<set name="gatewayRPC" ref="gatewayRPC" />
@@ -157,7 +132,7 @@
 			<set name="gatewayDao" ref="gatewayDao" />
 			<set name="locationDao" ref="locationDao" />
 			<set name="deviceDao" ref="deviceDao" />
-			<set name="roleInPlaceDao" ref="roleInPlaceDao" />
+			<set name="roleInGatewayDao" ref="sqlRoleInGatewayDao" />
 		</instance>
 
 		<!-- Data access layer -->
@@ -202,14 +177,13 @@
 
 		<alias name="gatewayRPC" ref="fakeGatewayRPC" />
 
-		<alias name="placeDao" ref="sqlPlaceDao" />
 		<alias name="userDao" ref="sqlUserDao" />
 		<alias name="gatewayDao" ref="sqlGatewayDao" />
 		<alias name="locationDao" ref="sqlLocationDao" />
 		<alias name="deviceDao" ref="sqlDeviceDao" />
 		<alias name="identityDao" ref="sqlIdentityDao" />
 		<alias name="verifiedIdentityDao" ref="sqlVerifiedIdentityDao" />
-		<alias name="roleInPlaceDao" ref="sqlRoleInPlaceDao" />
+		<alias name="roleInGatewayDao" ref="sqlRoleInGatewayDao" />
 
 		<instance name="pocoDaoManager"
 				class="BeeeOn::PocoDaoManager">
@@ -228,12 +202,6 @@
 
 		<instance name="sqliteConnector"
 				class="BeeeOn::PocoSQLiteConnectorLoader" />
-
-		<instance name="sqlPlaceDao" class="BeeeOn::PocoSQLPlaceDao">
-			<set name="daoManager" ref="pocoDaoManager" />
-			<set name="transactionManager" ref="transactionManager" />
-			<set name="sqlLoader" ref="queries" />
-		</instance>
 
 		<instance name="sqlUserDao" class="BeeeOn::PocoSQLUserDao">
 			<set name="daoManager" ref="pocoDaoManager" />
@@ -254,8 +222,8 @@
 			<set name="sqlLoader" ref="queries" />
 		</instance>
 
-		<instance name="sqlRoleInPlaceDao"
-				class="BeeeOn::PocoSQLRoleInPlaceDao">
+		<instance name="sqlRoleInGatewayDao"
+				class="BeeeOn::PocoSQLRoleInGatewayDao">
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="sqlLoader" ref="queries" />

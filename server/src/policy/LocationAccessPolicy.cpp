@@ -15,7 +15,7 @@ void NullLocationAccessPolicy::assureGet(
 
 void NullLocationAccessPolicy::assureCreateLocation(
 	const PolicyContext &context,
-	const Place &place)
+	const Gateway &gateway)
 {
 	throw NotImplementedException(__func__);
 }

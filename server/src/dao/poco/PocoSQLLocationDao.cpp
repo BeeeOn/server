@@ -5,7 +5,6 @@
 #include <Poco/Data/RowIterator.h>
 
 #include "dao/poco/PocoSQLLocationDao.h"
-#include "dao/poco/PocoSQLPlaceDao.h"
 #include "dao/poco/PocoDaoManager.h"
 
 using namespace std;
@@ -22,9 +21,7 @@ PocoSQLLocationDao::PocoSQLLocationDao()
 	registerQuery(m_queryUpdate);
 	registerQuery(m_queryRemove);
 	registerQuery(m_queryFetchById);
-	registerQuery(m_queryFetchByIdAndPlaceId);
 	registerQuery(m_queryFetchByIdAndGatewayId);
-	registerQuery(m_queryFetchByPlaceId);
 	registerQuery(m_queryFetchByGatewayId);
 }
 
@@ -33,12 +30,12 @@ void PocoSQLLocationDao::create(Location &location)
 	location.setId(LocationID::random());
 	string id(location.id().toString());
 	string name(location.name());
-	string placeID(location.place().id().toString());
+	string gatewayID(location.gateway().id().toString());
 
 	Statement sql = (session() << m_queryCreate(),
 		use(id, "id"),
 		use(name, "name"),
-		use(placeID, "place_id")
+		use(gatewayID, "gateway_id")
 	);
 
 	execute(sql);
@@ -51,26 +48,6 @@ bool PocoSQLLocationDao::fetch(Location &location)
 
 	Statement sql = (session() << m_queryFetchById(),
 		use(id, "id")
-	);
-
-	if (execute(sql) == 0)
-		return false;
-
-	RecordSet result(sql);
-	return parseSingle(result, location);
-}
-
-bool PocoSQLLocationDao::fetchFrom(Location &location, const Place &place)
-{
-	assureHasId(location);
-	assureHasId(place);
-
-	string id(location.id().toString());
-	string placeID(place.id().toString());
-
-	Statement sql = (session() << m_queryFetchByIdAndPlaceId(),
-		use(id, "id"),
-		use(placeID, "place_id")
 	);
 
 	if (execute(sql) == 0)
@@ -101,22 +78,6 @@ bool PocoSQLLocationDao::fetchFrom(Location &location, const Gateway &gateway)
 }
 
 void PocoSQLLocationDao::fetchBy(std::vector<Location> &locations,
-		const Place &place)
-{
-	assureHasId(place);
-
-	string placeID(place.id().toString());
-
-	Statement sql = (session() << m_queryFetchByPlaceId(),
-		use(placeID, "place_id")
-	);
-
-	execute(sql);
-	RecordSet result(sql);
-	parseMany(result, locations);
-}
-
-void PocoSQLLocationDao::fetchBy(std::vector<Location> &locations,
 		const Gateway &gateway)
 {
 	assureHasId(gateway);
@@ -135,11 +96,10 @@ void PocoSQLLocationDao::fetchBy(std::vector<Location> &locations,
 bool PocoSQLLocationDao::update(Location &location)
 {
 	assureHasId(location);
-	assureHasId(location.place());
+	assureHasId(location.gateway());
 
 	string id(location.id().toString());
 	string name(location.name());
-	string placeID(location.place().id().toString());
 
 	Statement sql = (session() << m_queryUpdate(),
 		use(name, "name"),
@@ -178,9 +138,8 @@ bool PocoSQLLocationDao::parseSingle(Row &result, Location &location,
 
 	location.setName(result[prefix + "name"]);
 
-	Place place;
-	if (PocoSQLPlaceDao::parseIfIDNotNull(result, place, prefix + "place_"))
-		location.setPlace(place);
+	Gateway gateway(GatewayID::parse(result[prefix + "gateway_id"]));
+	location.setGateway(gateway);
 
 	markLoaded(location);
 	return true;

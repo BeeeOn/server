@@ -8,11 +8,8 @@
 #include "server/SessionVerifier.h"
 #include "server/RestAuthHandler.h"
 #include "di/InjectorTarget.h"
-#include "ui/PlaceHandler.h"
 #include "service/UserService.h"
 #include "service/DeviceService.h"
-#include "ui/GatewayHandler.h"
-#include "ui/LocationHandler.h"
 #include "util/Loggable.h"
 
 /**
@@ -82,24 +79,12 @@ public:
 	{
 		injector<UIServerModule, SessionVerifier>("sessionVerifier",
 				&UIServerModule::setSessionVerifier);
-		injector<UIServerModule, BeeeOn::UI::PlaceHandler>(
-				"placeHandler",
-				&UIServerModule::setPlaceHandler
-		);
 		injector<UIServerModule, UserService>("userService",
 				&UIServerModule::setUserService);
 		injector<UIServerModule, RestAuthHandler>("authHandler",
 				&UIServerModule::setAuthHandler);
 		injector<UIServerModule, DeviceService>("deviceService",
 				&UIServerModule::setDeviceService);
-		injector<UIServerModule, BeeeOn::UI::GatewayHandler>(
-				"gatewayHandler",
-				&UIServerModule::setGatewayHandler
-		);
-		injector<UIServerModule, BeeeOn::UI::LocationHandler>(
-				"locationHandler",
-				&UIServerModule::setLocationHandler
-		);
 	}
 
 	/**
@@ -132,16 +117,6 @@ public:
 		m_factory->sessionVerifier(verifier);
 	}
 
-	void setPlaceHandler(BeeeOn::UI::PlaceHandler *handler)
-	{
-		m_placeHandler = handler;
-	}
-
-	BeeeOn::UI::PlaceHandler &placeHandler()
-	{
-		return *m_placeHandler;
-	}
-
 	void setUserService(UserService *service)
 	{
 		m_userService = service;
@@ -167,25 +142,12 @@ public:
 		return *m_deviceService;
 	}
 
-	void setGatewayHandler(BeeeOn::UI::GatewayHandler *handler)
-	{
-		m_gatewayHandler = handler;
-	}
-
-	void setLocationHandler(BeeeOn::UI::LocationHandler *handler)
-	{
-		m_locationHandler = handler;
-	}
-
 private:
 	Poco::SharedPtr<UIServerRequestHandlerFactory> m_factory;
 	UIRestServer *m_server;
-	BeeeOn::UI::PlaceHandler *m_placeHandler;
 	UserService *m_userService;
 	RestAuthHandler *m_authHandler;
 	DeviceService *m_deviceService;
-	BeeeOn::UI::GatewayHandler *m_gatewayHandler;
-	BeeeOn::UI::LocationHandler *m_locationHandler;
 };
 
 }

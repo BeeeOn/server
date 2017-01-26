@@ -35,25 +35,24 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/DeviceID.cpp
 	${PROJECT_SOURCE_DIR}/model/Identity.cpp
 	${PROJECT_SOURCE_DIR}/model/VerifiedIdentity.cpp
-	${PROJECT_SOURCE_DIR}/model/RoleInPlace.cpp
+	${PROJECT_SOURCE_DIR}/model/RoleInGateway.cpp
 	${PROJECT_SOURCE_DIR}/model/LegacyGateway.cpp
 	${PROJECT_SOURCE_DIR}/model/Device.cpp
-	${PROJECT_SOURCE_DIR}/dao/PlaceDao.cpp
+	${PROJECT_SOURCE_DIR}/model/Location.cpp
 	${PROJECT_SOURCE_DIR}/dao/UserDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/DeviceDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/GatewayDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/LocationDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/IdentityDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/VerifiedIdentityDao.cpp
-	${PROJECT_SOURCE_DIR}/dao/RoleInPlaceDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/RoleInGatewayDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoTransactionImpl.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoTransactionManager.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoAbstractDao.cpp
-	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLPlaceDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLUserDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLVerifiedIdentityDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLIdentityDao.cpp
-	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLRoleInPlaceDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLRoleInGatewayDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLGatewayDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLLocationDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLDeviceDao.cpp
@@ -65,17 +64,14 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/dao/NullTransactionManager.cpp
 	${PROJECT_SOURCE_DIR}/dao/NoTransactionManager.cpp
 	${PROJECT_SOURCE_DIR}/dao/Transactional.cpp
-	${PROJECT_SOURCE_DIR}/service/PlaceService.cpp
 	${PROJECT_SOURCE_DIR}/service/UserService.cpp
 	${PROJECT_SOURCE_DIR}/service/AuthService.cpp
 	${PROJECT_SOURCE_DIR}/service/DeviceService.cpp
 	${PROJECT_SOURCE_DIR}/service/GatewayService.cpp
 	${PROJECT_SOURCE_DIR}/service/LocationService.cpp
 	${PROJECT_SOURCE_DIR}/service/IdentityService.cpp
-	${PROJECT_SOURCE_DIR}/service/JSONPlaceDeserializer.cpp
 	${PROJECT_SOURCE_DIR}/service/JSONGatewayDeserializer.cpp
 	${PROJECT_SOURCE_DIR}/service/JSONLocationDeserializer.cpp
-	${PROJECT_SOURCE_DIR}/policy/PlaceAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/GatewayAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/LocationAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/DeviceAccessPolicy.cpp
@@ -111,9 +107,6 @@ add_executable(ui-server
 	ui/main.cpp
 	ui/UIServerModule.cpp
 	ui/Serializing.cpp
-	ui/PlaceHandler.cpp
-	ui/GatewayHandler.cpp
-	ui/LocationHandler.cpp
 	ui/UIMockInit.cpp
 	dao/poco/PocoSQLiteConnectorLoader.cpp
 )

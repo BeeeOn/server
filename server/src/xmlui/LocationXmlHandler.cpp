@@ -2,7 +2,6 @@
 #include "xmlui/XmlLocationDeserializer.h"
 #include "xmlui/Serializing.h"
 #include "model/Location.h"
-#include "model/Place.h"
 
 using namespace std;
 using namespace Poco;

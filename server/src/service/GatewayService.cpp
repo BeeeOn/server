@@ -4,8 +4,7 @@
 #include "service/GatewayService.h"
 #include "server/AccessLevel.h"
 #include "dao/GatewayDao.h"
-#include "dao/RoleInPlaceDao.h"
-#include "dao/PlaceDao.h"
+#include "dao/RoleInGatewayDao.h"
 #include "dao/IdentityDao.h"
 #include "dao/VerifiedIdentityDao.h"
 #include "policy/GatewayAccessPolicy.h"
@@ -18,18 +17,15 @@ using namespace BeeeOn;
 
 GatewayService::GatewayService():
 	m_gatewayDao(&NullGatewayDao::instance()),
-	m_roleInPlaceDao(&NullRoleInPlaceDao::instance()),
-	m_placeDao(&NullPlaceDao::instance()),
+	m_roleInGatewayDao(&NullRoleInGatewayDao::instance()),
 	m_identityDao(&NullIdentityDao::instance()),
 	m_rpc(&NullGatewayRPC::instance()),
 	m_accessPolicy(&NullGatewayAccessPolicy::instance())
 {
 	injector<GatewayService, GatewayDao>("gatewayDao",
 			&GatewayService::setGatewayDao);
-	injector<GatewayService, RoleInPlaceDao>("roleInPlaceDao",
-			&GatewayService::setRoleInPlaceDao);
-	injector<GatewayService, PlaceDao>("placeDao",
-			&GatewayService::setPlaceDao);
+	injector<GatewayService, RoleInGatewayDao>("roleInGatewayDao",
+			&GatewayService::setRoleInGatewayDao);
 	injector<GatewayService, IdentityDao>("identityDao",
 			&GatewayService::setIdentityDao);
 	injector<GatewayService, VerifiedIdentityDao>("verifiedIdentityDao",
@@ -45,14 +41,9 @@ void GatewayService::setGatewayDao(GatewayDao *dao)
 	m_gatewayDao = dao? dao : &NullGatewayDao::instance();
 }
 
-void GatewayService::setRoleInPlaceDao(RoleInPlaceDao *dao)
+void GatewayService::setRoleInGatewayDao(RoleInGatewayDao *dao)
 {
-	m_roleInPlaceDao = dao? dao :&NullRoleInPlaceDao::instance();
-}
-
-void GatewayService::setPlaceDao(PlaceDao *dao)
-{
-	m_placeDao = dao? dao : &NullPlaceDao::instance();
+	m_roleInGatewayDao = dao? dao :&NullRoleInGatewayDao::instance();
 }
 
 void GatewayService::setIdentityDao(IdentityDao *dao)
@@ -80,6 +71,8 @@ void GatewayService::setAccessPolicy(GatewayAccessPolicy *policy)
 bool GatewayService::doRegisterGateway(SingleWithData<Gateway> &input,
 		const VerifiedIdentity &verifiedIdentity)
 {
+	m_accessPolicy->assureRegister(input, input.target());
+
 	VerifiedIdentity tmp(verifiedIdentity);
 
 	if (!m_verifiedIdentityDao->fetch(tmp))
@@ -90,38 +83,15 @@ bool GatewayService::doRegisterGateway(SingleWithData<Gateway> &input,
 	if (!m_gatewayDao->fetch(gateway))
 		throw NotFoundException("gateway was not found");
 
-	if (gateway.hasPlace()) {
-		const AccessLevel &level = m_roleInPlaceDao->
-			fetchAccessLevel(gateway.place(), tmp.user());
-
-		if (level <= AccessLevel::admin()) // is owner
-			throw ExistsException("gateway is already assigned");
-
-		throw NotFoundException("gateway is owned by somebody else");
-	}
-
 	input.data().full(gateway);
 
-	Place place;
-	createImplicitPlace(place, gateway, tmp.identity());
-	return m_gatewayDao->assignAndUpdate(gateway, place);
-}
-
-void GatewayService::createImplicitPlace(
-		Place &place,
-		const Gateway &gateway,
-		const Identity &identity)
-{
-	place.setName(string("Place for ") + gateway.name());
-
-	m_placeDao->create(place);
-
-	RoleInPlace role;
-	role.setPlace(place);
-	role.setIdentity(identity);
+	RoleInGateway role;
+	role.setGateway(gateway);
+	role.setIdentity(tmp.identity());
 	role.setLevel(AccessLevel::admin());
+	m_roleInGatewayDao->create(role);
 
-	m_roleInPlaceDao->create(role);
+	return m_gatewayDao->update(gateway);
 }
 
 bool GatewayService::doFetch(Single<Gateway> &input)
@@ -136,13 +106,6 @@ bool GatewayService::doFetch(Single<LegacyGateway> &input)
 	m_accessPolicy->assureGet(input, input.target());
 
 	return m_gatewayDao->fetch(input.target(), input.user());
-}
-
-bool GatewayService::doFetchFromPlace(Relation<Gateway, Place> &input)
-{
-	m_accessPolicy->assureGet(input, input.target());
-
-	return m_gatewayDao->fetchFromPlace(input.target(), input.base());
 }
 
 void GatewayService::doFetchAccessible(Relation<vector<Gateway>, User> &input)
@@ -169,63 +132,22 @@ bool GatewayService::doUpdate(SingleWithData<Gateway> &input)
 	return m_gatewayDao->update(gateway);
 }
 
-bool GatewayService::doUpdateInPlace(RelationWithData<Gateway, Place> &input)
+bool GatewayService::doUnregister(Single<Gateway> &input)
 {
 	Gateway &gateway = input.target();
 
-	m_accessPolicy->assureUpdate(input, gateway);
+	m_accessPolicy->assureUnregister(input, input.target());
 
-	if (!m_gatewayDao->fetchFromPlace(gateway, input.base()))
-		throw NotFoundException("gateway does not exist");
+	// if there would be only roles without admin access level
+	// remove all the roles (unregister fro mthe gateway entirely)
+	if (m_roleInGatewayDao->hasOnlyNonAdminExcept(gateway, input.user()))
+		m_roleInGatewayDao->removeAll(gateway);
+	// if there are admins or current user is the last user
+	// remove only the current user's roles
+	else
+		return m_roleInGatewayDao->remove(gateway, input.user());
 
-	input.data().partial(gateway);
-
-	return m_gatewayDao->update(gateway);
-}
-
-bool GatewayService::doAssignAndUpdate(
-		RelationWithData<Gateway, Place> &input)
-{
-	Gateway &gateway = input.target();
-
-	m_accessPolicy->assureAssignGateway(input, input.base());
-
-	if (!m_gatewayDao->fetch(gateway))
-		throw NotFoundException("gateway does not exist");
-
-	if (gateway.hasPlace()) // do not leak it exists
-		throw NotFoundException("gateway is already assigned");
-
-	input.data().partial(gateway);
-
-	return m_gatewayDao->assignAndUpdate(gateway, input.base());
-}
-
-bool GatewayService::doUnassign(Relation<Gateway, Place> &input)
-{
-	Gateway &gateway = input.target();
-
-	m_accessPolicy->assureUnassign(input, input.target());
-
-	if (!m_gatewayDao->fetchFromPlace(gateway, input.base()))
-		return false;
-
-	return m_gatewayDao->unassign(gateway);
-}
-
-bool GatewayService::doUnassign(Relation<Gateway, User> &input)
-{
-	Gateway &gateway = input.target();
-
-	m_accessPolicy->assureUnassign(input, input.target());
-
-	if (!m_gatewayDao->fetch(gateway))
-		throw NotFoundException("gateway does not exist");
-
-	if (!gateway.hasPlace()) // do not leak that this gateway exists
-		throw NotFoundException("gateway is not assigned");
-
-	return m_gatewayDao->unassign(gateway);
+	return true;
 }
 
 void GatewayService::doScanDevices(Single<Gateway> &input)

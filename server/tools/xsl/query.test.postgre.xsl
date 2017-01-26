@@ -103,6 +103,14 @@
 		<x:value-of select="$value" />
 	</x:template>
 
+	<x:template match="true" mode="csv">
+		<x:text>t</x:text>
+	</x:template>
+
+	<x:template match="false" mode="csv">
+		<x:text>f</x:text>
+	</x:template>
+
 	<x:template match="/query-set">
 		<x:call-template name="generate-sql-tests" />
 		<x:call-template name="generate-expect-values" />

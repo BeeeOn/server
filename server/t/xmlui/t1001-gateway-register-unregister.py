@@ -8,7 +8,7 @@ import unittest
 from xmlui import Connector, Response, Login, Logout
 from xmlui import GatewayRegister, GatewayUnregister, GatewayGet
 
-class TestGatewayPlaceAssign(unittest.TestCase):
+class TestGatewayRegisterUnregister(unittest.TestCase):
 	"""
 	Create 2 sessions for 2 different users.
 	"""
@@ -37,8 +37,7 @@ class TestGatewayPlaceAssign(unittest.TestCase):
 
 	"""
 	Test register and unregister the well-known virtual testing
-	gateway	1780053541714013. Assume there is an implicit place
-	created for the user.
+	gateway	1780053541714013.
 	"""
 	def test1_register_unregister(self):
 		c = Connector(config.xmlui_host, config.xmlui_port)
@@ -119,7 +118,7 @@ class TestGatewayPlaceAssign(unittest.TestCase):
 		))
 
 		self.assertTrue(response.is_error())
-		self.assertEqual("13", response.error_code())
+		self.assertEqual("1001", response.error_code())
 
 		# check the gateway was not changed
 		response = c.request(GatewayGet(

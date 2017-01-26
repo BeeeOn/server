@@ -75,28 +75,28 @@ void UIMockInit::initLocations(vector<Location> &locations)
 
 	Location kitchen(LocationID::random());
 	kitchen.setName("Kitchen #1");
-	kitchen.setPlace(gateway.place());
+	kitchen.setGateway(gateway);
 
 	m_locationDao->create(kitchen);
 	locations.push_back(kitchen);
 
 	Location livingroom(LocationID::random());
 	livingroom.setName("Livingroom #1");
-	livingroom.setPlace(gateway.place());
+	livingroom.setGateway(gateway);
 
 	m_locationDao->create(livingroom);
 	locations.push_back(livingroom);
 
 	Location bathroom(LocationID::random());
 	bathroom.setName("Bathroom #1");
-	bathroom.setPlace(gateway.place());
+	bathroom.setGateway(gateway);
 
 	m_locationDao->create(bathroom);
 	locations.push_back(bathroom);
 
 	Location hall(LocationID::random());
 	hall.setName("Hall #1");
-	hall.setPlace(gateway.place());
+	hall.setGateway(gateway);
 
 	m_locationDao->create(hall);
 	locations.push_back(hall);
