@@ -16,6 +16,11 @@ void NullRoleInGatewayDao::create(RoleInGateway &role)
 	throw NotImplementedException(__func__);
 }
 
+bool NullRoleInGatewayDao::update(RoleInGateway &role)
+{
+	throw NotImplementedException(__func__);
+}
+
 bool NullRoleInGatewayDao::fetch(RoleInGateway &role)
 {
 	throw NotImplementedException(__func__);

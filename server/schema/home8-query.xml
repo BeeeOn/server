@@ -999,6 +999,32 @@
 		</test>
 	</query>
 
+	<query id="roles_in_gateway.update">
+		<define>
+		UPDATE roles_in_gateway SET
+			level = <value name="level" type="integer" />
+		WHERE
+			id = <value name="id" type="uuid" />
+		</define>
+		<test name="simple">
+			<check name="jack.sparrow@example.org is now admin for Test Gateway 1">
+				<call-query>
+					<arg name="level">10</arg>
+					<arg name="id">'aee235a1-ac89-4553-b185-d689faeeeee3'</arg>
+				</call-query>
+				<sql>SELECT level FROM roles_in_gateway WHERE id = 'aee235a1-ac89-4553-b185-d689faeeeee3'</sql>
+				<expect>
+					<row>
+						<value name="level">10</value>
+					</row>
+				</expect>
+			</check>
+			<teardown name="revert jack.sparrow@example.org to be guest">
+				<sql>UPDATE roles_in_gateway SET level = 30 WHERE id = 'aee235a1-ac89-4553-b185-d689faeeeee3'</sql>
+			</teardown>
+		</test>
+	</query>
+
 	<query id="roles_in_gateway.fetch.by.id">
 		<define>
 		SELECT

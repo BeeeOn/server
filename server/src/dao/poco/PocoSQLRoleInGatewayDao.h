@@ -21,6 +21,7 @@ public:
 	PocoSQLRoleInGatewayDao();
 
 	void create(RoleInGateway &role) override;
+	bool update(RoleInGateway &role) override;
 	bool fetch(RoleInGateway &role) override;
 	void fetchBy(std::vector<RoleInGateway> &roles,
 			const Gateway &gateway) override;
@@ -68,6 +69,7 @@ public:
 
 private:
 	SQLQuery m_queryCreate           {"roles_in_gateway.create"};
+	SQLQuery m_queryUpdate           {"roles_in_gateway.update"};
 	SQLQuery m_queryRemove           {"roles_in_gateway.remove"};
 	SQLQuery m_queryRemoveUser       {"roles_in_gateway.remove.user"};
 	SQLQuery m_queryRemoveAll        {"roles_in_gateway.remove.all"};

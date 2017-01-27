@@ -22,6 +22,7 @@ BEEEON_OBJECT(PocoSQLRoleInGatewayDao, BeeeOn::PocoSQLRoleInGatewayDao)
 PocoSQLRoleInGatewayDao::PocoSQLRoleInGatewayDao()
 {
 	registerQuery(m_queryCreate);
+	registerQuery(m_queryUpdate);
 	registerQuery(m_queryRemove);
 	registerQuery(m_queryRemoveUser);
 	registerQuery(m_queryRemoveAll);
@@ -55,6 +56,21 @@ void PocoSQLRoleInGatewayDao::create(RoleInGateway &role)
 	);
 
 	execute(sql);
+}
+
+bool PocoSQLRoleInGatewayDao::update(RoleInGateway &role)
+{
+	assureHasId(role);
+
+	string id(role.id().toString());
+	unsigned int level = role.level();
+
+	Statement sql = (session() << m_queryCreate(),
+		use(level, "level"),
+		use(id, "id")
+	);
+
+	return execute(sql) > 0;
 }
 
 bool PocoSQLRoleInGatewayDao::fetch(RoleInGateway &role)
