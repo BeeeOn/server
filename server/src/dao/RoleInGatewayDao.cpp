@@ -16,6 +16,16 @@ void NullRoleInGatewayDao::create(RoleInGateway &role)
 	throw NotImplementedException(__func__);
 }
 
+bool NullRoleInGatewayDao::update(RoleInGateway &role)
+{
+	throw NotImplementedException(__func__);
+}
+
+bool NullRoleInGatewayDao::fetch(RoleInGateway &role)
+{
+	throw NotImplementedException(__func__);
+}
+
 void NullRoleInGatewayDao::fetchBy(vector<RoleInGateway> &roles,
 		const Gateway &gateway)
 {
@@ -34,6 +44,13 @@ bool NullRoleInGatewayDao::remove(
 }
 
 void NullRoleInGatewayDao::removeAll(const Gateway &gateway)
+{
+	throw NotImplementedException(__func__);
+}
+
+bool NullRoleInGatewayDao::isUser(
+		const RoleInGateway &role,
+		const User &user)
 {
 	throw NotImplementedException(__func__);
 }

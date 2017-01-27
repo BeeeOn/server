@@ -356,3 +356,68 @@ class DeviceUnregister(Request):
 		device.set("euid", self.device)
 
 		return request
+
+class RoleInvite(Request):
+	def __init__(self, gateway, email, sessionid, **kwargs):
+		Request.__init__(self, ns = "gateusers",
+			type = "invite", sessionid = sessionid)
+		self.gateway = gateway
+		self.email = email
+
+		if "permission" in kwargs:
+			self.permission = kwargs["permission"]
+		else:
+			self.permission = "user"
+
+	def xml(self):
+		request = Request.xml(self)
+		request.set("gateid", self.gateway)
+		user = xml.SubElement(request, "user")
+		user.set("email", self.email)
+		user.set("permission", self.permission)
+
+		return request
+
+class RoleGetAll(Request):
+	def __init__(self, gateway, sessionid, **kwargs):
+		Request.__init__(self, ns = "gateusers",
+			type = "getall", sessionid = sessionid)
+		self.gateway = gateway
+
+	def xml(self):
+		request = Request.xml(self)
+		request.set("gateid", self.gateway)
+
+		return request
+
+class RoleRemove(Request):
+	def __init__(self, gateway, id, sessionid, **kwargs):
+		Request.__init__(self, ns = "gateusers",
+			type = "remove", sessionid = sessionid)
+		self.gateway = gateway
+		self.id = id
+
+	def xml(self):
+		request = Request.xml(self)
+		request.set("gateid", self.gateway)
+		user = xml.SubElement(request, "user")
+		user.set("id", self.id)
+
+		return request
+
+class RoleUpdateAccess(Request):
+	def __init__(self, gateway, id, level, sessionid, **kwargs):
+		Request.__init__(self, ns = "gateusers",
+			type = "updateaccess", sessionid = sessionid)
+		self.gateway = gateway
+		self.id = id
+		self.level = level
+
+	def xml(self):
+		request = Request.xml(self)
+		request.set("gateid", self.gateway)
+		user = xml.SubElement(request, "user")
+		user.set("id", self.id)
+		user.set("permission", self.level)
+
+		return request

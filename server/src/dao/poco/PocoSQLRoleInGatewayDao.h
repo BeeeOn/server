@@ -21,6 +21,8 @@ public:
 	PocoSQLRoleInGatewayDao();
 
 	void create(RoleInGateway &role) override;
+	bool update(RoleInGateway &role) override;
+	bool fetch(RoleInGateway &role) override;
 	void fetchBy(std::vector<RoleInGateway> &roles,
 			const Gateway &gateway) override;
 	bool remove(const RoleInGateway &role) override;
@@ -28,6 +30,7 @@ public:
 			const User &user) override;
 	void removeAll(const Gateway &gateway) override;
 
+	bool isUser(const RoleInGateway &role, const User &user) override;
 	bool isRegistered(const Gateway &gateway) override;
 	bool hasOnlyNonAdminExcept(
 			const Gateway &gateway,
@@ -66,10 +69,13 @@ public:
 
 private:
 	SQLQuery m_queryCreate           {"roles_in_gateway.create"};
+	SQLQuery m_queryUpdate           {"roles_in_gateway.update"};
 	SQLQuery m_queryRemove           {"roles_in_gateway.remove"};
 	SQLQuery m_queryRemoveUser       {"roles_in_gateway.remove.user"};
 	SQLQuery m_queryRemoveAll        {"roles_in_gateway.remove.all"};
+	SQLQuery m_queryIsUser           {"roles_in_gateway.is.user"};
 	SQLQuery m_queryIsRegistered     {"roles_in_gateway.is.registered"};
+	SQLQuery m_queryFetchById        {"roles_in_gateway.fetch.by.id"};
 	SQLQuery m_queryFetchByGatewayId   {"roles_in_gateway.fetch.by.gateway_id"};
 	SQLQuery m_queryFetchAccessLevel {"roles_in_gateway.fetch.access_level"};
 	SQLQuery m_queryFetchAccessibleGateways {"roles_in_gateway.fetch.accessible.gateways"};

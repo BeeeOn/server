@@ -8,6 +8,7 @@
 #include "model/Location.h"
 #include "model/Device.h"
 #include "model/DeviceInfo.h"
+#include "model/RoleInGateway.h"
 #include "model/VerifiedIdentity.h"
 
 using namespace std;
@@ -150,6 +151,28 @@ void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
 {
 	for (auto device : devices)
 		serialize(output, device);
+}
+
+void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
+		const RoleInGateway &role)
+{
+	AttributesImpl attrs;
+
+	attrs.addAttribute("", "id", "id", "", role.id().toString());
+	attrs.addAttribute("", "email", "email", "",
+			role.identity().email());
+	attrs.addAttribute("", "permission", "permission", "",
+			role.level().toString());
+	attrs.addAttribute("", "gender", "gender", "", "unknown");
+
+	output.emptyElement("", "user", "user", attrs);
+}
+
+void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
+		const std::vector<RoleInGateway> &roles)
+{
+	for (auto role : roles)
+		serialize(output, role);
 }
 
 void BeeeOn::XmlUI::serializeMyself(

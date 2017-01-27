@@ -126,6 +126,15 @@
 		<foreign-key table="identities" local="identity_id" remote="id" />
 
 		<check name="check_valid_level" expression="level &gt;= 0 AND level &lt;= 100" />
+
+		<unique name="gateway_with_identity">
+			<ref>gateway_id</ref>
+			<ref>identity_id</ref>
+		</unique>
+		<unique name="gateway_with_created">
+			<ref>gateway_id</ref>
+			<ref>created</ref>
+		</unique>
 	</table>
 
 	<table name="devices">

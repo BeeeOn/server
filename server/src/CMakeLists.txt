@@ -75,11 +75,13 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/service/GatewayService.cpp
 	${PROJECT_SOURCE_DIR}/service/LocationService.cpp
 	${PROJECT_SOURCE_DIR}/service/IdentityService.cpp
+	${PROJECT_SOURCE_DIR}/service/RoleService.cpp
 	${PROJECT_SOURCE_DIR}/service/JSONGatewayDeserializer.cpp
 	${PROJECT_SOURCE_DIR}/service/JSONLocationDeserializer.cpp
 	${PROJECT_SOURCE_DIR}/policy/GatewayAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/LocationAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/DeviceAccessPolicy.cpp
+	${PROJECT_SOURCE_DIR}/policy/RoleAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/DefaultAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/util/DAMM.cpp
 	${PROJECT_SOURCE_DIR}/util/SecureXmlParser.cpp
@@ -101,6 +103,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/rpc/FakeGatewayRPC.cpp
 	${PROJECT_SOURCE_DIR}/notification/NotificationDispatcher.cpp
 	${PROJECT_SOURCE_DIR}/notification/FirstLoginNotification.cpp
+	${PROJECT_SOURCE_DIR}/notification/InvitedNotification.cpp
 	${PROJECT_SOURCE_DIR}/notification/NotificationObserver.cpp
 	${PROJECT_SOURCE_DIR}/notification/LoggingObserver.cpp
 )
@@ -128,10 +131,12 @@ add_executable(xmlui-server
 	xmlui/XmlGatewayDeserializer.cpp
 	xmlui/XmlLocationDeserializer.cpp
 	xmlui/XmlDeviceDeserializer.cpp
+	xmlui/XmlRoleInGatewayDeserializer.cpp
 	xmlui/GatewayXmlHandler.cpp
 	xmlui/LocationXmlHandler.cpp
 	xmlui/ProfileXmlHandler.cpp
 	xmlui/DeviceXmlHandler.cpp
+	xmlui/RoleXmlHandler.cpp
 	ui/UIMockInit.cpp
 	dao/poco/PocoSQLiteConnectorLoader.cpp
 )

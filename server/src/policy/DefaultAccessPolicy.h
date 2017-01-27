@@ -5,6 +5,7 @@
 #include "policy/GatewayAccessPolicy.h"
 #include "policy/LocationAccessPolicy.h"
 #include "policy/DeviceAccessPolicy.h"
+#include "policy/RoleAccessPolicy.h"
 #include "dao/RoleInGatewayDao.h"
 #include "dao/GatewayDao.h"
 #include "dao/LocationDao.h"
@@ -16,7 +17,8 @@ namespace BeeeOn {
 class DefaultAccessPolicy : public AbstractInjectorTarget,
 		public GatewayAccessPolicy,
 		public LocationAccessPolicy,
-		public DeviceAccessPolicy {
+		public DeviceAccessPolicy,
+		public RoleAccessPolicy {
 public:
 	DefaultAccessPolicy();
 
@@ -54,6 +56,20 @@ public:
 		const Device &device, const Gateway &gateway);
 	void assureUpdate(const PolicyContext &context,
 		const Device &device, const Gateway &gateway);
+
+	void assureInvite(
+		const PolicyContext &context,
+		const Gateway &gateway,
+		const AccessLevel &as) override;
+	void assureList(
+		const PolicyContext &context,
+		const Gateway &gateway) override;
+	void assureRemove(
+		const PolicyContext &context,
+		const RoleInGateway &role) override;
+	void assureUpdate(
+		const PolicyContext &context,
+		const RoleInGateway &role) override;
 
 	void setUserDao(UserDao *dao)
 	{

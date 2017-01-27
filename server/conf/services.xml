@@ -23,6 +23,7 @@
 			<add name="resolvers" ref="deviceXmlHandler" />
 			<add name="resolvers" ref="locationXmlHandler" />
 			<add name="resolvers" ref="profileXmlHandler" />
+			<add name="resolvers" ref="roleXmlHandler" />
 			<add name="resolvers" ref="anyXmlHandler" />
 		</instance>
 
@@ -55,6 +56,12 @@
 		<instance name="profileXmlHandler"
 				class="BeeeOn::XmlUI::ProfileXmlHandlerResolver">
 			<set name="identityService" ref="identityService" />
+			<set name="sessionManager" ref="sessionManager" />
+		</instance>
+
+		<instance name="roleXmlHandler"
+				class="BeeeOn::XmlUI::RoleXmlHandlerResolver">
+			<set name="roleService" ref="roleService" />
 			<set name="sessionManager" ref="sessionManager" />
 		</instance>
 
@@ -118,6 +125,15 @@
 			<set name="identityDao" ref="identityDao" />
 			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
 			<set name="transactionManager" ref="transactionManager" />
+		</instance>
+
+		<instance name="roleService" class="BeeeOn::RoleService">
+			<set name="identityDao" ref="identityDao" />
+			<set name="gatewayDao" ref="gatewayDao" />
+			<set name="roleInGatewayDao" ref="roleInGatewayDao" />
+			<set name="accessPolicy" ref="accessPolicy" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="notificationDispatcher" ref="notificationDispatcher" />
 		</instance>
 
 		<instance name="typeInfoProvider" class="BeeeOn::TypeInfoProvider">

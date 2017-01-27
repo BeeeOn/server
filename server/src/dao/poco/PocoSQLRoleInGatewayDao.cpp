@@ -22,10 +22,13 @@ BEEEON_OBJECT(PocoSQLRoleInGatewayDao, BeeeOn::PocoSQLRoleInGatewayDao)
 PocoSQLRoleInGatewayDao::PocoSQLRoleInGatewayDao()
 {
 	registerQuery(m_queryCreate);
+	registerQuery(m_queryUpdate);
 	registerQuery(m_queryRemove);
 	registerQuery(m_queryRemoveUser);
 	registerQuery(m_queryRemoveAll);
+	registerQuery(m_queryIsUser);
 	registerQuery(m_queryIsRegistered);
+	registerQuery(m_queryFetchById);
 	registerQuery(m_queryFetchByGatewayId);
 	registerQuery(m_queryFetchAccessLevel);
 	registerQuery(m_queryFetchAccessibleGateways);
@@ -53,6 +56,38 @@ void PocoSQLRoleInGatewayDao::create(RoleInGateway &role)
 	);
 
 	execute(sql);
+}
+
+bool PocoSQLRoleInGatewayDao::update(RoleInGateway &role)
+{
+	assureHasId(role);
+
+	string id(role.id().toString());
+	unsigned int level = role.level();
+
+	Statement sql = (session() << m_queryCreate(),
+		use(level, "level"),
+		use(id, "id")
+	);
+
+	return execute(sql) > 0;
+}
+
+bool PocoSQLRoleInGatewayDao::fetch(RoleInGateway &role)
+{
+	assureHasId(role);
+
+	string roleID(role.id().toString());
+
+	Statement sql = (session() << m_queryFetchById(),
+		use(roleID, "role_id")
+	);
+
+	if (execute(sql) == 0)
+		return false;
+
+	RecordSet result(sql);
+	return parseSingle(result, role);
 }
 
 void PocoSQLRoleInGatewayDao::fetchBy(std::vector<RoleInGateway> &roles,
@@ -112,6 +147,26 @@ void PocoSQLRoleInGatewayDao::removeAll(const Gateway &gateway)
 	);
 
 	execute(sql);
+}
+
+bool PocoSQLRoleInGatewayDao::isUser(const RoleInGateway &role,
+		const User &user)
+{
+	assureHasId(role);
+	assureHasId(user);
+
+	string roleID(role.id().toString());
+	string userID(user.id().toString());
+	bool result = false;
+
+	Statement sql = (session() << m_queryIsUser(),
+		use(roleID, "role_id"),
+		use(userID, "user_id"),
+		into(result)
+	);
+
+	execute(sql);
+	return result;
 }
 
 bool PocoSQLRoleInGatewayDao::isRegistered(

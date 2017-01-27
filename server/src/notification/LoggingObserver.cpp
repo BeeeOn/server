@@ -2,6 +2,7 @@
 
 #include "notification/LoggingObserver.h"
 #include "notification/FirstLoginNotification.h"
+#include "notification/InvitedNotification.h"
 
 using namespace std;
 using namespace Poco;
@@ -26,11 +27,8 @@ bool LoggingObserver::equals(const NotificationObserver &o) const
 	return false;
 }
 
-static void notify(Logger &logger, const FirstLoginNotification *n)
+static void logNotification(Logger &logger, const FirstLoginNotification *n)
 {
-	if (n == NULL)
-		return;
-
 	const VerifiedIdentity &identity = n->identity();
 	const User &user = identity.user();
 
@@ -47,9 +45,33 @@ static void notify(Logger &logger, const FirstLoginNotification *n)
 		__FILE__, __LINE__);
 }
 
+static void logNotification(Logger &logger, const InvitedNotification *n)
+{
+	const Identity &identity = n->identity();
+	const Gateway &gateway = n->gateway();
+	const User &sender = n->sender();
+
+	logger.information("inviting "
+		+ identity.email()
+		+ " to access gateway "
+		+ gateway.id().toString()
+		+ " by "
+		+ sender.id().toString());
+}
+
+template <typename T>
+static void notify(Logger &logger, const T *n)
+{
+	if (n == NULL)
+		return;
+
+	logNotification(logger, n);
+}
+
 void LoggingObserver::notify(Notification *n) const
 {
 	::notify(logger(), FirstLoginNotification::cast(n));
+	::notify(logger(), InvitedNotification::cast(n));
 }
 
 AbstractObserver *LoggingObserver::clone() const
