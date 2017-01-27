@@ -22,6 +22,7 @@ public:
 			const User &user) = 0;
 	virtual void removeAll(const Gateway &gateway) = 0;
 
+	virtual bool isUser(const RoleInGateway &role, const User &user) = 0;
 	virtual bool isRegistered(const Gateway &gateway) = 0;
 	virtual bool hasOnlyNonAdminExcept(
 			const Gateway &gateway,
@@ -55,6 +56,7 @@ public:
 			const User &user)  override;
 	void removeAll(const Gateway &gateway) override;
 
+	bool isUser(const RoleInGateway &role, const User &user) override;
 	bool isRegistered(const Gateway &gateway) override;
 	bool hasOnlyNonAdminExcept(
 			const Gateway &gateway,

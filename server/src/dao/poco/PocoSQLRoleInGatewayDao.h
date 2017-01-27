@@ -28,6 +28,7 @@ public:
 			const User &user) override;
 	void removeAll(const Gateway &gateway) override;
 
+	bool isUser(const RoleInGateway &role, const User &user) override;
 	bool isRegistered(const Gateway &gateway) override;
 	bool hasOnlyNonAdminExcept(
 			const Gateway &gateway,
@@ -69,6 +70,7 @@ private:
 	SQLQuery m_queryRemove           {"roles_in_gateway.remove"};
 	SQLQuery m_queryRemoveUser       {"roles_in_gateway.remove.user"};
 	SQLQuery m_queryRemoveAll        {"roles_in_gateway.remove.all"};
+	SQLQuery m_queryIsUser           {"roles_in_gateway.is.user"};
 	SQLQuery m_queryIsRegistered     {"roles_in_gateway.is.registered"};
 	SQLQuery m_queryFetchByGatewayId   {"roles_in_gateway.fetch.by.gateway_id"};
 	SQLQuery m_queryFetchAccessLevel {"roles_in_gateway.fetch.access_level"};
