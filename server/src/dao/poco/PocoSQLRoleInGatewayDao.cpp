@@ -27,6 +27,7 @@ PocoSQLRoleInGatewayDao::PocoSQLRoleInGatewayDao()
 	registerQuery(m_queryRemoveAll);
 	registerQuery(m_queryIsUser);
 	registerQuery(m_queryIsRegistered);
+	registerQuery(m_queryFetchById);
 	registerQuery(m_queryFetchByGatewayId);
 	registerQuery(m_queryFetchAccessLevel);
 	registerQuery(m_queryFetchAccessibleGateways);
@@ -54,6 +55,23 @@ void PocoSQLRoleInGatewayDao::create(RoleInGateway &role)
 	);
 
 	execute(sql);
+}
+
+bool PocoSQLRoleInGatewayDao::fetch(RoleInGateway &role)
+{
+	assureHasId(role);
+
+	string roleID(role.id().toString());
+
+	Statement sql = (session() << m_queryFetchById(),
+		use(roleID, "role_id")
+	);
+
+	if (execute(sql) == 0)
+		return false;
+
+	RecordSet result(sql);
+	return parseSingle(result, role);
 }
 
 void PocoSQLRoleInGatewayDao::fetchBy(std::vector<RoleInGateway> &roles,

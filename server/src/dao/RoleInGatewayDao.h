@@ -15,6 +15,7 @@ class User;
 class RoleInGatewayDao {
 public:
 	virtual void create(RoleInGateway &role) = 0;
+	virtual bool fetch(RoleInGateway &role) = 0;
 	virtual void fetchBy(std::vector<RoleInGateway> &roles,
 			const Gateway &gateway) = 0;
 	virtual bool remove(const RoleInGateway &gateway) = 0;
@@ -49,6 +50,7 @@ public:
 	NullRoleInGatewayDao();
 
 	void create(RoleInGateway &role) override;
+	bool fetch(RoleInGateway &role) override;
 	void fetchBy(std::vector<RoleInGateway> &roles,
 			const Gateway &gateway) override;
 	bool remove(const RoleInGateway &role) override;
