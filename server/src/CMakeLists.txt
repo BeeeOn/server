@@ -15,7 +15,6 @@ set (CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -DBEEEON_SELECT_POCO")
 add_definitions(-std=c++11)
 
 file(GLOB SOURCES
-	${PROJECT_SOURCE_DIR}/mongoose/MongooseResponse.cpp
 	${PROJECT_SOURCE_DIR}/di/InjectorTarget.cpp
 	${PROJECT_SOURCE_DIR}/di/DependencyInjector.cpp
 	${PROJECT_SOURCE_DIR}/provider/AuthProvider.cpp
@@ -24,7 +23,6 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/provider/GoogleAuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/TypeInfoProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/DeviceInfoProvider.cpp
-	${PROJECT_SOURCE_DIR}/server/MongooseServer.cpp
 	${PROJECT_SOURCE_DIR}/server/SessionCache.cpp
 	${PROJECT_SOURCE_DIR}/server/SessionManager.cpp
 	${PROJECT_SOURCE_DIR}/server/SessionVerifier.cpp
@@ -162,7 +160,6 @@ set(LIBS
 	${POCO_XML}
 	${POCO_DATA}
 	${POCO_SQLITE}
-	mongoose
 )
 
 # Apple's linker doesn't support --whole-archive. Instead it uses -all_load.

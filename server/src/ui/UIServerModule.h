@@ -12,26 +12,7 @@
 #include "service/DeviceService.h"
 #include "util/Loggable.h"
 
-/**
- * Compilation-time configuration of the target underlying
- * HTTP server implementation.
- */
-#if defined(BEEEON_SELECT_MONGOOSE)
-
-/**
- * Use Mongoose server.
- */
-#include "mongoose/MongooseRequest.h"
-#include "mongoose/MongooseResponse.h"
-#include "server/MongooseServer.h"
-#define config_module \
-typedef MongooseRequest UIRequest; \
-typedef MongooseResponse UIResponse; \
-typedef TRestRequestHandlerFactory<UIRequest, UIResponse> \
-	UIServerRequestHandlerFactory; \
-typedef MongooseServer UIRestServer
-
-#elif defined(BEEEON_SELECT_POCO)
+#if defined(BEEEON_SELECT_POCO)
 
 /**
  * Use Poco HTTPServer.

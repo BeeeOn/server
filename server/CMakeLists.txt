@@ -6,9 +6,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../lib/modules)
 set (CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -pedantic -Wall -lpthread -ggdb3")
 add_definitions(-std=c++11)
 
-add_subdirectory(lib/mongoose)
-include_directories(lib/mongoose)
-
 if(DEFINED ENV{GIT_ID})
 	set (GIT_ID $ENV{GIT_ID})
 else()

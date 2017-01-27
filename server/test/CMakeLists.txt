@@ -45,7 +45,6 @@ set(LIBS
 	${POCO_JSON}
 	${POCO_XML}
 	${POCO_DATA}
-	mongoose
 	${CPP_UNIT}
 )
 
