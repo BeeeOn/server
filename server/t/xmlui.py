@@ -84,7 +84,14 @@ class Connector:
 			raise Exception("unexpected request: " + str(request))
 
 		s.sendall(xml.tostring(root))
-		raw = s.recv(maxlen)
+		raw = b""
+
+		while b"</response>" not in raw:
+			data = s.recv(maxlen)
+			if len(data) == 0:
+				break
+			raw += data
+
 		s.close()
 
 		result = xml.fromstring(raw)

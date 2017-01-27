@@ -33,7 +33,6 @@ public:
 	 * Construct 64-bit ID only.
 	 */
 	DeviceID(uint8_t prefix, uint64_t ident);
-	DeviceID(const DeviceID &copy);
 
 	bool isNull() const
 	{

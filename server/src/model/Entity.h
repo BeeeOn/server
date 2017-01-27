@@ -31,6 +31,11 @@ public:
 
 	virtual const std::string toString() const;
 
+	bool operator <(const Entity<TypeID> &e) const
+	{
+		return m_id < e.m_id;
+	}
+
 protected:
 	void setLoaded(bool loaded);
 

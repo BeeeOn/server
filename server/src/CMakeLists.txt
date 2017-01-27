@@ -22,6 +22,8 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/provider/RandomProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/OAuth2AuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/GoogleAuthProvider.cpp
+	${PROJECT_SOURCE_DIR}/provider/TypeInfoProvider.cpp
+	${PROJECT_SOURCE_DIR}/provider/DeviceInfoProvider.cpp
 	${PROJECT_SOURCE_DIR}/server/MongooseServer.cpp
 	${PROJECT_SOURCE_DIR}/server/SessionCache.cpp
 	${PROJECT_SOURCE_DIR}/server/SessionManager.cpp
@@ -39,6 +41,9 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/LegacyGateway.cpp
 	${PROJECT_SOURCE_DIR}/model/Device.cpp
 	${PROJECT_SOURCE_DIR}/model/Location.cpp
+	${PROJECT_SOURCE_DIR}/model/TypeInfo.cpp
+	${PROJECT_SOURCE_DIR}/model/ModuleInfo.cpp
+	${PROJECT_SOURCE_DIR}/model/DeviceInfo.cpp
 	${PROJECT_SOURCE_DIR}/dao/UserDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/DeviceDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/GatewayDao.cpp
@@ -78,6 +83,9 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/policy/DefaultAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/util/DAMM.cpp
 	${PROJECT_SOURCE_DIR}/util/SecureXmlParser.cpp
+	${PROJECT_SOURCE_DIR}/util/SAXHelper.cpp
+	${PROJECT_SOURCE_DIR}/util/TypesSAXHandler.cpp
+	${PROJECT_SOURCE_DIR}/util/DevicesSAXHandler.cpp
 	${PROJECT_SOURCE_DIR}/util/Template.cpp
 	${PROJECT_SOURCE_DIR}/util/Occasionally.cpp
 	${PROJECT_SOURCE_DIR}/util/Startup.cpp

@@ -37,11 +37,6 @@ DeviceID::DeviceID(uint8_t prefix, uint64_t ident)
 	m_value |= ident;
 }
 
-DeviceID::DeviceID(const DeviceID &copy):
-	m_value(copy.m_value)
-{
-}
-
 DeviceID DeviceID::parse(const string &s)
 {
 	unsigned long long v;

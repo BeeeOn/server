@@ -54,20 +54,92 @@ class TestDeviceGet(unittest.TestCase):
 		self.assertIsNotNone(e.get("locationid", None))
 
 	def assertKnownDevice(self, e, gatewayId = None):
-		name = e.get("name")
+		id = e.get("euid")
 		self.assertDeviceIsComplete(e)
 
 		if gatewayId is not None:
 			self.assertEqual(gatewayId, e.get("gateid"))
 
-		if name in ["Temperature", "Multi-sensor"]:
+		if id == "0x4135d00019f5234e":
+			self.assertEqual("Temperature", e.get("name"))
 			self.assertEqual("1", e.get("init"))
 			self.assertEqual("unavailable", e.get("status"))
-		elif name == "Humidity":
+			self.assertEqual("0", e.get("type"))
+		elif id == "0x432d27aa5e94ecfd":
+			self.assertEqual("Multi-sensor", e.get("name"))
+			self.assertEqual("1", e.get("init"))
+			self.assertEqual("unavailable", e.get("status"))
+			self.assertEqual("3", e.get("type"))
+		elif id == "0x427e0f7f0302324d":
+			self.assertEqual("Humidity", e.get("name"))
 			self.assertEqual("available", e.get("status"))
-		elif name == "Unknown":
+			self.assertEqual("0", e.get("type"))
+		elif id == "0x4471959aad24618e":
+			self.assertEqual("Unknown", e.get("name"))
 			self.assertEqual("0", e.get("init"))
 			self.assertEqual("available", e.get("status"))
+			self.assertEqual("4", e.get("type"))
+		else:
+			self.assertTrue(False, "unknown device: %s", (element))
+
+	def assertKnownModules(self, e):
+		id = e.get("euid")
+
+		if id == "0x4135d00019f5234e":
+			self.assertEqual("Temperature", e.get("name"))
+			self.assertEqual(6, len(e))
+
+			for i in range(len(e)):
+				self.assertEqual(str(i), e[i].get("id"))
+
+			self.assertEqual("2", e[0].get("type"))
+			self.assertEqual("2", e[1].get("type"))
+			self.assertEqual("3", e[2].get("type"))
+			self.assertEqual("8", e[3].get("type"))
+			self.assertEqual("9", e[4].get("type"))
+			self.assertEqual("10", e[5].get("type"))
+
+		elif id == "0x432d27aa5e94ecfd":
+			self.assertEqual("Multi-sensor", e.get("name"))
+
+			for i in range(len(e)):
+				self.assertEqual(str(i), e[i].get("id"))
+
+			self.assertEqual("2", e[0].get("type"))
+			self.assertEqual("3", e[1].get("type"))
+			self.assertEqual("6", e[2].get("type"))
+
+		elif id == "0x427e0f7f0302324d":
+			self.assertEqual("Humidity", e.get("name"))
+			self.assertEqual(6, len(e))
+
+			for i in range(len(e)):
+				self.assertEqual(str(i), e[i].get("id"))
+
+			self.assertEqual("2", e[0].get("type"))
+			self.assertEqual("2", e[1].get("type"))
+			self.assertEqual("3", e[2].get("type"))
+			self.assertEqual("8", e[3].get("type"))
+			self.assertEqual("9", e[4].get("type"))
+			self.assertEqual("10", e[5].get("type"))
+
+		elif id == "0x4471959aad24618e":
+			self.assertEqual("Unknown", e.get("name"))
+			self.assertEqual(9, len(e))
+
+			for i in range(len(e)):
+				self.assertEqual(str(i), e[i].get("id"))
+
+			self.assertEqual("2", e[0].get("type"))
+			self.assertEqual("3", e[1].get("type"))
+			self.assertEqual("6", e[2].get("type"))
+			self.assertEqual("2", e[3].get("type"))
+			self.assertEqual("3", e[4].get("type"))
+			self.assertEqual("6", e[5].get("type"))
+			self.assertEqual("2", e[6].get("type"))
+			self.assertEqual("3", e[7].get("type"))
+			self.assertEqual("6", e[8].get("type"))
+
 		else:
 			self.assertTrue(False, "unknown device: %s", (element))
 
@@ -98,6 +170,7 @@ class TestDeviceGet(unittest.TestCase):
 
 		for e in response.root:
 			self.assertKnownDevice(e, config.gateway_id)
+			self.assertKnownModules(e)
 
 	"""
 	Get all inactive devices, i.e. devices discovered by a gateway.
@@ -118,6 +191,7 @@ class TestDeviceGet(unittest.TestCase):
 
 		self.assertEqual("Unknown", e.get("name"))
 		self.assertKnownDevice(e, config.gateway_id)
+		self.assertKnownModules(e)
 
 	"""
 	Ask for devices with invalid EUID. Parsing should fail for
@@ -210,6 +284,7 @@ class TestDeviceGet(unittest.TestCase):
 		self.assertEqual(euid, e.get("euid"))
 		self.assertEqual("Unknown", e.get("name"))
 		self.assertKnownDevice(e, config.gateway_id)
+		self.assertKnownModules(e)
 
 	"""
 	Test we can get many devices selectively by get command
@@ -242,9 +317,10 @@ class TestDeviceGet(unittest.TestCase):
 		self.assertEqual(euids[2], response.root[0].get("euid"))
 		self.assertEqual(euids[0], response.root[1].get("euid"))
 		self.assertEqual(euids[1], response.root[2].get("euid"))
-		self.assertKnownDevice(response.root[0], config.gateway_id)
-		self.assertKnownDevice(response.root[1], config.gateway_id)
-		self.assertKnownDevice(response.root[2], config.gateway_id)
+
+		for i in range(3):
+			self.assertKnownDevice(response.root[i], config.gateway_id)
+			self.assertKnownModules(response.root[i])
 
 	"""
 	Test we can get many devices selectively by get command where
@@ -279,9 +355,10 @@ class TestDeviceGet(unittest.TestCase):
 		self.assertEqual(euids[2], response.root[0].get("euid"))
 		self.assertEqual(euids[1], response.root[1].get("euid"))
 		self.assertEqual(euids[1], response.root[2].get("euid"))
-		self.assertKnownDevice(response.root[0], config.gateway_id)
-		self.assertKnownDevice(response.root[1], config.gateway_id)
-		self.assertKnownDevice(response.root[2], config.gateway_id)
+
+		for i in range(3):
+			self.assertKnownDevice(response.root[i], config.gateway_id)
+			self.assertKnownModules(response.root[i])
 
 if __name__ == '__main__':
 	import sys

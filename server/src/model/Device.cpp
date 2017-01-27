@@ -45,12 +45,12 @@ const string &Device::name() const
 	return m_name;
 }
 
-void Device::setType(const unsigned int type)
+void Device::setType(const SharedPtr<DeviceInfo> type)
 {
 	m_type = type;
 }
 
-unsigned int Device::type() const
+const SharedPtr<DeviceInfo> Device::type() const
 {
 	return m_type;
 }

@@ -26,13 +26,38 @@ using percent = Poco::Util::Units::Values::percent;
 
 BEEEON_OBJECT(PocoSQLDeviceDao, BeeeOn::PocoSQLDeviceDao)
 
-PocoSQLDeviceDao::PocoSQLDeviceDao()
+PocoSQLDeviceDao::PocoSQLDeviceDao():
+	m_infoProvider(&NullInfoProvider<DeviceInfo>::instance())
 {
+	injector<PocoSQLDeviceDao, InfoProvider<DeviceInfo>>(
+		"deviceInfoProvider",
+		&PocoSQLDeviceDao::setDeviceInfoProvider
+	);
+
 	registerQuery(m_queryInsert);
 	registerQuery(m_queryUpdate);
 	registerQuery(m_queryFetchFromGateway);
 	registerQuery(m_queryFetchActiveBy);
 	registerQuery(m_queryFetchInactiveBy);
+}
+
+void PocoSQLDeviceDao::setDeviceInfoProvider(InfoProvider<DeviceInfo> *provider)
+{
+	m_infoProvider = provider == NULL?
+		&NullInfoProvider<DeviceInfo>::instance() : provider;
+}
+
+void PocoSQLDeviceDao::assertTypeValid(const Device &device)
+{
+	if (device.type().isNull()) {
+		throw InvalidArgumentException("missing device type for: "
+				+ device.id().toString());
+	}
+
+	if (m_infoProvider->findById(device.type()->id()).isNull()) {
+		throw InvalidArgumentException("unrecognized device type: "
+				+ device.type()->id().toString());
+	}
 }
 
 bool PocoSQLDeviceDao::insert(Device &device, const Gateway &gateway)
@@ -48,7 +73,10 @@ bool PocoSQLDeviceDao::insert(Device &device, const Gateway &gateway)
 		locationID = device.location().id().toString();
 
 	string name = device.name();
-	unsigned int type = device.type();
+
+	assertTypeValid(device);
+
+	unsigned int type = device.type()->id();
 	unsigned int refresh = device.refresh().totalSeconds();
 
 	Nullable<unsigned int> battery;
@@ -96,7 +124,10 @@ bool PocoSQLDeviceDao::update(Device &device, const Gateway &gateway)
 		locationID = device.location().id().toString();
 
 	string name = device.name();
-	unsigned int type = device.type();
+
+	assertTypeValid(device);
+
+	unsigned int type = device.type()->id();
 	unsigned int refresh = device.refresh().totalSeconds();
 
 	Nullable<unsigned int> battery;
@@ -143,7 +174,7 @@ bool PocoSQLDeviceDao::fetch(Device &device, const Gateway &gateway)
 		return false;
 
 	RecordSet result(sql);
-	return parseSingle(result, device, gateway);
+	return parseSingle(result, device, gateway, *m_infoProvider);
 }
 
 void PocoSQLDeviceDao::fetchMany(std::list<Device> &devices)
@@ -172,7 +203,7 @@ void PocoSQLDeviceDao::fetchMany(std::list<Device> &devices)
 		}
 
 		RecordSet result(sql);
-		if (!parseSingle(result, device, device.gateway())) {
+		if (!parseSingle(result, device, device.gateway(), *m_infoProvider)) {
 			it = devices.erase(it);
 			continue;
 		}
@@ -195,7 +226,7 @@ void PocoSQLDeviceDao::fetchActiveBy(std::vector<Device> &devices,
 
 	execute(sql);
 	RecordSet result(sql);
-	return parseMany(result, devices, gateway);
+	return parseMany(result, devices, gateway, *m_infoProvider);
 }
 
 void PocoSQLDeviceDao::fetchInactiveBy(std::vector<Device> &devices, const Gateway &gateway)
@@ -210,20 +241,22 @@ void PocoSQLDeviceDao::fetchInactiveBy(std::vector<Device> &devices, const Gatew
 
 	execute(sql);
 	RecordSet result(sql);
-	return parseMany(result, devices, gateway);
+	return parseMany(result, devices, gateway, *m_infoProvider);
 }
 
 bool PocoSQLDeviceDao::parseSingle(RecordSet &result, Device &device,
-		const Gateway &gateway, const string &prefix)
+		const Gateway &gateway, const InfoProvider<DeviceInfo> &provider,
+		const string &prefix)
 {
 	if (result.begin() == result.end())
 		return false;
 
-	return parseSingle(*result.begin(), device, gateway, prefix);
+	return parseSingle(*result.begin(), device, gateway, provider, prefix);
 }
 
 bool PocoSQLDeviceDao::parseSingle(Row &result, Device &device,
-		const Gateway &gateway, const string &prefix)
+		const Gateway &gateway, const InfoProvider<DeviceInfo> &provider,
+		const string &prefix)
 {
 	if (hasColumn(result, prefix + "id"))
 		device.setId(DeviceID::parse(result[prefix + "id"]));
@@ -235,7 +268,7 @@ bool PocoSQLDeviceDao::parseSingle(Row &result, Device &device,
 		device.setLocation(location);
 
 	device.setName(result[prefix + "name"]);
-	device.setType(result[prefix + "type"]);
+	device.setType(provider.findById(DeviceInfoID::parse(result[prefix + "type"])));
 	device.setRefresh(result[prefix + "refresh"].convert<unsigned int>());
 	device.setBattery(whenNull(result[prefix + "battery"], 0));
 	device.setSignal(whenNull(result[prefix + "signal"], 0));
