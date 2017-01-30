@@ -35,27 +35,17 @@
 			</sql>
 		</setup>
 		<setup name="global devices for test">
-			<!-- Test Device A on Test Gateway 1 (inactive) -->
 			<sql>INSERT INTO devices (
 					id, gateway_id, location_id, name, type, refresh, battery,
 					signal, first_seen, last_seen, active_since)
-				VALUES (
-					2731287621, 181462068183316, NULL, 'Test Device A', 0, 5, 95,
-					80, 1483416275, 1483448120, NULL)</sql>
-			<!-- Test Device B on Test Gateway 1 (active) -->
-			<sql>INSERT INTO devices (
-					id, gateway_id, location_id, name, type, refresh, battery,
-					signal, first_seen, last_seen, active_since)
-				VALUES (
-					2728733371, 181462068183316, NULL, 'Test Device B', 0, 15, NULL,
-					NULL, 1483424265, 1483453120, 1483434265)</sql>
-			<!-- Test Device C on Test Gateway 1 (active) -->
-			<sql>INSERT INTO devices (
-					id, gateway_id, location_id, name, type, refresh, battery,
-					signal, first_seen, last_seen, active_since)
-				VALUES (
-					2751463465, 181462068183316, NULL, 'Test Device C', 0, 15, NULL,
-					99, 1483422145, 1483541120, 1483444265)</sql>
+			VALUES
+				<!-- Test Device A on Test Gateway 1 (inactive) -->
+				(2731287621, 181462068183316, NULL, 'Test Device A', 0, 5, 95, 80, 1483416275, 1483448120, NULL),
+				<!-- Test Device B on Test Gateway 1 (active) -->
+				(2728733371, 181462068183316, NULL, 'Test Device B', 0, 15, NULL, NULL, 1483424265, 1483453120, 1483434265),
+				<!-- Test Device C on Test Gateway 1 (active) -->
+				(2751463465, 181462068183316, NULL, 'Test Device C', 0, 15, NULL, 99, 1483422145, 1483541120, 1483444265)
+			</sql>
 		</setup>
 		<setup name="global identities and users for tests">
 			<!-- Jack Sparrow -->
