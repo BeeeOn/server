@@ -456,12 +456,13 @@
 		</define>
 		<test name="simple test">
 			<setup name="create locations">
-				<sql>INSERT INTO locations (id, name, gateway_id)
-					VALUES ('0a2000c7-420a-4558-a981-1c67e36c2ee4', 'Test Location 1', 181462068183316)</sql>
-				<sql>INSERT INTO locations (id, name, gateway_id)
-					VALUES ('966d40f3-3967-4a4b-8ad6-40bad688008b', 'Test Location 2', 140548523101825)</sql>
-				<sql>INSERT INTO locations (id, name, gateway_id)
-					VALUES ('dc761ed8-baa3-434a-b5c0-b23a80859efe', 'Test Location 3', 144426044538750)</sql>
+				<sql>
+				INSERT INTO locations (id, name, gateway_id)
+				VALUES
+					('0a2000c7-420a-4558-a981-1c67e36c2ee4', 'Test Location 1', 181462068183316),
+					('966d40f3-3967-4a4b-8ad6-40bad688008b', 'Test Location 2', 140548523101825),
+					('dc761ed8-baa3-434a-b5c0-b23a80859efe', 'Test Location 3', 144426044538750)
+				</sql>
 			</setup>
 			<check name="select 'Test Location 1'">
 				<call-query>
