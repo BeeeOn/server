@@ -86,36 +86,25 @@
 			</sql>
 		</setup>
 		<setup name="global gateway roles for tests">
-			<!-- pepa@example.org is admin (and owner) of Test Gateway 1 -->
-			<sql>INSERT INTO roles_in_gateway (id, gateway_id, identity_id, level, created) VALUES (
-					'faabc96a-12b4-421a-8f4b-00ae1f75c11f',
-					181462068183316,
-					'4264d04a-4a50-4a53-a765-dc5a7cdce6f1',
-					10, 1483456377)</sql>
-			<!-- pepa2@example.org is user of Test Gateway 1 -->
-			<sql>INSERT INTO roles_in_gateway (id, gateway_id, identity_id, level, created) VALUES (
-					'f3733b47-d47c-4fa1-b2ce-2101dfa33ca1',
-					181462068183316,
-					'cd8c611b-7e8a-43ff-8d35-9e92c74f003d',
-					20, 1483456378)</sql>
-			<!-- jack.sparrow@example.org is guest of Test Gateway 1 -->
-			<sql>INSERT INTO roles_in_gateway (id, gateway_id, identity_id, level, created) VALUES (
-					'aee235a1-ac89-4553-b185-d689faeeeee3',
-					181462068183316,
-					'b5696add-11c4-4b51-834a-c14ddd672db4',
-					30, 1483456379)</sql>
-			<!-- franta@example.org is admin (and owner) of Test Gateway 2 -->
-			<sql>INSERT INTO roles_in_gateway (id, gateway_id, identity_id, level, created) VALUES (
-					'e01b65c0-5815-4f5b-a172-1dce164ef3d9',
-					140548523101825,
-					'd184702c-7003-49a7-9ded-4c4fe5d88881',
-					10, 1483456375)</sql>
-			<!-- pepa2@example.org is admin of Test Gateway 2 -->
-			<sql>INSERT INTO roles_in_gateway (id, gateway_id, identity_id, level, created) VALUES (
-					'4564a87e-d3e0-48a7-a29a-1ee0f9b111a1',
-					140548523101825,
-					'cd8c611b-7e8a-43ff-8d35-9e92c74f003d',
-					10, 1483456379)</sql>
+			<sql>
+			INSERT INTO roles_in_gateway (id, gateway_id, identity_id, level, created)
+			VALUES
+				<!-- pepa@example.org is admin (and owner) of Test Gateway 1 -->
+				('faabc96a-12b4-421a-8f4b-00ae1f75c11f', 181462068183316,
+					'4264d04a-4a50-4a53-a765-dc5a7cdce6f1', 10, 1483456377),
+				<!-- pepa2@example.org is user of Test Gateway 1 -->
+				('f3733b47-d47c-4fa1-b2ce-2101dfa33ca1', 181462068183316,
+					'cd8c611b-7e8a-43ff-8d35-9e92c74f003d', 20, 1483456378),
+				<!-- jack.sparrow@example.org is guest of Test Gateway 1 -->
+				('aee235a1-ac89-4553-b185-d689faeeeee3', 181462068183316,
+					'b5696add-11c4-4b51-834a-c14ddd672db4', 30, 1483456379),
+				<!-- franta@example.org is admin (and owner) of Test Gateway 2 -->
+				('e01b65c0-5815-4f5b-a172-1dce164ef3d9', 140548523101825,
+					'd184702c-7003-49a7-9ded-4c4fe5d88881', 10, 1483456375),
+				<!-- pepa2@example.org is admin of Test Gateway 2 -->
+				('4564a87e-d3e0-48a7-a29a-1ee0f9b111a1', 140548523101825,
+					'cd8c611b-7e8a-43ff-8d35-9e92c74f003d', 10, 1483456379)
+			</sql>
 		</setup>
 		<teardown name="delete global gateway roles">
 			<sql>DELETE FROM roles_in_gateway WHERE id = '4564a87e-d3e0-48a7-a29a-1ee0f9b111a1'</sql>
