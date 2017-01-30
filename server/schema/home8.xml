@@ -22,6 +22,59 @@
 			<ref>at</ref>
 		</primary-key>
 		<foreign-key table="gateways" local="gateway_id" remote="id" />
+
+		<triggers>
+			<before event="insert">
+				<!-- test whether the insert brings something new in -->
+				<when>
+					<sql engine="sqlite">
+					(SELECT COUNT(*) FROM gateways_status
+					WHERE
+						at = (SELECT MAX(at) FROM gateways_status
+							WHERE
+								gateway_id = NEW.gateway_id)
+						AND
+						gateway_id = NEW.gateway_id
+						AND
+						version = NEW.version
+						AND
+						ip = NEW.ip
+					) > 0
+					</sql>
+				</when>
+				<execute>
+					<!-- cancel the insert gracefully -->
+					<sql engine="sqlite">
+					BEGIN
+						SELECT RAISE(IGNORE);
+					END</sql>
+					<!-- insert if it brings something new in -->
+					<sql engine="postgre">
+					DECLARE
+						count integer;
+					BEGIN
+						SELECT COUNT(*) INTO count FROM gateways_status
+						WHERE
+							at = (SELECT MAX(at) FROM gateways_status
+								WHERE
+									gateway_id = NEW.gateway_id)
+							AND
+							gateway_id = NEW.gateway_id
+							AND
+							version = NEW.version
+							AND
+							ip = NEW.ip;
+
+						IF count > 0 THEN
+							RETURN NULL;
+						END IF;
+
+						RETURN NEW;
+					END
+					</sql>
+				</execute>
+			</before>
+		</triggers>
 	</table>
 
 	<view name="users_of_gateway" base="gateways">
