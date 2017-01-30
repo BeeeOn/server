@@ -37,7 +37,22 @@
 		<x:call-template name="print-name" />
 
 		<x:for-each select="column">
-			<x:value-of select="concat(' | ', '&lt;', @name, '&gt; ', @name)" />
+			<x:variable name="text">
+				<x:value-of select="@name" />
+				<x:text> : </x:text>
+				<x:value-of select="@type" />
+				<x:if test="@size">
+					<x:value-of select="concat('(', @size, ')')" />
+				</x:if>
+				<x:if test="@precision">
+					<x:value-of select="concat('(', @precision)" />
+					<x:if test="@scale">
+						<x:value-of select="concat(', ', @scale)" />
+					</x:if>
+					<x:text>)</x:text>
+				</x:if>
+			</x:variable>
+			<x:value-of select="concat(' | ', '&lt;', @name, '&gt; ', $text)" />
 		</x:for-each>
 
 		<x:text>"&#xA;</x:text>
