@@ -3,148 +3,108 @@
 
 	<test-global>
 		<setup name="global gateways for tests">
-			<!-- Test Gateway 1 -->
-			<sql>INSERT INTO gateways (id, name, altitude, latitude, longitude)
-				VALUES (181462068183316, 'Test Gateway 1', -1.5, 1.5, 11.5)</sql>
-			<sql>INSERT INTO gateways_status (gateway_id, at, version, ip)
-				VALUES (181462068183316, 1483414300, '0.9-master', '192.168.12.1')</sql>
-			<sql>INSERT INTO gateways_status (gateway_id, at, version, ip)
-				VALUES (181462068183316, 1483448120, '1.0-testing', '192.168.12.1')</sql>
-			<sql>INSERT INTO gateways_status (gateway_id, at, version, ip)
-				VALUES (181462068183316, 1483553208, '1.0-testing', '192.168.12.2')</sql>
-			<!-- Test Gateway 2 -->
-			<sql>INSERT INTO gateways (id, name, altitude, latitude, longitude)
-				VALUES (140548523101825, 'Test Gateway 2', -2.5, 2.5, 22.5)</sql>
-			<sql>INSERT INTO gateways_status (gateway_id, at, version, ip)
-				VALUES (140548523101825, 1483454300, '1.0-master', '192.168.11.1')</sql>
-			<!-- unused gateway Test Gateway 3 with no status -->
-			<sql>INSERT INTO gateways (id, name, altitude, latitude, longitude)
-				VALUES (144426044538750, 'Test Gateway 3', -3.5, 3.5, 33.5)</sql>
+			<sql>
+			INSERT INTO gateways (id, name, altitude, latitude, longitude)
+			VALUES
+				(181462068183316, 'Test Gateway 1', -1.5, 1.5, 11.5),
+				(140548523101825, 'Test Gateway 2', -2.5, 2.5, 22.5),
+				<!-- unused gateway Test Gateway 3 with no status -->
+				(144426044538750, 'Test Gateway 3', -3.5, 3.5, 33.5)</sql>
+
+			<sql>
+			INSERT INTO gateways_status (gateway_id, at, version, ip)
+			VALUES
+				<!-- Test Gateway 1 -->
+				(181462068183316, 1483414300, '0.9-master',  '192.168.12.1'),
+				(181462068183316, 1483448120, '1.0-testing', '192.168.12.1'),
+				(181462068183316, 1483553208, '1.0-testing', '192.168.12.2'),
+				<!-- Test Gateway 2 -->
+				(140548523101825, 1483454300, '1.0-master', '192.168.11.1')
+			</sql>
 		</setup>
 		<setup name="global locations for tests">
-			<!-- kitchen of Test Gateway 1 -->
-			<sql>INSERT INTO locations (id, name, gateway_id)
-				VALUES ('f5ad3e17-aa65-4291-8916-1d21cdf6b4bb',
-					'Kitchen',
-					181462068183316)</sql>
-			<!-- livingroom of Test Gateway 1 -->
-			<sql>INSERT INTO locations (id, name, gateway_id)
-				VALUES ('3a91f58e-579e-41f2-a17b-3fb6166abb69',
-					'Livingroom',
-					181462068183316)</sql>
-			<!-- bedroom of Test Gateway 2 -->
-			<sql>INSERT INTO locations (id, name, gateway_id)
-				VALUES ('7a336a66-da55-4bf0-ba37-00461845823b',
-					'Bedroom',
-					140548523101825)</sql>
+			<sql>
+			INSERT INTO locations (id, name, gateway_id)
+			VALUES
+				<!-- kitchen of Test Gateway 1 -->
+				('f5ad3e17-aa65-4291-8916-1d21cdf6b4bb', 'Kitchen', 181462068183316),
+				<!-- livingroom of Test Gateway 1 -->
+				('3a91f58e-579e-41f2-a17b-3fb6166abb69', 'Livingroom', 181462068183316),
+				<!-- bedroom of Test Gateway 2 -->
+				('7a336a66-da55-4bf0-ba37-00461845823b', 'Bedroom', 140548523101825)
+			</sql>
 		</setup>
 		<setup name="global devices for test">
-			<!-- Test Device A on Test Gateway 1 (inactive) -->
 			<sql>INSERT INTO devices (
 					id, gateway_id, location_id, name, type, refresh, battery,
 					signal, first_seen, last_seen, active_since)
-				VALUES (
-					2731287621, 181462068183316, NULL, 'Test Device A', 0, 5, 95,
-					80, 1483416275, 1483448120, NULL)</sql>
-			<!-- Test Device B on Test Gateway 1 (active) -->
-			<sql>INSERT INTO devices (
-					id, gateway_id, location_id, name, type, refresh, battery,
-					signal, first_seen, last_seen, active_since)
-				VALUES (
-					2728733371, 181462068183316, NULL, 'Test Device B', 0, 15, NULL,
-					NULL, 1483424265, 1483453120, 1483434265)</sql>
-			<!-- Test Device C on Test Gateway 1 (active) -->
-			<sql>INSERT INTO devices (
-					id, gateway_id, location_id, name, type, refresh, battery,
-					signal, first_seen, last_seen, active_since)
-				VALUES (
-					2751463465, 181462068183316, NULL, 'Test Device C', 0, 15, NULL,
-					99, 1483422145, 1483541120, 1483444265)</sql>
+			VALUES
+				<!-- Test Device A on Test Gateway 1 (inactive) -->
+				(2731287621, 181462068183316, NULL, 'Test Device A', 0, 5, 95, 80, 1483416275, 1483448120, NULL),
+				<!-- Test Device B on Test Gateway 1 (active) -->
+				(2728733371, 181462068183316, NULL, 'Test Device B', 0, 15, NULL, NULL, 1483424265, 1483453120, 1483434265),
+				<!-- Test Device C on Test Gateway 1 (active) -->
+				(2751463465, 181462068183316, NULL, 'Test Device C', 0, 15, NULL, 99, 1483422145, 1483541120, 1483444265)
+			</sql>
 		</setup>
 		<setup name="global identities and users for tests">
-			<!-- Jack Sparrow -->
-			<sql>INSERT INTO identities (id, email) VALUES
-				('b5696add-11c4-4b51-834a-c14ddd672db4', 'jack.sparrow@example.org')</sql>
-			<sql>INSERT INTO users (id, first_name, last_name) VALUES
-				('d67713ff-de75-43c4-917b-88f0048b7ccf', 'Jack', 'Sparrow')</sql>
-			<!-- Franta Kutil -->
-			<sql>INSERT INTO identities (id, email) VALUES
-				('d184702c-7003-49a7-9ded-4c4fe5d88881', 'franta@example.org')</sql>
-			<sql>INSERT INTO identities (id, email) VALUES
-				('aeec55a1-b8f5-4ae8-b8a9-1a35781b01d1', 'franta2@example.org')</sql>
-			<sql>INSERT INTO users (id, first_name, last_name) VALUES
-				('014ca448-26d7-4051-ad11-8c9e37343f0d', 'Franta', 'Kutil')</sql>
-			<!-- Pepa Goodman -->
-			<sql>INSERT INTO identities (id, email) VALUES
-				('4264d04a-4a50-4a53-a765-dc5a7cdce6f1', 'pepa@example.org')</sql>
-			<sql>INSERT INTO identities (id, email) VALUES
-				('cd8c611b-7e8a-43ff-8d35-9e92c74f003d', 'pepa2@example.org')</sql>
-			<sql>INSERT INTO identities (id, email) VALUES
-				('2c663e6b-d995-44f1-bc41-f8b12b2acbc2', 'pepa_nonverified@example.org')</sql>
-			<sql>INSERT INTO users (id, first_name, last_name) VALUES
-				('29d214d4-2057-4e06-b003-b839d0bb1df6', 'Pepa', 'Goodman')</sql>
+			<sql>
+			INSERT INTO identities (id, email)
+			VALUES
+				('b5696add-11c4-4b51-834a-c14ddd672db4', 'jack.sparrow@example.org'),
+				('d184702c-7003-49a7-9ded-4c4fe5d88881', 'franta@example.org'),
+				('aeec55a1-b8f5-4ae8-b8a9-1a35781b01d1', 'franta2@example.org'),
+				('4264d04a-4a50-4a53-a765-dc5a7cdce6f1', 'pepa@example.org'),
+				('cd8c611b-7e8a-43ff-8d35-9e92c74f003d', 'pepa2@example.org'),
+				('2c663e6b-d995-44f1-bc41-f8b12b2acbc2', 'pepa_nonverified@example.org')
+			</sql>
+			<sql>
+			INSERT INTO users (id, first_name, last_name)
+			VALUES
+				('d67713ff-de75-43c4-917b-88f0048b7ccf', 'Jack', 'Sparrow'),
+				('014ca448-26d7-4051-ad11-8c9e37343f0d', 'Franta', 'Kutil'),
+				('29d214d4-2057-4e06-b003-b839d0bb1df6', 'Pepa', 'Goodman')
+			</sql>
 		</setup>
 		<setup name="global verified identities for tests">
-			<!-- Jack Sparrow -->
-			<sql>INSERT INTO verified_identities (id, identity_id, user_id, provider) VALUES (
-					'b6e70e5a-dccd-4898-8c17-114160a808c6',
-					'b5696add-11c4-4b51-834a-c14ddd672db4',
-					'd67713ff-de75-43c4-917b-88f0048b7ccf',
-					'test')</sql>
-			<!-- Franta Kutil -->
-			<sql>INSERT INTO verified_identities (id, identity_id, user_id, provider) VALUES (
-					'a08909d5-0d59-4605-b1cb-99d9d813f657',
-					'd184702c-7003-49a7-9ded-4c4fe5d88881',
-					'014ca448-26d7-4051-ad11-8c9e37343f0d',
-					'test')</sql>
-			<sql>INSERT INTO verified_identities (id, identity_id, user_id, provider) VALUES (
-					'453ddb82-76ee-437a-b058-64998193a05c',
-					'aeec55a1-b8f5-4ae8-b8a9-1a35781b01d1',
-					'014ca448-26d7-4051-ad11-8c9e37343f0d',
-					'test')</sql>
-			<!-- Pepa Goodman -->
-			<sql>INSERT INTO verified_identities (id, identity_id, user_id, provider) VALUES (
-					'6dc7eeb2-4e7d-48dd-9c6a-5f8738410fa2',
-					'4264d04a-4a50-4a53-a765-dc5a7cdce6f1',
-					'29d214d4-2057-4e06-b003-b839d0bb1df6',
-					'test')</sql>
-			<sql>INSERT INTO verified_identities (id, identity_id, user_id, provider) VALUES (
-					'1d26df6a-c05c-4003-8759-fa8c05e86081',
-					'cd8c611b-7e8a-43ff-8d35-9e92c74f003d',
-					'29d214d4-2057-4e06-b003-b839d0bb1df6',
-					'test')</sql>
+			<sql>
+			INSERT INTO verified_identities (id, identity_id, user_id, provider)
+			VALUES
+				<!-- Jack Sparrow -->
+				('b6e70e5a-dccd-4898-8c17-114160a808c6', 'b5696add-11c4-4b51-834a-c14ddd672db4',
+					'd67713ff-de75-43c4-917b-88f0048b7ccf', 'test'),
+				<!-- Franta Kutil -->
+				('a08909d5-0d59-4605-b1cb-99d9d813f657', 'd184702c-7003-49a7-9ded-4c4fe5d88881',
+					'014ca448-26d7-4051-ad11-8c9e37343f0d', 'test'),
+				('453ddb82-76ee-437a-b058-64998193a05c', 'aeec55a1-b8f5-4ae8-b8a9-1a35781b01d1',
+					'014ca448-26d7-4051-ad11-8c9e37343f0d', 'test'),
+				<!-- Pepa Goodman -->
+				('6dc7eeb2-4e7d-48dd-9c6a-5f8738410fa2', '4264d04a-4a50-4a53-a765-dc5a7cdce6f1',
+					'29d214d4-2057-4e06-b003-b839d0bb1df6', 'test'),
+				('1d26df6a-c05c-4003-8759-fa8c05e86081', 'cd8c611b-7e8a-43ff-8d35-9e92c74f003d',
+					'29d214d4-2057-4e06-b003-b839d0bb1df6', 'test')
+			</sql>
 		</setup>
 		<setup name="global gateway roles for tests">
-			<!-- pepa@example.org is admin (and owner) of Test Gateway 1 -->
-			<sql>INSERT INTO roles_in_gateway (id, gateway_id, identity_id, level, created) VALUES (
-					'faabc96a-12b4-421a-8f4b-00ae1f75c11f',
-					181462068183316,
-					'4264d04a-4a50-4a53-a765-dc5a7cdce6f1',
-					10, 1483456377)</sql>
-			<!-- pepa2@example.org is user of Test Gateway 1 -->
-			<sql>INSERT INTO roles_in_gateway (id, gateway_id, identity_id, level, created) VALUES (
-					'f3733b47-d47c-4fa1-b2ce-2101dfa33ca1',
-					181462068183316,
-					'cd8c611b-7e8a-43ff-8d35-9e92c74f003d',
-					20, 1483456378)</sql>
-			<!-- jack.sparrow@example.org is guest of Test Gateway 1 -->
-			<sql>INSERT INTO roles_in_gateway (id, gateway_id, identity_id, level, created) VALUES (
-					'aee235a1-ac89-4553-b185-d689faeeeee3',
-					181462068183316,
-					'b5696add-11c4-4b51-834a-c14ddd672db4',
-					30, 1483456379)</sql>
-			<!-- franta@example.org is admin (and owner) of Test Gateway 2 -->
-			<sql>INSERT INTO roles_in_gateway (id, gateway_id, identity_id, level, created) VALUES (
-					'e01b65c0-5815-4f5b-a172-1dce164ef3d9',
-					140548523101825,
-					'd184702c-7003-49a7-9ded-4c4fe5d88881',
-					10, 1483456375)</sql>
-			<!-- pepa2@example.org is admin of Test Gateway 2 -->
-			<sql>INSERT INTO roles_in_gateway (id, gateway_id, identity_id, level, created) VALUES (
-					'4564a87e-d3e0-48a7-a29a-1ee0f9b111a1',
-					140548523101825,
-					'cd8c611b-7e8a-43ff-8d35-9e92c74f003d',
-					10, 1483456379)</sql>
+			<sql>
+			INSERT INTO roles_in_gateway (id, gateway_id, identity_id, level, created)
+			VALUES
+				<!-- pepa@example.org is admin (and owner) of Test Gateway 1 -->
+				('faabc96a-12b4-421a-8f4b-00ae1f75c11f', 181462068183316,
+					'4264d04a-4a50-4a53-a765-dc5a7cdce6f1', 10, 1483456377),
+				<!-- pepa2@example.org is user of Test Gateway 1 -->
+				('f3733b47-d47c-4fa1-b2ce-2101dfa33ca1', 181462068183316,
+					'cd8c611b-7e8a-43ff-8d35-9e92c74f003d', 20, 1483456378),
+				<!-- jack.sparrow@example.org is guest of Test Gateway 1 -->
+				('aee235a1-ac89-4553-b185-d689faeeeee3', 181462068183316,
+					'b5696add-11c4-4b51-834a-c14ddd672db4', 30, 1483456379),
+				<!-- franta@example.org is admin (and owner) of Test Gateway 2 -->
+				('e01b65c0-5815-4f5b-a172-1dce164ef3d9', 140548523101825,
+					'd184702c-7003-49a7-9ded-4c4fe5d88881', 10, 1483456375),
+				<!-- pepa2@example.org is admin of Test Gateway 2 -->
+				('4564a87e-d3e0-48a7-a29a-1ee0f9b111a1', 140548523101825,
+					'cd8c611b-7e8a-43ff-8d35-9e92c74f003d', 10, 1483456379)
+			</sql>
 		</setup>
 		<teardown name="delete global gateway roles">
 			<sql>DELETE FROM roles_in_gateway WHERE id = '4564a87e-d3e0-48a7-a29a-1ee0f9b111a1'</sql>
@@ -496,12 +456,13 @@
 		</define>
 		<test name="simple test">
 			<setup name="create locations">
-				<sql>INSERT INTO locations (id, name, gateway_id)
-					VALUES ('0a2000c7-420a-4558-a981-1c67e36c2ee4', 'Test Location 1', 181462068183316)</sql>
-				<sql>INSERT INTO locations (id, name, gateway_id)
-					VALUES ('966d40f3-3967-4a4b-8ad6-40bad688008b', 'Test Location 2', 140548523101825)</sql>
-				<sql>INSERT INTO locations (id, name, gateway_id)
-					VALUES ('dc761ed8-baa3-434a-b5c0-b23a80859efe', 'Test Location 3', 144426044538750)</sql>
+				<sql>
+				INSERT INTO locations (id, name, gateway_id)
+				VALUES
+					('0a2000c7-420a-4558-a981-1c67e36c2ee4', 'Test Location 1', 181462068183316),
+					('966d40f3-3967-4a4b-8ad6-40bad688008b', 'Test Location 2', 140548523101825),
+					('dc761ed8-baa3-434a-b5c0-b23a80859efe', 'Test Location 3', 144426044538750)
+				</sql>
 			</setup>
 			<check name="select 'Test Location 1'">
 				<call-query>
