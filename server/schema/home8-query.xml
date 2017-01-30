@@ -386,6 +386,92 @@
 		</test>
 	</query>
 
+	<query id="gateways_status.insert">
+		<define>
+		INSERT INTO gateways_status (gateway_id, at, version, ip) VALUES (
+				<value name="gateway_id" type="int64" />,
+				<value name="at" type="bigint" />,
+				<value name="version" type="varchar" />,
+				<value name="ip" type="varchar" />)
+		</define>
+		<test name="insert successful">
+			<check name="Test Gateway 1 update version">
+				<call-query>
+					<arg name="gateway_id">181462068183316</arg>
+					<arg name="at">1483555401</arg>
+					<arg name="version">'1.0-production'</arg>
+					<arg name="ip">'192.168.12.2'</arg>
+				</call-query>
+				<sql>SELECT gateway_id, at, version, ip FROM gateways_status
+					WHERE gateway_id = 181462068183316 AND at = 1483555401</sql>
+				<expect>
+					<row>
+						<value name="gateway_id">181462068183316</value>
+						<value name="at">1483555401</value>
+						<value name="version">1.0-production</value>
+						<value name="ip">192.168.12.2</value>
+					</row>
+				</expect>
+			</check>
+			<teardown name="drop updated version status">
+				<sql>DELETE FROM gateways_status WHERE gateway_id = 181462068183316 AND at = 1483555401</sql>
+			</teardown>
+		</test>
+		<test name="insert successful">
+			<check name="Test Gateway 1 update ip">
+				<call-query>
+					<arg name="gateway_id">181462068183316</arg>
+					<arg name="at">1483555401</arg>
+					<arg name="version">'1.0-testing'</arg>
+					<arg name="ip">'10.0.0.1'</arg>
+				</call-query>
+				<sql>SELECT gateway_id, at, version, ip FROM gateways_status
+					WHERE gateway_id = 181462068183316 AND at = 1483555401</sql>
+				<expect>
+					<row>
+						<value name="gateway_id">181462068183316</value>
+						<value name="at">1483555401</value>
+						<value name="version">1.0-testing</value>
+						<value name="ip">10.0.0.1</value>
+					</row>
+				</expect>
+			</check>
+			<teardown name="drop updated version status">
+				<sql>DELETE FROM gateways_status WHERE gateway_id = 181462068183316 AND at = 1483555401</sql>
+			</teardown>
+		</test>
+		<test name="insert ignored">
+			<check name="Test Gateway 1 no real update">
+				<call-query>
+					<arg name="gateway_id">181462068183316</arg>
+					<arg name="at">1483555401</arg>
+					<arg name="version">'1.0-testing'</arg>
+					<arg name="ip">'192.168.12.2'</arg>
+				</call-query>
+				<sql>SELECT gateway_id, at, version, ip FROM gateways_status
+					WHERE gateway_id = 181462068183316 AND at = 1483555401</sql>
+				<expect />
+			</check>
+			<teardown name="drop updated ip status">
+				<sql>DELETE FROM gateways_status WHERE gateway_id = 181462068183316 AND at = 1483555401</sql>
+			</teardown>
+		</test>
+		<test name="insert fails">
+			<check name="Test Gateway 1 update too eerly">
+				<call-query>
+					<arg name="gateway_id">181462068183316</arg>
+					<arg name="at">1483553208</arg>
+					<arg name="version">'1.0-production'</arg>
+					<arg name="ip">'192.168.12.2'</arg>
+				</call-query>
+				<expect>
+					<fail-insert table="gateways_status" conflict="gateway_id, at" />
+				</expect>
+			</check>
+
+		</test>
+	</query>
+
 	<query id="locations.create">
 		<define>INSERT INTO locations (id, name, gateway_id) VALUES (
 				<value name="id" type="uuid" />,
