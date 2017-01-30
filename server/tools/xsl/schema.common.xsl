@@ -300,6 +300,10 @@
 		<x:message terminate="yes">Unexpected element for cascade-dependencies: <x:value-of select="local-name()" /></x:message>
 	</x:template>
 
+	<x:template match="database/table" mode="cascade-name">
+		<entry type="table"><x:value-of select="@name" /></entry>
+	</x:template>
+
 	<x:template match="database/table" mode="cascade-dependencies">
 		<x:for-each select="foreign-key/@table">
 			<dependency><x:value-of select="." /></dependency>
@@ -325,6 +329,10 @@
 		<x:param name="context" />
 
 		<dependency><x:value-of select="." /></dependency>
+	</x:template>
+
+	<x:template match="database/view" mode="cascade-name">
+		<entry type="view"><x:value-of select="@name" /></entry>
 	</x:template>
 
 	<x:template match="database/view" mode="cascade-dependencies">
@@ -407,7 +415,7 @@
 
 				<x:if test="count(s:split(normalize-space($not-visited), ' ')) = 0">
 					<!-- no dependencies, create entry -->
-					<entry type="{local-name($head)}"><x:value-of select="$head/@name" /></entry>
+					<x:apply-templates select="$head" mode="cascade-name" />
 
 					<!-- continue to the next element in the queue -->
 					<x:call-template name="cascade-top">
