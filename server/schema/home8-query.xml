@@ -23,21 +23,16 @@
 			</sql>
 		</setup>
 		<setup name="global locations for tests">
-			<!-- kitchen of Test Gateway 1 -->
-			<sql>INSERT INTO locations (id, name, gateway_id)
-				VALUES ('f5ad3e17-aa65-4291-8916-1d21cdf6b4bb',
-					'Kitchen',
-					181462068183316)</sql>
-			<!-- livingroom of Test Gateway 1 -->
-			<sql>INSERT INTO locations (id, name, gateway_id)
-				VALUES ('3a91f58e-579e-41f2-a17b-3fb6166abb69',
-					'Livingroom',
-					181462068183316)</sql>
-			<!-- bedroom of Test Gateway 2 -->
-			<sql>INSERT INTO locations (id, name, gateway_id)
-				VALUES ('7a336a66-da55-4bf0-ba37-00461845823b',
-					'Bedroom',
-					140548523101825)</sql>
+			<sql>
+			INSERT INTO locations (id, name, gateway_id)
+			VALUES
+				<!-- kitchen of Test Gateway 1 -->
+				('f5ad3e17-aa65-4291-8916-1d21cdf6b4bb', 'Kitchen', 181462068183316),
+				<!-- livingroom of Test Gateway 1 -->
+				('3a91f58e-579e-41f2-a17b-3fb6166abb69', 'Livingroom', 181462068183316),
+				<!-- bedroom of Test Gateway 2 -->
+				('7a336a66-da55-4bf0-ba37-00461845823b', 'Bedroom', 140548523101825)
+			</sql>
 		</setup>
 		<setup name="global devices for test">
 			<!-- Test Device A on Test Gateway 1 (inactive) -->
