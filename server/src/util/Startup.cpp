@@ -270,6 +270,17 @@ static void warnAboutPocoVersion(Logger &logger)
 	}
 }
 
+static void reportVersion(const string &group,
+		const string &name, Logger &logger)
+{
+	const string app(group + "/" + name);
+#ifdef GIT_ID
+	logger.information(app + " " + string("version ") + GIT_ID, __FILE__, __LINE__);
+#else
+	logger.information(app + " out of tree", __FILE__, __LINE__);
+#endif
+}
+
 void ServerStartup::notifyStarted()
 {
 	if (m_notifyPid >= 0) {
@@ -285,6 +296,7 @@ void ServerStartup::notifyStarted()
 
 int ServerStartup::main(const vector<string> &args)
 {
+	reportVersion(m_appGroup, m_appName, logger());
 	logger().notice("Poco library " + pocoVersion() + " (headers " + pocoLinkedVersion() + ")");
 	warnAboutPocoVersion(logger());
 
