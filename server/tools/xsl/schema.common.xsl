@@ -7,6 +7,7 @@
 		version="1.0">
 
 	<x:import href="util.codebase.xsl" />
+	<x:import href="util.sqlgen.xsl" />
 
 	<x:param name="new.line" select="'&#xA;'" />
 
@@ -657,7 +658,9 @@
 	<x:template match="view/sub-query">
 		<x:text>        </x:text>
 		<x:text>(</x:text>
-		<x:value-of select="normalize-space(sql)" />
+		<x:apply-templates select="sql" mode="simple">
+			<x:with-param name="eol" select="''" />
+		</x:apply-templates>
 		<x:text>)</x:text>
 		<x:call-template name="new-line" />
 		<x:text>            </x:text>
