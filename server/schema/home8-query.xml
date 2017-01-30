@@ -3,23 +3,24 @@
 
 	<test-global>
 		<setup name="global gateways for tests">
-			<!-- Test Gateway 1 -->
-			<sql>INSERT INTO gateways (id, name, altitude, latitude, longitude)
-				VALUES (181462068183316, 'Test Gateway 1', -1.5, 1.5, 11.5)</sql>
-			<sql>INSERT INTO gateways_status (gateway_id, at, version, ip)
-				VALUES (181462068183316, 1483414300, '0.9-master', '192.168.12.1')</sql>
-			<sql>INSERT INTO gateways_status (gateway_id, at, version, ip)
-				VALUES (181462068183316, 1483448120, '1.0-testing', '192.168.12.1')</sql>
-			<sql>INSERT INTO gateways_status (gateway_id, at, version, ip)
-				VALUES (181462068183316, 1483553208, '1.0-testing', '192.168.12.2')</sql>
-			<!-- Test Gateway 2 -->
-			<sql>INSERT INTO gateways (id, name, altitude, latitude, longitude)
-				VALUES (140548523101825, 'Test Gateway 2', -2.5, 2.5, 22.5)</sql>
-			<sql>INSERT INTO gateways_status (gateway_id, at, version, ip)
-				VALUES (140548523101825, 1483454300, '1.0-master', '192.168.11.1')</sql>
-			<!-- unused gateway Test Gateway 3 with no status -->
-			<sql>INSERT INTO gateways (id, name, altitude, latitude, longitude)
-				VALUES (144426044538750, 'Test Gateway 3', -3.5, 3.5, 33.5)</sql>
+			<sql>
+			INSERT INTO gateways (id, name, altitude, latitude, longitude)
+			VALUES
+				(181462068183316, 'Test Gateway 1', -1.5, 1.5, 11.5),
+				(140548523101825, 'Test Gateway 2', -2.5, 2.5, 22.5),
+				<!-- unused gateway Test Gateway 3 with no status -->
+				(144426044538750, 'Test Gateway 3', -3.5, 3.5, 33.5)</sql>
+
+			<sql>
+			INSERT INTO gateways_status (gateway_id, at, version, ip)
+			VALUES
+				<!-- Test Gateway 1 -->
+				(181462068183316, 1483414300, '0.9-master',  '192.168.12.1'),
+				(181462068183316, 1483448120, '1.0-testing', '192.168.12.1'),
+				(181462068183316, 1483553208, '1.0-testing', '192.168.12.2'),
+				<!-- Test Gateway 2 -->
+				(140548523101825, 1483454300, '1.0-master', '192.168.11.1')
+			</sql>
 		</setup>
 		<setup name="global locations for tests">
 			<!-- kitchen of Test Gateway 1 -->
