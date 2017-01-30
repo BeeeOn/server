@@ -4,7 +4,7 @@
                 extension-element-prefixes="c"
 		version="1.0">
 
-	<x:import href="query.sql.xsl" />
+	<x:import href="util.sqlgen.xsl" />
 
 	<x:param name="engine" select="'unknown'" />
 	<x:param name="new.line" select="'&#xA;'" />
