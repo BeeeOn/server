@@ -24,12 +24,26 @@
 			</x:with-param>
 			<x:with-param name="eol" select="$new.line" />
 		</x:call-template>
+
+		<x:call-template name="remove-cr-lf">
+			<x:with-param name="text">
+				<x:apply-templates select="triggers" />
+			</x:with-param>
+			<x:with-param name="eol" select="$new.line" />
+		</x:call-template>
 	</x:template>
 
 	<x:template match="database/view">
 		<x:call-template name="remove-cr-lf">
 			<x:with-param name="text">
 				<x:call-template name="create-view" />
+			</x:with-param>
+			<x:with-param name="eol" select="$new.line" />
+		</x:call-template>
+
+		<x:call-template name="remove-cr-lf">
+			<x:with-param name="text">
+				<x:apply-templates select="triggers" />
 			</x:with-param>
 			<x:with-param name="eol" select="$new.line" />
 		</x:call-template>

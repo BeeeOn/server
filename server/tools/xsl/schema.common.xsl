@@ -244,6 +244,36 @@
 		</x:if>
 	</x:template>
 
+	<x:template name="print-trigger-name">
+		<x:param name="context" select="." />
+
+		<x:variable name="name" select="$context/@name" />
+		<x:variable name="event" select="$context/@event" />
+		<x:variable name="local.name" select="local-name($context)" />
+		<x:variable name="table.name" select="$context/../../@name" />
+		<x:choose>
+			<x:when test="$name">
+				<x:value-of select="concat(
+					$table.name, '_trigger_', $name)" />
+			</x:when>
+			<x:when test="$local.name = 'before'">
+				<x:value-of select="concat(
+					$table.name, '_trigger_before_', $event)" />
+			</x:when>
+			<x:when test="$local.name = 'after'">
+				<x:value-of select="concat(
+					$table.name, '_trigger_after_', $event)" />
+			</x:when>
+			<x:when test="$local.name = 'instead-of'">
+				<x:value-of select="concat(
+					$table.name, '_trigger_instead_of_', $event)" />
+			</x:when>
+			<x:otherwise>
+				<x:message terminate="yes">Unsupported type of trigger: <x:value-of select="$local.name" /></x:message>
+			</x:otherwise>
+		</x:choose>
+	</x:template>
+
 	<x:template name="if-not-last">
 		<x:param name="text" />
 
@@ -362,6 +392,37 @@
 		</x:call-template>
 	</x:template>
 
+	<x:template match="database/*/triggers/*" mode="cascade-name">
+		<entry type="trigger" table="{../../@name}"><x:call-template name="print-trigger-name" /></entry>
+	</x:template>
+
+	<x:template match="database/*/triggers/*" mode="cascade-dependencies">
+		<dependency><x:value-of select="../../@name" /></dependency>
+
+		<x:for-each select="when|execute">
+			<x:call-template name="extract-table-and-view-names">
+				<x:with-param name="text" select="sql[not(@engine) or @engine=$engine]" />
+			</x:call-template>
+		</x:for-each>
+	</x:template>
+
+	<x:template name="sql-drop-trigger">
+		<x:param name="table" />
+		<x:param name="name" />
+
+		<x:text>DROP TRIGGER IF EXISTS </x:text>
+		<x:value-of select="$name" />
+		<x:text>;</x:text>
+		<x:call-template name="new-line" />
+	</x:template>
+
+	<x:template match="entry[@type='trigger']" mode="drop">
+		<x:call-template name="sql-drop-trigger">
+			<x:with-param name="table" select="@table" />
+			<x:with-param name="name" select="." />
+		</x:call-template>
+	</x:template>
+
 	<x:template match="entry" mode="drop">
 		<x:message terminate="yes">Unexpected entry in drop: <x:value-of select="." /></x:message>
 	</x:template>
@@ -456,10 +517,10 @@
 		</x:if>
 	</x:template>
 
-	<x:template name="drop-tables-and-views">
+	<x:template name="drop-tables-views-and-triggers">
 		<x:variable name="result-data">
 			<x:call-template name="cascade-top">
-				<x:with-param name="elements" select="/database/table|/database/view" />
+				<x:with-param name="elements" select="/database/table|/database/view|/database/*/triggers/*" />
 			</x:call-template>
 		</x:variable>
 
@@ -537,7 +598,7 @@
 					<x:apply-templates select="." />
 				</c:document>
 				<c:document href="{@name}{$suffix}-cleanup.sql" method="text" encoding="utf-8">
-					<x:call-template name="drop-tables-and-views" />
+					<x:call-template name="drop-tables-views-and-triggers" />
 				</c:document>
 			</x:when>
 			<x:otherwise>
@@ -549,7 +610,7 @@
 
 	<x:template match="database">
 		<x:call-template name="print-header" />
-		<x:call-template name="drop-tables-and-views" />
+		<x:call-template name="drop-tables-views-and-triggers" />
 		<x:call-template name="new-line" />
 		<x:apply-templates select="table" />
 		<x:apply-templates select="view" />
@@ -568,6 +629,8 @@
 	<x:template match="database/table">
 		<x:call-template name="create-table" />
 		<x:call-template name="new-line" />
+
+		<x:apply-templates select="triggers" />
 	</x:template>
 
 	<x:template match="database/table/column">
@@ -626,6 +689,10 @@
 		<x:call-template name="comma-if-not-last-eol" />
 	</x:template>
 
+	<x:template match="table/triggers">
+		<x:call-template name="create-triggers" />
+	</x:template>
+
 	<x:template name="create-view">
 		<x:text>CREATE VIEW </x:text>
 		<x:call-template name="print-name" />
@@ -652,6 +719,8 @@
 	<x:template match="database/view">
 		<x:call-template name="create-view" />
 		<x:call-template name="new-line" />
+
+		<x:apply-templates select="triggers" />
 	</x:template>
 
 	<x:template match="view/map">
@@ -705,6 +774,104 @@
 		<x:call-template name="view-join">
 			<x:with-param name="base" select="../@base" />
 		</x:call-template>
+	</x:template>
+
+	<x:template match="view/triggers">
+		<x:call-template name="create-triggers" />
+	</x:template>
+
+	<x:template name="create-triggers">
+		<x:for-each select="before|after|instead-of">
+			<x:call-template name="create-trigger" />
+		</x:for-each>
+		<x:call-template name="new-line" />
+	</x:template>
+
+	<x:template name="create-trigger">
+		<x:call-template name="prepare-trigger" />
+		<x:text>CREATE TRIGGER IF NOT EXISTS </x:text>
+		<x:call-template name="print-trigger-name" />
+		<x:call-template name="new-line" />
+		<x:apply-templates select="." />
+	</x:template>
+
+	<x:template name="prepare-trigger">
+	</x:template>
+
+	<x:template match="triggers/*[@event = 'insert']" mode="event">
+		<x:text>INSERT</x:text>
+	</x:template>
+
+	<x:template match="triggers/*[@event = 'update']" mode="event">
+		<x:text>UPDATE</x:text>
+
+		<x:for-each select="s:split(@of, ' ')">
+			<x:value-of select="." />
+			<x:call-template name="comma-if-not-last" />
+		</x:for-each>
+	</x:template>
+
+	<x:template match="triggers/*[@event = 'delete']" mode="event">
+		<x:text>DELETE</x:text>
+	</x:template>
+
+	<x:template name="for-each-row-trigger">
+		<x:text>FOR EACH ROW</x:text>
+	</x:template>
+
+	<x:template name="for-each-statement-trigger" />
+
+	<x:template match="triggers/*" mode="for-each">
+		<x:text> </x:text>
+		<x:if test="@for-each = 'row' or not(@for-each)">
+			<x:call-template name="for-each-row-trigger" />
+		</x:if>
+		<x:if test="@for-each = 'statement'">
+			<x:call-template name="for-each-statement-trigger" />
+		</x:if>
+	</x:template>
+
+	<x:template name="on-execute-trigger">
+		<x:text>ON </x:text>
+		<x:value-of select="../../@name" />
+		<x:apply-templates select="." mode="for-each" />
+		<x:call-template name="new-line" />
+		<x:apply-templates select="when" />
+		<x:apply-templates select="execute" />
+	</x:template>
+
+	<x:template match="triggers/before">
+		<x:text>BEFORE </x:text>
+		<x:apply-templates select="." mode="event" />
+		<x:text> </x:text>
+		<x:call-template name="on-execute-trigger" />
+	</x:template>
+
+	<x:template match="triggers/after">
+		<x:text>AFTER </x:text>
+		<x:apply-templates select="." mode="event" />
+		<x:text> </x:text>
+		<x:call-template name="on-execute-trigger" />
+	</x:template>
+
+	<x:template match="triggers/instead-of">
+		<x:text>INSTEAD OF </x:text>
+		<x:apply-templates select="." mode="event" />
+		<x:text> </x:text>
+		<x:call-template name="on-execute-trigger" />
+	</x:template>
+
+	<x:template match="triggers/*/when">
+		<x:if test="sql[not(@engine) or @engine=$engine]">
+			<x:text>WHEN </x:text>
+			<x:apply-templates select="sql" mode="simple">
+				<x:with-param name="eol" select="$new.line" />
+			</x:apply-templates>
+		</x:if>
+	</x:template>
+
+	<x:template match="triggers/*/execute">
+		<x:apply-templates select="sql" mode="simple" />
 	</x:template>
 
 </x:stylesheet>
