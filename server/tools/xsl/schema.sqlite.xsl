@@ -6,6 +6,8 @@
 
 	<x:output method="text" />
 
+	<x:param name="engine" select="'sqlite'" />
+
 	<x:template name="print-type">
 		<x:call-template name="assert-has-type" />
 
