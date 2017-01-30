@@ -5,6 +5,8 @@
 	<x:param name="engine" select="'unknown'" />
 
 	<x:template match="sql" mode="simple">
+		<x:param name="eol" select="';&#xA;'" />
+
 		<x:if test="not(@engine) or $engine = @engine">
 			<x:choose>
 				<x:when test="@normalize = 'disable'">
@@ -14,7 +16,7 @@
 					<x:value-of select="normalize-space(.)" />
 				</x:otherwise>
 			</x:choose>
-			<x:text>;&#xA;</x:text>
+			<x:value-of select="$eol" />
 		</x:if>
 	</x:template>
 
