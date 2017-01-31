@@ -4,8 +4,6 @@
 		extension-element-prefixes="s"
 		version="1.0">
 
-	<x:import href="schema.common.xsl" />
-
 	<x:param name="new.line" select="'&#xD;&#xA;'" />
 
 	<x:template name="remove-cr-lf">
