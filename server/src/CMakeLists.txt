@@ -87,6 +87,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/policy/LocationAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/DeviceAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/RoleAccessPolicy.cpp
+	${PROJECT_SOURCE_DIR}/policy/SensorHistoryAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/DefaultAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/util/DAMM.cpp
 	${PROJECT_SOURCE_DIR}/util/SecureXmlParser.cpp
