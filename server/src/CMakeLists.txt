@@ -94,6 +94,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/Startup.cpp
 	${PROJECT_SOURCE_DIR}/util/Loggable.cpp
 	${PROJECT_SOURCE_DIR}/util/PosixSignal.cpp
+	${PROJECT_SOURCE_DIR}/util/TimeInterval.cpp
 	${PROJECT_SOURCE_DIR}/ssl/X509Fingerprint.cpp
 	${PROJECT_SOURCE_DIR}/ssl/RejectCertificateHandler.cpp
 	${PROJECT_SOURCE_DIR}/ssl/SSLFacility.cpp
