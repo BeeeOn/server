@@ -8,10 +8,12 @@
 
 	<x:template name="remove-cr-lf">
 		<x:param name="text" select="''" />
+		<x:param name="eol" select="''" />
 
 		<x:variable name="result" select="s:replace($text, '&#xD;&#xA;', ' ')" />
 		<x:if test="string-length(normalize-space($result)) &gt; 0">
 			<x:value-of select="$result" />
+			<x:value-of select="$eol" />
 		</x:if>
 	</x:template>
 
@@ -20,8 +22,8 @@
 			<x:with-param name="text">
 				<x:call-template name="create-table" />
 			</x:with-param>
+			<x:with-param name="eol" select="$new.line" />
 		</x:call-template>
-		<x:call-template name="new-line" />
 	</x:template>
 
 	<x:template match="database/view">
@@ -29,8 +31,8 @@
 			<x:with-param name="text">
 				<x:call-template name="create-view" />
 			</x:with-param>
+			<x:with-param name="eol" select="$new.line" />
 		</x:call-template>
-		<x:call-template name="new-line" />
 	</x:template>
 
 </x:stylesheet>
