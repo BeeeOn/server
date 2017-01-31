@@ -1,7 +1,8 @@
 = Database schema and queries =
 
 The database schema is described by XML file and by applying XSL transformations
-the target SQL code is generated for a selected database engine.
+the target SQL code is generated for a selected database engine. Also, a separate
+file that contains cleanup commands is generated.
 
 All SQL queries are specified in another XML file. It includes test definitions
 as well. By applying XSL transformations, query file for application, testing

@@ -528,6 +528,9 @@
 				<c:document href="{@name}{$suffix}.sql" method="text" encoding="utf-8">
 					<x:apply-templates select="." />
 				</c:document>
+				<c:document href="{@name}{$suffix}-cleanup.sql" method="text" encoding="utf-8">
+					<x:call-template name="drop-tables-and-views" />
+				</c:document>
 			</x:when>
 			<x:otherwise>
 				<x:message>No name of <x:value-of select="position()" />-th database, print to stdout</x:message>
