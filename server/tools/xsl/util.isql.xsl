@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <x:stylesheet xmlns:x="http://www.w3.org/1999/XSL/Transform"
+		xmlns:s="http://exslt.org/strings"
+		extension-element-prefixes="s"
 		version="1.0">
 
 	<x:import href="schema.common.xsl" />
@@ -9,7 +11,8 @@
 	<x:template name="remove-cr-lf">
 		<x:param name="text" select="''" />
 
-		<x:value-of select="translate($text, '&#xD;&#xA;', '')" />
+		<x:variable name="result" select="s:replace($text, '&#xD;&#xA;', ' ')" />
+		<x:value-of select="$result" />
 	</x:template>
 
 	<x:template match="database/table">
