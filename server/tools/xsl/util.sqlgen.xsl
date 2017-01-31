@@ -3,9 +3,10 @@
 		version="1.0">
 
 	<x:param name="engine" select="'unknown'" />
+	<x:param name="new.line" select="'&#xA;'" />
 
 	<x:template match="sql" mode="simple">
-		<x:param name="eol" select="';&#xA;'" />
+		<x:param name="eol" select="concat(';', $new.line)" />
 
 		<x:if test="not(@engine) or $engine = @engine">
 			<x:choose>
@@ -28,7 +29,7 @@
 				<x:with-param name="args" select="$args" />
 			</x:apply-templates>
 
-			<x:text>;&#xA;</x:text>
+			<x:value-of select="concat(';', $new.line)" />
 		</x:if>
 	</x:template>
 

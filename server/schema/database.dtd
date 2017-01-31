@@ -3,7 +3,7 @@
 	name       NMTOKEN   #REQUIRED
 >
 
-<!ELEMENT table (column|primary-key|foreign-key|unique|check)*>
+<!ELEMENT table (column|primary-key|foreign-key|unique|check|triggers)*>
 <!ATTLIST table
 	name       ID        #REQUIRED
 >
@@ -49,6 +49,32 @@
 	name       NMTOKEN   #REQUIRED
 	expression CDATA     #REQUIRED
 >
+
+<!ELEMENT triggers    (before|after|instead-of)*>
+<!ATTLIST before
+	name     CDATA #IMPLIED
+	event    (insert|update|delete) "insert"
+	of       CDATA #IMPLIED
+	for-each (row|statement) "row"
+>
+
+<!ATTLIST after
+	name  CDATA #IMPLIED
+	event (insert|update|delete) "insert"
+	of    CDATA #IMPLIED
+>
+
+<!ATTLIST instead-of
+	name  CDATA #IMPLIED
+	event (insert|update|delete) "insert"
+	of    CDATA #IMPLIED
+>
+
+<!ELEMENT before       (when, execute)>
+<!ELEMENT after        (when, execute)>
+<!ELEMENT instead-of   (when, execute)>
+<!ELEMENT when (sql)*>
+<!ELEMENT execute (sql)*>
 
 <!ELEMENT ref (#PCDATA)>
 
