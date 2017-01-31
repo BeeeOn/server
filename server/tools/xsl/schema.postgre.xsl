@@ -32,7 +32,8 @@
 
 		<x:text>DROP TABLE IF EXISTS </x:text>
 		<x:value-of select="." />
-		<x:text> CASCADE;&#xA;</x:text>
+		<x:text> CASCADE;</x:text>
+		<x:call-template name="new-line" />
 	</x:template>
 
 	<x:template name="sql-drop-view">
@@ -40,7 +41,8 @@
 
 		<x:text>DROP VIEW IF EXISTS </x:text>
 		<x:value-of select="." />
-		<x:text> CASCADE;&#xA;</x:text>
+		<x:text> CASCADE;</x:text>
+		<x:call-template name="new-line" />
 	</x:template>
 
 	<x:template match="/">
