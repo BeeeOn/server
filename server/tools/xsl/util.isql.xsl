@@ -10,7 +10,9 @@
 		<x:param name="text" select="''" />
 
 		<x:variable name="result" select="s:replace($text, '&#xD;&#xA;', ' ')" />
-		<x:value-of select="$result" />
+		<x:if test="string-length(normalize-space($result)) &gt; 0">
+			<x:value-of select="$result" />
+		</x:if>
 	</x:template>
 
 	<x:template match="database/table">
