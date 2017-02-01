@@ -1153,6 +1153,99 @@
 		</test>
 	</query>
 
+	<query id="legacy_roles_in_gateway.fetch.by.gateway_id">
+		<define>
+		SELECT
+			r.id AS id,
+			r.gateway_id AS gateway_id,
+			r.identity_id AS identity_id,
+			r.level AS level,
+			r.created AS created,
+			i.email AS identity_email,
+			u.first_name AS first_name,
+			u.last_name AS last_name,
+			v.picture AS picture,
+			g.owner_id = u.id AS is_owner
+		FROM roles_in_gateway AS r
+		JOIN identities AS i ON r.identity_id = i.id
+		JOIN legacy_gateways AS g ON g.id = r.gateway_id
+		JOIN verified_identities AS v on r.identity_id = v.identity_id
+		JOIN users AS u ON u.id = v.user_id
+		WHERE
+			r.gateway_id = <value name="gateway_id" type="int64" />
+		ORDER BY r.level
+		</define>
+		<test name="fetch legacy roles of gateway">
+			<setup name="jack sparrow has 2 verified identities for 1 e-mail">
+				<sql>
+				INSERT INTO verified_identities (id, identity_id, user_id, provider)
+				VALUES
+				('180f9234-5aab-4b14-a866-4d771a527f66', 'b5696add-11c4-4b51-834a-c14ddd672db4',
+					'd67713ff-de75-43c4-917b-88f0048b7ccf', 'test-second')
+				</sql>
+			</setup>
+			<check name="Test Gateway 1 has 3 users">
+				<call-query>
+					<arg name="gateway_id">181462068183316</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value type="uuid" name="id">faabc96a-12b4-421a-8f4b-00ae1f75c11f</value>
+						<value name="gateway_id">181462068183316</value>
+						<value type="uuid" name="identity_id">4264d04a-4a50-4a53-a765-dc5a7cdce6f1</value>
+						<value name="level">10</value>
+						<value name="created">1483456377</value>
+						<value name="identity_email">pepa@example.org</value>
+						<value name="first_name">Pepa</value>
+						<value name="last_name">Goodman</value>
+						<null name="picture" />
+						<true name="is_owner" />
+					</row>
+					<row>
+						<value type="uuid" name="id">f3733b47-d47c-4fa1-b2ce-2101dfa33ca1</value>
+						<value name="gateway_id">181462068183316</value>
+						<value type="uuid" name="identity_id">cd8c611b-7e8a-43ff-8d35-9e92c74f003d</value>
+						<value name="level">20</value>
+						<value name="created">1483456378</value>
+						<value name="identity_email">pepa2@example.org</value>
+						<value name="first_name">Pepa</value>
+						<value name="last_name">Goodman</value>
+						<null name="picture" />
+						<true name="is_owner" />
+					</row>
+					<row>
+						<value type="uuid" name="id">aee235a1-ac89-4553-b185-d689faeeeee3</value>
+						<value name="gateway_id">181462068183316</value>
+						<value type="uuid" name="identity_id">b5696add-11c4-4b51-834a-c14ddd672db4</value>
+						<value name="level">30</value>
+						<value name="created">1483456379</value>
+						<value name="identity_email">jack.sparrow@example.org</value>
+						<value name="first_name">Jack</value>
+						<value name="last_name">Sparrow</value>
+						<null name="picture" />
+						<false name="is_owner" />
+					</row>
+					<row>
+						<value type="uuid" name="id">aee235a1-ac89-4553-b185-d689faeeeee3</value>
+						<value name="gateway_id">181462068183316</value>
+						<value type="uuid" name="identity_id">b5696add-11c4-4b51-834a-c14ddd672db4</value>
+						<value name="level">30</value>
+						<value name="created">1483456379</value>
+						<value name="identity_email">jack.sparrow@example.org</value>
+						<value name="first_name">Jack</value>
+						<value name="last_name">Sparrow</value>
+						<null name="picture" />
+						<false name="is_owner" />
+					</row>
+				</expect>
+			</check>
+			<teardown name="clean the second verified identity of jack sparrow">
+				<sql>DELETE FROM verified_identities WHERE id = '180f9234-5aab-4b14-a866-4d771a527f66'</sql>
+			</teardown>
+		</test>
+
+	</query>
+
 	<query id="roles_in_gateway.remove">
 		<define>DELETE FROM roles_in_gateway WHERE id = <value name="id" type="uuid" /></define>
 	</query>
