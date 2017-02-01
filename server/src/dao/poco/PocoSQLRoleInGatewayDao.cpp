@@ -103,7 +103,7 @@ void PocoSQLRoleInGatewayDao::fetchBy(std::vector<RoleInGateway> &roles,
 
 	execute(sql);
 	RecordSet result(sql);
-	parseMany(result, roles);
+	parseMany<RoleInGateway>(result, roles);
 }
 
 bool PocoSQLRoleInGatewayDao::remove(const RoleInGateway &role)
@@ -249,15 +249,6 @@ void PocoSQLRoleInGatewayDao::fetchAccessibleGateways(
 	PocoSQLGatewayDao::parseMany<Gateway>(result, list);
 }
 
-bool PocoSQLRoleInGatewayDao::parseSingle(RecordSet &result,
-		RoleInGateway &role, const string &prefix)
-{
-	if (result.begin() == result.end())
-		return false;
-
-	return parseSingle(*result.begin(), role, prefix);
-}
-
 bool PocoSQLRoleInGatewayDao::parseSingle(Row &result,
 		RoleInGateway &role, const string &prefix)
 {
@@ -275,6 +266,23 @@ bool PocoSQLRoleInGatewayDao::parseSingle(Row &result,
 		throw IllegalStateException("identity is incomplete in query request");
 
 	role.setIdentity(identity);
+
+	markLoaded(role);
+	return true;
+}
+
+bool PocoSQLRoleInGatewayDao::parseSingle(Row &result,
+		LegacyRoleInGateway &role, const string &prefix)
+{
+	if (!parseSingle(result, static_cast<RoleInGateway &>(role)))
+		return false;
+
+	role.setOwner(result[prefix + "owner"]);
+	role.setFirstName(result[prefix + "first_name"]);
+	role.setLastName(result[prefix + "last_name"]);
+
+	const Poco::Dynamic::Var &picture = result[prefix + "picture"];
+	role.setPicture(picture.isEmpty()? URI() : URI(picture.toString()));
 
 	markLoaded(role);
 	return true;

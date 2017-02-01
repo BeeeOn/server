@@ -45,16 +45,26 @@ public:
 			const User &user,
 			const AccessLevel &atLeast = AccessLevel::any()) override;
 
+	template <typename R>
 	static bool parseSingle(Poco::Data::RecordSet &result,
-			RoleInGateway &role, const std::string &prefix = "");
+			R &role, const std::string &prefix = "")
+	{
+		if (result.begin() == result.end())
+			return false;
+
+		return parseSingle(*result.begin(), role, prefix);
+	}
+
 	static bool parseSingle(Poco::Data::Row &result,
 			RoleInGateway &role, const std::string &prefix = "");
+	static bool parseSingle(Poco::Data::Row &result,
+			LegacyRoleInGateway &role, const std::string &prefix = "");
 
-	template <typename C>
+	template <typename R, typename C>
 	static void parseMany(Poco::Data::RecordSet &result, C &collection)
 	{
 		for (auto row : result) {
-			RoleInGateway role;
+			R role;
 
 			if (!parseSingle(row, role)) {
 				LOGGER_FUNC(__func__)
