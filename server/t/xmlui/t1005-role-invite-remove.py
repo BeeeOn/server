@@ -97,11 +97,16 @@ class TestRoleInviteRemove(unittest.TestCase):
 		))
 
 		self.assertTrue(response.is_data())
-		self.assertEqual(2, len(response.root))
+		self.assertEqual(4, len(response.root))
 		self.assertEqual("joe.doe@example.org", response.root[0].get("email"))
-		self.assertEqual("john.smith@example.org", response.root[1].get("email"))
+		self.assertEqual("joe.doe@example.org", response.root[1].get("email"))
+		self.assertEqual("john.smith@example.org", response.root[2].get("email"))
+		self.assertEqual("john.smith@example.org", response.root[3].get("email"))
 
-		johnRole = response.root[1].get("id")
+		self.assertEqual(response.root[0].get("id"), response.root[1].get("id"))
+		self.assertEqual(response.root[2].get("id"), response.root[3].get("id"))
+
+		johnRole = response.root[2].get("id")
 
 		response = self.conn.request(RoleRemove(
 			config.tmp_gateway_id,
@@ -122,7 +127,7 @@ class TestRoleInviteRemove(unittest.TestCase):
 		))
 
 		self.assertTrue(response.is_data())
-		self.assertEqual(1, len(response.root))
+		self.assertEqual(2, len(response.root))
 		self.assertEqual("joe.doe@example.org", response.root[0].get("email"))
 
 		response = self.conn.request(RoleRemove(
@@ -144,7 +149,7 @@ class TestRoleInviteRemove(unittest.TestCase):
 		))
 
 		self.assertTrue(response.is_data())
-		self.assertEqual(1, len(response.root))
+		self.assertEqual(2, len(response.root))
 		self.assertEqual("joe.doe@example.org", response.root[0].get("email"))
 
 		time.sleep(1) # wait to prevent db constraint violation

@@ -3,6 +3,7 @@
 #include "model/Identity.h"
 #include "model/Gateway.h"
 #include "model/RoleInGateway.h"
+#include "model/LegacyRoleInGateway.h"
 #include "server/AccessLevel.h"
 #include "server/SessionManager.h"
 #include "service/RoleService.h"
@@ -79,9 +80,9 @@ void RoleXmlHandler::handleInvite(const string &gateid, Element *userNode)
 void RoleXmlHandler::handleGetAll(const string &gateid)
 {
 	Gateway gateway(GatewayID::parse(gateid));
-	vector<RoleInGateway> roles;
+	vector<LegacyRoleInGateway> roles;
 
-	Relation<vector<RoleInGateway>, Gateway> input(roles, gateway);
+	Relation<vector<LegacyRoleInGateway>, Gateway> input(roles, gateway);
 	User user(session()->userID());
 	input.setUser(user);
 
