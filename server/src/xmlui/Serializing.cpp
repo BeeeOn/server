@@ -9,6 +9,7 @@
 #include "model/Device.h"
 #include "model/DeviceInfo.h"
 #include "model/RoleInGateway.h"
+#include "model/LegacyRoleInGateway.h"
 #include "model/VerifiedIdentity.h"
 
 using namespace std;
@@ -153,23 +154,55 @@ void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
 		serialize(output, device);
 }
 
+static void prepare(AttributesImpl &attrs, const RoleInGateway &role)
+{
+	attrs.addAttribute("", "id", "id", "", role.id().toString());
+	attrs.addAttribute("", "email", "email", "",
+			role.identity().email());
+	attrs.addAttribute("", "level", "level", "",
+			role.level().toString());
+}
+
 void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
 		const RoleInGateway &role)
 {
 	AttributesImpl attrs;
-
-	attrs.addAttribute("", "id", "id", "", role.id().toString());
-	attrs.addAttribute("", "email", "email", "",
-			role.identity().email());
-	attrs.addAttribute("", "permission", "permission", "",
-			role.level().toString());
-	attrs.addAttribute("", "gender", "gender", "", "unknown");
-
+	prepare(attrs, role);
 	output.emptyElement("", "user", "user", attrs);
 }
 
 void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
 		const std::vector<RoleInGateway> &roles)
+{
+	for (auto role : roles)
+		serialize(output, role);
+}
+
+void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
+		const LegacyRoleInGateway &role)
+{
+	AttributesImpl attrs;
+	prepare(attrs, role);
+
+	if (role.isOwner()) {
+		attrs.addAttribute("", "permission", "permission",
+				"", "owner");
+	}
+	else {
+		attrs.addAttribute("", "permission", "permission",
+				"", role.level().toString());
+	}
+
+	attrs.addAttribute("", "gender", "gender", "", "unknown");
+	attrs.addAttribute("", "name", "name", "", role.firstName());
+	attrs.addAttribute("", "surname", "surname", "", role.lastName());
+	attrs.addAttribute("", "imgurl", "imgurl", "", role.picture().toString());
+
+	output.emptyElement("", "user", "user", attrs);
+}
+
+void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
+		const std::vector<LegacyRoleInGateway> &roles)
 {
 	for (auto role : roles)
 		serialize(output, role);
