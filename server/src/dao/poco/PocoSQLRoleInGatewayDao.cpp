@@ -30,6 +30,7 @@ PocoSQLRoleInGatewayDao::PocoSQLRoleInGatewayDao()
 	registerQuery(m_queryIsRegistered);
 	registerQuery(m_queryFetchById);
 	registerQuery(m_queryFetchByGatewayId);
+	registerQuery(m_queryFetchLegacyByGatewayId);
 	registerQuery(m_queryFetchAccessLevel);
 	registerQuery(m_queryFetchAccessibleGateways);
 	registerQuery(m_queryHasOnlyNonAdminExcept);
@@ -104,6 +105,22 @@ void PocoSQLRoleInGatewayDao::fetchBy(std::vector<RoleInGateway> &roles,
 	execute(sql);
 	RecordSet result(sql);
 	parseMany<RoleInGateway>(result, roles);
+}
+
+void PocoSQLRoleInGatewayDao::fetchBy(std::vector<LegacyRoleInGateway> &roles,
+		const Gateway &gateway)
+{
+	assureHasId(gateway);
+
+	string gatewayID(gateway.id().toString());
+
+	Statement sql = (session() << m_queryFetchLegacyByGatewayId(),
+		use(gatewayID, "gateway_id")
+	);
+
+	execute(sql);
+	RecordSet result(sql);
+	parseMany<LegacyRoleInGateway>(result, roles);
 }
 
 bool PocoSQLRoleInGatewayDao::remove(const RoleInGateway &role)
@@ -277,7 +294,7 @@ bool PocoSQLRoleInGatewayDao::parseSingle(Row &result,
 	if (!parseSingle(result, static_cast<RoleInGateway &>(role)))
 		return false;
 
-	role.setOwner(result[prefix + "owner"]);
+	role.setOwner(result[prefix + "is_owner"]);
 	role.setFirstName(result[prefix + "first_name"]);
 	role.setLastName(result[prefix + "last_name"]);
 
