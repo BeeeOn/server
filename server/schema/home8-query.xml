@@ -1993,4 +1993,203 @@
 		</test>
 	</query>
 
+	<query id="sensors_history.insert">
+		<define>
+		INSERT INTO sensors_history (gateway_id, device_id, module_id, at, value)
+		VALUES (
+			<value name="gateway_id" type="int64" />,
+			<value name="device_id" type="int64" />,
+			<value name="module_id" type="smallint" />,
+			<value name="at" type="bigint" />,
+			<value name="value" type="real" />
+		)
+		</define>
+		<test name="insert values">
+			<check name="for Test Device B, module 0">
+				<call-query>
+					<arg name="gateway_id">181462068183316</arg>
+					<arg name="device_id">2728733371</arg>
+					<arg name="module_id">0</arg>
+					<arg name="at">1483416275</arg>
+					<arg name="value">12.2</arg>
+				</call-query>
+				<sql>
+				SELECT at, value FROM sensors_history WHERE
+					gateway_id = 181462068183316
+					AND
+					device_id = 2728733371;
+				</sql>
+				<expect>
+					<row>
+						<value name="at">1483416275</value>
+						<value name="value">12.2</value>
+					</row>
+				</expect>
+			</check>
+			<teardown name="delete the single value for Test Device B">
+				<sql>DELETE FROM sensors_history WHERE
+					gateway_id = 181462068183316 AND device_id = 2728733371</sql>
+			</teardown>
+		</test>
+	</query>
+
+	<query id="sensors_history.fetch">
+		<define>
+		SELECT at, value
+		FROM sensors_history
+		WHERE
+			gateway_id = <value name="gateway_id" type="int64" />
+			AND
+			device_id = <value name="device_id" type="int64" />
+			AND
+			module_id = <value name="module_id" type="smallint" />
+		ORDER BY at DESC
+		LIMIT 1
+		</define>
+		<test name="fetch last value">
+			<check name="recent value is 29">
+				<call-query>
+					<arg name="gateway_id">181462068183316</arg>
+					<arg name="device_id">2731287621</arg>
+					<arg name="module_id">0</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="at">1483441918</value>
+						<value type="real" name="value">29</value>
+					</row>
+				</expect>
+			</check>
+			<check name="no value">
+				<call-query>
+					<arg name="gateway_id">181462068183316</arg>
+					<arg name="device_id">2751463465</arg>
+					<arg name="module_id">0</arg>
+				</call-query>
+				<expect />
+			</check>
+		</test>
+	</query>
+
+	<query id="sensors_history.fetch.huge.interval">
+		<!--
+		To stay as engine-independent as possible, pass the interval 3 times
+		as at_div, at_mul and interval. This might be fixed in the future.
+		Think that some engines require '?' placeholders for prepared statements.
+		Others allows named placeholders where the order matters.
+		-->
+		<define>
+		SELECT
+			(at / <value name="at_div" type="bigint" />) * <value name="at_mul" type="bigint" /> AS at,
+			AVG(value) AS avg_value,
+			MIN(value) AS min_value,
+			MAX(value) AS max_value
+		FROM sensors_history
+		WHERE
+			gateway_id = <value name="gateway_id" type="int64" />
+			AND
+			device_id = <value name="device_id" type="int64" />
+			AND
+			module_id = <value name="module_id" type="smallint" />
+			AND
+			at &gt;= <value name="start" type="bigint" />
+			AND
+			at &lt;= <value name="end" type="bigint" />
+		GROUP BY (at / <value name="interval" type="bigint" />)
+		ORDER BY at DESC
+		</define>
+		<test name="all values constant">
+			<setup name="setup simple history of module 21">
+				<sql>
+				INSERT INTO sensors_history (gateway_id, device_id, module_id, at, value)
+				VALUES
+					(181462068183316, 2751463465, 21, 0, 4),
+					(181462068183316, 2751463465, 21, 5, 16),
+					(181462068183316, 2751463465, 21, 15, 10),
+					(181462068183316, 2751463465, 21, 20, 10)
+				</sql>
+			</setup>
+			<check name="trivial (no) aggregation">
+				<call-query>
+					<arg name="at_div">5</arg>
+					<arg name="at_mul">5</arg>
+					<arg name="gateway_id">181462068183316</arg>
+					<arg name="device_id">2751463465</arg>
+					<arg name="module_id">21</arg>
+					<arg name="start">0</arg>
+					<arg name="end">40</arg>
+					<arg name="interval">5</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="at">20</value>
+						<value type="real" name="avg_value">10</value>
+						<value type="real" name="min_value">10</value>
+						<value type="real" name="max_value">10</value>
+					</row>
+					<row>
+						<value name="at">15</value>
+						<value type="real" name="avg_value">10</value>
+						<value type="real" name="min_value">10</value>
+						<value type="real" name="max_value">10</value>
+					</row>
+					<row>
+						<value name="at">5</value>
+						<value type="real" name="avg_value">16</value>
+						<value type="real" name="min_value">16</value>
+						<value type="real" name="max_value">16</value>
+					</row>
+					<row>
+						<value name="at">0</value>
+						<value type="real" name="avg_value">4</value>
+						<value type="real" name="min_value">4</value>
+						<value type="real" name="max_value">4</value>
+					</row>
+				</expect>
+			</check>
+			<check name="aggregation is multiple of 5 (note that we have no data between 5 and 15)">
+				<call-query>
+					<arg name="at_div">10</arg>
+					<arg name="at_mul">10</arg>
+					<arg name="gateway_id">181462068183316</arg>
+					<arg name="device_id">2751463465</arg>
+					<arg name="module_id">21</arg>
+					<arg name="start">0</arg>
+					<arg name="end">40</arg>
+					<arg name="interval">10</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="at">20</value>
+						<value type="real" name="avg_value">10</value>
+						<value type="real" name="min_value">10</value>
+						<value type="real" name="max_value">10</value>
+					</row>
+					<row>
+						<value name="at">10</value>
+						<value type="real" name="avg_value">10</value>
+						<value type="real" name="min_value">10</value>
+						<value type="real" name="max_value">10</value>
+					</row>
+					<row>
+						<value name="at">0</value>
+						<value type="real" name="avg_value">10</value>
+						<value type="real" name="min_value">4</value>
+						<value type="real" name="max_value">16</value>
+					</row>
+				</expect>
+			</check>
+			<teardown name="delete testing values of module 21">
+				<sql>
+				DELETE FROM sensors_history WHERE
+					gateway_id = 181462068183316
+					AND
+					device_id = 2751463465
+					AND
+					module_id = 21
+				</sql>
+			</teardown>
+		</test>
+	</query>
+
 </query-set>
