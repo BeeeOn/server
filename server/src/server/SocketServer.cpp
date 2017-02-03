@@ -11,7 +11,7 @@ SocketServer::SocketServer(
 		TCPServerConnectionFactory::Ptr factory,
 		const ServerSocket &socket,
 		TCPServerParams::Ptr params):
-	m_server(factory, socket, params)
+	m_server(new TCPServer(factory, socket, params))
 {
 }
 
@@ -38,16 +38,16 @@ void SocketServer::start()
 {
 	LOGGER_CLASS(this).information(
 		"starting server on port "
-		+ std::to_string(m_server.port()));
+		+ std::to_string(m_server->port()));
 
-	m_server.start();
+	m_server->start();
 }
 
 void SocketServer::stop()
 {
 	LOGGER_CLASS(this).information(
 		"stopping server on port "
-		+ std::to_string(m_server.port()));
+		+ std::to_string(m_server->port()));
 
-	m_server.stop();
+	m_server->stop();
 }

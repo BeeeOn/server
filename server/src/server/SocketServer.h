@@ -1,6 +1,7 @@
 #ifndef BEEEON_SOCKET_SERVER_H
 #define BEEEON_SOCKET_SERVER_H
 
+#include <Poco/SharedPtr.h>
 #include <Poco/Net/ServerSocket.h>
 #include <Poco/Net/TCPServer.h>
 #include <Poco/Net/TCPServerParams.h>
@@ -31,7 +32,7 @@ public:
 		Poco::UInt16 port = 443);
 
 private:
-	Poco::Net::TCPServer m_server;
+	Poco::SharedPtr<Poco::Net::TCPServer> m_server;
 };
 
 }
