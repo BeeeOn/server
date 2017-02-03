@@ -32,6 +32,12 @@ void NullRoleInGatewayDao::fetchBy(vector<RoleInGateway> &roles,
 	throw NotImplementedException(__func__);
 }
 
+void NullRoleInGatewayDao::fetchBy(vector<LegacyRoleInGateway> &roles,
+		const Gateway &gateway)
+{
+	throw NotImplementedException(__func__);
+}
+
 bool NullRoleInGatewayDao::remove(const RoleInGateway &role)
 {
 	throw NotImplementedException(__func__);

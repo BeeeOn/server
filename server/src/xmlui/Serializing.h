@@ -19,6 +19,7 @@ class Location;
 class Device;
 class VerifiedIdentity;
 class RoleInGateway;
+class LegacyRoleInGateway;
 
 namespace XmlUI {
 
@@ -44,6 +45,11 @@ void serialize(Poco::XML::XMLWriter &output,
 		const RoleInGateway &role);
 void serialize(Poco::XML::XMLWriter &output,
 		const std::vector<RoleInGateway> &roles);
+
+void serialize(Poco::XML::XMLWriter &output,
+		const LegacyRoleInGateway &role);
+void serialize(Poco::XML::XMLWriter &output,
+		const std::vector<LegacyRoleInGateway> &roles);
 
 void serializeMyself(Poco::XML::XMLWriter &output,
 		const VerifiedIdentity &identity);

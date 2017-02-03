@@ -25,6 +25,8 @@ public:
 	bool fetch(RoleInGateway &role) override;
 	void fetchBy(std::vector<RoleInGateway> &roles,
 			const Gateway &gateway) override;
+	void fetchBy(std::vector<LegacyRoleInGateway> &roles,
+			const Gateway &gateway) override;
 	bool remove(const RoleInGateway &role) override;
 	bool remove(const Gateway &gateway,
 			const User &user) override;
@@ -45,16 +47,26 @@ public:
 			const User &user,
 			const AccessLevel &atLeast = AccessLevel::any()) override;
 
+	template <typename R>
 	static bool parseSingle(Poco::Data::RecordSet &result,
-			RoleInGateway &role, const std::string &prefix = "");
+			R &role, const std::string &prefix = "")
+	{
+		if (result.begin() == result.end())
+			return false;
+
+		return parseSingle(*result.begin(), role, prefix);
+	}
+
 	static bool parseSingle(Poco::Data::Row &result,
 			RoleInGateway &role, const std::string &prefix = "");
+	static bool parseSingle(Poco::Data::Row &result,
+			LegacyRoleInGateway &role, const std::string &prefix = "");
 
-	template <typename C>
+	template <typename R, typename C>
 	static void parseMany(Poco::Data::RecordSet &result, C &collection)
 	{
 		for (auto row : result) {
-			RoleInGateway role;
+			R role;
 
 			if (!parseSingle(row, role)) {
 				LOGGER_FUNC(__func__)
@@ -77,6 +89,7 @@ private:
 	SQLQuery m_queryIsRegistered     {"roles_in_gateway.is.registered"};
 	SQLQuery m_queryFetchById        {"roles_in_gateway.fetch.by.id"};
 	SQLQuery m_queryFetchByGatewayId   {"roles_in_gateway.fetch.by.gateway_id"};
+	SQLQuery m_queryFetchLegacyByGatewayId {"legacy_roles_in_gateway.fetch.by.gateway_id"};
 	SQLQuery m_queryFetchAccessLevel {"roles_in_gateway.fetch.access_level"};
 	SQLQuery m_queryFetchAccessibleGateways {"roles_in_gateway.fetch.accessible.gateways"};
 	SQLQuery m_queryHasOnlyNonAdminExcept {"roles_in_gateway.has.only.given.level.except"};

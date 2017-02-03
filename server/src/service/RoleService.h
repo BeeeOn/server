@@ -10,6 +10,7 @@ namespace BeeeOn {
 class Identity;
 class Gateway;
 class RoleInGateway;
+class LegacyRoleInGateway;
 class AccessLevel;
 
 class IdentityDao;
@@ -41,6 +42,11 @@ public:
 		BEEEON_TRANSACTION(doList(input));
 	}
 
+	void list(Relation<std::vector<LegacyRoleInGateway>, Gateway> &input)
+	{
+		BEEEON_TRANSACTION(doList(input));
+	}
+
 	void remove(Single<RoleInGateway> &input)
 	{
 		BEEEON_TRANSACTION(doRemove(input));
@@ -56,6 +62,7 @@ protected:
 			Relation<Identity, Gateway> &input,
 			const AccessLevel &as);
 	void doList(Relation<std::vector<RoleInGateway>, Gateway> &input);
+	void doList(Relation<std::vector<LegacyRoleInGateway>, Gateway> &input);
 	void doRemove(Single<RoleInGateway> &input);
 	void doUpdate(SingleWithData<RoleInGateway> &input);
 

@@ -6,6 +6,7 @@
 #include "di/InjectorTarget.h"
 #include "model/Gateway.h"
 #include "model/RoleInGateway.h"
+#include "model/LegacyRoleInGateway.h"
 #include "server/AccessLevel.h"
 
 namespace BeeeOn {
@@ -18,6 +19,8 @@ public:
 	virtual bool update(RoleInGateway &role) = 0;
 	virtual bool fetch(RoleInGateway &role) = 0;
 	virtual void fetchBy(std::vector<RoleInGateway> &roles,
+			const Gateway &gateway) = 0;
+	virtual void fetchBy(std::vector<LegacyRoleInGateway> &roles,
 			const Gateway &gateway) = 0;
 	virtual bool remove(const RoleInGateway &gateway) = 0;
 	virtual bool remove(const Gateway &gateway,
@@ -54,6 +57,8 @@ public:
 	bool update(RoleInGateway &role) override;
 	bool fetch(RoleInGateway &role) override;
 	void fetchBy(std::vector<RoleInGateway> &roles,
+			const Gateway &gateway) override;
+	void fetchBy(std::vector<LegacyRoleInGateway> &roles,
 			const Gateway &gateway) override;
 	bool remove(const RoleInGateway &role) override;
 	bool remove(const Gateway &gateway,

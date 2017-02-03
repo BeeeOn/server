@@ -106,6 +106,12 @@ void RoleService::doList(Relation<vector<RoleInGateway>, Gateway> &input)
 	m_roleInGatewayDao->fetchBy(input.target(), input.base());
 }
 
+void RoleService::doList(Relation<vector<LegacyRoleInGateway>, Gateway> &input)
+{
+	m_accessPolicy->assureList(input, input.base());
+	m_roleInGatewayDao->fetchBy(input.target(), input.base());
+}
+
 void RoleService::doRemove(Single<RoleInGateway> &input)
 {
 	m_accessPolicy->assureRemove(input, input.target());
