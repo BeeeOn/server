@@ -21,6 +21,7 @@ public:
 
 	void setSSLConfig(SSLServer *config);
 	void setPort(int port);
+	void setBacklog(int backlog);
 	void setFactory(Poco::Net::TCPServerConnectionFactory::Ptr factory);
 	void setTCPParams(const Poco::Net::TCPServerParams::Ptr params);
 
@@ -32,8 +33,12 @@ public:
 		SSLServer *sslConfig,
 		Poco::UInt16 port);
 
+protected:
+	Poco::Net::TCPServer *createServer();
+
 private:
 	unsigned int m_port;
+	int m_backlog;
 	SSLServer *m_sslConfig;
 	Poco::Net::TCPServerConnectionFactory::Ptr m_factory;
 	Poco::Net::TCPServerParams::Ptr m_tcpParams;

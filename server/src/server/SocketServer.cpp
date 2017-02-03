@@ -14,6 +14,7 @@ using namespace BeeeOn;
 
 SocketServer::SocketServer():
 	m_port(0),
+	m_backlog(64),
 	m_sslConfig(NULL)
 {
 }
@@ -48,6 +49,16 @@ void SocketServer::setPort(int port)
 	m_port = (unsigned int) port;
 }
 
+void SocketServer::setBacklog(int backlog)
+{
+	if (backlog < 1) {
+		throw InvalidArgumentException(
+				"invalid backlog: " + to_string(backlog));
+	}
+
+	m_backlog = backlog;
+}
+
 void SocketServer::setFactory(TCPServerConnectionFactory::Ptr factory)
 {
 	m_factory = factory;
@@ -58,16 +69,21 @@ void SocketServer::setTCPParams(const TCPServerParams::Ptr params)
 	m_tcpParams = params;
 }
 
-void SocketServer::start()
+TCPServer *SocketServer::createServer()
 {
 	if (m_sslConfig == NULL) {
-		m_server = new TCPServer(m_factory,
-			ServerSocket(m_port), m_tcpParams);
+		ServerSocket socket(m_port, m_backlog);
+		return new TCPServer(m_factory, socket, m_tcpParams);
 	}
-	else {
-		m_server = new TCPServer(m_factory,
-			SecureServerSocket(m_port, 64, m_sslConfig->context()), m_tcpParams);
-	}
+
+	Context::Ptr context = m_sslConfig->context();
+	SecureServerSocket socket(m_port, m_backlog, context);
+	return new TCPServer(m_factory, socket, m_tcpParams);
+}
+
+void SocketServer::start()
+{
+	m_server = createServer();
 
 	LOGGER_CLASS(this).information(
 		"starting server on port "
