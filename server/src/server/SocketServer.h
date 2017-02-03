@@ -15,10 +15,12 @@ namespace BeeeOn {
 
 class SocketServer : public Server {
 public:
-	SocketServer(
-		Poco::Net::TCPServerConnectionFactory::Ptr factory,
-		const Poco::Net::ServerSocket &socket,
-		Poco::Net::TCPServerParams::Ptr params);
+	SocketServer();
+
+	void setFactory(Poco::Net::TCPServerConnectionFactory::Ptr factory);
+	void setSocket(const Poco::Net::ServerSocket &socket);
+	void setTCPParams(const Poco::Net::TCPServerParams::Ptr params);
+
 	void start();
 	void stop();
 

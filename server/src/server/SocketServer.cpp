@@ -7,13 +7,7 @@ using namespace Poco;
 using namespace Poco::Net;
 using namespace BeeeOn;
 
-SocketServer::SocketServer(
-		TCPServerConnectionFactory::Ptr factory,
-		const ServerSocket &socket,
-		TCPServerParams::Ptr params):
-	m_factory(factory),
-	m_socket(socket),
-	m_tcpParams(params)
+SocketServer::SocketServer()
 {
 }
 
@@ -21,9 +15,13 @@ SocketServer *SocketServer::createDefault(
 	TCPServerConnectionFactory::Ptr factory,
 	UInt16 port)
 {
-	ServerSocket socket(port);
-	TCPServerParams::Ptr params = new TCPServerParams();
-	return new SocketServer(factory, socket, params);
+	SocketServer *server = new SocketServer();
+
+	server->setFactory(factory);
+	server->setSocket(ServerSocket(port));
+	server->setTCPParams(new TCPServerParams());
+
+	return server;
 }
 
 SocketServer *SocketServer::createSecure(
@@ -31,9 +29,28 @@ SocketServer *SocketServer::createSecure(
 	Context::Ptr context,
 	UInt16 port)
 {
-	SecureServerSocket socket(port, 64, context);
-	TCPServerParams::Ptr params = new TCPServerParams();
-	return new SocketServer(factory, socket, params);
+	SocketServer *server = new SocketServer();
+
+	server->setFactory(factory);
+	server->setSocket(SecureServerSocket(port, 64, context));
+	server->setTCPParams(new TCPServerParams());
+
+	return server;
+}
+
+void SocketServer::setFactory(TCPServerConnectionFactory::Ptr factory)
+{
+	m_factory = factory;
+}
+
+void SocketServer::setSocket(const ServerSocket &socket)
+{
+	m_socket = socket;
+}
+
+void SocketServer::setTCPParams(const TCPServerParams::Ptr params)
+{
+	m_tcpParams = params;
 }
 
 void SocketServer::start()
