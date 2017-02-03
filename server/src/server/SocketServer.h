@@ -13,6 +13,8 @@
 
 namespace BeeeOn {
 
+class SSLServer;
+
 class SocketServer : public Server {
 public:
 	SocketServer();
@@ -23,6 +25,11 @@ public:
 
 	void start();
 	void stop();
+
+	static SocketServer *create(
+		Poco::Net::TCPServerConnectionFactory::Ptr factory,
+		SSLServer *sslConfig,
+		Poco::UInt16 port);
 
 	static SocketServer *createDefault(
 		Poco::Net::TCPServerConnectionFactory::Ptr factory,

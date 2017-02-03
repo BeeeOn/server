@@ -1,5 +1,6 @@
 #include <Poco/Net/SecureServerSocket.h>
 
+#include "ssl/SSLServer.h"
 #include "server/SocketServer.h"
 #include "Debug.h"
 
@@ -9,6 +10,24 @@ using namespace BeeeOn;
 
 SocketServer::SocketServer()
 {
+}
+
+SocketServer *SocketServer::create(
+	TCPServerConnectionFactory::Ptr factory,
+	SSLServer *sslConfig,
+	UInt16 port)
+{
+	SocketServer *server = new SocketServer();
+
+	server->setFactory(factory);
+	server->setTCPParams(new TCPServerParams());
+
+	if (sslConfig == NULL)
+		server->setSocket(ServerSocket(port));
+	else
+		server->setSocket(SecureServerSocket(port, 64, sslConfig->context()));
+
+	return server;
 }
 
 SocketServer *SocketServer::createDefault(
