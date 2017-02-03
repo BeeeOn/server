@@ -1,6 +1,7 @@
 #include <string>
 
 #include <Poco/Exception.h>
+#include <Poco/Timespan.h>
 #include <Poco/Net/SecureServerSocket.h>
 
 #include "ssl/SSLServer.h"
@@ -15,7 +16,8 @@ using namespace BeeeOn;
 SocketServer::SocketServer():
 	m_port(0),
 	m_backlog(64),
-	m_sslConfig(NULL)
+	m_sslConfig(NULL),
+	m_tcpParams(new TCPServerParams())
 {
 }
 
@@ -27,7 +29,6 @@ SocketServer *SocketServer::create(
 	SocketServer *server = new SocketServer();
 
 	server->setFactory(factory);
-	server->setTCPParams(new TCPServerParams());
 	server->setSSLConfig(sslConfig);
 	server->setPort(port);
 
@@ -64,9 +65,40 @@ void SocketServer::setFactory(TCPServerConnectionFactory::Ptr factory)
 	m_factory = factory;
 }
 
-void SocketServer::setTCPParams(const TCPServerParams::Ptr params)
+void SocketServer::setMaxThreads(int count)
 {
-	m_tcpParams = params;
+	m_tcpParams->setMaxThreads(count);
+}
+
+void SocketServer::setMaxQueued(int count)
+{
+	m_tcpParams->setMaxQueued(count);
+}
+
+void SocketServer::setThreadIdleTime(int seconds)
+{
+	m_tcpParams->setThreadIdleTime(Timespan(seconds, 0));
+}
+
+void SocketServer::setThreadPriority(const std::string &priority)
+{
+	Thread::Priority prio;
+
+	if (priority == "lowest")
+		prio = Thread::PRIO_LOWEST;
+	else if (priority == "low")
+		prio = Thread::PRIO_LOW;
+	else if (priority == "normal")
+		prio = Thread::PRIO_NORMAL;
+	else if (priority == "high")
+		prio = Thread::PRIO_HIGH;
+	else if (priority == "highest")
+		prio = Thread::PRIO_HIGHEST;
+	else
+		throw InvalidArgumentException("unrecognized priority: "
+				+ priority);
+
+	m_tcpParams->setThreadPriority(prio);
 }
 
 TCPServer *SocketServer::createServer()

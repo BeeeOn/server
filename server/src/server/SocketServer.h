@@ -23,7 +23,10 @@ public:
 	void setPort(int port);
 	void setBacklog(int backlog);
 	void setFactory(Poco::Net::TCPServerConnectionFactory::Ptr factory);
-	void setTCPParams(const Poco::Net::TCPServerParams::Ptr params);
+	void setMaxThreads(int count);
+	void setMaxQueued(int count);
+	void setThreadIdleTime(int seconds);
+	void setThreadPriority(const std::string &priority);
 
 	void start();
 	void stop();
