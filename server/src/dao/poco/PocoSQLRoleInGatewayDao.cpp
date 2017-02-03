@@ -65,7 +65,7 @@ bool PocoSQLRoleInGatewayDao::update(RoleInGateway &role)
 	string id(role.id().toString());
 	unsigned int level = role.level();
 
-	Statement sql = (session() << m_queryCreate(),
+	Statement sql = (session() << m_queryUpdate(),
 		use(level, "level"),
 		use(id, "id")
 	);
