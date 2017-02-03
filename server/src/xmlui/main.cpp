@@ -24,26 +24,16 @@ public:
 	}
 
 protected:
-	Context::Ptr initSSL(DependencyInjector &injector)
-	{
-		SSLServer *sslServer = injector
-				.create<SSLServer>("xmluiSSLServer");
-		return sslServer->context();
-	}
-
 	SocketServer *createSocketServer(
 			DependencyInjector &injector,
 			XmlRequestHandlerFactory::Ptr factory)
 	{
-		if (config().getBool("xmlui.ssl.enable", false)) {
-			Context::Ptr context = initSSL(injector);
-			return SocketServer::createSecure(factory,
-					context, m_serverPort);
-		}
-		else {
-			return SocketServer::createDefault(factory,
-					m_serverPort);
-		}
+		SSLServer *sslConfig = NULL;
+
+		if (config().getBool("xmlui.ssl.enable", false))
+			sslConfig = injector.create<SSLServer>("xmluiSSLServer");
+
+		return SocketServer::create(factory, sslConfig, m_serverPort);
 	}
 
 	int execute() override
