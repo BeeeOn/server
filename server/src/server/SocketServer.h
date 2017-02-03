@@ -19,8 +19,9 @@ class SocketServer : public Server {
 public:
 	SocketServer();
 
+	void setSSLConfig(SSLServer *config);
+	void setPort(int port);
 	void setFactory(Poco::Net::TCPServerConnectionFactory::Ptr factory);
-	void setSocket(const Poco::Net::ServerSocket &socket);
 	void setTCPParams(const Poco::Net::TCPServerParams::Ptr params);
 
 	void start();
@@ -32,8 +33,9 @@ public:
 		Poco::UInt16 port);
 
 private:
+	unsigned int m_port;
+	SSLServer *m_sslConfig;
 	Poco::Net::TCPServerConnectionFactory::Ptr m_factory;
-	Poco::Net::ServerSocket m_socket;
 	Poco::Net::TCPServerParams::Ptr m_tcpParams;
 	Poco::SharedPtr<Poco::Net::TCPServer> m_server;
 };
