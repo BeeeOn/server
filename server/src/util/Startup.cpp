@@ -275,9 +275,9 @@ static void reportVersion(const string &group,
 {
 	const string app(group + "/" + name);
 #ifdef GIT_ID
-	logger.information(app + " " + string("version ") + GIT_ID, __FILE__, __LINE__);
+	logger.notice(app + " " + string("version ") + GIT_ID, __FILE__, __LINE__);
 #else
-	logger.information(app + " out of tree", __FILE__, __LINE__);
+	logger.notice(app + " out of tree", __FILE__, __LINE__);
 #endif
 }
 
