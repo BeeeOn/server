@@ -91,6 +91,7 @@
 			<set name="deviceDao" ref="deviceDao" />
 			<set name="identityDao" ref="identityDao" />
 			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
+			<set name="sensorHistoryDao" ref="sensorHistoryDao" />
 			<set name="deviceInfoProvider" ref="deviceInfoProvider" />
 			<set name="transactionManager" ref="transactionManager" />
 		</instance>

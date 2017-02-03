@@ -1,11 +1,14 @@
 #include <Poco/UUIDGenerator.h>
 #include <Poco/DateTime.h>
 #include <Poco/Timespan.h>
+#include <Poco/Timestamp.h>
 #include <Poco/Exception.h>
 
 #include "model/DeviceInfo.h"
+#include "model/ModuleValue.h"
 #include "dao/DeviceDao.h"
 #include "ui/UIMockInit.h"
+#include "util/ValueGenerator.h"
 
 BEEEON_OBJECT(UIMockInit, BeeeOn::UIMockInit)
 
@@ -160,6 +163,57 @@ void UIMockInit::initDevices(const vector<Location> &locations)
 	m_deviceDao->insert(unknown, gateway);
 }
 
+void UIMockInit::initSensorData()
+{
+	Gateway gateway(GatewayID::parse("1284174504043136"));
+	Device temperature(DeviceID::parse("0x4135d00019f5234e"));
+	temperature.setGateway(gateway);
+
+	DateTime now;
+
+	ModuleInfoID inTempId(0);
+
+	ConstGenerator inTempImpl(19.5);
+	TimestampedGenerator inTempTimestamp(inTempImpl, now - Timespan(8, 0, 0, 0, 0), 260);
+	TimeLimitedGenerator inTemp(inTempTimestamp, now);
+
+	while (inTemp.hasNext()) {
+		m_sensorHistoryDao->insert(
+			temperature,
+			inTemp.at(),
+			ModuleValue(inTempId, inTemp.next())
+		);
+	}
+
+	ModuleInfoID outTempId(1);
+
+	SinGenerator outTempImpl;
+	RangeGenerator outTempRange(outTempImpl, -25, 25);
+	TimestampedGenerator outTempTimestamp(outTempRange, now - Timespan(0, 2, 0, 0, 0), 110);
+	TimeLimitedGenerator outTemp(outTempTimestamp, now);
+
+	while (outTemp.hasNext()) {
+		m_sensorHistoryDao->insert(
+			temperature,
+			outTemp.at(),
+			ModuleValue(outTempId, outTemp.next()));
+	}
+
+	ModuleInfoID humidityId(2);
+
+	RandomGenerator humidityImpl;;
+	RangeGenerator humidityRange(humidityImpl, 0, 100);
+	TimestampedGenerator humidityTimestamp(humidityRange, now - Timespan(14, 0, 0, 0, 0), 720);
+	TimeLimitedGenerator humidity(humidityTimestamp, now);
+
+	while (humidity.hasNext()) {
+		m_sensorHistoryDao->insert(
+			temperature,
+			humidity.at(),
+			ModuleValue(humidityId, humidity.next()));
+	}
+}
+
 void UIMockInit::injectionDone()
 {
 	vector<Location> locations;
@@ -169,5 +223,6 @@ void UIMockInit::injectionDone()
 		initGateways();
 		initLocations(locations);
 		initDevices(locations);
+		initSensorData();
 	);
 }
