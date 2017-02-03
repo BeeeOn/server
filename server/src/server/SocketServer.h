@@ -32,6 +32,9 @@ public:
 		Poco::UInt16 port = 443);
 
 private:
+	Poco::Net::TCPServerConnectionFactory::Ptr m_factory;
+	Poco::Net::ServerSocket m_socket;
+	Poco::Net::TCPServerParams::Ptr m_tcpParams;
 	Poco::SharedPtr<Poco::Net::TCPServer> m_server;
 };
 

@@ -11,7 +11,9 @@ SocketServer::SocketServer(
 		TCPServerConnectionFactory::Ptr factory,
 		const ServerSocket &socket,
 		TCPServerParams::Ptr params):
-	m_server(new TCPServer(factory, socket, params))
+	m_factory(factory),
+	m_socket(socket),
+	m_tcpParams(params)
 {
 }
 
@@ -36,6 +38,8 @@ SocketServer *SocketServer::createSecure(
 
 void SocketServer::start()
 {
+	m_server = new TCPServer(m_factory, m_socket, m_tcpParams);
+
 	LOGGER_CLASS(this).information(
 		"starting server on port "
 		+ std::to_string(m_server->port()));
