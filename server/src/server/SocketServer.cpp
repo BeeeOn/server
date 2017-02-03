@@ -30,33 +30,6 @@ SocketServer *SocketServer::create(
 	return server;
 }
 
-SocketServer *SocketServer::createDefault(
-	TCPServerConnectionFactory::Ptr factory,
-	UInt16 port)
-{
-	SocketServer *server = new SocketServer();
-
-	server->setFactory(factory);
-	server->setSocket(ServerSocket(port));
-	server->setTCPParams(new TCPServerParams());
-
-	return server;
-}
-
-SocketServer *SocketServer::createSecure(
-	TCPServerConnectionFactory::Ptr factory,
-	Context::Ptr context,
-	UInt16 port)
-{
-	SocketServer *server = new SocketServer();
-
-	server->setFactory(factory);
-	server->setSocket(SecureServerSocket(port, 64, context));
-	server->setTCPParams(new TCPServerParams());
-
-	return server;
-}
-
 void SocketServer::setFactory(TCPServerConnectionFactory::Ptr factory)
 {
 	m_factory = factory;

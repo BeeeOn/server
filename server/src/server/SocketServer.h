@@ -31,15 +31,6 @@ public:
 		SSLServer *sslConfig,
 		Poco::UInt16 port);
 
-	static SocketServer *createDefault(
-		Poco::Net::TCPServerConnectionFactory::Ptr factory,
-		Poco::UInt16 port);
-
-	static SocketServer *createSecure(
-		Poco::Net::TCPServerConnectionFactory::Ptr factory,
-		Poco::Net::Context::Ptr context,
-		Poco::UInt16 port = 443);
-
 private:
 	Poco::Net::TCPServerConnectionFactory::Ptr m_factory;
 	Poco::Net::ServerSocket m_socket;
