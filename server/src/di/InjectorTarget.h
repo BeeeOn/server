@@ -2,6 +2,7 @@
 #define BEEEON_INJECTOR_TARGET_H
 
 #include <map>
+#include <Poco/SharedPtr.h>
 #include <Poco/ClassLibrary.h>
 #include <Poco/Logger.h>
 #include <Poco/Manifest.h>
@@ -17,7 +18,7 @@ public:
 
 protected:
 	virtual void injectRef(const std::string &key,
-			InjectorTarget *value) = 0;
+			Poco::SharedPtr<InjectorTarget> value) = 0;
 	virtual void injectNumber(const std::string &key, int v) = 0;
 	virtual void injectText(const std::string &key,
 				const std::string &value) = 0;
@@ -107,13 +108,13 @@ protected:
 				new InjectorSetterImpl<P, T>(setter)));
 	}
 
-	void injectRef(const std::string &key, InjectorTarget *value);
+	void injectRef(const std::string &key, Poco::SharedPtr<InjectorTarget> value);
 	void injectText(const std::string &key, const std::string &value);
 	void injectNumber(const std::string &key, int value);
 
 	virtual bool injectRefFallback(
 			const std::string &key,
-			InjectorTarget *value);
+			Poco::SharedPtr<InjectorTarget> value);
 	virtual bool injectTextFallback(
 			const std::string &key,
 			const std::string &value);

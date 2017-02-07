@@ -223,7 +223,7 @@ bool DependencyInjector::tryInjectRef(
 					"failed to create ref " + value);
 		}
 
-		target->injectRef(name, ref.get());
+		target->injectRef(name, ref);
 		return true;
 	}
 

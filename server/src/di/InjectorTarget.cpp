@@ -34,7 +34,7 @@ AbstractInjectorTarget::~AbstractInjectorTarget()
 }
 
 void AbstractInjectorTarget::injectRef(
-		const std::string &key, InjectorTarget *value)
+		const std::string &key, SharedPtr<InjectorTarget> value)
 {
 	RefSetterMap::iterator it = m_refSetter.find(key);
 
@@ -45,7 +45,7 @@ void AbstractInjectorTarget::injectRef(
 		throw NotFoundException("missing setter in " + key);
 	}
 
-	it->second->call(this, value);
+	it->second->call(this, value.get());
 }
 
 void AbstractInjectorTarget::injectText(
@@ -86,7 +86,7 @@ void AbstractInjectorTarget::injectNumber(
 
 bool AbstractInjectorTarget::injectRefFallback(
 			const std::string &key,
-			InjectorTarget *value)
+			SharedPtr<InjectorTarget> value)
 {
 	return false;
 }
