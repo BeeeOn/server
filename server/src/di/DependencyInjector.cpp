@@ -98,11 +98,10 @@ private:
 
 DependencyInjector::~DependencyInjector()
 {
-	InjectorVector::reverse_iterator it;
-	for (it = m_free.rbegin(); it != m_free.rend(); ++it) {
-		InjectorTarget *t = *it;
-		delete t; // deleted in reverse order
-	}
+	m_set.clear();
+
+	while (!m_free.empty())
+		m_free.pop_back();
 }
 
 void DependencyInjector::createEarly()
@@ -160,7 +159,7 @@ InjectorTarget *DependencyInjector::find(const string &name)
 {
 	InjectorSet::const_iterator it = m_set.find(name);
 	if (it != m_set.end())
-		return it->second;
+		return (InjectorTarget *) it->second.get();
 
 	return NULL;
 }
@@ -175,7 +174,7 @@ InjectorTarget *DependencyInjector::createNoAlias(
 
 	if (!disown) {
 		m_set.insert(make_pair(info.name(), t));
-		m_free.push_back(t);
+		m_free.push_back(m_set[info.name()]);
 	}
 
 	return injectDependencies(info, t);

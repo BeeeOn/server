@@ -4,6 +4,7 @@
 #include <map>
 #include <Poco/Exception.h>
 #include <Poco/AutoPtr.h>
+#include <Poco/SharedPtr.h>
 #include <Poco/Logger.h>
 #include <Poco/Util/AbstractConfiguration.h>
 #include "di/InjectorTarget.h"
@@ -75,8 +76,8 @@ class InstanceInfo;
  */
 class DependencyInjector : public Loggable {
 public:
-	typedef std::map<std::string, InjectorTarget *> InjectorSet;
-	typedef std::vector<InjectorTarget *> InjectorVector;
+	typedef std::map<std::string, Poco::SharedPtr<InjectorTarget>> InjectorSet;
+	typedef std::vector<Poco::SharedPtr<InjectorTarget>> InjectorVector;
 
 	DependencyInjector(
 		Poco::AutoPtr<Poco::Util::AbstractConfiguration> conf):
