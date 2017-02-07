@@ -203,6 +203,8 @@ inline void __log_backtrace(Poco::Logger &l, const char *file, size_t line)
 				"Backtrace: > $0", std::string(strings[i])),
 			file, line);
 	}
+
+	free(strings);
 }
 
 }
