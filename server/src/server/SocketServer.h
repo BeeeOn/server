@@ -1,6 +1,7 @@
 #ifndef BEEEON_SOCKET_SERVER_H
 #define BEEEON_SOCKET_SERVER_H
 
+#include <Poco/SharedPtr.h>
 #include <Poco/Net/ServerSocket.h>
 #include <Poco/Net/TCPServer.h>
 #include <Poco/Net/TCPServerParams.h>
@@ -8,30 +9,49 @@
 #include <Poco/Net/TCPServerConnectionFactory.h>
 #include <Poco/Net/Context.h>
 
+#include "di/InjectorTarget.h"
 #include "server/Server.h"
 
 namespace BeeeOn {
 
-class SocketServer : public Server {
+class SSLServer;
+
+class SocketServerConnectionFactory :
+	public AbstractInjectorTarget,
+	public Poco::Net::TCPServerConnectionFactory {
 public:
-	SocketServer(
-		Poco::Net::TCPServerConnectionFactory::Ptr factory,
-		const Poco::Net::ServerSocket &socket,
-		Poco::Net::TCPServerParams::Ptr params);
+	typedef Poco::SharedPtr<SocketServerConnectionFactory> Ptr;
+
+	virtual Poco::Net::TCPServerConnection *createConnection(
+			const Poco::Net::StreamSocket &socket) = 0;
+};
+
+class SocketServer : public Server, public AbstractInjectorTarget {
+public:
+	SocketServer();
+
+	void setSSLConfig(SSLServer *config);
+	void setPort(int port);
+	void setBacklog(int backlog);
+	void setFactory(SocketServerConnectionFactory::Ptr factory);
+	void setMaxThreads(int count);
+	void setMaxQueued(int count);
+	void setThreadIdleTime(int seconds);
+	void setThreadPriority(const std::string &priority);
+
 	void start();
 	void stop();
 
-	static SocketServer *createDefault(
-		Poco::Net::TCPServerConnectionFactory::Ptr factory,
-		Poco::UInt16 port);
-
-	static SocketServer *createSecure(
-		Poco::Net::TCPServerConnectionFactory::Ptr factory,
-		Poco::Net::Context::Ptr context,
-		Poco::UInt16 port = 443);
+protected:
+	Poco::Net::TCPServer *createServer();
 
 private:
-	Poco::Net::TCPServer m_server;
+	unsigned int m_port;
+	int m_backlog;
+	SSLServer *m_sslConfig;
+	SocketServerConnectionFactory::Ptr m_factory;
+	Poco::Net::TCPServerParams::Ptr m_tcpParams;
+	Poco::SharedPtr<Poco::Net::TCPServer> m_server;
 };
 
 }

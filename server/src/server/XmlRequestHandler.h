@@ -20,6 +20,7 @@
 #include "util/SecureXmlParser.h"
 #include "util/Loggable.h"
 #include "di/InjectorTarget.h"
+#include "server/SocketServer.h"
 
 namespace BeeeOn {
 
@@ -51,8 +52,7 @@ public:
 };
 
 class XmlRequestHandlerFactory :
-	public Poco::Net::TCPServerConnectionFactory,
-	public BeeeOn::AbstractInjectorTarget,
+	public SocketServerConnectionFactory,
 	public Loggable {
 private:
 	void init();

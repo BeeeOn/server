@@ -24,45 +24,22 @@ public:
 	}
 
 protected:
-	Context::Ptr initSSL(DependencyInjector &injector)
-	{
-		SSLServer *sslServer = injector
-				.create<SSLServer>("xmluiSSLServer");
-		return sslServer->context();
-	}
-
-	SocketServer *createSocketServer(
-			DependencyInjector &injector,
-			XmlRequestHandlerFactory::Ptr factory)
-	{
-		if (config().getBool("xmlui.ssl.enable", false)) {
-			Context::Ptr context = initSSL(injector);
-			return SocketServer::createSecure(factory,
-					context, m_serverPort);
-		}
-		else {
-			return SocketServer::createDefault(factory,
-					m_serverPort);
-		}
-	}
-
 	int execute() override
 	{
 		if (logger().debug())
 			ManifestSingleton::reportInfo(logger());
 
 		DependencyInjector injector(config().createView("services"));
-		XmlRequestHandlerFactory::Ptr factory = injector
-			.create<XmlRequestHandlerFactory>("xmlui");
 
-		SocketServer *server = createSocketServer(injector, factory);
+		SharedPtr<SocketServer> server = injector.create<SocketServer>("xmlui");
+		server->setPort(m_serverPort);
+
 		server->start();
 
 		notifyStarted();
 
 		waitForTerminationRequest();
 		server->stop();
-		delete server;
 
 		return EXIT_OK;
 	}
