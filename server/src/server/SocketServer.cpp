@@ -46,7 +46,7 @@ void SocketServer::setBacklog(int backlog)
 	m_backlog = backlog;
 }
 
-void SocketServer::setFactory(TCPServerConnectionFactory::Ptr factory)
+void SocketServer::setFactory(SocketServerConnectionFactory::Ptr factory)
 {
 	m_factory = factory;
 }

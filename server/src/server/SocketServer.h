@@ -9,20 +9,31 @@
 #include <Poco/Net/TCPServerConnectionFactory.h>
 #include <Poco/Net/Context.h>
 
+#include "di/InjectorTarget.h"
 #include "server/Server.h"
 
 namespace BeeeOn {
 
 class SSLServer;
 
-class SocketServer : public Server {
+class SocketServerConnectionFactory :
+	public AbstractInjectorTarget,
+	public Poco::Net::TCPServerConnectionFactory {
+public:
+	typedef Poco::SharedPtr<SocketServerConnectionFactory> Ptr;
+
+	virtual Poco::Net::TCPServerConnection *createConnection(
+			const Poco::Net::StreamSocket &socket) = 0;
+};
+
+class SocketServer : public Server, public AbstractInjectorTarget {
 public:
 	SocketServer();
 
 	void setSSLConfig(SSLServer *config);
 	void setPort(int port);
 	void setBacklog(int backlog);
-	void setFactory(Poco::Net::TCPServerConnectionFactory::Ptr factory);
+	void setFactory(SocketServerConnectionFactory::Ptr factory);
 	void setMaxThreads(int count);
 	void setMaxQueued(int count);
 	void setThreadIdleTime(int seconds);
@@ -38,7 +49,7 @@ private:
 	unsigned int m_port;
 	int m_backlog;
 	SSLServer *m_sslConfig;
-	Poco::Net::TCPServerConnectionFactory::Ptr m_factory;
+	SocketServerConnectionFactory::Ptr m_factory;
 	Poco::Net::TCPServerParams::Ptr m_tcpParams;
 	Poco::SharedPtr<Poco::Net::TCPServer> m_server;
 };
