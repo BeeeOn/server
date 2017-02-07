@@ -31,19 +31,15 @@ protected:
 
 		DependencyInjector injector(config().createView("services"));
 
-		SocketServer server;
-		server.setPort(m_serverPort);
-		server.setFactory(injector.create<XmlRequestHandlerFactory>("xmlui"));
+		SharedPtr<SocketServer> server = injector.create<SocketServer>("xmlui");
+		server->setPort(m_serverPort);
 
-		if (config().getBool("xmlui.ssl.enable", false))
-			server.setSSLConfig(injector.create<SSLServer>("xmluiSSLServer"));
-
-		server.start();
+		server->start();
 
 		notifyStarted();
 
 		waitForTerminationRequest();
-		server.stop();
+		server->stop();
 
 		return EXIT_OK;
 	}
