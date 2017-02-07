@@ -45,7 +45,7 @@ void AbstractInjectorTarget::injectRef(
 		throw NotFoundException("missing setter in " + key);
 	}
 
-	it->second->call(this, value.get());
+	it->second->call(this, value);
 }
 
 void AbstractInjectorTarget::injectText(

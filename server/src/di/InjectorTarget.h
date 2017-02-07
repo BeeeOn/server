@@ -41,7 +41,7 @@ public:
 	/**
 	 * Perform p->set(t).
 	 */
-	virtual void call(InjectorTarget *p, InjectorTarget *t) = 0;
+	virtual void call(InjectorTarget *p, Poco::SharedPtr<InjectorTarget> t) = 0;
 };
 
 /**
@@ -65,12 +65,44 @@ public:
 	/**
 	 * Call the ((P *) ip)->set((T *) it). Casted via dynamic_cast.
 	 */
-	void call(InjectorTarget *ip, InjectorTarget *it)
+	void call(InjectorTarget *ip, Poco::SharedPtr<InjectorTarget> it)
 	{
 		P *p = dynamic_cast<P *>(ip);
-		T *t = dynamic_cast<T *>(it);
+		T *t = dynamic_cast<T *>(it.get());
 		SetterFunc f = m_func;
 		(p->*f)(t);
+	}
+
+private:
+	SetterFunc m_func;
+};
+
+/**
+ * SharedInjectorSetterImpl template class implements the InjectorSetter
+ * with respect to the target types. It wraps calling a setter in
+ * the form P::set(Poco::SharedPtr<T>).
+ */
+template <typename P, typename T>
+class SharedInjectorSetterImpl : public InjectorSetter {
+public:
+	typedef void (P::*SetterFunc)(Poco::SharedPtr<T>);
+
+	/**
+	 * Create instance wrapping the given setter method.
+	 */
+	SharedInjectorSetterImpl(SetterFunc f):
+		m_func(f)
+	{
+	}
+
+	/**
+	 * Call the ((P *) ip)->set(it.cast<T>()). Casted via dynamic_cast.
+	 */
+	void call(InjectorTarget *ip, Poco::SharedPtr<InjectorTarget> it)
+	{
+		P *p = dynamic_cast<P *>(ip);
+		SetterFunc f = m_func;
+		(p->*f)(it.cast<T>());
 	}
 
 private:
@@ -106,6 +138,14 @@ protected:
 	{
 		m_refSetter.insert(std::make_pair(key,
 				new InjectorSetterImpl<P, T>(setter)));
+	}
+
+	template <typename P, typename T = InjectorTarget>
+	void injector(const std::string key,
+			void (P::*setter)(Poco::SharedPtr<T>))
+	{
+		m_refSetter.insert(std::make_pair(key,
+				new SharedInjectorSetterImpl<P, T>(setter)));
 	}
 
 	void injectRef(const std::string &key, Poco::SharedPtr<InjectorTarget> value);
