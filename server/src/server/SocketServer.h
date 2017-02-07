@@ -31,11 +31,6 @@ public:
 	void start();
 	void stop();
 
-	static SocketServer *create(
-		Poco::Net::TCPServerConnectionFactory::Ptr factory,
-		SSLServer *sslConfig,
-		Poco::UInt16 port);
-
 protected:
 	Poco::Net::TCPServer *createServer();
 

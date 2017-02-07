@@ -21,20 +21,6 @@ SocketServer::SocketServer():
 {
 }
 
-SocketServer *SocketServer::create(
-	TCPServerConnectionFactory::Ptr factory,
-	SSLServer *sslConfig,
-	UInt16 port)
-{
-	SocketServer *server = new SocketServer();
-
-	server->setFactory(factory);
-	server->setSSLConfig(sslConfig);
-	server->setPort(port);
-
-	return server;
-}
-
 void SocketServer::setSSLConfig(SSLServer *config)
 {
 	m_sslConfig = config;
