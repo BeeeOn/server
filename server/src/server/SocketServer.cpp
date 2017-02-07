@@ -13,12 +13,35 @@ using namespace Poco;
 using namespace Poco::Net;
 using namespace BeeeOn;
 
+BEEEON_OBJECT(SocketServer, BeeeOn::SocketServer)
+
 SocketServer::SocketServer():
 	m_port(0),
 	m_backlog(64),
 	m_sslConfig(NULL),
 	m_tcpParams(new TCPServerParams())
 {
+	numberInjector("port",
+		(NumberSetter) &SocketServer::setPort);
+	numberInjector("backlog",
+		(NumberSetter) &SocketServer::setBacklog);
+	numberInjector("maxThreads",
+		(NumberSetter) &SocketServer::setMaxThreads);
+	numberInjector("maxQueued",
+		(NumberSetter) &SocketServer::setMaxQueued);
+	numberInjector("threadIdleTime",
+		(NumberSetter) &SocketServer::setThreadIdleTime);
+	textInjector("threadPriority",
+		(TextSetter) &SocketServer::setThreadPriority);
+
+	injector<SocketServer, SSLServer>(
+		"sslConfig",
+		&SocketServer::setSSLConfig
+	);
+	injector<SocketServer, SocketServerConnectionFactory>(
+		"connectionFactory",
+		&SocketServer::setFactory
+	);
 }
 
 void SocketServer::setSSLConfig(SSLServer *config)
