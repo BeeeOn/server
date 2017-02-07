@@ -31,9 +31,15 @@
 	ref        NMTOKEN   #IMPLIED
 >
 
-<!ELEMENT foreign-key EMPTY>
+<!ELEMENT foreign-key (pair*)>
 <!ATTLIST foreign-key
 	table      IDREF     #REQUIRED
+	local      NMTOKEN   #IMPLIED
+	remote     NMTOKEN   #IMPLIED
+>
+
+<!ELEMENT pair EMPTY>
+<!ATTLIST pair
 	local      NMTOKEN   #REQUIRED
 	remote     NMTOKEN   #REQUIRED
 >
