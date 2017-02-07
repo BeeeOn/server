@@ -47,6 +47,17 @@
 				(2751463465, 181462068183316, NULL, 'Test Device C', 0, 15, NULL, 99, 1483422145, 1483541120, 1483444265)
 			</sql>
 		</setup>
+		<setup name="global sensors history for test">
+			<sql>
+			INSERT INTO sensors_history (gateway_id, device_id, module_id, at, value)
+			VALUES
+				(181462068183316, 2731287621, 0, 1483416275, 24),
+				(181462068183316, 2731287621, 0, 1483421393, 25),
+				(181462068183316, 2731287621, 0, 1483426781, 23),
+				(181462068183316, 2731287621, 0, 1483431918, 27),
+				(181462068183316, 2731287621, 0, 1483441918, 29)
+			</sql>
+		</setup>
 		<setup name="global identities and users for tests">
 			<sql>
 			INSERT INTO identities (id, email)
@@ -130,6 +141,9 @@
 			<sql>DELETE FROM identities WHERE id = 'd184702c-7003-49a7-9ded-4c4fe5d88881'</sql>
 			<sql>DELETE FROM users WHERE id = 'd67713ff-de75-43c4-917b-88f0048b7ccf'</sql>
 			<sql>DELETE FROM identities WHERE id = 'b5696add-11c4-4b51-834a-c14ddd672db4'</sql>
+		</teardown>
+		<teardown name="global sensors history for test">
+			<sql>DELETE FROM sensors_history WHERE gateway_id = 2731287621 AND device_id = 181462068183316</sql>
 		</teardown>
 		<teardown name="global devices for test">
 			<sql>DELETE FROM devices WHERE id = 2751463465 and gateway_id = 181462068183316</sql>
