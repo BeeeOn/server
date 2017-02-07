@@ -126,12 +126,12 @@ void DependencyInjector::createEarly()
 	}
 }
 
-InjectorTarget *DependencyInjector::create(const string &name, bool disown)
+SharedPtr<InjectorTarget> DependencyInjector::create(const string &name, bool disown)
 {
 	TRACE_METHOD();
 
-	InjectorTarget *existing = find(name);
-	if (existing != NULL) {
+	SharedPtr<InjectorTarget> existing = find(name);
+	if (!existing.isNull()) {
 		logger().debug("instance " + name + " reused",
 				__FILE__, __LINE__);
 		return existing;
@@ -144,7 +144,7 @@ InjectorTarget *DependencyInjector::create(const string &name, bool disown)
 		return createNoAlias(info, disown);
 
 	existing = find(ref);
-	if (existing != NULL) {
+	if (!existing.isNull()) {
 		logger().debug("instance " + name
 				+ " reused as alias to " + ref,
 				__FILE__, __LINE__);
@@ -155,26 +155,26 @@ InjectorTarget *DependencyInjector::create(const string &name, bool disown)
 	return createNoAlias(aliasInfo, disown);
 }
 
-InjectorTarget *DependencyInjector::find(const string &name)
+SharedPtr<InjectorTarget> DependencyInjector::find(const string &name)
 {
 	InjectorSet::const_iterator it = m_set.find(name);
 	if (it != m_set.end())
-		return (InjectorTarget *) it->second.get();
+		return it->second;
 
 	return NULL;
 }
 
-InjectorTarget *DependencyInjector::createNoAlias(
+SharedPtr<InjectorTarget> DependencyInjector::createNoAlias(
 		const InstanceInfo &info, bool disown)
 {
-	InjectorTarget *t = createNew(info);
-	if (t == NULL)
+	SharedPtr<InjectorTarget> t = createNew(info);
+	if (t.isNull())
 		throw Poco::NullPointerException("failed to create target "
 				+ info.name());
 
 	if (!disown) {
 		m_set.insert(make_pair(info.name(), t));
-		m_free.push_back(m_set[info.name()]);
+		m_free.push_back(t);
 	}
 
 	return injectDependencies(info, t);
@@ -198,7 +198,7 @@ InjectorTarget *DependencyInjector::createNew(const InstanceInfo &info)
 
 bool DependencyInjector::tryInjectRef(
 		const InstanceInfo &info,
-		InjectorTarget *target,
+		SharedPtr<InjectorTarget> target,
 		const string &key,
 		const string &name)
 {
@@ -208,7 +208,7 @@ bool DependencyInjector::tryInjectRef(
 		logger().debug("injecting " + value + " as " + name
 				+ " into " + info.name());
 
-		InjectorTarget *ref;
+		SharedPtr<InjectorTarget> ref;
 
 		try {
 			ref = create(value);
@@ -218,12 +218,12 @@ bool DependencyInjector::tryInjectRef(
 			e.rethrow();
 		}
 
-		if (ref == NULL) {
+		if (ref.isNull()) {
 			throw NullPointerException(
 					"failed to create ref " + value);
 		}
 
-		target->injectRef(name, ref);
+		target->injectRef(name, ref.get());
 		return true;
 	}
 
@@ -232,7 +232,7 @@ bool DependencyInjector::tryInjectRef(
 
 bool DependencyInjector::tryInjectNumber(
 		const InstanceInfo &info,
-		InjectorTarget *target,
+		SharedPtr<InjectorTarget> target,
 		const string &key,
 		const string &name)
 {
@@ -251,7 +251,7 @@ bool DependencyInjector::tryInjectNumber(
 
 bool DependencyInjector::tryInjectText(
 		const InstanceInfo &info,
-		InjectorTarget *target,
+		SharedPtr<InjectorTarget> target,
 		const string &key,
 		const string &name)
 {
@@ -270,7 +270,7 @@ bool DependencyInjector::tryInjectText(
 
 void DependencyInjector::injectValue(
 		const InstanceInfo &info,
-		InjectorTarget *target,
+		SharedPtr<InjectorTarget> target,
 		const string &key,
 		const string &name)
 {
@@ -288,9 +288,9 @@ void DependencyInjector::injectValue(
 			__FILE__, __LINE__);
 }
 
-InjectorTarget *DependencyInjector::injectDependencies(
+SharedPtr<InjectorTarget> DependencyInjector::injectDependencies(
 		const InstanceInfo &info,
-		InjectorTarget *target)
+		SharedPtr<InjectorTarget> target)
 {
 	AbstractConfiguration::Keys keys;
 	info.resolveKeys(m_conf, keys);

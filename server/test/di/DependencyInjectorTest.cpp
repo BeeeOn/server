@@ -158,12 +158,12 @@ void DependencyInjectorTest::testSimple()
 {
 	DependencyInjector injector(m_config);
 
-	FakeObject *fake = injector.find<FakeObject>("simple");
-	CPPUNIT_ASSERT(fake == NULL);
+	SharedPtr<FakeObject> fake = injector.find<FakeObject>("simple");
+	CPPUNIT_ASSERT(fake.isNull());
 
 	fake = injector.create<FakeObject>("simple");
 
-	CPPUNIT_ASSERT(fake != NULL);
+	CPPUNIT_ASSERT(!fake.isNull());
 	CPPUNIT_ASSERT(fake->m_self == fake);
 	CPPUNIT_ASSERT(fake->m_name.compare("fake") == 0);
 	CPPUNIT_ASSERT(fake->m_index == 5);
@@ -177,20 +177,20 @@ void DependencyInjectorTest::testAlias()
 {
 	DependencyInjector injector(m_config);
 
-	FakeObject *fakeAlias = injector.find<FakeObject>("simpleAlias");
-	CPPUNIT_ASSERT(fakeAlias == NULL);
+	SharedPtr<FakeObject> fakeAlias = injector.find<FakeObject>("simpleAlias");
+	CPPUNIT_ASSERT(fakeAlias.isNull());
 
 	fakeAlias = injector.create<FakeObject>("simpleAlias");
-	CPPUNIT_ASSERT(fakeAlias != NULL);
+	CPPUNIT_ASSERT(!fakeAlias.isNull());
 
-	FakeObject *fake = injector.find<FakeObject>("simple");
-	CPPUNIT_ASSERT(fake != NULL);
+	SharedPtr<FakeObject> fake = injector.find<FakeObject>("simple");
+	CPPUNIT_ASSERT(!fake.isNull());
 
-	FakeObject *fakeCreated = injector.create<FakeObject>("simple");
-	CPPUNIT_ASSERT(fakeCreated != NULL);
+	SharedPtr<FakeObject> fakeCreated = injector.create<FakeObject>("simple");
+	CPPUNIT_ASSERT(!fakeCreated.isNull());
 
 	CPPUNIT_ASSERT(fake == fakeAlias);
-	CPPUNIT_ASSERT(fake == fakeCreated);
+	CPPUNIT_ASSERT(fakeAlias == fakeCreated);
 }
 
 /**
@@ -224,9 +224,9 @@ void DependencyInjectorTest::testExternalVariables()
 {
 	DependencyInjector injector(m_config);
 
-	FakeObject *fake = injector.create<FakeObject>("variable");
+	SharedPtr<FakeObject> fake = injector.create<FakeObject>("variable");
 
-	CPPUNIT_ASSERT(fake != NULL);
+	CPPUNIT_ASSERT(!fake.isNull());
 	CPPUNIT_ASSERT(fake->m_name.compare("any string") == 0);
 	CPPUNIT_ASSERT(fake->m_other.compare("${NotExisting}") == 0);
 	CPPUNIT_ASSERT(fake->m_index == 42);
@@ -240,11 +240,11 @@ void DependencyInjectorTest::testEarly()
 {
 	DependencyInjector injector(m_config);
 
-	FakeObject *early0 = injector.find<FakeObject>("earlyInit0");
-	CPPUNIT_ASSERT(early0 != NULL);
+	SharedPtr<FakeObject> early0 = injector.find<FakeObject>("earlyInit0");
+	CPPUNIT_ASSERT(!early0.isNull());
 
-	FakeObject *early1 = injector.find<FakeObject>("earlyInit1");
-	CPPUNIT_ASSERT(early1 != NULL);
+	SharedPtr<FakeObject> early1 = injector.find<FakeObject>("earlyInit1");
+	CPPUNIT_ASSERT(!early1.isNull());
 
 	CPPUNIT_ASSERT(early0 != early1);
 }

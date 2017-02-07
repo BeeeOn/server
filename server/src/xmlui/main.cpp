@@ -33,7 +33,7 @@ protected:
 
 	SocketServer *createSocketServer(
 			DependencyInjector &injector,
-			XmlRequestHandlerFactory *factory)
+			XmlRequestHandlerFactory::Ptr factory)
 	{
 		if (config().getBool("xmlui.ssl.enable", false)) {
 			Context::Ptr context = initSSL(injector);
@@ -52,8 +52,8 @@ protected:
 			ManifestSingleton::reportInfo(logger());
 
 		DependencyInjector injector(config().createView("services"));
-		XmlRequestHandlerFactory *factory = injector
-			.create<XmlRequestHandlerFactory>("xmlui", true);
+		XmlRequestHandlerFactory::Ptr factory = injector
+			.create<XmlRequestHandlerFactory>("xmlui");
 
 		SocketServer *server = createSocketServer(injector, factory);
 		server->start();

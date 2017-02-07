@@ -88,24 +88,21 @@ public:
 
 	~DependencyInjector();
 
-	InjectorTarget *create(const std::string &name, bool disown = false);
+	Poco::SharedPtr<InjectorTarget> create(const std::string &name, bool disown = false);
 
 	template <typename T>
-	T *create(const std::string &name, bool disown = false)
+	Poco::SharedPtr<T> create(const std::string &name, bool disown = false)
 	{
-		return dynamic_cast<T *>(create(name, disown));
+		return create(name, disown).cast<T>();
 	}
 
-	InjectorTarget *find(const std::string &name);
+	Poco::SharedPtr<InjectorTarget> find(const std::string &name);
 
 	template <typename T>
-	T *find(const std::string &name)
+	Poco::SharedPtr<T> find(const std::string &name)
 	{
-		InjectorTarget *t = find(name);
-		if (t != NULL)
-			return dynamic_cast<T *>(t);
-
-		return NULL;
+		Poco::SharedPtr<InjectorTarget> t = find(name);
+		return t.cast<T>();
 	}
 
 private:
@@ -114,27 +111,27 @@ private:
 	 */
 	void createEarly();
 
-	InjectorTarget *createNoAlias(
+	Poco::SharedPtr<InjectorTarget> createNoAlias(
 			const InstanceInfo &info,
 			bool disown = false);
 	InjectorTarget *createNew(const InstanceInfo &info);
-	InjectorTarget *injectDependencies(
+	Poco::SharedPtr<InjectorTarget> injectDependencies(
 			const InstanceInfo &info,
-			InjectorTarget *target);
+			Poco::SharedPtr<InjectorTarget> target);
 	void injectValue(const InstanceInfo &info,
-			InjectorTarget *target,
+			Poco::SharedPtr<InjectorTarget> target,
 			const std::string &key,
 			const std::string &name);
 	bool tryInjectRef(const InstanceInfo &info,
-			InjectorTarget *target,
+			Poco::SharedPtr<InjectorTarget> target,
 			const std::string &key,
 			const std::string &name);
 	bool tryInjectNumber(const InstanceInfo &info,
-			InjectorTarget *target,
+			Poco::SharedPtr<InjectorTarget> target,
 			const std::string &key,
 			const std::string &name);
 	bool tryInjectText(const InstanceInfo &info,
-			InjectorTarget *target,
+			Poco::SharedPtr<InjectorTarget> target,
 			const std::string &key,
 			const std::string &name);
 
