@@ -44,6 +44,17 @@
 		<x:call-template name="new-line" />
 	</x:template>
 
+	<x:template match="value[@type='real' or @type='double']" mode="csv">
+		<x:variable name="is.integer" select="floor(number(.)) = number(.)" />
+
+		<x:if test="$is.integer">
+			<x:value-of select="format-number(number(.), '#.0')" />
+		</x:if>
+		<x:if test="not($is.integer)">
+			<x:value-of select="." />
+		</x:if>
+	</x:template>
+
 	<x:template match="/query-set">
 		<x:call-template name="generate-sql-tests" />
 		<x:call-template name="generate-expect-values" />
