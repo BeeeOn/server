@@ -288,3 +288,14 @@ void DefaultAccessPolicy::assureUpdate(
 		fetchAccessLevel(context.user(), tmp.gateway()),
 		AccessLevel::admin());
 }
+
+void DefaultAccessPolicy::assureFetchRange(
+	const PolicyContext &context,
+	const Device &device,
+	const ModuleInfo &module,
+	const TimeInterval &range)
+{
+	assureAtLeast(
+		fetchAccessLevel(context.user(), device.gateway()),
+		AccessLevel::guest());
+}

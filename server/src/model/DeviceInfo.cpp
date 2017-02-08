@@ -55,3 +55,15 @@ void DeviceInfo::clear()
 {
 	m_modules.clear();
 }
+
+bool DeviceInfo::lookup(ModuleInfo &module) const
+{
+	for (auto &info : *this) {
+		if (info.id() == module.id()) {
+			module = info;
+			return true;
+		}
+	}
+
+	return false;
+}

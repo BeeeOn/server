@@ -23,6 +23,11 @@ public:
 		return m_target;
 	}
 
+	const T &target() const
+	{
+		return m_target;
+	}
+
 	const Base &base() const
 	{
 		return m_base;

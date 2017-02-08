@@ -1,4 +1,5 @@
 import xml.etree.ElementTree as xml
+import time
 import socket
 
 class Request:
@@ -354,6 +355,35 @@ class DeviceUnregister(Request):
 		request.set("gateid", self.gateway)
 		device = xml.SubElement(request, "device")
 		device.set("euid", self.device)
+
+		return request
+
+class DeviceGetLog(Request):
+	def __init__(self, gateway, device, module, sessionid, **kwargs):
+		Request.__init__(self, ns = "devices",
+			type = "getlog", sessionid = sessionid)
+		self.gateway = gateway
+		self.device = device
+		self.module = module
+
+		self.start = int(time.mktime(kwargs["start"].timetuple()))
+		self.end = int(time.mktime(kwargs["end"].timetuple()))
+		self.ftype = kwargs["ftype"]
+		if "interval" in kwargs:
+			self.interval = kwargs["interval"]
+		else:
+			self.interval = 5
+
+	def xml(self):
+		request = Request.xml(self)
+		request.set("gateid", self.gateway)
+		logs = xml.SubElement(request, "logs")
+		logs.set("deviceeuid", str(self.device))
+		logs.set("moduleid", str(self.module))
+		logs.set("from", str(self.start))
+		logs.set("to", str(self.end))
+		logs.set("ftype", self.ftype)
+		logs.set("interval", str(self.interval))
 
 		return request
 

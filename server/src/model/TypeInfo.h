@@ -31,6 +31,8 @@ public:
 	void setWidth(const unsigned int width);
 	unsigned int width() const;
 
+	std::string asString(const double v) const;
+
 private:
 	std::string m_name;
 	std::string m_unit;

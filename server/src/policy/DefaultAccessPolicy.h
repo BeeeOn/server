@@ -6,6 +6,7 @@
 #include "policy/LocationAccessPolicy.h"
 #include "policy/DeviceAccessPolicy.h"
 #include "policy/RoleAccessPolicy.h"
+#include "policy/SensorHistoryAccessPolicy.h"
 #include "dao/RoleInGatewayDao.h"
 #include "dao/GatewayDao.h"
 #include "dao/LocationDao.h"
@@ -18,7 +19,8 @@ class DefaultAccessPolicy : public AbstractInjectorTarget,
 		public GatewayAccessPolicy,
 		public LocationAccessPolicy,
 		public DeviceAccessPolicy,
-		public RoleAccessPolicy {
+		public RoleAccessPolicy,
+		public SensorHistoryAccessPolicy {
 public:
 	DefaultAccessPolicy();
 
@@ -70,6 +72,12 @@ public:
 	void assureUpdate(
 		const PolicyContext &context,
 		const RoleInGateway &role) override;
+
+	void assureFetchRange(
+		const PolicyContext &context,
+		const Device &device,
+		const ModuleInfo &module,
+		const TimeInterval &range) override;
 
 	void setUserDao(UserDao *dao)
 	{

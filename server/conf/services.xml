@@ -31,6 +31,7 @@
 			<add name="resolvers" ref="authXmlHandler" />
 			<add name="resolvers" ref="gatewayXmlHandler" />
 			<add name="resolvers" ref="deviceXmlHandler" />
+			<add name="resolvers" ref="sensorXmlHandler" />
 			<add name="resolvers" ref="locationXmlHandler" />
 			<add name="resolvers" ref="profileXmlHandler" />
 			<add name="resolvers" ref="roleXmlHandler" />
@@ -63,6 +64,12 @@
 			<set name="sessionManager" ref="sessionManager" />
 		</instance>
 
+		<instance name="sensorXmlHandler"
+				class="BeeeOn::XmlUI::SensorXmlHandlerResolver">
+			<set name="sensorHistoryService" ref="sensorHistoryService" />
+			<set name="sessionManager" ref="sessionManager" />
+		</instance>
+
 		<instance name="profileXmlHandler"
 				class="BeeeOn::XmlUI::ProfileXmlHandlerResolver">
 			<set name="identityService" ref="identityService" />
@@ -84,6 +91,7 @@
 			<set name="deviceDao" ref="deviceDao" />
 			<set name="identityDao" ref="identityDao" />
 			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
+			<set name="sensorHistoryDao" ref="sensorHistoryDao" />
 			<set name="deviceInfoProvider" ref="deviceInfoProvider" />
 			<set name="transactionManager" ref="transactionManager" />
 		</instance>
@@ -144,6 +152,13 @@
 			<set name="accessPolicy" ref="accessPolicy" />
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="notificationDispatcher" ref="notificationDispatcher" />
+		</instance>
+
+		<instance name="sensorHistoryService" class="BeeeOn::SensorHistoryService">
+			<set name="sensorHistoryDao" ref="sensorHistoryDao" />
+			<set name="deviceDao" ref="deviceDao" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="accessPolicy" ref="accessPolicy" />
 		</instance>
 
 		<instance name="typeInfoProvider" class="BeeeOn::TypeInfoProvider">
@@ -220,6 +235,7 @@
 		<alias name="identityDao" ref="sqlIdentityDao" />
 		<alias name="verifiedIdentityDao" ref="sqlVerifiedIdentityDao" />
 		<alias name="roleInGatewayDao" ref="sqlRoleInGatewayDao" />
+		<alias name="sensorHistoryDao" ref="sqlSensorHistoryDao" />
 
 		<instance name="pocoDaoManager"
 				class="BeeeOn::PocoDaoManager">
@@ -281,6 +297,12 @@
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="deviceInfoProvider" ref="deviceInfoProvider" />
+			<set name="sqlLoader" ref="queries" />
+		</instance>
+
+		<instance name="sqlSensorHistoryDao" class="BeeeOn::PocoSQLSensorHistoryDao">
+			<set name="daoManager" ref="pocoDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
 			<set name="sqlLoader" ref="queries" />
 		</instance>
 

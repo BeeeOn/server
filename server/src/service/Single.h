@@ -22,6 +22,11 @@ public:
 		return m_target;
 	}
 
+	const T &target() const
+	{
+		return m_target;
+	}
+
 private:
 	T &m_target;
 };

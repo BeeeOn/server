@@ -9,6 +9,7 @@
 #include "dao/LocationDao.h"
 #include "dao/IdentityDao.h"
 #include "dao/VerifiedIdentityDao.h"
+#include "dao/SensorHistoryDao.h"
 #include "dao/Transactional.h"
 #include "model/Location.h"
 #include "model/DeviceInfo.h"
@@ -36,6 +37,8 @@ public:
 			&UIMockInit::setVerifiedIdentityDao);
 		injector<UIMockInit, InfoProvider<DeviceInfo>>("deviceInfoProvider",
 			&UIMockInit::setDeviceInfoProvider);
+		injector<UIMockInit, SensorHistoryDao>("sensorHistoryDao",
+			&UIMockInit::setSensorHistoryDao);
 	}
 
 	void setUserDao(UserDao *dao)
@@ -73,11 +76,17 @@ public:
 		m_infoProvider = provider;
 	}
 
+	void setSensorHistoryDao(SensorHistoryDao *dao)
+	{
+		m_sensorHistoryDao = dao;
+	}
+
 protected:
 	void initUsers();
 	void initGateways();
 	void initLocations(std::vector<Location> &locations);
 	void initDevices(const std::vector<Location> &locations);
+	void initSensorData();
 	void injectionDone();
 
 private:
@@ -88,6 +97,7 @@ private:
 	IdentityDao *m_identityDao;
 	VerifiedIdentityDao *m_verifiedIdentityDao;
 	InfoProvider<DeviceInfo> *m_infoProvider;
+	SensorHistoryDao *m_sensorHistoryDao;
 };
 
 }

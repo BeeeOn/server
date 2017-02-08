@@ -45,6 +45,8 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/TypeInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/ModuleInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/DeviceInfo.cpp
+	${PROJECT_SOURCE_DIR}/model/ValueAt.cpp
+	${PROJECT_SOURCE_DIR}/model/ModuleValue.cpp
 	${PROJECT_SOURCE_DIR}/dao/UserDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/DeviceDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/GatewayDao.cpp
@@ -52,6 +54,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/dao/IdentityDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/VerifiedIdentityDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/RoleInGatewayDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/SensorHistoryDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoTransactionImpl.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoTransactionManager.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoAbstractDao.cpp
@@ -62,6 +65,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLGatewayDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLLocationDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLDeviceDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLSensorHistoryDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/ConnectorLoader.cpp
 	${PROJECT_SOURCE_DIR}/dao/SQLLoader.cpp
 	${PROJECT_SOURCE_DIR}/dao/SQLQuery.cpp
@@ -77,12 +81,14 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/service/LocationService.cpp
 	${PROJECT_SOURCE_DIR}/service/IdentityService.cpp
 	${PROJECT_SOURCE_DIR}/service/RoleService.cpp
+	${PROJECT_SOURCE_DIR}/service/SensorHistoryService.cpp
 	${PROJECT_SOURCE_DIR}/service/JSONGatewayDeserializer.cpp
 	${PROJECT_SOURCE_DIR}/service/JSONLocationDeserializer.cpp
 	${PROJECT_SOURCE_DIR}/policy/GatewayAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/LocationAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/DeviceAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/RoleAccessPolicy.cpp
+	${PROJECT_SOURCE_DIR}/policy/SensorHistoryAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/DefaultAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/util/DAMM.cpp
 	${PROJECT_SOURCE_DIR}/util/SecureXmlParser.cpp
@@ -94,6 +100,8 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/Startup.cpp
 	${PROJECT_SOURCE_DIR}/util/Loggable.cpp
 	${PROJECT_SOURCE_DIR}/util/PosixSignal.cpp
+	${PROJECT_SOURCE_DIR}/util/TimeInterval.cpp
+	${PROJECT_SOURCE_DIR}/util/ValueGenerator.cpp
 	${PROJECT_SOURCE_DIR}/ssl/X509Fingerprint.cpp
 	${PROJECT_SOURCE_DIR}/ssl/RejectCertificateHandler.cpp
 	${PROJECT_SOURCE_DIR}/ssl/SSLFacility.cpp
@@ -126,6 +134,7 @@ add_executable(ui-server
 add_executable(xmlui-server
 	xmlui/main.cpp
 	xmlui/Serializing.cpp
+	xmlui/XmlValueConsumer.cpp
 	xmlui/AbstractXmlHandler.cpp
 	xmlui/AnyXmlHandler.cpp
 	xmlui/AuthXmlHandler.cpp
@@ -137,6 +146,7 @@ add_executable(xmlui-server
 	xmlui/LocationXmlHandler.cpp
 	xmlui/ProfileXmlHandler.cpp
 	xmlui/DeviceXmlHandler.cpp
+	xmlui/SensorXmlHandler.cpp
 	xmlui/RoleXmlHandler.cpp
 	ui/UIMockInit.cpp
 	dao/poco/PocoSQLiteConnectorLoader.cpp
