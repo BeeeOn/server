@@ -101,6 +101,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/TimeInterval.cpp
 	${PROJECT_SOURCE_DIR}/util/ValueGenerator.cpp
 	${PROJECT_SOURCE_DIR}/loop/StoppableRunnable.cpp
+	${PROJECT_SOURCE_DIR}/loop/StoppableLoop.cpp
 	${PROJECT_SOURCE_DIR}/ssl/X509Fingerprint.cpp
 	${PROJECT_SOURCE_DIR}/ssl/RejectCertificateHandler.cpp
 	${PROJECT_SOURCE_DIR}/ssl/SSLFacility.cpp
