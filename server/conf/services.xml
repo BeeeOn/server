@@ -16,7 +16,11 @@
 			<set name="sessionManager" ref="sessionManager" />
 		</instance>
 
-		<instance name="xmlui" class="BeeeOn::SocketServer">
+		<instance name="xmlui" class="BeeeOn::LoopRunner">
+			<add name="loops" ref="xmluiServer" />
+		</instance>
+
+		<instance name="xmluiServer" class="BeeeOn::SocketServer">
 			<set name="connectionFactory" ref="xmluiFactory" />
 			<set name="sslConfig" ref="xmluiSSLServer" if-yes="${xmlui.ssl.enable}" />
 			<set name="backlog" number="64" />
@@ -24,6 +28,7 @@
 			<set name="maxQueued" number="64" />
 			<set name="threadIdleTime" number="8" />
 			<set name="threadPriority" text="normal" />
+			<set name="port" number="${xmlui.port}" />
 		</instance>
 
 		<instance name="xmluiFactory"

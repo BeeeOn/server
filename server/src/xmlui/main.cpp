@@ -5,21 +5,16 @@
 #include <Poco/Net/RejectCertificateHandler.h>
 
 #include "di/DependencyInjector.h"
-#include "server/SocketServer.h"
-#include "server/XmlRequestHandler.h"
-#include "ssl/SSLServer.h"
+#include "loop/LoopRunner.h"
 #include "util/Startup.h"
 
 using namespace std;
 using namespace Poco;
-using namespace Poco::Net;
 using namespace BeeeOn;
-
-#define DEFAULT_PORT 8001
 
 class Startup : public ServerStartup {
 public:
-	Startup(): ServerStartup("beeeon", "ui-server", DEFAULT_PORT)
+	Startup(): ServerStartup("beeeon", "ui-server", 0)
 	{
 	}
 
@@ -29,17 +24,18 @@ protected:
 		if (logger().debug())
 			ManifestSingleton::reportInfo(logger());
 
+		if (m_serverPort != 0)
+			config().setInt("xmlui.port", m_serverPort);
+
 		DependencyInjector injector(config().createView("services"));
 
-		SharedPtr<SocketServer> server = injector.create<SocketServer>("xmlui");
-		server->setPort(m_serverPort);
-
-		server->start();
+		SharedPtr<LoopRunner> runner = injector.create<LoopRunner>("xmlui");
+		runner->start();
 
 		notifyStarted();
 
 		waitForTerminationRequest();
-		server->stop();
+		runner->stop();
 
 		return EXIT_OK;
 	}
