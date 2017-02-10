@@ -8,11 +8,9 @@ using namespace std;
 using namespace Poco;
 using namespace BeeeOn;
 
-#define DEFAULT_PORT 8000
-
 class Startup : public ServerStartup {
 public:
-	Startup(): ServerStartup("BeeeOn", "ui-server", DEFAULT_PORT)
+	Startup(): ServerStartup("BeeeOn", "ui-server", 0)
 	{
 	}
 
@@ -22,11 +20,14 @@ protected:
 		if (logger().debug())
 			ManifestSingleton::reportInfo(logger());
 
+		if (m_serverPort > 0)
+			config().setInt("ui.port", m_serverPort);
+
 		DependencyInjector injector(config().createView("services"));
 		UIServerModule *module = injector
 					.create<UIServerModule>("ui");
 
-		module->createServer(m_serverPort);
+		module->createServer();
 		module->server().start();
 
 		notifyStarted();

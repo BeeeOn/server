@@ -56,6 +56,7 @@ class UIServerModule : public AbstractInjectorTarget,
 		public Loggable {
 public:
 	UIServerModule(void):
+		m_port(0),
 		m_factory(new UIServerRequestHandlerFactory("ui-server")),
 		m_server(NULL)
 	{
@@ -67,6 +68,7 @@ public:
 				&UIServerModule::setAuthHandler);
 		injector<UIServerModule, DeviceService>("deviceService",
 				&UIServerModule::setDeviceService);
+		numberInjector("port", (NumberSetter) &UIServerModule::setPort);
 	}
 
 	/**
@@ -79,9 +81,14 @@ public:
 			delete m_server;
 	}
 
-	void createServer(unsigned int port)
+	void setPort(int port)
 	{
-		m_server = new UIRestServer(port, m_factory);
+		m_port = port;
+	}
+
+	void createServer()
+	{
+		m_server = new UIRestServer(m_port, m_factory);
 	}
 
 	UIServerRequestHandlerFactory &factory()
@@ -125,6 +132,7 @@ public:
 	}
 
 private:
+	int m_port;
 	Poco::SharedPtr<UIServerRequestHandlerFactory> m_factory;
 	UIRestServer *m_server;
 	UserService *m_userService;

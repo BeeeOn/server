@@ -6,6 +6,7 @@
 			<set name="userService" ref="userService" />
 			<set name="authHandler" ref="authHandler" />
 			<set name="deviceService" ref="deviceService" />
+			<set name="port" number="${ui.port}" />
 		</instance>
 
 		<instance name="authHandler" class="BeeeOn::RestAuthHandler">
