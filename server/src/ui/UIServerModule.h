@@ -4,6 +4,7 @@
 #include <iostream>
 #include <Poco/SharedPtr.h>
 
+#include "loop/StoppableLoop.h"
 #include "server/RestRequestHandler.h"
 #include "server/SessionVerifier.h"
 #include "server/RestAuthHandler.h"
@@ -52,9 +53,11 @@ typedef TRoute<UIRequest, UIResponse, ExpirableSession::Ptr> UIRoute;
 typedef UIRoute::Context UIRouteContext;
 
 class UIServerModule : public AbstractInjectorTarget,
-		public Loggable {
+		public Loggable,
+		public StoppableLoop {
 public:
 	UIServerModule(void):
+		m_port(0),
 		m_factory(new UIServerRequestHandlerFactory("ui-server")),
 		m_server(NULL)
 	{
@@ -66,6 +69,7 @@ public:
 				&UIServerModule::setAuthHandler);
 		injector<UIServerModule, DeviceService>("deviceService",
 				&UIServerModule::setDeviceService);
+		numberInjector("port", (NumberSetter) &UIServerModule::setPort);
 	}
 
 	/**
@@ -78,9 +82,14 @@ public:
 			delete m_server;
 	}
 
-	void createServer(unsigned int port)
+	void setPort(int port)
 	{
-		m_server = new UIRestServer(port, m_factory);
+		m_port = port;
+	}
+
+	void createServer()
+	{
+		m_server = new UIRestServer(m_port, m_factory);
 	}
 
 	UIServerRequestHandlerFactory &factory()
@@ -88,9 +97,15 @@ public:
 		return *m_factory;
 	}
 
-	Server &server()
+	void start()
 	{
-		return *m_server;
+		createServer();
+		m_server->start();
+	}
+
+	void stop()
+	{
+		m_server->stop();
 	}
 
 	void setSessionVerifier(SessionVerifier *verifier)
@@ -124,6 +139,7 @@ public:
 	}
 
 private:
+	int m_port;
 	Poco::SharedPtr<UIServerRequestHandlerFactory> m_factory;
 	UIRestServer *m_server;
 	UserService *m_userService;

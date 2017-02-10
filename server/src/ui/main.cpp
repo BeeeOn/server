@@ -1,18 +1,17 @@
+#include <Poco/SharedPtr.h>
 #include <Poco/Logger.h>
 
 #include "util/Startup.h"
 #include "di/DependencyInjector.h"
-#include "UIServerModule.h"
+#include "loop/LoopRunner.h"
 
 using namespace std;
 using namespace Poco;
 using namespace BeeeOn;
 
-#define DEFAULT_PORT 8000
-
 class Startup : public ServerStartup {
 public:
-	Startup(): ServerStartup("BeeeOn", "ui-server", DEFAULT_PORT)
+	Startup(): ServerStartup("BeeeOn", "ui-server", 0)
 	{
 	}
 
@@ -22,17 +21,18 @@ protected:
 		if (logger().debug())
 			ManifestSingleton::reportInfo(logger());
 
-		DependencyInjector injector(config().createView("services"));
-		UIServerModule *module = injector
-					.create<UIServerModule>("ui");
+		if (m_serverPort > 0)
+			config().setInt("ui.port", m_serverPort);
 
-		module->createServer(m_serverPort);
-		module->server().start();
+		DependencyInjector injector(config().createView("services"));
+		SharedPtr<LoopRunner> runner = injector.create<LoopRunner>("ui");
+
+		runner->start();
 
 		notifyStarted();
 
 		waitForTerminationRequest();
-		module->server().stop();
+		runner->stop();
 		return EXIT_OK;
 	}
 };
