@@ -10,7 +10,7 @@
 #include <Poco/Net/Context.h>
 
 #include "di/InjectorTarget.h"
-#include "server/Server.h"
+#include "loop/StoppableLoop.h"
 
 namespace BeeeOn {
 
@@ -26,7 +26,7 @@ public:
 			const Poco::Net::StreamSocket &socket) = 0;
 };
 
-class SocketServer : public Server, public AbstractInjectorTarget {
+class SocketServer : public StoppableLoop, public AbstractInjectorTarget {
 public:
 	SocketServer();
 
@@ -39,8 +39,8 @@ public:
 	void setThreadIdleTime(int seconds);
 	void setThreadPriority(const std::string &priority);
 
-	void start();
-	void stop();
+	void start() override;
+	void stop() override;
 
 protected:
 	Poco::Net::TCPServer *createServer();
