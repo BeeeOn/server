@@ -76,6 +76,21 @@ CPPUNIT_NS_BEGIN
 		}                                                                       \
 	} while (false)
 
+static inline void assertEquals(
+		const char *expected,
+		const std::string &actual,
+		SourceLine sourceLine,
+		const std::string &message)
+{
+	if (!assertion_traits<std::string>::equal(std::string(expected), actual)) {
+		Asserter::failNotEqual(
+			assertion_traits<std::string>::toString(std::string(expected)),
+			assertion_traits<std::string>::toString(actual),
+			sourceLine,
+			message);
+	}
+}
+
 CPPUNIT_NS_END
 
 #endif
