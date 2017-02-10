@@ -1,7 +1,11 @@
 <!DOCTYPE system SYSTEM "services.dtd">
 <system>
 	<services>
-		<instance name="ui" class="BeeeOn::UIServerModule">
+		<instance name="ui" class="BeeeOn::LoopRunner">
+			<add name="loops" ref="uiModule" />
+		</instance>
+
+		<instance name="uiModule" class="BeeeOn::UIServerModule">
 			<set name="sessionVerifier" ref="sessionVerifier" />
 			<set name="userService" ref="userService" />
 			<set name="authHandler" ref="authHandler" />

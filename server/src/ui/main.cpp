@@ -1,8 +1,9 @@
+#include <Poco/SharedPtr.h>
 #include <Poco/Logger.h>
 
 #include "util/Startup.h"
 #include "di/DependencyInjector.h"
-#include "UIServerModule.h"
+#include "loop/LoopRunner.h"
 
 using namespace std;
 using namespace Poco;
@@ -24,16 +25,14 @@ protected:
 			config().setInt("ui.port", m_serverPort);
 
 		DependencyInjector injector(config().createView("services"));
-		UIServerModule *module = injector
-					.create<UIServerModule>("ui");
+		SharedPtr<LoopRunner> runner = injector.create<LoopRunner>("ui");
 
-		module->createServer();
-		module->server().start();
+		runner->start();
 
 		notifyStarted();
 
 		waitForTerminationRequest();
-		module->server().stop();
+		runner->stop();
 		return EXIT_OK;
 	}
 };

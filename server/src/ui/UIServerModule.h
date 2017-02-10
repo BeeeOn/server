@@ -53,7 +53,8 @@ typedef TRoute<UIRequest, UIResponse, ExpirableSession::Ptr> UIRoute;
 typedef UIRoute::Context UIRouteContext;
 
 class UIServerModule : public AbstractInjectorTarget,
-		public Loggable {
+		public Loggable,
+		public StoppableLoop {
 public:
 	UIServerModule(void):
 		m_port(0),
@@ -96,9 +97,15 @@ public:
 		return *m_factory;
 	}
 
-	StoppableLoop &server()
+	void start()
 	{
-		return *m_server;
+		createServer();
+		m_server->start();
+	}
+
+	void stop()
+	{
+		m_server->stop();
 	}
 
 	void setSessionVerifier(SessionVerifier *verifier)
