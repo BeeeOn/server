@@ -10,7 +10,7 @@
 #include <Poco/Net/HTTPRequestHandler.h>
 #include <Poco/Net/HTTPRequestHandlerFactory.h>
 
-#include "server/Server.h"
+#include "loop/StoppableLoop.h"
 #include "server/Session.h"
 #include "server/SessionVerifier.h"
 #include "server/RestRequestHandler.h"
@@ -117,7 +117,7 @@ private:
 	RestRequestHandlerFactory m_impl;
 };
 
-class PocoServer : public Server {
+class PocoServer : public StoppableLoop {
 public:
 	using RequestHandlerFactory = PocoRestRequestHandlerFactory;
 	PocoServer(unsigned int port,
@@ -127,7 +127,7 @@ public:
 	{
 	}
 
-	void start()
+	void start() override
 	{
 		LOGGER_CLASS(this).information(
 			"starting server on port "
@@ -137,7 +137,7 @@ public:
 		m_server.start();
 	}
 
-	void stop()
+	void stop() override
 	{
 		LOGGER_CLASS(this).information(
 			"stopping server on port "

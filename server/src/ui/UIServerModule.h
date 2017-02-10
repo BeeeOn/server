@@ -4,6 +4,7 @@
 #include <iostream>
 #include <Poco/SharedPtr.h>
 
+#include "loop/StoppableLoop.h"
 #include "server/RestRequestHandler.h"
 #include "server/SessionVerifier.h"
 #include "server/RestAuthHandler.h"
@@ -88,7 +89,7 @@ public:
 		return *m_factory;
 	}
 
-	Server &server()
+	StoppableLoop &server()
 	{
 		return *m_server;
 	}
