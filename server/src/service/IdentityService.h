@@ -1,7 +1,6 @@
 #ifndef BEEEON_IDENTITY_SERVICE_H
 #define BEEEON_IDENTITY_SERVICE_H
 
-#include "di/InjectorTarget.h"
 #include "dao/IdentityDao.h"
 #include "dao/VerifiedIdentityDao.h"
 #include "dao/Transactional.h"

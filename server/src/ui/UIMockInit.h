@@ -3,7 +3,6 @@
 
 #include <vector>
 
-#include "di/InjectorTarget.h"
 #include "dao/UserDao.h"
 #include "dao/GatewayDao.h"
 #include "dao/LocationDao.h"

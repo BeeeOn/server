@@ -4,7 +4,6 @@
 #include <map>
 #include <Poco/Exception.h>
 #include <Poco/Logger.h>
-#include "di/InjectorTarget.h"
 #include "provider/AuthProvider.h"
 #include "notification/NotificationDispatcher.h"
 #include "dao/UserDao.h"

@@ -8,7 +8,6 @@
 #include "service/Relation.h"
 #include "dao/Transactional.h"
 #include "rpc/GatewayRPC.h"
-#include "di/InjectorTarget.h"
 #include "Debug.h"
 #include "model/User.h"
 #include "model/VerifiedIdentity.h"
