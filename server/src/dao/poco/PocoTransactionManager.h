@@ -1,7 +1,7 @@
 #ifndef BEEEON_POCO_TRANSACTION_MANAGER_H
 #define BEEEON_POCO_TRANSACTION_MANAGER_H
 
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "dao/ThreadLocalTransactionManager.h"
 #include "dao/poco/PocoDaoManager.h"
 

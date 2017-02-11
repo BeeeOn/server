@@ -5,7 +5,7 @@
 #include <Poco/Util/LayeredConfiguration.h>
 #include <Poco/Util/AbstractConfiguration.h>
 
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 
 namespace BeeeOn {
 

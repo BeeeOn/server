@@ -19,7 +19,7 @@
 
 #include "util/SecureXmlParser.h"
 #include "util/Loggable.h"
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "server/SocketServer.h"
 
 namespace BeeeOn {

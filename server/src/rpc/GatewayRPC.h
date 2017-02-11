@@ -3,7 +3,7 @@
 
 #include <Poco/Exception.h>
 
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "model/Gateway.h"
 #include "model/Device.h"
 

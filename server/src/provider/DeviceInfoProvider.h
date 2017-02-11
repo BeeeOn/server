@@ -3,7 +3,7 @@
 
 #include <set>
 
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "model/ModuleInfo.h"
 #include "model/DeviceInfo.h"
 #include "provider/InfoProvider.h"

@@ -4,7 +4,7 @@
 #include <Poco/RWLock.h>
 #include <Poco/Logger.h>
 
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "provider/RandomProvider.h"
 #include "model/VerifiedIdentity.h"
 #include "server/SessionCache.h"

@@ -3,7 +3,7 @@
 
 #include <map>
 #include <Poco/Logger.h>
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "util/Loggable.h"
 #include "Debug.h"
 

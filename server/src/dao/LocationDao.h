@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "dao/NullDao.h"
 #include "dao/GatewayDao.h"
 #include "model/Gateway.h"

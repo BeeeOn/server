@@ -5,7 +5,7 @@
 #include <Poco/Mutex.h>
 #include <Poco/Net/Context.h>
 
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "util/Loggable.h"
 
 namespace Poco {

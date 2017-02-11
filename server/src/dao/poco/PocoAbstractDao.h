@@ -10,7 +10,7 @@
 #include <Poco/Data/RecordSet.h>
 
 #include "dao/EntityLoader.h"
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "util/Loggable.h"
 
 namespace Poco {

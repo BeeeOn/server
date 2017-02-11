@@ -3,7 +3,7 @@
 
 #include <set>
 
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "model/TypeInfo.h"
 #include "provider/InfoProvider.h"
 #include "util/TypesSAXHandler.h"

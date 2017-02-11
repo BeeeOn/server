@@ -1,6 +1,6 @@
 #include <Poco/Logger.h>
 
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "rpc/GatewayRPC.h"
 #include "dao/DeviceDao.h"
 #include "util/Loggable.h"

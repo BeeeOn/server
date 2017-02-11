@@ -8,7 +8,7 @@
 #include "server/RestRequestHandler.h"
 #include "server/SessionVerifier.h"
 #include "server/RestAuthHandler.h"
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "service/UserService.h"
 #include "service/DeviceService.h"
 #include "util/Loggable.h"

@@ -16,6 +16,7 @@ add_definitions(-std=c++11)
 
 file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/di/InjectorTarget.cpp
+	${PROJECT_SOURCE_DIR}/di/AbstractInjectorTarget.cpp
 	${PROJECT_SOURCE_DIR}/di/DependencyInjector.cpp
 	${PROJECT_SOURCE_DIR}/provider/AuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/RandomProvider.cpp

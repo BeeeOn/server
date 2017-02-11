@@ -1,7 +1,7 @@
 #ifndef BEEEON_POCO_SQLITE_CONNECTOR_LOADER_H
 #define BEEEON_POCO_SQLITE_CONNECTOR_LOADER_H
 
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "dao/ConnectorLoader.h"
 
 namespace BeeeOn {

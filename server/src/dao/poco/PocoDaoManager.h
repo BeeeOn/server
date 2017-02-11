@@ -3,7 +3,7 @@
 
 #include <Poco/SharedPtr.h>
 #include <Poco/Data/SessionPool.h>
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "util/Loggable.h"
 
 namespace BeeeOn {

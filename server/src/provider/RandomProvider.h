@@ -6,7 +6,7 @@
 #include <Poco/Timestamp.h>
 #include <Poco/Mutex.h>
 
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "Debug.h"
 
 namespace BeeeOn {

@@ -1,7 +1,7 @@
 #ifndef BEEEON_DEFAULT_ACCESS_POLICY_H
 #define BEEEON_DEFAULT_ACCESS_POLICY_H
 
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "policy/GatewayAccessPolicy.h"
 #include "policy/LocationAccessPolicy.h"
 #include "policy/DeviceAccessPolicy.h"

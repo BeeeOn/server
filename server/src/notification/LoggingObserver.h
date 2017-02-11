@@ -1,7 +1,7 @@
 #ifndef BEEEON_CONSOLE_OBSERVER_H
 #define BEEEON_CONSOLE_OBSERVER_H
 
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "notification/NotificationObserver.h"
 
 namespace BeeeOn {

@@ -4,7 +4,7 @@
 #include <vector>
 #include <list>
 
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "dao/NullDao.h"
 #include "model/Device.h"
 #include "model/Gateway.h"

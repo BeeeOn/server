@@ -9,7 +9,7 @@
 #include <Poco/Net/TCPServerConnectionFactory.h>
 #include <Poco/Net/Context.h>
 
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "loop/StoppableLoop.h"
 
 namespace BeeeOn {

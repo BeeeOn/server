@@ -3,7 +3,7 @@
 
 #include <Poco/Exception.h>
 
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "dao/NullDao.h"
 #include "dao/MockDao.h"
 #include "model/User.h"

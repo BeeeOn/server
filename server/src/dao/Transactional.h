@@ -1,7 +1,7 @@
 #ifndef BEEEON_TRANSACTIONAL_H
 #define BEEEON_TRANSACTIONAL_H
 
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "dao/TransactionManager.h"
 #include "util/Loggable.h"
 

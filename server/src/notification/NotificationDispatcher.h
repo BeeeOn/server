@@ -3,7 +3,7 @@
 
 #include <Poco/NotificationCenter.h>
 
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "model/VerifiedIdentity.h"
 
 namespace Poco {

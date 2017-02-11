@@ -5,7 +5,7 @@
 
 #include <Poco/Mutex.h>
 
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "loop/StoppableRunnable.h"
 #include "loop/StoppableLoop.h"
 #include "util/Loggable.h"

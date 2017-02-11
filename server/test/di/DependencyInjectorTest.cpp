@@ -3,7 +3,7 @@
 
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "di/DependencyInjector.h"
 #include "cppunit/BetterAssert.h"
 #include "Debug.h"

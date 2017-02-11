@@ -4,7 +4,7 @@
 #include <Poco/Logger.h>
 #include <Poco/Net/NetException.h>
 
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "server/Session.h"
 #include "server/SessionManager.h"
 #include "util/Loggable.h"
