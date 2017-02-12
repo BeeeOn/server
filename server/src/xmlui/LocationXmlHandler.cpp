@@ -133,12 +133,8 @@ void LocationXmlHandler::handleGetAll(const string &gateid)
 LocationXmlHandlerResolver::LocationXmlHandlerResolver():
 	AbstractXmlHandlerResolver("locations")
 {
-	injector<LocationXmlHandlerResolver, LocationService>(
-			"locationService",
-			&LocationXmlHandlerResolver::setLocationService);
-	injector<LocationXmlHandlerResolver, SessionManager>(
-			"sessionManager",
-			&LocationXmlHandlerResolver::setSessionManager);
+	injector("locationService", &LocationXmlHandlerResolver::setLocationService);
+	injector("sessionManager", &LocationXmlHandlerResolver::setSessionManager);
 }
 
 bool LocationXmlHandlerResolver::canHandle(

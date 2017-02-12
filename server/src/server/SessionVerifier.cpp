@@ -9,8 +9,7 @@ using namespace BeeeOn;
 
 SessionVerifier::SessionVerifier()
 {
-	injector<SessionVerifier, SessionManager>("sessionManager",
-			&SessionVerifier::setSessionManager);
+	injector("sessionManager", &SessionVerifier::setSessionManager);
 }
 
 ExpirableSession::Ptr SessionVerifier::verifyAuthorized(

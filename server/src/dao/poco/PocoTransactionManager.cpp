@@ -8,10 +8,7 @@ BEEEON_OBJECT(PocoTransactionManager, BeeeOn::PocoTransactionManager)
 
 PocoTransactionManager::PocoTransactionManager()
 {
-	injector<PocoTransactionManager, PocoDaoManager>(
-		"daoManager",
-		&PocoTransactionManager::setDaoManager
-	);
+	injector("daoManager", &PocoTransactionManager::setDaoManager);
 }
 
 PocoTransactionManager::~PocoTransactionManager()

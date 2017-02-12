@@ -12,16 +12,11 @@ using namespace BeeeOn;
 
 DefaultAccessPolicy::DefaultAccessPolicy()
 {
-	injector<DefaultAccessPolicy, UserDao>("userDao",
-			&DefaultAccessPolicy::setUserDao);
-	injector<DefaultAccessPolicy, GatewayDao>("gatewayDao",
-			&DefaultAccessPolicy::setGatewayDao);
-	injector<DefaultAccessPolicy, LocationDao>("locationDao",
-			&DefaultAccessPolicy::setLocationDao);
-	injector<DefaultAccessPolicy, DeviceDao>("deviceDao",
-			&DefaultAccessPolicy::setDeviceDao);
-	injector<DefaultAccessPolicy, RoleInGatewayDao>("roleInGatewayDao",
-			&DefaultAccessPolicy::setRoleInGatewayDao);
+	injector("userDao", &DefaultAccessPolicy::setUserDao);
+	injector("gatewayDao", &DefaultAccessPolicy::setGatewayDao);
+	injector("locationDao", &DefaultAccessPolicy::setLocationDao);
+	injector("deviceDao", &DefaultAccessPolicy::setDeviceDao);
+	injector("roleInGatewayDao", &DefaultAccessPolicy::setRoleInGatewayDao);
 }
 
 AccessLevel DefaultAccessPolicy::fetchAccessLevel(

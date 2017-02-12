@@ -53,9 +53,7 @@ public:
 			.critical("AN INSECURE RANDOM PROVIDER IN USE",
 					__FILE__, __LINE__);
 
-		injector<InsecureRandomProvider, RandomProvider>(
-			"providerImpl",
-			&InsecureRandomProvider::setProviderImpl);
+		injector("providerImpl", &InsecureRandomProvider::setProviderImpl);
 	}
 
 	void setProviderImpl(RandomProvider *provider)

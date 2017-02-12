@@ -22,26 +22,11 @@ RoleService::RoleService():
 	m_roleInGatewayDao(&NullRoleInGatewayDao::instance()),
 	m_notificationDispatcher(0)
 {
-	injector<RoleService, IdentityDao>(
-		"identityDao",
-		&RoleService::setIdentityDao
-	);
-	injector<RoleService, GatewayDao>(
-		"gatewayDao",
-		&RoleService::setGatewayDao
-	);
-	injector<RoleService, RoleInGatewayDao>(
-		"roleInGatewayDao",
-		&RoleService::setRoleInGatewayDao
-	);
-	injector<RoleService, RoleAccessPolicy>(
-		"accessPolicy",
-		&RoleService::setAccessPolicy
-	);
-	injector<RoleService, NotificationDispatcher>(
-		"notificationDispatcher",
-		&RoleService::setNotificationDispatcher
-	);
+	injector("identityDao", &RoleService::setIdentityDao);
+	injector("gatewayDao", &RoleService::setGatewayDao);
+	injector("roleInGatewayDao", &RoleService::setRoleInGatewayDao);
+	injector("accessPolicy", &RoleService::setAccessPolicy);
+	injector("notificationDispatcher", &RoleService::setNotificationDispatcher);
 }
 
 void RoleService::setIdentityDao(IdentityDao *dao)

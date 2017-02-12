@@ -8,14 +8,8 @@ IdentityService::IdentityService():
 	m_identityDao(&NullIdentityDao::instance()),
 	m_verifiedIdentityDao(&NullVerifiedIdentityDao::instance())
 {
-	injector<IdentityService, IdentityDao>(
-		"identityDao",
-		&IdentityService::setIdentityDao
-	);
-	injector<IdentityService, VerifiedIdentityDao>(
-		"verifiedIdentityDao",
-		&IdentityService::setVerifiedIdentityDao
-	);
+	injector("identityDao", &IdentityService::setIdentityDao);
+	injector("verifiedIdentityDao", &IdentityService::setVerifiedIdentityDao);
 }
 
 void IdentityService::setIdentityDao(IdentityDao *dao)

@@ -16,10 +16,7 @@ using namespace BeeeOn;
 
 NotificationDispatcher::NotificationDispatcher()
 {
-	injector<NotificationDispatcher, AbstractObserver>(
-		"observer",
-		&NotificationDispatcher::addObserver
-	);
+	injector("observer", &NotificationDispatcher::addObserver);
 }
 
 NotificationDispatcher::~NotificationDispatcher()

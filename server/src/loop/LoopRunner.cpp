@@ -11,14 +11,8 @@ BEEEON_OBJECT(LoopRunner, BeeeOn::LoopRunner)
 LoopRunner::LoopRunner():
 	m_autoStart(false)
 {
-	injector<LoopRunner, StoppableRunnable>(
-		"runnables",
-		&LoopRunner::addRunnable
-	);
-	injector<LoopRunner, StoppableLoop>(
-		"loops",
-		&LoopRunner::addLoop
-	);
+	injector("runnables", &LoopRunner::addRunnable);
+	injector("loops", &LoopRunner::addLoop);
 }
 
 LoopRunner::~LoopRunner()

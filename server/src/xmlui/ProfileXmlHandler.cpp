@@ -51,12 +51,8 @@ void ProfileXmlHandler::handleMyProfile()
 ProfileXmlHandlerResolver::ProfileXmlHandlerResolver():
 	AbstractXmlHandlerResolver("accounts")
 {
-	injector<ProfileXmlHandlerResolver, IdentityService>(
-			"identityService",
-			&ProfileXmlHandlerResolver::setIdentityService);
-	injector<ProfileXmlHandlerResolver, SessionManager>(
-			"sessionManager",
-			&ProfileXmlHandlerResolver::setSessionManager);
+	injector("identityService", &ProfileXmlHandlerResolver::setIdentityService);
+	injector("sessionManager", &ProfileXmlHandlerResolver::setSessionManager);
 }
 
 bool ProfileXmlHandlerResolver::canHandle(

@@ -53,7 +53,7 @@ public:
 		m_self(NULL),
 		m_index(0)
 	{
-		injector<FakeObject, FakeObject>("self", &FakeObject::setSelf);
+		injector("self", &FakeObject::setSelf);
 		textInjector("name", (TextSetter) &FakeObject::setName);
 		numberInjector("index", (NumberSetter) &FakeObject::setIndex);
 		textInjector("other", (TextSetter) &FakeObject::setOther);

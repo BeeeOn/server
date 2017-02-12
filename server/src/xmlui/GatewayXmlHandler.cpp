@@ -151,12 +151,8 @@ void GatewayXmlHandler::handleGetAll()
 GatewayXmlHandlerResolver::GatewayXmlHandlerResolver():
 	AbstractXmlHandlerResolver("gates")
 {
-	injector<GatewayXmlHandlerResolver, GatewayService>(
-			"gatewayService",
-			&GatewayXmlHandlerResolver::setGatewayService);
-	injector<GatewayXmlHandlerResolver, SessionManager>(
-			"sessionManager",
-			&GatewayXmlHandlerResolver::setSessionManager);
+	injector("gatewayService", &GatewayXmlHandlerResolver::setGatewayService);
+	injector("sessionManager", &GatewayXmlHandlerResolver::setSessionManager);
 }
 
 bool GatewayXmlHandlerResolver::canHandle(

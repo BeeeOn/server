@@ -8,10 +8,7 @@ using namespace BeeeOn;
 Transactional::Transactional():
 	m_transactionManager(&NullTransactionManager::instance())
 {
-	injector<Transactional, TransactionManager>(
-		"transactionManager",
-		&Transactional::setTransactionManager
-	);
+	injector("transactionManager", &Transactional::setTransactionManager);
 }
 
 void Transactional::setTransactionManager(TransactionManager *manager)

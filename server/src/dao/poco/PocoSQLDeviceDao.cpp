@@ -29,10 +29,7 @@ BEEEON_OBJECT(PocoSQLDeviceDao, BeeeOn::PocoSQLDeviceDao)
 PocoSQLDeviceDao::PocoSQLDeviceDao():
 	m_infoProvider(&NullInfoProvider<DeviceInfo>::instance())
 {
-	injector<PocoSQLDeviceDao, InfoProvider<DeviceInfo>>(
-		"deviceInfoProvider",
-		&PocoSQLDeviceDao::setDeviceInfoProvider
-	);
+	injector("deviceInfoProvider", &PocoSQLDeviceDao::setDeviceInfoProvider);
 
 	registerQuery(m_queryInsert);
 	registerQuery(m_queryUpdate);

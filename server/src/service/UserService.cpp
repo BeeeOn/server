@@ -6,8 +6,7 @@ BEEEON_OBJECT(UserService, BeeeOn::UserService)
 
 UserService::UserService()
 {
-	injector<UserService, UserDao>("userDao",
-			&UserService::setUserDao);
+	injector("userDao", &UserService::setUserDao);
 }
 
 void UserService::setUserDao(UserDao *dao)

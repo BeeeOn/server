@@ -34,14 +34,9 @@ SocketServer::SocketServer():
 	textInjector("threadPriority",
 		(TextSetter) &SocketServer::setThreadPriority);
 
-	injector<SocketServer, SSLServer>(
-		"sslConfig",
-		&SocketServer::setSSLConfig
-	);
-	injector<SocketServer, SocketServerConnectionFactory>(
-		"connectionFactory",
-		&SocketServer::setFactory
-	);
+	injector("sslConfig", &SocketServer::setSSLConfig);
+	injector("connectionFactory", &SocketServer::setFactory);
+
 }
 
 void SocketServer::setSSLConfig(SSLServer *config)

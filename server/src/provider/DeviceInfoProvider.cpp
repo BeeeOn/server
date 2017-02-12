@@ -11,11 +11,7 @@ DeviceInfoProvider::DeviceInfoProvider():
 	m_typeProvider(&NullInfoProvider<TypeInfo>::instance())
 {
 	textInjector("devicesFile", (TextSetter) &DeviceInfoProvider::setDevicesFile);
-
-	injector<DeviceInfoProvider, InfoProvider<TypeInfo>>(
-		"typeInfoProvider",
-		&DeviceInfoProvider::setTypeInfoProvider
-	);
+	injector("typeInfoProvider", &DeviceInfoProvider::setTypeInfoProvider);
 }
 
 void DeviceInfoProvider::setDevicesFile(const std::string &devicesFile)

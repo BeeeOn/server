@@ -16,12 +16,9 @@ LocationService::LocationService():
 	m_gatewayDao(&NullGatewayDao::instance()),
 	m_accessPolicy(&NullLocationAccessPolicy::instance())
 {
-	injector<LocationService, LocationDao>("locationDao",
-			&LocationService::setLocationDao);
-	injector<LocationService, GatewayDao>("gatewayDao",
-			&LocationService::setGatewayDao);
-	injector<LocationService, LocationAccessPolicy>("accessPolicy",
-			&LocationService::setAccessPolicy);
+	injector("locationDao", &LocationService::setLocationDao);
+	injector("gatewayDao", &LocationService::setGatewayDao);
+	injector("accessPolicy", &LocationService::setAccessPolicy);
 }
 
 void LocationService::setLocationDao(LocationDao *dao)

@@ -124,14 +124,8 @@ void RoleXmlHandler::handleUpdateAccess(const string &gateid, Element *userNode)
 RoleXmlHandlerResolver::RoleXmlHandlerResolver():
 	AbstractXmlHandlerResolver("gateusers")
 {
-	injector<RoleXmlHandlerResolver, RoleService>(
-		"roleService",
-		&RoleXmlHandlerResolver::setRoleService
-	);
-	injector<RoleXmlHandlerResolver, SessionManager>(
-		"sessionManager",
-		&RoleXmlHandlerResolver::setSessionManager
-	);
+	injector("roleService", &RoleXmlHandlerResolver::setRoleService);
+	injector("sessionManager", &RoleXmlHandlerResolver::setSessionManager);
 }
 
 bool RoleXmlHandlerResolver::canHandle(const Element &root)

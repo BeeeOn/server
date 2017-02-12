@@ -31,10 +31,7 @@ private:
 FakeGatewayRPC::FakeGatewayRPC():
 	m_deviceDao(&NullDeviceDao::instance())
 {
-	injector<FakeGatewayRPC, DeviceDao>(
-			"deviceDao",
-			&FakeGatewayRPC::setDeviceDao
-	);
+	injector("deviceDao", &FakeGatewayRPC::setDeviceDao);
 }
 
 void FakeGatewayRPC::setDeviceDao(DeviceDao *dao)

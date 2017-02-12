@@ -27,9 +27,7 @@ public:
 	SessionManager() :
 		m_sessionCache(NULL)
 	{
-		injector<SessionManager, SecureRandomProvider>(
-			"secureRandomProvider",
-			&SessionManager::setSecureRandomProvider);
+		injector("secureRandomProvider", &SessionManager::setSecureRandomProvider);
 		numberInjector("sessionExpireTime",
 				(NumberSetter) &SessionManager::setSessionExpireTime);
 		numberInjector("maxUserSessions",

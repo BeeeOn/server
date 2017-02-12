@@ -163,12 +163,8 @@ void DeviceXmlHandler::handleGetNew(const string &gateid)
 DeviceXmlHandlerResolver::DeviceXmlHandlerResolver():
 	AbstractXmlHandlerResolver("devices")
 {
-	injector<DeviceXmlHandlerResolver, DeviceService>(
-			"deviceService",
-			&DeviceXmlHandlerResolver::setDeviceService);
-	injector<DeviceXmlHandlerResolver, SessionManager>(
-			"sessionManager",
-			&DeviceXmlHandlerResolver::setSessionManager);
+	injector("deviceService", &DeviceXmlHandlerResolver::setDeviceService);
+	injector("sessionManager", &DeviceXmlHandlerResolver::setSessionManager);
 }
 
 bool DeviceXmlHandlerResolver::canHandle(

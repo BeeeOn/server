@@ -24,8 +24,7 @@ PocoDaoManager::PocoDaoManager():
 	m_maxSessions(32),
 	m_idleTime(60)
 {
-	injector<PocoDaoManager, ConnectorLoader>("connector",
-			&PocoDaoManager::setConnector);
+	injector("connector", &PocoDaoManager::setConnector);
 	textInjector("connectionString", (TextSetter)
 			&PocoDaoManager::setConnectionString);
 	numberInjector("minSessions", (NumberSetter)

@@ -15,8 +15,7 @@ using namespace BeeeOn;
 
 RestAuthHandler::RestAuthHandler()
 {
-	injector<RestAuthHandler, AuthService>("authService",
-			&RestAuthHandler::setAuthService);
+	injector("authService", &RestAuthHandler::setAuthService);
 }
 
 void RestAuthHandler::extractAuthData(std::istream &in,

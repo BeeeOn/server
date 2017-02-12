@@ -22,22 +22,14 @@ class UIMockInit : public Transactional {
 public:
 	UIMockInit()
 	{
-		injector<UIMockInit, UserDao>("userDao",
-			&UIMockInit::setUserDao);
-		injector<UIMockInit, GatewayDao>("gatewayDao",
-			&UIMockInit::setGatewayDao);
-		injector<UIMockInit, LocationDao>("locationDao",
-			&UIMockInit::setLocationDao);
-		injector<UIMockInit, DeviceDao>("deviceDao",
-			&UIMockInit::setDeviceDao);
-		injector<UIMockInit, IdentityDao>("identityDao",
-			&UIMockInit::setIdentityDao);
-		injector<UIMockInit, VerifiedIdentityDao>("verifiedIdentityDao",
-			&UIMockInit::setVerifiedIdentityDao);
-		injector<UIMockInit, InfoProvider<DeviceInfo>>("deviceInfoProvider",
-			&UIMockInit::setDeviceInfoProvider);
-		injector<UIMockInit, SensorHistoryDao>("sensorHistoryDao",
-			&UIMockInit::setSensorHistoryDao);
+		injector("userDao", &UIMockInit::setUserDao);
+		injector("gatewayDao", &UIMockInit::setGatewayDao);
+		injector("locationDao", &UIMockInit::setLocationDao);
+		injector("deviceDao", &UIMockInit::setDeviceDao);
+		injector("identityDao", &UIMockInit::setIdentityDao);
+		injector("verifiedIdentityDao", &UIMockInit::setVerifiedIdentityDao);
+		injector("deviceInfoProvider", &UIMockInit::setDeviceInfoProvider);
+		injector("sensorHistoryDao", &UIMockInit::setSensorHistoryDao);
 	}
 
 	void setUserDao(UserDao *dao)

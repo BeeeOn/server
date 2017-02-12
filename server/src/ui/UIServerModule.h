@@ -61,14 +61,10 @@ public:
 		m_factory(new UIServerRequestHandlerFactory("ui-server")),
 		m_server(NULL)
 	{
-		injector<UIServerModule, SessionVerifier>("sessionVerifier",
-				&UIServerModule::setSessionVerifier);
-		injector<UIServerModule, UserService>("userService",
-				&UIServerModule::setUserService);
-		injector<UIServerModule, RestAuthHandler>("authHandler",
-				&UIServerModule::setAuthHandler);
-		injector<UIServerModule, DeviceService>("deviceService",
-				&UIServerModule::setDeviceService);
+		injector("sessionVerifier", &UIServerModule::setSessionVerifier);
+		injector("userService", &UIServerModule::setUserService);
+		injector("authHandler", &UIServerModule::setAuthHandler);
+		injector("deviceService", &UIServerModule::setDeviceService);
 		numberInjector("port", (NumberSetter) &UIServerModule::setPort);
 	}
 

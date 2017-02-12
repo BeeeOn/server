@@ -60,8 +60,7 @@ void AuthXmlHandler::handleInputImpl()
 AuthXmlHandlerResolver::AuthXmlHandlerResolver():
 	AbstractXmlHandlerResolver("accounts")
 {
-	injector<AuthXmlHandlerResolver, AuthService>("authService",
-			&AuthXmlHandlerResolver::setAuthService);
+	injector("authService", &AuthXmlHandlerResolver::setAuthService);
 }
 
 bool AuthXmlHandlerResolver::canHandle(const Element &root)

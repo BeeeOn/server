@@ -81,14 +81,8 @@ void SensorXmlHandler::handleGetLog(const string &gateid,
 SensorXmlHandlerResolver::SensorXmlHandlerResolver():
 	AbstractXmlHandlerResolver("devices")
 {
-	injector<SensorXmlHandlerResolver, SensorHistoryService>(
-		"sensorHistoryService",
-		&SensorXmlHandlerResolver::setSensorHistoryService
-	);
-	injector<SensorXmlHandlerResolver, SessionManager>(
-		"sessionManager",
-		&SensorXmlHandlerResolver::setSessionManager
-	);
+	injector("sensorHistoryService", &SensorXmlHandlerResolver::setSensorHistoryService);
+	injector("sessionManager", &SensorXmlHandlerResolver::setSessionManager);
 }
 
 bool SensorXmlHandlerResolver::canHandle(
