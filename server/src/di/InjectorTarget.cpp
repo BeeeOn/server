@@ -42,7 +42,7 @@ void AbstractInjectorTarget::injectRef(
 		if (injectRefFallback(key, value))
 			return;
 
-		throw NotFoundException("missing setter in " + key);
+		throw NotFoundException("missing setter for " + key);
 	}
 
 	it->second->call(this, value);
@@ -59,7 +59,7 @@ void AbstractInjectorTarget::injectText(
 		if (injectTextFallback(key, value))
 			return;
 
-		throw NotFoundException("missing text setter " + key);
+		throw NotFoundException("missing text setter for " + key);
 	}
 
 	TextSetter func = it->second;
@@ -77,7 +77,7 @@ void AbstractInjectorTarget::injectNumber(
 		if (injectNumberFallback(key, value))
 			return;
 
-		throw NotFoundException("missing number setter " + key);
+		throw NotFoundException("missing number setter for " + key);
 	}
 
 	NumberSetter func = it->second;
