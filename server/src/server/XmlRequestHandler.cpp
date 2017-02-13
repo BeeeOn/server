@@ -58,8 +58,7 @@ XmlRequestHandlerFactory::XmlRequestHandlerFactory(size_t maxLength):
 void XmlRequestHandlerFactory::init()
 {
 	injector("resolvers", &XmlRequestHandlerFactory::registerResolver);
-	numberInjector("maxBuffer", (NumberSetter)
-			&XmlRequestHandlerFactory::setMaxLength);
+	numberInjector("maxBuffer", &XmlRequestHandlerFactory::setMaxLength);
 }
 
 TCPServerConnection *XmlRequestHandlerFactory::createConnection(

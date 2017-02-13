@@ -11,8 +11,7 @@ class MockRandomProvider : public RandomProvider,
 public:
 	MockRandomProvider()
 	{
-		textInjector("nextRandom", (TextSetter)
-				&MockRandomProvider::setNextRandom);
+		textInjector("nextRandom", &MockRandomProvider::setNextRandom);
 	}
 
 	void setNextRandom(const std::string &next)

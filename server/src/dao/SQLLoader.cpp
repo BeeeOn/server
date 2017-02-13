@@ -12,8 +12,8 @@ BEEEON_OBJECT(BeeeOn, SQLLoader)
 SQLLoader::SQLLoader():
 	m_config(new LayeredConfiguration())
 {
-	textInjector("file", (TextSetter) &SQLLoader::addSourceFile);
-	textInjector("database", (TextSetter) &SQLLoader::setDatabase);
+	textInjector("file", &SQLLoader::addSourceFile);
+	textInjector("database", &SQLLoader::setDatabase);
 }
 
 SQLLoader::~SQLLoader()

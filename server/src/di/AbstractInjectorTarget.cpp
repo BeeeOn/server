@@ -9,10 +9,20 @@ using namespace BeeeOn;
 
 AbstractInjectorTarget::~AbstractInjectorTarget()
 {
-	RefSetterMap::iterator it = m_refSetter.begin();
+	auto refIt = m_refSetter.begin();
 
-	for (; it != m_refSetter.end(); ++it)
-		delete it->second;
+	for (; refIt != m_refSetter.end(); ++refIt)
+		delete refIt->second;
+
+	auto numberIt = m_numberSetter.begin();
+
+	for (; numberIt != m_numberSetter.end(); ++numberIt)
+		delete numberIt->second;
+
+	auto textIt = m_textSetter.begin();
+
+	for (; textIt != m_textSetter.end(); ++textIt)
+		delete textIt->second;
 }
 
 void AbstractInjectorTarget::injectRef(
@@ -42,8 +52,7 @@ void AbstractInjectorTarget::injectText(
 		throw NotFoundException("missing text setter for " + key);
 	}
 
-	TextSetter func = it->second;
-	(this->*func)(value);
+	it->second->call(this, value);
 }
 
 void AbstractInjectorTarget::injectNumber(
@@ -58,8 +67,7 @@ void AbstractInjectorTarget::injectNumber(
 		throw NotFoundException("missing number setter for " + key);
 	}
 
-	NumberSetter func = it->second;
-	(this->*func)(value);
+	it->second->call(this, value);
 }
 
 bool AbstractInjectorTarget::injectRefFallback(

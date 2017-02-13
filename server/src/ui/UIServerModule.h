@@ -65,7 +65,7 @@ public:
 		injector("userService", &UIServerModule::setUserService);
 		injector("authHandler", &UIServerModule::setAuthHandler);
 		injector("deviceService", &UIServerModule::setDeviceService);
-		numberInjector("port", (NumberSetter) &UIServerModule::setPort);
+		numberInjector("port", &UIServerModule::setPort);
 	}
 
 	/**

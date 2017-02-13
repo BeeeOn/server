@@ -73,26 +73,16 @@ SSLFacility::SSLFacility():
 {
 	initializeSSL();
 
-	textInjector("caLocation", (TextSetter)
-			&SSLFacility::setCALocation);
-	textInjector("loadDefaultCA", (TextSetter)
-			&SSLFacility::setLoadDefaultCA);
-	textInjector("privateKey", (TextSetter)
-			&SSLFacility::setPrivateKey);
-	textInjector("passphrase", (TextSetter)
-			&SSLFacility::setPassphrase);
-	textInjector("certificate", (TextSetter)
-			&SSLFacility::setCertificate);
-	textInjector("verificationMode", (TextSetter)
-			&SSLFacility::setVerificationMode);
-	numberInjector("verificationDepth", (NumberSetter)
-			&SSLFacility::setVerificationDepth);
-	textInjector("cipherList", (TextSetter)
-			&SSLFacility::setCipherList);
-	textInjector("sessionCache", (TextSetter)
-			&SSLFacility::setSessionCache);
-	textInjector("disabledProtocols", (TextSetter)
-			&SSLFacility::setDisabledProtocols);
+	textInjector("caLocation", &SSLFacility::setCALocation);
+	textInjector("loadDefaultCA", &SSLFacility::setLoadDefaultCA);
+	textInjector("privateKey", &SSLFacility::setPrivateKey);
+	textInjector("passphrase", &SSLFacility::setPassphrase);
+	textInjector("certificate", &SSLFacility::setCertificate);
+	textInjector("verificationMode", &SSLFacility::setVerificationMode);
+	numberInjector("verificationDepth", &SSLFacility::setVerificationDepth);
+	textInjector("cipherList", &SSLFacility::setCipherList);
+	textInjector("sessionCache", &SSLFacility::setSessionCache);
+	textInjector("disabledProtocols", &SSLFacility::setDisabledProtocols);
 
 #if POCO_VERSION >= 0x01070000
 	m_disabledProtocols = Context::PROTO_SSLV2 | Context::PROTO_SSLV3;

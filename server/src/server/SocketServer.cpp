@@ -21,18 +21,12 @@ SocketServer::SocketServer():
 	m_sslConfig(NULL),
 	m_tcpParams(new TCPServerParams())
 {
-	numberInjector("port",
-		(NumberSetter) &SocketServer::setPort);
-	numberInjector("backlog",
-		(NumberSetter) &SocketServer::setBacklog);
-	numberInjector("maxThreads",
-		(NumberSetter) &SocketServer::setMaxThreads);
-	numberInjector("maxQueued",
-		(NumberSetter) &SocketServer::setMaxQueued);
-	numberInjector("threadIdleTime",
-		(NumberSetter) &SocketServer::setThreadIdleTime);
-	textInjector("threadPriority",
-		(TextSetter) &SocketServer::setThreadPriority);
+	numberInjector("port", &SocketServer::setPort);
+	numberInjector("backlog", &SocketServer::setBacklog);
+	numberInjector("maxThreads", &SocketServer::setMaxThreads);
+	numberInjector("maxQueued", &SocketServer::setMaxQueued);
+	numberInjector("threadIdleTime", &SocketServer::setThreadIdleTime);
+	textInjector("threadPriority", &SocketServer::setThreadPriority);
 
 	injector("sslConfig", &SocketServer::setSSLConfig);
 	injector("connectionFactory", &SocketServer::setFactory);

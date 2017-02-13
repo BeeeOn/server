@@ -9,7 +9,7 @@ BEEEON_OBJECT(BeeeOn, TypeInfoProvider)
 
 TypeInfoProvider::TypeInfoProvider()
 {
-	textInjector("typesFile", (TextSetter) &TypeInfoProvider::setTypesFile);
+	textInjector("typesFile", &TypeInfoProvider::setTypesFile);
 }
 
 void TypeInfoProvider::setTypesFile(const std::string &typesFile)

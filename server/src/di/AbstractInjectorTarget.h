@@ -92,27 +92,84 @@ private:
 	SetterFunc m_func;
 };
 
+class NumberInjectorSetter {
+public:
+	virtual ~NumberInjectorSetter() {}
+
+	virtual void call(InjectorTarget *ip, int value) = 0;
+};
+
+template <typename P>
+class NumberInjectorSetterImpl : public NumberInjectorSetter {
+public:
+	typedef void (P::*SetterFunc)(int);
+
+	NumberInjectorSetterImpl(SetterFunc func):
+		m_func(func)
+	{
+	}
+
+	void call(InjectorTarget *ip, int value) override
+	{
+		P *p = dynamic_cast<P *>(ip);
+		SetterFunc f = m_func;
+		(p->*f)(value);
+	}
+
+private:
+	SetterFunc m_func;
+};
+
+class TextInjectorSetter {
+public:
+	virtual ~TextInjectorSetter() {}
+
+	virtual void call(InjectorTarget *ip, const std::string &text) = 0;
+};
+
+template <typename P>
+class TextInjectorSetterImpl : public TextInjectorSetter {
+public:
+	typedef void (P::*SetterFunc)(const std::string &);
+
+	TextInjectorSetterImpl(SetterFunc func):
+		m_func(func)
+	{
+	}
+
+	void call(InjectorTarget *ip, const std::string &text) override
+	{
+		P *p = dynamic_cast<P *>(ip);
+		SetterFunc f = m_func;
+		(p->*f)(text);
+	}
+
+private:
+	SetterFunc m_func;
+};
+
 class AbstractInjectorTarget : public InjectorTarget {
 public:
-	typedef void (AbstractInjectorTarget::*TextSetter)(
-			const std::string &);
-	typedef void (AbstractInjectorTarget::*NumberSetter)(int);
-
 	typedef std::map<std::string, InjectorSetter *> RefSetterMap;
-	typedef std::map<std::string, TextSetter> TextSetterMap;
-	typedef std::map<std::string, NumberSetter> NumberSetterMap;
+	typedef std::map<std::string, TextInjectorSetter *> TextSetterMap;
+	typedef std::map<std::string, NumberInjectorSetter *> NumberSetterMap;
 
 	virtual ~AbstractInjectorTarget();
 
 protected:
-	void numberInjector(const std::string key, NumberSetter setter)
+	template <typename T>
+	void numberInjector(const std::string key, void (T::*setter)(int))
 	{
-		m_numberSetter.insert(std::make_pair(key, setter));
+		m_numberSetter.insert(std::make_pair(key,
+				new NumberInjectorSetterImpl<T>(setter)));
 	}
 
-	void textInjector(const std::string key, TextSetter setter)
+	template <typename T>
+	void textInjector(const std::string key,
+			void (T::*setter)(const std::string &))
 	{
-		m_textSetter.insert(std::make_pair(key, setter));
+		m_textSetter.insert(std::make_pair(key,
+				new TextInjectorSetterImpl<T>(setter)));
 	}
 
 	template <typename P, typename T = InjectorTarget>

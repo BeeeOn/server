@@ -25,16 +25,11 @@ PocoDaoManager::PocoDaoManager():
 	m_idleTime(60)
 {
 	injector("connector", &PocoDaoManager::setConnector);
-	textInjector("connectionString", (TextSetter)
-			&PocoDaoManager::setConnectionString);
-	numberInjector("minSessions", (NumberSetter)
-			&PocoDaoManager::setMinSessions);
-	numberInjector("maxSessions", (NumberSetter)
-			&PocoDaoManager::setMaxSessions);
-	numberInjector("idleTime", (NumberSetter)
-			&PocoDaoManager::setIdleTime);
-	textInjector("initScript", (TextSetter)
-			&PocoDaoManager::setInitScript);
+	textInjector("connectionString", &PocoDaoManager::setConnectionString);
+	numberInjector("minSessions", &PocoDaoManager::setMinSessions);
+	numberInjector("maxSessions", &PocoDaoManager::setMaxSessions);
+	numberInjector("idleTime", &PocoDaoManager::setIdleTime);
+	textInjector("initScript", &PocoDaoManager::setInitScript);
 }
 
 void PocoDaoManager::setConnector(ConnectorLoader *connector)

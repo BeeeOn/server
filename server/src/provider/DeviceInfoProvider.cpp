@@ -10,7 +10,7 @@ BEEEON_OBJECT(BeeeOn, DeviceInfoProvider)
 DeviceInfoProvider::DeviceInfoProvider():
 	m_typeProvider(&NullInfoProvider<TypeInfo>::instance())
 {
-	textInjector("devicesFile", (TextSetter) &DeviceInfoProvider::setDevicesFile);
+	textInjector("devicesFile", &DeviceInfoProvider::setDevicesFile);
 	injector("typeInfoProvider", &DeviceInfoProvider::setTypeInfoProvider);
 }
 

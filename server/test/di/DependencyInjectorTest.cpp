@@ -54,9 +54,9 @@ public:
 		m_index(0)
 	{
 		injector("self", &FakeObject::setSelf);
-		textInjector("name", (TextSetter) &FakeObject::setName);
-		numberInjector("index", (NumberSetter) &FakeObject::setIndex);
-		textInjector("other", (TextSetter) &FakeObject::setOther);
+		textInjector("name", &FakeObject::setName);
+		numberInjector("index", &FakeObject::setIndex);
+		textInjector("other", &FakeObject::setOther);
 	}
 
 	void setSelf(FakeObject *self)
