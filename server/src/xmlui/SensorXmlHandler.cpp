@@ -109,5 +109,5 @@ XmlRequestHandler *SensorXmlHandlerResolver::createHandler(
 			socket, input, session, *m_sensorService);
 }
 
-BEEEON_OBJECT(SensorXmlHandlerResolver,
+BEEEON_OBJECT(BeeeOn_XmlUI_SensorXmlHandlerResolver,
 		BeeeOn::XmlUI::SensorXmlHandlerResolver)

@@ -10,7 +10,7 @@ using namespace std;
 using namespace Poco;
 using namespace BeeeOn;
 
-BEEEON_OBJECT(SensorHistoryService, BeeeOn::SensorHistoryService)
+BEEEON_OBJECT(BeeeOn_SensorHistoryService, BeeeOn::SensorHistoryService)
 
 SensorHistoryService::SensorHistoryService():
 	m_dao(&NullSensorHistoryDao::instance()),

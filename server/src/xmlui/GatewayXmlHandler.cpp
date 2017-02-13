@@ -190,5 +190,5 @@ XmlRequestHandler *GatewayXmlHandlerResolver::createHandler(
 			*m_gatewayService);
 }
 
-BEEEON_OBJECT(GatewayXmlHandlerResolver,
+BEEEON_OBJECT(BeeeOn_XmlUI_GatewayXmlHandlerResolver,
 		BeeeOn::XmlUI::GatewayXmlHandlerResolver)

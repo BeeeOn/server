@@ -11,7 +11,7 @@
 #include "rpc/GatewayRPC.h"
 #include "Debug.h"
 
-BEEEON_OBJECT(DeviceService, BeeeOn::DeviceService)
+BEEEON_OBJECT(BeeeOn_DeviceService, BeeeOn::DeviceService)
 
 using namespace std;
 using namespace Poco;

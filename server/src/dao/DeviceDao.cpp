@@ -3,7 +3,7 @@
 
 #include "dao/DeviceDao.h"
 
-BEEEON_OBJECT(NullDeviceDao, BeeeOn::NullDeviceDao)
+BEEEON_OBJECT(BeeeOn_NullDeviceDao, BeeeOn::NullDeviceDao)
 
 using namespace std;
 using namespace Poco;

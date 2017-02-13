@@ -15,7 +15,7 @@ using namespace std;
 using namespace Poco;
 using namespace BeeeOn;
 
-BEEEON_OBJECT(RoleService, BeeeOn::RoleService)
+BEEEON_OBJECT(BeeeOn_RoleService, BeeeOn::RoleService)
 
 RoleService::RoleService():
 	m_identityDao(&NullIdentityDao::instance()),

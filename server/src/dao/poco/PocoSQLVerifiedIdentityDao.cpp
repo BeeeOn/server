@@ -15,7 +15,7 @@ using namespace Poco::Data;
 using namespace Poco::Data::Keywords;
 using namespace BeeeOn;
 
-BEEEON_OBJECT(PocoSQLVerifiedIdentityDao, BeeeOn::PocoSQLVerifiedIdentityDao)
+BEEEON_OBJECT(BeeeOn_PocoSQLVerifiedIdentityDao, BeeeOn::PocoSQLVerifiedIdentityDao)
 
 PocoSQLVerifiedIdentityDao::PocoSQLVerifiedIdentityDao()
 {

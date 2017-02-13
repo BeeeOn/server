@@ -24,7 +24,7 @@ using namespace BeeeOn;
 
 using percent = Poco::Util::Units::Values::percent;
 
-BEEEON_OBJECT(PocoSQLDeviceDao, BeeeOn::PocoSQLDeviceDao)
+BEEEON_OBJECT(BeeeOn_PocoSQLDeviceDao, BeeeOn::PocoSQLDeviceDao)
 
 PocoSQLDeviceDao::PocoSQLDeviceDao():
 	m_infoProvider(&NullInfoProvider<DeviceInfo>::instance())

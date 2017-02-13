@@ -4,7 +4,7 @@
 #include "policy/PolicyContext.h"
 #include "policy/DefaultAccessPolicy.h"
 
-BEEEON_OBJECT(DefaultAccessPolicy, BeeeOn::DefaultAccessPolicy)
+BEEEON_OBJECT(BeeeOn_DefaultAccessPolicy, BeeeOn::DefaultAccessPolicy)
 
 using namespace std;
 using namespace Poco;

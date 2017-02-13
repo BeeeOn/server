@@ -85,7 +85,7 @@ public:
 	int m_index;
 };
 
-BEEEON_OBJECT(FakeObject, BeeeOn::FakeObject)
+BEEEON_OBJECT(BeeeOn_FakeObject, BeeeOn::FakeObject)
 
 void DependencyInjectorTest::setUp()
 {

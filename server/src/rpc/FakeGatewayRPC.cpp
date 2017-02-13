@@ -74,4 +74,4 @@ void FakeGatewayRPC::pingGateway(const Gateway &gateway)
 
 }
 
-BEEEON_OBJECT(FakeGatewayRPC, BeeeOn::FakeGatewayRPC)
+BEEEON_OBJECT(BeeeOn_FakeGatewayRPC, BeeeOn::FakeGatewayRPC)

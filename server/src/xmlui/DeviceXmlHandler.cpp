@@ -199,5 +199,5 @@ XmlRequestHandler *DeviceXmlHandlerResolver::createHandler(
 			socket, input, session, *m_deviceService);
 }
 
-BEEEON_OBJECT(DeviceXmlHandlerResolver,
+BEEEON_OBJECT(BeeeOn_XmlUI_DeviceXmlHandlerResolver,
 		BeeeOn::XmlUI::DeviceXmlHandlerResolver)

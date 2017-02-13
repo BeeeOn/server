@@ -6,7 +6,7 @@
 using namespace Poco;
 using namespace BeeeOn;
 
-BEEEON_OBJECT(SessionManager, BeeeOn::SessionManager)
+BEEEON_OBJECT(BeeeOn_SessionManager, BeeeOn::SessionManager)
 
 const ExpirableSession::Ptr SessionManager::open(
 		const VerifiedIdentity &identity)

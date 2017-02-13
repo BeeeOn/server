@@ -2,7 +2,7 @@
 
 using namespace BeeeOn;
 
-BEEEON_OBJECT(UserService, BeeeOn::UserService)
+BEEEON_OBJECT(BeeeOn_UserService, BeeeOn::UserService)
 
 UserService::UserService()
 {

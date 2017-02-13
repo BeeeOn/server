@@ -10,7 +10,7 @@
 #include "ui/UIMockInit.h"
 #include "util/ValueGenerator.h"
 
-BEEEON_OBJECT(UIMockInit, BeeeOn::UIMockInit)
+BEEEON_OBJECT(BeeeOn_UIMockInit, BeeeOn::UIMockInit)
 
 using namespace std;
 using namespace Poco;

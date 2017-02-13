@@ -34,4 +34,4 @@ void UIServerModule::injectionDone()
 	});
 }
 
-BEEEON_OBJECT(UIServerModule, BeeeOn::UIServerModule)
+BEEEON_OBJECT(BeeeOn_UIServerModule, BeeeOn::UIServerModule)

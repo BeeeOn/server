@@ -6,7 +6,7 @@ using namespace std;
 using namespace BeeeOn;
 using namespace Poco;
 
-BEEEON_OBJECT(LoopRunner, BeeeOn::LoopRunner)
+BEEEON_OBJECT(BeeeOn_LoopRunner, BeeeOn::LoopRunner)
 
 LoopRunner::LoopRunner():
 	m_autoStart(false)

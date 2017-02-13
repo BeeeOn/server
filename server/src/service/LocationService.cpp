@@ -5,7 +5,7 @@
 #include "dao/GatewayDao.h"
 #include "policy/LocationAccessPolicy.h"
 
-BEEEON_OBJECT(LocationService, BeeeOn::LocationService)
+BEEEON_OBJECT(BeeeOn_LocationService, BeeeOn::LocationService)
 
 using namespace std;
 using namespace Poco;

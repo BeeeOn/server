@@ -7,7 +7,7 @@ using namespace Poco;
 using namespace Poco::Util;
 using namespace BeeeOn;
 
-BEEEON_OBJECT(SQLLoader, BeeeOn::SQLLoader)
+BEEEON_OBJECT(BeeeOn_SQLLoader, BeeeOn::SQLLoader)
 
 SQLLoader::SQLLoader():
 	m_config(new LayeredConfiguration())
