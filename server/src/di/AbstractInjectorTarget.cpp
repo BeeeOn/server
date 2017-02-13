@@ -2,7 +2,6 @@
 
 #include "di/InjectorTarget.h"
 #include "di/AbstractInjectorTarget.h"
-#include "Debug.h"
 
 using namespace std;
 using namespace Poco;
@@ -34,8 +33,6 @@ void AbstractInjectorTarget::injectRef(
 void AbstractInjectorTarget::injectText(
 		const string &key, const string &value)
 {
-	TRACE_METHOD();
-
 	TextSetterMap::iterator it = m_textSetter.find(key);
 
 	if (it == m_textSetter.end()) {
@@ -52,8 +49,6 @@ void AbstractInjectorTarget::injectText(
 void AbstractInjectorTarget::injectNumber(
 		const string &key, int value)
 {
-	TRACE_METHOD();
-
 	NumberSetterMap::iterator it = m_numberSetter.find(key);
 
 	if (it == m_numberSetter.end()) {
