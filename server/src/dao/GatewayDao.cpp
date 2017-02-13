@@ -2,8 +2,6 @@
 
 #include "dao/GatewayDao.h"
 
-BEEEON_OBJECT(BeeeOn_NullGatewayDao, BeeeOn::NullGatewayDao)
-
 using namespace std;
 using namespace BeeeOn;
 

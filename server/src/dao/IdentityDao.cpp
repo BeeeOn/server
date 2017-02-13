@@ -3,7 +3,6 @@
 
 #include "dao/IdentityDao.h"
 
-BEEEON_OBJECT(BeeeOn_NullIdentityDao, BeeeOn::NullIdentityDao)
 BEEEON_OBJECT(BeeeOn_MockIdentityDao, BeeeOn::MockIdentityDao)
 
 using namespace Poco;
