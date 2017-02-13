@@ -23,6 +23,11 @@ AbstractInjectorTarget::~AbstractInjectorTarget()
 
 	for (; textIt != m_textSetter.end(); ++textIt)
 		delete textIt->second;
+
+	auto hookIt = m_hookMap.begin();
+
+	for (; hookIt != m_hookMap.end(); ++hookIt)
+		delete hookIt->second;
 }
 
 void AbstractInjectorTarget::injectRef(
@@ -89,4 +94,18 @@ bool AbstractInjectorTarget::injectNumberFallback(
 			int value)
 {
 	return false;
+}
+
+void AbstractInjectorTarget::callHook(const std::string &key, bool required)
+{
+	HookMap::iterator it = m_hookMap.find(key);
+
+	if (it == m_hookMap.end()) {
+		if (!required)
+			return;
+
+		throw NotFoundException("no such hook defined " + key);
+	}
+
+	it->second->call(this);
 }

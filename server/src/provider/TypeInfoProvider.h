@@ -18,8 +18,7 @@ public:
 
 	void setTypesFile(const std::string &typesFile);
 
-protected:
-	void injectionDone() override;
+	void loadInfo();
 
 private:
 	std::string m_typesFile;

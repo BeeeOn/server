@@ -30,6 +30,8 @@ public:
 		injector("verifiedIdentityDao", &UIMockInit::setVerifiedIdentityDao);
 		injector("deviceInfoProvider", &UIMockInit::setDeviceInfoProvider);
 		injector("sensorHistoryDao", &UIMockInit::setSensorHistoryDao);
+
+		hook("done", &UIMockInit::initAll);
 	}
 
 	void setUserDao(UserDao *dao)
@@ -72,13 +74,14 @@ public:
 		m_sensorHistoryDao = dao;
 	}
 
+	void initAll();
+
 protected:
 	void initUsers();
 	void initGateways();
 	void initLocations(std::vector<Location> &locations);
 	void initDevices(const std::vector<Location> &locations);
 	void initSensorData();
-	void injectionDone();
 
 private:
 	UserDao *m_userDao;

@@ -95,7 +95,6 @@ public:
 protected:
 	void initContext();
 	virtual Poco::Net::Context::Ptr createContext() = 0;
-	virtual void injectionDone() override;
 
 protected:
 	using VerificationMode =

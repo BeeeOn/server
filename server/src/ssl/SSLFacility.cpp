@@ -84,6 +84,8 @@ SSLFacility::SSLFacility():
 	textInjector("sessionCache", &SSLFacility::setSessionCache);
 	textInjector("disabledProtocols", &SSLFacility::setDisabledProtocols);
 
+	hook("done", &SSLFacility::initContext);
+
 #if POCO_VERSION >= 0x01070000
 	m_disabledProtocols = Context::PROTO_SSLV2 | Context::PROTO_SSLV3;
 #endif
@@ -136,11 +138,6 @@ Context::Ptr SSLFacility::context()
 {
 	initContext();
 	return m_context;
-}
-
-void SSLFacility::injectionDone()
-{
-	initContext();
 }
 
 void SSLFacility::setSessionCache(const std::string &enable)

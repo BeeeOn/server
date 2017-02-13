@@ -25,10 +25,10 @@ public:
 
 	void start();
 	void stop();
+	void autoStart();
 
 protected:
 	void stopAll(std::list<StoppableLoop *> &list);
-	void injectionDone() override;
 
 private:
 	bool m_autoStart;

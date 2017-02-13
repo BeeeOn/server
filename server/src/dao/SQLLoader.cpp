@@ -14,6 +14,7 @@ SQLLoader::SQLLoader():
 {
 	textInjector("file", &SQLLoader::addSourceFile);
 	textInjector("database", &SQLLoader::setDatabase);
+	hook("done", &SQLLoader::prepare);
 }
 
 SQLLoader::~SQLLoader()
@@ -31,7 +32,7 @@ void SQLLoader::setDatabase(const string &name)
 	m_database = name;
 }
 
-void SQLLoader::injectionDone()
+void SQLLoader::prepare()
 {
 	m_view = m_config->createView(m_database);
 }

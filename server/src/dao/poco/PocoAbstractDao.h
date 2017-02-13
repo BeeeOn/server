@@ -66,8 +66,7 @@ protected:
 	std::size_t execute(Poco::Data::Statement &sql);
 	void throwMissingId(const std::type_info &t);
 
-protected:
-	virtual void injectionDone();
+	void loadQueries();
 
 private:
 	PocoDaoManager *m_manager;

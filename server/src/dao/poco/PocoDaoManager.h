@@ -24,9 +24,10 @@ public:
 
 	Poco::Data::SessionPool &pool();
 
+	void connectAndPrepare();
+
 protected:
 	void initPool();
-	void injectionDone() override;
 
 private:
 	ConnectorLoader *m_connector;

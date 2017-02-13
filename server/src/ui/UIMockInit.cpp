@@ -214,7 +214,7 @@ void UIMockInit::initSensorData()
 	}
 }
 
-void UIMockInit::injectionDone()
+void UIMockInit::initAll()
 {
 	vector<Location> locations;
 

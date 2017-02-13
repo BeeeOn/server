@@ -12,6 +12,8 @@ DeviceInfoProvider::DeviceInfoProvider():
 {
 	textInjector("devicesFile", &DeviceInfoProvider::setDevicesFile);
 	injector("typeInfoProvider", &DeviceInfoProvider::setTypeInfoProvider);
+
+	hook("done", &DeviceInfoProvider::loadInfo);
 }
 
 void DeviceInfoProvider::setDevicesFile(const std::string &devicesFile)
@@ -50,7 +52,7 @@ DeviceInfo DeviceInfoProvider::resolveTypes(const DeviceInfo &device)
 	return result;
 }
 
-void DeviceInfoProvider::injectionDone()
+void DeviceInfoProvider::loadInfo()
 {
 	parseFile(m_devicesFile, "device");
 

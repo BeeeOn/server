@@ -13,6 +13,7 @@ LoopRunner::LoopRunner():
 {
 	injector("runnables", &LoopRunner::addRunnable);
 	injector("loops", &LoopRunner::addLoop);
+	hook("done", &LoopRunner::autoStart);
 }
 
 LoopRunner::~LoopRunner()
@@ -81,7 +82,7 @@ void LoopRunner::start()
 			__FILE__, __LINE__);
 }
 
-void LoopRunner::injectionDone()
+void LoopRunner::autoStart()
 {
 	if (m_autoStart) {
 		logger().information("auto-starting loops", __FILE__, __LINE__);

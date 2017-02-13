@@ -22,6 +22,7 @@ PocoAbstractDao::PocoAbstractDao():
 	injector("daoManager", &PocoAbstractDao::setDaoManager);
 	injector("transactionManager", &PocoAbstractDao::setTransactionManager);
 	injector("sqlLoader", &PocoAbstractDao::setSQLLoader);
+	hook("done", &PocoAbstractDao::loadQueries);
 }
 
 PocoAbstractDao::~PocoAbstractDao()
@@ -138,7 +139,7 @@ bool PocoAbstractDao::hasColumn(const Row &result, const std::string &name)
 	return false;
 }
 
-void PocoAbstractDao::injectionDone()
+void PocoAbstractDao::loadQueries()
 {
 	if (m_loader == NULL) {
 		logger().warning("missing SQLLoader instance",

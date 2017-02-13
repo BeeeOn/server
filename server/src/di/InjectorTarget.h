@@ -21,7 +21,7 @@ protected:
 	virtual void injectNumber(const std::string &key, int v) = 0;
 	virtual void injectText(const std::string &key,
 				const std::string &value) = 0;
-	virtual void injectionDone() = 0;
+	virtual void callHook(const std::string &hook, bool required = false) = 0;
 };
 
 class ManifestSingleton {

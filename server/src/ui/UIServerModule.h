@@ -66,12 +66,14 @@ public:
 		injector("authHandler", &UIServerModule::setAuthHandler);
 		injector("deviceService", &UIServerModule::setDeviceService);
 		numberInjector("port", &UIServerModule::setPort);
+
+		hook("done", &UIServerModule::installRoutes);
 	}
 
 	/**
 	 * Called when dependency injection sets all entries.
 	 */
-	void injectionDone() override;
+	void installRoutes();
 
 	~UIServerModule() {
 		if (m_server)

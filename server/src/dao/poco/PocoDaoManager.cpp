@@ -30,6 +30,7 @@ PocoDaoManager::PocoDaoManager():
 	numberInjector("maxSessions", &PocoDaoManager::setMaxSessions);
 	numberInjector("idleTime", &PocoDaoManager::setIdleTime);
 	textInjector("initScript", &PocoDaoManager::setInitScript);
+	hook("done", &PocoDaoManager::connectAndPrepare);
 }
 
 void PocoDaoManager::setConnector(ConnectorLoader *connector)
@@ -129,7 +130,7 @@ void PocoDaoManager::initPool()
 	logger().notice("database pool initialized", __FILE__, __LINE__);
 }
 
-void PocoDaoManager::injectionDone()
+void PocoDaoManager::connectAndPrepare()
 {
 	initPool();
 

@@ -148,11 +148,40 @@ private:
 	SetterFunc m_func;
 };
 
+class InjectorHook {
+public:
+	virtual ~InjectorHook() {}
+
+	virtual void call(InjectorTarget *ip) = 0;
+};
+
+template <typename P>
+class InjectorHookImpl : public InjectorHook {
+public:
+	typedef void (P::*Hook)();
+
+	InjectorHookImpl(Hook hook):
+		m_hook(hook)
+	{
+	}
+
+	void call(InjectorTarget *ip) override
+	{
+		P *p = dynamic_cast<P *>(ip);
+		Hook f = m_hook;
+		(p->*f)();
+	}
+
+private:
+	Hook m_hook;
+};
+
 class AbstractInjectorTarget : public InjectorTarget {
 public:
 	typedef std::map<std::string, InjectorSetter *> RefSetterMap;
 	typedef std::map<std::string, TextInjectorSetter *> TextSetterMap;
 	typedef std::map<std::string, NumberInjectorSetter *> NumberSetterMap;
+	typedef std::map<std::string, InjectorHook *> HookMap;
 
 	virtual ~AbstractInjectorTarget();
 
@@ -188,9 +217,16 @@ protected:
 				new SharedInjectorSetterImpl<P, T>(setter)));
 	}
 
+	template <typename T>
+	void hook(const std::string &key, void (T::*call)())
+	{
+		m_hookMap.insert(std::make_pair(key, new InjectorHookImpl<T>(call)));
+	}
+
 	void injectRef(const std::string &key, Poco::SharedPtr<InjectorTarget> value);
 	void injectText(const std::string &key, const std::string &value);
 	void injectNumber(const std::string &key, int value);
+	void callHook(const std::string &key, bool required = false);
 
 	virtual bool injectRefFallback(
 			const std::string &key,
@@ -202,14 +238,11 @@ protected:
 			const std::string &key,
 			int value);
 
-	virtual void injectionDone()
-	{
-	}
-
 protected:
 	RefSetterMap m_refSetter;
 	TextSetterMap m_textSetter;
 	NumberSetterMap m_numberSetter;
+	HookMap m_hookMap;
 };
 
 }

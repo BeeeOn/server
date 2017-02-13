@@ -19,10 +19,10 @@ public:
 
 	void setTypeInfoProvider(InfoProvider<TypeInfo> *provider);
 	void setDevicesFile(const std::string &devicesFile);
+	void loadInfo();
 
 protected:
 	DeviceInfo resolveTypes(const DeviceInfo &device);
-	void injectionDone() override;
 
 private:
 	std::string m_devicesFile;
