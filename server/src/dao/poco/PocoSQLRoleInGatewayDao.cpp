@@ -17,7 +17,7 @@ using namespace Poco::Data;
 using namespace Poco::Data::Keywords;
 using namespace BeeeOn;
 
-BEEEON_OBJECT(BeeeOn_PocoSQLRoleInGatewayDao, BeeeOn::PocoSQLRoleInGatewayDao)
+BEEEON_OBJECT(BeeeOn, PocoSQLRoleInGatewayDao)
 
 PocoSQLRoleInGatewayDao::PocoSQLRoleInGatewayDao()
 {

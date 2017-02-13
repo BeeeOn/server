@@ -9,7 +9,7 @@
 #include "model/User.h"
 #include "Debug.h"
 
-BEEEON_OBJECT(BeeeOn_NotificationDispatcher, BeeeOn::NotificationDispatcher)
+BEEEON_OBJECT(BeeeOn, NotificationDispatcher)
 
 using namespace Poco;
 using namespace BeeeOn;

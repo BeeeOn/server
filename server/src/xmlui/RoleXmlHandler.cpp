@@ -157,5 +157,4 @@ XmlRequestHandler *RoleXmlHandlerResolver::createHandler(
 			session, *m_roleService);
 }
 
-BEEEON_OBJECT(BeeeOn_XmlUI_RoleXmlHandlerResolver,
-		BeeeOn::XmlUI::RoleXmlHandlerResolver)
+BEEEON_OBJECT(BeeeOn, XmlUI, RoleXmlHandlerResolver)

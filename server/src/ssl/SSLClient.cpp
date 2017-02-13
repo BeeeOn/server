@@ -38,4 +38,4 @@ Context::Ptr SSLClient::createContext()
 	return context;
 }
 
-BEEEON_OBJECT(BeeeOn_SSLClient, BeeeOn::SSLClient)
+BEEEON_OBJECT(BeeeOn, SSLClient)

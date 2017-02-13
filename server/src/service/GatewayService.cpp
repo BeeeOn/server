@@ -9,7 +9,7 @@
 #include "dao/VerifiedIdentityDao.h"
 #include "policy/GatewayAccessPolicy.h"
 
-BEEEON_OBJECT(BeeeOn_GatewayService, BeeeOn::GatewayService)
+BEEEON_OBJECT(BeeeOn, GatewayService)
 
 using namespace std;
 using namespace Poco;

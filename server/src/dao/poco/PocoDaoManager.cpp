@@ -10,7 +10,7 @@
 #include "util/Template.h"
 #include "util/Occasionally.h"
 
-BEEEON_OBJECT(BeeeOn_PocoDaoManager, BeeeOn::PocoDaoManager)
+BEEEON_OBJECT(BeeeOn, PocoDaoManager)
 
 using namespace std;
 using namespace Poco;

@@ -69,4 +69,4 @@ SessionID RestAuthHandler::handleLogin(istream &in)
 	return session->sessionID();
 }
 
-BEEEON_OBJECT(BeeeOn_RestAuthHandler, BeeeOn::RestAuthHandler)
+BEEEON_OBJECT(BeeeOn, RestAuthHandler)

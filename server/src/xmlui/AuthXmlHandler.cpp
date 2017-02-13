@@ -84,4 +84,4 @@ XmlRequestHandler *AuthXmlHandlerResolver::createHandler(
 	return new AuthXmlHandler(socket, input, *m_authService);
 }
 
-BEEEON_OBJECT(BeeeOn_XmlUI_AuthXmlHandlerResolver, BeeeOn::XmlUI::AuthXmlHandlerResolver)
+BEEEON_OBJECT(BeeeOn, XmlUI, AuthXmlHandlerResolver)

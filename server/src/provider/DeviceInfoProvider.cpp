@@ -5,7 +5,7 @@ using namespace Poco;
 using namespace Poco::XML;
 using namespace BeeeOn;
 
-BEEEON_OBJECT(BeeeOn_DeviceInfoProvider, BeeeOn::DeviceInfoProvider)
+BEEEON_OBJECT(BeeeOn, DeviceInfoProvider)
 
 DeviceInfoProvider::DeviceInfoProvider():
 	m_typeProvider(&NullInfoProvider<TypeInfo>::instance())

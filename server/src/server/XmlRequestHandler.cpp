@@ -134,4 +134,4 @@ AutoPtr<Document> XmlRequestHandlerFactory::parseDocument(
 	return m_parser.parse(xml.c_str(), length);
 }
 
-BEEEON_OBJECT(BeeeOn_XmlRequestHandlerFactory, BeeeOn::XmlRequestHandlerFactory)
+BEEEON_OBJECT(BeeeOn, XmlRequestHandlerFactory)

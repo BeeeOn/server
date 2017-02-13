@@ -29,4 +29,4 @@ ExpirableSession::Ptr SessionVerifier::verifyAuthorized(
 	throw NotAuthenticatedException("missing a session");
 }
 
-BEEEON_OBJECT(BeeeOn_SessionVerifier, BeeeOn::SessionVerifier)
+BEEEON_OBJECT(BeeeOn, SessionVerifier)

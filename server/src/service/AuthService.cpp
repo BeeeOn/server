@@ -7,7 +7,7 @@ using namespace Poco;
 using namespace Poco::Net;
 using namespace BeeeOn;
 
-BEEEON_OBJECT(BeeeOn_AuthService, BeeeOn::AuthService)
+BEEEON_OBJECT(BeeeOn, AuthService)
 
 User AuthService::createUser(const AuthResult &result)
 {

@@ -4,7 +4,7 @@
 using namespace Poco;
 using namespace BeeeOn;
 
-BEEEON_OBJECT(BeeeOn_PocoTransactionManager, BeeeOn::PocoTransactionManager)
+BEEEON_OBJECT(BeeeOn, PocoTransactionManager)
 
 PocoTransactionManager::PocoTransactionManager()
 {

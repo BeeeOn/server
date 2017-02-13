@@ -165,5 +165,4 @@ XmlRequestHandler *LocationXmlHandlerResolver::createHandler(
 			socket, input, session, *m_locationService);
 }
 
-BEEEON_OBJECT(BeeeOn_XmlUI_LocationXmlHandlerResolver,
-		BeeeOn::XmlUI::LocationXmlHandlerResolver)
+BEEEON_OBJECT(BeeeOn, XmlUI, LocationXmlHandlerResolver)

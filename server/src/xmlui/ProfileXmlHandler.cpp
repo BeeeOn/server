@@ -77,6 +77,5 @@ XmlRequestHandler *ProfileXmlHandlerResolver::createHandler(
 			*m_identityService);
 }
 
-BEEEON_OBJECT(BeeeOn_XmlUI_ProfileXmlHandlerResolver,
-		BeeeOn::XmlUI::ProfileXmlHandlerResolver)
+BEEEON_OBJECT(BeeeOn, XmlUI, ProfileXmlHandlerResolver)
 

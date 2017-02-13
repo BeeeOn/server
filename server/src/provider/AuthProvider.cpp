@@ -2,5 +2,5 @@
 #include "provider/PermitAuthProvider.h"
 #include "provider/GoogleAuthProvider.h"
 
-BEEEON_OBJECT(BeeeOn_PermitAuthProvider, BeeeOn::PermitAuthProvider)
-BEEEON_OBJECT(BeeeOn_GoogleAuthProvider, BeeeOn::GoogleAuthProvider)
+BEEEON_OBJECT(BeeeOn, PermitAuthProvider)
+BEEEON_OBJECT(BeeeOn, GoogleAuthProvider)

@@ -13,7 +13,7 @@ using namespace Poco;
 using namespace Poco::Net;
 using namespace BeeeOn;
 
-BEEEON_OBJECT(BeeeOn_SocketServer, BeeeOn::SocketServer)
+BEEEON_OBJECT(BeeeOn, SocketServer)
 
 SocketServer::SocketServer():
 	m_port(0),

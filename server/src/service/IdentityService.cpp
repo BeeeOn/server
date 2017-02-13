@@ -1,6 +1,6 @@
 #include "service/IdentityService.h"
 
-BEEEON_OBJECT(BeeeOn_IdentityService, BeeeOn::IdentityService)
+BEEEON_OBJECT(BeeeOn, IdentityService)
 
 using namespace BeeeOn;
 
