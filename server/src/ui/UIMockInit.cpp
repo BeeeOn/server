@@ -10,7 +10,7 @@
 #include "ui/UIMockInit.h"
 #include "util/ValueGenerator.h"
 
-BEEEON_OBJECT(UIMockInit, BeeeOn::UIMockInit)
+BEEEON_OBJECT(BeeeOn, UIMockInit)
 
 using namespace std;
 using namespace Poco;
@@ -214,7 +214,7 @@ void UIMockInit::initSensorData()
 	}
 }
 
-void UIMockInit::injectionDone()
+void UIMockInit::initAll()
 {
 	vector<Location> locations;
 

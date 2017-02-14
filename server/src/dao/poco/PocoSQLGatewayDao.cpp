@@ -17,7 +17,7 @@ using namespace Poco::Data::Keywords;
 using namespace Poco::Net;
 using namespace BeeeOn;
 
-BEEEON_OBJECT(PocoSQLGatewayDao, BeeeOn::PocoSQLGatewayDao)
+BEEEON_OBJECT(BeeeOn, PocoSQLGatewayDao)
 
 PocoSQLGatewayDao::PocoSQLGatewayDao()
 {

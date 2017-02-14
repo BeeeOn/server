@@ -13,7 +13,7 @@ using namespace Poco::Data;
 using namespace Poco::Data::Keywords;
 using namespace BeeeOn;
 
-BEEEON_OBJECT(PocoSQLLocationDao, BeeeOn::PocoSQLLocationDao)
+BEEEON_OBJECT(BeeeOn, PocoSQLLocationDao)
 
 PocoSQLLocationDao::PocoSQLLocationDao()
 {

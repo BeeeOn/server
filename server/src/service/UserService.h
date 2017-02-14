@@ -5,7 +5,6 @@
 #include <Poco/Logger.h>
 #include "dao/UserDao.h"
 #include "dao/Transactional.h"
-#include "di/InjectorTarget.h"
 #include "Debug.h"
 
 namespace BeeeOn {

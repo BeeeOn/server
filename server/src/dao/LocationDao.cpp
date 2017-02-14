@@ -2,8 +2,6 @@
 
 #include "dao/LocationDao.h"
 
-BEEEON_OBJECT(NullLocationDao, BeeeOn::NullLocationDao)
-
 using namespace BeeeOn;
 
 LocationDao &NullLocationDao::instance()

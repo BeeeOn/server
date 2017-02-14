@@ -2,8 +2,6 @@
 
 #include "rpc/GatewayRPC.h"
 
-BEEEON_OBJECT(NullGatewayRPC, BeeeOn::NullGatewayRPC)
-
 using namespace BeeeOn;
 
 GatewayRPC &NullGatewayRPC::instance()

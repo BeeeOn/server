@@ -133,12 +133,8 @@ void LocationXmlHandler::handleGetAll(const string &gateid)
 LocationXmlHandlerResolver::LocationXmlHandlerResolver():
 	AbstractXmlHandlerResolver("locations")
 {
-	injector<LocationXmlHandlerResolver, LocationService>(
-			"locationService",
-			&LocationXmlHandlerResolver::setLocationService);
-	injector<LocationXmlHandlerResolver, SessionManager>(
-			"sessionManager",
-			&LocationXmlHandlerResolver::setSessionManager);
+	injector("locationService", &LocationXmlHandlerResolver::setLocationService);
+	injector("sessionManager", &LocationXmlHandlerResolver::setSessionManager);
 }
 
 bool LocationXmlHandlerResolver::canHandle(
@@ -169,5 +165,4 @@ XmlRequestHandler *LocationXmlHandlerResolver::createHandler(
 			socket, input, session, *m_locationService);
 }
 
-BEEEON_OBJECT(LocationXmlHandlerResolver,
-		BeeeOn::XmlUI::LocationXmlHandlerResolver)
+BEEEON_OBJECT(BeeeOn, XmlUI, LocationXmlHandlerResolver)

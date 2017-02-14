@@ -10,7 +10,7 @@
 #include <Poco/Data/RecordSet.h>
 
 #include "dao/EntityLoader.h"
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "util/Loggable.h"
 
 namespace Poco {
@@ -66,8 +66,7 @@ protected:
 	std::size_t execute(Poco::Data::Statement &sql);
 	void throwMissingId(const std::type_info &t);
 
-protected:
-	virtual void injectionDone();
+	void loadQueries();
 
 private:
 	PocoDaoManager *m_manager;

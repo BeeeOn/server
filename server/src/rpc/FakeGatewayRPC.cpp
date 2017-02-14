@@ -1,6 +1,6 @@
 #include <Poco/Logger.h>
 
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "rpc/GatewayRPC.h"
 #include "dao/DeviceDao.h"
 #include "util/Loggable.h"
@@ -31,10 +31,7 @@ private:
 FakeGatewayRPC::FakeGatewayRPC():
 	m_deviceDao(&NullDeviceDao::instance())
 {
-	injector<FakeGatewayRPC, DeviceDao>(
-			"deviceDao",
-			&FakeGatewayRPC::setDeviceDao
-	);
+	injector("deviceDao", &FakeGatewayRPC::setDeviceDao);
 }
 
 void FakeGatewayRPC::setDeviceDao(DeviceDao *dao)
@@ -77,4 +74,4 @@ void FakeGatewayRPC::pingGateway(const Gateway &gateway)
 
 }
 
-BEEEON_OBJECT(FakeGatewayRPC, BeeeOn::FakeGatewayRPC)
+BEEEON_OBJECT(BeeeOn, FakeGatewayRPC)

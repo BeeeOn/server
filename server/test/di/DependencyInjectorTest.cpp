@@ -3,7 +3,7 @@
 
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "di/DependencyInjector.h"
 #include "cppunit/BetterAssert.h"
 #include "Debug.h"
@@ -53,10 +53,10 @@ public:
 		m_self(NULL),
 		m_index(0)
 	{
-		injector<FakeObject, FakeObject>("self", &FakeObject::setSelf);
-		textInjector("name", (TextSetter) &FakeObject::setName);
-		numberInjector("index", (NumberSetter) &FakeObject::setIndex);
-		textInjector("other", (TextSetter) &FakeObject::setOther);
+		injector("self", &FakeObject::setSelf);
+		textInjector("name", &FakeObject::setName);
+		numberInjector("index", &FakeObject::setIndex);
+		textInjector("other", &FakeObject::setOther);
 	}
 
 	void setSelf(FakeObject *self)
@@ -85,7 +85,7 @@ public:
 	int m_index;
 };
 
-BEEEON_OBJECT(FakeObject, BeeeOn::FakeObject)
+BEEEON_OBJECT(BeeeOn, FakeObject)
 
 void DependencyInjectorTest::setUp()
 {

@@ -5,7 +5,7 @@
 
 #include <Poco/Mutex.h>
 
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "loop/StoppableRunnable.h"
 #include "loop/StoppableLoop.h"
 #include "util/Loggable.h"
@@ -25,10 +25,10 @@ public:
 
 	void start();
 	void stop();
+	void autoStart();
 
 protected:
 	void stopAll(std::list<StoppableLoop *> &list);
-	void injectionDone() override;
 
 private:
 	bool m_autoStart;

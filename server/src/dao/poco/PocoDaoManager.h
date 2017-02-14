@@ -3,7 +3,7 @@
 
 #include <Poco/SharedPtr.h>
 #include <Poco/Data/SessionPool.h>
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "util/Loggable.h"
 
 namespace BeeeOn {
@@ -24,9 +24,10 @@ public:
 
 	Poco::Data::SessionPool &pool();
 
+	void connectAndPrepare();
+
 protected:
 	void initPool();
-	void injectionDone() override;
 
 private:
 	ConnectorLoader *m_connector;

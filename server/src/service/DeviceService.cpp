@@ -11,7 +11,7 @@
 #include "rpc/GatewayRPC.h"
 #include "Debug.h"
 
-BEEEON_OBJECT(DeviceService, BeeeOn::DeviceService)
+BEEEON_OBJECT(BeeeOn, DeviceService)
 
 using namespace std;
 using namespace Poco;
@@ -22,12 +22,9 @@ DeviceService::DeviceService():
 	m_gatewayRPC(&NullGatewayRPC::instance()),
 	m_policy(&NullDeviceAccessPolicy::instance())
 {
-	injector<DeviceService, DeviceDao>("deviceDao",
-			&DeviceService::setDeviceDao);
-	injector<DeviceService, GatewayRPC>("gatewayRPC",
-			&DeviceService::setGatewayRPC);
-	injector<DeviceService, DeviceAccessPolicy>("accessPolicy",
-			&DeviceService::setAccessPolicy);
+	injector("deviceDao", &DeviceService::setDeviceDao);
+	injector("gatewayRPC", &DeviceService::setGatewayRPC);
+	injector("accessPolicy", &DeviceService::setAccessPolicy);
 }
 
 void DeviceService::setDeviceDao(DeviceDao *dao)

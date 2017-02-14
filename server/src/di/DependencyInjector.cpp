@@ -324,9 +324,9 @@ SharedPtr<InjectorTarget> DependencyInjector::injectDependencies(
 			__FILE__, __LINE__);
 
 	try {
-		target->injectionDone();
+		target->callHook("done");
 	} catch (const Exception &e) {
-		logger().error("injectionDone() failed for " + info.name(),
+		logger().error("hook 'done' failed for " + info.name(),
 				__FILE__, __LINE__);
 		e.rethrow();
 	}

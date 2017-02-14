@@ -4,7 +4,7 @@
 #include <Poco/RWLock.h>
 #include <Poco/Logger.h>
 
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "provider/RandomProvider.h"
 #include "model/VerifiedIdentity.h"
 #include "server/SessionCache.h"
@@ -27,13 +27,9 @@ public:
 	SessionManager() :
 		m_sessionCache(NULL)
 	{
-		injector<SessionManager, SecureRandomProvider>(
-			"secureRandomProvider",
-			&SessionManager::setSecureRandomProvider);
-		numberInjector("sessionExpireTime",
-				(NumberSetter) &SessionManager::setSessionExpireTime);
-		numberInjector("maxUserSessions",
-				(NumberSetter) &SessionManager::setMaxUserSessions);
+		injector("secureRandomProvider", &SessionManager::setSecureRandomProvider);
+		numberInjector("sessionExpireTime", &SessionManager::setSessionExpireTime);
+		numberInjector("maxUserSessions", &SessionManager::setMaxUserSessions);
 	}
 
 	~SessionManager()

@@ -5,7 +5,7 @@
 #include "dao/GatewayDao.h"
 #include "policy/LocationAccessPolicy.h"
 
-BEEEON_OBJECT(LocationService, BeeeOn::LocationService)
+BEEEON_OBJECT(BeeeOn, LocationService)
 
 using namespace std;
 using namespace Poco;
@@ -16,12 +16,9 @@ LocationService::LocationService():
 	m_gatewayDao(&NullGatewayDao::instance()),
 	m_accessPolicy(&NullLocationAccessPolicy::instance())
 {
-	injector<LocationService, LocationDao>("locationDao",
-			&LocationService::setLocationDao);
-	injector<LocationService, GatewayDao>("gatewayDao",
-			&LocationService::setGatewayDao);
-	injector<LocationService, LocationAccessPolicy>("accessPolicy",
-			&LocationService::setAccessPolicy);
+	injector("locationDao", &LocationService::setLocationDao);
+	injector("gatewayDao", &LocationService::setGatewayDao);
+	injector("accessPolicy", &LocationService::setAccessPolicy);
 }
 
 void LocationService::setLocationDao(LocationDao *dao)

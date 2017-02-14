@@ -151,12 +151,8 @@ void GatewayXmlHandler::handleGetAll()
 GatewayXmlHandlerResolver::GatewayXmlHandlerResolver():
 	AbstractXmlHandlerResolver("gates")
 {
-	injector<GatewayXmlHandlerResolver, GatewayService>(
-			"gatewayService",
-			&GatewayXmlHandlerResolver::setGatewayService);
-	injector<GatewayXmlHandlerResolver, SessionManager>(
-			"sessionManager",
-			&GatewayXmlHandlerResolver::setSessionManager);
+	injector("gatewayService", &GatewayXmlHandlerResolver::setGatewayService);
+	injector("sessionManager", &GatewayXmlHandlerResolver::setSessionManager);
 }
 
 bool GatewayXmlHandlerResolver::canHandle(
@@ -194,5 +190,4 @@ XmlRequestHandler *GatewayXmlHandlerResolver::createHandler(
 			*m_gatewayService);
 }
 
-BEEEON_OBJECT(GatewayXmlHandlerResolver,
-		BeeeOn::XmlUI::GatewayXmlHandlerResolver)
+BEEEON_OBJECT(BeeeOn, XmlUI, GatewayXmlHandlerResolver)

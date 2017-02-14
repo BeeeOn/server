@@ -1,7 +1,7 @@
 #ifndef BEEEON_IDENTITY_DAO_H
 #define BEEEON_IDENTITY_DAO_H
 
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "model/Identity.h"
 #include "dao/NullDao.h"
 #include "dao/MockDao.h"

@@ -2,12 +2,11 @@
 
 using namespace BeeeOn;
 
-BEEEON_OBJECT(UserService, BeeeOn::UserService)
+BEEEON_OBJECT(BeeeOn, UserService)
 
 UserService::UserService()
 {
-	injector<UserService, UserDao>("userDao",
-			&UserService::setUserDao);
+	injector("userDao", &UserService::setUserDao);
 }
 
 void UserService::setUserDao(UserDao *dao)

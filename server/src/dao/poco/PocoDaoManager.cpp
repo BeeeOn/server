@@ -10,7 +10,7 @@
 #include "util/Template.h"
 #include "util/Occasionally.h"
 
-BEEEON_OBJECT(PocoDaoManager, BeeeOn::PocoDaoManager)
+BEEEON_OBJECT(BeeeOn, PocoDaoManager)
 
 using namespace std;
 using namespace Poco;
@@ -24,18 +24,13 @@ PocoDaoManager::PocoDaoManager():
 	m_maxSessions(32),
 	m_idleTime(60)
 {
-	injector<PocoDaoManager, ConnectorLoader>("connector",
-			&PocoDaoManager::setConnector);
-	textInjector("connectionString", (TextSetter)
-			&PocoDaoManager::setConnectionString);
-	numberInjector("minSessions", (NumberSetter)
-			&PocoDaoManager::setMinSessions);
-	numberInjector("maxSessions", (NumberSetter)
-			&PocoDaoManager::setMaxSessions);
-	numberInjector("idleTime", (NumberSetter)
-			&PocoDaoManager::setIdleTime);
-	textInjector("initScript", (TextSetter)
-			&PocoDaoManager::setInitScript);
+	injector("connector", &PocoDaoManager::setConnector);
+	textInjector("connectionString", &PocoDaoManager::setConnectionString);
+	numberInjector("minSessions", &PocoDaoManager::setMinSessions);
+	numberInjector("maxSessions", &PocoDaoManager::setMaxSessions);
+	numberInjector("idleTime", &PocoDaoManager::setIdleTime);
+	textInjector("initScript", &PocoDaoManager::setInitScript);
+	hook("done", &PocoDaoManager::connectAndPrepare);
 }
 
 void PocoDaoManager::setConnector(ConnectorLoader *connector)
@@ -135,7 +130,7 @@ void PocoDaoManager::initPool()
 	logger().notice("database pool initialized", __FILE__, __LINE__);
 }
 
-void PocoDaoManager::injectionDone()
+void PocoDaoManager::connectAndPrepare()
 {
 	initPool();
 

@@ -13,7 +13,7 @@ using namespace Poco;
 using namespace Poco::Net;
 using namespace BeeeOn;
 
-BEEEON_OBJECT(SocketServer, BeeeOn::SocketServer)
+BEEEON_OBJECT(BeeeOn, SocketServer)
 
 SocketServer::SocketServer():
 	m_port(0),
@@ -21,27 +21,16 @@ SocketServer::SocketServer():
 	m_sslConfig(NULL),
 	m_tcpParams(new TCPServerParams())
 {
-	numberInjector("port",
-		(NumberSetter) &SocketServer::setPort);
-	numberInjector("backlog",
-		(NumberSetter) &SocketServer::setBacklog);
-	numberInjector("maxThreads",
-		(NumberSetter) &SocketServer::setMaxThreads);
-	numberInjector("maxQueued",
-		(NumberSetter) &SocketServer::setMaxQueued);
-	numberInjector("threadIdleTime",
-		(NumberSetter) &SocketServer::setThreadIdleTime);
-	textInjector("threadPriority",
-		(TextSetter) &SocketServer::setThreadPriority);
+	numberInjector("port", &SocketServer::setPort);
+	numberInjector("backlog", &SocketServer::setBacklog);
+	numberInjector("maxThreads", &SocketServer::setMaxThreads);
+	numberInjector("maxQueued", &SocketServer::setMaxQueued);
+	numberInjector("threadIdleTime", &SocketServer::setThreadIdleTime);
+	textInjector("threadPriority", &SocketServer::setThreadPriority);
 
-	injector<SocketServer, SSLServer>(
-		"sslConfig",
-		&SocketServer::setSSLConfig
-	);
-	injector<SocketServer, SocketServerConnectionFactory>(
-		"connectionFactory",
-		&SocketServer::setFactory
-	);
+	injector("sslConfig", &SocketServer::setSSLConfig);
+	injector("connectionFactory", &SocketServer::setFactory);
+
 }
 
 void SocketServer::setSSLConfig(SSLServer *config)

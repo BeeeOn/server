@@ -12,7 +12,7 @@ using namespace Poco::Data;
 using namespace Poco::Data::Keywords;
 using namespace BeeeOn;
 
-BEEEON_OBJECT(PocoSQLIdentityDao, BeeeOn::PocoSQLIdentityDao)
+BEEEON_OBJECT(BeeeOn, PocoSQLIdentityDao)
 
 PocoSQLIdentityDao::PocoSQLIdentityDao()
 {

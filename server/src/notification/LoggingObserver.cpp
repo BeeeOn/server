@@ -8,7 +8,7 @@ using namespace std;
 using namespace Poco;
 using namespace BeeeOn;
 
-BEEEON_OBJECT(LoggingObserver, BeeeOn::LoggingObserver)
+BEEEON_OBJECT(BeeeOn, LoggingObserver)
 
 LoggingObserver::LoggingObserver()
 {

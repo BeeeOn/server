@@ -6,19 +6,14 @@ using namespace std;
 using namespace BeeeOn;
 using namespace Poco;
 
-BEEEON_OBJECT(LoopRunner, BeeeOn::LoopRunner)
+BEEEON_OBJECT(BeeeOn, LoopRunner)
 
 LoopRunner::LoopRunner():
 	m_autoStart(false)
 {
-	injector<LoopRunner, StoppableRunnable>(
-		"runnables",
-		&LoopRunner::addRunnable
-	);
-	injector<LoopRunner, StoppableLoop>(
-		"loops",
-		&LoopRunner::addLoop
-	);
+	injector("runnables", &LoopRunner::addRunnable);
+	injector("loops", &LoopRunner::addLoop);
+	hook("done", &LoopRunner::autoStart);
 }
 
 LoopRunner::~LoopRunner()
@@ -87,7 +82,7 @@ void LoopRunner::start()
 			__FILE__, __LINE__);
 }
 
-void LoopRunner::injectionDone()
+void LoopRunner::autoStart()
 {
 	if (m_autoStart) {
 		logger().information("auto-starting loops", __FILE__, __LINE__);

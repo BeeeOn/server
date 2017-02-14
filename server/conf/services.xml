@@ -231,7 +231,6 @@
 			<set name="providerImpl" ref="mockRandomProvider" />
 		</instance>
 
-		<instance name="nullGatewayRPC" class="BeeeOn::NullGatewayRPC" />
 		<instance name="fakeGatewayRPC" class="BeeeOn::FakeGatewayRPC">
 			<set name="deviceDao" ref="deviceDao" />
 		</instance>

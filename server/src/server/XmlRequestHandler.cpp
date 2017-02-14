@@ -57,10 +57,8 @@ XmlRequestHandlerFactory::XmlRequestHandlerFactory(size_t maxLength):
 
 void XmlRequestHandlerFactory::init()
 {
-	injector<XmlRequestHandlerFactory, XmlRequestHandlerResolver>
-		("resolvers", &XmlRequestHandlerFactory::registerResolver);
-	numberInjector("maxBuffer", (NumberSetter)
-			&XmlRequestHandlerFactory::setMaxLength);
+	injector("resolvers", &XmlRequestHandlerFactory::registerResolver);
+	numberInjector("maxBuffer", &XmlRequestHandlerFactory::setMaxLength);
 }
 
 TCPServerConnection *XmlRequestHandlerFactory::createConnection(
@@ -135,4 +133,4 @@ AutoPtr<Document> XmlRequestHandlerFactory::parseDocument(
 	return m_parser.parse(xml.c_str(), length);
 }
 
-BEEEON_OBJECT(XmlRequestHandlerFactory, BeeeOn::XmlRequestHandlerFactory)
+BEEEON_OBJECT(BeeeOn, XmlRequestHandlerFactory)

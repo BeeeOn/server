@@ -4,7 +4,7 @@
 #include <string>
 #include <Poco/Exception.h>
 
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "server/RestHandler.h"
 #include "server/Session.h"
 #include "service/AuthService.h"

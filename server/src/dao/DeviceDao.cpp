@@ -3,8 +3,6 @@
 
 #include "dao/DeviceDao.h"
 
-BEEEON_OBJECT(NullDeviceDao, BeeeOn::NullDeviceDao)
-
 using namespace std;
 using namespace Poco;
 using namespace BeeeOn;

@@ -3,7 +3,7 @@
 
 #include <set>
 
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "model/ModuleInfo.h"
 #include "model/DeviceInfo.h"
 #include "provider/InfoProvider.h"
@@ -19,10 +19,10 @@ public:
 
 	void setTypeInfoProvider(InfoProvider<TypeInfo> *provider);
 	void setDevicesFile(const std::string &devicesFile);
+	void loadInfo();
 
 protected:
 	DeviceInfo resolveTypes(const DeviceInfo &device);
-	void injectionDone() override;
 
 private:
 	std::string m_devicesFile;

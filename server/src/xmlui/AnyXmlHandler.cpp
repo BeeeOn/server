@@ -38,4 +38,4 @@ XmlRequestHandler *AnyXmlHandlerResolver::createHandler(
 	return new AnyXmlHandler(socket, input);
 }
 
-BEEEON_OBJECT(AnyXmlHandlerResolver, BeeeOn::XmlUI::AnyXmlHandlerResolver)
+BEEEON_OBJECT(BeeeOn, XmlUI, AnyXmlHandlerResolver)

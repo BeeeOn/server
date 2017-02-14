@@ -8,7 +8,7 @@
 #include "server/RestRequestHandler.h"
 #include "server/SessionVerifier.h"
 #include "server/RestAuthHandler.h"
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "service/UserService.h"
 #include "service/DeviceService.h"
 #include "util/Loggable.h"
@@ -61,21 +61,19 @@ public:
 		m_factory(new UIServerRequestHandlerFactory("ui-server")),
 		m_server(NULL)
 	{
-		injector<UIServerModule, SessionVerifier>("sessionVerifier",
-				&UIServerModule::setSessionVerifier);
-		injector<UIServerModule, UserService>("userService",
-				&UIServerModule::setUserService);
-		injector<UIServerModule, RestAuthHandler>("authHandler",
-				&UIServerModule::setAuthHandler);
-		injector<UIServerModule, DeviceService>("deviceService",
-				&UIServerModule::setDeviceService);
-		numberInjector("port", (NumberSetter) &UIServerModule::setPort);
+		injector("sessionVerifier", &UIServerModule::setSessionVerifier);
+		injector("userService", &UIServerModule::setUserService);
+		injector("authHandler", &UIServerModule::setAuthHandler);
+		injector("deviceService", &UIServerModule::setDeviceService);
+		numberInjector("port", &UIServerModule::setPort);
+
+		hook("done", &UIServerModule::installRoutes);
 	}
 
 	/**
 	 * Called when dependency injection sets all entries.
 	 */
-	void injectionDone() override;
+	void installRoutes();
 
 	~UIServerModule() {
 		if (m_server)

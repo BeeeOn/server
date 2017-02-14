@@ -38,4 +38,4 @@ Context::Ptr SSLServer::createContext()
 	return context;
 }
 
-BEEEON_OBJECT(SSLServer, BeeeOn::SSLServer)
+BEEEON_OBJECT(BeeeOn, SSLServer)

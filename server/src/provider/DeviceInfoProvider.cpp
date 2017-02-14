@@ -5,17 +5,15 @@ using namespace Poco;
 using namespace Poco::XML;
 using namespace BeeeOn;
 
-BEEEON_OBJECT(DeviceInfoProvider, BeeeOn::DeviceInfoProvider)
+BEEEON_OBJECT(BeeeOn, DeviceInfoProvider)
 
 DeviceInfoProvider::DeviceInfoProvider():
 	m_typeProvider(&NullInfoProvider<TypeInfo>::instance())
 {
-	textInjector("devicesFile", (TextSetter) &DeviceInfoProvider::setDevicesFile);
+	textInjector("devicesFile", &DeviceInfoProvider::setDevicesFile);
+	injector("typeInfoProvider", &DeviceInfoProvider::setTypeInfoProvider);
 
-	injector<DeviceInfoProvider, InfoProvider<TypeInfo>>(
-		"typeInfoProvider",
-		&DeviceInfoProvider::setTypeInfoProvider
-	);
+	hook("done", &DeviceInfoProvider::loadInfo);
 }
 
 void DeviceInfoProvider::setDevicesFile(const std::string &devicesFile)
@@ -54,7 +52,7 @@ DeviceInfo DeviceInfoProvider::resolveTypes(const DeviceInfo &device)
 	return result;
 }
 
-void DeviceInfoProvider::injectionDone()
+void DeviceInfoProvider::loadInfo()
 {
 	parseFile(m_devicesFile, "device");
 

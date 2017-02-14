@@ -10,25 +10,16 @@ using namespace std;
 using namespace Poco;
 using namespace BeeeOn;
 
-BEEEON_OBJECT(SensorHistoryService, BeeeOn::SensorHistoryService)
+BEEEON_OBJECT(BeeeOn, SensorHistoryService)
 
 SensorHistoryService::SensorHistoryService():
 	m_dao(&NullSensorHistoryDao::instance()),
 	m_deviceDao(&NullDeviceDao::instance()),
 	m_policy(&NullSensorHistoryAccessPolicy::instance())
 {
-	injector<SensorHistoryService, SensorHistoryDao>(
-		"sensorHistoryDao",
-		&SensorHistoryService::setSensorHistoryDao
-	);
-	injector<SensorHistoryService, DeviceDao>(
-		"deviceDao",
-		&SensorHistoryService::setDeviceDao
-	);
-	injector<SensorHistoryService, SensorHistoryAccessPolicy>(
-		"accessPolicy",
-		&SensorHistoryService::setAccessPolicy
-	);
+	injector("sensorHistoryDao", &SensorHistoryService::setSensorHistoryDao);
+	injector("deviceDao", &SensorHistoryService::setDeviceDao);
+	injector("accessPolicy", &SensorHistoryService::setAccessPolicy);
 }
 
 void SensorHistoryService::setSensorHistoryDao(SensorHistoryDao *dao)

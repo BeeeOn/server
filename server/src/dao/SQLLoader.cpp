@@ -7,13 +7,14 @@ using namespace Poco;
 using namespace Poco::Util;
 using namespace BeeeOn;
 
-BEEEON_OBJECT(SQLLoader, BeeeOn::SQLLoader)
+BEEEON_OBJECT(BeeeOn, SQLLoader)
 
 SQLLoader::SQLLoader():
 	m_config(new LayeredConfiguration())
 {
-	textInjector("file", (TextSetter) &SQLLoader::addSourceFile);
-	textInjector("database", (TextSetter) &SQLLoader::setDatabase);
+	textInjector("file", &SQLLoader::addSourceFile);
+	textInjector("database", &SQLLoader::setDatabase);
+	hook("done", &SQLLoader::prepare);
 }
 
 SQLLoader::~SQLLoader()
@@ -31,7 +32,7 @@ void SQLLoader::setDatabase(const string &name)
 	m_database = name;
 }
 
-void SQLLoader::injectionDone()
+void SQLLoader::prepare()
 {
 	m_view = m_config->createView(m_database);
 }

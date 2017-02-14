@@ -5,7 +5,7 @@
 #include <Poco/Util/LayeredConfiguration.h>
 #include <Poco/Util/AbstractConfiguration.h>
 
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 
 namespace BeeeOn {
 
@@ -20,8 +20,7 @@ public:
 
 	std::string find(const std::string &key) const;
 
-protected:
-	void injectionDone() override;
+	void prepare();
 
 protected:
 	Poco::AutoPtr<Poco::Util::LayeredConfiguration> m_config;

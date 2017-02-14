@@ -5,7 +5,7 @@
 #include <Poco/Mutex.h>
 #include <Poco/Net/Context.h>
 
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "util/Loggable.h"
 
 namespace Poco {
@@ -95,7 +95,6 @@ public:
 protected:
 	void initContext();
 	virtual Poco::Net::Context::Ptr createContext() = 0;
-	virtual void injectionDone() override;
 
 protected:
 	using VerificationMode =

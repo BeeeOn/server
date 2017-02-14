@@ -3,7 +3,7 @@
 
 #include <set>
 
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "model/TypeInfo.h"
 #include "provider/InfoProvider.h"
 #include "util/TypesSAXHandler.h"
@@ -18,8 +18,7 @@ public:
 
 	void setTypesFile(const std::string &typesFile);
 
-protected:
-	void injectionDone() override;
+	void loadInfo();
 
 private:
 	std::string m_typesFile;

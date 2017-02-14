@@ -4,14 +4,11 @@
 using namespace Poco;
 using namespace BeeeOn;
 
-BEEEON_OBJECT(PocoTransactionManager, BeeeOn::PocoTransactionManager)
+BEEEON_OBJECT(BeeeOn, PocoTransactionManager)
 
 PocoTransactionManager::PocoTransactionManager()
 {
-	injector<PocoTransactionManager, PocoDaoManager>(
-		"daoManager",
-		&PocoTransactionManager::setDaoManager
-	);
+	injector("daoManager", &PocoTransactionManager::setDaoManager);
 }
 
 PocoTransactionManager::~PocoTransactionManager()

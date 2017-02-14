@@ -3,8 +3,7 @@
 
 #include "dao/VerifiedIdentityDao.h"
 
-BEEEON_OBJECT(NullVerifiedIdentityDao, BeeeOn::NullVerifiedIdentityDao)
-BEEEON_OBJECT(MockVerifiedIdentityDao, BeeeOn::MockVerifiedIdentityDao)
+BEEEON_OBJECT(BeeeOn, MockVerifiedIdentityDao)
 
 using namespace std;
 using namespace Poco;

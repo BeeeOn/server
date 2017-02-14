@@ -15,8 +15,7 @@ using namespace BeeeOn;
 
 RestAuthHandler::RestAuthHandler()
 {
-	injector<RestAuthHandler, AuthService>("authService",
-			&RestAuthHandler::setAuthService);
+	injector("authService", &RestAuthHandler::setAuthService);
 }
 
 void RestAuthHandler::extractAuthData(std::istream &in,
@@ -70,4 +69,4 @@ SessionID RestAuthHandler::handleLogin(istream &in)
 	return session->sessionID();
 }
 
-BEEEON_OBJECT(RestAuthHandler, BeeeOn::RestAuthHandler)
+BEEEON_OBJECT(BeeeOn, RestAuthHandler)

@@ -18,7 +18,7 @@ using namespace Poco::JSON;
 using namespace Poco::Dynamic;
 using namespace BeeeOn;
 
-void UIServerModule::injectionDone()
+void UIServerModule::installRoutes()
 {
 	m_factory->noRoute([](UIRouteContext &context) {
 		RestHandler::sendNoRoute(context.response());
@@ -34,4 +34,4 @@ void UIServerModule::injectionDone()
 	});
 }
 
-BEEEON_OBJECT(UIServerModule, BeeeOn::UIServerModule)
+BEEEON_OBJECT(BeeeOn, UIServerModule)

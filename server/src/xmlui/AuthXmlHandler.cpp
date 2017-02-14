@@ -60,8 +60,7 @@ void AuthXmlHandler::handleInputImpl()
 AuthXmlHandlerResolver::AuthXmlHandlerResolver():
 	AbstractXmlHandlerResolver("accounts")
 {
-	injector<AuthXmlHandlerResolver, AuthService>("authService",
-			&AuthXmlHandlerResolver::setAuthService);
+	injector("authService", &AuthXmlHandlerResolver::setAuthService);
 }
 
 bool AuthXmlHandlerResolver::canHandle(const Element &root)
@@ -85,4 +84,4 @@ XmlRequestHandler *AuthXmlHandlerResolver::createHandler(
 	return new AuthXmlHandler(socket, input, *m_authService);
 }
 
-BEEEON_OBJECT(AuthXmlHandlerResolver, BeeeOn::XmlUI::AuthXmlHandlerResolver)
+BEEEON_OBJECT(BeeeOn, XmlUI, AuthXmlHandlerResolver)

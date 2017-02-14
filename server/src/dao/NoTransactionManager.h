@@ -1,7 +1,7 @@
 #ifndef BEEEON_NO_TRANSACTION_MANAGER_H
 #define BEEEON_NO_TRANSACTION_MANAGER_H
 
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "dao/ThreadLocalTransactionManager.h"
 
 namespace BeeeOn {

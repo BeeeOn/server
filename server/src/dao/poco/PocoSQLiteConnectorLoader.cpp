@@ -5,7 +5,7 @@
 using namespace std;
 using namespace BeeeOn;
 
-BEEEON_OBJECT(PocoSQLiteConnectorLoader, BeeeOn::PocoSQLiteConnectorLoader)
+BEEEON_OBJECT(BeeeOn, PocoSQLiteConnectorLoader)
 
 PocoSQLiteConnectorLoader::PocoSQLiteConnectorLoader():
 	ConnectorLoader("sqlite")

@@ -6,7 +6,7 @@
 #include <Poco/Timestamp.h>
 #include <Poco/Mutex.h>
 
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 #include "Debug.h"
 
 namespace BeeeOn {
@@ -53,9 +53,7 @@ public:
 			.critical("AN INSECURE RANDOM PROVIDER IN USE",
 					__FILE__, __LINE__);
 
-		injector<InsecureRandomProvider, RandomProvider>(
-			"providerImpl",
-			&InsecureRandomProvider::setProviderImpl);
+		injector("providerImpl", &InsecureRandomProvider::setProviderImpl);
 	}
 
 	void setProviderImpl(RandomProvider *provider)

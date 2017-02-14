@@ -5,11 +5,12 @@ using namespace Poco;
 using namespace Poco::XML;
 using namespace BeeeOn;
 
-BEEEON_OBJECT(TypeInfoProvider, BeeeOn::TypeInfoProvider)
+BEEEON_OBJECT(BeeeOn, TypeInfoProvider)
 
 TypeInfoProvider::TypeInfoProvider()
 {
-	textInjector("typesFile", (TextSetter) &TypeInfoProvider::setTypesFile);
+	textInjector("typesFile", &TypeInfoProvider::setTypesFile);
+	hook("done", &TypeInfoProvider::loadInfo);
 }
 
 void TypeInfoProvider::setTypesFile(const std::string &typesFile)
@@ -17,7 +18,7 @@ void TypeInfoProvider::setTypesFile(const std::string &typesFile)
 	m_typesFile = typesFile;
 }
 
-void TypeInfoProvider::injectionDone()
+void TypeInfoProvider::loadInfo()
 {
 	parseFile(m_typesFile, "type");
 }

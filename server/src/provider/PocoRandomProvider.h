@@ -2,7 +2,7 @@
 #define BEEEON_POCO_RANDOM_PROVIDER_H
 
 #include "provider/RandomProvider.h"
-#include "di/InjectorTarget.h"
+#include "di/AbstractInjectorTarget.h"
 
 namespace BeeeOn {
 
