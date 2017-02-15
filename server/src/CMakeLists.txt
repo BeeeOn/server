@@ -128,7 +128,7 @@ include_directories(
 add_library(BeeeOnBase   SHARED ${BASE_SOURCES})
 add_library(BeeeOnServer SHARED ${SOURCES})
 
-add_executable(ui-server
+add_executable(beeeon-restui
 	ui/main.cpp
 	ui/UIServerModule.cpp
 	ui/Serializing.cpp
@@ -136,7 +136,7 @@ add_executable(ui-server
 	dao/poco/PocoSQLiteConnectorLoader.cpp
 )
 
-add_executable(xmlui-server
+add_executable(beeeon-xmlui
 	xmlui/main.cpp
 	xmlui/Serializing.cpp
 	xmlui/XmlValueConsumer.cpp
@@ -171,13 +171,13 @@ set(LIBS
 
 # Apple's linker doesn't support --whole-archive. Instead it uses -all_load.
 if (APPLE)
-	target_link_libraries(ui-server
+	target_link_libraries(beeeon-restui
 		-Wl,-all_load
 		BeeeOnBase
 		BeeeOnServer
 		${LIBS}
 	)
-	target_link_libraries(xmlui-server
+	target_link_libraries(beeeon-xmlui
 		-Wl,-all_load
 		BeeeOnBase
 		BeeeOnServer
@@ -186,14 +186,14 @@ if (APPLE)
 # The -Wl,--whole-archive is necessary for all libraries defining
 # BEEEON_OBJECTs (see di/Injectable.h).
 else()
-	target_link_libraries(ui-server
+	target_link_libraries(beeeon-restui
 		-Wl,--whole-archive
 		BeeeOnBase
 		BeeeOnServer
 		-Wl,--no-whole-archive
 		${LIBS}
 	)
-	target_link_libraries(xmlui-server
+	target_link_libraries(beeeon-xmlui
 		-Wl,--whole-archive
 		BeeeOnBase
 		BeeeOnServer
@@ -202,7 +202,7 @@ else()
 	)
 endif()
 
-install(TARGETS xmlui-server ui-server BeeeOnServer BeeeOnBase
+install(TARGETS beeeon-xmlui beeeon-restui BeeeOnServer BeeeOnBase
 	RUNTIME DESTINATION usr/bin
 	LIBRARY DESTINATION usr/lib
 	ARCHIVE DESTINATION usr/lib
