@@ -11,23 +11,26 @@ find_library (POCO_JSON PocoJSON)
 find_library (POCO_XML PocoXML)
 find_library (POCO_DATA PocoData)
 
-file(GLOB TEST_SOURCES
+file(GLOB TEST_BASE_SOURCES
 	${PROJECT_SOURCE_DIR}/DebugTest.cpp
-	${PROJECT_SOURCE_DIR}/server/RouteTest.cpp
-	${PROJECT_SOURCE_DIR}/server/SessionManagerTest.cpp
+	${PROJECT_SOURCE_DIR}/cppunit/TapTestProducer.cpp
 	${PROJECT_SOURCE_DIR}/di/DependencyInjectorTest.cpp
 	${PROJECT_SOURCE_DIR}/di/DIWrapperTest.cpp
 	${PROJECT_SOURCE_DIR}/model/GatewayIDTest.cpp
 	${PROJECT_SOURCE_DIR}/model/DeviceIDTest.cpp
-	${PROJECT_SOURCE_DIR}/service/AuthServiceTest.cpp
-	${PROJECT_SOURCE_DIR}/provider/GoogleAuthProviderTest.cpp
 	${PROJECT_SOURCE_DIR}/util/DAMMTest.cpp
 	${PROJECT_SOURCE_DIR}/util/Base64Test.cpp
 	${PROJECT_SOURCE_DIR}/util/SecureXmlParserTest.cpp
 	${PROJECT_SOURCE_DIR}/util/TypesSAXHandlerTest.cpp
 	${PROJECT_SOURCE_DIR}/util/DevicesSAXHandlerTest.cpp
 	${PROJECT_SOURCE_DIR}/ssl/X509FingerprintTest.cpp
-	${PROJECT_SOURCE_DIR}/cppunit/TapTestProducer.cpp
+)
+
+file(GLOB TEST_SOURCES
+	${PROJECT_SOURCE_DIR}/server/RouteTest.cpp
+	${PROJECT_SOURCE_DIR}/server/SessionManagerTest.cpp
+	${PROJECT_SOURCE_DIR}/service/AuthServiceTest.cpp
+	${PROJECT_SOURCE_DIR}/provider/GoogleAuthProviderTest.cpp
 )
 
 include_directories(
@@ -35,7 +38,7 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/src
 )
 
-add_executable(test-suite test.cpp ${TEST_SOURCES})
+add_executable(test-suite test.cpp ${TEST_SOURCES} ${TEST_BASE_SOURCES})
 
 set(LIBS
 	${POCO_FOUNDATION}
@@ -53,6 +56,7 @@ set(LIBS
 if (APPLE)
 	target_link_libraries(test-suite
 		-Wl,-all_load
+		BeeeOnBase
 		BeeeOnServer
 		${LIBS}
 	)
@@ -61,6 +65,7 @@ if (APPLE)
 else()
 	target_link_libraries(test-suite
 		-Wl,--whole-archive
+		BeeeOnBase
 		BeeeOnServer
 		-Wl,--no-whole-archive
 		${LIBS}

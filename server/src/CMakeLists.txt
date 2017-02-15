@@ -14,15 +14,42 @@ find_library (POCO_SQLITE PocoDataSQLite)
 set (CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -DBEEEON_SELECT_POCO")
 add_definitions(-std=c++11)
 
-file(GLOB SOURCES
+file(GLOB BASE_SOURCES
 	${PROJECT_SOURCE_DIR}/di/DependencyInjector.cpp
 	${PROJECT_SOURCE_DIR}/di/DIWrapper.cpp
+	${PROJECT_SOURCE_DIR}/loop/StoppableRunnable.cpp
+	${PROJECT_SOURCE_DIR}/loop/StoppableLoop.cpp
+	${PROJECT_SOURCE_DIR}/loop/LoopRunner.cpp
+	${PROJECT_SOURCE_DIR}/model/GatewayID.cpp
+	${PROJECT_SOURCE_DIR}/model/DeviceID.cpp
+	${PROJECT_SOURCE_DIR}/model/TypeInfo.cpp
+	${PROJECT_SOURCE_DIR}/model/ModuleInfo.cpp
+	${PROJECT_SOURCE_DIR}/model/DeviceInfo.cpp
+	${PROJECT_SOURCE_DIR}/provider/TypeInfoProvider.cpp
+	${PROJECT_SOURCE_DIR}/provider/DeviceInfoProvider.cpp
+	${PROJECT_SOURCE_DIR}/ssl/X509Fingerprint.cpp
+	${PROJECT_SOURCE_DIR}/ssl/RejectCertificateHandler.cpp
+	${PROJECT_SOURCE_DIR}/ssl/SSLFacility.cpp
+	${PROJECT_SOURCE_DIR}/ssl/SSLClient.cpp
+	${PROJECT_SOURCE_DIR}/ssl/SSLServer.cpp
+	${PROJECT_SOURCE_DIR}/util/DAMM.cpp
+	${PROJECT_SOURCE_DIR}/util/SecureXmlParser.cpp
+	${PROJECT_SOURCE_DIR}/util/SAXHelper.cpp
+	${PROJECT_SOURCE_DIR}/util/TypesSAXHandler.cpp
+	${PROJECT_SOURCE_DIR}/util/DevicesSAXHandler.cpp
+	${PROJECT_SOURCE_DIR}/util/Template.cpp
+	${PROJECT_SOURCE_DIR}/util/Occasionally.cpp
+	${PROJECT_SOURCE_DIR}/util/Loggable.cpp
+	${PROJECT_SOURCE_DIR}/util/PosixSignal.cpp
+	${PROJECT_SOURCE_DIR}/util/TimeInterval.cpp
+	${PROJECT_SOURCE_DIR}/util/ValueGenerator.cpp
+)
+
+file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/provider/AuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/RandomProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/OAuth2AuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/GoogleAuthProvider.cpp
-	${PROJECT_SOURCE_DIR}/provider/TypeInfoProvider.cpp
-	${PROJECT_SOURCE_DIR}/provider/DeviceInfoProvider.cpp
 	${PROJECT_SOURCE_DIR}/server/SessionCache.cpp
 	${PROJECT_SOURCE_DIR}/server/SessionManager.cpp
 	${PROJECT_SOURCE_DIR}/server/SessionVerifier.cpp
@@ -31,8 +58,6 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/server/AccessLevel.cpp
 	${PROJECT_SOURCE_DIR}/server/XmlRequestHandler.cpp
 	${PROJECT_SOURCE_DIR}/server/SocketServer.cpp
-	${PROJECT_SOURCE_DIR}/model/GatewayID.cpp
-	${PROJECT_SOURCE_DIR}/model/DeviceID.cpp
 	${PROJECT_SOURCE_DIR}/model/Identity.cpp
 	${PROJECT_SOURCE_DIR}/model/VerifiedIdentity.cpp
 	${PROJECT_SOURCE_DIR}/model/RoleInGateway.cpp
@@ -40,9 +65,6 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/LegacyGateway.cpp
 	${PROJECT_SOURCE_DIR}/model/Device.cpp
 	${PROJECT_SOURCE_DIR}/model/Location.cpp
-	${PROJECT_SOURCE_DIR}/model/TypeInfo.cpp
-	${PROJECT_SOURCE_DIR}/model/ModuleInfo.cpp
-	${PROJECT_SOURCE_DIR}/model/DeviceInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/ValueAt.cpp
 	${PROJECT_SOURCE_DIR}/model/ModuleValue.cpp
 	${PROJECT_SOURCE_DIR}/dao/UserDao.cpp
@@ -88,26 +110,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/policy/RoleAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/SensorHistoryAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/DefaultAccessPolicy.cpp
-	${PROJECT_SOURCE_DIR}/util/DAMM.cpp
-	${PROJECT_SOURCE_DIR}/util/SecureXmlParser.cpp
-	${PROJECT_SOURCE_DIR}/util/SAXHelper.cpp
-	${PROJECT_SOURCE_DIR}/util/TypesSAXHandler.cpp
-	${PROJECT_SOURCE_DIR}/util/DevicesSAXHandler.cpp
-	${PROJECT_SOURCE_DIR}/util/Template.cpp
-	${PROJECT_SOURCE_DIR}/util/Occasionally.cpp
 	${PROJECT_SOURCE_DIR}/util/Startup.cpp
-	${PROJECT_SOURCE_DIR}/util/Loggable.cpp
-	${PROJECT_SOURCE_DIR}/util/PosixSignal.cpp
-	${PROJECT_SOURCE_DIR}/util/TimeInterval.cpp
-	${PROJECT_SOURCE_DIR}/util/ValueGenerator.cpp
-	${PROJECT_SOURCE_DIR}/loop/StoppableRunnable.cpp
-	${PROJECT_SOURCE_DIR}/loop/StoppableLoop.cpp
-	${PROJECT_SOURCE_DIR}/loop/LoopRunner.cpp
-	${PROJECT_SOURCE_DIR}/ssl/X509Fingerprint.cpp
-	${PROJECT_SOURCE_DIR}/ssl/RejectCertificateHandler.cpp
-	${PROJECT_SOURCE_DIR}/ssl/SSLFacility.cpp
-	${PROJECT_SOURCE_DIR}/ssl/SSLClient.cpp
-	${PROJECT_SOURCE_DIR}/ssl/SSLServer.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoDaoManager.cpp
 	${PROJECT_SOURCE_DIR}/rpc/GatewayRPC.cpp
 	${PROJECT_SOURCE_DIR}/rpc/FakeGatewayRPC.cpp
@@ -122,6 +125,7 @@ include_directories(
 	${PROJECT_SOURCE_DIR}
 )
 
+add_library(BeeeOnBase   ${BASE_SOURCES})
 add_library(BeeeOnServer ${SOURCES})
 
 add_executable(ui-server
@@ -169,11 +173,13 @@ set(LIBS
 if (APPLE)
 	target_link_libraries(ui-server
 		-Wl,-all_load
+		BeeeOnBase
 		BeeeOnServer
 		${LIBS}
 	)
 	target_link_libraries(xmlui-server
 		-Wl,-all_load
+		BeeeOnBase
 		BeeeOnServer
 		${LIBS}
 	)
@@ -182,12 +188,14 @@ if (APPLE)
 else()
 	target_link_libraries(ui-server
 		-Wl,--whole-archive
+		BeeeOnBase
 		BeeeOnServer
 		-Wl,--no-whole-archive
 		${LIBS}
 	)
 	target_link_libraries(xmlui-server
 		-Wl,--whole-archive
+		BeeeOnBase
 		BeeeOnServer
 		-Wl,--no-whole-archive
 		${LIBS}
