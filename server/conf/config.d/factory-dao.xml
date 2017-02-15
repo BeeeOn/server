@@ -36,6 +36,10 @@
 			<set name="deviceDao" ref="deviceDao" />
 		</instance>
 
+		<instance name="legacyGatewayRPC" class="BeeeOn::LegacyGatewayRPC">
+			<set name="rpcConnector" ref="adaServerConnector" />
+		</instance>
+
 		<alias name="gatewayRPC" ref="fakeGatewayRPC" />
 
 		<!-- Data access layer -->

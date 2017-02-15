@@ -85,6 +85,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/rpc/SocketRPCConnector.cpp
 	${PROJECT_SOURCE_DIR}/rpc/GatewayRPC.cpp
 	${PROJECT_SOURCE_DIR}/rpc/FakeGatewayRPC.cpp
+	${PROJECT_SOURCE_DIR}/rpc/LegacyGatewayRPC.cpp
 	${PROJECT_SOURCE_DIR}/notification/NotificationDispatcher.cpp
 	${PROJECT_SOURCE_DIR}/notification/FirstLoginNotification.cpp
 	${PROJECT_SOURCE_DIR}/notification/InvitedNotification.cpp
