@@ -22,16 +22,19 @@ set (SCHEMA_POSTGRE_ISQL_ARGS
 
 set (QUERIES_SQLITE_ARGS
 	--stringparam codebase.version "${GIT_ID}"
+	--stringparam queries.dir "../conf"
 	"${TOOLS_DIR}/xsl/query.export.sqlite.xsl"
 	"${SCHEMA}-query.xml")
 
 set (QUERIES_POSTGRE_ARGS
 	--stringparam codebase.version "${GIT_ID}"
+	--stringparam queries.dir "../conf"
 	"${TOOLS_DIR}/xsl/query.export.postgre.xsl"
 	"${SCHEMA}-query.xml")
 
 set (TEST_SQLITE_ARGS
 	--stringparam codebase.version "${GIT_ID}"
+	--stringparam queries.dir "../conf"
 	"${TOOLS_DIR}/xsl/query.test.sqlite.xsl"
 	"${SCHEMA}-query.xml")
 
