@@ -82,6 +82,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/Startup.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoDaoManager.cpp
 	${PROJECT_SOURCE_DIR}/rpc/RPCConnector.cpp
+	${PROJECT_SOURCE_DIR}/rpc/SocketRPCConnector.cpp
 	${PROJECT_SOURCE_DIR}/rpc/GatewayRPC.cpp
 	${PROJECT_SOURCE_DIR}/rpc/FakeGatewayRPC.cpp
 	${PROJECT_SOURCE_DIR}/notification/NotificationDispatcher.cpp
