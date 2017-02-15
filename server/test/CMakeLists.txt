@@ -39,6 +39,7 @@ include_directories(
 )
 
 add_executable(test-suite test.cpp ${TEST_SOURCES} ${TEST_BASE_SOURCES})
+add_test(COMMAND test-suite)
 
 set(LIBS
 	${POCO_FOUNDATION}
