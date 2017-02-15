@@ -15,8 +15,6 @@ set (CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -DBEEEON_SELECT_POCO")
 add_definitions(-std=c++11)
 
 file(GLOB SOURCES
-	${PROJECT_SOURCE_DIR}/di/InjectorTarget.cpp
-	${PROJECT_SOURCE_DIR}/di/AbstractInjectorTarget.cpp
 	${PROJECT_SOURCE_DIR}/di/DependencyInjector.cpp
 	${PROJECT_SOURCE_DIR}/di/DIWrapper.cpp
 	${PROJECT_SOURCE_DIR}/provider/AuthProvider.cpp
