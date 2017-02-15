@@ -125,8 +125,8 @@ include_directories(
 	${PROJECT_SOURCE_DIR}
 )
 
-add_library(BeeeOnBase   ${BASE_SOURCES})
-add_library(BeeeOnServer ${SOURCES})
+add_library(BeeeOnBase   SHARED ${BASE_SOURCES})
+add_library(BeeeOnServer SHARED ${SOURCES})
 
 add_executable(ui-server
 	ui/main.cpp
