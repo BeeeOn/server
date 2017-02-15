@@ -201,3 +201,9 @@ else()
 		${LIBS}
 	)
 endif()
+
+install(TARGETS xmlui-server ui-server BeeeOnServer BeeeOnBase
+	RUNTIME DESTINATION usr/bin
+	LIBRARY DESTINATION usr/lib
+	ARCHIVE DESTINATION usr/lib
+)

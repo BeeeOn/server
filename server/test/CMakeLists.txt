@@ -71,3 +71,8 @@ else()
 		${LIBS}
 	)
 endif()
+
+install(TARGETS test-suite-server
+	RUNTIME DESTINATION usr/share/beeeon/test-suite
+	CONFIGURATIONS Debug
+)
