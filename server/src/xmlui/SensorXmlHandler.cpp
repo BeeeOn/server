@@ -2,6 +2,7 @@
 #include <Poco/DOM/Node.h>
 #include <Poco/DOM/Element.h>
 
+#include "di/Injectable.h"
 #include "xmlui/SensorXmlHandler.h"
 #include "xmlui/XmlValueConsumer.h"
 #include "model/Device.h"
@@ -81,8 +82,6 @@ void SensorXmlHandler::handleGetLog(const string &gateid,
 SensorXmlHandlerResolver::SensorXmlHandlerResolver():
 	AbstractXmlHandlerResolver("devices")
 {
-	injector("sensorHistoryService", &SensorXmlHandlerResolver::setSensorHistoryService);
-	injector("sessionManager", &SensorXmlHandlerResolver::setSessionManager);
 }
 
 bool SensorXmlHandlerResolver::canHandle(
@@ -109,4 +108,9 @@ XmlRequestHandler *SensorXmlHandlerResolver::createHandler(
 			socket, input, session, *m_sensorService);
 }
 
-BEEEON_OBJECT(BeeeOn, XmlUI, SensorXmlHandlerResolver)
+BEEEON_OBJECT_BEGIN(BeeeOn, XmlUI, SensorXmlHandlerResolver)
+BEEEON_OBJECT_CASTABLE(AbstractXmlHandlerResolver)
+BEEEON_OBJECT_CASTABLE(XmlRequestHandlerResolver)
+BEEEON_OBJECT_REF("sensorHistoryService", &SensorXmlHandlerResolver::setSensorHistoryService)
+BEEEON_OBJECT_REF("sessionManager", &SensorXmlHandlerResolver::setSessionManager)
+BEEEON_OBJECT_END(BeeeOn, XmlUI, SensorXmlHandlerResolver)

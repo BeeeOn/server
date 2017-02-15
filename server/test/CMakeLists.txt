@@ -57,7 +57,7 @@ if (APPLE)
 		${LIBS}
 	)
 # The -Wl,--whole-archive is necessary for all libraries defining
-# BEEEON_OBJECTs (see di/InjectorTarget.h).
+# BEEEON_OBJECTs (see di/Injectable.h).
 else()
 	target_link_libraries(test-suite
 		-Wl,--whole-archive

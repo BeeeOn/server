@@ -4,14 +4,13 @@
 #include <string>
 #include <Poco/Exception.h>
 
-#include "di/AbstractInjectorTarget.h"
 #include "server/RestHandler.h"
 #include "server/Session.h"
 #include "service/AuthService.h"
 
 namespace BeeeOn {
 
-class RestAuthHandler : public RestHandler, public AbstractInjectorTarget {
+class RestAuthHandler : public RestHandler {
 public:
 	RestAuthHandler();
 

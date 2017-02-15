@@ -1,9 +1,12 @@
 #include <Poco/Exception.h>
 #include <Poco/SingletonHolder.h>
 
+#include "di/Injectable.h"
 #include "dao/IdentityDao.h"
 
-BEEEON_OBJECT(BeeeOn, MockIdentityDao)
+BEEEON_OBJECT_BEGIN(BeeeOn, MockIdentityDao)
+BEEEON_OBJECT_CASTABLE(IdentityDao)
+BEEEON_OBJECT_END(BeeeOn, MockIdentityDao)
 
 using namespace Poco;
 using namespace BeeeOn;

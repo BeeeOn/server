@@ -4,6 +4,8 @@
 #include <Poco/Data/Row.h>
 #include <Poco/Data/RecordSet.h>
 
+#include "di/Injectable.h"
+#include "dao/TransactionManager.h"
 #include "dao/poco/PocoSQLRoleInGatewayDao.h"
 #include "dao/poco/PocoSQLGatewayDao.h"
 #include "dao/poco/PocoSQLIdentityDao.h"
@@ -17,7 +19,13 @@ using namespace Poco::Data;
 using namespace Poco::Data::Keywords;
 using namespace BeeeOn;
 
-BEEEON_OBJECT(BeeeOn, PocoSQLRoleInGatewayDao)
+BEEEON_OBJECT_BEGIN(BeeeOn, PocoSQLRoleInGatewayDao)
+BEEEON_OBJECT_CASTABLE(RoleInGatewayDao)
+BEEEON_OBJECT_REF("daoManager", &PocoSQLRoleInGatewayDao::setDaoManager)
+BEEEON_OBJECT_REF("transactionManager", &PocoSQLRoleInGatewayDao::setTransactionManager)
+BEEEON_OBJECT_REF("sqlLoader", &PocoSQLRoleInGatewayDao::setSQLLoader)
+BEEEON_OBJECT_HOOK("done", &PocoSQLRoleInGatewayDao::loadQueries)
+BEEEON_OBJECT_END(BeeeOn, PocoSQLRoleInGatewayDao)
 
 PocoSQLRoleInGatewayDao::PocoSQLRoleInGatewayDao()
 {

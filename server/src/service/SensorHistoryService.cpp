@@ -1,5 +1,6 @@
 #include <Poco/Exception.h>
 
+#include "di/Injectable.h"
 #include "dao/SensorHistoryDao.h"
 #include "dao/DeviceDao.h"
 #include "policy/SensorHistoryAccessPolicy.h"
@@ -10,16 +11,18 @@ using namespace std;
 using namespace Poco;
 using namespace BeeeOn;
 
-BEEEON_OBJECT(BeeeOn, SensorHistoryService)
+BEEEON_OBJECT_BEGIN(BeeeOn, SensorHistoryService)
+BEEEON_OBJECT_REF("sensorHistoryDao", &SensorHistoryService::setSensorHistoryDao)
+BEEEON_OBJECT_REF("deviceDao", &SensorHistoryService::setDeviceDao)
+BEEEON_OBJECT_REF("accessPolicy", &SensorHistoryService::setAccessPolicy)
+BEEEON_OBJECT_REF("transactionManager", &Transactional::setTransactionManager)
+BEEEON_OBJECT_END(BeeeOn, SensorHistoryService)
 
 SensorHistoryService::SensorHistoryService():
 	m_dao(&NullSensorHistoryDao::instance()),
 	m_deviceDao(&NullDeviceDao::instance()),
 	m_policy(&NullSensorHistoryAccessPolicy::instance())
 {
-	injector("sensorHistoryDao", &SensorHistoryService::setSensorHistoryDao);
-	injector("deviceDao", &SensorHistoryService::setDeviceDao);
-	injector("accessPolicy", &SensorHistoryService::setAccessPolicy);
 }
 
 void SensorHistoryService::setSensorHistoryDao(SensorHistoryDao *dao)

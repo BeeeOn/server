@@ -1,15 +1,12 @@
 #ifndef BEEEON_POCO_TRANSACTION_MANAGER_H
 #define BEEEON_POCO_TRANSACTION_MANAGER_H
 
-#include "di/AbstractInjectorTarget.h"
 #include "dao/ThreadLocalTransactionManager.h"
 #include "dao/poco/PocoDaoManager.h"
 
 namespace BeeeOn {
 
-class PocoTransactionManager :
-		public AbstractInjectorTarget,
-		public ThreadLocalTransactionManager {
+class PocoTransactionManager : public ThreadLocalTransactionManager {
 public:
 	PocoTransactionManager();
 	~PocoTransactionManager();

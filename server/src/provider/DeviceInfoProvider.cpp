@@ -1,3 +1,4 @@
+#include "di/Injectable.h"
 #include "provider/DeviceInfoProvider.h"
 
 using namespace std;
@@ -5,15 +6,16 @@ using namespace Poco;
 using namespace Poco::XML;
 using namespace BeeeOn;
 
-BEEEON_OBJECT(BeeeOn, DeviceInfoProvider)
+BEEEON_OBJECT_BEGIN(BeeeOn, DeviceInfoProvider)
+BEEEON_OBJECT_CASTABLE(InfoProvider<DeviceInfo>)
+BEEEON_OBJECT_TEXT("devicesFile", &DeviceInfoProvider::setDevicesFile)
+BEEEON_OBJECT_REF("typeInfoProvider", &DeviceInfoProvider::setTypeInfoProvider)
+BEEEON_OBJECT_HOOK("done", &DeviceInfoProvider::loadInfo)
+BEEEON_OBJECT_END(BeeeOn, DeviceInfoProvider)
 
 DeviceInfoProvider::DeviceInfoProvider():
 	m_typeProvider(&NullInfoProvider<TypeInfo>::instance())
 {
-	textInjector("devicesFile", &DeviceInfoProvider::setDevicesFile);
-	injector("typeInfoProvider", &DeviceInfoProvider::setTypeInfoProvider);
-
-	hook("done", &DeviceInfoProvider::loadInfo);
 }
 
 void DeviceInfoProvider::setDevicesFile(const std::string &devicesFile)

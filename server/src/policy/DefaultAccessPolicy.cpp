@@ -1,10 +1,22 @@
 #include <set>
 #include <Poco/Exception.h>
 
+#include "di/Injectable.h"
 #include "policy/PolicyContext.h"
 #include "policy/DefaultAccessPolicy.h"
 
-BEEEON_OBJECT(BeeeOn, DefaultAccessPolicy)
+BEEEON_OBJECT_BEGIN(BeeeOn, DefaultAccessPolicy)
+BEEEON_OBJECT_CASTABLE(GatewayAccessPolicy)
+BEEEON_OBJECT_CASTABLE(LocationAccessPolicy)
+BEEEON_OBJECT_CASTABLE(DeviceAccessPolicy)
+BEEEON_OBJECT_CASTABLE(RoleAccessPolicy)
+BEEEON_OBJECT_CASTABLE(SensorHistoryAccessPolicy)
+BEEEON_OBJECT_REF("userDao", &DefaultAccessPolicy::setUserDao)
+BEEEON_OBJECT_REF("gatewayDao", &DefaultAccessPolicy::setGatewayDao)
+BEEEON_OBJECT_REF("locationDao", &DefaultAccessPolicy::setLocationDao)
+BEEEON_OBJECT_REF("deviceDao", &DefaultAccessPolicy::setDeviceDao)
+BEEEON_OBJECT_REF("roleInGatewayDao", &DefaultAccessPolicy::setRoleInGatewayDao)
+BEEEON_OBJECT_END(BeeeOn, DefaultAccessPolicy)
 
 using namespace std;
 using namespace Poco;
@@ -12,11 +24,6 @@ using namespace BeeeOn;
 
 DefaultAccessPolicy::DefaultAccessPolicy()
 {
-	injector("userDao", &DefaultAccessPolicy::setUserDao);
-	injector("gatewayDao", &DefaultAccessPolicy::setGatewayDao);
-	injector("locationDao", &DefaultAccessPolicy::setLocationDao);
-	injector("deviceDao", &DefaultAccessPolicy::setDeviceDao);
-	injector("roleInGatewayDao", &DefaultAccessPolicy::setRoleInGatewayDao);
 }
 
 AccessLevel DefaultAccessPolicy::fetchAccessLevel(

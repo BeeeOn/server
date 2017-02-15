@@ -4,13 +4,25 @@
 #include <Poco/Timestamp.h>
 #include <Poco/Exception.h>
 
+#include "di/Injectable.h"
 #include "model/DeviceInfo.h"
 #include "model/ModuleValue.h"
 #include "dao/DeviceDao.h"
 #include "ui/UIMockInit.h"
 #include "util/ValueGenerator.h"
 
-BEEEON_OBJECT(BeeeOn, UIMockInit)
+BEEEON_OBJECT_BEGIN(BeeeOn, UIMockInit)
+BEEEON_OBJECT_REF("userDao", &UIMockInit::setUserDao)
+BEEEON_OBJECT_REF("gatewayDao", &UIMockInit::setGatewayDao)
+BEEEON_OBJECT_REF("locationDao", &UIMockInit::setLocationDao)
+BEEEON_OBJECT_REF("deviceDao", &UIMockInit::setDeviceDao)
+BEEEON_OBJECT_REF("identityDao", &UIMockInit::setIdentityDao)
+BEEEON_OBJECT_REF("verifiedIdentityDao", &UIMockInit::setVerifiedIdentityDao)
+BEEEON_OBJECT_REF("deviceInfoProvider", &UIMockInit::setDeviceInfoProvider)
+BEEEON_OBJECT_REF("sensorHistoryDao", &UIMockInit::setSensorHistoryDao)
+BEEEON_OBJECT_REF("transactionManager", &Transactional::setTransactionManager)
+BEEEON_OBJECT_HOOK("done", &UIMockInit::initAll)
+BEEEON_OBJECT_END(BeeeOn, UIMockInit)
 
 using namespace std;
 using namespace Poco;

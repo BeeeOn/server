@@ -4,7 +4,6 @@
 #include <Poco/Logger.h>
 #include <Poco/Net/NetException.h>
 
-#include "di/AbstractInjectorTarget.h"
 #include "server/Session.h"
 #include "server/SessionManager.h"
 #include "util/Loggable.h"
@@ -15,8 +14,7 @@ namespace BeeeOn {
 /**
  * Abstract class providing access to sessions.
  */
-class SessionVerifier : public AbstractInjectorTarget,
-		public Loggable {
+class SessionVerifier : public Loggable {
 public:
 	SessionVerifier();
 

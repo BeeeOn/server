@@ -5,16 +5,13 @@
 
 #include <Poco/Mutex.h>
 
-#include "di/AbstractInjectorTarget.h"
 #include "loop/StoppableRunnable.h"
 #include "loop/StoppableLoop.h"
 #include "util/Loggable.h"
 
 namespace BeeeOn {
 
-class LoopRunner :
-	public Loggable,
-	public AbstractInjectorTarget {
+class LoopRunner : public Loggable {
 public:
 	LoopRunner();
 	~LoopRunner();

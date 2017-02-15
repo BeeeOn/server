@@ -5,12 +5,21 @@
 #include <Poco/Data/Session.h>
 #include <Poco/Data/SessionPool.h>
 
+#include "di/Injectable.h"
 #include "dao/poco/PocoDaoManager.h"
 #include "dao/ConnectorLoader.h"
 #include "util/Template.h"
 #include "util/Occasionally.h"
 
-BEEEON_OBJECT(BeeeOn, PocoDaoManager)
+BEEEON_OBJECT_BEGIN(BeeeOn, PocoDaoManager)
+BEEEON_OBJECT_REF("connector", &PocoDaoManager::setConnector)
+BEEEON_OBJECT_TEXT("connectionString", &PocoDaoManager::setConnectionString)
+BEEEON_OBJECT_NUMBER("minSessions", &PocoDaoManager::setMinSessions)
+BEEEON_OBJECT_NUMBER("maxSessions", &PocoDaoManager::setMaxSessions)
+BEEEON_OBJECT_NUMBER("idleTime", &PocoDaoManager::setIdleTime)
+BEEEON_OBJECT_TEXT("initScript", &PocoDaoManager::setInitScript)
+BEEEON_OBJECT_HOOK("done", &PocoDaoManager::connectAndPrepare)
+BEEEON_OBJECT_END(BeeeOn, PocoDaoManager)
 
 using namespace std;
 using namespace Poco;
@@ -24,13 +33,6 @@ PocoDaoManager::PocoDaoManager():
 	m_maxSessions(32),
 	m_idleTime(60)
 {
-	injector("connector", &PocoDaoManager::setConnector);
-	textInjector("connectionString", &PocoDaoManager::setConnectionString);
-	numberInjector("minSessions", &PocoDaoManager::setMinSessions);
-	numberInjector("maxSessions", &PocoDaoManager::setMaxSessions);
-	numberInjector("idleTime", &PocoDaoManager::setIdleTime);
-	textInjector("initScript", &PocoDaoManager::setInitScript);
-	hook("done", &PocoDaoManager::connectAndPrepare);
 }
 
 void PocoDaoManager::setConnector(ConnectorLoader *connector)

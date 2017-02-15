@@ -1,3 +1,4 @@
+#include "di/Injectable.h"
 #include "xmlui/AnyXmlHandler.h"
 #include "Debug.h"
 
@@ -38,4 +39,7 @@ XmlRequestHandler *AnyXmlHandlerResolver::createHandler(
 	return new AnyXmlHandler(socket, input);
 }
 
-BEEEON_OBJECT(BeeeOn, XmlUI, AnyXmlHandlerResolver)
+BEEEON_OBJECT_BEGIN(BeeeOn, XmlUI, AnyXmlHandlerResolver)
+BEEEON_OBJECT_CASTABLE(AbstractXmlHandlerResolver)
+BEEEON_OBJECT_CASTABLE(XmlRequestHandlerResolver)
+BEEEON_OBJECT_END(BeeeOn, XmlUI, AnyXmlHandlerResolver)

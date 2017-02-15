@@ -4,6 +4,8 @@
 #include <Poco/Data/Row.h>
 #include <Poco/Data/RowIterator.h>
 
+#include "di/Injectable.h"
+#include "dao/TransactionManager.h"
 #include "dao/poco/PocoSQLLocationDao.h"
 #include "dao/poco/PocoDaoManager.h"
 
@@ -13,7 +15,13 @@ using namespace Poco::Data;
 using namespace Poco::Data::Keywords;
 using namespace BeeeOn;
 
-BEEEON_OBJECT(BeeeOn, PocoSQLLocationDao)
+BEEEON_OBJECT_BEGIN(BeeeOn, PocoSQLLocationDao)
+BEEEON_OBJECT_CASTABLE(LocationDao)
+BEEEON_OBJECT_REF("daoManager", &PocoSQLLocationDao::setDaoManager)
+BEEEON_OBJECT_REF("transactionManager", &PocoSQLLocationDao::setTransactionManager)
+BEEEON_OBJECT_REF("sqlLoader", &PocoSQLLocationDao::setSQLLoader)
+BEEEON_OBJECT_HOOK("done", &PocoSQLLocationDao::loadQueries)
+BEEEON_OBJECT_END(BeeeOn, PocoSQLLocationDao)
 
 PocoSQLLocationDao::PocoSQLLocationDao()
 {

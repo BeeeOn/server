@@ -1,5 +1,6 @@
 #include <Poco/Version.h>
 #include <Poco/String.h>
+#include <Poco/Logger.h>
 #include <Poco/Delegate.h>
 #include <Poco/StringTokenizer.h>
 #include <Poco/NumberParser.h>
@@ -72,19 +73,6 @@ SSLFacility::SSLFacility():
 	m_disabledProtocols(-1)
 {
 	initializeSSL();
-
-	textInjector("caLocation", &SSLFacility::setCALocation);
-	textInjector("loadDefaultCA", &SSLFacility::setLoadDefaultCA);
-	textInjector("privateKey", &SSLFacility::setPrivateKey);
-	textInjector("passphrase", &SSLFacility::setPassphrase);
-	textInjector("certificate", &SSLFacility::setCertificate);
-	textInjector("verificationMode", &SSLFacility::setVerificationMode);
-	numberInjector("verificationDepth", &SSLFacility::setVerificationDepth);
-	textInjector("cipherList", &SSLFacility::setCipherList);
-	textInjector("sessionCache", &SSLFacility::setSessionCache);
-	textInjector("disabledProtocols", &SSLFacility::setDisabledProtocols);
-
-	hook("done", &SSLFacility::initContext);
 
 #if POCO_VERSION >= 0x01070000
 	m_disabledProtocols = Context::PROTO_SSLV2 | Context::PROTO_SSLV3;

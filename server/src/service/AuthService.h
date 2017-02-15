@@ -27,12 +27,6 @@ public:
 
 	AuthService()
 	{
-		injector("userDao", &AuthService::setUserDao);
-		injector("identityDao", &AuthService::setIdentityDao);
-		injector("verifiedIdentityDao", &AuthService::setVerifiedIdentityDao);
-		injector("sessionManager", &AuthService::setSessionManager);
-		injector("providers", &AuthService::registerProvider);
-		injector("notificationDispatcher", &AuthService::setNotificationDispatcher);
 	}
 
 	void setUserDao(UserDao *dao)

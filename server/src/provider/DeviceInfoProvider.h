@@ -3,7 +3,6 @@
 
 #include <set>
 
-#include "di/AbstractInjectorTarget.h"
 #include "model/ModuleInfo.h"
 #include "model/DeviceInfo.h"
 #include "provider/InfoProvider.h"
@@ -11,9 +10,7 @@
 
 namespace BeeeOn {
 
-class DeviceInfoProvider :
-		public AbstractInjectorTarget,
-		public XmlInfoProvider<DeviceInfo, DevicesSAXHandler> {
+class DeviceInfoProvider : public XmlInfoProvider<DeviceInfo, DevicesSAXHandler> {
 public:
 	DeviceInfoProvider();
 

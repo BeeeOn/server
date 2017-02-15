@@ -3,15 +3,13 @@
 
 #include <Poco/SharedPtr.h>
 #include <Poco/Data/SessionPool.h>
-#include "di/AbstractInjectorTarget.h"
 #include "util/Loggable.h"
 
 namespace BeeeOn {
 
 class ConnectorLoader;
 
-class PocoDaoManager : public AbstractInjectorTarget,
-		public Loggable {
+class PocoDaoManager : public Loggable {
 public:
 	PocoDaoManager();
 

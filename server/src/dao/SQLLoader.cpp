@@ -1,5 +1,6 @@
 #include <Poco/Util/IniFileConfiguration.h>
 
+#include "di/Injectable.h"
 #include "dao/SQLLoader.h"
 
 using namespace std;
@@ -7,14 +8,15 @@ using namespace Poco;
 using namespace Poco::Util;
 using namespace BeeeOn;
 
-BEEEON_OBJECT(BeeeOn, SQLLoader)
+BEEEON_OBJECT_BEGIN(BeeeOn, SQLLoader)
+BEEEON_OBJECT_TEXT("file", &SQLLoader::addSourceFile)
+BEEEON_OBJECT_TEXT("database", &SQLLoader::setDatabase)
+BEEEON_OBJECT_HOOK("done", &SQLLoader::prepare)
+BEEEON_OBJECT_END(BeeeOn, SQLLoader)
 
 SQLLoader::SQLLoader():
 	m_config(new LayeredConfiguration())
 {
-	textInjector("file", &SQLLoader::addSourceFile);
-	textInjector("database", &SQLLoader::setDatabase);
-	hook("done", &SQLLoader::prepare);
 }
 
 SQLLoader::~SQLLoader()

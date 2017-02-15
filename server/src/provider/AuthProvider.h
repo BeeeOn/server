@@ -3,7 +3,6 @@
 
 #include <map>
 #include <Poco/Logger.h>
-#include "di/AbstractInjectorTarget.h"
 #include "util/Loggable.h"
 #include "Debug.h"
 
@@ -166,7 +165,6 @@ public:
 };
 
 class AbstractAuthProvider : public virtual AuthProvider,
-		public AbstractInjectorTarget,
 		public Loggable {
 public:
 	AbstractAuthProvider(const std::string &name):

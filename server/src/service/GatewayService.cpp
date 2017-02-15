@@ -1,6 +1,7 @@
 #include <vector>
 #include <Poco/Exception.h>
 
+#include "di/Injectable.h"
 #include "service/GatewayService.h"
 #include "server/AccessLevel.h"
 #include "dao/GatewayDao.h"
@@ -9,7 +10,15 @@
 #include "dao/VerifiedIdentityDao.h"
 #include "policy/GatewayAccessPolicy.h"
 
-BEEEON_OBJECT(BeeeOn, GatewayService)
+BEEEON_OBJECT_BEGIN(BeeeOn, GatewayService)
+BEEEON_OBJECT_REF("gatewayDao", &GatewayService::setGatewayDao)
+BEEEON_OBJECT_REF("roleInGatewayDao", &GatewayService::setRoleInGatewayDao)
+BEEEON_OBJECT_REF("identityDao", &GatewayService::setIdentityDao)
+BEEEON_OBJECT_REF("verifiedIdentityDao", &GatewayService::setVerifiedIdentityDao)
+BEEEON_OBJECT_REF("gatewayRPC", &GatewayService::setGatewayRPC)
+BEEEON_OBJECT_REF("accessPolicy", &GatewayService::setAccessPolicy)
+BEEEON_OBJECT_REF("transactionManager", &Transactional::setTransactionManager)
+BEEEON_OBJECT_END(BeeeOn, GatewayService)
 
 using namespace std;
 using namespace Poco;
@@ -22,12 +31,6 @@ GatewayService::GatewayService():
 	m_rpc(&NullGatewayRPC::instance()),
 	m_accessPolicy(&NullGatewayAccessPolicy::instance())
 {
-	injector("gatewayDao", &GatewayService::setGatewayDao);
-	injector("roleInGatewayDao", &GatewayService::setRoleInGatewayDao);
-	injector("identityDao", &GatewayService::setIdentityDao);
-	injector("verifiedIdentityDao", &GatewayService::setVerifiedIdentityDao);
-	injector("gatewayRPC", &GatewayService::setGatewayRPC);
-	injector("accessPolicy", &GatewayService::setAccessPolicy);
 }
 
 void GatewayService::setGatewayDao(GatewayDao *dao)

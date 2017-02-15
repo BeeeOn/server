@@ -5,7 +5,6 @@
 #include <Poco/Mutex.h>
 #include <Poco/Net/Context.h>
 
-#include "di/AbstractInjectorTarget.h"
 #include "util/Loggable.h"
 
 namespace Poco {
@@ -73,8 +72,7 @@ private:
  * - cipherList - string ("ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH")
  * - sessionCache - string ("false")
  */
-class SSLFacility : public AbstractInjectorTarget,
-		public Loggable {
+class SSLFacility : public Loggable {
 public:
 	SSLFacility();
 	virtual ~SSLFacility();
@@ -91,9 +89,9 @@ public:
 	void setDisabledProtocols(const std::string &protocols);
 
 	Poco::Net::Context::Ptr context();
+	void initContext();
 
 protected:
-	void initContext();
 	virtual Poco::Net::Context::Ptr createContext() = 0;
 
 protected:

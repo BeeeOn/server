@@ -3,7 +3,6 @@
 
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "di/AbstractInjectorTarget.h"
 #include "di/DependencyInjector.h"
 #include "cppunit/BetterAssert.h"
 #include "Debug.h"
@@ -47,16 +46,12 @@ private:
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DependencyInjectorTest);
 
-class FakeObject : public AbstractInjectorTarget {
+class FakeObject {
 public:
 	FakeObject():
 		m_self(NULL),
 		m_index(0)
 	{
-		injector("self", &FakeObject::setSelf);
-		textInjector("name", &FakeObject::setName);
-		numberInjector("index", &FakeObject::setIndex);
-		textInjector("other", &FakeObject::setOther);
 	}
 
 	void setSelf(FakeObject *self)
@@ -85,7 +80,16 @@ public:
 	int m_index;
 };
 
-BEEEON_OBJECT(BeeeOn, FakeObject)
+}
+
+BEEEON_OBJECT_BEGIN(BeeeOn, FakeObject)
+BEEEON_OBJECT_REF("self", &FakeObject::setSelf)
+BEEEON_OBJECT_TEXT("name", &FakeObject::setName)
+BEEEON_OBJECT_NUMBER("index", &FakeObject::setIndex)
+BEEEON_OBJECT_TEXT("other", &FakeObject::setOther)
+BEEEON_OBJECT_END(BeeeOn, FakeObject)
+
+namespace BeeeOn {
 
 void DependencyInjectorTest::setUp()
 {

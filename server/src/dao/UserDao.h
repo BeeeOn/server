@@ -3,7 +3,6 @@
 
 #include <Poco/Exception.h>
 
-#include "di/AbstractInjectorTarget.h"
 #include "dao/NullDao.h"
 #include "dao/MockDao.h"
 #include "model/User.h"
@@ -17,12 +16,10 @@ public:
 	virtual bool fetch(User &user) = 0;
 };
 
-class NullUserDao : public AbstractInjectorTarget,
-		public NullDao<User, UserDao> {
+class NullUserDao : public NullDao<User, UserDao> {
 };
 
-class MockUserDao : public AbstractInjectorTarget,
-		public MockDao<User, UserDao> {
+class MockUserDao : public MockDao<User, UserDao> {
 protected:
 	UserID nextID()
 	{

@@ -1,6 +1,8 @@
 #include <Poco/Exception.h>
 #include <Poco/Data/Statement.h>
 
+#include "di/Injectable.h"
+#include "dao/TransactionManager.h"
 #include "dao/poco/PocoSQLUserDao.h"
 #include "dao/poco/PocoDaoManager.h"
 
@@ -10,7 +12,13 @@ using namespace Poco::Data;
 using namespace Poco::Data::Keywords;
 using namespace BeeeOn;
 
-BEEEON_OBJECT(BeeeOn, PocoSQLUserDao)
+BEEEON_OBJECT_BEGIN(BeeeOn, PocoSQLUserDao)
+BEEEON_OBJECT_CASTABLE(UserDao)
+BEEEON_OBJECT_REF("daoManager", &PocoSQLUserDao::setDaoManager)
+BEEEON_OBJECT_REF("transactionManager", &PocoSQLUserDao::setTransactionManager)
+BEEEON_OBJECT_REF("sqlLoader", &PocoSQLUserDao::setSQLLoader)
+BEEEON_OBJECT_HOOK("done", &PocoSQLUserDao::loadQueries)
+BEEEON_OBJECT_END(BeeeOn, PocoSQLUserDao)
 
 PocoSQLUserDao::PocoSQLUserDao()
 {

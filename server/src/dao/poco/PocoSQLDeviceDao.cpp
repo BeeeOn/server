@@ -10,6 +10,8 @@
 #include <Poco/Data/Row.h>
 #include <Poco/Data/RowIterator.h>
 
+#include "di/Injectable.h"
+#include "dao/TransactionManager.h"
 #include "dao/poco/PocoSQLDeviceDao.h"
 #include "dao/poco/PocoSQLLocationDao.h"
 #include "dao/poco/PocoDaoManager.h"
@@ -24,13 +26,18 @@ using namespace BeeeOn;
 
 using percent = Poco::Util::Units::Values::percent;
 
-BEEEON_OBJECT(BeeeOn, PocoSQLDeviceDao)
+BEEEON_OBJECT_BEGIN(BeeeOn, PocoSQLDeviceDao)
+BEEEON_OBJECT_CASTABLE(DeviceDao)
+BEEEON_OBJECT_REF("deviceInfoProvider", &PocoSQLDeviceDao::setDeviceInfoProvider)
+BEEEON_OBJECT_REF("daoManager", &PocoSQLDeviceDao::setDaoManager)
+BEEEON_OBJECT_REF("transactionManager", &PocoSQLDeviceDao::setTransactionManager)
+BEEEON_OBJECT_REF("sqlLoader", &PocoSQLDeviceDao::setSQLLoader)
+BEEEON_OBJECT_HOOK("done", &PocoSQLDeviceDao::loadQueries)
+BEEEON_OBJECT_END(BeeeOn, PocoSQLDeviceDao)
 
 PocoSQLDeviceDao::PocoSQLDeviceDao():
 	m_infoProvider(&NullInfoProvider<DeviceInfo>::instance())
 {
-	injector("deviceInfoProvider", &PocoSQLDeviceDao::setDeviceInfoProvider);
-
 	registerQuery(m_queryInsert);
 	registerQuery(m_queryUpdate);
 	registerQuery(m_queryFetchFromGateway);

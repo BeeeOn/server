@@ -1,3 +1,4 @@
+#include "di/Injectable.h"
 #include "server/RestAuthHandler.h"
 
 #include <Poco/Exception.h>
@@ -15,7 +16,6 @@ using namespace BeeeOn;
 
 RestAuthHandler::RestAuthHandler()
 {
-	injector("authService", &RestAuthHandler::setAuthService);
 }
 
 void RestAuthHandler::extractAuthData(std::istream &in,
@@ -69,4 +69,7 @@ SessionID RestAuthHandler::handleLogin(istream &in)
 	return session->sessionID();
 }
 
-BEEEON_OBJECT(BeeeOn, RestAuthHandler)
+BEEEON_OBJECT_BEGIN(BeeeOn, RestAuthHandler)
+BEEEON_OBJECT_CASTABLE(RestHandler)
+BEEEON_OBJECT_REF("authService", &RestAuthHandler::setAuthService)
+BEEEON_OBJECT_END(BeeeOn, RestAuthHandler)

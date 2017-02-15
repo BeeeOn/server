@@ -1,6 +1,11 @@
+#include "di/Injectable.h"
 #include "service/IdentityService.h"
 
-BEEEON_OBJECT(BeeeOn, IdentityService)
+BEEEON_OBJECT_BEGIN(BeeeOn, IdentityService)
+BEEEON_OBJECT_REF("identityDao", &IdentityService::setIdentityDao)
+BEEEON_OBJECT_REF("verifiedIdentityDao", &IdentityService::setVerifiedIdentityDao)
+BEEEON_OBJECT_REF("transactionManager", &Transactional::setTransactionManager)
+BEEEON_OBJECT_END(BeeeOn, IdentityService)
 
 using namespace BeeeOn;
 
@@ -8,8 +13,6 @@ IdentityService::IdentityService():
 	m_identityDao(&NullIdentityDao::instance()),
 	m_verifiedIdentityDao(&NullVerifiedIdentityDao::instance())
 {
-	injector("identityDao", &IdentityService::setIdentityDao);
-	injector("verifiedIdentityDao", &IdentityService::setVerifiedIdentityDao);
 }
 
 void IdentityService::setIdentityDao(IdentityDao *dao)

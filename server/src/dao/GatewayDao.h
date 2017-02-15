@@ -3,7 +3,6 @@
 
 #include <vector>
 
-#include "di/AbstractInjectorTarget.h"
 #include "dao/NullDao.h"
 #include "model/User.h"
 #include "model/Gateway.h"
@@ -25,8 +24,7 @@ public:
 			const User &user) = 0;
 };
 
-class NullGatewayDao : public AbstractInjectorTarget,
-	public NullDao<Gateway, GatewayDao> {
+class NullGatewayDao : public NullDao<Gateway, GatewayDao> {
 public:
 	/**
 	 * Provide a singleton instance to avoid

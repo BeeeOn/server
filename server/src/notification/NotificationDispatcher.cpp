@@ -1,5 +1,6 @@
 #include <Poco/AbstractObserver.h>
 
+#include "di/Injectable.h"
 #include "notification/NotificationDispatcher.h"
 #include "notification/FirstLoginNotification.h"
 #include "notification/InvitedNotification.h"
@@ -9,14 +10,15 @@
 #include "model/User.h"
 #include "Debug.h"
 
-BEEEON_OBJECT(BeeeOn, NotificationDispatcher)
+BEEEON_OBJECT_BEGIN(BeeeOn, NotificationDispatcher)
+BEEEON_OBJECT_REF("observer", &NotificationDispatcher::addObserver)
+BEEEON_OBJECT_END(BeeeOn, NotificationDispatcher)
 
 using namespace Poco;
 using namespace BeeeOn;
 
 NotificationDispatcher::NotificationDispatcher()
 {
-	injector("observer", &NotificationDispatcher::addObserver);
 }
 
 NotificationDispatcher::~NotificationDispatcher()

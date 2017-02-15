@@ -5,9 +5,11 @@
 #include <Poco/Data/Row.h>
 #include <Poco/Data/RowIterator.h>
 
+#include "di/Injectable.h"
 #include "model/Device.h"
 #include "model/ModuleInfo.h"
 #include "model/ModuleValue.h"
+#include "dao/TransactionManager.h"
 #include "dao/poco/PocoSQLSensorHistoryDao.h"
 #include "dao/poco/PocoDaoManager.h"
 #include "service/ValueConsumer.h"
@@ -19,7 +21,13 @@ using namespace Poco::Data;
 using namespace Poco::Data::Keywords;
 using namespace BeeeOn;
 
-BEEEON_OBJECT(BeeeOn, PocoSQLSensorHistoryDao)
+BEEEON_OBJECT_BEGIN(BeeeOn, PocoSQLSensorHistoryDao)
+BEEEON_OBJECT_CASTABLE(SensorHistoryDao)
+BEEEON_OBJECT_REF("daoManager", &PocoSQLSensorHistoryDao::setDaoManager)
+BEEEON_OBJECT_REF("transactionManager", &PocoSQLSensorHistoryDao::setTransactionManager)
+BEEEON_OBJECT_REF("sqlLoader", &PocoSQLSensorHistoryDao::setSQLLoader)
+BEEEON_OBJECT_HOOK("done", &PocoSQLSensorHistoryDao::loadQueries)
+BEEEON_OBJECT_END(BeeeOn, PocoSQLSensorHistoryDao)
 
 PocoSQLSensorHistoryDao::PocoSQLSensorHistoryDao()
 {

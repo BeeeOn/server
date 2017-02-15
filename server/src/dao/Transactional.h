@@ -1,7 +1,8 @@
 #ifndef BEEEON_TRANSACTIONAL_H
 #define BEEEON_TRANSACTIONAL_H
 
-#include "di/AbstractInjectorTarget.h"
+#include <Poco/Logger.h>
+
 #include "dao/TransactionManager.h"
 #include "util/Loggable.h"
 
@@ -12,8 +13,7 @@ namespace BeeeOn {
 #define BEEEON_TRANSACTION_RETURN(type, code) \
 	this->transaction<type>([&]() {return code;});
 
-class Transactional : public AbstractInjectorTarget,
-		public Loggable {
+class Transactional : public Loggable {
 public:
 	Transactional();
 

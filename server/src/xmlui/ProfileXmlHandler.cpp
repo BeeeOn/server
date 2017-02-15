@@ -1,5 +1,6 @@
 #include <vector>
 
+#include "di/Injectable.h"
 #include "service/IdentityService.h"
 #include "xmlui/ProfileXmlHandler.h"
 #include "xmlui/Serializing.h"
@@ -51,8 +52,6 @@ void ProfileXmlHandler::handleMyProfile()
 ProfileXmlHandlerResolver::ProfileXmlHandlerResolver():
 	AbstractXmlHandlerResolver("accounts")
 {
-	injector("identityService", &ProfileXmlHandlerResolver::setIdentityService);
-	injector("sessionManager", &ProfileXmlHandlerResolver::setSessionManager);
 }
 
 bool ProfileXmlHandlerResolver::canHandle(
@@ -77,5 +76,9 @@ XmlRequestHandler *ProfileXmlHandlerResolver::createHandler(
 			*m_identityService);
 }
 
-BEEEON_OBJECT(BeeeOn, XmlUI, ProfileXmlHandlerResolver)
-
+BEEEON_OBJECT_BEGIN(BeeeOn, XmlUI, ProfileXmlHandlerResolver)
+BEEEON_OBJECT_CASTABLE(AbstractXmlHandlerResolver)
+BEEEON_OBJECT_CASTABLE(XmlRequestHandlerResolver)
+BEEEON_OBJECT_REF("identityService", &ProfileXmlHandlerResolver::setIdentityService)
+BEEEON_OBJECT_REF("sessionManager", &ProfileXmlHandlerResolver::setSessionManager)
+BEEEON_OBJECT_END(BeeeOn, XmlUI, ProfileXmlHandlerResolver)

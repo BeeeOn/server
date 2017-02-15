@@ -6,7 +6,6 @@
 #include <Poco/Timestamp.h>
 #include <Poco/Mutex.h>
 
-#include "di/AbstractInjectorTarget.h"
 #include "Debug.h"
 
 namespace BeeeOn {
@@ -44,16 +43,13 @@ class SecureRandomProvider : public RandomProvider {
  * This is intended for testing only. Never run an InsecureRandomProvider
  * in the production environment!
  */
-class InsecureRandomProvider : public SecureRandomProvider,
-		public AbstractInjectorTarget {
+class InsecureRandomProvider : public SecureRandomProvider {
 public:
 	InsecureRandomProvider()
 	{
 		LOGGER_CLASS(this)
 			.critical("AN INSECURE RANDOM PROVIDER IN USE",
 					__FILE__, __LINE__);
-
-		injector("providerImpl", &InsecureRandomProvider::setProviderImpl);
 	}
 
 	void setProviderImpl(RandomProvider *provider)

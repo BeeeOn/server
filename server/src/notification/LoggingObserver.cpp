@@ -1,5 +1,6 @@
 #include <Poco/Notification.h>
 
+#include "di/Injectable.h"
 #include "notification/LoggingObserver.h"
 #include "notification/FirstLoginNotification.h"
 #include "notification/InvitedNotification.h"
@@ -8,7 +9,10 @@ using namespace std;
 using namespace Poco;
 using namespace BeeeOn;
 
-BEEEON_OBJECT(BeeeOn, LoggingObserver)
+BEEEON_OBJECT_BEGIN(BeeeOn, LoggingObserver)
+BEEEON_OBJECT_CASTABLE(NotificationObserver)
+BEEEON_OBJECT_CASTABLE(AbstractObserver)
+BEEEON_OBJECT_END(BeeeOn, LoggingObserver)
 
 LoggingObserver::LoggingObserver()
 {

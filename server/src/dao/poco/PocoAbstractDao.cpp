@@ -19,10 +19,6 @@ PocoAbstractDao::PocoAbstractDao():
 	m_transactionManager(&NullTransactionManager::instance()),
 	m_loader(NULL)
 {
-	injector("daoManager", &PocoAbstractDao::setDaoManager);
-	injector("transactionManager", &PocoAbstractDao::setTransactionManager);
-	injector("sqlLoader", &PocoAbstractDao::setSQLLoader);
-	hook("done", &PocoAbstractDao::loadQueries);
 }
 
 PocoAbstractDao::~PocoAbstractDao()

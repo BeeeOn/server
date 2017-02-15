@@ -3,6 +3,7 @@
 #include <Poco/Nullable.h>
 #include <Poco/DateTime.h>
 
+#include "di/Injectable.h"
 #include "service/DeviceService.h"
 #include "policy/DeviceAccessPolicy.h"
 #include "model/Device.h"
@@ -11,7 +12,12 @@
 #include "rpc/GatewayRPC.h"
 #include "Debug.h"
 
-BEEEON_OBJECT(BeeeOn, DeviceService)
+BEEEON_OBJECT_BEGIN(BeeeOn, DeviceService)
+BEEEON_OBJECT_REF("deviceDao", &DeviceService::setDeviceDao)
+BEEEON_OBJECT_REF("gatewayRPC", &DeviceService::setGatewayRPC)
+BEEEON_OBJECT_REF("accessPolicy", &DeviceService::setAccessPolicy)
+BEEEON_OBJECT_REF("transactionManager", &Transactional::setTransactionManager)
+BEEEON_OBJECT_END(BeeeOn, DeviceService)
 
 using namespace std;
 using namespace Poco;
@@ -22,9 +28,6 @@ DeviceService::DeviceService():
 	m_gatewayRPC(&NullGatewayRPC::instance()),
 	m_policy(&NullDeviceAccessPolicy::instance())
 {
-	injector("deviceDao", &DeviceService::setDeviceDao);
-	injector("gatewayRPC", &DeviceService::setGatewayRPC);
-	injector("accessPolicy", &DeviceService::setAccessPolicy);
 }
 
 void DeviceService::setDeviceDao(DeviceDao *dao)

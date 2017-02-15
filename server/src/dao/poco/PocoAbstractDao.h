@@ -10,7 +10,6 @@
 #include <Poco/Data/RecordSet.h>
 
 #include "dao/EntityLoader.h"
-#include "di/AbstractInjectorTarget.h"
 #include "util/Loggable.h"
 
 namespace Poco {
@@ -28,7 +27,7 @@ class TransactionManager;
 class SQLLoader;
 class SQLQuery;
 
-class PocoAbstractDao : public AbstractInjectorTarget,
+class PocoAbstractDao :
 		public EntityLoader,
 		public Loggable {
 public:

@@ -1,14 +1,12 @@
 #ifndef BEEEON_CONSOLE_OBSERVER_H
 #define BEEEON_CONSOLE_OBSERVER_H
 
-#include "di/AbstractInjectorTarget.h"
 #include "notification/NotificationObserver.h"
 
 namespace BeeeOn {
 
 class LoggingObserver :
-	public NotificationObserver,
-	public AbstractInjectorTarget {
+	public NotificationObserver {
 public:
 	LoggingObserver();
 	~LoggingObserver();

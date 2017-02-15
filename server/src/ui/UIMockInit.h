@@ -22,16 +22,6 @@ class UIMockInit : public Transactional {
 public:
 	UIMockInit()
 	{
-		injector("userDao", &UIMockInit::setUserDao);
-		injector("gatewayDao", &UIMockInit::setGatewayDao);
-		injector("locationDao", &UIMockInit::setLocationDao);
-		injector("deviceDao", &UIMockInit::setDeviceDao);
-		injector("identityDao", &UIMockInit::setIdentityDao);
-		injector("verifiedIdentityDao", &UIMockInit::setVerifiedIdentityDao);
-		injector("deviceInfoProvider", &UIMockInit::setDeviceInfoProvider);
-		injector("sensorHistoryDao", &UIMockInit::setSensorHistoryDao);
-
-		hook("done", &UIMockInit::initAll);
 	}
 
 	void setUserDao(UserDao *dao)
