@@ -19,6 +19,7 @@ endif()
 add_definitions(-DGIT_ID="${GIT_ID}")
 
 add_subdirectory(src)
+add_subdirectory(base)
 add_subdirectory(test)
 add_subdirectory(schema)
 
