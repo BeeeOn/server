@@ -39,6 +39,8 @@ public:
 	void setTransactionManager(TransactionManager *manager);
 	void setSQLLoader(SQLLoader *loader);
 
+	void loadQueries();
+
 protected:
 	PocoDaoManager &manager();
 	Poco::Data::Session session(bool transact = true);
@@ -65,8 +67,6 @@ protected:
 
 	std::size_t execute(Poco::Data::Statement &sql);
 	void throwMissingId(const std::type_info &t);
-
-	void loadQueries();
 
 private:
 	PocoDaoManager *m_manager;
