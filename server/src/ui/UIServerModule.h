@@ -8,7 +8,6 @@
 #include "server/RestRequestHandler.h"
 #include "server/SessionVerifier.h"
 #include "server/RestAuthHandler.h"
-#include "di/AbstractInjectorTarget.h"
 #include "service/UserService.h"
 #include "service/DeviceService.h"
 #include "util/Loggable.h"
@@ -52,7 +51,7 @@ typedef TRoute<UIRequest, UIResponse, ExpirableSession::Ptr> UIRoute;
  */
 typedef UIRoute::Context UIRouteContext;
 
-class UIServerModule : public AbstractInjectorTarget,
+class UIServerModule :
 		public Loggable,
 		public StoppableLoop {
 public:
@@ -61,13 +60,6 @@ public:
 		m_factory(new UIServerRequestHandlerFactory("ui-server")),
 		m_server(NULL)
 	{
-		injector("sessionVerifier", &UIServerModule::setSessionVerifier);
-		injector("userService", &UIServerModule::setUserService);
-		injector("authHandler", &UIServerModule::setAuthHandler);
-		injector("deviceService", &UIServerModule::setDeviceService);
-		numberInjector("port", &UIServerModule::setPort);
-
-		hook("done", &UIServerModule::installRoutes);
 	}
 
 	/**

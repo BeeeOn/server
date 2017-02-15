@@ -1,11 +1,17 @@
 #include <Poco/Exception.h>
 
+#include "di/Injectable.h"
 #include "service/LocationService.h"
 #include "dao/LocationDao.h"
 #include "dao/GatewayDao.h"
 #include "policy/LocationAccessPolicy.h"
 
-BEEEON_OBJECT(BeeeOn, LocationService)
+BEEEON_OBJECT_BEGIN(BeeeOn, LocationService)
+BEEEON_OBJECT_REF("locationDao", &LocationService::setLocationDao)
+BEEEON_OBJECT_REF("gatewayDao", &LocationService::setGatewayDao)
+BEEEON_OBJECT_REF("accessPolicy", &LocationService::setAccessPolicy)
+BEEEON_OBJECT_REF("transactionManager", &Transactional::setTransactionManager)
+BEEEON_OBJECT_END(BeeeOn, LocationService)
 
 using namespace std;
 using namespace Poco;
@@ -16,9 +22,6 @@ LocationService::LocationService():
 	m_gatewayDao(&NullGatewayDao::instance()),
 	m_accessPolicy(&NullLocationAccessPolicy::instance())
 {
-	injector("locationDao", &LocationService::setLocationDao);
-	injector("gatewayDao", &LocationService::setGatewayDao);
-	injector("accessPolicy", &LocationService::setAccessPolicy);
 }
 
 void LocationService::setLocationDao(LocationDao *dao)

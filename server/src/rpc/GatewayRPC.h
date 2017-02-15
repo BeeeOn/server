@@ -3,7 +3,6 @@
 
 #include <Poco/Exception.h>
 
-#include "di/AbstractInjectorTarget.h"
 #include "model/Gateway.h"
 #include "model/Device.h"
 
@@ -34,7 +33,7 @@ public:
 	virtual void pingGateway(const Gateway &gateway) = 0;
 };
 
-class NullGatewayRPC : public GatewayRPC, public AbstractInjectorTarget {
+class NullGatewayRPC : public GatewayRPC {
 public:
 	void sendListen(const Gateway &gateway)
 	{

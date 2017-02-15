@@ -1,5 +1,6 @@
 #include <Poco/URI.h>
 #include <Poco/Net/NetException.h>
+#include "di/Injectable.h"
 #include "service/AuthService.h"
 
 using namespace std;
@@ -7,7 +8,15 @@ using namespace Poco;
 using namespace Poco::Net;
 using namespace BeeeOn;
 
-BEEEON_OBJECT(BeeeOn, AuthService)
+BEEEON_OBJECT_BEGIN(BeeeOn, AuthService)
+BEEEON_OBJECT_REF("userDao", &AuthService::setUserDao)
+BEEEON_OBJECT_REF("identityDao", &AuthService::setIdentityDao)
+BEEEON_OBJECT_REF("verifiedIdentityDao", &AuthService::setVerifiedIdentityDao)
+BEEEON_OBJECT_REF("sessionManager", &AuthService::setSessionManager)
+BEEEON_OBJECT_REF("providers", &AuthService::registerProvider)
+BEEEON_OBJECT_REF("notificationDispatcher", &AuthService::setNotificationDispatcher)
+BEEEON_OBJECT_REF("transactionManager", &Transactional::setTransactionManager)
+BEEEON_OBJECT_END(BeeeOn, AuthService)
 
 User AuthService::createUser(const AuthResult &result)
 {

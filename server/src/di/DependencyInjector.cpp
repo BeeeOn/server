@@ -100,8 +100,10 @@ DependencyInjector::~DependencyInjector()
 {
 	m_set.clear();
 
-	while (!m_free.empty())
+	while (!m_free.empty()) {
+		delete m_free.back();
 		m_free.pop_back();
+	}
 }
 
 void DependencyInjector::createEarly()
@@ -126,12 +128,12 @@ void DependencyInjector::createEarly()
 	}
 }
 
-SharedPtr<InjectorTarget> DependencyInjector::create(const string &name, bool disown)
+DIWrapper *DependencyInjector::create(const string &name, bool disown)
 {
 	TRACE_METHOD();
 
-	SharedPtr<InjectorTarget> existing = find(name);
-	if (!existing.isNull()) {
+	DIWrapper *existing = find(name);
+	if (existing != NULL) {
 		logger().debug("instance " + name + " reused",
 				__FILE__, __LINE__);
 		return existing;
@@ -144,7 +146,7 @@ SharedPtr<InjectorTarget> DependencyInjector::create(const string &name, bool di
 		return createNoAlias(info, disown);
 
 	existing = find(ref);
-	if (!existing.isNull()) {
+	if (existing != NULL) {
 		logger().debug("instance " + name
 				+ " reused as alias to " + ref,
 				__FILE__, __LINE__);
@@ -155,20 +157,20 @@ SharedPtr<InjectorTarget> DependencyInjector::create(const string &name, bool di
 	return createNoAlias(aliasInfo, disown);
 }
 
-SharedPtr<InjectorTarget> DependencyInjector::find(const string &name)
+DIWrapper *DependencyInjector::find(const string &name)
 {
-	InjectorSet::const_iterator it = m_set.find(name);
+	WrapperMap::const_iterator it = m_set.find(name);
 	if (it != m_set.end())
 		return it->second;
 
 	return NULL;
 }
 
-SharedPtr<InjectorTarget> DependencyInjector::createNoAlias(
+DIWrapper *DependencyInjector::createNoAlias(
 		const InstanceInfo &info, bool disown)
 {
-	SharedPtr<InjectorTarget> t = createNew(info);
-	if (t.isNull())
+	DIWrapper *t = createNew(info);
+	if (t == NULL)
 		throw Poco::NullPointerException("failed to create target "
 				+ info.name());
 
@@ -180,15 +182,15 @@ SharedPtr<InjectorTarget> DependencyInjector::createNoAlias(
 	return injectDependencies(info, t);
 }
 
-InjectorTarget *DependencyInjector::createNew(const InstanceInfo &info)
+DIWrapper *DependencyInjector::createNew(const InstanceInfo &info)
 {
 	info.validate(m_conf);
 	const string cls = info.resolveClass(m_conf);
 
 	logger().debug("creating " + info.name() + " as " + cls);
 
-	Manifest<InjectorTarget>::Iterator it =
-		ManifestSingleton::manifest().find(cls);
+	Manifest<DIWrapper>::Iterator it =
+		ManifestSingleton::manifest().find(cls + "DIW");
 
 	if (it == ManifestSingleton::manifest().end())
 		throw NotFoundException("missing class " + cls);
@@ -198,7 +200,7 @@ InjectorTarget *DependencyInjector::createNew(const InstanceInfo &info)
 
 bool DependencyInjector::tryInjectRef(
 		const InstanceInfo &info,
-		SharedPtr<InjectorTarget> target,
+		DIWrapper *target,
 		const string &key,
 		const string &name)
 {
@@ -208,7 +210,7 @@ bool DependencyInjector::tryInjectRef(
 		logger().debug("injecting " + value + " as " + name
 				+ " into " + info.name());
 
-		SharedPtr<InjectorTarget> ref;
+		DIWrapper *ref = NULL;
 
 		try {
 			ref = create(value);
@@ -218,12 +220,12 @@ bool DependencyInjector::tryInjectRef(
 			e.rethrow();
 		}
 
-		if (ref.isNull()) {
+		if (ref == NULL) {
 			throw NullPointerException(
 					"failed to create ref " + value);
 		}
 
-		target->injectRef(name, ref);
+		target->injectRef(name, *ref);
 		return true;
 	}
 
@@ -232,7 +234,7 @@ bool DependencyInjector::tryInjectRef(
 
 bool DependencyInjector::tryInjectNumber(
 		const InstanceInfo &info,
-		SharedPtr<InjectorTarget> target,
+		DIWrapper *target,
 		const string &key,
 		const string &name)
 {
@@ -251,7 +253,7 @@ bool DependencyInjector::tryInjectNumber(
 
 bool DependencyInjector::tryInjectText(
 		const InstanceInfo &info,
-		SharedPtr<InjectorTarget> target,
+		DIWrapper *target,
 		const string &key,
 		const string &name)
 {
@@ -270,7 +272,7 @@ bool DependencyInjector::tryInjectText(
 
 void DependencyInjector::injectValue(
 		const InstanceInfo &info,
-		SharedPtr<InjectorTarget> target,
+		DIWrapper *target,
 		const string &key,
 		const string &name)
 {
@@ -288,9 +290,9 @@ void DependencyInjector::injectValue(
 			__FILE__, __LINE__);
 }
 
-SharedPtr<InjectorTarget> DependencyInjector::injectDependencies(
+DIWrapper *DependencyInjector::injectDependencies(
 		const InstanceInfo &info,
-		SharedPtr<InjectorTarget> target)
+		DIWrapper *target)
 {
 	AbstractConfiguration::Keys keys;
 	info.resolveKeys(m_conf, keys);

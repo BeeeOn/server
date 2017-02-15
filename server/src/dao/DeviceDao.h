@@ -4,7 +4,6 @@
 #include <vector>
 #include <list>
 
-#include "di/AbstractInjectorTarget.h"
 #include "dao/NullDao.h"
 #include "model/Device.h"
 #include "model/Gateway.h"
@@ -25,8 +24,7 @@ public:
 			const Gateway &gateway) = 0;
 };
 
-class NullDeviceDao : public AbstractInjectorTarget,
-	public NullDao<Device, DeviceDao> {
+class NullDeviceDao : public NullDao<Device, DeviceDao> {
 public:
 	bool insert(Device &device, const Gateway &gateway)
 	{

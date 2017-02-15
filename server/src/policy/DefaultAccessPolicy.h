@@ -1,7 +1,6 @@
 #ifndef BEEEON_DEFAULT_ACCESS_POLICY_H
 #define BEEEON_DEFAULT_ACCESS_POLICY_H
 
-#include "di/AbstractInjectorTarget.h"
 #include "policy/GatewayAccessPolicy.h"
 #include "policy/LocationAccessPolicy.h"
 #include "policy/DeviceAccessPolicy.h"
@@ -15,7 +14,7 @@
 
 namespace BeeeOn {
 
-class DefaultAccessPolicy : public AbstractInjectorTarget,
+class DefaultAccessPolicy :
 		public GatewayAccessPolicy,
 		public LocationAccessPolicy,
 		public DeviceAccessPolicy,

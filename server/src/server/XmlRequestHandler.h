@@ -19,7 +19,6 @@
 
 #include "util/SecureXmlParser.h"
 #include "util/Loggable.h"
-#include "di/AbstractInjectorTarget.h"
 #include "server/SocketServer.h"
 
 namespace BeeeOn {
@@ -42,8 +41,7 @@ protected:
 	Poco::XML::XMLWriter m_output;
 };
 
-class XmlRequestHandlerResolver : public BeeeOn::AbstractInjectorTarget,
-		public Loggable {
+class XmlRequestHandlerResolver : public Loggable {
 public:
 	virtual bool canHandle(const Poco::XML::Document &input) = 0;
 	virtual XmlRequestHandler *createHandler(

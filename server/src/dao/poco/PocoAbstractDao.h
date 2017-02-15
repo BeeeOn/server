@@ -10,7 +10,6 @@
 #include <Poco/Data/RecordSet.h>
 
 #include "dao/EntityLoader.h"
-#include "di/AbstractInjectorTarget.h"
 #include "util/Loggable.h"
 
 namespace Poco {
@@ -28,7 +27,7 @@ class TransactionManager;
 class SQLLoader;
 class SQLQuery;
 
-class PocoAbstractDao : public AbstractInjectorTarget,
+class PocoAbstractDao :
 		public EntityLoader,
 		public Loggable {
 public:
@@ -38,6 +37,8 @@ public:
 	void setDaoManager(PocoDaoManager *manager);
 	void setTransactionManager(TransactionManager *manager);
 	void setSQLLoader(SQLLoader *loader);
+
+	void loadQueries();
 
 protected:
 	PocoDaoManager &manager();
@@ -65,8 +66,6 @@ protected:
 
 	std::size_t execute(Poco::Data::Statement &sql);
 	void throwMissingId(const std::type_info &t);
-
-	void loadQueries();
 
 private:
 	PocoDaoManager *m_manager;

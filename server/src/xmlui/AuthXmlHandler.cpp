@@ -1,3 +1,4 @@
+#include "di/Injectable.h"
 #include "xmlui/AuthXmlHandler.h"
 
 using namespace std;
@@ -60,7 +61,6 @@ void AuthXmlHandler::handleInputImpl()
 AuthXmlHandlerResolver::AuthXmlHandlerResolver():
 	AbstractXmlHandlerResolver("accounts")
 {
-	injector("authService", &AuthXmlHandlerResolver::setAuthService);
 }
 
 bool AuthXmlHandlerResolver::canHandle(const Element &root)
@@ -84,4 +84,8 @@ XmlRequestHandler *AuthXmlHandlerResolver::createHandler(
 	return new AuthXmlHandler(socket, input, *m_authService);
 }
 
-BEEEON_OBJECT(BeeeOn, XmlUI, AuthXmlHandlerResolver)
+BEEEON_OBJECT_BEGIN(BeeeOn, XmlUI, AuthXmlHandlerResolver)
+BEEEON_OBJECT_CASTABLE(AbstractXmlHandlerResolver)
+BEEEON_OBJECT_CASTABLE(XmlRequestHandlerResolver)
+BEEEON_OBJECT_REF("authService", &AuthXmlHandlerResolver::setAuthService)
+BEEEON_OBJECT_END(BeeeOn, XmlUI, AuthXmlHandlerResolver)

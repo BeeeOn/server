@@ -1,5 +1,6 @@
 #include <vector>
 
+#include "di/Injectable.h"
 #include "model/Identity.h"
 #include "model/Gateway.h"
 #include "model/RoleInGateway.h"
@@ -124,8 +125,6 @@ void RoleXmlHandler::handleUpdateAccess(const string &gateid, Element *userNode)
 RoleXmlHandlerResolver::RoleXmlHandlerResolver():
 	AbstractXmlHandlerResolver("gateusers")
 {
-	injector("roleService", &RoleXmlHandlerResolver::setRoleService);
-	injector("sessionManager", &RoleXmlHandlerResolver::setSessionManager);
 }
 
 bool RoleXmlHandlerResolver::canHandle(const Element &root)
@@ -157,4 +156,9 @@ XmlRequestHandler *RoleXmlHandlerResolver::createHandler(
 			session, *m_roleService);
 }
 
-BEEEON_OBJECT(BeeeOn, XmlUI, RoleXmlHandlerResolver)
+BEEEON_OBJECT_BEGIN(BeeeOn, XmlUI, RoleXmlHandlerResolver)
+BEEEON_OBJECT_CASTABLE(AbstractXmlHandlerResolver)
+BEEEON_OBJECT_CASTABLE(XmlRequestHandlerResolver)
+BEEEON_OBJECT_REF("roleService", &RoleXmlHandlerResolver::setRoleService)
+BEEEON_OBJECT_REF("sessionManager", &RoleXmlHandlerResolver::setSessionManager)
+BEEEON_OBJECT_END(BeeeOn, XmlUI, RoleXmlHandlerResolver)

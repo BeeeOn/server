@@ -2,6 +2,7 @@
 #include <Poco/DOM/Element.h>
 #include <Poco/DOM/NodeList.h>
 
+#include "di/Injectable.h"
 #include "xmlui/DeviceXmlHandler.h"
 #include "xmlui/XmlDeviceDeserializer.h"
 #include "xmlui/Serializing.h"
@@ -163,8 +164,6 @@ void DeviceXmlHandler::handleGetNew(const string &gateid)
 DeviceXmlHandlerResolver::DeviceXmlHandlerResolver():
 	AbstractXmlHandlerResolver("devices")
 {
-	injector("deviceService", &DeviceXmlHandlerResolver::setDeviceService);
-	injector("sessionManager", &DeviceXmlHandlerResolver::setSessionManager);
 }
 
 bool DeviceXmlHandlerResolver::canHandle(
@@ -199,4 +198,9 @@ XmlRequestHandler *DeviceXmlHandlerResolver::createHandler(
 			socket, input, session, *m_deviceService);
 }
 
-BEEEON_OBJECT(BeeeOn, XmlUI, DeviceXmlHandlerResolver)
+BEEEON_OBJECT_BEGIN(BeeeOn, XmlUI, DeviceXmlHandlerResolver)
+BEEEON_OBJECT_CASTABLE(AbstractXmlHandlerResolver)
+BEEEON_OBJECT_CASTABLE(XmlRequestHandlerResolver)
+BEEEON_OBJECT_REF("deviceService", &DeviceXmlHandlerResolver::setDeviceService)
+BEEEON_OBJECT_REF("sessionManager", &DeviceXmlHandlerResolver::setSessionManager)
+BEEEON_OBJECT_END(BeeeOn, XmlUI, DeviceXmlHandlerResolver)

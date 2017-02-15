@@ -4,6 +4,7 @@
 #include <Poco/Timespan.h>
 #include <Poco/Net/SecureServerSocket.h>
 
+#include "di/Injectable.h"
 #include "ssl/SSLServer.h"
 #include "server/SocketServer.h"
 #include "Debug.h"
@@ -13,7 +14,17 @@ using namespace Poco;
 using namespace Poco::Net;
 using namespace BeeeOn;
 
-BEEEON_OBJECT(BeeeOn, SocketServer)
+BEEEON_OBJECT_BEGIN(BeeeOn, SocketServer)
+BEEEON_OBJECT_CASTABLE(StoppableLoop)
+BEEEON_OBJECT_NUMBER("port", &SocketServer::setPort)
+BEEEON_OBJECT_NUMBER("backlog", &SocketServer::setBacklog)
+BEEEON_OBJECT_NUMBER("maxThreads", &SocketServer::setMaxThreads)
+BEEEON_OBJECT_NUMBER("maxQueued", &SocketServer::setMaxQueued)
+BEEEON_OBJECT_NUMBER("threadIdleTime", &SocketServer::setThreadIdleTime)
+BEEEON_OBJECT_TEXT("threadPriority", &SocketServer::setThreadPriority)
+BEEEON_OBJECT_REF("sslConfig", &SocketServer::setSSLConfig)
+BEEEON_OBJECT_REF("connectionFactory", &SocketServer::setFactory)
+BEEEON_OBJECT_END(BeeeOn, SocketServer)
 
 SocketServer::SocketServer():
 	m_port(0),
@@ -21,16 +32,6 @@ SocketServer::SocketServer():
 	m_sslConfig(NULL),
 	m_tcpParams(new TCPServerParams())
 {
-	numberInjector("port", &SocketServer::setPort);
-	numberInjector("backlog", &SocketServer::setBacklog);
-	numberInjector("maxThreads", &SocketServer::setMaxThreads);
-	numberInjector("maxQueued", &SocketServer::setMaxQueued);
-	numberInjector("threadIdleTime", &SocketServer::setThreadIdleTime);
-	textInjector("threadPriority", &SocketServer::setThreadPriority);
-
-	injector("sslConfig", &SocketServer::setSSLConfig);
-	injector("connectionFactory", &SocketServer::setFactory);
-
 }
 
 void SocketServer::setSSLConfig(SSLServer *config)

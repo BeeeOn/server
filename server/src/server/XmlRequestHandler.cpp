@@ -7,6 +7,7 @@
 #include <Poco/DOM/DOMWriter.h>
 
 #include "Debug.h"
+#include "di/Injectable.h"
 #include "server/XmlRequestHandler.h"
 
 using namespace std;
@@ -57,8 +58,6 @@ XmlRequestHandlerFactory::XmlRequestHandlerFactory(size_t maxLength):
 
 void XmlRequestHandlerFactory::init()
 {
-	injector("resolvers", &XmlRequestHandlerFactory::registerResolver);
-	numberInjector("maxBuffer", &XmlRequestHandlerFactory::setMaxLength);
 }
 
 TCPServerConnection *XmlRequestHandlerFactory::createConnection(
@@ -133,4 +132,8 @@ AutoPtr<Document> XmlRequestHandlerFactory::parseDocument(
 	return m_parser.parse(xml.c_str(), length);
 }
 
-BEEEON_OBJECT(BeeeOn, XmlRequestHandlerFactory)
+BEEEON_OBJECT_BEGIN(BeeeOn, XmlRequestHandlerFactory)
+BEEEON_OBJECT_CASTABLE(SocketServerConnectionFactory)
+BEEEON_OBJECT_REF("resolvers", &XmlRequestHandlerFactory::registerResolver)
+BEEEON_OBJECT_NUMBER("maxBuffer", &XmlRequestHandlerFactory::setMaxLength)
+BEEEON_OBJECT_END(BeeeOn, XmlRequestHandlerFactory)

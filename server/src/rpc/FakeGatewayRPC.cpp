@@ -1,6 +1,6 @@
 #include <Poco/Logger.h>
 
-#include "di/AbstractInjectorTarget.h"
+#include "di/Injectable.h"
 #include "rpc/GatewayRPC.h"
 #include "dao/DeviceDao.h"
 #include "util/Loggable.h"
@@ -12,7 +12,7 @@ namespace BeeeOn {
 /**
  * Fake RPC with no communication to Ada Server at all.
  */
-class FakeGatewayRPC : public GatewayRPC, public AbstractInjectorTarget,
+class FakeGatewayRPC : public GatewayRPC,
 		public Loggable {
 public:
 	FakeGatewayRPC();
@@ -31,7 +31,6 @@ private:
 FakeGatewayRPC::FakeGatewayRPC():
 	m_deviceDao(&NullDeviceDao::instance())
 {
-	injector("deviceDao", &FakeGatewayRPC::setDeviceDao);
 }
 
 void FakeGatewayRPC::setDeviceDao(DeviceDao *dao)
@@ -74,4 +73,7 @@ void FakeGatewayRPC::pingGateway(const Gateway &gateway)
 
 }
 
-BEEEON_OBJECT(BeeeOn, FakeGatewayRPC)
+BEEEON_OBJECT_BEGIN(BeeeOn, FakeGatewayRPC)
+BEEEON_OBJECT_CASTABLE(GatewayRPC)
+BEEEON_OBJECT_REF("deviceDao", &FakeGatewayRPC::setDeviceDao)
+BEEEON_OBJECT_END(BeeeOn, FakeGatewayRPC)

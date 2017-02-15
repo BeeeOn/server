@@ -6,12 +6,10 @@
 
 namespace BeeeOn {
 
-class MockRandomProvider : public RandomProvider,
-		public AbstractInjectorTarget {
+class MockRandomProvider : public RandomProvider {
 public:
 	MockRandomProvider()
 	{
-		textInjector("nextRandom", &MockRandomProvider::setNextRandom);
 	}
 
 	void setNextRandom(const std::string &next)

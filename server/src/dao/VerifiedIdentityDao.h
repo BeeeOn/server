@@ -3,7 +3,6 @@
 
 #include <vector>
 
-#include "di/AbstractInjectorTarget.h"
 #include "dao/IdentityDao.h"
 #include "dao/NullDao.h"
 #include "dao/MockDao.h"
@@ -24,8 +23,7 @@ public:
 	virtual bool remove(const VerifiedIdentity &identity) = 0;
 };
 
-class NullVerifiedIdentityDao : public AbstractInjectorTarget,
-		public NullDao<VerifiedIdentity, VerifiedIdentityDao> {
+class NullVerifiedIdentityDao : public NullDao<VerifiedIdentity, VerifiedIdentityDao> {
 public:
 	virtual bool fetchBy(VerifiedIdentity &identity,
 			const std::string email,
@@ -40,8 +38,7 @@ public:
 	static VerifiedIdentityDao &instance();
 };
 
-class MockVerifiedIdentityDao : public AbstractInjectorTarget,
-		public MockDao<VerifiedIdentity, VerifiedIdentityDao> {
+class MockVerifiedIdentityDao : public MockDao<VerifiedIdentity, VerifiedIdentityDao> {
 public:
 	bool fetchBy(VerifiedIdentity &identity,
 			const std::string email,

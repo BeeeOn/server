@@ -7,7 +7,19 @@
 #include <Poco/JSON/Object.h>
 
 #include "Debug.h"
+#include "di/Injectable.h"
+#include "ssl/SSLClient.h"
 #include "provider/GoogleAuthProvider.h"
+
+BEEEON_OBJECT_BEGIN(BeeeOn, GoogleAuthProvider)
+BEEEON_OBJECT_CASTABLE(AuthProvider)
+BEEEON_OBJECT_CASTABLE(AuthCodeAuthProvider)
+BEEEON_OBJECT_CASTABLE(OAuth2AuthProvider)
+BEEEON_OBJECT_TEXT("client_id", &GoogleAuthProvider::setClientId)
+BEEEON_OBJECT_TEXT("client_secret", &GoogleAuthProvider::setClientSecret)
+BEEEON_OBJECT_TEXT("redirect_uri", &GoogleAuthProvider::setRedirectURI)
+BEEEON_OBJECT_REF("sslConfig", &GoogleAuthProvider::setSSLConfig)
+BEEEON_OBJECT_END(BeeeOn, GoogleAuthProvider)
 
 using namespace std;
 using namespace Poco;

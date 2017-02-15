@@ -2,7 +2,6 @@
 #define BEEEON_POCO_RANDOM_PROVIDER_H
 
 #include "provider/RandomProvider.h"
-#include "di/AbstractInjectorTarget.h"
 
 namespace BeeeOn {
 
@@ -14,8 +13,7 @@ namespace BeeeOn {
  *
  * @see Poco::Random for details.
  */
-class PocoRandomProvider : public SecureRandomProvider,
-		public AbstractInjectorTarget {
+class PocoRandomProvider : public SecureRandomProvider {
 public:
 	PocoRandomProvider():
 		m_reseed_us(0)

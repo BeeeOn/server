@@ -1,7 +1,6 @@
 #ifndef BEEEON_IDENTITY_DAO_H
 #define BEEEON_IDENTITY_DAO_H
 
-#include "di/AbstractInjectorTarget.h"
 #include "model/Identity.h"
 #include "dao/NullDao.h"
 #include "dao/MockDao.h"
@@ -17,8 +16,7 @@ public:
 	virtual bool remove(const Identity &identity) = 0;
 };
 
-class NullIdentityDao : public AbstractInjectorTarget,
-		public NullDao<Identity, IdentityDao> {
+class NullIdentityDao : public NullDao<Identity, IdentityDao> {
 public:
 	bool fetchBy(Identity &identity,
 			const std::string &email)
@@ -29,8 +27,7 @@ public:
 	static IdentityDao &instance();
 };
 
-class MockIdentityDao : public AbstractInjectorTarget,
-		public MockDao<Identity, IdentityDao> {
+class MockIdentityDao : public MockDao<Identity, IdentityDao> {
 public:
 	void create(Identity &identity);
 	bool fetchBy(Identity &identity,

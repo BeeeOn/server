@@ -7,7 +7,7 @@
 #include <Poco/SharedPtr.h>
 #include <Poco/Logger.h>
 #include <Poco/Util/AbstractConfiguration.h>
-#include "di/InjectorTarget.h"
+#include "di/DIWrapper.h"
 #include "util/Loggable.h"
 
 namespace BeeeOn {
@@ -72,12 +72,12 @@ class InstanceInfo;
  * </services>
  *
  * DependencyInjector di(config.createView("services"));
- * Main *main = di.create("main");
+ * Poco::SharedPtr<Main> main = di.create<Main>("main");
  */
 class DependencyInjector : public Loggable {
 public:
-	typedef std::map<std::string, Poco::SharedPtr<InjectorTarget>> InjectorSet;
-	typedef std::vector<Poco::SharedPtr<InjectorTarget>> InjectorVector;
+	typedef std::map<std::string, DIWrapper *> WrapperMap;
+	typedef std::vector<DIWrapper *> WrapperVector;
 
 	DependencyInjector(
 		Poco::AutoPtr<Poco::Util::AbstractConfiguration> conf):
@@ -88,21 +88,28 @@ public:
 
 	~DependencyInjector();
 
-	Poco::SharedPtr<InjectorTarget> create(const std::string &name, bool disown = false);
+	DIWrapper *create(const std::string &name, bool disown = false);
 
 	template <typename T>
 	Poco::SharedPtr<T> create(const std::string &name, bool disown = false)
 	{
-		return create(name, disown).cast<T>();
+		DIWrapper *wrapper = create(name, disown);
+		if (wrapper == NULL)
+			return NULL;
+
+		return dynamic_cast<AbstractDIWrapper<T> &>(*wrapper).instance();
 	}
 
-	Poco::SharedPtr<InjectorTarget> find(const std::string &name);
+	DIWrapper *find(const std::string &name);
 
 	template <typename T>
 	Poco::SharedPtr<T> find(const std::string &name)
 	{
-		Poco::SharedPtr<InjectorTarget> t = find(name);
-		return t.cast<T>();
+		DIWrapper *wrapper = find(name);
+		if (wrapper == NULL)
+			return NULL;
+
+		return dynamic_cast<AbstractDIWrapper<T> &>(*wrapper).instance();
 	}
 
 private:
@@ -111,34 +118,34 @@ private:
 	 */
 	void createEarly();
 
-	Poco::SharedPtr<InjectorTarget> createNoAlias(
+	DIWrapper *createNoAlias(
 			const InstanceInfo &info,
 			bool disown = false);
-	InjectorTarget *createNew(const InstanceInfo &info);
-	Poco::SharedPtr<InjectorTarget> injectDependencies(
+	DIWrapper *createNew(const InstanceInfo &info);
+	DIWrapper *injectDependencies(
 			const InstanceInfo &info,
-			Poco::SharedPtr<InjectorTarget> target);
+			DIWrapper *target);
 	void injectValue(const InstanceInfo &info,
-			Poco::SharedPtr<InjectorTarget> target,
+			DIWrapper *target,
 			const std::string &key,
 			const std::string &name);
 	bool tryInjectRef(const InstanceInfo &info,
-			Poco::SharedPtr<InjectorTarget> target,
+			DIWrapper *target,
 			const std::string &key,
 			const std::string &name);
 	bool tryInjectNumber(const InstanceInfo &info,
-			Poco::SharedPtr<InjectorTarget> target,
+			DIWrapper *target,
 			const std::string &key,
 			const std::string &name);
 	bool tryInjectText(const InstanceInfo &info,
-			Poco::SharedPtr<InjectorTarget> target,
+			DIWrapper *target,
 			const std::string &key,
 			const std::string &name);
 
 private:
-	InjectorSet m_set;
-	InjectorVector m_free;
-	Poco::Manifest<InjectorTarget> m_manifest;
+	WrapperMap m_set;
+	WrapperVector m_free;
+	Poco::Manifest<DIWrapper> m_manifest;
 	Poco::AutoPtr<Poco::Util::AbstractConfiguration> m_conf;
 };
 

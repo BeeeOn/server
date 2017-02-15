@@ -1,12 +1,17 @@
 #include <Poco/Exception.h>
 
+#include "di/Injectable.h"
 #include "server/SessionManager.h"
 #include "util/Base64.h"
 
 using namespace Poco;
 using namespace BeeeOn;
 
-BEEEON_OBJECT(BeeeOn, SessionManager)
+BEEEON_OBJECT_BEGIN(BeeeOn, SessionManager)
+BEEEON_OBJECT_REF("secureRandomProvider", &SessionManager::setSecureRandomProvider)
+BEEEON_OBJECT_NUMBER("sessionExpireTime", &SessionManager::setSessionExpireTime)
+BEEEON_OBJECT_NUMBER("maxUserSessions", &SessionManager::setMaxUserSessions)
+BEEEON_OBJECT_END(BeeeOn, SessionManager)
 
 const ExpirableSession::Ptr SessionManager::open(
 		const VerifiedIdentity &identity)

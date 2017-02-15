@@ -3,16 +3,13 @@
 
 #include <set>
 
-#include "di/AbstractInjectorTarget.h"
 #include "model/TypeInfo.h"
 #include "provider/InfoProvider.h"
 #include "util/TypesSAXHandler.h"
 
 namespace BeeeOn {
 
-class TypeInfoProvider :
-		public AbstractInjectorTarget,
-		public XmlInfoProvider<TypeInfo, TypesSAXHandler> {
+class TypeInfoProvider : public XmlInfoProvider<TypeInfo, TypesSAXHandler> {
 public:
 	TypeInfoProvider();
 

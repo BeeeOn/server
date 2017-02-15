@@ -19,8 +19,6 @@ public:
 	PermitAuthProvider():
 		AuthCodeAuthProvider("permit")
 	{
-		textInjector("resultProvider", &PermitAuthProvider::setResultProvider);
-
 		logger().critical("SOME AUTHS WILL BE PERMITTED");
 	}
 

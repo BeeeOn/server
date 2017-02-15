@@ -9,16 +9,13 @@
 #include <Poco/Net/TCPServerConnectionFactory.h>
 #include <Poco/Net/Context.h>
 
-#include "di/AbstractInjectorTarget.h"
 #include "loop/StoppableLoop.h"
 
 namespace BeeeOn {
 
 class SSLServer;
 
-class SocketServerConnectionFactory :
-	public AbstractInjectorTarget,
-	public Poco::Net::TCPServerConnectionFactory {
+class SocketServerConnectionFactory : public Poco::Net::TCPServerConnectionFactory {
 public:
 	typedef Poco::SharedPtr<SocketServerConnectionFactory> Ptr;
 
@@ -26,7 +23,7 @@ public:
 			const Poco::Net::StreamSocket &socket) = 0;
 };
 
-class SocketServer : public StoppableLoop, public AbstractInjectorTarget {
+class SocketServer : public StoppableLoop {
 public:
 	SocketServer();
 

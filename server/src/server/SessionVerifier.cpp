@@ -1,5 +1,6 @@
 #include <Poco/String.h>
 
+#include "di/Injectable.h"
 #include "server/SessionVerifier.h"
 #include "Debug.h"
 
@@ -9,7 +10,6 @@ using namespace BeeeOn;
 
 SessionVerifier::SessionVerifier()
 {
-	injector("sessionManager", &SessionVerifier::setSessionManager);
 }
 
 ExpirableSession::Ptr SessionVerifier::verifyAuthorized(
@@ -29,4 +29,6 @@ ExpirableSession::Ptr SessionVerifier::verifyAuthorized(
 	throw NotAuthenticatedException("missing a session");
 }
 
-BEEEON_OBJECT(BeeeOn, SessionVerifier)
+BEEEON_OBJECT_BEGIN(BeeeOn, SessionVerifier)
+BEEEON_OBJECT_REF("sessionManager", &SessionVerifier::setSessionManager)
+BEEEON_OBJECT_END(BeeeOn, SessionVerifier)

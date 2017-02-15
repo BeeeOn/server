@@ -1,5 +1,6 @@
 #include <vector>
 
+#include "di/Injectable.h"
 #include "xmlui/GatewayXmlHandler.h"
 #include "xmlui/XmlGatewayDeserializer.h"
 #include "xmlui/Serializing.h"
@@ -151,8 +152,6 @@ void GatewayXmlHandler::handleGetAll()
 GatewayXmlHandlerResolver::GatewayXmlHandlerResolver():
 	AbstractXmlHandlerResolver("gates")
 {
-	injector("gatewayService", &GatewayXmlHandlerResolver::setGatewayService);
-	injector("sessionManager", &GatewayXmlHandlerResolver::setSessionManager);
 }
 
 bool GatewayXmlHandlerResolver::canHandle(
@@ -190,4 +189,9 @@ XmlRequestHandler *GatewayXmlHandlerResolver::createHandler(
 			*m_gatewayService);
 }
 
-BEEEON_OBJECT(BeeeOn, XmlUI, GatewayXmlHandlerResolver)
+BEEEON_OBJECT_BEGIN(BeeeOn, XmlUI, GatewayXmlHandlerResolver)
+BEEEON_OBJECT_CASTABLE(AbstractXmlHandlerResolver)
+BEEEON_OBJECT_CASTABLE(XmlRequestHandlerResolver)
+BEEEON_OBJECT_REF("gatewayService", &GatewayXmlHandlerResolver::setGatewayService)
+BEEEON_OBJECT_REF("sessionManager", &GatewayXmlHandlerResolver::setSessionManager)
+BEEEON_OBJECT_END(BeeeOn, XmlUI, GatewayXmlHandlerResolver)

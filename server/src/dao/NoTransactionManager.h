@@ -1,7 +1,6 @@
 #ifndef BEEEON_NO_TRANSACTION_MANAGER_H
 #define BEEEON_NO_TRANSACTION_MANAGER_H
 
-#include "di/AbstractInjectorTarget.h"
 #include "dao/ThreadLocalTransactionManager.h"
 
 namespace BeeeOn {
@@ -12,9 +11,7 @@ namespace BeeeOn {
  * are empty and does not guarantee anything. This is useful
  * for testing.
  */
-class NoTransactionManager :
-		public ThreadLocalTransactionManager,
-		public AbstractInjectorTarget {
+class NoTransactionManager : public ThreadLocalTransactionManager {
 public:
 	NoTransactionManager();
 	~NoTransactionManager();

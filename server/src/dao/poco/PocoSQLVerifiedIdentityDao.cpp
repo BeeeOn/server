@@ -4,6 +4,8 @@
 #include <Poco/Data/Row.h>
 #include <Poco/Data/RecordSet.h>
 
+#include "di/Injectable.h"
+#include "dao/TransactionManager.h"
 #include "dao/poco/PocoSQLVerifiedIdentityDao.h"
 #include "dao/poco/PocoSQLIdentityDao.h"
 #include "dao/poco/PocoSQLUserDao.h"
@@ -15,7 +17,13 @@ using namespace Poco::Data;
 using namespace Poco::Data::Keywords;
 using namespace BeeeOn;
 
-BEEEON_OBJECT(BeeeOn, PocoSQLVerifiedIdentityDao)
+BEEEON_OBJECT_BEGIN(BeeeOn, PocoSQLVerifiedIdentityDao)
+BEEEON_OBJECT_CASTABLE(VerifiedIdentityDao)
+BEEEON_OBJECT_REF("daoManager", &PocoSQLVerifiedIdentityDao::setDaoManager)
+BEEEON_OBJECT_REF("transactionManager", &PocoSQLVerifiedIdentityDao::setTransactionManager)
+BEEEON_OBJECT_REF("sqlLoader", &PocoSQLVerifiedIdentityDao::setSQLLoader)
+BEEEON_OBJECT_HOOK("done", &PocoSQLVerifiedIdentityDao::loadQueries)
+BEEEON_OBJECT_END(BeeeOn, PocoSQLVerifiedIdentityDao)
 
 PocoSQLVerifiedIdentityDao::PocoSQLVerifiedIdentityDao()
 {

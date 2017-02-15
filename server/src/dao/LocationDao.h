@@ -3,7 +3,6 @@
 
 #include <vector>
 
-#include "di/AbstractInjectorTarget.h"
 #include "dao/NullDao.h"
 #include "dao/GatewayDao.h"
 #include "model/Gateway.h"
@@ -23,8 +22,7 @@ public:
 	virtual bool remove(const Location &location) = 0;
 };
 
-class NullLocationDao : public AbstractInjectorTarget,
-	public NullDao<Location, LocationDao> {
+class NullLocationDao : public NullDao<Location, LocationDao> {
 public:
 	bool fetchFrom(Location &location,
 			const Gateway &gateway)

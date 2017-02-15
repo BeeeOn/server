@@ -4,7 +4,6 @@
 #include <Poco/RWLock.h>
 #include <Poco/Logger.h>
 
-#include "di/AbstractInjectorTarget.h"
 #include "provider/RandomProvider.h"
 #include "model/VerifiedIdentity.h"
 #include "server/SessionCache.h"
@@ -16,9 +15,7 @@ namespace BeeeOn {
 /**
  * A user session management.
  */
-class SessionManager : public AbstractInjectorTarget,
-		public Loggable
-{
+class SessionManager : public Loggable {
 public:
 	enum {
 		ID_LENGTH64 = 64, /**< 512 bits long session ID */
@@ -27,9 +24,6 @@ public:
 	SessionManager() :
 		m_sessionCache(NULL)
 	{
-		injector("secureRandomProvider", &SessionManager::setSecureRandomProvider);
-		numberInjector("sessionExpireTime", &SessionManager::setSessionExpireTime);
-		numberInjector("maxUserSessions", &SessionManager::setMaxUserSessions);
 	}
 
 	~SessionManager()

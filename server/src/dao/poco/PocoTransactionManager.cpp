@@ -1,14 +1,17 @@
+#include "di/Injectable.h"
 #include "dao/poco/PocoTransactionManager.h"
 #include "dao/poco/PocoTransactionImpl.h"
 
 using namespace Poco;
 using namespace BeeeOn;
 
-BEEEON_OBJECT(BeeeOn, PocoTransactionManager)
+BEEEON_OBJECT_BEGIN(BeeeOn, PocoTransactionManager)
+BEEEON_OBJECT_CASTABLE(TransactionManager)
+BEEEON_OBJECT_REF("daoManager", &PocoTransactionManager::setDaoManager)
+BEEEON_OBJECT_END(BeeeOn, PocoTransactionManager)
 
 PocoTransactionManager::PocoTransactionManager()
 {
-	injector("daoManager", &PocoTransactionManager::setDaoManager);
 }
 
 PocoTransactionManager::~PocoTransactionManager()

@@ -3,7 +3,6 @@
 
 #include <Poco/NotificationCenter.h>
 
-#include "di/AbstractInjectorTarget.h"
 #include "model/VerifiedIdentity.h"
 
 namespace Poco {
@@ -18,7 +17,7 @@ class Identity;
 class Gateway;
 class User;
 
-class NotificationDispatcher : public AbstractInjectorTarget {
+class NotificationDispatcher {
 public:
 	NotificationDispatcher();
 	virtual ~NotificationDispatcher();

@@ -1,3 +1,4 @@
+#include "di/Injectable.h"
 #include "xmlui/LocationXmlHandler.h"
 #include "xmlui/XmlLocationDeserializer.h"
 #include "xmlui/Serializing.h"
@@ -133,8 +134,6 @@ void LocationXmlHandler::handleGetAll(const string &gateid)
 LocationXmlHandlerResolver::LocationXmlHandlerResolver():
 	AbstractXmlHandlerResolver("locations")
 {
-	injector("locationService", &LocationXmlHandlerResolver::setLocationService);
-	injector("sessionManager", &LocationXmlHandlerResolver::setSessionManager);
 }
 
 bool LocationXmlHandlerResolver::canHandle(
@@ -165,4 +164,9 @@ XmlRequestHandler *LocationXmlHandlerResolver::createHandler(
 			socket, input, session, *m_locationService);
 }
 
-BEEEON_OBJECT(BeeeOn, XmlUI, LocationXmlHandlerResolver)
+BEEEON_OBJECT_BEGIN(BeeeOn, XmlUI, LocationXmlHandlerResolver)
+BEEEON_OBJECT_CASTABLE(AbstractXmlHandlerResolver)
+BEEEON_OBJECT_CASTABLE(XmlRequestHandlerResolver)
+BEEEON_OBJECT_REF("locationService", &LocationXmlHandlerResolver::setLocationService)
+BEEEON_OBJECT_REF("sessionManager", &LocationXmlHandlerResolver::setSessionManager)
+BEEEON_OBJECT_END(BeeeOn, XmlUI, LocationXmlHandlerResolver)

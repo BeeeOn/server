@@ -5,11 +5,9 @@
 #include <Poco/Util/LayeredConfiguration.h>
 #include <Poco/Util/AbstractConfiguration.h>
 
-#include "di/AbstractInjectorTarget.h"
-
 namespace BeeeOn {
 
-class SQLLoader : public AbstractInjectorTarget {
+class SQLLoader {
 public:
 	SQLLoader();
 	virtual ~SQLLoader();
