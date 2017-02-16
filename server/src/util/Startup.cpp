@@ -24,8 +24,8 @@ static Option optConfig("config", "c",
 		false,
 		"<file>",
 		true);
-static Option optServices("services", "s",
-		"services configuration file to be used (xml, ini, properties)",
+static Option optFactory("factory", "f",
+		"factory configuration file to be used (xml, ini, properties)",
 		false,
 		"<file>",
 		true);
@@ -84,8 +84,8 @@ void ServerStartup::overrideConfig(const string text)
 
 void ServerStartup::handleOption(const string &name, const string &value)
 {
-	if (name == "services")
-		m_userServices = value;
+	if (name == "factory")
+		m_userFactory = value;
 	if (name == "logging")
 		m_userLogging = value;
 	if (name == "config")
@@ -111,7 +111,7 @@ void ServerStartup::loadAllConfiguration()
 {
 	findAndLoadConfig();
 	findAndLoadLogging();
-	findAndLoadServices();
+	findAndLoadFactory();
 }
 
 string ServerStartup::parentPath(const File &file)
@@ -162,16 +162,16 @@ void ServerStartup::findAndLoadLogging()
 		logger().warning("no logging configuration found");
 }
 
-void ServerStartup::findAndLoadServices()
+void ServerStartup::findAndLoadFactory()
 {
-	File user(m_userServices);
+	File user(m_userFactory);
 	File system(config().getString(
-			"ui.config.services", defaultServicesFile()));
+			"ui.config.factory", defaultFactoryFile()));
 
-	if (!m_userServices.empty() && readConfiguration(user))
+	if (!m_userFactory.empty() && readConfiguration(user))
 		return;
 	else if (!readConfiguration(system))
-		logger().warning("no services configuration found");
+		logger().warning("no factory configuration found");
 }
 
 void ServerStartup::initialize(Application &app)
@@ -186,7 +186,7 @@ void ServerStartup::initialize(Application &app)
 void ServerStartup::defineOptions(OptionSet &options)
 {
 	options.addOption(optConfig);
-	options.addOption(optServices);
+	options.addOption(optFactory);
 	options.addOption(optLogging);
 	options.addOption(optLogLevel);
 	options.addOption(optPort);
@@ -221,10 +221,10 @@ string ServerStartup::defaultConfigFile() const
 	return path + "/" + m_appGroup + "/" + m_appName + "/server.ini";
 }
 
-string ServerStartup::defaultServicesFile() const
+string ServerStartup::defaultFactoryFile() const
 {
 	string path("/etc");
-	return path + "/" + m_appGroup + "/" + m_appName + "/services.xml";
+	return path + "/" + m_appGroup + "/" + m_appName + "/factory.xml";
 }
 
 static string pocoVersion(unsigned long version = 0)

@@ -1,6 +1,6 @@
-<!DOCTYPE system SYSTEM "services.dtd">
+<!DOCTYPE system SYSTEM "factory.dtd">
 <system>
-	<services>
+	<factory>
 		<instance name="ui" class="BeeeOn::LoopRunner">
 			<add name="loops" ref="uiModule" />
 		</instance>
@@ -336,5 +336,5 @@
 			<set name="disabledProtocols" text="sslv2,sslv3,tlsv1,tlsv1_1" />
 		</instance>
 
-	</services>
+	</factory>
 </system>

@@ -9,11 +9,11 @@ CONF_XSLT += xsl/conf.properties.xsl
 CONF_XSLT += xsl/conf.resolve.xsl
 CONF_XSLT += xsl/conf.dot.xsl
 
-CONF = ../conf/services.xml
+CONF = ../conf/factory.xml
 
-all: services.png home8-schema.png home8-sqlite.sql home8-postgre.sql
+all: factory.png home8-schema.png home8-sqlite.sql home8-postgre.sql
 
-services.png: $(CONF) $(CONF_XSLT)
+factory.png: $(CONF) $(CONF_XSLT)
 	$(XSLTP) xsl/conf.dot.xsl $< | $(DOT) -Tpng > $@
 	@ls -lh $@
 
@@ -30,7 +30,7 @@ SCHEMA_XML = ../schema
 	@ls -lh $@
 
 clean:
-	$(RM) services.png
+	$(RM) factory.png
 	$(RM) home8-schema.png
 	$(RM) home8-sqlite.sql
 	$(RM) home8-postgre.sql

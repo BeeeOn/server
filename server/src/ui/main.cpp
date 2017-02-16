@@ -24,7 +24,7 @@ protected:
 		if (m_serverPort > 0)
 			config().setInt("ui.port", m_serverPort);
 
-		DependencyInjector injector(config().createView("services"));
+		DependencyInjector injector(config().createView("factory"));
 		SharedPtr<LoopRunner> runner = injector.create<LoopRunner>("ui");
 
 		runner->start();

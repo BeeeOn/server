@@ -11,13 +11,13 @@
 	<x:strip-space elements="*" />
 
 	<x:template match="/">
-		<x:text>digraph services {&#xA;</x:text>
+		<x:text>digraph factory {&#xA;</x:text>
 		<x:text>  graph [rankdir="LR"];&#xA;</x:text>
-		<x:apply-templates match="//services" />
+		<x:apply-templates match="//factory" />
 		<x:text>}&#xA;</x:text>
 	</x:template>
 
-	<x:template match="services">
+	<x:template match="factory">
 		<x:apply-templates select="instance" mode="define" />
 		<x:apply-templates select="instance" mode="deps" />
 		<x:text>  {rank=same;</x:text>

@@ -76,7 +76,7 @@
 		...
 	-->
 	<x:template name="group-instances">
-		<x:param name="instances" select="//services/instance" />
+		<x:param name="instances" select="//factory/instance" />
 		<x:param name="ignore" select="''" />
 		<x:param name="groups"
 			select="document('conf.params.xsl')/*/x:param[@name='groups']/group" />

@@ -1,5 +1,5 @@
-<!ELEMENT system (services)>
-<!ELEMENT services (instance|alias)*>
+<!ELEMENT system (factory)>
+<!ELEMENT factory (instance|alias)*>
 
 <!ELEMENT instance (set|add)*>
 <!ATTLIST instance
