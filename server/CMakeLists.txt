@@ -23,9 +23,9 @@ add_subdirectory(base)
 add_subdirectory(test)
 add_subdirectory(schema)
 
-install(FILES conf/factory.xml
+install(FILES conf/restui-startup.ini conf/xmlui-startup.ini
 	DESTINATION etc/beeeon)
-install(FILES conf/logging.ini conf/server.ini
+install(DIRECTORY conf/config.d
 	DESTINATION etc/beeeon)
 install(FILES conf/devices.xml conf/types.xml
 	DESTINATION etc/beeeon)
