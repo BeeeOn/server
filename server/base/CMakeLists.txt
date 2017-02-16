@@ -3,3 +3,6 @@ project (beeeon-base CXX)
 
 add_subdirectory(src)
 add_subdirectory(test)
+
+install(FILES dtd/services.dtd
+	DESTINATION etc/beeeon)

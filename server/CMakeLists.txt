@@ -23,7 +23,7 @@ add_subdirectory(base)
 add_subdirectory(test)
 add_subdirectory(schema)
 
-install(FILES conf/services.dtd conf/services.xml
+install(FILES conf/services.xml
 	DESTINATION etc/beeeon)
 install(FILES conf/logging.ini conf/server.ini
 	DESTINATION etc/beeeon)
