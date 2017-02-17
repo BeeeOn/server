@@ -8,14 +8,18 @@ CONF_XSLT += xsl/conf.params.xsl
 CONF_XSLT += xsl/conf.properties.xsl
 CONF_XSLT += xsl/conf.resolve.xsl
 CONF_XSLT += xsl/conf.dot.xsl
+CONF_XSLT += xsl/conf.merge.xsl
 
-CONF = ../conf/factory.xml
+CONF = $(wildcard ../conf/config.d/factory*.xml)
 
 all: factory.png home8-schema.png home8-sqlite.sql home8-postgre.sql
 
-factory.png: $(CONF) $(CONF_XSLT)
-	$(XSLTP) xsl/conf.dot.xsl $< | $(DOT) -Tpng > $@
+factory.png: factory-merged.xml
+	$(XSLTP) xsl/conf.dot.xsl factory-merged.xml | $(DOT) -Tpng > $@
 	@ls -lh $@
+
+factory-merged.xml: $(CONF) $(CONF_XSLT)
+	$(XSLTP) --stringparam conf.inputs "$(filter-out $<,$(CONF))" xsl/conf.merge.xsl $< > $@
 
 SCHEMA_XSL += xsl/schema.common.xsl
 SCHEMA_XML = ../schema
