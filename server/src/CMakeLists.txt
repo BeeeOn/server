@@ -90,23 +90,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/notification/LoggingObserver.cpp
 )
 
-include_directories(
-	${PROJECT_SOURCE_DIR}
-	${CMAKE_SOURCE_DIR}/base/src
-)
-
-add_library(BeeeOnServer SHARED ${SOURCES})
-
-add_executable(beeeon-restui
-	ui/main.cpp
-	ui/UIServerModule.cpp
-	ui/Serializing.cpp
-	ui/UIMockInit.cpp
-	dao/poco/PocoSQLiteConnectorLoader.cpp
-)
-
-add_executable(beeeon-xmlui
-	xmlui/main.cpp
+file(GLOB XMLUI_SOURCES
 	xmlui/Serializing.cpp
 	xmlui/XmlValueConsumer.cpp
 	xmlui/AbstractXmlHandler.cpp
@@ -126,6 +110,26 @@ add_executable(beeeon-xmlui
 	dao/poco/PocoSQLiteConnectorLoader.cpp
 )
 
+file(GLOB RESTUI_SOURCES
+	ui/UIServerModule.cpp
+	ui/Serializing.cpp
+	ui/UIMockInit.cpp
+	dao/poco/PocoSQLiteConnectorLoader.cpp
+)
+
+include_directories(
+	${PROJECT_SOURCE_DIR}
+	${CMAKE_SOURCE_DIR}/base/src
+)
+
+add_library(BeeeOnServer SHARED ${SOURCES})
+
+add_executable(beeeon-server
+	main.cpp
+	${XMLUI_SOURCES}
+	${RESTUI_SOURCES}
+)
+
 set(LIBS
 	${POCO_FOUNDATION}
 	${POCO_SSL}
@@ -140,13 +144,7 @@ set(LIBS
 
 # Apple's linker doesn't support --whole-archive. Instead it uses -all_load.
 if (APPLE)
-	target_link_libraries(beeeon-restui
-		-Wl,-all_load
-		BeeeOnBase
-		BeeeOnServer
-		${LIBS}
-	)
-	target_link_libraries(beeeon-xmlui
+	target_link_libraries(beeeon-server
 		-Wl,-all_load
 		BeeeOnBase
 		BeeeOnServer
@@ -155,14 +153,7 @@ if (APPLE)
 # The -Wl,--whole-archive is necessary for all libraries defining
 # BEEEON_OBJECTs (see di/Injectable.h).
 else()
-	target_link_libraries(beeeon-restui
-		-Wl,--whole-archive
-		BeeeOnBase
-		BeeeOnServer
-		-Wl,--no-whole-archive
-		${LIBS}
-	)
-	target_link_libraries(beeeon-xmlui
+	target_link_libraries(beeeon-server
 		-Wl,--whole-archive
 		BeeeOnBase
 		BeeeOnServer
@@ -171,8 +162,8 @@ else()
 	)
 endif()
 
-install(TARGETS beeeon-xmlui beeeon-restui BeeeOnServer
-	RUNTIME DESTINATION usr/bin
-	LIBRARY DESTINATION usr/lib
-	ARCHIVE DESTINATION usr/lib
+install(TARGETS beeeon-server BeeeOnServer
+	RUNTIME DESTINATION bin
+	LIBRARY DESTINATION lib
+	ARCHIVE DESTINATION lib
 )

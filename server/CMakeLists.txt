@@ -23,9 +23,9 @@ add_subdirectory(base)
 add_subdirectory(test)
 add_subdirectory(schema)
 
-install(FILES conf/factory.xml
+install(FILES conf/restui-startup.ini conf/xmlui-startup.ini
 	DESTINATION etc/beeeon)
-install(FILES conf/logging.ini conf/server.ini
+install(DIRECTORY conf/config.d
 	DESTINATION etc/beeeon)
 install(FILES conf/devices.xml conf/types.xml
 	DESTINATION etc/beeeon)
@@ -33,11 +33,11 @@ install(DIRECTORY conf/
 	DESTINATION etc/beeeon
 	FILES_MATCHING PATTERN "home8-*-queries.ini")
 install(DIRECTORY schema/
-	DESTINATION usr/share/beeeon/sql
+	DESTINATION share/beeeon/sql
 	FILES_MATCHING PATTERN "home8-*.sql")
 install(DIRECTORY schema/
-	DESTINATION usr/share/beeeon/sql
+	DESTINATION share/beeeon/sql
 	FILES_MATCHING PATTERN "schema/home8-*-expect.csv")
 install(DIRECTORY cert/
-	DESTINATION usr/share/beeeon/cert
+	DESTINATION share/beeeon/cert
 	FILES_MATCHING PATTERN "*.pem")
