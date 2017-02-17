@@ -64,6 +64,6 @@ else()
 endif()
 
 install(TARGETS test-suite-server
-	RUNTIME DESTINATION usr/share/beeeon/test-suite
+	RUNTIME DESTINATION share/beeeon/test-suite
 	CONFIGURATIONS Debug
 )

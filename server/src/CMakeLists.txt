@@ -163,7 +163,7 @@ else()
 endif()
 
 install(TARGETS beeeon-server BeeeOnServer
-	RUNTIME DESTINATION usr/bin
-	LIBRARY DESTINATION usr/lib
-	ARCHIVE DESTINATION usr/lib
+	RUNTIME DESTINATION bin
+	LIBRARY DESTINATION lib
+	ARCHIVE DESTINATION lib
 )

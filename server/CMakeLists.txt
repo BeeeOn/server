@@ -33,11 +33,11 @@ install(DIRECTORY conf/
 	DESTINATION etc/beeeon
 	FILES_MATCHING PATTERN "home8-*-queries.ini")
 install(DIRECTORY schema/
-	DESTINATION usr/share/beeeon/sql
+	DESTINATION share/beeeon/sql
 	FILES_MATCHING PATTERN "home8-*.sql")
 install(DIRECTORY schema/
-	DESTINATION usr/share/beeeon/sql
+	DESTINATION share/beeeon/sql
 	FILES_MATCHING PATTERN "schema/home8-*-expect.csv")
 install(DIRECTORY cert/
-	DESTINATION usr/share/beeeon/cert
+	DESTINATION share/beeeon/cert
 	FILES_MATCHING PATTERN "*.pem")
