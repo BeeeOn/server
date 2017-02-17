@@ -1,0 +1,3 @@
+[submodule "server/base"]
+	path = server/base
+	url = ../base

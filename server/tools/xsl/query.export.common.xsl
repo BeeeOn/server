@@ -9,6 +9,7 @@
 	<x:import href="util.sqlgen.xsl" />
 
 	<x:param name="engine" select="'unknown'" />
+	<x:param name="queries.dir" select="'.'" />
 
 	<x:template name="print-preamble">
 		<x:text>; Auto-generated header&#xA;</x:text>
@@ -27,7 +28,7 @@
 	</x:template>
 
 	<x:template match="query-set">
-		<c:document href="{@for-database}-{$engine}-queries.ini" method="text">
+		<c:document href="{$queries.dir}/{@for-database}-{$engine}-queries.ini" method="text">
 			<x:call-template name="print-preamble" />
 			<x:apply-templates select="query" />
 		</c:document>

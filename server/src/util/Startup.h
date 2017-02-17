@@ -39,7 +39,7 @@ protected:
 	bool readConfiguration(const Poco::File &file);
 	void findAndLoadConfig();
 	void findAndLoadLogging();
-	void findAndLoadServices();
+	void findAndLoadFactory();
 	void initialize(Poco::Util::Application &app) override;
 	void defineOptions(Poco::Util::OptionSet &options) override;
 	int printHelp();
@@ -50,7 +50,7 @@ protected:
 
 	virtual std::string defaultLoggingFile() const;
 	virtual std::string defaultConfigFile() const;
-	virtual std::string defaultServicesFile() const;
+	virtual std::string defaultFactoryFile() const;
 
 protected:
 	std::string m_appGroup;
@@ -59,7 +59,7 @@ protected:
 	unsigned int m_serverPort;
 	std::string m_userLogging;
 	std::string m_userConfig;
-	std::string m_userServices;
+	std::string m_userFactory;
 	long m_notifyPid;
 };
 

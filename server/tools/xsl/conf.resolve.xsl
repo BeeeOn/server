@@ -69,7 +69,7 @@
 			<x:call-template name="print-ref" />
 		</x:variable>
 
-		<x:for-each select="//services/instance|//services/alias">
+		<x:for-each select="//factory/instance|//factory/alias">
 			<x:variable name="name">
 				<x:call-template name="print-name" />
 			</x:variable>
@@ -115,7 +115,7 @@
 			<x:call-template name="print-ref" />
 		</x:variable>
 
-		<x:for-each select="//services/instance|//services/alias">
+		<x:for-each select="//factory/instance|//factory/alias">
 			<x:variable name="name">
 				<x:call-template name="print-name" />
 			</x:variable>
@@ -136,7 +136,7 @@
 		</x:param>
 
 		<x:variable name="result">
-			<x:for-each select="//services/instance|//services/alias">
+			<x:for-each select="//factory/instance|//factory/alias">
 				<x:variable name="name">
 					<x:call-template name="print-name" />
 				</x:variable>
