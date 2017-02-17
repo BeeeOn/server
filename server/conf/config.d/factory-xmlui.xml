@@ -1,0 +1,75 @@
+<system>
+	<factory>
+		<instance name="xmlui" class="BeeeOn::LoopRunner">
+			<add name="loops" ref="xmluiServer" />
+		</instance>
+
+		<instance name="xmluiServer" class="BeeeOn::SocketServer">
+			<set name="connectionFactory" ref="xmluiFactory" />
+			<set name="sslConfig" ref="xmluiSSLServer" if-yes="${xmlui.ssl.enable}" />
+			<set name="backlog" number="64" />
+			<set name="maxThreads" number="64" />
+			<set name="maxQueued" number="64" />
+			<set name="threadIdleTime" number="8" />
+			<set name="threadPriority" text="normal" />
+			<set name="port" number="${xmlui.port}" />
+		</instance>
+
+		<instance name="xmluiFactory"
+				class="BeeeOn::XmlRequestHandlerFactory">
+			<add name="resolvers" ref="authXmlHandler" />
+			<add name="resolvers" ref="gatewayXmlHandler" />
+			<add name="resolvers" ref="deviceXmlHandler" />
+			<add name="resolvers" ref="sensorXmlHandler" />
+			<add name="resolvers" ref="locationXmlHandler" />
+			<add name="resolvers" ref="profileXmlHandler" />
+			<add name="resolvers" ref="roleXmlHandler" />
+			<add name="resolvers" ref="anyXmlHandler" />
+		</instance>
+
+		<instance name="anyXmlHandler"
+				class="BeeeOn::XmlUI::AnyXmlHandlerResolver" />
+
+		<instance name="authXmlHandler"
+				class="BeeeOn::XmlUI::AuthXmlHandlerResolver">
+			<set name="authService" ref="authService" />
+		</instance>
+
+		<instance name="gatewayXmlHandler"
+				class="BeeeOn::XmlUI::GatewayXmlHandlerResolver">
+			<set name="gatewayService" ref="gatewayService" />
+			<set name="sessionManager" ref="sessionManager" />
+		</instance>
+
+		<instance name="locationXmlHandler"
+				class="BeeeOn::XmlUI::LocationXmlHandlerResolver">
+			<set name="locationService" ref="locationService" />
+			<set name="sessionManager" ref="sessionManager" />
+		</instance>
+
+		<instance name="deviceXmlHandler"
+				class="BeeeOn::XmlUI::DeviceXmlHandlerResolver">
+			<set name="deviceService" ref="deviceService" />
+			<set name="sessionManager" ref="sessionManager" />
+		</instance>
+
+		<instance name="sensorXmlHandler"
+				class="BeeeOn::XmlUI::SensorXmlHandlerResolver">
+			<set name="sensorHistoryService" ref="sensorHistoryService" />
+			<set name="sessionManager" ref="sessionManager" />
+		</instance>
+
+		<instance name="profileXmlHandler"
+				class="BeeeOn::XmlUI::ProfileXmlHandlerResolver">
+			<set name="identityService" ref="identityService" />
+			<set name="sessionManager" ref="sessionManager" />
+		</instance>
+
+		<instance name="roleXmlHandler"
+				class="BeeeOn::XmlUI::RoleXmlHandlerResolver">
+			<set name="roleService" ref="roleService" />
+			<set name="sessionManager" ref="sessionManager" />
+		</instance>
+
+	</factory>
+</system>

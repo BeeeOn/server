@@ -1,0 +1,20 @@
+<system>
+	<factory>
+		<!-- SSL configurations -->
+
+		<instance name="xmluiSSLServer" class="BeeeOn::SSLServer">
+			<set name="certificate" text="${xmlui.ssl.certificate}" />
+			<set name="privateKey" text="${xmlui.ssl.key}" />
+			<set name="caLocation" text="${xmlui.ssl.authority}" />
+			<set name="verificationMode" text="${xmlui.ssl.verify_level}" />
+			<set name="loadDefaultCA" text="false" />
+		</instance>
+
+		<instance name="googleOAuthSSL" class="BeeeOn::SSLClient">
+			<set name="verificationMode" text="${google.ssl.verify_mode}" />
+			<set name="caLocation" text="${google.ssl.authority}" />
+			<set name="disabledProtocols" text="sslv2,sslv3,tlsv1,tlsv1_1" />
+		</instance>
+
+	</factory>
+</system>

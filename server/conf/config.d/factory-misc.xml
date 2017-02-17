@@ -1,0 +1,10 @@
+<system>
+	<factory>
+		<instance name="loggingObserver" class="BeeeOn::LoggingObserver" />
+
+		<instance name="notificationDispatcher"
+				class="BeeeOn::NotificationDispatcher">
+			<add name="observer" ref="loggingObserver" />
+		</instance>
+	</factory>
+</system>
