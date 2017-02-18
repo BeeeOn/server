@@ -1,0 +1,23 @@
+<system>
+	<factory>
+		<instance name="sessionManager" class="BeeeOn::SessionManager">
+			<set name="secureRandomProvider"
+				ref="pocoRandomProvider" />
+			<set name="sessionExpireTime" number="${session.expire}" />
+			<set name="maxUserSessions" number="${session.maxPerUser}" />
+		</instance>
+
+		<instance name="googlePermitAuthProvider"
+				class="BeeeOn::PermitAuthProvider">
+			<set name="resultProvider" text="google" />
+		</instance>
+
+		<instance name="googleAuthProvider"
+				class="BeeeOn::GoogleAuthProvider">
+			<set name="client_secret" text="${google.client_secret}"/>
+			<set name="client_id" text="${google.client_id}"/>
+			<set name="redirect_uri" text="${google.redirect_uri}"/>
+			<set name="sslConfig" ref="googleOAuthSSL"/>
+		</instance>
+	</factory>
+</system>

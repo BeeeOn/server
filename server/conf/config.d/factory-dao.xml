@@ -1,0 +1,121 @@
+<system>
+	<factory>
+		<!-- Providers -->
+
+		<instance name="typeInfoProvider" class="BeeeOn::TypeInfoProvider">
+			<set name="typesFile" text="${spec.types.xml}" />
+		</instance>
+
+		<instance name="deviceInfoProvider" class="BeeeOn::DeviceInfoProvider">
+			<set name="typeInfoProvider" ref="typeInfoProvider" />
+			<set name="devicesFile" text="${spec.devices.xml}" />
+		</instance>
+
+		<instance name="pocoRandomProvider"
+				class="BeeeOn::PocoRandomProvider" />
+
+		<instance name="mockRandomProvider"
+				class="BeeeOn::MockRandomProvider">
+			<set name="nextRandom" text="0123456789abcdef" />
+		</instance>
+
+		<instance name="insecureRandomProvider"
+				class="BeeeOn::InsecureRandomProvider">
+			<set name="providerImpl" ref="mockRandomProvider" />
+		</instance>
+
+		<!-- RPC communication -->
+
+		<instance name="fakeGatewayRPC" class="BeeeOn::FakeGatewayRPC">
+			<set name="deviceDao" ref="deviceDao" />
+		</instance>
+
+		<alias name="gatewayRPC" ref="fakeGatewayRPC" />
+
+		<!-- Data access layer -->
+
+		<alias name="userDao" ref="sqlUserDao" />
+		<alias name="gatewayDao" ref="sqlGatewayDao" />
+		<alias name="locationDao" ref="sqlLocationDao" />
+		<alias name="deviceDao" ref="sqlDeviceDao" />
+		<alias name="identityDao" ref="sqlIdentityDao" />
+		<alias name="verifiedIdentityDao" ref="sqlVerifiedIdentityDao" />
+		<alias name="roleInGatewayDao" ref="sqlRoleInGatewayDao" />
+		<alias name="sensorHistoryDao" ref="sqlSensorHistoryDao" />
+
+		<instance name="pocoDaoManager"
+				class="BeeeOn::PocoDaoManager">
+			<set name="connector" ref="${database.backend}Connector" />
+			<set name="connectionString" text="${database.connector}" />
+			<set name="maxSessions" number="${database.pool}" />
+			<set name="initScript" text="${database.init}" />
+		</instance>
+
+		<instance name="pocoTransactionManager"
+				class="BeeeOn::PocoTransactionManager">
+			<set name="daoManager" ref="pocoDaoManager" />
+		</instance>
+
+		<alias name="transactionManager" ref="pocoTransactionManager" />
+
+		<instance name="sqliteConnector"
+				class="BeeeOn::PocoSQLiteConnectorLoader" />
+
+		<instance name="sqlUserDao" class="BeeeOn::PocoSQLUserDao">
+			<set name="daoManager" ref="pocoDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="sqlLoader" ref="queries" />
+		</instance>
+
+		<instance name="sqlIdentityDao" class="BeeeOn::PocoSQLIdentityDao">
+			<set name="daoManager" ref="pocoDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="sqlLoader" ref="queries" />
+		</instance>
+
+		<instance name="sqlVerifiedIdentityDao"
+				class="BeeeOn::PocoSQLVerifiedIdentityDao">
+			<set name="daoManager" ref="pocoDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="sqlLoader" ref="queries" />
+		</instance>
+
+		<instance name="sqlRoleInGatewayDao"
+				class="BeeeOn::PocoSQLRoleInGatewayDao">
+			<set name="daoManager" ref="pocoDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="sqlLoader" ref="queries" />
+		</instance>
+
+		<instance name="sqlGatewayDao" class="BeeeOn::PocoSQLGatewayDao">
+			<set name="daoManager" ref="pocoDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="sqlLoader" ref="queries" />
+		</instance>
+
+		<instance name="sqlLocationDao" class="BeeeOn::PocoSQLLocationDao">
+			<set name="daoManager" ref="pocoDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="sqlLoader" ref="queries" />
+		</instance>
+
+		<instance name="sqlDeviceDao" class="BeeeOn::PocoSQLDeviceDao">
+			<set name="daoManager" ref="pocoDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="deviceInfoProvider" ref="deviceInfoProvider" />
+			<set name="sqlLoader" ref="queries" />
+		</instance>
+
+		<instance name="sqlSensorHistoryDao" class="BeeeOn::PocoSQLSensorHistoryDao">
+			<set name="daoManager" ref="pocoDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="sqlLoader" ref="queries" />
+		</instance>
+
+		<instance name="queries" class="BeeeOn::SQLLoader">
+			<set name="database" text="home8" />
+			<add name="file" text="${database.queries}" />
+		</instance>
+
+	</factory>
+</system>

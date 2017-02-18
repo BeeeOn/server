@@ -1,0 +1,80 @@
+<system>
+	<factory>
+		<!-- Bussiness layer -->
+
+		<instance name="userService" class="BeeeOn::UserService">
+			<set name="userDao" ref="userDao" />
+			<set name="transactionManager" ref="transactionManager" />
+		</instance>
+
+		<instance name="authService" class="BeeeOn::AuthService">
+			<set name="userDao" ref="userDao" />
+			<set name="identityDao" ref="identityDao" />
+			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
+			<set name="sessionManager" ref="sessionManager" />
+			<set name="notificationDispatcher" ref="notificationDispatcher" />
+			<set name="transactionManager" ref="transactionManager" />
+			<add name="providers" ref="googlePermitAuthProvider" if-yes="${ui.debug}" />
+			<add name="providers" ref="googleAuthProvider" />
+		</instance>
+
+		<instance name="deviceService" class="BeeeOn::DeviceService">
+			<set name="deviceDao" ref="deviceDao" />
+			<set name="gatewayRPC" ref="gatewayRPC" />
+			<set name="accessPolicy" ref="accessPolicy" />
+			<set name="transactionManager" ref="transactionManager" />
+		</instance>
+
+		<instance name="gatewayService" class="BeeeOn::GatewayService">
+			<set name="gatewayDao" ref="gatewayDao" />
+			<set name="roleInGatewayDao" ref="roleInGatewayDao" />
+			<set name="identityDao" ref="identityDao" />
+			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
+			<set name="gatewayRPC" ref="gatewayRPC" />
+			<set name="accessPolicy" ref="accessPolicy" />
+			<set name="transactionManager" ref="transactionManager" />
+		</instance>
+
+		<instance name="locationService"
+				class="BeeeOn::LocationService">
+			<set name="locationDao" ref="locationDao" />
+			<set name="gatewayDao" ref="gatewayDao" />
+			<set name="accessPolicy" ref="accessPolicy" />
+			<set name="transactionManager" ref="transactionManager" />
+		</instance>
+
+		<instance name="identityService" class="BeeeOn::IdentityService">
+			<set name="identityDao" ref="identityDao" />
+			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
+			<set name="transactionManager" ref="transactionManager" />
+		</instance>
+
+		<instance name="roleService" class="BeeeOn::RoleService">
+			<set name="identityDao" ref="identityDao" />
+			<set name="gatewayDao" ref="gatewayDao" />
+			<set name="roleInGatewayDao" ref="roleInGatewayDao" />
+			<set name="accessPolicy" ref="accessPolicy" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="notificationDispatcher" ref="notificationDispatcher" />
+		</instance>
+
+		<instance name="sensorHistoryService" class="BeeeOn::SensorHistoryService">
+			<set name="sensorHistoryDao" ref="sensorHistoryDao" />
+			<set name="deviceDao" ref="deviceDao" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="accessPolicy" ref="accessPolicy" />
+		</instance>
+
+		<!-- Access policy -->
+
+		<instance name="accessPolicy"
+				class="BeeeOn::DefaultAccessPolicy">
+			<set name="userDao" ref="userDao" />
+			<set name="gatewayDao" ref="gatewayDao" />
+			<set name="locationDao" ref="locationDao" />
+			<set name="deviceDao" ref="deviceDao" />
+			<set name="roleInGatewayDao" ref="sqlRoleInGatewayDao" />
+		</instance>
+
+	</factory>
+</system>
