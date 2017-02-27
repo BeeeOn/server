@@ -25,6 +25,17 @@ class TestXmlAttack(unittest.TestCase):
 
 		self.assertEqual(0, len(raw))
 
+	def test2_too_long_message(self):
+		s = socket.socket()
+		s.connect((config.xmlui_host, config.xmlui_port))
+		s.send(bytes("<message>", "utf-8"))
+
+		try:
+			while True:
+				s.send(bytes("<item>" + ("x" * 1010) + "</item>", "utf-8"))
+		except Exception as e:
+			self.assertTrue(True, str(e))
+
 if __name__ == '__main__':
 	import sys
 	import taprunner
