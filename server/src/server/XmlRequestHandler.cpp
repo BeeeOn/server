@@ -126,7 +126,7 @@ AutoPtr<Document> XmlRequestHandlerFactory::parseDocument(
 		}
 
 		xml += string(buffer.begin(), buffer.used());
-	} while(buffer.isFull() || xml.size() >= m_maxLength);
+	} while(buffer.isFull() && xml.size() < m_maxLength);
 
 	size_t length = xml.size() > m_maxLength? m_maxLength : xml.size();
 	return m_parser.parse(xml.c_str(), length);
