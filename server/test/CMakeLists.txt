@@ -15,6 +15,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/server/SessionManagerTest.cpp
 	${PROJECT_SOURCE_DIR}/service/AuthServiceTest.cpp
 	${PROJECT_SOURCE_DIR}/provider/GoogleAuthProviderTest.cpp
+	${PROJECT_SOURCE_DIR}/rpc/LegacyGatewayRPCTest.cpp
 )
 
 include_directories(
@@ -38,6 +39,7 @@ set(LIBS
 	${POCO_NET}
 	${POCO_JSON}
 	${POCO_DATA}
+	${POCO_XML}
 	${CPP_UNIT}
 )
 
