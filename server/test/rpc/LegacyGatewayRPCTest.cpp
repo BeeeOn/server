@@ -177,8 +177,8 @@ private:
 	SharedPtr<TCPServer> m_fakeAdaServer;
 	bool m_fakeAdaServerCrashed = false;
 	string m_fakeAdaServerErrorMessage;
-	LegacyGatewayRPC m_rpc;
-	SocketRPCConnector m_connector;
+	LegacyGatewayRPC *m_rpc;
+	SocketRPCConnector *m_connector;
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(LegacyGatewayRPCTest);
@@ -195,15 +195,21 @@ void LegacyGatewayRPCTest::setUp()
 		new TCPServerConnectionFactoryImpl<FakeAdaServerConnection>()));
 	m_fakeAdaServer->start();
 
-	m_connector.setHost("localhost");
-	m_connector.setPort(m_fakeAdaServer->port());
-	m_connector.setReceiveTimeout(10000);
-	m_rpc.setRPCConnector(&m_connector);
+	m_connector = new SocketRPCConnector();
+	m_connector->setHost("localhost");
+	m_connector->setPort(m_fakeAdaServer->port());
+	m_connector->setReceiveTimeout(10000);
+
+	m_rpc = new LegacyGatewayRPC();
+	m_rpc->setRPCConnector(m_connector);
 }
 
 void LegacyGatewayRPCTest::tearDown()
 {
 	m_fakeAdaServer->stop();
+
+	delete m_rpc;
+	delete m_connector;
 }
 
 /**
@@ -213,7 +219,7 @@ void LegacyGatewayRPCTest::tearDown()
 void LegacyGatewayRPCTest::testSendListenSuccess()
 {
 	Gateway gateway(GATEWAYID_SUCCESS_NUM);
-	CPPUNIT_ASSERT_NO_THROW(m_rpc.sendListen(gateway));
+	CPPUNIT_ASSERT_NO_THROW(m_rpc->sendListen(gateway));
 	CPPUNIT_ASSERT_MESSAGE(
 		m_fakeAdaServerErrorMessage, !m_fakeAdaServerCrashed);
 }
@@ -225,7 +231,7 @@ void LegacyGatewayRPCTest::testSendListenSuccess()
 void LegacyGatewayRPCTest::testSendListenFailResponse()
 {
 	Gateway gateway(GATEWAYID_FAIL_NUM);
-	CPPUNIT_ASSERT_THROW(m_rpc.sendListen(gateway), Poco::IllegalStateException);
+	CPPUNIT_ASSERT_THROW(m_rpc->sendListen(gateway), Poco::IllegalStateException);
 	CPPUNIT_ASSERT_MESSAGE(
 		m_fakeAdaServerErrorMessage, !m_fakeAdaServerCrashed);
 }
@@ -238,7 +244,7 @@ void LegacyGatewayRPCTest::testUnpairDeviceSuccess()
 {
 	Gateway gateway(GATEWAYID_SUCCESS_NUM);
 	Device device;
-	CPPUNIT_ASSERT_NO_THROW(m_rpc.unpairDevice(gateway, device));
+	CPPUNIT_ASSERT_NO_THROW(m_rpc->unpairDevice(gateway, device));
 	CPPUNIT_ASSERT_MESSAGE(
 		m_fakeAdaServerErrorMessage, !m_fakeAdaServerCrashed);
 }
@@ -252,7 +258,7 @@ void LegacyGatewayRPCTest::testUnpairDeviceMissingResponse()
 	Gateway gateway(GATEWAYID_FAIL_NUM);
 	Device device;
 	CPPUNIT_ASSERT_THROW(
-		m_rpc.unpairDevice(gateway, device), Poco::InvalidArgumentException);
+		m_rpc->unpairDevice(gateway, device), Poco::InvalidArgumentException);
 	CPPUNIT_ASSERT_MESSAGE(
 		m_fakeAdaServerErrorMessage, !m_fakeAdaServerCrashed);
 }
@@ -264,7 +270,7 @@ void LegacyGatewayRPCTest::testUnpairDeviceMissingResponse()
 void LegacyGatewayRPCTest::testPingGatewaySuccess()
 {
 	Gateway gateway(GATEWAYID_SUCCESS_NUM);
-	CPPUNIT_ASSERT_NO_THROW(m_rpc.pingGateway(gateway));
+	CPPUNIT_ASSERT_NO_THROW(m_rpc->pingGateway(gateway));
 	CPPUNIT_ASSERT_MESSAGE(
 		m_fakeAdaServerErrorMessage, !m_fakeAdaServerCrashed);
 }
@@ -276,7 +282,7 @@ void LegacyGatewayRPCTest::testPingGatewaySuccess()
 void LegacyGatewayRPCTest::testPingGatewayCorruptedResponse()
 {
 	Gateway gateway(GATEWAYID_FAIL_NUM);
-	CPPUNIT_ASSERT_THROW(m_rpc.pingGateway(gateway), Poco::XML::SAXException);
+	CPPUNIT_ASSERT_THROW(m_rpc->pingGateway(gateway), Poco::XML::SAXException);
 	CPPUNIT_ASSERT_MESSAGE(
 		m_fakeAdaServerErrorMessage, !m_fakeAdaServerCrashed);
 }
