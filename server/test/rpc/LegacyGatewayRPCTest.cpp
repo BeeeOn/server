@@ -198,7 +198,7 @@ void LegacyGatewayRPCTest::setUp()
 	m_connector = new SocketRPCConnector();
 	m_connector->setHost("localhost");
 	m_connector->setPort(m_fakeAdaServer->port());
-	m_connector->setReceiveTimeout(10000);
+	m_connector->setReceiveTimeout(1000000);
 
 	m_rpc = new LegacyGatewayRPC();
 	m_rpc->setRPCConnector(m_connector);
