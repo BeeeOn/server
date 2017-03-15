@@ -6,6 +6,12 @@
 
 		<instance name="uiWorkScheduler" class="BeeeOn::BasicProcessor">
 			<set name="runnerFactory" ref="uiRunnerFactory" />
+			<add name="executors" ref="deviceUnpairExecutor" />
+		</instance>
+
+		<instance name="deviceUnpairExecutor" class="BeeeOn::DeviceUnpairWorkExecutor">
+			<set name="deviceDao" ref="deviceDao" />
+			<set name="gatewayRPC" ref="gatewayRPC" />
 		</instance>
 	</factory>
 </system>

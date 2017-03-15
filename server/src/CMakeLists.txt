@@ -107,6 +107,8 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/rest/RestRouter.cpp
 	${PROJECT_SOURCE_DIR}/rest/UriPattern.cpp
 	${PROJECT_SOURCE_DIR}/work/TransactionalWorkRunner.cpp
+	${PROJECT_SOURCE_DIR}/work/DeviceUnpairWork.cpp
+	${PROJECT_SOURCE_DIR}/work/DeviceUnpairWorkExecutor.cpp
 )
 
 file(GLOB XMLUI_SOURCES
