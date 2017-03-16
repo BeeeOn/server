@@ -69,8 +69,8 @@ bool PocoSQLDeviceDao::insert(Device &device, const Gateway &gateway)
 	assureHasId(device);
 	assureHasId(gateway);
 
-	UInt64 id(device.id());
-	UInt64 gatewayID(gateway.id());
+	uint64_t id(device.id());
+	uint64_t gatewayID(gateway.id());
 
 	Nullable<string> locationID;
 	if (!device.location().id().isNull())
@@ -120,8 +120,8 @@ bool PocoSQLDeviceDao::update(Device &device, const Gateway &gateway)
 	assureHasId(device);
 	assureHasId(gateway);
 
-	UInt64 id(device.id());
-	UInt64 gatewayID(gateway.id());
+	uint64_t id(device.id());
+	uint64_t gatewayID(gateway.id());
 
 	Nullable<string> locationID;
 	if (!device.location().id().isNull())
@@ -166,8 +166,8 @@ bool PocoSQLDeviceDao::fetch(Device &device, const Gateway &gateway)
 	assureHasId(device);
 	assureHasId(gateway);
 
-	UInt64 id(device.id());
-	UInt64 gatewayID(gateway.id());
+	uint64_t id(device.id());
+	uint64_t gatewayID(gateway.id());
 
 	Statement sql = (session() << m_queryFetchFromGateway(),
 		use(id, "id"),
@@ -193,8 +193,8 @@ void PocoSQLDeviceDao::fetchMany(std::list<Device> &devices)
 			continue;
 		}
 
-		UInt64 id(device.id());
-		UInt64 gatewayID(device.gateway().id());
+		uint64_t id(device.id());
+		uint64_t gatewayID(device.gateway().id());
 
 		Statement sql = (session() << m_queryFetchFromGateway(),
 			use(id, "id"),
@@ -222,7 +222,7 @@ void PocoSQLDeviceDao::fetchActiveBy(std::vector<Device> &devices,
 {
 	assureHasId(gateway);
 
-	UInt64 gatewayID(gateway.id());
+	uint64_t gatewayID(gateway.id());
 
 	Statement sql = (session() << m_queryFetchActiveBy(),
 		use(gatewayID, "gateway_id")
@@ -237,7 +237,7 @@ void PocoSQLDeviceDao::fetchInactiveBy(std::vector<Device> &devices, const Gatew
 {
 	assureHasId(gateway);
 
-	UInt64 gatewayID(gateway.id());
+	uint64_t gatewayID(gateway.id());
 
 	Statement sql = (session() << m_queryFetchInactiveBy(),
 		use(gatewayID, "gateway_id")

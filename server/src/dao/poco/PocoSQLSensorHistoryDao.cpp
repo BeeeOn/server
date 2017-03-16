@@ -44,8 +44,8 @@ bool PocoSQLSensorHistoryDao::insert(
 	assureHasId(device);
 	assureHasId(device.gateway());
 
-	UInt64 deviceID(device.id());
-	UInt64 gatewayID(device.gateway().id());
+	uint64_t deviceID(device.id());
+	uint64_t gatewayID(device.gateway().id());
 	unsigned int moduleID(value.module());
 	unsigned long timeAt = at.epochTime();
 	double v = value.value();
@@ -76,8 +76,8 @@ void PocoSQLSensorHistoryDao::insertMany(
 	if (values.empty())
 		return;
 
-	UInt64 deviceID(device.id());
-	UInt64 gatewayID(device.gateway().id());
+	uint64_t deviceID(device.id());
+	uint64_t gatewayID(device.gateway().id());
 	unsigned int moduleID;
 	unsigned long timeAt = at.epochTime();
 	double v;
@@ -109,8 +109,8 @@ bool PocoSQLSensorHistoryDao::fetch(
 	assureHasId(device.gateway());
 	// cannot assureHasId for module, SimpleID == 0 is allowed
 
-	UInt64 deviceID(device.id());
-	UInt64 gatewayID(device.gateway().id());
+	uint64_t deviceID(device.id());
+	uint64_t gatewayID(device.gateway().id());
 	unsigned int moduleID(module.id());
 	unsigned long timeAt;
 
@@ -143,8 +143,8 @@ void PocoSQLSensorHistoryDao::fetchHuge(
 
 	assureValid(agg);
 
-	UInt64 deviceID(device.id());
-	UInt64 gatewayID(device.gateway().id());
+	uint64_t deviceID(device.id());
+	uint64_t gatewayID(device.gateway().id());
 	unsigned int moduleID(module.id());
 	unsigned long start = range.start().epochTime();
 	unsigned long end = range.end().epochTime();
