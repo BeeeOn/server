@@ -215,7 +215,7 @@ void UIMockInit::initDevices(const vector<Location> &locations)
 	unknown.setName("Unknown");
 	unknown.setGateway(gateway);
 	unknown.setType(m_infoProvider->findById(4));
-	unknown.setRefresh(20);
+	unknown.setRefresh(2);
 	unknown.setFirstSeen(DateTime() - Timespan(100, 0));
 	unknown.setLastSeen(DateTime() - Timespan(7, 0));
 

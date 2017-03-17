@@ -3,6 +3,7 @@
 import config
 config.import_libs()
 
+import time
 import unittest
 
 from xmlui import Connector, Response, Login, Logout
@@ -279,10 +280,17 @@ class TestDeviceUpdateActivate(unittest.TestCase):
 		))
 		self.assertTrue(response.is_ok())
 
-		response = c.request(DeviceGetNew(
-			config.gateway_id,
-			self.session
-		))
+		for i in range(10):
+			response = c.request(DeviceGetNew(
+				config.gateway_id,
+				self.session
+			))
+
+			if response.is_data() and len(response.root) == 1:
+				break
+
+			time.sleep(1)
+
 		self.assertTrue(response.is_data())
 		self.assertEqual(1, len(response.root))
 
