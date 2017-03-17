@@ -11,6 +11,7 @@
 #include "dao/DeviceDao.h"
 #include "dao/DevicePropertyDao.h"
 #include "rpc/GatewayRPC.h"
+#include "work/WorkScheduler.h"
 #include "Debug.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, DeviceService)
@@ -18,6 +19,7 @@ BEEEON_OBJECT_REF("deviceDao", &DeviceService::setDeviceDao)
 BEEEON_OBJECT_REF("devicePropertyDao", &DeviceService::setDevicePropertyDao)
 BEEEON_OBJECT_REF("gatewayRPC", &DeviceService::setGatewayRPC)
 BEEEON_OBJECT_REF("accessPolicy", &DeviceService::setAccessPolicy)
+BEEEON_OBJECT_REF("workScheduler", &DeviceService::setWorkScheduler)
 BEEEON_OBJECT_REF("transactionManager", &Transactional::setTransactionManager)
 BEEEON_OBJECT_END(BeeeOn, DeviceService)
 
@@ -29,6 +31,7 @@ DeviceService::DeviceService():
 	m_dao(&NullDeviceDao::instance()),
 	m_propertyDao(&NullDevicePropertyDao::instance()),
 	m_gatewayRPC(&NullGatewayRPC::instance()),
+	m_scheduler(&NullWorkScheduler::instance()),
 	m_policy(&NullDeviceAccessPolicy::instance())
 {
 }
@@ -46,6 +49,11 @@ void DeviceService::setDevicePropertyDao(DevicePropertyDao *dao)
 void DeviceService::setGatewayRPC(GatewayRPC *rpc)
 {
 	m_gatewayRPC = rpc? rpc : &NullGatewayRPC::instance();
+}
+
+void DeviceService::setWorkScheduler(WorkScheduler *scheduler)
+{
+	m_scheduler = scheduler? scheduler : &NullWorkScheduler::instance();
 }
 
 void DeviceService::setAccessPolicy(DeviceAccessPolicy *policy)

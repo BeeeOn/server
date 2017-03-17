@@ -16,6 +16,7 @@ namespace BeeeOn {
 class DeviceDao;
 class DevicePropertyDao;
 class GatewayRPC;
+class WorkScheduler;
 class DeviceAccessPolicy;
 
 /**
@@ -28,6 +29,7 @@ public:
 	void setDeviceDao(DeviceDao *dao);
 	void setDevicePropertyDao(DevicePropertyDao *dao);
 	void setGatewayRPC(GatewayRPC *rpc);
+	void setWorkScheduler(WorkScheduler *scheduler);
 	void setAccessPolicy(DeviceAccessPolicy *policy);
 
 	bool fetch(Relation<Device, Gateway> &input)
@@ -126,6 +128,7 @@ private:
 	DeviceDao *m_dao;
 	DevicePropertyDao *m_propertyDao;
 	GatewayRPC *m_gatewayRPC;
+	WorkScheduler *m_scheduler;
 	DeviceAccessPolicy *m_policy;
 };
 

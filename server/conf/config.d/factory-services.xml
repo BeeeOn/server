@@ -22,6 +22,7 @@
 			<set name="deviceDao" ref="deviceDao" />
 			<set name="devicePropertyDao" ref="devicePropertyDao" />
 			<set name="gatewayRPC" ref="gatewayRPC" />
+			<set name="workScheduler" ref="uiWorkScheduler" />
 			<set name="accessPolicy" ref="accessPolicy" />
 			<set name="transactionManager" ref="transactionManager" />
 		</instance>
