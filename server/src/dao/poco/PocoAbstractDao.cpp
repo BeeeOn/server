@@ -51,6 +51,14 @@ PocoDaoManager &PocoAbstractDao::manager()
 
 Poco::Data::Session PocoAbstractDao::session(bool transact)
 {
+	Session session(openSession(transact));
+	manager().customizeSession(session);
+
+	return session;
+}
+
+Poco::Data::Session PocoAbstractDao::openSession(bool transact)
+{
 	Transaction *t = m_transactionManager->current();
 
 	if (t == NULL) {

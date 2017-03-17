@@ -43,6 +43,7 @@ public:
 protected:
 	PocoDaoManager &manager();
 	Poco::Data::Session session(bool transact = true);
+	Poco::Data::Session openSession(bool transact = true);
 
 	void registerQuery(SQLQuery &query);
 

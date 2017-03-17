@@ -19,6 +19,7 @@ BEEEON_OBJECT_TEXT("connectionString", &PocoDaoManager::setConnectionString)
 BEEEON_OBJECT_NUMBER("minSessions", &PocoDaoManager::setMinSessions)
 BEEEON_OBJECT_NUMBER("maxSessions", &PocoDaoManager::setMaxSessions)
 BEEEON_OBJECT_NUMBER("idleTime", &PocoDaoManager::setIdleTime)
+BEEEON_OBJECT_NUMBER("connectionTimeout", &PocoDaoManager::setConnectionTimeout)
 BEEEON_OBJECT_TEXT("features", &PocoDaoManager::setFeatures)
 BEEEON_OBJECT_TEXT("initScript", &PocoDaoManager::setInitScript)
 BEEEON_OBJECT_HOOK("done", &PocoDaoManager::connectAndPrepare)
@@ -34,7 +35,8 @@ PocoDaoManager::PocoDaoManager():
 	m_connector(&ConnectorLoader::null()),
 	m_minSessions(1),
 	m_maxSessions(32),
-	m_idleTime(60)
+	m_idleTime(60),
+	m_connectionTimeout(5)
 {
 }
 
@@ -77,6 +79,16 @@ void PocoDaoManager::setIdleTime(const int seconds)
 	}
 
 	m_idleTime = seconds;
+}
+
+void PocoDaoManager::setConnectionTimeout(const int seconds)
+{
+	if (seconds < 0) {
+		throw InvalidArgumentException(
+			"connectionTimeout must be non-negative");
+	}
+
+	m_connectionTimeout = seconds;
 }
 
 void PocoDaoManager::setInitScript(const std::string &script)
@@ -203,4 +215,9 @@ void PocoDaoManager::connectAndPrepare()
 
 	logger().information("database has been initialized successfully",
 			__FILE__, __LINE__);
+}
+
+void PocoDaoManager::customizeSession(Session &session)
+{
+	session.setConnectionTimeout(m_connectionTimeout);
 }
