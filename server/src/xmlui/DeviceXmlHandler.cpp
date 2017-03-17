@@ -10,6 +10,7 @@
 #include "model/Device.h"
 #include "model/DeviceProperty.h"
 #include "util/CryptoConfig.h"
+#include "work/Work.h"
 
 using namespace std;
 using namespace Poco;
@@ -84,10 +85,11 @@ void DeviceXmlHandler::handleUnregister(const string &gateid,
 	User user(session()->userID());
 	input.setUser(user);
 
-	if (m_deviceService.unregister(input))
-		resultSuccess();
-	else
+	Work::Ptr work = m_deviceService.unregister(input);
+	if (work.isNull())
 		resultUnexpected();
+
+	resultSuccess();
 }
 
 void DeviceXmlHandler::handleUpdate(const string &gateid,

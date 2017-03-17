@@ -10,6 +10,7 @@
 #include "model/Device.h"
 #include "model/DeviceProperty.h"
 #include "model/Gateway.h"
+#include "work/Work.h"
 
 namespace BeeeOn {
 
@@ -62,9 +63,9 @@ public:
 		return BEEEON_TRANSACTION_RETURN(bool, doActivate(input));
 	}
 
-	bool unregister(Relation<Device, Gateway> &input)
+	Work::Ptr unregister(Relation<Device, Gateway> &input)
 	{
-		return BEEEON_TRANSACTION_RETURN(bool, doUnregister(input));
+		return BEEEON_TRANSACTION_RETURN(Work::Ptr, doUnregister(input));
 	}
 
 	bool update(RelationWithData<Device, Gateway> &input)
@@ -110,7 +111,7 @@ protected:
 	void doFetchInactiveBy(Relation<std::vector<Device>, Gateway> &input);
 
 	bool doActivate(Relation<Device, Gateway> &input);
-	bool doUnregister(Relation<Device, Gateway> &input);
+	Work::Ptr doUnregister(Relation<Device, Gateway> &input);
 	bool doUpdate(RelationWithData<Device, Gateway> &input);
 	bool doUpdateAndActivate(RelationWithData<Device, Gateway> &input);
 

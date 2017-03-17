@@ -11,6 +11,7 @@
 #include "dao/DeviceDao.h"
 #include "dao/DevicePropertyDao.h"
 #include "rpc/GatewayRPC.h"
+#include "work/DeviceUnpairWork.h"
 #include "work/WorkScheduler.h"
 #include "Debug.h"
 
@@ -117,18 +118,20 @@ void DeviceService::doFetchInactiveBy(Relation<vector<Device>, Gateway> &input)
 	m_dao->fetchInactiveBy(input.target(), input.base());
 }
 
-bool DeviceService::doUnregister(Relation<Device, Gateway> &input)
+Work::Ptr DeviceService::doUnregister(Relation<Device, Gateway> &input)
 {
 	m_policy->assureUnregister(input, input.target(), input.base());
 
-	try {
-		m_gatewayRPC->unpairDevice(input.base(), input.target());
-		return true;
-	}
-	catch (const Poco::Exception &e) {
-		LOGGER_CLASS(this).log(e, __FILE__, __LINE__);
-		return false;
-	}
+	Device &device = input.target();
+
+	if (!m_dao->fetch(device, input.base()))
+		return NULL;
+
+	DeviceUnpairWork::Ptr work(new DeviceUnpairWork(WorkID::random()));
+	work->setDevice(input.target());
+
+	m_scheduler->schedule(work);
+	return work;
 }
 
 bool DeviceService::doActivate(Relation<Device, Gateway> &input)
