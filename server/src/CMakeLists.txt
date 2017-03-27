@@ -89,6 +89,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/notification/InvitedNotification.cpp
 	${PROJECT_SOURCE_DIR}/notification/NotificationObserver.cpp
 	${PROJECT_SOURCE_DIR}/notification/LoggingObserver.cpp
+	${PROJECT_SOURCE_DIR}/rest/RestLinker.cpp
 	${PROJECT_SOURCE_DIR}/rest/UriPattern.cpp
 )
 
