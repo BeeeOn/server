@@ -22,8 +22,6 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/server/SessionCache.cpp
 	${PROJECT_SOURCE_DIR}/server/SessionManager.cpp
 	${PROJECT_SOURCE_DIR}/server/SessionVerifier.cpp
-	${PROJECT_SOURCE_DIR}/server/RestHandler.cpp
-	${PROJECT_SOURCE_DIR}/server/RestAuthHandler.cpp
 	${PROJECT_SOURCE_DIR}/server/AccessLevel.cpp
 	${PROJECT_SOURCE_DIR}/server/XmlRequestHandler.cpp
 	${PROJECT_SOURCE_DIR}/server/SocketServer.cpp
@@ -114,7 +112,6 @@ file(GLOB XMLUI_SOURCES
 )
 
 file(GLOB RESTUI_SOURCES
-	ui/UIServerModule.cpp
 	ui/Serializing.cpp
 	ui/UIMockInit.cpp
 	dao/poco/PocoSQLiteConnectorLoader.cpp

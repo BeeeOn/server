@@ -1,19 +1,6 @@
 <system>
 	<factory>
 		<instance name="ui" class="BeeeOn::LoopRunner">
-			<add name="loops" ref="uiModule" />
-		</instance>
-
-		<instance name="uiModule" class="BeeeOn::UIServerModule">
-			<set name="sessionVerifier" ref="sessionVerifier" />
-			<set name="userService" ref="userService" />
-			<set name="authHandler" ref="authHandler" />
-			<set name="deviceService" ref="deviceService" />
-			<set name="port" number="${ui.port}" />
-		</instance>
-
-		<instance name="authHandler" class="BeeeOn::RestAuthHandler">
-			<set name="authService" ref="authService" />
 		</instance>
 
 		<instance name="sessionVerifier" class="BeeeOn::SessionVerifier">
