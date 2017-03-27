@@ -25,6 +25,8 @@ add_subdirectory(schema)
 
 install(FILES conf/restui-startup.ini conf/xmlui-startup.ini
 	DESTINATION etc/beeeon)
+install(FILES conf/restui-api.ini
+	DESTINATION etc/beeeon)
 install(DIRECTORY conf/config.d
 	DESTINATION etc/beeeon)
 install(FILES conf/devices.xml conf/types.xml

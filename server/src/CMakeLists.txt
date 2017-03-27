@@ -95,6 +95,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/rest/RestFlow.cpp
 	${PROJECT_SOURCE_DIR}/rest/RestHandler.cpp
 	${PROJECT_SOURCE_DIR}/rest/RestLinker.cpp
+	${PROJECT_SOURCE_DIR}/rest/RestRouter.cpp
 	${PROJECT_SOURCE_DIR}/rest/UriPattern.cpp
 )
 

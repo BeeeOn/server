@@ -6,5 +6,11 @@
 		<instance name="sessionVerifier" class="BeeeOn::SessionVerifier">
 			<set name="sessionManager" ref="sessionManager" />
 		</instance>
+
+		<instance name="uiRouter" class="BeeeOn::RestRouter">
+			<set name="apiName" text="restui" />
+			<set name="applicationName" text="BeeeOn Server" />
+			<set name="configurationFile" text="${spec.restui.ini}" />
+		</instance>
 	</factory>
 </system>
