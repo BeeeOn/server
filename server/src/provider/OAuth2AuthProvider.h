@@ -27,6 +27,11 @@ public:
 		m_clientId = clientId;
 	}
 
+	std::string clientId() const
+	{
+		return m_clientId;
+	}
+
 	void setClientSecret(const std::string &clientSecret)
 	{
 		m_clientSecret = clientSecret;
