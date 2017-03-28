@@ -2,6 +2,7 @@
 #define BEEEON_AUTH_SERVICE_H
 
 #include <map>
+#include <vector>
 #include <Poco/Exception.h>
 #include <Poco/Logger.h>
 #include "provider/AuthProvider.h"
@@ -63,6 +64,8 @@ public:
 	const ExpirableSession::Ptr login(const Credentials &cred);
 
 	void logout(const std::string &id);
+
+	void list(std::vector<AuthProvider *> &providers);
 
 protected:
 	ExpirableSession::Ptr loginAuthorized(const AuthResult &result)
