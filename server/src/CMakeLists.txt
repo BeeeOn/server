@@ -125,7 +125,7 @@ file(GLOB XMLUI_SOURCES
 )
 
 file(GLOB RESTUI_SOURCES
-	ui/Serializing.cpp
+	restui/Serializing.cpp
 	ui/UIMockInit.cpp
 	dao/poco/PocoSQLiteConnectorLoader.cpp
 )
