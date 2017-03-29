@@ -1,6 +1,13 @@
 <system>
 	<factory>
 		<instance name="ui" class="BeeeOn::LoopRunner">
+			<add name="loops" ref="uiServer" />
+		</instance>
+
+		<instance name="uiServer" class="BeeeOn::PocoRestServer">
+			<set name="router" ref="uiRouter" />
+			<set name="sessionVerifier" ref="sessionVerifier" />
+			<set name="port" number="${restui.port}" />
 		</instance>
 
 		<instance name="sessionVerifier" class="BeeeOn::SessionVerifier">
