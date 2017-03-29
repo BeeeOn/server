@@ -90,6 +90,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/notification/InvitedNotification.cpp
 	${PROJECT_SOURCE_DIR}/notification/NotificationObserver.cpp
 	${PROJECT_SOURCE_DIR}/notification/LoggingObserver.cpp
+	${PROJECT_SOURCE_DIR}/rest/BuiltinRestHandler.cpp
 	${PROJECT_SOURCE_DIR}/rest/JSONRestHandler.cpp
 	${PROJECT_SOURCE_DIR}/rest/MappedRestAction.cpp
 	${PROJECT_SOURCE_DIR}/rest/PocoContext.cpp
