@@ -1,4 +1,7 @@
 #include <Poco/Exception.h>
+#include <Poco/DateTime.h>
+#include <Poco/DateTimeFormat.h>
+#include <Poco/DateTimeFormatter.h>
 #include <Poco/Logger.h>
 
 #include <Poco/Net/HTTPServerParams.h>
@@ -87,6 +90,7 @@ void PocoRestRequestHandler::prepareInternalAction(
 		HTTPServerRequest &req,
 		HTTPServerResponse &res) const
 {
+	req.set("Cache-Control", "public, no-cache");
 }
 
 void PocoRestRequestHandler::prepareMappedAction(
@@ -94,6 +98,18 @@ void PocoRestRequestHandler::prepareMappedAction(
 		HTTPServerRequest &req,
 		HTTPServerResponse &res) const
 {
+	if (action->caching() == 0) {
+		req.set("Cache-Control", "public, no-cache");
+	}
+	else {
+		const Timespan shift(action->caching(), 0);
+		const DateTime now;
+
+		res.set("Expires",
+			DateTimeFormatter::format(now + shift, DateTimeFormat::HTTP_FORMAT));
+		res.set("Cache-Control",
+			"max-age=" + to_string(shift.totalSeconds()) + ", must-revalidate");
+	}
 }
 
 void PocoRestRequestHandler::handleRequest(
