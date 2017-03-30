@@ -13,4 +13,4 @@ gateway_id = "1284174504043136"
 tmp_gateway_id = "1780053541714013"
 
 PERMIT_LOGIN = json.dumps(
-	{"provider": "permit", "authCode": "joe.doe@example.org"})
+	{"provider": "permit", "code": "joe.doe@example.org"})

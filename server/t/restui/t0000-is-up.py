@@ -5,7 +5,7 @@ config.import_libs()
 
 import unittest
 import socket
-from rest import GET, POST
+from rest import GET, POST, PUT
 
 class TestIsUp(unittest.TestCase):
 	"""
@@ -17,10 +17,10 @@ class TestIsUp(unittest.TestCase):
 		s.close()
 
 	"""
-	Send GET to /auth. Such method is not supported.
+	Send GET to /nothing. Such method and path is not supported.
 	"""
 	def test2_http_auth_GET_404(self):
-		req = GET(config.ui_host, config.ui_port, "/auth")
+		req = GET(config.ui_host, config.ui_port, "/nothing")
 		response, _ = req()
 		self.assertEqual(404, response.status)
 
@@ -32,6 +32,14 @@ class TestIsUp(unittest.TestCase):
 		req.body("")
 		response, _ = req()
 		self.assertEqual(401, response.status)
+
+	"""
+	Send PUT to /auth. Such method is not supported on this path.
+	"""
+	def test4_http_auth_PUT_404(self):
+		req = PUT(config.ui_host, config.ui_port, "/auth")
+		response, _ = req()
+		self.assertEqual(404, response.status)
 
 if __name__ == '__main__':
 	import sys
