@@ -18,6 +18,11 @@
 			<set name="apiName" text="restui" />
 			<set name="applicationName" text="BeeeOn Server" />
 			<set name="configurationFile" text="${spec.restui.ini}" />
+			<add name="handlers" ref="uiAuthHandler" />
+		</instance>
+
+		<instance name="uiAuthHandler" class="BeeeOn::AuthRestHandler">
+			<set name="authService" ref="authService" />
 		</instance>
 	</factory>
 </system>
