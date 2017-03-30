@@ -91,6 +91,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/notification/LoggingObserver.cpp
 	${PROJECT_SOURCE_DIR}/rest/MappedRestAction.cpp
 	${PROJECT_SOURCE_DIR}/rest/PocoContext.cpp
+	${PROJECT_SOURCE_DIR}/rest/PocoRestRequestHandler.cpp
 	${PROJECT_SOURCE_DIR}/rest/RestAction.cpp
 	${PROJECT_SOURCE_DIR}/rest/RestFlow.cpp
 	${PROJECT_SOURCE_DIR}/rest/RestHandler.cpp

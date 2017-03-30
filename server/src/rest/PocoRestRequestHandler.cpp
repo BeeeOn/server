@@ -1,0 +1,289 @@
+#include <Poco/Exception.h>
+#include <Poco/Logger.h>
+
+#include <Poco/Net/HTTPServerParams.h>
+#include <Poco/Net/HTTPServerRequest.h>
+#include <Poco/Net/HTTPServerResponse.h>
+
+#include "rest/PocoRestRequestHandler.h"
+#include "rest/RestFlow.h"
+#include "rest/RestRouter.h"
+#include "rest/RestLinker.h"
+#include "server/SessionVerifier.h"
+
+using namespace std;
+using namespace Poco;
+using namespace Poco::Net;
+using namespace BeeeOn;
+
+PocoRestRequestHandler::PocoRestRequestHandler(
+		RestAction::Ptr action,
+		const MappedRestAction::Params &params,
+		ExpirableSession::Ptr session,
+		RestLinker &linker):
+	m_action(action),
+	m_params(params),
+	m_session(session),
+	m_linker(linker)
+{
+}
+
+bool PocoRestRequestHandler::expectedContentLength(
+		HTTPServerRequest &req,
+		HTTPServerResponse &res)
+{
+	const string &method = req.getMethod();
+
+	if (method != "POST" && method != "PUT" && method != "PATCH")
+		return true;;
+
+	if (!req.hasContentLength()) {
+		res.setStatusAndReason(HTTPResponse::HTTP_LENGTH_REQUIRED);
+		return false;
+	}
+
+	int inputMaxSize = m_action->inputMaxSize();
+	if (inputMaxSize < 0)
+		return true;
+
+	auto contentLength = req.getContentLength();
+	if (contentLength > inputMaxSize) {
+		if (logger().warning()) {
+			logger().warning(
+				"too long input: "
+				+ to_string(contentLength)
+				+ " for "
+				+ m_action->fullName(),
+				__FILE__, __LINE__);
+		}
+
+		res.setStatusAndReason(HTTPResponse::HTTP_BAD_REQUEST);
+		return false;
+	}
+
+	return true;
+}
+
+string PocoRestRequestHandler::asString(const MappedRestAction::Params &params) const
+{
+	string s("[");
+	auto it = params.begin();
+
+	for (; it != params.end(); ++it) {
+		if (it != params.begin())
+			s.append(", ");
+
+		s.append(it->first);
+		s.append(" => ");
+		s.append(it->second);
+	}
+
+	s.append("]");
+	return s;
+}
+
+void PocoRestRequestHandler::prepareInternalAction(
+		RestAction::Ptr action,
+		HTTPServerRequest &req,
+		HTTPServerResponse &res) const
+{
+}
+
+void PocoRestRequestHandler::prepareMappedAction(
+		MappedRestAction::Ptr action,
+		HTTPServerRequest &req,
+		HTTPServerResponse &res) const
+{
+}
+
+void PocoRestRequestHandler::handleRequest(
+		HTTPServerRequest &req,
+		HTTPServerResponse &res)
+{
+	if (logger().debug()) {
+		logger().debug("serving request "
+			+ req.getMethod()
+			+ " "
+			+ req.getURI()
+			+ " via action "
+			+ m_action->fullName()
+			+ " "
+			+ asString(m_params),
+			__FILE__, __LINE__);
+	}
+
+	if (logger().trace()) {
+		for (const auto &pair : req) {
+			logger().trace(
+				pair.first
+				+ ": "
+				+ pair.second,
+				__FILE__, __LINE__);
+		}
+	}
+
+	if (!expectedContentLength(req, res)) {
+		res.send();
+		return;
+	}
+
+	Poco::URI uri(req.getURI());
+
+	RestFlow flow(
+		m_linker,
+		uri,
+		m_params,
+		PocoRequest(req),
+		PocoResponse(res)
+	);
+
+	MappedRestAction::Ptr mapped = m_action.cast<MappedRestAction>();
+	if (mapped.isNull())
+		prepareInternalAction(m_action, req, res);
+	else
+		prepareMappedAction(mapped, req, res);
+
+	const auto &call = m_action->call();
+
+	try {
+		flow.setSession(m_session);
+		call(flow);
+		return;
+	}
+	catch (const Exception &e) {
+		logger().log(e, __FILE__, __LINE__);
+	}
+	catch (const exception &e) {
+		logger().critical(e.what(), __FILE__, __LINE__);
+	}
+	catch (const char *m) {
+		logger().fatal(m, __FILE__, __LINE__);
+	}
+	catch (...) {
+		logger().fatal("unknown error occured", __FILE__, __LINE__);
+	}
+
+	if (res.sent())
+		return;
+
+	res.setStatusAndReason(HTTPResponse::HTTP_INTERNAL_SERVER_ERROR);
+}
+
+PocoRestRequestFactory::PocoRestRequestFactory(
+		RestRouter &router,
+		SessionVerifier &verifier):
+	m_router(router),
+	m_sessionVerifier(verifier)
+{
+}
+
+HTTPRequestHandler *PocoRestRequestFactory::handleNoRoute(const HTTPServerRequest &request)
+{
+	if (logger().debug()) {
+		logger().debug("no action resolved for "
+			+ request.getMethod()
+			+ " "
+			+ request.getURI(),
+			__FILE__, __LINE__);
+	}
+
+	RestAction::Ptr target = m_router.lookup("builtin", "noroute");
+	if (target.isNull())
+		throw Exception("missing handler builtin.noroute");
+
+	return new PocoRestRequestHandler(
+		target,
+		{},
+		NULL,
+		static_cast<RestLinker &>(m_router)
+	);
+}
+
+HTTPRequestHandler *PocoRestRequestFactory::handleNoSession()
+{
+	if (logger().debug()) {
+		logger().debug("missing session, redirecting...",
+			__FILE__, __LINE__);
+	}
+
+	RestAction::Ptr target = m_router.lookup("builtin", "unauthorized");
+	if (target.isNull())
+		throw Exception("missing handler builtin.unauthorized");
+
+	return new PocoRestRequestHandler(
+		target,
+		{},
+		NULL,
+		static_cast<RestLinker &>(m_router)
+	);
+}
+
+HTTPRequestHandler *PocoRestRequestFactory::createWithSession(
+		RestAction::Ptr action,
+		const MappedRestAction::Params &params,
+		const HTTPServerRequest &request)
+{
+	ExpirableSession::Ptr session;
+
+	if (action->sessionRequired()) {
+		try {
+			session = m_sessionVerifier.verifyAuthorized(request);
+		} catch (const NotAuthenticatedException &e) {
+			logger().log(e, __FILE__, __LINE__);
+		}
+
+		if (session.isNull())
+			return handleNoSession();
+	}
+
+	return new PocoRestRequestHandler(
+		action,
+		params,
+		session,
+		static_cast<RestLinker &>(m_router)
+	);
+}
+
+HTTPRequestHandler *PocoRestRequestFactory::createRequestHandler(
+		const HTTPServerRequest &request)
+{
+	if (logger().debug()) {
+		logger().debug("handling request "
+			+ request.getMethod()
+			+ " "
+			+ request.getURI(),
+			__FILE__, __LINE__);
+	}
+
+	Poco::URI uri(request.getURI());
+	MappedRestAction::Params params;
+
+	try {
+		RestAction::Ptr action = m_router.route(
+			request.getMethod(), uri, params
+		);
+
+		if (action.isNull())
+			return handleNoRoute(request);
+
+		return createWithSession(
+			action,
+			params,
+			request
+		);
+	} catch (const Exception &e) {
+		logger().log(e, __FILE__, __LINE__);
+		e.rethrow();
+	} catch (const exception &e) {
+		logger().fatal(e.what(), __FILE__, __LINE__);
+		throw e;
+	} catch (...) {
+		logger().fatal("something is terribly wrong",
+				__FILE__, __LINE__);
+		throw;
+	}
+
+	logger().fatal("should ben ever reached", __FILE__, __LINE__);
+	return NULL;
+}
+
