@@ -1,23 +1,36 @@
 <system>
 	<factory>
 		<instance name="ui" class="BeeeOn::LoopRunner">
-			<add name="loops" ref="uiModule" />
+			<add name="loops" ref="uiServer" />
 		</instance>
 
-		<instance name="uiModule" class="BeeeOn::UIServerModule">
+		<instance name="uiServer" class="BeeeOn::PocoRestServer">
+			<set name="router" ref="uiRouter" />
 			<set name="sessionVerifier" ref="sessionVerifier" />
-			<set name="userService" ref="userService" />
-			<set name="authHandler" ref="authHandler" />
-			<set name="deviceService" ref="deviceService" />
-			<set name="port" number="${ui.port}" />
-		</instance>
-
-		<instance name="authHandler" class="BeeeOn::RestAuthHandler">
-			<set name="authService" ref="authService" />
+			<set name="port" number="${restui.port}" />
 		</instance>
 
 		<instance name="sessionVerifier" class="BeeeOn::SessionVerifier">
 			<set name="sessionManager" ref="sessionManager" />
+		</instance>
+
+		<instance name="uiRouter" class="BeeeOn::RestRouter">
+			<set name="apiName" text="restui" />
+			<set name="applicationName" text="BeeeOn Server" />
+			<set name="configurationFile" text="${spec.restui.ini}" />
+			<add name="handlers" ref="uiAuthHandler" />
+			<add name="handlers" ref="uiBuiltinHandler" />
+			<add name="handlers" ref="uiGatewayHandler" />
+		</instance>
+
+		<instance name="uiBuiltinHandler" class="BeeeOn::BuiltinRestHandler" />
+
+		<instance name="uiAuthHandler" class="BeeeOn::AuthRestHandler">
+			<set name="authService" ref="authService" />
+		</instance>
+
+		<instance name="uiGatewayHandler" class="BeeeOn::RestUI::GatewayRestHandler">
+			<set name="gatewayService" ref="gatewayService" />
 		</instance>
 	</factory>
 </system>

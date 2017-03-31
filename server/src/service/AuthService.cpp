@@ -157,3 +157,9 @@ void AuthService::logout(const std::string &id)
 	TRACE_METHOD();
 	m_sessionManager->close(id);
 }
+
+void AuthService::list(vector<AuthProvider *> &providers)
+{
+	for (auto pair : m_providers)
+		providers.push_back(pair.second);
+}

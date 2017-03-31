@@ -11,10 +11,10 @@ find_library (POCO_JSON PocoJSON)
 find_library (POCO_DATA PocoData)
 
 file(GLOB TEST_SOURCES
-	${PROJECT_SOURCE_DIR}/server/RouteTest.cpp
 	${PROJECT_SOURCE_DIR}/server/SessionManagerTest.cpp
 	${PROJECT_SOURCE_DIR}/service/AuthServiceTest.cpp
 	${PROJECT_SOURCE_DIR}/provider/GoogleAuthProviderTest.cpp
+	${PROJECT_SOURCE_DIR}/rest/UriPatternTest.cpp
 	${PROJECT_SOURCE_DIR}/rpc/LegacyGatewayRPCTest.cpp
 )
 

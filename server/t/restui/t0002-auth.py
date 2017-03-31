@@ -14,7 +14,14 @@ from rest import POST, DELETE
 def login(body):
 	req = POST(config.ui_host, config.ui_port, "/auth")
 	req.body(body)
-	return req()
+
+	response, data = req()
+	result = json.loads(data)
+
+	if result["status"] == "success":
+		return response, result["data"]["id"]
+	else:
+		return response, None
 
 def logout(session):
 	req = DELETE(config.ui_host, config.ui_port, "/auth")
@@ -34,7 +41,7 @@ class TestAuth(unittest.TestCase):
 		self.assertEqual(200, response.status)
 
 		response, _ = logout(session)
-		self.assertEqual(200, response.status)
+		self.assertEqual(204, response.status)
 
 	"""
 	Test login & logout with the Google provider. The test
@@ -50,14 +57,14 @@ class TestAuth(unittest.TestCase):
 	def test2_login_logout_google(self):
 		GOOGLE_LOGIN = json.dumps({
 			"provider": "google",
-			"authCode": google.login_auth_code()
+			"code": google.login_auth_code()
 		})
 
 		response, session = login(GOOGLE_LOGIN)
 		self.assertEqual(200, response.status)
 
 		response, _ = logout(session)
-		self.assertEqual(200, response.status)
+		self.assertEqual(204, response.status)
 
 	"""
 	Test login & logout with the Facebook provider.
@@ -70,14 +77,14 @@ class TestAuth(unittest.TestCase):
 	def test3_login_logout_facebook(self):
 		FACEBOOK_LOGIN = json.dumps({
 			"provider": "facebook",
-			"authCode": os.environ["FACEBOOK_AUTH_CODE"]
+			"code": os.environ["FACEBOOK_AUTH_CODE"]
 		})
 
 		response, session = login(FACEBOOK_LOGIN)
 		self.assertEqual(200, response.status)
 
 		response, _ = logout(session)
-		self.assertEqual(200, response.status)
+		self.assertEqual(204, response.status)
 
 	"""
 	Test maximal count of sessions per user.
@@ -98,7 +105,7 @@ class TestAuth(unittest.TestCase):
 
 		for s in session:
 			response, _ = logout(s)
-			self.assertEqual(200, response.status)
+			self.assertEqual(204, response.status)
 
 if __name__ == '__main__':
 	import sys

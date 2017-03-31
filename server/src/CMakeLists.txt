@@ -19,11 +19,10 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/provider/RandomProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/OAuth2AuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/GoogleAuthProvider.cpp
+	${PROJECT_SOURCE_DIR}/server/AuthRestHandler.cpp
 	${PROJECT_SOURCE_DIR}/server/SessionCache.cpp
 	${PROJECT_SOURCE_DIR}/server/SessionManager.cpp
 	${PROJECT_SOURCE_DIR}/server/SessionVerifier.cpp
-	${PROJECT_SOURCE_DIR}/server/RestHandler.cpp
-	${PROJECT_SOURCE_DIR}/server/RestAuthHandler.cpp
 	${PROJECT_SOURCE_DIR}/server/AccessLevel.cpp
 	${PROJECT_SOURCE_DIR}/server/XmlRequestHandler.cpp
 	${PROJECT_SOURCE_DIR}/server/SocketServer.cpp
@@ -91,6 +90,18 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/notification/InvitedNotification.cpp
 	${PROJECT_SOURCE_DIR}/notification/NotificationObserver.cpp
 	${PROJECT_SOURCE_DIR}/notification/LoggingObserver.cpp
+	${PROJECT_SOURCE_DIR}/rest/BuiltinRestHandler.cpp
+	${PROJECT_SOURCE_DIR}/rest/JSONRestHandler.cpp
+	${PROJECT_SOURCE_DIR}/rest/MappedRestAction.cpp
+	${PROJECT_SOURCE_DIR}/rest/PocoContext.cpp
+	${PROJECT_SOURCE_DIR}/rest/PocoRestRequestHandler.cpp
+	${PROJECT_SOURCE_DIR}/rest/PocoRestServer.cpp
+	${PROJECT_SOURCE_DIR}/rest/RestAction.cpp
+	${PROJECT_SOURCE_DIR}/rest/RestFlow.cpp
+	${PROJECT_SOURCE_DIR}/rest/RestHandler.cpp
+	${PROJECT_SOURCE_DIR}/rest/RestLinker.cpp
+	${PROJECT_SOURCE_DIR}/rest/RestRouter.cpp
+	${PROJECT_SOURCE_DIR}/rest/UriPattern.cpp
 )
 
 file(GLOB XMLUI_SOURCES
@@ -114,8 +125,9 @@ file(GLOB XMLUI_SOURCES
 )
 
 file(GLOB RESTUI_SOURCES
-	ui/UIServerModule.cpp
-	ui/Serializing.cpp
+	restui/Serializing.cpp
+	restui/JSONGatewayDeserializer.cpp
+	restui/GatewayRestHandler.cpp
 	ui/UIMockInit.cpp
 	dao/poco/PocoSQLiteConnectorLoader.cpp
 )
