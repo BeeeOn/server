@@ -3,6 +3,7 @@
 
 #include <Poco/LogStream.h>
 #include <Poco/Mutex.h>
+#include <Poco/Timespan.h>
 
 #include "rpc/GatewayRPC.h"
 #include "util/SecureXmlParser.h"
@@ -25,10 +26,13 @@ public:
 	void unpairDevice(const Gateway &gateway, const Device &device) override;
 	void pingGateway(const Gateway &gateway) override;
 
+	void setResponseTimeout(int ms);
+
 private:
 	std::string receiveResponse();
 	void parseResponse(const std::string &response);
 
+	Poco::Timespan m_timeout;
 	Poco::LogStream m_logStream;
 	Poco::Mutex m_lock;
 	RPCConnector *m_connector;

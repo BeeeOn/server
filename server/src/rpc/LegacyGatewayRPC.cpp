@@ -3,6 +3,8 @@
 #include <Poco/Exception.h>
 #include <Poco/AutoPtr.h>
 #include <Poco/TeeStream.h>
+#include <Poco/Timespan.h>
+#include <Poco/Timestamp.h>
 #include <Poco/StreamCopier.h>
 #include <Poco/SAX/AttributesImpl.h>
 #include <Poco/XML/XMLWriter.h>
@@ -17,8 +19,17 @@ using namespace Poco::XML;
 using namespace BeeeOn;
 
 LegacyGatewayRPC::LegacyGatewayRPC():
+	m_timeout(0, 1000),
 	m_logStream(logger(), Poco::Message::PRIO_DEBUG)
 {
+}
+
+void LegacyGatewayRPC::setResponseTimeout(int ms)
+{
+	if (ms < 0)
+		throw InvalidArgumentException("response timeout must be non-negative");
+
+	m_timeout = Timespan(0, ms * 1000);
 }
 
 void LegacyGatewayRPC::sendListen(const Gateway &gateway)
@@ -133,8 +144,31 @@ void LegacyGatewayRPC::pingGateway(const Gateway &gateway)
 string LegacyGatewayRPC::receiveResponse()
 {
 	stringstream response;
-	StreamCopier::copyStreamUnbuffered(m_connector->receive(), response);
-	m_connector->close();
+	Timestamp started;
+
+	while (started.elapsed() < m_timeout.totalMicroseconds()) {
+		StreamCopier::copyStreamUnbuffered(m_connector->receive(), response);
+
+		const string &content = response.str();
+		const size_t endTag = content.rfind("</reply>");
+
+		if (endTag == string::npos)
+			continue;
+
+		m_connector->close();
+
+		const size_t expectedEnd = endTag + string("</reply>").size();
+		if (expectedEnd < content.size()) {
+			logger().warning(
+				"unexpected content after </replay>: "
+				+ to_string(content.size() - expectedEnd),
+				__FILE__, __LINE__);
+
+			return response.str().substr(0, expectedEnd + 1);
+		}
+
+		break;
+	}
 
 	return response.str();
 }
@@ -169,4 +203,5 @@ void LegacyGatewayRPC::parseResponse(const string &response)
 BEEEON_OBJECT_BEGIN(BeeeOn, LegacyGatewayRPC)
 BEEEON_OBJECT_CASTABLE(GatewayRPC)
 BEEEON_OBJECT_REF("rpcConnector", &LegacyGatewayRPC::setRPCConnector)
+BEEEON_OBJECT_NUMBER("responseTimeout", &LegacyGatewayRPC::setResponseTimeout)
 BEEEON_OBJECT_END(BeeeOn, LegacyGatewayRPC)
