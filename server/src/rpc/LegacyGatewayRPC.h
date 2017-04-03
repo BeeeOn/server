@@ -26,6 +26,7 @@ public:
 	void pingGateway(const Gateway &gateway) override;
 
 private:
+	std::string receiveResponse();
 	void parseResponse(const std::string &response);
 
 	Poco::LogStream m_logStream;

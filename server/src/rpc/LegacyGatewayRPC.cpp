@@ -54,12 +54,7 @@ void LegacyGatewayRPC::sendListen(const Gateway &gateway)
 	}
 
 	m_logStream << endl;
-
-	stringstream response;
-	StreamCopier::copyStreamUnbuffered(m_connector->receive(), response);
-	m_connector->close();
-
-	parseResponse(response.str());
+	parseResponse(receiveResponse());
 }
 
 void LegacyGatewayRPC::unpairDevice(const Gateway &gateway, const Device &device)
@@ -96,12 +91,7 @@ void LegacyGatewayRPC::unpairDevice(const Gateway &gateway, const Device &device
 	}
 
 	m_logStream << endl;
-
-	stringstream response;
-	StreamCopier::copyStreamUnbuffered(m_connector->receive(), response);
-	m_connector->close();
-
-	parseResponse(response.str());
+	parseResponse(receiveResponse());
 }
 
 void LegacyGatewayRPC::pingGateway(const Gateway &gateway)
@@ -137,12 +127,16 @@ void LegacyGatewayRPC::pingGateway(const Gateway &gateway)
 	}
 
 	m_logStream << endl;
+	parseResponse(receiveResponse());
+}
 
+string LegacyGatewayRPC::receiveResponse()
+{
 	stringstream response;
 	StreamCopier::copyStreamUnbuffered(m_connector->receive(), response);
 	m_connector->close();
 
-	parseResponse(response.str());
+	return response.str();
 }
 
 void LegacyGatewayRPC::parseResponse(const string &response)
