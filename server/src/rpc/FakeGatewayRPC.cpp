@@ -23,6 +23,11 @@ public:
 	void unpairDevice(const Gateway &gateway,
 			const Device &device) override;
 	void pingGateway(const Gateway &gateway) override;
+	void updateActor(const Gateway &gateway,
+			const Device &device,
+			const ModuleInfo &module,
+			double value,
+			const Timespan &timeout) override;
 
 private:
 	DeviceDao::Ptr m_deviceDao;
@@ -67,6 +72,17 @@ void FakeGatewayRPC::unpairDevice(const Gateway &gateway,
 void FakeGatewayRPC::pingGateway(const Gateway &gateway)
 {
 	logger().warning("ping gateway",
+			__FILE__, __LINE__);
+}
+
+void FakeGatewayRPC::updateActor(
+		const Gateway &gateway,
+		const Device &device,
+		const ModuleInfo &module,
+		double value,
+		const Timespan &timeout)
+{
+	logger().warning("update actor",
 			__FILE__, __LINE__);
 }
 

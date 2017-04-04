@@ -141,6 +141,54 @@ void LegacyGatewayRPC::pingGateway(const Gateway &gateway)
 	parseResponse(receiveResponse());
 }
 
+void LegacyGatewayRPC::updateActor(
+		const Gateway &gateway,
+		const Device &device,
+		const ModuleInfo &module,
+		double value,
+		const Timespan &timeout)
+{
+	Mutex::ScopedLock guard(m_lock);
+	m_connector->open();
+
+	TeeOutputStream outStream(m_connector->send());
+	outStream.addStream(m_logStream);
+
+	XMLWriter xmlWriter(outStream, XMLWriter::CANONICAL_XML);
+	AttributesImpl attributes;
+
+	try {
+		xmlWriter.startDocument();
+		attributes.addAttribute("", "", "type", "", "ping");
+		xmlWriter.startElement("", "request", "", attributes);
+
+		attributes.clear();
+		attributes.addAttribute("", "", "id", "", gateway.id().toString());
+		xmlWriter.startElement("", "adapter", "", attributes);
+
+		attributes.clear();
+		attributes.addAttribute("", "", "type", "", module.id().toString());
+		xmlWriter.startElement("", "value", "", attributes);
+		xmlWriter.characters(to_string(value));
+		xmlWriter.endElement("", "value", "");
+
+		xmlWriter.endElement("", "adapter", "");
+
+		xmlWriter.endElement("", "request", "");
+		xmlWriter.endDocument();
+
+		m_connector->flush();
+	}
+	catch (const Exception &e) {
+		m_logStream << endl;
+		m_connector->close();
+		e.rethrow();
+	}
+
+	m_logStream << endl;
+	parseResponse(receiveResponse());
+}
+
 string LegacyGatewayRPC::receiveResponse()
 {
 	stringstream response;

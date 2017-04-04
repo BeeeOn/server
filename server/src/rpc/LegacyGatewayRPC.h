@@ -25,6 +25,11 @@ public:
 	void sendListen(const Gateway &gateway) override;
 	void unpairDevice(const Gateway &gateway, const Device &device) override;
 	void pingGateway(const Gateway &gateway) override;
+	void updateActor(const Gateway &gateway,
+			const Device &device,
+			const ModuleInfo &module,
+			double value,
+			const Poco::Timespan &timeout) override;
 
 	void setResponseTimeout(int ms);
 

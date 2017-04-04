@@ -2,9 +2,11 @@
 #define BEEEON_GATEWAY_RPC_H
 
 #include <Poco/Exception.h>
+#include <Poco/Timespan.h>
 
 #include "model/Gateway.h"
 #include "model/Device.h"
+#include "model/ModuleInfo.h"
 
 namespace BeeeOn {
 
@@ -31,6 +33,16 @@ public:
 	 * Send ping command to the gateway.
 	 */
 	virtual void pingGateway(const Gateway &gateway) = 0;
+
+	/**
+	 * Send update command for the given module.
+	 */
+	virtual void updateActor(
+			const Gateway &gateway,
+			const Device &device,
+			const ModuleInfo &module,
+			double value,
+			const Poco::Timespan &timeout) = 0;
 };
 
 class NullGatewayRPC : public GatewayRPC {
@@ -46,6 +58,15 @@ public:
 	}
 
 	void pingGateway(const Gateway &gateway)
+	{
+		throw Poco::NotImplementedException(__func__);
+	}
+
+	void updateActor(const Gateway &gateway,
+			const Device &device,
+			const ModuleInfo &module,
+			double value,
+			const Poco::Timespan &timeout)
 	{
 		throw Poco::NotImplementedException(__func__);
 	}
