@@ -7,7 +7,7 @@ def import_libs():
 import_libs()
 import xmlui
 
-xmlui_host = "localhost"
+xmlui_host = os.getenv("XMLUI_SERVER_HOST", "localhost")
 xmlui_port = int(os.getenv("XMLUI_SERVER_PORT", 8001))
 xmlui_session_per_user = 10
 
