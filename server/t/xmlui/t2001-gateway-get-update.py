@@ -14,7 +14,7 @@ class TestGatewayGetUpdate(unittest.TestCase):
 	Create a session and register a gateway.
 	"""
 	def setUp(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		response = c.request(config.PERMIT_LOGIN)
 		self.assertTrue(response.is_data())
@@ -37,7 +37,7 @@ class TestGatewayGetUpdate(unittest.TestCase):
 	Unregister the gateway and destroy the session.
 	"""
 	def tearDown(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		response = c.request(GatewayUnregister(
 			config.gateway_id,
@@ -52,7 +52,7 @@ class TestGatewayGetUpdate(unittest.TestCase):
 	Try to fetch a non-existing gateway.
 	"""
 	def test0_get_non_existing(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		response = c.request(GatewayGet(
 			"1464123670904752",
@@ -65,7 +65,7 @@ class TestGatewayGetUpdate(unittest.TestCase):
 	Request an existing gateway.
 	"""
 	def test1_get_existing(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		response = c.request(GatewayGet(
 			config.gateway_id,
@@ -93,7 +93,7 @@ class TestGatewayGetUpdate(unittest.TestCase):
 	Get the single implicit gateway by getall.
 	"""
 	def test2_get_all_single(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		response = c.request(GatewayGetAll(self.session))
 		self.assertTrue(response.is_data())
@@ -106,7 +106,7 @@ class TestGatewayGetUpdate(unittest.TestCase):
 	Register another gateway and get both by getall.
 	"""
 	def test3_get_all(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		response = c.request(GatewayRegister(
 			config.tmp_gateway_id,
@@ -151,7 +151,7 @@ class TestGatewayGetUpdate(unittest.TestCase):
 		self.assertTrue(response.is_ok())
 
 	def test4_test_update(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		response = c.request(GatewayUpdate(
 			config.gateway_id,

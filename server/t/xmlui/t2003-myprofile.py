@@ -13,7 +13,7 @@ class TestGetMyProfile(unittest.TestCase):
 	Create 2 sessions for 2 different users.
 	"""
 	def setUp(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		response = c.request(config.PERMIT_LOGIN)
 		self.assertTrue(response.is_data())
@@ -27,7 +27,7 @@ class TestGetMyProfile(unittest.TestCase):
 	Destroy the sessions.
 	"""
 	def tearDown(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		response = c.request(Logout(self.session2))
 		self.assertTrue(response.is_ok())
@@ -36,7 +36,7 @@ class TestGetMyProfile(unittest.TestCase):
 		self.assertTrue(response.is_ok())
 
 	def test0_getmyprofile_first(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		response = c.request(GetMyProfile(self.session))
 		self.assertTrue(response.is_data())
@@ -50,7 +50,7 @@ class TestGetMyProfile(unittest.TestCase):
 		self.assertEqual("unknown", response.root[0].get("gender"))
 
 	def test1_getmyprofile_second(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		response = c.request(GetMyProfile(self.session2))
 		self.assertTrue(response.is_data())

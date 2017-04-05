@@ -16,7 +16,7 @@ class TestRoleInviteRemove(unittest.TestCase):
 	empty gateway.
 	"""
 	def setUp(self):
-		self.conn = Connector(config.xmlui_host, config.xmlui_port)
+		self.conn = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		response = self.conn.request(config.PERMIT_LOGIN)
 		self.assertTrue(response.is_data())

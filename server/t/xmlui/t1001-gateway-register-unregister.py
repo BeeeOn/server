@@ -13,7 +13,7 @@ class TestGatewayRegisterUnregister(unittest.TestCase):
 	Create 2 sessions for 2 different users.
 	"""
 	def setUp(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		response = c.request(config.PERMIT_LOGIN)
 		self.assertTrue(response.is_data())
@@ -27,7 +27,7 @@ class TestGatewayRegisterUnregister(unittest.TestCase):
 	Destroy the sessions.
 	"""
 	def tearDown(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		response = c.request(Logout(self.session2))
 		self.assertTrue(response.is_ok())
@@ -40,7 +40,7 @@ class TestGatewayRegisterUnregister(unittest.TestCase):
 	gateway	1780053541714013.
 	"""
 	def test1_register_unregister(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 		response = c.request(GatewayRegister(
 			config.tmp_gateway_id,
 			self.session,
@@ -92,7 +92,7 @@ class TestGatewayRegisterUnregister(unittest.TestCase):
 	first.
 	"""
 	def test2_cannot_steal_gateway(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 		response = c.request(GatewayRegister(
 			config.tmp_gateway_id,
 			self.session,

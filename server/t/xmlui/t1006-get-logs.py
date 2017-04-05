@@ -16,7 +16,7 @@ class TestDeviceGetLog(unittest.TestCase):
 	Login and register gateway with sensors.
 	"""
 	def setUp(self):
-		self.conn = Connector(config.xmlui_host, config.xmlui_port)
+		self.conn = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		response = self.conn.request(config.PERMIT_LOGIN)
 		self.assertTrue(response.is_data())

@@ -14,7 +14,7 @@ class TestLocationAddDelete(unittest.TestCase):
 	Create a session and a gateway.
 	"""
 	def setUp(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		response = c.request(config.PERMIT_LOGIN)
 		self.assertTrue(response.is_data())
@@ -32,7 +32,7 @@ class TestLocationAddDelete(unittest.TestCase):
 	Destroy the session.
 	"""
 	def tearDown(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		response = c.request(GatewayUnregister(
 			config.tmp_gateway_id,
@@ -47,7 +47,7 @@ class TestLocationAddDelete(unittest.TestCase):
 	Add location to the prepared gateway and then delete it.
 	"""
 	def test1_add_delete(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		response = c.request(LocationAdd(
 			config.tmp_gateway_id,

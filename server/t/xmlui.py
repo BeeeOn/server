@@ -74,14 +74,12 @@ class Connector:
 		self.ssl = ssl
 
 	def request(self, request, maxlen = 1024):
-		sock = socket.socket()
-		sock.settimeout(10)
+		s = socket.socket()
+		s.settimeout(10)
 
 		if self.ssl:
 			import ssl
-			s = ssl.wrap_socket(sock)
-		else:
-			s = sock
+			s = ssl.wrap_socket(s)
 
 		s.connect((self.host, self.port))
 

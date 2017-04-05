@@ -18,7 +18,7 @@ class TestDeviceUpdateActivate(unittest.TestCase):
 	testing and store their EUIDs, and 1 inactive device.
 	"""
 	def setUp(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		response = c.request(config.PERMIT_LOGIN)
 		self.assertTrue(response.is_data())
@@ -56,7 +56,7 @@ class TestDeviceUpdateActivate(unittest.TestCase):
 	assumed on setUp. Unregister the gateway and destroy the session.
 	"""
 	def tearDown(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		response = c.request(DeviceGetAll(
 			config.gateway_id,
@@ -85,7 +85,7 @@ class TestDeviceUpdateActivate(unittest.TestCase):
 	Update a non-existing device should fail.
 	"""
 	def test1_update_non_existing(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		# assure such device does not exist
 		response = c.request(DeviceGet(
@@ -119,7 +119,7 @@ class TestDeviceUpdateActivate(unittest.TestCase):
 	Change name of an existing device and revert it back.
 	"""
 	def test2_update_existing(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		# assure such device exists
 		response = c.request(DeviceGet(
@@ -165,7 +165,7 @@ class TestDeviceUpdateActivate(unittest.TestCase):
 	Send update of a device to set a location.
 	"""
 	def test3_update_location(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		response = c.request(LocationAdd(
 			config.gateway_id,
@@ -216,7 +216,7 @@ class TestDeviceUpdateActivate(unittest.TestCase):
 	activated and renamed during this test.
 	"""
 	def test4_activate(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		response = c.request(DeviceGetNew(
 			config.gateway_id,

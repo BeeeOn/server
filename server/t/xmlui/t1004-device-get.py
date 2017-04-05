@@ -15,7 +15,7 @@ class TestDeviceGet(unittest.TestCase):
 	assigned devices.
 	"""
 	def setUp(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		response = c.request(config.PERMIT_LOGIN)
 		self.assertTrue(response.is_data())
@@ -33,7 +33,7 @@ class TestDeviceGet(unittest.TestCase):
 	Unregister the gateway and destroy the session.
 	"""
 	def tearDown(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		response = c.request(GatewayUnregister(
 			config.gateway_id,
@@ -149,7 +149,7 @@ class TestDeviceGet(unittest.TestCase):
 	be available at the time of running this test.
 	"""
 	def test1_getall(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		response = c.request(DeviceGetAll(
 			config.gateway_id,
@@ -178,7 +178,7 @@ class TestDeviceGet(unittest.TestCase):
 	inactive device available for testing.
 	"""
 	def test2_getnew(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		response = c.request(DeviceGetNew(
 			config.gateway_id,
@@ -198,7 +198,7 @@ class TestDeviceGet(unittest.TestCase):
 	all of them.
 	"""
 	def test3_get_by_invalid_euid(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		response = c.request(DeviceGet(
 			config.gateway_id,
@@ -222,7 +222,7 @@ class TestDeviceGet(unittest.TestCase):
 	Ask for a device with too big EUID (oveflows 64-bit unsigned integer).
 	"""
 	def test4_get_by_toobig_euid(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		response = c.request(DeviceGet(
 			config.gateway_id,
@@ -237,7 +237,7 @@ class TestDeviceGet(unittest.TestCase):
 	not fail and the actual processing of the request should occur).
 	"""
 	def test5_get_non_existing(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		response = c.request(DeviceGet(
 			config.gateway_id,
@@ -260,7 +260,7 @@ class TestDeviceGet(unittest.TestCase):
 	Test method get to obtain the inactive device named "Unknown".
 	"""
 	def test6_get_inactive(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		response = c.request(DeviceGetNew(
 			config.gateway_id,
@@ -291,7 +291,7 @@ class TestDeviceGet(unittest.TestCase):
 	in any order.
 	"""
 	def test7_get_selective(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		response = c.request(DeviceGetAll(
 			config.gateway_id,
@@ -327,7 +327,7 @@ class TestDeviceGet(unittest.TestCase):
 	some devices do not exist or are duplicated.
 	"""
 	def test8_get_mixed(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		response = c.request(DeviceGetAll(
 			config.gateway_id,
