@@ -14,7 +14,7 @@ class TestLocationGetUpdate(unittest.TestCase):
 	Create a session, register a gateway and add some locations.
 	"""
 	def setUp(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		response = c.request(config.PERMIT_LOGIN)
 		self.assertTrue(response.is_data())
@@ -44,7 +44,7 @@ class TestLocationGetUpdate(unittest.TestCase):
 	Remove the locations, unregister the gateway and destroy the session.
 	"""
 	def tearDown(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		for location in self.locations:
 			response = c.request(LocationDelete(
@@ -64,7 +64,7 @@ class TestLocationGetUpdate(unittest.TestCase):
 		self.assertTrue(response.is_ok())
 
 	def test1_getall(self):
-		c = Connector(config.xmlui_host, config.xmlui_port)
+		c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 		response = c.request(LocationGetAll(
 			config.tmp_gateway_id,

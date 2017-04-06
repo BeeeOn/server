@@ -68,14 +68,20 @@ class Response:
 		return str(xml.tostring(self.root), "utf-8")
 
 class Connector:
-	def __init__(self, host, port):
+	def __init__(self, host, port, ssl = False):
 		self.host = host
 		self.port = port
+		self.ssl = ssl
 
 	def request(self, request, maxlen = 1024):
 		s = socket.socket()
-		s.connect((self.host, self.port))
 		s.settimeout(10)
+
+		if self.ssl:
+			import ssl
+			s = ssl.wrap_socket(s)
+
+		s.connect((self.host, self.port))
 
 		if isinstance(request, Request):
 			root = request.xml()

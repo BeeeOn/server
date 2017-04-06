@@ -7,8 +7,14 @@ def import_libs():
 import_libs()
 import xmlui
 
-xmlui_host = "localhost"
+xmlui_host = os.getenv("XMLUI_SERVER_HOST", "localhost")
 xmlui_port = int(os.getenv("XMLUI_SERVER_PORT", 8001))
+
+if os.getenv("XMLUI_SERVER_SSL", 0) == 0:
+	xmlui_ssl = False
+else:
+	xmlui_ssl = True
+
 xmlui_session_per_user = 10
 
 gateway_id = "1284174504043136"

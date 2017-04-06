@@ -15,6 +15,11 @@ class TestXmlAttack(unittest.TestCase):
 	"""
 	def test1_refuse_doctype_xml(self):
 		s = socket.socket()
+
+		if config.xmlui_ssl:
+			import ssl
+			s = ssl.wrap_socket(s)
+
 		s.connect((config.xmlui_host, config.xmlui_port))
 		s.sendall(bytes("<!DOCTYPE s [ <!ENTITY n \"LLL\"> ]>" +
 				"<request version=\"1.0.0\" ns=\"&n;\" />",
@@ -27,6 +32,11 @@ class TestXmlAttack(unittest.TestCase):
 
 	def test2_too_long_message(self):
 		s = socket.socket()
+
+		if config.xmlui_ssl:
+			import ssl
+			s = ssl.wrap_socket(s)
+
 		s.connect((config.xmlui_host, config.xmlui_port))
 		s.send(bytes("<message>", "utf-8"))
 

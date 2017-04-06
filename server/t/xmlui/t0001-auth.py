@@ -10,7 +10,7 @@ import google
 from xmlui import Connector, Response, Login, Logout
 
 def login(login):
-	c = Connector(config.xmlui_host, config.xmlui_port)
+	c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 	response = c.request(login)
 
 	if response.is_error():
@@ -22,7 +22,7 @@ def login(login):
 	return True, response.sessionid()
 
 def logout(session):
-	c = Connector(config.xmlui_host, config.xmlui_port)
+	c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 	response = c.request(Logout(session))
 
 	if response.is_error():

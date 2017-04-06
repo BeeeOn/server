@@ -9,13 +9,18 @@ from xmlui import Connector, Request, Response, Login
 
 class TestIsUp(unittest.TestCase):
 	def setUp(self):
-		self.c = Connector(config.xmlui_host, config.xmlui_port)
+		self.c = Connector(config.xmlui_host, config.xmlui_port, config.xmlui_ssl)
 
 	"""
 	Ping the xmlui server port.
 	"""
 	def test1_port_is_open(self):
 		s = socket.socket()
+
+		if config.xmlui_ssl:
+			import ssl
+			s = ssl.wrap_socket(s)
+
 		s.connect((config.xmlui_host, config.xmlui_port))
 		s.close()
 
