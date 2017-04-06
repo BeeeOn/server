@@ -6,10 +6,10 @@
 			<sql>
 			INSERT INTO gateways (id, name, altitude, latitude, longitude)
 			VALUES
-				(181462068183316, 'Test Gateway 1', -1.5, 1.5, 11.5),
-				(140548523101825, 'Test Gateway 2', -2.5, 2.5, 22.5),
+				(181462068183316, 'Test Gateway 1', -1, 1.5, 11.5),
+				(140548523101825, 'Test Gateway 2', -2, 2.5, 22.5),
 				<!-- unused gateway Test Gateway 3 with no status -->
-				(144426044538750, 'Test Gateway 3', -3.5, 3.5, 33.5)</sql>
+				(144426044538750, 'Test Gateway 3', -3, 3.5, 33.5)</sql>
 
 			<sql>
 			INSERT INTO gateways_status (gateway_id, at, version, ip)
@@ -167,7 +167,7 @@
 			) VALUES (
 				<value name="id" type="uuid" />,
 				<value name="name" type="varchar" />,
-				<value name="altitude" type="double" />,
+				<value name="altitude" type="int" />,
 				<value name="latitude" type="double" />,
 				<value name="longitude" type="double" />
 			)</define>
@@ -176,7 +176,7 @@
 				<call-query>
 					<arg name="id">161762224815122</arg>
 					<arg name="name">'Test Gateway 10'</arg>
-					<arg name="altitude">54.5</arg>
+					<arg name="altitude">54</arg>
 					<arg name="latitude">45.5</arg>
 					<arg name="longitude">15.5</arg>
 				</call-query>
@@ -186,7 +186,7 @@
 					<row>
 						<value type="uuid" name="id">161762224815122</value>
 						<value name="name">Test Gateway 10</value>
-						<value name="altitude">54.5</value>
+						<value name="altitude">54</value>
 						<value name="latitude">45.5</value>
 						<value name="longitude">15.5</value>
 					</row>
@@ -201,7 +201,7 @@
 				<call-query>
 					<arg name="id">181462068183316</arg>
 					<arg name="name">'Test Gateway 10'</arg>
-					<arg name="altitude">0.63</arg>
+					<arg name="altitude">63</arg>
 					<arg name="latitude">0.71</arg>
 					<arg name="longitude">0.23</arg>
 				</call-query>
@@ -238,7 +238,7 @@
 				<expect>
 					<row>
 						<value name="name">Test Gateway 1</value>
-						<value name="altitude">-1.5</value>
+						<value name="altitude">-1</value>
 						<value name="latitude">1.5</value>
 						<value name="longitude">11.5</value>
 						<value name="last_changed">1483553208</value>
@@ -262,7 +262,7 @@
 				<expect>
 					<row>
 						<value name="name">Test Gateway 3</value>
-						<value name="altitude">-3.5</value>
+						<value name="altitude">-3</value>
 						<value name="latitude">3.5</value>
 						<value name="longitude">33.5</value>
 						<null name="last_changed" />
@@ -278,7 +278,7 @@
 		<define>
 		UPDATE gateways SET
 			name = <value name="name" type="varchar" />,
-			altitude = <value name="altitude" type="double" />,
+			altitude = <value name="altitude" type="int" />,
 			latitude = <value name="latitude" type="double" />,
 			longitude = <value name="longitude" type="double" />
 		WHERE
@@ -311,7 +311,7 @@
 		<test name="gateways of Pepa Goodman">
 			<setup name="another testing gateway Test Gateway 13">
 				<sql>INSERT INTO gateways (id, name, altitude, latitude, longitude)
-					VALUES (116084064167771, 'Test Gateway 13', 20.5, 10.1, 10.24)</sql>
+					VALUES (116084064167771, 'Test Gateway 13', 20, 10.1, 10.24)</sql>
 				<sql>INSERT INTO roles_in_gateway (id, gateway_id, identity_id, level, created) VALUES (
 						'60c4e3aa-25a7-448d-9a04-5f2194e4ed00',
 						116084064167771,
@@ -326,7 +326,7 @@
 					<row>
 						<value type="uuid" name="id">181462068183316</value>
 						<value name="name">Test Gateway 1</value>
-						<value name="altitude">-1.5</value>
+						<value name="altitude">-1</value>
 						<value name="latitude">1.5</value>
 						<value name="longitude">11.5</value>
 						<value name="last_changed">1483553208</value>
@@ -336,7 +336,7 @@
 					<row>
 						<value type="uuid" name="id">116084064167771</value>
 						<value name="name">Test Gateway 13</value>
-						<value name="altitude">20.5</value>
+						<value name="altitude">20</value>
 						<value name="latitude">10.1</value>
 						<value name="longitude">10.24</value>
 						<null name="last_changed" />
@@ -346,7 +346,7 @@
 					<row>
 						<value type="uuid" name="id">140548523101825</value>
 						<value name="name">Test Gateway 2</value>
-						<value name="altitude">-2.5</value>
+						<value name="altitude">-2</value>
 						<value name="latitude">2.5</value>
 						<value name="longitude">22.5</value>
 						<value name="last_changed">1483454300</value>
@@ -369,7 +369,7 @@
 					<row>
 						<value type="uuid" name="id">140548523101825</value>
 						<value name="name">Test Gateway 2</value>
-						<value name="altitude">-2.5</value>
+						<value name="altitude">-2</value>
 						<value name="latitude">2.5</value>
 						<value name="longitude">22.5</value>
 						<value name="last_changed">1483454300</value>
@@ -388,7 +388,7 @@
 					<row>
 						<value type="uuid" name="id">181462068183316</value>
 						<value name="name">Test Gateway 1</value>
-						<value name="altitude">-1.5</value>
+						<value name="altitude">-1</value>
 						<value name="latitude">1.5</value>
 						<value name="longitude">11.5</value>
 						<value name="last_changed">1483553208</value>
@@ -1525,7 +1525,7 @@
 					<row>
 						<value name="id">181462068183316</value>
 						<value name="name">Test Gateway 1</value>
-						<value name="altitude">-1.5</value>
+						<value name="altitude">-1</value>
 						<value name="latitude">1.5</value>
 						<value name="longitude">11.5</value>
 						<value name="last_changed">1483553208</value>
@@ -1535,7 +1535,7 @@
 					<row>
 						<value name="id">140548523101825</value>
 						<value name="name">Test Gateway 2</value>
-						<value name="altitude">-2.5</value>
+						<value name="altitude">-2</value>
 						<value name="latitude">2.5</value>
 						<value name="longitude">22.5</value>
 						<value name="last_changed">1483454300</value>
@@ -1586,7 +1586,7 @@
 				<expect>
 					<row>
 						<value name="name">Test Gateway 2</value>
-						<value name="altitude">-2.5</value>
+						<value name="altitude">-2</value>
 						<value name="latitude">2.5</value>
 						<value name="longitude">22.5</value>
 						<value name="last_changed">1483454300</value>
@@ -1609,7 +1609,7 @@
 				<expect>
 					<row>
 						<value name="name">Test Gateway 1</value>
-						<value name="altitude">-1.5</value>
+						<value name="altitude">-1</value>
 						<value name="latitude">1.5</value>
 						<value name="longitude">11.5</value>
 						<value name="last_changed">1483553208</value>
@@ -1664,7 +1664,7 @@
 					<row>
 						<value type="uuid" name="id">181462068183316</value>
 						<value name="name">Test Gateway 1</value>
-						<value name="altitude">-1.5</value>
+						<value name="altitude">-1</value>
 						<value name="latitude">1.5</value>
 						<value name="longitude">11.5</value>
 						<value name="last_changed">1483553208</value>

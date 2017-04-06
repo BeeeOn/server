@@ -4,7 +4,7 @@
 	<table name="gateways">
 		<column name="id" type="int64" not-null="yes" />
 		<column name="name" type="varchar" size="250" />
-		<column name="altitude" type="double" />
+		<column name="altitude" type="integer" />
 		<column name="latitude" type="double" />
 		<column name="longitude" type="double" />
 

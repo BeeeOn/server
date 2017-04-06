@@ -1,5 +1,6 @@
 #include <cmath>
 #include <Poco/Exception.h>
+#include <Poco/Nullable.h>
 #include <Poco/NumberParser.h>
 #include <Poco/DOM/Element.h>
 
@@ -19,6 +20,16 @@ static double attributeAsDouble(const Element &e, const std::string &name)
 	return NumberParser::parseFloat(e.getAttribute(name));
 }
 
+static Nullable<int> attributeNullable(const std::string &value)
+{
+	Nullable<int> result;
+
+	if (!value.empty())
+		result = NumberParser::parse(value);
+
+	return result;
+}
+
 void XmlGatewayDeserializer::partial(Gateway &gateway) const
 {
 	if (m_node.hasAttribute("name"))
@@ -31,7 +42,7 @@ void XmlGatewayDeserializer::partial(Gateway &gateway) const
 		gateway.setLatitude(attributeAsDouble(m_node, "latitude"));
 
 	if (m_node.hasAttribute("altitude"))
-		gateway.setAltitude(attributeAsDouble(m_node, "altitude"));
+		gateway.setAltitude(attributeNullable(m_node.getAttribute("altitude")));
 }
 
 void XmlGatewayDeserializer::full(Gateway &gateway) const
@@ -52,7 +63,7 @@ void XmlGatewayDeserializer::full(Gateway &gateway) const
 		gateway.setLatitude(attributeAsDouble(m_node, "latitude"));
 
 	if (!m_node.hasAttribute("altitude"))
-		gateway.setAltitude(NAN);
+		gateway.setAltitude(Nullable<int>());
 	else
-		gateway.setAltitude(attributeAsDouble(m_node, "altitude"));
+		gateway.setAltitude(attributeNullable(m_node.getAttribute("altitude")));
 }
