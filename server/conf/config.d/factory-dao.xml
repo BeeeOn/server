@@ -57,6 +57,8 @@
 				class="BeeeOn::PocoDaoManager">
 			<set name="connector" ref="${database.backend}Connector" />
 			<set name="connectionString" text="${database.connector}" />
+			<set name="connectionTimeout" number="${database.timeout}" />
+			<set name="features" text="${database.features}" />
 			<set name="maxSessions" number="${database.pool}" />
 			<set name="initScript" text="${database.init}" />
 		</instance>

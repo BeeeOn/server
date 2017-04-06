@@ -51,6 +51,14 @@ PocoDaoManager &PocoAbstractDao::manager()
 
 Poco::Data::Session PocoAbstractDao::session(bool transact)
 {
+	Session session(openSession(transact));
+	manager().customizeSession(session);
+
+	return session;
+}
+
+Poco::Data::Session PocoAbstractDao::openSession(bool transact)
+{
 	Transaction *t = m_transactionManager->current();
 
 	if (t == NULL) {
@@ -61,8 +69,15 @@ Poco::Data::Session PocoAbstractDao::session(bool transact)
 
 		return manager().pool().get();
 	}
-	else
-		return t->impl<PocoTransactionImpl>().session();
+	else {
+		try {
+			return t->impl<PocoTransactionImpl>().session();
+		}
+		catch (std::bad_cast &e) {
+			throw IllegalStateException(
+				"incompatible transaction, expected BeeeOn::PocoTransactionImpl");
+		}
+	}
 }
 
 void PocoAbstractDao::registerQuery(SQLQuery &query)
