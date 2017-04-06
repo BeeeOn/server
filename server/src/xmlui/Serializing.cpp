@@ -106,6 +106,8 @@ void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
 			device.available()? "available" : "unavailable");
 	attrs.addAttribute("", "time", "time", "",
 			to_string(device.lastSeen().timestamp().epochTime()));
+	attrs.addAttribute("", "involved", "involved", "",
+			to_string(device.firstSeen().timestamp().epochTime()));
 	attrs.addAttribute("", "init", "init", "",
 			device.active()? "1" : "0");
 
