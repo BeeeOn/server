@@ -133,6 +133,12 @@ void ProtocolV1MessageParser::GetDeviceID()
 	{
 		this->_log->WriteMessage(ERR,"Device id not parsable!");
 	}
+
+	if (!_device.attribute("name").empty())
+		this->_message->deviceName = _device.attribute("name").as_string();
+	else
+		this->_message->deviceName = "";
+
 	in_addr_t temp = htonl (_message->device_euid);
 	this->_log->WriteMessage(MSG,"Device id :" + std::to_string(this->_message->device_euid));
 	struct sockaddr_in antelope;
