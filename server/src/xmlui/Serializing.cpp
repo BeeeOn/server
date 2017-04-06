@@ -101,7 +101,12 @@ void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
 			device.location().id().toString());
 	attrs.addAttribute("", "gateid", "gateid", "",
 			device.gateway().id().toString());
-	attrs.addAttribute("", "name", "name", "", device.name());
+
+	if (device.name().empty())
+		attrs.addAttribute("", "name", "name", "", device.type()->displayName());
+	else
+		attrs.addAttribute("", "name", "name", "", device.name());
+
 	attrs.addAttribute("", "status", "status", "",
 			device.available()? "available" : "unavailable");
 	attrs.addAttribute("", "time", "time", "",
