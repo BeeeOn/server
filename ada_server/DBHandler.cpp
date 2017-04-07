@@ -138,11 +138,14 @@ bool DBHandler::UpdateGateway(tmessageV1_0 *message)
 bool DBHandler::InsertSenAct(tmessageV1_0 *message)
 {
 	this->_log->WriteMessage(TRACE,"Entering " + this->_Name + "::InsertSenAct");
+	std::string deviceName(message->deviceName.empty()? "" : message->deviceName);
+
 	try
 	{
 		std::string retRec;
 		*_sql << SQLQueries::InsertDevice,
 					use(message->device_type, "DEVICE_TYPE"),
+					use(deviceName, "DEVICE_NAME"),
 					use(message->device_euid,"DEVICE_EUID"),
 					use(message->timestamp,"TIMESTAMP"),
 					//use(message->battery,"battery"),
@@ -207,11 +210,14 @@ bool DBHandler::UpdateSenAct(tmessageV1_0 *message)
     			use(message->adapterINTid,"GATEWAY_ID")
           );
     devStl.execute(false);
+
+	std::string deviceName(message->deviceName.empty()? "" : message->deviceName);
     
     if (devStl.get_affected_rows()<=0)
 		{
   		*_sql << SQLQueries::InsertDevice,
   					use(message->device_type, "DEVICE_TYPE"),
+					use(deviceName, "DEVICE_NAME"),
   					use(message->device_euid,"DEVICE_EUID"),
   					use(message->timestamp,"TIMESTAMP"),
   					//use(message->battery,"battery"),

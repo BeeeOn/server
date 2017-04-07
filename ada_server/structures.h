@@ -198,6 +198,7 @@ typedef struct messageV1_0
 	unsigned int refresh;
 	std::string DeviceIDstr; /**< Device ID string*/
   	std::string DeviceIPstr; /**< Device IP string*/
+	std::string deviceName;
 	bool registerResult;
 	unsigned short int values_count; /**< count of values received*/
 	tvalue* values; /**< pointer to vales array*/
