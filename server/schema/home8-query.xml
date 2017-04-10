@@ -1993,6 +1993,193 @@
 		</test>
 	</query>
 
+	<query id="devices_properties.insert">
+		<define>
+		INSERT INTO devices_properties
+			(device_id, gateway_id, key, value, params)
+		VALUES (
+			<value name="device_id" type="int64" />,
+			<value name="gateway_id" type="int64" />,
+			<value name="key" type="smallint" />,
+			<value name="value" type="text" />,
+			<value name="params" type="text" />
+		)
+		</define>
+		<test name="duplicate keys are not allowed">
+			<setup name="prepare the value to duplicate">
+				<sql>
+				INSERT INTO devices_properties
+					(device_id, gateway_id, key, value, params)
+				VALUES
+					(2731287621, 181462068183316, 0, 'valueA', '')
+				</sql>
+			</setup>
+			<check>
+				<call-query>
+					<arg name="device_id">2731287621</arg>
+					<arg name="gateway_id">181462068183316</arg>
+					<arg name="key">0</arg>
+					<arg name="value">'valueB'</arg>
+					<null name="params" />
+				</call-query>
+				<expect>
+					<fail-insert table="devices_properties" conflict="key" />
+				</expect>
+			</check>
+			<teardown>
+				<sql>
+				DELETE FROM devices_properties WHERE
+					device_id = 2731287621
+					AND
+					gateway_id = 181462068183316
+					AND
+					key = 0
+				</sql>
+			</teardown>
+		</test>
+	</query>
+
+	<query id="devices_properties.update">
+		<define>
+		UPDATE devices_properties SET
+			value = <value name="value" type="text" />,
+			params = <value name="params" type="text" />
+		WHERE
+			device_id = <value name="device_id" type="int64" />
+			AND
+			gateway_id = <value name="gateway_id" type="int64" />
+			AND
+			key = <value name="key" type="smallint" />
+		</define>
+		<test name="update non-existing key fails">
+			<check>
+				<call-query>
+					<arg name="value">'data 2'</arg>
+					<null name="params" />
+					<arg name="device_id">2731287621</arg>
+					<arg name="gateway_id">181462068183316</arg>
+					<arg name="key">0</arg>
+				</call-query>
+				<expect>
+					<fail-update table="devices_properties" conflict="key" />
+				</expect>
+			</check>
+		</test>
+	</query>
+
+	<query id="devices_properties.remove">
+		<define>
+		DELETE FROM devices_properties
+		WHERE
+			device_id = <value name="device_id" type="int64" />
+			AND
+			gateway_id = <value name="gateway_id" type="int64" />
+			AND
+			key = <value name="key" type="smallint" />
+		</define>
+		<test name="remove temporary key succeeds">
+			<setup name="prepare the value to delete">
+				<sql>
+				INSERT INTO devices_properties
+					(device_id, gateway_id, key, value, params)
+				VALUES
+					(2731287621, 181462068183316, 0, 'valueA', '')
+				</sql>
+			</setup>
+			<check>
+				<call-query>
+					<arg name="device_id">2731287621</arg>
+					<arg name="gateway_id">181462068183316</arg>
+					<arg name="key">0</arg>
+				</call-query>
+				<sql>
+				SELECT device_id, gateway_id, key FROM devices_properties WHERE
+					device_id = 2731287621
+					AND
+					gateway_id = 181462068183316
+					AND
+					key = 0
+				</sql>
+				<expect />
+			</check>
+		</test>
+	</query>
+
+	<query id="devices_properties.fetch">
+		<define>
+		SELECT
+			value,
+			params
+		FROM devices_properties
+		WHERE
+			device_id = <value name="device_id" type="int64" />
+			AND
+			gateway_id = <value name="gateway_id" type="int64" />
+			AND
+			key = <value name="key" type="smallint" />
+		</define>
+		<test name="fetch properties of device 2731287621">
+			<setup name="create temporary properties">
+				<sql>
+				INSERT INTO devices_properties
+					(device_id, gateway_id, key, value, params)
+				VALUES
+					(2731287621, 181462068183316, 0, 'valueA', NULL),
+					(2731287621, 181462068183316, 1, 'valueB', NULL),
+					(2728733371, 181462068183316, 0, 'valueC', NULL)
+				</sql>
+			</setup>
+			<check name="only properties of device 2731287621 are retrieved">
+				<call-query>
+					<arg name="device_id">2731287621</arg>
+					<arg name="gateway_id">181462068183316</arg>
+					<arg name="key">0</arg>
+				</call-query>
+				<call-query>
+					<arg name="device_id">2731287621</arg>
+					<arg name="gateway_id">181462068183316</arg>
+					<arg name="key">1</arg>
+				</call-query>
+				<expect>
+					<row>
+						<value name="value">valueA</value>
+						<null name="params" />
+					</row>
+				</expect>
+				<expect>
+					<row>
+						<value name="value">valueB</value>
+						<null name="params" />
+					</row>
+				</expect>
+			</check>
+			<teardown name="remove all temporary properties">
+				<sql>
+				DELETE FROM devices_properties WHERE
+					(device_id = 2731287621 AND (key = 0 OR key = 1)
+						OR
+					(device_id = 2728733371 AND key = 0))
+					AND
+					gateway_id = 181462068183316
+				</sql>
+			</teardown>
+		</test>
+	</query>
+
+	<query id="devices_properties.fetch.by.device">
+		<define>
+		SELECT
+			key,
+			value,
+			params
+		FROM devices_properties
+		WHERE
+			device_id = <value name="device_id" type="int64" />
+			AND
+			gateway_id = <value name="gateway_id" type="int64" />
+		</define>
+	</query>
+
 	<query id="sensors_history.insert">
 		<define>
 		INSERT INTO sensors_history (gateway_id, device_id, module_id, at, value)
