@@ -39,6 +39,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/ModuleValue.cpp
 	${PROJECT_SOURCE_DIR}/dao/UserDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/DeviceDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/DevicePropertyDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/GatewayDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/LocationDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/IdentityDao.cpp
