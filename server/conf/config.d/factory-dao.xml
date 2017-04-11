@@ -48,6 +48,7 @@
 		<alias name="gatewayDao" ref="sqlGatewayDao" />
 		<alias name="locationDao" ref="sqlLocationDao" />
 		<alias name="deviceDao" ref="sqlDeviceDao" />
+		<alias name="devicePropertyDao" ref="sqlDevicePropertyDao" />
 		<alias name="identityDao" ref="sqlIdentityDao" />
 		<alias name="verifiedIdentityDao" ref="sqlVerifiedIdentityDao" />
 		<alias name="roleInGatewayDao" ref="sqlRoleInGatewayDao" />
@@ -117,6 +118,12 @@
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="deviceInfoProvider" ref="deviceInfoProvider" />
+			<set name="sqlLoader" ref="queries" />
+		</instance>
+
+		<instance name="sqlDevicePropertyDao" class="BeeeOn::PocoSQLDevicePropertyDao">
+			<set name="daoManager" ref="pocoDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
 			<set name="sqlLoader" ref="queries" />
 		</instance>
 
