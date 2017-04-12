@@ -474,3 +474,65 @@ class DeviceParameterGet(Request):
 		device.set("parameterkey", self.key)
 
 		return request
+
+class DeviceParameterWrite(Request):
+	def __init__(self, type, gateway, device, key, value, sessionid, **kwargs):
+		Request.__init__(self, ns = "devices",
+			type = type, sessionid = sessionid)
+		self.gateway = gateway
+		self.device = device
+		self.key = key
+		self.value = value
+
+	def xml(self):
+		request = Request.xml(self)
+		request.set("gateid", self.gateway)
+		device = xml.SubElement(request, "device")
+		device.set("euid", self.device)
+		device.set("parameterkey", self.key)
+		device.set("parametervalue", self.value)
+
+		return request
+
+class DeviceParameterCreate(DeviceParameterWrite):
+	def __init__(self, gateway, device, key, value, sessionid, **kwargs):
+		DeviceParameterWrite.__init__(
+			self,
+			"createparameter",
+			gateway,
+			device,
+			key,
+			value,
+			sessionid,
+			**kwargs
+		)
+
+class DeviceParameterUpdate(DeviceParameterWrite):
+	def __init__(self, gateway, device, key, value, sessionid, **kwargs):
+		DeviceParameterWrite.__init__(
+			self,
+			"updateparameter",
+			gateway,
+			device,
+			key,
+			value,
+			sessionid,
+			**kwargs
+		)
+
+class DeviceParameterDelete(Request):
+	def __init__(self, gateway, device, key, sessionid, **kwargs):
+		Request.__init__(self, ns = "devices",
+			type = "deleteparameter", sessionid = sessionid)
+		self.gateway = gateway
+		self.device = device
+		self.key = key
+
+	def xml(self):
+		request = Request.xml(self)
+		request.set("gateid", self.gateway)
+		device = xml.SubElement(request, "device")
+		device.set("euid", self.device)
+		device.set("parameterkey", self.key)
+
+		return request
