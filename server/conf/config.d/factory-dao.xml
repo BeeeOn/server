@@ -11,6 +11,11 @@
 			<set name="devicesFile" text="${spec.devices.xml}" />
 		</instance>
 
+		<instance name="devicePropertiesCryptoConfig" class="BeeeOn::CryptoConfig">
+			<set name="algorithm" text="${secure.device_properties.algorithm}" />
+			<set name="passphrase" text="${secure.device_properties.passphrase}" />
+		</instance>
+
 		<instance name="pocoRandomProvider"
 				class="BeeeOn::PocoRandomProvider" />
 
