@@ -5,6 +5,9 @@
 #include "xmlui/AbstractXmlHandler.h"
 
 namespace BeeeOn {
+
+class CryptoConfig;
+
 namespace XmlUI {
 
 class DeviceXmlHandler : public AbstractXmlHandler {
@@ -12,9 +15,18 @@ public:
 	DeviceXmlHandler(const Poco::Net::StreamSocket &socket,
 			const Poco::AutoPtr<Poco::XML::Document> input,
 			BeeeOn::ExpirableSession::Ptr session,
-			BeeeOn::DeviceService &deviceService);
+			BeeeOn::DeviceService &deviceService,
+			BeeeOn::CryptoConfig *config);
 	void handleInputImpl() override;
 
+	void handleCreateParameter(const std::string &gateid,
+			Poco::XML::Element *deviceNode);
+	void handleUpdateParameter(const std::string &gateid,
+			Poco::XML::Element *deviceNode);
+	void handleDeleteParameter(const std::string &gateid,
+			Poco::XML::Element *deviceNode);
+	void handleGetParameter(const std::string &gateid,
+			Poco::XML::Element *deviceNode);
 	void handleUnregister(const std::string &gateid,
 			Poco::XML::Element *deviceNode);
 	void handleUpdate(const std::string &gateid,
@@ -25,6 +37,7 @@ public:
 
 private:
 	DeviceService &m_deviceService;
+	CryptoConfig *m_config;
 };
 
 class DeviceXmlHandlerResolver : public AbstractXmlHandlerResolver {
@@ -46,7 +59,13 @@ public:
 		m_sessionManager = manager;
 	}
 
+	void setCryptoConfig(CryptoConfig *config)
+	{
+		m_config = config;
+	}
+
 private:
+	BeeeOn::CryptoConfig *m_config;
 	BeeeOn::DeviceService *m_deviceService;
 	BeeeOn::SessionManager *m_sessionManager;
 };

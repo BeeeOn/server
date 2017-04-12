@@ -5,8 +5,11 @@
 #include "di/Injectable.h"
 #include "xmlui/DeviceXmlHandler.h"
 #include "xmlui/XmlDeviceDeserializer.h"
+#include "xmlui/XmlDevicePropertyDeserializer.h"
 #include "xmlui/Serializing.h"
 #include "model/Device.h"
+#include "model/DeviceProperty.h"
+#include "util/CryptoConfig.h"
 
 using namespace std;
 using namespace Poco;
@@ -18,9 +21,11 @@ using namespace BeeeOn::XmlUI;
 DeviceXmlHandler::DeviceXmlHandler(const StreamSocket &socket,
 		const AutoPtr<Document> input,
 		ExpirableSession::Ptr session,
-		DeviceService &deviceService):
+		DeviceService &deviceService,
+		CryptoConfig *config):
 	AbstractXmlHandler("devices", socket, input, session),
-	m_deviceService(deviceService)
+	m_deviceService(deviceService),
+	m_config(config)
 {
 }
 
@@ -58,6 +63,14 @@ void DeviceXmlHandler::handleInputImpl()
 		handleUnregister(gateid, deviceNode);
 	else if (type == "update")
 		handleUpdate(gateid, deviceNode);
+	else if (type == "createparameter")
+		handleCreateParameter(gateid, deviceNode);
+	else if (type == "updateparameter")
+		handleUpdateParameter(gateid, deviceNode);
+	else if (type == "deleteparameter")
+		handleDeleteParameter(gateid, deviceNode);
+	else if (type == "getparameter")
+		handleGetParameter(gateid, deviceNode);
 	else
 		resultInvalidInput();
 }
@@ -161,6 +174,107 @@ void DeviceXmlHandler::handleGetNew(const string &gateid)
 	resultDataEnd();
 }
 
+void DeviceXmlHandler::handleCreateParameter(const string &gateid,
+		Element *deviceNode)
+{
+	Gateway gateway(GatewayID::parse(gateid));
+	Device device(DeviceID::parse(deviceNode->getAttribute("euid")));
+	device.setGateway(gateway);
+
+	XmlDevicePropertyDeserializer deserializer(*deviceNode, m_config);
+	DeviceProperty property;
+	property.setKey(DevicePropertyKey::parse(
+			deviceNode->getAttribute("parameterkey")));
+
+	RelationWithData<DeviceProperty, Device> input(property, deserializer, device);
+	User user(session()->userID());
+	input.setUser(user);
+
+	if (m_deviceService.createProperty(input))
+		resultSuccess();
+	else
+		resultUnexpected();
+}
+
+void DeviceXmlHandler::handleUpdateParameter(const string &gateid,
+		Element *deviceNode)
+{
+	Gateway gateway(GatewayID::parse(gateid));
+	Device device(DeviceID::parse(deviceNode->getAttribute("euid")));
+	device.setGateway(gateway);
+
+	XmlDevicePropertyDeserializer deserializer(*deviceNode, m_config);
+	DeviceProperty property;
+	property.setKey(DevicePropertyKey::parse(
+			deviceNode->getAttribute("parameterkey")));
+
+	RelationWithData<DeviceProperty, Device> input(property, deserializer, device);
+	User user(session()->userID());
+	input.setUser(user);
+
+	if (m_deviceService.updateProperty(input))
+		resultSuccess();
+	else
+		resultUnexpected();
+}
+
+void DeviceXmlHandler::handleDeleteParameter(const string &gateid,
+		Element *deviceNode)
+{
+	Gateway gateway(GatewayID::parse(gateid));
+	Device device(DeviceID::parse(deviceNode->getAttribute("euid")));
+	device.setGateway(gateway);
+
+	DeviceProperty property;
+	property.setKey(DevicePropertyKey::parse(
+			deviceNode->getAttribute("parameterkey")));
+
+	switch (property.key().raw()) {
+	case DevicePropertyKey::KEY_IP_ADDRESS:
+	case DevicePropertyKey::KEY_PASSWORD:
+		break;
+	default:
+		resultInvalidInput();
+		return;
+	}
+
+	Relation<const DeviceProperty, Device> input(property, device);
+	User user(session()->userID());
+	input.setUser(user);
+
+	if (m_deviceService.removeProperty(input))
+		resultSuccess();
+	else
+		resultNotFound();
+}
+
+void DeviceXmlHandler::handleGetParameter(const string &gateid,
+		Element *deviceNode)
+{
+	Gateway gateway(GatewayID::parse(gateid));
+	Device device(DeviceID::parse(deviceNode->getAttribute("euid")));
+	device.setGateway(gateway);
+
+	DeviceProperty property;
+	property.setKey(DevicePropertyKey::parse(
+			deviceNode->getAttribute("parameterkey")));
+
+	Relation<DeviceProperty, Device> input(property, device);
+	User user(session()->userID());
+	input.setUser(user);
+
+	if (!m_deviceService.findProperty(input)) {
+		resultNotFound();
+		return;
+	}
+
+	const DecryptedDeviceProperty decrypted(property, m_config);
+
+	resultDataStart();
+	serialize(m_output, decrypted, device);
+	resultDataEnd();
+}
+
 DeviceXmlHandlerResolver::DeviceXmlHandlerResolver():
 	AbstractXmlHandlerResolver("devices")
 {
@@ -184,6 +298,14 @@ bool DeviceXmlHandlerResolver::canHandle(
 		return true;
 	if (type == "unregister")
 		return true;
+	if (type == "createparameter")
+		return true;
+	if (type == "updateparameter")
+		return true;
+	if (type == "deleteparameter")
+		return true;
+	if (type == "getparameter")
+		return true;
 
 	return false;
 }
@@ -195,7 +317,7 @@ XmlRequestHandler *DeviceXmlHandlerResolver::createHandler(
 	ExpirableSession::Ptr session = lookupSession(
 			*m_sessionManager, input);
 	return new DeviceXmlHandler(
-			socket, input, session, *m_deviceService);
+			socket, input, session, *m_deviceService, m_config);
 }
 
 BEEEON_OBJECT_BEGIN(BeeeOn, XmlUI, DeviceXmlHandlerResolver)
@@ -203,4 +325,5 @@ BEEEON_OBJECT_CASTABLE(AbstractXmlHandlerResolver)
 BEEEON_OBJECT_CASTABLE(XmlRequestHandlerResolver)
 BEEEON_OBJECT_REF("deviceService", &DeviceXmlHandlerResolver::setDeviceService)
 BEEEON_OBJECT_REF("sessionManager", &DeviceXmlHandlerResolver::setSessionManager)
+BEEEON_OBJECT_REF("cryptoConfig", &DeviceXmlHandlerResolver::setCryptoConfig)
 BEEEON_OBJECT_END(BeeeOn, XmlUI, DeviceXmlHandlerResolver)
