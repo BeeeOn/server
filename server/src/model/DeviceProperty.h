@@ -84,6 +84,22 @@ private:
 	CryptoParams m_params;
 };
 
+class DecryptedDeviceProperty {
+public:
+	DecryptedDeviceProperty(
+		const DeviceProperty &property,
+		const CryptoConfig *config);
+
+	const DevicePropertyKey &key() const;
+	Poco::Net::IPAddress asIPAddress() const;
+	std::string asPassword(bool placeholder = true) const;
+	std::string asFirmware() const;
+
+private:
+	const DeviceProperty &m_property;
+	Poco::Crypto::Cipher *m_cipher;
+};
+
 }
 
 #endif

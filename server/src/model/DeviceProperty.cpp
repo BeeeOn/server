@@ -1,5 +1,7 @@
 #include <Poco/Exception.h>
 #include <Poco/Crypto/Cipher.h>
+#include <Poco/Crypto/CipherFactory.h>
+#include <Poco/Crypto/CipherKey.h>
 
 #include "model/DeviceProperty.h"
 #include "util/CryptoConfig.h"
@@ -112,4 +114,48 @@ void DeviceProperty::setParams(const CryptoParams &params)
 CryptoParams DeviceProperty::params() const
 {
 	return m_params;
+}
+
+DecryptedDeviceProperty::DecryptedDeviceProperty(
+		const DeviceProperty &property,
+		const CryptoConfig *config):
+	m_property(property),
+	m_cipher(NULL)
+{
+	CipherFactory &factory = CipherFactory::defaultFactory();
+
+	switch (property.key().raw()) {
+	case DevicePropertyKey::KEY_IP_ADDRESS:
+	case DevicePropertyKey::KEY_PASSWORD:
+		if (config == NULL)
+			throw IllegalStateException("no crypto configuration provided");
+
+		m_cipher = factory.createCipher(config->createKey(property.params()));
+
+	default:
+		break;
+	}
+}
+
+const DevicePropertyKey &DecryptedDeviceProperty::key() const
+{
+	return m_property.key();
+}
+
+IPAddress DecryptedDeviceProperty::asIPAddress() const
+{
+	return m_property.asIPAddress(m_cipher);
+}
+
+string DecryptedDeviceProperty::asPassword(bool placeholder) const
+{
+	if (placeholder)
+		return "*****";
+	else
+		return m_property.asPassword(m_cipher);
+}
+
+string DecryptedDeviceProperty::asFirmware() const
+{
+	return m_property.asFirmware();
 }
