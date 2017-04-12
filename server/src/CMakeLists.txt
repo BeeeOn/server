@@ -118,6 +118,7 @@ file(GLOB XMLUI_SOURCES
 	xmlui/XmlGatewayDeserializer.cpp
 	xmlui/XmlLocationDeserializer.cpp
 	xmlui/XmlDeviceDeserializer.cpp
+	xmlui/XmlDevicePropertyDeserializer.cpp
 	xmlui/XmlRoleInGatewayDeserializer.cpp
 	xmlui/GatewayXmlHandler.cpp
 	xmlui/LocationXmlHandler.cpp
