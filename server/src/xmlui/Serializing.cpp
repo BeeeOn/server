@@ -8,6 +8,7 @@
 #include "model/Location.h"
 #include "model/Device.h"
 #include "model/DeviceInfo.h"
+#include "model/DeviceProperty.h"
 #include "model/RoleInGateway.h"
 #include "model/LegacyRoleInGateway.h"
 #include "model/VerifiedIdentity.h"
@@ -159,6 +160,40 @@ void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
 {
 	for (auto device : devices)
 		serialize(output, device);
+}
+
+void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
+		const DecryptedDeviceProperty &property,
+		const Device &device)
+{
+	AttributesImpl attrs;
+
+	attrs.addAttribute("", "euid", "euid", "",
+			device.id().toString());
+	attrs.addAttribute("", "gateid", "gateid",  "",
+			device.gateway().id().toString());
+	attrs.addAttribute("", "parameterkey", "parameterkey",  "",
+			property.key().toString());
+
+	string value;
+
+	switch (property.key().raw()) {
+	case DevicePropertyKey::KEY_IP_ADDRESS:
+		value = property.asIPAddress().toString();
+		break;
+	case DevicePropertyKey::KEY_FIRMWARE:
+		value = property.asFirmware();
+		break;
+	case DevicePropertyKey::KEY_PASSWORD:
+		value = property.asPassword();
+		break;
+	default:
+		break;
+	}
+
+	attrs.addAttribute("", "parametervalue", "parametervalue",  "", value);
+
+	output.emptyElement("", "device", "device", attrs);
 }
 
 static void prepare(AttributesImpl &attrs, const RoleInGateway &role)
