@@ -457,3 +457,20 @@ class RoleUpdateAccess(Request):
 		user.set("permission", self.level)
 
 		return request
+
+class DeviceParameterGet(Request):
+	def __init__(self, gateway, device, key, sessionid, **kwargs):
+		Request.__init__(self, ns = "devices",
+			type = "getparameter", sessionid = sessionid)
+		self.gateway = gateway
+		self.device = device
+		self.key = key
+
+	def xml(self):
+		request = Request.xml(self)
+		request.set("gateid", self.gateway)
+		device = xml.SubElement(request, "device")
+		device.set("euid", self.device)
+		device.set("parameterkey", self.key)
+
+		return request
