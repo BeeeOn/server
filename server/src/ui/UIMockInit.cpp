@@ -3,12 +3,19 @@
 #include <Poco/Timespan.h>
 #include <Poco/Timestamp.h>
 #include <Poco/Exception.h>
+#include <Poco/Net/IPAddress.h>
+#include <Poco/Crypto/Cipher.h>
+#include <Poco/Crypto/CipherFactory.h>
+#include <Poco/Crypto/CipherKey.h>
 
 #include "di/Injectable.h"
 #include "model/DeviceInfo.h"
+#include "model/DeviceProperty.h"
 #include "model/ModuleValue.h"
 #include "dao/DeviceDao.h"
+#include "dao/DevicePropertyDao.h"
 #include "ui/UIMockInit.h"
+#include "util/CryptoConfig.h"
 #include "util/ValueGenerator.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, UIMockInit)
@@ -16,16 +23,20 @@ BEEEON_OBJECT_REF("userDao", &UIMockInit::setUserDao)
 BEEEON_OBJECT_REF("gatewayDao", &UIMockInit::setGatewayDao)
 BEEEON_OBJECT_REF("locationDao", &UIMockInit::setLocationDao)
 BEEEON_OBJECT_REF("deviceDao", &UIMockInit::setDeviceDao)
+BEEEON_OBJECT_REF("devicePropertyDao", &UIMockInit::setDevicePropertyDao)
 BEEEON_OBJECT_REF("identityDao", &UIMockInit::setIdentityDao)
 BEEEON_OBJECT_REF("verifiedIdentityDao", &UIMockInit::setVerifiedIdentityDao)
 BEEEON_OBJECT_REF("deviceInfoProvider", &UIMockInit::setDeviceInfoProvider)
 BEEEON_OBJECT_REF("sensorHistoryDao", &UIMockInit::setSensorHistoryDao)
 BEEEON_OBJECT_REF("transactionManager", &Transactional::setTransactionManager)
+BEEEON_OBJECT_REF("cryptoConfig", &UIMockInit::setCryptoConfig)
 BEEEON_OBJECT_HOOK("done", &UIMockInit::initAll)
 BEEEON_OBJECT_END(BeeeOn, UIMockInit)
 
 using namespace std;
 using namespace Poco;
+using namespace Poco::Crypto;
+using namespace Poco::Net;
 using namespace BeeeOn;
 
 void UIMockInit::initUsers()
@@ -120,6 +131,8 @@ void UIMockInit::initLocations(vector<Location> &locations)
 
 void UIMockInit::initDevices(const vector<Location> &locations)
 {
+	CipherFactory &factory = CipherFactory::defaultFactory();
+
 	Gateway gateway(GatewayID::parse("1284174504043136"));
 
 	Device temperature(DeviceID::parse("0x4135d00019f5234e"));
@@ -136,6 +149,12 @@ void UIMockInit::initDevices(const vector<Location> &locations)
 
 	m_deviceDao->insert(temperature, gateway);
 
+	DeviceProperty temperatureFirmware;
+	temperatureFirmware.setKey(DevicePropertyKey::KEY_FIRMWARE);
+	temperatureFirmware.setFirmware("v1.0-6453");
+
+	m_devicePropertyDao->insert(temperatureFirmware, temperature);
+
 	Device humidity(DeviceID::parse("0x427e0f7f0302324d"));
 	humidity.setName("Humidity");
 	humidity.setGateway(gateway);
@@ -150,6 +169,12 @@ void UIMockInit::initDevices(const vector<Location> &locations)
 
 	m_deviceDao->insert(humidity, gateway);
 
+	DeviceProperty humidityFirmware;
+	humidityFirmware.setKey(DevicePropertyKey::KEY_FIRMWARE);
+	humidityFirmware.setFirmware("000-111");
+
+	m_devicePropertyDao->insert(humidityFirmware, humidity);
+
 	Device multi(DeviceID::parse("0x432d27aa5e94ecfd"));
 	multi.setName("Multi-sensor");
 	multi.setGateway(gateway);
@@ -163,6 +188,28 @@ void UIMockInit::initDevices(const vector<Location> &locations)
 	multi.setActiveSince(DateTime(2016, 9, 10, 11, 30, 1));
 
 	m_deviceDao->insert(multi, gateway);
+
+	DeviceProperty multiIPAddress;
+	multiIPAddress.setKey(DevicePropertyKey::KEY_IP_ADDRESS);
+	multiIPAddress.setParams(m_cryptoConfig->deriveParams());
+	multiIPAddress.setIPAddress(IPAddress("10.0.0.1"),
+			factory.createCipher(
+				m_cryptoConfig->createKey(multiIPAddress.params())
+			)
+	);
+
+	m_devicePropertyDao->insert(multiIPAddress, multi);
+
+	DeviceProperty multiPassword;
+	multiPassword.setKey(DevicePropertyKey::KEY_PASSWORD);
+	multiPassword.setParams(m_cryptoConfig->deriveParams());
+	multiPassword.setPassword("some secret password",
+			factory.createCipher(
+				m_cryptoConfig->createKey(multiIPAddress.params())
+			)
+	);
+
+	m_devicePropertyDao->insert(multiPassword, multi);
 
 	Device unknown(DeviceID::parse("0x4471959aad24618e"));
 	unknown.setName("Unknown");
