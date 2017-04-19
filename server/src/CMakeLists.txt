@@ -168,6 +168,7 @@ if (APPLE)
 	target_link_libraries(beeeon-server
 		-Wl,-all_load
 		BeeeOnBase
+		BeeeOnWork
 		BeeeOnServer
 		${LIBS}
 	)
@@ -177,6 +178,7 @@ else()
 	target_link_libraries(beeeon-server
 		-Wl,--whole-archive
 		BeeeOnBase
+		BeeeOnWork
 		BeeeOnServer
 		-Wl,--no-whole-archive
 		${LIBS}
