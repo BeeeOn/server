@@ -1,0 +1,11 @@
+<system>
+	<factory>
+		<instance name="uiRunnerFactory" class="BeeeOn::TransactionalWorkRunnerFactory">
+			<set name="transactionManager" ref="transactionManager" />
+		</instance>
+
+		<instance name="uiWorkScheduler" class="BeeeOn::BasicProcessor">
+			<set name="runnerFactory" ref="uiRunnerFactory" />
+		</instance>
+	</factory>
+</system>

@@ -49,6 +49,7 @@ if (APPLE)
 		-Wl,-all_load
 		BeeeOnBaseTest
 		BeeeOnBase
+		BeeeOnWork
 		BeeeOnServer
 		${LIBS}
 	)
@@ -59,6 +60,7 @@ else()
 		-Wl,--whole-archive
 		BeeeOnBaseTest
 		BeeeOnBase
+		BeeeOnWork
 		BeeeOnServer
 		-Wl,--no-whole-archive
 		${LIBS}

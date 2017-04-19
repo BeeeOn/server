@@ -2,6 +2,7 @@
 	<factory>
 		<instance name="xmlui" class="BeeeOn::LoopRunner">
 			<add name="loops" ref="xmluiServer" />
+			<add name="runnables" ref="uiWorkScheduler" />
 		</instance>
 
 		<instance name="xmluiServer" class="BeeeOn::SocketServer">

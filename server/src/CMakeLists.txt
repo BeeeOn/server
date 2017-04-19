@@ -103,6 +103,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/rest/RestLinker.cpp
 	${PROJECT_SOURCE_DIR}/rest/RestRouter.cpp
 	${PROJECT_SOURCE_DIR}/rest/UriPattern.cpp
+	${PROJECT_SOURCE_DIR}/work/TransactionalWorkRunner.cpp
 )
 
 file(GLOB XMLUI_SOURCES
@@ -168,6 +169,7 @@ if (APPLE)
 	target_link_libraries(beeeon-server
 		-Wl,-all_load
 		BeeeOnBase
+		BeeeOnWork
 		BeeeOnServer
 		${LIBS}
 	)
@@ -177,6 +179,7 @@ else()
 	target_link_libraries(beeeon-server
 		-Wl,--whole-archive
 		BeeeOnBase
+		BeeeOnWork
 		BeeeOnServer
 		-Wl,--no-whole-archive
 		${LIBS}
