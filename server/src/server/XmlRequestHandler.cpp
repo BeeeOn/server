@@ -34,6 +34,10 @@ void XmlRequestHandler::run()
 {
 	_TRACE_METHOD(logger());
 
+	Thread *current = Thread::current();
+	if (current != NULL)
+		current->setName("XmlRequestHandler");
+
 	try {
 		m_output.startDocument();
 		handleInput();
