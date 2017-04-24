@@ -217,7 +217,7 @@ void UIMockInit::initDevices(const vector<Location> &locations)
 	unknown.setType(m_infoProvider->findById(4));
 	unknown.setRefresh(20);
 	unknown.setFirstSeen(DateTime() - Timespan(100, 0));
-	unknown.setLastSeen(DateTime());
+	unknown.setLastSeen(DateTime() - Timespan(7, 0));
 
 	m_deviceDao->insert(unknown, gateway);
 }
