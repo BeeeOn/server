@@ -27,7 +27,7 @@ void JSONGatewayDeserializer::partial(Gateway &gateway) const
 		gateway.setLatitude(JsonUtil::extract<double>(m_object, "latitude"));
 
 	if (m_object->has("altitude"))
-		gateway.setAltitude(JsonUtil::extract<double>(m_object, "altitude"));
+		gateway.setAltitude(JsonUtil::extract<int>(m_object, "altitude"));
 }
 
 void JSONGatewayDeserializer::full(Gateway &gateway) const
@@ -48,7 +48,7 @@ void JSONGatewayDeserializer::full(Gateway &gateway) const
 		gateway.setLatitude(JsonUtil::extract<double>(m_object, "latitude"));
 
 	if (!m_object->has("altitude"))
-		gateway.setAltitude(NAN);
+		gateway.setAltitude(0);
 	else
-		gateway.setAltitude(JsonUtil::extract<double>(m_object, "altitude"));
+		gateway.setAltitude(JsonUtil::extract<int>(m_object, "altitude"));
 }

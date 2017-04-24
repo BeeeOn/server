@@ -50,7 +50,12 @@ void BeeeOn::RestUI::serialize(PrintHandler &output, const Gateway &gateway)
 	output.key("name");
 	output.value(gateway.name());
 	output.key("altitude");
-	valueDouble(output, gateway.altitude());
+
+	if (gateway.altitude().isNull())
+		output.value(gateway.altitude().value());
+	else
+		output.null();
+
 	output.key("latitude");
 	valueDouble(output, gateway.latitude());
 	output.key("longitude");

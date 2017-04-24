@@ -31,7 +31,7 @@ void JSONGatewayDeserializer::partial(Gateway &gateway) const
 		gateway.setName(m_data->getValue<string>("name"));
 
 	if (m_data->has("altitude"))
-		gateway.setAltitude(m_data->getValue<double>("altitude"));
+		gateway.setAltitude(m_data->getValue<int>("altitude"));
 
 	if (m_data->has("latitude"))
 		gateway.setLatitude(m_data->getValue<double>("latitude"));
@@ -50,7 +50,7 @@ void JSONGatewayDeserializer::full(Gateway &gateway) const
 	if (!m_data->has("altitude"))
 		throw InvalidArgumentException("missing altitude for gateway");
 
-	gateway.setAltitude(m_data->getValue<double>("altitude"));
+	gateway.setAltitude(m_data->getValue<int>("altitude"));
 
 	if (!m_data->has("latitude"))
 		throw InvalidArgumentException("missing latitude for gateway");

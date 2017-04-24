@@ -79,7 +79,7 @@ class TestGatewayGetUpdate(unittest.TestCase):
 				response.root[0].get("id"))
 		self.assertEqual("nan", response.root[0].get("latitude"))
 		self.assertEqual("nan", response.root[0].get("longitude"))
-		self.assertEqual("nan", response.root[0].get("altitude"))
+		self.assertEqual("", response.root[0].get("altitude"))
 		self.assertEqual("3", response.root[0].get("devices"))
 		self.assertEqual("1", response.root[0].get("users"))
 		self.assertEqual("", response.root[0].get("version"))

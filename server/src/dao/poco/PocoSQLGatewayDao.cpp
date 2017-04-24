@@ -44,9 +44,7 @@ bool PocoSQLGatewayDao::insert(Gateway &gateway)
 	string id(gateway.id().toString());
 	string name(gateway.name());
 
-	Nullable<double> altitude;
-	if (!std::isnan(gateway.altitude()))
-		altitude = gateway.altitude();
+	Nullable<int> altitude = gateway.altitude();
 
 	Nullable<double> latitude;
 	if (!std::isnan(gateway.latitude()))
@@ -111,9 +109,7 @@ bool PocoSQLGatewayDao::update(Gateway &gateway)
 	string id(gateway.id().toString());
 	string name(gateway.name());
 
-	Nullable<double> altitude;
-	if (!std::isnan(gateway.altitude()))
-		altitude = gateway.altitude();
+	Nullable<int> altitude = gateway.altitude();
 
 	Nullable<double> latitude;
 	if (!std::isnan(gateway.latitude()))
@@ -173,7 +169,7 @@ bool PocoSQLGatewayDao::parseSingle(Row &result, Gateway &gateway,
 		gateway.setId(GatewayID::parse(result[prefix + "id"]));
 
 	gateway.setName(emptyWhenNull(result[prefix + "name"]));
-	gateway.setAltitude(nanWhenEmpty(result[prefix + "altitude"]));
+	gateway.setAltitude(nullable<int>(result[prefix + "altitude"]));
 	gateway.setLatitude(nanWhenEmpty(result[prefix + "latitude"]));
 	gateway.setLongitude(nanWhenEmpty(result[prefix + "longitude"]));
 	gateway.setVersion(emptyWhenNull(result[prefix + "version"]));

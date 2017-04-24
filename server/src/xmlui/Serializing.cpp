@@ -26,8 +26,15 @@ static void prepare(AttributesImpl &attrs, const Gateway &gateway)
 			std::to_string(gateway.longitude()));
 	attrs.addAttribute("", "latitude", "latitude", "",
 			std::to_string(gateway.latitude()));
-	attrs.addAttribute("", "altitude", "altitude", "",
-			std::to_string(gateway.altitude()));
+
+	if (gateway.altitude().isNull()) {
+		attrs.addAttribute("", "altitude", "altitude", "", "");
+	}
+	else {
+		attrs.addAttribute("", "altitude", "altitude", "",
+			std::to_string(gateway.altitude().value()));
+	}
+
 	attrs.addAttribute("", "version", "version", "", gateway.version());
 	attrs.addAttribute("", "ip", "ip", "", gateway.ipAddress().toString());
 }

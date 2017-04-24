@@ -19,7 +19,6 @@ public:
 	typedef Poco::SharedPtr<Gateway> Ptr;
 
 	Gateway():
-		m_altitude(0),
 		m_latitude(0),
 		m_longitude(0)
 	{
@@ -27,7 +26,6 @@ public:
 
 	Gateway(const ID &id):
 		Entity<GatewayID>(id),
-		m_altitude(0),
 		m_latitude(0),
 		m_longitude(0)
 	{
@@ -43,12 +41,17 @@ public:
 		return m_name;
 	}
 
-	void setAltitude(double alt)
+	void setAltitude(const Poco::Nullable<int> alt)
 	{
 		m_altitude = alt;
 	}
 
-	double altitude() const
+	void setAltitude(int alt)
+	{
+		m_altitude = alt;
+	}
+
+	Poco::Nullable<int> altitude() const
 	{
 		return m_altitude;
 	}
@@ -110,7 +113,7 @@ public:
 
 private:
 	std::string m_name;
-	double m_altitude;
+	Poco::Nullable<int> m_altitude;
 	double m_latitude;
 	double m_longitude;
 	Poco::Nullable<Poco::DateTime> m_lastChanged;
