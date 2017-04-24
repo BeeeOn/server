@@ -5,6 +5,7 @@
 #include <list>
 
 #include <Poco/Logger.h>
+#include <Poco/Nullable.h>
 #include <Poco/Dynamic/Var.h>
 #include <Poco/Data/Statement.h>
 #include <Poco/Data/RecordSet.h>
@@ -63,6 +64,12 @@ protected:
 	static D whenNull(const Poco::Dynamic::Var &v, const D def)
 	{
 		return v.isEmpty()? def : v.convert<D>();
+	}
+
+	template <typename T>
+	static Poco::Nullable<T> nullable(const Poco::Dynamic::Var &v)
+	{
+		return v.isEmpty()? Poco::Nullable<T>() : Poco::Nullable<T>(v.convert<T>());
 	}
 
 	std::size_t execute(Poco::Data::Statement &sql);
