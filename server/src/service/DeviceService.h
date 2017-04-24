@@ -8,11 +8,13 @@
 #include "service/Single.h"
 #include "service/Relation.h"
 #include "model/Device.h"
+#include "model/DeviceProperty.h"
 #include "model/Gateway.h"
 
 namespace BeeeOn {
 
 class DeviceDao;
+class DevicePropertyDao;
 class GatewayRPC;
 class DeviceAccessPolicy;
 
@@ -24,6 +26,7 @@ public:
 	DeviceService();
 
 	void setDeviceDao(DeviceDao *dao);
+	void setDevicePropertyDao(DevicePropertyDao *dao);
 	void setGatewayRPC(GatewayRPC *rpc);
 	void setAccessPolicy(DeviceAccessPolicy *policy);
 
@@ -72,6 +75,31 @@ public:
 		return BEEEON_TRANSACTION_RETURN(bool, doUpdateAndActivate(input));
 	}
 
+	bool createProperty(RelationWithData<DeviceProperty, Device> &input)
+	{
+		return BEEEON_TRANSACTION_RETURN(bool, doCreateProperty(input));
+	}
+
+	bool updateProperty(RelationWithData<DeviceProperty, Device> &input)
+	{
+		return BEEEON_TRANSACTION_RETURN(bool, doUpdateProperty(input));
+	}
+
+	bool removeProperty(Relation<const DeviceProperty, Device> &input)
+	{
+		return BEEEON_TRANSACTION_RETURN(bool, doRemoveProperty(input));
+	}
+
+	bool findProperty(Relation<DeviceProperty, Device> &input)
+	{
+		return BEEEON_TRANSACTION_RETURN(bool, doFindProperty(input));
+	}
+
+	void listProperties(Relation<std::list<DeviceProperty>, Device> &input)
+	{
+		return BEEEON_TRANSACTION(doListProperties(input));
+	}
+
 protected:
 	bool doFetch(Relation<Device, Gateway> &input);
 	void doFetchMany(Single<std::list<Device>> &input);
@@ -84,12 +112,19 @@ protected:
 	bool doUpdate(RelationWithData<Device, Gateway> &input);
 	bool doUpdateAndActivate(RelationWithData<Device, Gateway> &input);
 
+	bool doCreateProperty(RelationWithData<DeviceProperty, Device> &input);
+	bool doUpdateProperty(RelationWithData<DeviceProperty, Device> &input);
+	bool doRemoveProperty(Relation<const DeviceProperty, Device> &input);
+	bool doFindProperty(Relation<DeviceProperty, Device> &input);
+	void doListProperties(Relation<std::list<DeviceProperty>, Device> &input);
+
 	bool prepareUpdate(RelationWithData<Device, Gateway> &input);
 	bool tryActivateAndUpdate(Device &device,
 			const Gateway &gateway, bool forceUpdate = false);
 
 private:
 	DeviceDao *m_dao;
+	DevicePropertyDao *m_propertyDao;
 	GatewayRPC *m_gatewayRPC;
 	DeviceAccessPolicy *m_policy;
 };

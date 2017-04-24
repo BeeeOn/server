@@ -17,6 +17,7 @@ class Gateway;
 class LegacyGateway;
 class Location;
 class Device;
+class DecryptedDeviceProperty;
 class VerifiedIdentity;
 class RoleInGateway;
 class LegacyRoleInGateway;
@@ -40,6 +41,10 @@ void serialize(Poco::XML::XMLWriter &output,
 		const std::vector<Device> &devices);
 void serialize(Poco::XML::XMLWriter &output,
 		const std::list<Device> &devices);
+
+void serialize(Poco::XML::XMLWriter &output,
+		const DecryptedDeviceProperty &property,
+		const Device &device);
 
 void serialize(Poco::XML::XMLWriter &output,
 		const RoleInGateway &role);

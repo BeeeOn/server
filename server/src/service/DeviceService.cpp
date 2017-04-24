@@ -9,11 +9,13 @@
 #include "model/Device.h"
 #include "model/Gateway.h"
 #include "dao/DeviceDao.h"
+#include "dao/DevicePropertyDao.h"
 #include "rpc/GatewayRPC.h"
 #include "Debug.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, DeviceService)
 BEEEON_OBJECT_REF("deviceDao", &DeviceService::setDeviceDao)
+BEEEON_OBJECT_REF("devicePropertyDao", &DeviceService::setDevicePropertyDao)
 BEEEON_OBJECT_REF("gatewayRPC", &DeviceService::setGatewayRPC)
 BEEEON_OBJECT_REF("accessPolicy", &DeviceService::setAccessPolicy)
 BEEEON_OBJECT_REF("transactionManager", &Transactional::setTransactionManager)
@@ -25,6 +27,7 @@ using namespace BeeeOn;
 
 DeviceService::DeviceService():
 	m_dao(&NullDeviceDao::instance()),
+	m_propertyDao(&NullDevicePropertyDao::instance()),
 	m_gatewayRPC(&NullGatewayRPC::instance()),
 	m_policy(&NullDeviceAccessPolicy::instance())
 {
@@ -33,6 +36,11 @@ DeviceService::DeviceService():
 void DeviceService::setDeviceDao(DeviceDao *dao)
 {
 	m_dao = dao? dao : &NullDeviceDao::instance();
+}
+
+void DeviceService::setDevicePropertyDao(DevicePropertyDao *dao)
+{
+	m_propertyDao = dao? dao : &NullDevicePropertyDao::instance();
 }
 
 void DeviceService::setGatewayRPC(GatewayRPC *rpc)
@@ -167,4 +175,51 @@ bool DeviceService::doUpdateAndActivate(
 		return false;
 
 	return tryActivateAndUpdate(input.target(), input.base(), true);
+}
+
+bool DeviceService::doCreateProperty(RelationWithData<DeviceProperty, Device> &input)
+{
+	const Gateway &gateway = input.base().gateway();
+	m_policy->assureUpdate(input, input.base(), gateway);
+
+	input.data().full(input.target());
+
+	return m_propertyDao->insert(input.target(), input.base());
+}
+
+bool DeviceService::doUpdateProperty(RelationWithData<DeviceProperty, Device> &input)
+{
+	const Gateway &gateway = input.base().gateway();
+	m_policy->assureUpdate(input, input.base(), gateway);
+
+	if (!m_propertyDao->fetch(input.target(), input.base()))
+		return false;
+
+	input.data().partial(input.target());
+
+	return m_propertyDao->update(input.target(), input.base());
+}
+
+bool DeviceService::doRemoveProperty(Relation<const DeviceProperty, Device> &input)
+{
+	const Gateway &gateway = input.base().gateway();
+	m_policy->assureUpdate(input, input.base(), gateway);
+
+	return m_propertyDao->remove(input.target(), input.base());
+}
+
+bool DeviceService::doFindProperty(Relation<DeviceProperty, Device> &input)
+{
+	const Gateway &gateway = input.base().gateway();
+	m_policy->assureGet(input, input.base(), gateway);
+
+	return m_propertyDao->fetch(input.target(), input.base());
+}
+
+void DeviceService::doListProperties(Relation<list<DeviceProperty>, Device> &input)
+{
+	const Gateway &gateway = input.base().gateway();
+	m_policy->assureGet(input, input.base(), gateway);
+
+	return m_propertyDao->fetchByDevice(input.target(), input.base());
 }

@@ -16,7 +16,9 @@
 
 namespace BeeeOn {
 
+class CryptoConfig;
 class DeviceDao;
+class DevicePropertyDao;
 
 class UIMockInit : public Transactional {
 public:
@@ -44,6 +46,11 @@ public:
 		m_deviceDao = dao;
 	}
 
+	void setDevicePropertyDao(DevicePropertyDao *dao)
+	{
+		m_devicePropertyDao = dao;
+	}
+
 	void setIdentityDao(IdentityDao *dao)
 	{
 		m_identityDao = dao;
@@ -64,6 +71,11 @@ public:
 		m_sensorHistoryDao = dao;
 	}
 
+	void setCryptoConfig(CryptoConfig *config)
+	{
+		m_cryptoConfig = config;
+	}
+
 	void initAll();
 
 protected:
@@ -78,10 +90,12 @@ private:
 	GatewayDao *m_gatewayDao;
 	LocationDao *m_locationDao;
 	DeviceDao *m_deviceDao;
+	DevicePropertyDao *m_devicePropertyDao;
 	IdentityDao *m_identityDao;
 	VerifiedIdentityDao *m_verifiedIdentityDao;
 	InfoProvider<DeviceInfo> *m_infoProvider;
 	SensorHistoryDao *m_sensorHistoryDao;
+	CryptoConfig *m_cryptoConfig;
 };
 
 }

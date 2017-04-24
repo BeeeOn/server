@@ -52,6 +52,7 @@
 				class="BeeeOn::XmlUI::DeviceXmlHandlerResolver">
 			<set name="deviceService" ref="deviceService" />
 			<set name="sessionManager" ref="sessionManager" />
+			<set name="cryptoConfig" ref="devicePropertiesCryptoConfig" />
 		</instance>
 
 		<instance name="sensorXmlHandler"

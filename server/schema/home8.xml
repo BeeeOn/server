@@ -221,6 +221,25 @@
 			expression="signal IS NULL OR (signal &gt;= 0 AND signal &lt;= 100)" />
 	</table>
 
+	<table name="devices_properties">
+		<column name="device_id" type="int64" not-null="yes" />
+		<column name="gateway_id" type="int64" not-null="yes" />
+		<column name="key" type="smallint" not-null="yes" />
+		<column name="value" type="text" />
+		<column name="params" type="text" />
+
+		<primary-key>
+			<ref>device_id</ref>
+			<ref>gateway_id</ref>
+			<ref>key</ref>
+		</primary-key>
+
+		<foreign-key table="devices">
+			<pair local="device_id" remote="id" />
+			<pair local="gateway_id" remote="gateway_id" />
+		</foreign-key>
+	</table>
+
 	<table name="sensors_history">
 		<column name="gateway_id" type="int64" not-null="yes" />
 		<column name="device_id" type="int64" not-null="yes" />
