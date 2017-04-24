@@ -19,7 +19,6 @@ public:
 	typedef Poco::SharedPtr<Gateway> Ptr;
 
 	Gateway():
-		m_altitude(0),
 		m_latitude(0),
 		m_longitude(0)
 	{
@@ -27,7 +26,6 @@ public:
 
 	Gateway(const ID &id):
 		Entity<GatewayID>(id),
-		m_altitude(0),
 		m_latitude(0),
 		m_longitude(0)
 	{
