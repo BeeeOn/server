@@ -31,12 +31,6 @@
 		<x:param name="table" />
 		<x:param name="name" />
 
-		<x:text>DROP TRIGGER IF EXISTS </x:text>
-		<x:value-of select="$name" />
-		<x:text> ON </x:text>
-		<x:value-of select="$table" />
-		<x:text> CASCADE;</x:text>
-		<x:call-template name="new-line" />
 		<x:text>DROP FUNCTION IF EXISTS </x:text>
 		<x:value-of select="concat($name, '_execute()')" />
 		<x:text> CASCADE;</x:text>
