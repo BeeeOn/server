@@ -2014,7 +2014,7 @@
 					(2731287621, 181462068183316, 0, 'valueA', '')
 				</sql>
 			</setup>
-			<check>
+			<check name="cannot insert duplicate key">
 				<call-query>
 					<arg name="device_id">2731287621</arg>
 					<arg name="gateway_id">181462068183316</arg>
@@ -2052,7 +2052,7 @@
 			key = <value name="key" type="smallint" />
 		</define>
 		<test name="update non-existing key fails">
-			<check>
+			<check name="non-existing key cannot be updated">
 				<call-query>
 					<arg name="value">'data 2'</arg>
 					<null name="params" />
@@ -2086,7 +2086,7 @@
 					(2731287621, 181462068183316, 0, 'valueA', '')
 				</sql>
 			</setup>
-			<check>
+			<check name="key is deleted as expected">
 				<call-query>
 					<arg name="device_id">2731287621</arg>
 					<arg name="gateway_id">181462068183316</arg>
@@ -2129,16 +2129,11 @@
 					(2728733371, 181462068183316, 0, 'valueC', NULL)
 				</sql>
 			</setup>
-			<check name="only properties of device 2731287621 are retrieved">
+			<check name="only key 0 of device 2731287621 are retrieved">
 				<call-query>
 					<arg name="device_id">2731287621</arg>
 					<arg name="gateway_id">181462068183316</arg>
 					<arg name="key">0</arg>
-				</call-query>
-				<call-query>
-					<arg name="device_id">2731287621</arg>
-					<arg name="gateway_id">181462068183316</arg>
-					<arg name="key">1</arg>
 				</call-query>
 				<expect>
 					<row>
@@ -2146,6 +2141,13 @@
 						<null name="params" />
 					</row>
 				</expect>
+			</check>
+			<check name="only key 1 of device 2731287621 are retrieved">
+				<call-query>
+					<arg name="device_id">2731287621</arg>
+					<arg name="gateway_id">181462068183316</arg>
+					<arg name="key">1</arg>
+				</call-query>
 				<expect>
 					<row>
 						<value name="value">valueB</value>
