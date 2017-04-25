@@ -2026,7 +2026,7 @@
 					<fail-insert table="devices_properties" conflict="key" />
 				</expect>
 			</check>
-			<teardown>
+			<teardown name="delete temporary key">
 				<sql>
 				DELETE FROM devices_properties WHERE
 					device_id = 2731287621
