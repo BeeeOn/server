@@ -43,7 +43,7 @@
 	name           CDATA       #REQUIRED
 >
 
-<!ELEMENT call-query (arg*)>
+<!ELEMENT call-query ((arg|null)*)>
 
 <!ELEMENT arg (#PCDATA)>
 <!ATTLIST arg
