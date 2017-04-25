@@ -190,7 +190,7 @@
 		<x:text>-- Call query under test</x:text>
 		<x:call-template name="new-line" />
 		<x:apply-templates select="../../../define" mode="sql-direct">
-			<x:with-param name="args" select="arg" />
+			<x:with-param name="args" select="arg|null" />
 		</x:apply-templates>
 	</x:template>
 
