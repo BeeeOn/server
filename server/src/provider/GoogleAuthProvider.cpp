@@ -61,6 +61,14 @@ bool GoogleAuthProvider::verifyAuthCode(const string &authCode, AuthResult &info
 
 	try {
 		tokens = requestTokens(authCode);
+
+		if (tokens.tokenType != "Bearer")
+			throw NotAuthenticatedException("incompatible token type: " + tokens.tokenType);
+		if (tokens.accessToken.empty())
+			throw NotAuthenticatedException("missing access_token");
+		if (tokens.expiresIn == 0)
+			throw NotAuthenticatedException("token has expired");
+
 		rawInfo = fetchUserInfo(tokens);
 	} catch(const Exception &e) {
 		logger().log(e, __FILE__, __LINE__);
