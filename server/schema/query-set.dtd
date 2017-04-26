@@ -39,6 +39,9 @@
 <!ATTLIST value
 	name           NMTOKEN     #REQUIRED
 	type           NMTOKEN     #IMPLIED
+	size           NMTOKEN   #IMPLIED
+	precision      NMTOKEN   #IMPLIED
+	scale          NMTOKEN   #IMPLIED
 >
 
 <!ELEMENT check ((call-query|sql)+, expect)>
