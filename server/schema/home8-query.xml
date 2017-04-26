@@ -166,7 +166,7 @@
 				id, name, altitude, latitude, longitude
 			) VALUES (
 				<value name="id" type="uuid" />,
-				<value name="name" type="varchar" />,
+				<value name="name" type="varchar" size="250" />,
 				<value name="altitude" type="integer" />,
 				<value name="latitude" type="double" />,
 				<value name="longitude" type="double" />
@@ -277,7 +277,7 @@
 	<query id="gateways.update">
 		<define>
 		UPDATE gateways SET
-			name = <value name="name" type="varchar" />,
+			name = <value name="name" type="varchar" size="250" />,
 			altitude = <value name="altitude" type="integer" />,
 			latitude = <value name="latitude" type="double" />,
 			longitude = <value name="longitude" type="double" />
@@ -405,8 +405,8 @@
 		INSERT INTO gateways_status (gateway_id, at, version, ip) VALUES (
 				<value name="gateway_id" type="int64" />,
 				<value name="at" type="bigint" />,
-				<value name="version" type="varchar" />,
-				<value name="ip" type="varchar" />)
+				<value name="version" type="varchar" size="40" />,
+				<value name="ip" type="varchar" size="45" />)
 		</define>
 		<test name="insert successful">
 			<check name="Test Gateway 1 update version">
@@ -489,7 +489,7 @@
 	<query id="locations.create">
 		<define>INSERT INTO locations (id, name, gateway_id) VALUES (
 				<value name="id" type="uuid" />,
-				<value name="name" type="varchar" />,
+				<value name="name" type="varchar" size="250" />,
 				<value name="gateway_id" type="int64" />)</define>
 		<test name="insert location works">
 			<check name="simple insert">
@@ -690,7 +690,7 @@
 	</query>
 
 	<query id="locations.update">
-		<define>UPDATE locations SET name = <value name="name" type="varchar" />
+		<define>UPDATE locations SET name = <value name="name" type="varchar" size="250" />
 				WHERE id = <value name="id" type="uuid" /></define>
 	</query>
 
@@ -701,8 +701,8 @@
 	<query id="users.create">
 		<define>INSERT INTO users (id, first_name, last_name) VALUES (
 				<value name="id" type="uuid" />,
-				<value name="first_name" type="varchar" />,
-				<value name="last_name" type="varchar" />)</define>
+				<value name="first_name" type="varchar" size="250" />,
+				<value name="last_name" type="varchar" size="250" />)</define>
 	</query>
 
 	<query id="users.fetch.by.id">
@@ -726,7 +726,7 @@
 	<query id="identities.create">
 		<define>INSERT INTO identities (id, email) VALUES (
 				<value name="id" type="uuid" />,
-				<value name="email" type="varchar" />)</define>
+				<value name="email" type="varchar" size="250" />)</define>
 		<test name="fail on integrity">
 			<check name="duplicate id">
 				<call-query>
@@ -766,7 +766,7 @@
 	</query>
 
 	<query id="identities.fetch.by.email">
-		<define>SELECT id, email FROM identities WHERE email = <value name="email" type="varchar" /></define>
+		<define>SELECT id, email FROM identities WHERE email = <value name="email" type="varchar" size="250" /></define>
 		<test name="simple">
 			<check name="fetch 'jack.sparrow@example.org'">
 				<call-query>
@@ -809,9 +809,9 @@
 			<value name="id" type="uuid" />,
 			<value name="identity_id" type="uuid" />,
 			<value name="user_id" type="uuid" />,
-			<value name="provider" type="varchar" />,
-			<value name="picture" type="varchar" />,
-			<value name="access_token" type="varchar" />
+			<value name="provider" type="varchar" size="250" />,
+			<value name="picture" type="varchar" size="250" />,
+			<value name="access_token" type="varchar" size="250" />
 		)
 		</define>
 	</query>
@@ -880,9 +880,9 @@
 		JOIN identities AS i ON v.identity_id = i.id
 		JOIN users AS u ON v.user_id = u.id
 		WHERE
-			i.email = <value name="email" type="varchar" />
+			i.email = <value name="email" type="varchar" size="250" />
 			AND
-			v.provider = <value name="provider" type="varchar" />
+			v.provider = <value name="provider" type="varchar" size="250" />
 		</define>
 		<test name="simple">
 			<check name="franta@example.org via provider test">
@@ -923,7 +923,7 @@
 		JOIN identities AS i ON v.identity_id = i.id
 		JOIN users AS u ON v.user_id = u.id
 		WHERE
-			i.email = <value name="email" type="varchar" />
+			i.email = <value name="email" type="varchar" size="250" />
 		ORDER BY provider
 		</define>
 		<test name="show we may have more valid results">
@@ -976,8 +976,8 @@
 	<query id="verified_identities.update">
 		<define>
 		UPDATE verified_identities SET
-			picture = <value name="picture" type="varchar" />,
-			access_token = <value name="access_token" type="varchar" />
+			picture = <value name="picture" type="varchar" size="250" />,
+			access_token = <value name="access_token" type="varchar" size="250" />
 		WHERE
 			id = <value name="id" type="uuid" />
 		</define>
@@ -1699,7 +1699,7 @@
 				<value name="id" type="int64" />,
 				<value name="gateway_id" type="int64" />,
 				<value name="location_id" type="uuid" />,
-				<value name="name" type="varchar" />,
+				<value name="name" type="varchar" size="250" />,
 				<value name="type" type="smallint" />,
 				<value name="refresh" type="integer" />,
 				<value name="battery" type="smallint" />,
@@ -1796,7 +1796,7 @@
 	<query id="devices.update">
 		<define>UPDATE devices SET
 				location_id = <value name="location_id" type="uuid" />,
-				name = <value name="name" type="varchar" />,
+				name = <value name="name" type="varchar" size="250" />,
 				type = <value name="type" type="smallint" />,
 				refresh = <value name="refresh" type="integer" />,
 				battery = <value name="battery" type="smallint" />,
