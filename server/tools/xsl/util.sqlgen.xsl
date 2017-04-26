@@ -76,7 +76,9 @@
 	</x:template>
 
 	<x:template match="define" mode="export">
-		<x:apply-templates mode="export" />
+		<x:if test="not(@engine) or $engine = @engine">
+			<x:apply-templates mode="export" />
+		</x:if>
 	</x:template>
 
 	<x:template match="define/text()" mode="export">
