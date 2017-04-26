@@ -167,7 +167,7 @@
 			) VALUES (
 				<value name="id" type="uuid" />,
 				<value name="name" type="varchar" />,
-				<value name="altitude" type="int" />,
+				<value name="altitude" type="integer" />,
 				<value name="latitude" type="double" />,
 				<value name="longitude" type="double" />
 			)</define>
@@ -278,7 +278,7 @@
 		<define>
 		UPDATE gateways SET
 			name = <value name="name" type="varchar" />,
-			altitude = <value name="altitude" type="int" />,
+			altitude = <value name="altitude" type="integer" />,
 			latitude = <value name="latitude" type="double" />,
 			longitude = <value name="longitude" type="double" />
 		WHERE
