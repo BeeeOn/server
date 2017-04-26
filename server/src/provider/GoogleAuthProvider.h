@@ -1,6 +1,7 @@
 #ifndef BEEEON_GOOGLE_AUTH_PROVIDER_H
 #define BEEEON_GOOGLE_AUTH_PROVIDER_H
 
+#include <Poco/Timespan.h>
 #include <Poco/Net/HTTPSClientSession.h>
 
 #include "provider/OAuth2AuthProvider.h"
@@ -22,6 +23,14 @@ protected:
 	bool verifyAuthCode(const std::string &authCode, AuthResult &info);
 
 private:
+	struct GoogleTokens {
+		std::string accessToken;
+		std::string refreshToken;
+		std::string idToken;
+		std::string tokenType;
+		Poco::Timespan expiresIn;
+	};
+
 	/**
 	 * Get token info a.k.a. user info from Google API
 	 */
