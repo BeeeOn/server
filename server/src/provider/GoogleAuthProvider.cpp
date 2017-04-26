@@ -50,7 +50,7 @@ bool GoogleAuthProvider::parseIdentity(const std::string &userInfo,
 	if (info->has("picture"))
 		result.setPicture(info->getValue<string>("picture"));
 
-	result.setAccessToken(tokens.idToken);
+	result.setAccessToken(tokens.accessToken);
 
 	return true;
 }
