@@ -3,6 +3,7 @@
 		version="1.0">
 
 	<x:import href="query.test.common.xsl" />
+	<x:import href="util.sqltypes.postgre.xsl" />
 
 	<x:param name="engine" select="'postgre'" />
 
@@ -109,6 +110,14 @@
 
 	<x:template match="false" mode="csv">
 		<x:text>f</x:text>
+	</x:template>
+
+	<!-- always perform explicit cast -->
+	<x:template name="define-value-sql-direct">
+		<x:param name="arg" />
+		<x:value-of select="$arg" />
+		<x:text>::</x:text>
+		<x:call-template name="print-type" />
 	</x:template>
 
 	<x:template match="/query-set">
