@@ -165,7 +165,7 @@
 		<define>INSERT INTO gateways (
 				id, name, altitude, latitude, longitude
 			) VALUES (
-				<value name="id" type="uuid" />,
+				<value name="id" type="int64" />,
 				<value name="name" type="varchar" size="250" />,
 				<value name="altitude" type="integer" />,
 				<value name="latitude" type="double" />,
@@ -184,7 +184,7 @@
 					FROM gateways WHERE id = 161762224815122</sql>
 				<expect>
 					<row>
-						<value type="uuid" name="id">161762224815122</value>
+						<value type="int64" name="id">161762224815122</value>
 						<value name="name">Test Gateway 10</value>
 						<value name="altitude">54</value>
 						<value name="latitude">45.5</value>
@@ -225,7 +225,7 @@
 		FROM gateways AS g
 		LEFT JOIN gateways_status AS s ON s.gateway_id = g.id
 		WHERE
-			g.id = <value name="id" type="uuid" />
+			g.id = <value name="id" type="int64" />
 			AND
 			(s.at IS NULL OR s.at =
 				(SELECT MAX(at) FROM gateways_status WHERE gateway_id = g.id))
@@ -282,7 +282,7 @@
 			latitude = <value name="latitude" type="double" />,
 			longitude = <value name="longitude" type="double" />
 		WHERE
-			id = <value name="id" type="uuid" />
+			id = <value name="id" type="int64" />
 		</define>
 	</query>
 
@@ -324,7 +324,7 @@
 				</call-query>
 				<expect>
 					<row>
-						<value type="uuid" name="id">181462068183316</value>
+						<value type="int64" name="id">181462068183316</value>
 						<value name="name">Test Gateway 1</value>
 						<value name="altitude">-1</value>
 						<value name="latitude">1.5</value>
@@ -334,7 +334,7 @@
 						<value name="ip">192.168.12.2</value>
 					</row>
 					<row>
-						<value type="uuid" name="id">116084064167771</value>
+						<value type="int64" name="id">116084064167771</value>
 						<value name="name">Test Gateway 13</value>
 						<value name="altitude">20</value>
 						<value name="latitude">10.1</value>
@@ -344,7 +344,7 @@
 						<null name="ip" />
 					</row>
 					<row>
-						<value type="uuid" name="id">140548523101825</value>
+						<value type="int64" name="id">140548523101825</value>
 						<value name="name">Test Gateway 2</value>
 						<value name="altitude">-2</value>
 						<value name="latitude">2.5</value>
@@ -367,7 +367,7 @@
 				</call-query>
 				<expect>
 					<row>
-						<value type="uuid" name="id">140548523101825</value>
+						<value type="int64" name="id">140548523101825</value>
 						<value name="name">Test Gateway 2</value>
 						<value name="altitude">-2</value>
 						<value name="latitude">2.5</value>
@@ -386,7 +386,7 @@
 				</call-query>
 				<expect>
 					<row>
-						<value type="uuid" name="id">181462068183316</value>
+						<value type="int64" name="id">181462068183316</value>
 						<value name="name">Test Gateway 1</value>
 						<value name="altitude">-1</value>
 						<value name="latitude">1.5</value>
@@ -503,7 +503,7 @@
 					<row>
 						<value type="uuid" name="id">c94d43df-84da-4200-b5a2-1d3594ac7645</value>
 						<value name="name">living room</value>
-						<value type="uuid" name="gateway_id">140548523101825</value>
+						<value type="int64" name="gateway_id">140548523101825</value>
 					</row>
 				</expect>
 			</check>
@@ -620,7 +620,7 @@
 		WHERE
 			l.id = <value name="id" type="uuid" />
 			AND
-			l.gateway_id = <value name="gateway_id" type="uuid" />
+			l.gateway_id = <value name="gateway_id" type="int64" />
 		</define>
 		<test name="simple test">
 			<check name="find the Kitchen by Test Gateway 1">
@@ -653,7 +653,7 @@
 			l.gateway_id AS gateway_id
 		FROM locations AS l
 		WHERE
-			l.gateway_id = <value name="gateway_id" type="uuid" />
+			l.gateway_id = <value name="gateway_id" type="int64" />
 		ORDER BY l.id
 		</define>
 		<test name="simple test">
@@ -991,7 +991,7 @@
 	<query id="roles_in_gateway.create">
 		<define>INSERT INTO roles_in_gateway (id, gateway_id, identity_id, level, created) VALUES (
 			<value name="id" type="uuid" />,
-			<value name="gateway_id" type="uuid" />,
+			<value name="gateway_id" type="int64" />,
 			<value name="identity_id" type="uuid" />,
 			<value name="level" type="integer" />,
 			<value name="created" type="bigint" />)</define>
