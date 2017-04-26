@@ -61,7 +61,7 @@ bool GoogleAuthProvider::verifyAuthCode(const string &authCode, AuthResult &info
 
 	try {
 		tokens = requestTokens(authCode);
-		rawInfo = fetchUserInfo(tokens.idToken);
+		rawInfo = fetchUserInfo(tokens);
 	} catch(const Exception &e) {
 		logger().log(e, __FILE__, __LINE__);
 		return false;
@@ -112,19 +112,17 @@ GoogleAuthProvider::GoogleTokens GoogleAuthProvider::requestTokens(const string 
 	tokens.tokenType = object->optValue<string>("token_type", "");
 	tokens.idToken = object->optValue<string>("id_token", "");
 
-	if (tokens.idToken.empty()) {
-		logger().error("No ID token to obtain user data", __FILE__, __LINE__);
-		throw NotAuthenticatedException("Missing id_token field in response.");
-	}
-
 	return tokens;
 }
 
-string GoogleAuthProvider::fetchUserInfo(const string &token)
+string GoogleAuthProvider::fetchUserInfo(const GoogleTokens &tokens)
 {
 	TRACE_METHOD();
 
-	URI uri(m_tokenInfoUrl + token);
+	if (tokens.idToken.empty())
+		throw NotAuthenticatedException("missing id_token");
+
+	URI uri(m_tokenInfoUrl + tokens.idToken);
 	SharedPtr<HTTPSClientSession> session;
 
 	session = connectSecure(uri.getHost(), uri.getPort());

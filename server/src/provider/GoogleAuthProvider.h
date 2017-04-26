@@ -34,7 +34,7 @@ private:
 	/**
 	 * Get token info a.k.a. user info from Google API
 	 */
-	std::string fetchUserInfo(const std::string &token);
+	std::string fetchUserInfo(const GoogleTokens &tokens);
 
 	/**
 	 * Get access token from Google APIs
