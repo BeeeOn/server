@@ -54,25 +54,25 @@ bool GoogleAuthProvider::parseIdentity(const std::string &userInfo,
 
 bool GoogleAuthProvider::verifyAuthCode(const string &authCode, AuthResult &info)
 {
-	string idToken;
+	GoogleTokens tokens;
 	string rawInfo;
 	string google_id;
 	string email;
 
 	try {
-		idToken = requestIdToken(authCode);
-		rawInfo = fetchUserInfo(idToken);
+		tokens = requestTokens(authCode);
+		rawInfo = fetchUserInfo(tokens.idToken);
 	} catch(const Exception &e) {
 		logger().log(e, __FILE__, __LINE__);
 		return false;
 	}
 
-	info.setAccessToken(idToken);
+	info.setAccessToken(tokens.idToken);
 
 	return parseIdentity(rawInfo, info);
 }
 
-string GoogleAuthProvider::requestIdToken(const string &authCode)
+GoogleAuthProvider::GoogleTokens GoogleAuthProvider::requestTokens(const string &authCode)
 {
 	TRACE_METHOD();
 
@@ -103,15 +103,21 @@ string GoogleAuthProvider::requestIdToken(const string &authCode)
 	Parser parser;
 	Object::Ptr object = parser.parse(receiveResponse)
 			.extract<Object::Ptr>();
-	string idToken;
 
-	if (object->has("id_token"))
-		return object->getValue<string>("id_token");
+	GoogleTokens tokens;
 
-	logger().error("No ID token to obtain user data", __FILE__, __LINE__);
+	tokens.accessToken = object->optValue<string>("access_token", "");
+	tokens.refreshToken = object->optValue<string>("refresh_token", "");
+	tokens.expiresIn = Timespan(object->optValue<unsigned int>("expires_in", 0), 0);
+	tokens.tokenType = object->optValue<string>("token_type", "");
+	tokens.idToken = object->optValue<string>("id_token", "");
 
-	throw NotAuthenticatedException("Missing id_token field in response.");
+	if (tokens.idToken.empty()) {
+		logger().error("No ID token to obtain user data", __FILE__, __LINE__);
+		throw NotAuthenticatedException("Missing id_token field in response.");
+	}
 
+	return tokens;
 }
 
 string GoogleAuthProvider::fetchUserInfo(const string &token)

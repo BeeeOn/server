@@ -39,7 +39,7 @@ private:
 	/**
 	 * Get access token from Google APIs
 	 */
-	std::string requestIdToken(const std::string &token);
+	GoogleTokens requestTokens(const std::string &authCode);
 
 	/**
 	 * Parse userInfo data and fill the AuthResult instance.
