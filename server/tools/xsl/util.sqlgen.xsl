@@ -67,12 +67,19 @@
 				<x:text>NULL</x:text>
 			</x:when>
 			<x:when test="local-name($arg) = 'arg'">
-				<x:value-of select="$arg" />
+				<x:call-template name="define-value-sql-direct">
+					<x:with-param name="arg" select="$arg" />
+				</x:call-template>
 			</x:when>
 			<x:otherwise>
 				<x:message terminate="yes">Unrecognized arg type '<x:value-of select="local-name($arg)" />'</x:message>
 			</x:otherwise>
 		</x:choose>
+	</x:template>
+
+	<x:template name="define-value-sql-direct">
+		<x:param name="arg" />
+		<x:value-of select="$arg" />
 	</x:template>
 
 	<x:template match="define" mode="export">
