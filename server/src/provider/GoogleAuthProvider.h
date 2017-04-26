@@ -44,7 +44,8 @@ private:
 	/**
 	 * Parse userInfo data and fill the AuthResult instance.
 	 */
-	bool parseIdentity(const std::string &userInfo, AuthResult &result);
+	bool parseIdentity(const std::string &userInfo,
+			const GoogleTokens &tokens, AuthResult &result);
 
 	// URL to get access and ID token from Google API
 	const std::string m_tokenUrl = "https://www.googleapis.com/oauth2/v4/token";

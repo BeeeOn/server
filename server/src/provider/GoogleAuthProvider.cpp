@@ -28,6 +28,7 @@ using namespace Poco::Net;
 using namespace BeeeOn;
 
 bool GoogleAuthProvider::parseIdentity(const std::string &userInfo,
+		const GoogleTokens &tokens,
 		AuthResult &result)
 {
 	Parser parser;
@@ -48,6 +49,8 @@ bool GoogleAuthProvider::parseIdentity(const std::string &userInfo,
 		result.setLastName(info->getValue<string>("family_name"));
 	if (info->has("picture"))
 		result.setPicture(info->getValue<string>("picture"));
+
+	result.setAccessToken(tokens.idToken);
 
 	return true;
 }
@@ -75,9 +78,7 @@ bool GoogleAuthProvider::verifyAuthCode(const string &authCode, AuthResult &info
 		return false;
 	}
 
-	info.setAccessToken(tokens.idToken);
-
-	return parseIdentity(rawInfo, info);
+	return parseIdentity(rawInfo, tokens, info);
 }
 
 GoogleAuthProvider::GoogleTokens GoogleAuthProvider::requestTokens(const string &authCode)
