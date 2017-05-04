@@ -77,7 +77,7 @@ class TestDeviceGet(unittest.TestCase):
 		elif id == "0x4471959aad24618e":
 			self.assertEqual("Unknown", e.get("name"))
 			self.assertEqual("0", e.get("init"))
-			self.assertEqual("available", e.get("status"))
+			self.assertEqual("unavailable", e.get("status"))
 			self.assertEqual("4", e.get("type"))
 		else:
 			self.assertTrue(False, "unknown device: %s", (element))

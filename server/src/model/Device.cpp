@@ -108,6 +108,9 @@ const DateTime &Device::lastSeen() const
 bool Device::available(const unsigned int multiple,
 		const DateTime &ref) const
 {
+	if (refresh() < 1 * Timespan::SECONDS)
+		return true; // refresh time is invalid
+
 	Timespan diff;
 	for (unsigned int i = 0; i < multiple; ++i)
 		diff += refresh();
