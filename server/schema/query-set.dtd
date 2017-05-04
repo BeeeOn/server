@@ -5,7 +5,7 @@
 
 <!ELEMENT test-global (setup*, teardown*)>
 
-<!ELEMENT query (define, test*)>
+<!ELEMENT query (define+, test*)>
 <!ATTLIST query
 	id             ID          #REQUIRED
 >
@@ -21,6 +21,9 @@
 >
 
 <!ELEMENT define (#PCDATA|value)*>
+<!ATTLIST define
+	engine         CDATA       #IMPLIED
+>
 
 <!ELEMENT test (setup*, check*, teardown*)>
 <!ATTLIST test
@@ -36,6 +39,9 @@
 <!ATTLIST value
 	name           NMTOKEN     #REQUIRED
 	type           NMTOKEN     #IMPLIED
+	size           NMTOKEN   #IMPLIED
+	precision      NMTOKEN   #IMPLIED
+	scale          NMTOKEN   #IMPLIED
 >
 
 <!ELEMENT check ((call-query|sql)+, expect)>
