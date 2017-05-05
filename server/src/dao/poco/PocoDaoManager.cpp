@@ -83,12 +83,7 @@ void PocoDaoManager::setIdleTime(const int seconds)
 
 void PocoDaoManager::setConnectionTimeout(const int seconds)
 {
-	if (seconds < 0) {
-		throw InvalidArgumentException(
-			"connectionTimeout must be non-negative");
-	}
-
-	m_connectionTimeout = seconds;
+	m_connectionTimeout = seconds < 0? -1 : seconds;
 }
 
 void PocoDaoManager::setInitScript(const std::string &script)
@@ -219,5 +214,6 @@ void PocoDaoManager::connectAndPrepare()
 
 void PocoDaoManager::customizeSession(Session &session)
 {
-	session.setConnectionTimeout(m_connectionTimeout);
+	if (m_connectionTimeout >= 0)
+		session.setConnectionTimeout(m_connectionTimeout);
 }

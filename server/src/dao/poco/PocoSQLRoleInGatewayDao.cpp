@@ -242,7 +242,7 @@ AccessLevel PocoSQLRoleInGatewayDao::fetchAccessLevel(
 
 	string gatewayID(gateway.id().toString());
 	string userID(user.id().toString());
-	Nullable<unsigned int> level;
+	Nullable<unsigned int> level(0);
 
 	Statement sql = (session() << m_queryFetchAccessLevel(),
 		use(gatewayID, "gateway_id"),

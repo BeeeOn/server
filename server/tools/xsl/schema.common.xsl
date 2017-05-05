@@ -527,10 +527,17 @@
 
 	<x:template match="database">
 		<x:call-template name="print-header" />
+
+		<x:for-each select="custom[@stage='drop']">
+			<x:sort select="position()" data-type="number" order="descending" />
+			<x:apply-templates select="." />
+		</x:for-each>
+
 		<x:call-template name="drop-tables-views-and-triggers" />
 		<x:call-template name="new-line" />
 		<x:apply-templates select="table" />
 		<x:apply-templates select="view" />
+		<x:apply-templates select="custom[@stage='create']" />
 	</x:template>
 
 	<x:template name="create-table">
@@ -789,6 +796,38 @@
 
 	<x:template match="triggers/*/execute">
 		<x:apply-templates select="sql" mode="simple" />
+	</x:template>
+
+	<x:template name="realize-custom-block">
+		<x:variable name="id">
+			<x:if test="@stage">
+				<x:value-of select="concat(@stage, '-')" />
+			</x:if>
+			<x:if test="not(@stage)">
+				<x:text>create-</x:text>
+			</x:if>
+			<x:value-of select="position()" />
+		</x:variable>
+
+		<x:choose>
+			<x:when test="sql[not(@engine) or @engine=$engine]">
+				<x:text>-- Custom block </x:text>
+				<x:value-of select="$id" />
+				<x:call-template name="new-line" />
+				<x:apply-templates select="sql" mode="simple" />
+			</x:when>
+			<x:otherwise>
+				<x:text>-- Custom block </x:text>
+				<x:value-of select="$id" />
+				<x:text> ignored for engine </x:text>
+				<x:value-of select="concat($engine, $new.line)" />
+			</x:otherwise>
+		</x:choose>
+	</x:template>
+
+	<x:template match="database/custom">
+		<x:call-template name="realize-custom-block" />
+		<x:call-template name="new-line" />
 	</x:template>
 
 </x:stylesheet>
