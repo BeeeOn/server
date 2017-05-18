@@ -7,6 +7,7 @@
 #include "dao/poco/PocoTransactionImpl.h"
 #include "dao/poco/PocoAbstractDao.h"
 #include "dao/poco/PocoDaoManager.h"
+#include "util/ClassInfo.h"
 #include "Debug.h"
 
 using namespace std;
@@ -113,7 +114,7 @@ void PocoAbstractDao::throwMissingId(const type_info &t)
 {
 	log_backtrace(logger());
 	throw InvalidArgumentException("missing id for "
-			+ BeeeOn::classDemangle(t.name()));
+			+ ClassInfo(t).name());
 }
 
 double PocoAbstractDao::nanWhenEmpty(const Poco::Dynamic::Var &v)
