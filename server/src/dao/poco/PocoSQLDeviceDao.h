@@ -5,7 +5,7 @@
 #include "dao/SQLQuery.h"
 #include "dao/poco/PocoAbstractDao.h"
 #include "provider/InfoProvider.h"
-#include "Debug.h"
+#include "util/Loggable.h"
 
 namespace Poco {
 namespace Data {
@@ -54,7 +54,7 @@ public:
 			Device device;
 
 			if (!parseSingle(row, device, gateway, provider)) {
-				LOGGER_FUNC(__func__)
+				Loggable::forMethod(__func__)
 					.warning("skipping malformed data, query result: "
 						+ row.valuesToString(), __FILE__, __LINE__);
 				continue;
