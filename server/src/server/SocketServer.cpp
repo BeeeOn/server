@@ -1,13 +1,13 @@
 #include <string>
 
 #include <Poco/Exception.h>
+#include <Poco/Logger.h>
 #include <Poco/Timespan.h>
 #include <Poco/Net/SecureServerSocket.h>
 
 #include "di/Injectable.h"
 #include "ssl/SSLServer.h"
 #include "server/SocketServer.h"
-#include "Debug.h"
 
 using namespace std;
 using namespace Poco;
@@ -116,7 +116,7 @@ void SocketServer::start()
 {
 	m_server = createServer();
 
-	LOGGER_CLASS(this).information(
+	logger().information(
 		"starting server on port "
 		+ std::to_string(m_server->port()));
 
@@ -125,7 +125,7 @@ void SocketServer::start()
 
 void SocketServer::stop()
 {
-	LOGGER_CLASS(this).information(
+	logger().information(
 		"stopping server on port "
 		+ std::to_string(m_server->port()));
 

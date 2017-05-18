@@ -10,6 +10,7 @@
 #include <Poco/Net/Context.h>
 
 #include "loop/StoppableLoop.h"
+#include "util/Loggable.h"
 
 namespace BeeeOn {
 
@@ -23,7 +24,7 @@ public:
 			const Poco::Net::StreamSocket &socket) = 0;
 };
 
-class SocketServer : public StoppableLoop {
+class SocketServer : public StoppableLoop, protected Loggable {
 public:
 	SocketServer();
 
