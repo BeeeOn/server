@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include <vector>
 #include <cppunit/extensions/HelperMacros.h>
 
