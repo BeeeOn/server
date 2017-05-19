@@ -13,9 +13,9 @@ namespace BeeeOn {
  * that we can access such transaction anytime in the code flow where we have
  * access to the appropriate TransactionManager instance.
  *
- * The ThreadLocalTransaction has the pointer to the ThreadLocal instance holding
- * it. When the ThreadLocalTransaction is destroyed (by delete), the reference
- * in the ThreadLocal is cleared.
+ * The ThreadLocalTransactionWrapper has the pointer to the ThreadLocal instance
+ * holding it. When the ThreadLocalTransactionWrapper is destroyed (by delete),
+ * the reference in the ThreadLocal is cleared.
  */
 class ThreadLocalTransactionWrapper : public Transaction {
 public:
@@ -44,13 +44,19 @@ private:
 
 class ThreadLocalTransactionManager : public TransactionManager {
 public:
+	ThreadLocalTransactionManager();
 	virtual ~ThreadLocalTransactionManager();
 
 	Transaction *start();
 	Transaction *current();
 
+	void setFactory(TransactionFactory *factory);
+
 protected:
-	virtual Transaction *create() = 0;
+	virtual Transaction *create();
+
+private:
+	TransactionFactory *m_factory;
 };
 
 }

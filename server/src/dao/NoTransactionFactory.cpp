@@ -1,7 +1,7 @@
 #include <Poco/SingletonHolder.h>
 #include <Poco/Exception.h>
 
-#include "dao/NoTransactionManager.h"
+#include "dao/NoTransactionFactory.h"
 
 using namespace Poco;
 using namespace BeeeOn;
@@ -34,21 +34,21 @@ public:
 	}
 };
 
-NoTransactionManager::NoTransactionManager()
+NoTransactionFactory::NoTransactionFactory()
 {
 }
 
-NoTransactionManager::~NoTransactionManager()
+NoTransactionFactory::~NoTransactionFactory()
 {
 }
 
-TransactionManager &NoTransactionManager::instance()
+TransactionFactory &NoTransactionFactory::instance()
 {
-	static SingletonHolder<NoTransactionManager> singleton;
+	static SingletonHolder<NoTransactionFactory> singleton;
 	return *singleton.get();
 }
 
-Transaction *NoTransactionManager::create()
+Transaction *NoTransactionFactory::create()
 {
 	return new NoTransaction;
 }

@@ -14,7 +14,8 @@
 #include "dao/UserDao.h"
 #include "dao/IdentityDao.h"
 #include "dao/VerifiedIdentityDao.h"
-#include "dao/NoTransactionManager.h"
+#include "dao/NoTransactionFactory.h"
+#include "dao/ThreadLocalTransactionManager.h"
 #include "notification/NotificationObserver.h"
 #include "notification/FirstLoginNotification.h"
 #include "util/Base64.h"
@@ -53,7 +54,7 @@ private:
 	NotificationDispatcher *m_notifiactionDispatcher;
 	VerifiedIdentity m_lastIdentity;
 	TestableAuthService *m_service;
-	NoTransactionManager m_transactionManager;
+	ThreadLocalTransactionManager m_transactionManager;
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(AuthServiceTest);
@@ -123,6 +124,8 @@ void AuthServiceTest::setUp()
 	m_service->setVerifiedIdentityDao(&m_verifiedIdentityDao);
 	m_service->setSessionManager(&m_manager);
 	m_service->setNotificationDispatcher(m_notifiactionDispatcher);
+
+	m_transactionManager.setFactory(&NoTransactionFactory::instance());
 	m_service->setTransactionManager(&m_transactionManager);
 }
 

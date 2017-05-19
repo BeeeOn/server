@@ -1,6 +1,13 @@
 #include <Poco/Exception.h>
 
+#include "di/Injectable.h"
+#include "dao/NullTransactionManager.h"
 #include "dao/ThreadLocalTransactionManager.h"
+
+BEEEON_OBJECT_BEGIN(BeeeOn, ThreadLocalTransactionManager)
+BEEEON_OBJECT_CASTABLE(TransactionManager)
+BEEEON_OBJECT_REF("factory", &ThreadLocalTransactionManager::setFactory)
+BEEEON_OBJECT_END(BeeeOn, ThreadLocalTransactionManager)
 
 using namespace std;
 using namespace Poco;
@@ -69,9 +76,9 @@ TransactionImpl &ThreadLocalTransactionWrapper::impl(const type_info &type)
 }
 
 /**
- * Anytime a ThreadLocalTransaction is being destructed, we must ensure
- * that it is not referenced by the ThreadLocal instance. However, a
- * different transaction may be already there (if there is a use case
+ * Anytime a ThreadLocalTransactionWrapper is being destructed, we must
+ * ensure that it is not referenced by the ThreadLocal instance. However,
+ * a different transaction may be already there (if there is a use case
  * for such situation).
  */
 ThreadLocalTransactionWrapper::~ThreadLocalTransactionWrapper()
@@ -83,8 +90,18 @@ ThreadLocalTransactionWrapper::~ThreadLocalTransactionWrapper()
 		delete m_transaction;
 }
 
+ThreadLocalTransactionManager::ThreadLocalTransactionManager():
+	m_factory(&NullTransactionFactory::instance())
+{
+}
+
 ThreadLocalTransactionManager::~ThreadLocalTransactionManager()
 {
+}
+
+void ThreadLocalTransactionManager::setFactory(TransactionFactory *factory)
+{
+	m_factory = factory;
 }
 
 /**
@@ -105,6 +122,11 @@ Transaction *ThreadLocalTransactionManager::start()
 	}
 
 	return ref.get();
+}
+
+Transaction *ThreadLocalTransactionManager::create()
+{
+	return m_factory->create();
 }
 
 Transaction *ThreadLocalTransactionManager::current()

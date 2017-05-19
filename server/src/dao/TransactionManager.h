@@ -1,6 +1,7 @@
 #ifndef BEEEON_TRANSACTION_MANAGER_H
 #define BEEEON_TRANSACTION_MANAGER_H
 
+#include <string>
 #include <typeinfo>
 
 namespace BeeeOn {
