@@ -23,7 +23,7 @@ void PocoTransactionManager::setDaoManager(PocoDaoManager *manager)
 	m_daoManager = manager;
 }
 
-void PocoTransactionManager::create(ThreadLocal<ThreadLocalTransaction *> &ref)
+Transaction *PocoTransactionManager::create()
 {
-	new PocoTransaction(m_daoManager->pool(), ref);
+	return new PocoTransaction(m_daoManager->pool());
 }

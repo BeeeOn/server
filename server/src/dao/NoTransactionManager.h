@@ -19,7 +19,7 @@ public:
 	static TransactionManager &instance();
 
 protected:
-	void create(Poco::ThreadLocal<ThreadLocalTransaction *> &ref);
+	Transaction *create();
 };
 
 }

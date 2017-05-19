@@ -36,10 +36,9 @@ private:
 	Poco::Data::Transaction m_transaction;
 };
 
-class PocoTransaction : public ThreadLocalTransaction {
+class PocoTransaction : public AbstractTransaction {
 public:
-	PocoTransaction(Poco::Data::SessionPool &pool,
-			Poco::ThreadLocal<ThreadLocalTransaction *> &ref);
+	PocoTransaction(Poco::Data::SessionPool &pool);
 
 	void commit();
 	void rollback();

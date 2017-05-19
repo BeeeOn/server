@@ -14,7 +14,7 @@ public:
 	void setDaoManager(PocoDaoManager *manager);
 
 protected:
-	void create(Poco::ThreadLocal<ThreadLocalTransaction *> &ref);
+	Transaction *create();
 
 private:
 	PocoDaoManager *m_daoManager;

@@ -14,10 +14,10 @@ using namespace BeeeOn;
  * for some use cases). Thus, the NoTransaction is a TransactionImpl
  * for itself.
  */
-class NoTransaction : public ThreadLocalTransaction, TransactionImpl {
+class NoTransaction : public AbstractTransaction, TransactionImpl {
 public:
-	NoTransaction(ThreadLocal<ThreadLocalTransaction *> &self):
-		ThreadLocalTransaction(*this, self)
+	NoTransaction():
+		AbstractTransaction(static_cast<TransactionImpl &>(*this))
 	{
 	}
 
@@ -48,7 +48,7 @@ TransactionManager &NoTransactionManager::instance()
 	return *singleton.get();
 }
 
-void NoTransactionManager::create(Poco::ThreadLocal<ThreadLocalTransaction *> &ref)
+Transaction *NoTransactionManager::create()
 {
-	new NoTransaction(ref);
+	return new NoTransaction;
 }
