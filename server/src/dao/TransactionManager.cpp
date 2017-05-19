@@ -16,11 +16,6 @@ const string TransactionImpl::name() const
 	return to_string((unsigned long) ((void *) this));
 }
 
-Transaction::Transaction(TransactionImpl &impl):
-	m_impl(impl)
-{
-}
-
 void Transaction::isolate(Transaction::Isolation mask)
 {
 	throw NotImplementedException("isolate()");
@@ -28,6 +23,24 @@ void Transaction::isolate(Transaction::Isolation mask)
 
 Transaction::~Transaction()
 {
+}
+
+AbstractTransaction::AbstractTransaction(TransactionImpl &impl):
+	m_impl(impl)
+{
+}
+
+TransactionImpl &AbstractTransaction::impl(const type_info &info)
+{
+	if (typeid(m_impl) != info)
+		throw BadCastException("bad TransactionImpl requested");
+
+	return m_impl;
+}
+
+const string AbstractTransaction::name() const
+{
+	return m_impl.name();
 }
 
 TransactionManager::~TransactionManager()

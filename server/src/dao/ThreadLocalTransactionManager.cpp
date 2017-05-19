@@ -8,7 +8,7 @@ using namespace BeeeOn;
 ThreadLocalTransaction::ThreadLocalTransaction(
 		TransactionImpl &impl,
 		ThreadLocal<ThreadLocalTransaction *> &self):
-	Transaction(impl),
+	AbstractTransaction(impl),
 	m_self(self)
 {
 	if (m_self.get() != NULL) {

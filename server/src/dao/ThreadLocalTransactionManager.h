@@ -17,7 +17,7 @@ namespace BeeeOn {
  * it. When the ThreadLocalTransaction is destroyed (by delete), the reference
  * in the ThreadLocal is cleared.
  */
-class ThreadLocalTransaction : public Transaction {
+class ThreadLocalTransaction : public AbstractTransaction {
 public:
 	ThreadLocalTransaction(TransactionImpl &impl,
 			Poco::ThreadLocal<ThreadLocalTransaction *> &self);

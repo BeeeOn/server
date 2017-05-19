@@ -1,6 +1,8 @@
 #ifndef BEEEON_TRANSACTION_MANAGER_H
 #define BEEEON_TRANSACTION_MANAGER_H
 
+#include <typeinfo>
+
 namespace BeeeOn {
 
 /**
@@ -21,7 +23,6 @@ public:
  */
 class Transaction {
 public:
-	Transaction(TransactionImpl &impl);
 	virtual ~Transaction();
 
 	/**
@@ -53,17 +54,24 @@ public:
 	template <typename T>
 	T &impl()
 	{
-		return dynamic_cast<T &>(m_impl);
+		return dynamic_cast<T &>(impl(typeid(T)));
 	}
+
+	virtual TransactionImpl &impl(const std::type_info &type) = 0;
 
 	/**
 	 * Unreliable identification of the transaction.
 	 * It is useful for debugging.
 	 */
-	const std::string name() const
-	{
-		return m_impl.name();
-	}
+	virtual const std::string name() const = 0;
+};
+
+class AbstractTransaction : public Transaction {
+public:
+	AbstractTransaction(TransactionImpl &impl);
+
+	TransactionImpl &impl(const std::type_info &type) override;
+	const std::string name() const override;
 
 private:
 	TransactionImpl &m_impl;
