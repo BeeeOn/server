@@ -40,9 +40,9 @@ class PocoTransaction : public AbstractTransaction {
 public:
 	PocoTransaction(Poco::Data::SessionPool &pool);
 
-	void commit();
-	void rollback();
-	void isolate(Transaction::Isolation mask);
+	void commit() override;
+	void rollback() override;
+	void isolate(Transaction::Isolation mask) override;
 
 private:
 	PocoTransactionImpl m_impl;
