@@ -20,6 +20,13 @@ public:
 	static TransactionManager &instance();
 };
 
+class NullTransactionFactory : public TransactionFactory {
+public:
+	Transaction *create() override;
+
+	static TransactionFactory &instance();
+};
+
 }
 
 #endif

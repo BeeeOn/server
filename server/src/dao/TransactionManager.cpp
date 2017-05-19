@@ -43,6 +43,10 @@ const string AbstractTransaction::name() const
 	return m_impl.name();
 }
 
+TransactionFactory::TransactionFactory()
+{
+}
+
 TransactionManager::~TransactionManager()
 {
 }

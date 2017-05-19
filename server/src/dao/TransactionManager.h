@@ -78,6 +78,19 @@ private:
 };
 
 /**
+ * Factory for transactions specific to the target resource.
+ */
+class TransactionFactory {
+public:
+	virtual ~TransactionFactory();
+
+	/**
+	 * Create a new transaction.
+	 */
+	virtual Transaction *create() = 0;
+};
+
+/**
  * Interface to a transaction manager providing transactions to
  * the application code. It is typically called by the service layer
  * anytime when it is necessary to access the current transaction.
