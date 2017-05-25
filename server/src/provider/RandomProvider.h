@@ -6,7 +6,7 @@
 #include <Poco/Timestamp.h>
 #include <Poco/Mutex.h>
 
-#include "Debug.h"
+#include "util/Loggable.h"
 
 namespace BeeeOn {
 
@@ -47,7 +47,7 @@ class InsecureRandomProvider : public SecureRandomProvider {
 public:
 	InsecureRandomProvider()
 	{
-		LOGGER_CLASS(this)
+		Loggable::forInstance(this)
 			.critical("AN INSECURE RANDOM PROVIDER IN USE",
 					__FILE__, __LINE__);
 	}

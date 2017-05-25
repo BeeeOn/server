@@ -16,8 +16,6 @@ BEEEON_OBJECT_END(BeeeOn, SessionManager)
 const ExpirableSession::Ptr SessionManager::open(
 		const VerifiedIdentity &identity)
 {
-	TRACE_METHOD();
-
 	if (identity.id().isNull()) {
 		throw InvalidArgumentException(
 				"missing verified identity ID");
@@ -54,8 +52,6 @@ const ExpirableSession::Ptr SessionManager::open(
 
 bool SessionManager::lookup(const SessionID &id, ExpirableSession::Ptr &session)
 {
-	TRACE_METHOD();
-
 	if (logger().debug())
 		logger().debug("Looking up session: " + id, __FILE__, __LINE__);
 
@@ -71,8 +67,6 @@ bool SessionManager::lookup(const SessionID &id, ExpirableSession::Ptr &session)
 
 void SessionManager::close(const SessionID &id)
 {
-	TRACE_METHOD();
-
 	if (logger().debug())
 		logger().debug("Closing session: " + id, __FILE__, __LINE__);
 

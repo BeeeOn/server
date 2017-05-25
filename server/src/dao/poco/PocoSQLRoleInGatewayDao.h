@@ -1,7 +1,7 @@
 #include "dao/RoleInGatewayDao.h"
 #include "dao/SQLQuery.h"
 #include "dao/poco/PocoAbstractDao.h"
-#include "Debug.h"
+#include "util/Loggable.h"
 
 namespace Poco {
 namespace Data {
@@ -69,7 +69,7 @@ public:
 			R role;
 
 			if (!parseSingle(row, role)) {
-				LOGGER_FUNC(__func__)
+				Loggable::forMethod(__func__)
 					.warning("skipping malformed data, query result: "
 						+ row.valuesToString(), __FILE__, __LINE__);
 				continue;
