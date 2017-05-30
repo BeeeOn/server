@@ -7,8 +7,10 @@
 #include "provider/AuthProvider.h"
 
 namespace Poco {
+class URI;
 namespace Net {
 
+class HTMLForm;
 class HTTPSClientSession;
 
 }
@@ -64,6 +66,11 @@ protected:
 	 * Convert istream response body to string
 	 */
 	std::string convertResponseToString(std::istream &rs);
+
+	/**
+	 * Creates session and makes on method based request and returns handled response
+	 */
+	std::string makeRequest(const std::string &method, Poco::URI &host, Poco::Net::HTMLForm &requestForm);
 
 private:
 	/**

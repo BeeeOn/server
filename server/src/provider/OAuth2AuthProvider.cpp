@@ -5,10 +5,13 @@
 #include <Poco/Net/SSLManager.h>
 #include <Poco/Net/InvalidCertificateHandler.h>
 #include <Poco/Net/AcceptCertificateHandler.h>
+#include <Poco/Net/HTMLForm.h>
 #include <Poco/Net/HTTPResponse.h>
+#include <Poco/Net/HTTPRequest.h>
 #include <Poco/Net/HTTPSClientSession.h>
 #include <Poco/Net/NetException.h>
 #include <Poco/StreamCopier.h>
+#include <Poco/URI.h>
 
 #include "provider/OAuth2AuthProvider.h"
 #include "ssl/SSLClient.h"
@@ -66,6 +69,28 @@ string OAuth2AuthProvider::handleResponse(HTTPSClientSession &session)
 	}
 
 	return receiveResponse;
+}
+
+string OAuth2AuthProvider::makeRequest(const string &method, URI &host, HTMLForm &requestForm)
+{
+	SharedPtr<HTTPSClientSession>session;
+	session = connectSecure(host.getHost(), host.getPort());
+
+	HTTPRequest request(method, host.getPathAndQuery(), HTTPMessage::HTTP_1_1);
+	requestForm.prepareSubmit(request);
+
+	ostringstream requestQuery;
+	requestForm.write(requestQuery);
+
+	if (logger().debug())
+		logger().debug("request: " + requestQuery.str(), __FILE__, __LINE__);
+
+	if (method == HTTPRequest::HTTP_POST)
+		session->sendRequest(request) << requestQuery.str();
+	else
+		session->sendRequest(request);
+
+	return handleResponse(*session);
 }
 
 string OAuth2AuthProvider::convertResponseToString(istream &rs)
