@@ -60,7 +60,6 @@ bool GoogleAuthProvider::verifyAuthCode(const string &authCode, AuthResult &info
 	GoogleTokens tokens;
 	string rawInfo;
 	string google_id;
-	string email;
 
 	try {
 		tokens = requestTokens(authCode);
