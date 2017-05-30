@@ -16,5 +16,11 @@
 			<set name="disabledProtocols" text="sslv2,sslv3,tlsv1,tlsv1_1" />
 		</instance>
 
+		<instance name="facebookOAuthSSL" class="BeeeOn::SSLClient">
+			<set name="verificationMode" text="${facebook.ssl.verifyMode}" />
+			<set name="caLocation" text="${facebook.ssl.authority}" />
+			<set name="disabledProtocols" text="sslv2,sslv3,tlsv1,tlsv1_1" />
+		</instance>
+
 	</factory>
 </system>

@@ -19,5 +19,13 @@
 			<set name="redirect_uri" text="${google.redirect_uri}"/>
 			<set name="sslConfig" ref="googleOAuthSSL"/>
 		</instance>
+
+		<instance name="facebookAuthProvider"
+				class="BeeeOn::FacebookAuthProvider">
+			<set name="clientSecret" text="${facebook.clientSecret}"/>
+			<set name="clientId" text="${facebook.clientId}"/>
+			<set name="redirectUri" text="${facebook.redirectUri}"/>
+			<set name="sslConfig" ref="facebookOAuthSSL"/>
+		</instance>
 	</factory>
 </system>
