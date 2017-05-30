@@ -51,7 +51,7 @@ private:
 	const std::string m_tokenUrl = "https://www.googleapis.com/oauth2/v4/token";
 	// URL to get user info using ID token
 	const std::string m_tokenInfoUrl =
-		"https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=";
+		"https://www.googleapis.com/oauth2/v3/tokeninfo";
 };
 
 }

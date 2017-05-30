@@ -138,7 +138,11 @@ string GoogleAuthProvider::fetchUserInfo(const GoogleTokens &tokens)
 	if (tokens.idToken.empty())
 		throw NotAuthenticatedException("missing id_token");
 
-	URI uri(m_tokenInfoUrl + tokens.idToken);
+	HTMLForm form;
+	form.setEncoding(HTMLForm::ENCODING_URL);
+	form.set("id_token", tokens.idToken);
+
+	URI uri(m_tokenInfoUrl);
 	SharedPtr<HTTPSClientSession> session;
 
 	session = connectSecure(uri.getHost(), uri.getPort());
@@ -146,6 +150,7 @@ string GoogleAuthProvider::fetchUserInfo(const GoogleTokens &tokens)
 	HTTPRequest req(HTTPRequest::HTTP_GET,
 			uri.getPathAndQuery(),
 			HTTPMessage::HTTP_1_1);
+	form.prepareSubmit(req);
 
 	session->sendRequest(req);
 	return handleResponse(*session);
