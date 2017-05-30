@@ -5,6 +5,7 @@
 #include <Poco/Net/HTTPSClientSession.h>
 #include <Poco/JSON/Parser.h>
 #include <Poco/JSON/Object.h>
+#include <Poco/Net/HTMLForm.h>
 
 #include "Debug.h"
 #include "di/Injectable.h"
@@ -89,12 +90,17 @@ GoogleAuthProvider::GoogleTokens GoogleAuthProvider::requestTokens(const string 
 
 	session = connectSecure(uri.getHost(), uri.getPort());
 
-	string requestRaw = "code=" + authCode + "&"
-		"redirect_uri=" + m_redirectURI + "&"
-		"client_id=" + m_clientId + "&"
-		"client_secret=" + m_clientSecret + "&"
-		"scope=&"	// No need to specify, defaults to userinfo.profile,userinfo.email
-		"grant_type=authorization_code";
+	HTMLForm form;
+	form.setEncoding(HTMLForm::ENCODING_URL);
+	form.set("code", authCode);
+	form.set("redirect_uri", m_redirectURI);
+	form.set("client_id", m_clientId);
+	form.set("client_secret", m_clientSecret);
+	form.set("scope", ""); // No need to specify, defaults to userinfo.profile,userinfo.email
+	form.set("grant_type", "authorization_code");
+	ostringstream s;
+	form.write(s);
+	string requestRaw = s.str();
 
 	if (logger().debug())
 		logger().debug("request: " + requestRaw, __FILE__, __LINE__);
@@ -102,8 +108,7 @@ GoogleAuthProvider::GoogleTokens GoogleAuthProvider::requestTokens(const string 
 	HTTPRequest req(HTTPRequest::HTTP_POST,
 			uri.getPathAndQuery(),
 			HTTPMessage::HTTP_1_1);
-	req.setContentType("application/x-www-form-urlencoded");
-	req.setContentLength(requestRaw.length());
+	form.prepareSubmit(req);
 
 	session->sendRequest(req) << requestRaw;
 	string receiveResponse = handleResponse(*session);
