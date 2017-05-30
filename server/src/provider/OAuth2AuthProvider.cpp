@@ -65,11 +65,6 @@ string OAuth2AuthProvider::handleResponse(HTTPSClientSession &session)
 			+ receiveResponse, __FILE__, __LINE__);
 	}
 
-	if (response.getStatus() != HTTPResponse::HTTP_OK) {
-		throw NotAuthenticatedException(
-			"failed to retrieve access token from Google APIs");
-	}
-
 	return receiveResponse;
 }
 
