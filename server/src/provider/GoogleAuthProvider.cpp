@@ -110,6 +110,11 @@ GoogleAuthProvider::GoogleTokens GoogleAuthProvider::requestTokens(const string 
 
 	Object::Ptr object = JsonUtil::parse(receiveResponse);
 
+	if (object->has("error")) {
+		string message = object->getValue<string>("error_description");
+		throw NotAuthenticatedException(message);
+	}
+
 	GoogleTokens tokens;
 
 	tokens.accessToken = object->optValue<string>("access_token", "");
