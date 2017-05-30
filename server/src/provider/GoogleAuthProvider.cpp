@@ -10,6 +10,7 @@
 #include "di/Injectable.h"
 #include "ssl/SSLClient.h"
 #include "provider/GoogleAuthProvider.h"
+#include "util/JsonUtil.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, GoogleAuthProvider)
 BEEEON_OBJECT_CASTABLE(AuthProvider)
@@ -31,8 +32,7 @@ bool GoogleAuthProvider::parseIdentity(const std::string &userInfo,
 		const GoogleTokens &tokens,
 		AuthResult &result)
 {
-	Parser parser;
-	Object::Ptr info = parser.parse(userInfo).extract<Object::Ptr>();
+	Object::Ptr info = JsonUtil::parse(userInfo);
 
 	if (info->has("sub"))
 		result.setProviderID(info->getValue<string>("sub"));
@@ -108,9 +108,7 @@ GoogleAuthProvider::GoogleTokens GoogleAuthProvider::requestTokens(const string 
 	session->sendRequest(req) << requestRaw;
 	string receiveResponse = handleResponse(*session);
 
-	Parser parser;
-	Object::Ptr object = parser.parse(receiveResponse)
-			.extract<Object::Ptr>();
+	Object::Ptr object = JsonUtil::parse(receiveResponse);
 
 	GoogleTokens tokens;
 
