@@ -55,28 +55,28 @@ protected:
 	 */
 	Poco::SharedPtr<Poco::Net::HTTPSClientSession> connectSecure(
 			const std::string &host,
-			unsigned int port);
+			unsigned int port) const;
 
 	/**
 	 * Handle response based on given session.
 	 */
-	std::string handleResponse(Poco::Net::HTTPSClientSession &session);
+	std::string handleResponse(Poco::Net::HTTPSClientSession &session) const;
 
 	/**
 	 * Convert istream response body to string
 	 */
-	std::string convertResponseToString(std::istream &rs);
+	std::string convertResponseToString(std::istream &rs) const;
 
 	/**
 	 * Creates session and makes on method based request and returns handled response
 	 */
-	std::string makeRequest(const std::string &method, Poco::URI &host, Poco::Net::HTMLForm &requestForm);
+	std::string makeRequest(const std::string &method, Poco::URI &host, Poco::Net::HTMLForm &requestForm) const;
 
 private:
 	/**
 	 * Initialize SSL context for upcoming HTTPS requests
 	 */
-	void initSSL();
+	void initSSL() const;
 
 protected:
 	std::string m_clientId;

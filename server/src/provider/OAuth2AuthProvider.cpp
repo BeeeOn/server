@@ -28,7 +28,7 @@ OAuth2AuthProvider::OAuth2AuthProvider(const string &name):
 {
 }
 
-void OAuth2AuthProvider::initSSL()
+void OAuth2AuthProvider::initSSL() const
 {
 	if (m_sslConfig == 0)
 		throw IllegalStateException(
@@ -37,7 +37,7 @@ void OAuth2AuthProvider::initSSL()
 
 SharedPtr<HTTPSClientSession> OAuth2AuthProvider::connectSecure(
 		const std::string &host,
-		unsigned int port)
+		unsigned int port) const
 {
 	try {
 		initSSL();
@@ -49,7 +49,7 @@ SharedPtr<HTTPSClientSession> OAuth2AuthProvider::connectSecure(
 	}
 }
 
-string OAuth2AuthProvider::handleResponse(HTTPSClientSession &session)
+string OAuth2AuthProvider::handleResponse(HTTPSClientSession &session) const
 {
 	HTTPResponse response;
 	istream &rs = session.receiveResponse(response);
@@ -71,7 +71,7 @@ string OAuth2AuthProvider::handleResponse(HTTPSClientSession &session)
 	return receiveResponse;
 }
 
-string OAuth2AuthProvider::makeRequest(const string &method, URI &host, HTMLForm &requestForm)
+string OAuth2AuthProvider::makeRequest(const string &method, URI &host, HTMLForm &requestForm) const
 {
 	SharedPtr<HTTPSClientSession>session;
 	session = connectSecure(host.getHost(), host.getPort());
@@ -93,7 +93,7 @@ string OAuth2AuthProvider::makeRequest(const string &method, URI &host, HTMLForm
 	return handleResponse(*session);
 }
 
-string OAuth2AuthProvider::convertResponseToString(istream &rs)
+string OAuth2AuthProvider::convertResponseToString(istream &rs) const
 {
 	string response;
 	stringstream ss;
