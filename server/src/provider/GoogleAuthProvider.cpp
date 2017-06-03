@@ -85,11 +85,6 @@ GoogleAuthProvider::GoogleTokens GoogleAuthProvider::requestTokens(const string 
 {
 	TRACE_METHOD();
 
-	SharedPtr<HTTPSClientSession> session;
-	URI uri(m_tokenUrl);
-
-	session = connectSecure(uri.getHost(), uri.getPort());
-
 	HTMLForm form;
 	form.setEncoding(HTMLForm::ENCODING_URL);
 	form.set("code", authCode);
@@ -98,20 +93,9 @@ GoogleAuthProvider::GoogleTokens GoogleAuthProvider::requestTokens(const string 
 	form.set("client_secret", m_clientSecret);
 	form.set("scope", ""); // No need to specify, defaults to userinfo.profile,userinfo.email
 	form.set("grant_type", "authorization_code");
-	ostringstream s;
-	form.write(s);
-	string requestRaw = s.str();
 
-	if (logger().debug())
-		logger().debug("request: " + requestRaw, __FILE__, __LINE__);
-
-	HTTPRequest req(HTTPRequest::HTTP_POST,
-			uri.getPathAndQuery(),
-			HTTPMessage::HTTP_1_1);
-	form.prepareSubmit(req);
-
-	session->sendRequest(req) << requestRaw;
-	string receiveResponse = handleResponse(*session);
+	URI host(m_tokenUrl);
+	string receiveResponse = makeRequest(HTTPRequest::HTTP_POST, host, form);
 
 	Object::Ptr object = JsonUtil::parse(receiveResponse);
 
@@ -141,17 +125,7 @@ string GoogleAuthProvider::fetchUserInfo(const GoogleTokens &tokens)
 	HTMLForm form;
 	form.setEncoding(HTMLForm::ENCODING_URL);
 	form.set("id_token", tokens.idToken);
+	URI host(m_tokenInfoUrl);
 
-	URI uri(m_tokenInfoUrl);
-	SharedPtr<HTTPSClientSession> session;
-
-	session = connectSecure(uri.getHost(), uri.getPort());
-
-	HTTPRequest req(HTTPRequest::HTTP_GET,
-			uri.getPathAndQuery(),
-			HTTPMessage::HTTP_1_1);
-	form.prepareSubmit(req);
-
-	session->sendRequest(req);
-	return handleResponse(*session);
+	return makeRequest(HTTPRequest::HTTP_GET, host, form);
 }
