@@ -9,6 +9,7 @@ import json
 import os
 
 import google
+import facebook
 from rest import POST, DELETE
 
 def login(body):
@@ -72,12 +73,11 @@ class TestAuth(unittest.TestCase):
 	environment variable FACEBOOK_AUTH_CODE otherwise
 	the test is skipped.
 	"""
-	@unittest.skipIf(not "FACEBOOK_AUTH_CODE" in os.environ,
-			"no FACEBOOK_AUTH_CODE specified")
+	@unittest.skipIf(facebook.skip_login(), "Missing configuration to perform Facebook login")
 	def test3_login_logout_facebook(self):
 		FACEBOOK_LOGIN = json.dumps({
 			"provider": "facebook",
-			"code": os.environ["FACEBOOK_AUTH_CODE"]
+			"code": facebook.login_auth_code()
 		})
 
 		response, session = login(FACEBOOK_LOGIN)
