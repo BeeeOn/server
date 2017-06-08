@@ -223,13 +223,70 @@ class GoogleLogin(AbstractLogin):
 		allow = driver.find_element_by_id("submit_approve_access")
 		allow.click()
 
+FACEBOOK_AUTH_URI = "https://www.facebook.com/v2.9/dialog/oauth"
+FACEBOOK_BASIC_SCOPES = [
+	"email",
+	"public_profile"
+]
+
+class FacebookLogin(AbstractLogin):
+	"""
+	Login via Facebook OAuth2. If possible, selenium is used to
+	perform the login automatically without any manual intervention.
+	"""
+	def __init__(self, id, auth_uri = FACEBOOK_AUTH_URI):
+		self._id = id
+		self._auth_uri = auth_uri
+
+	def weblogin(self, user, password, scope = FACEBOOK_BASIC_SCOPES, **kwargs):
+		if automatic():
+			return self._do_weblogin(user, password, scope, **kwargs)
+		elif manual():
+			return ManualResult(self._login_uri(scope))
+		else:
+			raise Exception("missing Facebook OAuth2 Client libarary and Selenium")
+
+	def _do_weblogin(self, user, password, scope, **kwargs):
+		"""
+		Perform automatic login via Facebook OAuth2 website. It is possible
+		to override parameters:
+		"""
+		driver = self._config_driver(**kwargs)
+		driver.get(self._login_uri(scope, "https://localhost/"))
+
+		try:
+			self._input_credentials(driver, user, password)
+		except WebDriverException as e:
+			driver.save_screenshot("facebook_login_failed.png")
+			raise e
+		try:
+			return self._extract_code(driver)
+		except WebDriverException as e:
+			driver.save_screenshot("facebook_code_extr_failed.png");
+			raise e
+
+	def _input_credentials(self, driver, user, passwd):
+		self._wait_clickable(driver, "loginbutton")
+		email = driver.find_element_by_id("email")
+		email.send_keys(user)
+		password = driver.find_element_by_id("pass")
+		password.send_keys(passwd)
+		next = driver.find_element_by_id("loginbutton")
+		next.click()
+
+	def _allow_permissions(self, driver):
+		self._wait_clickable_name(driver, "__CONFIRM__")
+		allow = driver.find_element_by_name("__CONFIRM__")
+		allow.click()
+		self._wait_while_present_name(driver, "__CONFIRM__")
+
 if __name__ == "__main__":
 	import sys
 	import getpass
 
 	if len(sys.argv) < 4:
 		print("oauth2.py <provider> <id> <user> [<password>]")
-		print("  providers: google")
+		print("  providers: google, facebook")
 		print("  if no password it is asked on prompt")
 		sys.exit(1)
 
@@ -240,6 +297,13 @@ if __name__ == "__main__":
 		else:
 			result = login.weblogin(sys.argv[3], getpass.getpass())
 
+		print("%s" % (result))
+	elif sys.argv[1] == "facebook":
+		login = FacebookLogin(sys.argv[2])
+		if len(sys.argv) >= 5:
+			result = login.weblogin(sys.argv[3], sys.argv[4])
+		else:
+			result = login.weblogin(sys.argv[3], getpass.getpass())
 		print("%s" % (result))
 	else:
 		raise Exception("no such provider: %s" % (provider))
