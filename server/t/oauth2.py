@@ -157,7 +157,7 @@ GOOGLE_BASIC_SCOPES = [
 	"https://www.googleapis.com/auth/userinfo.email"
 ]
 
-class GoogleLogin:
+class GoogleLogin(AbstractLogin):
 	"""
 	Login via Google OAuth2. If possible, selenium is used to
 	perform the login automatically without any manual intervention.
@@ -178,37 +178,12 @@ class GoogleLogin:
 		else:
 			raise Exception("missing Google OAuth2 Client libarary and Selenium")
 
-	def _login_uri(self, scope = GOOGLE_BASIC_SCOPES, redirect = "http://localhost"):
-		"""
-		Provide login URI only.
-		"""
-		flow = OAuth2WebServerFlow(
-				self._id,
-				scope = scope,
-				redirect_uri = redirect,
-				auth_uri = self._auth_uri
-		)
-		return flow.step1_get_authorize_url()
-
 	def _do_weblogin(self, user, password, scope = GOOGLE_BASIC_SCOPES, **kwargs):
 		"""
 		Perform automatic login via Google OAuth2 website. It is possible
 		to override parameters:
-
-		* 'webdriver' - selenium webdriver, default: 'phantomjs'
-		* 'window' - window size, default: (1024, 768)
 		"""
-		if "webdriver" in kwargs:
-			driver = webdriver_create(kwargs["webdriver"])
-		else:
-			driver = webdriver_create("phantomjs")
-
-		if "window" in kwargs:
-			w = kwargs["window"]
-		else:
-			w = [1024, 768]
-
-		driver.set_window_size(w[0], w[1])
+		driver = self._config_driver(**kwargs)
 		driver.get(self._login_uri(scope))
 
 		try:
@@ -219,13 +194,6 @@ class GoogleLogin:
 		except WebDriverException as e:
 			driver.save_screenshot("google_login_failed.png")
 			raise e
-
-	def _wait_clickable(self, driver, id, timeout = 30):
-		"""
-		Wait until the element identified by the given ID is clickable.
-		"""
-		cond = expected_conditions.element_to_be_clickable((By.ID, id))
-		WebDriverWait(driver, timeout).until(cond)
 
 	def _input_email(self, driver, user):
 		"""
@@ -254,24 +222,6 @@ class GoogleLogin:
 		self._wait_clickable(driver, "submit_approve_access")
 		allow = driver.find_element_by_id("submit_approve_access")
 		allow.click()
-
-	def _extract_code(self, driver):
-		"""
-		Extract the authentication code. This is a tricky operation when using
-		PhantomJS as it does not process 301 redirects properly. Workaround:
-		list the PhantomJS log and find message/log/entries/request/url entry
-		that contains the code encoded in the URI. It is assumed that the URI
-		is in the first log entry.
-		"""
-		if webdriver_is_phantomjs(driver):
-			logs = driver.get_log("har")
-			for e in logs:
-				data = json.loads(e["message"])
-				uri = data["log"]["entries"][0]["request"]["url"]
-				return CodeResult(parse_qs(urlparse(uri).query)["code"][0])
-
-		# implemented for PhantomJS only
-		raise Exception("Not implemented or failed")
 
 if __name__ == "__main__":
 	import sys
