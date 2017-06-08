@@ -79,6 +79,78 @@ class ManualResult(Result):
 	def __init__(self, login_uri):
 		Result.__init__(self, "manual", login_uri)
 
+class AbstractLogin:
+	def _login_uri(self, scope, redirect = "http://localhost"):
+		"""
+		Provide login URI only.
+		"""
+		flow = OAuth2WebServerFlow(
+				self._id,
+				scope = scope,
+				redirect_uri = redirect,
+				auth_uri = self._auth_uri
+		)
+		return flow.step1_get_authorize_url()
+
+	def _config_driver(self, **kwargs):
+		"""
+		Configures driver so that it can be used in other autorisation functions.
+
+		* 'webdriver' - selenium webdriver, default: 'phantomjs'
+		* 'window' - window size, default: (1024, 768)
+		"""
+		if "webdriver" in kwargs:
+			driver = webdriver_create(kwargs["webdriver"])
+		else:
+			driver = webdriver_create("phantomjs")
+
+		if "window" in kwargs:
+			w = kwargs["window"]
+		else:
+			w = [1024, 768]
+
+		driver.set_window_size(w[0], w[1])
+		return driver
+
+	def _wait_clickable(self, driver, id, timeout = 30):
+		"""
+		Wait until the element identified by the given ID is clickable.
+		"""
+		cond = expected_conditions.element_to_be_clickable((By.ID, id))
+		WebDriverWait(driver, timeout).until(cond)
+
+	def _wait_clickable_name(self, driver, name, timeout = 30):
+		"""
+		Wait until the element identified by the given name is clickable.
+		"""
+		cond = expected_conditions.element_to_be_clickable((By.NAME, name))
+		WebDriverWait(driver, timeout).until(cond)
+
+	def _wait_while_present_name(self, driver, name, timeout = 30):
+		"""
+		Wait until the element identified by the given ID is clickable.
+		"""
+		WebDriverWait(driver, timeout).until_not(lambda x: x.find_element_by_name(name).is_displayed())
+
+	def _extract_code(self, driver):
+		"""
+		Extract the authentication code. This is a tricky operation when using
+		PhantomJS as it does not process 301 redirects properly. Workaround:
+		list the PhantomJS log and find message/log/entries/request/url entry
+		that contains the code encoded in the URI. It is assumed that the URI
+		is in the first log entry.
+		"""
+		if webdriver_is_phantomjs(driver):
+			logs = driver.get_log("har")
+			for e in logs:
+				data = json.loads(e["message"])
+				uri = data["log"]["entries"][0]["request"]["url"]
+				driver.save_screenshot("extr.png");
+				return CodeResult(parse_qs(urlparse(uri).query)["code"][0])
+
+		# implemented for PhantomJS only
+		raise Exception("Not implemented or failed")
+
 GOOGLE_AUTH_URI = "https://accounts.google.com/o/oauth2/auth"
 GOOGLE_BASIC_SCOPES = [
 	"https://www.googleapis.com/auth/userinfo.profile",
