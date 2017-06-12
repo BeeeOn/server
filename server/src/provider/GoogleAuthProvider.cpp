@@ -5,11 +5,13 @@
 #include <Poco/Net/HTTPSClientSession.h>
 #include <Poco/JSON/Parser.h>
 #include <Poco/JSON/Object.h>
+#include <Poco/Net/HTMLForm.h>
 
 #include "Debug.h"
 #include "di/Injectable.h"
 #include "ssl/SSLClient.h"
 #include "provider/GoogleAuthProvider.h"
+#include "util/JsonUtil.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, GoogleAuthProvider)
 BEEEON_OBJECT_CASTABLE(AuthProvider)
@@ -31,8 +33,7 @@ bool GoogleAuthProvider::parseIdentity(const std::string &userInfo,
 		const GoogleTokens &tokens,
 		AuthResult &result)
 {
-	Parser parser;
-	Object::Ptr info = parser.parse(userInfo).extract<Object::Ptr>();
+	Object::Ptr info = JsonUtil::parse(userInfo);
 
 	if (info->has("sub"))
 		result.setProviderID(info->getValue<string>("sub"));
@@ -60,7 +61,6 @@ bool GoogleAuthProvider::verifyAuthCode(const string &authCode, AuthResult &info
 	GoogleTokens tokens;
 	string rawInfo;
 	string google_id;
-	string email;
 
 	try {
 		tokens = requestTokens(authCode);
@@ -85,33 +85,24 @@ GoogleAuthProvider::GoogleTokens GoogleAuthProvider::requestTokens(const string 
 {
 	TRACE_METHOD();
 
-	SharedPtr<HTTPSClientSession> session;
-	URI uri(m_tokenUrl);
+	HTMLForm form;
+	form.setEncoding(HTMLForm::ENCODING_URL);
+	form.set("code", authCode);
+	form.set("redirect_uri", m_redirectURI);
+	form.set("client_id", m_clientId);
+	form.set("client_secret", m_clientSecret);
+	form.set("scope", ""); // No need to specify, defaults to userinfo.profile,userinfo.email
+	form.set("grant_type", "authorization_code");
 
-	session = connectSecure(uri.getHost(), uri.getPort());
+	URI host(m_tokenUrl);
+	string receiveResponse = makeRequest(HTTPRequest::HTTP_POST, host, form);
 
-	string requestRaw = "code=" + authCode + "&"
-		"redirect_uri=" + m_redirectURI + "&"
-		"client_id=" + m_clientId + "&"
-		"client_secret=" + m_clientSecret + "&"
-		"scope=&"	// No need to specify, defaults to userinfo.profile,userinfo.email
-		"grant_type=authorization_code";
+	Object::Ptr object = JsonUtil::parse(receiveResponse);
 
-	if (logger().debug())
-		logger().debug("request: " + requestRaw, __FILE__, __LINE__);
-
-	HTTPRequest req(HTTPRequest::HTTP_POST,
-			uri.getPathAndQuery(),
-			HTTPMessage::HTTP_1_1);
-	req.setContentType("application/x-www-form-urlencoded");
-	req.setContentLength(requestRaw.length());
-
-	session->sendRequest(req) << requestRaw;
-	string receiveResponse = handleResponse(*session);
-
-	Parser parser;
-	Object::Ptr object = parser.parse(receiveResponse)
-			.extract<Object::Ptr>();
+	if (object->has("error")) {
+		string message = object->getValue<string>("error_description");
+		throw NotAuthenticatedException(message);
+	}
 
 	GoogleTokens tokens;
 
@@ -131,15 +122,10 @@ string GoogleAuthProvider::fetchUserInfo(const GoogleTokens &tokens)
 	if (tokens.idToken.empty())
 		throw NotAuthenticatedException("missing id_token");
 
-	URI uri(m_tokenInfoUrl + tokens.idToken);
-	SharedPtr<HTTPSClientSession> session;
+	HTMLForm form;
+	form.setEncoding(HTMLForm::ENCODING_URL);
+	form.set("id_token", tokens.idToken);
+	URI host(m_tokenInfoUrl);
 
-	session = connectSecure(uri.getHost(), uri.getPort());
-
-	HTTPRequest req(HTTPRequest::HTTP_GET,
-			uri.getPathAndQuery(),
-			HTTPMessage::HTTP_1_1);
-
-	session->sendRequest(req);
-	return handleResponse(*session);
+	return makeRequest(HTTPRequest::HTTP_GET, host, form);
 }

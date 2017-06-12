@@ -5,10 +5,13 @@
 #include <Poco/Net/SSLManager.h>
 #include <Poco/Net/InvalidCertificateHandler.h>
 #include <Poco/Net/AcceptCertificateHandler.h>
+#include <Poco/Net/HTMLForm.h>
 #include <Poco/Net/HTTPResponse.h>
+#include <Poco/Net/HTTPRequest.h>
 #include <Poco/Net/HTTPSClientSession.h>
 #include <Poco/Net/NetException.h>
 #include <Poco/StreamCopier.h>
+#include <Poco/URI.h>
 
 #include "provider/OAuth2AuthProvider.h"
 #include "ssl/SSLClient.h"
@@ -25,7 +28,7 @@ OAuth2AuthProvider::OAuth2AuthProvider(const string &name):
 {
 }
 
-void OAuth2AuthProvider::initSSL()
+void OAuth2AuthProvider::initSSL() const
 {
 	if (m_sslConfig == 0)
 		throw IllegalStateException(
@@ -34,7 +37,7 @@ void OAuth2AuthProvider::initSSL()
 
 SharedPtr<HTTPSClientSession> OAuth2AuthProvider::connectSecure(
 		const std::string &host,
-		unsigned int port)
+		unsigned int port) const
 {
 	try {
 		initSSL();
@@ -46,7 +49,7 @@ SharedPtr<HTTPSClientSession> OAuth2AuthProvider::connectSecure(
 	}
 }
 
-string OAuth2AuthProvider::handleResponse(HTTPSClientSession &session)
+string OAuth2AuthProvider::handleResponse(HTTPSClientSession &session) const
 {
 	HTTPResponse response;
 	istream &rs = session.receiveResponse(response);
@@ -65,15 +68,32 @@ string OAuth2AuthProvider::handleResponse(HTTPSClientSession &session)
 			+ receiveResponse, __FILE__, __LINE__);
 	}
 
-	if (response.getStatus() != HTTPResponse::HTTP_OK) {
-		throw NotAuthenticatedException(
-			"failed to retrieve access token from Google APIs");
-	}
-
 	return receiveResponse;
 }
 
-string OAuth2AuthProvider::convertResponseToString(istream &rs)
+string OAuth2AuthProvider::makeRequest(const string &method, URI &host, HTMLForm &requestForm) const
+{
+	SharedPtr<HTTPSClientSession>session;
+	session = connectSecure(host.getHost(), host.getPort());
+
+	HTTPRequest request(method, host.getPathAndQuery(), HTTPMessage::HTTP_1_1);
+	requestForm.prepareSubmit(request);
+
+	ostringstream requestQuery;
+	requestForm.write(requestQuery);
+
+	if (logger().debug())
+		logger().debug("request: " + requestQuery.str(), __FILE__, __LINE__);
+
+	if (method == HTTPRequest::HTTP_POST)
+		session->sendRequest(request) << requestQuery.str();
+	else
+		session->sendRequest(request);
+
+	return handleResponse(*session);
+}
+
+string OAuth2AuthProvider::convertResponseToString(istream &rs) const
 {
 	string response;
 	stringstream ss;

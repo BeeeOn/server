@@ -1,5 +1,6 @@
 #include <Poco/Exception.h>
 #include <Poco/Environment.h>
+#include <Poco/Net/HTMLForm.h>
 
 #include <cppunit/extensions/HelperMacros.h>
 
@@ -8,6 +9,7 @@
 #include "ssl/SSLClient.h"
 #include "cppunit/SkippableAutoRegisterSuite.h"
 
+using namespace Poco::Net;
 using namespace std;
 using namespace Poco;
 
@@ -28,12 +30,14 @@ bool skipWhenNoAuthCode()
 class GoogleAuthProviderTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST_SUITE(GoogleAuthProviderTest);
 	CPPUNIT_TEST(testVerifyAuthCode);
+	CPPUNIT_TEST(testHTTPData);
 	CPPUNIT_TEST_SUITE_END();
 
 public:
 	void setUp();
 	void tearDown();
 	void testVerifyAuthCode();
+	void testHTTPData();
 private:
 	std::string googleAuthCode;
 	SSLClient *m_sslConfig;
@@ -54,6 +58,17 @@ void GoogleAuthProviderTest::setUp()
 
 void GoogleAuthProviderTest::tearDown()
 {
+}
+
+void GoogleAuthProviderTest::testHTTPData()
+{
+	HTMLForm form;
+	form.setEncoding(HTMLForm::ENCODING_URL);
+	form.set("code","any&redirect_uri=malicious&client_id=attacking_client_id");
+	ostringstream code;
+	form.write(code);
+	string expected = "code=any%26redirect_uri%3Dmalicious%26client_id%3Dattacking_client_id";
+	CPPUNIT_ASSERT_EQUAL(expected, code.str());
 }
 
 /**
