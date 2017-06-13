@@ -79,13 +79,85 @@ class ManualResult(Result):
 	def __init__(self, login_uri):
 		Result.__init__(self, "manual", login_uri)
 
+class AbstractLogin:
+	def _login_uri(self, scope, redirect = "http://localhost"):
+		"""
+		Provide login URI only.
+		"""
+		flow = OAuth2WebServerFlow(
+				self._id,
+				scope = scope,
+				redirect_uri = redirect,
+				auth_uri = self._auth_uri
+		)
+		return flow.step1_get_authorize_url()
+
+	def _config_driver(self, **kwargs):
+		"""
+		Configures driver so that it can be used in other autorisation functions.
+
+		* 'webdriver' - selenium webdriver, default: 'phantomjs'
+		* 'window' - window size, default: (1024, 768)
+		"""
+		if "webdriver" in kwargs:
+			driver = webdriver_create(kwargs["webdriver"])
+		else:
+			driver = webdriver_create("phantomjs")
+
+		if "window" in kwargs:
+			w = kwargs["window"]
+		else:
+			w = [1024, 768]
+
+		driver.set_window_size(w[0], w[1])
+		return driver
+
+	def _wait_clickable(self, driver, id, timeout = 30):
+		"""
+		Wait until the element identified by the given ID is clickable.
+		"""
+		cond = expected_conditions.element_to_be_clickable((By.ID, id))
+		WebDriverWait(driver, timeout).until(cond)
+
+	def _wait_clickable_name(self, driver, name, timeout = 30):
+		"""
+		Wait until the element identified by the given name is clickable.
+		"""
+		cond = expected_conditions.element_to_be_clickable((By.NAME, name))
+		WebDriverWait(driver, timeout).until(cond)
+
+	def _wait_while_present_name(self, driver, name, timeout = 30):
+		"""
+		Wait until the element identified by the given ID is clickable.
+		"""
+		WebDriverWait(driver, timeout).until_not(lambda x: x.find_element_by_name(name).is_displayed())
+
+	def _extract_code(self, driver):
+		"""
+		Extract the authentication code. This is a tricky operation when using
+		PhantomJS as it does not process 301 redirects properly. Workaround:
+		list the PhantomJS log and find message/log/entries/request/url entry
+		that contains the code encoded in the URI. It is assumed that the URI
+		is in the first log entry.
+		"""
+		if webdriver_is_phantomjs(driver):
+			logs = driver.get_log("har")
+			for e in logs:
+				data = json.loads(e["message"])
+				uri = data["log"]["entries"][0]["request"]["url"]
+				driver.save_screenshot("extr.png");
+				return CodeResult(parse_qs(urlparse(uri).query)["code"][0])
+
+		# implemented for PhantomJS only
+		raise Exception("Not implemented or failed")
+
 GOOGLE_AUTH_URI = "https://accounts.google.com/o/oauth2/auth"
 GOOGLE_BASIC_SCOPES = [
 	"https://www.googleapis.com/auth/userinfo.profile",
 	"https://www.googleapis.com/auth/userinfo.email"
 ]
 
-class GoogleLogin:
+class GoogleLogin(AbstractLogin):
 	"""
 	Login via Google OAuth2. If possible, selenium is used to
 	perform the login automatically without any manual intervention.
@@ -106,37 +178,12 @@ class GoogleLogin:
 		else:
 			raise Exception("missing Google OAuth2 Client libarary and Selenium")
 
-	def _login_uri(self, scope = GOOGLE_BASIC_SCOPES, redirect = "http://localhost"):
-		"""
-		Provide login URI only.
-		"""
-		flow = OAuth2WebServerFlow(
-				self._id,
-				scope = scope,
-				redirect_uri = redirect,
-				auth_uri = self._auth_uri
-		)
-		return flow.step1_get_authorize_url()
-
 	def _do_weblogin(self, user, password, scope = GOOGLE_BASIC_SCOPES, **kwargs):
 		"""
 		Perform automatic login via Google OAuth2 website. It is possible
 		to override parameters:
-
-		* 'webdriver' - selenium webdriver, default: 'phantomjs'
-		* 'window' - window size, default: (1024, 768)
 		"""
-		if "webdriver" in kwargs:
-			driver = webdriver_create(kwargs["webdriver"])
-		else:
-			driver = webdriver_create("phantomjs")
-
-		if "window" in kwargs:
-			w = kwargs["window"]
-		else:
-			w = [1024, 768]
-
-		driver.set_window_size(w[0], w[1])
+		driver = self._config_driver(**kwargs)
 		driver.get(self._login_uri(scope))
 
 		try:
@@ -147,13 +194,6 @@ class GoogleLogin:
 		except WebDriverException as e:
 			driver.save_screenshot("google_login_failed.png")
 			raise e
-
-	def _wait_clickable(self, driver, id, timeout = 30):
-		"""
-		Wait until the element identified by the given ID is clickable.
-		"""
-		cond = expected_conditions.element_to_be_clickable((By.ID, id))
-		WebDriverWait(driver, timeout).until(cond)
 
 	def _input_email(self, driver, user):
 		"""
@@ -183,23 +223,62 @@ class GoogleLogin:
 		allow = driver.find_element_by_id("submit_approve_access")
 		allow.click()
 
-	def _extract_code(self, driver):
-		"""
-		Extract the authentication code. This is a tricky operation when using
-		PhantomJS as it does not process 301 redirects properly. Workaround:
-		list the PhantomJS log and find message/log/entries/request/url entry
-		that contains the code encoded in the URI. It is assumed that the URI
-		is in the first log entry.
-		"""
-		if webdriver_is_phantomjs(driver):
-			logs = driver.get_log("har")
-			for e in logs:
-				data = json.loads(e["message"])
-				uri = data["log"]["entries"][0]["request"]["url"]
-				return CodeResult(parse_qs(urlparse(uri).query)["code"][0])
+FACEBOOK_AUTH_URI = "https://www.facebook.com/v2.9/dialog/oauth"
+FACEBOOK_BASIC_SCOPES = [
+	"email",
+	"public_profile"
+]
 
-		# implemented for PhantomJS only
-		raise Exception("Not implemented or failed")
+class FacebookLogin(AbstractLogin):
+	"""
+	Login via Facebook OAuth2. If possible, selenium is used to
+	perform the login automatically without any manual intervention.
+	"""
+	def __init__(self, id, auth_uri = FACEBOOK_AUTH_URI):
+		self._id = id
+		self._auth_uri = auth_uri
+
+	def weblogin(self, user, password, scope = FACEBOOK_BASIC_SCOPES, **kwargs):
+		if automatic():
+			return self._do_weblogin(user, password, scope, **kwargs)
+		elif manual():
+			return ManualResult(self._login_uri(scope))
+		else:
+			raise Exception("missing Facebook OAuth2 Client libarary and Selenium")
+
+	def _do_weblogin(self, user, password, scope, **kwargs):
+		"""
+		Perform automatic login via Facebook OAuth2 website. It is possible
+		to override parameters:
+		"""
+		driver = self._config_driver(**kwargs)
+		driver.get(self._login_uri(scope, "https://localhost/"))
+
+		try:
+			self._input_credentials(driver, user, password)
+		except WebDriverException as e:
+			driver.save_screenshot("facebook_login_failed.png")
+			raise e
+		try:
+			return self._extract_code(driver)
+		except WebDriverException as e:
+			driver.save_screenshot("facebook_code_extr_failed.png");
+			raise e
+
+	def _input_credentials(self, driver, user, passwd):
+		self._wait_clickable(driver, "loginbutton")
+		email = driver.find_element_by_id("email")
+		email.send_keys(user)
+		password = driver.find_element_by_id("pass")
+		password.send_keys(passwd)
+		next = driver.find_element_by_id("loginbutton")
+		next.click()
+
+	def _allow_permissions(self, driver):
+		self._wait_clickable_name(driver, "__CONFIRM__")
+		allow = driver.find_element_by_name("__CONFIRM__")
+		allow.click()
+		self._wait_while_present_name(driver, "__CONFIRM__")
 
 if __name__ == "__main__":
 	import sys
@@ -207,7 +286,7 @@ if __name__ == "__main__":
 
 	if len(sys.argv) < 4:
 		print("oauth2.py <provider> <id> <user> [<password>]")
-		print("  providers: google")
+		print("  providers: google, facebook")
 		print("  if no password it is asked on prompt")
 		sys.exit(1)
 
@@ -218,6 +297,13 @@ if __name__ == "__main__":
 		else:
 			result = login.weblogin(sys.argv[3], getpass.getpass())
 
+		print("%s" % (result))
+	elif sys.argv[1] == "facebook":
+		login = FacebookLogin(sys.argv[2])
+		if len(sys.argv) >= 5:
+			result = login.weblogin(sys.argv[3], sys.argv[4])
+		else:
+			result = login.weblogin(sys.argv[3], getpass.getpass())
 		print("%s" % (result))
 	else:
 		raise Exception("no such provider: %s" % (provider))

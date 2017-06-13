@@ -16,6 +16,7 @@
 			<set name="transactionManager" ref="transactionManager" />
 			<add name="providers" ref="googlePermitAuthProvider" if-yes="${ui.debug}" />
 			<add name="providers" ref="googleAuthProvider" />
+			<add name="providers" ref="facebookAuthProvider" />
 		</instance>
 
 		<instance name="deviceService" class="BeeeOn::DeviceService">

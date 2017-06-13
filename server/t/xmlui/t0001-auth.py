@@ -6,6 +6,7 @@ config.import_libs()
 import unittest
 import os
 
+import facebook
 import google
 from xmlui import Connector, Response, Login, Logout
 
@@ -67,12 +68,11 @@ class TestAuth(unittest.TestCase):
 	environment variable FACEBOOK_AUTH_CODE otherwise
 	the test is skipped.
 	"""
-	@unittest.skipIf(not "FACEBOOK_AUTH_CODE" in os.environ,
-			"no FACEBOOK_AUTH_CODE specified")
+	@unittest.skipIf(facebook.skip_login(), "Missing configuration to perform Facebook login")
 	def test3_login_logout_facebook(self):
-		FACEBOOK_LOGIN = Login("facebook", os.environ["FACEBOOK_AUTH_CODE"])
+		FACEBOOK_LOGIN = Login("facebook", facebook.login_auth_code())
 
-		ok, session = login(FACEBOOK_AUTH_CODE)
+		ok, session = login(FACEBOOK_LOGIN)
 		self.assertTrue(ok)
 		self.assertTrue(logout(session))
 
