@@ -4,7 +4,7 @@
 #include <Poco/Data/Session.h>
 #include <Poco/Data/Transaction.h>
 
-#include "dao/ThreadLocalTransactionManager.h"
+#include "dao/TransactionManager.h"
 
 namespace Poco {
 namespace Data {
@@ -36,14 +36,13 @@ private:
 	Poco::Data::Transaction m_transaction;
 };
 
-class PocoTransaction : public ThreadLocalTransaction {
+class PocoTransaction : public AbstractTransaction {
 public:
-	PocoTransaction(Poco::Data::SessionPool &pool,
-			Poco::ThreadLocal<ThreadLocalTransaction *> &ref);
+	PocoTransaction(Poco::Data::SessionPool &pool);
 
-	void commit();
-	void rollback();
-	void isolate(Transaction::Isolation mask);
+	void commit() override;
+	void rollback() override;
+	void isolate(Transaction::Isolation mask) override;
 
 private:
 	PocoTransactionImpl m_impl;

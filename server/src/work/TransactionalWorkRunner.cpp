@@ -1,4 +1,4 @@
-#include "dao/NoTransactionManager.h"
+#include "dao/NullTransactionManager.h"
 #include "di/Injectable.h"
 #include "work/TransactionalWorkRunner.h"
 #include "work/WorkAccess.h"
@@ -49,7 +49,7 @@ void TransactionalWorkRunner::doExecute(WorkExecuting &guard)
 }
 
 TransactionalWorkRunnerFactory::TransactionalWorkRunnerFactory():
-	m_manager(&NoTransactionManager::instance())
+	m_manager(&NullTransactionManager::instance())
 {
 }
 
@@ -64,5 +64,5 @@ WorkRunner *TransactionalWorkRunnerFactory::create(
 
 void TransactionalWorkRunnerFactory::setTransactionManager(TransactionManager *manager)
 {
-	m_manager = manager? manager : &NoTransactionManager::instance();
+	m_manager = manager? manager : &NullTransactionManager::instance();
 }

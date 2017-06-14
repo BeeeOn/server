@@ -18,10 +18,9 @@ PocoTransactionImpl::~PocoTransactionImpl()
 {
 }
 
-PocoTransaction::PocoTransaction(SessionPool &pool,
-		ThreadLocal<ThreadLocalTransaction *> &ref):
-	 // we assume that ThreadLocalTransaction does not touch m_impl yet
-	ThreadLocalTransaction(m_impl, ref),
+PocoTransaction::PocoTransaction(SessionPool &pool):
+	 // we assume that AbstractTransaction does not touch m_impl yet
+	AbstractTransaction(m_impl),
 	m_impl(pool)
 {
 }

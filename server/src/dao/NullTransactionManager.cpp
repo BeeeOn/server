@@ -29,3 +29,14 @@ Transaction *NullTransactionManager::current()
 {
 	throw NullPointerException("missing transaction manager when calling current()");
 }
+
+TransactionFactory &NullTransactionFactory::instance()
+{
+	static SingletonHolder<NullTransactionFactory> singleton;
+	return *singleton.get();
+}
+
+Transaction *NullTransactionFactory::create()
+{
+	throw NullPointerException("missing transaction factory when calling create()");
+}

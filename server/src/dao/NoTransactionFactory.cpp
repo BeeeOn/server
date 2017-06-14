@@ -1,7 +1,7 @@
 #include <Poco/SingletonHolder.h>
 #include <Poco/Exception.h>
 
-#include "dao/NoTransactionManager.h"
+#include "dao/NoTransactionFactory.h"
 
 using namespace Poco;
 using namespace BeeeOn;
@@ -14,10 +14,10 @@ using namespace BeeeOn;
  * for some use cases). Thus, the NoTransaction is a TransactionImpl
  * for itself.
  */
-class NoTransaction : public ThreadLocalTransaction, TransactionImpl {
+class NoTransaction : public AbstractTransaction, TransactionImpl {
 public:
-	NoTransaction(ThreadLocal<ThreadLocalTransaction *> &self):
-		ThreadLocalTransaction(*this, self)
+	NoTransaction():
+		AbstractTransaction(static_cast<TransactionImpl &>(*this))
 	{
 	}
 
@@ -34,21 +34,21 @@ public:
 	}
 };
 
-NoTransactionManager::NoTransactionManager()
+NoTransactionFactory::NoTransactionFactory()
 {
 }
 
-NoTransactionManager::~NoTransactionManager()
+NoTransactionFactory::~NoTransactionFactory()
 {
 }
 
-TransactionManager &NoTransactionManager::instance()
+TransactionFactory &NoTransactionFactory::instance()
 {
-	static SingletonHolder<NoTransactionManager> singleton;
+	static SingletonHolder<NoTransactionFactory> singleton;
 	return *singleton.get();
 }
 
-void NoTransactionManager::create(Poco::ThreadLocal<ThreadLocalTransaction *> &ref)
+Transaction *NoTransactionFactory::create()
 {
-	new NoTransaction(ref);
+	return new NoTransaction;
 }
