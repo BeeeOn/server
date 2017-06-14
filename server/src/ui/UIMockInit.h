@@ -9,10 +9,10 @@
 #include "dao/IdentityDao.h"
 #include "dao/VerifiedIdentityDao.h"
 #include "dao/SensorHistoryDao.h"
-#include "dao/Transactional.h"
 #include "model/Location.h"
 #include "model/DeviceInfo.h"
 #include "provider/InfoProvider.h"
+#include "transaction/Transactional.h"
 
 namespace BeeeOn {
 

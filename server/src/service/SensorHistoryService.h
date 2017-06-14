@@ -3,10 +3,10 @@
 
 #include <vector>
 
-#include "dao/Transactional.h"
 #include "model/ModuleValue.h"
 #include "service/Single.h"
 #include "service/Relation.h"
+#include "transaction/Transactional.h"
 
 namespace Poco {
 

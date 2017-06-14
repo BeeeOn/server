@@ -1,8 +1,8 @@
 #ifndef BEEEON_POCO_TRANSACTION_FACTORY_H
 #define BEEEON_POCO_TRANSACTION_FACTORY_H
 
-#include "dao/TransactionManager.h"
 #include "dao/poco/PocoDaoManager.h"
+#include "transaction/TransactionManager.h"
 
 namespace BeeeOn {
 

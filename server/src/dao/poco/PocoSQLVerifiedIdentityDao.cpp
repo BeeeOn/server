@@ -5,11 +5,11 @@
 #include <Poco/Data/RecordSet.h>
 
 #include "di/Injectable.h"
-#include "dao/TransactionManager.h"
 #include "dao/poco/PocoSQLVerifiedIdentityDao.h"
 #include "dao/poco/PocoSQLIdentityDao.h"
 #include "dao/poco/PocoSQLUserDao.h"
 #include "dao/poco/PocoDaoManager.h"
+#include "transaction/TransactionManager.h"
 
 using namespace std;
 using namespace Poco;

@@ -1,7 +1,7 @@
 #ifndef BEEEON_TRANSACTIONAL_WORK_RUNNER_H
 #define BEEEON_TRANSACTIONAL_WORK_RUNNER_H
 
-#include "dao/Transactional.h"
+#include "transaction/Transactional.h"
 #include "work/GenericWorkRunner.h"
 
 namespace BeeeOn {

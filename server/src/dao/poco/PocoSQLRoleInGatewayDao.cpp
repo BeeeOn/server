@@ -5,13 +5,13 @@
 #include <Poco/Data/RecordSet.h>
 
 #include "di/Injectable.h"
-#include "dao/TransactionManager.h"
 #include "dao/poco/PocoSQLRoleInGatewayDao.h"
 #include "dao/poco/PocoSQLGatewayDao.h"
 #include "dao/poco/PocoSQLIdentityDao.h"
 #include "dao/poco/PocoDaoManager.h"
 #include "model/User.h"
 #include "model/Gateway.h"
+#include "transaction/TransactionManager.h"
 
 using namespace std;
 using namespace Poco;

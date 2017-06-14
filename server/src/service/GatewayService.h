@@ -6,13 +6,13 @@
 #include <Poco/Logger.h>
 #include "service/Single.h"
 #include "service/Relation.h"
-#include "dao/Transactional.h"
 #include "rpc/GatewayRPC.h"
 #include "Debug.h"
 #include "model/User.h"
 #include "model/VerifiedIdentity.h"
 #include "model/Gateway.h"
 #include "model/LegacyGateway.h"
+#include "transaction/Transactional.h"
 
 namespace BeeeOn {
 

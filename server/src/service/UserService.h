@@ -4,7 +4,7 @@
 #include <Poco/Exception.h>
 #include <Poco/Logger.h>
 #include "dao/UserDao.h"
-#include "dao/Transactional.h"
+#include "transaction/Transactional.h"
 #include "Debug.h"
 
 namespace BeeeOn {

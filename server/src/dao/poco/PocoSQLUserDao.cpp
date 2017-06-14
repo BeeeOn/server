@@ -2,9 +2,9 @@
 #include <Poco/Data/Statement.h>
 
 #include "di/Injectable.h"
-#include "dao/TransactionManager.h"
 #include "dao/poco/PocoSQLUserDao.h"
 #include "dao/poco/PocoDaoManager.h"
+#include "transaction/TransactionManager.h"
 
 using namespace std;
 using namespace Poco;
