@@ -1,9 +1,9 @@
 #ifndef BEEEON_ROLE_SERVICE_H
 #define BEEEON_ROLE_SERVICE_H
 
-#include "dao/Transactional.h"
 #include "service/Single.h"
 #include "service/Relation.h"
+#include "transaction/Transactional.h"
 
 namespace BeeeOn {
 

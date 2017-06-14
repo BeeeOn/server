@@ -4,7 +4,7 @@
 #include <Poco/Data/Session.h>
 #include <Poco/Data/Transaction.h>
 
-#include "dao/TransactionManager.h"
+#include "transaction/TransactionManager.h"
 
 namespace Poco {
 namespace Data {

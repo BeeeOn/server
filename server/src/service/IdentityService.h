@@ -3,7 +3,7 @@
 
 #include "dao/IdentityDao.h"
 #include "dao/VerifiedIdentityDao.h"
-#include "dao/Transactional.h"
+#include "transaction/Transactional.h"
 
 namespace BeeeOn {
 

@@ -2,11 +2,11 @@
 
 #include "dao/SQLLoader.h"
 #include "dao/SQLQuery.h"
-#include "dao/TransactionManager.h"
-#include "dao/NullTransactionManager.h"
 #include "dao/poco/PocoTransactionImpl.h"
 #include "dao/poco/PocoAbstractDao.h"
 #include "dao/poco/PocoDaoManager.h"
+#include "transaction/NullTransactionManager.h"
+#include "transaction/TransactionManager.h"
 #include "util/ClassInfo.h"
 #include "Debug.h"
 

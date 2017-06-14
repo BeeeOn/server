@@ -7,9 +7,9 @@
 #include <Poco/Logger.h>
 #include "service/Single.h"
 #include "service/Relation.h"
-#include "dao/Transactional.h"
 #include "model/Location.h"
 #include "model/Gateway.h"
+#include "transaction/Transactional.h"
 #include "Debug.h"
 
 namespace BeeeOn {

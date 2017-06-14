@@ -62,11 +62,6 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/dao/ConnectorLoader.cpp
 	${PROJECT_SOURCE_DIR}/dao/SQLLoader.cpp
 	${PROJECT_SOURCE_DIR}/dao/SQLQuery.cpp
-	${PROJECT_SOURCE_DIR}/dao/TransactionManager.cpp
-	${PROJECT_SOURCE_DIR}/dao/ThreadLocalTransactionManager.cpp
-	${PROJECT_SOURCE_DIR}/dao/NullTransactionManager.cpp
-	${PROJECT_SOURCE_DIR}/dao/NoTransactionFactory.cpp
-	${PROJECT_SOURCE_DIR}/dao/Transactional.cpp
 	${PROJECT_SOURCE_DIR}/service/UserService.cpp
 	${PROJECT_SOURCE_DIR}/service/AuthService.cpp
 	${PROJECT_SOURCE_DIR}/service/DeviceService.cpp
@@ -177,6 +172,7 @@ if (APPLE)
 		-Wl,-all_load
 		BeeeOnBase
 		BeeeOnWork
+		BeeeOnTransaction
 		BeeeOnServer
 		${LIBS}
 	)
@@ -187,6 +183,7 @@ else()
 		-Wl,--whole-archive
 		BeeeOnBase
 		BeeeOnWork
+		BeeeOnTransaction
 		BeeeOnServer
 		-Wl,--no-whole-archive
 		${LIBS}

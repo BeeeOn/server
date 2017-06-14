@@ -10,9 +10,9 @@
 #include "dao/UserDao.h"
 #include "dao/IdentityDao.h"
 #include "dao/VerifiedIdentityDao.h"
-#include "dao/Transactional.h"
 #include "server/SessionManager.h"
 #include "server/Session.h"
+#include "transaction/Transactional.h"
 #include "Debug.h"
 
 namespace BeeeOn {

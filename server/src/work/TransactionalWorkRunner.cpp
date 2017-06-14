@@ -1,5 +1,5 @@
-#include "dao/NullTransactionManager.h"
 #include "di/Injectable.h"
+#include "transaction/NullTransactionManager.h"
 #include "work/TransactionalWorkRunner.h"
 #include "work/WorkAccess.h"
 #include "work/WorkExecutor.h"

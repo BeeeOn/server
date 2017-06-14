@@ -14,10 +14,10 @@
 #include "dao/UserDao.h"
 #include "dao/IdentityDao.h"
 #include "dao/VerifiedIdentityDao.h"
-#include "dao/NoTransactionFactory.h"
-#include "dao/ThreadLocalTransactionManager.h"
 #include "notification/NotificationObserver.h"
 #include "notification/FirstLoginNotification.h"
+#include "transaction/NoTransactionFactory.h"
+#include "transaction/ThreadLocalTransactionManager.h"
 #include "util/Base64.h"
 
 using namespace std;

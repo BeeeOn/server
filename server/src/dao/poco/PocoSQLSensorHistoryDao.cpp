@@ -9,10 +9,10 @@
 #include "model/Device.h"
 #include "model/ModuleInfo.h"
 #include "model/ModuleValue.h"
-#include "dao/TransactionManager.h"
 #include "dao/poco/PocoSQLSensorHistoryDao.h"
 #include "dao/poco/PocoDaoManager.h"
 #include "service/ValueConsumer.h"
+#include "transaction/TransactionManager.h"
 #include "util/TimeInterval.h"
 
 using namespace std;
