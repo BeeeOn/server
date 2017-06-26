@@ -12,6 +12,12 @@
 #include "service/GatewayService.h"
 #include "transaction/Transactional.h"
 
+namespace Poco {
+
+class Timespan;
+
+}
+
 namespace BeeeOn {
 
 class IdentityDao;
@@ -73,9 +79,9 @@ public:
 		return BEEEON_TRANSACTION_RETURN(bool, doUnregister(input));
 	}
 
-	void scanDevices(Single<Gateway> &input) override
+	void scanDevices(Single<Gateway> &input, const Poco::Timespan &duration) override
 	{
-		doScanDevices(input);
+		doScanDevices(input, duration);
 	}
 
 	void unpairDevice(Single<Gateway> &input, Device &device) override
@@ -97,7 +103,7 @@ protected:
 	void doFetchAccessible(Relation<std::vector<LegacyGateway>, User> &input);
 	bool doUpdate(SingleWithData<Gateway> &input);
 	bool doUnregister(Single<Gateway> &input);
-	void doScanDevices(Single<Gateway> &input);
+	void doScanDevices(Single<Gateway> &input, const Poco::Timespan &duration);
 	void doUnpairDevice(Single<Gateway> &input, Device &device);
 	void doPingGateway(Single<Gateway> &input);
 

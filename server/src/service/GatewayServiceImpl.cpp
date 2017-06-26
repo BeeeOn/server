@@ -138,7 +138,7 @@ bool GatewayServiceImpl::doUnregister(Single<Gateway> &input)
 	return true;
 }
 
-void GatewayServiceImpl::doScanDevices(Single<Gateway> &input)
+void GatewayServiceImpl::doScanDevices(Single<Gateway> &input, const Timespan &timeout)
 {
 	m_accessPolicy->assure(GatewayAccessPolicy::ACTION_USER_SCAN, input, input.target());
 
@@ -151,7 +151,7 @@ void GatewayServiceImpl::doScanDevices(Single<Gateway> &input)
 			event.set();
 		},
 		input.target(),
-		Timespan(30, 0)
+		timeout
 	);
 
 	while (1) {

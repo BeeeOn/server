@@ -1,5 +1,7 @@
 #include <vector>
 
+#include <Poco/Timespan.h>
+
 #include "di/Injectable.h"
 #include "xmlui/GatewayXmlHandler.h"
 #include "xmlui/XmlGatewayDeserializer.h"
@@ -97,7 +99,7 @@ void GatewayXmlHandler::handleListen(Element *gatewayNode)
 	User user(session()->userID());
 	input.setUser(user);
 
-	m_gatewayService.scanDevices(input);
+	m_gatewayService.scanDevices(input, Timespan(30, 0));
 	resultSuccess();
 }
 
