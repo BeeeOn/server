@@ -23,6 +23,7 @@ class LegacyRoleInGateway;
 class Location;
 class VerifiedIdentity;
 class RoleInGateway;
+class Sensor;
 class Translator;
 class Work;
 
@@ -56,6 +57,13 @@ void serialize(Poco::JSON::PrintHandler &output,
 		Translator &translator,
 		const TypeInfoProvider::InfoSet::const_iterator begin,
 		const TypeInfoProvider::InfoSet::const_iterator end);
+
+void serialize(Poco::JSON::PrintHandler &output,
+		Translator &translator,
+		const Sensor &sensor);
+void serialize(Poco::JSON::PrintHandler &output,
+		Translator &translator,
+		const std::list<Sensor> &sensors);
 
 }
 

@@ -221,6 +221,7 @@ file(GLOB RESTUI_SOURCES
 	restui/ProfileRestHandler.cpp
 	restui/RestValueConsumer.cpp
 	restui/RoleRestHandler.cpp
+	restui/SensorRestHandler.cpp
 	restui/TypeRestHandler.cpp
 	restui/GatewayRestHandler.cpp
 	restui/WorkRestHandler.cpp

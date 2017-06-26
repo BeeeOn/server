@@ -8,9 +8,12 @@
 #include "model/Gateway.h"
 #include "model/LegacyRoleInGateway.h"
 #include "model/Location.h"
+#include "model/ModuleInfo.h"
 #include "model/RoleInGateway.h"
+#include "model/Sensor.h"
 #include "model/User.h"
 #include "model/VerifiedIdentity.h"
+#include "restui/RestValueConsumer.h"
 #include "restui/Serializing.h"
 #include "work/Work.h"
 
@@ -424,6 +427,68 @@ void BeeeOn::RestUI::serialize(Poco::JSON::PrintHandler &output,
 		SharedPtr<TypeInfo> info = *it;
 		serialize(output, translator, *info);
 	}
+
+	output.endArray();
+}
+
+void BeeeOn::RestUI::serialize(Poco::JSON::PrintHandler &output,
+		Translator &translator,
+		const Sensor &sensor)
+{
+	const ModuleInfo &info = sensor.info();
+
+	output.startObject();
+
+	output.key("id");
+	output.value(sensor.id().toString());
+
+	if (!sensor.name().empty()) {
+		output.key("display_name");
+		output.value(sensor.name());
+	}
+	else if (!info.name().empty()) {
+		output.key("display_name");
+		output.value(translator.format(
+			"modules." + info.name() + ".label"));
+	}
+	else {
+		output.key("display_name");
+		output.value(translator.format(
+			"types." + info.type()->name() + ".label"));
+	}
+
+	output.key("type_id");
+	output.value(info.type()->id().toString());
+
+	if (!info.group().empty()) {
+		output.key("group");
+		output.value(translator.format(
+			"modules.groups." + info.group() + ".label"));
+	}
+
+	output.key("order");
+	output.value(info.id().toString());
+
+	if (!sensor.at().isNull()) {
+		output.key("current");
+
+		RestValueConsumer consumer(output);
+		consumer.begin(*sensor.info().type());
+		consumer.single(ValueAt(sensor.at().value(), sensor.value()));
+		consumer.end();
+	}
+
+	output.endObject();
+}
+
+void BeeeOn::RestUI::serialize(Poco::JSON::PrintHandler &output,
+		Translator &translator,
+		const list<Sensor> &sensors)
+{
+	output.startArray();
+
+	for (auto &sensor : sensors)
+		serialize(output, translator, sensor);
 
 	output.endArray();
 }
