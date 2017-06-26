@@ -219,6 +219,7 @@ file(GLOB RESTUI_SOURCES
 	restui/DeviceRestHandler.cpp
 	restui/LocationRestHandler.cpp
 	restui/ProfileRestHandler.cpp
+	restui/RestValueConsumer.cpp
 	restui/RoleRestHandler.cpp
 	restui/TypeRestHandler.cpp
 	restui/GatewayRestHandler.cpp
