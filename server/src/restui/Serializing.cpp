@@ -3,6 +3,7 @@
 #include <Poco/DateTime.h>
 #include <Poco/JSON/PrintHandler.h>
 
+#include "l10n/Translator.h"
 #include "model/Device.h"
 #include "model/Gateway.h"
 #include "model/LegacyRoleInGateway.h"
@@ -298,6 +299,39 @@ void BeeeOn::RestUI::serialize(Poco::JSON::PrintHandler &output,
 
 	for (auto &device : devices)
 		serialize(output, device);
+
+	output.endArray();
+}
+
+void BeeeOn::RestUI::serialize(Poco::JSON::PrintHandler &output,
+		Translator &translator,
+		const TypeInfo &info)
+{
+	output.startObject();
+
+	output.key("id");
+	output.value(info.id().toString());
+
+	output.key("name");
+	output.value(translator.format("types." + info.name()));
+
+	output.key("unit");
+	output.value(info.unit());
+
+	output.endObject();
+}
+
+void BeeeOn::RestUI::serialize(Poco::JSON::PrintHandler &output,
+		Translator &translator,
+		const TypeInfoProvider::InfoSet::const_iterator begin,
+		const TypeInfoProvider::InfoSet::const_iterator end)
+{
+	output.startArray();
+
+	for (auto it = begin; it != end; ++it) {
+		SharedPtr<TypeInfo> info = *it;
+		serialize(output, translator, *info);
+	}
 
 	output.endArray();
 }
