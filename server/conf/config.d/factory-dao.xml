@@ -48,6 +48,12 @@
 			<set name="responseTimeout" time="${gateway-rpc.legacy.responseTimeout}" />
 		</instance>
 
+		<instance name="asyncGatewayRPC" class="BeeeOn::AsyncGatewayRPC">
+			<set name="gatewayCommunicator" ref="gatewayCommunicator" />
+			<set name="responseExpectedQueue" ref="responseExpectedQueue" />
+			<set name="finalResultTimeout" time="${gateway-rpc.async.finalResultTimeout}" />
+		</instance>
+
 		<alias name="gatewayRPC" ref="${gateway-rpc.type}GatewayRPC" />
 
 		<!-- Data access layer -->

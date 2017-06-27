@@ -28,6 +28,7 @@
 
 		<instance name="responseExpectedQueue" class="BeeeOn::GWResponseExpectedQueue">
 			<set name="gatewayCommunicator" ref="gatewayCommunicator" />
+			<set name="rpcForwarder" ref="asyncGatewayRPC" />
 			<set name="responseTimeout" time="${gws.queue.responseTimeout}" />
 		</instance>
 	</factory>
