@@ -32,7 +32,9 @@ void LegacyGatewayRPC::setResponseTimeout(int ms)
 	m_timeout = Timespan(0, ms * 1000);
 }
 
-void LegacyGatewayRPC::sendListen(const Gateway &gateway,
+void LegacyGatewayRPC::sendListen(
+		const ResultCall &resultCall,
+		const Gateway &gateway,
 		const Poco::Timespan &duration)
 {
 	Mutex::ScopedLock guard(m_lock);
@@ -66,10 +68,13 @@ void LegacyGatewayRPC::sendListen(const Gateway &gateway,
 	}
 
 	m_logStream << endl;
-	parseResponse(receiveResponse());
+	resultCall(parseResponse(receiveResponse()));
 }
 
-void LegacyGatewayRPC::unpairDevice(const Gateway &gateway, const Device &device)
+void LegacyGatewayRPC::unpairDevice(
+		const ResultCall &resultCall,
+		const Gateway &gateway,
+		const Device &device)
 {
 	Mutex::ScopedLock guard(m_lock);
 	m_connector->open();
@@ -103,10 +108,12 @@ void LegacyGatewayRPC::unpairDevice(const Gateway &gateway, const Device &device
 	}
 
 	m_logStream << endl;
-	parseResponse(receiveResponse());
+	resultCall(parseResponse(receiveResponse()));
 }
 
-void LegacyGatewayRPC::pingGateway(const Gateway &gateway)
+void LegacyGatewayRPC::pingGateway(
+		const ResultCall &resultCall,
+		const Gateway &gateway)
 {
 	Mutex::ScopedLock guard(m_lock);
 	m_connector->open();
@@ -139,10 +146,11 @@ void LegacyGatewayRPC::pingGateway(const Gateway &gateway)
 	}
 
 	m_logStream << endl;
-	parseResponse(receiveResponse());
+	resultCall(parseResponse(receiveResponse()));
 }
 
 void LegacyGatewayRPC::updateActor(
+		const ResultCall &resultCall,
 		const Gateway &gateway,
 		const Device &device,
 		const ModuleInfo &module,
@@ -187,7 +195,7 @@ void LegacyGatewayRPC::updateActor(
 	}
 
 	m_logStream << endl;
-	parseResponse(receiveResponse());
+	resultCall(parseResponse(receiveResponse()));
 }
 
 string LegacyGatewayRPC::receiveResponse()
@@ -222,31 +230,37 @@ string LegacyGatewayRPC::receiveResponse()
 	return response.str();
 }
 
-void LegacyGatewayRPC::parseResponse(const string &response)
+GatewayRPCResult::Ptr LegacyGatewayRPC::parseResponse(const string &response)
 {
-	if (response.length() == 0)
-		throw InvalidArgumentException("response is empty.");
+	GatewayRPCResult::Ptr result = new GatewayRPCResult;
+
+	if (response.length() == 0) {
+		result->setStatus(GatewayRPCResult::TIMEOUT);
+		return result;
+	}
 
 	if(logger().debug())
 		logger().debug(response);
 
-	AutoPtr<XML::Document> doc = m_xmlParser.parse(response);
-	string errorCode = doc->documentElement()->getAttribute("errorCode");
+	string errorCode;
+
+	try {
+		AutoPtr<XML::Document> doc = m_xmlParser.parse(response);
+		errorCode = doc->documentElement()->getAttribute("errorCode");
+	} catch (const Exception &e) {
+		logger().log(e);
+		result->setStatus(GatewayRPCResult::FAILED);
+		return result;
+	}
 
 	if (errorCode == "0")
-		return;
-	else if (errorCode == "1")
-		throw IllegalStateException("gateway was never connected to the server");
-	else if (errorCode == "2")
-		throw IllegalStateException("connection with gateway is broken");
-	else if (errorCode == "3")
-		throw IllegalStateException("error sending data to the gateway");
-	else if (errorCode == "4")
-		throw IllegalStateException("PING response has not arrived");
-	else if (errorCode == "5")
-		throw IllegalStateException("message is not supported by the gateway protocol");
+		result->setStatus(GatewayRPCResult::SUCCESS);
+	else if (errorCode == "1" || errorCode == "2")
+		result->setStatus(GatewayRPCResult::NOT_CONNECTED);
 	else
-		throw IllegalStateException("illegal error code: " + errorCode);
+		result->setStatus(GatewayRPCResult::FAILED);
+
+	return result;
 }
 
 BEEEON_OBJECT_BEGIN(BeeeOn, LegacyGatewayRPC)

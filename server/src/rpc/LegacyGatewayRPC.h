@@ -22,11 +22,20 @@ public:
 		m_connector = connector;
 	}
 
-	void sendListen(const Gateway &gateway,
+	void sendListen(
+			const ResultCall &resultCall,
+			const Gateway &gateway,
 			const Poco::Timespan &duration) override;
-	void unpairDevice(const Gateway &gateway, const Device &device) override;
-	void pingGateway(const Gateway &gateway) override;
-	void updateActor(const Gateway &gateway,
+	void unpairDevice(
+			const ResultCall &resultCall,
+			const Gateway &gateway,
+			const Device &device) override;
+	void pingGateway(
+			const ResultCall &resultCall,
+			const Gateway &gateway) override;
+	void updateActor(
+			const ResultCall &resultCall,
+			const Gateway &gateway,
 			const Device &device,
 			const ModuleInfo &module,
 			double value,
@@ -36,7 +45,7 @@ public:
 
 private:
 	std::string receiveResponse();
-	void parseResponse(const std::string &response);
+	GatewayRPCResult::Ptr parseResponse(const std::string &response);
 
 	Poco::Timespan m_timeout;
 	Poco::LogStream m_logStream;

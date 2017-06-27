@@ -1,5 +1,6 @@
 #include <string>
 
+#include <Poco/Event.h>
 #include <Poco/Exception.h>
 
 #include "dao/DeviceDao.h"
@@ -119,7 +120,45 @@ void DeviceUnpairWorkExecutor::execute(Work::Ptr work)
 	content.setAttempt(content.attempt() + 1);
 
 	try {
-		m_rpc->unpairDevice(gateway, device);
+		//TODO this is temporary solution intended to use with blocking
+		// synchronous RPC like LegacyGatewayRPC
+
+		Event event;
+		GatewayRPCResult::Ptr localResult;
+
+		m_rpc->unpairDevice([&](GatewayRPCResult::Ptr result)
+			{
+				localResult = result;
+				event.set();
+			},
+			gateway,
+			device
+		);
+
+		while (1) {
+			event.wait();
+
+			switch (localResult->status()) {
+				case GatewayRPCResult::PENDING:
+				case GatewayRPCResult::ACCEPTED:
+					break;
+				case GatewayRPCResult::NOT_CONNECTED:
+					throw NotFoundException("gateway "
+							+ gateway.id().toString()
+							+ " is not connected");
+				case GatewayRPCResult::TIMEOUT:
+					throw TimeoutException("no response from gateway "
+							+ gateway.id().toString());
+				case GatewayRPCResult::FAILED:
+					throw Exception("unpair device "
+							+ device.id().toString()
+							+ " failed on gateway "
+							+ gateway.id().toString());
+				case GatewayRPCResult::SUCCESS:
+					return;
+			}
+		}
+
 	} catch (const Poco::Exception &e) {
 		logger().log(e, __FILE__, __LINE__);
 		// we will try again after suspend
@@ -131,4 +170,5 @@ void DeviceUnpairWorkExecutor::execute(Work::Ptr work)
 
 	work->setContent(content);
 	suspend(work, sleep);
+
 }
