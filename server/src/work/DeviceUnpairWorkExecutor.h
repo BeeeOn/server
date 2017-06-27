@@ -52,7 +52,7 @@ protected:
 	 * the Poco::TimeoutException is thrown and the task is marked as
 	 * failing.
 	 */
-	void checkAttempts(DeviceUnpairWork::Ptr work, const WorkAccess &guard);
+	void checkAttempts(DeviceUnpairWork::Ptr work);
 
 private:
 	DeviceDao *m_dao;

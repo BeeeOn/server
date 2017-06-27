@@ -1,38 +1,41 @@
 #include "di/Injectable.h"
 #include "transaction/NullTransactionManager.h"
 #include "work/TransactionalWorkRunner.h"
-#include "work/WorkAccess.h"
 #include "work/WorkExecutor.h"
+#include "work/WorkLockManager.h"
 #include "work/WorkSuspendThrowable.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, TransactionalWorkRunnerFactory)
 BEEEON_OBJECT_CASTABLE(WorkRunnerFactory)
 BEEEON_OBJECT_REF("transactionManager", &TransactionalWorkRunnerFactory::setTransactionManager)
+BEEEON_OBJECT_REF("lockManager", &TransactionalWorkRunnerFactory::setLockManager)
 BEEEON_OBJECT_END(BeeeOn, TransactionalWorkRunnerFactory)
 
 using namespace Poco;
 using namespace BeeeOn;
 
 TransactionalWorkRunner::TransactionalWorkRunner(
-		WorkScheduler &scheduler):
-	GenericWorkRunner(scheduler)
+		WorkScheduler &scheduler,
+		WorkLockManager &manager):
+	GenericWorkRunner(scheduler, manager)
 {
 }
 
 void TransactionalWorkRunner::execute()
 {
-	WorkExecuting guard(m_work, __FILE__, __LINE__);
+	WorkExecutionGuard guard(m_lockManager.execute(m_work->id()));
+	WorkWriteGuard accessGuard(m_lockManager.readWrite(m_work->id()));
 
 	try {
 		prepare();
-		BEEEON_TRANSACTION(doExecute(guard));
+		BEEEON_TRANSACTION(doExecute(accessGuard));
 	} catch (...) {
 		doFailed();
 		throw;
 	}
 }
 
-void TransactionalWorkRunner::doExecute(WorkExecuting &guard)
+void TransactionalWorkRunner::doExecute(WorkWriteGuard &guard)
 {
 	try {
 		m_executor->execute(m_work);
@@ -56,7 +59,7 @@ TransactionalWorkRunnerFactory::TransactionalWorkRunnerFactory():
 WorkRunner *TransactionalWorkRunnerFactory::create(
 		WorkScheduler &scheduler)
 {
-	TransactionalWorkRunner *runner(new TransactionalWorkRunner(scheduler));
+	TransactionalWorkRunner *runner(new TransactionalWorkRunner(scheduler, *m_lockManager));
 	runner->setTransactionManager(m_manager);
 
 	return runner;

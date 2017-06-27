@@ -6,15 +6,17 @@
 
 namespace BeeeOn {
 
+class WorkWriteGuard;
+
 class TransactionalWorkRunner :
 	public Transactional,
 	public GenericWorkRunner {
 public:
-	TransactionalWorkRunner(WorkScheduler &scheduler);
+	TransactionalWorkRunner(WorkScheduler &scheduler, WorkLockManager &manager);
 
 protected:
 	void execute() override;
-	void doExecute(WorkExecuting &guard);
+	void doExecute(WorkWriteGuard &guard);
 };
 
 class TransactionalWorkRunnerFactory : public WorkRunnerFactory {

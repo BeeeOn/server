@@ -26,7 +26,6 @@ public:
 	 * Set when creating the work instance. The device must
 	 * contain the owning Gateway.
 	 */
-	void setDevice(const Device &device, const WorkWriting &guard);
 	void setDevice(const Device &device);
 
 	/**
@@ -34,7 +33,6 @@ public:
 	 * We need Device::id() and Device::gateway().id() to be
 	 * valid.
 	 */
-	const Device &device(const WorkAccess &guard) const;
 	const Device &device() const;
 
 	/**
@@ -42,14 +40,12 @@ public:
 	 * device. To be called from DeviceUnpairWorkExecutor or some
 	 * persistance layer only.
 	 */
-	void setAttempt(unsigned int attempt, const WorkWriting &guard);
 	void setAttempt(unsigned int attempt);
 
 	/**
 	 * Return the number of this attempt. Initially, this is always 0.
 	 * After N executions, the value is incremented automatically.
 	 */
-	unsigned int attempt(const WorkAccess &guard) const;
 	unsigned int attempt() const;
 
 private:
