@@ -21,7 +21,8 @@ public:
 	/**
 	 * Send listen command.
 	 */
-	virtual void sendListen(const Gateway &gateway) = 0;
+	virtual void sendListen(const Gateway &gateway,
+			const Poco::Timespan &duration) = 0;
 
 	/**
 	 * Send unpair device command to the selected gateway.
@@ -47,7 +48,7 @@ public:
 
 class NullGatewayRPC : public GatewayRPC {
 public:
-	void sendListen(const Gateway &gateway)
+	void sendListen(const Gateway &gateway, const Poco::Timespan &duration)
 	{
 		throw Poco::NotImplementedException(__func__);
 	}

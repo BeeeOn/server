@@ -19,7 +19,8 @@ public:
 
 	void setDeviceDao(DeviceDao::Ptr dao);
 
-	void sendListen(const Gateway &gateway) override;
+	void sendListen(const Gateway &gateway,
+			const Poco::Timespan &duration) override;
 	void unpairDevice(const Gateway &gateway,
 			const Device &device) override;
 	void pingGateway(const Gateway &gateway) override;
@@ -42,7 +43,7 @@ void FakeGatewayRPC::setDeviceDao(DeviceDao::Ptr dao)
 	m_deviceDao = dao;
 }
 
-void FakeGatewayRPC::sendListen(const Gateway &gateway)
+void FakeGatewayRPC::sendListen(const Gateway &gateway, const Timespan &duration)
 {
 	logger().warning("send listen to gateway",
 			__FILE__, __LINE__);

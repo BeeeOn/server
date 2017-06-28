@@ -140,7 +140,7 @@ void GatewayServiceImpl::doScanDevices(Single<Gateway> &input)
 {
 	m_accessPolicy->assure(GatewayAccessPolicy::ACTION_USER_SCAN, input, input.target());
 
-	m_rpc->sendListen(input.target());
+	m_rpc->sendListen(input.target(), Timespan(30, 0));
 }
 
 void GatewayServiceImpl::doUnpairDevice(Single<Gateway> &input, Device &device)

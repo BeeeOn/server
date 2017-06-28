@@ -32,7 +32,8 @@ void LegacyGatewayRPC::setResponseTimeout(int ms)
 	m_timeout = Timespan(0, ms * 1000);
 }
 
-void LegacyGatewayRPC::sendListen(const Gateway &gateway)
+void LegacyGatewayRPC::sendListen(const Gateway &gateway,
+		const Poco::Timespan &duration)
 {
 	Mutex::ScopedLock guard(m_lock);
 	m_connector->open();

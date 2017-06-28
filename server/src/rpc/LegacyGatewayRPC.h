@@ -22,7 +22,8 @@ public:
 		m_connector = connector;
 	}
 
-	void sendListen(const Gateway &gateway) override;
+	void sendListen(const Gateway &gateway,
+			const Poco::Timespan &duration) override;
 	void unpairDevice(const Gateway &gateway, const Device &device) override;
 	void pingGateway(const Gateway &gateway) override;
 	void updateActor(const Gateway &gateway,

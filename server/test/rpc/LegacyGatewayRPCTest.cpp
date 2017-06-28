@@ -233,7 +233,7 @@ void LegacyGatewayRPCTest::tearDown()
 void LegacyGatewayRPCTest::testSendListenSuccess()
 {
 	Gateway gateway(GATEWAYID_SUCCESS_NUM);
-	CPPUNIT_ASSERT_NO_THROW(m_rpc->sendListen(gateway));
+	CPPUNIT_ASSERT_NO_THROW(m_rpc->sendListen(gateway, Timespan()));
 	CPPUNIT_ASSERT_MESSAGE(
 		m_fakeAdaServerErrorMessage, !m_fakeAdaServerCrashed);
 }
@@ -245,7 +245,8 @@ void LegacyGatewayRPCTest::testSendListenSuccess()
 void LegacyGatewayRPCTest::testSendListenFailResponse()
 {
 	Gateway gateway(GATEWAYID_FAIL_NUM);
-	CPPUNIT_ASSERT_THROW(m_rpc->sendListen(gateway), Poco::IllegalStateException);
+	CPPUNIT_ASSERT_THROW(m_rpc->sendListen(gateway, Timespan()),
+			Poco::IllegalStateException);
 	CPPUNIT_ASSERT_MESSAGE(
 		m_fakeAdaServerErrorMessage, !m_fakeAdaServerCrashed);
 }
@@ -253,7 +254,7 @@ void LegacyGatewayRPCTest::testSendListenFailResponse()
 void LegacyGatewayRPCTest::testSendListenSlowResponse()
 {
 	Gateway gateway(GATEWAYID_SLOW_NUM);
-	m_rpc->sendListen(gateway);
+	m_rpc->sendListen(gateway, Timespan());
 	CPPUNIT_ASSERT_MESSAGE(
 		m_fakeAdaServerErrorMessage, !m_fakeAdaServerCrashed);
 }
