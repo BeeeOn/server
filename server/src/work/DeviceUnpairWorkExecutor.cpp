@@ -6,7 +6,6 @@
 #include "di/Injectable.h"
 #include "rpc/GatewayRPC.h"
 #include "work/DeviceUnpairWorkExecutor.h"
-#include "work/WorkAccess.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, DeviceUnpairWorkExecutor)
 BEEEON_OBJECT_CASTABLE(WorkExecutor)
@@ -89,18 +88,18 @@ bool DeviceUnpairWorkExecutor::done(Device &device)
 	return false;
 }
 
-void DeviceUnpairWorkExecutor::checkAttempts(DeviceUnpairWork::Ptr work, const WorkAccess &guard)
+void DeviceUnpairWorkExecutor::checkAttempts(DeviceUnpairWork::Ptr work)
 {
-	if (work->attempt(guard) >= m_maxAttempts) {
+	if (work->attempt() >= m_maxAttempts) {
 		if (logger().debug()) {
 			logger().debug(
-				"failed to unpair device " + work->device(guard)
+				"failed to unpair device " + work->device()
 				+ " after " + to_string(m_maxAttempts)
 				+ " attempts",
 				__FILE__, __LINE__);
 		}
 
-		throw TimeoutException("failed to unpair device " + work->device(guard));
+		throw TimeoutException("failed to unpair device " + work->device());
 	}
 }
 
@@ -114,11 +113,8 @@ void DeviceUnpairWorkExecutor::execute(Work::Ptr work)
 
 	const Gateway &gateway = device.gateway();
 
-	do { // guarded block
-		WorkWriting guard(work, __FILE__, __LINE__);
-		checkAttempts(unpair, guard);
-		unpair->setAttempt(unpair->attempt(guard) + 1, guard);
-	} while (0);
+	checkAttempts(unpair);
+	unpair->setAttempt(unpair->attempt() + 1);
 
 	try {
 		m_rpc->unpairDevice(gateway, device);

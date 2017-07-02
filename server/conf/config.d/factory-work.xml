@@ -1,11 +1,18 @@
 <system>
 	<factory>
+		<instance name="uiWorkLockManager" class="BeeeOn::WorkLockManager">
+			<set name="accessLockCount" number="32" />
+			<set name="executionLockCount" number="128" />
+		</instance>
+
 		<instance name="uiRunnerFactory" class="BeeeOn::TransactionalWorkRunnerFactory">
 			<set name="transactionManager" ref="transactionManager" />
+			<set name="lockManager" ref="uiWorkLockManager" />
 		</instance>
 
 		<instance name="uiWorkScheduler" class="BeeeOn::BasicProcessor">
 			<set name="runnerFactory" ref="uiRunnerFactory" />
+			<set name="lockManager" ref="uiWorkLockManager" />
 			<add name="executors" ref="deviceUnpairExecutor" />
 		</instance>
 
