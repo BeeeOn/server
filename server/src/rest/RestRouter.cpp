@@ -71,11 +71,12 @@ void RestRouter::addHandler(RestHandler *handler)
 	m_handlers.push_back(handler);
 }
 
-URI RestRouter::link(const string &group, const string &name,
+URI RestRouter::link(
+		const string &group,
+		const string &name,
+		const map<string, string> &queryParams,
 		const vector<string> &params)
 {
-	URI uri;
-
 	auto it = m_linkMapper.find(group + "." + name);
 	if (it == m_linkMapper.end()) {
 		throw IllegalStateException(
@@ -94,7 +95,14 @@ URI RestRouter::link(const string &group, const string &name,
 		);
 	}
 
-	return action->uri(params);
+	URI::QueryParameters qpList;
+
+	for (const auto &pair : queryParams)
+		qpList.push_back(pair);
+
+	URI uri = action->uri(params);
+	uri.setQueryParameters(qpList);
+	return uri;
 }
 
 void RestRouter::initRouting()

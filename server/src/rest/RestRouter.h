@@ -58,7 +58,8 @@ public:
 	 */
 	Poco::URI link(const std::string &group,
 			const std::string &action,
-			const std::vector<std::string> &params = {});
+			const std::map<std::string, std::string> &queryParams,
+			const std::vector<std::string> &params) override;
 
 protected:
 	void initHandler(RestHandler &handler,
