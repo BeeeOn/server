@@ -118,7 +118,7 @@ string FacebookAuthProvider::fetchUserData(const string &accessToken) const
 	HTMLForm form;
 	form.setEncoding(HTMLForm::ENCODING_URL);
 	form.set("access_token", accessToken);
-	form.set("fields", "name,picture,email,first_name,last_name");
+	form.set("fields", "name,picture,email,first_name,last_name,locale");
 
 	URI host(m_userInfoUrl);
 	string response = makeRequest(HTTPRequest::HTTP_POST, host, form);
@@ -147,6 +147,9 @@ bool FacebookAuthProvider::parseIdentity(const string &userInfo, const string &a
 
 	if (info->has("last_name"))
 		result.setLastName(Sanitize::common(info->getValue<string>("last_name")));
+
+	if (info->has("locale"))
+		result.setLocale(info->getValue<string>("locale"));
 
 	if (info->has("picture")) {
 		Object::Ptr pictData = info->getObject("picture");
