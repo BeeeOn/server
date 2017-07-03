@@ -12,7 +12,7 @@
 #include "dao/DevicePropertyDao.h"
 #include "rpc/GatewayRPC.h"
 #include "work/DeviceUnpairWork.h"
-#include "work/WorkScheduler.h"
+#include "work/WorkFacade.h"
 #include "Debug.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, DeviceService)
@@ -20,7 +20,7 @@ BEEEON_OBJECT_REF("deviceDao", &DeviceService::setDeviceDao)
 BEEEON_OBJECT_REF("devicePropertyDao", &DeviceService::setDevicePropertyDao)
 BEEEON_OBJECT_REF("gatewayRPC", &DeviceService::setGatewayRPC)
 BEEEON_OBJECT_REF("accessPolicy", &DeviceService::setAccessPolicy)
-BEEEON_OBJECT_REF("workScheduler", &DeviceService::setWorkScheduler)
+BEEEON_OBJECT_REF("workFacade", &DeviceService::setWorkFacade)
 BEEEON_OBJECT_REF("transactionManager", &Transactional::setTransactionManager)
 BEEEON_OBJECT_END(BeeeOn, DeviceService)
 
@@ -32,7 +32,7 @@ DeviceService::DeviceService():
 	m_dao(&NullDeviceDao::instance()),
 	m_propertyDao(&NullDevicePropertyDao::instance()),
 	m_gatewayRPC(&NullGatewayRPC::instance()),
-	m_scheduler(&NullWorkScheduler::instance()),
+	m_workFacade(&NullWorkFacade::instance()),
 	m_policy(&NullDeviceAccessPolicy::instance())
 {
 }
@@ -52,9 +52,9 @@ void DeviceService::setGatewayRPC(GatewayRPC *rpc)
 	m_gatewayRPC = rpc? rpc : &NullGatewayRPC::instance();
 }
 
-void DeviceService::setWorkScheduler(WorkScheduler *scheduler)
+void DeviceService::setWorkFacade(WorkFacade *facade)
 {
-	m_scheduler = scheduler? scheduler : &NullWorkScheduler::instance();
+	m_workFacade = facade? facade : &NullWorkFacade::instance();
 }
 
 void DeviceService::setAccessPolicy(DeviceAccessPolicy *policy)
@@ -127,8 +127,11 @@ Work::Ptr DeviceService::doUnregister(Relation<Device, Gateway> &input)
 	if (!m_dao->fetch(device, input.base()))
 		return NULL;
 
-	DeviceUnpairWork::Ptr work(new DeviceUnpairWork(WorkID::random()));
-	work->setDevice(input.target());
+	Work::Ptr work(new Work(WorkID::random()));
+	DeviceUnpairWork content;
+	content.setGatewayID(device.gateway().id());
+	content.setDeviceID(device.id());
+	work->setContent(content);
 
 	m_scheduler->schedule(work);
 	return work;

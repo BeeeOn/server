@@ -1,39 +1,34 @@
 #ifndef BEEEON_DEVICE_UNPAIR_WORK_H
 #define BEEEON_DEVICE_UNPAIR_WORK_H
 
-#include <Poco/SharedPtr.h>
-
 #include "model/Device.h"
-#include "work/Work.h"
+#include "model/Gateway.h"
+#include "work/WorkContent.h"
 
 namespace BeeeOn {
-
-class DeviceUnpairWorkExecutor;
 
 /**
  * Representation of a work that unpairs a device from its gateway.
  * The unpairing process usually requires some asynchronous communication
  * with other parts of the system.
  */
-class DeviceUnpairWork : public Work {
+class DeviceUnpairWork : public WorkContent {
 public:
-	typedef Poco::SharedPtr<DeviceUnpairWork> Ptr;
-
 	DeviceUnpairWork();
-	DeviceUnpairWork(const WorkID &id);
+	DeviceUnpairWork(const WorkContent &content);
+	DeviceUnpairWork(const Poco::JSON::Object::Ptr json);
 
 	/**
-	 * Set when creating the work instance. The device must
-	 * contain the owning Gateway.
+	 * ID of gateway where a device is to be unpaired from.
 	 */
-	void setDevice(const Device &device);
+	void setGatewayID(const GatewayID &id);
+	GatewayID gatewayID() const;
 
 	/**
-	 * Device holding the Gateway we want to unpair from.
-	 * We need Device::id() and Device::gateway().id() to be
-	 * valid.
+	 * ID of device to be unpaired.
 	 */
-	const Device &device() const;
+	void setDeviceID(const DeviceID &id);
+	DeviceID deviceID() const;
 
 	/**
 	 * Update the number of attempts done while trying to unpair a
@@ -47,10 +42,6 @@ public:
 	 * After N executions, the value is incremented automatically.
 	 */
 	unsigned int attempt() const;
-
-private:
-	unsigned int m_attempt;
-	Device m_device;
 };
 
 }
