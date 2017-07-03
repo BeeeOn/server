@@ -118,22 +118,22 @@ void DeviceService::doFetchInactiveBy(Relation<vector<Device>, Gateway> &input)
 	m_dao->fetchInactiveBy(input.target(), input.base());
 }
 
-Work::Ptr DeviceService::doUnregister(Relation<Device, Gateway> &input)
+Work DeviceService::doUnregister(Relation<Device, Gateway> &input)
 {
 	m_policy->assureUnregister(input, input.target(), input.base());
 
 	Device &device = input.target();
 
 	if (!m_dao->fetch(device, input.base()))
-		return NULL;
+		throw NotFoundException("no such device " + device);
 
-	Work::Ptr work(new Work(WorkID::random()));
+	Work work(WorkID::random());
 	DeviceUnpairWork content;
 	content.setGatewayID(device.gateway().id());
 	content.setDeviceID(device.id());
-	work->setContent(content);
+	work.setContent(content);
 
-	m_scheduler->schedule(work);
+	m_workFacade->schedule(work);
 	return work;
 }
 

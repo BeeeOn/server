@@ -20,5 +20,10 @@
 			<set name="deviceDao" ref="deviceDao" />
 			<set name="gatewayRPC" ref="gatewayRPC" />
 		</instance>
+
+		<instance name="uiWorkFacade" class="BeeeOn::DefaultWorkFacade">
+			<set name="scheduler" ref="uiWorkScheduler" />
+			<set name="lockManager" ref="uiWorkLockManager" />
+		</instance>
 	</factory>
 </system>

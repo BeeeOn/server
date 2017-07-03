@@ -17,7 +17,7 @@ namespace BeeeOn {
 class DeviceDao;
 class DevicePropertyDao;
 class GatewayRPC;
-class WorkScheduler;
+class WorkFacade;
 class DeviceAccessPolicy;
 
 /**
@@ -30,7 +30,7 @@ public:
 	void setDeviceDao(DeviceDao *dao);
 	void setDevicePropertyDao(DevicePropertyDao *dao);
 	void setGatewayRPC(GatewayRPC *rpc);
-	void setWorkScheduler(WorkScheduler *scheduler);
+	void setWorkFacade(WorkFacade *facade);
 	void setAccessPolicy(DeviceAccessPolicy *policy);
 
 	bool fetch(Relation<Device, Gateway> &input)
@@ -63,9 +63,9 @@ public:
 		return BEEEON_TRANSACTION_RETURN(bool, doActivate(input));
 	}
 
-	Work::Ptr unregister(Relation<Device, Gateway> &input)
+	Work unregister(Relation<Device, Gateway> &input)
 	{
-		return BEEEON_TRANSACTION_RETURN(Work::Ptr, doUnregister(input));
+		return BEEEON_TRANSACTION_RETURN(Work, doUnregister(input));
 	}
 
 	bool update(RelationWithData<Device, Gateway> &input)
@@ -111,7 +111,7 @@ protected:
 	void doFetchInactiveBy(Relation<std::vector<Device>, Gateway> &input);
 
 	bool doActivate(Relation<Device, Gateway> &input);
-	Work::Ptr doUnregister(Relation<Device, Gateway> &input);
+	Work doUnregister(Relation<Device, Gateway> &input);
 	bool doUpdate(RelationWithData<Device, Gateway> &input);
 	bool doUpdateAndActivate(RelationWithData<Device, Gateway> &input);
 
@@ -129,7 +129,7 @@ private:
 	DeviceDao *m_dao;
 	DevicePropertyDao *m_propertyDao;
 	GatewayRPC *m_gatewayRPC;
-	WorkScheduler *m_scheduler;
+	WorkFacade *m_workFacade;
 	DeviceAccessPolicy *m_policy;
 };
 
