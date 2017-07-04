@@ -55,10 +55,10 @@ void DeviceUnpairWorkExecutor::setMaxAttempts(int count)
 
 bool DeviceUnpairWorkExecutor::accepts(const Work::Ptr work) const
 {
-	if (work.cast<DeviceUnpairWork>().isNull())
-		return false;
+	if (work->content().type().is<DeviceUnpairWork>())
+		return true;
 
-	return true;
+	return false;
 }
 
 bool DeviceUnpairWorkExecutor::done(Device &device)
@@ -88,33 +88,36 @@ bool DeviceUnpairWorkExecutor::done(Device &device)
 	return false;
 }
 
-void DeviceUnpairWorkExecutor::checkAttempts(DeviceUnpairWork::Ptr work)
+void DeviceUnpairWorkExecutor::checkAttempts(const DeviceUnpairWork &work)
 {
-	if (work->attempt() >= m_maxAttempts) {
+	if (work.attempt() >= m_maxAttempts) {
 		if (logger().debug()) {
 			logger().debug(
-				"failed to unpair device " + work->device()
+				"failed to unpair device " + work.deviceID().toString()
 				+ " after " + to_string(m_maxAttempts)
 				+ " attempts",
 				__FILE__, __LINE__);
 		}
 
-		throw TimeoutException("failed to unpair device " + work->device());
+		throw TimeoutException("failed to unpair device "
+				+ work.deviceID().toString());
 	}
 }
 
 void DeviceUnpairWorkExecutor::execute(Work::Ptr work)
 {
-	DeviceUnpairWork::Ptr unpair = work.cast<DeviceUnpairWork>();
-	Device device(unpair->device());
+	DeviceUnpairWork content = work->contentAs<DeviceUnpairWork>();
+
+	Device device(content.deviceID());
+	device.setGateway(Gateway(content.gatewayID()));
 
 	if (done(device))
 		return;
 
 	const Gateway &gateway = device.gateway();
 
-	checkAttempts(unpair);
-	unpair->setAttempt(unpair->attempt() + 1);
+	checkAttempts(content);
+	content.setAttempt(content.attempt() + 1);
 
 	try {
 		m_rpc->unpairDevice(gateway, device);
@@ -127,5 +130,6 @@ void DeviceUnpairWorkExecutor::execute(Work::Ptr work)
 	if (device.refresh() >= Timespan(1, 0))
 		sleep = device.refresh();
 
+	work->setContent(content);
 	suspend(work, sleep);
 }

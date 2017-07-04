@@ -1,35 +1,65 @@
+#include <Poco/Exception.h>
+
+#include "util/JsonUtil.h"
 #include "work/DeviceUnpairWork.h"
 
+BEEEON_CLASS(DeviceUnpairWork)
+
+using namespace std;
 using namespace Poco;
+using namespace Poco::JSON;
 using namespace BeeeOn;
 
 DeviceUnpairWork::DeviceUnpairWork():
-	m_attempt(0)
+	WorkContent(ClassInfo::forPointer(this))
 {
+	json()->set("attempt", 0);
 }
 
-DeviceUnpairWork::DeviceUnpairWork(const WorkID &id):
-	Work(id),
-	m_attempt(0)
+DeviceUnpairWork::DeviceUnpairWork(const WorkContent &content):
+	WorkContent(content)
 {
+	if (!type().is<DeviceUnpairWork>())
+		throw InvalidArgumentException("uncompatible work content");
+}
+
+DeviceUnpairWork::DeviceUnpairWork(const Object::Ptr json):
+	WorkContent(json)
+{
+	if (!type().is<DeviceUnpairWork>())
+		throw InvalidArgumentException("uncompatible work content");
 }
 
 void DeviceUnpairWork::setAttempt(unsigned int attempt)
 {
-	m_attempt = attempt;
+	json()->set("attempt", attempt);
 }
 
 unsigned int DeviceUnpairWork::attempt() const
 {
-	return m_attempt;
+	return JsonUtil::extract<unsigned int>(json(), "attempt");
 }
 
-void DeviceUnpairWork::setDevice(const Device &device)
+void DeviceUnpairWork::setGatewayID(const GatewayID &id)
 {
-	m_device = device;
+	json()->set("gateway_id", id.toString());
 }
 
-const Device &DeviceUnpairWork::device() const
+GatewayID DeviceUnpairWork::gatewayID() const
 {
-	return m_device;
+	return GatewayID::parse(
+		JsonUtil::extract<string>(json(), "gateway_id")
+	);
+}
+
+void DeviceUnpairWork::setDeviceID(const DeviceID &id)
+{
+	json()->set("device_id", id.toString());
+}
+
+DeviceID DeviceUnpairWork::deviceID() const
+{
+	return DeviceID::parse(
+		JsonUtil::extract<string>(json(), "device_id")
+	);
 }
