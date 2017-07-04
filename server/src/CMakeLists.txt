@@ -11,6 +11,8 @@ find_library (POCO_XML PocoXML)
 find_library (POCO_DATA PocoData)
 find_library (POCO_SQLITE PocoDataSQLite)
 find_library (POCO_ODBC PocoDataODBC)
+find_library (ICU_I18N icui18n)
+find_library (ICU_UC icuuc)
 
 set (CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -DBEEEON_SELECT_POCO")
 add_definitions(-std=c++11)
@@ -30,6 +32,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/server/AccessLevel.cpp
 	${PROJECT_SOURCE_DIR}/server/XmlRequestHandler.cpp
 	${PROJECT_SOURCE_DIR}/server/SocketServer.cpp
+	${PROJECT_SOURCE_DIR}/l10n/IcuLocaleImpl.cpp
 	${PROJECT_SOURCE_DIR}/model/Identity.cpp
 	${PROJECT_SOURCE_DIR}/model/VerifiedIdentity.cpp
 	${PROJECT_SOURCE_DIR}/model/RoleInGateway.cpp
@@ -192,6 +195,8 @@ set(LIBS
 	${POCO_XML}
 	${POCO_DATA}
 	${POCO_SQLITE}
+	${ICU_I18N}
+	${ICU_UC}
 )
 
 # Apple's linker doesn't support --whole-archive. Instead it uses -all_load.
