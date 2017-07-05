@@ -1,0 +1,9 @@
+root {
+	hello { "hello" }
+	hello2 { "hello2" }
+	fmtany { "Any: {0}" }
+	fmtint { "Int: {0,number,integer}" }
+	fmtstr { "Str: {0}" }
+	fmtdate { "Date: {0,date}" }
+	fmttime { "Time: {0,time}" }
+}
