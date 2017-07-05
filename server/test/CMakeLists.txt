@@ -14,6 +14,7 @@ find_library (ICU_UC icuuc)
 
 file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/l10n/IcuLocaleImplTest.cpp
+	${PROJECT_SOURCE_DIR}/l10n/IcuLocaleManagerTest.cpp
 	${PROJECT_SOURCE_DIR}/l10n/IcuTranslatorTest.cpp
 	${PROJECT_SOURCE_DIR}/model/DevicePropertyTest.cpp
 	${PROJECT_SOURCE_DIR}/server/SessionManagerTest.cpp

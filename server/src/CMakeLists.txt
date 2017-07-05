@@ -33,6 +33,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/server/XmlRequestHandler.cpp
 	${PROJECT_SOURCE_DIR}/server/SocketServer.cpp
 	${PROJECT_SOURCE_DIR}/l10n/IcuLocaleImpl.cpp
+	${PROJECT_SOURCE_DIR}/l10n/IcuLocaleManager.cpp
 	${PROJECT_SOURCE_DIR}/l10n/IcuTranslator.cpp
 	${PROJECT_SOURCE_DIR}/model/Identity.cpp
 	${PROJECT_SOURCE_DIR}/model/VerifiedIdentity.cpp
