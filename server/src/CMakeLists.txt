@@ -182,8 +182,10 @@ file(GLOB RESTUI_SOURCES
 	restui/Serializing.cpp
 	restui/JSONGatewayDeserializer.cpp
 	restui/JSONLocationDeserializer.cpp
+	restui/JSONRoleInGatewayDeserializer.cpp
 	restui/LocationRestHandler.cpp
 	restui/ProfileRestHandler.cpp
+	restui/RoleRestHandler.cpp
 	restui/GatewayRestHandler.cpp
 	dao/poco/PocoSQLiteConnectorLoader.cpp
 )

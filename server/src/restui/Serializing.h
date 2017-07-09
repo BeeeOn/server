@@ -15,8 +15,10 @@ class PrintHandler;
 namespace BeeeOn {
 
 class Gateway;
+class LegacyRoleInGateway;
 class Location;
 class VerifiedIdentity;
+class RoleInGateway;
 
 namespace RestUI {
 
@@ -30,6 +32,10 @@ void serialize(Poco::JSON::PrintHandler &output,
 
 void serialize(Poco::JSON::PrintHandler &output, const Location &location);
 void serialize(Poco::JSON::PrintHandler  &output, const std::vector <Location> &locations);
+
+void serialize(Poco::JSON::PrintHandler &output, const RoleInGateway &role);
+void serialize(Poco::JSON::PrintHandler &output, const LegacyRoleInGateway &role);
+void serialize(Poco::JSON::PrintHandler  &output, const std::vector <RoleInGateway> &roles);
 
 }
 

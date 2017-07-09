@@ -2,10 +2,11 @@
 
 #include <Poco/DateTime.h>
 #include <Poco/JSON/PrintHandler.h>
-#include <model/RoleInGateway.h>
 
 #include "model/Gateway.h"
+#include "model/LegacyRoleInGateway.h"
 #include "model/Location.h"
+#include "model/RoleInGateway.h"
 #include "model/User.h"
 #include "model/VerifiedIdentity.h"
 #include "restui/Serializing.h"
@@ -139,6 +140,60 @@ void BeeeOn::RestUI::serialize(PrintHandler &output, const std::vector<Location>
 
 	for (auto location : locations)
 		serialize(output, location);
+
+	output.endArray();
+}
+
+static void roleCommon(PrintHandler &output, const RoleInGateway &role)
+{
+	output.key("id");
+	output.value(role.id().toString());
+
+	output.key("identity_email");
+	output.value(role.identity().email());
+
+	output.key("access_level");
+	output.value(role.level().toString());
+
+	output.key("created");
+	output.value(role.created().timestamp().epochTime());
+}
+
+void BeeeOn::RestUI::serialize(PrintHandler &output, const RoleInGateway &role)
+{
+	output.startObject();
+
+	roleCommon(output, role);
+
+	output.endObject();
+}
+
+void BeeeOn::RestUI::serialize(PrintHandler &output, const LegacyRoleInGateway &role)
+{
+	output.startObject();
+
+	roleCommon(output, role);
+
+	output.key("user");
+	output.startObject();
+
+	output.key("first_name");
+	output.value(role.firstName());
+
+	output.key("last_name");
+	output.value(role.lastName());
+
+	output.endObject();
+
+	output.endObject();
+}
+
+void BeeeOn::RestUI::serialize(PrintHandler &output, const std::vector<RoleInGateway> &roles)
+{
+	output.startArray();
+
+	for (auto role : roles)
+		serialize(output, role);
 
 	output.endArray();
 }
