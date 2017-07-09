@@ -21,6 +21,7 @@
 			<add name="handlers" ref="uiAuthHandler" />
 			<add name="handlers" ref="uiBuiltinHandler" />
 			<add name="handlers" ref="uiGatewayHandler" />
+			<add name="handlers" ref="uiProfileHandler" />
 		</instance>
 
 		<instance name="uiBuiltinHandler" class="BeeeOn::BuiltinRestHandler" />
@@ -31,6 +32,10 @@
 
 		<instance name="uiGatewayHandler" class="BeeeOn::RestUI::GatewayRestHandler">
 			<set name="gatewayService" ref="gatewayService" />
+		</instance>
+
+		<instance name="uiProfileHandler" class="BeeeOn::RestUI::ProfileRestHandler">
+			<set name="identityService" ref="identityService" />
 		</instance>
 	</factory>
 </system>

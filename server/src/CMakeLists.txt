@@ -158,6 +158,7 @@ file(GLOB XMLUI_SOURCES
 file(GLOB RESTUI_SOURCES
 	restui/Serializing.cpp
 	restui/JSONGatewayDeserializer.cpp
+	restui/ProfileRestHandler.cpp
 	restui/GatewayRestHandler.cpp
 	dao/poco/PocoSQLiteConnectorLoader.cpp
 )
