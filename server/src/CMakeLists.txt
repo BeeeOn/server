@@ -109,6 +109,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/sqitch/SqitchEntry.cpp
 	${PROJECT_SOURCE_DIR}/sqitch/SqitchLine.cpp
 	${PROJECT_SOURCE_DIR}/sqitch/SqitchRef.cpp
+	${PROJECT_SOURCE_DIR}/sqitch/SqitchTag.cpp
 	${PROJECT_SOURCE_DIR}/work/TransactionalWorkRunner.cpp
 	${PROJECT_SOURCE_DIR}/work/DeviceUnpairWork.cpp
 	${PROJECT_SOURCE_DIR}/work/DeviceUnpairWorkExecutor.cpp
