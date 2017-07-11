@@ -55,6 +55,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLIdentityDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLRoleInGatewayDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLGatewayDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLGatewayStatusDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLLocationDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLDeviceDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLDevicePropertyDao.cpp
