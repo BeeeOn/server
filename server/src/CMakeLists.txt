@@ -108,6 +108,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/sqitch/SqitchChange.cpp
 	${PROJECT_SOURCE_DIR}/sqitch/SqitchEntry.cpp
 	${PROJECT_SOURCE_DIR}/sqitch/SqitchLine.cpp
+	${PROJECT_SOURCE_DIR}/sqitch/SqitchPlan.cpp
 	${PROJECT_SOURCE_DIR}/sqitch/SqitchPlanParser.cpp
 	${PROJECT_SOURCE_DIR}/sqitch/SqitchPragma.cpp
 	${PROJECT_SOURCE_DIR}/sqitch/SqitchRef.cpp
