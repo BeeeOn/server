@@ -211,7 +211,6 @@
 		<foreign-key table="gateways" local="gateway_id" remote="id" />
 		<foreign-key table="locations" local="location_id" remote="id" />
 
-		<check name="check_id_positive" expression="id &gt;= 0" />
 		<check name="check_seen_valid" expression="first_seen &lt;= last_seen" />
 		<check name="check_active_valid"
 			expression="active_since IS NULL OR first_seen &lt;= active_since" />
