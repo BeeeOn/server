@@ -21,7 +21,6 @@ add_definitions(-DGIT_ID="${GIT_ID}")
 add_subdirectory(src)
 add_subdirectory(base)
 add_subdirectory(test)
-add_subdirectory(schema)
 
 install(FILES conf/restui-startup.ini conf/xmlui-startup.ini
 	DESTINATION etc/beeeon)
