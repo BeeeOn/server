@@ -1,3 +1,7 @@
 [submodule "server/base"]
 	path = server/base
 	url = ../base
+[submodule "server/db"]
+	path = server/db
+	url = ../server-db
+	branch = master
