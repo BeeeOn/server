@@ -67,11 +67,16 @@
 			<set name="connectionTimeout" number="${database.timeout}" />
 			<set name="features" text="${database.features}" />
 			<set name="maxSessions" number="${database.pool}" />
-			<add name="initializers" ref="simpleDBInitializer" />
+			<add name="initializers" ref="sqitchDBInitializer" if-yes="${ui.debug}" />
 		</instance>
 
 		<instance name="simpleDBInitializer" class="BeeeOn::PocoSimpleDBInitializer">
 			<set name="script" text="${database.init}" />
+		</instance>
+
+		<instance name="sqitchDBInitializer" class="BeeeOn::PocoSqitchInitializer">
+			<set name="planFile" text="${sqitch.plan}" />
+			<set name="baseDir" text="${sqitch.baseDir}" />
 		</instance>
 
 		<instance name="pocoTransactionFactory"
@@ -152,7 +157,7 @@
 		</instance>
 
 		<instance name="queries" class="BeeeOn::SQLLoader">
-			<set name="database" text="home8" />
+			<set name="database" text="beeeon" />
 			<add name="file" text="${database.queries}" />
 		</instance>
 

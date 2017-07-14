@@ -155,8 +155,6 @@ void PocoSQLSensorHistoryDao::fetchHuge(
 	double max;
 
 	Statement sql = (session() << m_queryFetchHuge(),
-		use(intervalSeconds, "at_div"),
-		use(intervalSeconds, "at_mul"),
 		use(gatewayID, "gateway_id"),
 		use(deviceID, "device_id"),
 		use(moduleID, "module_id"),
