@@ -67,7 +67,11 @@
 			<set name="connectionTimeout" number="${database.timeout}" />
 			<set name="features" text="${database.features}" />
 			<set name="maxSessions" number="${database.pool}" />
-			<set name="initScript" text="${database.init}" />
+			<add name="initializers" ref="simpleDBInitializer" />
+		</instance>
+
+		<instance name="simpleDBInitializer" class="BeeeOn::PocoSimpleDBInitializer">
+			<set name="script" text="${database.init}" />
 		</instance>
 
 		<instance name="pocoTransactionFactory"
