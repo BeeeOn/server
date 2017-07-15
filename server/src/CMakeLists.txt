@@ -105,6 +105,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/rest/RestLinker.cpp
 	${PROJECT_SOURCE_DIR}/rest/RestRouter.cpp
 	${PROJECT_SOURCE_DIR}/rest/UriPattern.cpp
+	${PROJECT_SOURCE_DIR}/sqitch/PocoSqitchInitializer.cpp
 	${PROJECT_SOURCE_DIR}/sqitch/SqitchChange.cpp
 	${PROJECT_SOURCE_DIR}/sqitch/SqitchEntry.cpp
 	${PROJECT_SOURCE_DIR}/sqitch/SqitchInitializer.cpp
