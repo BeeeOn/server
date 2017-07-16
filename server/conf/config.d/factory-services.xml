@@ -39,6 +39,12 @@
 			<set name="transactionManager" ref="transactionManager" />
 		</instance>
 
+		<instance name="gwsGatewayService" class="BeeeOn::GWSGatewayServiceImpl">
+			<set name="gatewayDao" ref="gatewayDao" />
+			<set name="gatewayStatusDao" ref="gatewayStatusDao" />
+			<set name="transactionManager" ref="transactionManager" />
+		</instance>
+
 		<instance name="locationService"
 				class="BeeeOn::LocationServiceImpl">
 			<set name="locationDao" ref="locationDao" />
