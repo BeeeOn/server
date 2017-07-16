@@ -88,6 +88,8 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/service/GWSGatewayService.cpp
 	${PROJECT_SOURCE_DIR}/service/GWSGatewayServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/GWSSensorHistoryService.cpp
+	${PROJECT_SOURCE_DIR}/service/GWSSensorHistoryService.cpp
+	${PROJECT_SOURCE_DIR}/service/GWSSensorHistoryServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/LocationService.cpp
 	${PROJECT_SOURCE_DIR}/service/LocationServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/IdentityService.cpp

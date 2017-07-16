@@ -87,6 +87,13 @@
 			<set name="facade" ref="uiWorkFacade" />
 		</instance>
 
+		<instance name="gwsSensorHistoryService"
+				class="BeeeOn::GWSSensorHistoryServiceImpl">
+			<set name="sensorHistoryDao" ref="sensorHistoryDao" />
+			<set name="deviceDao" ref="deviceDao" />
+			<set name="transactionManager" ref="transactionManager" />
+		</instance>
+
 		<!-- Access policy -->
 
 		<instance name="accessPolicy"
