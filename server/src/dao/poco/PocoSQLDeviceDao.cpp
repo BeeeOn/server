@@ -35,8 +35,7 @@ BEEEON_OBJECT_REF("sqlLoader", &PocoSQLDeviceDao::setSQLLoader)
 BEEEON_OBJECT_HOOK("done", &PocoSQLDeviceDao::loadQueries)
 BEEEON_OBJECT_END(BeeeOn, PocoSQLDeviceDao)
 
-PocoSQLDeviceDao::PocoSQLDeviceDao():
-	m_infoProvider(&NullInfoProvider<DeviceInfo>::instance())
+PocoSQLDeviceDao::PocoSQLDeviceDao()
 {
 	registerQuery(m_queryInsert);
 	registerQuery(m_queryUpdate);
@@ -45,10 +44,9 @@ PocoSQLDeviceDao::PocoSQLDeviceDao():
 	registerQuery(m_queryFetchInactiveBy);
 }
 
-void PocoSQLDeviceDao::setDeviceInfoProvider(InfoProvider<DeviceInfo> *provider)
+void PocoSQLDeviceDao::setDeviceInfoProvider(DeviceInfoProvider::Ptr provider)
 {
-	m_infoProvider = provider == NULL?
-		&NullInfoProvider<DeviceInfo>::instance() : provider;
+	m_deviceInfoProvider = provider;
 }
 
 void PocoSQLDeviceDao::assertTypeValid(const Device &device)
@@ -58,7 +56,7 @@ void PocoSQLDeviceDao::assertTypeValid(const Device &device)
 				+ device.id().toString());
 	}
 
-	if (m_infoProvider->findById(device.type()->id()).isNull()) {
+	if (m_deviceInfoProvider->findById(device.type()->id()).isNull()) {
 		throw InvalidArgumentException("unrecognized device type: "
 				+ device.type()->id().toString());
 	}
@@ -178,7 +176,7 @@ bool PocoSQLDeviceDao::fetch(Device &device, const Gateway &gateway)
 		return false;
 
 	RecordSet result(sql);
-	return parseSingle(result, device, gateway, *m_infoProvider);
+	return parseSingle(result, device, gateway, *m_deviceInfoProvider);
 }
 
 void PocoSQLDeviceDao::fetchMany(std::list<Device> &devices)
@@ -207,7 +205,7 @@ void PocoSQLDeviceDao::fetchMany(std::list<Device> &devices)
 		}
 
 		RecordSet result(sql);
-		if (!parseSingle(result, device, device.gateway(), *m_infoProvider)) {
+		if (!parseSingle(result, device, device.gateway(), *m_deviceInfoProvider)) {
 			it = devices.erase(it);
 			continue;
 		}
@@ -230,7 +228,7 @@ void PocoSQLDeviceDao::fetchActiveBy(std::vector<Device> &devices,
 
 	execute(sql);
 	RecordSet result(sql);
-	return parseMany(result, devices, gateway, *m_infoProvider);
+	return parseMany(result, devices, gateway, *m_deviceInfoProvider);
 }
 
 void PocoSQLDeviceDao::fetchInactiveBy(std::vector<Device> &devices, const Gateway &gateway)
@@ -245,11 +243,11 @@ void PocoSQLDeviceDao::fetchInactiveBy(std::vector<Device> &devices, const Gatew
 
 	execute(sql);
 	RecordSet result(sql);
-	return parseMany(result, devices, gateway, *m_infoProvider);
+	return parseMany(result, devices, gateway, *m_deviceInfoProvider);
 }
 
 bool PocoSQLDeviceDao::parseSingle(RecordSet &result, Device &device,
-		const Gateway &gateway, const InfoProvider<DeviceInfo> &provider,
+		const Gateway &gateway, const DeviceInfoProvider &provider,
 		const string &prefix)
 {
 	if (result.begin() == result.end())
@@ -259,7 +257,7 @@ bool PocoSQLDeviceDao::parseSingle(RecordSet &result, Device &device,
 }
 
 bool PocoSQLDeviceDao::parseSingle(Row &result, Device &device,
-		const Gateway &gateway, const InfoProvider<DeviceInfo> &provider,
+		const Gateway &gateway, const DeviceInfoProvider &provider,
 		const string &prefix)
 {
 	if (hasColumn(result, prefix + "id"))
