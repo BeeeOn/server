@@ -126,9 +126,10 @@ void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
 
 	const Poco::SharedPtr<DeviceInfo> info = device.type();
 
-	attrs.addAttribute("", "displayName", "displayName", "", info->displayName());
-	attrs.addAttribute("", "name", "name", "", info->name());
-	attrs.addAttribute("", "vendor", "vendor", "", info->vendor());
+	attrs.addAttribute("", "displayName", "displayName", "",
+			info->vendor() + " " + info->name());
+	attrs.addAttribute("", "name", "name", "", info->displayName());
+	attrs.addAttribute("", "vendor", "vendor", "", info->displayVendor());
 
 	output.startElement("", "device", "device", attrs);
 
