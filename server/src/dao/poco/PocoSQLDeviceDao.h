@@ -36,6 +36,9 @@ public:
 			const Gateway &gateway) override;
 	void fetchInactiveBy(std::vector<Device> &devices,
 			const Gateway &gateway) override;
+	void fetchActiveWithPrefix(std::vector<Device> &devices,
+			const Gateway &gateway,
+			const DevicePrefix &prefix) override;
 
 	static bool parseSingle(Poco::Data::RecordSet &result,
 			Device &device, const Gateway &gateway,
@@ -75,6 +78,7 @@ private:
 	SQLQuery m_queryFetchFromGateway {"devices.fetch.from.gateway"};
 	SQLQuery m_queryFetchActiveBy    {"devices.fetch.active.by.gateway"};
 	SQLQuery m_queryFetchInactiveBy  {"devices.fetch.inactive.by.gateway"};
+	SQLQuery m_queryFetchActiveWithPrefix {"devices.fetch.active.by.gateway.with.prefix"};
 };
 
 }
