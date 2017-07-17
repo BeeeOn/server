@@ -80,7 +80,7 @@ class TestDeviceGet(unittest.TestCase):
 			self.assertEqual("unavailable", e.get("status"))
 			self.assertEqual("4", e.get("type"))
 		else:
-			self.assertTrue(False, "unknown device: %s", (element))
+			self.assertTrue(False, "unknown device: %s, %s, %s" % (e.tag, e.attrib, e.text))
 
 	def assertKnownModules(self, e):
 		id = e.get("euid")
@@ -141,7 +141,7 @@ class TestDeviceGet(unittest.TestCase):
 			self.assertEqual("6", e[8].get("type"))
 
 		else:
-			self.assertTrue(False, "unknown device: %s", (element))
+			self.assertTrue(False, "unknown device: %s, %s, %s" % (e.tag, e.attrib, e.text))
 
 	"""
 	Get all active devices. There should be 3 devices already
