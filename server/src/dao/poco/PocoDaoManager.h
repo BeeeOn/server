@@ -5,6 +5,8 @@
 
 #include <Poco/SharedPtr.h>
 #include <Poco/Data/SessionPool.h>
+
+#include "dao/poco/PocoDBInitializer.h"
 #include "util/Loggable.h"
 
 namespace BeeeOn {
@@ -21,7 +23,7 @@ public:
 	void setMaxSessions(const int sessions);
 	void setIdleTime(const int seconds);
 	void setConnectionTimeout(const int seconds);
-	void setInitScript(const std::string &script);
+	void addInitializer(Poco::SharedPtr<PocoDBInitializer> initializer);
 	void setFeatures(const std::string &features);
 
 	Poco::Data::SessionPool &pool();
@@ -39,7 +41,7 @@ private:
 	int m_maxSessions;
 	int m_idleTime;
 	int m_connectionTimeout;
-	std::string m_script;
+	std::list<Poco::SharedPtr<PocoDBInitializer>> m_initializers;
 	Poco::SharedPtr<Poco::Data::SessionPool> m_pool;
 	std::map<std::string, bool> m_features;
 };

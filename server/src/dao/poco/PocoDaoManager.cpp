@@ -21,7 +21,7 @@ BEEEON_OBJECT_NUMBER("maxSessions", &PocoDaoManager::setMaxSessions)
 BEEEON_OBJECT_NUMBER("idleTime", &PocoDaoManager::setIdleTime)
 BEEEON_OBJECT_NUMBER("connectionTimeout", &PocoDaoManager::setConnectionTimeout)
 BEEEON_OBJECT_TEXT("features", &PocoDaoManager::setFeatures)
-BEEEON_OBJECT_TEXT("initScript", &PocoDaoManager::setInitScript)
+BEEEON_OBJECT_REF("initializers", &PocoDaoManager::addInitializer)
 BEEEON_OBJECT_HOOK("done", &PocoDaoManager::connectAndPrepare)
 BEEEON_OBJECT_END(BeeeOn, PocoDaoManager)
 
@@ -86,9 +86,9 @@ void PocoDaoManager::setConnectionTimeout(const int seconds)
 	m_connectionTimeout = seconds < 0? -1 : seconds;
 }
 
-void PocoDaoManager::setInitScript(const std::string &script)
+void PocoDaoManager::addInitializer(SharedPtr<PocoDBInitializer> initializer)
 {
-	m_script = script;
+	m_initializers.push_back(initializer);
 }
 
 void PocoDaoManager::setFeatures(const std::string &features)
@@ -171,23 +171,11 @@ void PocoDaoManager::connectAndPrepare()
 {
 	initPool();
 
-	if (m_script.empty()) {
-		logger().debug("no initialization script, skipping",
+	if (m_initializers.empty()) {
+		logger().debug("no initializers, skipping",
 				__FILE__, __LINE__);
 		return;
 	}
-
-	logger().debug("executing initialization script: " + m_script,
-			__FILE__, __LINE__);
-
-	FileInputStream inputStream(m_script);
-	Template script(inputStream);
-	map<string, string> context;
-
-	// XXX: no context for now, this feature will be probably dropped
-
-	const string &text = script.apply(context);
-	logger().trace(text, __FILE__, __LINE__);
 
 	Session session(pool().get());
 
@@ -204,9 +192,8 @@ void PocoDaoManager::connectAndPrepare()
 				__FILE__, __LINE__);
 	}
 
-	session.begin();
-	session << (text), now;
-	session.commit();
+	for (auto initializer : m_initializers)
+		initializer->initialize(session);
 
 	logger().information("database has been initialized successfully",
 			__FILE__, __LINE__);
