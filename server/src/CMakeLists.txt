@@ -105,6 +105,16 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/rest/RestLinker.cpp
 	${PROJECT_SOURCE_DIR}/rest/RestRouter.cpp
 	${PROJECT_SOURCE_DIR}/rest/UriPattern.cpp
+	${PROJECT_SOURCE_DIR}/sqitch/PocoSqitchInitializer.cpp
+	${PROJECT_SOURCE_DIR}/sqitch/SqitchChange.cpp
+	${PROJECT_SOURCE_DIR}/sqitch/SqitchEntry.cpp
+	${PROJECT_SOURCE_DIR}/sqitch/SqitchInitializer.cpp
+	${PROJECT_SOURCE_DIR}/sqitch/SqitchLine.cpp
+	${PROJECT_SOURCE_DIR}/sqitch/SqitchPlan.cpp
+	${PROJECT_SOURCE_DIR}/sqitch/SqitchPlanParser.cpp
+	${PROJECT_SOURCE_DIR}/sqitch/SqitchPragma.cpp
+	${PROJECT_SOURCE_DIR}/sqitch/SqitchRef.cpp
+	${PROJECT_SOURCE_DIR}/sqitch/SqitchTag.cpp
 	${PROJECT_SOURCE_DIR}/work/TransactionalWorkRunner.cpp
 	${PROJECT_SOURCE_DIR}/work/DeviceUnpairWork.cpp
 	${PROJECT_SOURCE_DIR}/work/DeviceUnpairWorkExecutor.cpp
