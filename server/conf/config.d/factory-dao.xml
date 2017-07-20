@@ -68,6 +68,7 @@
 			<set name="features" text="${database.features}" />
 			<set name="maxSessions" number="${database.pool}" />
 			<add name="initializers" ref="sqitchDBInitializer" if-yes="${ui.debug}" />
+			<add name="initializers" ref="testDBInitializer" if-yes="${ui.debug}" />
 		</instance>
 
 		<instance name="simpleDBInitializer" class="BeeeOn::PocoSimpleDBInitializer">
@@ -77,6 +78,10 @@
 		<instance name="sqitchDBInitializer" class="BeeeOn::PocoSqitchInitializer">
 			<set name="planFile" text="${sqitch.plan}" />
 			<set name="baseDir" text="${sqitch.baseDir}" />
+		</instance>
+
+		<instance name="testDBInitializer" class="BeeeOn::PocoSimpleDBInitializer">
+			<set name="script" text="${application.configDir}../t/testing-data.sql" />
 		</instance>
 
 		<instance name="pocoTransactionFactory"
