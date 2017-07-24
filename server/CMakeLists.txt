@@ -21,7 +21,6 @@ add_definitions(-DGIT_ID="${GIT_ID}")
 add_subdirectory(src)
 add_subdirectory(base)
 add_subdirectory(test)
-add_subdirectory(schema)
 
 install(FILES conf/restui-startup.ini conf/xmlui-startup.ini
 	DESTINATION etc/beeeon)
@@ -31,15 +30,22 @@ install(DIRECTORY conf/config.d
 	DESTINATION etc/beeeon)
 install(FILES conf/devices.xml conf/types.xml
 	DESTINATION etc/beeeon)
-install(DIRECTORY conf/
-	DESTINATION etc/beeeon
-	FILES_MATCHING PATTERN "home8-*-queries.ini")
-install(DIRECTORY schema/
-	DESTINATION share/beeeon/sql
-	FILES_MATCHING PATTERN "home8-*.sql")
-install(DIRECTORY schema/
-	DESTINATION share/beeeon/sql
-	FILES_MATCHING PATTERN "schema/home8-*-expect.csv")
+install(FILES db/server-queries.ini
+	DESTINATION etc/beeeon)
+install(DIRECTORY db/
+	DESTINATION share/beeeon/db
+	FILES_MATCHING
+	PATTERN "db/sqitch.conf"
+	PATTERN "db/sqitch.plan"
+	PATTERN "db/deploy/*.sql"
+	PATTERN "db/deploy/*/*.sql"
+	PATTERN "db/verify/*.sql"
+	PATTERN "db/verify/*/*.sql"
+	PATTERN "db/revert/*.sql"
+	PATTERN "db/revert/*/*.sql"
+	PATTERN "db/tools/*"
+	PATTERN "db/test" EXCLUDE
+	PATTERN "db/templates" EXCLUDE)
 install(DIRECTORY cert/
 	DESTINATION share/beeeon/cert
 	FILES_MATCHING PATTERN "*.pem")
