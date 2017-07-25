@@ -41,19 +41,12 @@ class ExpirableSession : public Session
 public:
 	typedef Poco::SharedPtr<ExpirableSession> Ptr;
 
-	ExpirableSession(const UserID &userID, const SessionID &sessionID,
-			Poco::Timespan &timespan) :
-		Session(userID, sessionID),
-		m_tstamp()
-	{
-		// Set expiration time
-		m_tstamp += timespan;
-	}
+	ExpirableSession(
+		const UserID &userID,
+		const SessionID &sessionID,
+		Poco::Timespan &timespan);
 
-	const Poco::Timestamp& getExpiration() const
-	{
-		return m_tstamp;
-	}
+	const Poco::Timestamp& getExpiration() const;
 
 private:
 	Poco::Timestamp m_tstamp;
