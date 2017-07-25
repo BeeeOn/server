@@ -17,36 +17,15 @@ typedef std::string SessionID;
 class Session
 {
 public:
-	Session(const UserID &userID, const SessionID &sessionID) :
-		m_userID(userID),
-		m_sessionID(sessionID)
-	{
-	}
+	Session(const UserID &userID, const SessionID &sessionID);
 
-	void setIdentityID(const VerifiedIdentityID &id)
-	{
-		m_identityID = id;
-	}
+	void setIdentityID(const VerifiedIdentityID &id);
+	const VerifiedIdentityID &identityID() const;
 
-	const VerifiedIdentityID &identityID() const
-	{
-		return m_identityID;
-	}
+	void setUserId(const UserID &id);
+	const UserID userID() const;
 
-	void setUserId(const UserID &id)
-	{
-		m_userID = id;
-	}
-
-	const UserID userID() const
-	{
-		return m_userID;
-	}
-
-	const SessionID sessionID() const
-	{
-		return m_sessionID;
-	}
+	const SessionID sessionID() const;
 
 private:
 	VerifiedIdentityID m_identityID;

@@ -22,6 +22,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/provider/FacebookAuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/GoogleAuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/server/AuthRestHandler.cpp
+	${PROJECT_SOURCE_DIR}/server/Session.cpp
 	${PROJECT_SOURCE_DIR}/server/SessionCache.cpp
 	${PROJECT_SOURCE_DIR}/server/SessionManager.cpp
 	${PROJECT_SOURCE_DIR}/server/SessionVerifier.cpp
