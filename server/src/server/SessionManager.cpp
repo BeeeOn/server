@@ -13,6 +13,35 @@ BEEEON_OBJECT_NUMBER("sessionExpireTime", &SessionManager::setSessionExpireTime)
 BEEEON_OBJECT_NUMBER("maxUserSessions", &SessionManager::setMaxUserSessions)
 BEEEON_OBJECT_END(BeeeOn, SessionManager)
 
+SessionManager::SessionManager() :
+	m_sessionCache(NULL)
+{
+}
+
+SessionManager::~SessionManager()
+{
+	if (m_sessionCache)
+		delete m_sessionCache;
+}
+
+void SessionManager::setSecureRandomProvider(SecureRandomProvider *provider)
+{
+	m_random = provider;
+}
+
+void SessionManager::setSessionExpireTime(const int sessionExpireTime)
+{
+	m_expireTime = sessionExpireTime;
+}
+
+void SessionManager::setMaxUserSessions(const int maxUserSessions)
+{
+	if (m_sessionCache)
+		delete m_sessionCache;
+
+	m_sessionCache = new SessionCache(maxUserSessions);
+}
+
 const ExpirableSession::Ptr SessionManager::open(
 		const VerifiedIdentity &identity)
 {

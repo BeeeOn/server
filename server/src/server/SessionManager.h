@@ -21,34 +21,12 @@ public:
 		ID_LENGTH64 = 64, /**< 512 bits long session ID */
 	};
 
-	SessionManager() :
-		m_sessionCache(NULL)
-	{
-	}
+	SessionManager();
+	~SessionManager();
 
-	~SessionManager()
-	{
-		if (m_sessionCache)
-			delete m_sessionCache;
-	}
-
-	void setSecureRandomProvider(SecureRandomProvider *provider)
-	{
-		m_random = provider;
-	}
-
-	void setSessionExpireTime(const int sessionExpireTime)
-	{
-		m_expireTime = sessionExpireTime;
-	}
-
-	void setMaxUserSessions(const int maxUserSessions)
-	{
-		if (m_sessionCache)
-			delete m_sessionCache;
-
-		m_sessionCache = new SessionCache(maxUserSessions);
-	}
+	void setSecureRandomProvider(SecureRandomProvider *provider);
+	void setSessionExpireTime(const int sessionExpireTime);
+	void setMaxUserSessions(const int maxUserSessions);
 
 	/**
 	 * Open a new session for the given info.
