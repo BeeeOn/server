@@ -17,6 +17,8 @@ typedef std::string SessionID;
 class Session
 {
 public:
+	typedef Poco::SharedPtr<Session> Ptr;
+
 	Session(const UserID &userID, const SessionID &sessionID);
 
 	void setIdentityID(const VerifiedIdentityID &id);
