@@ -3,6 +3,7 @@
 
 #include <Poco/RWLock.h>
 #include <Poco/Logger.h>
+#include <Poco/Timespan.h>
 
 #include "provider/RandomProvider.h"
 #include "model/VerifiedIdentity.h"
@@ -25,7 +26,7 @@ public:
 	~SessionManager();
 
 	void setSecureRandomProvider(SecureRandomProvider *provider);
-	void setSessionExpireTime(const int sessionExpireTime);
+	void setSessionExpireTime(const int seconds);
 	void setMaxUserSessions(const int maxUserSessions);
 
 	/**
@@ -52,7 +53,7 @@ private:
 	Poco::RWLock m_lock;
 	SecureRandomProvider *m_random;
 	SessionCache *m_sessionCache;
-	unsigned int m_expireTime;
+	Poco::Timespan m_expireTime;
 };
 
 }
