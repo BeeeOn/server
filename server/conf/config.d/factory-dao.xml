@@ -101,6 +101,7 @@
 		<instance name="sqlUserDao" class="BeeeOn::PocoSQLUserDao">
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="transactionManager" ref="transactionManager" />
+			<set name="localeManager" ref="localeManager" />
 			<set name="sqlLoader" ref="queries" />
 		</instance>
 

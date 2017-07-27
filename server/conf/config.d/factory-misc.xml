@@ -6,5 +6,7 @@
 				class="BeeeOn::NotificationDispatcher">
 			<add name="observer" ref="loggingObserver" />
 		</instance>
+
+		<instance name="localeManager" class="BeeeOn::SystemLocaleManager" />
 	</factory>
 </system>
