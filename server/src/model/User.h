@@ -1,6 +1,8 @@
 #ifndef BEEEON_USER_H
 #define BEEEON_USER_H
 
+#include <string>
+
 #include <Poco/SharedPtr.h>
 #include "model/Entity.h"
 #include "model/GlobalID.h"
@@ -14,42 +16,17 @@ class User : public Entity<GlobalID> {
 public:
 	typedef Poco::SharedPtr<User> Ptr;
 
-	User()
-	{
-	}
+	User();
+	User(const ID &id);
 
-	User(const ID &id):
-		Entity(id)
-	{
-	}
+	void setFirstName(const std::string &firstName);
+	std::string firstName() const;
 
-	void setFirstName(const std::string &firstName)
-	{
-		m_firstName = firstName;
-	}
+	void setLastName(const std::string &lastName);
+	std::string lastName() const;
 
-	std::string firstName() const
-	{
-		return m_firstName;
-	}
+	std::string fullName() const;
 
-	void setLastName(const std::string &lastName)
-	{
-		m_lastName = lastName;
-	}
-
-	std::string lastName() const
-	{
-		return m_lastName;
-	}
-
-	std::string fullName() const
-	{
-		if (m_firstName.empty() && m_lastName.empty())
-			return "";
-
-		return m_firstName + " " + m_lastName;
-	}
 
 private:
 	std::string m_firstName;
