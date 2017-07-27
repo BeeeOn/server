@@ -18,7 +18,7 @@ using namespace BeeeOn::XmlUI;
 GatewayXmlHandler::GatewayXmlHandler(
 		const StreamSocket &socket,
 		const AutoPtr<Document> input,
-		ExpirableSession::Ptr session,
+		Session::Ptr session,
 		GatewayService &gatewayService):
 	AbstractXmlHandler("gates", socket, input, session),
 	m_gatewayService(gatewayService)
@@ -182,8 +182,7 @@ XmlRequestHandler *GatewayXmlHandlerResolver::createHandler(
 		const StreamSocket &socket,
 		const AutoPtr<Document> input)
 {
-	ExpirableSession::Ptr session = lookupSession(
-			*m_sessionManager, input);
+	Session::Ptr session = lookupSession(*m_sessionManager, input);
 	return new GatewayXmlHandler(
 			socket, input, session,
 			*m_gatewayService);

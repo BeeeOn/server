@@ -13,7 +13,7 @@ class ProfileXmlHandler : public AbstractXmlHandler {
 public:
 	ProfileXmlHandler(const Poco::Net::StreamSocket &socket,
 			const Poco::AutoPtr<Poco::XML::Document> input,
-			BeeeOn::ExpirableSession::Ptr session,
+			BeeeOn::Session::Ptr session,
 			IdentityService &identityService);
 	void handleInputImpl() override;
 	void handleMyProfile();

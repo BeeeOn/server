@@ -22,7 +22,7 @@ using namespace BeeeOn::XmlUI;
 RoleXmlHandler::RoleXmlHandler(
 		const StreamSocket &socket,
 		const AutoPtr<Document> input,
-		ExpirableSession::Ptr session,
+		Session::Ptr session,
 		RoleService &roleService):
 	AbstractXmlHandler("gateusers", socket, input, session),
 	m_roleService(roleService)
@@ -150,8 +150,7 @@ XmlRequestHandler *RoleXmlHandlerResolver::createHandler(
 		const StreamSocket &socket,
 		const AutoPtr<Document> input)
 {
-	ExpirableSession::Ptr session = lookupSession(
-			*m_sessionManager, input);
+	Session::Ptr session = lookupSession(*m_sessionManager, input);
 	return new RoleXmlHandler(socket, input,
 			session, *m_roleService);
 }

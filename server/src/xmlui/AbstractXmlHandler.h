@@ -21,7 +21,7 @@ public:
 			const std::string &ns,
 			const Poco::Net::StreamSocket &socket,
 			const Poco::AutoPtr<Poco::XML::Document> input,
-			BeeeOn::ExpirableSession::Ptr session);
+			BeeeOn::Session::Ptr session);
 
 	virtual void handleInput();
 	virtual void handleInputImpl() = 0;
@@ -33,7 +33,7 @@ public:
 		return !m_session.isNull();
 	}
 
-	const BeeeOn::ExpirableSession::Ptr session() const
+	const BeeeOn::Session::Ptr session() const
 	{
 		return m_session;
 	}
@@ -56,7 +56,7 @@ public:
 	void resultDataEnd();
 
 	const std::string m_ns;
-	BeeeOn::ExpirableSession::Ptr m_session;
+	BeeeOn::Session::Ptr m_session;
 };
 
 class AbstractXmlHandlerResolver : public BeeeOn::XmlRequestHandlerResolver {
@@ -68,7 +68,7 @@ public:
 	virtual bool canHandle(const Poco::XML::Element &root);
 
 protected:
-	BeeeOn::ExpirableSession::Ptr lookupSession(
+	BeeeOn::Session::Ptr lookupSession(
 			BeeeOn::SessionManager &sessionManager,
 			const Poco::AutoPtr<Poco::XML::Document> input);
 

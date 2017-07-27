@@ -14,7 +14,7 @@ class RoleXmlHandler : public AbstractXmlHandler {
 public:
 	RoleXmlHandler(const Poco::Net::StreamSocket &socket,
 			const Poco::AutoPtr<Poco::XML::Document> input,
-			ExpirableSession::Ptr session,
+			Session::Ptr session,
 			RoleService &roleService);
 
 	void handleInputImpl() override;

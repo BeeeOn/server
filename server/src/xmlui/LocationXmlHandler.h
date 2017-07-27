@@ -11,7 +11,7 @@ class LocationXmlHandler : public AbstractXmlHandler {
 public:
 	LocationXmlHandler(const Poco::Net::StreamSocket &socket,
 			const Poco::AutoPtr<Poco::XML::Document> input,
-			BeeeOn::ExpirableSession::Ptr session,
+			BeeeOn::Session::Ptr session,
 			BeeeOn::LocationService &locationService);
 	void handleInputImpl() override;
 	void handleCreate(const std::string &gateid,

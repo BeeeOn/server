@@ -25,7 +25,7 @@ AbstractXmlHandler::AbstractXmlHandler(
 		const string &ns,
 		const StreamSocket &socket,
 		const AutoPtr<Document> input,
-		BeeeOn::ExpirableSession::Ptr session):
+		BeeeOn::Session::Ptr session):
 	BeeeOn::XmlRequestHandler(socket, input),
 	m_ns(ns),
 	m_session(session)
@@ -194,7 +194,7 @@ bool AbstractXmlHandlerResolver::canHandle(
 
 }
 
-ExpirableSession::Ptr AbstractXmlHandlerResolver::lookupSession(
+Session::Ptr AbstractXmlHandlerResolver::lookupSession(
 		SessionManager &sessionManager,
 		const AutoPtr<Document> input)
 {

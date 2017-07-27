@@ -14,7 +14,7 @@ class DeviceXmlHandler : public AbstractXmlHandler {
 public:
 	DeviceXmlHandler(const Poco::Net::StreamSocket &socket,
 			const Poco::AutoPtr<Poco::XML::Document> input,
-			BeeeOn::ExpirableSession::Ptr session,
+			BeeeOn::Session::Ptr session,
 			BeeeOn::DeviceService &deviceService,
 			BeeeOn::CryptoConfig *config);
 	void handleInputImpl() override;

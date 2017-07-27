@@ -21,7 +21,7 @@ using namespace BeeeOn::XmlUI;
 
 DeviceXmlHandler::DeviceXmlHandler(const StreamSocket &socket,
 		const AutoPtr<Document> input,
-		ExpirableSession::Ptr session,
+		Session::Ptr session,
 		DeviceService &deviceService,
 		CryptoConfig *config):
 	AbstractXmlHandler("devices", socket, input, session),
@@ -314,8 +314,7 @@ XmlRequestHandler *DeviceXmlHandlerResolver::createHandler(
 		const StreamSocket &socket,
 		const AutoPtr<Document> input)
 {
-	ExpirableSession::Ptr session = lookupSession(
-			*m_sessionManager, input);
+	Session::Ptr session = lookupSession(*m_sessionManager, input);
 	return new DeviceXmlHandler(
 			socket, input, session, *m_deviceService, m_config);
 }

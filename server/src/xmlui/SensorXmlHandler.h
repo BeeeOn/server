@@ -13,7 +13,7 @@ class SensorXmlHandler : public AbstractXmlHandler {
 public:
 	SensorXmlHandler(const Poco::Net::StreamSocket &socket,
 			const Poco::AutoPtr<Poco::XML::Document> input,
-			BeeeOn::ExpirableSession::Ptr session,
+			BeeeOn::Session::Ptr session,
 			BeeeOn::SensorHistoryService &sensorService);
 	void handleInputImpl() override;
 

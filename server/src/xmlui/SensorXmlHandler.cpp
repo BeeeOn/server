@@ -20,7 +20,7 @@ using namespace BeeeOn::XmlUI;
 
 SensorXmlHandler::SensorXmlHandler(const StreamSocket &socket,
 		const AutoPtr<Document> input,
-		ExpirableSession::Ptr session,
+		Session::Ptr session,
 		SensorHistoryService &sensorService):
 	AbstractXmlHandler("devices", socket, input, session),
 	m_sensorService(sensorService)
@@ -102,7 +102,7 @@ XmlRequestHandler *SensorXmlHandlerResolver::createHandler(
 		const StreamSocket &socket,
 		const AutoPtr<Document> input)
 {
-	ExpirableSession::Ptr session = lookupSession(
+	Session::Ptr session = lookupSession(
 			*m_sessionManager, input);
 	return new SensorXmlHandler(
 			socket, input, session, *m_sensorService);

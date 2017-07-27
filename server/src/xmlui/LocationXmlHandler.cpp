@@ -14,7 +14,7 @@ using namespace BeeeOn::XmlUI;
 LocationXmlHandler::LocationXmlHandler(
 		const StreamSocket &socket,
 		const AutoPtr<Document> input,
-		ExpirableSession::Ptr session,
+		Session::Ptr session,
 		LocationService &locationService):
 	AbstractXmlHandler("locations", socket, input, session),
 	m_locationService(locationService)
@@ -158,8 +158,7 @@ XmlRequestHandler *LocationXmlHandlerResolver::createHandler(
 		const StreamSocket &socket,
 		const AutoPtr<Document> input)
 {
-	ExpirableSession::Ptr session = lookupSession(
-			*m_sessionManager, input);
+	Session::Ptr session = lookupSession(*m_sessionManager, input);
 	return new LocationXmlHandler(
 			socket, input, session, *m_locationService);
 }

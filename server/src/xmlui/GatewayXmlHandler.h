@@ -11,7 +11,7 @@ class GatewayXmlHandler : public AbstractXmlHandler {
 public:
 	GatewayXmlHandler(const Poco::Net::StreamSocket &socket,
 			const Poco::AutoPtr<Poco::XML::Document> input,
-			BeeeOn::ExpirableSession::Ptr session,
+			BeeeOn::Session::Ptr session,
 			BeeeOn::GatewayService &gatewayService);
 	void handleInputImpl() override;
 	void handleRegister(Poco::XML::Element *gatewayNode);
