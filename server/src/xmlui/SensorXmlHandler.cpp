@@ -22,7 +22,7 @@ SensorXmlHandler::SensorXmlHandler(const StreamSocket &socket,
 		const AutoPtr<Document> input,
 		Session::Ptr session,
 		SensorHistoryService &sensorService):
-	AbstractXmlHandler("devices", socket, input, session),
+	SessionXmlHandler("devices", socket, input, session),
 	m_sensorService(sensorService)
 {
 }
@@ -80,14 +80,14 @@ void SensorXmlHandler::handleGetLog(const string &gateid,
 }
 
 SensorXmlHandlerResolver::SensorXmlHandlerResolver():
-	AbstractXmlHandlerResolver("devices")
+	SessionXmlHandlerResolver("devices")
 {
 }
 
 bool SensorXmlHandlerResolver::canHandle(
 		const Element &root)
 {
-	if (!AbstractXmlHandlerResolver::canHandle(root))
+	if (!SessionXmlHandlerResolver::canHandle(root))
 		return false;
 
 	const string &type = root.getAttribute("type");
@@ -109,6 +109,7 @@ XmlRequestHandler *SensorXmlHandlerResolver::createHandler(
 }
 
 BEEEON_OBJECT_BEGIN(BeeeOn, XmlUI, SensorXmlHandlerResolver)
+BEEEON_OBJECT_CASTABLE(SessionXmlHandlerResolver)
 BEEEON_OBJECT_CASTABLE(AbstractXmlHandlerResolver)
 BEEEON_OBJECT_CASTABLE(XmlRequestHandlerResolver)
 BEEEON_OBJECT_REF("sensorHistoryService", &SensorXmlHandlerResolver::setSensorHistoryService)

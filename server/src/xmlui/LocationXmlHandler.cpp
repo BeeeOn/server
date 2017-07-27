@@ -16,7 +16,7 @@ LocationXmlHandler::LocationXmlHandler(
 		const AutoPtr<Document> input,
 		Session::Ptr session,
 		LocationService &locationService):
-	AbstractXmlHandler("locations", socket, input, session),
+	SessionXmlHandler("locations", socket, input, session),
 	m_locationService(locationService)
 {
 }
@@ -132,14 +132,14 @@ void LocationXmlHandler::handleGetAll(const string &gateid)
 }
 
 LocationXmlHandlerResolver::LocationXmlHandlerResolver():
-	AbstractXmlHandlerResolver("locations")
+	SessionXmlHandlerResolver("locations")
 {
 }
 
 bool LocationXmlHandlerResolver::canHandle(
 		const Element &root)
 {
-	if (!AbstractXmlHandlerResolver::canHandle(root))
+	if (!SessionXmlHandlerResolver::canHandle(root))
 		return false;
 
 	if (root.getAttribute("type") == "create")
@@ -164,6 +164,7 @@ XmlRequestHandler *LocationXmlHandlerResolver::createHandler(
 }
 
 BEEEON_OBJECT_BEGIN(BeeeOn, XmlUI, LocationXmlHandlerResolver)
+BEEEON_OBJECT_CASTABLE(SessionXmlHandlerResolver)
 BEEEON_OBJECT_CASTABLE(AbstractXmlHandlerResolver)
 BEEEON_OBJECT_CASTABLE(XmlRequestHandlerResolver)
 BEEEON_OBJECT_REF("locationService", &LocationXmlHandlerResolver::setLocationService)

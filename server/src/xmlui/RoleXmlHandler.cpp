@@ -24,7 +24,7 @@ RoleXmlHandler::RoleXmlHandler(
 		const AutoPtr<Document> input,
 		Session::Ptr session,
 		RoleService &roleService):
-	AbstractXmlHandler("gateusers", socket, input, session),
+	SessionXmlHandler("gateusers", socket, input, session),
 	m_roleService(roleService)
 {
 }
@@ -123,13 +123,13 @@ void RoleXmlHandler::handleUpdateAccess(const string &gateid, Element *userNode)
 }
 
 RoleXmlHandlerResolver::RoleXmlHandlerResolver():
-	AbstractXmlHandlerResolver("gateusers")
+	SessionXmlHandlerResolver("gateusers")
 {
 }
 
 bool RoleXmlHandlerResolver::canHandle(const Element &root)
 {
-	if (!AbstractXmlHandlerResolver::canHandle(root))
+	if (!SessionXmlHandlerResolver::canHandle(root))
 		return false;
 
 	const string &type = root.getAttribute("type");
@@ -156,6 +156,7 @@ XmlRequestHandler *RoleXmlHandlerResolver::createHandler(
 }
 
 BEEEON_OBJECT_BEGIN(BeeeOn, XmlUI, RoleXmlHandlerResolver)
+BEEEON_OBJECT_CASTABLE(SessionXmlHandlerResolver)
 BEEEON_OBJECT_CASTABLE(AbstractXmlHandlerResolver)
 BEEEON_OBJECT_CASTABLE(XmlRequestHandlerResolver)
 BEEEON_OBJECT_REF("roleService", &RoleXmlHandlerResolver::setRoleService)

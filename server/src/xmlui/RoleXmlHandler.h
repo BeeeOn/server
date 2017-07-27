@@ -1,7 +1,7 @@
 #ifndef BEEEON_XMLUI_ROLE_XML_HANDLER_H
 #define BEEEON_XMLUI_ROLE_XML_HANDLER_H
 
-#include "xmlui/AbstractXmlHandler.h"
+#include "xmlui/SessionXmlHandler.h"
 
 namespace BeeeOn {
 
@@ -10,7 +10,7 @@ class SessionManager;
 
 namespace XmlUI {
 
-class RoleXmlHandler : public AbstractXmlHandler {
+class RoleXmlHandler : public SessionXmlHandler {
 public:
 	RoleXmlHandler(const Poco::Net::StreamSocket &socket,
 			const Poco::AutoPtr<Poco::XML::Document> input,
@@ -32,7 +32,7 @@ private:
 	RoleService &m_roleService;
 };
 
-class RoleXmlHandlerResolver : public AbstractXmlHandlerResolver {
+class RoleXmlHandlerResolver : public SessionXmlHandlerResolver {
 public:
 	RoleXmlHandlerResolver();
 
