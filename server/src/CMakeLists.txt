@@ -70,6 +70,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/service/UserService.cpp
 	${PROJECT_SOURCE_DIR}/service/UserServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/AuthService.cpp
+	${PROJECT_SOURCE_DIR}/service/AuthServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/DeviceService.cpp
 	${PROJECT_SOURCE_DIR}/service/DeviceServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/GatewayService.cpp

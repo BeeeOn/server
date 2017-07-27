@@ -7,7 +7,7 @@
 			<set name="transactionManager" ref="transactionManager" />
 		</instance>
 
-		<instance name="authService" class="BeeeOn::AuthService">
+		<instance name="authService" class="BeeeOn::AuthServiceImpl">
 			<set name="userDao" ref="userDao" />
 			<set name="identityDao" ref="identityDao" />
 			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
