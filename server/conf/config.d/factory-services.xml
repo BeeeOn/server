@@ -28,7 +28,7 @@
 			<set name="transactionManager" ref="transactionManager" />
 		</instance>
 
-		<instance name="gatewayService" class="BeeeOn::GatewayService">
+		<instance name="gatewayService" class="BeeeOn::GatewayServiceImpl">
 			<set name="gatewayDao" ref="gatewayDao" />
 			<set name="roleInGatewayDao" ref="roleInGatewayDao" />
 			<set name="identityDao" ref="identityDao" />
