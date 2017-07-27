@@ -46,7 +46,7 @@
 			<set name="transactionManager" ref="transactionManager" />
 		</instance>
 
-		<instance name="identityService" class="BeeeOn::IdentityService">
+		<instance name="identityService" class="BeeeOn::IdentityServiceImpl">
 			<set name="identityDao" ref="identityDao" />
 			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
 			<set name="transactionManager" ref="transactionManager" />

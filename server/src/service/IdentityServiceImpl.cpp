@@ -1,0 +1,46 @@
+#include "di/Injectable.h"
+#include "service/IdentityServiceImpl.h"
+
+BEEEON_OBJECT_BEGIN(BeeeOn, IdentityServiceImpl)
+BEEEON_OBJECT_CASTABLE(IdentityService)
+BEEEON_OBJECT_REF("identityDao", &IdentityServiceImpl::setIdentityDao)
+BEEEON_OBJECT_REF("verifiedIdentityDao", &IdentityServiceImpl::setVerifiedIdentityDao)
+BEEEON_OBJECT_REF("transactionManager", &Transactional::setTransactionManager)
+BEEEON_OBJECT_END(BeeeOn, IdentityServiceImpl)
+
+using namespace BeeeOn;
+
+IdentityServiceImpl::IdentityServiceImpl():
+	m_identityDao(&NullIdentityDao::instance()),
+	m_verifiedIdentityDao(&NullVerifiedIdentityDao::instance())
+{
+}
+
+void IdentityServiceImpl::setIdentityDao(IdentityDao *dao)
+{
+	if (dao == NULL)
+		m_identityDao = &NullIdentityDao::instance();
+	else
+		m_identityDao = dao;
+}
+
+void IdentityServiceImpl::setVerifiedIdentityDao(VerifiedIdentityDao *dao)
+{
+	if (dao == NULL) {
+		m_verifiedIdentityDao =
+			&NullVerifiedIdentityDao::instance();
+	}
+	else {
+		m_verifiedIdentityDao = dao;
+	}
+}
+
+bool IdentityServiceImpl::doFetch(VerifiedIdentity &identity)
+{
+	return m_verifiedIdentityDao->fetch(identity);
+}
+
+bool IdentityServiceImpl::doFetch(Identity &identity)
+{
+	return m_identityDao->fetch(identity);
+}
