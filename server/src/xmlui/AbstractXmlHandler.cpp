@@ -82,6 +82,16 @@ bool AbstractXmlHandler::requireSession()
 	return true;
 }
 
+bool AbstractXmlHandler::hasSession() const
+{
+	return !m_session.isNull();
+}
+
+const Session::Ptr AbstractXmlHandler::session() const
+{
+	return m_session;
+}
+
 void AbstractXmlHandler::deriveType(Poco::XML::AttributesImpl &attrs)
 {
 	const Element *root = m_input->documentElement();
