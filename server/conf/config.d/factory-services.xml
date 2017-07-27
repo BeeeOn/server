@@ -39,7 +39,7 @@
 		</instance>
 
 		<instance name="locationService"
-				class="BeeeOn::LocationService">
+				class="BeeeOn::LocationServiceImpl">
 			<set name="locationDao" ref="locationDao" />
 			<set name="gatewayDao" ref="gatewayDao" />
 			<set name="accessPolicy" ref="accessPolicy" />

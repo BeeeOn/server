@@ -74,6 +74,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/service/GatewayService.cpp
 	${PROJECT_SOURCE_DIR}/service/GatewayServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/LocationService.cpp
+	${PROJECT_SOURCE_DIR}/service/LocationServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/IdentityService.cpp
 	${PROJECT_SOURCE_DIR}/service/IdentityServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/RoleService.cpp
