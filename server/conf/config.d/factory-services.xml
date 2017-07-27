@@ -52,7 +52,7 @@
 			<set name="transactionManager" ref="transactionManager" />
 		</instance>
 
-		<instance name="roleService" class="BeeeOn::RoleService">
+		<instance name="roleService" class="BeeeOn::RoleServiceImpl">
 			<set name="identityDao" ref="identityDao" />
 			<set name="gatewayDao" ref="gatewayDao" />
 			<set name="roleInGatewayDao" ref="roleInGatewayDao" />
