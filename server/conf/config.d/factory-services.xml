@@ -19,7 +19,7 @@
 			<add name="providers" ref="facebookAuthProvider" />
 		</instance>
 
-		<instance name="deviceService" class="BeeeOn::DeviceService">
+		<instance name="deviceService" class="BeeeOn::DeviceServiceImpl">
 			<set name="deviceDao" ref="deviceDao" />
 			<set name="devicePropertyDao" ref="devicePropertyDao" />
 			<set name="gatewayRPC" ref="gatewayRPC" />
