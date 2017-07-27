@@ -39,3 +39,13 @@ string User::fullName() const
 
 	return m_firstName + " " + m_lastName;
 }
+
+void User::setLocale(const Locale &locale)
+{
+	m_locale = locale;
+}
+
+const Locale &User::locale() const
+{
+	return m_locale;
+}

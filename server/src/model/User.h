@@ -4,6 +4,8 @@
 #include <string>
 
 #include <Poco/SharedPtr.h>
+
+#include "l10n/Locale.h"
 #include "model/Entity.h"
 #include "model/GlobalID.h"
 
@@ -27,10 +29,13 @@ public:
 
 	std::string fullName() const;
 
+	void setLocale(const Locale &locale);
+	const Locale &locale() const;
 
 private:
 	std::string m_firstName;
 	std::string m_lastName;
+	Locale m_locale;
 };
 
 typedef User::ID UserID;
