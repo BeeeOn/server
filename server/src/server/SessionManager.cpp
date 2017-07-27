@@ -13,15 +13,12 @@ BEEEON_OBJECT_NUMBER("sessionExpireTime", &SessionManager::setSessionExpireTime)
 BEEEON_OBJECT_NUMBER("maxUserSessions", &SessionManager::setMaxUserSessions)
 BEEEON_OBJECT_END(BeeeOn, SessionManager)
 
-SessionManager::SessionManager() :
-	m_sessionCache(NULL)
+SessionManager::SessionManager()
 {
 }
 
 SessionManager::~SessionManager()
 {
-	if (m_sessionCache)
-		delete m_sessionCache;
 }
 
 void SessionManager::setSecureRandomProvider(SecureRandomProvider *provider)
@@ -45,9 +42,6 @@ void SessionManager::setMaxUserSessions(const int maxUserSessions)
 		throw InvalidArgumentException(
 			"max user sessions must be greater then zero");
 	}
-
-	if (m_sessionCache)
-		delete m_sessionCache;
 
 	m_sessionCache = new SessionCache(maxUserSessions);
 }

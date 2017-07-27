@@ -3,6 +3,7 @@
 
 #include <Poco/RWLock.h>
 #include <Poco/Logger.h>
+#include <Poco/SharedPtr.h>
 #include <Poco/Timespan.h>
 
 #include "provider/RandomProvider.h"
@@ -52,7 +53,7 @@ public:
 private:
 	Poco::RWLock m_lock;
 	SecureRandomProvider *m_random;
-	SessionCache *m_sessionCache;
+	Poco::SharedPtr<SessionCache> m_sessionCache;
 	Poco::Timespan m_expireTime;
 };
 
