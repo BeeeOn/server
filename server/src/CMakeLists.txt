@@ -82,6 +82,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/service/RoleService.cpp
 	${PROJECT_SOURCE_DIR}/service/RoleServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/SensorHistoryService.cpp
+	${PROJECT_SOURCE_DIR}/service/SensorHistoryServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/JSONGatewayDeserializer.cpp
 	${PROJECT_SOURCE_DIR}/service/JSONLocationDeserializer.cpp
 	${PROJECT_SOURCE_DIR}/policy/GatewayAccessPolicy.cpp

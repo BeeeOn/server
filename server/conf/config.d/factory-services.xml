@@ -61,7 +61,7 @@
 			<set name="notificationDispatcher" ref="notificationDispatcher" />
 		</instance>
 
-		<instance name="sensorHistoryService" class="BeeeOn::SensorHistoryService">
+		<instance name="sensorHistoryService" class="BeeeOn::SensorHistoryServiceImpl">
 			<set name="sensorHistoryDao" ref="sensorHistoryDao" />
 			<set name="deviceDao" ref="deviceDao" />
 			<set name="transactionManager" ref="transactionManager" />
