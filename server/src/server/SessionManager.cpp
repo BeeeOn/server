@@ -41,6 +41,11 @@ void SessionManager::setSessionExpireTime(const int seconds)
 
 void SessionManager::setMaxUserSessions(const int maxUserSessions)
 {
+	if (maxUserSessions <= 0) {
+		throw InvalidArgumentException(
+			"max user sessions must be greater then zero");
+	}
+
 	if (m_sessionCache)
 		delete m_sessionCache;
 
