@@ -2,7 +2,7 @@
 	<factory>
 		<!-- Bussiness layer -->
 
-		<instance name="userService" class="BeeeOn::UserService">
+		<instance name="userService" class="BeeeOn::UserServiceImpl">
 			<set name="userDao" ref="userDao" />
 			<set name="transactionManager" ref="transactionManager" />
 		</instance>

@@ -1,11 +1,7 @@
 #ifndef BEEEON_USER_SERVICE_H
 #define BEEEON_USER_SERVICE_H
 
-#include <Poco/Exception.h>
-#include <Poco/Logger.h>
-
 #include "dao/UserDao.h"
-#include "transaction/Transactional.h"
 
 namespace BeeeOn {
 
@@ -13,28 +9,12 @@ namespace BeeeOn {
  * User management service. Its purpose is to ensure creating
  * user profiles and operations strongly related to a user.
  */
-class UserService : public Transactional {
+class UserService {
 public:
-	UserService();
+	virtual ~UserService();
 
-	void setUserDao(UserDao *dao);
-
-	void create(User &u)
-	{
-		BEEEON_TRANSACTION(doCreate(u));
-	}
-
-	bool fetch(User &u)
-	{
-		return BEEEON_TRANSACTION_RETURN(bool, doFetch(u));
-	}
-
-protected:
-	void doCreate(User &u);
-	bool doFetch(User &u);
-
-private:
-	UserDao *m_dao;
+	virtual void create(User &u) = 0;
+	virtual bool fetch(User &u) = 0;
 };
 
 }
