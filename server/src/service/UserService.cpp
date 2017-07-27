@@ -19,12 +19,10 @@ void UserService::setUserDao(UserDao *dao)
 
 void UserService::doCreate(User &u)
 {
-	TRACE_METHOD();
 	m_dao->create(u);
 }
 
 bool UserService::doFetch(User &u)
 {
-	TRACE_METHOD();
 	return m_dao->fetch(u);
 }

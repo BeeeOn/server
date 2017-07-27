@@ -2,16 +2,14 @@
 #define BEEEON_GATEWAY_SERVICE_H
 
 #include <vector>
-#include <Poco/Exception.h>
-#include <Poco/Logger.h>
-#include "service/Single.h"
-#include "service/Relation.h"
-#include "rpc/GatewayRPC.h"
-#include "Debug.h"
-#include "model/User.h"
-#include "model/VerifiedIdentity.h"
+
 #include "model/Gateway.h"
 #include "model/LegacyGateway.h"
+#include "model/User.h"
+#include "model/VerifiedIdentity.h"
+#include "rpc/GatewayRPC.h"
+#include "service/Single.h"
+#include "service/Relation.h"
 #include "transaction/Transactional.h"
 
 namespace BeeeOn {

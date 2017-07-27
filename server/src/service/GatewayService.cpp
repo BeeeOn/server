@@ -1,14 +1,15 @@
 #include <vector>
+
 #include <Poco/Exception.h>
 
-#include "di/Injectable.h"
-#include "service/GatewayService.h"
-#include "server/AccessLevel.h"
 #include "dao/GatewayDao.h"
-#include "dao/RoleInGatewayDao.h"
 #include "dao/IdentityDao.h"
+#include "dao/RoleInGatewayDao.h"
 #include "dao/VerifiedIdentityDao.h"
+#include "di/Injectable.h"
 #include "policy/GatewayAccessPolicy.h"
+#include "server/AccessLevel.h"
+#include "service/GatewayService.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, GatewayService)
 BEEEON_OBJECT_REF("gatewayDao", &GatewayService::setGatewayDao)

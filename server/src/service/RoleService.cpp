@@ -1,16 +1,16 @@
 #include <Poco/Exception.h>
 
+#include "dao/IdentityDao.h"
+#include "dao/GatewayDao.h"
+#include "dao/RoleInGatewayDao.h"
 #include "di/Injectable.h"
 #include "model/Identity.h"
 #include "model/Gateway.h"
 #include "model/RoleInGateway.h"
-#include "dao/IdentityDao.h"
-#include "dao/GatewayDao.h"
-#include "dao/RoleInGatewayDao.h"
+#include "notification/NotificationDispatcher.h"
 #include "policy/RoleAccessPolicy.h"
 #include "server/AccessLevel.h"
 #include "service/RoleService.h"
-#include "notification/NotificationDispatcher.h"
 
 using namespace std;
 using namespace Poco;

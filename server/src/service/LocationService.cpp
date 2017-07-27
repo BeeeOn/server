@@ -1,10 +1,10 @@
 #include <Poco/Exception.h>
 
-#include "di/Injectable.h"
-#include "service/LocationService.h"
 #include "dao/LocationDao.h"
 #include "dao/GatewayDao.h"
+#include "di/Injectable.h"
 #include "policy/LocationAccessPolicy.h"
+#include "service/LocationService.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, LocationService)
 BEEEON_OBJECT_REF("locationDao", &LocationService::setLocationDao)

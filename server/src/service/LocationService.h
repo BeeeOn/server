@@ -5,12 +5,12 @@
 
 #include <Poco/Exception.h>
 #include <Poco/Logger.h>
-#include "service/Single.h"
-#include "service/Relation.h"
+
 #include "model/Location.h"
 #include "model/Gateway.h"
+#include "service/Single.h"
+#include "service/Relation.h"
 #include "transaction/Transactional.h"
-#include "Debug.h"
 
 namespace BeeeOn {
 

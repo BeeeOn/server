@@ -4,11 +4,11 @@
 #include <list>
 #include <vector>
 
-#include "service/Single.h"
-#include "service/Relation.h"
 #include "model/Device.h"
 #include "model/DeviceProperty.h"
 #include "model/Gateway.h"
+#include "service/Single.h"
+#include "service/Relation.h"
 #include "transaction/Transactional.h"
 #include "work/Work.h"
 

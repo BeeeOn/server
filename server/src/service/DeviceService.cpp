@@ -1,19 +1,18 @@
 #include <Poco/Exception.h>
+#include <Poco/DateTime.h>
 #include <Poco/Logger.h>
 #include <Poco/Nullable.h>
-#include <Poco/DateTime.h>
 
-#include "di/Injectable.h"
-#include "service/DeviceService.h"
-#include "policy/DeviceAccessPolicy.h"
-#include "model/Device.h"
-#include "model/Gateway.h"
 #include "dao/DeviceDao.h"
 #include "dao/DevicePropertyDao.h"
+#include "di/Injectable.h"
+#include "model/Device.h"
+#include "model/Gateway.h"
+#include "policy/DeviceAccessPolicy.h"
 #include "rpc/GatewayRPC.h"
+#include "service/DeviceService.h"
 #include "work/DeviceUnpairWork.h"
 #include "work/WorkFacade.h"
-#include "Debug.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, DeviceService)
 BEEEON_OBJECT_REF("deviceDao", &DeviceService::setDeviceDao)
@@ -64,8 +63,6 @@ void DeviceService::setAccessPolicy(DeviceAccessPolicy *policy)
 
 bool DeviceService::doFetch(Relation<Device, Gateway> &input)
 {
-	TRACE_METHOD();
-
 	m_policy->assureGet(input, input.target(), input.base());
 	return m_dao->fetch(input.target(), input.base());
 }

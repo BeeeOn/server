@@ -1,8 +1,8 @@
 #include <Poco/Exception.h>
 
-#include "di/Injectable.h"
 #include "dao/SensorHistoryDao.h"
 #include "dao/DeviceDao.h"
+#include "di/Injectable.h"
 #include "policy/SensorHistoryAccessPolicy.h"
 #include "service/SensorHistoryService.h"
 #include "service/ValueConsumer.h"

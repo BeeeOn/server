@@ -1,5 +1,6 @@
 #include <Poco/URI.h>
 #include <Poco/Net/NetException.h>
+
 #include "di/Injectable.h"
 #include "service/AuthService.h"
 
@@ -134,8 +135,6 @@ ExpirableSession::Ptr AuthService::doLoginAuthorized(const AuthResult &result)
 
 const ExpirableSession::Ptr AuthService::login(const Credentials &cred)
 {
-	TRACE_METHOD();
-
 	Providers::iterator it = m_providers.find(cred.provider());
 	if (it == m_providers.end())
 		throw NotAuthenticatedException("no such provider");
@@ -154,7 +153,6 @@ const ExpirableSession::Ptr AuthService::login(const Credentials &cred)
 
 void AuthService::logout(const std::string &id)
 {
-	TRACE_METHOD();
 	m_sessionManager->close(id);
 }
 
