@@ -4,6 +4,8 @@
 #include <list>
 #include <vector>
 
+#include <Poco/SharedPtr.h>
+
 #include "model/Device.h"
 #include "model/DeviceProperty.h"
 #include "model/Gateway.h"
@@ -18,6 +20,8 @@ namespace BeeeOn {
  */
 class DeviceService {
 public:
+	typedef Poco::SharedPtr<DeviceService> Ptr;
+
 	virtual ~DeviceService();
 
 	virtual bool fetch(Relation<Device, Gateway> &input) = 0;
