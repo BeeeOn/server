@@ -1,6 +1,8 @@
 #ifndef BEEEON_USER_SERVICE_H
 #define BEEEON_USER_SERVICE_H
 
+#include <Poco/SharedPtr.h>
+
 #include "dao/UserDao.h"
 
 namespace BeeeOn {
@@ -11,6 +13,8 @@ namespace BeeeOn {
  */
 class UserService {
 public:
+	typedef Poco::SharedPtr<UserService> Ptr;
+
 	virtual ~UserService();
 
 	virtual void create(User &u) = 0;
