@@ -6,6 +6,7 @@
 
 #include <Poco/Exception.h>
 #include <Poco/Logger.h>
+#include <Poco/SharedPtr.h>
 
 #include "dao/IdentityDao.h"
 #include "dao/UserDao.h"
@@ -25,6 +26,8 @@ namespace BeeeOn {
  */
 class AuthService {
 public:
+	typedef Poco::SharedPtr<AuthService> Ptr;
+
 	virtual ~AuthService();
 
 	virtual const ExpirableSession::Ptr login(const Credentials &cred) = 0;
