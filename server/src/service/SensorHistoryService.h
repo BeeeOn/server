@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include <Poco/SharedPtr.h>
+
 #include "service/Relation.h"
 
 namespace Poco {
@@ -20,6 +22,8 @@ class Device;
 
 class SensorHistoryService {
 public:
+	typedef Poco::SharedPtr<SensorHistoryService> Ptr;
+
 	virtual ~SensorHistoryService();
 
 	virtual void fetchRange(const Relation<ModuleInfo, Device> &module,
