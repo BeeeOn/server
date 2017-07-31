@@ -18,9 +18,9 @@ using namespace BeeeOn::XmlUI;
 GatewayXmlHandler::GatewayXmlHandler(
 		const StreamSocket &socket,
 		const AutoPtr<Document> input,
-		ExpirableSession::Ptr session,
+		Session::Ptr session,
 		GatewayService &gatewayService):
-	AbstractXmlHandler("gates", socket, input, session),
+	SessionXmlHandler("gates", socket, input, session),
 	m_gatewayService(gatewayService)
 {
 }
@@ -150,14 +150,14 @@ void GatewayXmlHandler::handleGetAll()
 }
 
 GatewayXmlHandlerResolver::GatewayXmlHandlerResolver():
-	AbstractXmlHandlerResolver("gates")
+	SessionXmlHandlerResolver("gates")
 {
 }
 
 bool GatewayXmlHandlerResolver::canHandle(
 		const Element &root)
 {
-	if (!AbstractXmlHandlerResolver::canHandle(root))
+	if (!SessionXmlHandlerResolver::canHandle(root))
 		return false;
 
 	const string &type = root.getAttribute("type");
@@ -182,14 +182,14 @@ XmlRequestHandler *GatewayXmlHandlerResolver::createHandler(
 		const StreamSocket &socket,
 		const AutoPtr<Document> input)
 {
-	ExpirableSession::Ptr session = lookupSession(
-			*m_sessionManager, input);
+	Session::Ptr session = lookupSession(*m_sessionManager, input);
 	return new GatewayXmlHandler(
 			socket, input, session,
 			*m_gatewayService);
 }
 
 BEEEON_OBJECT_BEGIN(BeeeOn, XmlUI, GatewayXmlHandlerResolver)
+BEEEON_OBJECT_CASTABLE(SessionXmlHandlerResolver)
 BEEEON_OBJECT_CASTABLE(AbstractXmlHandlerResolver)
 BEEEON_OBJECT_CASTABLE(XmlRequestHandlerResolver)
 BEEEON_OBJECT_REF("gatewayService", &GatewayXmlHandlerResolver::setGatewayService)

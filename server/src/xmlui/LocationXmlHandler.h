@@ -2,16 +2,16 @@
 #define BEEEON_XMLUI_LOCATION_XML_HANDLER_H
 
 #include "service/LocationService.h"
-#include "xmlui/AbstractXmlHandler.h"
+#include "xmlui/SessionXmlHandler.h"
 
 namespace BeeeOn {
 namespace XmlUI {
 
-class LocationXmlHandler : public AbstractXmlHandler {
+class LocationXmlHandler : public SessionXmlHandler {
 public:
 	LocationXmlHandler(const Poco::Net::StreamSocket &socket,
 			const Poco::AutoPtr<Poco::XML::Document> input,
-			BeeeOn::ExpirableSession::Ptr session,
+			BeeeOn::Session::Ptr session,
 			BeeeOn::LocationService &locationService);
 	void handleInputImpl() override;
 	void handleCreate(const std::string &gateid,
@@ -26,7 +26,7 @@ private:
 	LocationService &m_locationService;
 };
 
-class LocationXmlHandlerResolver : public AbstractXmlHandlerResolver {
+class LocationXmlHandlerResolver : public SessionXmlHandlerResolver {
 public:
 	LocationXmlHandlerResolver();
 

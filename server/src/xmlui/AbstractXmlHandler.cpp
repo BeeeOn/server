@@ -21,17 +21,6 @@ AbstractXmlHandler::AbstractXmlHandler(
 {
 }
 
-AbstractXmlHandler::AbstractXmlHandler(
-		const string &ns,
-		const StreamSocket &socket,
-		const AutoPtr<Document> input,
-		BeeeOn::ExpirableSession::Ptr session):
-	BeeeOn::XmlRequestHandler(socket, input),
-	m_ns(ns),
-	m_session(session)
-{
-}
-
 void AbstractXmlHandler::handleInput()
 {
 	try {
@@ -70,16 +59,6 @@ void AbstractXmlHandler::handleInput()
 				__FILE__, __LINE__);
 		resultUnexpected();
 	}
-}
-
-bool AbstractXmlHandler::requireSession()
-{
-	if (!hasSession()) {
-		resultNotAuthenticated();
-		return false;
-	}
-
-	return true;
 }
 
 void AbstractXmlHandler::deriveType(Poco::XML::AttributesImpl &attrs)
@@ -192,18 +171,4 @@ bool AbstractXmlHandlerResolver::canHandle(
 
 	return true;
 
-}
-
-ExpirableSession::Ptr AbstractXmlHandlerResolver::lookupSession(
-		SessionManager &sessionManager,
-		const AutoPtr<Document> input)
-{
-	const Element *root = input->documentElement();
-	const string &sessionId = root->getAttribute("sessionid");
-	ExpirableSession::Ptr session;
-
-	if (!sessionManager.lookup(sessionId, session))
-		return NULL;
-
-	return session;
 }

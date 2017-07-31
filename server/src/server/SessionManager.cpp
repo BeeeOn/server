@@ -13,6 +13,39 @@ BEEEON_OBJECT_NUMBER("sessionExpireTime", &SessionManager::setSessionExpireTime)
 BEEEON_OBJECT_NUMBER("maxUserSessions", &SessionManager::setMaxUserSessions)
 BEEEON_OBJECT_END(BeeeOn, SessionManager)
 
+SessionManager::SessionManager()
+{
+}
+
+SessionManager::~SessionManager()
+{
+}
+
+void SessionManager::setSecureRandomProvider(SecureRandomProvider *provider)
+{
+	m_random = provider;
+}
+
+void SessionManager::setSessionExpireTime(const int seconds)
+{
+	if (seconds <= 0) {
+		throw InvalidArgumentException(
+			"session expire time must be greater then zero");
+	}
+
+	m_expireTime = seconds * Timespan::SECONDS;
+}
+
+void SessionManager::setMaxUserSessions(const int maxUserSessions)
+{
+	if (maxUserSessions <= 0) {
+		throw InvalidArgumentException(
+			"max user sessions must be greater then zero");
+	}
+
+	m_sessionCache = new SessionCache(maxUserSessions);
+}
+
 const ExpirableSession::Ptr SessionManager::open(
 		const VerifiedIdentity &identity)
 {
@@ -28,7 +61,6 @@ const ExpirableSession::Ptr SessionManager::open(
 
 	const User user(identity.user());
 
-	Timespan timespan(m_expireTime, 0);
 	char bSessionID[ID_LENGTH64];
 
 	// lock here for the rest of the method
@@ -37,7 +69,7 @@ const ExpirableSession::Ptr SessionManager::open(
 	m_random->randomBytesUnlocked(bSessionID, sizeof(bSessionID));
 	SessionID sessionID = Base64::encode(bSessionID, sizeof(bSessionID));
 
-	ExpirableSession session(user.id(), sessionID, timespan);
+	ExpirableSession session(user.id(), sessionID, m_expireTime);
 	session.setIdentityID(identity.id());
 
 	m_sessionCache->add(session.sessionID(), session);

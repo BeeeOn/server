@@ -5,8 +5,6 @@
 #include <Poco/SAX/AttributesImpl.h>
 
 #include "server/XmlRequestHandler.h"
-#include "server/Session.h"
-#include "server/SessionManager.h"
 
 namespace BeeeOn {
 namespace XmlUI {
@@ -17,26 +15,9 @@ public:
 			const std::string &ns,
 			const Poco::Net::StreamSocket &socket,
 			const Poco::AutoPtr<Poco::XML::Document> input);
-	AbstractXmlHandler(
-			const std::string &ns,
-			const Poco::Net::StreamSocket &socket,
-			const Poco::AutoPtr<Poco::XML::Document> input,
-			BeeeOn::ExpirableSession::Ptr session);
 
 	virtual void handleInput();
 	virtual void handleInputImpl() = 0;
-
-	bool requireSession();
-
-	bool hasSession() const
-	{
-		return !m_session.isNull();
-	}
-
-	const BeeeOn::ExpirableSession::Ptr session() const
-	{
-		return m_session;
-	}
 
 	void deriveType(Poco::XML::AttributesImpl &attrs);
 
@@ -56,7 +37,6 @@ public:
 	void resultDataEnd();
 
 	const std::string m_ns;
-	BeeeOn::ExpirableSession::Ptr m_session;
 };
 
 class AbstractXmlHandlerResolver : public BeeeOn::XmlRequestHandlerResolver {
@@ -66,11 +46,6 @@ public:
 
 	virtual bool canHandle(const Poco::XML::Document &doc);
 	virtual bool canHandle(const Poco::XML::Element &root);
-
-protected:
-	BeeeOn::ExpirableSession::Ptr lookupSession(
-			BeeeOn::SessionManager &sessionManager,
-			const Poco::AutoPtr<Poco::XML::Document> input);
 
 protected:
 	const std::string m_ns;

@@ -17,36 +17,17 @@ typedef std::string SessionID;
 class Session
 {
 public:
-	Session(const UserID &userID, const SessionID &sessionID) :
-		m_userID(userID),
-		m_sessionID(sessionID)
-	{
-	}
+	typedef Poco::SharedPtr<Session> Ptr;
 
-	void setIdentityID(const VerifiedIdentityID &id)
-	{
-		m_identityID = id;
-	}
+	Session(const UserID &userID, const SessionID &sessionID);
 
-	const VerifiedIdentityID &identityID() const
-	{
-		return m_identityID;
-	}
+	void setIdentityID(const VerifiedIdentityID &id);
+	const VerifiedIdentityID &identityID() const;
 
-	void setUserId(const UserID &id)
-	{
-		m_userID = id;
-	}
+	void setUserId(const UserID &id);
+	const UserID userID() const;
 
-	const UserID userID() const
-	{
-		return m_userID;
-	}
-
-	const SessionID sessionID() const
-	{
-		return m_sessionID;
-	}
+	const SessionID sessionID() const;
 
 private:
 	VerifiedIdentityID m_identityID;
@@ -62,19 +43,12 @@ class ExpirableSession : public Session
 public:
 	typedef Poco::SharedPtr<ExpirableSession> Ptr;
 
-	ExpirableSession(const UserID &userID, const SessionID &sessionID,
-			Poco::Timespan &timespan) :
-		Session(userID, sessionID),
-		m_tstamp()
-	{
-		// Set expiration time
-		m_tstamp += timespan;
-	}
+	ExpirableSession(
+		const UserID &userID,
+		const SessionID &sessionID,
+		Poco::Timespan &timespan);
 
-	const Poco::Timestamp& getExpiration() const
-	{
-		return m_tstamp;
-	}
+	const Poco::Timestamp& getExpiration() const;
 
 private:
 	Poco::Timestamp m_tstamp;

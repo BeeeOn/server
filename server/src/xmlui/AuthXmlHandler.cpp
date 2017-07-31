@@ -38,8 +38,7 @@ void AuthXmlHandler::handleInputImpl()
 			provider->getAttribute("authCode")
 		);
 
-		const ExpirableSession::Ptr session =
-			m_authService.login(credentials);
+		const Session::Ptr session = m_authService.login(credentials);
 
 		if (session.isNull()) {
 			resultNotAuthenticated();

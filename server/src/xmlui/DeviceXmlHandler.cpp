@@ -21,10 +21,10 @@ using namespace BeeeOn::XmlUI;
 
 DeviceXmlHandler::DeviceXmlHandler(const StreamSocket &socket,
 		const AutoPtr<Document> input,
-		ExpirableSession::Ptr session,
+		Session::Ptr session,
 		DeviceService &deviceService,
 		CryptoConfig *config):
-	AbstractXmlHandler("devices", socket, input, session),
+	SessionXmlHandler("devices", socket, input, session),
 	m_deviceService(deviceService),
 	m_config(config)
 {
@@ -276,14 +276,14 @@ void DeviceXmlHandler::handleGetParameter(const string &gateid,
 }
 
 DeviceXmlHandlerResolver::DeviceXmlHandlerResolver():
-	AbstractXmlHandlerResolver("devices")
+	SessionXmlHandlerResolver("devices")
 {
 }
 
 bool DeviceXmlHandlerResolver::canHandle(
 		const Element &root)
 {
-	if (!AbstractXmlHandlerResolver::canHandle(root))
+	if (!SessionXmlHandlerResolver::canHandle(root))
 		return false;
 
 	const string &type = root.getAttribute("type");
@@ -314,13 +314,13 @@ XmlRequestHandler *DeviceXmlHandlerResolver::createHandler(
 		const StreamSocket &socket,
 		const AutoPtr<Document> input)
 {
-	ExpirableSession::Ptr session = lookupSession(
-			*m_sessionManager, input);
+	Session::Ptr session = lookupSession(*m_sessionManager, input);
 	return new DeviceXmlHandler(
 			socket, input, session, *m_deviceService, m_config);
 }
 
 BEEEON_OBJECT_BEGIN(BeeeOn, XmlUI, DeviceXmlHandlerResolver)
+BEEEON_OBJECT_CASTABLE(SessionXmlHandlerResolver)
 BEEEON_OBJECT_CASTABLE(AbstractXmlHandlerResolver)
 BEEEON_OBJECT_CASTABLE(XmlRequestHandlerResolver)
 BEEEON_OBJECT_REF("deviceService", &DeviceXmlHandlerResolver::setDeviceService)

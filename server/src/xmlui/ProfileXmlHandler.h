@@ -1,7 +1,7 @@
 #ifndef BEEEON_XMLUI_PROFILE_XML_HANDLER_H
 #define BEEEON_XMLUI_PROFILE_XML_HANDLER_H
 
-#include "xmlui/AbstractXmlHandler.h"
+#include "xmlui/SessionXmlHandler.h"
 
 namespace BeeeOn {
 
@@ -9,11 +9,11 @@ class IdentityService;
 
 namespace XmlUI {
 
-class ProfileXmlHandler : public AbstractXmlHandler {
+class ProfileXmlHandler : public SessionXmlHandler {
 public:
 	ProfileXmlHandler(const Poco::Net::StreamSocket &socket,
 			const Poco::AutoPtr<Poco::XML::Document> input,
-			BeeeOn::ExpirableSession::Ptr session,
+			BeeeOn::Session::Ptr session,
 			IdentityService &identityService);
 	void handleInputImpl() override;
 	void handleMyProfile();
@@ -22,7 +22,7 @@ private:
 	IdentityService &m_identityService;
 };
 
-class ProfileXmlHandlerResolver : public AbstractXmlHandlerResolver {
+class ProfileXmlHandlerResolver : public SessionXmlHandlerResolver {
 public:
 	ProfileXmlHandlerResolver();
 

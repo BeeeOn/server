@@ -18,9 +18,9 @@ using namespace BeeeOn::XmlUI;
 ProfileXmlHandler::ProfileXmlHandler(
 		const StreamSocket &socket,
 		const AutoPtr<Document> input,
-		ExpirableSession::Ptr session,
+		Session::Ptr session,
 		IdentityService &identityService):
-	AbstractXmlHandler("accounts", socket, input, session),
+	SessionXmlHandler("accounts", socket, input, session),
 	m_identityService(identityService)
 {
 }
@@ -50,7 +50,7 @@ void ProfileXmlHandler::handleMyProfile()
 }
 
 ProfileXmlHandlerResolver::ProfileXmlHandlerResolver():
-	AbstractXmlHandlerResolver("accounts")
+	SessionXmlHandlerResolver("accounts")
 {
 }
 
@@ -69,14 +69,14 @@ XmlRequestHandler *ProfileXmlHandlerResolver::createHandler(
 		const StreamSocket &socket,
 		const AutoPtr<Document> input)
 {
-	ExpirableSession::Ptr session = lookupSession(
-			*m_sessionManager, input);
+	Session::Ptr session = lookupSession(*m_sessionManager, input);
 	return new ProfileXmlHandler(
 			socket, input, session,
 			*m_identityService);
 }
 
 BEEEON_OBJECT_BEGIN(BeeeOn, XmlUI, ProfileXmlHandlerResolver)
+BEEEON_OBJECT_CASTABLE(SessionXmlHandlerResolver)
 BEEEON_OBJECT_CASTABLE(AbstractXmlHandlerResolver)
 BEEEON_OBJECT_CASTABLE(XmlRequestHandlerResolver)
 BEEEON_OBJECT_REF("identityService", &ProfileXmlHandlerResolver::setIdentityService)

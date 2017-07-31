@@ -2,7 +2,7 @@
 #define BEEEON_XMLUI_DEVICE_XML_HANDLER_H
 
 #include "service/DeviceService.h"
-#include "xmlui/AbstractXmlHandler.h"
+#include "xmlui/SessionXmlHandler.h"
 
 namespace BeeeOn {
 
@@ -10,11 +10,11 @@ class CryptoConfig;
 
 namespace XmlUI {
 
-class DeviceXmlHandler : public AbstractXmlHandler {
+class DeviceXmlHandler : public SessionXmlHandler {
 public:
 	DeviceXmlHandler(const Poco::Net::StreamSocket &socket,
 			const Poco::AutoPtr<Poco::XML::Document> input,
-			BeeeOn::ExpirableSession::Ptr session,
+			BeeeOn::Session::Ptr session,
 			BeeeOn::DeviceService &deviceService,
 			BeeeOn::CryptoConfig *config);
 	void handleInputImpl() override;
@@ -40,7 +40,7 @@ private:
 	CryptoConfig *m_config;
 };
 
-class DeviceXmlHandlerResolver : public AbstractXmlHandlerResolver {
+class DeviceXmlHandlerResolver : public SessionXmlHandlerResolver {
 public:
 	DeviceXmlHandlerResolver();
 

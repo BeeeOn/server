@@ -14,9 +14,9 @@ using namespace BeeeOn::XmlUI;
 LocationXmlHandler::LocationXmlHandler(
 		const StreamSocket &socket,
 		const AutoPtr<Document> input,
-		ExpirableSession::Ptr session,
+		Session::Ptr session,
 		LocationService &locationService):
-	AbstractXmlHandler("locations", socket, input, session),
+	SessionXmlHandler("locations", socket, input, session),
 	m_locationService(locationService)
 {
 }
@@ -132,14 +132,14 @@ void LocationXmlHandler::handleGetAll(const string &gateid)
 }
 
 LocationXmlHandlerResolver::LocationXmlHandlerResolver():
-	AbstractXmlHandlerResolver("locations")
+	SessionXmlHandlerResolver("locations")
 {
 }
 
 bool LocationXmlHandlerResolver::canHandle(
 		const Element &root)
 {
-	if (!AbstractXmlHandlerResolver::canHandle(root))
+	if (!SessionXmlHandlerResolver::canHandle(root))
 		return false;
 
 	if (root.getAttribute("type") == "create")
@@ -158,13 +158,13 @@ XmlRequestHandler *LocationXmlHandlerResolver::createHandler(
 		const StreamSocket &socket,
 		const AutoPtr<Document> input)
 {
-	ExpirableSession::Ptr session = lookupSession(
-			*m_sessionManager, input);
+	Session::Ptr session = lookupSession(*m_sessionManager, input);
 	return new LocationXmlHandler(
 			socket, input, session, *m_locationService);
 }
 
 BEEEON_OBJECT_BEGIN(BeeeOn, XmlUI, LocationXmlHandlerResolver)
+BEEEON_OBJECT_CASTABLE(SessionXmlHandlerResolver)
 BEEEON_OBJECT_CASTABLE(AbstractXmlHandlerResolver)
 BEEEON_OBJECT_CASTABLE(XmlRequestHandlerResolver)
 BEEEON_OBJECT_REF("locationService", &LocationXmlHandlerResolver::setLocationService)
