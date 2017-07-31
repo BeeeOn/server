@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include <Poco/SharedPtr.h>
+
 #include "service/Single.h"
 #include "service/Relation.h"
 
@@ -16,6 +18,8 @@ class AccessLevel;
 
 class RoleService {
 public:
+	typedef Poco::SharedPtr<RoleService> Ptr;
+
 	virtual ~RoleService();
 
 	virtual void inviteIdentity(
