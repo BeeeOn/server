@@ -29,6 +29,10 @@ public:
 	static bool parseIfIDNotNull(Poco::Data::Row &result,
 			User &user, const std::string &prefix = "");
 
+protected:
+	static bool doParseIfIDNotNull(Poco::Data::Row &result,
+			User &user, const std::string &prefix = "");
+
 private:
 	SQLQuery m_queryCreate {"users.create"};
 	SQLQuery m_queryFetch  {"users.fetch.by.id"};
