@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include <Poco/SharedPtr.h>
+
 #include "model/Device.h"
 #include "model/User.h"
 #include "model/VerifiedIdentity.h"
@@ -15,6 +17,8 @@ namespace BeeeOn {
 
 class GatewayService {
 public:
+	typedef Poco::SharedPtr<GatewayService> Ptr;
+
 	virtual ~GatewayService();
 
 	/**
