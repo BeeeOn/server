@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include <Poco/SharedPtr.h>
+
 #include "model/Location.h"
 #include "model/Gateway.h"
 #include "service/Single.h"
@@ -15,6 +17,8 @@ namespace BeeeOn {
  */
 class LocationService {
 public:
+	typedef Poco::SharedPtr<LocationService> Ptr;
+
 	virtual ~LocationService();
 
 	virtual void createIn(RelationWithData<Location, Gateway> &input) = 0;
