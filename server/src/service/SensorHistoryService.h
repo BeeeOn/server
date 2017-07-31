@@ -3,14 +3,12 @@
 
 #include <vector>
 
-#include "model/ModuleValue.h"
-#include "service/Single.h"
+#include <Poco/SharedPtr.h>
+
 #include "service/Relation.h"
-#include "transaction/Transactional.h"
 
 namespace Poco {
 
-class Timestamp;
 class Timespan;
 
 }
@@ -21,39 +19,19 @@ class TimeInterval;
 class ValueConsumer;
 class ModuleInfo;
 class Device;
-class DeviceDao;
-class SensorHistoryDao;
-class SensorHistoryAccessPolicy;
 
-class SensorHistoryService : public Transactional {
+class SensorHistoryService {
 public:
-	SensorHistoryService();
+	typedef Poco::SharedPtr<SensorHistoryService> Ptr;
 
-	void setSensorHistoryDao(SensorHistoryDao *dao);
-	void setDeviceDao(DeviceDao *dao);
-	void setAccessPolicy(SensorHistoryAccessPolicy *policy);
+	virtual ~SensorHistoryService();
 
-	void fetchRange(const Relation<ModuleInfo, Device> &module,
+	virtual void fetchRange(const Relation<ModuleInfo, Device> &module,
 			const TimeInterval &range,
 			const Poco::Timespan &interval,
 			const std::string &aggregator,
-			ValueConsumer &consumer)
-	{
-		BEEEON_TRANSACTION(doFetchRange(
-			module, range, interval, aggregator, consumer));
-	}
+			ValueConsumer &consumer) = 0;
 
-protected:
-	void doFetchRange(const Relation<ModuleInfo, Device> &module,
-			const TimeInterval &range,
-			const Poco::Timespan &interval,
-			const std::string &aggregator,
-			ValueConsumer &consumer);
-
-private:
-	SensorHistoryDao *m_dao;
-	DeviceDao *m_deviceDao;
-	SensorHistoryAccessPolicy *m_policy;
 };
 
 }

@@ -2,12 +2,12 @@
 	<factory>
 		<!-- Bussiness layer -->
 
-		<instance name="userService" class="BeeeOn::UserService">
+		<instance name="userService" class="BeeeOn::UserServiceImpl">
 			<set name="userDao" ref="userDao" />
 			<set name="transactionManager" ref="transactionManager" />
 		</instance>
 
-		<instance name="authService" class="BeeeOn::AuthService">
+		<instance name="authService" class="BeeeOn::AuthServiceImpl">
 			<set name="userDao" ref="userDao" />
 			<set name="identityDao" ref="identityDao" />
 			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
@@ -19,7 +19,7 @@
 			<add name="providers" ref="facebookAuthProvider" />
 		</instance>
 
-		<instance name="deviceService" class="BeeeOn::DeviceService">
+		<instance name="deviceService" class="BeeeOn::DeviceServiceImpl">
 			<set name="deviceDao" ref="deviceDao" />
 			<set name="devicePropertyDao" ref="devicePropertyDao" />
 			<set name="gatewayRPC" ref="gatewayRPC" />
@@ -28,7 +28,7 @@
 			<set name="transactionManager" ref="transactionManager" />
 		</instance>
 
-		<instance name="gatewayService" class="BeeeOn::GatewayService">
+		<instance name="gatewayService" class="BeeeOn::GatewayServiceImpl">
 			<set name="gatewayDao" ref="gatewayDao" />
 			<set name="roleInGatewayDao" ref="roleInGatewayDao" />
 			<set name="identityDao" ref="identityDao" />
@@ -39,20 +39,20 @@
 		</instance>
 
 		<instance name="locationService"
-				class="BeeeOn::LocationService">
+				class="BeeeOn::LocationServiceImpl">
 			<set name="locationDao" ref="locationDao" />
 			<set name="gatewayDao" ref="gatewayDao" />
 			<set name="accessPolicy" ref="accessPolicy" />
 			<set name="transactionManager" ref="transactionManager" />
 		</instance>
 
-		<instance name="identityService" class="BeeeOn::IdentityService">
+		<instance name="identityService" class="BeeeOn::IdentityServiceImpl">
 			<set name="identityDao" ref="identityDao" />
 			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
 			<set name="transactionManager" ref="transactionManager" />
 		</instance>
 
-		<instance name="roleService" class="BeeeOn::RoleService">
+		<instance name="roleService" class="BeeeOn::RoleServiceImpl">
 			<set name="identityDao" ref="identityDao" />
 			<set name="gatewayDao" ref="gatewayDao" />
 			<set name="roleInGatewayDao" ref="roleInGatewayDao" />
@@ -61,7 +61,7 @@
 			<set name="notificationDispatcher" ref="notificationDispatcher" />
 		</instance>
 
-		<instance name="sensorHistoryService" class="BeeeOn::SensorHistoryService">
+		<instance name="sensorHistoryService" class="BeeeOn::SensorHistoryServiceImpl">
 			<set name="sensorHistoryDao" ref="sensorHistoryDao" />
 			<set name="deviceDao" ref="deviceDao" />
 			<set name="transactionManager" ref="transactionManager" />

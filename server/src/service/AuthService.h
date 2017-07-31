@@ -3,99 +3,36 @@
 
 #include <map>
 #include <vector>
+
 #include <Poco/Exception.h>
 #include <Poco/Logger.h>
-#include "provider/AuthProvider.h"
-#include "notification/NotificationDispatcher.h"
-#include "dao/UserDao.h"
+#include <Poco/SharedPtr.h>
+
 #include "dao/IdentityDao.h"
+#include "dao/UserDao.h"
 #include "dao/VerifiedIdentityDao.h"
+#include "notification/NotificationDispatcher.h"
+#include "provider/AuthProvider.h"
 #include "server/SessionManager.h"
 #include "server/Session.h"
 #include "transaction/Transactional.h"
-#include "Debug.h"
 
 namespace BeeeOn {
 
 /**
- * Template class for authentication by using various providers.
+ * Service class for authentication by using various providers.
  * A user login operation is performed by utilizing AuthProviders.
  * This makes possible to choose the provider by user.
  */
-class AuthService : public Transactional {
+class AuthService {
 public:
-	typedef std::map<const std::string, AuthProvider *> Providers;
+	typedef Poco::SharedPtr<AuthService> Ptr;
 
-	AuthService()
-	{
-	}
+	virtual ~AuthService();
 
-	void setUserDao(UserDao *dao)
-	{
-		m_userDao = dao;
-	}
-
-	void setIdentityDao(IdentityDao *dao)
-	{
-		m_identityDao = dao;
-	}
-
-	void setVerifiedIdentityDao(VerifiedIdentityDao *dao)
-	{
-		m_verifiedIdentityDao = dao;
-	}
-
-	void setSessionManager(SessionManager *manager)
-	{
-		m_sessionManager = manager;
-	}
-
-	void registerProvider(AuthProvider *provider)
-	{
-		m_providers.insert(
-			std::make_pair(provider->name(), provider));
-	}
-
-	void setNotificationDispatcher(NotificationDispatcher *service)
-	{
-		m_notificationService = service;
-	}
-
-	const ExpirableSession::Ptr login(const Credentials &cred);
-
-	void logout(const std::string &id);
-
-	void list(std::vector<AuthProvider *> &providers);
-
-protected:
-	ExpirableSession::Ptr loginAuthorized(const AuthResult &result)
-	{
-		return BEEEON_TRANSACTION_RETURN(
-			ExpirableSession::Ptr,
-			doLoginAuthorized(result)
-		);
-	}
-
-	ExpirableSession::Ptr doLoginAuthorized(const AuthResult &result);
-
-	ExpirableSession::Ptr openSession(const VerifiedIdentity &verifiedIdentity);
-	ExpirableSession::Ptr verifyIdentityAndLogin(const AuthResult &result);
-	ExpirableSession::Ptr loginAsNew(const AuthResult &result);
-	void verifyIdentity(VerifiedIdentity &verifiedIdentity,
-			Identity &identity, const AuthResult &result);
-	void approveIdentity(VerifiedIdentity &verifiedIdentity,
-		const Identity &identity, const User &user, const AuthResult &result);
-	void createUserAndVerify(VerifiedIdentity &verifiedIdentity,
-			Identity &identity, const AuthResult &result);
-	User createUser(const AuthResult &result);
-
-private:
-	SessionManager *m_sessionManager;
-	UserDao *m_userDao;
-	IdentityDao *m_identityDao;
-	VerifiedIdentityDao *m_verifiedIdentityDao;
-	Providers m_providers;
-	NotificationDispatcher *m_notificationService;
+	virtual const ExpirableSession::Ptr login(const Credentials &cred) = 0;
+	virtual void logout(const std::string &id) = 0;
+	virtual void list(std::vector<AuthProvider *> &providers) = 0;
 };
 
 }

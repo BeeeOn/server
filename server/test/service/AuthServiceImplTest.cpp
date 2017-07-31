@@ -9,7 +9,7 @@
 #include "provider/MockRandomProvider.h"
 #include "provider/RandomProvider.h"
 #include "notification/NotificationDispatcher.h"
-#include "service/AuthService.h"
+#include "service/AuthServiceImpl.h"
 #include "provider/PermitAuthProvider.h"
 #include "dao/UserDao.h"
 #include "dao/IdentityDao.h"
@@ -28,8 +28,8 @@ namespace BeeeOn {
 class TestableAuthService;
 class MockNotificationObserver;
 
-class AuthServiceTest : public CppUnit::TestFixture {
-	CPPUNIT_TEST_SUITE(AuthServiceTest);
+class AuthServiceImplTest : public CppUnit::TestFixture {
+	CPPUNIT_TEST_SUITE(AuthServiceImplTest);
 	CPPUNIT_TEST(testPermitAuth);
 	CPPUNIT_TEST(testCreateUser);
 	CPPUNIT_TEST(testLoginAsNew);
@@ -57,13 +57,13 @@ private:
 	ThreadLocalTransactionManager m_transactionManager;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(AuthServiceTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(AuthServiceImplTest);
 
-class TestableAuthService : public AuthService {
+class TestableAuthService : public AuthServiceImpl {
 public:
-	using AuthService::createUser;
-	using AuthService::loginAsNew;
-	using AuthService::verifyIdentityAndLogin;
+	using AuthServiceImpl::createUser;
+	using AuthServiceImpl::loginAsNew;
+	using AuthServiceImpl::verifyIdentityAndLogin;
 };
 
 class MockNotificationObserver : public NotificationObserver {
@@ -101,7 +101,7 @@ private:
 	"abcdef0123456789"   \
 	"abcdef0123456789")
 
-void AuthServiceTest::setUp()
+void AuthServiceImplTest::setUp()
 {
 	m_userDao.storage().clear();
 	m_identityDao.storage().clear();
@@ -129,13 +129,13 @@ void AuthServiceTest::setUp()
 	m_service->setTransactionManager(&m_transactionManager);
 }
 
-void AuthServiceTest::tearDown()
+void AuthServiceImplTest::tearDown()
 {
 	delete m_service;
 	delete m_notifiactionDispatcher;
 }
 
-void AuthServiceTest::testPermitAuth()
+void AuthServiceImplTest::testPermitAuth()
 {
 	UserID newID(UUIDGenerator::defaultGenerator().createRandom());
 	User::Ptr user(new User(newID));
@@ -168,7 +168,7 @@ void AuthServiceTest::testPermitAuth()
 	}
 }
 
-void AuthServiceTest::testCreateUser()
+void AuthServiceImplTest::testCreateUser()
 {
 	AuthResult result;
 	result.setFirstName("Freddie");
@@ -184,7 +184,7 @@ void AuthServiceTest::testCreateUser()
 	CPPUNIT_ASSERT(hasUser.lastName() == "Mercury");
 }
 
-void AuthServiceTest::testLoginAsNew()
+void AuthServiceImplTest::testLoginAsNew()
 {
 	AuthResult result;
 	result.setEmail("freddie@example.org");
@@ -211,7 +211,7 @@ void AuthServiceTest::testLoginAsNew()
 	CPPUNIT_ASSERT(verifiedIdentity.email() == "freddie@example.org");
 }
 
-void AuthServiceTest::testFirstLoginBySecondProvider()
+void AuthServiceImplTest::testFirstLoginBySecondProvider()
 {
 	User user;
 	user.setFirstName("Freddie");

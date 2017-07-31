@@ -1,36 +1,21 @@
 #ifndef BEEEON_IDENTITY_SERVICE_H
 #define BEEEON_IDENTITY_SERVICE_H
 
-#include "dao/IdentityDao.h"
-#include "dao/VerifiedIdentityDao.h"
-#include "transaction/Transactional.h"
+#include <Poco/SharedPtr.h>
 
 namespace BeeeOn {
 
-class IdentityService : public Transactional {
+class Identity;
+class VerifiedIdentity;
+
+class IdentityService {
 public:
-	IdentityService();
+	typedef Poco::SharedPtr<IdentityService> Ptr;
 
-	void setIdentityDao(IdentityDao *dao);
-	void setVerifiedIdentityDao(VerifiedIdentityDao *dao);
+	virtual ~IdentityService();
 
-	bool fetch(VerifiedIdentity &identity)
-	{
-		return BEEEON_TRANSACTION_RETURN(bool, doFetch(identity));
-	}
-
-	bool fetch(Identity &identity)
-	{
-		return BEEEON_TRANSACTION_RETURN(bool, doFetch(identity));
-	}
-
-protected:
-	bool doFetch(VerifiedIdentity &identity);
-	bool doFetch(Identity &identity);
-
-private:
-	IdentityDao *m_identityDao;
-	VerifiedIdentityDao *m_verifiedIdentityDao;
+	virtual bool fetch(VerifiedIdentity &identity) = 0;
+	virtual bool fetch(Identity &identity) = 0;
 };
 
 }

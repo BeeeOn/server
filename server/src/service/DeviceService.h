@@ -4,133 +4,42 @@
 #include <list>
 #include <vector>
 
-#include "service/Single.h"
-#include "service/Relation.h"
+#include <Poco/SharedPtr.h>
+
 #include "model/Device.h"
 #include "model/DeviceProperty.h"
 #include "model/Gateway.h"
-#include "transaction/Transactional.h"
+#include "service/Single.h"
+#include "service/Relation.h"
 #include "work/Work.h"
 
 namespace BeeeOn {
 
-class DeviceDao;
-class DevicePropertyDao;
-class GatewayRPC;
-class WorkFacade;
-class DeviceAccessPolicy;
-
 /**
  * Service for devices management.
  */
-class DeviceService : public Transactional {
+class DeviceService {
 public:
-	DeviceService();
+	typedef Poco::SharedPtr<DeviceService> Ptr;
 
-	void setDeviceDao(DeviceDao *dao);
-	void setDevicePropertyDao(DevicePropertyDao *dao);
-	void setGatewayRPC(GatewayRPC *rpc);
-	void setWorkFacade(WorkFacade *facade);
-	void setAccessPolicy(DeviceAccessPolicy *policy);
+	virtual ~DeviceService();
 
-	bool fetch(Relation<Device, Gateway> &input)
-	{
-		return BEEEON_TRANSACTION_RETURN(bool, doFetch(input));
-	}
+	virtual bool fetch(Relation<Device, Gateway> &input) = 0;
+	virtual void fetchMany(Single<std::list<Device>> &input) = 0;
+	virtual void fetchMany(Relation<std::list<Device>, Gateway> &input) = 0;
+	virtual void fetchActiveBy(Relation<std::vector<Device>, Gateway> &input) = 0;
+	virtual void fetchInactiveBy(Relation<std::vector<Device>, Gateway> &input) = 0;
 
-	void fetchMany(Single<std::list<Device>> &input)
-	{
-		BEEEON_TRANSACTION(doFetchMany(input));
-	}
+	virtual bool activate(Relation<Device, Gateway> &input) = 0;
+	virtual Work unregister(Relation<Device, Gateway> &input) = 0;
+	virtual bool update(RelationWithData<Device, Gateway> &input) = 0;
+	virtual bool updateAndActivate(RelationWithData<Device, Gateway> &input) = 0;
 
-	void fetchMany(Relation<std::list<Device>, Gateway> &input)
-	{
-		BEEEON_TRANSACTION(doFetchMany(input));
-	}
-
-	void fetchActiveBy(Relation<std::vector<Device>, Gateway> &input)
-	{
-		BEEEON_TRANSACTION(doFetchActiveBy(input));
-	}
-
-	void fetchInactiveBy(Relation<std::vector<Device>, Gateway> &input)
-	{
-		BEEEON_TRANSACTION(doFetchInactiveBy(input));
-	}
-
-	bool activate(Relation<Device, Gateway> &input)
-	{
-		return BEEEON_TRANSACTION_RETURN(bool, doActivate(input));
-	}
-
-	Work unregister(Relation<Device, Gateway> &input)
-	{
-		return BEEEON_TRANSACTION_RETURN(Work, doUnregister(input));
-	}
-
-	bool update(RelationWithData<Device, Gateway> &input)
-	{
-		return BEEEON_TRANSACTION_RETURN(bool, doUpdate(input));
-	}
-
-	bool updateAndActivate(RelationWithData<Device, Gateway> &input)
-	{
-		return BEEEON_TRANSACTION_RETURN(bool, doUpdateAndActivate(input));
-	}
-
-	bool createProperty(RelationWithData<DeviceProperty, Device> &input)
-	{
-		return BEEEON_TRANSACTION_RETURN(bool, doCreateProperty(input));
-	}
-
-	bool updateProperty(RelationWithData<DeviceProperty, Device> &input)
-	{
-		return BEEEON_TRANSACTION_RETURN(bool, doUpdateProperty(input));
-	}
-
-	bool removeProperty(Relation<const DeviceProperty, Device> &input)
-	{
-		return BEEEON_TRANSACTION_RETURN(bool, doRemoveProperty(input));
-	}
-
-	bool findProperty(Relation<DeviceProperty, Device> &input)
-	{
-		return BEEEON_TRANSACTION_RETURN(bool, doFindProperty(input));
-	}
-
-	void listProperties(Relation<std::list<DeviceProperty>, Device> &input)
-	{
-		return BEEEON_TRANSACTION(doListProperties(input));
-	}
-
-protected:
-	bool doFetch(Relation<Device, Gateway> &input);
-	void doFetchMany(Single<std::list<Device>> &input);
-	void doFetchMany(Relation<std::list<Device>, Gateway> &input);
-	void doFetchActiveBy(Relation<std::vector<Device>, Gateway> &input);
-	void doFetchInactiveBy(Relation<std::vector<Device>, Gateway> &input);
-
-	bool doActivate(Relation<Device, Gateway> &input);
-	Work doUnregister(Relation<Device, Gateway> &input);
-	bool doUpdate(RelationWithData<Device, Gateway> &input);
-	bool doUpdateAndActivate(RelationWithData<Device, Gateway> &input);
-
-	bool doCreateProperty(RelationWithData<DeviceProperty, Device> &input);
-	bool doUpdateProperty(RelationWithData<DeviceProperty, Device> &input);
-	bool doRemoveProperty(Relation<const DeviceProperty, Device> &input);
-	bool doFindProperty(Relation<DeviceProperty, Device> &input);
-	void doListProperties(Relation<std::list<DeviceProperty>, Device> &input);
-
-	bool prepareUpdate(RelationWithData<Device, Gateway> &input);
-	bool tryActivateAndUpdate(Device &device,
-			const Gateway &gateway, bool forceUpdate = false);
-
-private:
-	DeviceDao *m_dao;
-	DevicePropertyDao *m_propertyDao;
-	GatewayRPC *m_gatewayRPC;
-	WorkFacade *m_workFacade;
-	DeviceAccessPolicy *m_policy;
+	virtual bool createProperty(RelationWithData<DeviceProperty, Device> &input) = 0;
+	virtual bool updateProperty(RelationWithData<DeviceProperty, Device> &input) = 0;
+	virtual bool removeProperty(Relation<const DeviceProperty, Device> &input) = 0;
+	virtual bool findProperty(Relation<DeviceProperty, Device> &input) = 0;
+	virtual void listProperties(Relation<std::list<DeviceProperty>, Device> &input) = 0;
 };
 
 }

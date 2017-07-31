@@ -68,13 +68,21 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/dao/SQLLoader.cpp
 	${PROJECT_SOURCE_DIR}/dao/SQLQuery.cpp
 	${PROJECT_SOURCE_DIR}/service/UserService.cpp
+	${PROJECT_SOURCE_DIR}/service/UserServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/AuthService.cpp
+	${PROJECT_SOURCE_DIR}/service/AuthServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/DeviceService.cpp
+	${PROJECT_SOURCE_DIR}/service/DeviceServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/GatewayService.cpp
+	${PROJECT_SOURCE_DIR}/service/GatewayServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/LocationService.cpp
+	${PROJECT_SOURCE_DIR}/service/LocationServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/IdentityService.cpp
+	${PROJECT_SOURCE_DIR}/service/IdentityServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/RoleService.cpp
+	${PROJECT_SOURCE_DIR}/service/RoleServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/SensorHistoryService.cpp
+	${PROJECT_SOURCE_DIR}/service/SensorHistoryServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/JSONGatewayDeserializer.cpp
 	${PROJECT_SOURCE_DIR}/service/JSONLocationDeserializer.cpp
 	${PROJECT_SOURCE_DIR}/policy/GatewayAccessPolicy.cpp
