@@ -43,6 +43,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/LegacyGateway.cpp
 	${PROJECT_SOURCE_DIR}/model/Device.cpp
 	${PROJECT_SOURCE_DIR}/model/DeviceProperty.cpp
+	${PROJECT_SOURCE_DIR}/model/GatewayStatus.cpp
 	${PROJECT_SOURCE_DIR}/model/Location.cpp
 	${PROJECT_SOURCE_DIR}/model/ValueAt.cpp
 	${PROJECT_SOURCE_DIR}/model/ModuleValue.cpp
