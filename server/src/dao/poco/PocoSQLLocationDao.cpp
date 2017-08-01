@@ -110,8 +110,8 @@ bool PocoSQLLocationDao::update(Location &location)
 	string name(location.name());
 
 	Statement sql = (session() << m_queryUpdate(),
-		use(name, "name"),
-		use(id, "id")
+		use(id, "id"),
+		use(name, "name")
 	);
 
 	return execute(sql) > 0;
