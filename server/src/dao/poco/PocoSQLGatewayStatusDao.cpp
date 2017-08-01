@@ -24,23 +24,24 @@ PocoSQLGatewayStatusDao::PocoSQLGatewayStatusDao()
 	registerQuery(m_queryInsert);
 }
 
-bool PocoSQLGatewayStatusDao::insert(Gateway &gateway)
+bool PocoSQLGatewayStatusDao::insert(const GatewayStatus &status,
+		const Gateway &gateway)
 {
 	assureHasId(gateway);
 
 	string id(gateway.id().toString());
 
 	Nullable<unsigned long> at;
-	if (!gateway.lastChanged().isNull())
-		at = gateway.lastChanged().value().timestamp().epochTime();
+	if (!status.lastChanged().isNull())
+		at = status.lastChanged().value().timestamp().epochTime();
 
 	Nullable<string> version;
-	if (!gateway.version().empty())
-		version = gateway.version();
+	if (!status.version().empty())
+		version = status.version();
 
 	Nullable<string> ip;
-	if (!gateway.ipAddress().isWildcard())
-		ip = gateway.ipAddress().toString();
+	if (!status.ipAddress().isWildcard())
+		ip = status.ipAddress().toString();
 
 	Statement sql = (session() << m_queryInsert(),
 		use(id, "gateway_id"),
