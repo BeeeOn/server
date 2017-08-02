@@ -18,6 +18,7 @@
 		</instance>
 
 		<instance name="gatewayCommunicator" class="BeeeOn::GatewayCommunicator">
+			<set name="messageHandler" ref="messageHandler" />
 			<set name="maxMessageSize" number="${gws.comm.maxMessageSize}" />
 			<set name="receiveTimeout" time="${gws.comm.receiveTimeout}" />
 			<set name="sendTimeout" time="${gws.comm.sendTimeout}" />
@@ -30,6 +31,14 @@
 			<set name="gatewayCommunicator" ref="gatewayCommunicator" />
 			<set name="rpcForwarder" ref="asyncGatewayRPC" />
 			<set name="responseTimeout" time="${gws.queue.responseTimeout}" />
+		</instance>
+
+		<instance name="messageHandler" class="BeeeOn::GWMessageHandlerImpl">
+			<set name="gatewayCommunicator" ref="gatewayCommunicator" />
+			<set name="responseExpectedQueue" ref="responseExpectedQueue" />
+			<set name="rpcForwarder" ref="asyncGatewayRPC" />
+			<set name="deviceService" ref="gwsDeviceService" />
+			<set name="sensorHistoryService" ref="gwsSensorHistoryService" />
 		</instance>
 	</factory>
 </system>
