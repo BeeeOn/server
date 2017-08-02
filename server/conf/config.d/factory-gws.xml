@@ -25,5 +25,10 @@
 			<set name="maxThreads" number="${gws.comm.maxThreads}" />
 			<set name="threadIdleTime" time="${gws.comm.threadIdleTime}" />
 		</instance>
+
+		<instance name="responseExpectedQueue" class="BeeeOn::GWResponseExpectedQueue">
+			<set name="gatewayCommunicator" ref="gatewayCommunicator" />
+			<set name="responseTimeout" time="${gws.queue.responseTimeout}" />
+		</instance>
 	</factory>
 </system>
