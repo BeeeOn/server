@@ -1,6 +1,16 @@
 <system>
 	<factory>
 		<instance name="gws" class="BeeeOn::LoopRunner">
+			<add name="loops" ref="gatewayCommunicator" />
+		</instance>
+
+		<instance name="gatewayCommunicator" class="BeeeOn::GatewayCommunicator">
+			<set name="maxMessageSize" number="${gws.comm.maxMessageSize}" />
+			<set name="receiveTimeout" time="${gws.comm.receiveTimeout}" />
+			<set name="sendTimeout" time="${gws.comm.sendTimeout}" />
+			<set name="minThreads" number="${gws.comm.minThreads}" />
+			<set name="maxThreads" number="${gws.comm.maxThreads}" />
+			<set name="threadIdleTime" time="${gws.comm.threadIdleTime}" />
 		</instance>
 	</factory>
 </system>
