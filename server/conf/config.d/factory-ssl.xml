@@ -22,5 +22,13 @@
 			<set name="disabledProtocols" text="sslv2,sslv3,tlsv1,tlsv1_1" />
 		</instance>
 
+		<instance name="gwsSSLServer" class="BeeeOn::SSLServer">
+			<set name="certificate" text="${gws.ws.ssl.certificate}" />
+			<set name="privateKey" text="${gws.ws.ssl.key}" />
+			<set name="caLocation" text="${gws.ws.ssl.authority}" />
+			<set name="verificationMode" text="${gws.ws.ssl.verify_level}" />
+			<set name="loadDefaultCA" text="false" />
+		</instance>
+
 	</factory>
 </system>

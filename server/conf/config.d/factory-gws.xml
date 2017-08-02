@@ -2,6 +2,19 @@
 	<factory>
 		<instance name="gws" class="BeeeOn::LoopRunner">
 			<add name="loops" ref="gatewayCommunicator" />
+			<add name="loops" ref="webSocketServer" />
+		</instance>
+
+		<instance name="webSocketServer" class="BeeeOn::WebSocketServer">
+			<set name="gatewayCommunicator" ref="gatewayCommunicator"/>
+			<set name="sslConfig" ref="gwsSSLServer" if-yes="${gws.ws.ssl.enable}" />
+			<set name="gatewayService" ref="gwsGatewayService" />
+			<set name="port" number="${gws.ws.port}" />
+			<set name="backlog" number="${gws.ws.backlog}" />
+			<set name="maxMessageSize" number="${gws.ws.maxMessageSize}" />
+			<set name="minThreads" number="${gws.ws.minThreads}" />
+			<set name="maxThreads" number="${gws.ws.maxThreads}" />
+			<set name="threadIdleTime" time="${gws.ws.threadIdleTime}" />
 		</instance>
 
 		<instance name="gatewayCommunicator" class="BeeeOn::GatewayCommunicator">

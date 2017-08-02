@@ -116,6 +116,8 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/gws/GatewayConnection.cpp
 	${PROJECT_SOURCE_DIR}/gws/GatewayCommunicator.cpp
 	${PROJECT_SOURCE_DIR}/gws/GWMessageHandler.cpp
+	${PROJECT_SOURCE_DIR}/gws/WebSocketRequestHandler.cpp
+	${PROJECT_SOURCE_DIR}/gws/WebSocketServer.cpp
 	${PROJECT_SOURCE_DIR}/rpc/RPCConnector.cpp
 	${PROJECT_SOURCE_DIR}/rpc/SocketRPCConnector.cpp
 	${PROJECT_SOURCE_DIR}/rpc/GatewayRPC.cpp
