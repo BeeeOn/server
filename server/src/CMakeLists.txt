@@ -82,6 +82,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/service/DeviceService.cpp
 	${PROJECT_SOURCE_DIR}/service/DeviceServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/GWSDeviceService.cpp
+	${PROJECT_SOURCE_DIR}/service/GWSDeviceServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/GatewayService.cpp
 	${PROJECT_SOURCE_DIR}/service/GatewayServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/GWSGatewayService.cpp

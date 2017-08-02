@@ -29,6 +29,12 @@
 			<set name="transactionManager" ref="transactionManager" />
 		</instance>
 
+		<instance name="gwsDeviceService" class="BeeeOn::GWSDeviceServiceImpl">
+			<set name="deviceDao" ref="deviceDao" />
+			<set name="deviceInfoProvider" ref="deviceInfoProvider" />
+			<set name="transactionManager" ref="transactionManager" />
+		</instance>
+
 		<instance name="gatewayService" class="BeeeOn::GatewayServiceImpl">
 			<set name="gatewayDao" ref="gatewayDao" />
 			<set name="roleInGatewayDao" ref="roleInGatewayDao" />
