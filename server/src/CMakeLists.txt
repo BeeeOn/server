@@ -113,6 +113,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/Sanitize.cpp
 	${PROJECT_SOURCE_DIR}/util/Startup.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoDaoManager.cpp
+	${PROJECT_SOURCE_DIR}/gws/GWMessageHandler.cpp
 	${PROJECT_SOURCE_DIR}/rpc/RPCConnector.cpp
 	${PROJECT_SOURCE_DIR}/rpc/SocketRPCConnector.cpp
 	${PROJECT_SOURCE_DIR}/rpc/GatewayRPC.cpp
