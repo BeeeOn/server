@@ -51,17 +51,12 @@ public:
 		const PolicyContext &context,
 		const std::list<Device> &devices) override;
 
-	void assureInvite(
-		const PolicyContext &context,
-		const Gateway &gateway,
-		const AccessLevel &as) override;
-	void assureList(
+	void assure(
+		const RoleAccessPolicy::Action action,
 		const PolicyContext &context,
 		const Gateway &gateway) override;
-	void assureRemove(
-		const PolicyContext &context,
-		const RoleInGateway &role) override;
-	void assureUpdate(
+	void assure(
+		const RoleAccessPolicy::Action action,
 		const PolicyContext &context,
 		const RoleInGateway &role) override;
 

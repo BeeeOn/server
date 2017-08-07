@@ -207,29 +207,35 @@ void DefaultAccessPolicy::assureMany(
 		seen.insert(device.gateway().id());
 	}
 }
-void DefaultAccessPolicy::assureInvite(
-	const PolicyContext &context,
-	const Gateway &gateway,
-	const AccessLevel &as)
-{
-	/**
-	 * Only admin can invite others.
-	 */
-	assureAtLeast(
-		fetchAccessLevel(context.user(), gateway),
-		AccessLevel::admin());
-}
 
-void DefaultAccessPolicy::assureList(
+void DefaultAccessPolicy::assure(
+	const RoleAccessPolicy::Action action,
 	const PolicyContext &context,
 	const Gateway &gateway)
 {
-	assureAtLeast(
-		fetchAccessLevel(context.user(), gateway),
-		AccessLevel::guest());
+	switch (action) {
+	case RoleAccessPolicy::ACTION_USER_GET:
+		assureAtLeast(
+			fetchAccessLevel(context.user(), gateway),
+			AccessLevel::guest());
+		break;
+
+	case RoleAccessPolicy::ACTION_USER_INVITE:
+		/**
+		 * Only admin can invite others.
+		 */
+		assureAtLeast(
+			fetchAccessLevel(context.user(), gateway),
+			AccessLevel::admin());
+		break;
+
+	default:
+		throw InvalidAccessException("invalid action: " + to_string((int) action));
+	}
 }
 
-void DefaultAccessPolicy::assureRemove(
+void DefaultAccessPolicy::assure(
+	const RoleAccessPolicy::Action action,
 	const PolicyContext &context,
 	const RoleInGateway &role)
 {
@@ -237,25 +243,31 @@ void DefaultAccessPolicy::assureRemove(
 	if (!m_roleInGatewayDao->fetch(tmp))
 		throw InvalidAccessException("no such role " + tmp);
 
-	assureAtLeast(
-		fetchAccessLevel(context.user(), tmp.gateway()),
-		AccessLevel::admin());
-}
+	switch (action) {
+	case RoleAccessPolicy::ACTION_USER_GET:
+		assureAtLeast(
+			fetchAccessLevel(context.user(), tmp.gateway()),
+			AccessLevel::guest());
+		break;
 
-void DefaultAccessPolicy::assureUpdate(
-	const PolicyContext &context,
-	const RoleInGateway &role)
-{
-	if (m_roleInGatewayDao->isUser(role, context.user()))
-		throw InvalidAccessException("cannot change own access level");
+	case RoleAccessPolicy::ACTION_USER_UPDATE:
+		if (m_roleInGatewayDao->isUser(role, context.user()))
+			throw InvalidAccessException("cannot change own access level");
 
-	RoleInGateway tmp(role);
-	if (!m_roleInGatewayDao->fetch(tmp))
-		throw InvalidAccessException("no such role " + tmp);
+		assureAtLeast(
+			fetchAccessLevel(context.user(), tmp.gateway()),
+			AccessLevel::admin());
+		break;
 
-	assureAtLeast(
-		fetchAccessLevel(context.user(), tmp.gateway()),
-		AccessLevel::admin());
+	case RoleAccessPolicy::ACTION_USER_REMOVE:
+		assureAtLeast(
+			fetchAccessLevel(context.user(), tmp.gateway()),
+			AccessLevel::admin());
+		break;
+
+	default:
+		throw InvalidAccessException("invalid action: " + to_string((int) action));
+	}
 }
 
 void DefaultAccessPolicy::assureFetchRange(

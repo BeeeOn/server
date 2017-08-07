@@ -65,7 +65,7 @@ void RoleServiceImpl::doInviteIdentity(
 		Relation<Identity, Gateway> &input,
 		const AccessLevel &as)
 {
-	m_accessPolicy->assureInvite(input, input.base(), as);
+	m_accessPolicy->assure(RoleAccessPolicy::ACTION_USER_INVITE, input, input.base());
 
 	const string email(input.target().email());
 
@@ -89,19 +89,19 @@ void RoleServiceImpl::doInviteIdentity(
 
 void RoleServiceImpl::doList(Relation<vector<RoleInGateway>, Gateway> &input)
 {
-	m_accessPolicy->assureList(input, input.base());
+	m_accessPolicy->assure(RoleAccessPolicy::ACTION_USER_GET, input, input.base());
 	m_roleInGatewayDao->fetchBy(input.target(), input.base());
 }
 
 void RoleServiceImpl::doList(Relation<vector<LegacyRoleInGateway>, Gateway> &input)
 {
-	m_accessPolicy->assureList(input, input.base());
+	m_accessPolicy->assure(RoleAccessPolicy::ACTION_USER_GET, input, input.base());
 	m_roleInGatewayDao->fetchBy(input.target(), input.base());
 }
 
 void RoleServiceImpl::doRemove(Single<RoleInGateway> &input)
 {
-	m_accessPolicy->assureRemove(input, input.target());
+	m_accessPolicy->assure(RoleAccessPolicy::ACTION_USER_REMOVE, input, input.target());
 
 	if (m_roleInGatewayDao->isUser(input.target(), input.user()))
 		throw IllegalStateException("cannot remove self");
@@ -114,7 +114,7 @@ void RoleServiceImpl::doRemove(Single<RoleInGateway> &input)
 
 void RoleServiceImpl::doUpdate(SingleWithData<RoleInGateway> &input)
 {
-	m_accessPolicy->assureUpdate(input, input.target());
+	m_accessPolicy->assure(RoleAccessPolicy::ACTION_USER_UPDATE, input, input.target());
 
 	RoleInGateway &role = input.target();
 

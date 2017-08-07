@@ -15,22 +15,22 @@ class RoleAccessPolicy {
 public:
 	typedef Poco::SharedPtr<RoleAccessPolicy> Ptr;
 
+	enum Action {
+		ACTION_USER_INVITE,
+		ACTION_USER_GET,
+		ACTION_USER_UPDATE,
+		ACTION_USER_REMOVE,
+	};
+
 	virtual ~RoleAccessPolicy();
 
-	virtual void assureInvite(
-		const PolicyContext &context,
-		const Gateway &gateway,
-		const AccessLevel &as) = 0;
-
-	virtual void assureList(
+	virtual void assure(
+		const Action action,
 		const PolicyContext &context,
 		const Gateway &gateway) = 0;
 
-	virtual void assureRemove(
-		const PolicyContext &context,
-		const RoleInGateway &role) = 0;
-
-	virtual void assureUpdate(
+	virtual void assure(
+		const Action action,
 		const PolicyContext &context,
 		const RoleInGateway &role) = 0;
 };
