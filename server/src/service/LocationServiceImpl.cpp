@@ -3,7 +3,6 @@
 #include "dao/LocationDao.h"
 #include "dao/GatewayDao.h"
 #include "di/Injectable.h"
-#include "policy/LocationAccessPolicy.h"
 #include "service/LocationServiceImpl.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, LocationServiceImpl)
@@ -20,8 +19,7 @@ using namespace BeeeOn;
 
 LocationServiceImpl::LocationServiceImpl():
 	m_dao(&NullLocationDao::instance()),
-	m_gatewayDao(&NullGatewayDao::instance()),
-	m_accessPolicy(&NullLocationAccessPolicy::instance())
+	m_gatewayDao(&NullGatewayDao::instance())
 {
 }
 
@@ -35,10 +33,9 @@ void LocationServiceImpl::setGatewayDao(GatewayDao *dao)
 	m_gatewayDao = dao? dao : &NullGatewayDao::instance();
 }
 
-void LocationServiceImpl::setAccessPolicy(LocationAccessPolicy *policy)
+void LocationServiceImpl::setAccessPolicy(LocationAccessPolicy::Ptr policy)
 {
-	m_accessPolicy = policy? policy :
-		&NullLocationAccessPolicy::instance();
+	m_accessPolicy = policy;
 }
 
 void LocationServiceImpl::doCreateIn(RelationWithData<Location, Gateway> &input)
