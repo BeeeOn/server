@@ -78,15 +78,29 @@ void DefaultAccessPolicy::assure(
 	}
 }
 
-void DefaultAccessPolicy::assureCreateLocation(
+void DefaultAccessPolicy::assure(
+		const LocationAccessPolicy::Action action,
 		const PolicyContext &context,
 		const Gateway &gateway)
 {
-	assureAtLeast(
-		fetchAccessLevel(context.user(), gateway), AccessLevel::user());
+	switch (action) {
+	case LocationAccessPolicy::ACTION_USER_CREATE:
+		assureAtLeast(
+			fetchAccessLevel(context.user(), gateway), AccessLevel::user());
+		break;
+
+	case LocationAccessPolicy::ACTION_USER_GET:
+		assureAtLeast(
+			fetchAccessLevel(context.user(), gateway), AccessLevel::guest());
+		break;
+
+	default:
+		throw InvalidAccessException("invalid action: " + to_string((int) action));
+	}
 }
 
-void DefaultAccessPolicy::assureGet(
+void DefaultAccessPolicy::assure(
+		const LocationAccessPolicy::Action action,
 		const PolicyContext &context,
 		const Location &location)
 {
@@ -94,32 +108,27 @@ void DefaultAccessPolicy::assureGet(
 	if (!m_locationDao->fetch(tmp))
 		throw InvalidAccessException("no such location " + location);
 
-	assureAtLeast(
-		fetchAccessLevel(context.user(), tmp.gateway()), AccessLevel::guest());
-}
+	const Gateway &gateway = tmp.gateway();
 
-void DefaultAccessPolicy::assureUpdate(
-		const PolicyContext &context,
-		const Location &location)
-{
-	Location tmp(location);
-	if (!m_locationDao->fetch(tmp))
-		throw InvalidAccessException("no such location " + location);
+	switch (action) {
+	case LocationAccessPolicy::ACTION_USER_GET:
+		assureAtLeast(
+			fetchAccessLevel(context.user(), gateway), AccessLevel::guest());
+		break;
 
-	assureAtLeast(
-		fetchAccessLevel(context.user(), tmp.gateway()), AccessLevel::user());
-}
+	case LocationAccessPolicy::ACTION_USER_UPDATE:
+		assureAtLeast(
+			fetchAccessLevel(context.user(), gateway), AccessLevel::user());
+		break;
 
-void DefaultAccessPolicy::assureRemove(
-		const PolicyContext &context,
-		const Location &location)
-{
-	Location tmp(location);
-	if (!m_locationDao->fetch(tmp))
-		throw InvalidAccessException("no such location " + location);
+	case LocationAccessPolicy::ACTION_USER_REMOVE:
+		assureAtLeast(
+			fetchAccessLevel(context.user(), gateway), AccessLevel::user());
+		break;
 
-	assureAtLeast(
-		fetchAccessLevel(context.user(), tmp.gateway()), AccessLevel::user());
+	default:
+		throw InvalidAccessException("invalid action: " + to_string((int) action));
+	}
 }
 
 void DefaultAccessPolicy::assure(

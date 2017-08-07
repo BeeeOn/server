@@ -16,20 +16,23 @@ class LocationAccessPolicy {
 public:
 	typedef Poco::SharedPtr<LocationAccessPolicy> Ptr;
 
+	enum Action {
+		ACTION_USER_GET,
+		ACTION_USER_CREATE,
+		ACTION_USER_UPDATE,
+		ACTION_USER_REMOVE,
+	};
+
 	virtual ~LocationAccessPolicy();
 
-	virtual void assureGet(
+	virtual void assure(
+			const Action action,
 			const PolicyContext &context,
 			const Location &location) = 0;
-	virtual void assureCreateLocation(
+	virtual void assure(
+			const Action action,
 			const PolicyContext &context,
 			const Gateway &gateway) = 0;
-	virtual void assureUpdate(
-			const PolicyContext &context,
-			const Location &location) = 0;
-	virtual void assureRemove(
-			const PolicyContext &context,
-			const Location &location) = 0;
 };
 
 }

@@ -28,14 +28,14 @@ public:
 		const PolicyContext &context,
 		const Gateway &gateway) override;
 
-	void assureGet(const PolicyContext &context,
-		const Location &location);
-	void assureCreateLocation(const PolicyContext &context,
-		const Gateway &gateway);
-	void assureUpdate(const PolicyContext &context,
-		const Location &location);
-	void assureRemove(const PolicyContext &context,
-		const Location &location);
+	void assure(
+		const LocationAccessPolicy::Action action,
+		const PolicyContext &context,
+		const Location &location) override;
+	void assure(
+		const LocationAccessPolicy::Action action,
+		const PolicyContext &context,
+		const Gateway &gateway) override;
 
 	void assure(
 		const DeviceAccessPolicy::Action action,
