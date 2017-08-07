@@ -8,7 +8,6 @@
 #include "model/Gateway.h"
 #include "model/RoleInGateway.h"
 #include "notification/NotificationDispatcher.h"
-#include "policy/RoleAccessPolicy.h"
 #include "server/AccessLevel.h"
 #include "service/RoleServiceImpl.h"
 
@@ -51,10 +50,9 @@ void RoleServiceImpl::setRoleInGatewayDao(RoleInGatewayDao *dao)
 		&NullRoleInGatewayDao::instance() : dao;
 }
 
-void RoleServiceImpl::setAccessPolicy(RoleAccessPolicy *policy)
+void RoleServiceImpl::setAccessPolicy(RoleAccessPolicy::Ptr policy)
 {
-	m_accessPolicy = policy == NULL?
-		&NullRoleAccessPolicy::instance() : policy;
+	m_accessPolicy = policy;
 }
 
 void RoleServiceImpl::setNotificationDispatcher(
