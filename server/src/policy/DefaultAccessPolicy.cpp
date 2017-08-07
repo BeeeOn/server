@@ -122,7 +122,8 @@ void DefaultAccessPolicy::assureRemove(
 		fetchAccessLevel(context.user(), tmp.gateway()), AccessLevel::user());
 }
 
-void DefaultAccessPolicy::assureGet(
+void DefaultAccessPolicy::assure(
+		const DeviceAccessPolicy::Action action,
 		const PolicyContext &context,
 		const Device &device,
 		const Gateway &gateway)
@@ -134,102 +135,69 @@ void DefaultAccessPolicy::assureGet(
 				+ device + " for gateway " + gateway);
 	}
 
-	assureAtLeast(fetchAccessLevel(context.user(), gateway),
-			AccessLevel::guest());
+	doAssure(action, context, gateway);
 }
 
-void DefaultAccessPolicy::assureGetMany(
+void DefaultAccessPolicy::assure(
+		const DeviceAccessPolicy::Action action,
+		const PolicyContext &context,
+		const Gateway &gateway)
+{
+
+	doAssure(action, context, gateway);
+}
+
+void DefaultAccessPolicy::doAssure(
+	const DeviceAccessPolicy::Action action,
+	const PolicyContext &context,
+	const Gateway &gateway)
+{
+	switch (action) {
+	case DeviceAccessPolicy::ACTION_USER_GET:
+		assureAtLeast(
+			fetchAccessLevel(context.user(), gateway), AccessLevel::guest());
+		break;
+
+	case DeviceAccessPolicy::ACTION_USER_UNREGISTER:
+	case DeviceAccessPolicy::ACTION_USER_ACTIVATE:
+	case DeviceAccessPolicy::ACTION_USER_UPDATE_AND_ACTIVATE:
+		assureAtLeast(
+			fetchAccessLevel(context.user(), gateway), AccessLevel::admin());
+		break;
+
+	case DeviceAccessPolicy::ACTION_USER_UPDATE:
+		assureAtLeast(
+			fetchAccessLevel(context.user(), gateway), AccessLevel::user());
+		break;
+
+	default:
+		throw InvalidAccessException("invalid action: " + to_string((int) action));
+	}
+}
+
+void DefaultAccessPolicy::assureMany(
+		const DeviceAccessPolicy::Action action,
 		const PolicyContext &context,
 		const list<Device> &devices)
 {
 	set<GatewayID> seen;
 
 	for (auto &device : devices) {
-		const GatewayID &id = device.gateway().id();
-
 		if (!device.hasId())
 			throw InvalidAccessException(
 				"no id specified for device");
 
-		if (id.isNull())
+		if (device.gateway().id().isNull())
 			throw InvalidAccessException(
 				"no id specified for gateway");
 
-		if (seen.find(id) != seen.end())
+		if (seen.find(device.gateway().id()) != seen.end())
 			continue;
 
-		Gateway gateway(id);
-		assureAtLeast(fetchAccessLevel(context.user(), gateway),
-				AccessLevel::guest());
-
-		seen.insert(id);
+		doAssure(action, context, device.gateway());
+		seen.insert(device.gateway().id());
 	}
 }
-
-void DefaultAccessPolicy::assureListActiveDevices(
-		const PolicyContext &context,
-		const Gateway &gateway)
-{
-	assureAtLeast(
-		fetchAccessLevel(context.user(), gateway), AccessLevel::guest());
-}
-
-void DefaultAccessPolicy::assureListInactiveDevices(
-		const PolicyContext &context,
-		const Gateway &gateway)
-{
-	assureAtLeast(
-		fetchAccessLevel(context.user(), gateway), AccessLevel::admin());
-}
-
-void DefaultAccessPolicy::assureUnregister(
-		const PolicyContext &context,
-		const Device &device,
-		const Gateway &gateway)
-{
-	Device tmp(device);
-
-	if (!m_deviceDao->fetch(tmp, gateway)) {
-		throw InvalidAccessException("no such device "
-				+ device + " for gateway " + gateway);
-	}
-
-	assureAtLeast(fetchAccessLevel(context.user(), gateway),
-			AccessLevel::admin());
-}
-
-void DefaultAccessPolicy::assureActivate(
-		const PolicyContext &context,
-		const Device &device,
-		const Gateway &gateway)
-{
-	Device tmp(device);
-
-	if (!m_deviceDao->fetch(tmp, gateway)) {
-		throw InvalidAccessException("no such device "
-				+ device + " for gateway " + gateway);
-	}
-
-	assureAtLeast(fetchAccessLevel(context.user(), gateway),
-			AccessLevel::admin());
-}
-
-void DefaultAccessPolicy::assureUpdate(
-		const PolicyContext &context,
-		const Device &device,
-		const Gateway &gateway)
-{
-	Device tmp(device);
-
-	if (!m_deviceDao->fetch(tmp, gateway)) {
-		throw InvalidAccessException("no such device "
-				+ device + " for gateway " + gateway);
-	}
-
-	assureAtLeast(fetchAccessLevel(context.user(), gateway),
-			AccessLevel::user());
-}
-
 void DefaultAccessPolicy::assureInvite(
 	const PolicyContext &context,
 	const Gateway &gateway,

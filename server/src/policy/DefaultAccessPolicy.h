@@ -37,20 +37,19 @@ public:
 	void assureRemove(const PolicyContext &context,
 		const Location &location);
 
-	void assureGet(const PolicyContext &context,
-		const Device &device, const Gateway &gateway);
-	void assureGetMany(const PolicyContext &context,
-		const std::list<Device> &devices);
-	void assureListActiveDevices(const PolicyContext &context,
-		const Gateway &gateway);
-	void assureListInactiveDevices(const PolicyContext &context,
-		const Gateway &gateway);
-	void assureUnregister(const PolicyContext &context,
-		const Device &device, const Gateway &gateway);
-	void assureActivate(const PolicyContext &context,
-		const Device &device, const Gateway &gateway);
-	void assureUpdate(const PolicyContext &context,
-		const Device &device, const Gateway &gateway);
+	void assure(
+		const DeviceAccessPolicy::Action action,
+		const PolicyContext &context,
+		const Device &device,
+		const Gateway &gateway) override;
+	void assure(
+		const DeviceAccessPolicy::Action action,
+		const PolicyContext &context,
+		const Gateway &gateway) override;
+	void assureMany(
+		const DeviceAccessPolicy::Action action,
+		const PolicyContext &context,
+		const std::list<Device> &devices) override;
 
 	void assureInvite(
 		const PolicyContext &context,
@@ -102,6 +101,11 @@ protected:
 	void assureAtLeast(
 			const AccessLevel &current,
 			const AccessLevel &required);
+
+	void doAssure(
+		const DeviceAccessPolicy::Action action,
+		const PolicyContext &context,
+		const Gateway &gateway);
 
 private:
 	UserDao *m_userDao;
