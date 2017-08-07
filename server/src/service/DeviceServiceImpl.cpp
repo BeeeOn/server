@@ -8,7 +8,6 @@
 #include "di/Injectable.h"
 #include "model/Device.h"
 #include "model/Gateway.h"
-#include "policy/DeviceAccessPolicy.h"
 #include "rpc/GatewayRPC.h"
 #include "service/DeviceServiceImpl.h"
 #include "work/DeviceUnpairWork.h"
@@ -32,8 +31,7 @@ DeviceServiceImpl::DeviceServiceImpl():
 	m_dao(&NullDeviceDao::instance()),
 	m_propertyDao(&NullDevicePropertyDao::instance()),
 	m_gatewayRPC(&NullGatewayRPC::instance()),
-	m_workFacade(&NullWorkFacade::instance()),
-	m_policy(&NullDeviceAccessPolicy::instance())
+	m_workFacade(&NullWorkFacade::instance())
 {
 }
 
@@ -57,9 +55,9 @@ void DeviceServiceImpl::setWorkFacade(WorkFacade *facade)
 	m_workFacade = facade? facade : &NullWorkFacade::instance();
 }
 
-void DeviceServiceImpl::setAccessPolicy(DeviceAccessPolicy *policy)
+void DeviceServiceImpl::setAccessPolicy(DeviceAccessPolicy::Ptr policy)
 {
-	m_policy = policy? policy : &NullDeviceAccessPolicy::instance();
+	m_policy = policy;
 }
 
 bool DeviceServiceImpl::doFetch(Relation<Device, Gateway> &input)

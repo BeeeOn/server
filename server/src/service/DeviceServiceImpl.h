@@ -4,6 +4,7 @@
 #include <list>
 #include <vector>
 
+#include "policy/DeviceAccessPolicy.h"
 #include "service/DeviceService.h"
 #include "transaction/Transactional.h"
 
@@ -13,7 +14,6 @@ class DeviceDao;
 class DevicePropertyDao;
 class GatewayRPC;
 class WorkFacade;
-class DeviceAccessPolicy;
 
 /**
  * Service for devices management.
@@ -26,7 +26,7 @@ public:
 	void setDevicePropertyDao(DevicePropertyDao *dao);
 	void setGatewayRPC(GatewayRPC *rpc);
 	void setWorkFacade(WorkFacade *facade);
-	void setAccessPolicy(DeviceAccessPolicy *policy);
+	void setAccessPolicy(DeviceAccessPolicy::Ptr policy);
 
 	bool fetch(Relation<Device, Gateway> &input) override
 	{
@@ -125,7 +125,7 @@ private:
 	DevicePropertyDao *m_propertyDao;
 	GatewayRPC *m_gatewayRPC;
 	WorkFacade *m_workFacade;
-	DeviceAccessPolicy *m_policy;
+	DeviceAccessPolicy::Ptr m_policy;
 };
 
 }

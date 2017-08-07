@@ -1,6 +1,8 @@
 #ifndef BEEEON_DEVICE_ACCESS_POLICY_H
 #define BEEEON_DEVICE_ACCESS_POLICY_H
 
+#include <Poco/SharedPtr.h>
+
 #include <list>
 
 namespace BeeeOn {
@@ -11,6 +13,10 @@ class PolicyContext;
 
 class DeviceAccessPolicy {
 public:
+	typedef Poco::SharedPtr<DeviceAccessPolicy> Ptr;
+
+	virtual ~DeviceAccessPolicy();
+
 	virtual void assureGet(
 		const PolicyContext &context,
 		const Device &device,
@@ -52,43 +58,6 @@ public:
 		assureUpdate(context, device, gateway);
 		assureActivate(context, device, gateway);
 	}
-};
-
-class NullDeviceAccessPolicy : public DeviceAccessPolicy {
-public:
-	void assureGet(
-		const PolicyContext &context,
-		const Device &device,
-		const Gateway &gateway) override;
-
-	void assureGetMany(
-		const PolicyContext &context,
-		const std::list<Device> &devices) override;
-
-	void assureListActiveDevices(
-		const PolicyContext &context,
-		const Gateway &gateway) override;
-
-	void assureListInactiveDevices(
-		const PolicyContext &context,
-		const Gateway &gateway) override;
-
-	void assureUnregister(
-		const PolicyContext &context,
-		const Device &device,
-		const Gateway &gateway) override;
-
-	void assureActivate(
-		const PolicyContext &context,
-		const Device &device,
-		const Gateway &gateway) override;
-
-	void assureUpdate(
-		const PolicyContext &context,
-		const Device &device,
-		const Gateway &gateway) override;
-
-	static DeviceAccessPolicy &instance();
 };
 
 }
