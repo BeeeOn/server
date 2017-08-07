@@ -47,45 +47,35 @@ void DefaultAccessPolicy::assureAtLeast(
 	}
 }
 
-void DefaultAccessPolicy::assureRegister(
+void DefaultAccessPolicy::assure(
+		const GatewayAccessPolicy::Action action,
 		const PolicyContext &context,
 		const Gateway &gateway)
 {
-	if (m_roleInGatewayDao->isRegistered(gateway))
-		throw InvalidAccessException("gateway "
+	switch (action) {
+	case GatewayAccessPolicy::ACTION_USER_REGISTER:
+		if (m_roleInGatewayDao->isRegistered(gateway)) {
+			throw InvalidAccessException("gateway "
 				+ gateway + " is already registered");
-}
+		}
 
-void DefaultAccessPolicy::assureGet(
-		const PolicyContext &context,
-		const Gateway &gateway)
-{
-	assureAtLeast(
-		fetchAccessLevel(context.user(), gateway), AccessLevel::guest());
-}
+		break;
 
-void DefaultAccessPolicy::assureUnregister(
-		const PolicyContext &context,
-		const Gateway &gateway)
-{
-	assureAtLeast(
-		fetchAccessLevel(context.user(), gateway), AccessLevel::guest());
-}
+	case GatewayAccessPolicy::ACTION_USER_UNREGISTER:
+	case GatewayAccessPolicy::ACTION_USER_GET:
+		assureAtLeast(
+			fetchAccessLevel(context.user(), gateway), AccessLevel::guest());
+		break;
 
-void DefaultAccessPolicy::assureUpdate(
-		const PolicyContext &context,
-		const Gateway &gateway)
-{
-	assureAtLeast(
-		fetchAccessLevel(context.user(), gateway), AccessLevel::user());
-}
+	case GatewayAccessPolicy::ACTION_USER_UPDATE:
+	case GatewayAccessPolicy::ACTION_USER_SCAN:
+		assureAtLeast(
+			fetchAccessLevel(context.user(), gateway), AccessLevel::user());
+		break;
 
-void DefaultAccessPolicy::assureScanDevices(
-		const PolicyContext &context,
-		const Gateway &gateway)
-{
-	assureAtLeast(
-		fetchAccessLevel(context.user(), gateway), AccessLevel::user());
+	default:
+		throw InvalidAccessException("invalid action: " + to_string((int) action));
+	}
 }
 
 void DefaultAccessPolicy::assureCreateLocation(

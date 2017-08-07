@@ -14,23 +14,20 @@ class GatewayAccessPolicy {
 public:
 	typedef Poco::SharedPtr<GatewayAccessPolicy> Ptr;
 
+	enum Action {
+		ACTION_USER_REGISTER,
+		ACTION_USER_UNREGISTER,
+		ACTION_USER_GET,
+		ACTION_USER_UPDATE,
+		ACTION_USER_SCAN,
+	};
+
 	virtual ~GatewayAccessPolicy();
 
-	virtual void assureRegister(
-			const PolicyContext &context,
-			const Gateway &gateway) = 0;
-	virtual void assureGet(
-			const PolicyContext &context,
-			const Gateway &gateway) = 0;
-	virtual void assureUnregister(
-			const PolicyContext &context,
-			const Gateway &gateway) = 0;
-	virtual void assureUpdate(
-			const PolicyContext &context,
-			const Gateway &gateway) = 0;
-	virtual void assureScanDevices(
-			const PolicyContext &context,
-			const Gateway &gateway) = 0;
+	virtual void assure(
+		const Action action,
+		const PolicyContext &context,
+		const Gateway &gateway) = 0;
 };
 
 }

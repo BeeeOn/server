@@ -23,15 +23,9 @@ class DefaultAccessPolicy :
 public:
 	DefaultAccessPolicy();
 
-	void assureRegister(const PolicyContext &context,
-		const Gateway &gateway) override;
-	void assureGet(const PolicyContext &context,
-		const Gateway &gateway) override;
-	void assureUnregister(const PolicyContext &context,
-		const Gateway &gateway) override;
-	void assureUpdate(const PolicyContext &context,
-		const Gateway &gateway) override;
-	void assureScanDevices(const PolicyContext &context,
+	void assure(
+		const GatewayAccessPolicy::Action action,
+		const PolicyContext &context,
 		const Gateway &gateway) override;
 
 	void assureGet(const PolicyContext &context,
