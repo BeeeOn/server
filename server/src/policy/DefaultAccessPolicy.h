@@ -60,11 +60,10 @@ public:
 		const PolicyContext &context,
 		const RoleInGateway &role) override;
 
-	void assureFetchRange(
+	void assure(
+		const SensorHistoryAccessPolicy::Action action,
 		const PolicyContext &context,
-		const Device &device,
-		const ModuleInfo &module,
-		const TimeInterval &range) override;
+		const Device &device) override;
 
 	void setUserDao(UserDao *dao)
 	{

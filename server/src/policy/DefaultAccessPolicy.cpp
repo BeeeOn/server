@@ -270,13 +270,19 @@ void DefaultAccessPolicy::assure(
 	}
 }
 
-void DefaultAccessPolicy::assureFetchRange(
+void DefaultAccessPolicy::assure(
+	const SensorHistoryAccessPolicy::Action action,
 	const PolicyContext &context,
-	const Device &device,
-	const ModuleInfo &module,
-	const TimeInterval &range)
+	const Device &device)
 {
-	assureAtLeast(
-		fetchAccessLevel(context.user(), device.gateway()),
-		AccessLevel::guest());
+	switch (action) {
+	case SensorHistoryAccessPolicy::ACTION_USER_GET:
+		assureAtLeast(
+			fetchAccessLevel(context.user(), device.gateway()),
+			AccessLevel::guest());
+		break;
+
+	default:
+		throw InvalidAccessException("invalid action: " + to_string((int) action));
+	}
 }

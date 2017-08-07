@@ -14,13 +14,16 @@ class SensorHistoryAccessPolicy {
 public:
 	typedef Poco::SharedPtr<SensorHistoryAccessPolicy> Ptr;
 
+	enum Action {
+		ACTION_USER_GET,
+	};
+
 	virtual ~SensorHistoryAccessPolicy();
 
-	virtual void assureFetchRange(
+	virtual void assure(
+		const Action action,
 		const PolicyContext &context,
-		const Device &device,
-		const ModuleInfo &module,
-		const TimeInterval &range) = 0;
+		const Device &device) = 0;
 };
 
 }
