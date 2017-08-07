@@ -3,6 +3,7 @@
 
 #include <vector>
 
+#include "policy/GatewayAccessPolicy.h"
 #include "rpc/GatewayRPC.h"
 #include "service/GatewayService.h"
 #include "transaction/Transactional.h"
@@ -14,7 +15,6 @@ class RoleInGatewayDao;
 class IdentityDao;
 class VerifiedIdentityDao;
 class GatewayRPC;
-class GatewayAccessPolicy;
 
 class GatewayServiceImpl : public GatewayService, public Transactional {
 public:
@@ -25,7 +25,7 @@ public:
 	void setIdentityDao(IdentityDao *dao);
 	void setVerifiedIdentityDao(VerifiedIdentityDao *dao);
 	void setGatewayRPC(GatewayRPC *rpc);
-	void setAccessPolicy(GatewayAccessPolicy *policy);
+	void setAccessPolicy(GatewayAccessPolicy::Ptr policy);
 
 	/**
 	 * Register the given gateway to be owned by the given identity.
@@ -106,7 +106,7 @@ private:
 	IdentityDao *m_identityDao;
 	VerifiedIdentityDao *m_verifiedIdentityDao;
 	GatewayRPC *m_rpc;
-	GatewayAccessPolicy *m_accessPolicy;
+	GatewayAccessPolicy::Ptr m_accessPolicy;
 };
 
 }

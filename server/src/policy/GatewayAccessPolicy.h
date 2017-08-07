@@ -1,6 +1,8 @@
 #ifndef BEEEON_GATEWAY_ACCESS_POLICY_H
 #define BEEEON_GATEWAY_ACCESS_POLICY_H
 
+#include <Poco/SharedPtr.h>
+
 #include "model/User.h"
 #include "model/Gateway.h"
 
@@ -10,6 +12,10 @@ class PolicyContext;
 
 class GatewayAccessPolicy {
 public:
+	typedef Poco::SharedPtr<GatewayAccessPolicy> Ptr;
+
+	virtual ~GatewayAccessPolicy();
+
 	virtual void assureRegister(
 			const PolicyContext &context,
 			const Gateway &gateway) = 0;
@@ -25,27 +31,6 @@ public:
 	virtual void assureScanDevices(
 			const PolicyContext &context,
 			const Gateway &gateway) = 0;
-};
-
-class NullGatewayAccessPolicy : public GatewayAccessPolicy {
-public:
-	void assureRegister(
-		const PolicyContext &context,
-		const Gateway &gateway) override;
-	void assureGet(
-		const PolicyContext &context,
-		const Gateway &gateway) override;
-	void assureUnregister(
-		const PolicyContext &context,
-		const Gateway &gateway) override;
-	void assureUpdate(
-		const PolicyContext &context,
-		const Gateway &gateway) override;
-	void assureScanDevices(
-		const PolicyContext &context,
-		const Gateway &gateway) override;
-
-	static GatewayAccessPolicy &instance();
 };
 
 }

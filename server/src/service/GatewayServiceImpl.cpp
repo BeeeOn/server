@@ -5,7 +5,6 @@
 #include "dao/RoleInGatewayDao.h"
 #include "dao/VerifiedIdentityDao.h"
 #include "di/Injectable.h"
-#include "policy/GatewayAccessPolicy.h"
 #include "server/AccessLevel.h"
 #include "service/GatewayServiceImpl.h"
 
@@ -28,8 +27,7 @@ GatewayServiceImpl::GatewayServiceImpl():
 	m_gatewayDao(&NullGatewayDao::instance()),
 	m_roleInGatewayDao(&NullRoleInGatewayDao::instance()),
 	m_identityDao(&NullIdentityDao::instance()),
-	m_rpc(&NullGatewayRPC::instance()),
-	m_accessPolicy(&NullGatewayAccessPolicy::instance())
+	m_rpc(&NullGatewayRPC::instance())
 {
 }
 
@@ -59,10 +57,9 @@ void GatewayServiceImpl::setGatewayRPC(GatewayRPC *rpc)
 	m_rpc = rpc? rpc : &NullGatewayRPC::instance();
 }
 
-void GatewayServiceImpl::setAccessPolicy(GatewayAccessPolicy *policy)
+void GatewayServiceImpl::setAccessPolicy(GatewayAccessPolicy::Ptr policy)
 {
-	m_accessPolicy = policy? policy :
-		&NullGatewayAccessPolicy::instance();
+	m_accessPolicy = policy;
 }
 
 bool GatewayServiceImpl::doRegisterGateway(SingleWithData<Gateway> &input,
