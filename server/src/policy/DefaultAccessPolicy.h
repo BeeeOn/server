@@ -96,6 +96,11 @@ protected:
 			const AccessLevel &current,
 			const AccessLevel &required);
 
+	/**
+	 * Test whether the given role represents the PolicyContext.
+	 */
+	bool representsSelf(const RoleInGateway &role, const PolicyContext &self);
+
 	void doAssure(
 		const DeviceAccessPolicy::Action action,
 		const PolicyContext &context,

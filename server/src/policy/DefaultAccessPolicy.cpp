@@ -47,6 +47,11 @@ void DefaultAccessPolicy::assureAtLeast(
 	}
 }
 
+bool DefaultAccessPolicy::representsSelf(const RoleInGateway &role, const PolicyContext &self)
+{
+	return m_roleInGatewayDao->isUser(role, self.user());
+}
+
 void DefaultAccessPolicy::assure(
 		const GatewayAccessPolicy::Action action,
 		const PolicyContext &context,
@@ -251,7 +256,7 @@ void DefaultAccessPolicy::assure(
 		break;
 
 	case RoleAccessPolicy::ACTION_USER_UPDATE:
-		if (m_roleInGatewayDao->isUser(role, context.user()))
+		if (representsSelf(role, context))
 			throw InvalidAccessException("cannot change own access level");
 
 		assureAtLeast(
