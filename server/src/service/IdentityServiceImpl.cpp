@@ -6,6 +6,7 @@ BEEEON_OBJECT_CASTABLE(IdentityService)
 BEEEON_OBJECT_REF("identityDao", &IdentityServiceImpl::setIdentityDao)
 BEEEON_OBJECT_REF("verifiedIdentityDao", &IdentityServiceImpl::setVerifiedIdentityDao)
 BEEEON_OBJECT_REF("transactionManager", &Transactional::setTransactionManager)
+BEEEON_OBJECT_REF("accessPolicy", &IdentityServiceImpl::setAccessPolicy)
 BEEEON_OBJECT_END(BeeeOn, IdentityServiceImpl)
 
 using namespace BeeeOn;
@@ -24,12 +25,19 @@ void IdentityServiceImpl::setVerifiedIdentityDao(VerifiedIdentityDao::Ptr dao)
 	m_verifiedIdentityDao = dao;
 }
 
-bool IdentityServiceImpl::doFetch(VerifiedIdentity &identity)
+void IdentityServiceImpl::setAccessPolicy(IdentityAccessPolicy::Ptr accessPolicy)
 {
-	return m_verifiedIdentityDao->fetch(identity);
+	m_accessPolicy = accessPolicy;
 }
 
-bool IdentityServiceImpl::doFetch(Identity &identity)
+bool IdentityServiceImpl::doFetch(Single<VerifiedIdentity> &input)
 {
-	return m_identityDao->fetch(identity);
+	m_accessPolicy->assure(IdentityAccessPolicy::ACTION_USER_GET, input, input.target());
+	return m_verifiedIdentityDao->fetch(input.target());
+}
+
+bool IdentityServiceImpl::doFetch(Single<Identity> &input)
+{
+	m_accessPolicy->assure(IdentityAccessPolicy::ACTION_USER_GET, input, input.target());
+	return m_identityDao->fetch(input.target());
 }

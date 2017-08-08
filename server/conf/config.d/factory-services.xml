@@ -49,6 +49,7 @@
 		<instance name="identityService" class="BeeeOn::IdentityServiceImpl">
 			<set name="identityDao" ref="identityDao" />
 			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
+			<set name="accessPolicy" ref="accessPolicy" />
 			<set name="transactionManager" ref="transactionManager" />
 		</instance>
 
