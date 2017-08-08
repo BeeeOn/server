@@ -19,6 +19,7 @@
 #include "transaction/NoTransactionFactory.h"
 #include "transaction/ThreadLocalTransactionManager.h"
 #include "util/Base64.h"
+#include "l10n/SystemLocaleManager.h"
 
 using namespace std;
 using namespace Poco;
@@ -54,6 +55,7 @@ private:
 	NotificationDispatcher *m_notifiactionDispatcher;
 	VerifiedIdentity m_lastIdentity;
 	TestableAuthService *m_service;
+	LocaleManager::Ptr m_localeManager;
 	ThreadLocalTransactionManager m_transactionManager;
 };
 
@@ -114,6 +116,7 @@ void AuthServiceImplTest::setUp()
 	m_manager.setSessionExpireTime(1);
 
 	m_notifiactionDispatcher = new NotificationDispatcher();
+	m_localeManager = new SystemLocaleManager();
 
 	MockNotificationObserver observer(m_lastIdentity);
 	m_notifiactionDispatcher->addObserver(&observer);
@@ -124,6 +127,7 @@ void AuthServiceImplTest::setUp()
 	m_service->setVerifiedIdentityDao(&m_verifiedIdentityDao);
 	m_service->setSessionManager(&m_manager);
 	m_service->setNotificationDispatcher(m_notifiactionDispatcher);
+	m_service->setLocaleManager(m_localeManager);
 
 	m_transactionManager.setFactory(&NoTransactionFactory::instance());
 	m_service->setTransactionManager(&m_transactionManager);
@@ -173,6 +177,7 @@ void AuthServiceImplTest::testCreateUser()
 	AuthResult result;
 	result.setFirstName("Freddie");
 	result.setLastName("Mercury");
+	result.setLocale("en_US");
 
 	const User &user = m_service->createUser(result);
 	CPPUNIT_ASSERT(user.firstName() == "Freddie");

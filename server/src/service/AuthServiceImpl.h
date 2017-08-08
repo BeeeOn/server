@@ -7,6 +7,7 @@
 #include "dao/IdentityDao.h"
 #include "dao/UserDao.h"
 #include "dao/VerifiedIdentityDao.h"
+#include "l10n/LocaleManager.h"
 #include "notification/NotificationDispatcher.h"
 #include "provider/AuthProvider.h"
 #include "server/SessionManager.h"
@@ -60,6 +61,11 @@ public:
 		m_notificationService = service;
 	}
 
+	void setLocaleManager(LocaleManager::Ptr manager)
+	{
+		m_localeManager = manager;
+	}
+
 	const ExpirableSession::Ptr login(const Credentials &cred);
 
 	void logout(const std::string &id);
@@ -95,6 +101,7 @@ private:
 	VerifiedIdentityDao *m_verifiedIdentityDao;
 	Providers m_providers;
 	NotificationDispatcher *m_notificationService;
+	LocaleManager::Ptr m_localeManager;
 };
 
 }
