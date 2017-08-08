@@ -91,7 +91,7 @@ public:
 	}
 
 protected:
-	AccessLevel fetchAccessLevel(const User &user, const Gateway &gateway);
+	AccessLevel fetchAccessLevel(const PolicyContext &context, const Gateway &gateway);
 	void assureAtLeast(
 			const AccessLevel &current,
 			const AccessLevel &required);
