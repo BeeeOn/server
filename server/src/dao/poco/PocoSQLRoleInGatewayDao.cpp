@@ -11,6 +11,8 @@
 #include "dao/poco/PocoDaoManager.h"
 #include "model/User.h"
 #include "model/Gateway.h"
+#include "model/Identity.h"
+#include "model/VerifiedIdentity.h"
 #include "transaction/TransactionManager.h"
 
 using namespace std;
@@ -42,6 +44,8 @@ PocoSQLRoleInGatewayDao::PocoSQLRoleInGatewayDao()
 	registerQuery(m_queryFetchAccessLevel);
 	registerQuery(m_queryFetchAccessibleGateways);
 	registerQuery(m_queryHasOnlyNonAdminExcept);
+	registerQuery(m_queryCanSeeIdentity);
+	registerQuery(m_queryCanSeeVerifiedIdentity);
 }
 
 void PocoSQLRoleInGatewayDao::create(RoleInGateway &role)
@@ -272,6 +276,48 @@ void PocoSQLRoleInGatewayDao::fetchAccessibleGateways(
 	execute(sql);
 	RecordSet result(sql);
 	PocoSQLGatewayDao::parseMany<Gateway>(result, list);
+}
+
+bool PocoSQLRoleInGatewayDao::canSeeIdentity(
+		const Identity &identity,
+		const User &user)
+{
+	assureHasId(identity);
+	assureHasId(user);
+
+	string identityID(identity.id().toString());
+	string userID(user.id().toString());
+	bool canSee = false;
+
+	Statement sql = (session() << m_queryCanSeeIdentity(),
+		use(identityID, "identity_id"),
+		use(userID, "user_id"),
+		into(canSee)
+	);
+
+	execute(sql);
+	return canSee;
+}
+
+bool PocoSQLRoleInGatewayDao::canSeeVerifiedIdentity(
+		const VerifiedIdentity &identity,
+		const User &user)
+{
+	assureHasId(identity);
+	assureHasId(user);
+
+	string identityID(identity.id().toString());
+	string userID(user.id().toString());
+	bool canSee = false;
+
+	Statement sql = (session() << m_queryCanSeeVerifiedIdentity(),
+		use(identityID, "identity_id"),
+		use(userID, "user_id"),
+		into(canSee)
+	);
+
+	execute(sql);
+	return canSee;
 }
 
 bool PocoSQLRoleInGatewayDao::parseSingle(Row &result,

@@ -14,6 +14,9 @@ class Row;
 
 namespace BeeeOn {
 
+class Identity;
+class VerifiedIdentity;
+
 class PocoSQLRoleInGatewayDao :
 		public PocoAbstractDao,
 		public RoleInGatewayDao {
@@ -46,6 +49,13 @@ public:
 			std::vector<Gateway> &list,
 			const User &user,
 			const AccessLevel &atLeast = AccessLevel::any()) override;
+
+	bool canSeeIdentity(
+		const Identity &identity,
+		const User &user) override;
+	bool canSeeVerifiedIdentity(
+		const VerifiedIdentity &identity,
+		const User &user) override;
 
 	template <typename R>
 	static bool parseSingle(Poco::Data::RecordSet &result,
@@ -93,6 +103,8 @@ private:
 	SQLQuery m_queryFetchAccessLevel {"roles_in_gateway.fetch.access_level"};
 	SQLQuery m_queryFetchAccessibleGateways {"roles_in_gateway.fetch.accessible.gateways"};
 	SQLQuery m_queryHasOnlyNonAdminExcept {"roles_in_gateway.has.only.given.level.except"};
+	SQLQuery m_queryCanSeeIdentity   {"roles_in_gateway.can.see.identity"};
+	SQLQuery m_queryCanSeeVerifiedIdentity {"roles_in_gateway.can.see.verified_identity"};
 };
 
 }
