@@ -1,8 +1,6 @@
 #ifndef BEEEON_POLICY_CONTEXT_H
 #define BEEEON_POLICY_CONTEXT_H
 
-#include <Poco/Exception.h>
-
 namespace BeeeOn {
 
 class User;
@@ -19,29 +17,11 @@ public:
 
 class UserPolicyContext : public PolicyContext {
 public:
-	UserPolicyContext(User &user):
-		m_user(&user)
-	{
-	}
+	UserPolicyContext(User &user);
+	UserPolicyContext();
 
-	UserPolicyContext():
-		m_user(0)
-	{
-	}
-
-	void setUser(User &user)
-	{
-		m_user = &user;
-	}
-
-	const User &user() const override
-	{
-		if (m_user)
-			return *m_user;
-
-		throw Poco::IllegalStateException(
-				"no user has been specified");
-	}
+	void setUser(User &user);
+	const User &user() const override;
 
 private:
 	User *m_user;
