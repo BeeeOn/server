@@ -10,7 +10,7 @@ namespace BeeeOn {
  * Relation from a target to its base.
  */
 template <typename T, typename Base>
-class Relation : public AbstractPolicyContext {
+class Relation : public UserPolicyContext {
 public:
 	Relation(T &target, const Base &base):
 		m_target(target),

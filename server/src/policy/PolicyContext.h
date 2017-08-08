@@ -17,14 +17,14 @@ public:
 	virtual const User &user() const = 0;
 };
 
-class AbstractPolicyContext : public PolicyContext {
+class UserPolicyContext : public PolicyContext {
 public:
-	AbstractPolicyContext(User &user):
+	UserPolicyContext(User &user):
 		m_user(&user)
 	{
 	}
 
-	AbstractPolicyContext():
+	UserPolicyContext():
 		m_user(0)
 	{
 	}

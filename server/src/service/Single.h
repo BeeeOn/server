@@ -10,7 +10,7 @@ namespace BeeeOn {
  * Single entity representation.
  */
 template <typename T>
-class Single : public AbstractPolicyContext {
+class Single : public UserPolicyContext {
 public:
 	Single(T &target):
 		m_target(target)
