@@ -92,6 +92,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/policy/RoleAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/SensorHistoryAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/DefaultAccessPolicy.cpp
+	${PROJECT_SOURCE_DIR}/policy/PolicyContext.cpp
 	${PROJECT_SOURCE_DIR}/util/Startup.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoDaoManager.cpp
 	${PROJECT_SOURCE_DIR}/rpc/RPCConnector.cpp

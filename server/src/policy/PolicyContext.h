@@ -12,6 +12,8 @@ class User;
  */
 class PolicyContext {
 public:
+	virtual ~PolicyContext();
+
 	virtual const User &user() const = 0;
 };
 
