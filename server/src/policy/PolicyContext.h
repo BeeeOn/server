@@ -1,6 +1,8 @@
 #ifndef BEEEON_POLICY_CONTEXT_H
 #define BEEEON_POLICY_CONTEXT_H
 
+#include "util/Castable.h"
+
 namespace BeeeOn {
 
 class User;
@@ -8,7 +10,7 @@ class User;
 /**
  * Interface providing a context to the policy framework.
  */
-class PolicyContext {
+class PolicyContext : public Castable {
 public:
 	virtual ~PolicyContext();
 
