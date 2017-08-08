@@ -5,7 +5,6 @@
 #include "dao/RoleInGatewayDao.h"
 #include "dao/VerifiedIdentityDao.h"
 #include "di/Injectable.h"
-#include "policy/GatewayAccessPolicy.h"
 #include "server/AccessLevel.h"
 #include "service/GatewayServiceImpl.h"
 
@@ -28,8 +27,7 @@ GatewayServiceImpl::GatewayServiceImpl():
 	m_gatewayDao(&NullGatewayDao::instance()),
 	m_roleInGatewayDao(&NullRoleInGatewayDao::instance()),
 	m_identityDao(&NullIdentityDao::instance()),
-	m_rpc(&NullGatewayRPC::instance()),
-	m_accessPolicy(&NullGatewayAccessPolicy::instance())
+	m_rpc(&NullGatewayRPC::instance())
 {
 }
 
@@ -59,16 +57,15 @@ void GatewayServiceImpl::setGatewayRPC(GatewayRPC *rpc)
 	m_rpc = rpc? rpc : &NullGatewayRPC::instance();
 }
 
-void GatewayServiceImpl::setAccessPolicy(GatewayAccessPolicy *policy)
+void GatewayServiceImpl::setAccessPolicy(GatewayAccessPolicy::Ptr policy)
 {
-	m_accessPolicy = policy? policy :
-		&NullGatewayAccessPolicy::instance();
+	m_accessPolicy = policy;
 }
 
 bool GatewayServiceImpl::doRegisterGateway(SingleWithData<Gateway> &input,
 		const VerifiedIdentity &verifiedIdentity)
 {
-	m_accessPolicy->assureRegister(input, input.target());
+	m_accessPolicy->assure(GatewayAccessPolicy::ACTION_USER_REGISTER, input, input.target());
 
 	VerifiedIdentity tmp(verifiedIdentity);
 
@@ -93,14 +90,14 @@ bool GatewayServiceImpl::doRegisterGateway(SingleWithData<Gateway> &input,
 
 bool GatewayServiceImpl::doFetch(Single<Gateway> &input)
 {
-	m_accessPolicy->assureGet(input, input.target());
+	m_accessPolicy->assure(GatewayAccessPolicy::ACTION_USER_GET, input, input.target());
 
 	return m_gatewayDao->fetch(input.target());
 }
 
 bool GatewayServiceImpl::doFetch(Single<LegacyGateway> &input)
 {
-	m_accessPolicy->assureGet(input, input.target());
+	m_accessPolicy->assure(GatewayAccessPolicy::ACTION_USER_GET, input, input.target());
 
 	return m_gatewayDao->fetch(input.target(), input.user());
 }
@@ -120,7 +117,7 @@ bool GatewayServiceImpl::doUpdate(SingleWithData<Gateway> &input)
 {
 	Gateway &gateway = input.target();
 
-	m_accessPolicy->assureUpdate(input, gateway);
+	m_accessPolicy->assure(GatewayAccessPolicy::ACTION_USER_UPDATE, input, gateway);
 
 	if (!m_gatewayDao->fetch(gateway))
 		throw NotFoundException("gateway does not exist");
@@ -133,7 +130,7 @@ bool GatewayServiceImpl::doUnregister(Single<Gateway> &input)
 {
 	Gateway &gateway = input.target();
 
-	m_accessPolicy->assureUnregister(input, input.target());
+	m_accessPolicy->assure(GatewayAccessPolicy::ACTION_USER_UNREGISTER, input, input.target());
 
 	// if there would be only roles without admin access level
 	// remove all the roles (unregister fro mthe gateway entirely)
@@ -149,7 +146,7 @@ bool GatewayServiceImpl::doUnregister(Single<Gateway> &input)
 
 void GatewayServiceImpl::doScanDevices(Single<Gateway> &input)
 {
-	m_accessPolicy->assureScanDevices(input, input.target());
+	m_accessPolicy->assure(GatewayAccessPolicy::ACTION_USER_SCAN, input, input.target());
 
 	m_rpc->sendListen(input.target());
 }

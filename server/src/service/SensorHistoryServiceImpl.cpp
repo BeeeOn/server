@@ -3,7 +3,6 @@
 #include "dao/SensorHistoryDao.h"
 #include "dao/DeviceDao.h"
 #include "di/Injectable.h"
-#include "policy/SensorHistoryAccessPolicy.h"
 #include "service/SensorHistoryServiceImpl.h"
 #include "service/ValueConsumer.h"
 
@@ -21,8 +20,7 @@ BEEEON_OBJECT_END(BeeeOn, SensorHistoryServiceImpl)
 
 SensorHistoryServiceImpl::SensorHistoryServiceImpl():
 	m_dao(&NullSensorHistoryDao::instance()),
-	m_deviceDao(&NullDeviceDao::instance()),
-	m_policy(&NullSensorHistoryAccessPolicy::instance())
+	m_deviceDao(&NullDeviceDao::instance())
 {
 }
 
@@ -38,10 +36,9 @@ void SensorHistoryServiceImpl::setDeviceDao(DeviceDao *dao)
 		&NullDeviceDao::instance() : dao;
 }
 
-void SensorHistoryServiceImpl::setAccessPolicy(SensorHistoryAccessPolicy *policy)
+void SensorHistoryServiceImpl::setAccessPolicy(SensorHistoryAccessPolicy::Ptr policy)
 {
-	m_policy = policy == NULL?
-		&NullSensorHistoryAccessPolicy::instance() : policy;
+	m_policy = policy;
 }
 
 void SensorHistoryServiceImpl::doFetchRange(
@@ -51,8 +48,8 @@ void SensorHistoryServiceImpl::doFetchRange(
 		const string &aggregator,
 		ValueConsumer &consumer)
 {
-	m_policy->assureFetchRange(
-		module, module.base(), module.target(), range);
+	m_policy->assure(SensorHistoryAccessPolicy::ACTION_USER_GET,
+			module, module.base());
 
 	Device device(module.base());
 	if (!m_deviceDao->fetch(device, device.gateway()))

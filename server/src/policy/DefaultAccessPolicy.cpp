@@ -47,56 +47,60 @@ void DefaultAccessPolicy::assureAtLeast(
 	}
 }
 
-void DefaultAccessPolicy::assureRegister(
+void DefaultAccessPolicy::assure(
+		const GatewayAccessPolicy::Action action,
 		const PolicyContext &context,
 		const Gateway &gateway)
 {
-	if (m_roleInGatewayDao->isRegistered(gateway))
-		throw InvalidAccessException("gateway "
+	switch (action) {
+	case GatewayAccessPolicy::ACTION_USER_REGISTER:
+		if (m_roleInGatewayDao->isRegistered(gateway)) {
+			throw InvalidAccessException("gateway "
 				+ gateway + " is already registered");
+		}
+
+		break;
+
+	case GatewayAccessPolicy::ACTION_USER_UNREGISTER:
+	case GatewayAccessPolicy::ACTION_USER_GET:
+		assureAtLeast(
+			fetchAccessLevel(context.user(), gateway), AccessLevel::guest());
+		break;
+
+	case GatewayAccessPolicy::ACTION_USER_UPDATE:
+	case GatewayAccessPolicy::ACTION_USER_SCAN:
+		assureAtLeast(
+			fetchAccessLevel(context.user(), gateway), AccessLevel::user());
+		break;
+
+	default:
+		throw InvalidAccessException("invalid action: " + to_string((int) action));
+	}
 }
 
-void DefaultAccessPolicy::assureGet(
+void DefaultAccessPolicy::assure(
+		const LocationAccessPolicy::Action action,
 		const PolicyContext &context,
 		const Gateway &gateway)
 {
-	assureAtLeast(
-		fetchAccessLevel(context.user(), gateway), AccessLevel::guest());
+	switch (action) {
+	case LocationAccessPolicy::ACTION_USER_CREATE:
+		assureAtLeast(
+			fetchAccessLevel(context.user(), gateway), AccessLevel::user());
+		break;
+
+	case LocationAccessPolicy::ACTION_USER_GET:
+		assureAtLeast(
+			fetchAccessLevel(context.user(), gateway), AccessLevel::guest());
+		break;
+
+	default:
+		throw InvalidAccessException("invalid action: " + to_string((int) action));
+	}
 }
 
-void DefaultAccessPolicy::assureUnregister(
-		const PolicyContext &context,
-		const Gateway &gateway)
-{
-	assureAtLeast(
-		fetchAccessLevel(context.user(), gateway), AccessLevel::guest());
-}
-
-void DefaultAccessPolicy::assureUpdate(
-		const PolicyContext &context,
-		const Gateway &gateway)
-{
-	assureAtLeast(
-		fetchAccessLevel(context.user(), gateway), AccessLevel::user());
-}
-
-void DefaultAccessPolicy::assureScanDevices(
-		const PolicyContext &context,
-		const Gateway &gateway)
-{
-	assureAtLeast(
-		fetchAccessLevel(context.user(), gateway), AccessLevel::user());
-}
-
-void DefaultAccessPolicy::assureCreateLocation(
-		const PolicyContext &context,
-		const Gateway &gateway)
-{
-	assureAtLeast(
-		fetchAccessLevel(context.user(), gateway), AccessLevel::user());
-}
-
-void DefaultAccessPolicy::assureGet(
+void DefaultAccessPolicy::assure(
+		const LocationAccessPolicy::Action action,
 		const PolicyContext &context,
 		const Location &location)
 {
@@ -104,35 +108,31 @@ void DefaultAccessPolicy::assureGet(
 	if (!m_locationDao->fetch(tmp))
 		throw InvalidAccessException("no such location " + location);
 
-	assureAtLeast(
-		fetchAccessLevel(context.user(), tmp.gateway()), AccessLevel::guest());
+	const Gateway &gateway = tmp.gateway();
+
+	switch (action) {
+	case LocationAccessPolicy::ACTION_USER_GET:
+		assureAtLeast(
+			fetchAccessLevel(context.user(), gateway), AccessLevel::guest());
+		break;
+
+	case LocationAccessPolicy::ACTION_USER_UPDATE:
+		assureAtLeast(
+			fetchAccessLevel(context.user(), gateway), AccessLevel::user());
+		break;
+
+	case LocationAccessPolicy::ACTION_USER_REMOVE:
+		assureAtLeast(
+			fetchAccessLevel(context.user(), gateway), AccessLevel::user());
+		break;
+
+	default:
+		throw InvalidAccessException("invalid action: " + to_string((int) action));
+	}
 }
 
-void DefaultAccessPolicy::assureUpdate(
-		const PolicyContext &context,
-		const Location &location)
-{
-	Location tmp(location);
-	if (!m_locationDao->fetch(tmp))
-		throw InvalidAccessException("no such location " + location);
-
-	assureAtLeast(
-		fetchAccessLevel(context.user(), tmp.gateway()), AccessLevel::user());
-}
-
-void DefaultAccessPolicy::assureRemove(
-		const PolicyContext &context,
-		const Location &location)
-{
-	Location tmp(location);
-	if (!m_locationDao->fetch(tmp))
-		throw InvalidAccessException("no such location " + location);
-
-	assureAtLeast(
-		fetchAccessLevel(context.user(), tmp.gateway()), AccessLevel::user());
-}
-
-void DefaultAccessPolicy::assureGet(
+void DefaultAccessPolicy::assure(
+		const DeviceAccessPolicy::Action action,
 		const PolicyContext &context,
 		const Device &device,
 		const Gateway &gateway)
@@ -144,125 +144,98 @@ void DefaultAccessPolicy::assureGet(
 				+ device + " for gateway " + gateway);
 	}
 
-	assureAtLeast(fetchAccessLevel(context.user(), gateway),
-			AccessLevel::guest());
+	doAssure(action, context, gateway);
 }
 
-void DefaultAccessPolicy::assureGetMany(
+void DefaultAccessPolicy::assure(
+		const DeviceAccessPolicy::Action action,
+		const PolicyContext &context,
+		const Gateway &gateway)
+{
+
+	doAssure(action, context, gateway);
+}
+
+void DefaultAccessPolicy::doAssure(
+	const DeviceAccessPolicy::Action action,
+	const PolicyContext &context,
+	const Gateway &gateway)
+{
+	switch (action) {
+	case DeviceAccessPolicy::ACTION_USER_GET:
+		assureAtLeast(
+			fetchAccessLevel(context.user(), gateway), AccessLevel::guest());
+		break;
+
+	case DeviceAccessPolicy::ACTION_USER_UNREGISTER:
+	case DeviceAccessPolicy::ACTION_USER_ACTIVATE:
+	case DeviceAccessPolicy::ACTION_USER_UPDATE_AND_ACTIVATE:
+		assureAtLeast(
+			fetchAccessLevel(context.user(), gateway), AccessLevel::admin());
+		break;
+
+	case DeviceAccessPolicy::ACTION_USER_UPDATE:
+		assureAtLeast(
+			fetchAccessLevel(context.user(), gateway), AccessLevel::user());
+		break;
+
+	default:
+		throw InvalidAccessException("invalid action: " + to_string((int) action));
+	}
+}
+
+void DefaultAccessPolicy::assureMany(
+		const DeviceAccessPolicy::Action action,
 		const PolicyContext &context,
 		const list<Device> &devices)
 {
 	set<GatewayID> seen;
 
 	for (auto &device : devices) {
-		const GatewayID &id = device.gateway().id();
-
 		if (!device.hasId())
 			throw InvalidAccessException(
 				"no id specified for device");
 
-		if (id.isNull())
+		if (device.gateway().id().isNull())
 			throw InvalidAccessException(
 				"no id specified for gateway");
 
-		if (seen.find(id) != seen.end())
+		if (seen.find(device.gateway().id()) != seen.end())
 			continue;
 
-		Gateway gateway(id);
-		assureAtLeast(fetchAccessLevel(context.user(), gateway),
-				AccessLevel::guest());
-
-		seen.insert(id);
+		doAssure(action, context, device.gateway());
+		seen.insert(device.gateway().id());
 	}
 }
 
-void DefaultAccessPolicy::assureListActiveDevices(
-		const PolicyContext &context,
-		const Gateway &gateway)
-{
-	assureAtLeast(
-		fetchAccessLevel(context.user(), gateway), AccessLevel::guest());
-}
-
-void DefaultAccessPolicy::assureListInactiveDevices(
-		const PolicyContext &context,
-		const Gateway &gateway)
-{
-	assureAtLeast(
-		fetchAccessLevel(context.user(), gateway), AccessLevel::admin());
-}
-
-void DefaultAccessPolicy::assureUnregister(
-		const PolicyContext &context,
-		const Device &device,
-		const Gateway &gateway)
-{
-	Device tmp(device);
-
-	if (!m_deviceDao->fetch(tmp, gateway)) {
-		throw InvalidAccessException("no such device "
-				+ device + " for gateway " + gateway);
-	}
-
-	assureAtLeast(fetchAccessLevel(context.user(), gateway),
-			AccessLevel::admin());
-}
-
-void DefaultAccessPolicy::assureActivate(
-		const PolicyContext &context,
-		const Device &device,
-		const Gateway &gateway)
-{
-	Device tmp(device);
-
-	if (!m_deviceDao->fetch(tmp, gateway)) {
-		throw InvalidAccessException("no such device "
-				+ device + " for gateway " + gateway);
-	}
-
-	assureAtLeast(fetchAccessLevel(context.user(), gateway),
-			AccessLevel::admin());
-}
-
-void DefaultAccessPolicy::assureUpdate(
-		const PolicyContext &context,
-		const Device &device,
-		const Gateway &gateway)
-{
-	Device tmp(device);
-
-	if (!m_deviceDao->fetch(tmp, gateway)) {
-		throw InvalidAccessException("no such device "
-				+ device + " for gateway " + gateway);
-	}
-
-	assureAtLeast(fetchAccessLevel(context.user(), gateway),
-			AccessLevel::user());
-}
-
-void DefaultAccessPolicy::assureInvite(
-	const PolicyContext &context,
-	const Gateway &gateway,
-	const AccessLevel &as)
-{
-	/**
-	 * Only admin can invite others.
-	 */
-	assureAtLeast(
-		fetchAccessLevel(context.user(), gateway),
-		AccessLevel::admin());
-}
-
-void DefaultAccessPolicy::assureList(
+void DefaultAccessPolicy::assure(
+	const RoleAccessPolicy::Action action,
 	const PolicyContext &context,
 	const Gateway &gateway)
 {
-	assureAtLeast(
-		fetchAccessLevel(context.user(), gateway),
-		AccessLevel::guest());
+	switch (action) {
+	case RoleAccessPolicy::ACTION_USER_GET:
+		assureAtLeast(
+			fetchAccessLevel(context.user(), gateway),
+			AccessLevel::guest());
+		break;
+
+	case RoleAccessPolicy::ACTION_USER_INVITE:
+		/**
+		 * Only admin can invite others.
+		 */
+		assureAtLeast(
+			fetchAccessLevel(context.user(), gateway),
+			AccessLevel::admin());
+		break;
+
+	default:
+		throw InvalidAccessException("invalid action: " + to_string((int) action));
+	}
 }
 
-void DefaultAccessPolicy::assureRemove(
+void DefaultAccessPolicy::assure(
+	const RoleAccessPolicy::Action action,
 	const PolicyContext &context,
 	const RoleInGateway &role)
 {
@@ -270,34 +243,46 @@ void DefaultAccessPolicy::assureRemove(
 	if (!m_roleInGatewayDao->fetch(tmp))
 		throw InvalidAccessException("no such role " + tmp);
 
-	assureAtLeast(
-		fetchAccessLevel(context.user(), tmp.gateway()),
-		AccessLevel::admin());
+	switch (action) {
+	case RoleAccessPolicy::ACTION_USER_GET:
+		assureAtLeast(
+			fetchAccessLevel(context.user(), tmp.gateway()),
+			AccessLevel::guest());
+		break;
+
+	case RoleAccessPolicy::ACTION_USER_UPDATE:
+		if (m_roleInGatewayDao->isUser(role, context.user()))
+			throw InvalidAccessException("cannot change own access level");
+
+		assureAtLeast(
+			fetchAccessLevel(context.user(), tmp.gateway()),
+			AccessLevel::admin());
+		break;
+
+	case RoleAccessPolicy::ACTION_USER_REMOVE:
+		assureAtLeast(
+			fetchAccessLevel(context.user(), tmp.gateway()),
+			AccessLevel::admin());
+		break;
+
+	default:
+		throw InvalidAccessException("invalid action: " + to_string((int) action));
+	}
 }
 
-void DefaultAccessPolicy::assureUpdate(
+void DefaultAccessPolicy::assure(
+	const SensorHistoryAccessPolicy::Action action,
 	const PolicyContext &context,
-	const RoleInGateway &role)
+	const Device &device)
 {
-	if (m_roleInGatewayDao->isUser(role, context.user()))
-		throw InvalidAccessException("cannot change own access level");
+	switch (action) {
+	case SensorHistoryAccessPolicy::ACTION_USER_GET:
+		assureAtLeast(
+			fetchAccessLevel(context.user(), device.gateway()),
+			AccessLevel::guest());
+		break;
 
-	RoleInGateway tmp(role);
-	if (!m_roleInGatewayDao->fetch(tmp))
-		throw InvalidAccessException("no such role " + tmp);
-
-	assureAtLeast(
-		fetchAccessLevel(context.user(), tmp.gateway()),
-		AccessLevel::admin());
-}
-
-void DefaultAccessPolicy::assureFetchRange(
-	const PolicyContext &context,
-	const Device &device,
-	const ModuleInfo &module,
-	const TimeInterval &range)
-{
-	assureAtLeast(
-		fetchAccessLevel(context.user(), device.gateway()),
-		AccessLevel::guest());
+	default:
+		throw InvalidAccessException("invalid action: " + to_string((int) action));
+	}
 }

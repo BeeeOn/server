@@ -8,7 +8,6 @@
 #include "di/Injectable.h"
 #include "model/Device.h"
 #include "model/Gateway.h"
-#include "policy/DeviceAccessPolicy.h"
 #include "rpc/GatewayRPC.h"
 #include "service/DeviceServiceImpl.h"
 #include "work/DeviceUnpairWork.h"
@@ -32,8 +31,7 @@ DeviceServiceImpl::DeviceServiceImpl():
 	m_dao(&NullDeviceDao::instance()),
 	m_propertyDao(&NullDevicePropertyDao::instance()),
 	m_gatewayRPC(&NullGatewayRPC::instance()),
-	m_workFacade(&NullWorkFacade::instance()),
-	m_policy(&NullDeviceAccessPolicy::instance())
+	m_workFacade(&NullWorkFacade::instance())
 {
 }
 
@@ -57,20 +55,22 @@ void DeviceServiceImpl::setWorkFacade(WorkFacade *facade)
 	m_workFacade = facade? facade : &NullWorkFacade::instance();
 }
 
-void DeviceServiceImpl::setAccessPolicy(DeviceAccessPolicy *policy)
+void DeviceServiceImpl::setAccessPolicy(DeviceAccessPolicy::Ptr policy)
 {
-	m_policy = policy? policy : &NullDeviceAccessPolicy::instance();
+	m_policy = policy;
 }
 
 bool DeviceServiceImpl::doFetch(Relation<Device, Gateway> &input)
 {
-	m_policy->assureGet(input, input.target(), input.base());
+	m_policy->assure(DeviceAccessPolicy::ACTION_USER_GET,
+			input, input.target(), input.base());
 	return m_dao->fetch(input.target(), input.base());
 }
 
 void DeviceServiceImpl::doFetchMany(Single<list<Device>> &input)
 {
-	m_policy->assureGetMany(input, input.target());
+	m_policy->assureMany(DeviceAccessPolicy::ACTION_USER_GET,
+			input, input.target());
 
 	list<Device> &devices = input.target();
 	m_dao->fetchMany(devices);
@@ -87,7 +87,8 @@ void DeviceServiceImpl::doFetchMany(Relation<list<Device>, Gateway> &input)
 		Device &device = *it;
 
 		try {
-			m_policy->assureGet(input, device, input.base());
+			m_policy->assure(DeviceAccessPolicy::ACTION_USER_GET,
+					input, device, input.base());
 
 			if (!m_dao->fetch(device, input.base())) {
 				it = devices.erase(it);
@@ -106,19 +107,22 @@ void DeviceServiceImpl::doFetchMany(Relation<list<Device>, Gateway> &input)
 
 void DeviceServiceImpl::doFetchActiveBy(Relation<vector<Device>, Gateway> &input)
 {
-	m_policy->assureListActiveDevices(input, input.base());
+	m_policy->assure(DeviceAccessPolicy::ACTION_USER_GET,
+			input, input.base());
 	m_dao->fetchActiveBy(input.target(), input.base());
 }
 
 void DeviceServiceImpl::doFetchInactiveBy(Relation<vector<Device>, Gateway> &input)
 {
-	m_policy->assureListInactiveDevices(input, input.base());
+	m_policy->assure(DeviceAccessPolicy::ACTION_USER_GET,
+			input, input.base());
 	m_dao->fetchInactiveBy(input.target(), input.base());
 }
 
 Work DeviceServiceImpl::doUnregister(Relation<Device, Gateway> &input)
 {
-	m_policy->assureUnregister(input, input.target(), input.base());
+	m_policy->assure(DeviceAccessPolicy::ACTION_USER_UNREGISTER,
+			input, input.target(), input.base());
 
 	Device &device = input.target();
 
@@ -137,7 +141,8 @@ Work DeviceServiceImpl::doUnregister(Relation<Device, Gateway> &input)
 
 bool DeviceServiceImpl::doActivate(Relation<Device, Gateway> &input)
 {
-	m_policy->assureActivate(input, input.target(), input.base());
+	m_policy->assure(DeviceAccessPolicy::ACTION_USER_ACTIVATE,
+			input, input.target(), input.base());
 
 	Device &device = input.target();
 
@@ -169,7 +174,8 @@ bool DeviceServiceImpl::prepareUpdate(RelationWithData<Device, Gateway> &input)
 
 bool DeviceServiceImpl::doUpdate(RelationWithData<Device, Gateway> &input)
 {
-	m_policy->assureUpdate(input, input.target(), input.base());
+	m_policy->assure(DeviceAccessPolicy::ACTION_USER_UPDATE,
+			input, input.target(), input.base());
 
 	if (!prepareUpdate(input))
 		return false;
@@ -180,8 +186,8 @@ bool DeviceServiceImpl::doUpdate(RelationWithData<Device, Gateway> &input)
 bool DeviceServiceImpl::doUpdateAndActivate(
 		RelationWithData<Device, Gateway> &input)
 {
-	m_policy->assureUpdateAndActivate(input,
-			input.target(), input.base());
+	m_policy->assure(DeviceAccessPolicy::ACTION_USER_UPDATE_AND_ACTIVATE,
+			input, input.target(), input.base());
 
 	if (!prepareUpdate(input))
 		return false;
@@ -192,7 +198,8 @@ bool DeviceServiceImpl::doUpdateAndActivate(
 bool DeviceServiceImpl::doCreateProperty(RelationWithData<DeviceProperty, Device> &input)
 {
 	const Gateway &gateway = input.base().gateway();
-	m_policy->assureUpdate(input, input.base(), gateway);
+	m_policy->assure(DeviceAccessPolicy::ACTION_USER_UPDATE,
+			input, input.base(), gateway);
 
 	input.data().full(input.target());
 
@@ -202,7 +209,8 @@ bool DeviceServiceImpl::doCreateProperty(RelationWithData<DeviceProperty, Device
 bool DeviceServiceImpl::doUpdateProperty(RelationWithData<DeviceProperty, Device> &input)
 {
 	const Gateway &gateway = input.base().gateway();
-	m_policy->assureUpdate(input, input.base(), gateway);
+	m_policy->assure(DeviceAccessPolicy::ACTION_USER_UPDATE,
+			input, input.base(), gateway);
 
 	if (!m_propertyDao->fetch(input.target(), input.base()))
 		return false;
@@ -215,7 +223,8 @@ bool DeviceServiceImpl::doUpdateProperty(RelationWithData<DeviceProperty, Device
 bool DeviceServiceImpl::doRemoveProperty(Relation<const DeviceProperty, Device> &input)
 {
 	const Gateway &gateway = input.base().gateway();
-	m_policy->assureUpdate(input, input.base(), gateway);
+	m_policy->assure(DeviceAccessPolicy::ACTION_USER_UPDATE,
+			input, input.base(), gateway);
 
 	return m_propertyDao->remove(input.target(), input.base());
 }
@@ -223,7 +232,8 @@ bool DeviceServiceImpl::doRemoveProperty(Relation<const DeviceProperty, Device> 
 bool DeviceServiceImpl::doFindProperty(Relation<DeviceProperty, Device> &input)
 {
 	const Gateway &gateway = input.base().gateway();
-	m_policy->assureGet(input, input.base(), gateway);
+	m_policy->assure(DeviceAccessPolicy::ACTION_USER_GET,
+			input, input.base(), gateway);
 
 	return m_propertyDao->fetch(input.target(), input.base());
 }
@@ -231,7 +241,8 @@ bool DeviceServiceImpl::doFindProperty(Relation<DeviceProperty, Device> &input)
 void DeviceServiceImpl::doListProperties(Relation<list<DeviceProperty>, Device> &input)
 {
 	const Gateway &gateway = input.base().gateway();
-	m_policy->assureGet(input, input.base(), gateway);
+	m_policy->assure(DeviceAccessPolicy::ACTION_USER_GET,
+			input, input.base(), gateway);
 
 	return m_propertyDao->fetchByDevice(input.target(), input.base());
 }

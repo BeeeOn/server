@@ -1,6 +1,8 @@
 #ifndef BEEEON_ROLE_ACCESS_POLICY_H
 #define BEEEON_ROLE_ACCESS_POLICY_H
 
+#include <Poco/SharedPtr.h>
+
 namespace BeeeOn {
 
 class Identity;
@@ -11,46 +13,26 @@ class AccessLevel;
 
 class RoleAccessPolicy {
 public:
-	virtual void assureInvite(
-		const PolicyContext &context,
-		const Gateway &gateway,
-		const AccessLevel &as) = 0;
+	typedef Poco::SharedPtr<RoleAccessPolicy> Ptr;
 
-	virtual void assureList(
+	enum Action {
+		ACTION_USER_INVITE,
+		ACTION_USER_GET,
+		ACTION_USER_UPDATE,
+		ACTION_USER_REMOVE,
+	};
+
+	virtual ~RoleAccessPolicy();
+
+	virtual void assure(
+		const Action action,
 		const PolicyContext &context,
 		const Gateway &gateway) = 0;
 
-	virtual void assureRemove(
+	virtual void assure(
+		const Action action,
 		const PolicyContext &context,
 		const RoleInGateway &role) = 0;
-
-	virtual void assureUpdate(
-		const PolicyContext &context,
-		const RoleInGateway &role) = 0;
-};
-
-class NullRoleAccessPolicy : public RoleAccessPolicy {
-public:
-	NullRoleAccessPolicy();
-
-	void assureInvite(
-		const PolicyContext &context,
-		const Gateway &gateway,
-		const AccessLevel &as) override;
-
-	void assureList(
-		const PolicyContext &context,
-		const Gateway &gateway) override;
-
-	void assureRemove(
-		const PolicyContext &context,
-		const RoleInGateway &role) override;
-
-	void assureUpdate(
-		const PolicyContext &context,
-		const RoleInGateway &role) override;
-
-	static RoleAccessPolicy &instance();
 };
 
 }

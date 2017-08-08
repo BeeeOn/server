@@ -23,60 +23,47 @@ class DefaultAccessPolicy :
 public:
 	DefaultAccessPolicy();
 
-	void assureRegister(const PolicyContext &context,
-		const Gateway &gateway) override;
-	void assureGet(const PolicyContext &context,
-		const Gateway &gateway) override;
-	void assureUnregister(const PolicyContext &context,
-		const Gateway &gateway) override;
-	void assureUpdate(const PolicyContext &context,
-		const Gateway &gateway) override;
-	void assureScanDevices(const PolicyContext &context,
-		const Gateway &gateway) override;
-
-	void assureGet(const PolicyContext &context,
-		const Location &location);
-	void assureCreateLocation(const PolicyContext &context,
-		const Gateway &gateway);
-	void assureUpdate(const PolicyContext &context,
-		const Location &location);
-	void assureRemove(const PolicyContext &context,
-		const Location &location);
-
-	void assureGet(const PolicyContext &context,
-		const Device &device, const Gateway &gateway);
-	void assureGetMany(const PolicyContext &context,
-		const std::list<Device> &devices);
-	void assureListActiveDevices(const PolicyContext &context,
-		const Gateway &gateway);
-	void assureListInactiveDevices(const PolicyContext &context,
-		const Gateway &gateway);
-	void assureUnregister(const PolicyContext &context,
-		const Device &device, const Gateway &gateway);
-	void assureActivate(const PolicyContext &context,
-		const Device &device, const Gateway &gateway);
-	void assureUpdate(const PolicyContext &context,
-		const Device &device, const Gateway &gateway);
-
-	void assureInvite(
-		const PolicyContext &context,
-		const Gateway &gateway,
-		const AccessLevel &as) override;
-	void assureList(
+	void assure(
+		const GatewayAccessPolicy::Action action,
 		const PolicyContext &context,
 		const Gateway &gateway) override;
-	void assureRemove(
-		const PolicyContext &context,
-		const RoleInGateway &role) override;
-	void assureUpdate(
-		const PolicyContext &context,
-		const RoleInGateway &role) override;
 
-	void assureFetchRange(
+	void assure(
+		const LocationAccessPolicy::Action action,
+		const PolicyContext &context,
+		const Location &location) override;
+	void assure(
+		const LocationAccessPolicy::Action action,
+		const PolicyContext &context,
+		const Gateway &gateway) override;
+
+	void assure(
+		const DeviceAccessPolicy::Action action,
 		const PolicyContext &context,
 		const Device &device,
-		const ModuleInfo &module,
-		const TimeInterval &range) override;
+		const Gateway &gateway) override;
+	void assure(
+		const DeviceAccessPolicy::Action action,
+		const PolicyContext &context,
+		const Gateway &gateway) override;
+	void assureMany(
+		const DeviceAccessPolicy::Action action,
+		const PolicyContext &context,
+		const std::list<Device> &devices) override;
+
+	void assure(
+		const RoleAccessPolicy::Action action,
+		const PolicyContext &context,
+		const Gateway &gateway) override;
+	void assure(
+		const RoleAccessPolicy::Action action,
+		const PolicyContext &context,
+		const RoleInGateway &role) override;
+
+	void assure(
+		const SensorHistoryAccessPolicy::Action action,
+		const PolicyContext &context,
+		const Device &device) override;
 
 	void setUserDao(UserDao *dao)
 	{
@@ -108,6 +95,11 @@ protected:
 	void assureAtLeast(
 			const AccessLevel &current,
 			const AccessLevel &required);
+
+	void doAssure(
+		const DeviceAccessPolicy::Action action,
+		const PolicyContext &context,
+		const Gateway &gateway);
 
 private:
 	UserDao *m_userDao;

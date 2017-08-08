@@ -1,6 +1,8 @@
 #ifndef BEEEON_LOCATION_ACCESS_POLICY_H
 #define BEEEON_LOCATION_ACCESS_POLICY_H
 
+#include <Poco/SharedPtr.h>
+
 #include "server/Session.h"
 #include "model/Gateway.h"
 #include "model/Location.h"
@@ -12,36 +14,25 @@ class PolicyContext;
 
 class LocationAccessPolicy {
 public:
-	virtual void assureGet(
+	typedef Poco::SharedPtr<LocationAccessPolicy> Ptr;
+
+	enum Action {
+		ACTION_USER_GET,
+		ACTION_USER_CREATE,
+		ACTION_USER_UPDATE,
+		ACTION_USER_REMOVE,
+	};
+
+	virtual ~LocationAccessPolicy();
+
+	virtual void assure(
+			const Action action,
 			const PolicyContext &context,
 			const Location &location) = 0;
-	virtual void assureCreateLocation(
+	virtual void assure(
+			const Action action,
 			const PolicyContext &context,
 			const Gateway &gateway) = 0;
-	virtual void assureUpdate(
-			const PolicyContext &context,
-			const Location &location) = 0;
-	virtual void assureRemove(
-			const PolicyContext &context,
-			const Location &location) = 0;
-};
-
-class NullLocationAccessPolicy : public LocationAccessPolicy {
-public:
-	void assureGet(
-		const PolicyContext &context,
-		const Location &location) override;
-	void assureCreateLocation(
-		const PolicyContext &context,
-		const Gateway &gateway) override;
-	void assureUpdate(
-		const PolicyContext &context,
-		const Location &location) override;
-	void assureRemove(
-		const PolicyContext &context,
-		const Location &location) override;
-
-	static LocationAccessPolicy &instance();
 };
 
 }

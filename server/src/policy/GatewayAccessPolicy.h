@@ -1,6 +1,8 @@
 #ifndef BEEEON_GATEWAY_ACCESS_POLICY_H
 #define BEEEON_GATEWAY_ACCESS_POLICY_H
 
+#include <Poco/SharedPtr.h>
+
 #include "model/User.h"
 #include "model/Gateway.h"
 
@@ -10,42 +12,22 @@ class PolicyContext;
 
 class GatewayAccessPolicy {
 public:
-	virtual void assureRegister(
-			const PolicyContext &context,
-			const Gateway &gateway) = 0;
-	virtual void assureGet(
-			const PolicyContext &context,
-			const Gateway &gateway) = 0;
-	virtual void assureUnregister(
-			const PolicyContext &context,
-			const Gateway &gateway) = 0;
-	virtual void assureUpdate(
-			const PolicyContext &context,
-			const Gateway &gateway) = 0;
-	virtual void assureScanDevices(
-			const PolicyContext &context,
-			const Gateway &gateway) = 0;
-};
+	typedef Poco::SharedPtr<GatewayAccessPolicy> Ptr;
 
-class NullGatewayAccessPolicy : public GatewayAccessPolicy {
-public:
-	void assureRegister(
-		const PolicyContext &context,
-		const Gateway &gateway) override;
-	void assureGet(
-		const PolicyContext &context,
-		const Gateway &gateway) override;
-	void assureUnregister(
-		const PolicyContext &context,
-		const Gateway &gateway) override;
-	void assureUpdate(
-		const PolicyContext &context,
-		const Gateway &gateway) override;
-	void assureScanDevices(
-		const PolicyContext &context,
-		const Gateway &gateway) override;
+	enum Action {
+		ACTION_USER_REGISTER,
+		ACTION_USER_UNREGISTER,
+		ACTION_USER_GET,
+		ACTION_USER_UPDATE,
+		ACTION_USER_SCAN,
+	};
 
-	static GatewayAccessPolicy &instance();
+	virtual ~GatewayAccessPolicy();
+
+	virtual void assure(
+		const Action action,
+		const PolicyContext &context,
+		const Gateway &gateway) = 0;
 };
 
 }
