@@ -13,8 +13,6 @@ class User;
 class PolicyContext : public Castable {
 public:
 	virtual ~PolicyContext();
-
-	virtual const User &user() const = 0;
 };
 
 class UserPolicyContext : public PolicyContext {
@@ -23,7 +21,7 @@ public:
 	UserPolicyContext();
 
 	void setUser(User &user);
-	const User &user() const override;
+	const User &user() const;
 
 private:
 	User *m_user;

@@ -30,8 +30,13 @@ AccessLevel DefaultAccessPolicy::fetchAccessLevel(
 		const PolicyContext &context,
 		const Gateway &gateway)
 {
-	const AccessLevel level = m_roleInGatewayDao->fetchAccessLevel(gateway, context.user());
-	return level;
+	if (context.is<UserPolicyContext>()) {
+		const UserPolicyContext &uc = context.cast<UserPolicyContext>();
+		const AccessLevel level = m_roleInGatewayDao->fetchAccessLevel(gateway, uc.user());
+		return level;
+	}
+
+	throw InvalidAccessException("unexpected policy context");
 }
 
 void DefaultAccessPolicy::assureAtLeast(
@@ -49,7 +54,12 @@ void DefaultAccessPolicy::assureAtLeast(
 
 bool DefaultAccessPolicy::representsSelf(const RoleInGateway &role, const PolicyContext &self)
 {
-	return m_roleInGatewayDao->isUser(role, self.user());
+	if (self.is<UserPolicyContext>()) {
+		const UserPolicyContext &uc = self.cast<UserPolicyContext>();
+		return m_roleInGatewayDao->isUser(role, uc.user());
+	}
+
+	throw InvalidAccessException("unexpected policy context");
 }
 
 void DefaultAccessPolicy::assure(
