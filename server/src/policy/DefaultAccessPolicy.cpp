@@ -27,11 +27,16 @@ DefaultAccessPolicy::DefaultAccessPolicy()
 }
 
 AccessLevel DefaultAccessPolicy::fetchAccessLevel(
-		const User &user,
+		const PolicyContext &context,
 		const Gateway &gateway)
 {
-	const AccessLevel level = m_roleInGatewayDao->fetchAccessLevel(gateway, user);
-	return level;
+	if (context.is<UserPolicyContext>()) {
+		const UserPolicyContext &uc = context.cast<UserPolicyContext>();
+		const AccessLevel level = m_roleInGatewayDao->fetchAccessLevel(gateway, uc.user());
+		return level;
+	}
+
+	throw InvalidAccessException("unexpected policy context");
 }
 
 void DefaultAccessPolicy::assureAtLeast(
@@ -45,6 +50,16 @@ void DefaultAccessPolicy::assureAtLeast(
 				+ current.toString()
 				+ ")");
 	}
+}
+
+bool DefaultAccessPolicy::representsSelf(const RoleInGateway &role, const PolicyContext &self)
+{
+	if (self.is<UserPolicyContext>()) {
+		const UserPolicyContext &uc = self.cast<UserPolicyContext>();
+		return m_roleInGatewayDao->isUser(role, uc.user());
+	}
+
+	throw InvalidAccessException("unexpected policy context");
 }
 
 void DefaultAccessPolicy::assure(
@@ -64,13 +79,13 @@ void DefaultAccessPolicy::assure(
 	case GatewayAccessPolicy::ACTION_USER_UNREGISTER:
 	case GatewayAccessPolicy::ACTION_USER_GET:
 		assureAtLeast(
-			fetchAccessLevel(context.user(), gateway), AccessLevel::guest());
+			fetchAccessLevel(context, gateway), AccessLevel::guest());
 		break;
 
 	case GatewayAccessPolicy::ACTION_USER_UPDATE:
 	case GatewayAccessPolicy::ACTION_USER_SCAN:
 		assureAtLeast(
-			fetchAccessLevel(context.user(), gateway), AccessLevel::user());
+			fetchAccessLevel(context, gateway), AccessLevel::user());
 		break;
 
 	default:
@@ -86,12 +101,12 @@ void DefaultAccessPolicy::assure(
 	switch (action) {
 	case LocationAccessPolicy::ACTION_USER_CREATE:
 		assureAtLeast(
-			fetchAccessLevel(context.user(), gateway), AccessLevel::user());
+			fetchAccessLevel(context, gateway), AccessLevel::user());
 		break;
 
 	case LocationAccessPolicy::ACTION_USER_GET:
 		assureAtLeast(
-			fetchAccessLevel(context.user(), gateway), AccessLevel::guest());
+			fetchAccessLevel(context, gateway), AccessLevel::guest());
 		break;
 
 	default:
@@ -113,17 +128,17 @@ void DefaultAccessPolicy::assure(
 	switch (action) {
 	case LocationAccessPolicy::ACTION_USER_GET:
 		assureAtLeast(
-			fetchAccessLevel(context.user(), gateway), AccessLevel::guest());
+			fetchAccessLevel(context, gateway), AccessLevel::guest());
 		break;
 
 	case LocationAccessPolicy::ACTION_USER_UPDATE:
 		assureAtLeast(
-			fetchAccessLevel(context.user(), gateway), AccessLevel::user());
+			fetchAccessLevel(context, gateway), AccessLevel::user());
 		break;
 
 	case LocationAccessPolicy::ACTION_USER_REMOVE:
 		assureAtLeast(
-			fetchAccessLevel(context.user(), gateway), AccessLevel::user());
+			fetchAccessLevel(context, gateway), AccessLevel::user());
 		break;
 
 	default:
@@ -164,19 +179,19 @@ void DefaultAccessPolicy::doAssure(
 	switch (action) {
 	case DeviceAccessPolicy::ACTION_USER_GET:
 		assureAtLeast(
-			fetchAccessLevel(context.user(), gateway), AccessLevel::guest());
+			fetchAccessLevel(context, gateway), AccessLevel::guest());
 		break;
 
 	case DeviceAccessPolicy::ACTION_USER_UNREGISTER:
 	case DeviceAccessPolicy::ACTION_USER_ACTIVATE:
 	case DeviceAccessPolicy::ACTION_USER_UPDATE_AND_ACTIVATE:
 		assureAtLeast(
-			fetchAccessLevel(context.user(), gateway), AccessLevel::admin());
+			fetchAccessLevel(context, gateway), AccessLevel::admin());
 		break;
 
 	case DeviceAccessPolicy::ACTION_USER_UPDATE:
 		assureAtLeast(
-			fetchAccessLevel(context.user(), gateway), AccessLevel::user());
+			fetchAccessLevel(context, gateway), AccessLevel::user());
 		break;
 
 	default:
@@ -216,7 +231,7 @@ void DefaultAccessPolicy::assure(
 	switch (action) {
 	case RoleAccessPolicy::ACTION_USER_GET:
 		assureAtLeast(
-			fetchAccessLevel(context.user(), gateway),
+			fetchAccessLevel(context, gateway),
 			AccessLevel::guest());
 		break;
 
@@ -225,7 +240,7 @@ void DefaultAccessPolicy::assure(
 		 * Only admin can invite others.
 		 */
 		assureAtLeast(
-			fetchAccessLevel(context.user(), gateway),
+			fetchAccessLevel(context, gateway),
 			AccessLevel::admin());
 		break;
 
@@ -246,22 +261,22 @@ void DefaultAccessPolicy::assure(
 	switch (action) {
 	case RoleAccessPolicy::ACTION_USER_GET:
 		assureAtLeast(
-			fetchAccessLevel(context.user(), tmp.gateway()),
+			fetchAccessLevel(context, tmp.gateway()),
 			AccessLevel::guest());
 		break;
 
 	case RoleAccessPolicy::ACTION_USER_UPDATE:
-		if (m_roleInGatewayDao->isUser(role, context.user()))
+		if (representsSelf(role, context))
 			throw InvalidAccessException("cannot change own access level");
 
 		assureAtLeast(
-			fetchAccessLevel(context.user(), tmp.gateway()),
+			fetchAccessLevel(context, tmp.gateway()),
 			AccessLevel::admin());
 		break;
 
 	case RoleAccessPolicy::ACTION_USER_REMOVE:
 		assureAtLeast(
-			fetchAccessLevel(context.user(), tmp.gateway()),
+			fetchAccessLevel(context, tmp.gateway()),
 			AccessLevel::admin());
 		break;
 
@@ -278,7 +293,7 @@ void DefaultAccessPolicy::assure(
 	switch (action) {
 	case SensorHistoryAccessPolicy::ACTION_USER_GET:
 		assureAtLeast(
-			fetchAccessLevel(context.user(), device.gateway()),
+			fetchAccessLevel(context, device.gateway()),
 			AccessLevel::guest());
 		break;
 

@@ -91,10 +91,15 @@ public:
 	}
 
 protected:
-	AccessLevel fetchAccessLevel(const User &user, const Gateway &gateway);
+	AccessLevel fetchAccessLevel(const PolicyContext &context, const Gateway &gateway);
 	void assureAtLeast(
 			const AccessLevel &current,
 			const AccessLevel &required);
+
+	/**
+	 * Test whether the given role represents the PolicyContext.
+	 */
+	bool representsSelf(const RoleInGateway &role, const PolicyContext &self);
 
 	void doAssure(
 		const DeviceAccessPolicy::Action action,
