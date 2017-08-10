@@ -1,6 +1,5 @@
 #include <Poco/Exception.h>
 
-#include "dao/LocationDao.h"
 #include "di/Injectable.h"
 #include "service/LocationServiceImpl.h"
 
@@ -16,14 +15,13 @@ using namespace std;
 using namespace Poco;
 using namespace BeeeOn;
 
-LocationServiceImpl::LocationServiceImpl():
-	m_dao(&NullLocationDao::instance())
+LocationServiceImpl::LocationServiceImpl()
 {
 }
 
-void LocationServiceImpl::setLocationDao(LocationDao *dao)
+void LocationServiceImpl::setLocationDao(LocationDao::Ptr dao)
 {
-	m_dao = dao? dao : &NullLocationDao::instance();
+	m_dao = dao;
 }
 
 void LocationServiceImpl::setGatewayDao(GatewayDao::Ptr dao)

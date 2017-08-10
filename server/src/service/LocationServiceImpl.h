@@ -2,13 +2,12 @@
 #define BEEEON_LOCATION_SERVICE_IMPL_H
 
 #include "dao/GatewayDao.h"
+#include "dao/LocationDao.h"
 #include "policy/LocationAccessPolicy.h"
 #include "service/LocationService.h"
 #include "transaction/Transactional.h"
 
 namespace BeeeOn {
-
-class LocationDao;
 
 /**
  * Locations management.
@@ -17,7 +16,7 @@ class LocationServiceImpl : public LocationService, public Transactional {
 public:
 	LocationServiceImpl();
 
-	void setLocationDao(LocationDao *dao);
+	void setLocationDao(LocationDao::Ptr dao);
 	void setGatewayDao(GatewayDao::Ptr dao);
 	void setAccessPolicy(LocationAccessPolicy::Ptr policy);
 
@@ -60,7 +59,7 @@ protected:
 	bool doRemoveFrom(Relation<Location, Gateway> &input);
 
 private:
-	LocationDao *m_dao;
+	LocationDao::Ptr m_dao;
 	GatewayDao::Ptr m_gatewayDao;
 	LocationAccessPolicy::Ptr m_accessPolicy;
 };
