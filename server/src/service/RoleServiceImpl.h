@@ -3,6 +3,7 @@
 
 #include "dao/GatewayDao.h"
 #include "dao/IdentityDao.h"
+#include "dao/RoleInGatewayDao.h"
 #include "policy/RoleAccessPolicy.h"
 #include "service/RoleService.h"
 #include "transaction/Transactional.h"
@@ -15,8 +16,6 @@ class RoleInGateway;
 class LegacyRoleInGateway;
 class AccessLevel;
 
-class RoleInGatewayDao;
-
 class NotificationDispatcher;
 
 class RoleServiceImpl : public RoleService, public Transactional {
@@ -25,7 +24,7 @@ public:
 
 	void setIdentityDao(IdentityDao::Ptr dao);
 	void setGatewayDao(GatewayDao::Ptr dao);
-	void setRoleInGatewayDao(RoleInGatewayDao *dao);
+	void setRoleInGatewayDao(RoleInGatewayDao::Ptr dao);
 	void setAccessPolicy(RoleAccessPolicy::Ptr policy);
 	void setNotificationDispatcher(NotificationDispatcher *service);
 
@@ -68,7 +67,7 @@ protected:
 private:
 	IdentityDao::Ptr m_identityDao;
 	GatewayDao::Ptr m_gatewayDao;
-	RoleInGatewayDao *m_roleInGatewayDao;
+	RoleInGatewayDao::Ptr m_roleInGatewayDao;
 	RoleAccessPolicy::Ptr m_accessPolicy;
 	NotificationDispatcher *m_notificationDispatcher;
 };

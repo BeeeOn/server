@@ -5,6 +5,7 @@
 
 #include "dao/GatewayDao.h"
 #include "dao/IdentityDao.h"
+#include "dao/RoleInGatewayDao.h"
 #include "policy/GatewayAccessPolicy.h"
 #include "rpc/GatewayRPC.h"
 #include "service/GatewayService.h"
@@ -12,7 +13,6 @@
 
 namespace BeeeOn {
 
-class RoleInGatewayDao;
 class IdentityDao;
 class VerifiedIdentityDao;
 class GatewayRPC;
@@ -22,7 +22,7 @@ public:
 	GatewayServiceImpl();
 
 	void setGatewayDao(GatewayDao::Ptr dao);
-	void setRoleInGatewayDao(RoleInGatewayDao *dao);
+	void setRoleInGatewayDao(RoleInGatewayDao::Ptr dao);
 	void setIdentityDao(IdentityDao::Ptr dao);
 	void setVerifiedIdentityDao(VerifiedIdentityDao *dao);
 	void setGatewayRPC(GatewayRPC *rpc);
@@ -103,7 +103,7 @@ protected:
 
 private:
 	GatewayDao::Ptr m_gatewayDao;
-	RoleInGatewayDao *m_roleInGatewayDao;
+	RoleInGatewayDao::Ptr m_roleInGatewayDao;
 	IdentityDao::Ptr m_identityDao;
 	VerifiedIdentityDao *m_verifiedIdentityDao;
 	GatewayRPC *m_rpc;

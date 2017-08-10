@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include <Poco/SharedPtr.h>
+
 #include "model/Gateway.h"
 #include "model/RoleInGateway.h"
 #include "model/LegacyRoleInGateway.h"
@@ -14,6 +16,10 @@ class User;
 
 class RoleInGatewayDao {
 public:
+	typedef Poco::SharedPtr<RoleInGatewayDao> Ptr;
+
+	virtual ~RoleInGatewayDao();
+
 	virtual void create(RoleInGateway &role) = 0;
 	virtual bool update(RoleInGateway &role) = 0;
 	virtual bool fetch(RoleInGateway &role) = 0;
@@ -46,40 +52,6 @@ public:
 			std::vector<Gateway> &list,
 			const User &user,
 			const AccessLevel &atLeast = AccessLevel::any()) = 0;
-};
-
-class NullRoleInGatewayDao : public RoleInGatewayDao {
-public:
-	NullRoleInGatewayDao();
-
-	void create(RoleInGateway &role) override;
-	bool update(RoleInGateway &role) override;
-	bool fetch(RoleInGateway &role) override;
-	void fetchBy(std::vector<RoleInGateway> &roles,
-			const Gateway &gateway) override;
-	void fetchBy(std::vector<LegacyRoleInGateway> &roles,
-			const Gateway &gateway) override;
-	bool remove(const RoleInGateway &role) override;
-	bool remove(const Gateway &gateway,
-			const User &user)  override;
-	void removeAll(const Gateway &gateway) override;
-
-	bool isUser(const RoleInGateway &role, const User &user) override;
-	bool isRegistered(const Gateway &gateway) override;
-	bool hasOnlyNonAdminExcept(
-			const Gateway &gateway,
-			const User &user) override;
-
-	AccessLevel fetchAccessLevel(
-		const Gateway &gateway,
-		const User &user) override;
-
-	void fetchAccessibleGateways(
-		std::vector<Gateway> &list,
-		const User &user,
-		const AccessLevel &atLeast = AccessLevel::any()) override;
-
-	static RoleInGatewayDao &instance();
 };
 
 }
