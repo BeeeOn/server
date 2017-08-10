@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "dao/GatewayDao.h"
+#include "dao/IdentityDao.h"
 #include "policy/GatewayAccessPolicy.h"
 #include "rpc/GatewayRPC.h"
 #include "service/GatewayService.h"
@@ -22,7 +23,7 @@ public:
 
 	void setGatewayDao(GatewayDao::Ptr dao);
 	void setRoleInGatewayDao(RoleInGatewayDao *dao);
-	void setIdentityDao(IdentityDao *dao);
+	void setIdentityDao(IdentityDao::Ptr dao);
 	void setVerifiedIdentityDao(VerifiedIdentityDao *dao);
 	void setGatewayRPC(GatewayRPC *rpc);
 	void setAccessPolicy(GatewayAccessPolicy::Ptr policy);
@@ -103,7 +104,7 @@ protected:
 private:
 	GatewayDao::Ptr m_gatewayDao;
 	RoleInGatewayDao *m_roleInGatewayDao;
-	IdentityDao *m_identityDao;
+	IdentityDao::Ptr m_identityDao;
 	VerifiedIdentityDao *m_verifiedIdentityDao;
 	GatewayRPC *m_rpc;
 	GatewayAccessPolicy::Ptr m_accessPolicy;

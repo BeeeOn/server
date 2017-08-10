@@ -12,7 +12,7 @@ class IdentityServiceImpl : public IdentityService, public Transactional {
 public:
 	IdentityServiceImpl();
 
-	void setIdentityDao(IdentityDao *dao);
+	void setIdentityDao(IdentityDao::Ptr dao);
 	void setVerifiedIdentityDao(VerifiedIdentityDao *dao);
 
 	bool fetch(VerifiedIdentity &identity)
@@ -30,7 +30,7 @@ protected:
 	bool doFetch(Identity &identity);
 
 private:
-	IdentityDao *m_identityDao;
+	IdentityDao::Ptr m_identityDao;
 	VerifiedIdentityDao *m_verifiedIdentityDao;
 };
 

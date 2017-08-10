@@ -1,6 +1,5 @@
 #include <vector>
 
-#include "dao/IdentityDao.h"
 #include "dao/RoleInGatewayDao.h"
 #include "dao/VerifiedIdentityDao.h"
 #include "di/Injectable.h"
@@ -24,7 +23,6 @@ using namespace BeeeOn;
 
 GatewayServiceImpl::GatewayServiceImpl():
 	m_roleInGatewayDao(&NullRoleInGatewayDao::instance()),
-	m_identityDao(&NullIdentityDao::instance()),
 	m_rpc(&NullGatewayRPC::instance())
 {
 }
@@ -39,9 +37,9 @@ void GatewayServiceImpl::setRoleInGatewayDao(RoleInGatewayDao *dao)
 	m_roleInGatewayDao = dao? dao :&NullRoleInGatewayDao::instance();
 }
 
-void GatewayServiceImpl::setIdentityDao(IdentityDao *dao)
+void GatewayServiceImpl::setIdentityDao(IdentityDao::Ptr dao)
 {
-	m_identityDao = dao? dao :&NullIdentityDao::instance();
+	m_identityDao = dao;
 }
 
 void GatewayServiceImpl::setVerifiedIdentityDao(VerifiedIdentityDao *dao)
