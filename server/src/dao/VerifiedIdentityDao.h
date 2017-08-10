@@ -5,7 +5,6 @@
 
 #include <Poco/SharedPtr.h>
 
-#include "dao/IdentityDao.h"
 #include "dao/MockDao.h"
 #include "model/VerifiedIdentity.h"
 
