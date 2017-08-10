@@ -20,16 +20,15 @@ using namespace Poco;
 using namespace BeeeOn;
 
 DeviceUnpairWorkExecutor::DeviceUnpairWorkExecutor():
-	m_dao(&NullDeviceDao::instance()),
 	m_rpc(&NullGatewayRPC::instance()),
 	m_pollSleep(800),
 	m_maxAttempts(5)
 {
 }
 
-void DeviceUnpairWorkExecutor::setDeviceDao(DeviceDao *dao)
+void DeviceUnpairWorkExecutor::setDeviceDao(DeviceDao::Ptr dao)
 {
-	m_dao = dao == NULL? &NullDeviceDao::instance() : dao;
+	m_dao = dao;
 }
 
 void DeviceUnpairWorkExecutor::setGatewayRPC(GatewayRPC *rpc)

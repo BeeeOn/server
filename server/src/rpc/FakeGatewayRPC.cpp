@@ -17,7 +17,7 @@ class FakeGatewayRPC : public GatewayRPC,
 public:
 	FakeGatewayRPC();
 
-	void setDeviceDao(DeviceDao *dao);
+	void setDeviceDao(DeviceDao::Ptr dao);
 
 	void sendListen(const Gateway &gateway) override;
 	void unpairDevice(const Gateway &gateway,
@@ -25,17 +25,16 @@ public:
 	void pingGateway(const Gateway &gateway) override;
 
 private:
-	DeviceDao *m_deviceDao;
+	DeviceDao::Ptr m_deviceDao;
 };
 
-FakeGatewayRPC::FakeGatewayRPC():
-	m_deviceDao(&NullDeviceDao::instance())
+FakeGatewayRPC::FakeGatewayRPC()
 {
 }
 
-void FakeGatewayRPC::setDeviceDao(DeviceDao *dao)
+void FakeGatewayRPC::setDeviceDao(DeviceDao::Ptr dao)
 {
-	m_deviceDao = dao? dao : &NullDeviceDao::instance();
+	m_deviceDao = dao;
 }
 
 void FakeGatewayRPC::sendListen(const Gateway &gateway)

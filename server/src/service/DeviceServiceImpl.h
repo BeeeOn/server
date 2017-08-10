@@ -4,13 +4,13 @@
 #include <list>
 #include <vector>
 
+#include "dao/DeviceDao.h"
 #include "policy/DeviceAccessPolicy.h"
 #include "service/DeviceService.h"
 #include "transaction/Transactional.h"
 
 namespace BeeeOn {
 
-class DeviceDao;
 class DevicePropertyDao;
 class GatewayRPC;
 class WorkFacade;
@@ -22,7 +22,7 @@ class DeviceServiceImpl : public DeviceService, public Transactional {
 public:
 	DeviceServiceImpl();
 
-	void setDeviceDao(DeviceDao *dao);
+	void setDeviceDao(DeviceDao::Ptr dao);
 	void setDevicePropertyDao(DevicePropertyDao *dao);
 	void setGatewayRPC(GatewayRPC *rpc);
 	void setWorkFacade(WorkFacade *facade);
@@ -121,7 +121,7 @@ protected:
 			const Gateway &gateway, bool forceUpdate = false);
 
 private:
-	DeviceDao *m_dao;
+	DeviceDao::Ptr m_dao;
 	DevicePropertyDao *m_propertyDao;
 	GatewayRPC *m_gatewayRPC;
 	WorkFacade *m_workFacade;
