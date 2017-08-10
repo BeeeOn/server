@@ -10,8 +10,7 @@ BEEEON_OBJECT_END(BeeeOn, IdentityServiceImpl)
 
 using namespace BeeeOn;
 
-IdentityServiceImpl::IdentityServiceImpl():
-	m_verifiedIdentityDao(&NullVerifiedIdentityDao::instance())
+IdentityServiceImpl::IdentityServiceImpl()
 {
 }
 
@@ -20,15 +19,9 @@ void IdentityServiceImpl::setIdentityDao(IdentityDao::Ptr dao)
 	m_identityDao = dao;
 }
 
-void IdentityServiceImpl::setVerifiedIdentityDao(VerifiedIdentityDao *dao)
+void IdentityServiceImpl::setVerifiedIdentityDao(VerifiedIdentityDao::Ptr dao)
 {
-	if (dao == NULL) {
-		m_verifiedIdentityDao =
-			&NullVerifiedIdentityDao::instance();
-	}
-	else {
-		m_verifiedIdentityDao = dao;
-	}
+	m_verifiedIdentityDao = dao;
 }
 
 bool IdentityServiceImpl::doFetch(VerifiedIdentity &identity)

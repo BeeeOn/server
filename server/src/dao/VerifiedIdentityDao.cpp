@@ -12,17 +12,8 @@ using namespace std;
 using namespace Poco;
 using namespace BeeeOn;
 
-VerifiedIdentityDao &NullVerifiedIdentityDao::instance()
+VerifiedIdentityDao::~VerifiedIdentityDao()
 {
-	static Poco::SingletonHolder<NullVerifiedIdentityDao> singleton;
-	return *singleton.get();
-}
-
-void NullVerifiedIdentityDao::fetchBy(
-		vector<VerifiedIdentity> &identities,
-		const string email)
-{
-	throw NotImplementedException(__func__);
 }
 
 bool MockVerifiedIdentityDao::fetchBy(VerifiedIdentity &identity,

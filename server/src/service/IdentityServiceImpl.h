@@ -13,7 +13,7 @@ public:
 	IdentityServiceImpl();
 
 	void setIdentityDao(IdentityDao::Ptr dao);
-	void setVerifiedIdentityDao(VerifiedIdentityDao *dao);
+	void setVerifiedIdentityDao(VerifiedIdentityDao::Ptr dao);
 
 	bool fetch(VerifiedIdentity &identity)
 	{
@@ -31,7 +31,7 @@ protected:
 
 private:
 	IdentityDao::Ptr m_identityDao;
-	VerifiedIdentityDao *m_verifiedIdentityDao;
+	VerifiedIdentityDao::Ptr m_verifiedIdentityDao;
 };
 
 }

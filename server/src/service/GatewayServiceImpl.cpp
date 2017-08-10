@@ -1,6 +1,5 @@
 #include <vector>
 
-#include "dao/VerifiedIdentityDao.h"
 #include "di/Injectable.h"
 #include "server/AccessLevel.h"
 #include "service/GatewayServiceImpl.h"
@@ -40,10 +39,9 @@ void GatewayServiceImpl::setIdentityDao(IdentityDao::Ptr dao)
 	m_identityDao = dao;
 }
 
-void GatewayServiceImpl::setVerifiedIdentityDao(VerifiedIdentityDao *dao)
+void GatewayServiceImpl::setVerifiedIdentityDao(VerifiedIdentityDao::Ptr dao)
 {
-	m_verifiedIdentityDao = dao? dao :
-			&NullVerifiedIdentityDao::instance();
+	m_verifiedIdentityDao = dao;
 }
 
 void GatewayServiceImpl::setGatewayRPC(GatewayRPC *rpc)

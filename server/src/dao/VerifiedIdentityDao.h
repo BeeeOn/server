@@ -3,8 +3,9 @@
 
 #include <vector>
 
+#include <Poco/SharedPtr.h>
+
 #include "dao/IdentityDao.h"
-#include "dao/NullDao.h"
 #include "dao/MockDao.h"
 #include "model/VerifiedIdentity.h"
 
@@ -12,6 +13,10 @@ namespace BeeeOn {
 
 class VerifiedIdentityDao {
 public:
+	typedef Poco::SharedPtr<VerifiedIdentityDao> Ptr;
+
+	virtual ~VerifiedIdentityDao();
+
 	virtual void create(VerifiedIdentity &identity) = 0;
 	virtual bool fetch(VerifiedIdentity &identity) = 0;
 	virtual bool fetchBy(VerifiedIdentity &identity,
@@ -21,21 +26,6 @@ public:
 			const std::string email) = 0;
 	virtual bool update(VerifiedIdentity &identity) = 0;
 	virtual bool remove(const VerifiedIdentity &identity) = 0;
-};
-
-class NullVerifiedIdentityDao : public NullDao<VerifiedIdentity, VerifiedIdentityDao> {
-public:
-	virtual bool fetchBy(VerifiedIdentity &identity,
-			const std::string email,
-			const std::string provider)
-	{
-		return fetch(identity);
-	}
-
-	void fetchBy(std::vector<VerifiedIdentity> &identities,
-			const std::string email);
-
-	static VerifiedIdentityDao &instance();
 };
 
 class MockVerifiedIdentityDao : public MockDao<VerifiedIdentity, VerifiedIdentityDao> {
