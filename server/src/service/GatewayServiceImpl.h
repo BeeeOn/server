@@ -3,6 +3,7 @@
 
 #include <vector>
 
+#include "dao/GatewayDao.h"
 #include "policy/GatewayAccessPolicy.h"
 #include "rpc/GatewayRPC.h"
 #include "service/GatewayService.h"
@@ -10,7 +11,6 @@
 
 namespace BeeeOn {
 
-class GatewayDao;
 class RoleInGatewayDao;
 class IdentityDao;
 class VerifiedIdentityDao;
@@ -20,7 +20,7 @@ class GatewayServiceImpl : public GatewayService, public Transactional {
 public:
 	GatewayServiceImpl();
 
-	void setGatewayDao(GatewayDao *dao);
+	void setGatewayDao(GatewayDao::Ptr dao);
 	void setRoleInGatewayDao(RoleInGatewayDao *dao);
 	void setIdentityDao(IdentityDao *dao);
 	void setVerifiedIdentityDao(VerifiedIdentityDao *dao);
@@ -101,7 +101,7 @@ protected:
 	void doPingGateway(Single<Gateway> &input);
 
 private:
-	GatewayDao *m_gatewayDao;
+	GatewayDao::Ptr m_gatewayDao;
 	RoleInGatewayDao *m_roleInGatewayDao;
 	IdentityDao *m_identityDao;
 	VerifiedIdentityDao *m_verifiedIdentityDao;

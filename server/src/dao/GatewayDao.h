@@ -3,7 +3,8 @@
 
 #include <vector>
 
-#include "dao/NullDao.h"
+#include <Poco/SharedPtr.h>
+
 #include "model/User.h"
 #include "model/Gateway.h"
 #include "model/LegacyGateway.h"
@@ -12,6 +13,10 @@ namespace BeeeOn {
 
 class GatewayDao {
 public:
+	typedef Poco::SharedPtr<GatewayDao> Ptr;
+
+	virtual ~GatewayDao();
+
 	virtual bool insert(Gateway &gateway) = 0;
 	virtual bool fetch(Gateway &gateway) = 0;
 	virtual bool fetch(LegacyGateway &gateway, const User &user) = 0;
@@ -22,32 +27,6 @@ public:
 	virtual void fetchAccessible(
 			std::vector<LegacyGateway> &gateways,
 			const User &user) = 0;
-};
-
-class NullGatewayDao : public NullDao<Gateway, GatewayDao> {
-public:
-	/**
-	 * Provide a singleton instance to avoid
-	 * unnecessary allocations.
-	 */
-	static GatewayDao &instance();
-
-	bool fetch(LegacyGateway &gateway, const User &user)
-	{
-		throw Poco::NotImplementedException(__func__);
-	}
-
-	void fetchAccessible(std::vector<Gateway> &gateways,
-			const User &user)
-	{
-		throw Poco::NotImplementedException(__func__);
-	}
-
-	void fetchAccessible(std::vector<LegacyGateway> &gateways,
-			const User &user)
-	{
-		throw Poco::NotImplementedException(__func__);
-	}
 };
 
 }

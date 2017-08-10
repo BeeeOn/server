@@ -1,6 +1,7 @@
 #ifndef BEEEON_LOCATION_SERVICE_IMPL_H
 #define BEEEON_LOCATION_SERVICE_IMPL_H
 
+#include "dao/GatewayDao.h"
 #include "policy/LocationAccessPolicy.h"
 #include "service/LocationService.h"
 #include "transaction/Transactional.h"
@@ -8,7 +9,6 @@
 namespace BeeeOn {
 
 class LocationDao;
-class GatewayDao;
 
 /**
  * Locations management.
@@ -18,7 +18,7 @@ public:
 	LocationServiceImpl();
 
 	void setLocationDao(LocationDao *dao);
-	void setGatewayDao(GatewayDao *dao);
+	void setGatewayDao(GatewayDao::Ptr dao);
 	void setAccessPolicy(LocationAccessPolicy::Ptr policy);
 
 	void createIn(RelationWithData<Location, Gateway> &input)
@@ -61,7 +61,7 @@ protected:
 
 private:
 	LocationDao *m_dao;
-	GatewayDao *m_gatewayDao;
+	GatewayDao::Ptr m_gatewayDao;
 	LocationAccessPolicy::Ptr m_accessPolicy;
 };
 

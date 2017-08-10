@@ -1,7 +1,6 @@
 #include <Poco/Exception.h>
 
 #include "dao/IdentityDao.h"
-#include "dao/GatewayDao.h"
 #include "dao/RoleInGatewayDao.h"
 #include "di/Injectable.h"
 #include "model/Identity.h"
@@ -38,10 +37,9 @@ void RoleServiceImpl::setIdentityDao(IdentityDao *dao)
 		&NullIdentityDao::instance() : dao;
 }
 
-void RoleServiceImpl::setGatewayDao(GatewayDao *dao)
+void RoleServiceImpl::setGatewayDao(GatewayDao::Ptr dao)
 {
-	m_gatewayDao = dao == NULL?
-		&NullGatewayDao::instance() : dao;
+	m_gatewayDao = dao;
 }
 
 void RoleServiceImpl::setRoleInGatewayDao(RoleInGatewayDao *dao)
