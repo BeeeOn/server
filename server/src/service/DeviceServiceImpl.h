@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "dao/DeviceDao.h"
+#include "dao/DevicePropertyDao.h"
 #include "policy/DeviceAccessPolicy.h"
 #include "service/DeviceService.h"
 #include "transaction/Transactional.h"
@@ -23,7 +24,7 @@ public:
 	DeviceServiceImpl();
 
 	void setDeviceDao(DeviceDao::Ptr dao);
-	void setDevicePropertyDao(DevicePropertyDao *dao);
+	void setDevicePropertyDao(DevicePropertyDao::Ptr dao);
 	void setGatewayRPC(GatewayRPC *rpc);
 	void setWorkFacade(WorkFacade *facade);
 	void setAccessPolicy(DeviceAccessPolicy::Ptr policy);
@@ -122,7 +123,7 @@ protected:
 
 private:
 	DeviceDao::Ptr m_dao;
-	DevicePropertyDao *m_propertyDao;
+	DevicePropertyDao::Ptr m_propertyDao;
 	GatewayRPC *m_gatewayRPC;
 	WorkFacade *m_workFacade;
 	DeviceAccessPolicy::Ptr m_policy;
