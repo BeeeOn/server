@@ -2,8 +2,8 @@
 #define BEEEON_USER_DAO_H
 
 #include <Poco/Exception.h>
+#include <Poco/SharedPtr.h>
 
-#include "dao/NullDao.h"
 #include "dao/MockDao.h"
 #include "model/User.h"
 #include "model/Identity.h"
@@ -12,11 +12,12 @@ namespace BeeeOn {
 
 class UserDao {
 public:
+	typedef Poco::SharedPtr<UserDao> Ptr;
+
+	virtual ~UserDao();
+
 	virtual void create(User &user) = 0;
 	virtual bool fetch(User &user) = 0;
-};
-
-class NullUserDao : public NullDao<User, UserDao> {
 };
 
 class MockUserDao : public MockDao<User, UserDao> {
