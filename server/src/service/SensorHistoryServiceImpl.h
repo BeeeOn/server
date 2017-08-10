@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "dao/DeviceDao.h"
+#include "dao/SensorHistoryDao.h"
 #include "policy/SensorHistoryAccessPolicy.h"
 #include "service/Relation.h"
 #include "service/SensorHistoryService.h"
@@ -22,13 +23,12 @@ class TimeInterval;
 class ValueConsumer;
 class ModuleInfo;
 class Device;
-class SensorHistoryDao;
 
 class SensorHistoryServiceImpl : public SensorHistoryService, public Transactional {
 public:
 	SensorHistoryServiceImpl();
 
-	void setSensorHistoryDao(SensorHistoryDao *dao);
+	void setSensorHistoryDao(SensorHistoryDao::Ptr dao);
 	void setDeviceDao(DeviceDao::Ptr dao);
 	void setAccessPolicy(SensorHistoryAccessPolicy::Ptr policy);
 
@@ -50,7 +50,7 @@ protected:
 			ValueConsumer &consumer);
 
 private:
-	SensorHistoryDao *m_dao;
+	SensorHistoryDao::Ptr m_dao;
 	DeviceDao::Ptr m_deviceDao;
 	SensorHistoryAccessPolicy::Ptr m_policy;
 };

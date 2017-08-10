@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include <Poco/SharedPtr.h>
+
 namespace Poco {
 
 class Timestamp;
@@ -20,6 +22,8 @@ class Device;
 
 class SensorHistoryDao {
 public:
+	typedef Poco::SharedPtr<SensorHistoryDao> Ptr;
+
 	enum Aggregator {
 		AGG_AVG,
 		AGG_MIN,
@@ -28,6 +32,8 @@ public:
 
 	static bool isValid(const Aggregator agg);
 	static void assureValid(const Aggregator agg);
+
+	virtual ~SensorHistoryDao();
 
 	/**
 	 * Insert the single value into database.
@@ -61,35 +67,6 @@ public:
 			const Poco::Timespan &interval,
 			const Aggregator agg,
 			ValueConsumer &consumer) = 0;
-};
-
-class NullSensorHistoryDao : public SensorHistoryDao {
-public:
-	NullSensorHistoryDao();
-	~NullSensorHistoryDao();
-
-	bool insert(
-		const Device &device,
-		const Poco::Timestamp &at,
-		const ModuleValue &value) override;
-	void insertMany(
-		const Device &device,
-		const Poco::Timestamp &at,
-		std::vector<ModuleValue> &values) override;
-	bool fetch(
-		const Device &device,
-		const ModuleInfo &module,
-		Poco::Timestamp &at,
-		double &value) override;
-	void fetchHuge(
-		const Device &device,
-		const ModuleInfo &module,
-		const TimeInterval &range,
-		const Poco::Timespan &interval,
-		const Aggregator agg,
-		ValueConsumer &consumer) override;
-
-	static SensorHistoryDao &instance();
 };
 
 }
