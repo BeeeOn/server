@@ -3,6 +3,10 @@
 
 #include <vector>
 
+#include "dao/GatewayDao.h"
+#include "dao/IdentityDao.h"
+#include "dao/RoleInGatewayDao.h"
+#include "dao/VerifiedIdentityDao.h"
 #include "policy/GatewayAccessPolicy.h"
 #include "rpc/GatewayRPC.h"
 #include "service/GatewayService.h"
@@ -10,20 +14,17 @@
 
 namespace BeeeOn {
 
-class GatewayDao;
-class RoleInGatewayDao;
 class IdentityDao;
-class VerifiedIdentityDao;
 class GatewayRPC;
 
 class GatewayServiceImpl : public GatewayService, public Transactional {
 public:
 	GatewayServiceImpl();
 
-	void setGatewayDao(GatewayDao *dao);
-	void setRoleInGatewayDao(RoleInGatewayDao *dao);
-	void setIdentityDao(IdentityDao *dao);
-	void setVerifiedIdentityDao(VerifiedIdentityDao *dao);
+	void setGatewayDao(GatewayDao::Ptr dao);
+	void setRoleInGatewayDao(RoleInGatewayDao::Ptr dao);
+	void setIdentityDao(IdentityDao::Ptr dao);
+	void setVerifiedIdentityDao(VerifiedIdentityDao::Ptr dao);
 	void setGatewayRPC(GatewayRPC *rpc);
 	void setAccessPolicy(GatewayAccessPolicy::Ptr policy);
 
@@ -101,10 +102,10 @@ protected:
 	void doPingGateway(Single<Gateway> &input);
 
 private:
-	GatewayDao *m_gatewayDao;
-	RoleInGatewayDao *m_roleInGatewayDao;
-	IdentityDao *m_identityDao;
-	VerifiedIdentityDao *m_verifiedIdentityDao;
+	GatewayDao::Ptr m_gatewayDao;
+	RoleInGatewayDao::Ptr m_roleInGatewayDao;
+	IdentityDao::Ptr m_identityDao;
+	VerifiedIdentityDao::Ptr m_verifiedIdentityDao;
 	GatewayRPC *m_rpc;
 	GatewayAccessPolicy::Ptr m_accessPolicy;
 };

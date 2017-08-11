@@ -1,4 +1,3 @@
-#include <Poco/Exception.h>
 #include <Poco/SingletonHolder.h>
 
 #include "di/Injectable.h"
@@ -11,10 +10,8 @@ BEEEON_OBJECT_END(BeeeOn, MockIdentityDao)
 using namespace Poco;
 using namespace BeeeOn;
 
-IdentityDao &NullIdentityDao::instance()
+IdentityDao::~IdentityDao()
 {
-	static Poco::SingletonHolder<NullIdentityDao> singleton;
-	return *singleton.get();
 }
 
 MockIdentityDao::Iterator MockIdentityDao::findByEmail(

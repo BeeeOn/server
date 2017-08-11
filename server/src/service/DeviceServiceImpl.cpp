@@ -3,8 +3,6 @@
 #include <Poco/Logger.h>
 #include <Poco/Nullable.h>
 
-#include "dao/DeviceDao.h"
-#include "dao/DevicePropertyDao.h"
 #include "di/Injectable.h"
 #include "model/Device.h"
 #include "model/Gateway.h"
@@ -28,21 +26,19 @@ using namespace Poco;
 using namespace BeeeOn;
 
 DeviceServiceImpl::DeviceServiceImpl():
-	m_dao(&NullDeviceDao::instance()),
-	m_propertyDao(&NullDevicePropertyDao::instance()),
 	m_gatewayRPC(&NullGatewayRPC::instance()),
 	m_workFacade(&NullWorkFacade::instance())
 {
 }
 
-void DeviceServiceImpl::setDeviceDao(DeviceDao *dao)
+void DeviceServiceImpl::setDeviceDao(DeviceDao::Ptr dao)
 {
-	m_dao = dao? dao : &NullDeviceDao::instance();
+	m_dao = dao;
 }
 
-void DeviceServiceImpl::setDevicePropertyDao(DevicePropertyDao *dao)
+void DeviceServiceImpl::setDevicePropertyDao(DevicePropertyDao::Ptr dao)
 {
-	m_propertyDao = dao? dao : &NullDevicePropertyDao::instance();
+	m_propertyDao = dao;
 }
 
 void DeviceServiceImpl::setGatewayRPC(GatewayRPC *rpc)

@@ -1,6 +1,9 @@
 #ifndef BEEEON_ROLE_SERVICE_IMPL_H
 #define BEEEON_ROLE_SERVICE_IMPL_H
 
+#include "dao/GatewayDao.h"
+#include "dao/IdentityDao.h"
+#include "dao/RoleInGatewayDao.h"
 #include "policy/RoleAccessPolicy.h"
 #include "service/RoleService.h"
 #include "transaction/Transactional.h"
@@ -13,19 +16,15 @@ class RoleInGateway;
 class LegacyRoleInGateway;
 class AccessLevel;
 
-class IdentityDao;
-class GatewayDao;
-class RoleInGatewayDao;
-
 class NotificationDispatcher;
 
 class RoleServiceImpl : public RoleService, public Transactional {
 public:
 	RoleServiceImpl();
 
-	void setIdentityDao(IdentityDao *dao);
-	void setGatewayDao(GatewayDao *dao);
-	void setRoleInGatewayDao(RoleInGatewayDao *dao);
+	void setIdentityDao(IdentityDao::Ptr dao);
+	void setGatewayDao(GatewayDao::Ptr dao);
+	void setRoleInGatewayDao(RoleInGatewayDao::Ptr dao);
 	void setAccessPolicy(RoleAccessPolicy::Ptr policy);
 	void setNotificationDispatcher(NotificationDispatcher *service);
 
@@ -66,9 +65,9 @@ protected:
 	void doUpdate(SingleWithData<RoleInGateway> &input);
 
 private:
-	IdentityDao *m_identityDao;
-	GatewayDao *m_gatewayDao;
-	RoleInGatewayDao *m_roleInGatewayDao;
+	IdentityDao::Ptr m_identityDao;
+	GatewayDao::Ptr m_gatewayDao;
+	RoleInGatewayDao::Ptr m_roleInGatewayDao;
 	RoleAccessPolicy::Ptr m_accessPolicy;
 	NotificationDispatcher *m_notificationDispatcher;
 };

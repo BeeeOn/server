@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include "dao/DeviceDao.h"
+#include "dao/SensorHistoryDao.h"
 #include "policy/SensorHistoryAccessPolicy.h"
 #include "service/Relation.h"
 #include "service/SensorHistoryService.h"
@@ -21,15 +23,13 @@ class TimeInterval;
 class ValueConsumer;
 class ModuleInfo;
 class Device;
-class DeviceDao;
-class SensorHistoryDao;
 
 class SensorHistoryServiceImpl : public SensorHistoryService, public Transactional {
 public:
 	SensorHistoryServiceImpl();
 
-	void setSensorHistoryDao(SensorHistoryDao *dao);
-	void setDeviceDao(DeviceDao *dao);
+	void setSensorHistoryDao(SensorHistoryDao::Ptr dao);
+	void setDeviceDao(DeviceDao::Ptr dao);
 	void setAccessPolicy(SensorHistoryAccessPolicy::Ptr policy);
 
 	void fetchRange(const Relation<ModuleInfo, Device> &module,
@@ -50,8 +50,8 @@ protected:
 			ValueConsumer &consumer);
 
 private:
-	SensorHistoryDao *m_dao;
-	DeviceDao *m_deviceDao;
+	SensorHistoryDao::Ptr m_dao;
+	DeviceDao::Ptr m_deviceDao;
 	SensorHistoryAccessPolicy::Ptr m_policy;
 };
 

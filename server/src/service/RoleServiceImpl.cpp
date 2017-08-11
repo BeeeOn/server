@@ -1,8 +1,5 @@
 #include <Poco/Exception.h>
 
-#include "dao/IdentityDao.h"
-#include "dao/GatewayDao.h"
-#include "dao/RoleInGatewayDao.h"
 #include "di/Injectable.h"
 #include "model/Identity.h"
 #include "model/Gateway.h"
@@ -26,28 +23,23 @@ BEEEON_OBJECT_REF("transactionManager", &Transactional::setTransactionManager)
 BEEEON_OBJECT_END(BeeeOn, RoleServiceImpl)
 
 RoleServiceImpl::RoleServiceImpl():
-	m_identityDao(&NullIdentityDao::instance()),
-	m_roleInGatewayDao(&NullRoleInGatewayDao::instance()),
 	m_notificationDispatcher(0)
 {
 }
 
-void RoleServiceImpl::setIdentityDao(IdentityDao *dao)
+void RoleServiceImpl::setIdentityDao(IdentityDao::Ptr dao)
 {
-	m_identityDao = dao == NULL?
-		&NullIdentityDao::instance() : dao;
+	m_identityDao = dao;
 }
 
-void RoleServiceImpl::setGatewayDao(GatewayDao *dao)
+void RoleServiceImpl::setGatewayDao(GatewayDao::Ptr dao)
 {
-	m_gatewayDao = dao == NULL?
-		&NullGatewayDao::instance() : dao;
+	m_gatewayDao = dao;
 }
 
-void RoleServiceImpl::setRoleInGatewayDao(RoleInGatewayDao *dao)
+void RoleServiceImpl::setRoleInGatewayDao(RoleInGatewayDao::Ptr dao)
 {
-	m_roleInGatewayDao = dao == NULL?
-		&NullRoleInGatewayDao::instance() : dao;
+	m_roleInGatewayDao = dao;
 }
 
 void RoleServiceImpl::setAccessPolicy(RoleAccessPolicy::Ptr policy)

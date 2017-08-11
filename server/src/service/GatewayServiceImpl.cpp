@@ -1,9 +1,5 @@
 #include <vector>
 
-#include "dao/GatewayDao.h"
-#include "dao/IdentityDao.h"
-#include "dao/RoleInGatewayDao.h"
-#include "dao/VerifiedIdentityDao.h"
 #include "di/Injectable.h"
 #include "server/AccessLevel.h"
 #include "service/GatewayServiceImpl.h"
@@ -24,32 +20,28 @@ using namespace Poco;
 using namespace BeeeOn;
 
 GatewayServiceImpl::GatewayServiceImpl():
-	m_gatewayDao(&NullGatewayDao::instance()),
-	m_roleInGatewayDao(&NullRoleInGatewayDao::instance()),
-	m_identityDao(&NullIdentityDao::instance()),
 	m_rpc(&NullGatewayRPC::instance())
 {
 }
 
-void GatewayServiceImpl::setGatewayDao(GatewayDao *dao)
+void GatewayServiceImpl::setGatewayDao(GatewayDao::Ptr dao)
 {
-	m_gatewayDao = dao? dao : &NullGatewayDao::instance();
+	m_gatewayDao = dao;
 }
 
-void GatewayServiceImpl::setRoleInGatewayDao(RoleInGatewayDao *dao)
+void GatewayServiceImpl::setRoleInGatewayDao(RoleInGatewayDao::Ptr dao)
 {
-	m_roleInGatewayDao = dao? dao :&NullRoleInGatewayDao::instance();
+	m_roleInGatewayDao = dao;
 }
 
-void GatewayServiceImpl::setIdentityDao(IdentityDao *dao)
+void GatewayServiceImpl::setIdentityDao(IdentityDao::Ptr dao)
 {
-	m_identityDao = dao? dao :&NullIdentityDao::instance();
+	m_identityDao = dao;
 }
 
-void GatewayServiceImpl::setVerifiedIdentityDao(VerifiedIdentityDao *dao)
+void GatewayServiceImpl::setVerifiedIdentityDao(VerifiedIdentityDao::Ptr dao)
 {
-	m_verifiedIdentityDao = dao? dao :
-			&NullVerifiedIdentityDao::instance();
+	m_verifiedIdentityDao = dao;
 }
 
 void GatewayServiceImpl::setGatewayRPC(GatewayRPC *rpc)

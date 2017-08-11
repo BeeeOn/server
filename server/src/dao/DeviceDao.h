@@ -4,7 +4,8 @@
 #include <vector>
 #include <list>
 
-#include "dao/NullDao.h"
+#include <Poco/SharedPtr.h>
+
 #include "model/Device.h"
 #include "model/Gateway.h"
 
@@ -14,6 +15,10 @@ class Gateway;
 
 class DeviceDao {
 public:
+	typedef Poco::SharedPtr<DeviceDao> Ptr;
+
+	virtual ~DeviceDao();
+
 	virtual bool insert(Device &device, const Gateway &gateway) = 0;
 	virtual bool update(Device &device, const Gateway &gateway) = 0;
 	virtual bool fetch(Device &device, const Gateway &gateway) = 0;
@@ -22,33 +27,6 @@ public:
 			const Gateway &gateway) = 0;
 	virtual void fetchInactiveBy(std::vector<Device> &devices,
 			const Gateway &gateway) = 0;
-};
-
-class NullDeviceDao : public NullDao<Device, DeviceDao> {
-public:
-	bool insert(Device &device, const Gateway &gateway)
-	{
-		return NullDao<Device, DeviceDao>::insert(device);
-	}
-
-	bool update(Device &device, const Gateway &gateway)
-	{
-		return NullDao<Device, DeviceDao>::update(device);
-	}
-
-	void fetchMany(std::list<Device> &devices) override;
-
-	bool fetch(Device &device, const Gateway &gateway)
-	{
-		return NullDao<Device, DeviceDao>::fetch(device);
-	}
-
-	void fetchActiveBy(std::vector<Device> &devices,
-			const Gateway &gateway);
-	void fetchInactiveBy(std::vector<Device> &devices,
-			const Gateway &gateway);
-
-	static DeviceDao &instance();
 };
 
 }

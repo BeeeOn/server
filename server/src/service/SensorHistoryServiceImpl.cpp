@@ -1,7 +1,5 @@
 #include <Poco/Exception.h>
 
-#include "dao/SensorHistoryDao.h"
-#include "dao/DeviceDao.h"
 #include "di/Injectable.h"
 #include "service/SensorHistoryServiceImpl.h"
 #include "service/ValueConsumer.h"
@@ -18,22 +16,18 @@ BEEEON_OBJECT_REF("accessPolicy", &SensorHistoryServiceImpl::setAccessPolicy)
 BEEEON_OBJECT_REF("transactionManager", &Transactional::setTransactionManager)
 BEEEON_OBJECT_END(BeeeOn, SensorHistoryServiceImpl)
 
-SensorHistoryServiceImpl::SensorHistoryServiceImpl():
-	m_dao(&NullSensorHistoryDao::instance()),
-	m_deviceDao(&NullDeviceDao::instance())
+SensorHistoryServiceImpl::SensorHistoryServiceImpl()
 {
 }
 
-void SensorHistoryServiceImpl::setSensorHistoryDao(SensorHistoryDao *dao)
+void SensorHistoryServiceImpl::setSensorHistoryDao(SensorHistoryDao::Ptr dao)
 {
-	m_dao = dao == NULL?
-		&NullSensorHistoryDao::instance() : dao;
+	m_dao = dao;
 }
 
-void SensorHistoryServiceImpl::setDeviceDao(DeviceDao *dao)
+void SensorHistoryServiceImpl::setDeviceDao(DeviceDao::Ptr dao)
 {
-	m_deviceDao = dao == NULL?
-		&NullDeviceDao::instance() : dao;
+	m_deviceDao = dao;
 }
 
 void SensorHistoryServiceImpl::setAccessPolicy(SensorHistoryAccessPolicy::Ptr policy)

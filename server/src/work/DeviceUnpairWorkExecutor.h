@@ -1,13 +1,13 @@
 #ifndef BEEEON_DEVICE_UNPAIR_WORK_EXECUTOR_H
 #define BEEEON_DEVICE_UNPAIR_WORK_EXECUTOR_H
 
+#include "dao/DeviceDao.h"
 #include "work/DeviceUnpairWork.h"
 #include "util/Loggable.h"
 #include "work/WorkExecutor.h"
 
 namespace BeeeOn {
 
-class DeviceDao;
 class GatewayRPC;
 
 /**
@@ -20,7 +20,7 @@ class DeviceUnpairWorkExecutor :
 public:
 	DeviceUnpairWorkExecutor();
 
-	void setDeviceDao(DeviceDao *dao);
+	void setDeviceDao(DeviceDao::Ptr dao);
 	void setGatewayRPC(GatewayRPC *rpc);
 
 	/**
@@ -55,7 +55,7 @@ protected:
 	void checkAttempts(const DeviceUnpairWork &work);
 
 private:
-	DeviceDao *m_dao;
+	DeviceDao::Ptr m_dao;
 	GatewayRPC *m_rpc;
 	unsigned long m_pollSleep;
 	unsigned int m_maxAttempts;
