@@ -2,6 +2,7 @@
 #define BEEEON_DEFAULT_ACCESS_POLICY_H
 
 #include "policy/GatewayAccessPolicy.h"
+#include "policy/IdentityAccessPolicy.h"
 #include "policy/LocationAccessPolicy.h"
 #include "policy/DeviceAccessPolicy.h"
 #include "policy/RoleAccessPolicy.h"
@@ -16,6 +17,7 @@ namespace BeeeOn {
 
 class DefaultAccessPolicy :
 		public GatewayAccessPolicy,
+		public IdentityAccessPolicy,
 		public LocationAccessPolicy,
 		public DeviceAccessPolicy,
 		public RoleAccessPolicy,
@@ -27,6 +29,15 @@ public:
 		const GatewayAccessPolicy::Action action,
 		const PolicyContext &context,
 		const Gateway &gateway) override;
+
+	void assure(
+		const IdentityAccessPolicy::Action action,
+		const PolicyContext &context,
+		const Identity &identity) override;
+	void assure(
+		const IdentityAccessPolicy::Action action,
+		const PolicyContext &context,
+		const VerifiedIdentity &identity) override;
 
 	void assure(
 		const LocationAccessPolicy::Action action,
@@ -100,6 +111,8 @@ protected:
 	 * Test whether the given role represents the PolicyContext.
 	 */
 	bool representsSelf(const RoleInGateway &role, const PolicyContext &self);
+	bool canSeeIdentity(const Identity &identity, const PolicyContext &self);
+	bool canSeeIdentity(const VerifiedIdentity &identity, const PolicyContext &self);
 
 	void doAssure(
 		const DeviceAccessPolicy::Action action,

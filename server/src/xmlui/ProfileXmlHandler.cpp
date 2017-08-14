@@ -42,7 +42,11 @@ void ProfileXmlHandler::handleInputImpl()
 void ProfileXmlHandler::handleMyProfile()
 {
 	VerifiedIdentity identity(session()->identityID());
-	m_identityService.fetch(identity);
+	Single<VerifiedIdentity> input(identity);
+	User user(session()->userID());
+	input.setUser(user);
+
+	m_identityService.fetch(input);
 
 	resultDataStart();
 	serializeMyself(m_output, identity);

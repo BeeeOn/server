@@ -3,6 +3,7 @@
 
 #include "dao/IdentityDao.h"
 #include "dao/VerifiedIdentityDao.h"
+#include "policy/IdentityAccessPolicy.h"
 #include "service/IdentityService.h"
 #include "transaction/Transactional.h"
 
@@ -14,24 +15,26 @@ public:
 
 	void setIdentityDao(IdentityDao::Ptr dao);
 	void setVerifiedIdentityDao(VerifiedIdentityDao::Ptr dao);
+	void setAccessPolicy(IdentityAccessPolicy::Ptr accessPolicy);
 
-	bool fetch(VerifiedIdentity &identity)
+	bool fetch(Single<VerifiedIdentity> &input)
 	{
-		return BEEEON_TRANSACTION_RETURN(bool, doFetch(identity));
+		return BEEEON_TRANSACTION_RETURN(bool, doFetch(input));
 	}
 
-	bool fetch(Identity &identity)
+	bool fetch(Single<Identity> &input)
 	{
-		return BEEEON_TRANSACTION_RETURN(bool, doFetch(identity));
+		return BEEEON_TRANSACTION_RETURN(bool, doFetch(input));
 	}
 
 protected:
-	bool doFetch(VerifiedIdentity &identity);
-	bool doFetch(Identity &identity);
+	bool doFetch(Single<VerifiedIdentity> &input);
+	bool doFetch(Single<Identity> &input);
 
 private:
 	IdentityDao::Ptr m_identityDao;
 	VerifiedIdentityDao::Ptr m_verifiedIdentityDao;
+	IdentityAccessPolicy::Ptr m_accessPolicy;
 };
 
 }

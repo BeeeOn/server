@@ -7,6 +7,7 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, DefaultAccessPolicy)
 BEEEON_OBJECT_CASTABLE(GatewayAccessPolicy)
+BEEEON_OBJECT_CASTABLE(IdentityAccessPolicy)
 BEEEON_OBJECT_CASTABLE(LocationAccessPolicy)
 BEEEON_OBJECT_CASTABLE(DeviceAccessPolicy)
 BEEEON_OBJECT_CASTABLE(RoleAccessPolicy)
@@ -87,6 +88,62 @@ void DefaultAccessPolicy::assure(
 		assureAtLeast(
 			fetchAccessLevel(context, gateway), AccessLevel::user());
 		break;
+
+	default:
+		throw InvalidAccessException("invalid action: " + to_string((int) action));
+	}
+}
+
+bool DefaultAccessPolicy::canSeeIdentity(const Identity &identity, const PolicyContext &self)
+{
+	if (self.is<UserPolicyContext>()) {
+		const UserPolicyContext &uc = self.cast<UserPolicyContext>();
+		return m_roleInGatewayDao->canSeeIdentity(identity, uc.user());
+	}
+
+	throw InvalidAccessException("unexpected policy context");
+}
+
+bool DefaultAccessPolicy::canSeeIdentity(const VerifiedIdentity &identity, const PolicyContext &self)
+{
+	if (self.is<UserPolicyContext>()) {
+		const UserPolicyContext &uc = self.cast<UserPolicyContext>();
+		return m_roleInGatewayDao->canSeeVerifiedIdentity(identity, uc.user());
+	}
+
+	throw InvalidAccessException("unexpected policy context");
+}
+
+void DefaultAccessPolicy::assure(
+		const IdentityAccessPolicy::Action action,
+		const PolicyContext &context,
+		const Identity &identity)
+{
+	switch (action) {
+	case IdentityAccessPolicy::ACTION_USER_GET:
+		if (canSeeIdentity(identity, context))
+			break;
+
+		throw InvalidAccessException(
+				"identity " + identity + " is inaccessible");
+
+	default:
+		throw InvalidAccessException("invalid action: " + to_string((int) action));
+	}
+}
+
+void DefaultAccessPolicy::assure(
+		const IdentityAccessPolicy::Action action,
+		const PolicyContext &context,
+		const VerifiedIdentity &identity)
+{
+	switch (action) {
+	case IdentityAccessPolicy::ACTION_USER_GET:
+		if (canSeeIdentity(identity, context))
+			break;
+
+		throw InvalidAccessException(
+				"verified identity " + identity + " is inaccessible");
 
 	default:
 		throw InvalidAccessException("invalid action: " + to_string((int) action));

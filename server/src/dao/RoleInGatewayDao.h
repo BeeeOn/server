@@ -12,7 +12,9 @@
 
 namespace BeeeOn {
 
+class Identity;
 class User;
+class VerifiedIdentity;
 
 class RoleInGatewayDao {
 public:
@@ -36,6 +38,18 @@ public:
 	virtual bool isRegistered(const Gateway &gateway) = 0;
 	virtual bool hasOnlyNonAdminExcept(
 			const Gateway &gateway,
+			const User &user) = 0;
+
+	/**
+	 * Test whether the user can see the identity. There must be
+	 * an accessible gateway for the user that is also associated
+	 * with the given identity.
+	 */
+	virtual bool canSeeIdentity(
+			const Identity &identity,
+			const User &user) = 0;
+	virtual bool canSeeVerifiedIdentity(
+			const VerifiedIdentity &identity,
 			const User &user) = 0;
 
 	virtual AccessLevel fetchAccessLevel(

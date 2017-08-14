@@ -3,6 +3,8 @@
 
 #include <Poco/SharedPtr.h>
 
+#include "service/Single.h"
+
 namespace BeeeOn {
 
 class Identity;
@@ -14,8 +16,8 @@ public:
 
 	virtual ~IdentityService();
 
-	virtual bool fetch(VerifiedIdentity &identity) = 0;
-	virtual bool fetch(Identity &identity) = 0;
+	virtual bool fetch(Single<VerifiedIdentity> &identity) = 0;
+	virtual bool fetch(Single<Identity> &identity) = 0;
 };
 
 }
