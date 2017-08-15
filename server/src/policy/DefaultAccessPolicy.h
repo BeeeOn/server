@@ -38,6 +38,10 @@ public:
 		const IdentityAccessPolicy::Action action,
 		const PolicyContext &context,
 		const VerifiedIdentity &identity) override;
+	void assure(
+		const IdentityAccessPolicy::Action action,
+		const PolicyContext &context,
+		const User &user) override;
 
 	void assure(
 		const LocationAccessPolicy::Action action,
@@ -111,6 +115,7 @@ protected:
 	 * Test whether the given role represents the PolicyContext.
 	 */
 	bool representsSelf(const RoleInGateway &role, const PolicyContext &self);
+	bool representsSelf(const User &user, const PolicyContext &self);
 	bool canSeeIdentity(const Identity &identity, const PolicyContext &self);
 	bool canSeeIdentity(const VerifiedIdentity &identity, const PolicyContext &self);
 

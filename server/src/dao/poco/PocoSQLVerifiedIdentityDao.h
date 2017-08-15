@@ -27,6 +27,8 @@ public:
 			const std::string provider) override;
 	void fetchBy(std::vector<VerifiedIdentity> &identities,
 			const std::string email) override;
+	void fetchBy(std::list<VerifiedIdentity> &identities,
+			const User &user) override;
 	bool update(VerifiedIdentity &identity) override;
 	bool remove(const VerifiedIdentity &identity) override;
 
@@ -59,6 +61,7 @@ private:
 	SQLQuery m_queryFetchById    {"verified_identities.fetch.by.id"};
 	SQLQuery m_queryFetchByEmail {"verified_identities.fetch.by.email"};
 	SQLQuery m_queryFetchByEmailAndProvider {"verified_identities.fetch.by.email.and.provider"};
+	SQLQuery m_queryFetchByUser  {"verified_identities.fetch.by.user"};
 };
 
 }

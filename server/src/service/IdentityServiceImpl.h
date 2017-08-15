@@ -17,19 +17,25 @@ public:
 	void setVerifiedIdentityDao(VerifiedIdentityDao::Ptr dao);
 	void setAccessPolicy(IdentityAccessPolicy::Ptr accessPolicy);
 
-	bool fetch(Single<VerifiedIdentity> &input)
+	bool fetch(Single<VerifiedIdentity> &input) override
 	{
 		return BEEEON_TRANSACTION_RETURN(bool, doFetch(input));
 	}
 
-	bool fetch(Single<Identity> &input)
+	bool fetch(Single<Identity> &input) override
 	{
 		return BEEEON_TRANSACTION_RETURN(bool, doFetch(input));
+	}
+
+	void list(Relation<std::list<VerifiedIdentity>, User> &input) override
+	{
+		BEEEON_TRANSACTION(doList(input));
 	}
 
 protected:
 	bool doFetch(Single<VerifiedIdentity> &input);
 	bool doFetch(Single<Identity> &input);
+	void doList(Relation<std::list<VerifiedIdentity>, User> &input);
 
 private:
 	IdentityDao::Ptr m_identityDao;

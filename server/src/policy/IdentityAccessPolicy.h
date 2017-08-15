@@ -7,6 +7,7 @@ namespace BeeeOn {
 
 class Identity;
 class VerifiedIdentity;
+class User;
 class PolicyContext;
 
 class IdentityAccessPolicy {
@@ -28,6 +29,11 @@ public:
 		const Action action,
 		const PolicyContext &context,
 		const VerifiedIdentity &identity) = 0;
+
+	virtual void assure(
+		const Action action,
+		const PolicyContext &context,
+		const User &user) = 0;
 };
 
 }

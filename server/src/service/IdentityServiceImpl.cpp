@@ -41,3 +41,9 @@ bool IdentityServiceImpl::doFetch(Single<Identity> &input)
 	m_accessPolicy->assure(IdentityAccessPolicy::ACTION_USER_GET, input, input.target());
 	return m_identityDao->fetch(input.target());
 }
+
+void IdentityServiceImpl::doList(Relation<std::list<VerifiedIdentity>, User> &input)
+{
+	m_accessPolicy->assure(IdentityAccessPolicy::ACTION_USER_GET, input, input.base());
+	m_verifiedIdentityDao->fetchBy(input.target(), input.base());
+}
