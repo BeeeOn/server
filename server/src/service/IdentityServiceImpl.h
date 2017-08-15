@@ -17,12 +17,12 @@ public:
 	void setVerifiedIdentityDao(VerifiedIdentityDao::Ptr dao);
 	void setAccessPolicy(IdentityAccessPolicy::Ptr accessPolicy);
 
-	bool fetch(Single<VerifiedIdentity> &input)
+	bool fetch(Single<VerifiedIdentity> &input) override
 	{
 		return BEEEON_TRANSACTION_RETURN(bool, doFetch(input));
 	}
 
-	bool fetch(Single<Identity> &input)
+	bool fetch(Single<Identity> &input) override
 	{
 		return BEEEON_TRANSACTION_RETURN(bool, doFetch(input));
 	}
