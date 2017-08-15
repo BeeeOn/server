@@ -53,3 +53,19 @@ void MockVerifiedIdentityDao::fetchBy(
 		identities.push_back(tmp);
 	}
 }
+
+void MockVerifiedIdentityDao::fetchBy(
+		list<VerifiedIdentity> &identities,
+		const User &user)
+{
+	Iterator it = storage().begin();
+
+	for (; it != storage().end(); ++it) {
+		const VerifiedIdentity &tmp = *it->second;
+
+		if (tmp.user().id() != user.id())
+			continue;
+
+		identities.push_back(tmp);
+	}
+}

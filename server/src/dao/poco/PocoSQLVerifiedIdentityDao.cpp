@@ -33,6 +33,7 @@ PocoSQLVerifiedIdentityDao::PocoSQLVerifiedIdentityDao()
 	registerQuery(m_queryFetchById);
 	registerQuery(m_queryFetchByEmail);
 	registerQuery(m_queryFetchByEmailAndProvider);
+	registerQuery(m_queryFetchByUser);
 }
 
 void PocoSQLVerifiedIdentityDao::create(VerifiedIdentity &identity)
@@ -111,6 +112,23 @@ void PocoSQLVerifiedIdentityDao::fetchBy(
 
 	Statement sql = (session() << m_queryFetchByEmail(),
 		use(searchEmail, "email")
+	);
+
+	execute(sql);
+	RecordSet result(sql);
+	parseMany(result, identities);
+}
+
+void PocoSQLVerifiedIdentityDao::fetchBy(
+		std::list<VerifiedIdentity> &identities,
+		const User &user)
+{
+	assureHasId(user);
+
+	string id(user.id().toString());
+
+	Statement sql = (session() << m_queryFetchByUser(),
+		use(id, "user_id")
 	);
 
 	execute(sql);

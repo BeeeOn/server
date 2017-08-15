@@ -1,6 +1,7 @@
 #ifndef BEEEON_VERIFIED_IDENTITY_DAO_H
 #define BEEEON_VERIFIED_IDENTITY_DAO_H
 
+#include <list>
 #include <vector>
 
 #include <Poco/SharedPtr.h>
@@ -23,6 +24,8 @@ public:
 			const std::string provider) = 0;
 	virtual void fetchBy(std::vector<VerifiedIdentity> &identities,
 			const std::string email) = 0;
+	virtual void fetchBy(std::list<VerifiedIdentity> &identities,
+			const User &user) = 0;
 	virtual bool update(VerifiedIdentity &identity) = 0;
 	virtual bool remove(const VerifiedIdentity &identity) = 0;
 };
@@ -35,6 +38,9 @@ public:
 
 	void fetchBy(std::vector<VerifiedIdentity> &identities,
 			const std::string email);
+
+	void fetchBy(std::list<VerifiedIdentity> &identities,
+			const User &user);
 
 protected:
 	VerifiedIdentityID nextID()
