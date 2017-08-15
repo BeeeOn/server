@@ -63,6 +63,16 @@ bool DefaultAccessPolicy::representsSelf(const RoleInGateway &role, const Policy
 	throw InvalidAccessException("unexpected policy context");
 }
 
+bool DefaultAccessPolicy::representsSelf(const User &user, const PolicyContext &self)
+{
+	if (self.is<UserPolicyContext>()) {
+		const UserPolicyContext &uc = self.cast<UserPolicyContext>();
+		return user.id() == uc.user().id();
+	}
+
+	throw InvalidAccessException("unexpected policy context");
+}
+
 void DefaultAccessPolicy::assure(
 		const GatewayAccessPolicy::Action action,
 		const PolicyContext &context,
@@ -144,6 +154,24 @@ void DefaultAccessPolicy::assure(
 
 		throw InvalidAccessException(
 				"verified identity " + identity + " is inaccessible");
+
+	default:
+		throw InvalidAccessException("invalid action: " + to_string((int) action));
+	}
+}
+
+void DefaultAccessPolicy::assure(
+		const IdentityAccessPolicy::Action action,
+		const PolicyContext &context,
+		const User &user)
+{
+	switch (action) {
+	case IdentityAccessPolicy::ACTION_USER_GET:
+		if (representsSelf(user, context))
+			break;
+
+		throw InvalidAccessException(
+				"user " + user + " is inaccessible");
 
 	default:
 		throw InvalidAccessException("invalid action: " + to_string((int) action));
