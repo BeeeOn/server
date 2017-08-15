@@ -50,11 +50,11 @@ void LocationServiceImpl::doCreateIn(RelationWithData<Location, Gateway> &input)
 	m_dao->create(location);
 }
 
-bool LocationServiceImpl::doFetch(Single<Location> &input)
+bool LocationServiceImpl::doFetchFrom(Relation<Location, Gateway> &input)
 {
 	m_accessPolicy->assure(LocationAccessPolicy::ACTION_USER_GET, input, input.target());
 
-	return m_dao->fetch(input.target());
+	return m_dao->fetchFrom(input.target(), input.base());
 }
 
 void LocationServiceImpl::doFetchBy(Relation<vector<Location>, Gateway> &input)
