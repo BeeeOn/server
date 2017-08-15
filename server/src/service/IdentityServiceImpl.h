@@ -27,9 +27,15 @@ public:
 		return BEEEON_TRANSACTION_RETURN(bool, doFetch(input));
 	}
 
+	void list(Relation<std::list<VerifiedIdentity>, User> &input) override
+	{
+		BEEEON_TRANSACTION(doList(input));
+	}
+
 protected:
 	bool doFetch(Single<VerifiedIdentity> &input);
 	bool doFetch(Single<Identity> &input);
+	void doList(Relation<std::list<VerifiedIdentity>, User> &input);
 
 private:
 	IdentityDao::Ptr m_identityDao;
