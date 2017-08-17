@@ -86,6 +86,7 @@ RestHandler::Handler JSONRestHandler::wrapHandler(const Handler &handler)
 			);
 
 			status = "error";
+			message = "not authenticated";
 		}
 		catch (const NotFoundException &e) {
 			handleException(flow, e, __FILE__, __LINE__);
