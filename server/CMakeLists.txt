@@ -18,6 +18,16 @@ endif()
 
 add_definitions(-DGIT_ID="${GIT_ID}")
 
+exec_program(
+	"genrb"
+	${CMAKE_CURRENT_SOURCE_DIR}
+	ARGS
+	-d res/beeeon_server
+	res/beeeon_server/res_index.txt
+	res/beeeon_server/root.txt
+	res/beeeon_server/en.txt
+)
+
 add_subdirectory(src)
 add_subdirectory(base)
 add_subdirectory(test)

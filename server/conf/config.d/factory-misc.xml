@@ -7,6 +7,10 @@
 			<add name="observer" ref="loggingObserver" />
 		</instance>
 
-		<instance name="localeManager" class="BeeeOn::SystemLocaleManager" />
+		<instance name="localeManager" class="BeeeOn::IcuLocaleManager">
+			<set name="bundleName" text="${bundle.name}" />
+			<set name="resourceDir" text="${bundle.resource.dir}" />
+			<set name="defaultLocale" text="en" />
+		</instance>
 	</factory>
 </system>
