@@ -84,8 +84,6 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/service/RoleServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/SensorHistoryService.cpp
 	${PROJECT_SOURCE_DIR}/service/SensorHistoryServiceImpl.cpp
-	${PROJECT_SOURCE_DIR}/service/JSONGatewayDeserializer.cpp
-	${PROJECT_SOURCE_DIR}/service/JSONLocationDeserializer.cpp
 	${PROJECT_SOURCE_DIR}/policy/GatewayAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/IdentityAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/LocationAccessPolicy.cpp
@@ -158,7 +156,7 @@ file(GLOB XMLUI_SOURCES
 file(GLOB RESTUI_SOURCES
 	restui/Serializing.cpp
 	restui/JSONGatewayDeserializer.cpp
-	restui/JSONLocationDeseliazer.cpp
+	restui/JSONLocationDeserializer.cpp
 	restui/LocationRestHandler.cpp
 	restui/ProfileRestHandler.cpp
 	restui/GatewayRestHandler.cpp

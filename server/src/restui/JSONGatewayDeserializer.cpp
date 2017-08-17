@@ -1,54 +1,64 @@
-#include <cmath>
 #include <Poco/Exception.h>
+#include <Poco/JSON/Parser.h>
 
 #include "restui/JSONGatewayDeserializer.h"
-#include "util/JsonUtil.h"
 
 using namespace std;
 using namespace Poco;
 using namespace Poco::JSON;
 using namespace BeeeOn;
 
-JSONGatewayDeserializer::JSONGatewayDeserializer(
-		const Object::Ptr object):
-	m_object(object)
+JSONGatewayDeserializer::JSONGatewayDeserializer(const string &input)
+{
+	Parser parser;
+	m_data = parser.parse(input).extract<Object::Ptr>();
+}
+
+JSONGatewayDeserializer::JSONGatewayDeserializer(istream &input)
+{
+	Parser parser;
+	m_data = parser.parse(input).extract<Object::Ptr>();
+}
+
+JSONGatewayDeserializer::JSONGatewayDeserializer(const Object::Ptr data):
+	m_data(data)
 {
 }
 
 void JSONGatewayDeserializer::partial(Gateway &gateway) const
 {
-	if (m_object->has("name"))
-		gateway.setName(JsonUtil::extract<string>(m_object, "name"));
+	if (m_data->has("name"))
+		gateway.setName(m_data->getValue<string>("name"));
 
-	if (m_object->has("longitude"))
-		gateway.setLongitude(JsonUtil::extract<double>(m_object, "longitude"));
+	if (m_data->has("altitude"))
+		gateway.setAltitude(m_data->getValue<int>("altitude"));
 
-	if (m_object->has("latitude"))
-		gateway.setLatitude(JsonUtil::extract<double>(m_object, "latitude"));
+	if (m_data->has("latitude"))
+		gateway.setLatitude(m_data->getValue<double>("latitude"));
 
-	if (m_object->has("altitude"))
-		gateway.setAltitude(JsonUtil::extract<int>(m_object, "altitude"));
+	if (m_data->has("longitude"))
+		gateway.setLongitude(m_data->getValue<double>("longitude"));
 }
 
 void JSONGatewayDeserializer::full(Gateway &gateway) const
 {
-	if (!m_object->has("name"))
+	if (!m_data->has("name"))
 		throw InvalidArgumentException("missing name for gateway");
 
-	gateway.setName(JsonUtil::extract<string>(m_object, "name"));
+	gateway.setName(m_data->getValue<string>("name"));
 
-	if (!m_object->has("longitude"))
-		gateway.setLongitude(NAN);
-	else
-		gateway.setLongitude(JsonUtil::extract<double>(m_object, "longitude"));
-
-	if (!m_object->has("latitude"))
-		gateway.setLatitude(NAN);
-	else
-		gateway.setLatitude(JsonUtil::extract<double>(m_object, "latitude"));
-
-	if (!m_object->has("altitude"))
+	if (!m_data->has("altitude"))
 		gateway.setAltitude(0);
 	else
-		gateway.setAltitude(JsonUtil::extract<int>(m_object, "altitude"));
+		gateway.setAltitude(m_data->getValue<int>("altitude"));
+
+	if (!m_data->has("latitude"))
+		gateway.setLatitude(NAN);
+	else
+		gateway.setLatitude(m_data->getValue<double>("latitude"));
+
+	if (!m_data->has("longitude"))
+		gateway.setLongitude(NAN);
+	else
+		gateway.setLongitude(m_data->getValue<double>("longitude"));
 }
