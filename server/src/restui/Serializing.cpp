@@ -2,8 +2,10 @@
 
 #include <Poco/DateTime.h>
 #include <Poco/JSON/PrintHandler.h>
+#include <model/RoleInGateway.h>
 
 #include "model/Gateway.h"
+#include "model/Location.h"
 #include "model/User.h"
 #include "model/VerifiedIdentity.h"
 #include "restui/Serializing.h"
@@ -113,6 +115,30 @@ void BeeeOn::RestUI::serialize(PrintHandler &output,
 
 	for (auto &identity : identities)
 		serialize(output, identity);
+
+	output.endArray();
+}
+
+void BeeeOn::RestUI::serialize(PrintHandler &output, const Location &location)
+{
+	output.startObject();
+	output.key("id");
+	output.value(location.id().toString());
+
+	output.key("name");
+	output.value(location.name());
+
+	output.key("type");
+	output.value(0); //TODO: Location does not have a type
+	output.endObject();
+}
+
+void BeeeOn::RestUI::serialize(PrintHandler &output, const std::vector<Location> &locations)
+{
+	output.startArray();
+
+	for (auto location : locations)
+		serialize(output, location);
 
 	output.endArray();
 }

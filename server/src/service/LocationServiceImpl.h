@@ -25,9 +25,9 @@ public:
 		BEEEON_TRANSACTION(doCreateIn(input));
 	}
 
-	bool fetch(Single<Location> &input)
+	bool fetchFrom(Relation<Location, Gateway> &input)
 	{
-		return BEEEON_TRANSACTION_RETURN(bool, doFetch(input));
+		return BEEEON_TRANSACTION_RETURN(bool, doFetchFrom(input));
 	}
 
 	void fetchBy(Relation<std::vector<Location>, Gateway> &input)
@@ -52,7 +52,7 @@ public:
 
 protected:
 	void doCreateIn(RelationWithData<Location, Gateway> &input);
-	bool doFetch(Single<Location> &input);
+	bool doFetchFrom(Relation<Location, Gateway> &input);
 	void doFetchBy(Relation<std::vector<Location>, Gateway> &input);
 	bool doUpdateIn(RelationWithData<Location, Gateway> &input);
 	bool doRemove(Single<Location> &input);

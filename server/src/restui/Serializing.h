@@ -15,6 +15,7 @@ class PrintHandler;
 namespace BeeeOn {
 
 class Gateway;
+class Location;
 class VerifiedIdentity;
 
 namespace RestUI {
@@ -26,6 +27,9 @@ void serialize(Poco::JSON::PrintHandler &output,
 void serialize(Poco::JSON::PrintHandler &output, const VerifiedIdentity &identity);
 void serialize(Poco::JSON::PrintHandler &output,
 		const std::list<VerifiedIdentity> &identities);
+
+void serialize(Poco::JSON::PrintHandler &output, const Location &location);
+void serialize(Poco::JSON::PrintHandler  &output, const std::vector <Location> &locations);
 
 }
 
