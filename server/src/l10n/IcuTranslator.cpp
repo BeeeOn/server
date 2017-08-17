@@ -13,6 +13,7 @@
 #include "util/ClassInfo.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, IcuTranslatorFactory)
+BEEEON_OBJECT_CASTABLE(TranslatorFactory)
 BEEEON_OBJECT_TEXT("bundleName", &IcuTranslatorFactory::setBundleName)
 BEEEON_OBJECT_END(BeeeOn, IcuTranslatorFactory)
 
