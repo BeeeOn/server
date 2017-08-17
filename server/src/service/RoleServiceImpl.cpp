@@ -15,6 +15,7 @@ using namespace BeeeOn;
 BEEEON_OBJECT_BEGIN(BeeeOn, RoleServiceImpl)
 BEEEON_OBJECT_CASTABLE(RoleService)
 BEEEON_OBJECT_REF("identityDao", &RoleServiceImpl::setIdentityDao)
+BEEEON_OBJECT_REF("verifiedIdentityDao", &RoleServiceImpl::setVerifiedIdentityDao)
 BEEEON_OBJECT_REF("gatewayDao", &RoleServiceImpl::setGatewayDao)
 BEEEON_OBJECT_REF("roleInGatewayDao", &RoleServiceImpl::setRoleInGatewayDao)
 BEEEON_OBJECT_REF("accessPolicy", &RoleServiceImpl::setAccessPolicy)
@@ -30,6 +31,11 @@ RoleServiceImpl::RoleServiceImpl():
 void RoleServiceImpl::setIdentityDao(IdentityDao::Ptr dao)
 {
 	m_identityDao = dao;
+}
+
+void RoleServiceImpl::setVerifiedIdentityDao(VerifiedIdentityDao::Ptr dao)
+{
+	m_verifiedIdentityDao = dao;
 }
 
 void RoleServiceImpl::setGatewayDao(GatewayDao::Ptr dao)
@@ -83,6 +89,27 @@ bool RoleServiceImpl::doFetch(Relation<LegacyRoleInGateway, Gateway> &input)
 {
 	m_accessPolicy->assure(RoleAccessPolicy::ACTION_USER_GET, input, input.target());
 	return m_roleInGatewayDao->fetch(input.target());
+}
+
+bool RoleServiceImpl::doFetch(Relation<RoleInGateway, Gateway> &input, const VerifiedIdentity &identity)
+{
+	m_accessPolicy->assure(RoleAccessPolicy::ACTION_USER_GET, input, input.base());
+
+	VerifiedIdentity tmp(identity);
+	if (!m_verifiedIdentityDao->fetch(tmp))
+		throw NotFoundException("no such verified identity " + identity);
+
+	vector<RoleInGateway> roles;
+	m_roleInGatewayDao->fetchBy(roles, input.base());
+
+	for (const auto &role : roles) {
+		if (role.identity().id() == tmp.identity().id()) {
+			input.target() = role;
+			return true;
+		}
+	}
+
+	return false;
 }
 
 void RoleServiceImpl::doList(Relation<vector<RoleInGateway>, Gateway> &input)

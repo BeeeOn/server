@@ -55,6 +55,7 @@
 
 		<instance name="roleService" class="BeeeOn::RoleServiceImpl">
 			<set name="identityDao" ref="identityDao" />
+			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
 			<set name="gatewayDao" ref="gatewayDao" />
 			<set name="roleInGatewayDao" ref="roleInGatewayDao" />
 			<set name="accessPolicy" ref="accessPolicy" />

@@ -15,6 +15,7 @@ class Gateway;
 class RoleInGateway;
 class LegacyRoleInGateway;
 class AccessLevel;
+class VerifiedIdentity;
 
 class RoleService {
 public:
@@ -26,6 +27,7 @@ public:
 			Relation<Identity, Gateway> &input,
 			const AccessLevel &as) = 0;
 	virtual bool fetch(Relation<LegacyRoleInGateway, Gateway> &input) = 0;
+	virtual bool fetch(Relation<RoleInGateway, Gateway> &input, const VerifiedIdentity &identity) = 0;
 	virtual void list(Relation<std::vector<RoleInGateway>, Gateway> &input) = 0;
 	virtual void list(Relation<std::vector<LegacyRoleInGateway>, Gateway> &input) = 0;
 	virtual void remove(Single<RoleInGateway> &input) = 0;
