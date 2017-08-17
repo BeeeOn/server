@@ -13,6 +13,7 @@
 #include "rest/RestRouter.h"
 #include "rest/RestLinker.h"
 #include "server/SessionVerifier.h"
+#include "util/Sanitize.h"
 
 using namespace std;
 using namespace Poco;
@@ -271,7 +272,7 @@ HTTPRequestHandler *PocoRestRequestFactory::createRequestHandler(
 			__FILE__, __LINE__);
 	}
 
-	Poco::URI uri(request.getURI());
+	Poco::URI uri(Sanitize::uri(request.getURI()));
 	MappedRestAction::Params params;
 
 	try {
