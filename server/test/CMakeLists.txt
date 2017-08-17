@@ -22,6 +22,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/sqitch/SqitchPlanParserTest.cpp
 	${PROJECT_SOURCE_DIR}/sqitch/SqitchRefTest.cpp
 	${PROJECT_SOURCE_DIR}/sqitch/SqitchTestingPlans.cpp
+	${PROJECT_SOURCE_DIR}/util/SanitizeTest.cpp
 )
 
 include_directories(

@@ -1,4 +1,5 @@
 #include "di/Injectable.h"
+#include "util/Sanitize.h"
 #include "xmlui/AuthXmlHandler.h"
 
 using namespace std;
@@ -34,7 +35,7 @@ void AuthXmlHandler::handleInputImpl()
 		}
 
 		AuthCodeCredentials credentials(
-			provider->getAttribute("name"),
+			Sanitize::strict(provider->getAttribute("name")),
 			provider->getAttribute("authCode")
 		);
 

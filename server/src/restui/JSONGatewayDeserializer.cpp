@@ -2,6 +2,7 @@
 #include <Poco/JSON/Parser.h>
 
 #include "restui/JSONGatewayDeserializer.h"
+#include "util/Sanitize.h"
 
 using namespace std;
 using namespace Poco;
@@ -28,7 +29,7 @@ JSONGatewayDeserializer::JSONGatewayDeserializer(const Object::Ptr data):
 void JSONGatewayDeserializer::partial(Gateway &gateway) const
 {
 	if (m_data->has("name"))
-		gateway.setName(m_data->getValue<string>("name"));
+		gateway.setName(Sanitize::common(m_data->getValue<string>("name")));
 
 	if (m_data->has("altitude"))
 		gateway.setAltitude(m_data->getValue<int>("altitude"));
@@ -45,7 +46,7 @@ void JSONGatewayDeserializer::full(Gateway &gateway) const
 	if (!m_data->has("name"))
 		throw InvalidArgumentException("missing name for gateway");
 
-	gateway.setName(m_data->getValue<string>("name"));
+	gateway.setName(Sanitize::common(m_data->getValue<string>("name")));
 
 	if (!m_data->has("altitude"))
 		gateway.setAltitude(0);

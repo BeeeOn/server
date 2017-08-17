@@ -11,6 +11,7 @@
 #include "ssl/SSLClient.h"
 #include "provider/FacebookAuthProvider.h"
 #include "util/JsonUtil.h"
+#include "util/Sanitize.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, FacebookAuthProvider)
 BEEEON_OBJECT_CASTABLE(AuthCodeAuthProvider)
@@ -139,20 +140,20 @@ bool FacebookAuthProvider::parseIdentity(const string &userInfo, const string &a
 		result.setProviderID(info->getValue<string>("id"));
 
 	if (info->has("email"))
-		result.setEmail(info->getValue<string>("email"));
+		result.setEmail(Sanitize::email(info->getValue<string>("email")));
 
 	if (info->has("first_name"))
-		result.setFirstName(info->getValue<string>("first_name"));
+		result.setFirstName(Sanitize::common(info->getValue<string>("first_name")));
 
 	if (info->has("last_name"))
-		result.setLastName(info->getValue<string>("last_name"));
+		result.setLastName(Sanitize::common(info->getValue<string>("last_name")));
 
 	if (info->has("picture")) {
 		Object::Ptr pictData = info->getObject("picture");
 		if (pictData->has("data")) {
 			Object::Ptr picture  = pictData->getObject("data");
 			if (picture->has("url"))
-				result.setPicture(picture->getValue<string>("url"));
+				result.setPicture(Sanitize::uri(picture->getValue<string>("url")));
 		}
 	}
 

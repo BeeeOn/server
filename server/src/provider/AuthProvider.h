@@ -3,6 +3,8 @@
 
 #include <map>
 #include <Poco/Logger.h>
+#include <Poco/URI.h>
+
 #include "util/Loggable.h"
 #include "Debug.h"
 
@@ -119,12 +121,12 @@ public:
 		return m_lastName;
 	}
 
-	void setPicture(const std::string &picture)
+	void setPicture(const Poco::URI &picture)
 	{
 		m_picture = picture;
 	}
 
-	std::string picture() const
+	const Poco::URI &picture() const
 	{
 		return m_picture;
 	}
@@ -136,7 +138,7 @@ private:
 	std::string m_providerID;
 	std::string m_firstName;
 	std::string m_lastName;
-	std::string m_picture;
+	Poco::URI   m_picture;
 };
 
 /**

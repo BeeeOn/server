@@ -47,6 +47,11 @@ public:
 		m_sessionManager = manager;
 	}
 
+private:
+	ExpirableSession::Ptr doVerifyAuthorized(
+			const std::string &scheme,
+			const std::string &authInfo);
+
 protected:
 	SessionManager *m_sessionManager;
 };

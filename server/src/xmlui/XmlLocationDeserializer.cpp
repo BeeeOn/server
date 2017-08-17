@@ -4,6 +4,7 @@
 #include <Poco/DOM/Element.h>
 
 #include "xmlui/XmlLocationDeserializer.h"
+#include "util/Sanitize.h"
 
 using namespace Poco;
 using namespace Poco::XML;
@@ -17,7 +18,7 @@ XmlLocationDeserializer::XmlLocationDeserializer(const Element &node):
 void XmlLocationDeserializer::partial(Location &location) const
 {
 	if (m_node.hasAttribute("name"))
-		location.setName(m_node.getAttribute("name"));
+		location.setName(Sanitize::common(m_node.getAttribute("name")));
 }
 
 void XmlLocationDeserializer::full(Location &location) const
@@ -25,5 +26,5 @@ void XmlLocationDeserializer::full(Location &location) const
 	if (!m_node.hasAttribute("name"))
 		throw InvalidArgumentException("missing name for location");
 
-	location.setName(m_node.getAttribute("name"));
+	location.setName(Sanitize::common(m_node.getAttribute("name")));
 }
