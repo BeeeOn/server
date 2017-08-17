@@ -1,30 +1,40 @@
-#include <cmath>
 #include <Poco/Exception.h>
+#include <Poco/JSON/Parser.h>
 
-#include "JSONLocationDeseliazer.h"
-#include "util/JsonUtil.h"
+#include "restui/JSONLocationDeserializer.h"
 
 using namespace std;
 using namespace Poco;
 using namespace Poco::JSON;
 using namespace BeeeOn;
 
-JSONLocationDeserializer::JSONLocationDeserializer(
-        const Object::Ptr object):
-        m_object(object)
+JSONLocationDeserializer::JSONLocationDeserializer(const string &input)
+{
+	Parser parser;
+	m_data = parser.parse(input).extract<Object::Ptr>();
+}
+
+JSONLocationDeserializer::JSONLocationDeserializer(istream &input)
+{
+	Parser parser;
+	m_data = parser.parse(input).extract<Object::Ptr>();
+}
+
+JSONLocationDeserializer::JSONLocationDeserializer(const Object::Ptr data):
+	m_data(data)
 {
 }
 
 void JSONLocationDeserializer::partial(Location &location) const
 {
-    if (m_object->has("name"))
-        location.setName(JsonUtil::extract<string>(m_object, "name"));
+	if (m_data->has("name"))
+		location.setName(m_data->getValue<string>("name"));
 }
 
 void JSONLocationDeserializer::full(Location &location) const
 {
-    if (!m_object->has("name"))
-        throw InvalidArgumentException("missing name for location");
+	if (!m_data->has("name"))
+		throw InvalidArgumentException("missing name for location");
 
-    location.setName(JsonUtil::extract<string>(m_object, "name"));
+	location.setName(m_data->getValue<string>("name"));
 }
