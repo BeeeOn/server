@@ -84,3 +84,13 @@ ExpirableSession::Ptr RestFlow::session() const
 {
 	return m_session;
 }
+
+void RestFlow::setTranslator(Translator::Ptr translator)
+{
+	m_translator = translator;
+}
+
+Translator::Ptr RestFlow::translator() const
+{
+	return m_translator;
+}

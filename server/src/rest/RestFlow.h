@@ -3,6 +3,7 @@
 
 #include <Poco/URI.h>
 
+#include "l10n/Translator.h"
 #include "rest/PocoContext.h"
 #include "rest/UriPattern.h"
 #include "server/Session.h"
@@ -83,6 +84,16 @@ public:
 	 */
 	ExpirableSession::Ptr session() const;
 
+	/**
+	 * Set localization translator for current flow.
+	 */
+	void setTranslator(Translator::Ptr translator);
+
+	/**
+	 * Access localization translator for current flow.
+	 */
+	Translator::Ptr translator() const;
+
 private:
 	RestLinker &m_linker;
 	Poco::URI &m_uri;
@@ -90,6 +101,7 @@ private:
 	PocoRequest m_request;
 	PocoResponse m_response;
 	ExpirableSession::Ptr m_session;
+	Translator::Ptr m_translator;
 };
 
 }
