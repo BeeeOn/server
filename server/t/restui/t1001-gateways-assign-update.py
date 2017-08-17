@@ -76,6 +76,9 @@ class TestGatewayAssignUpdate(unittest.TestCase):
 
 		response, content = req()
 		self.assertEqual(403, response.status)
+		result = json.loads(content)
+		self.assertEqual(403, result["code"])
+		self.assertEqual("not enough permission to access the resource", result["message"])
 
 if __name__ == '__main__':
 	import sys

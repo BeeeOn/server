@@ -22,7 +22,7 @@ def login(body):
 	if result["status"] == "success":
 		return response, result["data"]["id"]
 	else:
-		return response, None
+		return response, result["message"]
 
 def logout(session):
 	req = DELETE(config.ui_host, config.ui_port, "/auth")
@@ -100,8 +100,9 @@ class TestAuth(unittest.TestCase):
 			self.assertEqual(200, response.status)
 			session.append(content)
 
-		response, _ = login(config.PERMIT_LOGIN)
+		response, message = login(config.PERMIT_LOGIN)
 		self.assertEqual(401, response.status)
+		self.assertEqual("not authenticated", message)
 
 		for s in session:
 			response, _ = logout(s)
