@@ -50,9 +50,14 @@ private:
 
 class IcuTranslatorFactory : public TranslatorFactory {
 public:
+	void setBundleName(const std::string &name);
+
 	Translator *create(
 		const Locale &locale,
 		const std::string &name = "") override;
+
+private:
+	std::string m_bundleName;
 };
 
 }
