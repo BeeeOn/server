@@ -24,11 +24,13 @@ PocoRestRequestHandler::PocoRestRequestHandler(
 		RestAction::Ptr action,
 		const MappedRestAction::Params &params,
 		ExpirableSession::Ptr session,
-		RestLinker &linker):
+		RestLinker &linker,
+		TranslatorFactory &factory):
 	m_action(action),
 	m_params(params),
 	m_session(session),
-	m_linker(linker)
+	m_linker(linker),
+	m_translatorFactory(factory)
 {
 }
 
@@ -188,9 +190,11 @@ void PocoRestRequestHandler::handleRequest(
 
 PocoRestRequestFactory::PocoRestRequestFactory(
 		RestRouter &router,
-		SessionVerifier &verifier):
+		SessionVerifier &verifier,
+		TranslatorFactory &factory):
 	m_router(router),
-	m_sessionVerifier(verifier)
+	m_sessionVerifier(verifier),
+	m_translatorFactory(factory)
 {
 }
 
@@ -212,7 +216,8 @@ HTTPRequestHandler *PocoRestRequestFactory::handleNoRoute(const HTTPServerReques
 		target,
 		{},
 		NULL,
-		static_cast<RestLinker &>(m_router)
+		static_cast<RestLinker &>(m_router),
+		m_translatorFactory
 	);
 }
 
@@ -231,7 +236,8 @@ HTTPRequestHandler *PocoRestRequestFactory::handleNoSession()
 		target,
 		{},
 		NULL,
-		static_cast<RestLinker &>(m_router)
+		static_cast<RestLinker &>(m_router),
+		m_translatorFactory
 	);
 }
 
@@ -257,7 +263,8 @@ HTTPRequestHandler *PocoRestRequestFactory::createWithSession(
 		action,
 		params,
 		session,
-		static_cast<RestLinker &>(m_router)
+		static_cast<RestLinker &>(m_router),
+		m_translatorFactory
 	);
 }
 

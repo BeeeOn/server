@@ -23,6 +23,7 @@ namespace BeeeOn {
 class RestLinker;
 class RestRouter;
 class SessionVerifier;
+class TranslatorFactory;
 
 class PocoRestRequestHandler : public Poco::Net::HTTPRequestHandler, Loggable {
 public:
@@ -30,7 +31,8 @@ public:
 			RestAction::Ptr action,
 			const MappedRestAction::Params &params,
 			ExpirableSession::Ptr session,
-			RestLinker &linker);
+			RestLinker &linker,
+			TranslatorFactory &factory);
 
 	void handleRequest(
 			Poco::Net::HTTPServerRequest &req,
@@ -58,6 +60,7 @@ private:
 	MappedRestAction::Params m_params;
 	ExpirableSession::Ptr m_session;
 	RestLinker &m_linker;
+	TranslatorFactory &m_translatorFactory;
 };
 
 /**
@@ -65,7 +68,8 @@ private:
  */
 class PocoRestRequestFactory : public Poco::Net::HTTPRequestHandlerFactory, Loggable {
 public:
-	PocoRestRequestFactory(RestRouter &router, SessionVerifier &verifier);
+	PocoRestRequestFactory(RestRouter &router, SessionVerifier &verifier,
+			TranslatorFactory &factory);
 
 	Poco::Net::HTTPRequestHandler *createRequestHandler(
 			const Poco::Net::HTTPServerRequest &request) override;
@@ -82,6 +86,7 @@ protected:
 private:
 	RestRouter &m_router;
 	SessionVerifier &m_sessionVerifier;
+	TranslatorFactory &m_translatorFactory;
 };
 
 
