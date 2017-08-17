@@ -4,6 +4,7 @@
 #include <Poco/Timespan.h>
 #include <Poco/SharedPtr.h>
 
+#include "l10n/Locale.h"
 #include "model/User.h"
 #include "model/VerifiedIdentity.h"
 
@@ -27,12 +28,16 @@ public:
 	void setUserId(const UserID &id);
 	const UserID userID() const;
 
+	void setLocale(const Locale &locale);
+	const Locale &locale() const;
+
 	const SessionID sessionID() const;
 
 private:
 	VerifiedIdentityID m_identityID;
 	UserID m_userID;
 	SessionID m_sessionID;
+	Locale m_locale;
 };
 
 /**

@@ -28,6 +28,16 @@ const UserID Session::userID() const
 	return m_userID;
 }
 
+void Session::setLocale(const Locale &locale)
+{
+	m_locale = locale;
+}
+
+const Locale &Session::locale() const
+{
+	return m_locale;
+}
+
 const SessionID Session::sessionID() const
 {
 	return m_sessionID;
