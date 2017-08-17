@@ -12,5 +12,9 @@
 			<set name="resourceDir" text="${bundle.resource.dir}" />
 			<set name="defaultLocale" text="en" />
 		</instance>
+
+		<instance name="translatorFactory" class="BeeeOn::IcuTranslatorFactory">
+			<set name="bundleName" text="${bundle.name}" />
+		</instance>
 	</factory>
 </system>
