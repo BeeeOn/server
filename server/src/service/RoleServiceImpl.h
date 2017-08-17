@@ -31,10 +31,11 @@ public:
 	void setNotificationDispatcher(NotificationDispatcher *service);
 
 	void inviteIdentity(
-			Relation<Identity, Gateway> &input,
+			Relation<RoleInGateway, Gateway> &input,
+			const Identity &identity,
 			const AccessLevel &as)
 	{
-		BEEEON_TRANSACTION(doInviteIdentity(input, as));
+		BEEEON_TRANSACTION(doInviteIdentity(input, identity, as));
 	}
 
 	bool fetch(Relation<LegacyRoleInGateway, Gateway> &input)
@@ -69,7 +70,8 @@ public:
 
 protected:
 	void doInviteIdentity(
-			Relation<Identity, Gateway> &input,
+			Relation<RoleInGateway, Gateway> &input,
+			const Identity &identity,
 			const AccessLevel &as);
 	bool doFetch(Relation<LegacyRoleInGateway, Gateway> &input);
 	bool doFetch(Relation<RoleInGateway, Gateway> &input, const VerifiedIdentity &identity);

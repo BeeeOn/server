@@ -60,19 +60,20 @@ void RoleServiceImpl::setNotificationDispatcher(
 }
 
 void RoleServiceImpl::doInviteIdentity(
-		Relation<Identity, Gateway> &input,
+		Relation<RoleInGateway, Gateway> &input,
+		const Identity &identity,
 		const AccessLevel &as)
 {
 	m_accessPolicy->assure(RoleAccessPolicy::ACTION_USER_INVITE, input, input.base());
 
-	const string email(input.target().email());
+	Identity tmp(identity);
 
-	if (!m_identityDao->fetchBy(input.target(), email))
-		m_identityDao->create(input.target());
+	if (!m_identityDao->fetchBy(tmp, identity.email()))
+		m_identityDao->create(tmp);
 
-	RoleInGateway role;
+	RoleInGateway &role = input.target();
 	role.setGateway(input.base());
-	role.setIdentity(input.target());
+	role.setIdentity(tmp);
 	role.setLevel(as);
 
 	// Create the role or fail if already exists.
@@ -80,9 +81,7 @@ void RoleServiceImpl::doInviteIdentity(
 
 	// notify about the invitation
 	m_notificationDispatcher->notifyInvited(
-			input.target(),
-			input.base(),
-			input.user());
+			tmp, input.base(), input.user());
 }
 
 bool RoleServiceImpl::doFetch(Relation<LegacyRoleInGateway, Gateway> &input)

@@ -66,15 +66,17 @@ void RoleXmlHandler::handleInvite(const string &gateid, Element *userNode)
 	const string email(userNode->getAttribute("email"));
 	const string perm(userNode->getAttribute("permission"));
 
+	RoleInGateway role;
+
 	Identity identity;
 	identity.setEmail(email);
 	AccessLevel as(AccessLevel::parse(perm));
 
-	Relation<Identity, Gateway> input(identity, gateway);
+	Relation<RoleInGateway, Gateway> input(role, gateway);
 	User user(session()->userID());
 	input.setUser(user);
 
-	m_roleService.inviteIdentity(input, as);
+	m_roleService.inviteIdentity(input, identity, as);
 	resultSuccess();
 }
 
