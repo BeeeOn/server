@@ -38,6 +38,14 @@ SharedPtr<IcuLocaleImpl> IcuLocaleManager::determine(const IcuLocaleImpl &locale
 	return NULL;
 }
 
+BeeeOn::Locale IcuLocaleManager::defaultLocale()
+{
+	if (m_cachedDefaultLocale.isNull())
+		m_cachedDefaultLocale = new IcuLocaleImpl(IcuLocaleImpl::parse(m_defaultLocale));
+
+	return Locale(m_cachedDefaultLocale);
+}
+
 BeeeOn::Locale IcuLocaleManager::parse(const string &input)
 {
 	IcuLocaleImpl locale = IcuLocaleImpl::parse(input);
@@ -49,13 +57,25 @@ BeeeOn::Locale IcuLocaleManager::parse(const string &input)
 				__FILE__, __LINE__);
 		}
 
-		if (m_cachedDefaultLocale.isNull())
-			m_cachedDefaultLocale = new IcuLocaleImpl(IcuLocaleImpl::parse(m_defaultLocale));
-
-		return Locale(m_cachedDefaultLocale);
+		return defaultLocale();
 	}
 
 	return Locale(found);
+}
+
+BeeeOn::Locale IcuLocaleManager::chooseBest(const vector<string> &input)
+{
+	for (const auto one : input) {
+		IcuLocaleImpl locale = IcuLocaleImpl::parse(one);
+		auto found = determine(locale);
+
+		if (found.isNull())
+			continue;
+
+		return Locale(found);
+	}
+
+	return defaultLocale();
 }
 
 void IcuLocaleManager::setDefaultLocale(const string &name)

@@ -15,10 +15,13 @@ public:
 	IcuLocaleManager();
 
 	Locale parse(const std::string &input) override;
+	Locale chooseBest(const std::vector<std::string> &input) override;
 
 	void setDefaultLocale(const std::string &locale);
 	void setBundleName(const std::string &name);
 	void setResourceDir(const std::string &dir);
+
+	Locale defaultLocale();
 
 	/**
 	 * Setup the localization environment to use the uci library.

@@ -13,6 +13,7 @@ find_library (ICU_I18N icui18n)
 find_library (ICU_UC icuuc)
 
 file(GLOB TEST_SOURCES
+	${PROJECT_SOURCE_DIR}/l10n/HTTPLocaleExtractorTest.cpp
 	${PROJECT_SOURCE_DIR}/l10n/IcuLocaleImplTest.cpp
 	${PROJECT_SOURCE_DIR}/l10n/IcuLocaleManagerTest.cpp
 	${PROJECT_SOURCE_DIR}/l10n/IcuTranslatorTest.cpp
