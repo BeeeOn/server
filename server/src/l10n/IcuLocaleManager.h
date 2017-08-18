@@ -20,6 +20,8 @@ public:
 	void setBundleName(const std::string &name);
 	void setResourceDir(const std::string &dir);
 
+	Locale defaultLocale();
+
 	/**
 	 * Setup the localization environment to use the uci library.
 	 */
