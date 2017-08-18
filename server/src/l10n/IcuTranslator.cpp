@@ -13,6 +13,8 @@
 #include "util/ClassInfo.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, IcuTranslatorFactory)
+BEEEON_OBJECT_CASTABLE(TranslatorFactory)
+BEEEON_OBJECT_TEXT("bundleName", &IcuTranslatorFactory::setBundleName)
 BEEEON_OBJECT_END(BeeeOn, IcuTranslatorFactory)
 
 using namespace std;
@@ -203,15 +205,21 @@ static IcuLocaleImpl asIcuLocale(const BeeeOn::Locale &locale)
 		return IcuLocaleImpl::parse(locale.toString());
 }
 
+void IcuTranslatorFactory::setBundleName(const string &name)
+{
+	m_bundleName = name;
+}
+
 Translator *IcuTranslatorFactory::create(
 		const Locale &loc,
 		const string &name)
 {
 	const IcuLocaleImpl &locale = asIcuLocale(loc);
+	const string bundleName = name.empty()? m_bundleName : name;
 
 	UErrorCode error = U_ZERO_ERROR;
-	icu::ResourceBundle bundle(name.c_str(), locale.icu(), error);
-	handleError(Loggable::forInstance(this), error, name, locale.toString());
+	icu::ResourceBundle bundle(bundleName.c_str(), locale.icu(), error);
+	handleError(Loggable::forInstance(this), error, bundleName, locale.toString());
 
 	return new IcuTranslator(bundle.clone());
 }
