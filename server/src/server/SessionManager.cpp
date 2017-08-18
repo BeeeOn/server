@@ -71,6 +71,7 @@ const ExpirableSession::Ptr SessionManager::open(
 
 	ExpirableSession session(user.id(), sessionID, m_expireTime);
 	session.setIdentityID(identity.id());
+	session.setLocale(user.locale());
 
 	m_sessionCache->add(session.sessionID(), session);
 

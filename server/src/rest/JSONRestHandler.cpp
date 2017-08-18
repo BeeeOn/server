@@ -52,6 +52,7 @@ RestHandler::Handler JSONRestHandler::wrapHandler(const Handler &handler)
 	Handler wrapped = [this, handler](RestFlow &flow) {
 		const PocoRequest &request = flow.request();
 		PocoResponse &response = flow.response();
+		Translator::Ptr translator = flow.translator();
 
 		response.impl().setVersion(HTTPResponse::HTTP_1_1);
 
@@ -86,47 +87,47 @@ RestHandler::Handler JSONRestHandler::wrapHandler(const Handler &handler)
 			);
 
 			status = "error";
-			message = "not authenticated";
+			message = translator->format("not_authenticated");
 		}
 		catch (const NotFoundException &e) {
 			handleException(flow, e, __FILE__, __LINE__);
 
 			response.setStatus(HTTPResponse::HTTP_NOT_FOUND);
 			status = "error";
-			message = "requested resource doest not exist";
+			message = translator->format("requested_resource_missing");
 		}
 		catch (const InvalidAccessException &e) {
 			handleException(flow, e, __FILE__, __LINE__);
 
 			response.setStatus(HTTPResponse::HTTP_FORBIDDEN);
 			status = "error";
-			message = "not enough permission to access the resource";
+			message = translator->format("not_enough_permission");
 		}
 		catch (const SyntaxException &e) {
 			handleException(flow, e, __FILE__, __LINE__);
 
 			response.setStatus(HTTPResponse::HTTP_BAD_REQUEST);
 			status = "error";
-			message = "cannot process input data";
+			message = translator->format("malformed_input_data");
 		}
 		catch (const InvalidArgumentException &e) {
 			handleException(flow, e, __FILE__, __LINE__);
 
 			response.setStatus(HTTPResponse::HTTP_BAD_REQUEST);
 			status = "error";
-			message = "malformed input data";
+			message = translator->format("invalid_input_data");
 		}
 		catch (const Exception &e) {
 			handleException(flow, e, __FILE__, __LINE__);
 
 			response.setStatus(HTTPResponse::HTTP_INTERNAL_SERVER_ERROR);
-			message = "internal error on the server";
+			message = translator->format("internal_error");
 		}
 		catch (const exception &e) {
 			handleException(flow, e, __FILE__, __LINE__);
 
 			response.setStatus(HTTPResponse::HTTP_INTERNAL_SERVER_ERROR);
-			message = "internal error on the server";
+			message = translator->format("internal_error");
 		}
 
 		PrintHandler result(response.impl().send());

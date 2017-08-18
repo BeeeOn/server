@@ -1,0 +1,10 @@
+cs {
+	hello { "Překlad funguje" }
+
+	not_authenticated { "uživatel nepřihlášen" }
+	requested_resource_missing { "požadovaný zdroj zřejmě neexistuje" }
+	not_enough_permission { "příliš nízká oprávnění pro přístup ke zdroji" }
+	malformed_input_data { "vstupní data jsou neplatná" }
+	invalid_input_data { "chybně zadané údaje" }
+	internal_error { "interní chyba serveru" }
+}

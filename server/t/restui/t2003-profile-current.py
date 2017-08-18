@@ -66,6 +66,7 @@ class TestProfileCurrent(unittest.TestCase):
 		self.assertEqual(403, response.status)
 		result = json.loads(content)
 		self.assertEqual("error", result["status"])
+		self.assertEqual("not enough permission to access the resource", result["message"])
 
 	def test3_list(self):
 		req = GET(config.ui_host, config.ui_port, "/profiles")

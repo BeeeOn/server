@@ -26,6 +26,7 @@ exec_program(
 	res/beeeon_server/res_index.txt
 	res/beeeon_server/root.txt
 	res/beeeon_server/en.txt
+	res/beeeon_server/cs.txt
 )
 
 add_subdirectory(src)

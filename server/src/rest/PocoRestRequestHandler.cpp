@@ -8,6 +8,7 @@
 #include <Poco/Net/HTTPServerRequest.h>
 #include <Poco/Net/HTTPServerResponse.h>
 
+#include "l10n/HTTPLocaleExtractor.h"
 #include "rest/PocoRestRequestHandler.h"
 #include "rest/RestFlow.h"
 #include "rest/RestRouter.h"
@@ -24,11 +25,15 @@ PocoRestRequestHandler::PocoRestRequestHandler(
 		RestAction::Ptr action,
 		const MappedRestAction::Params &params,
 		ExpirableSession::Ptr session,
-		RestLinker &linker):
+		RestLinker &linker,
+		TranslatorFactory &factory,
+		HTTPLocaleExtractor &localeExtractor):
 	m_action(action),
 	m_params(params),
 	m_session(session),
-	m_linker(linker)
+	m_linker(linker),
+	m_translatorFactory(factory),
+	m_localeExtractor(localeExtractor)
 {
 }
 
@@ -164,6 +169,27 @@ void PocoRestRequestHandler::handleRequest(
 
 	try {
 		flow.setSession(m_session);
+
+		if (m_session.isNull()) {
+			string language = req.has("Accept-Language") ? req.get("Accept-Language") : "";
+
+			const Locale &httpLocale = m_localeExtractor.extract(language);
+
+			if (logger().debug())
+				logger().debug("resolved locale: " + httpLocale.toString());
+
+			Translator::Ptr translator = m_translatorFactory.create(httpLocale);
+			flow.setTranslator(translator);
+		}
+		else {
+			Translator::Ptr translator = m_translatorFactory.create(m_session->locale());
+
+			if (logger().debug())
+				logger().debug("using user locale: " + m_session->locale().toString());
+
+			flow.setTranslator(translator);
+		}
+
 		call(flow);
 		return;
 	}
@@ -188,9 +214,13 @@ void PocoRestRequestHandler::handleRequest(
 
 PocoRestRequestFactory::PocoRestRequestFactory(
 		RestRouter &router,
-		SessionVerifier &verifier):
+		SessionVerifier &verifier,
+		TranslatorFactory &factory,
+		HTTPLocaleExtractor &localeExtractor):
 	m_router(router),
-	m_sessionVerifier(verifier)
+	m_sessionVerifier(verifier),
+	m_translatorFactory(factory),
+	m_localeExtractor(localeExtractor)
 {
 }
 
@@ -212,7 +242,9 @@ HTTPRequestHandler *PocoRestRequestFactory::handleNoRoute(const HTTPServerReques
 		target,
 		{},
 		NULL,
-		static_cast<RestLinker &>(m_router)
+		static_cast<RestLinker &>(m_router),
+		m_translatorFactory,
+		m_localeExtractor
 	);
 }
 
@@ -231,7 +263,9 @@ HTTPRequestHandler *PocoRestRequestFactory::handleNoSession()
 		target,
 		{},
 		NULL,
-		static_cast<RestLinker &>(m_router)
+		static_cast<RestLinker &>(m_router),
+		m_translatorFactory,
+		m_localeExtractor
 	);
 }
 
@@ -257,7 +291,9 @@ HTTPRequestHandler *PocoRestRequestFactory::createWithSession(
 		action,
 		params,
 		session,
-		static_cast<RestLinker &>(m_router)
+		static_cast<RestLinker &>(m_router),
+		m_translatorFactory,
+		m_localeExtractor
 	);
 }
 

@@ -78,6 +78,7 @@ class TestAttack(unittest.TestCase):
 		result = json.loads(content)
 		self.assertEqual("error", result["status"])
 		self.assertEqual(400, result["code"])
+		self.assertEqual("invalid input data", result["message"])
 
 if __name__ == '__main__':
 	import sys
