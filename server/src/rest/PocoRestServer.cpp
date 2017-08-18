@@ -14,6 +14,7 @@ BEEEON_OBJECT_CASTABLE(StoppableLoop)
 BEEEON_OBJECT_REF("router", &PocoRestServer::setRouter)
 BEEEON_OBJECT_REF("sessionVerifier", &PocoRestServer::setSessionVerifier)
 BEEEON_OBJECT_REF("translatorFactory", &PocoRestServer::setTranslatorFactory)
+BEEEON_OBJECT_REF("localeManager", &PocoRestServer::setLocaleManager)
 BEEEON_OBJECT_NUMBER("port", &PocoRestServer::setPort)
 BEEEON_OBJECT_NUMBER("backlog", &PocoRestServer::setBacklog)
 BEEEON_OBJECT_NUMBER("minThreads", &PocoRestServer::setMinThreads)
@@ -50,7 +51,7 @@ void PocoRestServer::initFactory()
 	if (m_translatorFactory.isNull())
 		m_translatorFactory = new NoTranslatorFactory;
 
-	m_factory = new PocoRestRequestFactory(*m_router, *m_sessionVerifier, *m_translatorFactory);
+	m_factory = new PocoRestRequestFactory(*m_router, *m_sessionVerifier, *m_translatorFactory, m_localeExtractor);
 }
 
 void PocoRestServer::initHttpServer()
@@ -97,6 +98,11 @@ void PocoRestServer::setSessionVerifier(SessionVerifier *verifier)
 void PocoRestServer::setTranslatorFactory(TranslatorFactory::Ptr factory)
 {
 	m_translatorFactory = factory;
+}
+
+void PocoRestServer::setLocaleManager(SharedPtr<LocaleManager> manager)
+{
+	m_localeExtractor.setLocaleManager(manager);
 }
 
 void PocoRestServer::setPort(int port)

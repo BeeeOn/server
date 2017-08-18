@@ -8,6 +8,7 @@
 #include <Poco/Net/HTTPServerRequest.h>
 #include <Poco/Net/HTTPServerResponse.h>
 
+#include "l10n/HTTPLocaleExtractor.h"
 #include "rest/PocoRestRequestHandler.h"
 #include "rest/RestFlow.h"
 #include "rest/RestRouter.h"
@@ -25,12 +26,14 @@ PocoRestRequestHandler::PocoRestRequestHandler(
 		const MappedRestAction::Params &params,
 		ExpirableSession::Ptr session,
 		RestLinker &linker,
-		TranslatorFactory &factory):
+		TranslatorFactory &factory,
+		HTTPLocaleExtractor &localeExtractor):
 	m_action(action),
 	m_params(params),
 	m_session(session),
 	m_linker(linker),
-	m_translatorFactory(factory)
+	m_translatorFactory(factory),
+	m_localeExtractor(localeExtractor)
 {
 }
 
@@ -191,10 +194,12 @@ void PocoRestRequestHandler::handleRequest(
 PocoRestRequestFactory::PocoRestRequestFactory(
 		RestRouter &router,
 		SessionVerifier &verifier,
-		TranslatorFactory &factory):
+		TranslatorFactory &factory,
+		HTTPLocaleExtractor &localeExtractor):
 	m_router(router),
 	m_sessionVerifier(verifier),
-	m_translatorFactory(factory)
+	m_translatorFactory(factory),
+	m_localeExtractor(localeExtractor)
 {
 }
 
@@ -217,7 +222,8 @@ HTTPRequestHandler *PocoRestRequestFactory::handleNoRoute(const HTTPServerReques
 		{},
 		NULL,
 		static_cast<RestLinker &>(m_router),
-		m_translatorFactory
+		m_translatorFactory,
+		m_localeExtractor
 	);
 }
 
@@ -237,7 +243,8 @@ HTTPRequestHandler *PocoRestRequestFactory::handleNoSession()
 		{},
 		NULL,
 		static_cast<RestLinker &>(m_router),
-		m_translatorFactory
+		m_translatorFactory,
+		m_localeExtractor
 	);
 }
 
@@ -264,7 +271,8 @@ HTTPRequestHandler *PocoRestRequestFactory::createWithSession(
 		params,
 		session,
 		static_cast<RestLinker &>(m_router),
-		m_translatorFactory
+		m_translatorFactory,
+		m_localeExtractor
 	);
 }
 

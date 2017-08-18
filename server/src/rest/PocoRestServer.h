@@ -7,6 +7,7 @@
 #include <Poco/Net/ServerSocket.h>
 
 #include "l10n/Translator.h"
+#include "l10n/HTTPLocaleExtractor.h"
 #include "loop/StoppableLoop.h"
 #include "util/HavingThreadPool.h"
 
@@ -47,6 +48,11 @@ public:
 	void setTranslatorFactory(TranslatorFactory::Ptr factory);
 
 	/**
+	 * Set locale manager for HTTPLocaleExtractor.
+	 */
+	void setLocaleManager(Poco::SharedPtr<LocaleManager> manager);
+
+	/**
 	 * Set port to listen on.
 	 */
 	void setPort(int port);
@@ -70,6 +76,7 @@ private:
 	Poco::Net::HTTPRequestHandlerFactory::Ptr m_factory;
 	Poco::SharedPtr<Poco::Net::HTTPServer> m_server;
 	TranslatorFactory::Ptr m_translatorFactory;
+	HTTPLocaleExtractor m_localeExtractor;
 };
 
 }

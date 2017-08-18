@@ -20,6 +20,7 @@ class HTTPServerResponse;
 
 namespace BeeeOn {
 
+class HTTPLocaleExtractor;
 class RestLinker;
 class RestRouter;
 class SessionVerifier;
@@ -32,7 +33,8 @@ public:
 			const MappedRestAction::Params &params,
 			ExpirableSession::Ptr session,
 			RestLinker &linker,
-			TranslatorFactory &factory);
+			TranslatorFactory &factory,
+			HTTPLocaleExtractor &localeExtractor);
 
 	void handleRequest(
 			Poco::Net::HTTPServerRequest &req,
@@ -61,6 +63,7 @@ private:
 	ExpirableSession::Ptr m_session;
 	RestLinker &m_linker;
 	TranslatorFactory &m_translatorFactory;
+	HTTPLocaleExtractor &m_localeExtractor;
 };
 
 /**
@@ -69,7 +72,7 @@ private:
 class PocoRestRequestFactory : public Poco::Net::HTTPRequestHandlerFactory, Loggable {
 public:
 	PocoRestRequestFactory(RestRouter &router, SessionVerifier &verifier,
-			TranslatorFactory &factory);
+			TranslatorFactory &factory, HTTPLocaleExtractor &localeExtractor);
 
 	Poco::Net::HTTPRequestHandler *createRequestHandler(
 			const Poco::Net::HTTPServerRequest &request) override;
@@ -87,6 +90,7 @@ private:
 	RestRouter &m_router;
 	SessionVerifier &m_sessionVerifier;
 	TranslatorFactory &m_translatorFactory;
+	HTTPLocaleExtractor &m_localeExtractor;
 };
 
 

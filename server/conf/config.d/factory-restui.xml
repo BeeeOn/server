@@ -8,6 +8,7 @@
 			<set name="router" ref="uiRouter" />
 			<set name="sessionVerifier" ref="sessionVerifier" />
 			<set name="translatorFactory" ref="translatorFactory" />
+			<set name="localeManager" ref="localeManager" />
 			<set name="port" number="${restui.port}" />
 		</instance>
 
