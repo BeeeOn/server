@@ -63,6 +63,21 @@ BeeeOn::Locale IcuLocaleManager::parse(const string &input)
 	return Locale(found);
 }
 
+BeeeOn::Locale IcuLocaleManager::chooseBest(const vector<string> &input)
+{
+	for (const auto one : input) {
+		IcuLocaleImpl locale = IcuLocaleImpl::parse(one);
+		auto found = determine(locale);
+
+		if (found.isNull())
+			continue;
+
+		return Locale(found);
+	}
+
+	return defaultLocale();
+}
+
 void IcuLocaleManager::setDefaultLocale(const string &name)
 {
 	m_defaultLocale = name;

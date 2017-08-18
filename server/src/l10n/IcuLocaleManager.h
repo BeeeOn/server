@@ -15,6 +15,7 @@ public:
 	IcuLocaleManager();
 
 	Locale parse(const std::string &input) override;
+	Locale chooseBest(const std::vector<std::string> &input);
 
 	void setDefaultLocale(const std::string &locale);
 	void setBundleName(const std::string &name);
