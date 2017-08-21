@@ -25,6 +25,7 @@ public:
 	virtual void create(RoleInGateway &role) = 0;
 	virtual bool update(RoleInGateway &role) = 0;
 	virtual bool fetch(RoleInGateway &role) = 0;
+	virtual bool fetch(LegacyRoleInGateway &role) = 0;
 	virtual void fetchBy(std::vector<RoleInGateway> &roles,
 			const Gateway &gateway) = 0;
 	virtual void fetchBy(std::vector<LegacyRoleInGateway> &roles,

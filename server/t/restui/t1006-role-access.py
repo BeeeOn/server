@@ -9,7 +9,8 @@ import json
 
 from rest import GET, POST, DELETE, PUT
 
-class TestLocationGetUpdate(unittest.TestCase):
+
+class TestRole(unittest.TestCase):
 	"""
 	Create a session for testing.
 	"""
@@ -27,13 +28,12 @@ class TestLocationGetUpdate(unittest.TestCase):
 
 		req = POST(config.ui_host, config.ui_port, "/gateways")
 		req.authorize(self.session)
-		req.body(json.dumps(
-			{"id": config.gateway_id, "name": "Testing Gateway"}
-		))
+		req.body(json.dumps({
+			"id": config.gateway_id, "name": "Testing Gateway"
+		}))
 		response, _ = req()
 
-		if response.status != 403:
-			self.assertEqual(201, response.status)
+		self.assertEqual(201, response.status)
 
 	def tearDown(self):
 		req = DELETE(config.ui_host, config.ui_port, "/gateways/" + config.gateway_id)
@@ -49,33 +49,28 @@ class TestLocationGetUpdate(unittest.TestCase):
 		self.assertEqual(204, response.status)
 
 	"""
-	Update existing location
+	Access my current role in the given gateway.
 	"""
-	def test2_get_and_update(self):
-		req = GET(config.ui_host, config.ui_port, "/gateways/" + config.gateway_id + "/locations")
+	def test1_access_myself(self):
+		req = GET(config.ui_host, config.ui_port, "/gateways/" + config.gateway_id + "/roles/current")
 		req.authorize(self.session)
 		response, content = req()
 
-		result = json.loads(content)
+		self.assertEqual(303, response.status)
 
-		self.assertEqual(200, response.status)
-
-		location = result["data"][0]
-
-		req = PUT(config.ui_host, config.ui_port,
-			"/gateways/" + config.gateway_id + "/locations/" + location["id"])
-
+		req = GET(config.ui_host, config.ui_port, response.headers["Location"])
 		req.authorize(self.session)
-		req.body(json.dumps({
-			"name": "New location2"
-		}))
-
 		response, content = req()
-		result = json.loads(content)
 
 		self.assertEqual(200, response.status)
-		self.assertEqual("New location2", result["data"]["name"])
+		result = json.loads(content)
+		self.assertEqual("success", result["status"])
+		self.assertEqual(200, result["code"])
 
+		self.assertEqual("joe.doe@example.org", result["data"]["identity_email"])
+		self.assertEqual("admin", result["data"]["access_level"])
+		self.assertEqual("Joe", result["data"]["user"]["first_name"])
+		self.assertEqual("Doe", result["data"]["user"]["last_name"])
 
 if __name__ == '__main__':
 	import sys
