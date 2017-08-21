@@ -31,6 +31,12 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/util/SanitizeTest.cpp
 )
 
+file(GLOB TEST_WORK_SOURCES
+	${PROJECT_SOURCE_DIR}/work/BasicProcessorTest.cpp
+	${PROJECT_SOURCE_DIR}/work/BasicQueueTest.cpp
+	${PROJECT_SOURCE_DIR}/work/GenericWorkRunnerTest.cpp
+)
+
 include_directories(
 	${PROJECT_SOURCE_DIR}
 	${CMAKE_SOURCE_DIR}/src
@@ -41,6 +47,7 @@ include_directories(
 add_executable(test-suite-server
 	${CMAKE_SOURCE_DIR}/base/test/test.cpp
 	${TEST_SOURCES}
+	${TEST_WORK_SOURCES}
 )
 add_test(COMMAND test-suite-server)
 
