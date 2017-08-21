@@ -35,6 +35,11 @@ public:
 		BEEEON_TRANSACTION(doInviteIdentity(input, as));
 	}
 
+	bool fetch(Relation<LegacyRoleInGateway, Gateway> &input)
+	{
+		return BEEEON_TRANSACTION_RETURN(bool, doFetch(input));
+	}
+
 	void list(Relation<std::vector<RoleInGateway>, Gateway> &input)
 	{
 		BEEEON_TRANSACTION(doList(input));
@@ -59,6 +64,7 @@ protected:
 	void doInviteIdentity(
 			Relation<Identity, Gateway> &input,
 			const AccessLevel &as);
+	bool doFetch(Relation<LegacyRoleInGateway, Gateway> &input);
 	void doList(Relation<std::vector<RoleInGateway>, Gateway> &input);
 	void doList(Relation<std::vector<LegacyRoleInGateway>, Gateway> &input);
 	void doRemove(Single<RoleInGateway> &input);

@@ -26,6 +26,7 @@ public:
 	void create(RoleInGateway &role) override;
 	bool update(RoleInGateway &role) override;
 	bool fetch(RoleInGateway &role) override;
+	bool fetch(LegacyRoleInGateway &role) override;
 	void fetchBy(std::vector<RoleInGateway> &roles,
 			const Gateway &gateway) override;
 	void fetchBy(std::vector<LegacyRoleInGateway> &roles,
@@ -100,6 +101,7 @@ private:
 	SQLQuery m_queryFetchById        {"roles_in_gateway.fetch.by.id"};
 	SQLQuery m_queryFetchByGatewayId   {"roles_in_gateway.fetch.by.gateway_id"};
 	SQLQuery m_queryFetchLegacyByGatewayId {"legacy_roles_in_gateway.fetch.by.gateway_id"};
+	SQLQuery m_queryFetchLegacyById  {"legacy_roles_in_gateway.fetch.by.id"};
 	SQLQuery m_queryFetchAccessLevel {"roles_in_gateway.fetch.access_level"};
 	SQLQuery m_queryFetchAccessibleGateways {"roles_in_gateway.fetch.accessible.gateways"};
 	SQLQuery m_queryHasOnlyNonAdminExcept {"roles_in_gateway.has.only.given.level.except"};

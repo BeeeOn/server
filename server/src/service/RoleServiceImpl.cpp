@@ -79,6 +79,12 @@ void RoleServiceImpl::doInviteIdentity(
 			input.user());
 }
 
+bool RoleServiceImpl::doFetch(Relation<LegacyRoleInGateway, Gateway> &input)
+{
+	m_accessPolicy->assure(RoleAccessPolicy::ACTION_USER_GET, input, input.target());
+	return m_roleInGatewayDao->fetch(input.target());
+}
+
 void RoleServiceImpl::doList(Relation<vector<RoleInGateway>, Gateway> &input)
 {
 	m_accessPolicy->assure(RoleAccessPolicy::ACTION_USER_GET, input, input.base());

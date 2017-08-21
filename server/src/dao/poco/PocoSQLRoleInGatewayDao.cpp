@@ -41,6 +41,7 @@ PocoSQLRoleInGatewayDao::PocoSQLRoleInGatewayDao()
 	registerQuery(m_queryFetchById);
 	registerQuery(m_queryFetchByGatewayId);
 	registerQuery(m_queryFetchLegacyByGatewayId);
+	registerQuery(m_queryFetchLegacyById);
 	registerQuery(m_queryFetchAccessLevel);
 	registerQuery(m_queryFetchAccessibleGateways);
 	registerQuery(m_queryHasOnlyNonAdminExcept);
@@ -93,6 +94,23 @@ bool PocoSQLRoleInGatewayDao::fetch(RoleInGateway &role)
 	string roleID(role.id().toString());
 
 	Statement sql = (session() << m_queryFetchById(),
+		use(roleID, "role_id")
+	);
+
+	if (execute(sql) == 0)
+		return false;
+
+	RecordSet result(sql);
+	return parseSingle(result, role);
+}
+
+bool PocoSQLRoleInGatewayDao::fetch(LegacyRoleInGateway &role)
+{
+	assureHasId(role);
+
+	string roleID(role.id().toString());
+
+	Statement sql = (session() << m_queryFetchLegacyById(),
 		use(roleID, "role_id")
 	);
 

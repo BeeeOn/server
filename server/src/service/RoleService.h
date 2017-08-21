@@ -25,6 +25,7 @@ public:
 	virtual void inviteIdentity(
 			Relation<Identity, Gateway> &input,
 			const AccessLevel &as) = 0;
+	virtual bool fetch(Relation<LegacyRoleInGateway, Gateway> &input) = 0;
 	virtual void list(Relation<std::vector<RoleInGateway>, Gateway> &input) = 0;
 	virtual void list(Relation<std::vector<LegacyRoleInGateway>, Gateway> &input) = 0;
 	virtual void remove(Single<RoleInGateway> &input) = 0;
