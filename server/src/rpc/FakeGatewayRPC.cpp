@@ -19,10 +19,24 @@ public:
 
 	void setDeviceDao(DeviceDao::Ptr dao);
 
-	void sendListen(const Gateway &gateway) override;
-	void unpairDevice(const Gateway &gateway,
+	void sendListen(
+			const ResultCall &resultCall,
+			const Gateway &gateway,
+			const Poco::Timespan &duration) override;
+	void unpairDevice(
+			const ResultCall &resultCall,
+			const Gateway &gateway,
 			const Device &device) override;
-	void pingGateway(const Gateway &gateway) override;
+	void pingGateway(
+			const ResultCall &resultCall,
+			const Gateway &gateway) override;
+	void updateActor(
+			const ResultCall &resultCall,
+			const Gateway &gateway,
+			const Device &device,
+			const ModuleInfo &module,
+			double value,
+			const Timespan &timeout) override;
 
 private:
 	DeviceDao::Ptr m_deviceDao;
@@ -37,21 +51,35 @@ void FakeGatewayRPC::setDeviceDao(DeviceDao::Ptr dao)
 	m_deviceDao = dao;
 }
 
-void FakeGatewayRPC::sendListen(const Gateway &gateway)
+void FakeGatewayRPC::sendListen(
+		const ResultCall &resultCall,
+		const Gateway &gateway,
+		const Poco::Timespan &duration)
 {
 	logger().warning("send listen to gateway",
 			__FILE__, __LINE__);
+
+	GatewayRPCResult::Ptr result = new GatewayRPCResult;
+	result->setStatus(GatewayRPCResult::SUCCESS);
+	resultCall(result);
 }
 
-void FakeGatewayRPC::unpairDevice(const Gateway &gateway,
+void FakeGatewayRPC::unpairDevice(
+		const ResultCall &resultCall,
+		const Gateway &gateway,
 		const Device &target)
 {
 	Device device(target);
+
+	GatewayRPCResult::Ptr result = new GatewayRPCResult;
 
 	if (!m_deviceDao->fetch(device, gateway)) {
 		logger().warning("failed to fetch device "
 				+ device.id().toString(),
 				__FILE__, __LINE__);
+
+		result->setStatus(GatewayRPCResult::FAILED);
+		resultCall(result);
 		return;
 	}
 
@@ -61,13 +89,42 @@ void FakeGatewayRPC::unpairDevice(const Gateway &gateway,
 		logger().warning("failed to update device "
 				+ device.id().toString(),
 				__FILE__, __LINE__);
+
+		result->setStatus(GatewayRPCResult::FAILED);
+		resultCall(result);
+		return;
 	}
+
+	result->setStatus(GatewayRPCResult::SUCCESS);
+	resultCall(result);
 }
 
-void FakeGatewayRPC::pingGateway(const Gateway &gateway)
+void FakeGatewayRPC::pingGateway(
+		const ResultCall &resultCall,
+		const Gateway &gateway)
 {
 	logger().warning("ping gateway",
 			__FILE__, __LINE__);
+
+	GatewayRPCResult::Ptr result = new GatewayRPCResult;
+	result->setStatus(GatewayRPCResult::SUCCESS);
+	resultCall(result);
+}
+
+void FakeGatewayRPC::updateActor(
+		const ResultCall &resultCall,
+		const Gateway &gateway,
+		const Device &device,
+		const ModuleInfo &module,
+		double value,
+		const Timespan &timeout)
+{
+	logger().warning("update actor",
+			__FILE__, __LINE__);
+
+	GatewayRPCResult::Ptr result = new GatewayRPCResult;
+	result->setStatus(GatewayRPCResult::SUCCESS);
+	resultCall(result);
 }
 
 }

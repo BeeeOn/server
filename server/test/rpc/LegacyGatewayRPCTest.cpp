@@ -21,6 +21,8 @@
 #define GATEWAYID_SUCCESS_NUM 1111222211112222
 #define GATEWAYID_FAIL_STRING "1111222233334444"
 #define GATEWAYID_FAIL_NUM 1111222233334444
+#define GATEWAYID_SLOW_STRING "1111111111111111"
+#define GATEWAYID_SLOW_NUM 1111111111111111
 
 using namespace std;
 using namespace Poco;
@@ -56,6 +58,8 @@ public:
 				sendSuccessResponse(sock);
 			else if (gatewayID == GATEWAYID_FAIL_STRING)
 				sendFailResponse(sock);
+			else if (gatewayID == GATEWAYID_SLOW_STRING)
+				sendSlowResponse(sock);
 			else poco_assert(false);
 		}
 		else if (root->getAttribute("type") == "ping") {
@@ -93,6 +97,14 @@ private:
 	{
 		string xml("<reply errorCode=\"1\">false</reply>");
 		socket.sendBytes(xml.c_str(), xml.length());
+	}
+
+	void sendSlowResponse(StreamSocket &socket)
+	{
+		string xml("<reply errorCode=\"0\">true</reply>");
+
+		for (unsigned int i = 0; i < xml.length(); ++i)
+			socket.sendBytes(xml.c_str() + i, 1);
 	}
 
 	void sendCorruptedResponse(StreamSocket &socket)
@@ -158,6 +170,7 @@ class LegacyGatewayRPCTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST_SUITE(LegacyGatewayRPCTest);
 	CPPUNIT_TEST(testSendListenSuccess);
 	CPPUNIT_TEST(testSendListenFailResponse);
+	CPPUNIT_TEST(testSendListenSlowResponse);
 	CPPUNIT_TEST(testUnpairDeviceSuccess);
 	CPPUNIT_TEST(testUnpairDeviceMissingResponse);
 	CPPUNIT_TEST(testPingGatewaySuccess);
@@ -168,6 +181,7 @@ public:
 	void tearDown();
 	void testSendListenSuccess();
 	void testSendListenFailResponse();
+	void testSendListenSlowResponse();
 	void testUnpairDeviceSuccess();
 	void testUnpairDeviceMissingResponse();
 	void testPingGatewaySuccess();
@@ -214,75 +228,157 @@ void LegacyGatewayRPCTest::tearDown()
 
 /**
  * SendListen with GATEWAYID_SUCCESS expects a successful response
- * from FakeAdaServer, so there should be no exception thrown.
+ * from FakeAdaServer, so there should be SUCCESS result.
  */
 void LegacyGatewayRPCTest::testSendListenSuccess()
 {
 	Gateway gateway(GATEWAYID_SUCCESS_NUM);
-	CPPUNIT_ASSERT_NO_THROW(m_rpc->sendListen(gateway));
+	GatewayRPCResult::Ptr localResult;
+
+	m_rpc->sendListen([&](GatewayRPCResult::Ptr result)
+		{
+			localResult = result;
+		},
+		gateway,
+		Timespan()
+	);
+
+	CPPUNIT_ASSERT(!localResult.isNull());
+	CPPUNIT_ASSERT(localResult->status() == GatewayRPCResult::SUCCESS);
 	CPPUNIT_ASSERT_MESSAGE(
 		m_fakeAdaServerErrorMessage, !m_fakeAdaServerCrashed);
 }
 
 /**
- * SendListen with GATEWAYID_FAIL expects an unsuccessful response
- * from FakeAdaServer, so there should be an IllegalStateException thrown.
+ * SendListen with GATEWAYID_FAIL expects an unsuccessful response NOT_CONNECTED
+ * from FakeAdaServer, so there should be NOT_CONNECTED result.
  */
 void LegacyGatewayRPCTest::testSendListenFailResponse()
 {
 	Gateway gateway(GATEWAYID_FAIL_NUM);
-	CPPUNIT_ASSERT_THROW(m_rpc->sendListen(gateway), Poco::IllegalStateException);
+	GatewayRPCResult::Ptr localResult;
+
+	m_rpc->sendListen([&](GatewayRPCResult::Ptr result)
+		{
+			localResult = result;
+		},
+		gateway,
+		Timespan()
+	);
+
+	CPPUNIT_ASSERT(!localResult.isNull());
+	CPPUNIT_ASSERT(localResult->status() == GatewayRPCResult::NOT_CONNECTED);
+	CPPUNIT_ASSERT_MESSAGE(
+		m_fakeAdaServerErrorMessage, !m_fakeAdaServerCrashed);
+}
+
+void LegacyGatewayRPCTest::testSendListenSlowResponse()
+{
+	Gateway gateway(GATEWAYID_SLOW_NUM);
+	GatewayRPCResult::Ptr localResult;
+
+	m_rpc->sendListen([&](GatewayRPCResult::Ptr result)
+		{
+			localResult = result;
+		},
+		gateway,
+		Timespan()
+	);
+
+	CPPUNIT_ASSERT(!localResult.isNull());
+	CPPUNIT_ASSERT(localResult->status() == GatewayRPCResult::SUCCESS);
 	CPPUNIT_ASSERT_MESSAGE(
 		m_fakeAdaServerErrorMessage, !m_fakeAdaServerCrashed);
 }
 
 /**
  * UnparDevice with GATEWAYID_SUCCESS expects a successful response
- * from FakeAdaServer, so there should be no exception thrown.
+ * from FakeAdaServer, so there should be SUCCESS result.
  */
 void LegacyGatewayRPCTest::testUnpairDeviceSuccess()
 {
 	Gateway gateway(GATEWAYID_SUCCESS_NUM);
 	Device device;
-	CPPUNIT_ASSERT_NO_THROW(m_rpc->unpairDevice(gateway, device));
+	GatewayRPCResult::Ptr localResult;
+
+	m_rpc->unpairDevice([&](GatewayRPCResult::Ptr result)
+		{
+			localResult = result;
+		},
+		gateway,
+		device
+	);
+
+	CPPUNIT_ASSERT(!localResult.isNull());
+	CPPUNIT_ASSERT(localResult->status() == GatewayRPCResult::SUCCESS);
 	CPPUNIT_ASSERT_MESSAGE(
 		m_fakeAdaServerErrorMessage, !m_fakeAdaServerCrashed);
 }
 
 /**
  * UnpairDevice with GATEWAYID_FAIL expects a missing response
- * from FakeAdaServer, so there should be an InvalidArgumentException thrown.
+ * from FakeAdaServer, so there should be TIMEOUT result.
  */
 void LegacyGatewayRPCTest::testUnpairDeviceMissingResponse()
 {
 	Gateway gateway(GATEWAYID_FAIL_NUM);
 	Device device;
-	CPPUNIT_ASSERT_THROW(
-		m_rpc->unpairDevice(gateway, device), Poco::InvalidArgumentException);
+	GatewayRPCResult::Ptr localResult;
+
+	m_rpc->unpairDevice([&](GatewayRPCResult::Ptr result)
+		{
+			localResult = result;
+		},
+		gateway,
+		device
+	);
+
+	CPPUNIT_ASSERT(!localResult.isNull());
+	CPPUNIT_ASSERT(localResult->status() == GatewayRPCResult::TIMEOUT);
 	CPPUNIT_ASSERT_MESSAGE(
 		m_fakeAdaServerErrorMessage, !m_fakeAdaServerCrashed);
 }
 
 /**
  * PingGateway with GATEWAYID_SUCCESS expects a successful response
- * from FakeAdaServer, so there should be no exception thrown.
+ * from FakeAdaServer, so there should be SUCCESS result.
  */
 void LegacyGatewayRPCTest::testPingGatewaySuccess()
 {
 	Gateway gateway(GATEWAYID_SUCCESS_NUM);
-	CPPUNIT_ASSERT_NO_THROW(m_rpc->pingGateway(gateway));
+	GatewayRPCResult::Ptr localResult;
+
+	m_rpc->pingGateway([&](GatewayRPCResult::Ptr result)
+		{
+			localResult = result;
+		},
+		gateway
+	);
+
+	CPPUNIT_ASSERT(!localResult.isNull());
+	CPPUNIT_ASSERT(localResult->status() == GatewayRPCResult::SUCCESS);
 	CPPUNIT_ASSERT_MESSAGE(
 		m_fakeAdaServerErrorMessage, !m_fakeAdaServerCrashed);
 }
 
 /**
  * PingGateway with GATEWAYID_FAIL expects a corrupted xml response
- * from FakeAdaServer, so there should be a SAXException thrown.
+ * from FakeAdaServer, so there should be FAILED result.
  */
 void LegacyGatewayRPCTest::testPingGatewayCorruptedResponse()
 {
 	Gateway gateway(GATEWAYID_FAIL_NUM);
-	CPPUNIT_ASSERT_THROW(m_rpc->pingGateway(gateway), Poco::XML::SAXException);
+	GatewayRPCResult::Ptr localResult;
+
+	m_rpc->pingGateway([&](GatewayRPCResult::Ptr result)
+		{
+			localResult = result;
+		},
+		gateway
+	);
+
+	CPPUNIT_ASSERT(!localResult.isNull());
+	CPPUNIT_ASSERT(localResult->status() == GatewayRPCResult::FAILED);
 	CPPUNIT_ASSERT_MESSAGE(
 		m_fakeAdaServerErrorMessage, !m_fakeAdaServerCrashed);
 }

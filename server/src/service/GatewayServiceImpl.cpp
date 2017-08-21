@@ -1,5 +1,7 @@
 #include <vector>
 
+#include <Poco/Event.h>
+
 #include "di/Injectable.h"
 #include "server/AccessLevel.h"
 #include "service/GatewayServiceImpl.h"
@@ -140,15 +142,113 @@ void GatewayServiceImpl::doScanDevices(Single<Gateway> &input)
 {
 	m_accessPolicy->assure(GatewayAccessPolicy::ACTION_USER_SCAN, input, input.target());
 
-	m_rpc->sendListen(input.target());
+	Event event;
+	GatewayRPCResult::Ptr localResult;
+
+	m_rpc->sendListen([&](GatewayRPCResult::Ptr result)
+		{
+			localResult = result;
+			event.set();
+		},
+		input.target(),
+		Timespan(30, 0)
+	);
+
+	while (1) {
+		event.wait();
+
+		switch (localResult->status()) {
+			case GatewayRPCResult::PENDING:
+			case GatewayRPCResult::ACCEPTED:
+				break;
+			case GatewayRPCResult::NOT_CONNECTED:
+				throw NotFoundException("gateway "
+						+ input.target().id().toString()
+						+ " is not connected");
+			case GatewayRPCResult::TIMEOUT:
+				throw TimeoutException("no response from gateway "
+						+ input.target().id().toString());
+			case GatewayRPCResult::FAILED:
+				throw Exception("scan devices failed on gateway "
+						+ input.target().id().toString());
+			case GatewayRPCResult::SUCCESS:
+				return;
+		}
+	}
 }
 
 void GatewayServiceImpl::doUnpairDevice(Single<Gateway> &input, Device &device)
 {
-	m_rpc->unpairDevice(input.target(), device);
+	Event event;
+	GatewayRPCResult::Ptr localResult;
+
+	m_rpc->unpairDevice([&](GatewayRPCResult::Ptr result)
+		{
+			localResult = result;
+			event.set();
+		},
+		input.target(),
+		device
+	);
+
+	while (1) {
+		event.wait();
+
+		switch (localResult->status()) {
+			case GatewayRPCResult::PENDING:
+			case GatewayRPCResult::ACCEPTED:
+				break;
+			case GatewayRPCResult::NOT_CONNECTED:
+				throw NotFoundException("gateway "
+						+ input.target().id().toString()
+						+ " is not connected");
+			case GatewayRPCResult::TIMEOUT:
+				throw TimeoutException("no response from gateway "
+						+ input.target().id().toString());
+			case GatewayRPCResult::FAILED:
+				throw Exception("unpair device "
+						+ device.id().toString()
+						+ " failed on gateway "
+						+ input.target().id().toString());
+			case GatewayRPCResult::SUCCESS:
+				return;
+		}
+	}
 }
 
 void GatewayServiceImpl::doPingGateway(Single<Gateway> &input)
 {
-	m_rpc->pingGateway(input.target());
+	Event event;
+	GatewayRPCResult::Ptr localResult;
+
+	m_rpc->pingGateway([&](GatewayRPCResult::Ptr result)
+		{
+			localResult = result;
+			event.set();
+		},
+		input.target()
+	);
+
+	while (1) {
+		event.wait();
+
+		switch (localResult->status()) {
+			case GatewayRPCResult::PENDING:
+			case GatewayRPCResult::ACCEPTED:
+				break;
+			case GatewayRPCResult::NOT_CONNECTED:
+				throw NotFoundException("gateway "
+						+ input.target().id().toString()
+						+ " is not connected");
+			case GatewayRPCResult::TIMEOUT:
+				throw TimeoutException("no response from gateway "
+						+ input.target().id().toString());
+			case GatewayRPCResult::FAILED:
+				throw Exception("ping gateway "
+						+ input.target().id().toString()
+						+ "failed");
+			case GatewayRPCResult::SUCCESS:
+				return;
+		}
+	}
 }
