@@ -35,6 +35,19 @@ class TestLocationGetUpdate(unittest.TestCase):
 		if response.status != 403:
 			self.assertEqual(201, response.status)
 
+	def tearDown(self):
+		req = DELETE(config.ui_host, config.ui_port, "/gateways/" + config.gateway_id)
+		req.authorize(self.session)
+		response, content = req()
+
+		self.assertEqual(204, response.status)
+
+		req = DELETE(config.ui_host, config.ui_port, "/auth")
+		req.authorize(self.session)
+		response, content = req()
+
+		self.assertEqual(204, response.status)
+
 	"""
 	Update existing location
 	"""
