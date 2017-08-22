@@ -131,6 +131,16 @@ public:
 		return m_picture;
 	}
 
+	void setLocale(const std::string &locale)
+	{
+		m_locale = locale;
+	}
+
+	std::string locale() const
+	{
+		return m_locale;
+	}
+
 private:
 	std::string m_email;
 	std::string m_provider;
@@ -139,6 +149,7 @@ private:
 	std::string m_firstName;
 	std::string m_lastName;
 	Poco::URI   m_picture;
+	std::string m_locale;
 };
 
 /**

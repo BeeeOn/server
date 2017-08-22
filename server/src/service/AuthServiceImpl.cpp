@@ -2,6 +2,7 @@
 #include <Poco/Net/NetException.h>
 
 #include "di/Injectable.h"
+#include "l10n/LocaleManager.h"
 #include "service/AuthServiceImpl.h"
 
 using namespace std;
@@ -17,6 +18,7 @@ BEEEON_OBJECT_REF("verifiedIdentityDao", &AuthServiceImpl::setVerifiedIdentityDa
 BEEEON_OBJECT_REF("sessionManager", &AuthServiceImpl::setSessionManager)
 BEEEON_OBJECT_REF("providers", &AuthServiceImpl::registerProvider)
 BEEEON_OBJECT_REF("notificationDispatcher", &AuthServiceImpl::setNotificationDispatcher)
+BEEEON_OBJECT_REF("localeManager", &AuthServiceImpl::setLocaleManager)
 BEEEON_OBJECT_REF("transactionManager", &Transactional::setTransactionManager)
 BEEEON_OBJECT_END(BeeeOn, AuthServiceImpl)
 
@@ -25,6 +27,7 @@ User AuthServiceImpl::createUser(const AuthResult &result)
 	User user;
 	user.setFirstName(result.firstName());
 	user.setLastName(result.lastName());
+	user.setLocale(m_localeManager->parse(result.locale()));
 
 	m_userDao->create(user);
 	return user;

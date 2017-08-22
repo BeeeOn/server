@@ -51,6 +51,8 @@ bool GoogleAuthProvider::parseIdentity(const std::string &userInfo,
 		result.setLastName(Sanitize::common(info->getValue<string>("family_name")));
 	if (info->has("picture"))
 		result.setPicture(Sanitize::uri(info->getValue<string>("picture")));
+	if (info->has("locale"))
+		result.setLocale(info->getValue<string>("locale"));
 
 	result.setAccessToken(tokens.accessToken);
 
@@ -92,7 +94,7 @@ GoogleAuthProvider::GoogleTokens GoogleAuthProvider::requestTokens(const string 
 	form.set("redirect_uri", m_redirectURI);
 	form.set("client_id", m_clientId);
 	form.set("client_secret", m_clientSecret);
-	form.set("scope", ""); // No need to specify, defaults to userinfo.profile,userinfo.email
+	form.set("scope", ""); // No need to specify, defaults to userinfo.profile,userinfo.email,userinfo.locale
 	form.set("grant_type", "authorization_code");
 
 	URI host(m_tokenUrl);
