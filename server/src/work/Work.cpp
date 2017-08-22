@@ -32,6 +32,16 @@ Work::~Work()
 {
 }
 
+void Work::setOwner(const User &owner)
+{
+	m_owner = owner;
+}
+
+const User &Work::owner() const
+{
+	return m_owner;
+}
+
 void Work::setState(State state)
 {
 	m_state = state;
