@@ -9,12 +9,12 @@
 #include "policy/DeviceAccessPolicy.h"
 #include "service/DeviceService.h"
 #include "transaction/Transactional.h"
+#include "work/WorkFacade.h"
 
 namespace BeeeOn {
 
 class DevicePropertyDao;
 class GatewayRPC;
-class WorkFacade;
 
 /**
  * Service for devices management.
@@ -26,7 +26,7 @@ public:
 	void setDeviceDao(DeviceDao::Ptr dao);
 	void setDevicePropertyDao(DevicePropertyDao::Ptr dao);
 	void setGatewayRPC(GatewayRPC *rpc);
-	void setWorkFacade(WorkFacade *facade);
+	void setWorkFacade(WorkFacade::Ptr facade);
 	void setAccessPolicy(DeviceAccessPolicy::Ptr policy);
 
 	bool fetch(Relation<Device, Gateway> &input) override
@@ -125,7 +125,7 @@ private:
 	DeviceDao::Ptr m_dao;
 	DevicePropertyDao::Ptr m_propertyDao;
 	GatewayRPC *m_gatewayRPC;
-	WorkFacade *m_workFacade;
+	WorkFacade::Ptr m_workFacade;
 	DeviceAccessPolicy::Ptr m_policy;
 };
 

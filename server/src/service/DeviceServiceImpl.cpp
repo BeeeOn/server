@@ -26,8 +26,7 @@ using namespace Poco;
 using namespace BeeeOn;
 
 DeviceServiceImpl::DeviceServiceImpl():
-	m_gatewayRPC(&NullGatewayRPC::instance()),
-	m_workFacade(&NullWorkFacade::instance())
+	m_gatewayRPC(&NullGatewayRPC::instance())
 {
 }
 
@@ -46,9 +45,9 @@ void DeviceServiceImpl::setGatewayRPC(GatewayRPC *rpc)
 	m_gatewayRPC = rpc? rpc : &NullGatewayRPC::instance();
 }
 
-void DeviceServiceImpl::setWorkFacade(WorkFacade *facade)
+void DeviceServiceImpl::setWorkFacade(WorkFacade::Ptr facade)
 {
-	m_workFacade = facade? facade : &NullWorkFacade::instance();
+	m_workFacade = facade;
 }
 
 void DeviceServiceImpl::setAccessPolicy(DeviceAccessPolicy::Ptr policy)
