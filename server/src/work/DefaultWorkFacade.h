@@ -11,6 +11,7 @@
 
 namespace BeeeOn {
 
+class UserPolicyContext;
 class WorkLockManager;
 class WorkScheduler;
 
@@ -29,6 +30,7 @@ public:
 
 protected:
 	void apply(Work::Ptr &work, const Work &data) const;
+	const UserPolicyContext &asUserContext(const PolicyContext &context) const;
 
 private:
 	mutable Poco::SharedPtr<WorkLockManager> m_lockManager;

@@ -1,6 +1,7 @@
 #include <Poco/Exception.h>
 
 #include "di/Injectable.h"
+#include "policy/PolicyContext.h"
 #include "work/DefaultWorkFacade.h"
 #include "work/WorkLockManager.h"
 #include "work/WorkScheduler.h"
@@ -26,6 +27,14 @@ void DefaultWorkFacade::setScheduler(SharedPtr<WorkScheduler> scheduler)
 void DefaultWorkFacade::setLockManager(SharedPtr<WorkLockManager> manager)
 {
 	m_lockManager = manager;
+}
+
+const UserPolicyContext &DefaultWorkFacade::asUserContext(const PolicyContext &context) const
+{
+	if (context.is<UserPolicyContext>())
+		return context.cast<UserPolicyContext>();
+
+	throw IllegalStateException("given an incompatible policy context");
 }
 
 void DefaultWorkFacade::apply(Work::Ptr &work, const Work &data) const
