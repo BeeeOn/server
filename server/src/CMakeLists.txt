@@ -90,12 +90,15 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/service/RoleServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/SensorHistoryService.cpp
 	${PROJECT_SOURCE_DIR}/service/SensorHistoryServiceImpl.cpp
+	${PROJECT_SOURCE_DIR}/service/WorkService.cpp
+	${PROJECT_SOURCE_DIR}/service/WorkServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/policy/GatewayAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/IdentityAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/LocationAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/DeviceAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/RoleAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/SensorHistoryAccessPolicy.cpp
+	${PROJECT_SOURCE_DIR}/policy/WorkAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/DefaultAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/PolicyContext.cpp
 	${PROJECT_SOURCE_DIR}/policy/UserPolicyContext.cpp
@@ -188,6 +191,7 @@ file(GLOB RESTUI_SOURCES
 	restui/ProfileRestHandler.cpp
 	restui/RoleRestHandler.cpp
 	restui/GatewayRestHandler.cpp
+	restui/WorkRestHandler.cpp
 	dao/poco/PocoSQLiteConnectorLoader.cpp
 )
 

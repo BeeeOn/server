@@ -7,6 +7,7 @@
 #include "policy/DeviceAccessPolicy.h"
 #include "policy/RoleAccessPolicy.h"
 #include "policy/SensorHistoryAccessPolicy.h"
+#include "policy/WorkAccessPolicy.h"
 #include "dao/RoleInGatewayDao.h"
 #include "dao/GatewayDao.h"
 #include "dao/LocationDao.h"
@@ -21,7 +22,8 @@ class DefaultAccessPolicy :
 		public LocationAccessPolicy,
 		public DeviceAccessPolicy,
 		public RoleAccessPolicy,
-		public SensorHistoryAccessPolicy {
+		public SensorHistoryAccessPolicy,
+		public WorkAccessPolicy {
 public:
 	DefaultAccessPolicy();
 
@@ -80,6 +82,11 @@ public:
 		const PolicyContext &context,
 		const Device &device) override;
 
+	void assure(
+		const WorkAccessPolicy::Action action,
+		const PolicyContext &context,
+		const Work &work) override;
+
 	void setUserDao(UserDao *dao)
 	{
 		m_userDao = dao;
@@ -110,6 +117,8 @@ protected:
 	void assureAtLeast(
 			const AccessLevel &current,
 			const AccessLevel &required);
+
+	const User &userFromContext(const PolicyContext &context);
 
 	/**
 	 * Test whether the given role represents the PolicyContext.

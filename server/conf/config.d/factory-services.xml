@@ -71,6 +71,10 @@
 			<set name="accessPolicy" ref="accessPolicy" />
 		</instance>
 
+		<instance name="workService" class="BeeeOn::WorkServiceImpl">
+			<set name="facade" ref="uiWorkFacade" />
+		</instance>
+
 		<!-- Access policy -->
 
 		<instance name="accessPolicy"

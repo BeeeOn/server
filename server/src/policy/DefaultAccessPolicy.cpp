@@ -4,6 +4,7 @@
 #include "di/Injectable.h"
 #include "policy/PolicyContext.h"
 #include "policy/DefaultAccessPolicy.h"
+#include "work/Work.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, DefaultAccessPolicy)
 BEEEON_OBJECT_CASTABLE(GatewayAccessPolicy)
@@ -12,6 +13,7 @@ BEEEON_OBJECT_CASTABLE(LocationAccessPolicy)
 BEEEON_OBJECT_CASTABLE(DeviceAccessPolicy)
 BEEEON_OBJECT_CASTABLE(RoleAccessPolicy)
 BEEEON_OBJECT_CASTABLE(SensorHistoryAccessPolicy)
+BEEEON_OBJECT_CASTABLE(WorkAccessPolicy)
 BEEEON_OBJECT_REF("userDao", &DefaultAccessPolicy::setUserDao)
 BEEEON_OBJECT_REF("gatewayDao", &DefaultAccessPolicy::setGatewayDao)
 BEEEON_OBJECT_REF("locationDao", &DefaultAccessPolicy::setLocationDao)
@@ -53,24 +55,24 @@ void DefaultAccessPolicy::assureAtLeast(
 	}
 }
 
-bool DefaultAccessPolicy::representsSelf(const RoleInGateway &role, const PolicyContext &self)
+const User &DefaultAccessPolicy::userFromContext(const PolicyContext &context)
 {
-	if (self.is<UserPolicyContext>()) {
-		const UserPolicyContext &uc = self.cast<UserPolicyContext>();
-		return m_roleInGatewayDao->isUser(role, uc.user());
+	if (context.is<UserPolicyContext>()) {
+		const UserPolicyContext &uc = context.cast<UserPolicyContext>();
+		return uc.user();
 	}
 
 	throw InvalidAccessException("unexpected policy context");
 }
 
+bool DefaultAccessPolicy::representsSelf(const RoleInGateway &role, const PolicyContext &self)
+{
+	return m_roleInGatewayDao->isUser(role, userFromContext(self));
+}
+
 bool DefaultAccessPolicy::representsSelf(const User &user, const PolicyContext &self)
 {
-	if (self.is<UserPolicyContext>()) {
-		const UserPolicyContext &uc = self.cast<UserPolicyContext>();
-		return user.id() == uc.user().id();
-	}
-
-	throw InvalidAccessException("unexpected policy context");
+	return user.id() == userFromContext(self).id();
 }
 
 void DefaultAccessPolicy::assure(
@@ -380,6 +382,30 @@ void DefaultAccessPolicy::assure(
 		assureAtLeast(
 			fetchAccessLevel(context, device.gateway()),
 			AccessLevel::guest());
+		break;
+
+	default:
+		throw InvalidAccessException("invalid action: " + to_string((int) action));
+	}
+}
+
+void DefaultAccessPolicy::assure(
+	const WorkAccessPolicy::Action action,
+	const PolicyContext &context,
+	const Work &work)
+{
+	switch (action) {
+	case WorkAccessPolicy::ACTION_USER_GET:
+	case WorkAccessPolicy::ACTION_USER_WAKEUP:
+	case WorkAccessPolicy::ACTION_USER_CANCEL:
+	case WorkAccessPolicy::ACTION_USER_REMOVE:
+		if (userFromContext(context).id() != work.owner().id())
+			throw InvalidAccessException("work " + work + " inaccessible");
+
+		break;
+
+	case WorkAccessPolicy::ACTION_USER_SCHEDULE:
+		// currently, anybody can schedule
 		break;
 
 	default:

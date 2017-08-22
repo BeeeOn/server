@@ -26,6 +26,7 @@
 			<add name="handlers" ref="uiProfileHandler" />
 			<add name="handlers" ref="uiLocationHandler" />
 			<add name="handlers" ref="uiRoleHandler" />
+			<add name="handlers" ref="uiWorkHandler" />
 		</instance>
 
 		<instance name="uiBuiltinHandler" class="BeeeOn::BuiltinRestHandler" />
@@ -49,6 +50,10 @@
 		<instance name="uiRoleHandler" class="BeeeOn::RestUI::RoleRestHandler">
 			<set name="roleService" ref="roleService" />
 			<set name="identityService" ref="identityService" />
+		</instance>
+
+		<instance name="uiWorkHandler" class="BeeeOn::RestUI::WorkRestHandler">
+			<set name="workService" ref="workService" />
 		</instance>
 	</factory>
 </system>

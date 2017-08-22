@@ -24,6 +24,7 @@
 		<instance name="uiWorkFacade" class="BeeeOn::DefaultWorkFacade">
 			<set name="scheduler" ref="uiWorkScheduler" />
 			<set name="lockManager" ref="uiWorkLockManager" />
+			<set name="accessPolicy" ref="accessPolicy" />
 		</instance>
 	</factory>
 </system>

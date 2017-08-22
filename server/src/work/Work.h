@@ -8,6 +8,7 @@
 
 #include "model/Entity.h"
 #include "model/GlobalID.h"
+#include "model/User.h"
 #include "work/WorkContent.h"
 
 namespace BeeeOn {
@@ -28,6 +29,9 @@ public:
 	Work();
 	Work(const ID &id);
 	virtual ~Work();
+
+	void setOwner(const User &user);
+	const User &owner() const;
 
 	void setState(State state);
 	State state() const;
@@ -87,6 +91,7 @@ private:
 	Poco::Timestamp m_created;
 	Poco::Timestamp m_suspended;
 	Poco::Timestamp m_finished;
+	User m_owner;
 	WorkContent m_content;
 };
 

@@ -10,6 +10,7 @@
 #include "model/User.h"
 #include "model/VerifiedIdentity.h"
 #include "restui/Serializing.h"
+#include "work/Work.h"
 
 using namespace std;
 using namespace Poco;
@@ -196,4 +197,56 @@ void BeeeOn::RestUI::serialize(PrintHandler &output, const std::vector<RoleInGat
 		serialize(output, role);
 
 	output.endArray();
+}
+
+void BeeeOn::RestUI::serialize(PrintHandler &output, const Work &work)
+{
+	output.startObject();
+
+	output.key("id");
+	output.value(work.id().toString());
+
+	output.key("status");
+
+	switch (work.state()) {
+	case Work::STATE_IDLE:
+		output.value("idle");
+		break;
+	case Work::STATE_SCHEDULED:
+		output.value("sleeping");
+		break;
+	case Work::STATE_EXECUTED:
+		output.value("processing");
+		break;
+	case Work::STATE_FINISHED:
+		output.value("successful");
+		break;
+	case Work::STATE_FAILED:
+		output.value("failed");
+		break;
+	case Work::STATE_CANCELED:
+		output.value("canceled");
+		break;
+	default:
+		throw IllegalStateException("invalid work state");
+	}
+
+	output.key("created");
+	output.value(work.created().epochTime());
+
+	if (Work::timestampValid(work.finished())) {
+		output.key("finished");
+		output.value(work.finished().epochTime());
+	}
+
+	Nullable<Timestamp> activationTime = work.activationTime();
+	if (!activationTime.isNull()) {
+		output.key("next_wakeup");
+		output.value(activationTime.value().epochTime());
+	}
+
+	output.key("owner_id");
+	output.value(work.owner().id().toString());
+
+	output.endObject();
 }
