@@ -42,6 +42,7 @@ PocoSQLDeviceDao::PocoSQLDeviceDao()
 	registerQuery(m_queryFetchFromGateway);
 	registerQuery(m_queryFetchActiveBy);
 	registerQuery(m_queryFetchInactiveBy);
+	registerQuery(m_queryFetchActiveWithPrefix);
 }
 
 void PocoSQLDeviceDao::setDeviceInfoProvider(DeviceInfoProvider::Ptr provider)
@@ -239,6 +240,28 @@ void PocoSQLDeviceDao::fetchInactiveBy(std::vector<Device> &devices, const Gatew
 
 	Statement sql = (session() << m_queryFetchInactiveBy(),
 		use(gatewayID, "gateway_id")
+	);
+
+	execute(sql);
+	RecordSet result(sql);
+	return parseMany(result, devices, gateway, *m_deviceInfoProvider);
+}
+
+void PocoSQLDeviceDao::fetchActiveWithPrefix(std::vector<Device> &devices,
+		const Gateway &gateway,
+		const DevicePrefix &prefix)
+{
+	assureHasId(gateway);
+
+	uint64_t gatewayID = gateway.id();
+
+	uint64_t minID = DeviceID(prefix, 0);
+	uint64_t maxID = DeviceID(prefix, 0x00FFFFFFFFFFFFFF);
+
+	Statement sql = (session() << m_queryFetchActiveWithPrefix(),
+		use(gatewayID, "gateway_id"),
+		use(minID, "min_id"),
+		use(maxID, "max_id")
 	);
 
 	execute(sql);

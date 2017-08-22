@@ -13,7 +13,7 @@ class PocoSQLGatewayStatusDao :
 public:
 	PocoSQLGatewayStatusDao();
 
-	bool insert(Gateway &gateway) override;
+	bool insert(const GatewayStatus &status, const Gateway &gateway) override;
 
 private:
 	SQLQuery m_queryInsert {"gateways_status.insert"};

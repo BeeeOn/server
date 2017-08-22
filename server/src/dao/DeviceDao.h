@@ -27,6 +27,9 @@ public:
 			const Gateway &gateway) = 0;
 	virtual void fetchInactiveBy(std::vector<Device> &devices,
 			const Gateway &gateway) = 0;
+	virtual void fetchActiveWithPrefix(std::vector<Device> &devices,
+			const Gateway &gateway,
+			const DevicePrefix &prefix) = 0;
 };
 
 }

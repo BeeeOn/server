@@ -43,6 +43,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/LegacyGateway.cpp
 	${PROJECT_SOURCE_DIR}/model/Device.cpp
 	${PROJECT_SOURCE_DIR}/model/DeviceProperty.cpp
+	${PROJECT_SOURCE_DIR}/model/GatewayStatus.cpp
 	${PROJECT_SOURCE_DIR}/model/Location.cpp
 	${PROJECT_SOURCE_DIR}/model/ValueAt.cpp
 	${PROJECT_SOURCE_DIR}/model/ModuleValue.cpp
@@ -80,8 +81,15 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/service/AuthServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/DeviceService.cpp
 	${PROJECT_SOURCE_DIR}/service/DeviceServiceImpl.cpp
+	${PROJECT_SOURCE_DIR}/service/GWSDeviceService.cpp
+	${PROJECT_SOURCE_DIR}/service/GWSDeviceServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/GatewayService.cpp
 	${PROJECT_SOURCE_DIR}/service/GatewayServiceImpl.cpp
+	${PROJECT_SOURCE_DIR}/service/GWSGatewayService.cpp
+	${PROJECT_SOURCE_DIR}/service/GWSGatewayServiceImpl.cpp
+	${PROJECT_SOURCE_DIR}/service/GWSSensorHistoryService.cpp
+	${PROJECT_SOURCE_DIR}/service/GWSSensorHistoryService.cpp
+	${PROJECT_SOURCE_DIR}/service/GWSSensorHistoryServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/LocationService.cpp
 	${PROJECT_SOURCE_DIR}/service/LocationServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/IdentityService.cpp
