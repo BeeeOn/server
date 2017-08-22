@@ -191,6 +191,7 @@ file(GLOB RESTUI_SOURCES
 	restui/ProfileRestHandler.cpp
 	restui/RoleRestHandler.cpp
 	restui/GatewayRestHandler.cpp
+	restui/WorkRestHandler.cpp
 	dao/poco/PocoSQLiteConnectorLoader.cpp
 )
 
