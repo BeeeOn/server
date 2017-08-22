@@ -111,6 +111,8 @@ protected:
 			const AccessLevel &current,
 			const AccessLevel &required);
 
+	const User &userFromContext(const PolicyContext &context);
+
 	/**
 	 * Test whether the given role represents the PolicyContext.
 	 */

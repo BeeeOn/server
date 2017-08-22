@@ -53,24 +53,24 @@ void DefaultAccessPolicy::assureAtLeast(
 	}
 }
 
-bool DefaultAccessPolicy::representsSelf(const RoleInGateway &role, const PolicyContext &self)
+const User &DefaultAccessPolicy::userFromContext(const PolicyContext &context)
 {
-	if (self.is<UserPolicyContext>()) {
-		const UserPolicyContext &uc = self.cast<UserPolicyContext>();
-		return m_roleInGatewayDao->isUser(role, uc.user());
+	if (context.is<UserPolicyContext>()) {
+		const UserPolicyContext &uc = context.cast<UserPolicyContext>();
+		return uc.user();
 	}
 
 	throw InvalidAccessException("unexpected policy context");
 }
 
+bool DefaultAccessPolicy::representsSelf(const RoleInGateway &role, const PolicyContext &self)
+{
+	return m_roleInGatewayDao->isUser(role, userFromContext(self));
+}
+
 bool DefaultAccessPolicy::representsSelf(const User &user, const PolicyContext &self)
 {
-	if (self.is<UserPolicyContext>()) {
-		const UserPolicyContext &uc = self.cast<UserPolicyContext>();
-		return user.id() == uc.user().id();
-	}
-
-	throw InvalidAccessException("unexpected policy context");
+	return user.id() == userFromContext(self).id();
 }
 
 void DefaultAccessPolicy::assure(
