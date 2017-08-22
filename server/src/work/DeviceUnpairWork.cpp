@@ -18,14 +18,14 @@ DeviceUnpairWork::DeviceUnpairWork(const WorkContent &content):
 	WorkContent(content)
 {
 	if (!type().is<DeviceUnpairWork>())
-		throw InvalidArgumentException("uncompatible work content");
+		throw InvalidArgumentException("incompatible work content");
 }
 
 DeviceUnpairWork::DeviceUnpairWork(const Object::Ptr json):
 	WorkContent(json)
 {
 	if (!type().is<DeviceUnpairWork>())
-		throw InvalidArgumentException("uncompatible work content");
+		throw InvalidArgumentException("incompatible work content");
 }
 
 void DeviceUnpairWork::setGatewayID(const GatewayID &id)
