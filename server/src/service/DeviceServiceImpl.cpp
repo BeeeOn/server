@@ -130,7 +130,7 @@ Work DeviceServiceImpl::doUnregister(Relation<Device, Gateway> &input)
 	content.setDeviceID(device.id());
 	work.setContent(content);
 
-	m_workFacade->schedule(work);
+	m_workFacade->schedule(work, input);
 	return work;
 }
 

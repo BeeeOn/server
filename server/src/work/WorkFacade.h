@@ -5,6 +5,7 @@
 
 namespace BeeeOn {
 
+class PolicyContext;
 class Work;
 
 class WorkFacade {
@@ -13,11 +14,11 @@ public:
 
 	virtual ~WorkFacade();
 
-	virtual void schedule(Work &work) = 0;
-	virtual void wakeup(Work &work) = 0;
-	virtual void cancel(Work &work) = 0;
-	virtual bool fetch(Work &work) = 0;
-	virtual bool remove(const Work &work) = 0;
+	virtual void schedule(Work &work, const PolicyContext &context) = 0;
+	virtual void wakeup(Work &work, const PolicyContext &context) = 0;
+	virtual void cancel(Work &work, const PolicyContext &context) = 0;
+	virtual bool fetch(Work &work, const PolicyContext &context) = 0;
+	virtual bool remove(const Work &work, const PolicyContext &context) = 0;
 };
 
 }
