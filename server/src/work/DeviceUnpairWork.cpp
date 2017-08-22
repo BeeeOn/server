@@ -3,8 +3,6 @@
 #include "util/JsonUtil.h"
 #include "work/DeviceUnpairWork.h"
 
-BEEEON_CLASS(DeviceUnpairWork)
-
 using namespace std;
 using namespace Poco;
 using namespace Poco::JSON;
