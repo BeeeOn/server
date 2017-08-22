@@ -40,7 +40,7 @@ void DefaultWorkFacade::schedule(Work &work)
 {
 	Work::Ptr p;
 
-	do {
+	{
 		RWLock::ScopedWriteLock guard(m_lock);
 
 		auto it = m_storage.find(work.id());
@@ -52,7 +52,7 @@ void DefaultWorkFacade::schedule(Work &work)
 			p = new Work(work);
 			m_storage.emplace(work.id(), p);
 		}
-	} while (0);
+	}
 
 	m_scheduler->schedule(p);
 
@@ -60,11 +60,11 @@ void DefaultWorkFacade::schedule(Work &work)
 	work = *p;
 }
 
-void DefaultWorkFacade::wakeup(Work &work)
+void DefaultWorkFacade::wakeup(Work &work, const PolicyContext &context)
 {
 	Work::Ptr p;
 
-	do {
+	{
 		RWLock::ScopedReadLock guard(m_lock);
 
 		auto it = m_storage.find(work.id());
@@ -72,7 +72,7 @@ void DefaultWorkFacade::wakeup(Work &work)
 			p = it->second;
 		else
 			throw NotFoundException("no such work to wakeup: " + work);
-	} while (0);
+	}
 
 	m_scheduler->wakeup(p);
 
@@ -84,7 +84,7 @@ void DefaultWorkFacade::cancel(Work &work)
 {
 	Work::Ptr p;
 
-	do {
+	{
 		RWLock::ScopedReadLock guard(m_lock);
 
 		auto it = m_storage.find(work.id());
@@ -92,7 +92,7 @@ void DefaultWorkFacade::cancel(Work &work)
 			p = it->second;
 		else
 			throw NotFoundException("no such work to cancel: " + work);
-	} while (0);
+	}
 
 	m_scheduler->cancel(p);
 
