@@ -7,6 +7,7 @@
 #include "policy/DeviceAccessPolicy.h"
 #include "policy/RoleAccessPolicy.h"
 #include "policy/SensorHistoryAccessPolicy.h"
+#include "policy/WorkAccessPolicy.h"
 #include "dao/RoleInGatewayDao.h"
 #include "dao/GatewayDao.h"
 #include "dao/LocationDao.h"
@@ -21,7 +22,8 @@ class DefaultAccessPolicy :
 		public LocationAccessPolicy,
 		public DeviceAccessPolicy,
 		public RoleAccessPolicy,
-		public SensorHistoryAccessPolicy {
+		public SensorHistoryAccessPolicy,
+		public WorkAccessPolicy {
 public:
 	DefaultAccessPolicy();
 
@@ -79,6 +81,11 @@ public:
 		const SensorHistoryAccessPolicy::Action action,
 		const PolicyContext &context,
 		const Device &device) override;
+
+	void assure(
+		const WorkAccessPolicy::Action action,
+		const PolicyContext &context,
+		const Work &work) override;
 
 	void setUserDao(UserDao *dao)
 	{
