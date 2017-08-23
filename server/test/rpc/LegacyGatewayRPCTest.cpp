@@ -8,9 +8,11 @@
 #include <Poco/Net/StreamSocket.h>
 #include <Poco/SharedPtr.h>
 #include <Poco/AutoPtr.h>
+#include <Poco/Event.h>
 #include <Poco/FIFOBuffer.h>
 #include <Poco/ErrorHandler.h>
 
+#include "loop/LoopRunner.h"
 #include "rpc/SocketRPCConnector.h"
 #include "rpc/LegacyGatewayRPC.h"
 #include "util/SecureXmlParser.h"
@@ -191,6 +193,8 @@ private:
 	SharedPtr<TCPServer> m_fakeAdaServer;
 	bool m_fakeAdaServerCrashed = false;
 	string m_fakeAdaServerErrorMessage;
+	SharedPtr<AsyncExecutor> m_executor;
+	LoopRunner m_loopRunner;
 	LegacyGatewayRPC *m_rpc;
 	SocketRPCConnector *m_connector;
 };
@@ -214,13 +218,19 @@ void LegacyGatewayRPCTest::setUp()
 	m_connector->setPort(m_fakeAdaServer->port());
 	m_connector->setReceiveTimeout(1000000);
 
+	m_executor = new AsyncExecutor;
+	m_loopRunner.addRunnable(m_executor);
+	m_loopRunner.start();
+
 	m_rpc = new LegacyGatewayRPC();
 	m_rpc->setRPCConnector(m_connector);
+	m_rpc->setAsyncExecutor(m_executor);
 }
 
 void LegacyGatewayRPCTest::tearDown()
 {
 	m_fakeAdaServer->stop();
+	m_loopRunner.stop();
 
 	delete m_rpc;
 	delete m_connector;
@@ -233,15 +243,20 @@ void LegacyGatewayRPCTest::tearDown()
 void LegacyGatewayRPCTest::testSendListenSuccess()
 {
 	Gateway gateway(GATEWAYID_SUCCESS_NUM);
+
+	Poco::Event event;
 	GatewayRPCResult::Ptr localResult;
 
 	m_rpc->sendListen([&](GatewayRPCResult::Ptr result)
 		{
 			localResult = result;
+			event.set();
 		},
 		gateway,
 		Timespan()
 	);
+
+	CPPUNIT_ASSERT(event.tryWait(5000));
 
 	CPPUNIT_ASSERT(!localResult.isNull());
 	CPPUNIT_ASSERT(localResult->status() == GatewayRPCResult::SUCCESS);
@@ -256,15 +271,20 @@ void LegacyGatewayRPCTest::testSendListenSuccess()
 void LegacyGatewayRPCTest::testSendListenFailResponse()
 {
 	Gateway gateway(GATEWAYID_FAIL_NUM);
+
+	Poco::Event event;
 	GatewayRPCResult::Ptr localResult;
 
 	m_rpc->sendListen([&](GatewayRPCResult::Ptr result)
 		{
 			localResult = result;
+			event.set();
 		},
 		gateway,
 		Timespan()
 	);
+
+	CPPUNIT_ASSERT(event.tryWait(5000));
 
 	CPPUNIT_ASSERT(!localResult.isNull());
 	CPPUNIT_ASSERT(localResult->status() == GatewayRPCResult::NOT_CONNECTED);
@@ -275,15 +295,20 @@ void LegacyGatewayRPCTest::testSendListenFailResponse()
 void LegacyGatewayRPCTest::testSendListenSlowResponse()
 {
 	Gateway gateway(GATEWAYID_SLOW_NUM);
+
+	Poco::Event event;
 	GatewayRPCResult::Ptr localResult;
 
 	m_rpc->sendListen([&](GatewayRPCResult::Ptr result)
 		{
 			localResult = result;
+			event.set();
 		},
 		gateway,
 		Timespan()
 	);
+
+	CPPUNIT_ASSERT(event.tryWait(5000));
 
 	CPPUNIT_ASSERT(!localResult.isNull());
 	CPPUNIT_ASSERT(localResult->status() == GatewayRPCResult::SUCCESS);
@@ -299,15 +324,20 @@ void LegacyGatewayRPCTest::testUnpairDeviceSuccess()
 {
 	Gateway gateway(GATEWAYID_SUCCESS_NUM);
 	Device device;
+
+	Poco::Event event;
 	GatewayRPCResult::Ptr localResult;
 
 	m_rpc->unpairDevice([&](GatewayRPCResult::Ptr result)
 		{
 			localResult = result;
+			event.set();
 		},
 		gateway,
 		device
 	);
+
+	CPPUNIT_ASSERT(event.tryWait(5000));
 
 	CPPUNIT_ASSERT(!localResult.isNull());
 	CPPUNIT_ASSERT(localResult->status() == GatewayRPCResult::SUCCESS);
@@ -323,15 +353,20 @@ void LegacyGatewayRPCTest::testUnpairDeviceMissingResponse()
 {
 	Gateway gateway(GATEWAYID_FAIL_NUM);
 	Device device;
+
+	Poco::Event event;
 	GatewayRPCResult::Ptr localResult;
 
 	m_rpc->unpairDevice([&](GatewayRPCResult::Ptr result)
 		{
 			localResult = result;
+			event.set();
 		},
 		gateway,
 		device
 	);
+
+	CPPUNIT_ASSERT(event.tryWait(5000));
 
 	CPPUNIT_ASSERT(!localResult.isNull());
 	CPPUNIT_ASSERT(localResult->status() == GatewayRPCResult::TIMEOUT);
@@ -346,14 +381,19 @@ void LegacyGatewayRPCTest::testUnpairDeviceMissingResponse()
 void LegacyGatewayRPCTest::testPingGatewaySuccess()
 {
 	Gateway gateway(GATEWAYID_SUCCESS_NUM);
+
+	Poco::Event event;
 	GatewayRPCResult::Ptr localResult;
 
 	m_rpc->pingGateway([&](GatewayRPCResult::Ptr result)
 		{
 			localResult = result;
+			event.set();
 		},
 		gateway
 	);
+
+	CPPUNIT_ASSERT(event.tryWait(5000));
 
 	CPPUNIT_ASSERT(!localResult.isNull());
 	CPPUNIT_ASSERT(localResult->status() == GatewayRPCResult::SUCCESS);
@@ -368,14 +408,19 @@ void LegacyGatewayRPCTest::testPingGatewaySuccess()
 void LegacyGatewayRPCTest::testPingGatewayCorruptedResponse()
 {
 	Gateway gateway(GATEWAYID_FAIL_NUM);
+
+	Poco::Event event;
 	GatewayRPCResult::Ptr localResult;
 
 	m_rpc->pingGateway([&](GatewayRPCResult::Ptr result)
 		{
 			localResult = result;
+			event.set();
 		},
 		gateway
 	);
+
+	CPPUNIT_ASSERT(event.tryWait(5000));
 
 	CPPUNIT_ASSERT(!localResult.isNull());
 	CPPUNIT_ASSERT(localResult->status() == GatewayRPCResult::FAILED);

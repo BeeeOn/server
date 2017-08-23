@@ -6,6 +6,7 @@
 #include <Poco/Timespan.h>
 
 #include "rpc/GatewayRPC.h"
+#include "util/AsyncExecutor.h"
 #include "util/SecureXmlParser.h"
 #include "util/Loggable.h"
 
@@ -20,6 +21,11 @@ public:
 	void setRPCConnector(RPCConnector *connector)
 	{
 		m_connector = connector;
+	}
+
+	void setAsyncExecutor(Poco::SharedPtr<AsyncExecutor> executor)
+	{
+		m_executor = executor;
 	}
 
 	void sendListen(
@@ -50,6 +56,7 @@ private:
 	Poco::Timespan m_timeout;
 	Poco::LogStream m_logStream;
 	Poco::Mutex m_lock;
+	Poco::SharedPtr<AsyncExecutor> m_executor;
 	RPCConnector *m_connector;
 	SecureXmlParser m_xmlParser;
 };

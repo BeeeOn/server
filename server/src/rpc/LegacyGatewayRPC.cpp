@@ -68,7 +68,12 @@ void LegacyGatewayRPC::sendListen(
 	}
 
 	m_logStream << endl;
-	resultCall(parseResponse(receiveResponse()));
+	GatewayRPCResult::Ptr result = parseResponse(receiveResponse());
+
+	m_executor->invoke([resultCall, result]()
+	{
+		resultCall(result);
+	});
 }
 
 void LegacyGatewayRPC::unpairDevice(
@@ -108,7 +113,12 @@ void LegacyGatewayRPC::unpairDevice(
 	}
 
 	m_logStream << endl;
-	resultCall(parseResponse(receiveResponse()));
+	GatewayRPCResult::Ptr result = parseResponse(receiveResponse());
+
+	m_executor->invoke([resultCall, result]()
+	{
+		resultCall(result);
+	});
 }
 
 void LegacyGatewayRPC::pingGateway(
@@ -146,7 +156,12 @@ void LegacyGatewayRPC::pingGateway(
 	}
 
 	m_logStream << endl;
-	resultCall(parseResponse(receiveResponse()));
+	GatewayRPCResult::Ptr result = parseResponse(receiveResponse());
+
+	m_executor->invoke([resultCall, result]()
+	{
+		resultCall(result);
+	});
 }
 
 void LegacyGatewayRPC::updateActor(
@@ -195,7 +210,12 @@ void LegacyGatewayRPC::updateActor(
 	}
 
 	m_logStream << endl;
-	resultCall(parseResponse(receiveResponse()));
+	GatewayRPCResult::Ptr result = parseResponse(receiveResponse());
+
+	m_executor->invoke([resultCall, result]()
+	{
+		resultCall(result);
+	});
 }
 
 string LegacyGatewayRPC::receiveResponse()
@@ -266,5 +286,6 @@ GatewayRPCResult::Ptr LegacyGatewayRPC::parseResponse(const string &response)
 BEEEON_OBJECT_BEGIN(BeeeOn, LegacyGatewayRPC)
 BEEEON_OBJECT_CASTABLE(GatewayRPC)
 BEEEON_OBJECT_REF("rpcConnector", &LegacyGatewayRPC::setRPCConnector)
+BEEEON_OBJECT_REF("asyncExecutor", &LegacyGatewayRPC::setAsyncExecutor)
 BEEEON_OBJECT_NUMBER("responseTimeout", &LegacyGatewayRPC::setResponseTimeout)
 BEEEON_OBJECT_END(BeeeOn, LegacyGatewayRPC)

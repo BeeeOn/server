@@ -39,10 +39,12 @@
 
 		<instance name="fakeGatewayRPC" class="BeeeOn::FakeGatewayRPC">
 			<set name="deviceDao" ref="deviceDao" />
+			<set name="asyncExecutor" ref="asyncExecutor" />
 		</instance>
 
 		<instance name="legacyGatewayRPC" class="BeeeOn::LegacyGatewayRPC">
 			<set name="rpcConnector" ref="adaServerConnector" />
+			<set name="asyncExecutor" ref="asyncExecutor" />
 			<set name="responseTimeout" number="${ada.legacy.responseTimeout}" />
 		</instance>
 
