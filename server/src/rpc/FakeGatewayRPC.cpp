@@ -3,6 +3,7 @@
 #include "di/Injectable.h"
 #include "rpc/GatewayRPC.h"
 #include "dao/DeviceDao.h"
+#include "util/AsyncExecutor.h"
 #include "util/Loggable.h"
 
 using namespace Poco;
@@ -18,6 +19,7 @@ public:
 	FakeGatewayRPC();
 
 	void setDeviceDao(DeviceDao::Ptr dao);
+	void setAsyncExecutor(Poco::SharedPtr<AsyncExecutor> executor);
 
 	void sendListen(
 			const ResultCall &resultCall,
@@ -40,6 +42,7 @@ public:
 
 private:
 	DeviceDao::Ptr m_deviceDao;
+	Poco::SharedPtr<AsyncExecutor> m_executor;
 };
 
 FakeGatewayRPC::FakeGatewayRPC()
@@ -49,6 +52,11 @@ FakeGatewayRPC::FakeGatewayRPC()
 void FakeGatewayRPC::setDeviceDao(DeviceDao::Ptr dao)
 {
 	m_deviceDao = dao;
+}
+
+void FakeGatewayRPC::setAsyncExecutor(Poco::SharedPtr<AsyncExecutor> executor)
+{
+	m_executor = executor;
 }
 
 void FakeGatewayRPC::sendListen(
@@ -61,7 +69,11 @@ void FakeGatewayRPC::sendListen(
 
 	GatewayRPCResult::Ptr result = new GatewayRPCResult;
 	result->setStatus(GatewayRPCResult::SUCCESS);
-	resultCall(result);
+
+	m_executor->invoke([resultCall, result]()
+	{
+		resultCall(result);
+	});
 }
 
 void FakeGatewayRPC::unpairDevice(
@@ -79,7 +91,12 @@ void FakeGatewayRPC::unpairDevice(
 				__FILE__, __LINE__);
 
 		result->setStatus(GatewayRPCResult::FAILED);
-		resultCall(result);
+
+		m_executor->invoke([resultCall, result]()
+		{
+			resultCall(result);
+		});
+
 		return;
 	}
 
@@ -91,12 +108,21 @@ void FakeGatewayRPC::unpairDevice(
 				__FILE__, __LINE__);
 
 		result->setStatus(GatewayRPCResult::FAILED);
-		resultCall(result);
+
+		m_executor->invoke([resultCall, result]()
+		{
+			resultCall(result);
+		});
+
 		return;
 	}
 
 	result->setStatus(GatewayRPCResult::SUCCESS);
-	resultCall(result);
+
+	m_executor->invoke([resultCall, result]()
+	{
+		resultCall(result);
+	});
 }
 
 void FakeGatewayRPC::pingGateway(
@@ -108,7 +134,11 @@ void FakeGatewayRPC::pingGateway(
 
 	GatewayRPCResult::Ptr result = new GatewayRPCResult;
 	result->setStatus(GatewayRPCResult::SUCCESS);
-	resultCall(result);
+
+	m_executor->invoke([resultCall, result]()
+	{
+		resultCall(result);
+	});
 }
 
 void FakeGatewayRPC::updateActor(
@@ -124,7 +154,11 @@ void FakeGatewayRPC::updateActor(
 
 	GatewayRPCResult::Ptr result = new GatewayRPCResult;
 	result->setStatus(GatewayRPCResult::SUCCESS);
-	resultCall(result);
+
+	m_executor->invoke([resultCall, result]()
+	{
+		resultCall(result);
+	});
 }
 
 }
@@ -132,4 +166,5 @@ void FakeGatewayRPC::updateActor(
 BEEEON_OBJECT_BEGIN(BeeeOn, FakeGatewayRPC)
 BEEEON_OBJECT_CASTABLE(GatewayRPC)
 BEEEON_OBJECT_REF("deviceDao", &FakeGatewayRPC::setDeviceDao)
+BEEEON_OBJECT_REF("asyncExecutor", &FakeGatewayRPC::setAsyncExecutor)
 BEEEON_OBJECT_END(BeeeOn, FakeGatewayRPC)

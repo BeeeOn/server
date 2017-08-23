@@ -16,5 +16,8 @@
 		<instance name="translatorFactory" class="BeeeOn::IcuTranslatorFactory">
 			<set name="bundleName" text="${bundle.name}" />
 		</instance>
+
+		<instance name="asyncExecutor" class="BeeeOn::AsyncExecutor">
+		</instance>
 	</factory>
 </system>
