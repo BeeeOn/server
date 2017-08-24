@@ -20,7 +20,7 @@ DefaultWorkFacade::DefaultWorkFacade()
 {
 }
 
-void DefaultWorkFacade::setScheduler(SharedPtr<WorkScheduler> scheduler)
+void DefaultWorkFacade::setScheduler(WorkScheduler::Ptr scheduler)
 {
 	m_scheduler = scheduler;
 }

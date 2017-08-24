@@ -1,12 +1,16 @@
 #ifndef BEEEON_WORK_SCHEDULER_H
 #define BEEEON_WORK_SCHEDULER_H
 
+#include <Poco/SharedPtr.h>
+
 #include "work/Work.h"
 
 namespace BeeeOn {
 
 class WorkScheduler {
 public:
+	typedef Poco::SharedPtr<WorkScheduler> Ptr;
+
 	virtual ~WorkScheduler();
 
 	/**
@@ -30,16 +34,6 @@ public:
 	 * can be done.
 	 */
 	virtual void notify() = 0;
-};
-
-class NullWorkScheduler : public WorkScheduler {
-public:
-	void schedule(Work::Ptr work) override;
-	void wakeup(Work::Ptr work) override;
-	void cancel(Work::Ptr work) override;
-	void notify() override;
-
-	static WorkScheduler &instance();
 };
 
 }
