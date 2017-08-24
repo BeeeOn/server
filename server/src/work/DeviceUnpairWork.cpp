@@ -28,16 +28,6 @@ DeviceUnpairWork::DeviceUnpairWork(const Object::Ptr json):
 		throw InvalidArgumentException("uncompatible work content");
 }
 
-void DeviceUnpairWork::setAttempt(unsigned int attempt)
-{
-	json()->set("attempt", attempt);
-}
-
-unsigned int DeviceUnpairWork::attempt() const
-{
-	return JsonUtil::extract<unsigned int>(json(), "attempt");
-}
-
 void DeviceUnpairWork::setGatewayID(const GatewayID &id)
 {
 	json()->set("gateway_id", id.toString());
@@ -60,4 +50,19 @@ DeviceID DeviceUnpairWork::deviceID() const
 	return DeviceID::parse(
 		JsonUtil::extract<string>(json(), "device_id")
 	);
+}
+
+void DeviceUnpairWork::setResult(const GatewayRPCResult::Status status)
+{
+	json()->set("rpc_result", static_cast<int>(status));
+}
+
+GatewayRPCResult::Status DeviceUnpairWork::result() const
+{
+	return GatewayRPCResult::convert(json()->getValue<int>("rpc_result"));
+}
+
+bool DeviceUnpairWork::hasResult() const
+{
+	return json()->has("rpc_result");
 }
