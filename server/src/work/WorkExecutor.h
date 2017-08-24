@@ -12,7 +12,6 @@ class Timespan;
 namespace BeeeOn {
 
 class WorkRunner;
-class WorkScheduler;
 
 class WorkExecutor {
 public:
