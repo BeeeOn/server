@@ -37,7 +37,7 @@ public:
 	 */
 	void setMaxAttempts(int count);
 
-	bool accepts(const Work::Ptr work) const;
+	bool accepts(const Work::Ptr work) const override;
 	void execute(Work::Ptr work) override;
 
 protected:
