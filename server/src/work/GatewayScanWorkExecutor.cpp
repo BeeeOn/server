@@ -80,7 +80,7 @@ void GatewayScanWorkExecutor::execute(Work::Ptr work)
 {
 	GatewayScanWork content = work->contentAs<GatewayScanWork>();
 
-	if (Work::timestampValid(work->suspend())) {
+	if (Work::timestampValid(work->suspended())) {
 		processResult(work, content);
 		return;
 	}

@@ -5,6 +5,7 @@
 #include "di/Injectable.h"
 #include "server/AccessLevel.h"
 #include "service/GatewayServiceImpl.h"
+#include "work/GatewayScanWork.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, GatewayServiceImpl)
 BEEEON_OBJECT_CASTABLE(GatewayService)
@@ -144,43 +145,18 @@ bool GatewayServiceImpl::doUnregister(Single<Gateway> &input)
 	return true;
 }
 
-void GatewayServiceImpl::doScanDevices(Single<Gateway> &input, const Timespan &timeout)
+Work GatewayServiceImpl::doScanDevices(Single<Gateway> &input, const Timespan &timeout)
 {
 	m_accessPolicy->assure(GatewayAccessPolicy::ACTION_USER_SCAN, input, input.target());
 
-	Event event;
-	GatewayRPCResult::Ptr localResult;
+	Work work(WorkID::random());
+	GatewayScanWork content;
+	content.setGatewayID(input.target().id());
+	content.setDuration(timeout);
+	work.setContent(content);
 
-	m_rpc->sendListen([&](GatewayRPCResult::Ptr result)
-		{
-			localResult = result;
-			event.set();
-		},
-		input.target(),
-		timeout
-	);
-
-	while (1) {
-		event.wait();
-
-		switch (localResult->status()) {
-			case GatewayRPCResult::PENDING:
-			case GatewayRPCResult::ACCEPTED:
-				break;
-			case GatewayRPCResult::NOT_CONNECTED:
-				throw NotFoundException("gateway "
-						+ input.target().id().toString()
-						+ " is not connected");
-			case GatewayRPCResult::TIMEOUT:
-				throw TimeoutException("no response from gateway "
-						+ input.target().id().toString());
-			case GatewayRPCResult::FAILED:
-				throw Exception("scan devices failed on gateway "
-						+ input.target().id().toString());
-			case GatewayRPCResult::SUCCESS:
-				return;
-		}
-	}
+	m_workFacade->schedule(work, input);
+	return work;
 }
 
 void GatewayServiceImpl::doPingGateway(Single<Gateway> &input)
