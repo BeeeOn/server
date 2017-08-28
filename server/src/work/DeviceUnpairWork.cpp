@@ -11,7 +11,6 @@ using namespace BeeeOn;
 DeviceUnpairWork::DeviceUnpairWork():
 	WorkContent(ClassInfo::forPointer(this))
 {
-	json()->set("attempt", 0);
 }
 
 DeviceUnpairWork::DeviceUnpairWork(const WorkContent &content):
