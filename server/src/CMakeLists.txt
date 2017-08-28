@@ -153,6 +153,7 @@ file(GLOB SOURCES
 
 file(GLOB WORK_SOURCES
 	${PROJECT_SOURCE_DIR}/work/AbstractWorkBackup.cpp
+	${PROJECT_SOURCE_DIR}/work/AbstractGatewayWork.cpp
 	${PROJECT_SOURCE_DIR}/work/BasicProcessor.cpp
 	${PROJECT_SOURCE_DIR}/work/BasicQueue.cpp
 	${PROJECT_SOURCE_DIR}/work/DefaultWorkFacade.cpp
