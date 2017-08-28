@@ -156,6 +156,7 @@ file(GLOB WORK_SOURCES
 	${PROJECT_SOURCE_DIR}/work/BasicProcessor.cpp
 	${PROJECT_SOURCE_DIR}/work/BasicQueue.cpp
 	${PROJECT_SOURCE_DIR}/work/DefaultWorkFacade.cpp
+	${PROJECT_SOURCE_DIR}/work/ExtendedWorkExecutor.cpp
 	${PROJECT_SOURCE_DIR}/work/GenericWorkRunner.cpp
 	${PROJECT_SOURCE_DIR}/work/Work.cpp
 	${PROJECT_SOURCE_DIR}/work/WorkBackup.cpp

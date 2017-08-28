@@ -6,7 +6,6 @@
 #include "work/BasicProcessor.h"
 #include "work/WorkBackup.h"
 #include "work/WorkExecutor.h"
-#include "work/WorkLockManager.h"
 #include "work/WorkRunner.h"
 #include "work/WorkScheduler.h"
 
@@ -48,7 +47,7 @@ void BasicProcessor::setRunnerFactory(WorkRunnerFactory *factory)
 	m_runnerFactory = factory? factory : &NullWorkRunnerFactory::instance();
 }
 
-void BasicProcessor::setLockManager(WorkLockManager *manager)
+void BasicProcessor::setLockManager(WorkLockManager::Ptr manager)
 {
 	m_lockManager = manager;
 }

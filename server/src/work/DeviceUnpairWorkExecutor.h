@@ -4,18 +4,17 @@
 #include "dao/DeviceDao.h"
 #include "work/DeviceUnpairWork.h"
 #include "util/Loggable.h"
-#include "work/WorkExecutor.h"
+#include "work/ExtendedWorkExecutor.h"
 
 namespace BeeeOn {
 
 class GatewayRPC;
 
 /**
- * Executes DeviceUnpairWork instances. It should be executed
- * in a transaction context to avoid concurrency issues.
+ * Executes DeviceUnpairWork instances.
  */
 class DeviceUnpairWorkExecutor :
-		public WorkExecutor,
+		public ExtendedWorkExecutor,
 		Loggable {
 public:
 	DeviceUnpairWorkExecutor();
@@ -23,42 +22,21 @@ public:
 	void setDeviceDao(DeviceDao::Ptr dao);
 	void setGatewayRPC(GatewayRPC *rpc);
 
-	/**
-	 * How long (in miliseconds) to sleep before database polling steps.
-	 * This sleep time is applicated when a device has no or unknown
-	 * refresh time.
-	 */
-	void setPollSleep(int ms);
-
-	/**
-	 * How many attempts to perform before we can consider
-	 * an executed work as failing. This corresponds to the
-	 * DeviceUnpairWork::attempts property.
-	 */
-	void setMaxAttempts(int count);
-
-	bool accepts(const Work::Ptr work) const;
+	bool accepts(const Work::Ptr work) const override;
 	void execute(Work::Ptr work) override;
 
 protected:
 	/**
-	 * Test whether a task targeting the given device has finished
-	 * successfully.
+	 * Process the result of the work. It is assumed that the DeviceUnpairWork
+	 * contains a result of its operation.
+	 *
+	 * @see DeviceUnpairWork::hasResult()
 	 */
-	bool done(Device &device);
-
-	/**
-	 * Test whether we have exceeded the attempts count. In that case,
-	 * the Poco::TimeoutException is thrown and the task is marked as
-	 * failing.
-	 */
-	void checkAttempts(const DeviceUnpairWork &work);
+	void processResult(Work::Ptr work, DeviceUnpairWork &content);
 
 private:
 	DeviceDao::Ptr m_dao;
 	GatewayRPC *m_rpc;
-	unsigned long m_pollSleep;
-	unsigned int m_maxAttempts;
 };
 
 }

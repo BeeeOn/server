@@ -5,6 +5,7 @@
 
 #include <Poco/Mutex.h>
 #include <Poco/RWLock.h>
+#include <Poco/SharedPtr.h>
 
 #include "work/Work.h"
 #include "util/HashedLock.h"
@@ -23,6 +24,8 @@ class WorkExecutionGuard;
  */
 class WorkLockManager : Loggable {
 public:
+	typedef Poco::SharedPtr<WorkLockManager> Ptr;
+
 	WorkLockManager();
 	WorkLockManager(unsigned int accessCount, unsigned int executionCount);
 
