@@ -39,7 +39,6 @@ public:
 	virtual bool unregister(Single<Gateway> &input) = 0;
 
 	virtual void scanDevices(Single<Gateway> &input, const Poco::Timespan &duration) = 0;
-	virtual void unpairDevice(Single<Gateway> &input, Device &device) = 0;
 	virtual void pingGateway(Single<Gateway> &input) = 0;
 };
 

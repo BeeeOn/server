@@ -84,11 +84,6 @@ public:
 		doScanDevices(input, duration);
 	}
 
-	void unpairDevice(Single<Gateway> &input, Device &device) override
-	{
-		doUnpairDevice(input, device);
-	}
-
 	void pingGateway(Single<Gateway> &input) override
 	{
 		doPingGateway(input);
@@ -104,7 +99,6 @@ protected:
 	bool doUpdate(SingleWithData<Gateway> &input);
 	bool doUnregister(Single<Gateway> &input);
 	void doScanDevices(Single<Gateway> &input, const Poco::Timespan &duration);
-	void doUnpairDevice(Single<Gateway> &input, Device &device);
 	void doPingGateway(Single<Gateway> &input);
 
 private:
