@@ -13,6 +13,7 @@ BEEEON_OBJECT_REF("roleInGatewayDao", &GatewayServiceImpl::setRoleInGatewayDao)
 BEEEON_OBJECT_REF("identityDao", &GatewayServiceImpl::setIdentityDao)
 BEEEON_OBJECT_REF("verifiedIdentityDao", &GatewayServiceImpl::setVerifiedIdentityDao)
 BEEEON_OBJECT_REF("gatewayRPC", &GatewayServiceImpl::setGatewayRPC)
+BEEEON_OBJECT_REF("workFacade", &GatewayServiceImpl::setWorkFacade)
 BEEEON_OBJECT_REF("accessPolicy", &GatewayServiceImpl::setAccessPolicy)
 BEEEON_OBJECT_REF("transactionManager", &GatewayServiceImpl::setTransactionManager)
 BEEEON_OBJECT_END(BeeeOn, GatewayServiceImpl)
@@ -49,6 +50,11 @@ void GatewayServiceImpl::setVerifiedIdentityDao(VerifiedIdentityDao::Ptr dao)
 void GatewayServiceImpl::setGatewayRPC(GatewayRPC *rpc)
 {
 	m_rpc = rpc? rpc : &NullGatewayRPC::instance();
+}
+
+void GatewayServiceImpl::setWorkFacade(WorkFacade::Ptr facade)
+{
+	m_workFacade = facade;
 }
 
 void GatewayServiceImpl::setAccessPolicy(GatewayAccessPolicy::Ptr policy)
