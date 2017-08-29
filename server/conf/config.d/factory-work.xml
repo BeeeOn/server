@@ -19,6 +19,7 @@
 		<instance name="deviceUnpairExecutor" class="BeeeOn::DeviceUnpairWorkExecutor">
 			<set name="deviceDao" ref="deviceDao" />
 			<set name="gatewayRPC" ref="gatewayRPC" />
+			<set name="lockManager" ref="uiWorkLockManager" />
 		</instance>
 
 		<instance name="uiWorkFacade" class="BeeeOn::DefaultWorkFacade">

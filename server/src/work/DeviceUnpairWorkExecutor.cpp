@@ -14,6 +14,7 @@ BEEEON_OBJECT_CASTABLE(WorkExecutor)
 BEEEON_OBJECT_REF("deviceDao", &DeviceUnpairWorkExecutor::setDeviceDao)
 BEEEON_OBJECT_REF("gatewayRPC", &DeviceUnpairWorkExecutor::setGatewayRPC)
 BEEEON_OBJECT_REF("scheduler", &DeviceUnpairWorkExecutor::setScheduler)
+BEEEON_OBJECT_REF("lockManager", &DeviceUnpairWorkExecutor::setLockManager)
 BEEEON_OBJECT_END(BeeeOn, DeviceUnpairWorkExecutor)
 
 using namespace std;
