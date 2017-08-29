@@ -149,6 +149,8 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/work/TransactionalWorkRunner.cpp
 	${PROJECT_SOURCE_DIR}/work/DeviceUnpairWork.cpp
 	${PROJECT_SOURCE_DIR}/work/DeviceUnpairWorkExecutor.cpp
+	${PROJECT_SOURCE_DIR}/work/GatewayScanWork.cpp
+	${PROJECT_SOURCE_DIR}/work/GatewayScanWorkExecutor.cpp
 )
 
 file(GLOB WORK_SOURCES
