@@ -76,7 +76,5 @@ void WorkRestHandler::remove(RestFlow &flow)
 
 	m_service->remove(input);
 
-	PrintHandler result(flow.response().stream());
-	beginSuccess(result, 204);
-	endSuccess(result);
+	flow.response().setStatus(204);
 }
