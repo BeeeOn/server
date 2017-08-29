@@ -91,8 +91,10 @@ public:
 
 	void unlock()
 	{
-		if (m_lock != NULL)
+		if (m_lock != NULL) {
 			m_unlock(*m_lock);
+			m_lock = NULL;
+		}
 	}
 
 protected:
