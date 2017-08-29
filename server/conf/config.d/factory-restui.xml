@@ -2,6 +2,7 @@
 	<factory>
 		<instance name="ui" class="BeeeOn::LoopRunner">
 			<add name="loops" ref="uiServer" />
+			<add name="runnables" ref="uiWorkScheduler" />
 			<add name="runnables" ref="asyncExecutor" />
 		</instance>
 
