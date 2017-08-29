@@ -42,6 +42,7 @@ void WorkRestHandler::detail(RestFlow &flow)
 
 	PrintHandler result(flow.response().stream());
 	beginSuccess(result, 200);
+	serialize(result, work);
 	endSuccess(result);
 }
 
