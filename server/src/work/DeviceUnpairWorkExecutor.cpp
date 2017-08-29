@@ -98,12 +98,14 @@ void DeviceUnpairWorkExecutor::execute(Work::Ptr work)
 
 	m_rpc->unpairDevice([=](GatewayRPCResult::Ptr result) mutable
 		{
-			WorkWriteGuard accessGuard(lockManager->readWrite(work->id()));
+			{
+				WorkWriteGuard accessGuard(lockManager->readWrite(work->id()));
 
-			// update result of the work
-			DeviceUnpairWork content = work->contentAs<DeviceUnpairWork>();
-			content.setResult(result->status());
-			work->setContent(content);
+				// update result of the work
+				DeviceUnpairWork content = work->contentAs<DeviceUnpairWork>();
+				content.setResult(result->status());
+				work->setContent(content);
+			}
 
 			switch (result->status()) {
 			case GatewayRPCResult::PENDING:
