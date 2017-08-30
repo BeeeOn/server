@@ -11,6 +11,7 @@
 #include "rpc/GatewayRPC.h"
 #include "service/GatewayService.h"
 #include "transaction/Transactional.h"
+#include "work/WorkFacade.h"
 
 namespace Poco {
 
@@ -32,6 +33,7 @@ public:
 	void setIdentityDao(IdentityDao::Ptr dao);
 	void setVerifiedIdentityDao(VerifiedIdentityDao::Ptr dao);
 	void setGatewayRPC(GatewayRPC *rpc);
+	void setWorkFacade(WorkFacade::Ptr facade);
 	void setAccessPolicy(GatewayAccessPolicy::Ptr policy);
 
 	/**
@@ -79,14 +81,9 @@ public:
 		return BEEEON_TRANSACTION_RETURN(bool, doUnregister(input));
 	}
 
-	void scanDevices(Single<Gateway> &input, const Poco::Timespan &duration) override
+	Work scanDevices(Single<Gateway> &input, const Poco::Timespan &duration) override
 	{
-		doScanDevices(input, duration);
-	}
-
-	void unpairDevice(Single<Gateway> &input, Device &device) override
-	{
-		doUnpairDevice(input, device);
+		return BEEEON_TRANSACTION_RETURN(Work, doScanDevices(input, duration));
 	}
 
 	void pingGateway(Single<Gateway> &input) override
@@ -103,8 +100,7 @@ protected:
 	void doFetchAccessible(Relation<std::vector<LegacyGateway>, User> &input);
 	bool doUpdate(SingleWithData<Gateway> &input);
 	bool doUnregister(Single<Gateway> &input);
-	void doScanDevices(Single<Gateway> &input, const Poco::Timespan &duration);
-	void doUnpairDevice(Single<Gateway> &input, Device &device);
+	Work doScanDevices(Single<Gateway> &input, const Poco::Timespan &duration);
 	void doPingGateway(Single<Gateway> &input);
 
 private:
@@ -113,6 +109,7 @@ private:
 	IdentityDao::Ptr m_identityDao;
 	VerifiedIdentityDao::Ptr m_verifiedIdentityDao;
 	GatewayRPC *m_rpc;
+	WorkFacade::Ptr m_workFacade;
 	GatewayAccessPolicy::Ptr m_accessPolicy;
 };
 

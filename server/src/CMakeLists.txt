@@ -149,10 +149,13 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/work/TransactionalWorkRunner.cpp
 	${PROJECT_SOURCE_DIR}/work/DeviceUnpairWork.cpp
 	${PROJECT_SOURCE_DIR}/work/DeviceUnpairWorkExecutor.cpp
+	${PROJECT_SOURCE_DIR}/work/GatewayScanWork.cpp
+	${PROJECT_SOURCE_DIR}/work/GatewayScanWorkExecutor.cpp
 )
 
 file(GLOB WORK_SOURCES
 	${PROJECT_SOURCE_DIR}/work/AbstractWorkBackup.cpp
+	${PROJECT_SOURCE_DIR}/work/AbstractGatewayWork.cpp
 	${PROJECT_SOURCE_DIR}/work/BasicProcessor.cpp
 	${PROJECT_SOURCE_DIR}/work/BasicQueue.cpp
 	${PROJECT_SOURCE_DIR}/work/DefaultWorkFacade.cpp
@@ -193,9 +196,11 @@ file(GLOB XMLUI_SOURCES
 
 file(GLOB RESTUI_SOURCES
 	restui/Serializing.cpp
+	restui/JSONDeviceDeserializer.cpp
 	restui/JSONGatewayDeserializer.cpp
 	restui/JSONLocationDeserializer.cpp
 	restui/JSONRoleInGatewayDeserializer.cpp
+	restui/DeviceRestHandler.cpp
 	restui/LocationRestHandler.cpp
 	restui/ProfileRestHandler.cpp
 	restui/RoleRestHandler.cpp

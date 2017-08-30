@@ -3,6 +3,7 @@
 #include <Poco/DateTime.h>
 #include <Poco/JSON/PrintHandler.h>
 
+#include "model/Device.h"
 #include "model/Gateway.h"
 #include "model/LegacyRoleInGateway.h"
 #include "model/Location.h"
@@ -189,16 +190,6 @@ void BeeeOn::RestUI::serialize(PrintHandler &output, const LegacyRoleInGateway &
 	output.endObject();
 }
 
-void BeeeOn::RestUI::serialize(PrintHandler &output, const std::vector<RoleInGateway> &roles)
-{
-	output.startArray();
-
-	for (auto role : roles)
-		serialize(output, role);
-
-	output.endArray();
-}
-
 void BeeeOn::RestUI::serialize(PrintHandler &output, const Work &work)
 {
 	output.startObject();
@@ -249,4 +240,64 @@ void BeeeOn::RestUI::serialize(PrintHandler &output, const Work &work)
 	output.value(work.owner().id().toString());
 
 	output.endObject();
+}
+
+void BeeeOn::RestUI::serialize(PrintHandler &output, const Device &device)
+{
+	output.startObject();
+
+	output.key("id");
+	output.value(device.id().toString());
+	output.key("location_id");
+	output.value(device.location().id().toString());
+	output.key("name");
+	output.value(device.name());
+
+	output.key("type");
+	output.startObject();
+	output.key("name");
+	output.value(device.type().get()->name());
+	output.key("display_name");
+	output.value(device.type().get()->displayName());
+	output.key("vendor");
+	output.value(device.type().get()->vendor());
+	output.endObject();
+
+	output.key("first_seen");
+	output.value(device.firstSeen().timestamp().epochTime());
+	output.key("last_seen");
+	output.value(device.lastSeen().timestamp().epochTime());
+
+	if (!device.activeSince().isNull()) {
+		output.key("active_since");
+		output.value(device.activeSince().value().timestamp().epochTime());
+	}
+
+	output.key("refresh_time");
+	output.value(device.refresh().totalSeconds());
+	output.key("available");
+	output.value(device.available());
+
+	output.endObject();
+}
+
+void BeeeOn::RestUI::serialize(PrintHandler &output, const std::vector<RoleInGateway> &roles)
+{
+	output.startArray();
+
+	for (auto role : roles)
+		serialize(output, role);
+
+	output.endArray();
+}
+
+void BeeeOn::RestUI::serialize(Poco::JSON::PrintHandler &output,
+		const std::vector<Device> &devices)
+{
+	output.startArray();
+
+	for (auto &device : devices)
+		serialize(output, device);
+
+	output.endArray();
 }

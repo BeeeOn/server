@@ -3,8 +3,7 @@
 
 #include "model/Device.h"
 #include "model/Gateway.h"
-#include "rpc/GatewayRPCResult.h"
-#include "work/WorkContent.h"
+#include "work/AbstractGatewayWork.h"
 
 namespace BeeeOn {
 
@@ -13,7 +12,7 @@ namespace BeeeOn {
  * The unpairing process usually requires some asynchronous communication
  * with other parts of the system.
  */
-class DeviceUnpairWork : public WorkContent {
+class DeviceUnpairWork : public AbstractGatewayWork {
 public:
 	DeviceUnpairWork();
 	DeviceUnpairWork(const WorkContent &content);
@@ -30,10 +29,6 @@ public:
 	 */
 	void setDeviceID(const DeviceID &id);
 	DeviceID deviceID() const;
-
-	void setResult(const GatewayRPCResult::Status status);
-	GatewayRPCResult::Status result() const;
-	bool hasResult() const;
 };
 
 }

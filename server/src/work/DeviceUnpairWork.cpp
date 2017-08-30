@@ -9,19 +9,19 @@ using namespace Poco::JSON;
 using namespace BeeeOn;
 
 DeviceUnpairWork::DeviceUnpairWork():
-	WorkContent(ClassInfo::forPointer(this))
+	AbstractGatewayWork(ClassInfo::forPointer(this))
 {
 }
 
 DeviceUnpairWork::DeviceUnpairWork(const WorkContent &content):
-	WorkContent(content)
+	AbstractGatewayWork(content)
 {
 	if (!type().is<DeviceUnpairWork>())
 		throw InvalidArgumentException("incompatible work content");
 }
 
 DeviceUnpairWork::DeviceUnpairWork(const Object::Ptr json):
-	WorkContent(json)
+	AbstractGatewayWork(json)
 {
 	if (!type().is<DeviceUnpairWork>())
 		throw InvalidArgumentException("incompatible work content");
@@ -49,19 +49,4 @@ DeviceID DeviceUnpairWork::deviceID() const
 	return DeviceID::parse(
 		JsonUtil::extract<string>(json(), "device_id")
 	);
-}
-
-void DeviceUnpairWork::setResult(const GatewayRPCResult::Status status)
-{
-	json()->set("rpc_result", static_cast<int>(status));
-}
-
-GatewayRPCResult::Status DeviceUnpairWork::result() const
-{
-	return GatewayRPCResult::convert(json()->getValue<int>("rpc_result"));
-}
-
-bool DeviceUnpairWork::hasResult() const
-{
-	return json()->has("rpc_result");
 }
