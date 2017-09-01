@@ -4,6 +4,7 @@
 #include <Poco/DateTime.h>
 #include <Poco/Exception.h>
 #include <Poco/Logger.h>
+#include <Poco/StringTokenizer.h>
 #include <Poco/Timestamp.h>
 
 #include "di/Injectable.h"
@@ -172,28 +173,47 @@ string IcuTranslator::applyArgs(
 	return result.toUTF8String(utf8);
 }
 
-string IcuTranslator::formatImpl(
-		const string &key,
+string IcuTranslator::lookaupAndApplyArgs(
+		const string &originalKey,
+		vector<string>::const_iterator current,
+		const vector<string>::const_iterator end,
+		const ResourceBundle &bundle,
 		const vector<Var> &args)
 {
+	if (current == end)
+		return NoTranslator::formatImpl(originalKey, args);
+
 	UErrorCode error = U_ZERO_ERROR;
-	icu::ResourceBundle value = m_bundle->get(key.c_str(), error);
-	handleError(error, key, m_bundle->getName());
+	icu::ResourceBundle value = bundle.get(current->c_str(), error);
+	handleError(error, originalKey, bundle.getName());
 
 	switch (value.getType()) {
 	case URES_STRING:
 		return applyArgs(value, args);
 
+	case URES_TABLE:
+		return lookaupAndApplyArgs(originalKey, ++current, end, value, args);
+
 	default:
 		logger().critical(
 			"requested resource "
-			+ key
+			+ originalKey
 			+ " is of type "
 			+ typeName(value.getType()),
 			__FILE__, __LINE__);
 
-		return NoTranslator::formatImpl(key, args);
+		return NoTranslator::formatImpl(originalKey, args);
 	}
+}
+
+string IcuTranslator::formatImpl(
+		const string &key,
+		const vector<Var> &args)
+{
+	StringTokenizer keyList(key, ".",
+		StringTokenizer::TOK_IGNORE_EMPTY | StringTokenizer::TOK_TRIM);
+
+	return lookaupAndApplyArgs(key, keyList.begin(), keyList.end(), *m_bundle, args);
 }
 
 static IcuLocaleImpl asIcuLocale(const BeeeOn::Locale &locale)

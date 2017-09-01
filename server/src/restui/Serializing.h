@@ -4,7 +4,7 @@
 #include <list>
 #include <vector>
 
-#include "provider/InfoProvider.h"
+#include "provider/TypeInfoProvider.h"
 #include "model/TypeInfo.h"
 
 namespace Poco {
@@ -23,6 +23,7 @@ class LegacyRoleInGateway;
 class Location;
 class VerifiedIdentity;
 class RoleInGateway;
+class Translator;
 class Work;
 
 namespace RestUI {
@@ -47,6 +48,14 @@ void serialize(Poco::JSON::PrintHandler &output, const Work &work);
 void serialize(Poco::JSON::PrintHandler &output, const Device &device);
 void serialize(Poco::JSON::PrintHandler &output,
 	       const std::vector<Device> &devices);
+
+void serialize(Poco::JSON::PrintHandler &output,
+		Translator &translator,
+		const TypeInfo &info);
+void serialize(Poco::JSON::PrintHandler &output,
+		Translator &translator,
+		const TypeInfoProvider::InfoSet::const_iterator begin,
+		const TypeInfoProvider::InfoSet::const_iterator end);
 
 }
 

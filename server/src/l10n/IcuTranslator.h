@@ -28,6 +28,13 @@ protected:
 		const std::string &key,
 		const std::vector<Poco::Dynamic::Var> &args) override;
 
+	std::string lookaupAndApplyArgs(
+		const std::string &originalKey,
+		std::vector<std::string>::const_iterator current,
+		const std::vector<std::string>::const_iterator end,
+		const icu::ResourceBundle &bundle,
+		const std::vector<Poco::Dynamic::Var> &args);
+
 	std::string applyArgs(
 		const icu::ResourceBundle &bundle,
 		const std::vector<Poco::Dynamic::Var> &args);

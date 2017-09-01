@@ -7,4 +7,27 @@ root {
 	malformed_input_data { "could not process input data" }
 	invalid_input_data { "invalid input data" }
 	internal_error { "internal server error" }
+
+	types {
+		availability { "availability" }
+		battery { "battery" }
+		bitmap { "bitmap" }
+		brightness { "brightness" }
+		co2 { "CO2"}
+		enum { "enumeration" }
+		fire { "fire" }
+		humidity { "humidity" }
+		luminance { "luminance" }
+		motion { "motion" }
+		noise { "noise" }
+		open_close { "open/close" }
+		on_off { "on/off" }
+		performance { "performance" }
+		pressure { "pressure" }
+		rssi { "signal" }
+		security_alert { "security alert" }
+		shake { "shake" }
+		temperature { "temperature" }
+		ultraviolet { "UV" }
+	}
 }
