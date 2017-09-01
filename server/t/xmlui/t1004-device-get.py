@@ -87,17 +87,16 @@ class TestDeviceGet(unittest.TestCase):
 
 		if id == "0x4135d00019f5234e":
 			self.assertEqual("Temperature", e.get("name"))
-			self.assertEqual(6, len(e))
+			self.assertEqual(5, len(e))
 
 			for i in range(len(e)):
 				self.assertEqual(str(i), e[i].get("id"))
 
-			self.assertEqual("2", e[0].get("type"))
-			self.assertEqual("2", e[1].get("type"))
-			self.assertEqual("3", e[2].get("type"))
-			self.assertEqual("8", e[3].get("type"))
-			self.assertEqual("9", e[4].get("type"))
-			self.assertEqual("10", e[5].get("type"))
+			self.assertEqual("19", e[0].get("type"))
+			self.assertEqual("19", e[1].get("type"))
+			self.assertEqual("8", e[2].get("type"))
+			self.assertEqual("2", e[3].get("type"))
+			self.assertEqual("16", e[4].get("type"))
 
 		elif id == "0x432d27aa5e94ecfd":
 			self.assertEqual("Multi-sensor", e.get("name"))
@@ -105,23 +104,22 @@ class TestDeviceGet(unittest.TestCase):
 			for i in range(len(e)):
 				self.assertEqual(str(i), e[i].get("id"))
 
-			self.assertEqual("2", e[0].get("type"))
-			self.assertEqual("3", e[1].get("type"))
-			self.assertEqual("6", e[2].get("type"))
+			self.assertEqual("19", e[0].get("type"))
+			self.assertEqual("8", e[1].get("type"))
+			self.assertEqual("11", e[2].get("type"))
 
 		elif id == "0x427e0f7f0302324d":
 			self.assertEqual("Humidity", e.get("name"))
-			self.assertEqual(6, len(e))
+			self.assertEqual(5, len(e))
 
 			for i in range(len(e)):
 				self.assertEqual(str(i), e[i].get("id"))
 
-			self.assertEqual("2", e[0].get("type"))
-			self.assertEqual("2", e[1].get("type"))
-			self.assertEqual("3", e[2].get("type"))
-			self.assertEqual("8", e[3].get("type"))
-			self.assertEqual("9", e[4].get("type"))
-			self.assertEqual("10", e[5].get("type"))
+			self.assertEqual("19", e[0].get("type"))
+			self.assertEqual("19", e[1].get("type"))
+			self.assertEqual("8", e[2].get("type"))
+			self.assertEqual("2", e[3].get("type"))
+			self.assertEqual("16", e[4].get("type"))
 
 		elif id == "0x4471959aad24618e":
 			self.assertEqual("Unknown", e.get("name"))
@@ -130,15 +128,15 @@ class TestDeviceGet(unittest.TestCase):
 			for i in range(len(e)):
 				self.assertEqual(str(i), e[i].get("id"))
 
-			self.assertEqual("2", e[0].get("type"))
-			self.assertEqual("3", e[1].get("type"))
-			self.assertEqual("6", e[2].get("type"))
-			self.assertEqual("2", e[3].get("type"))
-			self.assertEqual("3", e[4].get("type"))
-			self.assertEqual("6", e[5].get("type"))
-			self.assertEqual("2", e[6].get("type"))
-			self.assertEqual("3", e[7].get("type"))
-			self.assertEqual("6", e[8].get("type"))
+			self.assertEqual("19", e[0].get("type"))
+			self.assertEqual("8", e[1].get("type"))
+			self.assertEqual("11", e[2].get("type"))
+			self.assertEqual("19", e[3].get("type"))
+			self.assertEqual("8", e[4].get("type"))
+			self.assertEqual("11", e[5].get("type"))
+			self.assertEqual("19", e[6].get("type"))
+			self.assertEqual("8", e[7].get("type"))
+			self.assertEqual("11", e[8].get("type"))
 
 		else:
 			self.assertTrue(False, "unknown device: %s, %s, %s" % (e.tag, e.attrib, e.text))

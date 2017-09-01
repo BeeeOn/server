@@ -5,17 +5,17 @@
 		<name>T:DEV_TEMPERATURE_HUMIDITY</name>
 		<manufacturer>T:MANUFACTURER_BUT</manufacturer>
 		<modules>
-			<sensor id="0" type="0x02">
+			<sensor id="0" type="19">
 				<name>T:MOD_ROOM_TEMPERATURE</name>
 			</sensor>
-			<sensor id="1" type="0x02" unavailable-value="0x7FFFFFFF">
+			<sensor id="1" type="19" unavailable-value="0x7FFFFFFF">
 				<name>T:MOD_OUTSIDE_TEMPERATURE</name>
 			</sensor>
-			<sensor id="2" type="0x03">
+			<sensor id="2" type="8">
 				<name>T:MOD_ROOM_HUMIDITY</name>
 			</sensor>
-			<battery id="3" type="0x08" />
-			<rssi id="4" type="0x09" />
+			<battery id="3" type="2" />
+			<rssi id="4" type="16" />
 		</modules>
 	</device>
 
@@ -23,7 +23,7 @@
 		<name>T:DEV_INTERNAL_PRESSURE</name>
 		<manufacturer>T:MANUFACTURER_BUT</manufacturer>
 		<modules>
-			<sensor id="0" type="0x04">
+			<sensor id="0" type="15">
 				<name>T:TYPE_PRESSURE</name>
 			</sensor>
 		</modules>
@@ -33,13 +33,13 @@
 		<name>T:DEV_VIRTUAL_THN</name>
 		<manufacturer>T:MANUFACTURER_VIRTUAL</manufacturer>
 		<modules>
-			<sensor id="0" type="0x02">
+			<sensor id="0" type="19">
 				<name>T:TYPE_TEMPERATURE</name>
 			</sensor>
-			<sensor id="1" type="0x03">
+			<sensor id="1" type="8">
 				<name>T:TYPE_HUMIDITY</name>
 			</sensor>
-			<sensor id="2" type="0x06">
+			<sensor id="2" type="11">
 				<name>T:TYPE_NOISE</name>
 			</sensor>
 		</modules>
@@ -49,41 +49,41 @@
 		<name>T:DEV_VIRTUAL_THN_X3</name>
 		<manufacturer>T:MANUFACTURER_VIRTUAL</manufacturer>
 		<modules>
-			<sensor id="0" type="0x02">
+			<sensor id="0" type="19">
 				<group>T:ZONE_1</group>
 				<name>T:TYPE_TEMPERATURE</name>
 			</sensor>
-			<sensor id="1" type="0x03">
+			<sensor id="1" type="8">
 				<group>T:ZONE_1</group>
 				<name>T:TYPE_HUMIDITY</name>
 			</sensor>
-			<sensor id="2" type="0x06">
+			<sensor id="2" type="11">
 				<group>T:ZONE_1</group>
 				<name>T:TYPE_NOISE</name>
 			</sensor>
 
-			<sensor id="3" type="0x02">
+			<sensor id="3" type="19">
 				<group>T:ZONE_2</group>
 				<name>T:TYPE_TEMPERATURE</name>
 			</sensor>
-			<sensor id="4" type="0x03">
+			<sensor id="4" type="8">
 				<group>T:ZONE_2</group>
 				<name>T:TYPE_HUMIDITY</name>
 			</sensor>
-			<sensor id="5" type="0x06">
+			<sensor id="5" type="11">
 				<group>T:ZONE_2</group>
 				<name>T:TYPE_NOISE</name>
 			</sensor>
 
-			<sensor id="6" type="0x02">
+			<sensor id="6" type="19">
 				<group>T:ZONE_3</group>
 				<name>T:TYPE_TEMPERATURE</name>
 			</sensor>
-			<sensor id="7" type="0x03">
+			<sensor id="7" type="8">
 				<group>T:ZONE_3</group>
 				<name>T:TYPE_HUMIDITY</name>
 			</sensor>
-			<sensor id="8" type="0x06">
+			<sensor id="8" type="11">
 				<group>T:ZONE_3</group>
 				<name>T:TYPE_NOISE</name>
 			</sensor>

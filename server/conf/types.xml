@@ -1,34 +1,34 @@
 <?warn This file is intended for testing only?>
 
 <types>
-	<type id="0x02">
-		<name>T:TYPE_TEMPERATURE</name>
-		<var size="4">float</var>
-		<unit>&#176;C</unit>
-	</type>
-	<type id="0x03">
-		<name>T:TYPE_HUMIDITY</name>
-		<var size="4">int</var>
-		<unit>&#37;</unit>
-	</type>
-	<type id="0x04">
-		<name>T:TYPE_PRESSURE</name>
-		<var size="2">int</var>
-		<unit>hPa</unit>
-	</type>
-	<type id="0x06">
-		<name>T:TYPE_NOISE</name>
-		<var size="4">float</var>
-		<unit>dB</unit>
-	</type>
-	<type id="0x08">
+	<type id="2">
 		<name>T:TYPE_BATTERY</name>
 		<var size="2">int</var>
 		<unit>&#37;</unit>
 	</type>
-	<type id="0x09">
-		<name>T:TYPE_RSSI</name>
+	<type id="8">
+		<name>T:TYPE_HUMIDITY</name>
 		<var size="1">int</var>
 		<unit>&#37;</unit>
+	</type>
+	<type id="11">
+		<name>T:TYPE_NOISE</name>
+		<var size="4">float</var>
+		<unit>dB</unit>
+	</type>
+	<type id="15">
+		<name>T:TYPE_PRESSURE</name>
+		<var size="2">int</var>
+		<unit>hPa</unit>
+	</type>
+	<type id="16">
+		<name>T:TYPE_RSSI</name>
+		<var size="2">int</var>
+		<unit>&#37;</unit>
+	</type>
+	<type id="19">
+		<name>T:TYPE_TEMPERATURE</name>
+		<var size="4">float</var>
+		<unit>&#176;C</unit>
 	</type>
 </types>
