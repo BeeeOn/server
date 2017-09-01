@@ -31,9 +31,4 @@
 		<var size="1">int</var>
 		<unit>&#37;</unit>
 	</type>
-	<type id="0x0A">
-		<name>T:TYPE_REFRESH</name>
-		<var size="2">int</var>
-		<unit>s</unit>
-	</type>
 </types>

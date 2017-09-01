@@ -16,14 +16,6 @@
 			</sensor>
 			<battery id="3" type="0x08" />
 			<rssi id="4" type="0x09" />
-			<refresh id="5" type="0x0A">
-				<default>30</default>
-				<constraints>
-					<min>5</min>
-					<max>3600</max>
-					<step>1</step>
-				</constraints>
-			</refresh>
 		</modules>
 	</device>
 
@@ -34,14 +26,6 @@
 			<sensor id="0" type="0x04">
 				<name>T:TYPE_PRESSURE</name>
 			</sensor>
-			<refresh id="1" type="0x0A">
-				<default>30</default>
-				<constraints>
-					<min>5</min>
-					<max>3600</max>
-					<step>1</step>
-				</constraints>
-			</refresh>
 		</modules>
 	</device>
 
