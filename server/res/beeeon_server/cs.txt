@@ -7,4 +7,28 @@ cs {
 	malformed_input_data { "vstupní data jsou neplatná" }
 	invalid_input_data { "chybně zadané údaje" }
 	internal_error { "interní chyba serveru" }
+
+	types {
+		availability { "přítomnost" }
+		battery { "baterie" }
+		bitmap { "příznaky" }
+		brightness { "jas" }
+		co2 { "CO2"}
+		enum { "výčet" }
+		fire { "oheň" }
+		humidity { "vlhkost" }
+		luminance { "osvětlení" }
+		motion { "pohyb" }
+		noise { "hluk" }
+		open_close { "otevřeno/zavřeno" }
+		on_off { "zapnuto/vypnuto" }
+		performance { "výkon" }
+		pressure { "tlak" }
+		rssi { "signál" }
+		security_alert { "výstraha" }
+		shake { "otřesy" }
+		temperature { "teplota" }
+		ultraviolet { "UV" }
+	}
+
 }

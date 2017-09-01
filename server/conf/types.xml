@@ -2,93 +2,93 @@
 
 <types>
 	<type id="1">
-		<name>T:TYPE_AVAILABILITY</name>
+		<name>availability</name>
 		<var size="1">int</var>
 	</type>
 	<type id="2">
-		<name>T:TYPE_BATTERY</name>
+		<name>battery</name>
 		<var size="2">int</var>
 		<unit>&#37;</unit>
 	</type>
 	<type id="3">
-		<name>T:TYPE_BITMAP</name>
+		<name>bitmap</name>
 		<var size="4">int</var>
 	</type>
 	<type id="4">
-		<name>T:TYPE_BRIGHTNES</name>
+		<name>brightness</name>
 		<var size="1">int</var>
 		<unit>&#37;</unit>
 	</type>
 	<type id="5">
-		<name>T:TYPE_CO2</name>
+		<name>co2</name>
 		<var size="4">int</var>
 		<unit>ppm</unit>
 	</type>
 	<type id="6">
-		<name>T:TYPE_ENUM</name>
+		<name>enum</name>
 		<var size="2">int</var>
 	</type>
 	<type id="7">
-		<name>T:TYPE_FIRE</name>
+		<name>fire</name>
 		<var size="1">int</var>
 	</type>
 	<type id="8">
-		<name>T:TYPE_HUMIDITY</name>
+		<name>humidity</name>
 		<var size="1">int</var>
 		<unit>&#37;</unit>
 	</type>
 	<type id="9">
-		<name>T:TYPE_LUMINANCE</name>
+		<name>luminance</name>
 		<var size="4">int</var>
 		<unit>lux</unit>
 	</type>
 	<type id="10">
-		<name>T:TYPE_MOTION</name>
+		<name>motion</name>
 		<var size="1">int</var>
 	</type>
 	<type id="11">
-		<name>T:TYPE_NOISE</name>
+		<name>noise</name>
 		<var size="4">float</var>
 		<unit>dB</unit>
 	</type>
 	<type id="12">
-		<name>T:TYPE_OPEN_CLOSE</name>
+		<name>open_close</name>
 		<var size="1">int</var>
 	</type>
 	<type id="13">
-		<name>T:TYPE_ON_OFF</name>
+		<name>on_off</name>
 		<var size="1">int</var>
 	</type>
 	<type id="14">
-		<name>T:TYPE_PERFORMANCE</name>
+		<name>performance</name>
 		<var size="1">int</var>
 		<unit>&#37;</unit>
 	</type>
 	<type id="15">
-		<name>T:TYPE_PRESSURE</name>
+		<name>pressure</name>
 		<var size="2">int</var>
 		<unit>hPa</unit>
 	</type>
 	<type id="16">
-		<name>T:TYPE_RSSI</name>
+		<name>rssi</name>
 		<var size="2">int</var>
 		<unit>&#37;</unit>
 	</type>
 	<type id="17">
-		<name>T:TYPE_SECURITY_ALERT</name>
+		<name>security_alert</name>
 		<var size="1">int</var>
 	</type>
 	<type id="18">
-		<name>T:TYPE_SHAKE</name>
+		<name>shake</name>
 		<var size="1">int</var>
 	</type>
 	<type id="19">
-		<name>T:TYPE_TEMPERATURE</name>
+		<name>temperature</name>
 		<var size="4">float</var>
 		<unit>&#176;C</unit>
 	</type>
 	<type id="20">
-		<name>T:TYPE_ULTRAVIOLET</name>
+		<name>ultraviolet</name>
 		<var size="1">int</var>
 		<unit>UV</unit>
 	</type>
