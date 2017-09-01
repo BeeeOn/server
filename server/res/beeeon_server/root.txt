@@ -2,7 +2,7 @@ root {
 	hello { "Translation works" }
 
 	not_authenticated { "not authenticated" }
-	requested_resource_missing { "requested resource does not exists" }
+	requested_resource_missing { "requested resource does not exist" }
 	not_enough_permission { "not enough permission to access the resource" }
 	malformed_input_data { "could not process input data" }
 	invalid_input_data { "invalid input data" }

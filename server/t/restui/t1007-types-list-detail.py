@@ -55,7 +55,7 @@ class TestTypesListDetail(unittest.TestCase):
 
 		result = json.loads(content)
 		self.assertEqual("error", result["status"])
-		self.assertEqual("requested resource does not exists", result["message"])
+		self.assertEqual("requested resource does not exist", result["message"])
 
 	def test3_detail_of_battery(self):
 		req = GET(config.ui_host, config.ui_port, "/types/2")
