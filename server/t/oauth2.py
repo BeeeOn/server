@@ -146,7 +146,10 @@ class AbstractLogin:
 				data = json.loads(e["message"])
 				uri = data["log"]["entries"][0]["request"]["url"]
 				driver.save_screenshot("extr.png");
-				return CodeResult(parse_qs(urlparse(uri).query)["code"][0])
+				try:
+					return CodeResult(parse_qs(urlparse(uri).query)["code"][0])
+				except Exception:
+					return "parsing_error"
 
 		# implemented for PhantomJS only
 		raise Exception("Not implemented or failed")
@@ -251,19 +254,22 @@ class FacebookLogin(AbstractLogin):
 		Perform automatic login via Facebook OAuth2 website. It is possible
 		to override parameters:
 		"""
-		driver = self._config_driver(**kwargs)
-		driver.get(self._login_uri(scope, "https://localhost/"))
+		for i in range(0, 10):
+			driver = self._config_driver(**kwargs)
+			driver.get(self._login_uri(scope, "https://localhost/"))
 
-		try:
-			self._input_credentials(driver, user, password)
-		except WebDriverException as e:
-			driver.save_screenshot("facebook_login_failed.png")
-			raise e
-		try:
-			return self._extract_code(driver)
-		except WebDriverException as e:
-			driver.save_screenshot("facebook_code_extr_failed.png");
-			raise e
+			try:
+				self._input_credentials(driver, user, password)
+			except WebDriverException as e:
+				driver.save_screenshot("facebook_login_failed.png")
+				raise e
+			try:
+				code = self._extract_code(driver)
+				if (code != "parsing_error"):
+					break
+			except Exception as e:
+				raise Exception("Unexpected uri %s", driver.current_url)
+		return code
 
 	def _input_credentials(self, driver, user, passwd):
 		self._wait_clickable(driver, "loginbutton")
