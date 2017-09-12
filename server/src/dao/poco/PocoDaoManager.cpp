@@ -18,8 +18,8 @@ BEEEON_OBJECT_REF("connector", &PocoDaoManager::setConnector)
 BEEEON_OBJECT_TEXT("connectionString", &PocoDaoManager::setConnectionString)
 BEEEON_OBJECT_NUMBER("minSessions", &PocoDaoManager::setMinSessions)
 BEEEON_OBJECT_NUMBER("maxSessions", &PocoDaoManager::setMaxSessions)
-BEEEON_OBJECT_NUMBER("idleTime", &PocoDaoManager::setIdleTime)
-BEEEON_OBJECT_NUMBER("connectionTimeout", &PocoDaoManager::setConnectionTimeout)
+BEEEON_OBJECT_TIME("idleTime", &PocoDaoManager::setIdleTime)
+BEEEON_OBJECT_TIME("connectionTimeout", &PocoDaoManager::setConnectionTimeout)
 BEEEON_OBJECT_TEXT("features", &PocoDaoManager::setFeatures)
 BEEEON_OBJECT_REF("initializers", &PocoDaoManager::addInitializer)
 BEEEON_OBJECT_HOOK("done", &PocoDaoManager::connectAndPrepare)
@@ -35,8 +35,8 @@ PocoDaoManager::PocoDaoManager():
 	m_connector(&ConnectorLoader::null()),
 	m_minSessions(1),
 	m_maxSessions(32),
-	m_idleTime(60),
-	m_connectionTimeout(5)
+	m_idleTime(60 * Timespan::SECONDS),
+	m_connectionTimeout(5 * Timespan::SECONDS)
 {
 }
 
@@ -71,19 +71,24 @@ void PocoDaoManager::setMaxSessions(const int sessions)
 	m_maxSessions = sessions;
 }
 
-void PocoDaoManager::setIdleTime(const int seconds)
+void PocoDaoManager::setIdleTime(const Timespan &time)
 {
-	if (seconds < 0) {
+	if (time.totalSeconds() < 1) {
 		throw InvalidArgumentException(
-			"idleTime must be non-negative");
+			"idleTime must be at least 1 second");
 	}
 
-	m_idleTime = seconds;
+	m_idleTime = time;
 }
 
-void PocoDaoManager::setConnectionTimeout(const int seconds)
+void PocoDaoManager::setConnectionTimeout(const Timespan &timeout)
 {
-	m_connectionTimeout = seconds < 0? -1 : seconds;
+	if (timeout >= 0 && timeout.totalSeconds() < 1) {
+		throw InvalidArgumentException(
+			"connectionTimeout must be negative or at least a second");
+	}
+
+	m_connectionTimeout = timeout < 0? -1 : timeout;
 }
 
 void PocoDaoManager::addInitializer(SharedPtr<PocoDBInitializer> initializer)
@@ -151,7 +156,7 @@ void PocoDaoManager::initPool()
 			+ m_connector->name() + ", "
 			+ to_string(m_minSessions) + ", "
 			+ to_string(m_maxSessions) + ", "
-			+ to_string(m_idleTime),
+			+ to_string(m_idleTime.totalSeconds()),
 			__FILE__, __LINE__);
 
 	m_pool = new SessionPool(
@@ -159,7 +164,7 @@ void PocoDaoManager::initPool()
 			m_connectionString,
 			m_minSessions,
 			m_maxSessions,
-			m_idleTime);
+			m_idleTime.totalSeconds());
 
 	for (auto feature : m_features)
 		m_pool->setFeature(feature.first, feature.second);
@@ -202,5 +207,5 @@ void PocoDaoManager::connectAndPrepare()
 void PocoDaoManager::customizeSession(Session &session)
 {
 	if (m_connectionTimeout >= 0)
-		session.setConnectionTimeout(m_connectionTimeout);
+		session.setConnectionTimeout(m_connectionTimeout.totalSeconds());
 }
