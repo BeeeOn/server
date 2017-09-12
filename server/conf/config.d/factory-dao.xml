@@ -34,7 +34,7 @@
 		<instance name="adaServerConnector" class="BeeeOn::SocketRPCConnector">
 			<set name="host" text="${ada.connector.host}" />
 			<set name="port" number="${ada.connector.port}" />
-			<set name="receiveTimeout" number="${ada.connector.receiveTimeout}" />
+			<set name="receiveTimeout" time="${ada.connector.receiveTimeout}" />
 		</instance>
 
 		<instance name="fakeGatewayRPC" class="BeeeOn::FakeGatewayRPC">
