@@ -39,7 +39,7 @@ public:
 
 private:
 	TestableBasicProcessor *m_processor;
-	WorkLockManager *m_lockManager;
+	WorkLockManager::Ptr m_lockManager;
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(BasicProcessorTest);
@@ -84,7 +84,6 @@ void BasicProcessorTest::setUp()
 void BasicProcessorTest::tearDown()
 {
 	delete m_processor;
-	delete m_lockManager;
 }
 
 /**
