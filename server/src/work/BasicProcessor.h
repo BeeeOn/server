@@ -10,7 +10,7 @@
 #include <Poco/ThreadPool.h>
 
 #include "loop/StoppableRunnable.h"
-#include "util/Loggable.h"
+#include "util/HavingThreadPool.h"
 #include "work/BasicQueue.h"
 #include "work/WorkScheduler.h"
 #include "work/WorkLockManager.h"
@@ -25,17 +25,13 @@ class WorkRunnerFactory;
 class BasicProcessor :
 		public WorkScheduler,
 		public StoppableRunnable,
-		Loggable {
+		public HavingThreadPool {
 public:
 	BasicProcessor();
 
 	void setBackup(WorkBackup *repository);
 	void setRunnerFactory(WorkRunnerFactory *factory);
 	void setLockManager(WorkLockManager::Ptr manager);
-
-	void setMinThreads(int min);
-	void setMaxThreads(int max);
-	void setThreadIdleTime(int ms);
 
 	void run() override;
 	void stop() override;
@@ -51,8 +47,6 @@ public:
 
 protected:
 	void initQueue();
-	void initPool();
-	Poco::ThreadPool &pool();
 	void dispatch();
 	void execute(WorkExecutor *executor, Work::Ptr work);
 	bool executeInThread(Poco::Runnable &runnable,
@@ -66,10 +60,6 @@ private:
 	std::list<WorkExecutor *> m_executors;
 	Poco::AtomicCounter m_shouldStop;
 	Poco::Thread *m_current;
-	Poco::SharedPtr<Poco::ThreadPool> m_pool;
-	int m_minThreads;
-	int m_maxThreads;
-	int m_threadIdleTime;
 	BasicQueue m_queue;
 };
 
