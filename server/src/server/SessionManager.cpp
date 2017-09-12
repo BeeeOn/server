@@ -9,7 +9,7 @@ using namespace BeeeOn;
 
 BEEEON_OBJECT_BEGIN(BeeeOn, SessionManager)
 BEEEON_OBJECT_REF("secureRandomProvider", &SessionManager::setSecureRandomProvider)
-BEEEON_OBJECT_NUMBER("sessionExpireTime", &SessionManager::setSessionExpireTime)
+BEEEON_OBJECT_TIME("sessionExpireTime", &SessionManager::setSessionExpireTime)
 BEEEON_OBJECT_NUMBER("maxUserSessions", &SessionManager::setMaxUserSessions)
 BEEEON_OBJECT_END(BeeeOn, SessionManager)
 
@@ -26,14 +26,14 @@ void SessionManager::setSecureRandomProvider(SecureRandomProvider *provider)
 	m_random = provider;
 }
 
-void SessionManager::setSessionExpireTime(const int seconds)
+void SessionManager::setSessionExpireTime(const Timespan &time)
 {
-	if (seconds <= 0) {
+	if (time <= 0) {
 		throw InvalidArgumentException(
 			"session expire time must be greater then zero");
 	}
 
-	m_expireTime = seconds * Timespan::SECONDS;
+	m_expireTime = time;
 }
 
 void SessionManager::setMaxUserSessions(const int maxUserSessions)
