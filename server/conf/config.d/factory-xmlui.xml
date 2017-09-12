@@ -12,7 +12,7 @@
 			<set name="backlog" number="64" />
 			<set name="maxThreads" number="64" />
 			<set name="maxQueued" number="64" />
-			<set name="threadIdleTime" number="8" />
+			<set name="threadIdleTime" time="8 s" />
 			<set name="threadPriority" text="normal" />
 			<set name="port" number="${xmlui.port}" />
 		</instance>

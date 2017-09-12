@@ -20,7 +20,7 @@ BEEEON_OBJECT_NUMBER("port", &SocketServer::setPort)
 BEEEON_OBJECT_NUMBER("backlog", &SocketServer::setBacklog)
 BEEEON_OBJECT_NUMBER("maxThreads", &SocketServer::setMaxThreads)
 BEEEON_OBJECT_NUMBER("maxQueued", &SocketServer::setMaxQueued)
-BEEEON_OBJECT_NUMBER("threadIdleTime", &SocketServer::setThreadIdleTime)
+BEEEON_OBJECT_TIME("threadIdleTime", &SocketServer::setThreadIdleTime)
 BEEEON_OBJECT_TEXT("threadPriority", &SocketServer::setThreadPriority)
 BEEEON_OBJECT_REF("sslConfig", &SocketServer::setSSLConfig)
 BEEEON_OBJECT_REF("connectionFactory", &SocketServer::setFactory)
@@ -74,9 +74,9 @@ void SocketServer::setMaxQueued(int count)
 	m_tcpParams->setMaxQueued(count);
 }
 
-void SocketServer::setThreadIdleTime(int seconds)
+void SocketServer::setThreadIdleTime(const Timespan &time)
 {
-	m_tcpParams->setThreadIdleTime(Timespan(seconds, 0));
+	m_tcpParams->setThreadIdleTime(time);
 }
 
 void SocketServer::setThreadPriority(const std::string &priority)

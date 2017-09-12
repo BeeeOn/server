@@ -2,6 +2,7 @@
 #define BEEEON_SOCKET_SERVER_H
 
 #include <Poco/SharedPtr.h>
+#include <Poco/Timespan.h>
 #include <Poco/Net/ServerSocket.h>
 #include <Poco/Net/TCPServer.h>
 #include <Poco/Net/TCPServerParams.h>
@@ -34,7 +35,7 @@ public:
 	void setFactory(SocketServerConnectionFactory::Ptr factory);
 	void setMaxThreads(int count);
 	void setMaxQueued(int count);
-	void setThreadIdleTime(int seconds);
+	void setThreadIdleTime(const Poco::Timespan &time);
 	void setThreadPriority(const std::string &priority);
 
 	void start() override;
