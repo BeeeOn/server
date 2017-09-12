@@ -45,7 +45,7 @@
 		<instance name="legacyGatewayRPC" class="BeeeOn::LegacyGatewayRPC">
 			<set name="rpcConnector" ref="adaServerConnector" />
 			<set name="asyncExecutor" ref="asyncExecutor" />
-			<set name="responseTimeout" number="${ada.legacy.responseTimeout}" />
+			<set name="responseTimeout" time="${ada.legacy.responseTimeout}" />
 		</instance>
 
 		<alias name="gatewayRPC" ref="fakeGatewayRPC" />

@@ -24,12 +24,12 @@ LegacyGatewayRPC::LegacyGatewayRPC():
 {
 }
 
-void LegacyGatewayRPC::setResponseTimeout(int ms)
+void LegacyGatewayRPC::setResponseTimeout(const Timespan &timeout)
 {
-	if (ms < 0)
+	if (timeout < 0)
 		throw InvalidArgumentException("response timeout must be non-negative");
 
-	m_timeout = Timespan(0, ms * 1000);
+	m_timeout = timeout;
 }
 
 void LegacyGatewayRPC::sendListen(
@@ -287,5 +287,5 @@ BEEEON_OBJECT_BEGIN(BeeeOn, LegacyGatewayRPC)
 BEEEON_OBJECT_CASTABLE(GatewayRPC)
 BEEEON_OBJECT_REF("rpcConnector", &LegacyGatewayRPC::setRPCConnector)
 BEEEON_OBJECT_REF("asyncExecutor", &LegacyGatewayRPC::setAsyncExecutor)
-BEEEON_OBJECT_NUMBER("responseTimeout", &LegacyGatewayRPC::setResponseTimeout)
+BEEEON_OBJECT_TIME("responseTimeout", &LegacyGatewayRPC::setResponseTimeout)
 BEEEON_OBJECT_END(BeeeOn, LegacyGatewayRPC)
