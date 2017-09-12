@@ -18,7 +18,7 @@ BEEEON_OBJECT_REF("lockManager", &BasicProcessor::setLockManager)
 BEEEON_OBJECT_REF("executors", &BasicProcessor::registerExecutor)
 BEEEON_OBJECT_NUMBER("minThreads", &BasicProcessor::setMinThreads)
 BEEEON_OBJECT_NUMBER("maxThreads", &BasicProcessor::setMaxThreads)
-BEEEON_OBJECT_NUMBER("threadIdleTime", &BasicProcessor::setThreadIdleTime)
+BEEEON_OBJECT_TIME("threadIdleTime", &BasicProcessor::setThreadIdleTime)
 BEEEON_OBJECT_HOOK("done", &BasicProcessor::init)
 BEEEON_OBJECT_END(BeeeOn, BasicProcessor)
 

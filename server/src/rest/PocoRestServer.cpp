@@ -19,7 +19,7 @@ BEEEON_OBJECT_NUMBER("port", &PocoRestServer::setPort)
 BEEEON_OBJECT_NUMBER("backlog", &PocoRestServer::setBacklog)
 BEEEON_OBJECT_NUMBER("minThreads", &PocoRestServer::setMinThreads)
 BEEEON_OBJECT_NUMBER("maxThreads", &PocoRestServer::setMaxThreads)
-BEEEON_OBJECT_NUMBER("threadIdleTime", &PocoRestServer::setThreadIdleTime)
+BEEEON_OBJECT_TIME("threadIdleTime", &PocoRestServer::setThreadIdleTime)
 BEEEON_OBJECT_END(BeeeOn, PocoRestServer)
 
 using namespace std;
