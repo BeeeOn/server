@@ -4,6 +4,7 @@
 #include <map>
 
 #include <Poco/SharedPtr.h>
+#include <Poco/Timespan.h>
 #include <Poco/Data/SessionPool.h>
 
 #include "dao/poco/PocoDBInitializer.h"
@@ -21,8 +22,8 @@ public:
 	void setConnectionString(const std::string &conn);
 	void setMinSessions(const int sessions);
 	void setMaxSessions(const int sessions);
-	void setIdleTime(const int seconds);
-	void setConnectionTimeout(const int seconds);
+	void setIdleTime(const Poco::Timespan &time);
+	void setConnectionTimeout(const Poco::Timespan &timeout);
 	void addInitializer(Poco::SharedPtr<PocoDBInitializer> initializer);
 	void setFeatures(const std::string &features);
 
@@ -39,8 +40,8 @@ private:
 	std::string m_connectionString;
 	int m_minSessions;
 	int m_maxSessions;
-	int m_idleTime;
-	int m_connectionTimeout;
+	Poco::Timespan m_idleTime;
+	Poco::Timespan m_connectionTimeout;
 	std::list<Poco::SharedPtr<PocoDBInitializer>> m_initializers;
 	Poco::SharedPtr<Poco::Data::SessionPool> m_pool;
 	std::map<std::string, bool> m_features;

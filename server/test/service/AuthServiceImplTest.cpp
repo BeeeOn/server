@@ -113,7 +113,7 @@ void AuthServiceImplTest::setUp()
 	m_insecureRandomProvider.setProviderImpl(&m_mockRandomProvider);
 	m_manager.setSecureRandomProvider(&m_insecureRandomProvider);
 	m_manager.setMaxUserSessions(10);
-	m_manager.setSessionExpireTime(1);
+	m_manager.setSessionExpireTime(1 * Timespan::SECONDS);
 
 	m_notifiactionDispatcher = new NotificationDispatcher();
 	m_localeManager = new SystemLocaleManager();

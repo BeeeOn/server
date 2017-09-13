@@ -47,7 +47,7 @@ public:
 			double value,
 			const Poco::Timespan &timeout) override;
 
-	void setResponseTimeout(int ms);
+	void setResponseTimeout(const Poco::Timespan &timeout);
 
 private:
 	std::string receiveResponse();

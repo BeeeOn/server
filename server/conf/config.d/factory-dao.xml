@@ -34,7 +34,7 @@
 		<instance name="adaServerConnector" class="BeeeOn::SocketRPCConnector">
 			<set name="host" text="${ada.connector.host}" />
 			<set name="port" number="${ada.connector.port}" />
-			<set name="receiveTimeout" number="${ada.connector.receiveTimeout}" />
+			<set name="receiveTimeout" time="${ada.connector.receiveTimeout}" />
 		</instance>
 
 		<instance name="fakeGatewayRPC" class="BeeeOn::FakeGatewayRPC">
@@ -45,7 +45,7 @@
 		<instance name="legacyGatewayRPC" class="BeeeOn::LegacyGatewayRPC">
 			<set name="rpcConnector" ref="adaServerConnector" />
 			<set name="asyncExecutor" ref="asyncExecutor" />
-			<set name="responseTimeout" number="${ada.legacy.responseTimeout}" />
+			<set name="responseTimeout" time="${ada.legacy.responseTimeout}" />
 		</instance>
 
 		<alias name="gatewayRPC" ref="fakeGatewayRPC" />
@@ -67,7 +67,7 @@
 				class="BeeeOn::PocoDaoManager">
 			<set name="connector" ref="${database.backend}Connector" />
 			<set name="connectionString" text="${database.connector}" />
-			<set name="connectionTimeout" number="${database.timeout}" />
+			<set name="connectionTimeout" time="${database.timeout}" />
 			<set name="features" text="${database.features}" />
 			<set name="maxSessions" number="${database.pool}" />
 			<add name="initializers" ref="sqitchDBInitializer" if-yes="${ui.debug}" />

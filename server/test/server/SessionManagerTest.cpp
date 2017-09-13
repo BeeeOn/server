@@ -2,6 +2,8 @@
 #include <vector>
 #include <cppunit/extensions/HelperMacros.h>
 
+#include <Poco/Timespan.h>
+
 #include "server/SessionManager.h"
 #include "provider/MockRandomProvider.h"
 #include "util/Base64.h"
@@ -35,9 +37,7 @@ void SessionManagerTest::setUp()
 {
 	// Set how many sessions is user allowed to have
 	m_manager.setMaxUserSessions(10);
-
-	// Set session expire time in seconds
-	m_manager.setSessionExpireTime(1);
+	m_manager.setSessionExpireTime(1 * Poco::Timespan::SECONDS);
 }
 
 void SessionManagerTest::tearDown()

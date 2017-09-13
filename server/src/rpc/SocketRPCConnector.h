@@ -31,9 +31,9 @@ public:
 		m_port = port;
 	}
 
-	void setReceiveTimeout(int us)
+	void setReceiveTimeout(const Poco::Timespan &timeout)
 	{
-		m_receiveTimeout = us;
+		m_receiveTimeout = timeout;
 	}
 
 	void open() override;

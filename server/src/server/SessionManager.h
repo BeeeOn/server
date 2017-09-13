@@ -27,7 +27,7 @@ public:
 	~SessionManager();
 
 	void setSecureRandomProvider(SecureRandomProvider *provider);
-	void setSessionExpireTime(const int seconds);
+	void setSessionExpireTime(const Poco::Timespan &time);
 	void setMaxUserSessions(const int maxUserSessions);
 
 	/**
