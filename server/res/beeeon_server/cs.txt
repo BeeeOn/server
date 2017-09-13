@@ -11,6 +11,10 @@ cs {
 	types {
 		availability {
 			label { "přítomnost" }
+			values {
+				unavailable { "nepřítomen" }
+				availabile  { "přítomen" }
+			}
 		}
 		battery {
 			label { "baterie" }
@@ -29,6 +33,10 @@ cs {
 		}
 		fire {
 			label { "oheň" }
+			values {
+				no_fire { "nehoří" }
+				fire    { "hoří" }
+			}
 		}
 		humidity {
 			label { "vlhkost" }
@@ -38,15 +46,27 @@ cs {
 		}
 		motion {
 			label { "pohyb" }
+			values {
+				no_motion { "bez pohybu" }
+				motion    { "pohyb" }
+			}
 		}
 		noise {
 			label { "hluk" }
 		}
 		open_close {
 			label { "otevřeno/zavřeno" }
+			values {
+				closed { "zavřeno" }
+				open   { "otevřeno" }
+			}
 		}
 		on_off {
 			label { "zapnuto/vypnuto" }
+			values {
+				off { "vypnuto" }
+				on  { "zapnuto" }
+			}
 		}
 		performance {
 			label { "výkon" }
@@ -59,9 +79,17 @@ cs {
 		}
 		security_alert {
 			label { "výstraha" }
+			values {
+				ease  { "klid" }
+				alert { "výstraha" }
+			}
 		}
 		shake {
 			label { "otřesy" }
+			values {
+				ease  { "klid" }
+				shake { "otřes" }
+			}
 		}
 		temperature {
 			label { "teplota" }

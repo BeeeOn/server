@@ -11,6 +11,10 @@ root {
 	types {
 		availability {
 			label { "availability" }
+			values {
+				unavailable { "unavailable" }
+				available  { "available" }
+			}
 		}
 		battery {
 			label { "battery" }
@@ -29,6 +33,10 @@ root {
 		}
 		fire {
 			label { "fire" }
+			values {
+				no_fire { "no fire" }
+				fire    { "fire" }
+			}
 		}
 		humidity {
 			label { "humidity" }
@@ -38,15 +46,27 @@ root {
 		}
 		motion {
 			label { "motion" }
+			values {
+				no_motion { "no motion" }
+				motion    { "motion" }
+			}
 		}
 		noise {
 			label { "noise" }
 		}
 		open_close {
 			label { "open/close" }
+			values {
+				closed { "closed" }
+				open   { "open" }
+			}
 		}
 		on_off {
 			label { "on/off" }
+			values {
+				off { "off" }
+				on  { "on" }
+			}
 		}
 		performance {
 			label { "performance" }
@@ -59,9 +79,17 @@ root {
 		}
 		security_alert {
 			label { "security alert" }
+			values {
+				ease  { "ease" }
+				alert { "alert" }
+			}
 		}
 		shake {
 			label { "shake" }
+			values {
+				ease  { "ease" }
+				shake { "shake" }
+			}
 		}
 		temperature {
 			label { "temperature" }

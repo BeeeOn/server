@@ -343,6 +343,20 @@ void BeeeOn::RestUI::serialize(Poco::JSON::PrintHandler &output,
 		output.endObject();
 	}
 
+	if (!info.values().empty()) {
+		output.key("values");
+		output.startObject();
+
+		for (const auto pair : info.values()) {
+			output.key(to_string(pair.first));
+			output.value(translator.format(
+				"types." + info.name()
+				+ ".values." + pair.second));
+		}
+
+		output.endObject();
+	}
+
 	output.endObject();
 }
 

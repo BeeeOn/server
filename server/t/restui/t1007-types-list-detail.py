@@ -114,6 +114,34 @@ class TestTypesListDetail(unittest.TestCase):
 		self.assure_range("19", "temperature", -273.15, 200, 0.01)
 		self.assure_range("20", "UV", 0, 11, 0.1)
 
+	def assure_values(self, id, name, values):
+		req = GET(config.ui_host, config.ui_port, "/types/" + id)
+		req.authorize(self.session)
+		response, content = req()
+
+		self.assertEqual(200, response.status)
+
+		result = json.loads(content)
+		self.assertEqual("success", result["status"])
+
+		type = result["data"]
+		self.assertEqual(name, type["name"])
+		self.assertTrue("values" in type)
+		self.assertEqual(len(values), len(type["values"]))
+
+		for key in values:
+			self.assertTrue(key in type["values"])
+			self.assertEqual(values[key], type["values"][key])
+
+	def test5_check_types_with_values(self):
+		self.assure_values("1", "availability", {"0": "unavailable", "1": "available"})
+		self.assure_values("7", "fire", {"0": "no fire", "1": "fire"})
+		self.assure_values("10", "motion", {"0": "no motion", "1": "motion"})
+		self.assure_values("12", "open/close", {"0": "closed", "1": "open"})
+		self.assure_values("13", "on/off", {"0": "off", "1": "on"})
+		self.assure_values("17", "security alert", {"0": "ease", "1": "alert"})
+		self.assure_values("18", "shake", {"0": "ease", "1": "shake"})
+
 if __name__ == '__main__':
 	import sys
 	import taprunner
