@@ -13,15 +13,9 @@ TypesSAXHandler::TypesSAXHandler()
 {
 	m_typeExpect.insert("name");
 	m_typeExpect.insert("unit");
-	m_typeExpect.insert("transform");
-
-	m_transformExpect.insert("from");
-	m_transformExpect.insert("to");
 
 	m_leafElements.insert("name");
 	m_leafElements.insert("unit");
-	m_leafElements.insert("from");
-	m_leafElements.insert("to");
 
 	m_entities["celsius"]  = "°C";
 	m_entities["percent"]  = "%";
@@ -108,10 +102,6 @@ bool TypesSAXHandler::expectElement(const SAXElement &element) const
 	if (isPathFromRoot("types", "type"))
 		return m_typeExpect
 			.find(element.qName) != m_typeExpect.end();
-
-	if (isPathFromRoot("types", "type", "transform"))
-		return m_transformExpect
-			.find(element.qName) != m_transformExpect.end();
 
 	return false;
 }

@@ -37,7 +37,6 @@ protected:
 
 private:
 	std::set<Poco::XML::XMLString> m_typeExpect;
-	std::set<Poco::XML::XMLString> m_transformExpect;
 	std::set<Poco::XML::XMLString> m_leafElements;
 	std::set<TypeInfo> m_result;
 	std::map<Poco::XML::XMLString, Poco::XML::XMLString> m_entities;
