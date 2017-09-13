@@ -9,14 +9,12 @@ using namespace std;
 using namespace Poco;
 using namespace BeeeOn;
 
-TypeInfo::TypeInfo():
-	m_width(1)
+TypeInfo::TypeInfo()
 {
 }
 
 TypeInfo::TypeInfo(const TypeInfo::ID &id):
-	Entity(id),
-	m_width(1)
+	Entity(id)
 {
 }
 
@@ -38,16 +36,6 @@ void TypeInfo::setUnit(const string &unit)
 const string &TypeInfo::unit() const
 {
 	return m_unit;
-}
-
-void TypeInfo::setWidth(const unsigned int width)
-{
-	m_width = width;
-}
-
-unsigned int TypeInfo::width() const
-{
-	return m_width;
 }
 
 std::string TypeInfo::asString(const double v) const

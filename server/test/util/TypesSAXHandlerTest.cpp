@@ -19,8 +19,6 @@ class TypesSAXHandlerTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testParseSimple);
 	CPPUNIT_TEST(testParseMissingId);
 	CPPUNIT_TEST(testParseMissingName);
-	CPPUNIT_TEST(testParseMissingVar);
-	CPPUNIT_TEST(testParseMissingVarSize);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void setUp();
@@ -29,8 +27,6 @@ public:
 	void testParseSimple();
 	void testParseMissingId();
 	void testParseMissingName();
-	void testParseMissingVar();
-	void testParseMissingVarSize();
 
 private:
 	SAXParser m_parser;
@@ -58,16 +54,13 @@ void TypesSAXHandlerTest::testParseSimple()
 			"<types>"
 			"  <type id=\"0x01\">"
 			"    <name>NAME1</name>"
-			"    <var size=\"1\" />"
 			"  </type>"
 			"  <type id=\"0x02\">"
 			"    <name>NAME2</name>"
-			"    <var size=\"2\" />"
 			"    <unit>&#176;C</unit>"
 			"  </type>"
 			"  <type id=\"0x03\">"
 			"    <name>NAME3</name>"
-			"    <var size=\"3\" />"
 			"  </type>"
 			"</types>")
 	);
@@ -75,17 +68,14 @@ void TypesSAXHandlerTest::testParseSimple()
 	for (auto it : *m_handler) {
 		if (it.id() == TypeInfoID::parse("0x01")) {
 			CPPUNIT_ASSERT_EQUAL(string("NAME1"), it.name());
-			CPPUNIT_ASSERT_EQUAL((unsigned int) 1, it.width());
 			CPPUNIT_ASSERT_EQUAL(string(""), it.unit());
 		}
 		else if (it.id() == TypeInfoID::parse("0x02")) {
 			CPPUNIT_ASSERT_EQUAL(string("NAME2"), it.name());
-			CPPUNIT_ASSERT_EQUAL((unsigned int) 2, it.width());
 			CPPUNIT_ASSERT_EQUAL(string("°C"), it.unit());
 		}
 		else if (it.id() == TypeInfoID::parse("0x03")) {
 			CPPUNIT_ASSERT_EQUAL(string("NAME3"), it.name());
-			CPPUNIT_ASSERT_EQUAL((unsigned int) 3, it.width());
 			CPPUNIT_ASSERT_EQUAL(string(""), it.unit());
 		}
 		else {
@@ -100,7 +90,6 @@ void TypesSAXHandlerTest::testParseMissingId()
 		"<types>"
 		"  <type>"
 		"    <name>NAME1</name>"
-		"    <var size=\"1\" />"
 		"  </type>"
 		"</types>"),
 		XMLException);
@@ -110,42 +99,7 @@ void TypesSAXHandlerTest::testParseMissingName()
 {
 	CPPUNIT_ASSERT_THROW(m_parser.parseString(
 		"<types>"
-		"  <type id=\"0x01\">"
-		"    <var size=\"1\" />"
-		"  </type>"
-		"</types>"),
-		XMLException);
-}
-
-void TypesSAXHandlerTest::testParseMissingVar()
-{
-	CPPUNIT_ASSERT_NO_THROW(m_parser.parseString(
-		"<types>"
-		"  <type id=\"0x01\">"
-		"    <name>NAME1</name>"
-		"  </type>"
-		"</types>"));
-
-	for (auto it : *m_handler) {
-		if (it.id() == TypeInfoID::parse("0x01")) {
-			CPPUNIT_ASSERT_EQUAL(string("NAME1"), it.name());
-			CPPUNIT_ASSERT_EQUAL((unsigned int) 1, it.width());
-			CPPUNIT_ASSERT_EQUAL(string(""), it.unit());
-		}
-		else {
-			CPPUNIT_ASSERT(false);
-		}
-	}
-}
-
-void TypesSAXHandlerTest::testParseMissingVarSize()
-{
-	CPPUNIT_ASSERT_THROW(m_parser.parseString(
-		"<types>"
-		"  <type id=\"0x01\">"
-		"    <name>NAME1</name>"
-		"    <var />"
-		"  </type>"
+		"  <type id=\"0x01\" />"
 		"</types>"),
 		XMLException);
 }

@@ -19,15 +19,11 @@ public:
 	void setUnit(const std::string &unit);
 	const std::string &unit() const;
 
-	void setWidth(const unsigned int width);
-	unsigned int width() const;
-
 	std::string asString(const double v) const;
 
 private:
 	std::string m_name;
 	std::string m_unit;
-	unsigned int m_width;
 };
 
 typedef TypeInfo::ID TypeInfoID;

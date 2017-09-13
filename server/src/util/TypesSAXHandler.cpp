@@ -12,7 +12,6 @@ using namespace BeeeOn;
 TypesSAXHandler::TypesSAXHandler()
 {
 	m_typeExpect.insert("name");
-	m_typeExpect.insert("var");
 	m_typeExpect.insert("unit");
 	m_typeExpect.insert("transform");
 
@@ -20,7 +19,6 @@ TypesSAXHandler::TypesSAXHandler()
 	m_transformExpect.insert("to");
 
 	m_leafElements.insert("name");
-	m_leafElements.insert("var");
 	m_leafElements.insert("unit");
 	m_leafElements.insert("from");
 	m_leafElements.insert("to");
@@ -61,17 +59,6 @@ void TypesSAXHandler::startElement(
 		m_temp.setId(TypeInfoID::parse(id));
 		m_temp.setName("");
 		m_temp.setUnit("");
-		m_temp.setWidth(1);
-	}
-	else if (isPathFromRoot("types", "type", "var")) {
-		XMLString size;
-		if (!getAndTrimAttribute(attrList, "size", size))
-			error("missing attribute size");
-
-		if (logger().debug())
-			logger().debug("parsing @size as width " + size, __FILE__, __LINE__);
-
-		m_temp.setWidth(NumberParser::parse(size));
 	}
 }
 
