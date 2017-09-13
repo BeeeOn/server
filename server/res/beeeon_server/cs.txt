@@ -9,26 +9,66 @@ cs {
 	internal_error { "interní chyba serveru" }
 
 	types {
-		availability { "přítomnost" }
-		battery { "baterie" }
-		bitmap { "příznaky" }
-		brightness { "jas" }
-		co2 { "CO2"}
-		enum { "výčet" }
-		fire { "oheň" }
-		humidity { "vlhkost" }
-		luminance { "osvětlení" }
-		motion { "pohyb" }
-		noise { "hluk" }
-		open_close { "otevřeno/zavřeno" }
-		on_off { "zapnuto/vypnuto" }
-		performance { "výkon" }
-		pressure { "tlak" }
-		rssi { "signál" }
-		security_alert { "výstraha" }
-		shake { "otřesy" }
-		temperature { "teplota" }
-		ultraviolet { "UV" }
+		availability {
+			label { "přítomnost" }
+		}
+		battery {
+			label { "baterie" }
+		}
+		bitmap {
+			label { "příznaky" }
+		}
+		brightness {
+			label { "jas" }
+		}
+		co2 {
+			label { "CO2"}
+		}
+		enum {
+			label { "výčet" }
+		}
+		fire {
+			label { "oheň" }
+		}
+		humidity {
+			label { "vlhkost" }
+		}
+		luminance {
+			label { "osvětlení" }
+		}
+		motion {
+			label { "pohyb" }
+		}
+		noise {
+			label { "hluk" }
+		}
+		open_close {
+			label { "otevřeno/zavřeno" }
+		}
+		on_off {
+			label { "zapnuto/vypnuto" }
+		}
+		performance {
+			label { "výkon" }
+		}
+		pressure {
+			label { "tlak" }
+		}
+		rssi {
+			label { "signál" }
+		}
+		security_alert {
+			label { "výstraha" }
+		}
+		shake {
+			label { "otřesy" }
+		}
+		temperature {
+			label { "teplota" }
+		}
+		ultraviolet {
+			label { "UV" }
+		}
 	}
 
 }

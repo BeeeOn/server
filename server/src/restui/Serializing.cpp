@@ -313,7 +313,7 @@ void BeeeOn::RestUI::serialize(Poco::JSON::PrintHandler &output,
 	output.value(info.id().toString());
 
 	output.key("name");
-	output.value(translator.format("types." + info.name()));
+	output.value(translator.format("types." + info.name() + ".label"));
 
 	if (!info.unit().empty()) {
 		output.key("unit");

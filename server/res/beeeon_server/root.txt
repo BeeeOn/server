@@ -9,25 +9,65 @@ root {
 	internal_error { "internal server error" }
 
 	types {
-		availability { "availability" }
-		battery { "battery" }
-		bitmap { "bitmap" }
-		brightness { "brightness" }
-		co2 { "CO2"}
-		enum { "enumeration" }
-		fire { "fire" }
-		humidity { "humidity" }
-		luminance { "luminance" }
-		motion { "motion" }
-		noise { "noise" }
-		open_close { "open/close" }
-		on_off { "on/off" }
-		performance { "performance" }
-		pressure { "pressure" }
-		rssi { "signal" }
-		security_alert { "security alert" }
-		shake { "shake" }
-		temperature { "temperature" }
-		ultraviolet { "UV" }
+		availability {
+			label { "availability" }
+		}
+		battery {
+			label { "battery" }
+		}
+		bitmap {
+			label { "bitmap" }
+		}
+		brightness {
+			label { "brightness" }
+		}
+		co2 {
+			label { "CO2" }
+		}
+		enum {
+			label { "enumeration" }
+		}
+		fire {
+			label { "fire" }
+		}
+		humidity {
+			label { "humidity" }
+		}
+		luminance {
+			label { "luminance" }
+		}
+		motion {
+			label { "motion" }
+		}
+		noise {
+			label { "noise" }
+		}
+		open_close {
+			label { "open/close" }
+		}
+		on_off {
+			label { "on/off" }
+		}
+		performance {
+			label { "performance" }
+		}
+		pressure {
+			label { "pressure" }
+		}
+		rssi {
+			label { "signal" }
+		}
+		security_alert {
+			label { "security alert" }
+		}
+		shake {
+			label { "shake" }
+		}
+		temperature {
+			label { "temperature" }
+		}
+		ultraviolet {
+			label { "UV" }
+		}
 	}
 }
