@@ -25,9 +25,6 @@ TypesSAXHandler::TypesSAXHandler()
 	m_leafElements.insert("from");
 	m_leafElements.insert("to");
 
-	m_entities["int"]      = "int";
-	m_entities["bitarray"] = "bitarray";
-	m_entities["float"]    = "float";
 	m_entities["celsius"]  = "°C";
 	m_entities["percent"]  = "%";
 	m_entities["hpascal"]  = "hPa";
@@ -64,7 +61,6 @@ void TypesSAXHandler::startElement(
 		m_temp.setId(TypeInfoID::parse(id));
 		m_temp.setName("");
 		m_temp.setUnit("");
-		m_temp.setCType(TypeInfo::CTYPE_INT);
 		m_temp.setWidth(1);
 	}
 	else if (isPathFromRoot("types", "type", "var")) {
@@ -91,13 +87,6 @@ void TypesSAXHandler::endElement(const SAXElement &element)
 
 		if (logger().debug())
 			logger().debug("parsing @name " + element.content, __FILE__, __LINE__);
-	}
-
-	if (isPathFromRoot("types", "type", "var")) {
-		m_temp.setCType(element.content);
-
-		if (logger().debug())
-			logger().debug("parsing var of value " + element.content, __FILE__, __LINE__);
 	}
 
 	if (isPathFromRoot("types", "type", "unit")) {

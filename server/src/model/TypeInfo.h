@@ -10,11 +10,6 @@ namespace BeeeOn {
 
 class TypeInfo : public Entity<SimpleID> {
 public:
-	enum CType {
-		CTYPE_INT,
-		CTYPE_FLOAT
-	};
-
 	TypeInfo();
 	TypeInfo(const TypeInfo::ID &id);
 
@@ -24,10 +19,6 @@ public:
 	void setUnit(const std::string &unit);
 	const std::string &unit() const;
 
-	void setCType(const std::string &cType);
-	void setCType(const CType cType);
-	CType cType() const;
-
 	void setWidth(const unsigned int width);
 	unsigned int width() const;
 
@@ -36,7 +27,6 @@ public:
 private:
 	std::string m_name;
 	std::string m_unit;
-	CType m_cType;
 	unsigned int m_width;
 };
 
