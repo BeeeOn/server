@@ -19,10 +19,12 @@ add_definitions(-std=c++11)
 
 file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/provider/AuthProvider.cpp
+	${PROJECT_SOURCE_DIR}/provider/DeviceInfoProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/RandomProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/OAuth2AuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/FacebookAuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/GoogleAuthProvider.cpp
+	${PROJECT_SOURCE_DIR}/provider/TypeInfoProvider.cpp
 	${PROJECT_SOURCE_DIR}/server/AuthRestHandler.cpp
 	${PROJECT_SOURCE_DIR}/server/ExpirableSession.cpp
 	${PROJECT_SOURCE_DIR}/server/Session.cpp
@@ -36,7 +38,9 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/l10n/IcuLocaleImpl.cpp
 	${PROJECT_SOURCE_DIR}/l10n/IcuLocaleManager.cpp
 	${PROJECT_SOURCE_DIR}/l10n/IcuTranslator.cpp
+	${PROJECT_SOURCE_DIR}/model/DeviceInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/Identity.cpp
+	${PROJECT_SOURCE_DIR}/model/ModuleInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/VerifiedIdentity.cpp
 	${PROJECT_SOURCE_DIR}/model/RoleInGateway.cpp
 	${PROJECT_SOURCE_DIR}/model/LegacyRoleInGateway.cpp
@@ -47,6 +51,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/Location.cpp
 	${PROJECT_SOURCE_DIR}/model/ValueAt.cpp
 	${PROJECT_SOURCE_DIR}/model/ModuleValue.cpp
+	${PROJECT_SOURCE_DIR}/model/TypeInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/User.cpp
 	${PROJECT_SOURCE_DIR}/dao/UserDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/DeviceDao.cpp
@@ -110,8 +115,10 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/policy/DefaultAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/PolicyContext.cpp
 	${PROJECT_SOURCE_DIR}/policy/UserPolicyContext.cpp
+	${PROJECT_SOURCE_DIR}/util/DevicesSAXHandler.cpp
 	${PROJECT_SOURCE_DIR}/util/Sanitize.cpp
 	${PROJECT_SOURCE_DIR}/util/Startup.cpp
+	${PROJECT_SOURCE_DIR}/util/TypesSAXHandler.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoDaoManager.cpp
 	${PROJECT_SOURCE_DIR}/gws/GatewayConnection.cpp
 	${PROJECT_SOURCE_DIR}/gws/GatewayCommunicator.cpp
