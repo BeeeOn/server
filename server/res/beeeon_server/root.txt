@@ -18,6 +18,12 @@ root {
 		}
 		battery {
 			label { "battery" }
+			levels {
+				critical { "critical" }
+				low    { "low" }
+				medium { "medium" }
+				high   { "high" }
+			}
 		}
 		bitmap {
 			label { "bitmap" }
@@ -27,6 +33,15 @@ root {
 		}
 		co2 {
 			label { "CO2" }
+			levels {
+				outdoor      { "normal outdoor" }
+				indoor       { "normal indoor" }
+				poor_air     { "poor air" }
+				unhealthy    { "adverse health effects" }
+				stay_hours   { "dangerous after few hours" }
+				stay_minutes { "dangerous after several minutes" }
+				dangerous    { "extreme and dangerous" }
+			}
 		}
 		enum {
 			label { "enumeration" }
@@ -53,6 +68,14 @@ root {
 		}
 		noise {
 			label { "noise" }
+			levels {
+				normal         { "normal" }
+				acceptable     { "acceptable" }
+				laud           { "loud" }
+				dangerous      { "dangerous for several minutes stay" }
+				very_dangerous { "dangerous for few minutes stay" }
+				damaging       { "immediate nerve damage possible" }
+			}
 		}
 		open_close {
 			label { "open/close" }
@@ -70,12 +93,21 @@ root {
 		}
 		performance {
 			label { "performance" }
+			levels {
+				idle      { "idle" }
+				high_load { "high load" }
+			}
 		}
 		pressure {
 			label { "pressure" }
 		}
 		rssi {
 			label { "signal" }
+			levels {
+				poor { "poor" }
+				good { "good" }
+				high { "high" }
+			}
 		}
 		security_alert {
 			label { "security alert" }
@@ -96,6 +128,13 @@ root {
 		}
 		ultraviolet {
 			label { "UV" }
+			levels {
+				low       { "low" }
+				moderate  { "moderate" }
+				high      { "high" }
+				very_high { "very high" }
+				extreme   { "extreme" }
+			}
 		}
 	}
 }

@@ -142,6 +142,96 @@ class TestTypesListDetail(unittest.TestCase):
 		self.assure_values("17", "security alert", {"0": "ease", "1": "alert"})
 		self.assure_values("18", "shake", {"0": "ease", "1": "shake"})
 
+	def assure_levels(self, id, name, levels):
+		req = GET(config.ui_host, config.ui_port, "/types/" + id)
+		req.authorize(self.session)
+		response, content = req()
+
+		self.assertEqual(200, response.status)
+
+		result = json.loads(content)
+		self.assertEqual("success", result["status"])
+
+		type = result["data"]
+		self.assertEqual(name, type["name"])
+		self.assertTrue("levels" in type)
+		self.assertEqual(len(levels), len(type["levels"]))
+
+		for i in range(len(levels)):
+			if levels[i][0] is None:
+				self.assertFalse("min" in type["levels"][i])
+			else:
+				self.assertTrue("min" in type["levels"][i])
+				self.assertEqual(levels[i][0], type["levels"][i]["min"])
+
+			if levels[i][1] is None:
+				self.assertFalse("max" in type["levels"][i])
+			else:
+				self.assertTrue("max" in type["levels"][i])
+				self.assertEqual(levels[i][1], type["levels"][i]["max"])
+
+			if levels[i][2] is None:
+				self.assertFalse("attention" in type["levels"][i])
+			else:
+				self.assertTrue("attention" in type["levels"][i])
+				self.assertEqual(levels[i][2], type["levels"][i]["attention"])
+
+			if levels[i][3] is None:
+				self.assertFalse("name" in type["levels"][i])
+			else:
+				self.assertTrue("name" in type["levels"][i])
+				self.assertEqual(levels[i][3], type["levels"][i]["name"])
+
+	def test6_check_types_with_levels(self):
+		self.assure_levels("2", "battery", [
+			(0, 10, "single", "critical"),
+			(11, 25, "single", "low"),
+			(26, 80, None, "medium"),
+			(81, 100, None, "high")
+		])
+		self.assure_levels("5", "CO2", [
+			(None, 450, None, "normal outdoor"),
+			(451, 1000, None, "normal indoor"),
+			(1001, 2500, None, "poor air"),
+			(2501, 5000, "single", "adverse health effects"),
+			(5001, 10000, "repeat", "dangerous after few hours"),
+			(10001, 30000, "repeat" , "dangerous after several minutes"),
+			(30001, None, "alert", "extreme and dangerous")
+		])
+		self.assure_levels("7", "fire", [
+			(1, 1, "alert", None)
+		])
+		self.assure_levels("10", "motion", [
+			(1, 1, "single", None)
+		])
+		self.assure_levels("11", "noise", [
+			(None, 80, None, "normal"),
+			(81, 90, None, "acceptable"),
+			(91, 99, "single", "loud"),
+			(100, 111, "repeat", "dangerous for several minutes stay"),
+			(112, 139, "repeat", "dangerous for few minutes stay"),
+			(140, None, "alert", "immediate nerve damage possible"),
+		])
+		self.assure_levels("14", "performance", [
+			(0, 0, None, "idle"),
+			(95, None, None, "high load")
+		])
+		self.assure_levels("16", "signal", [
+			(None, 25, None, "poor"),
+			(26, 80, None, "good"),
+			(81, 100, None, "high")
+		])
+		self.assure_levels("17", "security alert", [
+			(1, 1, "alert", None)
+		])
+		self.assure_levels("20", "UV", [
+			(None, 2.9, None, "low"),
+			(3, 5.9, None, "moderate"),
+			(6, 7.9, "single", "high"),
+			(8, 10.9, "single", "very high"),
+			(11, None, "single", "extreme")
+		])
+
 if __name__ == '__main__':
 	import sys
 	import taprunner

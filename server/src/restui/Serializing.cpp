@@ -357,6 +357,59 @@ void BeeeOn::RestUI::serialize(Poco::JSON::PrintHandler &output,
 		output.endObject();
 	}
 
+	if (!info.levels().empty()) {
+		output.key("levels");
+		output.startArray();
+
+		for (const auto level : info.levels()) {
+			if (!level.isValid())
+				continue; // should not happen but...
+
+			output.startObject();
+
+			if (!level.label().empty()) {
+				output.key("name");
+				output.value(translator.format(
+					"types." + info.name()
+					+ ".levels." + level.label()));
+			}
+
+			if (!std::isnan(level.min())) {
+				output.key("min");
+				output.value(level.min());
+			}
+
+			if (!std::isnan(level.max())) {
+				output.key("max");
+				output.value(level.max());
+			}
+
+			switch (level.attention()) {
+			case TypeInfo::Level::SINGLE:
+				output.key("attention");
+				output.value(string("single"));
+				break;
+
+			case TypeInfo::Level::REPEAT:
+				output.key("attention");
+				output.value(string("repeat"));
+				break;
+
+			case TypeInfo::Level::ALERT:
+				output.key("attention");
+				output.value(string("alert"));
+				break;
+
+			default:
+				break;
+			}
+
+			output.endObject();
+		}
+
+		output.endArray();
+	}
+
 	output.endObject();
 }
 

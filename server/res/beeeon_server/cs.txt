@@ -18,6 +18,12 @@ cs {
 		}
 		battery {
 			label { "baterie" }
+			levels {
+				critical { "kritická" }
+				low    { "nízká" }
+				medium { "střední" }
+				high   { "vysoká" }
+			}
 		}
 		bitmap {
 			label { "příznaky" }
@@ -27,6 +33,15 @@ cs {
 		}
 		co2 {
 			label { "CO2"}
+			levels {
+				outdoor      { "normální veknovní koncentrace" }
+				indoor       { "normální pokojová koncentrace" }
+				poor_air     { "vydýchaný vzduch" }
+				unhealthy    { "hrozí zdravotní problémy" }
+				stay_hours   { "nebezpečné po několika hodinách" }
+				stay_minutes { "nebezpečné po několika minutách" }
+				dangerous    { "extrémní nebezpečný stav" }
+			}
 		}
 		enum {
 			label { "výčet" }
@@ -53,6 +68,14 @@ cs {
 		}
 		noise {
 			label { "hluk" }
+			levels {
+				normal         { "normální" }
+				acceptable     { "přípustný" }
+				laud           { "hlasitý" }
+				dangerous      { "nebezpečné pro delší setrvání" }
+				very_dangerous { "nebezpečné pro krátké setrvání" }
+				damaging       { "hrozí okamžité poškození sluchu" }
+			}
 		}
 		open_close {
 			label { "otevřeno/zavřeno" }
@@ -70,12 +93,21 @@ cs {
 		}
 		performance {
 			label { "výkon" }
+			levels {
+				idle      { "nečinný" }
+				high_load { "velmi vytížený" }
+			}
 		}
 		pressure {
 			label { "tlak" }
 		}
 		rssi {
 			label { "signál" }
+			levels {
+				poor { "slabý" }
+				good { "dobrý" }
+				high { "silný" }
+			}
 		}
 		security_alert {
 			label { "výstraha" }
@@ -96,6 +128,13 @@ cs {
 		}
 		ultraviolet {
 			label { "UV" }
+			levels {
+				low       { "nízký" }
+				moderate  { "střední" }
+				high      { "vysoký" }
+				very_high { "velmi vysoký" }
+				extreme   { "extrémní" }
+			}
 		}
 	}
 
