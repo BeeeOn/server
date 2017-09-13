@@ -320,6 +320,29 @@ void BeeeOn::RestUI::serialize(Poco::JSON::PrintHandler &output,
 		output.value(info.unit());
 	}
 
+	const TypeInfo::Range &range = info.range();
+	if (range.isValid()) {
+		output.key("range");
+		output.startObject();
+
+		if (range.hasMin()) {
+			output.key("min");
+			output.value(range.min());
+		}
+
+		if (range.hasMax()) {
+			output.key("max");
+			output.value(range.max());
+		}
+
+		if (range.hasStep()) {
+			output.key("step");
+			output.value(range.step());
+		}
+
+		output.endObject();
+	}
+
 	output.endObject();
 }
 
