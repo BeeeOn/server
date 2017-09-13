@@ -1,3 +1,5 @@
+#include <cmath>
+
 #include <Poco/Logger.h>
 #include <Poco/NumberParser.h>
 #include <Poco/SAX/Attributes.h>
@@ -13,6 +15,7 @@ TypesSAXHandler::TypesSAXHandler()
 {
 	m_typeExpect.insert("name");
 	m_typeExpect.insert("unit");
+	m_typeExpect.insert("range");
 
 	m_leafElements.insert("name");
 	m_leafElements.insert("unit");
@@ -45,6 +48,31 @@ void TypesSAXHandler::startElement(
 		m_temp.setId(TypeInfoID::parse(id));
 		m_temp.setName("");
 		m_temp.setUnit("");
+		m_temp.setRange(TypeInfo::Range());
+	}
+
+	if (isPathFromRoot("types", "type", "range")) {
+		if (m_temp.range().isValid())
+			error("duplicate element range");
+
+		double min = NAN;
+		double max = NAN;
+		double step = NAN;
+
+		(void) getAttributeAsDouble(attrList, "min", min);
+		(void) getAttributeAsDouble(attrList, "max", max);
+		(void) getAttributeAsDouble(attrList, "step", step);
+
+		TypeInfo::Range range(min, max, step);
+		m_temp.setRange(range);
+
+		if (logger().debug()) {
+			logger().debug("parsing range "
+				"@min=" + to_string(min)
+				+ " @max=" + to_string(max)
+				+ " @step=" + to_string(step),
+				__FILE__, __LINE__);
+		}
 	}
 }
 

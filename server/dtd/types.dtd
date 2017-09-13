@@ -1,7 +1,14 @@
 <!ELEMENT types (type)*>
 
-<!ELEMENT type (name, unit?)>
+<!ELEMENT type (name, unit?, range?)>
 <!ATTLIST type id CDATA #REQUIRED>
 
 <!ELEMENT name (#PCDATA)>
 <!ELEMENT unit (#PCDATA)>
+
+<!ELEMENT range EMPTY>
+<!ATTLIST range
+	min    CDATA #IMPLIED
+	max    CDATA #IMPLIED
+	step   CDATA #IMPLIED
+>
