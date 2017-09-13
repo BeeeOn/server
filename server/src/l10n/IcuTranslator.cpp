@@ -185,7 +185,13 @@ string IcuTranslator::lookaupAndApplyArgs(
 
 	UErrorCode error = U_ZERO_ERROR;
 	icu::ResourceBundle value = bundle.get(current->c_str(), error);
-	handleError(error, originalKey, bundle.getName());
+
+	try {
+		handleError(error, originalKey, bundle.getName());
+	} catch (const Exception &e) {
+		logger().log(e, __FILE__, __LINE__);
+		return NoTranslator::formatImpl(originalKey, args);
+	}
 
 	switch (value.getType()) {
 	case URES_STRING:
