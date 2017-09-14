@@ -98,10 +98,9 @@ void IcuTranslatorTest::testFormatMissing()
 	SharedPtr<Translator> translator;
 
 	CPPUNIT_ASSERT_NO_THROW(translator = m_factory.create(root, "test"));
-	CPPUNIT_ASSERT_THROW(
-		translator->format("helloX"),
-		NotFoundException
-	);
+
+	// fallback to bypass of the input
+	CPPUNIT_ASSERT_EQUAL("helloX", translator->format("helloX"));
 
 	// fallback to root locale
 	CPPUNIT_ASSERT_NO_THROW(translator = m_factory.create(en_US, "test"));

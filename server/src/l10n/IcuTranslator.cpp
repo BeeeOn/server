@@ -173,7 +173,7 @@ string IcuTranslator::applyArgs(
 	return result.toUTF8String(utf8);
 }
 
-string IcuTranslator::lookaupAndApplyArgs(
+string IcuTranslator::lookupAndApplyArgs(
 		const string &originalKey,
 		vector<string>::const_iterator current,
 		const vector<string>::const_iterator end,
@@ -185,14 +185,20 @@ string IcuTranslator::lookaupAndApplyArgs(
 
 	UErrorCode error = U_ZERO_ERROR;
 	icu::ResourceBundle value = bundle.get(current->c_str(), error);
-	handleError(error, originalKey, bundle.getName());
+
+	try {
+		handleError(error, originalKey, bundle.getName());
+	} catch (const Exception &e) {
+		logger().log(e, __FILE__, __LINE__);
+		return NoTranslator::formatImpl(originalKey, args);
+	}
 
 	switch (value.getType()) {
 	case URES_STRING:
 		return applyArgs(value, args);
 
 	case URES_TABLE:
-		return lookaupAndApplyArgs(originalKey, ++current, end, value, args);
+		return lookupAndApplyArgs(originalKey, ++current, end, value, args);
 
 	default:
 		logger().critical(
@@ -213,7 +219,7 @@ string IcuTranslator::formatImpl(
 	StringTokenizer keyList(key, ".",
 		StringTokenizer::TOK_IGNORE_EMPTY | StringTokenizer::TOK_TRIM);
 
-	return lookaupAndApplyArgs(key, keyList.begin(), keyList.end(), *m_bundle, args);
+	return lookupAndApplyArgs(key, keyList.begin(), keyList.end(), *m_bundle, args);
 }
 
 static IcuLocaleImpl asIcuLocale(const BeeeOn::Locale &locale)
