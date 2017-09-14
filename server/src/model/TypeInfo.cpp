@@ -49,6 +49,16 @@ const TypeInfo::Range &TypeInfo::range() const
 	return m_range;
 }
 
+void TypeInfo::setValues(const map<int, string> &values)
+{
+	m_values = values;
+}
+
+const map<int, string> &TypeInfo::values() const
+{
+	return m_values;
+}
+
 std::string TypeInfo::asString(const double v) const
 {
 	return to_string(v);

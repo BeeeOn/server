@@ -16,9 +16,13 @@ TypesSAXHandler::TypesSAXHandler()
 	m_typeExpect.insert("name");
 	m_typeExpect.insert("unit");
 	m_typeExpect.insert("range");
+	m_typeExpect.insert("values");
+
+	m_valuesExpect.insert("value");
 
 	m_leafElements.insert("name");
 	m_leafElements.insert("unit");
+	m_leafElements.insert("value");
 }
 
 TypesSAXHandler::~TypesSAXHandler()
@@ -49,11 +53,15 @@ void TypesSAXHandler::startElement(
 		m_temp.setName("");
 		m_temp.setUnit("");
 		m_temp.setRange(TypeInfo::Range());
+		m_temp.setValues({});
 	}
 
 	if (isPathFromRoot("types", "type", "range")) {
 		if (m_temp.range().isValid())
 			error("duplicate element range");
+
+		if (!m_temp.values().empty())
+			error("unexpected element range, values aready defined");
 
 		double min = NAN;
 		double max = NAN;
@@ -73,6 +81,22 @@ void TypesSAXHandler::startElement(
 				+ " @step=" + to_string(step),
 				__FILE__, __LINE__);
 		}
+	}
+
+	if (isPathFromRoot("types", "type", "values")) {
+		if (m_temp.range().isValid())
+			error("unexpected element values, range already defined");
+	}
+
+	if (isPathFromRoot("types", "type", "values", "value")) {
+		if (!getAttributeAsInt(attrList, "equals", m_lastValue))
+			error("missing attribute equals");
+
+		if (!m_values.emplace(m_lastValue, "").second)
+			error("duplicate value with equals to " + to_string(m_lastValue));
+
+		if (logger().debug())
+			logger().debug("parsing value equals to " + to_string(m_lastValue), __FILE__, __LINE__);
 	}
 }
 
@@ -95,6 +119,21 @@ void TypesSAXHandler::endElement(const SAXElement &element)
 
 		if (logger().debug())
 			logger().debug("parsing unit of value " + element.content, __FILE__, __LINE__);
+	}
+
+	if (isPathFromRoot("types", "type", "values", "value")) {
+		m_values[m_lastValue] = element.content;
+
+		if (logger().debug())
+			logger().debug("parsing value " + to_string(m_lastValue) + ": " + element.content, __FILE__, __LINE__);
+	}
+
+	if (isPathFromRoot("types", "type", "values")) {
+		m_temp.setValues(m_values);
+		m_values.clear();
+
+		if (logger().debug())
+			logger().debug("parsing values " + to_string(m_temp.values().size()), __FILE__, __LINE__);
 	}
 
 	if (isPathFromRoot("types", "type")) {
@@ -122,6 +161,10 @@ bool TypesSAXHandler::expectElement(const SAXElement &element) const
 	if (isPathFromRoot("types", "type"))
 		return m_typeExpect
 			.find(element.qName) != m_typeExpect.end();
+
+	if (isPathFromRoot("types", "type", "values"))
+		return m_valuesExpect
+			.find(element.qName) != m_valuesExpect.end();
 
 	return false;
 }

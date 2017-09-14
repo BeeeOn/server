@@ -3,6 +3,10 @@
 <types>
 	<type id="1">
 		<name>availability</name>
+		<values>
+			<value equals="0">unavailable</value>
+			<value equals="1">available</value>
+		</values>
 	</type>
 	<type id="2">
 		<name>battery</name>
@@ -29,6 +33,10 @@
 	</type>
 	<type id="7">
 		<name>fire</name>
+		<values>
+			<value equals="0">no_fire</value>
+			<value equals="1">fire</value>
+		</values>
 	</type>
 	<type id="8">
 		<name>humidity</name>
@@ -42,6 +50,10 @@
 	</type>
 	<type id="10">
 		<name>motion</name>
+		<values>
+			<value equals="0">no_motion</value>
+			<value equals="1">motion</value>
+		</values>
 	</type>
 	<type id="11">
 		<name>noise</name>
@@ -52,9 +64,17 @@
 	</type>
 	<type id="12">
 		<name>open_close</name>
+		<values>
+			<value equals="0">closed</value>
+			<value equals="1">open</value>
+		</values>
 	</type>
 	<type id="13">
 		<name>on_off</name>
+		<values>
+			<value equals="0">off</value>
+			<value equals="1">on</value>
+		</values>
 	</type>
 	<type id="14">
 		<name>performance</name>
@@ -74,9 +94,17 @@
 	</type>
 	<type id="17">
 		<name>security_alert</name>
+		<values>
+			<value equals="0">ease</value>
+			<value equals="1">alert</value>
+		</values>
 	</type>
 	<type id="18">
 		<name>shake</name>
+		<values>
+			<value equals="0">ease</value>
+			<value equals="1">shake</value>
+		</values>
 	</type>
 	<type id="19">
 		<name>temperature</name>

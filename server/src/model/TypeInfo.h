@@ -1,6 +1,7 @@
 #ifndef BEEEON_TYPE_INFO_H
 #define BEEEON_TYPE_INFO_H
 
+#include <map>
 #include <string>
 
 #include "model/Entity.h"
@@ -44,12 +45,16 @@ public:
 	void setRange(const Range &range);
 	const Range &range() const;
 
+	void setValues(const std::map<int, std::string> &values);
+	const std::map<int, std::string> &values() const;
+
 	std::string asString(const double v) const;
 
 private:
 	std::string m_name;
 	std::string m_unit;
 	Range m_range;
+	std::map<int, std::string> m_values;
 };
 
 typedef TypeInfo::ID TypeInfoID;
