@@ -173,7 +173,7 @@ string IcuTranslator::applyArgs(
 	return result.toUTF8String(utf8);
 }
 
-string IcuTranslator::lookaupAndApplyArgs(
+string IcuTranslator::lookupAndApplyArgs(
 		const string &originalKey,
 		vector<string>::const_iterator current,
 		const vector<string>::const_iterator end,
@@ -198,7 +198,7 @@ string IcuTranslator::lookaupAndApplyArgs(
 		return applyArgs(value, args);
 
 	case URES_TABLE:
-		return lookaupAndApplyArgs(originalKey, ++current, end, value, args);
+		return lookupAndApplyArgs(originalKey, ++current, end, value, args);
 
 	default:
 		logger().critical(
@@ -219,7 +219,7 @@ string IcuTranslator::formatImpl(
 	StringTokenizer keyList(key, ".",
 		StringTokenizer::TOK_IGNORE_EMPTY | StringTokenizer::TOK_TRIM);
 
-	return lookaupAndApplyArgs(key, keyList.begin(), keyList.end(), *m_bundle, args);
+	return lookupAndApplyArgs(key, keyList.begin(), keyList.end(), *m_bundle, args);
 }
 
 static IcuLocaleImpl asIcuLocale(const BeeeOn::Locale &locale)
