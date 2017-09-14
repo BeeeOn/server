@@ -12,6 +12,12 @@
 		<name>battery</name>
 		<unit>&#37;</unit>
 		<range min="0" max="100" step="1" />
+		<levels>
+			<level min="0"  max="10" attention="single">critical</level>
+			<level min="11" max="25" attention="single">low</level>
+			<level min="26" max="80">medium</level>
+			<level min="81" max="100">high</level>
+		</levels>
 	</type>
 	<type id="3">
 		<name>bitmap</name>
@@ -27,6 +33,15 @@
 		<!-- https://www.kane.co.uk/knowledge-centre/what-are-safe-levels-of-co-and-co2-in-rooms -->
 		<!-- http://www.engineeringtoolbox.com/co2-comfort-level-d_1024.html -->
 		<range min="0" max="1000000" step="1" />
+		<levels>
+			<level max="450">outdoor</level>
+			<level min="451" max="1000">indoor</level>
+			<level min="1001" max="2500">poor_air</level>
+			<level min="2501" max="5000" attention="single">unhealthy</level>
+			<level min="5001" max="10000" attention="repeat">stay_hours</level>
+			<level min="10001" max="30000" attention="repeat">stay_minutes</level>
+			<level min="30001" attention="alert">dangerous</level>
+		</levels>
 	</type>
 	<type id="6">
 		<name>enum</name>
@@ -37,6 +52,9 @@
 			<value equals="0">no_fire</value>
 			<value equals="1">fire</value>
 		</values>
+		<levels>
+			<level equals="1" attention="alert" />
+		</levels>
 	</type>
 	<type id="8">
 		<name>humidity</name>
@@ -54,6 +72,9 @@
 			<value equals="0">no_motion</value>
 			<value equals="1">motion</value>
 		</values>
+		<levels>
+			<level equals="1" attention="single" />
+		</levels>
 	</type>
 	<type id="11">
 		<name>noise</name>
@@ -61,6 +82,14 @@
 		<!-- http://www.noisehelp.com/noise-level-chart.html -->
 		<!-- http://www.noisehelp.com/noise-dose.html -->
 		<range min="0" max="200" step="1" />
+		<levels>
+			<level max="80">normal</level>
+			<level min="81" max="90">acceptable</level>
+			<level min="91" max="99" attention="single">laud</level>
+			<level min="100" max="111" attention="repeat">dangerous</level>
+			<level min="112" max="139" attention="repeat">very_dangerous</level>
+			<level min="140" attention="alert">damaging</level>
+		</levels>
 	</type>
 	<type id="12">
 		<name>open_close</name>
@@ -80,6 +109,10 @@
 		<name>performance</name>
 		<unit>&#37;</unit>
 		<range min="0" max="100" step="1" />
+		<levels>
+			<level equals="0">idle</level>
+			<level min="95">high_load</level>
+		</levels>
 	</type>
 	<type id="15">
 		<name>pressure</name>
@@ -91,6 +124,11 @@
 		<name>rssi</name>
 		<unit>&#37;</unit>
 		<range min="0" max="100" step="1" />
+		<levels>
+			<level max="25">poor</level>
+			<level min="26" max="80">good</level>
+			<level min="81" max="100">high</level>
+		</levels>
 	</type>
 	<type id="17">
 		<name>security_alert</name>
@@ -98,6 +136,9 @@
 			<value equals="0">ease</value>
 			<value equals="1">alert</value>
 		</values>
+		<levels>
+			<level equals="1" attention="alert" />
+		</levels>
 	</type>
 	<type id="18">
 		<name>shake</name>
@@ -117,5 +158,12 @@
 		<unit>UV</unit>
 		<!-- https://en.wikipedia.org/wiki/Ultraviolet_index -->
 		<range min="0" max="11" step="0.1" />
+		<levels>
+			<level max="2.9">low</level>
+			<level min="3" max="5.9">moderate</level>
+			<level min="6" max="7.9" attention="single">high</level>
+			<level min="8" max="10.9" attention="single">very_high</level>
+			<level min="11" attention="single">extreme</level>
+		</levels>
 	</type>
 </types>

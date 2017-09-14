@@ -17,12 +17,16 @@ TypesSAXHandler::TypesSAXHandler()
 	m_typeExpect.insert("unit");
 	m_typeExpect.insert("range");
 	m_typeExpect.insert("values");
+	m_typeExpect.insert("levels");
 
 	m_valuesExpect.insert("value");
+
+	m_levelsExpect.insert("level");
 
 	m_leafElements.insert("name");
 	m_leafElements.insert("unit");
 	m_leafElements.insert("value");
+	m_leafElements.insert("level");
 }
 
 TypesSAXHandler::~TypesSAXHandler()
@@ -98,6 +102,41 @@ void TypesSAXHandler::startElement(
 		if (logger().debug())
 			logger().debug("parsing value equals to " + to_string(m_lastValue), __FILE__, __LINE__);
 	}
+
+	if (isPathFromRoot("types", "type", "levels", "level")) {
+		double min = NAN;
+		double max = NAN;
+
+		if (getAttributeAsDouble(attrList, "equals", min)) {
+			m_level = TypeInfo::Level(min);
+		}
+		else if (getAttributeAsDouble(attrList, "min", min)) {
+			if (getAttributeAsDouble(attrList, "max", max))
+				m_level = TypeInfo::Level(min, max);
+			else
+				m_level = TypeInfo::Level(min, NAN);
+		}
+		else if (getAttributeAsDouble(attrList, "max", max)) {
+			m_level = TypeInfo::Level(NAN, max);
+		}
+		else {
+			error("missing attribute equals or attributes min and max");
+		}
+
+		XMLString attention;
+		if (getAndTrimAttribute(attrList, "attention", attention)) {
+			if (attention == "none")
+				m_level.setAttention(TypeInfo::Level::NONE);
+			else if (attention == "single")
+				m_level.setAttention(TypeInfo::Level::SINGLE);
+			else if (attention == "repeat")
+				m_level.setAttention(TypeInfo::Level::REPEAT);
+			else if (attention == "alert")
+				m_level.setAttention(TypeInfo::Level::ALERT);
+			else
+				error("unexpected value of attribute attention: " + attention);
+		}
+	}
 }
 
 void TypesSAXHandler::endElement(const SAXElement &element)
@@ -136,6 +175,30 @@ void TypesSAXHandler::endElement(const SAXElement &element)
 			logger().debug("parsing values " + to_string(m_temp.values().size()), __FILE__, __LINE__);
 	}
 
+	if (isPathFromRoot("types", "type", "levels", "level")) {
+		if (!element.content.empty())
+			m_level.setLabel(element.content);
+
+		if (!m_levels.emplace(m_level).second)
+			error("overlapping level: " + to_string(m_level.min()) + ".." + to_string(m_level.max()));
+
+		if (logger().debug()) {
+			logger().debug("parsing level "
+				+ to_string(m_level.min())
+				+ ".."
+				+ to_string(m_level.max()),
+				__FILE__, __LINE__);
+		}
+	}
+
+	if (isPathFromRoot("types", "type", "levels")) {
+		m_temp.setLevels(m_levels);
+		m_levels.clear();
+
+		if (logger().debug())
+			logger().debug("parsing levels " + to_string(m_temp.levels().size()), __FILE__, __LINE__);
+	}
+
 	if (isPathFromRoot("types", "type")) {
 		if (m_temp.name().empty())
 			error("missing name of type " + m_temp);
@@ -164,6 +227,10 @@ bool TypesSAXHandler::expectElement(const SAXElement &element) const
 
 	if (isPathFromRoot("types", "type", "values"))
 		return m_valuesExpect
+			.find(element.qName) != m_valuesExpect.end();
+
+	if (isPathFromRoot("types", "type", "levels"))
+		return m_levelsExpect
 			.find(element.qName) != m_valuesExpect.end();
 
 	return false;

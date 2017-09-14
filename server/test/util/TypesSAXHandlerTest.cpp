@@ -21,6 +21,8 @@ class TypesSAXHandlerTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testParseWithValues);
 	CPPUNIT_TEST(testParseHasBothValuesAndRange);
 	CPPUNIT_TEST(testParseInvalidValues);
+	CPPUNIT_TEST(testParseWithLevels);
+	CPPUNIT_TEST(testParseOverlappingLevels);
 	CPPUNIT_TEST(testParseMissingId);
 	CPPUNIT_TEST(testParseMissingName);
 	CPPUNIT_TEST_SUITE_END();
@@ -33,6 +35,8 @@ public:
 	void testParseWithValues();
 	void testParseHasBothValuesAndRange();
 	void testParseInvalidValues();
+	void testParseWithLevels();
+	void testParseOverlappingLevels();
 	void testParseMissingId();
 	void testParseMissingName();
 
@@ -293,6 +297,111 @@ void TypesSAXHandlerTest::testParseInvalidValues()
 			"</types>"),
 		XMLException
 	);
+}
+
+void TypesSAXHandlerTest::testParseWithLevels()
+{
+	CPPUNIT_ASSERT_NO_THROW(
+		m_parser.parseString(
+			"<types>"
+			"  <type id=\"0x01\">"
+			"    <name>NAME1</name>"
+			"    <levels>"
+			"      <level equals=\"0\">zero</level>"
+			"      <level equals=\"1\">one</level>"
+			"    </levels>"
+			"  </type>"
+			"  <type id=\"0x02\">"
+			"    <name>NAME2</name>"
+			"    <unit>&#176;C</unit>"
+			"    <levels>"
+			"      <level min=\"0\" max=\"1\">0..1</level>"
+			"      <level min=\"2\" max=\"3\">2..3</level>"
+			"      <level equals=\"4\">4</level>"
+			"    </levels>"
+			"  </type>"
+			"  <type id=\"0x03\">"
+			"    <name>NAME3</name>"
+			"    <levels>"
+			"      <level max=\"10\">?..10</level>"
+			"      <level equals=\"11\">minus two</level>"
+			"      <level min=\"12\">12..?</level>"
+			"    </levels>"
+			"  </type>"
+			"</types>")
+	);
+
+	for (auto it : *m_handler) {
+		if (it.id() == TypeInfoID::parse("0x01")) {
+			CPPUNIT_ASSERT_EQUAL(string("NAME1"), it.name());
+			CPPUNIT_ASSERT_EQUAL(string(""), it.unit());
+			CPPUNIT_ASSERT_EQUAL(2, it.levels().size());
+		}
+		else if (it.id() == TypeInfoID::parse("0x02")) {
+			CPPUNIT_ASSERT_EQUAL(string("NAME2"), it.name());
+			CPPUNIT_ASSERT_EQUAL(string("°C"), it.unit());
+			CPPUNIT_ASSERT_EQUAL(3, it.levels().size());
+		}
+		else if (it.id() == TypeInfoID::parse("0x03")) {
+			CPPUNIT_ASSERT_EQUAL(string("NAME3"), it.name());
+			CPPUNIT_ASSERT_EQUAL(string(""), it.unit());
+			CPPUNIT_ASSERT_EQUAL(3, it.levels().size());
+		}
+		else {
+			CPPUNIT_ASSERT(false);
+		}
+	}
+}
+
+void TypesSAXHandlerTest::testParseOverlappingLevels()
+{
+	CPPUNIT_ASSERT_THROW(m_parser.parseString(
+		"<types>"
+		"  <type>"
+		"    <name>NAME</name>"
+		"    <levels>"
+		"      <level equals=\"10\">10</level>"
+		"      <level equals=\"10\">10</level>"
+		"    </levels>"
+		"  </type>"
+		"</types>"),
+		XMLException);
+
+	CPPUNIT_ASSERT_THROW(m_parser.parseString(
+		"<types>"
+		"  <type>"
+		"    <name>NAME</name>"
+		"    <levels>"
+		"      <level min=\"0\" max=\"10\">0..10</level>"
+		"      <level min=\"10\" max=\"20\">10..20</level>"
+		"    </levels>"
+		"  </type>"
+		"</types>"),
+		XMLException);
+
+	CPPUNIT_ASSERT_THROW(m_parser.parseString(
+		"<types>"
+		"  <type>"
+		"    <name>NAME</name>"
+		"    <levels>"
+		"      <level equals=\"10\">10</level>"
+		"      <level min=\"10\" max=\"20\">10..20</level>"
+		"    </levels>"
+		"  </type>"
+		"</types>"),
+		XMLException);
+
+	CPPUNIT_ASSERT_THROW(m_parser.parseString(
+		"<types>"
+		"  <type>"
+		"    <name>NAME</name>"
+		"    <levels>"
+		"      <level max=\"10\">10</level>"
+		"      <level min=\"10\">10</level>"
+		"    </levels>"
+		"  </type>"
+		"</types>"),
+		XMLException);
 }
 
 void TypesSAXHandlerTest::testParseMissingId()

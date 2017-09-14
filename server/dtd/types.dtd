@@ -1,6 +1,6 @@
 <!ELEMENT types (type)*>
 
-<!ELEMENT type (name, unit?, range?, values?)>
+<!ELEMENT type (name, unit?, range?, values?, levels?)>
 <!ATTLIST type id CDATA #REQUIRED>
 
 <!ELEMENT name (#PCDATA)>
@@ -16,3 +16,12 @@
 <!ELEMENT values (value+)>
 <!ELEMENT value (#PCDATA)>
 <!ATTLIST value equals CDATA #REQUIRED>
+
+<!ELEMENT levels (level+)>
+<!ELEMENT level (#PCDATA)>
+<!ATTLIST level
+	min    CDATA #IMPLIED
+	max    CDATA #IMPLIED
+	equals CDATA #IMPLIED
+	attention (none|single|repeat|alert) "none"
+>

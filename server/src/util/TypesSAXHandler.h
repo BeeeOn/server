@@ -36,10 +36,13 @@ protected:
 private:
 	std::set<Poco::XML::XMLString> m_typeExpect;
 	std::set<Poco::XML::XMLString> m_valuesExpect;
+	std::set<Poco::XML::XMLString> m_levelsExpect;
 	std::set<Poco::XML::XMLString> m_leafElements;
 	std::set<TypeInfo> m_result;
 	std::map<int, std::string> m_values;
 	int m_lastValue;
+	TypeInfo::Level m_level;
+	std::set<TypeInfo::Level> m_levels;
 	TypeInfo m_temp;
 };
 
