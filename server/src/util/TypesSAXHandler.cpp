@@ -16,14 +16,6 @@ TypesSAXHandler::TypesSAXHandler()
 
 	m_leafElements.insert("name");
 	m_leafElements.insert("unit");
-
-	m_entities["celsius"]  = "°C";
-	m_entities["percent"]  = "%";
-	m_entities["hpascal"]  = "hPa";
-	m_entities["lux"]      = "lx";
-	m_entities["decibel"]  = "dB";
-	m_entities["ppm"]      = "ppm";
-	m_entities["seconds"]  = "s";
 }
 
 TypesSAXHandler::~TypesSAXHandler()
@@ -117,13 +109,4 @@ bool TypesSAXHandler::expectContent(int length) const
 void TypesSAXHandler::preprocessContent(const XMLChar c[], int &start, int &length)
 {
 	trimContent(c, start, length);
-}
-
-void TypesSAXHandler::skippedEntity(const XMLString &name)
-{
-	auto it = m_entities.find(name);
-	if (it == m_entities.end())
-		return;
-
-	appendContent(it->second);
 }

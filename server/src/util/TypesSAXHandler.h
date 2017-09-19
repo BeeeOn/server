@@ -13,8 +13,6 @@ public:
 	TypesSAXHandler();
 	~TypesSAXHandler();
 
-	void skippedEntity(const Poco::XML::XMLString &name) override;
-
 	std::set<TypeInfo>::const_iterator begin() const
 	{
 		return m_result.begin();
@@ -39,7 +37,6 @@ private:
 	std::set<Poco::XML::XMLString> m_typeExpect;
 	std::set<Poco::XML::XMLString> m_leafElements;
 	std::set<TypeInfo> m_result;
-	std::map<Poco::XML::XMLString, Poco::XML::XMLString> m_entities;
 	TypeInfo m_temp;
 };
 
