@@ -6,13 +6,13 @@
 		<manufacturer>T:MANUFACTURER_BUT</manufacturer>
 		<modules>
 			<sensor id="0" type="19">
-				<name>T:MOD_ROOM_TEMPERATURE</name>
+				<name>room_temperature</name>
 			</sensor>
 			<sensor id="1" type="19" unavailable-value="0x7FFFFFFF">
-				<name>T:MOD_OUTSIDE_TEMPERATURE</name>
+				<name>outside_temperature</name>
 			</sensor>
 			<sensor id="2" type="8">
-				<name>T:MOD_ROOM_HUMIDITY</name>
+				<name>room_humidity</name>
 			</sensor>
 			<battery id="3" type="2" />
 			<rssi id="4" type="16" />
@@ -42,33 +42,33 @@
 		<manufacturer>T:MANUFACTURER_VIRTUAL</manufacturer>
 		<modules>
 			<sensor id="0" type="19">
-				<group>T:ZONE_1</group>
+				<group>zone_1</group>
 			</sensor>
 			<sensor id="1" type="8">
-				<group>T:ZONE_1</group>
+				<group>zone_1</group>
 			</sensor>
 			<sensor id="2" type="11">
-				<group>T:ZONE_1</group>
+				<group>zone_1</group>
 			</sensor>
 
 			<sensor id="3" type="19">
-				<group>T:ZONE_2</group>
+				<group>zone_2</group>
 			</sensor>
 			<sensor id="4" type="8">
-				<group>T:ZONE_2</group>
+				<group>zone_2</group>
 			</sensor>
 			<sensor id="5" type="11">
-				<group>T:ZONE_2</group>
+				<group>zone_2</group>
 			</sensor>
 
 			<sensor id="6" type="19">
-				<group>T:ZONE_3</group>
+				<group>zone_3</group>
 			</sensor>
 			<sensor id="7" type="8">
-				<group>T:ZONE_3</group>
+				<group>zone_3</group>
 			</sensor>
 			<sensor id="8" type="11">
-				<group>T:ZONE_3</group>
+				<group>zone_3</group>
 			</sensor>
 		</modules>
 	</device>

@@ -137,4 +137,31 @@ root {
 			}
 		}
 	}
+
+	modules {
+		room_temperature {
+			label { "room temperature" }
+		}
+		outside_temperature {
+			label { "outside temperature" }
+		}
+		room_humidity {
+			label { "room humidity" }
+		}
+
+		groups {
+			zone_1 {
+				label { "zone 1" }
+			}
+			zone_2 {
+				label { "zone 2" }
+			}
+			zone_3 {
+				label { "zone 3" }
+			}
+			zone_4 {
+				label { "zone 4" }
+			}
+		}
+	}
 }
