@@ -127,6 +127,40 @@ bool PocoSQLSensorHistoryDao::fetch(
 	return true;
 }
 
+void PocoSQLSensorHistoryDao::fetchMany(
+	const Device &device,
+	const std::vector<ModuleInfo> &modules,
+	std::vector<Nullable<ValueAt>> &values)
+{
+	assureHasId(device);
+	assureHasId(device.gateway());
+	// cannot assureHasId for module, SimpleID == 0 is allowed
+
+	uint64_t deviceID(device.id());
+	uint64_t gatewayID(device.gateway().id());
+	unsigned int moduleID;
+	unsigned long at;
+	double value;
+
+	Statement sql = (session() << m_queryFetch(),
+		use(gatewayID, "gateway_id"),
+		use(deviceID, "device_id"),
+		use(moduleID, "module_id"),
+		into(at),
+		into(value)
+	);
+
+	for (const auto module : modules) {
+		moduleID = module.id();
+
+		RecordSet result = executeSelect(sql);
+		if (result.rowCount() > 0)
+			values.emplace_back(ValueAt(at, value));
+		else
+			values.emplace_back(Nullable<ValueAt>());
+	}
+}
+
 void PocoSQLSensorHistoryDao::fetchHuge(
 	const Device &device,
 	const ModuleInfo &module,

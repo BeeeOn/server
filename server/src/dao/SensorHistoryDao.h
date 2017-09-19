@@ -3,7 +3,10 @@
 
 #include <vector>
 
+#include <Poco/Nullable.h>
 #include <Poco/SharedPtr.h>
+
+#include "model/ValueAt.h"
 
 namespace Poco {
 
@@ -57,6 +60,15 @@ public:
 			const ModuleInfo &module,
 			Poco::Timestamp &at,
 			double &value) = 0;
+
+	/**
+	 * Fetch recent values of the given sensors.
+	 */
+	virtual void fetchMany(
+			const Device &device,
+			const std::vector<ModuleInfo> &modules,
+			std::vector<Poco::Nullable<ValueAt>> &values) = 0;
+
 	/**
 	 * Fetch values determined by the given time range.
 	 */
