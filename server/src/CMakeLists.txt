@@ -110,6 +110,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/policy/GatewayAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/IdentityAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/LocationAccessPolicy.cpp
+	${PROJECT_SOURCE_DIR}/policy/SensorAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/DeviceAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/RoleAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/SensorHistoryAccessPolicy.cpp
