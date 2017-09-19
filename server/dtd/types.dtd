@@ -1,0 +1,7 @@
+<!ELEMENT types (type)*>
+
+<!ELEMENT type (name, unit?)>
+<!ATTLIST type id CDATA #REQUIRED>
+
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT unit (#PCDATA)>
