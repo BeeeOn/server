@@ -49,6 +49,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/DeviceProperty.cpp
 	${PROJECT_SOURCE_DIR}/model/GatewayStatus.cpp
 	${PROJECT_SOURCE_DIR}/model/Location.cpp
+	${PROJECT_SOURCE_DIR}/model/Sensor.cpp
 	${PROJECT_SOURCE_DIR}/model/ValueAt.cpp
 	${PROJECT_SOURCE_DIR}/model/ModuleValue.cpp
 	${PROJECT_SOURCE_DIR}/model/TypeInfo.cpp
