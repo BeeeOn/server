@@ -313,11 +313,101 @@ void BeeeOn::RestUI::serialize(Poco::JSON::PrintHandler &output,
 	output.value(info.id().toString());
 
 	output.key("name");
-	output.value(translator.format("types." + info.name()));
+	output.value(translator.format("types." + info.name() + ".label"));
 
 	if (!info.unit().empty()) {
 		output.key("unit");
 		output.value(info.unit());
+	}
+
+	const TypeInfo::Range &range = info.range();
+	if (range.isValid()) {
+		output.key("range");
+		output.startObject();
+
+		if (range.hasMin()) {
+			output.key("min");
+			output.value(range.min());
+		}
+
+		if (range.hasMax()) {
+			output.key("max");
+			output.value(range.max());
+		}
+
+		if (range.hasStep()) {
+			output.key("step");
+			output.value(range.step());
+		}
+
+		output.endObject();
+	}
+
+	if (!info.values().empty()) {
+		output.key("values");
+		output.startObject();
+
+		for (const auto pair : info.values()) {
+			output.key(to_string(pair.first));
+			output.value(translator.format(
+				"types." + info.name()
+				+ ".values." + pair.second));
+		}
+
+		output.endObject();
+	}
+
+	if (!info.levels().empty()) {
+		output.key("levels");
+		output.startArray();
+
+		for (const auto level : info.levels()) {
+			if (!level.isValid())
+				continue; // should not happen but...
+
+			output.startObject();
+
+			if (!level.label().empty()) {
+				output.key("name");
+				output.value(translator.format(
+					"types." + info.name()
+					+ ".levels." + level.label()));
+			}
+
+			if (!std::isnan(level.min())) {
+				output.key("min");
+				output.value(level.min());
+			}
+
+			if (!std::isnan(level.max())) {
+				output.key("max");
+				output.value(level.max());
+			}
+
+			switch (level.attention()) {
+			case TypeInfo::Level::SINGLE:
+				output.key("attention");
+				output.value(string("single"));
+				break;
+
+			case TypeInfo::Level::REPEAT:
+				output.key("attention");
+				output.value(string("repeat"));
+				break;
+
+			case TypeInfo::Level::ALERT:
+				output.key("attention");
+				output.value(string("alert"));
+				break;
+
+			default:
+				break;
+			}
+
+			output.endObject();
+		}
+
+		output.endArray();
 	}
 
 	output.endObject();

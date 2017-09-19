@@ -1,0 +1,27 @@
+<!ELEMENT types (type)*>
+
+<!ELEMENT type (name, unit?, range?, values?, levels?)>
+<!ATTLIST type id CDATA #REQUIRED>
+
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT unit (#PCDATA)>
+
+<!ELEMENT range EMPTY>
+<!ATTLIST range
+	min    CDATA #IMPLIED
+	max    CDATA #IMPLIED
+	step   CDATA #IMPLIED
+>
+
+<!ELEMENT values (value+)>
+<!ELEMENT value (#PCDATA)>
+<!ATTLIST value equals CDATA #REQUIRED>
+
+<!ELEMENT levels (level+)>
+<!ELEMENT level (#PCDATA)>
+<!ATTLIST level
+	min    CDATA #IMPLIED
+	max    CDATA #IMPLIED
+	equals CDATA #IMPLIED
+	attention (none|single|repeat|alert) "none"
+>

@@ -9,25 +9,132 @@ root {
 	internal_error { "internal server error" }
 
 	types {
-		availability { "availability" }
-		battery { "battery" }
-		bitmap { "bitmap" }
-		brightness { "brightness" }
-		co2 { "CO2"}
-		enum { "enumeration" }
-		fire { "fire" }
-		humidity { "humidity" }
-		luminance { "luminance" }
-		motion { "motion" }
-		noise { "noise" }
-		open_close { "open/close" }
-		on_off { "on/off" }
-		performance { "performance" }
-		pressure { "pressure" }
-		rssi { "signal" }
-		security_alert { "security alert" }
-		shake { "shake" }
-		temperature { "temperature" }
-		ultraviolet { "UV" }
+		availability {
+			label { "availability" }
+			values {
+				unavailable { "unavailable" }
+				available  { "available" }
+			}
+		}
+		battery {
+			label { "battery" }
+			levels {
+				critical { "critical" }
+				low    { "low" }
+				medium { "medium" }
+				high   { "high" }
+			}
+		}
+		bitmap {
+			label { "bitmap" }
+		}
+		brightness {
+			label { "brightness" }
+		}
+		co2 {
+			label { "CO2" }
+			levels {
+				outdoor      { "normal outdoor" }
+				indoor       { "normal indoor" }
+				poor_air     { "poor air" }
+				unhealthy    { "adverse health effects" }
+				stay_hours   { "dangerous after few hours" }
+				stay_minutes { "dangerous after several minutes" }
+				dangerous    { "extreme and dangerous" }
+			}
+		}
+		enum {
+			label { "enumeration" }
+		}
+		fire {
+			label { "fire" }
+			values {
+				no_fire { "no fire" }
+				fire    { "fire" }
+			}
+		}
+		humidity {
+			label { "humidity" }
+		}
+		luminance {
+			label { "luminance" }
+		}
+		motion {
+			label { "motion" }
+			values {
+				no_motion { "no motion" }
+				motion    { "motion" }
+			}
+		}
+		noise {
+			label { "noise" }
+			levels {
+				normal         { "normal" }
+				acceptable     { "acceptable" }
+				laud           { "loud" }
+				dangerous      { "dangerous for several minutes stay" }
+				very_dangerous { "dangerous for few minutes stay" }
+				damaging       { "immediate nerve damage possible" }
+			}
+		}
+		open_close {
+			label { "open/close" }
+			values {
+				closed { "closed" }
+				open   { "open" }
+			}
+		}
+		on_off {
+			label { "on/off" }
+			values {
+				off { "off" }
+				on  { "on" }
+			}
+		}
+		performance {
+			label { "performance" }
+			levels {
+				idle      { "idle" }
+				high_load { "high load" }
+			}
+		}
+		pressure {
+			label { "pressure" }
+		}
+		rssi {
+			label { "signal" }
+			levels {
+				poor { "poor" }
+				good { "good" }
+				high { "high" }
+			}
+		}
+		security_alert {
+			label { "security alert" }
+			values {
+				ease  { "ease" }
+				alert { "alert" }
+			}
+		}
+		shake {
+			label { "shake" }
+			values {
+				ease  { "ease" }
+				shake { "shake" }
+			}
+		}
+		temperature {
+			label { "temperature" }
+		}
+		ultraviolet {
+			label { "UV" }
+			levels {
+				low       { "low" }
+				moderate  { "moderate" }
+				high      { "high" }
+				very_high { "very high" }
+				extreme   { "extreme" }
+			}
+		}
 	}
 }
