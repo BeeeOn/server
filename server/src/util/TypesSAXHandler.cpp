@@ -12,22 +12,11 @@ using namespace BeeeOn;
 TypesSAXHandler::TypesSAXHandler()
 {
 	m_typeExpect.insert("name");
-	m_typeExpect.insert("var");
 	m_typeExpect.insert("unit");
-	m_typeExpect.insert("transform");
-
-	m_transformExpect.insert("from");
-	m_transformExpect.insert("to");
 
 	m_leafElements.insert("name");
-	m_leafElements.insert("var");
 	m_leafElements.insert("unit");
-	m_leafElements.insert("from");
-	m_leafElements.insert("to");
 
-	m_entities["int"]      = "int";
-	m_entities["bitarray"] = "bitarray";
-	m_entities["float"]    = "float";
 	m_entities["celsius"]  = "°C";
 	m_entities["percent"]  = "%";
 	m_entities["hpascal"]  = "hPa";
@@ -64,18 +53,6 @@ void TypesSAXHandler::startElement(
 		m_temp.setId(TypeInfoID::parse(id));
 		m_temp.setName("");
 		m_temp.setUnit("");
-		m_temp.setCType(TypeInfo::CTYPE_INT);
-		m_temp.setWidth(1);
-	}
-	else if (isPathFromRoot("types", "type", "var")) {
-		XMLString size;
-		if (!getAndTrimAttribute(attrList, "size", size))
-			error("missing attribute size");
-
-		if (logger().debug())
-			logger().debug("parsing @size as width " + size, __FILE__, __LINE__);
-
-		m_temp.setWidth(NumberParser::parse(size));
 	}
 }
 
@@ -91,13 +68,6 @@ void TypesSAXHandler::endElement(const SAXElement &element)
 
 		if (logger().debug())
 			logger().debug("parsing @name " + element.content, __FILE__, __LINE__);
-	}
-
-	if (isPathFromRoot("types", "type", "var")) {
-		m_temp.setCType(element.content);
-
-		if (logger().debug())
-			logger().debug("parsing var of value " + element.content, __FILE__, __LINE__);
 	}
 
 	if (isPathFromRoot("types", "type", "unit")) {
@@ -132,10 +102,6 @@ bool TypesSAXHandler::expectElement(const SAXElement &element) const
 	if (isPathFromRoot("types", "type"))
 		return m_typeExpect
 			.find(element.qName) != m_typeExpect.end();
-
-	if (isPathFromRoot("types", "type", "transform"))
-		return m_transformExpect
-			.find(element.qName) != m_transformExpect.end();
 
 	return false;
 }

@@ -59,7 +59,7 @@ class TestDeviceGetLog(unittest.TestCase):
 		self.assertEqual(14, len(response.root))
 
 		for row in response.root:
-			self.assertEqual("19.5", row.text.split(" ")[1])
+			self.assertEqual("19.500000", row.text.split(" ")[1])
 
 	def test2_getlogs_outtemp_2hours(self):
 		response = self.conn.request(DeviceGetLog(
