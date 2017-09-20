@@ -114,8 +114,7 @@ void PocoSQLVerifiedIdentityDao::fetchBy(
 		use(searchEmail, "email")
 	);
 
-	execute(sql);
-	RecordSet result(sql);
+	RecordSet result = executeSelect(sql);
 	parseMany(result, identities);
 }
 
@@ -131,8 +130,7 @@ void PocoSQLVerifiedIdentityDao::fetchBy(
 		use(id, "user_id")
 	);
 
-	execute(sql);
-	RecordSet result(sql);
+	RecordSet result = executeSelect(sql);
 	parseMany(result, identities);
 }
 

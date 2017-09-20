@@ -153,8 +153,7 @@ void PocoSQLDevicePropertyDao::fetchByDevice(std::list<DeviceProperty> &properti
 		use(gatewayID, "gateway_id")
 	);
 
-	execute(sql);
-	RecordSet result(sql);
+	RecordSet result = executeSelect(sql);
 	parseMany(result, properties);
 }
 

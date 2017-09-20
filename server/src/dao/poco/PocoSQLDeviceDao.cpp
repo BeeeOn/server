@@ -227,8 +227,7 @@ void PocoSQLDeviceDao::fetchActiveBy(std::vector<Device> &devices,
 		use(gatewayID, "gateway_id")
 	);
 
-	execute(sql);
-	RecordSet result(sql);
+	RecordSet result = executeSelect(sql);
 	return parseMany(result, devices, gateway, *m_deviceInfoProvider);
 }
 
@@ -242,8 +241,7 @@ void PocoSQLDeviceDao::fetchInactiveBy(std::vector<Device> &devices, const Gatew
 		use(gatewayID, "gateway_id")
 	);
 
-	execute(sql);
-	RecordSet result(sql);
+	RecordSet result = executeSelect(sql);
 	return parseMany(result, devices, gateway, *m_deviceInfoProvider);
 }
 
@@ -264,8 +262,7 @@ void PocoSQLDeviceDao::fetchActiveWithPrefix(std::vector<Device> &devices,
 		use(maxID, "max_id")
 	);
 
-	execute(sql);
-	RecordSet result(sql);
+	RecordSet result = executeSelect(sql);
 	return parseMany(result, devices, gateway, *m_deviceInfoProvider);
 }
 

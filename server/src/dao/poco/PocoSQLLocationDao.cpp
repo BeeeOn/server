@@ -96,8 +96,7 @@ void PocoSQLLocationDao::fetchBy(std::vector<Location> &locations,
 		use(gatewayID, "gateway_id")
 	);
 
-	execute(sql);
-	RecordSet result(sql);
+	RecordSet result = executeSelect(sql);
 	parseMany(result, locations);
 }
 

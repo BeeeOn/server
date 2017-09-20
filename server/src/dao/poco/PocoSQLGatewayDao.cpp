@@ -141,8 +141,7 @@ void PocoSQLGatewayDao::fetchAccessible(std::vector<Gateway> &gateways,
 		use(userID, "user_id")
 	);
 
-	execute(sql);
-	RecordSet result(sql);
+	RecordSet result = executeSelect(sql);
 	parseMany<Gateway>(result, gateways);
 }
 
@@ -157,8 +156,7 @@ void PocoSQLGatewayDao::fetchAccessible(std::vector<LegacyGateway> &gateways,
 		use(userID, "user_id")
 	);
 
-	execute(sql);
-	RecordSet result(sql);
+	RecordSet result = executeSelect(sql);
 	parseMany<LegacyGateway>(result, gateways);
 }
 
