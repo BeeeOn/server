@@ -123,7 +123,7 @@ bool PocoSQLSensorHistoryDao::fetch(
 	if (result.rowCount() == 0)
 		return false;
 
-	at = timeAt;
+	at = Timestamp::fromEpochTime(timeAt);
 	return true;
 }
 
