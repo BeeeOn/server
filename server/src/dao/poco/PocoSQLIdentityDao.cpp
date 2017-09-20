@@ -54,10 +54,10 @@ bool PocoSQLIdentityDao::fetch(Identity &identity)
 		use(id, "id")
 	);
 
-	if (execute(sql) == 0)
+	RecordSet result = executeSelect(sql);
+	if (result.rowCount() == 0)
 		return false;
 
-	RecordSet result(sql);
 	return parseSingle(result, identity);
 }
 
@@ -70,10 +70,10 @@ bool PocoSQLIdentityDao::fetchBy(Identity &identity, const string &email)
 		use(searchEmail, "email")
 	);
 
-	if (execute(sql) == 0)
+	RecordSet result = executeSelect(sql);
+	if (result.rowCount() == 0)
 		return false;
 
-	RecordSet result(sql);
 	return parseSingle(result, identity);
 }
 

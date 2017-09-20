@@ -173,10 +173,10 @@ bool PocoSQLDeviceDao::fetch(Device &device, const Gateway &gateway)
 		use(gatewayID, "gateway_id")
 	);
 
-	if (execute(sql) == 0)
+	RecordSet result = executeSelect(sql);
+	if (result.rowCount() == 0)
 		return false;
 
-	RecordSet result(sql);
 	return parseSingle(result, device, gateway, *m_deviceInfoProvider);
 }
 
@@ -200,12 +200,12 @@ void PocoSQLDeviceDao::fetchMany(std::list<Device> &devices)
 			use(gatewayID, "gateway_id")
 		);
 
-		if (execute(sql) == 0) {
+		RecordSet result = executeSelect(sql);
+		if (result.rowCount() == 0) {
 			it = devices.erase(it);
 			continue;
 		}
 
-		RecordSet result(sql);
 		if (!parseSingle(result, device, device.gateway(), *m_deviceInfoProvider)) {
 			it = devices.erase(it);
 			continue;

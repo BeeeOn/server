@@ -58,10 +58,10 @@ bool PocoSQLUserDao::fetch(User &user)
 		use(id, "id")
 	);
 
-	if (execute(sql) == 0)
+	RecordSet result = executeSelect(sql);
+	if (result.rowCount() == 0)
 		return false;
 
-	RecordSet result(sql);
 	return parseSingle(result, user, *m_localeManager);
 }
 

@@ -122,7 +122,8 @@ bool PocoSQLSensorHistoryDao::fetch(
 		into(value)
 	);
 
-	if (execute(sql) == 0)
+	RecordSet result = executeSelect(sql);
+	if (result.rowCount() == 0)
 		return false;
 
 	at = timeAt;
@@ -172,7 +173,9 @@ void PocoSQLSensorHistoryDao::fetchHuge(
 
 	try {
 		while (!sql.done()) {
-			execute(sql);
+			RecordSet result = executeSelect(sql);
+			if (result.rowCount() == 0)
+				break;
 
 			switch (agg) {
 			case AGG_AVG:

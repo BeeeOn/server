@@ -77,10 +77,10 @@ bool PocoSQLVerifiedIdentityDao::fetch(VerifiedIdentity &identity)
 		use(id, "id")
 	);
 
-	if (execute(sql) == 0)
+	RecordSet result = executeSelect(sql);
+	if (result.rowCount() == 0)
 		return false;
 
-	RecordSet result(sql);
 	return parseSingle(result, identity);
 }
 
@@ -97,10 +97,10 @@ bool PocoSQLVerifiedIdentityDao::fetchBy(
 		use(searchProvider, "provider")
 	);
 
-	if (execute(sql) == 0)
+	RecordSet result = executeSelect(sql);
+	if (result.rowCount() == 0)
 		return false;
 
-	RecordSet result(sql);
 	return parseSingle(result, identity);
 }
 

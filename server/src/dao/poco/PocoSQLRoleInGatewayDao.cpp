@@ -97,10 +97,10 @@ bool PocoSQLRoleInGatewayDao::fetch(RoleInGateway &role)
 		use(roleID, "role_id")
 	);
 
-	if (execute(sql) == 0)
+	RecordSet result = executeSelect(sql);
+	if (result.rowCount() == 0)
 		return false;
 
-	RecordSet result(sql);
 	return parseSingle(result, role);
 }
 
@@ -114,10 +114,10 @@ bool PocoSQLRoleInGatewayDao::fetch(LegacyRoleInGateway &role)
 		use(roleID, "role_id")
 	);
 
-	if (execute(sql) == 0)
+	RecordSet result = executeSelect(sql);
+	if (result.rowCount() == 0)
 		return false;
 
-	RecordSet result(sql);
 	return parseSingle(result, role);
 }
 
