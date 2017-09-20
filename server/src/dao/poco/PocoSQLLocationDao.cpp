@@ -58,10 +58,10 @@ bool PocoSQLLocationDao::fetch(Location &location)
 		use(id, "id")
 	);
 
-	if (execute(sql) == 0)
+	RecordSet result = executeSelect(sql);
+	if (result.rowCount() == 0)
 		return false;
 
-	RecordSet result(sql);
 	return parseSingle(result, location);
 }
 
@@ -78,10 +78,10 @@ bool PocoSQLLocationDao::fetchFrom(Location &location, const Gateway &gateway)
 		use(gatewayID, "gateway_id")
 	);
 
-	if (execute(sql) == 0)
+	RecordSet result = executeSelect(sql);
+	if (result.rowCount() == 0)
 		return false;
 
-	RecordSet result(sql);
 	return parseSingle(result, location);
 }
 
@@ -96,8 +96,7 @@ void PocoSQLLocationDao::fetchBy(std::vector<Location> &locations,
 		use(gatewayID, "gateway_id")
 	);
 
-	execute(sql);
-	RecordSet result(sql);
+	RecordSet result = executeSelect(sql);
 	parseMany(result, locations);
 }
 

@@ -75,10 +75,10 @@ bool PocoSQLGatewayDao::fetch(Gateway &gateway)
 		use(id, "id")
 	);
 
-	if (execute(sql) == 0)
+	RecordSet result = executeSelect(sql);
+	if (result.rowCount() == 0)
 		return false;
 
-	RecordSet result(sql);
 	return parseSingle(result, gateway);
 }
 
@@ -95,10 +95,10 @@ bool PocoSQLGatewayDao::fetch(LegacyGateway &gateway, const User &user)
 		use(id, "id")
 	);
 
-	if (execute(sql) == 0)
+	RecordSet result = executeSelect(sql);
+	if (result.rowCount() == 0)
 		return false;
 
-	RecordSet result(sql);
 	return parseSingle(result, gateway);
 }
 
@@ -141,8 +141,7 @@ void PocoSQLGatewayDao::fetchAccessible(std::vector<Gateway> &gateways,
 		use(userID, "user_id")
 	);
 
-	execute(sql);
-	RecordSet result(sql);
+	RecordSet result = executeSelect(sql);
 	parseMany<Gateway>(result, gateways);
 }
 
@@ -157,8 +156,7 @@ void PocoSQLGatewayDao::fetchAccessible(std::vector<LegacyGateway> &gateways,
 		use(userID, "user_id")
 	);
 
-	execute(sql);
-	RecordSet result(sql);
+	RecordSet result = executeSelect(sql);
 	parseMany<LegacyGateway>(result, gateways);
 }
 

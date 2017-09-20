@@ -133,10 +133,10 @@ bool PocoSQLDevicePropertyDao::fetch(DeviceProperty &property, const Device &dev
 		use(key, "key")
 	);
 
-	if (execute(sql) == 0)
+	RecordSet result = executeSelect(sql);
+	if (result.rowCount() == 0)
 		return false;
 
-	RecordSet result(sql);
 	return parseSingle(result, property);
 }
 
@@ -153,8 +153,7 @@ void PocoSQLDevicePropertyDao::fetchByDevice(std::list<DeviceProperty> &properti
 		use(gatewayID, "gateway_id")
 	);
 
-	execute(sql);
-	RecordSet result(sql);
+	RecordSet result = executeSelect(sql);
 	parseMany(result, properties);
 }
 

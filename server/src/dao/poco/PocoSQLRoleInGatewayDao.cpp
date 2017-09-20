@@ -97,10 +97,10 @@ bool PocoSQLRoleInGatewayDao::fetch(RoleInGateway &role)
 		use(roleID, "role_id")
 	);
 
-	if (execute(sql) == 0)
+	RecordSet result = executeSelect(sql);
+	if (result.rowCount() == 0)
 		return false;
 
-	RecordSet result(sql);
 	return parseSingle(result, role);
 }
 
@@ -114,10 +114,10 @@ bool PocoSQLRoleInGatewayDao::fetch(LegacyRoleInGateway &role)
 		use(roleID, "role_id")
 	);
 
-	if (execute(sql) == 0)
+	RecordSet result = executeSelect(sql);
+	if (result.rowCount() == 0)
 		return false;
 
-	RecordSet result(sql);
 	return parseSingle(result, role);
 }
 
@@ -132,8 +132,7 @@ void PocoSQLRoleInGatewayDao::fetchBy(std::vector<RoleInGateway> &roles,
 		use(gatewayID, "gateway_id")
 	);
 
-	execute(sql);
-	RecordSet result(sql);
+	RecordSet result = executeSelect(sql);
 	parseMany<RoleInGateway>(result, roles);
 }
 
@@ -148,8 +147,7 @@ void PocoSQLRoleInGatewayDao::fetchBy(std::vector<LegacyRoleInGateway> &roles,
 		use(gatewayID, "gateway_id")
 	);
 
-	execute(sql);
-	RecordSet result(sql);
+	RecordSet result = executeSelect(sql);
 	parseMany<LegacyRoleInGateway>(result, roles);
 }
 
@@ -291,8 +289,7 @@ void PocoSQLRoleInGatewayDao::fetchAccessibleGateways(
 		use(userID, "user_id")
 	);
 
-	execute(sql);
-	RecordSet result(sql);
+	RecordSet result = executeSelect(sql);
 	PocoSQLGatewayDao::parseMany<Gateway>(result, list);
 }
 

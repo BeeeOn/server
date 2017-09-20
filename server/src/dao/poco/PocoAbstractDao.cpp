@@ -110,6 +110,14 @@ size_t PocoAbstractDao::execute(Statement &sql)
 	}
 }
 
+RecordSet PocoAbstractDao::executeSelect(Statement &sql)
+{
+	execute(sql);
+	RecordSet result(sql);
+	return result;
+}
+
+
 void PocoAbstractDao::throwMissingId(const type_info &t)
 {
 	log_backtrace(logger());

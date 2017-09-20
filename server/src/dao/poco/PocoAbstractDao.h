@@ -73,6 +73,7 @@ protected:
 	}
 
 	std::size_t execute(Poco::Data::Statement &sql);
+	Poco::Data::RecordSet executeSelect(Poco::Data::Statement &sql);
 	void throwMissingId(const std::type_info &t);
 
 private:

@@ -77,10 +77,10 @@ bool PocoSQLVerifiedIdentityDao::fetch(VerifiedIdentity &identity)
 		use(id, "id")
 	);
 
-	if (execute(sql) == 0)
+	RecordSet result = executeSelect(sql);
+	if (result.rowCount() == 0)
 		return false;
 
-	RecordSet result(sql);
 	return parseSingle(result, identity);
 }
 
@@ -97,10 +97,10 @@ bool PocoSQLVerifiedIdentityDao::fetchBy(
 		use(searchProvider, "provider")
 	);
 
-	if (execute(sql) == 0)
+	RecordSet result = executeSelect(sql);
+	if (result.rowCount() == 0)
 		return false;
 
-	RecordSet result(sql);
 	return parseSingle(result, identity);
 }
 
@@ -114,8 +114,7 @@ void PocoSQLVerifiedIdentityDao::fetchBy(
 		use(searchEmail, "email")
 	);
 
-	execute(sql);
-	RecordSet result(sql);
+	RecordSet result = executeSelect(sql);
 	parseMany(result, identities);
 }
 
@@ -131,8 +130,7 @@ void PocoSQLVerifiedIdentityDao::fetchBy(
 		use(id, "user_id")
 	);
 
-	execute(sql);
-	RecordSet result(sql);
+	RecordSet result = executeSelect(sql);
 	parseMany(result, identities);
 }
 
