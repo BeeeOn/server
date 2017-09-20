@@ -35,6 +35,10 @@ public:
 		const ModuleInfo &module,
 		Poco::Timestamp &at,
 		double &value) override;
+	void fetchMany(
+		const Device &device,
+		const std::vector<ModuleInfo> &modules,
+		std::vector<Poco::Nullable<ValueAt>> &values) override;
 	void fetchHuge(
 		const Device &device,
 		const ModuleInfo &module,

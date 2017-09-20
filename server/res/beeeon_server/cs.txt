@@ -138,4 +138,30 @@ cs {
 		}
 	}
 
+	modules {
+		room_temperature {
+			label { "pokojová teplota" }
+		}
+		outside_temperature {
+			label { "venkovní teplota" }
+		}
+		room_humidity {
+			label { "pokojová vlhkost" }
+		}
+
+		groups {
+			zone_1 {
+				label { "zóna 1" }
+			}
+			zone_2 {
+				label { "zóna 2" }
+			}
+			zone_3 {
+				label { "zóna 3" }
+			}
+			zone_4 {
+				label { "zóna 4" }
+			}
+		}
+	}
 }

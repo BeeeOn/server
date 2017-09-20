@@ -6,6 +6,7 @@
 #include "policy/LocationAccessPolicy.h"
 #include "policy/DeviceAccessPolicy.h"
 #include "policy/RoleAccessPolicy.h"
+#include "policy/SensorAccessPolicy.h"
 #include "policy/SensorHistoryAccessPolicy.h"
 #include "policy/WorkAccessPolicy.h"
 #include "dao/RoleInGatewayDao.h"
@@ -22,6 +23,7 @@ class DefaultAccessPolicy :
 		public LocationAccessPolicy,
 		public DeviceAccessPolicy,
 		public RoleAccessPolicy,
+		public SensorAccessPolicy,
 		public SensorHistoryAccessPolicy,
 		public WorkAccessPolicy {
 public:
@@ -79,6 +81,17 @@ public:
 
 	void assure(
 		const SensorHistoryAccessPolicy::Action action,
+		const PolicyContext &context,
+		const Device &device) override;
+
+	void assure(
+		const SensorAccessPolicy::Action action,
+		const PolicyContext &context,
+		const Sensor &sensor,
+		const Device &device) override;
+
+	void assureMany(
+		const SensorAccessPolicy::Action action,
 		const PolicyContext &context,
 		const Device &device) override;
 

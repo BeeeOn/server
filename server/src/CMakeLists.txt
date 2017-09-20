@@ -49,6 +49,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/DeviceProperty.cpp
 	${PROJECT_SOURCE_DIR}/model/GatewayStatus.cpp
 	${PROJECT_SOURCE_DIR}/model/Location.cpp
+	${PROJECT_SOURCE_DIR}/model/Sensor.cpp
 	${PROJECT_SOURCE_DIR}/model/ValueAt.cpp
 	${PROJECT_SOURCE_DIR}/model/ModuleValue.cpp
 	${PROJECT_SOURCE_DIR}/model/TypeInfo.cpp
@@ -97,6 +98,8 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/service/GWSSensorHistoryServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/LocationService.cpp
 	${PROJECT_SOURCE_DIR}/service/LocationServiceImpl.cpp
+	${PROJECT_SOURCE_DIR}/service/SensorService.cpp
+	${PROJECT_SOURCE_DIR}/service/SensorServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/IdentityService.cpp
 	${PROJECT_SOURCE_DIR}/service/IdentityServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/RoleService.cpp
@@ -108,6 +111,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/policy/GatewayAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/IdentityAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/LocationAccessPolicy.cpp
+	${PROJECT_SOURCE_DIR}/policy/SensorAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/DeviceAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/RoleAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/SensorHistoryAccessPolicy.cpp
@@ -215,7 +219,9 @@ file(GLOB RESTUI_SOURCES
 	restui/DeviceRestHandler.cpp
 	restui/LocationRestHandler.cpp
 	restui/ProfileRestHandler.cpp
+	restui/RestValueConsumer.cpp
 	restui/RoleRestHandler.cpp
+	restui/SensorRestHandler.cpp
 	restui/TypeRestHandler.cpp
 	restui/GatewayRestHandler.cpp
 	restui/WorkRestHandler.cpp
