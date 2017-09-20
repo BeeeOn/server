@@ -58,10 +58,7 @@ bool PocoSQLSensorHistoryDao::insert(
 		use(v, "value")
 	);
 
-	if (execute(sql) == 0)
-		return false;
-
-	return true;
+	return execute(sql) > 0;
 }
 
 
