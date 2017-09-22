@@ -101,6 +101,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/service/AuthServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/DeviceService.cpp
 	${PROJECT_SOURCE_DIR}/service/DeviceServiceImpl.cpp
+	${PROJECT_SOURCE_DIR}/service/FCMTokenService.cpp
 	${PROJECT_SOURCE_DIR}/service/GWSDeviceService.cpp
 	${PROJECT_SOURCE_DIR}/service/GWSDeviceServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/GatewayService.cpp
