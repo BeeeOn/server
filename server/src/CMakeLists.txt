@@ -252,6 +252,7 @@ file(GLOB RESTUI_SOURCES
 	restui/JSONRoleInGatewayDeserializer.cpp
 	restui/ControlRestHandler.cpp
 	restui/DeviceRestHandler.cpp
+	restui/FCMTokenRestHandler.cpp
 	restui/LocationRestHandler.cpp
 	restui/ProfileRestHandler.cpp
 	restui/RestValueConsumer.cpp
