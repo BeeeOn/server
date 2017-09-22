@@ -39,6 +39,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/l10n/IcuLocaleManager.cpp
 	${PROJECT_SOURCE_DIR}/l10n/IcuTranslator.cpp
 	${PROJECT_SOURCE_DIR}/model/AbstractModule.cpp
+	${PROJECT_SOURCE_DIR}/model/Control.cpp
 	${PROJECT_SOURCE_DIR}/model/DeviceInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/Identity.cpp
 	${PROJECT_SOURCE_DIR}/model/ModuleInfo.cpp
