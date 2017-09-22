@@ -6,8 +6,7 @@
 #include <Poco/Nullable.h>
 #include <Poco/Timestamp.h>
 
-#include "model/ModuleInfo.h"
-#include "model/SimpleID.h"
+#include "model/AbstractModule.h"
 
 namespace BeeeOn {
 
@@ -30,20 +29,10 @@ namespace BeeeOn {
  * we know that there was an attempt to access such sensor by the system but the sensor was unable to give
  * any reasonable value.
  */
-class Sensor : public Entity<SimpleID> {
+class Sensor : public AbstractModule {
 public:
 	Sensor();
 	Sensor(const ID &id);
-
-	void setInfo(const ModuleInfo &info);
-	const ModuleInfo &info() const;
-
-	void setName(const std::string &name);
-
-	/**
-	 * @return custom name given by user.
-	 */
-	std::string name() const;
 
 	void setValue(const double value);
 
@@ -62,8 +51,6 @@ public:
 	Poco::Nullable<Poco::Timestamp> at() const;
 
 private:
-	ModuleInfo m_info;
-	std::string m_name;
 	double m_value;
 	Poco::Nullable<Poco::Timestamp> m_at;
 };
