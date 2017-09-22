@@ -26,6 +26,7 @@
 			<add name="resolvers" ref="locationXmlHandler" />
 			<add name="resolvers" ref="profileXmlHandler" />
 			<add name="resolvers" ref="roleXmlHandler" />
+			<add name="resolvers" ref="fcmTokenXmlHandler" if-yes="${fcm.enable}" />
 			<add name="resolvers" ref="anyXmlHandler" />
 		</instance>
 
@@ -71,6 +72,12 @@
 		<instance name="roleXmlHandler"
 				class="BeeeOn::XmlUI::RoleXmlHandlerResolver">
 			<set name="roleService" ref="roleService" />
+			<set name="sessionManager" ref="sessionManager" />
+		</instance>
+
+		<instance name="fcmTokenXmlHandler"
+				class="BeeeOn::XmlUI::FCMTokenXmlHandlerResolver">
+			<set name="fcmTokenService" ref="fcmTokenService" />
 			<set name="sessionManager" ref="sessionManager" />
 		</instance>
 

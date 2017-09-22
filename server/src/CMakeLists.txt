@@ -235,6 +235,7 @@ file(GLOB XMLUI_SOURCES
 	xmlui/XmlDevicePropertyDeserializer.cpp
 	xmlui/XmlRoleInGatewayDeserializer.cpp
 	xmlui/GatewayXmlHandler.cpp
+	xmlui/FCMTokenXmlHandler.cpp
 	xmlui/LocationXmlHandler.cpp
 	xmlui/ProfileXmlHandler.cpp
 	xmlui/DeviceXmlHandler.cpp
