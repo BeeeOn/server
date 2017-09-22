@@ -14,6 +14,7 @@ BEEEON_OBJECT_CASTABLE(DeviceAccessPolicy)
 BEEEON_OBJECT_CASTABLE(RoleAccessPolicy)
 BEEEON_OBJECT_CASTABLE(SensorAccessPolicy)
 BEEEON_OBJECT_CASTABLE(SensorHistoryAccessPolicy)
+BEEEON_OBJECT_CASTABLE(ControlAccessPolicy)
 BEEEON_OBJECT_CASTABLE(WorkAccessPolicy)
 BEEEON_OBJECT_REF("userDao", &DefaultAccessPolicy::setUserDao)
 BEEEON_OBJECT_REF("gatewayDao", &DefaultAccessPolicy::setGatewayDao)
@@ -415,6 +416,41 @@ void DefaultAccessPolicy::assureMany(
 {
 	switch (action) {
 	case SensorAccessPolicy::ACTION_USER_GET:
+		assureAtLeast(
+			fetchAccessLevel(context, device.gateway()),
+			AccessLevel::guest());
+		break;
+
+	default:
+		throw InvalidAccessException("invalid action: " + to_string((int) action));
+	}
+}
+
+void DefaultAccessPolicy::assure(
+	const ControlAccessPolicy::Action action,
+	const PolicyContext &context,
+	const Control &control,
+	const Device &device)
+{
+	switch (action) {
+	case ControlAccessPolicy::ACTION_USER_GET:
+		assureAtLeast(
+			fetchAccessLevel(context, device.gateway()),
+			AccessLevel::guest());
+		break;
+
+	default:
+		throw InvalidAccessException("invalid action: " + to_string((int) action));
+	}
+}
+
+void DefaultAccessPolicy::assureMany(
+	const ControlAccessPolicy::Action action,
+	const PolicyContext &context,
+	const Device &device)
+{
+	switch (action) {
+	case ControlAccessPolicy::ACTION_USER_GET:
 		assureAtLeast(
 			fetchAccessLevel(context, device.gateway()),
 			AccessLevel::guest());

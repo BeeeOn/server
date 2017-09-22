@@ -1,6 +1,7 @@
 #ifndef BEEEON_DEFAULT_ACCESS_POLICY_H
 #define BEEEON_DEFAULT_ACCESS_POLICY_H
 
+#include "policy/ControlAccessPolicy.h"
 #include "policy/GatewayAccessPolicy.h"
 #include "policy/IdentityAccessPolicy.h"
 #include "policy/LocationAccessPolicy.h"
@@ -25,6 +26,7 @@ class DefaultAccessPolicy :
 		public RoleAccessPolicy,
 		public SensorAccessPolicy,
 		public SensorHistoryAccessPolicy,
+		public ControlAccessPolicy,
 		public WorkAccessPolicy {
 public:
 	DefaultAccessPolicy();
@@ -92,6 +94,17 @@ public:
 
 	void assureMany(
 		const SensorAccessPolicy::Action action,
+		const PolicyContext &context,
+		const Device &device) override;
+
+	void assure(
+		const ControlAccessPolicy::Action action,
+		const PolicyContext &context,
+		const Control &control,
+		const Device &device) override;
+
+	void assureMany(
+		const ControlAccessPolicy::Action action,
 		const PolicyContext &context,
 		const Device &device) override;
 
