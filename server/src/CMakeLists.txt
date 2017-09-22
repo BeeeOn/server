@@ -64,6 +64,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/TypeInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/User.cpp
 	${PROJECT_SOURCE_DIR}/dao/ControlDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/FCMTokenDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/UserDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/DeviceDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/DevicePropertyDao.cpp
