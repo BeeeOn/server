@@ -98,6 +98,11 @@
 			<set name="accessPolicy" ref="accessPolicy" />
 		</instance>
 
+		<instance name="fcmTokenService" class="BeeeOn::FCMTokenServiceImpl">
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="accessPolicy" ref="accessPolicy" />
+		</instance>
+
 		<instance name="workService" class="BeeeOn::WorkServiceImpl">
 			<set name="facade" ref="uiWorkFacade" />
 		</instance>
