@@ -10,11 +10,9 @@
 #include "model/ValueAt.h"
 #include "rest/RestFlow.h"
 #include "rest/RestLinker.h"
-#include "restui/JSONGatewayDeserializer.h"
 #include "restui/RestValueConsumer.h"
 #include "restui/SensorRestHandler.h"
 #include "restui/Serializing.h"
-#include "util/JsonUtil.h"
 #include "util/Sanitize.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, RestUI, SensorRestHandler)
