@@ -113,6 +113,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/service/SensorHistoryServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/WorkService.cpp
 	${PROJECT_SOURCE_DIR}/service/WorkServiceImpl.cpp
+	${PROJECT_SOURCE_DIR}/policy/ControlAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/GatewayAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/IdentityAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/LocationAccessPolicy.cpp
