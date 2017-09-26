@@ -28,7 +28,7 @@ protected:
 	int parseLogLevel(const std::string &level);
 
 	/**
-	 * Override a configuration option given as <key>=<value>.
+	 * Override a configuration option given as <code>key=value</code>.
 	 */
 	void overrideConfig(const std::string text);
 
