@@ -62,6 +62,7 @@
 		<alias name="verifiedIdentityDao" ref="sqlVerifiedIdentityDao" />
 		<alias name="roleInGatewayDao" ref="sqlRoleInGatewayDao" />
 		<alias name="sensorHistoryDao" ref="sqlSensorHistoryDao" />
+		<alias name="controlDao" ref="sqlControlDao" />
 
 		<instance name="pocoDaoManager"
 				class="BeeeOn::PocoDaoManager">
@@ -160,6 +161,12 @@
 		</instance>
 
 		<instance name="sqlSensorHistoryDao" class="BeeeOn::PocoSQLSensorHistoryDao">
+			<set name="daoManager" ref="pocoDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="sqlLoader" ref="queries" />
+		</instance>
+
+		<instance name="sqlControlDao" class="BeeeOn::PocoSQLControlDao">
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="sqlLoader" ref="queries" />
