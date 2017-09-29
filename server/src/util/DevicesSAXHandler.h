@@ -39,7 +39,7 @@ private:
 	std::set<Poco::XML::XMLString> m_deviceExpect;
 	std::set<Poco::XML::XMLString> m_modulesExpect;
 	std::set<Poco::XML::XMLString> m_sensorExpect;
-	std::set<Poco::XML::XMLString> m_actuatorExpect;
+	std::set<Poco::XML::XMLString> m_controlExpect;
 	std::set<Poco::XML::XMLString> m_refreshExpect;
 	std::set<Poco::XML::XMLString> m_constraintsExpect;
 	std::set<Poco::XML::XMLString> m_contentElements;
