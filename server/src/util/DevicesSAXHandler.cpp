@@ -18,6 +18,7 @@ DevicesSAXHandler::DevicesSAXHandler()
 
 	m_modulesExpect.insert("sensor");
 	m_modulesExpect.insert("actuator");
+	m_modulesExpect.insert("control");
 	m_modulesExpect.insert("refresh");
 	m_modulesExpect.insert("battery");
 	m_modulesExpect.insert("rssi");
@@ -29,12 +30,12 @@ DevicesSAXHandler::DevicesSAXHandler()
 	m_sensorExpect.insert("constraints");
 	m_sensorExpect.insert("values");
 
-	m_actuatorExpect.insert("order");
-	m_actuatorExpect.insert("group");
-	m_actuatorExpect.insert("name");
-	m_actuatorExpect.insert("constraints");
-	m_actuatorExpect.insert("values");
-	m_actuatorExpect.insert("rules");
+	m_controlExpect.insert("order");
+	m_controlExpect.insert("group");
+	m_controlExpect.insert("name");
+	m_controlExpect.insert("constraints");
+	m_controlExpect.insert("values");
+	m_controlExpect.insert("rules");
 
 	m_refreshExpect.insert("default");
 	m_refreshExpect.insert("constraints");
@@ -80,9 +81,16 @@ bool DevicesSAXHandler::expectElement(const SAXElement &element) const
 		return m_sensorExpect
 			.find(element.qName) != m_sensorExpect.end();
 
-	if (isPathFromRoot("devices", "device", "modules", "actuator"))
-		return m_actuatorExpect
-			.find(element.qName) != m_actuatorExpect.end();
+	// obsolete, will be removed
+	if (isPathFromRoot("devices", "device", "modules", "actuator")) {
+		logger().warning("tag <actuator> is obsolete, use <control> instead");
+		return m_controlExpect
+			.find(element.qName) != m_controlExpect.end();
+	}
+
+	if (isPathFromRoot("devices", "device", "modules", "control"))
+		return m_controlExpect
+			.find(element.qName) != m_controlExpect.end();
 
 	if (isPathFromRoot("devices", "device", "modules", "refresh"))
 		return m_refreshExpect
@@ -95,10 +103,18 @@ bool DevicesSAXHandler::expectElement(const SAXElement &element) const
 	if (isPathFromRoot("devices", "device", "modules", "*", "values"))
 		return element.qName == "value";
 
+	// obsolete
 	if (isPathFromRoot("devices", "device", "modules", "actuator", "rules"))
 		return element.qName == "if";
 
+	if (isPathFromRoot("devices", "device", "modules", "control", "rules"))
+		return element.qName == "if";
+
+	// obsolete
 	if (isPathFromRoot("devices", "device", "modules", "actuator", "rules", "if"))
+		return element.qName == "hide-module";
+
+	if (isPathFromRoot("devices", "device", "modules", "control", "rules", "if"))
 		return element.qName == "hide-module";
 
 	return false;
@@ -177,6 +193,7 @@ void DevicesSAXHandler::startElement(
 		m_module.setGroup("");
 		m_module.setUnavailable(unavailable);
 		m_module.setDefaultValue("");
+		m_module.setControllable(element.localName == "control" || element.localName == "actuator");
 	}
 }
 

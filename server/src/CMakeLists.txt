@@ -38,6 +38,8 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/l10n/IcuLocaleImpl.cpp
 	${PROJECT_SOURCE_DIR}/l10n/IcuLocaleManager.cpp
 	${PROJECT_SOURCE_DIR}/l10n/IcuTranslator.cpp
+	${PROJECT_SOURCE_DIR}/model/AbstractModule.cpp
+	${PROJECT_SOURCE_DIR}/model/Control.cpp
 	${PROJECT_SOURCE_DIR}/model/DeviceInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/Identity.cpp
 	${PROJECT_SOURCE_DIR}/model/ModuleInfo.cpp
@@ -54,6 +56,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/ModuleValue.cpp
 	${PROJECT_SOURCE_DIR}/model/TypeInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/User.cpp
+	${PROJECT_SOURCE_DIR}/dao/ControlDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/UserDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/DeviceDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/DevicePropertyDao.cpp
@@ -68,6 +71,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoAbstractDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoDBInitializer.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSimpleDBInitializer.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLControlDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLUserDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLVerifiedIdentityDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLIdentityDao.cpp
@@ -81,6 +85,8 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/dao/ConnectorLoader.cpp
 	${PROJECT_SOURCE_DIR}/dao/SQLLoader.cpp
 	${PROJECT_SOURCE_DIR}/dao/SQLQuery.cpp
+	${PROJECT_SOURCE_DIR}/service/ControlService.cpp
+	${PROJECT_SOURCE_DIR}/service/ControlServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/UserService.cpp
 	${PROJECT_SOURCE_DIR}/service/UserServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/AuthService.cpp
@@ -108,6 +114,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/service/SensorHistoryServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/WorkService.cpp
 	${PROJECT_SOURCE_DIR}/service/WorkServiceImpl.cpp
+	${PROJECT_SOURCE_DIR}/policy/ControlAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/GatewayAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/IdentityAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/LocationAccessPolicy.cpp
@@ -216,6 +223,7 @@ file(GLOB RESTUI_SOURCES
 	restui/JSONGatewayDeserializer.cpp
 	restui/JSONLocationDeserializer.cpp
 	restui/JSONRoleInGatewayDeserializer.cpp
+	restui/ControlRestHandler.cpp
 	restui/DeviceRestHandler.cpp
 	restui/LocationRestHandler.cpp
 	restui/ProfileRestHandler.cpp

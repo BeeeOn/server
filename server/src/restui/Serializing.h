@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "provider/TypeInfoProvider.h"
+#include "model/Control.h"
 #include "model/TypeInfo.h"
 
 namespace Poco {
@@ -64,6 +65,15 @@ void serialize(Poco::JSON::PrintHandler &output,
 void serialize(Poco::JSON::PrintHandler &output,
 		Translator &translator,
 		const std::list<Sensor> &sensors);
+
+void serialize(Poco::JSON::PrintHandler &output,
+		Translator &translator,
+		const Control &control);
+void serialize(Poco::JSON::PrintHandler &output,
+		const Control::State &state);
+void serialize(Poco::JSON::PrintHandler &output,
+		Translator &translator,
+		const std::list<Control> &control);
 
 }
 

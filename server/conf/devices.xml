@@ -70,6 +70,8 @@
 			<sensor id="8" type="11">
 				<group>zone_3</group>
 			</sensor>
+
+			<control id="9" type="4" />
 		</modules>
 	</device>
 </devices>

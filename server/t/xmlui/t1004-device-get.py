@@ -123,7 +123,7 @@ class TestDeviceGet(unittest.TestCase):
 
 		elif id == "0x4471959aad24618e":
 			self.assertEqual("Unknown", e.get("name"))
-			self.assertEqual(9, len(e))
+			self.assertEqual(10, len(e))
 
 			for i in range(len(e)):
 				self.assertEqual(str(i), e[i].get("id"))
@@ -137,6 +137,7 @@ class TestDeviceGet(unittest.TestCase):
 			self.assertEqual("19", e[6].get("type"))
 			self.assertEqual("8", e[7].get("type"))
 			self.assertEqual("11", e[8].get("type"))
+			self.assertEqual("4", e[9].get("type"))
 
 		else:
 			self.assertTrue(False, "unknown device: %s, %s, %s" % (e.tag, e.attrib, e.text))

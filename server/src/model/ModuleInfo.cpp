@@ -4,7 +4,8 @@ using namespace std;
 using namespace Poco;
 using namespace BeeeOn;
 
-ModuleInfo::ModuleInfo()
+ModuleInfo::ModuleInfo():
+	m_controllable(false)
 {
 }
 
@@ -66,4 +67,14 @@ void ModuleInfo::setDefaultValue(const string &defaultValue)
 const string &ModuleInfo::defaultValue() const
 {
 	return m_default;
+}
+
+void ModuleInfo::setControllable(bool controllable)
+{
+	m_controllable = controllable;
+}
+
+bool ModuleInfo::isControllable() const
+{
+	return m_controllable;
 }

@@ -31,6 +31,7 @@
 			<add name="handlers" ref="uiWorkHandler" />
 			<add name="handlers" ref="uiDeviceHandler" />
 			<add name="handlers" ref="uiSensorHandler" />
+			<add name="handlers" ref="uiControlHandler" />
 			<add name="handlers" ref="uiTypeHandler" />
 		</instance>
 
@@ -69,6 +70,11 @@
 		<instance name="uiSensorHandler" class="BeeeOn::RestUI::SensorRestHandler">
 			<set name="sensorService" ref="sensorService" />
 			<set name="sensorHistoryService" ref="sensorHistoryService" />
+			<set name="translatorFactory" ref="translatorFactory" />
+		</instance>
+
+		<instance name="uiControlHandler" class="BeeeOn::RestUI::ControlRestHandler">
+			<set name="controlService" ref="controlService" />
 			<set name="translatorFactory" ref="translatorFactory" />
 		</instance>
 

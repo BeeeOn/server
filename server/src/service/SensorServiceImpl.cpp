@@ -78,8 +78,10 @@ void SensorServiceImpl::doFetchMany(Relation<list<Sensor>, Device> &data)
 	SharedPtr<DeviceInfo> deviceInfo = device.type();
 	vector<ModuleInfo> modules;
 
-	for (const auto info : *deviceInfo)
-		modules.emplace_back(info);
+	for (const auto info : *deviceInfo) {
+		if (!info.isControllable())
+			modules.emplace_back(info);
+	}
 
 	vector<Nullable<ValueAt>> values;
 	m_sensorHistoryDao->fetchMany(device, modules, values);

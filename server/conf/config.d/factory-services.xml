@@ -84,6 +84,13 @@
 			<set name="accessPolicy" ref="accessPolicy" />
 		</instance>
 
+		<instance name="controlService" class="BeeeOn::ControlServiceImpl">
+			<set name="deviceDao" ref="deviceDao" />
+			<set name="controlDao" ref="controlDao" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="accessPolicy" ref="accessPolicy" />
+		</instance>
+
 		<instance name="sensorHistoryService" class="BeeeOn::SensorHistoryServiceImpl">
 			<set name="sensorHistoryDao" ref="sensorHistoryDao" />
 			<set name="deviceDao" ref="deviceDao" />

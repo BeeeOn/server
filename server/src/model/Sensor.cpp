@@ -9,28 +9,8 @@ Sensor::Sensor()
 }
 
 Sensor::Sensor(const ID &id):
-	Entity<SensorID>(id)
+	AbstractModule(id)
 {
-}
-
-void Sensor::setInfo(const ModuleInfo &info)
-{
-	m_info = info;
-}
-
-const ModuleInfo &Sensor::info() const
-{
-	return m_info;
-}
-
-void Sensor::setName(const string &name)
-{
-	m_name = name;
-}
-
-string Sensor::name() const
-{
-	return m_name;
 }
 
 void Sensor::setValue(const double value)

@@ -492,3 +492,141 @@ void BeeeOn::RestUI::serialize(Poco::JSON::PrintHandler &output,
 
 	output.endArray();
 }
+
+void BeeeOn::RestUI::serialize(PrintHandler &output,
+		Translator &translator,
+		const Control &control)
+{
+	const ModuleInfo &info = control.info();
+
+	output.startObject();
+
+	output.key("id");
+	output.value(control.id().toString());
+
+	if (!control.name().empty()) {
+		output.key("display_name");
+		output.value(control.name());
+	}
+	else if (!info.name().empty()) {
+		output.key("display_name");
+		output.value(translator.format(
+			"modules." + info.name() + ".label"));
+	}
+	else {
+		output.key("display_name");
+		output.value(translator.format(
+			"types." + info.type()->name() + ".label"));
+	}
+
+	output.key("type_id");
+	output.value(info.type()->id().toString());
+
+	if (!info.group().empty()) {
+		output.key("group");
+		output.value(translator.format(
+			"modules.groups." + info.group() + ".label"));
+	}
+
+	output.key("order");
+	output.value(info.id().toString());
+
+	output.key("state");
+	output.startObject();
+
+	if (!control.lastConfirmed().isNull()) {
+		output.key("last_confirmed");
+		serialize(output, control.lastConfirmed());
+	}
+
+	output.key("current");
+	serialize(output, control.current());
+
+	output.endObject();
+
+	output.endObject();
+
+}
+
+void BeeeOn::RestUI::serialize(PrintHandler &output,
+		const Control::State &state)
+{
+	output.startObject();
+
+	output.key("stability");
+	switch (state.stability()) {
+	case Control::State::STABILITY_UNKNOWN:
+		output.value(string("unknown"));
+		break;
+	case Control::State::STABILITY_REQUESTED:
+		output.value(string("request"));
+		break;
+	case Control::State::STABILITY_ACCEPTED:
+		output.value(string("accepted"));
+		break;
+	case Control::State::STABILITY_UNCONFIRMED:
+		output.value(string("unconfirmed"));
+		break;
+	case Control::State::STABILITY_CONFIRMED:
+		output.value(string("confirmed"));
+		break;
+	case Control::State::STABILITY_OVERRIDEN:
+		output.value(string("overriden"));
+		break;
+	case Control::State::STABILITY_STUCK:
+		output.value(string("stuck"));
+		break;
+	case Control::State::STABILITY_FAILED_ROLLBACK:
+		output.value(string("failed_rollback"));
+		break;
+	case Control::State::STABILITY_FAILED_UNKNOWN:
+		output.value(string("failed_unknown"));
+		break;
+	default:
+		throw IllegalStateException("unexpected control stability");
+	}
+
+	output.key("value");
+	valueDouble(output, state.value());
+
+	if (!state.at().isNull()) {
+		output.key("at");
+		output.value(state.at().value().epochTime());
+	}
+
+
+	switch (state.originatorType()) {
+	case Control::State::ORIGINATOR_USER:
+		output.key("originator");
+		output.startObject();
+		output.key("user_id");
+		output.value(state.user().id().toString());
+		output.endObject();
+		break;
+
+	case Control::State::ORIGINATOR_GATEWAY:
+		output.key("originator");
+		output.startObject();
+		output.key("gateway_id");
+		output.value(state.gateway().id().toString());
+		output.endObject();
+		break;
+
+	default: // ignore
+		break;
+	}
+
+	output.endObject();
+}
+
+void BeeeOn::RestUI::serialize(PrintHandler &output,
+		Translator &translator,
+		const list<Control> &controls)
+{
+	output.startArray();
+
+	for (auto &control : controls)
+		serialize(output, translator, control);
+
+	output.endArray();
+}

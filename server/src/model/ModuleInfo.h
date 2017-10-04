@@ -33,6 +33,9 @@ public:
 	void setDefaultValue(const std::string &defaultValue);
 	const std::string &defaultValue() const;
 
+	void setControllable(bool controllable);
+	bool isControllable() const;
+
 private:
 	Poco::SharedPtr<TypeInfo> m_type;
 	std::string m_className;
@@ -40,6 +43,7 @@ private:
 	std::string m_group;
 	std::string m_unavailable;
 	std::string m_default;
+	bool m_controllable;
 };
 
 typedef ModuleInfo::ID ModuleInfoID;
