@@ -90,3 +90,7 @@ install(DIRECTORY cert/
 	FILES_MATCHING PATTERN "*.pem")
 install(FILES dtd/types.dtd
 	DESTINATION share/beeeon/dtd)
+install(DIRECTORY res/
+	DESTINATION share/beeeon/res
+	FILES_MATCHING
+	PATTERN "res/beeeon_server/*.res")
