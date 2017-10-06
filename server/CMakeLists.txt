@@ -61,7 +61,7 @@ if(DOXYGEN_FOUND)
 		VERBATIM)
 endif()
 
-install(FILES conf/restui-startup.ini conf/xmlui-startup.ini
+install(FILES conf/server-startup.ini
 	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon/server)
 install(FILES conf/restui-api.ini
 	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon/server)
