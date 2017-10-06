@@ -1,0 +1,16 @@
+[Unit]
+Description=BeeeOn Server
+Requires=postgresql.service
+After=postgresql.service
+
+[Service]
+ExecStart=/usr/bin/beeeon-server -c /etc/beeeon/server/server-startup.ini 2>&1
+User=beeeon_user
+TimeoutStartSec=30
+TimeoutStopSec=20
+Nice=-5
+RestartSec=5
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
