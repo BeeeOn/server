@@ -29,6 +29,13 @@ exec_program(
 	res/beeeon_server/cs.txt
 )
 
+# When installing into /usr, use /etc for configuration
+if("${CMAKE_INSTALL_PREFIX}" STREQUAL "/usr")
+set(SYSCONF_INSTALL_DIR "/etc")
+else()
+set(SYSCONF_INSTALL_DIR "etc")
+endif()
+
 add_subdirectory(src)
 add_subdirectory(base)
 add_subdirectory(test)
@@ -47,15 +54,15 @@ if(DOXYGEN_FOUND)
 endif()
 
 install(FILES conf/restui-startup.ini conf/xmlui-startup.ini
-	DESTINATION etc/beeeon)
+	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon)
 install(FILES conf/restui-api.ini
-	DESTINATION etc/beeeon)
+	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon)
 install(DIRECTORY conf/config.d
-	DESTINATION etc/beeeon)
+	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon)
 install(FILES conf/devices.xml conf/types.xml
-	DESTINATION etc/beeeon)
+	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon)
 install(FILES db/server-queries.ini
-	DESTINATION etc/beeeon)
+	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon)
 install(DIRECTORY db/
 	DESTINATION share/beeeon/db
 	FILES_MATCHING
