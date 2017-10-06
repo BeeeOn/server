@@ -29,6 +29,14 @@ exec_program(
 	res/beeeon_server/cs.txt
 )
 
+if(NOT DEFINED LIB_INSTALL_DIR)
+set(LIB_INSTALL_DIR "lib")
+endif()
+
+if(NOT DEFINED AR_INSTALL_DIR)
+set(AR_INSTALL_DIR "lib")
+endif()
+
 # When installing into /usr, use /etc for configuration
 if("${CMAKE_INSTALL_PREFIX}" STREQUAL "/usr")
 set(SYSCONF_INSTALL_DIR "/etc")
