@@ -54,15 +54,15 @@ if(DOXYGEN_FOUND)
 endif()
 
 install(FILES conf/restui-startup.ini conf/xmlui-startup.ini
-	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon)
+	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon/server)
 install(FILES conf/restui-api.ini
-	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon)
+	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon/server)
 install(DIRECTORY conf/config.d
-	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon)
+	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon/server)
 install(FILES conf/devices.xml conf/types.xml
-	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon)
+	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon/server)
 install(FILES db/server-queries.ini
-	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon)
+	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon/server)
 install(DIRECTORY db/
 	DESTINATION share/beeeon/db
 	FILES_MATCHING
