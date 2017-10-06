@@ -1,4 +1,5 @@
 #include <Poco/Exception.h>
+#include <Poco/Logger.h>
 #include <Poco/Timestamp.h>
 
 #include "di/Injectable.h"

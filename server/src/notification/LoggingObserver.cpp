@@ -1,3 +1,4 @@
+#include <Poco/Logger.h>
 #include <Poco/Notification.h>
 
 #include "di/Injectable.h"
