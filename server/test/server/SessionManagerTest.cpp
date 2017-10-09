@@ -4,7 +4,7 @@
 
 #include <Poco/Timespan.h>
 
-#include "server/SessionManager.h"
+#include "server/SessionManagerImpl.h"
 #include "provider/MockRandomProvider.h"
 #include "util/Base64.h"
 #include "provider/PocoRandomProvider.h"
@@ -28,7 +28,7 @@ public:
 	void testSessionTimeout();
 
 private:
-	SessionManager m_manager;
+	SessionManagerImpl m_manager;
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SessionManagerTest);

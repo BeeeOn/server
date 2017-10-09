@@ -9,6 +9,7 @@
 #include "provider/MockRandomProvider.h"
 #include "provider/RandomProvider.h"
 #include "notification/NotificationDispatcher.h"
+#include "server/SessionManagerImpl.h"
 #include "service/AuthServiceImpl.h"
 #include "provider/PermitAuthProvider.h"
 #include "dao/UserDao.h"
@@ -49,7 +50,7 @@ private:
 	MockUserDao m_userDao;
 	MockIdentityDao m_identityDao;
 	MockVerifiedIdentityDao m_verifiedIdentityDao;
-	SessionManager m_manager;
+	SessionManagerImpl m_manager;
 	MockRandomProvider m_mockRandomProvider;
 	InsecureRandomProvider m_insecureRandomProvider;
 	NotificationDispatcher *m_notifiactionDispatcher;
