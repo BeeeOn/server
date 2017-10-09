@@ -73,3 +73,5 @@ install(DIRECTORY db/
 install(DIRECTORY cert/
 	DESTINATION share/beeeon/cert
 	FILES_MATCHING PATTERN "*.pem")
+install(FILES dtd/types.dtd
+	DESTINATION share/beeeon/dtd)
