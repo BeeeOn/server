@@ -38,8 +38,8 @@ There are multiple startup configurations according to the purpose of testing or
 The server is started either with the REST-UI or with the XML-UI:
 
 ```
-$ TARGET=xmlui-startup tools/server-testing-start.sh
-$ TARGET=restui-startup tools/server-testing-start.sh
+$ TARGET=xmlui tools/server-testing-start.sh
+$ TARGET=restui tools/server-testing-start.sh
 ```
 
 Also, for debugging and testing purposes, the server can be started with the PermitAuthProvider enabled
@@ -50,7 +50,7 @@ tests to pass:
 $ tools/server-testing-start.sh -Dui.debug=yes
 ```
 
-The executable `beeeon-server` reads the given configuration file and configuration
+The executable `beeeon-server` reads a startup configuration file and configuration
 files from conf/config.d. Then, the definition of the _main_ instance (of class
 LoopRunner) is searched, created and executed. All main application threads start
 via this main instance.
