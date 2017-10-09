@@ -15,7 +15,7 @@
 			<set name="notificationDispatcher" ref="notificationDispatcher" />
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="localeManager" ref="localeManager" />
-			<add name="providers" ref="googlePermitAuthProvider" if-yes="${ui.debug}" />
+			<add name="providers" ref="googlePermitAuthProvider" if-yes="${testing.enable}" />
 			<add name="providers" ref="googleAuthProvider" if-yes="${google.enable}" />
 			<add name="providers" ref="facebookAuthProvider" if-yes="${facebook.enable}" />
 		</instance>

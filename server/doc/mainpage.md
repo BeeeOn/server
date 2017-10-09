@@ -42,14 +42,6 @@ $ TARGET=xmlui tools/server-testing-start.sh
 $ TARGET=restui tools/server-testing-start.sh
 ```
 
-Also, for debugging and testing purposes, the server can be started with the PermitAuthProvider enabled
-that allows to login as any of already registred users. This is necessary for automatic integration
-tests to pass:
-
-```
-$ tools/server-testing-start.sh -Dui.debug=yes
-```
-
 The executable `beeeon-server` reads a startup configuration file and configuration
 files from conf/config.d. Then, the definition of the _main_ instance (of class
 LoopRunner) is searched, created and executed. All main application threads start
