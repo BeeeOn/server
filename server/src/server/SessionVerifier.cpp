@@ -26,6 +26,7 @@ ExpirableSession::Ptr SessionVerifier::verifyAuthorized(
 	} catch (const NotAuthenticatedException &e) {
 		e.rethrow();
 	} catch (const Exception &e) {
+		logger().log(e, __FILE__, __LINE__);
 		throw NotAuthenticatedException("failed to authorize", e);
 	} catch (const std::exception &e) {
 		throw NotAuthenticatedException(
