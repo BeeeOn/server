@@ -35,6 +35,14 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/util/TypesSAXHandlerTest.cpp
 )
 
+if (JWT AND JANSSON)
+	file(GLOB JWT_TEST_SOURCES
+		${PROJECT_SOURCE_DIR}/jwt/JWTConstants.cpp
+		${PROJECT_SOURCE_DIR}/jwt/JWTDecoderTest.cpp
+	)
+	list(APPEND TEST_SOURCES ${JWT_TEST_SOURCES})
+endif()
+
 file(GLOB TEST_WORK_SOURCES
 	${PROJECT_SOURCE_DIR}/work/BasicProcessorTest.cpp
 	${PROJECT_SOURCE_DIR}/work/BasicQueueTest.cpp

@@ -7,6 +7,10 @@
 			<set name="maxUserSessions" number="${session.maxPerUser}" />
 		</instance>
 
+		<instance name="jwtDecoder" class="BeeeOn::JWTDecoder">
+			<set name="secret" text="${session.jwt.secret}" />
+		</instance>
+
 		<instance name="googlePermitAuthProvider"
 				class="BeeeOn::PermitAuthProvider">
 			<set name="resultProvider" text="google" />
