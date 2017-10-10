@@ -1,3 +1,4 @@
+#include "util/Sanitize.h"
 #include "xmlui/SessionXmlHandler.h"
 
 using namespace std;
@@ -47,7 +48,7 @@ Session::Ptr SessionXmlHandlerResolver::lookupSession(
 		const AutoPtr<Document> input)
 {
 	const Element *root = input->documentElement();
-	const string &sessionId = root->getAttribute("sessionid");
+	const string &sessionId = Sanitize::base64(root->getAttribute("sessionid"));
 	ExpirableSession::Ptr session;
 
 	if (!sessionManager.lookup(sessionId, session))
