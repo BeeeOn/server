@@ -1,6 +1,7 @@
 #include <Poco/NumberFormatter.h>
 #include <Poco/NumberParser.h>
 #include <Poco/RegularExpression.h>
+#include <Poco/StringTokenizer.h>
 #include <Poco/TextEncoding.h>
 #include <Poco/TextConverter.h>
 #include <Poco/TextIterator.h>
@@ -260,6 +261,7 @@ static RegularExpression base64Regex(
 );
 
 string Sanitize::base64(const string &bytes,
+		const std::string &separators,
 		const unsigned long sizeLimit,
 		const string &inputEncoding)
 {
@@ -268,8 +270,19 @@ string Sanitize::base64(const string &bytes,
 	if (base64.empty())
 		return "";
 
-	if (!match(base64Regex, base64))
+	if (separators.empty() && !match(base64Regex, base64)) {
 		throw InvalidArgumentException("invalid base64 content");
+	}
+	else if (!separators.empty()) {
+		const StringTokenizer fragments(base64, separators);
+
+		for (const auto &one : fragments) {
+			if (!match(base64Regex, one)) {
+				throw InvalidArgumentException(
+						"invalid base64 content in a fragment");
+			}
+		}
+	}
 
 	return base64;
 }

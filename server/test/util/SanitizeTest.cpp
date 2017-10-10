@@ -31,6 +31,7 @@ class SanitizeTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testSanitizeStrict);
 	CPPUNIT_TEST(testSanitizeUri);
 	CPPUNIT_TEST(testSanitizeBase64);
+	CPPUNIT_TEST(testSanitizeBase64Fragments);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testSanitizeSizeLimit();
@@ -46,6 +47,7 @@ public:
 	void testSanitizeStrict();
 	void testSanitizeUri();
 	void testSanitizeBase64();
+	void testSanitizeBase64Fragments();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SanitizeTest);
@@ -320,6 +322,31 @@ void SanitizeTest::testSanitizeBase64()
 	CPPUNIT_ASSERT_THROW(Sanitize::base64("\r"), InvalidArgumentException);
 
 	CPPUNIT_ASSERT_EQUAL(string(""), Sanitize::base64("\x00"));
+}
+
+void SanitizeTest::testSanitizeBase64Fragments()
+{
+	CPPUNIT_ASSERT_NO_THROW(Sanitize::base64("", ","));
+	CPPUNIT_ASSERT_NO_THROW(Sanitize::base64("abcde,fghijk,lmnopqr,stuv;wxyz", ",;"));
+	CPPUNIT_ASSERT_NO_THROW(Sanitize::base64("ABCDEF?GHI?JKLM?NOPQR?STUVWXYZ", "?"));
+	CPPUNIT_ASSERT_NO_THROW(Sanitize::base64("0123.456.789+./", "."));
+	CPPUNIT_ASSERT_NO_THROW(Sanitize::base64("0=", ","));
+	CPPUNIT_ASSERT_NO_THROW(Sanitize::base64("0==", ","));
+
+	CPPUNIT_ASSERT_THROW(Sanitize::base64("0,=",    ","), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::base64("0,",     ","), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::base64("0,==",   ","), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::base64("0,0==1", ","), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::base64("0,0===", ","), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::base64(" ,",     ","), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::base64("\n,",    ","), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::base64("\r,",    ","), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::base64(", ",     ","), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::base64(",\n",    ","), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::base64(",\r",    ","), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::base64("0,\x00", ","), InvalidArgumentException);
+
+	CPPUNIT_ASSERT_EQUAL(string(""), Sanitize::base64("\x00,\x00", ","));
 }
 
 }
