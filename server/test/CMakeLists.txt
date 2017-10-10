@@ -40,6 +40,7 @@ if (JWT AND JANSSON)
 		${PROJECT_SOURCE_DIR}/jwt/JWTConstants.cpp
 		${PROJECT_SOURCE_DIR}/jwt/JWTDecoderTest.cpp
 		${PROJECT_SOURCE_DIR}/jwt/JWTEncoderTest.cpp
+		${PROJECT_SOURCE_DIR}/server/JWTSessionManagerTest.cpp
 	)
 	list(APPEND TEST_SOURCES ${JWT_TEST_SOURCES})
 endif()

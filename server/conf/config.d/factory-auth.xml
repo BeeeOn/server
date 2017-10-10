@@ -16,6 +16,15 @@
 			<set name="algorithm" text="${session.jwt.algorithm}" />
 		</instance>
 
+		<instance name="jwtSessionManager" class="BeeeOn::JWTSessionManager">
+			<set name="audienceList" list="${session.jwt.audience}" />
+			<set name="jwtDecoder" ref="jwtDecoder" />
+			<set name="jwtEncoder" ref="jwtEncoder" />
+			<set name="localeManager" ref="localeManager" />
+			<set name="issuerName" text="BeeeOn" />
+			<set name="sessionExpireTime" time="${session.expire}" />
+		</instance>
+
 		<instance name="googlePermitAuthProvider"
 				class="BeeeOn::PermitAuthProvider">
 			<set name="resultProvider" text="google" />

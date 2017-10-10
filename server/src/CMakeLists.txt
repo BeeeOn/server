@@ -184,6 +184,7 @@ if (JWT AND JANSSON)
 	file(GLOB JWT_SOURCES
 		${PROJECT_SOURCE_DIR}/jwt/JWTDecoder.cpp
 		${PROJECT_SOURCE_DIR}/jwt/JWTEncoder.cpp
+		${PROJECT_SOURCE_DIR}/server/JWTSessionManager.cpp
 	)
 	list(APPEND SOURCES ${JWT_SOURCES})
 else()
