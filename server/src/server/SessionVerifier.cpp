@@ -21,7 +21,7 @@ ExpirableSession::Ptr SessionVerifier::verifyAuthorized(
 	try {
 		return doVerifyAuthorized(
 			Sanitize::encoding(scheme),
-			Sanitize::base64(authInfo)
+			Sanitize::base64(authInfo, ".")
 		);
 	} catch (const NotAuthenticatedException &e) {
 		e.rethrow();
