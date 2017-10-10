@@ -1,6 +1,8 @@
 <system>
 	<factory>
-		<instance name="sessionManager" class="BeeeOn::SessionManagerImpl">
+		<alias name="sessionManager" ref="${session.manager}SessionManager" />
+
+		<instance name="systemSessionManager" class="BeeeOn::SessionManagerImpl">
 			<set name="secureRandomProvider"
 				ref="pocoRandomProvider" />
 			<set name="sessionExpireTime" time="${session.expire}" />
