@@ -39,6 +39,7 @@ if (JWT AND JANSSON)
 	file(GLOB JWT_TEST_SOURCES
 		${PROJECT_SOURCE_DIR}/jwt/JWTConstants.cpp
 		${PROJECT_SOURCE_DIR}/jwt/JWTDecoderTest.cpp
+		${PROJECT_SOURCE_DIR}/jwt/JWTEncoderTest.cpp
 	)
 	list(APPEND TEST_SOURCES ${JWT_TEST_SOURCES})
 endif()

@@ -11,6 +11,11 @@
 			<set name="secret" text="${session.jwt.secret}" />
 		</instance>
 
+		<instance name="jwtEncoder" class="BeeeOn::JWTEncoder">
+			<set name="secret" text="${session.jwt.secret}" />
+			<set name="algorithm" text="${session.jwt.algorithm}" />
+		</instance>
+
 		<instance name="googlePermitAuthProvider"
 				class="BeeeOn::PermitAuthProvider">
 			<set name="resultProvider" text="google" />
