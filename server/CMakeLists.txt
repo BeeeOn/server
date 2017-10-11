@@ -120,6 +120,7 @@ install(DIRECTORY db/
 	PATTERN "db/revert/*.sql"
 	PATTERN "db/revert/*/*.sql"
 	PATTERN "db/tools/*"
+	PATTERN "db/scripts/*.sql"
 	PATTERN "db/test" EXCLUDE
 	PATTERN "db/templates" EXCLUDE)
 install(DIRECTORY cert/
