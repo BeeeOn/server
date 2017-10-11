@@ -984,6 +984,7 @@ FILTER_SOURCE_PATTERNS =
 # and want to reuse the introduction page also for the doxygen output.
 
 INPUT += @CMAKE_CURRENT_SOURCE_DIR@/doc/mainpage.md
+INPUT += @CMAKE_CURRENT_SOURCE_DIR@/doc/install.md
 INPUT += @CMAKE_CURRENT_SOURCE_DIR@/t/README.md
 USE_MDFILE_AS_MAINPAGE = @CMAKE_CURRENT_SOURCE_DIR@/doc/mainpage.md
 
