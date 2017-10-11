@@ -260,6 +260,14 @@ static RegularExpression base64Regex(
 	true
 );
 
+static RegularExpression base64URLRegex(
+	"[-a-zA-Z0-9_]+={0,2}",
+	RegularExpression::RE_DOLLAR_ENDONLY  |
+	RegularExpression::RE_NO_AUTO_CAPTURE |
+	RegularExpression::RE_UTF8,
+	true
+);
+
 string Sanitize::base64(const string &bytes,
 		const std::string &separators,
 		const unsigned long sizeLimit,
@@ -270,16 +278,23 @@ string Sanitize::base64(const string &bytes,
 	if (base64.empty())
 		return "";
 
-	if (separators.empty() && !match(base64Regex, base64)) {
-		throw InvalidArgumentException("invalid base64 content");
+	if (separators.empty()) {
+		if (match(base64Regex, base64))
+			return base64;
+			
+		if (!match(base64URLRegex, base64))
+			throw InvalidArgumentException("invalid base64 content");
 	}
 	else if (!separators.empty()) {
 		const StringTokenizer fragments(base64, separators);
 
 		for (const auto &one : fragments) {
-			if (!match(base64Regex, one)) {
+			if (match(base64Regex, one))
+				continue;
+
+			if (!match(base64URLRegex, one)) {
 				throw InvalidArgumentException(
-						"invalid base64 content in a fragment");
+					"invalid base64 content in fragment: " + one);
 			}
 		}
 	}

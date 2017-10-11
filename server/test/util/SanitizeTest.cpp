@@ -31,6 +31,7 @@ class SanitizeTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testSanitizeStrict);
 	CPPUNIT_TEST(testSanitizeUri);
 	CPPUNIT_TEST(testSanitizeBase64);
+	CPPUNIT_TEST(testSanitizeBase64URL);
 	CPPUNIT_TEST(testSanitizeBase64Fragments);
 	CPPUNIT_TEST_SUITE_END();
 public:
@@ -47,6 +48,7 @@ public:
 	void testSanitizeStrict();
 	void testSanitizeUri();
 	void testSanitizeBase64();
+	void testSanitizeBase64URL();
 	void testSanitizeBase64Fragments();
 };
 
@@ -322,6 +324,23 @@ void SanitizeTest::testSanitizeBase64()
 	CPPUNIT_ASSERT_THROW(Sanitize::base64("\r"), InvalidArgumentException);
 
 	CPPUNIT_ASSERT_EQUAL(string(""), Sanitize::base64("\x00"));
+}
+
+/**
+ * The Base64 for URL variant uses '-', '_' instead of '+', '/'.
+ * Allow the input to be only either the standard Base64 or Base64
+ * for URL (thus without mixing the '-', '_' and '+', '/' characters).
+ */
+void SanitizeTest::testSanitizeBase64URL()
+{
+	CPPUNIT_ASSERT_NO_THROW(Sanitize::base64("+/"));
+	CPPUNIT_ASSERT_NO_THROW(Sanitize::base64("-_"));
+	CPPUNIT_ASSERT_NO_THROW(Sanitize::base64("kLYz_C_KfRynpesleipBeuYDUdQ5pv5ZeBgzsUCgyyY"));
+
+	CPPUNIT_ASSERT_THROW(Sanitize::base64("+-"), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::base64("+_"), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::base64("/-"), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::base64("/_"), InvalidArgumentException);
 }
 
 void SanitizeTest::testSanitizeBase64Fragments()
