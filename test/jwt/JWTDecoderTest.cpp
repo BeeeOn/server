@@ -19,6 +19,9 @@ class JWTDecoderTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testDecodeWithHS256);
 	CPPUNIT_TEST(testDecodeWithHS384);
 	CPPUNIT_TEST(testDecodeWithHS512);
+	CPPUNIT_TEST(testDecodeWithRS256);
+	CPPUNIT_TEST(testDecodeWithRS384);
+	CPPUNIT_TEST(testDecodeWithRS512);
 	CPPUNIT_TEST(testDecodeWithNONE);
 	CPPUNIT_TEST(testNonExistingAlg);
 	CPPUNIT_TEST(testInvalidHeader);
@@ -32,6 +35,9 @@ public:
 	void testDecodeWithHS256();
 	void testDecodeWithHS384();
 	void testDecodeWithHS512();
+	void testDecodeWithRS256();
+	void testDecodeWithRS384();
+	void testDecodeWithRS512();
 	void testDecodeWithNONE();
 	void testNonExistingAlg();
 	void testInvalidHeader();
@@ -94,6 +100,24 @@ void JWTDecoderTest::testDecodeWithHS512()
 {
 	m_decoder.setSecret(JWTConstants::HMAC_SECRET);
 	doTestDecode(JWTConstants::HS512_VALID_TOKEN, m_token);
+}
+
+void JWTDecoderTest::testDecodeWithRS256()
+{
+	m_decoder.setSecret(JWTConstants::RSA_SECRET);
+	doTestDecode(JWTConstants::RS256_VALID_TOKEN, m_token);
+}
+
+void JWTDecoderTest::testDecodeWithRS384()
+{
+	m_decoder.setSecret(JWTConstants::RSA_SECRET);
+	doTestDecode(JWTConstants::RS384_VALID_TOKEN, m_token);
+}
+
+void JWTDecoderTest::testDecodeWithRS512()
+{
+	m_decoder.setSecret(JWTConstants::RSA_SECRET);
+	doTestDecode(JWTConstants::RS512_VALID_TOKEN, m_token);
 }
 
 void JWTDecoderTest::testDecodeWithNONE()
