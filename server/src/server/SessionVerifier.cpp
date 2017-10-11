@@ -21,11 +21,12 @@ ExpirableSession::Ptr SessionVerifier::verifyAuthorized(
 	try {
 		return doVerifyAuthorized(
 			Sanitize::encoding(scheme),
-			Sanitize::base64(authInfo)
+			Sanitize::base64(authInfo, ".")
 		);
 	} catch (const NotAuthenticatedException &e) {
 		e.rethrow();
 	} catch (const Exception &e) {
+		logger().log(e, __FILE__, __LINE__);
 		throw NotAuthenticatedException("failed to authorize", e);
 	} catch (const std::exception &e) {
 		throw NotAuthenticatedException(

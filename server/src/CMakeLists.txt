@@ -13,11 +13,14 @@ find_library (POCO_SQLITE PocoDataSQLite)
 find_library (POCO_ODBC PocoDataODBC)
 find_library (ICU_I18N icui18n)
 find_library (ICU_UC icuuc)
+find_library (JWT jwt)
+find_library (JANSSON jansson)
 
 set (CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -DBEEEON_SELECT_POCO")
 add_definitions(-std=c++11)
 
 file(GLOB SOURCES
+	${PROJECT_SOURCE_DIR}/jwt/JWToken.cpp
 	${PROJECT_SOURCE_DIR}/provider/AuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/DeviceInfoProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/RandomProvider.cpp
@@ -177,6 +180,17 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/work/GatewayScanWorkExecutor.cpp
 )
 
+if (JWT AND JANSSON)
+	file(GLOB JWT_SOURCES
+		${PROJECT_SOURCE_DIR}/jwt/JWTDecoder.cpp
+		${PROJECT_SOURCE_DIR}/jwt/JWTEncoder.cpp
+		${PROJECT_SOURCE_DIR}/server/JWTSessionManager.cpp
+	)
+	list(APPEND SOURCES ${JWT_SOURCES})
+else()
+	message(STATUS "JWT support is disabled due to unmet dependencies")
+endif()
+
 file(GLOB WORK_SOURCES
 	${PROJECT_SOURCE_DIR}/work/AbstractWorkBackup.cpp
 	${PROJECT_SOURCE_DIR}/work/AbstractGatewayWork.cpp
@@ -269,6 +283,18 @@ set(LIBS
 	${ICU_I18N}
 	${ICU_UC}
 )
+
+if(JANSSON)
+	list(APPEND LIBS ${JANSSON})
+else()
+	message(STATUS "library jansson was not found, ignoring...")
+endif()
+
+if(JWT)
+	list(APPEND LIBS ${JWT})
+else()
+	message(STATUS "library jwt was not found, ignoring...")
+endif()
 
 # Apple's linker doesn't support --whole-archive. Instead it uses -all_load.
 if (APPLE)

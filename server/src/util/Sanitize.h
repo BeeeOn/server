@@ -104,8 +104,14 @@ public:
 	 * and allow only Base64 symbols. Whitespace is denied and thus it must
 	 * not be included. Padding '=' symbols can be included at the end.
 	 * The method does NOT perform decoding.
+	 *
+	 * If the separators field is a non-empty string, the input can also
+	 * contain those characters. This allows to support JSON Web Tokens
+	 * that consist of a sequence of base64-encoded blocks delimited by
+	 * dots.
 	 */
 	static std::string base64(const std::string &bytes,
+			const std::string &separators = "",
 			const unsigned long sizeLimit = SIZE_LIMIT_BASE64,
 			const std::string &inputEncoding = "UTF-8");
 };

@@ -1,10 +1,30 @@
 <system>
 	<factory>
-		<instance name="sessionManager" class="BeeeOn::SessionManagerImpl">
+		<alias name="sessionManager" ref="${session.manager}SessionManager" />
+
+		<instance name="systemSessionManager" class="BeeeOn::SessionManagerImpl">
 			<set name="secureRandomProvider"
 				ref="pocoRandomProvider" />
 			<set name="sessionExpireTime" time="${session.expire}" />
 			<set name="maxUserSessions" number="${session.maxPerUser}" />
+		</instance>
+
+		<instance name="jwtDecoder" class="BeeeOn::JWTDecoder">
+			<set name="secret" text="${session.jwt.secret}" />
+		</instance>
+
+		<instance name="jwtEncoder" class="BeeeOn::JWTEncoder">
+			<set name="secret" text="${session.jwt.secret}" />
+			<set name="algorithm" text="${session.jwt.algorithm}" />
+		</instance>
+
+		<instance name="jwtSessionManager" class="BeeeOn::JWTSessionManager">
+			<set name="audienceList" list="${session.jwt.audience}" />
+			<set name="jwtDecoder" ref="jwtDecoder" />
+			<set name="jwtEncoder" ref="jwtEncoder" />
+			<set name="localeManager" ref="localeManager" />
+			<set name="issuerName" text="BeeeOn" />
+			<set name="sessionExpireTime" time="${session.expire}" />
 		</instance>
 
 		<instance name="googlePermitAuthProvider"

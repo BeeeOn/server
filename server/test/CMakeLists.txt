@@ -11,6 +11,8 @@ find_library (POCO_JSON PocoJSON)
 find_library (POCO_DATA PocoData)
 find_library (ICU_I18N icui18n)
 find_library (ICU_UC icuuc)
+find_library (JWT jwt)
+find_library (JANSSON jansson)
 
 file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/l10n/HTTPLocaleExtractorTest.cpp
@@ -32,6 +34,16 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/util/SanitizeTest.cpp
 	${PROJECT_SOURCE_DIR}/util/TypesSAXHandlerTest.cpp
 )
+
+if (JWT AND JANSSON)
+	file(GLOB JWT_TEST_SOURCES
+		${PROJECT_SOURCE_DIR}/jwt/JWTConstants.cpp
+		${PROJECT_SOURCE_DIR}/jwt/JWTDecoderTest.cpp
+		${PROJECT_SOURCE_DIR}/jwt/JWTEncoderTest.cpp
+		${PROJECT_SOURCE_DIR}/server/JWTSessionManagerTest.cpp
+	)
+	list(APPEND TEST_SOURCES ${JWT_TEST_SOURCES})
+endif()
 
 file(GLOB TEST_WORK_SOURCES
 	${PROJECT_SOURCE_DIR}/work/BasicProcessorTest.cpp
@@ -77,6 +89,14 @@ set(LIBS
 	${ICU_UC}
 	${CPP_UNIT}
 )
+
+if(JANSSON)
+	list(APPEND LIBS ${JANSSON})
+endif()
+
+if(JWT)
+	list(APPEND LIBS ${JWT})
+endif()
 
 # Apple's linker doesn't support --whole-archive. Instead it uses -all_load.
 if (APPLE)

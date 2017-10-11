@@ -1,0 +1,32 @@
+#include "jwt/JWTConstants.h"
+
+using namespace std;
+using namespace BeeeOn;
+
+const string JWTConstants::HS256_VALID_TOKEN =
+	"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOlsiQmVlZU9uIl0sImV4cC"
+	"I6OTIyMzM3MjAzNjg1NCwiaWF0IjotOTIyMzM3MjAzNjg1NCwiaXNzIjoiQmVlZU9uIiwibG9jYWxlI"
+	"joiZW5fVVMiLCJuYmYiOi05MjIzMzcyMDM2ODU0LCJzdWIiOiJiZTU3MjA3OS0wOTcxLTQ3ZjAtOTVk"
+	"Zi02ODQ3NmE2NDI5MTEifQ.EUWpzjq_kzEQq3gjTyVUa1zXrElJbe41RN9BeVhaOHY";
+
+const string JWTConstants::HS384_VALID_TOKEN =
+	"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzM4NCJ9.eyJhdWQiOlsiQmVlZU9uIl0sImV4cC"
+	"I6OTIyMzM3MjAzNjg1NCwiaWF0IjotOTIyMzM3MjAzNjg1NCwiaXNzIjoiQmVlZU9uIiwibG9jYWxlI"
+	"joiZW5fVVMiLCJuYmYiOi05MjIzMzcyMDM2ODU0LCJzdWIiOiJiZTU3MjA3OS0wOTcxLTQ3ZjAtOTVk"
+	"Zi02ODQ3NmE2NDI5MTEifQ.Ax7Dfth9Yk33QKsIZ4tXBn4aXOJ-Hn27zdF8_qymzX39MggNFDo3lOuq"
+	"zMlHtJoW";
+
+const string JWTConstants::HS512_VALID_TOKEN =
+	"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJhdWQiOlsiQmVlZU9uIl0sImV4cC"
+	"I6OTIyMzM3MjAzNjg1NCwiaWF0IjotOTIyMzM3MjAzNjg1NCwiaXNzIjoiQmVlZU9uIiwibG9jYWxlI"
+	"joiZW5fVVMiLCJuYmYiOi05MjIzMzcyMDM2ODU0LCJzdWIiOiJiZTU3MjA3OS0wOTcxLTQ3ZjAtOTVk"
+	"Zi02ODQ3NmE2NDI5MTEifQ.oH8BkPVsSPxcGYbJXVDh-nOR7Qak64RM3Ipqnshbk7KEcklKclthZPCi"
+	"bN1kubi6VvVXMqUfUUeofhrTT3Nttg";
+
+const string JWTConstants::NONAL_VALID_TOKEN = 
+	"eyJhbGciOiJub25lIn0.eyJhdWQiOlsiQmVlZU9uIl0sImV4cCI6OTIyMzM3MjAzNjg"
+	"1NCwiaWF0IjotOTIyMzM3MjAzNjg1NCwiaXNzIjoiQmVlZU9uIiwibG9jYWxlIjoiZW5fVVMiLCJuYm"
+	"YiOi05MjIzMzcyMDM2ODU0LCJzdWIiOiJiZTU3MjA3OS0wOTcxLTQ3ZjAtOTVkZi02ODQ3NmE2NDI5M"
+	"TEifQ.";
+
+const string JWTConstants::HMAC_SECRET = "SuperClever_unGuEsSabLE-s:E#c~R.e,T";
