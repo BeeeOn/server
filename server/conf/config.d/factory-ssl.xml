@@ -10,6 +10,14 @@
 			<set name="loadDefaultCA" text="false" />
 		</instance>
 
+		<instance name="restuiSSLServer" class="BeeeOn::SSLServer">
+			<set name="certificate" text="${restui.ssl.certificate}" />
+			<set name="privateKey" text="${restui.ssl.key}" />
+			<set name="caLocation" text="${restui.ssl.authority}" />
+			<set name="verificationMode" text="${restui.ssl.verifyMode}" />
+			<set name="loadDefaultCA" text="false" />
+		</instance>
+
 		<instance name="googleOAuthSSL" class="BeeeOn::SSLClient">
 			<set name="verificationMode" text="${google.ssl.verify_mode}" />
 			<set name="caLocation" text="${google.ssl.authority}" />

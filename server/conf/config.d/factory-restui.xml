@@ -11,6 +11,7 @@
 			<set name="sessionVerifier" ref="sessionVerifier" />
 			<set name="translatorFactory" ref="translatorFactory" />
 			<set name="localeManager" ref="localeManager" />
+			<set name="sslConfig" ref="restuiSSLServer" if-yes="${restui.ssl.enable}" />
 			<set name="port" number="${restui.port}" />
 			<set name="backlog" number="${restui.backlog}" />
 			<set name="minThreads" number="${restui.minThreads}" />

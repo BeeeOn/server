@@ -15,6 +15,7 @@ namespace BeeeOn {
 
 class RestRouter;
 class SessionVerifier;
+class SSLServer;
 
 class PocoRestServer :
 		public StoppableLoop,
@@ -53,6 +54,11 @@ public:
 	void setLocaleManager(Poco::SharedPtr<LocaleManager> manager);
 
 	/**
+	 * Set the SSL configuration.
+	 */
+	void setSSLConfig(Poco::SharedPtr<SSLServer> config);
+
+	/**
 	 * Set port to listen on.
 	 */
 	void setPort(int port);
@@ -72,6 +78,7 @@ private:
 	unsigned int m_backlog;
 	RestRouter *m_router;
 	SessionVerifier *m_sessionVerifier;
+	Poco::SharedPtr<SSLServer> m_sslConfig;
 	Poco::SharedPtr<Poco::Net::ServerSocket> m_socket;
 	Poco::Net::HTTPRequestHandlerFactory::Ptr m_factory;
 	Poco::SharedPtr<Poco::Net::HTTPServer> m_server;
