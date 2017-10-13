@@ -1,0 +1,12 @@
+<system>
+	<factory>
+		<instance name="all" class="BeeeOn::LoopRunner">
+			<add name="runnables" ref="asyncExecutor" />
+			<add name="runnables" ref="uiWorkScheduler" />
+			<add name="loops" ref="gatewayCommunicator" />
+			<add name="loops" ref="webSocketServer" />
+			<add name="loops" ref="uiServer" />
+			<add name="loops" ref="xmluiServer" />
+		</instance>
+	</factory>
+</system>

@@ -123,8 +123,3 @@ else()
 		${LIBS}
 	)
 endif()
-
-install(TARGETS test-suite-server
-	RUNTIME DESTINATION share/beeeon/test-suite
-	CONFIGURATIONS Debug
-)

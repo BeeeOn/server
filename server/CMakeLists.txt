@@ -29,6 +29,21 @@ exec_program(
 	res/beeeon_server/cs.txt
 )
 
+if(NOT DEFINED LIB_INSTALL_DIR)
+set(LIB_INSTALL_DIR "lib")
+endif()
+
+if(NOT DEFINED AR_INSTALL_DIR)
+set(AR_INSTALL_DIR "lib")
+endif()
+
+# When installing into /usr, use /etc for configuration
+if("${CMAKE_INSTALL_PREFIX}" STREQUAL "/usr")
+set(SYSCONF_INSTALL_DIR "/etc")
+else()
+set(SYSCONF_INSTALL_DIR "etc")
+endif()
+
 add_subdirectory(src)
 add_subdirectory(base)
 add_subdirectory(test)
@@ -46,16 +61,53 @@ if(DOXYGEN_FOUND)
 		VERBATIM)
 endif()
 
-install(FILES conf/restui-startup.ini conf/xmlui-startup.ini
-	DESTINATION etc/beeeon)
+set(CPACK_PACKAGE_VERSION_MAJOR "2017")
+set(CPACK_PACKAGE_VERSION_MINOR "9")
+set(CPACK_PACKAGE_VERSION_PATCH "1")
+set(CPACK_PACKAGE_NAME "beeeon-server")
+set(CPACK_PACKAGE_VENDOR "Brno University of Technology")
+set(CPACK_PACKAGE_CONTACT "Jan Viktorin <iviktorin@fit.vutbr.cz>")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY
+	"BeeeOn Server - part of the BeeeOn IoT platform")
+set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_CURRENT_SOURCE_DIR}/../LICENSE.md)
+
+set(CPACK_RPM_PACKAGE_LICENSE "BSD")
+set(CPACK_RPM_PACKAGE_ARCHITECTURE "x86_64")
+set(CPACK_RPM_PACKAGE_GROUP "Other")
+set(CPACK_RPM_PACKAGE_URL "https://github/BeeeOn/server")
+set(CPACK_RPM_COMPRESSION_TYPE "gzip")
+set(CPACK_RPM_PACKAGE_REQUIRES "libPocoFoundation48 >= 1.7.7")
+set(CPACK_RPM_PACKAGE_REQUIRES "${CPACK_RPM_PACKAGE_REQUIRES}, libPocoDataODBC48 >= 1.7.7")
+set(CPACK_RPM_PACKAGE_REQUIRES "${CPACK_RPM_PACKAGE_REQUIRES}, libPocoJSON48 >= 1.7.7")
+set(CPACK_RPM_PACKAGE_REQUIRES "${CPACK_RPM_PACKAGE_REQUIRES}, libPocoNet48 >= 1.7.7")
+set(CPACK_RPM_PACKAGE_REQUIRES "${CPACK_RPM_PACKAGE_REQUIRES}, libPocoNetSSL48 >= 1.7.7")
+set(CPACK_RPM_PACKAGE_REQUIRES "${CPACK_RPM_PACKAGE_REQUIRES}, libPocoXML48 >= 1.7.7")
+set(CPACK_RPM_PACKAGE_REQUIRES "${CPACK_RPM_PACKAGE_REQUIRES}, libPocoCrypto48 >= 1.7.7")
+set(CPACK_RPM_PACKAGE_REQUIRES "${CPACK_RPM_PACKAGE_REQUIRES}, libicu >= 50.1")
+set(CPACK_RPM_PACKAGE_REQUIRES "${CPACK_RPM_PACKAGE_REQUIRES}, unixODBC >= 2.3.1")
+set(CPACK_RPM_PACKAGE_REQUIRES "${CPACK_RPM_PACKAGE_REQUIRES}, postgresql-odbc")
+set(CPACK_RPM_PACKAGE_SUGGESTS "libjwt >= 1.8")
+list(APPEND CPACK_RPM_USER_FILELIST "%attr(0750,root,beeeon) /etc/beeeon/db")
+list(APPEND CPACK_RPM_USER_FILELIST "%attr(0755,root,beeeon) /etc/beeeon/server")
+list(APPEND CPACK_RPM_USER_FILELIST "%attr(0750,root,beeeon) /etc/beeeon/server/config.d")
+list(APPEND CPACK_RPM_USER_FILELIST "%attr(0640,root,beeeon) /etc/beeeon/server/config.d/*")
+list(APPEND CPACK_RPM_USER_FILELIST "%attr(0640,root,beeeon) /etc/beeeon/server/*.ini")
+list(APPEND CPACK_RPM_USER_FILELIST "%attr(0640,root,beeeon) /etc/beeeon/server/*.xml")
+set(CPACK_RPM_PRE_INSTALL_SCRIPT_FILE "${CMAKE_CURRENT_SOURCE_DIR}/dist/rpm/pre_install.sh")
+set(CPACK_RPM_POST_UNINSTALL_SCRIPT_FILE "${CMAKE_CURRENT_SOURCE_DIR}/dist/rpm/post_uninstall.sh")
+
+include(CPack)
+
+install(FILES conf/server-startup.ini
+	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon/server)
 install(FILES conf/restui-api.ini
-	DESTINATION etc/beeeon)
+	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon/server)
 install(DIRECTORY conf/config.d
-	DESTINATION etc/beeeon)
+	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon/server)
 install(FILES conf/devices.xml conf/types.xml
-	DESTINATION etc/beeeon)
+	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon/server)
 install(FILES db/server-queries.ini
-	DESTINATION etc/beeeon)
+	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon/db)
 install(DIRECTORY db/
 	DESTINATION share/beeeon/db
 	FILES_MATCHING
@@ -73,3 +125,9 @@ install(DIRECTORY db/
 install(DIRECTORY cert/
 	DESTINATION share/beeeon/cert
 	FILES_MATCHING PATTERN "*.pem")
+install(FILES dtd/types.dtd
+	DESTINATION share/beeeon/dtd)
+install(DIRECTORY res/
+	DESTINATION share/beeeon/res
+	FILES_MATCHING
+	PATTERN "res/beeeon_server/*.res")
