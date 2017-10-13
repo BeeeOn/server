@@ -300,11 +300,13 @@ HTTPRequestHandler *PocoRestRequestFactory::createWithSession(
 HTTPRequestHandler *PocoRestRequestFactory::createRequestHandler(
 		const HTTPServerRequest &request)
 {
-	if (logger().debug()) {
-		logger().debug("handling request "
+	if (logger().information()) {
+		logger().information("handling request "
 			+ request.getMethod()
 			+ " "
-			+ request.getURI(),
+			+ request.getURI()
+			+ " from "
+			+ request.clientAddress().toString(),
 			__FILE__, __LINE__);
 	}
 
