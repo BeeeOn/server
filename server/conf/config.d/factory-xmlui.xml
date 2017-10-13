@@ -9,10 +9,10 @@
 		<instance name="xmluiServer" class="BeeeOn::SocketServer">
 			<set name="connectionFactory" ref="xmluiFactory" />
 			<set name="sslConfig" ref="xmluiSSLServer" if-yes="${xmlui.ssl.enable}" />
-			<set name="backlog" number="64" />
-			<set name="maxThreads" number="64" />
-			<set name="maxQueued" number="64" />
-			<set name="threadIdleTime" time="8 s" />
+			<set name="backlog" number="${xmlui.backlog}" />
+			<set name="maxThreads" number="${xmlui.maxThreads}" />
+			<set name="maxQueued" number="${xmlui.maxQueued}" />
+			<set name="threadIdleTime" time="${xmlui.threadIdleTime}" />
 			<set name="threadPriority" text="normal" />
 			<set name="port" number="${xmlui.port}" />
 		</instance>

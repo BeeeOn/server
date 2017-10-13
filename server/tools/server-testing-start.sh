@@ -3,11 +3,12 @@
 test -z "${BIN_DIR}"  && BIN_DIR=build_x86/src
 test -z "${DB_DIR}"   && DB_DIR=db
 test -z "${CONF_DIR}" && CONF_DIR=conf
-test -z "${TARGET}"   && TARGET=xmlui-startup
+test -z "${TARGET}"   && TARGET=xmlui
 test -z "${TIMEOUT}"  && TIMEOUT=-1
+test -z "${STARTUP}"  && STARTUP="${CONF_DIR}/testing-startup.ini"
 
 BEEEON_SERVER=${BIN_DIR}/beeeon-server
-BEEEON_CONF="${CONF_DIR}/${TARGET}.ini"
+BEEEON_CONF="${STARTUP}"
 
 die()
 {
@@ -47,7 +48,7 @@ server_start()
 		server_start="timeout --preserve-status ${TIMEOUT}s ${BEEEON_SERVER}"
 	fi
 
-	${server_start} -c ${BEEEON_CONF} \
+	${server_start} -c ${BEEEON_CONF} -Dapplication.di.runner=${TARGET} \
 		-Ddatabase.host=${host}    \
 		-Ddatabase.port=${port}    \
 		-Ddatabase.user=${user}    \

@@ -71,8 +71,8 @@
 			<set name="connectionTimeout" time="${database.timeout}" />
 			<set name="features" text="${database.features}" />
 			<set name="maxSessions" number="${database.pool}" />
-			<add name="initializers" ref="sqitchDBInitializer" if-yes="${ui.debug}" />
-			<add name="initializers" ref="testDBInitializer" if-yes="${ui.debug}" />
+			<add name="initializers" ref="sqitchDBInitializer" if-yes="${testing.enable}" />
+			<add name="initializers" ref="testDBInitializer" if-yes="${testing.enable}" />
 		</instance>
 
 		<instance name="simpleDBInitializer" class="BeeeOn::PocoSimpleDBInitializer">

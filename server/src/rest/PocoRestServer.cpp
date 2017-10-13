@@ -1,10 +1,12 @@
 #include <Poco/Exception.h>
 #include <Poco/Net/HTTPServerParams.h>
+#include <Poco/Net/SecureServerSocket.h>
 
 #include "di/Injectable.h"
 #include "l10n/Translator.h"
 #include "l10n/NoTranslator.h"
 #include "server/SessionVerifier.h"
+#include "ssl/SSLServer.h"
 #include "rest/PocoRestRequestHandler.h"
 #include "rest/PocoRestServer.h"
 #include "rest/RestRouter.h"
@@ -15,6 +17,7 @@ BEEEON_OBJECT_REF("router", &PocoRestServer::setRouter)
 BEEEON_OBJECT_REF("sessionVerifier", &PocoRestServer::setSessionVerifier)
 BEEEON_OBJECT_REF("translatorFactory", &PocoRestServer::setTranslatorFactory)
 BEEEON_OBJECT_REF("localeManager", &PocoRestServer::setLocaleManager)
+BEEEON_OBJECT_REF("sslConfig", &PocoRestServer::setSSLConfig)
 BEEEON_OBJECT_NUMBER("port", &PocoRestServer::setPort)
 BEEEON_OBJECT_NUMBER("backlog", &PocoRestServer::setBacklog)
 BEEEON_OBJECT_NUMBER("minThreads", &PocoRestServer::setMinThreads)
@@ -35,12 +38,23 @@ PocoRestServer::PocoRestServer():
 {
 }
 
+void PocoRestServer::setSSLConfig(SharedPtr<SSLServer> config)
+{
+	m_sslConfig = config;
+}
+
 void PocoRestServer::initServerSocket()
 {
 	if (!m_socket.isNull())
 		return;
 
-	m_socket = new ServerSocket(m_port, m_backlog);
+	if (m_sslConfig.isNull()) {
+		m_socket = new ServerSocket(m_port, m_backlog);
+	}
+	else {
+		Context::Ptr context = m_sslConfig->context();
+		m_socket = new SecureServerSocket(m_port, m_backlog, context);
+	}
 }
 
 void PocoRestServer::initFactory()
