@@ -141,6 +141,12 @@ AutoPtr<Document> XmlRequestHandlerFactory::parseDocument(
 		xml += string(buffer.begin(), buffer.used());
 	} while(buffer.isFull() && xml.size() < m_maxLength);
 
+	if (xml.size() > m_maxLength) {
+		logger().notice("too long input: "
+				+ to_string(xml.size()) + " B",
+				__FILE__, __LINE__);
+	}
+
 	size_t length = xml.size() > m_maxLength? m_maxLength : xml.size();
 	return m_parser.parse(xml.c_str(), length);
 }
