@@ -69,6 +69,15 @@ TCPServerConnection *XmlRequestHandlerFactory::createConnection(
 {
 	try {
 		StreamSocket readableSocket(socket);
+
+		if (logger().information()) {
+			const SocketAddress &peer = readableSocket.peerAddress();
+			logger().information("accepting client "
+				+ peer.toString()
+				+ (readableSocket.secure()? " (secure)" : " (insecure)"),
+				__FILE__, __LINE__);
+		}
+
 		return resolveRequest(socket, parseDocument(readableSocket));
 	}
 	catch (const Exception &e) {
