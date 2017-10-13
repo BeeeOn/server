@@ -122,6 +122,20 @@ void PocoRestRequestHandler::handleRequest(
 		HTTPServerRequest &req,
 		HTTPServerResponse &res)
 {
+	Thread *current = Thread::current();
+	if (current != NULL)
+		current->setName("restui-" + req.clientAddress().toString());
+
+	doHandleRequest(req, res);
+
+	if (current != NULL)
+		current->setName("");
+}
+
+void PocoRestRequestHandler::doHandleRequest(
+		HTTPServerRequest &req,
+		HTTPServerResponse &res)
+{
 	if (logger().debug()) {
 		logger().debug("serving request "
 			+ req.getMethod()
