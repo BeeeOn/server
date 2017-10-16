@@ -13,7 +13,7 @@ using namespace BeeeOn;
 DevicesSAXHandler::DevicesSAXHandler()
 {
 	m_deviceExpect.insert("name");
-	m_deviceExpect.insert("manufacturer");
+	m_deviceExpect.insert("vendor");
 	m_deviceExpect.insert("match");
 	m_deviceExpect.insert("modules");
 
@@ -49,7 +49,7 @@ DevicesSAXHandler::DevicesSAXHandler()
 	m_constraintsExpect.insert("step");
 
 	m_contentElements.insert("name");
-	m_contentElements.insert("manufacturer");
+	m_contentElements.insert("vendor");
 	m_contentElements.insert("order");
 	m_contentElements.insert("group");
 	m_contentElements.insert("value");
@@ -237,7 +237,7 @@ void DevicesSAXHandler::endElement(const SAXElement &element)
 	if (isPathFromRoot("devices", "device", "name"))
 		m_device.setDisplayName(element.content);
 
-	if (isPathFromRoot("devices", "device", "manufacturer"))
+	if (isPathFromRoot("devices", "device", "vendor"))
 		m_device.setDisplayVendor(element.content);
 
 	if (isPathFromRoot("devices", "device")) {

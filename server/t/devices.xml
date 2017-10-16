@@ -3,7 +3,7 @@
 <devices>
 	<device id="0">
 		<name>T:DEV_TEMPERATURE_HUMIDITY</name>
-		<manufacturer>T:MANUFACTURER_BUT</manufacturer>
+		<vendor>T:MANUFACTURER_BUT</vendor>
 		<match>
 			<exact name="Temperature Humidity v1.0" vendor="BeeeOn" />
 		</match>
@@ -24,7 +24,7 @@
 
 	<device id="2">
 		<name>T:DEV_INTERNAL_PRESSURE</name>
-		<manufacturer>T:MANUFACTURER_BUT</manufacturer>
+		<vendor>T:MANUFACTURER_BUT</vendor>
 		<match>
 			<exact name="Internal Pressure v1.0" vendor="BeeeOn" />
 		</match>
@@ -35,7 +35,7 @@
 
 	<device id="3">
 		<name>T:DEV_VIRTUAL_THN</name>
-		<manufacturer>T:MANUFACTURER_VIRTUAL</manufacturer>
+		<vendor>T:MANUFACTURER_VIRTUAL</vendor>
 		<match>
 			<exact name="THN v1.0" vendor="Virtual" />
 		</match>
@@ -48,7 +48,7 @@
 
 	<device id="4">
 		<name>T:DEV_VIRTUAL_THN_X3</name>
-		<manufacturer>T:MANUFACTURER_VIRTUAL</manufacturer>
+		<vendor>T:MANUFACTURER_VIRTUAL</vendor>
 		<match>
 			<exact name="THNx3 v1.0" vendor="Virtual" />
 		</match>
