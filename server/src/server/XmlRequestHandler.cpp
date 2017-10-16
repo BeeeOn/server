@@ -36,7 +36,7 @@ void XmlRequestHandler::run()
 
 	Thread *current = Thread::current();
 	if (current != NULL)
-		current->setName("XmlRequestHandler");
+		current->setName("xmlui-" + socket().peerAddress().toString());
 
 	try {
 		m_output.startDocument();
@@ -46,6 +46,9 @@ void XmlRequestHandler::run()
 	} catch (const Exception &e) {
 		logger().log(e, __FILE__, __LINE__);
 	}
+
+	if (current != NULL)
+		current->setName("");
 }
 
 XmlRequestHandlerFactory::XmlRequestHandlerFactory():
@@ -69,6 +72,15 @@ TCPServerConnection *XmlRequestHandlerFactory::createConnection(
 {
 	try {
 		StreamSocket readableSocket(socket);
+
+		if (logger().information()) {
+			const SocketAddress &peer = readableSocket.peerAddress();
+			logger().information("accepting client "
+				+ peer.toString()
+				+ (readableSocket.secure()? " (secure)" : " (insecure)"),
+				__FILE__, __LINE__);
+		}
+
 		return resolveRequest(socket, parseDocument(readableSocket));
 	}
 	catch (const Exception &e) {
@@ -131,6 +143,12 @@ AutoPtr<Document> XmlRequestHandlerFactory::parseDocument(
 
 		xml += string(buffer.begin(), buffer.used());
 	} while(buffer.isFull() && xml.size() < m_maxLength);
+
+	if (xml.size() > m_maxLength) {
+		logger().notice("too long input: "
+				+ to_string(xml.size()) + " B",
+				__FILE__, __LINE__);
+	}
 
 	size_t length = xml.size() > m_maxLength? m_maxLength : xml.size();
 	return m_parser.parse(xml.c_str(), length);

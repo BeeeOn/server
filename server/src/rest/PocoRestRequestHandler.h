@@ -41,6 +41,10 @@ public:
 			Poco::Net::HTTPServerResponse &res) override;
 
 protected:
+	void doHandleRequest(
+			Poco::Net::HTTPServerRequest &req,
+			Poco::Net::HTTPServerResponse &res);
+
 	bool expectedContentLength(
 			Poco::Net::HTTPServerRequest &req,
 			Poco::Net::HTTPServerResponse &res);
