@@ -12,6 +12,21 @@ DeviceInfo::DeviceInfo(const DeviceInfo::ID &id):
 {
 }
 
+void DeviceInfo::addMatch(Match::Ptr match)
+{
+	m_match.push_back(match);
+}
+
+bool DeviceInfo::match(const string &name, const string &vendor) const
+{
+	for (const auto m : m_match) {
+		if (m->match(name, vendor))
+			return true;
+	}
+
+	return false;
+}
+
 void DeviceInfo::setName(const string &name)
 {
 	m_name = name;
@@ -74,4 +89,8 @@ bool DeviceInfo::lookup(ModuleInfo &module) const
 
 	module = *it;
 	return true;
+}
+
+DeviceInfo::Match::~Match()
+{
 }

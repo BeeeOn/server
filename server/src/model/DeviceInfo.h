@@ -1,8 +1,11 @@
 #ifndef BEEEON_DEVICE_INFO_H
 #define BEEEON_DEVICE_INFO_H
 
+#include <list>
 #include <string>
 #include <set>
+
+#include <Poco/SharedPtr.h>
 
 #include "model/Entity.h"
 #include "model/ModuleInfo.h"
@@ -14,6 +17,20 @@ class DeviceInfo : public Entity<SimpleID> {
 public:
 	DeviceInfo();
 	DeviceInfo(const DeviceInfo::ID &id);
+
+	class Match {
+	public:
+		typedef Poco::SharedPtr<Match> Ptr;
+
+		virtual ~Match();
+
+		virtual bool match(
+			const std::string &name,
+			const std::string &vendor) const = 0;
+	};
+
+	void addMatch(Match::Ptr match);
+	bool match(const std::string &name, const std::string &vendor) const;
 
 	void setName(const std::string &name);
 	const std::string &name() const;
@@ -47,6 +64,7 @@ private:
 	std::string m_displayName;
 	std::string m_vendor;
 	std::string m_displayVendor;
+	std::list<Match::Ptr> m_match;
 	std::set<ModuleInfo> m_modules;
 };
 
