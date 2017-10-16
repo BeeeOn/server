@@ -29,6 +29,19 @@ public:
 			const std::string &vendor) const = 0;
 	};
 
+	class MatchExact : public Match {
+	public:
+		MatchExact(const std::string &name, const std::string &vendor);
+
+		bool match(
+			const std::string &name,
+			const std::string &vendor) const override;
+
+	private:
+		std::string m_name;
+		std::string m_vendor;
+	};
+
 	void addMatch(Match::Ptr match);
 	bool match(const std::string &name, const std::string &vendor) const;
 

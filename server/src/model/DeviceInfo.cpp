@@ -94,3 +94,16 @@ bool DeviceInfo::lookup(ModuleInfo &module) const
 DeviceInfo::Match::~Match()
 {
 }
+
+DeviceInfo::MatchExact::MatchExact(
+		const string &name, const string &vendor):
+	m_name(name),
+	m_vendor(vendor)
+{
+}
+
+bool DeviceInfo::MatchExact::match(
+		const string &name, const string &vendor) const
+{
+	return m_name == name && m_vendor == vendor;
+}

@@ -175,8 +175,7 @@ void DevicesSAXHandler::startElement(
 		if (vendor.empty())
 			error("vendor value is empty");
 
-		m_device.setName(name);
-		m_device.setVendor(vendor);
+		m_device.addMatch(new DeviceInfo::MatchExact(name, vendor));
 	}
 
 	if (isPathFromRoot("devices", "device", "modules", "*")) {
@@ -241,7 +240,7 @@ void DevicesSAXHandler::endElement(const SAXElement &element)
 		m_device.setDisplayVendor(element.content);
 
 	if (isPathFromRoot("devices", "device")) {
-		if (m_device.name().empty())
+		if (m_device.displayName().empty())
 			error("missing name of device " + m_device);
 
 		if (m_result.find(m_device) != m_result.end())

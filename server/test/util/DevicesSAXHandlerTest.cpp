@@ -101,9 +101,8 @@ void DevicesSAXHandlerTest::testParseSimple()
 
 	for (auto device : *m_handler) {
 		if (device.id() == DeviceInfoID::parse("0x01")) {
-			CPPUNIT_ASSERT_EQUAL(string("@NAME1"), device.name());
+			CPPUNIT_ASSERT(device.match("@NAME1", "@VENDOR1"));
 			CPPUNIT_ASSERT_EQUAL(string("NAME1"), device.displayName());
-			CPPUNIT_ASSERT_EQUAL(string("@VENDOR1"), device.vendor());
 			CPPUNIT_ASSERT_EQUAL(string("VENDOR1"), device.displayVendor());
 
 			for (auto module : device) {
@@ -119,9 +118,8 @@ void DevicesSAXHandlerTest::testParseSimple()
 			}
 		}
 		else if (device.id() == DeviceInfoID::parse("0x02")) {
-			CPPUNIT_ASSERT_EQUAL(string("@NAME2"), device.name());
+			CPPUNIT_ASSERT(device.match("@NAME2", "@VENDOR2"));
 			CPPUNIT_ASSERT_EQUAL(string("NAME2"), device.displayName());
-			CPPUNIT_ASSERT_EQUAL(string("@VENDOR2"), device.vendor());
 			CPPUNIT_ASSERT_EQUAL(string("VENDOR2"), device.displayVendor());
 
 			for (auto module : device) {
@@ -152,9 +150,8 @@ void DevicesSAXHandlerTest::testParseSimple()
 			}
 		}
 		else if (device.id() == DeviceInfoID::parse("0x03")) {
-			CPPUNIT_ASSERT_EQUAL(string("@NAME3"), device.name());
+			CPPUNIT_ASSERT(device.match("@NAME3", "@VENDOR3"));
 			CPPUNIT_ASSERT_EQUAL(string("NAME3"), device.displayName());
-			CPPUNIT_ASSERT_EQUAL(string("@VENDOR3"), device.vendor());
 			CPPUNIT_ASSERT_EQUAL(string("VENDOR3"), device.displayVendor());
 
 			for (auto module : device) {
