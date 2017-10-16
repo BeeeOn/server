@@ -1,9 +1,12 @@
 <?warn This file is intended for testing only?>
 
 <devices>
-	<device id="0" name="Temperature Humidity v1.0" vendor="BeeeOn">
+	<device id="0">
 		<name>T:DEV_TEMPERATURE_HUMIDITY</name>
 		<manufacturer>T:MANUFACTURER_BUT</manufacturer>
+		<match>
+			<exact name="Temperature Humidity v1.0" vendor="BeeeOn" />
+		</match>
 		<modules>
 			<sensor id="0" type="19">
 				<name>room_temperature</name>
@@ -19,17 +22,23 @@
 		</modules>
 	</device>
 
-	<device id="2" name="Internal Pressure v1.0" vendor="BeeeOn">
+	<device id="2">
 		<name>T:DEV_INTERNAL_PRESSURE</name>
 		<manufacturer>T:MANUFACTURER_BUT</manufacturer>
+		<match>
+			<exact name="Internal Pressure v1.0" vendor="BeeeOn" />
+		</match>
 		<modules>
 			<sensor id="0" type="15" />
 		</modules>
 	</device>
 
-	<device id="3" name="THN v1.0" vendor="Virtual">
+	<device id="3">
 		<name>T:DEV_VIRTUAL_THN</name>
 		<manufacturer>T:MANUFACTURER_VIRTUAL</manufacturer>
+		<match>
+			<exact name="THN v1.0" vendor="Virtual" />
+		</match>
 		<modules>
 			<sensor id="0" type="19" />
 			<sensor id="1" type="8" />
@@ -37,9 +46,12 @@
 		</modules>
 	</device>
 
-	<device id="4" name="THNx3 v1.0" vendor="Virtual">
+	<device id="4">
 		<name>T:DEV_VIRTUAL_THN_X3</name>
 		<manufacturer>T:MANUFACTURER_VIRTUAL</manufacturer>
+		<match>
+			<exact name="THNx3 v1.0" vendor="Virtual" />
+		</match>
 		<modules>
 			<sensor id="0" type="19">
 				<group>zone_1</group>
