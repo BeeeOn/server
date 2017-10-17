@@ -82,7 +82,7 @@ void DevicesSAXHandlerTest::testParseSimple()
 			"    <name>NAME3</name>"
 			"    <vendor>VENDOR3</vendor>"
 			"    <match>"
-			"        <exact name=\"@NAME3\" vendor=\"@VENDOR3\" />"
+			"        <pattern name=\"@*\" vendor=\"@VENDOR3\" />"
 			"    </match>"
 			"    <modules>"
 			"      <sensor id=\"0x31\" type=\"0x03\" unavailable-value=\"0xffff\">"
@@ -151,6 +151,9 @@ void DevicesSAXHandlerTest::testParseSimple()
 		}
 		else if (device.id() == DeviceInfoID::parse("0x03")) {
 			CPPUNIT_ASSERT(device.match("@NAME3", "@VENDOR3"));
+			CPPUNIT_ASSERT(device.match("@NAME-any", "@VENDOR3"));
+			CPPUNIT_ASSERT(device.match("@any", "@VENDOR3"));
+			CPPUNIT_ASSERT(!device.match("NAME3", "@VENDOR3"));
 			CPPUNIT_ASSERT_EQUAL(string("NAME3"), device.displayName());
 			CPPUNIT_ASSERT_EQUAL(string("VENDOR3"), device.displayVendor());
 

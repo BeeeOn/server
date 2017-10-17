@@ -18,6 +18,7 @@ DevicesSAXHandler::DevicesSAXHandler()
 	m_deviceExpect.insert("modules");
 
 	m_matchExpect.insert("exact");
+	m_matchExpect.insert("pattern");
 
 	m_modulesExpect.insert("sensor");
 	m_modulesExpect.insert("actuator");
@@ -59,6 +60,7 @@ DevicesSAXHandler::DevicesSAXHandler()
 	m_contentElements.insert("step");
 	m_contentElements.insert("hide-module");
 	m_contentElements.insert("exact");
+	m_contentElements.insert("pattern");
 }
 
 DevicesSAXHandler::~DevicesSAXHandler()
@@ -177,6 +179,25 @@ void DevicesSAXHandler::startElement(
 
 		m_device.addMatch(new DeviceInfo::MatchExact(name, vendor));
 	}
+
+	if (isPathFromRoot("devices", "device", "match", "pattern")) {
+		XMLString name;
+		if (!getAndTrimAttribute(attrList, "name", name))
+			error("missing attribute name");
+
+		if (name.empty())
+			error("name value is empty");
+
+		XMLString vendor;
+		if (!getAndTrimAttribute(attrList, "vendor", vendor))
+			error("missing attribute vendor");
+
+		if (vendor.empty())
+			error("vendor value is empty");
+
+		m_device.addMatch(new DeviceInfo::MatchGlob(name, vendor));
+	}
+
 
 	if (isPathFromRoot("devices", "device", "modules", "*")) {
 		XMLString id;

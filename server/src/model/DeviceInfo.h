@@ -42,6 +42,19 @@ public:
 		std::string m_vendor;
 	};
 
+	class MatchGlob : public Match {
+	public:
+		MatchGlob(const std::string &name, const std::string &vendor);
+
+		bool match(
+			const std::string &name,
+			const std::string &vendor) const override;
+
+	private:
+		std::string m_name;
+		std::string m_vendor;
+	};
+
 	void addMatch(Match::Ptr match);
 	bool match(const std::string &name, const std::string &vendor) const;
 

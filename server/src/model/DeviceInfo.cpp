@@ -1,6 +1,9 @@
+#include <Poco/Glob.h>
+
 #include "model/DeviceInfo.h"
 
 using namespace std;
+using namespace Poco;
 using namespace BeeeOn;
 
 DeviceInfo::DeviceInfo()
@@ -106,4 +109,20 @@ bool DeviceInfo::MatchExact::match(
 		const string &name, const string &vendor) const
 {
 	return m_name == name && m_vendor == vendor;
+}
+
+DeviceInfo::MatchGlob::MatchGlob(
+		const string &name, const string &vendor):
+	m_name(name),
+	m_vendor(vendor)
+{
+}
+
+bool DeviceInfo::MatchGlob::match(
+		const string &name, const string &vendor) const
+{
+	Glob namePat(m_name);
+	Glob vendorPat(m_vendor);
+
+	return namePat.match(name) && vendorPat.match(vendor);
 }
