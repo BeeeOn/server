@@ -13,4 +13,19 @@
 			</sensor>
 		</modules>
 	</device>
+
+	<device id="10">
+		<name>Remote Switch</name>
+		<vendor>Belkin WeMo</vendor>
+
+		<match>
+			<exact name="Switch F7C027fr" vendor="Belkin WeMo" />
+		</match>
+
+		<modules>
+			<control id="0" type="13">
+				<name>On/Off</name>
+			</control>
+		</modules>
+	</device>
 </devices>
