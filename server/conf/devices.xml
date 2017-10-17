@@ -71,6 +71,24 @@
 		</modules>
 	</device>
 
+	<device id="12">
+		<name>Light Dimmer</name>
+		<vendor>Belkin WeMo</vendor>
+
+		<match>
+			<exact name="Dimmer" vendor="Belkin WeMo" />
+		</match>
+
+		<modules>
+			<control id="0" type="13">
+				<name>On/Off</name>
+			</control>
+			<control id="1" type="4">
+				<name>Brightness</name>
+			</control>
+		</modules>
+	</device>
+
 	<device id="20">
 		<name>VPT Boiler Control</name>
 		<vendor>Thermona</vendor>
