@@ -124,4 +124,19 @@
 			</control>
 		</modules>
 	</device>
+
+	<device id="30">
+		<name>Unknown Device</name>
+		<vendor>Unknown Vendor</vendor>
+
+		<match>
+			<pattern name="*" vendor="Bluetooth Availability" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="1">
+				<name>Available</name>
+			</sensor>
+		</modules>
+	</device>
 </devices>
