@@ -1,2 +1,16 @@
 <devices>
+	<device id="0">
+		<name>Pressure Sensor</name>
+		<vendor>BeeeOn</vendor>
+
+		<match>
+			<exact name="Air Pressure Sensor" vendor="BeeeOn" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="15">
+				<name>Pressure</name>
+			</sensor>
+		</modules>
+	</device>
 </devices>
