@@ -28,4 +28,22 @@
 			</control>
 		</modules>
 	</device>
+
+	<device id="11">
+		<name>Bulb</name>
+		<vendor>Belkin WeMo</vendor>
+
+		<match>
+			<exact name="Led Light Bulb" vendor="Belkin WeMo" />
+		</match>
+
+		<modules>
+			<control id="0" type="13">
+				<name>On/Off</name>
+			</control>
+			<control id="1" type="4">
+				<name>Brightness</name>
+			</control>
+		</modules>
+	</device>
 </devices>
