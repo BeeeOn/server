@@ -190,16 +190,12 @@ void GatewayCommunicator::handleConnectionReadable(GatewayConnection::Ptr connec
 		guard.unlock();
 
 		logger().notice(
-			"active connections: %d, "
-			"readable queue: %d, "
-			"thread pool allocated: %d, "
-			"available: %d, "
-			"capacity: %d",
-			connections,
-			m_connectionReadableQueue.size(),
-			pool().allocated(),
-			pool().available(),
-			pool().capacity());
+			"active connections: " + to_string(connections)
+			+ ", readable queue: " + to_string(m_connectionReadableQueue.size())
+			+ ", thread pool allocated: " + to_string(pool().allocated())
+			+ ", available: " + to_string(pool().available())
+			+ ", capacity: " + to_string(pool().capacity()),
+			__FILE__, __LINE__);
 	});
 
 	Thread::current()->setName("worker-" + connection->gatewayID().toString());
