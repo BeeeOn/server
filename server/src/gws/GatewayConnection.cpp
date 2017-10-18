@@ -23,7 +23,7 @@ GatewayConnection::GatewayConnection(
 {
 	if (logger().debug()) {
 		logger().debug("gateway " + m_gatewayID.toString()
-				+ " connection created");
+				+ " connection created", __FILE__, __LINE__);
 	}
 }
 
@@ -31,7 +31,7 @@ GatewayConnection::~GatewayConnection()
 {
 	if (logger().debug()) {
 		logger().debug("gateway " + m_gatewayID.toString()
-				+ " connection destroyed");
+				+ " connection destroyed", __FILE__, __LINE__);
 	}
 }
 
@@ -78,7 +78,7 @@ GWMessage::Ptr GatewayConnection::receiveMessage()
 
 	if (logger().debug()) {
 		logger().debug("data from gateway "
-				+ m_gatewayID.toString() + ":\n" + msg);
+				+ m_gatewayID.toString() + ":\n" + msg, __FILE__, __LINE__);
 	}
 
 	return GWMessage::fromJSON(msg);
@@ -92,7 +92,7 @@ void GatewayConnection::sendMessage(const GWMessage::Ptr message)
 
 	if (logger().debug()) {
 		logger().debug("message to gateway "
-				+ m_gatewayID.toString() + ":\n" + msg);
+				+ m_gatewayID.toString() + ":\n" + msg, __FILE__, __LINE__);
 	}
 
 	m_webSocket.sendFrame(msg.c_str(), msg.length());

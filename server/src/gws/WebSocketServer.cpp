@@ -92,13 +92,13 @@ void WebSocketServer::start()
 	m_server = createServer();
 
 	logger().information("starting WebSocket server on port: "
-			+ to_string(m_server->port()));
+			+ to_string(m_server->port()), __FILE__, __LINE__);
 
 	m_server->start();
 }
 
 void WebSocketServer::stop()
 {
-	logger().information("stopping WebSocket server");
+	logger().information("stopping WebSocket server", __FILE__, __LINE__);
 	m_server->stop();
 }

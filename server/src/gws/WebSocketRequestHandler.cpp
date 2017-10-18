@@ -27,8 +27,11 @@ void WebSocketRequestHandler::handleRequest(
 
 		int ret = ws.receiveFrame(buffer.begin(), buffer.size(), flags);
 		if (ret <= 0 || (flags & WebSocket::FRAME_OP_CLOSE)) {
-			if (logger().debug())
-				logger().debug(ws.peerAddress().toString() + " connection closed");
+			if (logger().debug()) {
+				logger().debug(ws.peerAddress().toString()
+					+ " connection closed",
+					__FILE__, __LINE__);
+			}
 			return;
 		}
 
@@ -42,7 +45,8 @@ void WebSocketRequestHandler::handleRequest(
 		if (registerMsg.isNull()) {
 			logger().warning("invalid message from "
 				+ ws.peerAddress().toString() + ":\n"
-				+ msg->toString());
+				+ msg->toString(),
+				__FILE__, __LINE__);
 			return;
 		}
 

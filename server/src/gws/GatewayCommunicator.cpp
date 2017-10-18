@@ -40,7 +40,7 @@ void GatewayCommunicator::addGateway(const GatewayID &gatewayID, WebSocket &webS
 	if (it != m_connectionMap.end()) {
 		if (logger().debug()) {
 			logger().debug("gateway " + gatewayID.toString()
-					+ " found, using new connection");
+					+ " found, using new connection", __FILE__, __LINE__);
 		}
 
 		it->second->removeFromReactor();
@@ -72,7 +72,8 @@ void GatewayCommunicator::removeGateway(const GatewayID &id)
 
 	auto it = m_connectionMap.find(id);
 	if (it == m_connectionMap.end()) {
-		logger().warning("gateway " + id.toString() + " not found");
+		logger().warning("gateway " + id.toString() + " not found",
+			__FILE__, __LINE__);
 		return;
 	}
 
@@ -87,7 +88,8 @@ void GatewayCommunicator::removeIfInactive(const GatewayID &id,
 
 	auto it = m_connectionMap.find(id);
 	if (it == m_connectionMap.end()) {
-		logger().warning("gateway " + id.toString() + " not found");
+		logger().warning("gateway " + id.toString() + " not found",
+			__FILE__, __LINE__);
 		return;
 	}
 
@@ -129,17 +131,17 @@ void GatewayCommunicator::stop()
 	m_stop = true;
 
 	m_reactor.stop();
-	logger().information("waiting to join reactor thread");
+	logger().information("waiting to join reactor thread", __FILE__, __LINE__);
 	m_reactorThread.join();
 
 	m_connectionReadableQueue.clear();
 
-	logger().information("waiting to join worker threads");
+	logger().information("waiting to join worker threads", __FILE__, __LINE__);
 	pool().joinAll();
 
 	FastMutex::ScopedLock guard(m_connectionMapMutex);
 	logger().notice("destroying " + to_string(m_connectionMap.size())
-			+ " active connections");
+			+ " active connections", __FILE__, __LINE__);
 
 	for (auto &it : m_connectionMap)
 		it.second->removeFromReactor();
@@ -190,16 +192,12 @@ void GatewayCommunicator::handleConnectionReadable(GatewayConnection::Ptr connec
 		guard.unlock();
 
 		logger().notice(
-			"active connections: %d, "
-			"readable queue: %d, "
-			"thread pool allocated: %d, "
-			"available: %d, "
-			"capacity: %d",
-			connections,
-			m_connectionReadableQueue.size(),
-			pool().allocated(),
-			pool().available(),
-			pool().capacity());
+			"active connections: " + to_string(connections)
+			+ ", readable queue: " + to_string(m_connectionReadableQueue.size())
+			+ ", thread pool allocated: " + to_string(pool().allocated())
+			+ ", available: " + to_string(pool().available())
+			+ ", capacity: " + to_string(pool().capacity()),
+			__FILE__, __LINE__);
 	});
 
 	Thread::current()->setName("worker-" + connection->gatewayID().toString());
