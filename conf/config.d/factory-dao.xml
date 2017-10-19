@@ -12,6 +12,7 @@
 
 		<instance name="deviceInfoProvider" class="BeeeOn::DeviceInfoProvider">
 			<set name="typeInfoProvider" ref="typeInfoProvider" />
+			<set name="enumInfoProvider" ref="enumInfoProvider" />
 			<set name="devicesFile" text="${spec.devices.xml}" />
 		</instance>
 
