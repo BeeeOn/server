@@ -19,6 +19,16 @@ const SharedPtr<TypeInfo> ModuleInfo::type() const
 	return m_type;
 }
 
+void ModuleInfo::setSubtype(const SharedPtr<EnumInfo> subtype)
+{
+	m_subtype = subtype;
+}
+
+const SharedPtr<EnumInfo> ModuleInfo::subtype() const
+{
+	return m_subtype;
+}
+
 void ModuleInfo::setClassName(const string &className)
 {
 	m_className = className;
