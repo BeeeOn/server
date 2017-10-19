@@ -291,11 +291,11 @@ void BeeeOn::RestUI::serialize(PrintHandler &output, const Device &device)
 	output.key("type");
 	output.startObject();
 	output.key("name");
-	output.value(device.type().get()->name());
+	output.value(device.type()->name());
 	output.key("display_name");
-	output.value(device.type().get()->name());
+	output.value(device.type()->name()); // TODO: localization
 	output.key("vendor");
-	output.value(device.type().get()->vendor());
+	output.value(device.type()->vendor());
 	output.key("family");
 	output.value(device.id().prefix().toString());
 	output.endObject();
