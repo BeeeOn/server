@@ -13,8 +13,12 @@ using namespace BeeeOn;
 DevicesSAXHandler::DevicesSAXHandler()
 {
 	m_deviceExpect.insert("name");
-	m_deviceExpect.insert("manufacturer");
+	m_deviceExpect.insert("vendor");
+	m_deviceExpect.insert("match");
 	m_deviceExpect.insert("modules");
+
+	m_matchExpect.insert("exact");
+	m_matchExpect.insert("pattern");
 
 	m_modulesExpect.insert("sensor");
 	m_modulesExpect.insert("actuator");
@@ -46,7 +50,7 @@ DevicesSAXHandler::DevicesSAXHandler()
 	m_constraintsExpect.insert("step");
 
 	m_contentElements.insert("name");
-	m_contentElements.insert("manufacturer");
+	m_contentElements.insert("vendor");
 	m_contentElements.insert("order");
 	m_contentElements.insert("group");
 	m_contentElements.insert("value");
@@ -55,6 +59,8 @@ DevicesSAXHandler::DevicesSAXHandler()
 	m_contentElements.insert("max");
 	m_contentElements.insert("step");
 	m_contentElements.insert("hide-module");
+	m_contentElements.insert("exact");
+	m_contentElements.insert("pattern");
 }
 
 DevicesSAXHandler::~DevicesSAXHandler()
@@ -72,6 +78,10 @@ bool DevicesSAXHandler::expectElement(const SAXElement &element) const
 	if (isPathFromRoot("devices", "device"))
 		return m_deviceExpect
 			.find(element.qName) != m_deviceExpect.end();
+
+	if (isPathFromRoot("devices", "device", "match"))
+		return m_matchExpect
+			.find(element.qName) != m_matchExpect.end();
 
 	if (isPathFromRoot("devices", "device", "modules"))
 		return m_modulesExpect
@@ -145,6 +155,14 @@ void DevicesSAXHandler::startElement(
 		if (id.empty())
 			error("id value is empty");
 
+
+		m_device.setId(DeviceInfoID::parse(id));
+		m_device.setName("");
+		m_device.setVendor("");
+		m_device.clear();
+	}
+
+	if (isPathFromRoot("devices", "device", "match", "exact")) {
 		XMLString name;
 		if (!getAndTrimAttribute(attrList, "name", name))
 			error("missing attribute name");
@@ -159,11 +177,27 @@ void DevicesSAXHandler::startElement(
 		if (vendor.empty())
 			error("vendor value is empty");
 
-		m_device.setId(DeviceInfoID::parse(id));
-		m_device.setName(name);
-		m_device.setVendor(vendor);
-		m_device.clear();
+		m_device.addMatch(new DeviceInfo::MatchExact(name, vendor));
 	}
+
+	if (isPathFromRoot("devices", "device", "match", "pattern")) {
+		XMLString name;
+		if (!getAndTrimAttribute(attrList, "name", name))
+			error("missing attribute name");
+
+		if (name.empty())
+			error("name value is empty");
+
+		XMLString vendor;
+		if (!getAndTrimAttribute(attrList, "vendor", vendor))
+			error("missing attribute vendor");
+
+		if (vendor.empty())
+			error("vendor value is empty");
+
+		m_device.addMatch(new DeviceInfo::MatchGlob(name, vendor));
+	}
+
 
 	if (isPathFromRoot("devices", "device", "modules", "*")) {
 		XMLString id;
@@ -223,11 +257,11 @@ void DevicesSAXHandler::endElement(const SAXElement &element)
 	if (isPathFromRoot("devices", "device", "name"))
 		m_device.setDisplayName(element.content);
 
-	if (isPathFromRoot("devices", "device", "manufacturer"))
+	if (isPathFromRoot("devices", "device", "vendor"))
 		m_device.setDisplayVendor(element.content);
 
 	if (isPathFromRoot("devices", "device")) {
-		if (m_device.name().empty())
+		if (m_device.displayName().empty())
 			error("missing name of device " + m_device);
 
 		if (m_result.find(m_device) != m_result.end())

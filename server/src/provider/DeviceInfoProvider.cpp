@@ -70,7 +70,7 @@ const SharedPtr<DeviceInfo> DeviceInfoProvider::findByNameAndVendor(
 		const std::string &name, const std::string &vendor) const
 {
 	for (auto info : infoSet()) {
-		if (info->name() == name && info->vendor() == vendor)
+		if (info->match(name, vendor))
 			return info;
 	}
 

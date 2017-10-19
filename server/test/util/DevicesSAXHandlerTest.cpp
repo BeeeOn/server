@@ -48,18 +48,24 @@ void DevicesSAXHandlerTest::testParseSimple()
 	CPPUNIT_ASSERT_NO_THROW(
 		m_parser.parseString(
 			"<devices>"
-			"  <device id=\"0x01\" name=\"@NAME1\" vendor=\"@VENDOR1\">"
+			"  <device id=\"0x01\">"
 			"    <name>NAME1</name>"
-			"    <manufacturer>VENDOR1</manufacturer>"
+			"    <vendor>VENDOR1</vendor>"
+			"    <match>"
+			"        <exact name=\"@NAME1\" vendor=\"@VENDOR1\" />"
+			"    </match>"
 			"    <modules>"
 			"      <sensor id=\"0x11\" type=\"0x01\">"
 			"        <name>SENSOR1</name>"
 			"      </sensor>"
 			"    </modules>"
 			"  </device>"
-			"  <device id=\"0x02\" name=\"@NAME2\" vendor=\"@VENDOR2\">"
+			"  <device id=\"0x02\">"
 			"    <name>NAME2</name>"
-			"    <manufacturer>VENDOR2</manufacturer>"
+			"    <vendor>VENDOR2</vendor>"
+			"    <match>"
+			"        <exact name=\"@NAME2\" vendor=\"@VENDOR2\" />"
+			"    </match>"
 			"    <modules>"
 			"      <sensor id=\"0x21\" type=\"0x02\">"
 			"        <name>SENSOR2</name>"
@@ -72,9 +78,12 @@ void DevicesSAXHandlerTest::testParseSimple()
 			"      </actuator>"
 			"    </modules>"
 			"  </device>"
-			"  <device id=\"0x03\" name=\"@NAME3\" vendor=\"@VENDOR3\">"
+			"  <device id=\"0x03\">"
 			"    <name>NAME3</name>"
-			"    <manufacturer>VENDOR3</manufacturer>"
+			"    <vendor>VENDOR3</vendor>"
+			"    <match>"
+			"        <pattern name=\"@*\" vendor=\"@VENDOR3\" />"
+			"    </match>"
 			"    <modules>"
 			"      <sensor id=\"0x31\" type=\"0x03\" unavailable-value=\"0xffff\">"
 			"        <name>SENSOR3</name>"
@@ -92,9 +101,8 @@ void DevicesSAXHandlerTest::testParseSimple()
 
 	for (auto device : *m_handler) {
 		if (device.id() == DeviceInfoID::parse("0x01")) {
-			CPPUNIT_ASSERT_EQUAL(string("@NAME1"), device.name());
+			CPPUNIT_ASSERT(device.match("@NAME1", "@VENDOR1"));
 			CPPUNIT_ASSERT_EQUAL(string("NAME1"), device.displayName());
-			CPPUNIT_ASSERT_EQUAL(string("@VENDOR1"), device.vendor());
 			CPPUNIT_ASSERT_EQUAL(string("VENDOR1"), device.displayVendor());
 
 			for (auto module : device) {
@@ -110,9 +118,8 @@ void DevicesSAXHandlerTest::testParseSimple()
 			}
 		}
 		else if (device.id() == DeviceInfoID::parse("0x02")) {
-			CPPUNIT_ASSERT_EQUAL(string("@NAME2"), device.name());
+			CPPUNIT_ASSERT(device.match("@NAME2", "@VENDOR2"));
 			CPPUNIT_ASSERT_EQUAL(string("NAME2"), device.displayName());
-			CPPUNIT_ASSERT_EQUAL(string("@VENDOR2"), device.vendor());
 			CPPUNIT_ASSERT_EQUAL(string("VENDOR2"), device.displayVendor());
 
 			for (auto module : device) {
@@ -143,9 +150,11 @@ void DevicesSAXHandlerTest::testParseSimple()
 			}
 		}
 		else if (device.id() == DeviceInfoID::parse("0x03")) {
-			CPPUNIT_ASSERT_EQUAL(string("@NAME3"), device.name());
+			CPPUNIT_ASSERT(device.match("@NAME3", "@VENDOR3"));
+			CPPUNIT_ASSERT(device.match("@NAME-any", "@VENDOR3"));
+			CPPUNIT_ASSERT(device.match("@any", "@VENDOR3"));
+			CPPUNIT_ASSERT(!device.match("NAME3", "@VENDOR3"));
 			CPPUNIT_ASSERT_EQUAL(string("NAME3"), device.displayName());
-			CPPUNIT_ASSERT_EQUAL(string("@VENDOR3"), device.vendor());
 			CPPUNIT_ASSERT_EQUAL(string("VENDOR3"), device.displayVendor());
 
 			for (auto module : device) {

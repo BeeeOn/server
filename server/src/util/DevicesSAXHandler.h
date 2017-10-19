@@ -37,6 +37,7 @@ protected:
 
 private:
 	std::set<Poco::XML::XMLString> m_deviceExpect;
+	std::set<Poco::XML::XMLString> m_matchExpect;
 	std::set<Poco::XML::XMLString> m_modulesExpect;
 	std::set<Poco::XML::XMLString> m_sensorExpect;
 	std::set<Poco::XML::XMLString> m_controlExpect;
