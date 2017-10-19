@@ -520,6 +520,11 @@ void BeeeOn::RestUI::serialize(Poco::JSON::PrintHandler &output,
 	output.key("type_id");
 	output.value(info.type()->id().toString());
 
+	if (!info.subtype().isNull()) {
+		output.key("subtype_id");
+		output.value(info.subtype()->id().toString());
+	}
+
 	if (!info.group().empty()) {
 		output.key("group");
 		output.value(translator.format(
@@ -581,6 +586,11 @@ void BeeeOn::RestUI::serialize(PrintHandler &output,
 
 	output.key("type_id");
 	output.value(info.type()->id().toString());
+
+	if (!info.subtype().isNull()) {
+		output.key("subtype_id");
+		output.value(info.subtype()->id().toString());
+	}
 
 	if (!info.group().empty()) {
 		output.key("group");
