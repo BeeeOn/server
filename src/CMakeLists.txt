@@ -162,6 +162,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/policy/PolicyContext.cpp
 	${PROJECT_SOURCE_DIR}/policy/UserPolicyContext.cpp
 	${PROJECT_SOURCE_DIR}/util/DevicesSAXHandler.cpp
+	${PROJECT_SOURCE_DIR}/util/EnumsSAXHandler.cpp
 	${PROJECT_SOURCE_DIR}/util/PocoStatementIntruder.cpp
 	${PROJECT_SOURCE_DIR}/util/Sanitize.cpp
 	${PROJECT_SOURCE_DIR}/util/Startup.cpp
