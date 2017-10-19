@@ -114,6 +114,7 @@
 
 		<instance name="uiTypeHandler" class="BeeeOn::RestUI::TypeRestHandler">
 			<set name="typeInfoProvider" ref="typeInfoProvider" />
+			<set name="enumInfoProvider" ref="enumInfoProvider" />
 		</instance>
 
 		<instance name="uiFCMTokenHandler" class="BeeeOn::RestUI::FCMTokenRestHandler">
