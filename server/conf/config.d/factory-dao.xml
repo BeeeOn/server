@@ -48,7 +48,7 @@
 			<set name="responseTimeout" time="${gateway-rpc.legacy.responseTimeout}" />
 		</instance>
 
-		<alias name="gatewayRPC" ref="fakeGatewayRPC" />
+		<alias name="gatewayRPC" ref="${gateway-rpc.type}GatewayRPC" />
 
 		<!-- Data access layer -->
 
