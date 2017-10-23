@@ -158,7 +158,7 @@ bool DefaultWorkFacade::fetch(Work &work, const PolicyContext &context)
 		Work::Ptr p = it->second;
 
 		m_accessPolicy->assure(
-			WorkAccessPolicy::ACTION_USER_CANCEL,
+			WorkAccessPolicy::ACTION_USER_GET,
 			context,
 			*p
 		);
