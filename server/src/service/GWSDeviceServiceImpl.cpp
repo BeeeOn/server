@@ -22,7 +22,10 @@ void GWSDeviceServiceImpl::setDeviceInfoProvider(DeviceInfoProvider::Ptr provide
 	m_deviceInfoProvider = provider;
 }
 
-bool GWSDeviceServiceImpl::doRegisterDevice(Device &device, const Gateway &gateway)
+bool GWSDeviceServiceImpl::doRegisterDevice(Device &device,
+		const string &name,
+		const string &vendor,
+		const Gateway &gateway)
 {
 	if (m_deviceDao->fetch(device, gateway)) {
 		device.setLastSeen(DateTime());
@@ -30,16 +33,13 @@ bool GWSDeviceServiceImpl::doRegisterDevice(Device &device, const Gateway &gatew
 		return m_deviceDao->update(device, gateway);
 	}
 	else {
+		device.setName(name);
+		device.setType(m_deviceInfoProvider->findByNameAndVendor(name, vendor));
+
 		device.setFirstSeen(DateTime());
 		device.setLastSeen(DateTime());
 
 		device.setActiveSince(Nullable<DateTime>());
-
-		auto id = device.type()->id();
-		if (m_deviceInfoProvider->findById(id).isNull()) {
-			throw InvalidArgumentException(
-				"bad device type " + id.toString());
-		}
 
 		return m_deviceDao->insert(device, gateway);
 	}
