@@ -205,6 +205,30 @@ void PocoRestRequestHandler::doHandleRequest(
 		}
 
 		call(flow);
+
+		if (logger().information()) {
+			logger().information("result of "
+				+ req.getMethod()
+				+ " "
+				+ req.getURI()
+				+ ": "
+				+ to_string(res.getStatus()),
+				__FILE__, __LINE__);
+		}
+
+		if (logger().trace()) {
+			for (const auto &pair : res) {
+				logger().trace(
+					pair.first
+					+ ": "
+					+ pair.second,
+					__FILE__, __LINE__);
+			}
+		}
+
+		if (!res.sent())
+			res.send();
+
 		return;
 	}
 	catch (const Exception &e) {
