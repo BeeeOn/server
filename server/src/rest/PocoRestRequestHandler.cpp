@@ -107,7 +107,7 @@ void PocoRestRequestHandler::prepareMappedAction(
 	if (action->caching() == 0) {
 		req.set("Cache-Control", "public, no-cache");
 	}
-	else {
+	else if (action->caching() > 0) {
 		const Timespan shift(action->caching(), 0);
 		const DateTime now;
 
