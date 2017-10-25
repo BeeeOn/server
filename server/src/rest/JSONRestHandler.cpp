@@ -65,18 +65,6 @@ RestHandler::Handler JSONRestHandler::wrapHandler(const Handler &handler)
 
 			response.impl().set("Content-Type", "application/json; charset=utf-8");
 			handler(flow);
-
-			if (logger().debug()) {
-				logger().debug("result of "
-					+ flow.uri().toString()
-					+ ": "
-					+ to_string(response.status()),
-					__FILE__, __LINE__);
-			}
-
-			if (!response.impl().sent())
-				response.impl().send();
-
 			return;
 		}
 		catch (const NotAuthenticatedException &e) {
