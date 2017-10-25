@@ -23,6 +23,9 @@
 			<set name="sessionManager" ref="sessionManager" />
 		</instance>
 
+		<instance name="uiFilterChain" class="BeeeOn::HTTPFilterChain">
+		</instance>
+
 		<instance name="uiRouter" class="BeeeOn::RestRouter">
 			<set name="apiName" text="restui" />
 			<set name="applicationName" text="BeeeOn Server" />
