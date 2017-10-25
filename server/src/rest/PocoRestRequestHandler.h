@@ -46,19 +46,19 @@ protected:
 			Poco::Net::HTTPServerResponse &res);
 
 	bool expectedContentLength(
-			Poco::Net::HTTPServerRequest &req,
+			const Poco::Net::HTTPServerRequest &req,
 			Poco::Net::HTTPServerResponse &res);
 
 	std::string asString(const MappedRestAction::Params &params) const;
 
 	void prepareInternalAction(
-			RestAction::Ptr action,
-			Poco::Net::HTTPServerRequest &req,
+			const RestAction::Ptr action,
+			const Poco::Net::HTTPServerRequest &req,
 			Poco::Net::HTTPServerResponse &res) const;
 
 	void prepareMappedAction(
-			MappedRestAction::Ptr action,
-			Poco::Net::HTTPServerRequest &req,
+			const MappedRestAction::Ptr action,
+			const Poco::Net::HTTPServerRequest &req,
 			Poco::Net::HTTPServerResponse &res) const;
 
 private:

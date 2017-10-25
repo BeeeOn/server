@@ -38,7 +38,7 @@ PocoRestRequestHandler::PocoRestRequestHandler(
 }
 
 bool PocoRestRequestHandler::expectedContentLength(
-		HTTPServerRequest &req,
+		const HTTPServerRequest &req,
 		HTTPServerResponse &res)
 {
 	const string &method = req.getMethod();
@@ -92,16 +92,16 @@ string PocoRestRequestHandler::asString(const MappedRestAction::Params &params) 
 }
 
 void PocoRestRequestHandler::prepareInternalAction(
-		RestAction::Ptr action,
-		HTTPServerRequest &req,
+		const RestAction::Ptr action,
+		const HTTPServerRequest &req,
 		HTTPServerResponse &res) const
 {
 	res.set("Cache-Control", "public, no-cache");
 }
 
 void PocoRestRequestHandler::prepareMappedAction(
-		MappedRestAction::Ptr action,
-		HTTPServerRequest &req,
+		const MappedRestAction::Ptr action,
+		const HTTPServerRequest &req,
 		HTTPServerResponse &res) const
 {
 	if (action->caching() == 0) {
