@@ -19,14 +19,17 @@ public:
 	 * Register the given device to be owned by the given gateway.
 	 *
 	 * It is intended to use after discovering new devices on the gateway.
-	 * In case of repeated registration, device is just updated with new last
-	 * seen time.
+	 * Device type is recognized by the name + vendor combination. In case of
+	 * repeated registration, device is just updated with new last seen time.
 	 *
-	 * @throw InvalidArgumentException for invalid device type.
+	 * @throw InvalidArgumentException for invalid name + vendor combination.
 	 *
 	 * @return false if device update or insertion fails.
 	 */
-	virtual bool registerDevice(Device &device, const Gateway &gateway) = 0;
+	virtual bool registerDevice(Device &device,
+		const std::string &name,
+		const std::string &vendor,
+		const Gateway &gateway) = 0;
 
 	/**
 	 * Retrieve vector of all active devices owned by the given gateway,

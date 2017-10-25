@@ -5,6 +5,8 @@
 			<add name="runnables" ref="uiWorkScheduler" />
 			<add name="loops" ref="gatewayCommunicator" />
 			<add name="loops" ref="webSocketServer" />
+			<add name="loops" ref="responseExpectedQueue" />
+			<add name="loops" ref="asyncGatewayRPC" />
 			<add name="loops" ref="uiServer" />
 			<add name="loops" ref="xmluiServer" />
 		</instance>

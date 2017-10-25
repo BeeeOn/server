@@ -138,12 +138,16 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/gws/GatewayConnection.cpp
 	${PROJECT_SOURCE_DIR}/gws/GatewayCommunicator.cpp
 	${PROJECT_SOURCE_DIR}/gws/GWMessageHandler.cpp
+	${PROJECT_SOURCE_DIR}/gws/GWMessageHandlerImpl.cpp
+	${PROJECT_SOURCE_DIR}/gws/GWResponseExpectedQueue.cpp
+	${PROJECT_SOURCE_DIR}/gws/RPCForwarder.cpp
 	${PROJECT_SOURCE_DIR}/gws/WebSocketRequestHandler.cpp
 	${PROJECT_SOURCE_DIR}/gws/WebSocketServer.cpp
 	${PROJECT_SOURCE_DIR}/rpc/RPCConnector.cpp
 	${PROJECT_SOURCE_DIR}/rpc/SocketRPCConnector.cpp
 	${PROJECT_SOURCE_DIR}/rpc/GatewayRPC.cpp
 	${PROJECT_SOURCE_DIR}/rpc/GatewayRPCResult.cpp
+	${PROJECT_SOURCE_DIR}/rpc/AsyncGatewayRPC.cpp
 	${PROJECT_SOURCE_DIR}/rpc/FakeGatewayRPC.cpp
 	${PROJECT_SOURCE_DIR}/rpc/LegacyGatewayRPC.cpp
 	${PROJECT_SOURCE_DIR}/notification/NotificationDispatcher.cpp

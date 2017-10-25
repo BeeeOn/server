@@ -13,9 +13,13 @@ public:
 	void setDeviceDao(DeviceDao::Ptr dao);
 	void setDeviceInfoProvider(DeviceInfoProvider::Ptr provider);
 
-	bool registerDevice(Device &device, const Gateway &gateway) override
+	bool registerDevice(Device &device,
+			const std::string &name,
+			const std::string &vendor,
+			const Gateway &gateway) override
 	{
-		return BEEEON_TRANSACTION_RETURN(bool, doRegisterDevice(device, gateway));
+		return BEEEON_TRANSACTION_RETURN(bool,
+			doRegisterDevice(device, name, vendor, gateway));
 	}
 
 	void fetchActiveWithPrefix(std::vector<Device> &devices,
@@ -26,7 +30,10 @@ public:
 	}
 
 protected:
-	bool doRegisterDevice(Device &device, const Gateway &gateway);
+	bool doRegisterDevice(Device &device,
+			const std::string &name,
+			const std::string &vendor,
+			const Gateway &gateway);
 
 	void doFetchActiveWithPrefix(std::vector<Device> &devices,
 			const Gateway &gateway,
