@@ -67,7 +67,7 @@ void PocoRestServer::initFactory()
 	if (m_translatorFactory.isNull())
 		m_translatorFactory = new NoTranslatorFactory;
 
-	m_factory = new PocoRestRequestFactory(*m_router, *m_sessionVerifier, *m_translatorFactory, m_localeExtractor);
+	m_factory = new PocoRestRequestFactory(*m_router, *m_sessionVerifier, *m_translatorFactory, m_localeExtractor, m_filterChain);
 }
 
 void PocoRestServer::initHttpServer()

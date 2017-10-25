@@ -6,6 +6,7 @@
 
 #include "rest/MappedRestAction.h"
 #include "rest/RestAction.h"
+#include "server/HTTPFilterChain.h"
 #include "server/Session.h"
 #include "util/Loggable.h"
 
@@ -34,7 +35,8 @@ public:
 			ExpirableSession::Ptr session,
 			RestLinker &linker,
 			TranslatorFactory &factory,
-			HTTPLocaleExtractor &localeExtractor);
+			HTTPLocaleExtractor &localeExtractor,
+			HTTPFilterChain &filterChain);
 
 	void handleRequest(
 			Poco::Net::HTTPServerRequest &req,
@@ -68,6 +70,7 @@ private:
 	RestLinker &m_linker;
 	TranslatorFactory &m_translatorFactory;
 	HTTPLocaleExtractor &m_localeExtractor;
+	HTTPFilterChain &m_filterChain;
 };
 
 /**
@@ -76,7 +79,8 @@ private:
 class PocoRestRequestFactory : public Poco::Net::HTTPRequestHandlerFactory, Loggable {
 public:
 	PocoRestRequestFactory(RestRouter &router, SessionVerifier &verifier,
-			TranslatorFactory &factory, HTTPLocaleExtractor &localeExtractor);
+			TranslatorFactory &factory, HTTPLocaleExtractor &localeExtractor,
+			HTTPFilterChain::Ptr filterChain);
 
 	Poco::Net::HTTPRequestHandler *createRequestHandler(
 			const Poco::Net::HTTPServerRequest &request) override;
@@ -95,6 +99,7 @@ private:
 	SessionVerifier &m_sessionVerifier;
 	TranslatorFactory &m_translatorFactory;
 	HTTPLocaleExtractor &m_localeExtractor;
+	HTTPFilterChain::Ptr m_filterChain;
 };
 
 

@@ -27,13 +27,15 @@ PocoRestRequestHandler::PocoRestRequestHandler(
 		ExpirableSession::Ptr session,
 		RestLinker &linker,
 		TranslatorFactory &factory,
-		HTTPLocaleExtractor &localeExtractor):
+		HTTPLocaleExtractor &localeExtractor,
+		HTTPFilterChain &filterChain):
 	m_action(action),
 	m_params(params),
 	m_session(session),
 	m_linker(linker),
 	m_translatorFactory(factory),
-	m_localeExtractor(localeExtractor)
+	m_localeExtractor(localeExtractor),
+	m_filterChain(filterChain)
 {
 }
 
@@ -182,29 +184,32 @@ void PocoRestRequestHandler::doHandleRequest(
 	const auto &call = m_action->call();
 
 	try {
-		flow.setSession(m_session);
+		m_filterChain.applyChain(req, res);
+		if (!res.sent()) {
+			flow.setSession(m_session);
 
-		if (m_session.isNull()) {
-			string language = req.has("Accept-Language") ? req.get("Accept-Language") : "";
+			if (m_session.isNull()) {
+				string language = req.has("Accept-Language") ? req.get("Accept-Language") : "";
 
-			const Locale &httpLocale = m_localeExtractor.extract(language);
+				const Locale &httpLocale = m_localeExtractor.extract(language);
 
-			if (logger().debug())
-				logger().debug("resolved locale: " + httpLocale.toString());
+				if (logger().debug())
+					logger().debug("resolved locale: " + httpLocale.toString());
 
-			Translator::Ptr translator = m_translatorFactory.create(httpLocale);
-			flow.setTranslator(translator);
+				Translator::Ptr translator = m_translatorFactory.create(httpLocale);
+				flow.setTranslator(translator);
+			}
+			else {
+				Translator::Ptr translator = m_translatorFactory.create(m_session->locale());
+
+				if (logger().debug())
+					logger().debug("using user locale: " + m_session->locale().toString());
+
+				flow.setTranslator(translator);
+			}
+
+			call(flow);
 		}
-		else {
-			Translator::Ptr translator = m_translatorFactory.create(m_session->locale());
-
-			if (logger().debug())
-				logger().debug("using user locale: " + m_session->locale().toString());
-
-			flow.setTranslator(translator);
-		}
-
-		call(flow);
 
 		if (logger().information()) {
 			logger().information("result of "
@@ -254,11 +259,13 @@ PocoRestRequestFactory::PocoRestRequestFactory(
 		RestRouter &router,
 		SessionVerifier &verifier,
 		TranslatorFactory &factory,
-		HTTPLocaleExtractor &localeExtractor):
+		HTTPLocaleExtractor &localeExtractor,
+		HTTPFilterChain::Ptr filterChain):
 	m_router(router),
 	m_sessionVerifier(verifier),
 	m_translatorFactory(factory),
-	m_localeExtractor(localeExtractor)
+	m_localeExtractor(localeExtractor),
+	m_filterChain(filterChain)
 {
 }
 
@@ -282,7 +289,8 @@ HTTPRequestHandler *PocoRestRequestFactory::handleNoRoute(const HTTPServerReques
 		NULL,
 		static_cast<RestLinker &>(m_router),
 		m_translatorFactory,
-		m_localeExtractor
+		m_localeExtractor,
+		*m_filterChain
 	);
 }
 
@@ -303,7 +311,8 @@ HTTPRequestHandler *PocoRestRequestFactory::handleNoSession()
 		NULL,
 		static_cast<RestLinker &>(m_router),
 		m_translatorFactory,
-		m_localeExtractor
+		m_localeExtractor,
+		*m_filterChain
 	);
 }
 
@@ -331,7 +340,8 @@ HTTPRequestHandler *PocoRestRequestFactory::createWithSession(
 		session,
 		static_cast<RestLinker &>(m_router),
 		m_translatorFactory,
-		m_localeExtractor
+		m_localeExtractor,
+		*m_filterChain
 	);
 }
 
