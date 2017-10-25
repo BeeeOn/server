@@ -96,7 +96,7 @@ void PocoRestRequestHandler::prepareInternalAction(
 		HTTPServerRequest &req,
 		HTTPServerResponse &res) const
 {
-	req.set("Cache-Control", "public, no-cache");
+	res.set("Cache-Control", "public, no-cache");
 }
 
 void PocoRestRequestHandler::prepareMappedAction(
@@ -105,7 +105,7 @@ void PocoRestRequestHandler::prepareMappedAction(
 		HTTPServerResponse &res) const
 {
 	if (action->caching() == 0) {
-		req.set("Cache-Control", "public, no-cache");
+		res.set("Cache-Control", "public, no-cache");
 	}
 	else if (action->caching() > 0) {
 		const Timespan shift(action->caching(), 0);
