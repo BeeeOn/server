@@ -8,6 +8,7 @@
 
 		<instance name="uiServer" class="BeeeOn::PocoRestServer">
 			<set name="router" ref="uiRouter" />
+			<set name="filterChain" ref="uiFilterChain" />
 			<set name="sessionVerifier" ref="sessionVerifier" />
 			<set name="translatorFactory" ref="translatorFactory" />
 			<set name="localeManager" ref="localeManager" />
@@ -21,6 +22,19 @@
 
 		<instance name="sessionVerifier" class="BeeeOn::SessionVerifier">
 			<set name="sessionManager" ref="sessionManager" />
+		</instance>
+
+		<instance name="uiFilterChain" class="BeeeOn::HTTPFilterChain">
+			<add name="filters" ref="corsFilter" />
+		</instance>
+
+		<instance name="corsFilter" class="BeeeOn::CORSFilter">
+			<set name="requireOrigin" number="0" />
+			<set name="allowedOrigins" list="${restui.cors.origins}" />
+			<set name="allowedMethods" list="${restui.cors.methods}" />
+			<set name="allowedHeaders" list="${restui.cors.headers}" />
+			<set name="allowCredentials" number="1" />
+			<set name="preflightMaxAge" time="${restui.cors.maxAge}" />
 		</instance>
 
 		<instance name="uiRouter" class="BeeeOn::RestRouter">

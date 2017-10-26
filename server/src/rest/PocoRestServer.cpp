@@ -14,6 +14,7 @@
 BEEEON_OBJECT_BEGIN(BeeeOn, PocoRestServer)
 BEEEON_OBJECT_CASTABLE(StoppableLoop)
 BEEEON_OBJECT_REF("router", &PocoRestServer::setRouter)
+BEEEON_OBJECT_REF("filterChain", &PocoRestServer::setFilterChain)
 BEEEON_OBJECT_REF("sessionVerifier", &PocoRestServer::setSessionVerifier)
 BEEEON_OBJECT_REF("translatorFactory", &PocoRestServer::setTranslatorFactory)
 BEEEON_OBJECT_REF("localeManager", &PocoRestServer::setLocaleManager)
@@ -34,7 +35,8 @@ PocoRestServer::PocoRestServer():
 	m_port(80),
 	m_backlog(64),
 	m_router(NULL),
-	m_sessionVerifier(NULL)
+	m_sessionVerifier(NULL),
+	m_filterChain(new HTTPFilterChain)
 {
 }
 
@@ -65,7 +67,7 @@ void PocoRestServer::initFactory()
 	if (m_translatorFactory.isNull())
 		m_translatorFactory = new NoTranslatorFactory;
 
-	m_factory = new PocoRestRequestFactory(*m_router, *m_sessionVerifier, *m_translatorFactory, m_localeExtractor);
+	m_factory = new PocoRestRequestFactory(*m_router, *m_sessionVerifier, *m_translatorFactory, m_localeExtractor, m_filterChain);
 }
 
 void PocoRestServer::initHttpServer()
@@ -102,6 +104,11 @@ void PocoRestServer::stop()
 void PocoRestServer::setRouter(RestRouter *router)
 {
 	m_router = router;
+}
+
+void PocoRestServer::setFilterChain(HTTPFilterChain::Ptr filterChain)
+{
+	m_filterChain = filterChain;
 }
 
 void PocoRestServer::setSessionVerifier(SessionVerifier *verifier)

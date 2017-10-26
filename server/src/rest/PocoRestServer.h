@@ -9,6 +9,7 @@
 #include "l10n/Translator.h"
 #include "l10n/HTTPLocaleExtractor.h"
 #include "loop/StoppableLoop.h"
+#include "server/HTTPFilterChain.h"
 #include "util/HavingThreadPool.h"
 
 namespace BeeeOn {
@@ -37,6 +38,11 @@ public:
 	 * Set Rest router for this server.
 	 */
 	void setRouter(RestRouter *router);
+
+	/**
+	 * Set global filter chain applied to each request.
+	 */
+	void setFilterChain(HTTPFilterChain::Ptr filterChain);
 
 	/**
 	 * Set session verifier.
@@ -84,6 +90,7 @@ private:
 	Poco::SharedPtr<Poco::Net::HTTPServer> m_server;
 	TranslatorFactory::Ptr m_translatorFactory;
 	HTTPLocaleExtractor m_localeExtractor;
+	HTTPFilterChain::Ptr m_filterChain;
 };
 
 }
