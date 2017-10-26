@@ -55,10 +55,14 @@
 			<add name="handlers" ref="uiFCMTokenHandler" if-yes="${fcm.enable}" />
 			<add name="handlers" ref="uiTimeZoneHandler" />
 			<add name="handlers" ref="uiOAuth2Callback" />
+			<add name="handlers" ref="uiCPSPHandler" />
 		</instance>
 
 		<instance name="uiBuiltinHandler" class="BeeeOn::BuiltinRestHandler" />
 		<instance name="uiOAuth2Callback" class="BeeeOn::RestUI::OAuth2CallbackRestHandler" />
+
+		<instance name="uiCPSPHandler" class="BeeeOn::CPSPRestHandler">
+		</instance>
 
 		<instance name="uiAuthHandler" class="BeeeOn::AuthRestHandler">
 			<set name="authService" ref="authService" />
