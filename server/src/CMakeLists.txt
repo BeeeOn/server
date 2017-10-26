@@ -16,7 +16,6 @@ find_library (ICU_UC icuuc)
 find_library (JWT jwt)
 find_library (JANSSON jansson)
 
-set (CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -DBEEEON_SELECT_POCO")
 add_definitions(-std=c++11)
 
 file(GLOB SOURCES
