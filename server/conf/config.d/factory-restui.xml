@@ -61,7 +61,10 @@
 		<instance name="uiBuiltinHandler" class="BeeeOn::BuiltinRestHandler" />
 		<instance name="uiOAuth2Callback" class="BeeeOn::RestUI::OAuth2CallbackRestHandler" />
 
+		<instance name="testerIndex" class="BeeeOn::Tester::IndexHandler" />
+
 		<instance name="uiCPSPHandler" class="BeeeOn::CPSPRestHandler">
+			<add name="handlers" ref="testerIndex" />
 		</instance>
 
 		<instance name="uiAuthHandler" class="BeeeOn::AuthRestHandler">

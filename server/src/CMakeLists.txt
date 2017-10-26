@@ -278,9 +278,31 @@ if (POCO_ODBC)
 	list(APPEND RESTUI_SOURCES dao/poco/PocoODBCConnectorLoader.cpp)
 endif()
 
+find_program(CPSPC cpspc)
+
+file(GLOB WEB_TESTER_INDEX
+	${PROJECT_SOURCE_DIR}/tester/index.cpsp
+)
+
+file(GLOB WEB_TESTER_INDEX_DEPS
+)
+
+add_custom_command(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/index.cpp" "${CMAKE_CURRENT_BINARY_DIR}/index.h"
+	COMMAND ${CPSPC} -o "${CMAKE_CURRENT_BINARY_DIR}" "${WEB_TESTER_INDEX}"
+	MAIN_DEPENDENCY "${WEB_TESTER_INDEX}"
+	DEPENDS "${WEB_TESTER_INDEX_DEPS}"
+	WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+	COMMENT "preprocessing ${WEB_TESTER_INDEX}"
+	VERBATIM)
+
+set_source_files_properties("${CMAKE_CURRENT_BINARY_DIR}/index.cpp" PROPERTIES GENERATED 1)
+set_source_files_properties("${CMAKE_CURRENT_BINARY_DIR}/index.h" PROPERTIES GENERATED 1)
+list(APPEND SOURCES "${CMAKE_CURRENT_BINARY_DIR}/index.cpp")
+
 include_directories(
 	${PROJECT_SOURCE_DIR}
 	${CMAKE_SOURCE_DIR}/base/src
+	${CMAKE_CURRENT_BINARY_DIR}/tester
 )
 
 add_library(BeeeOnServer SHARED ${SOURCES})
