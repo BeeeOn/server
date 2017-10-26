@@ -1,2 +1,142 @@
 <devices>
+	<device id="0">
+		<name>Pressure Sensor</name>
+		<vendor>BeeeOn</vendor>
+
+		<match>
+			<exact name="Air Pressure Sensor" vendor="BeeeOn" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="15">
+				<name>Pressure</name>
+			</sensor>
+		</modules>
+	</device>
+
+	<device id="10">
+		<name>Remote Switch</name>
+		<vendor>Belkin WeMo</vendor>
+
+		<match>
+			<exact name="Switch F7C027fr" vendor="Belkin WeMo" />
+		</match>
+
+		<modules>
+			<control id="0" type="13">
+				<name>On/Off</name>
+			</control>
+		</modules>
+	</device>
+
+	<device id="11">
+		<name>Bulb</name>
+		<vendor>Belkin WeMo</vendor>
+
+		<match>
+			<exact name="Led Light Bulb" vendor="Belkin WeMo" />
+		</match>
+
+		<modules>
+			<control id="0" type="13">
+				<name>On/Off</name>
+			</control>
+			<control id="1" type="4">
+				<name>Brightness</name>
+			</control>
+		</modules>
+	</device>
+
+	<device id="20">
+		<name>VPT Boiler Control</name>
+		<vendor>Thermona</vendor>
+
+		<match>
+			<exact name="Boiler" vendor="Thermona" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="6">
+				<name>Status</name>
+			</sensor>
+			<sensor id="1" type="6">
+				<name>Mode</name>
+			</sensor>
+			<sensor id="2" type="19">
+				<name>Water Temperature</name>
+			</sensor>
+			<sensor id="3" type="19">
+				<name>Outer Temperature</name>
+			</sensor>
+			<sensor id="4" type="19">
+				<name>Avarage Outer Temperature</name>
+			</sensor>
+			<sensor id="5" type="14">
+				<name>Boiler Performance</name>
+			</sensor>
+			<sensor id="6" type="15">
+				<name>Boiler Pressure</name>
+			</sensor>
+			<sensor id="7" type="3">
+				<name>OpenTherm Fault Flags</name>
+			</sensor>
+			<sensor id="8" type="3">
+				<name>OpenTherm OEM Flags</name>
+			</sensor>
+		</modules>
+	</device>
+
+	<device id="21">
+		<name>VPT Zone Control</name>
+		<vendor>Thermona</vendor>
+
+		<match>
+			<pattern name="Zone ." vendor="Thermona" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="6">
+				<name>Operation Type</name>
+			</sensor>
+			<sensor id="1" type="6">
+				<name>Operation Mode</name>
+			</sensor>
+			<sensor id="2" type="19">
+				<name>Requested Room Temperature</name>
+			</sensor>
+			<sensor id="3" type="19">
+				<name>Room Temperature</name>
+			</sensor>
+			<sensor id="4" type="19">
+				<name>Requested Water Temperature</name>
+			</sensor>
+			<sensor id="5" type="19">
+				<name>Water Temperature</name>
+			</sensor>
+			<control id="6" type="19">
+				<name>Manual Requested Room Temperature</name>
+			</control>
+			<control id="7" type="19">
+				<name>Manual Requested Water Temperature</name>
+			</control>
+			<control id="8" type="19">
+				<name>Manual Requested TUV Temperature</name>
+			</control>
+		</modules>
+	</device>
+
+	<device id="30">
+		<name>Unknown Device</name>
+		<vendor>Unknown Vendor</vendor>
+
+		<match>
+			<pattern name="*" vendor="Bluetooth Availability" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="1">
+				<name>Available</name>
+			</sensor>
+		</modules>
+	</device>
 </devices>
