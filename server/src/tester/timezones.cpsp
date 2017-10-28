@@ -1,0 +1,129 @@
+<script>
+function timezonesApply(zone) {
+	$("#timezones-detail .id span").text(zone["id"]);
+	$("#timezones-detail .short-name span").text(zone["short_name"]);
+	$("#timezones-detail .display-name span").text(zone["display_name"]);
+
+	var utcOffset = zone["utc_offset"];
+	var dstOffset = zone["dst_offset"];
+	var dstInEffect = zone["dst_in_effect"];
+
+	$("#timezones-detail .utc-offset span").text(utcOffset);
+	$("#timezones-detail .dst-offset span").text(dstOffset);
+	$("#timezones-detail .dst-in-effect span").text(dstInEffect);
+
+	function number(n, digits) {
+		var x = 10;
+		var prefix = "";
+
+		for (var i = 1; i < digits; ++i) {
+			if (n < x)
+				prefix += "0";
+			else
+				break;
+
+			x *= 10;
+		}
+
+		return prefix + n;
+	}
+
+	function fmt(d, utc) {
+		return number(utc ? d.getUTCFullYear() : d.getFullYear(), 4)
+			+ "-"
+			+ number(utc ? d.getUTCMonth() : d.getMonth(), 2)
+			+ "-"
+			+ number(utc ? d.getUTCDate() : d.getDate(), 2)
+			+ " "
+			+ number(utc ? d.getUTCHours() : d.getHours(), 2)
+			+ ":"
+			+ number(utc ? d.getUTCMinutes() : d.getMinutes(), 2)
+			+ ":"
+			+ number(utc ? d.getUTCSeconds() : d.getUTCSeconds(), 2);
+	}
+
+	function fmtOffset(d) {
+		var offset = now.getTimezoneOffset();
+		var abs = offset < 0 ? -offset : offset;
+		var h = abs / 60;
+		var m = abs % 60;
+
+		return (offset < 0 ? "+" : "-") + number(h, 2) + ":" + number(m, 2);
+	}
+
+	var now = new Date();
+	$("#timezones-detail .time-utc span").text(fmt(now, true));
+	$("#timezones-detail .time-browser span").text(fmt(now, false) + " " + fmtOffset(now));
+
+	var inZone = new Date(
+		now.getTime()
+		+ utcOffset * 1000
+		+ (dstInEffect ? (dstOffset * 1000) : 0)
+	);
+	$("#timezones-detail .time-in-zone span").text(fmt(inZone, true));
+}
+
+tester.modules["timezones"] = function () {
+	$("#timezones-button").click(function () {
+		tester.get("/time/zones", "#timezones", function (data) {
+			$("#timezones-list .list").empty();
+			$("#timezones-list .list").append(
+				$("<option value='_invalid_'>Please, select</option>")		
+			);
+
+			for (i in data) {
+				var id = data[i]["id"];
+				var name = data[i]["display_name"];
+
+				var option = $("<option></option>");
+				option.text(name);
+				option.attr("value", id);
+				$("#timezones-list .list").append(option);
+
+				if (id == "Europe/Prague") {
+					option.prop('selected', 'selected');
+					timezonesApply(data[i]);
+				}
+			}
+
+			$("#timezones-list .list").change(function () {
+				var timezone = $("#timezones-list .list").val();
+
+				if (timezone == "__invalid__")
+					return;
+
+				tester.get("/time/zones/" + timezone, "#timezones", function (data) {
+					timezonesApply(data);
+				});
+			});
+		});
+	});
+};
+</script>
+
+<div id="timezones" class="module">
+	<h2>Time Zones Module</h2>
+
+	<div class="custom">
+		<button id="timezones-button">List Time Zones</button>
+		<div id="timezones-list">
+			<select class="list">
+				<option value="__invalid__">Please, select</option>
+			</select>
+		</div>
+
+		<div id="timezones-detail">
+			<p class="id">ID: <span></span></p>
+			<p class="short-name">Short name: <span></span></p>
+			<p class="display-name">Display name: <span></span></p>
+			<p class="utc-offset">UTC offset: <span></span></p>
+			<p class="dst-offset">DST offset: <span></span></p>
+			<p class="dst-in-effect">Daylight savings now: <span></span></p>
+			<p class="time-utc">Time in UTC: <span></span></p>
+			<p class="time-in-zone">Time in zone: <span></span></p>
+			<p class="time-browser">Browser Time: <span></span></p>
+		</div>
+	</div>
+	<div class="request"></div>
+	<div class="response"></div>
+</div>
