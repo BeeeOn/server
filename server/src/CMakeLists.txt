@@ -286,6 +286,7 @@ file(GLOB WEB_TESTER_INDEX
 
 file(GLOB WEB_TESTER_INDEX_DEPS
 	${PROJECT_SOURCE_DIR}/tester/login.cpsp
+	${PROJECT_SOURCE_DIR}/tester/profile.cpsp
 )
 
 add_custom_command(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/index.cpp" "${CMAKE_CURRENT_BINARY_DIR}/index.h"

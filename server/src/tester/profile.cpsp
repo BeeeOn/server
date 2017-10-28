@@ -1,0 +1,62 @@
+<script>
+tester.modules["profile"] = function () {
+	$("#profile-current-button").click(function () {
+		tester.get("/profiles/current", "#profile", function (data) {
+			$("#profile-current .first-name span")
+				.text(data["first_name"]);
+			$("#profile-current .last-name span")
+				.text(data["last_name"]);
+			$("#profile-current .email span")
+				.text(data["email"]);
+
+			$("#profile-current .provider span")
+				.text(data["provider_display_name"]);
+			$("#profile-current .provider span")
+				.attr("alt", data["provider"]);
+			$("#profile-current .provider span")
+				.attr("title", data["provider"]);
+
+			$("#profile-current .locale span")
+				.text(data["locale_display_name"] + " (" + data["locale"] + ")");
+
+			if (data["picture_url"]) {
+				var url = data["picture_url"];
+				$("#provider-current .picture").css("display", "block");
+				$("#provider-current .picture").css("background-image", url);
+			}
+			else {
+				$("#provider-current .picture").css("display", "inline");
+				$("#provider-current .picture").css("background-image", "");
+			}
+		});
+	});
+};
+</script>
+
+<div id="profile" class="module">
+	<h2>Profile Module</h2>
+
+	<div class="custom">
+		<button id="profile-current-button">Current Profile</button>
+		<div id="profile-current">
+			<span class="picture"></span>
+			<p class="first-name">
+			First name: <span></span>
+			</p>
+			<p class="last-name">
+			Last name: <span></span>
+			</p>
+			<p class="email">
+			E-mail: <span></span>
+			</p>
+			<p class="provider">
+			Provider: <span></span>
+			</p>
+			<p class="locale">
+			Locale: <span></span>
+			</p>
+		</div>
+	</div>
+	<div class="request"></div>
+	<div class="response"></div>
+</div>
