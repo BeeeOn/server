@@ -1,0 +1,34 @@
+<script>
+tester.modules["types"] = function () {
+	$("#types-list").click(function () {
+		tester.get("/types", "#types", function (data) {
+			$("#types-list .list").empty();
+
+			for (i in data) {
+				var id = data[i]["id"];
+				var name = data[i]["name"];
+				var li = $("<li class='type'></li>");
+				li.append($("<span class='name'></span>").text(name));
+				li.attr("title", id);
+				li.attr("alt", id);
+				$("#types-list .list").append(li);
+			}
+		});
+	});
+};
+</script>
+
+<div id="types" class="module">
+	<h2>Types Module</h2>
+
+	<div class="custom">
+		<button id="types-list">List Types</button>
+		<div id="types-list">
+			<h3>Types list</h3>
+			<ul class="list">
+			</ul>
+		</div>
+	</div>
+	<div class="request"></div>
+	<div class="response"></div>
+</div>
