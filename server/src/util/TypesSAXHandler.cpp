@@ -58,6 +58,7 @@ void TypesSAXHandler::startElement(
 		m_temp.setUnit("");
 		m_temp.setRange(TypeInfo::Range());
 		m_temp.setValues({});
+		m_temp.setLevels({});
 	}
 
 	if (isPathFromRoot("types", "type", "range")) {
