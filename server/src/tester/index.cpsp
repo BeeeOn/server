@@ -261,5 +261,6 @@ BEEEON_OBJECT_END(BeeeOn, Tester, IndexHandler)
 	<body onload="tester.init()">
 		<div id="tester-bearer">
 		</div>
+		<%@ include page="login.cpsp" %>
 	</body>
 </html>
