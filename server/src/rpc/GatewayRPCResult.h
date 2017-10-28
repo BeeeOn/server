@@ -37,8 +37,6 @@ public:
 	void setStatus(const Status status);
 	Status status() const;
 
-	static Status convert(const int value);
-
 protected:
 	~GatewayRPCResult();
 

@@ -1,5 +1,8 @@
+#include <string>
+
 #include "work/AbstractGatewayWork.h"
 
+using namespace std;
 using namespace Poco::JSON;
 using namespace BeeeOn;
 
@@ -20,12 +23,13 @@ AbstractGatewayWork::AbstractGatewayWork(Object::Ptr content):
 
 void AbstractGatewayWork::setResult(const GatewayRPCResult::Status status)
 {
-	json()->set("rpc_result", static_cast<int>(status));
+	json()->set("rpc_result", status.toString());
 }
 
 GatewayRPCResult::Status AbstractGatewayWork::result() const
 {
-	return GatewayRPCResult::convert(json()->getValue<int>("rpc_result"));
+	return GatewayRPCResult::Status::parse(
+			json()->getValue<string>("rpc_result"));
 }
 
 bool AbstractGatewayWork::hasResult() const
