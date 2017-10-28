@@ -1,8 +1,12 @@
 #ifndef SERVER_GATEWAY_RPC_RESULT_H
 #define SERVER_GATEWAY_RPC_RESULT_H
 
+#include <string>
+
 #include <Poco/AutoPtr.h>
 #include <Poco/RefCountedObject.h>
+
+#include "util/Enum.h"
 
 namespace BeeeOn {
 
@@ -13,14 +17,20 @@ class GatewayRPCResult : public Poco::RefCountedObject {
 public:
 	typedef Poco::AutoPtr<GatewayRPCResult> Ptr;
 
-	enum Status {
-		PENDING,
-		NOT_CONNECTED,
-		TIMEOUT,
-		ACCEPTED,
-		SUCCESS,
-		FAILED
+	struct StatusEnum {
+		enum Raw {
+			PENDING,
+			NOT_CONNECTED,
+			TIMEOUT,
+			ACCEPTED,
+			SUCCESS,
+			FAILED
+		};
+
+		static EnumHelper<Raw>::ValueMap &valueMap();
 	};
+
+	typedef Enum<GatewayRPCResult::StatusEnum> Status;
 
 	GatewayRPCResult();
 

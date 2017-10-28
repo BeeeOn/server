@@ -44,19 +44,19 @@ void GatewayScanWorkExecutor::processResult(Work::Ptr work, GatewayScanWork &con
 	}
 
 	switch (content.result()) {
-	case GatewayRPCResult::NOT_CONNECTED:
+	case GatewayRPCResult::Status::NOT_CONNECTED:
 		throw ConnectionAbortedException(
 			"failed to scan on gateway " + gateway);
 
-	case GatewayRPCResult::TIMEOUT:
+	case GatewayRPCResult::Status::TIMEOUT:
 		throw TimeoutException(
 			"failed to scan on gateway " + gateway);
 
-	case GatewayRPCResult::FAILED:
+	case GatewayRPCResult::Status::FAILED:
 		throw RuntimeException(
 			"failed to scan on gateway " + gateway);
 
-	case GatewayRPCResult::SUCCESS:
+	case GatewayRPCResult::Status::SUCCESS:
 		if (elapsed >= content.duration())
 			return;
 
@@ -104,8 +104,8 @@ void GatewayScanWorkExecutor::execute(Work::Ptr work)
 			}
 
 			switch (result->status()) {
-			case GatewayRPCResult::PENDING:
-			case GatewayRPCResult::ACCEPTED:
+			case GatewayRPCResult::Status::PENDING:
+			case GatewayRPCResult::Status::ACCEPTED:
 				// TODO persist
 				return; // no other action needed
 			default:

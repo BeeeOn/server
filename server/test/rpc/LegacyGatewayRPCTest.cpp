@@ -259,7 +259,7 @@ void LegacyGatewayRPCTest::testSendListenSuccess()
 	CPPUNIT_ASSERT(event.tryWait(5000));
 
 	CPPUNIT_ASSERT(!localResult.isNull());
-	CPPUNIT_ASSERT(localResult->status() == GatewayRPCResult::SUCCESS);
+	CPPUNIT_ASSERT(localResult->status() == GatewayRPCResult::Status::SUCCESS);
 	CPPUNIT_ASSERT_MESSAGE(
 		m_fakeAdaServerErrorMessage, !m_fakeAdaServerCrashed);
 }
@@ -287,7 +287,7 @@ void LegacyGatewayRPCTest::testSendListenFailResponse()
 	CPPUNIT_ASSERT(event.tryWait(5000));
 
 	CPPUNIT_ASSERT(!localResult.isNull());
-	CPPUNIT_ASSERT(localResult->status() == GatewayRPCResult::NOT_CONNECTED);
+	CPPUNIT_ASSERT(localResult->status() == GatewayRPCResult::Status::NOT_CONNECTED);
 	CPPUNIT_ASSERT_MESSAGE(
 		m_fakeAdaServerErrorMessage, !m_fakeAdaServerCrashed);
 }
@@ -311,7 +311,7 @@ void LegacyGatewayRPCTest::testSendListenSlowResponse()
 	CPPUNIT_ASSERT(event.tryWait(5000));
 
 	CPPUNIT_ASSERT(!localResult.isNull());
-	CPPUNIT_ASSERT(localResult->status() == GatewayRPCResult::SUCCESS);
+	CPPUNIT_ASSERT(localResult->status() == GatewayRPCResult::Status::SUCCESS);
 	CPPUNIT_ASSERT_MESSAGE(
 		m_fakeAdaServerErrorMessage, !m_fakeAdaServerCrashed);
 }
@@ -340,7 +340,7 @@ void LegacyGatewayRPCTest::testUnpairDeviceSuccess()
 	CPPUNIT_ASSERT(event.tryWait(5000));
 
 	CPPUNIT_ASSERT(!localResult.isNull());
-	CPPUNIT_ASSERT(localResult->status() == GatewayRPCResult::SUCCESS);
+	CPPUNIT_ASSERT(localResult->status() == GatewayRPCResult::Status::SUCCESS);
 	CPPUNIT_ASSERT_MESSAGE(
 		m_fakeAdaServerErrorMessage, !m_fakeAdaServerCrashed);
 }
@@ -369,7 +369,7 @@ void LegacyGatewayRPCTest::testUnpairDeviceMissingResponse()
 	CPPUNIT_ASSERT(event.tryWait(5000));
 
 	CPPUNIT_ASSERT(!localResult.isNull());
-	CPPUNIT_ASSERT(localResult->status() == GatewayRPCResult::TIMEOUT);
+	CPPUNIT_ASSERT(localResult->status() == GatewayRPCResult::Status::TIMEOUT);
 	CPPUNIT_ASSERT_MESSAGE(
 		m_fakeAdaServerErrorMessage, !m_fakeAdaServerCrashed);
 }
@@ -396,7 +396,7 @@ void LegacyGatewayRPCTest::testPingGatewaySuccess()
 	CPPUNIT_ASSERT(event.tryWait(5000));
 
 	CPPUNIT_ASSERT(!localResult.isNull());
-	CPPUNIT_ASSERT(localResult->status() == GatewayRPCResult::SUCCESS);
+	CPPUNIT_ASSERT(localResult->status() == GatewayRPCResult::Status::SUCCESS);
 	CPPUNIT_ASSERT_MESSAGE(
 		m_fakeAdaServerErrorMessage, !m_fakeAdaServerCrashed);
 }
@@ -423,7 +423,7 @@ void LegacyGatewayRPCTest::testPingGatewayCorruptedResponse()
 	CPPUNIT_ASSERT(event.tryWait(5000));
 
 	CPPUNIT_ASSERT(!localResult.isNull());
-	CPPUNIT_ASSERT(localResult->status() == GatewayRPCResult::FAILED);
+	CPPUNIT_ASSERT(localResult->status() == GatewayRPCResult::Status::FAILED);
 	CPPUNIT_ASSERT_MESSAGE(
 		m_fakeAdaServerErrorMessage, !m_fakeAdaServerCrashed);
 }

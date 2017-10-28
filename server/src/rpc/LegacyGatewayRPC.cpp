@@ -255,7 +255,7 @@ GatewayRPCResult::Ptr LegacyGatewayRPC::parseResponse(const string &response)
 	GatewayRPCResult::Ptr result = new GatewayRPCResult;
 
 	if (response.length() == 0) {
-		result->setStatus(GatewayRPCResult::TIMEOUT);
+		result->setStatus(GatewayRPCResult::Status::TIMEOUT);
 		return result;
 	}
 
@@ -269,16 +269,16 @@ GatewayRPCResult::Ptr LegacyGatewayRPC::parseResponse(const string &response)
 		errorCode = doc->documentElement()->getAttribute("errorCode");
 	} catch (const Exception &e) {
 		logger().log(e);
-		result->setStatus(GatewayRPCResult::FAILED);
+		result->setStatus(GatewayRPCResult::Status::FAILED);
 		return result;
 	}
 
 	if (errorCode == "0")
-		result->setStatus(GatewayRPCResult::SUCCESS);
+		result->setStatus(GatewayRPCResult::Status::SUCCESS);
 	else if (errorCode == "1" || errorCode == "2")
-		result->setStatus(GatewayRPCResult::NOT_CONNECTED);
+		result->setStatus(GatewayRPCResult::Status::NOT_CONNECTED);
 	else
-		result->setStatus(GatewayRPCResult::FAILED);
+		result->setStatus(GatewayRPCResult::Status::FAILED);
 
 	return result;
 }
