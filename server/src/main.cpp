@@ -1,6 +1,8 @@
 #include "util/About.h"
 #include "di/DIDaemon.h"
 
+#cmakedefine GIT_ID "@GIT_ID@"
+
 using namespace BeeeOn;
 
 int main(int argc, char **argv)

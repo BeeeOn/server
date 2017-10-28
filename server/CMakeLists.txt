@@ -16,8 +16,6 @@ else()
 		OUTPUT_VARIABLE GIT_ID)
 endif()
 
-add_definitions(-DGIT_ID="${GIT_ID}")
-
 exec_program(
 	"genrb"
 	${CMAKE_CURRENT_SOURCE_DIR}

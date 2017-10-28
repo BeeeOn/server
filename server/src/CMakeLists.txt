@@ -270,8 +270,11 @@ include_directories(
 add_library(BeeeOnServer SHARED ${SOURCES})
 add_library(BeeeOnWork SHARED ${WORK_SOURCES})
 
+file(GLOB MAIN_CPP main.cpp)
+configure_file(${MAIN_CPP} ${CMAKE_CURRENT_BINARY_DIR}/main.cpp)
+
 add_executable(beeeon-server
-	main.cpp
+	${CMAKE_CURRENT_BINARY_DIR}/main.cpp
 	${XMLUI_SOURCES}
 	${RESTUI_SOURCES}
 )
