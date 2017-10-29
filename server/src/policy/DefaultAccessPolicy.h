@@ -2,6 +2,7 @@
 #define BEEEON_DEFAULT_ACCESS_POLICY_H
 
 #include "policy/ControlAccessPolicy.h"
+#include "policy/FCMTokenAccessPolicy.h"
 #include "policy/GatewayAccessPolicy.h"
 #include "policy/IdentityAccessPolicy.h"
 #include "policy/LocationAccessPolicy.h"
@@ -11,6 +12,7 @@
 #include "policy/SensorHistoryAccessPolicy.h"
 #include "policy/WorkAccessPolicy.h"
 #include "dao/RoleInGatewayDao.h"
+#include "dao/FCMTokenDao.h"
 #include "dao/GatewayDao.h"
 #include "dao/LocationDao.h"
 #include "dao/DeviceDao.h"
@@ -27,7 +29,8 @@ class DefaultAccessPolicy :
 		public SensorAccessPolicy,
 		public SensorHistoryAccessPolicy,
 		public ControlAccessPolicy,
-		public WorkAccessPolicy {
+		public WorkAccessPolicy,
+		public FCMTokenAccessPolicy {
 public:
 	DefaultAccessPolicy();
 
@@ -112,6 +115,15 @@ public:
 		const WorkAccessPolicy::Action action,
 		const PolicyContext &context,
 		const Work &work) override;
+	void assure(
+		const FCMTokenAccessPolicy::Action action,
+		const PolicyContext &context,
+		const FCMToken &token) override;
+
+	void setFCMTokenDao(FCMTokenDao::Ptr dao)
+	{
+		m_fcmTokenDao = dao;
+	}
 
 	void setUserDao(UserDao *dao)
 	{
@@ -161,6 +173,7 @@ protected:
 
 private:
 	UserDao *m_userDao;
+	FCMTokenDao::Ptr m_fcmTokenDao;
 	GatewayDao *m_gatewayDao;
 	LocationDao *m_locationDao;
 	DeviceDao *m_deviceDao;

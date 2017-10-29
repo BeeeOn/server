@@ -7,6 +7,7 @@
 #include "work/Work.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, DefaultAccessPolicy)
+BEEEON_OBJECT_CASTABLE(FCMTokenAccessPolicy)
 BEEEON_OBJECT_CASTABLE(GatewayAccessPolicy)
 BEEEON_OBJECT_CASTABLE(IdentityAccessPolicy)
 BEEEON_OBJECT_CASTABLE(LocationAccessPolicy)
@@ -17,6 +18,7 @@ BEEEON_OBJECT_CASTABLE(SensorHistoryAccessPolicy)
 BEEEON_OBJECT_CASTABLE(ControlAccessPolicy)
 BEEEON_OBJECT_CASTABLE(WorkAccessPolicy)
 BEEEON_OBJECT_REF("userDao", &DefaultAccessPolicy::setUserDao)
+BEEEON_OBJECT_REF("fcmTokenDao", &DefaultAccessPolicy::setFCMTokenDao)
 BEEEON_OBJECT_REF("gatewayDao", &DefaultAccessPolicy::setGatewayDao)
 BEEEON_OBJECT_REF("locationDao", &DefaultAccessPolicy::setLocationDao)
 BEEEON_OBJECT_REF("deviceDao", &DefaultAccessPolicy::setDeviceDao)
@@ -479,6 +481,34 @@ void DefaultAccessPolicy::assure(
 	case WorkAccessPolicy::ACTION_USER_SCHEDULE:
 		// currently, anybody can schedule
 		break;
+
+	default:
+		throw InvalidAccessException("invalid action: " + to_string((int) action));
+	}
+}
+
+void DefaultAccessPolicy::assure(
+	const FCMTokenAccessPolicy::Action action,
+	const PolicyContext &context,
+	const FCMToken &token)
+{
+	FCMToken userToken(token);
+
+	switch (action) {
+	case FCMTokenAccessPolicy::ACTION_USER_REGISTER:
+		if (representsSelf(token.user(), context))
+			break;
+
+		throw InvalidAccessException(
+				"token " + token.id().toString() + " is inaccessible");
+
+	case FCMTokenAccessPolicy::ACTION_USER_UNREGISTER:
+		if (m_fcmTokenDao->fetch(userToken))
+			if (representsSelf(token.user(), context))
+				break;
+
+		throw InvalidAccessException(
+				"token " + token.id().toString() + " is inaccessible");
 
 	default:
 		throw InvalidAccessException("invalid action: " + to_string((int) action));

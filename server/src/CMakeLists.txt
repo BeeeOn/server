@@ -47,6 +47,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/AbstractModule.cpp
 	${PROJECT_SOURCE_DIR}/model/Control.cpp
 	${PROJECT_SOURCE_DIR}/model/DeviceInfo.cpp
+	${PROJECT_SOURCE_DIR}/model/FCMToken.cpp
 	${PROJECT_SOURCE_DIR}/model/Identity.cpp
 	${PROJECT_SOURCE_DIR}/model/ModuleInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/VerifiedIdentity.cpp
@@ -63,6 +64,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/TypeInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/User.cpp
 	${PROJECT_SOURCE_DIR}/dao/ControlDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/FCMTokenDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/UserDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/DeviceDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/DevicePropertyDao.cpp
@@ -99,6 +101,8 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/service/AuthServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/DeviceService.cpp
 	${PROJECT_SOURCE_DIR}/service/DeviceServiceImpl.cpp
+	${PROJECT_SOURCE_DIR}/service/FCMTokenService.cpp
+	${PROJECT_SOURCE_DIR}/service/FCMTokenServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/GWSDeviceService.cpp
 	${PROJECT_SOURCE_DIR}/service/GWSDeviceServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/GatewayService.cpp
@@ -121,6 +125,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/service/WorkService.cpp
 	${PROJECT_SOURCE_DIR}/service/WorkServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/policy/ControlAccessPolicy.cpp
+	${PROJECT_SOURCE_DIR}/policy/FCMTokenAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/GatewayAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/IdentityAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/LocationAccessPolicy.cpp
