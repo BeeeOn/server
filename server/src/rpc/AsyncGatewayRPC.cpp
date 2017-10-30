@@ -231,11 +231,11 @@ void AsyncGatewayRPC::processResult(const GatewayID &gatewayID,
 	const ResultCall &resultCall = it->second.resultCall;
 
 	switch (result->status()) {
-	case GatewayRPCResult::ACCEPTED:
+	case GatewayRPCResult::Status::ACCEPTED:
 		break;
-	case GatewayRPCResult::TIMEOUT:
-	case GatewayRPCResult::SUCCESS:
-	case GatewayRPCResult::FAILED:
+	case GatewayRPCResult::Status::TIMEOUT:
+	case GatewayRPCResult::Status::SUCCESS:
+	case GatewayRPCResult::Status::FAILED:
 		it->second.finalResultMissingTask->cancel();
 		m_resultCalls.erase(it);
 		break;

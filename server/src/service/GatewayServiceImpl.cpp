@@ -175,22 +175,22 @@ void GatewayServiceImpl::doPingGateway(Single<Gateway> &input)
 	while (1) {
 		event.wait();
 
-		switch (localResult->status()) {
-			case GatewayRPCResult::PENDING:
-			case GatewayRPCResult::ACCEPTED:
+		switch (localResult->status().raw()) {
+			case GatewayRPCResult::Status::PENDING:
+			case GatewayRPCResult::Status::ACCEPTED:
 				break;
-			case GatewayRPCResult::NOT_CONNECTED:
+			case GatewayRPCResult::Status::NOT_CONNECTED:
 				throw NotFoundException("gateway "
 						+ input.target().id().toString()
 						+ " is not connected");
-			case GatewayRPCResult::TIMEOUT:
+			case GatewayRPCResult::Status::TIMEOUT:
 				throw TimeoutException("no response from gateway "
 						+ input.target().id().toString());
-			case GatewayRPCResult::FAILED:
+			case GatewayRPCResult::Status::FAILED:
 				throw Exception("ping gateway "
 						+ input.target().id().toString()
 						+ "failed");
-			case GatewayRPCResult::SUCCESS:
+			case GatewayRPCResult::Status::SUCCESS:
 				return;
 		}
 	}

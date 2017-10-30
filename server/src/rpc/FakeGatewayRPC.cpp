@@ -68,7 +68,7 @@ void FakeGatewayRPC::sendListen(
 			__FILE__, __LINE__);
 
 	GatewayRPCResult::Ptr result = new GatewayRPCResult;
-	result->setStatus(GatewayRPCResult::SUCCESS);
+	result->setStatus(GatewayRPCResult::Status::SUCCESS);
 
 	m_executor->invoke([resultCall, result]()
 	{
@@ -90,7 +90,7 @@ void FakeGatewayRPC::unpairDevice(
 				+ device.id().toString(),
 				__FILE__, __LINE__);
 
-		result->setStatus(GatewayRPCResult::FAILED);
+		result->setStatus(GatewayRPCResult::Status::FAILED);
 
 		m_executor->invoke([resultCall, result]()
 		{
@@ -107,7 +107,7 @@ void FakeGatewayRPC::unpairDevice(
 				+ device.id().toString(),
 				__FILE__, __LINE__);
 
-		result->setStatus(GatewayRPCResult::FAILED);
+		result->setStatus(GatewayRPCResult::Status::FAILED);
 
 		m_executor->invoke([resultCall, result]()
 		{
@@ -117,7 +117,7 @@ void FakeGatewayRPC::unpairDevice(
 		return;
 	}
 
-	result->setStatus(GatewayRPCResult::SUCCESS);
+	result->setStatus(GatewayRPCResult::Status::SUCCESS);
 
 	m_executor->invoke([resultCall, result]()
 	{
@@ -133,7 +133,7 @@ void FakeGatewayRPC::pingGateway(
 			__FILE__, __LINE__);
 
 	GatewayRPCResult::Ptr result = new GatewayRPCResult;
-	result->setStatus(GatewayRPCResult::SUCCESS);
+	result->setStatus(GatewayRPCResult::Status::SUCCESS);
 
 	m_executor->invoke([resultCall, result]()
 	{
@@ -153,7 +153,7 @@ void FakeGatewayRPC::updateActor(
 			__FILE__, __LINE__);
 
 	GatewayRPCResult::Ptr result = new GatewayRPCResult;
-	result->setStatus(GatewayRPCResult::SUCCESS);
+	result->setStatus(GatewayRPCResult::Status::SUCCESS);
 
 	m_executor->invoke([resultCall, result]()
 	{

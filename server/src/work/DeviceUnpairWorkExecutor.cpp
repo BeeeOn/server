@@ -51,19 +51,19 @@ void DeviceUnpairWorkExecutor::processResult(Work::Ptr work, DeviceUnpairWork &c
 	Device device(content.deviceID());
 
 	switch (content.result()) {
-	case GatewayRPCResult::NOT_CONNECTED:
+	case GatewayRPCResult::Status::NOT_CONNECTED:
 		throw ConnectionAbortedException(
 			"failed to unpair device " + device + " on gateway " + gateway);
 
-	case GatewayRPCResult::TIMEOUT:
+	case GatewayRPCResult::Status::TIMEOUT:
 		throw TimeoutException(
 			"failed to unpair device " + device + " on gateway " + gateway);
 
-	case GatewayRPCResult::FAILED:
+	case GatewayRPCResult::Status::FAILED:
 		throw RuntimeException(
 			"failed to unpair device " + device + " on gateway " + gateway);
 
-	case GatewayRPCResult::SUCCESS:
+	case GatewayRPCResult::Status::SUCCESS:
 		return;
 
 	default:
@@ -109,8 +109,8 @@ void DeviceUnpairWorkExecutor::execute(Work::Ptr work)
 			}
 
 			switch (result->status()) {
-			case GatewayRPCResult::PENDING:
-			case GatewayRPCResult::ACCEPTED:
+			case GatewayRPCResult::Status::PENDING:
+			case GatewayRPCResult::Status::ACCEPTED:
 				// TODO persist
 				return; // no other action is needed
 			default:

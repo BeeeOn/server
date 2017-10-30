@@ -27,17 +27,17 @@ GatewayRPCResult::Status GatewayRPCResult::status() const
 	return m_status;
 }
 
-GatewayRPCResult::Status GatewayRPCResult::convert(const int value)
+EnumHelper<GatewayRPCResult::StatusEnum::Raw>::ValueMap
+	&GatewayRPCResult::StatusEnum::valueMap()
 {
-	switch (static_cast<Status>(value)) {
-	case PENDING:
-	case NOT_CONNECTED:
-	case TIMEOUT:
-	case ACCEPTED:
-	case SUCCESS:
-	case FAILED:
-		return static_cast<Status>(value);
-	default:
-		throw InvalidArgumentException("invalid status: " + to_string(value));
-	}
+	static EnumHelper<GatewayRPCResult::StatusEnum::Raw>::ValueMap valueMap = {
+		{GatewayRPCResult::StatusEnum::PENDING, "pending"},
+		{GatewayRPCResult::StatusEnum::NOT_CONNECTED, "not_connected"},
+		{GatewayRPCResult::StatusEnum::TIMEOUT, "timeout"},
+		{GatewayRPCResult::StatusEnum::ACCEPTED, "accepted"},
+		{GatewayRPCResult::StatusEnum::SUCCESS, "success"},
+		{GatewayRPCResult::StatusEnum::FAILED, "failed"},
+	};
+
+	return valueMap;
 }
