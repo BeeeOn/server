@@ -301,3 +301,24 @@ string Sanitize::base64(const string &bytes,
 
 	return base64;
 }
+
+static RegularExpression tokenRegex(
+	"[0-9a-zA-Z\\-_\\.:]+",
+	RegularExpression::RE_DOLLAR_ENDONLY  |
+	RegularExpression::RE_NO_AUTO_CAPTURE |
+	RegularExpression::RE_UTF8,
+	true
+);
+
+string Sanitize::token(const string &bytes,
+		const unsigned long sizeLimit,
+		const string &inputEncoding)
+{
+	const string text(Sanitize::encoding(bytes, sizeLimit, inputEncoding));
+
+	if (!match(tokenRegex, text))
+		throw InvalidArgumentException(
+			"unexpected content");
+
+	return text;
+}

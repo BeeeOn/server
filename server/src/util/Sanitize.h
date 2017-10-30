@@ -41,6 +41,11 @@ public:
 		 * size. Session IDs are not longer then 1024 characters.
 		 */
 		SIZE_LIMIT_BASE64 = 1024,
+		/**
+		 * Tokens used for authorization are typically 150-170 caracters long,
+		 * can expect longer tokens, depends on data stored in the token.
+		 */
+		SIZE_LIMIT_TOKEN = 280,
 	};
 
 	/**
@@ -113,6 +118,14 @@ public:
 	static std::string base64(const std::string &bytes,
 			const std::string &separators = "",
 			const unsigned long sizeLimit = SIZE_LIMIT_BASE64,
+			const std::string &inputEncoding = "UTF-8");
+
+	/**
+	 * Sanitize authorization token. Convert the contents to UTF-8
+	 * and allow only symbols: [0-9a-zA-Z\-\_\.\:]+.
+	 */
+	static std::string token(const std::string &bytes,
+			const unsigned long sizeLimit = SIZE_LIMIT_TOKEN,
 			const std::string &inputEncoding = "UTF-8");
 };
 

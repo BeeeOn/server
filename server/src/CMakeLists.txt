@@ -235,6 +235,7 @@ file(GLOB XMLUI_SOURCES
 	xmlui/XmlDevicePropertyDeserializer.cpp
 	xmlui/XmlRoleInGatewayDeserializer.cpp
 	xmlui/GatewayXmlHandler.cpp
+	xmlui/FCMTokenXmlHandler.cpp
 	xmlui/LocationXmlHandler.cpp
 	xmlui/ProfileXmlHandler.cpp
 	xmlui/DeviceXmlHandler.cpp
@@ -251,6 +252,7 @@ file(GLOB RESTUI_SOURCES
 	restui/JSONRoleInGatewayDeserializer.cpp
 	restui/ControlRestHandler.cpp
 	restui/DeviceRestHandler.cpp
+	restui/FCMTokenRestHandler.cpp
 	restui/LocationRestHandler.cpp
 	restui/ProfileRestHandler.cpp
 	restui/RestValueConsumer.cpp

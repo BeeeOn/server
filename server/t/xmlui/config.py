@@ -20,5 +20,10 @@ xmlui_session_per_user = 10
 gateway_id = "1284174504043136"
 tmp_gateway_id = "1780053541714013"
 
+fcm_token = (
+	"cxuhiaqxWxk:APA91bH-H8Gc690MjdlpMDX3Xc1BbhfuokwlZkIn"
+	"EuCsCvdwxUpTWGG0V8O_dD_Nx6qE42bjrdN4VONjPISnesoAHOXa"
+	"e3WyrccyjcoKJ9OM5QUbUdN1918FyNVWITiqERaQlj5bKMAk")
+
 PERMIT_LOGIN = xmlui.Login("permit", "joe.doe@example.org")
 PERMIT_LOGIN2 = xmlui.Login("permit", "john.smith@example.org")

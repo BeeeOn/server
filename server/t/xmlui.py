@@ -125,6 +125,36 @@ class Logout(Request):
 		Request.__init__(self, ns = "accounts",
 				type = "logout", sessionid = sessionid)
 
+class FCMTokenRegister(Request):
+	def __init__(self, fcmToken, sessionid, **kwargs):
+		Request.__init__(self, ns = "notifications",
+			type = "register", sessionid = sessionid)
+		self.fcmToken = fcmToken
+
+	def xml(self):
+		request = Request.xml(self)
+		fcmToken = xml.SubElement(request, "service")
+		fcmToken.set("id", self.fcmToken)
+		fcmToken.set("name", "fcm")
+
+		return request
+
+class FCMTokenUnregister(Request):
+	def __init__(self, fcmToken, sessionid):
+		Request.__init__(self, ns = "notifications",
+			type = "unregister", sessionid = sessionid)
+		self.fcmToken = fcmToken
+
+	def xml(self):
+		request = Request.xml(self)
+		fcmToken = xml.SubElement(request, "service")
+		fcmToken.set("id", self.fcmToken)
+		fcmToken.set("name", "fcm")
+
+		return request
+
+
+
 class GatewayRegister(Request):
 	def __init__(self, gateway, sessionid, **kwargs):
 		Request.__init__(self, ns = "gates",

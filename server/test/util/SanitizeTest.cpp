@@ -33,6 +33,7 @@ class SanitizeTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testSanitizeBase64);
 	CPPUNIT_TEST(testSanitizeBase64URL);
 	CPPUNIT_TEST(testSanitizeBase64Fragments);
+	CPPUNIT_TEST(testSanitizeToken);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testSanitizeSizeLimit();
@@ -50,6 +51,7 @@ public:
 	void testSanitizeBase64();
 	void testSanitizeBase64URL();
 	void testSanitizeBase64Fragments();
+	void testSanitizeToken();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SanitizeTest);
@@ -366,6 +368,44 @@ void SanitizeTest::testSanitizeBase64Fragments()
 	CPPUNIT_ASSERT_THROW(Sanitize::base64("0,\x00", ","), InvalidArgumentException);
 
 	CPPUNIT_ASSERT_EQUAL(string(""), Sanitize::base64("\x00,\x00", ","));
+}
+
+void SanitizeTest::testSanitizeToken()
+{
+	CPPUNIT_ASSERT_NO_THROW(Sanitize::token("0123456789"));
+	CPPUNIT_ASSERT_NO_THROW(Sanitize::token("abcdefghijklmnopqrstuvwxyz"));
+	CPPUNIT_ASSERT_NO_THROW(Sanitize::token("ABCDEFGHIJKLMNOPQRSTUVWXYZ"));
+	CPPUNIT_ASSERT_NO_THROW(Sanitize::token("-_.:"));
+
+	CPPUNIT_ASSERT_THROW(Sanitize::token(","), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::token(";"), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::token("<"), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::token(">"), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::token("\n"), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::token("\r"), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::token(" "), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::token("\t"), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(Sanitize::token("\0"), InvalidArgumentException);
+
+	// JWT HS256 example
+	CPPUNIT_ASSERT_NO_THROW(Sanitize::token(
+		"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+		"."
+		"eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9"
+		"."
+		"TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ"
+	));
+
+	// JWT RS256 example
+	CPPUNIT_ASSERT_NO_THROW(Sanitize::token(
+		"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9"
+		"."
+		"eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9"
+		"."
+		"EkN-DOsnsuRjRO6BxXemmJDm3HbxrbRzXglbN2S4sOkopdU4IsDxTI8jO19W_A4K8ZPJijN"
+		"Lis4EZsHeY559a4DFOd50_OqgHGuERTqYZyuhtF39yxJPAjUESwxk2J5k_4zM3O-vtd1Ghyo"
+		"4IbqKKSy6J9mTniYJPenn5-HIirE"
+	));
 }
 
 }

@@ -52,6 +52,7 @@
 			<add name="handlers" ref="uiSensorHandler" />
 			<add name="handlers" ref="uiControlHandler" />
 			<add name="handlers" ref="uiTypeHandler" />
+			<add name="handlers" ref="uiFCMTokenHandler" if-yes="${fcm.enable}" />
 		</instance>
 
 		<instance name="uiBuiltinHandler" class="BeeeOn::BuiltinRestHandler" />
@@ -100,6 +101,10 @@
 		<instance name="uiTypeHandler" class="BeeeOn::RestUI::TypeRestHandler">
 			<set name="typeInfoProvider" ref="typeInfoProvider" />
 			<set name="translatorFactory" ref="translatorFactory" />
+		</instance>
+
+		<instance name="uiFCMTokenHandler" class="BeeeOn::RestUI::FCMTokenRestHandler">
+			<set name="fcmTokenService" ref="fcmTokenService" />
 		</instance>
 	</factory>
 </system>
