@@ -1,3 +1,4 @@
+<script src="https://apis.google.com/js/api.js"></script>
 <script>
 function listLogins() {
 	tester.get("/auth", "#login", function (data) {
@@ -29,6 +30,33 @@ function listLogins() {
 
 				$("#login-method-permit").append(button);
 			}
+			else if (provider["name"] == "google" && provider["oauth2"]
+					&& provider["oauth2"]["redirect_uri"] == tester.selfURL()) {
+				var id = provider["id"];
+				var clientId = provider["oauth2"]["client_id"];
+				var displayName = provider["display_name"];
+
+				gapi.load('auth2', function () {
+					var button = $("<button id='google-signin'></button>");
+					button.text(displayName + " (" + id + ")");
+					button.click(function () {
+						var auth2 = gapi.auth2.init({
+							client_id: clientId,
+							scope: "email profile openid"
+						});
+
+						auth2.grantOfflineAccess({redirect_uri: tester.selfURL()})
+							.then(function (result) {
+								console.log(result);
+							});
+					});
+
+					var method = $("<div title='Will reset the page!'></div>");
+					$("#login .methods").append(method);
+
+					method.append(button);
+				});
+			}
 			else {
 				var name = $("<span class='method-name'></span>");
 				name.text(provider["display_name"] + " (" + provider["id"] + ")");
@@ -45,6 +73,35 @@ function listLogins() {
 }
 
 tester.modules["login"] = function () {
+	if (window.location.hash) {
+		var hash = window.location.hash;
+		code = hash.match(/code=([^&]+)&/)[1];
+
+		tester.get("/auth", "#login", function (data) {
+			for (i in data) {
+				var provider = data[i];
+				if (!provider["oauth2"])
+					continue;
+
+				if (provider["oauth2"]["redirect_uri"] != tester.selfURL())
+					continue;
+
+				console.log("login via " + provider["id"]);
+
+				tester.post("/auth", "#login", {
+					provider: provider["id"],
+					code: code
+				}, function (data) {
+					tester.installBearer(data["id"]);
+				});
+
+				break;
+			}
+
+			window.location.hash = "";
+		})
+	}
+
 	$("#login-list-button").click(function () {
 		listLogins();
 	});
