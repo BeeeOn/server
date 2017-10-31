@@ -11,6 +11,7 @@ public:
 	void setFacade(WorkFacade::Ptr facade);
 
 	bool fetch(Single<Work> &input) override;
+	void list(Single<std::list<Work>> &input) override;
 	void cancel(Single<Work> &input) override;
 	void remove(Single<Work> &input) override;
 
