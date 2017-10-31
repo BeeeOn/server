@@ -13,6 +13,7 @@ public:
 
 	void setWorkService(WorkService::Ptr service);
 
+	void list(RestFlow &flow);
 	void detail(RestFlow &flow);
 	void update(RestFlow &flow);
 	void remove(RestFlow &flow);

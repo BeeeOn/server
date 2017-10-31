@@ -46,6 +46,7 @@ void serialize(Poco::JSON::PrintHandler &output, const LegacyRoleInGateway &role
 void serialize(Poco::JSON::PrintHandler  &output, const std::vector <RoleInGateway> &roles);
 
 void serialize(Poco::JSON::PrintHandler &output, const Work &work);
+void serialize(Poco::JSON::PrintHandler &output, const std::list<Work> &works);
 
 void serialize(Poco::JSON::PrintHandler &output, const Device &device);
 void serialize(Poco::JSON::PrintHandler &output,

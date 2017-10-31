@@ -2,6 +2,7 @@
 #define BEEEON_DEFAULT_WORK_FACADE_H
 
 #include <map>
+#include <set>
 
 #include <Poco/RWLock.h>
 #include <Poco/SharedPtr.h>
@@ -24,6 +25,7 @@ public:
 	void wakeup(Work &work, const PolicyContext &context) override;
 	void cancel(Work &work, const PolicyContext &context) override;
 	bool fetch(Work &work, const PolicyContext &context) override;
+	void fetch(std::set<Work> &works, const PolicyContext &context) override;
 	bool remove(const Work &work, const PolicyContext &context) override;
 
 	void setScheduler(WorkScheduler::Ptr scheduler);

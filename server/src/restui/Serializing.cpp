@@ -246,6 +246,16 @@ void BeeeOn::RestUI::serialize(PrintHandler &output, const Work &work)
 	output.endObject();
 }
 
+void BeeeOn::RestUI::serialize(PrintHandler &output, const list<Work> &works)
+{
+	output.startArray();
+
+	for (auto &work : works)
+		serialize(output, work);
+
+	output.endArray();
+}
+
 void BeeeOn::RestUI::serialize(PrintHandler &output, const Device &device)
 {
 	output.startObject();

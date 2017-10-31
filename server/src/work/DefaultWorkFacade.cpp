@@ -13,6 +13,7 @@ BEEEON_OBJECT_REF("lockManager", &DefaultWorkFacade::setLockManager)
 BEEEON_OBJECT_REF("accessPolicy", &DefaultWorkFacade::setAccessPolicy)
 BEEEON_OBJECT_END(BeeeOn, DefaultWorkFacade)
 
+using namespace std;
 using namespace Poco;
 using namespace BeeeOn;
 
@@ -158,7 +159,7 @@ bool DefaultWorkFacade::fetch(Work &work, const PolicyContext &context)
 		Work::Ptr p = it->second;
 
 		m_accessPolicy->assure(
-			WorkAccessPolicy::ACTION_USER_CANCEL,
+			WorkAccessPolicy::ACTION_USER_GET,
 			context,
 			*p
 		);
@@ -168,6 +169,28 @@ bool DefaultWorkFacade::fetch(Work &work, const PolicyContext &context)
 	}
 
 	return false;
+}
+
+void DefaultWorkFacade::fetch(set<Work> &works, const PolicyContext &context)
+{
+	RWLock::ScopedReadLock guard(m_lock);
+
+	for (const auto &pair : m_storage) {
+		Work::Ptr p = pair.second;
+		WorkReadGuard guard(m_lockManager->readOnly(p->id()));
+
+		try {
+			m_accessPolicy->assure(
+				WorkAccessPolicy::ACTION_USER_GET,
+				context,
+				*p
+			);
+		} catch (...) {
+			continue; // just skip if inaccessible
+		}
+
+		works.emplace(*p);
+	}
 }
 
 bool DefaultWorkFacade::remove(const Work &work, const PolicyContext &context)

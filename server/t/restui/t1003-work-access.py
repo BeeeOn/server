@@ -35,7 +35,7 @@ class TestWorkAccess(unittest.TestCase):
 	Reading any non-existing work leads to 404.
 	"""
 	def test1_get_non_existing(self):
-		req = GET(config.ui_host, config.ui_port, "/work/4891a1ec-2939-49f8-9207-4ea9f0499934")
+		req = GET(config.ui_host, config.ui_port, "/works/4891a1ec-2939-49f8-9207-4ea9f0499934")
 		req.authorize(self.session)
 
 		response, content = req()
@@ -47,7 +47,7 @@ class TestWorkAccess(unittest.TestCase):
 	Canceling any non-existing work leads to 404.
 	"""
 	def test2_cancel_non_existing(self):
-		req = PUT(config.ui_host, config.ui_port, "/work/4891a1ec-2939-49f8-9207-4ea9f0499934")
+		req = PUT(config.ui_host, config.ui_port, "/works/4891a1ec-2939-49f8-9207-4ea9f0499934")
 		req.authorize(self.session)
 		req.body(json.dumps({
 			"status": "canceled"
@@ -62,7 +62,7 @@ class TestWorkAccess(unittest.TestCase):
 	Remove any non-existing work leads to 404.
 	"""
 	def test3_remove_non_existing(self):
-		req = DELETE(config.ui_host, config.ui_port, "/work/4891a1ec-2939-49f8-9207-4ea9f0499934")
+		req = DELETE(config.ui_host, config.ui_port, "/works/4891a1ec-2939-49f8-9207-4ea9f0499934")
 		req.authorize(self.session)
 
 		response, content = req()

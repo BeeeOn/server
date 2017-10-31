@@ -1,3 +1,5 @@
+#include <set>
+
 #include <Poco/Exception.h>
 
 #include "di/Injectable.h"
@@ -19,6 +21,14 @@ void WorkServiceImpl::setFacade(WorkFacade::Ptr facade)
 bool WorkServiceImpl::fetch(Single<Work> &input)
 {
 	return m_facade->fetch(input.target(), input);
+}
+
+void WorkServiceImpl::list(Single<std::list<Work>> &input)
+{
+	std::set<Work> works;
+	m_facade->fetch(works, input);
+
+	input.target().assign(works.begin(), works.end());
 }
 
 void WorkServiceImpl::cancel(Single<Work> &input)
