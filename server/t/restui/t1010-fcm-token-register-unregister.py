@@ -34,7 +34,22 @@ class TestFCMTokenRegisterUnregister(unittest.TestCase):
 
 	@unittest.skipIf("FCM_SENDER_ID" not in os.environ,
 			"fcm support is disabled")
-	def test_register_unregister_token(self):
+	def test1_list_services(self):
+		req = GET(config.ui_host, config.ui_port, "/notifications")
+		req.authorize(self.session)
+		response, content = req()
+
+		self.assertEqual(200, response.status)
+
+		result = json.loads(content)
+		self.assertEqual("success", result["status"])
+		self.assertEqual(1, len(result["data"]))
+		self.assertEqual("fcm", result["data"][0]["name"])
+		self.assertEqual(os.environ["FCM_SENDER_ID"], result["data"][0]["id"])
+
+	@unittest.skipIf("FCM_SENDER_ID" not in os.environ,
+			"fcm support is disabled")
+	def test2_register_unregister_token(self):
 		req = POST(config.ui_host, config.ui_port, "/notifications/fcm")
 		req.authorize(self.session)
 		req.body(json.dumps(
