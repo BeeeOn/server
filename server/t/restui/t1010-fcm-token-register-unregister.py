@@ -32,7 +32,7 @@ class TestFCMTokenRegisterUnregister(unittest.TestCase):
 
 		self.assertEqual(204, response.status)
 
-	@unittest.skipIf("FCM_AVAILABLE" not in os.environ,
+	@unittest.skipIf("FCM_SENDER_ID" not in os.environ,
 			"fcm support is disabled")
 	def test_register_unregister_token(self):
 		req = POST(config.ui_host, config.ui_port, "/notifications/fcm")
