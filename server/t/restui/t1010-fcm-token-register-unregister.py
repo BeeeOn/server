@@ -35,21 +35,17 @@ class TestFCMTokenRegisterUnregister(unittest.TestCase):
 	@unittest.skipIf("FCM_AVAILABLE" not in os.environ,
 			"fcm support is disabled")
 	def test_register_unregister_token(self):
-		req = POST(config.ui_host, config.ui_port, "/notifications")
+		req = POST(config.ui_host, config.ui_port, "/notifications/fcm")
 		req.authorize(self.session)
 		req.body(json.dumps(
-			{"id": config.fcm_token, "name": "fcm"}
+			{"id": config.fcm_token}
 		))
 		response, _ = req()
 
 		self.assertEqual(204, response.status)
 
-		req = DELETE(config.ui_host, config.ui_port, "/notifications");
+		req = DELETE(config.ui_host, config.ui_port, "/notifications/fcm/" + config.fcm_token);
 		req.authorize(self.session)
-		req.body(json.dumps(
-			{"id": config.fcm_token, "name": "fcm"}
-		));
-		response, _ = req()
 
 		self.assertEqual(204, response.status)
 

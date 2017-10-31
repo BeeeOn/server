@@ -27,7 +27,7 @@ FCMTokenRestHandler::FCMTokenRestHandler():
 	JSONRestHandler("notifications")
 {
 	registerAction<FCMTokenRestHandler>("register", &FCMTokenRestHandler::registerToken);
-	registerAction<FCMTokenRestHandler>("unregister", &FCMTokenRestHandler::unregisterToken, {"fcm_token"});
+	registerAction<FCMTokenRestHandler>("unregister", &FCMTokenRestHandler::unregisterToken, {"token"});
 }
 
 void FCMTokenRestHandler::setFCMTokenService(FCMTokenService::Ptr service)
@@ -39,9 +39,6 @@ FCMToken FCMTokenRestHandler::extractToken(RestFlow &flow) const
 {
 	User user(flow.session()->userID());
 	Object::Ptr object = parseInput(flow);
-
-	if (object->getValue<string>("name") != "fcm")
-		throw InvalidArgumentException("unrecognized attribute name");
 
 	FCMToken token = FCMTokenID::parse(
 		Sanitize::token(object->getValue<string>("id")));
@@ -66,7 +63,10 @@ void FCMTokenRestHandler::registerToken(RestFlow &flow)
 void FCMTokenRestHandler::unregisterToken(RestFlow &flow)
 {
 	User user(flow.session()->userID());
-	FCMToken token = extractToken(flow);
+	FCMToken token = FCMTokenID::parse(
+		Sanitize::token(flow.param("token"))
+	);
+	token.setUser(user);
 
 	Single<FCMToken> data(token);
 	data.setUser(user);
