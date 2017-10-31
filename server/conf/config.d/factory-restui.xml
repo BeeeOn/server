@@ -105,6 +105,7 @@
 
 		<instance name="uiFCMTokenHandler" class="BeeeOn::RestUI::FCMTokenRestHandler">
 			<set name="fcmTokenService" ref="fcmTokenService" />
+			<set name="senderId" text="${fcm.senderId}" />
 		</instance>
 	</factory>
 </system>

@@ -15,6 +15,7 @@
 BEEEON_OBJECT_BEGIN(BeeeOn, RestUI, FCMTokenRestHandler)
 BEEEON_OBJECT_CASTABLE(RestHandler)
 BEEEON_OBJECT_REF("fcmTokenService", &FCMTokenRestHandler::setFCMTokenService)
+BEEEON_OBJECT_TEXT("senderId", &FCMTokenRestHandler::setSenderID)
 BEEEON_OBJECT_END(BeeeOn, RestUI, FCMTokenRestHandler)
 
 using namespace std;
@@ -26,6 +27,7 @@ using namespace BeeeOn::RestUI;
 FCMTokenRestHandler::FCMTokenRestHandler():
 	JSONRestHandler("notifications")
 {
+	registerAction<FCMTokenRestHandler>("list_services", &FCMTokenRestHandler::listServices);
 	registerAction<FCMTokenRestHandler>("register", &FCMTokenRestHandler::registerToken);
 	registerAction<FCMTokenRestHandler>("unregister", &FCMTokenRestHandler::unregisterToken, {"token"});
 }
@@ -33,6 +35,35 @@ FCMTokenRestHandler::FCMTokenRestHandler():
 void FCMTokenRestHandler::setFCMTokenService(FCMTokenService::Ptr service)
 {
 	m_service = service;
+}
+
+void FCMTokenRestHandler::setSenderID(const string &senderID)
+{
+	m_senderID = senderID;
+}
+
+void FCMTokenRestHandler::listServices(RestFlow &flow)
+{
+	PrintHandler result(flow.response().stream());
+	beginSuccess(result, 200);
+
+	result.startArray();
+
+	if (!m_senderID.empty()) {
+		result.startObject();
+
+		result.key("name");
+		result.value("fcm");
+
+		result.key("id");
+		result.value(m_senderID);
+
+		result.endObject();
+	}
+
+	result.endArray();
+
+	endSuccess(result);
 }
 
 FCMToken FCMTokenRestHandler::extractToken(RestFlow &flow) const
