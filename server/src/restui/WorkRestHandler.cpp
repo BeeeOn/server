@@ -20,6 +20,7 @@ using namespace BeeeOn::RestUI;
 WorkRestHandler::WorkRestHandler():
 	JSONRestHandler("work")
 {
+	registerAction<WorkRestHandler>("list", &WorkRestHandler::list);
 	registerAction<WorkRestHandler>("detail", &WorkRestHandler::detail, {"work_id"});
 	registerAction<WorkRestHandler>("update", &WorkRestHandler::update, {"work_id"});
 	registerAction<WorkRestHandler>("delete", &WorkRestHandler::remove, {"work_id"});
@@ -28,6 +29,21 @@ WorkRestHandler::WorkRestHandler():
 void WorkRestHandler::setWorkService(WorkService::Ptr service)
 {
 	m_service = service;
+}
+
+void WorkRestHandler::list(RestFlow &flow)
+{
+	std::list<Work> works;
+	Single<std::list<Work>> input(works);
+	User user(flow.session()->userID());
+	input.setUser(user);
+
+	m_service->list(input);
+
+	PrintHandler result(flow.response().stream());
+	beginSuccess(result, 200);
+	serialize(result, works);
+	endSuccess(result);
 }
 
 void WorkRestHandler::detail(RestFlow &flow)
