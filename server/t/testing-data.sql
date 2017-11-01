@@ -201,9 +201,9 @@ SELECT
 	1284174504043136,
 	beeeon.to_device_id(4698890485085053774),
 	0,
-	(NOW() - interval '8 days') + (i * interval '260 seconds'),
+	NOW() - (i * interval '260 seconds'),
 	19.5
-FROM generate_series(1, (extract(epoch FROM interval '8 days') / 260)::integer) AS i;
+FROM generate_series(0, (extract(epoch FROM interval '8 days') / 260)::integer - 1) AS i;
 
 ---
 -- Insert a big set of sin(x) testing data.
@@ -220,9 +220,9 @@ SELECT
 	1284174504043136,
 	beeeon.to_device_id(4698890485085053774),
 	1,
-	(NOW() - interval '2 hours') + (i * interval '110 seconds'),
+	NOW() - (i * interval '110 seconds'),
 	25 * SIN(i * 0.01)
-FROM generate_series(1, (extract(epoch FROM interval '2 hours') / 110)::integer) AS i;
+FROM generate_series(0, (extract(epoch FROM interval '2 hours') / 110)::integer - 1) AS i;
 
 ---
 -- Insert a big set of random testing data.
@@ -239,8 +239,8 @@ SELECT
 	1284174504043136,
 	beeeon.to_device_id(4698890485085053774),
 	2,
-	(NOW() - interval '14 days') + (i * interval '720 seconds'),
+	NOW() - (i * interval '720 seconds'),
 	random() * 100
-FROM generate_series(1, (extract(epoch FROM interval '14 days') / 720)::integer) AS i;
+FROM generate_series(0, (extract(epoch FROM interval '14 days') / 720)::integer - 1) AS i;
 
 COMMIT;

@@ -2,6 +2,7 @@
 #include <string>
 
 #include <Poco/Exception.h>
+#include <Poco/Logger.h>
 #include <Poco/JSON/PrintHandler.h>
 
 #include "restui/RestValueConsumer.h"
@@ -14,13 +15,15 @@ using namespace BeeeOn::RestUI;
 
 RestValueConsumer::RestValueConsumer(PrintHandler &output):
 	m_output(output),
-	m_info(NULL)
+	m_info(NULL),
+	m_count(0)
 {
 }
 
 void RestValueConsumer::begin(const TypeInfo &info)
 {
 	m_info = &info;
+	m_count = 0;
 }
 
 const TypeInfo &RestValueConsumer::info() const
@@ -45,9 +48,18 @@ void RestValueConsumer::single(const ValueAt &v)
 		m_output.value(info().asString(v.value()));
 
 	m_output.endObject();
+
+	m_count += 1;
 }
 
 void RestValueConsumer::end()
 {
 	m_info = NULL;
+
+	if (logger().debug()) {
+		logger().debug("consumed " + to_string(m_count) + " values",
+				__FILE__, __LINE__);
+	}
+
+	m_count = 0;
 }
