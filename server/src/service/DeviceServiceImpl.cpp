@@ -149,6 +149,38 @@ bool DeviceServiceImpl::tryActivateAndUpdate(Device &device,
 		const Gateway &gateway, bool forceUpdate)
 {
 	if (!device.active()) {
+		Device copy(device);
+
+		m_gatewayRPC->pairDevice([copy, this](GatewayRPCResult::Ptr r) {
+			switch (r->status()) {
+			case GatewayRPCResult::Status::PENDING:
+				logger().information(
+					"device " + copy + " pairing is pending...",
+					__FILE__, __LINE__);
+				break;
+
+			case GatewayRPCResult::Status::ACCEPTED:
+				logger().debug(
+					"device " + copy + " would be paired",
+					__FILE__, __LINE__);
+				break;
+
+			case GatewayRPCResult::Status::SUCCESS:
+				logger().information(
+					"device " + copy + " successfully paired",
+					__FILE__, __LINE__);
+				break;
+
+			case GatewayRPCResult::Status::FAILED:
+			case GatewayRPCResult::Status::TIMEOUT:
+			case GatewayRPCResult::Status::NOT_CONNECTED:
+				logger().warning(
+					"device " + copy + " failed to pair",
+					__FILE__, __LINE__);
+				break;
+			}
+		}, gateway, device);
+
 		device.setActiveSince(DateTime());
 		return m_dao->update(device, gateway);
 	}
