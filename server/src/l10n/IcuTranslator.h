@@ -5,7 +5,7 @@
 
 #include <Poco/SharedPtr.h>
 
-#include "l10n/NoTranslator.h"
+#include "l10n/Translator.h"
 #include "util/Loggable.h"
 
 namespace BeeeOn {
@@ -19,7 +19,7 @@ namespace BeeeOn {
  *
  *  http://icu-project.org/apiref/icu4c/classicu_1_1MessageFormat.html
  */
-class IcuTranslator : public NoTranslator, Loggable {
+class IcuTranslator : public Translator, Loggable {
 public:
 	IcuTranslator(Poco::SharedPtr<icu::ResourceBundle> bundle);
 

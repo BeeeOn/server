@@ -181,7 +181,7 @@ string IcuTranslator::lookupAndApplyArgs(
 		const vector<Var> &args)
 {
 	if (current == end)
-		return NoTranslator::formatImpl(originalKey, args);
+		return "";
 
 	UErrorCode error = U_ZERO_ERROR;
 	icu::ResourceBundle value = bundle.get(current->c_str(), error);
@@ -190,7 +190,7 @@ string IcuTranslator::lookupAndApplyArgs(
 		handleError(error, originalKey, bundle.getName());
 	} catch (const Exception &e) {
 		logger().log(e, __FILE__, __LINE__);
-		return NoTranslator::formatImpl(originalKey, args);
+		return "";
 	}
 
 	switch (value.getType()) {
@@ -208,7 +208,7 @@ string IcuTranslator::lookupAndApplyArgs(
 			+ typeName(value.getType()),
 			__FILE__, __LINE__);
 
-		return NoTranslator::formatImpl(originalKey, args);
+		return "";
 	}
 }
 
@@ -219,7 +219,10 @@ string IcuTranslator::formatImpl(
 	StringTokenizer keyList(key, ".",
 		StringTokenizer::TOK_IGNORE_EMPTY | StringTokenizer::TOK_TRIM);
 
-	return lookupAndApplyArgs(key, keyList.begin(), keyList.end(), *m_bundle, args);
+	const auto &result = lookupAndApplyArgs(
+			key, keyList.begin(), keyList.end(), *m_bundle, args);
+
+	return result;
 }
 
 static IcuLocaleImpl asIcuLocale(const BeeeOn::Locale &locale)

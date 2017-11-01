@@ -326,7 +326,7 @@ void BeeeOn::RestUI::serialize(Poco::JSON::PrintHandler &output,
 	output.value(info.id().toString());
 
 	output.key("name");
-	output.value(translator.format("types." + info.name() + ".label"));
+	output.value(translator.format("types." + info.name() + ".label", info.name()));
 
 	if (!info.unit().empty()) {
 		output.key("unit");
@@ -363,8 +363,8 @@ void BeeeOn::RestUI::serialize(Poco::JSON::PrintHandler &output,
 		for (const auto pair : info.values()) {
 			output.key(to_string(pair.first));
 			output.value(translator.format(
-				"types." + info.name()
-				+ ".values." + pair.second));
+				"types." + info.name() + ".values." + pair.second,
+				pair.second));
 		}
 
 		output.endObject();
@@ -383,8 +383,8 @@ void BeeeOn::RestUI::serialize(Poco::JSON::PrintHandler &output,
 			if (!level.label().empty()) {
 				output.key("name");
 				output.value(translator.format(
-					"types." + info.name()
-					+ ".levels." + level.label()));
+					"types." + info.name() + ".levels." + level.label(),
+					level.label()));
 			}
 
 			if (!std::isnan(level.min())) {
@@ -459,12 +459,12 @@ void BeeeOn::RestUI::serialize(Poco::JSON::PrintHandler &output,
 	else if (!info.name().empty()) {
 		output.key("display_name");
 		output.value(translator.format(
-			"modules." + info.name() + ".label"));
+			"modules." + info.name() + ".label", info.name()));
 	}
 	else {
 		output.key("display_name");
 		output.value(translator.format(
-			"types." + info.type()->name() + ".label"));
+			"types." + info.type()->name() + ".label", info.type()->name()));
 	}
 
 	output.key("type_id");
@@ -473,7 +473,7 @@ void BeeeOn::RestUI::serialize(Poco::JSON::PrintHandler &output,
 	if (!info.group().empty()) {
 		output.key("group");
 		output.value(translator.format(
-			"modules.groups." + info.group() + ".label"));
+			"modules.groups." + info.group() + ".label", info.group()));
 	}
 
 	output.key("order");
@@ -521,12 +521,12 @@ void BeeeOn::RestUI::serialize(PrintHandler &output,
 	else if (!info.name().empty()) {
 		output.key("display_name");
 		output.value(translator.format(
-			"modules." + info.name() + ".label"));
+			"modules." + info.name() + ".label", info.name()));
 	}
 	else {
 		output.key("display_name");
 		output.value(translator.format(
-			"types." + info.type()->name() + ".label"));
+			"types." + info.type()->name() + ".label", info.type()->name()));
 	}
 
 	output.key("type_id");
@@ -535,7 +535,7 @@ void BeeeOn::RestUI::serialize(PrintHandler &output,
 	if (!info.group().empty()) {
 		output.key("group");
 		output.value(translator.format(
-			"modules.groups." + info.group() + ".label"));
+			"modules.groups." + info.group() + ".label", info.group()));
 	}
 
 	output.key("order");
