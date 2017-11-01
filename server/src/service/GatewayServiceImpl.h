@@ -22,7 +22,6 @@ class Timespan;
 namespace BeeeOn {
 
 class IdentityDao;
-class GatewayRPC;
 
 class GatewayServiceImpl : public GatewayService, public Transactional {
 public:
@@ -32,7 +31,7 @@ public:
 	void setRoleInGatewayDao(RoleInGatewayDao::Ptr dao);
 	void setIdentityDao(IdentityDao::Ptr dao);
 	void setVerifiedIdentityDao(VerifiedIdentityDao::Ptr dao);
-	void setGatewayRPC(GatewayRPC *rpc);
+	void setGatewayRPC(GatewayRPC::Ptr rpc);
 	void setWorkFacade(WorkFacade::Ptr facade);
 	void setAccessPolicy(GatewayAccessPolicy::Ptr policy);
 
@@ -108,7 +107,7 @@ private:
 	RoleInGatewayDao::Ptr m_roleInGatewayDao;
 	IdentityDao::Ptr m_identityDao;
 	VerifiedIdentityDao::Ptr m_verifiedIdentityDao;
-	GatewayRPC *m_rpc;
+	GatewayRPC::Ptr m_rpc;
 	WorkFacade::Ptr m_workFacade;
 	GatewayAccessPolicy::Ptr m_accessPolicy;
 };

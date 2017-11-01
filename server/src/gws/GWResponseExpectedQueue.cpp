@@ -48,7 +48,7 @@ void GWResponseExpectedQueue::registerResponse(const GatewayID &gatewayID,
 {
 	if (logger().debug()) {
 		logger().debug("expecting response " + responseID.toString()
-			+ "from gateway " + gatewayID.toString(),
+			+ " from gateway " + gatewayID.toString(),
 			__FILE__, __LINE__);
 	}
 
@@ -67,7 +67,7 @@ void GWResponseExpectedQueue::notifyDelivered(const GatewayID &gatewayID,
 
 	if (logger().debug()) {
 		logger().debug("delivered response " + responseID.toString()
-					   + "from gateway " + gatewayID.toString(),
+					   + " from gateway " + gatewayID.toString(),
 			__FILE__, __LINE__);
 	}
 

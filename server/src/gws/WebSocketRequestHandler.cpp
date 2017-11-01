@@ -35,6 +35,10 @@ void WebSocketRequestHandler::handleRequest(
 			return;
 		}
 
+		logger().information("connection from "
+				+ ws.peerAddress().toString(),
+				__FILE__, __LINE__);
+
 		string data(buffer.begin(), ret);
 		if (logger().trace())
 			logger().trace(data);

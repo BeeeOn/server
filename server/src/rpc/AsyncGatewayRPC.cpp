@@ -92,7 +92,7 @@ LambdaTimerTask::Ptr AsyncGatewayRPC::createFinalResultMissingTask(
 		if (it == m_resultCalls.end())
 			return;
 
-		const ResultCall &resultCall = it->second.resultCall;
+		const ResultCall resultCall = it->second.resultCall;
 
 		m_resultCalls.erase(it);
 		guard.unlock();
@@ -228,7 +228,7 @@ void AsyncGatewayRPC::processResult(const GatewayID &gatewayID,
 		return;
 	}
 
-	const ResultCall &resultCall = it->second.resultCall;
+	const ResultCall resultCall = it->second.resultCall;
 
 	switch (result->status()) {
 	case GatewayRPCResult::Status::ACCEPTED:

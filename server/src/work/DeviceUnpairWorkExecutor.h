@@ -4,11 +4,10 @@
 #include "dao/DeviceDao.h"
 #include "work/DeviceUnpairWork.h"
 #include "util/Loggable.h"
+#include "rpc/GatewayRPC.h"
 #include "work/ExtendedWorkExecutor.h"
 
 namespace BeeeOn {
-
-class GatewayRPC;
 
 /**
  * Executes DeviceUnpairWork instances.
@@ -20,7 +19,7 @@ public:
 	DeviceUnpairWorkExecutor();
 
 	void setDeviceDao(DeviceDao::Ptr dao);
-	void setGatewayRPC(GatewayRPC *rpc);
+	void setGatewayRPC(GatewayRPC::Ptr rpc);
 
 	bool accepts(const Work::Ptr work) const override;
 	void execute(Work::Ptr work) override;
@@ -36,7 +35,7 @@ protected:
 
 private:
 	DeviceDao::Ptr m_dao;
-	GatewayRPC *m_rpc;
+	GatewayRPC::Ptr m_rpc;
 };
 
 }
