@@ -4,6 +4,10 @@
 
 using namespace BeeeOn;
 
+GatewayRPC::~GatewayRPC()
+{
+}
+
 GatewayRPC &NullGatewayRPC::instance()
 {
 	static Poco::SingletonHolder<NullGatewayRPC> singleton;

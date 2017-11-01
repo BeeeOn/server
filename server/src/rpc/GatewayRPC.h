@@ -23,6 +23,8 @@ class GatewayRPC {
 public:
 	typedef std::function<void(GatewayRPCResult::Ptr)> ResultCall;
 
+	virtual ~GatewayRPC();
+
 	/**
 	 * Send listen command.
 	 */
