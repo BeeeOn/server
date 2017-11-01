@@ -15,6 +15,7 @@
 BEEEON_OBJECT_BEGIN(BeeeOn, RestUI, FCMTokenRestHandler)
 BEEEON_OBJECT_CASTABLE(RestHandler)
 BEEEON_OBJECT_REF("fcmTokenService", &FCMTokenRestHandler::setFCMTokenService)
+BEEEON_OBJECT_TEXT("senderId", &FCMTokenRestHandler::setSenderID)
 BEEEON_OBJECT_END(BeeeOn, RestUI, FCMTokenRestHandler)
 
 using namespace std;
@@ -26,8 +27,9 @@ using namespace BeeeOn::RestUI;
 FCMTokenRestHandler::FCMTokenRestHandler():
 	JSONRestHandler("notifications")
 {
+	registerAction<FCMTokenRestHandler>("list_services", &FCMTokenRestHandler::listServices);
 	registerAction<FCMTokenRestHandler>("register", &FCMTokenRestHandler::registerToken);
-	registerAction<FCMTokenRestHandler>("unregister", &FCMTokenRestHandler::unregisterToken, {"fcm_token"});
+	registerAction<FCMTokenRestHandler>("unregister", &FCMTokenRestHandler::unregisterToken, {"token"});
 }
 
 void FCMTokenRestHandler::setFCMTokenService(FCMTokenService::Ptr service)
@@ -35,13 +37,39 @@ void FCMTokenRestHandler::setFCMTokenService(FCMTokenService::Ptr service)
 	m_service = service;
 }
 
+void FCMTokenRestHandler::setSenderID(const string &senderID)
+{
+	m_senderID = senderID;
+}
+
+void FCMTokenRestHandler::listServices(RestFlow &flow)
+{
+	PrintHandler result(flow.response().stream());
+	beginSuccess(result, 200);
+
+	result.startArray();
+
+	if (!m_senderID.empty()) {
+		result.startObject();
+
+		result.key("name");
+		result.value("fcm");
+
+		result.key("id");
+		result.value(m_senderID);
+
+		result.endObject();
+	}
+
+	result.endArray();
+
+	endSuccess(result);
+}
+
 FCMToken FCMTokenRestHandler::extractToken(RestFlow &flow) const
 {
 	User user(flow.session()->userID());
 	Object::Ptr object = parseInput(flow);
-
-	if (object->getValue<string>("name") != "fcm")
-		throw InvalidArgumentException("unrecognized attribute name");
 
 	FCMToken token = FCMTokenID::parse(
 		Sanitize::token(object->getValue<string>("id")));
@@ -66,7 +94,10 @@ void FCMTokenRestHandler::registerToken(RestFlow &flow)
 void FCMTokenRestHandler::unregisterToken(RestFlow &flow)
 {
 	User user(flow.session()->userID());
-	FCMToken token = extractToken(flow);
+	FCMToken token = FCMTokenID::parse(
+		Sanitize::token(flow.param("token"))
+	);
+	token.setUser(user);
 
 	Single<FCMToken> data(token);
 	data.setUser(user);
