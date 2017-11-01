@@ -4,6 +4,7 @@
 #include <functional>
 
 #include <Poco/Exception.h>
+#include <Poco/SharedPtr.h>
 #include <Poco/Timespan.h>
 
 #include "model/Gateway.h"
@@ -21,6 +22,8 @@ namespace BeeeOn {
  */
 class GatewayRPC {
 public:
+	typedef Poco::SharedPtr<GatewayRPC> Ptr;
+
 	typedef std::function<void(GatewayRPCResult::Ptr)> ResultCall;
 
 	virtual ~GatewayRPC();
@@ -58,43 +61,6 @@ public:
 			const ModuleInfo &module,
 			double value,
 			const Poco::Timespan &timeout) = 0;
-};
-
-class NullGatewayRPC : public GatewayRPC {
-public:
-	void sendListen(
-			const ResultCall &resultCall,
-			const Gateway &gateway,
-			const Poco::Timespan &duration)
-	{
-		throw Poco::NotImplementedException(__func__);
-	}
-
-	void unpairDevice(
-			const ResultCall &resultCall,
-			const Gateway &gateway,
-			const Device &device)
-	{
-		throw Poco::NotImplementedException(__func__);
-	}
-
-	void pingGateway(const ResultCall &resultCall, const Gateway &gateway)
-	{
-		throw Poco::NotImplementedException(__func__);
-	}
-
-	void updateActor(
-			const ResultCall &resultCall,
-			const Gateway &gateway,
-			const Device &device,
-			const ModuleInfo &module,
-			double value,
-			const Poco::Timespan &timeout)
-	{
-		throw Poco::NotImplementedException(__func__);
-	}
-
-	static GatewayRPC &instance();
 };
 
 }

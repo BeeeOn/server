@@ -23,8 +23,7 @@ using namespace std;
 using namespace Poco;
 using namespace BeeeOn;
 
-GatewayServiceImpl::GatewayServiceImpl():
-	m_rpc(&NullGatewayRPC::instance())
+GatewayServiceImpl::GatewayServiceImpl()
 {
 }
 
@@ -48,9 +47,9 @@ void GatewayServiceImpl::setVerifiedIdentityDao(VerifiedIdentityDao::Ptr dao)
 	m_verifiedIdentityDao = dao;
 }
 
-void GatewayServiceImpl::setGatewayRPC(GatewayRPC *rpc)
+void GatewayServiceImpl::setGatewayRPC(GatewayRPC::Ptr rpc)
 {
-	m_rpc = rpc? rpc : &NullGatewayRPC::instance();
+	m_rpc = rpc;
 }
 
 void GatewayServiceImpl::setWorkFacade(WorkFacade::Ptr facade)

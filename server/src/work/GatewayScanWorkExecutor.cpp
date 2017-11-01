@@ -3,7 +3,6 @@
 #include <Poco/Net/NetException.h>
 
 #include "di/Injectable.h"
-#include "rpc/GatewayRPC.h"
 #include "work/GatewayScanWorkExecutor.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, GatewayScanWorkExecutor)
@@ -18,12 +17,11 @@ using namespace Poco;
 using namespace Poco::Net;
 using namespace BeeeOn;
 
-GatewayScanWorkExecutor::GatewayScanWorkExecutor():
-	m_rpc(&NullGatewayRPC::instance())
+GatewayScanWorkExecutor::GatewayScanWorkExecutor()
 {
 }
 
-void GatewayScanWorkExecutor::setGatewayRPC(GatewayRPC *rpc)
+void GatewayScanWorkExecutor::setGatewayRPC(GatewayRPC::Ptr rpc)
 {
 	m_rpc = rpc;
 }

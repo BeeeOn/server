@@ -3,11 +3,10 @@
 
 #include "work/GatewayScanWork.h"
 #include "util/Loggable.h"
+#include "rpc/GatewayRPC.h"
 #include "work/ExtendedWorkExecutor.h"
 
 namespace BeeeOn {
-
-class GatewayRPC;
 
 /**
  * Requests the given gateway to start listening for new devices.
@@ -25,7 +24,7 @@ class GatewayScanWorkExecutor :
 public:
 	GatewayScanWorkExecutor();
 
-	void setGatewayRPC(GatewayRPC *rpc);
+	void setGatewayRPC(GatewayRPC::Ptr rpc);
 
 	bool accepts(const Work::Ptr work) const;
 	void execute(Work::Ptr work) override;
@@ -34,7 +33,7 @@ protected:
 	void processResult(Work::Ptr work, GatewayScanWork &content);
 
 private:
-	GatewayRPC *m_rpc;
+	GatewayRPC::Ptr m_rpc;
 };
 
 }

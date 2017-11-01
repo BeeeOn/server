@@ -7,6 +7,7 @@
 #include "dao/DeviceDao.h"
 #include "dao/DevicePropertyDao.h"
 #include "policy/DeviceAccessPolicy.h"
+#include "rpc/GatewayRPC.h"
 #include "service/DeviceService.h"
 #include "transaction/Transactional.h"
 #include "work/WorkFacade.h"
@@ -14,7 +15,6 @@
 namespace BeeeOn {
 
 class DevicePropertyDao;
-class GatewayRPC;
 
 /**
  * Service for devices management.
@@ -25,7 +25,7 @@ public:
 
 	void setDeviceDao(DeviceDao::Ptr dao);
 	void setDevicePropertyDao(DevicePropertyDao::Ptr dao);
-	void setGatewayRPC(GatewayRPC *rpc);
+	void setGatewayRPC(GatewayRPC::Ptr rpc);
 	void setWorkFacade(WorkFacade::Ptr facade);
 	void setAccessPolicy(DeviceAccessPolicy::Ptr policy);
 
@@ -124,7 +124,7 @@ protected:
 private:
 	DeviceDao::Ptr m_dao;
 	DevicePropertyDao::Ptr m_propertyDao;
-	GatewayRPC *m_gatewayRPC;
+	GatewayRPC::Ptr m_gatewayRPC;
 	WorkFacade::Ptr m_workFacade;
 	DeviceAccessPolicy::Ptr m_policy;
 };

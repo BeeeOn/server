@@ -6,7 +6,6 @@
 
 #include "dao/DeviceDao.h"
 #include "di/Injectable.h"
-#include "rpc/GatewayRPC.h"
 #include "work/DeviceUnpairWorkExecutor.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, DeviceUnpairWorkExecutor)
@@ -22,8 +21,7 @@ using namespace Poco;
 using namespace Poco::Net;
 using namespace BeeeOn;
 
-DeviceUnpairWorkExecutor::DeviceUnpairWorkExecutor():
-	m_rpc(&NullGatewayRPC::instance())
+DeviceUnpairWorkExecutor::DeviceUnpairWorkExecutor()
 {
 }
 
@@ -32,9 +30,9 @@ void DeviceUnpairWorkExecutor::setDeviceDao(DeviceDao::Ptr dao)
 	m_dao = dao;
 }
 
-void DeviceUnpairWorkExecutor::setGatewayRPC(GatewayRPC *rpc)
+void DeviceUnpairWorkExecutor::setGatewayRPC(GatewayRPC::Ptr rpc)
 {
-	m_rpc = rpc == NULL? &NullGatewayRPC::instance() : rpc;
+	m_rpc = rpc;
 }
 
 bool DeviceUnpairWorkExecutor::accepts(const Work::Ptr work) const

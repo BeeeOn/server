@@ -6,7 +6,6 @@
 #include "di/Injectable.h"
 #include "model/Device.h"
 #include "model/Gateway.h"
-#include "rpc/GatewayRPC.h"
 #include "service/DeviceServiceImpl.h"
 #include "work/DeviceUnpairWork.h"
 #include "work/WorkFacade.h"
@@ -25,8 +24,7 @@ using namespace std;
 using namespace Poco;
 using namespace BeeeOn;
 
-DeviceServiceImpl::DeviceServiceImpl():
-	m_gatewayRPC(&NullGatewayRPC::instance())
+DeviceServiceImpl::DeviceServiceImpl()
 {
 }
 
@@ -40,9 +38,9 @@ void DeviceServiceImpl::setDevicePropertyDao(DevicePropertyDao::Ptr dao)
 	m_propertyDao = dao;
 }
 
-void DeviceServiceImpl::setGatewayRPC(GatewayRPC *rpc)
+void DeviceServiceImpl::setGatewayRPC(GatewayRPC::Ptr rpc)
 {
-	m_gatewayRPC = rpc? rpc : &NullGatewayRPC::instance();
+	m_gatewayRPC = rpc;
 }
 
 void DeviceServiceImpl::setWorkFacade(WorkFacade::Ptr facade)
