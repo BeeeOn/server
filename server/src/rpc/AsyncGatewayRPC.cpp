@@ -1,4 +1,5 @@
 #include "di/Injectable.h"
+#include "gwmessage/GWDeviceAcceptRequest.h"
 #include "gwmessage/GWListenRequest.h"
 #include "gwmessage/GWUnpairRequest.h"
 #include "gwmessage/GWPingRequest.h"
@@ -27,6 +28,19 @@ void AsyncGatewayRPC::sendListen(const ResultCall &resultCall,
 	GWListenRequest::Ptr request = new GWListenRequest;
 	request->setID(callID);
 	request->setDuration(duration);
+
+	sendAndExpectResult(gateway.id(), callID, resultCall, request);
+}
+
+void AsyncGatewayRPC::pairDevice(const ResultCall &resultCall,
+		const Gateway &gateway,
+		const Device &device)
+{
+	CallID callID = CallID::random();
+
+	GWDeviceAcceptRequest::Ptr request = new GWDeviceAcceptRequest;
+	request->setID(callID);
+	request->setDeviceID(device.id());
 
 	sendAndExpectResult(gateway.id(), callID, resultCall, request);
 }

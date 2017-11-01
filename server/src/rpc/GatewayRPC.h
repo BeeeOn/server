@@ -37,6 +37,14 @@ public:
 			const Poco::Timespan &duration) = 0;
 
 	/**
+	 * Send pair device command to the selected gateway.
+	 */
+	virtual void pairDevice(
+			const ResultCall &resultCall,
+			const Gateway &gateway,
+			const Device &device) = 0;
+
+	/**
 	 * Send unpair device command to the selected gateway.
 	 */
 	virtual void unpairDevice(
