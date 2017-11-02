@@ -59,7 +59,7 @@ void CORSFilter::setAllowedOrigins(const list<string> &origins)
 	m_allowedOrigins.clear();
 
 	for (const auto &s : origins)
-		m_allowedOrigins.emplace(s);
+		m_allowedOrigins.emplace_back(new Glob(s));
 }
 
 void CORSFilter::setAllowedMethods(const list<string> &methods)
@@ -112,6 +112,19 @@ void CORSFilter::apply(HTTPServerRequest &req, HTTPServerResponse &res)
 		filterRequest(req, res);
 }
 
+bool CORSFilter::originAllowed(const string &origin) const
+{
+	if (m_allowedOrigins.empty())
+		return true;
+
+	for (auto glob : m_allowedOrigins) {
+		if (glob->match(origin))
+			return true;
+	}
+
+	return false;
+}
+
 void CORSFilter::handlePreflight(const HTTPServerRequest &req, HTTPServerResponse &res) const
 {
 	if (logger().debug()) {
@@ -125,9 +138,7 @@ void CORSFilter::handlePreflight(const HTTPServerRequest &req, HTTPServerRespons
 
 	const string &origin = req.get("Origin");
 
-	if (m_allowedOrigins.empty())
-		res.set("Access-Control-Allow-Origin", origin);
-	else if (m_allowedOrigins.find(origin) != m_allowedOrigins.end())
+	if (originAllowed(origin))
 		res.set("Access-Control-Allow-Origin", origin);
 	else
 		throw InvalidArgumentException("disallowed Origin: " + origin);
@@ -164,10 +175,8 @@ void CORSFilter::filterRequest(const HTTPServerRequest &req, HTTPServerResponse 
 
 	const string &origin = req.get("Origin");
 
-	if (!m_allowedOrigins.empty()) { // otherwise, allow any ('*')
-		if (m_allowedOrigins.find(origin) == m_allowedOrigins.end())
-			throw InvalidArgumentException("disallowed Origin: " + origin);
-	}
+	if (!originAllowed(origin))
+		throw InvalidArgumentException("disallowed Origin: " + origin);
 
 	res.set("Access-Control-Allow-Origin", origin);
 

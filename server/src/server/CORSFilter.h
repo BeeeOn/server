@@ -5,6 +5,8 @@
 #include <set>
 #include <string>
 
+#include <Poco/Glob.h>
+#include <Poco/SharedPtr.h>
 #include <Poco/Timespan.h>
 
 #include "server/HTTPFilter.h"
@@ -33,8 +35,10 @@ public:
 
 	/**
 	 * Set origins that are allowed during cross-domain requests.
-	 * If it is empty then the injected CORS response header
-	 * Control-Access-Allow-Origin will be '*'.
+	 * Each origin can be a glob pattern according to the Poco::Glob
+	 * implementation. If it is empty then all origins would be allowed.
+	 *
+	 * @see https://pocoproject.org/docs/Poco.Glob.html
 	 */
 	void setAllowedOrigins(const std::list<std::string> &origins);
 
@@ -94,12 +98,17 @@ protected:
 	 */
 	void filterRequest(const Poco::Net::HTTPServerRequest &req, Poco::Net::HTTPServerResponse &res) const;
 
+	/**
+	 * @return true if the given origin is allowed
+	 */
+	bool originAllowed(const std::string &origin) const;
+
 	std::string formatSet(const std::set<std::string> &s,
 			const std::string &separator) const;
 
 private:
 	bool m_requireOrigin;
-	std::set<std::string> m_allowedOrigins;
+	std::list<Poco::SharedPtr<Poco::Glob>> m_allowedOrigins;
 	std::set<std::string> m_allowedMethods;
 	std::set<std::string> m_allowedHeaders;
 	std::set<std::string> m_simpleHeaders;
