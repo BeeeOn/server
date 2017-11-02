@@ -18,6 +18,8 @@ class CORSFilterTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST_SUITE(CORSFilterTest);
 	CPPUNIT_TEST(testPreflightWithoutOrigin);
 	CPPUNIT_TEST(testPreflightDisallowedOrigin);
+	CPPUNIT_TEST(testPreflightDisallowedOriginByPattern);
+	CPPUNIT_TEST(testPreflightAllowedByPattern);
 	CPPUNIT_TEST(testPreflightNoSettings);
 	CPPUNIT_TEST(testPreflight);
 	CPPUNIT_TEST(testOriginNotRequired);
@@ -31,6 +33,8 @@ public:
 
 	void testPreflightWithoutOrigin();
 	void testPreflightDisallowedOrigin();
+	void testPreflightDisallowedOriginByPattern();
+	void testPreflightAllowedByPattern();
 	void testPreflightNoSettings();
 	void testPreflight();
 	void testOriginNotRequired();
@@ -87,6 +91,65 @@ void CORSFilterTest::testPreflightDisallowedOrigin()
 	CPPUNIT_ASSERT(!res->has("Access-Control-Expose-Headers"));
 	CPPUNIT_ASSERT(!res->has("Access-Control-Allow-Credentials"));
 	CPPUNIT_ASSERT(!res->has("Access-Control-Max-Age"));
+}
+
+/**
+ * Preflight requests with Origin that is not whitelisted must be denied.
+ */
+void CORSFilterTest::testPreflightDisallowedOriginByPattern()
+{
+	CORSFilter filter;
+	filter.setAllowedOrigins({"*.thirdparty.com", "thirdparty.com:*"});
+
+	req->setMethod(HTTPRequest::HTTP_OPTIONS);
+	req->set("Origin", "thirdparty.com"); // not matching
+
+	CPPUNIT_ASSERT_THROW(filter.apply(*req, *res), InvalidArgumentException);
+
+	CPPUNIT_ASSERT(!res->has("Access-Control-Allow-Origin"));
+	CPPUNIT_ASSERT(!res->has("Access-Control-Allow-Methods"));
+	CPPUNIT_ASSERT(!res->has("Access-Control-Allow-Headers"));
+	CPPUNIT_ASSERT(!res->has("Access-Control-Expose-Headers"));
+	CPPUNIT_ASSERT(!res->has("Access-Control-Allow-Credentials"));
+	CPPUNIT_ASSERT(!res->has("Access-Control-Max-Age"));
+
+	req->setMethod(HTTPRequest::HTTP_OPTIONS);
+	req->set("Origin", "sub.thirdparty.com:1000"); // not matching
+
+	CPPUNIT_ASSERT_THROW(filter.apply(*req, *res), InvalidArgumentException);
+
+	CPPUNIT_ASSERT(!res->has("Access-Control-Allow-Origin"));
+	CPPUNIT_ASSERT(!res->has("Access-Control-Allow-Methods"));
+	CPPUNIT_ASSERT(!res->has("Access-Control-Allow-Headers"));
+	CPPUNIT_ASSERT(!res->has("Access-Control-Expose-Headers"));
+	CPPUNIT_ASSERT(!res->has("Access-Control-Allow-Credentials"));
+	CPPUNIT_ASSERT(!res->has("Access-Control-Max-Age"));
+}
+
+/**
+ * Whitelisting by glob pattern can be used to allow multiple different
+ * similar origins.
+ */
+void CORSFilterTest::testPreflightAllowedByPattern()
+{
+	CORSFilter filter;
+	filter.setAllowedOrigins({"thirdparty.com:*"});
+
+	req->setMethod(HTTPRequest::HTTP_OPTIONS);
+	req->set("Origin", "thirdparty.com:1267");
+
+	CPPUNIT_ASSERT_NO_THROW(filter.apply(*req, *res));
+
+	CPPUNIT_ASSERT(res->has("Access-Control-Allow-Origin"));
+	CPPUNIT_ASSERT_EQUAL("thirdparty.com:1267", res->get("Access-Control-Allow-Origin"));
+
+	CPPUNIT_ASSERT(!res->has("Access-Control-Allow-Methods"));
+	CPPUNIT_ASSERT(!res->has("Access-Control-Allow-Headers"));
+	CPPUNIT_ASSERT(!res->has("Access-Control-Expose-Headers"));
+	CPPUNIT_ASSERT(!res->has("Access-Control-Allow-Credentials"));
+
+	CPPUNIT_ASSERT(res->has("Access-Control-Max-Age"));
+	CPPUNIT_ASSERT_EQUAL("10", res->get("Access-Control-Max-Age"));
 }
 
 /**
