@@ -33,8 +33,7 @@ public:
 
 	/**
 	 * Set origins that are allowed during cross-domain requests.
-	 * If it is empty then the injected CORS response header
-	 * Control-Access-Allow-Origin will be '*'.
+	 * If it is empty then all origins would be allowed.
 	 */
 	void setAllowedOrigins(const std::list<std::string> &origins);
 
