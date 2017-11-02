@@ -75,47 +75,47 @@ RestHandler::Handler JSONRestHandler::wrapHandler(const Handler &handler)
 			);
 
 			status = "error";
-			message = translator->format("not_authenticated");
+			message = translator->formatSure("not_authenticated");
 		}
 		catch (const NotFoundException &e) {
 			handleException(flow, e, __FILE__, __LINE__);
 
 			response.setStatus(HTTPResponse::HTTP_NOT_FOUND);
 			status = "error";
-			message = translator->format("requested_resource_missing");
+			message = translator->formatSure("requested_resource_missing");
 		}
 		catch (const InvalidAccessException &e) {
 			handleException(flow, e, __FILE__, __LINE__);
 
 			response.setStatus(HTTPResponse::HTTP_FORBIDDEN);
 			status = "error";
-			message = translator->format("not_enough_permission");
+			message = translator->formatSure("not_enough_permission");
 		}
 		catch (const SyntaxException &e) {
 			handleException(flow, e, __FILE__, __LINE__);
 
 			response.setStatus(HTTPResponse::HTTP_BAD_REQUEST);
 			status = "error";
-			message = translator->format("malformed_input_data");
+			message = translator->formatSure("malformed_input_data");
 		}
 		catch (const InvalidArgumentException &e) {
 			handleException(flow, e, __FILE__, __LINE__);
 
 			response.setStatus(HTTPResponse::HTTP_BAD_REQUEST);
 			status = "error";
-			message = translator->format("invalid_input_data");
+			message = translator->formatSure("invalid_input_data");
 		}
 		catch (const Exception &e) {
 			handleException(flow, e, __FILE__, __LINE__);
 
 			response.setStatus(HTTPResponse::HTTP_INTERNAL_SERVER_ERROR);
-			message = translator->format("internal_error");
+			message = translator->formatSure("internal_error");
 		}
 		catch (const exception &e) {
 			handleException(flow, e, __FILE__, __LINE__);
 
 			response.setStatus(HTTPResponse::HTTP_INTERNAL_SERVER_ERROR);
-			message = translator->format("internal_error");
+			message = translator->formatSure("internal_error");
 		}
 
 		PrintHandler result(response.impl().send());
