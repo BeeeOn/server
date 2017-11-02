@@ -50,6 +50,10 @@ public:
 			const Gateway &gateway,
 			const Poco::Timespan &duration) override;
 
+	void pairDevice(const ResultCall &resultCall,
+			const Gateway &gateway,
+			const Device &device) override;
+
 	void unpairDevice(const ResultCall &resultCall,
 			const Gateway &gateway,
 			const Device &device) override;

@@ -156,7 +156,6 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/rpc/GatewayRPCResult.cpp
 	${PROJECT_SOURCE_DIR}/rpc/AsyncGatewayRPC.cpp
 	${PROJECT_SOURCE_DIR}/rpc/FakeGatewayRPC.cpp
-	${PROJECT_SOURCE_DIR}/rpc/LegacyGatewayRPC.cpp
 	${PROJECT_SOURCE_DIR}/notification/NotificationDispatcher.cpp
 	${PROJECT_SOURCE_DIR}/notification/FirstLoginNotification.cpp
 	${PROJECT_SOURCE_DIR}/notification/InvitedNotification.cpp

@@ -25,6 +25,10 @@ public:
 			const ResultCall &resultCall,
 			const Gateway &gateway,
 			const Poco::Timespan &duration) override;
+	void pairDevice(
+			const ResultCall &resultCall,
+			const Gateway &gateway,
+			const Device &device) override;
 	void unpairDevice(
 			const ResultCall &resultCall,
 			const Gateway &gateway,
@@ -75,6 +79,39 @@ void FakeGatewayRPC::sendListen(
 		resultCall(result);
 	});
 }
+
+void FakeGatewayRPC::pairDevice(
+		const ResultCall &resultCall,
+		const Gateway &gateway,
+		const Device &target)
+{
+	Device device(target);
+
+	GatewayRPCResult::Ptr result = new GatewayRPCResult;
+
+	if (!m_deviceDao->fetch(device, gateway)) {
+		logger().warning("failed to fetch device "
+				+ device.id().toString(),
+				__FILE__, __LINE__);
+
+		result->setStatus(GatewayRPCResult::Status::FAILED);
+
+		m_executor->invoke([resultCall, result]()
+		{
+			resultCall(result);
+		});
+
+		return;
+	}
+
+	result->setStatus(GatewayRPCResult::Status::SUCCESS);
+
+	m_executor->invoke([resultCall, result]()
+	{
+		resultCall(result);
+	});
+}
+
 
 void FakeGatewayRPC::unpairDevice(
 		const ResultCall &resultCall,

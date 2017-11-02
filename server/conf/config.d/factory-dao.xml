@@ -42,12 +42,6 @@
 			<set name="asyncExecutor" ref="asyncExecutor" />
 		</instance>
 
-		<instance name="legacyGatewayRPC" class="BeeeOn::LegacyGatewayRPC">
-			<set name="rpcConnector" ref="adaServerConnector" />
-			<set name="asyncExecutor" ref="asyncExecutor" />
-			<set name="responseTimeout" time="${gateway-rpc.legacy.responseTimeout}" />
-		</instance>
-
 		<instance name="asyncGatewayRPC" class="BeeeOn::AsyncGatewayRPC">
 			<set name="gatewayCommunicator" ref="gatewayCommunicator" />
 			<set name="responseExpectedQueue" ref="responseExpectedQueue" />
