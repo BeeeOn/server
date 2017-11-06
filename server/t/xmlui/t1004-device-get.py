@@ -60,21 +60,21 @@ class TestDeviceGet(unittest.TestCase):
 		if gatewayId is not None:
 			self.assertEqual(gatewayId, e.get("gateid"))
 
-		if id == "0x4135d00019f5234e":
+		if id == "0xa335d00019f5234e":
 			self.assertEqual("Temperature", e.get("name"))
 			self.assertEqual("1", e.get("init"))
 			self.assertEqual("unavailable", e.get("status"))
 			self.assertEqual("0", e.get("type"))
-		elif id == "0x432d27aa5e94ecfd":
+		elif id == "0xa32d27aa5e94ecfd":
 			self.assertEqual("Multi-sensor", e.get("name"))
 			self.assertEqual("1", e.get("init"))
 			self.assertEqual("unavailable", e.get("status"))
 			self.assertEqual("3", e.get("type"))
-		elif id == "0x427e0f7f0302324d":
+		elif id == "0xa37e0f7f0302324d":
 			self.assertEqual("Humidity", e.get("name"))
 			self.assertEqual("available", e.get("status"))
 			self.assertEqual("0", e.get("type"))
-		elif id == "0x4471959aad24618e":
+		elif id == "0xa371959aad24618e":
 			self.assertEqual("Unknown", e.get("name"))
 			self.assertEqual("0", e.get("init"))
 			self.assertEqual("unavailable", e.get("status"))
@@ -85,7 +85,7 @@ class TestDeviceGet(unittest.TestCase):
 	def assertKnownModules(self, e):
 		id = e.get("euid")
 
-		if id == "0x4135d00019f5234e":
+		if id == "0xa335d00019f5234e":
 			self.assertEqual("Temperature", e.get("name"))
 			self.assertEqual(5, len(e))
 
@@ -98,7 +98,7 @@ class TestDeviceGet(unittest.TestCase):
 			self.assertEqual("2", e[3].get("type"))
 			self.assertEqual("16", e[4].get("type"))
 
-		elif id == "0x432d27aa5e94ecfd":
+		elif id == "0xa32d27aa5e94ecfd":
 			self.assertEqual("Multi-sensor", e.get("name"))
 
 			for i in range(len(e)):
@@ -108,7 +108,7 @@ class TestDeviceGet(unittest.TestCase):
 			self.assertEqual("8", e[1].get("type"))
 			self.assertEqual("11", e[2].get("type"))
 
-		elif id == "0x427e0f7f0302324d":
+		elif id == "0xa37e0f7f0302324d":
 			self.assertEqual("Humidity", e.get("name"))
 			self.assertEqual(5, len(e))
 
@@ -121,7 +121,7 @@ class TestDeviceGet(unittest.TestCase):
 			self.assertEqual("2", e[3].get("type"))
 			self.assertEqual("16", e[4].get("type"))
 
-		elif id == "0x4471959aad24618e":
+		elif id == "0xa371959aad24618e":
 			self.assertEqual("Unknown", e.get("name"))
 			self.assertEqual(10, len(e))
 

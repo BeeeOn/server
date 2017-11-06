@@ -76,7 +76,7 @@ class TestControlsListDetail(unittest.TestCase):
 	"""
 	def test1_list_controls_of_device_unknown(self):
 		req = GET(config.ui_host, config.ui_port,
-				"/gateways/1284174504043136/devices/0x4471959aad24618e/controls")
+				"/gateways/1284174504043136/devices/0xa371959aad24618e/controls")
 		req.authorize(self.session)
 		response, content = req()
 
@@ -94,7 +94,7 @@ class TestControlsListDetail(unittest.TestCase):
 	"""
 	def test2_detail_unknown_brightness(self):
 		req = GET(config.ui_host, config.ui_port,
-				"/gateways/1284174504043136/devices/0x4471959aad24618e/controls/9")
+				"/gateways/1284174504043136/devices/0xa371959aad24618e/controls/9")
 		req.authorize(self.session)
 		response, content = req()
 
@@ -110,7 +110,7 @@ class TestControlsListDetail(unittest.TestCase):
 	"""
 	def test3_detail_non_existing_control(self):
 		req = GET(config.ui_host, config.ui_port,
-				"/gateways/1284174504043136/devices/0x4471959aad24618e/sensors/1000")
+				"/gateways/1284174504043136/devices/0xa371959aad24618e/sensors/1000")
 		req.authorize(self.session)
 		response, content = req()
 
@@ -121,7 +121,7 @@ class TestControlsListDetail(unittest.TestCase):
 	"""
 	def test4_current_non_existing_sensor(self):
 		req = GET(config.ui_host, config.ui_port,
-				"/gateways/1284174504043136/devices/0x4471959aad24618e/controls/1000/current")
+				"/gateways/1284174504043136/devices/0xa371959aad24618e/controls/1000/current")
 		req.authorize(self.session)
 		response, content = req()
 

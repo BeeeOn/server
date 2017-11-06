@@ -64,7 +64,7 @@ class TestDevicesUpdateActivate(unittest.TestCase):
 	Change name of the device 4931887558509748622 (Unknown).
 	"""
 	def test2_update_existing(self):
-		req = PUT(config.ui_host, config.ui_port, "/gateways/" + config.gateway_id + "/devices/0x427e0f7f0302324d")
+		req = PUT(config.ui_host, config.ui_port, "/gateways/" + config.gateway_id + "/devices/0xa37e0f7f0302324d")
 		req.authorize(self.session)
 		req.body(json.dumps({
 			"name": "New device name"
@@ -92,7 +92,7 @@ class TestDevicesUpdateActivate(unittest.TestCase):
 	Attempt to unpair the inactive device 4931887558509748622 (Unknown) should succeed.
 	"""
 	def test4_unpair_inactive(self):
-		req = DELETE(config.ui_host, config.ui_port, "/gateways/" + config.gateway_id + "/devices/0x4471959aad24618e")
+		req = DELETE(config.ui_host, config.ui_port, "/gateways/" + config.gateway_id + "/devices/0xa371959aad24618e")
 		req.authorize(self.session)
 		response, content = req()
 
@@ -132,7 +132,7 @@ class TestDevicesUpdateActivate(unittest.TestCase):
 	Activate device 4931887558509748622 (Unknown).
 	"""
 	def test5_activate_and_unpair(self):
-		req = PUT(config.ui_host, config.ui_port, "/gateways/" + config.gateway_id + "/devices/0x4471959aad24618e")
+		req = PUT(config.ui_host, config.ui_port, "/gateways/" + config.gateway_id + "/devices/0xa371959aad24618e")
 		req.authorize(self.session)
 		req.body(json.dumps({
 			"name": "Activated device"
@@ -143,7 +143,7 @@ class TestDevicesUpdateActivate(unittest.TestCase):
 		self.assertEqual(200, response.status)
 		self.assertTrue("active_since" in result["data"])
 
-		req = DELETE(config.ui_host, config.ui_port, "/gateways/" + config.gateway_id + "/devices/0x4471959aad24618e")
+		req = DELETE(config.ui_host, config.ui_port, "/gateways/" + config.gateway_id + "/devices/0xa371959aad24618e")
 		req.authorize(self.session)
 		response, content = req()
 

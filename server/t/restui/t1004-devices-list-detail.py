@@ -84,7 +84,7 @@ class TestDevicesListDetail(unittest.TestCase):
 	Get detail of the existing device 4698890485085053774 (Temperature).
 	"""
 	def test2_detail(self):
-		req = GET(config.ui_host, config.ui_port, "/gateways/" + config.gateway_id + "/devices/" + "0x4135d00019f5234e")
+		req = GET(config.ui_host, config.ui_port, "/gateways/" + config.gateway_id + "/devices/" + "0xa335d00019f5234e")
 		req.authorize(self.session)
 		response, content = req()
 
@@ -209,16 +209,16 @@ class TestDevicesListDetail(unittest.TestCase):
 		id = e.get("id")
 		self.assertDeviceIsComplete(e)
 
-		if id == "0x4135d00019f5234e":
+		if id == "0xa335d00019f5234e":
 			self.assertEqual("Temperature", e.get("name"))
 			self.assertEqual(0, e.get("available"))
-		elif id == "0x432d27aa5e94ecfd":
+		elif id == "0xa32d27aa5e94ecfd":
 			self.assertEqual("Multi-sensor", e.get("name"))
 			self.assertEqual(0, e.get("available"))
-		elif id == "0x427e0f7f0302324d":
+		elif id == "0xa37e0f7f0302324d":
 			self.assertEqual("Humidity", e.get("name"))
 			self.assertEqual(1, e.get("available"))
-		elif id == "0x4471959aad24618e":
+		elif id == "0xa371959aad24618e":
 			self.assertEqual("Unknown", e.get("name"))
 			self.assertEqual(1, e.get("available"))
 		else:
