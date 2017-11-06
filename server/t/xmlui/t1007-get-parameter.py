@@ -44,7 +44,7 @@ class TestGetDeviceParameter(unittest.TestCase):
 	def test1_get_invalid_parameter(self):
 		response = self.c.request(DeviceParameterGet(
 			config.gateway_id,
-			"0x4135d00019f5234e",
+			"0xa335d00019f5234e",
 			"testing",
 			self.session
 		))
@@ -53,13 +53,13 @@ class TestGetDeviceParameter(unittest.TestCase):
 		self.assertEqual("998", response.error_code())
 
 	"""
-	Testing devices 0x4135d00019f5234e and 0x427e0f7f0302324d provide the
+	Testing devices 0xa335d00019f5234e and 0xa37e0f7f0302324d provide the
 	parameter 'firmware'. Check we can read it.
 	"""
 	def test2_get_firmware(self):
 		response = self.c.request(DeviceParameterGet(
 			config.gateway_id,
-			"0x4135d00019f5234e",
+			"0xa335d00019f5234e",
 			"firmware",
 			self.session
 		))
@@ -69,7 +69,7 @@ class TestGetDeviceParameter(unittest.TestCase):
 
 		response = self.c.request(DeviceParameterGet(
 			config.gateway_id,
-			"0x427e0f7f0302324d",
+			"0xa37e0f7f0302324d",
 			"firmware",
 			self.session
 		))
@@ -78,13 +78,13 @@ class TestGetDeviceParameter(unittest.TestCase):
 		self.assertEqual("000-111", response.root[0].get("parametervalue"))
 
 	"""
-	Testing device 0x432d27aa5e94ecfd provides parameter 'ip-address'.
+	Testing device 0xa32d27aa5e94ecfd provides parameter 'ip-address'.
 	Check that the IP address can be read.
 	"""
 	def test3_get_ip_address(self):
 		response = self.c.request(DeviceParameterGet(
 			config.gateway_id,
-			"0x432d27aa5e94ecfd",
+			"0xa32d27aa5e94ecfd",
 			"ip-address",
 			self.session
 		))
@@ -93,14 +93,14 @@ class TestGetDeviceParameter(unittest.TestCase):
 		self.assertEqual("10.0.0.1", response.root[0].get("parametervalue"))
 
 	"""
-	Testing device 0x432d27aa5e94ecfd provides parameter 'password'.
+	Testing device 0xa32d27aa5e94ecfd provides parameter 'password'.
 	Check that the password cannot be read this way, only placeholders
 	('*****') are returned to denote the password exists.
 	"""
 	def test4_get_password(self):
 		response = self.c.request(DeviceParameterGet(
 			config.gateway_id,
-			"0x432d27aa5e94ecfd",
+			"0xa32d27aa5e94ecfd",
 			"password",
 			self.session
 		))

@@ -47,7 +47,7 @@ class TestDeviceGetLog(unittest.TestCase):
 	def test1_getlogs_intemp_1hour(self):
 		response = self.conn.request(DeviceGetLog(
 			config.gateway_id,
-			"0x4135d00019f5234e",
+			"0xa335d00019f5234e",
 			0,
 			self.session,
 			start = datetime.now() - timedelta(0, 60 * 60),
@@ -64,7 +64,7 @@ class TestDeviceGetLog(unittest.TestCase):
 	def test2_getlogs_outtemp_2hours(self):
 		response = self.conn.request(DeviceGetLog(
 			config.gateway_id,
-			"0x4135d00019f5234e",
+			"0xa335d00019f5234e",
 			1,
 			self.session,
 			start = datetime.now() - timedelta(0, 24 * 60 * 60),
@@ -78,7 +78,7 @@ class TestDeviceGetLog(unittest.TestCase):
 	def test2_getlogs_humidity_day(self):
 		response = self.conn.request(DeviceGetLog(
 			config.gateway_id,
-			"0x4135d00019f5234e",
+			"0xa335d00019f5234e",
 			2,
 			self.session,
 			start = datetime.now() - timedelta(0, 48 * 60 * 60),

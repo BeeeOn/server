@@ -97,7 +97,7 @@ INSERT INTO beeeon.devices (
 )
 VALUES
 (
-	beeeon.to_device_id(4698890485085053774),
+	beeeon.to_device_id(11760534700801991502),
 	1284174504043136,
 	'ad01fa7b-0295-4c56-b84c-62372112762f',
 	'Temperature',
@@ -110,7 +110,7 @@ VALUES
 	timestamp with time zone '2015-5-2 17:59:59'
 ),
 (
-	beeeon.to_device_id(4791284091754525261),
+	beeeon.to_device_id(11780870713433535053),
 	1284174504043136,
 	'93e56107-686e-4e87-ab61-9c83283a2057',
 	'Humidity',
@@ -123,7 +123,7 @@ VALUES
 	timestamp with time zone '2016-8-9 08:09:08'
 ),
 (
-	beeeon.to_device_id(4840568787177893117),
+	beeeon.to_device_id(11758097814818974973),
 	1284174504043136,
 	'dd74afbf-03ee-40bd-8289-08df10196ecd',
 	'Multi-sensor',
@@ -136,7 +136,7 @@ VALUES
 	timestamp with time zone '2016-9-10 11:30:01'
 ),
 (
-	beeeon.to_device_id(4931887558509748622),
+	beeeon.to_device_id(11777358992112902542),
 	1284174504043136,
 	NULL,
 	'Unknown',
@@ -158,28 +158,28 @@ INSERT INTO beeeon.device_properties (
 )
 VALUES
 (
-	beeeon.to_device_id(4698890485085053774),
+	beeeon.to_device_id(11760534700801991502),
 	1284174504043136,
 	3, -- firmware
 	'v1.0-6453',
 	NULL
 ),
 (
-	beeeon.to_device_id(4791284091754525261),
+	beeeon.to_device_id(11780870713433535053),
 	1284174504043136,
 	3, -- firmware
 	'000-111',
 	NULL
 ),
 (
-	beeeon.to_device_id(4840568787177893117),
+	beeeon.to_device_id(11758097814818974973),
 	1284174504043136,
 	1, -- IP address
 	'NPG6A1VaVcA4A7heqERjEg==',
 	'{"it": 2000, "name": "aes256", "salt": "hwMCpcIm3lg4YDsrIRdvmAv-1z]8Qzfb"}'
 ),
 (
-	beeeon.to_device_id(4840568787177893117),
+	beeeon.to_device_id(11758097814818974973),
 	1284174504043136,
 	2, -- password
 	'qmdPau6zKHxkTqnU3f7po/RiLNFTECFiA5BE7ICQZ8U=',
@@ -199,7 +199,7 @@ INSERT INTO beeeon.sensor_history_recent (
 )
 SELECT
 	1284174504043136,
-	beeeon.to_device_id(4698890485085053774),
+	beeeon.to_device_id(11760534700801991502),
 	0,
 	NOW() - (i * interval '260 seconds'),
 	19.5
@@ -218,7 +218,7 @@ INSERT INTO beeeon.sensor_history_recent (
 )
 SELECT
 	1284174504043136,
-	beeeon.to_device_id(4698890485085053774),
+	beeeon.to_device_id(11760534700801991502),
 	1,
 	NOW() - (i * interval '110 seconds'),
 	25 * SIN(i * 0.01)
@@ -237,7 +237,7 @@ INSERT INTO beeeon.sensor_history_recent (
 )
 SELECT
 	1284174504043136,
-	beeeon.to_device_id(4698890485085053774),
+	beeeon.to_device_id(11760534700801991502),
 	2,
 	NOW() - (i * interval '720 seconds'),
 	random() * 100

@@ -76,7 +76,7 @@ class TestSensorsListDetail(unittest.TestCase):
 	"""
 	def test1_list_sensors_of_device_temperature(self):
 		req = GET(config.ui_host, config.ui_port,
-				"/gateways/1284174504043136/devices/0x4135d00019f5234e/sensors")
+				"/gateways/1284174504043136/devices/0xa335d00019f5234e/sensors")
 		req.authorize(self.session)
 		response, content = req()
 
@@ -97,7 +97,7 @@ class TestSensorsListDetail(unittest.TestCase):
 	"""
 	def test2_detail_room_temperature(self):
 		req = GET(config.ui_host, config.ui_port,
-				"/gateways/1284174504043136/devices/0x4135d00019f5234e/sensors/0")
+				"/gateways/1284174504043136/devices/0xa335d00019f5234e/sensors/0")
 		req.authorize(self.session)
 		response, content = req()
 
@@ -114,7 +114,7 @@ class TestSensorsListDetail(unittest.TestCase):
 	"""
 	def test3_current_room_temperature(self):
 		req = GET(config.ui_host, config.ui_port,
-				"/gateways/1284174504043136/devices/0x4135d00019f5234e/sensors/0/current")
+				"/gateways/1284174504043136/devices/0xa335d00019f5234e/sensors/0/current")
 		req.authorize(self.session)
 		response, content = req()
 
@@ -131,7 +131,7 @@ class TestSensorsListDetail(unittest.TestCase):
 	"""
 	def test4_list_sensors_of_device_unknown(self):
 		req = GET(config.ui_host, config.ui_port,
-				"/gateways/1284174504043136/devices/0x4471959aad24618e/sensors")
+				"/gateways/1284174504043136/devices/0xa371959aad24618e/sensors")
 		req.authorize(self.session)
 		response, content = req()
 
@@ -156,7 +156,7 @@ class TestSensorsListDetail(unittest.TestCase):
 	"""
 	def test5_detail_unknown_temperature(self):
 		req = GET(config.ui_host, config.ui_port,
-				"/gateways/1284174504043136/devices/0x4471959aad24618e/sensors/0")
+				"/gateways/1284174504043136/devices/0xa371959aad24618e/sensors/0")
 		req.authorize(self.session)
 		response, content = req()
 
@@ -173,7 +173,7 @@ class TestSensorsListDetail(unittest.TestCase):
 	"""
 	def test6_current_unknown_temperature(self):
 		req = GET(config.ui_host, config.ui_port,
-				"/gateways/1284174504043136/devices/0x4471959aad24618e/sensors/0/current")
+				"/gateways/1284174504043136/devices/0xa371959aad24618e/sensors/0/current")
 		req.authorize(self.session)
 		response, content = req()
 
@@ -189,7 +189,7 @@ class TestSensorsListDetail(unittest.TestCase):
 	"""
 	def test7_detail_non_existing_sensor(self):
 		req = GET(config.ui_host, config.ui_port,
-				"/gateways/1284174504043136/devices/0x4471959aad24618e/sensors/10")
+				"/gateways/1284174504043136/devices/0xa371959aad24618e/sensors/10")
 		req.authorize(self.session)
 		response, content = req()
 
@@ -200,7 +200,7 @@ class TestSensorsListDetail(unittest.TestCase):
 	"""
 	def test8_current_non_existing_sensor(self):
 		req = GET(config.ui_host, config.ui_port,
-				"/gateways/1284174504043136/devices/0x4471959aad24618e/sensors/10/current")
+				"/gateways/1284174504043136/devices/0xa371959aad24618e/sensors/10/current")
 		req.authorize(self.session)
 		response, content = req()
 
@@ -230,7 +230,7 @@ class TestSensorsListDetail(unittest.TestCase):
 
 	def testb_history_room_temperature_1hour(self):
 		req = GET(config.ui_host, config.ui_port,
-				"/gateways/1284174504043136/devices/0x4135d00019f5234e/sensors/0/history" +
+				"/gateways/1284174504043136/devices/0xa335d00019f5234e/sensors/0/history" +
 				"?range=hour")
 		req.authorize(self.session)
 		response, content = req()
@@ -246,7 +246,7 @@ class TestSensorsListDetail(unittest.TestCase):
 		end = datetime.now()
 
 		req = GET(config.ui_host, config.ui_port,
-				"/gateways/1284174504043136/devices/0x4135d00019f5234e/sensors/0/history" +
+				"/gateways/1284174504043136/devices/0xa335d00019f5234e/sensors/0/history" +
 				"?range=%s,%s" % (start.strftime("%s"), end.strftime("%s")))
 		req.authorize(self.session)
 		response, content = req()
