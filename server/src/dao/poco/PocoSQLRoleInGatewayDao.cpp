@@ -26,6 +26,7 @@ BEEEON_OBJECT_CASTABLE(RoleInGatewayDao)
 BEEEON_OBJECT_REF("daoManager", &PocoSQLRoleInGatewayDao::setDaoManager)
 BEEEON_OBJECT_REF("transactionManager", &PocoSQLRoleInGatewayDao::setTransactionManager)
 BEEEON_OBJECT_REF("sqlLoader", &PocoSQLRoleInGatewayDao::setSQLLoader)
+BEEEON_OBJECT_REF("timeZoneProvider", &PocoSQLRoleInGatewayDao::setTimeZoneProvider)
 BEEEON_OBJECT_HOOK("done", &PocoSQLRoleInGatewayDao::loadQueries)
 BEEEON_OBJECT_END(BeeeOn, PocoSQLRoleInGatewayDao)
 
@@ -47,6 +48,11 @@ PocoSQLRoleInGatewayDao::PocoSQLRoleInGatewayDao()
 	registerQuery(m_queryHasOnlyNonAdminExcept);
 	registerQuery(m_queryCanSeeIdentity);
 	registerQuery(m_queryCanSeeVerifiedIdentity);
+}
+
+void PocoSQLRoleInGatewayDao::setTimeZoneProvider(TimeZoneProvider::Ptr provider)
+{
+	m_timeZoneProvider = provider;
 }
 
 void PocoSQLRoleInGatewayDao::create(RoleInGateway &role)
@@ -290,7 +296,7 @@ void PocoSQLRoleInGatewayDao::fetchAccessibleGateways(
 	);
 
 	RecordSet result = executeSelect(sql);
-	PocoSQLGatewayDao::parseMany<Gateway>(result, list);
+	PocoSQLGatewayDao::parseMany<Gateway>(result, m_timeZoneProvider, list);
 }
 
 bool PocoSQLRoleInGatewayDao::canSeeIdentity(

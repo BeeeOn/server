@@ -1,6 +1,7 @@
 #include "dao/RoleInGatewayDao.h"
 #include "dao/SQLQuery.h"
 #include "dao/poco/PocoAbstractDao.h"
+#include "l10n/TimeZoneProvider.h"
 #include "util/Loggable.h"
 
 namespace Poco {
@@ -22,6 +23,8 @@ class PocoSQLRoleInGatewayDao :
 		public RoleInGatewayDao {
 public:
 	PocoSQLRoleInGatewayDao();
+
+	void setTimeZoneProvider(TimeZoneProvider::Ptr provider);
 
 	void create(RoleInGateway &role) override;
 	bool update(RoleInGateway &role) override;
@@ -107,6 +110,8 @@ private:
 	SQLQuery m_queryHasOnlyNonAdminExcept {"roles_in_gateway.has.only.given.level.except"};
 	SQLQuery m_queryCanSeeIdentity   {"roles_in_gateway.can.see.identity"};
 	SQLQuery m_queryCanSeeVerifiedIdentity {"roles_in_gateway.can.see.verified_identity"};
+
+	TimeZoneProvider::Ptr m_timeZoneProvider;
 };
 
 }

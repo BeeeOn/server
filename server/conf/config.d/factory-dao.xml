@@ -128,12 +128,14 @@
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="sqlLoader" ref="queries" />
+			<set name="timeZoneProvider" ref="timeZoneProvider" />
 		</instance>
 
 		<instance name="sqlGatewayDao" class="BeeeOn::PocoSQLGatewayDao">
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="sqlLoader" ref="queries" />
+			<set name="timeZoneProvider" ref="timeZoneProvider" />
 		</instance>
 
 		<instance name="sqlGatewayStatusDao" class="BeeeOn::PocoSQLGatewayStatusDao">
