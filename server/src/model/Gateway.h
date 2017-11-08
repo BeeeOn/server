@@ -1,9 +1,9 @@
 #ifndef BEEEON_GATEWAY_H
 #define BEEEON_GATEWAY_H
 
-#include <Poco/SharedPtr.h>
 #include <Poco/DateTime.h>
 #include <Poco/Nullable.h>
+#include <Poco/SharedPtr.h>
 #include <Poco/Net/IPAddress.h>
 
 #include "model/Entity.h"
@@ -18,98 +18,31 @@ class Gateway : public Entity<GatewayID> {
 public:
 	typedef Poco::SharedPtr<Gateway> Ptr;
 
-	Gateway():
-		m_latitude(0),
-		m_longitude(0)
-	{
-	}
+	Gateway();
+	Gateway(const ID &id);
 
-	Gateway(const ID &id):
-		Entity<GatewayID>(id),
-		m_latitude(0),
-		m_longitude(0)
-	{
-	}
+	void setName(const std::string &name);
+	const std::string &name() const;
 
-	void setName(const std::string &name)
-	{
-		m_name = name;
-	}
+	void setAltitude(const Poco::Nullable<int> alt);
+	void setAltitude(int alt);
+	Poco::Nullable<int> altitude() const;
 
-	const std::string &name() const
-	{
-		return m_name;
-	}
+	void setLatitude(double lat);
+	double latitude() const;
 
-	void setAltitude(const Poco::Nullable<int> alt)
-	{
-		m_altitude = alt;
-	}
+	void setLongitude(double lon);
+	double longitude() const;
 
-	void setAltitude(int alt)
-	{
-		m_altitude = alt;
-	}
+	void setLastChanged(const Poco::Nullable<Poco::DateTime> &at);
+	Poco::Nullable<Poco::DateTime> lastChanged() const;
 
-	Poco::Nullable<int> altitude() const
-	{
-		return m_altitude;
-	}
+	void setVersion(const std::string &version);
+	std::string version() const;
 
-	void setLatitude(double lat)
-	{
-		m_latitude = lat;
-	}
-
-	double latitude() const
-	{
-		return m_latitude;
-	}
-
-	void setLongitude(double lon)
-	{
-		m_longitude = lon;
-	}
-
-	double longitude() const
-	{
-		return m_longitude;
-	}
-
-	void setLastChanged(const Poco::Nullable<Poco::DateTime> &at)
-	{
-		m_lastChanged = at;
-	}
-
-	Poco::Nullable<Poco::DateTime> lastChanged() const
-	{
-		return m_lastChanged;
-	}
-
-	void setVersion(const std::string &version)
-	{
-		m_version = version;
-	}
-
-	std::string version() const
-	{
-		return m_version;
-	}
-
-	void setIPAddress(const std::string &ipAddress)
-	{
-		setIPAddress(Poco::Net::IPAddress(ipAddress));
-	}
-
-	void setIPAddress(const Poco::Net::IPAddress &ipAddress)
-	{
-		m_ipAddress = ipAddress;
-	}
-
-	Poco::Net::IPAddress ipAddress() const
-	{
-		return m_ipAddress;
-	}
+	void setIPAddress(const std::string &ipAddress);
+	void setIPAddress(const Poco::Net::IPAddress &ipAddress);
+	Poco::Net::IPAddress ipAddress() const;
 
 private:
 	std::string m_name;

@@ -53,6 +53,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/Control.cpp
 	${PROJECT_SOURCE_DIR}/model/DeviceInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/FCMToken.cpp
+	${PROJECT_SOURCE_DIR}/model/Gateway.cpp
 	${PROJECT_SOURCE_DIR}/model/Identity.cpp
 	${PROJECT_SOURCE_DIR}/model/ModuleInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/VerifiedIdentity.cpp
