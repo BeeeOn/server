@@ -49,7 +49,7 @@ void GatewayRestHandler::list(RestFlow &flow)
 
 	PrintHandler result(flow.response().stream());
 	beginSuccess(result, 200);
-	serialize(result, gateways);
+	serialize(result, gateways, flow.locale());
 	endSuccess(result);
 }
 
@@ -65,7 +65,7 @@ void GatewayRestHandler::detail(RestFlow &flow)
 
 	PrintHandler result(flow.response().stream());
 	beginSuccess(result, 200);
-	serialize(result, gateway);
+	serialize(result, gateway, flow.locale());
 	endSuccess(result);
 }
 
@@ -82,7 +82,7 @@ void GatewayRestHandler::update(RestFlow &flow)
 
 	PrintHandler result(flow.response().stream());
 	beginSuccess(result, 200);
-	serialize(result, gateway);
+	serialize(result, gateway, flow.locale());
 	endSuccess(result);
 }
 

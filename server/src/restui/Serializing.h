@@ -32,9 +32,12 @@ class Work;
 
 namespace RestUI {
 
-void serialize(Poco::JSON::PrintHandler &output, const Gateway &gateway);
 void serialize(Poco::JSON::PrintHandler &output,
-		const std::vector<Gateway> &gateways);
+		const Gateway &gateway,
+		const Locale &locale);
+void serialize(Poco::JSON::PrintHandler &output,
+		const std::vector<Gateway> &gateways,
+		const Locale &locale);
 
 void serialize(Poco::JSON::PrintHandler &output,
 		Translator &translator,

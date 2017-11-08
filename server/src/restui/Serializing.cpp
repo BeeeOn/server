@@ -53,7 +53,9 @@ static void gatewayStatus(PrintHandler &output, const Gateway &gateway)
 	output.endObject();
 }
 
-void BeeeOn::RestUI::serialize(PrintHandler &output, const Gateway &gateway)
+void BeeeOn::RestUI::serialize(PrintHandler &output,
+		const Gateway &gateway,
+		const Locale &locale)
 {
 	output.startObject();
 
@@ -72,6 +74,8 @@ void BeeeOn::RestUI::serialize(PrintHandler &output, const Gateway &gateway)
 	valueDouble(output, gateway.latitude());
 	output.key("longitude");
 	valueDouble(output, gateway.longitude());
+	output.key("timezone");
+	serialize(output, gateway.timeZone(), locale);
 
 	output.key("state");
 	gatewayStatus(output, gateway);
@@ -80,12 +84,13 @@ void BeeeOn::RestUI::serialize(PrintHandler &output, const Gateway &gateway)
 }
 
 void BeeeOn::RestUI::serialize(PrintHandler &output,
-		const vector<Gateway> &gateways)
+		const vector<Gateway> &gateways,
+		const Locale &locale)
 {
 	output.startArray();
 
 	for (auto &gateway : gateways)
-		serialize(output, gateway);
+		serialize(output, gateway, locale);
 
 	output.endArray();
 }
