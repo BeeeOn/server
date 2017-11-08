@@ -262,6 +262,7 @@ file(GLOB RESTUI_SOURCES
 	restui/RestValueConsumer.cpp
 	restui/RoleRestHandler.cpp
 	restui/SensorRestHandler.cpp
+	restui/TimeZoneRestHandler.cpp
 	restui/TypeRestHandler.cpp
 	restui/GatewayRestHandler.cpp
 	restui/WorkRestHandler.cpp

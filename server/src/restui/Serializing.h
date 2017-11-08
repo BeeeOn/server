@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "provider/TypeInfoProvider.h"
+#include "l10n/TimeZone.h"
 #include "model/Control.h"
 #include "model/TypeInfo.h"
 
@@ -21,6 +22,7 @@ namespace BeeeOn {
 class Device;
 class Gateway;
 class LegacyRoleInGateway;
+class Locale;
 class Location;
 class VerifiedIdentity;
 class RoleInGateway;
@@ -75,6 +77,13 @@ void serialize(Poco::JSON::PrintHandler &output,
 void serialize(Poco::JSON::PrintHandler &output,
 		Translator &translator,
 		const std::list<Control> &control);
+
+void serialize(Poco::JSON::PrintHandler &output,
+		const TimeZone &zone,
+		const Locale &locale);
+void serialize(Poco::JSON::PrintHandler &output,
+		const std::vector<TimeZone> &zones,
+		const Locale &locale);
 
 }
 

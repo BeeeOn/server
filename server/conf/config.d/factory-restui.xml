@@ -53,6 +53,7 @@
 			<add name="handlers" ref="uiControlHandler" />
 			<add name="handlers" ref="uiTypeHandler" />
 			<add name="handlers" ref="uiFCMTokenHandler" if-yes="${fcm.enable}" />
+			<add name="handlers" ref="uiTimeZoneHandler" />
 		</instance>
 
 		<instance name="uiBuiltinHandler" class="BeeeOn::BuiltinRestHandler" />
@@ -103,6 +104,10 @@
 		<instance name="uiFCMTokenHandler" class="BeeeOn::RestUI::FCMTokenRestHandler">
 			<set name="fcmTokenService" ref="fcmTokenService" />
 			<set name="senderId" text="${fcm.senderId}" />
+		</instance>
+
+		<instance name="uiTimeZoneHandler" class="BeeeOn::RestUI::TimeZoneRestHandler">
+			<set name="timeZoneProvider" ref="timeZoneProvider" />
 		</instance>
 	</factory>
 </system>

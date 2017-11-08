@@ -3,6 +3,7 @@
 #include <Poco/DateTime.h>
 #include <Poco/JSON/PrintHandler.h>
 
+#include "l10n/Locale.h"
 #include "l10n/Translator.h"
 #include "model/Device.h"
 #include "model/Gateway.h"
@@ -639,6 +640,47 @@ void BeeeOn::RestUI::serialize(PrintHandler &output,
 
 	for (auto &control : controls)
 		serialize(output, translator, control);
+
+	output.endArray();
+}
+
+void BeeeOn::RestUI::serialize(PrintHandler &output,
+		const TimeZone &zone,
+		const Locale &locale)
+{
+	Timestamp now;
+
+	output.startObject();
+
+	output.key("id");
+	output.value(zone.id());
+
+	output.key("short_name");
+	output.value(zone.shortName(locale));
+
+	output.key("display_name");
+	output.value(zone.displayName(locale));
+
+	output.key("utc_offset");
+	output.value(zone.utcOffset().totalSeconds());
+
+	output.key("dst_offset");
+	output.value(zone.dstOffset().totalSeconds());
+
+	output.key("dst_in_effect");
+	output.value(zone.appliesDST(now));
+
+	output.endObject();
+}
+
+void BeeeOn::RestUI::serialize(PrintHandler &output,
+		const vector<TimeZone> &zones,
+		const Locale &locale)
+{
+	output.startArray();
+
+	for (auto &zone : zones)
+		serialize(output, zone, locale);
 
 	output.endArray();
 }
