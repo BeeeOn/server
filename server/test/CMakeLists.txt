@@ -19,6 +19,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/l10n/IcuLocaleImplTest.cpp
 	${PROJECT_SOURCE_DIR}/l10n/IcuLocaleManagerTest.cpp
 	${PROJECT_SOURCE_DIR}/l10n/IcuTranslatorTest.cpp
+	${PROJECT_SOURCE_DIR}/l10n/IcuTimeZoneImplTest.cpp
 	${PROJECT_SOURCE_DIR}/l10n/TimeZoneImplTest.cpp
 	${PROJECT_SOURCE_DIR}/model/DevicePropertyTest.cpp
 	${PROJECT_SOURCE_DIR}/server/CORSFilterTest.cpp
