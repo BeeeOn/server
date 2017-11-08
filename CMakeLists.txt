@@ -1,6 +1,8 @@
 cmake_minimum_required (VERSION 2.8.11)
 project (server C CXX)
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
 set (CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -pedantic -Wall -lpthread -ggdb3")
 add_definitions(-std=c++11)
 
@@ -55,18 +57,7 @@ if(XSLTPROC)
 	set(SUPPORTED_DEVICES "INPUT += ${CMAKE_CURRENT_BINARY_DIR}/supported_devices.md")
 endif()
 
-find_package(Doxygen)
-
-if(DOXYGEN_FOUND)
-	set(DOXYGEN_IN  ${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxyfile.in)
-	set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
-	configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT})
-	add_custom_target(doc
-		COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
-		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-		COMMENT "Generating API documentation with Doxygen"
-		VERBATIM)
-endif()
+include(DoxygenSupport)
 
 find_program(MARKED_MAN NAMES marked-man)
 find_program(RONN NAMES ronn)
