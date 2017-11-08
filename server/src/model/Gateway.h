@@ -6,6 +6,7 @@
 #include <Poco/SharedPtr.h>
 #include <Poco/Net/IPAddress.h>
 
+#include "l10n/TimeZone.h"
 #include "model/Entity.h"
 #include "model/GatewayID.h"
 
@@ -44,6 +45,9 @@ public:
 	void setIPAddress(const Poco::Net::IPAddress &ipAddress);
 	Poco::Net::IPAddress ipAddress() const;
 
+	void setTimeZone(const TimeZone &tz);
+	const TimeZone &timeZone() const;
+
 private:
 	std::string m_name;
 	Poco::Nullable<int> m_altitude;
@@ -52,6 +56,7 @@ private:
 	Poco::Nullable<Poco::DateTime> m_lastChanged;
 	std::string m_version;
 	Poco::Net::IPAddress m_ipAddress;
+	TimeZone m_timeZone;
 };
 
 typedef Gateway::ID GatewayID;

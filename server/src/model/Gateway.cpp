@@ -1,3 +1,5 @@
+#include <Poco/Timezone.h>
+
 #include "model/Gateway.h"
 
 using namespace Poco;
@@ -97,4 +99,12 @@ IPAddress Gateway::ipAddress() const
 	return m_ipAddress;
 }
 
+void Gateway::setTimeZone(const TimeZone &tz)
+{
+	m_timeZone = tz;
+}
 
+const TimeZone &Gateway::timeZone() const
+{
+	return m_timeZone;
+}
