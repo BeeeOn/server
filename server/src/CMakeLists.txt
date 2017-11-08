@@ -44,6 +44,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/l10n/IcuLocaleImpl.cpp
 	${PROJECT_SOURCE_DIR}/l10n/IcuLocaleManager.cpp
 	${PROJECT_SOURCE_DIR}/l10n/IcuTimeZoneImpl.cpp
+	${PROJECT_SOURCE_DIR}/l10n/IcuTimeZoneProvider.cpp
 	${PROJECT_SOURCE_DIR}/l10n/IcuTranslator.cpp
 	${PROJECT_SOURCE_DIR}/l10n/TimeZone.cpp
 	${PROJECT_SOURCE_DIR}/l10n/TimeZoneImpl.cpp

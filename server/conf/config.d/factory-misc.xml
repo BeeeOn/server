@@ -17,6 +17,9 @@
 			<set name="bundleName" text="${bundle.name}" />
 		</instance>
 
+		<instance name="timeZoneProvider" class="BeeeOn::IcuTimeZoneProvider">
+		</instance>
+
 		<instance name="asyncExecutor" class="BeeeOn::AsyncExecutor">
 		</instance>
 	</factory>
