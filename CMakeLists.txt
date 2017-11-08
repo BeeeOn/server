@@ -6,15 +6,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 set (CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -pedantic -Wall -lpthread -ggdb3")
 add_definitions(-std=c++11)
 
-if(DEFINED ENV{GIT_ID})
-	set (GIT_ID $ENV{GIT_ID})
-else()
-	exec_program(
-		"git"
-		${CMAKE_CURRENT_SOURCE_DIR}
-		ARGS "describe --always --tags"
-		OUTPUT_VARIABLE GIT_ID)
-endif()
+include(GitSupport)
 
 exec_program(
 	"genrb"
