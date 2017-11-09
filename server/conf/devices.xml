@@ -14,6 +14,30 @@
 		</modules>
 	</device>
 
+	<device id="1">
+		<name>Temperature and Humidity Sensor</name>
+		<vendor>Brno University of Technology</vendor>
+
+		<match>
+			<exact name="Temperature and humidity sensor" vendor="BeeeOn" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="2">
+				<name>Battery</name>
+			</sensor>
+			<sensor id="1" type="19">
+				<name>Room Temperature</name>
+			</sensor>
+			<sensor id="2" type="19">
+				<name>Outside Temperature</name>
+			</sensor>
+			<sensor id="3" type="8">
+				<name>Room Humidity</name>
+			</sensor>
+		</modules>
+	</device>
+
 	<device id="10">
 		<name>Remote Switch</name>
 		<vendor>Belkin WeMo</vendor>
@@ -35,6 +59,24 @@
 
 		<match>
 			<exact name="Led Light Bulb" vendor="Belkin WeMo" />
+		</match>
+
+		<modules>
+			<control id="0" type="13">
+				<name>On/Off</name>
+			</control>
+			<control id="1" type="4">
+				<name>Brightness</name>
+			</control>
+		</modules>
+	</device>
+
+	<device id="12">
+		<name>Light Dimmer</name>
+		<vendor>Belkin WeMo</vendor>
+
+		<match>
+			<exact name="Dimmer" vendor="Belkin WeMo" />
 		</match>
 
 		<modules>
@@ -136,6 +178,147 @@
 		<modules>
 			<sensor id="0" type="1">
 				<name>Available</name>
+			</sensor>
+		</modules>
+	</device>
+
+	<device id="40">
+		<name>AC-88 Wireless Mains Outlet</name>
+		<vendor>Jablotron</vendor>
+
+		<match>
+			<exact name="AC-88" vendor="Jablotron" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="13">
+				<name>On/Off</name>
+			</sensor>
+		</modules>
+	</device>
+
+	<device id="41">
+		<name>JA-82SH Wireless Shake Sensor</name>
+		<vendor>Jablotron</vendor>
+
+		<match>
+			<exact name="JA-82SH" vendor="Jablotron" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="18">
+				<name>Shake</name>
+			</sensor>
+			<sensor id="1" type="17">
+				<name>Security Alert</name>
+			</sensor>
+			<sensor id="2" type="2">
+				<name>Battery</name>
+			</sensor>
+		</modules>
+	</device>
+
+	<device id="42">
+		<name>JA-85ST Wireless Fire Sensor</name>
+		<vendor>Jablotron</vendor>
+
+		<match>
+			<exact name="JA-85ST" vendor="Jablotron" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="7">
+				<name>Fire Sensor Alarm</name>
+			</sensor>
+			<sensor id="1" type="17">
+				<name>Security Alert</name>
+			</sensor>
+			<sensor id="2" type="2">
+				<name>Battery</name>
+			</sensor>
+		</modules>
+	</device>
+
+	<device id="43">
+		<name>JA-81M Wireless Magnetic Door Contact</name>
+		<vendor>Jablotron</vendor>
+
+		<match>
+			<exact name="JA-81M" vendor="Jablotron" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="12">
+				<name>Open/Closed</name>
+			</sensor>
+			<sensor id="1" type="17">
+				<name>Security Alert</name>
+			</sensor>
+			<sensor id="2" type="2">
+				<name>Battery</name>
+			</sensor>
+		</modules>
+	</device>
+
+	<device id="44">
+		<name>JA-83M Wireless Magnetic Door Contact</name>
+		<vendor>Jablotron</vendor>
+
+		<match>
+			<exact name="JA-83M" vendor="Jablotron" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="12">
+				<name>Open/Closed</name>
+			</sensor>
+			<sensor id="1" type="17">
+				<name>Security Alert</name>
+			</sensor>
+			<sensor id="2" type="2">
+				<name>Battery</name>
+			</sensor>
+		</modules>
+	</device>
+
+	<device id="45">
+		<name>RC-86K Wireless Remote Control</name>
+		<vendor>Jablotron</vendor>
+
+		<match>
+			<exact name="RC-86K" vendor="Jablotron" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="12">
+				<name>Open/Closed</name>
+			</sensor>
+			<sensor id="1" type="17">
+				<name>Security Alert</name>
+			</sensor>
+			<sensor id="2" type="2">
+				<name>Battery</name>
+			</sensor>
+		</modules>
+	</device>
+
+	<device id="46">
+		<name>TP-82N Wireless Thermostat</name>
+		<vendor>Jablotron</vendor>
+
+		<match>
+			<exact name="TP-82N" vendor="Jablotron" />
+		</match>
+
+		<modules>
+			<control id="0" type="19" manual-only="yes">
+				<name>Requested Temperature</name>
+			</control>
+			<sensor id="1" type="18">
+				<name>Room Temperature</name>
+			</sensor>
+			<sensor id="2" type="2">
+				<name>Battery</name>
 			</sensor>
 		</modules>
 	</device>
