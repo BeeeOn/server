@@ -986,6 +986,7 @@ FILTER_SOURCE_PATTERNS =
 INPUT += @CMAKE_CURRENT_SOURCE_DIR@/doc/mainpage.md
 INPUT += @CMAKE_CURRENT_SOURCE_DIR@/doc/install.md
 INPUT += @CMAKE_CURRENT_SOURCE_DIR@/t/README.md
+@SUPPORTED_DEVICES@
 USE_MDFILE_AS_MAINPAGE = @CMAKE_CURRENT_SOURCE_DIR@/doc/mainpage.md
 
 #---------------------------------------------------------------------------
