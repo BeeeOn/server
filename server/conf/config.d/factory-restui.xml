@@ -90,17 +90,14 @@
 		<instance name="uiSensorHandler" class="BeeeOn::RestUI::SensorRestHandler">
 			<set name="sensorService" ref="sensorService" />
 			<set name="sensorHistoryService" ref="sensorHistoryService" />
-			<set name="translatorFactory" ref="translatorFactory" />
 		</instance>
 
 		<instance name="uiControlHandler" class="BeeeOn::RestUI::ControlRestHandler">
 			<set name="controlService" ref="controlService" />
-			<set name="translatorFactory" ref="translatorFactory" />
 		</instance>
 
 		<instance name="uiTypeHandler" class="BeeeOn::RestUI::TypeRestHandler">
 			<set name="typeInfoProvider" ref="typeInfoProvider" />
-			<set name="translatorFactory" ref="translatorFactory" />
 		</instance>
 
 		<instance name="uiFCMTokenHandler" class="BeeeOn::RestUI::FCMTokenRestHandler">
