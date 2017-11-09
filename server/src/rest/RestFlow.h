@@ -3,6 +3,7 @@
 
 #include <Poco/URI.h>
 
+#include "l10n/Locale.h"
 #include "l10n/Translator.h"
 #include "rest/PocoContext.h"
 #include "rest/UriPattern.h"
@@ -94,6 +95,18 @@ public:
 	 */
 	Translator::Ptr translator() const;
 
+	/**
+	 * Set locale for the flow. If a session is set, than the session locale
+	 * has higher priority.
+	 */
+	void setLocale(const Locale &locale);
+
+	/**
+	 * Obtain locale from the session if any. Otherwise, use the
+	 * m_locale.
+	 */
+	const Locale &locale() const;
+
 private:
 	RestLinker &m_linker;
 	Poco::URI &m_uri;
@@ -102,6 +115,7 @@ private:
 	PocoResponse m_response;
 	ExpirableSession::Ptr m_session;
 	Translator::Ptr m_translator;
+	Locale m_locale;
 };
 
 }

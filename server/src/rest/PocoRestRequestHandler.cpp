@@ -188,14 +188,15 @@ void PocoRestRequestHandler::doHandleRequest(
 		if (!res.sent()) {
 			flow.setSession(m_session);
 
+			const string language = req.has("Accept-Language") ? req.get("Accept-Language") : "";
+			const Locale &httpLocale = m_localeExtractor.extract(language);
+			flow.setLocale(httpLocale);
+
+			if (logger().debug())
+				logger().debug("resolved HTTP locale: " + httpLocale.toString());
+
+
 			if (m_session.isNull()) {
-				string language = req.has("Accept-Language") ? req.get("Accept-Language") : "";
-
-				const Locale &httpLocale = m_localeExtractor.extract(language);
-
-				if (logger().debug())
-					logger().debug("resolved locale: " + httpLocale.toString());
-
 				Translator::Ptr translator = m_translatorFactory.create(httpLocale);
 				flow.setTranslator(translator);
 			}

@@ -94,3 +94,16 @@ Translator::Ptr RestFlow::translator() const
 {
 	return m_translator;
 }
+
+void RestFlow::setLocale(const Locale &locale)
+{
+	m_locale = locale;
+}
+
+const Locale &RestFlow::locale() const
+{
+	if (m_session.isNull())
+		return m_locale;
+
+	return m_session->locale();
+}

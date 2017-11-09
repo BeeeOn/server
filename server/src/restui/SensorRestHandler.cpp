@@ -19,7 +19,6 @@ BEEEON_OBJECT_BEGIN(BeeeOn, RestUI, SensorRestHandler)
 BEEEON_OBJECT_CASTABLE(RestHandler)
 BEEEON_OBJECT_REF("sensorService", &SensorRestHandler::setSensorService)
 BEEEON_OBJECT_REF("sensorHistoryService", &SensorRestHandler::setSensorHistoryService)
-BEEEON_OBJECT_REF("translatorFactory", &SensorRestHandler::setTranslatorFactory)
 BEEEON_OBJECT_END(BeeeOn, RestUI, SensorRestHandler)
 
 using namespace std;
@@ -47,16 +46,8 @@ void SensorRestHandler::setSensorHistoryService(SensorHistoryService::Ptr servic
 	m_sensorHistoryService = service;
 }
 
-void SensorRestHandler::setTranslatorFactory(TranslatorFactory::Ptr factory)
-{
-	m_translatorFactory = factory;
-}
-
 void SensorRestHandler::list(RestFlow &flow)
 {
-	Translator::Ptr translator =
-		m_translatorFactory->create(flow.session()->locale());
-
 	User user(flow.session()->userID());
 	Gateway gateway(GatewayID::parse(flow.param("gateway_id")));
 	Device device(DeviceID::parse(flow.param("device_id")));
@@ -69,7 +60,7 @@ void SensorRestHandler::list(RestFlow &flow)
 
 	PrintHandler result(flow.response().stream());
 	beginSuccess(result, 200);
-	serialize(result, *translator, sensors);
+	serialize(result, *flow.translator(), sensors);
 	endSuccess(result);
 }
 
@@ -91,15 +82,12 @@ void SensorRestHandler::prepareDetail(RestFlow &flow, Sensor &sensor)
 
 void SensorRestHandler::detail(RestFlow &flow)
 {
-	Translator::Ptr translator =
-		m_translatorFactory->create(flow.session()->locale());
-
 	Sensor sensor;
 	prepareDetail(flow, sensor);
 
 	PrintHandler result(flow.response().stream());
 	beginSuccess(result, 200);
-	serialize(result, *translator, sensor);
+	serialize(result, *flow.translator(), sensor);
 	endSuccess(result);
 }
 

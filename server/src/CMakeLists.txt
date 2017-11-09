@@ -43,7 +43,12 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/l10n/HTTPLocaleExtractor.cpp
 	${PROJECT_SOURCE_DIR}/l10n/IcuLocaleImpl.cpp
 	${PROJECT_SOURCE_DIR}/l10n/IcuLocaleManager.cpp
+	${PROJECT_SOURCE_DIR}/l10n/IcuTimeZoneImpl.cpp
+	${PROJECT_SOURCE_DIR}/l10n/IcuTimeZoneProvider.cpp
 	${PROJECT_SOURCE_DIR}/l10n/IcuTranslator.cpp
+	${PROJECT_SOURCE_DIR}/l10n/TimeZone.cpp
+	${PROJECT_SOURCE_DIR}/l10n/TimeZoneImpl.cpp
+	${PROJECT_SOURCE_DIR}/l10n/TimeZoneProvider.cpp
 	${PROJECT_SOURCE_DIR}/model/AbstractModule.cpp
 	${PROJECT_SOURCE_DIR}/model/Control.cpp
 	${PROJECT_SOURCE_DIR}/model/DeviceInfo.cpp
@@ -257,6 +262,7 @@ file(GLOB RESTUI_SOURCES
 	restui/RestValueConsumer.cpp
 	restui/RoleRestHandler.cpp
 	restui/SensorRestHandler.cpp
+	restui/TimeZoneRestHandler.cpp
 	restui/TypeRestHandler.cpp
 	restui/GatewayRestHandler.cpp
 	restui/WorkRestHandler.cpp

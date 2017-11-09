@@ -16,7 +16,6 @@
 BEEEON_OBJECT_BEGIN(BeeeOn, RestUI, TypeRestHandler)
 BEEEON_OBJECT_CASTABLE(RestHandler)
 BEEEON_OBJECT_REF("typeInfoProvider", &TypeRestHandler::setTypeInfoProvider)
-BEEEON_OBJECT_REF("translatorFactory", &TypeRestHandler::setTranslatorFactory)
 BEEEON_OBJECT_END(BeeeOn, RestUI, TypeRestHandler)
 
 using namespace std;
@@ -37,28 +36,17 @@ void TypeRestHandler::setTypeInfoProvider(TypeInfoProvider *typeInfoProvider)
 	m_provider = typeInfoProvider;
 }
 
-void TypeRestHandler::setTranslatorFactory(TranslatorFactory::Ptr factory)
-{
-	m_translatorFactory = factory;
-}
-
 void TypeRestHandler::list(RestFlow &flow)
 {
-	Translator::Ptr translator =
-		m_translatorFactory->create(flow.session()->locale());
-
 	PrintHandler result(flow.response().stream());
 
 	beginSuccess(result, 200);
-	serialize(result, *translator, m_provider->begin(), m_provider->end());
+	serialize(result, *flow.translator(), m_provider->begin(), m_provider->end());
 	endSuccess(result);
 }
 
 void TypeRestHandler::detail(RestFlow &flow)
 {
-	Translator::Ptr translator =
-		m_translatorFactory->create(flow.session()->locale());
-
 	SimpleID id = SimpleID::parse(flow.param("type_id"));
 	SharedPtr<TypeInfo> info = m_provider->findById(id);
 
@@ -68,6 +56,6 @@ void TypeRestHandler::detail(RestFlow &flow)
 	PrintHandler result(flow.response().stream());
 
 	beginSuccess(result, 200);
-	serialize(result, *translator, *info);
+	serialize(result, *flow.translator(), *info);
 	endSuccess(result);
 }

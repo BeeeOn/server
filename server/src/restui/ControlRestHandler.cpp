@@ -14,7 +14,6 @@
 BEEEON_OBJECT_BEGIN(BeeeOn, RestUI, ControlRestHandler)
 BEEEON_OBJECT_CASTABLE(RestHandler)
 BEEEON_OBJECT_REF("controlService", &ControlRestHandler::setControlService)
-BEEEON_OBJECT_REF("translatorFactory", &ControlRestHandler::setTranslatorFactory)
 BEEEON_OBJECT_END(BeeeOn, RestUI, ControlRestHandler)
 
 using namespace std;
@@ -39,16 +38,8 @@ void ControlRestHandler::setControlService(ControlService::Ptr service)
 	m_controlService = service;
 }
 
-void ControlRestHandler::setTranslatorFactory(TranslatorFactory::Ptr factory)
-{
-	m_translatorFactory = factory;
-}
-
 void ControlRestHandler::list(RestFlow &flow)
 {
-	Translator::Ptr translator =
-		m_translatorFactory->create(flow.session()->locale());
-
 	User user(flow.session()->userID());
 	Gateway gateway(GatewayID::parse(flow.param("gateway_id")));
 	Device device(DeviceID::parse(flow.param("device_id")));
@@ -61,7 +52,7 @@ void ControlRestHandler::list(RestFlow &flow)
 
 	PrintHandler result(flow.response().stream());
 	beginSuccess(result, 200);
-	serialize(result, *translator, controls);
+	serialize(result, *flow.translator(), controls);
 	endSuccess(result);
 }
 
@@ -83,15 +74,12 @@ void ControlRestHandler::prepareDetail(RestFlow &flow, Control &control)
 
 void ControlRestHandler::detail(RestFlow &flow)
 {
-	Translator::Ptr translator =
-		m_translatorFactory->create(flow.session()->locale());
-
 	Control control;
 	prepareDetail(flow, control);
 
 	PrintHandler result(flow.response().stream());
 	beginSuccess(result, 200);
-	serialize(result, *translator, control);
+	serialize(result, *flow.translator(), control);
 	endSuccess(result);
 }
 
