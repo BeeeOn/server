@@ -51,7 +51,7 @@ void AuthRestHandler::list(RestFlow &flow)
 		result.startObject();
 
 		result.key("id");
-		result.value(provider->name());
+		result.value(provider->id());
 
 		result.key("name");
 		result.value(provider->name()); // TODO

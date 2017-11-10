@@ -126,8 +126,19 @@ string AuthResult::locale() const
 }
 
 AbstractAuthProvider::AbstractAuthProvider(const string &name):
+	m_id(name),
 	m_name(name)
 {
+}
+
+void AbstractAuthProvider::setID(const string &id)
+{
+	m_id = id;
+}
+
+const string &AbstractAuthProvider::id() const
+{
+	return m_id;
 }
 
 const string &AbstractAuthProvider::name() const

@@ -89,6 +89,11 @@ public:
 	virtual ~AuthProvider();
 
 	/**
+	 * Return id of the provider.
+	 */
+	virtual const std::string &id() const = 0;
+
+	/**
 	 * Return name of the provider.
 	 */
 	virtual const std::string &name() const = 0;
@@ -109,9 +114,13 @@ class AbstractAuthProvider : public virtual AuthProvider,
 public:
 	AbstractAuthProvider(const std::string &name);
 
+	void setID(const std::string &id);
+	const std::string &id() const override;
+
 	const std::string &name() const override;
 
 protected:
+	std::string m_id;
 	const std::string m_name;
 };
 
