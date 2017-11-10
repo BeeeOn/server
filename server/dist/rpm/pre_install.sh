@@ -15,5 +15,9 @@ case "$1" in
 	/usr/bin/chmod 0770 /var/log/beeeon
 ;;
 2) # upgrade
+	echo "stopping service beeeon-server..."
+	/usr/bin/systemctl stop beeeon-server.service \
+		&& echo "service beeeon-server has been stopped" \
+		|| echo "failed to stop beeeon-server service"
 ;;
 esac

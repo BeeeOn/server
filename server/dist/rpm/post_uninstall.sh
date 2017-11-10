@@ -16,5 +16,9 @@ case "$1" in
 	rmdir --ignore-fail-on-non-empty -v /var/lib/beeeon
 ;;
 1) # upgrade
+	echo "please, start beeeon-server service manually"
+	echo ""
+	echo "   systemctl start beeeon-server.service"
+	echo ""
 ;;
 esac
