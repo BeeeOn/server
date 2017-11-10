@@ -141,6 +141,8 @@ list(APPEND CPACK_RPM_USER_FILELIST "%attr(0755,root,root) /usr/share/man/man7/*
 endif()
 
 set(CPACK_RPM_PRE_INSTALL_SCRIPT_FILE "${CMAKE_CURRENT_SOURCE_DIR}/dist/rpm/pre_install.sh")
+set(CPACK_RPM_POST_INSTALL_SCRIPT_FILE "${CMAKE_CURRENT_SOURCE_DIR}/dist/rpm/post_install.sh")
+set(CPACK_RPM_PRE_UNINSTALL_SCRIPT_FILE "${CMAKE_CURRENT_SOURCE_DIR}/dist/rpm/pre_uninstall.sh")
 set(CPACK_RPM_POST_UNINSTALL_SCRIPT_FILE "${CMAKE_CURRENT_SOURCE_DIR}/dist/rpm/post_uninstall.sh")
 
 include(CPack)
