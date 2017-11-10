@@ -56,6 +56,12 @@ void AuthRestHandler::list(RestFlow &flow)
 		result.key("name");
 		result.value(provider->name()); // TODO
 
+		result.key("display_name");
+		result.value(flow.translator()->format(
+			"auth.providers." + provider->name(),
+			provider->name()
+		));
+
 		OAuth2AuthProvider *oauth2 = dynamic_cast<OAuth2AuthProvider *>(provider);
 		if (oauth2 != NULL) {
 			result.key("oauth2");
