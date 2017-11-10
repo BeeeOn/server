@@ -103,7 +103,7 @@ endif()
 
 set(CPACK_PACKAGE_VERSION_MAJOR "2017")
 set(CPACK_PACKAGE_VERSION_MINOR "10")
-set(CPACK_PACKAGE_VERSION_PATCH "1-rc2")
+set(CPACK_PACKAGE_VERSION_PATCH "1-rc3")
 set(CPACK_PACKAGE_NAME "beeeon-server")
 set(CPACK_PACKAGE_VENDOR "Brno University of Technology")
 set(CPACK_PACKAGE_CONTACT "Jan Viktorin <iviktorin@fit.vutbr.cz>")
