@@ -109,7 +109,7 @@ class AbstractAuthProvider : public virtual AuthProvider,
 public:
 	AbstractAuthProvider(const std::string &name);
 
-	const std::string &name() const;
+	const std::string &name() const override;
 
 protected:
 	const std::string m_name;
@@ -124,7 +124,7 @@ class AuthCodeAuthProvider : public AbstractAuthProvider {
 public:
 	AuthCodeAuthProvider(const std::string &name);
 
-	bool authorize(const Credentials &cred, AuthResult &result);
+	bool authorize(const Credentials &cred, AuthResult &result) override;
 
 protected:
 	/**
