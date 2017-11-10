@@ -50,12 +50,22 @@
 			<set name="id" text="google-android"/>
 		</instance>
 
-		<instance name="facebookAuthProvider"
+		<instance name="facebookWebAuth"
 				class="BeeeOn::FacebookAuthProvider">
-			<set name="clientSecret" text="${facebook.clientSecret}"/>
-			<set name="clientId" text="${facebook.clientId}"/>
-			<set name="redirectUri" text="${facebook.redirectUri}"/>
+			<set name="clientSecret" text="${web-app.facebook.clientSecret}"/>
+			<set name="clientId" text="${web-app.facebook.clientId}"/>
+			<set name="redirectUri" text="${web-app.facebook.redirectUri}"/>
 			<set name="sslConfig" ref="facebookOAuthSSL"/>
+			<set name="id" text="facebook-webapp" />
+		</instance>
+
+		<instance name="facebookAndroidAuth"
+				class="BeeeOn::FacebookAuthProvider">
+			<set name="clientSecret" text="${android.facebook.clientSecret}"/>
+			<set name="clientId" text="${android.facebook.clientId}"/>
+			<set name="redirectUri" text="${android.facebook.redirectUri}"/>
+			<set name="sslConfig" ref="facebookOAuthSSL"/>
+			<set name="id" text="facebook-android" />
 		</instance>
 	</factory>
 </system>

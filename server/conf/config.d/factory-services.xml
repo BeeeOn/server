@@ -18,7 +18,8 @@
 			<add name="providers" ref="googlePermitAuthProvider" if-yes="${testing.enable}" />
 			<add name="providers" ref="googleWebAuth" if-yes="${web-app.google.enable}" />
 			<add name="providers" ref="googleAndroidAuth" if-yes="${android.google.enable}" />
-			<add name="providers" ref="facebookAuthProvider" if-yes="${facebook.enable}" />
+			<add name="providers" ref="facebookWebAuth" if-yes="${web-app.facebook.enable}" />
+			<add name="providers" ref="facebookAndroidAuth" if-yes="${android.facebook.enable}" />
 		</instance>
 
 		<instance name="deviceService" class="BeeeOn::DeviceServiceImpl">

@@ -66,7 +66,7 @@ class TestAuth(unittest.TestCase):
 			self.assertEqual("Permit Login", provider["display_name"])
 
 		if not google.skip_login():
-			provider = self.find_provider(providers, "google")
+			provider = self.find_provider(providers, "google-webapp")
 			self.assertIsNotNone(provider)
 			self.assertEqual("google", provider["name"])
 			self.assertEqual("Google Login", provider["display_name"])
@@ -74,7 +74,7 @@ class TestAuth(unittest.TestCase):
 			self.assertTrue("client_id" in provider["oauth2"])
 
 		if not facebook.skip_login():
-			provider = self.find_provider(providers, "facebook")
+			provider = self.find_provider(providers, "facebook-webapp")
 			self.assertIsNotNone(provider)
 			self.assertEqual("facebook", provider["name"])
 			self.assertEqual("Facebook Login", provider["display_name"])
@@ -106,9 +106,9 @@ class TestAuth(unittest.TestCase):
 	   automatic login capabilities (via Selenium).
 	"""
 	@unittest.skipIf(google.skip_login(), "Missing configuration to perform Google login")
-	def test3_login_logout_google(self):
+	def test3_login_logout_google_webapp(self):
 		GOOGLE_LOGIN = json.dumps({
-			"provider": "google",
+			"provider": "google-webapp",
 			"code": google.login_auth_code()
 		})
 
@@ -125,9 +125,9 @@ class TestAuth(unittest.TestCase):
 	the test is skipped.
 	"""
 	@unittest.skipIf(facebook.skip_login(), "Missing configuration to perform Facebook login")
-	def test4_login_logout_facebook(self):
+	def test4_login_logout_facebook_webapp(self):
 		FACEBOOK_LOGIN = json.dumps({
-			"provider": "facebook",
+			"provider": "facebook-webapp",
 			"code": facebook.login_auth_code()
 		})
 

@@ -56,7 +56,7 @@ class TestAuth(unittest.TestCase):
 	"""
 	@unittest.skipIf(google.skip_login(), "Missing configuration to perform Google login")
 	def test2_login_logout_google(self):
-		GOOGLE_LOGIN = Login("google", google.login_auth_code())
+		GOOGLE_LOGIN = Login("google-webapp", google.login_auth_code())
 
 		ok, session = login(GOOGLE_LOGIN)
 		self.assertTrue(ok)
@@ -70,7 +70,7 @@ class TestAuth(unittest.TestCase):
 	"""
 	@unittest.skipIf(facebook.skip_login(), "Missing configuration to perform Facebook login")
 	def test3_login_logout_facebook(self):
-		FACEBOOK_LOGIN = Login("facebook", facebook.login_auth_code())
+		FACEBOOK_LOGIN = Login("facebook-webapp", facebook.login_auth_code())
 
 		ok, session = login(FACEBOOK_LOGIN)
 		self.assertTrue(ok)
