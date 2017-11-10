@@ -243,4 +243,20 @@ SELECT
 	random() * 100
 FROM generate_series(0, (extract(epoch FROM interval '14 days') / 720)::integer - 1) AS i;
 
+INSERT INTO beeeon.sensor_history_recent (
+	gateway_id,
+	device_id,
+	module_id,
+	at,
+	value
+)
+VALUES
+(
+	1284174504043136,
+	beeeon.to_device_id(11758097814818974973),
+	0,
+	NOW(),
+	20.0
+);
+
 COMMIT;
