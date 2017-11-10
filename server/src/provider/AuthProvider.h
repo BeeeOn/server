@@ -2,11 +2,9 @@
 #define BEEEON_AUTH_PROVIDER_H
 
 #include <map>
-#include <Poco/Logger.h>
 #include <Poco/URI.h>
 
 #include "util/Loggable.h"
-#include "Debug.h"
 
 namespace BeeeOn {
 
@@ -23,15 +21,9 @@ public:
 	 * The scheme and authInfo are usually extracted
 	 * from a HTTP Request header Authorization.
 	 */
-	Credentials(const std::string &provider):
-		m_provider(provider)
-	{
-	}
+	Credentials(const std::string &provider);
 
-	const std::string &provider() const
-	{
-		return m_provider;
-	}
+	const std::string &provider() const;
 
 private:
 	const std::string m_provider;
@@ -40,16 +32,9 @@ private:
 class AuthCodeCredentials : public Credentials {
 public:
 	AuthCodeCredentials(const std::string &provider,
-			const std::string &authCode):
-		Credentials(provider),
-		m_authCode(authCode)
-	{
-	}
+			const std::string &authCode);
 
-	const std::string &authCode() const
-	{
-		return m_authCode;
-	}
+	const std::string &authCode() const;
 
 private:
 	const std::string m_authCode;
@@ -57,89 +42,31 @@ private:
 
 class AuthResult {
 public:
-	AuthResult()
-	{
-	}
+	AuthResult();
 
-	void setEmail(const std::string &email)
-	{
-		m_email = email;
-	}
+	void setEmail(const std::string &email);
+	std::string email() const;
 
-	std::string email() const
-	{
-		return m_email;
-	}
+	void setProvider(const std::string &provider);
+	std::string provider() const;
 
-	void setProvider(const std::string &provider)
-	{
-		m_provider = provider;
-	}
+	void setAccessToken(const std::string &accessToken);
+	std::string accessToken() const;
 
-	std::string provider() const
-	{
-		return m_provider;
-	}
+	void setProviderID(const std::string &providerID);
+	std::string providerID() const;
 
-	void setAccessToken(const std::string &accessToken)
-	{
-		m_accessToken = accessToken;
-	}
+	void setFirstName(const std::string &firstName);
+	std::string firstName() const;
 
-	std::string accessToken() const
-	{
-		return m_accessToken;
-	}
+	void setLastName(const std::string &lastName);
+	std::string lastName() const;
 
-	void setProviderID(const std::string &providerID)
-	{
-		m_providerID = providerID;
-	}
+	void setPicture(const Poco::URI &picture);
+	const Poco::URI &picture() const;
 
-	std::string providerID() const
-	{
-		return m_providerID;
-	}
-
-	void setFirstName(const std::string &firstName)
-	{
-		m_firstName = firstName;
-	}
-
-	std::string firstName() const
-	{
-		return m_firstName;
-	}
-
-	void setLastName(const std::string &lastName)
-	{
-		m_lastName = lastName;
-	}
-
-	std::string lastName() const
-	{
-		return m_lastName;
-	}
-
-	void setPicture(const Poco::URI &picture)
-	{
-		m_picture = picture;
-	}
-
-	const Poco::URI &picture() const
-	{
-		return m_picture;
-	}
-
-	void setLocale(const std::string &locale)
-	{
-		m_locale = locale;
-	}
-
-	std::string locale() const
-	{
-		return m_locale;
-	}
+	void setLocale(const std::string &locale);
+	std::string locale() const;
 
 private:
 	std::string m_email;
@@ -159,7 +86,7 @@ private:
  */
 class AuthProvider {
 public:
-	virtual ~AuthProvider() {}
+	virtual ~AuthProvider();
 
 	/**
 	 * Return name of the provider.
@@ -180,15 +107,9 @@ public:
 class AbstractAuthProvider : public virtual AuthProvider,
 		public Loggable {
 public:
-	AbstractAuthProvider(const std::string &name):
-		m_name(name)
-	{
-	}
+	AbstractAuthProvider(const std::string &name);
 
-	const std::string &name() const
-	{
-		return m_name;
-	}
+	const std::string &name() const;
 
 protected:
 	const std::string m_name;
@@ -201,21 +122,9 @@ protected:
  */
 class AuthCodeAuthProvider : public AbstractAuthProvider {
 public:
-	AuthCodeAuthProvider(const std::string &name):
-		AbstractAuthProvider(name)
-	{
-	}
+	AuthCodeAuthProvider(const std::string &name);
 
-	bool authorize(const Credentials &cred, AuthResult &result)
-	{
-		_TRACE_METHOD(logger());
-
-		const AuthCodeCredentials &authCodeCredentials =
-			reinterpret_cast<const AuthCodeCredentials &>(cred);
-
-		result.setProvider(name());
-		return verifyAuthCode(authCodeCredentials.authCode(), result);
-	}
+	bool authorize(const Credentials &cred, AuthResult &result);
 
 protected:
 	/**
