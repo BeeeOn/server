@@ -2,7 +2,10 @@
 
 case "$1" in
 1) # install
+	echo "creating group beeeon..."
 	/usr/sbin/groupadd -r beeeon
+
+	echo "creating users beeeon_user, beeeon_admin..."
 	/usr/bin/mkdir -p /var/lib/beeeon
 	/usr/sbin/useradd -r -d /var/lib/beeeon/server-user -m -s /sbin/nologin -g beeeon beeeon_user
 	/usr/sbin/useradd -r -d /var/lib/beeeon/server-admin -m -s /sbin/nologin -g beeeon beeeon_admin
