@@ -138,6 +138,8 @@ void CORSFilter::handlePreflight(const HTTPServerRequest &req, HTTPServerRespons
 
 	const string &origin = req.get("Origin");
 
+	res.add("Vary", "Origin");
+
 	if (originAllowed(origin))
 		res.set("Access-Control-Allow-Origin", origin);
 	else
@@ -172,6 +174,8 @@ void CORSFilter::filterRequest(const HTTPServerRequest &req, HTTPServerResponse 
 
 	if (!req.has("Origin"))
 		throw InvalidArgumentException("missing required Origin header");
+
+	res.add("Vary", "Origin");
 
 	const string &origin = req.get("Origin");
 

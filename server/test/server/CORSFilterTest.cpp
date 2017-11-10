@@ -70,6 +70,7 @@ void CORSFilterTest::testPreflightWithoutOrigin()
 	req->setMethod(HTTPRequest::HTTP_OPTIONS);
 
 	CPPUNIT_ASSERT_THROW(filter.apply(*req, *res), InvalidArgumentException);
+	CPPUNIT_ASSERT(!res->has("Vary"));
 }
 
 /**
@@ -85,6 +86,7 @@ void CORSFilterTest::testPreflightDisallowedOrigin()
 
 	CPPUNIT_ASSERT_THROW(filter.apply(*req, *res), InvalidArgumentException);
 
+	CPPUNIT_ASSERT_EQUAL("Origin", res->get("Vary"));
 	CPPUNIT_ASSERT(!res->has("Access-Control-Allow-Origin"));
 	CPPUNIT_ASSERT(!res->has("Access-Control-Allow-Methods"));
 	CPPUNIT_ASSERT(!res->has("Access-Control-Allow-Headers"));
@@ -106,6 +108,7 @@ void CORSFilterTest::testPreflightDisallowedOriginByPattern()
 
 	CPPUNIT_ASSERT_THROW(filter.apply(*req, *res), InvalidArgumentException);
 
+	CPPUNIT_ASSERT_EQUAL("Origin", res->get("Vary"));
 	CPPUNIT_ASSERT(!res->has("Access-Control-Allow-Origin"));
 	CPPUNIT_ASSERT(!res->has("Access-Control-Allow-Methods"));
 	CPPUNIT_ASSERT(!res->has("Access-Control-Allow-Headers"));
@@ -116,8 +119,11 @@ void CORSFilterTest::testPreflightDisallowedOriginByPattern()
 	req->setMethod(HTTPRequest::HTTP_OPTIONS);
 	req->set("Origin", "sub.thirdparty.com:1000"); // not matching
 
+	res->clear();
+
 	CPPUNIT_ASSERT_THROW(filter.apply(*req, *res), InvalidArgumentException);
 
+	CPPUNIT_ASSERT_EQUAL("Origin", res->get("Vary"));
 	CPPUNIT_ASSERT(!res->has("Access-Control-Allow-Origin"));
 	CPPUNIT_ASSERT(!res->has("Access-Control-Allow-Methods"));
 	CPPUNIT_ASSERT(!res->has("Access-Control-Allow-Headers"));
@@ -139,6 +145,8 @@ void CORSFilterTest::testPreflightAllowedByPattern()
 	req->set("Origin", "thirdparty.com:1267");
 
 	CPPUNIT_ASSERT_NO_THROW(filter.apply(*req, *res));
+
+	CPPUNIT_ASSERT_EQUAL("Origin", res->get("Vary"));
 
 	CPPUNIT_ASSERT(res->has("Access-Control-Allow-Origin"));
 	CPPUNIT_ASSERT_EQUAL("thirdparty.com:1267", res->get("Access-Control-Allow-Origin"));
@@ -168,6 +176,8 @@ void CORSFilterTest::testPreflightNoSettings()
 	req->set("Origin", "thirdparty.com");
 
 	CPPUNIT_ASSERT_NO_THROW(filter.apply(*req, *res));
+
+	CPPUNIT_ASSERT_EQUAL("Origin", res->get("Vary"));
 
 	CPPUNIT_ASSERT(res->has("Access-Control-Allow-Origin"));
 	CPPUNIT_ASSERT_EQUAL("thirdparty.com", res->get("Access-Control-Allow-Origin"));
@@ -206,6 +216,8 @@ void CORSFilterTest::testPreflight()
 
 	CPPUNIT_ASSERT_NO_THROW(filter.apply(*req, *res));
 
+	CPPUNIT_ASSERT_EQUAL("Origin", res->get("Vary"));
+
 	CPPUNIT_ASSERT(res->has("Access-Control-Allow-Origin"));
 	CPPUNIT_ASSERT_EQUAL("thirdparty.com", res->get("Access-Control-Allow-Origin"));
 
@@ -238,6 +250,7 @@ void CORSFilterTest::testOriginNotRequired()
 
 	CPPUNIT_ASSERT_NO_THROW(filter.apply(*req, *res));
 
+	CPPUNIT_ASSERT(!res->has("Vary"));
 	CPPUNIT_ASSERT(!res->has("Access-Control-Allow-Origin"));
 	CPPUNIT_ASSERT(!res->has("Access-Control-Allow-Methods"));
 	CPPUNIT_ASSERT(!res->has("Access-Control-Allow-Headers"));
@@ -259,6 +272,7 @@ void CORSFilterTest::testDisallowedOrigin()
 
 	CPPUNIT_ASSERT_THROW(filter.apply(*req, *res), InvalidArgumentException);
 
+	CPPUNIT_ASSERT_EQUAL("Origin", res->get("Vary"));
 	CPPUNIT_ASSERT(!res->has("Access-Control-Allow-Origin"));
 	CPPUNIT_ASSERT(!res->has("Access-Control-Allow-Methods"));
 	CPPUNIT_ASSERT(!res->has("Access-Control-Allow-Headers"));
@@ -280,6 +294,8 @@ void CORSFilterTest::testDisallowedMethod()
 	req->set("Origin", "thirdparty.com");
 
 	CPPUNIT_ASSERT_THROW(filter.apply(*req, *res), InvalidArgumentException);
+
+	CPPUNIT_ASSERT_EQUAL("Origin", res->get("Vary"));
 
 	CPPUNIT_ASSERT(res->has("Access-Control-Allow-Origin"));
 	CPPUNIT_ASSERT_EQUAL("thirdparty.com", res->get("Access-Control-Allow-Origin"));
@@ -306,6 +322,8 @@ void CORSFilterTest::testDisallowedHeader()
 
 	CPPUNIT_ASSERT_THROW(filter.apply(*req, *res), InvalidArgumentException);
 
+	CPPUNIT_ASSERT_EQUAL("Origin", res->get("Vary"));
+
 	CPPUNIT_ASSERT(res->has("Access-Control-Allow-Origin"));
 	CPPUNIT_ASSERT_EQUAL("thirdparty.com", res->get("Access-Control-Allow-Origin"));
 
@@ -328,6 +346,8 @@ void CORSFilterTest::testPassingRequest()
 	req->set("X-Requested-By", "1212312");
 
 	CPPUNIT_ASSERT_NO_THROW(filter.apply(*req, *res));
+
+	CPPUNIT_ASSERT_EQUAL("Origin", res->get("Vary"));
 
 	CPPUNIT_ASSERT(res->has("Access-Control-Allow-Origin"));
 	CPPUNIT_ASSERT_EQUAL("thirdparty.com", res->get("Access-Control-Allow-Origin"));
