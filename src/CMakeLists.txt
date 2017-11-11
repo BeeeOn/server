@@ -102,6 +102,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/dao/SQLLoader.cpp
 	${PROJECT_SOURCE_DIR}/dao/SQLQuery.cpp
 	${PROJECT_SOURCE_DIR}/fcm/FCMMessage.cpp
+	${PROJECT_SOURCE_DIR}/fcm/FCMResponse.cpp
 	${PROJECT_SOURCE_DIR}/service/ControlService.cpp
 	${PROJECT_SOURCE_DIR}/service/ControlServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/UserService.cpp
