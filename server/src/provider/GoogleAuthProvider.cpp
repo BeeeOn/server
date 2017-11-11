@@ -21,6 +21,7 @@ BEEEON_OBJECT_CASTABLE(OAuth2AuthProvider)
 BEEEON_OBJECT_TEXT("clientId", &GoogleAuthProvider::setClientId)
 BEEEON_OBJECT_TEXT("clientSecret", &GoogleAuthProvider::setClientSecret)
 BEEEON_OBJECT_TEXT("redirectUri", &GoogleAuthProvider::setRedirectURI)
+BEEEON_OBJECT_TEXT("id", &GoogleAuthProvider::setID)
 BEEEON_OBJECT_REF("sslConfig", &GoogleAuthProvider::setSSLConfig)
 BEEEON_OBJECT_END(BeeeOn, GoogleAuthProvider)
 

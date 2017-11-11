@@ -258,6 +258,7 @@ file(GLOB RESTUI_SOURCES
 	restui/DeviceRestHandler.cpp
 	restui/FCMTokenRestHandler.cpp
 	restui/LocationRestHandler.cpp
+	restui/OAuth2CallbackRestHandler.cpp
 	restui/ProfileRestHandler.cpp
 	restui/RestValueConsumer.cpp
 	restui/RoleRestHandler.cpp

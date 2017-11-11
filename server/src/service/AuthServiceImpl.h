@@ -53,7 +53,7 @@ public:
 	void registerProvider(AuthProvider *provider)
 	{
 		m_providers.insert(
-			std::make_pair(provider->name(), provider));
+			std::make_pair(provider->id(), provider));
 	}
 
 	void setNotificationDispatcher(NotificationDispatcher *service)

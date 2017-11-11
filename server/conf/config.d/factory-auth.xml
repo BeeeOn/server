@@ -32,20 +32,40 @@
 			<set name="resultProvider" text="google" />
 		</instance>
 
-		<instance name="googleAuthProvider"
+		<instance name="googleWebAuth"
 				class="BeeeOn::GoogleAuthProvider">
-			<set name="clientSecret" text="${google.clientSecret}"/>
-			<set name="clientId" text="${google.clientId}"/>
-			<set name="redirectUri" text="${google.redirectUri}"/>
+			<set name="clientSecret" text="${web-app.google.clientSecret}"/>
+			<set name="clientId" text="${web-app.google.clientId}"/>
+			<set name="redirectUri" text="${web-app.google.redirectUri}"/>
 			<set name="sslConfig" ref="googleOAuthSSL"/>
+			<set name="id" text="google-webapp"/>
 		</instance>
 
-		<instance name="facebookAuthProvider"
+		<instance name="googleAndroidAuth"
+				class="BeeeOn::GoogleAuthProvider">
+			<set name="clientSecret" text="${android.google.clientSecret}"/>
+			<set name="clientId" text="${android.google.clientId}"/>
+			<set name="redirectUri" text="${android.google.redirectUri}"/>
+			<set name="sslConfig" ref="googleOAuthSSL"/>
+			<set name="id" text="google-android"/>
+		</instance>
+
+		<instance name="facebookWebAuth"
 				class="BeeeOn::FacebookAuthProvider">
-			<set name="clientSecret" text="${facebook.clientSecret}"/>
-			<set name="clientId" text="${facebook.clientId}"/>
-			<set name="redirectUri" text="${facebook.redirectUri}"/>
+			<set name="clientSecret" text="${web-app.facebook.clientSecret}"/>
+			<set name="clientId" text="${web-app.facebook.clientId}"/>
+			<set name="redirectUri" text="${web-app.facebook.redirectUri}"/>
 			<set name="sslConfig" ref="facebookOAuthSSL"/>
+			<set name="id" text="facebook-webapp" />
+		</instance>
+
+		<instance name="facebookAndroidAuth"
+				class="BeeeOn::FacebookAuthProvider">
+			<set name="clientSecret" text="${android.facebook.clientSecret}"/>
+			<set name="clientId" text="${android.facebook.clientId}"/>
+			<set name="redirectUri" text="${android.facebook.redirectUri}"/>
+			<set name="sslConfig" ref="facebookOAuthSSL"/>
+			<set name="id" text="facebook-android" />
 		</instance>
 	</factory>
 </system>

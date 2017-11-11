@@ -8,6 +8,14 @@ root {
 	invalid_input_data { "invalid input data" }
 	internal_error { "internal server error" }
 
+	auth {
+		providers {
+			google { "Google Login" }
+			facebook { "Facebook Login" }
+			permit { "Permit Login" }
+		}
+	}
+
 	types {
 		availability {
 			label { "availability" }
