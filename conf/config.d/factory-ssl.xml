@@ -38,5 +38,10 @@
 			<set name="loadDefaultCA" text="false" />
 		</instance>
 
+		<instance name="fcmApiSSL" class="BeeeOn::SSLClient">
+			<set name="verificationMode" text="${fcm.ssl.verifyMode}" />
+			<set name="caLocation" text="${fcm.ssl.authority}" />
+			<set name="disabledProtocols" text="sslv2,sslv3,tlsv1,tlsv1_1" />
+		</instance>
 	</factory>
 </system>

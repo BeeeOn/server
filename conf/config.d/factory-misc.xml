@@ -22,5 +22,10 @@
 
 		<instance name="asyncExecutor" class="BeeeOn::AsyncExecutor">
 		</instance>
+
+		<instance name="fcmClient" class="BeeeOn::LegacyFCMClient">
+			<set name="fcmApiUri" text="${fcm.api.uri}" />
+			<set name="sslConfig" ref="fcmApiSSL" />
+		</instance>
 	</factory>
 </system>
