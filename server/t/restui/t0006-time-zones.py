@@ -5,10 +5,22 @@ config.import_libs()
 
 import unittest
 import json
+import base64
 
 from rest import GET
 
 class TestTimeZones(unittest.TestCase):
+	def fetch_zone_by_id(self, id):
+		req = GET(config.ui_host, config.ui_port, "/time/zones/" + id)
+		response, content = req()
+
+		self.assertEqual(200, response.status)
+
+		data = json.loads(content)
+		self.assertEqual("success", data["status"])
+
+		return data["data"]
+
 	def fetch_zones(self):
 		req = GET(config.ui_host, config.ui_port, "/time/zones")
 		response, content = req()
@@ -52,24 +64,18 @@ class TestTimeZones(unittest.TestCase):
 	Client has no ability to tell server, what is the reference time for the expected results.
 	"""
 	def test2_europe_prague(self):
-		zones = self.fetch_zones()
+		zone = self.fetch_zone_by_id("Europe/Prague")
 
-		for zone in zones:
-			id = zone["id"]
-			if id == "Europe/Prague":
-				self.assertEqual(3600, zone["utc_offset"])
-				self.assertEqual(3600, zone["dst_offset"])
+		self.assertEqual("Europe/Prague", zone["id"])
+		self.assertEqual(3600, zone["utc_offset"])
+		self.assertEqual(3600, zone["dst_offset"])
 
-				if zone["dst_in_effect"]:
-					self.assertEqual("GMT+02:00", zone["short_name"])
-					self.assertEqual("Europe/Prague (GMT+02:00)", zone["display_name"])
-				else:
-					self.assertEqual("GMT+01:00", zone["short_name"])
-					self.assertEqual("Europe/Prague (GMT+01:00)", zone["display_name"])
-
-				return
-
-		self.fail("missing time zone Europe/Prague")
+		if zone["dst_in_effect"]:
+			self.assertEqual("GMT+02:00", zone["short_name"])
+			self.assertEqual("Europe/Prague (GMT+02:00)", zone["display_name"])
+		else:
+			self.assertEqual("GMT+01:00", zone["short_name"])
+			self.assertEqual("Europe/Prague (GMT+01:00)", zone["display_name"])
 
 	"""
 	Test information about zone Europe/London are correct. The test depends on time.
@@ -78,24 +84,18 @@ class TestTimeZones(unittest.TestCase):
 	Client has no ability to tell server, what is the reference time for the expected results.
 	"""
 	def test3_europe_london(self):
-		zones = self.fetch_zones()
+		zone = self.fetch_zone_by_id("Europe/London")
 
-		for zone in zones:
-			id = zone["id"]
-			if id == "Europe/London":
-				self.assertEqual(0, zone["utc_offset"])
-				self.assertEqual(3600, zone["dst_offset"])
+		self.assertEqual("Europe/London", zone["id"])
+		self.assertEqual(0, zone["utc_offset"])
+		self.assertEqual(3600, zone["dst_offset"])
 
-				if zone["dst_in_effect"]:
-					self.assertEqual("GMT+01:00", zone["short_name"])
-					self.assertEqual("Europe/London (GMT+01:00)", zone["display_name"])
-				else:
-					self.assertEqual("GMT", zone["short_name"])
-					self.assertEqual("Europe/London (GMT)", zone["display_name"])
-
-				return
-
-		self.fail("missing time zone Europe/London")
+		if zone["dst_in_effect"]:
+			self.assertEqual("GMT+01:00", zone["short_name"])
+			self.assertEqual("Europe/London (GMT+01:00)", zone["display_name"])
+		else:
+			self.assertEqual("GMT", zone["short_name"])
+			self.assertEqual("Europe/London (GMT)", zone["display_name"])
 
 if __name__ == '__main__':
 	import sys

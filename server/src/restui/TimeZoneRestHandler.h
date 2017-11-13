@@ -14,6 +14,11 @@ public:
 	void setTimeZoneProvider(TimeZoneProvider::Ptr provider);
 
 	void list(RestFlow &flow);
+	void detailByID(RestFlow &flow);
+	void detailByPair(RestFlow &flow);
+
+protected:
+	void detail(RestFlow &flow, const std::string &id);
 
 private:
 	TimeZoneProvider::Ptr m_provider;
