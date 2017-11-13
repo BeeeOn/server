@@ -1,0 +1,84 @@
+<script>
+function listLogins() {
+	tester.get("/auth", "#login", function (data) {
+		$("#login .methods").empty();
+
+		for (i in data) {
+			var provider = data[i];
+
+			if (provider["id"] == "permit") {
+				$("#login .methods")
+					.append("<div id='login-method-permit'></div>");
+				$("#login-method-permit")
+					.append("<label>User: </label>");
+				$("#login-method-permit")
+					.append("<input id='permit-user' type='text'></input>");
+				$("#permit-user")
+					.attr("value", "joe.doe@example.org");
+
+				var button = $("<button id='permit-button'></button>");
+				button.text(provider["display_name"]);
+				button.click(function () {
+						tester.post("/auth", "#login", {
+							provider: "permit",
+							code: $("#permit-user").val()
+						}, function (data) {
+							tester.installBearer(data["id"]);
+						});
+					});
+
+				$("#login-method-permit").append(button);
+			}
+			else {
+				var name = $("<span class='method-name'></span>");
+				name.text(provider["display_name"] + " (" + provider["id"] + ")");
+				name.attr("alt", "tester does not support this method");
+				name.attr("title", "tester does not support this method");
+
+				if ($("#login .ignored-methods").children().length > 0)
+					$("#login .ignored-methods").append(", ");
+
+				$("#login .ignored-methods").append(name);
+			}
+		}
+	});
+}
+
+tester.modules["login"] = function () {
+	$("#login-list-button").click(function () {
+		listLogins();
+	});
+	$("#login-apply-bearer").click(function () {
+		tester.installBearer(
+			$("#login-input-bearer").val());
+	});
+	$("#login-logout-button").click(function () {
+		if (!tester.bearer) {
+			console.log("no bearer installed");
+			return;
+		}
+
+		tester.delete("/auth", "#login", function () {});
+		$("#" + tester.bearerID(tester.bearer)).remove();
+		tester.uninstallBearer(tester.bearer);
+	});
+};
+</script>
+
+<div id="login" class="module">
+	<h2>Login Module</h2>
+	<div class="custom">
+		<input id="login-input-bearer"></input>
+		<button id="login-apply-bearer">Apply bearer</button>
+		<button id="login-logout-button">Logout</button>
+
+		<h3>Available methods</h3>
+		<button id="login-list-button">List methods</button>
+		<div class="methods"></div>
+
+		<h3>Ignored methods</h3>
+		<div class="ignored-methods"></div>
+	</div>
+	<div class="request"></div>
+	<div class="response"></div>
+</div>

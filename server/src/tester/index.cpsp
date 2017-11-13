@@ -1,0 +1,269 @@
+<%@ page namespace="BeeeOn::Tester" %>
+<%@ impl include="di/Injectable.h" %>
+<%!
+
+BEEEON_OBJECT_BEGIN(BeeeOn, Tester, IndexHandler)
+BEEEON_OBJECT_CASTABLE(Poco::Net::HTTPRequestHandler)
+BEEEON_OBJECT_END(BeeeOn, Tester, IndexHandler)
+%>
+
+<html>
+	<head>
+		<title>Login Tester</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+		<style>
+		.module {
+			height: 400 px;
+			display: block;
+			float: none;
+		}
+		.module .custom {
+			display: inline;
+			width: 30%;
+			overflow: auto;
+		}
+		.module .request {
+			position: relative;
+			display: inline;
+			border-left: 2px;
+			border-right: 2px;
+			width: 30%;
+			overflow: auto;
+		}
+		.module .response {
+			position: relative;
+			display: inline;
+			width: 30%;
+			overflow: auto;
+		}
+		</style>
+
+		<script>
+		var tester = {
+			bearer: undefined,
+			modules: {}
+		};
+
+		tester.init = function () {
+			console.log("initializing modules...");
+
+			for (name in tester.modules) {
+				var init = tester.modules[name];
+
+				console.log("init module " + name);
+				$("#" + name).find(".request")
+					.append("<h4>Request</h4>");
+				$("#" + name).find(".request")
+					.append("<div class='panel'></div>");
+				$("#" + name).find(".response")
+					.append("<h4>Response</h4>");
+				$("#" + name).find(".response")
+					.append("<div class='panel'></div>");
+
+				init();
+			}
+		};
+
+		tester.bearerID = function (bearer) {
+			return bearer.replace(/[=\\/+]/g, function (m) {
+				return {
+					"=": "-E",
+					"\\/": "-S",
+					"+": "-P"
+				}[m];
+			});
+		};
+
+		tester.installBearer = function (bearer) {
+			console.log("installing bearer: " + bearer);
+
+			tester.bearer = bearer;
+			var id = tester.bearerID(bearer);
+
+			$("#tester-bearer")
+				.append("<div id='" + id + "'></div>");
+			$("#" + id).append("<label>Bearer: " + bearer + "</label>");
+			$("#" + id).append("<button class='select'>Select</button>");
+			$("#" + id).append("<button class='delete'>Delete</button>");
+			$("#" + id + " .select")
+				.click(function () {
+					tester.bearer = bearer;
+				});
+			$("#" + id + " .delete")
+				.click(function () {
+					$("#" + id).remove();
+					tester.uninstallBearer(bearer);
+				});
+		};
+
+		tester.uninstallBearer = function (bearer) {
+			if (tester.bearer == bearer)
+				tester.bearer = undefined;
+		}
+
+		tester.beforeSend = function (module, request, settings, data) {
+			$(module).find(".request .panel").empty();
+			$(module).find(".response .panel").empty();
+
+			if (data) {
+				$(module).find(".request .panel")
+					.append("<pre></pre>");
+				$(module).find(".request .panel pre")
+					.text(JSON.stringify(data));
+			}
+
+			if (tester.bearer) {
+				request.setRequestHeader(
+					"Authorization",
+					"Bearer " + tester.bearer);
+			}
+		};
+
+		tester.handleSuccess = function (module, data, status, request, result) {
+			console.log(data);
+
+			if (data && data["status"] != "success") {
+				console.log("Application error: " + data["message"]);
+			}
+
+			if (!data) {
+				$(module).find(".response .panel").empty();
+				result();
+				return;
+			}
+
+			$(module).find(".response .panel").empty();
+			$(module).find(".response .panel")
+				.append("<pre></pre>");
+			$(module).find(".response .panel pre")
+				.text(JSON.stringify(data));
+
+			if (result)
+				result(data["data"]);
+		};
+
+		tester.handleError = function (module, request, status, error) {
+			console.log("HTTP error " + status + ": " + error);
+
+			$(module).find(".response .panel").empty();
+			$(module).find(".response .panel")
+				.append("<strong></strong>");
+			$(module).find(".response strong")
+				.text(status + ": " + error);
+		};
+
+		tester.preprocessJSON = function (data, type) {
+			if (data.length == 0)
+				return data;
+
+			return JSON.parse(data);
+		};
+
+		tester.get = function (uri, module, result) {
+			$.ajax({
+				url: uri,
+				method: "GET",
+				dataType: "text",
+				dataFilter: tester.preprocessJSON,
+				headers: {
+					Accept: "application/json"
+				},
+				cache: false,
+				contentType: "application/json; charset=utf8",
+				beforeSend: function (request, settings) {
+					tester.beforeSend(module, request, settings);
+				},
+				success: function (data, status, request) {
+					tester.handleSuccess(module, data, status, request, result);
+				},
+				error: function (request, status, error) {
+					tester.handleError(module, request, status, error);
+				}
+			});
+		};
+
+		tester.post = function (uri, module, data, result)
+		{
+			$.ajax({
+				url: uri,
+				method: "POST",
+				dataType: "text",
+				dataFilter: tester.preprocessJSON,
+				headers: {
+					Accept: "application/json"
+				},
+				cache: false,
+				contentType: "application/json; charset=utf8",
+				data: JSON.stringify(data),
+				beforeSend: function (request, settings) {
+					tester.beforeSend(module, request, settings, data);
+				},
+				success: function (data, status, request) {
+					tester.handleSuccess(module, data, status, request, result);
+				},
+				error: function (request, status, error) {
+					tester.handleError(module, request, status, error);
+				}
+			});
+		};
+
+		tester.put = function (uri, module, data, result)
+		{
+			$.ajax({
+				url: uri,
+				method: "PUT",
+				dataType: "text",
+				dataFilter: tester.preprocessJSON,
+				headers: {
+					Accept: "application/json"
+				},
+				cache: false,
+				contentType: "application/json; charset=utf8",
+				data: JSON.stringify(data),
+				beforeSend: function (request, settings) {
+					tester.beforeSend(module, request, settings, data);
+				},
+				success: function (data, status, request) {
+					tester.handleSuccess(module, data, status, request, result);
+				},
+				error: function (request, status, error) {
+					tester.handleError(module, request, status, error);
+				}
+			});
+		};
+
+		tester.delete = function (uri, module, result)
+		{
+			$.ajax({
+				url: uri,
+				method: "DELETE",
+				accept: "application/json",
+				dataType: "text",
+				dataFilter: tester.preprocessJSON,
+				cache: false,
+				contentType: "application/json; charset=utf8",
+				beforeSend: function (request, settings) {
+					tester.beforeSend(module, request, settings);
+				},
+				success: function (data, status, request) {
+					tester.handleSuccess(module, data, status, request, result);
+				},
+				error: function (request, status, error) {
+					tester.handleError(module, request, status, error);
+				}
+			});
+		};
+
+		</script>
+	</head>
+	<body onload="tester.init()">
+		<div id="tester-bearer">
+		</div>
+		<%@ include page="login.cpsp" %>
+		<%@ include page="profile.cpsp" %>
+		<%@ include page="timezones.cpsp" %>
+		<%@ include page="types.cpsp" %>
+	</body>
+</html>
