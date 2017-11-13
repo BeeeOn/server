@@ -45,7 +45,7 @@ void ProfileRestHandler::detail(RestFlow &flow)
 
 	PrintHandler result(flow.response().stream());
 	beginSuccess(result, 200);
-	serialize(result, identity);
+	serialize(result, *flow.translator(), identity);
 	endSuccess(result);
 }
 
@@ -69,6 +69,6 @@ void ProfileRestHandler::list(RestFlow &flow)
 
 	PrintHandler result(flow.response().stream());
 	beginSuccess(result, 200);
-	serialize(result, profiles);
+	serialize(result, *flow.translator(), profiles);
 	endSuccess(result);
 }

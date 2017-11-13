@@ -36,8 +36,11 @@ void serialize(Poco::JSON::PrintHandler &output, const Gateway &gateway);
 void serialize(Poco::JSON::PrintHandler &output,
 		const std::vector<Gateway> &gateways);
 
-void serialize(Poco::JSON::PrintHandler &output, const VerifiedIdentity &identity);
 void serialize(Poco::JSON::PrintHandler &output,
+		Translator &translator,
+		const VerifiedIdentity &identity);
+void serialize(Poco::JSON::PrintHandler &output,
+		Translator &translator,
 		const std::list<VerifiedIdentity> &identities);
 
 void serialize(Poco::JSON::PrintHandler &output, const Location &location);

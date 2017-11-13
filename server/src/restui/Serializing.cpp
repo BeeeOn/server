@@ -90,7 +90,9 @@ void BeeeOn::RestUI::serialize(PrintHandler &output,
 	output.endArray();
 }
 
-void BeeeOn::RestUI::serialize(PrintHandler &output, const VerifiedIdentity &identity)
+void BeeeOn::RestUI::serialize(PrintHandler &output,
+		Translator &translator,
+		const VerifiedIdentity &identity)
 {
 	const User &user = identity.user();
 	output.startObject();
@@ -119,16 +121,23 @@ void BeeeOn::RestUI::serialize(PrintHandler &output, const VerifiedIdentity &ide
 	output.key("provider");
 	output.value(identity.provider());
 
+	output.key("provider_display_name");
+	output.value(translator.format(
+		"auth.providers." + identity.provider(),
+		identity.provider()
+	));
+
 	output.endObject();
 }
 
 void BeeeOn::RestUI::serialize(PrintHandler &output,
+		Translator &translator,
 		const list<VerifiedIdentity> &identities)
 {
 	output.startArray();
 
 	for (auto &identity : identities)
-		serialize(output, identity);
+		serialize(output, translator, identity);
 
 	output.endArray();
 }
