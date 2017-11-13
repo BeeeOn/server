@@ -8,7 +8,7 @@ import socket
 import json
 import os
 
-from rest import POST, DELETE
+from rest import GET, POST, DELETE
 
 class TestFCMTokenRegisterUnregister(unittest.TestCase):
 	"""
@@ -61,6 +61,7 @@ class TestFCMTokenRegisterUnregister(unittest.TestCase):
 
 		req = DELETE(config.ui_host, config.ui_port, "/notifications/fcm/" + config.fcm_token);
 		req.authorize(self.session)
+		response, _ = req()
 
 		self.assertEqual(204, response.status)
 

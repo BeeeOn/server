@@ -101,6 +101,7 @@
 		</instance>
 
 		<instance name="fcmTokenService" class="BeeeOn::FCMTokenServiceImpl">
+			<set name="fcmTokenDao" ref="fcmTokenDao" />
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="accessPolicy" ref="accessPolicy" />
 		</instance>
@@ -125,6 +126,7 @@
 			<set name="locationDao" ref="locationDao" />
 			<set name="deviceDao" ref="deviceDao" />
 			<set name="roleInGatewayDao" ref="sqlRoleInGatewayDao" />
+			<set name="fcmTokenDao" ref="fcmTokenDao" />
 		</instance>
 
 	</factory>

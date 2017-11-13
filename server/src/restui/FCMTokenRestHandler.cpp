@@ -53,7 +53,7 @@ void FCMTokenRestHandler::listServices(RestFlow &flow)
 		result.startObject();
 
 		result.key("name");
-		result.value("fcm");
+		result.value(string("fcm"));
 
 		result.key("id");
 		result.value(m_senderID);
