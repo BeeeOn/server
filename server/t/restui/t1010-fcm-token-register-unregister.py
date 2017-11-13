@@ -8,7 +8,7 @@ import socket
 import json
 import os
 
-from rest import POST, DELETE
+from rest import GET, POST, DELETE
 
 class TestFCMTokenRegisterUnregister(unittest.TestCase):
 	"""
