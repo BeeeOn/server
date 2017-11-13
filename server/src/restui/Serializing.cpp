@@ -104,6 +104,12 @@ void BeeeOn::RestUI::serialize(PrintHandler &output, const VerifiedIdentity &ide
 	output.key("last_name");
 	output.value(user.lastName());
 
+	output.key("locale");
+	output.value(user.locale().toString());
+
+	output.key("locale_display_name");
+	output.value(user.locale().displayName());
+
 	output.key("email");
 	output.value(identity.email());
 
