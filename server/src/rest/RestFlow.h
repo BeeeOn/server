@@ -60,6 +60,7 @@ public:
 	 * Current request representation.
 	 */
 	const PocoRequest &request() const;
+	PocoRequest &request();
 
 	/**
 	 * Current response representation.
