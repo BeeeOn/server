@@ -60,6 +60,11 @@ const PocoRequest &RestFlow::request() const
 	return m_request;
 }
 
+PocoRequest &RestFlow::request()
+{
+	return m_request;
+}
+
 const PocoResponse &RestFlow::response() const
 {
 	return m_response;
