@@ -226,22 +226,22 @@ void BeeeOn::RestUI::serialize(PrintHandler &output, const Work &work)
 
 	switch (work.state()) {
 	case Work::STATE_IDLE:
-		output.value("idle");
+		output.value(string("idle"));
 		break;
 	case Work::STATE_SCHEDULED:
-		output.value("sleeping");
+		output.value(string("sleeping"));
 		break;
 	case Work::STATE_EXECUTED:
-		output.value("processing");
+		output.value(string("processing"));
 		break;
 	case Work::STATE_FINISHED:
-		output.value("successful");
+		output.value(string("successful"));
 		break;
 	case Work::STATE_FAILED:
-		output.value("failed");
+		output.value(string("failed"));
 		break;
 	case Work::STATE_CANCELED:
-		output.value("canceled");
+		output.value(string("canceled"));
 		break;
 	default:
 		throw IllegalStateException("invalid work state");
