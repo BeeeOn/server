@@ -66,6 +66,12 @@ BEEEON_OBJECT_END(BeeeOn, Tester, IndexHandler)
 			}
 		};
 
+		tester.selfURL = function () {
+			return window.location.protocol + "//"
+				+ window.location.host
+				+ window.location.pathname;
+		}
+
 		tester.bearerID = function (bearer) {
 			return bearer.replace(/[=\\/+]/g, function (m) {
 				return {
