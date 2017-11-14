@@ -261,5 +261,6 @@ BEEEON_OBJECT_END(BeeeOn, Tester, IndexHandler)
 		<%@ include page="gateway.cpsp" %>
 		<%@ include page="types.cpsp" %>
 		<%@ include page="devices.cpsp" %>
+		<%@ include page="sensors.cpsp" %>
 	</body>
 </html>

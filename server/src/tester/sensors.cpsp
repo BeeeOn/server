@@ -1,0 +1,146 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+
+<script>
+function sensors_uri(gwid, devid, modid) {
+	if (!modid)
+		return "/gateways/" + gwid + "/devices/" + devid + "/sensors";
+	else
+		return "/gateways/" + gwid + "/devices/" + devid + "/sensors/" + modid;
+}
+
+function sensors_show_history(gwid, devid, sensor, panel) {
+	var modid = sensor["id"];
+	var range = $("#sensors-range").val();
+	var interval = $("#sensors-interval").val();
+	var agg = $("#sensors-aggregate").val();
+
+	var query = "range=" + range + "&interval=" + interval + "&aggregation=" + agg;
+
+	tester.get(sensors_uri(gwid, devid, modid) + "/history?" + query,
+			"#sensors", function (data) {
+		var at = [];
+		var values = [];
+
+		for (i in data) {
+			at.push(new Date(data[i]["at"] * 1000).toTimeString().split(" ")[0]);
+			values.push(data[i]["value"]);
+		}
+
+		var wrapper = $("<div class='canvas-wrapper'></div>");
+		panel.append(wrapper);
+
+		var canvas = $("<canvas />");
+		var canvas_id = "sensors-canvas-" + gwid + "-" + devid + "-" + modid;
+		canvas.attr("id", canvas_id);
+
+		wrapper.append(canvas);
+
+		var chart = new Chart(canvas, {
+			type: "line",
+			data: {
+				labels: at,
+				datasets: [{
+					label: sensor["display_name"],
+					data: values
+				}]
+			},
+			options: {
+				maintainAspectRatio: false
+			}
+		});
+	});
+}
+
+function sensors_show_refresh() {
+	var gwid = $("#sensors-gateway-input").val();
+	var devid = $("#sensors-device-input").val();
+
+	if (!gwid)
+		alert("please, fill gateway ID");
+	if (!devid)
+		alert("please, fill device ID");
+
+	tester.get(sensors_uri(gwid, devid), "#sensors", function (data) {
+		$("#sensors-list .panel").empty();
+
+		for (i in data) {
+			var sensor = data[i];
+
+			var panel = $("<div></div>");
+			panel.attr("id", "sensors-history-" + devid + "-" + sensor["id"]);
+
+			sensors_show_history(gwid, devid, sensor, $("#sensors-list .panel"));
+		}
+	})
+}
+
+tester.modules["sensors"] = function () {
+	$("#sensors-show").click(function () {
+		sensors_show_refresh();
+	});
+};
+</script>
+
+<style>
+#sensors-list .panel {
+}
+
+#sensors-list .canvas-wrapper {
+	width: 80%;
+	height: 200px;
+	margin: 10px;
+}
+</style>
+
+<div id="sensors" class="module">
+	<h2>Sensors Module</h2>
+
+	<div class="custom">
+		<label for="">Gateway</label>
+		<input id="sensors-gateway-input" type="text" />
+		<label for="">Device</label>
+		<input id="sensors-device-input" type="text" />
+		<br />
+
+		<label for="sensors-range">Range</label>
+		<select id="sensors-range">
+			<option value="hour" selected="selected">last hour</option>
+			<option value="7200">last 2 hours</option>
+			<option value="10800">last 3 hours</option>
+			<option value="day">last day</option>
+			<option value="week">last week</option>
+		</select>
+		<br />
+
+		<label for="sensors-aggregate">Aggregation</label>
+		<select id="sensors-aggregate">
+			<option value="avg" selected="selected">Avarage</option>
+			<option value="max">Maximum</option>
+			<option value="min">Minimum</option>
+		</select>
+		<br />
+
+		<label for="sensors-interval">Aggregation interval</label>
+		<select id="sensors-interval">
+			<option value="1">1 s</option>
+			<option value="5">5 s</option>
+			<option value="10">10 s</option>
+			<option value="15" selected="selected">15 s</option>
+			<option value="30">30 s</option>
+			<option value="60">1 min</option>
+			<option value="120">2 min</option>
+			<option value="300">5 min</option>
+		</select>
+		<br />
+
+		<button id="sensors-show">Show sensors</button>
+
+		<div id="sensors-list">
+			<h3>Sensors</h3>
+
+			<div class="panel"></div>
+		</div>
+	</div>
+	<div class="request"></div>
+	<div class="response"></div>
+</div>
