@@ -277,6 +277,15 @@ else()
 	message(STATUS "ZeroMQ support is disabled due to unmet dependencies")
 endif()
 
+if (POCO_CASSANDRA)
+	file(GLOB CASSANDRA_SOURCES
+		${PROJECT_SOURCE_DIR}/dao/poco/PocoCassandraConnectorLoader.cpp
+	)
+	list(APPEND SOURCES ${CASSANDRA_SOURCES})
+else()
+	message(STATUS "Cassandra support is disabled due to unmet dependencies")
+endif()
+
 file(GLOB XMLUI_SOURCES
 	xmlui/Serializing.cpp
 	xmlui/XmlValueConsumer.cpp

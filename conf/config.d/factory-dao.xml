@@ -106,6 +106,9 @@
 		<instance name="odbcConnector"
 				class="BeeeOn::PocoODBCConnectorLoader" />
 
+		<instance name="cassandraConnector"
+				class="BeeeOn::PocoCassandraConnectorLoader" />
+
 		<instance name="sqlUserDao" class="BeeeOn::PocoSQLUserDao">
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="transactionManager" ref="transactionManager" />
