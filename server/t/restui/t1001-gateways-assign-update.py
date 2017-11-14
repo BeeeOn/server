@@ -42,7 +42,8 @@ class TestGatewayAssignUpdate(unittest.TestCase):
 		req.authorize(self.session)
 		req.body(json.dumps({
 			"id": config.gateway_id,
-			"name": "My Home"
+			"name": "My Home",
+			"timezone_id": "Europe/Prague"
 		}))
 
 		response, content = req()
@@ -62,6 +63,7 @@ class TestGatewayAssignUpdate(unittest.TestCase):
 		self.assertEqual("success", result["status"])
 		self.assertEqual("My Home", result["data"]["name"])
 		self.assertEqual(config.gateway_id, result["data"]["id"])
+		self.assertEqual("Europe/Prague", result["data"]["timezone"]["id"])
 
 		# unassign the gateway
 		req = DELETE(config.ui_host, config.ui_port, "/gateways/" + config.gateway_id)

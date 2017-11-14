@@ -44,7 +44,8 @@ class TestGatewayRegisterUnregister(unittest.TestCase):
 		response = c.request(GatewayRegister(
 			config.tmp_gateway_id,
 			self.session,
-			name = "Test Gateway Registered"
+			name = "Test Gateway Registered",
+			timezone = 3600
 		))
 
 		self.assertTrue(response.is_ok())
@@ -68,7 +69,8 @@ class TestGatewayRegisterUnregister(unittest.TestCase):
 		self.assertEqual("0.0.0.0", response.root[0].get("ip"))
 		self.assertEqual("admin", response.root[0].get("permission"))
 		self.assertEqual("Joe Doe", response.root[0].get("owner"))
-		self.assertEqual("0", response.root[0].get("timezone"))
+		self.assertEqual("3600", response.root[0].get("timezone"))
+		self.assertEqual("GMT+01:00", response.root[0].get("timezone_name"))
 		self.assertEqual("available", response.root[0].get("status"))
 
 		response = c.request(GatewayUnregister(

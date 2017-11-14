@@ -10,6 +10,7 @@
 #include "dao/poco/PocoSQLGatewayDao.h"
 #include "dao/poco/PocoSQLUserDao.h"
 #include "dao/poco/PocoDaoManager.h"
+#include "l10n/TimeZone.h"
 #include "transaction/TransactionManager.h"
 
 using namespace std;
@@ -24,6 +25,7 @@ BEEEON_OBJECT_CASTABLE(GatewayDao)
 BEEEON_OBJECT_REF("daoManager", &PocoSQLGatewayDao::setDaoManager)
 BEEEON_OBJECT_REF("transactionManager", &PocoSQLGatewayDao::setTransactionManager)
 BEEEON_OBJECT_REF("sqlLoader", &PocoSQLGatewayDao::setSQLLoader)
+BEEEON_OBJECT_REF("timeZoneProvider", &PocoSQLGatewayDao::setTimeZoneProvider)
 BEEEON_OBJECT_HOOK("done", &PocoSQLGatewayDao::loadQueries)
 BEEEON_OBJECT_END(BeeeOn, PocoSQLGatewayDao)
 
@@ -35,6 +37,11 @@ PocoSQLGatewayDao::PocoSQLGatewayDao()
 	registerQuery(m_queryFetchAccessible);
 	registerQuery(m_queryLegacyFetchById);
 	registerQuery(m_queryLegacyFetchAccessible);
+}
+
+void PocoSQLGatewayDao::setTimeZoneProvider(TimeZoneProvider::Ptr provider)
+{
+	m_timeZoneProvider = provider;
 }
 
 bool PocoSQLGatewayDao::insert(Gateway &gateway)
@@ -54,12 +61,15 @@ bool PocoSQLGatewayDao::insert(Gateway &gateway)
 	if (!std::isnan(gateway.longitude()))
 		longitude = gateway.longitude();
 
+	string zone = gateway.timeZone().id();
+
 	Statement sql = (session() << m_queryCreate(),
 		use(id, "id"),
 		use(name, "name"),
 		use(altitude, "altitude"),
 		use(latitude, "latitude"),
-		use(longitude, "longitude")
+		use(longitude, "longitude"),
+		use(zone, "timezone")
 	);
 
 	return execute(sql) > 0;
@@ -79,7 +89,7 @@ bool PocoSQLGatewayDao::fetch(Gateway &gateway)
 	if (result.rowCount() == 0)
 		return false;
 
-	return parseSingle(result, gateway);
+	return parseSingle(result, m_timeZoneProvider, gateway);
 }
 
 bool PocoSQLGatewayDao::fetch(LegacyGateway &gateway, const User &user)
@@ -99,7 +109,7 @@ bool PocoSQLGatewayDao::fetch(LegacyGateway &gateway, const User &user)
 	if (result.rowCount() == 0)
 		return false;
 
-	return parseSingle(result, gateway);
+	return parseSingle(result, m_timeZoneProvider, gateway);
 }
 
 bool PocoSQLGatewayDao::update(Gateway &gateway)
@@ -119,12 +129,15 @@ bool PocoSQLGatewayDao::update(Gateway &gateway)
 	if (!std::isnan(gateway.longitude()))
 		longitude = gateway.longitude();
 
+	string zone = gateway.timeZone().id();
+
 	Statement sql = (session() << m_queryUpdate(),
+		use(id, "id"),
 		use(name, "name"),
 		use(altitude, "altitude"),
 		use(latitude, "latitude"),
 		use(longitude, "longitude"),
-		use(id, "id")
+		use(zone, "timezone")
 	);
 
 	return execute(sql) > 0;
@@ -142,7 +155,7 @@ void PocoSQLGatewayDao::fetchAccessible(std::vector<Gateway> &gateways,
 	);
 
 	RecordSet result = executeSelect(sql);
-	parseMany<Gateway>(result, gateways);
+	parseMany<Gateway>(result, m_timeZoneProvider, gateways);
 }
 
 void PocoSQLGatewayDao::fetchAccessible(std::vector<LegacyGateway> &gateways,
@@ -157,10 +170,12 @@ void PocoSQLGatewayDao::fetchAccessible(std::vector<LegacyGateway> &gateways,
 	);
 
 	RecordSet result = executeSelect(sql);
-	parseMany<LegacyGateway>(result, gateways);
+	parseMany<LegacyGateway>(result, m_timeZoneProvider, gateways);
 }
 
-bool PocoSQLGatewayDao::parseSingle(Row &result, Gateway &gateway,
+bool PocoSQLGatewayDao::parseSingle(Row &result,
+		TimeZoneProvider::Ptr provider,
+		Gateway &gateway,
 		const string &prefix)
 {
 	if (hasColumn(result, prefix + "id"))
@@ -169,6 +184,13 @@ bool PocoSQLGatewayDao::parseSingle(Row &result, Gateway &gateway,
 	gateway.setName(emptyWhenNull(result[prefix + "name"]));
 	gateway.setAltitude(nullable<int>(result[prefix + "altitude"]));
 	gateway.setLatitude(nanWhenEmpty(result[prefix + "latitude"]));
+
+	Nullable<TimeZone> zone = provider->findById(result[prefix + "timezone"]);
+	if (!zone.isNull())
+		gateway.setTimeZone(zone);
+	else
+		gateway.setTimeZone(TimeZone::system());
+
 	gateway.setLongitude(nanWhenEmpty(result[prefix + "longitude"]));
 	gateway.setVersion(emptyWhenNull(result[prefix + "version"]));
 	gateway.setIPAddress(whenNull(result[prefix + "ip"], string("0.0.0.0")));
@@ -183,10 +205,12 @@ bool PocoSQLGatewayDao::parseSingle(Row &result, Gateway &gateway,
 	return true;
 }
 
-bool PocoSQLGatewayDao::parseSingle(Row &result, LegacyGateway &gateway,
+bool PocoSQLGatewayDao::parseSingle(Row &result,
+		TimeZoneProvider::Ptr provider,
+		LegacyGateway &gateway,
 		const string &prefix)
 {
-	if (!parseSingle(result, static_cast<Gateway &>(gateway)))
+	if (!parseSingle(result, provider, static_cast<Gateway &>(gateway)))
 		return false;
 
 	Poco::Dynamic::Var &accessLevel = result[prefix + "access_level"];

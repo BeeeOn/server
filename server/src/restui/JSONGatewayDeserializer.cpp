@@ -1,4 +1,5 @@
 #include <Poco/Exception.h>
+#include <Poco/Nullable.h>
 #include <Poco/JSON/Parser.h>
 
 #include "restui/JSONGatewayDeserializer.h"
@@ -26,6 +27,29 @@ JSONGatewayDeserializer::JSONGatewayDeserializer(const Object::Ptr data):
 {
 }
 
+void JSONGatewayDeserializer::setTimeZoneProvider(TimeZoneProvider::Ptr provider)
+{
+	m_timeZoneProvider = provider;
+}
+
+TimeZoneProvider::Ptr JSONGatewayDeserializer::timeZoneProvider() const
+{
+	return m_timeZoneProvider;
+}
+
+TimeZone JSONGatewayDeserializer::extractTimeZone(const Object::Ptr data) const
+{
+	TimeZoneProvider::Ptr provider = m_timeZoneProvider; // get rid of const
+
+	const string &id = Sanitize::common(m_data->getValue<string>("timezone_id"));
+	Nullable<TimeZone> timeZone = provider->findById(id);
+
+	if (timeZone.isNull())
+		throw InvalidArgumentException("unrecognized timezone_id given");
+
+	return timeZone.value();
+}
+
 void JSONGatewayDeserializer::partial(Gateway &gateway) const
 {
 	if (m_data->has("name"))
@@ -39,12 +63,20 @@ void JSONGatewayDeserializer::partial(Gateway &gateway) const
 
 	if (m_data->has("longitude"))
 		gateway.setLongitude(m_data->getValue<double>("longitude"));
+
+	if (m_data->has("timezone_id")) {
+		const TimeZone &timeZone = extractTimeZone(m_data);
+		gateway.setTimeZone(timeZone);
+	}
 }
 
 void JSONGatewayDeserializer::full(Gateway &gateway) const
 {
 	if (!m_data->has("name"))
 		throw InvalidArgumentException("missing name for gateway");
+
+	if (!m_data->has("timezone_id"))
+		throw InvalidArgumentException("missing timezone_id for gateway");
 
 	gateway.setName(Sanitize::common(m_data->getValue<string>("name")));
 
@@ -62,4 +94,7 @@ void JSONGatewayDeserializer::full(Gateway &gateway) const
 		gateway.setLongitude(NAN);
 	else
 		gateway.setLongitude(m_data->getValue<double>("longitude"));
+
+	const TimeZone &timeZone = extractTimeZone(m_data);
+	gateway.setTimeZone(timeZone);
 }

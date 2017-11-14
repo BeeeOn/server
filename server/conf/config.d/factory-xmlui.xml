@@ -42,6 +42,7 @@
 				class="BeeeOn::XmlUI::GatewayXmlHandlerResolver">
 			<set name="gatewayService" ref="gatewayService" />
 			<set name="sessionManager" ref="sessionManager" />
+			<set name="timeZoneProvider" ref="timeZoneProvider" />
 		</instance>
 
 		<instance name="locationXmlHandler"

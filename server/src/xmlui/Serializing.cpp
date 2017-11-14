@@ -1,8 +1,10 @@
 #include <string>
+#include <Poco/Timestamp.h>
 #include <Poco/XML/XMLWriter.h>
 #include <Poco/SAX/AttributesImpl.h>
 
 #include "xmlui/Serializing.h"
+#include "l10n/TimeZone.h"
 #include "model/Gateway.h"
 #include "model/LegacyGateway.h"
 #include "model/Location.h"
@@ -66,7 +68,16 @@ void BeeeOn::XmlUI::serialize(XMLWriter &output, const LegacyGateway &gateway)
 			to_string(gateway.deviceCount()));
 	attrs.addAttribute("", "users", "users", "",
 			to_string(gateway.userCount()));
-	attrs.addAttribute("", "timezone", "timezone", "", "0");
+
+	const TimeZone &zone = gateway.timeZone();
+	const Timestamp now;
+	const int offset = zone.utcOffset().totalSeconds()
+			+ (zone.appliesDST(now) ? zone.dstOffset().totalSeconds() : 0);
+
+	attrs.addAttribute("", "timezone_name", "timezone_name", "",
+			zone.shortName(Locale::system()));
+	attrs.addAttribute("", "timezone", "timezone", "", to_string(offset));
+
 	attrs.addAttribute("", "status", "status", "", "available");
 
 	output.emptyElement("", "gate", "gate", attrs);

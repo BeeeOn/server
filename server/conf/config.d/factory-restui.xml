@@ -73,6 +73,7 @@
 
 		<instance name="uiGatewayHandler" class="BeeeOn::RestUI::GatewayRestHandler">
 			<set name="gatewayService" ref="gatewayService" />
+			<set name="timeZoneProvider" ref="timeZoneProvider" />
 		</instance>
 
 		<instance name="uiProfileHandler" class="BeeeOn::RestUI::ProfileRestHandler">

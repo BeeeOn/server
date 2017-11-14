@@ -21,9 +21,11 @@ GatewayXmlHandler::GatewayXmlHandler(
 		const StreamSocket &socket,
 		const AutoPtr<Document> input,
 		Session::Ptr session,
-		GatewayService &gatewayService):
+		GatewayService &gatewayService,
+		TimeZoneProvider::Ptr timeZoneProvider):
 	SessionXmlHandler("gates", socket, input, session),
-	m_gatewayService(gatewayService)
+	m_gatewayService(gatewayService),
+	m_timeZoneProvider(timeZoneProvider)
 {
 }
 
@@ -64,7 +66,10 @@ void GatewayXmlHandler::handleRegister(Element *gatewayNode)
 {
 	Gateway gateway(GatewayID::parse(gatewayNode->getAttribute("id")));
 	VerifiedIdentity identity(session()->identityID());
+
 	XmlGatewayDeserializer deserializer(*gatewayNode);
+	deserializer.setTimeZoneProvider(m_timeZoneProvider);
+
 	SingleWithData<Gateway> input(gateway, deserializer);
 	User user(session()->userID());
 	input.setUser(user);
@@ -124,7 +129,10 @@ void GatewayXmlHandler::handleGet(Element *gatewayNode)
 void GatewayXmlHandler::handleUpdate(Element *gatewayNode)
 {
 	Gateway gateway(GatewayID::parse(gatewayNode->getAttribute("id")));
+
 	XmlGatewayDeserializer update(*gatewayNode);
+	update.setTimeZoneProvider(m_timeZoneProvider);
+
 	SingleWithData<Gateway> input(gateway, update);
 	User user(session()->userID());
 	input.setUser(user);
@@ -154,6 +162,11 @@ void GatewayXmlHandler::handleGetAll()
 GatewayXmlHandlerResolver::GatewayXmlHandlerResolver():
 	SessionXmlHandlerResolver("gates")
 {
+}
+
+void GatewayXmlHandlerResolver::setTimeZoneProvider(TimeZoneProvider::Ptr provider)
+{
+	m_timeZoneProvider = provider;
 }
 
 bool GatewayXmlHandlerResolver::canHandle(
@@ -187,7 +200,8 @@ XmlRequestHandler *GatewayXmlHandlerResolver::createHandler(
 	Session::Ptr session = lookupSession(*m_sessionManager, input);
 	return new GatewayXmlHandler(
 			socket, input, session,
-			*m_gatewayService);
+			*m_gatewayService,
+			m_timeZoneProvider);
 }
 
 BEEEON_OBJECT_BEGIN(BeeeOn, XmlUI, GatewayXmlHandlerResolver)
@@ -196,4 +210,5 @@ BEEEON_OBJECT_CASTABLE(AbstractXmlHandlerResolver)
 BEEEON_OBJECT_CASTABLE(XmlRequestHandlerResolver)
 BEEEON_OBJECT_REF("gatewayService", &GatewayXmlHandlerResolver::setGatewayService)
 BEEEON_OBJECT_REF("sessionManager", &GatewayXmlHandlerResolver::setSessionManager)
+BEEEON_OBJECT_REF("timeZoneProvider", &GatewayXmlHandlerResolver::setTimeZoneProvider)
 BEEEON_OBJECT_END(BeeeOn, XmlUI, GatewayXmlHandlerResolver)

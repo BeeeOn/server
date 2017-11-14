@@ -1,6 +1,7 @@
 #ifndef BEEEON_XMLUI_GATEWAY_XML_HANDLER_H
 #define BEEEON_XMLUI_GATEWAY_XML_HANDLER_H
 
+#include "l10n/TimeZoneProvider.h"
 #include "service/GatewayService.h"
 #include "xmlui/SessionXmlHandler.h"
 
@@ -12,7 +13,8 @@ public:
 	GatewayXmlHandler(const Poco::Net::StreamSocket &socket,
 			const Poco::AutoPtr<Poco::XML::Document> input,
 			BeeeOn::Session::Ptr session,
-			BeeeOn::GatewayService &gatewayService);
+			BeeeOn::GatewayService &gatewayService,
+			TimeZoneProvider::Ptr timeZoneProvider);
 	void handleInputImpl() override;
 	void handleRegister(Poco::XML::Element *gatewayNode);
 	void handleUnregister(Poco::XML::Element *gatewayNode);
@@ -23,6 +25,7 @@ public:
 
 private:
 	GatewayService &m_gatewayService;
+	TimeZoneProvider::Ptr m_timeZoneProvider;
 };
 
 class GatewayXmlHandlerResolver : public SessionXmlHandlerResolver {
@@ -44,9 +47,12 @@ public:
 		m_sessionManager = manager;
 	}
 
+	void setTimeZoneProvider(TimeZoneProvider::Ptr provider);
+
 private:
 	BeeeOn::GatewayService *m_gatewayService;
 	BeeeOn::SessionManager *m_sessionManager;
+	TimeZoneProvider::Ptr m_timeZoneProvider;
 };
 
 }

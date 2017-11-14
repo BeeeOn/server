@@ -163,6 +163,8 @@ class GatewayRegister(Request):
 
 		if "name" in kwargs:
 			self.name = kwargs["name"]
+		if "timezone" in kwargs:
+			self.timezone = kwargs["timezone"]
 	
 	def xml(self):
 		request = Request.xml(self)
@@ -171,6 +173,11 @@ class GatewayRegister(Request):
 
 		if hasattr(self, "name"):
 			gate.set("name", self.name)
+
+		if hasattr(self, "timezone"):
+			gate.set("timezone", str(self.timezone))
+		else:
+			gate.set("timezone", "0")
 
 		return request
 
