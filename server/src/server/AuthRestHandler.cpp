@@ -68,6 +68,12 @@ void AuthRestHandler::list(RestFlow &flow)
 			result.startObject();
 			result.key("client_id");
 			result.value(oauth2->clientId());
+
+			if (!oauth2->redirectURI().empty()) {
+				result.key("redirect_uri");
+				result.value(oauth2->redirectURI());
+			}
+
 			result.endObject();
 		}
 

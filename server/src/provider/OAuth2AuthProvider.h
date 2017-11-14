@@ -44,6 +44,11 @@ public:
 		m_redirectURI = uri;
 	}
 
+	std::string redirectURI() const
+	{
+		return m_redirectURI;
+	}
+
 	void setSSLConfig(SSLClient *config)
 	{
 		m_sslConfig = config;

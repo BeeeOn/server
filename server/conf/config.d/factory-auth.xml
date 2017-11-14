@@ -50,6 +50,15 @@
 			<set name="id" text="google-android"/>
 		</instance>
 
+		<instance name="googleTesterAuth"
+				class="BeeeOn::GoogleAuthProvider">
+			<set name="clientSecret" text="${tester.google.clientSecret}"/>
+			<set name="clientId" text="${tester.google.clientId}"/>
+			<set name="redirectUri" text="${tester.google.redirectUri}"/>
+			<set name="sslConfig" ref="googleOAuthSSL"/>
+			<set name="id" text="google-tester"/>
+		</instance>
+
 		<instance name="facebookWebAuth"
 				class="BeeeOn::FacebookAuthProvider">
 			<set name="clientSecret" text="${web-app.facebook.clientSecret}"/>
