@@ -105,10 +105,13 @@ class TestDevicesListDetail(unittest.TestCase):
 		req.body(json.dumps({"time_limit": 1}))
 		response, content = req()
 
-		self.assertEqual(0, len(content))
-		self.assertEqual(204, response.status)
+		self.assertEqual(202, response.status)
+
+		data = json.loads(content)
+		self.assertEqual("success", data["status"])
 
 		work_uri = response.getheader("Location")
+		self.assertEqual(work_uri, data["data"]["location"])
 
 		for i in range(10):
 			req = GET(config.ui_host, config.ui_port, work_uri)

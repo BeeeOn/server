@@ -174,10 +174,22 @@ void DeviceRestHandler::discover(RestFlow &flow)
 	inputGateway.setUser(user);
 
 	const Work &work = m_gatewayService->scanDevices(inputGateway, timeLimit);
-	flow.response().setStatus(204);
+	flow.response().setStatus(202);
 
-	flow.response()["Location"] = flow.linker()
+	const URI &location = flow.linker()
 		.link("work", "detail", {work.id().toString()});
+
+	flow.response()["Location"] = location;
+
+	PrintHandler result(flow.response().stream());
+	beginSuccess(result);
+
+	result.startObject();
+	result.key("location");
+	result.value(location.toString());
+	result.endObject();
+
+	endSuccess(result);
 }
 
 void DeviceRestHandler::unpair(RestFlow &flow)
@@ -191,7 +203,20 @@ void DeviceRestHandler::unpair(RestFlow &flow)
 
 	const Work &work = m_deviceService->unregister(data);
 
-	flow.response().setStatus(204);
-	flow.response()["Location"] = flow.linker()
+	flow.response().setStatus(202);
+
+	const URI &location = flow.linker()
 		.link("work", "detail", {work.id().toString()});
+
+	flow.response()["Location"] = location;
+
+	PrintHandler result(flow.response().stream());
+	beginSuccess(result);
+
+	result.startObject();
+	result.key("location");
+	result.value(location.toString());
+	result.endObject();
+
+	endSuccess(result);
 }
