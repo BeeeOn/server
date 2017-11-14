@@ -185,7 +185,7 @@ void SensorRestHandler::history(RestFlow &flow)
 		else if (item.first == "interval")
 			interval = parseInterval(Sanitize::strict(item.second));
 		else
-			throw InvalidArgumentException("unknown query parameter");
+			continue; // ignore unknown parameters
 	}
 
 	PrintHandler result(flow.response().stream());
