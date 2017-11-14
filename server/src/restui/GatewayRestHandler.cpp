@@ -15,6 +15,7 @@
 BEEEON_OBJECT_BEGIN(BeeeOn, RestUI, GatewayRestHandler)
 BEEEON_OBJECT_CASTABLE(RestHandler)
 BEEEON_OBJECT_REF("gatewayService", &GatewayRestHandler::setGatewayService)
+BEEEON_OBJECT_REF("timeZoneProvider", &GatewayRestHandler::setTimeZoneProvider)
 BEEEON_OBJECT_END(BeeeOn, RestUI, GatewayRestHandler)
 
 using namespace std;
@@ -36,6 +37,11 @@ GatewayRestHandler::GatewayRestHandler():
 void GatewayRestHandler::setGatewayService(GatewayService *service)
 {
 	m_service = service;
+}
+
+void GatewayRestHandler::setTimeZoneProvider(TimeZoneProvider::Ptr provider)
+{
+	m_timeZoneProvider = provider;
 }
 
 void GatewayRestHandler::list(RestFlow &flow)
@@ -73,7 +79,10 @@ void GatewayRestHandler::update(RestFlow &flow)
 {
 	User user(flow.session()->userID());
 	Gateway gateway(GatewayID::parse(flow.param("gatewayId")));
+
 	JSONGatewayDeserializer update(parseInput(flow));
+	update.setTimeZoneProvider(m_timeZoneProvider);
+
 	SingleWithData<Gateway> data(gateway, update);
 	data.setUser(user);
 
@@ -92,7 +101,10 @@ void GatewayRestHandler::assign(RestFlow &flow)
 	VerifiedIdentity identity(flow.session()->identityID());
 	Object::Ptr object = parseInput(flow);
 	Gateway gateway(GatewayID::parse(JsonUtil::extract<string>(object, "id")));
+
 	JSONGatewayDeserializer create(object);
+	create.setTimeZoneProvider(m_timeZoneProvider);
+
 	SingleWithData<Gateway> data(gateway, create);
 	data.setUser(user);
 

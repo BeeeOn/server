@@ -28,7 +28,7 @@ class TestLocationAddDelete(unittest.TestCase):
 		req = POST(config.ui_host, config.ui_port, "/gateways")
 		req.authorize(self.session)
 		req.body(json.dumps(
-			{"id": config.gateway_id, "name": "Testing Gateway"}
+			{"id": config.gateway_id, "name": "Testing Gateway", "timezone_id": "Europe/Prague"}
 		))
 		response, _ = req()
 
