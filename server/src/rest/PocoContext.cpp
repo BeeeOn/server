@@ -39,6 +39,8 @@ bool PocoRequest::accepts(const string &type, const string &subtype) const
 			return true;
 		else if(icompare(value, type + "/*") == 0)
 			return true;
+		else if (value == "*/*")
+			return true;
 	}
 
 	return false;
