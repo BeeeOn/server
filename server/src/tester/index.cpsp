@@ -15,28 +15,16 @@ BEEEON_OBJECT_END(BeeeOn, Tester, IndexHandler)
 
 		<style>
 		.module {
-			height: 400 px;
 			display: block;
-			float: none;
 		}
 		.module .custom {
-			display: inline;
-			width: 30%;
-			overflow: auto;
+			display: block;
 		}
 		.module .request {
-			position: relative;
-			display: inline;
-			border-left: 2px;
-			border-right: 2px;
-			width: 30%;
-			overflow: auto;
+			display: block;
 		}
 		.module .response {
-			position: relative;
-			display: inline;
-			width: 30%;
-			overflow: auto;
+			display: block;
 		}
 		</style>
 
@@ -270,6 +258,9 @@ BEEEON_OBJECT_END(BeeeOn, Tester, IndexHandler)
 		<%@ include page="login.cpsp" %>
 		<%@ include page="profile.cpsp" %>
 		<%@ include page="timezones.cpsp" %>
+		<%@ include page="gateway.cpsp" %>
 		<%@ include page="types.cpsp" %>
+		<%@ include page="devices.cpsp" %>
+		<%@ include page="sensors.cpsp" %>
 	</body>
 </html>

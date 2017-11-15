@@ -1,0 +1,118 @@
+<script>
+tester.modules["gateway"] = function () {
+	$("#gateway-list-gateways").click(function () {
+		tester.get("/gateways", "#gateway", function (data) {
+			$("#gateway-list .list").empty();
+
+			for (i in data) {
+				var id = data[i]["id"];
+				var name = data[i]["name"];
+				var li = $("<li class='gateway'></li>");
+				li.append($("<span class='id'></span>").text(id));
+				li.attr("title", name);
+				li.attr("alt", name);
+
+				var button = $("<button></button>");
+				li.append(button);
+				button.text("Detail");
+				button.click(function () {
+					tester.get("/gateways/" + id, "#gateway", function (data) {
+						$("#gateway-detail .id span")
+							.text(data["id"]);
+						$("#gateway-detail .name span")
+							.text(data["name"]);
+						$("#gateway-detail .altitude span")
+							.text(data["altitude"]);
+						$("#gateway-detail .latitude span")
+							.text(data["latitude"]);
+						$("#gateway-detail .longitude span")
+							.text(data["longitude"]);
+						$("#gateway-detail .timezone span")
+							.text(data["timezone"]["display_name"]);
+						$("#gateway-detail .version span")
+							.text(data["state"]["version"]);
+						$("#gateway-detail .ip-address span")
+							.text(data["state"]["ip"]);
+						$("#gateway-detail .last-modified span")
+							.text(new Date(data["state"]["lastModified"] * 1000));
+					});
+				});
+
+				$("#gateway-list .list").append(li);
+			}
+		});
+	});
+
+	$("#gateway-register").click(function () {
+		var timezone = $("#timezones .list").val();
+		if (timezone == "__invalid__") {
+			alert("please, select a time zone");
+			return;
+		}
+
+		tester.post("/gateways", "#gateway", {
+			"id": $("#gateway-id-input").val(),
+			"name": $("#gateway-name-input").val(),
+			"timezone_id": timezone
+		}, function (data) {});
+	});
+};
+</script>
+
+<style>
+li.gateway .id {
+	margin-right: 5px;
+}
+</style>
+
+<div id="gateway" class="module">
+	<h2>Gateway Module</h2>
+
+	<div class="custom">
+		<p>Hints: 1284174504043136, 1780053541714013</p>
+		<label for="gateway-id-input">ID</label>
+		<input id="gateway-id-input" type="text"></input>
+		<label for="gateway-name-input">Name</label>
+		<input id="gateway-name-input" type="text"></input>
+		<button id="gateway-register">Register Gateway</button>
+		<br />
+		<button id="gateway-list-gateways">List Gateways</button>
+		<div id="gateway-list">
+			<h3>Gateway list</h3>
+			<ul class="list">
+			</ul>
+		</div>
+		<div id="gateway-detail">
+			<h3>Gateway detail</h3>
+			<p class="id">
+			ID: <span></span>
+			</p>
+			<p class="name">
+			Name: <span></span>
+			</p>
+			<p class="altitude">
+			Altitude: <span></span>
+			</p>
+			<p class="latitude">
+			Latitude: <span></span>
+			</p>
+			<p class="longitude">
+			Longitude: <span></span>
+			</p>
+			<p class="timezone">
+			Time zone: <span></span>
+			</p>
+			<p class="version">
+			Version: <span></span>
+			</p>
+			<p class="ip-address">
+			IP-Address: <span></span>
+			</p>
+			<p class="last-modified">
+			Last-modified: <span></span>
+			</p>
+		</div>
+	</div>
+	<div class="request"></div>
+	<div class="response"></div>
+</div>
