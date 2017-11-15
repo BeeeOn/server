@@ -62,6 +62,19 @@ void DeviceUnpairWorkExecutor::processResult(Work::Ptr work, DeviceUnpairWork &c
 			"failed to unpair device " + device + " on gateway " + gateway);
 
 	case GatewayRPCResult::Status::SUCCESS:
+		if (!m_dao->fetch(device, gateway)) {
+			logger().warning("device " + device + " not found while unpairing",
+					__FILE__, __LINE__);
+			return;
+		}
+
+		device.setActiveSince(Nullable<DateTime>{});
+
+		if (!m_dao->update(device, gateway)) {
+			logger().warning("failed to update device " + device,
+					__FILE__, __LINE__);
+		}
+
 		return;
 
 	default:
