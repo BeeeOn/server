@@ -105,9 +105,9 @@ VALUES
 	5,
 	50,
 	90,
-	timestamp with time zone '2015-4-9 15:43:01',
-	timestamp with time zone '2016-9-1 13:27:18',
-	timestamp with time zone '2015-5-2 17:59:59'
+	timestamp '2015-4-9 15:43:01',
+	timestamp '2016-9-1 13:27:18',
+	timestamp '2015-5-2 17:59:59'
 ),
 (
 	beeeon.to_device_id(11780870713433535053),
@@ -118,9 +118,9 @@ VALUES
 	1000,
 	99,
 	45,
-	timestamp with time zone '2016-8-8 08:08:08',
-	NOW(),
-	timestamp with time zone '2016-8-9 08:09:08'
+	timestamp '2016-8-8 08:08:08',
+	NOW() AT TIME ZONE 'UTC',
+	timestamp '2016-8-9 08:09:08'
 ),
 (
 	beeeon.to_device_id(11758097814818974973),
@@ -131,9 +131,9 @@ VALUES
 	5,
 	50,
 	90,
-	timestamp with time zone '2016-9-10 11:12:13',
-	timestamp with time zone '2016-10-10 11:11:22',
-	timestamp with time zone '2016-9-10 11:30:01'
+	timestamp '2016-9-10 11:12:13',
+	timestamp '2016-10-10 11:11:22',
+	timestamp '2016-9-10 11:30:01'
 ),
 (
 	beeeon.to_device_id(11777358992112902542),
@@ -144,8 +144,8 @@ VALUES
 	2,
 	NULL,
 	NULL,
-	NOW() - interval '100 seconds',
-	NOW() - interval '7 seconds',
+	NOW() AT TIME ZONE 'UTC' - interval '100 seconds',
+	NOW() AT TIME ZONE 'UTC' - interval '7 seconds',
 	NULL
 );
 
@@ -201,7 +201,7 @@ SELECT
 	1284174504043136,
 	beeeon.to_device_id(11760534700801991502),
 	0,
-	NOW() - (i * interval '260 seconds'),
+	NOW() AT TIME ZONE 'UTC' - (i * interval '260 seconds'),
 	19.5
 FROM generate_series(0, (extract(epoch FROM interval '8 days') / 260)::integer - 1) AS i;
 
@@ -220,7 +220,7 @@ SELECT
 	1284174504043136,
 	beeeon.to_device_id(11760534700801991502),
 	1,
-	NOW() - (i * interval '110 seconds'),
+	NOW() AT TIME ZONE 'UTC' - (i * interval '110 seconds'),
 	25 * SIN(i * 0.01)
 FROM generate_series(0, (extract(epoch FROM interval '2 hours') / 110)::integer - 1) AS i;
 
@@ -239,7 +239,7 @@ SELECT
 	1284174504043136,
 	beeeon.to_device_id(11760534700801991502),
 	2,
-	NOW() - (i * interval '720 seconds'),
+	NOW() AT TIME ZONE 'UTC' - (i * interval '720 seconds'),
 	random() * 100
 FROM generate_series(0, (extract(epoch FROM interval '14 days') / 720)::integer - 1) AS i;
 
