@@ -1,9 +1,0 @@
-node_modules
-public
-.tmp
-.idea
-client/bower_components
-dist
-server/config/environment/development.js
-FEATURES
-dump
