@@ -1,8 +1,0 @@
-<config>
-	<server threads="10" port="4566" adaServerPort="7081" verbosity="7"/>
-	<database sessions="10" connectionString="port = '5432' dbname = 'home7' user = 'uiserver7' password = '1234' connect_timeout = '3'" />
-	<comTable cleanerSleepPeriodMs="3600000" maxInactivityTimeMs="86400000"/>     <!-- 86400 seconds is in one day, 3600 in hour -->
-        <ssl certfile="/etc/beeeon/ssl/ui_server_cert/ant-2.fit.vutbr.cz.crt" 
-             keyfile="/etc/beeeon/ssl/ui_server_cert/ant-2.fit.vutbr.cz.key"/>
-        <logs toCout="true" />
-</config>

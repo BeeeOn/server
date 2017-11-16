@@ -1,8 +1,6 @@
 cmake_minimum_required (VERSION 2.8.11)
 project (server C CXX)
 
-set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../lib/modules)
-
 set (CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -pedantic -Wall -lpthread -ggdb3")
 add_definitions(-std=c++11)
 
