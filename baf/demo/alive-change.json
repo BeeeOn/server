@@ -1,9 +1,0 @@
-{
-    "msg": "change",
-    "user_id": 9509,
-    "task_id": 1,
-    "instance_id": 74,
-    "config": {
-        "send_notif": "0"
-    }
-}
