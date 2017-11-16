@@ -1,3 +1,14 @@
+# Contributors
+
+Jan Viktorin  iviktorin@fit.vutbr.cz
+Jozef Halaj  xhalaj03@stud.fit.vutbr.cz
+Peter Kubov xkubov06@stud.fit.vutbr.cz
+Martin Matejčík xmatej46@stud.fit.vutbr.cz
+Peter Tisovcik xtisov00@stud.fit.vutbr.cz
+Petr Stehlík xstehl14@stud.fit.vutbr.cz
+
+# Former contributors
+
 Filip Šutovský  xsutov00@stud.fit.vutbr.cz
 Marek Beňo  xbenom01@stud.fit.vutbr.cz
 Martin Douděra  doudera.m@gmail.com
