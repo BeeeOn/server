@@ -124,24 +124,58 @@ The JWT requires to setup the cryptography. The available entries are:
 * session.jwt.algorithm - algorithm for signing of JWTs (HS256, HS512, ...)
 * session.jwt.audience - names of other system that should be accepting our JWTs
 
-### Google OAuth 2.0
+### Client authentication
+
+The OAuth 2.0 login can be setup up in different configurations. Usually, the
+particular providers need to be configured differently for various clients:
+
+* web application
+* Android application
+* iOS application
+* etc.
+
+For this purpose, the authentication settings are divided into sections:
+
+* web-app
+* android
+* any other...
+
+There are, however, settings which can be shared among all those instances.
+This is usually the SSL configuration.
+
+#### Google OAuth 2.0
 
 To enable login via the Google OAuth 2.0, it is necessary to configure the
-Google ID and secret and to configure the SSL. The available entries are:
+Google ID and secret and to configure the SSL.
 
-* google.enable - enable using of the Google OAuth 2.0
-* google.clientId - client ID (obtain from Google)
-* google.clientSecret - secret passphrase (obtain from Google)
-* google.verifyMode - SSL verify mode
-* google.authority - path to CA to verify connection to Google
+The SSL configuration is shared among all Google Auth providers:
 
-### Facebook OAuth 2.0
+* google.ssl.verifyMode - SSL verify mode
+* google.ssl.authority - path to CA to verify connection to Google
+
+For web applications, there is the section web-app in the configuration file:
+
+* web-app.google.enable - enable using of the Google OAuth 2.0
+* web-app.google.clientId - client ID (obtain from Google)
+* web-app.google.clientSecret - secret passphrase (obtain from Google)
+
+For Android applications, there is the section android in the configuration file:
+
+* android.google.enable - enable using of the Google OAuth 2.0
+* android.google.clientId - client ID (obtain from Google)
+* android.google.clientSecret - secret passphrase (obtain from Google)
+
+#### Facebook OAuth 2.0
 
 To enable login via the Facebook OAuth 2.0, it is necessary to configure the
-Facebook ID and secret and to configure the SSL. The available entries are:
+Facebook ID and secret and to configure the SSL. Similar to the Google OAuth 2.0,
+more different configuration are possible while the SSL configuration is shared:
 
-* facebook.enable - enable using of the Facebook OAuth 2.0
-* facebook.clientId - client ID (obtain from Facebook)
-* facebook.clientSecret - secret passphrase (obtain from Facebook)
-* facebook.verifyMode - SSL verify mode
-* facebook.authority - path to CA to verify connection to Facebook
+* facebook.ssl.verifyMode - SSL verify mode
+* facebook.ssl.authority - path to CA to verify connection to Facebook
+
+For web applications:
+
+* web-app.facebook.enable - enable using of the Facebook OAuth 2.0
+* web-app.facebook.clientId - client ID (obtain from Facebook)
+* web-app.facebook.clientSecret - secret passphrase (obtain from Facebook)

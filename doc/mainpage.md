@@ -15,6 +15,47 @@ receives measured sensor data and allows to drive the controllable elements.
 * Notification Infrastructure - delivers user notifications to user devices
 (phones, tablets, etc.).
 
+## Prerequisites
+
+Required prerequisites for development:
+
+* Poco library 1.7.7+ devel
+* icu and libicu-devel
+* cppunit-devel
+* postgresql-server
+* python3
+  * testing.postgresql
+  * http.client
+  * json
+  * uuid
+  * unittest
+  * unittest-tap-reporting
+
+Optional prerequisites for development:
+
+* jansson-devel
+* jwt-devel
+* python3
+  * selenium
+  * phantomjs
+  * python-selenium
+  * python-oauth2client
+* sqitch
+* postgresql
+
+Required prerequisites for deployment:
+
+* Poco library 1.7.7+
+* icu and libicu
+* postgresql-server
+* postgresql
+* sqitch
+
+Optional prerequisites for deployment:
+
+* jansson
+* jwt
+
 ## Start hacking
 
 The BeeeOn Gateway is built by the CMake build system:
