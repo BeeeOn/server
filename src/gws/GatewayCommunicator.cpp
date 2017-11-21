@@ -14,6 +14,8 @@ BEEEON_OBJECT_TIME("sendTimeout", &GatewayCommunicator::setSendTimeout)
 BEEEON_OBJECT_NUMBER("minThreads", &GatewayCommunicator::setMinThreads)
 BEEEON_OBJECT_NUMBER("maxThreads", &GatewayCommunicator::setMaxThreads)
 BEEEON_OBJECT_TIME("threadIdleTime", &GatewayCommunicator::setThreadIdleTime)
+BEEEON_OBJECT_REF("asyncExecutor", &GatewayCommunicator::setAsyncExecutor)
+BEEEON_OBJECT_REF("listeners", &GatewayCommunicator::registerListener)
 BEEEON_OBJECT_END(BeeeOn, GatewayCommunicator)
 
 using namespace std;
@@ -30,6 +32,16 @@ GatewayCommunicator::GatewayCommunicator():
 
 GatewayCommunicator::~GatewayCommunicator()
 {
+}
+
+void GatewayCommunicator::registerListener(GatewayListener::Ptr listener)
+{
+	m_eventSource.addListener(listener);
+}
+
+void GatewayCommunicator::setAsyncExecutor(SharedPtr<AsyncExecutor> executor)
+{
+	m_eventSource.setAsyncExecutor(executor);
 }
 
 void GatewayCommunicator::addGateway(const GatewayID &gatewayID, WebSocket &webSocket)
@@ -64,6 +76,14 @@ void GatewayCommunicator::addGateway(const GatewayID &gatewayID, WebSocket &webS
 
 	auto emplaced = m_connectionMap.emplace(gatewayID, connection);
 	emplaced.first->second->addToReactor();
+
+	GatewayEvent e(gatewayID);
+	e.setSocketAddress(webSocket.peerAddress());
+
+	if (it != m_connectionMap.end())
+		m_eventSource.fireEvent(e, &GatewayListener::onReconnected);
+	else
+		m_eventSource.fireEvent(e, &GatewayListener::onConnected);
 }
 
 void GatewayCommunicator::removeGateway(const GatewayID &id)
@@ -79,6 +99,9 @@ void GatewayCommunicator::removeGateway(const GatewayID &id)
 
 	it->second->removeFromReactor();
 	m_connectionMap.erase(it);
+
+	const GatewayEvent e(id);
+	m_eventSource.fireEvent(e, &GatewayListener::onDisconnected);
 }
 
 void GatewayCommunicator::removeIfInactive(const GatewayID &id,
@@ -98,6 +121,9 @@ void GatewayCommunicator::removeIfInactive(const GatewayID &id,
 
 	it->second->removeFromReactor();
 	m_connectionMap.erase(it);
+
+	const GatewayEvent e(id);
+	m_eventSource.fireEvent(e, &GatewayListener::onDisconnected);
 }
 
 GatewayConnection::Ptr GatewayCommunicator::findConnection(const GatewayID &id)
@@ -143,8 +169,12 @@ void GatewayCommunicator::stop()
 	logger().notice("destroying " + to_string(m_connectionMap.size())
 			+ " active connections", __FILE__, __LINE__);
 
-	for (auto &it : m_connectionMap)
+	for (auto &it : m_connectionMap) {
 		it.second->removeFromReactor();
+
+		const GatewayEvent e(it.second->gatewayID());
+		m_eventSource.fireEvent(e, &GatewayListener::onDisconnected);
+	}
 
 	m_connectionMap.clear();
 }

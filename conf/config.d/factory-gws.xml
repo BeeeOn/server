@@ -25,6 +25,7 @@
 			<set name="minThreads" number="${gws.comm.minThreads}" />
 			<set name="maxThreads" number="${gws.comm.maxThreads}" />
 			<set name="threadIdleTime" time="${gws.comm.threadIdleTime}" />
+			<set name="asyncExecutor" ref="asyncExecutor" />
 		</instance>
 
 		<instance name="responseExpectedQueue" class="BeeeOn::GWResponseExpectedQueue">

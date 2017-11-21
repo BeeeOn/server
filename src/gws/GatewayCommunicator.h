@@ -13,9 +13,11 @@
 
 #include "gwmessage/GWMessage.h"
 #include "gws/GatewayConnection.h"
+#include "gws/GatewayListener.h"
 #include "gws/GWMessageHandler.h"
 #include "loop/StoppableLoop.h"
 #include "model/GatewayID.h"
+#include "util/EventSource.h"
 #include "util/HavingThreadPool.h"
 #include "util/Occasionally.h"
 
@@ -134,6 +136,9 @@ public:
 	void setReceiveTimeout(const Poco::Timespan &timeout);
 	void setSendTimeout(const Poco::Timespan &timeout);
 
+	void registerListener(GatewayListener::Ptr listener);
+	void setAsyncExecutor(Poco::SharedPtr<AsyncExecutor> executor);
+
 	void start() override;
 	void stop() override;
 
@@ -194,6 +199,8 @@ private:
 	Poco::Thread m_reactorThread;
 	Poco::AtomicCounter m_stop;
 	Poco::RunnableAdapter<GatewayCommunicator> m_workerRunnable;
+
+	EventSource<GatewayListener> m_eventSource;
 };
 
 }
