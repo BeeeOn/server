@@ -37,6 +37,7 @@
 			<set name="rpcForwarder" ref="asyncGatewayRPC" />
 			<set name="deviceService" ref="gwsDeviceService" />
 			<set name="sensorHistoryService" ref="gwsSensorHistoryService" />
+			<set name="eventsExecutor" ref="asyncExecutor" />
 		</instance>
 
 		<instance name="gatewayScanController" class="BeeeOn::GatewayScanController">
