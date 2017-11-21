@@ -17,6 +17,7 @@ BEEEON_OBJECT_PROPERTY("deviceService", &GWMessageHandlerImpl::setDeviceService)
 BEEEON_OBJECT_PROPERTY("sensorHistoryService", &GWMessageHandlerImpl::setSensorHistoryService)
 BEEEON_OBJECT_PROPERTY("eventsExecutor", &GWMessageHandlerImpl::setEventsExecutor)
 BEEEON_OBJECT_PROPERTY("dataListeners", &GWMessageHandlerImpl::registerDataListener)
+BEEEON_OBJECT_PROPERTY("deviceListeners", &GWMessageHandlerImpl::registerDeviceListener)
 BEEEON_OBJECT_HOOK("cleanup", &GWMessageHandlerImpl::cleanup)
 BEEEON_OBJECT_END(BeeeOn, GWMessageHandlerImpl)
 
@@ -142,25 +143,34 @@ GWResponse::Ptr GWMessageHandlerImpl::handleNewDevice(
 	Device device(request->deviceID());
 	device.setRefresh(request->refreshTime());
 
+	DeviceEvent event;
+	event.setGatewayID(gatewayID);
+	event.setDeviceID(device.id());
+
 	try {
+
 		if (m_deviceService->registerDevice(device,
 				request->productName(),
 				request->vendor(),
 				request->moduleTypes(),
 				gatewayID)) {
 			response->setStatus(GWResponse::Status::SUCCESS);
+			m_deviceEventSource.fireEvent(event, &DeviceListener::onNewDevice);
 		}
 		else {
 			response->setStatus(GWResponse::Status::FAILED);
+			m_deviceEventSource.fireEvent(event, &DeviceListener::onRefusedNewDevice);
 		}
 	}
 	catch (const Exception &e) {
 		logger().log(e, __FILE__, __LINE__);
 		response->setStatus(GWResponse::Status::FAILED);
+		m_deviceEventSource.fireEvent(event, &DeviceListener::onRefusedNewDevice);
 	}
 	catch (...) {
 		logger().critical("unknown failure", __FILE__, __LINE__);
 		response->setStatus(GWResponse::Status::FAILED);
+		m_deviceEventSource.fireEvent(event, &DeviceListener::onRefusedNewDevice);
 	}
 
 	return response;
@@ -275,7 +285,13 @@ void GWMessageHandlerImpl::registerDataListener(SensorDataListener::Ptr listener
 	m_dataEventSource.addListener(listener);
 }
 
+void GWMessageHandlerImpl::registerDeviceListener(DeviceListener::Ptr listener)
+{
+	m_deviceEventSource.addListener(listener);
+}
+
 void GWMessageHandlerImpl::setEventsExecutor(AsyncExecutor::Ptr executor)
 {
 	m_dataEventSource.setAsyncExecutor(executor);
+	m_deviceEventSource.setAsyncExecutor(executor);
 }
