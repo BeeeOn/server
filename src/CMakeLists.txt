@@ -76,6 +76,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/dao/DevicePropertyDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/FCMTokenDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/GatewayDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/GatewayStatusDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/LocationDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/IdentityDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/VerifiedIdentityDao.cpp

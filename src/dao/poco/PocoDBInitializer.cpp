@@ -7,6 +7,10 @@ using namespace std;
 using namespace Poco::Data;
 using namespace BeeeOn;
 
+PocoDBInitializer::~PocoDBInitializer()
+{
+}
+
 unsigned long PocoDBInitializer::execute(
 		Session &session, const string &script) const
 {

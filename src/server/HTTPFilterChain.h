@@ -14,7 +14,7 @@ public:
 	typedef Poco::SharedPtr<HTTPFilterChain> Ptr;
 
 	HTTPFilterChain();
-	~HTTPFilterChain();
+	virtual ~HTTPFilterChain();
 
 	void applyChain(
 		Poco::Net::HTTPServerRequest &req,

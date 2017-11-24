@@ -15,6 +15,8 @@ namespace BeeeOn {
 
 class PocoDBInitializer {
 public:
+	virtual ~PocoDBInitializer();
+
 	virtual void initialize(Poco::Data::Session &session) = 0;
 
 protected:

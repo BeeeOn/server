@@ -15,7 +15,7 @@ class SessionManager {
 public:
 	typedef Poco::SharedPtr<SessionManager> Ptr;
 
-	~SessionManager();
+	virtual ~SessionManager();
 
 	virtual const ExpirableSession::Ptr open(const VerifiedIdentity &identity) = 0;
 	virtual bool lookup(const SessionID &id, ExpirableSession::Ptr &info) = 0;

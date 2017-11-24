@@ -15,6 +15,10 @@ namespace BeeeOn {
  */
 class RandomProvider {
 public:
+	virtual ~RandomProvider()
+	{
+	}
+
 	/**
 	 * Return a buffer of random bytes of the given length.
 	 * The quality of the randomness depends on implementation.
