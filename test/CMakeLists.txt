@@ -15,6 +15,7 @@ find_library (JWT jwt)
 find_library (JANSSON jansson)
 
 file(GLOB TEST_SOURCES
+	${PROJECT_SOURCE_DIR}/fcm/LegacyFCMClientTest.cpp
 	${PROJECT_SOURCE_DIR}/l10n/HTTPLocaleExtractorTest.cpp
 	${PROJECT_SOURCE_DIR}/l10n/IcuLocaleImplTest.cpp
 	${PROJECT_SOURCE_DIR}/l10n/IcuLocaleManagerTest.cpp
