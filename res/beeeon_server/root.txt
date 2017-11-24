@@ -172,4 +172,29 @@ root {
 			}
 		}
 	}
+
+	baf {
+		gateway_watcher {
+			connected {
+				title { "Gateway {0} connected" }
+				body { "Gateway {0} connected at {1}." }
+			}
+
+			reconnected {
+				title { "Gateway {0} reconnected" }
+				body {
+					"Gateway {0} reconnected at {1}. If you see many reconnects,"
+					" please check the Internet connection of your BeeeOn Gateway."
+				}
+			}
+
+			disconnected {
+				title { "Gateway {0} disconnected" }
+				body {
+					"Gateway {0} disconnected at {1}. If this is an unexpected event,"
+					" please check the Internet connection of your BeeeOn Gateway."
+				}
+			}
+		}
+	}
 }

@@ -1,0 +1,10 @@
+<system>
+	<factory>
+		<instance name="bafGatewayWatcher" class="BeeeOn::Automation::GatewayWatcher">
+			<set name="recipientsDao" ref="fcmRecipientsDao" />
+			<set name="sender" ref="fcmSender" if-yes="${fcm.enable}" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="translatorFactory" ref="translatorFactory" />
+		</instance>
+	</factory>
+</system>

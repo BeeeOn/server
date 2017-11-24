@@ -164,4 +164,30 @@ cs {
 			}
 		}
 	}
+
+	baf {
+		gateway_watcher {
+			connected {
+				title { "Brána {0} se připojila" }
+				body { "Brána {0} se připojila {1}." }
+			}
+
+			reconnected {
+				title { "Brána {0} se znovu připojila" }
+				body {
+					"Brána {0} se znovu připojila {1}. Pokud se tato událost opakuje často,"
+					" prosím, zkontrolujte Internetové připojení vaší brány, je pravděpodobně"
+					" nestabilní."
+				}
+			}
+
+			disconnected {
+				title { "Brána {0} se odpojila" }
+				body {
+					"Brána {0} se odpojila {1} a nekomunikuje. Pokud se jedná o neočekávanou událost,"
+					" prosím, zkontrolujte Internetové připojení vaší brány, je pravděpodobně nestabilní."
+				}
+			}
+		}
+	}
 }
