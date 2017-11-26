@@ -119,9 +119,10 @@ Transaction *ThreadLocalTransactionManager::start()
 
 	if (ref.get() == NULL) {
 		(new ThreadLocalTransactionWrapper(ref))->setTransaction(create());
+		return ref.get();
 	}
 
-	return ref.get();
+	throw IllegalStateException("transaction already exists in this context");
 }
 
 Transaction *ThreadLocalTransactionManager::create()
