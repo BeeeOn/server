@@ -57,6 +57,7 @@ protected:
 
 private:
 	TransactionFactory *m_factory;
+	Poco::ThreadLocal<ThreadLocalTransactionWrapper *> m_null;
 };
 
 }

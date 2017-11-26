@@ -104,24 +104,16 @@ void ThreadLocalTransactionManager::setFactory(TransactionFactory *factory)
 	m_factory = factory;
 }
 
-/**
- * Access to the ThreadLocal memory.
- */
-static ThreadLocal<ThreadLocalTransactionWrapper *> &impl()
-{
-	static ThreadLocal<ThreadLocalTransactionWrapper *> null;
-	return null;
-}
-
 Transaction *ThreadLocalTransactionManager::start()
 {
-	ThreadLocal<ThreadLocalTransactionWrapper *> &ref = impl();
+	ThreadLocal<ThreadLocalTransactionWrapper *> &ref = m_null;
 
 	if (ref.get() == NULL) {
 		(new ThreadLocalTransactionWrapper(ref))->setTransaction(create());
+		return ref.get();
 	}
 
-	return ref.get();
+	throw IllegalStateException("transaction already exists in this context");
 }
 
 Transaction *ThreadLocalTransactionManager::create()
@@ -131,5 +123,5 @@ Transaction *ThreadLocalTransactionManager::create()
 
 Transaction *ThreadLocalTransactionManager::current()
 {
-	return impl().get();
+	return m_null.get();
 }
