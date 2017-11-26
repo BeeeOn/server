@@ -136,6 +136,11 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/service/SensorHistoryServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/WorkService.cpp
 	${PROJECT_SOURCE_DIR}/service/WorkServiceImpl.cpp
+	${PROJECT_SOURCE_DIR}/transaction/NoTransactionFactory.cpp
+	${PROJECT_SOURCE_DIR}/transaction/NullTransactionManager.cpp
+	${PROJECT_SOURCE_DIR}/transaction/ThreadLocalTransactionManager.cpp
+	${PROJECT_SOURCE_DIR}/transaction/Transactional.cpp
+	${PROJECT_SOURCE_DIR}/transaction/TransactionManager.cpp
 	${PROJECT_SOURCE_DIR}/policy/ControlAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/FCMTokenAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/GatewayAccessPolicy.cpp
@@ -361,7 +366,6 @@ if (APPLE)
 		-Wl,-all_load
 		BeeeOnBase
 		BeeeOnWork
-		BeeeOnTransaction
 		BeeeOnServer
 		${LIBS}
 	)
@@ -372,7 +376,6 @@ else()
 		-Wl,--whole-archive
 		BeeeOnBase
 		BeeeOnWork
-		BeeeOnTransaction
 		BeeeOnServer
 		-Wl,--no-whole-archive
 		${LIBS}

@@ -109,7 +109,6 @@ if (APPLE)
 		-Wl,-all_load
 		BeeeOnBaseTest
 		BeeeOnBase
-		BeeeOnTransaction
 		BeeeOnWork
 		BeeeOnServer
 		${LIBS}
@@ -121,7 +120,6 @@ else()
 		-Wl,--whole-archive
 		BeeeOnBaseTest
 		BeeeOnBase
-		BeeeOnTransaction
 		BeeeOnWork
 		BeeeOnServer
 		-Wl,--no-whole-archive
