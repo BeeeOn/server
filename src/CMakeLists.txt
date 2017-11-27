@@ -305,6 +305,7 @@ file(GLOB WEB_TESTER_INDEX_DEPS
 	${PROJECT_SOURCE_DIR}/tester/gateway.cpsp
 	${PROJECT_SOURCE_DIR}/tester/devices.cpsp
 	${PROJECT_SOURCE_DIR}/tester/sensors.cpsp
+	${PROJECT_SOURCE_DIR}/tester/notifications.cpsp
 )
 
 add_custom_command(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/index.cpp" "${CMAKE_CURRENT_BINARY_DIR}/index.h"

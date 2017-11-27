@@ -1,0 +1,134 @@
+<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+
+<script>
+function notifications_fcm_install(senderId) {
+	var app = firebase.initializeApp({
+		messagingSenderId: senderId
+	});
+
+	var messaging = app.messaging();
+
+	var refreshToken = function (old, refresh) {
+		console.log("[REFRESH] ", refresh);
+
+		tester.post("/notifications/fcm", "#notifications", {
+			id: refresh
+		});
+
+		tester.delete("/notifications/fcm/" + old, "#notifications");
+	};
+
+	var receiveToken = function (token) {
+		console.log("[TOKEN] ", token);
+
+		tester.post("/notifications/fcm", "#notifications", {
+			id: token
+		}, function () {
+			messaging.onTokenRefresh(function (refresh) {
+				refreshToken(token, refresh);
+			});
+		});
+	};
+
+	var initMessaging = function () {
+		if ("serviceWorker" in navigator) {
+			navigator.serviceWorker.register("tester/firebase-messaging-sw.js")
+			.then(function (result) {
+				console.log("FCM worker registered");
+				messaging.useServiceWorker(result);
+
+				startMessaging();
+			})
+			.catch(function (error) {
+				console.log(error);
+				alert("failed to register FCM worker: " + error);
+			});
+		}
+		else {
+			console.log("FCM worker cannot be registered");
+			alert("FCM worker cannot be registered");
+
+			startMessaging();
+		}
+	};
+
+	var startMessaging = function () {
+		messaging.onMessage(function (msg) {
+			console.log("[FG] ", msg);
+
+			var info = $("<div></div>");
+
+			var title = $("<em></em>");
+			title.text(msg["notification"]["title"]);
+			info.append(title);
+			info.append(" ");
+
+			var body = $("<span></span>");
+			body.text(msg["notification"]["body"]);
+			info.append(body);
+
+			$("#notifications-received").append(info);
+		});
+
+		messaging.getToken()
+		.then(receiveToken)
+		.catch(function (error) {
+			console.log(error);
+			alert(error["message"]);
+		});
+	};
+
+	messaging.requestPermission().then(initMessaging);
+};
+
+tester.modules["notifications"] = function () {
+	$("#notifications-list-button").click(function () {
+		tester.get("/notifications", "#notifications", function (data) {
+			$("#notifications-list").empty();
+
+			for (i in data) {
+				var service = data[i];
+				var panel = $("<div></div>");
+				$("#notifications-list").append(panel);
+
+				if (service["name"] == "fcm") {
+					var senderId = service["id"];
+					var reg = $("<button></button>");
+					reg.text("Register for " + service["name"]);
+
+					reg.click(function () {
+						notifications_fcm_install(senderId);
+					});
+
+					panel.append(reg);
+				}
+			}
+		});
+	});
+};
+</script>
+
+<style>
+#notifications-received {
+	display: block;
+	height: 200 px;
+	overflow: auto;
+}
+</style>
+
+<div id="notifications" class="module">
+	<h2>Notifications</h2>
+
+	<div class="custom">
+		<button id="notifications-list-button">List services</button>
+
+		<h3>Services</h3>
+		<div id="notifications-list"></div>
+
+		<h3>Notifications</h3>
+		<div id="notifications-received"></div>
+	</div>
+
+	<div class="request"></div>
+	<div class="response"></div>
+</div>
