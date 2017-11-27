@@ -315,9 +315,24 @@ add_custom_command(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/index.cpp" "${CMAKE_CURRE
 	COMMENT "preprocessing ${WEB_TESTER_INDEX}"
 	VERBATIM)
 
+file(GLOB WEB_TESTER_FCMSW
+	${PROJECT_SOURCE_DIR}/tester/fcmsw.cpsp
+)
+
 set_source_files_properties("${CMAKE_CURRENT_BINARY_DIR}/index.cpp" PROPERTIES GENERATED 1)
 set_source_files_properties("${CMAKE_CURRENT_BINARY_DIR}/index.h" PROPERTIES GENERATED 1)
 list(APPEND SOURCES "${CMAKE_CURRENT_BINARY_DIR}/index.cpp")
+
+add_custom_command(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/fcmsw.cpp" "${CMAKE_CURRENT_BINARY_DIR}/fcmsw.h"
+	COMMAND ${CPSPC} -o "${CMAKE_CURRENT_BINARY_DIR}" "${WEB_TESTER_FCMSW}"
+	MAIN_DEPENDENCY "${WEB_TESTER_FCMSW}"
+	WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+	COMMENT "preprocessing ${WEB_TESTER_FCMSW}"
+	VERBATIM)
+
+set_source_files_properties("${CMAKE_CURRENT_BINARY_DIR}/fcmsw.cpp" PROPERTIES GENERATED 1)
+set_source_files_properties("${CMAKE_CURRENT_BINARY_DIR}/fcmsw.h" PROPERTIES GENERATED 1)
+list(APPEND SOURCES "${CMAKE_CURRENT_BINARY_DIR}/fcmsw.cpp")
 
 include_directories(
 	${PROJECT_SOURCE_DIR}
