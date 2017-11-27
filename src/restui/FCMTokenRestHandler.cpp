@@ -37,11 +37,6 @@ void FCMTokenRestHandler::setFCMTokenService(FCMTokenService::Ptr service)
 	m_service = service;
 }
 
-void FCMTokenRestHandler::setSenderID(const string &senderID)
-{
-	m_senderID = senderID;
-}
-
 void FCMTokenRestHandler::listServices(RestFlow &flow)
 {
 	PrintHandler result(flow.response().stream());
@@ -49,14 +44,14 @@ void FCMTokenRestHandler::listServices(RestFlow &flow)
 
 	result.startArray();
 
-	if (!m_senderID.empty()) {
+	if (!senderID().empty()) {
 		result.startObject();
 
 		result.key("name");
 		result.value(string("fcm"));
 
 		result.key("id");
-		result.value(m_senderID);
+		result.value(senderID());
 
 		result.endObject();
 	}

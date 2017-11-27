@@ -104,6 +104,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/dao/SQLQuery.cpp
 	${PROJECT_SOURCE_DIR}/fcm/FCMClient.cpp
 	${PROJECT_SOURCE_DIR}/fcm/FCMMessage.cpp
+	${PROJECT_SOURCE_DIR}/fcm/FCMReceiverConfigurable.cpp
 	${PROJECT_SOURCE_DIR}/fcm/FCMResponse.cpp
 	${PROJECT_SOURCE_DIR}/fcm/FCMSender.cpp
 	${PROJECT_SOURCE_DIR}/fcm/LegacyFCMClient.cpp
