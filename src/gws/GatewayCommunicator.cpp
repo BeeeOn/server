@@ -206,6 +206,9 @@ void GatewayCommunicator::handleConnectionReadable(GatewayConnection::Ptr connec
 		GWMessage::Ptr message = connection->receiveMessage();
 		connection->addToReactor();
 
+		if (message.isNull())
+			return;
+
 		m_messageHandler->handle(message, connection->gatewayID());
 	}
 	catch (const Exception &e) {

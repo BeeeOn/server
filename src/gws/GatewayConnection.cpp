@@ -1,4 +1,5 @@
 #include <Poco/Logger.h>
+#include <Poco/NumberFormatter.h>
 #include <Poco/Net/NetException.h>
 
 #include "gws/GatewayConnection.h"
@@ -7,6 +8,10 @@ using namespace std;
 using namespace Poco;
 using namespace Poco::Net;
 using namespace BeeeOn;
+
+/// @see https://tools.ietf.org/html/rfc6455#section-5.5
+#define CONTROL_PAYLOAD_LIMIT 125
+#define FRAME_OP_CONTROL_MASK 0x08
 
 GatewayConnection::GatewayConnection(
 		const GatewayID &gatewayID,
@@ -82,14 +87,29 @@ GWMessage::Ptr GatewayConnection::receiveMessage()
 
 	updateLastReceiveTime();
 
+	if (opcode & FRAME_OP_CONTROL_MASK && ret > CONTROL_PAYLOAD_LIMIT)
+		throw ProtocolException("too long payload for a control frame");
+
 	string msg(m_receiveBuffer.begin(), ret);
 
-	if (logger().debug()) {
-		logger().debug("data from gateway "
-				+ m_gatewayID.toString() + ":\n" + msg, __FILE__, __LINE__);
+	switch (opcode) {
+	case WebSocket::FRAME_OP_TEXT:
+		if (!(flags & WebSocket::FRAME_FLAG_FIN))
+			throw ProtocolException("multi-fragment messages are unsupported");
+
+		if (logger().debug()) {
+			logger().debug("data from gateway "
+					+ m_gatewayID.toString() + ":\n" + msg, __FILE__, __LINE__);
+		}
+
+		return GWMessage::fromJSON(msg);
+
+	default:
+		throw ProtocolException("unhandled websocket opcode: "
+				+ NumberFormatter::formatHex(opcode, true));
 	}
 
-	return GWMessage::fromJSON(msg);
+	return nullptr;
 }
 
 void GatewayConnection::sendMessage(const GWMessage::Ptr message)
