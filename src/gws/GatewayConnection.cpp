@@ -74,6 +74,12 @@ GWMessage::Ptr GatewayConnection::receiveMessage()
 	if (ret <= 0 || opcode == WebSocket::FRAME_OP_CLOSE)
 		throw ConnectionResetException(m_gatewayID.toString());
 
+	if (logger().debug()) {
+		logger().debug("received frame with flags: "
+			+ NumberFormatter::formatHex(flags, true),
+			__FILE__, __LINE__);
+	}
+
 	updateLastReceiveTime();
 
 	string msg(m_receiveBuffer.begin(), ret);
