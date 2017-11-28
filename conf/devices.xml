@@ -322,4 +322,22 @@
 			</sensor>
 		</modules>
 	</device>
+
+	<device id="50">
+		<name>Dimmable Light</name>
+		<vendor>Philips Hue</vendor>
+
+		<match>
+			<exact name="Dimmable Light Bulb" vendor="Philips Hue" />
+		</match>
+
+		<modules>
+			<control id="0" type="13">
+				<name>On/Off</name>
+			</control>
+			<control id="1" type="4">
+				<name>Brightness</name>
+			</control>
+		</modules>
+	</device>
 </devices>
