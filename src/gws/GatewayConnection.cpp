@@ -104,12 +104,33 @@ GWMessage::Ptr GatewayConnection::receiveMessage()
 
 		return GWMessage::fromJSON(msg);
 
+	case WebSocket::FRAME_OP_PING:
+		sendPong(msg);
+		break;
+
 	default:
 		throw ProtocolException("unhandled websocket opcode: "
 				+ NumberFormatter::formatHex(opcode, true));
 	}
 
 	return nullptr;
+}
+
+void GatewayConnection::sendPong(const std::string &requestData)
+{
+	if (logger().debug()) {
+		logger().debug(
+			"reply PONG frame of size "
+			+ to_string(requestData.size()),
+			__FILE__, __LINE__);
+	}
+
+	FastMutex::ScopedLock guard(m_sendMutex);
+
+	m_webSocket.sendFrame(
+		requestData.c_str(),
+		requestData.length(),
+		WebSocket::FRAME_OP_PONG);
 }
 
 void GatewayConnection::sendMessage(const GWMessage::Ptr message)

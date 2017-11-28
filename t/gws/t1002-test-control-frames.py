@@ -57,6 +57,16 @@ class TestControlFrames(unittest.TestCase):
 		self.ws.ping("X" * 1024)
 		assureIsClosed(self, self.ws)
 
+	"""
+	Valid PING frame should lead to an appropriate PONG response.
+	"""
+	def test4_ping_pong(self):
+		self.ws.ping("testing connection")
+		frame = self.ws.recv_frame()
+
+		self.assertEqual(websocket.ABNF.OPCODE_PONG, frame.opcode)
+		self.assertEqual("testing connection", str(frame.data, "utf-8"))
+
 if __name__ == '__main__':
 	import sys
 	import taprunner
