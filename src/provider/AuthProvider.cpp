@@ -143,17 +143,3 @@ const string &AbstractAuthProvider::name() const
 {
 	return m_name;
 }
-
-AuthCodeAuthProvider::AuthCodeAuthProvider(const string &name):
-	AbstractAuthProvider(name)
-{
-}
-
-bool AuthCodeAuthProvider::authorize(const Credentials &cred, AuthResult &result)
-{
-	const AuthCodeCredentials &authCodeCredentials =
-		static_cast<const AuthCodeCredentials &>(cred);
-
-	result.setProvider(name());
-	return verifyAuthCode(authCodeCredentials.authCode(), result);
-}
