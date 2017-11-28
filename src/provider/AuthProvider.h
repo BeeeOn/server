@@ -41,6 +41,18 @@ private:
 	const std::string m_authCode;
 };
 
+class AccessTokenCredentials : public Credentials {
+public:
+	AccessTokenCredentials(
+		const std::string &provider,
+		const std::string &accessToken);
+
+	const std::string &accessToken() const;
+
+private:
+	const std::string m_accessToken;
+};
+
 class AuthResult {
 public:
 	AuthResult();
