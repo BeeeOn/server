@@ -37,8 +37,25 @@ bool OAuth2AuthProvider::authorize(const Credentials &cred, AuthResult &result)
 		result.setProvider(name());
 		return verifyAuthCode(authCodeCredentials, result);
 	}
+	if (typeid(cred) == typeid(AccessTokenCredentials)) {
+		const AccessTokenCredentials &accessTokenCredentials =
+			dynamic_cast<const AccessTokenCredentials &>(cred);
+
+		result.setProvider(name());
+		return verifyAuthCode(accessTokenCredentials, result);
+	}
 
 	throw NotAuthenticatedException("unrecognized credentials type");
+}
+
+bool OAuth2AuthProvider::verifyAuthCode(const AuthCodeCredentials &, AuthResult &)
+{
+	throw NotImplementedException("auth-code capability is not implemented");
+}
+
+bool OAuth2AuthProvider::verifyAuthCode(const AccessTokenCredentials &, AuthResult &)
+{
+	throw NotImplementedException("access-token capability is not implemented");
 }
 
 void OAuth2AuthProvider::initSSL() const
