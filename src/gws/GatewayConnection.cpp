@@ -90,7 +90,7 @@ GWMessage::Ptr GatewayConnection::receiveMessage()
 	if (opcode & FRAME_OP_CONTROL_MASK && ret > CONTROL_PAYLOAD_LIMIT)
 		throw ProtocolException("too long payload for a control frame");
 
-	string msg(m_receiveBuffer.begin(), ret);
+	const string msg(m_receiveBuffer.begin(), ret);
 
 	switch (opcode) {
 	case WebSocket::FRAME_OP_TEXT:
