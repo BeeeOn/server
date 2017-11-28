@@ -34,7 +34,7 @@ bool OAuth2AuthProvider::authorize(const Credentials &cred, AuthResult &result)
 		static_cast<const AuthCodeCredentials &>(cred);
 
 	result.setProvider(name());
-	return verifyAuthCode(authCodeCredentials.authCode(), result);
+	return verifyAuthCode(authCodeCredentials, result);
 }
 
 void OAuth2AuthProvider::initSSL() const

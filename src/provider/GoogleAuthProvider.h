@@ -20,7 +20,9 @@ public:
 	}
 
 protected:
-	bool verifyAuthCode(const std::string &authCode, AuthResult &info);
+	bool verifyAuthCode(
+		const AuthCodeCredentials &credentials,
+		AuthResult &info);
 
 private:
 	struct GoogleTokens {

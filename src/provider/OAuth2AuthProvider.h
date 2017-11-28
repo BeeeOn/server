@@ -65,7 +65,8 @@ protected:
 	/**
 	 * Verification against a 3rd party.
 	 */
-	virtual bool verifyAuthCode(const std::string &authCode,
+	virtual bool verifyAuthCode(
+			const AuthCodeCredentials &credentials,
 			AuthResult &info) = 0;
 
 	/**

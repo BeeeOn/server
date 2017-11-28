@@ -29,12 +29,14 @@ using namespace Poco::JSON;
 using namespace Poco::Net;
 using namespace std;
 
-bool FacebookAuthProvider::verifyAuthCode(const string &authCode, AuthResult &info)
+bool FacebookAuthProvider::verifyAuthCode(
+		const AuthCodeCredentials &credentials,
+		AuthResult &info)
 {
 	string accessToken;
 
 	try {
-		accessToken = requestAccessToken(authCode);
+		accessToken = requestAccessToken(credentials.authCode());
 	} catch (const Exception &e) {
 		logger().log(e, __FILE__, __LINE__);
 		return false;

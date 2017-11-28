@@ -58,14 +58,16 @@ bool GoogleAuthProvider::parseIdentity(const std::string &userInfo,
 	return true;
 }
 
-bool GoogleAuthProvider::verifyAuthCode(const string &authCode, AuthResult &info)
+bool GoogleAuthProvider::verifyAuthCode(
+		const AuthCodeCredentials &credentials,
+		AuthResult &info)
 {
 	GoogleTokens tokens;
 	string rawInfo;
 	string google_id;
 
 	try {
-		tokens = requestTokens(authCode);
+		tokens = requestTokens(credentials.authCode());
 
 		if (tokens.tokenType != "Bearer")
 			throw NotAuthenticatedException("incompatible token type: " + tokens.tokenType);

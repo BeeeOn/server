@@ -99,8 +99,10 @@ void GoogleAuthProviderTest::testVerifyAuthCode()
 	else
 		provider.setRedirectURI("http://localhost");
 
+	AuthCodeCredentials credentials("google", googleAuthCode);
+
 	CPPUNIT_ASSERT_MESSAGE("failed to authenticate user",
-			provider.verifyAuthCode(googleAuthCode, info));
+			provider.verifyAuthCode(credentials, info));
 
 	CPPUNIT_ASSERT_MESSAGE("missing email field",
 			!info.email().empty());
