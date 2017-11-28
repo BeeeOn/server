@@ -153,7 +153,7 @@ AuthCodeAuthProvider::AuthCodeAuthProvider(const string &name):
 bool AuthCodeAuthProvider::authorize(const Credentials &cred, AuthResult &result)
 {
 	const AuthCodeCredentials &authCodeCredentials =
-		reinterpret_cast<const AuthCodeCredentials &>(cred);
+		static_cast<const AuthCodeCredentials &>(cred);
 
 	result.setProvider(name());
 	return verifyAuthCode(authCodeCredentials.authCode(), result);
