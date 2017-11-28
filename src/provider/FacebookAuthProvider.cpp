@@ -14,7 +14,6 @@
 #include "util/Sanitize.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, FacebookAuthProvider)
-BEEEON_OBJECT_CASTABLE(AuthCodeAuthProvider)
 BEEEON_OBJECT_CASTABLE(AuthProvider)
 BEEEON_OBJECT_CASTABLE(OAuth2AuthProvider)
 BEEEON_OBJECT_REF("sslConfig", &FacebookAuthProvider::setSSLConfig)
