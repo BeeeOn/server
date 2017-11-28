@@ -69,7 +69,9 @@ GWMessage::Ptr GatewayConnection::receiveMessage()
 	int ret = m_webSocket.receiveFrame(
 			m_receiveBuffer.begin(), m_receiveBuffer.size(), flags);
 
-	if (ret <= 0 || (flags & WebSocket::FRAME_OP_CLOSE))
+	const int opcode = flags & WebSocket::FRAME_OP_BITMASK;
+
+	if (ret <= 0 || opcode == WebSocket::FRAME_OP_CLOSE)
 		throw ConnectionResetException(m_gatewayID.toString());
 
 	updateLastReceiveTime();
