@@ -168,8 +168,8 @@
 	</device>
 
 	<device id="30">
-		<name>Unknown Device</name>
-		<vendor>Unknown Vendor</vendor>
+		<name>Bluetooth Device</name>
+		<vendor>Unknown</vendor>
 
 		<match>
 			<pattern name="*" vendor="Bluetooth Availability" />
