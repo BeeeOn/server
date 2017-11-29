@@ -19,6 +19,7 @@ find_library (JANSSON jansson)
 add_definitions(-std=c++11)
 
 file(GLOB SOURCES
+	${PROJECT_SOURCE_DIR}/baf/GatewayWatcher.cpp
 	${PROJECT_SOURCE_DIR}/jwt/JWToken.cpp
 	${PROJECT_SOURCE_DIR}/provider/AuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/DeviceInfoProvider.cpp
@@ -71,6 +72,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/User.cpp
 	${PROJECT_SOURCE_DIR}/dao/ControlDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/FCMTokenDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/FCMRecipientsDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/UserDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/DeviceDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/DevicePropertyDao.cpp
@@ -88,6 +90,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoDBInitializer.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSimpleDBInitializer.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLControlDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLFCMRecipientsDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLFCMTokenDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLUserDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLVerifiedIdentityDao.cpp
@@ -164,6 +167,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoDaoManager.cpp
 	${PROJECT_SOURCE_DIR}/gws/GatewayConnection.cpp
 	${PROJECT_SOURCE_DIR}/gws/GatewayCommunicator.cpp
+	${PROJECT_SOURCE_DIR}/gws/GatewayListener.cpp
 	${PROJECT_SOURCE_DIR}/gws/GWMessageHandler.cpp
 	${PROJECT_SOURCE_DIR}/gws/GWMessageHandlerImpl.cpp
 	${PROJECT_SOURCE_DIR}/gws/GWResponseExpectedQueue.cpp

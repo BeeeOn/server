@@ -55,6 +55,23 @@ public:
 		}
 	}
 
+	template <typename C>
+	static void parseMany(Poco::Data::RecordSet &result, C &collection)
+	{
+		for (auto row : result) {
+			FCMToken token;
+
+			if (!parseSingle(row, token)) {
+				Loggable::forMethod(__func__)
+					.warning("skipping malformed data, query result: "
+						+ row.valuesToString(), __FILE__, __LINE__);
+				continue;
+			}
+
+			collection.push_back(token);
+		}
+	}
+
 private:
 	SQLQuery m_queryCreate              {"fcm_tokens.create"};
 	SQLQuery m_queryReplace             {"fcm_tokens.replace"};
