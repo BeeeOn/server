@@ -95,6 +95,14 @@ public:
 
 private:
 	/**
+	 * @brief Sends back the PONG frame. Such frame must contain the same
+	 * application data as it was received.
+	 *
+	 * @see https://tools.ietf.org/html/rfc6455#section-5.5.2
+	 */
+	void sendPong(const std::string &requestData);
+
+	/**
 	 * @brief Set timestamp of the last received message.
 	 */
 	void updateLastReceiveTime();
