@@ -75,21 +75,26 @@ BEEEON_OBJECT_END(BeeeOn, Tester, IndexHandler)
 
 			tester.bearer = bearer;
 			var id = tester.bearerID(bearer);
+			var entry = $("<div></div>");
+			entry.attr("id", bearer);
+			$("#tester-bearer").append(entry);
 
-			$("#tester-bearer")
-				.append("<div id='" + id + "'></div>");
-			$("#" + id).append("<label>Bearer: " + bearer + "</label>");
-			$("#" + id).append("<button class='select'>Select</button>");
-			$("#" + id).append("<button class='delete'>Delete</button>");
-			$("#" + id + " .select")
-				.click(function () {
-					tester.bearer = bearer;
-				});
-			$("#" + id + " .delete")
-				.click(function () {
-					$("#" + id).remove();
-					tester.uninstallBearer(bearer);
-				});
+			var label = $("<label></label>");
+			label.text(bearer);
+			entry.append(label);
+
+			var select = $("<button class='select'>Select</button>");
+			select.click(function () {
+				tester.bearer = bearer;
+			});
+			entry.append(select);
+
+			var remove = $("<button class='delete'>Delete</button>");
+			remove.click(function () {
+				entry.remove();
+				tester.uninstallBearer(bearer);
+			});
+			entry.append(remove);
 		};
 
 		tester.uninstallBearer = function (bearer) {

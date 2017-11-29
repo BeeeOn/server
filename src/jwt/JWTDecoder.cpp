@@ -5,6 +5,7 @@
 #include <Poco/Exception.h>
 #include <Poco/Logger.h>
 #include <Poco/JSON/Array.h>
+#include <Poco/JSON/JSONException.h>
 #include <Poco/JSON/Parser.h>
 
 #include "di/Injectable.h"
@@ -34,12 +35,17 @@ static vector<string> deserializeArray(const string &arr)
 	vector<string> deserialized;
 	Parser parser;
 
-	Array::Ptr array = parser.parse(arr).extract<Array::Ptr>();
+	try {
+		Array::Ptr array = parser.parse(arr).extract<Array::Ptr>();
 
-	for (size_t i = 0; i < array->size(); i++)
-		deserialized.push_back(array->getElement<string>(i));
+		for (size_t i = 0; i < array->size(); i++)
+			deserialized.push_back(array->getElement<string>(i));
 
-	return deserialized;
+		return deserialized;
+	}
+	catch (const JSONException &e) {
+		throw SyntaxException("failed to parse array", e);
+	}
 }
 
 static void fillTokenWithData(JWToken &token, jwt_t *tokenData)

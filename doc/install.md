@@ -8,8 +8,8 @@ that is to be amended before running. The systemd service is included.
 
 Before the BeeeOn Server can be started, several configuration entries should
 be set and the database must be initialized. The configuration can be usually
-found at @/etc/beeeon/server@. The main configuration file is called @server-startup.ini@.
-The directory @config.d@ contains files that are also applied and can be used to
+found at `/etc/beeeon/server`. The main configuration file is called `server-startup.ini`.
+The directory `config.d` contains files that are also applied and can be used to
 override the main configuration entries. It is recommanded to customize the
 configuration settings by creating new INI files there.
 
@@ -19,7 +19,7 @@ At least the following entries must be configured:
 
 ### XML-UI Server
 
-The group @xmlui.ssl@ configures using of SSL layer for the XML-UI Server.
+The group `xmlui.ssl` configures using of SSL layer for the XML-UI Server.
 The available entries are:
 
 * xmlui.ssl.enable - enable SSL layer for the XML-UI Server
@@ -30,7 +30,7 @@ The available entries are:
 
 ### REST-UI Server
 
-The group @restui.ssl@ configures using of SSL layer for the REST-UI Server.
+The group `restui.ssl` configures using of SSL layer for the REST-UI Server.
 The available entries are:
 
 * restui.ssl.enable - enable SSL layer for the REST-UI Server
@@ -41,7 +41,7 @@ The available entries are:
 
 ### Gateway Server (GWS)
 
-The group @gws.ws.ssl@ configures using of SSL layer for the GWS.
+The group `gws.ws.ssl` configures using of SSL layer for the GWS.
 The available entries are:
 
 * gws.ws.ssl.enable - enable SSL layer for the GWS websockets
@@ -86,11 +86,11 @@ The database must be initialized before the first run. For this purpose,
 there is an initialization script a set of deploy scripts versioned by
 the Sqitch management system. The Sqitch is currently a mandatory tool
 for initialization. All the necessary scripts can be (usually) found in
-@/usr/share/beeeon/db@.
+`/usr/share/beeeon/db`.
 
 The initialization is done in few steps:
 
-1. Initialize database and create user role @beeeon_user@:
+1. Initialize database and create user role `beeeon_user`:
 
 ```
 $ cd /usr/share/beeeon/db/scripts

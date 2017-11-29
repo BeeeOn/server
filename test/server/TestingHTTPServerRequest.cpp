@@ -8,7 +8,9 @@ using namespace Poco::Net;
 using namespace BeeeOn;
 
 TestingHTTPServerRequest::TestingHTTPServerRequest(HTTPServerResponse &response):
+#if POCO_VERSION < 0x01080000
 	m_expectContinue(false),
+#endif
 	m_response(response)
 {
 }
@@ -23,15 +25,24 @@ istringstream &TestingHTTPServerRequest::stringstream()
 	return m_stream;
 }
 
-void TestingHTTPServerRequest::setExpectContinue(bool expect)
-{
-	m_expectContinue = expect;
-}
-
+#if POCO_VERSION < 0x01080000
 bool TestingHTTPServerRequest::expectContinue() const
 {
 	return m_expectContinue;
 }
+
+void TestingHTTPServerRequest::setExpectContinue(bool expect)
+{
+	m_expectContinue = expect;
+}
+#endif
+
+#if POCO_VERSION >= 0x01080000
+bool TestingHTTPServerRequest::secure() const
+{
+	return false;
+}
+#endif
 
 void TestingHTTPServerRequest::setClientAddress(const SocketAddress &address)
 {
