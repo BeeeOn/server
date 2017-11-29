@@ -1,0 +1,33 @@
+<%!! #include "fcm/FCMReceiverConfigurable.h" %>
+<%@ page namespace="BeeeOn::Tester" %>
+<%@ page baseClass="FCMReceiverConfigurable, public Poco::Net::HTTPRequestHandler" %>
+<%@ page contentType="application/javascript" %>
+<%@ impl include="di/Injectable.h" %>
+<%!
+
+BEEEON_OBJECT_BEGIN(BeeeOn, Tester, FcmswHandler)
+BEEEON_OBJECT_CASTABLE(Poco::Net::HTTPRequestHandler)
+BEEEON_OBJECT_TEXT("senderId", &FcmswHandler::setSenderID)
+BEEEON_OBJECT_END(BeeeOn, Tester, FcmswHandler)
+%>
+
+importScripts('https://www.gstatic.com/firebasejs/3.9.0/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/3.9.0/firebase-messaging.js');
+
+firebase.initializeApp({
+	"messagingSenderId": "<%= senderID() %>"
+});
+
+const messaging = firebase.messaging();
+
+messaging.setBackgroundMessageHandler(function(msg) {
+	console.log("[firebase-messaging-sw.js] ", msg);
+/* TODO
+	var title = msg["notification"]["title"];
+	var body = msg["notification"]["body"];
+
+	return self.registration.showNotification(title, {
+		"body": body		
+	});
+*/
+});

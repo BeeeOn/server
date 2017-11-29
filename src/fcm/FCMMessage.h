@@ -30,7 +30,6 @@ public:
 	static const Poco::Timespan MAX_SUPPORTED_TTL;
 
 	FCMMessage();
-	FCMMessage(const FCMMessage &copy);
 
 	/**
 	 * Adds one recipient into JSON array of recipients

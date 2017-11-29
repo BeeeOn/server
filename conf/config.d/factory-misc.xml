@@ -27,5 +27,21 @@
 			<set name="fcmApiUri" text="${fcm.api.uri}" />
 			<set name="sslConfig" ref="fcmApiSSL" />
 		</instance>
+
+		<instance name="fcmBackOff" class="BeeeOn::ExponentialBackOffFactory">
+			<set name="initialInterval" time="1 s" />
+			<set name="maxInterval" time="10 m" />
+			<set name="maxElapsedTime" time="2 h" />
+			<set name="multiplier" number="1.5" />
+			<set name="randomizationFactor" number="0.5" />
+		</instance>
+
+		<instance name="fcmSender" class="BeeeOn::FCMSender">
+			<set name="serverKey" text="${fcm.serverKey}" />
+			<set name="fcmClient" ref="fcmClient" />
+			<set name="fcmTokenDao" ref="fcmTokenDao" />
+			<set name="backOffFactory" ref="fcmBackOff" />
+			<set name="transactionManager" ref="transactionManager" />
+		</instance>
 	</factory>
 </system>

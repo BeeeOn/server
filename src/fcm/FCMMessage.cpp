@@ -15,10 +15,6 @@ FCMMessage::FCMMessage():
 {
 }
 
-FCMMessage::FCMMessage(const FCMMessage &copy)
-{
-}
-
 void FCMMessage::addRecipient(const FCMTokenID &to)
 {
 	m_recipients.insert(to);

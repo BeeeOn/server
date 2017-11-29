@@ -96,7 +96,8 @@ string LegacyFCMClient::buildContent(const FCMMessage &message, bool dryRun) con
 		notification->set("priority", "high");
 		break;
 	default:
-		throw IllegalStateException("invalid FCM notification priority");
+		throw IllegalStateException("invalid FCM notification priority: "
+				+ to_string(message.priority()));
 	}
 
 	if (message.recipients().empty())

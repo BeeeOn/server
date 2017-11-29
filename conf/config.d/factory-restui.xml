@@ -63,8 +63,13 @@
 
 		<instance name="testerIndex" class="BeeeOn::Tester::IndexHandler" />
 
+		<instance name="testerFcmsw" class="BeeeOn::Tester::FcmswHandler">
+			<set name="senderId" text="${fcm.senderId}" />
+		</instance>
+
 		<instance name="uiCPSPHandler" class="BeeeOn::CPSPRestHandler">
 			<add name="handlers" ref="testerIndex" />
+			<add name="handlers" ref="testerFcmsw" if-yes="${fcm.enable}" />
 		</instance>
 
 		<instance name="uiAuthHandler" class="BeeeOn::AuthRestHandler">

@@ -256,6 +256,7 @@ BEEEON_OBJECT_END(BeeeOn, Tester, IndexHandler)
 		<div id="tester-bearer">
 		</div>
 		<%@ include page="login.cpsp" %>
+		<%@ include page="notifications.cpsp" %>
 		<%@ include page="profile.cpsp" %>
 		<%@ include page="timezones.cpsp" %>
 		<%@ include page="gateway.cpsp" %>
