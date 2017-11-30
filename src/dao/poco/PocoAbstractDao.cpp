@@ -105,7 +105,6 @@ size_t PocoAbstractDao::execute(Statement &sql)
 	catch (const Exception &e) {
 		logger().log(e, __FILE__, __LINE__);
 		logger().error(sql.toString(), __FILE__, __LINE__);
-		log_backtrace(logger());
 		throw;
 	}
 }
