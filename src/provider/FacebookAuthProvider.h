@@ -25,6 +25,12 @@ namespace BeeeOn {
 		bool verifyAuthCode(
 			const AuthCodeCredentials &credentials,
 			AuthResult &info);
+		/**
+		 * Verifies the given access token and obtains user info.
+		 */
+		bool verifyAuthCode(
+			const AccessTokenCredentials &credentials,
+			AuthResult &info);
 
 		/**
 		 *  Verifies access token and makes calls to facebook graph api to gain user info

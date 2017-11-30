@@ -45,6 +45,13 @@ bool FacebookAuthProvider::verifyAuthCode(
 	return processAccessToken(accessToken, info);
 }
 
+bool FacebookAuthProvider::verifyAuthCode(
+		const AccessTokenCredentials &credentials,
+		AuthResult &info)
+{
+	return processAccessToken(credentials.accessToken(), info);
+}
+
 string FacebookAuthProvider::requestAccessToken(const string &authCode) const
 {
 	HTMLForm form;
