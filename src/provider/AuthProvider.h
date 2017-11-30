@@ -22,6 +22,7 @@ public:
 	 * from a HTTP Request header Authorization.
 	 */
 	Credentials(const std::string &provider);
+	virtual ~Credentials();
 
 	const std::string &provider() const;
 
