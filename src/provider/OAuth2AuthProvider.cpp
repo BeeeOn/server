@@ -30,11 +30,15 @@ OAuth2AuthProvider::OAuth2AuthProvider(const string &name):
 
 bool OAuth2AuthProvider::authorize(const Credentials &cred, AuthResult &result)
 {
-	const AuthCodeCredentials &authCodeCredentials =
-		static_cast<const AuthCodeCredentials &>(cred);
+	if (typeid(cred) == typeid(AuthCodeCredentials)) {
+		const AuthCodeCredentials &authCodeCredentials =
+			static_cast<const AuthCodeCredentials &>(cred);
 
-	result.setProvider(name());
-	return verifyAuthCode(authCodeCredentials, result);
+		result.setProvider(name());
+		return verifyAuthCode(authCodeCredentials, result);
+	}
+
+	throw NotAuthenticatedException("unrecognized credentials type");
 }
 
 void OAuth2AuthProvider::initSSL() const
