@@ -4,7 +4,6 @@
 #include <Poco/Logger.h>
 #include <Poco/String.h>
 #include "provider/AuthProvider.h"
-#include "Debug.h"
 
 namespace BeeeOn {
 

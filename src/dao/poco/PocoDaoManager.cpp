@@ -10,7 +10,6 @@
 #include "di/Injectable.h"
 #include "dao/poco/PocoDaoManager.h"
 #include "dao/ConnectorLoader.h"
-#include "util/Template.h"
 #include "util/Occasionally.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, PocoDaoManager)

@@ -8,7 +8,6 @@
 #include "model/VerifiedIdentity.h"
 #include "model/Gateway.h"
 #include "model/User.h"
-#include "Debug.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, NotificationDispatcher)
 BEEEON_OBJECT_REF("observer", &NotificationDispatcher::addObserver)

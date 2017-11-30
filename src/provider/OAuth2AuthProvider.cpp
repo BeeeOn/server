@@ -1,6 +1,7 @@
 #include <sstream>
 
 #include <Poco/Exception.h>
+#include <Poco/Logger.h>
 #include <Poco/Net/Context.h>
 #include <Poco/Net/SSLManager.h>
 #include <Poco/Net/InvalidCertificateHandler.h>
@@ -15,7 +16,6 @@
 
 #include "provider/OAuth2AuthProvider.h"
 #include "ssl/SSLClient.h"
-#include "Debug.h"
 
 using namespace std;
 using namespace BeeeOn;

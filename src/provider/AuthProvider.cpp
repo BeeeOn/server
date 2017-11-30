@@ -3,7 +3,6 @@
 #include "di/Injectable.h"
 #include "provider/AuthProvider.h"
 #include "provider/PermitAuthProvider.h"
-#include "Debug.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, PermitAuthProvider)
 BEEEON_OBJECT_CASTABLE(AuthProvider)
@@ -153,8 +152,6 @@ AuthCodeAuthProvider::AuthCodeAuthProvider(const string &name):
 
 bool AuthCodeAuthProvider::authorize(const Credentials &cred, AuthResult &result)
 {
-	_TRACE_METHOD(logger());
-
 	const AuthCodeCredentials &authCodeCredentials =
 		reinterpret_cast<const AuthCodeCredentials &>(cred);
 

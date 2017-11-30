@@ -4,7 +4,6 @@
 #include "di/Injectable.h"
 #include "server/SessionVerifier.h"
 #include "util/Sanitize.h"
-#include "Debug.h"
 
 using namespace Poco;
 using namespace Poco::Net;

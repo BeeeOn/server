@@ -3,7 +3,6 @@
 #include <Poco/SAX/AttributesImpl.h>
 
 #include "xmlui/AbstractXmlHandler.h"
-#include "Debug.h"
 
 using namespace std;
 using namespace Poco;

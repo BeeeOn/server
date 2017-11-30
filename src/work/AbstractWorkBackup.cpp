@@ -2,7 +2,6 @@
 
 #include "work/AbstractWorkBackup.h"
 #include "work/WorkFactory.h"
-#include "Debug.h"
 
 using namespace Poco;
 using namespace BeeeOn;

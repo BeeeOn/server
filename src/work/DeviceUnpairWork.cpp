@@ -35,7 +35,7 @@ void DeviceUnpairWork::setGatewayID(const GatewayID &id)
 GatewayID DeviceUnpairWork::gatewayID() const
 {
 	return GatewayID::parse(
-		JsonUtil::extract<string>(json(), "gateway_id")
+		json()->getValue<string>("gateway_id")
 	);
 }
 
@@ -47,6 +47,6 @@ void DeviceUnpairWork::setDeviceID(const DeviceID &id)
 DeviceID DeviceUnpairWork::deviceID() const
 {
 	return DeviceID::parse(
-		JsonUtil::extract<string>(json(), "device_id")
+		json()->getValue<string>("device_id")
 	);
 }

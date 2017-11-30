@@ -164,7 +164,7 @@ void DeviceRestHandler::discover(RestFlow &flow)
 		throw InvalidArgumentException("missing argument time_limit");
 
 	const Timespan timeLimit =
-		JsonUtil::extract<unsigned int>(object, "time_limit")
+		object->getValue<unsigned int>("time_limit")
 		* Timespan::SECONDS;
 
 	User user(flow.session()->userID());
