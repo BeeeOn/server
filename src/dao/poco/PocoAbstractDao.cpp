@@ -313,25 +313,16 @@ static void formatStatementInfo(
 	}
 }
 
-static void finishHandleException(
-		Logger &logger,
-		const string &message,
-		const Poco::Exception e,
-		const char *file,
-		int line)
+static void finishHandleException(const string &message, const Poco::Exception e)
 {
 	Data::DataException exception(message, e);
-	logger.error(message, file, line);
 	exception.rethrow();
 }
 
 #ifdef POCO_ODBC
 static void handleException(
-		Logger &logger,
 		const Statement &stmt,
-		const ODBC::StatementException &e,
-		const char *file,
-		int line)
+		const ODBC::StatementException &e)
 {
 	ostringstream buffer;
 
@@ -349,23 +340,20 @@ static void handleException(
 	}
 
 	formatStatementInfo(buffer, stmt);
-	finishHandleException(logger, buffer.str(), e, file, line);
+	finishHandleException(buffer.str(), e);
 }
 #endif
 
 static void handleException(
-		Logger &logger,
 		const Statement &stmt,
-		const Exception &e,
-		const char *file,
-		int line)
+		const Exception &e)
 {
 	ostringstream buffer;
 
 	buffer << trimRight(e.displayText()) << endl;
 
 	formatStatementInfo(buffer, stmt);
-	finishHandleException(logger, buffer.str(), e, file, line);
+	finishHandleException(buffer.str(), e);
 }
 
 size_t PocoAbstractDao::execute(Statement &sql)
@@ -386,12 +374,12 @@ size_t PocoAbstractDao::execute(Statement &sql)
 	}
 #ifdef POCO_ODBC
 	catch (const ODBC::StatementException &e) {
-		handleException(logger(), sql, e, __FILE__, __LINE__);
+		handleException(sql, e);
 		throw;
 	}
 #endif
 	catch (const Exception &e) {
-		handleException(logger(), sql, e, __FILE__, __LINE__);
+		handleException(sql, e);
 		throw;
 	}
 }
