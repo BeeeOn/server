@@ -34,12 +34,24 @@ void AuthXmlHandler::handleInputImpl()
 			return;
 		}
 
-		AuthCodeCredentials credentials(
-			Sanitize::strict(provider->getAttribute("name")),
-			provider->getAttribute("authCode")
-		);
+		Session::Ptr session;
 
-		const Session::Ptr session = m_authService.login(credentials);
+		if (provider->hasAttribute("authCode")) {
+			AuthCodeCredentials credentials(
+				Sanitize::strict(provider->getAttribute("name")),
+				provider->getAttribute("authCode")
+			);
+
+			session = m_authService.login(credentials);
+		}
+		else if (provider->hasAttribute("accessToken")) {
+			AccessTokenCredentials credentials(
+				Sanitize::strict(provider->getAttribute("name")),
+				provider->getAttribute("accessToken")
+			);
+
+			session = m_authService.login(credentials);
+		}
 
 		if (session.isNull()) {
 			resultNotAuthenticated();
