@@ -294,6 +294,7 @@ file(GLOB RESTUI_SOURCES
 if (POCO_ODBC)
 	list(APPEND XMLUI_SOURCES  dao/poco/PocoODBCConnectorLoader.cpp)
 	list(APPEND RESTUI_SOURCES dao/poco/PocoODBCConnectorLoader.cpp)
+	add_definitions(-DPOCO_ODBC=1)
 endif()
 
 find_program(CPSPC cpspc)

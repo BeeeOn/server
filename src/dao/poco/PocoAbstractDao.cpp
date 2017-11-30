@@ -12,6 +12,10 @@
 #include <Poco/Data/AbstractBinding.h>
 #include <Poco/Data/StatementImpl.h>
 
+#ifdef POCO_ODBC
+#include <Poco/Data/ODBC/ODBCException.h>
+#endif
+
 #include "dao/SQLLoader.h"
 #include "dao/SQLQuery.h"
 #include "dao/poco/PocoTransactionImpl.h"
@@ -321,6 +325,34 @@ static void finishHandleException(
 	exception.rethrow();
 }
 
+#ifdef POCO_ODBC
+static void handleException(
+		Logger &logger,
+		const Statement &stmt,
+		const ODBC::StatementException &e,
+		const char *file,
+		int line)
+{
+	ostringstream buffer;
+
+	buffer << "ODBC StatementException" << endl;
+
+	const auto &diag = e.diagnostics();
+
+	for (int i = 0; i < diag.count(); ++i) {
+		buffer << "[" << i << "] ";
+		buffer << "SQL state: " << diag.sqlState(i);
+		buffer << ", ";
+		buffer << "Native error: " << diag.nativeError(i);
+		buffer << endl;
+		buffer << trimRight(diag.message(i)) << endl;
+	}
+
+	formatStatementInfo(buffer, stmt);
+	finishHandleException(logger, buffer.str(), e, file, line);
+}
+#endif
+
 static void handleException(
 		Logger &logger,
 		const Statement &stmt,
@@ -352,6 +384,12 @@ size_t PocoAbstractDao::execute(Statement &sql)
 
 		return result;
 	}
+#ifdef POCO_ODBC
+	catch (const ODBC::StatementException &e) {
+		handleException(logger(), sql, e, __FILE__, __LINE__);
+		throw;
+	}
+#endif
 	catch (const Exception &e) {
 		handleException(logger(), sql, e, __FILE__, __LINE__);
 		throw;
@@ -364,7 +402,6 @@ RecordSet PocoAbstractDao::executeSelect(Statement &sql)
 	RecordSet result(sql);
 	return result;
 }
-
 
 void PocoAbstractDao::throwMissingId(const type_info &t)
 {
