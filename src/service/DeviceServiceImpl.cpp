@@ -131,6 +131,32 @@ void DeviceServiceImpl::doFetchMany(Single<list<Device>> &input)
 	m_dao->fetchMany(devices);
 }
 
+void DeviceServiceImpl::doFetchMany(Single<list<DeviceWithData>> &input)
+{
+	list<Device> devices;
+	for (const auto &dev : input.target())
+		devices.emplace_back(dev);
+
+	m_dao->fetchMany(devices);
+
+	// convert to list of DeviceWithData
+	list<DeviceWithData> result;
+	for (const auto &dev : devices) {
+		DeviceWithData device = dev;
+
+		try {
+			m_policy->assure(DeviceAccessPolicy::ACTION_USER_GET,
+					input, device, device.gateway());
+		} catch (const InvalidAccessException &e) {
+			continue;
+		}
+
+		valuesFor(device);
+		result.emplace_back(device);
+	}
+
+	input.target() = result;
+}
 
 void DeviceServiceImpl::doFetchMany(Relation<list<Device>, Gateway> &input)
 {
@@ -158,6 +184,44 @@ void DeviceServiceImpl::doFetchMany(Relation<list<Device>, Gateway> &input)
 	}
 }
 
+/**
+ * The method performs 1 + 2 * N Dao requests where N is the number of devices.
+ * The first query obtains list of Device instances. Because we need a list
+ * of DeviceWithData instances, the loop would convert it. The conversion
+ * fetches module data for every single device.
+ *
+ * The method should be optimized (moved to Dao layer) if needed.
+ */
+void DeviceServiceImpl::doFetchMany(Relation<list<DeviceWithData>, Gateway> &input)
+{
+	// fetch list of Devices
+	list<Device> devices;
+	for (const auto &dev : input.target())
+		devices.emplace_back(dev);
+
+	m_policy->assureMany(DeviceAccessPolicy::ACTION_USER_GET, input, devices);
+
+	m_dao->fetchMany(devices);
+
+	// convert to list of DeviceWithData
+	list<DeviceWithData> result;
+	for (const auto &dev : devices) {
+		DeviceWithData device = dev;
+
+		try {
+			m_policy->assure(DeviceAccessPolicy::ACTION_USER_GET,
+					input, device, input.base());
+		} catch (const InvalidAccessException &e) {
+			continue;
+		}
+
+		valuesFor(device);
+		result.emplace_back(device);
+	}
+
+	input.target() = result;
+}
+
 void DeviceServiceImpl::doFetchActiveBy(Relation<vector<Device>, Gateway> &input)
 {
 	m_policy->assure(DeviceAccessPolicy::ACTION_USER_GET,
@@ -165,11 +229,72 @@ void DeviceServiceImpl::doFetchActiveBy(Relation<vector<Device>, Gateway> &input
 	m_dao->fetchActiveBy(input.target(), input.base());
 }
 
+void DeviceServiceImpl::doFetchActiveBy(Relation<vector<DeviceWithData>, Gateway> &input)
+{
+	// fetch list of Devices
+	vector<Device> devices;
+	for (const auto &dev : input.target())
+		devices.emplace_back(dev);
+
+	m_policy->assure(DeviceAccessPolicy::ACTION_USER_GET,
+			input, input.base());
+	m_dao->fetchActiveBy(devices, input.base());
+
+	// convert to list of DeviceWithData
+	vector<DeviceWithData> result;
+	for (const auto &dev : devices) {
+		DeviceWithData device = dev;
+
+		try {
+			m_policy->assure(DeviceAccessPolicy::ACTION_USER_GET,
+					input, device, input.base());
+		} catch (const InvalidAccessException &e) {
+			continue;
+		}
+
+		valuesFor(device);
+		result.emplace_back(device);
+	}
+
+	input.target() = result;
+}
+
 void DeviceServiceImpl::doFetchInactiveBy(Relation<vector<Device>, Gateway> &input)
 {
 	m_policy->assure(DeviceAccessPolicy::ACTION_USER_GET,
 			input, input.base());
 	m_dao->fetchInactiveBy(input.target(), input.base());
+}
+
+void DeviceServiceImpl::doFetchInactiveBy(Relation<vector<DeviceWithData>, Gateway> &input)
+{
+	// fetch list of Devices
+	vector<Device> devices;
+	for (const auto &dev : input.target())
+		devices.emplace_back(dev);
+
+	m_policy->assure(DeviceAccessPolicy::ACTION_USER_GET,
+			input, input.base());
+	m_dao->fetchInactiveBy(devices, input.base());
+
+	// convert to list of DeviceWithData
+	vector<DeviceWithData> result;
+	for (const auto &dev : devices) {
+		DeviceWithData device = dev;
+
+		try {
+			m_policy->assure(DeviceAccessPolicy::ACTION_USER_GET,
+					input, device, input.base());
+		} catch (const InvalidAccessException &e) {
+			continue;
+		}
+
+		valuesFor(device);
+		result.emplace_back(device);
+	}
+
+	input.target() = result;
+
 }
 
 Work DeviceServiceImpl::doUnregister(Relation<Device, Gateway> &input)

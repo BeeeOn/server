@@ -6,8 +6,8 @@
 
 #include <Poco/SharedPtr.h>
 
-#include "model/Device.h"
 #include "model/DeviceProperty.h"
+#include "model/DeviceWithData.h"
 #include "model/Gateway.h"
 #include "service/Single.h"
 #include "service/Relation.h"
@@ -26,9 +26,13 @@ public:
 
 	virtual bool fetch(Relation<Device, Gateway> &input) = 0;
 	virtual void fetchMany(Single<std::list<Device>> &input) = 0;
+	virtual void fetchMany(Single<std::list<DeviceWithData>> &input) = 0;
 	virtual void fetchMany(Relation<std::list<Device>, Gateway> &input) = 0;
+	virtual void fetchMany(Relation<std::list<DeviceWithData>, Gateway> &input) = 0;
 	virtual void fetchActiveBy(Relation<std::vector<Device>, Gateway> &input) = 0;
+	virtual void fetchActiveBy(Relation<std::vector<DeviceWithData>, Gateway> &input) = 0;
 	virtual void fetchInactiveBy(Relation<std::vector<Device>, Gateway> &input) = 0;
+	virtual void fetchInactiveBy(Relation<std::vector<DeviceWithData>, Gateway> &input) = 0;
 
 	virtual bool activate(Relation<Device, Gateway> &input) = 0;
 	virtual Work unregister(Relation<Device, Gateway> &input) = 0;

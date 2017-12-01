@@ -44,7 +44,17 @@ public:
 		BEEEON_TRANSACTION(doFetchMany(input));
 	}
 
+	void fetchMany(Single<std::list<DeviceWithData>> &input) override
+	{
+		BEEEON_TRANSACTION(doFetchMany(input));
+	}
+
 	void fetchMany(Relation<std::list<Device>, Gateway> &input) override
+	{
+		BEEEON_TRANSACTION(doFetchMany(input));
+	}
+
+	void fetchMany(Relation<std::list<DeviceWithData>, Gateway> &input) override
 	{
 		BEEEON_TRANSACTION(doFetchMany(input));
 	}
@@ -54,7 +64,17 @@ public:
 		BEEEON_TRANSACTION(doFetchActiveBy(input));
 	}
 
+	void fetchActiveBy(Relation<std::vector<DeviceWithData>, Gateway> &input) override
+	{
+		BEEEON_TRANSACTION(doFetchActiveBy(input));
+	}
+
 	void fetchInactiveBy(Relation<std::vector<Device>, Gateway> &input) override
+	{
+		BEEEON_TRANSACTION(doFetchInactiveBy(input));
+	}
+
+	void fetchInactiveBy(Relation<std::vector<DeviceWithData>, Gateway> &input) override
 	{
 		BEEEON_TRANSACTION(doFetchInactiveBy(input));
 	}
@@ -109,9 +129,13 @@ protected:
 
 	bool doFetch(Relation<Device, Gateway> &input);
 	void doFetchMany(Single<std::list<Device>> &input);
+	void doFetchMany(Single<std::list<DeviceWithData>> &input);
 	void doFetchMany(Relation<std::list<Device>, Gateway> &input);
+	void doFetchMany(Relation<std::list<DeviceWithData>, Gateway> &input);
 	void doFetchActiveBy(Relation<std::vector<Device>, Gateway> &input);
+	void doFetchActiveBy(Relation<std::vector<DeviceWithData>, Gateway> &input);
 	void doFetchInactiveBy(Relation<std::vector<Device>, Gateway> &input);
+	void doFetchInactiveBy(Relation<std::vector<DeviceWithData>, Gateway> &input);
 
 	bool doActivate(Relation<Device, Gateway> &input);
 	Work doUnregister(Relation<Device, Gateway> &input);
