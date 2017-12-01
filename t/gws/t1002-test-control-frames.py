@@ -7,26 +7,14 @@ import unittest
 import websocket
 import json
 
-from gws import assureIsClosed, assureNotClosed
+from gws import assureIsClosed, assureNotClosed, registerGateway
 
 class TestControlFrames(unittest.TestCase):
 	def setUp(self):
 		self.ws = websocket.WebSocket()
 		self.ws.connect(config.gws_ws_uri)
 
-		msg = json.dumps(
-			{
-				"gateway_id": config.gateway_id,
-				"ip_address": "192.168.1.1",
-				"message_type": "gateway_register",
-				"version": "v1.0"
-			}
-		)
-
-		self.ws.send(msg)
-		msg = json.loads(self.ws.recv())
-
-		self.assertEqual("gateway_accepted", msg["message_type"])
+		registerGateway(self, self.ws, config.gateway_id)
 
 	def tearDown(self):
 		self.ws.close()
