@@ -9,6 +9,7 @@ find_library (POCO_CRYPTO PocoCrypto)
 find_library (POCO_NET PocoNet)
 find_library (POCO_JSON PocoJSON)
 find_library (POCO_DATA PocoData)
+find_library (POCO_ODBC PocoDataODBC)
 find_library (ICU_I18N icui18n)
 find_library (ICU_UC icuuc)
 find_library (JWT jwt)
@@ -126,4 +127,8 @@ else()
 		-Wl,--no-whole-archive
 		${LIBS}
 	)
+endif()
+
+if(POCO_ODBC)
+	target_link_libraries(test-suite-server ${POCO_ODBC})
 endif()

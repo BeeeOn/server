@@ -14,6 +14,9 @@
 #include "util/Loggable.h"
 
 namespace Poco {
+
+class Exception;
+
 namespace Data {
 
 class Session;

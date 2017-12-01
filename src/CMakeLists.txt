@@ -161,6 +161,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/policy/PolicyContext.cpp
 	${PROJECT_SOURCE_DIR}/policy/UserPolicyContext.cpp
 	${PROJECT_SOURCE_DIR}/util/DevicesSAXHandler.cpp
+	${PROJECT_SOURCE_DIR}/util/PocoStatementIntruder.cpp
 	${PROJECT_SOURCE_DIR}/util/Sanitize.cpp
 	${PROJECT_SOURCE_DIR}/util/Startup.cpp
 	${PROJECT_SOURCE_DIR}/util/TypesSAXHandler.cpp
@@ -293,6 +294,7 @@ file(GLOB RESTUI_SOURCES
 if (POCO_ODBC)
 	list(APPEND XMLUI_SOURCES  dao/poco/PocoODBCConnectorLoader.cpp)
 	list(APPEND RESTUI_SOURCES dao/poco/PocoODBCConnectorLoader.cpp)
+	add_definitions(-DPOCO_ODBC=1)
 endif()
 
 find_program(CPSPC cpspc)
