@@ -4,7 +4,6 @@
 #include "model/Identity.h"
 #include "model/Gateway.h"
 #include "model/RoleInGateway.h"
-#include "notification/NotificationDispatcher.h"
 #include "server/AccessLevel.h"
 #include "service/RoleServiceImpl.h"
 
@@ -19,14 +18,12 @@ BEEEON_OBJECT_PROPERTY("verifiedIdentityDao", &RoleServiceImpl::setVerifiedIdent
 BEEEON_OBJECT_PROPERTY("gatewayDao", &RoleServiceImpl::setGatewayDao)
 BEEEON_OBJECT_PROPERTY("roleInGatewayDao", &RoleServiceImpl::setRoleInGatewayDao)
 BEEEON_OBJECT_PROPERTY("accessPolicy", &RoleServiceImpl::setAccessPolicy)
-BEEEON_OBJECT_PROPERTY("notificationDispatcher", &RoleServiceImpl::setNotificationDispatcher)
 BEEEON_OBJECT_PROPERTY("transactionManager", &Transactional::setTransactionManager)
 BEEEON_OBJECT_PROPERTY("eventsExecutor", &RoleServiceImpl::setEventsExecutor)
 BEEEON_OBJECT_PROPERTY("listeners", &RoleServiceImpl::registerListener)
 BEEEON_OBJECT_END(BeeeOn, RoleServiceImpl)
 
-RoleServiceImpl::RoleServiceImpl():
-	m_notificationDispatcher(0)
+RoleServiceImpl::RoleServiceImpl()
 {
 }
 
@@ -53,12 +50,6 @@ void RoleServiceImpl::setRoleInGatewayDao(RoleInGatewayDao::Ptr dao)
 void RoleServiceImpl::setAccessPolicy(RoleAccessPolicy::Ptr policy)
 {
 	m_accessPolicy = policy;
-}
-
-void RoleServiceImpl::setNotificationDispatcher(
-		NotificationDispatcher *dispatcher)
-{
-	m_notificationDispatcher = dispatcher;
 }
 
 void RoleServiceImpl::setEventsExecutor(AsyncExecutor::Ptr executor)
@@ -90,10 +81,6 @@ void RoleServiceImpl::doInviteIdentity(
 
 	// Create the role or fail if already exists.
 	m_roleInGatewayDao->create(role);
-
-	// notify about the invitation
-	m_notificationDispatcher->notifyInvited(
-			tmp, input.base(), input.user());
 
 	IdentityInviteEvent e;
 	e.setOriginator(input.user());

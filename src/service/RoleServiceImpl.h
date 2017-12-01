@@ -18,8 +18,6 @@ class RoleInGateway;
 class LegacyRoleInGateway;
 class AccessLevel;
 
-class NotificationDispatcher;
-
 class RoleServiceImpl : public RoleService, public Transactional {
 public:
 	RoleServiceImpl();
@@ -29,7 +27,6 @@ public:
 	void setGatewayDao(GatewayDao::Ptr dao);
 	void setRoleInGatewayDao(RoleInGatewayDao::Ptr dao);
 	void setAccessPolicy(RoleAccessPolicy::Ptr policy);
-	void setNotificationDispatcher(NotificationDispatcher *service);
 	void setEventsExecutor(AsyncExecutor::Ptr executor);
 	void registerListener(IdentityListener::Ptr listener);
 
@@ -89,7 +86,6 @@ private:
 	GatewayDao::Ptr m_gatewayDao;
 	RoleInGatewayDao::Ptr m_roleInGatewayDao;
 	RoleAccessPolicy::Ptr m_accessPolicy;
-	NotificationDispatcher *m_notificationDispatcher;
 	EventSource<IdentityListener> m_eventSource;
 };
 

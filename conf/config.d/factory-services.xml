@@ -80,7 +80,6 @@
 			<set name="roleInGatewayDao" ref="roleInGatewayDao" />
 			<set name="accessPolicy" ref="accessPolicy" />
 			<set name="transactionManager" ref="transactionManager" />
-			<set name="notificationDispatcher" ref="notificationDispatcher" />
 			<set name="eventsExecutor" ref="eventsExecutor" />
 			<add name="listeners" ref="publishingWatcher" if-yes="${baf.publish.identity.enable}" />
 		</instance>
