@@ -73,21 +73,17 @@ void DeviceServiceImpl::doFetchMany(Single<list<Device>> &input)
 void DeviceServiceImpl::doFetchMany(Relation<list<Device>, Gateway> &input)
 {
 	list<Device> &devices = input.target();
+
+	m_dao->fetchMany(devices);
+
 	list<Device>::iterator it = devices.begin();
 
-	// TODO: move to Dao layer
 	while (it != devices.end()) {
 		Device &device = *it;
 
 		try {
 			m_policy->assure(DeviceAccessPolicy::ACTION_USER_GET,
 					input, device, input.base());
-
-			if (!m_dao->fetch(device, input.base())) {
-				it = devices.erase(it);
-				continue;
-			}
-
 		} catch (const InvalidAccessException &e) {
 			// drop inaccessible devices
 			it = devices.erase(it);
