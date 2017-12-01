@@ -4,9 +4,12 @@
 #include <list>
 #include <vector>
 
+#include "dao/ControlDao.h"
 #include "dao/DeviceDao.h"
 #include "dao/DevicePropertyDao.h"
+#include "dao/SensorHistoryDao.h"
 #include "policy/DeviceAccessPolicy.h"
+#include "model/DeviceWithData.h"
 #include "rpc/GatewayRPC.h"
 #include "service/DeviceService.h"
 #include "transaction/Transactional.h"
@@ -24,6 +27,8 @@ public:
 	DeviceServiceImpl();
 
 	void setDeviceDao(DeviceDao::Ptr dao);
+	void setControlDao(ControlDao::Ptr dao);
+	void setSensorHistoryDao(SensorHistoryDao::Ptr dao);
 	void setDevicePropertyDao(DevicePropertyDao::Ptr dao);
 	void setGatewayRPC(GatewayRPC::Ptr rpc);
 	void setWorkFacade(WorkFacade::Ptr facade);
@@ -100,6 +105,8 @@ public:
 	}
 
 protected:
+	void valuesFor(DeviceWithData &device);
+
 	bool doFetch(Relation<Device, Gateway> &input);
 	void doFetchMany(Single<std::list<Device>> &input);
 	void doFetchMany(Relation<std::list<Device>, Gateway> &input);
@@ -123,6 +130,8 @@ protected:
 
 private:
 	DeviceDao::Ptr m_dao;
+	ControlDao::Ptr m_controlDao;
+	SensorHistoryDao::Ptr m_historyDao;
 	DevicePropertyDao::Ptr m_propertyDao;
 	GatewayRPC::Ptr m_gatewayRPC;
 	WorkFacade::Ptr m_workFacade;

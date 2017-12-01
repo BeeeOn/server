@@ -13,6 +13,8 @@
 BEEEON_OBJECT_BEGIN(BeeeOn, DeviceServiceImpl)
 BEEEON_OBJECT_CASTABLE(DeviceService)
 BEEEON_OBJECT_REF("deviceDao", &DeviceServiceImpl::setDeviceDao)
+BEEEON_OBJECT_REF("controlDao", &DeviceServiceImpl::setControlDao)
+BEEEON_OBJECT_REF("sensorHistoryDao", &DeviceServiceImpl::setSensorHistoryDao)
 BEEEON_OBJECT_REF("devicePropertyDao", &DeviceServiceImpl::setDevicePropertyDao)
 BEEEON_OBJECT_REF("gatewayRPC", &DeviceServiceImpl::setGatewayRPC)
 BEEEON_OBJECT_REF("accessPolicy", &DeviceServiceImpl::setAccessPolicy)
@@ -31,6 +33,16 @@ DeviceServiceImpl::DeviceServiceImpl()
 void DeviceServiceImpl::setDeviceDao(DeviceDao::Ptr dao)
 {
 	m_dao = dao;
+}
+
+void DeviceServiceImpl::setControlDao(ControlDao::Ptr dao)
+{
+	m_controlDao = dao;
+}
+
+void DeviceServiceImpl::setSensorHistoryDao(SensorHistoryDao::Ptr dao)
+{
+	m_historyDao = dao;
 }
 
 void DeviceServiceImpl::setDevicePropertyDao(DevicePropertyDao::Ptr dao)
@@ -58,6 +70,56 @@ bool DeviceServiceImpl::doFetch(Relation<Device, Gateway> &input)
 	m_policy->assure(DeviceAccessPolicy::ACTION_USER_GET,
 			input, input.target(), input.base());
 	return m_dao->fetch(input.target(), input.base());
+}
+
+void DeviceServiceImpl::valuesFor(DeviceWithData &device)
+{
+	// fetch last value of all device modules
+	vector<ModuleInfo> sensors;
+	list<Control> controls;
+	size_t count = 0;
+
+	for (const auto &info : *device.type()) {
+		if (info.isControllable())
+			controls.emplace_back(Control{info.id()});
+		else
+			sensors.emplace_back(info);
+
+		count += 1;
+	}
+
+	// values of all modules
+	vector<ValueAt> values(count);
+
+	// a null result means that there is no data for that sensor yet
+	vector<Nullable<ValueAt>> nullableValues;
+	m_historyDao->fetchMany(device, sensors, nullableValues);
+
+	size_t i = 0;
+	for (const auto &sensor : sensors) {
+		const auto &current = nullableValues.at(i++);
+		const unsigned int index = sensor.id();
+
+		if (!current.isNull())
+			values[index] = current;
+
+		// else leave the value as invalid
+	}
+
+	m_controlDao->fetchBy(controls, device);
+
+	for (const auto &control : controls) {
+		const unsigned int index = control.id();
+
+		const auto &confirmed = control.lastConfirmed();
+		if (!confirmed.isNull()) {
+			const Control::State &state = confirmed;
+			values[index] = {state.at().value(), state.value()};
+		}
+		// else leave the value as invalid
+	}
+
+	device.setValues(values);
 }
 
 void DeviceServiceImpl::doFetchMany(Single<list<Device>> &input)
