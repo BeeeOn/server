@@ -12,7 +12,6 @@
 			<set name="identityDao" ref="identityDao" />
 			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
 			<set name="sessionManager" ref="sessionManager" />
-			<set name="notificationDispatcher" ref="notificationDispatcher" />
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="localeManager" ref="localeManager" />
 			<set name="eventsExecutor" ref="eventsExecutor" />

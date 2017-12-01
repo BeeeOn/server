@@ -11,7 +11,6 @@
 #include "dao/IdentityDao.h"
 #include "dao/UserDao.h"
 #include "dao/VerifiedIdentityDao.h"
-#include "notification/NotificationDispatcher.h"
 #include "provider/AuthProvider.h"
 #include "server/SessionManager.h"
 #include "server/Session.h"

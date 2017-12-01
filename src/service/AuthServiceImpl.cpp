@@ -17,7 +17,6 @@ BEEEON_OBJECT_PROPERTY("identityDao", &AuthServiceImpl::setIdentityDao)
 BEEEON_OBJECT_PROPERTY("verifiedIdentityDao", &AuthServiceImpl::setVerifiedIdentityDao)
 BEEEON_OBJECT_PROPERTY("sessionManager", &AuthServiceImpl::setSessionManager)
 BEEEON_OBJECT_PROPERTY("providers", &AuthServiceImpl::registerProvider)
-BEEEON_OBJECT_PROPERTY("notificationDispatcher", &AuthServiceImpl::setNotificationDispatcher)
 BEEEON_OBJECT_PROPERTY("localeManager", &AuthServiceImpl::setLocaleManager)
 BEEEON_OBJECT_PROPERTY("transactionManager", &Transactional::setTransactionManager)
 BEEEON_OBJECT_PROPERTY("listeners", &AuthServiceImpl::registerListener)
@@ -54,8 +53,6 @@ Session::Ptr AuthServiceImpl::loginAsNew(const AuthResult &result)
 
 	VerifiedIdentity verifiedIdentity;
 	verifyIdentity(verifiedIdentity, identity, result);
-
-	m_notificationService->notifyFirstLogin(verifiedIdentity);
 
 	VerifiedIdentityEvent e;
 	e.setVerifiedIdentity(verifiedIdentity);
@@ -121,8 +118,6 @@ Session::Ptr AuthServiceImpl::verifyIdentityAndLogin(
 		return openSession(verifiedIdentity);
 
 	verifyIdentity(verifiedIdentity, identity, result);
-
-	m_notificationService->notifyFirstLogin(verifiedIdentity);
 
 	VerifiedIdentityEvent e;
 	e.setVerifiedIdentity(verifiedIdentity);

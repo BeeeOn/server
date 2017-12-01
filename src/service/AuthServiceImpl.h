@@ -8,7 +8,6 @@
 #include "dao/UserDao.h"
 #include "dao/VerifiedIdentityDao.h"
 #include "l10n/LocaleManager.h"
-#include "notification/NotificationDispatcher.h"
 #include "provider/AuthProvider.h"
 #include "server/SessionManager.h"
 #include "server/Session.h"
@@ -58,11 +57,6 @@ public:
 			std::make_pair(provider->id(), provider));
 	}
 
-	void setNotificationDispatcher(NotificationDispatcher *service)
-	{
-		m_notificationService = service;
-	}
-
 	void setLocaleManager(LocaleManager::Ptr manager)
 	{
 		m_localeManager = manager;
@@ -104,7 +98,6 @@ private:
 	IdentityDao *m_identityDao;
 	VerifiedIdentityDao *m_verifiedIdentityDao;
 	Providers m_providers;
-	NotificationDispatcher *m_notificationService;
 	LocaleManager::Ptr m_localeManager;
 	EventSource<IdentityListener> m_eventSource;
 };
