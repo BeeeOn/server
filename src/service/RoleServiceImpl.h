@@ -6,12 +6,13 @@
 #include "dao/RoleInGatewayDao.h"
 #include "dao/VerifiedIdentityDao.h"
 #include "policy/RoleAccessPolicy.h"
+#include "service/IdentityListener.h"
 #include "service/RoleService.h"
 #include "transaction/Transactional.h"
+#include "util/EventSource.h"
 
 namespace BeeeOn {
 
-class Identity;
 class Gateway;
 class RoleInGateway;
 class LegacyRoleInGateway;
@@ -29,6 +30,8 @@ public:
 	void setRoleInGatewayDao(RoleInGatewayDao::Ptr dao);
 	void setAccessPolicy(RoleAccessPolicy::Ptr policy);
 	void setNotificationDispatcher(NotificationDispatcher *service);
+	void setEventsExecutor(AsyncExecutor::Ptr executor);
+	void registerListener(IdentityListener::Ptr listener);
 
 	void inviteIdentity(
 			Relation<RoleInGateway, Gateway> &input,
@@ -87,6 +90,7 @@ private:
 	RoleInGatewayDao::Ptr m_roleInGatewayDao;
 	RoleAccessPolicy::Ptr m_accessPolicy;
 	NotificationDispatcher *m_notificationDispatcher;
+	EventSource<IdentityListener> m_eventSource;
 };
 
 }

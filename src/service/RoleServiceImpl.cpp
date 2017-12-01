@@ -21,6 +21,8 @@ BEEEON_OBJECT_PROPERTY("roleInGatewayDao", &RoleServiceImpl::setRoleInGatewayDao
 BEEEON_OBJECT_PROPERTY("accessPolicy", &RoleServiceImpl::setAccessPolicy)
 BEEEON_OBJECT_PROPERTY("notificationDispatcher", &RoleServiceImpl::setNotificationDispatcher)
 BEEEON_OBJECT_PROPERTY("transactionManager", &Transactional::setTransactionManager)
+BEEEON_OBJECT_PROPERTY("eventsExecutor", &RoleServiceImpl::setEventsExecutor)
+BEEEON_OBJECT_PROPERTY("listeners", &RoleServiceImpl::registerListener)
 BEEEON_OBJECT_END(BeeeOn, RoleServiceImpl)
 
 RoleServiceImpl::RoleServiceImpl():
@@ -59,6 +61,16 @@ void RoleServiceImpl::setNotificationDispatcher(
 	m_notificationDispatcher = dispatcher;
 }
 
+void RoleServiceImpl::setEventsExecutor(AsyncExecutor::Ptr executor)
+{
+	m_eventSource.setAsyncExecutor(executor);
+}
+
+void RoleServiceImpl::registerListener(IdentityListener::Ptr listener)
+{
+	m_eventSource.addListener(listener);
+}
+
 void RoleServiceImpl::doInviteIdentity(
 		Relation<RoleInGateway, Gateway> &input,
 		const Identity &identity,
@@ -82,6 +94,13 @@ void RoleServiceImpl::doInviteIdentity(
 	// notify about the invitation
 	m_notificationDispatcher->notifyInvited(
 			tmp, input.base(), input.user());
+
+	IdentityInviteEvent e;
+	e.setOriginator(input.user());
+	e.setGateway(input.base());
+	e.setIdentity(tmp);
+	e.setLevel(as);
+	m_eventSource.fireEvent(e, &IdentityListener::onInvite);
 }
 
 bool RoleServiceImpl::doFetch(Relation<LegacyRoleInGateway, Gateway> &input)
