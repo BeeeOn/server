@@ -12,8 +12,10 @@
 #include "provider/AuthProvider.h"
 #include "server/SessionManager.h"
 #include "server/Session.h"
+#include "service/IdentityListener.h"
 #include "service/AuthService.h"
 #include "transaction/Transactional.h"
+#include "util/EventSource.h"
 
 namespace BeeeOn {
 
@@ -66,8 +68,10 @@ public:
 		m_localeManager = manager;
 	}
 
-	const Session::Ptr login(const Credentials &cred);
+	void registerListener(IdentityListener::Ptr listener);
+	void setEventsExecutor(AsyncExecutor::Ptr executor);
 
+	const Session::Ptr login(const Credentials &cred);
 	void logout(const std::string &id);
 
 	void list(std::vector<AuthProvider *> &providers);
@@ -102,6 +106,7 @@ private:
 	Providers m_providers;
 	NotificationDispatcher *m_notificationService;
 	LocaleManager::Ptr m_localeManager;
+	EventSource<IdentityListener> m_eventSource;
 };
 
 }
