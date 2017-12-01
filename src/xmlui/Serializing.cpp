@@ -122,7 +122,7 @@ void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
 			device.gateway().id().toString());
 
 	if (device.name().empty())
-		attrs.addAttribute("", "name", "name", "", device.type()->displayName());
+		attrs.addAttribute("", "name", "name", "", device.type()->name());
 	else
 		attrs.addAttribute("", "name", "name", "", device.name());
 
@@ -137,10 +137,8 @@ void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
 
 	const Poco::SharedPtr<DeviceInfo> info = device.type();
 
-	attrs.addAttribute("", "displayName", "displayName", "",
-			info->vendor() + " " + info->name());
-	attrs.addAttribute("", "name", "name", "", info->displayName());
-	attrs.addAttribute("", "vendor", "vendor", "", info->displayVendor());
+	attrs.addAttribute("", "type_name", "type_name", "", info->name());
+	attrs.addAttribute("", "vendor", "vendor", "", info->vendor());
 
 	output.startElement("", "device", "device", attrs);
 

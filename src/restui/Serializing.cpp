@@ -293,7 +293,7 @@ void BeeeOn::RestUI::serialize(PrintHandler &output, const Device &device)
 	output.key("name");
 	output.value(device.type().get()->name());
 	output.key("display_name");
-	output.value(device.type().get()->displayName());
+	output.value(device.type().get()->name());
 	output.key("vendor");
 	output.value(device.type().get()->vendor());
 	output.key("family");

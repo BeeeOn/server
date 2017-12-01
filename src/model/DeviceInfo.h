@@ -61,14 +61,8 @@ public:
 	void setName(const std::string &name);
 	const std::string &name() const;
 
-	void setDisplayName(const std::string &name);
-	const std::string &displayName() const;
-
 	void setVendor(const std::string &vendor);
 	const std::string &vendor() const;
-
-	void setDisplayVendor(const std::string &vendor);
-	const std::string &displayVendor() const;
 
 	bool add(const ModuleInfo &info);
 	void clear();
@@ -87,9 +81,7 @@ public:
 
 private:
 	std::string m_name;
-	std::string m_displayName;
 	std::string m_vendor;
-	std::string m_displayVendor;
 	std::list<Match::Ptr> m_match;
 	std::set<ModuleInfo> m_modules;
 };
