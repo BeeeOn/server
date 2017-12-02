@@ -270,19 +270,11 @@ PocoRestRequestFactory::PocoRestRequestFactory(
 {
 }
 
-HTTPRequestHandler *PocoRestRequestFactory::handleNoRoute(const HTTPServerRequest &request)
+HTTPRequestHandler *PocoRestRequestFactory::routeBuiltin(const string &name)
 {
-	if (logger().debug()) {
-		logger().debug("no action resolved for "
-			+ request.getMethod()
-			+ " "
-			+ request.getURI(),
-			__FILE__, __LINE__);
-	}
-
-	RestAction::Ptr target = m_router.lookup("builtin", "noroute");
+	RestAction::Ptr target = m_router.lookup("builtin", name);
 	if (target.isNull())
-		throw Exception("missing handler builtin.noroute");
+		throw Exception("missing handler builtin." + name);
 
 	PocoRestRequestHandler *handler = nullptr;
 
@@ -305,6 +297,19 @@ HTTPRequestHandler *PocoRestRequestFactory::handleNoRoute(const HTTPServerReques
 	}
 }
 
+HTTPRequestHandler *PocoRestRequestFactory::handleNoRoute(const HTTPServerRequest &request)
+{
+	if (logger().debug()) {
+		logger().debug("no action resolved for "
+			+ request.getMethod()
+			+ " "
+			+ request.getURI(),
+			__FILE__, __LINE__);
+	}
+
+	return routeBuiltin("noroute");
+}
+
 HTTPRequestHandler *PocoRestRequestFactory::handleNoSession()
 {
 	if (logger().debug()) {
@@ -312,29 +317,7 @@ HTTPRequestHandler *PocoRestRequestFactory::handleNoSession()
 			__FILE__, __LINE__);
 	}
 
-	RestAction::Ptr target = m_router.lookup("builtin", "unauthorized");
-	if (target.isNull())
-		throw Exception("missing handler builtin.unauthorized");
-
-	PocoRestRequestHandler *handler = nullptr;
-	
-	try {
-		handler = new PocoRestRequestHandler(
-			static_cast<RestLinker &>(m_router),
-			m_translatorFactory,
-			m_localeExtractor,
-			*m_filterChain
-		);
-
-		handler->setAction(target);
-
-		return handler;
-	}
-	catch (...) {
-		if (handler)
-			delete handler;
-		throw;
-	}
+	return routeBuiltin("unauthorized");
 }
 
 HTTPRequestHandler *PocoRestRequestFactory::createWithSession(
