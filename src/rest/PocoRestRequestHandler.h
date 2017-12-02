@@ -30,7 +30,6 @@ class TranslatorFactory;
 class PocoRestRequestHandler : public Poco::Net::AbstractHTTPRequestHandler, Loggable {
 public:
 	PocoRestRequestHandler(
-			const MappedRestAction::Params &params,
 			ExpirableSession::Ptr session,
 			RestLinker &linker,
 			TranslatorFactory &factory,
@@ -38,6 +37,7 @@ public:
 			HTTPFilterChain &filterChain);
 
 	void setAction(RestAction::Ptr action);
+	void setActionParams(const MappedRestAction::Params &params);
 
 protected:
 	void run() override;

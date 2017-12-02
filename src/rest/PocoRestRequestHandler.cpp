@@ -22,13 +22,11 @@ using namespace Poco::Net;
 using namespace BeeeOn;
 
 PocoRestRequestHandler::PocoRestRequestHandler(
-		const MappedRestAction::Params &params,
 		ExpirableSession::Ptr session,
 		RestLinker &linker,
 		TranslatorFactory &factory,
 		HTTPLocaleExtractor &localeExtractor,
 		HTTPFilterChain &filterChain):
-	m_params(params),
 	m_session(session),
 	m_linker(linker),
 	m_translatorFactory(factory),
@@ -40,6 +38,12 @@ PocoRestRequestHandler::PocoRestRequestHandler(
 void PocoRestRequestHandler::setAction(RestAction::Ptr action)
 {
 	m_action = action;
+}
+
+void PocoRestRequestHandler::setActionParams(
+		const MappedRestAction::Params &params)
+{
+	m_params = params;
 }
 
 bool PocoRestRequestHandler::expectedContentLength()
@@ -281,7 +285,6 @@ HTTPRequestHandler *PocoRestRequestFactory::handleNoRoute(const HTTPServerReques
 
 	try {
 		handler = new PocoRestRequestHandler(
-			{},
 			NULL,
 			static_cast<RestLinker &>(m_router),
 			m_translatorFactory,
@@ -315,7 +318,6 @@ HTTPRequestHandler *PocoRestRequestFactory::handleNoSession()
 	
 	try {
 		handler = new PocoRestRequestHandler(
-			{},
 			NULL,
 			static_cast<RestLinker &>(m_router),
 			m_translatorFactory,
@@ -356,7 +358,6 @@ HTTPRequestHandler *PocoRestRequestFactory::createWithSession(
 	
 	try {
 		handler = new PocoRestRequestHandler(
-			params,
 			session,
 			static_cast<RestLinker &>(m_router),
 			m_translatorFactory,
@@ -365,6 +366,7 @@ HTTPRequestHandler *PocoRestRequestFactory::createWithSession(
 		);
 
 		handler->setAction(action);
+		handler->setActionParams(params);
 
 		return handler;
 	}
