@@ -274,15 +274,26 @@ HTTPRequestHandler *PocoRestRequestFactory::handleNoRoute(const HTTPServerReques
 	if (target.isNull())
 		throw Exception("missing handler builtin.noroute");
 
-	return new PocoRestRequestHandler(
-		target,
-		{},
-		NULL,
-		static_cast<RestLinker &>(m_router),
-		m_translatorFactory,
-		m_localeExtractor,
-		*m_filterChain
-	);
+	PocoRestRequestHandler *handler = nullptr;
+
+	try {
+		handler = new PocoRestRequestHandler(
+			target,
+			{},
+			NULL,
+			static_cast<RestLinker &>(m_router),
+			m_translatorFactory,
+			m_localeExtractor,
+			*m_filterChain
+		);
+
+		return handler;
+	}
+	catch (...) {
+		if (handler)
+			delete handler;
+		throw;
+	}
 }
 
 HTTPRequestHandler *PocoRestRequestFactory::handleNoSession()
@@ -296,15 +307,26 @@ HTTPRequestHandler *PocoRestRequestFactory::handleNoSession()
 	if (target.isNull())
 		throw Exception("missing handler builtin.unauthorized");
 
-	return new PocoRestRequestHandler(
-		target,
-		{},
-		NULL,
-		static_cast<RestLinker &>(m_router),
-		m_translatorFactory,
-		m_localeExtractor,
-		*m_filterChain
-	);
+	PocoRestRequestHandler *handler = nullptr;
+	
+	try {
+		handler = new PocoRestRequestHandler(
+			target,
+			{},
+			NULL,
+			static_cast<RestLinker &>(m_router),
+			m_translatorFactory,
+			m_localeExtractor,
+			*m_filterChain
+		);
+
+		return handler;
+	}
+	catch (...) {
+		if (handler)
+			delete handler;
+		throw;
+	}
 }
 
 HTTPRequestHandler *PocoRestRequestFactory::createWithSession(
@@ -325,15 +347,26 @@ HTTPRequestHandler *PocoRestRequestFactory::createWithSession(
 			return handleNoSession();
 	}
 
-	return new PocoRestRequestHandler(
-		action,
-		params,
-		session,
-		static_cast<RestLinker &>(m_router),
-		m_translatorFactory,
-		m_localeExtractor,
-		*m_filterChain
-	);
+	PocoRestRequestHandler *handler = nullptr;
+	
+	try {
+		handler = new PocoRestRequestHandler(
+			action,
+			params,
+			session,
+			static_cast<RestLinker &>(m_router),
+			m_translatorFactory,
+			m_localeExtractor,
+			*m_filterChain
+		);
+
+		return handler;
+	}
+	catch (...) {
+		if (handler)
+			delete handler;
+		throw;
+	}
 }
 
 HTTPRequestHandler *PocoRestRequestFactory::createRequestHandler(
