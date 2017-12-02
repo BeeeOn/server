@@ -39,17 +39,15 @@ PocoRestRequestHandler::PocoRestRequestHandler(
 {
 }
 
-bool PocoRestRequestHandler::expectedContentLength(
-		const HTTPServerRequest &req,
-		HTTPServerResponse &res)
+bool PocoRestRequestHandler::expectedContentLength()
 {
-	const string &method = req.getMethod();
+	const string &method = request().getMethod();
 
 	if (method != "POST" && method != "PUT" && method != "PATCH")
 		return true;;
 
-	if (!req.hasContentLength()) {
-		res.setStatusAndReason(HTTPResponse::HTTP_LENGTH_REQUIRED);
+	if (!request().hasContentLength()) {
+		response().setStatusAndReason(HTTPResponse::HTTP_LENGTH_REQUIRED);
 		return false;
 	}
 
@@ -57,7 +55,7 @@ bool PocoRestRequestHandler::expectedContentLength(
 	if (inputMaxSize < 0)
 		return true;
 
-	auto contentLength = req.getContentLength();
+	auto contentLength = request().getContentLength();
 	if (contentLength > inputMaxSize) {
 		if (logger().warning()) {
 			logger().warning(
@@ -68,7 +66,7 @@ bool PocoRestRequestHandler::expectedContentLength(
 				__FILE__, __LINE__);
 		}
 
-		res.setStatusAndReason(HTTPResponse::HTTP_BAD_REQUEST);
+		response().setStatusAndReason(HTTPResponse::HTTP_BAD_REQUEST);
 		return false;
 	}
 
@@ -94,55 +92,47 @@ string PocoRestRequestHandler::asString(const MappedRestAction::Params &params) 
 }
 
 void PocoRestRequestHandler::prepareInternalAction(
-		const RestAction::Ptr action,
-		const HTTPServerRequest &req,
-		HTTPServerResponse &res) const
+		const RestAction::Ptr action)
 {
-	res.set("Cache-Control", "public, no-cache");
+	response().set("Cache-Control", "public, no-cache");
 }
 
 void PocoRestRequestHandler::prepareMappedAction(
-		const MappedRestAction::Ptr action,
-		const HTTPServerRequest &req,
-		HTTPServerResponse &res) const
+		const MappedRestAction::Ptr action)
 {
 	if (action->caching() == 0) {
-		res.set("Cache-Control", "public, no-cache");
+		response().set("Cache-Control", "public, no-cache");
 	}
 	else if (action->caching() > 0) {
 		const Timespan shift(action->caching(), 0);
 		const DateTime now;
 
-		res.set("Expires",
+		response().set("Expires",
 			DateTimeFormatter::format(now + shift, DateTimeFormat::HTTP_FORMAT));
-		res.set("Cache-Control",
+		response().set("Cache-Control",
 			"max-age=" + to_string(shift.totalSeconds()) + ", must-revalidate");
 	}
 }
 
-void PocoRestRequestHandler::handleRequest(
-		HTTPServerRequest &req,
-		HTTPServerResponse &res)
+void PocoRestRequestHandler::run()
 {
 	Thread *current = Thread::current();
 	if (current != NULL)
-		current->setName("restui-" + req.clientAddress().toString());
+		current->setName("restui-" + request().clientAddress().toString());
 
-	doHandleRequest(req, res);
+	doHandleRequest();
 
 	if (current != NULL)
 		current->setName("");
 }
 
-void PocoRestRequestHandler::doHandleRequest(
-		HTTPServerRequest &req,
-		HTTPServerResponse &res)
+void PocoRestRequestHandler::doHandleRequest()
 {
 	if (logger().debug()) {
 		logger().debug("serving request "
-			+ req.getMethod()
+			+ request().getMethod()
 			+ " "
-			+ req.getURI()
+			+ request().getURI()
 			+ " via action "
 			+ m_action->fullName()
 			+ " "
@@ -151,7 +141,7 @@ void PocoRestRequestHandler::doHandleRequest(
 	}
 
 	if (logger().trace()) {
-		for (const auto &pair : req) {
+		for (const auto &pair : request()) {
 			logger().trace(
 				pair.first
 				+ ": "
@@ -160,35 +150,35 @@ void PocoRestRequestHandler::doHandleRequest(
 		}
 	}
 
-	if (!expectedContentLength(req, res)) {
-		res.send();
+	if (!expectedContentLength()) {
+		response().send();
 		return;
 	}
 
-	Poco::URI uri(req.getURI());
+	Poco::URI uri(request().getURI());
 
 	RestFlow flow(
 		m_linker,
 		uri,
 		m_params,
-		PocoRequest(req),
-		PocoResponse(res)
+		PocoRequest(request()),
+		PocoResponse(response())
 	);
 
 	MappedRestAction::Ptr mapped = m_action.cast<MappedRestAction>();
 	if (mapped.isNull())
-		prepareInternalAction(m_action, req, res);
+		prepareInternalAction(m_action);
 	else
-		prepareMappedAction(mapped, req, res);
+		prepareMappedAction(mapped);
 
 	const auto &call = m_action->call();
 
 	try {
-		m_filterChain.applyChain(req, res);
-		if (!res.sent()) {
+		m_filterChain.applyChain(request(), response());
+		if (!response().sent()) {
 			flow.setSession(m_session);
 
-			const string language = req.has("Accept-Language") ? req.get("Accept-Language") : "";
+			const string language = request().has("Accept-Language") ? request().get("Accept-Language") : "";
 			const Locale &httpLocale = m_localeExtractor.extract(language);
 			flow.setLocale(httpLocale);
 
@@ -214,16 +204,16 @@ void PocoRestRequestHandler::doHandleRequest(
 
 		if (logger().information()) {
 			logger().information("result of "
-				+ req.getMethod()
+				+ request().getMethod()
 				+ " "
-				+ req.getURI()
+				+ request().getURI()
 				+ ": "
-				+ to_string(res.getStatus()),
+				+ to_string(response().getStatus()),
 				__FILE__, __LINE__);
 		}
 
 		if (logger().trace()) {
-			for (const auto &pair : res) {
+			for (const auto &pair : response()) {
 				logger().trace(
 					pair.first
 					+ ": "
@@ -232,8 +222,8 @@ void PocoRestRequestHandler::doHandleRequest(
 			}
 		}
 
-		if (!res.sent())
-			res.send();
+		if (!response().sent())
+			response().send();
 
 		return;
 	}
@@ -250,10 +240,10 @@ void PocoRestRequestHandler::doHandleRequest(
 		logger().fatal("unknown error occured", __FILE__, __LINE__);
 	}
 
-	if (res.sent())
+	if (response().sent())
 		return;
 
-	res.setStatusAndReason(HTTPResponse::HTTP_INTERNAL_SERVER_ERROR);
+	response().setStatusAndReason(HTTPResponse::HTTP_INTERNAL_SERVER_ERROR);
 }
 
 PocoRestRequestFactory::PocoRestRequestFactory(

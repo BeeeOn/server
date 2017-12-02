@@ -1,7 +1,7 @@
 #ifndef BEEEON_POCO_REST_REQUEST_HANDLER_H
 #define BEEEON_POCO_REST_REQUEST_HANDLER_H
 
-#include <Poco/Net/HTTPRequestHandler.h>
+#include <Poco/Net/AbstractHTTPRequestHandler.h>
 #include <Poco/Net/HTTPRequestHandlerFactory.h>
 
 #include "rest/MappedRestAction.h"
@@ -27,7 +27,7 @@ class RestRouter;
 class SessionVerifier;
 class TranslatorFactory;
 
-class PocoRestRequestHandler : public Poco::Net::HTTPRequestHandler, Loggable {
+class PocoRestRequestHandler : public Poco::Net::AbstractHTTPRequestHandler, Loggable {
 public:
 	PocoRestRequestHandler(
 			RestAction::Ptr action,
@@ -38,30 +38,17 @@ public:
 			HTTPLocaleExtractor &localeExtractor,
 			HTTPFilterChain &filterChain);
 
-	void handleRequest(
-			Poco::Net::HTTPServerRequest &req,
-			Poco::Net::HTTPServerResponse &res) override;
-
 protected:
-	void doHandleRequest(
-			Poco::Net::HTTPServerRequest &req,
-			Poco::Net::HTTPServerResponse &res);
+	void run() override;
+	void doHandleRequest();
 
-	bool expectedContentLength(
-			const Poco::Net::HTTPServerRequest &req,
-			Poco::Net::HTTPServerResponse &res);
+	bool expectedContentLength();
 
 	std::string asString(const MappedRestAction::Params &params) const;
 
-	void prepareInternalAction(
-			const RestAction::Ptr action,
-			const Poco::Net::HTTPServerRequest &req,
-			Poco::Net::HTTPServerResponse &res) const;
+	void prepareInternalAction(const RestAction::Ptr action);
 
-	void prepareMappedAction(
-			const MappedRestAction::Ptr action,
-			const Poco::Net::HTTPServerRequest &req,
-			Poco::Net::HTTPServerResponse &res) const;
+	void prepareMappedAction(const MappedRestAction::Ptr action);
 
 private:
 	RestAction::Ptr m_action;
