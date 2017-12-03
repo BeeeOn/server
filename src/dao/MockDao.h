@@ -8,7 +8,6 @@
 #include <Poco/Logger.h>
 
 #include "dao/EntityLoader.h"
-#include "Debug.h"
 
 namespace BeeeOn {
 
@@ -32,8 +31,6 @@ public:
 
 	virtual bool fetch(T &t)
 	{
-		TRACE_METHOD();
-
 		Iterator it = m_storage.find(t.id());
 
 		if (it == m_storage.end())
@@ -46,15 +43,11 @@ public:
 
 	virtual bool has(const T &t)
 	{
-		TRACE_METHOD();
-
 		return m_storage.find(t.id()) != m_storage.end();
 	}
 
 	virtual bool insert(T &t)
 	{
-		TRACE_METHOD();
-
 		if (t.id().isNull())
 			return false;
 
@@ -65,8 +58,6 @@ public:
 
 	virtual void create(T &t)
 	{
-		TRACE_METHOD();
-
 		const ID id = nextID();
 		m_storage[id] = newWithID(id, t);
 		t = *m_storage[id];
@@ -74,8 +65,6 @@ public:
 
 	virtual bool update(T &t)
 	{
-		TRACE_METHOD();
-
 		Iterator it = m_storage.find(t.id());
 
 		if (it == m_storage.end())
@@ -88,8 +77,6 @@ public:
 
 	virtual bool remove(const T &t)
 	{
-		TRACE_METHOD();
-
 		Iterator it = m_storage.find(t.id());
 
 		if (it == m_storage.end())
@@ -178,8 +165,6 @@ public:
 
 	virtual bool fetch(T &t, const B &b)
 	{
-		TRACE_METHOD();
-
 		Key key(t.id(), b.id());
 		Iterator it = m_storage.find(key);
 
@@ -194,16 +179,12 @@ public:
 
 	virtual bool has(const T &t, const B &b)
 	{
-		TRACE_METHOD();
-
 		Key key(t.id(), b.id());
 		return m_storage.find(key) != m_storage.end();
 	}
 
 	virtual bool insert(T &t, const B &b)
 	{
-		TRACE_METHOD();
-
 		if (t.id().isNull())
 			return false;
 		if (b.id().isNull())
@@ -218,8 +199,6 @@ public:
 
 	virtual void create(T &t, const B &b)
 	{
-		TRACE_METHOD();
-
 		const ID id = nextID();
 		Key key(id, b.id());
 		m_storage[key] = newWithID(id, t);
@@ -229,8 +208,6 @@ public:
 
 	virtual bool update(T &t, const B &b)
 	{
-		TRACE_METHOD();
-
 		Key key(t.id(), b.id());
 		Iterator it = m_storage.find(key);
 
@@ -245,8 +222,6 @@ public:
 
 	virtual bool remove(const T &t, const B &b)
 	{
-		TRACE_METHOD();
-
 		Key key(t.id(), b.id());
 		Iterator it = m_storage.find(key);
 

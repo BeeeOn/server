@@ -2,7 +2,6 @@
 #include <Poco/Logger.h>
 
 #include "server/SessionCache.h"
-#include "Debug.h"
 
 using namespace Poco;
 using namespace BeeeOn;

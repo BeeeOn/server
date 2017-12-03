@@ -7,7 +7,6 @@
 #include "server/Session.h"
 #include "server/SessionManager.h"
 #include "util/Loggable.h"
-#include "Debug.h"
 
 namespace BeeeOn {
 
@@ -24,8 +23,6 @@ public:
 	template <typename Request>
 	ExpirableSession::Ptr verifyAuthorized(const Request &request)
 	{
-		_TRACE_METHOD(logger());
-
 		if (!request.hasCredentials()) {
 			throw Poco::Net::NotAuthenticatedException(
 					"missing credentials");

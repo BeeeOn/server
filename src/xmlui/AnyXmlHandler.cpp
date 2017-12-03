@@ -1,6 +1,5 @@
 #include "di/Injectable.h"
 #include "xmlui/AnyXmlHandler.h"
-#include "Debug.h"
 
 using namespace std;
 using namespace BeeeOn;
@@ -18,7 +17,6 @@ AnyXmlHandler::AnyXmlHandler(
 
 void AnyXmlHandler::handleInputImpl()
 {
-	_TRACE_METHOD(logger());
 	resultInvalidInput();
 }
 

@@ -46,7 +46,6 @@ void MockIdentityDao::create(Identity &identity)
 bool MockIdentityDao::fetchBy(Identity &identity,
 		const std::string &email)
 {
-	TRACE_METHOD();
 	Iterator it = findByEmail(email);
 
 	if (it == storage().end())

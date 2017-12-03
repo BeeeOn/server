@@ -7,7 +7,6 @@
 #include <Poco/Net/NetException.h>
 #include <Poco/DOM/DOMWriter.h>
 
-#include "Debug.h"
 #include "di/Injectable.h"
 #include "server/XmlRequestHandler.h"
 
@@ -32,8 +31,6 @@ XmlRequestHandler::XmlRequestHandler(
 
 void XmlRequestHandler::run()
 {
-	_TRACE_METHOD(logger());
-
 	Thread *current = Thread::current();
 	if (current != NULL)
 		current->setName("xmlui-" + socket().peerAddress().toString());

@@ -2,7 +2,6 @@
 #include <Poco/Notification.h>
 
 #include "notification/NotificationObserver.h"
-#include "Debug.h"
 
 using namespace std;
 using namespace Poco;

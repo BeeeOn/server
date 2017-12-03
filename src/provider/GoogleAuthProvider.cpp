@@ -7,7 +7,6 @@
 #include <Poco/JSON/Object.h>
 #include <Poco/Net/HTMLForm.h>
 
-#include "Debug.h"
 #include "di/Injectable.h"
 #include "ssl/SSLClient.h"
 #include "provider/GoogleAuthProvider.h"
@@ -87,8 +86,6 @@ bool GoogleAuthProvider::verifyAuthCode(const string &authCode, AuthResult &info
 
 GoogleAuthProvider::GoogleTokens GoogleAuthProvider::requestTokens(const string &authCode)
 {
-	TRACE_METHOD();
-
 	HTMLForm form;
 	form.setEncoding(HTMLForm::ENCODING_URL);
 	form.set("code", authCode);
@@ -121,8 +118,6 @@ GoogleAuthProvider::GoogleTokens GoogleAuthProvider::requestTokens(const string 
 
 string GoogleAuthProvider::fetchUserInfo(const GoogleTokens &tokens)
 {
-	TRACE_METHOD();
-
 	if (tokens.idToken.empty())
 		throw NotAuthenticatedException("missing id_token");
 

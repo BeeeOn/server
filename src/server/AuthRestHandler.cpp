@@ -99,8 +99,8 @@ void AuthRestHandler::login(RestFlow &flow)
 		throw NotAuthenticatedException("malformed input, missing provider or code");
 
 	AuthCodeCredentials credentials(
-		Sanitize::strict(JsonUtil::extract<std::string>(object, "provider")),
-		JsonUtil::extract<std::string>(object, "code")
+		Sanitize::strict(object->getValue<std::string>("provider")),
+		object->getValue<std::string>("code")
 	);
 
 	ExpirableSession::Ptr session;

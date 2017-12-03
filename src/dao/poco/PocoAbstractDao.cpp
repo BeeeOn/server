@@ -23,9 +23,9 @@
 #include "dao/poco/PocoDaoManager.h"
 #include "transaction/NullTransactionManager.h"
 #include "transaction/TransactionManager.h"
+#include "util/Backtrace.h"
 #include "util/ClassInfo.h"
 #include "util/PocoStatementIntruder.h"
-#include "Debug.h"
 
 using namespace std;
 using namespace Poco;
@@ -393,7 +393,9 @@ RecordSet PocoAbstractDao::executeSelect(Statement &sql)
 
 void PocoAbstractDao::throwMissingId(const type_info &t)
 {
-	log_backtrace(logger());
+	Backtrace trace;
+	logger().critical(trace.toString());
+
 	throw InvalidArgumentException("missing id for "
 			+ ClassInfo(t).name());
 }

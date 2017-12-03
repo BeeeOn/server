@@ -100,7 +100,7 @@ void GatewayRestHandler::assign(RestFlow &flow)
 	User user(flow.session()->userID());
 	VerifiedIdentity identity(flow.session()->identityID());
 	Object::Ptr object = parseInput(flow);
-	Gateway gateway(GatewayID::parse(JsonUtil::extract<string>(object, "id")));
+	Gateway gateway(GatewayID::parse(object->getValue<string>("id")));
 
 	JSONGatewayDeserializer create(object);
 	create.setTimeZoneProvider(m_timeZoneProvider);
