@@ -146,6 +146,48 @@ root {
 		}
 	}
 
+	enums {
+		MOD_BOILER_OPERATION_TYPE {
+			label { "heating type" }
+			values {
+				off { "off" }
+				room_regulator { "room regulator" }
+				equiterm_regulator { "equiterm regulator" }
+				constant_water { "constant water" }
+				hot_water { "hot water" }
+			}
+		}
+
+		MOD_BOILER_OPERATION_MODE {
+			label { "operation mode" }
+			values {
+				automatic { "automatic" }
+				manual { "manual" }
+				vacation { "vacation" }
+			}
+		}
+
+		MOD_BOILER_STATUS {
+			label { "boiler status" }
+			values {
+				undefined { "undefined" }
+				heating { "heating" }
+				hot_water { "heating water" }
+				failure { "failure" }
+				shutdown { "shutdown" }
+			}
+		}
+
+		MOD_BOILER_MODE {
+			label { "boiler mode" }
+			values {
+				undefined { "undefined" }
+				on { "on" }
+				off { "off" }
+			}
+		}
+	}
+
 	modules {
 		room_temperature {
 			label { "room temperature" }

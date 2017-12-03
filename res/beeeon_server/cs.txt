@@ -138,6 +138,48 @@ cs {
 		}
 	}
 
+	enums {
+		MOD_BOILER_OPERATION_TYPE {
+			label { "režim vytápění" }
+			values {
+				off { "vypnuto" }
+				room_regulator { "pokojový termostat" }
+				equiterm_regulator { "ekvitermní regulátor" }
+				constant_water { "konstantní teplota vody" }
+				hot_water { "ohřev TUV" }
+			}
+		}
+
+		MOD_BOILER_OPERATION_MODE {
+			label { "režim provozu" }
+			values {
+				automatic { "automatický" }
+				manual { "ruční" }
+				vacation { "dovolená" }
+			}
+		}
+
+		MOD_BOILER_STATUS {
+			label { "stav kotle" }
+			values {
+				undefined { "nedefinovaný" }
+				heating { "ohřev" }
+				hot_water { "ohřev TUV" }
+				failure { "selhání" }
+				shutdown { "vypnuto" }
+			}
+		}
+
+		MOD_BOILER_MODE {
+			label { "režim kotle" }
+			values {
+				undefined { "nedefinovaný" }
+				on { "zapnuto" }
+				off { "vypnuto" }
+			}
+		}
+	}
+
 	modules {
 		room_temperature {
 			label { "pokojová teplota" }
