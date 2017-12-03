@@ -28,13 +28,17 @@ public:
 
 	bool authorize(const Credentials &cred, AuthResult &result)
 	{
-		const AuthCodeCredentials &authCodeCredentials =
-			static_cast<const AuthCodeCredentials &>(cred);
+		std::string email;
 
-		const std::string &email = Poco::trim(authCodeCredentials.authCode());
+		if (typeid(cred) == typeid(AuthCodeCredentials)) {
+			const AuthCodeCredentials &authCodeCredentials =
+				static_cast<const AuthCodeCredentials &>(cred);
+
+			email = Poco::trim(authCodeCredentials.authCode());
+		}
 
 		if (email.empty()) {
-			logger().warning("given authCode is empty");
+			logger().warning("extracted email is empty");
 			return false;
 		}
 

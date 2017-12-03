@@ -17,6 +17,10 @@ Credentials::Credentials(const string &provider):
 {
 }
 
+Credentials::~Credentials()
+{
+}
+
 const string &Credentials::provider() const
 {
 	return m_provider;

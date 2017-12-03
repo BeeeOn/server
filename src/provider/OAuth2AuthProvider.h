@@ -65,8 +65,15 @@ protected:
 	/**
 	 * Verification against a 3rd party.
 	 */
-	virtual bool verifyAuthCode(const std::string &authCode,
-			AuthResult &info) = 0;
+	virtual bool verifyAuthCode(
+			const AuthCodeCredentials &credentials,
+			AuthResult &info);
+	/**
+	 * Verification against a 3rd party.
+	 */
+	virtual bool verifyAuthCode(
+			const AccessTokenCredentials &credentials,
+			AuthResult &info);
 
 	/**
 	 * Open HTTPS connection to the given host:port.

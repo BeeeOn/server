@@ -69,11 +69,13 @@ void FacebookAuthProviderTest::testVerifyAuthCode()
 	provider.setClientId(Environment::get("FACEBOOK_CLIENT_ID"));
 	provider.setClientSecret(Environment::get("FACEBOOK_CLIENT_SECRET"));
 
+	AuthCodeCredentials credentials("facebook", m_authCode);
+
 	//MUST be same as redirect uri that was used to get auth code/acces token
 	provider.setRedirectURI(
 			Environment::get("FACEBOOK_REDIRECT_URI", "https://localhost/"));
 	CPPUNIT_ASSERT_MESSAGE("failed to authenticate user",
-			provider.verifyAuthCode(m_authCode, info));
+			provider.verifyAuthCode(credentials, info));
 	CPPUNIT_ASSERT_MESSAGE("id field has not been obtained",
 			!info.providerID().empty());
 	CPPUNIT_ASSERT_MESSAGE("email field has not been obtained",

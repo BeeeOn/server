@@ -22,7 +22,15 @@ namespace BeeeOn {
 		 * Verifies the given authCode and obtains access token and user info. The fetched accessToken is verified via
 		 * the method FacebookAuthProvider::processAccessToken.
 		 */
-		bool verifyAuthCode(const std::string &authCode, AuthResult &info);
+		bool verifyAuthCode(
+			const AuthCodeCredentials &credentials,
+			AuthResult &info);
+		/**
+		 * Verifies the given access token and obtains user info.
+		 */
+		bool verifyAuthCode(
+			const AccessTokenCredentials &credentials,
+			AuthResult &info);
 
 		/**
 		 *  Verifies access token and makes calls to facebook graph api to gain user info
