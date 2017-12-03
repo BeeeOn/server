@@ -309,7 +309,7 @@ bool LegacyFCMClient::isUndelivered(const string &spec) const
 
 bool LegacyFCMClient::isFailing(const string &spec) const
 {
-	return spec == "InvalidRegistration" || spec == "NotRegistred";
+	return spec == "InvalidRegistration" || spec == "NotRegistered";
 }
 
 bool LegacyFCMClient::isRateExceeded(const string &spec) const
