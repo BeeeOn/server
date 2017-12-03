@@ -6,7 +6,6 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, PermitAuthProvider)
 BEEEON_OBJECT_CASTABLE(AuthProvider)
-BEEEON_OBJECT_CASTABLE(AuthCodeAuthProvider)
 BEEEON_OBJECT_TEXT("resultProvider", &PermitAuthProvider::setResultProvider)
 BEEEON_OBJECT_END(BeeeOn, PermitAuthProvider)
 
@@ -143,18 +142,4 @@ const string &AbstractAuthProvider::id() const
 const string &AbstractAuthProvider::name() const
 {
 	return m_name;
-}
-
-AuthCodeAuthProvider::AuthCodeAuthProvider(const string &name):
-	AbstractAuthProvider(name)
-{
-}
-
-bool AuthCodeAuthProvider::authorize(const Credentials &cred, AuthResult &result)
-{
-	const AuthCodeCredentials &authCodeCredentials =
-		reinterpret_cast<const AuthCodeCredentials &>(cred);
-
-	result.setProvider(name());
-	return verifyAuthCode(authCodeCredentials.authCode(), result);
 }

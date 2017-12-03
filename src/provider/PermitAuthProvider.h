@@ -13,10 +13,10 @@ namespace BeeeOn {
  * purposes. When it is activated a loud logs are
  * created on start and on every login.
  */
-class PermitAuthProvider : public AuthCodeAuthProvider {
+class PermitAuthProvider : public AbstractAuthProvider {
 public:
 	PermitAuthProvider():
-		AuthCodeAuthProvider("permit")
+		AbstractAuthProvider("permit")
 	{
 		logger().critical("SOME AUTHS WILL BE PERMITTED");
 	}
@@ -26,17 +26,20 @@ public:
 		m_resultProvider = provider;
 	}
 
-	bool verifyAuthCode(const std::string &authCode, AuthResult &result)
+	bool authorize(const Credentials &cred, AuthResult &result)
 	{
-		const std::string &email = Poco::trim(authCode);
+		const AuthCodeCredentials &authCodeCredentials =
+			static_cast<const AuthCodeCredentials &>(cred);
+
+		const std::string &email = Poco::trim(authCodeCredentials.authCode());
 
 		if (email.empty()) {
 			logger().warning("given authCode is empty");
 			return false;
 		}
 
-		logger().critical("PERMIT AUTH: " + authCode);
-		result.setEmail(authCode);
+		logger().critical("PERMIT AUTH: " + email);
+		result.setEmail(email);
 		result.setProvider(m_resultProvider);
 		return true;
 	}

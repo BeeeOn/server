@@ -124,25 +124,6 @@ protected:
 	const std::string m_name;
 };
 
-/**
- * An auth code authorization provider performs authorization
- * by using an auth code. The abstract class extracts the auth
- * code and verifies it against a 3rd party authorization service.
- */
-class AuthCodeAuthProvider : public AbstractAuthProvider {
-public:
-	AuthCodeAuthProvider(const std::string &name);
-
-	bool authorize(const Credentials &cred, AuthResult &result) override;
-
-protected:
-	/**
-	 * Verification against a 3rd party.
-	 */
-	virtual bool verifyAuthCode(const std::string &authCode,
-			AuthResult &info) = 0;
-};
-
 }
 
 #endif

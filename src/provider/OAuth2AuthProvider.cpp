@@ -23,9 +23,18 @@ using namespace Poco;
 using namespace Poco::Net;
 
 OAuth2AuthProvider::OAuth2AuthProvider(const string &name):
-		AuthCodeAuthProvider(name),
+		AbstractAuthProvider(name),
 		m_sslConfig(0)
 {
+}
+
+bool OAuth2AuthProvider::authorize(const Credentials &cred, AuthResult &result)
+{
+	const AuthCodeCredentials &authCodeCredentials =
+		static_cast<const AuthCodeCredentials &>(cred);
+
+	result.setProvider(name());
+	return verifyAuthCode(authCodeCredentials.authCode(), result);
 }
 
 void OAuth2AuthProvider::initSSL() const

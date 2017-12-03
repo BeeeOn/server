@@ -15,7 +15,6 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, GoogleAuthProvider)
 BEEEON_OBJECT_CASTABLE(AuthProvider)
-BEEEON_OBJECT_CASTABLE(AuthCodeAuthProvider)
 BEEEON_OBJECT_CASTABLE(OAuth2AuthProvider)
 BEEEON_OBJECT_TEXT("clientId", &GoogleAuthProvider::setClientId)
 BEEEON_OBJECT_TEXT("clientSecret", &GoogleAuthProvider::setClientSecret)

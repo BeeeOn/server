@@ -20,9 +20,16 @@ namespace BeeeOn {
 
 class SSLClient;
 
-class OAuth2AuthProvider : public AuthCodeAuthProvider {
+/**
+ * An OAuth 2 authorization provider performs authorization by using an
+ * auth code. The abstract class extracts the appropriate credentials and
+ * verifies it against a 3rd party authorization service.
+ */
+class OAuth2AuthProvider : public AbstractAuthProvider {
 public:
 	OAuth2AuthProvider(const std::string &name);
+
+	bool authorize(const Credentials &cred, AuthResult &result) override;
 
 	void setClientId(const std::string &clientId)
 	{
@@ -55,6 +62,12 @@ public:
 	}
 
 protected:
+	/**
+	 * Verification against a 3rd party.
+	 */
+	virtual bool verifyAuthCode(const std::string &authCode,
+			AuthResult &info) = 0;
+
 	/**
 	 * Open HTTPS connection to the given host:port.
 	 */
