@@ -74,6 +74,7 @@ public:
 			const Poco::Net::HTTPServerRequest &request) override;
 
 protected:
+	PocoRestRequestHandler *createHandler(RestAction::Ptr action);
 	Poco::Net::HTTPRequestHandler *routeBuiltin(const std::string &name);
 	Poco::Net::HTTPRequestHandler *handleNoRoute(
 			const Poco::Net::HTTPServerRequest &request);

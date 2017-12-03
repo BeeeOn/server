@@ -270,12 +270,9 @@ PocoRestRequestFactory::PocoRestRequestFactory(
 {
 }
 
-HTTPRequestHandler *PocoRestRequestFactory::routeBuiltin(const string &name)
+PocoRestRequestHandler *PocoRestRequestFactory::createHandler(
+		RestAction::Ptr action)
 {
-	RestAction::Ptr target = m_router.lookup("builtin", name);
-	if (target.isNull())
-		throw Exception("missing handler builtin." + name);
-
 	PocoRestRequestHandler *handler = nullptr;
 
 	try {
@@ -286,7 +283,7 @@ HTTPRequestHandler *PocoRestRequestFactory::routeBuiltin(const string &name)
 			*m_filterChain
 		);
 
-		handler->setAction(target);
+		handler->setAction(action);
 
 		return handler;
 	}
@@ -295,6 +292,15 @@ HTTPRequestHandler *PocoRestRequestFactory::routeBuiltin(const string &name)
 			delete handler;
 		throw;
 	}
+}
+
+HTTPRequestHandler *PocoRestRequestFactory::routeBuiltin(const string &name)
+{
+	RestAction::Ptr target = m_router.lookup("builtin", name);
+	if (target.isNull())
+		throw Exception("missing handler builtin." + name);
+
+	return createHandler(target);
 }
 
 HTTPRequestHandler *PocoRestRequestFactory::handleNoRoute(const HTTPServerRequest &request)
@@ -339,19 +345,10 @@ HTTPRequestHandler *PocoRestRequestFactory::createWithSession(
 	}
 
 	PocoRestRequestHandler *handler = nullptr;
-	
 	try {
-		handler = new PocoRestRequestHandler(
-			static_cast<RestLinker &>(m_router),
-			m_translatorFactory,
-			m_localeExtractor,
-			*m_filterChain
-		);
-
-		handler->setAction(action);
+		handler = createHandler(action);
 		handler->setActionParams(params);
 		handler->setSession(session);
-
 		return handler;
 	}
 	catch (...) {
