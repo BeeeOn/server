@@ -232,6 +232,28 @@ class TestTypesListDetail(unittest.TestCase):
 			(11, None, "single", "extreme")
 		])
 
+	def test7_check_enums(self):
+		req = GET(config.ui_host, config.ui_port, "/types/6/MOD_BOILER_STATUS")
+		req.authorize(self.session)
+		response, content = req()
+
+		self.assertEqual(200, response.status)
+
+		result = json.loads(content)
+		self.assertEqual("success", result["status"])
+
+		enum = result["data"]
+		self.assertEqual("boiler status", enum["name"])
+		self.assertTrue("values" in enum)
+		self.assertEqual(5, len(enum["values"]))
+
+		self.assertEqual("undefined", enum["values"]["0"])
+		self.assertEqual("heating", enum["values"]["1"])
+		self.assertEqual("heating water", enum["values"]["2"])
+		self.assertEqual("failure", enum["values"]["3"])
+		self.assertEqual("shutdown", enum["values"]["4"])
+
+
 if __name__ == '__main__':
 	import sys
 	import taprunner

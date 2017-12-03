@@ -1,0 +1,15 @@
+<!ELEMENT enums (enum)*>
+
+<!ELEMENT enum (values, levels?)>
+<!ATTLIST enum id CDATA #REQUIRED>
+
+<!ELEMENT values (value+)>
+<!ELEMENT value (#PCDATA)>
+<!ATTLIST value equals CDATA #REQUIRED>
+
+<!ELEMENT levels (level+)>
+<!ELEMENT level (#PCDATA)>
+<!ATTLIST level
+	equals CDATA #IMPLIED
+	attention (none|single|repeat|alert) "none"
+>

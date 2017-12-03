@@ -23,6 +23,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/jwt/JWToken.cpp
 	${PROJECT_SOURCE_DIR}/provider/AuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/DeviceInfoProvider.cpp
+	${PROJECT_SOURCE_DIR}/provider/EnumInfoProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/RandomProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/OAuth2AuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/FacebookAuthProvider.cpp
@@ -53,6 +54,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/AbstractModule.cpp
 	${PROJECT_SOURCE_DIR}/model/Control.cpp
 	${PROJECT_SOURCE_DIR}/model/DeviceInfo.cpp
+	${PROJECT_SOURCE_DIR}/model/EnumInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/FCMToken.cpp
 	${PROJECT_SOURCE_DIR}/model/Gateway.cpp
 	${PROJECT_SOURCE_DIR}/model/Identity.cpp
@@ -161,6 +163,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/policy/PolicyContext.cpp
 	${PROJECT_SOURCE_DIR}/policy/UserPolicyContext.cpp
 	${PROJECT_SOURCE_DIR}/util/DevicesSAXHandler.cpp
+	${PROJECT_SOURCE_DIR}/util/EnumsSAXHandler.cpp
 	${PROJECT_SOURCE_DIR}/util/PocoStatementIntruder.cpp
 	${PROJECT_SOURCE_DIR}/util/Sanitize.cpp
 	${PROJECT_SOURCE_DIR}/util/Startup.cpp

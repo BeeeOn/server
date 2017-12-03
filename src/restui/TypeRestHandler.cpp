@@ -16,6 +16,7 @@
 BEEEON_OBJECT_BEGIN(BeeeOn, RestUI, TypeRestHandler)
 BEEEON_OBJECT_CASTABLE(RestHandler)
 BEEEON_OBJECT_REF("typeInfoProvider", &TypeRestHandler::setTypeInfoProvider)
+BEEEON_OBJECT_REF("enumInfoProvider", &TypeRestHandler::setEnumInfoProvider)
 BEEEON_OBJECT_END(BeeeOn, RestUI, TypeRestHandler)
 
 using namespace std;
@@ -29,11 +30,17 @@ BeeeOn::RestUI::TypeRestHandler::TypeRestHandler():
 {
 	registerAction<TypeRestHandler>("list", &TypeRestHandler::list);
 	registerAction<TypeRestHandler>("detail", &TypeRestHandler::detail, {"type_id"});
+	registerAction<TypeRestHandler>("detail_enum", &TypeRestHandler::detailEnum, {"enum_id"});
 }
 
 void TypeRestHandler::setTypeInfoProvider(TypeInfoProvider *typeInfoProvider)
 {
 	m_provider = typeInfoProvider;
+}
+
+void TypeRestHandler::setEnumInfoProvider(EnumInfoProvider *enumInfoProvider)
+{
+	m_enumProvider = enumInfoProvider;
 }
 
 void TypeRestHandler::list(RestFlow &flow)
@@ -52,6 +59,21 @@ void TypeRestHandler::detail(RestFlow &flow)
 
 	if (info.isNull())
 		throw NotFoundException("no such type " + id.toString());
+
+	PrintHandler result(flow.response().stream());
+
+	beginSuccess(result, 200);
+	serialize(result, *flow.translator(), *info);
+	endSuccess(result);
+}
+
+void TypeRestHandler::detailEnum(RestFlow &flow)
+{
+	EnumInfoID id = EnumInfoID::parse(flow.param("enum_id"));
+	SharedPtr<EnumInfo> info = m_enumProvider->findById(id);
+
+	if (info.isNull())
+		throw NotFoundException("no such enum " + id.toString());
 
 	PrintHandler result(flow.response().stream());
 

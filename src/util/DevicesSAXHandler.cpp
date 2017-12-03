@@ -214,6 +214,12 @@ void DevicesSAXHandler::startElement(
 		if (type.empty())
 			error("type value is empty");
 
+		XMLString subtype;
+		if (getAndTrimAttribute(attrList, "subtype", subtype)) {
+			if (subtype.empty())
+				error("subtype value is empty");
+		}
+
 		XMLString unavailable;
 		if (getAndTrimAttribute(attrList, "unavailable-value", unavailable)) {
 			if (unavailable.empty())
@@ -222,6 +228,12 @@ void DevicesSAXHandler::startElement(
 
 		m_module.setId(ModuleInfoID::parse(id));
 		m_module.setType(new TypeInfo(TypeInfoID::parse(type)));
+
+		if (subtype.empty())
+			m_module.setSubtype(nullptr);
+		else
+			m_module.setSubtype(new EnumInfo(EnumInfoID::parse(subtype)));
+
 		m_module.setClassName(element.localName);
 		m_module.setName("");
 		m_module.setGroup("");

@@ -6,6 +6,7 @@
 #include <Poco/SharedPtr.h>
 
 #include "model/Entity.h"
+#include "model/EnumInfo.h"
 #include "model/SimpleID.h"
 #include "model/TypeInfo.h"
 
@@ -17,6 +18,9 @@ public:
 
 	void setType(const Poco::SharedPtr<TypeInfo> type);
 	const Poco::SharedPtr<TypeInfo> type() const;
+
+	void setSubtype(const Poco::SharedPtr<EnumInfo> e);
+	const Poco::SharedPtr<EnumInfo> subtype() const;
 
 	void setClassName(const std::string &type);
 	const std::string &className() const;
@@ -38,6 +42,7 @@ public:
 
 private:
 	Poco::SharedPtr<TypeInfo> m_type;
+	Poco::SharedPtr<EnumInfo> m_subtype;
 	std::string m_className;
 	std::string m_name;
 	std::string m_group;

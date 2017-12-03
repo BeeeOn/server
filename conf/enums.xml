@@ -1,0 +1,38 @@
+<enums>
+	<enum id="MOD_BOILER_OPERATION_TYPE">
+		<values>
+			<value equals="0">off</value>
+			<value equals="1">room_regulator</value>
+			<value equals="2">equiterm_regulator</value>
+			<value equals="3">constant_water</value>
+			<value equals="4">hot_water</value>
+		</values>
+	</enum>
+	<enum id="MOD_BOILER_OPERATION_MODE">
+		<values>
+			<value equals="0">automatic</value>
+			<value equals="1">manual</value>
+			<value equals="2">vacation</value>
+		</values>
+	</enum>
+	<enum id="MOD_BOILER_STATUS">
+		<values>
+			<value equals="0">undefined</value>
+			<value equals="1">heating</value>
+			<value equals="2">hot_water</value>
+			<value equals="3">failure</value>
+			<value equals="4">shutdown</value>
+		</values>
+		<levels>
+			<level equals="3" attention="single" />
+			<level equals="4" attention="single" />
+		</levels>
+	</enum>
+	<enum id="MOD_BOILER_MODE">
+		<values>
+			<value equals="0">undefined</value>
+			<value equals="1">on</value>
+			<value equals="2">off</value>
+		</values>
+	</enum>
+</enums>

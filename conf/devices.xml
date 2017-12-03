@@ -98,10 +98,10 @@
 		</match>
 
 		<modules>
-			<sensor id="0" type="6">
+			<sensor id="0" type="6" subtype="MOD_BOILER_STATUS">
 				<name>Status</name>
 			</sensor>
-			<sensor id="1" type="6">
+			<sensor id="1" type="6" subtype="MOD_BOILER_MODE">
 				<name>Mode</name>
 			</sensor>
 			<sensor id="2" type="19">
@@ -137,10 +137,10 @@
 		</match>
 
 		<modules>
-			<sensor id="0" type="6">
+			<sensor id="0" type="6" subtype="MOD_BOILER_OPERATION_TYPE">
 				<name>Operation Type</name>
 			</sensor>
-			<sensor id="1" type="6">
+			<sensor id="1" type="6" subtype="MOD_BOILER_OPERATION_MODE">
 				<name>Operation Mode</name>
 			</sensor>
 			<sensor id="2" type="19">

@@ -2,12 +2,17 @@
 	<factory>
 		<!-- Providers -->
 
+		<instance name="enumInfoProvider" class="BeeeOn::EnumInfoProvider">
+			<set name="enumsFile" text="${spec.enums.xml}" />
+		</instance>
+
 		<instance name="typeInfoProvider" class="BeeeOn::TypeInfoProvider">
 			<set name="typesFile" text="${spec.types.xml}" />
 		</instance>
 
 		<instance name="deviceInfoProvider" class="BeeeOn::DeviceInfoProvider">
 			<set name="typeInfoProvider" ref="typeInfoProvider" />
+			<set name="enumInfoProvider" ref="enumInfoProvider" />
 			<set name="devicesFile" text="${spec.devices.xml}" />
 		</instance>
 
