@@ -363,7 +363,15 @@ size_t PocoAbstractDao::execute(Statement &sql)
 	try {
 		result = sql.execute();
 
-		if (logger().debug()) {
+		if (logger().trace()) {
+			ostringstream buffer;
+
+			buffer << "[result: " << result << "] ";
+			formatStatementInfo(buffer, sql);
+
+			logger().trace(buffer.str(), __FILE__, __LINE__);
+		}
+		else if (logger().debug()) {
 			string prefix("[result: ");
 			prefix += to_string(result) + "] ";
 			logger().debug(prefix + sql.toString(),
