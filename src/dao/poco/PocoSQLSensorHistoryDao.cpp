@@ -50,7 +50,7 @@ bool PocoSQLSensorHistoryDao::insert(
 	uint64_t deviceID(device.id());
 	uint64_t gatewayID(device.gateway().id());
 	unsigned int moduleID(value.module());
-	unsigned long timeAt = at.epochTime();
+	int64_t timeAt = at.epochMicroseconds();
 	double v = value.value();
 
 	Statement sql = (session() << m_queryInsert(),
@@ -79,7 +79,7 @@ void PocoSQLSensorHistoryDao::insertMany(
 	uint64_t deviceID(device.id());
 	uint64_t gatewayID(device.gateway().id());
 	unsigned int moduleID;
-	unsigned long timeAt = at.epochTime();
+	int64_t timeAt = at.epochMicroseconds();
 	double v;
 
 	auto it = values.begin();
