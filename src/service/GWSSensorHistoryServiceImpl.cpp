@@ -1,5 +1,6 @@
 #include "di/Injectable.h"
 #include "service/GWSSensorHistoryServiceImpl.h"
+#include "util/MultiException.h"
 
 using namespace std;
 using namespace Poco;
@@ -45,7 +46,25 @@ void GWSSensorHistoryServiceImpl::doInsertMany(Device &device,
 		}
 	}
 
-	m_sensorHistoryDao->insertMany(device, at, values);
+	try {
+		m_sensorHistoryDao->insertMany(device, at, values);
+	}
+	catch (const MultiException &e) {
+		logger().error("failed to insert "
+				+ to_string(e.count())
+				+ " of "
+				+ to_string(values.size())
+				+ " values for "
+				+ device,
+				__FILE__, __LINE__);
+
+		logger().log(e, __FILE__, __LINE__);
+	}
+	catch (const Exception &e) {
+		logger().error("failed to insert value for " + device,
+				__FILE__, __LINE__);
+		logger().log(e, __FILE__, __LINE__);
+	}
 }
 
 bool GWSSensorHistoryServiceImpl::doFetchLast(Device &device,
