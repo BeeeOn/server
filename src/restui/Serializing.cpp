@@ -65,7 +65,7 @@ void BeeeOn::RestUI::serialize(PrintHandler &output,
 	output.value(gateway.name());
 	output.key("altitude");
 
-	if (gateway.altitude().isNull())
+	if (!gateway.altitude().isNull())
 		output.value(gateway.altitude().value());
 	else
 		output.null();
