@@ -33,6 +33,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/server/AuthRestHandler.cpp
 	${PROJECT_SOURCE_DIR}/server/ExpirableSession.cpp
 	${PROJECT_SOURCE_DIR}/server/CORSFilter.cpp
+	${PROJECT_SOURCE_DIR}/server/FailingTCPServerConnection.cpp
 	${PROJECT_SOURCE_DIR}/server/HTTPFilter.cpp
 	${PROJECT_SOURCE_DIR}/server/HTTPFilterChain.cpp
 	${PROJECT_SOURCE_DIR}/server/Session.cpp

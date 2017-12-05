@@ -9,6 +9,7 @@
 
 #include "di/Injectable.h"
 #include "server/XmlRequestHandler.h"
+#include "server/FailingTCPServerConnection.h"
 
 using namespace std;
 using namespace Poco;
@@ -87,7 +88,7 @@ TCPServerConnection *XmlRequestHandlerFactory::createConnection(
 		logger().critical(e.what(), __FILE__, __LINE__);
 	}
 
-	return NULL;
+	return new FailingTCPServerConnection(socket);
 }
 
 static string documentToString(const AutoPtr<Document> doc)
