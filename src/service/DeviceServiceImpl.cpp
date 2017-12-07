@@ -72,6 +72,8 @@ void DeviceServiceImpl::doFetchMany(Single<list<Device>> &input)
 
 void DeviceServiceImpl::doFetchMany(Relation<list<Device>, Gateway> &input)
 {
+	m_policy->assure(DeviceAccessPolicy::ACTION_USER_GET, input, input.base());
+
 	list<Device> &devices = input.target();
 
 	m_dao->fetchMany(devices);
