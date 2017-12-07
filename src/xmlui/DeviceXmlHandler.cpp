@@ -7,7 +7,7 @@
 #include "xmlui/XmlDeviceDeserializer.h"
 #include "xmlui/XmlDevicePropertyDeserializer.h"
 #include "xmlui/Serializing.h"
-#include "model/Device.h"
+#include "model/DeviceWithData.h"
 #include "model/DeviceProperty.h"
 #include "util/CryptoConfig.h"
 #include "work/Work.h"
@@ -109,7 +109,7 @@ void DeviceXmlHandler::handleUpdate(const string &gateid,
 
 void DeviceXmlHandler::handleGet(AutoPtr<NodeList> nodes)
 {
-	list<Device> devices;
+	list<DeviceWithData> devices;
 
 	if (nodes.isNull()) {
 		resultInvalidInput();
@@ -128,12 +128,12 @@ void DeviceXmlHandler::handleGet(AutoPtr<NodeList> nodes)
 		const Element *e = dynamic_cast<const Element *>(node);
 
 		Gateway gateway(GatewayID::parse(e->getAttribute("gateid")));
-		Device device(DeviceID::parse(e->getAttribute("euid")));
+		DeviceWithData device(DeviceID::parse(e->getAttribute("euid")));
 		device.setGateway(gateway);
 		devices.push_back(device);
 	}
 
-	Single<list<Device>> input(devices);
+	Single<list<DeviceWithData>> input(devices);
 	User user(session()->userID());
 	input.setUser(user);
 
@@ -147,8 +147,8 @@ void DeviceXmlHandler::handleGet(AutoPtr<NodeList> nodes)
 void DeviceXmlHandler::handleGetAll(const string &gateid)
 {
 	Gateway gateway(GatewayID::parse(gateid));
-	vector<Device> devices;
-	Relation<vector<Device>, Gateway> input(devices, gateway);
+	vector<DeviceWithData> devices;
+	Relation<vector<DeviceWithData>, Gateway> input(devices, gateway);
 	User user(session()->userID());
 	input.setUser(user);
 
@@ -162,8 +162,8 @@ void DeviceXmlHandler::handleGetAll(const string &gateid)
 void DeviceXmlHandler::handleGetNew(const string &gateid)
 {
 	Gateway gateway(GatewayID::parse(gateid));
-	vector<Device> devices;
-	Relation<vector<Device>, Gateway> input(devices, gateway);
+	vector<DeviceWithData> devices;
+	Relation<vector<DeviceWithData>, Gateway> input(devices, gateway);
 	User user(session()->userID());
 	input.setUser(user);
 
@@ -178,7 +178,7 @@ void DeviceXmlHandler::handleCreateParameter(const string &gateid,
 		Element *deviceNode)
 {
 	Gateway gateway(GatewayID::parse(gateid));
-	Device device(DeviceID::parse(deviceNode->getAttribute("euid")));
+	DeviceWithData device(DeviceID::parse(deviceNode->getAttribute("euid")));
 	device.setGateway(gateway);
 
 	XmlDevicePropertyDeserializer deserializer(*deviceNode, m_config);

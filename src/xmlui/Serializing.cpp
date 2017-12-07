@@ -1,4 +1,5 @@
 #include <string>
+#include <Poco/NumberFormatter.h>
 #include <Poco/Timestamp.h>
 #include <Poco/XML/XMLWriter.h>
 #include <Poco/SAX/AttributesImpl.h>
@@ -8,9 +9,9 @@
 #include "model/Gateway.h"
 #include "model/LegacyGateway.h"
 #include "model/Location.h"
-#include "model/Device.h"
 #include "model/DeviceInfo.h"
 #include "model/DeviceProperty.h"
+#include "model/DeviceWithData.h"
 #include "model/RoleInGateway.h"
 #include "model/LegacyRoleInGateway.h"
 #include "model/VerifiedIdentity.h"
@@ -110,7 +111,7 @@ void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
 }
 
 void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
-		const Device &device)
+		const DeviceWithData &device)
 {
 	AttributesImpl attrs;
 	attrs.addAttribute("", "id", "id", "", device.id().toString());
@@ -142,6 +143,8 @@ void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
 
 	output.startElement("", "device", "device", attrs);
 
+	const auto &values = device.values();
+
 	for (auto module : *info) {
 		AttributesImpl attrs;
 
@@ -149,8 +152,23 @@ void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
 		// FIXME: just copy device status for now
 		attrs.addAttribute("", "status", "status", "",
 				device.available()? "available" : "unavailable");
-		// FIXME: no values implemented, send neutral 0
-		attrs.addAttribute("", "value", "value", "", "0");
+
+		string value = "NaN";
+
+		const unsigned int id = module.id();
+
+		if (id < values.size()) {
+			const ValueAt &current = values.at(id);
+
+			if (current.isValid())
+				value = NumberFormatter::format(current.value());
+
+			attrs.addAttribute("", "value", "value", "", value);
+			attrs.addAttribute("", "valid", "valid", "",
+					NumberFormatter::format(current.isValid()));
+			attrs.addAttribute("", "at", "at", "",
+					NumberFormatter::format(current.at().epochTime()));
+		}
 
 		attrs.addAttribute("", "type", "type", "", module.type()->id().toString());
 
@@ -166,14 +184,14 @@ void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
 }
 
 void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
-		const std::vector<Device> &devices)
+		const std::vector<DeviceWithData> &devices)
 {
 	for (auto device : devices)
 		serialize(output, device);
 }
 
 void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
-		const std::list<Device> &devices)
+		const std::list<DeviceWithData> &devices)
 {
 	for (auto device : devices)
 		serialize(output, device);

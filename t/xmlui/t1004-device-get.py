@@ -93,10 +93,20 @@ class TestDeviceGet(unittest.TestCase):
 				self.assertEqual(str(i), e[i].get("id"))
 
 			self.assertEqual("19", e[0].get("type"))
+			self.assertEqual("true", e[0].get("valid"))
+			self.assertEqual("19.5", e[0].get("value"))
 			self.assertEqual("19", e[1].get("type"))
+			self.assertEqual("true", e[1].get("valid"))
+			self.assertEqual("0", e[1].get("value"))
 			self.assertEqual("8", e[2].get("type"))
+			self.assertEqual("true", e[2].get("valid"))
+			# value for module 2 is random for each run
 			self.assertEqual("2", e[3].get("type"))
+			self.assertEqual("false", e[3].get("valid"))
+			self.assertEqual("NaN", e[3].get("value"))
 			self.assertEqual("16", e[4].get("type"))
+			self.assertEqual("false", e[4].get("valid"))
+			self.assertEqual("NaN", e[4].get("value"))
 
 		elif id == "0xa32d27aa5e94ecfd":
 			self.assertEqual("Multi-sensor", e.get("name"))
@@ -105,8 +115,14 @@ class TestDeviceGet(unittest.TestCase):
 				self.assertEqual(str(i), e[i].get("id"))
 
 			self.assertEqual("19", e[0].get("type"))
+			self.assertEqual("true", e[0].get("valid"))
+			self.assertEqual("20", e[0].get("value"))
 			self.assertEqual("8", e[1].get("type"))
+			self.assertEqual("false", e[1].get("valid"))
+			self.assertEqual("NaN", e[1].get("value"))
 			self.assertEqual("11", e[2].get("type"))
+			self.assertEqual("false", e[2].get("valid"))
+			self.assertEqual("NaN", e[2].get("value"))
 
 		elif id == "0xa37e0f7f0302324d":
 			self.assertEqual("Humidity", e.get("name"))
@@ -116,10 +132,20 @@ class TestDeviceGet(unittest.TestCase):
 				self.assertEqual(str(i), e[i].get("id"))
 
 			self.assertEqual("19", e[0].get("type"))
+			self.assertEqual("false", e[0].get("valid"))
+			self.assertEqual("NaN", e[0].get("value"))
 			self.assertEqual("19", e[1].get("type"))
+			self.assertEqual("false", e[1].get("valid"))
+			self.assertEqual("NaN", e[1].get("value"))
 			self.assertEqual("8", e[2].get("type"))
+			self.assertEqual("false", e[2].get("valid"))
+			self.assertEqual("NaN", e[2].get("value"))
 			self.assertEqual("2", e[3].get("type"))
+			self.assertEqual("false", e[3].get("valid"))
+			self.assertEqual("NaN", e[3].get("value"))
 			self.assertEqual("16", e[4].get("type"))
+			self.assertEqual("false", e[4].get("valid"))
+			self.assertEqual("NaN", e[4].get("value"))
 
 		elif id == "0xa371959aad24618e":
 			self.assertEqual("Unknown", e.get("name"))
