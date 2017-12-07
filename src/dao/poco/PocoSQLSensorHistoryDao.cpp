@@ -1,3 +1,5 @@
+#include <sstream>
+
 #include <Poco/Exception.h>
 #include <Poco/Timestamp.h>
 #include <Poco/Data/Statement.h>
@@ -13,6 +15,7 @@
 #include "dao/poco/PocoDaoManager.h"
 #include "service/ValueConsumer.h"
 #include "transaction/TransactionManager.h"
+#include "util/MultiException.h"
 #include "util/TimeInterval.h"
 
 using namespace std;
@@ -47,7 +50,7 @@ bool PocoSQLSensorHistoryDao::insert(
 	uint64_t deviceID(device.id());
 	uint64_t gatewayID(device.gateway().id());
 	unsigned int moduleID(value.module());
-	unsigned long timeAt = at.epochTime();
+	int64_t timeAt = at.epochMicroseconds();
 	double v = value.value();
 
 	Statement sql = (session() << m_queryInsert(),
@@ -76,24 +79,46 @@ void PocoSQLSensorHistoryDao::insertMany(
 	uint64_t deviceID(device.id());
 	uint64_t gatewayID(device.gateway().id());
 	unsigned int moduleID;
-	unsigned long timeAt = at.epochTime();
+	int64_t timeAt = at.epochMicroseconds();
 	double v;
 
-	Statement sql = (session() << m_queryInsert(),
-		use(gatewayID, "gateway_id"),
-		use(deviceID, "device_id"),
-		use(moduleID, "module_id"),
-		use(timeAt, "at"),
-		use(v, "value")
-	);
+	auto it = values.begin();
+	MultiException ex;
 
-	for (auto &value : values) {
-		moduleID = value.module();
-		v = value.value();
+	while (it != values.end()) {
+		Statement sql = (session() << m_queryInsert(),
+			use(gatewayID, "gateway_id"),
+			use(deviceID, "device_id"),
+			use(moduleID, "module_id"),
+			use(timeAt, "at"),
+			use(v, "value")
+		);
 
-		if (execute(sql) == 0)
-			throw IllegalStateException(string(__func__) + " returned 0");
+		for (; it != values.end(); ++it) {
+			moduleID = it->module();
+			v = it->value();
+
+			size_t result = 0;
+
+			try {
+				result = execute(sql);
+			}
+			catch (const Exception &e) {
+				ex.caught(e);
+
+				// reinitialize statement and continue
+				// with following value
+				++it;
+				break;
+			}
+
+			if (result == 0)
+				throw IllegalStateException(string(__func__) + " returned 0");
+		}
 	}
+
+	if (!ex.empty())
+		ex.rethrow();
 }
 
 bool PocoSQLSensorHistoryDao::fetch(

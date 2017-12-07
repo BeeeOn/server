@@ -27,7 +27,7 @@ class TestSensorData(unittest.TestCase):
 	"""
 	def test1_export_successful(self):
 		id = str(uuid.uuid4())
-		timestamp = time.time()
+		timestamp = int(time.time() * 1000000)
 
 		msg = json.dumps(
 			{
@@ -69,7 +69,7 @@ class TestSensorData(unittest.TestCase):
 	Even if we send an invalid export message, we get just "confirm" response.
 	This test is semi-automatic, it requires to check the server log.
 	"""
-	def test1_export_fails_due_to_unexisting_device(self):
+	def test2_export_fails_due_to_unexisting_device(self):
 		id = str(uuid.uuid4())
 
 		msg = json.dumps(
@@ -108,6 +108,44 @@ class TestSensorData(unittest.TestCase):
 		self.assertEqual(id, msg["id"])
 		assureNotClosed(self, self.ws)
 
+	"""
+	Send conflicting data (same timestamp). We cannot test anything there
+	automatically. But it allows at least a semi-automatic test.
+	"""
+	def test3_export_fails_due_to_unexisting_device(self):
+		id = str(uuid.uuid4())
+		timestamp = int(time.time() * 1000000)
+
+		msg = json.dumps(
+			{
+				"message_type" : "sensor_data_export",
+				"id" : id,
+				"data" : [
+					{
+						"device_id" : "0xa32d27aa5e94ecfd",
+						"timestamp" : timestamp,
+						"values": [
+							{
+								"module_id" : "0",
+								"value" : 30.0,
+								"valid" : "true"
+							},
+							{
+								"module_id" : "0",
+								"valid" : "false"
+							}
+						]
+					}
+				]
+			}
+		)
+
+		self.ws.send(msg)
+		msg = json.loads(self.ws.recv())
+
+		self.assertEqual("sensor_data_confirm", msg["message_type"])
+		self.assertEqual(id, msg["id"])
+		assureNotClosed(self, self.ws)
 
 if __name__ == '__main__':
 	import sys
