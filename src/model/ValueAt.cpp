@@ -53,3 +53,8 @@ double ValueAt::value() const
 {
 	return m_value;
 }
+
+bool ValueAt::isValid() const
+{
+	return !std::isnan(m_value);
+}

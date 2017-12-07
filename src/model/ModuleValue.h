@@ -21,6 +21,8 @@ public:
 	void setValue(double value);
 	double value() const;
 
+	bool isValid() const;
+
 private:
 	ModuleInfoID m_module;
 	double m_value;

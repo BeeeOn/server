@@ -36,3 +36,8 @@ double ModuleValue::value() const
 {
 	return m_value;
 }
+
+bool ModuleValue::isValid() const
+{
+	return !std::isnan(m_value);
+}

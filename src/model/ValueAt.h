@@ -20,6 +20,8 @@ public:
 	void setValue(double v);
 	double value() const;
 
+	bool isValid() const;
+
 private:
 	unsigned long m_at;
 	double m_value;
