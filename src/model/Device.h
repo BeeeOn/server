@@ -3,10 +3,9 @@
 
 #include <Poco/SharedPtr.h>
 #include <Poco/Timespan.h>
-#include <Poco/Timestamp.h>
-#include <Poco/Nullable.h>
 #include <Poco/Util/Units.h>
 
+#include "model/DeviceStatus.h"
 #include "model/Entity.h"
 #include "model/Location.h"
 #include "model/Gateway.h"
@@ -63,11 +62,29 @@ public:
 	void setSignal(const Poco::Nullable<percent> &signal);
 	const Poco::Nullable<percent> &signal() const;
 
-	void setFirstSeen(const Poco::Timestamp &at);
-	const Poco::Timestamp &firstSeen() const;
+	void setStatus(const DeviceStatus &status);
+	const DeviceStatus &status() const;
+	DeviceStatus &status();
 
-	void setLastSeen(const Poco::Timestamp &at);
-	const Poco::Timestamp &lastSeen() const;
+	void setFirstSeen(const Poco::Timestamp &at)
+	{
+		m_status.setFirstSeen(at);
+	}
+
+	const Poco::Timestamp &firstSeen() const
+	{
+		return m_status.firstSeen();
+	}
+
+	void setLastSeen(const Poco::Timestamp &at)
+	{
+		m_status.setLastSeen(at);
+	}
+
+	const Poco::Timestamp &lastSeen() const
+	{
+		return m_status.lastSeen();
+	}
 
 	/**
 	 * A device is available when it has been last seen
@@ -76,12 +93,19 @@ public:
 	bool available(const unsigned int multiple = 3,
 			const Poco::Timestamp &ref = Poco::Timestamp()) const;
 
-	void setActiveSince(const Poco::Nullable<Poco::Timestamp> &at);
-	const Poco::Nullable<Poco::Timestamp> &activeSince() const;
+	void setActiveSince(const Poco::Nullable<Poco::Timestamp> &at)
+	{
+		m_status.setActiveSince(at);
+	}
+
+	const Poco::Nullable<Poco::Timestamp> &activeSince() const
+	{
+		return m_status.activeSince();
+	}
 
 	bool active() const
 	{
-		return !activeSince().isNull();
+		return m_status.active();
 	}
 
 private:
@@ -92,9 +116,7 @@ private:
 	Poco::Timespan m_refresh;
 	Poco::Nullable<percent> m_battery;
 	Poco::Nullable<percent> m_signal;
-	Poco::Timestamp m_firstSeen;
-	Poco::Timestamp m_lastSeen;
-	Poco::Nullable<Poco::Timestamp> m_activeSince;
+	DeviceStatus m_status;
 };
 
 typedef Device::ID DeviceID;

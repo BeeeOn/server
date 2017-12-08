@@ -85,24 +85,19 @@ const Nullable<Device::percent> &Device::signal() const
 	return m_signal;
 }
 
-void Device::setFirstSeen(const Timestamp &at)
+void Device::setStatus(const DeviceStatus &status)
 {
-	m_firstSeen = at;
+	m_status = status;
 }
 
-const Timestamp &Device::firstSeen() const
+const DeviceStatus &Device::status() const
 {
-	return m_firstSeen;
+	return m_status;
 }
 
-void Device::setLastSeen(const Timestamp &at)
+DeviceStatus &Device::status()
 {
-	m_lastSeen = at;
-}
-
-const Timestamp &Device::lastSeen() const
-{
-	return m_lastSeen;
+	return m_status;
 }
 
 bool Device::available(const unsigned int multiple,
@@ -115,15 +110,5 @@ bool Device::available(const unsigned int multiple,
 	for (unsigned int i = 0; i < multiple; ++i)
 		diff += refresh();
 
-	return lastSeen() + diff >= ref;
-}
-
-void Device::setActiveSince(const Nullable<Timestamp> &at)
-{
-	m_activeSince = at;
-}
-
-const Nullable<Timestamp> &Device::activeSince() const
-{
-	return m_activeSince;
+	return m_status.lastSeen() + diff >= ref;
 }
