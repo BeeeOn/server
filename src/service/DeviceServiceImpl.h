@@ -84,9 +84,9 @@ public:
 		return BEEEON_TRANSACTION_RETURN(bool, doActivate(input));
 	}
 
-	Work unregister(Relation<Device, Gateway> &input) override
+	void unregister(Relation<Device, Gateway> &input) override
 	{
-		return BEEEON_TRANSACTION_RETURN(Work, doUnregister(input));
+		BEEEON_TRANSACTION(doUnregister(input));
 	}
 
 	bool update(RelationWithData<Device, Gateway> &input) override
@@ -138,7 +138,7 @@ protected:
 	void doFetchInactiveBy(Relation<std::vector<DeviceWithData>, Gateway> &input);
 
 	bool doActivate(Relation<Device, Gateway> &input);
-	Work doUnregister(Relation<Device, Gateway> &input);
+	void doUnregister(Relation<Device, Gateway> &input);
 	bool doUpdate(RelationWithData<Device, Gateway> &input);
 	bool doUpdateAndActivate(RelationWithData<Device, Gateway> &input);
 

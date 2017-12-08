@@ -85,7 +85,7 @@ void DeviceXmlHandler::handleUnregister(const string &gateid,
 	User user(session()->userID());
 	input.setUser(user);
 
-	(void) m_deviceService.unregister(input);
+	m_deviceService.unregister(input);
 
 	resultSuccess();
 }

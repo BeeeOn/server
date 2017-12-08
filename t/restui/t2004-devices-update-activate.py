@@ -101,11 +101,10 @@ class TestDevicesUpdateActivate(unittest.TestCase):
 		data = json.loads(content)
 		self.assertEqual("success", data["status"])
 
-		work_uri = response.getheader("Location")
-		self.assertEqual(work_uri, data["data"]["location"])
+		device_uri = response.getheader("Location")
 
 		for i in range(10):
-			req = GET(config.ui_host, config.ui_port, work_uri)
+			req = GET(config.ui_host, config.ui_port, device_uri)
 			req.authorize(self.session)
 			response, content = req()
 
@@ -113,25 +112,10 @@ class TestDevicesUpdateActivate(unittest.TestCase):
 			result = json.loads(content)
 			self.assertEqual("success", result["status"])
 
-			if "finished" in result["data"]:
+			if result["data"]["state"] == "inactive":
 				break
 
 			time.sleep(1)
-
-		req = GET(config.ui_host, config.ui_port, work_uri)
-		req.authorize(self.session)
-		response, content = req()
-
-		self.assertEqual(200, response.status)
-		result = json.loads(content)
-		self.assertEqual("success", result["status"])
-		self.assertTrue("finished" in result["data"])
-
-		req = DELETE(config.ui_host, config.ui_port, work_uri)
-		req.authorize(self.session)
-		response, content = req()
-
-		self.assertEqual(204, response.status)
 
 	"""
 	Activate device 4931887558509748622 (Unknown).
@@ -169,11 +153,10 @@ class TestDevicesUpdateActivate(unittest.TestCase):
 		data = json.loads(content)
 		self.assertEqual("success", data["status"])
 
-		work_uri = response.getheader("Location")
-		self.assertEqual(work_uri, data["data"]["location"])
+		device_uri = response.getheader("Location")
 
 		for i in range(10):
-			req = GET(config.ui_host, config.ui_port, work_uri)
+			req = GET(config.ui_host, config.ui_port, device_uri)
 			req.authorize(self.session)
 			response, content = req()
 
@@ -181,25 +164,10 @@ class TestDevicesUpdateActivate(unittest.TestCase):
 			result = json.loads(content)
 			self.assertEqual("success", result["status"])
 
-			if "finished" in result["data"]:
+			if result["data"]["state"] == "inactive":
 				break
 
 			time.sleep(1)
-
-		req = GET(config.ui_host, config.ui_port, work_uri)
-		req.authorize(self.session)
-		response, content = req()
-
-		self.assertEqual(200, response.status)
-		result = json.loads(content)
-		self.assertEqual("success", result["status"])
-		self.assertTrue("finished" in result["data"])
-
-		req = DELETE(config.ui_host, config.ui_port, work_uri)
-		req.authorize(self.session)
-		response, content = req()
-
-		self.assertEqual(204, response.status)
 
 if __name__ == '__main__':
 	import sys

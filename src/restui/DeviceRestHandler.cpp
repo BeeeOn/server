@@ -201,22 +201,18 @@ void DeviceRestHandler::unpair(RestFlow &flow)
 	Relation<Device, Gateway> data(device, gateway);
 	data.setUser(user);
 
-	const Work &work = m_deviceService->unregister(data);
+	m_deviceService->unregister(data);
 
 	flow.response().setStatus(202);
 
 	const URI &location = flow.linker()
-		.link("work", "detail", {work.id().toString()});
+		.link("devices", "detail",
+			{gateway.id().toString(), device.id().toString()});
 
 	flow.response()["Location"] = location;
 
 	PrintHandler result(flow.response().stream());
 	beginSuccess(result);
-
-	result.startObject();
-	result.key("location");
-	result.value(location.toString());
-	result.endObject();
-
+	serialize(result, device);
 	endSuccess(result);
 }
