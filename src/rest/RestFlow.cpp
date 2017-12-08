@@ -105,9 +105,9 @@ void RestFlow::setLocale(const Locale &locale)
 	m_locale = locale;
 }
 
-const Locale &RestFlow::locale() const
+const Locale &RestFlow::locale(bool ignoreSessionLocale) const
 {
-	if (m_session.isNull())
+	if (ignoreSessionLocale || m_session.isNull())
 		return m_locale;
 
 	return m_session->locale();

@@ -104,9 +104,10 @@ public:
 
 	/**
 	 * Obtain locale from the session if any. Otherwise, use the
-	 * m_locale.
+	 * m_locale. The return value depends also on the given argument
+	 * ignoreSessionLocale.
 	 */
-	const Locale &locale() const;
+	const Locale &locale(bool ignoreSessionLocale = false) const;
 
 private:
 	RestLinker &m_linker;
