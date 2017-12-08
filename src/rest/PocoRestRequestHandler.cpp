@@ -136,6 +136,30 @@ void PocoRestRequestHandler::run()
 		current->setName("");
 }
 
+void PocoRestRequestHandler::setupLanguage(RestFlow &flow)
+{
+	const string language = request().has("Accept-Language") ? request().get("Accept-Language") : "";
+	const Locale &httpLocale = m_localeExtractor.extract(language);
+	flow.setLocale(httpLocale);
+
+	if (logger().debug())
+		logger().debug("resolved HTTP locale: " + httpLocale.toString());
+
+
+	if (m_session.isNull()) {
+		Translator::Ptr translator = m_translatorFactory.create(httpLocale);
+		flow.setTranslator(translator);
+	}
+	else {
+		Translator::Ptr translator = m_translatorFactory.create(m_session->locale());
+
+		if (logger().debug())
+			logger().debug("using user locale: " + m_session->locale().toString());
+
+		flow.setTranslator(translator);
+	}
+}
+
 void PocoRestRequestHandler::doHandleRequest()
 {
 	if (logger().debug()) {
@@ -187,28 +211,7 @@ void PocoRestRequestHandler::doHandleRequest()
 		m_filterChain.applyChain(request(), response());
 		if (!response().sent()) {
 			flow.setSession(m_session);
-
-			const string language = request().has("Accept-Language") ? request().get("Accept-Language") : "";
-			const Locale &httpLocale = m_localeExtractor.extract(language);
-			flow.setLocale(httpLocale);
-
-			if (logger().debug())
-				logger().debug("resolved HTTP locale: " + httpLocale.toString());
-
-
-			if (m_session.isNull()) {
-				Translator::Ptr translator = m_translatorFactory.create(httpLocale);
-				flow.setTranslator(translator);
-			}
-			else {
-				Translator::Ptr translator = m_translatorFactory.create(m_session->locale());
-
-				if (logger().debug())
-					logger().debug("using user locale: " + m_session->locale().toString());
-
-				flow.setTranslator(translator);
-			}
-
+			setupLanguage(flow);
 			call(flow);
 		}
 
