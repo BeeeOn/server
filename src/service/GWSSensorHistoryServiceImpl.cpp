@@ -30,7 +30,7 @@ void GWSSensorHistoryServiceImpl::doInsertMany(Device &device,
 	if (!m_deviceDao->fetch(device, device.gateway()))
 		throw NotFoundException("no such device " + device);
 
-	device.setLastSeen(DateTime());
+	device.setLastSeen(Timestamp());
 	if (!m_deviceDao->update(device, device.gateway()))
 		throw IllegalStateException("updating device " + device + " failed");
 

@@ -301,13 +301,13 @@ void BeeeOn::RestUI::serialize(PrintHandler &output, const Device &device)
 	output.endObject();
 
 	output.key("first_seen");
-	output.value(device.firstSeen().timestamp().epochTime());
+	output.value(device.firstSeen().epochTime());
 	output.key("last_seen");
-	output.value(device.lastSeen().timestamp().epochTime());
+	output.value(device.lastSeen().epochTime());
 
 	if (!device.activeSince().isNull()) {
 		output.key("active_since");
-		output.value(device.activeSince().value().timestamp().epochTime());
+		output.value(device.activeSince().value().epochTime());
 	}
 
 	output.key("refresh_time");

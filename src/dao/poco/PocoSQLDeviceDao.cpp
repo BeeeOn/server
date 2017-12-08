@@ -90,12 +90,12 @@ bool PocoSQLDeviceDao::insert(Device &device, const Gateway &gateway)
 	if (!device.signal().isNull())
 		signal = device.signal().value().get();
 
-	unsigned long firstSeen = device.firstSeen().timestamp().epochTime();
-	unsigned long lastSeen = device.lastSeen().timestamp().epochTime();
+	unsigned long firstSeen = device.firstSeen().epochTime();
+	unsigned long lastSeen = device.lastSeen().epochTime();
 
 	Nullable<unsigned long> activeSince;
 	if (!device.activeSince().isNull())
-		activeSince = device.activeSince().value().timestamp().epochTime();
+		activeSince = device.activeSince().value().epochTime();
 
 	Statement sql = (session() << m_queryInsert(),
 		use(id, "id"),
@@ -143,7 +143,7 @@ bool PocoSQLDeviceDao::update(Device &device, const Gateway &gateway)
 
 	Nullable<unsigned long> activeSince;
 	if (!device.activeSince().isNull())
-		activeSince = device.activeSince().value().timestamp().epochTime();
+		activeSince = device.activeSince().value().epochTime();
 
 	Statement sql = (session() << m_queryUpdate(),
 		use(locationID, "location_id"),
@@ -297,7 +297,7 @@ bool PocoSQLDeviceDao::parseSingle(Row &result, Device &device,
 	device.setFirstSeen(Timestamp::fromEpochTime(result[prefix + "first_seen"]));
 	device.setLastSeen(Timestamp::fromEpochTime(result[prefix + "last_seen"]));
 
-	Nullable<DateTime> activeSince;
+	Nullable<Timestamp> activeSince;
 	if (!result[prefix + "active_since"].isEmpty())
 		activeSince = Timestamp::fromEpochTime(result[prefix + "active_since"]);
 

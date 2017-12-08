@@ -68,7 +68,7 @@ void DeviceUnpairWorkExecutor::processResult(Work::Ptr work, DeviceUnpairWork &c
 			return;
 		}
 
-		device.setActiveSince(Nullable<DateTime>{});
+		device.setActiveSince(Nullable<Timestamp>{});
 
 		if (!m_dao->update(device, gateway)) {
 			logger().warning("failed to update device " + device,

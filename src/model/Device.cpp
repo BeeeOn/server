@@ -85,28 +85,28 @@ const Nullable<Device::percent> &Device::signal() const
 	return m_signal;
 }
 
-void Device::setFirstSeen(const DateTime &at)
+void Device::setFirstSeen(const Timestamp &at)
 {
 	m_firstSeen = at;
 }
 
-const DateTime &Device::firstSeen() const
+const Timestamp &Device::firstSeen() const
 {
 	return m_firstSeen;
 }
 
-void Device::setLastSeen(const DateTime &at)
+void Device::setLastSeen(const Timestamp &at)
 {
 	m_lastSeen = at;
 }
 
-const DateTime &Device::lastSeen() const
+const Timestamp &Device::lastSeen() const
 {
 	return m_lastSeen;
 }
 
 bool Device::available(const unsigned int multiple,
-		const DateTime &ref) const
+		const Timestamp &ref) const
 {
 	if (refresh() < 1 * Timespan::SECONDS)
 		return true; // refresh time is invalid
@@ -118,12 +118,12 @@ bool Device::available(const unsigned int multiple,
 	return lastSeen() + diff >= ref;
 }
 
-void Device::setActiveSince(const Nullable<DateTime> &at)
+void Device::setActiveSince(const Nullable<Timestamp> &at)
 {
 	m_activeSince = at;
 }
 
-const Nullable<DateTime> &Device::activeSince() const
+const Nullable<Timestamp> &Device::activeSince() const
 {
 	return m_activeSince;
 }

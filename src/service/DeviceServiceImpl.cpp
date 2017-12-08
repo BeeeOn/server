@@ -1,7 +1,7 @@
 #include <Poco/Exception.h>
-#include <Poco/DateTime.h>
 #include <Poco/Logger.h>
 #include <Poco/Nullable.h>
+#include <Poco/Timestamp.h>
 
 #include "di/Injectable.h"
 #include "model/Device.h"
@@ -366,7 +366,7 @@ bool DeviceServiceImpl::tryActivateAndUpdate(Device &device,
 			}
 		}, gateway, device);
 
-		device.setActiveSince(DateTime());
+		device.setActiveSince(Timestamp());
 		return m_dao->update(device, gateway);
 	}
 
