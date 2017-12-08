@@ -13,7 +13,6 @@
 #include "rpc/GatewayRPC.h"
 #include "service/DeviceService.h"
 #include "transaction/Transactional.h"
-#include "work/WorkFacade.h"
 
 namespace BeeeOn {
 
@@ -31,7 +30,6 @@ public:
 	void setSensorHistoryDao(SensorHistoryDao::Ptr dao);
 	void setDevicePropertyDao(DevicePropertyDao::Ptr dao);
 	void setGatewayRPC(GatewayRPC::Ptr rpc);
-	void setWorkFacade(WorkFacade::Ptr facade);
 	void setAccessPolicy(DeviceAccessPolicy::Ptr policy);
 
 	bool fetch(Relation<Device, Gateway> &input) override
@@ -158,7 +156,6 @@ private:
 	SensorHistoryDao::Ptr m_historyDao;
 	DevicePropertyDao::Ptr m_propertyDao;
 	GatewayRPC::Ptr m_gatewayRPC;
-	WorkFacade::Ptr m_workFacade;
 	DeviceAccessPolicy::Ptr m_policy;
 };
 

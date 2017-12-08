@@ -11,7 +11,6 @@
 #include "model/Gateway.h"
 #include "service/Single.h"
 #include "service/Relation.h"
-#include "work/Work.h"
 
 namespace BeeeOn {
 

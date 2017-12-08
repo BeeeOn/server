@@ -7,7 +7,6 @@
 #include "model/Device.h"
 #include "model/Gateway.h"
 #include "service/DeviceServiceImpl.h"
-#include "work/WorkFacade.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, DeviceServiceImpl)
 BEEEON_OBJECT_CASTABLE(DeviceService)
@@ -17,7 +16,6 @@ BEEEON_OBJECT_REF("sensorHistoryDao", &DeviceServiceImpl::setSensorHistoryDao)
 BEEEON_OBJECT_REF("devicePropertyDao", &DeviceServiceImpl::setDevicePropertyDao)
 BEEEON_OBJECT_REF("gatewayRPC", &DeviceServiceImpl::setGatewayRPC)
 BEEEON_OBJECT_REF("accessPolicy", &DeviceServiceImpl::setAccessPolicy)
-BEEEON_OBJECT_REF("workFacade", &DeviceServiceImpl::setWorkFacade)
 BEEEON_OBJECT_REF("transactionManager", &DeviceServiceImpl::setTransactionManager)
 BEEEON_OBJECT_END(BeeeOn, DeviceServiceImpl)
 
@@ -52,11 +50,6 @@ void DeviceServiceImpl::setDevicePropertyDao(DevicePropertyDao::Ptr dao)
 void DeviceServiceImpl::setGatewayRPC(GatewayRPC::Ptr rpc)
 {
 	m_gatewayRPC = rpc;
-}
-
-void DeviceServiceImpl::setWorkFacade(WorkFacade::Ptr facade)
-{
-	m_workFacade = facade;
 }
 
 void DeviceServiceImpl::setAccessPolicy(DeviceAccessPolicy::Ptr policy)
