@@ -336,9 +336,19 @@ bool DeviceServiceImpl::tryActivateAndUpdate(Device &device,
 	const DeviceStatus &status = device.status();
 
 	if (!status.active()) {
-		Device copy(device);
+		device.status().setState(DeviceStatus::STATE_ACTIVE_PENDING);
+		device.status().setLastChanged({});
 
-		m_gatewayRPC->pairDevice([copy, this](GatewayRPCResult::Ptr r) {
+		if (!m_dao->update(device, gateway))
+			throw NotFoundException("device " + device + " seems to not exist");
+
+		Transactional lambda(this);
+		lambda.setTransactionManager(transactionManager());
+		DeviceDao::Ptr dao = m_dao;
+
+		m_gatewayRPC->pairDevice([device, gateway, lambda, dao](GatewayRPCResult::Ptr r) mutable {
+			Device copy(device);
+
 			switch (r->status()) {
 			case GatewayRPCResult::Status::PENDING:
 				Loggable::forClass(typeid(DeviceServiceImpl)).information(
@@ -356,25 +366,36 @@ bool DeviceServiceImpl::tryActivateAndUpdate(Device &device,
 				Loggable::forClass(typeid(DeviceServiceImpl)).information(
 					"device " + device + " successfully paired",
 					__FILE__, __LINE__);
+
+				copy.status().setState(DeviceStatus::STATE_ACTIVE);
+				copy.status().setLastChanged(Timestamp());
+				BEEEON_TRANSACTION_ON(lambda, dao->update(copy, gateway));
 				break;
 
 			case GatewayRPCResult::Status::FAILED:
 				Loggable::forClass(typeid(DeviceServiceImpl)).warning(
 					"device " + device + " failed to pair",
 					__FILE__, __LINE__);
+
+				copy.status().setState(DeviceStatus::STATE_INACTIVE);
+				copy.status().setLastChanged(Timestamp());
+				BEEEON_TRANSACTION_ON(lambda, dao->update(copy, gateway));
 				break;
+
 			case GatewayRPCResult::Status::TIMEOUT:
 			case GatewayRPCResult::Status::NOT_CONNECTED:
 				Loggable::forClass(typeid(DeviceServiceImpl)).warning(
 					"device " + device + " failed to pair on time",
 					__FILE__, __LINE__);
+
+				copy.status().setState(DeviceStatus::STATE_INACTIVE);
+				copy.status().setLastChanged(Timestamp());
+				BEEEON_TRANSACTION_ON(lambda, dao->update(copy, gateway));
 				break;
 			}
 		}, gateway, device);
 
-		device.status().setState(DeviceStatus::STATE_ACTIVE);
-		device.status().setLastChanged(Timestamp());
-		return m_dao->update(device, gateway);
+		return true;
 	}
 
 	return forceUpdate? m_dao->update(device, gateway) : false;

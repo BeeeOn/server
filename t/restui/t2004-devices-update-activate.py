@@ -146,7 +146,19 @@ class TestDevicesUpdateActivate(unittest.TestCase):
 		response, content = req()
 		result = json.loads(content)
 		self.assertEqual(200, response.status)
+		self.assertTrue("state" in result["data"])
+
+		while result["data"]["state"] == "active-pending":
+			req = GET(config.ui_host, config.ui_port,
+				"/gateways/" + config.gateway_id + "/devices/0xa371959aad24618e")
+			req.authorize(self.session)
+			response, content = req()
+
+			result = json.loads(content)
+			self.assertEqual(200, response.status)
+
 		self.assertTrue("active_since" in result["data"])
+		self.assertEqual("active", result["data"]["state"])
 
 		req = DELETE(config.ui_host, config.ui_port, "/gateways/" + config.gateway_id + "/devices/0xa371959aad24618e")
 		req.authorize(self.session)
