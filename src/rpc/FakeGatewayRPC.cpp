@@ -137,7 +137,8 @@ void FakeGatewayRPC::unpairDevice(
 		return;
 	}
 
-	device.status().setActiveSince(Nullable<Timestamp>());
+	device.status().setState(DeviceStatus::STATE_INACTIVE);
+	device.status().setLastChanged({});
 
 	if (!m_deviceDao->update(device, gateway)) {
 		logger().warning("failed to update device "

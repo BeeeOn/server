@@ -368,7 +368,8 @@ bool DeviceServiceImpl::tryActivateAndUpdate(Device &device,
 			}
 		}, gateway, device);
 
-		copy.status().setActiveSince(Timestamp());
+		device.status().setState(DeviceStatus::STATE_ACTIVE);
+		device.status().setLastChanged(Timestamp());
 		return m_dao->update(device, gateway);
 	}
 

@@ -96,8 +96,8 @@ bool PocoSQLDeviceDao::insert(Device &device, const Gateway &gateway)
 	unsigned long lastSeen = status.lastSeen().epochTime();
 
 	Nullable<unsigned long> activeSince;
-	if (!status.activeSince().isNull())
-		activeSince = status.activeSince().value().epochTime();
+	if (status.active())
+		activeSince = status.lastChanged().epochTime();
 
 	Statement sql = (session() << m_queryInsert(),
 		use(id, "id"),
@@ -146,8 +146,8 @@ bool PocoSQLDeviceDao::update(Device &device, const Gateway &gateway)
 	const DeviceStatus &status = device.status();
 
 	Nullable<unsigned long> activeSince;
-	if (!status.activeSince().isNull())
-		activeSince = status.activeSince().value().epochTime();
+	if (status.active())
+		activeSince = status.lastChanged().epochTime();
 
 	Statement sql = (session() << m_queryUpdate(),
 		use(locationID, "location_id"),
@@ -303,8 +303,15 @@ bool PocoSQLDeviceDao::parseSingle(Row &result, Device &device,
 	status.setFirstSeen(Timestamp::fromEpochTime(result[prefix + "first_seen"]));
 	status.setLastSeen(Timestamp::fromEpochTime(result[prefix + "last_seen"]));
 
-	if (!result[prefix + "active_since"].isEmpty())
-		status.setActiveSince(Timestamp::fromEpochTime(result[prefix + "active_since"]));
+	if (!result[prefix + "active_since"].isEmpty()) {
+		status.setState(DeviceStatus::STATE_ACTIVE);
+		status.setLastChanged(Timestamp::fromEpochTime(result[prefix + "active_since"]));
+	}
+	else {
+		status.setState(DeviceStatus::STATE_INACTIVE);
+		// use first-seen until the db schema is fixed
+		status.setLastChanged(status.firstSeen());
+	}
 
 	device.setStatus(status);
 

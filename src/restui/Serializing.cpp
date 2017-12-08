@@ -307,9 +307,31 @@ void BeeeOn::RestUI::serialize(PrintHandler &output, const Device &device)
 	output.key("last_seen");
 	output.value(status.lastSeen().epochTime());
 
-	if (!status.activeSince().isNull()) {
+	if (status.active()) {
 		output.key("active_since");
-		output.value(status.activeSince().value().epochTime());
+		output.value(status.lastChanged().epochTime());
+	}
+
+	output.key("last_changed");
+	output.value(status.lastChanged().epochTime());
+
+	output.key("state");
+	switch (status.state()) {
+	case DeviceStatus::STATE_INACTIVE:
+		output.value(string("inactive"));
+		break;
+	case DeviceStatus::STATE_INACTIVE_PENDING:
+		output.value(string("inactive-pending"));
+		break;
+	case DeviceStatus::STATE_ACTIVE:
+		output.value(string("active"));
+		break;
+	case DeviceStatus::STATE_ACTIVE_PENDING:
+		output.value(string("active-pending"));
+		break;
+	default:
+		throw IllegalStateException(
+			"unexpected state: " + to_string(status.state()));
 	}
 
 	output.key("refresh_time");

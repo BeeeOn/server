@@ -1,6 +1,5 @@
 #pragma once
 
-#include <Poco/Nullable.h>
 #include <Poco/Timestamp.h>
 
 namespace BeeeOn {
@@ -47,12 +46,12 @@ public:
 	void setLastSeen(const Poco::Timestamp &at);
 	const Poco::Timestamp &lastSeen() const;
 
-	void setActiveSince(const Poco::Nullable<Poco::Timestamp> &at);
-	const Poco::Nullable<Poco::Timestamp> &activeSince() const;
+	void setLastChanged(const Poco::Timestamp &at);
+	const Poco::Timestamp &lastChanged() const;
 
 	bool active() const
 	{
-		return !activeSince().isNull();
+		return m_state == STATE_ACTIVE;
 	}
 
 	void setState(State state);
@@ -61,7 +60,7 @@ public:
 private:
 	Poco::Timestamp m_firstSeen;
 	Poco::Timestamp m_lastSeen;
-	Poco::Nullable<Poco::Timestamp> m_activeSince;
+	Poco::Timestamp m_lastChanged;
 	State m_state;
 };
 

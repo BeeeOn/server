@@ -32,14 +32,14 @@ const Timestamp &DeviceStatus::lastSeen() const
 	return m_lastSeen;
 }
 
-void DeviceStatus::setActiveSince(const Nullable<Timestamp> &at)
+void DeviceStatus::setLastChanged(const Timestamp &at)
 {
-	m_activeSince = at;
+	m_lastChanged = at;
 }
 
-const Nullable<Timestamp> &DeviceStatus::activeSince() const
+const Timestamp &DeviceStatus::lastChanged() const
 {
-	return m_activeSince;
+	return m_lastChanged;
 }
 
 void DeviceStatus::setState(State state)

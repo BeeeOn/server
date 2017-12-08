@@ -47,8 +47,8 @@ bool GWSDeviceServiceImpl::doRegisterDevice(Device &device,
 
 		status.setFirstSeen(Timestamp());
 		status.setLastSeen(Timestamp());
-
-		status.setActiveSince(Nullable<Timestamp>());
+		status.setState(DeviceStatus::STATE_INACTIVE);
+		status.setLastChanged({});
 
 		return m_deviceDao->insert(device, gateway);
 	}
