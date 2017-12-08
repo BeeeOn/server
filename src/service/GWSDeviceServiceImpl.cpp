@@ -28,7 +28,7 @@ bool GWSDeviceServiceImpl::doRegisterDevice(Device &device,
 		const Gateway &gateway)
 {
 	if (m_deviceDao->fetch(device, gateway)) {
-		device.setLastSeen(Timestamp());
+		device.status().setLastSeen(Timestamp());
 
 		return m_deviceDao->update(device, gateway);
 	}
@@ -43,10 +43,12 @@ bool GWSDeviceServiceImpl::doRegisterDevice(Device &device,
 
 		device.setType(type);
 
-		device.setFirstSeen(Timestamp());
-		device.setLastSeen(Timestamp());
+		DeviceStatus &status = device.status();
 
-		device.setActiveSince(Nullable<Timestamp>());
+		status.setFirstSeen(Timestamp());
+		status.setLastSeen(Timestamp());
+
+		status.setActiveSince(Nullable<Timestamp>());
 
 		return m_deviceDao->insert(device, gateway);
 	}

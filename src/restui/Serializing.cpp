@@ -300,14 +300,16 @@ void BeeeOn::RestUI::serialize(PrintHandler &output, const Device &device)
 	output.value(device.id().prefix().toString());
 	output.endObject();
 
-	output.key("first_seen");
-	output.value(device.firstSeen().epochTime());
-	output.key("last_seen");
-	output.value(device.lastSeen().epochTime());
+	const DeviceStatus &status = device.status();
 
-	if (!device.activeSince().isNull()) {
+	output.key("first_seen");
+	output.value(status.firstSeen().epochTime());
+	output.key("last_seen");
+	output.value(status.lastSeen().epochTime());
+
+	if (!status.activeSince().isNull()) {
 		output.key("active_since");
-		output.value(device.activeSince().value().epochTime());
+		output.value(status.activeSince().value().epochTime());
 	}
 
 	output.key("refresh_time");

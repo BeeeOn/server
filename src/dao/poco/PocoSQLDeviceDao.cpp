@@ -90,12 +90,14 @@ bool PocoSQLDeviceDao::insert(Device &device, const Gateway &gateway)
 	if (!device.signal().isNull())
 		signal = device.signal().value().get();
 
-	unsigned long firstSeen = device.firstSeen().epochTime();
-	unsigned long lastSeen = device.lastSeen().epochTime();
+	const DeviceStatus &status = device.status();
+
+	unsigned long firstSeen = status.firstSeen().epochTime();
+	unsigned long lastSeen = status.lastSeen().epochTime();
 
 	Nullable<unsigned long> activeSince;
-	if (!device.activeSince().isNull())
-		activeSince = device.activeSince().value().epochTime();
+	if (!status.activeSince().isNull())
+		activeSince = status.activeSince().value().epochTime();
 
 	Statement sql = (session() << m_queryInsert(),
 		use(id, "id"),
@@ -141,9 +143,11 @@ bool PocoSQLDeviceDao::update(Device &device, const Gateway &gateway)
 	if (!device.signal().isNull())
 		signal = device.signal().value().get();
 
+	const DeviceStatus &status = device.status();
+
 	Nullable<unsigned long> activeSince;
-	if (!device.activeSince().isNull())
-		activeSince = device.activeSince().value().epochTime();
+	if (!status.activeSince().isNull())
+		activeSince = status.activeSince().value().epochTime();
 
 	Statement sql = (session() << m_queryUpdate(),
 		use(locationID, "location_id"),
@@ -294,14 +298,15 @@ bool PocoSQLDeviceDao::parseSingle(Row &result, Device &device,
 	device.setRefresh(result[prefix + "refresh"].convert<unsigned int>());
 	device.setBattery(whenNull(result[prefix + "battery"], 0));
 	device.setSignal(whenNull(result[prefix + "signal"], 0));
-	device.setFirstSeen(Timestamp::fromEpochTime(result[prefix + "first_seen"]));
-	device.setLastSeen(Timestamp::fromEpochTime(result[prefix + "last_seen"]));
 
-	Nullable<Timestamp> activeSince;
+	DeviceStatus status;
+	status.setFirstSeen(Timestamp::fromEpochTime(result[prefix + "first_seen"]));
+	status.setLastSeen(Timestamp::fromEpochTime(result[prefix + "last_seen"]));
+
 	if (!result[prefix + "active_since"].isEmpty())
-		activeSince = Timestamp::fromEpochTime(result[prefix + "active_since"]);
+		status.setActiveSince(Timestamp::fromEpochTime(result[prefix + "active_since"]));
 
-	device.setActiveSince(activeSince);
+	device.setStatus(status);
 
 	markLoaded(device);
 	return true;

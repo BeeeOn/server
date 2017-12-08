@@ -333,7 +333,9 @@ bool DeviceServiceImpl::doActivate(Relation<Device, Gateway> &input)
 bool DeviceServiceImpl::tryActivateAndUpdate(Device &device,
 		const Gateway &gateway, bool forceUpdate)
 {
-	if (!device.active()) {
+	const DeviceStatus &status = device.status();
+
+	if (!status.active()) {
 		Device copy(device);
 
 		m_gatewayRPC->pairDevice([copy, this](GatewayRPCResult::Ptr r) {
@@ -366,7 +368,7 @@ bool DeviceServiceImpl::tryActivateAndUpdate(Device &device,
 			}
 		}, gateway, device);
 
-		device.setActiveSince(Timestamp());
+		copy.status().setActiveSince(Timestamp());
 		return m_dao->update(device, gateway);
 	}
 

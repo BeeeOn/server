@@ -66,47 +66,12 @@ public:
 	const DeviceStatus &status() const;
 	DeviceStatus &status();
 
-	void setFirstSeen(const Poco::Timestamp &at)
-	{
-		m_status.setFirstSeen(at);
-	}
-
-	const Poco::Timestamp &firstSeen() const
-	{
-		return m_status.firstSeen();
-	}
-
-	void setLastSeen(const Poco::Timestamp &at)
-	{
-		m_status.setLastSeen(at);
-	}
-
-	const Poco::Timestamp &lastSeen() const
-	{
-		return m_status.lastSeen();
-	}
-
 	/**
 	 * A device is available when it has been last seen
 	 * after a certain multiple of refresh time.
 	 */
 	bool available(const unsigned int multiple = 3,
 			const Poco::Timestamp &ref = Poco::Timestamp()) const;
-
-	void setActiveSince(const Poco::Nullable<Poco::Timestamp> &at)
-	{
-		m_status.setActiveSince(at);
-	}
-
-	const Poco::Nullable<Poco::Timestamp> &activeSince() const
-	{
-		return m_status.activeSince();
-	}
-
-	bool active() const
-	{
-		return m_status.active();
-	}
 
 private:
 	Gateway m_gateway;

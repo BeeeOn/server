@@ -127,14 +127,16 @@ void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
 	else
 		attrs.addAttribute("", "name", "name", "", device.name());
 
+	const DeviceStatus &status = device.status();
+
 	attrs.addAttribute("", "status", "status", "",
 			device.available()? "available" : "unavailable");
 	attrs.addAttribute("", "time", "time", "",
-			to_string(device.lastSeen().epochTime()));
+			to_string(status.lastSeen().epochTime()));
 	attrs.addAttribute("", "involved", "involved", "",
-			to_string(device.firstSeen().epochTime()));
+			to_string(status.firstSeen().epochTime()));
 	attrs.addAttribute("", "init", "init", "",
-			device.active()? "1" : "0");
+			status.active()? "1" : "0");
 
 	const Poco::SharedPtr<DeviceInfo> info = device.type();
 
