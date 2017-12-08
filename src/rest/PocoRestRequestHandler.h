@@ -51,6 +51,10 @@ protected:
 	 */
 	bool expectedContentLength();
 
+	/**
+	 * @return string representation of the given action parameters for
+	 * debugging purposes.
+	 */
 	std::string asString(const MappedRestAction::Params &params) const;
 
 	void prepareInternalAction(const RestAction::Ptr action);
