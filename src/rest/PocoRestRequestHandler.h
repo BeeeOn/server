@@ -57,8 +57,17 @@ protected:
 	 */
 	std::string asString(const MappedRestAction::Params &params) const;
 
+	/**
+	 * Prepare the HTTP response for handling the given internal action.
+	 * The internal actions are non-cachable.
+	 */
 	void prepareInternalAction(const RestAction::Ptr action);
 
+	/**
+	 * Prepare the HTTP response for handling the given user action.
+	 * This usually contains applying of cache headers from the action
+	 * settings.
+	 */
 	void prepareMappedAction(const MappedRestAction::Ptr action);
 
 private:
