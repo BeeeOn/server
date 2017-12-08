@@ -145,19 +145,13 @@ void PocoRestRequestHandler::setupLanguage(RestFlow &flow)
 	if (logger().debug())
 		logger().debug("resolved HTTP locale: " + httpLocale.toString());
 
+	const Locale &locale = flow.locale();
 
-	if (m_session.isNull()) {
-		Translator::Ptr translator = m_translatorFactory.create(httpLocale);
-		flow.setTranslator(translator);
-	}
-	else {
-		Translator::Ptr translator = m_translatorFactory.create(m_session->locale());
+	if (logger().debug())
+		logger().debug("using locale: " + locale.toString());
 
-		if (logger().debug())
-			logger().debug("using user locale: " + m_session->locale().toString());
-
-		flow.setTranslator(translator);
-	}
+	Translator::Ptr translator = m_translatorFactory.create(locale);
+	flow.setTranslator(translator);
 }
 
 void PocoRestRequestHandler::doHandleRequest()
