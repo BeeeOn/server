@@ -145,7 +145,7 @@ void PocoRestRequestHandler::setupLanguage(RestFlow &flow)
 	if (logger().debug())
 		logger().debug("resolved HTTP locale: " + httpLocale.toString());
 
-	const Locale &locale = flow.locale();
+	const Locale &locale = flow.locale(request().get("X-Prefer-Request-Language", "no") == "yes");
 
 	if (logger().debug())
 		logger().debug("using locale: " + locale.toString());
