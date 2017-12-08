@@ -3,7 +3,8 @@
 using namespace Poco;
 using namespace BeeeOn;
 
-DeviceStatus::DeviceStatus()
+DeviceStatus::DeviceStatus():
+	m_state(STATE_INACTIVE)
 {
 }
 
@@ -39,4 +40,14 @@ void DeviceStatus::setActiveSince(const Nullable<Timestamp> &at)
 const Nullable<Timestamp> &DeviceStatus::activeSince() const
 {
 	return m_activeSince;
+}
+
+void DeviceStatus::setState(State state)
+{
+	m_state = state;
+}
+
+DeviceStatus::State DeviceStatus::state() const
+{
+	return m_state;
 }
