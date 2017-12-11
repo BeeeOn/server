@@ -61,6 +61,18 @@ public:
 
 	bool appliesDST(const Poco::Timestamp &at) const override;
 
+protected:
+	/**
+	 * If the time zone with the given id is from region "001" (world),
+	 * try to derive its display name. This allows to give names like
+	 * <code>Central Standard Time</code>, <code>Greenwich Mean Time</code>,
+	 * etc. The method returns an empty string from non-world time zones.
+	 * For some time zones, the result is the LONG_GMT format like <code>GMT+1</code>.
+	 */
+	std::string worldName(const std::string &id,
+			const Locale &locale,
+			const Poco::Timestamp &at) const;
+
 private:
 	Poco::SharedPtr<icu::TimeZone> m_zone;
 };
