@@ -17,6 +17,12 @@ public:
 	Poco::Nullable<TimeZone> findById(const std::string &id) override;
 
 	/**
+	 * Finds all compatible zones via icu::TimeZone::createTimeZoneIDEnumeration()
+	 * with UCAL_ZONE_TYPE_CANONICAL parameter.
+	 */
+	Poco::Nullable<TimeZone> findByOffset(const Poco::Timespan &offset) override;
+
+	/**
 	 * List all time zones via icu::TimeZone::createTimeZoneIDEnumeration()
 	 * with UCAL_ZONE_TYPE_CANONICAL_LOCATION parameter. This should provide
 	 * only timezones related to a location like Europe/Prague, Pacific/Tahiti, etc.

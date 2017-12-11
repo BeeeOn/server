@@ -43,6 +43,36 @@ string IcuTimeZoneImpl::shortName(const Locale &locale, const Timestamp &at) con
 	return gmt.toUTF8String(utf8gmt);
 }
 
+string IcuTimeZoneImpl::worldName(const string &id, const Locale &locale, const Timestamp &at) const
+{
+	SharedPtr<IcuLocaleImpl> icuLocale = locale.impl().cast<IcuLocaleImpl>();
+
+	char regionBuffer[4];
+	UErrorCode error = U_ZERO_ERROR;
+	const icu::UnicodeString utcId(id.c_str(), id.size());
+
+	const int32_t regionLength = icu::TimeZone::getRegion(
+			utcId, regionBuffer, sizeof(regionBuffer), error);
+
+	if (!U_SUCCESS(error))
+		return "";
+
+	const string region(regionBuffer, regionLength);
+
+	if (region == "001") {
+		icu::UnicodeString uniName;
+		if (icuLocale.isNull())
+			m_zone->getDisplayName(appliesDST(at), icu::TimeZone::LONG, uniName);
+		else
+			m_zone->getDisplayName(appliesDST(at), icu::TimeZone::LONG, icuLocale->icu(), uniName);
+
+		string name;
+		return uniName.toUTF8String(name);
+	}
+
+	return "";
+}
+
 string IcuTimeZoneImpl::displayName(const Locale &locale, const Timestamp &at) const
 {
 	SharedPtr<IcuLocaleImpl> icuLocale = locale.impl().cast<IcuLocaleImpl>();
@@ -57,7 +87,16 @@ string IcuTimeZoneImpl::displayName(const Locale &locale, const Timestamp &at) c
 	string utf8gmt;
 	gmt.toUTF8String(utf8gmt);
 
-	return id() + " (" + utf8gmt + ")";
+	const string &zoneId = id();
+	const string &name = worldName(zoneId, locale, at);
+
+	if (!name.empty() && name != utf8gmt)
+		return name + " (" + utf8gmt + ")";
+
+	if (utf8gmt != zoneId)
+		return zoneId + " (" + utf8gmt + ")";
+
+	return utf8gmt;
 }
 
 Timespan IcuTimeZoneImpl::utcOffset() const
