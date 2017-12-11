@@ -53,18 +53,12 @@ TimeZone XmlGatewayDeserializer::extractTimeZone(const Element &node) const
 	TimeZoneProvider::Ptr provider = m_timeZoneProvider; // get rid of const
 
 	const Timespan &utcOffset = attributeAsInt(node, "timezone") * Timespan::SECONDS;
+	Nullable<TimeZone> zone = provider->findByOffset(utcOffset);
 
-	std::vector<TimeZone> zones;
-	provider->listTimeZones(zones);
+	if (zone.isNull())
+		throw InvalidArgumentException("fail to detemine timezone");
 
-	for (const auto &zone : zones) {
-		if (zone.utcOffset() != utcOffset)
-			continue;
-
-		return zone;
-	}
-
-	throw InvalidArgumentException("fail to detemine timezone");
+	return zone;
 }
 
 void XmlGatewayDeserializer::partial(Gateway &gateway) const
