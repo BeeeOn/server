@@ -133,7 +133,7 @@
 		<vendor>Thermona</vendor>
 
 		<match>
-			<pattern name="Zone ." vendor="Thermona" />
+			<pattern name="Zone ?" vendor="Thermona" />
 		</match>
 
 		<modules>

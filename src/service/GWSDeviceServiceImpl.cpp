@@ -34,7 +34,14 @@ bool GWSDeviceServiceImpl::doRegisterDevice(Device &device,
 	}
 	else {
 		device.setName(name);
-		device.setType(m_deviceInfoProvider->findByNameAndVendor(name, vendor));
+
+		auto type = m_deviceInfoProvider->findByNameAndVendor(name, vendor);
+		if (type.isNull()) {
+			throw NotFoundException("no such device type for "
+				"'" + vendor + "' '" + name + "' specification");
+		}
+
+		device.setType(type);
 
 		device.setFirstSeen(DateTime());
 		device.setLastSeen(DateTime());
