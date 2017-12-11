@@ -37,5 +37,12 @@
 			<set name="backOffFactory" ref="fcmBackOff" />
 			<set name="transactionManager" ref="transactionManager" />
 		</instance>
+
+		<instance name="stdConsole" class="BeeeOn::StdConsole" />
+
+		<instance name="deviceMatchingTester" class="BeeeOn::DeviceMatchingTester">
+			<set name="console" ref="stdConsole" />
+			<set name="deviceInfoProvider" ref="deviceInfoProvider" />
+		</instance>
 	</factory>
 </system>
