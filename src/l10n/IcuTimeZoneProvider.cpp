@@ -37,6 +37,48 @@ Nullable<BeeeOn::TimeZone> IcuTimeZoneProvider::findById(const string &id)
 	return zone;
 }
 
+Nullable<BeeeOn::TimeZone> IcuTimeZoneProvider::findByOffset(const Timespan &offset)
+{
+	Nullable<BeeeOn::TimeZone> zone;
+	UErrorCode error = U_ZERO_ERROR;
+	const int32_t rawOffset = offset.totalMilliseconds();
+
+	SharedPtr<icu::StringEnumeration> e =
+		icu::TimeZone::createTimeZoneIDEnumeration(
+			UCAL_ZONE_TYPE_CANONICAL,
+			"001", // world
+			&rawOffset,
+			error
+		);
+
+	if (!U_SUCCESS(error)) {
+		logger().warning(u_errorName(error), __FILE__, __LINE__);
+		return zone;
+	}
+
+	const UnicodeString *id;
+
+	UnicodeString unknownID;
+	icu::TimeZone::getUnknown().getID(unknownID);
+
+	while ((id = e->snext(error)) != NULL) {
+		if (!U_SUCCESS(error)) {
+			logger().warning(u_errorName(error), __FILE__, __LINE__);
+			continue; // skip
+		}
+
+		SharedPtr<icu::TimeZone> impl = icu::TimeZone::createTimeZone(*id);
+		UnicodeString tmp;
+		if (impl->getID(tmp) == unknownID)
+			continue; // skip unknown ID, should not happen here
+
+		zone = TimeZone(new IcuTimeZoneImpl(impl));
+		break;
+	}
+
+	return zone;
+}
+
 void IcuTimeZoneProvider::listTimeZones(vector<TimeZone> &zones)
 {
 	UErrorCode error = U_ZERO_ERROR;

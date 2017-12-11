@@ -6,6 +6,7 @@
 
 #include <Poco/Nullable.h>
 #include <Poco/SharedPtr.h>
+#include <Poco/Timespan.h>
 
 #include "l10n/Locale.h"
 #include "l10n/TimeZone.h"
@@ -30,6 +31,12 @@ public:
 	 * If no such time zone information is found, it returns NULL.
 	 */
 	virtual Poco::Nullable<TimeZone> findById(const std::string &id) = 0;
+
+	/**
+	 * @returns time zone information by the given UTC offset.
+	 * If no such time zone information is found, it returns NULL.
+	 */
+	virtual Poco::Nullable<TimeZone> findByOffset(const Poco::Timespan &offset) = 0;
 
 	/**
 	 * @returns all supported time zone information in the system.
