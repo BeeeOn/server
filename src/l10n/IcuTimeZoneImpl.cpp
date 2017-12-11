@@ -57,7 +57,11 @@ string IcuTimeZoneImpl::displayName(const Locale &locale, const Timestamp &at) c
 	string utf8gmt;
 	gmt.toUTF8String(utf8gmt);
 
-	return id() + " (" + utf8gmt + ")";
+	const string &zoneId = id();
+	if (utf8gmt == zoneId)
+		return zoneId;
+
+	return zoneId + " (" + utf8gmt + ")";
 }
 
 Timespan IcuTimeZoneImpl::utcOffset() const

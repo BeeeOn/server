@@ -15,11 +15,13 @@ class IcuTimeZoneImplTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST_SUITE(IcuTimeZoneImplTest);
 	CPPUNIT_TEST(testPrague);
 	CPPUNIT_TEST(testLondon);
+	CPPUNIT_TEST(testSpecificID);
 	CPPUNIT_TEST_SUITE_END();
 
 public:
 	void testPrague();
 	void testLondon();
+	void testSpecificID();
 
 private:
 	SharedPtr<icu::TimeZone> byID(const string &id);
@@ -95,6 +97,43 @@ void IcuTimeZoneImplTest::testLondon()
 	);
 	CPPUNIT_ASSERT_EQUAL(
 		"Europe/London (GMT+01:00)",
+		zone.displayName(Locale::system(), T2017_06_24)
+	);
+}
+
+/**
+ * Test GMT+01:00 specific time zones. Thowse zones are low-level and the DST
+ * does not applies to them.
+ */
+void IcuTimeZoneImplTest::testSpecificID()
+{
+	static const Timestamp T2017_06_24 = Timestamp::fromEpochTime(1498255200);
+	static const Timestamp T2017_12_24 = Timestamp::fromEpochTime(1514070000);
+
+	const IcuTimeZoneImpl zone(byID("GMT+01:00"));
+
+	CPPUNIT_ASSERT_EQUAL("GMT+01:00", zone.id());
+
+	CPPUNIT_ASSERT_EQUAL(1, zone.utcOffset().hours());
+	CPPUNIT_ASSERT_EQUAL(1, zone.dstOffset().hours());
+	CPPUNIT_ASSERT(!zone.appliesDST(T2017_06_24));
+	CPPUNIT_ASSERT(!zone.appliesDST(T2017_12_24));
+
+	CPPUNIT_ASSERT_EQUAL(
+		"GMT+01:00",
+		zone.shortName(Locale::system(), T2017_12_24)
+	);
+	CPPUNIT_ASSERT_EQUAL(
+		"GMT+01:00",
+		zone.shortName(Locale::system(), T2017_06_24)
+	);
+
+	CPPUNIT_ASSERT_EQUAL(
+		"GMT+01:00",
+		zone.displayName(Locale::system(), T2017_12_24)
+	);
+	CPPUNIT_ASSERT_EQUAL(
+		"GMT+01:00",
 		zone.displayName(Locale::system(), T2017_06_24)
 	);
 }
