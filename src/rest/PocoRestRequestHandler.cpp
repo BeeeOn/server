@@ -33,6 +33,16 @@ PocoRestRequestHandler::PocoRestRequestHandler(
 {
 }
 
+void PocoRestRequestHandler::setStarted(const Clock &started)
+{
+	m_started = started;
+}
+
+const Clock &PocoRestRequestHandler::started() const
+{
+	return m_started;
+}
+
 void PocoRestRequestHandler::setAction(RestAction::Ptr action)
 {
 	m_action = action;
@@ -131,6 +141,12 @@ void PocoRestRequestHandler::run()
 		current->setName("restui-" + request().clientAddress().toString());
 
 	doHandleRequest();
+
+	if (logger().information()) {
+		logger().information("duration: "
+				+ to_string(m_started.elapsed()) + "us",
+				__FILE__, __LINE__);
+	}
 
 	if (current != NULL)
 		current->setName("");
@@ -358,6 +374,8 @@ PocoRestRequestHandler *PocoRestRequestFactory::createWithSession(
 HTTPRequestHandler *PocoRestRequestFactory::createRequestHandler(
 		const HTTPServerRequest &request)
 {
+	const Clock started;
+
 	if (logger().information()) {
 		logger().information("handling request "
 			+ request.getMethod()
@@ -379,11 +397,15 @@ HTTPRequestHandler *PocoRestRequestFactory::createRequestHandler(
 		if (action.isNull())
 			return handleNoRoute(request);
 
-		return createWithSession(
+		PocoRestRequestHandler *handler = createWithSession(
 			action,
 			params,
 			request
 		);
+
+		handler->setStarted(started);
+
+		return handler;
 	} catch (const Exception &e) {
 		logger().log(e, __FILE__, __LINE__);
 		e.rethrow();

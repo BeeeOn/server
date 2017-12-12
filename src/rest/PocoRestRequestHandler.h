@@ -1,6 +1,7 @@
 #ifndef BEEEON_POCO_REST_REQUEST_HANDLER_H
 #define BEEEON_POCO_REST_REQUEST_HANDLER_H
 
+#include <Poco/Clock.h>
 #include <Poco/Net/AbstractHTTPRequestHandler.h>
 #include <Poco/Net/HTTPRequestHandlerFactory.h>
 
@@ -34,6 +35,9 @@ public:
 			TranslatorFactory &factory,
 			HTTPLocaleExtractor &localeExtractor,
 			HTTPFilterChain &filterChain);
+
+	void setStarted(const Poco::Clock &started);
+	const Poco::Clock &started() const;
 
 	void setAction(RestAction::Ptr action);
 	void setActionParams(const MappedRestAction::Params &params);
@@ -79,6 +83,7 @@ private:
 	TranslatorFactory &m_translatorFactory;
 	HTTPLocaleExtractor &m_localeExtractor;
 	HTTPFilterChain &m_filterChain;
+	Poco::Clock m_started;
 };
 
 /**
