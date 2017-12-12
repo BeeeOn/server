@@ -43,12 +43,31 @@ protected:
 	void run() override;
 	void doHandleRequest();
 
+	/**
+	 * Test whether the request contains Content-Length if required.
+	 * When missing it, such request would fail. If the Content-Length
+	 * is present and required, check that the value does not exceed
+	 * the limit for the resolved action.
+	 */
 	bool expectedContentLength();
 
+	/**
+	 * @return string representation of the given action parameters for
+	 * debugging purposes.
+	 */
 	std::string asString(const MappedRestAction::Params &params) const;
 
+	/**
+	 * Prepare the HTTP response for handling the given internal action.
+	 * The internal actions are non-cachable.
+	 */
 	void prepareInternalAction(const RestAction::Ptr action);
 
+	/**
+	 * Prepare the HTTP response for handling the given user action.
+	 * This usually contains applying of cache headers from the action
+	 * settings.
+	 */
 	void prepareMappedAction(const MappedRestAction::Ptr action);
 
 private:

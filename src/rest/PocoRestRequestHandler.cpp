@@ -54,7 +54,7 @@ bool PocoRestRequestHandler::expectedContentLength()
 	const string &method = request().getMethod();
 
 	if (method != "POST" && method != "PUT" && method != "PATCH")
-		return true;;
+		return true;
 
 	if (!request().hasContentLength()) {
 		response().setStatusAndReason(HTTPResponse::HTTP_LENGTH_REQUIRED);
