@@ -1,4 +1,5 @@
 #include <Poco/Buffer.h>
+#include <Poco/Clock.h>
 #include <Poco/Logger.h>
 #include <Poco/SharedPtr.h>
 #include <Poco/JSON/Object.h>
@@ -16,6 +17,8 @@ using namespace BeeeOn;
 
 void WebSocketRequestHandler::run()
 {
+	const Clock started;
+
 	try {
 		Thread::current()->setName("ws");
 
@@ -49,6 +52,12 @@ void WebSocketRequestHandler::run()
 	}
 	catch (...) {
 		logger().critical("unknown error, cought '...'", __FILE__, __LINE__);
+	}
+
+	if (logger().information()) {
+		logger().information("duration: "
+			+ to_string(started.elapsed()) + "us",
+			__FILE__, __LINE__);
 	}
 }
 
