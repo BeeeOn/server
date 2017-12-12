@@ -1,9 +1,7 @@
 #ifndef BEEEON_WEBSOCKET_REQUEST_HANDLER_H
 #define BEEEON_WEBSOCKET_REQUEST_HANDLER_H
 
-#include <Poco/Net/HTTPServerRequest.h>
-#include <Poco/Net/HTTPServerResponse.h>
-#include <Poco/Net/HTTPRequestHandler.h>
+#include <Poco/Net/AbstractHTTPRequestHandler.h>
 #include <Poco/Net/HTTPRequestHandlerFactory.h>
 
 #include "gws/GatewayCommunicator.h"
@@ -20,7 +18,7 @@ namespace BeeeOn {
  * this handler is destroyed.
  */
 class WebSocketRequestHandler :
-	public Poco::Net::HTTPRequestHandler,
+	public Poco::Net::AbstractHTTPRequestHandler,
 	protected Loggable {
 public:
 	WebSocketRequestHandler(
@@ -40,9 +38,7 @@ public:
 	 * Successfully registered Gateway connection (using GatewayService)
 	 * is added to the GatewayCommunicator.
 	 */
-	void handleRequest(
-		Poco::Net::HTTPServerRequest &request,
-		Poco::Net::HTTPServerResponse &response);
+	void run();
 
 private:
 	size_t m_maxMessageSize;

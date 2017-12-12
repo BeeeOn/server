@@ -14,13 +14,12 @@ using namespace Poco;
 using namespace Poco::Net;
 using namespace BeeeOn;
 
-void WebSocketRequestHandler::handleRequest(
-	HTTPServerRequest &request, HTTPServerResponse &response)
+void WebSocketRequestHandler::run()
 {
 	try {
 		Thread::current()->setName("ws");
 
-		WebSocket ws(request, response);
+		WebSocket ws(request(), response());
 
 		Poco::Buffer<char> buffer(m_maxMessageSize);
 		int flags;
