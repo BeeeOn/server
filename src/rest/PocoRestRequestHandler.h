@@ -41,6 +41,7 @@ public:
 
 protected:
 	void run() override;
+	void setupLanguage(RestFlow &flow);
 	void doHandleRequest();
 
 	/**
