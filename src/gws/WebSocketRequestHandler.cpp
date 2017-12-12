@@ -39,38 +39,7 @@ void WebSocketRequestHandler::run()
 				__FILE__, __LINE__);
 
 		string data(buffer.begin(), ret);
-		if (logger().trace())
-			logger().trace(data);
-
-		GWMessage::Ptr msg = GWMessage::fromJSON(data);
-		GWGatewayRegister::Ptr registerMsg = msg.cast<GWGatewayRegister>();
-
-		if (registerMsg.isNull()) {
-			logger().warning("invalid message from "
-				+ ws.peerAddress().toString() + ":\n"
-				+ msg->toString(),
-				__FILE__, __LINE__);
-			return;
-		}
-
-		Gateway gateway(registerMsg->gatewayID());
-
-		Thread::current()->setName("ws-" + gateway);
-
-		GatewayStatus status;
-		status.setVersion(Sanitize::common(registerMsg->version()));
-		status.setIPAddress(registerMsg->ipAddress());
-
-		if (!m_gatewayService->registerGateway(status, gateway)) {
-			logger().error("failed to register gateway "
-					+ gateway, __FILE__, __LINE__);
-			return;
-		}
-
-		data = GWGatewayAccepted().toString();
-		ws.sendFrame(data.c_str(), data.length());
-
-		m_gatewayCommunicator->addGateway(gateway.id(), ws);
+		processPayload(ws, data);
 	}
 	catch (const Exception &e) {
 		logger().log(e, __FILE__, __LINE__);
@@ -83,3 +52,40 @@ void WebSocketRequestHandler::run()
 	}
 }
 
+void WebSocketRequestHandler::processPayload(
+		WebSocket &ws,
+		string data)
+{
+	if (logger().trace())
+		logger().trace(data);
+
+	GWMessage::Ptr msg = GWMessage::fromJSON(data);
+	GWGatewayRegister::Ptr registerMsg = msg.cast<GWGatewayRegister>();
+
+	if (registerMsg.isNull()) {
+		logger().warning("invalid message from "
+			+ ws.peerAddress().toString() + ":\n"
+			+ msg->toString(),
+			__FILE__, __LINE__);
+		return;
+	}
+
+	Gateway gateway(registerMsg->gatewayID());
+
+	Thread::current()->setName("ws-" + gateway);
+
+	GatewayStatus status;
+	status.setVersion(Sanitize::common(registerMsg->version()));
+	status.setIPAddress(registerMsg->ipAddress());
+
+	if (!m_gatewayService->registerGateway(status, gateway)) {
+		logger().error("failed to register gateway "
+				+ gateway, __FILE__, __LINE__);
+		return;
+	}
+
+	data = GWGatewayAccepted().toString();
+	ws.sendFrame(data.c_str(), data.length());
+
+	m_gatewayCommunicator->addGateway(gateway.id(), ws);
+}

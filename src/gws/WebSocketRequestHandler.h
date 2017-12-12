@@ -1,8 +1,11 @@
 #ifndef BEEEON_WEBSOCKET_REQUEST_HANDLER_H
 #define BEEEON_WEBSOCKET_REQUEST_HANDLER_H
 
+#include <string>
+
 #include <Poco/Net/AbstractHTTPRequestHandler.h>
 #include <Poco/Net/HTTPRequestHandlerFactory.h>
+#include <Poco/Net/WebSocket.h>
 
 #include "gws/GatewayCommunicator.h"
 #include "service/GWSGatewayServiceImpl.h"
@@ -39,6 +42,15 @@ public:
 	 * is added to the GatewayCommunicator.
 	 */
 	void run();
+
+protected:
+	/**
+	 * Process the received WebSocket frame, generate a response and
+	 * register the gateway with GatewayCommunicator.
+	 */
+	void processPayload(
+		Poco::Net::WebSocket &ws,
+		std::string data);
 
 private:
 	size_t m_maxMessageSize;
