@@ -291,7 +291,7 @@ PocoRestRequestHandler *PocoRestRequestFactory::createHandler(
 	}
 }
 
-HTTPRequestHandler *PocoRestRequestFactory::routeBuiltin(const string &name)
+PocoRestRequestHandler *PocoRestRequestFactory::routeBuiltin(const string &name)
 {
 	RestAction::Ptr target = m_router.lookup("builtin", name);
 	if (target.isNull())
@@ -300,7 +300,7 @@ HTTPRequestHandler *PocoRestRequestFactory::routeBuiltin(const string &name)
 	return createHandler(target);
 }
 
-HTTPRequestHandler *PocoRestRequestFactory::handleNoRoute(const HTTPServerRequest &request)
+PocoRestRequestHandler *PocoRestRequestFactory::handleNoRoute(const HTTPServerRequest &request)
 {
 	if (logger().debug()) {
 		logger().debug("no action resolved for "
@@ -313,7 +313,7 @@ HTTPRequestHandler *PocoRestRequestFactory::handleNoRoute(const HTTPServerReques
 	return routeBuiltin("noroute");
 }
 
-HTTPRequestHandler *PocoRestRequestFactory::handleNoSession()
+PocoRestRequestHandler *PocoRestRequestFactory::handleNoSession()
 {
 	if (logger().debug()) {
 		logger().debug("missing session, redirecting...",
@@ -323,7 +323,7 @@ HTTPRequestHandler *PocoRestRequestFactory::handleNoSession()
 	return routeBuiltin("unauthorized");
 }
 
-HTTPRequestHandler *PocoRestRequestFactory::createWithSession(
+PocoRestRequestHandler *PocoRestRequestFactory::createWithSession(
 		RestAction::Ptr action,
 		const MappedRestAction::Params &params,
 		const HTTPServerRequest &request)

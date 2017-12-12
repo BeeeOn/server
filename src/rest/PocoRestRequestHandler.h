@@ -95,11 +95,11 @@ public:
 
 protected:
 	PocoRestRequestHandler *createHandler(RestAction::Ptr action);
-	Poco::Net::HTTPRequestHandler *routeBuiltin(const std::string &name);
-	Poco::Net::HTTPRequestHandler *handleNoRoute(
+	PocoRestRequestHandler *routeBuiltin(const std::string &name);
+	PocoRestRequestHandler *handleNoRoute(
 			const Poco::Net::HTTPServerRequest &request);
-	Poco::Net::HTTPRequestHandler *handleNoSession();
-	Poco::Net::HTTPRequestHandler *createWithSession(
+	PocoRestRequestHandler *handleNoSession();
+	PocoRestRequestHandler *createWithSession(
 			RestAction::Ptr action,
 			const MappedRestAction::Params &params,
 			const Poco::Net::HTTPServerRequest &request);
