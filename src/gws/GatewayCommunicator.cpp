@@ -1,3 +1,4 @@
+#include <Poco/Clock.h>
 #include <Poco/Logger.h>
 #include <Poco/Net/WebSocket.h>
 #include <Poco/Net/NetException.h>
@@ -231,6 +232,7 @@ void GatewayCommunicator::handleConnectionReadable(GatewayConnection::Ptr connec
 	});
 
 	Thread::current()->setName("worker-" + connection->gatewayID().toString());
+	const Clock started;
 
 	try {
 		GWMessage::Ptr message = connection->receiveMessage();
@@ -244,7 +246,12 @@ void GatewayCommunicator::handleConnectionReadable(GatewayConnection::Ptr connec
 	catch (const Exception &e) {
 		logger().log(e, __FILE__, __LINE__);
 		removeGateway(connection->gatewayID());
-		return;
+	}
+
+	if (logger().information()) {
+		logger().information("duration: "
+			+ to_string(started.elapsed()) + "us",
+			__FILE__, __LINE__);
 	}
 }
 

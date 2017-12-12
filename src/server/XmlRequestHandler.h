@@ -3,6 +3,7 @@
 
 #include <unistd.h>
 
+#include <Poco/Clock.h>
 #include <Poco/Message.h>
 #include <Poco/Exception.h>
 #include <Poco/TeeStream.h>
@@ -31,12 +32,16 @@ public:
 	void run() override;
 	virtual void handleInput() = 0;
 
+	void setStarted(const Poco::Clock &started);
+	const Poco::Clock &started() const;
+
 protected:
 	const Poco::AutoPtr<Poco::XML::Document> m_input;
 	Poco::Net::SocketOutputStream m_socketStream;
 	Poco::LogStream m_logStream;
 	Poco::TeeOutputStream m_stream;
 	Poco::XML::XMLWriter m_output;
+	Poco::Clock m_started;
 };
 
 class XmlRequestHandlerResolver : public Loggable {

@@ -1,4 +1,5 @@
 #include <Poco/Buffer.h>
+#include <Poco/Clock.h>
 #include <Poco/Logger.h>
 #include <Poco/SharedPtr.h>
 #include <Poco/JSON/Object.h>
@@ -14,13 +15,14 @@ using namespace Poco;
 using namespace Poco::Net;
 using namespace BeeeOn;
 
-void WebSocketRequestHandler::handleRequest(
-	HTTPServerRequest &request, HTTPServerResponse &response)
+void WebSocketRequestHandler::run()
 {
+	const Clock started;
+
 	try {
 		Thread::current()->setName("ws");
 
-		WebSocket ws(request, response);
+		WebSocket ws(request(), response());
 
 		Poco::Buffer<char> buffer(m_maxMessageSize);
 		int flags;
@@ -40,38 +42,7 @@ void WebSocketRequestHandler::handleRequest(
 				__FILE__, __LINE__);
 
 		string data(buffer.begin(), ret);
-		if (logger().trace())
-			logger().trace(data);
-
-		GWMessage::Ptr msg = GWMessage::fromJSON(data);
-		GWGatewayRegister::Ptr registerMsg = msg.cast<GWGatewayRegister>();
-
-		if (registerMsg.isNull()) {
-			logger().warning("invalid message from "
-				+ ws.peerAddress().toString() + ":\n"
-				+ msg->toString(),
-				__FILE__, __LINE__);
-			return;
-		}
-
-		Gateway gateway(registerMsg->gatewayID());
-
-		Thread::current()->setName("ws-" + gateway);
-
-		GatewayStatus status;
-		status.setVersion(Sanitize::common(registerMsg->version()));
-		status.setIPAddress(registerMsg->ipAddress());
-
-		if (!m_gatewayService->registerGateway(status, gateway)) {
-			logger().error("failed to register gateway "
-					+ gateway, __FILE__, __LINE__);
-			return;
-		}
-
-		data = GWGatewayAccepted().toString();
-		ws.sendFrame(data.c_str(), data.length());
-
-		m_gatewayCommunicator->addGateway(gateway.id(), ws);
+		processPayload(ws, data);
 	}
 	catch (const Exception &e) {
 		logger().log(e, __FILE__, __LINE__);
@@ -82,5 +53,48 @@ void WebSocketRequestHandler::handleRequest(
 	catch (...) {
 		logger().critical("unknown error, cought '...'", __FILE__, __LINE__);
 	}
+
+	if (logger().information()) {
+		logger().information("duration: "
+			+ to_string(started.elapsed()) + "us",
+			__FILE__, __LINE__);
+	}
 }
 
+void WebSocketRequestHandler::processPayload(
+		WebSocket &ws,
+		string data)
+{
+	if (logger().trace())
+		logger().trace(data);
+
+	GWMessage::Ptr msg = GWMessage::fromJSON(data);
+	GWGatewayRegister::Ptr registerMsg = msg.cast<GWGatewayRegister>();
+
+	if (registerMsg.isNull()) {
+		logger().warning("invalid message from "
+			+ ws.peerAddress().toString() + ":\n"
+			+ msg->toString(),
+			__FILE__, __LINE__);
+		return;
+	}
+
+	Gateway gateway(registerMsg->gatewayID());
+
+	Thread::current()->setName("ws-" + gateway);
+
+	GatewayStatus status;
+	status.setVersion(Sanitize::common(registerMsg->version()));
+	status.setIPAddress(registerMsg->ipAddress());
+
+	if (!m_gatewayService->registerGateway(status, gateway)) {
+		logger().error("failed to register gateway "
+				+ gateway, __FILE__, __LINE__);
+		return;
+	}
+
+	data = GWGatewayAccepted().toString();
+	ws.sendFrame(data.c_str(), data.length());
+
+	m_gatewayCommunicator->addGateway(gateway.id(), ws);
+}
