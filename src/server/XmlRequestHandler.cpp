@@ -30,6 +30,16 @@ XmlRequestHandler::XmlRequestHandler(
 	m_stream.addStream(m_logStream);
 }
 
+void XmlRequestHandler::setStarted(const Clock &started)
+{
+	m_started = started;
+}
+
+const Clock &XmlRequestHandler::started() const
+{
+	return m_started;
+}
+
 void XmlRequestHandler::run()
 {
 	Thread *current = Thread::current();
@@ -43,6 +53,12 @@ void XmlRequestHandler::run()
 		m_logStream << std::endl;
 	} catch (const Exception &e) {
 		logger().log(e, __FILE__, __LINE__);
+	}
+
+	if (logger().information()) {
+		logger().information("duration: "
+				+ to_string(m_started.elapsed()) + "us",
+				__FILE__, __LINE__);
 	}
 
 	if (current != NULL)
@@ -68,6 +84,8 @@ void XmlRequestHandlerFactory::init()
 TCPServerConnection *XmlRequestHandlerFactory::createConnection(
 	const StreamSocket &socket)
 {
+	const Clock started;
+
 	try {
 		StreamSocket readableSocket(socket);
 
@@ -79,7 +97,9 @@ TCPServerConnection *XmlRequestHandlerFactory::createConnection(
 				__FILE__, __LINE__);
 		}
 
-		return resolveRequest(socket, parseDocument(readableSocket));
+		XmlRequestHandler *handler = resolveRequest(socket, parseDocument(readableSocket));
+		handler->setStarted(started);
+		return handler;
 	}
 	catch (const Exception &e) {
 		logger().log(e, __FILE__, __LINE__);
