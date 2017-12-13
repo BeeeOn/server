@@ -29,7 +29,6 @@
 			<set name="sensorHistoryDao" ref="sensorHistoryDao" />
 			<set name="devicePropertyDao" ref="devicePropertyDao" />
 			<set name="gatewayRPC" ref="gatewayRPC" />
-			<set name="workFacade" ref="uiWorkFacade" />
 			<set name="accessPolicy" ref="accessPolicy" />
 			<set name="transactionManager" ref="transactionManager" />
 		</instance>

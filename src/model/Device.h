@@ -2,11 +2,10 @@
 #define BEEEON_DEVICE_H
 
 #include <Poco/SharedPtr.h>
-#include <Poco/DateTime.h>
 #include <Poco/Timespan.h>
-#include <Poco/Nullable.h>
 #include <Poco/Util/Units.h>
 
+#include "model/DeviceStatus.h"
 #include "model/Entity.h"
 #include "model/Location.h"
 #include "model/Gateway.h"
@@ -63,26 +62,16 @@ public:
 	void setSignal(const Poco::Nullable<percent> &signal);
 	const Poco::Nullable<percent> &signal() const;
 
-	void setFirstSeen(const Poco::DateTime &at);
-	const Poco::DateTime &firstSeen() const;
-
-	void setLastSeen(const Poco::DateTime &at);
-	const Poco::DateTime &lastSeen() const;
+	void setStatus(const DeviceStatus &status);
+	const DeviceStatus &status() const;
+	DeviceStatus &status();
 
 	/**
 	 * A device is available when it has been last seen
 	 * after a certain multiple of refresh time.
 	 */
 	bool available(const unsigned int multiple = 3,
-			const Poco::DateTime &ref = Poco::DateTime()) const;
-
-	void setActiveSince(const Poco::Nullable<Poco::DateTime> &at);
-	const Poco::Nullable<Poco::DateTime> &activeSince() const;
-
-	bool active() const
-	{
-		return !activeSince().isNull();
-	}
+			const Poco::Timestamp &ref = Poco::Timestamp()) const;
 
 private:
 	Gateway m_gateway;
@@ -92,9 +81,7 @@ private:
 	Poco::Timespan m_refresh;
 	Poco::Nullable<percent> m_battery;
 	Poco::Nullable<percent> m_signal;
-	Poco::DateTime m_firstSeen;
-	Poco::DateTime m_lastSeen;
-	Poco::Nullable<Poco::DateTime> m_activeSince;
+	DeviceStatus m_status;
 };
 
 typedef Device::ID DeviceID;

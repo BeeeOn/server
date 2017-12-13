@@ -35,7 +35,7 @@ function devices_append(gwid, device) {
 	dev.find(".name").text(device["name"]);
 	dev.find(".type").text(device["type"]["display_name"]);
 
-	if (!device["active_since"]) {
+	if (device["state"] == "inactive") {
 		var activate = $("<button>Activate</button>");
 		activate.click(function () {
 			tester.put(devices_uri(gwid, device["id"]),
@@ -75,33 +75,7 @@ function devices_append(gwid, device) {
 			var device_id = device["id"];
 
 			tester.delete(devices_uri(gwid, device_id), "#devices", function (data) {
-				var location = data["location"];
-
-				$("#devices-unpair-" + device_id).remove();
-
-				var unpair_progress =
-					$("<span><span class='status'></span></span>");
-				unpair_progress.attr("id", "devices-unpair-" + device_id);
-				dev.append(unpair_progress);
-
-				var refresh = $("<button></button>")
-				refresh.attr("id", "devices-unpair-" + device_id + "-refresh");
-				refresh.text("Refresh");
-
-				$("#devices-unpair-" + device_id + " .status").text("unknown");
-				unpair_progress.append(refresh);
-
-				devices_check_progress(
-					location,
-					$("#devices-unpair-" + device_id + " .status"),
-					refresh);
-
-				refresh.click(function () {
-					devices_check_progress(
-						location,
-						$("#devices-unpair-" + device_id + " .status"),
-						refresh);
-				});
+				console.log(data);
 			});
 		});
 		dev.append(unpair);

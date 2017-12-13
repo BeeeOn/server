@@ -127,14 +127,40 @@ void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
 	else
 		attrs.addAttribute("", "name", "name", "", device.name());
 
+	const DeviceStatus &status = device.status();
+
 	attrs.addAttribute("", "status", "status", "",
 			device.available()? "available" : "unavailable");
 	attrs.addAttribute("", "time", "time", "",
-			to_string(device.lastSeen().timestamp().epochTime()));
+			to_string(status.lastSeen().epochTime()));
 	attrs.addAttribute("", "involved", "involved", "",
-			to_string(device.firstSeen().timestamp().epochTime()));
+			to_string(status.firstSeen().epochTime()));
 	attrs.addAttribute("", "init", "init", "",
-			device.active()? "1" : "0");
+			status.active()? "1" : "0");
+
+	string state;
+
+	switch (status.state()) {
+	case DeviceStatus::STATE_INACTIVE:
+		state = "inactive";
+		break;
+	case DeviceStatus::STATE_INACTIVE_PENDING:
+		state = "inactive-pending";
+		break;
+	case DeviceStatus::STATE_ACTIVE:
+		state = "active";
+		break;
+	case DeviceStatus::STATE_ACTIVE_PENDING:
+		state = "active-pending";
+		break;
+	default:
+		throw IllegalStateException(
+			"invalid state: " + to_string(status.state()));
+	}
+
+	attrs.addAttribute("", "state", "state", "", state);
+	attrs.addAttribute("", "last-changed", "last-changed", "",
+			to_string(status.lastChanged().epochTime()));
 
 	const Poco::SharedPtr<DeviceInfo> info = device.type();
 

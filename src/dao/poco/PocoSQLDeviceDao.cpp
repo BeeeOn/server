@@ -90,12 +90,14 @@ bool PocoSQLDeviceDao::insert(Device &device, const Gateway &gateway)
 	if (!device.signal().isNull())
 		signal = device.signal().value().get();
 
-	unsigned long firstSeen = device.firstSeen().timestamp().epochTime();
-	unsigned long lastSeen = device.lastSeen().timestamp().epochTime();
+	const DeviceStatus &status = device.status();
+
+	unsigned long firstSeen = status.firstSeen().epochTime();
+	unsigned long lastSeen = status.lastSeen().epochTime();
 
 	Nullable<unsigned long> activeSince;
-	if (!device.activeSince().isNull())
-		activeSince = device.activeSince().value().timestamp().epochTime();
+	if (status.active())
+		activeSince = status.lastChanged().epochTime();
 
 	Statement sql = (session() << m_queryInsert(),
 		use(id, "id"),
@@ -141,9 +143,11 @@ bool PocoSQLDeviceDao::update(Device &device, const Gateway &gateway)
 	if (!device.signal().isNull())
 		signal = device.signal().value().get();
 
+	const DeviceStatus &status = device.status();
+
 	Nullable<unsigned long> activeSince;
-	if (!device.activeSince().isNull())
-		activeSince = device.activeSince().value().timestamp().epochTime();
+	if (status.active())
+		activeSince = status.lastChanged().epochTime();
 
 	Statement sql = (session() << m_queryUpdate(),
 		use(locationID, "location_id"),
@@ -294,14 +298,22 @@ bool PocoSQLDeviceDao::parseSingle(Row &result, Device &device,
 	device.setRefresh(result[prefix + "refresh"].convert<unsigned int>());
 	device.setBattery(whenNull(result[prefix + "battery"], 0));
 	device.setSignal(whenNull(result[prefix + "signal"], 0));
-	device.setFirstSeen(Timestamp::fromEpochTime(result[prefix + "first_seen"]));
-	device.setLastSeen(Timestamp::fromEpochTime(result[prefix + "last_seen"]));
 
-	Nullable<DateTime> activeSince;
-	if (!result[prefix + "active_since"].isEmpty())
-		activeSince = Timestamp::fromEpochTime(result[prefix + "active_since"]);
+	DeviceStatus status;
+	status.setFirstSeen(Timestamp::fromEpochTime(result[prefix + "first_seen"]));
+	status.setLastSeen(Timestamp::fromEpochTime(result[prefix + "last_seen"]));
 
-	device.setActiveSince(activeSince);
+	if (!result[prefix + "active_since"].isEmpty()) {
+		status.setState(DeviceStatus::STATE_ACTIVE);
+		status.setLastChanged(Timestamp::fromEpochTime(result[prefix + "active_since"]));
+	}
+	else {
+		status.setState(DeviceStatus::STATE_INACTIVE);
+		// use first-seen until the db schema is fixed
+		status.setLastChanged(status.firstSeen());
+	}
+
+	device.setStatus(status);
 
 	markLoaded(device);
 	return true;

@@ -13,7 +13,6 @@
 #include "rpc/GatewayRPC.h"
 #include "service/DeviceService.h"
 #include "transaction/Transactional.h"
-#include "work/WorkFacade.h"
 
 namespace BeeeOn {
 
@@ -31,7 +30,6 @@ public:
 	void setSensorHistoryDao(SensorHistoryDao::Ptr dao);
 	void setDevicePropertyDao(DevicePropertyDao::Ptr dao);
 	void setGatewayRPC(GatewayRPC::Ptr rpc);
-	void setWorkFacade(WorkFacade::Ptr facade);
 	void setAccessPolicy(DeviceAccessPolicy::Ptr policy);
 
 	bool fetch(Relation<Device, Gateway> &input) override
@@ -84,9 +82,9 @@ public:
 		return BEEEON_TRANSACTION_RETURN(bool, doActivate(input));
 	}
 
-	Work unregister(Relation<Device, Gateway> &input) override
+	void unregister(Relation<Device, Gateway> &input) override
 	{
-		return BEEEON_TRANSACTION_RETURN(Work, doUnregister(input));
+		BEEEON_TRANSACTION(doUnregister(input));
 	}
 
 	bool update(RelationWithData<Device, Gateway> &input) override
@@ -138,7 +136,7 @@ protected:
 	void doFetchInactiveBy(Relation<std::vector<DeviceWithData>, Gateway> &input);
 
 	bool doActivate(Relation<Device, Gateway> &input);
-	Work doUnregister(Relation<Device, Gateway> &input);
+	void doUnregister(Relation<Device, Gateway> &input);
 	bool doUpdate(RelationWithData<Device, Gateway> &input);
 	bool doUpdateAndActivate(RelationWithData<Device, Gateway> &input);
 
@@ -158,7 +156,6 @@ private:
 	SensorHistoryDao::Ptr m_historyDao;
 	DevicePropertyDao::Ptr m_propertyDao;
 	GatewayRPC::Ptr m_gatewayRPC;
-	WorkFacade::Ptr m_workFacade;
 	DeviceAccessPolicy::Ptr m_policy;
 };
 

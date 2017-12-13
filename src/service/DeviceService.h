@@ -11,7 +11,6 @@
 #include "model/Gateway.h"
 #include "service/Single.h"
 #include "service/Relation.h"
-#include "work/Work.h"
 
 namespace BeeeOn {
 
@@ -35,7 +34,7 @@ public:
 	virtual void fetchInactiveBy(Relation<std::vector<DeviceWithData>, Gateway> &input) = 0;
 
 	virtual bool activate(Relation<Device, Gateway> &input) = 0;
-	virtual Work unregister(Relation<Device, Gateway> &input) = 0;
+	virtual void unregister(Relation<Device, Gateway> &input) = 0;
 	virtual bool update(RelationWithData<Device, Gateway> &input) = 0;
 	virtual bool updateAndActivate(RelationWithData<Device, Gateway> &input) = 0;
 
