@@ -85,6 +85,8 @@ private:
  */
 class TransactionFactory {
 public:
+	typedef Poco::SharedPtr<TransactionFactory> Ptr;
+
 	virtual ~TransactionFactory();
 
 	/**
