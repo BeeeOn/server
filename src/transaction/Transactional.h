@@ -22,6 +22,12 @@ class Transactional : public Loggable {
 public:
 	Transactional();
 
+	template <typename Wrapper>
+	Transactional(const Wrapper *):
+		Loggable(typeid(Wrapper))
+	{
+	}
+
 	void setTransactionManager(TransactionManager::Ptr manager);
 	TransactionManager::Ptr transactionManager() const;
 
