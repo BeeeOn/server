@@ -4,6 +4,7 @@
 #include "di/Injectable.h"
 #include "model/User.h"
 #include "model/Gateway.h"
+#include "model/GatewayScan.h"
 #include "service/GatewayService.h"
 #include "service/DeviceService.h"
 #include "rest/RestFlow.h"
@@ -181,22 +182,17 @@ void DeviceRestHandler::discover(RestFlow &flow)
 	Single<Gateway> inputGateway(gateway);
 	inputGateway.setUser(user);
 
-	const Work &work = m_gatewayService->scanDevices(inputGateway, timeLimit);
+	const GatewayScan &scan = m_gatewayService->scanDevices(inputGateway, timeLimit);
 	flow.response().setStatus(202);
 
 	const URI &location = flow.linker()
-		.link("work", "detail", {work.id().toString()});
+		.link("devices", "discoverStatus", {gateway.id().toString()});
 
 	flow.response()["Location"] = location;
 
 	PrintHandler result(flow.response().stream());
 	beginSuccess(result);
-
-	result.startObject();
-	result.key("location");
-	result.value(location.toString());
-	result.endObject();
-
+	serialize(result, scan, *flow.translator());
 	endSuccess(result);
 }
 

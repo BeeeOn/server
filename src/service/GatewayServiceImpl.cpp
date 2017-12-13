@@ -150,18 +150,12 @@ bool GatewayServiceImpl::doUnregister(Single<Gateway> &input)
 	return true;
 }
 
-Work GatewayServiceImpl::doScanDevices(Single<Gateway> &input, const Timespan &timeout)
+GatewayScan GatewayServiceImpl::doScanDevices(Single<Gateway> &input, const Timespan &timeout)
 {
-	m_accessPolicy->assure(GatewayAccessPolicy::ACTION_USER_SCAN, input, input.target());
+	BEEEON_TRANSACTION(
+		m_accessPolicy->assure(GatewayAccessPolicy::ACTION_USER_SCAN, input, input.target()));
 
-	Work work(WorkID::random());
-	GatewayScanWork content;
-	content.setGatewayID(input.target().id());
-	content.setDuration(timeout);
-	work.setContent(content);
-
-	m_workFacade->schedule(work, input);
-	return work;
+	return m_scanController->scan(input.target(), timeout);
 }
 
 GatewayScan GatewayServiceImpl::doScanStatus(Single<Gateway> &input)

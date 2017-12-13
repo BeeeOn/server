@@ -45,6 +45,7 @@
 
 		<instance name="gatewayScanController" class="BeeeOn::GatewayScanController">
 			<set name="gatewayRPC" ref="gatewayRPC" />
+			<set name="defaultDuration" time="2 m" />
 			<set name="cleanupInterval" time="15 m" />
 			<set name="cleanupOlderThan" time="30 m" />
 		</instance>

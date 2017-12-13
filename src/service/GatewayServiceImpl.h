@@ -82,9 +82,9 @@ public:
 		return BEEEON_TRANSACTION_RETURN(bool, doUnregister(input));
 	}
 
-	Work scanDevices(Single<Gateway> &input, const Poco::Timespan &duration) override
+	GatewayScan scanDevices(Single<Gateway> &input, const Poco::Timespan &duration) override
 	{
-		return BEEEON_TRANSACTION_RETURN(Work, doScanDevices(input, duration));
+		return doScanDevices(input, duration);
 	}
 
 	GatewayScan scanStatus(Single<Gateway> &input) override
@@ -106,7 +106,7 @@ protected:
 	void doFetchAccessible(Relation<std::vector<LegacyGateway>, User> &input);
 	bool doUpdate(SingleWithData<Gateway> &input);
 	bool doUnregister(Single<Gateway> &input);
-	Work doScanDevices(Single<Gateway> &input, const Poco::Timespan &duration);
+	GatewayScan doScanDevices(Single<Gateway> &input, const Poco::Timespan &duration);
 	GatewayScan doScanStatus(Single<Gateway> &input);
 	void doPingGateway(Single<Gateway> &input);
 
