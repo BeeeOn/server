@@ -359,10 +359,14 @@ bool DeviceServiceImpl::tryActivateAndUpdate(Device &device,
 				break;
 
 			case GatewayRPCResult::Status::FAILED:
+				Loggable::forClass(typeid(DeviceServiceImpl)).warning(
+					"device " + device + " failed to pair",
+					__FILE__, __LINE__);
+				break;
 			case GatewayRPCResult::Status::TIMEOUT:
 			case GatewayRPCResult::Status::NOT_CONNECTED:
 				Loggable::forClass(typeid(DeviceServiceImpl)).warning(
-					"device " + device + " failed to pair",
+					"device " + device + " failed to pair on time",
 					__FILE__, __LINE__);
 				break;
 			}
