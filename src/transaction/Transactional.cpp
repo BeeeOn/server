@@ -13,6 +13,11 @@ void Transactional::setTransactionManager(TransactionManager::Ptr manager)
 	m_transactionManager = manager;
 }
 
+TransactionManager::Ptr Transactional::transactionManager() const
+{
+	return m_transactionManager;
+}
+
 void Transactional::transactionNotNull(const Transaction *t)
 {
 	if (t == NULL)
