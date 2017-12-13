@@ -25,10 +25,10 @@ public:
 
 	WorkRunner *create(WorkScheduler &scheduler) override;
 
-	void setTransactionManager(TransactionManager *manager);
+	void setTransactionManager(TransactionManager::Ptr manager);
 
 private:
-	TransactionManager *m_manager;
+	TransactionManager::Ptr m_manager;
 };
 
 }

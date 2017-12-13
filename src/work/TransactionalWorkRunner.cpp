@@ -1,5 +1,4 @@
 #include "di/Injectable.h"
-#include "transaction/NullTransactionManager.h"
 #include "work/TransactionalWorkRunner.h"
 #include "work/WorkExecutor.h"
 #include "work/WorkLockManager.h"
@@ -51,8 +50,7 @@ void TransactionalWorkRunner::doExecute(WorkWriteGuard &guard)
 	}
 }
 
-TransactionalWorkRunnerFactory::TransactionalWorkRunnerFactory():
-	m_manager(&NullTransactionManager::instance())
+TransactionalWorkRunnerFactory::TransactionalWorkRunnerFactory()
 {
 }
 
@@ -65,7 +63,7 @@ WorkRunner *TransactionalWorkRunnerFactory::create(
 	return runner;
 }
 
-void TransactionalWorkRunnerFactory::setTransactionManager(TransactionManager *manager)
+void TransactionalWorkRunnerFactory::setTransactionManager(TransactionManager::Ptr manager)
 {
-	m_manager = manager? manager : &NullTransactionManager::instance();
+	m_manager = manager;
 }
