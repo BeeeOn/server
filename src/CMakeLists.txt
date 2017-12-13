@@ -59,6 +59,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/EnumInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/FCMToken.cpp
 	${PROJECT_SOURCE_DIR}/model/Gateway.cpp
+	${PROJECT_SOURCE_DIR}/model/GatewayScan.cpp
 	${PROJECT_SOURCE_DIR}/model/Identity.cpp
 	${PROJECT_SOURCE_DIR}/model/ModuleInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/VerifiedIdentity.cpp
