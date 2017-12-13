@@ -9,9 +9,14 @@
 namespace BeeeOn {
 
 #define BEEEON_TRANSACTION(code) \
-	this->transaction([&]() {code;});
+	BEEEON_TRANSACTION_ON(*this, code)
 #define BEEEON_TRANSACTION_RETURN(type, code) \
-	this->transaction<type>([&]() {return code;});
+	BEEEON_TRANSACTION_RETURN_ON(*this, type, code)
+
+#define BEEEON_TRANSACTION_ON(transactional, code) \
+	(transactional).transaction([&]() {code;})
+#define BEEEON_TRANSACTION_RETURN_ON(transactional, type, code) \
+	(transactional).transaction<type>([&]() {return code;})
 
 class Transactional : public Loggable {
 public:
