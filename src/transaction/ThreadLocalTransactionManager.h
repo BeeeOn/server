@@ -50,13 +50,13 @@ public:
 	Transaction *start();
 	Transaction *current();
 
-	void setFactory(TransactionFactory *factory);
+	void setFactory(TransactionFactory::Ptr factory);
 
 protected:
 	virtual Transaction *create();
 
 private:
-	TransactionFactory *m_factory;
+	TransactionFactory::Ptr m_factory;
 	Poco::ThreadLocal<ThreadLocalTransactionWrapper *> m_null;
 };
 

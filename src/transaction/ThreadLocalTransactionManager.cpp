@@ -1,7 +1,6 @@
 #include <Poco/Exception.h>
 
 #include "di/Injectable.h"
-#include "transaction/NullTransactionManager.h"
 #include "transaction/ThreadLocalTransactionManager.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, ThreadLocalTransactionManager)
@@ -90,8 +89,7 @@ ThreadLocalTransactionWrapper::~ThreadLocalTransactionWrapper()
 		delete m_transaction;
 }
 
-ThreadLocalTransactionManager::ThreadLocalTransactionManager():
-	m_factory(&NullTransactionFactory::instance())
+ThreadLocalTransactionManager::ThreadLocalTransactionManager()
 {
 }
 
@@ -99,7 +97,7 @@ ThreadLocalTransactionManager::~ThreadLocalTransactionManager()
 {
 }
 
-void ThreadLocalTransactionManager::setFactory(TransactionFactory *factory)
+void ThreadLocalTransactionManager::setFactory(TransactionFactory::Ptr factory)
 {
 	m_factory = factory;
 }

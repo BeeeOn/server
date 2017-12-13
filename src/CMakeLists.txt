@@ -148,7 +148,6 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/service/WorkService.cpp
 	${PROJECT_SOURCE_DIR}/service/WorkServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/transaction/NoTransactionFactory.cpp
-	${PROJECT_SOURCE_DIR}/transaction/NullTransactionManager.cpp
 	${PROJECT_SOURCE_DIR}/transaction/ThreadLocalTransactionManager.cpp
 	${PROJECT_SOURCE_DIR}/transaction/Transactional.cpp
 	${PROJECT_SOURCE_DIR}/transaction/TransactionManager.cpp

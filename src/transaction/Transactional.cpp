@@ -1,19 +1,16 @@
 #include <Poco/Exception.h>
 
-#include "transaction/NullTransactionManager.h"
 #include "transaction/Transactional.h"
 
 using namespace BeeeOn;
 
-Transactional::Transactional():
-	m_transactionManager(&NullTransactionManager::instance())
+Transactional::Transactional()
 {
 }
 
-void Transactional::setTransactionManager(TransactionManager *manager)
+void Transactional::setTransactionManager(TransactionManager::Ptr manager)
 {
-	m_transactionManager = manager == NULL?
-		&NullTransactionManager::instance() : manager;
+	m_transactionManager = manager;
 }
 
 void Transactional::transactionNotNull(const Transaction *t)
