@@ -18,6 +18,7 @@ public:
 	Transactional();
 
 	void setTransactionManager(TransactionManager::Ptr manager);
+	TransactionManager::Ptr transactionManager() const;
 
 	template <typename Ret, typename A>
 	Ret transaction(const A &action)
