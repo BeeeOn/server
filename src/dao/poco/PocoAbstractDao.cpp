@@ -21,7 +21,6 @@
 #include "dao/poco/PocoTransactionImpl.h"
 #include "dao/poco/PocoAbstractDao.h"
 #include "dao/poco/PocoDaoManager.h"
-#include "transaction/NullTransactionManager.h"
 #include "transaction/TransactionManager.h"
 #include "util/Backtrace.h"
 #include "util/ClassInfo.h"
@@ -34,7 +33,6 @@ using namespace BeeeOn;
 
 PocoAbstractDao::PocoAbstractDao():
 	m_manager(NULL),
-	m_transactionManager(&NullTransactionManager::instance()),
 	m_loader(NULL)
 {
 }
@@ -48,10 +46,9 @@ void PocoAbstractDao::setDaoManager(PocoDaoManager *manager)
 	m_manager = manager;
 }
 
-void PocoAbstractDao::setTransactionManager(TransactionManager *manager)
+void PocoAbstractDao::setTransactionManager(TransactionManager::Ptr manager)
 {
-	m_transactionManager = manager == NULL?
-		&NullTransactionManager::instance() : manager;
+	m_transactionManager = manager;
 }
 
 void PocoAbstractDao::setSQLLoader(SQLLoader *loader)
