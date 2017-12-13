@@ -17,7 +17,7 @@ class Transactional : public Loggable {
 public:
 	Transactional();
 
-	void setTransactionManager(TransactionManager *manager);
+	void setTransactionManager(TransactionManager::Ptr manager);
 
 	template <typename Ret, typename A>
 	Ret transaction(const A &action)
@@ -97,7 +97,7 @@ protected:
 	const std::string transactionRollback(const Transaction &t);
 
 private:
-	TransactionManager *m_transactionManager;
+	TransactionManager::Ptr m_transactionManager;
 };
 
 }
