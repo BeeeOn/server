@@ -341,28 +341,28 @@ bool DeviceServiceImpl::tryActivateAndUpdate(Device &device,
 		m_gatewayRPC->pairDevice([copy, this](GatewayRPCResult::Ptr r) {
 			switch (r->status()) {
 			case GatewayRPCResult::Status::PENDING:
-				logger().information(
-					"device " + copy + " pairing is pending...",
+				Loggable::forClass(typeid(DeviceServiceImpl)).information(
+					"device " + device + " pairing is pending...",
 					__FILE__, __LINE__);
 				break;
 
 			case GatewayRPCResult::Status::ACCEPTED:
-				logger().debug(
-					"device " + copy + " would be paired",
+				Loggable::forClass(typeid(DeviceServiceImpl)).debug(
+					"device " + device + " would be paired",
 					__FILE__, __LINE__);
 				break;
 
 			case GatewayRPCResult::Status::SUCCESS:
-				logger().information(
-					"device " + copy + " successfully paired",
+				Loggable::forClass(typeid(DeviceServiceImpl)).information(
+					"device " + device + " successfully paired",
 					__FILE__, __LINE__);
 				break;
 
 			case GatewayRPCResult::Status::FAILED:
 			case GatewayRPCResult::Status::TIMEOUT:
 			case GatewayRPCResult::Status::NOT_CONNECTED:
-				logger().warning(
-					"device " + copy + " failed to pair",
+				Loggable::forClass(typeid(DeviceServiceImpl)).warning(
+					"device " + device + " failed to pair",
 					__FILE__, __LINE__);
 				break;
 			}
