@@ -4,6 +4,8 @@
 #include <string>
 #include <typeinfo>
 
+#include <Poco/SharedPtr.h>
+
 namespace BeeeOn {
 
 /**
@@ -98,6 +100,8 @@ public:
  */
 class TransactionManager {
 public:
+	typedef Poco::SharedPtr<TransactionManager> Ptr;
+
 	virtual ~TransactionManager();
 
 	/**
