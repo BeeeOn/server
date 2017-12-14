@@ -215,6 +215,18 @@ root {
 		}
 	}
 
+	gateway {
+		scan {
+			state {
+				idle { "No device discovery in progress" }
+				waiting { "Starting device discovery" }
+				processing { "Device discovery in progress" }
+				finished { "Device discovery was successful" }
+				failed { "Failed during device discovery" }
+			}
+		}
+	}
+
 	baf {
 		gateway_watcher {
 			connected {
