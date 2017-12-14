@@ -5,7 +5,6 @@
 #include "di/Injectable.h"
 #include "server/AccessLevel.h"
 #include "service/GatewayServiceImpl.h"
-#include "work/GatewayScanWork.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, GatewayServiceImpl)
 BEEEON_OBJECT_CASTABLE(GatewayService)

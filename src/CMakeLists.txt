@@ -218,8 +218,6 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/sqitch/SqitchRef.cpp
 	${PROJECT_SOURCE_DIR}/sqitch/SqitchTag.cpp
 	${PROJECT_SOURCE_DIR}/work/TransactionalWorkRunner.cpp
-	${PROJECT_SOURCE_DIR}/work/GatewayScanWork.cpp
-	${PROJECT_SOURCE_DIR}/work/GatewayScanWorkExecutor.cpp
 )
 
 if (JWT AND JANSSON)
