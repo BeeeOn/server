@@ -12,7 +12,6 @@
 #include "rpc/GatewayRPC.h"
 #include "service/GatewayService.h"
 #include "transaction/Transactional.h"
-#include "work/WorkFacade.h"
 
 namespace Poco {
 
@@ -34,7 +33,6 @@ public:
 	void setVerifiedIdentityDao(VerifiedIdentityDao::Ptr dao);
 	void setGatewayRPC(GatewayRPC::Ptr rpc);
 	void setScanController(GatewayScanController::Ptr controller);
-	void setWorkFacade(WorkFacade::Ptr facade);
 	void setAccessPolicy(GatewayAccessPolicy::Ptr policy);
 
 	/**
@@ -116,7 +114,6 @@ private:
 	IdentityDao::Ptr m_identityDao;
 	VerifiedIdentityDao::Ptr m_verifiedIdentityDao;
 	GatewayRPC::Ptr m_rpc;
-	WorkFacade::Ptr m_workFacade;
 	GatewayAccessPolicy::Ptr m_accessPolicy;
 	GatewayScanController::Ptr m_scanController;
 };

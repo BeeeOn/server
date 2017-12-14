@@ -10,7 +10,6 @@
 #include "model/DeviceWithData.h"
 #include "model/DeviceProperty.h"
 #include "util/CryptoConfig.h"
-#include "work/Work.h"
 
 using namespace std;
 using namespace Poco;

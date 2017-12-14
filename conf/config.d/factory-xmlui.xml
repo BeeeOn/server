@@ -3,7 +3,6 @@
 		<instance name="xmlui" class="BeeeOn::LoopRunner">
 			<add name="loops" ref="xmluiServer" />
 			<add name="loops" ref="gatewayScanController" />
-			<add name="runnables" ref="uiWorkScheduler" />
 			<add name="runnables" ref="asyncExecutor" />
 		</instance>
 

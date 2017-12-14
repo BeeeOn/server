@@ -10,7 +10,6 @@
 #include "policy/RoleAccessPolicy.h"
 #include "policy/SensorAccessPolicy.h"
 #include "policy/SensorHistoryAccessPolicy.h"
-#include "policy/WorkAccessPolicy.h"
 #include "dao/RoleInGatewayDao.h"
 #include "dao/FCMTokenDao.h"
 #include "dao/GatewayDao.h"
@@ -29,7 +28,6 @@ class DefaultAccessPolicy :
 		public SensorAccessPolicy,
 		public SensorHistoryAccessPolicy,
 		public ControlAccessPolicy,
-		public WorkAccessPolicy,
 		public FCMTokenAccessPolicy {
 public:
 	DefaultAccessPolicy();
@@ -111,10 +109,6 @@ public:
 		const PolicyContext &context,
 		const Device &device) override;
 
-	void assure(
-		const WorkAccessPolicy::Action action,
-		const PolicyContext &context,
-		const Work &work) override;
 	void assure(
 		const FCMTokenAccessPolicy::Action action,
 		const PolicyContext &context,

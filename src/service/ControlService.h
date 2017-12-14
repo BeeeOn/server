@@ -6,7 +6,6 @@
 #include "model/Control.h"
 #include "model/Device.h"
 #include "service/Relation.h"
-#include "work/Work.h"
 
 namespace BeeeOn {
 

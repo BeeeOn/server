@@ -3,7 +3,6 @@
 		<instance name="restui" class="BeeeOn::LoopRunner">
 			<add name="loops" ref="uiServer" />
 			<add name="loops" ref="gatewayScanController" />
-			<add name="runnables" ref="uiWorkScheduler" />
 			<add name="runnables" ref="asyncExecutor" />
 		</instance>
 
@@ -48,7 +47,6 @@
 			<add name="handlers" ref="uiProfileHandler" />
 			<add name="handlers" ref="uiLocationHandler" />
 			<add name="handlers" ref="uiRoleHandler" />
-			<add name="handlers" ref="uiWorkHandler" />
 			<add name="handlers" ref="uiDeviceHandler" />
 			<add name="handlers" ref="uiSensorHandler" />
 			<add name="handlers" ref="uiControlHandler" />
@@ -93,10 +91,6 @@
 		<instance name="uiRoleHandler" class="BeeeOn::RestUI::RoleRestHandler">
 			<set name="roleService" ref="roleService" />
 			<set name="identityService" ref="identityService" />
-		</instance>
-
-		<instance name="uiWorkHandler" class="BeeeOn::RestUI::WorkRestHandler">
-			<set name="workService" ref="workService" />
 		</instance>
 
 		<instance name="uiDeviceHandler" class="BeeeOn::RestUI::DeviceRestHandler">
