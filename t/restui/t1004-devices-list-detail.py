@@ -100,7 +100,7 @@ class TestDevicesListDetail(unittest.TestCase):
 	timestamp).
 	"""
 	def test3_discover(self):
-		req = POST(config.ui_host, config.ui_port, "/gateways/" + config.gateway_id + "/devices")
+		req = POST(config.ui_host, config.ui_port, "/gateways/" + config.gateway_id + "/discovery")
 		req.authorize(self.session)
 		req.body(json.dumps({"time_limit": 1}))
 		response, content = req()

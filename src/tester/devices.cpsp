@@ -128,7 +128,7 @@ tester.modules["devices"] = function () {
 
 		$("#devices-discover-progress-refresh").remove();
 
-		tester.post(devices_uri(gwid), "#devices", {
+		tester.post("/gateways/" + gwid + "/discovery", "#devices", {
 			time_limit: 10
 		}, function (data) {
 			var location = data["location"];
