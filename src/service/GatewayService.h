@@ -9,6 +9,7 @@
 #include "model/User.h"
 #include "model/VerifiedIdentity.h"
 #include "model/Gateway.h"
+#include "model/GatewayScan.h"
 #include "model/LegacyGateway.h"
 #include "service/Single.h"
 #include "service/Relation.h"
@@ -40,6 +41,7 @@ public:
 	virtual bool unregister(Single<Gateway> &input) = 0;
 
 	virtual Work scanDevices(Single<Gateway> &input, const Poco::Timespan &duration) = 0;
+	virtual GatewayScan scanStatus(Single<Gateway> &input) = 0;
 	virtual void pingGateway(Single<Gateway> &input) = 0;
 };
 

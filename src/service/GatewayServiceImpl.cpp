@@ -15,6 +15,7 @@ BEEEON_OBJECT_REF("identityDao", &GatewayServiceImpl::setIdentityDao)
 BEEEON_OBJECT_REF("verifiedIdentityDao", &GatewayServiceImpl::setVerifiedIdentityDao)
 BEEEON_OBJECT_REF("gatewayRPC", &GatewayServiceImpl::setGatewayRPC)
 BEEEON_OBJECT_REF("workFacade", &GatewayServiceImpl::setWorkFacade)
+BEEEON_OBJECT_REF("scanController", &GatewayServiceImpl::setScanController)
 BEEEON_OBJECT_REF("accessPolicy", &GatewayServiceImpl::setAccessPolicy)
 BEEEON_OBJECT_REF("transactionManager", &GatewayServiceImpl::setTransactionManager)
 BEEEON_OBJECT_END(BeeeOn, GatewayServiceImpl)
@@ -50,6 +51,11 @@ void GatewayServiceImpl::setVerifiedIdentityDao(VerifiedIdentityDao::Ptr dao)
 void GatewayServiceImpl::setGatewayRPC(GatewayRPC::Ptr rpc)
 {
 	m_rpc = rpc;
+}
+
+void GatewayServiceImpl::setScanController(GatewayScanController::Ptr controller)
+{
+	m_scanController = controller;
 }
 
 void GatewayServiceImpl::setWorkFacade(WorkFacade::Ptr facade)
@@ -156,6 +162,14 @@ Work GatewayServiceImpl::doScanDevices(Single<Gateway> &input, const Timespan &t
 
 	m_workFacade->schedule(work, input);
 	return work;
+}
+
+GatewayScan GatewayServiceImpl::doScanStatus(Single<Gateway> &input)
+{
+	BEEEON_TRANSACTION(
+		m_accessPolicy->assure(GatewayAccessPolicy::ACTION_USER_SCAN, input, input.target()));
+
+	return m_scanController->find(input.target().id());
 }
 
 void GatewayServiceImpl::doPingGateway(Single<Gateway> &input)
