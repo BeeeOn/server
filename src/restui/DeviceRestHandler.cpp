@@ -49,6 +49,11 @@ DeviceRestHandler::DeviceRestHandler():
 		{"gateway_id"}
 	);
 	registerAction<DeviceRestHandler>(
+		"discoverStatus",
+		&DeviceRestHandler::discoverStatus,
+		{"gateway_id"}
+	);
+	registerAction<DeviceRestHandler>(
 		"unpair",
 		&DeviceRestHandler::unpair,
 		{"gateway_id", "device_id"}
@@ -192,6 +197,22 @@ void DeviceRestHandler::discover(RestFlow &flow)
 	result.value(location.toString());
 	result.endObject();
 
+	endSuccess(result);
+}
+
+void DeviceRestHandler::discoverStatus(RestFlow &flow)
+{
+	User user(flow.session()->userID());
+	Gateway gateway(GatewayID::parse(flow.param("gateway_id")));
+
+	Single<Gateway> inputGateway(gateway);
+	inputGateway.setUser(user);
+
+	const GatewayScan &scan = m_gatewayService->scanStatus(inputGateway);
+
+	PrintHandler result(flow.response().stream());
+	beginSuccess(result);
+	serialize(result, scan, *flow.translator());
 	endSuccess(result);
 }
 
