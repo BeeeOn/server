@@ -176,6 +176,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/gws/GatewayConnection.cpp
 	${PROJECT_SOURCE_DIR}/gws/GatewayCommunicator.cpp
 	${PROJECT_SOURCE_DIR}/gws/GatewayListener.cpp
+	${PROJECT_SOURCE_DIR}/gws/GatewayScanController.cpp
 	${PROJECT_SOURCE_DIR}/gws/GWMessageHandler.cpp
 	${PROJECT_SOURCE_DIR}/gws/GWMessageHandlerImpl.cpp
 	${PROJECT_SOURCE_DIR}/gws/GWResponseExpectedQueue.cpp
