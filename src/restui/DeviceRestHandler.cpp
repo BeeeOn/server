@@ -167,6 +167,9 @@ void DeviceRestHandler::discover(RestFlow &flow)
 		object->getValue<unsigned int>("time_limit")
 		* Timespan::SECONDS;
 
+	if (timeLimit < 0)
+		throw InvalidArgumentException("time_limit must not be negative");
+
 	User user(flow.session()->userID());
 	Gateway gateway(GatewayID::parse(flow.param("gateway_id")));
 
