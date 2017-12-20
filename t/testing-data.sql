@@ -18,6 +18,12 @@ VALUES
 	'en_US'
 );
 
+INSERT INTO beeeon.fcm_tokens (token, user_id)
+VALUES (
+	'TESTING_FCM_TOKEN',
+	'99e54009-1b7d-4408-9bb9-d9fb0c69d5b4'
+);
+
 INSERT INTO beeeon.identities (id, email)
 VALUES
 ('be572079-0971-47f0-95df-68476a642911', 'joe.doe@example.org'),

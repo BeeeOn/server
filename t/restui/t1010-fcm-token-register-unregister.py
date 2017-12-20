@@ -65,6 +65,18 @@ class TestFCMTokenRegisterUnregister(unittest.TestCase):
 
 		self.assertEqual(204, response.status)
 
+	@unittest.skipIf("FCM_SENDER_ID" not in os.environ,
+			"fcm support is disabled")
+	def test3_register_duplicate_token(self):
+		req = POST(config.ui_host, config.ui_port, "/notifications/fcm")
+		req.authorize(self.session)
+		req.body(json.dumps(
+			{"id": "TESTING_FCM_TOKEN"}
+		))
+		response, _ = req()
+
+		self.assertEqual(204, response.status)
+
 if __name__ == '__main__':
 	import sys
 	import taprunner
