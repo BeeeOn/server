@@ -207,6 +207,18 @@ cs {
 		}
 	}
 
+	gateway {
+		scan {
+			state {
+				idle { "Hledání zařízení neprobíhá" }
+				waiting { "Spouští se hledání zařízení" }
+				processing { "Probíhá hledání zařízení" }
+				finished { "Hledání zařízení bylo úspěšně dokončeno" }
+				failed { "Při hledání zařízení došlo k chybě" }
+			}
+		}
+	}
+
 	baf {
 		gateway_watcher {
 			connected {

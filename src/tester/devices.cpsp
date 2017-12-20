@@ -11,15 +11,9 @@ function devices_clear() {
 	$("#devices-list .panel").empty();
 }
 
-function devices_check_progress(uri, status, refresh) {
+function devices_check_discovery_progress(uri, status, refresh) {
 	tester.get(uri, "#devices", function (data) {
-		status.text(data["status"]);
-
-		if (data["finished"]) {
-			tester.delete(uri, "#devices", function () {
-				refresh.remove();
-			});
-		}
+		status.text(data["state"]["display_name"]);
 	});
 }
 
@@ -128,23 +122,23 @@ tester.modules["devices"] = function () {
 
 		$("#devices-discover-progress-refresh").remove();
 
-		tester.post(devices_uri(gwid), "#devices", {
+		tester.post("/gateways/" + gwid + "/discovery", "#devices", {
 			time_limit: 10
 		}, function (data) {
-			var location = data["location"];
+			var location = "/gateways/" + gwid + "/discovery";
 
 			var refresh = $("<button id='devices-discover-progress-refresh'></button>");
 			refresh.text("Refresh");
 			$("#devices-discover-progress .status").text("unknown");
 			$("#devices-discover-progress").append(refresh);
 
-			devices_check_progress(
+			devices_check_discovery_progress(
 				location,
 				$("#devices-discover-progress .status"),
 				refresh);
 
 			refresh.click(function () {
-				devices_check_progress(
+				devices_check_discovery_progress(
 					location,
 					$("#devices-discover-progress .status"),
 					refresh)

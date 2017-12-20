@@ -59,6 +59,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/EnumInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/FCMToken.cpp
 	${PROJECT_SOURCE_DIR}/model/Gateway.cpp
+	${PROJECT_SOURCE_DIR}/model/GatewayScan.cpp
 	${PROJECT_SOURCE_DIR}/model/Identity.cpp
 	${PROJECT_SOURCE_DIR}/model/ModuleInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/VerifiedIdentity.cpp
@@ -175,6 +176,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/gws/GatewayConnection.cpp
 	${PROJECT_SOURCE_DIR}/gws/GatewayCommunicator.cpp
 	${PROJECT_SOURCE_DIR}/gws/GatewayListener.cpp
+	${PROJECT_SOURCE_DIR}/gws/GatewayScanController.cpp
 	${PROJECT_SOURCE_DIR}/gws/GWMessageHandler.cpp
 	${PROJECT_SOURCE_DIR}/gws/GWMessageHandlerImpl.cpp
 	${PROJECT_SOURCE_DIR}/gws/GWResponseExpectedQueue.cpp
@@ -216,8 +218,6 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/sqitch/SqitchRef.cpp
 	${PROJECT_SOURCE_DIR}/sqitch/SqitchTag.cpp
 	${PROJECT_SOURCE_DIR}/work/TransactionalWorkRunner.cpp
-	${PROJECT_SOURCE_DIR}/work/GatewayScanWork.cpp
-	${PROJECT_SOURCE_DIR}/work/GatewayScanWorkExecutor.cpp
 )
 
 if (JWT AND JANSSON)

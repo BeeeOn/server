@@ -22,6 +22,7 @@ namespace BeeeOn {
 
 class Device;
 class Gateway;
+class GatewayScan;
 class LegacyRoleInGateway;
 class Locale;
 class Location;
@@ -39,6 +40,10 @@ void serialize(Poco::JSON::PrintHandler &output,
 void serialize(Poco::JSON::PrintHandler &output,
 		const std::vector<Gateway> &gateways,
 		const Locale &locale);
+
+void serialize(Poco::JSON::PrintHandler &output,
+		const GatewayScan &scan,
+		Translator &translator);
 
 void serialize(Poco::JSON::PrintHandler &output,
 		Translator &translator,

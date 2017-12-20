@@ -100,7 +100,7 @@ class TestDevicesListDetail(unittest.TestCase):
 	timestamp).
 	"""
 	def test3_discover(self):
-		req = POST(config.ui_host, config.ui_port, "/gateways/" + config.gateway_id + "/devices")
+		req = POST(config.ui_host, config.ui_port, "/gateways/" + config.gateway_id + "/discovery")
 		req.authorize(self.session)
 		req.body(json.dumps({"time_limit": 1}))
 		response, content = req()
@@ -110,38 +110,27 @@ class TestDevicesListDetail(unittest.TestCase):
 		data = json.loads(content)
 		self.assertEqual("success", data["status"])
 
-		work_uri = response.getheader("Location")
-		self.assertEqual(work_uri, data["data"]["location"])
+		scan_uri = response.getheader("Location")
+		self.assertEqual("/gateways/" + config.gateway_id + "/discovery", scan_uri)
 
 		for i in range(10):
-			req = GET(config.ui_host, config.ui_port, work_uri)
+			req = GET(config.ui_host, config.ui_port, scan_uri)
 			req.authorize(self.session)
 			response, content = req()
 
 			self.assertEqual(200, response.status)
 
 			result = json.loads(content)
-			self.assertEqual("success", result["status"])
-			if "finished" in result["data"]:
+			self.assertTrue("success", result["status"])
+
+			if result["data"]["state"]["name"] == "finished":
 				break
 
+			self.assertTrue("started" in result["data"])
+			self.assertTrue("duration" in result["data"])
+			self.assertEqual(1, result["data"]["duration"])
+
 			time.sleep(1)
-
-		req = GET(config.ui_host, config.ui_port, work_uri)
-		req.authorize(self.session)
-		response, content = req()
-
-		self.assertEqual(200, response.status)
-
-		result = json.loads(content)
-		self.assertEqual("success", result["status"])
-		self.assertTrue("finished" in result["data"])
-
-		req = DELETE(config.ui_host, config.ui_port, work_uri)
-		req.authorize(self.session)
-		response, content = req()
-
-		self.assertEqual(204, response.status)
 
 	"""
 	Get all active devices via the filter=active.

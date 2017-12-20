@@ -5,6 +5,7 @@
 			<add name="runnables" ref="uiWorkScheduler" />
 			<add name="runnables" ref="fcmSender" if-yes="${fcm.enable}" />
 			<add name="loops" ref="gatewayCommunicator" />
+			<add name="loops" ref="gatewayScanController" />
 			<add name="loops" ref="webSocketServer" />
 			<add name="loops" ref="responseExpectedQueue" />
 			<add name="loops" ref="asyncGatewayRPC" />

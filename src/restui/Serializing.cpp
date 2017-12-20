@@ -7,6 +7,7 @@
 #include "l10n/Translator.h"
 #include "model/Device.h"
 #include "model/Gateway.h"
+#include "model/GatewayScan.h"
 #include "model/LegacyRoleInGateway.h"
 #include "model/Location.h"
 #include "model/ModuleInfo.h"
@@ -93,6 +94,73 @@ void BeeeOn::RestUI::serialize(PrintHandler &output,
 		serialize(output, gateway, locale);
 
 	output.endArray();
+}
+
+void BeeeOn::RestUI::serialize(PrintHandler &output,
+		const GatewayScan &scan,
+		Translator &translator)
+{
+	output.startObject();
+
+	if (scan.state() > GatewayScan::SCAN_IDLE) {
+		output.key("duration");
+		output.value(scan.duration().totalSeconds());
+
+		output.key("started");
+		output.value(scan.started().epochTime());
+	}
+
+	output.key("state");
+	output.startObject();
+
+	switch (scan.state()) {
+	case GatewayScan::SCAN_IDLE:
+		output.key("name");
+		output.value(string("idle"));
+
+		output.key("display_name");
+		output.value(translator.formatSure("gateway.scan.state.idle"));
+		break;
+
+	case GatewayScan::SCAN_WAITING:
+		output.key("name");
+		output.value(string("waiting"));
+
+		output.key("display_name");
+		output.value(translator.formatSure("gateway.scan.state.waiting"));
+		break;
+
+	case GatewayScan::SCAN_PROCESSING:
+		output.key("name");
+		output.value(string("processing"));
+
+		output.key("display_name");
+		output.value(translator.formatSure("gateway.scan.state.processing"));
+		break;
+
+	case GatewayScan::SCAN_FINISHED:
+		output.key("name");
+		output.value(string("finished"));
+
+		output.key("display_name");
+		output.value(translator.formatSure("gateway.scan.state.finished"));
+		break;
+
+	case GatewayScan::SCAN_FAILED:
+		output.key("name");
+		output.value(string("failed"));
+
+		output.key("display_name");
+		output.value(translator.formatSure("gateway.scan.state.failed"));
+		break;
+
+	default:
+		throw IllegalStateException("unexpected gateway scan state: "
+			+ to_string(scan.state()));
+	}
+
+	output.endObject();
+	output.endObject();
 }
 
 void BeeeOn::RestUI::serialize(PrintHandler &output,

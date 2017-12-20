@@ -23,6 +23,7 @@ public:
 	void detail(RestFlow &flow);
 	void update(RestFlow &flow);
 	void discover(RestFlow &flow);
+	void discoverStatus(RestFlow &flow);
 	void unpair(RestFlow &flow);
 
 private:
