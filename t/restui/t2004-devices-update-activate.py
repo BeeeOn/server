@@ -132,7 +132,7 @@ class TestDevicesUpdateActivate(unittest.TestCase):
 		self.assertEqual(200, response.status)
 		self.assertTrue("state" in result["data"])
 
-		while result["data"]["state"] == "active-pending":
+		while result["data"]["state"] != "active":
 			req = GET(config.ui_host, config.ui_port,
 				"/gateways/" + config.gateway_id + "/devices/0xa371959aad24618e")
 			req.authorize(self.session)
