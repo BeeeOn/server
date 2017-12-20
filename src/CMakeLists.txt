@@ -147,8 +147,6 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/service/RoleServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/SensorHistoryService.cpp
 	${PROJECT_SOURCE_DIR}/service/SensorHistoryServiceImpl.cpp
-	${PROJECT_SOURCE_DIR}/service/WorkService.cpp
-	${PROJECT_SOURCE_DIR}/service/WorkServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/transaction/NoTransactionFactory.cpp
 	${PROJECT_SOURCE_DIR}/transaction/ThreadLocalTransactionManager.cpp
 	${PROJECT_SOURCE_DIR}/transaction/Transactional.cpp
@@ -162,7 +160,6 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/policy/DeviceAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/RoleAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/SensorHistoryAccessPolicy.cpp
-	${PROJECT_SOURCE_DIR}/policy/WorkAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/DefaultAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/PolicyContext.cpp
 	${PROJECT_SOURCE_DIR}/policy/UserPolicyContext.cpp
@@ -217,7 +214,6 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/sqitch/SqitchPragma.cpp
 	${PROJECT_SOURCE_DIR}/sqitch/SqitchRef.cpp
 	${PROJECT_SOURCE_DIR}/sqitch/SqitchTag.cpp
-	${PROJECT_SOURCE_DIR}/work/TransactionalWorkRunner.cpp
 )
 
 if (JWT AND JANSSON)
@@ -230,26 +226,6 @@ if (JWT AND JANSSON)
 else()
 	message(STATUS "JWT support is disabled due to unmet dependencies")
 endif()
-
-file(GLOB WORK_SOURCES
-	${PROJECT_SOURCE_DIR}/work/AbstractWorkBackup.cpp
-	${PROJECT_SOURCE_DIR}/work/AbstractGatewayWork.cpp
-	${PROJECT_SOURCE_DIR}/work/BasicProcessor.cpp
-	${PROJECT_SOURCE_DIR}/work/BasicQueue.cpp
-	${PROJECT_SOURCE_DIR}/work/DefaultWorkFacade.cpp
-	${PROJECT_SOURCE_DIR}/work/ExtendedWorkExecutor.cpp
-	${PROJECT_SOURCE_DIR}/work/GenericWorkRunner.cpp
-	${PROJECT_SOURCE_DIR}/work/Work.cpp
-	${PROJECT_SOURCE_DIR}/work/WorkBackup.cpp
-	${PROJECT_SOURCE_DIR}/work/WorkContent.cpp
-	${PROJECT_SOURCE_DIR}/work/WorkExecutor.cpp
-	${PROJECT_SOURCE_DIR}/work/WorkFacade.cpp
-	${PROJECT_SOURCE_DIR}/work/WorkFactory.cpp
-	${PROJECT_SOURCE_DIR}/work/WorkLockManager.cpp
-	${PROJECT_SOURCE_DIR}/work/WorkRunner.cpp
-	${PROJECT_SOURCE_DIR}/work/WorkScheduler.cpp
-	${PROJECT_SOURCE_DIR}/work/WorkSuspendThrowable.cpp
-)
 
 file(GLOB XMLUI_SOURCES
 	xmlui/Serializing.cpp
@@ -291,7 +267,6 @@ file(GLOB RESTUI_SOURCES
 	restui/TimeZoneRestHandler.cpp
 	restui/TypeRestHandler.cpp
 	restui/GatewayRestHandler.cpp
-	restui/WorkRestHandler.cpp
 	dao/poco/PocoSQLiteConnectorLoader.cpp
 )
 
@@ -352,7 +327,6 @@ include_directories(
 )
 
 add_library(BeeeOnServer SHARED ${SOURCES})
-add_library(BeeeOnWork SHARED ${WORK_SOURCES})
 
 file(GLOB MAIN_CPP main.cpp)
 configure_file(${MAIN_CPP} ${CMAKE_CURRENT_BINARY_DIR}/main.cpp)
@@ -394,7 +368,6 @@ if (APPLE)
 	target_link_libraries(beeeon-server
 		-Wl,-all_load
 		BeeeOnBase
-		BeeeOnWork
 		BeeeOnServer
 		${LIBS}
 	)
@@ -404,7 +377,6 @@ else()
 	target_link_libraries(beeeon-server
 		-Wl,--whole-archive
 		BeeeOnBase
-		BeeeOnWork
 		BeeeOnServer
 		-Wl,--no-whole-archive
 		${LIBS}
@@ -417,7 +389,7 @@ else()
 	target_link_libraries(beeeon-server ${POCO_ODBC})
 endif()
 
-install(TARGETS beeeon-server BeeeOnServer BeeeOnWork
+install(TARGETS beeeon-server BeeeOnServer
 	RUNTIME DESTINATION bin
 	LIBRARY DESTINATION "${LIB_INSTALL_DIR}"
 	ARCHIVE DESTINATION "${AR_INSTALL_DIR}"

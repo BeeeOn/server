@@ -47,7 +47,6 @@
 			<set name="gatewayRPC" ref="gatewayRPC" />
 			<set name="accessPolicy" ref="accessPolicy" />
 			<set name="transactionManager" ref="transactionManager" />
-			<set name="workFacade" ref="uiWorkFacade" />
 			<set name="scanController" ref="gatewayScanController" />
 		</instance>
 
@@ -107,10 +106,6 @@
 			<set name="fcmTokenDao" ref="fcmTokenDao" />
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="accessPolicy" ref="accessPolicy" />
-		</instance>
-
-		<instance name="workService" class="BeeeOn::WorkServiceImpl">
-			<set name="facade" ref="uiWorkFacade" />
 		</instance>
 
 		<instance name="gwsSensorHistoryService"

@@ -11,7 +11,6 @@ especially:
 that is maintained for backwards compatibility and the newer REST-UI.
 * GWS - the Gateway Server is used to maintain connections to BeeeOn Gateways. It
 receives measured sensor data and allows to drive the controllable elements.
-* Work Scheduler - allows to perform asynchronous tasks.
 * Notification Infrastructure - delivers user notifications to user devices
 (phones, tablets, etc.).
 

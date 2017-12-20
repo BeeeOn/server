@@ -52,12 +52,6 @@ if (JWT AND JANSSON)
 	list(APPEND TEST_SOURCES ${JWT_TEST_SOURCES})
 endif()
 
-file(GLOB TEST_WORK_SOURCES
-	${PROJECT_SOURCE_DIR}/work/BasicProcessorTest.cpp
-	${PROJECT_SOURCE_DIR}/work/BasicQueueTest.cpp
-	${PROJECT_SOURCE_DIR}/work/GenericWorkRunnerTest.cpp
-)
-
 include_directories(
 	${PROJECT_SOURCE_DIR}
 	${CMAKE_SOURCE_DIR}/src
@@ -68,7 +62,6 @@ include_directories(
 add_executable(test-suite-server
 	${CMAKE_SOURCE_DIR}/base/test/test.cpp
 	${TEST_SOURCES}
-	${TEST_WORK_SOURCES}
 )
 add_test(COMMAND test-suite-server)
 
@@ -111,7 +104,6 @@ if (APPLE)
 		-Wl,-all_load
 		BeeeOnBaseTest
 		BeeeOnBase
-		BeeeOnWork
 		BeeeOnServer
 		${LIBS}
 	)
@@ -122,7 +114,6 @@ else()
 		-Wl,--whole-archive
 		BeeeOnBaseTest
 		BeeeOnBase
-		BeeeOnWork
 		BeeeOnServer
 		-Wl,--no-whole-archive
 		${LIBS}
