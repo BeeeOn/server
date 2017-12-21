@@ -211,7 +211,10 @@ void AsyncGatewayRPC::sendAndExpectResult(const GatewayID &gatewayID,
 		m_responseExpectedQueue->notifyDelivered(gatewayID, callID);
 
 		result->setStatus(GatewayRPCResult::Status::NOT_CONNECTED);
-		executeResultCall(gatewayID, callID, resultCall, result);
+
+		m_timer.schedule(new LambdaTimerTask([=]() {
+			executeResultCall(gatewayID, callID, resultCall, result);
+		}), Clock{});
 	}
 	catch (const Exception &e) {
 		logger().log(e, __FILE__, __LINE__);
@@ -220,7 +223,10 @@ void AsyncGatewayRPC::sendAndExpectResult(const GatewayID &gatewayID,
 		m_responseExpectedQueue->notifyDelivered(gatewayID, callID);
 
 		result->setStatus(GatewayRPCResult::Status::FAILED);
-		executeResultCall(gatewayID, callID, resultCall, result);
+
+		m_timer.schedule(new LambdaTimerTask([=]() {
+			executeResultCall(gatewayID, callID, resultCall, result);
+		}), Clock{});
 	}
 }
 
