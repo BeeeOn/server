@@ -117,6 +117,16 @@ class TestDevicesUpdateActivate(unittest.TestCase):
 
 			time.sleep(1)
 
+		req = GET(config.ui_host, config.ui_port, device_uri)
+		req.authorize(self.session)
+		response, content = req()
+
+		self.assertEqual(200, response.status)
+		result = json.loads(content)
+		self.assertEqual("success", result["status"])
+
+		self.assertEqual("inactive", result["data"]["state"])
+
 	"""
 	Activate device 4931887558509748622 (Unknown).
 	"""
@@ -168,6 +178,16 @@ class TestDevicesUpdateActivate(unittest.TestCase):
 				break
 
 			time.sleep(1)
+
+		req = GET(config.ui_host, config.ui_port, device_uri)
+		req.authorize(self.session)
+		response, content = req()
+
+		self.assertEqual(200, response.status)
+		result = json.loads(content)
+		self.assertEqual("success", result["status"])
+
+		self.assertEqual("inactive", result["data"]["state"])
 
 if __name__ == '__main__':
 	import sys
