@@ -239,6 +239,17 @@ class TestDeviceUpdateActivate(unittest.TestCase):
 		))
 		self.assertTrue(response.is_ok())
 
+		for i in range(10):
+			response = c.request(DeviceGetNew(
+				config.gateway_id,
+				self.session
+			))
+			self.assertTrue(response.is_data())
+			if len(response.root) == 0:
+				break
+
+			time.sleep(1)
+
 		response = c.request(DeviceGetNew(
 			config.gateway_id,
 			self.session
