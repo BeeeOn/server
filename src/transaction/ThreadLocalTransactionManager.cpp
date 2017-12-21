@@ -111,7 +111,9 @@ Transaction *ThreadLocalTransactionManager::start()
 		return ref.get();
 	}
 
-	throw IllegalStateException("transaction already exists in this context");
+	throw IllegalStateException("transaction ("
+			+ ref.get()->name()
+			+ ") already exists in this context");
 }
 
 Transaction *ThreadLocalTransactionManager::create()
