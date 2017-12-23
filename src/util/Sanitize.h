@@ -46,6 +46,10 @@ public:
 		 * can expect longer tokens, depends on data stored in the token.
 		 */
 		SIZE_LIMIT_TOKEN = 280,
+		/**
+		 * Locale are usually in form en_US, cs_CZ, etc.
+		 */
+		SIZE_LIMIT_LOCALE = 16,
 	};
 
 	/**
@@ -126,6 +130,14 @@ public:
 	 */
 	static std::string token(const std::string &bytes,
 			const unsigned long sizeLimit = SIZE_LIMIT_TOKEN,
+			const std::string &inputEncoding = "UTF-8");
+
+	/**
+	 * Sanitize locale specification. Convert the contents to UTF-8
+	 * and allow only symbols: [0-9a-zA-Z\-\_\.]+.
+	 */
+	static std::string locale(const std::string &bytes,
+			const unsigned long sizeLimit = SIZE_LIMIT_LOCALE,
 			const std::string &inputEncoding = "UTF-8");
 };
 
