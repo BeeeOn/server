@@ -85,6 +85,26 @@ class TestLocalizationAfterLogin(unittest.TestCase):
 
 		self.assertEqual("přítomnost", result["data"]["name"])
 
+	"""
+	Test locale of the user we are logged in as (joe.doe@example.org).
+	"""
+	def test2_current_locale_is_en(self):
+		req = GET(config.ui_host, config.ui_port, "/profiles/current")
+		req.authorize(self.session)
+		response, _ = req()
+
+		self.assertEqual(303, response.status)
+
+		req = GET(config.ui_host, config.ui_port, response.headers["Location"])
+		req.authorize(self.session)
+		response, content = req()
+
+		self.assertEqual(200, response.status)
+		result = json.loads(content)
+		self.assertEqual("success", result["status"])
+
+		self.assertEqual("en", result["data"]["locale"])
+
 if __name__ == '__main__':
 	import sys
 	import taprunner
