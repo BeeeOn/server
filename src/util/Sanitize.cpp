@@ -322,3 +322,23 @@ string Sanitize::token(const string &bytes,
 
 	return text;
 }
+
+static RegularExpression localeRegex(
+	"[0-9a-zA-Z\\-_\\.]+",
+	RegularExpression::RE_DOLLAR_ENDONLY  |
+	RegularExpression::RE_NO_AUTO_CAPTURE |
+	RegularExpression::RE_UTF8,
+	true
+);
+
+string Sanitize::locale(const string &bytes,
+		const unsigned long sizeLimit,
+		const string &inputEncoding)
+{
+	const string text(Sanitize::encoding(bytes, sizeLimit, inputEncoding));
+
+	if (!match(localeRegex, text))
+		throw InvalidArgumentException("unexpected locale input");
+
+	return text;
+}

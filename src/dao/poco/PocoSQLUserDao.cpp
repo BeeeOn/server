@@ -39,11 +39,13 @@ void PocoSQLUserDao::create(User &user)
 	string id(user.id().toString());
 	string firstName(user.firstName());
 	string lastName(user.lastName());
+	string locale(user.locale().toString());
 
 	Statement sql = (session() << m_queryCreate(),
 		use(id, "id"),
 		use(firstName),
-		use(lastName)
+		use(lastName),
+		use(locale)
 	);
 
 	execute(sql);

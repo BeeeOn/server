@@ -158,7 +158,7 @@ bool FacebookAuthProvider::parseIdentity(const string &userInfo, const string &a
 		result.setLastName(Sanitize::common(info->getValue<string>("last_name")));
 
 	if (info->has("locale"))
-		result.setLocale(info->getValue<string>("locale"));
+		result.setLocale(Sanitize::locale(info->getValue<string>("locale")));
 
 	if (info->has("picture")) {
 		Object::Ptr pictData = info->getObject("picture");

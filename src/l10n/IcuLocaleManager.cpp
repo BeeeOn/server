@@ -52,12 +52,15 @@ BeeeOn::Locale IcuLocaleManager::parse(const string &input)
 	auto found = determine(locale);
 
 	if (found.isNull()) {
+		const Locale &def = defaultLocale();
+
 		if (logger().debug()) {
-			logger().warning("requested missing locale: " + locale.toString(),
+			logger().warning("requested missing locale: " + locale.toString()
+					+ ", fallback to " + def.toString(),
 				__FILE__, __LINE__);
 		}
 
-		return defaultLocale();
+		return def;
 	}
 
 	return Locale(found);
