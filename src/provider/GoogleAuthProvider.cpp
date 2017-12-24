@@ -51,7 +51,7 @@ bool GoogleAuthProvider::parseIdentity(const std::string &userInfo,
 	if (info->has("picture"))
 		result.setPicture(Sanitize::uri(info->getValue<string>("picture")));
 	if (info->has("locale"))
-		result.setLocale(info->getValue<string>("locale"));
+		result.setLocale(Sanitize::locale(info->getValue<string>("locale")));
 
 	result.setAccessToken(tokens.accessToken);
 
