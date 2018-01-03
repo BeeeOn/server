@@ -25,7 +25,7 @@ const VerifiedIdentityID &Session::identityID() const
 	return m_identityID;
 }
 
-void Session::setUserId(const UserID &id)
+void Session::setUserID(const UserID &id)
 {
 	m_userID = id;
 }

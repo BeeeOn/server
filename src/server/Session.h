@@ -27,7 +27,7 @@ public:
 	void setIdentityID(const VerifiedIdentityID &id);
 	const VerifiedIdentityID &identityID() const;
 
-	void setUserId(const UserID &id);
+	void setUserID(const UserID &id);
 	const UserID userID() const;
 
 	void setLocale(const Locale &locale);
