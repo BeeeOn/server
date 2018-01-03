@@ -1,7 +1,6 @@
 #ifndef BEEEON_SESSION_VERIFIER_H
 #define BEEEON_SESSION_VERIFIER_H
 
-#include <Poco/Logger.h>
 #include <Poco/Net/NetException.h>
 
 #include "server/Session.h"

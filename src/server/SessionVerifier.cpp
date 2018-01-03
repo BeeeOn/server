@@ -1,3 +1,4 @@
+#include <Poco/Logger.h>
 #include <Poco/Exception.h>
 #include <Poco/String.h>
 
