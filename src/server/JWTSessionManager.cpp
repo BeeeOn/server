@@ -123,7 +123,9 @@ const Session::Ptr JWTSessionManager::open(
 	const TokenID &tokenID = m_encoder->encode(token);
 	const SessionID &sessionID = tokenID.toString();
 
-	Session::Ptr session = new Session(user.id(), sessionID, m_expireTime);
+	Session::Ptr session = new Session(sessionID);
+	session->setUserID(user.id());
+	session->setExpiration(Timestamp{} + m_expireTime);
 	session->setIdentityID(identity.id());
 	session->setLocale(user.locale());
 
@@ -177,7 +179,9 @@ bool JWTSessionManager::lookup(const SessionID &id, Session::Ptr &session)
 
 	tie(userID, identityID) = decodeSubject(token.subject());
 
-	session = new Session(userID, id, expTime);
+	session = new Session(id);
+	session->setUserID(userID);
+	session->setExpiration(Timestamp{} + expTime);
 	session->setIdentityID(identityID);
 
 	// when not found default locale is set

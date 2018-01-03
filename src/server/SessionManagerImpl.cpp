@@ -66,7 +66,9 @@ const Session::Ptr SessionManagerImpl::open(
 	m_random->randomBytesUnlocked(bSessionID, sizeof(bSessionID));
 	SessionID sessionID = Base64::encode(bSessionID, sizeof(bSessionID));
 
-	Session session(user.id(), sessionID, m_expireTime);
+	Session session(sessionID);
+	session.setUserID(user.id());
+	session.setExpiration(Timestamp{} + m_expireTime);
 	session.setIdentityID(identity.id());
 	session.setLocale(user.locale());
 

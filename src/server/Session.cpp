@@ -3,12 +3,9 @@
 using namespace Poco;
 using namespace BeeeOn;
 
-Session::Session(const UserID &userID, const SessionID &sessionID,
-			const Timespan &expireIn):
-	m_userID(userID),
-	m_sessionID(sessionID)
+Session::Session(const SessionID &id):
+	m_sessionID(id)
 {
-	m_expiration += expireIn;
 }
 
 Session::~Session()
