@@ -20,7 +20,7 @@
 			<set name="threadIdleTime" time="${restui.threadIdleTime}" />
 		</instance>
 
-		<instance name="sessionVerifier" class="BeeeOn::SessionVerifier">
+		<instance name="sessionVerifier" class="BeeeOn::SessionVerifierImpl">
 			<set name="sessionManager" ref="sessionManager" />
 		</instance>
 

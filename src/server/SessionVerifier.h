@@ -4,7 +4,6 @@
 #include <Poco/Net/NetException.h>
 
 #include "server/Session.h"
-#include "server/SessionManager.h"
 #include "util/Loggable.h"
 
 namespace BeeeOn {
@@ -39,18 +38,10 @@ public:
 			const std::string &scheme,
 			const std::string &authInfo);
 
-	void setSessionManager(SessionManager *manager)
-	{
-		m_sessionManager = manager;
-	}
-
-private:
-	Session::Ptr doVerifyAuthorized(
-			const std::string &scheme,
-			const std::string &authInfo);
-
 protected:
-	SessionManager *m_sessionManager;
+	virtual Session::Ptr doVerifyAuthorized(
+			const std::string &scheme,
+			const std::string &authInfo) = 0;
 };
 
 }

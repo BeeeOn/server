@@ -40,6 +40,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/server/SessionManager.cpp
 	${PROJECT_SOURCE_DIR}/server/SessionManagerImpl.cpp
 	${PROJECT_SOURCE_DIR}/server/SessionVerifier.cpp
+	${PROJECT_SOURCE_DIR}/server/SessionVerifierImpl.cpp
 	${PROJECT_SOURCE_DIR}/server/AccessLevel.cpp
 	${PROJECT_SOURCE_DIR}/server/XmlRequestHandler.cpp
 	${PROJECT_SOURCE_DIR}/server/SocketServer.cpp

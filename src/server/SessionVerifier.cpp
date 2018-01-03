@@ -1,8 +1,6 @@
 #include <Poco/Logger.h>
 #include <Poco/Exception.h>
-#include <Poco/String.h>
 
-#include "di/Injectable.h"
 #include "server/SessionVerifier.h"
 #include "util/Sanitize.h"
 
@@ -39,24 +37,3 @@ Session::Ptr SessionVerifier::verifyAuthorized(
 
 	throw NotAuthenticatedException("terribly failed to authorize");
 }
-
-Session::Ptr SessionVerifier::doVerifyAuthorized(
-		const std::string &scheme,
-		const std::string &authInfo)
-{
-	if (icompare(scheme, "Bearer")) {
-		throw NotAuthenticatedException(
-				"unsupported scheme: " + scheme);
-	}
-
-	Session::Ptr session;
-
-	if (m_sessionManager->lookup(authInfo, session))
-		return session;
-
-	throw NotAuthenticatedException("missing a session");
-}
-
-BEEEON_OBJECT_BEGIN(BeeeOn, SessionVerifier)
-BEEEON_OBJECT_REF("sessionManager", &SessionVerifier::setSessionManager)
-BEEEON_OBJECT_END(BeeeOn, SessionVerifier)
