@@ -1,7 +1,6 @@
 #ifndef BEEEON_SESSION_H
 #define BEEEON_SESSION_H
 
-#include <Poco/Timespan.h>
 #include <Poco/Timestamp.h>
 #include <Poco/SharedPtr.h>
 
@@ -20,14 +19,13 @@ class Session {
 public:
 	typedef Poco::SharedPtr<Session> Ptr;
 
-	Session(const UserID &userID, const SessionID &sessionID,
-			const Poco::Timespan &expireIn);
+	Session(const SessionID &id);
 	virtual ~Session();
 
 	void setIdentityID(const VerifiedIdentityID &id);
 	const VerifiedIdentityID &identityID() const;
 
-	void setUserId(const UserID &id);
+	void setUserID(const UserID &id);
 	const UserID userID() const;
 
 	void setLocale(const Locale &locale);
@@ -35,6 +33,7 @@ public:
 
 	const SessionID sessionID() const;
 
+	void setExpiration(const Poco::Timestamp &expiration);
 	const Poco::Timestamp& getExpiration() const;
 
 private:

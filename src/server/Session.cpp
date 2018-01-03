@@ -3,12 +3,9 @@
 using namespace Poco;
 using namespace BeeeOn;
 
-Session::Session(const UserID &userID, const SessionID &sessionID,
-			const Timespan &expireIn):
-	m_userID(userID),
-	m_sessionID(sessionID)
+Session::Session(const SessionID &id):
+	m_sessionID(id)
 {
-	m_expiration += expireIn;
 }
 
 Session::~Session()
@@ -25,7 +22,7 @@ const VerifiedIdentityID &Session::identityID() const
 	return m_identityID;
 }
 
-void Session::setUserId(const UserID &id)
+void Session::setUserID(const UserID &id)
 {
 	m_userID = id;
 }
@@ -48,6 +45,11 @@ const Locale &Session::locale() const
 const SessionID Session::sessionID() const
 {
 	return m_sessionID;
+}
+
+void Session::setExpiration(const Timestamp &expiration)
+{
+	m_expiration = expiration;
 }
 
 const Timestamp& Session::getExpiration() const
