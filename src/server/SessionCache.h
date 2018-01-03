@@ -21,8 +21,8 @@ namespace BeeeOn {
  * This class is NOT thread-safe
  */
 class SessionCache : public Poco::AbstractCache<SessionID,
-	ExpirableSession,
-	Poco::UniqueExpireStrategy<SessionID, ExpirableSession>>,
+	Session,
+	Poco::UniqueExpireStrategy<SessionID, Session>>,
 	public Loggable
 {
 public:
@@ -33,7 +33,7 @@ public:
 	 * Adds new session with given sessionID to session table and creates
 	 * new reverse record to map existing user's session.
 	 */
-	void add(const SessionID &sessionID, ExpirableSession &session);
+	void add(const SessionID &sessionID, Session &session);
 
 	/**
 	 * Removes session from session and user's session tables.

@@ -103,7 +103,7 @@ void AuthRestHandler::login(RestFlow &flow)
 		object->getValue<std::string>("code")
 	);
 
-	ExpirableSession::Ptr session;
+	Session::Ptr session;
 
 	try {
 		session	= m_authService->login(credentials);

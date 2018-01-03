@@ -43,7 +43,7 @@ void SessionManagerImpl::setMaxUserSessions(const int maxUserSessions)
 	m_sessionCache = new SessionCache(maxUserSessions);
 }
 
-const ExpirableSession::Ptr SessionManagerImpl::open(
+const Session::Ptr SessionManagerImpl::open(
 		const VerifiedIdentity &identity)
 {
 	if (identity.id().isNull()) {
@@ -66,7 +66,7 @@ const ExpirableSession::Ptr SessionManagerImpl::open(
 	m_random->randomBytesUnlocked(bSessionID, sizeof(bSessionID));
 	SessionID sessionID = Base64::encode(bSessionID, sizeof(bSessionID));
 
-	ExpirableSession session(user.id(), sessionID, m_expireTime);
+	Session session(user.id(), sessionID, m_expireTime);
 	session.setIdentityID(identity.id());
 	session.setLocale(user.locale());
 
@@ -80,7 +80,7 @@ const ExpirableSession::Ptr SessionManagerImpl::open(
 	return m_sessionCache->get(sessionID);
 }
 
-bool SessionManagerImpl::lookup(const SessionID &id, ExpirableSession::Ptr &session)
+bool SessionManagerImpl::lookup(const SessionID &id, Session::Ptr &session)
 {
 	if (logger().debug())
 		logger().debug("Looking up session: " + id, __FILE__, __LINE__);

@@ -17,8 +17,8 @@ public:
 
 	virtual ~SessionManager();
 
-	virtual const ExpirableSession::Ptr open(const VerifiedIdentity &identity) = 0;
-	virtual bool lookup(const SessionID &id, ExpirableSession::Ptr &info) = 0;
+	virtual const Session::Ptr open(const VerifiedIdentity &identity) = 0;
+	virtual bool lookup(const SessionID &id, Session::Ptr &info) = 0;
 	virtual void close(const SessionID &id) = 0;
 };
 

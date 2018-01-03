@@ -66,26 +66,26 @@ public:
 		m_localeManager = manager;
 	}
 
-	const ExpirableSession::Ptr login(const Credentials &cred);
+	const Session::Ptr login(const Credentials &cred);
 
 	void logout(const std::string &id);
 
 	void list(std::vector<AuthProvider *> &providers);
 
 protected:
-	ExpirableSession::Ptr loginAuthorized(const AuthResult &result)
+	Session::Ptr loginAuthorized(const AuthResult &result)
 	{
 		return BEEEON_TRANSACTION_RETURN(
-			ExpirableSession::Ptr,
+			Session::Ptr,
 			doLoginAuthorized(result)
 		);
 	}
 
-	ExpirableSession::Ptr doLoginAuthorized(const AuthResult &result);
+	Session::Ptr doLoginAuthorized(const AuthResult &result);
 
-	ExpirableSession::Ptr openSession(const VerifiedIdentity &verifiedIdentity);
-	ExpirableSession::Ptr verifyIdentityAndLogin(const AuthResult &result);
-	ExpirableSession::Ptr loginAsNew(const AuthResult &result);
+	Session::Ptr openSession(const VerifiedIdentity &verifiedIdentity);
+	Session::Ptr verifyIdentityAndLogin(const AuthResult &result);
+	Session::Ptr loginAsNew(const AuthResult &result);
 	void verifyIdentity(VerifiedIdentity &verifiedIdentity,
 			Identity &identity, const AuthResult &result);
 	void approveIdentity(VerifiedIdentity &verifiedIdentity,

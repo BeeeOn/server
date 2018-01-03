@@ -65,11 +65,11 @@ void SessionManagerTest::testOpenClose()
 	VerifiedIdentity identity(VerifiedIdentityID::random());
 	identity.setUser(user);
 
-	ExpirableSession::Ptr newSession = m_manager.open(identity);
+	Session::Ptr newSession = m_manager.open(identity);
 	const SessionID &id = newSession->sessionID();
 	CPPUNIT_ASSERT(Base64::decode(id).compare(SESSION_ID64) == 0);
 
-	ExpirableSession::Ptr infoLookup;
+	Session::Ptr infoLookup;
 	CPPUNIT_ASSERT(m_manager.lookup(id, infoLookup));
 
 	m_manager.close(id);
@@ -85,7 +85,7 @@ void SessionManagerTest::testMaxUserSessions()
 	VerifiedIdentity identity(VerifiedIdentityID::random());
 	identity.setUser(user);
 
-	std::vector<ExpirableSession::Ptr> sessions;
+	std::vector<Session::Ptr> sessions;
 
 	m_manager.setSecureRandomProvider(&pocoProvider);
 
@@ -109,7 +109,7 @@ void SessionManagerTest::testSessionTimeout()
 {
 	// Sleep for 1 second + a little bit of overhead.
 	// Tests whether the session really expired.
-	ExpirableSession::Ptr infoLookup;
+	Session::Ptr infoLookup;
 	PocoRandomProvider pocoProvider;
 
 	m_manager.setSecureRandomProvider(&pocoProvider);
@@ -119,7 +119,7 @@ void SessionManagerTest::testSessionTimeout()
 	VerifiedIdentity identity(VerifiedIdentityID::random());
 	identity.setUser(user);
 
-	ExpirableSession::Ptr session = m_manager.open(identity);
+	Session::Ptr session = m_manager.open(identity);
 
 	usleep(1100000);
 	CPPUNIT_ASSERT(!m_manager.lookup(session->sessionID(), infoLookup));

@@ -21,7 +21,7 @@ public:
 	 * Verify the session exists and return it.
 	 */
 	template <typename Request>
-	ExpirableSession::Ptr verifyAuthorized(const Request &request)
+	Session::Ptr verifyAuthorized(const Request &request)
 	{
 		if (!request.hasCredentials()) {
 			throw Poco::Net::NotAuthenticatedException(
@@ -35,7 +35,7 @@ public:
 		return verifyAuthorized(scheme, authInfo);
 	}
 
-	ExpirableSession::Ptr verifyAuthorized(
+	Session::Ptr verifyAuthorized(
 			const std::string &scheme,
 			const std::string &authInfo);
 
@@ -45,7 +45,7 @@ public:
 	}
 
 private:
-	ExpirableSession::Ptr doVerifyAuthorized(
+	Session::Ptr doVerifyAuthorized(
 			const std::string &scheme,
 			const std::string &authInfo);
 

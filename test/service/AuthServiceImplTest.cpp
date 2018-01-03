@@ -164,7 +164,7 @@ void AuthServiceImplTest::testPermitAuth()
 	AuthCodeCredentials cred("permit", "permit@example.org");
 
 	try {
-		const ExpirableSession::Ptr session = m_service->login(cred);
+		const Session::Ptr session = m_service->login(cred);
 		const SessionID id = session->sessionID();
 		CPPUNIT_ASSERT(Base64::decode(id).compare(SESSION_ID64) == 0);
 		m_service->logout(id);
@@ -197,7 +197,7 @@ void AuthServiceImplTest::testLoginAsNew()
 	result.setFirstName("Freddie");
 	result.setLastName("Mercury");
 
-	ExpirableSession::Ptr session = m_service->loginAsNew(result);
+	Session::Ptr session = m_service->loginAsNew(result);
 	CPPUNIT_ASSERT(!session.isNull());
 
 	Identity identity;
@@ -240,7 +240,7 @@ void AuthServiceImplTest::testFirstLoginBySecondProvider()
 	result.setFirstName("Freddie 2");
 	result.setLastName("Mercury 2");
 
-	ExpirableSession::Ptr session =
+	Session::Ptr session =
 		m_service->verifyIdentityAndLogin(result);
 	CPPUNIT_ASSERT(!session.isNull());
 

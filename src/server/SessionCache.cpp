@@ -20,7 +20,7 @@ SessionCache::~SessionCache()
  * Adds new session with given sessionID to session table and creates
  * new reverse record to map existing user's session.
  */
-void SessionCache::add(const SessionID &sessionID, ExpirableSession &session)
+void SessionCache::add(const SessionID &sessionID, Session &session)
 {
 	UserID userID = session.userID();
 	auto userSession = m_userSessionSet.find(userID);

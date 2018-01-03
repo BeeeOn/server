@@ -45,19 +45,6 @@ private:
 	Poco::Timestamp m_expiration;
 };
 
-/**
- * Enables expirable session feature using Poco
- */
-class ExpirableSession : public Session {
-public:
-	typedef Poco::SharedPtr<ExpirableSession> Ptr;
-
-	ExpirableSession(
-		const UserID &userID,
-		const SessionID &sessionID,
-		Poco::Timespan &timespan);
-};
-
 }
 
 #endif

@@ -68,14 +68,14 @@ public:
 	 * Creates JWT and fills audience and issuer by setting specification.
 	 * Subject of JWToken is filled with userID and verifiedIdentityID.
 	 */
-	const ExpirableSession::Ptr open(const VerifiedIdentity &identity) override;
+	const Session::Ptr open(const VerifiedIdentity &identity) override;
 
 	/**
 	 * Decodes and verify received token. If list of audience does not include
 	 * issuer name of JWTokenSessionManager token is refused. Otherwise token
 	 * is attempted to be decoded.
 	 */
-	bool lookup(const SessionID &id, ExpirableSession::Ptr &info) override;
+	bool lookup(const SessionID &id, Session::Ptr &info) override;
 
 	/**
 	 * Does nothing in this implementation.
