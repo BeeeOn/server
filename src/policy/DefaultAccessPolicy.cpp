@@ -2,6 +2,7 @@
 #include <Poco/Exception.h>
 
 #include "di/Injectable.h"
+#include "model/VerifiedIdentity.h"
 #include "policy/PolicyContext.h"
 #include "policy/DefaultAccessPolicy.h"
 
