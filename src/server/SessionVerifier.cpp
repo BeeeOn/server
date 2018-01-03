@@ -13,6 +13,10 @@ SessionVerifier::SessionVerifier()
 {
 }
 
+SessionVerifier::~SessionVerifier()
+{
+}
+
 Session::Ptr SessionVerifier::verifyAuthorized(
 		const std::string &scheme,
 		const std::string &authInfo)

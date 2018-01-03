@@ -16,6 +16,7 @@ namespace BeeeOn {
 class SessionVerifier : public Loggable {
 public:
 	SessionVerifier();
+	virtual ~SessionVerifier();
 
 	/**
 	 * Verify the session exists and return it.
