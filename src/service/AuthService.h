@@ -30,7 +30,7 @@ public:
 
 	virtual ~AuthService();
 
-	virtual const ExpirableSession::Ptr login(const Credentials &cred) = 0;
+	virtual const Session::Ptr login(const Credentials &cred) = 0;
 	virtual void logout(const std::string &id) = 0;
 	virtual void list(std::vector<AuthProvider *> &providers) = 0;
 };

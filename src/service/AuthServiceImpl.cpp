@@ -33,7 +33,7 @@ User AuthServiceImpl::createUser(const AuthResult &result)
 	return user;
 }
 
-ExpirableSession::Ptr AuthServiceImpl::loginAsNew(const AuthResult &result)
+Session::Ptr AuthServiceImpl::loginAsNew(const AuthResult &result)
 {
 	Identity identity;
 	identity.setEmail(result.email());
@@ -90,7 +90,7 @@ void AuthServiceImpl::verifyIdentity(
 	approveIdentity(verifiedIdentity, identity, existing.user(), result);
 }
 
-ExpirableSession::Ptr AuthServiceImpl::verifyIdentityAndLogin(
+Session::Ptr AuthServiceImpl::verifyIdentityAndLogin(
 		const AuthResult &result)
 {
 	Identity identity;
@@ -111,7 +111,7 @@ ExpirableSession::Ptr AuthServiceImpl::verifyIdentityAndLogin(
 	return openSession(verifiedIdentity);
 }
 
-ExpirableSession::Ptr AuthServiceImpl::openSession(
+Session::Ptr AuthServiceImpl::openSession(
 		const VerifiedIdentity &verifiedIdentity)
 {
 	User user(verifiedIdentity.user());
@@ -127,7 +127,7 @@ ExpirableSession::Ptr AuthServiceImpl::openSession(
 	return m_sessionManager->open(copy);
 }
 
-ExpirableSession::Ptr AuthServiceImpl::doLoginAuthorized(const AuthResult &result)
+Session::Ptr AuthServiceImpl::doLoginAuthorized(const AuthResult &result)
 {
 	VerifiedIdentity identity;
 	if (!m_verifiedIdentityDao->fetchBy(identity,
@@ -137,7 +137,7 @@ ExpirableSession::Ptr AuthServiceImpl::doLoginAuthorized(const AuthResult &resul
 	return openSession(identity);
 }
 
-const ExpirableSession::Ptr AuthServiceImpl::login(const Credentials &cred)
+const Session::Ptr AuthServiceImpl::login(const Credentials &cred)
 {
 	Providers::iterator it = m_providers.find(cred.provider());
 	if (it == m_providers.end())

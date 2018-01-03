@@ -77,14 +77,14 @@ public:
 	 * Set session of this flow. This is usually done by some
 	 * lower layer.
 	 */
-	void setSession(ExpirableSession::Ptr session);
+	void setSession(Session::Ptr session);
 
 	/**
 	 * Provide access to the current session. If there is no
 	 * session associated with the current flow, it returns
 	 * NULL.
 	 */
-	ExpirableSession::Ptr session() const;
+	Session::Ptr session() const;
 
 	/**
 	 * Set localization translator for current flow.
@@ -115,7 +115,7 @@ private:
 	UriPattern::Params &m_params;
 	PocoRequest m_request;
 	PocoResponse m_response;
-	ExpirableSession::Ptr m_session;
+	Session::Ptr m_session;
 	Translator::Ptr m_translator;
 	Locale m_locale;
 };

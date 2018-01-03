@@ -93,7 +93,7 @@ static tuple<UserID, VerifiedIdentityID> decodeSubject(const string &subject)
 	return make_tuple(userID, identityID);
 }
 
-const ExpirableSession::Ptr JWTSessionManager::open(
+const Session::Ptr JWTSessionManager::open(
 		const VerifiedIdentity &identity)
 {
 	if (identity.id().isNull())
@@ -123,7 +123,7 @@ const ExpirableSession::Ptr JWTSessionManager::open(
 	const TokenID &tokenID = m_encoder->encode(token);
 	const SessionID &sessionID = tokenID.toString();
 
-	ExpirableSession::Ptr session = new ExpirableSession(user.id(), sessionID, m_expireTime);
+	Session::Ptr session = new Session(user.id(), sessionID, m_expireTime);
 	session->setIdentityID(identity.id());
 	session->setLocale(user.locale());
 
@@ -135,7 +135,7 @@ const ExpirableSession::Ptr JWTSessionManager::open(
 	return session;
 }
 
-bool JWTSessionManager::lookup(const SessionID &id, ExpirableSession::Ptr &session)
+bool JWTSessionManager::lookup(const SessionID &id, Session::Ptr &session)
 {
 	JWToken token;
 
@@ -177,7 +177,7 @@ bool JWTSessionManager::lookup(const SessionID &id, ExpirableSession::Ptr &sessi
 
 	tie(userID, identityID) = decodeSubject(token.subject());
 
-	session = new ExpirableSession(userID, id, expTime);
+	session = new Session(userID, id, expTime);
 	session->setIdentityID(identityID);
 
 	// when not found default locale is set

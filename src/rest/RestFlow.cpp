@@ -80,12 +80,12 @@ bool RestFlow::hasSession() const
 	return !m_session.isNull();
 }
 
-void RestFlow::setSession(ExpirableSession::Ptr session)
+void RestFlow::setSession(Session::Ptr session)
 {
 	m_session = session;
 }
 
-ExpirableSession::Ptr RestFlow::session() const
+Session::Ptr RestFlow::session() const
 {
 	return m_session;
 }

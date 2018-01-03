@@ -1,10 +1,17 @@
 #include "server/Session.h"
 
+using namespace Poco;
 using namespace BeeeOn;
 
-Session::Session(const UserID &userID, const SessionID &sessionID):
+Session::Session(const UserID &userID, const SessionID &sessionID,
+			const Timespan &expireIn):
 	m_userID(userID),
 	m_sessionID(sessionID)
+{
+	m_expiration += expireIn;
+}
+
+Session::~Session()
 {
 }
 
@@ -41,4 +48,9 @@ const Locale &Session::locale() const
 const SessionID Session::sessionID() const
 {
 	return m_sessionID;
+}
+
+const Timestamp& Session::getExpiration() const
+{
+	return m_expiration;
 }

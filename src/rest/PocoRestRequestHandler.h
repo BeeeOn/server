@@ -41,7 +41,7 @@ public:
 
 	void setAction(RestAction::Ptr action);
 	void setActionParams(const MappedRestAction::Params &params);
-	void setSession(ExpirableSession::Ptr session);
+	void setSession(Session::Ptr session);
 
 protected:
 	void run() override;
@@ -78,7 +78,7 @@ protected:
 private:
 	RestAction::Ptr m_action;
 	MappedRestAction::Params m_params;
-	ExpirableSession::Ptr m_session;
+	Session::Ptr m_session;
 	RestLinker &m_linker;
 	TranslatorFactory &m_translatorFactory;
 	HTTPLocaleExtractor &m_localeExtractor;

@@ -54,7 +54,7 @@ void PocoRestRequestHandler::setActionParams(
 	m_params = params;
 }
 
-void PocoRestRequestHandler::setSession(ExpirableSession::Ptr session)
+void PocoRestRequestHandler::setSession(Session::Ptr session)
 {
 	m_session = session;
 }
@@ -344,7 +344,7 @@ PocoRestRequestHandler *PocoRestRequestFactory::createWithSession(
 		const MappedRestAction::Params &params,
 		const HTTPServerRequest &request)
 {
-	ExpirableSession::Ptr session;
+	Session::Ptr session;
 
 	if (action->sessionRequired()) {
 		try {

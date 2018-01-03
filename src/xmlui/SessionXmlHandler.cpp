@@ -49,7 +49,7 @@ Session::Ptr SessionXmlHandlerResolver::lookupSession(
 {
 	const Element *root = input->documentElement();
 	const string &sessionId = Sanitize::base64(root->getAttribute("sessionid"), ".");
-	ExpirableSession::Ptr session;
+	Session::Ptr session;
 
 	if (!sessionManager.lookup(sessionId, session))
 		return NULL;

@@ -72,11 +72,11 @@ void JWTSessionManagerTest::testOpenClose()
 	User user(userID);
 	identity.setUser(user);
 
-	ExpirableSession::Ptr newSession;
+	Session::Ptr newSession;
 	CPPUNIT_ASSERT_NO_THROW(newSession = m_manager.open(identity));
 	const SessionID &id = newSession->sessionID();
 
-	ExpirableSession::Ptr infoLookup;
+	Session::Ptr infoLookup;
 	CPPUNIT_ASSERT(m_manager.lookup(id, infoLookup));
 
 	CPPUNIT_ASSERT(infoLookup->identityID() == identityID);
@@ -114,7 +114,7 @@ static const string TOKEN_WITH_UNKNOWN_IN_AUDIENCE =
 void JWTSessionManagerTest::testNotInAudience()
 {
 	SessionID id(TOKEN_WITH_UNKNOWN_IN_AUDIENCE);
-	ExpirableSession::Ptr infoLookup;
+	Session::Ptr infoLookup;
 
 	CPPUNIT_ASSERT(!m_manager.lookup(id, infoLookup));
 }
@@ -148,7 +148,7 @@ static const string TOKEN_WITH_NO_LOCALE_CLAIM =
 void JWTSessionManagerTest::testMissingLocale()
 {
 	SessionID id(TOKEN_WITH_NO_LOCALE_CLAIM);
-	ExpirableSession::Ptr infoLookup;
+	Session::Ptr infoLookup;
 
 	CPPUNIT_ASSERT_NO_THROW(m_manager.lookup(id, infoLookup));
 	CPPUNIT_ASSERT_EQUAL(infoLookup->locale().toString(), Locale().toString());
@@ -185,7 +185,7 @@ static const string TOKEN_WITH_INVALID_LOCALE_CLAIM =
 void JWTSessionManagerTest::testInvalidLocale()
 {
 	SessionID id(TOKEN_WITH_INVALID_LOCALE_CLAIM);
-	ExpirableSession::Ptr infoLookup;
+	Session::Ptr infoLookup;
 
 	CPPUNIT_ASSERT_NO_THROW(m_manager.lookup(id, infoLookup));
 	CPPUNIT_ASSERT_EQUAL(infoLookup->locale().toString(), Locale().toString());
@@ -198,7 +198,7 @@ void JWTSessionManagerTest::testSessionTimeout()
 {
 	m_manager.setSessionExpireTime(0);
 
-	ExpirableSession::Ptr infoLookup;
+	Session::Ptr infoLookup;
 	UserID userID = UserID::parse("824b4831-6ce4-4614-8e02-8380d6d92f95");
 	VerifiedIdentityID identityID = VerifiedIdentityID::parse("be572079-0971-47f0-95df-68476a642911");
 
@@ -206,7 +206,7 @@ void JWTSessionManagerTest::testSessionTimeout()
 	User user(userID);
 	identity.setUser(user);
 
-	ExpirableSession::Ptr session = m_manager.open(identity);
+	Session::Ptr session = m_manager.open(identity);
 
 	CPPUNIT_ASSERT(!m_manager.lookup(session->sessionID(), infoLookup));
 }

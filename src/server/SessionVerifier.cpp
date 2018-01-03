@@ -13,7 +13,7 @@ SessionVerifier::SessionVerifier()
 {
 }
 
-ExpirableSession::Ptr SessionVerifier::verifyAuthorized(
+Session::Ptr SessionVerifier::verifyAuthorized(
 		const std::string &scheme,
 		const std::string &authInfo)
 {
@@ -35,7 +35,7 @@ ExpirableSession::Ptr SessionVerifier::verifyAuthorized(
 	throw NotAuthenticatedException("terribly failed to authorize");
 }
 
-ExpirableSession::Ptr SessionVerifier::doVerifyAuthorized(
+Session::Ptr SessionVerifier::doVerifyAuthorized(
 		const std::string &scheme,
 		const std::string &authInfo)
 {
@@ -44,7 +44,7 @@ ExpirableSession::Ptr SessionVerifier::doVerifyAuthorized(
 				"unsupported scheme: " + scheme);
 	}
 
-	ExpirableSession::Ptr session;
+	Session::Ptr session;
 
 	if (m_sessionManager->lookup(authInfo, session))
 		return session;

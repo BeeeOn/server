@@ -31,7 +31,6 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/provider/GoogleAuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/TypeInfoProvider.cpp
 	${PROJECT_SOURCE_DIR}/server/AuthRestHandler.cpp
-	${PROJECT_SOURCE_DIR}/server/ExpirableSession.cpp
 	${PROJECT_SOURCE_DIR}/server/CORSFilter.cpp
 	${PROJECT_SOURCE_DIR}/server/FailingTCPServerConnection.cpp
 	${PROJECT_SOURCE_DIR}/server/HTTPFilter.cpp

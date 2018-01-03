@@ -32,13 +32,13 @@ public:
 	 * info, an exception is thrown.
 	 * Returns a new session ID.
 	 */
-	const ExpirableSession::Ptr open(const VerifiedIdentity &identity) override;
+	const Session::Ptr open(const VerifiedIdentity &identity) override;
 
 	/**
 	 * Lookup a session information by ID.
 	 * Returns false if there is no such session.
 	 */
-	bool lookup(const SessionID &id, ExpirableSession::Ptr &info) override;
+	bool lookup(const SessionID &id, Session::Ptr &info) override;
 
 	/**
 	 * Close session of the given ID.
