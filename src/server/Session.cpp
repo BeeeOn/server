@@ -50,6 +50,11 @@ const SessionID Session::sessionID() const
 	return m_sessionID;
 }
 
+void Session::setExpiration(const Timestamp &expiration)
+{
+	m_expiration = expiration;
+}
+
 const Timestamp& Session::getExpiration() const
 {
 	return m_expiration;

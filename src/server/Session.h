@@ -35,6 +35,7 @@ public:
 
 	const SessionID sessionID() const;
 
+	void setExpiration(const Poco::Timestamp &expiration);
 	const Poco::Timestamp& getExpiration() const;
 
 private:
