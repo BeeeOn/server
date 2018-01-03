@@ -8,6 +8,10 @@ Session::Session(const UserID &userID, const SessionID &sessionID):
 {
 }
 
+Session::~Session()
+{
+}
+
 void Session::setIdentityID(const VerifiedIdentityID &id)
 {
 	m_identityID = id;

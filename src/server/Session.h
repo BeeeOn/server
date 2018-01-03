@@ -20,6 +20,7 @@ public:
 	typedef Poco::SharedPtr<Session> Ptr;
 
 	Session(const UserID &userID, const SessionID &sessionID);
+	virtual ~Session();
 
 	void setIdentityID(const VerifiedIdentityID &id);
 	const VerifiedIdentityID &identityID() const;
