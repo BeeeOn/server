@@ -8,13 +8,6 @@ ExpirableSession::ExpirableSession(
 		const UserID &userID,
 		const SessionID &sessionID,
 		Timespan &timespan):
-	Session(userID, sessionID)
+	Session(userID, sessionID, timespan)
 {
-	// Set expiration time
-	m_tstamp += timespan;
-}
-
-const Timestamp& ExpirableSession::getExpiration() const
-{
-	return m_tstamp;
 }
