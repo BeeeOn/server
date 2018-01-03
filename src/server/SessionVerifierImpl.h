@@ -7,7 +7,7 @@ namespace BeeeOn {
 
 class SessionVerifierImpl : public SessionVerifier {
 public:
-	void setSessionManager(SessionManager *manager)
+	void setSessionManager(SessionManager::Ptr manager)
 	{
 		m_sessionManager = manager;
 	}
@@ -18,7 +18,7 @@ protected:
 			const std::string &authInfo) override;
 
 protected:
-	SessionManager *m_sessionManager;
+	SessionManager::Ptr m_sessionManager;
 };
 
 }
