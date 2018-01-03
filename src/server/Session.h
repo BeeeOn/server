@@ -15,8 +15,7 @@ typedef std::string SessionID;
 /**
  * Base class to hold session data (userID, sessionID).
  */
-class Session
-{
+class Session {
 public:
 	typedef Poco::SharedPtr<Session> Ptr;
 
@@ -43,8 +42,7 @@ private:
 /**
  * Enables expirable session feature using Poco
  */
-class ExpirableSession : public Session
-{
+class ExpirableSession : public Session {
 public:
 	typedef Poco::SharedPtr<ExpirableSession> Ptr;
 
