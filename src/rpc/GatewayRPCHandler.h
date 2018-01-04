@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 #include <Poco/AutoPtr.h>
 #include <Poco/RefCountedObject.h>
 
@@ -14,6 +16,11 @@ namespace BeeeOn {
 class GatewayRPCHandler : public Poco::RefCountedObject {
 public:
 	typedef Poco::AutoPtr<GatewayRPCHandler> Ptr;
+
+	/**
+	 * Construct lambda function calling this GatewayRPCHandler instance.
+	 */
+	std::function<void(GatewayRPCResult::Ptr)> lambda();
 
 	/**
 	 * Called when a result update is delivered.
