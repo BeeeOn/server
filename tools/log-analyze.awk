@@ -121,6 +121,64 @@ function report_server_stats()
 
 	report_counts("GWS clients", gws_clients)
 
+	if (durations[0] > 0) {
+		print "Durations"
+
+		for (key in durations) {
+			if (key == 0)
+				continue
+
+			split(key, multikey, SUBSEP)
+			if (multikey[2] != "duration")
+				continue
+
+			clazz = durations[multikey[1], "class"]
+			duration = durations[multikey[1], "duration"]
+			time = durations[multikey[1], "time"]
+			date = durations[multikey[1], "date"]
+			thread = durations[multikey[1], "thread"]
+
+			if (date != 0)
+				datetime = date " " time
+			else
+				datetime = time
+
+			duration_per_clazz[clazz] += duration
+			count_per_clazz[clazz] += 1
+
+			if (min_per_clazz[clazz] == 0 || duration < min_per_clazz[clazz]) {
+				min_per_clazz[clazz] = duration
+				min_per_clazz[clazz, "info"] = thread " " datetime
+			}
+
+			if (max_per_clazz[clazz] == 0 || duration > max_per_clazz[clazz]) {
+				max_per_clazz[clazz] = duration
+				max_per_clazz[clazz, "info"] = thread " " datetime
+			}
+		}
+
+		for (clazz in count_per_clazz) {
+			_avg = duration_per_clazz[clazz] / count_per_clazz[clazz]
+			_avg = "avg " _avg "us"
+			_min = "min " min_per_clazz[clazz] "us"
+			_min_info = "(" min_per_clazz[clazz, "info"] ")"
+			_max = "max " max_per_clazz[clazz] "us"
+			_max_info = "(" max_per_clazz[clazz, "info"] ")"
+			_total = "total " count_per_clazz[clazz]
+
+			print "* " clazz ": " _avg " " _total
+			print "  " _min " " _min_info
+			print "  " _max " " _max_info
+
+			delete count_per_clazz[clazz]
+			delete duration_per_clazz[clazz]
+			delete min_per_clazz[clazz]
+			delete min_per_clazz[clazz, "info"]
+			delete max_per_clazz[clazz]
+			delete max_per_clazz[clazz, "info"]
+		}
+	}
+
 	if (transactions[0] > 0) {
 		print "Transactions"
 
@@ -154,6 +212,7 @@ function clear_stats()
 	clear_array(gws_clients, 1)
 	clear_array(transactions, 1)
 	clear_array(thread_pools, 1)
+	clear_array(durations, 1)
 
 	types_count = 0
 	enums_count = 0
@@ -168,11 +227,11 @@ BEGIN {
 	HAS_DATE = 0
 }
 
-/ (19[0-9]{2}|20[0-9]{2})-[012][0-9]-[0-3][0-9] / {
+/ (19[0-9]{2}|20[0-9]{2})-[012]?[0-9]-[0-3][0-9] / {
 	HAS_DATE = 1
 }
 
-!/ (19[0-9]{2}|20[0-9]{2})-[012][0-9]-[0-3][0-9] / {
+!/ (19[0-9]{2}|20[0-9]{2})-[012]?[0-9]-[0-3][0-9] / {
 	HAS_DATE = 0
 }
 
@@ -415,6 +474,34 @@ BEGIN {
 	transactions[_curr, "end"] = _time
 	transactions[_curr, "type"] = _type
 	transactions[_curr, "id"] = _id
+}
+
+/ duration: / {
+	_clazz = $1
+	_thread = log_extract_pid_tid($(3 + HAS_DATE))
+
+	if ($5 == "duration:")
+		_duration = $6
+	else if ($6 == "duration:")
+		_duration = $7
+
+	sub(/us$/, "", _duration)
+
+	_curr = durations[0] + 1
+	durations[0] = _curr
+
+	durations[_curr, "class"] = _clazz
+	durations[_curr, "thread"] = _thread
+
+	if (HAS_DATE) {
+		durations[_curr, "date"] = $2
+		durations[_curr, "time"] = $3
+	}
+	else {
+		durations[_curr, "time"] = $2
+	}
+
+	durations[_curr, "duration"] = int(_duration)
 }
 
 END {
