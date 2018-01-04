@@ -156,6 +156,12 @@ install(FILES conf/devices.xml conf/types.xml conf/enums.xml
 	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon/server)
 install(FILES db/server-queries.ini
 	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon/db)
+install(FILES tools/log-analyze.awk
+	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon/tools
+	PERMISSIONS
+		OWNER_READ OWNER_EXECUTE
+		GROUP_READ GROUP_EXECUTE
+		WORLD_READ WORLD_EXECUTE)
 install(DIRECTORY db/
 	DESTINATION share/beeeon/db
 	FILES_MATCHING
