@@ -1,11 +1,9 @@
 #ifndef BEEEON_SESSION_VERIFIER_H
 #define BEEEON_SESSION_VERIFIER_H
 
-#include <Poco/Logger.h>
 #include <Poco/Net/NetException.h>
 
 #include "server/Session.h"
-#include "server/SessionManager.h"
 #include "util/Loggable.h"
 
 namespace BeeeOn {
@@ -15,7 +13,11 @@ namespace BeeeOn {
  */
 class SessionVerifier : public Loggable {
 public:
-	SessionVerifier();
+	SessionVerifier(const std::string &scheme = "Bearer");
+	virtual ~SessionVerifier();
+
+	void setScheme(const std::string &scheme);
+	std::string scheme() const;
 
 	/**
 	 * Verify the session exists and return it.
@@ -39,18 +41,12 @@ public:
 			const std::string &scheme,
 			const std::string &authInfo);
 
-	void setSessionManager(SessionManager *manager)
-	{
-		m_sessionManager = manager;
-	}
+protected:
+	virtual Session::Ptr doVerifyAuthorized(
+			const std::string &authInfo) = 0;
 
 private:
-	Session::Ptr doVerifyAuthorized(
-			const std::string &scheme,
-			const std::string &authInfo);
-
-protected:
-	SessionManager *m_sessionManager;
+	std::string m_scheme;
 };
 
 }

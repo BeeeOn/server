@@ -1,25 +1,47 @@
+#include <Poco/Logger.h>
 #include <Poco/Exception.h>
 #include <Poco/String.h>
 
-#include "di/Injectable.h"
 #include "server/SessionVerifier.h"
 #include "util/Sanitize.h"
 
+using namespace std;
 using namespace Poco;
 using namespace Poco::Net;
 using namespace BeeeOn;
 
-SessionVerifier::SessionVerifier()
+SessionVerifier::SessionVerifier(const string &scheme):
+	m_scheme(scheme)
 {
+}
+
+SessionVerifier::~SessionVerifier()
+{
+}
+
+void SessionVerifier::setScheme(const string &scheme)
+{
+	m_scheme = scheme;
+}
+
+string SessionVerifier::scheme() const
+{
+	return m_scheme;
 }
 
 Session::Ptr SessionVerifier::verifyAuthorized(
 		const std::string &scheme,
 		const std::string &authInfo)
 {
+	const string &authScheme = Sanitize::encoding(scheme);
+
+	if (icompare(authScheme, m_scheme)) {
+		throw NotAuthenticatedException(
+				"unsupported scheme: " + authScheme);
+	}
+
 	try {
 		return doVerifyAuthorized(
-			Sanitize::encoding(scheme),
 			Sanitize::base64(authInfo, ".")
 		);
 	} catch (const NotAuthenticatedException &e) {
@@ -34,24 +56,3 @@ Session::Ptr SessionVerifier::verifyAuthorized(
 
 	throw NotAuthenticatedException("terribly failed to authorize");
 }
-
-Session::Ptr SessionVerifier::doVerifyAuthorized(
-		const std::string &scheme,
-		const std::string &authInfo)
-{
-	if (icompare(scheme, "Bearer")) {
-		throw NotAuthenticatedException(
-				"unsupported scheme: " + scheme);
-	}
-
-	Session::Ptr session;
-
-	if (m_sessionManager->lookup(authInfo, session))
-		return session;
-
-	throw NotAuthenticatedException("missing a session");
-}
-
-BEEEON_OBJECT_BEGIN(BeeeOn, SessionVerifier)
-BEEEON_OBJECT_REF("sessionManager", &SessionVerifier::setSessionManager)
-BEEEON_OBJECT_END(BeeeOn, SessionVerifier)
