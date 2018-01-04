@@ -7,6 +7,7 @@
 BEEEON_OBJECT_BEGIN(BeeeOn, SessionVerifierImpl)
 BEEEON_OBJECT_CASTABLE(SessionVerifier)
 BEEEON_OBJECT_REF("sessionManager", &SessionVerifierImpl::setSessionManager)
+BEEEON_OBJECT_TEXT("scheme", &SessionVerifierImpl::setScheme)
 BEEEON_OBJECT_END(BeeeOn, SessionVerifierImpl)
 
 using namespace Poco;
@@ -17,7 +18,7 @@ Session::Ptr SessionVerifierImpl::doVerifyAuthorized(
 		const std::string &scheme,
 		const std::string &authInfo)
 {
-	if (icompare(scheme, "Bearer")) {
+	if (icompare(scheme, this->scheme())) {
 		throw NotAuthenticatedException(
 				"unsupported scheme: " + scheme);
 	}

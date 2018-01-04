@@ -13,8 +13,11 @@ namespace BeeeOn {
  */
 class SessionVerifier : public Loggable {
 public:
-	SessionVerifier();
+	SessionVerifier(const std::string &scheme = "Bearer");
 	virtual ~SessionVerifier();
+
+	void setScheme(const std::string &scheme);
+	std::string scheme() const;
 
 	/**
 	 * Verify the session exists and return it.
@@ -42,6 +45,9 @@ protected:
 	virtual Session::Ptr doVerifyAuthorized(
 			const std::string &scheme,
 			const std::string &authInfo) = 0;
+
+private:
+	std::string m_scheme;
 };
 
 }

@@ -4,16 +4,28 @@
 #include "server/SessionVerifier.h"
 #include "util/Sanitize.h"
 
+using namespace std;
 using namespace Poco;
 using namespace Poco::Net;
 using namespace BeeeOn;
 
-SessionVerifier::SessionVerifier()
+SessionVerifier::SessionVerifier(const string &scheme):
+	m_scheme(scheme)
 {
 }
 
 SessionVerifier::~SessionVerifier()
 {
+}
+
+void SessionVerifier::setScheme(const string &scheme)
+{
+	m_scheme = scheme;
+}
+
+string SessionVerifier::scheme() const
+{
+	return m_scheme;
 }
 
 Session::Ptr SessionVerifier::verifyAuthorized(
