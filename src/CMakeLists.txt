@@ -183,6 +183,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/rpc/RPCConnector.cpp
 	${PROJECT_SOURCE_DIR}/rpc/SocketRPCConnector.cpp
 	${PROJECT_SOURCE_DIR}/rpc/GatewayRPC.cpp
+	${PROJECT_SOURCE_DIR}/rpc/GatewayRPCHandler.cpp
 	${PROJECT_SOURCE_DIR}/rpc/GatewayRPCResult.cpp
 	${PROJECT_SOURCE_DIR}/rpc/AsyncGatewayRPC.cpp
 	${PROJECT_SOURCE_DIR}/rpc/FakeGatewayRPC.cpp
