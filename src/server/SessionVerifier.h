@@ -43,7 +43,6 @@ public:
 
 protected:
 	virtual Session::Ptr doVerifyAuthorized(
-			const std::string &scheme,
 			const std::string &authInfo) = 0;
 
 private:

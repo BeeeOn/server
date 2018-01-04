@@ -14,7 +14,6 @@ public:
 
 protected:
 	Session::Ptr doVerifyAuthorized(
-			const std::string &scheme,
 			const std::string &authInfo) override;
 
 protected:

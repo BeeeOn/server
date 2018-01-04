@@ -1,5 +1,6 @@
 #include <Poco/Logger.h>
 #include <Poco/Exception.h>
+#include <Poco/String.h>
 
 #include "server/SessionVerifier.h"
 #include "util/Sanitize.h"
@@ -32,9 +33,15 @@ Session::Ptr SessionVerifier::verifyAuthorized(
 		const std::string &scheme,
 		const std::string &authInfo)
 {
+	const string &authScheme = Sanitize::encoding(scheme);
+
+	if (icompare(authScheme, m_scheme)) {
+		throw NotAuthenticatedException(
+				"unsupported scheme: " + authScheme);
+	}
+
 	try {
 		return doVerifyAuthorized(
-			Sanitize::encoding(scheme),
 			Sanitize::base64(authInfo, ".")
 		);
 	} catch (const NotAuthenticatedException &e) {
