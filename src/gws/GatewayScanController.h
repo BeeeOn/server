@@ -13,6 +13,7 @@
 #include "model/Gateway.h"
 #include "model/GatewayScan.h"
 #include "rpc/GatewayRPC.h"
+#include "rpc/GatewayRPCHandler.h"
 #include "transaction/Transactional.h"
 
 namespace BeeeOn {
@@ -83,16 +84,19 @@ private:
 	 * @brief Wrapper around the GatewayScan that adds the synchronized
 	 * object properties and dynamic allocation management via the SharedPtr.
 	 */
-	class ScanWrapper : public Poco::SynchronizedObject {
+	class ScanWrapper : public Poco::SynchronizedObject, public GatewayRPCHandler {
 	public:
-		typedef Poco::SharedPtr<ScanWrapper> Ptr;
+		typedef Poco::AutoPtr<ScanWrapper> Ptr;
 
-		ScanWrapper();
+		ScanWrapper(const GatewayID &id);
 
 		const GatewayScan &scan() const;
 		GatewayScan &scan();
 
+		void onAny(GatewayRPCResult::Ptr r) override;
+
 	private:
+		GatewayID m_id;
 		GatewayScan m_scan;
 	};
 
