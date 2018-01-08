@@ -16,7 +16,12 @@ public:
 
 	DevicePairHandler(const Device &device, DeviceDao::Ptr dao);
 
-	void onAny(GatewayRPCResult::Ptr r) override;
+	void onPending(GatewayRPCResult::Ptr result) override;
+	void onAccepted(GatewayRPCResult::Ptr result) override;
+	void onSuccess(GatewayRPCResult::Ptr result) override;
+	void onFailed(GatewayRPCResult::Ptr result) override;
+	void onNotConnected(GatewayRPCResult::Ptr result) override;
+	void onTimeout(GatewayRPCResult::Ptr result) override;
 
 private:
 	Device m_device;
