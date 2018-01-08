@@ -84,11 +84,11 @@ private:
 	 * @brief Wrapper around the GatewayScan that adds the synchronized
 	 * object properties and dynamic allocation management via the SharedPtr.
 	 */
-	class ScanWrapper : public Poco::SynchronizedObject, public GatewayRPCHandler {
+	class ScanHandler : public Poco::SynchronizedObject, public GatewayRPCHandler {
 	public:
-		typedef Poco::AutoPtr<ScanWrapper> Ptr;
+		typedef Poco::AutoPtr<ScanHandler> Ptr;
 
-		ScanWrapper(const GatewayID &id);
+		ScanHandler(const GatewayID &id);
 
 		const GatewayScan &scan() const;
 		GatewayScan &scan();
@@ -103,7 +103,7 @@ private:
 	/**
 	 * Mapping Gateway IDs to their particular GatewayScan records.
 	 */
-	typedef std::map<GatewayID, ScanWrapper::Ptr> ScanMap;
+	typedef std::map<GatewayID, ScanHandler::Ptr> ScanMap;
 
 	/**
 	 * @brief CleanUpTask is responsible for cleaning up the obsolete
