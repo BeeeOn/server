@@ -14,18 +14,20 @@ namespace BeeeOn {
  * a selected gateway.
  */
 class GatewayRPCHandler : public Poco::RefCountedObject {
+	friend class GatewayRPC;
 public:
 	typedef Poco::AutoPtr<GatewayRPCHandler> Ptr;
-
-	/**
-	 * Construct lambda function calling this GatewayRPCHandler instance.
-	 */
-	std::function<void(GatewayRPCResult::Ptr)> lambda();
 
 	/**
 	 * Called when a result update is delivered.
 	 */
 	virtual void onAny(GatewayRPCResult::Ptr result);
+
+protected:
+	/**
+	 * Handle the given result and invoke some of the event handlers.
+	 */
+	void handle(GatewayRPCResult::Ptr result);
 };
 
 }

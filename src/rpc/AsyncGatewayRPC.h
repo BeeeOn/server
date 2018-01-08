@@ -22,10 +22,10 @@ namespace BeeeOn {
  * in the BeeeOn Server running as monolit. It allows to send commands to the
  * gateways and receive partial results asynchronously.
  *
- * After sending request to the gateway, the ResultCall is stored and it is
- * executed with every received partial result. If final result (TIMEOUT,
- * SUCCESS, FAILED) is not received till timeout, the stored ResultCall is
- * executed with result TIMEOUT.
+ * After sending request to the gateway, the GatewayRPCHandler instance is stored
+ * and it is executed with every received partial result. If final result (TIMEOUT,
+ * SUCCESS, FAILED) is not received till timeout, the stored handler is executed
+ * with result TIMEOUT.
  *
  * The final result means that request has been completed (with success or error)
  * or timeout has expired.
@@ -38,27 +38,27 @@ class AsyncGatewayRPC :
 public:
 	typedef Poco::SharedPtr<AsyncGatewayRPC> Ptr;
 
-	struct ResultCallContext {
-		ResultCall resultCall;
+	struct Context {
+		GatewayRPCHandler::Ptr handler;
 		LambdaTimerTask::Ptr finalResultMissingTask;
 	};
 
 	typedef GlobalID CallID;
-	typedef std::map<std::pair<GatewayID, CallID>, ResultCallContext> ResultCallMap;
+	typedef std::map<std::pair<GatewayID, CallID>, Context> ContextMap;
 
-	void sendListen(const ResultCall &resultCall,
+	void sendListen(GatewayRPCHandler::Ptr handler,
 			const Gateway &gateway,
 			const Poco::Timespan &duration) override;
 
-	void pairDevice(const ResultCall &resultCall,
+	void pairDevice(GatewayRPCHandler::Ptr handler,
 			const Gateway &gateway,
 			const Device &device) override;
 
-	void unpairDevice(const ResultCall &resultCall,
+	void unpairDevice(GatewayRPCHandler::Ptr handler,
 			const Gateway &gateway,
 			const Device &device) override;
 
-	void updateActor(const ResultCall &resultCall,
+	void updateActor(GatewayRPCHandler::Ptr handler,
 			const Gateway &gateway,
 			const Device &device,
 			const ModuleInfo &module,
@@ -81,47 +81,50 @@ private:
 	/**
 	 * @brief Creates a final result missing task and returns it.
 	 *
-	 * The task removes the ResultCall from the map and executes it with TIMEOUT.
+	 * The task removes the registered GatewayRPCHandler instance from the context
+	 * map and executes it with TIMEOUT.
 	 */
 	LambdaTimerTask::Ptr createFinalResultMissingTask(
 			const GatewayID &gatewayID, const CallID &callID);
 
 	/**
-	 * @brief Stores the ResultCall and schedule final result missing task.
+	 * @brief Stores the handler and schedule final result missing task.
 	 */
-	void storeResultCall(const GatewayID &gatewayID,
+	void storeHandler(const GatewayID &gatewayID,
 			const CallID &callID,
-			const ResultCall &resultCall);
+			GatewayRPCHandler::Ptr handler);
 
 	/**
-	 * @brief Removes the ResultCall and cancels the final result missing task.
+	 * @brief Removes the appropriate GatewayRPCHandler instance and cancels
+	 * the final result missing task.
 	 */
-	void removeResultCall(const GatewayID &gatewayID, const CallID &callID);
+	void removeHandler(const GatewayID &gatewayID, const CallID &callID);
 
 	/**
-	 * @brief Stores the ResultCall and sends the request to the Gateway.
+	 * @brief Stores the handler and sends the request to the Gateway.
 	 *
-	 * If gateway is not connected or sending fails, executes the ResultCall
-	 * with NOT_CONNECTED resp. FAILED result.
+	 * If gateway is not connected or sending fails, executes the
+	 * GatewayRPCHandler::onNotConnected() or GatewayRPCHandler::onFailed().
 	 */
 	void sendAndExpectResult(const GatewayID &gatewayID,
 			const CallID &callID,
-			const ResultCall &resultCall,
+			GatewayRPCHandler::Ptr handler,
 			const GWRequest::Ptr request);
 
 	/**
-	 * @brief Finds the ResultCall for the given result and executes it.
+	 * @brief Finds the appropriate GatewayRPCHandler instance for the given
+	 * result and uses it for handling.
 	 */
 	void processResult(const GatewayID &gatewayID,
 			const GlobalID &callID,
 			GatewayRPCResult::Ptr result);
 
 	/**
-	 * @brief Calls the ResultCall with given result.
+	 * @brief Calls the given handler with given result.
 	 */
-	void executeResultCall(const GatewayID &gatewayID,
+	void executeHandler(const GatewayID &gatewayID,
 			const CallID &callID,
-			const ResultCall &resultCall,
+			GatewayRPCHandler::Ptr handler,
 			GatewayRPCResult::Ptr result);
 
 private:
@@ -129,7 +132,7 @@ private:
 	GatewayCommunicator::Ptr m_gatewayCommunicator;
 	GWResponseExpectedQueue::Ptr m_responseExpectedQueue;
 
-	ResultCallMap m_resultCalls;
+	ContextMap m_contexts;
 	Poco::FastMutex m_mutex;
 	Poco::Util::Timer m_timer;
 };

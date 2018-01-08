@@ -22,19 +22,19 @@ public:
 	void setAsyncExecutor(Poco::SharedPtr<AsyncExecutor> executor);
 
 	void sendListen(
-			const ResultCall &resultCall,
+			GatewayRPCHandler::Ptr handler,
 			const Gateway &gateway,
 			const Poco::Timespan &duration) override;
 	void pairDevice(
-			const ResultCall &resultCall,
+			GatewayRPCHandler::Ptr handler,
 			const Gateway &gateway,
 			const Device &device) override;
 	void unpairDevice(
-			const ResultCall &resultCall,
+			GatewayRPCHandler::Ptr handler,
 			const Gateway &gateway,
 			const Device &device) override;
 	void updateActor(
-			const ResultCall &resultCall,
+			GatewayRPCHandler::Ptr handler,
 			const Gateway &gateway,
 			const Device &device,
 			const ModuleInfo &module,
@@ -61,7 +61,7 @@ void FakeGatewayRPC::setAsyncExecutor(Poco::SharedPtr<AsyncExecutor> executor)
 }
 
 void FakeGatewayRPC::sendListen(
-		const ResultCall &resultCall,
+		GatewayRPCHandler::Ptr handler,
 		const Gateway &gateway,
 		const Poco::Timespan &duration)
 {
@@ -71,14 +71,14 @@ void FakeGatewayRPC::sendListen(
 	GatewayRPCResult::Ptr result = new GatewayRPCResult;
 	result->setStatus(GatewayRPCResult::Status::SUCCESS);
 
-	m_executor->invoke([resultCall, result]()
+	m_executor->invoke([handler, result]()
 	{
-		resultCall(result);
+		doHandle(handler, result);
 	});
 }
 
 void FakeGatewayRPC::pairDevice(
-		const ResultCall &resultCall,
+		GatewayRPCHandler::Ptr handler,
 		const Gateway &gateway,
 		const Device &target)
 {
@@ -93,9 +93,9 @@ void FakeGatewayRPC::pairDevice(
 
 		result->setStatus(GatewayRPCResult::Status::FAILED);
 
-		m_executor->invoke([resultCall, result]()
+		m_executor->invoke([handler, result]()
 		{
-			resultCall(result);
+			doHandle(handler, result);
 		});
 
 		return;
@@ -103,15 +103,15 @@ void FakeGatewayRPC::pairDevice(
 
 	result->setStatus(GatewayRPCResult::Status::SUCCESS);
 
-	m_executor->invoke([resultCall, result]()
+	m_executor->invoke([handler, result]()
 	{
-		resultCall(result);
+		doHandle(handler, result);
 	});
 }
 
 
 void FakeGatewayRPC::unpairDevice(
-		const ResultCall &resultCall,
+		GatewayRPCHandler::Ptr handler,
 		const Gateway &gateway,
 		const Device &target)
 {
@@ -126,9 +126,9 @@ void FakeGatewayRPC::unpairDevice(
 
 		result->setStatus(GatewayRPCResult::Status::FAILED);
 
-		m_executor->invoke([resultCall, result]()
+		m_executor->invoke([handler, result]()
 		{
-			resultCall(result);
+			doHandle(handler, result);
 		});
 
 		return;
@@ -144,9 +144,9 @@ void FakeGatewayRPC::unpairDevice(
 
 		result->setStatus(GatewayRPCResult::Status::FAILED);
 
-		m_executor->invoke([resultCall, result]()
+		m_executor->invoke([handler, result]()
 		{
-			resultCall(result);
+			doHandle(handler, result);
 		});
 
 		return;
@@ -154,14 +154,14 @@ void FakeGatewayRPC::unpairDevice(
 
 	result->setStatus(GatewayRPCResult::Status::SUCCESS);
 
-	m_executor->invoke([resultCall, result]()
+	m_executor->invoke([handler, result]()
 	{
-		resultCall(result);
+		doHandle(handler, result);
 	});
 }
 
 void FakeGatewayRPC::updateActor(
-		const ResultCall &resultCall,
+		GatewayRPCHandler::Ptr handler,
 		const Gateway &gateway,
 		const Device &device,
 		const ModuleInfo &module,
@@ -174,9 +174,9 @@ void FakeGatewayRPC::updateActor(
 	GatewayRPCResult::Ptr result = new GatewayRPCResult;
 	result->setStatus(GatewayRPCResult::Status::SUCCESS);
 
-	m_executor->invoke([resultCall, result]()
+	m_executor->invoke([handler, result]()
 	{
-		resultCall(result);
+		doHandle(handler, result);
 	});
 }
 

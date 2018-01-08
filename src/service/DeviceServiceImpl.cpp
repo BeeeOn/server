@@ -313,7 +313,7 @@ void DeviceServiceImpl::doUnregister(Relation<Device, Gateway> &input)
 	DeviceUnpairHandler::Ptr handler = new DeviceUnpairHandler(device, m_dao);
 	handler->setTransactionManager(transactionManager());
 
-	m_gatewayRPC->unpairDevice(handler->lambda(), input.base(), device);
+	m_gatewayRPC->unpairDevice(handler, input.base(), device);
 }
 
 bool DeviceServiceImpl::doActivate(Relation<Device, Gateway> &input)
@@ -344,7 +344,7 @@ bool DeviceServiceImpl::tryActivateAndUpdate(Device &device,
 		DevicePairHandler::Ptr handler = new DevicePairHandler(device, m_dao);
 		handler->setTransactionManager(transactionManager());
 
-		m_gatewayRPC->pairDevice(handler->lambda(), gateway, device);
+		m_gatewayRPC->pairDevice(handler, gateway, device);
 		return true;
 	}
 

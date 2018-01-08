@@ -5,13 +5,11 @@
 using namespace Poco;
 using namespace BeeeOn;
 
-std::function<void(GatewayRPCResult::Ptr)> GatewayRPCHandler::lambda()
+void GatewayRPCHandler::handle(GatewayRPCResult::Ptr result)
 {
 	GatewayRPCHandler::Ptr self(this, true);
 
-	return [=](GatewayRPCResult::Ptr r) mutable {
-		self->onAny(r);
-	};
+	self->onAny(result);
 }
 
 void GatewayRPCHandler::onAny(GatewayRPCResult::Ptr result)

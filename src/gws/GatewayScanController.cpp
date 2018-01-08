@@ -239,7 +239,7 @@ GatewayScan GatewayScanController::scan(const Gateway &gateway, const Timespan &
 	const Clock start;
 
 	m_rpc->sendListen(
-		context->lambda(),
+		context,
 		gateway,
 		duration
 	);

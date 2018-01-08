@@ -10,6 +10,7 @@
 #include "model/Gateway.h"
 #include "model/Device.h"
 #include "model/ModuleInfo.h"
+#include "rpc/GatewayRPCHandler.h"
 #include "rpc/GatewayRPCResult.h"
 
 namespace BeeeOn {
@@ -24,15 +25,13 @@ class GatewayRPC {
 public:
 	typedef Poco::SharedPtr<GatewayRPC> Ptr;
 
-	typedef std::function<void(GatewayRPCResult::Ptr)> ResultCall;
-
 	virtual ~GatewayRPC();
 
 	/**
 	 * Send listen command.
 	 */
 	virtual void sendListen(
-			const ResultCall &resultCall,
+			const GatewayRPCHandler::Ptr handler,
 			const Gateway &gateway,
 			const Poco::Timespan &duration) = 0;
 
@@ -40,7 +39,7 @@ public:
 	 * Send pair device command to the selected gateway.
 	 */
 	virtual void pairDevice(
-			const ResultCall &resultCall,
+			const GatewayRPCHandler::Ptr handler,
 			const Gateway &gateway,
 			const Device &device) = 0;
 
@@ -48,7 +47,7 @@ public:
 	 * Send unpair device command to the selected gateway.
 	 */
 	virtual void unpairDevice(
-			const ResultCall &resultCall,
+			const GatewayRPCHandler::Ptr handler,
 			const Gateway &gateway,
 			const Device &device) = 0;
 
@@ -56,12 +55,17 @@ public:
 	 * Send update command for the given module.
 	 */
 	virtual void updateActor(
-			const ResultCall &resultCall,
+			const GatewayRPCHandler::Ptr handler,
 			const Gateway &gateway,
 			const Device &device,
 			const ModuleInfo &module,
 			double value,
 			const Poco::Timespan &timeout) = 0;
+
+protected:
+	static void doHandle(
+		GatewayRPCHandler::Ptr handler,
+		GatewayRPCResult::Ptr result);
 };
 
 }
