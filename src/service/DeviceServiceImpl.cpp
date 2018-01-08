@@ -4,6 +4,8 @@
 #include <Poco/Timestamp.h>
 
 #include "di/Injectable.h"
+#include "gws/DevicePairHandler.h"
+#include "gws/DeviceUnpairHandler.h"
 #include "model/Device.h"
 #include "model/Gateway.h"
 #include "service/DeviceServiceImpl.h"
@@ -308,61 +310,10 @@ void DeviceServiceImpl::doUnregister(Relation<Device, Gateway> &input)
 	if (!m_dao->update(device, input.base()))
 		throw NotFoundException("device " + device + " seems to not exist");
 
-	Gateway gateway(input.base());
+	DeviceUnpairHandler::Ptr handler = new DeviceUnpairHandler(device, m_dao);
+	handler->setTransactionManager(transactionManager());
 
-	Transactional lambda(this);
-	lambda.setTransactionManager(transactionManager());
-	DeviceDao::Ptr dao = m_dao;
-
-	m_gatewayRPC->unpairDevice(
-		[device, gateway, lambda, dao](GatewayRPCResult::Ptr r) mutable {
-			Device copy(device);
-
-			switch (r->status()) {
-			case GatewayRPCResult::Status::PENDING:
-				Loggable::forClass(typeid(DeviceServiceImpl)).information(
-					"device " + device + " unpairing is pending...",
-					__FILE__, __LINE__);
-				break;
-
-			case GatewayRPCResult::Status::ACCEPTED:
-				Loggable::forClass(typeid(DeviceServiceImpl)).debug(
-					"device " + device + " would be unpaired",
-					__FILE__, __LINE__);
-				break;
-
-			case GatewayRPCResult::Status::SUCCESS:
-				Loggable::forClass(typeid(DeviceServiceImpl)).information(
-					"device " + device + " successfully unpaired",
-					__FILE__, __LINE__);
-
-				copy.status().setState(DeviceStatus::STATE_INACTIVE);
-				copy.status().setLastChanged(Timestamp());
-				BEEEON_TRANSACTION_ON(lambda, dao->update(copy, gateway));
-				break;
-
-			case GatewayRPCResult::Status::FAILED:
-				Loggable::forClass(typeid(DeviceServiceImpl)).warning(
-					"device " + device + " failed to unpair",
-					__FILE__, __LINE__);
-
-				copy.status().setState(DeviceStatus::STATE_ACTIVE);
-				copy.status().setLastChanged(Timestamp());
-				BEEEON_TRANSACTION_ON(lambda, dao->update(copy, gateway));
-				break;
-
-			case GatewayRPCResult::Status::TIMEOUT:
-			case GatewayRPCResult::Status::NOT_CONNECTED:
-				Loggable::forClass(typeid(DeviceServiceImpl)).warning(
-					"device " + device + " failed to unpair on time",
-					__FILE__, __LINE__);
-
-				copy.status().setState(DeviceStatus::STATE_ACTIVE);
-				copy.status().setLastChanged(Timestamp());
-				BEEEON_TRANSACTION_ON(lambda, dao->update(copy, gateway));
-				break;
-			}
-		}, gateway, device);
+	m_gatewayRPC->unpairDevice(handler, input.base(), device);
 }
 
 bool DeviceServiceImpl::doActivate(Relation<Device, Gateway> &input)
@@ -390,59 +341,10 @@ bool DeviceServiceImpl::tryActivateAndUpdate(Device &device,
 		if (!m_dao->update(device, gateway))
 			throw NotFoundException("device " + device + " seems to not exist");
 
-		Transactional lambda(this);
-		lambda.setTransactionManager(transactionManager());
-		DeviceDao::Ptr dao = m_dao;
+		DevicePairHandler::Ptr handler = new DevicePairHandler(device, m_dao);
+		handler->setTransactionManager(transactionManager());
 
-		m_gatewayRPC->pairDevice([device, gateway, lambda, dao](GatewayRPCResult::Ptr r) mutable {
-			Device copy(device);
-
-			switch (r->status()) {
-			case GatewayRPCResult::Status::PENDING:
-				Loggable::forClass(typeid(DeviceServiceImpl)).information(
-					"device " + device + " pairing is pending...",
-					__FILE__, __LINE__);
-				break;
-
-			case GatewayRPCResult::Status::ACCEPTED:
-				Loggable::forClass(typeid(DeviceServiceImpl)).debug(
-					"device " + device + " would be paired",
-					__FILE__, __LINE__);
-				break;
-
-			case GatewayRPCResult::Status::SUCCESS:
-				Loggable::forClass(typeid(DeviceServiceImpl)).information(
-					"device " + device + " successfully paired",
-					__FILE__, __LINE__);
-
-				copy.status().setState(DeviceStatus::STATE_ACTIVE);
-				copy.status().setLastChanged(Timestamp());
-				BEEEON_TRANSACTION_ON(lambda, dao->update(copy, gateway));
-				break;
-
-			case GatewayRPCResult::Status::FAILED:
-				Loggable::forClass(typeid(DeviceServiceImpl)).warning(
-					"device " + device + " failed to pair",
-					__FILE__, __LINE__);
-
-				copy.status().setState(DeviceStatus::STATE_INACTIVE);
-				copy.status().setLastChanged(Timestamp());
-				BEEEON_TRANSACTION_ON(lambda, dao->update(copy, gateway));
-				break;
-
-			case GatewayRPCResult::Status::TIMEOUT:
-			case GatewayRPCResult::Status::NOT_CONNECTED:
-				Loggable::forClass(typeid(DeviceServiceImpl)).warning(
-					"device " + device + " failed to pair on time",
-					__FILE__, __LINE__);
-
-				copy.status().setState(DeviceStatus::STATE_INACTIVE);
-				copy.status().setLastChanged(Timestamp());
-				BEEEON_TRANSACTION_ON(lambda, dao->update(copy, gateway));
-				break;
-			}
-		}, gateway, device);
-
+		m_gatewayRPC->pairDevice(handler, gateway, device);
 		return true;
 	}
 

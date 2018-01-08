@@ -21,20 +21,57 @@ using namespace BeeeOn;
 
 const static Timespan MAX_SCAN_DURATION = 10 * Timespan::MINUTES;
 
-GatewayScanController::ScanWrapper::ScanWrapper()
+GatewayScanController::ScanHandler::ScanHandler(const GatewayID &id):
+	m_id(id)
 {
 }
 
-const GatewayScan &GatewayScanController::ScanWrapper::scan() const
+const GatewayScan &GatewayScanController::ScanHandler::scan() const
 {
-	ScopedLock guard(const_cast<ScanWrapper&>(*this));
+	ScopedLock guard(const_cast<ScanHandler&>(*this));
 	return m_scan;
 }
 
-GatewayScan &GatewayScanController::ScanWrapper::scan()
+GatewayScan &GatewayScanController::ScanHandler::scan()
 {
-	ScopedLock guard(const_cast<ScanWrapper&>(*this));
+	ScopedLock guard(const_cast<ScanHandler&>(*this));
 	return m_scan;
+}
+
+void GatewayScanController::ScanHandler::onAny(GatewayRPCResult::Ptr r)
+{
+	Logger &logger = Loggable::forClass(typeid(GatewayScanController));
+	ScanHandler::ScopedLock guard(*this);
+
+	switch (r->status()) {
+	case GatewayRPCResult::Status::PENDING:
+	case GatewayRPCResult::Status::ACCEPTED:
+		logger.information("scanning " + m_id.toString() + " is starting",
+				__FILE__, __LINE__);
+		m_scan.changeState(GatewayScan::SCAN_PROCESSING);
+		break;
+
+	case GatewayRPCResult::Status::SUCCESS:
+		logger.information("scanning " + m_id.toString() + " in progress",
+				__FILE__, __LINE__);
+		m_scan.changeState(GatewayScan::SCAN_PROCESSING);
+		break;
+
+	case GatewayRPCResult::Status::FAILED:
+		logger.error("scanning " + m_id.toString() + " has failed",
+				__FILE__, __LINE__);
+
+		m_scan.changeState(GatewayScan::SCAN_FAILED);
+		break;
+
+	case GatewayRPCResult::Status::TIMEOUT:
+	case GatewayRPCResult::Status::NOT_CONNECTED:
+		logger.error("scanning " + m_id.toString() + " did not start on time",
+				__FILE__, __LINE__);
+
+		m_scan.changeState(GatewayScan::SCAN_FAILED);
+		break;
+	}
 }
 
 GatewayScanController::CleanUpTask::CleanUpTask(
@@ -67,8 +104,8 @@ void GatewayScanController::CleanUpTask::run()
 			__FILE__, __LINE__);
 
 	for (auto it = m_scanMap.begin(); it != m_scanMap.end();) {
-		ScanWrapper::Ptr context = it->second;
-		ScanWrapper::ScopedLock guard(*context);
+		ScanHandler::Ptr context = it->second;
+		ScanHandler::ScopedLock guard(*context);
 
 		if (logger().debug()) {
 			logger().debug("cleaning up scan record for "
@@ -192,7 +229,7 @@ GatewayScan GatewayScanController::scan(const Gateway &gateway, const Timespan &
 	if (duration > MAX_SCAN_DURATION)
 		throw InvalidArgumentException("too big scanning timeout given");
 
-	ScanWrapper::Ptr context = new ScanWrapper;
+	ScanHandler::Ptr context = new ScanHandler(id);
 	context->scan().setDuration(duration);
 
 	m_scanMap.emplace(id, context);
@@ -201,43 +238,8 @@ GatewayScan GatewayScanController::scan(const Gateway &gateway, const Timespan &
 
 	const Clock start;
 
-	m_rpc->sendListen([id, context](GatewayRPCResult::Ptr result) mutable
-		{
-			Logger &logger = Loggable::forClass(typeid(GatewayScanController));
-
-			ScanWrapper::ScopedLock guard(*context);
-			GatewayScan &scan = context->scan();
-
-			switch (result->status()) {
-			case GatewayRPCResult::Status::PENDING:
-			case GatewayRPCResult::Status::ACCEPTED:
-				logger.information("scanning " + id.toString() + " is starting",
-						__FILE__, __LINE__);
-				scan.changeState(GatewayScan::SCAN_PROCESSING);
-				break;
-
-			case GatewayRPCResult::Status::SUCCESS:
-				logger.information("scanning " + id.toString() + " in progress",
-						__FILE__, __LINE__);
-				scan.changeState(GatewayScan::SCAN_PROCESSING);
-				break;
-
-			case GatewayRPCResult::Status::FAILED:
-				logger.error("scanning " + id.toString() + " has failed",
-						__FILE__, __LINE__);
-
-				scan.changeState(GatewayScan::SCAN_FAILED);
-				break;
-
-			case GatewayRPCResult::Status::TIMEOUT:
-			case GatewayRPCResult::Status::NOT_CONNECTED:
-				logger.error("scanning " + id.toString() + " did not start on time",
-						__FILE__, __LINE__);
-
-				scan.changeState(GatewayScan::SCAN_FAILED);
-				break;
-			}
-		},
+	m_rpc->sendListen(
+		context,
 		gateway,
 		duration
 	);
@@ -246,7 +248,7 @@ GatewayScan GatewayScanController::scan(const Gateway &gateway, const Timespan &
 		{
 			Logger &logger = Loggable::forClass(typeid(GatewayScanController));
 
-			ScanWrapper::ScopedLock guard(*context);
+			ScanHandler::ScopedLock guard(*context);
 			GatewayScan &scan = context->scan();
 
 			const Timespan &duration = scan.started().elapsed();

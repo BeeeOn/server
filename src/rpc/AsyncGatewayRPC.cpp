@@ -19,7 +19,7 @@ using namespace std;
 using namespace Poco;
 using namespace BeeeOn;
 
-void AsyncGatewayRPC::sendListen(const ResultCall &resultCall,
+void AsyncGatewayRPC::sendListen(GatewayRPCHandler::Ptr handler,
 		const Gateway &gateway,
 		const Timespan &duration)
 {
@@ -29,10 +29,10 @@ void AsyncGatewayRPC::sendListen(const ResultCall &resultCall,
 	request->setID(callID);
 	request->setDuration(duration);
 
-	sendAndExpectResult(gateway.id(), callID, resultCall, request);
+	sendAndExpectResult(gateway.id(), callID, handler, request);
 }
 
-void AsyncGatewayRPC::pairDevice(const ResultCall &resultCall,
+void AsyncGatewayRPC::pairDevice(GatewayRPCHandler::Ptr handler,
 		const Gateway &gateway,
 		const Device &device)
 {
@@ -42,10 +42,10 @@ void AsyncGatewayRPC::pairDevice(const ResultCall &resultCall,
 	request->setID(callID);
 	request->setDeviceID(device.id());
 
-	sendAndExpectResult(gateway.id(), callID, resultCall, request);
+	sendAndExpectResult(gateway.id(), callID, handler, request);
 }
 
-void AsyncGatewayRPC::unpairDevice(const ResultCall &resultCall,
+void AsyncGatewayRPC::unpairDevice(GatewayRPCHandler::Ptr handler,
 		const Gateway &gateway,
 		const Device &device)
 {
@@ -55,10 +55,10 @@ void AsyncGatewayRPC::unpairDevice(const ResultCall &resultCall,
 	request->setID(callID);
 	request->setDeviceID(device.id());
 
-	sendAndExpectResult(gateway.id(), callID, resultCall, request);
+	sendAndExpectResult(gateway.id(), callID, handler, request);
 }
 
-void AsyncGatewayRPC::updateActor(const ResultCall &resultCall,
+void AsyncGatewayRPC::updateActor(GatewayRPCHandler::Ptr handler,
 		const Gateway &gateway,
 		const Device &device,
 		const ModuleInfo &module,
@@ -74,7 +74,7 @@ void AsyncGatewayRPC::updateActor(const ResultCall &resultCall,
 	request->setValue(value);
 	request->setTimeout(timeout);
 
-	sendAndExpectResult(gateway.id(), callID, resultCall, request);
+	sendAndExpectResult(gateway.id(), callID, handler, request);
 }
 
 LambdaTimerTask::Ptr AsyncGatewayRPC::createFinalResultMissingTask(
@@ -91,34 +91,34 @@ LambdaTimerTask::Ptr AsyncGatewayRPC::createFinalResultMissingTask(
 
 		ScopedLockWithUnlock<FastMutex> guard(m_mutex);
 
-		auto it = m_resultCalls.find(make_pair(gatewayID, callID));
-		if (it == m_resultCalls.end())
+		auto it = m_contexts.find(make_pair(gatewayID, callID));
+		if (it == m_contexts.end())
 			return;
 
-		const ResultCall resultCall = it->second.resultCall;
+		GatewayRPCHandler::Ptr handler = it->second.handler;
 
-		m_resultCalls.erase(it);
+		m_contexts.erase(it);
 		guard.unlock();
 
 		GatewayRPCResult::Ptr result = new GatewayRPCResult();
 		result->setStatus(GatewayRPCResult::Status::TIMEOUT);
 
-		executeResultCall(gatewayID, callID, resultCall, result);
+		executeHandler(gatewayID, callID, handler, result);
 	});
 }
 
-void AsyncGatewayRPC::storeResultCall(const GatewayID &gatewayID,
+void AsyncGatewayRPC::storeHandler(const GatewayID &gatewayID,
 		const CallID &callID,
-		const ResultCall &resultCall)
+		GatewayRPCHandler::Ptr handler)
 {
-	ResultCallContext context {
-		resultCall,
+	Context context {
+		handler,
 		createFinalResultMissingTask(gatewayID, callID)
 	};
 
 	FastMutex::ScopedLock guard(m_mutex);
 
-	auto it = m_resultCalls.emplace(make_pair(gatewayID, callID), context);
+	auto it = m_contexts.emplace(make_pair(gatewayID, callID), context);
 	if (!it.second) {
 		throw IllegalStateException("duplicate result call "
 			+ gatewayID.toString()
@@ -130,13 +130,13 @@ void AsyncGatewayRPC::storeResultCall(const GatewayID &gatewayID,
 		context.finalResultMissingTask, Timestamp() + m_finalResultTimeout);
 }
 
-void AsyncGatewayRPC::removeResultCall(const GatewayID &gatewayID,
+void AsyncGatewayRPC::removeHandler(const GatewayID &gatewayID,
 		const CallID &callID)
 {
 	FastMutex::ScopedLock guard(m_mutex);
 
-	auto it = m_resultCalls.find(make_pair(gatewayID, callID));
-	if (it == m_resultCalls.end()) {
+	auto it = m_contexts.find(make_pair(gatewayID, callID));
+	if (it == m_contexts.end()) {
 		logger().warning("result call "
 			+ gatewayID.toString()
 			+ " : "
@@ -148,12 +148,12 @@ void AsyncGatewayRPC::removeResultCall(const GatewayID &gatewayID,
 	}
 
 	it->second.finalResultMissingTask->cancel();
-	m_resultCalls.erase(it);
+	m_contexts.erase(it);
 }
 
-void AsyncGatewayRPC::executeResultCall(const GatewayID &gatewayID,
+void AsyncGatewayRPC::executeHandler(const GatewayID &gatewayID,
 	const AsyncGatewayRPC::CallID &callID,
-	const ResultCall &resultCall,
+	GatewayRPCHandler::Ptr handler,
 	GatewayRPCResult::Ptr result)
 {
 	if (logger().debug()) {
@@ -167,7 +167,7 @@ void AsyncGatewayRPC::executeResultCall(const GatewayID &gatewayID,
 	}
 
 	try {
-		resultCall(result);
+		doHandle(handler, result);
 	}
 	catch (const Exception &e) {
 		logger().log(e, __FILE__, __LINE__);
@@ -182,12 +182,12 @@ void AsyncGatewayRPC::executeResultCall(const GatewayID &gatewayID,
 
 void AsyncGatewayRPC::sendAndExpectResult(const GatewayID &gatewayID,
 		const AsyncGatewayRPC::CallID &callID,
-		const GatewayRPC::ResultCall &resultCall,
+		GatewayRPCHandler::Ptr handler,
 		const GWRequest::Ptr request)
 {
 	GatewayRPCResult::Ptr result = new GatewayRPCResult;
 
-	storeResultCall(gatewayID, callID, resultCall);
+	storeHandler(gatewayID, callID, handler);
 	m_responseExpectedQueue->registerResponse(gatewayID, callID);
 
 	try {
@@ -196,25 +196,25 @@ void AsyncGatewayRPC::sendAndExpectResult(const GatewayID &gatewayID,
 	catch (const NotFoundException &e) {
 		logger().log(e, __FILE__, __LINE__);
 
-		removeResultCall(gatewayID, callID);
+		removeHandler(gatewayID, callID);
 		m_responseExpectedQueue->notifyDelivered(gatewayID, callID);
 
 		result->setStatus(GatewayRPCResult::Status::NOT_CONNECTED);
 
 		m_timer.schedule(new LambdaTimerTask([=]() {
-			executeResultCall(gatewayID, callID, resultCall, result);
+			executeHandler(gatewayID, callID, handler, result);
 		}), Clock{});
 	}
 	catch (const Exception &e) {
 		logger().log(e, __FILE__, __LINE__);
 
-		removeResultCall(gatewayID, callID);
+		removeHandler(gatewayID, callID);
 		m_responseExpectedQueue->notifyDelivered(gatewayID, callID);
 
 		result->setStatus(GatewayRPCResult::Status::FAILED);
 
 		m_timer.schedule(new LambdaTimerTask([=]() {
-			executeResultCall(gatewayID, callID, resultCall, result);
+			executeHandler(gatewayID, callID, handler, result);
 		}), Clock{});
 	}
 }
@@ -225,8 +225,8 @@ void AsyncGatewayRPC::processResult(const GatewayID &gatewayID,
 {
 	ScopedLockWithUnlock<FastMutex> guard(m_mutex);
 
-	auto it = m_resultCalls.find(make_pair(gatewayID, callID));
-	if (it == m_resultCalls.end()) {
+	auto it = m_contexts.find(make_pair(gatewayID, callID));
+	if (it == m_contexts.end()) {
 		logger().warning("result call "
 			+ gatewayID.toString()
 			+ " : "
@@ -237,7 +237,7 @@ void AsyncGatewayRPC::processResult(const GatewayID &gatewayID,
 		return;
 	}
 
-	const ResultCall resultCall = it->second.resultCall;
+	GatewayRPCHandler::Ptr handler = it->second.handler;
 
 	switch (result->status()) {
 	case GatewayRPCResult::Status::ACCEPTED:
@@ -246,7 +246,7 @@ void AsyncGatewayRPC::processResult(const GatewayID &gatewayID,
 	case GatewayRPCResult::Status::SUCCESS:
 	case GatewayRPCResult::Status::FAILED:
 		it->second.finalResultMissingTask->cancel();
-		m_resultCalls.erase(it);
+		m_contexts.erase(it);
 		break;
 	default:
 		logger().error("invalid result " + to_string(result->status())
@@ -261,7 +261,7 @@ void AsyncGatewayRPC::processResult(const GatewayID &gatewayID,
 
 	guard.unlock();
 
-	executeResultCall(gatewayID, callID, resultCall, result);
+	executeHandler(gatewayID, callID, handler, result);
 }
 
 void AsyncGatewayRPC::forwardResponse(const GatewayID &gatewayID,
@@ -313,12 +313,12 @@ void AsyncGatewayRPC::stop()
 	m_timer.cancel(true);
 
 	FastMutex::ScopedLock guard(m_mutex);
-	for (auto &it : m_resultCalls) {
+	for (auto &it : m_contexts) {
 		try {
 			GatewayRPCResult::Ptr result = new GatewayRPCResult;
 			result->setStatus(GatewayRPCResult::Status::FAILED);
 
-			it.second.resultCall(result);
+			doHandle(it.second.handler, result);
 		}
 		catch (const Exception &e) {
 			logger().log(e, __FILE__, __LINE__);
@@ -331,7 +331,7 @@ void AsyncGatewayRPC::stop()
 		}
 	}
 
-	m_resultCalls.clear();
+	m_contexts.clear();
 
 	logger().information("gateway rpc has stopped", __FILE__, __LINE__);
 }

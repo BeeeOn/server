@@ -170,6 +170,8 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/Startup.cpp
 	${PROJECT_SOURCE_DIR}/util/TypesSAXHandler.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoDaoManager.cpp
+	${PROJECT_SOURCE_DIR}/gws/DevicePairHandler.cpp
+	${PROJECT_SOURCE_DIR}/gws/DeviceUnpairHandler.cpp
 	${PROJECT_SOURCE_DIR}/gws/GatewayConnection.cpp
 	${PROJECT_SOURCE_DIR}/gws/GatewayCommunicator.cpp
 	${PROJECT_SOURCE_DIR}/gws/GatewayListener.cpp
@@ -183,6 +185,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/rpc/RPCConnector.cpp
 	${PROJECT_SOURCE_DIR}/rpc/SocketRPCConnector.cpp
 	${PROJECT_SOURCE_DIR}/rpc/GatewayRPC.cpp
+	${PROJECT_SOURCE_DIR}/rpc/GatewayRPCHandler.cpp
 	${PROJECT_SOURCE_DIR}/rpc/GatewayRPCResult.cpp
 	${PROJECT_SOURCE_DIR}/rpc/AsyncGatewayRPC.cpp
 	${PROJECT_SOURCE_DIR}/rpc/FakeGatewayRPC.cpp
