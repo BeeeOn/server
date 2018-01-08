@@ -93,7 +93,12 @@ private:
 		const GatewayScan &scan() const;
 		GatewayScan &scan();
 
-		void onAny(GatewayRPCResult::Ptr r) override;
+		void onPending(GatewayRPCResult::Ptr r) override;
+		void onAccepted(GatewayRPCResult::Ptr r) override;
+		void onSuccess(GatewayRPCResult::Ptr r) override;
+		void onFailed(GatewayRPCResult::Ptr r) override;
+		void onTimeout(GatewayRPCResult::Ptr r) override;
+		void onNotConnected(GatewayRPCResult::Ptr r) override;
 
 	private:
 		GatewayID m_id;

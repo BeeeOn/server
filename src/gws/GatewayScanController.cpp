@@ -38,51 +38,67 @@ GatewayScan &GatewayScanController::ScanHandler::scan()
 	return m_scan;
 }
 
-void GatewayScanController::ScanHandler::onAny(GatewayRPCResult::Ptr r)
+void GatewayScanController::ScanHandler::onPending(GatewayRPCResult::Ptr r)
 {
-	Logger &logger = Loggable::forClass(typeid(GatewayScanController));
 	ScanHandler::ScopedLock guard(*this);
 
-	switch (r->status()) {
-	case GatewayRPCResult::Status::PENDING:
-		logger.information("scanning " + m_id.toString() + " requested",
-				__FILE__, __LINE__);
-		m_scan.changeState(GatewayScan::SCAN_PROCESSING);
-		break;
+	Logger &logger = Loggable::forClass(typeid(GatewayScanController));
+	logger.information("scanning " + m_id.toString() + " requested",
+			__FILE__, __LINE__);
+	m_scan.changeState(GatewayScan::SCAN_PROCESSING);
+}
 
-	case GatewayRPCResult::Status::ACCEPTED:
-		logger.information("scanning " + m_id.toString() + " is starting",
-				__FILE__, __LINE__);
-		m_scan.changeState(GatewayScan::SCAN_PROCESSING);
-		break;
+void GatewayScanController::ScanHandler::onAccepted(GatewayRPCResult::Ptr r)
+{
+	ScanHandler::ScopedLock guard(*this);
 
-	case GatewayRPCResult::Status::SUCCESS:
-		logger.information("scanning " + m_id.toString() + " in progress",
-				__FILE__, __LINE__);
-		m_scan.changeState(GatewayScan::SCAN_PROCESSING);
-		break;
+	Logger &logger = Loggable::forClass(typeid(GatewayScanController));
+	logger.information("scanning " + m_id.toString() + " is starting",
+			__FILE__, __LINE__);
+	m_scan.changeState(GatewayScan::SCAN_PROCESSING);
+}
 
-	case GatewayRPCResult::Status::FAILED:
-		logger.error("scanning " + m_id.toString() + " has failed",
-				__FILE__, __LINE__);
+void GatewayScanController::ScanHandler::onSuccess(GatewayRPCResult::Ptr r)
+{
+	ScanHandler::ScopedLock guard(*this);
 
-		m_scan.changeState(GatewayScan::SCAN_FAILED);
-		break;
+	Logger &logger = Loggable::forClass(typeid(GatewayScanController));
+	logger.information("scanning " + m_id.toString() + " in progress",
+			__FILE__, __LINE__);
+	m_scan.changeState(GatewayScan::SCAN_PROCESSING);
+}
 
-	case GatewayRPCResult::Status::TIMEOUT:
-		logger.error("scanning " + m_id.toString() + " did not start on time",
-				__FILE__, __LINE__);
+void GatewayScanController::ScanHandler::onFailed(GatewayRPCResult::Ptr r)
+{
+	ScanHandler::ScopedLock guard(*this);
 
-		m_scan.changeState(GatewayScan::SCAN_FAILED);
-		break;
+	Logger &logger = Loggable::forClass(typeid(GatewayScanController));
+	logger.error("scanning " + m_id.toString() + " has failed",
+			__FILE__, __LINE__);
 
-	case GatewayRPCResult::Status::NOT_CONNECTED:
-		logger.error("scanning " + m_id.toString() + " failed, not connected",
-				__FILE__, __LINE__);
+	m_scan.changeState(GatewayScan::SCAN_FAILED);
+}
 
-		m_scan.changeState(GatewayScan::SCAN_FAILED);
-		break;
-	}
+void GatewayScanController::ScanHandler::onTimeout(GatewayRPCResult::Ptr r)
+{
+	ScanHandler::ScopedLock guard(*this);
+
+	Logger &logger = Loggable::forClass(typeid(GatewayScanController));
+	logger.error("scanning " + m_id.toString() + " did not start on time",
+			__FILE__, __LINE__);
+
+	m_scan.changeState(GatewayScan::SCAN_FAILED);
+}
+
+void GatewayScanController::ScanHandler::onNotConnected(GatewayRPCResult::Ptr r)
+{
+	ScanHandler::ScopedLock guard(*this);
+
+	Logger &logger = Loggable::forClass(typeid(GatewayScanController));
+	logger.error("scanning " + m_id.toString() + " failed, not connected",
+			__FILE__, __LINE__);
+
+	m_scan.changeState(GatewayScan::SCAN_FAILED);
 }
 
 GatewayScanController::CleanUpTask::CleanUpTask(
