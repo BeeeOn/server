@@ -50,9 +50,19 @@ void DevicePairHandler::onAny(GatewayRPCResult::Ptr r)
 		break;
 
 	case GatewayRPCResult::Status::TIMEOUT:
-	case GatewayRPCResult::Status::NOT_CONNECTED:
 		logger().warning(
 			"device " + m_device + " failed to pair on time",
+			__FILE__, __LINE__);
+
+		m_device.status().setState(DeviceStatus::STATE_INACTIVE);
+		m_device.status().setLastChanged(Timestamp());
+		BEEEON_TRANSACTION(m_deviceDao->update(m_device, gateway));
+		break;
+
+	case GatewayRPCResult::Status::NOT_CONNECTED:
+		logger().warning(
+			"device " + m_device + " failed to pair, gateway "
+			+ gateway + " not connected",
 			__FILE__, __LINE__);
 
 		m_device.status().setState(DeviceStatus::STATE_INACTIVE);
