@@ -53,13 +53,6 @@ public:
 			const Device &device) = 0;
 
 	/**
-	 * Send ping command to the gateway.
-	 */
-	virtual void pingGateway(
-			const ResultCall &resultCall,
-			const Gateway &gateway) = 0;
-
-	/**
 	 * Send update command for the given module.
 	 */
 	virtual void updateActor(

@@ -58,17 +58,6 @@ void AsyncGatewayRPC::unpairDevice(const ResultCall &resultCall,
 	sendAndExpectResult(gateway.id(), callID, resultCall, request);
 }
 
-void AsyncGatewayRPC::pingGateway(const ResultCall &resultCall,
-		const Gateway &gateway)
-{
-	CallID callID = CallID::random();
-
-	GWPingRequest::Ptr request = new GWPingRequest;
-	request->setID(callID);
-
-	sendAndExpectResult(gateway.id(), callID, resultCall, request);
-}
-
 void AsyncGatewayRPC::updateActor(const ResultCall &resultCall,
 		const Gateway &gateway,
 		const Device &device,
