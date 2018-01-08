@@ -65,8 +65,14 @@ void GatewayScanController::ScanHandler::onAny(GatewayRPCResult::Ptr r)
 		break;
 
 	case GatewayRPCResult::Status::TIMEOUT:
-	case GatewayRPCResult::Status::NOT_CONNECTED:
 		logger.error("scanning " + m_id.toString() + " did not start on time",
+				__FILE__, __LINE__);
+
+		m_scan.changeState(GatewayScan::SCAN_FAILED);
+		break;
+
+	case GatewayRPCResult::Status::NOT_CONNECTED:
+		logger.error("scanning " + m_id.toString() + " failed, not connected",
 				__FILE__, __LINE__);
 
 		m_scan.changeState(GatewayScan::SCAN_FAILED);
