@@ -41,7 +41,6 @@ public:
 
 	virtual GatewayScan scanDevices(Single<Gateway> &input, const Poco::Timespan &duration) = 0;
 	virtual GatewayScan scanStatus(Single<Gateway> &input) = 0;
-	virtual void pingGateway(Single<Gateway> &input) = 0;
 };
 
 }

@@ -90,11 +90,6 @@ public:
 		return doScanStatus(input);
 	}
 
-	void pingGateway(Single<Gateway> &input) override
-	{
-		doPingGateway(input);
-	}
-
 protected:
 	bool doRegisterGateway(SingleWithData<Gateway> &input,
 			const VerifiedIdentity &verifiedIdentity);
@@ -106,7 +101,6 @@ protected:
 	bool doUnregister(Single<Gateway> &input);
 	GatewayScan doScanDevices(Single<Gateway> &input, const Poco::Timespan &duration);
 	GatewayScan doScanStatus(Single<Gateway> &input);
-	void doPingGateway(Single<Gateway> &input);
 
 private:
 	GatewayDao::Ptr m_gatewayDao;

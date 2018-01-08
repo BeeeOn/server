@@ -58,9 +58,6 @@ public:
 			const Gateway &gateway,
 			const Device &device) override;
 
-	void pingGateway(const ResultCall &resultCall,
-			const Gateway &gateway) override;
-
 	void updateActor(const ResultCall &resultCall,
 			const Gateway &gateway,
 			const Device &device,

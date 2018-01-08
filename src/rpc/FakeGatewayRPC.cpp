@@ -33,9 +33,6 @@ public:
 			const ResultCall &resultCall,
 			const Gateway &gateway,
 			const Device &device) override;
-	void pingGateway(
-			const ResultCall &resultCall,
-			const Gateway &gateway) override;
 	void updateActor(
 			const ResultCall &resultCall,
 			const Gateway &gateway,
@@ -155,22 +152,6 @@ void FakeGatewayRPC::unpairDevice(
 		return;
 	}
 
-	result->setStatus(GatewayRPCResult::Status::SUCCESS);
-
-	m_executor->invoke([resultCall, result]()
-	{
-		resultCall(result);
-	});
-}
-
-void FakeGatewayRPC::pingGateway(
-		const ResultCall &resultCall,
-		const Gateway &gateway)
-{
-	logger().warning("ping gateway",
-			__FILE__, __LINE__);
-
-	GatewayRPCResult::Ptr result = new GatewayRPCResult;
 	result->setStatus(GatewayRPCResult::Status::SUCCESS);
 
 	m_executor->invoke([resultCall, result]()
