@@ -45,6 +45,11 @@ void GatewayScanController::ScanHandler::onAny(GatewayRPCResult::Ptr r)
 
 	switch (r->status()) {
 	case GatewayRPCResult::Status::PENDING:
+		logger.information("scanning " + m_id.toString() + " requested",
+				__FILE__, __LINE__);
+		m_scan.changeState(GatewayScan::SCAN_PROCESSING);
+		break;
+
 	case GatewayRPCResult::Status::ACCEPTED:
 		logger.information("scanning " + m_id.toString() + " is starting",
 				__FILE__, __LINE__);
