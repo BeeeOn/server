@@ -1,4 +1,4 @@
-#! /usr/bin/awk -f
+#! /usr/bin/gawk -f
 
 function log_trim_left(line)
 {
@@ -182,6 +182,8 @@ function report_server_stats()
 	if (transactions[0] > 0) {
 		print "Transactions"
 
+		sort = "sort -b -n -k4,4 -r"
+
 		for (key in transactions) {
 			if (key == 0)
 				continue
@@ -195,8 +197,10 @@ function report_server_stats()
 			start = transactions[multikey[1], "start"]
 			end = transactions[multikey[1], "end"]
 
-			print "*", id ":", time_stat(start, end), type
+			print "*", id ":", time_stat(start, end), type | sort
 		}
+
+		close(sort)
 	}
 }
 
@@ -225,6 +229,12 @@ function clear_stats()
 BEGIN {
 	clear_stats()
 	HAS_DATE = 0
+}
+
+{
+	if (NR % 13759 == 0) {
+		printf "\r%u", NR > "/dev/stderr"
+	}
 }
 
 / (19[0-9]{2}|20[0-9]{2})-[012]?[0-9]-[0-3][0-9] / {
