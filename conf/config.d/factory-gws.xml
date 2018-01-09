@@ -1,10 +1,5 @@
 <system>
 	<factory>
-		<instance name="gws" class="BeeeOn::LoopRunner">
-			<add name="loops" ref="gatewayCommunicator" />
-			<add name="loops" ref="webSocketServer" />
-		</instance>
-
 		<instance name="webSocketServer" class="BeeeOn::WebSocketServer">
 			<set name="gatewayCommunicator" ref="gatewayCommunicator"/>
 			<set name="sslConfig" ref="gwsSSLServer" if-yes="${gws.ws.ssl.enable}" />
