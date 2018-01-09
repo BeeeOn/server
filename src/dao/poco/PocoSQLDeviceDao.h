@@ -2,7 +2,7 @@
 #define BEEEON_POCO_SQL_GATEWAY_DAO_H
 
 #include "dao/DeviceDao.h"
-#include "dao/SQLQuery.h"
+#include "dao/Query.h"
 #include "dao/poco/PocoAbstractDao.h"
 #include "provider/DeviceInfoProvider.h"
 #include "util/Loggable.h"
@@ -73,12 +73,12 @@ protected:
 private:
 	DeviceInfoProvider::Ptr m_deviceInfoProvider;
 
-	SQLQuery m_queryInsert           {"devices.create"};
-	SQLQuery m_queryUpdate           {"devices.update"};
-	SQLQuery m_queryFetchFromGateway {"devices.fetch.from.gateway"};
-	SQLQuery m_queryFetchActiveBy    {"devices.fetch.active.by.gateway"};
-	SQLQuery m_queryFetchInactiveBy  {"devices.fetch.inactive.by.gateway"};
-	SQLQuery m_queryFetchActiveWithPrefix {"devices.fetch.active.by.gateway.with.prefix"};
+	Query m_queryInsert           {"devices.create"};
+	Query m_queryUpdate           {"devices.update"};
+	Query m_queryFetchFromGateway {"devices.fetch.from.gateway"};
+	Query m_queryFetchActiveBy    {"devices.fetch.active.by.gateway"};
+	Query m_queryFetchInactiveBy  {"devices.fetch.inactive.by.gateway"};
+	Query m_queryFetchActiveWithPrefix {"devices.fetch.active.by.gateway.with.prefix"};
 };
 
 }

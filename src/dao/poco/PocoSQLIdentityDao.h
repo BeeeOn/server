@@ -1,5 +1,5 @@
 #include "dao/IdentityDao.h"
-#include "dao/SQLQuery.h"
+#include "dao/Query.h"
 #include "dao/poco/PocoAbstractDao.h"
 
 namespace Poco {
@@ -33,10 +33,10 @@ public:
 			Identity &identity, const std::string &prefix = "");
 
 private:
-	SQLQuery m_queryCreate       {"identities.create"};
-	SQLQuery m_queryRemove       {"identities.remove"};
-	SQLQuery m_queryFetchById    {"identities.fetch.by.id"};
-	SQLQuery m_queryFetchByEmail {"identities.fetch.by.email"};
+	Query m_queryCreate       {"identities.create"};
+	Query m_queryRemove       {"identities.remove"};
+	Query m_queryFetchById    {"identities.fetch.by.id"};
+	Query m_queryFetchByEmail {"identities.fetch.by.email"};
 };
 
 }

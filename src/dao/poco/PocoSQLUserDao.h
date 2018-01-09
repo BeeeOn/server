@@ -1,7 +1,7 @@
 #include <Poco/SharedPtr.h>
 
 #include "dao/UserDao.h"
-#include "dao/SQLQuery.h"
+#include "dao/Query.h"
 #include "dao/poco/PocoAbstractDao.h"
 
 namespace Poco {
@@ -46,8 +46,8 @@ protected:
 
 private:
 	Poco::SharedPtr<LocaleManager> m_localeManager;
-	SQLQuery m_queryCreate {"users.create"};
-	SQLQuery m_queryFetch  {"users.fetch.by.id"};
+	Query m_queryCreate {"users.create"};
+	Query m_queryFetch  {"users.fetch.by.id"};
 };
 
 }

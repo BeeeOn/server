@@ -1,5 +1,5 @@
 #include "dao/VerifiedIdentityDao.h"
-#include "dao/SQLQuery.h"
+#include "dao/Query.h"
 #include "dao/poco/PocoAbstractDao.h"
 #include "util/Loggable.h"
 
@@ -55,13 +55,13 @@ public:
 	}
 
 private:
-	SQLQuery m_queryCreate       {"verified_identities.create"};
-	SQLQuery m_queryUpdate       {"verified_identities.update"};
-	SQLQuery m_queryRemove       {"verified_identities.remove"};
-	SQLQuery m_queryFetchById    {"verified_identities.fetch.by.id"};
-	SQLQuery m_queryFetchByEmail {"verified_identities.fetch.by.email"};
-	SQLQuery m_queryFetchByEmailAndProvider {"verified_identities.fetch.by.email.and.provider"};
-	SQLQuery m_queryFetchByUser  {"verified_identities.fetch.by.user"};
+	Query m_queryCreate       {"verified_identities.create"};
+	Query m_queryUpdate       {"verified_identities.update"};
+	Query m_queryRemove       {"verified_identities.remove"};
+	Query m_queryFetchById    {"verified_identities.fetch.by.id"};
+	Query m_queryFetchByEmail {"verified_identities.fetch.by.email"};
+	Query m_queryFetchByEmailAndProvider {"verified_identities.fetch.by.email.and.provider"};
+	Query m_queryFetchByUser  {"verified_identities.fetch.by.user"};
 };
 
 }

@@ -1,21 +1,21 @@
 #include <Poco/Exception.h>
 
-#include "dao/SQLQuery.h"
+#include "dao/Query.h"
 
 using namespace std;
 using namespace Poco;
 using namespace BeeeOn;
 
-SQLQuery::SQLQuery(const std::string &key):
+Query::Query(const std::string &key):
 	m_key(key)
 {
 }
 
-SQLQuery::~SQLQuery()
+Query::~Query()
 {
 }
 
-void SQLQuery::load(SQLLoader &loader)
+void Query::load(QueryLoader &loader)
 {
 	m_query = loader.find(m_key);
 
@@ -23,7 +23,7 @@ void SQLQuery::load(SQLLoader &loader)
 		throw IllegalStateException("failed to load query " + m_key);
 }
 
-string SQLQuery::get() const
+string Query::get() const
 {
 	if (m_query.empty())
 		throw IllegalStateException("query " + m_key + " is not loaded");

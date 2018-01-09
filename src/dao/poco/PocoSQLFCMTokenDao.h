@@ -1,7 +1,7 @@
 #pragma once
 
 #include "dao/FCMTokenDao.h"
-#include "dao/SQLQuery.h"
+#include "dao/Query.h"
 #include "dao/poco/PocoAbstractDao.h"
 #include "util/Loggable.h"
 
@@ -73,11 +73,11 @@ public:
 	}
 
 private:
-	SQLQuery m_queryCreate              {"fcm_tokens.create"};
-	SQLQuery m_queryReplace             {"fcm_tokens.replace"};
-	SQLQuery m_queryRemove              {"fcm_tokens.remove"};
-	SQLQuery m_queryFetchByUserId       {"fcm_tokens.fetch.by.user.id"};
-	SQLQuery m_queryFetchUserByFCMToken {"fcm_tokens.fetch.by.id"};
+	Query m_queryCreate              {"fcm_tokens.create"};
+	Query m_queryReplace             {"fcm_tokens.replace"};
+	Query m_queryRemove              {"fcm_tokens.remove"};
+	Query m_queryFetchByUserId       {"fcm_tokens.fetch.by.user.id"};
+	Query m_queryFetchUserByFCMToken {"fcm_tokens.fetch.by.id"};
 };
 
 }

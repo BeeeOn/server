@@ -16,8 +16,8 @@
 #include <Poco/Data/ODBC/ODBCException.h>
 #endif
 
-#include "dao/SQLLoader.h"
-#include "dao/SQLQuery.h"
+#include "dao/QueryLoader.h"
+#include "dao/Query.h"
 #include "dao/poco/PocoTransactionImpl.h"
 #include "dao/poco/PocoAbstractDao.h"
 #include "dao/poco/PocoDaoManager.h"
@@ -51,7 +51,7 @@ void PocoAbstractDao::setTransactionManager(TransactionManager::Ptr manager)
 	m_transactionManager = manager;
 }
 
-void PocoAbstractDao::setSQLLoader(SQLLoader *loader)
+void PocoAbstractDao::setQueryLoader(QueryLoader::Ptr loader)
 {
 	m_loader = loader;
 }
@@ -95,7 +95,7 @@ Poco::Data::Session PocoAbstractDao::openSession(bool transact)
 	}
 }
 
-void PocoAbstractDao::registerQuery(SQLQuery &query)
+void PocoAbstractDao::registerQuery(Query &query)
 {
 	m_queries.push_back(&query);
 }
@@ -441,12 +441,6 @@ bool PocoAbstractDao::hasColumn(const Row &result, const std::string &name)
 
 void PocoAbstractDao::loadQueries()
 {
-	if (m_loader == NULL) {
-		logger().warning("missing SQLLoader instance",
-				__FILE__, __LINE__);
-		return;
-	}
-
 	for (auto query : m_queries) {
 		logger().debug("loading query " + query->key(),
 				__FILE__, __LINE__);

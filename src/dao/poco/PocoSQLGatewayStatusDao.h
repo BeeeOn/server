@@ -2,7 +2,7 @@
 #define BEEEON_POCO_SQL_GATEWAY_STATUS_DAO_H
 
 #include "dao/GatewayStatusDao.h"
-#include "dao/SQLQuery.h"
+#include "dao/Query.h"
 #include "dao/poco/PocoAbstractDao.h"
 
 namespace BeeeOn {
@@ -16,7 +16,7 @@ public:
 	bool insert(const GatewayStatus &status, const Gateway &gateway) override;
 
 private:
-	SQLQuery m_queryInsert {"gateways_status.insert"};
+	Query m_queryInsert {"gateways_status.insert"};
 };
 
 }
