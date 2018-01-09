@@ -11,6 +11,7 @@
 #include <Poco/Data/RecordSet.h>
 
 #include "dao/EntityLoader.h"
+#include "dao/QueryLoader.h"
 #include "transaction/TransactionManager.h"
 #include "util/Loggable.h"
 
@@ -28,7 +29,6 @@ class Session;
 namespace BeeeOn {
 
 class PocoDaoManager;
-class QueryLoader;
 class Query;
 
 class PocoAbstractDao :
@@ -40,7 +40,7 @@ public:
 
 	void setDaoManager(PocoDaoManager *manager);
 	void setTransactionManager(TransactionManager::Ptr manager);
-	void setQueryLoader(QueryLoader *loader);
+	void setQueryLoader(QueryLoader::Ptr loader);
 
 	void loadQueries();
 
@@ -82,7 +82,7 @@ protected:
 private:
 	PocoDaoManager *m_manager;
 	TransactionManager::Ptr m_transactionManager;
-	QueryLoader *m_loader;
+	QueryLoader::Ptr m_loader;
 	std::list<Query *> m_queries;
 };
 

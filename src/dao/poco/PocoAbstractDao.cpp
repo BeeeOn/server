@@ -51,7 +51,7 @@ void PocoAbstractDao::setTransactionManager(TransactionManager::Ptr manager)
 	m_transactionManager = manager;
 }
 
-void PocoAbstractDao::setQueryLoader(QueryLoader *loader)
+void PocoAbstractDao::setQueryLoader(QueryLoader::Ptr loader)
 {
 	m_loader = loader;
 }
@@ -441,12 +441,6 @@ bool PocoAbstractDao::hasColumn(const Row &result, const std::string &name)
 
 void PocoAbstractDao::loadQueries()
 {
-	if (m_loader == NULL) {
-		logger().warning("missing QueryLoader instance",
-				__FILE__, __LINE__);
-		return;
-	}
-
 	for (auto query : m_queries) {
 		logger().debug("loading query " + query->key(),
 				__FILE__, __LINE__);
