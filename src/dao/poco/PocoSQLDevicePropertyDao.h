@@ -2,7 +2,7 @@
 #define BEEEON_POCO_SQL_DEVICE_PROPERTY_DAO_H
 
 #include "dao/DevicePropertyDao.h"
-#include "dao/SQLQuery.h"
+#include "dao/Query.h"
 #include "dao/poco/PocoAbstractDao.h"
 #include "util/Loggable.h"
 
@@ -58,11 +58,11 @@ protected:
 	void assureKeyValid(const DeviceProperty &property) const;
 
 private:
-	SQLQuery m_queryInsert    {"devices_properties.insert"};
-	SQLQuery m_queryUpdate    {"devices_properties.update"};
-	SQLQuery m_queryRemove    {"devices_properties.remove"};
-	SQLQuery m_queryFetch     {"devices_properties.fetch"};
-	SQLQuery m_queryFetchByDevice {"devices_properties.fetch.by.device"};
+	Query m_queryInsert    {"devices_properties.insert"};
+	Query m_queryUpdate    {"devices_properties.update"};
+	Query m_queryRemove    {"devices_properties.remove"};
+	Query m_queryFetch     {"devices_properties.fetch"};
+	Query m_queryFetchByDevice {"devices_properties.fetch.by.device"};
 };
 
 }

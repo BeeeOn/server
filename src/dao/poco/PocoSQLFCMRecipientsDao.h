@@ -1,7 +1,7 @@
 #pragma once
 
 #include "dao/FCMRecipientsDao.h"
-#include "dao/SQLQuery.h"
+#include "dao/Query.h"
 
 #include "dao/poco/PocoAbstractDao.h"
 
@@ -25,7 +25,7 @@ public:
 	void fetchBy(std::vector<FCMToken> &tokens, const Gateway &gateway) override;
 
 private:
-	SQLQuery m_queryByGateway {"fcm_recipients.by_gateway"};
+	Query m_queryByGateway {"fcm_recipients.by_gateway"};
 };
 
 }

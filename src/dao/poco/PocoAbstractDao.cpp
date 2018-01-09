@@ -17,7 +17,7 @@
 #endif
 
 #include "dao/SQLLoader.h"
-#include "dao/SQLQuery.h"
+#include "dao/Query.h"
 #include "dao/poco/PocoTransactionImpl.h"
 #include "dao/poco/PocoAbstractDao.h"
 #include "dao/poco/PocoDaoManager.h"
@@ -95,7 +95,7 @@ Poco::Data::Session PocoAbstractDao::openSession(bool transact)
 	}
 }
 
-void PocoAbstractDao::registerQuery(SQLQuery &query)
+void PocoAbstractDao::registerQuery(Query &query)
 {
 	m_queries.push_back(&query);
 }

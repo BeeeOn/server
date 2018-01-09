@@ -1,5 +1,5 @@
 #include "dao/GatewayDao.h"
-#include "dao/SQLQuery.h"
+#include "dao/Query.h"
 #include "dao/poco/PocoAbstractDao.h"
 #include "l10n/TimeZoneProvider.h"
 #include "util/Loggable.h"
@@ -70,12 +70,12 @@ public:
 	}
 
 private:
-	SQLQuery m_queryCreate          {"gateways.create"};
-	SQLQuery m_queryUpdate          {"gateways.update"};
-	SQLQuery m_queryFetchById       {"gateways.fetch.by.id"};
-	SQLQuery m_queryFetchAccessible {"gateways.fetch.accessible"};
-	SQLQuery m_queryLegacyFetchById {"legacy_gateways.fetch.by.id"};
-	SQLQuery m_queryLegacyFetchAccessible {"legacy_gateways.fetch.accessible"};
+	Query m_queryCreate          {"gateways.create"};
+	Query m_queryUpdate          {"gateways.update"};
+	Query m_queryFetchById       {"gateways.fetch.by.id"};
+	Query m_queryFetchAccessible {"gateways.fetch.accessible"};
+	Query m_queryLegacyFetchById {"legacy_gateways.fetch.by.id"};
+	Query m_queryLegacyFetchAccessible {"legacy_gateways.fetch.accessible"};
 
 	TimeZoneProvider::Ptr m_timeZoneProvider;
 };

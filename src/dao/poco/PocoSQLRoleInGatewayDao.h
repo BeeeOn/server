@@ -1,5 +1,5 @@
 #include "dao/RoleInGatewayDao.h"
-#include "dao/SQLQuery.h"
+#include "dao/Query.h"
 #include "dao/poco/PocoAbstractDao.h"
 #include "l10n/TimeZoneProvider.h"
 #include "util/Loggable.h"
@@ -94,22 +94,22 @@ public:
 	}
 
 private:
-	SQLQuery m_queryCreate           {"roles_in_gateway.create"};
-	SQLQuery m_queryUpdate           {"roles_in_gateway.update"};
-	SQLQuery m_queryRemove           {"roles_in_gateway.remove"};
-	SQLQuery m_queryRemoveUser       {"roles_in_gateway.remove.user"};
-	SQLQuery m_queryRemoveAll        {"roles_in_gateway.remove.all"};
-	SQLQuery m_queryIsUser           {"roles_in_gateway.is.user"};
-	SQLQuery m_queryIsRegistered     {"roles_in_gateway.is.registered"};
-	SQLQuery m_queryFetchById        {"roles_in_gateway.fetch.by.id"};
-	SQLQuery m_queryFetchByGatewayId   {"roles_in_gateway.fetch.by.gateway_id"};
-	SQLQuery m_queryFetchLegacyByGatewayId {"legacy_roles_in_gateway.fetch.by.gateway_id"};
-	SQLQuery m_queryFetchLegacyById  {"legacy_roles_in_gateway.fetch.by.id"};
-	SQLQuery m_queryFetchAccessLevel {"roles_in_gateway.fetch.access_level"};
-	SQLQuery m_queryFetchAccessibleGateways {"roles_in_gateway.fetch.accessible.gateways"};
-	SQLQuery m_queryHasOnlyNonAdminExcept {"roles_in_gateway.has.only.given.level.except"};
-	SQLQuery m_queryCanSeeIdentity   {"roles_in_gateway.can.see.identity"};
-	SQLQuery m_queryCanSeeVerifiedIdentity {"roles_in_gateway.can.see.verified_identity"};
+	Query m_queryCreate           {"roles_in_gateway.create"};
+	Query m_queryUpdate           {"roles_in_gateway.update"};
+	Query m_queryRemove           {"roles_in_gateway.remove"};
+	Query m_queryRemoveUser       {"roles_in_gateway.remove.user"};
+	Query m_queryRemoveAll        {"roles_in_gateway.remove.all"};
+	Query m_queryIsUser           {"roles_in_gateway.is.user"};
+	Query m_queryIsRegistered     {"roles_in_gateway.is.registered"};
+	Query m_queryFetchById        {"roles_in_gateway.fetch.by.id"};
+	Query m_queryFetchByGatewayId   {"roles_in_gateway.fetch.by.gateway_id"};
+	Query m_queryFetchLegacyByGatewayId {"legacy_roles_in_gateway.fetch.by.gateway_id"};
+	Query m_queryFetchLegacyById  {"legacy_roles_in_gateway.fetch.by.id"};
+	Query m_queryFetchAccessLevel {"roles_in_gateway.fetch.access_level"};
+	Query m_queryFetchAccessibleGateways {"roles_in_gateway.fetch.accessible.gateways"};
+	Query m_queryHasOnlyNonAdminExcept {"roles_in_gateway.has.only.given.level.except"};
+	Query m_queryCanSeeIdentity   {"roles_in_gateway.can.see.identity"};
+	Query m_queryCanSeeVerifiedIdentity {"roles_in_gateway.can.see.verified_identity"};
 
 	TimeZoneProvider::Ptr m_timeZoneProvider;
 };

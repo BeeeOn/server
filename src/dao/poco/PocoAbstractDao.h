@@ -29,7 +29,7 @@ namespace BeeeOn {
 
 class PocoDaoManager;
 class SQLLoader;
-class SQLQuery;
+class Query;
 
 class PocoAbstractDao :
 		public EntityLoader,
@@ -49,7 +49,7 @@ protected:
 	Poco::Data::Session session(bool transact = true);
 	Poco::Data::Session openSession(bool transact = true);
 
-	void registerQuery(SQLQuery &query);
+	void registerQuery(Query &query);
 
 	template <typename T>
 	void assureHasId(const T &t)
@@ -83,7 +83,7 @@ private:
 	PocoDaoManager *m_manager;
 	TransactionManager::Ptr m_transactionManager;
 	SQLLoader *m_loader;
-	std::list<SQLQuery *> m_queries;
+	std::list<Query *> m_queries;
 };
 
 }

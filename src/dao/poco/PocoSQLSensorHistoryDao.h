@@ -2,7 +2,7 @@
 #define BEEEON_POCO_SQL_SENSOR_HISTORY_DAO_H
 
 #include "dao/SensorHistoryDao.h"
-#include "dao/SQLQuery.h"
+#include "dao/Query.h"
 #include "dao/poco/PocoAbstractDao.h"
 
 namespace Poco {
@@ -48,9 +48,9 @@ public:
 		ValueConsumer &consumer) override;
 
 private:
-	SQLQuery m_queryInsert    {"sensors_history.insert"};
-	SQLQuery m_queryFetch     {"sensors_history.fetch"};
-	SQLQuery m_queryFetchHuge {"sensors_history.fetch.huge.interval"};
+	Query m_queryInsert    {"sensors_history.insert"};
+	Query m_queryFetch     {"sensors_history.fetch"};
+	Query m_queryFetchHuge {"sensors_history.fetch.huge.interval"};
 };
 
 }

@@ -2,7 +2,7 @@
 #define BEEEON_POCO_SQL_CONTROL_DAO_H
 
 #include "dao/ControlDao.h"
-#include "dao/SQLQuery.h"
+#include "dao/Query.h"
 #include "dao/poco/PocoAbstractDao.h"
 #include "util/Loggable.h"
 
@@ -48,7 +48,7 @@ protected:
 			const std::string &prefix);
 
 private:
-	SQLQuery m_queryRecentState      {"controls_recent.fetch"};
+	Query m_queryRecentState      {"controls_recent.fetch"};
 };
 
 }

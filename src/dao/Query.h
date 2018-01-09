@@ -1,14 +1,14 @@
-#ifndef BEEEON_SQL_QUERY_H
-#define BEEEON_SQL_QUERY_H
+#ifndef BEEEON_QUERY_H
+#define BEEEON_QUERY_H
 
 #include "dao/SQLLoader.h"
 
 namespace BeeeOn {
 
-class SQLQuery {
+class Query {
 public:
-	SQLQuery(const std::string &key);
-	~SQLQuery();
+	Query(const std::string &key);
+	~Query();
 
 	void load(SQLLoader &loader);
 
