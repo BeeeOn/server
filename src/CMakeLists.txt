@@ -110,7 +110,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLDevicePropertyDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLSensorHistoryDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/ConnectorLoader.cpp
-	${PROJECT_SOURCE_DIR}/dao/SQLLoader.cpp
+	${PROJECT_SOURCE_DIR}/dao/IniFileQueryLoader.cpp
 	${PROJECT_SOURCE_DIR}/dao/Query.cpp
 	${PROJECT_SOURCE_DIR}/fcm/FCMClient.cpp
 	${PROJECT_SOURCE_DIR}/fcm/FCMMessage.cpp

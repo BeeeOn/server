@@ -18,7 +18,7 @@ BEEEON_OBJECT_BEGIN(BeeeOn, PocoSQLIdentityDao)
 BEEEON_OBJECT_CASTABLE(IdentityDao)
 BEEEON_OBJECT_REF("daoManager", &PocoSQLIdentityDao::setDaoManager)
 BEEEON_OBJECT_REF("transactionManager", &PocoSQLIdentityDao::setTransactionManager)
-BEEEON_OBJECT_REF("sqlLoader", &PocoSQLIdentityDao::setSQLLoader)
+BEEEON_OBJECT_REF("sqlLoader", &PocoSQLIdentityDao::setIniFileQueryLoader)
 BEEEON_OBJECT_HOOK("done", &PocoSQLIdentityDao::loadQueries)
 BEEEON_OBJECT_END(BeeeOn, PocoSQLIdentityDao)
 

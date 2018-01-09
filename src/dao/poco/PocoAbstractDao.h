@@ -28,7 +28,7 @@ class Session;
 namespace BeeeOn {
 
 class PocoDaoManager;
-class SQLLoader;
+class IniFileQueryLoader;
 class Query;
 
 class PocoAbstractDao :
@@ -40,7 +40,7 @@ public:
 
 	void setDaoManager(PocoDaoManager *manager);
 	void setTransactionManager(TransactionManager::Ptr manager);
-	void setSQLLoader(SQLLoader *loader);
+	void setIniFileQueryLoader(IniFileQueryLoader *loader);
 
 	void loadQueries();
 
@@ -82,7 +82,7 @@ protected:
 private:
 	PocoDaoManager *m_manager;
 	TransactionManager::Ptr m_transactionManager;
-	SQLLoader *m_loader;
+	IniFileQueryLoader *m_loader;
 	std::list<Query *> m_queries;
 };
 

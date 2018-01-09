@@ -18,7 +18,7 @@ BEEEON_OBJECT_CASTABLE(UserDao)
 BEEEON_OBJECT_REF("daoManager", &PocoSQLUserDao::setDaoManager)
 BEEEON_OBJECT_REF("transactionManager", &PocoSQLUserDao::setTransactionManager)
 BEEEON_OBJECT_REF("localeManager", &PocoSQLUserDao::setLocaleManager)
-BEEEON_OBJECT_REF("sqlLoader", &PocoSQLUserDao::setSQLLoader)
+BEEEON_OBJECT_REF("sqlLoader", &PocoSQLUserDao::setIniFileQueryLoader)
 BEEEON_OBJECT_HOOK("done", &PocoSQLUserDao::loadQueries)
 BEEEON_OBJECT_END(BeeeOn, PocoSQLUserDao)
 

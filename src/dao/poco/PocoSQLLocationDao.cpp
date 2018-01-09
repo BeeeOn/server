@@ -19,7 +19,7 @@ BEEEON_OBJECT_BEGIN(BeeeOn, PocoSQLLocationDao)
 BEEEON_OBJECT_CASTABLE(LocationDao)
 BEEEON_OBJECT_REF("daoManager", &PocoSQLLocationDao::setDaoManager)
 BEEEON_OBJECT_REF("transactionManager", &PocoSQLLocationDao::setTransactionManager)
-BEEEON_OBJECT_REF("sqlLoader", &PocoSQLLocationDao::setSQLLoader)
+BEEEON_OBJECT_REF("sqlLoader", &PocoSQLLocationDao::setIniFileQueryLoader)
 BEEEON_OBJECT_HOOK("done", &PocoSQLLocationDao::loadQueries)
 BEEEON_OBJECT_END(BeeeOn, PocoSQLLocationDao)
 

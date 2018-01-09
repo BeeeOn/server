@@ -28,7 +28,7 @@ BEEEON_OBJECT_BEGIN(BeeeOn, PocoSQLSensorHistoryDao)
 BEEEON_OBJECT_CASTABLE(SensorHistoryDao)
 BEEEON_OBJECT_REF("daoManager", &PocoSQLSensorHistoryDao::setDaoManager)
 BEEEON_OBJECT_REF("transactionManager", &PocoSQLSensorHistoryDao::setTransactionManager)
-BEEEON_OBJECT_REF("sqlLoader", &PocoSQLSensorHistoryDao::setSQLLoader)
+BEEEON_OBJECT_REF("sqlLoader", &PocoSQLSensorHistoryDao::setIniFileQueryLoader)
 BEEEON_OBJECT_HOOK("done", &PocoSQLSensorHistoryDao::loadQueries)
 BEEEON_OBJECT_END(BeeeOn, PocoSQLSensorHistoryDao)
 

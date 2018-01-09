@@ -16,7 +16,7 @@
 #include <Poco/Data/ODBC/ODBCException.h>
 #endif
 
-#include "dao/SQLLoader.h"
+#include "dao/IniFileQueryLoader.h"
 #include "dao/Query.h"
 #include "dao/poco/PocoTransactionImpl.h"
 #include "dao/poco/PocoAbstractDao.h"
@@ -51,7 +51,7 @@ void PocoAbstractDao::setTransactionManager(TransactionManager::Ptr manager)
 	m_transactionManager = manager;
 }
 
-void PocoAbstractDao::setSQLLoader(SQLLoader *loader)
+void PocoAbstractDao::setIniFileQueryLoader(IniFileQueryLoader *loader)
 {
 	m_loader = loader;
 }
@@ -442,7 +442,7 @@ bool PocoAbstractDao::hasColumn(const Row &result, const std::string &name)
 void PocoAbstractDao::loadQueries()
 {
 	if (m_loader == NULL) {
-		logger().warning("missing SQLLoader instance",
+		logger().warning("missing IniFileQueryLoader instance",
 				__FILE__, __LINE__);
 		return;
 	}

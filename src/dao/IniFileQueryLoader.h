@@ -1,5 +1,5 @@
-#ifndef BEEEON_SQL_LOADER_H
-#define BEEEON_SQL_LOADER_H
+#ifndef BEEEON_INI_FILE_QUERY_LOADER_H
+#define BEEEON_INI_FILE_QUERY_LOADER_H
 
 #include <Poco/AutoPtr.h>
 #include <Poco/Util/LayeredConfiguration.h>
@@ -7,10 +7,10 @@
 
 namespace BeeeOn {
 
-class SQLLoader {
+class IniFileQueryLoader {
 public:
-	SQLLoader();
-	virtual ~SQLLoader();
+	IniFileQueryLoader();
+	virtual ~IniFileQueryLoader();
 
 	void addSourceFile(const std::string &path);
 
