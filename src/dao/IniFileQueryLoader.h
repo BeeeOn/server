@@ -5,27 +5,17 @@
 #include <Poco/Util/LayeredConfiguration.h>
 #include <Poco/Util/AbstractConfiguration.h>
 
-#include "dao/QueryLoader.h"
+#include "dao/AbstractConfigurationQueryLoader.h"
 
 namespace BeeeOn {
 
-class IniFileQueryLoader : public QueryLoader {
+class IniFileQueryLoader : public AbstractConfigurationQueryLoader {
 public:
 	IniFileQueryLoader();
-	virtual ~IniFileQueryLoader();
-
-	void addSourceFile(const std::string &path);
-
-	void setDatabase(const std::string &name);
-
-	std::string find(const std::string &key) const override;
-
-	void prepare();
 
 protected:
-	Poco::AutoPtr<Poco::Util::LayeredConfiguration> m_config;
-	Poco::AutoPtr<Poco::Util::AbstractConfiguration> m_view;
-	std::string m_database;
+	Poco::AutoPtr<Poco::Util::AbstractConfiguration> loadConfig(
+			const std::string &path) override;
 };
 
 }

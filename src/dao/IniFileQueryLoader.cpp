@@ -15,32 +15,11 @@ BEEEON_OBJECT_TEXT("database", &IniFileQueryLoader::setDatabase)
 BEEEON_OBJECT_HOOK("done", &IniFileQueryLoader::prepare)
 BEEEON_OBJECT_END(BeeeOn, IniFileQueryLoader)
 
-IniFileQueryLoader::IniFileQueryLoader():
-	m_config(new LayeredConfiguration())
+IniFileQueryLoader::IniFileQueryLoader()
 {
 }
 
-IniFileQueryLoader::~IniFileQueryLoader()
+AutoPtr<AbstractConfiguration> IniFileQueryLoader::loadConfig(const string &path)
 {
-}
-
-void IniFileQueryLoader::addSourceFile(const string &path)
-{
-	AutoPtr<IniFileConfiguration> config(new IniFileConfiguration(path));
-	m_config->add(config);
-}
-
-void IniFileQueryLoader::setDatabase(const string &name)
-{
-	m_database = name;
-}
-
-void IniFileQueryLoader::prepare()
-{
-	m_view = m_config->createView(m_database);
-}
-
-string IniFileQueryLoader::find(const string &key) const
-{
-	return m_view->getString(key, "");
+	return new IniFileConfiguration(path);
 }
