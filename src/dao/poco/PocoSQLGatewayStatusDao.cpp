@@ -15,7 +15,7 @@ BEEEON_OBJECT_BEGIN(BeeeOn, PocoSQLGatewayStatusDao)
 BEEEON_OBJECT_CASTABLE(GatewayStatusDao)
 BEEEON_OBJECT_REF("daoManager", &PocoSQLGatewayStatusDao::setDaoManager)
 BEEEON_OBJECT_REF("transactionManager", &PocoSQLGatewayStatusDao::setTransactionManager)
-BEEEON_OBJECT_REF("sqlLoader", &PocoSQLGatewayStatusDao::setIniFileQueryLoader)
+BEEEON_OBJECT_REF("sqlLoader", &PocoSQLGatewayStatusDao::setQueryLoader)
 BEEEON_OBJECT_HOOK("done", &PocoSQLGatewayStatusDao::loadQueries)
 BEEEON_OBJECT_END(BeeeOn, PocoSQLGatewayStatusDao)
 

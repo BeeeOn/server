@@ -1,7 +1,7 @@
 #ifndef BEEEON_QUERY_H
 #define BEEEON_QUERY_H
 
-#include "dao/IniFileQueryLoader.h"
+#include "dao/QueryLoader.h"
 
 namespace BeeeOn {
 
@@ -10,7 +10,7 @@ public:
 	Query(const std::string &key);
 	~Query();
 
-	void load(IniFileQueryLoader &loader);
+	void load(QueryLoader &loader);
 
 	std::string key() const
 	{

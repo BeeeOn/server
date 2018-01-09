@@ -24,7 +24,7 @@ BEEEON_OBJECT_BEGIN(BeeeOn, PocoSQLControlDao)
 BEEEON_OBJECT_CASTABLE(ControlDao)
 BEEEON_OBJECT_REF("daoManager", &PocoSQLControlDao::setDaoManager)
 BEEEON_OBJECT_REF("transactionManager", &PocoSQLControlDao::setTransactionManager)
-BEEEON_OBJECT_REF("sqlLoader", &PocoSQLControlDao::setIniFileQueryLoader)
+BEEEON_OBJECT_REF("sqlLoader", &PocoSQLControlDao::setQueryLoader)
 BEEEON_OBJECT_HOOK("done", &PocoSQLControlDao::loadQueries)
 BEEEON_OBJECT_END(BeeeOn, PocoSQLControlDao)
 

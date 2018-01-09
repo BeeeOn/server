@@ -25,7 +25,7 @@ BEEEON_OBJECT_BEGIN(BeeeOn, PocoSQLDevicePropertyDao)
 BEEEON_OBJECT_CASTABLE(DevicePropertyDao)
 BEEEON_OBJECT_REF("daoManager", &PocoSQLDevicePropertyDao::setDaoManager)
 BEEEON_OBJECT_REF("transactionManager", &PocoSQLDevicePropertyDao::setTransactionManager)
-BEEEON_OBJECT_REF("sqlLoader", &PocoSQLDevicePropertyDao::setIniFileQueryLoader)
+BEEEON_OBJECT_REF("sqlLoader", &PocoSQLDevicePropertyDao::setQueryLoader)
 BEEEON_OBJECT_HOOK("done", &PocoSQLDevicePropertyDao::loadQueries)
 BEEEON_OBJECT_END(BeeeOn, PocoSQLDevicePropertyDao)
 

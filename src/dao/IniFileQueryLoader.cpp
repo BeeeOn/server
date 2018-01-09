@@ -9,6 +9,7 @@ using namespace Poco::Util;
 using namespace BeeeOn;
 
 BEEEON_OBJECT_BEGIN(BeeeOn, IniFileQueryLoader)
+BEEEON_OBJECT_CASTABLE(QueryLoader)
 BEEEON_OBJECT_TEXT("file", &IniFileQueryLoader::addSourceFile)
 BEEEON_OBJECT_TEXT("database", &IniFileQueryLoader::setDatabase)
 BEEEON_OBJECT_HOOK("done", &IniFileQueryLoader::prepare)

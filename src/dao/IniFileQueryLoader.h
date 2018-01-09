@@ -5,9 +5,11 @@
 #include <Poco/Util/LayeredConfiguration.h>
 #include <Poco/Util/AbstractConfiguration.h>
 
+#include "dao/QueryLoader.h"
+
 namespace BeeeOn {
 
-class IniFileQueryLoader {
+class IniFileQueryLoader : public QueryLoader {
 public:
 	IniFileQueryLoader();
 	virtual ~IniFileQueryLoader();
@@ -16,7 +18,7 @@ public:
 
 	void setDatabase(const std::string &name);
 
-	std::string find(const std::string &key) const;
+	std::string find(const std::string &key) const override;
 
 	void prepare();
 

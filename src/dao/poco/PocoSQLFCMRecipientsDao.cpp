@@ -15,7 +15,7 @@ BEEEON_OBJECT_BEGIN(BeeeOn, PocoSQLFCMRecipientsDao)
 BEEEON_OBJECT_CASTABLE(FCMRecipientsDao)
 BEEEON_OBJECT_REF("daoManager", &PocoSQLFCMRecipientsDao::setDaoManager)
 BEEEON_OBJECT_REF("transactionManager", &PocoSQLFCMRecipientsDao::setTransactionManager)
-BEEEON_OBJECT_REF("sqlLoader", &PocoSQLFCMRecipientsDao::setIniFileQueryLoader)
+BEEEON_OBJECT_REF("sqlLoader", &PocoSQLFCMRecipientsDao::setQueryLoader)
 BEEEON_OBJECT_HOOK("done", &PocoSQLFCMRecipientsDao::loadQueries)
 BEEEON_OBJECT_END(BeeeOn, PocoSQLFCMRecipientsDao)
 

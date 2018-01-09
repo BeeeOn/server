@@ -15,7 +15,7 @@ Query::~Query()
 {
 }
 
-void Query::load(IniFileQueryLoader &loader)
+void Query::load(QueryLoader &loader)
 {
 	m_query = loader.find(m_key);
 
