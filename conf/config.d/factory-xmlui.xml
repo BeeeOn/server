@@ -34,6 +34,7 @@
 
 		<instance name="gatewayXmlHandler"
 				class="BeeeOn::XmlUI::GatewayXmlHandlerResolver">
+			<set name="scanDuration" time="${xmlui.scanDuration}" />
 			<set name="gatewayService" ref="gatewayService" />
 			<set name="sessionManager" ref="sessionManager" />
 			<set name="timeZoneProvider" ref="timeZoneProvider" />
