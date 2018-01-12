@@ -244,6 +244,11 @@ void GatewayScanController::stop()
 
 GatewayScan GatewayScanController::scan(const Gateway &gateway, const Timespan &timeout)
 {
+	const Timespan &duration = timeout <= 0? m_defaultDuration : timeout;
+
+	if (duration > MAX_SCAN_DURATION)
+		throw InvalidArgumentException("too big scanning timeout given");
+
 	ScopedLockWithUnlock<FastMutex> guard(m_lock);
 
 	auto it = m_scanMap.find(gateway.id());
@@ -251,10 +256,6 @@ GatewayScan GatewayScanController::scan(const Gateway &gateway, const Timespan &
 		return it->second->scan();
 
 	const auto id = gateway.id();
-	const Timespan &duration = timeout <= 0? m_defaultDuration : timeout;
-
-	if (duration > MAX_SCAN_DURATION)
-		throw InvalidArgumentException("too big scanning timeout given");
 
 	ScanHandler::Ptr context = new ScanHandler(id);
 	context->scan().setDuration(duration);
