@@ -1,6 +1,6 @@
 #include <vector>
 
-#include <Poco/Timespan.h>
+#include <Poco/Exception.h>
 
 #include "di/Injectable.h"
 #include "xmlui/GatewayXmlHandler.h"
@@ -21,9 +21,11 @@ GatewayXmlHandler::GatewayXmlHandler(
 		const StreamSocket &socket,
 		const AutoPtr<Document> input,
 		Session::Ptr session,
+		const Timespan &scanDuration,
 		GatewayService &gatewayService,
 		TimeZoneProvider::Ptr timeZoneProvider):
 	SessionXmlHandler("gates", socket, input, session),
+	m_scanDuration(scanDuration),
 	m_gatewayService(gatewayService),
 	m_timeZoneProvider(timeZoneProvider)
 {
@@ -104,7 +106,7 @@ void GatewayXmlHandler::handleListen(Element *gatewayNode)
 	User user(session()->userID());
 	input.setUser(user);
 
-	m_gatewayService.scanDevices(input, Timespan(30, 0));
+	m_gatewayService.scanDevices(input, m_scanDuration);
 	resultSuccess();
 }
 
@@ -160,8 +162,17 @@ void GatewayXmlHandler::handleGetAll()
 }
 
 GatewayXmlHandlerResolver::GatewayXmlHandlerResolver():
-	SessionXmlHandlerResolver("gates")
+	SessionXmlHandlerResolver("gates"),
+	m_scanDuration(30 * Timespan::SECONDS)
 {
+}
+
+void GatewayXmlHandlerResolver::setScanDuration(const Poco::Timespan &duration)
+{
+	if (duration.totalSeconds() < 1)
+		throw InvalidArgumentException("duration must be at least a second");
+
+	m_scanDuration = duration;
 }
 
 void GatewayXmlHandlerResolver::setTimeZoneProvider(TimeZoneProvider::Ptr provider)
@@ -200,6 +211,7 @@ XmlRequestHandler *GatewayXmlHandlerResolver::createHandler(
 	Session::Ptr session = lookupSession(*m_sessionManager, input);
 	return new GatewayXmlHandler(
 			socket, input, session,
+			m_scanDuration,
 			*m_gatewayService,
 			m_timeZoneProvider);
 }
@@ -208,6 +220,7 @@ BEEEON_OBJECT_BEGIN(BeeeOn, XmlUI, GatewayXmlHandlerResolver)
 BEEEON_OBJECT_CASTABLE(SessionXmlHandlerResolver)
 BEEEON_OBJECT_CASTABLE(AbstractXmlHandlerResolver)
 BEEEON_OBJECT_CASTABLE(XmlRequestHandlerResolver)
+BEEEON_OBJECT_TIME("scanDuration", &GatewayXmlHandlerResolver::setScanDuration)
 BEEEON_OBJECT_REF("gatewayService", &GatewayXmlHandlerResolver::setGatewayService)
 BEEEON_OBJECT_REF("sessionManager", &GatewayXmlHandlerResolver::setSessionManager)
 BEEEON_OBJECT_REF("timeZoneProvider", &GatewayXmlHandlerResolver::setTimeZoneProvider)
