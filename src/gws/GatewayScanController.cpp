@@ -249,13 +249,13 @@ GatewayScan GatewayScanController::scan(const Gateway &gateway, const Timespan &
 	if (duration > MAX_SCAN_DURATION)
 		throw InvalidArgumentException("too big scanning timeout given");
 
+	const auto id = gateway.id();
+
 	ScopedLockWithUnlock<FastMutex> guard(m_lock);
 
-	auto it = m_scanMap.find(gateway.id());
+	auto it = m_scanMap.find(id);
 	if (it != m_scanMap.end())
 		return it->second->scan();
-
-	const auto id = gateway.id();
 
 	ScanHandler::Ptr context = new ScanHandler(id);
 	context->scan().setDuration(duration);
