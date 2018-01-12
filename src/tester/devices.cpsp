@@ -122,8 +122,10 @@ tester.modules["devices"] = function () {
 
 		$("#devices-discover-progress-refresh").remove();
 
+		var duration = $("#devices-discover-duration").val();
+
 		tester.post("/gateways/" + gwid + "/discovery", "#devices", {
-			time_limit: 10
+			time_limit: duration
 		}, function (data) {
 			var location = "/gateways/" + gwid + "/discovery";
 
@@ -209,6 +211,20 @@ tester.modules["devices"] = function () {
 		<input id="devices-gateway-input" type="text" />
 		<br />
 		<button id="devices-discover-button">Discover New Devices</button>
+		<select id="devices-discover-duration">
+			<option value="10">10 s</option>
+			<option value="20">20 s</option>
+			<option value="30">30 s</option>
+			<option value="45">45 s</option>
+			<option value="60">1 min</option>
+			<option value="80">1 min 20 s</option>
+			<option value="90">1 min 30 s</option>
+			<option value="105">1 min 45 s</option>
+			<option value="120" selected="selected">2 min</option>
+			<option value="180">3 min</option>
+			<option value="240">4 min</option>
+			<option value="300">5 min</option>
+		</select>
 		<span id="devices-discover-progress"><span class="status"></span></span>
 		<br />
 		<button id="devices-list-active-button">List Active Devices</button>
