@@ -253,16 +253,33 @@ GatewayScan GatewayScanController::scan(const Gateway &gateway, const Timespan &
 
 	ScopedLockWithUnlock<FastMutex> guard(m_lock);
 
+	ScanHandler::Ptr context;
+
 	auto it = m_scanMap.find(id);
-	if (it != m_scanMap.end())
-		return it->second->scan();
+	if (it != m_scanMap.end()) {
+		context = it->second;
 
-	ScanHandler::Ptr context = new ScanHandler(id);
-	context->scan().setDuration(duration);
+		const GatewayScan scan = context->scan();
 
-	m_scanMap.emplace(id, context);
+		switch (scan.state()) {
+		case GatewayScan::SCAN_PROCESSING:
+		case GatewayScan::SCAN_WAITING:
+			return scan;
+		default:
+			// restart scan
+			break;
+		}
+	}
+	else {
+		context = new ScanHandler(id);
+		m_scanMap.emplace(id, context);
+	}
 
+	ScanHandler::ScopedLock scanGuard(*context);
 	guard.unlock();
+
+	context->scan().setDuration(duration);
+	context->scan().changeState(GatewayScan::SCAN_WAITING);
 
 	const Clock start;
 
