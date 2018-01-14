@@ -7,13 +7,12 @@
 #include <Poco/Net/InvalidCertificateHandler.h>
 #include <Poco/Net/AcceptCertificateHandler.h>
 #include <Poco/Net/HTMLForm.h>
-#include <Poco/Net/HTTPResponse.h>
 #include <Poco/Net/HTTPRequest.h>
-#include <Poco/Net/HTTPSClientSession.h>
 #include <Poco/Net/NetException.h>
 #include <Poco/StreamCopier.h>
 #include <Poco/URI.h>
 
+#include "net/HTTPUtil.h"
 #include "provider/OAuth2AuthProvider.h"
 #include "ssl/SSLClient.h"
 
@@ -65,25 +64,8 @@ void OAuth2AuthProvider::initSSL() const
 				"missing sslConfig, cannot use OAuth");
 }
 
-SharedPtr<HTTPSClientSession> OAuth2AuthProvider::connectSecure(
-		const std::string &host,
-		unsigned int port) const
+string OAuth2AuthProvider::handleResponse(HTTPEntireResponse &response) const
 {
-	try {
-		initSSL();
-		return new HTTPSClientSession(
-				host, port, m_sslConfig->context());
-	} catch (const Exception &e) {
-		logger().log(e, __FILE__, __LINE__);
-		throw;
-	}
-}
-
-string OAuth2AuthProvider::handleResponse(HTTPSClientSession &session) const
-{
-	HTTPResponse response;
-	istream &rs = session.receiveResponse(response);
-
 	if (logger().debug()) {
 		logger().debug("response status: "
 			+ to_string(response.getStatus())
@@ -91,22 +73,18 @@ string OAuth2AuthProvider::handleResponse(HTTPSClientSession &session) const
 			+ response.getReason(), __FILE__, __LINE__);
 	}
 
-	string receiveResponse = convertResponseToString(rs);
-
 	if (logger().debug()) {
 		logger().debug("response: "
-			+ receiveResponse, __FILE__, __LINE__);
+			+ response.getBody(), __FILE__, __LINE__);
 	}
 
-	return receiveResponse;
+	return response.getBody();
 }
 
 string OAuth2AuthProvider::makeRequest(const string &method, URI &host, HTMLForm &requestForm) const
 {
-	SharedPtr<HTTPSClientSession>session;
-	session = connectSecure(host.getHost(), host.getPort());
-
-	HTTPRequest request(method, host.getPathAndQuery(), HTTPMessage::HTTP_1_1);
+	HTTPRequest request(HTTPMessage::HTTP_1_1);
+	request.setMethod(method);
 	requestForm.prepareSubmit(request);
 
 	ostringstream requestQuery;
@@ -115,19 +93,15 @@ string OAuth2AuthProvider::makeRequest(const string &method, URI &host, HTMLForm
 	if (logger().debug())
 		logger().debug("request: " + requestQuery.str(), __FILE__, __LINE__);
 
-	if (method == HTTPRequest::HTTP_POST)
-		session->sendRequest(request) << requestQuery.str();
-	else
-		session->sendRequest(request);
+	try {
+		initSSL();
+	} catch (const Exception &e) {
+		logger().log(e, __FILE__, __LINE__);
+		throw;
+	}
 
-	return handleResponse(*session);
-}
+	HTTPEntireResponse response = HTTPUtil::makeRequest(
+		request, host, requestQuery.str(), m_sslConfig);
 
-string OAuth2AuthProvider::convertResponseToString(istream &rs) const
-{
-	string response;
-	stringstream ss;
-	StreamCopier::copyToString(rs, response);
-
-	return response;
+	return handleResponse(response);
 }
