@@ -40,15 +40,8 @@ public:
 protected:
 	void assertTypeValid(const Device &device);
 
-	/**
-	 * Parse at, value, stability and originator from the row.
-	 */
-	static bool parseState(Poco::Data::Row &result,
-			Control::State &state,
-			const std::string &prefix);
-
 private:
-	Query m_queryRecentState      {"controls_recent.fetch"};
+	Query m_queryFetchLast     {"controls_fsm.fetch_last"};
 };
 
 }

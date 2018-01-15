@@ -85,7 +85,9 @@ void serialize(Poco::JSON::PrintHandler &output,
 		Translator &translator,
 		const Control &control);
 void serialize(Poco::JSON::PrintHandler &output,
-		const Control::State &state);
+		Translator &translator,
+		const Control::RequestedValue &requested,
+		const ValueAt &recent);
 void serialize(Poco::JSON::PrintHandler &output,
 		Translator &translator,
 		const std::list<Control> &control);

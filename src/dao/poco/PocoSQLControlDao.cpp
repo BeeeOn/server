@@ -30,7 +30,7 @@ BEEEON_OBJECT_END(BeeeOn, PocoSQLControlDao)
 
 PocoSQLControlDao::PocoSQLControlDao()
 {
-	registerQuery(m_queryRecentState);
+	registerQuery(m_queryFetchLast);
 }
 
 void PocoSQLControlDao::assertTypeValid(const Device &device)
@@ -64,16 +64,19 @@ bool PocoSQLControlDao::fetch(Control &control, const Device &device)
 	uint64_t deviceID(device.id());
 	uint64_t gatewayID(device.gateway().id());
 
-	Statement sql = (session() << m_queryRecentState(),
+	Statement sql = (session() << m_queryFetchLast(),
 		use(gatewayID, "gateway_id"),
 		use(deviceID, "device_id"),
-		use(id, "control_id")
+		use(id, "module_id")
 	);
 
 	RecordSet result = executeSelect(sql);
 	if (result.rowCount() == 0) {
-		Control::State unknown;
-		control.setCurrent(unknown);
+		Control::RequestedValue invalidRequested;
+		ValueAt invalidRecent;
+
+		control.setRequestedValue(invalidRequested);
+		control.setRecentValue(invalidRecent);
 		return true;
 	}
 
@@ -98,16 +101,19 @@ void PocoSQLControlDao::fetchBy(std::list<Control> &controls, const Device &devi
 
 		int id(control.id());
 
-		Statement sql = (session() << m_queryRecentState(),
+		Statement sql = (session() << m_queryFetchLast(),
 			use(gatewayID, "gateway_id"),
 			use(deviceID, "device_id"),
-			use(id, "control_id")
+			use(id, "module_id")
 		);
 
 		RecordSet result = executeSelect(sql);
 		if (result.rowCount() == 0) {
-			Control::State unknown;
-			control.setCurrent(unknown);
+			Control::RequestedValue invalidRequested;
+			ValueAt invalidRecent;
+
+			control.setRequestedValue(invalidRequested);
+			control.setRecentValue(invalidRecent);
 
 			controls.emplace_back(control);
 		}
@@ -138,50 +144,60 @@ bool PocoSQLControlDao::parseSingle(Row &result,
 	if (hasColumn(result, prefix + "module_id"))
 		control.setId(ControlID::parse(result[prefix + "module_id"]));
 
-	Control::State tmp;
-	if (!parseState(result, tmp, prefix + "current_state_"))
-		throw IllegalStateException("at least current state is required");
+	ValueAt recentValue;
+	if (!result[prefix + "recent_at"].isEmpty()) {
+		Nullable<Timestamp> at;
+		if (!result[prefix + "recent_at"].isEmpty())
+			at = Timestamp(result[prefix + "recent_at"].convert<int64_t>());
 
-	control.setCurrent(tmp);
-
-	Nullable<Control::State> confirmed;
-	if (parseState(result, tmp, prefix + "confirmed_state_"))
-		confirmed = tmp;
-	
-	control.setLastConfirmed(confirmed);
-
-	markLoaded(control);
-	return true;
-}
-
-
-bool PocoSQLControlDao::parseState(Row &result,
-		Control::State &state,
-		const string &prefix)
-{
-	if (result[prefix + "at"].isEmpty())
-		return false;
-
-	state.setAt(Timestamp::fromEpochTime(result[prefix + "at"]));
-
-	if (result[prefix + "value"].isEmpty())
-		state.setValue(NAN);
-	else
-		state.setValue(result[prefix + "value"].convert<double>());
-
-	if (result[prefix + "stability"].isEmpty())
-		return false;
-
-	const int stability = result[prefix + "stability"].convert<int>();
-	if (stability >= 0 && stability < Control::State::_STABILITY_LAST)
-		state.setStability((Control::State::Stability) stability);
-	else
-		throw IllegalStateException("invalid stability: " + to_string(stability));
-
-	if (!result[prefix + "originator_user_id"].isEmpty()) {
-		User user(UserID::parse(result[prefix + "originator_user_id"]));
-		state.setOriginator(user);
+		recentValue.setAt(at);
+		recentValue.setValue(result[prefix + "recent_value"]);
 	}
 
+	control.setRecentValue(recentValue);
+	
+	Control::RequestedValue requestedValue;
+	if (!result[prefix + "requested_at"].isEmpty()) {
+		requestedValue.setRequestedAt(
+			Timestamp(result[prefix + "requested_at"].convert<int64_t>()));
+	}
+
+	if (!result[prefix + "requested_value"].isEmpty()) {
+		requestedValue.setValue(
+			result[prefix + "requested_value"].convert<double>());
+	}
+
+	if (!result[prefix + "accepted_at"].isEmpty()) {
+		Nullable<Timestamp> at;
+		if (!result[prefix + "accepted_at"].isEmpty())
+			at = Timestamp(result[prefix + "accepted_at"].convert<int64_t>());
+
+		requestedValue.setAcceptedAt(at);
+	}
+
+	if (!result[prefix + "finished_at"].isEmpty()) {
+		Nullable<Timestamp> at;
+		if (!result[prefix + "finished_at"].isEmpty())
+			at = Timestamp(result[prefix + "finished_at"].convert<int64_t>());
+
+		requestedValue.setFinishedAt(at);
+
+		if (result[prefix + "failed"].convert<bool>())
+			requestedValue.setResult(Control::RequestedValue::RESULT_FAILURE);
+		else
+			requestedValue.setResult(Control::RequestedValue::RESULT_SUCCESS);
+	}
+	else {
+		requestedValue.setResult(Control::RequestedValue::RESULT_UNKNOWN);
+	}
+
+	if (!result[prefix + "originator_user_id"].isEmpty()) {
+		User originator(UserID::parse(result[prefix + "originator_user_id"]));
+		requestedValue.setOriginator(originator);
+	}
+
+	control.setRequestedValue(requestedValue);
+
+	markLoaded(control);
 	return true;
 }

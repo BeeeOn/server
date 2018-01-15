@@ -91,7 +91,11 @@ void ControlRestHandler::current(RestFlow &flow)
 	PrintHandler result(flow.response().stream());
 	beginSuccess(result, 200);
 
-	serialize(result, control.current());
+	result.startObject();
+	serialize(result, *flow.translator(),
+			control.requestedValue(),
+			control.recentValue());
+	result.endObject();
 
 	endSuccess(result);
 }
