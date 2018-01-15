@@ -25,7 +25,6 @@
 
 		<instance name="deviceService" class="BeeeOn::DeviceServiceImpl">
 			<set name="deviceDao" ref="deviceDao" />
-			<set name="controlDao" ref="controlDao" />
 			<set name="sensorHistoryDao" ref="sensorHistoryDao" />
 			<set name="devicePropertyDao" ref="devicePropertyDao" />
 			<set name="gatewayRPC" ref="gatewayRPC" />

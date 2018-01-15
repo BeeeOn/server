@@ -13,7 +13,6 @@
 BEEEON_OBJECT_BEGIN(BeeeOn, DeviceServiceImpl)
 BEEEON_OBJECT_CASTABLE(DeviceService)
 BEEEON_OBJECT_REF("deviceDao", &DeviceServiceImpl::setDeviceDao)
-BEEEON_OBJECT_REF("controlDao", &DeviceServiceImpl::setControlDao)
 BEEEON_OBJECT_REF("sensorHistoryDao", &DeviceServiceImpl::setSensorHistoryDao)
 BEEEON_OBJECT_REF("devicePropertyDao", &DeviceServiceImpl::setDevicePropertyDao)
 BEEEON_OBJECT_REF("gatewayRPC", &DeviceServiceImpl::setGatewayRPC)
@@ -32,11 +31,6 @@ DeviceServiceImpl::DeviceServiceImpl()
 void DeviceServiceImpl::setDeviceDao(DeviceDao::Ptr dao)
 {
 	m_dao = dao;
-}
-
-void DeviceServiceImpl::setControlDao(ControlDao::Ptr dao)
-{
-	m_controlDao = dao;
 }
 
 void DeviceServiceImpl::setSensorHistoryDao(SensorHistoryDao::Ptr dao)
