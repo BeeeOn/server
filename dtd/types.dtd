@@ -9,6 +9,7 @@
 <!ATTLIST unit
 	mul-by CDATA #IMPLIED
 	div-by CDATA #IMPLIED
+	expr   CDATA #IMPLIED
 >
 
 <!ELEMENT range EMPTY>
