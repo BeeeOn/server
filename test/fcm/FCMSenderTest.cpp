@@ -44,7 +44,7 @@ private:
 	FCMClient::Ptr m_client;
 	FCMTokenDao::Ptr m_dao;
 	FCMSender m_sender;
-	ThreadLocalTransactionManager m_transactionManager;
+	SharedPtr<ThreadLocalTransactionManager> m_transactionManager;
 	SharedPtr<TransactionFactory> m_transactionFactory;
 	BackOffFactory::Ptr m_backOff;
 };
@@ -176,14 +176,15 @@ void FCMSenderTest::setUp()
 	m_client = new FakeFCMClient;
 	m_dao = new FakeFCMTokenDao;
 
+	m_transactionManager = new ThreadLocalTransactionManager;
 	m_transactionFactory = new NoTransactionFactory;
-	m_transactionManager.setFactory(m_transactionFactory);
+	m_transactionManager->setFactory(m_transactionFactory);
 
 	m_backOff = new ExponentialBackOffFactory;
 
 	m_sender.setFCMClient(m_client);
 	m_sender.setFCMTokenDao(m_dao);
-	m_sender.setTransactionManager(&m_transactionManager);
+	m_sender.setTransactionManager(m_transactionManager);
 	m_sender.setBackOffFactory(m_backOff);
 }
 

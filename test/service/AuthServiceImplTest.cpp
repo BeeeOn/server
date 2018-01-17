@@ -57,7 +57,7 @@ private:
 	VerifiedIdentity m_lastIdentity;
 	TestableAuthService *m_service;
 	LocaleManager::Ptr m_localeManager;
-	ThreadLocalTransactionManager m_transactionManager;
+	SharedPtr<ThreadLocalTransactionManager> m_transactionManager;
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(AuthServiceImplTest);
@@ -130,8 +130,9 @@ void AuthServiceImplTest::setUp()
 	m_service->setNotificationDispatcher(m_notifiactionDispatcher);
 	m_service->setLocaleManager(m_localeManager);
 
-	m_transactionManager.setFactory(&NoTransactionFactory::instance());
-	m_service->setTransactionManager(&m_transactionManager);
+	m_transactionManager = new ThreadLocalTransactionManager;
+	m_transactionManager->setFactory(new NoTransactionFactory);
+	m_service->setTransactionManager(m_transactionManager);
 }
 
 void AuthServiceImplTest::tearDown()
