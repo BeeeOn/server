@@ -114,7 +114,13 @@
 	</type>
 	<type id="15">
 		<name>pressure</name>
-		<unit>hPa</unit>
+		<units>
+			<unit>hPa</unit>
+			<unit div-by="100">Pa</unit>
+			<unit mul-by="10">kPa</unit>
+			<unit div-by="1000">bar</unit>
+			<unit>mbar</unit>
+		</units>
 		<!-- https://en.wikipedia.org/wiki/Atmospheric_pressure -->
 		<range min="800" max="1100" step="1" />
 	</type>
