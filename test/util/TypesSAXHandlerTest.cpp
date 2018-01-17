@@ -25,6 +25,8 @@ class TypesSAXHandlerTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testParseOverlappingLevels);
 	CPPUNIT_TEST(testParseMissingId);
 	CPPUNIT_TEST(testParseMissingName);
+	CPPUNIT_TEST(testParseMultipleUnits);
+	CPPUNIT_TEST(testParseWrongFirstUnit);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void setUp();
@@ -39,6 +41,8 @@ public:
 	void testParseOverlappingLevels();
 	void testParseMissingId();
 	void testParseMissingName();
+	void testParseMultipleUnits();
+	void testParseWrongFirstUnit();
 
 private:
 	SAXParser m_parser;
@@ -422,6 +426,42 @@ void TypesSAXHandlerTest::testParseMissingName()
 		"  <type id=\"0x01\" />"
 		"</types>"),
 		XMLException);
+}
+
+void TypesSAXHandlerTest::testParseMultipleUnits()
+{
+	CPPUNIT_ASSERT_NO_THROW(m_parser.parseString(
+		"<types>"
+		"  <type id=\"0x01\">"
+		"    <name>weight</name>"
+		"    <units>"
+		"      <unit>g</unit>"
+		"      <unit mul-by=\"1000\">kg</unit>"
+		"      <unit div-by=\"1000\">mg</unit>"
+		"    </units>"
+		"  </type>"
+		"</types>")
+	);
+
+	auto it = m_handler->begin();
+	CPPUNIT_ASSERT(it != m_handler->end());
+	CPPUNIT_ASSERT(TypeInfoID::parse("0x01") == it->id());
+	CPPUNIT_ASSERT_EQUAL("g", it->unit());
+}
+
+void TypesSAXHandlerTest::testParseWrongFirstUnit()
+{
+	CPPUNIT_ASSERT_THROW(m_parser.parseString(
+		"<types>"
+		"  <type id=\"0x01\">"
+		"    <name>weight</name>"
+		"    <units>"
+		"      <unit mul-by=\"1\">g</unit>"
+		"    </units>"
+		"  </type>"
+		"</types>"),
+		InvalidArgumentException
+	);
 }
 
 }

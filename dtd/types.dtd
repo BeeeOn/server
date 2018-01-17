@@ -1,10 +1,15 @@
 <!ELEMENT types (type)*>
 
-<!ELEMENT type (name, unit?, range?, values?, levels?)>
+<!ELEMENT type (name, (unit | units)?, range?, values?, levels?)>
 <!ATTLIST type id CDATA #REQUIRED>
 
 <!ELEMENT name (#PCDATA)>
+<!ELEMENT units (unit+)>
 <!ELEMENT unit (#PCDATA)>
+<!ATTLIST unit
+	mul-by CDATA #IMPLIED
+	div-by CDATA #IMPLIED
+>
 
 <!ELEMENT range EMPTY>
 <!ATTLIST range
