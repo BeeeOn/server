@@ -15,9 +15,12 @@ TypesSAXHandler::TypesSAXHandler()
 {
 	m_typeExpect.insert("name");
 	m_typeExpect.insert("unit");
+	m_typeExpect.insert("units");
 	m_typeExpect.insert("range");
 	m_typeExpect.insert("values");
 	m_typeExpect.insert("levels");
+
+	m_unitsExpect.insert("unit");
 
 	m_valuesExpect.insert("value");
 
@@ -104,6 +107,16 @@ void TypesSAXHandler::startElement(
 			logger().debug("parsing value equals to " + to_string(m_lastValue), __FILE__, __LINE__);
 	}
 
+	if (isPathFromRoot("types", "type", "units", "unit")) {
+		if (m_temp.unit().empty()) {
+			if (attrList.getLength() != 0)
+				throw InvalidArgumentException("first element units/unit must not contain attributes");
+
+			if (logger().debug())
+				logger().debug("begin of units/unit", __FILE__, __LINE__);
+		}
+	}
+
 	if (isPathFromRoot("types", "type", "levels", "level")) {
 		double min = NAN;
 		double max = NAN;
@@ -159,6 +172,15 @@ void TypesSAXHandler::endElement(const SAXElement &element)
 
 		if (logger().debug())
 			logger().debug("parsing unit of value " + element.content, __FILE__, __LINE__);
+	}
+
+	if (isPathFromRoot("types", "type", "units", "unit")) {
+		if (m_temp.unit().empty()) {
+			m_temp.setUnit(element.content);
+
+			if (logger().debug())
+				logger().debug("parsing unit of value " + element.content, __FILE__, __LINE__);
+		}
 	}
 
 	if (isPathFromRoot("types", "type", "values", "value")) {
@@ -225,6 +247,10 @@ bool TypesSAXHandler::expectElement(const SAXElement &element) const
 	if (isPathFromRoot("types", "type"))
 		return m_typeExpect
 			.find(element.qName) != m_typeExpect.end();
+
+	if (isPathFromRoot("types", "type", "units"))
+		return m_unitsExpect
+			.find(element.qName) != m_unitsExpect.end();
 
 	if (isPathFromRoot("types", "type", "values"))
 		return m_valuesExpect

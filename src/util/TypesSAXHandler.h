@@ -35,6 +35,7 @@ protected:
 
 private:
 	std::set<Poco::XML::XMLString> m_typeExpect;
+	std::set<Poco::XML::XMLString> m_unitsExpect;
 	std::set<Poco::XML::XMLString> m_valuesExpect;
 	std::set<Poco::XML::XMLString> m_levelsExpect;
 	std::set<Poco::XML::XMLString> m_leafElements;
