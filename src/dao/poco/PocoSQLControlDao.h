@@ -32,6 +32,9 @@ public:
 	bool insert(const Control::RequestedValue &request,
 			const Control &control,
 			const Device &device) override;
+	bool update(const Control::RequestedValue &request,
+			const Control &control,
+			const Device &device) override;
 
 	static bool parseSingle(Poco::Data::RecordSet &result,
 			Control &control,
@@ -46,6 +49,7 @@ protected:
 private:
 	Query m_queryFetchLast     {"controls_fsm.fetch_last"};
 	Query m_queryInsertRequest {"controls_fsm.insert_request"};
+	Query m_queryUpdateRequest {"controls_fsm.update_request"};
 };
 
 }
