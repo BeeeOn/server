@@ -31,6 +31,7 @@ BEEEON_OBJECT_END(BeeeOn, PocoSQLControlDao)
 PocoSQLControlDao::PocoSQLControlDao()
 {
 	registerQuery(m_queryFetchLast);
+	registerQuery(m_queryInsertRequest);
 }
 
 void PocoSQLControlDao::assertTypeValid(const Device &device)
@@ -125,6 +126,55 @@ void PocoSQLControlDao::fetchBy(std::list<Control> &controls, const Device &devi
 					__FILE__, __LINE__);
 		}
 	}
+}
+
+bool PocoSQLControlDao::insert(const Control::RequestedValue &request,
+		const Control &control,
+		const Device &device)
+{
+	// cannot assureHasId for control, SimpleID == 0 is allowed
+	assureHasId(device);
+	assertTypeValid(device);
+	assureHasId(device.gateway());
+	assureHasId(request.originator());
+
+	if (!request.isValueValid())
+		throw InvalidArgumentException("request must have a valid value");
+
+	unsigned int moduleID(control.id());
+	uint64_t deviceID(device.id());
+	uint64_t gatewayID(device.gateway().id());
+	double value = request.value();
+
+	if (request.requestedAt().isNull())
+		throw IllegalStateException("requested timestamp must not be null");
+
+	int64_t requestedAt = request.requestedAt().value().epochMicroseconds();
+
+	Nullable<int64_t> acceptedAt;
+	if (!request.acceptedAt().isNull())
+		acceptedAt = request.acceptedAt().value().epochMicroseconds();
+
+	Nullable<int64_t> finishedAt;
+	if (!request.finishedAt().isNull())
+		finishedAt = request.finishedAt().value().epochMicroseconds();
+
+	bool failed = request.failed();
+	string originatorId = request.originator().id().toString();
+
+	Statement sql = (session() << m_queryInsertRequest(),
+		use(gatewayID, "gateway_id"),
+		use(deviceID, "device_id"),
+		use(moduleID, "module_id"),
+		use(value, "value"),
+		use(requestedAt, "requested_at"),
+		use(acceptedAt, "accepted_at"),
+		use(finishedAt, "finished_at"),
+		use(failed, "failed"),
+		use(originatorId, "originator_user_id")
+	);
+
+	return execute(sql) > 0;
 }
 
 bool PocoSQLControlDao::parseSingle(RecordSet &result,

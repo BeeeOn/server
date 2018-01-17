@@ -29,6 +29,9 @@ public:
 			const Device &device) override;
 	void fetchBy(std::list<Control> &controls,
 			const Device &device) override;
+	bool insert(const Control::RequestedValue &request,
+			const Control &control,
+			const Device &device) override;
 
 	static bool parseSingle(Poco::Data::RecordSet &result,
 			Control &control,
@@ -42,6 +45,7 @@ protected:
 
 private:
 	Query m_queryFetchLast     {"controls_fsm.fetch_last"};
+	Query m_queryInsertRequest {"controls_fsm.insert_request"};
 };
 
 }
