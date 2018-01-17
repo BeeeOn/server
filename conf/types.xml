@@ -174,4 +174,27 @@
 			<level min="11" attention="single">extreme</level>
 		</levels>
 	</type>
+	<type id="21">
+		<name>power</name>
+		<units>
+			<unit>W</unit>
+			<unit div-by="1000">mW</unit>
+		</units>
+	</type>
+	<type id="22">
+		<name>voltage</name>
+		<units>
+			<unit>V</unit>
+			<unit div-by="1000">mV</unit>
+			<unit mul-by="1000">kV</unit>
+		</units>
+	</type>
+	<type id="23">
+		<name>current</name>
+		<units>
+			<unit>A</unit>
+			<unit div-by="1000">mA</unit>
+			<unit div-by="1000000">&#181;uA</unit>
+		</units>
+	</type>
 </types>
