@@ -90,6 +90,7 @@
 		<instance name="controlService" class="BeeeOn::ControlServiceImpl">
 			<set name="deviceDao" ref="deviceDao" />
 			<set name="controlDao" ref="controlDao" />
+			<set name="gatewayRPC" ref="gatewayRPC" />
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="accessPolicy" ref="accessPolicy" />
 		</instance>
