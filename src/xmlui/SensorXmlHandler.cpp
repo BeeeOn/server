@@ -5,6 +5,7 @@
 #include "di/Injectable.h"
 #include "xmlui/SensorXmlHandler.h"
 #include "xmlui/XmlValueConsumer.h"
+#include "model/Control.h"
 #include "model/Device.h"
 #include "model/ModuleInfo.h"
 #include "service/Relation.h"
@@ -21,9 +22,13 @@ using namespace BeeeOn::XmlUI;
 SensorXmlHandler::SensorXmlHandler(const StreamSocket &socket,
 		const AutoPtr<Document> input,
 		Session::Ptr session,
-		SensorHistoryService &sensorService):
+		ControlService &controlService,
+		SensorHistoryService &sensorService,
+		const Timespan &setStateTimeout):
 	SessionXmlHandler("devices", socket, input, session),
-	m_sensorService(sensorService)
+	m_controlService(controlService),
+	m_sensorService(sensorService),
+	m_setStateTimeout(setStateTimeout)
 {
 }
 
@@ -40,6 +45,10 @@ void SensorXmlHandler::handleInputImpl()
 		Element *logsNode = root->getChildElement("logs");
 		handleGetLog(gateid, logsNode);
 		return;
+	}
+	else if (type == "setstate") {
+		Element *deviceNode = root->getChildElement("device");
+		handleSetState(gateid, deviceNode);
 	}
 
 	resultInvalidInput();
@@ -79,15 +88,46 @@ void SensorXmlHandler::handleGetLog(const string &gateid,
 	resultDataEnd();
 }
 
-SensorXmlHandlerResolver::SensorXmlHandlerResolver():
-	SessionXmlHandlerResolver("devices")
+void SensorXmlHandler::handleSetState(const string &gateid,
+		Element *deviceNode)
 {
+	Gateway gateway(GatewayID::parse(gateid));
+	Device device(DeviceID::parse(deviceNode->getAttribute("euid")));
+	device.setGateway(gateway);
+	Control control;
+	control.setId(ControlID::parse(deviceNode->getAttribute("moduleid")));
+
+	const double value = NumberParser::parseFloat(deviceNode->getAttribute("value"));
+
+	Relation<Control, Device> input(control, device);
+	User user(session()->userID());
+	input.setUser(user);
+
+	m_controlService.requestChange(input, value, m_setStateTimeout);
+	resultSuccess();
+}
+
+SensorXmlHandlerResolver::SensorXmlHandlerResolver():
+	SessionXmlHandlerResolver("devices"),
+	m_setStateTimeout(25 * Timespan::SECONDS)
+{
+}
+
+void SensorXmlHandlerResolver::setControlService(
+		ControlService::Ptr service)
+{
+	m_controlService = service;
 }
 
 void SensorXmlHandlerResolver::setSensorHistoryService(
 		SensorHistoryService::Ptr service)
 {
 	m_sensorService = service;
+}
+
+void SensorXmlHandlerResolver::setSetStateTimeout(const Timespan &timeout)
+{
+	m_setStateTimeout = timeout;
 }
 
 bool SensorXmlHandlerResolver::canHandle(
@@ -100,6 +140,8 @@ bool SensorXmlHandlerResolver::canHandle(
 
 	if (type == "getlog")
 		return true;
+	if (type == "setstate")
+		return true;
 
 	return false;
 }
@@ -111,13 +153,18 @@ XmlRequestHandler *SensorXmlHandlerResolver::createHandler(
 	Session::Ptr session = lookupSession(
 			*m_sessionManager, input);
 	return new SensorXmlHandler(
-			socket, input, session, *m_sensorService);
+			socket, input, session,
+			*m_controlService,
+			*m_sensorService,
+			m_setStateTimeout);
 }
 
 BEEEON_OBJECT_BEGIN(BeeeOn, XmlUI, SensorXmlHandlerResolver)
 BEEEON_OBJECT_CASTABLE(SessionXmlHandlerResolver)
 BEEEON_OBJECT_CASTABLE(AbstractXmlHandlerResolver)
 BEEEON_OBJECT_CASTABLE(XmlRequestHandlerResolver)
+BEEEON_OBJECT_REF("controlService", &SensorXmlHandlerResolver::setControlService)
 BEEEON_OBJECT_REF("sensorHistoryService", &SensorXmlHandlerResolver::setSensorHistoryService)
 BEEEON_OBJECT_REF("sessionManager", &SensorXmlHandlerResolver::setSessionManager)
+BEEEON_OBJECT_TIME("setStateTimeout", &SensorXmlHandlerResolver::setSetStateTimeout)
 BEEEON_OBJECT_END(BeeeOn, XmlUI, SensorXmlHandlerResolver)
