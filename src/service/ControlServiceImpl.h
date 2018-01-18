@@ -29,6 +29,8 @@ public:
 		BEEEON_TRANSACTION(doFetchMany(data));
 	}
 
+	void fixupControls();
+
 protected:
 	bool doFetch(Relation<Control, Device> &data);
 	void doFetchMany(Relation<std::list<Control>, Device> &data);

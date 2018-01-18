@@ -9,6 +9,7 @@ BEEEON_OBJECT_REF("controlDao", &ControlServiceImpl::setControlDao)
 BEEEON_OBJECT_REF("deviceDao", &ControlServiceImpl::setDeviceDao)
 BEEEON_OBJECT_REF("accessPolicy", &ControlServiceImpl::setAccessPolicy)
 BEEEON_OBJECT_REF("transactionManager", &ControlServiceImpl::setTransactionManager)
+BEEEON_OBJECT_HOOK("done", &ControlServiceImpl::fixupControls)
 BEEEON_OBJECT_END(BeeeOn, ControlServiceImpl)
 
 using namespace std;
@@ -69,5 +70,18 @@ void ControlServiceImpl::doFetchMany(Relation<std::list<Control>, Device> &data)
 		}
 
 		data.target().emplace_back(control);
+	}
+}
+
+void ControlServiceImpl::fixupControls()
+{
+	size_t count = BEEEON_TRANSACTION_RETURN(size_t,
+				m_controlDao->cancelUnfinished());
+
+	if (count > 0) {
+		logger().warning("cancelled "
+				+ to_string(count)
+				+ " control requests",
+			__FILE__, __LINE__);
 	}
 }
