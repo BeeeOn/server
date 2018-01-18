@@ -33,10 +33,7 @@ public:
 			const Poco::Net::StreamSocket &socket,
 			const Poco::AutoPtr<Poco::XML::Document> input);
 
-	void setSensorHistoryService(SensorHistoryService::Ptr service)
-	{
-		m_sensorService = service;
-	}
+	void setSensorHistoryService(SensorHistoryService::Ptr service);
 
 	void setSessionManager(BeeeOn::SessionManager *manager)
 	{
