@@ -19,10 +19,12 @@ public:
 
 	void setControlService(ControlService::Ptr service);
 	void setTranslatorFactory(TranslatorFactory::Ptr factory);
+	void setRequestTimeout(const Poco::Timespan &timeout);
 
 	void list(RestFlow &flow);
 	void detail(RestFlow &flow);
 	void current(RestFlow &flow);
+	void requestChange(RestFlow &flow);
 
 protected:
 	void prepareDetail(RestFlow &flow, Control &control);
@@ -30,6 +32,7 @@ protected:
 private:
 	ControlService::Ptr m_controlService;
 	TranslatorFactory::Ptr m_translatorFactory;
+	Poco::Timespan m_requestTimeout;
 };
 
 }
