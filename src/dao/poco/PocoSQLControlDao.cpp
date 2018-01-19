@@ -43,7 +43,7 @@ void PocoSQLControlDao::assertTypeValid(const Device &device)
 
 bool PocoSQLControlDao::fetch(Control &control, const Device &device)
 {
-	assureHasId(control);
+	// cannot assureHasId for control, SimpleID == 0 is allowed
 	assureHasId(device);
 	assertTypeValid(device);
 	assureHasId(device.gateway());
