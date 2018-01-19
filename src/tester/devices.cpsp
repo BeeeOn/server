@@ -111,6 +111,73 @@ function devices_sensor_current(gwid, devid, modid, element) {
 	});
 }
 
+function devices_control_state(state, data) {
+	if (!data || !data["state"])
+		return;
+
+	var finished_at = data["state"]["finished_at"];
+	var accepted_at = data["state"]["accepted_at"];
+	var requested_at = data["state"]["requested_at"];
+	var result = data["state"]["result"];
+
+	if (finished_at) {
+		state.text(result + " at " + new Date(finished_at * 1000));
+	}
+	else if (accepted_at) {
+		state.text("accepted at " + new Date(accepted_at * 1000));
+	}
+	else if (requested_at) {
+		state.text("requested at " + new Date(requested_at * 1000));
+	}
+	else {
+		state.text("");
+	}
+}
+
+function devices_control_current(gwid, devid, modid, element) {
+	tester.get(devices_uri(gwid, devid) + "/controls/" + modid + "/current",
+			"#devices", function (data) {
+		if (!data || !data["current"]) {
+			console.log("no data for control " + devid + "/" + modid);
+			element.append(" <span>(no data)</span>");
+		}
+		else {
+			var value = $("<span class='control-current'></span>");
+			value.text(data["current"]["value"]);
+			value.attr("alt", new Date(data["at"] * 1000).toString());
+			value.attr("title", new Date(data["at"] * 1000).toString());
+
+			element.append(" ");
+			element.append(value);
+		}
+
+		var input = $("<input type='number' />");
+		var request = $("<button>Change</button>");
+		var state = $("<span></span>");
+
+		devices_control_state(state, data);
+
+		request.click(function () {
+			var stateLabel = state;
+
+			tester.post(devices_uri(gwid, devid) + "/controls/" + modid + "/current",
+					"#devices", {
+				value: input.val(),
+				timeout: 25
+			}, function (data) {
+				devices_control_state(state, data);
+			});
+		});
+
+		var block = $("<span class='module-change-request'></span>");
+		block.append(input);
+		block.append(request);
+		block.append(state);
+
+		element.append(block);
+	});
+}
+
 tester.modules["devices"] = function () {
 	$("#devices-discover-button").click(function () {
 		var gwid = $("#devices-gateway-input").val();
@@ -197,8 +264,10 @@ tester.modules["devices"] = function () {
 		tester.get(devices_uri(gwid, devid) + "/controls",
 			"#devices", function (data) {
 				$("#devices-controls").empty();
-				for (i in data)
-					devices_module_append("control", data[i]);
+				for (i in data) {
+					var control = devices_module_append("control", data[i]);
+					devices_control_current(gwid, devid, data[i]["id"], control);
+				}
 			});
 	});
 };
