@@ -1,3 +1,4 @@
+#include <Poco/File.h>
 #include <Poco/FileStream.h>
 #include <Poco/Logger.h>
 #include <Poco/StreamCopier.h>
@@ -45,10 +46,10 @@ void SqitchInitializer::unsafeDeploy(
 
 		switch (change->operation()) {
 		case SqitchChange::DEPLOY:
-			applyChange(execute, change);
+			applyChange(execute, change, m_plan);
 			break;
 		case SqitchChange::REVERT:
-			applyRevert(execute, change);	
+			applyRevert(execute, change, m_plan);
 			break;
 		default:
 			throw IllegalStateException(
@@ -61,10 +62,11 @@ void SqitchInitializer::unsafeDeploy(
 
 void SqitchInitializer::applyChange(
 	const ScriptExecutor &execute,
-	const SqitchChange::Ptr change) const
+	const SqitchChange::Ptr change,
+	const SqitchPlan &plan) const
 {
-	const Path &deploy = resolve("deploy", change);
-	const Path &verify = resolve("verify", change);
+	const Path &deploy = resolve("deploy", change, plan);
+	const Path &verify = resolve("verify", change, plan);
 
 	string deployScript;
 
@@ -113,9 +115,10 @@ void SqitchInitializer::applyChange(
 
 void SqitchInitializer::applyRevert(
 	const ScriptExecutor &execute,
-	const SqitchChange::Ptr change) const
+	const SqitchChange::Ptr change,
+	const SqitchPlan &plan) const
 {
-	const Path &revert = resolve("revert", change);
+	const Path &revert = resolve("revert", change, plan);
 	string revertScript;
 
 	try {
@@ -146,8 +149,35 @@ void SqitchInitializer::applyRevert(
 
 Path SqitchInitializer::resolve(
 		const string &action,
-		const SqitchChange::Ptr change) const
+		const SqitchChange::Ptr change,
+		const SqitchPlan &plan) const
 {
+	const SqitchLine::Ptr current = change;
+
+	bool lookup = false;
+	for (const auto &line : plan) {
+		// skip all before the current change
+		if (line == current) {
+			lookup = true;
+			continue;
+		}
+
+		if (!lookup)
+			continue;
+
+		SqitchTag::Ptr tag = line.cast<SqitchTag>();
+		if (tag.isNull())
+			continue;
+
+		Path dir(m_baseDir, action);
+		Path file(dir, change->name() + "@" + tag->name());
+		file.setExtension(m_extension);
+
+		File f(file);
+		if (f.exists())
+			return file;
+	}
+
 	Path dir(m_baseDir, action);
 	Path file(dir, change->name());
 	file.setExtension(m_extension);
