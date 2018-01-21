@@ -46,14 +46,17 @@ public:
 protected:
 	Poco::Path resolve(
 		const std::string &action,
-		const SqitchChange::Ptr change) const;
+		const SqitchChange::Ptr change,
+		const SqitchPlan &plan) const;
 
 	void applyChange(
 		const ScriptExecutor &execute,
-		const SqitchChange::Ptr change) const;
+		const SqitchChange::Ptr change,
+		const SqitchPlan &plan) const;
 	void applyRevert(
 		const ScriptExecutor &execute,
-		const SqitchChange::Ptr change) const;
+		const SqitchChange::Ptr change,
+		const SqitchPlan &plan) const;
 
 private:
 	SqitchPlan m_plan;
