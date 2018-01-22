@@ -1,11 +1,11 @@
 #ifndef BEEEON_XMLUI_SENSOR_XML_HANDLER_H
 #define BEEEON_XMLUI_SENSOR_XML_HANDLER_H
 
+#include "service/SensorHistoryService.h"
+
 #include "xmlui/SessionXmlHandler.h"
 
 namespace BeeeOn {
-
-class SensorHistoryService;
 
 namespace XmlUI {
 
@@ -14,7 +14,7 @@ public:
 	SensorXmlHandler(const Poco::Net::StreamSocket &socket,
 			const Poco::AutoPtr<Poco::XML::Document> input,
 			BeeeOn::Session::Ptr session,
-			BeeeOn::SensorHistoryService &sensorService);
+			SensorHistoryService &sensorService);
 	void handleInputImpl() override;
 
 	void handleGetLog(const std::string &gateid,
@@ -33,10 +33,7 @@ public:
 			const Poco::Net::StreamSocket &socket,
 			const Poco::AutoPtr<Poco::XML::Document> input);
 
-	void setSensorHistoryService(BeeeOn::SensorHistoryService *service)
-	{
-		m_sensorService = service;
-	}
+	void setSensorHistoryService(SensorHistoryService::Ptr service);
 
 	void setSessionManager(BeeeOn::SessionManager *manager)
 	{
@@ -44,7 +41,7 @@ public:
 	}
 
 private:
-	BeeeOn::SensorHistoryService *m_sensorService;
+	SensorHistoryService::Ptr m_sensorService;
 	BeeeOn::SessionManager *m_sessionManager;
 };
 

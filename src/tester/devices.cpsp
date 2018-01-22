@@ -186,7 +186,7 @@ tester.modules["devices"] = function () {
 				$("#devices-sensors").empty();
 				for (i in data) {
 					var sensor = devices_module_append("sensor", data[i]);
-					devices_sensor_current(gwid, devid, i, sensor);
+					devices_sensor_current(gwid, devid, data[i]["id"], sensor);
 				}
 			});
 	});

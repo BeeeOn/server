@@ -84,6 +84,12 @@ SensorXmlHandlerResolver::SensorXmlHandlerResolver():
 {
 }
 
+void SensorXmlHandlerResolver::setSensorHistoryService(
+		SensorHistoryService::Ptr service)
+{
+	m_sensorService = service;
+}
+
 bool SensorXmlHandlerResolver::canHandle(
 		const Element &root)
 {
