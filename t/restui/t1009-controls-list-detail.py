@@ -82,7 +82,6 @@ class TestControlsListDetail(unittest.TestCase):
 
 		self.assertEqual(200, response.status)
 
-		print(content)
 		result = json.loads(content)
 		self.assertEqual("success", result["status"])
 		self.assertEqual(1, len(result["data"]))
