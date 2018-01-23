@@ -13,7 +13,6 @@
 BEEEON_OBJECT_BEGIN(BeeeOn, DeviceServiceImpl)
 BEEEON_OBJECT_CASTABLE(DeviceService)
 BEEEON_OBJECT_REF("deviceDao", &DeviceServiceImpl::setDeviceDao)
-BEEEON_OBJECT_REF("controlDao", &DeviceServiceImpl::setControlDao)
 BEEEON_OBJECT_REF("sensorHistoryDao", &DeviceServiceImpl::setSensorHistoryDao)
 BEEEON_OBJECT_REF("devicePropertyDao", &DeviceServiceImpl::setDevicePropertyDao)
 BEEEON_OBJECT_REF("gatewayRPC", &DeviceServiceImpl::setGatewayRPC)
@@ -32,11 +31,6 @@ DeviceServiceImpl::DeviceServiceImpl()
 void DeviceServiceImpl::setDeviceDao(DeviceDao::Ptr dao)
 {
 	m_dao = dao;
-}
-
-void DeviceServiceImpl::setControlDao(ControlDao::Ptr dao)
-{
-	m_controlDao = dao;
 }
 
 void DeviceServiceImpl::setSensorHistoryDao(SensorHistoryDao::Ptr dao)
@@ -69,47 +63,26 @@ bool DeviceServiceImpl::doFetch(Relation<Device, Gateway> &input)
 void DeviceServiceImpl::valuesFor(DeviceWithData &device)
 {
 	// fetch last value of all device modules
-	vector<ModuleInfo> sensors;
-	list<Control> controls;
-	size_t count = 0;
+	vector<ModuleInfo> modules;
 
-	for (const auto &info : *device.type()) {
-		if (info.isControllable())
-			controls.emplace_back(Control{info.id()});
-		else
-			sensors.emplace_back(info);
-
-		count += 1;
-	}
+	for (const auto &info : *device.type())
+		modules.emplace_back(info);
 
 	// values of all modules
-	vector<ValueAt> values(count);
+	vector<ValueAt> values(modules.size());
 
-	// a null result means that there is no data for that sensor yet
+	// a null result means that there is no data for that module yet
 	vector<Nullable<ValueAt>> nullableValues;
-	m_historyDao->fetchMany(device, sensors, nullableValues);
+	m_historyDao->fetchMany(device, modules, nullableValues);
 
 	size_t i = 0;
-	for (const auto &sensor : sensors) {
+	for (const auto &module : modules) {
 		const auto &current = nullableValues.at(i++);
-		const unsigned int index = sensor.id();
+		const unsigned int index = module.id();
 
 		if (!current.isNull())
 			values[index] = current;
 
-		// else leave the value as invalid
-	}
-
-	m_controlDao->fetchBy(controls, device);
-
-	for (const auto &control : controls) {
-		const unsigned int index = control.id();
-
-		const auto &confirmed = control.lastConfirmed();
-		if (!confirmed.isNull()) {
-			const Control::State &state = confirmed;
-			values[index] = {state.at().value(), state.value()};
-		}
 		// else leave the value as invalid
 	}
 

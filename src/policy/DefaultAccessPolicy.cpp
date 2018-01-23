@@ -439,6 +439,11 @@ void DefaultAccessPolicy::assure(
 			AccessLevel::guest());
 		break;
 
+	case ControlAccessPolicy::ACTION_USER_SET:
+		assureAtLeast(
+			fetchAccessLevel(context, device.gateway()),
+			AccessLevel::user());
+		break;
 	default:
 		throw InvalidAccessException("invalid action: " + to_string((int) action));
 	}

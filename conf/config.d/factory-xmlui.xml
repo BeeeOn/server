@@ -55,8 +55,10 @@
 
 		<instance name="sensorXmlHandler"
 				class="BeeeOn::XmlUI::SensorXmlHandlerResolver">
+			<set name="controlService" ref="controlService" />
 			<set name="sensorHistoryService" ref="sensorHistoryService" />
 			<set name="sessionManager" ref="sessionManager" />
+			<set name="setStateTimeout" time="25 s" />
 		</instance>
 
 		<instance name="profileXmlHandler"

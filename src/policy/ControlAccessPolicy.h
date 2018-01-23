@@ -15,6 +15,7 @@ public:
 
 	enum Action {
 		ACTION_USER_GET,
+		ACTION_USER_SET,
 	};
 
 	virtual ~ControlAccessPolicy();

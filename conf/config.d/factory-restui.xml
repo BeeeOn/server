@@ -99,6 +99,7 @@
 
 		<instance name="uiControlHandler" class="BeeeOn::RestUI::ControlRestHandler">
 			<set name="controlService" ref="controlService" />
+			<set name="requestTimeout" time="25 s" />
 		</instance>
 
 		<instance name="uiTypeHandler" class="BeeeOn::RestUI::TypeRestHandler">

@@ -16,109 +16,119 @@ Control::Control(const ID &id):
 {
 }
 
-void Control::setLastConfirmed(const Nullable<State> &state)
-{
-	m_lastConfirmed = state;
-}
-
-const Nullable<Control::State> &Control::lastConfirmed() const
-{
-	return m_lastConfirmed;
-}
-
-void Control::setCurrent(const State &state)
-{
-	m_current = state;
-}
-
-const Control::State &Control::current() const
-{
-	return m_current;
-}
-
-Control::State::State():
+Control::RequestedValue::RequestedValue():
 	m_value(NAN),
-	m_stability(STABILITY_UNKNOWN)
+	m_result(RESULT_UNKNOWN)
 {
 }
 
-void Control::State::setValue(const double value)
+Control::RequestedValue::RequestedValue(
+		const User &originator,
+		const Timestamp &at,
+		double value):
+	m_originator(originator),
+	m_value(value),
+	m_result(RESULT_UNKNOWN),
+	m_requestedAt(at)
 {
-	m_value = 0;
 }
 
-double Control::State::value() const
+void Control::RequestedValue::setValue(double value)
+{
+	m_value = value;
+}
+
+double Control::RequestedValue::value() const
 {
 	return m_value;
 }
 
-void Control::State::setAt(const Nullable<Timestamp> &at)
+bool Control::RequestedValue::isValueValid() const
 {
-	m_at = at;
+	return !std::isnan(m_value);
 }
 
-Nullable<Timestamp> Control::State::at() const
+bool Control::RequestedValue::hasStarted() const
 {
-	return m_at;
+	return !m_requestedAt.isNull();
 }
 
-void Control::State::setStability(Control::State::Stability stability)
+bool Control::RequestedValue::isActive() const
 {
-	if (stability < _STABILITY_LAST)
-		m_stability = stability;
-	else
-		throw InvalidArgumentException("invalid stability given");
+	return hasStarted() && m_finishedAt.isNull();
 }
 
-Control::State::Stability Control::State::stability() const
+bool Control::RequestedValue::hasFailed() const
 {
-	return m_stability;
+	return hasStarted() && failed();
 }
 
-void Control::State::clearOriginator()
+void Control::RequestedValue::setResult(const Result &result)
 {
-	m_user.clear();
-	m_gateway.clear();
+	m_result = result;
 }
 
-void Control::State::setOriginator(const User &user)
+Control::RequestedValue::Result Control::RequestedValue::result() const
 {
-	m_user = user;
-	m_gateway.clear();
+	return m_result;
 }
 
-void Control::State::setOriginator(const Gateway &gateway)
+void Control::RequestedValue::setOriginator(const User &originator)
 {
-	m_gateway = gateway;
-	m_user.clear();
+	m_originator = originator;
 }
 
-Control::State::Originator Control::State::originatorType() const
+const User &Control::RequestedValue::originator() const
 {
-	if (!m_user.isNull() && m_gateway.isNull())
-		return ORIGINATOR_USER;
-
-	if (m_user.isNull() && !m_gateway.isNull())
-		return ORIGINATOR_GATEWAY;
-
-	if (m_user.isNull() && m_gateway.isNull())
-		return ORIGINATOR_NONE;
-
-	throw IllegalStateException("both user and gateway are set as originators");
+	return m_originator;
 }
 
-const User &Control::State::user() const
+void Control::RequestedValue::setRequestedAt(const Nullable<Timestamp> &at)
 {
-	if (m_user.isNull())
-		throw IllegalStateException("no user originator defined");
-
-	return m_user.value();
+	m_requestedAt = at;
 }
 
-const Gateway &Control::State::gateway() const
+Nullable<Timestamp> Control::RequestedValue::requestedAt() const
 {
-	if (m_gateway.isNull())
-		throw IllegalStateException("no gateway originator defined");
+	return m_requestedAt;
+}
 
-	return m_gateway.value();
+void Control::RequestedValue::setAcceptedAt(const Nullable<Timestamp> &at)
+{
+	m_acceptedAt = at;
+}
+
+Nullable<Timestamp> Control::RequestedValue::acceptedAt() const
+{
+	return m_acceptedAt;
+}
+
+void Control::RequestedValue::setFinishedAt(const Nullable<Timestamp> &at)
+{
+	m_finishedAt = at;
+}
+
+Nullable<Timestamp> Control::RequestedValue::finishedAt() const
+{
+	return m_finishedAt;
+}
+
+void Control::setRecentValue(const ValueAt &value)
+{
+	m_recentValue = value;
+}
+
+const ValueAt &Control::recentValue() const
+{
+	return m_recentValue;
+}
+
+void Control::setRequestedValue(const RequestedValue &value)
+{
+	m_requestedValue = value;
+}
+
+const Control::RequestedValue &Control::requestedValue() const
+{
+	return m_requestedValue;
 }

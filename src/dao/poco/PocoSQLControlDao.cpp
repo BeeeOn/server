@@ -30,7 +30,10 @@ BEEEON_OBJECT_END(BeeeOn, PocoSQLControlDao)
 
 PocoSQLControlDao::PocoSQLControlDao()
 {
-	registerQuery(m_queryRecentState);
+	registerQuery(m_queryFetchLast);
+	registerQuery(m_queryInsertRequest);
+	registerQuery(m_queryUpdateRequest);
+	registerQuery(m_queryCancelUnfinished);
 }
 
 void PocoSQLControlDao::assertTypeValid(const Device &device)
@@ -64,16 +67,19 @@ bool PocoSQLControlDao::fetch(Control &control, const Device &device)
 	uint64_t deviceID(device.id());
 	uint64_t gatewayID(device.gateway().id());
 
-	Statement sql = (session() << m_queryRecentState(),
+	Statement sql = (session() << m_queryFetchLast(),
 		use(gatewayID, "gateway_id"),
 		use(deviceID, "device_id"),
-		use(id, "control_id")
+		use(id, "module_id")
 	);
 
 	RecordSet result = executeSelect(sql);
 	if (result.rowCount() == 0) {
-		Control::State unknown;
-		control.setCurrent(unknown);
+		Control::RequestedValue invalidRequested;
+		ValueAt invalidRecent;
+
+		control.setRequestedValue(invalidRequested);
+		control.setRecentValue(invalidRecent);
 		return true;
 	}
 
@@ -98,16 +104,19 @@ void PocoSQLControlDao::fetchBy(std::list<Control> &controls, const Device &devi
 
 		int id(control.id());
 
-		Statement sql = (session() << m_queryRecentState(),
+		Statement sql = (session() << m_queryFetchLast(),
 			use(gatewayID, "gateway_id"),
 			use(deviceID, "device_id"),
-			use(id, "control_id")
+			use(id, "module_id")
 		);
 
 		RecordSet result = executeSelect(sql);
 		if (result.rowCount() == 0) {
-			Control::State unknown;
-			control.setCurrent(unknown);
+			Control::RequestedValue invalidRequested;
+			ValueAt invalidRecent;
+
+			control.setRequestedValue(invalidRequested);
+			control.setRecentValue(invalidRecent);
 
 			controls.emplace_back(control);
 		}
@@ -119,6 +128,103 @@ void PocoSQLControlDao::fetchBy(std::list<Control> &controls, const Device &devi
 					__FILE__, __LINE__);
 		}
 	}
+}
+
+bool PocoSQLControlDao::insert(const Control::RequestedValue &request,
+		const Control &control,
+		const Device &device)
+{
+	// cannot assureHasId for control, SimpleID == 0 is allowed
+	assureHasId(device);
+	assertTypeValid(device);
+	assureHasId(device.gateway());
+	assureHasId(request.originator());
+
+	if (!request.isValueValid())
+		throw InvalidArgumentException("request must have a valid value");
+
+	unsigned int moduleID(control.id());
+	uint64_t deviceID(device.id());
+	uint64_t gatewayID(device.gateway().id());
+	double value = request.value();
+
+	if (request.requestedAt().isNull())
+		throw IllegalStateException("requested timestamp must not be null");
+
+	int64_t requestedAt = request.requestedAt().value().epochMicroseconds();
+
+	Nullable<int64_t> acceptedAt;
+	if (!request.acceptedAt().isNull())
+		acceptedAt = request.acceptedAt().value().epochMicroseconds();
+
+	Nullable<int64_t> finishedAt;
+	if (!request.finishedAt().isNull())
+		finishedAt = request.finishedAt().value().epochMicroseconds();
+
+	bool failed = request.failed();
+	string originatorId = request.originator().id().toString();
+
+	Statement sql = (session() << m_queryInsertRequest(),
+		use(gatewayID, "gateway_id"),
+		use(deviceID, "device_id"),
+		use(moduleID, "module_id"),
+		use(value, "value"),
+		use(requestedAt, "requested_at"),
+		use(acceptedAt, "accepted_at"),
+		use(finishedAt, "finished_at"),
+		use(failed, "failed"),
+		use(originatorId, "originator_user_id")
+	);
+
+	return execute(sql) > 0;
+}
+
+bool PocoSQLControlDao::update(const Control::RequestedValue &request,
+		const Control &control,
+		const Device &device)
+{
+	// cannot assureHasId for control, SimpleID == 0 is allowed
+	assureHasId(device);
+	assertTypeValid(device);
+	assureHasId(device.gateway());
+
+	unsigned int moduleID(control.id());
+	uint64_t deviceID(device.id());
+	uint64_t gatewayID(device.gateway().id());
+
+	if (request.requestedAt().isNull())
+		throw IllegalStateException("requested timestamp must not be null");
+
+	int64_t requestedAt = request.requestedAt().value().epochMicroseconds();
+
+	Nullable<int64_t> acceptedAt;
+	if (!request.acceptedAt().isNull())
+		acceptedAt = request.acceptedAt().value().epochMicroseconds();
+
+	Nullable<int64_t> finishedAt;
+	if (!request.finishedAt().isNull())
+		finishedAt = request.finishedAt().value().epochMicroseconds();
+
+	bool failed = request.failed();
+	string originatorId = request.originator().id().toString();
+
+	Statement sql = (session() << m_queryUpdateRequest(),
+		use(acceptedAt, "accepted_at"),
+		use(finishedAt, "finished_at"),
+		use(failed, "failed"),
+		use(gatewayID, "gateway_id"),
+		use(deviceID, "device_id"),
+		use(moduleID, "module_id"),
+		use(requestedAt, "requested_at")
+	);
+
+	return execute(sql) > 0;
+}
+
+size_t PocoSQLControlDao::cancelUnfinished()
+{
+	Statement sql = (session() << m_queryCancelUnfinished());
+	return execute(sql);
 }
 
 bool PocoSQLControlDao::parseSingle(RecordSet &result,
@@ -138,50 +244,60 @@ bool PocoSQLControlDao::parseSingle(Row &result,
 	if (hasColumn(result, prefix + "module_id"))
 		control.setId(ControlID::parse(result[prefix + "module_id"]));
 
-	Control::State tmp;
-	if (!parseState(result, tmp, prefix + "current_state_"))
-		throw IllegalStateException("at least current state is required");
+	ValueAt recentValue;
+	if (!result[prefix + "recent_at"].isEmpty()) {
+		Nullable<Timestamp> at;
+		if (!result[prefix + "recent_at"].isEmpty())
+			at = Timestamp(result[prefix + "recent_at"].convert<int64_t>());
 
-	control.setCurrent(tmp);
-
-	Nullable<Control::State> confirmed;
-	if (parseState(result, tmp, prefix + "confirmed_state_"))
-		confirmed = tmp;
-	
-	control.setLastConfirmed(confirmed);
-
-	markLoaded(control);
-	return true;
-}
-
-
-bool PocoSQLControlDao::parseState(Row &result,
-		Control::State &state,
-		const string &prefix)
-{
-	if (result[prefix + "at"].isEmpty())
-		return false;
-
-	state.setAt(Timestamp::fromEpochTime(result[prefix + "at"]));
-
-	if (result[prefix + "value"].isEmpty())
-		state.setValue(NAN);
-	else
-		state.setValue(result[prefix + "value"].convert<double>());
-
-	if (result[prefix + "stability"].isEmpty())
-		return false;
-
-	const int stability = result[prefix + "stability"].convert<int>();
-	if (stability >= 0 && stability < Control::State::_STABILITY_LAST)
-		state.setStability((Control::State::Stability) stability);
-	else
-		throw IllegalStateException("invalid stability: " + to_string(stability));
-
-	if (!result[prefix + "originator_user_id"].isEmpty()) {
-		User user(UserID::parse(result[prefix + "originator_user_id"]));
-		state.setOriginator(user);
+		recentValue.setAt(at);
+		recentValue.setValue(result[prefix + "recent_value"]);
 	}
 
+	control.setRecentValue(recentValue);
+	
+	Control::RequestedValue requestedValue;
+	if (!result[prefix + "requested_at"].isEmpty()) {
+		requestedValue.setRequestedAt(
+			Timestamp(result[prefix + "requested_at"].convert<int64_t>()));
+	}
+
+	if (!result[prefix + "requested_value"].isEmpty()) {
+		requestedValue.setValue(
+			result[prefix + "requested_value"].convert<double>());
+	}
+
+	if (!result[prefix + "accepted_at"].isEmpty()) {
+		Nullable<Timestamp> at;
+		if (!result[prefix + "accepted_at"].isEmpty())
+			at = Timestamp(result[prefix + "accepted_at"].convert<int64_t>());
+
+		requestedValue.setAcceptedAt(at);
+	}
+
+	if (!result[prefix + "finished_at"].isEmpty()) {
+		Nullable<Timestamp> at;
+		if (!result[prefix + "finished_at"].isEmpty())
+			at = Timestamp(result[prefix + "finished_at"].convert<int64_t>());
+
+		requestedValue.setFinishedAt(at);
+
+		if (result[prefix + "failed"].convert<bool>())
+			requestedValue.setResult(Control::RequestedValue::RESULT_FAILURE);
+		else
+			requestedValue.setResult(Control::RequestedValue::RESULT_SUCCESS);
+	}
+	else {
+		requestedValue.setResult(Control::RequestedValue::RESULT_UNKNOWN);
+	}
+
+	if (!result[prefix + "originator_user_id"].isEmpty()) {
+		User originator(UserID::parse(result[prefix + "originator_user_id"]));
+		requestedValue.setOriginator(originator);
+	}
+
+	control.setRequestedValue(requestedValue);
+
+	markLoaded(control);
 	return true;
 }

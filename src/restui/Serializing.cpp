@@ -587,6 +587,75 @@ void BeeeOn::RestUI::serialize(Poco::JSON::PrintHandler &output,
 	output.endArray();
 }
 
+static void serialize(Poco::JSON::PrintHandler &output,
+		Translator &translator,
+		const Control::RequestedValue &requested)
+{
+	if (!requested.requestedAt().isNull()) {
+		output.key("requested_value");
+		output.value(requested.value());
+
+		output.key("requested_at");
+		output.value(requested.requestedAt().value().epochTime());
+
+		if (!requested.acceptedAt().isNull()) {
+			output.key("accepted_at");
+			output.value(requested.acceptedAt().value().epochTime());
+		}
+
+		if (!requested.finishedAt().isNull()) {
+			output.key("finished_at");
+			output.value(requested.finishedAt().value().epochTime());
+		}
+
+		output.key("result");
+
+		switch (requested.result()) {
+		case Control::RequestedValue::RESULT_FAILURE:
+			output.value(string("failure"));
+			break;
+
+		case Control::RequestedValue::RESULT_SUCCESS:
+			output.value(string("success"));
+			break;
+
+		case Control::RequestedValue::RESULT_UNKNOWN:
+		default:
+			output.value(string("waiting"));
+			break;
+		}
+	}
+}
+
+static void serialize(Poco::JSON::PrintHandler &output,
+		const ValueAt &recent)
+{
+	output.key("value");
+	output.value(recent.value());
+	output.key("at");
+	output.value(recent.at().epochTime());
+}
+
+void BeeeOn::RestUI::serialize(Poco::JSON::PrintHandler &output,
+		Translator &translator,
+		const Control::RequestedValue &requested,
+		const ValueAt &recent)
+{
+	if (requested.hasStarted()) {
+		output.key("state");
+		output.startObject();
+		::serialize(output, translator, requested);
+		output.endObject();
+	}
+
+	if (recent.isValid()) {
+		output.key("current");
+		output.startObject();
+		::serialize(output, recent);
+		output.endObject();
+	}
+}
+
 void BeeeOn::RestUI::serialize(PrintHandler &output,
 		Translator &translator,
 		const Control &control)
@@ -630,90 +699,10 @@ void BeeeOn::RestUI::serialize(PrintHandler &output,
 	output.key("order");
 	output.value(info.id().toString());
 
-	output.key("state");
-	output.startObject();
-
-	if (!control.lastConfirmed().isNull()) {
-		output.key("last_confirmed");
-		serialize(output, control.lastConfirmed());
-	}
-
-	output.key("current");
-	serialize(output, control.current());
-
-	output.endObject();
-
-	output.endObject();
-
-}
-
-void BeeeOn::RestUI::serialize(PrintHandler &output,
-		const Control::State &state)
-{
-	output.startObject();
-
-	output.key("stability");
-	switch (state.stability()) {
-	case Control::State::STABILITY_UNKNOWN:
-		output.value(string("unknown"));
-		break;
-	case Control::State::STABILITY_REQUESTED:
-		output.value(string("request"));
-		break;
-	case Control::State::STABILITY_ACCEPTED:
-		output.value(string("accepted"));
-		break;
-	case Control::State::STABILITY_UNCONFIRMED:
-		output.value(string("unconfirmed"));
-		break;
-	case Control::State::STABILITY_CONFIRMED:
-		output.value(string("confirmed"));
-		break;
-	case Control::State::STABILITY_OVERRIDEN:
-		output.value(string("overriden"));
-		break;
-	case Control::State::STABILITY_STUCK:
-		output.value(string("stuck"));
-		break;
-	case Control::State::STABILITY_FAILED_ROLLBACK:
-		output.value(string("failed_rollback"));
-		break;
-	case Control::State::STABILITY_FAILED_UNKNOWN:
-		output.value(string("failed_unknown"));
-		break;
-	default:
-		throw IllegalStateException("unexpected control stability");
-	}
-
-	output.key("value");
-	valueDouble(output, state.value());
-
-	if (!state.at().isNull()) {
-		output.key("at");
-		output.value(state.at().value().epochTime());
-	}
-
-
-	switch (state.originatorType()) {
-	case Control::State::ORIGINATOR_USER:
-		output.key("originator");
-		output.startObject();
-		output.key("user_id");
-		output.value(state.user().id().toString());
-		output.endObject();
-		break;
-
-	case Control::State::ORIGINATOR_GATEWAY:
-		output.key("originator");
-		output.startObject();
-		output.key("gateway_id");
-		output.value(state.gateway().id().toString());
-		output.endObject();
-		break;
-
-	default: // ignore
-		break;
-	}
+	serialize(output,
+		translator,
+		control.requestedValue(),
+		control.recentValue());
 
 	output.endObject();
 }
