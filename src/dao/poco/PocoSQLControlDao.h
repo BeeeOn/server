@@ -35,6 +35,7 @@ public:
 	bool update(const Control::RequestedValue &request,
 			const Control &control,
 			const Device &device) override;
+	size_t cancelUnfinished() override;
 
 	static bool parseSingle(Poco::Data::RecordSet &result,
 			Control &control,
@@ -50,6 +51,7 @@ private:
 	Query m_queryFetchLast     {"controls_fsm.fetch_last"};
 	Query m_queryInsertRequest {"controls_fsm.insert_request"};
 	Query m_queryUpdateRequest {"controls_fsm.update_request"};
+	Query m_queryCancelUnfinished{"controls_fsm.cancel_unfinished"};
 };
 
 }

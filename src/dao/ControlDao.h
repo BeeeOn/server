@@ -27,6 +27,7 @@ public:
 	virtual bool update(const Control::RequestedValue &request,
 			const Control &control,
 			const Device &device) = 0;
+	virtual size_t cancelUnfinished() = 0;
 };
 
 }

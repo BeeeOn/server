@@ -33,6 +33,7 @@ PocoSQLControlDao::PocoSQLControlDao()
 	registerQuery(m_queryFetchLast);
 	registerQuery(m_queryInsertRequest);
 	registerQuery(m_queryUpdateRequest);
+	registerQuery(m_queryCancelUnfinished);
 }
 
 void PocoSQLControlDao::assertTypeValid(const Device &device)
@@ -218,6 +219,12 @@ bool PocoSQLControlDao::update(const Control::RequestedValue &request,
 	);
 
 	return execute(sql) > 0;
+}
+
+size_t PocoSQLControlDao::cancelUnfinished()
+{
+	Statement sql = (session() << m_queryCancelUnfinished());
+	return execute(sql);
 }
 
 bool PocoSQLControlDao::parseSingle(RecordSet &result,
