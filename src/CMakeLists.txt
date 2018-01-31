@@ -186,6 +186,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/gws/GWMessageHandlerImpl.cpp
 	${PROJECT_SOURCE_DIR}/gws/GWResponseExpectedQueue.cpp
 	${PROJECT_SOURCE_DIR}/gws/RPCForwarder.cpp
+	${PROJECT_SOURCE_DIR}/gws/SocketGatewayPeerVerifierFactory.cpp
 	${PROJECT_SOURCE_DIR}/gws/WebSocketRequestHandler.cpp
 	${PROJECT_SOURCE_DIR}/gws/WebSocketServer.cpp
 	${PROJECT_SOURCE_DIR}/rpc/RPCConnector.cpp
