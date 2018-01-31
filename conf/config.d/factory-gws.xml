@@ -44,5 +44,10 @@
 			<set name="cleanupInterval" time="15 m" />
 			<set name="cleanupOlderThan" time="30 m" />
 		</instance>
+
+		<alias name="gatewayPeerVerifierFactory" ref="${gws.peer.verifier}GatewayPeerVerifierFactory" />
+
+		<instance name="relaxedGatewayPeerVerifierFactory"
+			class="BeeeOn::RelaxedGatewayPeerVerifierFactory" />
 	</factory>
 </system>
