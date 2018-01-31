@@ -98,3 +98,13 @@ void WebSocketRequestHandler::processPayload(
 
 	m_gatewayCommunicator->addGateway(gateway.id(), ws);
 }
+
+HTTPRequestHandler *WebSocketRequestHandlerFactory::createRequestHandler(
+	const HTTPServerRequest &request)
+{
+	return new WebSocketRequestHandler(
+		m_maxMessageSize,
+		m_gatewayCommunicator,
+		m_gatewayService
+	);
+}

@@ -78,14 +78,8 @@ public:
 	}
 
 	Poco::Net::HTTPRequestHandler *createRequestHandler(
-		const Poco::Net::HTTPServerRequest &request)
-	{
-		return new WebSocketRequestHandler(
-			m_maxMessageSize,
-			m_gatewayCommunicator,
-			m_gatewayService
-		);
-	}
+		const Poco::Net::HTTPServerRequest &request) override;
+
 private:
 	size_t m_maxMessageSize;
 	GatewayCommunicator::Ptr m_gatewayCommunicator;
