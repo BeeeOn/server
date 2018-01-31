@@ -8,6 +8,7 @@
 #include <Poco/Net/WebSocket.h>
 
 #include "gws/GatewayCommunicator.h"
+#include "gws/SocketGatewayPeerVerifierFactory.h"
 #include "service/GWSGatewayServiceImpl.h"
 #include "util/Loggable.h"
 
@@ -67,10 +68,12 @@ public:
 	WebSocketRequestHandlerFactory(
 			size_t maxMessageSize,
 			GatewayCommunicator::Ptr communicator,
-			GWSGatewayService::Ptr service):
+			GWSGatewayService::Ptr service,
+			SocketGatewayPeerVerifierFactory::Ptr verifierFactory):
 		m_maxMessageSize(maxMessageSize),
 		m_gatewayCommunicator(communicator),
-		m_gatewayService(service)
+		m_gatewayService(service),
+		m_verifierFactory(verifierFactory)
 	{
 	}
 
@@ -87,6 +90,7 @@ private:
 	size_t m_maxMessageSize;
 	GatewayCommunicator::Ptr m_gatewayCommunicator;
 	GWSGatewayService::Ptr m_gatewayService;
+	SocketGatewayPeerVerifierFactory::Ptr m_verifierFactory;
 };
 
 }
