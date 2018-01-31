@@ -3,6 +3,7 @@
 #include <Poco/Logger.h>
 #include <Poco/SharedPtr.h>
 #include <Poco/JSON/Object.h>
+#include <Poco/Net/HTTPServerRequestImpl.h>
 #include <Poco/Net/WebSocket.h>
 
 #include "gwmessage/GWGatewayRegister.h"
@@ -83,6 +84,8 @@ void WebSocketRequestHandler::processPayload(
 
 	Thread::current()->setName("ws-" + gateway);
 
+	m_peerVerifier->verifyPeer(gateway);
+
 	GatewayStatus status;
 	status.setVersion(Sanitize::common(registerMsg->version()));
 	status.setIPAddress(registerMsg->ipAddress());
@@ -102,9 +105,22 @@ void WebSocketRequestHandler::processPayload(
 HTTPRequestHandler *WebSocketRequestHandlerFactory::createRequestHandler(
 	const HTTPServerRequest &request)
 {
+	GatewayPeerVerifier::Ptr verifier;
+	const HTTPServerRequestImpl *impl = nullptr;
+
+	impl = dynamic_cast<const HTTPServerRequestImpl *>(&request);
+	if (impl == nullptr) {
+		throw IllegalStateException(
+			"given request instance is not inherited from HTTPServerRequestImpl");
+	}
+
+	verifier = m_verifierFactory->preverifyAndCreate(
+			const_cast<HTTPServerRequestImpl *>(impl)->socket());
+
 	return new WebSocketRequestHandler(
 		m_maxMessageSize,
 		m_gatewayCommunicator,
-		m_gatewayService
+		m_gatewayService,
+		verifier
 	);
 }
