@@ -144,7 +144,7 @@ list(APPEND CPACK_RPM_USER_FILELIST "%attr(0640,root,beeeon) /etc/beeeon/server/
 list(APPEND CPACK_RPM_USER_FILELIST "%attr(0640,root,beeeon) /etc/beeeon/server/*.ini")
 list(APPEND CPACK_RPM_USER_FILELIST "%attr(0640,root,beeeon) /etc/beeeon/server/*.xml")
 
-if(MAN_MD)
+if(MD_MAN)
 list(APPEND CPACK_RPM_USER_FILELIST "%attr(0755,root,root) /usr/share/man")
 list(APPEND CPACK_RPM_USER_FILELIST "%attr(0755,root,root) /usr/share/man/man7/*")
 endif()
