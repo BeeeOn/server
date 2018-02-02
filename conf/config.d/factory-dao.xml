@@ -34,6 +34,8 @@
 			<set name="providerImpl" ref="mockRandomProvider" />
 		</instance>
 
+		<instance name="loggingQueryProfiler" class="BeeeOn::LoggingQueryProfiler" />
+
 		<!-- RPC communication -->
 
 		<instance name="adaServerConnector" class="BeeeOn::SocketRPCConnector">
@@ -114,12 +116,14 @@
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="localeManager" ref="localeManager" />
 			<set name="sqlLoader" ref="queries" />
+			<set name="profiler" ref="loggingQueryProfiler" />
 		</instance>
 
 		<instance name="sqlIdentityDao" class="BeeeOn::PocoSQLIdentityDao">
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="sqlLoader" ref="queries" />
+			<set name="profiler" ref="loggingQueryProfiler" />
 		</instance>
 
 		<instance name="sqlVerifiedIdentityDao"
@@ -127,6 +131,7 @@
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="sqlLoader" ref="queries" />
+			<set name="profiler" ref="loggingQueryProfiler" />
 		</instance>
 
 		<instance name="sqlRoleInGatewayDao"
@@ -134,6 +139,7 @@
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="sqlLoader" ref="queries" />
+			<set name="profiler" ref="loggingQueryProfiler" />
 			<set name="timeZoneProvider" ref="timeZoneProvider" />
 		</instance>
 
@@ -141,6 +147,7 @@
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="sqlLoader" ref="queries" />
+			<set name="profiler" ref="loggingQueryProfiler" />
 			<set name="timeZoneProvider" ref="timeZoneProvider" />
 		</instance>
 
@@ -148,12 +155,14 @@
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="sqlLoader" ref="queries" />
+			<set name="profiler" ref="loggingQueryProfiler" />
 		</instance>
 
 		<instance name="sqlLocationDao" class="BeeeOn::PocoSQLLocationDao">
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="sqlLoader" ref="queries" />
+			<set name="profiler" ref="loggingQueryProfiler" />
 		</instance>
 
 		<instance name="sqlDeviceDao" class="BeeeOn::PocoSQLDeviceDao">
@@ -161,36 +170,42 @@
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="deviceInfoProvider" ref="deviceInfoProvider" />
 			<set name="sqlLoader" ref="queries" />
+			<set name="profiler" ref="loggingQueryProfiler" />
 		</instance>
 
 		<instance name="sqlDevicePropertyDao" class="BeeeOn::PocoSQLDevicePropertyDao">
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="sqlLoader" ref="queries" />
+			<set name="profiler" ref="loggingQueryProfiler" />
 		</instance>
 
 		<instance name="sqlSensorHistoryDao" class="BeeeOn::PocoSQLSensorHistoryDao">
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="sqlLoader" ref="queries" />
+			<set name="profiler" ref="loggingQueryProfiler" />
 		</instance>
 
 		<instance name="sqlControlDao" class="BeeeOn::PocoSQLControlDao">
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="sqlLoader" ref="queries" />
+			<set name="profiler" ref="loggingQueryProfiler" />
 		</instance>
 
 		<instance name="sqlFcmTokenDao" class="BeeeOn::PocoSQLFCMTokenDao">
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="sqlLoader" ref="queries" />
+			<set name="profiler" ref="loggingQueryProfiler" />
 		</instance>
 
 		<instance name="sqlFcmRecipientsDao" class="BeeeOn::PocoSQLFCMRecipientsDao">
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="sqlLoader" ref="queries" />
+			<set name="profiler" ref="loggingQueryProfiler" />
 		</instance>
 
 		<instance name="queries" class="BeeeOn::IniFileQueryLoader">
