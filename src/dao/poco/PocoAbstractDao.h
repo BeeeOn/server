@@ -12,6 +12,7 @@
 
 #include "dao/EntityLoader.h"
 #include "dao/QueryLoader.h"
+#include "dao/QueryProfiler.h"
 #include "transaction/TransactionManager.h"
 #include "util/Loggable.h"
 
@@ -41,8 +42,10 @@ public:
 	void setDaoManager(PocoDaoManager *manager);
 	void setTransactionManager(TransactionManager::Ptr manager);
 	void setQueryLoader(QueryLoader::Ptr loader);
+	void setQueryProfiler(QueryProfiler::Ptr profiler);
 
 	void loadQueries();
+	void clearQueries();
 
 protected:
 	PocoDaoManager &manager();
@@ -83,6 +86,7 @@ private:
 	PocoDaoManager *m_manager;
 	TransactionManager::Ptr m_transactionManager;
 	QueryLoader::Ptr m_loader;
+	QueryProfiler::Ptr m_profiler;
 	std::list<Query *> m_queries;
 };
 

@@ -16,7 +16,9 @@ BEEEON_OBJECT_CASTABLE(FCMRecipientsDao)
 BEEEON_OBJECT_REF("daoManager", &PocoSQLFCMRecipientsDao::setDaoManager)
 BEEEON_OBJECT_REF("transactionManager", &PocoSQLFCMRecipientsDao::setTransactionManager)
 BEEEON_OBJECT_REF("sqlLoader", &PocoSQLFCMRecipientsDao::setQueryLoader)
+BEEEON_OBJECT_REF("profiler", &PocoSQLFCMRecipientsDao::setQueryProfiler)
 BEEEON_OBJECT_HOOK("done", &PocoSQLFCMRecipientsDao::loadQueries)
+BEEEON_OBJECT_HOOK("cleanup", &PocoSQLFCMRecipientsDao::clearQueries)
 BEEEON_OBJECT_END(BeeeOn, PocoSQLFCMRecipientsDao)
 
 using namespace Poco;
