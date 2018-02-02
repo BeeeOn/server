@@ -8,6 +8,7 @@ list_systemd_deps()
 		echo "found non-standard postgresql services:"
 		systemctl list-unit-files | awk '
 			/^postgresql/ && $2 == "enabled" {printf "  %s", $1}
+			/^postgresql/ && $2 != "enabled" {printf "  %s [%s]", $1, $2}
 			$1 == "postgresql.service" {printf " (*)"}
 			/^postgresql/ {print ""; next}
 		'
