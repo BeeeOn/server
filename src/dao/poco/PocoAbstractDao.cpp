@@ -56,6 +56,11 @@ void PocoAbstractDao::setQueryLoader(QueryLoader::Ptr loader)
 	m_loader = loader;
 }
 
+void PocoAbstractDao::setQueryProfiler(QueryProfiler::Ptr profiler)
+{
+	m_profiler = profiler;
+}
+
 PocoDaoManager &PocoAbstractDao::manager()
 {
 	if (m_manager)
@@ -446,5 +451,11 @@ void PocoAbstractDao::loadQueries()
 				__FILE__, __LINE__);
 
 		query->load(*m_loader);
+		query->setProfiler(m_profiler);
 	}
+}
+
+void PocoAbstractDao::clearQueries()
+{
+	m_queries.clear();
 }
