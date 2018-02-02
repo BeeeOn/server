@@ -114,6 +114,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/dao/IniFileQueryLoader.cpp
 	${PROJECT_SOURCE_DIR}/dao/Query.cpp
 	${PROJECT_SOURCE_DIR}/dao/QueryLoader.cpp
+	${PROJECT_SOURCE_DIR}/dao/QueryProfiler.cpp
 	${PROJECT_SOURCE_DIR}/fcm/FCMClient.cpp
 	${PROJECT_SOURCE_DIR}/fcm/FCMMessage.cpp
 	${PROJECT_SOURCE_DIR}/fcm/FCMReceiverConfigurable.cpp
