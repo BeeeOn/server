@@ -15,6 +15,11 @@ Query::~Query()
 {
 }
 
+void Query::setProfiler(QueryProfiler::Ptr profiler)
+{
+	m_profiler = profiler;
+}
+
 void Query::load(QueryLoader &loader)
 {
 	m_query = loader.find(m_key);
@@ -33,5 +38,8 @@ string Query::get() const
 
 string Query::use()
 {
+	if (!m_profiler.isNull())
+		m_profiler->use(m_key);
+
 	return get();
 }

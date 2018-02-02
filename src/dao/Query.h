@@ -2,6 +2,7 @@
 #define BEEEON_QUERY_H
 
 #include "dao/QueryLoader.h"
+#include "dao/QueryProfiler.h"
 
 namespace BeeeOn {
 
@@ -9,6 +10,8 @@ class Query {
 public:
 	Query(const std::string &key);
 	~Query();
+
+	void setProfiler(QueryProfiler::Ptr profiler);
 
 	void load(QueryLoader &loader);
 
@@ -34,6 +37,7 @@ public:
 private:
 	std::string m_key;
 	std::string m_query;
+	QueryProfiler::Ptr m_profiler;
 };
 
 }
