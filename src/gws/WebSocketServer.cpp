@@ -10,6 +10,7 @@ BEEEON_OBJECT_CASTABLE(StoppableLoop)
 BEEEON_OBJECT_REF("gatewayCommunicator", &WebSocketServer::setGatewayCommunicator)
 BEEEON_OBJECT_REF("sslConfig", &WebSocketServer::setSSLConfig)
 BEEEON_OBJECT_REF("gatewayService", &WebSocketServer::setGatewayService)
+BEEEON_OBJECT_REF("verifierFactory", &WebSocketServer::setVerifierFactory)
 BEEEON_OBJECT_NUMBER("port", &WebSocketServer::setPort)
 BEEEON_OBJECT_NUMBER("backlog", &WebSocketServer::setBacklog)
 BEEEON_OBJECT_NUMBER("maxMessageSize", &WebSocketServer::setMaxMessageSize)
@@ -45,6 +46,11 @@ void WebSocketServer::setGatewayService(GWSGatewayService::Ptr service)
 	m_gatewayService = service;
 }
 
+void WebSocketServer::setVerifierFactory(SocketGatewayPeerVerifierFactory::Ptr factory)
+{
+	m_verifierFactory = factory;
+}
+
 void WebSocketServer::setPort(int port)
 {
 	if (port < 0)
@@ -75,7 +81,8 @@ Poco::Net::HTTPServer *WebSocketServer::createServer()
 		new WebSocketRequestHandlerFactory(
 			m_maxMessageSize,
 			m_gatewayCommunicator,
-			m_gatewayService
+			m_gatewayService,
+			m_verifierFactory
 		));
 
 	return new HTTPServer(factory, pool(), createSocket(), new HTTPServerParams);

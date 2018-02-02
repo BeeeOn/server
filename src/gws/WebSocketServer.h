@@ -6,6 +6,7 @@
 #include <Poco/Net/ServerSocket.h>
 
 #include "gws/GatewayCommunicator.h"
+#include "gws/SocketGatewayPeerVerifierFactory.h"
 #include "loop/StoppableLoop.h"
 #include "service/GWSGatewayServiceImpl.h"
 #include "ssl/SSLServer.h"
@@ -38,6 +39,7 @@ public:
 	void setGatewayCommunicator(GatewayCommunicator::Ptr communicator);
 	void setSSLConfig(Poco::SharedPtr<SSLServer> config);
 	void setGatewayService(GWSGatewayService::Ptr service);
+	void setVerifierFactory(SocketGatewayPeerVerifierFactory::Ptr factory);
 
 	void setPort(int port);
 	void setBacklog(int backlog);
@@ -62,6 +64,7 @@ private:
 	GatewayCommunicator::Ptr m_gatewayCommunicator;
 	GWSGatewayService::Ptr m_gatewayService;
 	Poco::SharedPtr<Poco::Net::HTTPServer> m_server;
+	SocketGatewayPeerVerifierFactory::Ptr m_verifierFactory;
 };
 
 }

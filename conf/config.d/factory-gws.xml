@@ -4,6 +4,7 @@
 			<set name="gatewayCommunicator" ref="gatewayCommunicator"/>
 			<set name="sslConfig" ref="gwsSSLServer" if-yes="${gws.ws.ssl.enable}" />
 			<set name="gatewayService" ref="gwsGatewayService" />
+			<set name="verifierFactory" ref="gatewayPeerVerifierFactory" />
 			<set name="port" number="${gws.ws.port}" />
 			<set name="backlog" number="${gws.ws.backlog}" />
 			<set name="maxMessageSize" number="${gws.ws.maxMessageSize}" />
@@ -44,5 +45,10 @@
 			<set name="cleanupInterval" time="15 m" />
 			<set name="cleanupOlderThan" time="30 m" />
 		</instance>
+
+		<alias name="gatewayPeerVerifierFactory" ref="${gws.peer.verifier}GatewayPeerVerifierFactory" />
+
+		<instance name="relaxedGatewayPeerVerifierFactory"
+			class="BeeeOn::RelaxedGatewayPeerVerifierFactory" />
 	</factory>
 </system>
