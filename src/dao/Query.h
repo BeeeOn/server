@@ -19,9 +19,16 @@ public:
 
 	std::string get() const;
 
-	std::string operator ()() const
+	/**
+	 * Calling this method is the same as calling get()
+	 * however, it adds an additional semantics. This method
+	 * should be called every time when this query is used.
+	 */
+	std::string use();
+
+	std::string operator ()()
 	{
-		return get();
+		return use();
 	}
 
 private:

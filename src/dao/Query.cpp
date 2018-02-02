@@ -30,3 +30,8 @@ string Query::get() const
 
 	return m_query;
 }
+
+string Query::use()
+{
+	return get();
+}
