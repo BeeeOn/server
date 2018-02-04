@@ -36,6 +36,7 @@
 			<set name="caLocation" text="${gws.ws.ssl.authority}" />
 			<set name="verificationMode" text="${gws.ws.ssl.verifyMode}" />
 			<set name="loadDefaultCA" text="false" />
+			<set name="extendedCertificateVerification" number="0" />
 		</instance>
 
 		<instance name="fcmApiSSL" class="BeeeOn::SSLClient">
