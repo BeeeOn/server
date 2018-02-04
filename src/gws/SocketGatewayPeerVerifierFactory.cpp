@@ -1,4 +1,5 @@
 #include <Poco/Exception.h>
+#include <Poco/Net/SecureStreamSocketImpl.h>
 
 #include "gws/SocketGatewayPeerVerifierFactory.h"
 
@@ -10,32 +11,16 @@ SocketGatewayPeerVerifierFactory::~SocketGatewayPeerVerifierFactory()
 {
 }
 
-const SecureStreamSocket &SocketGatewayPeerVerifierFactory::asSecure(
-		const StreamSocket &socket)
-{
-	try {
-		return dynamic_cast<const SecureStreamSocket &>(socket);
-	}
-	catch (...) {
-		throw BadCastException("socket is not inherited from SecureStreamSocket");
-	}
-}
-
 SharedPtr<X509Certificate> SocketGatewayPeerVerifierFactory::extractPeerCert(
 		const StreamSocket &socket)
 {
 	SharedPtr<X509Certificate> certificate;
 
-	try {
-		const SecureStreamSocket &secureSocket = asSecure(socket);
+	SecureStreamSocketImpl *impl =
+		dynamic_cast<SecureStreamSocketImpl *>(socket.impl());
 
-		if (!secureSocket.havePeerCertificate())
-			return certificate;
-
-		certificate = new X509Certificate(secureSocket.peerCertificate());
-	}
-	catch (const BadCastException &e) {
-	}
+	if (impl && impl->havePeerCertificate())
+		certificate = new X509Certificate(impl->peerCertificate());
 
 	return certificate;
 }

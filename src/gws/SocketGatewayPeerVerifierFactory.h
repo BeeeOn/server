@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Poco/SharedPtr.h>
-#include <Poco/Net/SecureStreamSocket.h>
 #include <Poco/Net/StreamSocket.h>
 #include <Poco/Net/X509Certificate.h>
 
@@ -30,15 +29,6 @@ public:
 			const Poco::Net::StreamSocket &socket) = 0;
 
 protected:
-	/**
-	 * Convert the given instance of StreamSocket into the SecureStreamSocket
-	 * if possible.
-	 *
-	 * @throws Poco::BadCastException if the StreamSocket cannot be casted
-	 */
-	static const Poco::Net::SecureStreamSocket &asSecure(
-			const Poco::Net::StreamSocket &socket);
-
 	/**
 	 * Extract the peer certificate from the given StreamSocket instance
 	 * if possible. It returns null result when the socket is not secure
