@@ -2,7 +2,6 @@
 
 #include <Poco/SharedPtr.h>
 #include <Poco/Net/StreamSocket.h>
-#include <Poco/Net/X509Certificate.h>
 
 #include "gws/GatewayPeerVerifier.h"
 
@@ -27,15 +26,6 @@ public:
 	 */
 	virtual GatewayPeerVerifier::Ptr preverifyAndCreate(
 			const Poco::Net::StreamSocket &socket) = 0;
-
-protected:
-	/**
-	 * Extract the peer certificate from the given StreamSocket instance
-	 * if possible. It returns null result when the socket is not secure
-	 * or there is no peer certificate available.
-	 */
-	static Poco::SharedPtr<Poco::Net::X509Certificate> extractPeerCert(
-			const Poco::Net::StreamSocket &socket);
 };
 
 }
