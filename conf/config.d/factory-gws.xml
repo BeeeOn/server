@@ -52,6 +52,8 @@
 			class="BeeeOn::X509GatewayPeerVerifierFactory" />
 
 		<instance name="relaxedGatewayPeerVerifierFactory"
-			class="BeeeOn::RelaxedGatewayPeerVerifierFactory" />
+				class="BeeeOn::RelaxedGatewayPeerVerifierFactory">
+			<set name="verifierFactory" ref="strictGatewayPeerVerifierFactory" />
+		</instance>
 	</factory>
 </system>
