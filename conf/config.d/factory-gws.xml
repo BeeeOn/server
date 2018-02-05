@@ -48,7 +48,12 @@
 
 		<alias name="gatewayPeerVerifierFactory" ref="${gws.peer.verifier}GatewayPeerVerifierFactory" />
 
+		<instance name="strictGatewayPeerVerifierFactory"
+			class="BeeeOn::X509GatewayPeerVerifierFactory" />
+
 		<instance name="relaxedGatewayPeerVerifierFactory"
-			class="BeeeOn::RelaxedGatewayPeerVerifierFactory" />
+				class="BeeeOn::RelaxedGatewayPeerVerifierFactory">
+			<set name="verifierFactory" ref="strictGatewayPeerVerifierFactory" />
+		</instance>
 	</factory>
 </system>

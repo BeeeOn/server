@@ -25,14 +25,9 @@ public:
 	virtual void verifyPeer(const Gateway &gateway) const = 0;
 };
 
-class AbstractGatewayPeerVerifier : public GatewayPeerVerifier {
+class AcceptingGatewayPeerVerifier : public GatewayPeerVerifier {
 public:
-	AbstractGatewayPeerVerifier(const GatewayID &expectedID);
-
 	void verifyPeer(const Gateway &gateway) const override;
-
-private:
-	GatewayID m_expectedID;
 };
 
 }

@@ -9,19 +9,6 @@ GatewayPeerVerifier::~GatewayPeerVerifier()
 {
 }
 
-AbstractGatewayPeerVerifier::AbstractGatewayPeerVerifier(const GatewayID &id):
-	m_expectedID(id)
+void AcceptingGatewayPeerVerifier::verifyPeer(const Gateway &gateway) const
 {
-}
-
-void AbstractGatewayPeerVerifier::verifyPeer(const Gateway &gateway) const
-{
-	if (gateway.id() == m_expectedID)
-		return;
-
-	throw NotAuthenticatedException(
-		"gateway ID mismatch, got "
-		+ gateway.id().toString()
-		+ " but expected "
-		+ gateway.id().toString());
 }
