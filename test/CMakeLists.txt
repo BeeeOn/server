@@ -18,6 +18,7 @@ find_library (JANSSON jansson)
 file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/fcm/FCMSenderTest.cpp
 	${PROJECT_SOURCE_DIR}/fcm/LegacyFCMClientTest.cpp
+	${PROJECT_SOURCE_DIR}/gws/X509GatewayPeerVerifierTest.cpp
 	${PROJECT_SOURCE_DIR}/l10n/HTTPLocaleExtractorTest.cpp
 	${PROJECT_SOURCE_DIR}/l10n/IcuLocaleImplTest.cpp
 	${PROJECT_SOURCE_DIR}/l10n/IcuLocaleManagerTest.cpp
