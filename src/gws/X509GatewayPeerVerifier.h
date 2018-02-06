@@ -25,7 +25,7 @@ public:
 	X509GatewayPeerVerifier(const Poco::Net::X509Certificate &cert);
 
 	/**
-	 * @brief Verify that the given gateways'ID match the CN field of
+	 * @brief Verify that the given gateway's ID match the CN field of
 	 * the underlying certificate.
 	 *
 	 * @throws Poco::Net::NotAuthenticatedException if the peer certificate is missing
