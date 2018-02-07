@@ -258,6 +258,7 @@ FCMResponse LegacyFCMClient::processAffectedTokens(
 				logger().critical(
 					"senderId mismatch, check configuration",
 					__FILE__, __LINE__);
+				failing.emplace(original);
 			}
 			else {
 				logger().warning(
