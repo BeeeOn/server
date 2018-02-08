@@ -77,6 +77,11 @@ public:
 		return m_modules.end();
 	}
 
+	const std::set<ModuleInfo> &modules() const
+	{
+		return m_modules;
+	}
+
 	bool lookup(ModuleInfo &module) const;
 
 private:
