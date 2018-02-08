@@ -136,6 +136,7 @@ GWResponse::Ptr GWMessageHandlerImpl::handleNewDevice(
 		if (m_deviceService->registerDevice(device,
 				request->productName(),
 				request->vendor(),
+				request->moduleTypes(),
 				gatewayID)) {
 			response->setStatus(GWResponse::Status::SUCCESS);
 		}

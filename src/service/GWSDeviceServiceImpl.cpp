@@ -27,6 +27,7 @@ void GWSDeviceServiceImpl::setDeviceInfoProvider(DeviceInfoProvider::Ptr provide
 bool GWSDeviceServiceImpl::doRegisterDevice(Device &device,
 		const string &name,
 		const string &vendor,
+		const list<ModuleType> &modules,
 		const Gateway &gateway)
 {
 	if (m_deviceDao->fetch(device, gateway)) {
@@ -43,6 +44,7 @@ bool GWSDeviceServiceImpl::doRegisterDevice(Device &device,
 				"'" + vendor + "' '" + name + "' specification");
 		}
 
+		verifyModules(type, modules);
 		device.setType(type);
 
 		DeviceStatus &status = device.status();

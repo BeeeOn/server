@@ -21,10 +21,11 @@ public:
 	bool registerDevice(Device &device,
 			const std::string &name,
 			const std::string &vendor,
+			const std::list<ModuleType> &modules,
 			const Gateway &gateway) override
 	{
 		return BEEEON_TRANSACTION_RETURN(bool,
-			doRegisterDevice(device, name, vendor, gateway));
+			doRegisterDevice(device, name, vendor, modules, gateway));
 	}
 
 	void fetchActiveWithPrefix(std::vector<Device> &devices,
@@ -38,6 +39,7 @@ protected:
 	bool doRegisterDevice(Device &device,
 			const std::string &name,
 			const std::string &vendor,
+			const std::list<ModuleType> &modules,
 			const Gateway &gateway);
 
 	void doFetchActiveWithPrefix(std::vector<Device> &devices,
