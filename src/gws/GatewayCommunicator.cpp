@@ -243,10 +243,7 @@ void GatewayCommunicator::handleConnectionReadable(GatewayConnection::Ptr connec
 
 		m_messageHandler->handle(message, connection->gatewayID());
 	}
-	catch (const Exception &e) {
-		logger().log(e, __FILE__, __LINE__);
-		removeGateway(connection->gatewayID());
-	}
+	BEEEON_CATCH_CHAIN_ACTION(logger(), removeGateway(connection->gatewayID()));
 
 	if (logger().information()) {
 		logger().information("duration: "
