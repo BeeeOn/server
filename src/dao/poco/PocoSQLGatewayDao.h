@@ -72,10 +72,10 @@ public:
 private:
 	Query m_queryCreate          {"gateways.create"};
 	Query m_queryUpdate          {"gateways.update"};
-	Query m_queryFetchById       {"gateways.fetch.by.id"};
-	Query m_queryFetchAccessible {"gateways.fetch.accessible"};
-	Query m_queryLegacyFetchById {"legacy_gateways.fetch.by.id"};
-	Query m_queryLegacyFetchAccessible {"legacy_gateways.fetch.accessible"};
+	Query m_queryFetchById       {"gateways.fetch_by_id"};
+	Query m_queryFetchAccessible {"gateways.fetch_accessible"};
+	Query m_queryLegacyFetchById {"legacy_gateways.fetch_by_id"};
+	Query m_queryLegacyFetchAccessible {"legacy_gateways.fetch_accessible"};
 
 	TimeZoneProvider::Ptr m_timeZoneProvider;
 };

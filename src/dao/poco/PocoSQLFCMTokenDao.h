@@ -76,8 +76,8 @@ private:
 	Query m_queryCreate              {"fcm_tokens.create"};
 	Query m_queryReplace             {"fcm_tokens.replace"};
 	Query m_queryRemove              {"fcm_tokens.remove"};
-	Query m_queryFetchByUserId       {"fcm_tokens.fetch.by.user.id"};
-	Query m_queryFetchUserByFCMToken {"fcm_tokens.fetch.by.id"};
+	Query m_queryFetchByUserId       {"fcm_tokens.fetch_by_user_id"};
+	Query m_queryFetchUserByFCMToken {"fcm_tokens.fetch_by_id"};
 };
 
 }

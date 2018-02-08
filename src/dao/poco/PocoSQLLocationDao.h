@@ -57,9 +57,9 @@ private:
 	Query m_queryCreate    {"locations.create"};
 	Query m_queryUpdate    {"locations.update"};
 	Query m_queryRemove    {"locations.remove"};
-	Query m_queryFetchById {"locations.fetch.by.id"};
-	Query m_queryFetchByIdAndGatewayId {"locations.fetch.by.id.and.gateway_id"};
-	Query m_queryFetchByGatewayId {"locations.fetch.by.gateway_id"};
+	Query m_queryFetchById {"locations.fetch_by_id"};
+	Query m_queryFetchByIdAndGatewayId {"locations.fetch_by_id_and_gateway_id"};
+	Query m_queryFetchByGatewayId {"locations.fetch_by_gateway_id"};
 };
 
 }

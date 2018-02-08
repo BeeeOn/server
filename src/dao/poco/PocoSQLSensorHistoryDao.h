@@ -50,7 +50,7 @@ public:
 private:
 	Query m_queryInsert    {"sensors_history.insert"};
 	Query m_queryFetch     {"sensors_history.fetch"};
-	Query m_queryFetchHuge {"sensors_history.fetch.huge.interval"};
+	Query m_queryFetchHuge {"sensors_history.fetch_huge_interval"};
 };
 
 }

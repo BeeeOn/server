@@ -47,7 +47,7 @@ protected:
 private:
 	Poco::SharedPtr<LocaleManager> m_localeManager;
 	Query m_queryCreate {"users.create"};
-	Query m_queryFetch  {"users.fetch.by.id"};
+	Query m_queryFetch  {"users.fetch_by_id"};
 };
 
 }
