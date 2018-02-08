@@ -4,7 +4,6 @@
 #include <Poco/Timestamp.h>
 #include <Poco/URI.h>
 #include <Poco/JSON/Object.h>
-#include <Poco/Net/HTTPSClientSession.h>
 
 #include "fcm/FCMClient.h"
 #include "fcm/FCMMessage.h"
@@ -84,11 +83,6 @@ protected:
 			const FCMMessage &message,
 			FCMResponse &response,
 			Poco::JSON::Object::Ptr object) const;
-
-	/**
-	 * Connect to the Firebase Cloud service via HTTP or HTTPS.
-	 */
-	Poco::SharedPtr<Poco::Net::HTTPClientSession> connect(const Poco::URI &uri);
 
 	/**
 	 * Parse the header Retry-After that can come in an HTTP response.

@@ -8,12 +8,11 @@
 #include <Poco/JSON/Object.h>
 
 #include <Poco/Net/HTTPRequest.h>
-#include <Poco/Net/HTTPClientSession.h>
-#include <Poco/Net/HTTPSClientSession.h>
 #include <Poco/Net/NetException.h>
 
 #include "di/Injectable.h"
 #include "fcm/LegacyFCMClient.h"
+#include "net/HTTPUtil.h"
 #include "ssl/SSLClient.h"
 #include "util/JsonUtil.h"
 #include "util/Sanitize.h"
@@ -41,13 +40,11 @@ FCMResponse LegacyFCMClient::sendMessage(
 		bool dryRun)
 {
 	const URI uri(m_apiUri);
-	SharedPtr<HTTPClientSession> session = connect(uri);
 
 	const string &content = buildContent(message, dryRun);
 
-	HTTPRequest req(HTTPRequest::HTTP_POST,
-			uri.getPathAndQuery(),
-			HTTPMessage::HTTP_1_1);
+	HTTPRequest req(HTTPMessage::HTTP_1_1);
+	req.setMethod(HTTPRequest::HTTP_POST);
 	req.setContentType("application/json");
 	req.set("Authorization", "key=" + serverKey);
 	req.set("Accept", "application/json");
@@ -60,10 +57,8 @@ FCMResponse LegacyFCMClient::sendMessage(
 		logger().trace("request: " + s.str(), __FILE__, __LINE__);
 	}
 
-	session->sendRequest(req) << content;
-
-	HTTPEntireResponse response;
-	response.readBody(session->receiveResponse(response));
+	HTTPEntireResponse response = HTTPUtil::makeRequest(
+		req, uri, content, m_sslConfig);
 
 	if (response.getStatus() >= HTTPEntireResponse::HTTP_BAD_REQUEST) {
 		logger().error(
@@ -321,18 +316,6 @@ bool LegacyFCMClient::isRateExceeded(const string &spec) const
 bool LegacyFCMClient::isSenderMismatch(const string &spec) const
 {
 	return spec == "MismatchSenderId";
-}
-
-SharedPtr<HTTPClientSession> LegacyFCMClient::connect(const URI &uri)
-{
-	if (m_sslConfig.isNull()) {
-		return new HTTPClientSession(
-			uri.getHost(), uri.getPort());
-	}
-	else {
-		return new HTTPSClientSession(
-			uri.getHost(), uri.getPort(), m_sslConfig->context());
-	}
 }
 
 void LegacyFCMClient::setApiUri(const string &apiUri)

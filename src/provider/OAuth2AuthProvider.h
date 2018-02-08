@@ -4,6 +4,7 @@
 #include <Poco/SharedPtr.h>
 #include <Poco/Net/Context.h>
 
+#include "net/HTTPEntireResponse.h"
 #include "provider/AuthProvider.h"
 
 namespace Poco {
@@ -11,7 +12,6 @@ class URI;
 namespace Net {
 
 class HTMLForm;
-class HTTPSClientSession;
 
 }
 }
@@ -76,21 +76,9 @@ protected:
 			AuthResult &info);
 
 	/**
-	 * Open HTTPS connection to the given host:port.
+	 * Handle response.
 	 */
-	Poco::SharedPtr<Poco::Net::HTTPSClientSession> connectSecure(
-			const std::string &host,
-			unsigned int port) const;
-
-	/**
-	 * Handle response based on given session.
-	 */
-	std::string handleResponse(Poco::Net::HTTPSClientSession &session) const;
-
-	/**
-	 * Convert istream response body to string
-	 */
-	std::string convertResponseToString(std::istream &rs) const;
+	std::string handleResponse(HTTPEntireResponse &session) const;
 
 	/**
 	 * Creates session and makes on method based request and returns handled response
