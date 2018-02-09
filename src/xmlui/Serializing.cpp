@@ -203,6 +203,9 @@ void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
 		if (!module.group().empty())
 			attrs.addAttribute("", "group", "group", "", module.group());
 
+		if (module.isControllable())
+			attrs.addAttribute("", "actuator", "actuator", "", "yes");
+		
 		output.emptyElement("", "module", "module", attrs);
 	}
 
