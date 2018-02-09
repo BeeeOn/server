@@ -15,7 +15,7 @@ list_systemd_deps()
 		echo ""
 		echo "  you can change the dependency on postgresql systemd service"
 		echo "  during installation by setting the environment variable"
-		echo "  BEEEON_DEP_PGSQL (sudo might require -E option)"
+		echo "  BEEEON_DEPS_PGSQL (sudo might require -E option)"
 		echo ""
 	fi
 }
