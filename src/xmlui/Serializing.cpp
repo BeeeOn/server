@@ -198,11 +198,48 @@ void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
 
 		attrs.addAttribute("", "type", "type", "", module.type()->id().toString());
 
+		if (!module.type()->unit().empty())
+			attrs.addAttribute("", "type-unit", "type-unit", "", module.type()->unit());
+
+		if (module.type()->range().isValid()) {
+			const auto range = module.type()->range();
+
+			if (range.hasMin()) {
+				attrs.addAttribute("", "type-range-min", "type-range-min", "",
+						to_string(range.min()));
+			}
+			if (range.hasMax()) {
+				attrs.addAttribute("", "type-range-max",
+					"type-range-max", "", to_string(range.max()));
+			}
+			if (range.hasStep()) {
+				attrs.addAttribute("", "type-range-step",
+					"type-range-step", "", to_string(range.step()));
+			}
+		}
+
+		if (!module.type()->values().empty()) {
+			string values;
+
+			for (const auto &pair : module.type()->values()) {
+				values += to_string(pair.first);
+				values += ":";
+				values += pair.second;
+				values += ";";
+			}
+
+			attrs.addAttribute("", "type-enum-values",
+					"type-enum-values", "", values);
+		}
+
 		if (!module.name().empty())
 			attrs.addAttribute("", "name", "name", "", module.name());
 		if (!module.group().empty())
 			attrs.addAttribute("", "group", "group", "", module.group());
 
+		if (module.isControllable())
+			attrs.addAttribute("", "actuator", "actuator", "", "yes");
+		
 		output.emptyElement("", "module", "module", attrs);
 	}
 
