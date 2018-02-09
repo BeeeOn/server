@@ -47,10 +47,26 @@ public:
 		const Aggregator agg,
 		ValueConsumer &consumer) override;
 
+protected:
+	void fetchHugeRaw(
+		const Device &device,
+		const ModuleInfo &module,
+		const TimeInterval &range,
+		ValueConsumer &consumer);
+
+	void fetchHugeAgg(
+		const Device &device,
+		const ModuleInfo &module,
+		const TimeInterval &range,
+		const Poco::Timespan &interval,
+		const Aggregator agg,
+		ValueConsumer &consumer);
+
 private:
 	Query m_queryInsert    {"sensors_history.insert"};
 	Query m_queryFetch     {"sensors_history.fetch"};
-	Query m_queryFetchHuge {"sensors_history.fetch_huge_interval"};
+	Query m_queryHugeRaw   {"sensors_history.huge_fetch_raw"};
+	Query m_queryHugeAgg   {"sensors_history.huge_fetch_agg"};
 };
 
 }
