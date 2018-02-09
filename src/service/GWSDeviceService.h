@@ -22,7 +22,7 @@ public:
 	 * Device type is recognized by the name + vendor combination. In case of
 	 * repeated registration, device is just updated with new last seen time.
 	 *
-	 * @throw InvalidArgumentException for invalid name + vendor combination.
+	 * @throw NotFoundException for invalid name + vendor combination.
 	 *
 	 * @return false if device update or insertion fails.
 	 */
