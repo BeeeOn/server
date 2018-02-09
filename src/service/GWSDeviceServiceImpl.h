@@ -1,7 +1,12 @@
 #ifndef BEEEON_GWS_DEVICE_SERVICE_IMPL_H
 #define BEEEON_GWS_DEVICE_SERVICE_IMPL_H
 
+#include <list>
+
+#include <Poco/SharedPtr.h>
+
 #include "dao/DeviceDao.h"
+#include "model/ModuleType.h"
 #include "provider/DeviceInfoProvider.h"
 #include "service/GWSDeviceService.h"
 #include "transaction/Transactional.h"
@@ -40,6 +45,16 @@ protected:
 			const DevicePrefix &prefix);
 
 private:
+	/**
+	 * @brief Verify that count of given modules is less or equals to DeviceInfo
+	 * specification and types of modules are identical.
+	 *
+	 * @throw InvalidArgumentException for invalid count of modules.
+	 * @throw MultiException for invalid types of modules.
+	 */
+	void verifyModules(const Poco::SharedPtr<DeviceInfo> deviceInfo,
+			const std::list<ModuleType> &modules) const;
+
 	DeviceDao::Ptr m_deviceDao;
 	DeviceInfoProvider::Ptr m_deviceInfoProvider;
 };
