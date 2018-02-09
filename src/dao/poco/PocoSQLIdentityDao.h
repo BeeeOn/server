@@ -35,8 +35,8 @@ public:
 private:
 	Query m_queryCreate       {"identities.create"};
 	Query m_queryRemove       {"identities.remove"};
-	Query m_queryFetchById    {"identities.fetch.by.id"};
-	Query m_queryFetchByEmail {"identities.fetch.by.email"};
+	Query m_queryFetchById    {"identities.fetch_by_id"};
+	Query m_queryFetchByEmail {"identities.fetch_by_email"};
 };
 
 }

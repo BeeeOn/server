@@ -75,10 +75,10 @@ private:
 
 	Query m_queryInsert           {"devices.create"};
 	Query m_queryUpdate           {"devices.update"};
-	Query m_queryFetchFromGateway {"devices.fetch.from.gateway"};
-	Query m_queryFetchActiveBy    {"devices.fetch.active.by.gateway"};
-	Query m_queryFetchInactiveBy  {"devices.fetch.inactive.by.gateway"};
-	Query m_queryFetchActiveWithPrefix {"devices.fetch.active.by.gateway.with.prefix"};
+	Query m_queryFetchFromGateway {"devices.fetch_from_gateway"};
+	Query m_queryFetchActiveBy    {"devices.fetch_active_by_gateway"};
+	Query m_queryFetchInactiveBy  {"devices.fetch_inactive_by_gateway"};
+	Query m_queryFetchActiveWithPrefix {"devices.fetch_active_by_gateway_with_prefix"};
 };
 
 }

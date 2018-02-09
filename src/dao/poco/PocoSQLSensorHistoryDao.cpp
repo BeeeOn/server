@@ -38,7 +38,8 @@ PocoSQLSensorHistoryDao::PocoSQLSensorHistoryDao()
 {
 	registerQuery(m_queryInsert);
 	registerQuery(m_queryFetch);
-	registerQuery(m_queryFetchHuge);
+	registerQuery(m_queryHugeRaw);
+	registerQuery(m_queryHugeAgg);
 }
 
 bool PocoSQLSensorHistoryDao::insert(
@@ -188,7 +189,54 @@ void PocoSQLSensorHistoryDao::fetchMany(
 	}
 }
 
-void PocoSQLSensorHistoryDao::fetchHuge(
+void PocoSQLSensorHistoryDao::fetchHugeRaw(
+	const Device &device,
+	const ModuleInfo &module,
+	const TimeInterval &range,
+	ValueConsumer &consumer)
+{
+	assureHasId(device);
+	assureHasId(device.gateway());
+	// cannot assureHasId for module, SimpleID == 0 is allowed
+
+	uint64_t deviceID(device.id());
+	uint64_t gatewayID(device.gateway().id());
+	unsigned int moduleID(module.id());
+	unsigned long start = range.start().epochTime();
+	unsigned long end = range.end().epochTime();
+	unsigned long timeAt;
+	double value;
+
+	Statement sql = (session() << m_queryHugeRaw(),
+		use(gatewayID, "gateway_id"),
+		use(deviceID, "device_id"),
+		use(moduleID, "module_id"),
+		use(start, "start"),
+		use(end, "end"),
+		into(timeAt),
+		into(value),
+		Poco::Data::Keywords::range(0, 1)
+	);
+
+	consumer.begin(*module.type());
+
+	try {
+		while (!sql.done()) {
+			RecordSet result = executeSelect(sql);
+			if (result.rowCount() == 0)
+				break;
+
+			consumer.single(ValueAt(timeAt, value));
+		}
+	} catch (...) {
+		consumer.end();
+		throw;
+	}
+
+	consumer.end();
+}
+
+void PocoSQLSensorHistoryDao::fetchHugeAgg(
 	const Device &device,
 	const ModuleInfo &module,
 	const TimeInterval &range,
@@ -213,7 +261,7 @@ void PocoSQLSensorHistoryDao::fetchHuge(
 	double min;
 	double max;
 
-	Statement sql = (session() << m_queryFetchHuge(),
+	Statement sql = (session() << m_queryHugeAgg(),
 		use(gatewayID, "gateway_id"),
 		use(deviceID, "device_id"),
 		use(moduleID, "module_id"),
@@ -253,4 +301,21 @@ void PocoSQLSensorHistoryDao::fetchHuge(
 	}
 
 	consumer.end();
+}
+
+void PocoSQLSensorHistoryDao::fetchHuge(
+	const Device &device,
+	const ModuleInfo &module,
+	const TimeInterval &range,
+	const Timespan &interval,
+	const Aggregator agg,
+	ValueConsumer &consumer)
+{
+	if (interval <= 5 * Timespan::SECONDS) {
+		fetchHugeRaw(device, module, range, consumer);
+	}
+	else {
+		fetchHugeAgg(device, module, range,
+				interval, agg, consumer);
+	}
 }

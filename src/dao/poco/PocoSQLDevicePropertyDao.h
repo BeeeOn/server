@@ -62,7 +62,7 @@ private:
 	Query m_queryUpdate    {"devices_properties.update"};
 	Query m_queryRemove    {"devices_properties.remove"};
 	Query m_queryFetch     {"devices_properties.fetch"};
-	Query m_queryFetchByDevice {"devices_properties.fetch.by.device"};
+	Query m_queryFetchByDevice {"devices_properties.fetch_by_device"};
 };
 
 }

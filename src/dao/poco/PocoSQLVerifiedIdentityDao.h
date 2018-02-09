@@ -58,10 +58,10 @@ private:
 	Query m_queryCreate       {"verified_identities.create"};
 	Query m_queryUpdate       {"verified_identities.update"};
 	Query m_queryRemove       {"verified_identities.remove"};
-	Query m_queryFetchById    {"verified_identities.fetch.by.id"};
-	Query m_queryFetchByEmail {"verified_identities.fetch.by.email"};
-	Query m_queryFetchByEmailAndProvider {"verified_identities.fetch.by.email.and.provider"};
-	Query m_queryFetchByUser  {"verified_identities.fetch.by.user"};
+	Query m_queryFetchById    {"verified_identities.fetch_by_id"};
+	Query m_queryFetchByEmail {"verified_identities.fetch_by_email"};
+	Query m_queryFetchByEmailAndProvider {"verified_identities.fetch_by_email_and_provider"};
+	Query m_queryFetchByUser  {"verified_identities.fetch_by_user"};
 };
 
 }
