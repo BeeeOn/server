@@ -83,8 +83,7 @@ string OAuth2AuthProvider::handleResponse(HTTPEntireResponse &response) const
 
 string OAuth2AuthProvider::makeRequest(const string &method, URI &host, HTMLForm &requestForm) const
 {
-	HTTPRequest request(HTTPMessage::HTTP_1_1);
-	request.setMethod(method);
+	HTTPRequest request(method, host.getPathAndQuery(), HTTPMessage::HTTP_1_1);
 	requestForm.prepareSubmit(request);
 
 	ostringstream requestQuery;
