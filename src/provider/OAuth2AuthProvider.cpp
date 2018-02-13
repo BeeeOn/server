@@ -59,7 +59,7 @@ bool OAuth2AuthProvider::verifyAuthCode(const AccessTokenCredentials &, AuthResu
 
 void OAuth2AuthProvider::initSSL() const
 {
-	if (m_sslConfig == 0)
+	if (m_sslConfig.isNull())
 		throw IllegalStateException(
 				"missing sslConfig, cannot use OAuth");
 }

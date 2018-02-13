@@ -56,7 +56,7 @@ public:
 		return m_redirectURI;
 	}
 
-	void setSSLConfig(SSLClient *config)
+	void setSSLConfig(Poco::SharedPtr<SSLClient> config)
 	{
 		m_sslConfig = config;
 	}
@@ -95,7 +95,7 @@ protected:
 	std::string m_clientId;
 	std::string m_clientSecret;
 	std::string m_redirectURI;
-	SSLClient *m_sslConfig;
+	Poco::SharedPtr<SSLClient> m_sslConfig;
 };
 
 }
