@@ -41,6 +41,27 @@
 		</modules>
 	</device>
 
+	<device id="2">
+		<name>Temperature Sensor</name>
+		<vendor>Brno University of Technology</vendor>
+
+		<match>
+			<exact name="Temperature sensor" vendor="BeeeOn" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="2">
+				<name>Battery</name>
+			</sensor>
+			<sensor id="1" type="19">
+				<name>Room Temperature</name>
+			</sensor>
+			<sensor id="2" type="16">
+				<name>Signal strength</name>
+			</sensor>
+		</modules>
+	</device>
+
 	<device id="10">
 		<name>Remote Switch</name>
 		<vendor>Belkin WeMo</vendor>
