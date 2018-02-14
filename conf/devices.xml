@@ -35,6 +35,9 @@
 			<sensor id="3" type="8">
 				<name>Room Humidity</name>
 			</sensor>
+			<sensor id="4" type="16">
+				<name>Signal strength</name>
+			</sensor>
 		</modules>
 	</device>
 
