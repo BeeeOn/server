@@ -21,6 +21,7 @@ BEEEON_OBJECT_TEXT("clientId", &FacebookAuthProvider::setClientId)
 BEEEON_OBJECT_TEXT("clientSecret", &FacebookAuthProvider::setClientSecret)
 BEEEON_OBJECT_TEXT("redirectUri", &FacebookAuthProvider::setRedirectURI)
 BEEEON_OBJECT_TEXT("id", &FacebookAuthProvider::setID)
+BEEEON_OBJECT_HOOK("done", &FacebookAuthProvider::validateSSL)
 BEEEON_OBJECT_END(BeeeOn, FacebookAuthProvider)
 
 using namespace BeeeOn;

@@ -57,7 +57,7 @@ bool OAuth2AuthProvider::verifyAuthCode(const AccessTokenCredentials &, AuthResu
 	throw NotImplementedException("access-token capability is not implemented");
 }
 
-void OAuth2AuthProvider::initSSL() const
+void OAuth2AuthProvider::validateSSL()
 {
 	if (m_sslConfig.isNull())
 		throw IllegalStateException(
@@ -91,13 +91,6 @@ string OAuth2AuthProvider::makeRequest(const string &method, URI &host, HTMLForm
 
 	if (logger().debug())
 		logger().debug("request: " + requestQuery.str(), __FILE__, __LINE__);
-
-	try {
-		initSSL();
-	} catch (const Exception &e) {
-		logger().log(e, __FILE__, __LINE__);
-		throw;
-	}
 
 	HTTPEntireResponse response = HTTPUtil::makeRequest(
 		request, host, requestQuery.str(), m_sslConfig);

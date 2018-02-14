@@ -61,6 +61,11 @@ public:
 		m_sslConfig = config;
 	}
 
+	/**
+	 * Initialize SSL context for upcoming HTTPS requests
+	 */
+	void validateSSL();
+
 protected:
 	/**
 	 * Verification against a 3rd party.
@@ -84,12 +89,6 @@ protected:
 	 * Creates session and makes on method based request and returns handled response
 	 */
 	std::string makeRequest(const std::string &method, Poco::URI &host, Poco::Net::HTMLForm &requestForm) const;
-
-private:
-	/**
-	 * Initialize SSL context for upcoming HTTPS requests
-	 */
-	void initSSL() const;
 
 protected:
 	std::string m_clientId;

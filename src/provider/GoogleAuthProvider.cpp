@@ -21,6 +21,7 @@ BEEEON_OBJECT_TEXT("clientSecret", &GoogleAuthProvider::setClientSecret)
 BEEEON_OBJECT_TEXT("redirectUri", &GoogleAuthProvider::setRedirectURI)
 BEEEON_OBJECT_TEXT("id", &GoogleAuthProvider::setID)
 BEEEON_OBJECT_REF("sslConfig", &GoogleAuthProvider::setSSLConfig)
+BEEEON_OBJECT_HOOK("done", &GoogleAuthProvider::validateSSL)
 BEEEON_OBJECT_END(BeeeOn, GoogleAuthProvider)
 
 using namespace std;
