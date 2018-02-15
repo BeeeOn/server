@@ -1,5 +1,6 @@
 #include <Poco/Exception.h>
 #include <Poco/Environment.h>
+#include <Poco/SharedPtr.h>
 #include <Poco/Net/HTMLForm.h>
 
 #include <cppunit/extensions/HelperMacros.h>
@@ -36,7 +37,7 @@ public:
 	void testVerifyAuthCode();
 private:
 	string m_authCode;
-	SSLClient *m_sslConfig;
+	SharedPtr<SSLClient> m_sslConfig;
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION_SKIPPABLE(FacebookAuthProviderTest,
@@ -58,14 +59,14 @@ void FacebookAuthProviderTest::testVerifyAuthCode()
 {
 	TestableFacebookAuthProvider provider;
 	AuthResult info;
-	SSLClient sslConfig;
+	SharedPtr<SSLClient> sslConfig = new SSLClient;
 
 	if (Environment::has("FACEBOOK_CA_LOCATION"))
-		sslConfig.setCALocation(Environment::get("FACEBOOK_CA_LOCATION"));
+		sslConfig->setCALocation(Environment::get("FACEBOOK_CA_LOCATION"));
 	else
-		sslConfig.setCALocation("cert/mozilla-cacert-2016-11-02.pem");
+		sslConfig->setCALocation("cert/mozilla-cacert-2016-11-02.pem");
 
-	provider.setSSLConfig(&sslConfig);
+	provider.setSSLConfig(sslConfig);
 	provider.setClientId(Environment::get("FACEBOOK_CLIENT_ID"));
 	provider.setClientSecret(Environment::get("FACEBOOK_CLIENT_SECRET"));
 

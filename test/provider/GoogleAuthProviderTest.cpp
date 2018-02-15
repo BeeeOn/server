@@ -1,5 +1,6 @@
 #include <Poco/Exception.h>
 #include <Poco/Environment.h>
+#include <Poco/SharedPtr.h>
 #include <Poco/Net/HTMLForm.h>
 
 #include <cppunit/extensions/HelperMacros.h>
@@ -40,7 +41,7 @@ public:
 	void testHTTPData();
 private:
 	std::string googleAuthCode;
-	SSLClient *m_sslConfig;
+	SharedPtr<SSLClient> m_sslConfig;
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION_SKIPPABLE(GoogleAuthProviderTest,
@@ -83,14 +84,14 @@ void GoogleAuthProviderTest::testVerifyAuthCode()
 
 	TestableGoogleAuthProvider provider;
 	AuthResult info;
-	SSLClient sslConfig;
+	SharedPtr<SSLClient> sslConfig = new SSLClient;
 
 	if (Environment::has("GOOGLE_CA_LOCATION"))
-		sslConfig.setCALocation(Environment::get("GOOGLE_CA_LOCATION"));
+		sslConfig->setCALocation(Environment::get("GOOGLE_CA_LOCATION"));
 	else
-		sslConfig.setCALocation("cert/mozilla-cacert-2016-11-02.pem");
+		sslConfig->setCALocation("cert/mozilla-cacert-2016-11-02.pem");
 
-	provider.setSSLConfig(&sslConfig);
+	provider.setSSLConfig(sslConfig);
 	provider.setClientId(Environment::get("GOOGLE_CLIENT_ID"));
 	provider.setClientSecret(Environment::get("GOOGLE_CLIENT_SECRET"));
 

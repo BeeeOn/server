@@ -56,10 +56,15 @@ public:
 		return m_redirectURI;
 	}
 
-	void setSSLConfig(SSLClient *config)
+	void setSSLConfig(Poco::SharedPtr<SSLClient> config)
 	{
 		m_sslConfig = config;
 	}
+
+	/**
+	 * Initialize SSL context for upcoming HTTPS requests
+	 */
+	void validateSSL();
 
 protected:
 	/**
@@ -85,17 +90,11 @@ protected:
 	 */
 	std::string makeRequest(const std::string &method, Poco::URI &host, Poco::Net::HTMLForm &requestForm) const;
 
-private:
-	/**
-	 * Initialize SSL context for upcoming HTTPS requests
-	 */
-	void initSSL() const;
-
 protected:
 	std::string m_clientId;
 	std::string m_clientSecret;
 	std::string m_redirectURI;
-	SSLClient *m_sslConfig;
+	Poco::SharedPtr<SSLClient> m_sslConfig;
 };
 
 }
