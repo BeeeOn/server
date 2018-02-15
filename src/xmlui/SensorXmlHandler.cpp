@@ -49,6 +49,7 @@ void SensorXmlHandler::handleInputImpl()
 	else if (type == "setstate") {
 		Element *deviceNode = root->getChildElement("device");
 		handleSetState(gateid, deviceNode);
+		return;
 	}
 
 	resultInvalidInput();
