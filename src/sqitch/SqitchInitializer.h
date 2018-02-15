@@ -35,6 +35,16 @@ public:
 	void setExtension(const std::string &ext);
 
 	/**
+	 * @returns the extension property or empty string if no
+	 * extension is set.
+	 *
+	 * @param sep - prepend the separator to the returned extension
+	 * if the extension exists. If it does not exists, the method
+	 * returns empty string no matter what the sep is set to.
+	 */
+	std::string extension(const std::string &sep = "") const;
+
+	/**
 	 * Perform deploy operation as implemented by sqitch.
 	 * The method should be treated as unsafe due to the fact
 	 * that it does not fully implement all sqitch deploy

@@ -33,6 +33,14 @@ void SqitchInitializer::setExtension(const string &ext)
 	m_extension = ext;
 }
 
+string SqitchInitializer::extension(const string &sep) const
+{
+	if (m_extension.empty())
+		return "";
+
+	return sep + m_extension;
+}
+
 void SqitchInitializer::unsafeDeploy(
 		const ScriptExecutor &execute)
 {
@@ -170,8 +178,7 @@ Path SqitchInitializer::resolve(
 			continue;
 
 		Path dir(m_baseDir, action);
-		Path file(dir, change->name() + "@" + tag->name());
-		file.setExtension(m_extension);
+		Path file(dir, change->name() + "@" + tag->name() + extension("."));
 
 		File f(file);
 		if (f.exists())
@@ -179,8 +186,7 @@ Path SqitchInitializer::resolve(
 	}
 
 	Path dir(m_baseDir, action);
-	Path file(dir, change->name());
-	file.setExtension(m_extension);
+	Path file(dir, change->name() + extension("."));
 
 	return file;
 }
