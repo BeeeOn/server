@@ -31,7 +31,7 @@ const TypeInfo &XmlValueConsumer::info() const
 
 void XmlValueConsumer::single(const ValueAt &v)
 {
-	m_writer.dataElement("", "row", "row", to_string(v.atRaw()) + " " + info().asString(v.value()));
+	m_writer.dataElement("", "row", "row", to_string(v.at().epochTime()) + " " + info().asString(v.value()));
 }
 
 void XmlValueConsumer::end()
