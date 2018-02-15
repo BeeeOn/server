@@ -41,7 +41,7 @@ void ValueAt::setAt(const Timestamp &at)
 
 Timestamp ValueAt::at() const
 {
-	return Timestamp(m_at);
+	return Timestamp::fromEpochTime(m_at);
 }
 
 void ValueAt::setValue(double v)
