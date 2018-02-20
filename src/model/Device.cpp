@@ -68,6 +68,11 @@ const Timespan &Device::refresh() const
 	return m_refresh;
 }
 
+bool Device::hasRefresh() const
+{
+	return m_refresh >= 0;
+}
+
 void Device::setBattery(const Nullable<percent> &battery)
 {
 	m_battery = battery;

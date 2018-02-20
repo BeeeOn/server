@@ -12,11 +12,13 @@ class DeviceTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST_SUITE(DeviceTest);
 	CPPUNIT_TEST(testSetRefresh);
 	CPPUNIT_TEST(testSetRefreshNormalization);
+	CPPUNIT_TEST(testHasRefresh);
 	CPPUNIT_TEST_SUITE_END();
 
 public:
 	void testSetRefresh();
 	void testSetRefreshNormalization();
+	void testHasRefresh();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DeviceTest);
@@ -67,6 +69,23 @@ void DeviceTest::testSetRefreshNormalization()
 	CPPUNIT_ASSERT_EQUAL(
 		-1,
 		device.refresh().totalMicroseconds());
+}
+
+void DeviceTest::testHasRefresh()
+{
+	Device device;
+
+	device.setRefresh(0);
+	CPPUNIT_ASSERT(device.hasRefresh());
+
+	device.setRefresh(10);
+	CPPUNIT_ASSERT(device.hasRefresh());
+
+	device.setRefresh(-1);
+	CPPUNIT_ASSERT(!device.hasRefresh());
+
+	device.setRefresh(Timespan(0, -1));
+	CPPUNIT_ASSERT(!device.hasRefresh());
 }
 
 }

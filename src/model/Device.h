@@ -45,6 +45,7 @@ public:
 
 	void setRefresh(const Poco::Timespan &refresh);
 	const Poco::Timespan &refresh() const;
+	bool hasRefresh() const;
 
 	void setBattery(const unsigned int battery)
 	{
