@@ -38,13 +38,14 @@ public:
 	void setType(const Poco::SharedPtr<DeviceInfo> type);
 	const Poco::SharedPtr<DeviceInfo> type() const;
 
-	void setRefresh(const unsigned int seconds)
+	void setRefresh(const int seconds)
 	{
 		setRefresh(Poco::Timespan(seconds, 0));
 	}
 
 	void setRefresh(const Poco::Timespan &refresh);
 	const Poco::Timespan &refresh() const;
+	bool hasRefresh() const;
 
 	void setBattery(const unsigned int battery)
 	{

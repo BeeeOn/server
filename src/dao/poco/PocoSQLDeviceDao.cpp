@@ -82,7 +82,8 @@ bool PocoSQLDeviceDao::insert(Device &device, const Gateway &gateway)
 	assertTypeValid(device);
 
 	unsigned int type = device.type()->id();
-	unsigned int refresh = device.refresh().totalSeconds();
+	int refresh = device.hasRefresh() ?
+		device.refresh().totalSeconds() : -1;
 
 	Nullable<unsigned int> battery;
 	if (!device.battery().isNull())
@@ -135,7 +136,8 @@ bool PocoSQLDeviceDao::update(Device &device, const Gateway &gateway)
 	assertTypeValid(device);
 
 	unsigned int type = device.type()->id();
-	unsigned int refresh = device.refresh().totalSeconds();
+	int refresh = device.hasRefresh() ?
+		device.refresh().totalSeconds() : -1;
 
 	Nullable<unsigned int> battery;
 	if (!device.battery().isNull())
@@ -297,7 +299,7 @@ bool PocoSQLDeviceDao::parseSingle(Row &result, Device &device,
 
 	device.setName(result[prefix + "name"]);
 	device.setType(provider.findById(DeviceInfoID::parse(result[prefix + "type"])));
-	device.setRefresh(result[prefix + "refresh"].convert<unsigned int>());
+	device.setRefresh(result[prefix + "refresh"].convert<int>());
 	device.setBattery(whenNull(result[prefix + "battery"], 0));
 	device.setSignal(whenNull(result[prefix + "signal"], 0));
 

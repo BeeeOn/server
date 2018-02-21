@@ -15,6 +15,20 @@ BeeeOn::JSONDeviceDeserializer::JSONDeviceDeserializer(
 {
 }
 
+void BeeeOn::JSONDeviceDeserializer::applyRefresh(Device &device, int refresh) const
+{
+	if (device.hasRefresh() && refresh < 0) {
+		throw InvalidArgumentException(
+			"refresh_time must be negative for device " + device);
+	}
+	else if (!device.hasRefresh() && refresh >= 0) {
+		throw InvalidArgumentException(
+			"refresh_time must be non-negative for device " + device);
+	}
+
+	device.setRefresh(refresh);
+}
+
 void BeeeOn::JSONDeviceDeserializer::partial(BeeeOn::Device &device) const
 {
 	if (m_object->has("name"))
@@ -27,7 +41,7 @@ void BeeeOn::JSONDeviceDeserializer::partial(BeeeOn::Device &device) const
 	}
 
 	if (m_object->has("refresh_time"))
-		device.setRefresh(m_object->getValue<unsigned int>("refresh_time"));
+		applyRefresh(device, m_object->getValue<int>("refresh_time"));
 }
 
 void BeeeOn::JSONDeviceDeserializer::full(BeeeOn::Device &device) const
@@ -47,5 +61,5 @@ void BeeeOn::JSONDeviceDeserializer::full(BeeeOn::Device &device) const
 	if (m_object->has("refresh_time"))
 		throw InvalidArgumentException("missing refresh_time for device");
 
-	device.setRefresh(m_object->getValue<unsigned int>("refresh_time"));
+	applyRefresh(device, m_object->getValue<int>("refresh_time"));
 }

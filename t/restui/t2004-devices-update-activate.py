@@ -189,6 +189,36 @@ class TestDevicesUpdateActivate(unittest.TestCase):
 
 		self.assertEqual("inactive", result["data"]["state"])
 
+	"""
+	The Temperature sensor has non-updatable refresh time (-1).
+	Thus, we must be unable to change it to be updatable.
+	"""
+	def test6_update_non_updatable_refresh(self):
+		req = PUT(config.ui_host, config.ui_port, "/gateways/" + config.gateway_id + "/devices/0xa335d00019f5234e")
+		req.authorize(self.session)
+		req.body(json.dumps({
+			"refresh_time": 10
+		}))
+
+		response, content = req()
+		result = json.loads(content)
+		self.assertEqual(400, response.status)
+		self.assertEqual(400, result["code"])
+		self.assertEqual("invalid input data", result["message"])
+
+		# leave it non-updatable should work
+		req = PUT(config.ui_host, config.ui_port, "/gateways/" + config.gateway_id + "/devices/0xa335d00019f5234e")
+		req.authorize(self.session)
+		req.body(json.dumps({
+			"refresh_time": -1
+		}))
+
+		response, content = req()
+		result = json.loads(content)
+		self.assertEqual(200, response.status)
+		self.assertEqual("success", result["status"])
+		self.assertNotIn("refresh_time", result["data"])
+
 if __name__ == '__main__':
 	import sys
 	import taprunner

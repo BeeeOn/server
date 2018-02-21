@@ -57,12 +57,20 @@ const SharedPtr<DeviceInfo> Device::type() const
 
 void Device::setRefresh(const Timespan &refresh)
 {
-	m_refresh = refresh;
+	if (refresh < 0)
+		m_refresh = -1;
+	else
+		m_refresh = refresh;
 }
 
 const Timespan &Device::refresh() const
 {
 	return m_refresh;
+}
+
+bool Device::hasRefresh() const
+{
+	return m_refresh >= 0;
 }
 
 void Device::setBattery(const Nullable<percent> &battery)
