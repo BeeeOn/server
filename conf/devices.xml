@@ -215,9 +215,9 @@
 		</match>
 
 		<modules>
-			<sensor id="0" type="13">
+			<control id="0" type="13">
 				<name>On/Off</name>
-			</sensor>
+			</control>
 		</modules>
 	</device>
 
