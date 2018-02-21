@@ -4,7 +4,6 @@
 #include "di/Injectable.h"
 #include "dao/poco/PocoSQLUserDao.h"
 #include "dao/poco/PocoDaoManager.h"
-#include "l10n/LocaleManager.h"
 #include "transaction/TransactionManager.h"
 
 using namespace std;
@@ -30,7 +29,7 @@ PocoSQLUserDao::PocoSQLUserDao()
 	registerQuery(m_queryFetch);
 }
 
-void PocoSQLUserDao::setLocaleManager(SharedPtr<LocaleManager> manager)
+void PocoSQLUserDao::setLocaleManager(LocaleManager::Ptr manager)
 {
 	m_localeManager = manager;
 }
@@ -66,13 +65,13 @@ bool PocoSQLUserDao::fetch(User &user)
 	if (result.rowCount() == 0)
 		return false;
 
-	return parseSingle(result, user, *m_localeManager);
+	return parseSingle(result, user, m_localeManager);
 }
 
 bool PocoSQLUserDao::parseSingle(
 		RecordSet &result,
 		User &user,
-		LocaleManager &localeManager,
+		LocaleManager::Ptr localeManager,
 		const string &prefix)
 {
 	if (result.begin() == result.end())
@@ -84,7 +83,7 @@ bool PocoSQLUserDao::parseSingle(
 bool PocoSQLUserDao::parseSingle(
 		Row &result,
 		User &user,
-		LocaleManager &localeManager,
+		LocaleManager::Ptr localeManager,
 		const string &prefix)
 {
 	if (hasColumn(result, prefix + "id"))
@@ -92,7 +91,7 @@ bool PocoSQLUserDao::parseSingle(
 
 	user.setFirstName(result[prefix + "first_name"]);
 	user.setLastName(result[prefix + "last_name"]);
-	user.setLocale(localeManager.parse(result[prefix + "locale"]));
+	user.setLocale(localeManager->parse(result[prefix + "locale"]));
 
 	markLoaded(user);
 	return true;
@@ -116,13 +115,13 @@ bool PocoSQLUserDao::doParseIfIDNotNull(
 
 bool PocoSQLUserDao::parseIfIDNotNull(Row &result,
 			User &user,
-			LocaleManager &localeManager,
+			LocaleManager::Ptr localeManager,
 			const string &prefix)
 {
 	if (!doParseIfIDNotNull(result, user, prefix))
 		return false;
 
-	user.setLocale(localeManager.parse(result[prefix + "locale"]));
+	user.setLocale(localeManager->parse(result[prefix + "locale"]));
 	markLoaded(user);
 	return true;
 }
