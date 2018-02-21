@@ -38,7 +38,7 @@ public:
 	void setType(const Poco::SharedPtr<DeviceInfo> type);
 	const Poco::SharedPtr<DeviceInfo> type() const;
 
-	void setRefresh(const unsigned int seconds)
+	void setRefresh(const int seconds)
 	{
 		setRefresh(Poco::Timespan(seconds, 0));
 	}

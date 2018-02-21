@@ -57,6 +57,16 @@ void DeviceTest::testSetRefreshNormalization()
 	CPPUNIT_ASSERT_EQUAL(
 		-1,
 		device.refresh().totalMicroseconds());
+
+	device.setRefresh(-15);
+	CPPUNIT_ASSERT_EQUAL(
+		-1,
+		device.refresh().totalMicroseconds());
+
+	device.setRefresh(-1);
+	CPPUNIT_ASSERT_EQUAL(
+		-1,
+		device.refresh().totalMicroseconds());
 }
 
 }
