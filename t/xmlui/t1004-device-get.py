@@ -63,7 +63,7 @@ class TestDeviceGet(unittest.TestCase):
 		if id == "0xa335d00019f5234e":
 			self.assertEqual("Temperature", e.get("name"))
 			self.assertEqual("1", e.get("init"))
-			self.assertEqual("unavailable", e.get("status"))
+			self.assertEqual("available", e.get("status"))
 			self.assertEqual("0", e.get("type"))
 		elif id == "0xa32d27aa5e94ecfd":
 			self.assertEqual("Multi-sensor", e.get("name"))

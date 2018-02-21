@@ -202,8 +202,8 @@ class TestDevicesListDetail(unittest.TestCase):
 
 		if id == "0xa335d00019f5234e":
 			self.assertEqual("Temperature", e.get("name"))
-			self.assertEqual(0, e.get("available"))
-			self.assertIsNotNone(e.get("refresh_time", None))
+			self.assertEqual(1, e.get("available"))
+			self.assertIsNone(e.get("refresh_time", None))
 		elif id == "0xa32d27aa5e94ecfd":
 			self.assertEqual("Multi-sensor", e.get("name"))
 			self.assertEqual(0, e.get("available"))
