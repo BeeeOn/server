@@ -1,5 +1,7 @@
 #include "di/Injectable.h"
 #include "service/GWSDeviceServiceImpl.h"
+#include "util/MultiException.h"
+#include "util/ZipIterator.h"
 
 using namespace std;
 using namespace Poco;
@@ -25,6 +27,7 @@ void GWSDeviceServiceImpl::setDeviceInfoProvider(DeviceInfoProvider::Ptr provide
 bool GWSDeviceServiceImpl::doRegisterDevice(Device &device,
 		const string &name,
 		const string &vendor,
+		const list<ModuleType> &modules,
 		const Gateway &gateway)
 {
 	if (m_deviceDao->fetch(device, gateway)) {
@@ -41,6 +44,7 @@ bool GWSDeviceServiceImpl::doRegisterDevice(Device &device,
 				"'" + vendor + "' '" + name + "' specification");
 		}
 
+		verifyModules(type, modules);
 		device.setType(type);
 
 		DeviceStatus &status = device.status();
@@ -59,4 +63,51 @@ void GWSDeviceServiceImpl::doFetchActiveWithPrefix(vector<Device> &devices,
 		const DevicePrefix &prefix)
 {
 	m_deviceDao->fetchActiveWithPrefix(devices, gateway, prefix);
+}
+
+void GWSDeviceServiceImpl::verifyModules(
+		const SharedPtr<DeviceInfo> deviceInfo,
+		const list<ModuleType> &modules) const
+{
+	if (modules.size() > deviceInfo->modules().size()) {
+		throw InvalidArgumentException("invalid count of modules "
+			+ to_string(modules.size()) + " for device " + *deviceInfo);
+	}
+
+	MultiException ex;
+
+	Zip<const set<ModuleInfo>, const list<ModuleType>> zip(
+		deviceInfo->modules(), modules);
+
+	auto i = 0;
+	auto it = zip.begin();
+	for (; it != zip.end(); ++it, ++i) {
+		const auto &expect = (*it).first;
+		const auto &given = (*it).second;
+
+		if (expect.type()->name() != given.type().toString()) {
+			ex.caught(InvalidArgumentException(
+				"expected type " + expect.type()->name()
+				+ " of module " + to_string(i) + " but " + given.type()
+				+ " was given for device " + *deviceInfo
+			));
+		}
+	}
+
+	string missing;
+
+	for (auto expectIt = it.firstIterator(); expectIt != zip.firstEnd(); ++expectIt, ++i) {
+		if (!missing.empty())
+			missing += ", ";
+
+		missing += to_string(i) + " " + expectIt->type()->name();
+	}
+
+	if (!missing.empty()) {
+		logger().warning("missing specification of " + missing
+			 + " for device " + *deviceInfo);
+	}
+
+	if (!ex.empty())
+		ex.rethrow();
 }

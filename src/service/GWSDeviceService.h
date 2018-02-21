@@ -1,11 +1,13 @@
 #ifndef BEEEON_GWS_DEVICE_SERVICE_H
 #define BEEEON_GWS_DEVICE_SERVICE_H
 
+#include <list>
 #include <Poco/SharedPtr.h>
 
 #include "model/Device.h"
 #include "model/Gateway.h"
 #include "model/DevicePrefix.h"
+#include "model/ModuleType.h"
 
 namespace BeeeOn {
 
@@ -21,14 +23,18 @@ public:
 	 * It is intended to use after discovering new devices on the gateway.
 	 * Device type is recognized by the name + vendor combination. In case of
 	 * repeated registration, device is just updated with new last seen time.
+	 * The reported module types of the device are verified.
 	 *
-	 * @throw InvalidArgumentException for invalid name + vendor combination.
+	 * @throw NotFoundException for invalid name + vendor combination.
+	 * @throw InvalidArgumentException for invalid count of modules.
+	 * @throw MultiException for invalid types of modules.
 	 *
 	 * @return false if device update or insertion fails.
 	 */
 	virtual bool registerDevice(Device &device,
 		const std::string &name,
 		const std::string &vendor,
+		const std::list<ModuleType> &modules,
 		const Gateway &gateway) = 0;
 
 	/**
