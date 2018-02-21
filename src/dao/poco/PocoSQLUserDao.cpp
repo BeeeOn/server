@@ -4,7 +4,6 @@
 #include "di/Injectable.h"
 #include "dao/poco/PocoSQLUserDao.h"
 #include "dao/poco/PocoDaoManager.h"
-#include "l10n/LocaleManager.h"
 #include "transaction/TransactionManager.h"
 
 using namespace std;
@@ -30,7 +29,7 @@ PocoSQLUserDao::PocoSQLUserDao()
 	registerQuery(m_queryFetch);
 }
 
-void PocoSQLUserDao::setLocaleManager(SharedPtr<LocaleManager> manager)
+void PocoSQLUserDao::setLocaleManager(LocaleManager::Ptr manager)
 {
 	m_localeManager = manager;
 }

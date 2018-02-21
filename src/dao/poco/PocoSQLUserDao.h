@@ -3,6 +3,7 @@
 #include "dao/UserDao.h"
 #include "dao/Query.h"
 #include "dao/poco/PocoAbstractDao.h"
+#include "l10n/LocaleManager.h"
 
 namespace Poco {
 namespace Data {
@@ -15,15 +16,13 @@ class Row;
 
 namespace BeeeOn {
 
-class LocaleManager;
-
 class PocoSQLUserDao :
 		public PocoAbstractDao,
 		public UserDao {
 public:
 	PocoSQLUserDao();
 
-	void setLocaleManager(Poco::SharedPtr<LocaleManager> manager);
+	void setLocaleManager(LocaleManager::Ptr manager);
 
 	void create(User &user) override;
 	bool fetch(User &user) override;
@@ -45,7 +44,7 @@ protected:
 			User &user, const std::string &prefix = "");
 
 private:
-	Poco::SharedPtr<LocaleManager> m_localeManager;
+	LocaleManager::Ptr m_localeManager;
 	Query m_queryCreate {"users.create"};
 	Query m_queryFetch  {"users.fetch_by_id"};
 };
