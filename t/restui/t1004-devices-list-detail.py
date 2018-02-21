@@ -194,7 +194,6 @@ class TestDevicesListDetail(unittest.TestCase):
 		self.assertIsNotNone(e.get("first_seen", None))
 		self.assertIsNotNone(e.get("last_seen", None))
 		self.assertIsNotNone(e.get("active_since", None))
-		self.assertIsNotNone(e.get("refresh_time", None))
 		self.assertIsNotNone(e.get("available", None))
 
 	def assertKnownDevice(self, e):
@@ -204,15 +203,19 @@ class TestDevicesListDetail(unittest.TestCase):
 		if id == "0xa335d00019f5234e":
 			self.assertEqual("Temperature", e.get("name"))
 			self.assertEqual(0, e.get("available"))
+			self.assertIsNotNone(e.get("refresh_time", None))
 		elif id == "0xa32d27aa5e94ecfd":
 			self.assertEqual("Multi-sensor", e.get("name"))
 			self.assertEqual(0, e.get("available"))
+			self.assertIsNotNone(e.get("refresh_time", None))
 		elif id == "0xa37e0f7f0302324d":
 			self.assertEqual("Humidity", e.get("name"))
 			self.assertEqual(1, e.get("available"))
+			self.assertIsNotNone(e.get("refresh_time", None))
 		elif id == "0xa371959aad24618e":
 			self.assertEqual("Unknown", e.get("name"))
 			self.assertEqual(1, e.get("available"))
+			self.assertIsNotNone(e.get("refresh_time", None))
 		else:
 			self.assertTrue(False, "unknown device: %s, %s, %s", (e.tag, e.attrib, e.text))
 
