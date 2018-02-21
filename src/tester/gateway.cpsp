@@ -1,4 +1,33 @@
 <script>
+function gateways_detail(id) {
+	var button = $("<button></button>");
+	button.text("Detail");
+	button.click(function () {
+		tester.get("/gateways/" + id, "#gateway", function (data) {
+			$("#gateway-detail .id span")
+				.text(data["id"]);
+			$("#gateway-detail .name span")
+				.text(data["name"]);
+			$("#gateway-detail .altitude span")
+				.text(data["altitude"]);
+			$("#gateway-detail .latitude span")
+				.text(data["latitude"]);
+			$("#gateway-detail .longitude span")
+				.text(data["longitude"]);
+			$("#gateway-detail .timezone span")
+				.text(data["timezone"]["display_name"]);
+			$("#gateway-detail .version span")
+				.text(data["state"]["version"]);
+			$("#gateway-detail .ip-address span")
+				.text(data["state"]["ip"]);
+			$("#gateway-detail .last-modified span")
+				.text(new Date(data["state"]["lastModified"] * 1000));
+		});
+	});
+
+	return button;
+}
+
 tester.modules["gateway"] = function () {
 	$("#gateway-list-gateways").click(function () {
 		tester.get("/gateways", "#gateway", function (data) {
@@ -11,33 +40,7 @@ tester.modules["gateway"] = function () {
 				li.append($("<span class='id'></span>").text(id));
 				li.attr("title", name);
 				li.attr("alt", name);
-
-				var button = $("<button></button>");
-				li.append(button);
-				button.text("Detail");
-				button.click(function () {
-					tester.get("/gateways/" + id, "#gateway", function (data) {
-						$("#gateway-detail .id span")
-							.text(data["id"]);
-						$("#gateway-detail .name span")
-							.text(data["name"]);
-						$("#gateway-detail .altitude span")
-							.text(data["altitude"]);
-						$("#gateway-detail .latitude span")
-							.text(data["latitude"]);
-						$("#gateway-detail .longitude span")
-							.text(data["longitude"]);
-						$("#gateway-detail .timezone span")
-							.text(data["timezone"]["display_name"]);
-						$("#gateway-detail .version span")
-							.text(data["state"]["version"]);
-						$("#gateway-detail .ip-address span")
-							.text(data["state"]["ip"]);
-						$("#gateway-detail .last-modified span")
-							.text(new Date(data["state"]["lastModified"] * 1000));
-					});
-				});
-
+				li.append(gateways_detail(id));
 				$("#gateway-list .list").append(li);
 			}
 		});
