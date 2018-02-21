@@ -21,6 +21,7 @@ BEEEON_OBJECT_BEGIN(BeeeOn, PocoSQLVerifiedIdentityDao)
 BEEEON_OBJECT_CASTABLE(VerifiedIdentityDao)
 BEEEON_OBJECT_REF("daoManager", &PocoSQLVerifiedIdentityDao::setDaoManager)
 BEEEON_OBJECT_REF("transactionManager", &PocoSQLVerifiedIdentityDao::setTransactionManager)
+BEEEON_OBJECT_REF("localeManager", &PocoSQLVerifiedIdentityDao::setLocaleManager)
 BEEEON_OBJECT_REF("sqlLoader", &PocoSQLVerifiedIdentityDao::setQueryLoader)
 BEEEON_OBJECT_REF("profiler", &PocoSQLVerifiedIdentityDao::setQueryProfiler)
 BEEEON_OBJECT_HOOK("done", &PocoSQLVerifiedIdentityDao::loadQueries)
@@ -36,6 +37,11 @@ PocoSQLVerifiedIdentityDao::PocoSQLVerifiedIdentityDao()
 	registerQuery(m_queryFetchByEmail);
 	registerQuery(m_queryFetchByEmailAndProvider);
 	registerQuery(m_queryFetchByUser);
+}
+
+void PocoSQLVerifiedIdentityDao::setLocaleManager(LocaleManager::Ptr manager)
+{
+	m_localeManager = manager;
 }
 
 void PocoSQLVerifiedIdentityDao::create(VerifiedIdentity &identity)
@@ -83,7 +89,7 @@ bool PocoSQLVerifiedIdentityDao::fetch(VerifiedIdentity &identity)
 	if (result.rowCount() == 0)
 		return false;
 
-	return parseSingle(result, identity);
+	return parseSingle(result, identity, m_localeManager);
 }
 
 bool PocoSQLVerifiedIdentityDao::fetchBy(
@@ -103,7 +109,7 @@ bool PocoSQLVerifiedIdentityDao::fetchBy(
 	if (result.rowCount() == 0)
 		return false;
 
-	return parseSingle(result, identity);
+	return parseSingle(result, identity, m_localeManager);
 }
 
 void PocoSQLVerifiedIdentityDao::fetchBy(
@@ -117,7 +123,7 @@ void PocoSQLVerifiedIdentityDao::fetchBy(
 	);
 
 	RecordSet result = executeSelect(sql);
-	parseMany(result, identities);
+	parseMany(result, m_localeManager, identities);
 }
 
 void PocoSQLVerifiedIdentityDao::fetchBy(
@@ -133,7 +139,7 @@ void PocoSQLVerifiedIdentityDao::fetchBy(
 	);
 
 	RecordSet result = executeSelect(sql);
-	parseMany(result, identities);
+	parseMany(result, m_localeManager, identities);
 }
 
 bool PocoSQLVerifiedIdentityDao::update(VerifiedIdentity &identity)
@@ -172,16 +178,20 @@ bool PocoSQLVerifiedIdentityDao::remove(const VerifiedIdentity &identity)
 }
 
 bool PocoSQLVerifiedIdentityDao::parseSingle(RecordSet &result,
-		VerifiedIdentity &identity, const string &prefix)
+		VerifiedIdentity &identity,
+		LocaleManager::Ptr localeManager,
+		const string &prefix)
 {
 	if (result.begin() == result.end())
 		return false;
 
-	return parseSingle(*result.begin(), identity, prefix);
+	return parseSingle(*result.begin(), identity, localeManager, prefix);
 }
 
 bool PocoSQLVerifiedIdentityDao::parseSingle(Row &result,
-		VerifiedIdentity &identity, const string &prefix)
+		VerifiedIdentity &identity,
+		LocaleManager::Ptr localeManager,
+		const string &prefix)
 {
 	if (hasColumn(result, prefix + "id"))
 		identity.setId(VerifiedIdentityID::parse(result[prefix + "id"]));
@@ -199,7 +209,7 @@ bool PocoSQLVerifiedIdentityDao::parseSingle(Row &result,
 	identity.setIdentity(id);
 
 	User user;
-	if (!PocoSQLUserDao::parseIfIDNotNull(result, user, prefix + "user_"))
+	if (!PocoSQLUserDao::parseIfIDNotNull(result, user, localeManager, prefix + "user_"))
 		throw IllegalStateException("user is incomplete in query result");
 
 	identity.setUser(user);
