@@ -17,6 +17,8 @@ At least the following entries must be configured:
 
 * secure.device_properties.passphrase
 
+For details, see the following sections.
+
 ### XML-UI Server
 
 The group `xmlui.ssl` configures using of SSL layer for the XML-UI Server.
