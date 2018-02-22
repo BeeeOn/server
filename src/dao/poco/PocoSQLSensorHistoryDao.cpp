@@ -214,8 +214,6 @@ void PocoSQLSensorHistoryDao::fetchHugeRaw(
 	unsigned int moduleID(module.id());
 	unsigned long start = range.start().epochTime();
 	unsigned long end = range.end().epochTime();
-	unsigned long timeAt;
-	double value;
 
 	Statement sql = (session() << m_queryHugeRaw(),
 		use(gatewayID, "gateway_id"),
@@ -223,9 +221,7 @@ void PocoSQLSensorHistoryDao::fetchHugeRaw(
 		use(moduleID, "module_id"),
 		use(start, "start"),
 		use(end, "end"),
-		into(timeAt),
-		into(value),
-		Poco::Data::Keywords::range(0, 1)
+		Poco::Data::Keywords::range(0, m_batchSize)
 	);
 
 	consumer.begin(*module.type());
@@ -236,7 +232,11 @@ void PocoSQLSensorHistoryDao::fetchHugeRaw(
 			if (result.rowCount() == 0)
 				break;
 
-			consumer.single(ValueAt(timeAt, value));
+			for (auto &row : result) {
+				const unsigned long timeAt = row.get(0).convert<unsigned long>();
+				const double value = row.get(1).convert<double>();
+				consumer.single(ValueAt(timeAt, value));
+			}
 		}
 	} catch (...) {
 		consumer.end();
@@ -266,10 +266,6 @@ void PocoSQLSensorHistoryDao::fetchHugeAgg(
 	unsigned long start = range.start().epochTime();
 	unsigned long end = range.end().epochTime();
 	unsigned long intervalSeconds = interval.totalSeconds();
-	unsigned long timeAt;
-	double avg;
-	double min;
-	double max;
 
 	Statement sql = (session() << m_queryHugeAgg(),
 		use(gatewayID, "gateway_id"),
@@ -278,11 +274,7 @@ void PocoSQLSensorHistoryDao::fetchHugeAgg(
 		use(start, "start"),
 		use(end, "end"),
 		use(intervalSeconds, "interval"),
-		into(timeAt),
-		into(avg),
-		into(min),
-		into(max),
-		Poco::Data::Keywords::range(0, 1)
+		Poco::Data::Keywords::range(0, m_batchSize)
 	);
 
 	consumer.begin(*module.type());
@@ -293,16 +285,22 @@ void PocoSQLSensorHistoryDao::fetchHugeAgg(
 			if (result.rowCount() == 0)
 				break;
 
-			switch (agg) {
-			case AGG_AVG:
-				consumer.single(ValueAt(timeAt, avg));
-				break;
-			case AGG_MIN:
-				consumer.single(ValueAt(timeAt, min));
-				break;
-			case AGG_MAX:
-				consumer.single(ValueAt(timeAt, max));
-				break;
+			for (auto &row : result) {
+				const unsigned long timeAt = row.get(0).convert<unsigned long>();
+				switch (agg) {
+				case AGG_AVG:
+					consumer.single(ValueAt(
+						timeAt, row.get(1).convert<double>()));
+					break;
+				case AGG_MIN:
+					consumer.single(ValueAt(
+						timeAt, row.get(2).convert<double>()));
+					break;
+				case AGG_MAX:
+					consumer.single(ValueAt(
+						timeAt, row.get(3).convert<double>()));
+					break;
+				}
 			}
 		}
 	} catch (...) {
