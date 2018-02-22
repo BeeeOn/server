@@ -161,21 +161,21 @@
 		</match>
 
 		<modules>
-			<sensor id="0" type="6" subtype="MOD_BOILER_OPERATION_TYPE">
+			<control id="0" type="6" subtype="MOD_BOILER_OPERATION_TYPE">
 				<name>Operation Type</name>
-			</sensor>
-			<sensor id="1" type="6" subtype="MOD_BOILER_OPERATION_MODE">
+			</control>
+			<control id="1" type="6" subtype="MOD_BOILER_OPERATION_MODE">
 				<name>Operation Mode</name>
-			</sensor>
+			</control>
 			<sensor id="2" type="19">
 				<name>Requested Room Temperature</name>
 			</sensor>
 			<sensor id="3" type="19">
 				<name>Room Temperature</name>
 			</sensor>
-			<sensor id="4" type="19">
+			<control id="4" type="19">
 				<name>Requested Water Temperature</name>
-			</sensor>
+			</control>
 			<sensor id="5" type="19">
 				<name>Water Temperature</name>
 			</sensor>
@@ -215,9 +215,9 @@
 		</match>
 
 		<modules>
-			<sensor id="0" type="13">
+			<control id="0" type="13">
 				<name>On/Off</name>
-			</sensor>
+			</control>
 		</modules>
 	</device>
 
