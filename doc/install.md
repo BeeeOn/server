@@ -107,7 +107,7 @@ $ cd /usr/share/beeeon/db
 $ sudo -u beeeon_admin ${SQITCH} deploy beeeon
 ```
 
-3. Optionally, it is now possible to execute unit-tests (requires pgtap):
+3. Optionally, it is now possible (the database is empty) to execute unit-tests (requires pgtap):
 
 ```
 $ cd /usr/share/beeeon/db/test
