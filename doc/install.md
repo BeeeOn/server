@@ -102,7 +102,7 @@ $ sudo -u postgres psql -f beeeon_pg_init.sql
 2. Deploy the database schema by Sqitch:
 
 ```
-$ SQITCH=`which sqitch`
+$ SQITCH=$(which sqitch)
 $ cd /usr/share/beeeon/db
 $ sudo -u beeeon_admin ${SQITCH} deploy beeeon
 ```
