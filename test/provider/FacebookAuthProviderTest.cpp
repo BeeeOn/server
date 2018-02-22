@@ -64,7 +64,7 @@ void FacebookAuthProviderTest::testVerifyAuthCode()
 	if (Environment::has("FACEBOOK_CA_LOCATION"))
 		sslConfig->setCALocation(Environment::get("FACEBOOK_CA_LOCATION"));
 	else
-		sslConfig->setCALocation("cert/mozilla-cacert-2016-11-02.pem");
+		sslConfig->setCALocation("cert/mozilla-cacert-2018-01-17.pem");
 
 	provider.setSSLConfig(sslConfig);
 	provider.setClientId(Environment::get("FACEBOOK_CLIENT_ID"));

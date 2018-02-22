@@ -89,7 +89,7 @@ void GoogleAuthProviderTest::testVerifyAuthCode()
 	if (Environment::has("GOOGLE_CA_LOCATION"))
 		sslConfig->setCALocation(Environment::get("GOOGLE_CA_LOCATION"));
 	else
-		sslConfig->setCALocation("cert/mozilla-cacert-2016-11-02.pem");
+		sslConfig->setCALocation("cert/mozilla-cacert-2018-01-17.pem");
 
 	provider.setSSLConfig(sslConfig);
 	provider.setClientId(Environment::get("GOOGLE_CLIENT_ID"));
