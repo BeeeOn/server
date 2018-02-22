@@ -181,3 +181,29 @@ For web applications:
 * web-app.facebook.enable - enable using of the Facebook OAuth 2.0
 * web-app.facebook.clientId - client ID (obtain from Facebook)
 * web-app.facebook.clientSecret - secret passphrase (obtain from Facebook)
+
+## Logging
+
+The BeeeOn Server utilizes the Poco Logging Framework for logging purposes.
+The initial logging configuration is divided into 2 files:
+
+* server-startup.ini - general configuration
+* config.d/logging.ini - configuration of particular loggers
+
+The configuration is prepared for 3 cases:
+
+* logging to the console (useful also for journald)
+* logging via Poco::FileChannel that ensures rotations on its own
+(this is not a bullet-proof implementation but it just works)
+* logging via standard syslog API
+
+The initial configuration enables logging to console (with colors) and via
+Poco::FileChannel into the /var/log/beeeon/server.log with rotations.
+To change this, please tweak the configuration options:
+
+* logging.channels.split.channels - list of channels to log into
+* logging.root.level - logging level of the root logger
+* for others, see [FileChannel](https://pocoproject.org/docs/Poco.FileChannel.html),
+[SyslogChannel](https://pocoproject.org/docs/Poco.SyslogChannel.html),
+[ConsoleChannel](https://pocoproject.org/docs/Poco.ConsoleChannel.html)
+and [PatternFormatter](https://pocoproject.org/docs/Poco.PatternFormatter.html) docs.
