@@ -26,6 +26,7 @@ using namespace BeeeOn;
 
 BEEEON_OBJECT_BEGIN(BeeeOn, PocoSQLSensorHistoryDao)
 BEEEON_OBJECT_CASTABLE(SensorHistoryDao)
+BEEEON_OBJECT_PROPERTY("batchSize", &PocoSQLSensorHistoryDao::setBatchSize)
 BEEEON_OBJECT_REF("daoManager", &PocoSQLSensorHistoryDao::setDaoManager)
 BEEEON_OBJECT_REF("transactionManager", &PocoSQLSensorHistoryDao::setTransactionManager)
 BEEEON_OBJECT_REF("sqlLoader", &PocoSQLSensorHistoryDao::setQueryLoader)
@@ -34,12 +35,21 @@ BEEEON_OBJECT_HOOK("done", &PocoSQLSensorHistoryDao::loadQueries)
 BEEEON_OBJECT_HOOK("cleanup", &PocoSQLSensorHistoryDao::clearQueries)
 BEEEON_OBJECT_END(BeeeOn, PocoSQLSensorHistoryDao)
 
-PocoSQLSensorHistoryDao::PocoSQLSensorHistoryDao()
+PocoSQLSensorHistoryDao::PocoSQLSensorHistoryDao():
+	m_batchSize(1024)
 {
 	registerQuery(m_queryInsert);
 	registerQuery(m_queryFetch);
 	registerQuery(m_queryHugeRaw);
 	registerQuery(m_queryHugeAgg);
+}
+
+void PocoSQLSensorHistoryDao::setBatchSize(int size)
+{
+	if (size < 1)
+		throw InvalidArgumentException("batchSize must be at least 1");
+
+	m_batchSize = size;
 }
 
 bool PocoSQLSensorHistoryDao::insert(
