@@ -8,7 +8,6 @@
 #include "provider/RandomProvider.h"
 #include "model/VerifiedIdentity.h"
 #include "server/SessionCache.h"
-#include "server/Session.h"
 #include "server/SessionManager.h"
 #include "util/Loggable.h"
 
