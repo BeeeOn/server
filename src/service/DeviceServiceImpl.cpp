@@ -65,6 +65,11 @@ void DeviceServiceImpl::valuesFor(DeviceWithData &device)
 	// fetch last value of all device modules
 	vector<ModuleInfo> modules;
 
+	if (device.type().isNull()) {
+		throw IllegalStateException(
+			"device " + device + " does not have any known type");
+	}
+
 	for (const auto &info : *device.type())
 		modules.emplace_back(info);
 
@@ -118,7 +123,14 @@ void DeviceServiceImpl::doFetchMany(Single<list<DeviceWithData>> &input)
 			continue;
 		}
 
-		valuesFor(device);
+		try {
+			valuesFor(device);
+		}
+		catch (const Exception &e) {
+			logger().log(e, __FILE__, __LINE__);
+			continue; // skip failing devices
+		}
+
 		result.emplace_back(device);
 	}
 
@@ -182,7 +194,14 @@ void DeviceServiceImpl::doFetchMany(Relation<list<DeviceWithData>, Gateway> &inp
 			continue;
 		}
 
-		valuesFor(device);
+		try {
+			valuesFor(device);
+		}
+		catch (const Exception &e) {
+			logger().log(e, __FILE__, __LINE__);
+			continue; // skip failing devices
+		}
+
 		result.emplace_back(device);
 	}
 
@@ -219,7 +238,14 @@ void DeviceServiceImpl::doFetchActiveBy(Relation<vector<DeviceWithData>, Gateway
 			continue;
 		}
 
-		valuesFor(device);
+		try {
+			valuesFor(device);
+		}
+		catch (const Exception &e) {
+			logger().log(e, __FILE__, __LINE__);
+			continue; // skip failing devices
+		}
+
 		result.emplace_back(device);
 	}
 
@@ -256,7 +282,14 @@ void DeviceServiceImpl::doFetchInactiveBy(Relation<vector<DeviceWithData>, Gatew
 			continue;
 		}
 
-		valuesFor(device);
+		try {
+			valuesFor(device);
+		}
+		catch (const Exception &e) {
+			logger().log(e, __FILE__, __LINE__);
+			continue; // skip failing devices
+		}
+
 		result.emplace_back(device);
 	}
 
