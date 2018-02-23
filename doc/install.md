@@ -52,6 +52,23 @@ The available entries are:
 * gws.ws.ssl.authority - file path to CA certificate
 * gws.ws.ssl.verifyMode - SSL verify mode (none, relaxed, strict, once)
 
+Gateways are verified against server by their SSL/TLS certificate. The verification
+is influenced either by the SSL settings listed above and by the configuration
+entry
+
+* gws.peer.verifier - gateway verification strategy
+
+There are currently the following verification strategies:
+
+* relaxed - all gateways are accepted (for debugging and testing)
+* strict - only gateways connected via SSL/TLS connection with a valid certificate
+signed by a trusted CA and with a valid gateway ID is accepted
+
+The recommended configuration that is considered safe is:
+
+* gws.ws.ssl.verifyMode = strict
+* gws.peer.verifier = strict
+
 ### Device Properties
 
 Certain device properties stored in the main database are encrypted at the
