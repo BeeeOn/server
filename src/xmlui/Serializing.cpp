@@ -231,6 +231,19 @@ void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
 			attrs.addAttribute("", "type-enum-values",
 					"type-enum-values", "", values);
 		}
+		else if (!module.subtype().isNull() && !module.subtype()->values().empty()) {
+			string values;
+
+			for (const auto &pair : module.subtype()->values()) {
+				values += to_string(pair.first);
+				values += ":";
+				values += pair.second;
+				values += ";";
+			}
+
+			attrs.addAttribute("", "type-enum-values",
+					"type-enum-values", "", values);
+		}
 
 		if (!module.name().empty())
 			attrs.addAttribute("", "name", "name", "", module.name());
