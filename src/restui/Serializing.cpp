@@ -1,6 +1,7 @@
 #include <cmath>
 
 #include <Poco/DateTime.h>
+#include <Poco/Logger.h>
 #include <Poco/JSON/PrintHandler.h>
 
 #include "l10n/Locale.h"
@@ -17,6 +18,7 @@
 #include "model/VerifiedIdentity.h"
 #include "restui/RestValueConsumer.h"
 #include "restui/Serializing.h"
+#include "util/Loggable.h"
 
 using namespace std;
 using namespace Poco;
@@ -295,12 +297,21 @@ void BeeeOn::RestUI::serialize(PrintHandler &output, const Device &device)
 
 	output.key("type");
 	output.startObject();
-	output.key("name");
-	output.value(device.type()->name());
-	output.key("display_name");
-	output.value(device.type()->name()); // TODO: localization
-	output.key("vendor");
-	output.value(device.type()->vendor());
+
+	if (!device.type().isNull()) {
+		output.key("name");
+		output.value(device.type()->name());
+		output.key("display_name");
+		output.value(device.type()->name()); // TODO: localization
+		output.key("vendor");
+		output.value(device.type()->vendor());
+	}
+	else {
+		Loggable::forMethod(__func__)
+			.warning("device " + device + " has no type",
+				__FILE__, __LINE__);
+	}
+
 	output.key("family");
 	output.value(device.id().prefix().toString());
 	output.endObject();
