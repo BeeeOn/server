@@ -158,7 +158,7 @@ class TestDevicesListDetail(unittest.TestCase):
 		result = json.loads(content)
 		self.assertEqual("success", result["status"])
 
-		self.assertEqual(1, len(result["data"]))
+		self.assertEqual(2, len(result["data"]))
 
 	"""
 	Ask for a device with invalid EUID. Parsing should fail on invalid input.
@@ -185,6 +185,22 @@ class TestDevicesListDetail(unittest.TestCase):
 		result = json.loads(content)
 		self.assertEqual("error", result["status"])
 		self.assertEqual("could not process input data", result["message"])
+
+	"""
+	Get device 0xa3779fbec542e18b that has unsupported type defined (missing in device.xml).
+	"""
+	def test8_unsupported_device(self):
+		req = GET(config.ui_host, config.ui_port, "/gateways/" + config.gateway_id + "/devices/0xa3779fbec542e18b")
+		req.authorize(self.session)
+		response, content = req()
+
+		self.assertEqual(200, response.status)
+		result = json.loads(content)
+		self.assertEqual("success", result["status"])
+
+		self.assertEqual("0xa3779fbec542e18b", result["data"]["id"])
+		self.assertIn("type", result["data"])
+		self.assertNotIn("name", result["data"]["type"])
 
 	def assertDeviceIsComplete(self, e):
 		self.assertIsNotNone(e.get("id", None))

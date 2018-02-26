@@ -153,6 +153,19 @@ VALUES
 	NOW() AT TIME ZONE 'UTC' - interval '100 seconds',
 	NOW() AT TIME ZONE 'UTC' - interval '7 seconds',
 	NULL
+),
+(
+	beeeon.to_device_id(11779058992112918923),
+	1284174504043136,
+	NULL,
+	'Unsupported',
+	1000,
+	2,
+	NULL,
+	NULL,
+	timestamp '2018-1-10 11:12:13',
+	timestamp '2018-1-10 11:18:22',
+	NULL
 );
 
 INSERT INTO beeeon.device_properties (
