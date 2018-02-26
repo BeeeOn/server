@@ -42,6 +42,9 @@ bool SensorServiceImpl::doFetch(Relation<Sensor, Device> &data)
 
 	if (!m_deviceDao->fetch(device, device.gateway()))
 		throw NotFoundException("device " + device);
+
+	if (device.type().isNull())
+		throw IllegalStateException("device " + device + " does not have type");
 		
 	SharedPtr<DeviceInfo> deviceInfo = device.type();
 	ModuleInfo moduleInfo;
@@ -74,6 +77,9 @@ void SensorServiceImpl::doFetchMany(Relation<list<Sensor>, Device> &data)
 
 	if (!m_deviceDao->fetch(device, device.gateway()))
 		throw NotFoundException("device " + device);
+
+	if (device.type().isNull())
+		throw IllegalStateException("device " + device + " does not have type");
 		
 	SharedPtr<DeviceInfo> deviceInfo = device.type();
 	vector<ModuleInfo> modules;
