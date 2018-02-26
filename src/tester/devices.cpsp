@@ -27,7 +27,11 @@ function devices_append(gwid, device) {
 
 	dev.find(".id").text(device["id"]);
 	dev.find(".name").text(device["name"]);
-	dev.find(".type").text(device["type"]["display_name"]);
+
+	if (device["type"]["display_name"])
+		dev.find(".type").text(device["type"]["display_name"]);
+	else
+		dev.find(".type").text("unsupported");
 
 	if (device["state"] == "inactive") {
 		var activate = $("<button>Activate</button>");
@@ -49,8 +53,15 @@ function devices_append(gwid, device) {
 						.text(data["id"]);
 					panel.find(".name span")
 						.text(data["name"]);
-					panel.find(".type span")
-						.text(data["type"]["display_name"]);
+
+					if (data["type"]["display_name"]) {
+						panel.find(".type span")
+							.text(data["type"]["display_name"]);
+					}
+					else {
+						panel.find(".type span").text("unsupported");
+					}
+
 					panel.find(".first-seen span")
 						.text(new Date(data["first_seen"] * 1000));
 					panel.find(".last-seen span")
