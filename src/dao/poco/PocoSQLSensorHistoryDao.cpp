@@ -64,7 +64,10 @@ bool PocoSQLSensorHistoryDao::insert(
 	uint64_t gatewayID(device.gateway().id());
 	unsigned int moduleID(value.module());
 	int64_t timeAt = at.epochMicroseconds();
-	double v = value.value();
+	Nullable<double> v;
+
+	if (value.isValid())
+		v = value.value();
 
 	Statement sql = (session() << m_queryInsert(),
 		use(gatewayID, "gateway_id"),
@@ -93,7 +96,7 @@ void PocoSQLSensorHistoryDao::insertMany(
 	uint64_t gatewayID(device.gateway().id());
 	unsigned int moduleID;
 	int64_t timeAt = at.epochMicroseconds();
-	double v;
+	Nullable<double> v;
 
 	auto it = values.begin();
 	MultiException ex;
@@ -109,7 +112,11 @@ void PocoSQLSensorHistoryDao::insertMany(
 
 		for (; it != values.end(); ++it) {
 			moduleID = it->module();
-			v = it->value();
+
+			if (it->isValid())
+				v = it->value();
+			else
+				v.clear();
 
 			size_t result = 0;
 
@@ -147,21 +154,25 @@ bool PocoSQLSensorHistoryDao::fetch(
 	uint64_t deviceID(device.id());
 	uint64_t gatewayID(device.gateway().id());
 	unsigned int moduleID(module.id());
-	unsigned long timeAt;
 
 	Statement sql = (session() << m_queryFetch(),
 		use(gatewayID, "gateway_id"),
 		use(deviceID, "device_id"),
-		use(moduleID, "module_id"),
-		into(timeAt),
-		into(value)
+		use(moduleID, "module_id")
 	);
 
 	RecordSet result = executeSelect(sql);
 	if (result.rowCount() == 0)
 		return false;
 
-	at = Timestamp::fromEpochTime(timeAt);
+	auto &row = result.row(0);
+
+	at = Timestamp::fromEpochTime(row.get(0).convert<unsigned long>());
+	if (row.get(1).isEmpty())
+		value = std::nan("");
+	else
+		value = row.get(1).convert<double>();
+
 	return true;
 }
 
@@ -177,25 +188,29 @@ void PocoSQLSensorHistoryDao::fetchMany(
 	uint64_t deviceID(device.id());
 	uint64_t gatewayID(device.gateway().id());
 	unsigned int moduleID;
-	unsigned long at;
-	double value;
 
 	Statement sql = (session() << m_queryFetch(),
 		use(gatewayID, "gateway_id"),
 		use(deviceID, "device_id"),
-		use(moduleID, "module_id"),
-		into(at),
-		into(value)
+		use(moduleID, "module_id")
 	);
 
 	for (const auto module : modules) {
 		moduleID = module.id();
 
 		RecordSet result = executeSelect(sql);
-		if (result.rowCount() > 0)
-			values.emplace_back(ValueAt(at, value));
-		else
+		if (result.rowCount() > 0) {
+			auto &row = result.row(0);
+			const unsigned long at = row.get(0).convert<unsigned long>();
+
+			if (row.get(1).isEmpty())
+				values.emplace_back(ValueAt(at, NAN));
+			else
+				values.emplace_back(ValueAt(at, row.get(1).convert<double>()));
+		}
+		else {
 			values.emplace_back(Nullable<ValueAt>());
+		}
 	}
 }
 
@@ -234,7 +249,11 @@ void PocoSQLSensorHistoryDao::fetchHugeRaw(
 
 			for (auto &row : result) {
 				const unsigned long timeAt = row.get(0).convert<unsigned long>();
-				const double value = row.get(1).convert<double>();
+				double value = NAN;
+
+				if (!row.get(1).isEmpty())
+					value = row.get(1).convert<double>();
+
 				consumer.single(ValueAt(timeAt, value));
 			}
 		}
