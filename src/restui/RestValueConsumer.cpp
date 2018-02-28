@@ -1,4 +1,3 @@
-#include <cmath>
 #include <string>
 
 #include <Poco/Exception.h>
@@ -42,7 +41,7 @@ void RestValueConsumer::single(const ValueAt &v)
 	m_output.value(v.atRaw());
 	m_output.key("value");
 
-	if (std::isnan(v.value()))
+	if (!v.isValid())
 		m_output.null();
 	else
 		m_output.value(info().asString(v.value()));

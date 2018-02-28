@@ -1,3 +1,5 @@
+#include <cmath>
+
 #include <Poco/Exception.h>
 
 #include "di/Injectable.h"
@@ -152,6 +154,12 @@ ControlChangeHandler::Ptr ControlServiceImpl::doRequestChange(
 	m_accessPolicy->assure(
 		ControlAccessPolicy::ACTION_USER_SET,
 		data, control, device);
+
+	if (std::isnan(value)) {
+		throw InvalidArgumentException(
+			"requesting to set control "
+			+ device + ":" + control + " to NaN");
+	}
 
 	if (!m_deviceDao->fetch(device, device.gateway()))
 		throw NotFoundException("device " + device);
