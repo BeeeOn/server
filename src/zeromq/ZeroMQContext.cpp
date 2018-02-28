@@ -108,6 +108,8 @@ int ZeroMQContext::parseSocketType(const string &name)
 		return ZMQ_REP;
 	if (!icompare(name, "router"))
 		return ZMQ_ROUTER;
+	if (!icompare(name, "pull"))
+		return ZMQ_PULL;
 
 	throw InvalidArgumentException(
 		"unsupported ZeroMQ socket type: " + name);

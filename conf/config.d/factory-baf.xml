@@ -8,10 +8,17 @@
 		</instance>
 
 		<instance name="publishingWatcher" class="BeeeOn::Automation::PublishingWatcher">
+			<add name="publishers" ref="bafZMQPublisher" if-yes="${baf.publish.zeromq.enable}" />
 		</instance>
 
 		<instance name="zmqContext" class="BeeeOn::ZeroMQContext">
 			<set name="socketLinger" time="${baf.publish.zeromq.socket.linger}" />
+		</instance>
+
+		<instance name="bafZMQPublisher" class="BeeeOn::ZeroMQPublisher">
+			<set name="context" ref="zmqContext" />
+			<set name="endpoint" text="${baf.publish.zeromq.endpoint}" />
+			<set name="type" text="${baf.publish.zeromq.type}" />
 		</instance>
 	</factory>
 </system>
