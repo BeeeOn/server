@@ -19,7 +19,14 @@
 		</instance>
 
 		<instance name="uiFilterChain" class="BeeeOn::HTTPFilterChain">
+			<add name="filters" ref="customHeadersFilter" />
 			<add name="filters" ref="corsFilter" />
+		</instance>
+
+		<instance name="customHeadersFilter" class="BeeeOn::HTTPCustomHeadersFilter">
+			<set name="uriPattern" text="*" />
+			<set name="headers">
+			</set>
 		</instance>
 
 		<instance name="corsFilter" class="BeeeOn::CORSFilter">
