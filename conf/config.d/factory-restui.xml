@@ -31,6 +31,7 @@
 				<pair key="Referrer-Policy" text="no-referrer-when-downgrade" />
 				<pair key="X-Content-Type-Options" text="nosniff" />
 				<pair key="X-XSS-Protection" text="1; block" />
+				<pair key="X-Frame-Options" text="SAMEORIGIN" />
 			</set>
 		</instance>
 

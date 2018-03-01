@@ -40,6 +40,13 @@ class TestSecurityHeaders(unittest.TestCase):
 		self.assertIn("X-XSS-Protection", response.headers)
 		self.assertEqual("1; block", response.headers["X-XSS-Protection"])
 
+	def test5_auth_returns_frame_options(self):
+		req = GET(config.ui_host, config.ui_port, "/auth")
+		response, _ = req()
+
+		self.assertIn("X-Frame-Options", response.headers)
+		self.assertEqual("SAMEORIGIN", response.headers["X-Frame-Options"])
+
 if __name__ == '__main__':
 	import sys
 	import taprunner
