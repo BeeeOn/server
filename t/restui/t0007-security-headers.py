@@ -26,6 +26,13 @@ class TestSecurityHeaders(unittest.TestCase):
 		self.assertIn("Referrer-Policy", response.headers)
 		self.assertEqual("no-referrer-when-downgrade", response.headers["Referrer-Policy"])
 
+	def test3_auth_returns_nosniff(self):
+		req = GET(config.ui_host, config.ui_port, "/auth")
+		response, _ = req()
+
+		self.assertIn("X-Content-Type-Options", response.headers)
+		self.assertEqual("nosniff", response.headers["X-Content-Type-Options"])
+
 if __name__ == '__main__':
 	import sys
 	import taprunner

@@ -29,6 +29,7 @@
 				<pair key="Strict-Transport-Security"
 					text="max-age=31536000; includeSubDomains" />
 				<pair key="Referrer-Policy" text="no-referrer-when-downgrade" />
+				<pair key="X-Content-Type-Options" text="nosniff" />
 			</set>
 		</instance>
 
