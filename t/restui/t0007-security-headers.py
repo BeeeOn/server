@@ -19,6 +19,13 @@ class TestSecurityHeaders(unittest.TestCase):
 		self.assertEqual("max-age=31536000; includeSubDomains",
 				response.headers["Strict-Transport-Security"])
 
+	def test2_auth_returns_referrer_policy(self):
+		req = GET(config.ui_host, config.ui_port, "/auth")
+		response, _ = req()
+
+		self.assertIn("Referrer-Policy", response.headers)
+		self.assertEqual("no-referrer-when-downgrade", response.headers["Referrer-Policy"])
+
 if __name__ == '__main__':
 	import sys
 	import taprunner
