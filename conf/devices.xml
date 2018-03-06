@@ -639,4 +639,35 @@
 			<sensor id="4" type="heat" />
 		</modules>
 	</device>
+
+	<device id="110">
+		<name>Door/Window 3-in-1 Sensor</name>
+		<vendor>Philio Technology Corporation</vendor>
+
+		<match>
+			<exact name="PST02-C Door/Window 3 in 1 sensor" vendor="Philio Technology Corporation" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="battery" />
+			<sensor id="1" type="temperature" />
+			<sensor id="2" type="luminance" />
+			<sensor id="3" type="open_close" />
+		</modules>
+	</device>
+
+	<device id="111">
+		<name>Door/Window 3-in-1 Sensor</name>
+		<vendor>D-Link Technology</vendor>
+		<match>
+			<exact name="Unknown: type=0002, id=000d" vendor="D-Link Corporation" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="battery" />
+			<sensor id="1" type="temperature" />
+			<sensor id="2" type="luminance" />
+			<sensor id="3" type="open_close" />
+		</modules>
+	</device>
 </devices>
