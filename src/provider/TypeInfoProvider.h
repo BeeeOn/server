@@ -15,16 +15,6 @@ public:
 
 	void setTypesFile(const std::string &typesFile);
 
-	InfoSet::const_iterator begin() const
-	{
-		return infoSet().begin();
-	}
-
-	InfoSet::const_iterator end() const
-	{
-		return infoSet().end();
-	}
-
 	void loadInfo();
 
 private:
