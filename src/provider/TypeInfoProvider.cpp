@@ -30,7 +30,6 @@ void TypeInfoProvider::loadInfo()
 
 		if (findById(id).isNull()) {
 			TypeInfo info(id);
-			info.setName(type.toString());
 			info.setUnit(ModuleType(type).baseUnit().symbol());
 
 			if (!registerInfo(info))

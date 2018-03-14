@@ -122,8 +122,7 @@ public:
 	TypeInfo();
 	TypeInfo(const TypeInfo::ID &id);
 
-	void setName(const std::string &name);
-	const std::string &name() const;
+	std::string name() const;
 
 	void setUnit(const std::string &unit);
 	const std::string &unit() const;
@@ -140,7 +139,6 @@ public:
 	std::string asString(const double v) const;
 
 private:
-	std::string m_name;
 	std::string m_unit;
 	Range m_range;
 	std::map<int, std::string> m_values;

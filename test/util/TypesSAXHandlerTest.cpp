@@ -24,7 +24,6 @@ class TypesSAXHandlerTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testParseWithLevels);
 	CPPUNIT_TEST(testParseOverlappingLevels);
 	CPPUNIT_TEST(testParseMissingId);
-	CPPUNIT_TEST(testParseMissingName);
 	CPPUNIT_TEST(testParseMultipleUnits);
 	CPPUNIT_TEST(testParseWrongFirstUnit);
 	CPPUNIT_TEST_SUITE_END();
@@ -40,7 +39,6 @@ public:
 	void testParseWithLevels();
 	void testParseOverlappingLevels();
 	void testParseMissingId();
-	void testParseMissingName();
 	void testParseMultipleUnits();
 	void testParseWrongFirstUnit();
 
@@ -69,31 +67,28 @@ void TypesSAXHandlerTest::testParseSimple()
 		m_parser.parseString(
 			"<types>"
 			"  <type id=\"temperature\">"
-			"    <name>NAME1</name>"
 			"  </type>"
 			"  <type id=\"humidity\">"
-			"    <name>NAME2</name>"
 			"    <unit>&#176;C</unit>"
 			"  </type>"
 			"  <type id=\"battery\">"
-			"    <name>NAME3</name>"
 			"  </type>"
 			"</types>")
 	);
 
 	for (auto it : *m_handler) {
 		if (it.id() == TypeInfoID::parse("temperature")) {
-			CPPUNIT_ASSERT_EQUAL(string("NAME1"), it.name());
+			CPPUNIT_ASSERT_EQUAL(string("temperature"), it.name());
 			CPPUNIT_ASSERT_EQUAL(string(""), it.unit());
 			CPPUNIT_ASSERT(!it.range().isValid());
 		}
 		else if (it.id() == TypeInfoID::parse("humidity")) {
-			CPPUNIT_ASSERT_EQUAL(string("NAME2"), it.name());
+			CPPUNIT_ASSERT_EQUAL(string("humidity"), it.name());
 			CPPUNIT_ASSERT_EQUAL(string("°C"), it.unit());
 			CPPUNIT_ASSERT(!it.range().isValid());
 		}
 		else if (it.id() == TypeInfoID::parse("battery")) {
-			CPPUNIT_ASSERT_EQUAL(string("NAME3"), it.name());
+			CPPUNIT_ASSERT_EQUAL(string("battery"), it.name());
 			CPPUNIT_ASSERT_EQUAL(string(""), it.unit());
 			CPPUNIT_ASSERT(!it.range().isValid());
 		}
@@ -109,20 +104,16 @@ void TypesSAXHandlerTest::testParseWithRange()
 		m_parser.parseString(
 			"<types>"
 			"  <type id=\"temperature\">"
-			"    <name>NAME1</name>"
 			"    <range min=\"-10\" />"
 			"  </type>"
 			"  <type id=\"humidity\">"
-			"    <name>NAME2</name>"
 			"    <unit>&#176;C</unit>"
 			"    <range max=\"55\" />"
 			"  </type>"
 			"  <type id=\"on_off\">"
-			"    <name>NAME3</name>"
 			"    <range step=\"6\" />"
 			"  </type>"
 			"  <type id=\"rssi\">"
-			"    <name>NAME4</name>"
 			"    <range min=\"0.1\" max=\"0.5\" step=\"0.1\" />"
 			"  </type>"
 			"</types>")
@@ -130,7 +121,6 @@ void TypesSAXHandlerTest::testParseWithRange()
 
 	for (auto it : *m_handler) {
 		if (it.id() == TypeInfoID::parse("temperature")) {
-			CPPUNIT_ASSERT_EQUAL(string("NAME1"), it.name());
 			CPPUNIT_ASSERT_EQUAL(string(""), it.unit());
 			CPPUNIT_ASSERT(it.range().isValid());
 			CPPUNIT_ASSERT(it.range().hasMin());
@@ -139,7 +129,6 @@ void TypesSAXHandlerTest::testParseWithRange()
 			CPPUNIT_ASSERT(!it.range().hasStep());
 		}
 		else if (it.id() == TypeInfoID::parse("humidity")) {
-			CPPUNIT_ASSERT_EQUAL(string("NAME2"), it.name());
 			CPPUNIT_ASSERT_EQUAL(string("°C"), it.unit());
 			CPPUNIT_ASSERT(it.range().isValid());
 			CPPUNIT_ASSERT(!it.range().hasMin());
@@ -148,7 +137,6 @@ void TypesSAXHandlerTest::testParseWithRange()
 			CPPUNIT_ASSERT(!it.range().hasStep());
 		}
 		else if (it.id() == TypeInfoID::parse("on_off")) {
-			CPPUNIT_ASSERT_EQUAL(string("NAME3"), it.name());
 			CPPUNIT_ASSERT_EQUAL(string(""), it.unit());
 			CPPUNIT_ASSERT(it.range().isValid());
 			CPPUNIT_ASSERT(!it.range().hasMin());
@@ -157,7 +145,6 @@ void TypesSAXHandlerTest::testParseWithRange()
 			CPPUNIT_ASSERT_EQUAL(6.0, it.range().step());
 		}
 		else if (it.id() == TypeInfoID::parse("rssi")) {
-			CPPUNIT_ASSERT_EQUAL(string("NAME4"), it.name());
 			CPPUNIT_ASSERT_EQUAL(string(""), it.unit());
 			CPPUNIT_ASSERT(it.range().isValid());
 			CPPUNIT_ASSERT(it.range().hasMin());
@@ -180,14 +167,12 @@ void TypesSAXHandlerTest::testParseWithValues()
 		m_parser.parseString(
 			"<types>"
 			"  <type id=\"on_off\">"
-			"    <name>NAME1</name>"
 			"    <values>"
 			"      <value equals=\"0\">zero</value>"
 			"      <value equals=\"1\">one</value>"
 			"    </values>"
 			"  </type>"
 			"  <type id=\"enum\">"
-			"    <name>NAME2</name>"
 			"    <unit>&#176;C</unit>"
 			"    <values>"
 			"      <value equals=\"0\">zero</value>"
@@ -196,7 +181,6 @@ void TypesSAXHandlerTest::testParseWithValues()
 			"    </values>"
 			"  </type>"
 			"  <type id=\"availability\">"
-			"    <name>NAME3</name>"
 			"    <values>"
 			"      <value equals=\"-1\">minus one</value>"
 			"      <value equals=\"-2\">minus two</value>"
@@ -208,7 +192,6 @@ void TypesSAXHandlerTest::testParseWithValues()
 
 	for (auto it : *m_handler) {
 		if (it.id() == TypeInfoID::parse("on_off")) {
-			CPPUNIT_ASSERT_EQUAL(string("NAME1"), it.name());
 			CPPUNIT_ASSERT_EQUAL(string(""), it.unit());
 			CPPUNIT_ASSERT(!it.range().isValid());
 			CPPUNIT_ASSERT_EQUAL(2, it.values().size());
@@ -216,7 +199,6 @@ void TypesSAXHandlerTest::testParseWithValues()
 			CPPUNIT_ASSERT_EQUAL("one", it.values().at(1));
 		}
 		else if (it.id() == TypeInfoID::parse("enum")) {
-			CPPUNIT_ASSERT_EQUAL(string("NAME2"), it.name());
 			CPPUNIT_ASSERT_EQUAL(string("°C"), it.unit());
 			CPPUNIT_ASSERT(!it.range().isValid());
 			CPPUNIT_ASSERT_EQUAL(3, it.values().size());
@@ -225,7 +207,6 @@ void TypesSAXHandlerTest::testParseWithValues()
 			CPPUNIT_ASSERT_EQUAL("four", it.values().at(4));
 		}
 		else if (it.id() == TypeInfoID::parse("availability")) {
-			CPPUNIT_ASSERT_EQUAL(string("NAME3"), it.name());
 			CPPUNIT_ASSERT_EQUAL(string(""), it.unit());
 			CPPUNIT_ASSERT(!it.range().isValid());
 			CPPUNIT_ASSERT_EQUAL(3, it.values().size());
@@ -245,7 +226,6 @@ void TypesSAXHandlerTest::testParseHasBothValuesAndRange()
 		m_parser.parseString(
 			"<types>"
 			"  <type id=\"temperature\">"
-			"    <name>NAME1</name>"
 			"    <values>"
 			"      <value equals=\"0\">zero</value>"
 			"      <value equals=\"1\">one</value>"
@@ -260,7 +240,6 @@ void TypesSAXHandlerTest::testParseHasBothValuesAndRange()
 		m_parser.parseString(
 			"<types>"
 			"  <type id=\"humidity\">"
-			"    <name>NAME1</name>"
 			"    <range />"
 			"    <values>"
 			"      <value equals=\"0\">zero</value>"
@@ -278,7 +257,6 @@ void TypesSAXHandlerTest::testParseInvalidValues()
 		m_parser.parseString(
 			"<types>"
 			"  <type id=\"temperature\">"
-			"    <name>equals to string</name>"
 			"    <values>"
 			"      <value equals=\"0\">zero</value>"
 			"      <value equals=\"text\">one</value>"
@@ -292,7 +270,6 @@ void TypesSAXHandlerTest::testParseInvalidValues()
 		m_parser.parseString(
 			"<types>"
 			"  <type id=\"enum\">"
-			"    <name>duplicate</name>"
 			"    <values>"
 			"      <value equals=\"0\">zero</value>"
 			"      <value equals=\"0\">one</value>"
@@ -309,14 +286,12 @@ void TypesSAXHandlerTest::testParseWithLevels()
 		m_parser.parseString(
 			"<types>"
 			"  <type id=\"temperature\">"
-			"    <name>NAME1</name>"
 			"    <levels>"
 			"      <level equals=\"0\">zero</level>"
 			"      <level equals=\"1\">one</level>"
 			"    </levels>"
 			"  </type>"
 			"  <type id=\"humidity\">"
-			"    <name>NAME2</name>"
 			"    <unit>&#176;C</unit>"
 			"    <levels>"
 			"      <level min=\"0\" max=\"1\">0..1</level>"
@@ -325,7 +300,6 @@ void TypesSAXHandlerTest::testParseWithLevels()
 			"    </levels>"
 			"  </type>"
 			"  <type id=\"pressure\">"
-			"    <name>NAME3</name>"
 			"    <levels>"
 			"      <level max=\"10\">?..10</level>"
 			"      <level equals=\"11\">minus two</level>"
@@ -337,17 +311,14 @@ void TypesSAXHandlerTest::testParseWithLevels()
 
 	for (auto it : *m_handler) {
 		if (it.id() == TypeInfoID::parse("temperature")) {
-			CPPUNIT_ASSERT_EQUAL(string("NAME1"), it.name());
 			CPPUNIT_ASSERT_EQUAL(string(""), it.unit());
 			CPPUNIT_ASSERT_EQUAL(2, it.levels().size());
 		}
 		else if (it.id() == TypeInfoID::parse("humidity")) {
-			CPPUNIT_ASSERT_EQUAL(string("NAME2"), it.name());
 			CPPUNIT_ASSERT_EQUAL(string("°C"), it.unit());
 			CPPUNIT_ASSERT_EQUAL(3, it.levels().size());
 		}
 		else if (it.id() == TypeInfoID::parse("pressure")) {
-			CPPUNIT_ASSERT_EQUAL(string("NAME3"), it.name());
 			CPPUNIT_ASSERT_EQUAL(string(""), it.unit());
 			CPPUNIT_ASSERT_EQUAL(3, it.levels().size());
 		}
@@ -362,7 +333,6 @@ void TypesSAXHandlerTest::testParseOverlappingLevels()
 	CPPUNIT_ASSERT_THROW(m_parser.parseString(
 		"<types>"
 		"  <type>"
-		"    <name>NAME</name>"
 		"    <levels>"
 		"      <level equals=\"10\">10</level>"
 		"      <level equals=\"10\">10</level>"
@@ -374,7 +344,6 @@ void TypesSAXHandlerTest::testParseOverlappingLevels()
 	CPPUNIT_ASSERT_THROW(m_parser.parseString(
 		"<types>"
 		"  <type>"
-		"    <name>NAME</name>"
 		"    <levels>"
 		"      <level min=\"0\" max=\"10\">0..10</level>"
 		"      <level min=\"10\" max=\"20\">10..20</level>"
@@ -386,7 +355,6 @@ void TypesSAXHandlerTest::testParseOverlappingLevels()
 	CPPUNIT_ASSERT_THROW(m_parser.parseString(
 		"<types>"
 		"  <type>"
-		"    <name>NAME</name>"
 		"    <levels>"
 		"      <level equals=\"10\">10</level>"
 		"      <level min=\"10\" max=\"20\">10..20</level>"
@@ -398,7 +366,6 @@ void TypesSAXHandlerTest::testParseOverlappingLevels()
 	CPPUNIT_ASSERT_THROW(m_parser.parseString(
 		"<types>"
 		"  <type>"
-		"    <name>NAME</name>"
 		"    <levels>"
 		"      <level max=\"10\">10</level>"
 		"      <level min=\"10\">10</level>"
@@ -413,17 +380,7 @@ void TypesSAXHandlerTest::testParseMissingId()
 	CPPUNIT_ASSERT_THROW(m_parser.parseString(
 		"<types>"
 		"  <type>"
-		"    <name>NAME1</name>"
 		"  </type>"
-		"</types>"),
-		XMLException);
-}
-
-void TypesSAXHandlerTest::testParseMissingName()
-{
-	CPPUNIT_ASSERT_THROW(m_parser.parseString(
-		"<types>"
-		"  <type id=\"temperature\" />"
 		"</types>"),
 		XMLException);
 }
@@ -433,7 +390,6 @@ void TypesSAXHandlerTest::testParseMultipleUnits()
 	CPPUNIT_ASSERT_NO_THROW(m_parser.parseString(
 		"<types>"
 		"  <type id=\"pressure\">"
-		"    <name>weight</name>"
 		"    <units>"
 		"      <unit>g</unit>"
 		"      <unit mul-by=\"1000\">kg</unit>"
@@ -454,7 +410,6 @@ void TypesSAXHandlerTest::testParseWrongFirstUnit()
 	CPPUNIT_ASSERT_THROW(m_parser.parseString(
 		"<types>"
 		"  <type id=\"pressure\">"
-		"    <name>weight</name>"
 		"    <units>"
 		"      <unit mul-by=\"1\">g</unit>"
 		"    </units>"

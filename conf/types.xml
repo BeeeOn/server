@@ -1,13 +1,11 @@
 <types>
 	<type id="availability">
-		<name>availability</name>
 		<values>
 			<value equals="0">unavailable</value>
 			<value equals="1">available</value>
 		</values>
 	</type>
 	<type id="battery">
-		<name>battery</name>
 		<unit>&#37;</unit>
 		<range min="0" max="100" step="1" />
 		<levels>
@@ -18,12 +16,10 @@
 		</levels>
 	</type>
 	<type id="brightness">
-		<name>brightness</name>
 		<unit>&#37;</unit>
 		<range min="0" max="100" step="1" />
 	</type>
 	<type id="co2">
-		<name>co2</name>
 		<unit>ppm</unit>
 		<!-- https://www.kane.co.uk/knowledge-centre/what-are-safe-levels-of-co-and-co2-in-rooms -->
 		<!-- http://www.engineeringtoolbox.com/co2-comfort-level-d_1024.html -->
@@ -39,7 +35,6 @@
 		</levels>
 	</type>
 	<type id="fire">
-		<name>fire</name>
 		<values>
 			<value equals="0">no_fire</value>
 			<value equals="1">fire</value>
@@ -49,17 +44,14 @@
 		</levels>
 	</type>
 	<type id="humidity">
-		<name>humidity</name>
 		<unit>&#37;</unit>
 		<range min="0" max="100" step="1" />
 	</type>
 	<type id="luminance">
-		<name>luminance</name>
 		<unit>lux</unit>
 		<range min="0" max="1000000" step="1" />
 	</type>
 	<type id="motion">
-		<name>motion</name>
 		<values>
 			<value equals="0">no_motion</value>
 			<value equals="1">motion</value>
@@ -69,7 +61,6 @@
 		</levels>
 	</type>
 	<type id="noise">
-		<name>noise</name>
 		<unit>dB</unit>
 		<!-- http://www.noisehelp.com/noise-level-chart.html -->
 		<!-- http://www.noisehelp.com/noise-dose.html -->
@@ -84,21 +75,18 @@
 		</levels>
 	</type>
 	<type id="open_close">
-		<name>open_close</name>
 		<values>
 			<value equals="0">closed</value>
 			<value equals="1">open</value>
 		</values>
 	</type>
 	<type id="on_off">
-		<name>on_off</name>
 		<values>
 			<value equals="0">off</value>
 			<value equals="1">on</value>
 		</values>
 	</type>
 	<type id="performance">
-		<name>performance</name>
 		<unit>&#37;</unit>
 		<range min="0" max="100" step="1" />
 		<levels>
@@ -107,7 +95,6 @@
 		</levels>
 	</type>
 	<type id="pressure">
-		<name>pressure</name>
 		<units>
 			<unit>hPa</unit>
 			<unit div-by="100">Pa</unit>
@@ -119,7 +106,6 @@
 		<range min="800" max="1100" step="1" />
 	</type>
 	<type id="rssi">
-		<name>rssi</name>
 		<unit>&#37;</unit>
 		<range min="0" max="100" step="1" />
 		<levels>
@@ -129,7 +115,6 @@
 		</levels>
 	</type>
 	<type id="security_alert">
-		<name>security_alert</name>
 		<values>
 			<value equals="0">ease</value>
 			<value equals="1">alert</value>
@@ -139,19 +124,16 @@
 		</levels>
 	</type>
 	<type id="shake">
-		<name>shake</name>
 		<values>
 			<value equals="0">ease</value>
 			<value equals="1">shake</value>
 		</values>
 	</type>
 	<type id="temperature">
-		<name>temperature</name>
 		<!-- https://en.wikipedia.org/wiki/Celsius -->
 		<range min="-273.15" max="200" step="0.01" />
 	</type>
 	<type id="ultraviolet">
-		<name>ultraviolet</name>
 		<!-- https://en.wikipedia.org/wiki/Ultraviolet_index -->
 		<range min="0" max="11" step="0.1" />
 		<levels>

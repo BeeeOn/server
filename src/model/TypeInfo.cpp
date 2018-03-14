@@ -69,14 +69,9 @@ TypeInfo::TypeInfo(const TypeInfo::ID &id):
 {
 }
 
-void TypeInfo::setName(const string &name)
+string TypeInfo::name() const
 {
-	m_name = name;
-}
-
-const string &TypeInfo::name() const
-{
-	return m_name;
+	return id().toString();
 }
 
 void TypeInfo::setUnit(const string &unit)
