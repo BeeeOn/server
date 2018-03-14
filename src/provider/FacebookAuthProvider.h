@@ -12,10 +12,7 @@ namespace BeeeOn {
 
 	class FacebookAuthProvider : public OAuth2AuthProvider{
 	public:
-		FacebookAuthProvider():
-			OAuth2AuthProvider("facebook")
-		{
-		}
+		FacebookAuthProvider();
 
 	protected:
 		/**

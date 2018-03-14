@@ -30,6 +30,11 @@ using namespace Poco::JSON;
 using namespace Poco::Net;
 using namespace std;
 
+FacebookAuthProvider::FacebookAuthProvider():
+	OAuth2AuthProvider("facebook")
+{
+}
+
 bool FacebookAuthProvider::verifyAuthCode(
 		const AuthCodeCredentials &credentials,
 		AuthResult &info)
