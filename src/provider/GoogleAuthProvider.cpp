@@ -30,6 +30,11 @@ using namespace Poco::JSON;
 using namespace Poco::Net;
 using namespace BeeeOn;
 
+GoogleAuthProvider::GoogleAuthProvider():
+	OAuth2AuthProvider("google")
+{
+}
+
 bool GoogleAuthProvider::parseIdentity(const std::string &userInfo,
 		const GoogleTokens &tokens,
 		AuthResult &result)
