@@ -4,6 +4,7 @@
 
 #include <Poco/Nullable.h>
 #include <Poco/Timestamp.h>
+#include <Poco/URI.h>
 
 namespace BeeeOn {
 
@@ -63,6 +64,42 @@ public:
 	Poco::Nullable<Poco::Timestamp> notBefore() const;
 
 	/**
+	 * Claim that contains the first name of a person.
+	 *
+	 * @see http://ldapwiki.com/wiki/JSON%20Web%20Token%20Claims
+	 * @see http://ldapwiki.com/wiki/Given_name
+	 */
+	void setGivenName(const std::string &name);
+	Poco::Nullable<std::string> givenName() const;
+
+	/**
+	 * Claim that contains the last name of a person.
+	 *
+	 * @see http://ldapwiki.com/wiki/JSON%20Web%20Token%20Claims
+	 * @see http://ldapwiki.com/wiki/Family_name
+	 */
+	void setFamilyName(const std::string &name);
+	Poco::Nullable<std::string> familyName() const;
+
+	/**
+	 * Claim that contains URI pointing to the users' picture.
+	 *
+	 * @see http://ldapwiki.com/wiki/JSON%20Web%20Token%20Claims
+	 * @see http://ldapwiki.com/wiki/Picture
+	 */
+	void setPicture(const Poco::URI &uri);
+	Poco::Nullable<Poco::URI> picture() const;
+
+	/**
+	 * Claim that contains e-mail.
+	 *
+	 * @see http://ldapwiki.com/wiki/JSON%20Web%20Token%20Claims
+	 * @see http://ldapwiki.com/wiki/Email
+	 */
+	void setEmail(const std::string &email);
+	Poco::Nullable<std::string> email() const;
+
+	/**
 	 * Locale claim identifies the locale of the subject.
 	 *
 	 * @see http://ldapwiki.com/wiki/JSON%20Web%20Token%20Claims
@@ -97,6 +134,10 @@ private:
 	Poco::Nullable<Poco::Timestamp> m_expiration;
 	Poco::Nullable<Poco::Timestamp> m_issuedAt;
 	Poco::Nullable<Poco::Timestamp> m_notbefore;
+	Poco::Nullable<std::string> m_givenName;
+	Poco::Nullable<std::string> m_familyName;
+	Poco::Nullable<Poco::URI> m_picture;
+	Poco::Nullable<std::string> m_email;
 };
 
 }
