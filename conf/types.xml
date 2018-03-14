@@ -153,17 +153,11 @@
 	</type>
 	<type id="19">
 		<name>temperature</name>
-		<units>
-			<unit>&#176;C</unit>
-			<unit expr="${value} * 1.8 + 32">&#176;F</unit>
-			<unit expr="${value} + 273.15">K</unit>
-		</units>
 		<!-- https://en.wikipedia.org/wiki/Celsius -->
 		<range min="-273.15" max="200" step="0.01" />
 	</type>
 	<type id="20">
 		<name>ultraviolet</name>
-		<unit>UV</unit>
 		<!-- https://en.wikipedia.org/wiki/Ultraviolet_index -->
 		<range min="0" max="11" step="0.1" />
 		<levels>
