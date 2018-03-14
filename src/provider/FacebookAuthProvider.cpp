@@ -55,7 +55,7 @@ bool FacebookAuthProvider::verifyAccessToken(
 		const AccessTokenCredentials &credentials,
 		AuthResult &info)
 {
-	return processAccessToken(credentials.accessToken(), info);
+	return processAccessToken(credentials.accessToken().toString(), info);
 }
 
 string FacebookAuthProvider::requestAccessToken(const string &authCode) const

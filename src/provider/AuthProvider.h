@@ -4,6 +4,7 @@
 #include <map>
 #include <Poco/URI.h>
 
+#include "model/TokenID.h"
 #include "util/Loggable.h"
 
 namespace BeeeOn {
@@ -45,12 +46,12 @@ class AccessTokenCredentials : public Credentials {
 public:
 	AccessTokenCredentials(
 		const std::string &provider,
-		const std::string &accessToken);
+		const TokenID &accessToken);
 
-	const std::string &accessToken() const;
+	const TokenID &accessToken() const;
 
 private:
-	const std::string m_accessToken;
+	const TokenID m_accessToken;
 };
 
 class AuthResult {
