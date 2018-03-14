@@ -76,7 +76,7 @@ protected:
 	/**
 	 * Verification against a 3rd party.
 	 */
-	virtual bool verifyAuthCode(
+	virtual bool verifyAccessToken(
 			const AccessTokenCredentials &credentials,
 			AuthResult &info);
 

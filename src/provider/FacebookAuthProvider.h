@@ -25,7 +25,7 @@ namespace BeeeOn {
 		/**
 		 * Verifies the given access token and obtains user info.
 		 */
-		bool verifyAuthCode(
+		bool verifyAccessToken(
 			const AccessTokenCredentials &credentials,
 			AuthResult &info);
 
