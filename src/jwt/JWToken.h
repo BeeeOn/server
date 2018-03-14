@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include <set>
 
 #include <Poco/Nullable.h>
 #include <Poco/Timestamp.h>
@@ -38,8 +38,8 @@ public:
 	 * intended for. Audience is array of all recipients that
 	 * are intended to process token.
 	 */
-	void setAudience(const std::vector<std::string> &aud);
-	std::vector<std::string> audience() const;
+	void setAudience(const std::set<std::string> &aud);
+	std::set<std::string> audience() const;
 
 	/**
 	 * Expiration claim identifies the expiration time on (or
@@ -93,7 +93,7 @@ private:
 	std::string m_issuer;
 	std::string m_locale;
 	std::string m_subject;
-	std::vector<std::string> m_audience;
+	std::set<std::string> m_audience;
 	Poco::Nullable<Poco::Timestamp> m_expiration;
 	Poco::Nullable<Poco::Timestamp> m_issuedAt;
 	Poco::Nullable<Poco::Timestamp> m_notbefore;

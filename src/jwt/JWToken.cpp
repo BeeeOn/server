@@ -32,12 +32,12 @@ string JWToken::subject() const
 	return m_subject;
 }
 
-void JWToken::setAudience(const vector<string> &audience)
+void JWToken::setAudience(const set<string> &audience)
 {
 	m_audience = audience;
 }
 
-vector<string> JWToken::audience() const
+set<string> JWToken::audience() const
 {
 	return m_audience;
 }
@@ -94,5 +94,5 @@ bool JWToken::isAcceptable(const Timestamp &startTime) const
 
 bool JWToken::isInAudience(const string &recipient) const
 {
-	return find(m_audience.begin(), m_audience.end(), recipient) != m_audience.end();
+	return m_audience.find(recipient) != m_audience.end();
 }

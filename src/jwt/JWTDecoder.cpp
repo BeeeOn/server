@@ -1,6 +1,8 @@
 #include <cstdlib>
 #include <jwt.h>
 
+#include <set>
+
 #include <Poco/Error.h>
 #include <Poco/Exception.h>
 #include <Poco/Logger.h>
@@ -30,16 +32,16 @@ JWTDecoder::~JWTDecoder()
 {
 }
 
-static vector<string> deserializeArray(const string &arr)
+static set<string> deserializeArray(const string &arr)
 {
-	vector<string> deserialized;
+	set<string> deserialized;
 	Parser parser;
 
 	try {
 		Array::Ptr array = parser.parse(arr).extract<Array::Ptr>();
 
 		for (size_t i = 0; i < array->size(); i++)
-			deserialized.push_back(array->getElement<string>(i));
+			deserialized.emplace(array->getElement<string>(i));
 
 		return deserialized;
 	}
