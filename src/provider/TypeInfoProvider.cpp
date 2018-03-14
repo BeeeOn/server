@@ -24,4 +24,22 @@ void TypeInfoProvider::setTypesFile(const std::string &typesFile)
 void TypeInfoProvider::loadInfo()
 {
 	parseFile(m_typesFile, "type");
+
+	for (const auto &type : ModuleType::Type::all()) {
+		const TypeInfoID &id = {type};
+
+		if (findById(id).isNull()) {
+			TypeInfo info(id);
+			info.setName(type.toString());
+			info.setUnit(ModuleType(type).baseUnit().symbol());
+
+			if (!registerInfo(info))
+				continue;
+
+			logger().information("register type "
+				+ info.name()
+				+ " with ID " + info.id().toString(),
+				__FILE__, __LINE__);
+		}
+	}
 }

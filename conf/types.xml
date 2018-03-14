@@ -17,9 +17,6 @@
 			<level min="81" max="100">high</level>
 		</levels>
 	</type>
-	<type id="bitmap">
-		<name>bitmap</name>
-	</type>
 	<type id="brightness">
 		<name>brightness</name>
 		<unit>&#37;</unit>
@@ -40,9 +37,6 @@
 			<level min="10001" max="30000" attention="repeat">stay_minutes</level>
 			<level min="30001" attention="alert">dangerous</level>
 		</levels>
-	</type>
-	<type id="enum">
-		<name>enum</name>
 	</type>
 	<type id="fire">
 		<name>fire</name>
@@ -167,28 +161,5 @@
 			<level min="8" max="10.9" attention="single">very_high</level>
 			<level min="11" attention="single">extreme</level>
 		</levels>
-	</type>
-	<type id="power">
-		<name>power</name>
-		<units>
-			<unit>W</unit>
-			<unit div-by="1000">mW</unit>
-		</units>
-	</type>
-	<type id="voltage">
-		<name>voltage</name>
-		<units>
-			<unit>V</unit>
-			<unit div-by="1000">mV</unit>
-			<unit mul-by="1000">kV</unit>
-		</units>
-	</type>
-	<type id="current">
-		<name>current</name>
-		<units>
-			<unit>A</unit>
-			<unit div-by="1000">mA</unit>
-			<unit div-by="1000000">&#181;uA</unit>
-		</units>
 	</type>
 </types>
