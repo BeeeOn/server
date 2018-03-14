@@ -1,8 +1,6 @@
 #ifndef BEEEON_PERMIT_AUTH_PROVIDER_H
 #define BEEEON_PERMIT_AUTH_PROVIDER_H
 
-#include <Poco/Logger.h>
-#include <Poco/String.h>
 #include "provider/AuthProvider.h"
 
 namespace BeeeOn {
@@ -15,38 +13,11 @@ namespace BeeeOn {
  */
 class PermitAuthProvider : public AbstractAuthProvider {
 public:
-	PermitAuthProvider():
-		AbstractAuthProvider("permit")
-	{
-		logger().critical("SOME AUTHS WILL BE PERMITTED");
-	}
+	PermitAuthProvider();
 
-	void setResultProvider(const std::string &provider)
-	{
-		m_resultProvider = provider;
-	}
+	void setResultProvider(const std::string &provider);
 
-	bool authorize(const Credentials &cred, AuthResult &result)
-	{
-		std::string email;
-
-		if (typeid(cred) == typeid(AuthCodeCredentials)) {
-			const AuthCodeCredentials &authCodeCredentials =
-				static_cast<const AuthCodeCredentials &>(cred);
-
-			email = Poco::trim(authCodeCredentials.authCode());
-		}
-
-		if (email.empty()) {
-			logger().warning("extracted email is empty");
-			return false;
-		}
-
-		logger().critical("PERMIT AUTH: " + email);
-		result.setEmail(email);
-		result.setProvider(m_resultProvider);
-		return true;
-	}
+	bool authorize(const Credentials &cred, AuthResult &result) override;
 
 private:
 	std::string m_resultProvider;
