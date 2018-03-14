@@ -364,4 +364,25 @@
 			</control>
 		</modules>
 	</device>
+
+	<device id="60">
+		<name>Air quality sensor</name>
+		<vendor>Protronix</vendor>
+
+		<match>
+			<exact name="NLII-CO2+RH+T-IQRF" vendor="Protronix" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="temperature">
+				<name>Temperature</name>
+			</sensor>
+			<sensor id="1" type="humidity">
+				<name>Humidity</name>
+			</sensor>
+			<sensor id="2" type="co2">
+				<name>CO2</name>
+			</sensor>
+		</modules>
+	</device>
 </devices>
