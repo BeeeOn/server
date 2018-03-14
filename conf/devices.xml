@@ -338,7 +338,7 @@
 			<control id="0" type="19" manual-only="yes">
 				<name>Requested Temperature</name>
 			</control>
-			<sensor id="1" type="18">
+			<sensor id="1" type="19">
 				<name>Room Temperature</name>
 			</sensor>
 			<sensor id="2" type="2">
