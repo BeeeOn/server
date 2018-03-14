@@ -54,7 +54,7 @@ void TypeRestHandler::list(RestFlow &flow)
 
 void TypeRestHandler::detail(RestFlow &flow)
 {
-	SimpleID id = SimpleID::parse(flow.param("type_id"));
+	TypeInfoID id = TypeInfoID::parse(flow.param("type_id"));
 	SharedPtr<TypeInfo> info = m_provider->findById(id);
 
 	if (info.isNull())

@@ -86,7 +86,7 @@ class TestControlsListDetail(unittest.TestCase):
 		self.assertEqual("success", result["status"])
 		self.assertEqual(1, len(result["data"]))
 
-		self.assert_find_control(result["data"], "9", "brightness", "4", "9", False)
+		self.assert_find_control(result["data"], "9", "brightness", "brightness", "9", False)
 
 	"""
 	Ask for details about brightness control of device 4931887558509748622.
@@ -102,7 +102,7 @@ class TestControlsListDetail(unittest.TestCase):
 		result = json.loads(content)
 		self.assertEqual("success", result["status"])
 
-		self.assert_control(result["data"], "9", "brightness", "4", "9", False)
+		self.assert_control(result["data"], "9", "brightness", "brightness", "9", False)
 
 	"""
 	There is no control of id 1000 for device 4931887558509748622.

@@ -48,7 +48,7 @@ class TestLocalizationAfterLogin(unittest.TestCase):
 	"""
 	def test1_type_availability_multilang(self):
 		# Session language is used
-		req = GET(config.ui_host, config.ui_port, "/types/1")
+		req = GET(config.ui_host, config.ui_port, "/types/availability")
 		req.authorize(self.session)
 		response, content = req()
 
@@ -60,7 +60,7 @@ class TestLocalizationAfterLogin(unittest.TestCase):
 		self.assertEqual("availability", result["data"]["name"])
 
 		# Accept-Language does NOT override session language
-		req = GET(config.ui_host, config.ui_port, "/types/1")
+		req = GET(config.ui_host, config.ui_port, "/types/availability")
 		req.authorize(self.session)
 		response, content = req()
 
@@ -72,7 +72,7 @@ class TestLocalizationAfterLogin(unittest.TestCase):
 		self.assertEqual("availability", result["data"]["name"])
 
 		# Accept-Language DOES override session language
-		req = GET(config.ui_host, config.ui_port, "/types/1")
+		req = GET(config.ui_host, config.ui_port, "/types/availability")
 		req.authorize(self.session)
 		req["Accept-Language"] = "cs-CZ"
 		req["X-Prefer-Request-Language"] = "yes"

@@ -10,6 +10,56 @@ using namespace std;
 using namespace Poco;
 using namespace BeeeOn;
 
+TypeInfoID::TypeInfoID():
+	m_type(ModuleType::Type::TYPE_UNKNOWN)
+{
+}
+
+TypeInfoID::TypeInfoID(const ModuleType::Type::Raw &raw):
+	m_type(raw)
+{
+}
+
+TypeInfoID::TypeInfoID(const ModuleType::Type &type):
+	m_type(type)
+{
+}
+
+string TypeInfoID::toString() const
+{
+	return m_type.toString();
+}
+
+TypeInfoID::operator int() const
+{
+	return m_type;
+}
+
+bool TypeInfoID::operator ==(const TypeInfoID &other) const
+{
+	return m_type == other.m_type;
+}
+
+bool TypeInfoID::operator <(const TypeInfoID &other) const
+{
+	return m_type < other.m_type;
+}
+
+bool TypeInfoID::operator <=(const TypeInfoID &other) const
+{
+	return m_type <= other.m_type;
+}
+
+TypeInfoID TypeInfoID::parse(const string &input)
+{
+	try {
+		return TypeInfoID(ModuleType::Type::parse(input));
+	}
+	catch (const InvalidArgumentException &e) {
+		throw NotFoundException("no such type", e);
+	}
+}
+
 TypeInfo::TypeInfo()
 {
 }

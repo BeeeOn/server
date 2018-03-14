@@ -196,7 +196,7 @@ void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
 					NumberFormatter::format(current.at().epochTime()));
 		}
 
-		attrs.addAttribute("", "type", "type", "", module.type()->id().toString());
+		attrs.addAttribute("", "type", "type", "", to_string(int(module.type()->id())));
 
 		if (!module.type()->unit().empty())
 			attrs.addAttribute("", "type-unit", "type-unit", "", module.type()->unit());

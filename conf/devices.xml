@@ -8,7 +8,7 @@
 		</match>
 
 		<modules>
-			<sensor id="0" type="15">
+			<sensor id="0" type="pressure">
 				<name>Pressure</name>
 			</sensor>
 		</modules>
@@ -23,19 +23,19 @@
 		</match>
 
 		<modules>
-			<sensor id="0" type="2">
+			<sensor id="0" type="battery">
 				<name>Battery</name>
 			</sensor>
-			<sensor id="1" type="19">
+			<sensor id="1" type="temperature">
 				<name>Room Temperature</name>
 			</sensor>
-			<sensor id="2" type="19">
+			<sensor id="2" type="temperature">
 				<name>Outside Temperature</name>
 			</sensor>
-			<sensor id="3" type="8">
+			<sensor id="3" type="humidity">
 				<name>Room Humidity</name>
 			</sensor>
-			<sensor id="4" type="16">
+			<sensor id="4" type="rssi">
 				<name>Signal strength</name>
 			</sensor>
 		</modules>
@@ -50,13 +50,13 @@
 		</match>
 
 		<modules>
-			<sensor id="0" type="2">
+			<sensor id="0" type="battery">
 				<name>Battery</name>
 			</sensor>
-			<sensor id="1" type="19">
+			<sensor id="1" type="temperature">
 				<name>Room Temperature</name>
 			</sensor>
-			<sensor id="2" type="16">
+			<sensor id="2" type="rssi">
 				<name>Signal strength</name>
 			</sensor>
 		</modules>
@@ -71,7 +71,7 @@
 		</match>
 
 		<modules>
-			<control id="0" type="13">
+			<control id="0" type="on_off">
 				<name>On/Off</name>
 			</control>
 		</modules>
@@ -86,10 +86,10 @@
 		</match>
 
 		<modules>
-			<control id="0" type="13">
+			<control id="0" type="on_off">
 				<name>On/Off</name>
 			</control>
-			<control id="1" type="4">
+			<control id="1" type="brightness">
 				<name>Brightness</name>
 			</control>
 		</modules>
@@ -104,10 +104,10 @@
 		</match>
 
 		<modules>
-			<control id="0" type="13">
+			<control id="0" type="on_off">
 				<name>On/Off</name>
 			</control>
-			<control id="1" type="4">
+			<control id="1" type="brightness">
 				<name>Brightness</name>
 			</control>
 		</modules>
@@ -122,31 +122,31 @@
 		</match>
 
 		<modules>
-			<sensor id="0" type="6" subtype="MOD_BOILER_STATUS">
+			<sensor id="0" type="enum" subtype="MOD_BOILER_STATUS">
 				<name>Status</name>
 			</sensor>
-			<sensor id="1" type="6" subtype="MOD_BOILER_MODE">
+			<sensor id="1" type="enum" subtype="MOD_BOILER_MODE">
 				<name>Mode</name>
 			</sensor>
-			<sensor id="2" type="19">
+			<sensor id="2" type="temperature">
 				<name>Water Temperature</name>
 			</sensor>
-			<sensor id="3" type="19">
+			<sensor id="3" type="temperature">
 				<name>Outer Temperature</name>
 			</sensor>
-			<sensor id="4" type="19">
+			<sensor id="4" type="temperature">
 				<name>Avarage Outer Temperature</name>
 			</sensor>
-			<sensor id="5" type="14">
+			<sensor id="5" type="performance">
 				<name>Boiler Performance</name>
 			</sensor>
-			<sensor id="6" type="15">
+			<sensor id="6" type="pressure">
 				<name>Boiler Pressure</name>
 			</sensor>
-			<sensor id="7" type="3">
+			<sensor id="7" type="bitmap">
 				<name>OpenTherm Fault Flags</name>
 			</sensor>
-			<sensor id="8" type="3">
+			<sensor id="8" type="bitmap">
 				<name>OpenTherm OEM Flags</name>
 			</sensor>
 		</modules>
@@ -161,31 +161,31 @@
 		</match>
 
 		<modules>
-			<control id="0" type="6" subtype="MOD_BOILER_OPERATION_TYPE">
+			<control id="0" type="enum" subtype="MOD_BOILER_OPERATION_TYPE">
 				<name>Operation Type</name>
 			</control>
-			<control id="1" type="6" subtype="MOD_BOILER_OPERATION_MODE">
+			<control id="1" type="enum" subtype="MOD_BOILER_OPERATION_MODE">
 				<name>Operation Mode</name>
 			</control>
-			<sensor id="2" type="19">
+			<sensor id="2" type="temperature">
 				<name>Requested Room Temperature</name>
 			</sensor>
-			<sensor id="3" type="19">
+			<sensor id="3" type="temperature">
 				<name>Room Temperature</name>
 			</sensor>
-			<control id="4" type="19">
+			<control id="4" type="temperature">
 				<name>Requested Water Temperature</name>
 			</control>
-			<sensor id="5" type="19">
+			<sensor id="5" type="temperature">
 				<name>Water Temperature</name>
 			</sensor>
-			<control id="6" type="19">
+			<control id="6" type="temperature">
 				<name>Manual Requested Room Temperature</name>
 			</control>
-			<control id="7" type="19">
+			<control id="7" type="temperature">
 				<name>Manual Requested Water Temperature</name>
 			</control>
-			<control id="8" type="19">
+			<control id="8" type="temperature">
 				<name>Manual Requested TUV Temperature</name>
 			</control>
 		</modules>
@@ -200,7 +200,7 @@
 		</match>
 
 		<modules>
-			<sensor id="0" type="1">
+			<sensor id="0" type="availability">
 				<name>Available</name>
 			</sensor>
 		</modules>
@@ -215,7 +215,7 @@
 		</match>
 
 		<modules>
-			<control id="0" type="13">
+			<control id="0" type="on_off">
 				<name>On/Off</name>
 			</control>
 		</modules>
@@ -230,13 +230,13 @@
 		</match>
 
 		<modules>
-			<sensor id="0" type="18">
+			<sensor id="0" type="shake">
 				<name>Shake</name>
 			</sensor>
-			<sensor id="1" type="17">
+			<sensor id="1" type="security_alert">
 				<name>Security Alert</name>
 			</sensor>
-			<sensor id="2" type="2">
+			<sensor id="2" type="battery">
 				<name>Battery</name>
 			</sensor>
 		</modules>
@@ -251,13 +251,13 @@
 		</match>
 
 		<modules>
-			<sensor id="0" type="7">
+			<sensor id="0" type="fire">
 				<name>Fire Sensor Alarm</name>
 			</sensor>
-			<sensor id="1" type="17">
+			<sensor id="1" type="security_alert">
 				<name>Security Alert</name>
 			</sensor>
-			<sensor id="2" type="2">
+			<sensor id="2" type="battery">
 				<name>Battery</name>
 			</sensor>
 		</modules>
@@ -272,13 +272,13 @@
 		</match>
 
 		<modules>
-			<sensor id="0" type="12">
+			<sensor id="0" type="open_close">
 				<name>Open/Closed</name>
 			</sensor>
-			<sensor id="1" type="17">
+			<sensor id="1" type="security_alert">
 				<name>Security Alert</name>
 			</sensor>
-			<sensor id="2" type="2">
+			<sensor id="2" type="battery">
 				<name>Battery</name>
 			</sensor>
 		</modules>
@@ -293,13 +293,13 @@
 		</match>
 
 		<modules>
-			<sensor id="0" type="12">
+			<sensor id="0" type="open_close">
 				<name>Open/Closed</name>
 			</sensor>
-			<sensor id="1" type="17">
+			<sensor id="1" type="security_alert">
 				<name>Security Alert</name>
 			</sensor>
-			<sensor id="2" type="2">
+			<sensor id="2" type="battery">
 				<name>Battery</name>
 			</sensor>
 		</modules>
@@ -314,13 +314,13 @@
 		</match>
 
 		<modules>
-			<sensor id="0" type="12">
+			<sensor id="0" type="open_close">
 				<name>Open/Closed</name>
 			</sensor>
-			<sensor id="1" type="17">
+			<sensor id="1" type="security_alert">
 				<name>Security Alert</name>
 			</sensor>
-			<sensor id="2" type="2">
+			<sensor id="2" type="battery">
 				<name>Battery</name>
 			</sensor>
 		</modules>
@@ -335,13 +335,13 @@
 		</match>
 
 		<modules>
-			<control id="0" type="19" manual-only="yes">
+			<control id="0" type="temperature" manual-only="yes">
 				<name>Requested Temperature</name>
 			</control>
-			<sensor id="1" type="19">
+			<sensor id="1" type="temperature">
 				<name>Room Temperature</name>
 			</sensor>
-			<sensor id="2" type="2">
+			<sensor id="2" type="battery">
 				<name>Battery</name>
 			</sensor>
 		</modules>
@@ -356,10 +356,10 @@
 		</match>
 
 		<modules>
-			<control id="0" type="13">
+			<control id="0" type="on_off">
 				<name>On/Off</name>
 			</control>
-			<control id="1" type="4">
+			<control id="1" type="brightness">
 				<name>Brightness</name>
 			</control>
 		</modules>
