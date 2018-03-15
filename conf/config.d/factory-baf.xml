@@ -9,5 +9,9 @@
 
 		<instance name="publishingWatcher" class="BeeeOn::Automation::PublishingWatcher">
 		</instance>
+
+		<instance name="zmqContext" class="BeeeOn::ZeroMQContext">
+			<set name="socketLinger" time="${baf.publish.zeromq.socket.linger}" />
+		</instance>
 	</factory>
 </system>

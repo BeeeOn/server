@@ -246,6 +246,7 @@ endif()
 
 if (ZEROMQ)
 	file (GLOB ZEROMQ_SOURCES
+		${PROJECT_SOURCE_DIR}/zeromq/ZeroMQContext.cpp
 	)
 	list(APPEND SOURCES ${ZEROMQ_SOURCES})
 else()
