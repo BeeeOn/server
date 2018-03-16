@@ -21,7 +21,7 @@ Required prerequisites for development:
 * Poco library 1.7.7+ devel
 * icu and libicu-devel
 * cppunit-devel
-* postgresql-server
+* postgresql-server (9.2+)
 * python3
   * testing.postgresql
   * http.client
@@ -46,7 +46,7 @@ Required prerequisites for deployment:
 
 * Poco library 1.7.7+
 * icu and libicu
-* postgresql-server
+* postgresql-server (9.2+)
 * postgresql
 * sqitch
 
