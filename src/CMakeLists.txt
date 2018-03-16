@@ -21,6 +21,7 @@ add_definitions(-std=c++11)
 file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/baf/EventPublisher.cpp
 	${PROJECT_SOURCE_DIR}/baf/GatewayWatcher.cpp
+	${PROJECT_SOURCE_DIR}/baf/PublishingWatcher.cpp
 	${PROJECT_SOURCE_DIR}/jwt/JWToken.cpp
 	${PROJECT_SOURCE_DIR}/provider/AccessTokenCredentials.cpp
 	${PROJECT_SOURCE_DIR}/provider/AuthProvider.cpp

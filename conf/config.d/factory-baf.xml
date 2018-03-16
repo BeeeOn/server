@@ -6,5 +6,8 @@
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="translatorFactory" ref="translatorFactory" />
 		</instance>
+
+		<instance name="publishingWatcher" class="BeeeOn::Automation::PublishingWatcher">
+		</instance>
 	</factory>
 </system>

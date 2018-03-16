@@ -23,6 +23,7 @@
 			<set name="threadIdleTime" time="${gws.comm.threadIdleTime}" />
 			<set name="asyncExecutor" ref="asyncExecutor" />
 			<add name="listeners" ref="bafGatewayWatcher" />
+			<add name="listeners" ref="publishingWatcher" if-yes="${baf.publish.gateways.enable}" />
 		</instance>
 
 		<instance name="responseExpectedQueue" class="BeeeOn::GWResponseExpectedQueue">
@@ -38,6 +39,7 @@
 			<set name="deviceService" ref="gwsDeviceService" />
 			<set name="sensorHistoryService" ref="gwsSensorHistoryService" />
 			<set name="eventsExecutor" ref="asyncExecutor" />
+			<add name="dataListeners" ref="publishingWatcher" if-yes="${baf.publish.data.enable}" />
 		</instance>
 
 		<instance name="gatewayScanController" class="BeeeOn::GatewayScanController">
