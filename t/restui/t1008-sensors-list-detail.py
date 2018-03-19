@@ -86,11 +86,11 @@ class TestSensorsListDetail(unittest.TestCase):
 		self.assertEqual("success", result["status"])
 		self.assertEqual(5, len(result["data"]))
 
-		self.assert_find_sensor(result["data"], "0", "room temperature", "19", "0")
-		self.assert_find_sensor(result["data"], "1", "outside temperature", "19", "1")
-		self.assert_find_sensor(result["data"], "2", "room humidity", "8", "2")
-		self.assert_find_sensor(result["data"], "3", "battery", "2", "3", False)
-		self.assert_find_sensor(result["data"], "4", "signal", "16", "4", False)
+		self.assert_find_sensor(result["data"], "0", "room temperature", "temperature", "0")
+		self.assert_find_sensor(result["data"], "1", "outside temperature", "temperature", "1")
+		self.assert_find_sensor(result["data"], "2", "room humidity", "humidity", "2")
+		self.assert_find_sensor(result["data"], "3", "battery", "battery", "3", False)
+		self.assert_find_sensor(result["data"], "4", "signal", "rssi", "4", False)
 
 	"""
 	Ask for details about temperature sensor of device 4698890485085053774.
@@ -106,7 +106,7 @@ class TestSensorsListDetail(unittest.TestCase):
 		result = json.loads(content)
 		self.assertEqual("success", result["status"])
 
-		self.assert_sensor(result["data"], "0", "room temperature", "19", "0")
+		self.assert_sensor(result["data"], "0", "room temperature", "temperature", "0")
 		self.assertEqual("19.500000", result["data"]["current"]["value"])
 
 	"""
@@ -141,15 +141,15 @@ class TestSensorsListDetail(unittest.TestCase):
 		self.assertEqual("success", result["status"])
 		self.assertEqual(9, len(result["data"]))
 
-		self.assert_find_sensor(result["data"], "0", "temperature", "19", "0", False)
-		self.assert_find_sensor(result["data"], "1", "humidity", "8", "1", False)
-		self.assert_find_sensor(result["data"], "2", "noise", "11", "2", False)
-		self.assert_find_sensor(result["data"], "3", "temperature", "19", "3", False)
-		self.assert_find_sensor(result["data"], "4", "humidity", "8", "4", False)
-		self.assert_find_sensor(result["data"], "5", "noise", "11", "5", False)
-		self.assert_find_sensor(result["data"], "6", "temperature", "19", "6", False)
-		self.assert_find_sensor(result["data"], "7", "humidity", "8", "7", False)
-		self.assert_find_sensor(result["data"], "8", "noise", "11", "8", False)
+		self.assert_find_sensor(result["data"], "0", "temperature", "temperature", "0", False)
+		self.assert_find_sensor(result["data"], "1", "humidity", "humidity", "1", False)
+		self.assert_find_sensor(result["data"], "2", "noise", "noise", "2", False)
+		self.assert_find_sensor(result["data"], "3", "temperature", "temperature", "3", False)
+		self.assert_find_sensor(result["data"], "4", "humidity", "humidity", "4", False)
+		self.assert_find_sensor(result["data"], "5", "noise", "noise", "5", False)
+		self.assert_find_sensor(result["data"], "6", "temperature", "temperature", "6", False)
+		self.assert_find_sensor(result["data"], "7", "humidity", "humidity", "7", False)
+		self.assert_find_sensor(result["data"], "8", "noise", "noise", "8", False)
 
 	"""
 	Ask for details about temperature sensor of device 4931887558509748622.
@@ -165,7 +165,7 @@ class TestSensorsListDetail(unittest.TestCase):
 		result = json.loads(content)
 		self.assertEqual("success", result["status"])
 
-		self.assert_sensor(result["data"], "0", "temperature", "19", "0", False)
+		self.assert_sensor(result["data"], "0", "temperature", "temperature", "0", False)
 		self.assertEqual("zone 1", result["data"]["group"])
 
 	"""

@@ -13,7 +13,6 @@ using namespace BeeeOn;
 
 TypesSAXHandler::TypesSAXHandler()
 {
-	m_typeExpect.insert("name");
 	m_typeExpect.insert("unit");
 	m_typeExpect.insert("units");
 	m_typeExpect.insert("range");
@@ -26,7 +25,6 @@ TypesSAXHandler::TypesSAXHandler()
 
 	m_levelsExpect.insert("level");
 
-	m_leafElements.insert("name");
 	m_leafElements.insert("unit");
 	m_leafElements.insert("value");
 	m_leafElements.insert("level");
@@ -57,7 +55,6 @@ void TypesSAXHandler::startElement(
 			logger().debug("parsing type of @id " + id, __FILE__, __LINE__);
 
 		m_temp.setId(TypeInfoID::parse(id));
-		m_temp.setName("");
 		m_temp.setUnit("");
 		m_temp.setRange(TypeInfo::Range());
 		m_temp.setValues({});
@@ -160,13 +157,6 @@ void TypesSAXHandler::endElement(const SAXElement &element)
 				__FILE__, __LINE__);
 	}
 
-	if (isPathFromRoot("types", "type", "name")) {
-		m_temp.setName(element.content);
-
-		if (logger().debug())
-			logger().debug("parsing @name " + element.content, __FILE__, __LINE__);
-	}
-
 	if (isPathFromRoot("types", "type", "unit")) {
 		m_temp.setUnit(element.content);
 
@@ -223,9 +213,6 @@ void TypesSAXHandler::endElement(const SAXElement &element)
 	}
 
 	if (isPathFromRoot("types", "type")) {
-		if (m_temp.name().empty())
-			error("missing name of type " + m_temp);
-
 		if (m_result.find(m_temp) != m_result.end())
 			error("type of id " + m_temp.id().toString() + " already exists");
 

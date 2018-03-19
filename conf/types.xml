@@ -1,13 +1,11 @@
 <types>
-	<type id="1">
-		<name>availability</name>
+	<type id="availability">
 		<values>
 			<value equals="0">unavailable</value>
 			<value equals="1">available</value>
 		</values>
 	</type>
-	<type id="2">
-		<name>battery</name>
+	<type id="battery">
 		<unit>&#37;</unit>
 		<range min="0" max="100" step="1" />
 		<levels>
@@ -17,16 +15,11 @@
 			<level min="81" max="100">high</level>
 		</levels>
 	</type>
-	<type id="3">
-		<name>bitmap</name>
-	</type>
-	<type id="4">
-		<name>brightness</name>
+	<type id="brightness">
 		<unit>&#37;</unit>
 		<range min="0" max="100" step="1" />
 	</type>
-	<type id="5">
-		<name>co2</name>
+	<type id="co2">
 		<unit>ppm</unit>
 		<!-- https://www.kane.co.uk/knowledge-centre/what-are-safe-levels-of-co-and-co2-in-rooms -->
 		<!-- http://www.engineeringtoolbox.com/co2-comfort-level-d_1024.html -->
@@ -41,11 +34,7 @@
 			<level min="30001" attention="alert">dangerous</level>
 		</levels>
 	</type>
-	<type id="6">
-		<name>enum</name>
-	</type>
-	<type id="7">
-		<name>fire</name>
+	<type id="fire">
 		<values>
 			<value equals="0">no_fire</value>
 			<value equals="1">fire</value>
@@ -54,18 +43,15 @@
 			<level equals="1" attention="alert" />
 		</levels>
 	</type>
-	<type id="8">
-		<name>humidity</name>
+	<type id="humidity">
 		<unit>&#37;</unit>
 		<range min="0" max="100" step="1" />
 	</type>
-	<type id="9">
-		<name>luminance</name>
+	<type id="luminance">
 		<unit>lux</unit>
 		<range min="0" max="1000000" step="1" />
 	</type>
-	<type id="10">
-		<name>motion</name>
+	<type id="motion">
 		<values>
 			<value equals="0">no_motion</value>
 			<value equals="1">motion</value>
@@ -74,8 +60,7 @@
 			<level equals="1" attention="single" />
 		</levels>
 	</type>
-	<type id="11">
-		<name>noise</name>
+	<type id="noise">
 		<unit>dB</unit>
 		<!-- http://www.noisehelp.com/noise-level-chart.html -->
 		<!-- http://www.noisehelp.com/noise-dose.html -->
@@ -89,22 +74,19 @@
 			<level min="140" attention="alert">damaging</level>
 		</levels>
 	</type>
-	<type id="12">
-		<name>open_close</name>
+	<type id="open_close">
 		<values>
 			<value equals="0">closed</value>
 			<value equals="1">open</value>
 		</values>
 	</type>
-	<type id="13">
-		<name>on_off</name>
+	<type id="on_off">
 		<values>
 			<value equals="0">off</value>
 			<value equals="1">on</value>
 		</values>
 	</type>
-	<type id="14">
-		<name>performance</name>
+	<type id="performance">
 		<unit>&#37;</unit>
 		<range min="0" max="100" step="1" />
 		<levels>
@@ -112,8 +94,7 @@
 			<level min="95">high_load</level>
 		</levels>
 	</type>
-	<type id="15">
-		<name>pressure</name>
+	<type id="pressure">
 		<units>
 			<unit>hPa</unit>
 			<unit div-by="100">Pa</unit>
@@ -124,8 +105,7 @@
 		<!-- https://en.wikipedia.org/wiki/Atmospheric_pressure -->
 		<range min="800" max="1100" step="1" />
 	</type>
-	<type id="16">
-		<name>rssi</name>
+	<type id="rssi">
 		<unit>&#37;</unit>
 		<range min="0" max="100" step="1" />
 		<levels>
@@ -134,8 +114,7 @@
 			<level min="81" max="100">high</level>
 		</levels>
 	</type>
-	<type id="17">
-		<name>security_alert</name>
+	<type id="security_alert">
 		<values>
 			<value equals="0">ease</value>
 			<value equals="1">alert</value>
@@ -144,20 +123,17 @@
 			<level equals="1" attention="alert" />
 		</levels>
 	</type>
-	<type id="18">
-		<name>shake</name>
+	<type id="shake">
 		<values>
 			<value equals="0">ease</value>
 			<value equals="1">shake</value>
 		</values>
 	</type>
-	<type id="19">
-		<name>temperature</name>
+	<type id="temperature">
 		<!-- https://en.wikipedia.org/wiki/Celsius -->
 		<range min="-273.15" max="200" step="0.01" />
 	</type>
-	<type id="20">
-		<name>ultraviolet</name>
+	<type id="ultraviolet">
 		<!-- https://en.wikipedia.org/wiki/Ultraviolet_index -->
 		<range min="0" max="11" step="0.1" />
 		<levels>
@@ -167,28 +143,5 @@
 			<level min="8" max="10.9" attention="single">very_high</level>
 			<level min="11" attention="single">extreme</level>
 		</levels>
-	</type>
-	<type id="21">
-		<name>power</name>
-		<units>
-			<unit>W</unit>
-			<unit div-by="1000">mW</unit>
-		</units>
-	</type>
-	<type id="22">
-		<name>voltage</name>
-		<units>
-			<unit>V</unit>
-			<unit div-by="1000">mV</unit>
-			<unit mul-by="1000">kV</unit>
-		</units>
-	</type>
-	<type id="23">
-		<name>current</name>
-		<units>
-			<unit>A</unit>
-			<unit div-by="1000">mA</unit>
-			<unit div-by="1000000">&#181;uA</unit>
-		</units>
 	</type>
 </types>

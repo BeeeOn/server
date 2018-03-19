@@ -44,7 +44,7 @@ class TestTypesListDetail(unittest.TestCase):
 
 		result = json.loads(content)
 		self.assertEqual("success", result["status"])
-		self.assertEqual(23, len(result["data"]))
+		self.assertEqual(24, len(result["data"]))
 
 	def test2_detail_of_non_existing(self):
 		req = GET(config.ui_host, config.ui_port, "/types/12904232")
@@ -58,7 +58,7 @@ class TestTypesListDetail(unittest.TestCase):
 		self.assertEqual("requested resource does not exist", result["message"])
 
 	def test3_detail_of_battery(self):
-		req = GET(config.ui_host, config.ui_port, "/types/2")
+		req = GET(config.ui_host, config.ui_port, "/types/battery")
 		req.authorize(self.session)
 		response, content = req()
 
@@ -102,17 +102,17 @@ class TestTypesListDetail(unittest.TestCase):
 			self.assertFalse("step" in type["range"])
 
 	def test4_check_types_with_ranges(self):
-		self.assure_range("2", "battery", 0, 100, 1)
-		self.assure_range("4", "brightness", 0, 100, 1)
-		self.assure_range("5", "CO2", 0, 1000000, 1)
-		self.assure_range("8", "humidity", 0, 100, 1)
-		self.assure_range("9", "luminance", 0, 1000000, 1)
-		self.assure_range("11", "noise", 0, 200, 1)
-		self.assure_range("14", "performance", 0, 100, 1)
-		self.assure_range("15", "pressure", 800, 1100, 1)
-		self.assure_range("16", "signal", 0, 100, 1)
-		self.assure_range("19", "temperature", -273.15, 200, 0.01)
-		self.assure_range("20", "UV", 0, 11, 0.1)
+		self.assure_range("battery", "battery", 0, 100, 1)
+		self.assure_range("brightness", "brightness", 0, 100, 1)
+		self.assure_range("co2", "CO2", 0, 1000000, 1)
+		self.assure_range("humidity", "humidity", 0, 100, 1)
+		self.assure_range("luminance", "luminance", 0, 1000000, 1)
+		self.assure_range("noise", "noise", 0, 200, 1)
+		self.assure_range("performance", "performance", 0, 100, 1)
+		self.assure_range("pressure", "pressure", 800, 1100, 1)
+		self.assure_range("rssi", "signal", 0, 100, 1)
+		self.assure_range("temperature", "temperature", -273.15, 200, 0.01)
+		self.assure_range("ultraviolet", "UV", 0, 11, 0.1)
 
 	def assure_values(self, id, name, values):
 		req = GET(config.ui_host, config.ui_port, "/types/" + id)
@@ -134,13 +134,13 @@ class TestTypesListDetail(unittest.TestCase):
 			self.assertEqual(values[key], type["values"][key])
 
 	def test5_check_types_with_values(self):
-		self.assure_values("1", "availability", {"0": "unavailable", "1": "available"})
-		self.assure_values("7", "fire", {"0": "no fire", "1": "fire"})
-		self.assure_values("10", "motion", {"0": "no motion", "1": "motion"})
-		self.assure_values("12", "open/close", {"0": "closed", "1": "open"})
-		self.assure_values("13", "on/off", {"0": "off", "1": "on"})
-		self.assure_values("17", "security alert", {"0": "ease", "1": "alert"})
-		self.assure_values("18", "shake", {"0": "ease", "1": "shake"})
+		self.assure_values("availability", "availability", {"0": "unavailable", "1": "available"})
+		self.assure_values("fire", "fire", {"0": "no fire", "1": "fire"})
+		self.assure_values("motion", "motion", {"0": "no motion", "1": "motion"})
+		self.assure_values("open_close", "open/close", {"0": "closed", "1": "open"})
+		self.assure_values("on_off", "on/off", {"0": "off", "1": "on"})
+		self.assure_values("security_alert", "security alert", {"0": "ease", "1": "alert"})
+		self.assure_values("shake", "shake", {"0": "ease", "1": "shake"})
 
 	def assure_levels(self, id, name, levels):
 		req = GET(config.ui_host, config.ui_port, "/types/" + id)
@@ -183,13 +183,13 @@ class TestTypesListDetail(unittest.TestCase):
 				self.assertEqual(levels[i][3], type["levels"][i]["name"])
 
 	def test6_check_types_with_levels(self):
-		self.assure_levels("2", "battery", [
+		self.assure_levels("battery", "battery", [
 			(0, 10, "single", "critical"),
 			(11, 25, "single", "low"),
 			(26, 80, None, "medium"),
 			(81, 100, None, "high")
 		])
-		self.assure_levels("5", "CO2", [
+		self.assure_levels("co2", "CO2", [
 			(None, 450, None, "normal outdoor"),
 			(451, 1000, None, "normal indoor"),
 			(1001, 2500, None, "poor air"),
@@ -198,13 +198,13 @@ class TestTypesListDetail(unittest.TestCase):
 			(10001, 30000, "repeat" , "dangerous after several minutes"),
 			(30001, None, "alert", "extreme and dangerous")
 		])
-		self.assure_levels("7", "fire", [
+		self.assure_levels("fire", "fire", [
 			(1, 1, "alert", None)
 		])
-		self.assure_levels("10", "motion", [
+		self.assure_levels("motion", "motion", [
 			(1, 1, "single", None)
 		])
-		self.assure_levels("11", "noise", [
+		self.assure_levels("noise", "noise", [
 			(None, 80, None, "normal"),
 			(81, 90, None, "acceptable"),
 			(91, 99, "single", "loud"),
@@ -212,19 +212,19 @@ class TestTypesListDetail(unittest.TestCase):
 			(112, 139, "repeat", "dangerous for few minutes stay"),
 			(140, None, "alert", "immediate nerve damage possible"),
 		])
-		self.assure_levels("14", "performance", [
+		self.assure_levels("performance", "performance", [
 			(0, 0, None, "idle"),
 			(95, None, None, "high load")
 		])
-		self.assure_levels("16", "signal", [
+		self.assure_levels("rssi", "signal", [
 			(None, 25, None, "poor"),
 			(26, 80, None, "good"),
 			(81, 100, None, "high")
 		])
-		self.assure_levels("17", "security alert", [
+		self.assure_levels("security_alert", "security alert", [
 			(1, 1, "alert", None)
 		])
-		self.assure_levels("20", "UV", [
+		self.assure_levels("ultraviolet", "UV", [
 			(None, 2.9, None, "low"),
 			(3, 5.9, None, "moderate"),
 			(6, 7.9, "single", "high"),

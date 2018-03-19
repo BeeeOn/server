@@ -8,17 +8,17 @@
 			<exact name="Temperature Humidity v1.0" vendor="BeeeOn" />
 		</match>
 		<modules>
-			<sensor id="0" type="19">
+			<sensor id="0" type="temperature">
 				<name>room_temperature</name>
 			</sensor>
-			<sensor id="1" type="19" unavailable-value="0x7FFFFFFF">
+			<sensor id="1" type="temperature" unavailable-value="0x7FFFFFFF">
 				<name>outside_temperature</name>
 			</sensor>
-			<sensor id="2" type="8">
+			<sensor id="2" type="humidity">
 				<name>room_humidity</name>
 			</sensor>
-			<battery id="3" type="2" />
-			<rssi id="4" type="16" />
+			<battery id="3" type="battery" />
+			<rssi id="4" type="rssi" />
 		</modules>
 	</device>
 
@@ -29,7 +29,7 @@
 			<exact name="Internal Pressure v1.0" vendor="BeeeOn" />
 		</match>
 		<modules>
-			<sensor id="0" type="15" />
+			<sensor id="0" type="pressure" />
 		</modules>
 	</device>
 
@@ -40,9 +40,9 @@
 			<exact name="THN v1.0" vendor="Virtual" />
 		</match>
 		<modules>
-			<sensor id="0" type="19" />
-			<sensor id="1" type="8" />
-			<sensor id="2" type="11" />
+			<sensor id="0" type="temperature" />
+			<sensor id="1" type="humidity" />
+			<sensor id="2" type="noise" />
 		</modules>
 	</device>
 
@@ -53,37 +53,37 @@
 			<exact name="THNx3 v1.0" vendor="Virtual" />
 		</match>
 		<modules>
-			<sensor id="0" type="19">
+			<sensor id="0" type="temperature">
 				<group>zone_1</group>
 			</sensor>
-			<sensor id="1" type="8">
+			<sensor id="1" type="humidity">
 				<group>zone_1</group>
 			</sensor>
-			<sensor id="2" type="11">
+			<sensor id="2" type="noise">
 				<group>zone_1</group>
 			</sensor>
 
-			<sensor id="3" type="19">
+			<sensor id="3" type="temperature">
 				<group>zone_2</group>
 			</sensor>
-			<sensor id="4" type="8">
+			<sensor id="4" type="humidity">
 				<group>zone_2</group>
 			</sensor>
-			<sensor id="5" type="11">
+			<sensor id="5" type="noise">
 				<group>zone_2</group>
 			</sensor>
 
-			<sensor id="6" type="19">
+			<sensor id="6" type="temperature">
 				<group>zone_3</group>
 			</sensor>
-			<sensor id="7" type="8">
+			<sensor id="7" type="humidity">
 				<group>zone_3</group>
 			</sensor>
-			<sensor id="8" type="11">
+			<sensor id="8" type="noise">
 				<group>zone_3</group>
 			</sensor>
 
-			<control id="9" type="4" />
+			<control id="9" type="brightness" />
 		</modules>
 	</device>
 </devices>

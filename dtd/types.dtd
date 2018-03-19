@@ -1,6 +1,6 @@
 <!ELEMENT types (type)*>
 
-<!ELEMENT type (name, (unit | units)?, range?, values?, levels?)>
+<!ELEMENT type (name?, (unit | units)?, range?, values?, levels?)>
 <!ATTLIST type id CDATA #REQUIRED>
 
 <!ELEMENT name (#PCDATA)>

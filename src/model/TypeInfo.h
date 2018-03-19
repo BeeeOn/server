@@ -6,11 +6,45 @@
 #include <string>
 
 #include "model/Entity.h"
-#include "model/SimpleID.h"
+#include "model/ModuleType.h"
 
 namespace BeeeOn {
 
-class TypeInfo : public Entity<SimpleID> {
+class TypeInfoID {
+public:
+	TypeInfoID();
+	TypeInfoID(const ModuleType::Type::Raw &raw);
+	TypeInfoID(const ModuleType::Type &type);
+
+	std::string toString() const;
+	operator int() const;
+
+	bool operator ==(const TypeInfoID &other) const;
+	bool operator <(const TypeInfoID &other) const;
+	bool operator <=(const TypeInfoID &other) const;
+
+	bool operator !=(const TypeInfoID &other) const
+	{
+		return !(m_type == other.m_type);
+	}
+
+	bool operator >(const TypeInfoID &other) const
+	{
+		return other.m_type < m_type;
+	}
+
+	bool operator >=(const TypeInfoID &other) const
+	{
+		return other.m_type <= m_type;
+	}
+
+	static TypeInfoID parse(const std::string &input);
+
+private:
+	ModuleType::Type m_type;
+};
+
+class TypeInfo : public Entity<TypeInfoID> {
 public:
 	class Range {
 	public:
@@ -88,8 +122,7 @@ public:
 	TypeInfo();
 	TypeInfo(const TypeInfo::ID &id);
 
-	void setName(const std::string &name);
-	const std::string &name() const;
+	std::string name() const;
 
 	void setUnit(const std::string &unit);
 	const std::string &unit() const;
@@ -106,14 +139,11 @@ public:
 	std::string asString(const double v) const;
 
 private:
-	std::string m_name;
 	std::string m_unit;
 	Range m_range;
 	std::map<int, std::string> m_values;
 	std::set<Level> m_levels;
 };
-
-typedef TypeInfo::ID TypeInfoID;
 
 }
 
