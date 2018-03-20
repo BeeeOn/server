@@ -10,13 +10,13 @@ BEEEON_OBJECT_BEGIN(BeeeOn, DeviceInfoProvider)
 BEEEON_OBJECT_CASTABLE(InfoProvider<DeviceInfo>)
 BEEEON_OBJECT_TEXT("devicesFile", &DeviceInfoProvider::setDevicesFile)
 BEEEON_OBJECT_REF("typeInfoProvider", &DeviceInfoProvider::setTypeInfoProvider)
-BEEEON_OBJECT_REF("enumInfoProvider", &DeviceInfoProvider::setEnumInfoProvider)
+BEEEON_OBJECT_REF("subtypeInfoProvider", &DeviceInfoProvider::setSubtypeInfoProvider)
 BEEEON_OBJECT_HOOK("done", &DeviceInfoProvider::loadInfo)
 BEEEON_OBJECT_END(BeeeOn, DeviceInfoProvider)
 
 DeviceInfoProvider::DeviceInfoProvider():
 	m_typeProvider(&NullInfoProvider<TypeInfo>::instance()),
-	m_enumProvider(&NullInfoProvider<SubtypeInfo>::instance())
+	m_subtypeProvider(&NullInfoProvider<SubtypeInfo>::instance())
 {
 }
 
@@ -31,9 +31,9 @@ void DeviceInfoProvider::setTypeInfoProvider(InfoProvider<TypeInfo> *provider)
 		&NullInfoProvider<TypeInfo>::instance() : provider;
 }
 
-void DeviceInfoProvider::setEnumInfoProvider(InfoProvider<SubtypeInfo> *provider)
+void DeviceInfoProvider::setSubtypeInfoProvider(InfoProvider<SubtypeInfo> *provider)
 {
-	m_enumProvider = provider == NULL?
+	m_subtypeProvider = provider == NULL?
 		&NullInfoProvider<SubtypeInfo>::instance() : provider;
 }
 
@@ -65,16 +65,16 @@ DeviceInfo DeviceInfoProvider::resolveTypes(const DeviceInfo &device)
 			}
 
 			const SubtypeInfoID &id = module.subtype()->id();
-			const SharedPtr<SubtypeInfo> enumInfo = m_enumProvider->findById(id);
+			const SharedPtr<SubtypeInfo> subtypeInfo = m_subtypeProvider->findById(id);
 
-			if (enumInfo.isNull()) {
-				logger().warning("no such enum subtype " + id.toString()
+			if (subtypeInfo.isNull()) {
+				logger().warning("no such subtype " + id.toString()
 						+ " for device " + device,
 						__FILE__, __LINE__);
 				continue;
 			}
 
-			copy.setSubtype(enumInfo);
+			copy.setSubtype(subtypeInfo);
 		}
 
 		result.add(copy);

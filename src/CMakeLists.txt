@@ -27,8 +27,8 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/provider/AccessTokenCredentials.cpp
 	${PROJECT_SOURCE_DIR}/provider/AuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/DeviceInfoProvider.cpp
-	${PROJECT_SOURCE_DIR}/provider/EnumInfoProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/RandomProvider.cpp
+	${PROJECT_SOURCE_DIR}/provider/SubtypeInfoProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/OAuth2AuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/FacebookAuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/GoogleAuthProvider.cpp

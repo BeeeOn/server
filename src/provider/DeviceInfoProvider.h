@@ -20,7 +20,7 @@ public:
 	DeviceInfoProvider();
 
 	void setTypeInfoProvider(InfoProvider<TypeInfo> *provider);
-	void setEnumInfoProvider(InfoProvider<SubtypeInfo> *provider);
+	void setSubtypeInfoProvider(InfoProvider<SubtypeInfo> *provider);
 	void setDevicesFile(const std::string &devicesFile);
 	void loadInfo();
 
@@ -34,7 +34,7 @@ protected:
 private:
 	std::string m_devicesFile;
 	InfoProvider<TypeInfo> *m_typeProvider;
-	InfoProvider<SubtypeInfo> *m_enumProvider;
+	InfoProvider<SubtypeInfo> *m_subtypeProvider;
 };
 
 }

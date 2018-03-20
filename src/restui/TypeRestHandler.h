@@ -2,7 +2,7 @@
 #define BEEEON_SENSORTYPE_REST_HANDLER_H
 
 #include "l10n/Translator.h"
-#include "provider/EnumInfoProvider.h"
+#include "provider/SubtypeInfoProvider.h"
 #include "provider/TypeInfoProvider.h"
 #include "rest/JSONRestHandler.h"
 #include "util/UnsafePtr.h"
@@ -15,7 +15,7 @@ public:
 	TypeRestHandler();
 
 	void setTypeInfoProvider(TypeInfoProvider *provider);
-	void setEnumInfoProvider(EnumInfoProvider *provider);
+	void setSubtypeInfoProvider(SubtypeInfoProvider *provider);
 	void setTranslatorFactory(TranslatorFactory::Ptr factory);
 
 	void list(RestFlow &flow);
@@ -24,7 +24,7 @@ public:
 
 private:
 	UnsafePtr<TypeInfoProvider> m_provider;
-	UnsafePtr<EnumInfoProvider> m_enumProvider;
+	UnsafePtr<SubtypeInfoProvider> m_subtypeProvider;
 	TranslatorFactory::Ptr m_translatorFactory;
 };
 

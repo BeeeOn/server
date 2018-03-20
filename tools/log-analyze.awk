@@ -326,7 +326,7 @@ BEGIN {
 	types_count += 1
 }
 
-/EnumInfoProvider/ && /register enum / {
+/SubtypeInfoProvider/ && /register enum / {
 	enums_count += 1
 }
 

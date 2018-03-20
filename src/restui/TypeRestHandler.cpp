@@ -16,7 +16,7 @@
 BEEEON_OBJECT_BEGIN(BeeeOn, RestUI, TypeRestHandler)
 BEEEON_OBJECT_CASTABLE(RestHandler)
 BEEEON_OBJECT_REF("typeInfoProvider", &TypeRestHandler::setTypeInfoProvider)
-BEEEON_OBJECT_REF("enumInfoProvider", &TypeRestHandler::setEnumInfoProvider)
+BEEEON_OBJECT_REF("subtypeInfoProvider", &TypeRestHandler::setSubtypeInfoProvider)
 BEEEON_OBJECT_END(BeeeOn, RestUI, TypeRestHandler)
 
 using namespace std;
@@ -38,9 +38,9 @@ void TypeRestHandler::setTypeInfoProvider(TypeInfoProvider *typeInfoProvider)
 	m_provider = typeInfoProvider;
 }
 
-void TypeRestHandler::setEnumInfoProvider(EnumInfoProvider *enumInfoProvider)
+void TypeRestHandler::setSubtypeInfoProvider(SubtypeInfoProvider *subtypeInfoProvider)
 {
-	m_enumProvider = enumInfoProvider;
+	m_subtypeProvider = subtypeInfoProvider;
 }
 
 void TypeRestHandler::list(RestFlow &flow)
@@ -69,8 +69,8 @@ void TypeRestHandler::detail(RestFlow &flow)
 
 void TypeRestHandler::detailEnum(RestFlow &flow)
 {
-	SubtypeInfoID id = SubtypeInfoID::parse(flow.param("enum_id"));
-	SharedPtr<SubtypeInfo> info = m_enumProvider->findById(id);
+	SubtypeInfoID id = SubtypeInfoID::parse(flow.param("subtype_id"));
+	SharedPtr<SubtypeInfo> info = m_subtypeProvider->findById(id);
 
 	if (info.isNull())
 		throw NotFoundException("no such enum " + id.toString());
