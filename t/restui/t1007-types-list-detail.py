@@ -233,7 +233,7 @@ class TestTypesListDetail(unittest.TestCase):
 		])
 
 	def test7_check_enums(self):
-		req = GET(config.ui_host, config.ui_port, "/types/6/MOD_BOILER_STATUS")
+		req = GET(config.ui_host, config.ui_port, "/types/enum/MOD_BOILER_STATUS")
 		req.authorize(self.session)
 		response, content = req()
 
