@@ -43,6 +43,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/sqitch/SqitchPlanParserTest.cpp
 	${PROJECT_SOURCE_DIR}/sqitch/SqitchRefTest.cpp
 	${PROJECT_SOURCE_DIR}/sqitch/SqitchTestingPlans.cpp
+	${PROJECT_SOURCE_DIR}/util/BitmapsSAXHandlerTest.cpp
 	${PROJECT_SOURCE_DIR}/util/DevicesSAXHandlerTest.cpp
 	${PROJECT_SOURCE_DIR}/util/SanitizeTest.cpp
 	${PROJECT_SOURCE_DIR}/util/SQLPreprocessorTest.cpp
