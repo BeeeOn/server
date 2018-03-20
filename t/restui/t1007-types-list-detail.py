@@ -253,6 +253,53 @@ class TestTypesListDetail(unittest.TestCase):
 		self.assertEqual("failure", enum["values"]["3"])
 		self.assertEqual("shutdown", enum["values"]["4"])
 
+	def test8_check_bitmap_with_flags(self):
+		req = GET(config.ui_host, config.ui_port, "/types/bitmap/MOD_CURRENT_BOILER_OT_FAULT_FLAGS")
+		req.authorize(self.session)
+		response, content = req()
+
+		self.assertEqual(200, response.status)
+
+		result = json.loads(content)
+		self.assertEqual("success", result["status"])
+
+		bitmap = result["data"]
+		self.assertEqual("OT Fault Flags", bitmap["name"])
+		self.assertTrue("flags" in bitmap)
+		self.assertEqual(6, len(bitmap["flags"]))
+
+		self.assertEqual("service request", bitmap["flags"]["0"]["name"])
+		self.assertEqual("lockout reset enabled", bitmap["flags"]["1"]["name"])
+		self.assertEqual("low water pressure", bitmap["flags"]["2"]["name"])
+		self.assertEqual("gas/flame fault", bitmap["flags"]["3"]["name"])
+		self.assertEqual("air pressure fault", bitmap["flags"]["4"]["name"])
+		self.assertEqual("water overheated", bitmap["flags"]["5"]["name"])
+
+	def test9_check_bitmap_with_group(self):
+		req = GET(config.ui_host, config.ui_port, "/types/bitmap/MOD_CURRENT_BOILER_OT_OEM_FAULTS")
+		req.authorize(self.session)
+		response, content = req()
+
+		self.assertEqual(200, response.status)
+
+		result = json.loads(content)
+		self.assertEqual("success", result["status"])
+
+		bitmap = result["data"]
+		self.assertEqual("OT OEM Faults", bitmap["name"])
+		self.assertTrue("groups" in bitmap)
+		self.assertEqual(1, len(bitmap["groups"]))
+
+		self.assertEqual("OEM specific", bitmap["groups"][0]["name"])
+		self.assertEqual(8, len(bitmap["groups"][0]["mapping"]))
+		self.assertEqual(0, bitmap["groups"][0]["mapping"][0])
+		self.assertEqual(1, bitmap["groups"][0]["mapping"][1])
+		self.assertEqual(2, bitmap["groups"][0]["mapping"][2])
+		self.assertEqual(3, bitmap["groups"][0]["mapping"][3])
+		self.assertEqual(4, bitmap["groups"][0]["mapping"][4])
+		self.assertEqual(5, bitmap["groups"][0]["mapping"][5])
+		self.assertEqual(6, bitmap["groups"][0]["mapping"][6])
+		self.assertEqual(7, bitmap["groups"][0]["mapping"][7])
 
 if __name__ == '__main__':
 	import sys

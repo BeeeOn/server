@@ -72,6 +72,8 @@ void TypeRestHandler::detailSubtype(RestFlow &flow)
 	SubtypeInfo::Kind kind = SubtypeInfo::KIND_INVALID;
 	if (flow.param("type") == "enum")
 		kind = SubtypeInfo::KIND_ENUM;
+	else if (flow.param("type") == "bitmap")
+		kind = SubtypeInfo::KIND_BITMAP;
 
 	SubtypeInfoID id = SubtypeInfoID::parse(flow.param("subtype_id"));
 	SharedPtr<SubtypeInfo> info = m_subtypeProvider->findById(id);

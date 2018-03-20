@@ -13,6 +13,7 @@ public:
 	SubtypeInfoProvider();
 
 	void setEnumsFile(const std::string &enumsFile);
+	void setBitmapsFile(const std::string &bitmapsFile);
 
 	InfoSet::const_iterator begin() const
 	{
@@ -28,6 +29,7 @@ public:
 
 private:
 	std::string m_enumsFile;
+	std::string m_bitmapsFile;
 };
 
 }
