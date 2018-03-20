@@ -5,11 +5,10 @@
 
 #include "model/SubtypeInfo.h"
 #include "provider/InfoProvider.h"
-#include "util/EnumsSAXHandler.h"
 
 namespace BeeeOn {
 
-class SubtypeInfoProvider : public XmlInfoProvider<SubtypeInfo, EnumsSAXHandler> {
+class SubtypeInfoProvider : public XmlInfoProvider<SubtypeInfo> {
 public:
 	SubtypeInfoProvider();
 

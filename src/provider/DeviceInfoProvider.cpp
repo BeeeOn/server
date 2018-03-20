@@ -1,5 +1,6 @@
 #include "di/Injectable.h"
 #include "provider/DeviceInfoProvider.h"
+#include "util/DevicesSAXHandler.h"
 
 using namespace std;
 using namespace Poco;
@@ -85,7 +86,7 @@ DeviceInfo DeviceInfoProvider::resolveTypes(const DeviceInfo &device)
 
 void DeviceInfoProvider::loadInfo()
 {
-	parseFile(m_devicesFile, "device");
+	parseFile<DevicesSAXHandler>(m_devicesFile, "device");
 
 	InfoProvider<DeviceInfo>::InfoSet set;
 

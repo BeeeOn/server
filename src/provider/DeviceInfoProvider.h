@@ -9,11 +9,10 @@
 #include "model/DeviceInfo.h"
 #include "model/SubtypeInfo.h"
 #include "provider/InfoProvider.h"
-#include "util/DevicesSAXHandler.h"
 
 namespace BeeeOn {
 
-class DeviceInfoProvider : public XmlInfoProvider<DeviceInfo, DevicesSAXHandler> {
+class DeviceInfoProvider : public XmlInfoProvider<DeviceInfo> {
 public:
 	typedef Poco::SharedPtr<DeviceInfoProvider> Ptr;
 

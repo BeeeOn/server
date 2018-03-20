@@ -1,5 +1,6 @@
 #include "di/Injectable.h"
 #include "provider/SubtypeInfoProvider.h"
+#include "util/EnumsSAXHandler.h"
 
 using namespace std;
 using namespace Poco;
@@ -23,5 +24,5 @@ void SubtypeInfoProvider::setEnumsFile(const std::string &enumsFile)
 
 void SubtypeInfoProvider::loadInfo()
 {
-	parseFile(m_enumsFile, "enum");
+	parseFile<EnumsSAXHandler>(m_enumsFile, "enum");
 }
