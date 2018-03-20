@@ -252,7 +252,7 @@ void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
 
 		if (module.isControllable())
 			attrs.addAttribute("", "actuator", "actuator", "", "yes");
-		
+
 		output.emptyElement("", "module", "module", attrs);
 	}
 
