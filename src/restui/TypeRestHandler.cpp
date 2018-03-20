@@ -69,8 +69,8 @@ void TypeRestHandler::detail(RestFlow &flow)
 
 void TypeRestHandler::detailEnum(RestFlow &flow)
 {
-	EnumInfoID id = EnumInfoID::parse(flow.param("enum_id"));
-	SharedPtr<EnumInfo> info = m_enumProvider->findById(id);
+	SubtypeInfoID id = SubtypeInfoID::parse(flow.param("enum_id"));
+	SharedPtr<SubtypeInfo> info = m_enumProvider->findById(id);
 
 	if (info.isNull())
 		throw NotFoundException("no such enum " + id.toString());

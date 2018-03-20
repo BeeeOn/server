@@ -3,13 +3,13 @@
 
 #include <set>
 
-#include "model/EnumInfo.h"
+#include "model/SubtypeInfo.h"
 #include "provider/InfoProvider.h"
 #include "util/EnumsSAXHandler.h"
 
 namespace BeeeOn {
 
-class EnumInfoProvider : public XmlInfoProvider<EnumInfo, EnumsSAXHandler> {
+class EnumInfoProvider : public XmlInfoProvider<SubtypeInfo, EnumsSAXHandler> {
 public:
 	EnumInfoProvider();
 

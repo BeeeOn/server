@@ -229,10 +229,13 @@ void DevicesSAXHandler::startElement(
 		m_module.setId(ModuleInfoID::parse(id));
 		m_module.setType(new TypeInfo(TypeInfoID::parse(type)));
 
-		if (subtype.empty())
+		if (subtype.empty()) {
 			m_module.setSubtype(nullptr);
-		else
-			m_module.setSubtype(new EnumInfo(EnumInfoID::parse(subtype)));
+		}
+		else {
+			EnumInfo enumInfo;
+			m_module.setSubtype(new SubtypeInfo(SubtypeInfoID::parse(subtype), enumInfo));
+		}
 
 		m_module.setClassName(element.localName);
 		m_module.setName("");

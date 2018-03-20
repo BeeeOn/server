@@ -16,7 +16,7 @@ BEEEON_OBJECT_END(BeeeOn, DeviceInfoProvider)
 
 DeviceInfoProvider::DeviceInfoProvider():
 	m_typeProvider(&NullInfoProvider<TypeInfo>::instance()),
-	m_enumProvider(&NullInfoProvider<EnumInfo>::instance())
+	m_enumProvider(&NullInfoProvider<SubtypeInfo>::instance())
 {
 }
 
@@ -31,10 +31,10 @@ void DeviceInfoProvider::setTypeInfoProvider(InfoProvider<TypeInfo> *provider)
 		&NullInfoProvider<TypeInfo>::instance() : provider;
 }
 
-void DeviceInfoProvider::setEnumInfoProvider(InfoProvider<EnumInfo> *provider)
+void DeviceInfoProvider::setEnumInfoProvider(InfoProvider<SubtypeInfo> *provider)
 {
 	m_enumProvider = provider == NULL?
-		&NullInfoProvider<EnumInfo>::instance() : provider;
+		&NullInfoProvider<SubtypeInfo>::instance() : provider;
 }
 
 DeviceInfo DeviceInfoProvider::resolveTypes(const DeviceInfo &device)
@@ -64,8 +64,8 @@ DeviceInfo DeviceInfoProvider::resolveTypes(const DeviceInfo &device)
 				continue;
 			}
 
-			const EnumInfoID &id = module.subtype()->id();
-			const SharedPtr<EnumInfo> enumInfo = m_enumProvider->findById(id);
+			const SubtypeInfoID &id = module.subtype()->id();
+			const SharedPtr<SubtypeInfo> enumInfo = m_enumProvider->findById(id);
 
 			if (enumInfo.isNull()) {
 				logger().warning("no such enum subtype " + id.toString()

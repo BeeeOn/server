@@ -3,7 +3,7 @@
 
 #include <set>
 
-#include "model/EnumInfo.h"
+#include "model/SubtypeInfo.h"
 #include "util/SAXHelper.h"
 
 namespace BeeeOn {
@@ -13,12 +13,12 @@ public:
 	EnumsSAXHandler();
 	~EnumsSAXHandler();
 
-	std::set<EnumInfo>::const_iterator begin() const
+	std::set<SubtypeInfo>::const_iterator begin() const
 	{
 		return m_result.begin();
 	}
 
-	std::set<EnumInfo>::const_iterator end() const
+	std::set<SubtypeInfo>::const_iterator end() const
 	{
 		return m_result.end();
 	}
@@ -34,11 +34,12 @@ protected:
 	void endElement(const SAXElement &element) override;
 
 private:
-	std::set<EnumInfo> m_result;
+	std::set<SubtypeInfo> m_result;
 	int m_lastEquals;
 	std::map<int, std::string> m_values;
 	EnumInfo::Level m_level;
 	std::set<EnumInfo::Level> m_levels;
+	SubtypeInfoID m_id;
 	EnumInfo m_temp;
 };
 

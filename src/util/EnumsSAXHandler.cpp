@@ -39,7 +39,7 @@ void EnumsSAXHandler::startElement(
 		if (logger().debug())
 			logger().debug("parsing type of @id " + id, __FILE__, __LINE__);
 
-		m_temp.setId(EnumInfoID::parse(id));
+		m_id = SubtypeInfoID::parse(id);
 		m_temp.setValues({});
 	}
 
@@ -141,13 +141,15 @@ void EnumsSAXHandler::endElement(const SAXElement &element)
 	}
 
 	if (isPathFromRoot("enums", "enum")) {
-		if (m_result.find(m_temp) != m_result.end())
-			error("enum of id " + m_temp.id().toString() + " already exists");
+		const SubtypeInfo info(m_id, m_temp);
+
+		if (m_result.find(info) != m_result.end())
+			error("enum of id " + m_id.toString() + " already exists");
 
 		if (logger().debug())
-			logger().debug("inserting type " + m_temp, __FILE__, __LINE__);
+			logger().debug("inserting type " + info, __FILE__, __LINE__);
 
-		m_result.insert(m_temp);
+		m_result.insert(info);
 	}
 }
 

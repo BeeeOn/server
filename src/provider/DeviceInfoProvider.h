@@ -7,7 +7,7 @@
 
 #include "model/ModuleInfo.h"
 #include "model/DeviceInfo.h"
-#include "model/EnumInfo.h"
+#include "model/SubtypeInfo.h"
 #include "provider/InfoProvider.h"
 #include "util/DevicesSAXHandler.h"
 
@@ -20,7 +20,7 @@ public:
 	DeviceInfoProvider();
 
 	void setTypeInfoProvider(InfoProvider<TypeInfo> *provider);
-	void setEnumInfoProvider(InfoProvider<EnumInfo> *provider);
+	void setEnumInfoProvider(InfoProvider<SubtypeInfo> *provider);
 	void setDevicesFile(const std::string &devicesFile);
 	void loadInfo();
 
@@ -34,7 +34,7 @@ protected:
 private:
 	std::string m_devicesFile;
 	InfoProvider<TypeInfo> *m_typeProvider;
-	InfoProvider<EnumInfo> *m_enumProvider;
+	InfoProvider<SubtypeInfo> *m_enumProvider;
 };
 
 }

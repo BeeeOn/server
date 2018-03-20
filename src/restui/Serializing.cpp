@@ -509,27 +509,30 @@ void BeeeOn::RestUI::serialize(Poco::JSON::PrintHandler &output,
 
 void BeeeOn::RestUI::serialize(Poco::JSON::PrintHandler &output,
 		Translator &translator,
-		const EnumInfo &info)
+		const SubtypeInfo &info)
 {
 	output.startObject();
 
 	output.key("id");
 	output.value(info.id().toString());
 
-	output.key("name");
-	output.value(translator.format("enums." + info.name() + ".label", info.name()));
-
-	output.key("values");
-	output.startObject();
-
-	for (const auto pair : info.values()) {
-		output.key(to_string(pair.first));
+	if (info.kind() == SubtypeInfo::KIND_ENUM) {
+		output.key("name");
 		output.value(translator.format(
-			"enums." + info.name() + ".values." + pair.second,
-			info.name()));
-	}
+			"enums." + info.name() + ".label", info.name()));
 
-	output.endObject();
+		output.key("values");
+		output.startObject();
+
+		for (const auto pair : info.enumInfo().values()) {
+			output.key(to_string(pair.first));
+			output.value(translator.format(
+				"enums." + info.name() + ".values." + pair.second,
+				info.name()));
+		}
+
+		output.endObject();
+	}
 
 	output.endObject();
 }
