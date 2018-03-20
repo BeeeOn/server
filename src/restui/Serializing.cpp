@@ -382,6 +382,30 @@ void BeeeOn::RestUI::serialize(Poco::JSON::PrintHandler &output,
 	output.endArray();
 }
 
+static void serializeAttention(Poco::JSON::PrintHandler &output,
+		const TypeInfo::Level::Attention attention)
+{
+	switch (attention) {
+	case TypeInfo::Level::SINGLE:
+		output.key("attention");
+		output.value(string("single"));
+		break;
+
+	case TypeInfo::Level::REPEAT:
+		output.key("attention");
+		output.value(string("repeat"));
+		break;
+
+	case TypeInfo::Level::ALERT:
+		output.key("attention");
+		output.value(string("alert"));
+		break;
+
+	default:
+		break;
+	}
+}
+
 void BeeeOn::RestUI::serialize(Poco::JSON::PrintHandler &output,
 		Translator &translator,
 		const TypeInfo &info)
@@ -463,26 +487,7 @@ void BeeeOn::RestUI::serialize(Poco::JSON::PrintHandler &output,
 				output.value(level.max());
 			}
 
-			switch (level.attention()) {
-			case TypeInfo::Level::SINGLE:
-				output.key("attention");
-				output.value(string("single"));
-				break;
-
-			case TypeInfo::Level::REPEAT:
-				output.key("attention");
-				output.value(string("repeat"));
-				break;
-
-			case TypeInfo::Level::ALERT:
-				output.key("attention");
-				output.value(string("alert"));
-				break;
-
-			default:
-				break;
-			}
-
+			serializeAttention(output, level.attention());
 			output.endObject();
 		}
 
