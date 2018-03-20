@@ -61,6 +61,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/l10n/TimeZoneImpl.cpp
 	${PROJECT_SOURCE_DIR}/l10n/TimeZoneProvider.cpp
 	${PROJECT_SOURCE_DIR}/model/AbstractModule.cpp
+	${PROJECT_SOURCE_DIR}/model/BitmapInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/Control.cpp
 	${PROJECT_SOURCE_DIR}/model/DeviceInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/EnumInfo.cpp
