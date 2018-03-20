@@ -79,6 +79,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/Sensor.cpp
 	${PROJECT_SOURCE_DIR}/model/ValueAt.cpp
 	${PROJECT_SOURCE_DIR}/model/ModuleValue.cpp
+	${PROJECT_SOURCE_DIR}/model/SubtypeInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/TypeInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/User.cpp
 	${PROJECT_SOURCE_DIR}/dao/ControlDao.cpp
