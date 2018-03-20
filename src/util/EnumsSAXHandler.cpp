@@ -68,16 +68,8 @@ void EnumsSAXHandler::startElement(
 
 		XMLString attention;
 		if (getAndTrimAttribute(attrList, "attention", attention)) {
-			if (attention == "none")
-				m_level.setAttention(TypeInfo::Level::NONE);
-			else if (attention == "single")
-				m_level.setAttention(TypeInfo::Level::SINGLE);
-			else if (attention == "repeat")
-				m_level.setAttention(TypeInfo::Level::REPEAT);
-			else if (attention == "alert")
-				m_level.setAttention(TypeInfo::Level::ALERT);
-			else
-				error("unexpected value of attribute attention: " + attention);
+			m_level.setAttention(
+				TypeInfo::Level::parseAttention(attention));
 		}
 
 		if (logger().debug()) {
