@@ -385,4 +385,25 @@
 			</sensor>
 		</modules>
 	</device>
+
+	<device id="70">
+		<name>Smart Temperature and Humidity Sensor</name>
+		<vendor>BeeWi</vendor>
+
+		<match>
+			<exact name="BeeWi SmartClim" vendor="BeeWi" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="temperature">
+				<name>Room Temperature</name>
+			</sensor>
+			<sensor id="1" type="humidity">
+				<name>Room Humidity</name>
+			</sensor>
+			<sensor id="2" type="battery">
+				<name>Battery</name>
+			</sensor>
+		</modules>
+	</device>
 </devices>
