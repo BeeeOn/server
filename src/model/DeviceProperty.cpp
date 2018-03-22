@@ -1,5 +1,4 @@
 #include <Poco/Exception.h>
-#include <Poco/Crypto/Cipher.h>
 #include <Poco/Crypto/CipherFactory.h>
 #include <Poco/Crypto/CipherKey.h>
 
@@ -49,7 +48,7 @@ string DeviceProperty::value() const
 	return m_value;
 }
 
-void DeviceProperty::setIPAddress(const IPAddress &address, Cipher *cipher)
+void DeviceProperty::setIPAddress(const IPAddress &address, AutoPtr<Cipher> cipher)
 {
 	if (m_key != DevicePropertyKey::KEY_IP_ADDRESS)
 		throw IllegalStateException("cannot set IP address for key " + m_key);
@@ -60,7 +59,7 @@ void DeviceProperty::setIPAddress(const IPAddress &address, Cipher *cipher)
 	m_value = cipher->encryptString(address.toString(), Cipher::ENC_BASE64);
 }
 
-IPAddress DeviceProperty::asIPAddress(Cipher *cipher) const
+IPAddress DeviceProperty::asIPAddress(AutoPtr<Cipher> cipher) const
 {
 	if (m_key != DevicePropertyKey::KEY_IP_ADDRESS)
 		throw IllegalStateException("cannot read IP address with key " + m_key);
@@ -68,7 +67,7 @@ IPAddress DeviceProperty::asIPAddress(Cipher *cipher) const
 	return IPAddress(cipher->decryptString(m_value, Cipher::ENC_BASE64));
 }
 
-void DeviceProperty::setPassword(const std::string &password, Cipher *cipher)
+void DeviceProperty::setPassword(const std::string &password, AutoPtr<Cipher> cipher)
 {
 	if (m_key != DevicePropertyKey::KEY_PASSWORD)
 		throw IllegalStateException("cannot set password for key " + m_key);
@@ -79,7 +78,7 @@ void DeviceProperty::setPassword(const std::string &password, Cipher *cipher)
 	m_value = cipher->encryptString(password, Cipher::ENC_BASE64);
 }
 
-string DeviceProperty::asPassword(Cipher *cipher) const
+string DeviceProperty::asPassword(AutoPtr<Cipher> cipher) const
 {
 	if (m_key != DevicePropertyKey::KEY_PASSWORD)
 		throw IllegalStateException("cannot read password with key " + m_key);
@@ -119,8 +118,7 @@ CryptoParams DeviceProperty::params() const
 DecryptedDeviceProperty::DecryptedDeviceProperty(
 		const DeviceProperty &property,
 		const CryptoConfig *config):
-	m_property(property),
-	m_cipher(NULL)
+	m_property(property)
 {
 	CipherFactory &factory = CipherFactory::defaultFactory();
 

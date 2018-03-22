@@ -1,3 +1,4 @@
+#include <Poco/AutoPtr.h>
 #include <Poco/Exception.h>
 #include <Poco/NumberParser.h>
 #include <Poco/DOM/Element.h>
@@ -52,7 +53,7 @@ void XmlDevicePropertyDeserializer::deserialize(DeviceProperty &property) const
 void XmlDevicePropertyDeserializer::applyTo(DeviceProperty &property) const
 {
 	CipherFactory &factory = CipherFactory::defaultFactory();
-	Cipher *cipher = NULL;
+	AutoPtr<Cipher> cipher;
 
 	const string &value = m_node.getAttribute("parametervalue");
 

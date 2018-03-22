@@ -3,18 +3,12 @@
 
 #include <string>
 
+#include <Poco/AutoPtr.h>
+#include <Poco/Crypto/Cipher.h>
 #include <Poco/Net/IPAddress.h>
 
 #include "util/CryptoParams.h"
 #include "util/Enum.h"
-
-namespace Poco {
-namespace Crypto {
-
-class Cipher;
-
-}
-}
 
 namespace BeeeOn {
 
@@ -67,12 +61,12 @@ public:
 	void setValue(const std::string &value);
 	std::string value() const;
 
-	void setIPAddress(const Poco::Net::IPAddress &address, Poco::Crypto::Cipher *cipher);
-	void setPassword(const std::string &password, Poco::Crypto::Cipher *cipher);
+	void setIPAddress(const Poco::Net::IPAddress &address, Poco::AutoPtr<Poco::Crypto::Cipher> cipher);
+	void setPassword(const std::string &password, Poco::AutoPtr<Poco::Crypto::Cipher> cipher);
 	void setFirmware(const std::string &firmware);
 
-	Poco::Net::IPAddress asIPAddress(Poco::Crypto::Cipher *cipher) const;
-	std::string asPassword(Poco::Crypto::Cipher *cipher) const;
+	Poco::Net::IPAddress asIPAddress(Poco::AutoPtr<Poco::Crypto::Cipher> cipher) const;
+	std::string asPassword(Poco::AutoPtr<Poco::Crypto::Cipher> cipher) const;
 	std::string asFirmware() const;
 
 	void setParams(const CryptoParams &params);
@@ -97,7 +91,7 @@ public:
 
 private:
 	const DeviceProperty &m_property;
-	Poco::Crypto::Cipher *m_cipher;
+	Poco::AutoPtr<Poco::Crypto::Cipher> m_cipher;
 };
 
 }

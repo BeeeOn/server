@@ -1,3 +1,4 @@
+#include <Poco/AutoPtr.h>
 #include <Poco/Environment.h>
 #include <Poco/Exception.h>
 #include <Poco/Crypto/Cipher.h>
@@ -102,7 +103,7 @@ void DevicePropertyTest::testFirmware()
 void DevicePropertyTest::testNoIPAddress()
 {
 	const CipherKey &key = m_params.randomKey();
-	Cipher *cipher = m_factory.createCipher(key);
+	AutoPtr<Cipher> cipher = m_factory.createCipher(key);
 
 	m_property.setParams(m_params);
 
@@ -122,7 +123,7 @@ void DevicePropertyTest::testNoIPAddress()
 void DevicePropertyTest::testIPAddress()
 {
 	const CipherKey &key = m_params.randomKey();
-	Cipher *cipher = m_factory.createCipher(key);
+	AutoPtr<Cipher> cipher = m_factory.createCipher(key);
 
 	m_property.setParams(m_params);
 	m_property.setKey(DevicePropertyKey::KEY_IP_ADDRESS);
@@ -153,7 +154,7 @@ void DevicePropertyTest::testIPAddress()
 void DevicePropertyTest::testNoPassword()
 {
 	const CipherKey &key = m_params.randomKey();
-	Cipher *cipher = m_factory.createCipher(key);
+	AutoPtr<Cipher> cipher = m_factory.createCipher(key);
 
 	m_property.setParams(m_params);
 
@@ -173,7 +174,7 @@ void DevicePropertyTest::testNoPassword()
 void DevicePropertyTest::testPassword()
 {
 	const CipherKey &key = m_params.randomKey();
-	Cipher *cipher = m_factory.createCipher(key);
+	AutoPtr<Cipher> cipher = m_factory.createCipher(key);
 
 	m_property.setParams(m_params);
 	m_property.setKey(DevicePropertyKey::KEY_PASSWORD);
