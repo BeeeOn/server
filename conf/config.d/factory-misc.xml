@@ -21,6 +21,7 @@
 		</instance>
 
 		<instance name="eventsExecutor" class="BeeeOn::SequentialAsyncExecutor">
+			<set name="stopTimeout" time="${events.finalize.timeout}" />
 		</instance>
 
 		<instance name="fcmClient" class="BeeeOn::LegacyFCMClient">
