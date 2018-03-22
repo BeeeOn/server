@@ -41,7 +41,7 @@
 
 		<instance name="fakeGatewayRPC" class="BeeeOn::FakeGatewayRPC">
 			<set name="deviceDao" ref="deviceDao" />
-			<set name="asyncExecutor" ref="asyncExecutor" />
+			<set name="asyncExecutor" ref="eventsExecutor" />
 		</instance>
 
 		<instance name="asyncGatewayRPC" class="BeeeOn::AsyncGatewayRPC">

@@ -1,7 +1,7 @@
 <system>
 	<factory>
 		<instance name="all" class="BeeeOn::LoopRunner">
-			<add name="runnables" ref="asyncExecutor" />
+			<add name="runnables" ref="eventsExecutor" />
 			<add name="runnables" ref="fcmSender" if-yes="${fcm.enable}" />
 			<add name="loops" ref="gatewayCommunicator" />
 			<add name="loops" ref="gatewayScanController" />

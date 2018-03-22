@@ -11,7 +11,7 @@
 			<set name="minThreads" number="${gws.ws.minThreads}" />
 			<set name="maxThreads" number="${gws.ws.maxThreads}" />
 			<set name="threadIdleTime" time="${gws.ws.threadIdleTime}" />
-			<set name="eventsExecutor" ref="asyncExecutor" />
+			<set name="eventsExecutor" ref="eventsExecutor" />
 			<set name="listeners" ref="publishingWatcher" if-yes="${baf.publish.server.enable}" />
 		</instance>
 
@@ -24,7 +24,7 @@
 			<set name="minThreads" number="${gws.comm.minThreads}" />
 			<set name="maxThreads" number="${gws.comm.maxThreads}" />
 			<set name="threadIdleTime" time="${gws.comm.threadIdleTime}" />
-			<set name="asyncExecutor" ref="asyncExecutor" />
+			<set name="eventsExecutor" ref="eventsExecutor" />
 			<add name="listeners" ref="bafGatewayWatcher" />
 			<add name="listeners" ref="publishingWatcher" if-yes="${baf.publish.gateways.enable}" />
 		</instance>
@@ -41,7 +41,7 @@
 			<set name="rpcForwarder" ref="asyncGatewayRPC" />
 			<set name="deviceService" ref="gwsDeviceService" />
 			<set name="sensorHistoryService" ref="gwsSensorHistoryService" />
-			<set name="eventsExecutor" ref="asyncExecutor" />
+			<set name="eventsExecutor" ref="eventsExecutor" />
 			<add name="dataListeners" ref="publishingWatcher" if-yes="${baf.publish.data.enable}" />
 			<add name="deviceListeners" ref="publishingWatcher" if-yes="${baf.publish.device.enable}" />
 		</instance>

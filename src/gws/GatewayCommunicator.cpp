@@ -16,7 +16,7 @@ BEEEON_OBJECT_PROPERTY("sendTimeout", &GatewayCommunicator::setSendTimeout)
 BEEEON_OBJECT_PROPERTY("minThreads", &GatewayCommunicator::setMinThreads)
 BEEEON_OBJECT_PROPERTY("maxThreads", &GatewayCommunicator::setMaxThreads)
 BEEEON_OBJECT_PROPERTY("threadIdleTime", &GatewayCommunicator::setThreadIdleTime)
-BEEEON_OBJECT_PROPERTY("asyncExecutor", &GatewayCommunicator::setAsyncExecutor)
+BEEEON_OBJECT_PROPERTY("eventsExecutor", &GatewayCommunicator::setEventsExecutor)
 BEEEON_OBJECT_PROPERTY("listeners", &GatewayCommunicator::registerListener)
 BEEEON_OBJECT_END(BeeeOn, GatewayCommunicator)
 
@@ -41,7 +41,7 @@ void GatewayCommunicator::registerListener(GatewayListener::Ptr listener)
 	m_eventSource.addListener(listener);
 }
 
-void GatewayCommunicator::setAsyncExecutor(SharedPtr<AsyncExecutor> executor)
+void GatewayCommunicator::setEventsExecutor(SharedPtr<AsyncExecutor> executor)
 {
 	m_eventSource.setAsyncExecutor(executor);
 }
