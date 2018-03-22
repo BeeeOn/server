@@ -28,6 +28,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/model/DeviceTest.cpp
 	${PROJECT_SOURCE_DIR}/model/DevicePropertyTest.cpp
 	${PROJECT_SOURCE_DIR}/server/CORSFilterTest.cpp
+	${PROJECT_SOURCE_DIR}/server/HTTPCustomHeadersFilterTest.cpp
 	${PROJECT_SOURCE_DIR}/server/SessionManagerTest.cpp
 	${PROJECT_SOURCE_DIR}/server/TestingHTTPServerRequest.cpp
 	${PROJECT_SOURCE_DIR}/server/TestingHTTPServerResponse.cpp

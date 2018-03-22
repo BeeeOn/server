@@ -19,7 +19,20 @@
 		</instance>
 
 		<instance name="uiFilterChain" class="BeeeOn::HTTPFilterChain">
+			<add name="filters" ref="allCustomHeaders" />
 			<add name="filters" ref="corsFilter" />
+		</instance>
+
+		<instance name="allCustomHeaders" class="BeeeOn::HTTPCustomHeadersFilter">
+			<set name="uriPattern" text="*" />
+			<set name="headers">
+				<pair key="Strict-Transport-Security"
+					text="max-age=31536000; includeSubDomains" />
+				<pair key="Referrer-Policy" text="no-referrer-when-downgrade" />
+				<pair key="X-Content-Type-Options" text="nosniff" />
+				<pair key="X-XSS-Protection" text="1; block" />
+				<pair key="X-Frame-Options" text="SAMEORIGIN" />
+			</set>
 		</instance>
 
 		<instance name="corsFilter" class="BeeeOn::CORSFilter">
