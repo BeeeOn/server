@@ -34,6 +34,7 @@ Optional prerequisites for development:
 
 * jansson-devel
 * jwt-devel
+* cppzmq-devel
 * python3
   * selenium
   * phantomjs
@@ -54,6 +55,7 @@ Optional prerequisites for deployment:
 
 * jansson
 * jwt
+* zeromq
 
 ## Start hacking
 

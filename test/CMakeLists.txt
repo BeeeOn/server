@@ -14,6 +14,7 @@ find_library (ICU_I18N icui18n)
 find_library (ICU_UC icuuc)
 find_library (JWT jwt)
 find_library (JANSSON jansson)
+find_library (ZEROMQ zmq)
 
 file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/fcm/FCMSenderTest.cpp
@@ -99,6 +100,10 @@ endif()
 
 if(JWT)
 	list(APPEND LIBS ${JWT})
+endif()
+
+if(ZEROMQ)
+	list(APPEND LIBS ${ZEROMQ})
 endif()
 
 # Apple's linker doesn't support --whole-archive. Instead it uses -all_load.

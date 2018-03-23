@@ -11,8 +11,10 @@
 #include "gws/GWMessageHandler.h"
 #include "gws/GWResponseExpectedQueue.h"
 #include "gws/RPCForwarder.h"
+#include "gws/SensorDataListener.h"
 #include "service/GWSDeviceServiceImpl.h"
 #include "service/GWSSensorHistoryServiceImpl.h"
+#include "util/EventSource.h"
 #include "util/Loggable.h"
 
 namespace BeeeOn {
@@ -39,6 +41,9 @@ public:
 	void setRPCForwarder(RPCForwarder::Ptr forwarder);
 	void setDeviceService(GWSDeviceService::Ptr service);
 	void setSensorHistoryService(GWSSensorHistoryService::Ptr service);
+
+	void registerDataListener(SensorDataListener::Ptr listener);
+	void setEventsExecutor(AsyncExecutor::Ptr executor);
 
 	/**
 	 * Break dependency cycles prior destruction.
@@ -79,6 +84,7 @@ private:
 	RPCForwarder::Ptr m_rpcForwarder;
 	GWSDeviceService::Ptr m_deviceService;
 	GWSSensorHistoryService::Ptr m_sensorHistoryService;
+	EventSource<SensorDataListener> m_dataEventSource;
 };
 
 }

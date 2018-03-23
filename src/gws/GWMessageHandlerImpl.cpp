@@ -15,6 +15,8 @@ BEEEON_OBJECT_REF("responseExpectedQueue", &GWMessageHandlerImpl::setGWResponseE
 BEEEON_OBJECT_REF("rpcForwarder", &GWMessageHandlerImpl::setRPCForwarder)
 BEEEON_OBJECT_REF("deviceService", &GWMessageHandlerImpl::setDeviceService)
 BEEEON_OBJECT_REF("sensorHistoryService", &GWMessageHandlerImpl::setSensorHistoryService)
+BEEEON_OBJECT_REF("eventsExecutor", &GWMessageHandlerImpl::setEventsExecutor)
+BEEEON_OBJECT_REF("dataListeners", &GWMessageHandlerImpl::registerDataListener)
 BEEEON_OBJECT_HOOK("cleanup", &GWMessageHandlerImpl::cleanup)
 BEEEON_OBJECT_END(BeeeOn, GWMessageHandlerImpl)
 
@@ -105,6 +107,14 @@ void GWMessageHandlerImpl::handleSensorData(GWSensorDataExport::Ptr dataExport,
 
 			moduleValues.push_back(moduleValue);
 		}
+
+		SensorDataEvent e;
+		e.setGatewayID(gatewayID);
+		e.setDeviceID(device.id());
+		e.setStamp(it.timestamp());
+		e.setData(moduleValues);
+
+		m_dataEventSource.fireEvent(e, &SensorDataListener::onReceived);
 
 		try {
 			m_sensorHistoryService->insertMany(
@@ -258,4 +268,14 @@ void GWMessageHandlerImpl::setSensorHistoryService(
 		GWSSensorHistoryService::Ptr service)
 {
 	m_sensorHistoryService = service;
+}
+
+void GWMessageHandlerImpl::registerDataListener(SensorDataListener::Ptr listener)
+{
+	m_dataEventSource.addListener(listener);
+}
+
+void GWMessageHandlerImpl::setEventsExecutor(AsyncExecutor::Ptr executor)
+{
+	m_dataEventSource.setAsyncExecutor(executor);
 }

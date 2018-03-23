@@ -15,11 +15,14 @@ find_library (ICU_I18N icui18n)
 find_library (ICU_UC icuuc)
 find_library (JWT jwt)
 find_library (JANSSON jansson)
+find_library (ZEROMQ zmq)
 
 add_definitions(-std=c++11)
 
 file(GLOB SOURCES
+	${PROJECT_SOURCE_DIR}/baf/EventPublisher.cpp
 	${PROJECT_SOURCE_DIR}/baf/GatewayWatcher.cpp
+	${PROJECT_SOURCE_DIR}/baf/PublishingWatcher.cpp
 	${PROJECT_SOURCE_DIR}/jwt/JWToken.cpp
 	${PROJECT_SOURCE_DIR}/provider/AccessTokenCredentials.cpp
 	${PROJECT_SOURCE_DIR}/provider/AuthProvider.cpp
@@ -188,6 +191,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/gws/GWResponseExpectedQueue.cpp
 	${PROJECT_SOURCE_DIR}/gws/RPCForwarder.cpp
 	${PROJECT_SOURCE_DIR}/gws/RelaxedGatewayPeerVerifier.cpp
+	${PROJECT_SOURCE_DIR}/gws/SensorDataListener.cpp
 	${PROJECT_SOURCE_DIR}/gws/SocketGatewayPeerVerifierFactory.cpp
 	${PROJECT_SOURCE_DIR}/gws/WebSocketRequestHandler.cpp
 	${PROJECT_SOURCE_DIR}/gws/WebSocketServer.cpp
@@ -238,6 +242,17 @@ if (JWT AND JANSSON)
 	list(APPEND SOURCES ${JWT_SOURCES})
 else()
 	message(STATUS "JWT support is disabled due to unmet dependencies")
+endif()
+
+if (ZEROMQ)
+	file (GLOB ZEROMQ_SOURCES
+		${PROJECT_SOURCE_DIR}/zeromq/ZeroMQContext.cpp
+		${PROJECT_SOURCE_DIR}/zeromq/ZeroMQPublisher.cpp
+		${PROJECT_SOURCE_DIR}/zeromq/ZeroMQSender.cpp
+	)
+	list(APPEND SOURCES ${ZEROMQ_SOURCES})
+else()
+	message(STATUS "ZeroMQ support is disabled due to unmet dependencies")
 endif()
 
 file(GLOB XMLUI_SOURCES
@@ -374,6 +389,12 @@ if(JWT)
 	list(APPEND LIBS ${JWT})
 else()
 	message(STATUS "library jwt was not found, ignoring...")
+endif()
+
+if(ZEROMQ)
+	list(APPEND LIBS ${ZEROMQ})
+else()
+	message(STATUS "library zmq was not found, ignoring...")
 endif()
 
 # Apple's linker doesn't support --whole-archive. Instead it uses -all_load.
