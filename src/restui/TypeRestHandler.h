@@ -20,7 +20,7 @@ public:
 
 	void list(RestFlow &flow);
 	void detail(RestFlow &flow);
-	void detailEnum(RestFlow &flow);
+	void detailSubtype(RestFlow &flow);
 
 private:
 	UnsafePtr<TypeInfoProvider> m_provider;
