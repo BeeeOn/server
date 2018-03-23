@@ -38,7 +38,7 @@ class TestSecurityHeaders(unittest.TestCase):
 		response, _ = req()
 
 		self.assertIn("X-XSS-Protection", response.headers)
-		self.assertEqual("1; block", response.headers["X-XSS-Protection"])
+		self.assertEqual("1; mode=block", response.headers["X-XSS-Protection"])
 
 	def test5_auth_returns_frame_options(self):
 		req = GET(config.ui_host, config.ui_port, "/auth")
