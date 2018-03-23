@@ -117,6 +117,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLSensorHistoryDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/AbstractConfigurationQueryLoader.cpp
 	${PROJECT_SOURCE_DIR}/dao/ConnectorLoader.cpp
+	${PROJECT_SOURCE_DIR}/dao/FilesystemQueryLoader.cpp
 	${PROJECT_SOURCE_DIR}/dao/IniFileQueryLoader.cpp
 	${PROJECT_SOURCE_DIR}/dao/LoggingQueryProfiler.cpp
 	${PROJECT_SOURCE_DIR}/dao/Query.cpp

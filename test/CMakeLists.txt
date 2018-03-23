@@ -17,6 +17,7 @@ find_library (JANSSON jansson)
 find_library (ZEROMQ zmq)
 
 file(GLOB TEST_SOURCES
+	${PROJECT_SOURCE_DIR}/dao/FilesystemQueryLoaderTest.cpp
 	${PROJECT_SOURCE_DIR}/fcm/FCMSenderTest.cpp
 	${PROJECT_SOURCE_DIR}/fcm/LegacyFCMClientTest.cpp
 	${PROJECT_SOURCE_DIR}/gws/X509GatewayPeerVerifierTest.cpp
