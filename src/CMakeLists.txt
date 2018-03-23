@@ -15,6 +15,7 @@ find_library (ICU_I18N icui18n)
 find_library (ICU_UC icuuc)
 find_library (JWT jwt)
 find_library (JANSSON jansson)
+find_library (ZEROMQ zmq)
 
 add_definitions(-std=c++11)
 
@@ -243,6 +244,14 @@ else()
 	message(STATUS "JWT support is disabled due to unmet dependencies")
 endif()
 
+if (ZEROMQ)
+	file (GLOB ZEROMQ_SOURCES
+	)
+	list(APPEND SOURCES ${ZEROMQ_SOURCES})
+else()
+	message(STATUS "ZeroMQ support is disabled due to unmet dependencies")
+endif()
+
 file(GLOB XMLUI_SOURCES
 	xmlui/Serializing.cpp
 	xmlui/XmlValueConsumer.cpp
@@ -377,6 +386,12 @@ if(JWT)
 	list(APPEND LIBS ${JWT})
 else()
 	message(STATUS "library jwt was not found, ignoring...")
+endif()
+
+if(ZEROMQ)
+	list(APPEND LIBS ${ZEROMQ})
+else()
+	message(STATUS "library zmq was not found, ignoring...")
 endif()
 
 # Apple's linker doesn't support --whole-archive. Instead it uses -all_load.
