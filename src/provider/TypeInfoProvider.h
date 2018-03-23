@@ -5,11 +5,10 @@
 
 #include "model/TypeInfo.h"
 #include "provider/InfoProvider.h"
-#include "util/TypesSAXHandler.h"
 
 namespace BeeeOn {
 
-class TypeInfoProvider : public XmlInfoProvider<TypeInfo, TypesSAXHandler> {
+class TypeInfoProvider : public XmlInfoProvider<TypeInfo> {
 public:
 	TypeInfoProvider();
 

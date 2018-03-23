@@ -1,5 +1,6 @@
 #include "di/Injectable.h"
 #include "provider/DeviceInfoProvider.h"
+#include "util/DevicesSAXHandler.h"
 
 using namespace std;
 using namespace Poco;
@@ -10,13 +11,13 @@ BEEEON_OBJECT_BEGIN(BeeeOn, DeviceInfoProvider)
 BEEEON_OBJECT_CASTABLE(InfoProvider<DeviceInfo>)
 BEEEON_OBJECT_TEXT("devicesFile", &DeviceInfoProvider::setDevicesFile)
 BEEEON_OBJECT_REF("typeInfoProvider", &DeviceInfoProvider::setTypeInfoProvider)
-BEEEON_OBJECT_REF("enumInfoProvider", &DeviceInfoProvider::setEnumInfoProvider)
+BEEEON_OBJECT_REF("subtypeInfoProvider", &DeviceInfoProvider::setSubtypeInfoProvider)
 BEEEON_OBJECT_HOOK("done", &DeviceInfoProvider::loadInfo)
 BEEEON_OBJECT_END(BeeeOn, DeviceInfoProvider)
 
 DeviceInfoProvider::DeviceInfoProvider():
 	m_typeProvider(&NullInfoProvider<TypeInfo>::instance()),
-	m_enumProvider(&NullInfoProvider<EnumInfo>::instance())
+	m_subtypeProvider(&NullInfoProvider<SubtypeInfo>::instance())
 {
 }
 
@@ -31,10 +32,10 @@ void DeviceInfoProvider::setTypeInfoProvider(InfoProvider<TypeInfo> *provider)
 		&NullInfoProvider<TypeInfo>::instance() : provider;
 }
 
-void DeviceInfoProvider::setEnumInfoProvider(InfoProvider<EnumInfo> *provider)
+void DeviceInfoProvider::setSubtypeInfoProvider(InfoProvider<SubtypeInfo> *provider)
 {
-	m_enumProvider = provider == NULL?
-		&NullInfoProvider<EnumInfo>::instance() : provider;
+	m_subtypeProvider = provider == NULL?
+		&NullInfoProvider<SubtypeInfo>::instance() : provider;
 }
 
 DeviceInfo DeviceInfoProvider::resolveTypes(const DeviceInfo &device)
@@ -64,17 +65,17 @@ DeviceInfo DeviceInfoProvider::resolveTypes(const DeviceInfo &device)
 				continue;
 			}
 
-			const EnumInfoID &id = module.subtype()->id();
-			const SharedPtr<EnumInfo> enumInfo = m_enumProvider->findById(id);
+			const SubtypeInfoID &id = module.subtype()->id();
+			const SharedPtr<SubtypeInfo> subtypeInfo = m_subtypeProvider->findById(id);
 
-			if (enumInfo.isNull()) {
-				logger().warning("no such enum subtype " + id.toString()
+			if (subtypeInfo.isNull()) {
+				logger().warning("no such subtype " + id.toString()
 						+ " for device " + device,
 						__FILE__, __LINE__);
 				continue;
 			}
 
-			copy.setSubtype(enumInfo);
+			copy.setSubtype(subtypeInfo);
 		}
 
 		result.add(copy);
@@ -85,7 +86,7 @@ DeviceInfo DeviceInfoProvider::resolveTypes(const DeviceInfo &device)
 
 void DeviceInfoProvider::loadInfo()
 {
-	parseFile(m_devicesFile, "device");
+	parseFile<DevicesSAXHandler>(m_devicesFile, "device");
 
 	InfoProvider<DeviceInfo>::InfoSet set;
 

@@ -7,7 +7,7 @@
 #include "provider/TypeInfoProvider.h"
 #include "l10n/TimeZone.h"
 #include "model/Control.h"
-#include "model/EnumInfo.h"
+#include "model/SubtypeInfo.h"
 #include "model/TypeInfo.h"
 
 namespace Poco {
@@ -72,7 +72,7 @@ void serialize(Poco::JSON::PrintHandler &output,
 
 void serialize(Poco::JSON::PrintHandler &output,
 		Translator &translator,
-		const EnumInfo &info);
+		const SubtypeInfo &info);
 
 void serialize(Poco::JSON::PrintHandler &output,
 		Translator &translator,

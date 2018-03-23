@@ -112,6 +112,8 @@ public:
 		void setLabel(const std::string &label);
 		std::string label() const;
 
+		static Attention parseAttention(const std::string &input);
+
 	private:
 		double m_min;
 		double m_max;

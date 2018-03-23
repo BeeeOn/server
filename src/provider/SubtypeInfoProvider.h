@@ -1,17 +1,16 @@
-#ifndef BEEEON_ENUM_INFO_PROVIDER_H
-#define BEEEON_ENUM_INFO_PROVIDER_H
+#ifndef BEEEON_SUBTYPE_INFO_PROVIDER_H
+#define BEEEON_SUBTYPE_INFO_PROVIDER_H
 
 #include <set>
 
-#include "model/EnumInfo.h"
+#include "model/SubtypeInfo.h"
 #include "provider/InfoProvider.h"
-#include "util/EnumsSAXHandler.h"
 
 namespace BeeeOn {
 
-class EnumInfoProvider : public XmlInfoProvider<EnumInfo, EnumsSAXHandler> {
+class SubtypeInfoProvider : public XmlInfoProvider<SubtypeInfo> {
 public:
-	EnumInfoProvider();
+	SubtypeInfoProvider();
 
 	void setEnumsFile(const std::string &enumsFile);
 

@@ -27,8 +27,8 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/provider/AccessTokenCredentials.cpp
 	${PROJECT_SOURCE_DIR}/provider/AuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/DeviceInfoProvider.cpp
-	${PROJECT_SOURCE_DIR}/provider/EnumInfoProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/RandomProvider.cpp
+	${PROJECT_SOURCE_DIR}/provider/SubtypeInfoProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/OAuth2AuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/FacebookAuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/GoogleAuthProvider.cpp
@@ -79,6 +79,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/Sensor.cpp
 	${PROJECT_SOURCE_DIR}/model/ValueAt.cpp
 	${PROJECT_SOURCE_DIR}/model/ModuleValue.cpp
+	${PROJECT_SOURCE_DIR}/model/SubtypeInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/TypeInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/User.cpp
 	${PROJECT_SOURCE_DIR}/dao/ControlDao.cpp

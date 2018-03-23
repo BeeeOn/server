@@ -1,5 +1,6 @@
 #include "di/Injectable.h"
 #include "provider/TypeInfoProvider.h"
+#include "util/TypesSAXHandler.h"
 
 using namespace std;
 using namespace Poco;
@@ -23,7 +24,7 @@ void TypeInfoProvider::setTypesFile(const std::string &typesFile)
 
 void TypeInfoProvider::loadInfo()
 {
-	parseFile(m_typesFile, "type");
+	parseFile<TypesSAXHandler>(m_typesFile, "type");
 
 	for (const auto &type : ModuleType::Type::all()) {
 		const TypeInfoID &id = {type};

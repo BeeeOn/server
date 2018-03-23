@@ -39,7 +39,7 @@ void EnumsSAXHandler::startElement(
 		if (logger().debug())
 			logger().debug("parsing type of @id " + id, __FILE__, __LINE__);
 
-		m_temp.setId(EnumInfoID::parse(id));
+		m_id = SubtypeInfoID::parse(id);
 		m_temp.setValues({});
 	}
 
@@ -68,16 +68,8 @@ void EnumsSAXHandler::startElement(
 
 		XMLString attention;
 		if (getAndTrimAttribute(attrList, "attention", attention)) {
-			if (attention == "none")
-				m_level.setAttention(TypeInfo::Level::NONE);
-			else if (attention == "single")
-				m_level.setAttention(TypeInfo::Level::SINGLE);
-			else if (attention == "repeat")
-				m_level.setAttention(TypeInfo::Level::REPEAT);
-			else if (attention == "alert")
-				m_level.setAttention(TypeInfo::Level::ALERT);
-			else
-				error("unexpected value of attribute attention: " + attention);
+			m_level.setAttention(
+				TypeInfo::Level::parseAttention(attention));
 		}
 
 		if (logger().debug()) {
@@ -141,13 +133,15 @@ void EnumsSAXHandler::endElement(const SAXElement &element)
 	}
 
 	if (isPathFromRoot("enums", "enum")) {
-		if (m_result.find(m_temp) != m_result.end())
-			error("enum of id " + m_temp.id().toString() + " already exists");
+		const SubtypeInfo info(m_id, m_temp);
+
+		if (m_result.find(info) != m_result.end())
+			error("enum of id " + m_id.toString() + " already exists");
 
 		if (logger().debug())
-			logger().debug("inserting type " + m_temp, __FILE__, __LINE__);
+			logger().debug("inserting type " + info, __FILE__, __LINE__);
 
-		m_result.insert(m_temp);
+		m_result.insert(info);
 	}
 }
 

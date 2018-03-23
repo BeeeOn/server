@@ -10,11 +10,6 @@ EnumInfo::EnumInfo()
 {
 }
 
-EnumInfo::EnumInfo(const EnumInfo::ID &id):
-	Entity<CustomTypeID>(id)
-{
-}
-
 void EnumInfo::setValues(const map<int, string> &values)
 {
 	m_values = values;

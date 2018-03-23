@@ -16,7 +16,7 @@
 BEEEON_OBJECT_BEGIN(BeeeOn, RestUI, TypeRestHandler)
 BEEEON_OBJECT_CASTABLE(RestHandler)
 BEEEON_OBJECT_REF("typeInfoProvider", &TypeRestHandler::setTypeInfoProvider)
-BEEEON_OBJECT_REF("enumInfoProvider", &TypeRestHandler::setEnumInfoProvider)
+BEEEON_OBJECT_REF("subtypeInfoProvider", &TypeRestHandler::setSubtypeInfoProvider)
 BEEEON_OBJECT_END(BeeeOn, RestUI, TypeRestHandler)
 
 using namespace std;
@@ -30,7 +30,7 @@ BeeeOn::RestUI::TypeRestHandler::TypeRestHandler():
 {
 	registerAction<TypeRestHandler>("list", &TypeRestHandler::list);
 	registerAction<TypeRestHandler>("detail", &TypeRestHandler::detail, {"type_id"});
-	registerAction<TypeRestHandler>("detail_enum", &TypeRestHandler::detailEnum, {"enum_id"});
+	registerAction<TypeRestHandler>("detail_subtype", &TypeRestHandler::detailSubtype, {"type", "subtype_id"});
 }
 
 void TypeRestHandler::setTypeInfoProvider(TypeInfoProvider *typeInfoProvider)
@@ -38,9 +38,9 @@ void TypeRestHandler::setTypeInfoProvider(TypeInfoProvider *typeInfoProvider)
 	m_provider = typeInfoProvider;
 }
 
-void TypeRestHandler::setEnumInfoProvider(EnumInfoProvider *enumInfoProvider)
+void TypeRestHandler::setSubtypeInfoProvider(SubtypeInfoProvider *subtypeInfoProvider)
 {
-	m_enumProvider = enumInfoProvider;
+	m_subtypeProvider = subtypeInfoProvider;
 }
 
 void TypeRestHandler::list(RestFlow &flow)
@@ -67,13 +67,20 @@ void TypeRestHandler::detail(RestFlow &flow)
 	endSuccess(result);
 }
 
-void TypeRestHandler::detailEnum(RestFlow &flow)
+void TypeRestHandler::detailSubtype(RestFlow &flow)
 {
-	EnumInfoID id = EnumInfoID::parse(flow.param("enum_id"));
-	SharedPtr<EnumInfo> info = m_enumProvider->findById(id);
+	SubtypeInfo::Kind kind = SubtypeInfo::KIND_INVALID;
+	if (flow.param("type") == "enum")
+		kind = SubtypeInfo::KIND_ENUM;
+
+	SubtypeInfoID id = SubtypeInfoID::parse(flow.param("subtype_id"));
+	SharedPtr<SubtypeInfo> info = m_subtypeProvider->findById(id);
 
 	if (info.isNull())
-		throw NotFoundException("no such enum " + id.toString());
+		throw NotFoundException("no such subtype " + id.toString());
+
+	if (info->kind() != kind)
+		throw NotFoundException("subtype is of different kind");
 
 	PrintHandler result(flow.response().stream());
 

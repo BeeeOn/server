@@ -252,3 +252,17 @@ string TypeInfo::Level::label() const
 {
 	return m_label;
 }
+
+TypeInfo::Level::Attention TypeInfo::Level::parseAttention(const string &input)
+{
+	if (input == "none")
+		return NONE;
+	else if (input == "single")
+		return SINGLE;
+	else if (input == "repeat")
+		return REPEAT;
+	else if (input == "alert")
+		return ALERT;
+
+	throw InvalidArgumentException("unexpected attention value: " + input);
+}

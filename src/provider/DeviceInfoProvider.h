@@ -7,20 +7,19 @@
 
 #include "model/ModuleInfo.h"
 #include "model/DeviceInfo.h"
-#include "model/EnumInfo.h"
+#include "model/SubtypeInfo.h"
 #include "provider/InfoProvider.h"
-#include "util/DevicesSAXHandler.h"
 
 namespace BeeeOn {
 
-class DeviceInfoProvider : public XmlInfoProvider<DeviceInfo, DevicesSAXHandler> {
+class DeviceInfoProvider : public XmlInfoProvider<DeviceInfo> {
 public:
 	typedef Poco::SharedPtr<DeviceInfoProvider> Ptr;
 
 	DeviceInfoProvider();
 
 	void setTypeInfoProvider(InfoProvider<TypeInfo> *provider);
-	void setEnumInfoProvider(InfoProvider<EnumInfo> *provider);
+	void setSubtypeInfoProvider(InfoProvider<SubtypeInfo> *provider);
 	void setDevicesFile(const std::string &devicesFile);
 	void loadInfo();
 
@@ -34,7 +33,7 @@ protected:
 private:
 	std::string m_devicesFile;
 	InfoProvider<TypeInfo> *m_typeProvider;
-	InfoProvider<EnumInfo> *m_enumProvider;
+	InfoProvider<SubtypeInfo> *m_subtypeProvider;
 };
 
 }
