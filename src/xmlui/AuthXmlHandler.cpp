@@ -47,7 +47,7 @@ void AuthXmlHandler::handleInputImpl()
 		else if (provider->hasAttribute("accessToken")) {
 			AccessTokenCredentials credentials(
 				Sanitize::strict(provider->getAttribute("name")),
-				provider->getAttribute("accessToken")
+				TokenID::parse(provider->getAttribute("accessToken"))
 			);
 
 			session = m_authService.login(credentials);

@@ -14,10 +14,7 @@ namespace BeeeOn {
  */
 class GoogleAuthProvider : public OAuth2AuthProvider {
 public:
-	GoogleAuthProvider():
-		OAuth2AuthProvider("google")
-	{
-	}
+	GoogleAuthProvider();
 
 protected:
 	bool verifyAuthCode(

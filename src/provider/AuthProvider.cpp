@@ -1,13 +1,7 @@
 #include <Poco/Logger.h>
 
-#include "di/Injectable.h"
 #include "provider/AuthProvider.h"
 #include "provider/PermitAuthProvider.h"
-
-BEEEON_OBJECT_BEGIN(BeeeOn, PermitAuthProvider)
-BEEEON_OBJECT_CASTABLE(AuthProvider)
-BEEEON_OBJECT_TEXT("resultProvider", &PermitAuthProvider::setResultProvider)
-BEEEON_OBJECT_END(BeeeOn, PermitAuthProvider)
 
 using namespace std;
 using namespace BeeeOn;

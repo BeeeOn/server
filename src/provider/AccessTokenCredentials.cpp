@@ -5,13 +5,13 @@ using namespace BeeeOn;
 
 AccessTokenCredentials::AccessTokenCredentials(
 		const string &provider,
-		const string &accessToken):
+		const TokenID &accessToken):
 	Credentials(provider),
 	m_accessToken(accessToken)
 {
 }
 
-const string &AccessTokenCredentials::accessToken() const
+const TokenID &AccessTokenCredentials::accessToken() const
 {
 	return m_accessToken;
 }

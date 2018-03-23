@@ -41,7 +41,7 @@ bool OAuth2AuthProvider::authorize(const Credentials &cred, AuthResult &result)
 			dynamic_cast<const AccessTokenCredentials &>(cred);
 
 		result.setProvider(name());
-		return verifyAuthCode(accessTokenCredentials, result);
+		return verifyAccessToken(accessTokenCredentials, result);
 	}
 
 	throw NotAuthenticatedException("unrecognized credentials type");
@@ -52,7 +52,7 @@ bool OAuth2AuthProvider::verifyAuthCode(const AuthCodeCredentials &, AuthResult 
 	throw NotImplementedException("auth-code capability is not implemented");
 }
 
-bool OAuth2AuthProvider::verifyAuthCode(const AccessTokenCredentials &, AuthResult &)
+bool OAuth2AuthProvider::verifyAccessToken(const AccessTokenCredentials &, AuthResult &)
 {
 	throw NotImplementedException("access-token capability is not implemented");
 }
