@@ -17,6 +17,7 @@
 #include "gws/GWMessageHandler.h"
 #include "loop/StoppableLoop.h"
 #include "model/GatewayID.h"
+#include "policy/GatewayRateLimiter.h"
 #include "util/EventSource.h"
 #include "util/HavingThreadPool.h"
 #include "util/Occasionally.h"
@@ -131,6 +132,7 @@ public:
 	void sendMessage(const GatewayID &gatewayID, const GWMessage::Ptr message);
 
 	void setGWMessageHandler(GWMessageHandler::Ptr handler);
+	void setRateLimiterFactory(GatewayRateLimiterFactory::Ptr factory);
 
 	void setMaxMessageSize(int size);
 	void setReceiveTimeout(const Poco::Timespan &timeout);
@@ -190,6 +192,7 @@ private:
 	Poco::Timespan m_sendTimeout;
 
 	GWMessageHandler::Ptr m_messageHandler;
+	GatewayRateLimiterFactory::Ptr m_rateLimiterFactory;
 
 	GatewayConnectionMap m_connectionMap;
 	Poco::FastMutex m_connectionMapMutex;

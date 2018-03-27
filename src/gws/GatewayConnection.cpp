@@ -17,11 +17,13 @@ GatewayConnection::GatewayConnection(
 		const GatewayID &gatewayID,
 		const WebSocket &webSocket,
 		SocketReactor &reactor,
+		GatewayRateLimiter::Ptr rateLimiter,
 		const EnqueueReadable &enqueueReadable,
 		size_t maxMessageSize):
 	m_gatewayID(gatewayID),
 	m_webSocket(webSocket),
 	m_reactor(reactor),
+	m_rateLimiter(rateLimiter),
 	m_enqueueReadable(enqueueReadable),
 	m_receiveBuffer(maxMessageSize),
 	m_readableObserver(*this, &GatewayConnection::onReadable)
@@ -45,6 +47,11 @@ GatewayID GatewayConnection::gatewayID() const
 	return m_gatewayID;
 }
 
+GatewayRateLimiter::Ptr GatewayConnection::rateLimiter() const
+{
+	return m_rateLimiter;
+}
+
 void GatewayConnection::addToReactor() const
 {
 	m_reactor.addEventHandler(m_webSocket, m_readableObserver);
@@ -65,6 +72,21 @@ Poco::Timestamp GatewayConnection::lastReceiveTime()
 {
 	FastMutex::ScopedLock guard(m_lastReceiveTimeMutex);
 	return m_lastReceiveTime;
+}
+
+GWMessage::Ptr GatewayConnection::filterMessage(GWMessage::Ptr msg)
+{
+	if (!m_rateLimiter->accept(msg)) {
+		if (logger().debug()) {
+			logger().debug("rate limiting gateway "
+				+ gatewayID().toString(),
+				__FILE__, __LINE__);
+		}
+
+		return nullptr;
+	}
+
+	return msg;
 }
 
 GWMessage::Ptr GatewayConnection::receiveMessage()
@@ -102,9 +124,19 @@ GWMessage::Ptr GatewayConnection::receiveMessage()
 					+ m_gatewayID.toString() + ":\n" + msg, __FILE__, __LINE__);
 		}
 
-		return GWMessage::fromJSON(msg);
+		return filterMessage(GWMessage::fromJSON(msg));
 
 	case WebSocket::FRAME_OP_PING:
+		if (!m_rateLimiter->accept()) {
+			if (logger().debug()) {
+				logger().debug("rate limiting ping-pong for "
+					+ gatewayID().toString(),
+					__FILE__, __LINE__);
+			}
+
+			break;
+		}
+
 		sendPong(msg);
 		break;
 

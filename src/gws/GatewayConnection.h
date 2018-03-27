@@ -15,6 +15,7 @@
 
 #include "gwmessage/GWMessage.h"
 #include "model/GatewayID.h"
+#include "policy/GatewayRateLimiter.h"
 #include "util/Loggable.h"
 
 namespace BeeeOn {
@@ -57,6 +58,7 @@ public:
 		const GatewayID &gatewayID,
 		const Poco::Net::WebSocket &webSocket,
 		Poco::Net::SocketReactor &reactor,
+		GatewayRateLimiter::Ptr rateLimiter,
 		const EnqueueReadable &enqueueReadable,
 		size_t maxMessageSize
 	);
@@ -67,6 +69,11 @@ public:
 	 * @brief Returns id of the connected gateway.
 	 */
 	GatewayID gatewayID() const;
+
+	/**
+	 * @brief rate limiter of the connection.
+	 */
+	GatewayRateLimiter::Ptr rateLimiter() const;
 
 	/**
 	 * @brief Register GatewayConnection as an event handler to the SocketReactor.
@@ -94,6 +101,8 @@ public:
 	GWMessage::Ptr receiveMessage();
 
 private:
+	GWMessage::Ptr filterMessage(GWMessage::Ptr message);
+
 	/**
 	 * @brief Sends back the PONG frame. Such frame must contain the same
 	 * application data as it was received.
@@ -119,6 +128,7 @@ private:
 	GatewayID m_gatewayID;
 	Poco::Net::WebSocket m_webSocket;
 	Poco::Net::SocketReactor &m_reactor;
+	GatewayRateLimiter::Ptr m_rateLimiter;
 	EnqueueReadable m_enqueueReadable;
 	Poco::Buffer<char> m_receiveBuffer;
 	Poco::Timestamp m_lastReceiveTime;
