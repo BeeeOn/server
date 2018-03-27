@@ -115,14 +115,14 @@
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="localeManager" ref="localeManager" />
-			<set name="sqlLoader" ref="queries" />
+			<set name="sqlLoader" ref="sqlLoader" />
 			<set name="profiler" ref="loggingQueryProfiler" />
 		</instance>
 
 		<instance name="sqlIdentityDao" class="BeeeOn::PocoSQLIdentityDao">
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="transactionManager" ref="transactionManager" />
-			<set name="sqlLoader" ref="queries" />
+			<set name="sqlLoader" ref="sqlLoader" />
 			<set name="profiler" ref="loggingQueryProfiler" />
 		</instance>
 
@@ -131,7 +131,7 @@
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="localeManager" ref="localeManager" />
-			<set name="sqlLoader" ref="queries" />
+			<set name="sqlLoader" ref="sqlLoader" />
 			<set name="profiler" ref="loggingQueryProfiler" />
 		</instance>
 
@@ -139,7 +139,7 @@
 				class="BeeeOn::PocoSQLRoleInGatewayDao">
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="transactionManager" ref="transactionManager" />
-			<set name="sqlLoader" ref="queries" />
+			<set name="sqlLoader" ref="sqlLoader" />
 			<set name="profiler" ref="loggingQueryProfiler" />
 			<set name="timeZoneProvider" ref="timeZoneProvider" />
 		</instance>
@@ -147,7 +147,7 @@
 		<instance name="sqlGatewayDao" class="BeeeOn::PocoSQLGatewayDao">
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="transactionManager" ref="transactionManager" />
-			<set name="sqlLoader" ref="queries" />
+			<set name="sqlLoader" ref="sqlLoader" />
 			<set name="profiler" ref="loggingQueryProfiler" />
 			<set name="timeZoneProvider" ref="timeZoneProvider" />
 		</instance>
@@ -155,14 +155,14 @@
 		<instance name="sqlGatewayStatusDao" class="BeeeOn::PocoSQLGatewayStatusDao">
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="transactionManager" ref="transactionManager" />
-			<set name="sqlLoader" ref="queries" />
+			<set name="sqlLoader" ref="sqlLoader" />
 			<set name="profiler" ref="loggingQueryProfiler" />
 		</instance>
 
 		<instance name="sqlLocationDao" class="BeeeOn::PocoSQLLocationDao">
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="transactionManager" ref="transactionManager" />
-			<set name="sqlLoader" ref="queries" />
+			<set name="sqlLoader" ref="sqlLoader" />
 			<set name="profiler" ref="loggingQueryProfiler" />
 		</instance>
 
@@ -170,42 +170,42 @@
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="deviceInfoProvider" ref="deviceInfoProvider" />
-			<set name="sqlLoader" ref="queries" />
+			<set name="sqlLoader" ref="sqlLoader" />
 			<set name="profiler" ref="loggingQueryProfiler" />
 		</instance>
 
 		<instance name="sqlDevicePropertyDao" class="BeeeOn::PocoSQLDevicePropertyDao">
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="transactionManager" ref="transactionManager" />
-			<set name="sqlLoader" ref="queries" />
+			<set name="sqlLoader" ref="sqlLoader" />
 			<set name="profiler" ref="loggingQueryProfiler" />
 		</instance>
 
 		<instance name="sqlSensorHistoryDao" class="BeeeOn::PocoSQLSensorHistoryDao">
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="transactionManager" ref="transactionManager" />
-			<set name="sqlLoader" ref="queries" />
+			<set name="sqlLoader" ref="sqlLoader" />
 			<set name="profiler" ref="loggingQueryProfiler" />
 		</instance>
 
 		<instance name="sqlControlDao" class="BeeeOn::PocoSQLControlDao">
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="transactionManager" ref="transactionManager" />
-			<set name="sqlLoader" ref="queries" />
+			<set name="sqlLoader" ref="sqlLoader" />
 			<set name="profiler" ref="loggingQueryProfiler" />
 		</instance>
 
 		<instance name="sqlFcmTokenDao" class="BeeeOn::PocoSQLFCMTokenDao">
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="transactionManager" ref="transactionManager" />
-			<set name="sqlLoader" ref="queries" />
+			<set name="sqlLoader" ref="sqlLoader" />
 			<set name="profiler" ref="loggingQueryProfiler" />
 		</instance>
 
 		<instance name="sqlFcmRecipientsDao" class="BeeeOn::PocoSQLFCMRecipientsDao">
 			<set name="daoManager" ref="pocoDaoManager" />
 			<set name="transactionManager" ref="transactionManager" />
-			<set name="sqlLoader" ref="queries" />
+			<set name="sqlLoader" ref="sqlLoader" />
 			<set name="profiler" ref="loggingQueryProfiler" />
 		</instance>
 
@@ -214,5 +214,6 @@
 			<add name="file" text="${database.queries}" />
 		</instance>
 
+		<alias name="sqlLoader" ref="queries" />
 	</factory>
 </system>
