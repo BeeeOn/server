@@ -58,5 +58,10 @@
 				class="BeeeOn::RelaxedGatewayPeerVerifierFactory">
 			<set name="verifierFactory" ref="strictGatewayPeerVerifierFactory" />
 		</instance>
+
+		<instance name="noGatewayLimiterFactory" class="BeeeOn::NoGatewayRateLimiterFactory">
+		</instance>
+
+		<alias name="gatewayLimiterFactory" ref="noGatewayLimiterFactory" />
 	</factory>
 </system>
