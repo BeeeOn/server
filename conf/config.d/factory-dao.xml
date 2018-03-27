@@ -214,6 +214,12 @@
 			<add name="file" text="${database.queries.ini.file}" />
 		</instance>
 
-		<alias name="sqlLoader" ref="iniSqlLoader" />
+		<instance name="fsSqlLoader" class="BeeeOn::FilesystemQueryLoader">
+			<add name="rootPath" text="${database.queries.fs.rootDir}" />
+			<add name="preserveUnneededLines" number="${database.queries.fs.preserveLines}" />
+			<add name="extension" text="sql" />
+		</instance>
+
+		<alias name="sqlLoader" ref="${database.queries.impl}SqlLoader" />
 	</factory>
 </system>
