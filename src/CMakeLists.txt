@@ -178,6 +178,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/PocoStatementIntruder.cpp
 	${PROJECT_SOURCE_DIR}/util/Sanitize.cpp
 	${PROJECT_SOURCE_DIR}/util/Startup.cpp
+	${PROJECT_SOURCE_DIR}/util/SQLPreprocessor.cpp
 	${PROJECT_SOURCE_DIR}/util/TypesSAXHandler.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoDaoManager.cpp
 	${PROJECT_SOURCE_DIR}/gws/ControlChangeHandler.cpp
