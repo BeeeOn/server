@@ -209,11 +209,11 @@
 			<set name="profiler" ref="loggingQueryProfiler" />
 		</instance>
 
-		<instance name="queries" class="BeeeOn::IniFileQueryLoader">
+		<instance name="iniSqlLoader" class="BeeeOn::IniFileQueryLoader">
 			<set name="database" text="beeeon" />
 			<add name="file" text="${database.queries}" />
 		</instance>
 
-		<alias name="sqlLoader" ref="queries" />
+		<alias name="sqlLoader" ref="iniSqlLoader" />
 	</factory>
 </system>
