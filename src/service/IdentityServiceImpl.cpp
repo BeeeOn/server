@@ -3,10 +3,10 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, IdentityServiceImpl)
 BEEEON_OBJECT_CASTABLE(IdentityService)
-BEEEON_OBJECT_REF("identityDao", &IdentityServiceImpl::setIdentityDao)
-BEEEON_OBJECT_REF("verifiedIdentityDao", &IdentityServiceImpl::setVerifiedIdentityDao)
-BEEEON_OBJECT_REF("transactionManager", &Transactional::setTransactionManager)
-BEEEON_OBJECT_REF("accessPolicy", &IdentityServiceImpl::setAccessPolicy)
+BEEEON_OBJECT_PROPERTY("identityDao", &IdentityServiceImpl::setIdentityDao)
+BEEEON_OBJECT_PROPERTY("verifiedIdentityDao", &IdentityServiceImpl::setVerifiedIdentityDao)
+BEEEON_OBJECT_PROPERTY("transactionManager", &Transactional::setTransactionManager)
+BEEEON_OBJECT_PROPERTY("accessPolicy", &IdentityServiceImpl::setAccessPolicy)
 BEEEON_OBJECT_END(BeeeOn, IdentityServiceImpl)
 
 using namespace BeeeOn;

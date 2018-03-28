@@ -10,8 +10,8 @@ using namespace BeeeOn;
 
 BEEEON_OBJECT_BEGIN(BeeeOn, IniFileQueryLoader)
 BEEEON_OBJECT_CASTABLE(QueryLoader)
-BEEEON_OBJECT_TEXT("file", &IniFileQueryLoader::addSourceFile)
-BEEEON_OBJECT_TEXT("database", &IniFileQueryLoader::setDatabase)
+BEEEON_OBJECT_PROPERTY("file", &IniFileQueryLoader::addSourceFile)
+BEEEON_OBJECT_PROPERTY("database", &IniFileQueryLoader::setDatabase)
 BEEEON_OBJECT_HOOK("done", &IniFileQueryLoader::prepare)
 BEEEON_OBJECT_END(BeeeOn, IniFileQueryLoader)
 

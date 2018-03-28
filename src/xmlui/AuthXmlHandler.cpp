@@ -99,5 +99,5 @@ XmlRequestHandler *AuthXmlHandlerResolver::createHandler(
 BEEEON_OBJECT_BEGIN(BeeeOn, XmlUI, AuthXmlHandlerResolver)
 BEEEON_OBJECT_CASTABLE(AbstractXmlHandlerResolver)
 BEEEON_OBJECT_CASTABLE(XmlRequestHandlerResolver)
-BEEEON_OBJECT_REF("authService", &AuthXmlHandlerResolver::setAuthService)
+BEEEON_OBJECT_PROPERTY("authService", &AuthXmlHandlerResolver::setAuthService)
 BEEEON_OBJECT_END(BeeeOn, XmlUI, AuthXmlHandlerResolver)

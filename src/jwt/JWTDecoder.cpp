@@ -19,7 +19,7 @@ using namespace Poco;
 using namespace Poco::JSON;
 
 BEEEON_OBJECT_BEGIN(BeeeOn, JWTDecoder)
-BEEEON_OBJECT_TEXT("secret", &JWTDecoder::setSecret)
+BEEEON_OBJECT_PROPERTY("secret", &JWTDecoder::setSecret)
 BEEEON_OBJECT_END(BeeeOn, JWTDecoder)
 
 JWTDecoder::JWTDecoder()

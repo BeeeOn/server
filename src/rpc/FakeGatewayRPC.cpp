@@ -184,6 +184,6 @@ void FakeGatewayRPC::updateActor(
 
 BEEEON_OBJECT_BEGIN(BeeeOn, FakeGatewayRPC)
 BEEEON_OBJECT_CASTABLE(GatewayRPC)
-BEEEON_OBJECT_REF("deviceDao", &FakeGatewayRPC::setDeviceDao)
-BEEEON_OBJECT_REF("asyncExecutor", &FakeGatewayRPC::setAsyncExecutor)
+BEEEON_OBJECT_PROPERTY("deviceDao", &FakeGatewayRPC::setDeviceDao)
+BEEEON_OBJECT_PROPERTY("asyncExecutor", &FakeGatewayRPC::setAsyncExecutor)
 BEEEON_OBJECT_END(BeeeOn, FakeGatewayRPC)

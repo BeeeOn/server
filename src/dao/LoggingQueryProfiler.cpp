@@ -7,7 +7,7 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, LoggingQueryProfiler)
 BEEEON_OBJECT_CASTABLE(QueryProfiler)
-BEEEON_OBJECT_NUMBER("topCount", &LoggingQueryProfiler::setTopCount)
+BEEEON_OBJECT_PROPERTY("topCount", &LoggingQueryProfiler::setTopCount)
 BEEEON_OBJECT_HOOK("cleanup", &LoggingQueryProfiler::reportStats)
 BEEEON_OBJECT_END(BeeeOn, LoggingQueryProfiler)
 

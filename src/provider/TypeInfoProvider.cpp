@@ -9,7 +9,7 @@ using namespace BeeeOn;
 
 BEEEON_OBJECT_BEGIN(BeeeOn, TypeInfoProvider)
 BEEEON_OBJECT_CASTABLE(InfoProvider<TypeInfo>)
-BEEEON_OBJECT_TEXT("typesFile", &TypeInfoProvider::setTypesFile)
+BEEEON_OBJECT_PROPERTY("typesFile", &TypeInfoProvider::setTypesFile)
 BEEEON_OBJECT_HOOK("done", &TypeInfoProvider::loadInfo)
 BEEEON_OBJECT_END(BeeeOn, TypeInfoProvider)
 

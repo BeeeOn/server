@@ -9,7 +9,7 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, PocoSimpleDBInitializer)
 BEEEON_OBJECT_CASTABLE(PocoDBInitializer)
-BEEEON_OBJECT_TEXT("script", &PocoSimpleDBInitializer::loadScript)
+BEEEON_OBJECT_PROPERTY("script", &PocoSimpleDBInitializer::loadScript)
 BEEEON_OBJECT_END(BeeeOn, PocoSimpleDBInitializer)
 
 using namespace std;

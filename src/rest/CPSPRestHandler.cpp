@@ -5,7 +5,7 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, CPSPRestHandler)
 BEEEON_OBJECT_CASTABLE(RestHandler)
-BEEEON_OBJECT_REF("handlers", &CPSPRestHandler::registerHandler)
+BEEEON_OBJECT_PROPERTY("handlers", &CPSPRestHandler::registerHandler)
 BEEEON_OBJECT_END(BeeeOn, CPSPRestHandler)
 
 using namespace std;

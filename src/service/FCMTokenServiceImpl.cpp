@@ -9,9 +9,9 @@ using namespace BeeeOn;
 
 BEEEON_OBJECT_BEGIN(BeeeOn, FCMTokenServiceImpl)
 BEEEON_OBJECT_CASTABLE(FCMTokenService)
-BEEEON_OBJECT_REF("fcmTokenDao", &FCMTokenServiceImpl::setFCMTokenDao)
-BEEEON_OBJECT_REF("transactionManager", &FCMTokenServiceImpl::setTransactionManager)
-BEEEON_OBJECT_REF("accessPolicy", &FCMTokenServiceImpl::setAccessPolicy)
+BEEEON_OBJECT_PROPERTY("fcmTokenDao", &FCMTokenServiceImpl::setFCMTokenDao)
+BEEEON_OBJECT_PROPERTY("transactionManager", &FCMTokenServiceImpl::setTransactionManager)
+BEEEON_OBJECT_PROPERTY("accessPolicy", &FCMTokenServiceImpl::setAccessPolicy)
 BEEEON_OBJECT_END(BeeeOn, FCMTokenServiceImpl)
 
 FCMTokenServiceImpl::FCMTokenServiceImpl()

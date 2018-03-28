@@ -16,7 +16,7 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, AuthRestHandler)
 BEEEON_OBJECT_CASTABLE(RestHandler)
-BEEEON_OBJECT_REF("authService", &AuthRestHandler::setAuthService)
+BEEEON_OBJECT_PROPERTY("authService", &AuthRestHandler::setAuthService)
 BEEEON_OBJECT_END(BeeeOn, AuthRestHandler)
 
 using namespace std;

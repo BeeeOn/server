@@ -6,9 +6,9 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, GWResponseExpectedQueue)
 BEEEON_OBJECT_CASTABLE(StoppableLoop)
-BEEEON_OBJECT_TIME("responseTimeout", &GWResponseExpectedQueue::setResponseTimeout)
-BEEEON_OBJECT_REF("gatewayCommunicator", &GWResponseExpectedQueue::setGatewayCommunicator)
-BEEEON_OBJECT_REF("rpcForwarder", &GWResponseExpectedQueue::setRPCForwarder)
+BEEEON_OBJECT_PROPERTY("responseTimeout", &GWResponseExpectedQueue::setResponseTimeout)
+BEEEON_OBJECT_PROPERTY("gatewayCommunicator", &GWResponseExpectedQueue::setGatewayCommunicator)
+BEEEON_OBJECT_PROPERTY("rpcForwarder", &GWResponseExpectedQueue::setRPCForwarder)
 BEEEON_OBJECT_HOOK("cleanup", &GWResponseExpectedQueue::cleanup);
 BEEEON_OBJECT_END(BeeeOn, GWResponseExpectedQueue)
 

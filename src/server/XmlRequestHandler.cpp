@@ -174,6 +174,6 @@ AutoPtr<Document> XmlRequestHandlerFactory::parseDocument(
 
 BEEEON_OBJECT_BEGIN(BeeeOn, XmlRequestHandlerFactory)
 BEEEON_OBJECT_CASTABLE(SocketServerConnectionFactory)
-BEEEON_OBJECT_REF("resolvers", &XmlRequestHandlerFactory::registerResolver)
-BEEEON_OBJECT_NUMBER("maxBuffer", &XmlRequestHandlerFactory::setMaxLength)
+BEEEON_OBJECT_PROPERTY("resolvers", &XmlRequestHandlerFactory::registerResolver)
+BEEEON_OBJECT_PROPERTY("maxBuffer", &XmlRequestHandlerFactory::setMaxLength)
 BEEEON_OBJECT_END(BeeeOn, XmlRequestHandlerFactory)

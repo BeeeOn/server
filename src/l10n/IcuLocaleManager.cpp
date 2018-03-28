@@ -11,9 +11,9 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, IcuLocaleManager)
 BEEEON_OBJECT_CASTABLE(LocaleManager)
-BEEEON_OBJECT_TEXT("bundleName", &IcuLocaleManager::setBundleName)
-BEEEON_OBJECT_TEXT("defaultLocale", &IcuLocaleManager::setDefaultLocale)
-BEEEON_OBJECT_TEXT("resourceDir", &IcuLocaleManager::setResourceDir)
+BEEEON_OBJECT_PROPERTY("bundleName", &IcuLocaleManager::setBundleName)
+BEEEON_OBJECT_PROPERTY("defaultLocale", &IcuLocaleManager::setDefaultLocale)
+BEEEON_OBJECT_PROPERTY("resourceDir", &IcuLocaleManager::setResourceDir)
 BEEEON_OBJECT_HOOK("done", &IcuLocaleManager::setup)
 BEEEON_OBJECT_END(BeeeOn, IcuLocaleManager)
 

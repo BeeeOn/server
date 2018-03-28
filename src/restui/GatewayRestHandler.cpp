@@ -14,8 +14,8 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, RestUI, GatewayRestHandler)
 BEEEON_OBJECT_CASTABLE(RestHandler)
-BEEEON_OBJECT_REF("gatewayService", &GatewayRestHandler::setGatewayService)
-BEEEON_OBJECT_REF("timeZoneProvider", &GatewayRestHandler::setTimeZoneProvider)
+BEEEON_OBJECT_PROPERTY("gatewayService", &GatewayRestHandler::setGatewayService)
+BEEEON_OBJECT_PROPERTY("timeZoneProvider", &GatewayRestHandler::setTimeZoneProvider)
 BEEEON_OBJECT_END(BeeeOn, RestUI, GatewayRestHandler)
 
 using namespace std;

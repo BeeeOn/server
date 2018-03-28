@@ -9,9 +9,9 @@ using namespace BeeeOn;
 
 BEEEON_OBJECT_BEGIN(BeeeOn, SessionManagerImpl)
 BEEEON_OBJECT_CASTABLE(SessionManager)
-BEEEON_OBJECT_REF("secureRandomProvider", &SessionManagerImpl::setSecureRandomProvider)
-BEEEON_OBJECT_TIME("sessionExpireTime", &SessionManagerImpl::setSessionExpireTime)
-BEEEON_OBJECT_NUMBER("maxUserSessions", &SessionManagerImpl::setMaxUserSessions)
+BEEEON_OBJECT_PROPERTY("secureRandomProvider", &SessionManagerImpl::setSecureRandomProvider)
+BEEEON_OBJECT_PROPERTY("sessionExpireTime", &SessionManagerImpl::setSessionExpireTime)
+BEEEON_OBJECT_PROPERTY("maxUserSessions", &SessionManagerImpl::setMaxUserSessions)
 BEEEON_OBJECT_END(BeeeOn, SessionManagerImpl)
 
 SessionManagerImpl::SessionManagerImpl()

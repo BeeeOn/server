@@ -16,8 +16,8 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, RestUI, DeviceRestHandler)
 BEEEON_OBJECT_CASTABLE(RestHandler)
-BEEEON_OBJECT_REF("deviceService", &DeviceRestHandler::setDeviceService)
-BEEEON_OBJECT_REF("gatewayService", &DeviceRestHandler::setGatewayService)
+BEEEON_OBJECT_PROPERTY("deviceService", &DeviceRestHandler::setDeviceService)
+BEEEON_OBJECT_PROPERTY("gatewayService", &DeviceRestHandler::setGatewayService)
 BEEEON_OBJECT_END(BeeeOn, RestUI, DeviceRestHandler)
 
 using namespace std;

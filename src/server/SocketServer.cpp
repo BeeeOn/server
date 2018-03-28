@@ -16,14 +16,14 @@ using namespace BeeeOn;
 
 BEEEON_OBJECT_BEGIN(BeeeOn, SocketServer)
 BEEEON_OBJECT_CASTABLE(StoppableLoop)
-BEEEON_OBJECT_NUMBER("port", &SocketServer::setPort)
-BEEEON_OBJECT_NUMBER("backlog", &SocketServer::setBacklog)
-BEEEON_OBJECT_NUMBER("maxThreads", &SocketServer::setMaxThreads)
-BEEEON_OBJECT_NUMBER("maxQueued", &SocketServer::setMaxQueued)
-BEEEON_OBJECT_TIME("threadIdleTime", &SocketServer::setThreadIdleTime)
-BEEEON_OBJECT_TEXT("threadPriority", &SocketServer::setThreadPriority)
-BEEEON_OBJECT_REF("sslConfig", &SocketServer::setSSLConfig)
-BEEEON_OBJECT_REF("connectionFactory", &SocketServer::setFactory)
+BEEEON_OBJECT_PROPERTY("port", &SocketServer::setPort)
+BEEEON_OBJECT_PROPERTY("backlog", &SocketServer::setBacklog)
+BEEEON_OBJECT_PROPERTY("maxThreads", &SocketServer::setMaxThreads)
+BEEEON_OBJECT_PROPERTY("maxQueued", &SocketServer::setMaxQueued)
+BEEEON_OBJECT_PROPERTY("threadIdleTime", &SocketServer::setThreadIdleTime)
+BEEEON_OBJECT_PROPERTY("threadPriority", &SocketServer::setThreadPriority)
+BEEEON_OBJECT_PROPERTY("sslConfig", &SocketServer::setSSLConfig)
+BEEEON_OBJECT_PROPERTY("connectionFactory", &SocketServer::setFactory)
 BEEEON_OBJECT_END(BeeeOn, SocketServer)
 
 SocketServer::SocketServer():

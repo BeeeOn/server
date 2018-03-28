@@ -10,10 +10,10 @@ using namespace BeeeOn;
 
 BEEEON_OBJECT_BEGIN(BeeeOn, SensorHistoryServiceImpl)
 BEEEON_OBJECT_CASTABLE(SensorHistoryService)
-BEEEON_OBJECT_REF("sensorHistoryDao", &SensorHistoryServiceImpl::setSensorHistoryDao)
-BEEEON_OBJECT_REF("deviceDao", &SensorHistoryServiceImpl::setDeviceDao)
-BEEEON_OBJECT_REF("accessPolicy", &SensorHistoryServiceImpl::setAccessPolicy)
-BEEEON_OBJECT_REF("transactionManager", &Transactional::setTransactionManager)
+BEEEON_OBJECT_PROPERTY("sensorHistoryDao", &SensorHistoryServiceImpl::setSensorHistoryDao)
+BEEEON_OBJECT_PROPERTY("deviceDao", &SensorHistoryServiceImpl::setDeviceDao)
+BEEEON_OBJECT_PROPERTY("accessPolicy", &SensorHistoryServiceImpl::setAccessPolicy)
+BEEEON_OBJECT_PROPERTY("transactionManager", &Transactional::setTransactionManager)
 BEEEON_OBJECT_END(BeeeOn, SensorHistoryServiceImpl)
 
 SensorHistoryServiceImpl::SensorHistoryServiceImpl()

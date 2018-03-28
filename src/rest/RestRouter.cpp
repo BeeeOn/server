@@ -13,10 +13,10 @@
 #include "util/ConfigurationLoader.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, RestRouter)
-BEEEON_OBJECT_TEXT("apiName", &RestRouter::setApiName)
-BEEEON_OBJECT_TEXT("applicationName", &RestRouter::setApplicationName)
-BEEEON_OBJECT_TEXT("configurationFile", &RestRouter::setConfigurationFile)
-BEEEON_OBJECT_REF("handlers", &RestRouter::addHandler)
+BEEEON_OBJECT_PROPERTY("apiName", &RestRouter::setApiName)
+BEEEON_OBJECT_PROPERTY("applicationName", &RestRouter::setApplicationName)
+BEEEON_OBJECT_PROPERTY("configurationFile", &RestRouter::setConfigurationFile)
+BEEEON_OBJECT_PROPERTY("handlers", &RestRouter::addHandler)
 BEEEON_OBJECT_HOOK("done", &RestRouter::initRouting)
 BEEEON_OBJECT_END(BeeeOn, RestRouter)
 

@@ -7,9 +7,9 @@ using namespace BeeeOn;
 
 BEEEON_OBJECT_BEGIN(BeeeOn, GWSGatewayServiceImpl)
 BEEEON_OBJECT_CASTABLE(GWSGatewayService)
-BEEEON_OBJECT_REF("gatewayDao", &GWSGatewayServiceImpl::setGatewayDao)
-BEEEON_OBJECT_REF("gatewayStatusDao", &GWSGatewayServiceImpl::setGatewayStatusDao)
-BEEEON_OBJECT_REF("transactionManager", &Transactional::setTransactionManager)
+BEEEON_OBJECT_PROPERTY("gatewayDao", &GWSGatewayServiceImpl::setGatewayDao)
+BEEEON_OBJECT_PROPERTY("gatewayStatusDao", &GWSGatewayServiceImpl::setGatewayStatusDao)
+BEEEON_OBJECT_PROPERTY("transactionManager", &Transactional::setTransactionManager)
 BEEEON_OBJECT_END(BeeeOn, GWSGatewayServiceImpl)
 
 void GWSGatewayServiceImpl::setGatewayDao(GatewayDao::Ptr dao)

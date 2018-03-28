@@ -15,8 +15,8 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, RestUI, TypeRestHandler)
 BEEEON_OBJECT_CASTABLE(RestHandler)
-BEEEON_OBJECT_REF("typeInfoProvider", &TypeRestHandler::setTypeInfoProvider)
-BEEEON_OBJECT_REF("subtypeInfoProvider", &TypeRestHandler::setSubtypeInfoProvider)
+BEEEON_OBJECT_PROPERTY("typeInfoProvider", &TypeRestHandler::setTypeInfoProvider)
+BEEEON_OBJECT_PROPERTY("subtypeInfoProvider", &TypeRestHandler::setSubtypeInfoProvider)
 BEEEON_OBJECT_END(BeeeOn, RestUI, TypeRestHandler)
 
 using namespace std;

@@ -15,12 +15,12 @@ using namespace BeeeOn;
 
 BEEEON_OBJECT_BEGIN(BeeeOn, JWTSessionManager)
 BEEEON_OBJECT_CASTABLE(SessionManager)
-BEEEON_OBJECT_LIST("audienceList", &JWTSessionManager::setAudienceList)
-BEEEON_OBJECT_REF("jwtDecoder", &JWTSessionManager::setJWTDecoder)
-BEEEON_OBJECT_REF("jwtEncoder", &JWTSessionManager::setJWTEncoder)
-BEEEON_OBJECT_REF("localeManager", &JWTSessionManager::setLocaleManager)
-BEEEON_OBJECT_TEXT("issuerName", &JWTSessionManager::setIssuerName)
-BEEEON_OBJECT_TIME("sessionExpireTime", &JWTSessionManager::setSessionExpireTime)
+BEEEON_OBJECT_PROPERTY("audienceList", &JWTSessionManager::setAudienceList)
+BEEEON_OBJECT_PROPERTY("jwtDecoder", &JWTSessionManager::setJWTDecoder)
+BEEEON_OBJECT_PROPERTY("jwtEncoder", &JWTSessionManager::setJWTEncoder)
+BEEEON_OBJECT_PROPERTY("localeManager", &JWTSessionManager::setLocaleManager)
+BEEEON_OBJECT_PROPERTY("issuerName", &JWTSessionManager::setIssuerName)
+BEEEON_OBJECT_PROPERTY("sessionExpireTime", &JWTSessionManager::setSessionExpireTime)
 BEEEON_OBJECT_END(BeeeOn, JWTSessionManager)
 
 static const size_t UUID_SIZE = 16;

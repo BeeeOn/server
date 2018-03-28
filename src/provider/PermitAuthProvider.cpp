@@ -6,7 +6,7 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, PermitAuthProvider)
 BEEEON_OBJECT_CASTABLE(AuthProvider)
-BEEEON_OBJECT_TEXT("resultProvider", &PermitAuthProvider::setResultProvider)
+BEEEON_OBJECT_PROPERTY("resultProvider", &PermitAuthProvider::setResultProvider)
 BEEEON_OBJECT_END(BeeeOn, PermitAuthProvider)
 
 using namespace std;

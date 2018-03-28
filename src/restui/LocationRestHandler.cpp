@@ -13,7 +13,7 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, RestUI, LocationRestHandler)
 BEEEON_OBJECT_CASTABLE(RestHandler)
-BEEEON_OBJECT_REF("locationService", &LocationRestHandler::setLocationService)
+BEEEON_OBJECT_PROPERTY("locationService", &LocationRestHandler::setLocationService)
 BEEEON_OBJECT_END(BeeeOn, RestUI, LocationRestHandler)
 
 using namespace std;

@@ -9,8 +9,8 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, XmlUI, FCMTokenXmlHandlerResolver)
 BEEEON_OBJECT_CASTABLE(XmlRequestHandlerResolver)
-BEEEON_OBJECT_REF("fcmTokenService", &FCMTokenXmlHandlerResolver::setFCMTokenService)
-BEEEON_OBJECT_REF("sessionManager", &FCMTokenXmlHandlerResolver::setSessionManager)
+BEEEON_OBJECT_PROPERTY("fcmTokenService", &FCMTokenXmlHandlerResolver::setFCMTokenService)
+BEEEON_OBJECT_PROPERTY("sessionManager", &FCMTokenXmlHandlerResolver::setSessionManager)
 BEEEON_OBJECT_END(BeeeOn, XmlUI, FCMTokenXmlHandlerResolver)
 
 using namespace std;

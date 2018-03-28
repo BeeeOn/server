@@ -25,8 +25,8 @@ using namespace std;
 
 BEEEON_OBJECT_BEGIN(BeeeOn, LegacyFCMClient)
 BEEEON_OBJECT_CASTABLE(FCMClient)
-BEEEON_OBJECT_TEXT("fcmApiUri", &LegacyFCMClient::setApiUri)
-BEEEON_OBJECT_REF("sslConfig", &LegacyFCMClient::setSSLConfig)
+BEEEON_OBJECT_PROPERTY("fcmApiUri", &LegacyFCMClient::setApiUri)
+BEEEON_OBJECT_PROPERTY("sslConfig", &LegacyFCMClient::setSSLConfig)
 BEEEON_OBJECT_END(BeeeOn, LegacyFCMClient)
 
 LegacyFCMClient::LegacyFCMClient():

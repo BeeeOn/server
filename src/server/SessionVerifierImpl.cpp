@@ -5,8 +5,8 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, SessionVerifierImpl)
 BEEEON_OBJECT_CASTABLE(SessionVerifier)
-BEEEON_OBJECT_REF("sessionManager", &SessionVerifierImpl::setSessionManager)
-BEEEON_OBJECT_TEXT("scheme", &SessionVerifierImpl::setScheme)
+BEEEON_OBJECT_PROPERTY("sessionManager", &SessionVerifierImpl::setSessionManager)
+BEEEON_OBJECT_PROPERTY("scheme", &SessionVerifierImpl::setScheme)
 BEEEON_OBJECT_END(BeeeOn, SessionVerifierImpl)
 
 using namespace Poco;

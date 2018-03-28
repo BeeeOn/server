@@ -6,10 +6,10 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, Automation, GatewayWatcher)
 BEEEON_OBJECT_CASTABLE(GatewayListener)
-BEEEON_OBJECT_REF("recipientsDao", &GatewayWatcher::setRecipientsDao)
-BEEEON_OBJECT_REF("sender", &GatewayWatcher::setSender)
-BEEEON_OBJECT_REF("translatorFactory", &GatewayWatcher::setTranslatorFactory)
-BEEEON_OBJECT_REF("transactionManager", &GatewayWatcher::setTransactionManager)
+BEEEON_OBJECT_PROPERTY("recipientsDao", &GatewayWatcher::setRecipientsDao)
+BEEEON_OBJECT_PROPERTY("sender", &GatewayWatcher::setSender)
+BEEEON_OBJECT_PROPERTY("translatorFactory", &GatewayWatcher::setTranslatorFactory)
+BEEEON_OBJECT_PROPERTY("transactionManager", &GatewayWatcher::setTransactionManager)
 BEEEON_OBJECT_END(BeeeOn, Automation, GatewayWatcher)
 
 using namespace std;

@@ -14,8 +14,8 @@ using namespace Poco;
 using namespace Poco::JSON;
 
 BEEEON_OBJECT_BEGIN(BeeeOn, JWTEncoder)
-BEEEON_OBJECT_TEXT("secret", &JWTEncoder::setSecret)
-BEEEON_OBJECT_TEXT("algorithm", &JWTEncoder::setAlgorithm)
+BEEEON_OBJECT_PROPERTY("secret", &JWTEncoder::setSecret)
+BEEEON_OBJECT_PROPERTY("algorithm", &JWTEncoder::setAlgorithm)
 BEEEON_OBJECT_END(BeeeOn, JWTEncoder)
 
 JWTEncoder::JWTEncoder():

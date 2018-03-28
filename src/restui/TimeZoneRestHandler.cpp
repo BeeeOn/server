@@ -10,7 +10,7 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, RestUI, TimeZoneRestHandler)
 BEEEON_OBJECT_CASTABLE(RestHandler)
-BEEEON_OBJECT_REF("timeZoneProvider", &TimeZoneRestHandler::setTimeZoneProvider)
+BEEEON_OBJECT_PROPERTY("timeZoneProvider", &TimeZoneRestHandler::setTimeZoneProvider)
 BEEEON_OBJECT_END(BeeeOn, RestUI, TimeZoneRestHandler)
 
 using namespace std;

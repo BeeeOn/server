@@ -6,7 +6,7 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, RelaxedGatewayPeerVerifierFactory)
 BEEEON_OBJECT_CASTABLE(SocketGatewayPeerVerifierFactory)
-BEEEON_OBJECT_REF("verifierFactory", &RelaxedGatewayPeerVerifierFactory::setVerifierFactory)
+BEEEON_OBJECT_PROPERTY("verifierFactory", &RelaxedGatewayPeerVerifierFactory::setVerifierFactory)
 BEEEON_OBJECT_END(BeeeOn, RelaxedGatewayPeerVerifierFactory)
 
 using namespace std;

@@ -7,7 +7,7 @@ using namespace BeeeOn;
 
 BEEEON_OBJECT_BEGIN(BeeeOn, PocoTransactionFactory)
 BEEEON_OBJECT_CASTABLE(TransactionFactory)
-BEEEON_OBJECT_REF("daoManager", &PocoTransactionFactory::setDaoManager)
+BEEEON_OBJECT_PROPERTY("daoManager", &PocoTransactionFactory::setDaoManager)
 BEEEON_OBJECT_END(BeeeOn, PocoTransactionFactory)
 
 PocoTransactionFactory::PocoTransactionFactory()

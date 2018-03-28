@@ -5,10 +5,10 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, LocationServiceImpl)
 BEEEON_OBJECT_CASTABLE(LocationService)
-BEEEON_OBJECT_REF("locationDao", &LocationServiceImpl::setLocationDao)
-BEEEON_OBJECT_REF("gatewayDao", &LocationServiceImpl::setGatewayDao)
-BEEEON_OBJECT_REF("accessPolicy", &LocationServiceImpl::setAccessPolicy)
-BEEEON_OBJECT_REF("transactionManager", &Transactional::setTransactionManager)
+BEEEON_OBJECT_PROPERTY("locationDao", &LocationServiceImpl::setLocationDao)
+BEEEON_OBJECT_PROPERTY("gatewayDao", &LocationServiceImpl::setGatewayDao)
+BEEEON_OBJECT_PROPERTY("accessPolicy", &LocationServiceImpl::setAccessPolicy)
+BEEEON_OBJECT_PROPERTY("transactionManager", &Transactional::setTransactionManager)
 BEEEON_OBJECT_END(BeeeOn, LocationServiceImpl)
 
 using namespace std;

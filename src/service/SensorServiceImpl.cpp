@@ -7,10 +7,10 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, SensorServiceImpl)
 BEEEON_OBJECT_CASTABLE(SensorService)
-BEEEON_OBJECT_REF("deviceDao", &SensorServiceImpl::setDeviceDao)
-BEEEON_OBJECT_REF("sensorHistoryDao", &SensorServiceImpl::setSensorHistoryDao)
-BEEEON_OBJECT_REF("accessPolicy", &SensorServiceImpl::setAccessPolicy)
-BEEEON_OBJECT_REF("transactionManager", &SensorServiceImpl::setTransactionManager)
+BEEEON_OBJECT_PROPERTY("deviceDao", &SensorServiceImpl::setDeviceDao)
+BEEEON_OBJECT_PROPERTY("sensorHistoryDao", &SensorServiceImpl::setSensorHistoryDao)
+BEEEON_OBJECT_PROPERTY("accessPolicy", &SensorServiceImpl::setAccessPolicy)
+BEEEON_OBJECT_PROPERTY("transactionManager", &SensorServiceImpl::setTransactionManager)
 BEEEON_OBJECT_END(BeeeOn, SensorServiceImpl)
 
 using namespace std;

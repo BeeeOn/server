@@ -8,14 +8,14 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, GatewayServiceImpl)
 BEEEON_OBJECT_CASTABLE(GatewayService)
-BEEEON_OBJECT_REF("gatewayDao", &GatewayServiceImpl::setGatewayDao)
-BEEEON_OBJECT_REF("roleInGatewayDao", &GatewayServiceImpl::setRoleInGatewayDao)
-BEEEON_OBJECT_REF("identityDao", &GatewayServiceImpl::setIdentityDao)
-BEEEON_OBJECT_REF("verifiedIdentityDao", &GatewayServiceImpl::setVerifiedIdentityDao)
-BEEEON_OBJECT_REF("gatewayRPC", &GatewayServiceImpl::setGatewayRPC)
-BEEEON_OBJECT_REF("scanController", &GatewayServiceImpl::setScanController)
-BEEEON_OBJECT_REF("accessPolicy", &GatewayServiceImpl::setAccessPolicy)
-BEEEON_OBJECT_REF("transactionManager", &GatewayServiceImpl::setTransactionManager)
+BEEEON_OBJECT_PROPERTY("gatewayDao", &GatewayServiceImpl::setGatewayDao)
+BEEEON_OBJECT_PROPERTY("roleInGatewayDao", &GatewayServiceImpl::setRoleInGatewayDao)
+BEEEON_OBJECT_PROPERTY("identityDao", &GatewayServiceImpl::setIdentityDao)
+BEEEON_OBJECT_PROPERTY("verifiedIdentityDao", &GatewayServiceImpl::setVerifiedIdentityDao)
+BEEEON_OBJECT_PROPERTY("gatewayRPC", &GatewayServiceImpl::setGatewayRPC)
+BEEEON_OBJECT_PROPERTY("scanController", &GatewayServiceImpl::setScanController)
+BEEEON_OBJECT_PROPERTY("accessPolicy", &GatewayServiceImpl::setAccessPolicy)
+BEEEON_OBJECT_PROPERTY("transactionManager", &GatewayServiceImpl::setTransactionManager)
 BEEEON_OBJECT_END(BeeeOn, GatewayServiceImpl)
 
 using namespace std;

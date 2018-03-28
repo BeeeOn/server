@@ -9,9 +9,9 @@ using namespace BeeeOn;
 
 BEEEON_OBJECT_BEGIN(BeeeOn, GWSDeviceServiceImpl)
 BEEEON_OBJECT_CASTABLE(GWSDeviceService)
-BEEEON_OBJECT_REF("deviceDao", &GWSDeviceServiceImpl::setDeviceDao)
-BEEEON_OBJECT_REF("deviceInfoProvider", &GWSDeviceServiceImpl::setDeviceInfoProvider)
-BEEEON_OBJECT_REF("transactionManager", &Transactional::setTransactionManager)
+BEEEON_OBJECT_PROPERTY("deviceDao", &GWSDeviceServiceImpl::setDeviceDao)
+BEEEON_OBJECT_PROPERTY("deviceInfoProvider", &GWSDeviceServiceImpl::setDeviceInfoProvider)
+BEEEON_OBJECT_PROPERTY("transactionManager", &Transactional::setTransactionManager)
 BEEEON_OBJECT_END(BeeeOn, GWSDeviceServiceImpl)
 
 void GWSDeviceServiceImpl::setDeviceDao(DeviceDao::Ptr dao)

@@ -14,13 +14,13 @@ using namespace BeeeOn;
 
 BEEEON_OBJECT_BEGIN(BeeeOn, RoleServiceImpl)
 BEEEON_OBJECT_CASTABLE(RoleService)
-BEEEON_OBJECT_REF("identityDao", &RoleServiceImpl::setIdentityDao)
-BEEEON_OBJECT_REF("verifiedIdentityDao", &RoleServiceImpl::setVerifiedIdentityDao)
-BEEEON_OBJECT_REF("gatewayDao", &RoleServiceImpl::setGatewayDao)
-BEEEON_OBJECT_REF("roleInGatewayDao", &RoleServiceImpl::setRoleInGatewayDao)
-BEEEON_OBJECT_REF("accessPolicy", &RoleServiceImpl::setAccessPolicy)
-BEEEON_OBJECT_REF("notificationDispatcher", &RoleServiceImpl::setNotificationDispatcher)
-BEEEON_OBJECT_REF("transactionManager", &Transactional::setTransactionManager)
+BEEEON_OBJECT_PROPERTY("identityDao", &RoleServiceImpl::setIdentityDao)
+BEEEON_OBJECT_PROPERTY("verifiedIdentityDao", &RoleServiceImpl::setVerifiedIdentityDao)
+BEEEON_OBJECT_PROPERTY("gatewayDao", &RoleServiceImpl::setGatewayDao)
+BEEEON_OBJECT_PROPERTY("roleInGatewayDao", &RoleServiceImpl::setRoleInGatewayDao)
+BEEEON_OBJECT_PROPERTY("accessPolicy", &RoleServiceImpl::setAccessPolicy)
+BEEEON_OBJECT_PROPERTY("notificationDispatcher", &RoleServiceImpl::setNotificationDispatcher)
+BEEEON_OBJECT_PROPERTY("transactionManager", &Transactional::setTransactionManager)
 BEEEON_OBJECT_END(BeeeOn, RoleServiceImpl)
 
 RoleServiceImpl::RoleServiceImpl():

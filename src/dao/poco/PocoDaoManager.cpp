@@ -13,14 +13,14 @@
 #include "util/Occasionally.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, PocoDaoManager)
-BEEEON_OBJECT_REF("connector", &PocoDaoManager::setConnector)
-BEEEON_OBJECT_TEXT("connectionString", &PocoDaoManager::setConnectionString)
-BEEEON_OBJECT_NUMBER("minSessions", &PocoDaoManager::setMinSessions)
-BEEEON_OBJECT_NUMBER("maxSessions", &PocoDaoManager::setMaxSessions)
-BEEEON_OBJECT_TIME("idleTime", &PocoDaoManager::setIdleTime)
-BEEEON_OBJECT_TIME("connectionTimeout", &PocoDaoManager::setConnectionTimeout)
-BEEEON_OBJECT_TEXT("features", &PocoDaoManager::setFeatures)
-BEEEON_OBJECT_REF("initializers", &PocoDaoManager::addInitializer)
+BEEEON_OBJECT_PROPERTY("connector", &PocoDaoManager::setConnector)
+BEEEON_OBJECT_PROPERTY("connectionString", &PocoDaoManager::setConnectionString)
+BEEEON_OBJECT_PROPERTY("minSessions", &PocoDaoManager::setMinSessions)
+BEEEON_OBJECT_PROPERTY("maxSessions", &PocoDaoManager::setMaxSessions)
+BEEEON_OBJECT_PROPERTY("idleTime", &PocoDaoManager::setIdleTime)
+BEEEON_OBJECT_PROPERTY("connectionTimeout", &PocoDaoManager::setConnectionTimeout)
+BEEEON_OBJECT_PROPERTY("features", &PocoDaoManager::setFeatures)
+BEEEON_OBJECT_PROPERTY("initializers", &PocoDaoManager::addInitializer)
 BEEEON_OBJECT_HOOK("done", &PocoDaoManager::connectAndPrepare)
 BEEEON_OBJECT_END(BeeeOn, PocoDaoManager)
 

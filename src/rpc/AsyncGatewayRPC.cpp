@@ -10,9 +10,9 @@ BEEEON_OBJECT_BEGIN(BeeeOn, AsyncGatewayRPC)
 BEEEON_OBJECT_CASTABLE(GatewayRPC)
 BEEEON_OBJECT_CASTABLE(RPCForwarder)
 BEEEON_OBJECT_CASTABLE(StoppableLoop)
-BEEEON_OBJECT_REF("gatewayCommunicator", &AsyncGatewayRPC::setGatewayCommunicator)
-BEEEON_OBJECT_REF("responseExpectedQueue", &AsyncGatewayRPC::setGWResponseExpectedQueue)
-BEEEON_OBJECT_TIME("finalResultTimeout", &AsyncGatewayRPC::setFinalResultTimeout)
+BEEEON_OBJECT_PROPERTY("gatewayCommunicator", &AsyncGatewayRPC::setGatewayCommunicator)
+BEEEON_OBJECT_PROPERTY("responseExpectedQueue", &AsyncGatewayRPC::setGWResponseExpectedQueue)
+BEEEON_OBJECT_PROPERTY("finalResultTimeout", &AsyncGatewayRPC::setFinalResultTimeout)
 BEEEON_OBJECT_END(BeeeOn, AsyncGatewayRPC)
 
 using namespace std;

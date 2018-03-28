@@ -12,14 +12,14 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, CORSFilter)
 BEEEON_OBJECT_CASTABLE(HTTPFilter)
-BEEEON_OBJECT_NUMBER("requireOrigin", &CORSFilter::setRequireOrigin)
-BEEEON_OBJECT_LIST("allowedOrigins", &CORSFilter::setAllowedOrigins)
-BEEEON_OBJECT_LIST("allowedMethods", &CORSFilter::setAllowedMethods)
-BEEEON_OBJECT_LIST("allowedHeaders", &CORSFilter::setAllowedHeaders)
-BEEEON_OBJECT_LIST("simpleHeaders", &CORSFilter::setSimpleHeaders)
-BEEEON_OBJECT_LIST("exposeHeaders", &CORSFilter::setExposeHeaders)
-BEEEON_OBJECT_TIME("preflightMaxAge", &CORSFilter::setPreflightMaxAge)
-BEEEON_OBJECT_NUMBER("allowCredentials", &CORSFilter::setAllowCredentials)
+BEEEON_OBJECT_PROPERTY("requireOrigin", &CORSFilter::setRequireOrigin)
+BEEEON_OBJECT_PROPERTY("allowedOrigins", &CORSFilter::setAllowedOrigins)
+BEEEON_OBJECT_PROPERTY("allowedMethods", &CORSFilter::setAllowedMethods)
+BEEEON_OBJECT_PROPERTY("allowedHeaders", &CORSFilter::setAllowedHeaders)
+BEEEON_OBJECT_PROPERTY("simpleHeaders", &CORSFilter::setSimpleHeaders)
+BEEEON_OBJECT_PROPERTY("exposeHeaders", &CORSFilter::setExposeHeaders)
+BEEEON_OBJECT_PROPERTY("preflightMaxAge", &CORSFilter::setPreflightMaxAge)
+BEEEON_OBJECT_PROPERTY("allowCredentials", &CORSFilter::setAllowCredentials)
 BEEEON_OBJECT_END(BeeeOn, CORSFilter)
 
 using namespace std;

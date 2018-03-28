@@ -5,8 +5,8 @@ using namespace BeeeOn;
 
 BEEEON_OBJECT_BEGIN(BeeeOn, UserServiceImpl)
 BEEEON_OBJECT_CASTABLE(UserService)
-BEEEON_OBJECT_REF("userDao", &UserServiceImpl::setUserDao)
-BEEEON_OBJECT_REF("transactionManager", &UserServiceImpl::setTransactionManager)
+BEEEON_OBJECT_PROPERTY("userDao", &UserServiceImpl::setUserDao)
+BEEEON_OBJECT_PROPERTY("transactionManager", &UserServiceImpl::setTransactionManager)
 BEEEON_OBJECT_END(BeeeOn, UserServiceImpl)
 
 UserServiceImpl::UserServiceImpl()

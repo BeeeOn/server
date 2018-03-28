@@ -7,11 +7,11 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, ControlServiceImpl)
 BEEEON_OBJECT_CASTABLE(ControlService)
-BEEEON_OBJECT_REF("controlDao", &ControlServiceImpl::setControlDao)
-BEEEON_OBJECT_REF("deviceDao", &ControlServiceImpl::setDeviceDao)
-BEEEON_OBJECT_REF("gatewayRPC", &ControlServiceImpl::setGatewayRPC)
-BEEEON_OBJECT_REF("accessPolicy", &ControlServiceImpl::setAccessPolicy)
-BEEEON_OBJECT_REF("transactionManager", &ControlServiceImpl::setTransactionManager)
+BEEEON_OBJECT_PROPERTY("controlDao", &ControlServiceImpl::setControlDao)
+BEEEON_OBJECT_PROPERTY("deviceDao", &ControlServiceImpl::setDeviceDao)
+BEEEON_OBJECT_PROPERTY("gatewayRPC", &ControlServiceImpl::setGatewayRPC)
+BEEEON_OBJECT_PROPERTY("accessPolicy", &ControlServiceImpl::setAccessPolicy)
+BEEEON_OBJECT_PROPERTY("transactionManager", &ControlServiceImpl::setTransactionManager)
 BEEEON_OBJECT_HOOK("done", &ControlServiceImpl::fixupControls)
 BEEEON_OBJECT_END(BeeeOn, ControlServiceImpl)
 

@@ -9,9 +9,9 @@ using namespace BeeeOn;
 
 BEEEON_OBJECT_BEGIN(BeeeOn, DeviceInfoProvider)
 BEEEON_OBJECT_CASTABLE(InfoProvider<DeviceInfo>)
-BEEEON_OBJECT_TEXT("devicesFile", &DeviceInfoProvider::setDevicesFile)
-BEEEON_OBJECT_REF("typeInfoProvider", &DeviceInfoProvider::setTypeInfoProvider)
-BEEEON_OBJECT_REF("subtypeInfoProvider", &DeviceInfoProvider::setSubtypeInfoProvider)
+BEEEON_OBJECT_PROPERTY("devicesFile", &DeviceInfoProvider::setDevicesFile)
+BEEEON_OBJECT_PROPERTY("typeInfoProvider", &DeviceInfoProvider::setTypeInfoProvider)
+BEEEON_OBJECT_PROPERTY("subtypeInfoProvider", &DeviceInfoProvider::setSubtypeInfoProvider)
 BEEEON_OBJECT_HOOK("done", &DeviceInfoProvider::loadInfo)
 BEEEON_OBJECT_END(BeeeOn, DeviceInfoProvider)
 

@@ -12,12 +12,12 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, DeviceServiceImpl)
 BEEEON_OBJECT_CASTABLE(DeviceService)
-BEEEON_OBJECT_REF("deviceDao", &DeviceServiceImpl::setDeviceDao)
-BEEEON_OBJECT_REF("sensorHistoryDao", &DeviceServiceImpl::setSensorHistoryDao)
-BEEEON_OBJECT_REF("devicePropertyDao", &DeviceServiceImpl::setDevicePropertyDao)
-BEEEON_OBJECT_REF("gatewayRPC", &DeviceServiceImpl::setGatewayRPC)
-BEEEON_OBJECT_REF("accessPolicy", &DeviceServiceImpl::setAccessPolicy)
-BEEEON_OBJECT_REF("transactionManager", &DeviceServiceImpl::setTransactionManager)
+BEEEON_OBJECT_PROPERTY("deviceDao", &DeviceServiceImpl::setDeviceDao)
+BEEEON_OBJECT_PROPERTY("sensorHistoryDao", &DeviceServiceImpl::setSensorHistoryDao)
+BEEEON_OBJECT_PROPERTY("devicePropertyDao", &DeviceServiceImpl::setDevicePropertyDao)
+BEEEON_OBJECT_PROPERTY("gatewayRPC", &DeviceServiceImpl::setGatewayRPC)
+BEEEON_OBJECT_PROPERTY("accessPolicy", &DeviceServiceImpl::setAccessPolicy)
+BEEEON_OBJECT_PROPERTY("transactionManager", &DeviceServiceImpl::setTransactionManager)
 BEEEON_OBJECT_END(BeeeOn, DeviceServiceImpl)
 
 using namespace std;

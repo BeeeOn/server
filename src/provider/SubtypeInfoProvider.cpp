@@ -9,7 +9,7 @@ using namespace BeeeOn;
 
 BEEEON_OBJECT_BEGIN(BeeeOn, SubtypeInfoProvider)
 BEEEON_OBJECT_CASTABLE(InfoProvider<SubtypeInfo>)
-BEEEON_OBJECT_TEXT("enumsFile", &SubtypeInfoProvider::setEnumsFile)
+BEEEON_OBJECT_PROPERTY("enumsFile", &SubtypeInfoProvider::setEnumsFile)
 BEEEON_OBJECT_HOOK("done", &SubtypeInfoProvider::loadInfo)
 BEEEON_OBJECT_END(BeeeOn, SubtypeInfoProvider)
 

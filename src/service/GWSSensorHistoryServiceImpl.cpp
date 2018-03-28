@@ -8,9 +8,9 @@ using namespace BeeeOn;
 
 BEEEON_OBJECT_BEGIN(BeeeOn, GWSSensorHistoryServiceImpl)
 BEEEON_OBJECT_CASTABLE(GWSSensorHistoryService)
-BEEEON_OBJECT_REF("deviceDao", &GWSSensorHistoryServiceImpl::setDeviceDao)
-BEEEON_OBJECT_REF("sensorHistoryDao", &GWSSensorHistoryServiceImpl::setSensorHistoryDao)
-BEEEON_OBJECT_REF("transactionManager", &Transactional::setTransactionManager)
+BEEEON_OBJECT_PROPERTY("deviceDao", &GWSSensorHistoryServiceImpl::setDeviceDao)
+BEEEON_OBJECT_PROPERTY("sensorHistoryDao", &GWSSensorHistoryServiceImpl::setSensorHistoryDao)
+BEEEON_OBJECT_PROPERTY("transactionManager", &Transactional::setTransactionManager)
 BEEEON_OBJECT_END(BeeeOn, GWSSensorHistoryServiceImpl)
 
 void GWSSensorHistoryServiceImpl::setDeviceDao(DeviceDao::Ptr dao)

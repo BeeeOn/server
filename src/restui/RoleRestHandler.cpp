@@ -15,8 +15,8 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, RestUI, RoleRestHandler)
 BEEEON_OBJECT_CASTABLE(RestHandler)
-BEEEON_OBJECT_REF("roleService", &RoleRestHandler::setRoleService)
-BEEEON_OBJECT_REF("identityService", &RoleRestHandler::setIdentityService)
+BEEEON_OBJECT_PROPERTY("roleService", &RoleRestHandler::setRoleService)
+BEEEON_OBJECT_PROPERTY("identityService", &RoleRestHandler::setIdentityService)
 BEEEON_OBJECT_END(BeeeOn, RestUI, RoleRestHandler)
 
 using namespace std;

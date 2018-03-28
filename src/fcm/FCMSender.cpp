@@ -19,11 +19,11 @@ using namespace std;
 
 BEEEON_OBJECT_BEGIN(BeeeOn, FCMSender)
 BEEEON_OBJECT_CASTABLE(StoppableRunnable)
-BEEEON_OBJECT_TEXT("serverKey", &FCMSender::setServerKey)
-BEEEON_OBJECT_REF("fcmClient", &FCMSender::setFCMClient)
-BEEEON_OBJECT_REF("fcmTokenDao", &FCMSender::setFCMTokenDao)
-BEEEON_OBJECT_REF("backOffFactory", &FCMSender::setBackOffFactory)
-BEEEON_OBJECT_REF("transactionManager", &FCMSender::setTransactionManager)
+BEEEON_OBJECT_PROPERTY("serverKey", &FCMSender::setServerKey)
+BEEEON_OBJECT_PROPERTY("fcmClient", &FCMSender::setFCMClient)
+BEEEON_OBJECT_PROPERTY("fcmTokenDao", &FCMSender::setFCMTokenDao)
+BEEEON_OBJECT_PROPERTY("backOffFactory", &FCMSender::setBackOffFactory)
+BEEEON_OBJECT_PROPERTY("transactionManager", &FCMSender::setTransactionManager)
 BEEEON_OBJECT_END(BeeeOn, FCMSender)
 
 FCMSender::FCMSender():

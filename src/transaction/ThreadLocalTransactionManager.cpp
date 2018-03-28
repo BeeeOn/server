@@ -5,7 +5,7 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, ThreadLocalTransactionManager)
 BEEEON_OBJECT_CASTABLE(TransactionManager)
-BEEEON_OBJECT_REF("factory", &ThreadLocalTransactionManager::setFactory)
+BEEEON_OBJECT_PROPERTY("factory", &ThreadLocalTransactionManager::setFactory)
 BEEEON_OBJECT_END(BeeeOn, ThreadLocalTransactionManager)
 
 using namespace std;

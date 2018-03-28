@@ -7,7 +7,7 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, Tester, FcmswHandler)
 BEEEON_OBJECT_CASTABLE(Poco::Net::HTTPRequestHandler)
-BEEEON_OBJECT_TEXT("senderId", &FcmswHandler::setSenderID)
+BEEEON_OBJECT_PROPERTY("senderId", &FcmswHandler::setSenderID)
 BEEEON_OBJECT_END(BeeeOn, Tester, FcmswHandler)
 %>
 

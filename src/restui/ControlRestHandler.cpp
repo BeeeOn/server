@@ -13,8 +13,8 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, RestUI, ControlRestHandler)
 BEEEON_OBJECT_CASTABLE(RestHandler)
-BEEEON_OBJECT_REF("controlService", &ControlRestHandler::setControlService)
-BEEEON_OBJECT_TIME("requestTimeout", &ControlRestHandler::setRequestTimeout)
+BEEEON_OBJECT_PROPERTY("controlService", &ControlRestHandler::setControlService)
+BEEEON_OBJECT_PROPERTY("requestTimeout", &ControlRestHandler::setRequestTimeout)
 BEEEON_OBJECT_END(BeeeOn, RestUI, ControlRestHandler)
 
 using namespace std;

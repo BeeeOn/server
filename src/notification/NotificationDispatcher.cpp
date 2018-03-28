@@ -10,7 +10,7 @@
 #include "model/User.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, NotificationDispatcher)
-BEEEON_OBJECT_REF("observer", &NotificationDispatcher::addObserver)
+BEEEON_OBJECT_PROPERTY("observer", &NotificationDispatcher::addObserver)
 BEEEON_OBJECT_END(BeeeOn, NotificationDispatcher)
 
 using namespace Poco;

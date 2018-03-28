@@ -14,8 +14,8 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, RestUI, FCMTokenRestHandler)
 BEEEON_OBJECT_CASTABLE(RestHandler)
-BEEEON_OBJECT_REF("fcmTokenService", &FCMTokenRestHandler::setFCMTokenService)
-BEEEON_OBJECT_TEXT("senderId", &FCMTokenRestHandler::setSenderID)
+BEEEON_OBJECT_PROPERTY("fcmTokenService", &FCMTokenRestHandler::setFCMTokenService)
+BEEEON_OBJECT_PROPERTY("senderId", &FCMTokenRestHandler::setSenderID)
 BEEEON_OBJECT_END(BeeeOn, RestUI, FCMTokenRestHandler)
 
 using namespace std;

@@ -5,7 +5,7 @@
 #include "server/HTTPFilterChain.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, HTTPFilterChain)
-BEEEON_OBJECT_REF("filters", &HTTPFilterChain::registerFilter)
+BEEEON_OBJECT_PROPERTY("filters", &HTTPFilterChain::registerFilter)
 BEEEON_OBJECT_END(BeeeOn, HTTPFilterChain)
 
 using namespace Poco;

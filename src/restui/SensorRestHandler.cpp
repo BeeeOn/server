@@ -17,8 +17,8 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, RestUI, SensorRestHandler)
 BEEEON_OBJECT_CASTABLE(RestHandler)
-BEEEON_OBJECT_REF("sensorService", &SensorRestHandler::setSensorService)
-BEEEON_OBJECT_REF("sensorHistoryService", &SensorRestHandler::setSensorHistoryService)
+BEEEON_OBJECT_PROPERTY("sensorService", &SensorRestHandler::setSensorService)
+BEEEON_OBJECT_PROPERTY("sensorHistoryService", &SensorRestHandler::setSensorHistoryService)
 BEEEON_OBJECT_END(BeeeOn, RestUI, SensorRestHandler)
 
 using namespace std;

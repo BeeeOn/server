@@ -10,7 +10,7 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, RestUI, ProfileRestHandler)
 BEEEON_OBJECT_CASTABLE(RestHandler)
-BEEEON_OBJECT_REF("identityService", &ProfileRestHandler::setIdentityService)
+BEEEON_OBJECT_PROPERTY("identityService", &ProfileRestHandler::setIdentityService)
 BEEEON_OBJECT_END(BeeeOn, RestUI, ProfileRestHandler)
 
 using namespace std;
