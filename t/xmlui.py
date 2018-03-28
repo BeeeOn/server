@@ -27,10 +27,12 @@ class Request:
 		return request
 
 class Response:
-	def __init__(self, root, expectType = None):
+	def __init__(self, root, raw, expectType = None):
 		if root.tag != "response":
 			raise Exception("unexpected tag: " + root.tag)
 		self.root = root
+
+		self.raw = raw
 
 		if expectType is None:
 			return
@@ -103,9 +105,9 @@ class Connector:
 
 		result = xml.fromstring(raw)
 		if hasattr(request, "type"):
-			return Response(result, request.type)
+			return Response(result, raw, request.type)
 		else:
-			return Response(result)
+			return Response(result, raw)
 
 class Login(Request):
 	def __init__(self, provider, authCode):
