@@ -538,6 +538,65 @@ void BeeeOn::RestUI::serialize(Poco::JSON::PrintHandler &output,
 
 		output.endObject();
 	}
+	else if (info.kind() == SubtypeInfo::KIND_BITMAP) {
+		output.key("name");
+		output.value(translator.format(
+			"bitmaps." + info.name() + ".label", info.name()));
+
+		const auto bitmapInfo = info.bitmapInfo();
+
+		if (!bitmapInfo.flags().empty()) {
+			output.key("flags");
+			output.startObject();
+
+			for (const auto &pair : bitmapInfo.flags()) {
+				output.key(to_string(pair.first));
+				output.startObject();
+
+				output.key("name");
+				output.value(translator.format(
+						"bitmaps." + info.name()
+						+ ".flags." + pair.second.name(),
+						pair.second.name()));
+
+				output.key("active");
+				output.value(string(pair.second.inversed()? "low" : "high"));
+
+				serializeAttention(output, pair.second.attention());
+
+				output.endObject();
+			}
+
+			output.endObject();
+		}
+
+		if (!bitmapInfo.groups().empty()) {
+			output.key("groups");
+			output.startArray();
+
+			for (const auto &group : bitmapInfo.groups()) {
+				output.startObject();
+
+				output.key("mapping");
+				output.startArray();
+
+				for (const auto &bit : group.bits())
+					output.value((int) bit);
+
+				output.endArray();
+
+				output.key("name");
+				output.value(translator.format(
+						"bitmaps." + info.name()
+						+ ".groups." + group.name(),
+						group.name()));
+
+				output.endObject();
+			}
+
+			output.endArray();
+		}
+	}
 
 	output.endObject();
 }
