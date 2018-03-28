@@ -18,6 +18,7 @@ BEEEON_OBJECT_PROPERTY("devicePropertyDao", &DeviceServiceImpl::setDevicePropert
 BEEEON_OBJECT_PROPERTY("gatewayRPC", &DeviceServiceImpl::setGatewayRPC)
 BEEEON_OBJECT_PROPERTY("accessPolicy", &DeviceServiceImpl::setAccessPolicy)
 BEEEON_OBJECT_PROPERTY("transactionManager", &DeviceServiceImpl::setTransactionManager)
+BEEEON_OBJECT_HOOK("done", &DeviceServiceImpl::removeUnusedDevices)
 BEEEON_OBJECT_END(BeeeOn, DeviceServiceImpl)
 
 using namespace std;
@@ -439,4 +440,17 @@ void DeviceServiceImpl::doListProperties(Relation<list<DeviceProperty>, Device> 
 			input, input.base(), gateway);
 
 	return m_propertyDao->fetchByDevice(input.target(), input.base());
+}
+
+void DeviceServiceImpl::removeUnusedDevices()
+{
+	size_t count = BEEEON_TRANSACTION_RETURN(size_t,
+                               m_dao->removeUnused());
+
+	if (count > 0) {
+		logger().warning("removed "
+				+ to_string(count)
+				+ " unused devices",
+			__FILE__, __LINE__);
+	}
 }
