@@ -69,8 +69,14 @@ class TestGatewayRegisterUnregister(unittest.TestCase):
 		self.assertEqual("0.0.0.0", response.root[0].get("ip"))
 		self.assertEqual("admin", response.root[0].get("permission"))
 		self.assertEqual("Joe Doe", response.root[0].get("owner"))
-		self.assertEqual("3600", response.root[0].get("timezone"))
-		self.assertEqual("GMT+01:00", response.root[0].get("timezone_name"))
+
+		if response.root[0].get("timezone") == "3600":
+			self.assertEqual("GMT+01:00", response.root[0].get("timezone_name"))
+		elif response.root[0].get("timezone") == "7200":
+			self.assertEqual("GMT+02:00", response.root[0].get("timezone_name"))
+		else:
+			self.fail("unexpected timezone: " + response.root[0].get("timezone"))
+
 		self.assertEqual("available", response.root[0].get("status"))
 
 		response = c.request(GatewayUnregister(
