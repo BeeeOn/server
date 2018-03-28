@@ -45,6 +45,7 @@ PocoSQLDeviceDao::PocoSQLDeviceDao()
 	registerQuery(m_queryFetchActiveBy);
 	registerQuery(m_queryFetchInactiveBy);
 	registerQuery(m_queryFetchActiveWithPrefix);
+	registerQuery(m_queryRemoveUnused);
 }
 
 void PocoSQLDeviceDao::setDeviceInfoProvider(DeviceInfoProvider::Ptr provider)
@@ -272,6 +273,12 @@ void PocoSQLDeviceDao::fetchActiveWithPrefix(std::vector<Device> &devices,
 
 	RecordSet result = executeSelect(sql);
 	return parseMany(result, devices, gateway, *m_deviceInfoProvider);
+}
+
+size_t PocoSQLDeviceDao::removeUnused()
+{
+	Statement sql = (session() << m_queryRemoveUnused());
+	return execute(sql);
 }
 
 bool PocoSQLDeviceDao::parseSingle(RecordSet &result, Device &device,

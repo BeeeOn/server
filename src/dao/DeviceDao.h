@@ -30,6 +30,7 @@ public:
 	virtual void fetchActiveWithPrefix(std::vector<Device> &devices,
 			const Gateway &gateway,
 			const DevicePrefix &prefix) = 0;
+	virtual size_t removeUnused() = 0;
 };
 
 }
