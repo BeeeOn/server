@@ -1,0 +1,9 @@
+-- This query loads information
+-- about a user from database.
+SELECT
+	name,
+	email
+FROM
+	users
+WHERE
+	id = ?

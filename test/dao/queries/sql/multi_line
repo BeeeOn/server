@@ -1,0 +1,7 @@
+SELECT
+	name,
+	age
+FROM
+	users
+WHERE
+	id = ?

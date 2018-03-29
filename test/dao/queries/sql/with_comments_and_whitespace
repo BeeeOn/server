@@ -1,0 +1,12 @@
+
+-- This query intermixes comments, whitespace and
+-- the actual SQL query
+SELECT
+-- we select name and age
+name, age
+	-- this is a wierd line
+FROM -- table would be users
+	users
+
+WHERE
+	id = ?

@@ -17,6 +17,7 @@ find_library (JANSSON jansson)
 find_library (ZEROMQ zmq)
 
 file(GLOB TEST_SOURCES
+	${PROJECT_SOURCE_DIR}/dao/FilesystemQueryLoaderTest.cpp
 	${PROJECT_SOURCE_DIR}/fcm/FCMSenderTest.cpp
 	${PROJECT_SOURCE_DIR}/fcm/LegacyFCMClientTest.cpp
 	${PROJECT_SOURCE_DIR}/gws/X509GatewayPeerVerifierTest.cpp
@@ -43,6 +44,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/sqitch/SqitchTestingPlans.cpp
 	${PROJECT_SOURCE_DIR}/util/DevicesSAXHandlerTest.cpp
 	${PROJECT_SOURCE_DIR}/util/SanitizeTest.cpp
+	${PROJECT_SOURCE_DIR}/util/SQLPreprocessorTest.cpp
 	${PROJECT_SOURCE_DIR}/util/TypesSAXHandlerTest.cpp
 )
 
