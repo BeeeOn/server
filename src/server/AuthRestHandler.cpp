@@ -95,8 +95,11 @@ void AuthRestHandler::login(RestFlow &flow)
 		throw NotAuthenticatedException("invalid login credentials", e);
 	}
 
-	if (!object->has("provider") || !object->has("code"))
-		throw NotAuthenticatedException("malformed input, missing provider or code");
+	if (!object->has("provider"))
+		throw NotAuthenticatedException("malformed input, missing provider");
+
+	if (!object->has("code"))
+		throw NotAuthenticatedException("malformed input, missing code");
 
 	AuthCodeCredentials credentials(
 		Sanitize::strict(object->getValue<std::string>("provider")),
