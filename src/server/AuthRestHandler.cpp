@@ -106,15 +106,7 @@ void AuthRestHandler::login(RestFlow &flow)
 		object->getValue<std::string>("code")
 	);
 
-	Session::Ptr session;
-
-	try {
-		session	= m_authService->login(credentials);
-	}
-	catch (const Exception &e) {
-		throw NotAuthenticatedException("login failed", e);
-	}
-
+	Session::Ptr session = doLogin(credentials);
 	if (session.isNull())
 		throw InvalidAccessException("login failed");
 
@@ -126,6 +118,20 @@ void AuthRestHandler::login(RestFlow &flow)
 	result.value(session->sessionID());
 	result.endObject();
 	endSuccess(result);
+}
+
+Session::Ptr AuthRestHandler::doLogin(const Credentials &credentials)
+{
+	Session::Ptr session;
+
+	try {
+		session	= m_authService->login(credentials);
+	}
+	catch (const Exception &e) {
+		throw NotAuthenticatedException("login failed", e);
+	}
+
+	return session;
 }
 
 void AuthRestHandler::logout(RestFlow &flow)
