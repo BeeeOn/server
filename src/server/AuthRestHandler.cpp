@@ -98,15 +98,20 @@ void AuthRestHandler::login(RestFlow &flow)
 	if (!object->has("provider"))
 		throw NotAuthenticatedException("malformed input, missing provider");
 
-	if (!object->has("code"))
-		throw NotAuthenticatedException("malformed input, missing code");
+	Session::Ptr session;
 
-	AuthCodeCredentials credentials(
-		Sanitize::strict(object->getValue<std::string>("provider")),
-		object->getValue<std::string>("code")
-	);
+	if (object->has("code")) {
+		AuthCodeCredentials credentials(
+			Sanitize::strict(object->getValue<std::string>("provider")),
+			object->getValue<std::string>("code")
+		);
 
-	Session::Ptr session = doLogin(credentials);
+		session = doLogin(credentials);
+	}
+	else {
+		throw NotAuthenticatedException("malformed input, missing credentials");
+	}
+
 	if (session.isNull())
 		throw InvalidAccessException("login failed");
 
