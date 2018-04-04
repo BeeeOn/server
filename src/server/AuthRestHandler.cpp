@@ -110,6 +110,14 @@ void AuthRestHandler::login(RestFlow &flow)
 
 		session = doLogin(credentials);
 	}
+	else if (object->has("key")) {
+		ApiKeyCredentials credentials(
+			provider,
+			Sanitize::token(object->getValue<string>("key"))
+		);
+
+		session = doLogin(credentials);
+	}
 	else {
 		throw NotAuthenticatedException("malformed input, missing credentials");
 	}
