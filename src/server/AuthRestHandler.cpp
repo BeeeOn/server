@@ -102,8 +102,8 @@ void AuthRestHandler::login(RestFlow &flow)
 
 	if (object->has("code")) {
 		AuthCodeCredentials credentials(
-			Sanitize::strict(object->getValue<std::string>("provider")),
-			object->getValue<std::string>("code")
+			Sanitize::strict(object->getValue<string>("provider")),
+			object->getValue<string>("code")
 		);
 
 		session = doLogin(credentials);
