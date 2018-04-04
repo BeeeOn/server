@@ -16,6 +16,7 @@
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="localeManager" ref="localeManager" />
 			<add name="providers" ref="googlePermitAuthProvider" if-yes="${testing.enable}" />
+			<add name="providers" ref="apiKeyAuth" if-yes="${apikeys.enable}" />
 			<add name="providers" ref="googleWebAuth" if-yes="${web-app.google.enable}" />
 			<add name="providers" ref="googleAndroidAuth" if-yes="${android.google.enable}" />
 			<add name="providers" ref="facebookWebAuth" if-yes="${web-app.facebook.enable}" />

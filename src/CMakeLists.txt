@@ -26,6 +26,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/jwt/JWToken.cpp
 	${PROJECT_SOURCE_DIR}/provider/AccessTokenCredentials.cpp
 	${PROJECT_SOURCE_DIR}/provider/ApiKeyCredentials.cpp
+	${PROJECT_SOURCE_DIR}/provider/ApiKeyAuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/AuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/DeviceInfoProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/RandomProvider.cpp

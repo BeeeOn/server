@@ -32,6 +32,10 @@
 			<set name="resultProvider" text="google" />
 		</instance>
 
+		<instance name="apiKeyAuth" class="BeeeOn::ApiKeyAuthProvider">
+			<set name="keyFile" text="${apikeys.file}" />
+		</instance>
+
 		<instance name="googleWebAuth"
 				class="BeeeOn::GoogleAuthProvider">
 			<set name="clientSecret" text="${web-app.google.clientSecret}"/>
