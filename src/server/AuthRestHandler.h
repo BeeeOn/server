@@ -1,7 +1,9 @@
 #ifndef BEEEON_AUTH_REST_HANDLER_H
 #define BEEEON_AUTH_REST_HANDLER_H
 
+#include "provider/AuthProvider.h"
 #include "rest/JSONRestHandler.h"
+#include "server/Session.h"
 
 namespace BeeeOn {
 
@@ -16,6 +18,9 @@ public:
 	void list(RestFlow &flow);
 	void login(RestFlow &flow);
 	void logout(RestFlow &flow);
+
+protected:
+	Session::Ptr doLogin(const Credentials &credentials);
 
 private:
 	AuthService *m_authService;

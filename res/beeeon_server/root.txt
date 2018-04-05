@@ -13,6 +13,7 @@ root {
 			google { "Google Login" }
 			facebook { "Facebook Login" }
 			permit { "Permit Login" }
+			apikey { "API Key Login" }
 		}
 	}
 

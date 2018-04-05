@@ -54,6 +54,18 @@ private:
 	const TokenID m_accessToken;
 };
 
+class ApiKeyCredentials : public Credentials {
+public:
+	ApiKeyCredentials(
+		const std::string &provider,
+		const TokenID &key);
+
+	const TokenID &key() const;
+
+private:
+	const TokenID m_key;
+};
+
 class AuthResult {
 public:
 	AuthResult();

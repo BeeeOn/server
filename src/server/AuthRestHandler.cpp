@@ -95,21 +95,31 @@ void AuthRestHandler::login(RestFlow &flow)
 		throw NotAuthenticatedException("invalid login credentials", e);
 	}
 
-	if (!object->has("provider") || !object->has("code"))
-		throw NotAuthenticatedException("malformed input, missing provider or code");
+	if (!object->has("provider"))
+		throw NotAuthenticatedException("malformed input, missing provider");
 
-	AuthCodeCredentials credentials(
-		Sanitize::strict(object->getValue<std::string>("provider")),
-		object->getValue<std::string>("code")
-	);
-
+	const string &provider = Sanitize::strict(
+			object->getValue<string>("provider"));
 	Session::Ptr session;
 
-	try {
-		session	= m_authService->login(credentials);
+	if (object->has("code")) {
+		AuthCodeCredentials credentials(
+			provider,
+			object->getValue<string>("code")
+		);
+
+		session = doLogin(credentials);
 	}
-	catch (const Exception &e) {
-		throw NotAuthenticatedException("login failed", e);
+	else if (object->has("key")) {
+		ApiKeyCredentials credentials(
+			provider,
+			Sanitize::token(object->getValue<string>("key"))
+		);
+
+		session = doLogin(credentials);
+	}
+	else {
+		throw NotAuthenticatedException("malformed input, missing credentials");
 	}
 
 	if (session.isNull())
@@ -123,6 +133,20 @@ void AuthRestHandler::login(RestFlow &flow)
 	result.value(session->sessionID());
 	result.endObject();
 	endSuccess(result);
+}
+
+Session::Ptr AuthRestHandler::doLogin(const Credentials &credentials)
+{
+	Session::Ptr session;
+
+	try {
+		session	= m_authService->login(credentials);
+	}
+	catch (const Exception &e) {
+		throw NotAuthenticatedException("login failed", e);
+	}
+
+	return session;
 }
 
 void AuthRestHandler::logout(RestFlow &flow)
