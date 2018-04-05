@@ -166,7 +166,7 @@ install(FILES conf/apikeys.properties
 	PERMISSIONS OWNER_READ OWNER_WRITE)
 install(DIRECTORY conf/config.d
 	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon/server)
-install(FILES conf/devices.xml conf/types.xml conf/enums.xml
+install(FILES conf/devices.xml conf/types.xml conf/enums.xml conf/bitmaps.xml
 	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon/server)
 install(FILES db/server-queries.ini
 	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon/db)

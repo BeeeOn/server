@@ -189,6 +189,27 @@ root {
 		}
 	}
 
+	bitmaps {
+		MOD_CURRENT_BOILER_OT_FAULT_FLAGS {
+			label { "OT Fault Flags" }
+			flags {
+				service_request { "service request" }
+				lockout_reset { "lockout reset enabled" }
+				low_water_press { "low water pressure" }
+				gas_flame_fault { "gas/flame fault" }
+				air_press_fault { "air pressure fault" }
+				water_overtemp { "water overheated" }
+			}
+		}
+
+		MOD_CURRENT_BOILER_OT_OEM_FAULTS {
+			label { "OT OEM Faults" }
+			groups {
+				oem_specific { "OEM specific" }
+			}
+		}
+	}
+
 	modules {
 		room_temperature {
 			label { "room temperature" }

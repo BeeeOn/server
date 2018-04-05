@@ -1,0 +1,23 @@
+<!ELEMENT bitmaps (bitmap)*>
+
+<!ELEMENT bitmap (flags|group)+>
+<!ATTLIST bitmap id CDATA #REQUIRED>
+
+<!ELEMENT flags (flag+)>
+<!ATTLIST flags
+	attention (none|single|repeat|alert) "none"
+>
+<!ELEMENT flag (#PCDATA)>
+<!ATTLIST flag
+	index CDATA #REQUIRED
+	attention (none|single|repeat|alert) "none"
+>
+
+<!ELEMENT group (bit+)>
+<!ATTLIST group
+	label CDATA #REQUIRED
+>
+<!ELEMENT bit EMPTY>
+<!ATTLIST bit
+	index CDATA #IMPLIED
+>

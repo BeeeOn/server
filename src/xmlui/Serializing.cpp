@@ -248,6 +248,37 @@ void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
 				attrs.addAttribute("", "type-enum-values",
 						"type-enum-values", "", values);
 			}
+			else if (subtype->kind() == SubtypeInfo::KIND_BITMAP) {
+				const auto &bitmapInfo = subtype->bitmapInfo();
+				string flags;
+				string groups;
+
+				for (const auto &pair : bitmapInfo.flags()) {
+					flags += to_string(pair.first);
+					flags += ":";
+					flags += pair.second.name();
+					flags += ":";
+					flags += pair.second.inversed()? "low" : "high";
+					flags += ";";
+				}
+
+				for (const auto &group : bitmapInfo.groups()) {
+					groups += group.name();
+					groups += ":";
+
+					for (const auto &bit : group.bits()) {
+						groups += to_string(bit);
+						groups += ",";
+					}
+
+					groups.back() = ';';
+				}
+
+				attrs.addAttribute("", "type-bitmap-flags",
+						"type-bitmap-flags", "", flags);
+				attrs.addAttribute("", "type-bitmap-groups",
+						"type-bitmap-groups", "", groups);
+			}
 		}
 
 		if (!module.name().empty())

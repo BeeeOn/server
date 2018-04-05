@@ -180,6 +180,27 @@ cs {
 		}
 	}
 
+	bitmaps {
+		MOD_CURRENT_BOILER_OT_FAULT_FLAGS {
+			label { "OT příznaky selhání" }
+			flags {
+				service_request { "nezbytný servisní zásah" }
+				lockout_reset { "lockout reset povolen" }
+				low_water_press { "nízký tlak vody" }
+				gas_flame_fault { "plyn/plamen" }
+				air_press_fault { "tlak vzduchu" }
+				water_overtemp { "přehřátí vody" }
+			}
+		}
+
+		MOD_CURRENT_BOILER_OT_OEM_FAULTS {
+			label { "OT OEM Faults" }
+			groups {
+				oem_specific { "OEM specific" }
+			}
+		}
+	}
+
 	modules {
 		room_temperature {
 			label { "pokojová teplota" }

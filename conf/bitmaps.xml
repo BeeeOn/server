@@ -1,0 +1,24 @@
+<bitmaps>
+	<bitmap id="MOD_CURRENT_BOILER_OT_FAULT_FLAGS">
+		<flags attention="single">
+			<flag index="0">service_request</flag>
+			<flag index="1">lockout_reset</flag>
+			<flag index="2">low_water_press</flag>
+			<flag index="3">gas_flame_fault</flag>
+			<flag index="4">air_press_fault</flag>
+			<flag index="5">water_overtemp</flag>
+		</flags>
+	</bitmap>
+	<bitmap id="MOD_CURRENT_BOILER_OT_OEM_FAULTS">
+		<group label="oem_specific">
+			<bit index="0" />
+			<bit index="1" />
+			<bit index="2" />
+			<bit index="3" />
+			<bit index="4" />
+			<bit index="5" />
+			<bit index="6" />
+			<bit index="7" />
+		</group>
+	</bitmap>
+</bitmaps>

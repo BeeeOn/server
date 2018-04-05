@@ -4,6 +4,7 @@
 
 		<instance name="subtypeInfoProvider" class="BeeeOn::SubtypeInfoProvider">
 			<set name="enumsFile" text="${spec.enums.xml}" />
+			<set name="bitmapsFile" text="${spec.bitmaps.xml}" />
 		</instance>
 
 		<instance name="typeInfoProvider" class="BeeeOn::TypeInfoProvider">

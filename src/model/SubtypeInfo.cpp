@@ -19,6 +19,15 @@ SubtypeInfo::SubtypeInfo(
 {
 }
 
+SubtypeInfo::SubtypeInfo(
+		const ID &id,
+		const BitmapInfo &bitmapInfo):
+	Entity<CustomTypeID>(id),
+	m_kind(KIND_BITMAP),
+	m_bitmapInfo(bitmapInfo)
+{
+}
+
 EnumInfo &SubtypeInfo::enumInfo()
 {
 	if (m_kind != KIND_ENUM) {
@@ -37,6 +46,26 @@ const EnumInfo &SubtypeInfo::enumInfo() const
 	}
 
 	return m_enumInfo;
+}
+
+BitmapInfo &SubtypeInfo::bitmapInfo()
+{
+	if (m_kind != KIND_BITMAP) {
+		throw IllegalStateException(
+			"accessing BitmapInfo of non-bitmap subtype");
+	}
+
+	return m_bitmapInfo;
+}
+
+const BitmapInfo &SubtypeInfo::bitmapInfo() const
+{
+	if (m_kind != KIND_BITMAP) {
+		throw IllegalStateException(
+			"accessing BitmapInfo of non-bitmap subtype");
+	}
+
+	return m_bitmapInfo;
 }
 
 SubtypeInfo::Kind SubtypeInfo::kind() const

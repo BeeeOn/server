@@ -143,10 +143,10 @@
 			<sensor id="6" type="pressure">
 				<name>Boiler Pressure</name>
 			</sensor>
-			<sensor id="7" type="bitmap">
+			<sensor id="7" type="bitmap" subtype="MOD_CURRENT_BOILER_OT_FAULT_FLAGS">
 				<name>OpenTherm Fault Flags</name>
 			</sensor>
-			<sensor id="8" type="bitmap">
+			<sensor id="8" type="bitmap" subtype="MOD_CURRENT_BOILER_OT_OEM_FAULTS">
 				<name>OpenTherm OEM Flags</name>
 			</sensor>
 		</modules>
