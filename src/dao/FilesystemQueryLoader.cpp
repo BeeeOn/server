@@ -76,6 +76,7 @@ void FilesystemQueryLoader::setPreserveUnneededLines(bool preserve)
 void FilesystemQueryLoader::setRootPath(const string &rootPath)
 {
 	m_rootPath = Path(rootPath);
+	m_rootPath.makeDirectory();
 }
 
 void FilesystemQueryLoader::setExtension(const string &extension)
