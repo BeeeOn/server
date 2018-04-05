@@ -163,7 +163,9 @@ install(FILES conf/restui-api.ini
 	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon/server)
 install(FILES conf/apikeys.properties
 	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon/server
-	PERMISSIONS OWNER_READ OWNER_WRITE)
+	PERMISSIONS
+		OWNER_READ OWNER_WRITE
+		GROUP_READ)
 install(DIRECTORY conf/config.d
 	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon/server)
 install(FILES conf/devices.xml conf/types.xml conf/enums.xml conf/bitmaps.xml
