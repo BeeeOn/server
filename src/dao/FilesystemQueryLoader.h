@@ -5,6 +5,7 @@
 
 #include "dao/QueryLoader.h"
 #include "util/SQLPreprocessor.h"
+#include "util/Loggable.h"
 
 namespace BeeeOn {
 
@@ -21,7 +22,7 @@ namespace BeeeOn {
  * of directories. The lookup is always performed from the
  * configured root path.
  */
-class FilesystemQueryLoader: public QueryLoader {
+class FilesystemQueryLoader: public QueryLoader, Loggable {
 public:
 	FilesystemQueryLoader();
 	virtual ~FilesystemQueryLoader();

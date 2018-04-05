@@ -1,6 +1,7 @@
 #include <Poco/DirectoryIterator.h>
 #include <Poco/File.h>
 #include <Poco/FileStream.h>
+#include <Poco/Logger.h>
 #include <Poco/RegularExpression.h>
 #include <Poco/StreamCopier.h>
 #include <Poco/StringTokenizer.h>
@@ -37,11 +38,21 @@ string FilesystemQueryLoader::find(const string &key) const
 	string query;
 	Path p(keyAsFile(key));
 
+	if (logger().debug()) {
+		logger().debug("loading query " + key + " from " + p.toString(),
+				__FILE__, __LINE__);
+	}
+
 	try {
 		Poco::FileInputStream istr(p.toString());
 		StreamCopier::copyToString(istr, query);
 	} catch (const Exception &e) {
 		throw NotFoundException("failed to read query " + key, e);
+	}
+
+	if (logger().trace()) {
+		logger().trace("loaded query " + key + ":\n" + query,
+				__FILE__, __LINE__);
 	}
 
 	return m_pre.process(query);
