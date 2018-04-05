@@ -15,6 +15,7 @@
 
 		<instance name="gatewayCommunicator" class="BeeeOn::GatewayCommunicator">
 			<set name="messageHandler" ref="messageHandler" />
+			<set name="rateLimiterFactory" ref="gatewayLimiterFactory" />
 			<set name="maxMessageSize" number="${gws.comm.maxMessageSize}" />
 			<set name="receiveTimeout" time="${gws.comm.receiveTimeout}" />
 			<set name="sendTimeout" time="${gws.comm.sendTimeout}" />
@@ -58,5 +59,10 @@
 				class="BeeeOn::RelaxedGatewayPeerVerifierFactory">
 			<set name="verifierFactory" ref="strictGatewayPeerVerifierFactory" />
 		</instance>
+
+		<instance name="noGatewayLimiterFactory" class="BeeeOn::NoGatewayRateLimiterFactory">
+		</instance>
+
+		<alias name="gatewayLimiterFactory" ref="noGatewayLimiterFactory" />
 	</factory>
 </system>

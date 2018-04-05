@@ -9,6 +9,7 @@
 BEEEON_OBJECT_BEGIN(BeeeOn, GatewayCommunicator)
 BEEEON_OBJECT_CASTABLE(StoppableLoop)
 BEEEON_OBJECT_PROPERTY("messageHandler", &GatewayCommunicator::setGWMessageHandler)
+BEEEON_OBJECT_PROPERTY("rateLimiterFactory", &GatewayCommunicator::setRateLimiterFactory)
 BEEEON_OBJECT_PROPERTY("maxMessageSize", &GatewayCommunicator::setMaxMessageSize)
 BEEEON_OBJECT_PROPERTY("receiveTimeout", &GatewayCommunicator::setReceiveTimeout)
 BEEEON_OBJECT_PROPERTY("sendTimeout", &GatewayCommunicator::setSendTimeout)
@@ -49,6 +50,8 @@ void GatewayCommunicator::addGateway(const GatewayID &gatewayID, WebSocket &webS
 {
 	FastMutex::ScopedLock guard(m_connectionMapMutex);
 
+	GatewayRateLimiter::Ptr rateLimiter;
+
 	auto it = m_connectionMap.find(gatewayID);
 	if (it != m_connectionMap.end()) {
 		if (logger().debug()) {
@@ -56,9 +59,13 @@ void GatewayCommunicator::addGateway(const GatewayID &gatewayID, WebSocket &webS
 					+ " found, using new connection", __FILE__, __LINE__);
 		}
 
+		rateLimiter = it->second->rateLimiter();
 		it->second->removeFromReactor();
 		m_connectionMap.erase(it);
 	}
+
+	if (rateLimiter.isNull())
+		rateLimiter = m_rateLimiterFactory->create(gatewayID);
 
 	webSocket.setReceiveTimeout(m_receiveTimeout);
 	webSocket.setSendTimeout(m_sendTimeout);
@@ -68,6 +75,7 @@ void GatewayCommunicator::addGateway(const GatewayID &gatewayID, WebSocket &webS
 			gatewayID,
 			webSocket,
 			m_reactor,
+			rateLimiter,
 			[this](GatewayConnection::Ptr gatewayConnection)
 			{
 				enqueueReadable(gatewayConnection);
@@ -255,6 +263,11 @@ void GatewayCommunicator::handleConnectionReadable(GatewayConnection::Ptr connec
 void GatewayCommunicator::setGWMessageHandler(GWMessageHandler::Ptr handler)
 {
 	m_messageHandler = handler;
+}
+
+void GatewayCommunicator::setRateLimiterFactory(GatewayRateLimiterFactory::Ptr factory)
+{
+	m_rateLimiterFactory = factory;
 }
 
 void GatewayCommunicator::setMaxMessageSize(int size)
