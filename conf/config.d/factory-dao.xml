@@ -39,12 +39,6 @@
 
 		<!-- RPC communication -->
 
-		<instance name="adaServerConnector" class="BeeeOn::SocketRPCConnector">
-			<set name="host" text="${gateway-rpc.connector.host}" />
-			<set name="port" number="${gateway-rpc.connector.port}" />
-			<set name="receiveTimeout" time="${gateway-rpc.connector.receiveTimeout}" />
-		</instance>
-
 		<instance name="fakeGatewayRPC" class="BeeeOn::FakeGatewayRPC">
 			<set name="deviceDao" ref="deviceDao" />
 			<set name="asyncExecutor" ref="asyncExecutor" />
