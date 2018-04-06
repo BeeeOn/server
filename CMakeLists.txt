@@ -138,7 +138,6 @@ set(CPACK_RPM_PACKAGE_REQUIRES "${CPACK_RPM_PACKAGE_REQUIRES}, postgresql-odbc")
 set(CPACK_RPM_PACKAGE_SUGGESTS "libjwt >= 1.8")
 set(CPACK_RPM_PACKAGE_SUGGESTS "cppzmq >= 4.1")
 list(APPEND CPACK_RPM_USER_FILELIST "%attr(0775,root,root) /etc/beeeon")
-list(APPEND CPACK_RPM_USER_FILELIST "%attr(0750,root,beeeon) /etc/beeeon/db")
 list(APPEND CPACK_RPM_USER_FILELIST "%attr(0755,root,beeeon) /etc/beeeon/server")
 list(APPEND CPACK_RPM_USER_FILELIST "%attr(0750,root,beeeon) /etc/beeeon/server/config.d")
 list(APPEND CPACK_RPM_USER_FILELIST "%attr(0640,root,beeeon) /etc/beeeon/server/config.d/*")
@@ -171,8 +170,6 @@ install(DIRECTORY conf/config.d
 	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon/server)
 install(FILES conf/devices.xml conf/types.xml conf/enums.xml conf/bitmaps.xml
 	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon/server)
-install(FILES db/server-queries.ini
-	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon/db)
 install(FILES tools/log-analyze.awk
 	DESTINATION share/beeeon/tools
 	PERMISSIONS
@@ -191,6 +188,8 @@ install(DIRECTORY db/
 	PATTERN "db/revert/*.sql"
 	PATTERN "db/revert/*/*.sql"
 	PATTERN "db/tools/*"
+	PATTERN "db/pgsql/*.sql"
+	PATTERN "db/pgsql/*/*.sql"
 	PATTERN "db/scripts/*.sql"
 	PATTERN "db/test" EXCLUDE
 	PATTERN "db/templates" EXCLUDE)
