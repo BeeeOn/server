@@ -378,7 +378,9 @@ void DefaultAccessPolicy::assure(
 void DefaultAccessPolicy::assure(
 	const SensorHistoryAccessPolicy::Action action,
 	const PolicyContext &context,
-	const Device &device)
+	const Device &device,
+	const TimeInterval &,
+	const Timespan &)
 {
 	switch (action) {
 	case SensorHistoryAccessPolicy::ACTION_USER_GET:

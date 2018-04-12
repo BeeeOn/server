@@ -1,7 +1,10 @@
 #ifndef BEEEON_SENSOR_HISTORY_ACCESS_POLICY_H
 #define BEEEON_SENSOR_HISTORY_ACCESS_POLICY_H
 
+#include "util/TimeInterval.h"
+
 #include <Poco/SharedPtr.h>
+#include <Poco/Timespan.h>
 
 namespace BeeeOn {
 
@@ -23,7 +26,9 @@ public:
 	virtual void assure(
 		const Action action,
 		const PolicyContext &context,
-		const Device &device) = 0;
+		const Device &device,
+		const TimeInterval &range,
+		const Poco::Timespan &interval) = 0;
 };
 
 }
