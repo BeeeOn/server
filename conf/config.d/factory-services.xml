@@ -118,6 +118,12 @@
 
 		<!-- Access policy -->
 
+		<instance name="defaultSensorHistoryRules" class="BeeeOn::SensorHistoryRules">
+			<set name="rules">
+				<pair key="*" text="1 s..max" />
+			</set>
+		</instance>
+
 		<instance name="accessPolicy"
 				class="BeeeOn::DefaultAccessPolicy">
 			<set name="userDao" ref="userDao" />
