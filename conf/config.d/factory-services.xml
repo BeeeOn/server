@@ -124,6 +124,11 @@
 			</set>
 		</instance>
 
+		<instance name="ruledSensorHistoryPolicy" class="BeeeOn::RuledSensorHistoryAccessPolicy">
+			<set name="innerPolicy" ref="accessPolicy" />
+			<set name="rules" ref="defaultSensorHistoryRules" />
+		</instance>
+
 		<instance name="accessPolicy"
 				class="BeeeOn::DefaultAccessPolicy">
 			<set name="userDao" ref="userDao" />
