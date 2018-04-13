@@ -6,8 +6,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 
 #include "cppunit/SkippableAutoRegisterSuite.h"
-#include "provider/AuthProvider.h"
-#include "provider/FacebookAuthProvider.h"
+#include "oauth2/FacebookOAuth2Provider.h"
 #include "ssl/SSLClient.h"
 
 using namespace Poco;
@@ -27,8 +26,8 @@ bool skipWhenNotSetup()
 	return false;
 }
 
-class FacebookAuthProviderTest : public CppUnit::TestFixture {
-	CPPUNIT_TEST_SUITE(FacebookAuthProviderTest);
+class FacebookOAuth2ProviderTest : public CppUnit::TestFixture {
+	CPPUNIT_TEST_SUITE(FacebookOAuth2ProviderTest);
 	CPPUNIT_TEST(testVerifyAuthCode);
 	CPPUNIT_TEST_SUITE_END();
 
@@ -40,24 +39,19 @@ private:
 	SharedPtr<SSLClient> m_sslConfig;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION_SKIPPABLE(FacebookAuthProviderTest,
+CPPUNIT_TEST_SUITE_REGISTRATION_SKIPPABLE(FacebookOAuth2ProviderTest,
 		skipWhenNotSetup);
 
-class TestableFacebookAuthProvider : public FacebookAuthProvider {
-public:
-	using FacebookAuthProvider::verifyAuthCode;
-};
-
-void FacebookAuthProviderTest::setUp()
+void FacebookOAuth2ProviderTest::setUp()
 {
 	//Obtain auth code by accessing:
 	//https://www.facebook.com/v2.9/dialog/oauth?client_id={CLIENT_ID}&redirect_uri={REDIRECT_URI}&response_type=code
 	m_authCode = Environment::get("FACEBOOK_AUTH_CODE");
 }
 
-void FacebookAuthProviderTest::testVerifyAuthCode()
+void FacebookOAuth2ProviderTest::testVerifyAuthCode()
 {
-	TestableFacebookAuthProvider provider;
+	FacebookOAuth2Provider provider;
 	AuthResult info;
 	SharedPtr<SSLClient> sslConfig = new SSLClient;
 
@@ -73,15 +67,16 @@ void FacebookAuthProviderTest::testVerifyAuthCode()
 	AuthCodeCredentials credentials("facebook", m_authCode);
 
 	//MUST be same as redirect uri that was used to get auth code/acces token
-	provider.setRedirectURI(
+	provider.setRedirectUri(
 			Environment::get("FACEBOOK_REDIRECT_URI", "https://localhost/"));
-	CPPUNIT_ASSERT_MESSAGE("failed to authenticate user",
-			provider.verifyAuthCode(credentials, info));
+
+	const auto &tokens = provider.exchange(credentials);
+	provider.fetch(tokens, info);
+
 	CPPUNIT_ASSERT_MESSAGE("id field has not been obtained",
 			!info.providerID().empty());
 	CPPUNIT_ASSERT_MESSAGE("email field has not been obtained",
 			!info.email().empty());
-	}
 }
 
-
+}

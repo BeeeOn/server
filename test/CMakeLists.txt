@@ -30,6 +30,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/model/BitmapInfoTest.cpp
 	${PROJECT_SOURCE_DIR}/model/DeviceTest.cpp
 	${PROJECT_SOURCE_DIR}/model/DevicePropertyTest.cpp
+	${PROJECT_SOURCE_DIR}/oauth2/FacebookOAuth2ProviderTest.cpp
 	${PROJECT_SOURCE_DIR}/oauth2/GoogleOAuth2ProviderTest.cpp
 	${PROJECT_SOURCE_DIR}/policy/SensorHistoryRulesTest.cpp
 	${PROJECT_SOURCE_DIR}/server/CORSFilterTest.cpp
@@ -38,7 +39,6 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/server/TestingHTTPServerRequest.cpp
 	${PROJECT_SOURCE_DIR}/server/TestingHTTPServerResponse.cpp
 	${PROJECT_SOURCE_DIR}/service/AuthServiceImplTest.cpp
-	${PROJECT_SOURCE_DIR}/provider/FacebookAuthProviderTest.cpp
 	${PROJECT_SOURCE_DIR}/rest/UriPatternTest.cpp
 	${PROJECT_SOURCE_DIR}/sqitch/SqitchPlanTest.cpp
 	${PROJECT_SOURCE_DIR}/sqitch/SqitchPlanParserTest.cpp
