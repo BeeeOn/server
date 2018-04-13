@@ -24,6 +24,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/baf/GatewayWatcher.cpp
 	${PROJECT_SOURCE_DIR}/baf/PublishingWatcher.cpp
 	${PROJECT_SOURCE_DIR}/jwt/JWToken.cpp
+	${PROJECT_SOURCE_DIR}/oauth2/OAuth2CodeExchanger.cpp
 	${PROJECT_SOURCE_DIR}/pg/PostgreStartup.cpp
 	${PROJECT_SOURCE_DIR}/provider/AccessTokenCredentials.cpp
 	${PROJECT_SOURCE_DIR}/provider/ApiKeyCredentials.cpp
