@@ -5,8 +5,7 @@
 
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "provider/GoogleAuthProvider.h"
-#include "provider/AuthProvider.h"
+#include "oauth2/GoogleOAuth2Provider.h"
 #include "ssl/SSLClient.h"
 #include "cppunit/SkippableAutoRegisterSuite.h"
 
@@ -28,8 +27,8 @@ bool skipWhenNoAuthCode()
 	return false;
 }
 
-class GoogleAuthProviderTest : public CppUnit::TestFixture {
-	CPPUNIT_TEST_SUITE(GoogleAuthProviderTest);
+class GoogleOAuth2ProviderTest : public CppUnit::TestFixture {
+	CPPUNIT_TEST_SUITE(GoogleOAuth2ProviderTest);
 	CPPUNIT_TEST(testVerifyAuthCode);
 	CPPUNIT_TEST(testHTTPData);
 	CPPUNIT_TEST_SUITE_END();
@@ -44,24 +43,19 @@ private:
 	SharedPtr<SSLClient> m_sslConfig;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION_SKIPPABLE(GoogleAuthProviderTest,
+CPPUNIT_TEST_SUITE_REGISTRATION_SKIPPABLE(GoogleOAuth2ProviderTest,
 		skipWhenNoAuthCode);
 
-class TestableGoogleAuthProvider : public GoogleAuthProvider {
-public:
-	using GoogleAuthProvider::verifyAuthCode;
-};
-
-void GoogleAuthProviderTest::setUp()
+void GoogleOAuth2ProviderTest::setUp()
 {
 	googleAuthCode = Environment::get("GOOGLE_AUTH_CODE");
 }
 
-void GoogleAuthProviderTest::tearDown()
+void GoogleOAuth2ProviderTest::tearDown()
 {
 }
 
-void GoogleAuthProviderTest::testHTTPData()
+void GoogleOAuth2ProviderTest::testHTTPData()
 {
 	HTMLForm form;
 	form.setEncoding(HTMLForm::ENCODING_URL);
@@ -79,10 +73,10 @@ void GoogleAuthProviderTest::testHTTPData()
  *
  * TODO: obtain the authorization_code automatically (if it is even possible).
  */
-void GoogleAuthProviderTest::testVerifyAuthCode()
+void GoogleOAuth2ProviderTest::testVerifyAuthCode()
 {
 
-	TestableGoogleAuthProvider provider;
+	GoogleOAuth2Provider provider;
 	AuthResult info;
 	SharedPtr<SSLClient> sslConfig = new SSLClient;
 
@@ -96,14 +90,14 @@ void GoogleAuthProviderTest::testVerifyAuthCode()
 	provider.setClientSecret(Environment::get("GOOGLE_CLIENT_SECRET"));
 
 	if (Environment::has("GOOGLE_REDIRECT_URI"))
-		provider.setRedirectURI(Environment::get("GOOGLE_REDIRECT_URI"));
+		provider.setRedirectUri(Environment::get("GOOGLE_REDIRECT_URI"));
 	else
-		provider.setRedirectURI("http://localhost");
+		provider.setRedirectUri("http://localhost");
 
 	AuthCodeCredentials credentials("google", googleAuthCode);
 
-	CPPUNIT_ASSERT_MESSAGE("failed to authenticate user",
-			provider.verifyAuthCode(credentials, info));
+	const auto &tokens = provider.exchange(credentials);
+	provider.fetch(tokens, info);
 
 	CPPUNIT_ASSERT_MESSAGE("missing email field",
 			!info.email().empty());
