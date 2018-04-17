@@ -82,6 +82,22 @@ class TestGatewayAssignUpdate(unittest.TestCase):
 		self.assertEqual(403, result["code"])
 		self.assertEqual("not enough permission to access the resource", result["message"])
 
+	def test2_assign_gateway_invalid_name(self):
+		req = POST(config.ui_host, config.ui_port, "/gateways")
+		req.authorize(self.session)
+		req.body(json.dumps({
+			"id": config.gateway_id,
+			"name": "My New Line \n",
+			"timezone_id": "Europe/Prague"
+		}))
+
+		response, content = req()
+		self.assertEqual(400, response.status)
+
+		result = json.loads(content)
+		self.assertEqual(400, result["code"])
+		self.assertEqual("error", result["status"])
+
 if __name__ == '__main__':
 	import sys
 	import taprunner
