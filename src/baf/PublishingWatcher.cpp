@@ -4,6 +4,7 @@
 #include "baf/PublishingWatcher.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, Automation, PublishingWatcher)
+BEEEON_OBJECT_CASTABLE(DeviceListener)
 BEEEON_OBJECT_CASTABLE(GatewayListener)
 BEEEON_OBJECT_CASTABLE(SensorDataListener)
 BEEEON_OBJECT_PROPERTY("publishers", &PublishingWatcher::addPublisher)
@@ -25,6 +26,16 @@ void PublishingWatcher::addPublisher(EventPublisher::Ptr publisher)
 void PublishingWatcher::cleanup()
 {
 	m_publishers.clear();
+}
+
+void PublishingWatcher::onNewDevice(const DeviceEvent &e)
+{
+	publishEvent(e, "on-new-device");
+}
+
+void PublishingWatcher::onRefusedNewDevice(const DeviceEvent &e)
+{
+	publishEvent(e, "on-refused-new-device");
 }
 
 void PublishingWatcher::onConnected(const GatewayEvent &e)
@@ -103,6 +114,17 @@ void PublishingWatcher::eventDetails(
 	}
 
 	json.endObject();
+}
+
+void PublishingWatcher::eventDetails(
+	PrintHandler &json,
+	const DeviceEvent &e) const
+{
+	json.key("gateway_id");
+	json.value(e.gatewayID().toString());
+
+	json.key("device_id");
+	json.value(e.deviceID().toString());
 }
 
 void PublishingWatcher::publish(const string &message)

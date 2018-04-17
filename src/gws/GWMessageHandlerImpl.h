@@ -7,6 +7,7 @@
 #include "gwmessage/GWSensorDataExport.h"
 #include "gwmessage/GWResponse.h"
 #include "gwmessage/GWResponseWithAck.h"
+#include "gws/DeviceListener.h"
 #include "gws/GatewayCommunicator.h"
 #include "gws/GWMessageHandler.h"
 #include "gws/GWResponseExpectedQueue.h"
@@ -43,6 +44,7 @@ public:
 	void setSensorHistoryService(GWSSensorHistoryService::Ptr service);
 
 	void registerDataListener(SensorDataListener::Ptr listener);
+	void registerDeviceListener(DeviceListener::Ptr listener);
 	void setEventsExecutor(AsyncExecutor::Ptr executor);
 
 	/**
@@ -85,6 +87,7 @@ private:
 	GWSDeviceService::Ptr m_deviceService;
 	GWSSensorHistoryService::Ptr m_sensorHistoryService;
 	EventSource<SensorDataListener> m_dataEventSource;
+	EventSource<DeviceListener> m_deviceEventSource;
 };
 
 }

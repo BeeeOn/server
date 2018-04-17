@@ -189,6 +189,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/TypesSAXHandler.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoDaoManager.cpp
 	${PROJECT_SOURCE_DIR}/gws/ControlChangeHandler.cpp
+	${PROJECT_SOURCE_DIR}/gws/DeviceListener.cpp
 	${PROJECT_SOURCE_DIR}/gws/DevicePairHandler.cpp
 	${PROJECT_SOURCE_DIR}/gws/DeviceUnpairHandler.cpp
 	${PROJECT_SOURCE_DIR}/gws/GatewayConnection.cpp

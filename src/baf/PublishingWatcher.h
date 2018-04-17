@@ -7,6 +7,7 @@
 #include <Poco/JSON/PrintHandler.h>
 
 #include "baf/EventPublisher.h"
+#include "gws/DeviceListener.h"
 #include "gws/GatewayListener.h"
 #include "gws/SensorDataListener.h"
 #include "util/Loggable.h"
@@ -15,6 +16,7 @@ namespace BeeeOn {
 namespace Automation {
 
 class PublishingWatcher :
+	public DeviceListener,
 	public GatewayListener,
 	public SensorDataListener,
 	Loggable {
@@ -22,6 +24,9 @@ public:
 	PublishingWatcher();
 
 	void addPublisher(EventPublisher::Ptr publisher);
+
+	void onNewDevice(const DeviceEvent &e) override;
+	void onRefusedNewDevice(const DeviceEvent &e) override;
 
 	void onConnected(const GatewayEvent &e) override;
 	void onReconnected(const GatewayEvent &e) override;
@@ -43,6 +48,9 @@ protected:
 	void eventDetails(
 		Poco::JSON::PrintHandler &json,
 		const SensorDataEvent &e) const;
+	void eventDetails(
+		Poco::JSON::PrintHandler &json,
+		const DeviceEvent &e) const;
 
 	template <typename Event>
 	void publishEvent(const Event &e, const std::string &name)
