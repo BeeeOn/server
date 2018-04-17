@@ -24,6 +24,11 @@ public:
 	void single(const ValueAt &v) override;
 	void end() override;
 
+	static void format(
+		Poco::JSON::PrintHandler &output,
+		const ValueAt &v,
+		const TypeInfo &info);
+
 protected:
 	const TypeInfo &info() const;
 

@@ -35,19 +35,7 @@ const TypeInfo &RestValueConsumer::info() const
 
 void RestValueConsumer::single(const ValueAt &v)
 {
-	m_output.startObject();
-
-	m_output.key("at");
-	m_output.value(v.atRaw());
-	m_output.key("value");
-
-	if (!v.isValid())
-		m_output.null();
-	else
-		m_output.value(info().asString(v.value()));
-
-	m_output.endObject();
-
+	format(m_output, v, info());
 	m_count += 1;
 }
 
@@ -61,4 +49,23 @@ void RestValueConsumer::end()
 	}
 
 	m_count = 0;
+}
+
+void RestValueConsumer::format(
+		PrintHandler &output,
+		const ValueAt &v,
+		const TypeInfo &info)
+{
+	output.startObject();
+
+	output.key("at");
+	output.value(v.atRaw());
+	output.key("value");
+
+	if (!v.isValid())
+		output.null();
+	else
+		output.value(info.asString(v.value()));
+
+	output.endObject();
 }

@@ -647,10 +647,10 @@ void BeeeOn::RestUI::serialize(Poco::JSON::PrintHandler &output,
 	if (!sensor.at().isNull()) {
 		output.key("current");
 
-		RestValueConsumer consumer(output);
-		consumer.begin(*sensor.info().type());
-		consumer.single(ValueAt(sensor.at().value(), sensor.value()));
-		consumer.end();
+		RestValueConsumer::format(
+			output,
+			ValueAt(sensor.at().value(), sensor.value()),
+			*sensor.info().type());
 	}
 
 	output.endObject();

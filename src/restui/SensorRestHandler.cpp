@@ -103,10 +103,10 @@ void SensorRestHandler::current(RestFlow &flow)
 		result.null();
 	}
 	else {
-		RestValueConsumer consumer(result);
-		consumer.begin(*sensor.info().type());
-		consumer.single(ValueAt(sensor.at().value(), sensor.value()));
-		consumer.end();
+		RestValueConsumer::format(
+			result,
+			ValueAt(sensor.at().value(), sensor.value()),
+			*sensor.info().type());
 	}
 
 	endSuccess(result);
