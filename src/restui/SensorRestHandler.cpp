@@ -189,25 +189,22 @@ void SensorRestHandler::history(RestFlow &flow)
 	}
 
 	PrintHandler result(flow.response().stream());
-	beginSuccess(result, 200);
-	result.startArray();
 
 	RestValueConsumer consumer(result);
 
 	try {
 		m_sensorHistoryService->fetchRange(input, range, interval, aggregation, consumer);
 	}
-	catch (...) {
-		// in case of a failure, finish the probably incomplete result
-		// to at least not break the client processing, it is too late
-		// to signalize any failures
-		result.endArray();
-		endSuccess(result);
-
-		throw; // log the failure by upper layers
-	}
-
-	result.endArray();
-	endSuccess(result);
+	BEEEON_CATCH_CHAIN_ACTION(logger(),
+		if (consumer.hasBegin()) {
+			// in case of a failure, finish the probably incomplete result
+			// to at least not break the client processing, it is too late
+			// to signalize any failures
+			consumer.end();
+		}
+		else {
+			throw; // log the failure by upper layers
+		}
+	)
 }
 
