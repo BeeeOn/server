@@ -18,6 +18,8 @@ class XmlValueConsumer : public BeeeOn::ValueConsumer {
 public:
 	XmlValueConsumer(Poco::XML::XMLWriter &writer);
 
+	bool hasBegin() const;
+
 	void begin(const TypeInfo &info) override;
 	void single(const ValueAt &v) override;
 	void end() override;
@@ -28,6 +30,7 @@ protected:
 private:
 	Poco::XML::XMLWriter &m_writer;
 	const TypeInfo *m_info;
+	bool m_hasBegin;
 };
 
 }

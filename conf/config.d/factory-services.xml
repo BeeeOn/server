@@ -100,7 +100,7 @@
 			<set name="sensorHistoryDao" ref="sensorHistoryDao" />
 			<set name="deviceDao" ref="deviceDao" />
 			<set name="transactionManager" ref="transactionManager" />
-			<set name="accessPolicy" ref="accessPolicy" />
+			<set name="accessPolicy" ref="ruledSensorHistoryPolicy" />
 		</instance>
 
 		<instance name="fcmTokenService" class="BeeeOn::FCMTokenServiceImpl">
@@ -117,6 +117,22 @@
 		</instance>
 
 		<!-- Access policy -->
+
+		<instance name="defaultSensorHistoryRules" class="BeeeOn::SensorHistoryRules">
+			<set name="rules">
+				<pair key="0..1 s"     text="0" />
+				<pair key="1 s..1 h+"  text="1 s..30 m+" />
+				<pair key="1 h+..1 d+"  text="1 s..5 h+" />
+				<pair key="1 d+..7 d+"  text="5 m..1 d+" />
+				<pair key="7 d+..31 d+" text="1 h..7 d+" />
+				<pair key="*"          text="1 d" />
+			</set>
+		</instance>
+
+		<instance name="ruledSensorHistoryPolicy" class="BeeeOn::RuledSensorHistoryAccessPolicy">
+			<set name="innerPolicy" ref="accessPolicy" />
+			<set name="rules" ref="defaultSensorHistoryRules" />
+		</instance>
 
 		<instance name="accessPolicy"
 				class="BeeeOn::DefaultAccessPolicy">

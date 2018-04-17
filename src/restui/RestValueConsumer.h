@@ -20,9 +20,16 @@ class RestValueConsumer : public ValueConsumer, protected Loggable {
 public:
 	RestValueConsumer(Poco::JSON::PrintHandler &output);
 
+	bool hasBegin() const;
+
 	void begin(const TypeInfo &info) override;
 	void single(const ValueAt &v) override;
 	void end() override;
+
+	static void format(
+		Poco::JSON::PrintHandler &output,
+		const ValueAt &v,
+		const TypeInfo &info);
 
 protected:
 	const TypeInfo &info() const;
@@ -31,6 +38,7 @@ private:
 	Poco::JSON::PrintHandler &m_output;
 	const TypeInfo *m_info;
 	size_t m_count;
+	bool m_hasBegin;
 };
 
 }

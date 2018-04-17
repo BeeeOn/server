@@ -85,7 +85,9 @@ public:
 	void assure(
 		const SensorHistoryAccessPolicy::Action action,
 		const PolicyContext &context,
-		const Device &device) override;
+		const Device &device,
+		const TimeInterval &range,
+		const Poco::Timespan &interval) override;
 
 	void assure(
 		const SensorAccessPolicy::Action action,

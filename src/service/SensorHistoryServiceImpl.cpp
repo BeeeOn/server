@@ -43,7 +43,7 @@ void SensorHistoryServiceImpl::doFetchRange(
 		ValueConsumer &consumer)
 {
 	m_policy->assure(SensorHistoryAccessPolicy::ACTION_USER_GET,
-			module, module.base());
+			module, module.base(), range, interval);
 
 	Device device(module.base());
 	if (!m_deviceDao->fetch(device, device.gateway()))

@@ -15,14 +15,30 @@ using namespace BeeeOn::RestUI;
 RestValueConsumer::RestValueConsumer(PrintHandler &output):
 	m_output(output),
 	m_info(NULL),
-	m_count(0)
+	m_count(0),
+	m_hasBegin(false)
 {
+}
+
+bool RestValueConsumer::hasBegin() const
+{
+	return m_hasBegin;
 }
 
 void RestValueConsumer::begin(const TypeInfo &info)
 {
 	m_info = &info;
 	m_count = 0;
+
+	m_output.startObject();
+	m_output.key("code");
+	m_output.value(200);
+	m_output.key("status");
+	m_output.value(string("success"));
+	m_output.key("data");
+	m_output.startArray();
+
+	m_hasBegin = true;
 }
 
 const TypeInfo &RestValueConsumer::info() const
@@ -35,24 +51,15 @@ const TypeInfo &RestValueConsumer::info() const
 
 void RestValueConsumer::single(const ValueAt &v)
 {
-	m_output.startObject();
-
-	m_output.key("at");
-	m_output.value(v.atRaw());
-	m_output.key("value");
-
-	if (!v.isValid())
-		m_output.null();
-	else
-		m_output.value(info().asString(v.value()));
-
-	m_output.endObject();
-
+	format(m_output, v, info());
 	m_count += 1;
 }
 
 void RestValueConsumer::end()
 {
+	m_output.endArray();
+	m_output.endObject();
+
 	m_info = NULL;
 
 	if (logger().debug()) {
@@ -61,4 +68,23 @@ void RestValueConsumer::end()
 	}
 
 	m_count = 0;
+}
+
+void RestValueConsumer::format(
+		PrintHandler &output,
+		const ValueAt &v,
+		const TypeInfo &info)
+{
+	output.startObject();
+
+	output.key("at");
+	output.value(v.atRaw());
+	output.key("value");
+
+	if (!v.isValid())
+		output.null();
+	else
+		output.value(info.asString(v.value()));
+
+	output.endObject();
 }

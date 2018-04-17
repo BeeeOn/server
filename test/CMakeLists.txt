@@ -30,6 +30,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/model/BitmapInfoTest.cpp
 	${PROJECT_SOURCE_DIR}/model/DeviceTest.cpp
 	${PROJECT_SOURCE_DIR}/model/DevicePropertyTest.cpp
+	${PROJECT_SOURCE_DIR}/policy/SensorHistoryRulesTest.cpp
 	${PROJECT_SOURCE_DIR}/server/CORSFilterTest.cpp
 	${PROJECT_SOURCE_DIR}/server/HTTPCustomHeadersFilterTest.cpp
 	${PROJECT_SOURCE_DIR}/server/SessionManagerTest.cpp

@@ -81,12 +81,22 @@ void SensorXmlHandler::handleGetLog(const string &gateid,
 	User user(session()->userID());
 	input.setUser(user);
 
-	resultDataStart();
-
 	XmlValueConsumer consumer(m_output);
-	m_sensorService.fetchRange(input, range, interval, aggregator, consumer);
 
-	resultDataEnd();
+	try {
+		m_sensorService.fetchRange(input, range, interval, aggregator, consumer);
+	}
+	BEEEON_CATCH_CHAIN_ACTION(logger(),
+		if (consumer.hasBegin()) {
+			// in case of a failure, finish the probably incomplete result
+			// to at least not break the client processing, it is too late
+			// to signalize any failures
+			consumer.end();
+		}
+		else {
+			throw; // handle as error
+		}
+	)
 }
 
 void SensorXmlHandler::handleSetState(const string &gateid,

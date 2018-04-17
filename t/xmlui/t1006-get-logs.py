@@ -83,7 +83,8 @@ class TestDeviceGetLog(unittest.TestCase):
 			self.session,
 			start = datetime.now() - timedelta(0, 48 * 60 * 60),
 			end = datetime.now(),
-			ftype = "avg"
+			ftype = "avg",
+			interval = 300
 		))
 
 		self.assertTrue(response.is_data())
