@@ -21,11 +21,11 @@ using namespace BeeeOn;
 
 Nullable<BeeeOn::TimeZone> IcuTimeZoneProvider::findById(const string &id)
 {
-	UnicodeString uniID(id.c_str(), id.size());
+	icu::UnicodeString uniID(id.c_str(), id.size());
 	SharedPtr<icu::TimeZone> impl = icu::TimeZone::createTimeZone(uniID);
 
-	UnicodeString tmp;
-	UnicodeString unknownID;
+	icu::UnicodeString tmp;
+	icu::UnicodeString unknownID;
 	icu::TimeZone::getUnknown().getID(unknownID);
 
 	Nullable<TimeZone> zone;
@@ -56,9 +56,9 @@ Nullable<BeeeOn::TimeZone> IcuTimeZoneProvider::findByOffset(const Timespan &off
 		return zone;
 	}
 
-	const UnicodeString *id;
+	const icu::UnicodeString *id;
 
-	UnicodeString unknownID;
+	icu::UnicodeString unknownID;
 	icu::TimeZone::getUnknown().getID(unknownID);
 
 	while ((id = e->snext(error)) != NULL) {
@@ -68,7 +68,7 @@ Nullable<BeeeOn::TimeZone> IcuTimeZoneProvider::findByOffset(const Timespan &off
 		}
 
 		SharedPtr<icu::TimeZone> impl = icu::TimeZone::createTimeZone(*id);
-		UnicodeString tmp;
+		icu::UnicodeString tmp;
 		if (impl->getID(tmp) == unknownID)
 			continue; // skip unknown ID, should not happen here
 
@@ -100,9 +100,9 @@ void IcuTimeZoneProvider::listTimeZones(vector<TimeZone> &zones)
 		e = icu::TimeZone::createEnumeration();
 	}
 
-	const UnicodeString *id;
+	const icu::UnicodeString *id;
 
-	UnicodeString unknownID;
+	icu::UnicodeString unknownID;
 	icu::TimeZone::getUnknown().getID(unknownID);
 
 	while ((id = e->snext(error)) != NULL) {
@@ -112,7 +112,7 @@ void IcuTimeZoneProvider::listTimeZones(vector<TimeZone> &zones)
 		}
 
 		SharedPtr<icu::TimeZone> impl = icu::TimeZone::createTimeZone(*id);
-		UnicodeString tmp;
+		icu::UnicodeString tmp;
 
 		if (impl->getID(tmp) == unknownID)
 			continue; // skip unknown ID, should not happen here

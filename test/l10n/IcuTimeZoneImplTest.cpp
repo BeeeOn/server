@@ -162,16 +162,16 @@ SharedPtr<icu::TimeZone> IcuTimeZoneImplTest::byOffset(const int32_t rawOffset)
 
 	CPPUNIT_ASSERT_MESSAGE(u_errorName(error), U_SUCCESS(error));
 
-	const UnicodeString *id;
+	const icu::UnicodeString *id;
 
-	UnicodeString unknownID;
+	icu::UnicodeString unknownID;
 	icu::TimeZone::getUnknown().getID(unknownID);
 
 	while ((id = e->snext(error)) != NULL) {
 		CPPUNIT_ASSERT_MESSAGE(u_errorName(error), U_SUCCESS(error));
 
 		SharedPtr<icu::TimeZone> impl = icu::TimeZone::createTimeZone(*id);
-		UnicodeString tmp;
+		icu::UnicodeString tmp;
 
 		if (impl->getID(tmp) == unknownID)
 			continue; // skip unknown ID, should not happen here
