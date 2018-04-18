@@ -177,7 +177,7 @@ string IcuTranslator::lookupAndApplyArgs(
 		const string &originalKey,
 		vector<string>::const_iterator current,
 		const vector<string>::const_iterator end,
-		const ResourceBundle &bundle,
+		const icu::ResourceBundle &bundle,
 		const vector<Var> &args)
 {
 	if (current == end)
