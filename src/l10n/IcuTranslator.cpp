@@ -112,25 +112,25 @@ string IcuTranslator::typeName(const UResType type) const
 	}
 }
 
-static Formattable asFormattable(const Timestamp &ts)
+static icu::Formattable asFormattable(const Timestamp &ts)
 {
 	const double ms = ts.epochMicroseconds() / 1000.0;
-	return Formattable(ms, Formattable::kIsDate);
+	return icu::Formattable(ms, icu::Formattable::kIsDate);
 }
 
-static Formattable asFormattable(const Var &var)
+static icu::Formattable asFormattable(const Var &var)
 {
 	if (var.isString())
-		return Formattable(var.convert<string>().c_str());
+		return icu::Formattable(var.convert<string>().c_str());
 
 	if (var.isBoolean())
-		return Formattable(var.convert<bool>());
+		return icu::Formattable(var.convert<bool>());
 
 	if (var.isNumeric()) {
 		if (var.isInteger())
-			return Formattable(var.convert<long>());
+			return icu::Formattable(var.convert<long>());
 
-		return Formattable(var.convert<double>());
+		return icu::Formattable(var.convert<double>());
 	}
 
 	if (var.type() == typeid(Timestamp))
