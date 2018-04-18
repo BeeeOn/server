@@ -142,7 +142,7 @@ class TestSensorsListDetail(unittest.TestCase):
 		self.assertEqual(9, len(result["data"]))
 
 		self.assert_find_sensor(result["data"], "0", "temperature", "temperature", "0", False)
-		self.assert_find_sensor(result["data"], "1", "humidity", "humidity", "1", False)
+		self.assert_find_sensor(result["data"], "1", "humidity", "humidity", "1", True)
 		self.assert_find_sensor(result["data"], "2", "noise", "noise", "2", False)
 		self.assert_find_sensor(result["data"], "3", "temperature", "temperature", "3", False)
 		self.assert_find_sensor(result["data"], "4", "humidity", "humidity", "4", False)

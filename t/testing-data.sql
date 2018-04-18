@@ -276,6 +276,20 @@ VALUES
 	0,
 	NOW(),
 	20.0
+),
+( -- prevent removing as unused
+	1284174504043136,
+	beeeon.to_device_id(11777358992112902542),
+	1, -- module humidity of Unknown
+	beeeon.now_utc(),
+	21.0
+),
+( -- prevent removing as unused
+	1284174504043136,
+	beeeon.to_device_id(11779058992112918923),
+	0,
+	beeeon.now_utc(),
+	22.0
 );
 
 COMMIT;

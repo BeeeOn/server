@@ -39,6 +39,7 @@ public:
 	void fetchActiveWithPrefix(std::vector<Device> &devices,
 			const Gateway &gateway,
 			const DevicePrefix &prefix) override;
+	size_t removeUnused() override;
 
 	static bool parseSingle(Poco::Data::RecordSet &result,
 			Device &device, const Gateway &gateway,
@@ -79,6 +80,7 @@ private:
 	Query m_queryFetchActiveBy    {"devices.fetch_active_by_gateway"};
 	Query m_queryFetchInactiveBy  {"devices.fetch_inactive_by_gateway"};
 	Query m_queryFetchActiveWithPrefix {"devices.fetch_active_by_gateway_with_prefix"};
+	Query m_queryRemoveUnused     {"devices.remove_unused"};
 };
 
 }

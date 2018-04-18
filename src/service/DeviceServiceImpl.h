@@ -122,6 +122,11 @@ public:
 		return BEEEON_TRANSACTION(doListProperties(input));
 	}
 
+	/**
+	 * Remove all unused devices that are unpaired and have no history.
+	 */
+	void removeUnusedDevices();
+
 protected:
 	void valuesFor(DeviceWithData &device);
 
