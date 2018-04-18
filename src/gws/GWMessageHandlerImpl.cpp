@@ -7,6 +7,7 @@
 #include "gwmessage/GWDeviceListResponse.h"
 #include "gwmessage/GWAck.h"
 #include "gws/GWMessageHandlerImpl.h"
+#include "util/Sanitize.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, GWMessageHandlerImpl)
 BEEEON_OBJECT_CASTABLE(GWMessageHandler)
@@ -150,8 +151,8 @@ GWResponse::Ptr GWMessageHandlerImpl::handleNewDevice(
 	try {
 
 		if (m_deviceService->registerDevice(device,
-				request->productName(),
-				request->vendor(),
+				Sanitize::common(request->productName()),
+				Sanitize::common(request->vendor()),
 				request->moduleTypes(),
 				gatewayID)) {
 			response->setStatus(GWResponse::Status::SUCCESS);

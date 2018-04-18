@@ -254,7 +254,7 @@ void SanitizeTest::testSanitizeCommon()
 	CPPUNIT_ASSERT_NO_THROW(Sanitize::common("abcdefghijklmnopqrstuvwxyz"));
 	CPPUNIT_ASSERT_NO_THROW(Sanitize::common("ABCDEFGHIJKLMNOPQRSTUVWXYZ"));
 	CPPUNIT_ASSERT_NO_THROW(Sanitize::common("0123456789"));
-	CPPUNIT_ASSERT_NO_THROW(Sanitize::common(".:!?()/,-#'$€¥£©®"));
+	CPPUNIT_ASSERT_NO_THROW(Sanitize::common(".:!?()/,-#'$€¥£©®+"));
 	CPPUNIT_ASSERT_NO_THROW(Sanitize::common("My Common Place #1"));
 	CPPUNIT_ASSERT_NO_THROW(Sanitize::common("Frank O'Neil"));
 	CPPUNIT_ASSERT_NO_THROW(Sanitize::common("ěščřžýáíéůúóňďľĚŠČŘŽÝÁÍÉŮÚÓŇĎĽ"));
@@ -269,7 +269,6 @@ void SanitizeTest::testSanitizeCommon()
 	CPPUNIT_ASSERT_THROW(Sanitize::common("\\"), InvalidArgumentException);
 	CPPUNIT_ASSERT_THROW(Sanitize::common("\""), InvalidArgumentException);
 	CPPUNIT_ASSERT_THROW(Sanitize::common("*"),  InvalidArgumentException);
-	CPPUNIT_ASSERT_THROW(Sanitize::common("+"),  InvalidArgumentException);
 	CPPUNIT_ASSERT_THROW(Sanitize::common("|"),  InvalidArgumentException);
 	CPPUNIT_ASSERT_THROW(Sanitize::common("\n"), InvalidArgumentException);
 	CPPUNIT_ASSERT_THROW(Sanitize::common("\t"), InvalidArgumentException);
