@@ -147,8 +147,8 @@ bool SensorHistoryRules::accept(
 
 	const auto it = m_rules.find(needle);
 	if (it == m_rules.end() && m_missing.isNull()) {
-		if (logger().debug()) {
-			logger().debug(
+		if (logger().error()) {
+			logger().error(
 				"no such rule for "
 				+ needle.toString(),
 				__FILE__, __LINE__);
@@ -164,25 +164,37 @@ bool SensorHistoryRules::accept(
 				__FILE__, __LINE__);
 		}
 	}
+	else {
+		if (logger().debug()) {
+			logger().debug(
+				"range "
+				+ needle.toString()
+				+ " matched with rule "
+				+ it->first.toString(),
+				__FILE__, __LINE__);
+		}
+	}
 
 	const auto &rule = it == m_rules.end() ? *m_missing : it->second;
 	const bool result = interval >= rule.min && interval <= rule.max;
 
-	if (logger().debug()) {
-		if (result) {
-			logger().debug(
+	if (!result) {
+		if (logger().error()) {
+			logger().error(
 				"interval "
 				+ asString(interval)
 				+ " is not allowed for "
-				+ needle.toString(),
+				+ rule.toString(),
 				__FILE__, __LINE__);
 		}
-		else {
+	}
+	else {
+		if (logger().debug()) {
 			logger().debug(
 				"interval "
 				+ asString(interval)
 				+ " allowed for "
-				+ needle.toString(),
+				+ rule.toString(),
 				__FILE__, __LINE__);
 		}
 	}
