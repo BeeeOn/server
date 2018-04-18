@@ -32,12 +32,12 @@ string JWToken::subject() const
 	return m_subject;
 }
 
-void JWToken::setAudience(const vector<string> &audience)
+void JWToken::setAudience(const set<string> &audience)
 {
 	m_audience = audience;
 }
 
-vector<string> JWToken::audience() const
+set<string> JWToken::audience() const
 {
 	return m_audience;
 }
@@ -72,6 +72,46 @@ Nullable<Timestamp> JWToken::notBefore() const
 	return m_notbefore;
 }
 
+void JWToken::setGivenName(const string &name)
+{
+	m_givenName = name;
+}
+
+Nullable<string> JWToken::givenName() const
+{
+	return m_givenName;
+}
+
+void JWToken::setFamilyName(const string &name)
+{
+	m_familyName = name;
+}
+
+Nullable<string> JWToken::familyName() const
+{
+	return m_familyName;
+}
+
+void JWToken::setPicture(const URI &uri)
+{
+	m_picture = uri;
+}
+
+Nullable<URI> JWToken::picture() const
+{
+	return m_picture;
+}
+
+void JWToken::setEmail(const string &email)
+{
+	m_email = email;
+}
+
+Nullable<string> JWToken::email() const
+{
+	return m_email;
+}
+
 void JWToken::setLocale(const string &locale)
 {
 	m_locale = locale;
@@ -94,5 +134,5 @@ bool JWToken::isAcceptable(const Timestamp &startTime) const
 
 bool JWToken::isInAudience(const string &recipient) const
 {
-	return find(m_audience.begin(), m_audience.end(), recipient) != m_audience.end();
+	return m_audience.find(recipient) != m_audience.end();
 }

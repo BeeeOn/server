@@ -1,3 +1,5 @@
+#include <set>
+
 #include <Poco/Dynamic/Var.h>
 #include <Poco/Error.h>
 #include <Poco/Exception.h>
@@ -52,7 +54,7 @@ void JWTEncoder::setAlgorithm(const std::string &algorithm)
 		throw InvalidArgumentException("unknown algorithm " + algorithm);
 }
 
-static Array::Ptr serializeArray(const vector<string> &array)
+static Array::Ptr serializeArray(const set<string> &array)
 {
 	Array::Ptr arr = new Array;
 

@@ -1,9 +1,10 @@
 #pragma once
 
-#include <vector>
+#include <set>
 
 #include <Poco/Nullable.h>
 #include <Poco/Timestamp.h>
+#include <Poco/URI.h>
 
 namespace BeeeOn {
 
@@ -38,8 +39,8 @@ public:
 	 * intended for. Audience is array of all recipients that
 	 * are intended to process token.
 	 */
-	void setAudience(const std::vector<std::string> &aud);
-	std::vector<std::string> audience() const;
+	void setAudience(const std::set<std::string> &aud);
+	std::set<std::string> audience() const;
 
 	/**
 	 * Expiration claim identifies the expiration time on (or
@@ -61,6 +62,42 @@ public:
 	 */
 	void setNotBefore(const Poco::Timestamp &time);
 	Poco::Nullable<Poco::Timestamp> notBefore() const;
+
+	/**
+	 * Claim that contains the first name of a person.
+	 *
+	 * @see http://ldapwiki.com/wiki/JSON%20Web%20Token%20Claims
+	 * @see http://ldapwiki.com/wiki/Given_name
+	 */
+	void setGivenName(const std::string &name);
+	Poco::Nullable<std::string> givenName() const;
+
+	/**
+	 * Claim that contains the last name of a person.
+	 *
+	 * @see http://ldapwiki.com/wiki/JSON%20Web%20Token%20Claims
+	 * @see http://ldapwiki.com/wiki/Family_name
+	 */
+	void setFamilyName(const std::string &name);
+	Poco::Nullable<std::string> familyName() const;
+
+	/**
+	 * Claim that contains URI pointing to the users' picture.
+	 *
+	 * @see http://ldapwiki.com/wiki/JSON%20Web%20Token%20Claims
+	 * @see http://ldapwiki.com/wiki/Picture
+	 */
+	void setPicture(const Poco::URI &uri);
+	Poco::Nullable<Poco::URI> picture() const;
+
+	/**
+	 * Claim that contains e-mail.
+	 *
+	 * @see http://ldapwiki.com/wiki/JSON%20Web%20Token%20Claims
+	 * @see http://ldapwiki.com/wiki/Email
+	 */
+	void setEmail(const std::string &email);
+	Poco::Nullable<std::string> email() const;
 
 	/**
 	 * Locale claim identifies the locale of the subject.
@@ -93,10 +130,14 @@ private:
 	std::string m_issuer;
 	std::string m_locale;
 	std::string m_subject;
-	std::vector<std::string> m_audience;
+	std::set<std::string> m_audience;
 	Poco::Nullable<Poco::Timestamp> m_expiration;
 	Poco::Nullable<Poco::Timestamp> m_issuedAt;
 	Poco::Nullable<Poco::Timestamp> m_notbefore;
+	Poco::Nullable<std::string> m_givenName;
+	Poco::Nullable<std::string> m_familyName;
+	Poco::Nullable<Poco::URI> m_picture;
+	Poco::Nullable<std::string> m_email;
 };
 
 }

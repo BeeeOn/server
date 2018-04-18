@@ -109,11 +109,11 @@ const Session::Ptr JWTSessionManager::open(
 		logger().debug("encoded subject: " + subjectEncoded);
 
 	JWToken token;
-	vector<string> audience;
+	set<string> audience(m_audienceList.begin(), m_audienceList.end());
 	Timestamp now;
 
 	token.setIssuer(m_issuerName);
-	token.setAudience(m_audienceList);
+	token.setAudience(audience);
 	token.setSubject(subjectEncoded);
 	token.setLocale(user.locale().toString());
 	token.setExpirationTime(now + m_expireTime);
