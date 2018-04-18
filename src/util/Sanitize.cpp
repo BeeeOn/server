@@ -191,7 +191,7 @@ string Sanitize::xml(const string &bytes,
 }
 
 static RegularExpression commonRegex(
-	"[\\p{L}\\p{Nd} \\.:!?()/,\\-_#'$€¥£©®]*",
+	"[\\p{L}\\p{Nd} \\.:!?()/,\\-_#'$€¥£©®+]*",
 	RegularExpression::RE_DOLLAR_ENDONLY  |
 	RegularExpression::RE_NO_AUTO_CAPTURE |
 	RegularExpression::RE_UTF8,
