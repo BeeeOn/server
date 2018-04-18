@@ -178,7 +178,7 @@ bool SensorHistoryRules::accept(
 	const auto &rule = it == m_rules.end() ? *m_missing : it->second;
 	const bool result = interval >= rule.min && interval <= rule.max;
 
-	if (result) {
+	if (!result) {
 		if (logger().error()) {
 			logger().error(
 				"interval "
