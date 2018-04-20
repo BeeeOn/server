@@ -58,6 +58,21 @@ bool GWSDeviceServiceImpl::doRegisterDevice(Device &device,
 	}
 }
 
+void GWSDeviceServiceImpl::doRegisterDeviceGroup(
+		const vector<DeviceDescription> &descriptions,
+		const Gateway &gateway)
+{
+	for (auto &des : descriptions) {
+		Device device(des.id());
+		device.setRefresh(des.refreshTime());
+
+		if (!doRegisterDevice(device, des, gateway)) {
+			throw IllegalStateException("registration of device "
+				"'" + des.toString() + "' failed");
+		}
+	}
+}
+
 void GWSDeviceServiceImpl::doFetchActiveWithPrefix(vector<Device> &devices,
 		const Gateway &gateway,
 		const DevicePrefix &prefix)
