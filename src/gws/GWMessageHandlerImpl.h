@@ -4,6 +4,7 @@
 #include "gwmessage/GWDeviceListRequest.h"
 #include "gwmessage/GWLastValueRequest.h"
 #include "gwmessage/GWNewDeviceRequest.h"
+#include "gwmessage/GWNewDeviceGroupRequest.h"
 #include "gwmessage/GWSensorDataExport.h"
 #include "gwmessage/GWResponse.h"
 #include "gwmessage/GWResponseWithAck.h"
@@ -79,6 +80,8 @@ private:
 	GWResponse::Ptr handleLastValue(GWLastValueRequest::Ptr request,
 			const GatewayID &gatewayID);
 	GWResponse::Ptr handleNewDevice(GWNewDeviceRequest::Ptr request,
+			const GatewayID &gatewayID);
+	GWResponse::Ptr handleNewDeviceGroup(GWNewDeviceGroupRequest::Ptr request,
 			const GatewayID &gatewayID);
 
 	static DeviceDescription sanitizeDeviceDescription(

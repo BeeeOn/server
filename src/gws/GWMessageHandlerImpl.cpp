@@ -7,6 +7,7 @@
 #include "gwmessage/GWDeviceListResponse.h"
 #include "gwmessage/GWAck.h"
 #include "gws/GWMessageHandlerImpl.h"
+#include "model/DeviceDescription.h"
 #include "util/Sanitize.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, GWMessageHandlerImpl)
@@ -47,6 +48,9 @@ void GWMessageHandlerImpl::handleRequest(GWRequest::Ptr request,
 	switch(request->type()) {
 	case GWMessageType::NEW_DEVICE_REQUEST:
 		response = handleNewDevice(request.cast<GWNewDeviceRequest>(), gatewayID);
+		break;
+	case GWMessageType::NEW_DEVICE_GROUP_REQUEST:
+		response = handleNewDeviceGroup(request.cast<GWNewDeviceGroupRequest>(), gatewayID);
 		break;
 	case GWMessageType::LAST_VALUE_REQUEST:
 		response = handleLastValue(request.cast<GWLastValueRequest>(), gatewayID);
@@ -164,6 +168,38 @@ GWResponse::Ptr GWMessageHandlerImpl::handleNewDevice(
 	BEEEON_CATCH_CHAIN_ACTION(logger(),
 		response->setStatus(GWResponse::Status::FAILED);
 		m_deviceEventSource.fireEvent(event, &DeviceListener::onRefusedNewDevice);
+	);
+
+	return response;
+}
+
+GWResponse::Ptr GWMessageHandlerImpl::handleNewDeviceGroup(
+	GWNewDeviceGroupRequest::Ptr request, const GatewayID &gatewayID)
+{
+	GWResponse::Ptr response = request->derive();
+	vector<DeviceDescription> descriptions;
+	vector<DeviceEvent> events;
+
+	for (const auto &des : request->deviceDescriptions()) {
+		descriptions.emplace_back(sanitizeDeviceDescription(des));
+
+		DeviceEvent event;
+		event.setGatewayID(gatewayID);
+		event.setDeviceID(des.id());
+		events.emplace_back(event);
+	}
+
+	try {
+		m_deviceService->registerDeviceGroup(descriptions, gatewayID);
+
+		response->setStatus(GWResponse::Status::SUCCESS);
+		for (auto &event : events)
+			m_deviceEventSource.fireEvent(event, &DeviceListener::onNewDevice);
+	}
+	BEEEON_CATCH_CHAIN_ACTION(logger(),
+		response->setStatus(GWResponse::Status::FAILED);
+		for (auto &event : events)
+			m_deviceEventSource.fireEvent(event, &DeviceListener::onRefusedNewDevice);
 	);
 
 	return response;
