@@ -163,16 +163,10 @@ GWResponse::Ptr GWMessageHandlerImpl::handleNewDevice(
 			m_deviceEventSource.fireEvent(event, &DeviceListener::onRefusedNewDevice);
 		}
 	}
-	catch (const Exception &e) {
-		logger().log(e, __FILE__, __LINE__);
+	BEEEON_CATCH_CHAIN_ACTION(logger(),
 		response->setStatus(GWResponse::Status::FAILED);
 		m_deviceEventSource.fireEvent(event, &DeviceListener::onRefusedNewDevice);
-	}
-	catch (...) {
-		logger().critical("unknown failure", __FILE__, __LINE__);
-		response->setStatus(GWResponse::Status::FAILED);
-		m_deviceEventSource.fireEvent(event, &DeviceListener::onRefusedNewDevice);
-	}
+	);
 
 	return response;
 }
@@ -202,14 +196,9 @@ GWResponse::Ptr GWMessageHandlerImpl::handleLastValue(
 			response->setStatus(GWResponse::Status::FAILED);
 		}
 	}
-	catch (const Exception &e) {
-		logger().log(e, __FILE__, __LINE__);
+	BEEEON_CATCH_CHAIN_ACTION(logger(),
 		response->setStatus(GWResponse::Status::FAILED);
-	}
-	catch (...) {
-		logger().critical("unknown failure", __FILE__, __LINE__);
-		response->setStatus(GWResponse::Status::FAILED);
-	}
+	);
 
 	return response;
 }
@@ -234,14 +223,9 @@ GWResponse::Ptr GWMessageHandlerImpl::handleDeviceList(
 		response->setDevices(deviceIDs);
 		response->setStatus(GWResponse::Status::SUCCESS);
 	}
-	catch (const Exception &e) {
-		logger().log(e, __FILE__, __LINE__);
+	BEEEON_CATCH_CHAIN_ACTION(logger(),
 		response->setStatus(GWResponse::Status::FAILED);
-	}
-	catch (...) {
-		logger().critical("unknown failure", __FILE__, __LINE__);
-		response->setStatus(GWResponse::Status::FAILED);
-	}
+	);
 
 	return response;
 }
