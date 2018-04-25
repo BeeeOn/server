@@ -13,6 +13,7 @@
 #include "gws/GWResponseExpectedQueue.h"
 #include "gws/RPCForwarder.h"
 #include "gws/SensorDataListener.h"
+#include "model/DeviceDescription.h"
 #include "service/GWSDeviceServiceImpl.h"
 #include "service/GWSSensorHistoryServiceImpl.h"
 #include "util/EventSource.h"
@@ -79,6 +80,9 @@ private:
 			const GatewayID &gatewayID);
 	GWResponse::Ptr handleNewDevice(GWNewDeviceRequest::Ptr request,
 			const GatewayID &gatewayID);
+
+	static DeviceDescription sanitizeDeviceDescription(
+		const DeviceDescription& description);
 
 private:
 	GatewayCommunicator::Ptr m_gatewayCommunicator;

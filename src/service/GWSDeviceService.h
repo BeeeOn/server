@@ -32,9 +32,7 @@ public:
 	 * @return false if device update or insertion fails.
 	 */
 	virtual bool registerDevice(Device &device,
-		const std::string &name,
-		const std::string &vendor,
-		const std::list<ModuleType> &modules,
+		const DeviceDescription &description,
 		const Gateway &gateway) = 0;
 
 	/**

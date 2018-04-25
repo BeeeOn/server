@@ -151,9 +151,7 @@ GWResponse::Ptr GWMessageHandlerImpl::handleNewDevice(
 	try {
 
 		if (m_deviceService->registerDevice(device,
-				Sanitize::common(request->productName()),
-				Sanitize::common(request->vendor()),
-				request->moduleTypes(),
+				sanitizeDeviceDescription(request->deviceDescription()),
 				gatewayID)) {
 			response->setStatus(GWResponse::Status::SUCCESS);
 			m_deviceEventSource.fireEvent(event, &DeviceListener::onNewDevice);
@@ -228,6 +226,19 @@ GWResponse::Ptr GWMessageHandlerImpl::handleDeviceList(
 	);
 
 	return response;
+}
+
+DeviceDescription GWMessageHandlerImpl::sanitizeDeviceDescription(
+		const DeviceDescription& description)
+{
+	DeviceDescription des(
+		description.id(),
+		Sanitize::common(description.vendor()),
+		Sanitize::common(description.productName()),
+		description.dataTypes(),
+		description.refreshTime());
+
+	return des;
 }
 
 void GWMessageHandlerImpl::cleanup()

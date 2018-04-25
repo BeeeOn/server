@@ -25,9 +25,7 @@ void GWSDeviceServiceImpl::setDeviceInfoProvider(DeviceInfoProvider::Ptr provide
 }
 
 bool GWSDeviceServiceImpl::doRegisterDevice(Device &device,
-		const string &name,
-		const string &vendor,
-		const list<ModuleType> &modules,
+		const DeviceDescription &description,
 		const Gateway &gateway)
 {
 	if (m_deviceDao->fetch(device, gateway)) {
@@ -36,15 +34,17 @@ bool GWSDeviceServiceImpl::doRegisterDevice(Device &device,
 		return m_deviceDao->update(device, gateway);
 	}
 	else {
-		device.setName(name);
+		device.setName(description.productName());
 
-		auto type = m_deviceInfoProvider->findByNameAndVendor(name, vendor);
+		auto type = m_deviceInfoProvider->findByNameAndVendor(
+			description.productName(),
+			description.vendor());
 		if (type.isNull()) {
 			throw NotFoundException("no such device type for "
-				"'" + vendor + "' '" + name + "' specification");
+				"'" + description.toString() + "' specification");
 		}
 
-		verifyModules(type, modules);
+		verifyModules(type, description.dataTypes());
 		device.setType(type);
 
 		DeviceStatus &status = device.status();

@@ -19,13 +19,11 @@ public:
 	void setDeviceInfoProvider(DeviceInfoProvider::Ptr provider);
 
 	bool registerDevice(Device &device,
-			const std::string &name,
-			const std::string &vendor,
-			const std::list<ModuleType> &modules,
+			const DeviceDescription &description,
 			const Gateway &gateway) override
 	{
 		return BEEEON_TRANSACTION_RETURN(bool,
-			doRegisterDevice(device, name, vendor, modules, gateway));
+			doRegisterDevice(device, description, gateway));
 	}
 
 	void fetchActiveWithPrefix(std::vector<Device> &devices,
@@ -37,9 +35,7 @@ public:
 
 protected:
 	bool doRegisterDevice(Device &device,
-			const std::string &name,
-			const std::string &vendor,
-			const std::list<ModuleType> &modules,
+			const DeviceDescription &description,
 			const Gateway &gateway);
 
 	void doFetchActiveWithPrefix(std::vector<Device> &devices,
