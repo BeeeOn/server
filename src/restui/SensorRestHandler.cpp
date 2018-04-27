@@ -156,6 +156,8 @@ string SensorRestHandler::parseAggregation(const string &input) const
 		return input;
 	if (input == "max")
 		return input;
+	if (input == "freq")
+		return input;
 
 	throw InvalidArgumentException("invalid aggregation: " + input);
 }
