@@ -22,6 +22,7 @@ public:
 
 	void begin(const TypeInfo &info) override;
 	void single(const ValueAt &v) override;
+	void frequency(const ValueAt &v, size_t count) override;
 	void end() override;
 
 protected:

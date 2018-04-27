@@ -24,11 +24,18 @@ public:
 
 	void begin(const TypeInfo &info) override;
 	void single(const ValueAt &v) override;
+	void frequency(const ValueAt &v, size_t count) override;
 	void end() override;
 
 	static void format(
 		Poco::JSON::PrintHandler &output,
 		const ValueAt &v,
+		const TypeInfo &info);
+
+	static void format(
+		Poco::JSON::PrintHandler &output,
+		const ValueAt &v,
+		const size_t frequency,
 		const TypeInfo &info);
 
 protected:

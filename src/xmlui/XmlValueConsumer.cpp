@@ -51,6 +51,19 @@ void XmlValueConsumer::single(const ValueAt &v)
 	m_writer.dataElement("", "row", "row", to_string(v.at().epochTime()) + " " + info().asString(v.value()));
 }
 
+void XmlValueConsumer::frequency(const ValueAt &v, size_t count)
+{
+	AttributesImpl attrs;
+	attrs.addAttribute("", "freq", "freq", "", to_string(count));
+	m_writer.startElement("", "row", "row", attrs);
+
+	const auto &content = to_string(v.at().epochTime())
+		+ " " + info().asString(v.value());
+
+	m_writer.characters(content.c_str(), 0, content.size());
+	m_writer.endElement("", "row", "row");
+}
+
 void XmlValueConsumer::end()
 {
 	m_writer.endElement("", "response", "response");

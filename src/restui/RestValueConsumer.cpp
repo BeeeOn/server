@@ -55,6 +55,12 @@ void RestValueConsumer::single(const ValueAt &v)
 	m_count += 1;
 }
 
+void RestValueConsumer::frequency(const ValueAt &v, size_t count)
+{
+	format(m_output, v, count, info());
+	m_count += 1;
+}
+
 void RestValueConsumer::end()
 {
 	m_output.endArray();
@@ -85,6 +91,29 @@ void RestValueConsumer::format(
 		output.null();
 	else
 		output.value(info.asString(v.value()));
+
+	output.endObject();
+}
+
+void RestValueConsumer::format(
+		PrintHandler &output,
+		const ValueAt &v,
+		const size_t frequency,
+		const TypeInfo &info)
+{
+	output.startObject();
+
+	output.key("at");
+	output.value(v.atRaw());
+	output.key("value");
+
+	if (!v.isValid())
+		output.null();
+	else
+		output.value(info.asString(v.value()));
+
+	output.key("frequency");
+	output.value(frequency);
 
 	output.endObject();
 }
