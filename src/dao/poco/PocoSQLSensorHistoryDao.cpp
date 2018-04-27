@@ -42,6 +42,7 @@ PocoSQLSensorHistoryDao::PocoSQLSensorHistoryDao():
 	registerQuery(m_queryFetch);
 	registerQuery(m_queryHugeRaw);
 	registerQuery(m_queryHugeAgg);
+	registerQuery(m_queryEnumAgg);
 }
 
 void PocoSQLSensorHistoryDao::setBatchSize(int size)
@@ -286,7 +287,10 @@ void PocoSQLSensorHistoryDao::fetchHugeAgg(
 	unsigned long end = range.end().epochTime();
 	unsigned long intervalSeconds = interval.totalSeconds();
 
-	Statement sql = (session() << m_queryHugeAgg(),
+	const auto &query = agg == AGG_FREQ ?
+		m_queryEnumAgg() : m_queryHugeAgg();
+
+	Statement sql = (session() << query,
 		use(gatewayID, "gateway_id"),
 		use(deviceID, "device_id"),
 		use(moduleID, "module_id"),
@@ -318,6 +322,11 @@ void PocoSQLSensorHistoryDao::fetchHugeAgg(
 				case AGG_MAX:
 					consumer.single(ValueAt(
 						timeAt, row.get(3).convert<double>()));
+					break;
+				case AGG_FREQ:
+					consumer.frequency(
+						ValueAt(timeAt, row.get(1).convert<double>()),
+						row.get(2).convert<size_t>());
 					break;
 				}
 			}

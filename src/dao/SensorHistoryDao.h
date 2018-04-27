@@ -30,7 +30,8 @@ public:
 	enum Aggregator {
 		AGG_AVG,
 		AGG_MIN,
-		AGG_MAX
+		AGG_MAX,
+		AGG_FREQ,
 	};
 
 	static bool isValid(const Aggregator agg);

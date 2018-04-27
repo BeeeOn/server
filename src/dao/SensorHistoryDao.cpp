@@ -11,6 +11,7 @@ bool SensorHistoryDao::isValid(const SensorHistoryDao::Aggregator agg)
 	case AGG_AVG:
 	case AGG_MIN:
 	case AGG_MAX:
+	case AGG_FREQ:
 		return true;
 	}
 
