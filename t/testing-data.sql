@@ -209,7 +209,7 @@ VALUES
 -- Insert a big set of constant testing data.
 -- The data set starts 8 days ago and contains data every 260 seconds.
 ---
-INSERT INTO beeeon.sensor_history_recent (
+INSERT INTO beeeon.sensor_history (
 	gateway_id,
 	device_id,
 	module_id,
@@ -228,7 +228,7 @@ FROM generate_series(0, (extract(epoch FROM interval '8 days') / 260)::integer -
 -- Insert a big set of sin(x) testing data.
 -- The data set starts 2 hours ago and contains data every 110 seconds.
 ---
-INSERT INTO beeeon.sensor_history_recent (
+INSERT INTO beeeon.sensor_history (
 	gateway_id,
 	device_id,
 	module_id,
@@ -247,7 +247,7 @@ FROM generate_series(0, (extract(epoch FROM interval '2 hours') / 110)::integer 
 -- Insert a big set of random testing data.
 -- The data set starts 14 days ago and contains data every 720 seconds.
 ---
-INSERT INTO beeeon.sensor_history_recent (
+INSERT INTO beeeon.sensor_history (
 	gateway_id,
 	device_id,
 	module_id,
@@ -262,7 +262,7 @@ SELECT
 	random() * 100
 FROM generate_series(0, (extract(epoch FROM interval '14 days') / 720)::integer - 1) AS i;
 
-INSERT INTO beeeon.sensor_history_recent (
+INSERT INTO beeeon.sensor_history (
 	gateway_id,
 	device_id,
 	module_id,
