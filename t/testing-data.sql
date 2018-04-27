@@ -63,6 +63,13 @@ VALUES
 	NULL,
 	NULL,
 	NULL
+),
+(
+	1334886476281298,
+	'Gateway for Presence',
+	NULL,
+	NULL,
+	NULL
 );
 
 INSERT INTO beeeon.locations (id, name, gateway_id)
@@ -166,6 +173,19 @@ VALUES
 	timestamp '2018-1-10 11:12:13',
 	timestamp '2018-1-10 11:18:22',
 	NULL
+),
+(
+	beeeon.to_device_id(11769120941098410981),
+	1334886476281298,
+	NULL,
+	'Presence device',
+	5,
+	0,
+	NULL,
+	NULL,
+	timestamp '2018-2-10 11:12:13',
+	timestamp '2018-2-10 11:18:22',
+	timestamp '2018-4-10 09:41:01'
 );
 
 INSERT INTO beeeon.device_properties (
@@ -261,6 +281,34 @@ SELECT
 	NOW() AT TIME ZONE 'UTC' - (i * interval '720 seconds'),
 	random() * 100
 FROM generate_series(0, (extract(epoch FROM interval '14 days') / 720)::integer - 1) AS i;
+
+---
+-- Insert a big set of random availability testing data.
+-- The data set starts 14 days ago and contains data every 300 seconds.
+-- The presence values are toggeling: 1, 0, 1, 0, 1, 0, ...
+---
+INSERT INTO beeeon.sensor_history (
+	gateway_id,
+	device_id,
+	module_id,
+	at,
+	value
+)
+SELECT
+	1334886476281298,
+	beeeon.to_device_id(11769120941098410981),
+	0,
+	timestamp '2018-4-10 09:00:00' - (i * interval '600 seconds'),
+	1
+FROM generate_series(0, (extract(epoch FROM interval '8 days') / 600)::integer - 1) AS i
+UNION ALL
+SELECT
+	1334886476281298,
+	beeeon.to_device_id(11769120941098410981),
+	0,
+	timestamp '2018-4-10 09:00:00' - (i * interval '600 seconds') + interval '300 seconds',
+	0
+FROM generate_series(0, (extract(epoch FROM interval '8 days') / 600)::integer - 1) AS i;
 
 INSERT INTO beeeon.sensor_history (
 	gateway_id,
