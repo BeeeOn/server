@@ -36,48 +36,83 @@
 			<set name="keyFile" text="${apikeys.file}" />
 		</instance>
 
-		<instance name="googleWebAuth"
-				class="BeeeOn::GoogleAuthProvider">
+		<instance name="googleWebOAuth2Impl"
+				class="BeeeOn::GoogleOAuth2Provider">
 			<set name="clientSecret" text="${web-app.google.clientSecret}"/>
 			<set name="clientId" text="${web-app.google.clientId}"/>
 			<set name="redirectUri" text="${web-app.google.redirectUri}"/>
 			<set name="sslConfig" ref="googleOAuthSSL"/>
+		</instance>
+
+		<instance name="googleWebAuth"
+				class="BeeeOn::OAuth2AuthProvider">
+			<set name="codeExchanger" ref="googleWebOAuth2Impl" />
+			<set name="userFetcher" ref="googleWebOAuth2Impl" />
+			<set name="name" text="google"/>
 			<set name="id" text="google-webapp"/>
 		</instance>
 
-		<instance name="googleAndroidAuth"
-				class="BeeeOn::GoogleAuthProvider">
+		<instance name="googleAndroidOAuth2Impl"
+				class="BeeeOn::GoogleOAuth2Provider">
 			<set name="clientSecret" text="${android.google.clientSecret}"/>
 			<set name="clientId" text="${android.google.clientId}"/>
 			<set name="redirectUri" text="${android.google.redirectUri}"/>
 			<set name="sslConfig" ref="googleOAuthSSL"/>
+		</instance>
+
+		<instance name="googleAndroidAuth"
+				class="BeeeOn::OAuth2AuthProvider">
+			<set name="codeExchanger" ref="googleAndroidOAuth2Impl" />
+			<set name="userFetcher" ref="googleAndroidOAuth2Impl" />
+			<set name="name" text="google"/>
 			<set name="id" text="google-android"/>
 		</instance>
 
-		<instance name="googleTesterAuth"
-				class="BeeeOn::GoogleAuthProvider">
+		<instance name="googleTesterOAuth2Impl"
+				class="BeeeOn::GoogleOAuth2Provider">
 			<set name="clientSecret" text="${tester.google.clientSecret}"/>
 			<set name="clientId" text="${tester.google.clientId}"/>
 			<set name="redirectUri" text="${tester.google.redirectUri}"/>
 			<set name="sslConfig" ref="googleOAuthSSL"/>
+		</instance>
+
+		<instance name="googleTesterAuth"
+				class="BeeeOn::OAuth2AuthProvider">
+			<set name="codeExchanger" ref="googleTesterOAuth2Impl" />
+			<set name="userFetcher" ref="googleTesterOAuth2Impl" />
+			<set name="name" text="google"/>
 			<set name="id" text="google-tester"/>
 		</instance>
 
-		<instance name="facebookWebAuth"
-				class="BeeeOn::FacebookAuthProvider">
+		<instance name="facebookWebOAuth2Impl"
+				class="BeeeOn::FacebookOAuth2Provider">
 			<set name="clientSecret" text="${web-app.facebook.clientSecret}"/>
 			<set name="clientId" text="${web-app.facebook.clientId}"/>
 			<set name="redirectUri" text="${web-app.facebook.redirectUri}"/>
 			<set name="sslConfig" ref="facebookOAuthSSL"/>
+		</instance>
+
+		<instance name="facebookWebAuth"
+				class="BeeeOn::OAuth2AuthProvider">
+			<set name="codeExchanger" ref="facebookWebOAuth2Impl" />
+			<set name="userFetcher" ref="facebookWebOAuth2Impl" />
+			<set name="name" text="facebook"/>
 			<set name="id" text="facebook-webapp" />
 		</instance>
 
-		<instance name="facebookAndroidAuth"
-				class="BeeeOn::FacebookAuthProvider">
+		<instance name="facebookAndroidOAuth2Impl"
+				class="BeeeOn::FacebookOAuth2Provider">
 			<set name="clientSecret" text="${android.facebook.clientSecret}"/>
 			<set name="clientId" text="${android.facebook.clientId}"/>
 			<set name="redirectUri" text="${android.facebook.redirectUri}"/>
 			<set name="sslConfig" ref="facebookOAuthSSL"/>
+		</instance>
+
+		<instance name="facebookAndroidAuth"
+				class="BeeeOn::OAuth2AuthProvider">
+			<set name="codeExchanger" ref="facebookAndroidOAuth2Impl" />
+			<set name="userFetcher" ref="facebookAndroidOAuth2Impl" />
+			<set name="name" text="facebook"/>
 			<set name="id" text="facebook-android" />
 		</instance>
 	</factory>
