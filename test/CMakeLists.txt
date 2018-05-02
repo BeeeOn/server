@@ -32,6 +32,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/model/DevicePropertyTest.cpp
 	${PROJECT_SOURCE_DIR}/oauth2/FacebookOAuth2ProviderTest.cpp
 	${PROJECT_SOURCE_DIR}/oauth2/GoogleOAuth2ProviderTest.cpp
+	${PROJECT_SOURCE_DIR}/oauth2/OpenIDUserDecoderTest.cpp
 	${PROJECT_SOURCE_DIR}/policy/SensorHistoryRulesTest.cpp
 	${PROJECT_SOURCE_DIR}/server/CORSFilterTest.cpp
 	${PROJECT_SOURCE_DIR}/server/HTTPCustomHeadersFilterTest.cpp
