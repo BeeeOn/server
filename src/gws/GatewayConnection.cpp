@@ -162,7 +162,7 @@ void GatewayConnection::sendPong(const std::string &requestData)
 	m_webSocket.sendFrame(
 		requestData.c_str(),
 		requestData.length(),
-		WebSocket::FRAME_OP_PONG);
+		WebSocket::FRAME_OP_PONG | WebSocket::FRAME_FLAG_FIN);
 }
 
 void GatewayConnection::sendMessage(const GWMessage::Ptr message)
