@@ -2,10 +2,12 @@
 #define BEEEON_GWS_DEVICE_SERVICE_IMPL_H
 
 #include <list>
+#include <vector>
 
 #include <Poco/SharedPtr.h>
 
 #include "dao/DeviceDao.h"
+#include "model/DeviceDescription.h"
 #include "model/ModuleType.h"
 #include "provider/DeviceInfoProvider.h"
 #include "service/GWSDeviceService.h"
@@ -19,13 +21,19 @@ public:
 	void setDeviceInfoProvider(DeviceInfoProvider::Ptr provider);
 
 	bool registerDevice(Device &device,
-			const std::string &name,
-			const std::string &vendor,
-			const std::list<ModuleType> &modules,
+			const DeviceDescription &description,
 			const Gateway &gateway) override
 	{
 		return BEEEON_TRANSACTION_RETURN(bool,
-			doRegisterDevice(device, name, vendor, modules, gateway));
+			doRegisterDevice(device, description, gateway));
+	}
+
+	void registerDeviceGroup(
+			const std::vector<DeviceDescription> &descriptions,
+			const Gateway &gateway) override
+	{
+		return BEEEON_TRANSACTION(
+			doRegisterDeviceGroup(descriptions, gateway));
 	}
 
 	void fetchActiveWithPrefix(std::vector<Device> &devices,
@@ -37,9 +45,11 @@ public:
 
 protected:
 	bool doRegisterDevice(Device &device,
-			const std::string &name,
-			const std::string &vendor,
-			const std::list<ModuleType> &modules,
+			const DeviceDescription &description,
+			const Gateway &gateway);
+
+	void doRegisterDeviceGroup(
+			const std::vector<DeviceDescription> &descriptions,
 			const Gateway &gateway);
 
 	void doFetchActiveWithPrefix(std::vector<Device> &devices,

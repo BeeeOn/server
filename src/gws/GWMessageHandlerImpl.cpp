@@ -7,6 +7,7 @@
 #include "gwmessage/GWDeviceListResponse.h"
 #include "gwmessage/GWAck.h"
 #include "gws/GWMessageHandlerImpl.h"
+#include "model/DeviceDescription.h"
 #include "util/Sanitize.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, GWMessageHandlerImpl)
@@ -47,6 +48,9 @@ void GWMessageHandlerImpl::handleRequest(GWRequest::Ptr request,
 	switch(request->type()) {
 	case GWMessageType::NEW_DEVICE_REQUEST:
 		response = handleNewDevice(request.cast<GWNewDeviceRequest>(), gatewayID);
+		break;
+	case GWMessageType::NEW_DEVICE_GROUP_REQUEST:
+		response = handleNewDeviceGroup(request.cast<GWNewDeviceGroupRequest>(), gatewayID);
 		break;
 	case GWMessageType::LAST_VALUE_REQUEST:
 		response = handleLastValue(request.cast<GWLastValueRequest>(), gatewayID);
@@ -151,9 +155,7 @@ GWResponse::Ptr GWMessageHandlerImpl::handleNewDevice(
 	try {
 
 		if (m_deviceService->registerDevice(device,
-				Sanitize::common(request->productName()),
-				Sanitize::common(request->vendor()),
-				request->moduleTypes(),
+				sanitizeDeviceDescription(request->deviceDescription()),
 				gatewayID)) {
 			response->setStatus(GWResponse::Status::SUCCESS);
 			m_deviceEventSource.fireEvent(event, &DeviceListener::onNewDevice);
@@ -163,16 +165,42 @@ GWResponse::Ptr GWMessageHandlerImpl::handleNewDevice(
 			m_deviceEventSource.fireEvent(event, &DeviceListener::onRefusedNewDevice);
 		}
 	}
-	catch (const Exception &e) {
-		logger().log(e, __FILE__, __LINE__);
+	BEEEON_CATCH_CHAIN_ACTION(logger(),
 		response->setStatus(GWResponse::Status::FAILED);
 		m_deviceEventSource.fireEvent(event, &DeviceListener::onRefusedNewDevice);
+	);
+
+	return response;
+}
+
+GWResponse::Ptr GWMessageHandlerImpl::handleNewDeviceGroup(
+	GWNewDeviceGroupRequest::Ptr request, const GatewayID &gatewayID)
+{
+	GWResponse::Ptr response = request->derive();
+	vector<DeviceDescription> descriptions;
+	vector<DeviceEvent> events;
+
+	for (const auto &des : request->deviceDescriptions()) {
+		descriptions.emplace_back(sanitizeDeviceDescription(des));
+
+		DeviceEvent event;
+		event.setGatewayID(gatewayID);
+		event.setDeviceID(des.id());
+		events.emplace_back(event);
 	}
-	catch (...) {
-		logger().critical("unknown failure", __FILE__, __LINE__);
+
+	try {
+		m_deviceService->registerDeviceGroup(descriptions, gatewayID);
+
+		response->setStatus(GWResponse::Status::SUCCESS);
+		for (auto &event : events)
+			m_deviceEventSource.fireEvent(event, &DeviceListener::onNewDevice);
+	}
+	BEEEON_CATCH_CHAIN_ACTION(logger(),
 		response->setStatus(GWResponse::Status::FAILED);
-		m_deviceEventSource.fireEvent(event, &DeviceListener::onRefusedNewDevice);
-	}
+		for (auto &event : events)
+			m_deviceEventSource.fireEvent(event, &DeviceListener::onRefusedNewDevice);
+	);
 
 	return response;
 }
@@ -202,14 +230,9 @@ GWResponse::Ptr GWMessageHandlerImpl::handleLastValue(
 			response->setStatus(GWResponse::Status::FAILED);
 		}
 	}
-	catch (const Exception &e) {
-		logger().log(e, __FILE__, __LINE__);
+	BEEEON_CATCH_CHAIN_ACTION(logger(),
 		response->setStatus(GWResponse::Status::FAILED);
-	}
-	catch (...) {
-		logger().critical("unknown failure", __FILE__, __LINE__);
-		response->setStatus(GWResponse::Status::FAILED);
-	}
+	);
 
 	return response;
 }
@@ -234,16 +257,24 @@ GWResponse::Ptr GWMessageHandlerImpl::handleDeviceList(
 		response->setDevices(deviceIDs);
 		response->setStatus(GWResponse::Status::SUCCESS);
 	}
-	catch (const Exception &e) {
-		logger().log(e, __FILE__, __LINE__);
+	BEEEON_CATCH_CHAIN_ACTION(logger(),
 		response->setStatus(GWResponse::Status::FAILED);
-	}
-	catch (...) {
-		logger().critical("unknown failure", __FILE__, __LINE__);
-		response->setStatus(GWResponse::Status::FAILED);
-	}
+	);
 
 	return response;
+}
+
+DeviceDescription GWMessageHandlerImpl::sanitizeDeviceDescription(
+		const DeviceDescription& description)
+{
+	DeviceDescription des(
+		description.id(),
+		Sanitize::common(description.vendor()),
+		Sanitize::common(description.productName()),
+		description.dataTypes(),
+		description.refreshTime());
+
+	return des;
 }
 
 void GWMessageHandlerImpl::cleanup()
