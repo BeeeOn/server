@@ -188,9 +188,7 @@ void SensorRestHandler::history(RestFlow &flow)
 			continue; // ignore unknown parameters
 	}
 
-	PrintHandler result(flow.response().stream());
-
-	RestValueConsumer consumer(result);
+	RestValueConsumer consumer([&]() -> ostream& {return flow.response().stream();});
 
 	try {
 		m_sensorHistoryService->fetchRange(input, range, interval, aggregation, consumer);

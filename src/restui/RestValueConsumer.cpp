@@ -12,8 +12,8 @@ using namespace Poco::JSON;
 using namespace BeeeOn;
 using namespace BeeeOn::RestUI;
 
-RestValueConsumer::RestValueConsumer(PrintHandler &output):
-	m_output(output),
+RestValueConsumer::RestValueConsumer(function<ostream&()> open):
+	m_open(open),
 	m_info(NULL),
 	m_count(0),
 	m_hasBegin(false)
@@ -30,13 +30,14 @@ void RestValueConsumer::begin(const TypeInfo &info)
 	m_info = &info;
 	m_count = 0;
 
-	m_output.startObject();
-	m_output.key("code");
-	m_output.value(200);
-	m_output.key("status");
-	m_output.value(string("success"));
-	m_output.key("data");
-	m_output.startArray();
+	m_output = new PrintHandler(m_open());
+	m_output->startObject();
+	m_output->key("code");
+	m_output->value(200);
+	m_output->key("status");
+	m_output->value(string("success"));
+	m_output->key("data");
+	m_output->startArray();
 
 	m_hasBegin = true;
 }
@@ -51,20 +52,20 @@ const TypeInfo &RestValueConsumer::info() const
 
 void RestValueConsumer::single(const ValueAt &v)
 {
-	format(m_output, v, info());
+	format(*m_output, v, info());
 	m_count += 1;
 }
 
 void RestValueConsumer::frequency(const ValueAt &v, size_t count)
 {
-	format(m_output, v, count, info());
+	format(*m_output, v, count, info());
 	m_count += 1;
 }
 
 void RestValueConsumer::end()
 {
-	m_output.endArray();
-	m_output.endObject();
+	m_output->endArray();
+	m_output->endObject();
 
 	m_info = NULL;
 
