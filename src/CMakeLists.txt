@@ -26,6 +26,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/jwt/JWToken.cpp
 	${PROJECT_SOURCE_DIR}/oauth2/AbstractOAuth2Provider.cpp
 	${PROJECT_SOURCE_DIR}/oauth2/FacebookOAuth2Provider.cpp
+	${PROJECT_SOURCE_DIR}/oauth2/GenericCodeExchanger.cpp
 	${PROJECT_SOURCE_DIR}/oauth2/GoogleOAuth2Provider.cpp
 	${PROJECT_SOURCE_DIR}/oauth2/OpenIDUserDecoder.cpp
 	${PROJECT_SOURCE_DIR}/oauth2/OAuth2CodeExchanger.cpp
