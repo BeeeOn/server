@@ -1,0 +1,20 @@
+<system>
+	<factory>
+		<instance name="testing-setup" class="BeeeOn::LoopRunner" init="early">
+			<set name="autoStart" number="1" if-yes="${testing.enable}" />
+			<add name="loops" ref="pgsql" />
+			<add name="loops" ref="pgsql-blocker" />
+		</instance>
+
+		<instance name="pgsql-blocker" class="BeeeOn::SocketReadyBlocker">
+			<set name="host" text="${database.host}" />
+			<set name="port" number="${database.port}" />
+		</instance>
+
+		<instance name="pgsql" class="BeeeOn::PostgreStartup">
+			<set name="clusterInit" number="1" />
+			<set name="host" text="${database.host}" />
+			<set name="port" number="${database.port}" />
+		</instance>
+	</factory>
+</system>

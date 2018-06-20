@@ -171,7 +171,8 @@ install(FILES conf/apikeys.properties
 		OWNER_READ OWNER_WRITE
 		GROUP_READ)
 install(DIRECTORY conf/config.d
-	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon/server)
+	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon/server
+	PATTERN factory-testing.xml EXCLUDE)
 install(FILES conf/devices.xml conf/types.xml conf/enums.xml conf/bitmaps.xml
 	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon/server)
 install(FILES tools/log-analyze.awk
