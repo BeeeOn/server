@@ -52,6 +52,9 @@ bool GWSDeviceServiceImpl::doRegisterDevice(Device &device,
 				+ " has non-matching device type for device " + device);
 		}
 
+		if (!description.productName().empty())
+			device.setName(description.productName());
+
 		device.status().setLastSeen(Timestamp());
 
 		return m_deviceDao->update(device, gateway);
