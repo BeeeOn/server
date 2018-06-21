@@ -24,6 +24,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/baf/GatewayWatcher.cpp
 	${PROJECT_SOURCE_DIR}/baf/PublishingWatcher.cpp
 	${PROJECT_SOURCE_DIR}/jwt/JWToken.cpp
+	${PROJECT_SOURCE_DIR}/pg/PostgreStartup.cpp
 	${PROJECT_SOURCE_DIR}/provider/AccessTokenCredentials.cpp
 	${PROJECT_SOURCE_DIR}/provider/ApiKeyCredentials.cpp
 	${PROJECT_SOURCE_DIR}/provider/ApiKeyAuthProvider.cpp
@@ -86,6 +87,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/SubtypeInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/TypeInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/User.cpp
+	${PROJECT_SOURCE_DIR}/net/SocketReadyBlocker.cpp
 	${PROJECT_SOURCE_DIR}/dao/ControlDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/FCMTokenDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/FCMRecipientsDao.cpp
