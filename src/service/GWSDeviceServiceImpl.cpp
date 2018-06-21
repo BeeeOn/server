@@ -24,6 +24,21 @@ void GWSDeviceServiceImpl::setDeviceInfoProvider(DeviceInfoProvider::Ptr provide
 	m_deviceInfoProvider = provider;
 }
 
+SharedPtr<DeviceInfo> GWSDeviceServiceImpl::verifyDescription(
+		const DeviceDescription &description) const
+{
+	auto type = m_deviceInfoProvider->findByNameAndVendor(
+		description.productName(),
+		description.vendor());
+	if (type.isNull()) {
+		throw NotFoundException("no such device type for "
+			"'" + description.toString() + "' specification");
+	}
+
+	verifyModules(type, description.dataTypes());
+	return type;
+}
+
 bool GWSDeviceServiceImpl::doRegisterDevice(Device &device,
 		const DeviceDescription &description,
 		const Gateway &gateway)
@@ -35,17 +50,7 @@ bool GWSDeviceServiceImpl::doRegisterDevice(Device &device,
 	}
 	else {
 		device.setName(description.productName());
-
-		auto type = m_deviceInfoProvider->findByNameAndVendor(
-			description.productName(),
-			description.vendor());
-		if (type.isNull()) {
-			throw NotFoundException("no such device type for "
-				"'" + description.toString() + "' specification");
-		}
-
-		verifyModules(type, description.dataTypes());
-		device.setType(type);
+		device.setType(verifyDescription(description));
 
 		DeviceStatus &status = device.status();
 
