@@ -63,7 +63,7 @@ void AuthRestHandler::list(RestFlow &flow)
 		));
 
 		OAuth2AuthProvider *oauth2 = dynamic_cast<OAuth2AuthProvider *>(provider);
-		if (oauth2 != NULL) {
+		if (oauth2 != NULL && !oauth2->clientId().empty()) {
 			result.key("oauth2");
 			result.startObject();
 			result.key("client_id");
