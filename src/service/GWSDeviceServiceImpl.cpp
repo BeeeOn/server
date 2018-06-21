@@ -44,6 +44,14 @@ bool GWSDeviceServiceImpl::doRegisterDevice(Device &device,
 		const Gateway &gateway)
 {
 	if (m_deviceDao->fetch(device, gateway)) {
+		auto type = verifyDescription(description);
+
+		if (type != device.type()) {
+			throw IllegalStateException(
+				"description " + description.toString()
+				+ " has non-matching device type for device " + device);
+		}
+
 		device.status().setLastSeen(Timestamp());
 
 		return m_deviceDao->update(device, gateway);
