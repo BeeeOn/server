@@ -1,4 +1,5 @@
 #include <Poco/Clock.h>
+#include <Poco/Error.h>
 #include <Poco/Exception.h>
 #include <Poco/File.h>
 #include <Poco/Logger.h>
@@ -192,6 +193,9 @@ void PostgreStartup::start()
 
 	m_handle = new ProcessHandle(Process::launch(
 		m_postgresBin, args, m_clusterDir.toString(), nullptr, &pout, &perr));
+
+	if (setpgid(m_handle->id(), 0) < 0)
+		logger().error(Error::getMessage(Error::last()), __FILE__, __LINE__);
 
 	if (logger().debug()) {
 		logger().debug(
