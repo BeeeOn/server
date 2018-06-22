@@ -1,4 +1,5 @@
 #include <Poco/Clock.h>
+#include <Poco/Error.h>
 #include <Poco/Exception.h>
 #include <Poco/File.h>
 #include <Poco/Logger.h>
@@ -23,7 +24,6 @@ BEEEON_OBJECT_PROPERTY("clusterDir", &PostgreStartup::setClusterDir)
 BEEEON_OBJECT_PROPERTY("clusterInit", &PostgreStartup::setClusterInit)
 BEEEON_OBJECT_PROPERTY("stopTimeout", &PostgreStartup::setStopTimeout)
 BEEEON_OBJECT_HOOK("done", &PostgreStartup::initdb)
-BEEEON_OBJECT_HOOK("cleanup", &PostgreStartup::deletedb)
 BEEEON_OBJECT_END(BeeeOn, PostgreStartup)
 
 using namespace std;
@@ -44,6 +44,10 @@ PostgreStartup::PostgreStartup():
 
 PostgreStartup::~PostgreStartup()
 {
+	try {
+		deletedb();
+	}
+	BEEEON_CATCH_CHAIN(logger())
 }
 
 static void checkExecutable(const string &file)
@@ -144,6 +148,8 @@ void PostgreStartup::deletedb()
 	if (!m_clusterInit)
 		return;
 
+	logger().notice("deleting the postgres cluster at " + m_clusterDir.toString());
+
 	File dir(m_clusterDir);
 
 	try {
@@ -187,6 +193,9 @@ void PostgreStartup::start()
 
 	m_handle = new ProcessHandle(Process::launch(
 		m_postgresBin, args, m_clusterDir.toString(), nullptr, &pout, &perr));
+
+	if (setpgid(m_handle->id(), 0) < 0)
+		logger().error(Error::getMessage(Error::last()), __FILE__, __LINE__);
 
 	if (logger().debug()) {
 		logger().debug(
