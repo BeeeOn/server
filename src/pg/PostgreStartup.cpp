@@ -23,7 +23,6 @@ BEEEON_OBJECT_PROPERTY("clusterDir", &PostgreStartup::setClusterDir)
 BEEEON_OBJECT_PROPERTY("clusterInit", &PostgreStartup::setClusterInit)
 BEEEON_OBJECT_PROPERTY("stopTimeout", &PostgreStartup::setStopTimeout)
 BEEEON_OBJECT_HOOK("done", &PostgreStartup::initdb)
-BEEEON_OBJECT_HOOK("cleanup", &PostgreStartup::deletedb)
 BEEEON_OBJECT_END(BeeeOn, PostgreStartup)
 
 using namespace std;
@@ -44,6 +43,10 @@ PostgreStartup::PostgreStartup():
 
 PostgreStartup::~PostgreStartup()
 {
+	try {
+		deletedb();
+	}
+	BEEEON_CATCH_CHAIN(logger())
 }
 
 static void checkExecutable(const string &file)
@@ -143,6 +146,8 @@ void PostgreStartup::deletedb()
 {
 	if (!m_clusterInit)
 		return;
+
+	logger().notice("deleting the postgres cluster at " + m_clusterDir.toString());
 
 	File dir(m_clusterDir);
 
