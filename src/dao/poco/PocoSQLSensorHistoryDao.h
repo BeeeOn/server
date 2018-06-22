@@ -69,6 +69,7 @@ private:
 	Query m_queryFetch     {"sensors_history.fetch"};
 	Query m_queryHugeRaw   {"sensors_history.huge_fetch_raw"};
 	Query m_queryHugeAgg   {"sensors_history.huge_fetch_agg"};
+	Query m_queryEnumAgg   {"sensors_history.huge_fetch_enum_agg"};
 
 	int m_batchSize;
 };

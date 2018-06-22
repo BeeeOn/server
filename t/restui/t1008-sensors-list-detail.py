@@ -35,10 +35,25 @@ class TestSensorsListDetail(unittest.TestCase):
 
 		self.assertEqual(201, response.status)
 
+		req = POST(config.ui_host, config.ui_port, "/gateways")
+		req.authorize(self.session)
+		req.body(json.dumps(
+			{"id": "1334886476281298", "name": "Availability Gateway", "timezone_id": "Europe/Prague"}
+		))
+		response, _ = req()
+
+		self.assertEqual(201, response.status)
+
 	"""
 	Deassign the gateway 1284174504043136 and close the session.
 	"""
 	def tearDown(self):
+		req = DELETE(config.ui_host, config.ui_port, "/gateways/" + "1334886476281298")
+		req.authorize(self.session)
+		response, content = req()
+
+		self.assertEqual(204, response.status)
+
 		req = DELETE(config.ui_host, config.ui_port, "/gateways/" + config.gateway_id)
 		req.authorize(self.session)
 		response, content = req()
@@ -256,6 +271,40 @@ class TestSensorsListDetail(unittest.TestCase):
 		result = json.loads(content)
 		self.assertEqual("success", result["status"])
 		self.assertEqual(14, len(result["data"]))
+
+	def testc_availability_1hour(self):
+		end = datetime(2018, 4, 10, 9)
+		start = end - timedelta(0, 60 * 60)
+
+		req = GET(config.ui_host, config.ui_port,
+				"/gateways/1334886476281298/devices/0xa3545123f4c823e5/sensors/0/history" +
+				"?range=%s,%s&aggregation=freq&interval=300"
+				% (start.strftime("%s"), end.strftime("%s")))
+		req.authorize(self.session)
+		response, content = req()
+
+		self.assertEqual(200, response.status)
+
+		result = json.loads(content)
+		self.assertEqual("success", result["status"])
+		self.assertEqual(12, len(result["data"]))
+
+	def testd_availability_1week(self):
+		end = datetime(2018, 4, 10, 9)
+		start = end - timedelta(7)
+
+		req = GET(config.ui_host, config.ui_port,
+				"/gateways/1334886476281298/devices/0xa3545123f4c823e5/sensors/0/history" +
+				"?range=%s,%s&aggregation=freq&interval=3600"
+				% (start.strftime("%s"), end.strftime("%s")))
+		req.authorize(self.session)
+		response, content = req()
+
+		self.assertEqual(200, response.status)
+
+		result = json.loads(content)
+		self.assertEqual("success", result["status"])
+		self.assertEqual(336, len(result["data"]))
 
 if __name__ == '__main__':
 	import sys

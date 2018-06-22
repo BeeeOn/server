@@ -156,6 +156,8 @@ string SensorRestHandler::parseAggregation(const string &input) const
 		return input;
 	if (input == "max")
 		return input;
+	if (input == "freq")
+		return input;
 
 	throw InvalidArgumentException("invalid aggregation: " + input);
 }
@@ -188,9 +190,7 @@ void SensorRestHandler::history(RestFlow &flow)
 			continue; // ignore unknown parameters
 	}
 
-	PrintHandler result(flow.response().stream());
-
-	RestValueConsumer consumer(result);
+	RestValueConsumer consumer([&]() -> ostream& {return flow.response().stream();});
 
 	try {
 		m_sensorHistoryService->fetchRange(input, range, interval, aggregation, consumer);

@@ -61,6 +61,8 @@ void SensorHistoryServiceImpl::doFetchRange(
 		agg = SensorHistoryDao::AGG_MIN;
 	else if (aggregator == "max")
 		agg = SensorHistoryDao::AGG_MAX;
+	else if (aggregator == "freq")
+		agg = SensorHistoryDao::AGG_FREQ;
 	else
 		throw InvalidArgumentException("invalid aggregator given");
 
