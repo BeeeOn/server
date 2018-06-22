@@ -21,6 +21,10 @@ function sensors_show_history(gwid, devid, sensor, panel) {
 		var at = [];
 		var values = [];
 
+		data.sort(function (a, b) {
+			return parseInt(a["at"]) - parseInt(b["at"]);
+		});
+
 		for (i in data) {
 			at.push(new Date(data[i]["at"] * 1000).toTimeString().split(" ")[0]);
 			values.push(data[i]["value"]);
