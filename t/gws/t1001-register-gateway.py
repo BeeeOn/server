@@ -7,9 +7,16 @@ import unittest
 import websocket
 import json
 
-from gws import assureIsClosed, assureNotClosed
+from gws import assureIsClosed, assureNotClosed, ZMQConnection
 
 class TestRegister(unittest.TestCase):
+	def setUp(self):
+		self.zmq = ZMQConnection(config.gws_zmq_endpoint)
+		self.zmq.open()
+
+	def tearDown(self):
+		self.zmq.close()
+
 	"""
 	Register the gateway with a valid registration message. Expect successful
 	registration and open connection.
@@ -32,7 +39,16 @@ class TestRegister(unittest.TestCase):
 
 		self.assertEqual("gateway_accepted", msg["message_type"])
 		assureNotClosed(self, ws)
+
+		event = self.zmq.pop_data(timeout = 5)
+		self.assertEqual("on-connected", event["event"])
+		self.assertEqual(config.gateway_id, event["gateway_id"])
+
 		ws.close()
+
+		event = self.zmq.pop_data(timeout = 5)
+		self.assertEqual("on-disconnected", event["event"])
+		self.assertEqual(config.gateway_id, event["gateway_id"])
 
 	"""
 	Register the gateway with invalid id and expect closed connection.
@@ -89,6 +105,10 @@ class TestRegister(unittest.TestCase):
 		self.assertEqual("gateway_accepted", response["message_type"])
 		assureNotClosed(self, ws0)
 
+		event = self.zmq.pop_data(timeout = 5)
+		self.assertEqual("on-connected", event["event"])
+		self.assertEqual(config.gateway_id, event["gateway_id"])
+
 		ws1.connect(config.gws_ws_uri)
 		ws1.send(msg)
 		response = json.loads(ws1.recv())
@@ -97,7 +117,15 @@ class TestRegister(unittest.TestCase):
 		assureIsClosed(self, ws0)
 		assureNotClosed(self, ws1)
 
+		event = self.zmq.pop_data(timeout = 5)
+		self.assertEqual("on-reconnected", event["event"])
+		self.assertEqual(config.gateway_id, event["gateway_id"])
+
 		ws1.close()
+
+		event = self.zmq.pop_data(timeout = 5)
+		self.assertEqual("on-disconnected", event["event"])
+		self.assertEqual(config.gateway_id, event["gateway_id"])
 
 if __name__ == '__main__':
 	import sys
