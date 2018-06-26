@@ -12,7 +12,6 @@ BEEEON_OBJECT_PROPERTY("gatewayDao", &GatewayServiceImpl::setGatewayDao)
 BEEEON_OBJECT_PROPERTY("roleInGatewayDao", &GatewayServiceImpl::setRoleInGatewayDao)
 BEEEON_OBJECT_PROPERTY("identityDao", &GatewayServiceImpl::setIdentityDao)
 BEEEON_OBJECT_PROPERTY("verifiedIdentityDao", &GatewayServiceImpl::setVerifiedIdentityDao)
-BEEEON_OBJECT_PROPERTY("gatewayRPC", &GatewayServiceImpl::setGatewayRPC)
 BEEEON_OBJECT_PROPERTY("scanController", &GatewayServiceImpl::setScanController)
 BEEEON_OBJECT_PROPERTY("accessPolicy", &GatewayServiceImpl::setAccessPolicy)
 BEEEON_OBJECT_PROPERTY("transactionManager", &GatewayServiceImpl::setTransactionManager)
@@ -44,11 +43,6 @@ void GatewayServiceImpl::setIdentityDao(IdentityDao::Ptr dao)
 void GatewayServiceImpl::setVerifiedIdentityDao(VerifiedIdentityDao::Ptr dao)
 {
 	m_verifiedIdentityDao = dao;
-}
-
-void GatewayServiceImpl::setGatewayRPC(GatewayRPC::Ptr rpc)
-{
-	m_rpc = rpc;
 }
 
 void GatewayServiceImpl::setScanController(GatewayScanController::Ptr controller)

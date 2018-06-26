@@ -31,7 +31,6 @@ public:
 	void setRoleInGatewayDao(RoleInGatewayDao::Ptr dao);
 	void setIdentityDao(IdentityDao::Ptr dao);
 	void setVerifiedIdentityDao(VerifiedIdentityDao::Ptr dao);
-	void setGatewayRPC(GatewayRPC::Ptr rpc);
 	void setScanController(GatewayScanController::Ptr controller);
 	void setAccessPolicy(GatewayAccessPolicy::Ptr policy);
 
@@ -107,7 +106,6 @@ private:
 	RoleInGatewayDao::Ptr m_roleInGatewayDao;
 	IdentityDao::Ptr m_identityDao;
 	VerifiedIdentityDao::Ptr m_verifiedIdentityDao;
-	GatewayRPC::Ptr m_rpc;
 	GatewayAccessPolicy::Ptr m_accessPolicy;
 	GatewayScanController::Ptr m_scanController;
 };
