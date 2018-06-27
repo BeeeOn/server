@@ -149,7 +149,7 @@ class TestNewDevice(unittest.TestCase):
 	'pressure' known on the server. The server must fail
 	to register this devices and provide an appropriate response.
 	"""
-	def test5_new_device_fail_too_much_modules(self):
+	def test5_new_device_fail_too_many_modules(self):
 		id = str(uuid.uuid4())
 
 		msg = json.dumps({

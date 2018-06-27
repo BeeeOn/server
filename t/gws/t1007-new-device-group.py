@@ -206,7 +206,7 @@ class TestNewDeviceGroup(unittest.TestCase):
 	and provide an appropriate response. The response has to have same id as the
 	request and the status of response has to be 2 (failure).
 	"""
-	def test5_new_device_group_fail_too_much_modules(self):
+	def test5_new_device_group_fail_too_many_modules(self):
 		id = str(uuid.uuid4())
 
 		msg = json.dumps({

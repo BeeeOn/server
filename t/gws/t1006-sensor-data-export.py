@@ -112,7 +112,7 @@ class TestSensorData(unittest.TestCase):
 	Send conflicting data (same timestamp). We cannot test anything there
 	automatically. But it allows at least a semi-automatic test.
 	"""
-	def test3_export_fails_due_to_unexisting_device(self):
+	def test3_export_fails_due_to_conflicts(self):
 		id = str(uuid.uuid4())
 		timestamp = int(time.time() * 1000000)
 
