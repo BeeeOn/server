@@ -44,11 +44,11 @@ class TestNewDevice(unittest.TestCase):
 		})
 
 		self.ws.send(msg)
-		msg = json.loads(self.ws.recv())
+		response = json.loads(self.ws.recv())
 
-		self.assertEqual("generic_response", msg["message_type"])
-		self.assertEqual(id, msg["id"])
-		self.assertEqual(1, msg["status"])
+		self.assertEqual("generic_response", response["message_type"])
+		self.assertEqual(id, response["id"])
+		self.assertEqual(1, response["status"])
 		assureNotClosed(self, self.ws)
 
 	"""
@@ -77,11 +77,11 @@ class TestNewDevice(unittest.TestCase):
 		})
 
 		self.ws.send(msg)
-		msg = json.loads(self.ws.recv())
+		response = json.loads(self.ws.recv())
 
-		self.assertEqual("generic_response", msg["message_type"])
-		self.assertEqual(id, msg["id"])
-		self.assertEqual(2, msg["status"])
+		self.assertEqual("generic_response", response["message_type"])
+		self.assertEqual(id, response["id"])
+		self.assertEqual(2, response["status"])
 		assureNotClosed(self, self.ws)
 
 	"""
@@ -137,11 +137,11 @@ class TestNewDevice(unittest.TestCase):
 		})
 
 		self.ws.send(msg)
-		msg = json.loads(self.ws.recv())
+		response = json.loads(self.ws.recv())
 
-		self.assertEqual("generic_response", msg["message_type"])
-		self.assertEqual(id, msg["id"])
-		self.assertEqual(2, msg["status"])
+		self.assertEqual("generic_response", response["message_type"])
+		self.assertEqual(id, response["id"])
+		self.assertEqual(2, response["status"])
 		assureNotClosed(self, self.ws)
 
 	"""
@@ -174,11 +174,11 @@ class TestNewDevice(unittest.TestCase):
 		})
 
 		self.ws.send(msg)
-		msg = json.loads(self.ws.recv())
+		response = json.loads(self.ws.recv())
 
-		self.assertEqual("generic_response", msg["message_type"])
-		self.assertEqual(id, msg["id"])
-		self.assertEqual(2, msg["status"])
+		self.assertEqual("generic_response", response["message_type"])
+		self.assertEqual(id, response["id"])
+		self.assertEqual(2, response["status"])
 		assureNotClosed(self, self.ws)
 
 if __name__ == '__main__':
