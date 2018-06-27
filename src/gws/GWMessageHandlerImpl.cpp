@@ -114,17 +114,20 @@ void GWMessageHandlerImpl::handleSensorData(GWSensorDataExport::Ptr dataExport,
 			moduleValues.push_back(moduleValue);
 		}
 
-		SensorDataEvent e;
-		e.setGatewayID(gatewayID);
-		e.setDeviceID(device.id());
-		e.setStamp(it.timestamp());
-		e.setData(moduleValues);
-
-		m_dataEventSource.fireEvent(e, &SensorDataListener::onReceived);
-
 		try {
 			m_sensorHistoryService->insertMany(
 				device, it.timestamp(), moduleValues);
+
+			if (moduleValues.empty())
+				continue;
+
+			SensorDataEvent e;
+			e.setGatewayID(gatewayID);
+			e.setDeviceID(device.id());
+			e.setStamp(it.timestamp());
+			e.setData(moduleValues);
+
+			m_dataEventSource.fireEvent(e, &SensorDataListener::onReceived);
 		}
 		catch (const Exception &e) {
 			logger().log(e, __FILE__, __LINE__);
