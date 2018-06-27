@@ -68,6 +68,7 @@ class TestNewDevice(unittest.TestCase):
 		event = self.zmq.pop_data(timeout = 5)
 		self.assertEqual("on-new-device", event["event"])
 		self.assertEqual("0xa123123412341234", event["device_id"])
+		self.assertEqual("Internal Pressure v1.0", event["device_name"])
 		self.assertEqual(config.gateway_id, event["gateway_id"])
 
 	"""

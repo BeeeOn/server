@@ -44,6 +44,7 @@ public:
 
 	/**
 	 * Fired when a new device is discovered and registered in the system.
+	 * The event should contain the name of the related device if there is some.
 	 */
 	virtual void onNewDevice(const DeviceEvent &e);
 
