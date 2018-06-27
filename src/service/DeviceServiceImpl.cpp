@@ -362,7 +362,7 @@ bool DeviceServiceImpl::tryActivateAndUpdate(Device &device,
 		if (!m_dao->update(device, gateway))
 			throw NotFoundException("device " + device + " seems to not exist");
 
-		DevicePairHandler::Ptr handler = new DevicePairHandler(device, m_dao);
+		DevicePairHandler::Ptr handler = new DevicePairHandler(device, m_dao, m_eventSource);
 		handler->setTransactionManager(transactionManager());
 
 		m_gatewayRPC->pairDevice(handler, gateway, device);
