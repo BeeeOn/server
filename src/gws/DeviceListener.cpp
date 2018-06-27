@@ -54,3 +54,27 @@ void DeviceListener::onNewDevice(const DeviceEvent &e)
 void DeviceListener::onRefusedNewDevice(const DeviceEvent &e)
 {
 }
+
+void DeviceListener::onPairRequested(const DeviceEvent &e)
+{
+}
+
+void DeviceListener::onPairConfirmed(const DeviceEvent &e)
+{
+}
+
+void DeviceListener::onPairFailed(const DeviceEvent &e)
+{
+}
+
+void DeviceListener::onUnpairRequested(const DeviceEvent &e)
+{
+}
+
+void DeviceListener::onUnpairConfirmed(const DeviceEvent &e)
+{
+}
+
+void DeviceListener::onUnpairFailed(const DeviceEvent &e)
+{
+}
