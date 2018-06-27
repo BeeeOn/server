@@ -331,7 +331,7 @@ void DeviceServiceImpl::doUnregister(Relation<Device, Gateway> &input)
 	if (!m_dao->update(device, input.base()))
 		throw NotFoundException("device " + device + " seems to not exist");
 
-	DeviceUnpairHandler::Ptr handler = new DeviceUnpairHandler(device, m_dao);
+	DeviceUnpairHandler::Ptr handler = new DeviceUnpairHandler(device, m_dao, m_eventSource);
 	handler->setTransactionManager(transactionManager());
 
 	m_gatewayRPC->unpairDevice(handler, input.base(), device);
