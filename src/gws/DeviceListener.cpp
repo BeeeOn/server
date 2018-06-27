@@ -7,6 +7,12 @@ DeviceEvent::DeviceEvent()
 {
 }
 
+DeviceEvent::DeviceEvent(const GatewayID &gatewayID, const DeviceID &deviceID):
+	m_gatewayID(gatewayID),
+	m_deviceID(deviceID)
+{
+}
+
 void DeviceEvent::setGatewayID(const GatewayID &id)
 {
 	m_gatewayID = id;

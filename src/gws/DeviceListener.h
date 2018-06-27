@@ -12,6 +12,7 @@ namespace BeeeOn {
 class DeviceEvent {
 public:
 	DeviceEvent();
+	DeviceEvent(const GatewayID &gatewayID, const DeviceID &deviceID);
 
 	void setGatewayID(const GatewayID &id);
 	const GatewayID &gatewayID() const;
