@@ -8,11 +8,13 @@
 #include "dao/DeviceDao.h"
 #include "dao/DevicePropertyDao.h"
 #include "dao/SensorHistoryDao.h"
+#include "gws/DeviceListener.h"
 #include "policy/DeviceAccessPolicy.h"
 #include "model/DeviceWithData.h"
 #include "rpc/GatewayRPC.h"
 #include "service/DeviceService.h"
 #include "transaction/Transactional.h"
+#include "util/EventSource.h"
 
 namespace BeeeOn {
 
@@ -31,6 +33,8 @@ public:
 	void setDevicePropertyDao(DevicePropertyDao::Ptr dao);
 	void setGatewayRPC(GatewayRPC::Ptr rpc);
 	void setAccessPolicy(DeviceAccessPolicy::Ptr policy);
+	void setEventsExecutor(AsyncExecutor::Ptr executor);
+	void registerListener(DeviceListener::Ptr listener);
 
 	bool fetch(Relation<Device, Gateway> &input) override
 	{
@@ -162,6 +166,7 @@ private:
 	DevicePropertyDao::Ptr m_propertyDao;
 	GatewayRPC::Ptr m_gatewayRPC;
 	DeviceAccessPolicy::Ptr m_policy;
+	Poco::SharedPtr<EventSource<DeviceListener>> m_eventSource;
 };
 
 }
