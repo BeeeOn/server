@@ -98,4 +98,16 @@
 			</sensor>
 		</modules>
 	</device>
+
+	<device id="6">
+		<name>Unknown device</name>
+		<vendor>Some Company</vendor>
+		<match>
+			<pattern name="*" vendor="Availability" />
+		</match>
+		<modules>
+			<sensor id="0" type="availability">
+			</sensor>
+		</modules>
+	</device>
 </devices>

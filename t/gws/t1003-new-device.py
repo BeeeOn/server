@@ -216,6 +216,72 @@ class TestNewDevice(unittest.TestCase):
 		self.assertEqual("0xa123123412342222", event["device_id"])
 		self.assertEqual(config.gateway_id, event["gateway_id"])
 
+	"""
+	Test that a second new_device_request for the same device where its product_name
+	is not important for type recognition is used as an update and its name is
+	updated accordingly.
+	"""
+	def test6_new_device_and_update(self):
+		id = str(uuid.uuid4())
+
+		msg1 = json.dumps({
+			"message_type" : "new_device_request",
+			"id" : id,
+			"device_id" : "0xa123123412343333",
+			"vendor" : "Availability",
+			"product_name" : "",
+			"refresh_time" : 30,
+			"module_types" : [
+				{
+					"type" : "availability",
+					"attributes" : []
+				}
+			]
+		})
+
+		self.ws.send(msg1)
+		response = json.loads(self.ws.recv())
+
+		self.assertEqual("generic_response", response["message_type"])
+		self.assertEqual(id, response["id"])
+		self.assertEqual(1, response["status"])
+		assureNotClosed(self, self.ws)
+
+		notification = self.zmq.pop_data(timeout = 5)
+		self.assertEqual("on-new-device", notification["event"])
+		self.assertEqual("0xa123123412343333", notification["device_id"])
+		self.assertNotIn("device_name", notification)
+		self.assertEqual(config.gateway_id, notification["gateway_id"])
+
+		msg2 = json.dumps({
+			"message_type" : "new_device_request",
+			"id" : id,
+			"device_id" : "0xa123123412343333",
+			"vendor" : "Availability",
+			"product_name" : "Super device",
+			"refresh_time" : 30,
+			"module_types" : [
+				{
+					"type" : "availability",
+					"attributes" : []
+				}
+			]
+		})
+
+		self.ws.send(msg2)
+		response = json.loads(self.ws.recv())
+
+		self.assertEqual("generic_response", response["message_type"])
+		self.assertEqual(id, response["id"])
+		self.assertEqual(1, response["status"])
+		assureNotClosed(self, self.ws)
+
+		notification = self.zmq.pop_data(timeout = 5)
+		self.assertEqual("on-new-device", notification["event"])
+		self.assertEqual("0xa123123412343333", notification["device_id"])
+		self.assertEqual("Super device", notification["device_name"])
+		self.assertEqual(config.gateway_id, notification["gateway_id"])
+
 if __name__ == '__main__':
 	import sys
 	import taprunner
