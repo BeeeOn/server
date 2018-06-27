@@ -125,6 +125,11 @@ void PublishingWatcher::eventDetails(
 
 	json.key("device_id");
 	json.value(e.deviceID().toString());
+
+	if (!e.name().empty()) {
+		json.key("device_name");
+		json.value(e.name());
+	}
 }
 
 void PublishingWatcher::publish(const string &message)
