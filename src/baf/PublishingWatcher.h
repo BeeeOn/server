@@ -29,6 +29,12 @@ public:
 
 	void onNewDevice(const DeviceEvent &e) override;
 	void onRefusedNewDevice(const DeviceEvent &e) override;
+	void onPairRequested(const DeviceEvent &e) override;
+	void onPairConfirmed(const DeviceEvent &e) override;
+	void onPairFailed(const DeviceEvent &e) override;
+	void onUnpairRequested(const DeviceEvent &e) override;
+	void onUnpairConfirmed(const DeviceEvent &e) override;
+	void onUnpairFailed(const DeviceEvent &e) override;
 
 	void onConnected(const GatewayEvent &e) override;
 	void onReconnected(const GatewayEvent &e) override;

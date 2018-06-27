@@ -39,6 +39,36 @@ void PublishingWatcher::onRefusedNewDevice(const DeviceEvent &e)
 	publishEvent(e, "on-refused-new-device");
 }
 
+void PublishingWatcher::onPairRequested(const DeviceEvent &e)
+{
+	publishEvent(e, "on-pair-device", "request");
+}
+
+void PublishingWatcher::onPairConfirmed(const DeviceEvent &e)
+{
+	publishEvent(e, "on-pair-device", "confirmed");
+}
+
+void PublishingWatcher::onPairFailed(const DeviceEvent &e)
+{
+	publishEvent(e, "on-pair-device", "failed");
+}
+
+void PublishingWatcher::onUnpairRequested(const DeviceEvent &e)
+{
+	publishEvent(e, "on-unpair-device", "request");
+}
+
+void PublishingWatcher::onUnpairConfirmed(const DeviceEvent &e)
+{
+	publishEvent(e, "on-unpair-device", "confirmed");
+}
+
+void PublishingWatcher::onUnpairFailed(const DeviceEvent &e)
+{
+	publishEvent(e, "on-unpair-device", "failed");
+}
+
 void PublishingWatcher::onConnected(const GatewayEvent &e)
 {
 	publishEvent(e, "on-connected");
