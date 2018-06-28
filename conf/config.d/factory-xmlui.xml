@@ -9,6 +9,7 @@
 			<set name="threadIdleTime" time="${xmlui.threadIdleTime}" />
 			<set name="threadPriority" text="normal" />
 			<set name="port" number="${xmlui.port}" />
+			<set name="eventsExecutor" ref="asyncExecutor" />
 		</instance>
 
 		<instance name="xmluiFactory"
