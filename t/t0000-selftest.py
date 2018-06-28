@@ -16,6 +16,7 @@ class TestSelf(unittest.TestCase):
 		import http.client
 		import json
 		import uuid
+		import zmq
 
 if __name__ == '__main__':
 	import sys

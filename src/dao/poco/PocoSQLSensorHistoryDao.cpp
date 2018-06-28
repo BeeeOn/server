@@ -129,7 +129,7 @@ void PocoSQLSensorHistoryDao::insertMany(
 
 				// reinitialize statement and continue
 				// with following value
-				++it;
+				it = values.erase(it);
 				break;
 			}
 

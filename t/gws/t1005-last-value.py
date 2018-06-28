@@ -8,17 +8,31 @@ import websocket
 import json
 import uuid
 
-from gws import assureIsClosed, assureNotClosed, registerGateway
+from gws import assureIsClosed, assureNotClosed, registerGateway, ZMQConnection
 
 class TestLastValue(unittest.TestCase):
 	def setUp(self):
+		self.zmq = ZMQConnection(config.gws_zmq_endpoint)
+		self.zmq.open()
+
 		self.ws = websocket.WebSocket()
 		self.ws.connect(config.gws_ws_uri)
 
 		registerGateway(self, self.ws, config.gateway_id)
 
+		event = self.zmq.pop_data(timeout = 5)
+		self.assertEqual("on-connected", event["event"])
+		self.assertEqual(config.gateway_id, event["gateway_id"])
+
 	def tearDown(self):
 		self.ws.close()
+
+		try:
+			event = self.zmq.pop_data(timeout = 5)
+			self.assertEqual("on-disconnected", event["event"])
+			self.assertEqual(config.gateway_id, event["gateway_id"])
+		finally:
+			self.zmq.close()
 
 	"""
 	Obtain last value of the device's 0xa32d27aa5e94ecfd (11758097814818974973)

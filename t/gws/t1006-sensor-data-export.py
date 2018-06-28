@@ -9,17 +9,31 @@ import json
 import time
 import uuid
 
-from gws import assureIsClosed, assureNotClosed, registerGateway
+from gws import assureIsClosed, assureNotClosed, registerGateway, ZMQConnection
 
 class TestSensorData(unittest.TestCase):
 	def setUp(self):
+		self.zmq = ZMQConnection(config.gws_zmq_endpoint)
+		self.zmq.open()
+
 		self.ws = websocket.WebSocket()
 		self.ws.connect(config.gws_ws_uri)
 
 		registerGateway(self, self.ws, config.gateway_id)
 
+		event = self.zmq.pop_data(timeout = 5)
+		self.assertEqual("on-connected", event["event"])
+		self.assertEqual(config.gateway_id, event["gateway_id"])
+
 	def tearDown(self):
 		self.ws.close()
+
+		try:
+			event = self.zmq.pop_data(timeout = 5)
+			self.assertEqual("on-disconnected", event["event"])
+			self.assertEqual(config.gateway_id, event["gateway_id"])
+		finally:
+			self.zmq.close()
 
 	"""
 	Server just confirms that it received valid sensor data message,
@@ -64,6 +78,15 @@ class TestSensorData(unittest.TestCase):
 		self.assertEqual("sensor_data_confirm", msg["message_type"])
 		self.assertEqual(id, msg["id"])
 		assureNotClosed(self, self.ws)
+
+		event = self.zmq.pop_data(timeout = 5)
+		self.assertEqual("on-sensor-data", event["event"])
+		self.assertEqual(config.gateway_id, event["gateway_id"])
+		self.assertEqual("0xa32d27aa5e94ecfd", event["device_id"])
+		self.assertEqual(timestamp, event["timestamp"])
+		self.assertEqual(30, event["data"]["0"])
+		self.assertIsNone(event["data"]["1"])
+		self.assertEqual(60, event["data"]["2"])
 
 	"""
 	Even if we send an invalid export message, we get just "confirm" response.
@@ -112,7 +135,7 @@ class TestSensorData(unittest.TestCase):
 	Send conflicting data (same timestamp). We cannot test anything there
 	automatically. But it allows at least a semi-automatic test.
 	"""
-	def test3_export_fails_due_to_unexisting_device(self):
+	def test3_export_fails_due_to_conflicts(self):
 		id = str(uuid.uuid4())
 		timestamp = int(time.time() * 1000000)
 
@@ -146,6 +169,13 @@ class TestSensorData(unittest.TestCase):
 		self.assertEqual("sensor_data_confirm", msg["message_type"])
 		self.assertEqual(id, msg["id"])
 		assureNotClosed(self, self.ws)
+
+		event = self.zmq.pop_data(timeout = 5)
+		self.assertEqual("on-sensor-data", event["event"])
+		self.assertEqual(config.gateway_id, event["gateway_id"])
+		self.assertEqual("0xa32d27aa5e94ecfd", event["device_id"])
+		self.assertEqual(timestamp, event["timestamp"])
+		self.assertEqual(30, event["data"]["0"])
 
 if __name__ == '__main__':
 	import sys

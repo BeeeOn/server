@@ -48,6 +48,13 @@ public:
 			const ModuleValue &value) = 0;
 	/**
 	 * Insert the batch of values into database.
+	 * In case of a single failed insertion, the behaviour should be either:
+	 *
+	 * - fail all of them
+	 * - insert all possible values, avoid failing ones
+	 *
+	 * After the call, the vector values contains only values that were
+	 * successfully inserted.
 	 */
 	virtual void insertMany(
 			const Device &device,
