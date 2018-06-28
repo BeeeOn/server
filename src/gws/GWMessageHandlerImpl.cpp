@@ -161,6 +161,7 @@ GWResponse::Ptr GWMessageHandlerImpl::handleNewDevice(
 				sanitizeDeviceDescription(request->deviceDescription()),
 				gatewayID)) {
 			response->setStatus(GWResponse::Status::SUCCESS);
+			event.setName(device.name());
 			m_deviceEventSource.fireEvent(event, &DeviceListener::onNewDevice);
 		}
 		else {

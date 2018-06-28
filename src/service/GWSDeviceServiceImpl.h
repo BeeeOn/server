@@ -57,6 +57,9 @@ protected:
 			const DevicePrefix &prefix);
 
 private:
+	Poco::SharedPtr<DeviceInfo> verifyDescription(
+			const DeviceDescription &description) const;
+
 	/**
 	 * @brief Verify that count of given modules is less or equals to DeviceInfo
 	 * specification and types of modules are identical.

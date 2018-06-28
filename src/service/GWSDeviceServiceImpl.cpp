@@ -24,28 +24,44 @@ void GWSDeviceServiceImpl::setDeviceInfoProvider(DeviceInfoProvider::Ptr provide
 	m_deviceInfoProvider = provider;
 }
 
+SharedPtr<DeviceInfo> GWSDeviceServiceImpl::verifyDescription(
+		const DeviceDescription &description) const
+{
+	auto type = m_deviceInfoProvider->findByNameAndVendor(
+		description.productName(),
+		description.vendor());
+	if (type.isNull()) {
+		throw NotFoundException("no such device type for "
+			"'" + description.toString() + "' specification");
+	}
+
+	verifyModules(type, description.dataTypes());
+	return type;
+}
+
 bool GWSDeviceServiceImpl::doRegisterDevice(Device &device,
 		const DeviceDescription &description,
 		const Gateway &gateway)
 {
 	if (m_deviceDao->fetch(device, gateway)) {
+		auto type = verifyDescription(description);
+
+		if (type != device.type()) {
+			throw IllegalStateException(
+				"description " + description.toString()
+				+ " has non-matching device type for device " + device);
+		}
+
+		if (!description.productName().empty())
+			device.setName(description.productName());
+
 		device.status().setLastSeen(Timestamp());
 
 		return m_deviceDao->update(device, gateway);
 	}
 	else {
 		device.setName(description.productName());
-
-		auto type = m_deviceInfoProvider->findByNameAndVendor(
-			description.productName(),
-			description.vendor());
-		if (type.isNull()) {
-			throw NotFoundException("no such device type for "
-				"'" + description.toString() + "' specification");
-		}
-
-		verifyModules(type, description.dataTypes());
-		device.setType(type);
+		device.setType(verifyDescription(description));
 
 		DeviceStatus &status = device.status();
 
