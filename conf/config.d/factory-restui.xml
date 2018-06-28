@@ -12,6 +12,7 @@
 			<set name="minThreads" number="${restui.minThreads}" />
 			<set name="maxThreads" number="${restui.maxThreads}" />
 			<set name="threadIdleTime" time="${restui.threadIdleTime}" />
+			<set name="eventsExecutor" ref="asyncExecutor" />
 		</instance>
 
 		<instance name="sessionVerifier" class="BeeeOn::SessionVerifierImpl">
