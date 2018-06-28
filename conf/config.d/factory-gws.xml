@@ -12,6 +12,7 @@
 			<set name="maxThreads" number="${gws.ws.maxThreads}" />
 			<set name="threadIdleTime" time="${gws.ws.threadIdleTime}" />
 			<set name="eventsExecutor" ref="asyncExecutor" />
+			<set name="listeners" ref="publishingWatcher" if-yes="${baf.publish.server.enable}" />
 		</instance>
 
 		<instance name="gatewayCommunicator" class="BeeeOn::GatewayCommunicator">

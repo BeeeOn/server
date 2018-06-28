@@ -10,6 +10,7 @@
 #include "gws/DeviceListener.h"
 #include "gws/GatewayListener.h"
 #include "gws/SensorDataListener.h"
+#include "server/ServerListener.h"
 #include "util/Loggable.h"
 
 namespace BeeeOn {
@@ -19,6 +20,7 @@ class PublishingWatcher :
 	public DeviceListener,
 	public GatewayListener,
 	public SensorDataListener,
+	public ServerListener,
 	Loggable {
 public:
 	PublishingWatcher();
@@ -33,6 +35,9 @@ public:
 	void onDisconnected(const GatewayEvent &e) override;
 
 	void onReceived(const SensorDataEvent &e) override;
+
+	void onUp(const ServerEvent &e) override;
+	void onDown(const ServerEvent &e) override;
 
 	void cleanup();
 
@@ -51,6 +56,9 @@ protected:
 	void eventDetails(
 		Poco::JSON::PrintHandler &json,
 		const DeviceEvent &e) const;
+	void eventDetails(
+		Poco::JSON::PrintHandler &json,
+		const ServerEvent &e) const;
 
 	template <typename Event>
 	void publishEvent(const Event &e, const std::string &name)
