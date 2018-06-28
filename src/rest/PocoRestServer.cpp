@@ -1,4 +1,5 @@
 #include <Poco/Exception.h>
+#include <Poco/Logger.h>
 #include <Poco/Net/HTTPServerParams.h>
 #include <Poco/Net/SecureServerSocket.h>
 
@@ -86,6 +87,11 @@ void PocoRestServer::initHttpServer()
 void PocoRestServer::start()
 {
 	initHttpServer();
+
+	logger().information(
+		"starting server on port "
+		+ to_string(m_port));
+
 	m_server->start();
 }
 
@@ -93,6 +99,10 @@ void PocoRestServer::stop()
 {
 	if (m_server.isNull())
 		return;
+
+	logger().information(
+		"stopping server on port "
+		+ to_string(m_port));
 
 	m_server->stop();
 
