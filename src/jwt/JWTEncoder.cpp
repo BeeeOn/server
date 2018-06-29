@@ -123,6 +123,27 @@ static void insertClaims(jwt_t *tokenRaw, const JWToken &token)
 		if (err != 0)
 			throw IllegalStateException("nbf: " + Error::getMessage(err));
 	}
+
+	if (!token.givenName().isNull()) {
+		const auto &givenName = token.givenName().value();
+		err = ::jwt_add_grant(tokenRaw, "given_name", givenName.c_str());
+		if (err != 0)
+			throw IllegalStateException("given_name: " + Error::getMessage(err));
+	}
+
+	if (!token.familyName().isNull()) {
+		const auto &familyName = token.familyName().value();
+		err = ::jwt_add_grant(tokenRaw, "given_name", familyName.c_str());
+		if (err != 0)
+			throw IllegalStateException("family_name: " + Error::getMessage(err));
+	}
+
+	if (!token.email().isNull()) {
+		const auto &email = token.email().value();
+		err = ::jwt_add_grant(tokenRaw, "email", email.c_str());
+		if (err != 0)
+			throw IllegalStateException("email: " + Error::getMessage(err));
+	}
 }
 
 TokenID JWTEncoder::encode(const JWToken &token) const
