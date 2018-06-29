@@ -84,7 +84,7 @@ void SensorXmlHandler::handleGetLog(const string &gateid,
 	XmlValueConsumer consumer(m_output);
 
 	try {
-		m_sensorService.fetchRange(input, range, interval, aggregator, consumer);
+		m_sensorService.fetchRange(input, range, interval, {aggregator}, consumer);
 	}
 	BEEEON_CATCH_CHAIN_ACTION(logger(),
 		if (consumer.hasBegin()) {

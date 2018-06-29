@@ -39,7 +39,7 @@ void SensorHistoryServiceImpl::doFetchRange(
 		const Relation<ModuleInfo, Device> &module,
 		const TimeInterval &range,
 		const Timespan &interval,
-		const string &aggregator,
+		const vector<string> &aggregators,
 		ValueConsumer &consumer)
 {
 	m_policy->assure(SensorHistoryAccessPolicy::ACTION_USER_GET,
@@ -53,18 +53,20 @@ void SensorHistoryServiceImpl::doFetchRange(
 	if (!device.type()->lookup(info))
 		throw IllegalStateException("no such device module " + info);
 
-	SensorHistoryDao::Aggregator agg;
+	vector<SensorHistoryDao::Aggregator> agg;
 
-	if (aggregator == "avg")
-		agg = SensorHistoryDao::AGG_AVG;
-	else if (aggregator == "min")
-		agg = SensorHistoryDao::AGG_MIN;
-	else if (aggregator == "max")
-		agg = SensorHistoryDao::AGG_MAX;
-	else if (aggregator == "freq")
-		agg = SensorHistoryDao::AGG_FREQ;
-	else
-		throw InvalidArgumentException("invalid aggregator given");
+	for (const auto &one : aggregators) {
+		if (one == "avg")
+			agg.emplace_back(SensorHistoryDao::AGG_AVG);
+		else if (one == "min")
+			agg.emplace_back(SensorHistoryDao::AGG_MIN);
+		else if (one == "max")
+			agg.emplace_back(SensorHistoryDao::AGG_MAX);
+		else if (one == "freq")
+			agg.emplace_back(SensorHistoryDao::AGG_FREQ);
+		else
+			throw InvalidArgumentException("invalid aggregator given");
+	}
 
-	m_dao->fetchHuge(device, info, range, interval, {agg}, consumer);
+	m_dao->fetchHuge(device, info, range, interval, agg, consumer);
 }

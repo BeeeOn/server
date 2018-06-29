@@ -193,7 +193,7 @@ void SensorRestHandler::history(RestFlow &flow)
 	RestValueConsumer consumer([&]() -> ostream& {return flow.response().stream();});
 
 	try {
-		m_sensorHistoryService->fetchRange(input, range, interval, aggregation, consumer);
+		m_sensorHistoryService->fetchRange(input, range, interval, {aggregation}, consumer);
 	}
 	BEEEON_CATCH_CHAIN_ACTION(logger(),
 		if (consumer.hasBegin()) {

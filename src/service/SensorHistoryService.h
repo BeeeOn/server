@@ -29,7 +29,7 @@ public:
 	virtual void fetchRange(const Relation<ModuleInfo, Device> &module,
 			const TimeInterval &range,
 			const Poco::Timespan &interval,
-			const std::string &aggregator,
+			const std::vector<std::string> &aggregators,
 			ValueConsumer &consumer) = 0;
 
 };
