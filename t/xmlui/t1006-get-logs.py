@@ -75,7 +75,7 @@ class TestDeviceGetLog(unittest.TestCase):
 		self.assertTrue(response.is_data())
 		self.assertEqual(65, len(response.root))
 
-	def test2_getlogs_humidity_day(self):
+	def test3_getlogs_humidity_day(self):
 		response = self.conn.request(DeviceGetLog(
 			config.gateway_id,
 			"0xa335d00019f5234e",
