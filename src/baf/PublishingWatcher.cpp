@@ -145,6 +145,26 @@ void PublishingWatcher::eventDetails(
 
 void PublishingWatcher::eventDetails(
 	PrintHandler &json,
+	const DeviceEvent &e,
+	const string &status) const
+{
+	json.key("gateway_id");
+	json.value(e.gatewayID().toString());
+
+	json.key("device_id");
+	json.value(e.deviceID().toString());
+
+	if (!e.name().empty()) {
+		json.key("device_name");
+		json.value(e.name());
+	}
+
+	json.key("status");
+	json.value(status);
+}
+
+void PublishingWatcher::eventDetails(
+	PrintHandler &json,
 	const ServerEvent &e) const
 {
 	json.key("bind");
