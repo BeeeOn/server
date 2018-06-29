@@ -12,6 +12,7 @@ namespace BeeeOn {
 class DeviceEvent {
 public:
 	DeviceEvent();
+	DeviceEvent(const GatewayID &gatewayID, const DeviceID &deviceID);
 
 	void setGatewayID(const GatewayID &id);
 	const GatewayID &gatewayID() const;
@@ -53,6 +54,36 @@ public:
 	 * some failure (e.g. incompatibility).
 	 */
 	virtual void onRefusedNewDevice(const DeviceEvent &e);
+
+	/**
+	 * Fired on an attempt to pair a device.
+	 */
+	virtual void onPairRequested(const DeviceEvent &e);
+
+	/**
+	 * Fired when the pairing is confirmed from the associated gateway.
+	 */
+	virtual void onPairConfirmed(const DeviceEvent &e);
+
+	/**
+	 * Fired when a pairing fails to process.
+	 */
+	virtual void onPairFailed(const DeviceEvent &e);
+
+	/**
+	 * Fired on an attempt to unpair a device.
+	 */
+	virtual void onUnpairRequested(const DeviceEvent &e);
+
+	/**
+	 * Fired when the unpairing is confirmed from the associated gateway.
+	 */
+	virtual void onUnpairConfirmed(const DeviceEvent &e);
+
+	/**
+	 * Fired when the unpairing fails to process.
+	 */
+	virtual void onUnpairFailed(const DeviceEvent &e);
 };
 
 }

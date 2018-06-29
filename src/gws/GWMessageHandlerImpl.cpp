@@ -151,9 +151,7 @@ GWResponse::Ptr GWMessageHandlerImpl::handleNewDevice(
 	Device device(request->deviceID());
 	device.setRefresh(request->refreshTime());
 
-	DeviceEvent event;
-	event.setGatewayID(gatewayID);
-	event.setDeviceID(device.id());
+	DeviceEvent event = {gatewayID, device.id()};
 
 	try {
 
@@ -187,9 +185,7 @@ GWResponse::Ptr GWMessageHandlerImpl::handleNewDeviceGroup(
 	for (const auto &des : request->deviceDescriptions()) {
 		descriptions.emplace_back(sanitizeDeviceDescription(des));
 
-		DeviceEvent event;
-		event.setGatewayID(gatewayID);
-		event.setDeviceID(des.id());
+		const DeviceEvent event = {gatewayID, des.id()};
 		events.emplace_back(event);
 	}
 

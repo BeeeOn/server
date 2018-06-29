@@ -13,11 +13,13 @@
 BEEEON_OBJECT_BEGIN(BeeeOn, DeviceServiceImpl)
 BEEEON_OBJECT_CASTABLE(DeviceService)
 BEEEON_OBJECT_PROPERTY("deviceDao", &DeviceServiceImpl::setDeviceDao)
+BEEEON_OBJECT_PROPERTY("eventsExecutor", &DeviceServiceImpl::setEventsExecutor)
 BEEEON_OBJECT_PROPERTY("sensorHistoryDao", &DeviceServiceImpl::setSensorHistoryDao)
 BEEEON_OBJECT_PROPERTY("devicePropertyDao", &DeviceServiceImpl::setDevicePropertyDao)
 BEEEON_OBJECT_PROPERTY("gatewayRPC", &DeviceServiceImpl::setGatewayRPC)
 BEEEON_OBJECT_PROPERTY("accessPolicy", &DeviceServiceImpl::setAccessPolicy)
 BEEEON_OBJECT_PROPERTY("transactionManager", &DeviceServiceImpl::setTransactionManager)
+BEEEON_OBJECT_PROPERTY("listeners", &DeviceServiceImpl::registerListener)
 BEEEON_OBJECT_HOOK("done", &DeviceServiceImpl::removeUnusedDevices)
 BEEEON_OBJECT_END(BeeeOn, DeviceServiceImpl)
 
@@ -25,7 +27,8 @@ using namespace std;
 using namespace Poco;
 using namespace BeeeOn;
 
-DeviceServiceImpl::DeviceServiceImpl()
+DeviceServiceImpl::DeviceServiceImpl():
+	m_eventSource(new EventSource<DeviceListener>)
 {
 }
 
@@ -52,6 +55,17 @@ void DeviceServiceImpl::setGatewayRPC(GatewayRPC::Ptr rpc)
 void DeviceServiceImpl::setAccessPolicy(DeviceAccessPolicy::Ptr policy)
 {
 	m_policy = policy;
+}
+
+void DeviceServiceImpl::setEventsExecutor(AsyncExecutor::Ptr executor)
+{
+	m_eventSource->setAsyncExecutor(executor);
+}
+
+void DeviceServiceImpl::registerListener(DeviceListener::Ptr listener)
+
+{
+	m_eventSource->addListener(listener);
 }
 
 bool DeviceServiceImpl::doFetch(Relation<Device, Gateway> &input)
@@ -317,7 +331,7 @@ void DeviceServiceImpl::doUnregister(Relation<Device, Gateway> &input)
 	if (!m_dao->update(device, input.base()))
 		throw NotFoundException("device " + device + " seems to not exist");
 
-	DeviceUnpairHandler::Ptr handler = new DeviceUnpairHandler(device, m_dao);
+	DeviceUnpairHandler::Ptr handler = new DeviceUnpairHandler(device, m_dao, m_eventSource);
 	handler->setTransactionManager(transactionManager());
 
 	m_gatewayRPC->unpairDevice(handler, input.base(), device);
@@ -348,7 +362,7 @@ bool DeviceServiceImpl::tryActivateAndUpdate(Device &device,
 		if (!m_dao->update(device, gateway))
 			throw NotFoundException("device " + device + " seems to not exist");
 
-		DevicePairHandler::Ptr handler = new DevicePairHandler(device, m_dao);
+		DevicePairHandler::Ptr handler = new DevicePairHandler(device, m_dao, m_eventSource);
 		handler->setTransactionManager(transactionManager());
 
 		m_gatewayRPC->pairDevice(handler, gateway, device);

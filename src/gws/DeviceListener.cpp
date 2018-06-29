@@ -7,6 +7,12 @@ DeviceEvent::DeviceEvent()
 {
 }
 
+DeviceEvent::DeviceEvent(const GatewayID &gatewayID, const DeviceID &deviceID):
+	m_gatewayID(gatewayID),
+	m_deviceID(deviceID)
+{
+}
+
 void DeviceEvent::setGatewayID(const GatewayID &id)
 {
 	m_gatewayID = id;
@@ -46,5 +52,29 @@ void DeviceListener::onNewDevice(const DeviceEvent &e)
 }
 
 void DeviceListener::onRefusedNewDevice(const DeviceEvent &e)
+{
+}
+
+void DeviceListener::onPairRequested(const DeviceEvent &e)
+{
+}
+
+void DeviceListener::onPairConfirmed(const DeviceEvent &e)
+{
+}
+
+void DeviceListener::onPairFailed(const DeviceEvent &e)
+{
+}
+
+void DeviceListener::onUnpairRequested(const DeviceEvent &e)
+{
+}
+
+void DeviceListener::onUnpairConfirmed(const DeviceEvent &e)
+{
+}
+
+void DeviceListener::onUnpairFailed(const DeviceEvent &e)
 {
 }

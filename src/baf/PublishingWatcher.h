@@ -29,6 +29,12 @@ public:
 
 	void onNewDevice(const DeviceEvent &e) override;
 	void onRefusedNewDevice(const DeviceEvent &e) override;
+	void onPairRequested(const DeviceEvent &e) override;
+	void onPairConfirmed(const DeviceEvent &e) override;
+	void onPairFailed(const DeviceEvent &e) override;
+	void onUnpairRequested(const DeviceEvent &e) override;
+	void onUnpairConfirmed(const DeviceEvent &e) override;
+	void onUnpairFailed(const DeviceEvent &e) override;
 
 	void onConnected(const GatewayEvent &e) override;
 	void onReconnected(const GatewayEvent &e) override;
@@ -58,6 +64,10 @@ protected:
 		const DeviceEvent &e) const;
 	void eventDetails(
 		Poco::JSON::PrintHandler &json,
+		const DeviceEvent &e,
+		const std::string &status) const;
+	void eventDetails(
+		Poco::JSON::PrintHandler &json,
 		const ServerEvent &e) const;
 
 	template <typename Event>
@@ -71,6 +81,22 @@ protected:
 
 		eventBegin(json, name);
 		eventDetails(json, e);
+		eventEnd(json);
+
+		publish(buf.str());
+	}
+
+	template <typename Event, typename Status>
+	void publishEvent(const Event &e, const std::string &name, const Status &status)
+	{
+		if (m_publishers.empty())
+			return;
+
+		std::ostringstream buf;
+		Poco::JSON::PrintHandler json(buf);
+
+		eventBegin(json, name);
+		eventDetails(json, e, status);
 		eventEnd(json);
 
 		publish(buf.str());

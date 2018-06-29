@@ -31,6 +31,8 @@
 			<set name="gatewayRPC" ref="gatewayRPC" />
 			<set name="accessPolicy" ref="accessPolicy" />
 			<set name="transactionManager" ref="transactionManager" />
+			<set name="eventsExecutor" ref="eventsExecutor" />
+			<add name="listeners" ref="publishingWatcher" if-yes="${baf.publish.device.enable}" />
 		</instance>
 
 		<instance name="gwsDeviceService" class="BeeeOn::GWSDeviceServiceImpl">

@@ -39,6 +39,36 @@ void PublishingWatcher::onRefusedNewDevice(const DeviceEvent &e)
 	publishEvent(e, "on-refused-new-device");
 }
 
+void PublishingWatcher::onPairRequested(const DeviceEvent &e)
+{
+	publishEvent(e, "on-pair-device", "request");
+}
+
+void PublishingWatcher::onPairConfirmed(const DeviceEvent &e)
+{
+	publishEvent(e, "on-pair-device", "confirmed");
+}
+
+void PublishingWatcher::onPairFailed(const DeviceEvent &e)
+{
+	publishEvent(e, "on-pair-device", "failed");
+}
+
+void PublishingWatcher::onUnpairRequested(const DeviceEvent &e)
+{
+	publishEvent(e, "on-unpair-device", "request");
+}
+
+void PublishingWatcher::onUnpairConfirmed(const DeviceEvent &e)
+{
+	publishEvent(e, "on-unpair-device", "confirmed");
+}
+
+void PublishingWatcher::onUnpairFailed(const DeviceEvent &e)
+{
+	publishEvent(e, "on-unpair-device", "failed");
+}
+
 void PublishingWatcher::onConnected(const GatewayEvent &e)
 {
 	publishEvent(e, "on-connected");
@@ -141,6 +171,26 @@ void PublishingWatcher::eventDetails(
 		json.key("device_name");
 		json.value(e.name());
 	}
+}
+
+void PublishingWatcher::eventDetails(
+	PrintHandler &json,
+	const DeviceEvent &e,
+	const string &status) const
+{
+	json.key("gateway_id");
+	json.value(e.gatewayID().toString());
+
+	json.key("device_id");
+	json.value(e.deviceID().toString());
+
+	if (!e.name().empty()) {
+		json.key("device_name");
+		json.value(e.name());
+	}
+
+	json.key("status");
+	json.value(status);
 }
 
 void PublishingWatcher::eventDetails(
