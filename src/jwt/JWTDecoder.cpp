@@ -46,7 +46,7 @@ static set<string> deserializeArray(const string &arr)
 		return deserialized;
 	}
 	catch (const JSONException &e) {
-		throw SyntaxException("failed to parse array", e);
+		throw SyntaxException(e.message(), e);
 	}
 }
 
