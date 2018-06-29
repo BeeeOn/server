@@ -1,8 +1,13 @@
+#include <sstream>
+
+#include <Poco/JSON/PrintHandler.h>
+
 #include "jwt/JWToken.h"
 
 using namespace std;
 using namespace BeeeOn;
 using namespace Poco;
+using namespace Poco::JSON;
 
 JWToken::JWToken()
 {
@@ -135,4 +140,68 @@ bool JWToken::isAcceptable(const Timestamp &startTime) const
 bool JWToken::isInAudience(const string &recipient) const
 {
 	return m_audience.find(recipient) != m_audience.end();
+}
+
+string JWToken::toJSONString() const
+{
+	ostringstream buf;
+	PrintHandler printer(buf);
+
+	printer.startObject();
+
+	printer.key("sub");
+	printer.value(m_subject);
+
+	printer.key("aud");
+	printer.startArray();
+	for (const auto &aud : m_audience)
+		printer.value(aud);
+	printer.endArray();
+
+	printer.key("iss");
+	printer.value(m_issuer);
+
+	if (!m_expiration.isNull()) {
+		printer.key("exp");
+		printer.value(m_expiration.value().epochTime());
+	}
+
+	if (!m_issuedAt.isNull()) {
+		printer.key("iat");
+		printer.value(m_issuedAt.value().epochTime());
+	}
+
+	if (!m_notbefore.isNull()) {
+		printer.key("nbf");
+		printer.value(m_notbefore.value().epochTime());
+	}
+
+	if (!m_givenName.isNull()) {
+		printer.key("given_name");
+		printer.value(m_givenName);
+	}
+
+	if (!m_familyName.isNull()) {
+		printer.key("family_name");
+		printer.value(m_familyName);
+	}
+
+	if (!m_picture.isNull()) {
+		printer.key("picture");
+		printer.value(m_picture.value().toString());
+	}
+
+	if (!m_email.isNull()) {
+		printer.key("email");
+		printer.value(m_email);
+	}
+
+	if (!m_locale.empty()) {
+		printer.key("locale");
+		printer.value(m_locale);
+	}
+
+	printer.endObject();
+
+	return buf.str();
 }

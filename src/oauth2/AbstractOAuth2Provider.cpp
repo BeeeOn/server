@@ -119,7 +119,8 @@ void AbstractOAuth2Provider::parseUserInfo(
 
 void AbstractOAuth2Provider::fetch(
 	const OAuth2CodeExchanger::Tokens &tokens,
-	AuthResult &result)
+	AuthResult &result,
+	const Timestamp &)
 {
 	HTMLForm form;
 	form.setEncoding(HTMLForm::ENCODING_URL);

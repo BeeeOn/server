@@ -46,7 +46,7 @@ static set<string> deserializeArray(const string &arr)
 		return deserialized;
 	}
 	catch (const JSONException &e) {
-		throw SyntaxException("failed to parse array", e);
+		throw SyntaxException(e.message(), e);
 	}
 }
 
@@ -99,6 +99,18 @@ static void fillTokenWithData(JWToken &token, jwt_t *tokenData)
 		token.setNotBefore(Timestamp::fromEpochTime(timeRaw));
 	else
 		token.setNotBefore(Nullable<Timestamp>());
+
+	claim = ::jwt_get_grant(tokenData, "given_name");
+	if (claim != NULL)
+		token.setGivenName(string(claim));
+
+	claim = ::jwt_get_grant(tokenData, "family_name");
+	if (claim != NULL)
+		token.setFamilyName(string(claim));
+
+	claim = ::jwt_get_grant(tokenData, "email");
+	if (claim != NULL)
+		token.setEmail(string(claim));
 }
 
 JWToken JWTDecoder::decode(const TokenID &tokenId) const
