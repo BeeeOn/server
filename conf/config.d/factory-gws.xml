@@ -11,6 +11,7 @@
 			<set name="minThreads" number="${gws.ws.minThreads}" />
 			<set name="maxThreads" number="${gws.ws.maxThreads}" />
 			<set name="threadIdleTime" time="${gws.ws.threadIdleTime}" />
+			<set name="eventsExecutor" ref="asyncExecutor" />
 		</instance>
 
 		<instance name="gatewayCommunicator" class="BeeeOn::GatewayCommunicator">
