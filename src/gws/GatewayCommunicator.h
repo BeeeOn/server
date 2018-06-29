@@ -16,6 +16,7 @@
 #include "gws/GatewayListener.h"
 #include "gws/GWMessageHandler.h"
 #include "loop/StoppableLoop.h"
+#include "loop/StopControl.h"
 #include "model/GatewayID.h"
 #include "policy/GatewayRateLimiter.h"
 #include "util/EventSource.h"
@@ -200,7 +201,7 @@ private:
 
 	Poco::Net::SocketReactor m_reactor;
 	Poco::Thread m_reactorThread;
-	Poco::AtomicCounter m_stop;
+	StopControl m_stopControl;
 	Poco::RunnableAdapter<GatewayCommunicator> m_workerRunnable;
 
 	EventSource<GatewayListener> m_eventSource;
