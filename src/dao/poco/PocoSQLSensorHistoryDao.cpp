@@ -312,12 +312,32 @@ void PocoSQLSensorHistoryDao::processSingle(
 	}
 }
 
+void PocoSQLSensorHistoryDao::processMultiple(
+	ValueConsumer &consumer,
+	const std::vector<Aggregator> agg,
+	const RecordSet &result) const
+{
+	for (auto &row : result) {
+		const unsigned long timeAt = row.get(0).convert<unsigned long>();
+		std::vector<ValueAt> tuple;
+
+		for (const auto &which : agg) {
+			const int index = aggToIndex(which);
+
+			tuple.emplace_back(ValueAt(
+				timeAt, row.get(index).convert<double>()));
+		}
+
+		consumer.multiple(tuple);
+	}
+}
+
 void PocoSQLSensorHistoryDao::fetchHugeAgg(
 	const Device &device,
 	const ModuleInfo &module,
 	const TimeInterval &range,
 	const Timespan &interval,
-	const Aggregator agg,
+	const std::vector<Aggregator> agg,
 	ValueConsumer &consumer)
 {
 	assureHasId(device);
@@ -333,7 +353,7 @@ void PocoSQLSensorHistoryDao::fetchHugeAgg(
 	unsigned long end = range.end().epochTime();
 	unsigned long intervalSeconds = interval.totalSeconds();
 
-	const auto &query = agg == AGG_FREQ ?
+	const auto &query = agg[0] == AGG_FREQ ?
 		m_queryEnumAgg() : m_queryHugeAgg();
 
 	Statement sql = (session() << query,
@@ -354,10 +374,12 @@ void PocoSQLSensorHistoryDao::fetchHugeAgg(
 			if (result.rowCount() == 0)
 				break;
 
-			if (agg == AGG_FREQ)
+			if (agg.front() == AGG_FREQ)
 				processFrequencies(consumer, result);
+			else if (agg.size() == 1)
+				processSingle(consumer, agg.front(), result);
 			else
-				processSingle(consumer, agg, result);
+				processMultiple(consumer, agg, result);
 		}
 	} catch (...) {
 		consumer.end();
@@ -372,7 +394,7 @@ void PocoSQLSensorHistoryDao::fetchHuge(
 	const ModuleInfo &module,
 	const TimeInterval &range,
 	const Timespan &interval,
-	const Aggregator agg,
+	const std::vector<Aggregator> agg,
 	ValueConsumer &consumer)
 {
 	if (interval <= 5 * Timespan::SECONDS) {

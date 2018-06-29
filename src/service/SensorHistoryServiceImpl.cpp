@@ -66,5 +66,5 @@ void SensorHistoryServiceImpl::doFetchRange(
 	else
 		throw InvalidArgumentException("invalid aggregator given");
 
-	m_dao->fetchHuge(device, info, range, interval, agg, consumer);
+	m_dao->fetchHuge(device, info, range, interval, {agg}, consumer);
 }

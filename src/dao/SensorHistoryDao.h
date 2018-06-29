@@ -36,6 +36,7 @@ public:
 
 	static bool isValid(const Aggregator agg);
 	static void assureValid(const Aggregator agg);
+	static void assureValid(const std::vector<Aggregator> agg);
 
 	virtual ~SensorHistoryDao();
 
@@ -85,7 +86,7 @@ public:
 			const ModuleInfo &module,
 			const TimeInterval &range,
 			const Poco::Timespan &interval,
-			const Aggregator agg,
+			const std::vector<Aggregator> agg,
 			ValueConsumer &consumer) = 0;
 };
 

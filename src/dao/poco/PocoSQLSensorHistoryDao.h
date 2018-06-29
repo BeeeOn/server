@@ -46,7 +46,7 @@ public:
 		const ModuleInfo &module,
 		const TimeInterval &range,
 		const Poco::Timespan &interval,
-		const Aggregator agg,
+		const std::vector<Aggregator> agg,
 		ValueConsumer &consumer) override;
 
 protected:
@@ -61,7 +61,7 @@ protected:
 		const ModuleInfo &module,
 		const TimeInterval &range,
 		const Poco::Timespan &interval,
-		const Aggregator agg,
+		const std::vector<Aggregator> agg,
 		ValueConsumer &consumer);
 
 	void processFrequencies(
@@ -70,6 +70,10 @@ protected:
 	void processSingle(
 		ValueConsumer &consumer,
 		const Aggregator agg,
+		const Poco::Data::RecordSet &result) const;
+	void processMultiple(
+		ValueConsumer &consumer,
+		const std::vector<Aggregator> agg,
 		const Poco::Data::RecordSet &result) const;
 
 private:
