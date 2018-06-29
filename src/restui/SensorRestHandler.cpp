@@ -148,18 +148,26 @@ Timespan SensorRestHandler::parseInterval(const string &input) const
 	return NumberParser::parseUnsigned(input) * Timespan::SECONDS;
 }
 
-string SensorRestHandler::parseAggregation(const string &input) const
+vector<string> SensorRestHandler::parseAggregation(const string &input) const
 {
-	if (input == "avg")
-		return input;
-	if (input == "min")
-		return input;
-	if (input == "max")
-		return input;
-	if (input == "freq")
-		return input;
+	StringTokenizer list(input, ",",
+		StringTokenizer::TOK_TRIM | StringTokenizer::TOK_IGNORE_EMPTY);
+	vector<string> result;
 
-	throw InvalidArgumentException("invalid aggregation: " + input);
+	for (const auto &agg : list) {
+		if (agg == "avg")
+			result.emplace_back(agg);
+		else if (agg == "min")
+			result.emplace_back(agg);
+		else if (agg == "max")
+			result.emplace_back(agg);
+		else if (agg == "freq")
+			result.emplace_back(agg);
+		else
+			throw InvalidArgumentException("invalid aggregation: " + input);
+	}
+
+	return result;
 }
 
 void SensorRestHandler::history(RestFlow &flow)
@@ -176,7 +184,7 @@ void SensorRestHandler::history(RestFlow &flow)
 	URI::QueryParameters queryParams = flow.uri().getQueryParameters();
 
 	TimeInterval range = TimeInterval::past(1 * Timespan::HOURS);
-	string aggregation = "avg";
+	vector<string> aggregation;
 	Timespan interval = 15 * Timespan::SECONDS;
 
 	for (auto &item : queryParams) {
@@ -190,10 +198,13 @@ void SensorRestHandler::history(RestFlow &flow)
 			continue; // ignore unknown parameters
 	}
 
+	if (aggregation.empty())
+		aggregation.emplace_back("avg");
+
 	RestValueConsumer consumer([&]() -> ostream& {return flow.response().stream();});
 
 	try {
-		m_sensorHistoryService->fetchRange(input, range, interval, aggregation, consumer);
+		m_sensorHistoryService->fetchRange(input, range, interval, {aggregation}, consumer);
 	}
 	BEEEON_CATCH_CHAIN_ACTION(logger(),
 		if (consumer.hasBegin()) {

@@ -46,7 +46,7 @@ public:
 		const ModuleInfo &module,
 		const TimeInterval &range,
 		const Poco::Timespan &interval,
-		const Aggregator agg,
+		const std::vector<Aggregator> agg,
 		ValueConsumer &consumer) override;
 
 protected:
@@ -61,8 +61,20 @@ protected:
 		const ModuleInfo &module,
 		const TimeInterval &range,
 		const Poco::Timespan &interval,
-		const Aggregator agg,
+		const std::vector<Aggregator> agg,
 		ValueConsumer &consumer);
+
+	void processFrequencies(
+		ValueConsumer &consumer,
+		const Poco::Data::RecordSet &result) const;
+	void processSingle(
+		ValueConsumer &consumer,
+		const Aggregator agg,
+		const Poco::Data::RecordSet &result) const;
+	void processMultiple(
+		ValueConsumer &consumer,
+		const std::vector<Aggregator> agg,
+		const Poco::Data::RecordSet &result) const;
 
 private:
 	Query m_queryInsert    {"sensors_history.insert"};

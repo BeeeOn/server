@@ -35,7 +35,7 @@ public:
 	void fetchRange(const Relation<ModuleInfo, Device> &module,
 			const TimeInterval &range,
 			const Poco::Timespan &interval,
-			const std::string &aggregator,
+			const std::vector<std::string> &aggregator,
 			ValueConsumer &consumer)
 	{
 		BEEEON_TRANSACTION(doFetchRange(
@@ -46,7 +46,7 @@ protected:
 	void doFetchRange(const Relation<ModuleInfo, Device> &module,
 			const TimeInterval &range,
 			const Poco::Timespan &interval,
-			const std::string &aggregator,
+			const std::vector<std::string> &aggregator,
 			ValueConsumer &consumer);
 
 private:

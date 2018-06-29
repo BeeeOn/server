@@ -34,7 +34,7 @@ protected:
 private:
 	TimeInterval parseRange(const std::string &input) const;
 	Poco::Timespan parseInterval(const std::string &input) const;
-	std::string parseAggregation(const std::string &input) const;
+	std::vector<std::string> parseAggregation(const std::string &input) const;
 
 private:
 	SensorService::Ptr m_sensorService;
