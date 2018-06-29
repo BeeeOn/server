@@ -64,6 +64,14 @@ protected:
 		const Aggregator agg,
 		ValueConsumer &consumer);
 
+	void processFrequencies(
+		ValueConsumer &consumer,
+		const Poco::Data::RecordSet &result) const;
+	void processSingle(
+		ValueConsumer &consumer,
+		const Aggregator agg,
+		const Poco::Data::RecordSet &result) const;
+
 private:
 	Query m_queryInsert    {"sensors_history.insert"};
 	Query m_queryFetch     {"sensors_history.fetch"};
