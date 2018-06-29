@@ -51,6 +51,14 @@ void XmlValueConsumer::single(const ValueAt &v)
 	m_writer.dataElement("", "row", "row", to_string(v.at().epochTime()) + " " + info().asString(v.value()));
 }
 
+void XmlValueConsumer::multiple(const vector<ValueAt> &v)
+{
+	if (v.empty())
+		return;
+
+	single(v.front());
+}
+
 void XmlValueConsumer::frequency(const ValueAt &v, size_t count)
 {
 	AttributesImpl attrs;

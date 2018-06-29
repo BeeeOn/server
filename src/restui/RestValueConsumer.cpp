@@ -56,6 +56,12 @@ void RestValueConsumer::single(const ValueAt &v)
 	m_count += 1;
 }
 
+void RestValueConsumer::multiple(const vector<ValueAt> &v)
+{
+	format(*m_output, v, info());
+	m_count += 1;
+}
+
 void RestValueConsumer::frequency(const ValueAt &v, size_t count)
 {
 	format(*m_output, v, count, info());
@@ -93,6 +99,33 @@ void RestValueConsumer::format(
 	else
 		output.value(info.asString(v.value()));
 
+	output.endObject();
+}
+
+void RestValueConsumer::format(
+		PrintHandler &output,
+		const vector<ValueAt> &v,
+		const TypeInfo &info)
+{
+	if (v.empty())
+		return;
+
+	output.startObject();
+
+	output.key("at");
+	output.value(v.front().atRaw());
+
+	output.key("values");
+	output.startArray();
+
+	for (const auto &one : v) {
+		if (!one.isValid())
+			output.null();
+		else
+			output.value(info.asString(one.value()));
+	}
+
+	output.endArray();
 	output.endObject();
 }
 
