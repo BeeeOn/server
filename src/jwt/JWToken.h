@@ -126,6 +126,11 @@ public:
 	 */
 	bool isInAudience(const std::string &recipient) const;
 
+	/**
+	 * @brief Convert contents to JSON string.
+	 */
+	std::string toJSONString() const;
+
 private:
 	std::string m_issuer;
 	std::string m_locale;
