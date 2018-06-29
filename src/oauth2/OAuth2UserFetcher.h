@@ -2,6 +2,7 @@
 
 #include <Poco/SharedPtr.h>
 #include <Poco/Timespan.h>
+#include <Poco/Timestamp.h>
 
 #include "provider/AuthProvider.h"
 #include "oauth2/OAuth2CodeExchanger.h"
@@ -24,7 +25,8 @@ public:
 	 */
 	virtual void fetch(
 		const OAuth2CodeExchanger::Tokens &tokens,
-		AuthResult &result) = 0;
+		AuthResult &result,
+		const Poco::Timestamp &now = {}) = 0;
 
 	/**
 	 * @returns client ID of the OAuth2.

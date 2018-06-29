@@ -65,7 +65,8 @@ public:
 	 */
 	void fetch(
 		const OAuth2CodeExchanger::Tokens &tokens,
-		AuthResult &result) override;
+		AuthResult &result,
+		const Poco::Timestamp &now = {}) override;
 
 protected:
 	std::string clientSecret() const;
