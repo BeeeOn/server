@@ -7,6 +7,7 @@ BEEEON_OBJECT_BEGIN(BeeeOn, Automation, PublishingWatcher)
 BEEEON_OBJECT_CASTABLE(DeviceListener)
 BEEEON_OBJECT_CASTABLE(GatewayListener)
 BEEEON_OBJECT_CASTABLE(SensorDataListener)
+BEEEON_OBJECT_CASTABLE(ServerListener)
 BEEEON_OBJECT_PROPERTY("publishers", &PublishingWatcher::addPublisher)
 BEEEON_OBJECT_END(BeeeOn, Automation, PublishingWatcher)
 
@@ -56,6 +57,16 @@ void PublishingWatcher::onDisconnected(const GatewayEvent &e)
 void PublishingWatcher::onReceived(const SensorDataEvent &e)
 {
 	publishEvent(e, "on-sensor-data");
+}
+
+void PublishingWatcher::onUp(const ServerEvent &e)
+{
+	publishEvent(e, "on-server-up");
+}
+
+void PublishingWatcher::onDown(const ServerEvent &e)
+{
+	publishEvent(e, "on-server-down");
 }
 
 void PublishingWatcher::eventBegin(
@@ -130,6 +141,17 @@ void PublishingWatcher::eventDetails(
 		json.key("device_name");
 		json.value(e.name());
 	}
+}
+
+void PublishingWatcher::eventDetails(
+	PrintHandler &json,
+	const ServerEvent &e) const
+{
+	json.key("bind");
+	json.value(e.bind());
+
+	json.key("label");
+	json.value(e.label());
 }
 
 void PublishingWatcher::publish(const string &message)

@@ -17,6 +17,8 @@ BEEEON_OBJECT_PROPERTY("maxMessageSize", &WebSocketServer::setMaxMessageSize)
 BEEEON_OBJECT_PROPERTY("minThreads", &WebSocketServer::setMinThreads)
 BEEEON_OBJECT_PROPERTY("maxThreads", &WebSocketServer::setMaxThreads)
 BEEEON_OBJECT_PROPERTY("threadIdleTime", &WebSocketServer::setThreadIdleTime)
+BEEEON_OBJECT_PROPERTY("eventsExecutor", &WebSocketServer::setEventsExecutor)
+BEEEON_OBJECT_PROPERTY("listeners", &WebSocketServer::registerListener)
 BEEEON_OBJECT_END(BeeeOn, WebSocketServer)
 
 using namespace std;
@@ -75,6 +77,16 @@ void WebSocketServer::setMaxMessageSize(int size)
 	m_maxMessageSize = size;
 }
 
+void WebSocketServer::setEventsExecutor(AsyncExecutor::Ptr executor)
+{
+	m_eventSource.setAsyncExecutor(executor);
+}
+
+void WebSocketServer::registerListener(ServerListener::Ptr listener)
+{
+	m_eventSource.addListener(listener);
+}
+
 Poco::Net::HTTPServer *WebSocketServer::createServer()
 {
 	HTTPRequestHandlerFactory::Ptr factory(
@@ -102,10 +114,16 @@ void WebSocketServer::start()
 			+ to_string(m_server->port()), __FILE__, __LINE__);
 
 	m_server->start();
+
+	const ServerEvent e = {"0.0.0.0:" + to_string(m_port), "gws"};
+	m_eventSource.fireEvent(e, &ServerListener::onUp);
 }
 
 void WebSocketServer::stop()
 {
 	logger().information("stopping WebSocket server", __FILE__, __LINE__);
 	m_server->stop();
+
+	const ServerEvent e = {"0.0.0.0:" + to_string(m_port), "gws"};
+	m_eventSource.fireEvent(e, &ServerListener::onDown);
 }

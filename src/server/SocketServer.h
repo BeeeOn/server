@@ -11,6 +11,8 @@
 #include <Poco/Net/Context.h>
 
 #include "loop/StoppableLoop.h"
+#include "server/ServerListener.h"
+#include "util/EventSource.h"
 #include "util/Loggable.h"
 
 namespace BeeeOn {
@@ -38,6 +40,9 @@ public:
 	void setThreadIdleTime(const Poco::Timespan &time);
 	void setThreadPriority(const std::string &priority);
 
+	void setEventsExecutor(AsyncExecutor::Ptr executor);
+	void registerListener(ServerListener::Ptr listener);
+
 	void start() override;
 	void stop() override;
 
@@ -51,6 +56,7 @@ private:
 	SocketServerConnectionFactory::Ptr m_factory;
 	Poco::Net::TCPServerParams::Ptr m_tcpParams;
 	Poco::SharedPtr<Poco::Net::TCPServer> m_server;
+	EventSource<ServerListener> m_eventSource;
 };
 
 }

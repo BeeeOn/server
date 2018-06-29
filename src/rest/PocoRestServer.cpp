@@ -25,6 +25,8 @@ BEEEON_OBJECT_PROPERTY("backlog", &PocoRestServer::setBacklog)
 BEEEON_OBJECT_PROPERTY("minThreads", &PocoRestServer::setMinThreads)
 BEEEON_OBJECT_PROPERTY("maxThreads", &PocoRestServer::setMaxThreads)
 BEEEON_OBJECT_PROPERTY("threadIdleTime", &PocoRestServer::setThreadIdleTime)
+BEEEON_OBJECT_PROPERTY("eventsExecutor", &PocoRestServer::setEventsExecutor)
+BEEEON_OBJECT_PROPERTY("listeners", &PocoRestServer::registerListener)
 BEEEON_OBJECT_END(BeeeOn, PocoRestServer)
 
 using namespace std;
@@ -93,6 +95,9 @@ void PocoRestServer::start()
 		+ to_string(m_port));
 
 	m_server->start();
+
+	const ServerEvent e = {"0.0.0.0:" + to_string(m_port), "restui"};
+	m_eventSource.fireEvent(e, &ServerListener::onUp);
 }
 
 void PocoRestServer::stop()
@@ -109,6 +114,9 @@ void PocoRestServer::stop()
 	m_server = NULL;
 	m_factory = NULL;
 	m_socket = NULL;
+
+	const ServerEvent e = {"0.0.0.0:" + to_string(m_port), "restui"};
+	m_eventSource.fireEvent(e, &ServerListener::onDown);
 }
 
 void PocoRestServer::setRouter(RestRouter *router)
@@ -150,4 +158,14 @@ void PocoRestServer::setBacklog(int backlog)
 		throw InvalidArgumentException("backlog must be positive");
 
 	m_backlog = backlog;
+}
+
+void PocoRestServer::setEventsExecutor(AsyncExecutor::Ptr executor)
+{
+	m_eventSource.setAsyncExecutor(executor);
+}
+
+void PocoRestServer::registerListener(ServerListener::Ptr listener)
+{
+	m_eventSource.addListener(listener);
 }

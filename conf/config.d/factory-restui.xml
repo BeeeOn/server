@@ -12,6 +12,8 @@
 			<set name="minThreads" number="${restui.minThreads}" />
 			<set name="maxThreads" number="${restui.maxThreads}" />
 			<set name="threadIdleTime" time="${restui.threadIdleTime}" />
+			<set name="eventsExecutor" ref="asyncExecutor" />
+			<set name="listeners" ref="publishingWatcher" if-yes="${baf.publish.server.enable}" />
 		</instance>
 
 		<instance name="sessionVerifier" class="BeeeOn::SessionVerifierImpl">

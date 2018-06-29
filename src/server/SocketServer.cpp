@@ -24,6 +24,8 @@ BEEEON_OBJECT_PROPERTY("threadIdleTime", &SocketServer::setThreadIdleTime)
 BEEEON_OBJECT_PROPERTY("threadPriority", &SocketServer::setThreadPriority)
 BEEEON_OBJECT_PROPERTY("sslConfig", &SocketServer::setSSLConfig)
 BEEEON_OBJECT_PROPERTY("connectionFactory", &SocketServer::setFactory)
+BEEEON_OBJECT_PROPERTY("eventsExecutor", &SocketServer::setEventsExecutor)
+BEEEON_OBJECT_PROPERTY("listeners", &SocketServer::registerListener)
 BEEEON_OBJECT_END(BeeeOn, SocketServer)
 
 SocketServer::SocketServer():
@@ -100,6 +102,16 @@ void SocketServer::setThreadPriority(const std::string &priority)
 	m_tcpParams->setThreadPriority(prio);
 }
 
+void SocketServer::setEventsExecutor(AsyncExecutor::Ptr executor)
+{
+	m_eventSource.setAsyncExecutor(executor);
+}
+
+void SocketServer::registerListener(ServerListener::Ptr listener)
+{
+	m_eventSource.addListener(listener);
+}
+
 TCPServer *SocketServer::createServer()
 {
 	if (m_sslConfig == NULL) {
@@ -121,6 +133,9 @@ void SocketServer::start()
 		+ std::to_string(m_server->port()));
 
 	m_server->start();
+
+	const ServerEvent e = {"0.0.0.0:" + to_string(m_server->port()), "xmlui"};
+	m_eventSource.fireEvent(e, &ServerListener::onUp);
 }
 
 void SocketServer::stop()
@@ -130,4 +145,7 @@ void SocketServer::stop()
 		+ std::to_string(m_server->port()));
 
 	m_server->stop();
+
+	const ServerEvent e = {"0.0.0.0:" + to_string(m_server->port()), "xmlui"};
+	m_eventSource.fireEvent(e, &ServerListener::onDown);
 }

@@ -13,6 +13,7 @@ from gws import assureIsClosed, assureNotClosed, registerGateway, ZMQConnection
 class TestDeviceList(unittest.TestCase):
 	def setUp(self):
 		self.zmq = ZMQConnection(config.gws_zmq_endpoint)
+		self.zmq.accept(lambda m: "gateway_id" in m)
 		self.zmq.open()
 
 		self.ws = websocket.WebSocket()

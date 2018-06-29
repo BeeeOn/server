@@ -10,6 +10,8 @@
 #include "l10n/HTTPLocaleExtractor.h"
 #include "loop/StoppableLoop.h"
 #include "server/HTTPFilterChain.h"
+#include "server/ServerListener.h"
+#include "util/EventSource.h"
 #include "util/HavingThreadPool.h"
 
 namespace BeeeOn {
@@ -74,6 +76,9 @@ public:
 	 */
 	void setBacklog(int backlog);
 
+	void setEventsExecutor(AsyncExecutor::Ptr executor);
+	void registerListener(ServerListener::Ptr listener);
+
 protected:
 	void initServerSocket();
 	void initFactory();
@@ -91,6 +96,7 @@ private:
 	TranslatorFactory::Ptr m_translatorFactory;
 	HTTPLocaleExtractor m_localeExtractor;
 	HTTPFilterChain::Ptr m_filterChain;
+	EventSource<ServerListener> m_eventSource;
 };
 
 }

@@ -8,8 +8,10 @@
 #include "gws/GatewayCommunicator.h"
 #include "gws/SocketGatewayPeerVerifierFactory.h"
 #include "loop/StoppableLoop.h"
+#include "server/ServerListener.h"
 #include "service/GWSGatewayServiceImpl.h"
 #include "ssl/SSLServer.h"
+#include "util/EventSource.h"
 
 namespace BeeeOn {
 
@@ -49,6 +51,9 @@ public:
 	 */
 	void setMaxMessageSize(int size);
 
+	void setEventsExecutor(AsyncExecutor::Ptr executor);
+	void registerListener(ServerListener::Ptr listener);
+
 protected:
 	Poco::Net::HTTPServer *createServer();
 
@@ -65,6 +70,7 @@ private:
 	GWSGatewayService::Ptr m_gatewayService;
 	Poco::SharedPtr<Poco::Net::HTTPServer> m_server;
 	SocketGatewayPeerVerifierFactory::Ptr m_verifierFactory;
+	EventSource<ServerListener> m_eventSource;
 };
 
 }
