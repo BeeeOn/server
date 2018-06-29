@@ -91,6 +91,9 @@ class ZMQConnection:
 		self._active.clear()
 		return self.has_data()
 
+	def accept(self, f):
+		self.f = f
+
 	def start(self):
 		self._thread = threading.Thread(target = self.run)
 		self._thread.start()
@@ -113,6 +116,11 @@ class ZMQConnection:
 
 			try:
 				msg = sock.recv_json(zmq.NOBLOCK)
+
+				if self.f is not None:
+					if not self.f(msg):
+						continue
+
 				self.push_data(msg)
 			except Exception as e:
 				self.push_data(e)

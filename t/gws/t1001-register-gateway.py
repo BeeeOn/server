@@ -12,6 +12,7 @@ from gws import assureIsClosed, assureNotClosed, ZMQConnection
 class TestRegister(unittest.TestCase):
 	def setUp(self):
 		self.zmq = ZMQConnection(config.gws_zmq_endpoint)
+		self.zmq.accept(lambda m: "gateway_id" in m)
 		self.zmq.open()
 
 	def tearDown(self):
