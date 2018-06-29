@@ -139,7 +139,7 @@ public:
 	void setSendTimeout(const Poco::Timespan &timeout);
 
 	void registerListener(GatewayListener::Ptr listener);
-	void setAsyncExecutor(Poco::SharedPtr<AsyncExecutor> executor);
+	void setEventsExecutor(Poco::SharedPtr<AsyncExecutor> executor);
 
 	void start() override;
 	void stop() override;

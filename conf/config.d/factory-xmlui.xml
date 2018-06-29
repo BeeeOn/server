@@ -9,7 +9,7 @@
 			<set name="threadIdleTime" time="${xmlui.threadIdleTime}" />
 			<set name="threadPriority" text="normal" />
 			<set name="port" number="${xmlui.port}" />
-			<set name="eventsExecutor" ref="asyncExecutor" />
+			<set name="eventsExecutor" ref="eventsExecutor" />
 			<set name="listeners" ref="publishingWatcher" if-yes="${baf.publish.server.enable}" />
 		</instance>
 
