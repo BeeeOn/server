@@ -41,7 +41,7 @@ void GatewayCommunicator::registerListener(GatewayListener::Ptr listener)
 	m_eventSource.addListener(listener);
 }
 
-void GatewayCommunicator::setEventsExecutor(SharedPtr<AsyncExecutor> executor)
+void GatewayCommunicator::setEventsExecutor(AsyncExecutor::Ptr executor)
 {
 	m_eventSource.setAsyncExecutor(executor);
 }
