@@ -19,7 +19,7 @@ public:
 	FakeGatewayRPC();
 
 	void setDeviceDao(DeviceDao::Ptr dao);
-	void setAsyncExecutor(Poco::SharedPtr<AsyncExecutor> executor);
+	void setAsyncExecutor(AsyncExecutor::Ptr executor);
 
 	void sendListen(
 			GatewayRPCHandler::Ptr handler,
@@ -43,7 +43,7 @@ public:
 
 private:
 	DeviceDao::Ptr m_deviceDao;
-	Poco::SharedPtr<AsyncExecutor> m_executor;
+	AsyncExecutor::Ptr m_executor;
 };
 
 FakeGatewayRPC::FakeGatewayRPC()
