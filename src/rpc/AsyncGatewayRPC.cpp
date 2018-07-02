@@ -264,10 +264,23 @@ void AsyncGatewayRPC::processResult(const GatewayID &gatewayID,
 	executeHandler(gatewayID, callID, handler, result);
 }
 
+GatewayRPCResult::Ptr AsyncGatewayRPC::deriveResult(const GWResponse::Ptr response) const
+{
+	GatewayRPCResult::Ptr result;
+
+	switch (response->type().raw()) {
+	default:
+		result = new GatewayRPCResult;
+		break;
+	}
+
+	return result;
+}
+
 void AsyncGatewayRPC::forwardResponse(const GatewayID &gatewayID,
 		GWResponse::Ptr response)
 {
-	GatewayRPCResult::Ptr result = new GatewayRPCResult;
+	GatewayRPCResult::Ptr result = deriveResult(response);
 
 	switch (response->status()) {
 	case GWResponse::Status::ACCEPTED:
