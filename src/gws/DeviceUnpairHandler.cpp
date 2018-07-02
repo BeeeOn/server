@@ -16,19 +16,24 @@ DeviceUnpairHandler::DeviceUnpairHandler(
 {
 }
 
-void DeviceUnpairHandler::onSuccess(GatewayRPCResult::Ptr r)
+void DeviceUnpairHandler::deviceUnpaired(Device &device)
 {
-	const DeviceEvent event = {m_device.gateway().id(), m_device.id()};
-	Gateway gateway(m_device.gateway());
+	const DeviceEvent event = {device.gateway().id(), device.id()};
+	Gateway gateway(device.gateway());
 
 	logger().information(
-		"device " + m_device + " successfully unpaired",
+		"device " + device + " successfully unpaired",
 		__FILE__, __LINE__);
 
-	m_device.status().setState(DeviceStatus::STATE_INACTIVE);
-	m_device.status().setLastChanged(Timestamp());
-	BEEEON_TRANSACTION(m_deviceDao->update(m_device, gateway));
+	device.status().setState(DeviceStatus::STATE_INACTIVE);
+	device.status().setLastChanged(Timestamp());
+	BEEEON_TRANSACTION(m_deviceDao->update(device, gateway));
 	m_eventSource->fireEvent(event, &DeviceListener::onUnpairConfirmed);
+}
+
+void DeviceUnpairHandler::onSuccess(GatewayRPCResult::Ptr r)
+{
+	deviceUnpaired(m_device.id());
 }
 
 void DeviceUnpairHandler::onAny(GatewayRPCResult::Ptr r)

@@ -24,6 +24,9 @@ public:
 	void onSuccess(GatewayRPCResult::Ptr r) override;
 	void onAny(GatewayRPCResult::Ptr r) override;
 
+protected:
+	void deviceUnpaired(Device &device);
+
 private:
 	Device m_device;
 	DeviceDao::Ptr m_deviceDao;
