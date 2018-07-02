@@ -39,7 +39,7 @@ public:
 	void stop() override;
 
 	void setGatewayCommunicator(GatewayCommunicator::Ptr communicator);
-	void setSSLConfig(Poco::SharedPtr<SSLServer> config);
+	void setSSLConfig(SSLServer::Ptr config);
 	void setGatewayService(GWSGatewayService::Ptr service);
 	void setVerifierFactory(SocketGatewayPeerVerifierFactory::Ptr factory);
 
@@ -65,7 +65,7 @@ private:
 	int m_backlog;
 	size_t m_maxMessageSize;
 
-	Poco::SharedPtr<SSLServer> m_sslConfig;
+	SSLServer::Ptr m_sslConfig;
 	GatewayCommunicator::Ptr m_gatewayCommunicator;
 	GWSGatewayService::Ptr m_gatewayService;
 	Poco::SharedPtr<Poco::Net::HTTPServer> m_server;
