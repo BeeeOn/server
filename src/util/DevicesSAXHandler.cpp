@@ -227,7 +227,9 @@ void DevicesSAXHandler::startElement(
 		}
 
 		m_module.setId(ModuleInfoID::parse(id));
-		m_module.setType(new TypeInfo(TypeInfoID::parse(type)));
+
+		const ModuleType &moduleType = ModuleType::parse(type);
+		m_module.setType(new TypeInfo(moduleType.type()));
 
 		if (subtype.empty()) {
 			m_module.setSubtype(nullptr);
