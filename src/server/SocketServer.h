@@ -12,12 +12,11 @@
 
 #include "loop/StoppableLoop.h"
 #include "server/ServerListener.h"
+#include "ssl/SSLServer.h"
 #include "util/EventSource.h"
 #include "util/Loggable.h"
 
 namespace BeeeOn {
-
-class SSLServer;
 
 class SocketServerConnectionFactory : public Poco::Net::TCPServerConnectionFactory {
 public:
@@ -31,7 +30,7 @@ class SocketServer : public StoppableLoop, protected Loggable {
 public:
 	SocketServer();
 
-	void setSSLConfig(SSLServer *config);
+	void setSSLConfig(SSLServer::Ptr config);
 	void setPort(int port);
 	void setBacklog(int backlog);
 	void setFactory(SocketServerConnectionFactory::Ptr factory);
@@ -52,7 +51,7 @@ protected:
 private:
 	unsigned int m_port;
 	int m_backlog;
-	SSLServer *m_sslConfig;
+	SSLServer::Ptr m_sslConfig;
 	SocketServerConnectionFactory::Ptr m_factory;
 	Poco::Net::TCPServerParams::Ptr m_tcpParams;
 	Poco::SharedPtr<Poco::Net::TCPServer> m_server;
