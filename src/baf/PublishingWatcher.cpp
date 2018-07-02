@@ -41,7 +41,7 @@ void PublishingWatcher::onRefusedNewDevice(const DeviceEvent &e)
 
 void PublishingWatcher::onPairRequested(const DeviceEvent &e)
 {
-	publishEvent(e, "on-pair-device", "request");
+	publishEvent(e, "on-pair-device", "requested");
 }
 
 void PublishingWatcher::onPairConfirmed(const DeviceEvent &e)
@@ -56,7 +56,7 @@ void PublishingWatcher::onPairFailed(const DeviceEvent &e)
 
 void PublishingWatcher::onUnpairRequested(const DeviceEvent &e)
 {
-	publishEvent(e, "on-unpair-device", "request");
+	publishEvent(e, "on-unpair-device", "requested");
 }
 
 void PublishingWatcher::onUnpairConfirmed(const DeviceEvent &e)
