@@ -43,7 +43,7 @@ PocoRestServer::PocoRestServer():
 {
 }
 
-void PocoRestServer::setSSLConfig(SharedPtr<SSLServer> config)
+void PocoRestServer::setSSLConfig(SSLServer::Ptr config)
 {
 	m_sslConfig = config;
 }
