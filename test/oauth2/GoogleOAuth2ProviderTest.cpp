@@ -40,7 +40,7 @@ public:
 	void testHTTPData();
 private:
 	std::string googleAuthCode;
-	SharedPtr<SSLClient> m_sslConfig;
+	SSLClient::Ptr m_sslConfig;
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION_SKIPPABLE(GoogleOAuth2ProviderTest,
@@ -78,7 +78,7 @@ void GoogleOAuth2ProviderTest::testVerifyAuthCode()
 
 	GoogleOAuth2Provider provider;
 	AuthResult info;
-	SharedPtr<SSLClient> sslConfig = new SSLClient;
+	SSLClient::Ptr sslConfig = new SSLClient;
 
 	if (Environment::has("GOOGLE_CA_LOCATION"))
 		sslConfig->setCALocation(Environment::get("GOOGLE_CA_LOCATION"));
