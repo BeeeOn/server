@@ -21,6 +21,7 @@ public:
 		DeviceDao::Ptr dao,
 		Poco::SharedPtr<EventSource<DeviceListener>> source);
 
+	void onSuccess(GatewayRPCResult::Ptr r) override;
 	void onAny(GatewayRPCResult::Ptr r) override;
 
 private:
