@@ -11,6 +11,7 @@
 #include "loop/StoppableLoop.h"
 #include "server/HTTPFilterChain.h"
 #include "server/ServerListener.h"
+#include "ssl/SSLServer.h"
 #include "util/EventSource.h"
 #include "util/HavingThreadPool.h"
 
@@ -18,7 +19,6 @@ namespace BeeeOn {
 
 class RestRouter;
 class SessionVerifier;
-class SSLServer;
 
 class PocoRestServer :
 		public StoppableLoop,
@@ -64,7 +64,7 @@ public:
 	/**
 	 * Set the SSL configuration.
 	 */
-	void setSSLConfig(Poco::SharedPtr<SSLServer> config);
+	void setSSLConfig(SSLServer::Ptr config);
 
 	/**
 	 * Set port to listen on.
@@ -89,7 +89,7 @@ private:
 	unsigned int m_backlog;
 	RestRouter *m_router;
 	SessionVerifier *m_sessionVerifier;
-	Poco::SharedPtr<SSLServer> m_sslConfig;
+	SSLServer::Ptr m_sslConfig;
 	Poco::SharedPtr<Poco::Net::ServerSocket> m_socket;
 	Poco::Net::HTTPRequestHandlerFactory::Ptr m_factory;
 	Poco::SharedPtr<Poco::Net::HTTPServer> m_server;

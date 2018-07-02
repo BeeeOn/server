@@ -6,7 +6,6 @@
 #include <Poco/Net/SecureServerSocket.h>
 
 #include "di/Injectable.h"
-#include "ssl/SSLServer.h"
 #include "server/SocketServer.h"
 
 using namespace std;
@@ -31,12 +30,11 @@ BEEEON_OBJECT_END(BeeeOn, SocketServer)
 SocketServer::SocketServer():
 	m_port(0),
 	m_backlog(64),
-	m_sslConfig(NULL),
 	m_tcpParams(new TCPServerParams())
 {
 }
 
-void SocketServer::setSSLConfig(SSLServer *config)
+void SocketServer::setSSLConfig(SSLServer::Ptr config)
 {
 	m_sslConfig = config;
 }
@@ -114,7 +112,7 @@ void SocketServer::registerListener(ServerListener::Ptr listener)
 
 TCPServer *SocketServer::createServer()
 {
-	if (m_sslConfig == NULL) {
+	if (m_sslConfig.isNull()) {
 		ServerSocket socket(m_port, m_backlog);
 		return new TCPServer(m_factory, socket, m_tcpParams);
 	}

@@ -50,7 +50,7 @@ public:
 
 private:
 	LegacyFCMClient m_client;
-	SharedPtr<SSLClient> m_sslClient;
+	SSLClient::Ptr m_sslClient;
 	string m_serverKey;
 	FCMTokenID m_recipient;
 };

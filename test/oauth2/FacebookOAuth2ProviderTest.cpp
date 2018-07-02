@@ -36,7 +36,7 @@ public:
 	void testVerifyAuthCode();
 private:
 	string m_authCode;
-	SharedPtr<SSLClient> m_sslConfig;
+	SSLClient::Ptr m_sslConfig;
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION_SKIPPABLE(FacebookOAuth2ProviderTest,
@@ -53,7 +53,7 @@ void FacebookOAuth2ProviderTest::testVerifyAuthCode()
 {
 	FacebookOAuth2Provider provider;
 	AuthResult info;
-	SharedPtr<SSLClient> sslConfig = new SSLClient;
+	SSLClient::Ptr sslConfig = new SSLClient;
 
 	if (Environment::has("FACEBOOK_CA_LOCATION"))
 		sslConfig->setCALocation(Environment::get("FACEBOOK_CA_LOCATION"));

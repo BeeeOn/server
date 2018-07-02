@@ -28,7 +28,7 @@ public:
 
 	void setMethod(const std::string &method);
 	void setURL(const Poco::URI &url);
-	void setSSLConfig(Poco::SharedPtr<SSLClient> config);
+	void setSSLConfig(SSLClient::Ptr config);
 	void setEnforceSecure(bool enforce);
 
 	/**
