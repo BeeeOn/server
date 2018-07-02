@@ -10,6 +10,7 @@
 #include "fcm/FCMMessage.h"
 #include "fcm/FCMResponse.h"
 #include "loop/StoppableRunnable.h"
+#include "loop/StopControl.h"
 #include "transaction/Transactional.h"
 #include "util/BackOff.h"
 #include "util/Loggable.h"
@@ -65,7 +66,7 @@ protected:
 
 private:
 	std::string m_serverKey;
-	Poco::AtomicCounter m_stop;
+	StopControl m_stopControl;
 	Poco::TimedNotificationQueue m_notificationQueue;
 	FCMTokenDao::Ptr m_tokenDao;
 	FCMClient::Ptr m_client;

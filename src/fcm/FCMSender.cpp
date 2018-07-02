@@ -26,8 +26,7 @@ BEEEON_OBJECT_PROPERTY("backOffFactory", &FCMSender::setBackOffFactory)
 BEEEON_OBJECT_PROPERTY("transactionManager", &FCMSender::setTransactionManager)
 BEEEON_OBJECT_END(BeeeOn, FCMSender)
 
-FCMSender::FCMSender():
-	m_stop(false)
+FCMSender::FCMSender()
 {
 }
 
@@ -130,7 +129,9 @@ void FCMSender::setFCMClient(FCMClient::Ptr client)
 
 void FCMSender::run()
 {
-	while (!m_stop) {
+	StopControl::Run run(m_stopControl);
+
+	while (run) {
 		Notification::Ptr n = m_notificationQueue.waitDequeueNotification();
 		if (n->name() != MessageHolder::TYPE_NAME)
 			break;
@@ -198,7 +199,7 @@ void FCMSender::run()
 
 void FCMSender::stop()
 {
-	m_stop = true;
+	m_stopControl.requestStop();
 
 	const Clock now;
 	m_notificationQueue.enqueueNotification(
