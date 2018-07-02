@@ -27,7 +27,6 @@ using namespace BeeeOn;
 
 GatewayCommunicator::GatewayCommunicator():
 	m_maxMessageSize(4096),
-	m_stop(false),
 	m_workerRunnable(*this, &GatewayCommunicator::runWorker)
 {
 }
@@ -155,15 +154,12 @@ void GatewayCommunicator::sendMessage(const GatewayID &gatewayID,
 void GatewayCommunicator::start()
 {
 	initPool();
-
-	m_stop = false;
-
 	m_reactorThread.start(m_reactor);
 }
 
 void GatewayCommunicator::stop()
 {
-	m_stop = true;
+	m_stopControl.requestStop();
 
 	m_reactor.stop();
 	logger().information("waiting to join reactor thread", __FILE__, __LINE__);
@@ -208,7 +204,9 @@ void GatewayCommunicator::enqueueReadable(GatewayConnection::Ptr connection)
 
 void GatewayCommunicator::runWorker()
 {
-	while (!m_stop) {
+	StopControl::Run run(m_stopControl);
+
+	while (run) {
 		GatewayConnection::Ptr connection = m_connectionReadableQueue.dequeue();
 
 		if (!connection.isNull())
