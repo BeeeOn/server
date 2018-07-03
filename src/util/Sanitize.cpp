@@ -221,7 +221,15 @@ static RegularExpression strictRegex(
 	true
 );
 
+static void strictSimple(const string &text)
+{
+	if (!match(strictRegex, text))
+		throw InvalidArgumentException(
+			"unexpected content for strictly-validated data");
+}
+
 string Sanitize::strict(const string &bytes,
+		const string &separators,
 		const unsigned long sizeLimit,
 		const string &inputEncoding)
 {
@@ -230,9 +238,15 @@ string Sanitize::strict(const string &bytes,
 	if (text.empty())
 		return "";
 
-	if (!match(strictRegex, text))
-		throw InvalidArgumentException(
-			"unexpected content for strictly-validated data");
+	if (separators.empty()) {
+		strictSimple(text);
+	}
+	else {
+		const StringTokenizer toks(bytes, separators);
+
+		for (const auto &token : toks)
+			strictSimple(token);
+	}
 
 	return text;
 }

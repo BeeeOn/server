@@ -191,7 +191,7 @@ void SensorRestHandler::history(RestFlow &flow)
 		if (item.first == "range")
 			range = parseRange(Sanitize::common(item.second));
 		else if (item.first == "aggregation")
-			aggregation = parseAggregation(Sanitize::strict(item.second));
+			aggregation = parseAggregation(Sanitize::strict(item.second, ","));
 		else if (item.first == "interval")
 			interval = parseInterval(Sanitize::strict(item.second));
 		else
