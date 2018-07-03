@@ -256,6 +256,34 @@ class TestSensorsListDetail(unittest.TestCase):
 		self.assertEqual("success", result["status"])
 		self.assertEqual(14, len(result["data"]))
 
+		# again, but ask for min and max
+		req = GET(config.ui_host, config.ui_port,
+				"/gateways/1284174504043136/devices/0xa335d00019f5234e/sensors/0/history" +
+				"?range=hour&aggregation=min,max")
+		req.authorize(self.session)
+		response, content = req()
+
+		self.assertEqual(200, response.status)
+
+		result = json.loads(content)
+		self.assertEqual("success", result["status"])
+		self.assertEqual(14, len(result["data"]))
+		self.assertEqual(2, len(result["data"][0]["values"]))
+
+		# again, but ask for min, max and avg
+		req = GET(config.ui_host, config.ui_port,
+				"/gateways/1284174504043136/devices/0xa335d00019f5234e/sensors/0/history" +
+				"?range=hour&aggregation=min,max,avg")
+		req.authorize(self.session)
+		response, content = req()
+
+		self.assertEqual(200, response.status)
+
+		result = json.loads(content)
+		self.assertEqual("success", result["status"])
+		self.assertEqual(14, len(result["data"]))
+		self.assertEqual(3, len(result["data"][0]["values"]))
+
 		# the same request with explicit timestamps
 		start = datetime.now() - timedelta(0, 60 * 60)
 		end = datetime.now()
