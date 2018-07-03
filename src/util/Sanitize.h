@@ -96,6 +96,7 @@ public:
 	 * and allow only basic symbols like: [-a-zA-Z0-9 \t]*.
 	 */
 	static std::string strict(const std::string &bytes,
+			const std::string &separators = "",
 			const unsigned long sizeLimit = SIZE_LIMIT_STRICT,
 			const std::string &inputEncoding = "UTF-8");
 
