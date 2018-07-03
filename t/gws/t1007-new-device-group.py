@@ -21,7 +21,7 @@ class TestNewDeviceGroup(unittest.TestCase):
 
 		registerGateway(self, self.ws, config.gateway_id)
 
-		event = self.zmq.pop_data(timeout = 5)
+		event = self.zmq.pop_data(timeout = 10)
 		self.assertEqual("on-connected", event["event"])
 		self.assertEqual(config.gateway_id, event["gateway_id"])
 
@@ -29,7 +29,7 @@ class TestNewDeviceGroup(unittest.TestCase):
 		self.ws.close()
 
 		try:
-			event = self.zmq.pop_data(timeout = 5)
+			event = self.zmq.pop_data(timeout = 10)
 			self.assertEqual("on-disconnected", event["event"])
 			self.assertEqual(config.gateway_id, event["gateway_id"])
 		finally:
@@ -104,12 +104,12 @@ class TestNewDeviceGroup(unittest.TestCase):
 		self.assertEqual(1, msg["status"])
 		assureNotClosed(self, self.ws)
 
-		event = self.zmq.pop_data(timeout = 5)
+		event = self.zmq.pop_data(timeout = 10)
 		self.assertEqual("on-new-device", event["event"])
 		self.assertEqual("0xa100998877665511", event["device_id"])
 		self.assertEqual(config.gateway_id, event["gateway_id"])
 
-		event = self.zmq.pop_data(timeout = 5)
+		event = self.zmq.pop_data(timeout = 10)
 		self.assertEqual("on-new-device", event["event"])
 		self.assertEqual("0xa100998877665522", event["device_id"])
 		self.assertEqual(config.gateway_id, event["gateway_id"])
@@ -153,7 +153,7 @@ class TestNewDeviceGroup(unittest.TestCase):
 		self.assertEqual(2, msg["status"])
 		assureNotClosed(self, self.ws)
 
-		event = self.zmq.pop_data(timeout = 5)
+		event = self.zmq.pop_data(timeout = 10)
 		self.assertEqual("on-refused-new-device", event["event"])
 		self.assertEqual("0xa100998877665533", event["device_id"])
 		self.assertEqual(config.gateway_id, event["gateway_id"])
@@ -230,7 +230,7 @@ class TestNewDeviceGroup(unittest.TestCase):
 		self.assertEqual(2, msg["status"])
 		assureNotClosed(self, self.ws)
 
-		event = self.zmq.pop_data(timeout = 5)
+		event = self.zmq.pop_data(timeout = 10)
 		self.assertEqual("on-refused-new-device", event["event"])
 		self.assertEqual("0xa100998877665544", event["device_id"])
 		self.assertEqual(config.gateway_id, event["gateway_id"])
@@ -311,12 +311,12 @@ class TestNewDeviceGroup(unittest.TestCase):
 		self.assertEqual(2, msg["status"])
 		assureNotClosed(self, self.ws)
 
-		event = self.zmq.pop_data(timeout = 5)
+		event = self.zmq.pop_data(timeout = 10)
 		self.assertEqual("on-refused-new-device", event["event"])
 		self.assertEqual("0xa100998877665555", event["device_id"])
 		self.assertEqual(config.gateway_id, event["gateway_id"])
 
-		event = self.zmq.pop_data(timeout = 5)
+		event = self.zmq.pop_data(timeout = 10)
 		self.assertEqual("on-refused-new-device", event["event"])
 		self.assertEqual("0xa100998877665566", event["device_id"])
 		self.assertEqual(config.gateway_id, event["gateway_id"])

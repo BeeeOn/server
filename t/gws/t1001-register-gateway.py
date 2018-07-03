@@ -41,13 +41,13 @@ class TestRegister(unittest.TestCase):
 		self.assertEqual("gateway_accepted", msg["message_type"])
 		assureNotClosed(self, ws)
 
-		event = self.zmq.pop_data(timeout = 5)
+		event = self.zmq.pop_data(timeout = 10)
 		self.assertEqual("on-connected", event["event"])
 		self.assertEqual(config.gateway_id, event["gateway_id"])
 
 		ws.close()
 
-		event = self.zmq.pop_data(timeout = 5)
+		event = self.zmq.pop_data(timeout = 10)
 		self.assertEqual("on-disconnected", event["event"])
 		self.assertEqual(config.gateway_id, event["gateway_id"])
 
@@ -106,7 +106,7 @@ class TestRegister(unittest.TestCase):
 		self.assertEqual("gateway_accepted", response["message_type"])
 		assureNotClosed(self, ws0)
 
-		event = self.zmq.pop_data(timeout = 5)
+		event = self.zmq.pop_data(timeout = 10)
 		self.assertEqual("on-connected", event["event"])
 		self.assertEqual(config.gateway_id, event["gateway_id"])
 
@@ -118,13 +118,13 @@ class TestRegister(unittest.TestCase):
 		assureIsClosed(self, ws0)
 		assureNotClosed(self, ws1)
 
-		event = self.zmq.pop_data(timeout = 5)
+		event = self.zmq.pop_data(timeout = 10)
 		self.assertEqual("on-reconnected", event["event"])
 		self.assertEqual(config.gateway_id, event["gateway_id"])
 
 		ws1.close()
 
-		event = self.zmq.pop_data(timeout = 5)
+		event = self.zmq.pop_data(timeout = 10)
 		self.assertEqual("on-disconnected", event["event"])
 		self.assertEqual(config.gateway_id, event["gateway_id"])
 

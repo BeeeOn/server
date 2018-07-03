@@ -22,7 +22,7 @@ class TestSensorData(unittest.TestCase):
 
 		registerGateway(self, self.ws, config.gateway_id)
 
-		event = self.zmq.pop_data(timeout = 5)
+		event = self.zmq.pop_data(timeout = 10)
 		self.assertEqual("on-connected", event["event"])
 		self.assertEqual(config.gateway_id, event["gateway_id"])
 
@@ -30,7 +30,7 @@ class TestSensorData(unittest.TestCase):
 		self.ws.close()
 
 		try:
-			event = self.zmq.pop_data(timeout = 5)
+			event = self.zmq.pop_data(timeout = 10)
 			self.assertEqual("on-disconnected", event["event"])
 			self.assertEqual(config.gateway_id, event["gateway_id"])
 		finally:
@@ -80,7 +80,7 @@ class TestSensorData(unittest.TestCase):
 		self.assertEqual(id, msg["id"])
 		assureNotClosed(self, self.ws)
 
-		event = self.zmq.pop_data(timeout = 5)
+		event = self.zmq.pop_data(timeout = 10)
 		self.assertEqual("on-sensor-data", event["event"])
 		self.assertEqual(config.gateway_id, event["gateway_id"])
 		self.assertEqual("0xa32d27aa5e94ecfd", event["device_id"])
@@ -171,7 +171,7 @@ class TestSensorData(unittest.TestCase):
 		self.assertEqual(id, msg["id"])
 		assureNotClosed(self, self.ws)
 
-		event = self.zmq.pop_data(timeout = 5)
+		event = self.zmq.pop_data(timeout = 10)
 		self.assertEqual("on-sensor-data", event["event"])
 		self.assertEqual(config.gateway_id, event["gateway_id"])
 		self.assertEqual("0xa32d27aa5e94ecfd", event["device_id"])
