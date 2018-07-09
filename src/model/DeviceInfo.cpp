@@ -116,3 +116,13 @@ bool DeviceInfo::MatchGlob::match(
 
 	return namePat.match(name) && vendorPat.match(vendor);
 }
+
+string DeviceInfo::MatchGlob::namePattern() const
+{
+	return m_name;
+}
+
+string DeviceInfo::MatchGlob::vendorPattern() const
+{
+	return m_vendor;
+}
