@@ -8,6 +8,7 @@ BEEEON_OBJECT_CASTABLE(DeviceListener)
 BEEEON_OBJECT_CASTABLE(GatewayListener)
 BEEEON_OBJECT_CASTABLE(SensorDataListener)
 BEEEON_OBJECT_CASTABLE(ServerListener)
+BEEEON_OBJECT_CASTABLE(IdentityListener)
 BEEEON_OBJECT_PROPERTY("publishers", &PublishingWatcher::addPublisher)
 BEEEON_OBJECT_END(BeeeOn, Automation, PublishingWatcher)
 
@@ -97,6 +98,16 @@ void PublishingWatcher::onUp(const ServerEvent &e)
 void PublishingWatcher::onDown(const ServerEvent &e)
 {
 	publishEvent(e, "on-server-down");
+}
+
+void PublishingWatcher::onFirstLogin(const VerifiedIdentityEvent &e)
+{
+	publishEvent(e, "on-first-login");
+}
+
+void PublishingWatcher::onInvite(const IdentityInviteEvent &e)
+{
+	publishEvent(e, "on-gateway-invite");
 }
 
 void PublishingWatcher::eventBegin(
@@ -202,6 +213,63 @@ void PublishingWatcher::eventDetails(
 
 	json.key("label");
 	json.value(e.label());
+}
+
+void PublishingWatcher::eventDetails(
+	PrintHandler &json,
+	const VerifiedIdentityEvent &e) const
+{
+	const auto &verified = e.verifiedIdentity();
+
+	json.key("identity");
+	json.startObject();
+
+	json.key("email");
+	json.value(verified.email());
+
+	json.key("id");
+	json.value(verified.identity().id().toString());
+
+	json.endObject();
+
+	json.key("provider");
+	json.value(verified.provider());
+
+	json.key("user_id");
+	json.value(verified.user().id().toString());
+}
+
+void PublishingWatcher::eventDetails(
+	PrintHandler &json,
+	const IdentityInviteEvent &e) const
+{
+	json.key("originator_id");
+	json.value(e.originator().id().toString());
+
+	json.key("gateway_id");
+	json.value(e.gateway().id().toString());
+
+	json.key("identity");
+	json.startObject();
+
+	json.key("email");
+	json.value(e.identity().email());
+
+	json.key("id");
+	json.value(e.identity().id().toString());
+
+	json.endObject();
+
+	json.key("access_level");
+	json.startObject();
+
+	json.key("group");
+	json.value(e.level().toString());
+
+	json.key("value");
+	json.value(static_cast<unsigned int>(e.level()));
+
+	json.endObject();
 }
 
 void PublishingWatcher::publish(const string &message)

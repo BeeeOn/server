@@ -161,6 +161,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/service/GWSSensorHistoryService.cpp
 	${PROJECT_SOURCE_DIR}/service/GWSSensorHistoryService.cpp
 	${PROJECT_SOURCE_DIR}/service/GWSSensorHistoryServiceImpl.cpp
+	${PROJECT_SOURCE_DIR}/service/IdentityListener.cpp
 	${PROJECT_SOURCE_DIR}/service/LocationService.cpp
 	${PROJECT_SOURCE_DIR}/service/LocationServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/SensorService.cpp
@@ -228,11 +229,6 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/rpc/GatewayRPCUnpairResult.cpp
 	${PROJECT_SOURCE_DIR}/rpc/AsyncGatewayRPC.cpp
 	${PROJECT_SOURCE_DIR}/rpc/FakeGatewayRPC.cpp
-	${PROJECT_SOURCE_DIR}/notification/NotificationDispatcher.cpp
-	${PROJECT_SOURCE_DIR}/notification/FirstLoginNotification.cpp
-	${PROJECT_SOURCE_DIR}/notification/InvitedNotification.cpp
-	${PROJECT_SOURCE_DIR}/notification/NotificationObserver.cpp
-	${PROJECT_SOURCE_DIR}/notification/LoggingObserver.cpp
 	${PROJECT_SOURCE_DIR}/rest/BuiltinRestHandler.cpp
 	${PROJECT_SOURCE_DIR}/rest/CPSPRestHandler.cpp
 	${PROJECT_SOURCE_DIR}/rest/JSONRestHandler.cpp

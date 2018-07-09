@@ -1,12 +1,5 @@
 <system>
 	<factory>
-		<instance name="loggingObserver" class="BeeeOn::LoggingObserver" />
-
-		<instance name="notificationDispatcher"
-				class="BeeeOn::NotificationDispatcher">
-			<add name="observer" ref="loggingObserver" />
-		</instance>
-
 		<instance name="localeManager" class="BeeeOn::IcuLocaleManager">
 			<set name="bundleName" text="${bundle.name}" />
 			<set name="resourceDir" text="${bundle.resource.dir}" />

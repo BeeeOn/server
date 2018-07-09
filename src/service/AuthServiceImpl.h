@@ -8,12 +8,13 @@
 #include "dao/UserDao.h"
 #include "dao/VerifiedIdentityDao.h"
 #include "l10n/LocaleManager.h"
-#include "notification/NotificationDispatcher.h"
 #include "provider/AuthProvider.h"
 #include "server/SessionManager.h"
 #include "server/Session.h"
+#include "service/IdentityListener.h"
 #include "service/AuthService.h"
 #include "transaction/Transactional.h"
+#include "util/EventSource.h"
 
 namespace BeeeOn {
 
@@ -56,18 +57,15 @@ public:
 			std::make_pair(provider->id(), provider));
 	}
 
-	void setNotificationDispatcher(NotificationDispatcher *service)
-	{
-		m_notificationService = service;
-	}
-
 	void setLocaleManager(LocaleManager::Ptr manager)
 	{
 		m_localeManager = manager;
 	}
 
-	const Session::Ptr login(const Credentials &cred);
+	void registerListener(IdentityListener::Ptr listener);
+	void setEventsExecutor(AsyncExecutor::Ptr executor);
 
+	const Session::Ptr login(const Credentials &cred);
 	void logout(const std::string &id);
 
 	void list(std::vector<AuthProvider *> &providers);
@@ -100,8 +98,8 @@ private:
 	IdentityDao *m_identityDao;
 	VerifiedIdentityDao *m_verifiedIdentityDao;
 	Providers m_providers;
-	NotificationDispatcher *m_notificationService;
 	LocaleManager::Ptr m_localeManager;
+	EventSource<IdentityListener> m_eventSource;
 };
 
 }

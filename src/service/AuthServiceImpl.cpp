@@ -17,10 +17,21 @@ BEEEON_OBJECT_PROPERTY("identityDao", &AuthServiceImpl::setIdentityDao)
 BEEEON_OBJECT_PROPERTY("verifiedIdentityDao", &AuthServiceImpl::setVerifiedIdentityDao)
 BEEEON_OBJECT_PROPERTY("sessionManager", &AuthServiceImpl::setSessionManager)
 BEEEON_OBJECT_PROPERTY("providers", &AuthServiceImpl::registerProvider)
-BEEEON_OBJECT_PROPERTY("notificationDispatcher", &AuthServiceImpl::setNotificationDispatcher)
 BEEEON_OBJECT_PROPERTY("localeManager", &AuthServiceImpl::setLocaleManager)
 BEEEON_OBJECT_PROPERTY("transactionManager", &Transactional::setTransactionManager)
+BEEEON_OBJECT_PROPERTY("listeners", &AuthServiceImpl::registerListener)
+BEEEON_OBJECT_PROPERTY("eventsExecutor", &AuthServiceImpl::setEventsExecutor)
 BEEEON_OBJECT_END(BeeeOn, AuthServiceImpl)
+
+void AuthServiceImpl::registerListener(IdentityListener::Ptr listener)
+{
+	m_eventSource.addListener(listener);
+}
+
+void AuthServiceImpl::setEventsExecutor(AsyncExecutor::Ptr executor)
+{
+	m_eventSource.setAsyncExecutor(executor);
+}
 
 User AuthServiceImpl::createUser(const AuthResult &result)
 {
@@ -43,7 +54,9 @@ Session::Ptr AuthServiceImpl::loginAsNew(const AuthResult &result)
 	VerifiedIdentity verifiedIdentity;
 	verifyIdentity(verifiedIdentity, identity, result);
 
-	m_notificationService->notifyFirstLogin(verifiedIdentity);
+	VerifiedIdentityEvent e;
+	e.setVerifiedIdentity(verifiedIdentity);
+	m_eventSource.fireEvent(e, &IdentityListener::onFirstLogin);
 
 	return openSession(verifiedIdentity);
 }
@@ -106,7 +119,9 @@ Session::Ptr AuthServiceImpl::verifyIdentityAndLogin(
 
 	verifyIdentity(verifiedIdentity, identity, result);
 
-	m_notificationService->notifyFirstLogin(verifiedIdentity);
+	VerifiedIdentityEvent e;
+	e.setVerifiedIdentity(verifiedIdentity);
+	m_eventSource.fireEvent(e, &IdentityListener::onFirstLogin);
 
 	return openSession(verifiedIdentity);
 }

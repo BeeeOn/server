@@ -12,9 +12,9 @@
 			<set name="identityDao" ref="identityDao" />
 			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
 			<set name="sessionManager" ref="sessionManager" />
-			<set name="notificationDispatcher" ref="notificationDispatcher" />
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="localeManager" ref="localeManager" />
+			<set name="eventsExecutor" ref="eventsExecutor" />
 			<add name="providers" ref="googlePermitAuthProvider" if-yes="${testing.enable}" />
 			<add name="providers" ref="apiKeyAuth" if-yes="${apikeys.enable}" />
 			<add name="providers" ref="googleWebAuth" if-yes="${web-app.google.enable}" />
@@ -22,6 +22,7 @@
 			<add name="providers" ref="facebookWebAuth" if-yes="${web-app.facebook.enable}" />
 			<add name="providers" ref="facebookAndroidAuth" if-yes="${android.facebook.enable}" />
 			<add name="providers" ref="googleTesterAuth" if-yes="${tester.google.enable}" />
+			<add name="listeners" ref="publishingWatcher" if-yes="${baf.publish.identity.enable}" />
 		</instance>
 
 		<instance name="deviceService" class="BeeeOn::DeviceServiceImpl">
@@ -79,7 +80,8 @@
 			<set name="roleInGatewayDao" ref="roleInGatewayDao" />
 			<set name="accessPolicy" ref="accessPolicy" />
 			<set name="transactionManager" ref="transactionManager" />
-			<set name="notificationDispatcher" ref="notificationDispatcher" />
+			<set name="eventsExecutor" ref="eventsExecutor" />
+			<add name="listeners" ref="publishingWatcher" if-yes="${baf.publish.identity.enable}" />
 		</instance>
 
 		<instance name="sensorService" class="BeeeOn::SensorServiceImpl">
