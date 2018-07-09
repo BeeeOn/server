@@ -112,6 +112,11 @@ private:
 			const GWRequest::Ptr request);
 
 	/**
+	 * @brief Derive GatewayRPCResult instance based on the received response.
+	 */
+	GatewayRPCResult::Ptr deriveResult(const GWResponse::Ptr response) const;
+
+	/**
 	 * @brief Finds the appropriate GatewayRPCHandler instance for the given
 	 * result and uses it for handling.
 	 */

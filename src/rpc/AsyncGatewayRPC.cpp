@@ -2,9 +2,11 @@
 #include "gwmessage/GWDeviceAcceptRequest.h"
 #include "gwmessage/GWListenRequest.h"
 #include "gwmessage/GWUnpairRequest.h"
+#include "gwmessage/GWUnpairResponse.h"
 #include "gwmessage/GWPingRequest.h"
 #include "gwmessage/GWSetValueRequest.h"
 #include "rpc/AsyncGatewayRPC.h"
+#include "rpc/GatewayRPCUnpairResult.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, AsyncGatewayRPC)
 BEEEON_OBJECT_CASTABLE(GatewayRPC)
@@ -264,10 +266,29 @@ void AsyncGatewayRPC::processResult(const GatewayID &gatewayID,
 	executeHandler(gatewayID, callID, handler, result);
 }
 
+GatewayRPCResult::Ptr AsyncGatewayRPC::deriveResult(const GWResponse::Ptr response) const
+{
+	GatewayRPCResult::Ptr result;
+
+	switch (response->type().raw()) {
+	case GWMessageType::UNPAIR_RESPONSE:
+		result = new GatewayRPCUnpairResult;
+		result.cast<GatewayRPCUnpairResult>()->setUnpaired(
+			response.cast<GWUnpairResponse>()->unpairedDevices());
+		break;
+
+	default:
+		result = new GatewayRPCResult;
+		break;
+	}
+
+	return result;
+}
+
 void AsyncGatewayRPC::forwardResponse(const GatewayID &gatewayID,
 		GWResponse::Ptr response)
 {
-	GatewayRPCResult::Ptr result = new GatewayRPCResult;
+	GatewayRPCResult::Ptr result = deriveResult(response);
 
 	switch (response->status()) {
 	case GWResponse::Status::ACCEPTED:
