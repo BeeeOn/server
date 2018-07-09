@@ -88,6 +88,11 @@ public:
 		return m_modules;
 	}
 
+	const std::list<Match::Ptr> matchers() const
+	{
+		return m_match;
+	}
+
 	bool lookup(ModuleInfo &module) const;
 
 private:
