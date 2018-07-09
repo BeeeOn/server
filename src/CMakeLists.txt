@@ -229,7 +229,6 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/rpc/GatewayRPCUnpairResult.cpp
 	${PROJECT_SOURCE_DIR}/rpc/AsyncGatewayRPC.cpp
 	${PROJECT_SOURCE_DIR}/rpc/FakeGatewayRPC.cpp
-	${PROJECT_SOURCE_DIR}/notification/InvitedNotification.cpp
 	${PROJECT_SOURCE_DIR}/rest/BuiltinRestHandler.cpp
 	${PROJECT_SOURCE_DIR}/rest/CPSPRestHandler.cpp
 	${PROJECT_SOURCE_DIR}/rest/JSONRestHandler.cpp
