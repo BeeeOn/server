@@ -37,6 +37,9 @@ public:
 			const std::string &name,
 			const std::string &vendor) const override;
 
+		std::string name() const;
+		std::string vendor() const;
+
 	private:
 		std::string m_name;
 		std::string m_vendor;
