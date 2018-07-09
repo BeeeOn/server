@@ -44,6 +44,7 @@ private:
 	std::set<Poco::XML::XMLString> m_refreshExpect;
 	std::set<Poco::XML::XMLString> m_constraintsExpect;
 	std::set<Poco::XML::XMLString> m_contentElements;
+	std::list<DeviceInfo::Match::Ptr> m_matchers;
 	std::set<DeviceInfo> m_result;
 	DeviceInfo m_device;
 	ModuleInfo m_module;

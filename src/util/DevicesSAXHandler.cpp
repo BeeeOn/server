@@ -160,6 +160,7 @@ void DevicesSAXHandler::startElement(
 		m_device.setName("");
 		m_device.setVendor("");
 		m_device.clear();
+		m_matchers.clear();
 	}
 
 	if (isPathFromRoot("devices", "device", "match", "exact")) {
@@ -177,7 +178,7 @@ void DevicesSAXHandler::startElement(
 		if (vendor.empty())
 			error("vendor value is empty");
 
-		m_device.addMatch(new DeviceInfo::MatchExact(name, vendor));
+		m_matchers.push_back(new DeviceInfo::MatchExact(name, vendor));
 	}
 
 	if (isPathFromRoot("devices", "device", "match", "pattern")) {
@@ -195,7 +196,7 @@ void DevicesSAXHandler::startElement(
 		if (vendor.empty())
 			error("vendor value is empty");
 
-		m_device.addMatch(new DeviceInfo::MatchGlob(name, vendor));
+		m_matchers.push_back(new DeviceInfo::MatchGlob(name, vendor));
 	}
 
 
@@ -287,7 +288,11 @@ void DevicesSAXHandler::endElement(const SAXElement &element)
 		if (logger().debug())
 			logger().debug("inserting device " + m_device, __FILE__, __LINE__);
 
-		m_result.insert(m_device);
+		DeviceInfo copy(m_device);
+		for (const auto matcher : m_matchers)
+			copy.addMatch(matcher);
+
+		m_result.insert(copy);
 	}
 }
 

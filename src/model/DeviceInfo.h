@@ -37,6 +37,9 @@ public:
 			const std::string &name,
 			const std::string &vendor) const override;
 
+		std::string name() const;
+		std::string vendor() const;
+
 	private:
 		std::string m_name;
 		std::string m_vendor;
@@ -49,6 +52,9 @@ public:
 		bool match(
 			const std::string &name,
 			const std::string &vendor) const override;
+
+		std::string namePattern() const;
+		std::string vendorPattern() const;
 
 	private:
 		std::string m_name;
@@ -80,6 +86,11 @@ public:
 	const std::set<ModuleInfo> &modules() const
 	{
 		return m_modules;
+	}
+
+	const std::list<Match::Ptr> matchers() const
+	{
+		return m_match;
 	}
 
 	bool lookup(ModuleInfo &module) const;

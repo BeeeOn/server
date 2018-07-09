@@ -91,6 +91,16 @@ bool DeviceInfo::MatchExact::match(
 	return m_name == name && m_vendor == vendor;
 }
 
+string DeviceInfo::MatchExact::name() const
+{
+	return m_name;
+}
+
+string DeviceInfo::MatchExact::vendor() const
+{
+	return m_vendor;
+}
+
 DeviceInfo::MatchGlob::MatchGlob(
 		const string &name, const string &vendor):
 	m_name(name),
@@ -105,4 +115,14 @@ bool DeviceInfo::MatchGlob::match(
 	Glob vendorPat(m_vendor);
 
 	return namePat.match(name) && vendorPat.match(vendor);
+}
+
+string DeviceInfo::MatchGlob::namePattern() const
+{
+	return m_name;
+}
+
+string DeviceInfo::MatchGlob::vendorPattern() const
+{
+	return m_vendor;
 }
