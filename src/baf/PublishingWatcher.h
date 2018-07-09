@@ -11,6 +11,7 @@
 #include "gws/GatewayListener.h"
 #include "gws/SensorDataListener.h"
 #include "server/ServerListener.h"
+#include "service/IdentityListener.h"
 #include "util/Loggable.h"
 
 namespace BeeeOn {
@@ -21,6 +22,7 @@ class PublishingWatcher :
 	public GatewayListener,
 	public SensorDataListener,
 	public ServerListener,
+	public IdentityListener,
 	Loggable {
 public:
 	PublishingWatcher();
@@ -44,6 +46,9 @@ public:
 
 	void onUp(const ServerEvent &e) override;
 	void onDown(const ServerEvent &e) override;
+
+	void onFirstLogin(const VerifiedIdentityEvent &e) override;
+	void onInvite(const IdentityInviteEvent &e) override;
 
 	void cleanup();
 
@@ -69,6 +74,12 @@ protected:
 	void eventDetails(
 		Poco::JSON::PrintHandler &json,
 		const ServerEvent &e) const;
+	void eventDetails(
+		Poco::JSON::PrintHandler &json,
+		const VerifiedIdentityEvent &e) const;
+	void eventDetails(
+		Poco::JSON::PrintHandler &json,
+		const IdentityInviteEvent &e) const;
 
 	template <typename Event>
 	void publishEvent(const Event &e, const std::string &name)
