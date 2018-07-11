@@ -171,15 +171,7 @@ void AsyncGatewayRPC::executeHandler(const GatewayID &gatewayID,
 	try {
 		doHandle(handler, result);
 	}
-	catch (const Exception &e) {
-		logger().log(e, __FILE__, __LINE__);
-	}
-	catch (const exception &e) {
-		logger().critical(e.what(), __FILE__, __LINE__);
-	}
-	catch (...) {
-		logger().critical("unknown error", __FILE__, __LINE__);
-	}
+	BEEEON_CATCH_CHAIN(logger())
 }
 
 void AsyncGatewayRPC::sendAndExpectResult(const GatewayID &gatewayID,
@@ -272,6 +264,16 @@ GatewayRPCResult::Ptr AsyncGatewayRPC::deriveResult(const GWResponse::Ptr respon
 
 	switch (response->type().raw()) {
 	case GWMessageType::UNPAIR_RESPONSE:
+		if (response.cast<GWUnpairResponse>().isNull()) {
+			logger().error(
+				"expected GWUnpairResponse for message type "
+				+ response->type().toString(),
+				__FILE__, __LINE__);
+
+			result = new GatewayRPCResult;
+			break;
+		}
+
 		result = new GatewayRPCUnpairResult;
 		result.cast<GatewayRPCUnpairResult>()->setUnpaired(
 			response.cast<GWUnpairResponse>()->unpairedDevices());
@@ -341,15 +343,7 @@ void AsyncGatewayRPC::stop()
 
 			doHandle(it.second.handler, result);
 		}
-		catch (const Exception &e) {
-			logger().log(e, __FILE__, __LINE__);
-		}
-		catch (const exception &e) {
-			logger().critical(e.what(), __FILE__, __LINE__);
-		}
-		catch (...) {
-			logger().critical("unknown error", __FILE__, __LINE__);
-		}
+		BEEEON_CATCH_CHAIN(logger())
 	}
 
 	m_contexts.clear();
