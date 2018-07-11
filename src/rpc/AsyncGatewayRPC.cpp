@@ -171,15 +171,7 @@ void AsyncGatewayRPC::executeHandler(const GatewayID &gatewayID,
 	try {
 		doHandle(handler, result);
 	}
-	catch (const Exception &e) {
-		logger().log(e, __FILE__, __LINE__);
-	}
-	catch (const exception &e) {
-		logger().critical(e.what(), __FILE__, __LINE__);
-	}
-	catch (...) {
-		logger().critical("unknown error", __FILE__, __LINE__);
-	}
+	BEEEON_CATCH_CHAIN(logger())
 }
 
 void AsyncGatewayRPC::sendAndExpectResult(const GatewayID &gatewayID,
@@ -341,15 +333,7 @@ void AsyncGatewayRPC::stop()
 
 			doHandle(it.second.handler, result);
 		}
-		catch (const Exception &e) {
-			logger().log(e, __FILE__, __LINE__);
-		}
-		catch (const exception &e) {
-			logger().critical(e.what(), __FILE__, __LINE__);
-		}
-		catch (...) {
-			logger().critical("unknown error", __FILE__, __LINE__);
-		}
+		BEEEON_CATCH_CHAIN(logger())
 	}
 
 	m_contexts.clear();
