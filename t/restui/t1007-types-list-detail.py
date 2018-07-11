@@ -44,7 +44,7 @@ class TestTypesListDetail(unittest.TestCase):
 
 		result = json.loads(content)
 		self.assertEqual("success", result["status"])
-		self.assertEqual(24, len(result["data"]))
+		self.assertEqual(25, len(result["data"]))
 
 	def test2_detail_of_non_existing(self):
 		req = GET(config.ui_host, config.ui_port, "/types/12904232")
