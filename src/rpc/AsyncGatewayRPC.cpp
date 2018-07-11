@@ -264,6 +264,16 @@ GatewayRPCResult::Ptr AsyncGatewayRPC::deriveResult(const GWResponse::Ptr respon
 
 	switch (response->type().raw()) {
 	case GWMessageType::UNPAIR_RESPONSE:
+		if (response.cast<GWUnpairResponse>().isNull()) {
+			logger().error(
+				"expected GWUnpairResponse for message type "
+				+ response->type().toString(),
+				__FILE__, __LINE__);
+
+			result = new GatewayRPCResult;
+			break;
+		}
+
 		result = new GatewayRPCUnpairResult;
 		result.cast<GatewayRPCUnpairResult>()->setUnpaired(
 			response.cast<GWUnpairResponse>()->unpairedDevices());
