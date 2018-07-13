@@ -497,6 +497,27 @@
 		</modules>
 	</device>
 
+	<device id="75">
+		<name>Color Light</name>
+		<vendor>Tabu Lumen</vendor>
+
+		<match>
+			<exact name="TL 100S Smart Light" vendor="Tabu Lumen" />
+		</match>
+
+		<modules>
+			<control id="0" type="on_off,controllable">
+				<name>On/Off</name>
+			</control>
+			<control id="1" type="brightness,controllable">
+				<name>Brightness</name>
+			</control>
+			<control id="2" type="color,controllable">
+				<name>Color</name>
+			</control>
+		</modules>
+	</device>
+
 	<device id="61">
 		<name>Air quality sensor</name>
 		<vendor>IQ Home</vendor>
