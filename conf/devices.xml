@@ -473,6 +473,30 @@
 		</modules>
 	</device>
 
+	<device id="74">
+		<name>Color Light</name>
+		<vendor>BeeWi</vendor>
+
+		<match>
+			<exact name="BeeWi SmartLite" vendor="BeeWi" />
+		</match>
+
+		<modules>
+			<control id="0" type="on_off,controllable">
+				<name>On/Off</name>
+			</control>
+			<control id="1" type="brightness,controllable">
+				<name>Brightness</name>
+			</control>
+			<control id="2" type="color_temperature,controllable">
+				<name>Color Temperature</name>
+			</control>
+			<control id="3" type="color,controllable">
+				<name>Color</name>
+			</control>
+		</modules>
+	</device>
+
 	<device id="61">
 		<name>Air quality sensor</name>
 		<vendor>IQ Home</vendor>
