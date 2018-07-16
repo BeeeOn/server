@@ -34,7 +34,7 @@ DeviceServiceImpl::DeviceServiceImpl():
 
 void DeviceServiceImpl::setDeviceDao(DeviceDao::Ptr dao)
 {
-	m_dao = dao;
+	m_deviceDao = dao;
 }
 
 void DeviceServiceImpl::setSensorHistoryDao(SensorHistoryDao::Ptr dao)
@@ -72,7 +72,7 @@ bool DeviceServiceImpl::doFetch(Relation<Device, Gateway> &input)
 {
 	m_policy->assure(DeviceAccessPolicy::ACTION_USER_GET,
 			input, input.target(), input.base());
-	return m_dao->fetch(input.target(), input.base());
+	return m_deviceDao->fetch(input.target(), input.base());
 }
 
 void DeviceServiceImpl::valuesFor(DeviceWithData &device)
@@ -115,7 +115,7 @@ void DeviceServiceImpl::doFetchMany(Single<list<Device>> &input)
 			input, input.target());
 
 	list<Device> &devices = input.target();
-	m_dao->fetchMany(devices);
+	m_deviceDao->fetchMany(devices);
 }
 
 void DeviceServiceImpl::doFetchMany(Single<list<DeviceWithData>> &input)
@@ -124,7 +124,7 @@ void DeviceServiceImpl::doFetchMany(Single<list<DeviceWithData>> &input)
 	for (const auto &dev : input.target())
 		devices.emplace_back(dev);
 
-	m_dao->fetchMany(devices);
+	m_deviceDao->fetchMany(devices);
 
 	// convert to list of DeviceWithData
 	list<DeviceWithData> result;
@@ -158,7 +158,7 @@ void DeviceServiceImpl::doFetchMany(Relation<list<Device>, Gateway> &input)
 
 	list<Device> &devices = input.target();
 
-	m_dao->fetchMany(devices);
+	m_deviceDao->fetchMany(devices);
 
 	list<Device>::iterator it = devices.begin();
 
@@ -195,7 +195,7 @@ void DeviceServiceImpl::doFetchMany(Relation<list<DeviceWithData>, Gateway> &inp
 
 	m_policy->assureMany(DeviceAccessPolicy::ACTION_USER_GET, input, devices);
 
-	m_dao->fetchMany(devices);
+	m_deviceDao->fetchMany(devices);
 
 	// convert to list of DeviceWithData
 	list<DeviceWithData> result;
@@ -227,7 +227,7 @@ void DeviceServiceImpl::doFetchActiveBy(Relation<vector<Device>, Gateway> &input
 {
 	m_policy->assure(DeviceAccessPolicy::ACTION_USER_GET,
 			input, input.base());
-	m_dao->fetchActiveBy(input.target(), input.base());
+	m_deviceDao->fetchActiveBy(input.target(), input.base());
 }
 
 void DeviceServiceImpl::doFetchActiveBy(Relation<vector<DeviceWithData>, Gateway> &input)
@@ -239,7 +239,7 @@ void DeviceServiceImpl::doFetchActiveBy(Relation<vector<DeviceWithData>, Gateway
 
 	m_policy->assure(DeviceAccessPolicy::ACTION_USER_GET,
 			input, input.base());
-	m_dao->fetchActiveBy(devices, input.base());
+	m_deviceDao->fetchActiveBy(devices, input.base());
 
 	// convert to list of DeviceWithData
 	vector<DeviceWithData> result;
@@ -271,7 +271,7 @@ void DeviceServiceImpl::doFetchInactiveBy(Relation<vector<Device>, Gateway> &inp
 {
 	m_policy->assure(DeviceAccessPolicy::ACTION_USER_GET,
 			input, input.base());
-	m_dao->fetchInactiveBy(input.target(), input.base());
+	m_deviceDao->fetchInactiveBy(input.target(), input.base());
 }
 
 void DeviceServiceImpl::doFetchInactiveBy(Relation<vector<DeviceWithData>, Gateway> &input)
@@ -283,7 +283,7 @@ void DeviceServiceImpl::doFetchInactiveBy(Relation<vector<DeviceWithData>, Gatew
 
 	m_policy->assure(DeviceAccessPolicy::ACTION_USER_GET,
 			input, input.base());
-	m_dao->fetchInactiveBy(devices, input.base());
+	m_deviceDao->fetchInactiveBy(devices, input.base());
 
 	// convert to list of DeviceWithData
 	vector<DeviceWithData> result;
@@ -319,7 +319,7 @@ void DeviceServiceImpl::doUnregister(Relation<Device, Gateway> &input)
 
 	Device &device = input.target();
 
-	if (!m_dao->fetch(device, input.base()))
+	if (!m_deviceDao->fetch(device, input.base()))
 		throw NotFoundException("no such device " + device);
 
 	if (!device.status().active())
@@ -328,10 +328,10 @@ void DeviceServiceImpl::doUnregister(Relation<Device, Gateway> &input)
 	device.status().setState(DeviceStatus::STATE_INACTIVE_PENDING);
 	device.status().setLastChanged({});
 
-	if (!m_dao->update(device, input.base()))
+	if (!m_deviceDao->update(device, input.base()))
 		throw NotFoundException("device " + device + " seems to not exist");
 
-	DeviceUnpairHandler::Ptr handler = new DeviceUnpairHandler(device, m_dao, m_eventSource);
+	DeviceUnpairHandler::Ptr handler = new DeviceUnpairHandler(device, m_deviceDao, m_eventSource);
 	handler->setTransactionManager(transactionManager());
 
 	m_gatewayRPC->unpairDevice(handler, input.base(), device);
@@ -344,7 +344,7 @@ bool DeviceServiceImpl::doActivate(Relation<Device, Gateway> &input)
 
 	Device &device = input.target();
 
-	if (!m_dao->fetch(device, input.base()))
+	if (!m_deviceDao->fetch(device, input.base()))
 		return false;
 
 	return tryActivateAndUpdate(device, input.base());
@@ -359,22 +359,22 @@ bool DeviceServiceImpl::tryActivateAndUpdate(Device &device,
 		device.status().setState(DeviceStatus::STATE_ACTIVE_PENDING);
 		device.status().setLastChanged({});
 
-		if (!m_dao->update(device, gateway))
+		if (!m_deviceDao->update(device, gateway))
 			throw NotFoundException("device " + device + " seems to not exist");
 
-		DevicePairHandler::Ptr handler = new DevicePairHandler(device, m_dao, m_eventSource);
+		DevicePairHandler::Ptr handler = new DevicePairHandler(device, m_deviceDao, m_eventSource);
 		handler->setTransactionManager(transactionManager());
 
 		m_gatewayRPC->pairDevice(handler, gateway, device);
 		return true;
 	}
 
-	return forceUpdate? m_dao->update(device, gateway) : false;
+	return forceUpdate? m_deviceDao->update(device, gateway) : false;
 }
 
 bool DeviceServiceImpl::prepareUpdate(RelationWithData<Device, Gateway> &input)
 {
-	if (!m_dao->fetch(input.target(), input.base()))
+	if (!m_deviceDao->fetch(input.target(), input.base()))
 		return false;
 
 	input.data().partial(input.target());
@@ -389,7 +389,7 @@ bool DeviceServiceImpl::doUpdate(RelationWithData<Device, Gateway> &input)
 	if (!prepareUpdate(input))
 		return false;
 
-	return m_dao->update(input.target(), input.base());
+	return m_deviceDao->update(input.target(), input.base());
 }
 
 bool DeviceServiceImpl::doUpdateAndActivate(
@@ -459,7 +459,7 @@ void DeviceServiceImpl::doListProperties(Relation<list<DeviceProperty>, Device> 
 void DeviceServiceImpl::removeUnusedDevices()
 {
 	size_t count = BEEEON_TRANSACTION_RETURN(size_t,
-                               m_dao->removeUnused());
+                               m_deviceDao->removeUnused());
 
 	if (count > 0) {
 		logger().warning("removed "

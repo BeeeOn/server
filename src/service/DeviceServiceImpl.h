@@ -160,7 +160,7 @@ protected:
 			const Gateway &gateway, bool forceUpdate = false);
 
 private:
-	DeviceDao::Ptr m_dao;
+	DeviceDao::Ptr m_deviceDao;
 	ControlDao::Ptr m_controlDao;
 	SensorHistoryDao::Ptr m_historyDao;
 	DevicePropertyDao::Ptr m_propertyDao;
