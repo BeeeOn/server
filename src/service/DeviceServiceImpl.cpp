@@ -9,13 +9,17 @@
 #include "model/Device.h"
 #include "model/Gateway.h"
 #include "service/DeviceServiceImpl.h"
+#include "util/MultiException.h"
+#include "util/ZipIterator.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, DeviceServiceImpl)
 BEEEON_OBJECT_CASTABLE(DeviceService)
+BEEEON_OBJECT_CASTABLE(GWSDeviceService)
 BEEEON_OBJECT_PROPERTY("deviceDao", &DeviceServiceImpl::setDeviceDao)
 BEEEON_OBJECT_PROPERTY("eventsExecutor", &DeviceServiceImpl::setEventsExecutor)
 BEEEON_OBJECT_PROPERTY("sensorHistoryDao", &DeviceServiceImpl::setSensorHistoryDao)
 BEEEON_OBJECT_PROPERTY("devicePropertyDao", &DeviceServiceImpl::setDevicePropertyDao)
+BEEEON_OBJECT_PROPERTY("deviceInfoProvider", &DeviceServiceImpl::setDeviceInfoProvider)
 BEEEON_OBJECT_PROPERTY("gatewayRPC", &DeviceServiceImpl::setGatewayRPC)
 BEEEON_OBJECT_PROPERTY("accessPolicy", &DeviceServiceImpl::setAccessPolicy)
 BEEEON_OBJECT_PROPERTY("transactionManager", &DeviceServiceImpl::setTransactionManager)
@@ -45,6 +49,11 @@ void DeviceServiceImpl::setSensorHistoryDao(SensorHistoryDao::Ptr dao)
 void DeviceServiceImpl::setDevicePropertyDao(DevicePropertyDao::Ptr dao)
 {
 	m_propertyDao = dao;
+}
+
+void DeviceServiceImpl::setDeviceInfoProvider(DeviceInfoProvider::Ptr provider)
+{
+	m_deviceInfoProvider = provider;
 }
 
 void DeviceServiceImpl::setGatewayRPC(GatewayRPC::Ptr rpc)
@@ -467,4 +476,123 @@ void DeviceServiceImpl::removeUnusedDevices()
 				+ " unused devices",
 			__FILE__, __LINE__);
 	}
+}
+
+SharedPtr<DeviceInfo> DeviceServiceImpl::verifyDescription(
+		const DeviceDescription &description) const
+{
+	auto type = m_deviceInfoProvider->findByNameAndVendor(
+		description.productName(),
+		description.vendor());
+	if (type.isNull()) {
+		throw NotFoundException("no such device type for "
+			"'" + description.toString() + "' specification");
+	}
+
+	verifyModules(type, description.dataTypes());
+	return type;
+}
+
+bool DeviceServiceImpl::doRegisterDevice(Device &device,
+		const DeviceDescription &description,
+		const Gateway &gateway)
+{
+	if (m_deviceDao->fetch(device, gateway)) {
+		auto type = verifyDescription(description);
+
+		if (type != device.type()) {
+			throw IllegalStateException(
+				"description " + description.toString()
+				+ " has non-matching device type for device " + device);
+		}
+
+		if (!description.productName().empty())
+			device.setName(description.productName());
+
+		device.status().setLastSeen(Timestamp());
+
+		return m_deviceDao->update(device, gateway);
+	}
+	else {
+		device.setName(description.productName());
+		device.setType(verifyDescription(description));
+
+		DeviceStatus &status = device.status();
+
+		status.setFirstSeen(Timestamp());
+		status.setLastSeen(Timestamp());
+		status.setState(DeviceStatus::STATE_INACTIVE);
+		status.setLastChanged({});
+
+		return m_deviceDao->insert(device, gateway);
+	}
+}
+
+void DeviceServiceImpl::doRegisterDeviceGroup(
+		const vector<DeviceDescription> &descriptions,
+		const Gateway &gateway)
+{
+	for (auto &des : descriptions) {
+		Device device(des.id());
+		device.setRefresh(des.refreshTime());
+
+		if (!doRegisterDevice(device, des, gateway)) {
+			throw IllegalStateException("registration of device "
+				"'" + des.toString() + "' failed");
+		}
+	}
+}
+
+void DeviceServiceImpl::doFetchActiveWithPrefix(vector<Device> &devices,
+		const Gateway &gateway,
+		const DevicePrefix &prefix)
+{
+	m_deviceDao->fetchActiveWithPrefix(devices, gateway, prefix);
+}
+
+void DeviceServiceImpl::verifyModules(
+		const SharedPtr<DeviceInfo> deviceInfo,
+		const list<ModuleType> &modules) const
+{
+	if (modules.size() > deviceInfo->modules().size()) {
+		throw InvalidArgumentException("invalid count of modules "
+			+ to_string(modules.size()) + " for device " + *deviceInfo);
+	}
+
+	MultiException ex;
+
+	Zip<const set<ModuleInfo>, const list<ModuleType>> zip(
+		deviceInfo->modules(), modules);
+
+	auto i = 0;
+	auto it = zip.begin();
+	for (; it != zip.end(); ++it, ++i) {
+		const auto &expect = (*it).first;
+		const auto &given = (*it).second;
+
+		if (expect.type()->name() != given.type().toString()) {
+			ex.caught(InvalidArgumentException(
+				"expected type " + expect.type()->name()
+				+ " of module " + to_string(i) + " but " + given.type()
+				+ " was given for device " + *deviceInfo
+			));
+		}
+	}
+
+	string missing;
+
+	for (auto expectIt = it.firstIterator(); expectIt != zip.firstEnd(); ++expectIt, ++i) {
+		if (!missing.empty())
+			missing += ", ";
+
+		missing += to_string(i) + " " + expectIt->type()->name();
+	}
+
+	if (!missing.empty()) {
+		logger().warning("missing specification of " + missing
+			 + " for device " + *deviceInfo);
+	}
+
+	if (!ex.empty())
+		ex.rethrow();
 }

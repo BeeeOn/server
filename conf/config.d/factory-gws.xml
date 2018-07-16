@@ -39,7 +39,7 @@
 			<set name="gatewayCommunicator" ref="gatewayCommunicator" />
 			<set name="responseExpectedQueue" ref="responseExpectedQueue" />
 			<set name="rpcForwarder" ref="asyncGatewayRPC" />
-			<set name="deviceService" ref="gwsDeviceService" />
+			<set name="deviceService" ref="deviceService" />
 			<set name="sensorHistoryService" ref="gwsSensorHistoryService" />
 			<set name="eventsExecutor" ref="eventsExecutor" />
 			<add name="dataListeners" ref="publishingWatcher" if-yes="${baf.publish.data.enable}" />

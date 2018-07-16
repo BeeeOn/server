@@ -29,17 +29,12 @@
 			<set name="deviceDao" ref="deviceDao" />
 			<set name="sensorHistoryDao" ref="sensorHistoryDao" />
 			<set name="devicePropertyDao" ref="devicePropertyDao" />
+			<set name="deviceInfoProvider" ref="deviceInfoProvider" />
 			<set name="gatewayRPC" ref="gatewayRPC" />
 			<set name="accessPolicy" ref="accessPolicy" />
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="eventsExecutor" ref="eventsExecutor" />
 			<add name="listeners" ref="publishingWatcher" if-yes="${baf.publish.device.enable}" />
-		</instance>
-
-		<instance name="gwsDeviceService" class="BeeeOn::GWSDeviceServiceImpl">
-			<set name="deviceDao" ref="deviceDao" />
-			<set name="deviceInfoProvider" ref="deviceInfoProvider" />
-			<set name="transactionManager" ref="transactionManager" />
 		</instance>
 
 		<instance name="gatewayService" class="BeeeOn::GatewayServiceImpl">
