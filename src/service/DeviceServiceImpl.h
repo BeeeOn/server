@@ -150,7 +150,7 @@ public:
 			doRegisterDeviceGroup(descriptions, gateway));
 	}
 
-	void fetchActiveWithPrefix(std::vector<Device> &devices,
+	void fetchActiveWithPrefix(std::vector<DeviceWithData> &devices,
 			const Gateway &gateway,
 			const DevicePrefix &prefix) override
 	{
@@ -193,7 +193,7 @@ protected:
 			const std::vector<DeviceDescription> &descriptions,
 			const Gateway &gateway);
 
-	void doFetchActiveWithPrefix(std::vector<Device> &devices,
+	void doFetchActiveWithPrefix(std::vector<DeviceWithData> &devices,
 			const Gateway &gateway,
 			const DevicePrefix &prefix);
 

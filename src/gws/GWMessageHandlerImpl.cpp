@@ -245,7 +245,7 @@ GWResponse::Ptr GWMessageHandlerImpl::handleDeviceList(
 	);
 
 	DevicePrefix prefix(request->devicePrefix());
-	vector<Device> devices;
+	vector<DeviceWithData> devices;
 
 	try {
 		m_deviceService->fetchActiveWithPrefix(devices, gatewayID, prefix);
