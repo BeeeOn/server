@@ -255,6 +255,22 @@ GWResponse::Ptr GWMessageHandlerImpl::handleDeviceList(
 			deviceIDs.push_back(device.id());
 
 		response->setDevices(deviceIDs);
+
+		for (const auto &device : devices) {
+			size_t id = 0;
+			map<ModuleID, double> values;
+
+			for (const auto &value : device.values()) {
+				if (value.isValid())
+					values.emplace(id++, value.value());
+			}
+
+			if (values.empty())
+				continue;
+
+			response->setModulesValues(device.id(), values);
+		}
+
 		response->setStatus(GWResponse::Status::SUCCESS);
 	}
 	BEEEON_CATCH_CHAIN_ACTION(logger(),

@@ -61,6 +61,22 @@ class TestDeviceList(unittest.TestCase):
 		self.assertEqual("0xa32d27aa5e94ecfd", msg["devices"][0]["device_id"])
 		self.assertEqual("0xa335d00019f5234e", msg["devices"][1]["device_id"])
 		self.assertEqual("0xa37e0f7f0302324d", msg["devices"][2]["device_id"])
+
+		self.assertEqual(2, len(msg["values"]))
+		self.assertIn("0xa32d27aa5e94ecfd", msg["values"])
+		self.assertIn("0", msg["values"]["0xa32d27aa5e94ecfd"])
+		self.assertNotIn("1", msg["values"]["0xa32d27aa5e94ecfd"])
+		self.assertEqual(20, msg["values"]["0xa32d27aa5e94ecfd"]["0"])
+
+		self.assertIn("0xa335d00019f5234e", msg["values"])
+		self.assertIn("0", msg["values"]["0xa335d00019f5234e"])
+		self.assertIn("1", msg["values"]["0xa335d00019f5234e"])
+		self.assertIn("2", msg["values"]["0xa335d00019f5234e"])
+		self.assertNotIn("3", msg["values"]["0xa335d00019f5234e"])
+		self.assertEqual(19.5, msg["values"]["0xa335d00019f5234e"]["0"])
+		self.assertEqual(0, msg["values"]["0xa335d00019f5234e"]["1"])
+		# 0xa335d00019f5234e[2] is a random value and cannot be easily tested
+
 		assureNotClosed(self, self.ws)
 
 	"""
@@ -85,6 +101,7 @@ class TestDeviceList(unittest.TestCase):
 		self.assertEqual(id, msg["id"])
 		self.assertEqual(1, msg["status"])
 		self.assertEqual(0, len(msg["devices"]))
+		self.assertNotIn("values", msg)
 		assureNotClosed(self, self.ws)
 
 	"""
