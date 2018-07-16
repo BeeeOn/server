@@ -8,7 +8,9 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, GatewayServiceImpl)
 BEEEON_OBJECT_CASTABLE(GatewayService)
+BEEEON_OBJECT_CASTABLE(GWSGatewayService)
 BEEEON_OBJECT_PROPERTY("gatewayDao", &GatewayServiceImpl::setGatewayDao)
+BEEEON_OBJECT_PROPERTY("gatewayStatusDao", &GatewayServiceImpl::setGatewayStatusDao)
 BEEEON_OBJECT_PROPERTY("roleInGatewayDao", &GatewayServiceImpl::setRoleInGatewayDao)
 BEEEON_OBJECT_PROPERTY("identityDao", &GatewayServiceImpl::setIdentityDao)
 BEEEON_OBJECT_PROPERTY("verifiedIdentityDao", &GatewayServiceImpl::setVerifiedIdentityDao)
@@ -28,6 +30,11 @@ GatewayServiceImpl::GatewayServiceImpl()
 void GatewayServiceImpl::setGatewayDao(GatewayDao::Ptr dao)
 {
 	m_gatewayDao = dao;
+}
+
+void GatewayServiceImpl::setGatewayStatusDao(GatewayStatusDao::Ptr dao)
+{
+	m_gatewayStatusDao = dao;
 }
 
 void GatewayServiceImpl::setRoleInGatewayDao(RoleInGatewayDao::Ptr dao)
@@ -151,4 +158,20 @@ GatewayScan GatewayServiceImpl::doScanStatus(Single<Gateway> &input)
 		m_accessPolicy->assure(GatewayAccessPolicy::ACTION_USER_SCAN, input, input.target()));
 
 	return m_scanController->find(input.target().id());
+}
+
+bool GatewayServiceImpl::doRegisterGateway(GatewayStatus &status,
+		Gateway &gateway)
+{
+	status.setLastChanged(DateTime());
+
+	if (m_gatewayDao->fetch(gateway)) {
+		m_gatewayStatusDao->insert(status, gateway);
+		return true;
+	}
+
+	if (!m_gatewayDao->insert(gateway))
+		return false;
+
+	return m_gatewayStatusDao->insert(status, gateway);
 }

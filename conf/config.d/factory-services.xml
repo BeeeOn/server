@@ -39,18 +39,13 @@
 
 		<instance name="gatewayService" class="BeeeOn::GatewayServiceImpl">
 			<set name="gatewayDao" ref="gatewayDao" />
+			<set name="gatewayStatusDao" ref="gatewayStatusDao" />
 			<set name="roleInGatewayDao" ref="roleInGatewayDao" />
 			<set name="identityDao" ref="identityDao" />
 			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
 			<set name="accessPolicy" ref="accessPolicy" />
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="scanController" ref="gatewayScanController" />
-		</instance>
-
-		<instance name="gwsGatewayService" class="BeeeOn::GWSGatewayServiceImpl">
-			<set name="gatewayDao" ref="gatewayDao" />
-			<set name="gatewayStatusDao" ref="gatewayStatusDao" />
-			<set name="transactionManager" ref="transactionManager" />
 		</instance>
 
 		<instance name="locationService"

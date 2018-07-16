@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "dao/GatewayDao.h"
+#include "dao/GatewayStatusDao.h"
 #include "dao/IdentityDao.h"
 #include "dao/RoleInGatewayDao.h"
 #include "dao/VerifiedIdentityDao.h"
@@ -11,6 +12,7 @@
 #include "policy/GatewayAccessPolicy.h"
 #include "rpc/GatewayRPC.h"
 #include "service/GatewayService.h"
+#include "service/GWSGatewayService.h"
 #include "transaction/Transactional.h"
 
 namespace Poco {
@@ -23,11 +25,12 @@ namespace BeeeOn {
 
 class IdentityDao;
 
-class GatewayServiceImpl : public GatewayService, public Transactional {
+class GatewayServiceImpl : public GatewayService, public GWSGatewayService, public Transactional {
 public:
 	GatewayServiceImpl();
 
 	void setGatewayDao(GatewayDao::Ptr dao);
+	void setGatewayStatusDao(GatewayStatusDao::Ptr dao);
 	void setRoleInGatewayDao(RoleInGatewayDao::Ptr dao);
 	void setIdentityDao(IdentityDao::Ptr dao);
 	void setVerifiedIdentityDao(VerifiedIdentityDao::Ptr dao);
@@ -89,6 +92,11 @@ public:
 		return doScanStatus(input);
 	}
 
+	bool registerGateway(GatewayStatus &status, Gateway &gateway) override
+	{
+		return BEEEON_TRANSACTION_RETURN(bool, doRegisterGateway(status, gateway));
+	}
+
 protected:
 	bool doRegisterGateway(SingleWithData<Gateway> &input,
 			const VerifiedIdentity &verifiedIdentity);
@@ -101,8 +109,11 @@ protected:
 	GatewayScan doScanDevices(Single<Gateway> &input, const Poco::Timespan &duration);
 	GatewayScan doScanStatus(Single<Gateway> &input);
 
+	bool doRegisterGateway(GatewayStatus &status, Gateway &gateway);
+
 private:
 	GatewayDao::Ptr m_gatewayDao;
+	GatewayStatusDao::Ptr m_gatewayStatusDao;
 	RoleInGatewayDao::Ptr m_roleInGatewayDao;
 	IdentityDao::Ptr m_identityDao;
 	VerifiedIdentityDao::Ptr m_verifiedIdentityDao;

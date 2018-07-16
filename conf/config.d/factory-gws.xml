@@ -3,7 +3,7 @@
 		<instance name="webSocketServer" class="BeeeOn::WebSocketServer">
 			<set name="gatewayCommunicator" ref="gatewayCommunicator"/>
 			<set name="sslConfig" ref="gwsSSLServer" if-yes="${gws.ws.ssl.enable}" />
-			<set name="gatewayService" ref="gwsGatewayService" />
+			<set name="gatewayService" ref="gatewayService" />
 			<set name="verifierFactory" ref="gatewayPeerVerifierFactory" />
 			<set name="port" number="${gws.ws.port}" />
 			<set name="backlog" number="${gws.ws.backlog}" />
