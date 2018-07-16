@@ -9,7 +9,7 @@
 #include "gws/SocketGatewayPeerVerifierFactory.h"
 #include "loop/StoppableLoop.h"
 #include "server/ServerListener.h"
-#include "service/GWSGatewayServiceImpl.h"
+#include "service/GWSGatewayService.h"
 #include "ssl/SSLServer.h"
 #include "util/EventSource.h"
 

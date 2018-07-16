@@ -10,7 +10,7 @@
 #include "gws/GatewayCommunicator.h"
 #include "gws/GatewayPeerVerifier.h"
 #include "gws/SocketGatewayPeerVerifierFactory.h"
-#include "service/GWSGatewayServiceImpl.h"
+#include "service/GWSGatewayService.h"
 #include "util/Loggable.h"
 
 namespace BeeeOn {
