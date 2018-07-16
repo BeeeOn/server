@@ -15,8 +15,8 @@
 #include "gws/RPCForwarder.h"
 #include "gws/SensorDataListener.h"
 #include "model/DeviceDescription.h"
-#include "service/GWSDeviceServiceImpl.h"
-#include "service/GWSSensorHistoryServiceImpl.h"
+#include "service/GWSDeviceService.h"
+#include "service/GWSSensorHistoryService.h"
 #include "util/EventSource.h"
 #include "util/Loggable.h"
 
