@@ -59,6 +59,11 @@ bool ModuleInfo::isControllable() const
 	return m_controllable;
 }
 
+bool ModuleInfo::compatible(const ModuleType &type) const
+{
+	return *m_type == type.type();
+}
+
 const string ModuleInfo::toString() const
 {
 	string buffer;

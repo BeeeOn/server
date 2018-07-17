@@ -12,6 +12,8 @@
 
 namespace BeeeOn {
 
+class ModuleType; // from base
+
 class ModuleInfo : public Entity<SimpleID> {
 public:
 	ModuleInfo();
@@ -30,6 +32,13 @@ public:
 
 	void setControllable(bool controllable);
 	bool isControllable() const;
+
+	/**
+	 * @brief Compare with the ModuleType as provided by
+	 * gateways. We hide the comparison details in this
+	 * method.
+	 */
+	bool compatible(const ModuleType &type) const;
 
 	/**
 	 * @return summary of the ModuleInfo internals
