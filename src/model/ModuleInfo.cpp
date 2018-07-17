@@ -61,6 +61,42 @@ bool ModuleInfo::isControllable() const
 
 void ModuleInfo::assureCompatible(const ModuleType &type) const
 {
+	if (isControllable()) {
+		if (!type.isControllable()) {
+			throw InvalidArgumentException(
+				"type " + type.type().toString()
+				+ " expected to be controllable");
+		}
+	}
+	else {
+		if (type.isControllable()) {
+			throw InvalidArgumentException(
+				"type " + type.type().toString()
+				+ " is not expected to be controllable");
+		}
+	}
+
+	if (subtype().isNull() || subtype()->kind() == SubtypeInfo::KIND_INVALID) {
+		if (!type.customTypeID().isNull()) {
+			throw InvalidArgumentException(
+				"type " + type.type().toString()
+				+ " is not expected to have subtype");
+		}
+	}
+	else {
+		if (type.customTypeID().isNull()) {
+			throw InvalidArgumentException(
+				"type " + type.type().toString()
+				+ " is expected to have subtype");
+		}
+
+		if (subtype()->name() != type.customTypeID().toString()) {
+			throw InvalidArgumentException(
+				"subtype " + subtype()->name()
+				+ " is incompatible with " + type.customTypeID().toString());
+		}
+	}
+
 	if (*m_type != type.type()) {
 		throw InvalidArgumentException(
 			"type " + toString() + " is incompatible with "
