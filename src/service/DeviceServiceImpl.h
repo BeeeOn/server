@@ -11,8 +11,10 @@
 #include "gws/DeviceListener.h"
 #include "policy/DeviceAccessPolicy.h"
 #include "model/DeviceWithData.h"
+#include "provider/DeviceInfoProvider.h"
 #include "rpc/GatewayRPC.h"
 #include "service/DeviceService.h"
+#include "service/GWSDeviceService.h"
 #include "transaction/Transactional.h"
 #include "util/EventSource.h"
 
@@ -23,7 +25,7 @@ class DevicePropertyDao;
 /**
  * Service for devices management.
  */
-class DeviceServiceImpl : public DeviceService, public Transactional {
+class DeviceServiceImpl : public DeviceService, public GWSDeviceService, public Transactional {
 public:
 	DeviceServiceImpl();
 
@@ -31,6 +33,7 @@ public:
 	void setControlDao(ControlDao::Ptr dao);
 	void setSensorHistoryDao(SensorHistoryDao::Ptr dao);
 	void setDevicePropertyDao(DevicePropertyDao::Ptr dao);
+	void setDeviceInfoProvider(DeviceInfoProvider::Ptr provider);
 	void setGatewayRPC(GatewayRPC::Ptr rpc);
 	void setAccessPolicy(DeviceAccessPolicy::Ptr policy);
 	void setEventsExecutor(AsyncExecutor::Ptr executor);
@@ -131,6 +134,29 @@ public:
 	 */
 	void removeUnusedDevices();
 
+	bool registerDevice(Device &device,
+			const DeviceDescription &description,
+			const Gateway &gateway) override
+	{
+		return BEEEON_TRANSACTION_RETURN(bool,
+			doRegisterDevice(device, description, gateway));
+	}
+
+	void registerDeviceGroup(
+			const std::vector<DeviceDescription> &descriptions,
+			const Gateway &gateway) override
+	{
+		return BEEEON_TRANSACTION(
+			doRegisterDeviceGroup(descriptions, gateway));
+	}
+
+	void fetchActiveWithPrefix(std::vector<Device> &devices,
+			const Gateway &gateway,
+			const DevicePrefix &prefix) override
+	{
+		return BEEEON_TRANSACTION(doFetchActiveWithPrefix(devices, gateway, prefix));
+	}
+
 protected:
 	void valuesFor(DeviceWithData &device);
 
@@ -159,11 +185,39 @@ protected:
 	bool tryActivateAndUpdate(Device &device,
 			const Gateway &gateway, bool forceUpdate = false);
 
+	bool doRegisterDevice(Device &device,
+			const DeviceDescription &description,
+			const Gateway &gateway);
+
+	void doRegisterDeviceGroup(
+			const std::vector<DeviceDescription> &descriptions,
+			const Gateway &gateway);
+
+	void doFetchActiveWithPrefix(std::vector<Device> &devices,
+			const Gateway &gateway,
+			const DevicePrefix &prefix);
+
 private:
-	DeviceDao::Ptr m_dao;
+	Poco::SharedPtr<DeviceInfo> verifyDescription(
+			const DeviceDescription &description) const;
+
+	/**
+	 * @brief Verify that count of given modules is less or equals to DeviceInfo
+	 * specification and types of modules are identical.
+	 *
+	 * @throw InvalidArgumentException for invalid count of modules.
+	 * @throw MultiException for invalid types of modules.
+	 */
+	void verifyModules(const Poco::SharedPtr<DeviceInfo> deviceInfo,
+			const std::list<ModuleType> &modules) const;
+
+
+private:
+	DeviceDao::Ptr m_deviceDao;
 	ControlDao::Ptr m_controlDao;
 	SensorHistoryDao::Ptr m_historyDao;
 	DevicePropertyDao::Ptr m_propertyDao;
+	DeviceInfoProvider::Ptr m_deviceInfoProvider;
 	GatewayRPC::Ptr m_gatewayRPC;
 	DeviceAccessPolicy::Ptr m_policy;
 	Poco::SharedPtr<EventSource<DeviceListener>> m_eventSource;

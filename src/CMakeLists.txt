@@ -153,14 +153,11 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/service/FCMTokenService.cpp
 	${PROJECT_SOURCE_DIR}/service/FCMTokenServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/GWSDeviceService.cpp
-	${PROJECT_SOURCE_DIR}/service/GWSDeviceServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/GatewayService.cpp
 	${PROJECT_SOURCE_DIR}/service/GatewayServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/GWSGatewayService.cpp
-	${PROJECT_SOURCE_DIR}/service/GWSGatewayServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/GWSSensorHistoryService.cpp
 	${PROJECT_SOURCE_DIR}/service/GWSSensorHistoryService.cpp
-	${PROJECT_SOURCE_DIR}/service/GWSSensorHistoryServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/IdentityListener.cpp
 	${PROJECT_SOURCE_DIR}/service/LocationService.cpp
 	${PROJECT_SOURCE_DIR}/service/LocationServiceImpl.cpp

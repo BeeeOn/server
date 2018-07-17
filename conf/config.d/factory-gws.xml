@@ -3,7 +3,7 @@
 		<instance name="webSocketServer" class="BeeeOn::WebSocketServer">
 			<set name="gatewayCommunicator" ref="gatewayCommunicator"/>
 			<set name="sslConfig" ref="gwsSSLServer" if-yes="${gws.ws.ssl.enable}" />
-			<set name="gatewayService" ref="gwsGatewayService" />
+			<set name="gatewayService" ref="gatewayService" />
 			<set name="verifierFactory" ref="gatewayPeerVerifierFactory" />
 			<set name="port" number="${gws.ws.port}" />
 			<set name="backlog" number="${gws.ws.backlog}" />
@@ -39,8 +39,8 @@
 			<set name="gatewayCommunicator" ref="gatewayCommunicator" />
 			<set name="responseExpectedQueue" ref="responseExpectedQueue" />
 			<set name="rpcForwarder" ref="asyncGatewayRPC" />
-			<set name="deviceService" ref="gwsDeviceService" />
-			<set name="sensorHistoryService" ref="gwsSensorHistoryService" />
+			<set name="deviceService" ref="deviceService" />
+			<set name="sensorHistoryService" ref="sensorHistoryService" />
 			<set name="eventsExecutor" ref="eventsExecutor" />
 			<add name="dataListeners" ref="publishingWatcher" if-yes="${baf.publish.data.enable}" />
 			<add name="deviceListeners" ref="publishingWatcher" if-yes="${baf.publish.device.enable}" />

@@ -9,13 +9,17 @@
 #include "model/Device.h"
 #include "model/Gateway.h"
 #include "service/DeviceServiceImpl.h"
+#include "util/MultiException.h"
+#include "util/ZipIterator.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, DeviceServiceImpl)
 BEEEON_OBJECT_CASTABLE(DeviceService)
+BEEEON_OBJECT_CASTABLE(GWSDeviceService)
 BEEEON_OBJECT_PROPERTY("deviceDao", &DeviceServiceImpl::setDeviceDao)
 BEEEON_OBJECT_PROPERTY("eventsExecutor", &DeviceServiceImpl::setEventsExecutor)
 BEEEON_OBJECT_PROPERTY("sensorHistoryDao", &DeviceServiceImpl::setSensorHistoryDao)
 BEEEON_OBJECT_PROPERTY("devicePropertyDao", &DeviceServiceImpl::setDevicePropertyDao)
+BEEEON_OBJECT_PROPERTY("deviceInfoProvider", &DeviceServiceImpl::setDeviceInfoProvider)
 BEEEON_OBJECT_PROPERTY("gatewayRPC", &DeviceServiceImpl::setGatewayRPC)
 BEEEON_OBJECT_PROPERTY("accessPolicy", &DeviceServiceImpl::setAccessPolicy)
 BEEEON_OBJECT_PROPERTY("transactionManager", &DeviceServiceImpl::setTransactionManager)
@@ -34,7 +38,7 @@ DeviceServiceImpl::DeviceServiceImpl():
 
 void DeviceServiceImpl::setDeviceDao(DeviceDao::Ptr dao)
 {
-	m_dao = dao;
+	m_deviceDao = dao;
 }
 
 void DeviceServiceImpl::setSensorHistoryDao(SensorHistoryDao::Ptr dao)
@@ -45,6 +49,11 @@ void DeviceServiceImpl::setSensorHistoryDao(SensorHistoryDao::Ptr dao)
 void DeviceServiceImpl::setDevicePropertyDao(DevicePropertyDao::Ptr dao)
 {
 	m_propertyDao = dao;
+}
+
+void DeviceServiceImpl::setDeviceInfoProvider(DeviceInfoProvider::Ptr provider)
+{
+	m_deviceInfoProvider = provider;
 }
 
 void DeviceServiceImpl::setGatewayRPC(GatewayRPC::Ptr rpc)
@@ -72,7 +81,7 @@ bool DeviceServiceImpl::doFetch(Relation<Device, Gateway> &input)
 {
 	m_policy->assure(DeviceAccessPolicy::ACTION_USER_GET,
 			input, input.target(), input.base());
-	return m_dao->fetch(input.target(), input.base());
+	return m_deviceDao->fetch(input.target(), input.base());
 }
 
 void DeviceServiceImpl::valuesFor(DeviceWithData &device)
@@ -115,7 +124,7 @@ void DeviceServiceImpl::doFetchMany(Single<list<Device>> &input)
 			input, input.target());
 
 	list<Device> &devices = input.target();
-	m_dao->fetchMany(devices);
+	m_deviceDao->fetchMany(devices);
 }
 
 void DeviceServiceImpl::doFetchMany(Single<list<DeviceWithData>> &input)
@@ -124,7 +133,7 @@ void DeviceServiceImpl::doFetchMany(Single<list<DeviceWithData>> &input)
 	for (const auto &dev : input.target())
 		devices.emplace_back(dev);
 
-	m_dao->fetchMany(devices);
+	m_deviceDao->fetchMany(devices);
 
 	// convert to list of DeviceWithData
 	list<DeviceWithData> result;
@@ -158,7 +167,7 @@ void DeviceServiceImpl::doFetchMany(Relation<list<Device>, Gateway> &input)
 
 	list<Device> &devices = input.target();
 
-	m_dao->fetchMany(devices);
+	m_deviceDao->fetchMany(devices);
 
 	list<Device>::iterator it = devices.begin();
 
@@ -195,7 +204,7 @@ void DeviceServiceImpl::doFetchMany(Relation<list<DeviceWithData>, Gateway> &inp
 
 	m_policy->assureMany(DeviceAccessPolicy::ACTION_USER_GET, input, devices);
 
-	m_dao->fetchMany(devices);
+	m_deviceDao->fetchMany(devices);
 
 	// convert to list of DeviceWithData
 	list<DeviceWithData> result;
@@ -227,7 +236,7 @@ void DeviceServiceImpl::doFetchActiveBy(Relation<vector<Device>, Gateway> &input
 {
 	m_policy->assure(DeviceAccessPolicy::ACTION_USER_GET,
 			input, input.base());
-	m_dao->fetchActiveBy(input.target(), input.base());
+	m_deviceDao->fetchActiveBy(input.target(), input.base());
 }
 
 void DeviceServiceImpl::doFetchActiveBy(Relation<vector<DeviceWithData>, Gateway> &input)
@@ -239,7 +248,7 @@ void DeviceServiceImpl::doFetchActiveBy(Relation<vector<DeviceWithData>, Gateway
 
 	m_policy->assure(DeviceAccessPolicy::ACTION_USER_GET,
 			input, input.base());
-	m_dao->fetchActiveBy(devices, input.base());
+	m_deviceDao->fetchActiveBy(devices, input.base());
 
 	// convert to list of DeviceWithData
 	vector<DeviceWithData> result;
@@ -271,7 +280,7 @@ void DeviceServiceImpl::doFetchInactiveBy(Relation<vector<Device>, Gateway> &inp
 {
 	m_policy->assure(DeviceAccessPolicy::ACTION_USER_GET,
 			input, input.base());
-	m_dao->fetchInactiveBy(input.target(), input.base());
+	m_deviceDao->fetchInactiveBy(input.target(), input.base());
 }
 
 void DeviceServiceImpl::doFetchInactiveBy(Relation<vector<DeviceWithData>, Gateway> &input)
@@ -283,7 +292,7 @@ void DeviceServiceImpl::doFetchInactiveBy(Relation<vector<DeviceWithData>, Gatew
 
 	m_policy->assure(DeviceAccessPolicy::ACTION_USER_GET,
 			input, input.base());
-	m_dao->fetchInactiveBy(devices, input.base());
+	m_deviceDao->fetchInactiveBy(devices, input.base());
 
 	// convert to list of DeviceWithData
 	vector<DeviceWithData> result;
@@ -319,7 +328,7 @@ void DeviceServiceImpl::doUnregister(Relation<Device, Gateway> &input)
 
 	Device &device = input.target();
 
-	if (!m_dao->fetch(device, input.base()))
+	if (!m_deviceDao->fetch(device, input.base()))
 		throw NotFoundException("no such device " + device);
 
 	if (!device.status().active())
@@ -328,10 +337,10 @@ void DeviceServiceImpl::doUnregister(Relation<Device, Gateway> &input)
 	device.status().setState(DeviceStatus::STATE_INACTIVE_PENDING);
 	device.status().setLastChanged({});
 
-	if (!m_dao->update(device, input.base()))
+	if (!m_deviceDao->update(device, input.base()))
 		throw NotFoundException("device " + device + " seems to not exist");
 
-	DeviceUnpairHandler::Ptr handler = new DeviceUnpairHandler(device, m_dao, m_eventSource);
+	DeviceUnpairHandler::Ptr handler = new DeviceUnpairHandler(device, m_deviceDao, m_eventSource);
 	handler->setTransactionManager(transactionManager());
 
 	m_gatewayRPC->unpairDevice(handler, input.base(), device);
@@ -344,7 +353,7 @@ bool DeviceServiceImpl::doActivate(Relation<Device, Gateway> &input)
 
 	Device &device = input.target();
 
-	if (!m_dao->fetch(device, input.base()))
+	if (!m_deviceDao->fetch(device, input.base()))
 		return false;
 
 	return tryActivateAndUpdate(device, input.base());
@@ -359,22 +368,22 @@ bool DeviceServiceImpl::tryActivateAndUpdate(Device &device,
 		device.status().setState(DeviceStatus::STATE_ACTIVE_PENDING);
 		device.status().setLastChanged({});
 
-		if (!m_dao->update(device, gateway))
+		if (!m_deviceDao->update(device, gateway))
 			throw NotFoundException("device " + device + " seems to not exist");
 
-		DevicePairHandler::Ptr handler = new DevicePairHandler(device, m_dao, m_eventSource);
+		DevicePairHandler::Ptr handler = new DevicePairHandler(device, m_deviceDao, m_eventSource);
 		handler->setTransactionManager(transactionManager());
 
 		m_gatewayRPC->pairDevice(handler, gateway, device);
 		return true;
 	}
 
-	return forceUpdate? m_dao->update(device, gateway) : false;
+	return forceUpdate? m_deviceDao->update(device, gateway) : false;
 }
 
 bool DeviceServiceImpl::prepareUpdate(RelationWithData<Device, Gateway> &input)
 {
-	if (!m_dao->fetch(input.target(), input.base()))
+	if (!m_deviceDao->fetch(input.target(), input.base()))
 		return false;
 
 	input.data().partial(input.target());
@@ -389,7 +398,7 @@ bool DeviceServiceImpl::doUpdate(RelationWithData<Device, Gateway> &input)
 	if (!prepareUpdate(input))
 		return false;
 
-	return m_dao->update(input.target(), input.base());
+	return m_deviceDao->update(input.target(), input.base());
 }
 
 bool DeviceServiceImpl::doUpdateAndActivate(
@@ -459,7 +468,7 @@ void DeviceServiceImpl::doListProperties(Relation<list<DeviceProperty>, Device> 
 void DeviceServiceImpl::removeUnusedDevices()
 {
 	size_t count = BEEEON_TRANSACTION_RETURN(size_t,
-                               m_dao->removeUnused());
+                               m_deviceDao->removeUnused());
 
 	if (count > 0) {
 		logger().warning("removed "
@@ -467,4 +476,123 @@ void DeviceServiceImpl::removeUnusedDevices()
 				+ " unused devices",
 			__FILE__, __LINE__);
 	}
+}
+
+SharedPtr<DeviceInfo> DeviceServiceImpl::verifyDescription(
+		const DeviceDescription &description) const
+{
+	auto type = m_deviceInfoProvider->findByNameAndVendor(
+		description.productName(),
+		description.vendor());
+	if (type.isNull()) {
+		throw NotFoundException("no such device type for "
+			"'" + description.toString() + "' specification");
+	}
+
+	verifyModules(type, description.dataTypes());
+	return type;
+}
+
+bool DeviceServiceImpl::doRegisterDevice(Device &device,
+		const DeviceDescription &description,
+		const Gateway &gateway)
+{
+	if (m_deviceDao->fetch(device, gateway)) {
+		auto type = verifyDescription(description);
+
+		if (type != device.type()) {
+			throw IllegalStateException(
+				"description " + description.toString()
+				+ " has non-matching device type for device " + device);
+		}
+
+		if (!description.productName().empty())
+			device.setName(description.productName());
+
+		device.status().setLastSeen(Timestamp());
+
+		return m_deviceDao->update(device, gateway);
+	}
+	else {
+		device.setName(description.productName());
+		device.setType(verifyDescription(description));
+
+		DeviceStatus &status = device.status();
+
+		status.setFirstSeen(Timestamp());
+		status.setLastSeen(Timestamp());
+		status.setState(DeviceStatus::STATE_INACTIVE);
+		status.setLastChanged({});
+
+		return m_deviceDao->insert(device, gateway);
+	}
+}
+
+void DeviceServiceImpl::doRegisterDeviceGroup(
+		const vector<DeviceDescription> &descriptions,
+		const Gateway &gateway)
+{
+	for (auto &des : descriptions) {
+		Device device(des.id());
+		device.setRefresh(des.refreshTime());
+
+		if (!doRegisterDevice(device, des, gateway)) {
+			throw IllegalStateException("registration of device "
+				"'" + des.toString() + "' failed");
+		}
+	}
+}
+
+void DeviceServiceImpl::doFetchActiveWithPrefix(vector<Device> &devices,
+		const Gateway &gateway,
+		const DevicePrefix &prefix)
+{
+	m_deviceDao->fetchActiveWithPrefix(devices, gateway, prefix);
+}
+
+void DeviceServiceImpl::verifyModules(
+		const SharedPtr<DeviceInfo> deviceInfo,
+		const list<ModuleType> &modules) const
+{
+	if (modules.size() > deviceInfo->modules().size()) {
+		throw InvalidArgumentException("invalid count of modules "
+			+ to_string(modules.size()) + " for device " + *deviceInfo);
+	}
+
+	MultiException ex;
+
+	Zip<const set<ModuleInfo>, const list<ModuleType>> zip(
+		deviceInfo->modules(), modules);
+
+	auto i = 0;
+	auto it = zip.begin();
+	for (; it != zip.end(); ++it, ++i) {
+		const auto &expect = (*it).first;
+		const auto &given = (*it).second;
+
+		if (expect.type()->name() != given.type().toString()) {
+			ex.caught(InvalidArgumentException(
+				"expected type " + expect.type()->name()
+				+ " of module " + to_string(i) + " but " + given.type()
+				+ " was given for device " + *deviceInfo
+			));
+		}
+	}
+
+	string missing;
+
+	for (auto expectIt = it.firstIterator(); expectIt != zip.firstEnd(); ++expectIt, ++i) {
+		if (!missing.empty())
+			missing += ", ";
+
+		missing += to_string(i) + " " + expectIt->type()->name();
+	}
+
+	if (!missing.empty()) {
+		logger().warning("missing specification of " + missing
+			 + " for device " + *deviceInfo);
+	}
+
+	if (!ex.empty())
+		ex.rethrow();
 }
