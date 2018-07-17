@@ -543,11 +543,26 @@ void DeviceServiceImpl::doRegisterDeviceGroup(
 	}
 }
 
-void DeviceServiceImpl::doFetchActiveWithPrefix(vector<Device> &devices,
+void DeviceServiceImpl::doFetchActiveWithPrefix(vector<DeviceWithData> &devices,
 		const Gateway &gateway,
 		const DevicePrefix &prefix)
 {
-	m_deviceDao->fetchActiveWithPrefix(devices, gateway, prefix);
+	vector<Device> simple;
+	m_deviceDao->fetchActiveWithPrefix(simple, gateway, prefix);
+
+	for (const auto &one : simple) {
+		DeviceWithData device = one;
+
+		try {
+			valuesFor(device);
+		}
+		catch (const Exception &e) {
+			logger().log(e, __FILE__, __LINE__);
+			continue;
+		}
+
+		devices.emplace_back(device);
+	}
 }
 
 void DeviceServiceImpl::verifyModules(
