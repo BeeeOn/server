@@ -22,7 +22,7 @@ SensorHistoryServiceImpl::SensorHistoryServiceImpl()
 
 void SensorHistoryServiceImpl::setSensorHistoryDao(SensorHistoryDao::Ptr dao)
 {
-	m_dao = dao;
+	m_sensorHistoryDao = dao;
 }
 
 void SensorHistoryServiceImpl::setDeviceDao(DeviceDao::Ptr dao)
@@ -68,5 +68,5 @@ void SensorHistoryServiceImpl::doFetchRange(
 			throw InvalidArgumentException("invalid aggregator given");
 	}
 
-	m_dao->fetchHuge(device, info, range, interval, agg, consumer);
+	m_sensorHistoryDao->fetchHuge(device, info, range, interval, agg, consumer);
 }

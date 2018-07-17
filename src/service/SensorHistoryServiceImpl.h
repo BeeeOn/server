@@ -50,7 +50,7 @@ protected:
 			ValueConsumer &consumer);
 
 private:
-	SensorHistoryDao::Ptr m_dao;
+	SensorHistoryDao::Ptr m_sensorHistoryDao;
 	DeviceDao::Ptr m_deviceDao;
 	SensorHistoryAccessPolicy::Ptr m_policy;
 };
