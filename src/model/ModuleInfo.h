@@ -36,9 +36,10 @@ public:
 	/**
 	 * @brief Compare with the ModuleType as provided by
 	 * gateways. We hide the comparison details in this
-	 * method.
+	 * method. Throw an exception with details in case of
+	 * incompatibility.
 	 */
-	bool compatible(const ModuleType &type) const;
+	void assureCompatible(const ModuleType &type) const;
 
 	/**
 	 * @return summary of the ModuleInfo internals

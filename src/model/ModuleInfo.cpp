@@ -59,9 +59,13 @@ bool ModuleInfo::isControllable() const
 	return m_controllable;
 }
 
-bool ModuleInfo::compatible(const ModuleType &type) const
+void ModuleInfo::assureCompatible(const ModuleType &type) const
 {
-	return *m_type == type.type();
+	if (*m_type != type.type()) {
+		throw InvalidArgumentException(
+			"type " + toString() + " is incompatible with "
+			+ type.type().toString());
+	}
 }
 
 const string ModuleInfo::toString() const

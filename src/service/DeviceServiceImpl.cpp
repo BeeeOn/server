@@ -585,12 +585,11 @@ void DeviceServiceImpl::verifyModules(
 		const auto &expect = (*it).first;
 		const auto &given = (*it).second;
 
-		if (!expect.compatible(given)) {
-			ex.caught(InvalidArgumentException(
-				"expected type " + expect.toString()
-				+ " of module " + to_string(i) + " but " + given.type()
-				+ " was given for device " + *deviceInfo
-			));
+		try {
+			expect.assureCompatible(given);
+		}
+		catch (const Exception &e) {
+			ex.caught(e);
 		}
 	}
 
