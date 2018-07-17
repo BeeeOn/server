@@ -102,13 +102,6 @@
 			<set name="accessPolicy" ref="accessPolicy" />
 		</instance>
 
-		<instance name="gwsSensorHistoryService"
-				class="BeeeOn::GWSSensorHistoryServiceImpl">
-			<set name="sensorHistoryDao" ref="sensorHistoryDao" />
-			<set name="deviceDao" ref="deviceDao" />
-			<set name="transactionManager" ref="transactionManager" />
-		</instance>
-
 		<!-- Access policy -->
 
 		<instance name="defaultSensorHistoryRules" class="BeeeOn::SensorHistoryRules">

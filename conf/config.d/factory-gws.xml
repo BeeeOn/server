@@ -40,7 +40,7 @@
 			<set name="responseExpectedQueue" ref="responseExpectedQueue" />
 			<set name="rpcForwarder" ref="asyncGatewayRPC" />
 			<set name="deviceService" ref="deviceService" />
-			<set name="sensorHistoryService" ref="gwsSensorHistoryService" />
+			<set name="sensorHistoryService" ref="sensorHistoryService" />
 			<set name="eventsExecutor" ref="eventsExecutor" />
 			<add name="dataListeners" ref="publishingWatcher" if-yes="${baf.publish.data.enable}" />
 			<add name="deviceListeners" ref="publishingWatcher" if-yes="${baf.publish.device.enable}" />
