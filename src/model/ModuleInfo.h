@@ -31,9 +31,6 @@ public:
 	void setUnavailable(const std::string &unavailable);
 	const std::string &unavailable() const;
 
-	void setDefaultValue(const std::string &defaultValue);
-	const std::string &defaultValue() const;
-
 	void setControllable(bool controllable);
 	bool isControllable() const;
 
@@ -48,7 +45,6 @@ private:
 	std::string m_name;
 	std::string m_group;
 	std::string m_unavailable;
-	std::string m_default;
 	bool m_controllable;
 };
 

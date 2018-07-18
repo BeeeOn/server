@@ -59,16 +59,6 @@ const string &ModuleInfo::unavailable() const
 	return m_unavailable;
 }
 
-void ModuleInfo::setDefaultValue(const string &defaultValue)
-{
-	m_default = defaultValue;
-}
-
-const string &ModuleInfo::defaultValue() const
-{
-	return m_default;
-}
-
 void ModuleInfo::setControllable(bool controllable)
 {
 	m_controllable = controllable;
