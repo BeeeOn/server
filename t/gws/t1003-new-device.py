@@ -289,6 +289,54 @@ class TestNewDevice(unittest.TestCase):
 		self.assertEqual("availability", notification["modules"][0]["type"])
 		self.assertEqual(config.gateway_id, notification["gateway_id"])
 
+	"""
+	Register new device with unknown modules. Such device should
+	be registered successfully. The modules are resolved by server
+	and reported via ZeroMQ events.
+	"""
+	def test7_new_device_with_unknown_modules(self):
+		id = str(uuid.uuid4())
+
+		msg1 = json.dumps({
+			"message_type" : "new_device_request",
+			"id" : id,
+			"device_id" : "0xa123123412355431",
+			"vendor" : "Unknown sensors producer",
+			"product_name" : "Device with unknown sensors",
+			"refresh_time" : 30,
+			"module_types" : [
+				{
+					"type" : "unknown",
+					"attributes" : []
+				},
+				{
+					"type" : "unknown",
+					"attributes" : [
+						{"attribute": "controllable"}
+					]
+				}
+			]
+		})
+
+		self.ws.send(msg1)
+		response = json.loads(self.ws.recv())
+
+		self.assertEqual("generic_response", response["message_type"])
+		self.assertEqual(id, response["id"])
+		self.assertEqual(1, response["status"])
+		assureNotClosed(self, self.ws)
+
+		event = self.zmq.pop_data(timeout = 10)
+		self.assertEqual("on-new-device", event["event"])
+		self.assertEqual("0xa123123412355431", event["device_id"])
+		self.assertEqual("Device with unknown sensors", event["device_name"])
+		self.assertEqual(2, len(event["modules"]))
+		self.assertEqual("temperature", event["modules"][0]["type"])
+		self.assertEqual(0, event["modules"][0]["controllable"])
+		self.assertEqual("temperature", event["modules"][1]["type"])
+		self.assertEqual(1, event["modules"][1]["controllable"])
+		self.assertEqual(config.gateway_id, event["gateway_id"])
+
 if __name__ == '__main__':
 	import sys
 	import taprunner

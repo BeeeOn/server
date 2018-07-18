@@ -110,4 +110,21 @@
 			</sensor>
 		</modules>
 	</device>
+
+	<device id="7">
+		<name>Device with unknown sensors</name>
+		<vendor>Unknown sensors producer</vendor>
+		<match>
+			<exact name="Device with unknown sensors"
+				vendor="Unknown sensors producer" />
+		</match>
+		<modules>
+			<sensor id="0" type="temperature,inner">
+				<unknown from="${raw} * 4 / 3.0" />
+			</sensor>
+			<control id="1" type="temperature">
+				<unknown from="${raw} * 4 / 3.0" to="${value} * 3.0 / 4" />
+			</control>
+		</modules>
+	</device>
 </devices>
