@@ -95,6 +95,32 @@ void ModuleInfo::assureCompatible(const ModuleType &type) const
 		}
 	}
 
+	if (type.type() == ModuleType::Type::TYPE_UNKNOWN) {
+		if (type.isControllable()) {
+			if (m_fromUnknown.empty()) {
+				throw InvalidArgumentException(
+					"type is controllable unknown but no way to"
+					" convert from unknown is defined");
+			}
+			if (m_toUnknown.empty()) {
+				throw InvalidArgumentException(
+					"type is controllable unknown but no way to"
+					" convert to unknown is defined");
+			}
+
+			return;
+		}
+		else {
+			if (m_fromUnknown.empty()) {
+				throw InvalidArgumentException(
+					"type is unknown but no way to"
+					" convert from unknown is defined");
+			}
+
+			return;
+		}
+	}
+
 	if (subtype().isNull() || subtype()->kind() == SubtypeInfo::KIND_INVALID) {
 		if (!type.customTypeID().isNull()) {
 			throw InvalidArgumentException(

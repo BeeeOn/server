@@ -44,6 +44,12 @@ public:
 	 * gateways. We hide the comparison details in this
 	 * method. Throw an exception with details in case of
 	 * incompatibility.
+	 *
+	 * There are specific rules for TYPE_UNKNOWN:
+	 *
+	 * - controllable type requires both fromUnknown() and toUnknown()
+	 *   to be non-empty
+	 * - non-controllable type requires fromUnknown() to be non-empty
 	 */
 	void assureCompatible(const ModuleType &type) const;
 
