@@ -40,6 +40,11 @@ public:
 	void setControllable(bool controllable);
 	bool isControllable() const;
 
+	/**
+	 * @return summary of the ModuleInfo internals
+	 */
+	const std::string toString() const override;
+
 private:
 	Poco::SharedPtr<TypeInfo> m_type;
 	Poco::SharedPtr<SubtypeInfo> m_subtype;

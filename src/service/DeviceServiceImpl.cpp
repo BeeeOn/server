@@ -587,7 +587,7 @@ void DeviceServiceImpl::verifyModules(
 
 		if (expect.type()->name() != given.type().toString()) {
 			ex.caught(InvalidArgumentException(
-				"expected type " + expect.type()->name()
+				"expected type " + expect.toString()
 				+ " of module " + to_string(i) + " but " + given.type()
 				+ " was given for device " + *deviceInfo
 			));

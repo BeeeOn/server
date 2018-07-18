@@ -88,3 +88,25 @@ bool ModuleInfo::isControllable() const
 {
 	return m_controllable;
 }
+
+const string ModuleInfo::toString() const
+{
+	string buffer;
+
+	if (type().isNull())
+		buffer.append("(null)");
+	else
+		buffer.append(type()->name());
+
+	if (subtype().isNull())
+		buffer.append(",(null)");
+	else if (subtype()->kind() == SubtypeInfo::KIND_INVALID)
+		buffer.append(",none");
+	else
+		buffer.append(subtype()->name());
+
+	if (isControllable())
+		buffer.append(",controllable");
+
+	return buffer;
+}
