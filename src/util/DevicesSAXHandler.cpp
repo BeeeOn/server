@@ -33,6 +33,7 @@ DevicesSAXHandler::DevicesSAXHandler()
 	m_sensorExpect.insert("name");
 	m_sensorExpect.insert("constraints");
 	m_sensorExpect.insert("values");
+	m_sensorExpect.insert("unknown");
 
 	m_controlExpect.insert("order");
 	m_controlExpect.insert("group");
@@ -40,6 +41,7 @@ DevicesSAXHandler::DevicesSAXHandler()
 	m_controlExpect.insert("constraints");
 	m_controlExpect.insert("values");
 	m_controlExpect.insert("rules");
+	m_controlExpect.insert("unknown");
 
 	m_refreshExpect.insert("constraints");
 	m_refreshExpect.insert("values");
@@ -234,7 +236,29 @@ void DevicesSAXHandler::startElement(
 
 		m_module.setName("");
 		m_module.setGroup("");
+		m_module.setFromUnknown("");
+		m_module.setToUnknown("");
 		m_module.setControllable(element.localName == "control" || element.localName == "actuator");
+	}
+
+	if (isPathFromRoot("devices", "device", "modules", "*", "unknown")) {
+		XMLString from;
+		if (getAndTrimAttribute(attrList, "from", from)) {
+			if (from.empty())
+				error("from value is empty");
+		}
+
+		m_module.setFromUnknown(from);
+
+		if (m_module.isControllable()) {
+			XMLString to;
+			if (getAndTrimAttribute(attrList, "to", to)) {
+				if (to.empty())
+					error("to value is empty");
+			}
+
+			m_module.setToUnknown(to);
+		}
 	}
 }
 

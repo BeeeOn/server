@@ -86,12 +86,14 @@ void DevicesSAXHandlerTest::testParseSimple()
 			"    <modules>"
 			"      <sensor id=\"0x31\" type=\"temperature\">"
 			"        <name>SENSOR3</name>"
+			"        <unknown from=\"${raw} + 10 * 11\" />"
 			"      </sensor>"
 			"      <battery id=\"0x32\" type=\"battery\" />"
 			"      <rssi id=\"0x33\" type=\"rssi\" />"
 			"      <actuator id=\"0x34\" type=\"on_off\">"
 			"        <group>GROUP1</group>"
 			"        <name>ACTUATOR2</name>"
+			"        <unknown from=\"${raw} + 1\" to=\"${value} - 1\" />"
 			"      </actuator>"
 			"    </modules>"
 			"  </device>"
@@ -154,6 +156,8 @@ void DevicesSAXHandlerTest::testParseSimple()
 					CPPUNIT_ASSERT_EQUAL(TypeInfoID::parse("temperature"), module.type()->id());
 					CPPUNIT_ASSERT_EQUAL(string("SENSOR3"), module.name());
 					CPPUNIT_ASSERT(module.group().empty());
+					CPPUNIT_ASSERT_EQUAL(string("${raw} + 10 * 11"), module.fromUnknown());
+					CPPUNIT_ASSERT(module.toUnknown().empty());
 				}
 				else if (module.id() == ModuleInfoID::parse("0x32")) {
 					CPPUNIT_ASSERT_EQUAL(TypeInfoID::parse("battery"), module.type()->id());
@@ -169,6 +173,8 @@ void DevicesSAXHandlerTest::testParseSimple()
 					CPPUNIT_ASSERT_EQUAL(TypeInfoID::parse("on_off"), module.type()->id());
 					CPPUNIT_ASSERT_EQUAL(string("ACTUATOR2"), module.name());
 					CPPUNIT_ASSERT_EQUAL(string("GROUP1"), module.group());
+					CPPUNIT_ASSERT_EQUAL(string("${raw} + 1"), module.fromUnknown());
+					CPPUNIT_ASSERT_EQUAL(string("${value} - 1"), module.toUnknown());
 				}
 				else {
 					CPPUNIT_ASSERT(false);
