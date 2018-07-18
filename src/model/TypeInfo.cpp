@@ -266,3 +266,13 @@ TypeInfo::Level::Attention TypeInfo::Level::parseAttention(const string &input)
 
 	throw InvalidArgumentException("unexpected attention value: " + input);
 }
+
+bool TypeInfo::operator ==(const ModuleType::Type &type) const
+{
+	return name() == type.toString();
+}
+
+bool TypeInfo::operator !=(const ModuleType::Type &type) const
+{
+	return name() != type.toString();
+}

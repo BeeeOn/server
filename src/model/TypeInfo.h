@@ -140,6 +140,9 @@ public:
 
 	std::string asString(const double v) const;
 
+	bool operator ==(const ModuleType::Type &type) const;
+	bool operator !=(const ModuleType::Type &type) const;
+
 private:
 	std::string m_unit;
 	Range m_range;

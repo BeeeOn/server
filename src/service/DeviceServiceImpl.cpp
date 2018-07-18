@@ -585,7 +585,7 @@ void DeviceServiceImpl::verifyModules(
 		const auto &expect = (*it).first;
 		const auto &given = (*it).second;
 
-		if (expect.type()->name() != given.type().toString()) {
+		if (*expect.type() != given.type()) {
 			ex.caught(InvalidArgumentException(
 				"expected type " + expect.toString()
 				+ " of module " + to_string(i) + " but " + given.type()
