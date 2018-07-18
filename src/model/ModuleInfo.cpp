@@ -49,16 +49,6 @@ const string &ModuleInfo::group() const
 	return m_group;
 }
 
-void ModuleInfo::setUnavailable(const string &unavailable)
-{
-	m_unavailable = unavailable;
-}
-
-const string &ModuleInfo::unavailable() const
-{
-	return m_unavailable;
-}
-
 void ModuleInfo::setControllable(bool controllable)
 {
 	m_controllable = controllable;

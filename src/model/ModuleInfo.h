@@ -28,9 +28,6 @@ public:
 	void setGroup(const std::string &group);
 	const std::string &group() const;
 
-	void setUnavailable(const std::string &unavailable);
-	const std::string &unavailable() const;
-
 	void setControllable(bool controllable);
 	bool isControllable() const;
 
@@ -44,7 +41,6 @@ private:
 	Poco::SharedPtr<SubtypeInfo> m_subtype;
 	std::string m_name;
 	std::string m_group;
-	std::string m_unavailable;
 	bool m_controllable;
 };
 

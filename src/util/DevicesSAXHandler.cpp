@@ -219,12 +219,6 @@ void DevicesSAXHandler::startElement(
 				error("subtype value is empty");
 		}
 
-		XMLString unavailable;
-		if (getAndTrimAttribute(attrList, "unavailable-value", unavailable)) {
-			if (unavailable.empty())
-				error("unavailable-value is empty");
-		}
-
 		m_module.setId(ModuleInfoID::parse(id));
 
 		const ModuleType &moduleType = ModuleType::parse(type);
@@ -240,7 +234,6 @@ void DevicesSAXHandler::startElement(
 
 		m_module.setName("");
 		m_module.setGroup("");
-		m_module.setUnavailable(unavailable);
 		m_module.setControllable(element.localName == "control" || element.localName == "actuator");
 	}
 }
