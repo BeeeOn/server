@@ -29,16 +29,6 @@ const SharedPtr<SubtypeInfo> ModuleInfo::subtype() const
 	return m_subtype;
 }
 
-void ModuleInfo::setClassName(const string &className)
-{
-	m_className = className;
-}
-
-const string &ModuleInfo::className() const
-{
-	return m_className;
-}
-
 void ModuleInfo::setName(const string &name)
 {
 	m_name = name;

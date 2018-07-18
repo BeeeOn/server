@@ -240,7 +240,6 @@ void DevicesSAXHandler::startElement(
 			m_module.setSubtype(new SubtypeInfo(SubtypeInfoID::parse(subtype), enumInfo));
 		}
 
-		m_module.setClassName(element.localName);
 		m_module.setName("");
 		m_module.setGroup("");
 		m_module.setUnavailable(unavailable);

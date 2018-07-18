@@ -22,9 +22,6 @@ public:
 	void setSubtype(const Poco::SharedPtr<SubtypeInfo> e);
 	const Poco::SharedPtr<SubtypeInfo> subtype() const;
 
-	void setClassName(const std::string &type);
-	const std::string &className() const;
-
 	void setName(const std::string &group);
 	const std::string &name() const;
 
@@ -48,7 +45,6 @@ public:
 private:
 	Poco::SharedPtr<TypeInfo> m_type;
 	Poco::SharedPtr<SubtypeInfo> m_subtype;
-	std::string m_className;
 	std::string m_name;
 	std::string m_group;
 	std::string m_unavailable;
