@@ -10,6 +10,7 @@
 #include "rpc/GatewayRPC.h"
 #include "service/ControlService.h"
 #include "transaction/Transactional.h"
+#include "util/UnknownEvaluator.h"
 
 namespace BeeeOn {
 
@@ -44,12 +45,18 @@ public:
 		if (handler.isNull())
 			return;
 
+		const ModuleInfo &info = handler->control().info();
+		double raw = value;
+
+		if (!info.toUnknown().empty())
+			raw = m_unknownEvaluator.toRaw(info, value);
+
 		m_gatewayRPC->updateActor(
 				handler,
 				handler->device().gateway(),
 				handler->device(),
 				handler->control().info(),
-				value,
+				raw,
 				timeout);
 	}
 
@@ -77,6 +84,7 @@ private:
 	ControlDao::Ptr m_controlDao;
 	GatewayRPC::Ptr m_gatewayRPC;
 	ControlAccessPolicy::Ptr m_accessPolicy;
+	UnknownEvaluator m_unknownEvaluator;
 };
 
 }
