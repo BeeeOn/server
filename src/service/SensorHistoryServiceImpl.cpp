@@ -126,7 +126,7 @@ void SensorHistoryServiceImpl::doInsertMany(Device &device,
 bool SensorHistoryServiceImpl::doFetchLast(Device &device,
 		ModuleInfo &module,
 		Poco::Timestamp &at,
-		double &value)
+		double &raw)
 {
 	if (!m_deviceDao->fetch(device, device.gateway()))
 		throw NotFoundException("no such device " + device);
@@ -134,5 +134,14 @@ bool SensorHistoryServiceImpl::doFetchLast(Device &device,
 	if (!device.type()->lookup(module))
 		throw NotFoundException("no such device module " + module);
 
-	return m_sensorHistoryDao->fetch(device, module, at, value);
+	double value;
+	if (!m_sensorHistoryDao->fetch(device, module, at, value))
+		return false;
+
+	if (!std::isnan(value) && !module.toUnknown().empty())
+		raw = m_unknownEvaluator.toRaw(module, value);
+	else
+		raw = value;
+
+	return true;
 }
