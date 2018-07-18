@@ -33,6 +33,12 @@ public:
 	void setControllable(bool controllable);
 	bool isControllable() const;
 
+	void setFromUnknown(const std::string &formula);
+	std::string fromUnknown() const;
+
+	void setToUnknown(const std::string &formula);
+	std::string toUnknown() const;
+
 	/**
 	 * @brief Compare with the ModuleType as provided by
 	 * gateways. We hide the comparison details in this
@@ -51,6 +57,8 @@ private:
 	Poco::SharedPtr<SubtypeInfo> m_subtype;
 	std::string m_name;
 	std::string m_group;
+	std::string m_fromUnknown;
+	std::string m_toUnknown;
 	bool m_controllable;
 };
 

@@ -58,6 +58,25 @@ bool ModuleInfo::isControllable() const
 {
 	return m_controllable;
 }
+void ModuleInfo::setFromUnknown(const string &formula)
+{
+	m_fromUnknown = formula;
+}
+
+string ModuleInfo::fromUnknown() const
+{
+	return m_fromUnknown;
+}
+
+void ModuleInfo::setToUnknown(const string &formula)
+{
+	m_toUnknown = formula;
+}
+
+string ModuleInfo::toUnknown() const
+{
+	return m_toUnknown;
+}
 
 void ModuleInfo::assureCompatible(const ModuleType &type) const
 {
