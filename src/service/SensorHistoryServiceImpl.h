@@ -10,6 +10,7 @@
 #include "service/Relation.h"
 #include "service/SensorHistoryService.h"
 #include "transaction/Transactional.h"
+#include "util/UnknownEvaluator.h"
 
 namespace Poco {
 
@@ -79,6 +80,7 @@ private:
 	SensorHistoryDao::Ptr m_sensorHistoryDao;
 	DeviceDao::Ptr m_deviceDao;
 	SensorHistoryAccessPolicy::Ptr m_policy;
+	UnknownEvaluator m_unknownEvaluator;
 };
 
 }

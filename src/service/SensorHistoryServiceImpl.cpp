@@ -1,4 +1,5 @@
 #include <Poco/Exception.h>
+#include <Poco/String.h>
 
 #include "di/Injectable.h"
 #include "service/SensorHistoryServiceImpl.h"
@@ -94,6 +95,11 @@ void SensorHistoryServiceImpl::doInsertMany(Device &device,
 				+ " " + device.type()->name()
 				+ " has not module " + value.module().toString());
 		}
+
+		if (!value.isValid() || module.fromUnknown().empty())
+			continue;
+
+		value.setValue(m_unknownEvaluator.fromRaw(module, value.value()));
 	}
 
 	try {
