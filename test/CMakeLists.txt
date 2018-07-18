@@ -50,6 +50,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/util/SanitizeTest.cpp
 	${PROJECT_SOURCE_DIR}/util/SQLPreprocessorTest.cpp
 	${PROJECT_SOURCE_DIR}/util/TypesSAXHandlerTest.cpp
+	${PROJECT_SOURCE_DIR}/util/UnknownEvaluatorTest.cpp
 )
 
 if (JWT AND JANSSON)
