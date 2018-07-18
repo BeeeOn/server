@@ -11,7 +11,7 @@
 			<sensor id="0" type="temperature">
 				<name>room_temperature</name>
 			</sensor>
-			<sensor id="1" type="temperature" unavailable-value="0x7FFFFFFF">
+			<sensor id="1" type="temperature">
 				<name>outside_temperature</name>
 			</sensor>
 			<sensor id="2" type="humidity">

@@ -12,6 +12,8 @@
 
 namespace BeeeOn {
 
+class ModuleType; // from base
+
 class ModuleInfo : public Entity<SimpleID> {
 public:
 	ModuleInfo();
@@ -22,32 +24,32 @@ public:
 	void setSubtype(const Poco::SharedPtr<SubtypeInfo> e);
 	const Poco::SharedPtr<SubtypeInfo> subtype() const;
 
-	void setClassName(const std::string &type);
-	const std::string &className() const;
-
 	void setName(const std::string &group);
 	const std::string &name() const;
 
 	void setGroup(const std::string &group);
 	const std::string &group() const;
 
-	void setUnavailable(const std::string &unavailable);
-	const std::string &unavailable() const;
-
-	void setDefaultValue(const std::string &defaultValue);
-	const std::string &defaultValue() const;
-
 	void setControllable(bool controllable);
 	bool isControllable() const;
+
+	/**
+	 * @brief Compare with the ModuleType as provided by
+	 * gateways. We hide the comparison details in this
+	 * method.
+	 */
+	bool compatible(const ModuleType &type) const;
+
+	/**
+	 * @return summary of the ModuleInfo internals
+	 */
+	const std::string toString() const override;
 
 private:
 	Poco::SharedPtr<TypeInfo> m_type;
 	Poco::SharedPtr<SubtypeInfo> m_subtype;
-	std::string m_className;
 	std::string m_name;
 	std::string m_group;
-	std::string m_unavailable;
-	std::string m_default;
 	bool m_controllable;
 };
 

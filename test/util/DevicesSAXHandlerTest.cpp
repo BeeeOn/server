@@ -71,7 +71,6 @@ void DevicesSAXHandlerTest::testParseSimple()
 			"        <name>SENSOR2</name>"
 			"      </sensor>"
 			"      <refresh id=\"0x22\" type=\"luminance\">"
-			"        <default>10</default>"
 			"      </refresh>"
 			"      <actuator id=\"0x23\" type=\"on_off\">"
 			"        <name>ACTUATOR1</name>"
@@ -85,7 +84,7 @@ void DevicesSAXHandlerTest::testParseSimple()
 			"        <pattern name=\"@*\" vendor=\"@VENDOR3\" />"
 			"    </match>"
 			"    <modules>"
-			"      <sensor id=\"0x31\" type=\"temperature\" unavailable-value=\"0xffff\">"
+			"      <sensor id=\"0x31\" type=\"temperature\">"
 			"        <name>SENSOR3</name>"
 			"      </sensor>"
 			"      <battery id=\"0x32\" type=\"battery\" />"
@@ -109,7 +108,6 @@ void DevicesSAXHandlerTest::testParseSimple()
 				if (module.id() == ModuleInfoID::parse("0x11")) {
 					CPPUNIT_ASSERT_EQUAL(TypeInfoID::parse("pressure"), module.type()->id());
 					CPPUNIT_ASSERT_EQUAL(string("SENSOR1"), module.name());
-					CPPUNIT_ASSERT(module.unavailable().empty());
 					CPPUNIT_ASSERT(module.group().empty());
 				}
 				else {
@@ -126,22 +124,16 @@ void DevicesSAXHandlerTest::testParseSimple()
 				if (module.id() == ModuleInfoID::parse("0x21")) {
 					CPPUNIT_ASSERT_EQUAL(TypeInfoID::parse("humidity"), module.type()->id());
 					CPPUNIT_ASSERT_EQUAL(string("SENSOR2"), module.name());
-					CPPUNIT_ASSERT(module.unavailable().empty());
-					CPPUNIT_ASSERT(module.defaultValue().empty());
 					CPPUNIT_ASSERT(module.group().empty());
 				}
 				else if (module.id() == ModuleInfoID::parse("0x22")) {
 					CPPUNIT_ASSERT_EQUAL(TypeInfoID::parse("luminance"), module.type()->id());
 					CPPUNIT_ASSERT(module.name().empty());
-					CPPUNIT_ASSERT(module.unavailable().empty());
-					CPPUNIT_ASSERT_EQUAL(string("10"), module.defaultValue());
 					CPPUNIT_ASSERT(module.group().empty());
 				}
 				else if (module.id() == ModuleInfoID::parse("0x23")) {
 					CPPUNIT_ASSERT_EQUAL(TypeInfoID::parse("on_off"), module.type()->id());
 					CPPUNIT_ASSERT_EQUAL(string("ACTUATOR1"), module.name());
-					CPPUNIT_ASSERT(module.unavailable().empty());
-					CPPUNIT_ASSERT(module.defaultValue().empty());
 					CPPUNIT_ASSERT(module.group().empty());
 				}
 				else {
@@ -161,29 +153,21 @@ void DevicesSAXHandlerTest::testParseSimple()
 				if (module.id() == ModuleInfoID::parse("0x31")) {
 					CPPUNIT_ASSERT_EQUAL(TypeInfoID::parse("temperature"), module.type()->id());
 					CPPUNIT_ASSERT_EQUAL(string("SENSOR3"), module.name());
-					CPPUNIT_ASSERT_EQUAL(string("0xffff"), module.unavailable());
-					CPPUNIT_ASSERT(module.defaultValue().empty());
 					CPPUNIT_ASSERT(module.group().empty());
 				}
 				else if (module.id() == ModuleInfoID::parse("0x32")) {
 					CPPUNIT_ASSERT_EQUAL(TypeInfoID::parse("battery"), module.type()->id());
 					CPPUNIT_ASSERT(module.name().empty());
-					CPPUNIT_ASSERT(module.unavailable().empty());
-					CPPUNIT_ASSERT(module.defaultValue().empty());
 					CPPUNIT_ASSERT(module.group().empty());
 				}
 				else if (module.id() == ModuleInfoID::parse("0x33")) {
 					CPPUNIT_ASSERT_EQUAL(TypeInfoID::parse("rssi"), module.type()->id());
 					CPPUNIT_ASSERT(module.name().empty());
-					CPPUNIT_ASSERT(module.unavailable().empty());
-					CPPUNIT_ASSERT(module.defaultValue().empty());
 					CPPUNIT_ASSERT(module.group().empty());
 				}
 				else if (module.id() == ModuleInfoID::parse("0x34")) {
 					CPPUNIT_ASSERT_EQUAL(TypeInfoID::parse("on_off"), module.type()->id());
 					CPPUNIT_ASSERT_EQUAL(string("ACTUATOR2"), module.name());
-					CPPUNIT_ASSERT(module.unavailable().empty());
-					CPPUNIT_ASSERT(module.defaultValue().empty());
 					CPPUNIT_ASSERT_EQUAL(string("GROUP1"), module.group());
 				}
 				else {

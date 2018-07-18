@@ -41,7 +41,6 @@ DevicesSAXHandler::DevicesSAXHandler()
 	m_controlExpect.insert("values");
 	m_controlExpect.insert("rules");
 
-	m_refreshExpect.insert("default");
 	m_refreshExpect.insert("constraints");
 	m_refreshExpect.insert("values");
 
@@ -54,7 +53,6 @@ DevicesSAXHandler::DevicesSAXHandler()
 	m_contentElements.insert("order");
 	m_contentElements.insert("group");
 	m_contentElements.insert("value");
-	m_contentElements.insert("default");
 	m_contentElements.insert("min");
 	m_contentElements.insert("max");
 	m_contentElements.insert("step");
@@ -221,12 +219,6 @@ void DevicesSAXHandler::startElement(
 				error("subtype value is empty");
 		}
 
-		XMLString unavailable;
-		if (getAndTrimAttribute(attrList, "unavailable-value", unavailable)) {
-			if (unavailable.empty())
-				error("unavailable-value is empty");
-		}
-
 		m_module.setId(ModuleInfoID::parse(id));
 
 		const ModuleType &moduleType = ModuleType::parse(type);
@@ -240,11 +232,8 @@ void DevicesSAXHandler::startElement(
 			m_module.setSubtype(new SubtypeInfo(SubtypeInfoID::parse(subtype), enumInfo));
 		}
 
-		m_module.setClassName(element.localName);
 		m_module.setName("");
 		m_module.setGroup("");
-		m_module.setUnavailable(unavailable);
-		m_module.setDefaultValue("");
 		m_module.setControllable(element.localName == "control" || element.localName == "actuator");
 	}
 }
@@ -258,9 +247,6 @@ void DevicesSAXHandler::endElement(const SAXElement &element)
 
 	if (isPathFromRoot("devices", "device", "modules", "*", "name"))
 		m_module.setName(element.content);
-
-	if (isPathFromRoot("devices", "device", "modules", "*", "default"))
-		m_module.setDefaultValue(element.content);
 
 	if (isPathFromRoot("devices", "device", "modules", "*", "group"))
 		m_module.setGroup(element.content);

@@ -29,16 +29,6 @@ const SharedPtr<SubtypeInfo> ModuleInfo::subtype() const
 	return m_subtype;
 }
 
-void ModuleInfo::setClassName(const string &className)
-{
-	m_className = className;
-}
-
-const string &ModuleInfo::className() const
-{
-	return m_className;
-}
-
 void ModuleInfo::setName(const string &name)
 {
 	m_name = name;
@@ -59,26 +49,6 @@ const string &ModuleInfo::group() const
 	return m_group;
 }
 
-void ModuleInfo::setUnavailable(const string &unavailable)
-{
-	m_unavailable = unavailable;
-}
-
-const string &ModuleInfo::unavailable() const
-{
-	return m_unavailable;
-}
-
-void ModuleInfo::setDefaultValue(const string &defaultValue)
-{
-	m_default = defaultValue;
-}
-
-const string &ModuleInfo::defaultValue() const
-{
-	return m_default;
-}
-
 void ModuleInfo::setControllable(bool controllable)
 {
 	m_controllable = controllable;
@@ -87,4 +57,31 @@ void ModuleInfo::setControllable(bool controllable)
 bool ModuleInfo::isControllable() const
 {
 	return m_controllable;
+}
+
+bool ModuleInfo::compatible(const ModuleType &type) const
+{
+	return *m_type == type.type();
+}
+
+const string ModuleInfo::toString() const
+{
+	string buffer;
+
+	if (type().isNull())
+		buffer.append("(null)");
+	else
+		buffer.append(type()->name());
+
+	if (subtype().isNull())
+		buffer.append(",(null)");
+	else if (subtype()->kind() == SubtypeInfo::KIND_INVALID)
+		buffer.append(",none");
+	else
+		buffer.append(subtype()->name());
+
+	if (isControllable())
+		buffer.append(",controllable");
+
+	return buffer;
 }
