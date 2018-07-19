@@ -267,6 +267,22 @@ TypeInfo::Level::Attention TypeInfo::Level::parseAttention(const string &input)
 	throw InvalidArgumentException("unexpected attention value: " + input);
 }
 
+string TypeInfo::Level::attentionName(const Attention &attention)
+{
+	switch (attention) {
+	case TypeInfo::Level::SINGLE:
+		return "single";
+	case TypeInfo::Level::REPEAT:
+		return "repeat";
+	case TypeInfo::Level::ALERT:
+		return "alert";
+	case TypeInfo::Level::NONE:
+		return "none";
+	default:
+		throw IllegalStateException("invalid attention: " + to_string(attention));
+	}
+}
+
 bool TypeInfo::operator ==(const ModuleType::Type &type) const
 {
 	return name() == type.toString();
