@@ -70,6 +70,8 @@ class TestNewDevice(unittest.TestCase):
 		self.assertEqual("on-new-device", event["event"])
 		self.assertEqual("0xa123123412341234", event["device_id"])
 		self.assertEqual("Internal Pressure v1.0", event["device_name"])
+		self.assertEqual(1, len(event["modules"]))
+		self.assertEqual("pressure", event["modules"][0]["type"])
 		self.assertEqual(config.gateway_id, event["gateway_id"])
 
 	"""
@@ -252,6 +254,8 @@ class TestNewDevice(unittest.TestCase):
 		self.assertEqual("on-new-device", notification["event"])
 		self.assertEqual("0xa123123412343333", notification["device_id"])
 		self.assertNotIn("device_name", notification)
+		self.assertEqual(1, len(notification["modules"]))
+		self.assertEqual("availability", notification["modules"][0]["type"])
 		self.assertEqual(config.gateway_id, notification["gateway_id"])
 
 		msg2 = json.dumps({
@@ -281,6 +285,8 @@ class TestNewDevice(unittest.TestCase):
 		self.assertEqual("on-new-device", notification["event"])
 		self.assertEqual("0xa123123412343333", notification["device_id"])
 		self.assertEqual("Super device", notification["device_name"])
+		self.assertEqual(1, len(notification["modules"]))
+		self.assertEqual("availability", notification["modules"][0]["type"])
 		self.assertEqual(config.gateway_id, notification["gateway_id"])
 
 if __name__ == '__main__':
