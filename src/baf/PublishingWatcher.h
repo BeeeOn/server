@@ -88,6 +88,7 @@ protected:
 			return;
 
 		std::ostringstream buf;
+		buf.setf(std::ios::fixed);
 		Poco::JSON::PrintHandler json(buf);
 
 		eventBegin(json, name);
@@ -104,6 +105,7 @@ protected:
 			return;
 
 		std::ostringstream buf;
+		buf.setf(std::ios::fixed);
 		Poco::JSON::PrintHandler json(buf);
 
 		eventBegin(json, name);

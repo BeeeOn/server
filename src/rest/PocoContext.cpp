@@ -73,5 +73,7 @@ void PocoResponse::sendAll(const void *p, std::size_t len)
 
 ostream &PocoResponse::stream()
 {
-	return m_impl.send();
+	ostream &out = m_impl.send();
+	out.setf(ios::fixed);
+	return out;
 }
