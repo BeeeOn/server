@@ -2,9 +2,11 @@
 
 #include <string>
 
+#include <Poco/Nullable.h>
 #include <Poco/SharedPtr.h>
 
 #include "model/Device.h"
+#include "model/DeviceInfo.h"
 #include "model/Gateway.h"
 
 namespace BeeeOn {
@@ -31,10 +33,14 @@ public:
 	 */
 	const std::string &name() const;
 
+	void setType(const DeviceInfo &type);
+	Poco::Nullable<DeviceInfo> type() const;
+
 private:
 	GatewayID m_gatewayID;
 	DeviceID m_deviceID;
 	std::string m_name;
+	Poco::Nullable<DeviceInfo> m_type;
 };
 
 class DeviceListener {
