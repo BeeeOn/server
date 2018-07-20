@@ -113,7 +113,7 @@ class TestTypesListDetail(unittest.TestCase):
 		self.assure_range("rssi", "signal", 0, 100, 1)
 		self.assure_range("temperature", "temperature", -273.15, 200, 0.01)
 		self.assure_range("ultraviolet", "UV", 0, 11, 0.1)
-		self.assure_range("color_temperature", "color_temperature", 1700, 27000, 1)
+		self.assure_range("color_temperature", "color temperature", 1700, 27000, 1)
 		self.assure_range("color", "color", 0, 16777215, 1)
 
 	def assure_values(self, id, name, values):
