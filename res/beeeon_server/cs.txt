@@ -136,6 +136,24 @@ cs {
 				extreme   { "extrémní" }
 			}
 		}
+		power {
+			label { "výkon" }
+		}
+		voltage {
+			label { "elektrické napětí" }
+		}
+		current {
+			label { "elektrický proud" }
+		}
+		frequency {
+			label { "frekvence" }
+		}
+		color_temperature {
+			label { "teplota barvy" }
+		}
+		color {
+			label { "barva" }
+		}
 	}
 
 	enums {

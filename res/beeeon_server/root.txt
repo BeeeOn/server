@@ -145,6 +145,24 @@ root {
 				extreme   { "extreme" }
 			}
 		}
+		power {
+			label { "power" }
+		}
+		voltage {
+			label { "voltage" }
+		}
+		current {
+			label { "current" }
+		}
+		frequency {
+			label { "frequency" }
+		}
+		color_temperature {
+			label { "color temperature" }
+		}
+		color {
+			label { "color" }
+		}
 	}
 
 	enums {
