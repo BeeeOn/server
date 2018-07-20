@@ -113,6 +113,7 @@ public:
 		std::string label() const;
 
 		static Attention parseAttention(const std::string &input);
+		static std::string attentionName(const Attention &attention);
 
 	private:
 		double m_min;

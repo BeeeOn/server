@@ -387,21 +387,13 @@ static void serializeAttention(Poco::JSON::PrintHandler &output,
 {
 	switch (attention) {
 	case TypeInfo::Level::SINGLE:
-		output.key("attention");
-		output.value(string("single"));
-		break;
-
 	case TypeInfo::Level::REPEAT:
-		output.key("attention");
-		output.value(string("repeat"));
-		break;
-
 	case TypeInfo::Level::ALERT:
 		output.key("attention");
-		output.value(string("alert"));
+		output.value(TypeInfo::Level::attentionName(attention));
 		break;
 
-	default:
+	case TypeInfo::Level::NONE:
 		break;
 	}
 }

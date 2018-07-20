@@ -14,6 +14,7 @@ BEEEON_OBJECT_END(BeeeOn, Automation, PublishingWatcher)
 
 using namespace std;
 using namespace Poco::JSON;
+using namespace BeeeOn;
 using namespace BeeeOn::Automation;
 
 PublishingWatcher::PublishingWatcher()
@@ -168,6 +169,103 @@ void PublishingWatcher::eventDetails(
 	json.endObject();
 }
 
+static void deviceInfoDetails(
+	PrintHandler &json,
+	const DeviceInfo &info)
+{
+	json.key("modules");
+	json.startArray();
+
+	for (const auto &module : info) {
+		json.startObject();
+
+		json.key("controllable");
+		json.value(module.isControllable());
+
+		const auto type = module.type();
+		if (type.isNull())
+			continue;
+
+		json.key("type");
+		json.value(type->name());
+
+		if (type->range().isValid()) {
+			const auto &range = type->range();
+
+			json.key("range");
+			json.startObject();
+
+			if (range.hasMin()) {
+				json.key("min");
+				json.value(range.min());
+			}
+
+			if (range.hasMax()) {
+				json.key("max");
+				json.value(range.max());
+			}
+
+			if (range.hasStep()) {
+				json.key("step");
+				json.value(range.step());
+			}
+
+			json.endObject();
+		}
+
+		if (!type->values().empty()) {
+			json.key("values");
+			json.startObject();
+
+			for (const auto &pair : type->values()) {
+				json.key(to_string(pair.first));
+				json.value(pair.second);
+			}
+
+			json.endObject();
+		}
+
+		if (!type->levels().empty()) {
+			json.key("levels");
+			json.startArray();
+
+			for (const auto &level : type->levels()) {
+				json.startObject();
+
+				if (!level.isValid())
+					continue;
+
+				if (!level.label().empty()) {
+					json.key("label");
+					json.value(level.label());
+				}
+
+				json.key("attention");
+				json.value(TypeInfo::Level::attentionName(level.attention()));
+
+				if (level.min() != level.max()) {
+					json.key("min");
+					json.value(level.min());
+					json.key("max");
+					json.value(level.max());
+				}
+				else {
+					json.key("exact");
+					json.value(level.min());
+				}
+
+				json.endObject();
+			}
+
+			json.endArray();
+		}
+
+		json.endObject();
+	}
+
+	json.endArray();
+}
+
 void PublishingWatcher::eventDetails(
 	PrintHandler &json,
 	const DeviceEvent &e) const
@@ -182,6 +280,9 @@ void PublishingWatcher::eventDetails(
 		json.key("device_name");
 		json.value(e.name());
 	}
+
+	if (!e.type().isNull())
+		deviceInfoDetails(json, e.type());
 }
 
 void PublishingWatcher::eventDetails(

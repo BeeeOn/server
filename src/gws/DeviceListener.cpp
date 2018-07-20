@@ -1,6 +1,7 @@
 #include "gws/DeviceListener.h"
 
 using namespace std;
+using namespace Poco;
 using namespace BeeeOn;
 
 DeviceEvent::DeviceEvent()
@@ -41,6 +42,16 @@ void DeviceEvent::setName(const string &name)
 const string &DeviceEvent::name() const
 {
 	return m_name;
+}
+
+void DeviceEvent::setType(const DeviceInfo &type)
+{
+	m_type = type;
+}
+
+Nullable<DeviceInfo> DeviceEvent::type() const
+{
+	return m_type;
 }
 
 DeviceListener::~DeviceListener()
