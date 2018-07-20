@@ -13,7 +13,7 @@ cs {
 			label { "přítomnost" }
 			values {
 				unavailable { "nepřítomen" }
-				availabile  { "přítomen" }
+				available  { "přítomen" }
 			}
 		}
 		battery {
