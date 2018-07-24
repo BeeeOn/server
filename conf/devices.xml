@@ -407,6 +407,117 @@
 		</modules>
 	</device>
 
+	<device id="71">
+		<name>Motion Sensor</name>
+		<vendor>BeeWi</vendor>
+
+		<match>
+			<exact name="BeeWi Smart Motion" vendor="BeeWi" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="motion">
+				<name>Motion</name>
+			</sensor>
+			<sensor id="1" type="battery">
+				<name>Battery</name>
+			</sensor>
+		</modules>
+	</device>
+
+	<device id="72">
+		<name>Magnetic Door Sensor</name>
+		<vendor>BeeWi</vendor>
+
+		<match>
+			<exact name="BeeWi Smart Door" vendor="BeeWi" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="open_close">
+				<name>Open/Closed</name>
+			</sensor>
+			<sensor id="1" type="battery">
+				<name>Battery</name>
+			</sensor>
+		</modules>
+	</device>
+
+	<device id="73">
+		<name>Remote Switch</name>
+		<vendor>BeeWi</vendor>
+
+		<match>
+			<exact name="BeeWi Smart Watt" vendor="BeeWi" />
+		</match>
+
+		<modules>
+			<control id="0" type="on_off,controllable">
+				<name>Plug On/Off</name>
+			</control>
+			<control id="1" type="on_off,controllable">
+				<name>Light On/Off</name>
+			</control>
+			<sensor id="2" type="power">
+				<name>Electric Power</name>
+			</sensor>
+			<sensor id="3" type="voltage">
+				<name>Voltage</name>
+			</sensor>
+			<sensor id="4" type="current">
+				<name>Electric Current</name>
+			</sensor>
+			<sensor id="5" type="frequency">
+				<name>Frequency</name>
+			</sensor>
+		</modules>
+	</device>
+
+	<device id="74">
+		<name>Color Light</name>
+		<vendor>BeeWi</vendor>
+
+		<match>
+			<exact name="BeeWi SmartLite" vendor="BeeWi" />
+		</match>
+
+		<modules>
+			<control id="0" type="on_off,controllable">
+				<name>On/Off</name>
+			</control>
+			<control id="1" type="brightness,controllable">
+				<name>Brightness</name>
+			</control>
+			<control id="2" type="color_temperature,controllable">
+				<name>Color Temperature</name>
+			</control>
+			<control id="3" type="color,controllable">
+				<name>Color</name>
+			</control>
+		</modules>
+	</device>
+
+	<device id="75">
+		<name>Color Light</name>
+		<vendor>Tabu Lumen</vendor>
+
+		<match>
+			<exact name="TL 100S Smart Light" vendor="Tabu Lumen" />
+		</match>
+
+		<modules>
+			<control id="0" type="on_off,controllable">
+				<name>On/Off</name>
+			</control>
+			<control id="1" type="brightness,controllable">
+				<name>Brightness</name>
+			</control>
+			<control id="2" type="color,controllable">
+				<name>Color</name>
+			</control>
+		</modules>
+	</device>
+
 	<device id="61">
 		<name>Air quality sensor</name>
 		<vendor>IQ Home</vendor>
