@@ -33,12 +33,25 @@ public:
 	void setControllable(bool controllable);
 	bool isControllable() const;
 
+	void setFromUnknown(const std::string &formula);
+	std::string fromUnknown() const;
+
+	void setToUnknown(const std::string &formula);
+	std::string toUnknown() const;
+
 	/**
 	 * @brief Compare with the ModuleType as provided by
 	 * gateways. We hide the comparison details in this
-	 * method.
+	 * method. Throw an exception with details in case of
+	 * incompatibility.
+	 *
+	 * There are specific rules for TYPE_UNKNOWN:
+	 *
+	 * - controllable type requires both fromUnknown() and toUnknown()
+	 *   to be non-empty
+	 * - non-controllable type requires fromUnknown() to be non-empty
 	 */
-	bool compatible(const ModuleType &type) const;
+	void assureCompatible(const ModuleType &type) const;
 
 	/**
 	 * @return summary of the ModuleInfo internals
@@ -50,6 +63,8 @@ private:
 	Poco::SharedPtr<SubtypeInfo> m_subtype;
 	std::string m_name;
 	std::string m_group;
+	std::string m_fromUnknown;
+	std::string m_toUnknown;
 	bool m_controllable;
 };
 

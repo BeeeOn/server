@@ -17,6 +17,7 @@
 #include "service/GWSDeviceService.h"
 #include "transaction/Transactional.h"
 #include "util/EventSource.h"
+#include "util/UnknownEvaluator.h"
 
 namespace BeeeOn {
 
@@ -221,6 +222,7 @@ private:
 	GatewayRPC::Ptr m_gatewayRPC;
 	DeviceAccessPolicy::Ptr m_policy;
 	Poco::SharedPtr<EventSource<DeviceListener>> m_eventSource;
+	UnknownEvaluator m_unknownEvaluator;
 };
 
 }

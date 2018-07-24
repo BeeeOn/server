@@ -555,6 +555,30 @@ void DeviceServiceImpl::doFetchActiveWithPrefix(vector<DeviceWithData> &devices,
 
 		try {
 			valuesFor(device);
+
+			SharedPtr<DeviceInfo> info = device.type();
+			if (info.isNull())
+				continue;
+
+			Zip<const set<ModuleInfo>, const vector<ValueAt>> zip(
+				info->modules(), device.values());
+			vector<ValueAt> raw;
+
+			for (const auto &pair : zip) {
+				const auto &info = pair.first;
+				auto value = pair.second;
+
+				if (value.isValid() && !info.toUnknown().empty()) {
+					value.setValue(m_unknownEvaluator.toRaw(
+							info, value.value()));
+					raw.emplace_back(value);
+				}
+				else {
+					raw.emplace_back(value);
+				}
+			}
+
+			device.setValues(raw);
 		}
 		catch (const Exception &e) {
 			logger().log(e, __FILE__, __LINE__);
@@ -585,12 +609,11 @@ void DeviceServiceImpl::verifyModules(
 		const auto &expect = (*it).first;
 		const auto &given = (*it).second;
 
-		if (!expect.compatible(given)) {
-			ex.caught(InvalidArgumentException(
-				"expected type " + expect.toString()
-				+ " of module " + to_string(i) + " but " + given.type()
-				+ " was given for device " + *deviceInfo
-			));
+		try {
+			expect.assureCompatible(given);
+		}
+		catch (const Exception &e) {
+			ex.caught(e);
 		}
 	}
 

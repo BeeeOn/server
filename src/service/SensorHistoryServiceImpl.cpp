@@ -1,4 +1,5 @@
 #include <Poco/Exception.h>
+#include <Poco/String.h>
 
 #include "di/Injectable.h"
 #include "service/SensorHistoryServiceImpl.h"
@@ -94,6 +95,11 @@ void SensorHistoryServiceImpl::doInsertMany(Device &device,
 				+ " " + device.type()->name()
 				+ " has not module " + value.module().toString());
 		}
+
+		if (!value.isValid() || module.fromUnknown().empty())
+			continue;
+
+		value.setValue(m_unknownEvaluator.fromRaw(module, value.value()));
 	}
 
 	try {
@@ -120,7 +126,7 @@ void SensorHistoryServiceImpl::doInsertMany(Device &device,
 bool SensorHistoryServiceImpl::doFetchLast(Device &device,
 		ModuleInfo &module,
 		Poco::Timestamp &at,
-		double &value)
+		double &raw)
 {
 	if (!m_deviceDao->fetch(device, device.gateway()))
 		throw NotFoundException("no such device " + device);
@@ -128,5 +134,14 @@ bool SensorHistoryServiceImpl::doFetchLast(Device &device,
 	if (!device.type()->lookup(module))
 		throw NotFoundException("no such device module " + module);
 
-	return m_sensorHistoryDao->fetch(device, module, at, value);
+	double value;
+	if (!m_sensorHistoryDao->fetch(device, module, at, value))
+		return false;
+
+	if (!std::isnan(value) && !module.toUnknown().empty())
+		raw = m_unknownEvaluator.toRaw(module, value);
+	else
+		raw = value;
+
+	return true;
 }
