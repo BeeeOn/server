@@ -24,6 +24,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/baf/EventPublisher.cpp
 	${PROJECT_SOURCE_DIR}/baf/GatewayWatcher.cpp
 	${PROJECT_SOURCE_DIR}/baf/PublishingWatcher.cpp
+	${PROJECT_SOURCE_DIR}/cassandra/CassandraStartup.cpp
 	${PROJECT_SOURCE_DIR}/jwt/JWToken.cpp
 	${PROJECT_SOURCE_DIR}/oauth2/AbstractOAuth2Provider.cpp
 	${PROJECT_SOURCE_DIR}/oauth2/FacebookOAuth2Provider.cpp
