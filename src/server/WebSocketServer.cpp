@@ -3,7 +3,7 @@
 #include <Poco/Net/SecureServerSocket.h>
 
 #include "di/Injectable.h"
-#include "gws/WebSocketServer.h"
+#include "server/WebSocketServer.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, WebSocketServer)
 BEEEON_OBJECT_CASTABLE(StoppableLoop)
