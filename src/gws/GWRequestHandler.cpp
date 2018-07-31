@@ -9,22 +9,22 @@
 #include "di/Injectable.h"
 #include "gwmessage/GWGatewayRegister.h"
 #include "gwmessage/GWGatewayAccepted.h"
-#include "gws/WebSocketRequestHandler.h"
+#include "gws/GWRequestHandler.h"
 #include "util/Sanitize.h"
 
-BEEEON_OBJECT_BEGIN(BeeeOn, WebSocketRequestHandlerFactory)
-BEEEON_OBJECT_PROPERTY("gatewayCommunicator", &WebSocketRequestHandlerFactory::setGatewayCommunicator)
-BEEEON_OBJECT_PROPERTY("maxMessageSize", &WebSocketRequestHandlerFactory::setMaxMessageSize)
-BEEEON_OBJECT_PROPERTY("gatewayService", &WebSocketRequestHandlerFactory::setGatewayService)
-BEEEON_OBJECT_PROPERTY("verifierFactory", &WebSocketRequestHandlerFactory::setVerifierFactory)
-BEEEON_OBJECT_END(BeeeOn, WebSocketRequestHandlerFactory)
+BEEEON_OBJECT_BEGIN(BeeeOn, GWRequestHandlerFactory)
+BEEEON_OBJECT_PROPERTY("gatewayCommunicator", &GWRequestHandlerFactory::setGatewayCommunicator)
+BEEEON_OBJECT_PROPERTY("maxMessageSize", &GWRequestHandlerFactory::setMaxMessageSize)
+BEEEON_OBJECT_PROPERTY("gatewayService", &GWRequestHandlerFactory::setGatewayService)
+BEEEON_OBJECT_PROPERTY("verifierFactory", &GWRequestHandlerFactory::setVerifierFactory)
+BEEEON_OBJECT_END(BeeeOn, GWRequestHandlerFactory)
 
 using namespace std;
 using namespace Poco;
 using namespace Poco::Net;
 using namespace BeeeOn;
 
-WebSocketRequestHandler::WebSocketRequestHandler(
+GWRequestHandler::GWRequestHandler(
 		size_t maxMessageSize,
 		GatewayCommunicator::Ptr communicator,
 		GWSGatewayService::Ptr service,
@@ -36,7 +36,7 @@ WebSocketRequestHandler::WebSocketRequestHandler(
 {
 }
 
-void WebSocketRequestHandler::run()
+void GWRequestHandler::run()
 {
 	const Clock started;
 
@@ -82,7 +82,7 @@ void WebSocketRequestHandler::run()
 	}
 }
 
-void WebSocketRequestHandler::processPayload(
+void GWRequestHandler::processPayload(
 		WebSocket &ws,
 		string data)
 {
@@ -122,27 +122,27 @@ void WebSocketRequestHandler::processPayload(
 	m_gatewayCommunicator->addGateway(gateway.id(), ws);
 }
 
-WebSocketRequestHandlerFactory::WebSocketRequestHandlerFactory():
+GWRequestHandlerFactory::GWRequestHandlerFactory():
 	m_maxMessageSize(256)
 {
 }
 
-void WebSocketRequestHandlerFactory::setGatewayCommunicator(GatewayCommunicator::Ptr communicator)
+void GWRequestHandlerFactory::setGatewayCommunicator(GatewayCommunicator::Ptr communicator)
 {
 	m_gatewayCommunicator = communicator;
 }
 
-void WebSocketRequestHandlerFactory::setGatewayService(GWSGatewayService::Ptr service)
+void GWRequestHandlerFactory::setGatewayService(GWSGatewayService::Ptr service)
 {
 	m_gatewayService = service;
 }
 
-void WebSocketRequestHandlerFactory::setVerifierFactory(SocketGatewayPeerVerifierFactory::Ptr factory)
+void GWRequestHandlerFactory::setVerifierFactory(SocketGatewayPeerVerifierFactory::Ptr factory)
 {
 	m_verifierFactory = factory;
 }
 
-void WebSocketRequestHandlerFactory::setMaxMessageSize(int size)
+void GWRequestHandlerFactory::setMaxMessageSize(int size)
 {
 	if (size < 0)
 		throw InvalidArgumentException("size must be non-negative");
@@ -150,7 +150,7 @@ void WebSocketRequestHandlerFactory::setMaxMessageSize(int size)
 	m_maxMessageSize = size;
 }
 
-HTTPRequestHandler *WebSocketRequestHandlerFactory::createRequestHandler(
+HTTPRequestHandler *GWRequestHandlerFactory::createRequestHandler(
 	const HTTPServerRequest &request)
 {
 	GatewayPeerVerifier::Ptr verifier;
@@ -165,7 +165,7 @@ HTTPRequestHandler *WebSocketRequestHandlerFactory::createRequestHandler(
 	verifier = m_verifierFactory->preverifyAndCreate(
 			const_cast<HTTPServerRequestImpl *>(impl)->socket());
 
-	return new WebSocketRequestHandler(
+	return new GWRequestHandler(
 		m_maxMessageSize,
 		m_gatewayCommunicator,
 		m_gatewayService,

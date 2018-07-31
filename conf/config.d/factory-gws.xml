@@ -14,7 +14,7 @@
 			<set name="listeners" ref="publishingWatcher" if-yes="${baf.publish.server.enable}" />
 		</instance>
 
-		<instance name="gwsRequestHandlerFactory" class="BeeeOn::WebSocketRequestHandlerFactory">
+		<instance name="gwsRequestHandlerFactory" class="BeeeOn::GWRequestHandlerFactory">
 			<set name="gatewayCommunicator" ref="gatewayCommunicator"/>
 			<set name="gatewayService" ref="gatewayService" />
 			<set name="verifierFactory" ref="gatewayPeerVerifierFactory" />

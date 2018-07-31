@@ -23,11 +23,11 @@ namespace BeeeOn {
  * to the GatewayCommunicator. After the connection is added to the communicator,
  * this handler is destroyed.
  */
-class WebSocketRequestHandler :
+class GWRequestHandler :
 	public Poco::Net::AbstractHTTPRequestHandler,
 	protected Loggable {
 public:
-	WebSocketRequestHandler(
+	GWRequestHandler(
 			size_t maxMessageSize,
 			GatewayCommunicator::Ptr communicator,
 			GWSGatewayService::Ptr service,
@@ -59,14 +59,14 @@ private:
 };
 
 /**
- * @brief Factory for WebSocketRequestHandler objects.
+ * @brief Factory for GWRequestHandler objects.
  */
-class WebSocketRequestHandlerFactory :
+class GWRequestHandlerFactory :
 	public Poco::Net::HTTPRequestHandlerFactory {
 public:
-	typedef Poco::SharedPtr<WebSocketRequestHandlerFactory> Ptr;
+	typedef Poco::SharedPtr<GWRequestHandlerFactory> Ptr;
 
-	WebSocketRequestHandlerFactory();
+	GWRequestHandlerFactory();
 
 	void setGatewayCommunicator(GatewayCommunicator::Ptr communicator);
 	void setGatewayService(GWSGatewayService::Ptr service);

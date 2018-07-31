@@ -7,7 +7,7 @@
 #include <Poco/Net/SocketAddress.h>
 
 #include "server/AbstractServer.h"
-#include "gws/WebSocketRequestHandler.h"
+#include "gws/GWRequestHandler.h"
 #include "ssl/SSLServer.h"
 
 namespace BeeeOn {
@@ -19,8 +19,8 @@ namespace BeeeOn {
  * It uses the Poco::Net::HTTPServer framework, and it is multi-thread server
  * using thread pool. The WebSocketServer can run unsecured or secured by SSL/TLS.
  *
- * For each incoming connection is created the WebSocketRequestHandler by the
- * WebSocketRequestHandlerFactory, which handle() method is invoked in thread
+ * For each incoming connection is created the GWRequestHandler by the
+ * GWRequestHandlerFactory, which handle() method is invoked in thread
  * pool. The WebSocket connection is there created, gateway is registered and
  * then the connection is passed to the GatewayCommunicator. After the connection
  * is added to the communicator, handler is destroyed and serving thread is
@@ -33,7 +33,7 @@ public:
 	WebSocketServer();
 
 	void setSSLConfig(SSLServer::Ptr config);
-	void setRequestHandlerFactory(WebSocketRequestHandlerFactory::Ptr factory);
+	void setRequestHandlerFactory(GWRequestHandlerFactory::Ptr factory);
 
 	/**
 	 * @brief Set max message size just for register message.
@@ -52,7 +52,7 @@ private:
 private:
 	SSLServer::Ptr m_sslConfig;
 	Poco::SharedPtr<Poco::Net::HTTPServer> m_server;
-	WebSocketRequestHandlerFactory::Ptr m_factory;
+	GWRequestHandlerFactory::Ptr m_factory;
 };
 
 }

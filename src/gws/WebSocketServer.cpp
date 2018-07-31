@@ -4,7 +4,6 @@
 
 #include "di/Injectable.h"
 #include "gws/WebSocketServer.h"
-#include "gws/WebSocketRequestHandler.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, WebSocketServer)
 BEEEON_OBJECT_CASTABLE(StoppableLoop)
@@ -35,7 +34,7 @@ void WebSocketServer::setSSLConfig(SSLServer::Ptr config)
 	m_sslConfig = config;
 }
 
-void WebSocketServer::setRequestHandlerFactory(WebSocketRequestHandlerFactory::Ptr factory)
+void WebSocketServer::setRequestHandlerFactory(GWRequestHandlerFactory::Ptr factory)
 {
 	m_factory = factory;
 }

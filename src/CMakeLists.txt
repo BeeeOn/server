@@ -217,7 +217,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/gws/RelaxedGatewayPeerVerifier.cpp
 	${PROJECT_SOURCE_DIR}/gws/SensorDataListener.cpp
 	${PROJECT_SOURCE_DIR}/gws/SocketGatewayPeerVerifierFactory.cpp
-	${PROJECT_SOURCE_DIR}/gws/WebSocketRequestHandler.cpp
+	${PROJECT_SOURCE_DIR}/gws/GWRequestHandler.cpp
 	${PROJECT_SOURCE_DIR}/gws/WebSocketServer.cpp
 	${PROJECT_SOURCE_DIR}/gws/X509GatewayPeerVerifier.cpp
 	${PROJECT_SOURCE_DIR}/rpc/RPCConnector.cpp
