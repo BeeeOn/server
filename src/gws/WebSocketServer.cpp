@@ -63,13 +63,11 @@ void WebSocketServer::setMaxMessageSize(int size)
 
 Poco::Net::HTTPServer *WebSocketServer::createServer()
 {
-	HTTPRequestHandlerFactory::Ptr factory(
-		new WebSocketRequestHandlerFactory(
-			m_maxMessageSize,
-			m_gatewayCommunicator,
-			m_gatewayService,
-			m_verifierFactory
-		));
+	WebSocketRequestHandlerFactory::Ptr factory = new WebSocketRequestHandlerFactory;
+	factory->setMaxMessageSize(m_maxMessageSize);
+	factory->setGatewayCommunicator(m_gatewayCommunicator);
+	factory->setGatewayService(m_gatewayService);
+	factory->setVerifierFactory(m_verifierFactory);
 
 	return new HTTPServer(factory, pool(), createSocket(), new HTTPServerParams);
 }

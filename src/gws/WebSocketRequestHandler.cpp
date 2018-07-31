@@ -114,16 +114,32 @@ void WebSocketRequestHandler::processPayload(
 	m_gatewayCommunicator->addGateway(gateway.id(), ws);
 }
 
-WebSocketRequestHandlerFactory::WebSocketRequestHandlerFactory(
-		size_t maxMessageSize,
-		GatewayCommunicator::Ptr communicator,
-		GWSGatewayService::Ptr service,
-		SocketGatewayPeerVerifierFactory::Ptr verifierFactory):
-	m_maxMessageSize(maxMessageSize),
-	m_gatewayCommunicator(communicator),
-	m_gatewayService(service),
-	m_verifierFactory(verifierFactory)
+WebSocketRequestHandlerFactory::WebSocketRequestHandlerFactory():
+	m_maxMessageSize(256)
 {
+}
+
+void WebSocketRequestHandlerFactory::setGatewayCommunicator(GatewayCommunicator::Ptr communicator)
+{
+	m_gatewayCommunicator = communicator;
+}
+
+void WebSocketRequestHandlerFactory::setGatewayService(GWSGatewayService::Ptr service)
+{
+	m_gatewayService = service;
+}
+
+void WebSocketRequestHandlerFactory::setVerifierFactory(SocketGatewayPeerVerifierFactory::Ptr factory)
+{
+	m_verifierFactory = factory;
+}
+
+void WebSocketRequestHandlerFactory::setMaxMessageSize(int size)
+{
+	if (size < 0)
+		throw InvalidArgumentException("size must be non-negative");
+
+	m_maxMessageSize = size;
 }
 
 HTTPRequestHandler *WebSocketRequestHandlerFactory::createRequestHandler(

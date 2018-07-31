@@ -66,11 +66,12 @@ class WebSocketRequestHandlerFactory :
 public:
 	typedef Poco::SharedPtr<WebSocketRequestHandlerFactory> Ptr;
 
-	WebSocketRequestHandlerFactory(
-			size_t maxMessageSize,
-			GatewayCommunicator::Ptr communicator,
-			GWSGatewayService::Ptr service,
-			SocketGatewayPeerVerifierFactory::Ptr verifierFactory);
+	WebSocketRequestHandlerFactory();
+
+	void setGatewayCommunicator(GatewayCommunicator::Ptr communicator);
+	void setGatewayService(GWSGatewayService::Ptr service);
+	void setVerifierFactory(SocketGatewayPeerVerifierFactory::Ptr factory);
+	void setMaxMessageSize(int size);
 
 	Poco::Net::HTTPRequestHandler *createRequestHandler(
 		const Poco::Net::HTTPServerRequest &request) override;
