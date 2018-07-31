@@ -17,6 +17,13 @@
 			<set name="listeners" ref="publishingWatcher" if-yes="${baf.publish.server.enable}" />
 		</instance>
 
+		<instance name="gwsRequestHandlerFactory" class="BeeeOn::WebSocketRequestHandlerFactory">
+			<set name="gatewayCommunicator" ref="gatewayCommunicator"/>
+			<set name="gatewayService" ref="gatewayService" />
+			<set name="verifierFactory" ref="gatewayPeerVerifierFactory" />
+			<set name="maxMessageSize" number="${gws.ws.maxMessageSize}" />
+		</instance>
+
 		<instance name="gatewayCommunicator" class="BeeeOn::GatewayCommunicator">
 			<set name="messageHandler" ref="messageHandler" />
 			<set name="rateLimiterFactory" ref="gatewayLimiterFactory" />

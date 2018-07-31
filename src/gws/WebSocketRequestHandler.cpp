@@ -6,10 +6,18 @@
 #include <Poco/Net/HTTPServerRequestImpl.h>
 #include <Poco/Net/WebSocket.h>
 
+#include "di/Injectable.h"
 #include "gwmessage/GWGatewayRegister.h"
 #include "gwmessage/GWGatewayAccepted.h"
 #include "gws/WebSocketRequestHandler.h"
 #include "util/Sanitize.h"
+
+BEEEON_OBJECT_BEGIN(BeeeOn, WebSocketRequestHandlerFactory)
+BEEEON_OBJECT_PROPERTY("gatewayCommunicator", &WebSocketRequestHandlerFactory::setGatewayCommunicator)
+BEEEON_OBJECT_PROPERTY("maxMessageSize", &WebSocketRequestHandlerFactory::setMaxMessageSize)
+BEEEON_OBJECT_PROPERTY("gatewayService", &WebSocketRequestHandlerFactory::setGatewayService)
+BEEEON_OBJECT_PROPERTY("verifierFactory", &WebSocketRequestHandlerFactory::setVerifierFactory)
+BEEEON_OBJECT_END(BeeeOn, WebSocketRequestHandlerFactory)
 
 using namespace std;
 using namespace Poco;
