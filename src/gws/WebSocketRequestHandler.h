@@ -30,13 +30,7 @@ public:
 			size_t maxMessageSize,
 			GatewayCommunicator::Ptr communicator,
 			GWSGatewayService::Ptr service,
-			GatewayPeerVerifier::Ptr peerVerifier):
-		m_maxMessageSize(maxMessageSize),
-		m_gatewayCommunicator(communicator),
-		m_gatewayService(service),
-		m_peerVerifier(peerVerifier)
-	{
-	}
+			GatewayPeerVerifier::Ptr peerVerifier);
 
 	/**
 	 * @brief Handles incoming WebSocket connection from the Gateway.

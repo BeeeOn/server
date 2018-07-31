@@ -16,6 +16,18 @@ using namespace Poco;
 using namespace Poco::Net;
 using namespace BeeeOn;
 
+WebSocketRequestHandler::WebSocketRequestHandler(
+		size_t maxMessageSize,
+		GatewayCommunicator::Ptr communicator,
+		GWSGatewayService::Ptr service,
+		GatewayPeerVerifier::Ptr peerVerifier):
+	m_maxMessageSize(maxMessageSize),
+	m_gatewayCommunicator(communicator),
+	m_gatewayService(service),
+	m_peerVerifier(peerVerifier)
+{
+}
+
 void WebSocketRequestHandler::run()
 {
 	const Clock started;
