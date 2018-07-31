@@ -13,6 +13,7 @@
 #include "util/Sanitize.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, GWRequestHandlerFactory)
+BEEEON_OBJECT_CASTABLE(WebSocketRequestHandlerFactory)
 BEEEON_OBJECT_PROPERTY("gatewayCommunicator", &GWRequestHandlerFactory::setGatewayCommunicator)
 BEEEON_OBJECT_PROPERTY("maxMessageSize", &GWRequestHandlerFactory::setMaxMessageSize)
 BEEEON_OBJECT_PROPERTY("gatewayService", &GWRequestHandlerFactory::setGatewayService)
@@ -36,50 +37,29 @@ GWRequestHandler::GWRequestHandler(
 {
 }
 
-void GWRequestHandler::run()
+void GWRequestHandler::handle(WebSocket &ws)
 {
-	const Clock started;
+	Thread::current()->setName("ws");
 
-	try {
-		Thread::current()->setName("ws");
+	Poco::Buffer<char> buffer(m_maxMessageSize);
+	int flags;
 
-		WebSocket ws(request(), response());
-
-		Poco::Buffer<char> buffer(m_maxMessageSize);
-		int flags;
-
-		int ret = ws.receiveFrame(buffer.begin(), buffer.size(), flags);
-		if (ret <= 0 || (flags & WebSocket::FRAME_OP_CLOSE)) {
-			if (logger().debug()) {
-				logger().debug(ws.peerAddress().toString()
-					+ " connection closed",
-					__FILE__, __LINE__);
-			}
-			return;
-		}
-
-		logger().information("connection from "
-				+ ws.peerAddress().toString(),
+	int ret = ws.receiveFrame(buffer.begin(), buffer.size(), flags);
+	if (ret <= 0 || (flags & WebSocket::FRAME_OP_CLOSE)) {
+		if (logger().debug()) {
+			logger().debug(ws.peerAddress().toString()
+				+ " connection closed",
 				__FILE__, __LINE__);
-
-		string data(buffer.begin(), ret);
-		processPayload(ws, data);
-	}
-	catch (const Exception &e) {
-		logger().log(e, __FILE__, __LINE__);
-	}
-	catch (const exception &e) {
-		logger().critical(e.what(), __FILE__, __LINE__);
-	}
-	catch (...) {
-		logger().critical("unknown error, cought '...'", __FILE__, __LINE__);
+		}
+		return;
 	}
 
-	if (logger().information()) {
-		logger().information("duration: "
-			+ to_string(started.elapsed()) + "us",
+	logger().information("connection from "
+			+ ws.peerAddress().toString(),
 			__FILE__, __LINE__);
-	}
+
+	string data(buffer.begin(), ret);
+	processPayload(ws, data);
 }
 
 void GWRequestHandler::processPayload(
@@ -150,7 +130,7 @@ void GWRequestHandlerFactory::setMaxMessageSize(int size)
 	m_maxMessageSize = size;
 }
 
-HTTPRequestHandler *GWRequestHandlerFactory::createRequestHandler(
+WebSocketRequestHandler *GWRequestHandlerFactory::createWSHandler(
 	const HTTPServerRequest &request)
 {
 	GatewayPeerVerifier::Ptr verifier;

@@ -4,14 +4,13 @@
 #include <string>
 
 #include <Poco/SharedPtr.h>
-#include <Poco/Net/AbstractHTTPRequestHandler.h>
-#include <Poco/Net/HTTPRequestHandlerFactory.h>
 #include <Poco/Net/WebSocket.h>
 
 #include "gws/GatewayCommunicator.h"
 #include "gws/GatewayPeerVerifier.h"
 #include "gws/SocketGatewayPeerVerifierFactory.h"
 #include "service/GWSGatewayService.h"
+#include "server/WebSocketRequestHandler.h"
 #include "util/Loggable.h"
 
 namespace BeeeOn {
@@ -23,9 +22,7 @@ namespace BeeeOn {
  * to the GatewayCommunicator. After the connection is added to the communicator,
  * this handler is destroyed.
  */
-class GWRequestHandler :
-	public Poco::Net::AbstractHTTPRequestHandler,
-	protected Loggable {
+class GWRequestHandler : public WebSocketRequestHandler {
 public:
 	GWRequestHandler(
 			size_t maxMessageSize,
@@ -33,6 +30,7 @@ public:
 			GWSGatewayService::Ptr service,
 			GatewayPeerVerifier::Ptr peerVerifier);
 
+protected:
 	/**
 	 * @brief Handles incoming WebSocket connection from the Gateway.
 	 *
@@ -40,9 +38,8 @@ public:
 	 * Successfully registered Gateway connection (using GatewayService)
 	 * is added to the GatewayCommunicator.
 	 */
-	void run();
+	void handle(Poco::Net::WebSocket &ws) override;
 
-protected:
 	/**
 	 * Process the received WebSocket frame, generate a response and
 	 * register the gateway with GatewayCommunicator.
@@ -62,7 +59,7 @@ private:
  * @brief Factory for GWRequestHandler objects.
  */
 class GWRequestHandlerFactory :
-	public Poco::Net::HTTPRequestHandlerFactory {
+	public WebSocketRequestHandlerFactory {
 public:
 	typedef Poco::SharedPtr<GWRequestHandlerFactory> Ptr;
 
@@ -73,7 +70,8 @@ public:
 	void setVerifierFactory(SocketGatewayPeerVerifierFactory::Ptr factory);
 	void setMaxMessageSize(int size);
 
-	Poco::Net::HTTPRequestHandler *createRequestHandler(
+protected:
+	WebSocketRequestHandler *createWSHandler(
 		const Poco::Net::HTTPServerRequest &request) override;
 
 private:
