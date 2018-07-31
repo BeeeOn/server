@@ -9,11 +9,9 @@
 
 #include "l10n/Translator.h"
 #include "l10n/HTTPLocaleExtractor.h"
-#include "loop/StoppableLoop.h"
+#include "server/AbstractServer.h"
 #include "server/HTTPFilterChain.h"
-#include "server/ServerListener.h"
 #include "ssl/SSLServer.h"
-#include "util/EventSource.h"
 #include "util/HavingThreadPool.h"
 
 namespace BeeeOn {
@@ -22,20 +20,10 @@ class RestRouter;
 class SessionVerifier;
 
 class PocoRestServer :
-		public StoppableLoop,
+		public AbstractServer,
 		public HavingThreadPool {
 public:
 	PocoRestServer();
-
-	/**
-	 * Start the Rest HTTP server.
-	 */
-	void start();
-
-	/**
-	 * Stop the Rest HTTP server.
-	 */
-	void stop();
 
 	/**
 	 * Set Rest router for this server.
@@ -67,38 +55,22 @@ public:
 	 */
 	void setSSLConfig(SSLServer::Ptr config);
 
-	/**
-	 * Set name of the server instance.
-	 */
-	void setName(const std::string &name);
-
-	/**
-	 * Set bind address to listen on.
-	 */
-	void setHost(const std::string &host);
-
-	/**
-	 * Set port to listen on.
-	 */
-	void setPort(int port);
-
-	/**
-	 * Set server backlog.
-	 */
-	void setBacklog(int backlog);
-
-	void setEventsExecutor(AsyncExecutor::Ptr executor);
-	void registerListener(ServerListener::Ptr listener);
-
 protected:
 	void initServerSocket();
 	void initFactory();
 	void initHttpServer();
 
+	/**
+	 * Start the Rest HTTP server.
+	 */
+	void doStart() override;
+
+	/**
+	 * Stop the Rest HTTP server.
+	 */
+	void doStop() override;
+
 private:
-	std::string m_name;
-	Poco::Net::SocketAddress m_bind;
-	unsigned int m_backlog;
 	RestRouter *m_router;
 	SessionVerifier *m_sessionVerifier;
 	SSLServer::Ptr m_sslConfig;
@@ -108,7 +80,6 @@ private:
 	TranslatorFactory::Ptr m_translatorFactory;
 	HTTPLocaleExtractor m_localeExtractor;
 	HTTPFilterChain::Ptr m_filterChain;
-	EventSource<ServerListener> m_eventSource;
 };
 
 }

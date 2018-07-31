@@ -11,11 +11,8 @@
 #include <Poco/Net/TCPServerConnectionFactory.h>
 #include <Poco/Net/Context.h>
 
-#include "loop/StoppableLoop.h"
-#include "server/ServerListener.h"
+#include "server/AbstractServer.h"
 #include "ssl/SSLServer.h"
-#include "util/EventSource.h"
-#include "util/Loggable.h"
 
 namespace BeeeOn {
 
@@ -27,39 +24,28 @@ public:
 			const Poco::Net::StreamSocket &socket) = 0;
 };
 
-class SocketServer : public StoppableLoop, protected Loggable {
+class SocketServer : public AbstractServer {
 public:
 	SocketServer();
 
-	void setName(const std::string &name);
 	void setSSLConfig(SSLServer::Ptr config);
-	void setHost(const std::string &host);
-	void setPort(int port);
-	void setBacklog(int backlog);
 	void setFactory(SocketServerConnectionFactory::Ptr factory);
 	void setMaxThreads(int count);
 	void setMaxQueued(int count);
 	void setThreadIdleTime(const Poco::Timespan &time);
 	void setThreadPriority(const std::string &priority);
 
-	void setEventsExecutor(AsyncExecutor::Ptr executor);
-	void registerListener(ServerListener::Ptr listener);
-
-	void start() override;
-	void stop() override;
-
 protected:
 	Poco::Net::TCPServer *createServer();
 
+	void doStart() override;
+	void doStop() override;
+
 private:
-	std::string m_name;
-	Poco::Net::SocketAddress m_bind;
-	int m_backlog;
 	SSLServer::Ptr m_sslConfig;
 	SocketServerConnectionFactory::Ptr m_factory;
 	Poco::Net::TCPServerParams::Ptr m_tcpParams;
 	Poco::SharedPtr<Poco::Net::TCPServer> m_server;
-	EventSource<ServerListener> m_eventSource;
 };
 
 }

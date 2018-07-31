@@ -30,45 +30,13 @@ BEEEON_OBJECT_PROPERTY("listeners", &SocketServer::registerListener)
 BEEEON_OBJECT_END(BeeeOn, SocketServer)
 
 SocketServer::SocketServer():
-	m_bind("127.0.0.1:0"),
-	m_backlog(64),
 	m_tcpParams(new TCPServerParams())
 {
-}
-
-void SocketServer::setName(const string &name)
-{
-	m_name = name;
 }
 
 void SocketServer::setSSLConfig(SSLServer::Ptr config)
 {
 	m_sslConfig = config;
-}
-
-void SocketServer::setHost(const string &host)
-{
-	m_bind = SocketAddress(host, m_bind.port());
-}
-
-void SocketServer::setPort(int port)
-{
-	if (port < 0) {
-		throw InvalidArgumentException(
-				"invalid port number: " + to_string(port));
-	}
-
-	m_bind = SocketAddress(m_bind.host(), static_cast<UInt16>(port));
-}
-
-void SocketServer::setBacklog(int backlog)
-{
-	if (backlog < 1) {
-		throw InvalidArgumentException(
-				"invalid backlog: " + to_string(backlog));
-	}
-
-	m_backlog = backlog;
 }
 
 void SocketServer::setFactory(SocketServerConnectionFactory::Ptr factory)
@@ -112,50 +80,25 @@ void SocketServer::setThreadPriority(const std::string &priority)
 	m_tcpParams->setThreadPriority(prio);
 }
 
-void SocketServer::setEventsExecutor(AsyncExecutor::Ptr executor)
-{
-	m_eventSource.setAsyncExecutor(executor);
-}
-
-void SocketServer::registerListener(ServerListener::Ptr listener)
-{
-	m_eventSource.addListener(listener);
-}
-
 TCPServer *SocketServer::createServer()
 {
 	if (m_sslConfig.isNull()) {
-		ServerSocket socket(m_bind, m_backlog);
+		ServerSocket socket(bindAddress(), backlog());
 		return new TCPServer(m_factory, socket, m_tcpParams);
 	}
 
 	Context::Ptr context = m_sslConfig->context();
-	SecureServerSocket socket(m_bind, m_backlog, context);
+	SecureServerSocket socket(bindAddress(), backlog(), context);
 	return new TCPServer(m_factory, socket, m_tcpParams);
 }
 
-void SocketServer::start()
+void SocketServer::doStart()
 {
 	m_server = createServer();
-
-	logger().information(
-		"starting server on port "
-		+ std::to_string(m_server->port()));
-
 	m_server->start();
-
-	const ServerEvent e = {m_bind.toString(), m_name};
-	m_eventSource.fireEvent(e, &ServerListener::onUp);
 }
 
-void SocketServer::stop()
+void SocketServer::doStop()
 {
-	logger().information(
-		"stopping server on port "
-		+ std::to_string(m_server->port()));
-
 	m_server->stop();
-
-	const ServerEvent e = {m_bind.toString(), m_name};
-	m_eventSource.fireEvent(e, &ServerListener::onDown);
 }

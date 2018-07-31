@@ -44,6 +44,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/provider/FacebookAuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/GoogleAuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/TypeInfoProvider.cpp
+	${PROJECT_SOURCE_DIR}/server/AbstractServer.cpp
 	${PROJECT_SOURCE_DIR}/server/AuthRestHandler.cpp
 	${PROJECT_SOURCE_DIR}/server/CORSFilter.cpp
 	${PROJECT_SOURCE_DIR}/server/FailingTCPServerConnection.cpp

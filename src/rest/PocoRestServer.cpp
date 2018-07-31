@@ -37,8 +37,6 @@ using namespace Poco::Net;
 using namespace BeeeOn;
 
 PocoRestServer::PocoRestServer():
-	m_bind("127.0.0.1:0"),
-	m_backlog(64),
 	m_router(NULL),
 	m_sessionVerifier(NULL),
 	m_filterChain(new HTTPFilterChain)
@@ -56,11 +54,11 @@ void PocoRestServer::initServerSocket()
 		return;
 
 	if (m_sslConfig.isNull()) {
-		m_socket = new ServerSocket(m_bind, m_backlog);
+		m_socket = new ServerSocket(bindAddress(), backlog());
 	}
 	else {
 		Context::Ptr context = m_sslConfig->context();
-		m_socket = new SecureServerSocket(m_bind, m_backlog, context);
+		m_socket = new SecureServerSocket(bindAddress(), backlog(), context);
 	}
 }
 
@@ -88,37 +86,22 @@ void PocoRestServer::initHttpServer()
 	m_server = new HTTPServer(m_factory, pool(), *m_socket, params);
 }
 
-void PocoRestServer::start()
+void PocoRestServer::doStart()
 {
 	initHttpServer();
-
-	logger().information(
-		"starting server on port "
-		+ to_string(m_bind.port()));
-
 	m_server->start();
-
-	const ServerEvent e = {m_bind.toString(), m_name};
-	m_eventSource.fireEvent(e, &ServerListener::onUp);
 }
 
-void PocoRestServer::stop()
+void PocoRestServer::doStop()
 {
 	if (m_server.isNull())
 		return;
-
-	logger().information(
-		"stopping server on port "
-		+ to_string(m_bind.port()));
 
 	m_server->stop();
 
 	m_server = NULL;
 	m_factory = NULL;
 	m_socket = NULL;
-
-	const ServerEvent e = {m_bind.toString(), m_name};
-	m_eventSource.fireEvent(e, &ServerListener::onDown);
 }
 
 void PocoRestServer::setRouter(RestRouter *router)
@@ -144,40 +127,4 @@ void PocoRestServer::setTranslatorFactory(TranslatorFactory::Ptr factory)
 void PocoRestServer::setLocaleManager(SharedPtr<LocaleManager> manager)
 {
 	m_localeExtractor.setLocaleManager(manager);
-}
-
-void PocoRestServer::setName(const string &name)
-{
-	m_name = name;
-}
-
-void PocoRestServer::setHost(const string &host)
-{
-	m_bind = SocketAddress(host, m_bind.port());
-}
-
-void PocoRestServer::setPort(int port)
-{
-	if (port < 0)
-		throw InvalidArgumentException("port must be non-negative");
-
-	m_bind = SocketAddress(m_bind.host(), port);
-}
-
-void PocoRestServer::setBacklog(int backlog)
-{
-	if (backlog < 1)
-		throw InvalidArgumentException("backlog must be positive");
-
-	m_backlog = backlog;
-}
-
-void PocoRestServer::setEventsExecutor(AsyncExecutor::Ptr executor)
-{
-	m_eventSource.setAsyncExecutor(executor);
-}
-
-void PocoRestServer::registerListener(ServerListener::Ptr listener)
-{
-	m_eventSource.addListener(listener);
 }
