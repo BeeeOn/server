@@ -4,6 +4,7 @@
 #include <Poco/SharedPtr.h>
 #include <Poco/Timespan.h>
 #include <Poco/Net/ServerSocket.h>
+#include <Poco/Net/SocketAddress.h>
 #include <Poco/Net/TCPServer.h>
 #include <Poco/Net/TCPServerParams.h>
 #include <Poco/Net/TCPServerConnection.h>
@@ -50,8 +51,7 @@ protected:
 	Poco::Net::TCPServer *createServer();
 
 private:
-	std::string m_host;
-	unsigned int m_port;
+	Poco::Net::SocketAddress m_bind;
 	int m_backlog;
 	SSLServer::Ptr m_sslConfig;
 	SocketServerConnectionFactory::Ptr m_factory;

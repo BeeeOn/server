@@ -29,8 +29,7 @@ BEEEON_OBJECT_PROPERTY("listeners", &SocketServer::registerListener)
 BEEEON_OBJECT_END(BeeeOn, SocketServer)
 
 SocketServer::SocketServer():
-	m_host("127.0.0.1"),
-	m_port(0),
+	m_bind("127.0.0.1:0"),
 	m_backlog(64),
 	m_tcpParams(new TCPServerParams())
 {
@@ -43,7 +42,7 @@ void SocketServer::setSSLConfig(SSLServer::Ptr config)
 
 void SocketServer::setHost(const string &host)
 {
-	m_host = host;
+	m_bind = SocketAddress(host, m_bind.port());
 }
 
 void SocketServer::setPort(int port)
@@ -53,7 +52,7 @@ void SocketServer::setPort(int port)
 				"invalid port number: " + to_string(port));
 	}
 
-	m_port = (unsigned int) port;
+	m_bind = SocketAddress(m_bind.host(), static_cast<UInt16>(port));
 }
 
 void SocketServer::setBacklog(int backlog)
@@ -120,12 +119,12 @@ void SocketServer::registerListener(ServerListener::Ptr listener)
 TCPServer *SocketServer::createServer()
 {
 	if (m_sslConfig.isNull()) {
-		ServerSocket socket({m_host, static_cast<UInt16>(m_port)}, m_backlog);
+		ServerSocket socket(m_bind, m_backlog);
 		return new TCPServer(m_factory, socket, m_tcpParams);
 	}
 
 	Context::Ptr context = m_sslConfig->context();
-	SecureServerSocket socket({m_host, static_cast<UInt16>(m_port)}, m_backlog, context);
+	SecureServerSocket socket(m_bind, m_backlog, context);
 	return new TCPServer(m_factory, socket, m_tcpParams);
 }
 
@@ -139,7 +138,7 @@ void SocketServer::start()
 
 	m_server->start();
 
-	const ServerEvent e = {m_host + ":" + to_string(m_server->port()), "xmlui"};
+	const ServerEvent e = {m_bind.toString(), "xmlui"};
 	m_eventSource.fireEvent(e, &ServerListener::onUp);
 }
 
@@ -151,6 +150,6 @@ void SocketServer::stop()
 
 	m_server->stop();
 
-	const ServerEvent e = {m_host + ":" + to_string(m_server->port()), "xmlui"};
+	const ServerEvent e = {m_bind.toString(), "xmlui"};
 	m_eventSource.fireEvent(e, &ServerListener::onDown);
 }
