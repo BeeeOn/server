@@ -31,6 +31,7 @@ public:
 	SocketServer();
 
 	void setSSLConfig(SSLServer::Ptr config);
+	void setHost(const std::string &host);
 	void setPort(int port);
 	void setBacklog(int backlog);
 	void setFactory(SocketServerConnectionFactory::Ptr factory);
@@ -49,6 +50,7 @@ protected:
 	Poco::Net::TCPServer *createServer();
 
 private:
+	std::string m_host;
 	unsigned int m_port;
 	int m_backlog;
 	SSLServer::Ptr m_sslConfig;

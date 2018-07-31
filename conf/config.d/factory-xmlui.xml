@@ -8,6 +8,7 @@
 			<set name="maxQueued" number="${xmlui.maxQueued}" />
 			<set name="threadIdleTime" time="${xmlui.threadIdleTime}" />
 			<set name="threadPriority" text="normal" />
+			<set name="host" text="${xmlui.host}" />
 			<set name="port" number="${xmlui.port}" />
 			<set name="eventsExecutor" ref="eventsExecutor" />
 			<set name="listeners" ref="publishingWatcher" if-yes="${baf.publish.server.enable}" />

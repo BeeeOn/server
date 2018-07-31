@@ -15,6 +15,7 @@ using namespace BeeeOn;
 
 BEEEON_OBJECT_BEGIN(BeeeOn, SocketServer)
 BEEEON_OBJECT_CASTABLE(StoppableLoop)
+BEEEON_OBJECT_PROPERTY("host", &SocketServer::setHost)
 BEEEON_OBJECT_PROPERTY("port", &SocketServer::setPort)
 BEEEON_OBJECT_PROPERTY("backlog", &SocketServer::setBacklog)
 BEEEON_OBJECT_PROPERTY("maxThreads", &SocketServer::setMaxThreads)
@@ -28,6 +29,7 @@ BEEEON_OBJECT_PROPERTY("listeners", &SocketServer::registerListener)
 BEEEON_OBJECT_END(BeeeOn, SocketServer)
 
 SocketServer::SocketServer():
+	m_host("127.0.0.1"),
 	m_port(0),
 	m_backlog(64),
 	m_tcpParams(new TCPServerParams())
@@ -37,6 +39,11 @@ SocketServer::SocketServer():
 void SocketServer::setSSLConfig(SSLServer::Ptr config)
 {
 	m_sslConfig = config;
+}
+
+void SocketServer::setHost(const string &host)
+{
+	m_host = host;
 }
 
 void SocketServer::setPort(int port)
@@ -113,12 +120,12 @@ void SocketServer::registerListener(ServerListener::Ptr listener)
 TCPServer *SocketServer::createServer()
 {
 	if (m_sslConfig.isNull()) {
-		ServerSocket socket(m_port, m_backlog);
+		ServerSocket socket({m_host, static_cast<UInt16>(m_port)}, m_backlog);
 		return new TCPServer(m_factory, socket, m_tcpParams);
 	}
 
 	Context::Ptr context = m_sslConfig->context();
-	SecureServerSocket socket(m_port, m_backlog, context);
+	SecureServerSocket socket({m_host, static_cast<UInt16>(m_port)}, m_backlog, context);
 	return new TCPServer(m_factory, socket, m_tcpParams);
 }
 
@@ -132,7 +139,7 @@ void SocketServer::start()
 
 	m_server->start();
 
-	const ServerEvent e = {"0.0.0.0:" + to_string(m_server->port()), "xmlui"};
+	const ServerEvent e = {m_host + ":" + to_string(m_server->port()), "xmlui"};
 	m_eventSource.fireEvent(e, &ServerListener::onUp);
 }
 
@@ -144,6 +151,6 @@ void SocketServer::stop()
 
 	m_server->stop();
 
-	const ServerEvent e = {"0.0.0.0:" + to_string(m_server->port()), "xmlui"};
+	const ServerEvent e = {m_host + ":" + to_string(m_server->port()), "xmlui"};
 	m_eventSource.fireEvent(e, &ServerListener::onDown);
 }
