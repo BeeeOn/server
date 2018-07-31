@@ -43,6 +43,7 @@ public:
 	void setGatewayService(GWSGatewayService::Ptr service);
 	void setVerifierFactory(SocketGatewayPeerVerifierFactory::Ptr factory);
 
+	void setHost(const std::string &host);
 	void setPort(int port);
 	void setBacklog(int backlog);
 
@@ -61,6 +62,7 @@ private:
 	Poco::Net::ServerSocket createSocket();
 
 private:
+	std::string m_host;
 	int m_port;
 	int m_backlog;
 	size_t m_maxMessageSize;

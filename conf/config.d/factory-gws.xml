@@ -5,6 +5,7 @@
 			<set name="sslConfig" ref="gwsSSLServer" if-yes="${gws.ws.ssl.enable}" />
 			<set name="gatewayService" ref="gatewayService" />
 			<set name="verifierFactory" ref="gatewayPeerVerifierFactory" />
+			<set name="host" text="${gws.ws.host}" />
 			<set name="port" number="${gws.ws.port}" />
 			<set name="backlog" number="${gws.ws.backlog}" />
 			<set name="maxMessageSize" number="${gws.ws.maxMessageSize}" />
