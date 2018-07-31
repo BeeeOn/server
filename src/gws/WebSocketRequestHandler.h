@@ -3,6 +3,7 @@
 
 #include <string>
 
+#include <Poco/SharedPtr.h>
 #include <Poco/Net/AbstractHTTPRequestHandler.h>
 #include <Poco/Net/HTTPRequestHandlerFactory.h>
 #include <Poco/Net/WebSocket.h>
@@ -63,6 +64,8 @@ private:
 class WebSocketRequestHandlerFactory :
 	public Poco::Net::HTTPRequestHandlerFactory {
 public:
+	typedef Poco::SharedPtr<WebSocketRequestHandlerFactory> Ptr;
+
 	WebSocketRequestHandlerFactory(
 			size_t maxMessageSize,
 			GatewayCommunicator::Ptr communicator,
