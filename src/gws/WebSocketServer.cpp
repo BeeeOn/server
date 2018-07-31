@@ -34,7 +34,7 @@ void WebSocketServer::setSSLConfig(SSLServer::Ptr config)
 	m_sslConfig = config;
 }
 
-void WebSocketServer::setRequestHandlerFactory(GWRequestHandlerFactory::Ptr factory)
+void WebSocketServer::setRequestHandlerFactory(WebSocketRequestHandlerFactory::Ptr factory)
 {
 	m_factory = factory;
 }
