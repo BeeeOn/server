@@ -67,13 +67,7 @@ public:
 			size_t maxMessageSize,
 			GatewayCommunicator::Ptr communicator,
 			GWSGatewayService::Ptr service,
-			SocketGatewayPeerVerifierFactory::Ptr verifierFactory):
-		m_maxMessageSize(maxMessageSize),
-		m_gatewayCommunicator(communicator),
-		m_gatewayService(service),
-		m_verifierFactory(verifierFactory)
-	{
-	}
+			SocketGatewayPeerVerifierFactory::Ptr verifierFactory);
 
 	Poco::Net::HTTPRequestHandler *createRequestHandler(
 		const Poco::Net::HTTPServerRequest &request) override;
