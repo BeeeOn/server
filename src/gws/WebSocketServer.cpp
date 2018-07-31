@@ -38,7 +38,7 @@ void WebSocketServer::setGatewayCommunicator(GatewayCommunicator::Ptr communicat
 	m_gatewayCommunicator = communicator;
 }
 
-void WebSocketServer::setSSLConfig(SharedPtr<SSLServer> config)
+void WebSocketServer::setSSLConfig(SSLServer::Ptr config)
 {
 	m_sslConfig = config;
 }
