@@ -4,14 +4,13 @@
 #include <Poco/SharedPtr.h>
 #include <Poco/Net/HTTPServer.h>
 #include <Poco/Net/ServerSocket.h>
+#include <Poco/Net/SocketAddress.h>
 
 #include "gws/GatewayCommunicator.h"
 #include "gws/SocketGatewayPeerVerifierFactory.h"
-#include "loop/StoppableLoop.h"
-#include "server/ServerListener.h"
+#include "server/AbstractServer.h"
 #include "service/GWSGatewayService.h"
 #include "ssl/SSLServer.h"
-#include "util/EventSource.h"
 
 namespace BeeeOn {
 
@@ -30,39 +29,31 @@ namespace BeeeOn {
  * returned to the thread pool.
  */
 class WebSocketServer :
-		public StoppableLoop,
+		public AbstractServer,
 		public HavingThreadPool {
 public:
 	WebSocketServer();
-
-	void start() override;
-	void stop() override;
 
 	void setGatewayCommunicator(GatewayCommunicator::Ptr communicator);
 	void setSSLConfig(SSLServer::Ptr config);
 	void setGatewayService(GWSGatewayService::Ptr service);
 	void setVerifierFactory(SocketGatewayPeerVerifierFactory::Ptr factory);
 
-	void setPort(int port);
-	void setBacklog(int backlog);
-
 	/**
 	 * @brief Set max message size just for register message.
 	 */
 	void setMaxMessageSize(int size);
 
-	void setEventsExecutor(AsyncExecutor::Ptr executor);
-	void registerListener(ServerListener::Ptr listener);
-
 protected:
+	void doStart() override;
+	void doStop() override;
+
 	Poco::Net::HTTPServer *createServer();
 
 private:
 	Poco::Net::ServerSocket createSocket();
 
 private:
-	int m_port;
-	int m_backlog;
 	size_t m_maxMessageSize;
 
 	SSLServer::Ptr m_sslConfig;
@@ -70,7 +61,6 @@ private:
 	GWSGatewayService::Ptr m_gatewayService;
 	Poco::SharedPtr<Poco::Net::HTTPServer> m_server;
 	SocketGatewayPeerVerifierFactory::Ptr m_verifierFactory;
-	EventSource<ServerListener> m_eventSource;
 };
 
 }

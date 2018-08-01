@@ -11,6 +11,8 @@ BEEEON_OBJECT_PROPERTY("gatewayCommunicator", &WebSocketServer::setGatewayCommun
 BEEEON_OBJECT_PROPERTY("sslConfig", &WebSocketServer::setSSLConfig)
 BEEEON_OBJECT_PROPERTY("gatewayService", &WebSocketServer::setGatewayService)
 BEEEON_OBJECT_PROPERTY("verifierFactory", &WebSocketServer::setVerifierFactory)
+BEEEON_OBJECT_PROPERTY("name", &WebSocketServer::setName)
+BEEEON_OBJECT_PROPERTY("host", &WebSocketServer::setHost)
 BEEEON_OBJECT_PROPERTY("port", &WebSocketServer::setPort)
 BEEEON_OBJECT_PROPERTY("backlog", &WebSocketServer::setBacklog)
 BEEEON_OBJECT_PROPERTY("maxMessageSize", &WebSocketServer::setMaxMessageSize)
@@ -27,8 +29,6 @@ using namespace Poco::Net;
 using namespace BeeeOn;
 
 WebSocketServer::WebSocketServer():
-	m_port(0),
-	m_backlog(64),
 	m_maxMessageSize(256)
 {
 }
@@ -53,38 +53,12 @@ void WebSocketServer::setVerifierFactory(SocketGatewayPeerVerifierFactory::Ptr f
 	m_verifierFactory = factory;
 }
 
-void WebSocketServer::setPort(int port)
-{
-	if (port < 0)
-		throw InvalidArgumentException("port must be non-negative");
-
-	m_port = port;
-}
-
-void WebSocketServer::setBacklog(int backlog)
-{
-	if (backlog < 0)
-		throw InvalidArgumentException("backlog must be non-negative");
-
-	m_backlog = backlog;
-}
-
 void WebSocketServer::setMaxMessageSize(int size)
 {
 	if (size < 0)
 		throw InvalidArgumentException("size must be non-negative");
 
 	m_maxMessageSize = size;
-}
-
-void WebSocketServer::setEventsExecutor(AsyncExecutor::Ptr executor)
-{
-	m_eventSource.setAsyncExecutor(executor);
-}
-
-void WebSocketServer::registerListener(ServerListener::Ptr listener)
-{
-	m_eventSource.addListener(listener);
 }
 
 Poco::Net::HTTPServer *WebSocketServer::createServer()
@@ -102,28 +76,17 @@ Poco::Net::HTTPServer *WebSocketServer::createServer()
 
 ServerSocket WebSocketServer::createSocket()
 {
-	return m_sslConfig.isNull() ? ServerSocket(m_port, m_backlog)
-			: SecureServerSocket(m_port, m_backlog, m_sslConfig->context());
+	return m_sslConfig.isNull() ? ServerSocket(bindAddress(), backlog())
+			: SecureServerSocket(bindAddress(), backlog(), m_sslConfig->context());
 }
 
-void WebSocketServer::start()
+void WebSocketServer::doStart()
 {
 	m_server = createServer();
-
-	logger().information("starting WebSocket server on port: "
-			+ to_string(m_server->port()), __FILE__, __LINE__);
-
 	m_server->start();
-
-	const ServerEvent e = {"0.0.0.0:" + to_string(m_port), "gws"};
-	m_eventSource.fireEvent(e, &ServerListener::onUp);
 }
 
-void WebSocketServer::stop()
+void WebSocketServer::doStop()
 {
-	logger().information("stopping WebSocket server", __FILE__, __LINE__);
 	m_server->stop();
-
-	const ServerEvent e = {"0.0.0.0:" + to_string(m_port), "gws"};
-	m_eventSource.fireEvent(e, &ServerListener::onDown);
 }

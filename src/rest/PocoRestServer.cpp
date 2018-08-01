@@ -20,6 +20,8 @@ BEEEON_OBJECT_PROPERTY("sessionVerifier", &PocoRestServer::setSessionVerifier)
 BEEEON_OBJECT_PROPERTY("translatorFactory", &PocoRestServer::setTranslatorFactory)
 BEEEON_OBJECT_PROPERTY("localeManager", &PocoRestServer::setLocaleManager)
 BEEEON_OBJECT_PROPERTY("sslConfig", &PocoRestServer::setSSLConfig)
+BEEEON_OBJECT_PROPERTY("name", &PocoRestServer::setName)
+BEEEON_OBJECT_PROPERTY("host", &PocoRestServer::setHost)
 BEEEON_OBJECT_PROPERTY("port", &PocoRestServer::setPort)
 BEEEON_OBJECT_PROPERTY("backlog", &PocoRestServer::setBacklog)
 BEEEON_OBJECT_PROPERTY("minThreads", &PocoRestServer::setMinThreads)
@@ -35,8 +37,6 @@ using namespace Poco::Net;
 using namespace BeeeOn;
 
 PocoRestServer::PocoRestServer():
-	m_port(80),
-	m_backlog(64),
 	m_router(NULL),
 	m_sessionVerifier(NULL),
 	m_filterChain(new HTTPFilterChain)
@@ -54,11 +54,11 @@ void PocoRestServer::initServerSocket()
 		return;
 
 	if (m_sslConfig.isNull()) {
-		m_socket = new ServerSocket(m_port, m_backlog);
+		m_socket = new ServerSocket(bindAddress(), backlog());
 	}
 	else {
 		Context::Ptr context = m_sslConfig->context();
-		m_socket = new SecureServerSocket(m_port, m_backlog, context);
+		m_socket = new SecureServerSocket(bindAddress(), backlog(), context);
 	}
 }
 
@@ -86,37 +86,22 @@ void PocoRestServer::initHttpServer()
 	m_server = new HTTPServer(m_factory, pool(), *m_socket, params);
 }
 
-void PocoRestServer::start()
+void PocoRestServer::doStart()
 {
 	initHttpServer();
-
-	logger().information(
-		"starting server on port "
-		+ to_string(m_port));
-
 	m_server->start();
-
-	const ServerEvent e = {"0.0.0.0:" + to_string(m_port), "restui"};
-	m_eventSource.fireEvent(e, &ServerListener::onUp);
 }
 
-void PocoRestServer::stop()
+void PocoRestServer::doStop()
 {
 	if (m_server.isNull())
 		return;
-
-	logger().information(
-		"stopping server on port "
-		+ to_string(m_port));
 
 	m_server->stop();
 
 	m_server = NULL;
 	m_factory = NULL;
 	m_socket = NULL;
-
-	const ServerEvent e = {"0.0.0.0:" + to_string(m_port), "restui"};
-	m_eventSource.fireEvent(e, &ServerListener::onDown);
 }
 
 void PocoRestServer::setRouter(RestRouter *router)
@@ -142,30 +127,4 @@ void PocoRestServer::setTranslatorFactory(TranslatorFactory::Ptr factory)
 void PocoRestServer::setLocaleManager(SharedPtr<LocaleManager> manager)
 {
 	m_localeExtractor.setLocaleManager(manager);
-}
-
-void PocoRestServer::setPort(int port)
-{
-	if (port < 0)
-		throw InvalidArgumentException("port must be non-negative");
-
-	m_port = port;
-}
-
-void PocoRestServer::setBacklog(int backlog)
-{
-	if (backlog < 1)
-		throw InvalidArgumentException("backlog must be positive");
-
-	m_backlog = backlog;
-}
-
-void PocoRestServer::setEventsExecutor(AsyncExecutor::Ptr executor)
-{
-	m_eventSource.setAsyncExecutor(executor);
-}
-
-void PocoRestServer::registerListener(ServerListener::Ptr listener)
-{
-	m_eventSource.addListener(listener);
 }

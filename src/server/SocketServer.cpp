@@ -15,6 +15,8 @@ using namespace BeeeOn;
 
 BEEEON_OBJECT_BEGIN(BeeeOn, SocketServer)
 BEEEON_OBJECT_CASTABLE(StoppableLoop)
+BEEEON_OBJECT_PROPERTY("name", &SocketServer::setName)
+BEEEON_OBJECT_PROPERTY("host", &SocketServer::setHost)
 BEEEON_OBJECT_PROPERTY("port", &SocketServer::setPort)
 BEEEON_OBJECT_PROPERTY("backlog", &SocketServer::setBacklog)
 BEEEON_OBJECT_PROPERTY("maxThreads", &SocketServer::setMaxThreads)
@@ -28,8 +30,6 @@ BEEEON_OBJECT_PROPERTY("listeners", &SocketServer::registerListener)
 BEEEON_OBJECT_END(BeeeOn, SocketServer)
 
 SocketServer::SocketServer():
-	m_port(0),
-	m_backlog(64),
 	m_tcpParams(new TCPServerParams())
 {
 }
@@ -37,26 +37,6 @@ SocketServer::SocketServer():
 void SocketServer::setSSLConfig(SSLServer::Ptr config)
 {
 	m_sslConfig = config;
-}
-
-void SocketServer::setPort(int port)
-{
-	if (port < 0) {
-		throw InvalidArgumentException(
-				"invalid port number: " + to_string(port));
-	}
-
-	m_port = (unsigned int) port;
-}
-
-void SocketServer::setBacklog(int backlog)
-{
-	if (backlog < 1) {
-		throw InvalidArgumentException(
-				"invalid backlog: " + to_string(backlog));
-	}
-
-	m_backlog = backlog;
 }
 
 void SocketServer::setFactory(SocketServerConnectionFactory::Ptr factory)
@@ -100,50 +80,25 @@ void SocketServer::setThreadPriority(const std::string &priority)
 	m_tcpParams->setThreadPriority(prio);
 }
 
-void SocketServer::setEventsExecutor(AsyncExecutor::Ptr executor)
-{
-	m_eventSource.setAsyncExecutor(executor);
-}
-
-void SocketServer::registerListener(ServerListener::Ptr listener)
-{
-	m_eventSource.addListener(listener);
-}
-
 TCPServer *SocketServer::createServer()
 {
 	if (m_sslConfig.isNull()) {
-		ServerSocket socket(m_port, m_backlog);
+		ServerSocket socket(bindAddress(), backlog());
 		return new TCPServer(m_factory, socket, m_tcpParams);
 	}
 
 	Context::Ptr context = m_sslConfig->context();
-	SecureServerSocket socket(m_port, m_backlog, context);
+	SecureServerSocket socket(bindAddress(), backlog(), context);
 	return new TCPServer(m_factory, socket, m_tcpParams);
 }
 
-void SocketServer::start()
+void SocketServer::doStart()
 {
 	m_server = createServer();
-
-	logger().information(
-		"starting server on port "
-		+ std::to_string(m_server->port()));
-
 	m_server->start();
-
-	const ServerEvent e = {"0.0.0.0:" + to_string(m_server->port()), "xmlui"};
-	m_eventSource.fireEvent(e, &ServerListener::onUp);
 }
 
-void SocketServer::stop()
+void SocketServer::doStop()
 {
-	logger().information(
-		"stopping server on port "
-		+ std::to_string(m_server->port()));
-
 	m_server->stop();
-
-	const ServerEvent e = {"0.0.0.0:" + to_string(m_server->port()), "xmlui"};
-	m_eventSource.fireEvent(e, &ServerListener::onDown);
 }
