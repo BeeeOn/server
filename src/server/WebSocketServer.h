@@ -6,11 +6,10 @@
 #include <Poco/Net/ServerSocket.h>
 #include <Poco/Net/SocketAddress.h>
 
-#include "gws/GatewayCommunicator.h"
-#include "gws/SocketGatewayPeerVerifierFactory.h"
 #include "server/AbstractServer.h"
-#include "service/GWSGatewayService.h"
+#include "server/WebSocketRequestHandler.h"
 #include "ssl/SSLServer.h"
+#include "util/HavingThreadPool.h"
 
 namespace BeeeOn {
 
@@ -34,10 +33,8 @@ class WebSocketServer :
 public:
 	WebSocketServer();
 
-	void setGatewayCommunicator(GatewayCommunicator::Ptr communicator);
 	void setSSLConfig(SSLServer::Ptr config);
-	void setGatewayService(GWSGatewayService::Ptr service);
-	void setVerifierFactory(SocketGatewayPeerVerifierFactory::Ptr factory);
+	void setRequestHandlerFactory(WebSocketRequestHandlerFactory::Ptr factory);
 
 	/**
 	 * @brief Set max message size just for register message.
@@ -54,13 +51,9 @@ private:
 	Poco::Net::ServerSocket createSocket();
 
 private:
-	size_t m_maxMessageSize;
-
 	SSLServer::Ptr m_sslConfig;
-	GatewayCommunicator::Ptr m_gatewayCommunicator;
-	GWSGatewayService::Ptr m_gatewayService;
 	Poco::SharedPtr<Poco::Net::HTTPServer> m_server;
-	SocketGatewayPeerVerifierFactory::Ptr m_verifierFactory;
+	WebSocketRequestHandlerFactory::Ptr m_factory;
 };
 
 }

@@ -61,6 +61,8 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/server/AccessLevel.cpp
 	${PROJECT_SOURCE_DIR}/server/XmlRequestHandler.cpp
 	${PROJECT_SOURCE_DIR}/server/SocketServer.cpp
+	${PROJECT_SOURCE_DIR}/server/WebSocketRequestHandler.cpp
+	${PROJECT_SOURCE_DIR}/server/WebSocketServer.cpp
 	${PROJECT_SOURCE_DIR}/l10n/HTTPLocaleExtractor.cpp
 	${PROJECT_SOURCE_DIR}/l10n/IcuLocaleImpl.cpp
 	${PROJECT_SOURCE_DIR}/l10n/IcuLocaleManager.cpp
@@ -217,8 +219,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/gws/RelaxedGatewayPeerVerifier.cpp
 	${PROJECT_SOURCE_DIR}/gws/SensorDataListener.cpp
 	${PROJECT_SOURCE_DIR}/gws/SocketGatewayPeerVerifierFactory.cpp
-	${PROJECT_SOURCE_DIR}/gws/WebSocketRequestHandler.cpp
-	${PROJECT_SOURCE_DIR}/gws/WebSocketServer.cpp
+	${PROJECT_SOURCE_DIR}/gws/GWRequestHandler.cpp
 	${PROJECT_SOURCE_DIR}/gws/X509GatewayPeerVerifier.cpp
 	${PROJECT_SOURCE_DIR}/rpc/RPCConnector.cpp
 	${PROJECT_SOURCE_DIR}/rpc/SocketRPCConnector.cpp

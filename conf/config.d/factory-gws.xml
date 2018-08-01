@@ -1,20 +1,24 @@
 <system>
 	<factory>
 		<instance name="webSocketServer" class="BeeeOn::WebSocketServer">
-			<set name="gatewayCommunicator" ref="gatewayCommunicator"/>
 			<set name="sslConfig" ref="gwsSSLServer" if-yes="${gws.ws.ssl.enable}" />
-			<set name="gatewayService" ref="gatewayService" />
-			<set name="verifierFactory" ref="gatewayPeerVerifierFactory" />
+			<set name="requestHandlerFactory" ref="gwsRequestHandlerFactory" />
 			<set name="name" text="gws" />
 			<set name="host" text="${gws.ws.host}" />
 			<set name="port" number="${gws.ws.port}" />
 			<set name="backlog" number="${gws.ws.backlog}" />
-			<set name="maxMessageSize" number="${gws.ws.maxMessageSize}" />
 			<set name="minThreads" number="${gws.ws.minThreads}" />
 			<set name="maxThreads" number="${gws.ws.maxThreads}" />
 			<set name="threadIdleTime" time="${gws.ws.threadIdleTime}" />
 			<set name="eventsExecutor" ref="eventsExecutor" />
 			<set name="listeners" ref="publishingWatcher" if-yes="${baf.publish.server.enable}" />
+		</instance>
+
+		<instance name="gwsRequestHandlerFactory" class="BeeeOn::GWRequestHandlerFactory">
+			<set name="gatewayCommunicator" ref="gatewayCommunicator"/>
+			<set name="gatewayService" ref="gatewayService" />
+			<set name="verifierFactory" ref="gatewayPeerVerifierFactory" />
+			<set name="maxMessageSize" number="${gws.ws.maxMessageSize}" />
 		</instance>
 
 		<instance name="gatewayCommunicator" class="BeeeOn::GatewayCommunicator">
