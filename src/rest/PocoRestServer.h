@@ -5,6 +5,7 @@
 #include <Poco/Net/HTTPRequestHandlerFactory.h>
 #include <Poco/Net/HTTPServer.h>
 #include <Poco/Net/ServerSocket.h>
+#include <Poco/Net/SocketAddress.h>
 
 #include "l10n/Translator.h"
 #include "l10n/HTTPLocaleExtractor.h"
@@ -90,8 +91,7 @@ protected:
 	void initHttpServer();
 
 private:
-	std::string m_host;
-	unsigned int m_port;
+	Poco::Net::SocketAddress m_bind;
 	unsigned int m_backlog;
 	RestRouter *m_router;
 	SessionVerifier *m_sessionVerifier;

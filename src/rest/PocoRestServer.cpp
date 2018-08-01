@@ -36,8 +36,7 @@ using namespace Poco::Net;
 using namespace BeeeOn;
 
 PocoRestServer::PocoRestServer():
-	m_host("127.0.0.1"),
-	m_port(80),
+	m_bind("127.0.0.1:0"),
 	m_backlog(64),
 	m_router(NULL),
 	m_sessionVerifier(NULL),
@@ -56,11 +55,11 @@ void PocoRestServer::initServerSocket()
 		return;
 
 	if (m_sslConfig.isNull()) {
-		m_socket = new ServerSocket({m_host, static_cast<UInt16>(m_port)}, m_backlog);
+		m_socket = new ServerSocket(m_bind, m_backlog);
 	}
 	else {
 		Context::Ptr context = m_sslConfig->context();
-		m_socket = new SecureServerSocket({m_host, static_cast<UInt16>(m_port)}, m_backlog, context);
+		m_socket = new SecureServerSocket(m_bind, m_backlog, context);
 	}
 }
 
@@ -94,11 +93,11 @@ void PocoRestServer::start()
 
 	logger().information(
 		"starting server on port "
-		+ to_string(m_port));
+		+ to_string(m_bind.port()));
 
 	m_server->start();
 
-	const ServerEvent e = {m_host + ":" + to_string(m_port), "restui"};
+	const ServerEvent e = {m_bind.toString(), "restui"};
 	m_eventSource.fireEvent(e, &ServerListener::onUp);
 }
 
@@ -109,7 +108,7 @@ void PocoRestServer::stop()
 
 	logger().information(
 		"stopping server on port "
-		+ to_string(m_port));
+		+ to_string(m_bind.port()));
 
 	m_server->stop();
 
@@ -117,7 +116,7 @@ void PocoRestServer::stop()
 	m_factory = NULL;
 	m_socket = NULL;
 
-	const ServerEvent e = {m_host + ":" + to_string(m_port), "restui"};
+	const ServerEvent e = {m_bind.toString(), "restui"};
 	m_eventSource.fireEvent(e, &ServerListener::onDown);
 }
 
@@ -148,7 +147,7 @@ void PocoRestServer::setLocaleManager(SharedPtr<LocaleManager> manager)
 
 void PocoRestServer::setHost(const string &host)
 {
-	m_host = host;
+	m_bind = SocketAddress(host, m_bind.port());
 }
 
 void PocoRestServer::setPort(int port)
@@ -156,7 +155,7 @@ void PocoRestServer::setPort(int port)
 	if (port < 0)
 		throw InvalidArgumentException("port must be non-negative");
 
-	m_port = port;
+	m_bind = SocketAddress(m_bind.host(), port);
 }
 
 void PocoRestServer::setBacklog(int backlog)
