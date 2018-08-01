@@ -11,6 +11,7 @@ BEEEON_OBJECT_PROPERTY("gatewayCommunicator", &WebSocketServer::setGatewayCommun
 BEEEON_OBJECT_PROPERTY("sslConfig", &WebSocketServer::setSSLConfig)
 BEEEON_OBJECT_PROPERTY("gatewayService", &WebSocketServer::setGatewayService)
 BEEEON_OBJECT_PROPERTY("verifierFactory", &WebSocketServer::setVerifierFactory)
+BEEEON_OBJECT_PROPERTY("name", &WebSocketServer::setName)
 BEEEON_OBJECT_PROPERTY("host", &WebSocketServer::setHost)
 BEEEON_OBJECT_PROPERTY("port", &WebSocketServer::setPort)
 BEEEON_OBJECT_PROPERTY("backlog", &WebSocketServer::setBacklog)
@@ -52,6 +53,11 @@ void WebSocketServer::setGatewayService(GWSGatewayService::Ptr service)
 void WebSocketServer::setVerifierFactory(SocketGatewayPeerVerifierFactory::Ptr factory)
 {
 	m_verifierFactory = factory;
+}
+
+void WebSocketServer::setName(const string &name)
+{
+	m_name = name;
 }
 
 void WebSocketServer::setHost(const string &host)
@@ -121,7 +127,7 @@ void WebSocketServer::start()
 
 	m_server->start();
 
-	const ServerEvent e = {m_bind.toString(), "gws"};
+	const ServerEvent e = {m_bind.toString(), m_name};
 	m_eventSource.fireEvent(e, &ServerListener::onUp);
 }
 
@@ -130,6 +136,6 @@ void WebSocketServer::stop()
 	logger().information("stopping WebSocket server", __FILE__, __LINE__);
 	m_server->stop();
 
-	const ServerEvent e = {m_bind.toString(), "gws"};
+	const ServerEvent e = {m_bind.toString(), m_name};
 	m_eventSource.fireEvent(e, &ServerListener::onDown);
 }
