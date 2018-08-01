@@ -15,6 +15,7 @@ using namespace BeeeOn;
 
 BEEEON_OBJECT_BEGIN(BeeeOn, SocketServer)
 BEEEON_OBJECT_CASTABLE(StoppableLoop)
+BEEEON_OBJECT_PROPERTY("name", &SocketServer::setName)
 BEEEON_OBJECT_PROPERTY("host", &SocketServer::setHost)
 BEEEON_OBJECT_PROPERTY("port", &SocketServer::setPort)
 BEEEON_OBJECT_PROPERTY("backlog", &SocketServer::setBacklog)
@@ -33,6 +34,11 @@ SocketServer::SocketServer():
 	m_backlog(64),
 	m_tcpParams(new TCPServerParams())
 {
+}
+
+void SocketServer::setName(const string &name)
+{
+	m_name = name;
 }
 
 void SocketServer::setSSLConfig(SSLServer::Ptr config)
@@ -138,7 +144,7 @@ void SocketServer::start()
 
 	m_server->start();
 
-	const ServerEvent e = {m_bind.toString(), "xmlui"};
+	const ServerEvent e = {m_bind.toString(), m_name};
 	m_eventSource.fireEvent(e, &ServerListener::onUp);
 }
 
@@ -150,6 +156,6 @@ void SocketServer::stop()
 
 	m_server->stop();
 
-	const ServerEvent e = {m_bind.toString(), "xmlui"};
+	const ServerEvent e = {m_bind.toString(), m_name};
 	m_eventSource.fireEvent(e, &ServerListener::onDown);
 }

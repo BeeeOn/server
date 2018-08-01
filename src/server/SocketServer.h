@@ -31,6 +31,7 @@ class SocketServer : public StoppableLoop, protected Loggable {
 public:
 	SocketServer();
 
+	void setName(const std::string &name);
 	void setSSLConfig(SSLServer::Ptr config);
 	void setHost(const std::string &host);
 	void setPort(int port);
@@ -51,6 +52,7 @@ protected:
 	Poco::Net::TCPServer *createServer();
 
 private:
+	std::string m_name;
 	Poco::Net::SocketAddress m_bind;
 	int m_backlog;
 	SSLServer::Ptr m_sslConfig;
