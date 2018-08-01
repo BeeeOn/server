@@ -28,8 +28,7 @@ using namespace Poco::Net;
 using namespace BeeeOn;
 
 WebSocketServer::WebSocketServer():
-	m_host("127.0.0.1"),
-	m_port(0),
+	m_bind("127.0.0.1:0"),
 	m_backlog(64),
 	m_maxMessageSize(256)
 {
@@ -57,7 +56,7 @@ void WebSocketServer::setVerifierFactory(SocketGatewayPeerVerifierFactory::Ptr f
 
 void WebSocketServer::setHost(const string &host)
 {
-	m_host = host;
+	m_bind = SocketAddress(host, m_bind.port());
 }
 
 void WebSocketServer::setPort(int port)
@@ -65,7 +64,7 @@ void WebSocketServer::setPort(int port)
 	if (port < 0)
 		throw InvalidArgumentException("port must be non-negative");
 
-	m_port = port;
+	m_bind = SocketAddress(m_bind.host(), port);
 }
 
 void WebSocketServer::setBacklog(int backlog)
@@ -109,8 +108,8 @@ Poco::Net::HTTPServer *WebSocketServer::createServer()
 
 ServerSocket WebSocketServer::createSocket()
 {
-	return m_sslConfig.isNull() ? ServerSocket({m_host, static_cast<UInt16>(m_port)}, m_backlog)
-			: SecureServerSocket({m_host, static_cast<UInt16>(m_port)}, m_backlog, m_sslConfig->context());
+	return m_sslConfig.isNull() ? ServerSocket(m_bind, m_backlog)
+			: SecureServerSocket(m_bind, m_backlog, m_sslConfig->context());
 }
 
 void WebSocketServer::start()
@@ -122,7 +121,7 @@ void WebSocketServer::start()
 
 	m_server->start();
 
-	const ServerEvent e = {m_host + ":" + to_string(m_port), "gws"};
+	const ServerEvent e = {m_bind.toString(), "gws"};
 	m_eventSource.fireEvent(e, &ServerListener::onUp);
 }
 
@@ -131,6 +130,6 @@ void WebSocketServer::stop()
 	logger().information("stopping WebSocket server", __FILE__, __LINE__);
 	m_server->stop();
 
-	const ServerEvent e = {m_host + ":" + to_string(m_port), "gws"};
+	const ServerEvent e = {m_bind.toString(), "gws"};
 	m_eventSource.fireEvent(e, &ServerListener::onDown);
 }

@@ -4,6 +4,7 @@
 #include <Poco/SharedPtr.h>
 #include <Poco/Net/HTTPServer.h>
 #include <Poco/Net/ServerSocket.h>
+#include <Poco/Net/SocketAddress.h>
 
 #include "gws/GatewayCommunicator.h"
 #include "gws/SocketGatewayPeerVerifierFactory.h"
@@ -62,8 +63,7 @@ private:
 	Poco::Net::ServerSocket createSocket();
 
 private:
-	std::string m_host;
-	int m_port;
+	Poco::Net::SocketAddress m_bind;
 	int m_backlog;
 	size_t m_maxMessageSize;
 
