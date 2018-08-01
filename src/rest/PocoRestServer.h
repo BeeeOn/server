@@ -67,6 +67,11 @@ public:
 	void setSSLConfig(SSLServer::Ptr config);
 
 	/**
+	 * Set bind address to listen on.
+	 */
+	void setHost(const std::string &host);
+
+	/**
 	 * Set port to listen on.
 	 */
 	void setPort(int port);
@@ -85,6 +90,7 @@ protected:
 	void initHttpServer();
 
 private:
+	std::string m_host;
 	unsigned int m_port;
 	unsigned int m_backlog;
 	RestRouter *m_router;
