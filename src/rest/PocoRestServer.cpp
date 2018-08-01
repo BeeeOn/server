@@ -20,6 +20,7 @@ BEEEON_OBJECT_PROPERTY("sessionVerifier", &PocoRestServer::setSessionVerifier)
 BEEEON_OBJECT_PROPERTY("translatorFactory", &PocoRestServer::setTranslatorFactory)
 BEEEON_OBJECT_PROPERTY("localeManager", &PocoRestServer::setLocaleManager)
 BEEEON_OBJECT_PROPERTY("sslConfig", &PocoRestServer::setSSLConfig)
+BEEEON_OBJECT_PROPERTY("name", &PocoRestServer::setName)
 BEEEON_OBJECT_PROPERTY("host", &PocoRestServer::setHost)
 BEEEON_OBJECT_PROPERTY("port", &PocoRestServer::setPort)
 BEEEON_OBJECT_PROPERTY("backlog", &PocoRestServer::setBacklog)
@@ -97,7 +98,7 @@ void PocoRestServer::start()
 
 	m_server->start();
 
-	const ServerEvent e = {m_bind.toString(), "restui"};
+	const ServerEvent e = {m_bind.toString(), m_name};
 	m_eventSource.fireEvent(e, &ServerListener::onUp);
 }
 
@@ -116,7 +117,7 @@ void PocoRestServer::stop()
 	m_factory = NULL;
 	m_socket = NULL;
 
-	const ServerEvent e = {m_bind.toString(), "restui"};
+	const ServerEvent e = {m_bind.toString(), m_name};
 	m_eventSource.fireEvent(e, &ServerListener::onDown);
 }
 
@@ -143,6 +144,11 @@ void PocoRestServer::setTranslatorFactory(TranslatorFactory::Ptr factory)
 void PocoRestServer::setLocaleManager(SharedPtr<LocaleManager> manager)
 {
 	m_localeExtractor.setLocaleManager(manager);
+}
+
+void PocoRestServer::setName(const string &name)
+{
+	m_name = name;
 }
 
 void PocoRestServer::setHost(const string &host)

@@ -68,6 +68,11 @@ public:
 	void setSSLConfig(SSLServer::Ptr config);
 
 	/**
+	 * Set name of the server instance.
+	 */
+	void setName(const std::string &name);
+
+	/**
 	 * Set bind address to listen on.
 	 */
 	void setHost(const std::string &host);
@@ -91,6 +96,7 @@ protected:
 	void initHttpServer();
 
 private:
+	std::string m_name;
 	Poco::Net::SocketAddress m_bind;
 	unsigned int m_backlog;
 	RestRouter *m_router;
