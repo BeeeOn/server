@@ -191,6 +191,12 @@ private:
 	 */
 	void runWorker();
 
+	/**
+	 * @brief Remove the connection from reactor and fire event
+	 * on-disconnected for the associated gateway.
+	 */
+	void closeConnection(GatewayConnection::Ptr connection);
+
 private:
 	typedef std::map<GatewayID, GatewayConnection::Ptr> GatewayConnectionMap;
 

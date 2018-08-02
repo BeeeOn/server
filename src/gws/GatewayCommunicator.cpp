@@ -105,11 +105,8 @@ void GatewayCommunicator::removeGateway(const GatewayID &id)
 		return;
 	}
 
-	it->second->removeFromReactor();
+	closeConnection(it->second);
 	m_connectionMap.erase(it);
-
-	const GatewayEvent e(id);
-	m_eventSource.fireEvent(e, &GatewayListener::onDisconnected);
 }
 
 void GatewayCommunicator::removeIfInactive(const GatewayID &id,
@@ -127,11 +124,8 @@ void GatewayCommunicator::removeIfInactive(const GatewayID &id,
 	if (timeFrom < it->second->lastReceiveTime())
 		return;
 
-	it->second->removeFromReactor();
+	closeConnection(it->second);
 	m_connectionMap.erase(it);
-
-	const GatewayEvent e(id);
-	m_eventSource.fireEvent(e, &GatewayListener::onDisconnected);
 }
 
 Nullable<Timestamp> GatewayCommunicator::lastActivity(const GatewayID &id) const
@@ -185,16 +179,19 @@ void GatewayCommunicator::stop()
 	logger().notice("destroying " + to_string(m_connectionMap.size())
 			+ " active connections", __FILE__, __LINE__);
 
-	for (auto &it : m_connectionMap) {
-		it.second->removeFromReactor();
-
-		const GatewayEvent e(it.second->gatewayID());
-		m_eventSource.fireEvent(e, &GatewayListener::onDisconnected);
-	}
+	for (auto &it : m_connectionMap)
+		closeConnection(it.second);
 
 	m_connectionMap.clear();
 }
 
+void GatewayCommunicator::closeConnection(GatewayConnection::Ptr connection)
+{
+	connection->removeFromReactor();
+
+	const GatewayEvent e(connection->gatewayID());
+	m_eventSource.fireEvent(e, &GatewayListener::onDisconnected);
+}
 
 void GatewayCommunicator::enqueueReadable(GatewayConnection::Ptr connection)
 {
