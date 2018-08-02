@@ -98,8 +98,8 @@ void GWRequestHandler::processPayload(
 
 	m_gatewayCommunicator->addGateway(gateway.id(), ws);
 
-	data = GWGatewayAccepted().toString();
-	ws.sendFrame(data.c_str(), data.length());
+	const auto &reply = GWGatewayAccepted().toString();
+	ws.sendFrame(reply.c_str(), reply.length());
 }
 
 GWRequestHandlerFactory::GWRequestHandlerFactory():
