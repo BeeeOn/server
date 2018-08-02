@@ -237,7 +237,7 @@ void GatewayCommunicator::handleConnectionReadable(GatewayConnection::Ptr connec
 			__FILE__, __LINE__);
 	});
 
-	Thread::current()->setName("worker-" + connection->gatewayID().toString());
+	Thread::current()->setName("gws-worker-" + connection->gatewayID().toString());
 	const Clock started;
 
 	try {

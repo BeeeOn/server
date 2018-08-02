@@ -448,7 +448,7 @@ BEGIN {
 	restui_clients[_ip] += 1
 }
 
-/WebSocketRequestHandler/ && /connection from / {
+/GWRequestHandler/ && /connection from / {
 	$0 = log_trim_left($0)
 
 	split($3, _addr, ":")
