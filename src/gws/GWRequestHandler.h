@@ -46,7 +46,7 @@ protected:
 	 */
 	void processPayload(
 		Poco::Net::WebSocket &ws,
-		std::string data);
+		const std::string &data);
 
 private:
 	size_t m_maxMessageSize;

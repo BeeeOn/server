@@ -58,13 +58,12 @@ void GWRequestHandler::handle(WebSocket &ws)
 			+ ws.peerAddress().toString(),
 			__FILE__, __LINE__);
 
-	string data(buffer.begin(), ret);
-	processPayload(ws, data);
+	processPayload(ws, {buffer.begin(), static_cast<size_t>(ret)});
 }
 
 void GWRequestHandler::processPayload(
 		WebSocket &ws,
-		string data)
+		const string &data)
 {
 	if (logger().trace())
 		logger().trace(data);
