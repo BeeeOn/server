@@ -96,10 +96,10 @@ void GWRequestHandler::processPayload(
 		return;
 	}
 
+	m_gatewayCommunicator->addGateway(gateway.id(), ws);
+
 	data = GWGatewayAccepted().toString();
 	ws.sendFrame(data.c_str(), data.length());
-
-	m_gatewayCommunicator->addGateway(gateway.id(), ws);
 }
 
 GWRequestHandlerFactory::GWRequestHandlerFactory():
