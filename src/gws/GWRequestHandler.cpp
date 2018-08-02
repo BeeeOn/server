@@ -81,7 +81,7 @@ void GWRequestHandler::processPayload(
 
 	Gateway gateway(registerMsg->gatewayID());
 
-	Thread::current()->setName("ws-" + gateway);
+	Thread::current()->setName("gws-register-" + gateway);
 
 	m_peerVerifier->verifyPeer(gateway);
 
