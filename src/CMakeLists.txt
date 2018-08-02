@@ -151,6 +151,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/server/AccessLevel.cpp
 	${PROJECT_SOURCE_DIR}/server/XmlRequestHandler.cpp
 	${PROJECT_SOURCE_DIR}/server/SocketServer.cpp
+	${PROJECT_SOURCE_DIR}/server/WebSocketConnection.cpp
 	${PROJECT_SOURCE_DIR}/server/WebSocketRequestHandler.cpp
 	${PROJECT_SOURCE_DIR}/server/WebSocketServer.cpp
 	${PROJECT_SOURCE_DIR}/service/ControlService.cpp
