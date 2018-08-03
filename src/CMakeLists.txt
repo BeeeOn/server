@@ -11,6 +11,7 @@ find_library (POCO_XML PocoXML)
 find_library (POCO_DATA PocoData)
 find_library (POCO_SQLITE PocoDataSQLite)
 find_library (POCO_ODBC PocoDataODBC)
+find_library (POCO_CASSANDRA PocoDataCassandra)
 find_library (ICU_I18N icui18n)
 find_library (ICU_UC icuuc)
 find_library (JWT jwt)
@@ -23,6 +24,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/baf/EventPublisher.cpp
 	${PROJECT_SOURCE_DIR}/baf/GatewayWatcher.cpp
 	${PROJECT_SOURCE_DIR}/baf/PublishingWatcher.cpp
+	${PROJECT_SOURCE_DIR}/cassandra/CassandraStartup.cpp
 	${PROJECT_SOURCE_DIR}/jwt/JWToken.cpp
 	${PROJECT_SOURCE_DIR}/oauth2/AbstractOAuth2Provider.cpp
 	${PROJECT_SOURCE_DIR}/oauth2/FacebookOAuth2Provider.cpp
@@ -276,6 +278,15 @@ else()
 	message(STATUS "ZeroMQ support is disabled due to unmet dependencies")
 endif()
 
+if (POCO_CASSANDRA)
+	file(GLOB CASSANDRA_SOURCES
+		${PROJECT_SOURCE_DIR}/dao/poco/PocoCassandraConnectorLoader.cpp
+	)
+	list(APPEND SOURCES ${CASSANDRA_SOURCES})
+else()
+	message(STATUS "Cassandra support is disabled due to unmet dependencies")
+endif()
+
 file(GLOB XMLUI_SOURCES
 	xmlui/Serializing.cpp
 	xmlui/XmlValueConsumer.cpp
@@ -442,6 +453,12 @@ if (NOT POCO_ODBC)
 	message(WARNING "ODBC is NOT compiled in")
 else()
 	target_link_libraries(beeeon-server ${POCO_ODBC})
+endif()
+
+if (NOT POCO_CASSANDRA)
+	message(WARNING "Cassandra is NOT compiled in")
+else()
+	target_link_libraries(beeeon-server ${POCO_CASSANDRA})
 endif()
 
 install(TARGETS beeeon-server BeeeOnServer

@@ -79,6 +79,15 @@
 			<add name="initializers" ref="testDBInitializer" if-yes="${testing.enable}" />
 		</instance>
 
+		<instance name="cassandraDaoManager"
+				class="BeeeOn::PocoDaoManager">
+			<set name="connector" ref="cassandraConnector" />
+			<set name="connectionString" text="${cassandra.connector}" />
+			<set name="connectionTimeout" time="${cassandra.timeout}" />
+			<set name="features" text="${cassandra.features}" />
+			<set name="maxSessions" number="${cassandra.pool}" />
+		</instance>
+
 		<instance name="simpleDBInitializer" class="BeeeOn::PocoSimpleDBInitializer">
 			<set name="script" text="${database.init}" />
 		</instance>
@@ -105,6 +114,9 @@
 				class="BeeeOn::PocoSQLiteConnectorLoader" />
 		<instance name="odbcConnector"
 				class="BeeeOn::PocoODBCConnectorLoader" />
+
+		<instance name="cassandraConnector"
+				class="BeeeOn::PocoCassandraConnectorLoader" />
 
 		<instance name="sqlUserDao" class="BeeeOn::PocoSQLUserDao">
 			<set name="daoManager" ref="pocoDaoManager" />

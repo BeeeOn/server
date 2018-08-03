@@ -6,6 +6,12 @@
 			<add name="loops" ref="pgsql-blocker" />
 		</instance>
 
+		<instance name="cassandra-testing-setup" class="BeeeOn::LoopRunner" init="early">
+			<set name="autoStart" number="1" if-yes="${testing.enable}" />
+			<add name="loops" ref="cassandra" if-yes="${cassandra.enable}" />
+			<add name="loops" ref="cassandra-blocker" if-yes="${cassandra.enable}" />
+		</instance>
+
 		<instance name="pgsql-blocker" class="BeeeOn::SocketReadyBlocker">
 			<set name="host" text="${database.host}" />
 			<set name="port" number="${database.port}" />
@@ -15,6 +21,22 @@
 			<set name="clusterInit" number="1" />
 			<set name="host" text="${database.host}" />
 			<set name="port" number="${database.port}" />
+		</instance>
+
+		<instance name="cassandra-blocker" class="BeeeOn::SocketReadyBlocker">
+			<set name="host" text="${cassandra.host}" />
+			<set name="port" number="${cassandra.port}" />
+			<set name="timeout" time="10 s" />
+			<set name="interval" time="2 s" />
+		</instance>
+
+		<instance name="cassandra" class="BeeeOn::CassandraStartup">
+			<set name="clusterInit" number="1" />
+			<set name="host" text="${cassandra.host}" />
+			<set name="port" number="${cassandra.port}" />
+			<set name="rpcPort" number="${cassandra.rpcPort}" />
+			<set name="jmxPort" number="${cassandra.jmxPort}" />
+			<set name="clusterName" text="${cassandra.cluster.name}"/>
 		</instance>
 	</factory>
 </system>
