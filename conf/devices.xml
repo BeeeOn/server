@@ -371,6 +371,7 @@
 
 		<match>
 			<exact name="NLII-CO2+RH+T-IQRF" vendor="Protronix" />
+			<exact name="Protronix NLII-CO2+RH+T-IQRF+" vendor="Protronix s.r.o." />
 		</match>
 
 		<modules>
