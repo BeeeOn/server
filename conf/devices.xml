@@ -384,6 +384,12 @@
 			<sensor id="2" type="co2">
 				<name>CO2</name>
 			</sensor>
+			<sensor id="3" type="battery">
+				<name>Battery</name>
+			</sensor>
+			<sensor id="4" type="rssi">
+				<name>Signal strength</name>
+			</sensor>
 		</modules>
 	</device>
 
@@ -408,6 +414,9 @@
 			<sensor id="3" type="battery">
 				<name>Battery</name>
 			</sensor>
+			<sensor id="4" type="rssi">
+				<name>Signal strength</name>
+			</sensor>
 		</modules>
 	</device>
 
@@ -428,6 +437,9 @@
 			</sensor>
 			<sensor id="2" type="battery">
 				<name>Battery</name>
+			</sensor>
+			<sensor id="3" type="rssi">
+				<name>Signal strength</name>
 			</sensor>
 		</modules>
 	</device>
