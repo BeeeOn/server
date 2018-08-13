@@ -371,6 +371,7 @@
 
 		<match>
 			<exact name="NLII-CO2+RH+T-IQRF" vendor="Protronix" />
+			<exact name="Protronix NLII-CO2+RH+T-IQRF+" vendor="Protronix s.r.o." />
 		</match>
 
 		<modules>
@@ -382,6 +383,63 @@
 			</sensor>
 			<sensor id="2" type="co2">
 				<name>CO2</name>
+			</sensor>
+			<sensor id="3" type="battery">
+				<name>Battery</name>
+			</sensor>
+			<sensor id="4" type="rssi">
+				<name>Signal strength</name>
+			</sensor>
+		</modules>
+	</device>
+
+	<device id="61">
+		<name>Air quality sensor</name>
+		<vendor>IQ Home</vendor>
+
+		<match>
+			<exact name="SN-THC-01" vendor="IQHome" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="temperature">
+				<name>Temperature</name>
+			</sensor>
+			<sensor id="1" type="humidity">
+				<name>Humidity</name>
+			</sensor>
+			<sensor id="2" type="co2">
+				<name>CO2</name>
+			</sensor>
+			<sensor id="3" type="battery">
+				<name>Battery</name>
+			</sensor>
+			<sensor id="4" type="rssi">
+				<name>Signal strength</name>
+			</sensor>
+		</modules>
+	</device>
+
+	<device id="62">
+		<name>Temperature and Humidity Sensor</name>
+		<vendor>IQ Home</vendor>
+
+		<match>
+			<exact name="SN-TH-01" vendor="IQHome" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="temperature">
+				<name>Temperature</name>
+			</sensor>
+			<sensor id="1" type="humidity">
+				<name>Humidity</name>
+			</sensor>
+			<sensor id="2" type="battery">
+				<name>Battery</name>
+			</sensor>
+			<sensor id="3" type="rssi">
+				<name>Signal strength</name>
 			</sensor>
 		</modules>
 	</device>
@@ -515,51 +573,6 @@
 			<control id="2" type="color,controllable">
 				<name>Color</name>
 			</control>
-		</modules>
-	</device>
-
-	<device id="61">
-		<name>Air quality sensor</name>
-		<vendor>IQ Home</vendor>
-
-		<match>
-			<exact name="SN-THC-01" vendor="IQHome" />
-		</match>
-
-		<modules>
-			<sensor id="0" type="temperature">
-				<name>Temperature</name>
-			</sensor>
-			<sensor id="1" type="humidity">
-				<name>Humidity</name>
-			</sensor>
-			<sensor id="2" type="co2">
-				<name>CO2</name>
-			</sensor>
-			<sensor id="3" type="battery">
-				<name>Battery</name>
-			</sensor>
-		</modules>
-	</device>
-
-	<device id="62">
-		<name>Temperature and Humidity Sensor</name>
-		<vendor>IQ Home</vendor>
-
-		<match>
-			<exact name="SN-TH-01" vendor="IQHome" />
-		</match>
-
-		<modules>
-			<sensor id="0" type="temperature">
-				<name>Temperature</name>
-			</sensor>
-			<sensor id="1" type="humidity">
-				<name>Humidity</name>
-			</sensor>
-			<sensor id="2" type="battery">
-				<name>Battery</name>
-			</sensor>
 		</modules>
 	</device>
 </devices>
