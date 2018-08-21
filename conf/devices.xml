@@ -608,4 +608,35 @@
 			<sensor id="2" type="open_close" />
 		</modules>
 	</device>
+
+	<device id="100">
+		<name>Door Sensor FGK-101</name>
+		<vendor>Fibaro</vendor>
+
+		<match>
+			<exact name="FGK101 Door Opening Sensor" vendor="FIBARO System" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="battery" />
+			<sensor id="1" type="open_close" />
+		</modules>
+	</device>
+
+	<device id="101">
+		<name>Smoke Sensor FGSD-002</name>
+		<vendor>Fibaro</vendor>
+
+		<match>
+			<exact name="FGSD002 Smoke Sensor" vendor="FIBARO System" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="battery" />
+			<sensor id="1" type="temperature" />
+			<sensor id="2" type="security_alert" />
+			<sensor id="3" type="smoke" />
+			<sensor id="4" type="heat" />
+		</modules>
+	</device>
 </devices>
