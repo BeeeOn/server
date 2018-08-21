@@ -593,4 +593,19 @@
 			<sensor id="5" type="shake" />
 		</modules>
 	</device>
+
+	<device id="90">
+		<name>Door Sensor DC23-ZW</name>
+		<vendor>Climax</vendor>
+
+		<match>
+			<exact name="Unknown: type=0001, id=0001" vendor="Unknown: id=018e" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="battery" />
+			<sensor id="1" type="security_alert" />
+			<sensor id="2" type="open_close" />
+		</modules>
+	</device>
 </devices>
