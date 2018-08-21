@@ -154,6 +154,20 @@ cs {
 		color {
 			label { "barva" }
 		}
+		smoke {
+			label { "kouř" }
+			values {
+				clear { "čisto" }
+				smoke { "kouř" }
+			}
+		}
+		heat {
+			label { "heat" }
+			values {
+				normal { "normální" }
+				overheat { "přehřátí" }
+			}
+		}
 	}
 
 	enums {
