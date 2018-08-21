@@ -670,4 +670,18 @@
 			<sensor id="3" type="open_close" />
 		</modules>
 	</device>
+
+	<device id="120">
+		<name>PM 2.5 Monitor</name>
+		<vendor>MCO Home</vendor>
+		<match>
+			<exact name="Unknown: type=0a05, id=0201" vendor="Mcohome" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="temperature" />
+			<sensor id="1" type="humidity" />
+			<sensor id="2" type="pm25" />
+		</modules>
+	</device>
 </devices>
