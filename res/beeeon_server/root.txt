@@ -163,6 +163,20 @@ root {
 		color {
 			label { "color" }
 		}
+		smoke {
+			label { "smoke" }
+			values {
+				clear { "clear" }
+				smoke { "smoke" }
+			}
+		}
+		heat {
+			label { "heat" }
+			values {
+				normal { "normal" }
+				overheat { "overheat" }
+			}
+		}
 	}
 
 	enums {
