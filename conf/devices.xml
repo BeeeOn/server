@@ -575,4 +575,22 @@
 			</control>
 		</modules>
 	</device>
+
+	<device id="80">
+		<name>ZW100 MultiSensor 6</name>
+		<vendor>Aeotec</vendor>
+
+		<match>
+			<exact name="ZW100 MultiSensor 6" vendor="Aeotec" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="battery" />
+			<sensor id="1" type="temperature,inner" />
+			<sensor id="2" type="luminance,inner" />
+			<sensor id="3" type="humidity" />
+			<sensor id="4" type="ultraviolet" />
+			<sensor id="5" type="shake" />
+		</modules>
+	</device>
 </devices>
