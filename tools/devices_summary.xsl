@@ -99,8 +99,7 @@
 		<x:text> </x:text>
 		<x:value-of select="@id" />
 		<x:text>, </x:text>
-		<x:variable name="type" select="@type" />
-		<x:value-of select="$types.xml/type[@id=$type]/name" />
+		<x:value-of select="@type" />
 		<x:text>)</x:text>
 
 		<x:text>&#xA;</x:text>
