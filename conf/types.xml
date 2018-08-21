@@ -167,4 +167,14 @@
 			<value equals="1">overheat</value>
 		</values>
 	</type>
+	<type id="pm25">
+		<!-- https://en.wikipedia.org/wiki/Air_quality_index#Europe -->
+		<levels>
+			<level max="24.9">very_low</level>
+			<level min="25" max="49.9">low</level>
+			<level min="50" max="74.9" attention="single">medium</level>
+			<level min="75" max="99.9" attention="repeat">high</level>
+			<level min="100" attention="repeat">very_high</level>
+		</levels>
+	</type>
 </types>

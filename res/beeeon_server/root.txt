@@ -177,6 +177,16 @@ root {
 				overheat { "overheat" }
 			}
 		}
+		pm25 {
+			label { "particulate matter <2.5 um" }
+			values {
+				very_low  { "very low" }
+				low       { "low" }
+				medium    { "medium" }
+				high      { "high" }
+				very_high { "very high" }
+			}
+		}
 	}
 
 	enums {

@@ -168,6 +168,16 @@ cs {
 				overheat { "přehřátí" }
 			}
 		}
+		pm25 {
+			label { "pevné částice <2.5 um" }
+			values {
+				very_low  { "velmi nízká" }
+				low       { "nízká" }
+				medium    { "střední" }
+				high      { "vysoká" }
+				very_high { "velmi vysoká" }
+			}
+		}
 	}
 
 	enums {
