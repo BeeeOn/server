@@ -171,11 +171,12 @@ void CassandraStartup::start()
 	}
 
 	const Path yaml(m_clusterDir, YAML_FILE);
+	const Path logDir(m_clusterDir, "log");
 
 	Process::Args args;
 	args.emplace_back("-f");
 	args.emplace_back("-Dcassandra.config=file:///" + yaml.toString());
-	args.emplace_back("-Dcassandra.logdir=" + m_clusterDir.toString());
+	args.emplace_back("-Dcassandra.logdir=" + logDir.toString());
 	args.emplace_back("-Dcassandra.jmx.local.port=" + to_string(m_jmxPort));
 	args.emplace_back("-Dcom.sun.management.jmxremote.authenticate=true");
 
