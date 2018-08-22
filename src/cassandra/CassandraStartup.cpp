@@ -39,6 +39,7 @@ using namespace Poco;
 using namespace BeeeOn;
 
 const string YAML_FILE = "cassandra.yaml";
+const string JMX_PASSWORD_FILE = "jmxremote.password";
 const string PID_FILE = "pidfile";
 
 CassandraStartup::CassandraStartup():
@@ -172,15 +173,18 @@ void CassandraStartup::start()
 
 	const Path yaml(m_clusterDir, YAML_FILE);
 	const Path logDir(m_clusterDir, "log");
+	const Path jmxPassword(m_clusterDir, JMX_PASSWORD_FILE);
 
 	Process::Args args;
 	args.emplace_back("-f");
 	args.emplace_back("-Dcassandra.config=file:///" + yaml.toString());
 	args.emplace_back("-Dcassandra.logdir=" + logDir.toString());
 	args.emplace_back("-Dcassandra.jmx.local.port=" + to_string(m_jmxPort));
+	args.emplace_back("-Dcom.sun.management.jmxremote.password.file=" + jmxPassword.toString());
 	args.emplace_back("-Dcom.sun.management.jmxremote.authenticate=true");
 
 	Pipe pout;
+
 	m_handle = new ProcessHandle(Process::launch(
 	        m_cassandraBin, args, m_clusterDir.toString(), nullptr, &pout, nullptr));
 
