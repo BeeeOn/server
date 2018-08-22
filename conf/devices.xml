@@ -675,7 +675,7 @@
 		<name>PM 2.5 Monitor</name>
 		<vendor>MCO Home</vendor>
 		<match>
-			<exact name="Unknown: type=0a05, id=0201" vendor="Mcohome" />
+			<exact name="Unknown: type=0a05, id=0201 (generic)" vendor="Mcohome" />
 		</match>
 
 		<modules>
