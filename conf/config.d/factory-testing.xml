@@ -15,6 +15,9 @@
 		<instance name="pgsql-blocker" class="BeeeOn::SocketReadyBlocker">
 			<set name="host" text="${database.host}" />
 			<set name="port" number="${database.port}" />
+			<set name="request" list="00,00,00,08,04,d2,16,2f" />
+			<set name="responseHeader" list="4e" />
+			<set name="responseSize" number="1" />
 		</instance>
 
 		<instance name="pgsql" class="BeeeOn::PostgreStartup">
@@ -28,6 +31,9 @@
 			<set name="port" number="${cassandra.port}" />
 			<set name="timeout" time="10 s" />
 			<set name="interval" time="2 s" />
+			<set name="request" list="04,00,00,00,05,00,00,00,00" />
+			<set name="responseHeader" list="84,00,00,00,06,00,00,00" />
+			<set name="responseSize" number="-1" />
 		</instance>
 
 		<instance name="cassandra" class="BeeeOn::CassandraStartup">
