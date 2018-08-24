@@ -280,6 +280,7 @@ if (LUA_FOUND)
 
 	file(GLOB LUA_SOURCES
 		${PROJECT_SOURCE_DIR}/util/LuaEngine.cpp
+		${PROJECT_SOURCE_DIR}/util/LuaPreprocessor.cpp
 	)
 	list(APPEND SOURCES ${LUA_SOURCES})
 else()

@@ -34,8 +34,12 @@ LuaEngine::~LuaEngine()
 
 uint32_t LuaEngine::version()
 {
+#if LUA_VERSION_NUM > 501
 	const auto *ver = lua_version(m_state);
 	return static_cast<uint32_t>(*ver);
+#else
+	return LUA_VERSION_NUM;
+#endif
 }
 
 void LuaEngine::loadPackageModule()
@@ -60,7 +64,11 @@ void LuaEngine::loadTableModule()
 
 void LuaEngine::loadCoroutineModule()
 {
+#if LUA_VERSION_NUM > 501
 	loadModule("coroutine", &luaopen_coroutine);
+#else
+	throw NotImplementedException(__func__);
+#endif
 }
 
 void LuaEngine::loadDebugModule()

@@ -73,6 +73,7 @@ file(GLOB TEST_SOURCES
 
 if (LUA_FOUND)
 	file(GLOB LUA_TEST_SOURCES
+		${PROJECT_SOURCE_DIR}/util/LuaPreprocessorTest.cpp
 	)
 	list(APPEND TEST_SOURCES ${LUA_TEST_SOURCES})
 endif()
