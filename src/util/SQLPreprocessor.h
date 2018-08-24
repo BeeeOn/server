@@ -26,6 +26,8 @@ namespace BeeeOn {
  */
 class SQLPreprocessor : public Preprocessor {
 public:
+	typedef Poco::SharedPtr<SQLPreprocessor> Ptr;
+
 	SQLPreprocessor();
 
 	void setRemoveComments(bool remove);

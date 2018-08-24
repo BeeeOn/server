@@ -2,7 +2,15 @@
 #include <Poco/String.h>
 #include <Poco/StringTokenizer.h>
 
+#include "di/Injectable.h"
 #include "util/SQLPreprocessor.h"
+
+BEEEON_OBJECT_BEGIN(BeeeOn, SQLPreprocessor)
+BEEEON_OBJECT_CASTABLE(Preprocessor)
+BEEEON_OBJECT_PROPERTY("removeComments", &SQLPreprocessor::setRemoveComments)
+BEEEON_OBJECT_PROPERTY("removeWhitespace", &SQLPreprocessor::setRemoveWhitespace)
+BEEEON_OBJECT_PROPERTY("preserveUnneededLines", &SQLPreprocessor::setPreserveUnneededLines)
+BEEEON_OBJECT_END(BeeeOn, SQLPreprocessor)
 
 using namespace std;
 using namespace Poco;
