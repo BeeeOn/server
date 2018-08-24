@@ -36,6 +36,7 @@
 			<set name="port" number="${cassandra.port}" />
 			<set name="rpcPort" number="${cassandra.rpcPort}" />
 			<set name="jmxPort" number="${cassandra.jmxPort}" />
+			<set name="storagePort" number="${cassandra.storagePort}" />
 			<set name="clusterName" text="${cassandra.cluster.name}"/>
 		</instance>
 	</factory>

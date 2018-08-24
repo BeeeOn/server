@@ -27,6 +27,7 @@ BEEEON_OBJECT_PROPERTY("host", &CassandraStartup::setHost)
 BEEEON_OBJECT_PROPERTY("port", &CassandraStartup::setPort)
 BEEEON_OBJECT_PROPERTY("rpcPort", &CassandraStartup::setRPCPort)
 BEEEON_OBJECT_PROPERTY("jmxPort", &CassandraStartup::setJMXPort)
+BEEEON_OBJECT_PROPERTY("storagePort", &CassandraStartup::setStoragePort)
 BEEEON_OBJECT_PROPERTY("clusterDir", &CassandraStartup::setClusterDir)
 BEEEON_OBJECT_PROPERTY("clusterName", &CassandraStartup::setClusterName)
 BEEEON_OBJECT_PROPERTY("clusterInit", &CassandraStartup::setClusterInit)
@@ -39,6 +40,7 @@ using namespace Poco;
 using namespace BeeeOn;
 
 const string YAML_FILE = "cassandra.yaml";
+const string JMX_PASSWORD_FILE = "jmxremote.password";
 const string PID_FILE = "pidfile";
 
 CassandraStartup::CassandraStartup():
@@ -47,6 +49,7 @@ CassandraStartup::CassandraStartup():
 	m_port(59042),
 	m_rpcPort(59160),
 	m_jmxPort(57199),
+	m_storagePort(7000),
 	m_clusterDir(TemporaryFile::tempName(), "cassandra"),
 	m_clusterName("Test Cluster"),
 	m_clusterInit(false),
@@ -95,6 +98,14 @@ void CassandraStartup::setJMXPort(const int port)
 		throw InvalidArgumentException("jmxPort must be non-negative");
 
 	m_jmxPort = port;
+}
+
+void CassandraStartup::setStoragePort(const int port)
+{
+	if (port < 0)
+		throw InvalidArgumentException("storagePort must be non-negative");
+
+	m_storagePort = port;
 }
 
 void CassandraStartup::setClusterDir(const string &dir)
@@ -171,15 +182,19 @@ void CassandraStartup::start()
 	}
 
 	const Path yaml(m_clusterDir, YAML_FILE);
+	const Path logDir(m_clusterDir, "log");
+	const Path jmxPassword(m_clusterDir, JMX_PASSWORD_FILE);
 
 	Process::Args args;
 	args.emplace_back("-f");
 	args.emplace_back("-Dcassandra.config=file:///" + yaml.toString());
-	args.emplace_back("-Dcassandra.logdir=" + m_clusterDir.toString());
+	args.emplace_back("-Dcassandra.logdir=" + logDir.toString());
 	args.emplace_back("-Dcassandra.jmx.local.port=" + to_string(m_jmxPort));
+	args.emplace_back("-Dcom.sun.management.jmxremote.password.file=" + jmxPassword.toString());
 	args.emplace_back("-Dcom.sun.management.jmxremote.authenticate=true");
 
 	Pipe pout;
+
 	m_handle = new ProcessHandle(Process::launch(
 	        m_cassandraBin, args, m_clusterDir.toString(), nullptr, &pout, nullptr));
 
@@ -348,7 +363,8 @@ void CassandraStartup::dumpConfigFile(ostream &config) const
 		{"start_rpc", "false"},
 		{"rpc_address", m_host},
 		{"rpc_port", to_string(m_rpcPort)},
-		{"endpoint_snitch", "SimpleSnitch"}
+		{"endpoint_snitch", "SimpleSnitch"},
+		{"storage_port", to_string(m_storagePort)},
 	};
 
 	for (const auto pair : simpleEntries)
