@@ -55,6 +55,11 @@ public:
 	void setJMXPort(const int port);
 
 	/**
+	 * @brief Configure port for inter-node communication.
+	 */
+	void setStoragePort(const int port);
+
+	/**
 	 * @brief Configure directory with the cluster. There might
 	 * be an existing database or a temporary one might be created.
 	 */
@@ -133,6 +138,7 @@ private:
 	int m_port;
 	int m_rpcPort;
 	int m_jmxPort;
+	int m_storagePort;
 	Poco::Path m_clusterDir;
 	std::string m_clusterName;
 	bool m_clusterInit;
