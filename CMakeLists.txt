@@ -182,7 +182,8 @@ install(FILES tools/log-analyze.awk
 		GROUP_READ GROUP_EXECUTE
 		WORLD_READ WORLD_EXECUTE)
 install(FILES db/tools/db-admin.sh
-	DESTINATION bin/beeeon-db-admin
+	DESTINATION bin
+	RENAME beeeon-db-admin
 	PERMISSIONS
 		OWNER_READ OWNER_EXECUTE
 		GROUP_READ GROUP_EXECUTE
