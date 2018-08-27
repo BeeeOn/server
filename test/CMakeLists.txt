@@ -17,6 +17,23 @@ find_library (JWT jwt)
 find_library (JANSSON jansson)
 find_library (ZEROMQ zmq)
 
+find_package (Lua52 QUIET)
+if (LUA52_FOUND)
+	set(LUA_FOUND ${LUA52_FOUND})
+else()
+	find_package (Lua51 QUIET)
+	if (LUA51_FOUND)
+		set(LUA_FOUND ${LUA51_FOUND})
+	else()
+		find_package (Lua50 QUIET)
+		if (LUA50_FOUND)
+			set(LUA_FOUND ${LUA50_FOUND})
+		else()
+			find_package (Lua)
+		endif()
+	endif()
+endif()
+
 file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/dao/FilesystemQueryLoaderTest.cpp
 	${PROJECT_SOURCE_DIR}/fcm/FCMSenderTest.cpp
@@ -53,6 +70,12 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/util/TypesSAXHandlerTest.cpp
 	${PROJECT_SOURCE_DIR}/util/UnknownEvaluatorTest.cpp
 )
+
+if (LUA_FOUND)
+	file(GLOB LUA_TEST_SOURCES
+	)
+	list(APPEND TEST_SOURCES ${LUA_TEST_SOURCES})
+endif()
 
 if (JWT AND JANSSON)
 	file(GLOB JWT_TEST_SOURCES
@@ -101,6 +124,10 @@ set(LIBS
 	${ICU_UC}
 	${CPP_UNIT}
 )
+
+if(LUA_FOUND)
+	list(APPEND LIBS ${LUA_LIBRARIES})
+endif()
 
 if(JANSSON)
 	list(APPEND LIBS ${JANSSON})
