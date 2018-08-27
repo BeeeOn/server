@@ -279,6 +279,7 @@ if (LUA_FOUND)
 	include_directories(${LUA_INCLUDE_DIR})
 
 	file(GLOB LUA_SOURCES
+		${PROJECT_SOURCE_DIR}/util/LuaEngine.cpp
 	)
 	list(APPEND SOURCES ${LUA_SOURCES})
 else()
