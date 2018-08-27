@@ -1,6 +1,6 @@
 #pragma once
 
-#include <string>
+#include "util/Preprocessor.h"
 
 namespace BeeeOn {
 
@@ -24,15 +24,17 @@ namespace BeeeOn {
  * of empty lines does not help while debugging (we get source line
  * but the query's line numbers do not match anymore).
  */
-class SQLPreprocessor {
+class SQLPreprocessor : public Preprocessor {
 public:
+	typedef Poco::SharedPtr<SQLPreprocessor> Ptr;
+
 	SQLPreprocessor();
 
 	void setRemoveComments(bool remove);
 	void setRemoveWhitespace(bool remove);
 	void setPreserveUnneededLines(bool preserve);
 
-	std::string process(const std::string &input) const;
+	std::string process(const std::string &input) const override;
 
 protected:
 	void removeComments(std::string &line) const;

@@ -218,13 +218,17 @@
 
 		<instance name="iniSqlLoader" class="BeeeOn::IniFileQueryLoader">
 			<set name="database" text="beeeon" />
-			<add name="file" text="${database.queries.ini.file}" />
+			<set name="file" text="${database.queries.ini.file}" />
 		</instance>
 
 		<instance name="fsSqlLoader" class="BeeeOn::FilesystemQueryLoader">
-			<add name="rootPath" text="${database.queries.fs.rootDir}" />
+			<set name="rootPath" text="${database.queries.fs.rootDir}" />
+			<set name="extension" text="sql" />
+			<add name="preprocessors" ref="sqlQuerySimplifier" />
+		</instance>
+
+		<instance name="sqlQuerySimplifier" class="BeeeOn::SQLPreprocessor">
 			<add name="preserveUnneededLines" number="${database.queries.fs.preserveLines}" />
-			<add name="extension" text="sql" />
 		</instance>
 
 		<alias name="sqlLoader" ref="${database.queries.impl}SqlLoader" />

@@ -4,7 +4,7 @@
 #include <Poco/Path.h>
 
 #include "dao/QueryLoader.h"
-#include "util/SQLPreprocessor.h"
+#include "util/PreprocessorChain.h"
 #include "util/Loggable.h"
 
 namespace BeeeOn {
@@ -30,25 +30,6 @@ public:
 	std::string find(const std::string &key) const;
 
 	/**
-	 * @brief Configure to discard comments from all queries.
-	 * This feature is enabled by default.
-	 */
-	void setRemoveComments(bool remove);
-
-	/**
-	 * @brief Configure to discard unneeded whitespace from all queries.
-	 * This feature is enabled by default.
-	 */
-	void setRemoveWhitespace(bool remove);
-
-	/**
-	 * @brief Configure behaviour while loading queries with comments. If
-	 * set to true, the comments are removed but empty lines are preserved
-	 * for reference. Otherwise, all comments are removed.
-	 */
-	void setPreserveUnneededLines(bool preserve);
-
-	/**
 	 * @brief Configure root path to denote where to load queries from.
 	 * Example: for rootPath <code>~/src/</code> and key <code>database.server.select</code>,
 	 * the resulted dir for lookup of the query would be <code>~/src/database/server</code>.
@@ -68,6 +49,12 @@ public:
 	 */
 	void setExtension(const std::string &extension);
 
+	/**
+	 * @brief Add preprocessor into the internal preprocessor chain that would be
+	 * used to preprocess the SQL queries when loading from the file system.
+	 */
+	void addPreprocessor(Preprocessor::Ptr pp);
+
 private:
 	/**
 	 * Convert key <code>database.server.select</code> into the appropriate
@@ -78,8 +65,7 @@ private:
 private:
 	Poco::Path m_rootPath;
 	std::string m_extension;
-	SQLPreprocessor m_pre;
-	bool m_preserveUnneededLines;
+	PreprocessorChain m_chain;
 };
 
 }

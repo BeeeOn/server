@@ -199,6 +199,8 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/EnumsSAXHandler.cpp
 	${PROJECT_SOURCE_DIR}/util/HTTPClient.cpp
 	${PROJECT_SOURCE_DIR}/util/PocoStatementIntruder.cpp
+	${PROJECT_SOURCE_DIR}/util/Preprocessor.cpp
+	${PROJECT_SOURCE_DIR}/util/PreprocessorChain.cpp
 	${PROJECT_SOURCE_DIR}/util/Sanitize.cpp
 	${PROJECT_SOURCE_DIR}/util/Startup.cpp
 	${PROJECT_SOURCE_DIR}/util/SQLPreprocessor.cpp
