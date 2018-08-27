@@ -223,8 +223,12 @@
 
 		<instance name="fsSqlLoader" class="BeeeOn::FilesystemQueryLoader">
 			<set name="rootPath" text="${database.queries.fs.rootDir}" />
-			<set name="preserveUnneededLines" number="${database.queries.fs.preserveLines}" />
 			<set name="extension" text="sql" />
+			<add name="preprocessors" ref="sqlQuerySimplifier" />
+		</instance>
+
+		<instance name="sqlQuerySimplifier" class="BeeeOn::SQLPreprocessor">
+			<add name="preserveUnneededLines" number="${database.queries.fs.preserveLines}" />
 		</instance>
 
 		<alias name="sqlLoader" ref="${database.queries.impl}SqlLoader" />

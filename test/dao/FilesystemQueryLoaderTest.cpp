@@ -4,6 +4,7 @@
 
 #include "cppunit/BetterAssert.h"
 #include "dao/FilesystemQueryLoader.h"
+#include "util/SQLPreprocessor.h"
 
 using namespace std;
 using namespace Poco;
@@ -42,6 +43,7 @@ public:
 
 private:
 	FilesystemQueryLoader loader;
+	SQLPreprocessor::Ptr preprocessor;
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(FilesystemQueryLoaderTest);
@@ -50,7 +52,11 @@ void FilesystemQueryLoaderTest::setUp()
 {
 	static const string ROOT_PATH = "test/dao/";
 	loader.setRootPath(Environment::get("QUERIES_PATH", ROOT_PATH));
-	loader.setPreserveUnneededLines(false);
+
+	preprocessor = new SQLPreprocessor;
+	preprocessor->setPreserveUnneededLines(false);
+
+	loader.addPreprocessor(preprocessor);
 }
 
 /**
@@ -73,7 +79,7 @@ void FilesystemQueryLoaderTest::testWhitespace()
 	const string &empty = loader.find("queries.empty.whitespace");
 	CPPUNIT_ASSERT(empty.empty());
 
-	loader.setPreserveUnneededLines(true);
+	preprocessor->setPreserveUnneededLines(true);
 	const string lines = loader.find("queries.empty.whitespace");
 	CPPUNIT_ASSERT(!lines.empty());
 	CPPUNIT_ASSERT_EQUAL("\n\n\n\n\n", lines);
@@ -89,7 +95,7 @@ void FilesystemQueryLoaderTest::testComments()
 	const string empty = loader.find("queries.empty.comments");
 	CPPUNIT_ASSERT(empty.empty());
 
-	loader.setPreserveUnneededLines(true);
+	preprocessor->setPreserveUnneededLines(true);
 	const string lines = loader.find("queries.empty.comments");
 
 	CPPUNIT_ASSERT(!lines.empty());
@@ -106,7 +112,7 @@ void FilesystemQueryLoaderTest::testCommentsAndWhitespace()
 	const string empty = loader.find("queries.empty.comments_and_whitespace");
 	CPPUNIT_ASSERT(empty.empty());
 
-	loader.setPreserveUnneededLines(true);
+	preprocessor->setPreserveUnneededLines(true);
 	const string lines = loader.find("queries.empty.comments_and_whitespace");
 
 	CPPUNIT_ASSERT(!lines.empty());
@@ -123,7 +129,7 @@ void FilesystemQueryLoaderTest::testQuerySingleLine()
 	const string query = loader.find("queries.sql.single_line");
 	CPPUNIT_ASSERT_EQUAL("SELECT * FROM users WHERE id = ?", query);
 
-	loader.setPreserveUnneededLines(true);
+	preprocessor->setPreserveUnneededLines(true);
 	const string preserved = loader.find("queries.sql.single_line");
 	CPPUNIT_ASSERT_EQUAL("SELECT * FROM users WHERE id = ?\n", preserved);
 }
@@ -140,7 +146,7 @@ void FilesystemQueryLoaderTest::testQueryMultiLine()
 		"SELECT\n\tname,\n\tage\nFROM\n\tusers\nWHERE\n\tid = ?",
 		query);
 
-	loader.setPreserveUnneededLines(true);
+	preprocessor->setPreserveUnneededLines(true);
 	const string preserved = loader.find("queries.sql.multi_line");
 	CPPUNIT_ASSERT_EQUAL(
 		"SELECT\n\tname,\n\tage\nFROM\n\tusers\nWHERE\n\tid = ?\n",
@@ -159,7 +165,7 @@ void FilesystemQueryLoaderTest::testQueryWithComments()
 		"SELECT\n\tname,\n\temail\nFROM\n\tusers\nWHERE\n\tid = ?",
 		query);
 
-	loader.setPreserveUnneededLines(true);
+	preprocessor->setPreserveUnneededLines(true);
 	const string preserved = loader.find("queries.sql.with_comments");
 	CPPUNIT_ASSERT_EQUAL(
 		"\n\nSELECT\n\tname,\n\temail\nFROM\n\tusers\nWHERE\n\tid = ?\n",
@@ -180,7 +186,7 @@ void FilesystemQueryLoaderTest::testQueryWithCommentsAndWhitespace()
 		"SELECT\nname, age\nFROM\n\tusers\nWHERE\n\tid = ?",
 		query);
 
-	loader.setPreserveUnneededLines(true);
+	preprocessor->setPreserveUnneededLines(true);
 	const string preserved = loader.find("queries.sql.with_comments_and_whitespace");
 	CPPUNIT_ASSERT_EQUAL(
 		"\n\n\nSELECT\n\nname, age\n\nFROM\n\tusers\n\nWHERE\n\tid = ?\n",
@@ -198,7 +204,7 @@ void FilesystemQueryLoaderTest::testQueryEndingWithWhitespace()
 		"SELECT\n\tname\nFROM\n\tusers\nWHERE\n\tid = ?",
 		query);
 
-	loader.setPreserveUnneededLines(true);
+	preprocessor->setPreserveUnneededLines(true);
 	const string preserved = loader.find("queries.sql.ending_with_whitespace");
 	CPPUNIT_ASSERT_EQUAL(
 		"SELECT\n\tname\nFROM\n\tusers\nWHERE\n\tid = ?\n\n\n",

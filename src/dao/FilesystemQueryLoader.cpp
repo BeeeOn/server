@@ -8,6 +8,7 @@
 
 #include "di/Injectable.h"
 #include "dao/FilesystemQueryLoader.h"
+#include "util/Once.h"
 
 using namespace std;
 using namespace Poco;
@@ -17,16 +18,11 @@ BEEEON_OBJECT_BEGIN(BeeeOn, FilesystemQueryLoader)
 BEEEON_OBJECT_CASTABLE(QueryLoader)
 BEEEON_OBJECT_PROPERTY("rootPath", &FilesystemQueryLoader::setRootPath)
 BEEEON_OBJECT_PROPERTY("extension", &FilesystemQueryLoader::setExtension)
-BEEEON_OBJECT_PROPERTY("removeComments", &FilesystemQueryLoader::setRemoveComments)
-BEEEON_OBJECT_PROPERTY("removeWhitespace", &FilesystemQueryLoader::setRemoveWhitespace)
-BEEEON_OBJECT_PROPERTY("preserveUnneededLines", &FilesystemQueryLoader::setPreserveUnneededLines)
+BEEEON_OBJECT_PROPERTY("preprocessors", &FilesystemQueryLoader::addPreprocessor)
 BEEEON_OBJECT_END(BeeeOn, FilesystemQueryLoader)
 
 FilesystemQueryLoader::FilesystemQueryLoader()
 {
-	m_pre.setRemoveComments(true);
-	m_pre.setRemoveWhitespace(true);
-	m_pre.setPreserveUnneededLines(false);
 }
 
 FilesystemQueryLoader::~FilesystemQueryLoader()
@@ -55,22 +51,7 @@ string FilesystemQueryLoader::find(const string &key) const
 				__FILE__, __LINE__);
 	}
 
-	return m_pre.process(query);
-}
-
-void FilesystemQueryLoader::setRemoveComments(bool remove)
-{
-	m_pre.setRemoveComments(remove);
-}
-
-void FilesystemQueryLoader::setRemoveWhitespace(bool remove)
-{
-	m_pre.setRemoveWhitespace(remove);
-}
-
-void FilesystemQueryLoader::setPreserveUnneededLines(bool preserve)
-{
-	m_pre.setPreserveUnneededLines(preserve);
+	return m_chain.process(query);
 }
 
 void FilesystemQueryLoader::setRootPath(const string &rootPath)
@@ -82,6 +63,11 @@ void FilesystemQueryLoader::setRootPath(const string &rootPath)
 void FilesystemQueryLoader::setExtension(const string &extension)
 {
 	m_extension = extension;
+}
+
+void FilesystemQueryLoader::addPreprocessor(Preprocessor::Ptr pp)
+{
+	m_chain.add(pp);
 }
 
 Path FilesystemQueryLoader::keyAsFile(const string& key) const
