@@ -79,15 +79,6 @@
 			<add name="initializers" ref="testDBInitializer" if-yes="${testing.enable}" />
 		</instance>
 
-		<instance name="cassandraDaoManager"
-				class="BeeeOn::PocoDaoManager">
-			<set name="connector" ref="cassandraConnector" />
-			<set name="connectionString" text="${cassandra.connector}" />
-			<set name="connectionTimeout" time="${cassandra.timeout}" />
-			<set name="features" text="${cassandra.features}" />
-			<set name="maxSessions" number="${cassandra.pool}" />
-		</instance>
-
 		<instance name="sqitchDBInitializer" class="BeeeOn::PocoSqitchInitializer">
 			<set name="planFile" text="${sqitch.plan}" />
 			<set name="baseDir" text="${sqitch.baseDir}" />
@@ -95,6 +86,15 @@
 
 		<instance name="testDBInitializer" class="BeeeOn::PocoSimpleDBInitializer">
 			<set name="script" text="${application.configDir}../t/testing-data.sql" />
+		</instance>
+
+		<instance name="cassandraDaoManager"
+				class="BeeeOn::PocoDaoManager">
+			<set name="connector" ref="cassandraConnector" />
+			<set name="connectionString" text="${cassandra.connector}" />
+			<set name="connectionTimeout" time="${cassandra.timeout}" />
+			<set name="features" text="${cassandra.features}" />
+			<set name="maxSessions" number="${cassandra.pool}" />
 		</instance>
 
 		<instance name="pocoTransactionFactory"
