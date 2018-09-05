@@ -88,6 +88,8 @@
 			<set name="script" text="${application.configDir}../t/testing-data.sql" />
 		</instance>
 
+		<constant name="cassandra.pool" number="${cassandra.pool}" />
+
 		<instance name="cassandraDaoManager"
 				class="BeeeOn::PocoDaoManager">
 			<set name="connector" ref="cassandraConnector" />
