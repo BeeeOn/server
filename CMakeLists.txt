@@ -191,20 +191,20 @@ install(FILES db/tools/db-admin.sh
 install(DIRECTORY db/
 	DESTINATION share/beeeon/db
 	FILES_MATCHING
-	PATTERN "db/sqitch.conf"
-	PATTERN "db/sqitch.plan"
-	PATTERN "db/deploy/*.sql"
-	PATTERN "db/deploy/*/*.sql"
-	PATTERN "db/verify/*.sql"
-	PATTERN "db/verify/*/*.sql"
-	PATTERN "db/revert/*.sql"
-	PATTERN "db/revert/*/*.sql"
+	PATTERN "db/pgsql/sqitch.conf"
+	PATTERN "db/pgsql/sqitch.plan"
+	PATTERN "db/pgsql/deploy/*.sql"
+	PATTERN "db/pgsql/deploy/*/*.sql"
+	PATTERN "db/pgsql/verify/*.sql"
+	PATTERN "db/pgsql/verify/*/*.sql"
+	PATTERN "db/pgsql/revert/*.sql"
+	PATTERN "db/pgsql/revert/*/*.sql"
 	PATTERN "db/tools/*"
 	PATTERN "db/pgsql/queries/*.sql"
 	PATTERN "db/pgsql/queries/*/*.sql"
 	PATTERN "db/scripts/*.sql"
-	PATTERN "db/test" EXCLUDE
-	PATTERN "db/templates" EXCLUDE)
+	PATTERN "db/pgsql/test" EXCLUDE
+	PATTERN "db/pgsql/templates" EXCLUDE)
 install(DIRECTORY cert/
 	DESTINATION share/beeeon/cert
 	FILES_MATCHING PATTERN "*.pem")

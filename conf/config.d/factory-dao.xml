@@ -80,8 +80,8 @@
 		</instance>
 
 		<instance name="primaryTestSchemaInitializer" class="BeeeOn::PocoSqitchInitializer">
-			<set name="planFile" text="db/sqitch.plan" />
-			<set name="baseDir" text="${application.configDir}../db" />
+			<set name="planFile" text="db/pgsql/sqitch.plan" />
+			<set name="baseDir" text="${application.configDir}../db/pgsql" />
 		</instance>
 
 		<instance name="primaryTestDataInitializer" class="BeeeOn::PocoSimpleDBInitializer">
