@@ -4,6 +4,7 @@
 BEEEON_OBJECT_BEGIN(BeeeOn, PocoSqitchInitializer)
 BEEEON_OBJECT_CASTABLE(PocoDBInitializer)
 BEEEON_OBJECT_CASTABLE(SqitchInitializer)
+BEEEON_OBJECT_PROPERTY("executor", &PocoSqitchInitializer::setExecutor)
 BEEEON_OBJECT_PROPERTY("planFile", &PocoSqitchInitializer::loadPlanFile)
 BEEEON_OBJECT_PROPERTY("baseDir", &PocoSqitchInitializer::setBaseDir)
 BEEEON_OBJECT_PROPERTY("extension", &PocoSqitchInitializer::setExtension)

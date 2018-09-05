@@ -25,4 +25,13 @@ public:
 		const std::string &script) const = 0;
 };
 
+class PocoDefaultScriptExecutor : public PocoScriptExecutor {
+public:
+	typedef Poco::SharedPtr<PocoDefaultScriptExecutor> Ptr;
+
+	unsigned long execute(
+		Poco::Data::Session &session,
+		const std::string &script) const override;
+};
+
 }
