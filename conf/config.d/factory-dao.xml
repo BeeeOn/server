@@ -88,10 +88,6 @@
 			<set name="maxSessions" number="${cassandra.pool}" />
 		</instance>
 
-		<instance name="simpleDBInitializer" class="BeeeOn::PocoSimpleDBInitializer">
-			<set name="script" text="${database.init}" />
-		</instance>
-
 		<instance name="sqitchDBInitializer" class="BeeeOn::PocoSqitchInitializer">
 			<set name="planFile" text="${sqitch.plan}" />
 			<set name="baseDir" text="${sqitch.baseDir}" />
