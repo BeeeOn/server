@@ -136,6 +136,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoTransactionFactory.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoAbstractDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoDBInitializer.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoScriptExecutor.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSimpleDBInitializer.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLControlDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLFCMRecipientsDao.cpp
