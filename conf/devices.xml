@@ -640,6 +640,21 @@
 		</modules>
 	</device>
 
+	<device id="102">
+		<name>Wall Plug FGWPE/F</name>
+		<vendor>Fibaro</vendor>
+
+		<match>
+			<exact name="FGWPE/F Wall Plug Gen5" vendor="FIBARO System" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="on_off,controllable" />
+			<sensor id="1" type="on_off" />
+			<sensor id="2" type="power" />
+		</modules>
+	</device>
+
 	<device id="110">
 		<name>Door/Window 3-in-1 Sensor</name>
 		<vendor>Philio Technology Corporation</vendor>
