@@ -9,6 +9,7 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, PocoSimpleDBInitializer)
 BEEEON_OBJECT_CASTABLE(PocoDBInitializer)
+BEEEON_OBJECT_PROPERTY("executor", &PocoSimpleDBInitializer::setExecutor)
 BEEEON_OBJECT_PROPERTY("script", &PocoSimpleDBInitializer::loadScript)
 BEEEON_OBJECT_END(BeeeOn, PocoSimpleDBInitializer)
 

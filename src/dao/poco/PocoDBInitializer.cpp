@@ -7,13 +7,22 @@ using namespace std;
 using namespace Poco::Data;
 using namespace BeeeOn;
 
+PocoDBInitializer::PocoDBInitializer():
+	m_executor(new PocoDefaultScriptExecutor)
+{
+}
+
 PocoDBInitializer::~PocoDBInitializer()
 {
+}
+
+void PocoDBInitializer::setExecutor(PocoScriptExecutor::Ptr executor)
+{
+	m_executor = executor;
 }
 
 unsigned long PocoDBInitializer::execute(
 		Session &session, const string &script) const
 {
-	Statement sql = (session << script);
-	return sql.execute();
+	return m_executor->execute(session, script);
 }
