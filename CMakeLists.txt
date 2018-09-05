@@ -200,8 +200,8 @@ install(DIRECTORY db/
 	PATTERN "db/revert/*.sql"
 	PATTERN "db/revert/*/*.sql"
 	PATTERN "db/tools/*"
-	PATTERN "db/pgsql/*.sql"
-	PATTERN "db/pgsql/*/*.sql"
+	PATTERN "db/pgsql/queries/*.sql"
+	PATTERN "db/pgsql/queries/*/*.sql"
 	PATTERN "db/scripts/*.sql"
 	PATTERN "db/test" EXCLUDE
 	PATTERN "db/templates" EXCLUDE)
