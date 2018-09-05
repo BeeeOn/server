@@ -75,16 +75,16 @@
 			<set name="connectionTimeout" time="${database.timeout}" />
 			<set name="features" text="${database.features}" />
 			<set name="maxSessions" number="${database.pool}" />
-			<add name="initializers" ref="sqitchDBInitializer" if-yes="${testing.enable}" />
-			<add name="initializers" ref="testDBInitializer" if-yes="${testing.enable}" />
+			<add name="initializers" ref="primaryTestSchemaInitializer" if-yes="${testing.enable}" />
+			<add name="initializers" ref="primaryTestDataInitializer" if-yes="${testing.enable}" />
 		</instance>
 
-		<instance name="sqitchDBInitializer" class="BeeeOn::PocoSqitchInitializer">
+		<instance name="primaryTestSchemaInitializer" class="BeeeOn::PocoSqitchInitializer">
 			<set name="planFile" text="${sqitch.plan}" />
 			<set name="baseDir" text="${sqitch.baseDir}" />
 		</instance>
 
-		<instance name="testDBInitializer" class="BeeeOn::PocoSimpleDBInitializer">
+		<instance name="primaryTestDataInitializer" class="BeeeOn::PocoSimpleDBInitializer">
 			<set name="script" text="${application.configDir}../t/testing-data.sql" />
 		</instance>
 
