@@ -38,8 +38,18 @@ add_subdirectory(src)
 add_subdirectory(base)
 add_subdirectory(test)
 
+set(REST_API_DOC "INPUT += ${CMAKE_CURRENT_BINARY_DIR}/restui.h")
+
+add_custom_target(restapi-doc
+	COMMAND
+		"${CMAKE_CURRENT_SOURCE_DIR}/tools/restapi-doc.sh"
+		"${CMAKE_CURRENT_SOURCE_DIR}"
+		> "${CMAKE_CURRENT_BINARY_DIR}/restui.h"
+	WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
+
 include(DevicesSummary)
 include(DoxygenSupport)
+add_dependencies(doc restapi-doc)
 include(ManSupport)
 
 set(CPACK_PACKAGE_VERSION_MAJOR "2018")
