@@ -607,6 +607,23 @@
 		</modules>
 	</device>
 
+	<device id="78">
+		<name>Remote Switch</name>
+		<vendor>Revogi</vendor>
+
+		<match>
+			<exact name="MeterPlug-F19F" vendor="Revogi" />
+		</match>
+
+		<modules>
+			<control id="0" type="on_off,controllable" />
+			<sensor id="1" type="power" />
+			<sensor id="2" type="voltage" />
+			<sensor id="3" type="current" />
+			<sensor id="4" type="frequency" />
+		</modules>
+	</device>
+
 	<device id="80">
 		<name>ZW100 MultiSensor 6</name>
 		<vendor>Aeotec</vendor>
