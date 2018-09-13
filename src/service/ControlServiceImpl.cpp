@@ -171,11 +171,9 @@ ControlChangeHandler::Ptr ControlServiceImpl::doRequestChange(
 	const auto &requestedValue = control.requestedValue();
 
 	if (recentValue == value) {
-		logger().debug("requesting to set last reported value"
-			" for control " + control + ", ignoring...",
+		logger().debug("re-setting the last reported value"
+			+ to_string(recentValue) + " for control " + control,
 			__FILE__, __LINE__);
-
-		return nullptr;
 	}
 
 	if (requestedValue.value() == value && requestedValue.isActive()) {
