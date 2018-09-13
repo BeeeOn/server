@@ -1,6 +1,3 @@
-#ifndef BEEEON_SANITIZE_TEST_H
-#define BEEEON_SANITIZE_TEST_H
-
 #include <cstring>
 #include <cppunit/extensions/HelperMacros.h>
 
@@ -408,5 +405,3 @@ void SanitizeTest::testSanitizeToken()
 }
 
 }
-
-#endif

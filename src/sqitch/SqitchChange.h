@@ -1,5 +1,4 @@
-#ifndef BEEEON_SQITCH_CHANGE_H
-#define BEEEON_SQITCH_CHANGE_H
+#pragma once
 
 #include <set>
 #include <string>
@@ -38,5 +37,3 @@ private:
 };
 
 }
-
-#endif

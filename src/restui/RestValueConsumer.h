@@ -1,5 +1,4 @@
-#ifndef BEEEON_REST_VALUE_CONSUMER_H
-#define BEEEON_REST_VALUE_CONSUMER_H
+#pragma once
 
 #include <functional>
 #include <iosfwd>
@@ -62,5 +61,3 @@ private:
 
 }
 }
-
-#endif

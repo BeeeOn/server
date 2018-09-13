@@ -1,5 +1,4 @@
-#ifndef BEEEON_ICU_LOCALE_MANAGER_H
-#define BEEEON_ICU_LOCALE_MANAGER_H
+#pragma once
 
 #include <map>
 
@@ -42,5 +41,3 @@ private:
 };
 
 }
-
-#endif

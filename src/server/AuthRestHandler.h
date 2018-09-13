@@ -1,5 +1,4 @@
-#ifndef BEEEON_AUTH_REST_HANDLER_H
-#define BEEEON_AUTH_REST_HANDLER_H
+#pragma once
 
 #include "provider/AuthProvider.h"
 #include "rest/JSONRestHandler.h"
@@ -27,5 +26,3 @@ private:
 };
 
 }
-
-#endif

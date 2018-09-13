@@ -1,5 +1,4 @@
-#ifndef BEEEON_REST_ACTION_H
-#define BEEEON_REST_ACTION_H
+#pragma once
 
 #include <functional>
 #include <string>
@@ -57,5 +56,3 @@ private:
 };
 
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef BEEEON_SENSOR_H
-#define BEEEON_SENSOR_H
+#pragma once
 
 #include <string>
 
@@ -58,5 +57,3 @@ private:
 typedef Sensor::ID SensorID;
 
 }
-
-#endif

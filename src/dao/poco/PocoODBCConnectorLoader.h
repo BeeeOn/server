@@ -1,5 +1,4 @@
-#ifndef BEEEON_POCO_ODBC_CONNECTOR_LOADER_H
-#define BEEEON_POCO_ODBC_CONNECTOR_LOADER_H
+#pragma once
 
 #include "dao/ConnectorLoader.h"
 
@@ -12,5 +11,3 @@ public:
 };
 
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef BEEEON_GW_RESPONSE_EXPECTED_QUEUE_H
-#define BEEEON_GW_RESPONSE_EXPECTED_QUEUE_H
+#pragma once
 
 #include <Poco/Timespan.h>
 #include <Poco/Mutex.h>
@@ -80,5 +79,3 @@ private:
 };
 
 }
-
-#endif

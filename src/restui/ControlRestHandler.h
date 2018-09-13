@@ -1,5 +1,4 @@
-#ifndef BEEEON_CONTROL_REST_HANDLER_H
-#define BEEEON_CONTROL_REST_HANDLER_H
+#pragma once
 
 #include <Poco/Timespan.h>
 
@@ -37,6 +36,3 @@ private:
 
 }
 }
-
-#endif
-

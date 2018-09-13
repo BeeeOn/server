@@ -1,5 +1,4 @@
-#ifndef BEEEON_REST_FLOW_H
-#define BEEEON_REST_FLOW_H
+#pragma once
 
 #include <Poco/URI.h>
 
@@ -121,5 +120,3 @@ private:
 };
 
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef BEEEON_LOCATION_SERVICE_H
-#define BEEEON_LOCATION_SERVICE_H
+#pragma once
 
 #include <vector>
 
@@ -30,5 +29,3 @@ public:
 };
 
 }
-
-#endif

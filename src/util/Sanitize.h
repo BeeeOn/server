@@ -1,5 +1,4 @@
-#ifndef BEEEON_SANITIZE_H
-#define BEEEON_SANITIZE_H
+#pragma once
 
 #include <string>
 #include <Poco/URI.h>
@@ -143,5 +142,3 @@ public:
 };
 
 }
-
-#endif

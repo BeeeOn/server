@@ -1,5 +1,4 @@
-#ifndef BEEEON_DEVICE_DAO_H
-#define BEEEON_DEVICE_DAO_H
+#pragma once
 
 #include <vector>
 #include <list>
@@ -34,5 +33,3 @@ public:
 };
 
 }
-
-#endif

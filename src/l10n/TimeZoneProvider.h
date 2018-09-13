@@ -1,5 +1,4 @@
-#ifndef BEEEON_TIME_ZONE_PROVIDER_H
-#define BEEEON_TIME_ZONE_PROVIDER_H
+#pragma once
 
 #include <string>
 #include <vector>
@@ -45,5 +44,3 @@ public:
 };
 
 }
-
-#endif

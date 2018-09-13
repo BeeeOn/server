@@ -1,5 +1,4 @@
-#ifndef BEEEON_SESSION_VERIFIER_H
-#define BEEEON_SESSION_VERIFIER_H
+#pragma once
 
 #include <Poco/Net/NetException.h>
 
@@ -50,5 +49,3 @@ private:
 };
 
 }
-
-#endif

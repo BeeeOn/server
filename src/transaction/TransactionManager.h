@@ -1,5 +1,4 @@
-#ifndef BEEEON_TRANSACTION_MANAGER_H
-#define BEEEON_TRANSACTION_MANAGER_H
+#pragma once
 
 #include <string>
 #include <typeinfo>
@@ -122,5 +121,3 @@ public:
 };
 
 }
-
-#endif

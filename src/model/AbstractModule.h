@@ -1,5 +1,4 @@
-#ifndef BEEEON_ABSTRACT_MODULE_H
-#define BEEEON_ABSTRACT_MODULE_H
+#pragma once
 
 #include "model/Entity.h"
 #include "model/ModuleInfo.h"
@@ -36,5 +35,3 @@ private:
 };
 
 }
-
-#endif

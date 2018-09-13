@@ -1,5 +1,4 @@
-#ifndef BEEEON_IDENTITY_H
-#define BEEEON_IDENTITY_H
+#pragma once
 
 #include <Poco/SharedPtr.h>
 
@@ -47,5 +46,3 @@ private:
 typedef Identity::ID IdentityID;
 
 }
-
-#endif

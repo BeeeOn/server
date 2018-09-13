@@ -1,5 +1,4 @@
-#ifndef BEEEON_GW_MESSAGE_HANDLER_H
-#define BEEEON_GW_MESSAGE_HANDLER_H
+#pragma once
 
 #include <Poco/SharedPtr.h>
 
@@ -27,5 +26,3 @@ public:
 };
 
 }
-
-#endif

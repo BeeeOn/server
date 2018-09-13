@@ -1,5 +1,4 @@
-#ifndef BEEEON_GATEWAY_RPC_H
-#define BEEEON_GATEWAY_RPC_H
+#pragma once
 
 #include <functional>
 
@@ -69,5 +68,3 @@ protected:
 };
 
 }
-
-#endif

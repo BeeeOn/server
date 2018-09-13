@@ -1,5 +1,4 @@
-#ifndef BEEEON_LEGACY_ROLE_IN_GATEWAY_H
-#define BEEEON_LEGACY_ROLE_IN_GATEWAY_H
+#pragma once
 
 #include <string>
 
@@ -34,5 +33,3 @@ private:
 };
 
 }
-
-#endif

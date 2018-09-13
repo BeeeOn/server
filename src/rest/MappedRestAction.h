@@ -1,5 +1,4 @@
-#ifndef BEEEON_MAPPED_REST_ACTION_H
-#define BEEEON_MAPPED_REST_ACTION_H
+#pragma once
 
 #include <map>
 
@@ -35,5 +34,3 @@ private:
 };
 
 }
-
-#endif

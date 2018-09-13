@@ -1,5 +1,4 @@
-#ifndef BEEEON_ENUM_INFO_H
-#define BEEEON_ENUM_INFO_H
+#pragma once
 
 #include <map>
 #include <set>
@@ -30,5 +29,3 @@ private:
 };
 
 }
-
-#endif

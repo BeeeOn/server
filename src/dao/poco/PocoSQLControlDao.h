@@ -1,5 +1,4 @@
-#ifndef BEEEON_POCO_SQL_CONTROL_DAO_H
-#define BEEEON_POCO_SQL_CONTROL_DAO_H
+#pragma once
 
 #include "dao/ControlDao.h"
 #include "dao/Query.h"
@@ -55,6 +54,3 @@ private:
 };
 
 }
-
-#endif
-

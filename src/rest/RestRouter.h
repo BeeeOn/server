@@ -1,5 +1,4 @@
-#ifndef BEEEON_REST_ROUTER_H
-#define BEEEON_REST_ROUTER_H
+#pragma once
 
 #include <map>
 #include <vector>
@@ -100,5 +99,3 @@ private:
 };
 
 }
-
-#endif

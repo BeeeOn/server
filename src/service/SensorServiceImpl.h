@@ -1,5 +1,4 @@
-#ifndef BEEEON_SENSOR_SERVICE_IMPL_H
-#define BEEEON_SENSOR_SERVICE_IMPL_H
+#pragma once
 
 #include "dao/DeviceDao.h"
 #include "dao/SensorHistoryDao.h"
@@ -37,5 +36,3 @@ private:
 };
 
 }
-
-#endif

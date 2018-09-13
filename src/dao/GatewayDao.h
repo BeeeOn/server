@@ -1,5 +1,4 @@
-#ifndef BEEEON_GATEWAY_DAO_H
-#define BEEEON_GATEWAY_DAO_H
+#pragma once
 
 #include <vector>
 
@@ -30,5 +29,3 @@ public:
 };
 
 }
-
-#endif

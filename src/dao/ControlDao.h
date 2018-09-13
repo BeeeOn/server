@@ -1,5 +1,4 @@
-#ifndef BEEEON_CONTROL_DAO_H
-#define BEEEON_CONTROL_DAO_H
+#pragma once
 
 #include <list>
 
@@ -31,5 +30,3 @@ public:
 };
 
 }
-
-#endif

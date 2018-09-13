@@ -1,5 +1,4 @@
-#ifndef BEEEON_TESTING_HTTP_SERVER_RESPONSE_H
-#define BEEEON_TESTING_HTTP_SERVER_RESPONSE_H
+#pragma once
 
 #include <sstream>
 
@@ -42,5 +41,3 @@ private:
 };
 
 }
-
-#endif

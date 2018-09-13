@@ -1,5 +1,4 @@
-#ifndef BEEEON_Xml_GATEWAY_DESERIALIZER_H
-#define BEEEON_Xml_GATEWAY_DESERIALIZER_H
+#pragma once
 
 #include <Poco/DOM/Element.h>
 
@@ -29,5 +28,3 @@ private:
 };
 
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef BEEEON_VERIFIED_IDENTITY_DAO_H
-#define BEEEON_VERIFIED_IDENTITY_DAO_H
+#pragma once
 
 #include <list>
 #include <vector>
@@ -50,5 +49,3 @@ protected:
 };
 
 }
-
-#endif

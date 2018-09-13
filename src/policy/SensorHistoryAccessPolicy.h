@@ -1,5 +1,4 @@
-#ifndef BEEEON_SENSOR_HISTORY_ACCESS_POLICY_H
-#define BEEEON_SENSOR_HISTORY_ACCESS_POLICY_H
+#pragma once
 
 #include "util/TimeInterval.h"
 
@@ -32,5 +31,3 @@ public:
 };
 
 }
-
-#endif

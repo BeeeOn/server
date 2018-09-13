@@ -1,5 +1,4 @@
-#ifndef BEEEON_ICU_TIME_ZONE_IMPL_H
-#define BEEEON_ICU_TIME_ZONE_IMPL_H
+#pragma once
 
 #include <unicode/uversion.h>
 
@@ -78,5 +77,3 @@ private:
 };
 
 }
-
-#endif

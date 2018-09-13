@@ -1,5 +1,4 @@
-#ifndef BEEEON_LOCATION_H
-#define BEEEON_LOCATION_H
+#pragma once
 
 #include <Poco/SharedPtr.h>
 #include "model/Entity.h"
@@ -32,5 +31,3 @@ private:
 typedef Location::ID LocationID;
 
 }
-
-#endif

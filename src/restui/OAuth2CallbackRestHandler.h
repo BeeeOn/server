@@ -1,5 +1,4 @@
-#ifndef BEEEON_OATUH2_CALLBACK_REST_HANDLER_H
-#define BEEEON_OATUH2_CALLBACK_REST_HANDLER_H
+#pragma once
 
 #include "rest/RestHandler.h"
 
@@ -15,7 +14,3 @@ public:
 
 }
 }
-
-#endif
-
-

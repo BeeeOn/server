@@ -1,5 +1,4 @@
-#ifndef SERVER_GWS_SENSOR_HISTORY_SERVICE_H
-#define SERVER_GWS_SENSOR_HISTORY_SERVICE_H
+#pragma once
 
 #include <vector>
 
@@ -50,5 +49,3 @@ public:
 };
 
 }
-
-#endif

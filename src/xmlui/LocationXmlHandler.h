@@ -1,5 +1,4 @@
-#ifndef BEEEON_XMLUI_LOCATION_XML_HANDLER_H
-#define BEEEON_XMLUI_LOCATION_XML_HANDLER_H
+#pragma once
 
 #include "service/LocationService.h"
 #include "xmlui/SessionXmlHandler.h"
@@ -52,6 +51,3 @@ private:
 
 }
 }
-
-#endif
-

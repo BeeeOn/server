@@ -1,5 +1,4 @@
-#ifndef BEEEON_POCO_SQL_DEVICE_PROPERTY_DAO_H
-#define BEEEON_POCO_SQL_DEVICE_PROPERTY_DAO_H
+#pragma once
 
 #include "dao/DevicePropertyDao.h"
 #include "dao/Query.h"
@@ -66,5 +65,3 @@ private:
 };
 
 }
-
-#endif

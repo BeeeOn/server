@@ -1,5 +1,4 @@
-#ifndef BEEEON_HTTP_LOCALE_EXTRACTOR_H
-#define BEEEON_HTTP_LOCALE_EXTRACTOR_H
+#pragma once
 
 #include <Poco/SharedPtr.h>
 
@@ -56,5 +55,3 @@ private:
 };
 
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef BEEEON_XMLUI_ABSTRACT_XML_HANDLER_H
-#define BEEEON_XMLUI_ABSTRACT_XML_HANDLER_H
+#pragma once
 
 #include <Poco/Logger.h>
 #include <Poco/SAX/AttributesImpl.h>
@@ -53,5 +52,3 @@ protected:
 
 }
 }
-
-#endif

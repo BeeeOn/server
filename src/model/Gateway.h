@@ -1,5 +1,4 @@
-#ifndef BEEEON_GATEWAY_H
-#define BEEEON_GATEWAY_H
+#pragma once
 
 #include <Poco/DateTime.h>
 #include <Poco/Nullable.h>
@@ -62,5 +61,3 @@ private:
 typedef Gateway::ID GatewayID;
 
 }
-
-#endif

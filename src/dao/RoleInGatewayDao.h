@@ -1,5 +1,4 @@
-#ifndef BEEEON_ROLE_IN_GATEWAY_DAO_H
-#define BEEEON_ROLE_IN_GATEWAY_DAO_H
+#pragma once
 
 #include <vector>
 
@@ -70,5 +69,3 @@ public:
 };
 
 }
-
-#endif

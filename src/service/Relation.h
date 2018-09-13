@@ -1,5 +1,4 @@
-#ifndef BEEEON_RELATION_H
-#define BEEEON_RELATION_H
+#pragma once
 
 #include "service/Deserializer.h"
 #include "policy/PolicyContext.h"
@@ -63,5 +62,3 @@ private:
 };
 
 }
-
-#endif

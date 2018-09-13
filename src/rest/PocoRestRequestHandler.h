@@ -1,5 +1,4 @@
-#ifndef BEEEON_POCO_REST_REQUEST_HANDLER_H
-#define BEEEON_POCO_REST_REQUEST_HANDLER_H
+#pragma once
 
 #include <Poco/Clock.h>
 #include <Poco/Net/AbstractHTTPRequestHandler.h>
@@ -119,5 +118,3 @@ private:
 
 
 }
-
-#endif

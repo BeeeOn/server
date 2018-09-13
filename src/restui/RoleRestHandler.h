@@ -1,5 +1,4 @@
-#ifndef BEEEON_ROLE_REST_HANDLER_H
-#define BEEEON_ROLE_REST_HANDLER_H
+#pragma once
 
 #include "rest/JSONRestHandler.h"
 #include "service/IdentityService.h"
@@ -30,5 +29,3 @@ private:
 
 }
 }
-
-#endif

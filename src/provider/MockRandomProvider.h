@@ -1,5 +1,4 @@
-#ifndef BEEEON_MOCK_RANDOM_PROVIDER_H
-#define BEEEON_MOCK_RANDOM_PROVIDER_H
+#pragma once
 
 #include <Poco/Exception.h>
 #include "provider/RandomProvider.h"
@@ -34,5 +33,3 @@ private:
 };
 
 }
-
-#endif

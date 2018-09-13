@@ -1,5 +1,4 @@
-#ifndef BEEEON_SQITCH_TAG_H
-#define BEEEON_SQITCH_TAG_H
+#pragma once
 
 #include <string>
 
@@ -17,5 +16,3 @@ public:
 };
 
 }
-
-#endif

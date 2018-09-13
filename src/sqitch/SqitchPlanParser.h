@@ -1,5 +1,4 @@
-#ifndef BEEEON_SQITCH_PLAN_PARSER_H
-#define BEEEON_SQITCH_PLAN_PARSER_H
+#pragma once
 
 #include <iosfwd>
 #include <string>
@@ -69,5 +68,3 @@ private:
 };
 
 }
-
-#endif

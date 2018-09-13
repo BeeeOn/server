@@ -1,5 +1,4 @@
-#ifndef BEEEON_GATEWAY_STATUS_H
-#define BEEEON_GATEWAY_STATUS_H
+#pragma once
 
 #include <Poco/DateTime.h>
 #include <Poco/Nullable.h>
@@ -28,5 +27,3 @@ private:
 };
 
 }
-
-#endif

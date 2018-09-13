@@ -1,5 +1,4 @@
-#ifndef BEEEON_USER_DAO_H
-#define BEEEON_USER_DAO_H
+#pragma once
 
 #include <Poco/Exception.h>
 #include <Poco/SharedPtr.h>
@@ -29,5 +28,3 @@ protected:
 };
 
 }
-
-#endif

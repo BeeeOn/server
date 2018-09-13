@@ -1,5 +1,4 @@
-#ifndef BEEEON_GATEWAY_CONNECTION_H
-#define BEEEON_GATEWAY_CONNECTION_H
+#pragma once
 
 #include <functional>
 
@@ -138,4 +137,3 @@ private:
 };
 
 }
-#endif

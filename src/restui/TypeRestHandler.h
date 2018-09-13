@@ -1,5 +1,4 @@
-#ifndef BEEEON_SENSORTYPE_REST_HANDLER_H
-#define BEEEON_SENSORTYPE_REST_HANDLER_H
+#pragma once
 
 #include "l10n/Translator.h"
 #include "provider/SubtypeInfoProvider.h"
@@ -30,5 +29,3 @@ private:
 
 }
 }
-
-#endif

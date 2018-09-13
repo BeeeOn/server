@@ -1,5 +1,4 @@
-#ifndef BEEEON_XMLUI_SESSION_XML_HANDLER_H
-#define BEEEON_XMLUI_SESSION_XML_HANDLER_H
+#pragma once
 
 #include "server/Session.h"
 #include "server/SessionManager.h"
@@ -36,5 +35,3 @@ protected:
 
 }
 }
-
-#endif

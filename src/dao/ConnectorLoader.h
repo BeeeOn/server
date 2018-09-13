@@ -1,5 +1,4 @@
-#ifndef BEEEON_CONNECTOR_LOADER_H
-#define BEEEON_CONNECTOR_LOADER_H
+#pragma once
 
 #include <string>
 
@@ -22,5 +21,3 @@ private:
 };
 
 }
-
-#endif

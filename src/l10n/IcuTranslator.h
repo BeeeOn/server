@@ -1,5 +1,4 @@
-#ifndef BEEEON_ICU_TRANSLATOR_H
-#define BEEEON_ICU_TRANSLATOR_H
+#pragma once
 
 #include <unicode/resbund.h>
 
@@ -68,5 +67,3 @@ private:
 };
 
 }
-
-#endif

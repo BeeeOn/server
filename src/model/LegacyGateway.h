@@ -1,5 +1,4 @@
-#ifndef BEEEON_LEGACY_GATEWay_H
-#define BEEEON_LEGACY_GATEWay_H
+#pragma once
 
 #include "model/Gateway.h"
 #include "model/User.h"
@@ -37,5 +36,3 @@ private:
 };
 
 }
-
-#endif

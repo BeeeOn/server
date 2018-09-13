@@ -1,5 +1,4 @@
-#ifndef BEEEON_ROLE_IN_GATEWAY_H
-#define BEEEON_ROLE_IN_GATEWAY_H
+#pragma once
 
 #include <Poco/SharedPtr.h>
 
@@ -46,5 +45,3 @@ private:
 typedef RoleInGateway::ID RoleInGatewayID;
 
 }
-
-#endif

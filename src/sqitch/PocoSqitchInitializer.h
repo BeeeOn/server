@@ -1,5 +1,4 @@
-#ifndef BEEEON_POCO_SQITCH_INITIALIZER_H
-#define BEEEON_POCO_SQITCH_INITIALIZER_H
+#pragma once
 
 #include "dao/poco/PocoDBInitializer.h"
 #include "sqitch/SqitchInitializer.h"
@@ -12,5 +11,3 @@ public:
 };
 
 }
-
-#endif

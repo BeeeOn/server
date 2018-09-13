@@ -1,5 +1,4 @@
-#ifndef BEEEON_DEVICE_INFO_PROVIDER_H
-#define BEEEON_DEVICE_INFO_PROVIDER_H
+#pragma once
 
 #include <set>
 
@@ -37,5 +36,3 @@ private:
 };
 
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef BEEEON_CONTROL_SERVICE_H
-#define BEEEON_CONTROL_SERVICE_H
+#pragma once
 
 #include <Poco/SharedPtr.h>
 #include <Poco/Timespan.h>
@@ -24,5 +23,3 @@ public:
 };
 
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef BEEEON_DEVICE_INFO_H
-#define BEEEON_DEVICE_INFO_H
+#pragma once
 
 #include <list>
 #include <string>
@@ -105,5 +104,3 @@ private:
 typedef DeviceInfo::ID DeviceInfoID;
 
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef BEEEON_XML_REQUEST_HANDLER_H
-#define BEEEON_XML_REQUEST_HANDLER_H
+#pragma once
 
 #include <unistd.h>
 
@@ -90,5 +89,3 @@ private:
 };
 
 }
-
-#endif

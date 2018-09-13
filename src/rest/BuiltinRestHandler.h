@@ -1,5 +1,4 @@
-#ifndef BEEEON_BUILTIN_REST_HANDLER_H
-#define BEEEON_BUILTIN_REST_HANDLER_H
+#pragma once
 
 #include "di/Injectable.h"
 #include "rest/JSONRestHandler.h"
@@ -15,5 +14,3 @@ public:
 };
 
 }
-
-#endif

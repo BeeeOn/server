@@ -1,5 +1,4 @@
-#ifndef BEEEON_SESSION_H
-#define BEEEON_SESSION_H
+#pragma once
 
 #include <Poco/Timestamp.h>
 #include <Poco/SharedPtr.h>
@@ -45,5 +44,3 @@ private:
 };
 
 }
-
-#endif

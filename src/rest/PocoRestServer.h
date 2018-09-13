@@ -1,5 +1,4 @@
-#ifndef BEEEON_POCO_REST_SERVER_H
-#define BEEEON_POCO_REST_SERVER_H
+#pragma once
 
 #include <Poco/SharedPtr.h>
 #include <Poco/Net/HTTPRequestHandlerFactory.h>
@@ -83,5 +82,3 @@ private:
 };
 
 }
-
-#endif

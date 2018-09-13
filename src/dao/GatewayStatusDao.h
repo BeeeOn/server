@@ -1,5 +1,4 @@
-#ifndef SERVER_GATEWAY_STATUS_DAO_H
-#define SERVER_GATEWAY_STATUS_DAO_H
+#pragma once
 
 #include <Poco/SharedPtr.h>
 
@@ -18,5 +17,3 @@ public:
 };
 
 }
-
-#endif

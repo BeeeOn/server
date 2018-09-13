@@ -1,5 +1,4 @@
-#ifndef BEEEON_POCO_ABSTRACT_DAO_H
-#define BEEEON_POCO_ABSTRACT_DAO_H
+#pragma once
 
 #include <typeinfo>
 #include <list>
@@ -91,5 +90,3 @@ private:
 };
 
 }
-
-#endif

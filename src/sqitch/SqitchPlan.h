@@ -1,5 +1,4 @@
-#ifndef BEEEON_SQITCH_PLAN_H
-#define BEEEON_SQITCH_PLAN_H
+#pragma once
 
 #include <iosfwd>
 #include <list>
@@ -65,5 +64,3 @@ private:
 };
 
 }
-
-#endif

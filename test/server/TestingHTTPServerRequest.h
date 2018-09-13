@@ -1,5 +1,4 @@
-#ifndef BEEEON_TESTING_HTTP_SERVER_REQUEST_H
-#define BEEEON_TESTING_HTTP_SERVER_REQUEST_H
+#pragma once
 
 #include <sstream>
 
@@ -49,5 +48,3 @@ private:
 };
 
 }
-
-#endif

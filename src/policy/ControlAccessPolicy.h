@@ -1,5 +1,4 @@
-#ifndef BEEEON_CONTROL_ACCESS_POLICY_H
-#define BEEEON_CONTROL_ACCESS_POLICY_H
+#pragma once
 
 #include <Poco/SharedPtr.h>
 
@@ -33,6 +32,3 @@ public:
 };
 
 }
-
-#endif
-

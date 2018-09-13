@@ -1,5 +1,4 @@
-#ifndef BEEEON_OAUTH2_AUTH_PROVIDER_H
-#define BEEEON_OAUTH2_AUTH_PROVIDER_H
+#pragma once
 
 #include <Poco/SharedPtr.h>
 
@@ -80,5 +79,3 @@ private:
 };
 
 }
-
-#endif

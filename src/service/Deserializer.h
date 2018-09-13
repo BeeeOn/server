@@ -1,5 +1,4 @@
-#ifndef BEEEON_DESERIALIZER_H
-#define BEEEON_DESERIALIZER_H
+#pragma once
 
 namespace BeeeOn {
 
@@ -11,5 +10,3 @@ public:
 };
 
 }
-
-#endif

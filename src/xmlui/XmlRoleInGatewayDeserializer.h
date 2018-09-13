@@ -1,5 +1,4 @@
-#ifndef BEEEON_XML_ROLE_IN_GATEWAY_DESERIALIZER_H
-#define BEEEON_XML_ROLE_IN_GATEWAY_DESERIALIZER_H
+#pragma once
 
 #include "service/Deserializer.h"
 #include "model/RoleInGateway.h"
@@ -26,5 +25,3 @@ private:
 };
 
 }
-
-#endif

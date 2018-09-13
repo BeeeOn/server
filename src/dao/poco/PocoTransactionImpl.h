@@ -1,5 +1,4 @@
-#ifndef BEEEON_POCO_TRANSACTION_IMPL_H
-#define BEEEON_POCO_TRANSACTION_IMPL_H
+#pragma once
 
 #include <Poco/Data/Session.h>
 #include <Poco/Data/Transaction.h>
@@ -49,5 +48,3 @@ private:
 };
 
 }
-
-#endif

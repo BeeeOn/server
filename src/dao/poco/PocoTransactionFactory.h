@@ -1,5 +1,4 @@
-#ifndef BEEEON_POCO_TRANSACTION_FACTORY_H
-#define BEEEON_POCO_TRANSACTION_FACTORY_H
+#pragma once
 
 #include "dao/poco/PocoDaoManager.h"
 #include "transaction/TransactionManager.h"
@@ -20,5 +19,3 @@ private:
 };
 
 }
-
-#endif

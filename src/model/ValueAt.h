@@ -1,5 +1,4 @@
-#ifndef BEEEON_VALUE_AT_H
-#define BEEEON_VALUE_AT_H
+#pragma once
 
 #include <Poco/Timestamp.h>
 
@@ -28,5 +27,3 @@ private:
 };
 
 }
-
-#endif

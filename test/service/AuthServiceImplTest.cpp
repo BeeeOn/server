@@ -1,6 +1,3 @@
-#ifndef BEEEON_AUTH_SERVICE_TEST_H
-#define BEEEON_AUTH_SERVICE_TEST_H
-
 #include <Poco/Exception.h>
 
 #include <cppunit/extensions/HelperMacros.h>
@@ -195,5 +192,3 @@ void AuthServiceImplTest::testFirstLoginBySecondProvider()
 }
 
 }
-
-#endif

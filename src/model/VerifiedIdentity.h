@@ -1,5 +1,4 @@
-#ifndef BEEEON_VERIFIED_IDENTITY_H
-#define BEEEON_VERIFIED_IDENTITY_H
+#pragma once
 
 #include <string>
 #include <Poco/URI.h>
@@ -97,5 +96,3 @@ private:
 typedef VerifiedIdentity::ID VerifiedIdentityID;
 
 }
-
-#endif

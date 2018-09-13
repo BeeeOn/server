@@ -1,5 +1,4 @@
-#ifndef BEEEON_WEBSOCKET_REQUEST_HANDLER_H
-#define BEEEON_WEBSOCKET_REQUEST_HANDLER_H
+#pragma once
 
 #include <string>
 
@@ -82,5 +81,3 @@ private:
 };
 
 }
-
-#endif

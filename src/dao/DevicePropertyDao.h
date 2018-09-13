@@ -1,5 +1,4 @@
-#ifndef BEEEON_DEVICE_PROPERTY_DAO_H
-#define BEEEON_DEVICE_PROPERTY_DAO_H
+#pragma once
 
 #include <list>
 
@@ -25,5 +24,3 @@ public:
 };
 
 }
-
-#endif

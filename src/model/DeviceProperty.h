@@ -1,5 +1,4 @@
-#ifndef BEEEON_DEVICE_PROPERTY_H
-#define BEEEON_DEVICE_PROPERTY_H
+#pragma once
 
 #include <string>
 
@@ -95,5 +94,3 @@ private:
 };
 
 }
-
-#endif

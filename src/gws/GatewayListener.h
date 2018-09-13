@@ -1,5 +1,4 @@
-#ifndef BEEEON_GATEWAY_LISTENER_H
-#define BEEEON_GATEWAY_LISTENER_H
+#pragma once
 
 #include <Poco/SharedPtr.h>
 #include <Poco/Timestamp.h>
@@ -37,5 +36,3 @@ public:
 };
 
 }
-
-#endif

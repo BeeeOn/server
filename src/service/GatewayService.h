@@ -1,5 +1,4 @@
-#ifndef BEEEON_GATEWAY_SERVICE_H
-#define BEEEON_GATEWAY_SERVICE_H
+#pragma once
 
 #include <vector>
 
@@ -44,5 +43,3 @@ public:
 };
 
 }
-
-#endif

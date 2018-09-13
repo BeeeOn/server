@@ -1,5 +1,4 @@
-#ifndef BEEEON_DEFAULT_ACCESS_POLICY_H
-#define BEEEON_DEFAULT_ACCESS_POLICY_H
+#pragma once
 
 #include "policy/ControlAccessPolicy.h"
 #include "policy/FCMTokenAccessPolicy.h"
@@ -177,6 +176,3 @@ private:
 };
 
 }
-
-#endif
-

@@ -1,5 +1,4 @@
-#ifndef BEEEON_JSON_DEVICE_DESERIALIZER_H
-#define BEEEON_JSON_DEVICE_DESERIALIZER_H
+#pragma once
 
 #include <Poco/JSON/Object.h>
 
@@ -32,5 +31,3 @@ private:
 };
 
 }
-
-#endif

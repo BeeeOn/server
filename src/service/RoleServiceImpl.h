@@ -1,5 +1,4 @@
-#ifndef BEEEON_ROLE_SERVICE_IMPL_H
-#define BEEEON_ROLE_SERVICE_IMPL_H
+#pragma once
 
 #include "dao/GatewayDao.h"
 #include "dao/IdentityDao.h"
@@ -90,5 +89,3 @@ private:
 };
 
 }
-
-#endif

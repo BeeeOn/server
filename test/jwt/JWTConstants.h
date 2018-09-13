@@ -1,5 +1,4 @@
-#ifndef BEEEON_JWT_CONSTANTS_H
-#define BEEEON_JWT_CONSTANTS_H
+#pragma once
 
 #include <string>
 
@@ -18,5 +17,3 @@ struct JWTConstants {
 };
 
 }
-
-#endif

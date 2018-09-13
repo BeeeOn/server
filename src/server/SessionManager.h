@@ -1,5 +1,4 @@
-#ifndef BEEEON_SESSION_MANAGER_H
-#define BEEEON_SESSION_MANAGER_H
+#pragma once
 
 #include <Poco/SharedPtr.h>
 
@@ -23,5 +22,3 @@ public:
 };
 
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef BEEEON_GW_MESSAGE_HANDLER_IMPL_H
-#define BEEEON_GW_MESSAGE_HANDLER_IMPL_H
+#pragma once
 
 #include "gwmessage/GWDeviceListRequest.h"
 #include "gwmessage/GWLastValueRequest.h"
@@ -98,5 +97,3 @@ private:
 };
 
 }
-
-#endif

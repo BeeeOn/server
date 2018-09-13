@@ -1,5 +1,4 @@
-#ifndef BEEEON_XML_VALUE_CONSUMER_H
-#define BEEEON_XML_VALUE_CONSUMER_H
+#pragma once
 
 #include "service/ValueConsumer.h"
 
@@ -42,5 +41,3 @@ private:
 
 }
 }
-
-#endif

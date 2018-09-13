@@ -1,5 +1,4 @@
-#ifndef BEEEON_ICU_LOCALE_IMPL_H
-#define BEEEON_ICU_LOCALE_IMPL_H
+#pragma once
 
 #include <list>
 
@@ -93,5 +92,3 @@ private:
 };
 
 }
-
-#endif

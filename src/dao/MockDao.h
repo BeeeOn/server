@@ -1,5 +1,4 @@
-#ifndef BEEEON_MOCK_DAO_H
-#define BEEEON_MOCK_DAO_H
+#pragma once
 
 #include <map>
 #include <vector>
@@ -266,5 +265,3 @@ private:
 };
 
 }
-
-#endif

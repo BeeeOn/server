@@ -1,5 +1,4 @@
-#ifndef BEEEON_LOCATION_DAO_H
-#define BEEEON_LOCATION_DAO_H
+#pragma once
 
 #include <vector>
 
@@ -28,5 +27,3 @@ public:
 };
 
 }
-
-#endif

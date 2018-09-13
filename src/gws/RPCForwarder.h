@@ -1,5 +1,4 @@
-#ifndef BEEEON_RPC_FORWARDER_H
-#define BEEEON_RPC_FORWARDER_H
+#pragma once
 
 #include <Poco/SharedPtr.h>
 
@@ -32,5 +31,3 @@ public:
 };
 
 }
-
-#endif

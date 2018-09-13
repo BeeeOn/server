@@ -1,5 +1,4 @@
-#ifndef BEEEON_POCO_DB_INITIALIZER_H
-#define BEEEON_POCO_DB_INITIALIZER_H
+#pragma once
 
 #include <string>
 
@@ -33,5 +32,3 @@ private:
 };
 
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef BEEEON_WEBSOCKET_SERVER
-#define BEEEON_WEBSOCKET_SERVER
+#pragma once
 
 #include <Poco/SharedPtr.h>
 #include <Poco/Net/HTTPServer.h>
@@ -57,5 +56,3 @@ private:
 };
 
 }
-
-#endif

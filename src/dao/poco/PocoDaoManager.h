@@ -1,5 +1,4 @@
-#ifndef BEEEON_POCO_DAO_MANAGER_H
-#define BEEEON_POCO_DAO_MANAGER_H
+#pragma once
 
 #include <map>
 
@@ -48,5 +47,3 @@ private:
 };
 
 }
-
-#endif

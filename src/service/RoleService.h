@@ -1,5 +1,4 @@
-#ifndef BEEEON_ROLE_SERVICE_H
-#define BEEEON_ROLE_SERVICE_H
+#pragma once
 
 #include <vector>
 
@@ -36,5 +35,3 @@ public:
 };
 
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef BEEEON_QUERY_H
-#define BEEEON_QUERY_H
+#pragma once
 
 #include "dao/QueryLoader.h"
 #include "dao/QueryProfiler.h"
@@ -41,5 +40,3 @@ private:
 };
 
 }
-
-#endif

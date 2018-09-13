@@ -1,5 +1,4 @@
-#ifndef BEEEON_ACCESS_LEVEL_H
-#define BEEEON_ACCESS_LEVEL_H
+#pragma once
 
 #include <string>
 #include <climits>
@@ -91,5 +90,3 @@ private:
 };
 
 }
-
-#endif

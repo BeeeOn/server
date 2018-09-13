@@ -1,5 +1,4 @@
-#ifndef BEEEON_POCO_RANDOM_PROVIDER_H
-#define BEEEON_POCO_RANDOM_PROVIDER_H
+#pragma once
 
 #include "provider/RandomProvider.h"
 
@@ -67,5 +66,3 @@ private:
 };
 
 }
-
-#endif

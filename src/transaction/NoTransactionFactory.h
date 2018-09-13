@@ -1,5 +1,4 @@
-#ifndef BEEEON_NO_TRANSACTION_FACTORY_H
-#define BEEEON_NO_TRANSACTION_FACTORY_H
+#pragma once
 
 #include "transaction/TransactionManager.h"
 
@@ -22,5 +21,3 @@ public:
 };
 
 }
-
-#endif

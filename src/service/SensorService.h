@@ -1,5 +1,4 @@
-#ifndef BEEEON_SENSOR_SERVICE_H
-#define BEEEON_SENSOR_SERVICE_H
+#pragma once
 
 #include <list>
 
@@ -25,5 +24,3 @@ public:
 };
 
 }
-
-#endif

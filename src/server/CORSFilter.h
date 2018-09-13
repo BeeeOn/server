@@ -1,5 +1,4 @@
-#ifndef BEEEON_CORS_FILTER_H
-#define BEEEON_CORS_FILTER_H
+#pragma once
 
 #include <list>
 #include <set>
@@ -118,5 +117,3 @@ private:
 };
 
 }
-
-#endif

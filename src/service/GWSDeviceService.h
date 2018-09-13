@@ -1,5 +1,4 @@
-#ifndef BEEEON_GWS_DEVICE_SERVICE_H
-#define BEEEON_GWS_DEVICE_SERVICE_H
+#pragma once
 
 #include <list>
 #include <vector>
@@ -65,5 +64,3 @@ public:
 };
 
 }
-
-#endif

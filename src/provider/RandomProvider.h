@@ -1,5 +1,4 @@
-#ifndef BEEEON_RANDOM_PROVIDER_H
-#define BEEEON_RANDOM_PROVIDER_H
+#pragma once
 
 #include <Poco/Logger.h>
 #include <Poco/Random.h>
@@ -71,5 +70,3 @@ private:
 };
 
 }
-
-#endif

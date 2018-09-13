@@ -1,5 +1,4 @@
-#ifndef BEEEON_DEVICE_SERVICE_IMPL_H
-#define BEEEON_DEVICE_SERVICE_IMPL_H
+#pragma once
 
 #include <list>
 #include <vector>
@@ -226,6 +225,3 @@ private:
 };
 
 }
-
-#endif
-

@@ -1,5 +1,4 @@
-#ifndef BEEEON_XMLUI_AUTH_XML_HANDLER_H
-#define BEEEON_XMLUI_AUTH_XML_HANDLER_H
+#pragma once
 
 #include "xmlui/AbstractXmlHandler.h"
 #include "service/AuthService.h"
@@ -39,5 +38,3 @@ private:
 
 }
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef BEEEON_POCO_CONTEXT_H
-#define BEEEON_POCO_CONTEXT_H
+#pragma once
 
 #include <string>
 
@@ -119,5 +118,3 @@ public:
 };
 
 }
-
-#endif

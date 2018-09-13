@@ -1,5 +1,4 @@
-#ifndef BEEEON_REST_LINKER_H
-#define BEEEON_REST_LINKER_H
+#pragma once
 
 #include <map>
 #include <string>
@@ -32,5 +31,3 @@ public:
 };
 
 }
-
-#endif

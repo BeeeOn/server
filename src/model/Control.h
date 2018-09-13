@@ -1,5 +1,4 @@
-#ifndef BEEEON_CONTROL_H
-#define BEEEON_CONTROL_H
+#pragma once
 
 #include <Poco/Timestamp.h>
 #include <Poco/Nullable.h>
@@ -154,5 +153,3 @@ private:
 typedef Control::ID ControlID;
 
 }
-
-#endif

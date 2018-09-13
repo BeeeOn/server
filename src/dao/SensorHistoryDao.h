@@ -1,5 +1,4 @@
-#ifndef BEEEON_SENSORS_HISTORY_DAO_H
-#define BEEEON_SENSORS_HISTORY_DAO_H
+#pragma once
 
 #include <vector>
 
@@ -91,5 +90,3 @@ public:
 };
 
 }
-
-#endif

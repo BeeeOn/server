@@ -1,5 +1,4 @@
-#ifndef BEEEON_URI_PATTERN_H
-#define BEEEON_URI_PATTERN_H
+#pragma once
 
 #include <map>
 #include <string>
@@ -31,5 +30,3 @@ private:
 };
 
 }
-
-#endif

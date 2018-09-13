@@ -1,5 +1,4 @@
-#ifndef BEEEON_POLICY_CONTEXT_H
-#define BEEEON_POLICY_CONTEXT_H
+#pragma once
 
 #include "util/Castable.h"
 
@@ -28,5 +27,3 @@ private:
 };
 
 }
-
-#endif

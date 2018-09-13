@@ -1,5 +1,4 @@
-#ifndef BEEEON_SESSION_CACHE_H
-#define BEEEON_SESSION_CACHE_H
+#pragma once
 
 #include <map>
 
@@ -51,5 +50,3 @@ private:
 };
 
 }
-
-#endif

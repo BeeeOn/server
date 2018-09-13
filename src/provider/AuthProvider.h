@@ -1,5 +1,4 @@
-#ifndef BEEEON_AUTH_PROVIDER_H
-#define BEEEON_AUTH_PROVIDER_H
+#pragma once
 
 #include <map>
 #include <Poco/URI.h>
@@ -151,5 +150,3 @@ protected:
 };
 
 }
-
-#endif

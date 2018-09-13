@@ -1,5 +1,4 @@
-#ifndef BEEEON_HTTP_FILTER_H
-#define BEEEON_HTTP_FILTER_H
+#pragma once
 
 #include <Poco/SharedPtr.h>
 
@@ -36,5 +35,3 @@ public:
 };
 
 }
-
-#endif

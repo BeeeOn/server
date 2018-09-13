@@ -1,5 +1,4 @@
-#ifndef BEEEON_SENSOR_REST_HANDLER_H
-#define BEEEON_SENSOR_REST_HANDLER_H
+#pragma once
 
 #include <Poco/Timespan.h>
 
@@ -44,5 +43,3 @@ private:
 
 }
 }
-
-#endif

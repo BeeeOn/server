@@ -1,5 +1,4 @@
-#ifndef BEEEON_SQITCH_LINE_H
-#define BEEEON_SQITCH_LINE_H
+#pragma once
 
 #include <string>
 
@@ -61,5 +60,3 @@ private:
 };
 
 }
-
-#endif

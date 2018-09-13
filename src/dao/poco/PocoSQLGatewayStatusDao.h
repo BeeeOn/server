@@ -1,5 +1,4 @@
-#ifndef BEEEON_POCO_SQL_GATEWAY_STATUS_DAO_H
-#define BEEEON_POCO_SQL_GATEWAY_STATUS_DAO_H
+#pragma once
 
 #include "dao/GatewayStatusDao.h"
 #include "dao/Query.h"
@@ -20,5 +19,3 @@ private:
 };
 
 }
-
-#endif

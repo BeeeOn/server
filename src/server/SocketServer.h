@@ -1,5 +1,4 @@
-#ifndef BEEEON_SOCKET_SERVER_H
-#define BEEEON_SOCKET_SERVER_H
+#pragma once
 
 #include <Poco/SharedPtr.h>
 #include <Poco/Timespan.h>
@@ -49,5 +48,3 @@ private:
 };
 
 }
-
-#endif

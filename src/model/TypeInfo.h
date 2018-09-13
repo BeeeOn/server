@@ -1,5 +1,4 @@
-#ifndef BEEEON_TYPE_INFO_H
-#define BEEEON_TYPE_INFO_H
+#pragma once
 
 #include <map>
 #include <set>
@@ -152,5 +151,3 @@ private:
 };
 
 }
-
-#endif

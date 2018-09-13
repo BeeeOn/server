@@ -1,5 +1,4 @@
-#ifndef BEEEON_AUTH_SERVICE_H
-#define BEEEON_AUTH_SERVICE_H
+#pragma once
 
 #include <map>
 #include <vector>
@@ -35,5 +34,3 @@ public:
 };
 
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef BEEEON_THREAD_LOCAL_TRANSACTION_MANAGER_H
-#define BEEEON_THREAD_LOCAL_TRANSACTION_MANAGER_H
+#pragma once
 
 #include <Poco/ThreadLocal.h>
 
@@ -61,5 +60,3 @@ private:
 };
 
 }
-
-#endif

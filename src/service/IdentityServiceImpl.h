@@ -1,5 +1,4 @@
-#ifndef BEEEON_IDENTITY_SERVICE_IMPL_H
-#define BEEEON_IDENTITY_SERVICE_IMPL_H
+#pragma once
 
 #include "dao/IdentityDao.h"
 #include "dao/VerifiedIdentityDao.h"
@@ -44,6 +43,3 @@ private:
 };
 
 }
-
-#endif
-

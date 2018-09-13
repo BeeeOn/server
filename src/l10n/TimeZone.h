@@ -1,5 +1,4 @@
-#ifndef BEEEON_TIME_ZONE_H
-#define BEEEON_TIME_ZONE_H
+#pragma once
 
 #include <string>
 
@@ -81,5 +80,3 @@ private:
 };
 
 }
-
-#endif

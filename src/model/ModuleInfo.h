@@ -1,5 +1,4 @@
-#ifndef BEEEON_MODULE_INFO_H
-#define BEEEON_MODULE_INFO_H
+#pragma once
 
 #include <string>
 
@@ -71,5 +70,3 @@ private:
 typedef ModuleInfo::ID ModuleInfoID;
 
 }
-
-#endif

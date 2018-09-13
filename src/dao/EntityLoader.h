@@ -1,5 +1,4 @@
-#ifndef BEEEON_ENTITY_LOADER_H
-#define BEEEON_ENTITY_LOADER_H
+#pragma once
 
 #include <string>
 
@@ -23,5 +22,3 @@ void EntityLoader::markLoaded(Entity &entity)
 }
 
 }
-
-#endif

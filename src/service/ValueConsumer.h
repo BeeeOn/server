@@ -1,5 +1,4 @@
-#ifndef BEEEON_VALUE_CONSUMER_H
-#define BEEEON_VALUE_CONSUMER_H
+#pragma once
 
 #include <vector>
 
@@ -18,5 +17,3 @@ public:
 };
 
 }
-
-#endif

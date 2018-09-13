@@ -1,5 +1,4 @@
-#ifndef BEEEON_HTTP_FILTER_CHAIN_H
-#define BEEEON_HTTP_FILTER_CHAIN_H
+#pragma once
 
 #include <list>
 
@@ -27,5 +26,3 @@ private:
 };
 
 }
-
-#endif

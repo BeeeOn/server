@@ -1,5 +1,4 @@
-#ifndef BEEEON_MODULE_VALUE_H
-#define BEEEON_MODULE_VALUE_H
+#pragma once
 
 #include "model/ModuleInfo.h"
 
@@ -29,5 +28,3 @@ private:
 };
 
 }
-
-#endif

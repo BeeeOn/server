@@ -1,5 +1,4 @@
-#ifndef BEEEON_ICU_TIME_ZONE_PROVIDER_H
-#define BEEEON_ICU_TIME_ZONE_PROVIDER_H
+#pragma once
 
 #include "l10n/TimeZoneProvider.h"
 #include "util/Loggable.h"
@@ -34,5 +33,3 @@ public:
 };
 
 }
-
-#endif

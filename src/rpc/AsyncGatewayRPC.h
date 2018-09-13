@@ -1,5 +1,4 @@
-#ifndef BEEEON_ASYNC_GATEWAY_RPC_H
-#define BEEEON_ASYNC_GATEWAY_RPC_H
+#pragma once
 
 #include <Poco/SharedPtr.h>
 #include <Poco/Util/Timer.h>
@@ -143,5 +142,3 @@ private:
 };
 
 }
-
-#endif

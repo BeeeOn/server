@@ -1,5 +1,4 @@
-#ifndef SERVER_GATEWAY_RPC_RESULT_H
-#define SERVER_GATEWAY_RPC_RESULT_H
+#pragma once
 
 #include <string>
 
@@ -45,5 +44,3 @@ private:
 };
 
 }
-
-#endif

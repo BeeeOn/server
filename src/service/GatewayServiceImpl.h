@@ -1,5 +1,4 @@
-#ifndef BEEEON_GATEWAY_SERVICE_IMPL_H
-#define BEEEON_GATEWAY_SERVICE_IMPL_H
+#pragma once
 
 #include <vector>
 
@@ -122,6 +121,3 @@ private:
 };
 
 }
-
-#endif
-

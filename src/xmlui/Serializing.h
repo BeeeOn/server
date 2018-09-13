@@ -1,5 +1,4 @@
-#ifndef BEEEON_XMLUI_SERIALIZING_H
-#define BEEEON_XMLUI_SERIALIZING_H
+#pragma once
 
 #include <list>
 #include <vector>
@@ -62,6 +61,3 @@ void serializeMyself(Poco::XML::XMLWriter &output,
 
 }
 }
-
-#endif
-

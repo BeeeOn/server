@@ -1,5 +1,4 @@
-#ifndef BEEEON_XMLUI_ANY_XML_HANDLER_H
-#define BEEEON_XMLUI_ANY_XML_HANDLER_H
+#pragma once
 
 #include "xmlui/AbstractXmlHandler.h"
 
@@ -26,6 +25,3 @@ public:
 
 }
 }
-
-#endif
-

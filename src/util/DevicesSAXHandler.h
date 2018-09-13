@@ -1,5 +1,4 @@
-#ifndef BEEEON_DEVICES_SAX_HANDLER_H
-#define BEEEON_DEVICES_SAX_HANDLER_H
+#pragma once
 
 #include <set>
 
@@ -51,5 +50,3 @@ private:
 };
 
 }
-
-#endif

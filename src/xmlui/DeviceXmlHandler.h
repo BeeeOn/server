@@ -1,5 +1,4 @@
-#ifndef BEEEON_XMLUI_DEVICE_XML_HANDLER_H
-#define BEEEON_XMLUI_DEVICE_XML_HANDLER_H
+#pragma once
 
 #include "service/DeviceService.h"
 #include "xmlui/SessionXmlHandler.h"
@@ -72,5 +71,3 @@ private:
 
 }
 }
-
-#endif

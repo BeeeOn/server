@@ -1,5 +1,4 @@
-#ifndef BEEEON_DEVICE_SERVICE_H
-#define BEEEON_DEVICE_SERVICE_H
+#pragma once
 
 #include <list>
 #include <vector>
@@ -46,5 +45,3 @@ public:
 };
 
 }
-
-#endif

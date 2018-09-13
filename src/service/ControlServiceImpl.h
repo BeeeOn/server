@@ -1,5 +1,4 @@
-#ifndef BEEEON_CONTROL_SERVICE_IMPL_H
-#define BEEEON_CONTROL_SERVICE_IMPL_H
+#pragma once
 
 #include <Poco/SharedPtr.h>
 
@@ -88,6 +87,3 @@ private:
 };
 
 }
-
-#endif
-

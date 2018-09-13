@@ -1,5 +1,4 @@
-#ifndef BEEEON_SQITCH_TESTING_PLANS_H
-#define BEEEON_SQITCH_TESTING_PLANS_H
+#pragma once
 
 #include <string>
 
@@ -20,5 +19,3 @@ struct SqitchTestingPlans {
 };
 
 }
-
-#endif

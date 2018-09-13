@@ -1,5 +1,4 @@
-#ifndef BEEEON_RESTUI_SERIALIZING_H
-#define BEEEON_RESTUI_SERIALIZING_H
+#pragma once
 
 #include <list>
 #include <vector>
@@ -102,5 +101,3 @@ void serialize(Poco::JSON::PrintHandler &output,
 }
 
 }
-
-#endif

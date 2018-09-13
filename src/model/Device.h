@@ -1,5 +1,4 @@
-#ifndef BEEEON_DEVICE_H
-#define BEEEON_DEVICE_H
+#pragma once
 
 #include <Poco/SharedPtr.h>
 #include <Poco/Timespan.h>
@@ -88,5 +87,3 @@ private:
 typedef Device::ID DeviceID;
 
 }
-
-#endif

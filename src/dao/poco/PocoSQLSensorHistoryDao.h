@@ -1,5 +1,4 @@
-#ifndef BEEEON_POCO_SQL_SENSOR_HISTORY_DAO_H
-#define BEEEON_POCO_SQL_SENSOR_HISTORY_DAO_H
+#pragma once
 
 #include "dao/SensorHistoryDao.h"
 #include "dao/Query.h"
@@ -87,5 +86,3 @@ private:
 };
 
 }
-
-#endif

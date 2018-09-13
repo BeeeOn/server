@@ -1,5 +1,4 @@
-#ifndef BEEEON_IDENTITY_SERVICE_H
-#define BEEEON_IDENTITY_SERVICE_H
+#pragma once
 
 #include <list>
 
@@ -26,5 +25,3 @@ public:
 };
 
 }
-
-#endif

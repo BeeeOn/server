@@ -1,5 +1,4 @@
-#ifndef BEEEON_LOCATION_SERVICE_IMPL_H
-#define BEEEON_LOCATION_SERVICE_IMPL_H
+#pragma once
 
 #include "dao/GatewayDao.h"
 #include "dao/LocationDao.h"
@@ -65,5 +64,3 @@ private:
 };
 
 }
-
-#endif

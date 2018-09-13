@@ -1,5 +1,4 @@
-#ifndef BEEEON_SENSOR_DATA_LISTENER_H
-#define BEEEON_SENSOR_DATA_LISTENER_H
+#pragma once
 
 #include <vector>
 
@@ -59,5 +58,3 @@ public:
 };
 
 }
-
-#endif

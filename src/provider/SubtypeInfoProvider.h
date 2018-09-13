@@ -1,5 +1,4 @@
-#ifndef BEEEON_SUBTYPE_INFO_PROVIDER_H
-#define BEEEON_SUBTYPE_INFO_PROVIDER_H
+#pragma once
 
 #include <set>
 
@@ -33,6 +32,3 @@ private:
 };
 
 }
-
-#endif
-

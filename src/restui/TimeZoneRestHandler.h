@@ -1,5 +1,4 @@
-#ifndef BEEEON_TIME_ZONE_REST_HANDLER_H
-#define BEEEON_TIME_ZONE_REST_HANDLER_H
+#pragma once
 
 #include "l10n/TimeZoneProvider.h"
 #include "rest/JSONRestHandler.h"
@@ -26,7 +25,3 @@ private:
 
 }
 }
-
-#endif
-
-

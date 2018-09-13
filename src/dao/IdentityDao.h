@@ -1,5 +1,4 @@
-#ifndef BEEEON_IDENTITY_DAO_H
-#define BEEEON_IDENTITY_DAO_H
+#pragma once
 
 #include <Poco/SharedPtr.h>
 
@@ -36,5 +35,3 @@ protected:
 };
 
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef BEEEON_XMLUI_PROFILE_XML_HANDLER_H
-#define BEEEON_XMLUI_PROFILE_XML_HANDLER_H
+#pragma once
 
 #include "xmlui/SessionXmlHandler.h"
 
@@ -48,5 +47,3 @@ private:
 
 }
 }
-
-#endif

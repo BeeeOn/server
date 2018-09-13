@@ -1,5 +1,4 @@
-#ifndef BEEEON_INI_FILE_QUERY_LOADER_H
-#define BEEEON_INI_FILE_QUERY_LOADER_H
+#pragma once
 
 #include <Poco/AutoPtr.h>
 #include <Poco/Util/LayeredConfiguration.h>
@@ -19,5 +18,3 @@ protected:
 };
 
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef BEEEON_USER_SERVICE_IMPL_H
-#define BEEEON_USER_SERVICE_IMPL_H
+#pragma once
 
 #include "dao/UserDao.h"
 #include "service/UserService.h"
@@ -36,5 +35,3 @@ private:
 };
 
 }
-
-#endif

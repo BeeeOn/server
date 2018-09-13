@@ -1,5 +1,4 @@
-#ifndef BEEEON_DEVICE_REST_HANDLER_H
-#define BEEEON_DEVICE_REST_HANDLER_H
+#pragma once
 
 #include <Poco/SharedPtr.h>
 
@@ -33,5 +32,3 @@ private:
 
 }
 }
-
-#endif

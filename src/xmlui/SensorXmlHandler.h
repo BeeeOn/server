@@ -1,5 +1,4 @@
-#ifndef BEEEON_XMLUI_SENSOR_XML_HANDLER_H
-#define BEEEON_XMLUI_SENSOR_XML_HANDLER_H
+#pragma once
 
 #include <Poco/Timespan.h>
 
@@ -60,6 +59,3 @@ private:
 
 }
 }
-
-#endif
-

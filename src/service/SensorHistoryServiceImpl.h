@@ -1,5 +1,4 @@
-#ifndef SENSOR_HISTORY_SERVICE_IMPL_H
-#define SENSOR_HISTORY_SERVICE_IMPL_H
+#pragma once
 
 #include <vector>
 
@@ -84,5 +83,3 @@ private:
 };
 
 }
-
-#endif

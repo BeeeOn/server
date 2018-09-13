@@ -1,5 +1,4 @@
-#ifndef BEEEON_LOCATION_REST_HANDLER_H
-#define BEEEON_LOCATION_REST_HANDLER_H
+#pragma once
 
 #include "rest/JSONRestHandler.h"
 #include "service/LocationService.h"
@@ -26,5 +25,3 @@ private:
 
 }
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef BEEEON_SENSOR_ACCESS_POLICY_H
-#define BEEEON_SENSOR_ACCESS_POLICY_H
+#pragma once
 
 #include <Poco/SharedPtr.h>
 
@@ -32,5 +31,3 @@ public:
 };
 
 }
-
-#endif

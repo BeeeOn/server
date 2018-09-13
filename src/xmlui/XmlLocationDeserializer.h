@@ -1,5 +1,4 @@
-#ifndef BEEEON_XML_LOCATION_DESERIALIZER_H
-#define BEEEON_XML_LOCATION_DESERIALIZER_H
+#pragma once
 
 #include <Poco/DOM/Element.h>
 
@@ -20,5 +19,3 @@ private:
 };
 
 }
-
-#endif

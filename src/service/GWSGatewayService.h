@@ -1,5 +1,4 @@
-#ifndef BEEEON_GWS_GATEWAY_SERVICE_H
-#define BEEEON_GWS_GATEWAY_SERVICE_H
+#pragma once
 
 #include <Poco/SharedPtr.h>
 
@@ -27,5 +26,3 @@ public:
 };
 
 }
-
-#endif

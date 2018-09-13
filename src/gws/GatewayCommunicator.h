@@ -1,5 +1,4 @@
-#ifndef BEEEON_GATEWAY_COMMUNICATOR_H
-#define BEEEON_GATEWAY_COMMUNICATOR_H
+#pragma once
 
 #include <deque>
 #include <functional>
@@ -208,5 +207,3 @@ private:
 };
 
 }
-
-#endif

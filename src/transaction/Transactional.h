@@ -1,5 +1,4 @@
-#ifndef BEEEON_TRANSACTIONAL_H
-#define BEEEON_TRANSACTIONAL_H
+#pragma once
 
 #include <Poco/Logger.h>
 
@@ -113,6 +112,3 @@ private:
 };
 
 }
-
-#endif
-

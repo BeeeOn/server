@@ -1,5 +1,4 @@
-#ifndef BEEEON_SQITCH_INITIALIZER_H
-#define BEEEON_SQITCH_INITIALIZER_H
+#pragma once
 
 #include <functional>
 #include <string>
@@ -75,5 +74,3 @@ private:
 };
 
 }
-
-#endif

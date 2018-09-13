@@ -1,5 +1,4 @@
-#ifndef BEEEON_USER_H
-#define BEEEON_USER_H
+#pragma once
 
 #include <string>
 
@@ -41,5 +40,3 @@ private:
 typedef User::ID UserID;
 
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef BEEEON_USER_SERVICE_H
-#define BEEEON_USER_SERVICE_H
+#pragma once
 
 #include <Poco/SharedPtr.h>
 
@@ -22,5 +21,3 @@ public:
 };
 
 }
-
-#endif

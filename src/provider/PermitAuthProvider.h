@@ -1,5 +1,4 @@
-#ifndef BEEEON_PERMIT_AUTH_PROVIDER_H
-#define BEEEON_PERMIT_AUTH_PROVIDER_H
+#pragma once
 
 #include "provider/AuthProvider.h"
 
@@ -24,5 +23,3 @@ private:
 };
 
 }
-
-#endif
