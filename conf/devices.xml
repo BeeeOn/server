@@ -576,6 +576,54 @@
 		</modules>
 	</device>
 
+	<device id="76">
+		<name>Color Light</name>
+		<vendor>Revogi</vendor>
+
+		<match>
+			<exact name="Delite-1748 Smart Bulb" vendor="Revogi" />
+		</match>
+
+		<modules>
+			<control id="0" type="on_off,controllable" />
+			<control id="1" type="brightness,controllable" />
+			<control id="2" type="color_temperature,controllable" />
+			<control id="3" type="color,controllable" />
+		</modules>
+	</device>
+
+	<device id="77">
+		<name>Smart Candle</name>
+		<vendor>Revogi</vendor>
+
+		<match>
+			<exact name="Delite-ED33 Smart Candle" vendor="Revogi" />
+		</match>
+
+		<modules>
+			<control id="0" type="on_off,controllable" />
+			<control id="1" type="brightness,controllable" />
+			<control id="2" type="color,controllable" />
+		</modules>
+	</device>
+
+	<device id="78">
+		<name>Remote Switch</name>
+		<vendor>Revogi</vendor>
+
+		<match>
+			<exact name="MeterPlug-F19F" vendor="Revogi" />
+		</match>
+
+		<modules>
+			<control id="0" type="on_off,controllable" />
+			<sensor id="1" type="power" />
+			<sensor id="2" type="voltage" />
+			<sensor id="3" type="current" />
+			<sensor id="4" type="frequency" />
+		</modules>
+	</device>
+
 	<device id="80">
 		<name>ZW100 MultiSensor 6</name>
 		<vendor>Aeotec</vendor>
