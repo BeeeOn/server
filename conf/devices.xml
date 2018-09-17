@@ -380,6 +380,19 @@
 		</modules>
 	</device>
 
+	<device id="10000">
+		<name>PG (X/Y) Control</name>
+		<vendor>Jablotron</vendor>
+
+		<match>
+			<pattern name="PG[XY]" vendor="Jablotron" />
+		</match>
+
+		<modules>
+			<control id="0" type="on_off,controllable" />
+		</modules>
+	</device>
+
 	<device id="50">
 		<name>Dimmable Light</name>
 		<vendor>Philips Hue</vendor>
