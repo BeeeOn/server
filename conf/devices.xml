@@ -347,6 +347,19 @@
 		</modules>
 	</device>
 
+	<device id="47">
+		<name>AC-88 Wireless Mains Outlet</name>
+		<vendor>Jablotron</vendor>
+
+		<match>
+			<exact name="AC-88 (sensor)" vendor="Jablotron" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="on_off" />
+		</modules>
+	</device>
+
 	<device id="50">
 		<name>Dimmable Light</name>
 		<vendor>Philips Hue</vendor>
