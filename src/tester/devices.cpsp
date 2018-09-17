@@ -165,6 +165,7 @@ function devices_control_current(gwid, devid, modid, element) {
 		var input = $("<input type='number' />");
 		var request = $("<button>Change</button>");
 		var state = $("<span></span>");
+		var timeout = $("<input type='number' value='25' />");
 
 		devices_control_state(state, data);
 
@@ -174,7 +175,7 @@ function devices_control_current(gwid, devid, modid, element) {
 			tester.post(devices_uri(gwid, devid) + "/controls/" + modid + "/current",
 					"#devices", {
 				value: input.val(),
-				timeout: 25
+				timeout: timeout.val()
 			}, function (data) {
 				devices_control_state(state, data);
 			});
@@ -184,6 +185,8 @@ function devices_control_current(gwid, devid, modid, element) {
 		block.append(input);
 		block.append(request);
 		block.append(state);
+		block.append("<br /><span>Timeout: </span>");
+		block.append(timeout);
 
 		element.append(block);
 	});
