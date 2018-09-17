@@ -393,6 +393,20 @@
 		</modules>
 	</device>
 
+	<device id="10001">
+		<name>Siren Control</name>
+		<vendor>Jablotron</vendor>
+
+		<match>
+			<exact name="Siren" vendor="Jablotron" />
+		</match>
+
+		<modules>
+			<control id="0" type="on_off" />
+			<control id="1" type="enum:SIREN_BEEPING" />
+		</modules>
+	</device>
+
 	<device id="50">
 		<name>Dimmable Light</name>
 		<vendor>Philips Hue</vendor>
