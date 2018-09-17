@@ -165,7 +165,7 @@ function devices_control_current(gwid, devid, modid, element) {
 		var input = $("<input type='number' />");
 		var request = $("<button>Change</button>");
 		var state = $("<span></span>");
-		var timeout = $("<input type='number' value='25' />");
+		var timeout = $("<input type='number' value='5' />");
 
 		devices_control_state(state, data);
 
