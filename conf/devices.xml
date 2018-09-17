@@ -360,6 +360,26 @@
 		</modules>
 	</device>
 
+	<device id="48">
+		<name>RC-86K Wireless Remote Control</name>
+		<vendor>Jablotron</vendor>
+
+		<match>
+			<exact name="RC-86K (dual)" vendor="Jablotron" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="open_close">
+				<name>Left buttons</name>
+			</sensor>
+			<sensor id="1" type="open_close">
+				<name>Right buttons</name>
+			</sensor>
+			<sensor id="2" type="security_alert" />
+			<sensor id="3" type="battery" />
+		</modules>
+	</device>
+
 	<device id="50">
 		<name>Dimmable Light</name>
 		<vendor>Philips Hue</vendor>
