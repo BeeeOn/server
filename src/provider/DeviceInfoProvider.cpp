@@ -1,3 +1,5 @@
+#include <Poco/Exception.h>
+
 #include "di/Injectable.h"
 #include "provider/DeviceInfoProvider.h"
 #include "util/DevicesSAXHandler.h"
@@ -48,11 +50,9 @@ DeviceInfo DeviceInfoProvider::resolveTypes(const DeviceInfo &device)
 		const SharedPtr<TypeInfo> info = m_typeProvider->findById(id);
 
 		if (info.isNull()) {
-			logger().warning("could not resolve type " + id.toString()
-				+ " for device " + device,
-				__FILE__, __LINE__);
-
-			continue;
+			throw IllegalStateException(
+				"could not resolve type " + id.toString()
+				+ " for device " + device);
 		}
 
 		ModuleInfo copy(module);
@@ -60,19 +60,16 @@ DeviceInfo DeviceInfoProvider::resolveTypes(const DeviceInfo &device)
 
 		if (((int) id) == 6) {
 			if (module.subtype().isNull()) {
-				logger().warning("missing subtype for enum for device " + device,
-						__FILE__, __LINE__);
-				continue;
+				throw IllegalStateException(
+					"missing subtype for enum for device " + device);
 			}
 
 			const SubtypeInfoID &id = module.subtype()->id();
 			const SharedPtr<SubtypeInfo> subtypeInfo = m_subtypeProvider->findById(id);
 
 			if (subtypeInfo.isNull()) {
-				logger().warning("no such subtype " + id.toString()
-						+ " for device " + device,
-						__FILE__, __LINE__);
-				continue;
+				throw IllegalStateException(
+					"no such subtype " + id.toString() + " for device " + device);
 			}
 
 			copy.setSubtype(subtypeInfo);
