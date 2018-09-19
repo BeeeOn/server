@@ -74,6 +74,11 @@ bool DeviceInfo::lookup(ModuleInfo &module) const
 	return true;
 }
 
+const string DeviceInfo::toString() const
+{
+	return m_vendor + " " + m_name + " (" + to_string(m_modules.size()) + ")";
+}
+
 DeviceInfo::Match::~Match()
 {
 }
