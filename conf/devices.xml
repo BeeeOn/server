@@ -380,6 +380,21 @@
 		</modules>
 	</device>
 
+	<device id="49">
+		<name>JA-83P Wireless PIR Sensor</name>
+		<vendor>Jablotron</vendor>
+
+		<match>
+			<exact name="JA-83P" vendor="Jablotron" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="motion" />
+			<sensor id="1" type="security_alert" />
+			<sensor id="2" type="battery" />
+		</modules>
+	</device>
+
 	<device id="10000">
 		<name>PG (X/Y) Control</name>
 		<vendor>Jablotron</vendor>
