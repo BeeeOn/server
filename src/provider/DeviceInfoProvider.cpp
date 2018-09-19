@@ -44,6 +44,7 @@ void DeviceInfoProvider::setSubtypeInfoProvider(InfoProvider<SubtypeInfo> *provi
 DeviceInfo DeviceInfoProvider::resolveTypes(const DeviceInfo &device)
 {
 	static const TypeInfoID TYPE_ENUM_ID = ModuleType::Type::TYPE_ENUM;
+	static const TypeInfoID TYPE_BITMAP_ID = ModuleType::Type::TYPE_BITMAP;
 
 	DeviceInfo result(device);
 	result.clear();
@@ -61,7 +62,7 @@ DeviceInfo DeviceInfoProvider::resolveTypes(const DeviceInfo &device)
 		ModuleInfo copy(module);
 		copy.setType(info);
 
-		if (id == TYPE_ENUM_ID) {
+		if (id == TYPE_ENUM_ID || id == TYPE_BITMAP_ID) {
 			if (module.subtype().isNull()) {
 				throw IllegalStateException(
 					"missing subtype for enum for device " + device);
