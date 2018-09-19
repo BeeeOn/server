@@ -215,21 +215,16 @@ void DevicesSAXHandler::startElement(
 		if (type.empty())
 			error("type value is empty");
 
-		XMLString subtype;
-		if (getAndTrimAttribute(attrList, "subtype", subtype)) {
-			if (subtype.empty())
-				error("subtype value is empty");
-		}
-
 		m_module.setId(ModuleInfoID::parse(id));
 
 		const ModuleType &moduleType = ModuleType::parse(type);
 		m_module.setType(new TypeInfo(moduleType.type()));
 
-		if (subtype.empty()) {
+		if (moduleType.customTypeID().isNull()) {
 			m_module.setSubtype(nullptr);
 		}
 		else {
+			const string subtype = moduleType.customTypeID().toString();
 			EnumInfo enumInfo;
 			m_module.setSubtype(new SubtypeInfo(SubtypeInfoID::parse(subtype), enumInfo));
 		}
