@@ -1,6 +1,7 @@
 #include <Poco/Exception.h>
 
 #include "di/Injectable.h"
+#include "model/ModuleType.h"
 #include "provider/DeviceInfoProvider.h"
 #include "util/DevicesSAXHandler.h"
 
@@ -42,6 +43,8 @@ void DeviceInfoProvider::setSubtypeInfoProvider(InfoProvider<SubtypeInfo> *provi
 
 DeviceInfo DeviceInfoProvider::resolveTypes(const DeviceInfo &device)
 {
+	static const TypeInfoID TYPE_ENUM_ID = ModuleType::Type::TYPE_ENUM;
+
 	DeviceInfo result(device);
 	result.clear();
 
@@ -58,7 +61,7 @@ DeviceInfo DeviceInfoProvider::resolveTypes(const DeviceInfo &device)
 		ModuleInfo copy(module);
 		copy.setType(info);
 
-		if (((int) id) == 6) {
+		if (id == TYPE_ENUM_ID) {
 			if (module.subtype().isNull()) {
 				throw IllegalStateException(
 					"missing subtype for enum for device " + device);
