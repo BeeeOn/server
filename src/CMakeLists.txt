@@ -232,6 +232,7 @@ file(GLOB DAO_POCO_SOURCES
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoPerQueryScriptExecutor.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoScriptExecutor.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSimpleDBInitializer.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoStatementInfo.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLControlDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLDeviceDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLDevicePropertyDao.cpp
