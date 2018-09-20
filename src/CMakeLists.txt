@@ -365,6 +365,8 @@ file(GLOB RESTUI_SOURCES
 	restui/GatewayRestHandler.cpp
 )
 
+add_library(BeeeOnServerRestUI ${RESTUI_SOURCES})
+
 find_program(CPSPC cpspc)
 
 file(GLOB WEB_TESTER_INDEX
@@ -437,7 +439,6 @@ endif()
 
 add_executable(beeeon-server
 	${CMAKE_CURRENT_BINARY_DIR}/main.cpp
-	${RESTUI_SOURCES}
 	${DB_CONNECTOR_SOURCES}
 )
 
@@ -488,6 +489,7 @@ if (APPLE)
 		BeeeOnServerDaoPoco
 		BeeeOnServerSqitch
 		BeeeOnServerXmlUI
+		BeeeOnServerRestUI
 		${LIBS}
 	)
 # The -Wl,--whole-archive is necessary for all libraries defining
@@ -500,6 +502,7 @@ else()
 		BeeeOnServerDaoPoco
 		BeeeOnServerSqitch
 		BeeeOnServerXmlUI
+		BeeeOnServerRestUI
 		-Wl,--no-whole-archive
 		${LIBS}
 	)
