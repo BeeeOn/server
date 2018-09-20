@@ -496,6 +496,12 @@ else()
 	list(APPEND LIBS ${POCO_ODBC})
 endif()
 
+if (NOT POCO_CASSANDRA)
+	message(WARNING "Cassandra is NOT compiled in")
+else()
+	list(APPEND LIBS ${POCO_CASSANDRA})
+endif()
+
 # Apple's linker doesn't support --whole-archive. Instead it uses -all_load.
 if (APPLE)
 	target_link_libraries(beeeon-server
@@ -526,12 +532,6 @@ else()
 		-Wl,--no-whole-archive
 		${LIBS}
 	)
-endif()
-
-if (NOT POCO_CASSANDRA)
-	message(WARNING "Cassandra is NOT compiled in")
-else()
-	target_link_libraries(beeeon-server ${POCO_CASSANDRA})
 endif()
 
 install(TARGETS beeeon-server BeeeOnServer

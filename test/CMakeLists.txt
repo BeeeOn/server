@@ -146,6 +146,10 @@ if(POCO_ODBC)
 	list(APPEND LIBS ${POCO_ODBC})
 endif()
 
+if(POCO_CASSANDRA)
+	list(APPEND LIBS ${POCO_CASSANDRA})
+endif()
+
 # Apple's linker doesn't support --whole-archive. Instead it uses -all_load.
 if (APPLE)
 	target_link_libraries(test-suite-server
@@ -174,8 +178,4 @@ else()
 		-Wl,--no-whole-archive
 		${LIBS}
 	)
-endif()
-
-if(POCO_CASSANDRA)
-	target_link_libraries(test-suite-server ${POCO_CASSANDRA})
 endif()
