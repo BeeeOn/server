@@ -289,6 +289,7 @@ if (LUA_FOUND)
 		${PROJECT_SOURCE_DIR}/util/LuaPreprocessor.cpp
 	)
 	list(APPEND SOURCES ${LUA_SOURCES})
+	list(APPEND LIBS ${LUA_LIBRARIES})
 else()
 	message(STATUS "Lua support is disabled due to unmet dependencies")
 endif()
@@ -300,6 +301,8 @@ if (JWT AND JANSSON)
 		${PROJECT_SOURCE_DIR}/server/JWTSessionManager.cpp
 	)
 	list(APPEND SOURCES ${JWT_SOURCES})
+	list(APPEND LIBS ${JANSSON})
+	list(APPEND LIBS ${JWT})
 else()
 	message(STATUS "JWT support is disabled due to unmet dependencies")
 endif()
@@ -311,6 +314,7 @@ if (ZEROMQ)
 		${PROJECT_SOURCE_DIR}/zeromq/ZeroMQSender.cpp
 	)
 	list(APPEND SOURCES ${ZEROMQ_SOURCES})
+	list(APPEND LIBS ${ZEROMQ})
 else()
 	message(STATUS "ZeroMQ support is disabled due to unmet dependencies")
 endif()
@@ -452,11 +456,13 @@ file(GLOB DB_CONNECTOR_SOURCES
 
 if (POCO_ODBC)
 	list(APPEND DB_CONNECTOR_SOURCES  dao/poco/PocoODBCConnectorLoader.cpp)
+	list(APPEND LIBS ${POCO_ODBC})
 	add_definitions(-DPOCO_ODBC=1)
 endif()
 
 if (POCO_CASSANDRA)
 	list(APPEND DB_CONNECTOR_SOURCES dao/poco/PocoCassandraConnectorLoader.cpp)
+	list(APPEND LIBS ${POCO_CASSANDRA})
 else()
 	message(STATUS "Cassandra support is disabled due to unmet dependencies")
 endif()
@@ -465,42 +471,6 @@ add_executable(beeeon-server
 	${CMAKE_CURRENT_BINARY_DIR}/main.cpp
 	${DB_CONNECTOR_SOURCES}
 )
-
-if(LUA_FOUND)
-	list(APPEND LIBS ${LUA_LIBRARIES})
-else()
-	message(STATUS "library lua was not found, ignoring...")
-endif()
-
-if(JANSSON)
-	list(APPEND LIBS ${JANSSON})
-else()
-	message(STATUS "library jansson was not found, ignoring...")
-endif()
-
-if(JWT)
-	list(APPEND LIBS ${JWT})
-else()
-	message(STATUS "library jwt was not found, ignoring...")
-endif()
-
-if(ZEROMQ)
-	list(APPEND LIBS ${ZEROMQ})
-else()
-	message(STATUS "library zmq was not found, ignoring...")
-endif()
-
-if (NOT POCO_ODBC)
-	message(WARNING "ODBC is NOT compiled in")
-else()
-	list(APPEND LIBS ${POCO_ODBC})
-endif()
-
-if (NOT POCO_CASSANDRA)
-	message(WARNING "Cassandra is NOT compiled in")
-else()
-	list(APPEND LIBS ${POCO_CASSANDRA})
-endif()
 
 # Apple's linker doesn't support --whole-archive. Instead it uses -all_load.
 if (APPLE)
