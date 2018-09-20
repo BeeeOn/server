@@ -347,6 +347,81 @@
 		</modules>
 	</device>
 
+	<device id="47">
+		<name>AC-88 Wireless Mains Outlet</name>
+		<vendor>Jablotron</vendor>
+
+		<match>
+			<exact name="AC-88 (sensor)" vendor="Jablotron" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="on_off" />
+		</modules>
+	</device>
+
+	<device id="48">
+		<name>RC-86K Wireless Remote Control</name>
+		<vendor>Jablotron</vendor>
+
+		<match>
+			<exact name="RC-86K (dual)" vendor="Jablotron" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="open_close">
+				<name>Left buttons</name>
+			</sensor>
+			<sensor id="1" type="open_close">
+				<name>Right buttons</name>
+			</sensor>
+			<sensor id="2" type="security_alert" />
+			<sensor id="3" type="battery" />
+		</modules>
+	</device>
+
+	<device id="49">
+		<name>JA-83P Wireless PIR Sensor</name>
+		<vendor>Jablotron</vendor>
+
+		<match>
+			<exact name="JA-83P" vendor="Jablotron" />
+		</match>
+
+		<modules>
+			<sensor id="0" type="motion" />
+			<sensor id="1" type="security_alert" />
+			<sensor id="2" type="battery" />
+		</modules>
+	</device>
+
+	<device id="10000">
+		<name>PG (X/Y) Control</name>
+		<vendor>Jablotron</vendor>
+
+		<match>
+			<pattern name="PG[XY]" vendor="Jablotron" />
+		</match>
+
+		<modules>
+			<control id="0" type="on_off,controllable" />
+		</modules>
+	</device>
+
+	<device id="10001">
+		<name>Siren Control</name>
+		<vendor>Jablotron</vendor>
+
+		<match>
+			<exact name="Siren" vendor="Jablotron" />
+		</match>
+
+		<modules>
+			<control id="0" type="on_off" />
+			<control id="1" type="enum:SIREN_BEEPING" />
+		</modules>
+	</device>
+
 	<device id="50">
 		<name>Dimmable Light</name>
 		<vendor>Philips Hue</vendor>

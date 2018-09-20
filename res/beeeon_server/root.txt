@@ -229,6 +229,15 @@ root {
 				off { "off" }
 			}
 		}
+
+		SIREN_BEEPING {
+			label { "siren beeping" }
+			values {
+				none { "none" }
+				slow { "slow" }
+				fast { "fast" }
+			}
+		}
 	}
 
 	bitmaps {

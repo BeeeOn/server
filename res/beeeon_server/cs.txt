@@ -220,6 +220,15 @@ cs {
 				off { "vypnuto" }
 			}
 		}
+
+		SIREN_BEEPING {
+			label { "pípání sirény" }
+			values {
+				none { "žádné" }
+				slow { "pomalé" }
+				fast { "rychlé" }
+			}
+		}
 	}
 
 	bitmaps {

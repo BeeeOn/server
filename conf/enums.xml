@@ -35,4 +35,11 @@
 			<value equals="2">off</value>
 		</values>
 	</enum>
+	<enum id="SIREN_BEEPING">
+		<values>
+			<value equals="0">none</value>
+			<value equals="1">slow</value>
+			<value equals="2">fast</value>
+		</values>
+	</enum>
 </enums>
