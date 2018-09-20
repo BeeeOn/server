@@ -343,6 +343,8 @@ file(GLOB XMLUI_SOURCES
 	xmlui/RoleXmlHandler.cpp
 )
 
+add_library(BeeeOnServerXmlUI ${XMLUI_SOURCES})
+
 file(GLOB RESTUI_SOURCES
 	restui/Serializing.cpp
 	restui/JSONDeviceDeserializer.cpp
@@ -435,7 +437,6 @@ endif()
 
 add_executable(beeeon-server
 	${CMAKE_CURRENT_BINARY_DIR}/main.cpp
-	${XMLUI_SOURCES}
 	${RESTUI_SOURCES}
 	${DB_CONNECTOR_SOURCES}
 )
@@ -486,6 +487,7 @@ if (APPLE)
 		BeeeOnServer
 		BeeeOnServerDaoPoco
 		BeeeOnServerSqitch
+		BeeeOnServerXmlUI
 		${LIBS}
 	)
 # The -Wl,--whole-archive is necessary for all libraries defining
@@ -497,6 +499,7 @@ else()
 		BeeeOnServer
 		BeeeOnServerDaoPoco
 		BeeeOnServerSqitch
+		BeeeOnServerXmlUI
 		-Wl,--no-whole-archive
 		${LIBS}
 	)
