@@ -1,4 +1,3 @@
-#include <sstream>
 #include <Poco/Exception.h>
 
 #include "dao/QueryLoader.h"
@@ -6,6 +5,7 @@
 #include "dao/poco/PocoTransactionImpl.h"
 #include "dao/poco/PocoAbstractDao.h"
 #include "dao/poco/PocoDaoManager.h"
+#include "dao/poco/StatementExceptionRethrower.h"
 #include "dao/poco/PocoStatementInfo.h"
 #include "transaction/TransactionManager.h"
 #include "util/Backtrace.h"
@@ -90,26 +90,6 @@ void PocoAbstractDao::registerQuery(Query &query)
 	m_queries.push_back(&query);
 }
 
-
-static void finishHandleException(const string &message, const Poco::Exception e)
-{
-	Data::DataException exception(message, e);
-	exception.rethrow();
-}
-
-static void handleException(
-		const Statement &stmt,
-		const Exception &e)
-{
-	ostringstream buffer;
-
-	buffer << trimRight(e.displayText()) << endl;
-
-	PocoStatementInfo info(stmt);
-	info.dump(buffer);
-	finishHandleException(buffer.str(), e);
-}
-
 size_t PocoAbstractDao::execute(Statement &sql)
 {
 	size_t result;
@@ -136,7 +116,7 @@ size_t PocoAbstractDao::execute(Statement &sql)
 		return result;
 	}
 	catch (const Exception &e) {
-		handleException(sql, e);
+		StatementExceptionRethrower::rethrowAlways(sql, e);
 		throw;
 	}
 }

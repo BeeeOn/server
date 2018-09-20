@@ -248,6 +248,7 @@ file(GLOB DAO_POCO_SOURCES
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLVerifiedIdentityDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoTransactionFactory.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoTransactionImpl.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/StatementExceptionRethrower.cpp
 )
 
 add_library(BeeeOnServerDaoPoco ${DAO_POCO_SOURCES})
