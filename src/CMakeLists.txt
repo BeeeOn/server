@@ -18,6 +18,20 @@ find_library (JWT jwt)
 find_library (JANSSON jansson)
 find_library (ZEROMQ zmq)
 
+set(LIBS
+	${POCO_FOUNDATION}
+	${POCO_SSL}
+	${POCO_CRYPTO}
+	${POCO_UTIL}
+	${POCO_NET}
+	${POCO_JSON}
+	${POCO_XML}
+	${POCO_DATA}
+	${POCO_SQLITE}
+	${ICU_I18N}
+	${ICU_UC}
+)
+
 find_package (Lua52 QUIET)
 if (LUA52_FOUND)
 	set(LUA_FOUND ${LUA52_FOUND})
@@ -450,20 +464,6 @@ endif()
 add_executable(beeeon-server
 	${CMAKE_CURRENT_BINARY_DIR}/main.cpp
 	${DB_CONNECTOR_SOURCES}
-)
-
-set(LIBS
-	${POCO_FOUNDATION}
-	${POCO_SSL}
-	${POCO_CRYPTO}
-	${POCO_UTIL}
-	${POCO_NET}
-	${POCO_JSON}
-	${POCO_XML}
-	${POCO_DATA}
-	${POCO_SQLITE}
-	${ICU_I18N}
-	${ICU_UC}
 )
 
 if(LUA_FOUND)
