@@ -122,10 +122,10 @@
 		</match>
 
 		<modules>
-			<sensor id="0" type="enum:MOD_BOILER_STATUS" subtype="MOD_BOILER_STATUS">
+			<sensor id="0" type="enum:MOD_BOILER_STATUS">
 				<name>Status</name>
 			</sensor>
-			<sensor id="1" type="enum:MOD_BOILER_MODE" subtype="MOD_BOILER_MODE">
+			<sensor id="1" type="enum:MOD_BOILER_MODE">
 				<name>Mode</name>
 			</sensor>
 			<sensor id="2" type="temperature">
@@ -143,10 +143,10 @@
 			<sensor id="6" type="pressure">
 				<name>Boiler Pressure</name>
 			</sensor>
-			<sensor id="7" type="bitmap:MOD_CURRENT_BOILER_OT_FAULT_FLAGS" subtype="MOD_CURRENT_BOILER_OT_FAULT_FLAGS">
+			<sensor id="7" type="bitmap:MOD_CURRENT_BOILER_OT_FAULT_FLAGS">
 				<name>OpenTherm Fault Flags</name>
 			</sensor>
-			<sensor id="8" type="bitmap:MOD_CURRENT_BOILER_OT_OEM_FAULTS" subtype="MOD_CURRENT_BOILER_OT_OEM_FAULTS">
+			<sensor id="8" type="bitmap:MOD_CURRENT_BOILER_OT_OEM_FAULTS">
 				<name>OpenTherm OEM Flags</name>
 			</sensor>
 		</modules>
@@ -161,10 +161,10 @@
 		</match>
 
 		<modules>
-			<control id="0" type="enum:MOD_BOILER_OPERATION_TYPE,controllable" subtype="MOD_BOILER_OPERATION_TYPE">
+			<control id="0" type="enum:MOD_BOILER_OPERATION_TYPE,controllable">
 				<name>Operation Type</name>
 			</control>
-			<control id="1" type="enum:MOD_BOILER_OPERATION_MODE,controllable" subtype="MOD_BOILER_OPERATION_MODE">
+			<control id="1" type="enum:MOD_BOILER_OPERATION_MODE,controllable">
 				<name>Operation Mode</name>
 			</control>
 			<sensor id="2" type="temperature,inner">

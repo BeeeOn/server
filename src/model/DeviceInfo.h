@@ -94,6 +94,8 @@ public:
 
 	bool lookup(ModuleInfo &module) const;
 
+	const std::string toString() const override;
+
 private:
 	std::string m_name;
 	std::string m_vendor;
