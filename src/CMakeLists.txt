@@ -490,6 +490,12 @@ else()
 	message(STATUS "library zmq was not found, ignoring...")
 endif()
 
+if (NOT POCO_ODBC)
+	message(WARNING "ODBC is NOT compiled in")
+else()
+	list(APPEND LIBS ${POCO_ODBC})
+endif()
+
 # Apple's linker doesn't support --whole-archive. Instead it uses -all_load.
 if (APPLE)
 	target_link_libraries(beeeon-server
@@ -520,12 +526,6 @@ else()
 		-Wl,--no-whole-archive
 		${LIBS}
 	)
-endif()
-
-if (NOT POCO_ODBC)
-	message(WARNING "ODBC is NOT compiled in")
-else()
-	target_link_libraries(beeeon-server ${POCO_ODBC})
 endif()
 
 if (NOT POCO_CASSANDRA)
