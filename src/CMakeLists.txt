@@ -70,24 +70,6 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/fcm/FCMResponse.cpp
 	${PROJECT_SOURCE_DIR}/fcm/FCMSender.cpp
 	${PROJECT_SOURCE_DIR}/fcm/LegacyFCMClient.cpp
-	${PROJECT_SOURCE_DIR}/gws/ControlChangeHandler.cpp
-	${PROJECT_SOURCE_DIR}/gws/DeviceListener.cpp
-	${PROJECT_SOURCE_DIR}/gws/DevicePairHandler.cpp
-	${PROJECT_SOURCE_DIR}/gws/DeviceUnpairHandler.cpp
-	${PROJECT_SOURCE_DIR}/gws/GatewayCommunicator.cpp
-	${PROJECT_SOURCE_DIR}/gws/GatewayConnection.cpp
-	${PROJECT_SOURCE_DIR}/gws/GatewayListener.cpp
-	${PROJECT_SOURCE_DIR}/gws/GatewayPeerVerifier.cpp
-	${PROJECT_SOURCE_DIR}/gws/GatewayScanController.cpp
-	${PROJECT_SOURCE_DIR}/gws/GWMessageHandler.cpp
-	${PROJECT_SOURCE_DIR}/gws/GWMessageHandlerImpl.cpp
-	${PROJECT_SOURCE_DIR}/gws/GWRequestHandler.cpp
-	${PROJECT_SOURCE_DIR}/gws/GWResponseExpectedQueue.cpp
-	${PROJECT_SOURCE_DIR}/gws/RelaxedGatewayPeerVerifier.cpp
-	${PROJECT_SOURCE_DIR}/gws/RPCForwarder.cpp
-	${PROJECT_SOURCE_DIR}/gws/SensorDataListener.cpp
-	${PROJECT_SOURCE_DIR}/gws/SocketGatewayPeerVerifierFactory.cpp
-	${PROJECT_SOURCE_DIR}/gws/X509GatewayPeerVerifier.cpp
 	${PROJECT_SOURCE_DIR}/jwt/JWToken.cpp
 	${PROJECT_SOURCE_DIR}/l10n/HTTPLocaleExtractor.cpp
 	${PROJECT_SOURCE_DIR}/l10n/IcuLocaleImpl.cpp
@@ -223,14 +205,6 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/SQLPreprocessor.cpp
 	${PROJECT_SOURCE_DIR}/util/TypesSAXHandler.cpp
 	${PROJECT_SOURCE_DIR}/util/UnknownEvaluator.cpp
-	${PROJECT_SOURCE_DIR}/rpc/RPCConnector.cpp
-	${PROJECT_SOURCE_DIR}/rpc/SocketRPCConnector.cpp
-	${PROJECT_SOURCE_DIR}/rpc/GatewayRPC.cpp
-	${PROJECT_SOURCE_DIR}/rpc/GatewayRPCHandler.cpp
-	${PROJECT_SOURCE_DIR}/rpc/GatewayRPCResult.cpp
-	${PROJECT_SOURCE_DIR}/rpc/GatewayRPCUnpairResult.cpp
-	${PROJECT_SOURCE_DIR}/rpc/AsyncGatewayRPC.cpp
-	${PROJECT_SOURCE_DIR}/rpc/FakeGatewayRPC.cpp
 	${PROJECT_SOURCE_DIR}/rest/BuiltinRestHandler.cpp
 	${PROJECT_SOURCE_DIR}/rest/CPSPRestHandler.cpp
 	${PROJECT_SOURCE_DIR}/rest/JSONRestHandler.cpp
@@ -321,6 +295,37 @@ if (ZEROMQ)
 else()
 	message(STATUS "ZeroMQ support is disabled due to unmet dependencies")
 endif()
+
+file(GLOB GWS_SOURCES
+	${PROJECT_SOURCE_DIR}/gws/ControlChangeHandler.cpp
+	${PROJECT_SOURCE_DIR}/gws/DeviceListener.cpp
+	${PROJECT_SOURCE_DIR}/gws/DevicePairHandler.cpp
+	${PROJECT_SOURCE_DIR}/gws/DeviceUnpairHandler.cpp
+	${PROJECT_SOURCE_DIR}/gws/GatewayCommunicator.cpp
+	${PROJECT_SOURCE_DIR}/gws/GatewayConnection.cpp
+	${PROJECT_SOURCE_DIR}/gws/GatewayListener.cpp
+	${PROJECT_SOURCE_DIR}/gws/GatewayPeerVerifier.cpp
+	${PROJECT_SOURCE_DIR}/gws/GatewayScanController.cpp
+	${PROJECT_SOURCE_DIR}/gws/GWMessageHandler.cpp
+	${PROJECT_SOURCE_DIR}/gws/GWMessageHandlerImpl.cpp
+	${PROJECT_SOURCE_DIR}/gws/GWRequestHandler.cpp
+	${PROJECT_SOURCE_DIR}/gws/GWResponseExpectedQueue.cpp
+	${PROJECT_SOURCE_DIR}/gws/RelaxedGatewayPeerVerifier.cpp
+	${PROJECT_SOURCE_DIR}/gws/RPCForwarder.cpp
+	${PROJECT_SOURCE_DIR}/gws/SensorDataListener.cpp
+	${PROJECT_SOURCE_DIR}/gws/SocketGatewayPeerVerifierFactory.cpp
+	${PROJECT_SOURCE_DIR}/gws/X509GatewayPeerVerifier.cpp
+	${PROJECT_SOURCE_DIR}/rpc/RPCConnector.cpp
+	${PROJECT_SOURCE_DIR}/rpc/SocketRPCConnector.cpp
+	${PROJECT_SOURCE_DIR}/rpc/GatewayRPC.cpp
+	${PROJECT_SOURCE_DIR}/rpc/GatewayRPCHandler.cpp
+	${PROJECT_SOURCE_DIR}/rpc/GatewayRPCResult.cpp
+	${PROJECT_SOURCE_DIR}/rpc/GatewayRPCUnpairResult.cpp
+	${PROJECT_SOURCE_DIR}/rpc/AsyncGatewayRPC.cpp
+	${PROJECT_SOURCE_DIR}/rpc/FakeGatewayRPC.cpp
+)
+
+add_library(BeeeOnServerGWS ${GWS_SOURCES})
 
 file(GLOB XMLUI_SOURCES
 	xmlui/Serializing.cpp
@@ -490,6 +495,7 @@ if (APPLE)
 		BeeeOnServerSqitch
 		BeeeOnServerXmlUI
 		BeeeOnServerRestUI
+		BeeeOnServerGWS
 		${LIBS}
 	)
 # The -Wl,--whole-archive is necessary for all libraries defining
@@ -503,6 +509,7 @@ else()
 		BeeeOnServerSqitch
 		BeeeOnServerXmlUI
 		BeeeOnServerRestUI
+		BeeeOnServerGWS
 		-Wl,--no-whole-archive
 		${LIBS}
 	)

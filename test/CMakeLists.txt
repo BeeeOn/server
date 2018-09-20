@@ -151,6 +151,7 @@ if (APPLE)
 		BeeeOnServer
 		BeeeOnServerDaoPoco
 		BeeeOnServerSqitch
+		BeeeOnServerGWS
 		${LIBS}
 	)
 # The -Wl,--whole-archive is necessary for all libraries defining
@@ -163,6 +164,7 @@ else()
 		BeeeOnServer
 		BeeeOnServerDaoPoco
 		BeeeOnServerSqitch
+		BeeeOnServerGWS
 		-Wl,--no-whole-archive
 		${LIBS}
 	)
