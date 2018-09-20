@@ -142,6 +142,14 @@ if(ZEROMQ)
 	list(APPEND LIBS ${ZEROMQ})
 endif()
 
+if(POCO_ODBC)
+	list(APPEND LIBS ${POCO_ODBC})
+endif()
+
+if(POCO_CASSANDRA)
+	list(APPEND LIBS ${POCO_CASSANDRA})
+endif()
+
 # Apple's linker doesn't support --whole-archive. Instead it uses -all_load.
 if (APPLE)
 	target_link_libraries(test-suite-server
@@ -149,6 +157,10 @@ if (APPLE)
 		BeeeOnBaseTest
 		BeeeOnBase
 		BeeeOnServer
+		BeeeOnServerDaoPoco
+		BeeeOnServerSqitch
+		BeeeOnServerGWS
+		BeeeOnServerOAuth
 		${LIBS}
 	)
 # The -Wl,--whole-archive is necessary for all libraries defining
@@ -159,15 +171,11 @@ else()
 		BeeeOnBaseTest
 		BeeeOnBase
 		BeeeOnServer
+		BeeeOnServerDaoPoco
+		BeeeOnServerSqitch
+		BeeeOnServerGWS
+		BeeeOnServerOAuth
 		-Wl,--no-whole-archive
 		${LIBS}
 	)
-endif()
-
-if(POCO_ODBC)
-	target_link_libraries(test-suite-server ${POCO_ODBC})
-endif()
-
-if(POCO_CASSANDRA)
-	target_link_libraries(test-suite-server ${POCO_CASSANDRA})
 endif()
