@@ -464,8 +464,9 @@ if (POCO_ODBC)
 endif()
 
 if (POCO_CASSANDRA)
-	list(APPEND DB_CONNECTOR_SOURCES dao/poco/PocoCassandraConnectorLoader.cpp)
-	list(APPEND LIBS ${POCO_CASSANDRA})
+	add_library(BeeeOnServerCassandraConnector
+		dao/poco/PocoCassandraConnectorLoader.cpp)
+	target_link_libraries(BeeeOnServerCassandraConnector ${POCO_CASSANDRA})
 else()
 	message(STATUS "Cassandra support is disabled due to unmet dependencies")
 endif()

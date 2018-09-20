@@ -9,7 +9,6 @@ find_library (POCO_CRYPTO PocoCrypto)
 find_library (POCO_NET PocoNet)
 find_library (POCO_JSON PocoJSON)
 find_library (POCO_DATA PocoData)
-find_library (POCO_CASSANDRA PocoDataCassandra)
 find_library (ICU_I18N icui18n)
 find_library (ICU_UC icuuc)
 find_library (JWT jwt)
@@ -139,10 +138,6 @@ endif()
 
 if(ZEROMQ)
 	list(APPEND LIBS ${ZEROMQ})
-endif()
-
-if(POCO_CASSANDRA)
-	list(APPEND LIBS ${POCO_CASSANDRA})
 endif()
 
 # Apple's linker doesn't support --whole-archive. Instead it uses -all_load.

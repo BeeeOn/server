@@ -115,7 +115,8 @@
 				library="BeeeOnServerODBCConnector" />
 
 		<instance name="cassandraConnector"
-				class="BeeeOn::PocoCassandraConnectorLoader" />
+				class="BeeeOn::PocoCassandraConnectorLoader"
+				library="BeeeOnServerCassandraConnector" />
 
 		<instance name="sqlUserDao" class="BeeeOn::PocoSQLUserDao">
 			<set name="daoManager" ref="primaryDaoManager" />
