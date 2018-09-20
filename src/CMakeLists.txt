@@ -107,13 +107,6 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/TypeInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/User.cpp
 	${PROJECT_SOURCE_DIR}/net/SocketReadyBlocker.cpp
-	${PROJECT_SOURCE_DIR}/oauth2/AbstractOAuth2Provider.cpp
-	${PROJECT_SOURCE_DIR}/oauth2/FacebookOAuth2Provider.cpp
-	${PROJECT_SOURCE_DIR}/oauth2/GenericCodeExchanger.cpp
-	${PROJECT_SOURCE_DIR}/oauth2/GoogleOAuth2Provider.cpp
-	${PROJECT_SOURCE_DIR}/oauth2/OpenIDUserDecoder.cpp
-	${PROJECT_SOURCE_DIR}/oauth2/OAuth2CodeExchanger.cpp
-	${PROJECT_SOURCE_DIR}/oauth2/OAuth2UserFetcher.cpp
 	${PROJECT_SOURCE_DIR}/pg/PostgreStartup.cpp
 	${PROJECT_SOURCE_DIR}/policy/ControlAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/FCMTokenAccessPolicy.cpp
@@ -136,12 +129,9 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/provider/ApiKeyAuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/AuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/DeviceInfoProvider.cpp
+	${PROJECT_SOURCE_DIR}/provider/PermitAuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/RandomProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/SubtypeInfoProvider.cpp
-	${PROJECT_SOURCE_DIR}/provider/OAuth2AuthProvider.cpp
-	${PROJECT_SOURCE_DIR}/provider/PermitAuthProvider.cpp
-	${PROJECT_SOURCE_DIR}/provider/FacebookAuthProvider.cpp
-	${PROJECT_SOURCE_DIR}/provider/GoogleAuthProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/TypeInfoProvider.cpp
 	${PROJECT_SOURCE_DIR}/server/AbstractServer.cpp
 	${PROJECT_SOURCE_DIR}/server/AuthRestHandler.cpp
@@ -261,6 +251,21 @@ file(GLOB SQITCH_SOURCES
 )
 
 add_library(BeeeOnServerSqitch ${SQITCH_SOURCES})
+
+file(GLOB OAUTH_SOURCES
+	${PROJECT_SOURCE_DIR}/oauth2/AbstractOAuth2Provider.cpp
+	${PROJECT_SOURCE_DIR}/oauth2/FacebookOAuth2Provider.cpp
+	${PROJECT_SOURCE_DIR}/oauth2/GenericCodeExchanger.cpp
+	${PROJECT_SOURCE_DIR}/oauth2/GoogleOAuth2Provider.cpp
+	${PROJECT_SOURCE_DIR}/oauth2/OpenIDUserDecoder.cpp
+	${PROJECT_SOURCE_DIR}/oauth2/OAuth2CodeExchanger.cpp
+	${PROJECT_SOURCE_DIR}/oauth2/OAuth2UserFetcher.cpp
+	${PROJECT_SOURCE_DIR}/provider/OAuth2AuthProvider.cpp
+	${PROJECT_SOURCE_DIR}/provider/FacebookAuthProvider.cpp
+	${PROJECT_SOURCE_DIR}/provider/GoogleAuthProvider.cpp
+)
+
+add_library(BeeeOnServerOAuth ${OAUTH_SOURCES})
 
 if (LUA_FOUND)
 	include_directories(${LUA_INCLUDE_DIR})
@@ -496,6 +501,7 @@ if (APPLE)
 		BeeeOnServerXmlUI
 		BeeeOnServerRestUI
 		BeeeOnServerGWS
+		BeeeOnServerOAuth
 		${LIBS}
 	)
 # The -Wl,--whole-archive is necessary for all libraries defining
@@ -510,6 +516,7 @@ else()
 		BeeeOnServerXmlUI
 		BeeeOnServerRestUI
 		BeeeOnServerGWS
+		BeeeOnServerOAuth
 		-Wl,--no-whole-archive
 		${LIBS}
 	)
