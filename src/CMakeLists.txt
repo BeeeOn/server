@@ -457,7 +457,8 @@ file(GLOB DB_CONNECTOR_SOURCES
 )
 
 if (POCO_ODBC)
-	list(APPEND DB_CONNECTOR_SOURCES  dao/poco/PocoODBCConnectorLoader.cpp)
+	list(APPEND DB_CONNECTOR_SOURCES dao/poco/PocoODBCConnectorLoader.cpp)
+	list(APPEND DB_CONNECTOR_SOURCES dao/poco/ODBCStatementExceptionRethrower.cpp)
 	list(APPEND LIBS ${POCO_ODBC})
 endif()
 
