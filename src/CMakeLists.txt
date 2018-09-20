@@ -232,6 +232,7 @@ file(GLOB DAO_POCO_SOURCES
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoPerQueryScriptExecutor.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoScriptExecutor.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSimpleDBInitializer.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoStatementInfo.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLControlDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLDeviceDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLDevicePropertyDao.cpp
@@ -247,6 +248,7 @@ file(GLOB DAO_POCO_SOURCES
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLVerifiedIdentityDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoTransactionFactory.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoTransactionImpl.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/StatementExceptionRethrower.cpp
 )
 
 add_library(BeeeOnServerDaoPoco ${DAO_POCO_SOURCES})
@@ -455,14 +457,16 @@ file(GLOB DB_CONNECTOR_SOURCES
 )
 
 if (POCO_ODBC)
-	list(APPEND DB_CONNECTOR_SOURCES  dao/poco/PocoODBCConnectorLoader.cpp)
-	list(APPEND LIBS ${POCO_ODBC})
-	add_definitions(-DPOCO_ODBC=1)
+	add_library(BeeeOnServerODBCConnector SHARED
+		dao/poco/PocoODBCConnectorLoader.cpp
+		dao/poco/ODBCStatementExceptionRethrower.cpp)
+	target_link_libraries(BeeeOnServerODBCConnector ${POCO_ODBC})
 endif()
 
 if (POCO_CASSANDRA)
-	list(APPEND DB_CONNECTOR_SOURCES dao/poco/PocoCassandraConnectorLoader.cpp)
-	list(APPEND LIBS ${POCO_CASSANDRA})
+	add_library(BeeeOnServerCassandraConnector
+		dao/poco/PocoCassandraConnectorLoader.cpp)
+	target_link_libraries(BeeeOnServerCassandraConnector ${POCO_CASSANDRA})
 else()
 	message(STATUS "Cassandra support is disabled due to unmet dependencies")
 endif()
