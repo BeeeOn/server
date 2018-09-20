@@ -322,15 +322,6 @@ else()
 	message(STATUS "ZeroMQ support is disabled due to unmet dependencies")
 endif()
 
-if (POCO_CASSANDRA)
-	file(GLOB CASSANDRA_SOURCES
-		${PROJECT_SOURCE_DIR}/dao/poco/PocoCassandraConnectorLoader.cpp
-	)
-	list(APPEND SOURCES ${CASSANDRA_SOURCES})
-else()
-	message(STATUS "Cassandra support is disabled due to unmet dependencies")
-endif()
-
 file(GLOB XMLUI_SOURCES
 	xmlui/Serializing.cpp
 	xmlui/XmlValueConsumer.cpp
@@ -350,7 +341,6 @@ file(GLOB XMLUI_SOURCES
 	xmlui/DeviceXmlHandler.cpp
 	xmlui/SensorXmlHandler.cpp
 	xmlui/RoleXmlHandler.cpp
-	dao/poco/PocoSQLiteConnectorLoader.cpp
 )
 
 file(GLOB RESTUI_SOURCES
@@ -371,14 +361,7 @@ file(GLOB RESTUI_SOURCES
 	restui/TimeZoneRestHandler.cpp
 	restui/TypeRestHandler.cpp
 	restui/GatewayRestHandler.cpp
-	dao/poco/PocoSQLiteConnectorLoader.cpp
 )
-
-if (POCO_ODBC)
-	list(APPEND XMLUI_SOURCES  dao/poco/PocoODBCConnectorLoader.cpp)
-	list(APPEND RESTUI_SOURCES dao/poco/PocoODBCConnectorLoader.cpp)
-	add_definitions(-DPOCO_ODBC=1)
-endif()
 
 find_program(CPSPC cpspc)
 
@@ -435,10 +418,26 @@ add_library(BeeeOnServer SHARED ${SOURCES})
 file(GLOB MAIN_CPP main.cpp)
 configure_file(${MAIN_CPP} ${CMAKE_CURRENT_BINARY_DIR}/main.cpp)
 
+file(GLOB DB_CONNECTOR_SOURCES
+	dao/poco/PocoSQLiteConnectorLoader.cpp
+)
+
+if (POCO_ODBC)
+	list(APPEND DB_CONNECTOR_SOURCES  dao/poco/PocoODBCConnectorLoader.cpp)
+	add_definitions(-DPOCO_ODBC=1)
+endif()
+
+if (POCO_CASSANDRA)
+	list(APPEND DB_CONNECTOR_SOURCES dao/poco/PocoCassandraConnectorLoader.cpp)
+else()
+	message(STATUS "Cassandra support is disabled due to unmet dependencies")
+endif()
+
 add_executable(beeeon-server
 	${CMAKE_CURRENT_BINARY_DIR}/main.cpp
 	${XMLUI_SOURCES}
 	${RESTUI_SOURCES}
+	${DB_CONNECTOR_SOURCES}
 )
 
 set(LIBS
