@@ -1,10 +1,6 @@
 #include <sstream>
 #include <Poco/Exception.h>
 
-#ifdef POCO_ODBC
-#include <Poco/Data/ODBC/ODBCException.h>
-#endif
-
 #include "dao/QueryLoader.h"
 #include "dao/Query.h"
 #include "dao/poco/PocoTransactionImpl.h"
@@ -101,32 +97,6 @@ static void finishHandleException(const string &message, const Poco::Exception e
 	exception.rethrow();
 }
 
-#ifdef POCO_ODBC
-static void handleException(
-		const Statement &stmt,
-		const ODBC::StatementException &e)
-{
-	ostringstream buffer;
-
-	buffer << "ODBC StatementException" << endl;
-
-	const auto &diag = e.diagnostics();
-
-	for (int i = 0; i < diag.count(); ++i) {
-		buffer << "[" << i << "] ";
-		buffer << "SQL state: " << diag.sqlState(i);
-		buffer << ", ";
-		buffer << "Native error: " << diag.nativeError(i);
-		buffer << endl;
-		buffer << trimRight(diag.message(i)) << endl;
-	}
-
-	PocoStatementInfo info(stmt);
-	info.dump(buffer);
-	finishHandleException(buffer.str(), e);
-}
-#endif
-
 static void handleException(
 		const Statement &stmt,
 		const Exception &e)
@@ -165,12 +135,6 @@ size_t PocoAbstractDao::execute(Statement &sql)
 
 		return result;
 	}
-#ifdef POCO_ODBC
-	catch (const ODBC::StatementException &e) {
-		handleException(sql, e);
-		throw;
-	}
-#endif
 	catch (const Exception &e) {
 		handleException(sql, e);
 		throw;

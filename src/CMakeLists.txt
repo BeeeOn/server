@@ -458,7 +458,6 @@ file(GLOB DB_CONNECTOR_SOURCES
 if (POCO_ODBC)
 	list(APPEND DB_CONNECTOR_SOURCES  dao/poco/PocoODBCConnectorLoader.cpp)
 	list(APPEND LIBS ${POCO_ODBC})
-	add_definitions(-DPOCO_ODBC=1)
 endif()
 
 if (POCO_CASSANDRA)
