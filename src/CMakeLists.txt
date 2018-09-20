@@ -244,16 +244,6 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/rest/RestLinker.cpp
 	${PROJECT_SOURCE_DIR}/rest/RestRouter.cpp
 	${PROJECT_SOURCE_DIR}/rest/UriPattern.cpp
-	${PROJECT_SOURCE_DIR}/sqitch/PocoSqitchInitializer.cpp
-	${PROJECT_SOURCE_DIR}/sqitch/SqitchChange.cpp
-	${PROJECT_SOURCE_DIR}/sqitch/SqitchEntry.cpp
-	${PROJECT_SOURCE_DIR}/sqitch/SqitchInitializer.cpp
-	${PROJECT_SOURCE_DIR}/sqitch/SqitchLine.cpp
-	${PROJECT_SOURCE_DIR}/sqitch/SqitchPlan.cpp
-	${PROJECT_SOURCE_DIR}/sqitch/SqitchPlanParser.cpp
-	${PROJECT_SOURCE_DIR}/sqitch/SqitchPragma.cpp
-	${PROJECT_SOURCE_DIR}/sqitch/SqitchRef.cpp
-	${PROJECT_SOURCE_DIR}/sqitch/SqitchTag.cpp
 )
 
 file(GLOB DAO_POCO_SOURCES
@@ -282,6 +272,21 @@ file(GLOB DAO_POCO_SOURCES
 )
 
 add_library(BeeeOnServerDaoPoco ${DAO_POCO_SOURCES})
+
+file(GLOB SQITCH_SOURCES
+	${PROJECT_SOURCE_DIR}/sqitch/PocoSqitchInitializer.cpp
+	${PROJECT_SOURCE_DIR}/sqitch/SqitchChange.cpp
+	${PROJECT_SOURCE_DIR}/sqitch/SqitchEntry.cpp
+	${PROJECT_SOURCE_DIR}/sqitch/SqitchInitializer.cpp
+	${PROJECT_SOURCE_DIR}/sqitch/SqitchLine.cpp
+	${PROJECT_SOURCE_DIR}/sqitch/SqitchPlan.cpp
+	${PROJECT_SOURCE_DIR}/sqitch/SqitchPlanParser.cpp
+	${PROJECT_SOURCE_DIR}/sqitch/SqitchPragma.cpp
+	${PROJECT_SOURCE_DIR}/sqitch/SqitchRef.cpp
+	${PROJECT_SOURCE_DIR}/sqitch/SqitchTag.cpp
+)
+
+add_library(BeeeOnServerSqitch ${SQITCH_SOURCES})
 
 if (LUA_FOUND)
 	include_directories(${LUA_INCLUDE_DIR})
@@ -481,6 +486,7 @@ if (APPLE)
 		BeeeOnBase
 		BeeeOnServer
 		BeeeOnServerDaoPoco
+		BeeeOnServerSqitch
 		${LIBS}
 	)
 # The -Wl,--whole-archive is necessary for all libraries defining
@@ -491,6 +497,7 @@ else()
 		BeeeOnBase
 		BeeeOnServer
 		BeeeOnServerDaoPoco
+		BeeeOnServerSqitch
 		-Wl,--no-whole-archive
 		${LIBS}
 	)
