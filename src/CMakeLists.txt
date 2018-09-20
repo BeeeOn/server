@@ -64,28 +64,6 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/dao/RoleInGatewayDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/SensorHistoryDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/VerifiedIdentityDao.cpp
-	${PROJECT_SOURCE_DIR}/dao/poco/PocoAbstractDao.cpp
-	${PROJECT_SOURCE_DIR}/dao/poco/PocoDaoManager.cpp
-	${PROJECT_SOURCE_DIR}/dao/poco/PocoDBInitializer.cpp
-	${PROJECT_SOURCE_DIR}/dao/poco/PocoGlobDBInitializer.cpp
-	${PROJECT_SOURCE_DIR}/dao/poco/PocoPerQueryScriptExecutor.cpp
-	${PROJECT_SOURCE_DIR}/dao/poco/PocoScriptExecutor.cpp
-	${PROJECT_SOURCE_DIR}/dao/poco/PocoSimpleDBInitializer.cpp
-	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLControlDao.cpp
-	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLDeviceDao.cpp
-	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLDevicePropertyDao.cpp
-	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLFCMRecipientsDao.cpp
-	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLFCMTokenDao.cpp
-	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLGatewayDao.cpp
-	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLGatewayStatusDao.cpp
-	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLIdentityDao.cpp
-	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLLocationDao.cpp
-	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLRoleInGatewayDao.cpp
-	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLSensorHistoryDao.cpp
-	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLUserDao.cpp
-	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLVerifiedIdentityDao.cpp
-	${PROJECT_SOURCE_DIR}/dao/poco/PocoTransactionFactory.cpp
-	${PROJECT_SOURCE_DIR}/dao/poco/PocoTransactionImpl.cpp
 	${PROJECT_SOURCE_DIR}/fcm/FCMClient.cpp
 	${PROJECT_SOURCE_DIR}/fcm/FCMMessage.cpp
 	${PROJECT_SOURCE_DIR}/fcm/FCMReceiverConfigurable.cpp
@@ -277,6 +255,33 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/sqitch/SqitchRef.cpp
 	${PROJECT_SOURCE_DIR}/sqitch/SqitchTag.cpp
 )
+
+file(GLOB DAO_POCO_SOURCES
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoAbstractDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoDaoManager.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoDBInitializer.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoGlobDBInitializer.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoPerQueryScriptExecutor.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoScriptExecutor.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoSimpleDBInitializer.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLControlDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLDeviceDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLDevicePropertyDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLFCMRecipientsDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLFCMTokenDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLGatewayDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLGatewayStatusDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLIdentityDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLLocationDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLRoleInGatewayDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLSensorHistoryDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLUserDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLVerifiedIdentityDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoTransactionFactory.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoTransactionImpl.cpp
+)
+
+add_library(BeeeOnServerDaoPoco ${DAO_POCO_SOURCES})
 
 if (LUA_FOUND)
 	include_directories(${LUA_INCLUDE_DIR})
@@ -475,6 +480,7 @@ if (APPLE)
 		-Wl,-all_load
 		BeeeOnBase
 		BeeeOnServer
+		BeeeOnServerDaoPoco
 		${LIBS}
 	)
 # The -Wl,--whole-archive is necessary for all libraries defining
@@ -484,6 +490,7 @@ else()
 		-Wl,--whole-archive
 		BeeeOnBase
 		BeeeOnServer
+		BeeeOnServerDaoPoco
 		-Wl,--no-whole-archive
 		${LIBS}
 	)
