@@ -94,7 +94,8 @@ if(MD_MAN)
 	endforeach()
 
 	install(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/man/"
-		DESTINATION share/man/man7)
+		DESTINATION share/man/man7
+		COMPONENT core)
 else()
 	message(STATUS "missing tool for man pages generation, skipping")
 endif()
@@ -125,16 +126,16 @@ endif()
 set(CPACK_RPM_FILE_NAME
 	"${CPACK_PACKAGE_NAME}-${RPM_FILE_NAME_VERSION}.${CPACK_RPM_PACKAGE_ARCHITECTURE}.rpm")
 
-set(CPACK_RPM_PACKAGE_REQUIRES "libPocoFoundation48 >= 1.7.7")
-set(CPACK_RPM_PACKAGE_REQUIRES "${CPACK_RPM_PACKAGE_REQUIRES}, libPocoDataODBC48 >= 1.7.7")
-set(CPACK_RPM_PACKAGE_REQUIRES "${CPACK_RPM_PACKAGE_REQUIRES}, libPocoJSON48 >= 1.7.7")
-set(CPACK_RPM_PACKAGE_REQUIRES "${CPACK_RPM_PACKAGE_REQUIRES}, libPocoNet48 >= 1.7.7")
-set(CPACK_RPM_PACKAGE_REQUIRES "${CPACK_RPM_PACKAGE_REQUIRES}, libPocoNetSSL48 >= 1.7.7")
-set(CPACK_RPM_PACKAGE_REQUIRES "${CPACK_RPM_PACKAGE_REQUIRES}, libPocoXML48 >= 1.7.7")
-set(CPACK_RPM_PACKAGE_REQUIRES "${CPACK_RPM_PACKAGE_REQUIRES}, libPocoCrypto48 >= 1.7.7")
-set(CPACK_RPM_PACKAGE_REQUIRES "${CPACK_RPM_PACKAGE_REQUIRES}, libicu >= 50.1")
-set(CPACK_RPM_PACKAGE_REQUIRES "${CPACK_RPM_PACKAGE_REQUIRES}, unixODBC >= 2.3.1")
-set(CPACK_RPM_PACKAGE_REQUIRES "${CPACK_RPM_PACKAGE_REQUIRES}, postgresql-odbc")
+set(CPACK_RPM_CORE_PACKAGE_REQUIRES "libPocoFoundation48 >= 1.7.7")
+set(CPACK_RPM_CORE_PACKAGE_REQUIRES "${CPACK_RPM_CORE_PACKAGE_REQUIRES}, libPocoDataODBC48 >= 1.7.7")
+set(CPACK_RPM_CORE_PACKAGE_REQUIRES "${CPACK_RPM_CORE_PACKAGE_REQUIRES}, libPocoJSON48 >= 1.7.7")
+set(CPACK_RPM_CORE_PACKAGE_REQUIRES "${CPACK_RPM_CORE_PACKAGE_REQUIRES}, libPocoNet48 >= 1.7.7")
+set(CPACK_RPM_CORE_PACKAGE_REQUIRES "${CPACK_RPM_CORE_PACKAGE_REQUIRES}, libPocoNetSSL48 >= 1.7.7")
+set(CPACK_RPM_CORE_PACKAGE_REQUIRES "${CPACK_RPM_CORE_PACKAGE_REQUIRES}, libPocoXML48 >= 1.7.7")
+set(CPACK_RPM_CORE_PACKAGE_REQUIRES "${CPACK_RPM_CORE_PACKAGE_REQUIRES}, libPocoCrypto48 >= 1.7.7")
+set(CPACK_RPM_CORE_PACKAGE_REQUIRES "${CPACK_RPM_CORE_PACKAGE_REQUIRES}, libicu >= 50.1")
+set(CPACK_RPM_CORE_PACKAGE_REQUIRES "${CPACK_RPM_CORE_PACKAGE_REQUIRES}, unixODBC >= 2.3.1")
+set(CPACK_RPM_CORE_PACKAGE_REQUIRES "${CPACK_RPM_CORE_PACKAGE_REQUIRES}, postgresql-odbc")
 
 # FIXME: Suggests sometimes does not work:
 # CPackRPM:Debug: *** error: line 24: Unknown tag: Suggests: cppzmq >= 4.1
@@ -150,46 +151,62 @@ list(APPEND CPACK_RPM_USER_FILELIST "%attr(0640,root,beeeon) %config /etc/beeeon
 list(APPEND CPACK_RPM_USER_FILELIST "%attr(0640,root,beeeon) %config /etc/beeeon/server/apikeys.properties")
 
 if(MD_MAN)
-list(APPEND CPACK_RPM_USER_FILELIST "%attr(0755,root,root) /usr/share/man")
-list(APPEND CPACK_RPM_USER_FILELIST "%attr(0755,root,root) /usr/share/man/man7/*")
+list(APPEND CPACK_RPM_CORE_USER_FILELIST "%attr(0755,root,root) /usr/share/man")
+list(APPEND CPACK_RPM_CORE_USER_FILELIST "%attr(0755,root,root) /usr/share/man/man7/*")
 endif()
 
-set(CPACK_RPM_PRE_INSTALL_SCRIPT_FILE "${CMAKE_CURRENT_SOURCE_DIR}/dist/rpm/pre_install.sh")
-set(CPACK_RPM_POST_INSTALL_SCRIPT_FILE "${CMAKE_CURRENT_SOURCE_DIR}/dist/rpm/post_install.sh")
-set(CPACK_RPM_PRE_UNINSTALL_SCRIPT_FILE "${CMAKE_CURRENT_SOURCE_DIR}/dist/rpm/pre_uninstall.sh")
-set(CPACK_RPM_POST_UNINSTALL_SCRIPT_FILE "${CMAKE_CURRENT_SOURCE_DIR}/dist/rpm/post_uninstall.sh")
+set(CPACK_RPM_CORE_PRE_INSTALL_SCRIPT_FILE "${CMAKE_CURRENT_SOURCE_DIR}/dist/rpm/pre_install.sh")
+set(CPACK_RPM_CORE_POST_INSTALL_SCRIPT_FILE "${CMAKE_CURRENT_SOURCE_DIR}/dist/rpm/post_install.sh")
+set(CPACK_RPM_CORE_PRE_UNINSTALL_SCRIPT_FILE "${CMAKE_CURRENT_SOURCE_DIR}/dist/rpm/pre_uninstall.sh")
+set(CPACK_RPM_CORE_POST_UNINSTALL_SCRIPT_FILE "${CMAKE_CURRENT_SOURCE_DIR}/dist/rpm/post_uninstall.sh")
+
+set(CPACK_COMPONENTS_ALL core)
+set(CPACK_RPM_MAIN_COMPONENT core)
+
+set(CPACK_COMPONENT_CORE_DISPLAY_NAME "BeeeOn Server")
+
+set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
+set(CPACK_RPM_COMPONENT_INSTALL ON)
 
 include(CPack)
 
 install(FILES conf/server-startup.ini
-	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon/server)
+	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon/server
+	COMPONENT core)
 install(FILES conf/restui-api.ini
-	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon/server)
+	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon/server
+	COMPONENT core)
 install(FILES conf/apikeys.properties
 	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon/server
 	PERMISSIONS
 		OWNER_READ OWNER_WRITE
-		GROUP_READ)
+		GROUP_READ
+	COMPONENT core)
 install(DIRECTORY conf/config.d
 	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon/server
+	COMPONENT core
 	PATTERN factory-testing.xml EXCLUDE)
 install(FILES conf/devices.xml conf/types.xml conf/enums.xml conf/bitmaps.xml
-	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon/server)
+	DESTINATION ${SYSCONF_INSTALL_DIR}/beeeon/server
+	COMPONENT core)
 install(FILES tools/log-analyze.awk
 	DESTINATION share/beeeon/tools
 	PERMISSIONS
 		OWNER_READ OWNER_EXECUTE
 		GROUP_READ GROUP_EXECUTE
-		WORLD_READ WORLD_EXECUTE)
+		WORLD_READ WORLD_EXECUTE
+	COMPONENT core)
 install(FILES db/tools/db-admin.sh
 	DESTINATION bin
 	RENAME beeeon-db-admin
 	PERMISSIONS
 		OWNER_READ OWNER_EXECUTE
 		GROUP_READ GROUP_EXECUTE
-		WORLD_READ WORLD_EXECUTE)
+		WORLD_READ WORLD_EXECUTE
+	COMPONENT core)
 install(DIRECTORY db/
 	DESTINATION share/beeeon/db
+	COMPONENT core
 	FILES_MATCHING
 	PATTERN "db/pgsql/sqitch.conf"
 	PATTERN "db/pgsql/sqitch.plan"
@@ -207,11 +224,14 @@ install(DIRECTORY db/
 	PATTERN "db/pgsql/templates" EXCLUDE)
 install(DIRECTORY cert/
 	DESTINATION share/beeeon/cert
+	COMPONENT core
 	FILES_MATCHING PATTERN "*.pem")
 install(FILES dtd/types.dtd
-	DESTINATION share/beeeon/dtd)
+	DESTINATION share/beeeon/dtd
+	COMPONENT core)
 install(DIRECTORY res/
 	DESTINATION share/beeeon/res
+	COMPONENT core
 	FILES_MATCHING
 	PATTERN "res/beeeon_server/*.res")
 install(DIRECTORY systemd
@@ -223,4 +243,5 @@ install(DIRECTORY systemd
 	DIRECTORY_PERMISSIONS
 		OWNER_READ OWNER_WRITE OWNER_EXECUTE
 		GROUP_READ GROUP_EXECUTE
-		WORLD_READ WORLD_EXECUTE)
+		WORLD_READ WORLD_EXECUTE
+	COMPONENT core)
