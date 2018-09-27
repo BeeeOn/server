@@ -464,9 +464,8 @@ if (POCO_ODBC)
 endif()
 
 if (POCO_CASSANDRA)
-	add_library(BeeeOnServerCassandraConnector
+	add_library(BeeeOnServerCassandraConnector SHARED
 		dao/poco/PocoCassandraConnectorLoader.cpp)
-	target_link_libraries(BeeeOnServerCassandraConnector ${POCO_CASSANDRA})
 else()
 	message(STATUS "Cassandra support is disabled due to unmet dependencies")
 endif()
@@ -509,7 +508,11 @@ else()
 endif()
 
 install(TARGETS beeeon-server BeeeOnServer
+	COMPONENT core
 	RUNTIME DESTINATION bin
 	LIBRARY DESTINATION "${LIB_INSTALL_DIR}"
-	ARCHIVE DESTINATION "${AR_INSTALL_DIR}"
-)
+	ARCHIVE DESTINATION "${AR_INSTALL_DIR}")
+
+install(TARGETS BeeeOnServerCassandraConnector
+	COMPONENT cassandra
+	LIBRARY DESTINATION "${LIB_INSTALL_DIR}")
