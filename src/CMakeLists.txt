@@ -513,10 +513,14 @@ install(TARGETS beeeon-server BeeeOnServer
 	LIBRARY DESTINATION "${LIB_INSTALL_DIR}"
 	ARCHIVE DESTINATION "${AR_INSTALL_DIR}")
 
+if (POCO_ODBC)
 install(TARGETS BeeeOnServerODBCConnector
 	COMPONENT core
 	LIBRARY DESTINATION "${LIB_INSTALL_DIR}")
+endif()
 
+if (POCO_CASSANDRA)
 install(TARGETS BeeeOnServerCassandraConnector
 	COMPONENT cassandra
 	LIBRARY DESTINATION "${LIB_INSTALL_DIR}")
+endif()
