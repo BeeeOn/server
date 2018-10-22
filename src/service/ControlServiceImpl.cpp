@@ -164,6 +164,9 @@ ControlChangeHandler::Ptr ControlServiceImpl::doRequestChange(
 	if (!m_deviceDao->fetch(device, device.gateway()))
 		throw NotFoundException("device " + device);
 
+	if (!device.status().active())
+		throw NotFoundException("device " + device + " is inactive");
+
 	if (!m_controlDao->fetch(control, device))
 		throw NotFoundException("control " + control);
 
