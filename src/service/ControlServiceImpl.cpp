@@ -4,6 +4,7 @@
 
 #include "di/Injectable.h"
 #include "service/ControlServiceImpl.h"
+#include "util/Exception.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, ControlServiceImpl)
 BEEEON_OBJECT_CASTABLE(ControlService)
@@ -190,12 +191,9 @@ ControlChangeHandler::Ptr ControlServiceImpl::doRequestChange(
 
 	if (requestedValue.isActive()) {
 		if (!force) {
-			logger().debug("requesting to set value that is already"
-				" in progress for control " + control
-				+ ", ignoring...",
-				__FILE__, __LINE__);
-
-			return nullptr;
+			throw InProgressException(
+				"set-value is already in progress for control "
+				+ control);
 		}
 		else {
 			logger().information(
