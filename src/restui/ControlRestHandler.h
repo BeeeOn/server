@@ -139,6 +139,9 @@ public:
 	 * module. Only one request can be active at a time. If there is an already
 	 * pending request, it is returned.
 	 *
+	 * It is possible to cancel the previous request and start the new one by
+	 * passing parameter "force" in the URL query part.
+	 *
 	 * - usual responses: 200, 400, 404
 	 * - example input:
 	 * <pre>
