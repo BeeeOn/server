@@ -138,7 +138,7 @@ void ControlRestHandler::requestChange(RestFlow &flow)
 	Relation<Control, Device> data(control, device);
 	data.setUser(user);
 
-	m_controlService->requestChange(data, value, timeout);
+	m_controlService->requestChange(data, value, timeout, true);
 
 	PrintHandler result(flow.response().stream());
 	beginSuccess(result, 200);

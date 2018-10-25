@@ -141,7 +141,8 @@ void ControlServiceImpl::cancelRequest(
 ControlChangeHandler::Ptr ControlServiceImpl::doRequestChange(
 		Relation<Control, Device> &data,
 		double value,
-		const Poco::Timespan &timeout)
+		const Poco::Timespan &timeout,
+		bool force)
 {
 	if (timeout < REQUEST_TIMEOUT_MIN)
 		throw InvalidArgumentException("too short timeout for control change");
@@ -174,22 +175,36 @@ ControlChangeHandler::Ptr ControlServiceImpl::doRequestChange(
 	const auto &requestedValue = control.requestedValue();
 
 	if (recentValue == value) {
-		logger().debug("re-setting the last reported value"
-			+ to_string(recentValue) + " for control " + control,
-			__FILE__, __LINE__);
+		if (!force) {
+			logger().information("ignoring attempt to set the last reported value"
+				+ to_string(recentValue) + " for control " + control,
+				__FILE__, __LINE__);
+			return nullptr;
+		}
+		else {
+			logger().debug("force set the last reported value"
+				+ to_string(recentValue) + " for control " + control,
+				__FILE__, __LINE__);
+		}
 	}
 
-	if (requestedValue.value() == value && requestedValue.isActive()) {
-		logger().debug("requesting to set value that is already"
-			" in progress for control " + control
-			+ ", ignoring...",
-			__FILE__, __LINE__);
+	if (requestedValue.isActive()) {
+		if (!force) {
+			logger().debug("requesting to set value that is already"
+				" in progress for control " + control
+				+ ", ignoring...",
+				__FILE__, __LINE__);
 
-		return nullptr;
+			return nullptr;
+		}
+		else {
+			logger().information(
+				"cancelling current request for " + control,
+				__FILE__, __LINE__);
+
+			cancelRequest(device, control);
+		}
 	}
-
-	if (requestedValue.isActive())
-		cancelRequest(device, control);
 
 	startRequest(data, device, control, value);
 
