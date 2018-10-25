@@ -188,7 +188,7 @@ ControlChangeHandler::Ptr ControlServiceImpl::doRequestChange(
 		return nullptr;
 	}
 
-	if (requestedValue.isActive() || requestedValue.hasStarted())
+	if (requestedValue.isActive())
 		cancelRequest(device, control);
 
 	startRequest(data, device, control, value);
