@@ -7,6 +7,7 @@ cs {
 	malformed_input_data { "vstupní data jsou neplatná" }
 	invalid_input_data { "chybně zadané údaje" }
 	internal_error { "interní chyba serveru" }
+	in_progress { "operace už běží" }
 
 	types {
 		availability {

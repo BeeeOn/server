@@ -7,6 +7,7 @@
 #include "rest/JSONRestHandler.h"
 #include "rest/RestFlow.h"
 #include "rest/RestLinker.h"
+#include "util/Exception.h"
 
 using namespace std;
 using namespace Poco;
@@ -104,6 +105,13 @@ RestHandler::Handler JSONRestHandler::wrapHandler(const Handler &handler)
 			response.setStatus(HTTPResponse::HTTP_BAD_REQUEST);
 			status = "error";
 			message = translator->formatSure("invalid_input_data");
+		}
+		catch (const InProgressException &e) {
+			handleException(flow, e, __FILE__, __LINE__);
+
+			response.setStatus(423); // Locked (RFC 4918)
+			status = "error";
+			message = translator->formatSure("in_progress");
 		}
 		catch (const Exception &e) {
 			handleException(flow, e, __FILE__, __LINE__);
