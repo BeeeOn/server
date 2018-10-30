@@ -278,6 +278,7 @@ GatewayScan GatewayScanController::scan(const Gateway &gateway, const Timespan &
 	ScanHandler::ScopedLock scanGuard(*context);
 	guard.unlock();
 
+	context->scan().setStarted({});
 	context->scan().setDuration(duration);
 	context->scan().changeState(GatewayScan::SCAN_WAITING);
 
