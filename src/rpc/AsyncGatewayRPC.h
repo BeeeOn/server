@@ -72,7 +72,7 @@ public:
 	void start() override;
 	void stop() override;
 
-	void setFinalResultTimeout(const Poco::Timespan &timeout);
+	void setDefaultTimeout(const Poco::Timespan &timeout);
 	void setGatewayCommunicator(GatewayCommunicator::Ptr communicator);
 	void setGWResponseExpectedQueue(GWResponseExpectedQueue::Ptr queue);
 
@@ -91,7 +91,8 @@ private:
 	 */
 	void storeHandler(const GatewayID &gatewayID,
 			const CallID &callID,
-			GatewayRPCHandler::Ptr handler);
+			GatewayRPCHandler::Ptr handler,
+			const Poco::Timespan &timeout);
 
 	/**
 	 * @brief Removes the appropriate GatewayRPCHandler instance and cancels
@@ -108,7 +109,8 @@ private:
 	void sendAndExpectResult(const GatewayID &gatewayID,
 			const CallID &callID,
 			GatewayRPCHandler::Ptr handler,
-			const GWRequest::Ptr request);
+			const GWRequest::Ptr request,
+			const Poco::Timespan &timeout);
 
 	/**
 	 * @brief Derive GatewayRPCResult instance based on the received response.
@@ -132,7 +134,7 @@ private:
 			GatewayRPCResult::Ptr result);
 
 private:
-	Poco::Timespan m_finalResultTimeout;
+	Poco::Timespan m_defaultTimeout;
 	GatewayCommunicator::Ptr m_gatewayCommunicator;
 	GWResponseExpectedQueue::Ptr m_responseExpectedQueue;
 

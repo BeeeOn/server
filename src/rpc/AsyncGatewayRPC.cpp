@@ -14,7 +14,7 @@ BEEEON_OBJECT_CASTABLE(RPCForwarder)
 BEEEON_OBJECT_CASTABLE(StoppableLoop)
 BEEEON_OBJECT_PROPERTY("gatewayCommunicator", &AsyncGatewayRPC::setGatewayCommunicator)
 BEEEON_OBJECT_PROPERTY("responseExpectedQueue", &AsyncGatewayRPC::setGWResponseExpectedQueue)
-BEEEON_OBJECT_PROPERTY("finalResultTimeout", &AsyncGatewayRPC::setFinalResultTimeout)
+BEEEON_OBJECT_PROPERTY("defaultTimeout", &AsyncGatewayRPC::setDefaultTimeout)
 BEEEON_OBJECT_END(BeeeOn, AsyncGatewayRPC)
 
 using namespace std;
@@ -31,7 +31,7 @@ void AsyncGatewayRPC::sendListen(GatewayRPCHandler::Ptr handler,
 	request->setID(callID);
 	request->setDuration(duration);
 
-	sendAndExpectResult(gateway.id(), callID, handler, request);
+	sendAndExpectResult(gateway.id(), callID, handler, request, duration);
 }
 
 void AsyncGatewayRPC::pairDevice(GatewayRPCHandler::Ptr handler,
@@ -44,7 +44,7 @@ void AsyncGatewayRPC::pairDevice(GatewayRPCHandler::Ptr handler,
 	request->setID(callID);
 	request->setDeviceID(device.id());
 
-	sendAndExpectResult(gateway.id(), callID, handler, request);
+	sendAndExpectResult(gateway.id(), callID, handler, request, m_defaultTimeout);
 }
 
 void AsyncGatewayRPC::unpairDevice(GatewayRPCHandler::Ptr handler,
@@ -57,7 +57,7 @@ void AsyncGatewayRPC::unpairDevice(GatewayRPCHandler::Ptr handler,
 	request->setID(callID);
 	request->setDeviceID(device.id());
 
-	sendAndExpectResult(gateway.id(), callID, handler, request);
+	sendAndExpectResult(gateway.id(), callID, handler, request, m_defaultTimeout);
 }
 
 void AsyncGatewayRPC::updateActor(GatewayRPCHandler::Ptr handler,
@@ -76,7 +76,7 @@ void AsyncGatewayRPC::updateActor(GatewayRPCHandler::Ptr handler,
 	request->setValue(value);
 	request->setTimeout(timeout);
 
-	sendAndExpectResult(gateway.id(), callID, handler, request);
+	sendAndExpectResult(gateway.id(), callID, handler, request, timeout);
 }
 
 LambdaTimerTask::Ptr AsyncGatewayRPC::createFinalResultMissingTask(
@@ -111,7 +111,8 @@ LambdaTimerTask::Ptr AsyncGatewayRPC::createFinalResultMissingTask(
 
 void AsyncGatewayRPC::storeHandler(const GatewayID &gatewayID,
 		const CallID &callID,
-		GatewayRPCHandler::Ptr handler)
+		GatewayRPCHandler::Ptr handler,
+		const Poco::Timespan &timeout)
 {
 	Context context {
 		handler,
@@ -129,7 +130,7 @@ void AsyncGatewayRPC::storeHandler(const GatewayID &gatewayID,
 	}
 
 	m_timer.schedule(
-		context.finalResultMissingTask, Timestamp() + m_finalResultTimeout);
+		context.finalResultMissingTask, Timestamp() + timeout);
 }
 
 void AsyncGatewayRPC::removeHandler(const GatewayID &gatewayID,
@@ -177,11 +178,12 @@ void AsyncGatewayRPC::executeHandler(const GatewayID &gatewayID,
 void AsyncGatewayRPC::sendAndExpectResult(const GatewayID &gatewayID,
 		const AsyncGatewayRPC::CallID &callID,
 		GatewayRPCHandler::Ptr handler,
-		const GWRequest::Ptr request)
+		const GWRequest::Ptr request,
+		const Timespan &timeout)
 {
 	GatewayRPCResult::Ptr result = new GatewayRPCResult;
 
-	storeHandler(gatewayID, callID, handler);
+	storeHandler(gatewayID, callID, handler, timeout);
 	m_responseExpectedQueue->registerResponse(gatewayID, callID);
 
 	try {
@@ -351,12 +353,12 @@ void AsyncGatewayRPC::stop()
 	logger().information("gateway rpc has stopped", __FILE__, __LINE__);
 }
 
-void AsyncGatewayRPC::setFinalResultTimeout(const Timespan &timeout)
+void AsyncGatewayRPC::setDefaultTimeout(const Timespan &timeout)
 {
 	if (timeout < 0)
-		throw InvalidArgumentException("result timeout must be non-negative");
+		throw InvalidArgumentException("defaultTimeout must be non-negative");
 
-	m_finalResultTimeout = timeout;
+	m_defaultTimeout = timeout;
 }
 
 void AsyncGatewayRPC::setGatewayCommunicator(GatewayCommunicator::Ptr communicator)

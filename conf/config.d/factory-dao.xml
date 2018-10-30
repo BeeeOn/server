@@ -47,7 +47,7 @@
 		<instance name="asyncGatewayRPC" class="BeeeOn::AsyncGatewayRPC">
 			<set name="gatewayCommunicator" ref="gatewayCommunicator" />
 			<set name="responseExpectedQueue" ref="responseExpectedQueue" />
-			<set name="finalResultTimeout" time="${gateway-rpc.async.finalResultTimeout}" />
+			<set name="defaultTimeout" time="${gateway-rpc.async.defaultTimeout}" />
 		</instance>
 
 		<alias name="gatewayRPC" ref="${gateway-rpc.type}GatewayRPC" />
