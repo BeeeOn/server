@@ -31,7 +31,10 @@ public:
 	bool insert(const Control::RequestedValue &request,
 			const Control &control,
 			const Device &device) override;
-	bool update(const Control::RequestedValue &request,
+	bool markAccepted(const Control::RequestedValue &request,
+			const Control &control,
+			const Device &device) override;
+	bool markFinished(const Control::RequestedValue &request,
 			const Control &control,
 			const Device &device) override;
 	size_t cancelUnfinished() override;
@@ -49,7 +52,8 @@ protected:
 private:
 	Query m_queryFetchLast     {"controls_fsm.fetch_last"};
 	Query m_queryInsertRequest {"controls_fsm.insert_request"};
-	Query m_queryUpdateRequest {"controls_fsm.update_request"};
+	Query m_queryMarkAccepted  {"controls_fsm.mark_accepted"};
+	Query m_queryMarkFinished  {"controls_fsm.mark_finished"};
 	Query m_queryCancelUnfinished{"controls_fsm.cancel_unfinished"};
 };
 

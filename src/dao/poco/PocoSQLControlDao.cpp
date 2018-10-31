@@ -34,7 +34,8 @@ PocoSQLControlDao::PocoSQLControlDao()
 {
 	registerQuery(m_queryFetchLast);
 	registerQuery(m_queryInsertRequest);
-	registerQuery(m_queryUpdateRequest);
+	registerQuery(m_queryMarkAccepted);
+	registerQuery(m_queryMarkFinished);
 	registerQuery(m_queryCancelUnfinished);
 }
 
@@ -181,7 +182,8 @@ bool PocoSQLControlDao::insert(const Control::RequestedValue &request,
 	return execute(sql) > 0;
 }
 
-bool PocoSQLControlDao::update(const Control::RequestedValue &request,
+bool PocoSQLControlDao::markAccepted(
+		const Control::RequestedValue &request,
 		const Control &control,
 		const Device &device)
 {
@@ -203,15 +205,43 @@ bool PocoSQLControlDao::update(const Control::RequestedValue &request,
 	if (!request.acceptedAt().isNull())
 		acceptedAt = request.acceptedAt().value().epochMicroseconds();
 
+	Statement sql = (session() << m_queryMarkAccepted(),
+		use(acceptedAt, "accepted_at"),
+		use(gatewayID, "gateway_id"),
+		use(deviceID, "device_id"),
+		use(moduleID, "module_id"),
+		use(requestedAt, "requested_at")
+	);
+
+	return execute(sql) > 0;
+}
+
+bool PocoSQLControlDao::markFinished(
+		const Control::RequestedValue &request,
+		const Control &control,
+		const Device &device)
+{
+	// cannot assureHasId for control, SimpleID == 0 is allowed
+	assureHasId(device);
+	assertTypeValid(device);
+	assureHasId(device.gateway());
+
+	unsigned int moduleID(control.id());
+	uint64_t deviceID(device.id());
+	uint64_t gatewayID(device.gateway().id());
+
+	if (request.requestedAt().isNull())
+		throw IllegalStateException("requested timestamp must not be null");
+
+	int64_t requestedAt = request.requestedAt().value().epochMicroseconds();
+
 	Nullable<int64_t> finishedAt;
 	if (!request.finishedAt().isNull())
 		finishedAt = request.finishedAt().value().epochMicroseconds();
 
 	bool failed = request.failed();
-	string originatorId = request.originator().id().toString();
 
-	Statement sql = (session() << m_queryUpdateRequest(),
-		use(acceptedAt, "accepted_at"),
+	Statement sql = (session() << m_queryMarkFinished(),
 		use(finishedAt, "finished_at"),
 		use(failed, "failed"),
 		use(gatewayID, "gateway_id"),
