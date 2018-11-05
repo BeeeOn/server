@@ -5,6 +5,7 @@
 
 #include <Poco/Mutex.h>
 #include <Poco/NotificationQueue.h>
+#include <Poco/Nullable.h>
 #include <Poco/RunnableAdapter.h>
 #include <Poco/SharedPtr.h>
 #include <Poco/Net/WebSocket.h>
@@ -124,6 +125,12 @@ public:
 	void removeIfInactive(const GatewayID &id, const Poco::Timestamp &timeFrom);
 
 	/**
+	 * @returns timestamp of the most recent activity of the given gateway
+	 * or null if no such gateway is connected
+	 */
+	Poco::Nullable<Poco::Timestamp> lastActivity(const GatewayID &id) const;
+
+	/**
 	 * @brief Sends GWMessage to the connected gateway.
 	 *
 	 * @throw NotFoundException if GatewayCommunicator
@@ -195,7 +202,7 @@ private:
 	GatewayRateLimiterFactory::Ptr m_rateLimiterFactory;
 
 	GatewayConnectionMap m_connectionMap;
-	Poco::FastMutex m_connectionMapMutex;
+	mutable Poco::FastMutex m_connectionMapMutex;
 	ConnectionReadableQueue m_connectionReadableQueue;
 
 	Poco::Net::SocketReactor m_reactor;
