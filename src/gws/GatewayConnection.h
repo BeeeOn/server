@@ -87,7 +87,7 @@ public:
 	/**
 	 * @brief Returns timestamp of the last received message.
 	 */
-	Poco::Timestamp lastReceiveTime();
+	Poco::Timestamp lastReceiveTime() const;
 
 	/**
 	 * @brief Sends GWMessage to the gateway. Method is thread-safe.
@@ -131,7 +131,7 @@ private:
 	EnqueueReadable m_enqueueReadable;
 	Poco::Buffer<char> m_receiveBuffer;
 	Poco::Timestamp m_lastReceiveTime;
-	Poco::FastMutex m_lastReceiveTimeMutex;
+	mutable Poco::FastMutex m_lastReceiveTimeMutex;
 	Poco::FastMutex m_sendMutex;
 	Poco::NObserver<GatewayConnection, Poco::Net::ReadableNotification> m_readableObserver;
 };
