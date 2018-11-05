@@ -27,6 +27,7 @@ BEEEON_OBJECT_PROPERTY("transactionManager", &PocoSQLGatewayDao::setTransactionM
 BEEEON_OBJECT_PROPERTY("sqlLoader", &PocoSQLGatewayDao::setQueryLoader)
 BEEEON_OBJECT_PROPERTY("profiler", &PocoSQLGatewayDao::setQueryProfiler)
 BEEEON_OBJECT_PROPERTY("timeZoneProvider", &PocoSQLGatewayDao::setTimeZoneProvider)
+BEEEON_OBJECT_PROPERTY("communicator", &PocoSQLGatewayDao::setCommunicator)
 BEEEON_OBJECT_HOOK("done", &PocoSQLGatewayDao::loadQueries)
 BEEEON_OBJECT_HOOK("cleanup", &PocoSQLGatewayDao::clearQueries)
 BEEEON_OBJECT_END(BeeeOn, PocoSQLGatewayDao)
