@@ -1,4 +1,4 @@
-#include "dao/GatewayDao.h"
+#include "dao/AbstractGatewayDao.h"
 #include "dao/Query.h"
 #include "dao/poco/PocoAbstractDao.h"
 #include "l10n/TimeZoneProvider.h"
@@ -17,20 +17,20 @@ namespace BeeeOn {
 
 class PocoSQLGatewayDao :
 		public PocoAbstractDao,
-		public GatewayDao {
+		public AbstractGatewayDao {
 public:
 	PocoSQLGatewayDao();
 
 	void setTimeZoneProvider(TimeZoneProvider::Ptr provider);
 
-	bool insert(Gateway &gateway) override;
-	bool fetch(Gateway &gateway) override;
-	bool fetch(LegacyGateway &gateway, const User &user) override;
-	bool update(Gateway &gateway) override;
-	void fetchAccessible(
+	bool doInsert(Gateway &gateway) override;
+	bool doFetch(Gateway &gateway) override;
+	bool doFetch(LegacyGateway &gateway, const User &user) override;
+	bool doUpdate(Gateway &gateway) override;
+	void doFetchAccessible(
 			std::vector<Gateway> &gateways,
 			const User &user) override;
-	void fetchAccessible(
+	void doFetchAccessible(
 			std::vector<LegacyGateway> &gateways,
 			const User &user) override;
 

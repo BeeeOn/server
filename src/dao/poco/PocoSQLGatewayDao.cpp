@@ -46,7 +46,7 @@ void PocoSQLGatewayDao::setTimeZoneProvider(TimeZoneProvider::Ptr provider)
 	m_timeZoneProvider = provider;
 }
 
-bool PocoSQLGatewayDao::insert(Gateway &gateway)
+bool PocoSQLGatewayDao::doInsert(Gateway &gateway)
 {
 	assureHasId(gateway);
 
@@ -77,7 +77,7 @@ bool PocoSQLGatewayDao::insert(Gateway &gateway)
 	return execute(sql) > 0;
 }
 
-bool PocoSQLGatewayDao::fetch(Gateway &gateway)
+bool PocoSQLGatewayDao::doFetch(Gateway &gateway)
 {
 	assureHasId(gateway);
 
@@ -94,7 +94,7 @@ bool PocoSQLGatewayDao::fetch(Gateway &gateway)
 	return parseSingle(result, m_timeZoneProvider, gateway);
 }
 
-bool PocoSQLGatewayDao::fetch(LegacyGateway &gateway, const User &user)
+bool PocoSQLGatewayDao::doFetch(LegacyGateway &gateway, const User &user)
 {
 	assureHasId(gateway);
 	assureHasId(user);
@@ -114,7 +114,7 @@ bool PocoSQLGatewayDao::fetch(LegacyGateway &gateway, const User &user)
 	return parseSingle(result, m_timeZoneProvider, gateway);
 }
 
-bool PocoSQLGatewayDao::update(Gateway &gateway)
+bool PocoSQLGatewayDao::doUpdate(Gateway &gateway)
 {
 	assureHasId(gateway);
 
@@ -145,7 +145,7 @@ bool PocoSQLGatewayDao::update(Gateway &gateway)
 	return execute(sql) > 0;
 }
 
-void PocoSQLGatewayDao::fetchAccessible(std::vector<Gateway> &gateways,
+void PocoSQLGatewayDao::doFetchAccessible(std::vector<Gateway> &gateways,
 		const User &user)
 {
 	assureHasId(user);
@@ -160,7 +160,7 @@ void PocoSQLGatewayDao::fetchAccessible(std::vector<Gateway> &gateways,
 	parseMany<Gateway>(result, m_timeZoneProvider, gateways);
 }
 
-void PocoSQLGatewayDao::fetchAccessible(std::vector<LegacyGateway> &gateways,
+void PocoSQLGatewayDao::doFetchAccessible(std::vector<LegacyGateway> &gateways,
 		const User &user)
 {
 	assureHasId(user);
