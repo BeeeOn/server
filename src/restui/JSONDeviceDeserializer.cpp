@@ -19,11 +19,11 @@ void BeeeOn::JSONDeviceDeserializer::applyRefresh(Device &device, int refresh) c
 {
 	if (device.hasRefresh() && refresh < 0) {
 		throw InvalidArgumentException(
-			"refresh_time must be negative for device " + device);
+			"refresh_time must not be negative for device " + device);
 	}
 	else if (!device.hasRefresh() && refresh >= 0) {
 		throw InvalidArgumentException(
-			"refresh_time must be non-negative for device " + device);
+			"refresh_time must be negative for device " + device);
 	}
 
 	device.setRefresh(refresh);
