@@ -38,16 +38,16 @@ void DeviceTest::testHasRefresh()
 	Device device;
 
 	device.setRefresh(0);
-	CPPUNIT_ASSERT(device.hasRefresh());
+	CPPUNIT_ASSERT(!device.refresh().isNone());
 
 	device.setRefresh(10);
-	CPPUNIT_ASSERT(device.hasRefresh());
+	CPPUNIT_ASSERT(!device.refresh().isNone());
 
 	device.setRefresh(-1);
-	CPPUNIT_ASSERT(!device.hasRefresh());
+	CPPUNIT_ASSERT(device.refresh().isNone());
 
 	device.setRefresh(RefreshTime::NONE);
-	CPPUNIT_ASSERT(!device.hasRefresh());
+	CPPUNIT_ASSERT(device.refresh().isNone());
 }
 
 }

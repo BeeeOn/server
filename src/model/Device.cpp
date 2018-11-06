@@ -65,11 +65,6 @@ const RefreshTime &Device::refresh() const
 	return m_refresh;
 }
 
-bool Device::hasRefresh() const
-{
-	return !m_refresh.isNone();
-}
-
 void Device::setBattery(const Nullable<percent> &battery)
 {
 	m_battery = battery;

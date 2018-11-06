@@ -44,7 +44,6 @@ public:
 
 	void setRefresh(const RefreshTime &refresh);
 	const RefreshTime &refresh() const;
-	bool hasRefresh() const;
 
 	void setBattery(const unsigned int battery)
 	{

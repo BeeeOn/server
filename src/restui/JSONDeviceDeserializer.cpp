@@ -17,16 +17,18 @@ BeeeOn::JSONDeviceDeserializer::JSONDeviceDeserializer(
 
 void BeeeOn::JSONDeviceDeserializer::applyRefresh(Device &device, int refresh) const
 {
-	if (device.hasRefresh() && refresh < 0) {
+	const RefreshTime &current = device.refresh();
+
+	if (!current.isNone() && refresh < 0) {
 		throw InvalidArgumentException(
 			"refresh_time must not be negative for device " + device);
 	}
-	else if (!device.hasRefresh() && refresh >= 0) {
+	else if (current.isNone() && refresh >= 0) {
 		throw InvalidArgumentException(
 			"refresh_time must be negative for device " + device);
 	}
 
-	device.setRefresh(refresh);
+	device.setRefresh(RefreshTime::fromSeconds(refresh));
 }
 
 void BeeeOn::JSONDeviceDeserializer::partial(BeeeOn::Device &device) const
