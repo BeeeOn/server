@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Poco/SharedPtr.h>
-#include <Poco/Timespan.h>
 #include <Poco/Util/Units.h>
 
 #include "model/DeviceStatus.h"
@@ -10,6 +9,7 @@
 #include "model/Gateway.h"
 #include "model/DeviceID.h"
 #include "model/DeviceInfo.h"
+#include "model/RefreshTime.h"
 
 namespace BeeeOn {
 
@@ -39,11 +39,11 @@ public:
 
 	void setRefresh(const int seconds)
 	{
-		setRefresh(Poco::Timespan(seconds, 0));
+		setRefresh(RefreshTime::fromSeconds(seconds));
 	}
 
-	void setRefresh(const Poco::Timespan &refresh);
-	const Poco::Timespan &refresh() const;
+	void setRefresh(const RefreshTime &refresh);
+	const RefreshTime &refresh() const;
 	bool hasRefresh() const;
 
 	void setBattery(const unsigned int battery)
@@ -78,7 +78,7 @@ private:
 	Location m_location;
 	std::string m_name;
 	Poco::SharedPtr<DeviceInfo> m_type;
-	Poco::Timespan m_refresh;
+	RefreshTime m_refresh;
 	Poco::Nullable<percent> m_battery;
 	Poco::Nullable<percent> m_signal;
 	DeviceStatus m_status;

@@ -350,9 +350,10 @@ void BeeeOn::RestUI::serialize(PrintHandler &output, const Device &device)
 			"unexpected state: " + to_string(status.state()));
 	}
 
-	if (device.hasRefresh()) {
+	const auto refresh = device.refresh();
+	if (!refresh.isNone()) {
 		output.key("refresh_time");
-		output.value(device.refresh().totalSeconds());
+		output.value(refresh.seconds());
 	}
 
 	output.key("available");

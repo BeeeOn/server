@@ -149,7 +149,7 @@ GWResponse::Ptr GWMessageHandlerImpl::handleNewDevice(
 	GWResponse::Ptr response = request->derive();
 
 	Device device(request->deviceID());
-	device.setRefresh(request->refreshTime());
+	device.setRefresh(request->deviceDescription().refreshTime());
 
 	DeviceEvent event = {gatewayID, device.id()};
 

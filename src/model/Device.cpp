@@ -55,22 +55,19 @@ const SharedPtr<DeviceInfo> Device::type() const
 	return m_type;
 }
 
-void Device::setRefresh(const Timespan &refresh)
+void Device::setRefresh(const RefreshTime &refresh)
 {
-	if (refresh < 0)
-		m_refresh = -1;
-	else
-		m_refresh = refresh;
+	m_refresh = refresh;
 }
 
-const Timespan &Device::refresh() const
+const RefreshTime &Device::refresh() const
 {
 	return m_refresh;
 }
 
 bool Device::hasRefresh() const
 {
-	return m_refresh >= 0;
+	return !m_refresh.isNone();
 }
 
 void Device::setBattery(const Nullable<percent> &battery)
@@ -111,12 +108,12 @@ DeviceStatus &Device::status()
 bool Device::available(const unsigned int multiple,
 		const Timestamp &ref) const
 {
-	if (refresh() < 1 * Timespan::SECONDS)
-		return true; // refresh time is invalid
+	if (m_refresh.isNone() || m_refresh.isDisabled())
+		return true;
 
 	Timespan diff;
 	for (unsigned int i = 0; i < multiple; ++i)
-		diff += refresh();
+		diff += refresh().time();
 
 	return m_status.lastSeen() + diff >= ref;
 }

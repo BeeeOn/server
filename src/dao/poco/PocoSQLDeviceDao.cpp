@@ -83,8 +83,7 @@ bool PocoSQLDeviceDao::insert(Device &device, const Gateway &gateway)
 	assertTypeValid(device);
 
 	unsigned int type = device.type()->id();
-	int refresh = device.hasRefresh() ?
-		device.refresh().totalSeconds() : -1;
+	int refresh = device.refresh().seconds();
 
 	Nullable<unsigned int> battery;
 	if (!device.battery().isNull())
@@ -137,8 +136,7 @@ bool PocoSQLDeviceDao::update(Device &device, const Gateway &gateway)
 	assertTypeValid(device);
 
 	unsigned int type = device.type()->id();
-	int refresh = device.hasRefresh() ?
-		device.refresh().totalSeconds() : -1;
+	int refresh = device.refresh().seconds();
 
 	Nullable<unsigned int> battery;
 	if (!device.battery().isNull())

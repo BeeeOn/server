@@ -11,7 +11,6 @@ namespace BeeeOn {
 class DeviceTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST_SUITE(DeviceTest);
 	CPPUNIT_TEST(testSetRefresh);
-	CPPUNIT_TEST(testSetRefreshNormalization);
 	CPPUNIT_TEST(testHasRefresh);
 	CPPUNIT_TEST_SUITE_END();
 
@@ -28,47 +27,10 @@ void DeviceTest::testSetRefresh()
 	Device device;
 
 	device.setRefresh(0);
-	CPPUNIT_ASSERT_EQUAL(0, device.refresh().totalMicroseconds());
+	CPPUNIT_ASSERT_EQUAL(0, device.refresh().seconds());
 
 	device.setRefresh(10);
-	CPPUNIT_ASSERT_EQUAL(
-		10 * Timespan::SECONDS,
-		device.refresh().totalMicroseconds());
-
-	device.setRefresh(Timespan(15, 1));
-	CPPUNIT_ASSERT_EQUAL(
-		15 * Timespan::SECONDS + 1,
-		device.refresh().totalMicroseconds());
-}
-
-void DeviceTest::testSetRefreshNormalization()
-{
-	Device device;
-
-	device.setRefresh(Timespan(1504, 0));
-	CPPUNIT_ASSERT_EQUAL(
-		1504 * Timespan::SECONDS,
-		device.refresh().totalMicroseconds());
-
-	device.setRefresh(Timespan(-1504, 0));
-	CPPUNIT_ASSERT_EQUAL(
-		-1,
-		device.refresh().totalMicroseconds());
-
-	device.setRefresh(Timespan(0, -1));
-	CPPUNIT_ASSERT_EQUAL(
-		-1,
-		device.refresh().totalMicroseconds());
-
-	device.setRefresh(-15);
-	CPPUNIT_ASSERT_EQUAL(
-		-1,
-		device.refresh().totalMicroseconds());
-
-	device.setRefresh(-1);
-	CPPUNIT_ASSERT_EQUAL(
-		-1,
-		device.refresh().totalMicroseconds());
+	CPPUNIT_ASSERT_EQUAL(10, device.refresh().seconds());
 }
 
 void DeviceTest::testHasRefresh()
@@ -84,7 +46,7 @@ void DeviceTest::testHasRefresh()
 	device.setRefresh(-1);
 	CPPUNIT_ASSERT(!device.hasRefresh());
 
-	device.setRefresh(Timespan(0, -1));
+	device.setRefresh(RefreshTime::NONE);
 	CPPUNIT_ASSERT(!device.hasRefresh());
 }
 
