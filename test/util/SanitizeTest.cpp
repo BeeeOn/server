@@ -4,6 +4,7 @@
 #include <Poco/Exception.h>
 #include <Poco/Unicode.h>
 #include <Poco/URI.h>
+#include <Poco/Version.h>
 
 #include "cppunit/BetterAssert.h"
 #include "util/Sanitize.h"
@@ -87,8 +88,15 @@ void SanitizeTest::testSanitizeInvalidUTF8()
 		Sanitize::encoding("\xf8"));
 	CPPUNIT_ASSERT_EQUAL(string("?"),
 		Sanitize::encoding("\xf9"));
+
+#if POCO_VERSION >= 0x01090000
+	CPPUNIT_ASSERT_EQUAL(string("???????"),
+		Sanitize::encoding("\xf5\xf6\xf7\xf8\xf9\xfa\xfb\xfc\xfd\xfe"));
+#else
 	CPPUNIT_ASSERT_EQUAL(string("???"),
 		Sanitize::encoding("\xf5\xf6\xf7\xf8\xf9\xfa\xfb\xfc\xfd\xfe"));
+#endif
+
 	CPPUNIT_ASSERT_EQUAL(string("?"),
 		Sanitize::encoding("\xfa"));
 	CPPUNIT_ASSERT_EQUAL(string("?"),
@@ -99,8 +107,15 @@ void SanitizeTest::testSanitizeInvalidUTF8()
 		Sanitize::encoding("\xfd"));
 	CPPUNIT_ASSERT_EQUAL(string("?"),
 		Sanitize::encoding("\xfe"));
+
+#if POCO_VERSION >= 0x01090000
+	CPPUNIT_ASSERT_EQUAL(string("????????"),
+		Sanitize::encoding("\xf5\xf6\xf7\xf8\xf9\xfa\xfb\xfc\xfd\xfe\xff"));
+#else
 	CPPUNIT_ASSERT_EQUAL(string("????"),
 		Sanitize::encoding("\xf5\xf6\xf7\xf8\xf9\xfa\xfb\xfc\xfd\xfe\xff"));
+#endif
+
 	CPPUNIT_ASSERT_EQUAL(string("?"),
 		Sanitize::encoding("\xff"));
 
