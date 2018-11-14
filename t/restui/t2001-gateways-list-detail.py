@@ -71,6 +71,7 @@ class TestGatewayListDetail(unittest.TestCase):
 
 		self.assertEqual(config.gateway_id, result["data"]["id"])
 		self.assertEqual("Testing Gateway", result["data"]["name"])
+		self.assertIn("last_activity", result["data"])
 
 if __name__ == '__main__':
 	import sys
