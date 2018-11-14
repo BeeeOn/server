@@ -21,7 +21,7 @@ class TestNewDevice(unittest.TestCase):
 
 		registerGateway(self, self.ws, config.gateway_id)
 
-		event = self.zmq.pop_data(timeout = 10)
+		event = self.zmq.pop_data()
 		self.assertEqual("on-connected", event["event"])
 		self.assertEqual(config.gateway_id, event["gateway_id"])
 
@@ -29,7 +29,7 @@ class TestNewDevice(unittest.TestCase):
 		self.ws.close()
 
 		try:
-			event = self.zmq.pop_data(timeout = 10)
+			event = self.zmq.pop_data()
 			self.assertEqual("on-disconnected", event["event"])
 			self.assertEqual(config.gateway_id, event["gateway_id"])
 		finally:
@@ -66,7 +66,7 @@ class TestNewDevice(unittest.TestCase):
 		self.assertEqual(1, response["status"])
 		assureNotClosed(self, self.ws)
 
-		event = self.zmq.pop_data(timeout = 10)
+		event = self.zmq.pop_data()
 		self.assertEqual("on-new-device", event["event"])
 		self.assertEqual("0xa123123412341234", event["device_id"])
 		self.assertEqual("Internal Pressure v1.0", event["device_name"])
@@ -107,7 +107,7 @@ class TestNewDevice(unittest.TestCase):
 		self.assertEqual(2, response["status"])
 		assureNotClosed(self, self.ws)
 
-		event = self.zmq.pop_data(timeout = 10)
+		event = self.zmq.pop_data()
 		self.assertEqual("on-refused-new-device", event["event"])
 		self.assertEqual("0xa123123412349999", event["device_id"])
 		self.assertEqual(config.gateway_id, event["gateway_id"])
@@ -172,7 +172,7 @@ class TestNewDevice(unittest.TestCase):
 		self.assertEqual(2, response["status"])
 		assureNotClosed(self, self.ws)
 
-		event = self.zmq.pop_data(timeout = 10)
+		event = self.zmq.pop_data()
 		self.assertEqual("on-refused-new-device", event["event"])
 		self.assertEqual("0xa123123412341111", event["device_id"])
 		self.assertEqual(config.gateway_id, event["gateway_id"])
@@ -214,7 +214,7 @@ class TestNewDevice(unittest.TestCase):
 		self.assertEqual(2, response["status"])
 		assureNotClosed(self, self.ws)
 
-		event = self.zmq.pop_data(timeout = 10)
+		event = self.zmq.pop_data()
 		self.assertEqual("on-refused-new-device", event["event"])
 		self.assertEqual("0xa123123412342222", event["device_id"])
 		self.assertEqual(config.gateway_id, event["gateway_id"])
@@ -250,7 +250,7 @@ class TestNewDevice(unittest.TestCase):
 		self.assertEqual(1, response["status"])
 		assureNotClosed(self, self.ws)
 
-		notification = self.zmq.pop_data(timeout = 10)
+		notification = self.zmq.pop_data()
 		self.assertEqual("on-new-device", notification["event"])
 		self.assertEqual("0xa123123412343333", notification["device_id"])
 		self.assertNotIn("device_name", notification)
@@ -281,7 +281,7 @@ class TestNewDevice(unittest.TestCase):
 		self.assertEqual(1, response["status"])
 		assureNotClosed(self, self.ws)
 
-		notification = self.zmq.pop_data(timeout = 10)
+		notification = self.zmq.pop_data()
 		self.assertEqual("on-new-device", notification["event"])
 		self.assertEqual("0xa123123412343333", notification["device_id"])
 		self.assertEqual("Super device", notification["device_name"])
@@ -326,7 +326,7 @@ class TestNewDevice(unittest.TestCase):
 		self.assertEqual(1, response["status"])
 		assureNotClosed(self, self.ws)
 
-		event = self.zmq.pop_data(timeout = 10)
+		event = self.zmq.pop_data()
 		self.assertEqual("on-new-device", event["event"])
 		self.assertEqual("0xa123123412355431", event["device_id"])
 		self.assertEqual("Device with unknown sensors", event["device_name"])

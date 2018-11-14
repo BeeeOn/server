@@ -75,7 +75,7 @@ class ZMQConnection:
 		with self._lock:
 			return self._data.popleft()
 
-	def pop_data(self, timeout = 5):
+	def pop_data(self, timeout = 10):
 		if timeout == 0:
 			return self._pop_data()
 		else:
@@ -86,7 +86,7 @@ class ZMQConnection:
 		with self._lock:
 			return len(self._data) > 0
 
-	def wait_for_data(self, timeout = 5):
+	def wait_for_data(self, timeout = 10):
 		self._active.wait(timeout)
 		self._active.clear()
 		return self.has_data()
