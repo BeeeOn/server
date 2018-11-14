@@ -673,6 +673,7 @@
 
 		<match>
 			<exact name="Delite-ED33" vendor="Revogi" />
+			<exact name="Delite-0870" vendor="Revogi" />
 		</match>
 
 		<modules>
