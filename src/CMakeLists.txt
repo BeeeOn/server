@@ -27,7 +27,6 @@ set(LIBS
 	${POCO_JSON}
 	${POCO_XML}
 	${POCO_DATA}
-	${POCO_SQLITE}
 	${ICU_I18N}
 	${ICU_UC}
 )
@@ -438,9 +437,11 @@ add_library(BeeeOnServer SHARED ${SOURCES})
 file(GLOB MAIN_CPP main.cpp)
 configure_file(${MAIN_CPP} ${CMAKE_CURRENT_BINARY_DIR}/main.cpp)
 
-file(GLOB DB_CONNECTOR_SOURCES
-	dao/poco/PocoSQLiteConnectorLoader.cpp
-)
+if (POCO_SQLITE)
+	add_library(BeeeOnServerSQLiteConnector SHARED
+		dao/poco/PocoSQLiteConnectorLoader.cpp)
+	target_link_libraries(BeeeOnServerSQLiteConnector ${POCO_SQLITE})
+endif()
 
 if (POCO_ODBC)
 	add_library(BeeeOnServerODBCConnector SHARED
@@ -493,6 +494,12 @@ install(TARGETS beeeon-server BeeeOnServer
 	RUNTIME DESTINATION bin
 	LIBRARY DESTINATION "${LIB_INSTALL_DIR}"
 	ARCHIVE DESTINATION "${AR_INSTALL_DIR}")
+
+if (POCO_SQLITE)
+install(TARGETS BeeeOnServerSQLiteConnector
+	COMPONENT core
+	LIBRARY DESTINATION "${LIB_INSTALL_DIR}")
+endif()
 
 if (POCO_ODBC)
 install(TARGETS BeeeOnServerODBCConnector
