@@ -461,18 +461,20 @@ add_executable(beeeon-server
 	${DB_CONNECTOR_SOURCES}
 )
 
+list(APPEND CORE_LIBS BeeeOnBase)
+list(APPEND CORE_LIBS BeeeOnServer)
+list(APPEND CORE_LIBS BeeeOnServerXmlUI)
+list(APPEND CORE_LIBS BeeeOnServerRestUI)
+list(APPEND CORE_LIBS BeeeOnServerDaoPoco)
+list(APPEND CORE_LIBS BeeeOnServerSqitch)
+list(APPEND CORE_LIBS BeeeOnServerGWS)
+list(APPEND CORE_LIBS BeeeOnServerOAuth)
+
 # Apple's linker doesn't support --whole-archive. Instead it uses -all_load.
 if (APPLE)
 	target_link_libraries(beeeon-server
 		-Wl,-all_load
-		BeeeOnBase
-		BeeeOnServer
-		BeeeOnServerDaoPoco
-		BeeeOnServerSqitch
-		BeeeOnServerXmlUI
-		BeeeOnServerRestUI
-		BeeeOnServerGWS
-		BeeeOnServerOAuth
+		${CORE_LIBS}
 		${LIBS}
 	)
 # The -Wl,--whole-archive is necessary for all libraries defining
@@ -480,14 +482,7 @@ if (APPLE)
 else()
 	target_link_libraries(beeeon-server
 		-Wl,--whole-archive
-		BeeeOnBase
-		BeeeOnServer
-		BeeeOnServerDaoPoco
-		BeeeOnServerSqitch
-		BeeeOnServerXmlUI
-		BeeeOnServerRestUI
-		BeeeOnServerGWS
-		BeeeOnServerOAuth
+		${CORE_LIBS}
 		-Wl,--no-whole-archive
 		${LIBS}
 	)

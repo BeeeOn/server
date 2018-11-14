@@ -95,6 +95,14 @@ exec_program(
 	l10n/test/cs.txt
 )
 
+list(APPEND CORE_LIBS BeeeOnBaseTest)
+list(APPEND CORE_LIBS BeeeOnBase)
+list(APPEND CORE_LIBS BeeeOnServer)
+list(APPEND CORE_LIBS BeeeOnServerDaoPoco)
+list(APPEND CORE_LIBS BeeeOnServerSqitch)
+list(APPEND CORE_LIBS BeeeOnServerGWS)
+list(APPEND CORE_LIBS BeeeOnServerOAuth)
+
 set(LIBS
 	${POCO_FOUNDATION}
 	${POCO_SSL}
@@ -129,13 +137,7 @@ endif()
 if (APPLE)
 	target_link_libraries(test-suite-server
 		-Wl,-all_load
-		BeeeOnBaseTest
-		BeeeOnBase
-		BeeeOnServer
-		BeeeOnServerDaoPoco
-		BeeeOnServerSqitch
-		BeeeOnServerGWS
-		BeeeOnServerOAuth
+		${CORE_LIBS}
 		${LIBS}
 	)
 # The -Wl,--whole-archive is necessary for all libraries defining
@@ -143,13 +145,7 @@ if (APPLE)
 else()
 	target_link_libraries(test-suite-server
 		-Wl,--whole-archive
-		BeeeOnBaseTest
-		BeeeOnBase
-		BeeeOnServer
-		BeeeOnServerDaoPoco
-		BeeeOnServerSqitch
-		BeeeOnServerGWS
-		BeeeOnServerOAuth
+		${CORE_LIBS}
 		-Wl,--no-whole-archive
 		${LIBS}
 	)
