@@ -68,7 +68,7 @@ void GatewayConnection::updateLastReceiveTime()
 	m_lastReceiveTime.update();
 }
 
-Poco::Timestamp GatewayConnection::lastReceiveTime()
+Poco::Timestamp GatewayConnection::lastReceiveTime() const
 {
 	FastMutex::ScopedLock guard(m_lastReceiveTimeMutex);
 	return m_lastReceiveTime;

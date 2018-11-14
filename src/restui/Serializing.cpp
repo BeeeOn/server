@@ -82,6 +82,17 @@ void BeeeOn::RestUI::serialize(PrintHandler &output,
 	output.key("state");
 	gatewayStatus(output, gateway);
 
+	output.key("last_activity");
+	const auto &lastActivity = gateway.lastActivity();
+
+	if (lastActivity.isNull()) {
+		output.null();
+	}
+	else {
+		const DateTime dt = lastActivity.value();
+		output.value(dt.timestamp().epochTime());
+	}
+
 	output.endObject();
 }
 

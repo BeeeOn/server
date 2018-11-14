@@ -42,6 +42,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/baf/PublishingWatcher.cpp
 	${PROJECT_SOURCE_DIR}/cassandra/CassandraStartup.cpp
 	${PROJECT_SOURCE_DIR}/dao/AbstractConfigurationQueryLoader.cpp
+	${PROJECT_SOURCE_DIR}/dao/AbstractGatewayDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/ConnectorLoader.cpp
 	${PROJECT_SOURCE_DIR}/dao/ControlDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/FilesystemQueryLoader.cpp

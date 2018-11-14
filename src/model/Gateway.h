@@ -37,6 +37,14 @@ public:
 	void setLastChanged(const Poco::Nullable<Poco::DateTime> &at);
 	Poco::Nullable<Poco::DateTime> lastChanged() const;
 
+	/**
+	 * @brief Last activity of the gateway when connected to the
+	 * gateway server. If it is not currently connected, the value
+	 * should be null.
+	 */
+	void setLastActivity(const Poco::Nullable<Poco::DateTime> &at);
+	Poco::Nullable<Poco::DateTime> lastActivity() const;
+
 	void setVersion(const std::string &version);
 	std::string version() const;
 
@@ -53,6 +61,7 @@ private:
 	double m_latitude;
 	double m_longitude;
 	Poco::Nullable<Poco::DateTime> m_lastChanged;
+	Poco::Nullable<Poco::DateTime> m_lastActivity;
 	std::string m_version;
 	Poco::Net::IPAddress m_ipAddress;
 	TimeZone m_timeZone;

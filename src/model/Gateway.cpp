@@ -74,6 +74,16 @@ Nullable<DateTime> Gateway::lastChanged() const
 	return m_lastChanged;
 }
 
+void Gateway::setLastActivity(const Nullable<DateTime> &at)
+{
+	m_lastActivity = at;
+}
+
+Nullable<DateTime> Gateway::lastActivity() const
+{
+	return m_lastActivity;
+}
+
 void Gateway::setVersion(const std::string &version)
 {
 	m_version = version;

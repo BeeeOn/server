@@ -157,6 +157,7 @@
 			<set name="sqlLoader" ref="sqlLoader" />
 			<set name="profiler" ref="loggingQueryProfiler" />
 			<set name="timeZoneProvider" ref="timeZoneProvider" />
+			<set name="communicator" ref="gatewayCommunicator" />
 		</instance>
 
 		<instance name="sqlGatewayStatusDao" class="BeeeOn::PocoSQLGatewayStatusDao">

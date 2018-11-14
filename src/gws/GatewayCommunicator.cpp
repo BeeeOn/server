@@ -134,6 +134,17 @@ void GatewayCommunicator::removeIfInactive(const GatewayID &id,
 	m_eventSource.fireEvent(e, &GatewayListener::onDisconnected);
 }
 
+Nullable<Timestamp> GatewayCommunicator::lastActivity(const GatewayID &id) const
+{
+	FastMutex::ScopedLock guard(m_connectionMapMutex);
+
+	auto it = m_connectionMap.find(id);
+	if (it == m_connectionMap.end())
+		return {};
+
+	return it->second->lastReceiveTime();
+}
+
 GatewayConnection::Ptr GatewayCommunicator::findConnection(const GatewayID &id)
 {
 	FastMutex::ScopedLock guard(m_connectionMapMutex);
