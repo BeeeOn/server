@@ -23,7 +23,10 @@ public:
 	virtual bool insert(const Control::RequestedValue &request,
 			const Control &control,
 			const Device &device) = 0;
-	virtual bool update(const Control::RequestedValue &request,
+	virtual bool markAccepted(const Control::RequestedValue &request,
+			const Control &control,
+			const Device &device) = 0;
+	virtual bool markFinished(const Control::RequestedValue &request,
 			const Control &control,
 			const Device &device) = 0;
 	virtual size_t cancelUnfinished() = 0;

@@ -135,7 +135,7 @@ void ControlServiceImpl::cancelRequest(
 			__FILE__, __LINE__);
 	}
 
-	m_controlDao->update(oldRequest, control, device);
+	m_controlDao->markFinished(oldRequest, control, device);
 }
 
 ControlChangeHandler::Ptr ControlServiceImpl::doRequestChange(

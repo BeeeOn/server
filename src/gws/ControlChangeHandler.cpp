@@ -74,7 +74,7 @@ void ControlChangeHandler::onAccepted(GatewayRPCResult::Ptr result)
 		request.setAcceptedAt(now);
 		control.setRequestedValue(request);
 
-		m_controlDao->update(request, control, m_device);
+		m_controlDao->markAccepted(request, control, m_device);
 		m_control = control;
 	);
 }
@@ -109,7 +109,7 @@ void ControlChangeHandler::finishRequest(bool failed)
 		else
 			request.setResult(Control::RequestedValue::RESULT_SUCCESS);
 
-		m_controlDao->update(request, control, m_device);
+		m_controlDao->markFinished(request, control, m_device);
 		m_control = control;
 	);
 
