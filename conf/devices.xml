@@ -656,7 +656,7 @@
 		<vendor>Revogi</vendor>
 
 		<match>
-			<exact name="Delite-1748 Smart Bulb" vendor="Revogi" />
+			<exact name="Delite-1748" vendor="Revogi" />
 		</match>
 
 		<modules>
