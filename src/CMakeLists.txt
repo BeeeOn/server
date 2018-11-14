@@ -1,6 +1,8 @@
 cmake_minimum_required (VERSION 2.8.11)
 project (ui-server C CXX)
 
+include(TargetLink)
+
 find_library (POCO_FOUNDATION PocoFoundation)
 find_library (POCO_SSL PocoNetSSL)
 find_library (POCO_CRYPTO PocoCrypto)
@@ -471,23 +473,7 @@ list(APPEND CORE_LIBS BeeeOnServerSqitch)
 list(APPEND CORE_LIBS BeeeOnServerGWS)
 list(APPEND CORE_LIBS BeeeOnServerOAuth)
 
-# Apple's linker doesn't support --whole-archive. Instead it uses -all_load.
-if (APPLE)
-	target_link_libraries(beeeon-server
-		-Wl,-all_load
-		${CORE_LIBS}
-		${LIBS}
-	)
-# The -Wl,--whole-archive is necessary for all libraries defining
-# BEEEON_OBJECTs (see di/Injectable.h).
-else()
-	target_link_libraries(beeeon-server
-		-Wl,--whole-archive
-		${CORE_LIBS}
-		-Wl,--no-whole-archive
-		${LIBS}
-	)
-endif()
+TargetLink(beeeon-server "${CORE_LIBS}" "${LIBS}")
 
 install(TARGETS beeeon-server BeeeOnServer
 	COMPONENT core

@@ -1,6 +1,8 @@
 cmake_minimum_required (VERSION 2.8.11)
 project (server-test C CXX)
 
+include(TargetLink)
+
 find_library (CPP_UNIT cppunit)
 find_library (POCO_FOUNDATION PocoFoundation)
 find_library (POCO_UTIL PocoUtil)
@@ -133,20 +135,4 @@ if(ZEROMQ)
 	list(APPEND LIBS ${ZEROMQ})
 endif()
 
-# Apple's linker doesn't support --whole-archive. Instead it uses -all_load.
-if (APPLE)
-	target_link_libraries(test-suite-server
-		-Wl,-all_load
-		${CORE_LIBS}
-		${LIBS}
-	)
-# The -Wl,--whole-archive is necessary for all libraries defining
-# BEEEON_OBJECTs (see di/Injectable.h).
-else()
-	target_link_libraries(test-suite-server
-		-Wl,--whole-archive
-		${CORE_LIBS}
-		-Wl,--no-whole-archive
-		${LIBS}
-	)
-endif()
+TargetLink(test-suite-server "${CORE_LIBS}" "${LIBS}")
