@@ -672,7 +672,7 @@
 		<vendor>Revogi</vendor>
 
 		<match>
-			<exact name="Delite-ED33 Smart Candle" vendor="Revogi" />
+			<exact name="Delite-ED33" vendor="Revogi" />
 		</match>
 
 		<modules>
