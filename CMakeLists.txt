@@ -242,7 +242,7 @@ install(DIRECTORY res/
 	COMPONENT core
 	FILES_MATCHING
 	PATTERN "res/beeeon_server/*.res")
-install(DIRECTORY systemd
+install(DIRECTORY dist/systemd
 	DESTINATION lib
 	FILE_PERMISSIONS
 		OWNER_READ OWNER_WRITE
