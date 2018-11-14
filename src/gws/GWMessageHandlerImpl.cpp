@@ -149,7 +149,7 @@ GWResponse::Ptr GWMessageHandlerImpl::handleNewDevice(
 	GWResponse::Ptr response = request->derive();
 
 	Device device(request->deviceID());
-	device.setRefresh(request->refreshTime());
+	device.setRefresh(request->deviceDescription().refreshTime());
 
 	DeviceEvent event = {gatewayID, device.id()};
 
@@ -284,12 +284,13 @@ GWResponse::Ptr GWMessageHandlerImpl::handleDeviceList(
 DeviceDescription GWMessageHandlerImpl::sanitizeDeviceDescription(
 		const DeviceDescription& description)
 {
-	DeviceDescription des(
-		description.id(),
-		Sanitize::common(description.vendor()),
-		Sanitize::common(description.productName()),
-		description.dataTypes(),
-		description.refreshTime());
+	DeviceDescription des;
+
+	des.setID(description.id());
+	des.setVendor(Sanitize::common(description.vendor()));
+	des.setProductName(Sanitize::common(description.productName()));
+	des.setDataTypes(description.dataTypes());
+	des.setRefreshTime(description.refreshTime());
 
 	return des;
 }
