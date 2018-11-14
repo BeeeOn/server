@@ -1,6 +1,8 @@
 cmake_minimum_required (VERSION 2.8.11)
 project (ui-server C CXX)
 
+include(TargetLink)
+
 find_library (POCO_FOUNDATION PocoFoundation)
 find_library (POCO_SSL PocoNetSSL)
 find_library (POCO_CRYPTO PocoCrypto)
@@ -27,7 +29,6 @@ set(LIBS
 	${POCO_JSON}
 	${POCO_XML}
 	${POCO_DATA}
-	${POCO_SQLITE}
 	${ICU_I18N}
 	${ICU_UC}
 )
@@ -438,9 +439,11 @@ add_library(BeeeOnServer SHARED ${SOURCES})
 file(GLOB MAIN_CPP main.cpp)
 configure_file(${MAIN_CPP} ${CMAKE_CURRENT_BINARY_DIR}/main.cpp)
 
-file(GLOB DB_CONNECTOR_SOURCES
-	dao/poco/PocoSQLiteConnectorLoader.cpp
-)
+if (POCO_SQLITE)
+	add_library(BeeeOnServerSQLiteConnector SHARED
+		dao/poco/PocoSQLiteConnectorLoader.cpp)
+	target_link_libraries(BeeeOnServerSQLiteConnector ${POCO_SQLITE})
+endif()
 
 if (POCO_ODBC)
 	add_library(BeeeOnServerODBCConnector SHARED
@@ -461,43 +464,28 @@ add_executable(beeeon-server
 	${DB_CONNECTOR_SOURCES}
 )
 
-# Apple's linker doesn't support --whole-archive. Instead it uses -all_load.
-if (APPLE)
-	target_link_libraries(beeeon-server
-		-Wl,-all_load
-		BeeeOnBase
-		BeeeOnServer
-		BeeeOnServerDaoPoco
-		BeeeOnServerSqitch
-		BeeeOnServerXmlUI
-		BeeeOnServerRestUI
-		BeeeOnServerGWS
-		BeeeOnServerOAuth
-		${LIBS}
-	)
-# The -Wl,--whole-archive is necessary for all libraries defining
-# BEEEON_OBJECTs (see di/Injectable.h).
-else()
-	target_link_libraries(beeeon-server
-		-Wl,--whole-archive
-		BeeeOnBase
-		BeeeOnServer
-		BeeeOnServerDaoPoco
-		BeeeOnServerSqitch
-		BeeeOnServerXmlUI
-		BeeeOnServerRestUI
-		BeeeOnServerGWS
-		BeeeOnServerOAuth
-		-Wl,--no-whole-archive
-		${LIBS}
-	)
-endif()
+list(APPEND CORE_LIBS BeeeOnBase)
+list(APPEND CORE_LIBS BeeeOnServer)
+list(APPEND CORE_LIBS BeeeOnServerXmlUI)
+list(APPEND CORE_LIBS BeeeOnServerRestUI)
+list(APPEND CORE_LIBS BeeeOnServerDaoPoco)
+list(APPEND CORE_LIBS BeeeOnServerSqitch)
+list(APPEND CORE_LIBS BeeeOnServerGWS)
+list(APPEND CORE_LIBS BeeeOnServerOAuth)
+
+TargetLink(beeeon-server "${CORE_LIBS}" "${LIBS}")
 
 install(TARGETS beeeon-server BeeeOnServer
 	COMPONENT core
 	RUNTIME DESTINATION bin
 	LIBRARY DESTINATION "${LIB_INSTALL_DIR}"
 	ARCHIVE DESTINATION "${AR_INSTALL_DIR}")
+
+if (POCO_SQLITE)
+install(TARGETS BeeeOnServerSQLiteConnector
+	COMPONENT core
+	LIBRARY DESTINATION "${LIB_INSTALL_DIR}")
+endif()
 
 if (POCO_ODBC)
 install(TARGETS BeeeOnServerODBCConnector

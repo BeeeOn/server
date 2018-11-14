@@ -109,7 +109,9 @@
 		</instance>
 
 		<instance name="sqliteConnector"
-				class="BeeeOn::PocoSQLiteConnectorLoader" />
+				class="BeeeOn::PocoSQLiteConnectorLoader"
+				library="BeeeOnServerSQLiteConnector" />
+
 		<instance name="odbcConnector"
 				class="BeeeOn::PocoODBCConnectorLoader"
 				library="BeeeOnServerODBCConnector" />

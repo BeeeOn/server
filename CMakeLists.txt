@@ -1,18 +1,12 @@
 cmake_minimum_required (VERSION 2.8.11)
 project (server C CXX)
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
 set (CMAKE_CXX_FLAGS " ${CMAKE_CXX_FLAGS} -pedantic -Wall -lpthread -ggdb3")
 add_definitions(-std=c++11)
 
-if(DEFINED ENV{GIT_ID})
-	set (GIT_ID $ENV{GIT_ID})
-else()
-	exec_program(
-		"git"
-		${CMAKE_CURRENT_SOURCE_DIR}
-		ARGS "describe --always --tags"
-		OUTPUT_VARIABLE GIT_ID)
-endif()
+include(GitSupport)
 
 exec_program(
 	"genrb"
@@ -44,61 +38,9 @@ add_subdirectory(src)
 add_subdirectory(base)
 add_subdirectory(test)
 
-find_program(XSLTPROC NAMES xsltproc)
-if(XSLTPROC)
-	execute_process(COMMAND
-		"${XSLTPROC}"
-		"${CMAKE_CURRENT_SOURCE_DIR}/tools/devices_summary.xsl"
-		"${CMAKE_CURRENT_SOURCE_DIR}/conf/devices.xml"
-		WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-		OUTPUT_FILE "${CMAKE_CURRENT_BINARY_DIR}/supported_devices.md")
-	set(SUPPORTED_DEVICES "INPUT += ${CMAKE_CURRENT_BINARY_DIR}/supported_devices.md")
-endif()
-
-find_package(Doxygen)
-
-if(DOXYGEN_FOUND)
-	set(DOXYGEN_IN  ${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxyfile.in)
-	set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
-	configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT})
-	add_custom_target(doc
-		COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
-		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-		COMMENT "Generating API documentation with Doxygen"
-		VERBATIM)
-endif()
-
-find_program(MARKED_MAN NAMES marked-man)
-find_program(RONN NAMES ronn)
-
-if(MARKED_MAN)
-	set(MD_MAN "${MARKED_MAN}")
-	set(MD_MAN_ARGS "")
-elseif(RONN)
-	set(MD_MAN "${RONN}")
-	set(MD_MAN_ARGS --roff --pipe)
-endif()
-
-if(MD_MAN)
-	message(STATUS "generating man pages")
-	file(GLOB MD_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}/doc" ${CMAKE_CURRENT_SOURCE_DIR}/doc/*.md)
-	file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/man")
-
-	foreach(md ${MD_FILES})
-		message(STATUS "generating man from ${md}")
-		string(REPLACE ".md" ".7" man "${md}")
-		execute_process(COMMAND
-			${MD_MAN} ${MD_MAN_ARGS} "${CMAKE_CURRENT_SOURCE_DIR}/doc/${md}"
-			WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
-			OUTPUT_FILE "${CMAKE_CURRENT_BINARY_DIR}/man/beeeon-server-${man}")
-	endforeach()
-
-	install(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/man/"
-		DESTINATION share/man/man7
-		COMPONENT core)
-else()
-	message(STATUS "missing tool for man pages generation, skipping")
-endif()
+include(DevicesSummary)
+include(DoxygenSupport)
+include(ManSupport)
 
 set(CPACK_PACKAGE_VERSION_MAJOR "2018")
 set(CPACK_PACKAGE_VERSION_MINOR "11")
