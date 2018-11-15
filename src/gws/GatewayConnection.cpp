@@ -101,9 +101,24 @@ GWMessage::Ptr GatewayConnection::receiveMessage()
 	if (ret <= 0 || opcode == WebSocket::FRAME_OP_CLOSE)
 		throw ConnectionResetException(m_gatewayID.toString());
 
-	if (logger().debug()) {
-		logger().debug("received frame with flags: "
-			+ NumberFormatter::formatHex(flags, true),
+	const size_t length = static_cast<size_t>(ret);
+
+	if (logger().trace()) {
+		logger().dump(
+			"received frame of size "
+			+ to_string(length) + " B ("
+			+ NumberFormatter::formatHex(flags, true) + ")"
+			+ " from " + m_gatewayID.toString(),
+			m_receiveBuffer.begin(),
+			length,
+			Message::PRIO_TRACE);
+	}
+	else if (logger().debug()) {
+		logger().debug(
+			"received frame of size "
+			+ to_string(length) + " B ("
+			+ NumberFormatter::formatHex(flags, true) + ")"
+			+ " from " + m_gatewayID.toString(),
 			__FILE__, __LINE__);
 	}
 
@@ -118,11 +133,6 @@ GWMessage::Ptr GatewayConnection::receiveMessage()
 	case WebSocket::FRAME_OP_TEXT:
 		if (!(flags & WebSocket::FRAME_FLAG_FIN))
 			throw ProtocolException("multi-fragment messages are unsupported");
-
-		if (logger().debug()) {
-			logger().debug("data from gateway "
-					+ m_gatewayID.toString() + ":\n" + msg, __FILE__, __LINE__);
-		}
 
 		return filterMessage(GWMessage::fromJSON(msg));
 
@@ -155,10 +165,20 @@ void GatewayConnection::handlePing(const string &request)
 
 void GatewayConnection::sendPong(const std::string &requestData)
 {
-	if (logger().debug()) {
+	if (logger().trace()) {
+		logger().dump(
+			"reply PONG frame of size "
+			+ to_string(requestData.size())
+			+ " to " + m_gatewayID.toString(),
+			requestData.data(),
+			requestData.size(),
+			Message::PRIO_TRACE);
+	}
+	else if (logger().debug()) {
 		logger().debug(
 			"reply PONG frame of size "
-			+ to_string(requestData.size()),
+			+ to_string(requestData.size())
+			+ " to " + m_gatewayID.toString(),
 			__FILE__, __LINE__);
 	}
 
@@ -174,9 +194,19 @@ void GatewayConnection::sendFrame(const string &msg)
 {
 	FastMutex::ScopedLock guard(m_sendMutex);
 
-	if (logger().debug()) {
-		logger().debug("message to gateway "
-				+ m_gatewayID.toString() + ":\n" + msg, __FILE__, __LINE__);
+	if (logger().trace()) {
+		logger().dump(
+			"sending frame of size " + to_string(msg.size()) + " B"
+			+ " to " + m_gatewayID.toString(),
+			msg.data(),
+			msg.size(),
+			Message::PRIO_TRACE);
+	}
+	else if (logger().debug()) {
+		logger().debug(
+			"sending frame of size " + to_string(msg.size()) + " B"
+			+ " to " + m_gatewayID.toString(),
+			__FILE__, __LINE__);
 	}
 
 	m_webSocket.sendFrame(msg.c_str(), msg.length());
