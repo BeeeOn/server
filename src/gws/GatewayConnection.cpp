@@ -170,11 +170,9 @@ void GatewayConnection::sendPong(const std::string &requestData)
 		WebSocket::FRAME_OP_PONG | WebSocket::FRAME_FLAG_FIN);
 }
 
-void GatewayConnection::sendMessage(const GWMessage::Ptr message)
+void GatewayConnection::sendFrame(const string &msg)
 {
 	FastMutex::ScopedLock guard(m_sendMutex);
-
-	const string &msg = message->toString();
 
 	if (logger().debug()) {
 		logger().debug("message to gateway "
@@ -182,6 +180,12 @@ void GatewayConnection::sendMessage(const GWMessage::Ptr message)
 	}
 
 	m_webSocket.sendFrame(msg.c_str(), msg.length());
+}
+
+void GatewayConnection::sendMessage(const GWMessage::Ptr message)
+{
+	const auto &msg = message->toString();
+	sendFrame(msg);
 }
 
 void GatewayConnection::onReadable(const AutoPtr<ReadableNotification> &notification)

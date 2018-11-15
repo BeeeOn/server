@@ -105,6 +105,12 @@ protected:
 	 */
 	void handlePing(const std::string &request);
 
+	/**
+	 * @brief Send the given message via the associated
+	 * websocket as a single frame.
+	 */
+	void sendFrame(const std::string &buffer);
+
 private:
 	GWMessage::Ptr filterMessage(GWMessage::Ptr message);
 
