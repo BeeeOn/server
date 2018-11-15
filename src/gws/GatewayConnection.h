@@ -99,6 +99,12 @@ public:
 	 */
 	GWMessage::Ptr receiveMessage();
 
+protected:
+	/**
+	 * @brief Filter pings by the GatewayRateLimiter.
+	 */
+	void handlePing(const std::string &request);
+
 private:
 	GWMessage::Ptr filterMessage(GWMessage::Ptr message);
 

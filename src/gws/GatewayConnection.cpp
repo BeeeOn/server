@@ -127,17 +127,7 @@ GWMessage::Ptr GatewayConnection::receiveMessage()
 		return filterMessage(GWMessage::fromJSON(msg));
 
 	case WebSocket::FRAME_OP_PING:
-		if (!m_rateLimiter->accept()) {
-			if (logger().debug()) {
-				logger().debug("rate limiting ping-pong for "
-					+ gatewayID().toString(),
-					__FILE__, __LINE__);
-			}
-
-			break;
-		}
-
-		sendPong(msg);
+		handlePing(msg);
 		break;
 
 	default:
@@ -146,6 +136,21 @@ GWMessage::Ptr GatewayConnection::receiveMessage()
 	}
 
 	return nullptr;
+}
+
+void GatewayConnection::handlePing(const string &request)
+{
+	if (!m_rateLimiter->accept()) {
+		if (logger().debug()) {
+			logger().debug("rate limiting ping-pong for "
+				+ gatewayID().toString(),
+				__FILE__, __LINE__);
+		}
+
+		return;
+	}
+
+	sendPong(request);
 }
 
 void GatewayConnection::sendPong(const std::string &requestData)
