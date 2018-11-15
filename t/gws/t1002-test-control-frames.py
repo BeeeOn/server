@@ -20,7 +20,7 @@ class TestControlFrames(unittest.TestCase):
 
 		registerGateway(self, self.ws, config.gateway_id)
 
-		event = self.zmq.pop_data(timeout = 10)
+		event = self.zmq.pop_data()
 		self.assertEqual("on-connected", event["event"])
 		self.assertEqual(config.gateway_id, event["gateway_id"])
 
@@ -28,7 +28,7 @@ class TestControlFrames(unittest.TestCase):
 		self.ws.close()
 
 		try:
-			event = self.zmq.pop_data(timeout = 10)
+			event = self.zmq.pop_data()
 			self.assertEqual("on-disconnected", event["event"])
 			self.assertEqual(config.gateway_id, event["gateway_id"])
 		finally:
