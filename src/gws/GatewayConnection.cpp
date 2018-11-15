@@ -128,17 +128,15 @@ GWMessage::Ptr GatewayConnection::receiveMessage()
 	if (opcode & FRAME_OP_CONTROL_MASK && ret > CONTROL_PAYLOAD_LIMIT)
 		throw ProtocolException("too long payload for a control frame");
 
-	const string msg(buffer.begin(), ret);
-
 	switch (opcode) {
 	case WebSocket::FRAME_OP_TEXT:
 		if (!(flags & WebSocket::FRAME_FLAG_FIN))
 			throw ProtocolException("multi-fragment messages are unsupported");
 
-		return filterMessage(GWMessage::fromJSON(msg));
+		return filterMessage(GWMessage::fromJSON({buffer.begin(), length}));
 
 	case WebSocket::FRAME_OP_PING:
-		handlePing(msg);
+		handlePing(buffer, length);
 		break;
 
 	default:
@@ -149,7 +147,7 @@ GWMessage::Ptr GatewayConnection::receiveMessage()
 	return nullptr;
 }
 
-void GatewayConnection::handlePing(const string &request)
+void GatewayConnection::handlePing(const Buffer<char> &request, size_t length)
 {
 	if (!m_rateLimiter->accept()) {
 		if (logger().debug()) {
@@ -161,24 +159,24 @@ void GatewayConnection::handlePing(const string &request)
 		return;
 	}
 
-	sendPong(request);
+	sendPong(request, length);
 }
 
-void GatewayConnection::sendPong(const std::string &requestData)
+void GatewayConnection::sendPong(const Buffer<char> &request, size_t length)
 {
 	if (logger().trace()) {
 		logger().dump(
 			"reply PONG frame of size "
-			+ to_string(requestData.size())
+			+ to_string(length)
 			+ " to " + m_gatewayID.toString(),
-			requestData.data(),
-			requestData.size(),
+			request.begin(),
+			length,
 			Message::PRIO_TRACE);
 	}
 	else if (logger().debug()) {
 		logger().debug(
 			"reply PONG frame of size "
-			+ to_string(requestData.size())
+			+ to_string(length)
 			+ " to " + m_gatewayID.toString(),
 			__FILE__, __LINE__);
 	}
@@ -186,8 +184,8 @@ void GatewayConnection::sendPong(const std::string &requestData)
 	FastMutex::ScopedLock guard(m_sendMutex);
 
 	m_webSocket.sendFrame(
-		requestData.c_str(),
-		requestData.length(),
+		request.begin(),
+		length,
 		WebSocket::FRAME_OP_PONG | WebSocket::FRAME_FLAG_FIN);
 }
 

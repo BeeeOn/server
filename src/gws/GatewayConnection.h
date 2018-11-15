@@ -103,7 +103,7 @@ protected:
 	/**
 	 * @brief Filter pings by the GatewayRateLimiter.
 	 */
-	void handlePing(const std::string &request);
+	void handlePing(const Poco::Buffer<char> &request, size_t length);
 
 	/**
 	 * @brief Send the given message via the associated
@@ -120,7 +120,7 @@ private:
 	 *
 	 * @see https://tools.ietf.org/html/rfc6455#section-5.5.2
 	 */
-	void sendPong(const std::string &requestData);
+	void sendPong(const Poco::Buffer<char> &request, size_t length);
 
 	/**
 	 * @brief Set timestamp of the last received message.
