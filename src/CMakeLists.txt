@@ -122,6 +122,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/policy/RuledSensorHistoryAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/SensorHistoryAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/SensorHistoryRules.cpp
+	${PROJECT_SOURCE_DIR}/policy/SlidingWindowRateLimiter.cpp
 	${PROJECT_SOURCE_DIR}/policy/DefaultAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/PolicyContext.cpp
 	${PROJECT_SOURCE_DIR}/policy/UserPolicyContext.cpp
