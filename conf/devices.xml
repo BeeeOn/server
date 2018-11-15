@@ -656,7 +656,7 @@
 		<vendor>Revogi</vendor>
 
 		<match>
-			<exact name="Delite-1748 Smart Bulb" vendor="Revogi" />
+			<exact name="Delite-1748" vendor="Revogi" />
 		</match>
 
 		<modules>
@@ -672,7 +672,8 @@
 		<vendor>Revogi</vendor>
 
 		<match>
-			<exact name="Delite-ED33 Smart Candle" vendor="Revogi" />
+			<exact name="Delite-ED33" vendor="Revogi" />
+			<exact name="Delite-0870" vendor="Revogi" />
 		</match>
 
 		<modules>
