@@ -3,19 +3,13 @@
 #include <functional>
 
 #include <Poco/AutoPtr.h>
-#include <Poco/Buffer.h>
-#include <Poco/NObserver.h>
-#include <Poco/RefCountedObject.h>
 #include <Poco/SharedPtr.h>
 #include <Poco/Timestamp.h>
-#include <Poco/Net/SocketNotification.h>
-#include <Poco/Net/SocketReactor.h>
-#include <Poco/Net/WebSocket.h>
 
 #include "gwmessage/GWMessage.h"
 #include "model/GatewayID.h"
 #include "policy/GatewayRateLimiter.h"
-#include "util/Loggable.h"
+#include "server/WebSocketConnection.h"
 
 namespace BeeeOn {
 
@@ -46,9 +40,7 @@ namespace BeeeOn {
  *   arrived within the timeout and in the meantime no other message came
  *   from the gateway.)
  */
-class GatewayConnection :
-		public Poco::RefCountedObject,
-		public Loggable {
+class GatewayConnection : public WebSocketConnection {
 public:
 	typedef Poco::AutoPtr<GatewayConnection> Ptr;
 	typedef std::function<void(GatewayConnection::Ptr)> EnqueueReadable;
@@ -75,16 +67,6 @@ public:
 	GatewayRateLimiter::Ptr rateLimiter() const;
 
 	/**
-	 * @brief Register GatewayConnection as an event handler to the SocketReactor.
-	 */
-	void addToReactor() const;
-
-	/**
-	 * @brief Unregister GatewayConnection as an event handler from the SocketReactor.
-	 */
-	void removeFromReactor() const;
-
-	/**
 	 * @brief Returns timestamp of the last received message.
 	 */
 	Poco::Timestamp lastReceiveTime() const;
@@ -99,41 +81,31 @@ public:
 	 */
 	GWMessage::Ptr receiveMessage();
 
-private:
-	GWMessage::Ptr filterMessage(GWMessage::Ptr message);
+protected:
+	/**
+	 * @returns ID of gateway this connection serves.
+	 */
+	std::string id() const override;
 
 	/**
-	 * @brief Sends back the PONG frame. Such frame must contain the same
-	 * application data as it was received.
-	 *
-	 * @see https://tools.ietf.org/html/rfc6455#section-5.5.2
+	 * @brief Filter pings by the GatewayRateLimiter.
 	 */
-	void sendPong(const std::string &requestData);
+	void handlePing(const Poco::Buffer<char> &request, size_t length) override;
+
+private:
+	GWMessage::Ptr filterMessage(GWMessage::Ptr message);
 
 	/**
 	 * @brief Set timestamp of the last received message.
 	 */
 	void updateLastReceiveTime();
 
-	/**
-	 * @brief The Callback method invoked from the reactor thread.
-	 *
-	 * This method is intended just to determine there are data on the socket.
-	 * The data reading takes place in the thread pool of the GatewayCommunicator.
-	 */
-	void onReadable(const Poco::AutoPtr<Poco::Net::ReadableNotification> &notification);
-
 private:
 	GatewayID m_gatewayID;
-	Poco::Net::WebSocket m_webSocket;
-	Poco::Net::SocketReactor &m_reactor;
 	GatewayRateLimiter::Ptr m_rateLimiter;
 	EnqueueReadable m_enqueueReadable;
-	Poco::Buffer<char> m_receiveBuffer;
 	Poco::Timestamp m_lastReceiveTime;
 	mutable Poco::FastMutex m_lastReceiveTimeMutex;
-	Poco::FastMutex m_sendMutex;
-	Poco::NObserver<GatewayConnection, Poco::Net::ReadableNotification> m_readableObserver;
 };
 
 }

@@ -9,10 +9,6 @@ using namespace Poco;
 using namespace Poco::Net;
 using namespace BeeeOn;
 
-/// @see https://tools.ietf.org/html/rfc6455#section-5.5
-#define CONTROL_PAYLOAD_LIMIT 125
-#define FRAME_OP_CONTROL_MASK 0x08
-
 GatewayConnection::GatewayConnection(
 		const GatewayID &gatewayID,
 		const WebSocket &webSocket,
@@ -20,13 +16,15 @@ GatewayConnection::GatewayConnection(
 		GatewayRateLimiter::Ptr rateLimiter,
 		const EnqueueReadable &enqueueReadable,
 		size_t maxMessageSize):
+	WebSocketConnection(
+		webSocket,
+		reactor,
+		[enqueueReadable](WebSocketConnection::Ptr c) {
+			enqueueReadable(c.cast<GatewayConnection>());
+		},
+		maxMessageSize),
 	m_gatewayID(gatewayID),
-	m_webSocket(webSocket),
-	m_reactor(reactor),
-	m_rateLimiter(rateLimiter),
-	m_enqueueReadable(enqueueReadable),
-	m_receiveBuffer(maxMessageSize),
-	m_readableObserver(*this, &GatewayConnection::onReadable)
+	m_rateLimiter(rateLimiter)
 {
 	if (logger().debug()) {
 		logger().debug("gateway " + m_gatewayID.toString()
@@ -42,6 +40,11 @@ GatewayConnection::~GatewayConnection()
 	}
 }
 
+string GatewayConnection::id() const
+{
+	return m_gatewayID.toString();
+}
+
 GatewayID GatewayConnection::gatewayID() const
 {
 	return m_gatewayID;
@@ -50,16 +53,6 @@ GatewayID GatewayConnection::gatewayID() const
 GatewayRateLimiter::Ptr GatewayConnection::rateLimiter() const
 {
 	return m_rateLimiter;
-}
-
-void GatewayConnection::addToReactor() const
-{
-	m_reactor.addEventHandler(m_webSocket, m_readableObserver);
-}
-
-void GatewayConnection::removeFromReactor() const
-{
-	m_reactor.removeEventHandler(m_webSocket, m_readableObserver);
 }
 
 void GatewayConnection::updateLastReceiveTime()
@@ -91,97 +84,41 @@ GWMessage::Ptr GatewayConnection::filterMessage(GWMessage::Ptr msg)
 
 GWMessage::Ptr GatewayConnection::receiveMessage()
 {
-	int flags;
+	Nullable<string> message;
 
-	int ret = m_webSocket.receiveFrame(
-			m_receiveBuffer.begin(), m_receiveBuffer.size(), flags);
-
-	const int opcode = flags & WebSocket::FRAME_OP_BITMASK;
-
-	if (ret <= 0 || opcode == WebSocket::FRAME_OP_CLOSE)
-		throw ConnectionResetException(m_gatewayID.toString());
-
-	if (logger().debug()) {
-		logger().debug("received frame with flags: "
-			+ NumberFormatter::formatHex(flags, true),
-			__FILE__, __LINE__);
+	try {
+		message = receiveFrame();
+	}
+	catch (const ProtocolException &e) {
+		updateLastReceiveTime();
+		e.rethrow();
 	}
 
 	updateLastReceiveTime();
 
-	if (opcode & FRAME_OP_CONTROL_MASK && ret > CONTROL_PAYLOAD_LIMIT)
-		throw ProtocolException("too long payload for a control frame");
+	if (message.isNull())
+		return nullptr;
 
-	const string msg(m_receiveBuffer.begin(), ret);
-
-	switch (opcode) {
-	case WebSocket::FRAME_OP_TEXT:
-		if (!(flags & WebSocket::FRAME_FLAG_FIN))
-			throw ProtocolException("multi-fragment messages are unsupported");
-
-		if (logger().debug()) {
-			logger().debug("data from gateway "
-					+ m_gatewayID.toString() + ":\n" + msg, __FILE__, __LINE__);
-		}
-
-		return filterMessage(GWMessage::fromJSON(msg));
-
-	case WebSocket::FRAME_OP_PING:
-		if (!m_rateLimiter->accept()) {
-			if (logger().debug()) {
-				logger().debug("rate limiting ping-pong for "
-					+ gatewayID().toString(),
-					__FILE__, __LINE__);
-			}
-
-			break;
-		}
-
-		sendPong(msg);
-		break;
-
-	default:
-		throw ProtocolException("unhandled websocket opcode: "
-				+ NumberFormatter::formatHex(opcode, true));
-	}
-
-	return nullptr;
+	return filterMessage(GWMessage::fromJSON(message));
 }
 
-void GatewayConnection::sendPong(const std::string &requestData)
+void GatewayConnection::handlePing(const Buffer<char> &request, size_t length)
 {
-	if (logger().debug()) {
-		logger().debug(
-			"reply PONG frame of size "
-			+ to_string(requestData.size()),
-			__FILE__, __LINE__);
+	if (!m_rateLimiter->accept()) {
+		if (logger().debug()) {
+			logger().debug("rate limiting ping-pong for "
+				+ gatewayID().toString(),
+				__FILE__, __LINE__);
+		}
+
+		return;
 	}
 
-	FastMutex::ScopedLock guard(m_sendMutex);
-
-	m_webSocket.sendFrame(
-		requestData.c_str(),
-		requestData.length(),
-		WebSocket::FRAME_OP_PONG | WebSocket::FRAME_FLAG_FIN);
+	sendPong(request, length);
 }
 
 void GatewayConnection::sendMessage(const GWMessage::Ptr message)
 {
-	FastMutex::ScopedLock guard(m_sendMutex);
-
-	const string &msg = message->toString();
-
-	if (logger().debug()) {
-		logger().debug("message to gateway "
-				+ m_gatewayID.toString() + ":\n" + msg, __FILE__, __LINE__);
-	}
-
-	m_webSocket.sendFrame(msg.c_str(), msg.length());
+	const auto &msg = message->toString();
+	sendFrame(msg, msg.size());
 }
-
-void GatewayConnection::onReadable(const AutoPtr<ReadableNotification> &notification)
-{
-	m_enqueueReadable(AutoPtr<GatewayConnection>(this, true));
-}
-
-
