@@ -140,8 +140,8 @@ private:
 	Poco::Net::WebSocket m_webSocket;
 	Poco::Net::SocketReactor &m_reactor;
 	GatewayRateLimiter::Ptr m_rateLimiter;
+	size_t m_maxFrameSize;
 	EnqueueReadable m_enqueueReadable;
-	Poco::Buffer<char> m_receiveBuffer;
 	Poco::Timestamp m_lastReceiveTime;
 	mutable Poco::FastMutex m_lastReceiveTimeMutex;
 	Poco::FastMutex m_sendMutex;

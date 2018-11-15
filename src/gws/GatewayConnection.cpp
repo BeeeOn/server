@@ -24,8 +24,8 @@ GatewayConnection::GatewayConnection(
 	m_webSocket(webSocket),
 	m_reactor(reactor),
 	m_rateLimiter(rateLimiter),
+	m_maxFrameSize(maxMessageSize),
 	m_enqueueReadable(enqueueReadable),
-	m_receiveBuffer(maxMessageSize),
 	m_readableObserver(*this, &GatewayConnection::onReadable)
 {
 	if (logger().debug()) {
@@ -91,10 +91,11 @@ GWMessage::Ptr GatewayConnection::filterMessage(GWMessage::Ptr msg)
 
 GWMessage::Ptr GatewayConnection::receiveMessage()
 {
+	Buffer<char> buffer(m_maxFrameSize);
 	int flags;
 
 	int ret = m_webSocket.receiveFrame(
-			m_receiveBuffer.begin(), m_receiveBuffer.size(), flags);
+			buffer.begin(), buffer.size(), flags);
 
 	const int opcode = flags & WebSocket::FRAME_OP_BITMASK;
 
@@ -109,7 +110,7 @@ GWMessage::Ptr GatewayConnection::receiveMessage()
 			+ to_string(length) + " B ("
 			+ NumberFormatter::formatHex(flags, true) + ")"
 			+ " from " + m_gatewayID.toString(),
-			m_receiveBuffer.begin(),
+			buffer.begin(),
 			length,
 			Message::PRIO_TRACE);
 	}
@@ -127,7 +128,7 @@ GWMessage::Ptr GatewayConnection::receiveMessage()
 	if (opcode & FRAME_OP_CONTROL_MASK && ret > CONTROL_PAYLOAD_LIMIT)
 		throw ProtocolException("too long payload for a control frame");
 
-	const string msg(m_receiveBuffer.begin(), ret);
+	const string msg(buffer.begin(), ret);
 
 	switch (opcode) {
 	case WebSocket::FRAME_OP_TEXT:
