@@ -24,6 +24,7 @@ public:
 	typedef std::function<void(WebSocketConnection::Ptr)> EnqueueReadable;
 
 	WebSocketConnection(
+		const std::string &id,
 		const Poco::Net::WebSocket &webSocket,
 		Poco::Net::SocketReactor &reactor,
 		const EnqueueReadable &enqueueReadable,
@@ -39,7 +40,7 @@ protected:
 	 * @returns string identification of the connection that used
 	 * for logging and similar purposes.
 	 */
-	virtual std::string id() const = 0;
+	std::string id() const;
 
 	/**
 	 * @brief Receive a frame from the associated websocket.
@@ -94,6 +95,7 @@ private:
 	void checkOverflow(const size_t bufferSize, size_t length) const;
 
 private:
+	std::string m_id;
 	Poco::Net::WebSocket m_webSocket;
 	Poco::Net::SocketReactor &m_reactor;
 	EnqueueReadable m_enqueueReadable;

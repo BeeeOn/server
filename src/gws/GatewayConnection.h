@@ -83,11 +83,6 @@ public:
 
 protected:
 	/**
-	 * @returns ID of gateway this connection serves.
-	 */
-	std::string id() const override;
-
-	/**
 	 * @brief Filter pings by the GatewayRateLimiter.
 	 */
 	void handlePing(const Poco::Buffer<char> &request, size_t length) override;
