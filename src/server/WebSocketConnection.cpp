@@ -125,7 +125,7 @@ void WebSocketConnection::sendFrame(const string &buffer, size_t length)
 	}
 
 	FastMutex::ScopedLock guard(m_sendLock);
-	m_webSocket.sendFrame(buffer.data(), buffer.length());
+	m_webSocket.sendFrame(buffer.data(), length);
 }
 
 void WebSocketConnection::sendPong(const Buffer<char> &request, size_t length)
