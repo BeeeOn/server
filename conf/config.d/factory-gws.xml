@@ -72,6 +72,11 @@
 		<instance name="noGatewayLimiterFactory" class="BeeeOn::NoGatewayRateLimiterFactory">
 		</instance>
 
-		<alias name="gatewayLimiterFactory" ref="noGatewayLimiterFactory" />
+		<instance name="slidingWindowGatewayLimiterFactory" class="BeeeOn::SlidingWindowRateLimiterFactory">
+			<set name="maxRatePerMinute" number="${gws.rate.perMinute}" />
+			<set name="maxRatePerHour" number="${gws.rate.perHour}" />
+		</instance>
+
+		<alias name="gatewayLimiterFactory" ref="${gws.rate.impl}GatewayLimiterFactory" />
 	</factory>
 </system>
