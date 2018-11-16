@@ -38,6 +38,13 @@ public:
 
 protected:
 	/**
+	 * @brief To be called by the derived class in its constructor.
+	 * Inside this function it is already clear, of what type is the
+	 * pointer _this_.
+	 */
+	void afterConstructed() const;
+
+	/**
 	 * @returns string identification of the connection that used
 	 * for logging and similar purposes.
 	 */

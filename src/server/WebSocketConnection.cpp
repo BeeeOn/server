@@ -29,6 +29,10 @@ WebSocketConnection::WebSocketConnection(
 	m_maxFrameSize(maxFrameSize),
 	m_readableObserver(*this, &WebSocketConnection::onReadable)
 {
+}
+
+void WebSocketConnection::afterConstructed() const
+{
 	if (logger().information()) {
 		logger().information(
 			"created connection to " + this->id(),

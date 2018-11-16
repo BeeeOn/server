@@ -27,6 +27,7 @@ GatewayConnection::GatewayConnection(
 	m_gatewayID(gatewayID),
 	m_rateLimiter(rateLimiter)
 {
+	afterConstructed();
 }
 
 GatewayConnection::~GatewayConnection()
