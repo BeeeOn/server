@@ -88,7 +88,7 @@ protected:
 	void handlePing(const Poco::Buffer<char> &request, size_t length) override;
 
 private:
-	GWMessage::Ptr filterMessage(GWMessage::Ptr message);
+	GWMessage::Ptr filterMessage(const std::string &data);
 
 	/**
 	 * @brief Set timestamp of the last received message.

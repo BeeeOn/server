@@ -55,8 +55,10 @@ Poco::Timestamp GatewayConnection::lastReceiveTime() const
 	return m_lastReceiveTime;
 }
 
-GWMessage::Ptr GatewayConnection::filterMessage(GWMessage::Ptr msg)
+GWMessage::Ptr GatewayConnection::filterMessage(const std::string &data)
 {
+	GWMessage::Ptr msg = GWMessage::fromJSON(data);
+
 	if (!m_rateLimiter->accept(msg)) {
 		if (logger().debug()) {
 			logger().debug("rate limiting gateway "
@@ -64,6 +66,7 @@ GWMessage::Ptr GatewayConnection::filterMessage(GWMessage::Ptr msg)
 				__FILE__, __LINE__);
 		}
 
+		m_stats.lost(data.size());
 		return nullptr;
 	}
 
@@ -87,7 +90,7 @@ GWMessage::Ptr GatewayConnection::receiveMessage()
 	if (message.isNull())
 		return nullptr;
 
-	return filterMessage(GWMessage::fromJSON(message));
+	return filterMessage(message);
 }
 
 void GatewayConnection::handlePing(const Buffer<char> &request, size_t length)
@@ -99,6 +102,7 @@ void GatewayConnection::handlePing(const Buffer<char> &request, size_t length)
 				__FILE__, __LINE__);
 		}
 
+		m_stats.lost(length);
 		return;
 	}
 
