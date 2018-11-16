@@ -12,6 +12,7 @@
 #include <Poco/Net/SocketReactor.h>
 #include <Poco/Net/WebSocket.h>
 
+#include "io/IOStats.h"
 #include "util/Loggable.h"
 
 namespace BeeeOn {
@@ -93,6 +94,9 @@ private:
 	 * @see checkBuffer()
 	 */
 	void checkOverflow(const size_t bufferSize, size_t length) const;
+
+protected:
+	IOStats m_stats;
 
 private:
 	std::string m_id;

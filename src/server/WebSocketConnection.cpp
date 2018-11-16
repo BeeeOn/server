@@ -94,13 +94,19 @@ Nullable<string> WebSocketConnection::receiveFrame()
 			__FILE__, __LINE__);
 	}
 
-	if (opcode & FRAME_OP_CONTROL_MASK && length > CONTROL_PAYLOAD_LIMIT)
+	m_stats.read(length);
+
+	if (opcode & FRAME_OP_CONTROL_MASK && length > CONTROL_PAYLOAD_LIMIT) {
+		m_stats.lost(length);
 		throw ProtocolException("too long payload for a control frame");
+	}
 
 	switch (opcode) {
 	case WebSocket::FRAME_OP_TEXT:
-		if (!(flags & WebSocket::FRAME_FLAG_FIN))
+		if (!(flags & WebSocket::FRAME_FLAG_FIN)) {
+			m_stats.lost(length);
 			throw ProtocolException("multi-fragment messages are unsupported");
+		}
 
 		return string{buffer.begin(), length};
 
@@ -109,6 +115,7 @@ Nullable<string> WebSocketConnection::receiveFrame()
 		break;
 
 	default:
+		m_stats.lost(length);
 		throw ProtocolException("unhandled websocket opcode: "
 				+ NumberFormatter::formatHex(opcode, true));
 	}
@@ -143,6 +150,8 @@ void WebSocketConnection::sendFrame(const string &buffer, size_t length)
 
 	FastMutex::ScopedLock guard(m_sendLock);
 	m_webSocket.sendFrame(buffer.data(), length);
+
+	m_stats.written(length);
 }
 
 void WebSocketConnection::sendPong(const Buffer<char> &request, size_t length)
@@ -171,6 +180,8 @@ void WebSocketConnection::sendPong(const Buffer<char> &request, size_t length)
 		request.begin(),
 		length,
 		WebSocket::FRAME_OP_PONG | WebSocket::FRAME_FLAG_FIN);
+
+	m_stats.written(length);
 }
 
 void WebSocketConnection::checkOverflow(const size_t size, size_t length) const
