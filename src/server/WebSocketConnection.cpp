@@ -17,20 +17,37 @@ using namespace BeeeOn;
 #define FRAME_OP_CONTROL_MASK 0x08
 
 WebSocketConnection::WebSocketConnection(
+		const string &id,
 		const WebSocket &webSocket,
 		SocketReactor &reactor,
 		const EnqueueReadable &enqueueReadable,
 		const size_t maxFrameSize):
+	m_id(id),
 	m_webSocket(webSocket),
 	m_reactor(reactor),
 	m_enqueueReadable(enqueueReadable),
 	m_maxFrameSize(maxFrameSize),
 	m_readableObserver(*this, &WebSocketConnection::onReadable)
 {
+	if (logger().information()) {
+		logger().information(
+			"created connection to " + this->id(),
+			__FILE__, __LINE__);
+	}
 }
 
 WebSocketConnection::~WebSocketConnection()
 {
+	if (logger().information()) {
+		logger().information(
+			"destroyed connection to " + id(),
+			__FILE__, __LINE__);
+	}
+}
+
+string WebSocketConnection::id() const
+{
+	return m_id;
 }
 
 void WebSocketConnection::addToReactor() const
@@ -125,7 +142,7 @@ void WebSocketConnection::sendFrame(const string &buffer, size_t length)
 	}
 
 	FastMutex::ScopedLock guard(m_sendLock);
-	m_webSocket.sendFrame(buffer.data(), buffer.length());
+	m_webSocket.sendFrame(buffer.data(), length);
 }
 
 void WebSocketConnection::sendPong(const Buffer<char> &request, size_t length)

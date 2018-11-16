@@ -17,6 +17,7 @@ GatewayConnection::GatewayConnection(
 		const EnqueueReadable &enqueueReadable,
 		size_t maxMessageSize):
 	WebSocketConnection(
+		gatewayID.toString(),
 		webSocket,
 		reactor,
 		[enqueueReadable](WebSocketConnection::Ptr c) {
@@ -26,23 +27,10 @@ GatewayConnection::GatewayConnection(
 	m_gatewayID(gatewayID),
 	m_rateLimiter(rateLimiter)
 {
-	if (logger().debug()) {
-		logger().debug("gateway " + m_gatewayID.toString()
-				+ " connection created", __FILE__, __LINE__);
-	}
 }
 
 GatewayConnection::~GatewayConnection()
 {
-	if (logger().debug()) {
-		logger().debug("gateway " + m_gatewayID.toString()
-				+ " connection destroyed", __FILE__, __LINE__);
-	}
-}
-
-string GatewayConnection::id() const
-{
-	return m_gatewayID.toString();
 }
 
 GatewayID GatewayConnection::gatewayID() const
