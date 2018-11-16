@@ -99,7 +99,13 @@ bool SlidingWindowRateLimiter::overlimitGeneric(
 		return false;
 
 	const auto sum = sumRange(now - range, now);
-	logger().debug(label + ": " + to_string(sum) + "/" + to_string(maxLimit));
+
+	if (logger().debug()) {
+		logger().debug(
+			label + ": " + to_string(sum) + "/" + to_string(maxLimit),
+			__FILE__, __LINE__);
+	}
+
 	if (sum < maxLimit)
 		return false;
 
