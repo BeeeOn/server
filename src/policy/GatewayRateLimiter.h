@@ -1,5 +1,8 @@
 #pragma once
 
+#include <Poco/Clock.h>
+#include <Poco/Mutex.h>
+#include <Poco/Timespan.h>
 #include <Poco/SharedPtr.h>
 
 #include "gwmessage/GWMessage.h"
@@ -50,6 +53,46 @@ public:
 	 * given gateway ID.
 	 */
 	virtual GatewayRateLimiter::Ptr create(const GatewayID &id) = 0;
+};
+
+/**
+ * @brief GatewayRateLimiterCache holds GatewayRateLimiter instances
+ * for a certain amount of time. This allows to keep track of rate limiting
+ * for gateways that disconnect and returns back in a minute.
+ */
+class GatewayRateLimiterCache {
+public:
+	GatewayRateLimiterCache();
+
+	void setKeepTimeout(const Poco::Timespan &timeout);
+
+	/**
+	 * @brief Keep the given GatewayRateLimiter instance until
+	 * its timeout expires. If there is already a rateLimiter
+	 * for that gateway, it is overriden.
+	 */
+	void keep(GatewayRateLimiter::Ptr rateLimiter);
+
+	/**
+	 * @brief Find a GatewayRateLimiter instance for the given
+	 * gateway ID and drop it out of the cache.
+	 *
+	 * @returns appropriate instance of GatewayRateLimiter or nullptr.
+	 */
+	GatewayRateLimiter::Ptr findAndDrop(const GatewayID &id);
+
+protected:
+	void eraseExpired(const Poco::Clock &now = {});
+
+private:
+	Poco::Timespan m_keepTimeout;
+
+	typedef std::multimap<Poco::Clock, GatewayRateLimiter::Ptr> ExpireQueue;
+	typedef std::map<GatewayID, ExpireQueue::const_iterator> RecordMap;
+
+	RecordMap m_records;
+	ExpireQueue m_expireQueue;
+	Poco::FastMutex m_lock;
 };
 
 }
