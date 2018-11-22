@@ -56,19 +56,26 @@ void GatewayCommunicator::addGateway(const GatewayID &gatewayID, WebSocket &webS
 	GatewayRateLimiter::Ptr rateLimiter;
 
 	auto it = m_connectionMap.find(gatewayID);
+	if (it != m_connectionMap.end())
+		rateLimiter = it->second->rateLimiter();
+	else
+		rateLimiter = m_rateLimiterCache.findAndDrop(gatewayID);
+
+	if (!rateLimiter.isNull() && !rateLimiter->accept()) {
+		throw ConnectionResetException(
+			"refusing new connection from "
+			+ gatewayID.toString() + " due to rate limiting");
+	}
+
 	if (it != m_connectionMap.end()) {
 		if (logger().debug()) {
 			logger().debug("gateway " + gatewayID.toString()
 					+ " found, using new connection", __FILE__, __LINE__);
 		}
 
-		rateLimiter = it->second->rateLimiter();
 		m_reactor.removeEventHandler(it->second->socket(), m_readableObserver);
 		m_socketsMap.erase(it->second->socket());
 		m_connectionMap.erase(it);
-	}
-	else {
-		rateLimiter = m_rateLimiterCache.findAndDrop(gatewayID);
 	}
 
 	if (rateLimiter.isNull())
