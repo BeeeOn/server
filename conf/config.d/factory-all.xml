@@ -11,5 +11,15 @@
 			<add name="loops" ref="uiServer" />
 			<add name="loops" ref="xmluiServer" />
 		</instance>
+
+		<instance name="securityChecker" class="BeeeOn::StartupSecurityChecker" init="early">
+			<set name="mode" text="${application.security.mode}" />
+			<set name="rootAllowed" number="0" />
+			<set name="user" text="beeeon_user" />
+			<set name="peerVerifier" text="${gws.peer.verifier}" />
+			<set name="securePeerVerifiers" list="strict" />
+			<set name="gatewayLimiter" text="${gws.rate.impl}" />
+			<set name="secureGatewayLimiters" list="slidingWindow" />
+		</instance>
 	</factory>
 </system>

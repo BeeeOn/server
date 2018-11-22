@@ -196,6 +196,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/PreprocessorChain.cpp
 	${PROJECT_SOURCE_DIR}/util/Sanitize.cpp
 	${PROJECT_SOURCE_DIR}/util/Startup.cpp
+	${PROJECT_SOURCE_DIR}/util/StartupSecurityChecker.cpp
 	${PROJECT_SOURCE_DIR}/util/SQLPreprocessor.cpp
 	${PROJECT_SOURCE_DIR}/util/TypesSAXHandler.cpp
 	${PROJECT_SOURCE_DIR}/util/UnknownEvaluator.cpp
