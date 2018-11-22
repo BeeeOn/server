@@ -97,7 +97,10 @@ void GWRequestHandler::processPayload(
 
 	m_gatewayCommunicator->addGateway(gateway.id(), ws);
 
-	const auto &reply = GWGatewayAccepted().toString();
+	GWGatewayAccepted accepted;
+	accepted.setID(registerMsg->id());
+
+	const auto &reply = accepted.toString();
 	ws.sendFrame(reply.c_str(), reply.length());
 }
 
