@@ -142,6 +142,8 @@ void SlidingWindowRateLimiter::shiftWindow(const Timespan &now)
 		"seems like time is not monotonic");
 
 	const auto upperBound = m_window.upper_bound(now - 1 * Timespan::HOURS);
+	if (upperBound == m_window.end())
+		return;
 
 	if (logger().debug()) {
 		const auto dist = distance(begin(m_window), upperBound);
