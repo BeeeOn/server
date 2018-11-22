@@ -45,7 +45,7 @@ WebSocketConnection::~WebSocketConnection()
 	if (logger().information()) {
 		logger().information(
 			"destroyed connection to " + id()
-			+ "(I/O stats: " + m_stats.data().toString() + ")",
+			+ " (I/O stats: " + m_stats.data().toString() + ")",
 			__FILE__, __LINE__);
 	}
 }
