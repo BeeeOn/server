@@ -67,6 +67,9 @@ void GatewayCommunicator::addGateway(const GatewayID &gatewayID, WebSocket &webS
 		m_socketsMap.erase(it->second->socket());
 		m_connectionMap.erase(it);
 	}
+	else {
+		rateLimiter = m_rateLimiterCache.findAndDrop(gatewayID);
+	}
 
 	if (rateLimiter.isNull())
 		rateLimiter = m_rateLimiterFactory->create(gatewayID);
@@ -193,6 +196,7 @@ void GatewayCommunicator::stop()
 void GatewayCommunicator::closeConnection(GatewayConnection::Ptr connection)
 {
 	m_reactor.removeEventHandler(connection->socket(), m_readableObserver);
+	m_rateLimiterCache.keep(connection->rateLimiter());
 
 	const GatewayEvent e(connection->gatewayID());
 	m_eventSource.fireEvent(e, &GatewayListener::onDisconnected);
