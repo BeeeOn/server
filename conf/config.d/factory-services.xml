@@ -109,9 +109,9 @@
 			<set name="rules">
 				<pair key="0..1 s"  text="max" />
 				<pair key="1 s..1 h+"  text="0..30 m+" />
-				<pair key="1 h+..1 d+"  text="0..5 h+" />
-				<pair key="1 d+..7 d+"  text="5 m..1 d+" />
-				<pair key="7 d+..31 d+" text="1 h..7 d+" />
+				<pair key="1 h+..25 h+"  text="0..5 h+" />
+				<pair key="25 h+..8 d+"  text="5 m..1 d+" />
+				<pair key="8 d+..32 d+" text="1 h..7 d+" />
 				<pair key="*"          text="1 d" />
 			</set>
 		</instance>
