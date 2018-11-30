@@ -27,6 +27,7 @@ using namespace BeeeOn;
 
 GatewayCommunicator::GatewayCommunicator():
 	m_maxMessageSize(4096),
+	m_readableObserver(*this, &GatewayCommunicator::onReadable),
 	m_workerRunnable(*this, &GatewayCommunicator::runWorker)
 {
 }
@@ -59,7 +60,8 @@ void GatewayCommunicator::addGateway(const GatewayID &gatewayID, WebSocket &webS
 		}
 
 		rateLimiter = it->second->rateLimiter();
-		it->second->removeFromReactor();
+		m_reactor.removeEventHandler(it->second->socket(), m_readableObserver);
+		m_socketsMap.erase(it->second->socket());
 		m_connectionMap.erase(it);
 	}
 
@@ -73,17 +75,14 @@ void GatewayCommunicator::addGateway(const GatewayID &gatewayID, WebSocket &webS
 		new GatewayConnection(
 			gatewayID,
 			webSocket,
-			m_reactor,
 			rateLimiter,
-			[this](GatewayConnection::Ptr gatewayConnection)
-			{
-				enqueueReadable(gatewayConnection);
-			},
 			m_maxMessageSize
 	));
 
 	auto emplaced = m_connectionMap.emplace(gatewayID, connection);
-	emplaced.first->second->addToReactor();
+	poco_assert(emplaced.second);
+	m_socketsMap.emplace(webSocket, connection);
+	m_reactor.addEventHandler(webSocket, m_readableObserver);
 
 	GatewayEvent e(gatewayID);
 	e.setSocketAddress(webSocket.peerAddress());
@@ -106,6 +105,7 @@ void GatewayCommunicator::removeGateway(const GatewayID &id)
 	}
 
 	closeConnection(it->second);
+	m_socketsMap.erase(it->second->socket());
 	m_connectionMap.erase(it);
 }
 
@@ -125,6 +125,7 @@ void GatewayCommunicator::removeIfInactive(const GatewayID &id,
 		return;
 
 	closeConnection(it->second);
+	m_socketsMap.erase(it->second->socket());
 	m_connectionMap.erase(it);
 }
 
@@ -183,11 +184,12 @@ void GatewayCommunicator::stop()
 		closeConnection(it.second);
 
 	m_connectionMap.clear();
+	m_socketsMap.clear();
 }
 
 void GatewayCommunicator::closeConnection(GatewayConnection::Ptr connection)
 {
-	connection->removeFromReactor();
+	m_reactor.removeEventHandler(connection->socket(), m_readableObserver);
 
 	const GatewayEvent e(connection->gatewayID());
 	m_eventSource.fireEvent(e, &GatewayListener::onDisconnected);
@@ -195,7 +197,7 @@ void GatewayCommunicator::closeConnection(GatewayConnection::Ptr connection)
 
 void GatewayCommunicator::enqueueReadable(GatewayConnection::Ptr connection)
 {
-	connection->removeFromReactor();
+	m_reactor.removeEventHandler(connection->socket(), m_readableObserver);
 
 	m_connectionReadableQueue.enqueue(connection);
 
@@ -227,6 +229,39 @@ void GatewayCommunicator::runWorker()
 	}
 }
 
+void GatewayCommunicator::onReadable(const AutoPtr<ReadableNotification> &notification)
+{
+	FastMutex::ScopedLock guard(m_connectionMapMutex);
+
+	WebSocket socket(notification->socket());
+
+	auto it = m_socketsMap.find(socket);
+	if (it == m_socketsMap.end()) {
+		if (logger().debug()) {
+			logger().debug(
+				"handling incoming data for just disconnected gateway at "
+				+ socket.peerAddress().toString());
+		}
+
+		m_reactor.removeEventHandler(socket, m_readableObserver);
+		return;
+	}
+
+	enqueueReadable(it->second);
+	m_reactor.removeEventHandler(socket, m_readableObserver);
+	m_connectionReadableQueue.enqueue(it->second);
+
+	try {
+		pool().start(m_workerRunnable);
+	}
+	catch (const NoThreadAvailableException &e) {
+		logger().warning(e.displayText(), __FILE__, __LINE__);
+		// All configured threads are busy and thus there is no need to start
+		// threads anymore. The connection is already queued and thus some
+		// thread would serve it soon.
+	}
+}
+
 void GatewayCommunicator::handleConnectionReadable(GatewayConnection::Ptr connection)
 {
 	static Occasionally occasionally;
@@ -250,7 +285,7 @@ void GatewayCommunicator::handleConnectionReadable(GatewayConnection::Ptr connec
 
 	try {
 		GWMessage::Ptr message = connection->receiveMessage();
-		connection->addToReactor();
+		m_reactor.addEventHandler(connection->socket(), m_readableObserver);
 
 		if (message.isNull())
 			return;

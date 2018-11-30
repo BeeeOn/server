@@ -19,15 +19,10 @@ using namespace BeeeOn;
 WebSocketConnection::WebSocketConnection(
 		const string &id,
 		const WebSocket &webSocket,
-		SocketReactor &reactor,
-		const EnqueueReadable &enqueueReadable,
 		const size_t maxFrameSize):
 	m_id(id),
 	m_webSocket(webSocket),
-	m_reactor(reactor),
-	m_enqueueReadable(enqueueReadable),
-	m_maxFrameSize(maxFrameSize),
-	m_readableObserver(*this, &WebSocketConnection::onReadable)
+	m_maxFrameSize(maxFrameSize)
 {
 }
 
@@ -55,14 +50,9 @@ string WebSocketConnection::id() const
 	return m_id;
 }
 
-void WebSocketConnection::addToReactor() const
+WebSocket WebSocketConnection::socket() const
 {
-	m_reactor.addEventHandler(m_webSocket, m_readableObserver);
-}
-
-void WebSocketConnection::removeFromReactor() const
-{
-	m_reactor.removeEventHandler(m_webSocket, m_readableObserver);
+	return m_webSocket;
 }
 
 Nullable<string> WebSocketConnection::receiveFrame()
@@ -197,9 +187,4 @@ void WebSocketConnection::checkOverflow(const size_t size, size_t length) const
 			+ " is greater than buffer size "
 			+ to_string(size));
 	}
-}
-
-void WebSocketConnection::onReadable(const AutoPtr<ReadableNotification> &notification)
-{
-	m_enqueueReadable(AutoPtr<WebSocketConnection>(this, true));
 }
