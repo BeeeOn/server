@@ -1,4 +1,3 @@
-#include <Poco/Clock.h>
 #include <Poco/Logger.h>
 #include <Poco/Net/WebSocket.h>
 #include <Poco/Net/NetException.h>
@@ -13,6 +12,8 @@ BEEEON_OBJECT_PROPERTY("rateLimiterFactory", &GatewayCommunicator::setRateLimite
 BEEEON_OBJECT_PROPERTY("maxMessageSize", &GatewayCommunicator::setMaxMessageSize)
 BEEEON_OBJECT_PROPERTY("receiveTimeout", &GatewayCommunicator::setReceiveTimeout)
 BEEEON_OBJECT_PROPERTY("sendTimeout", &GatewayCommunicator::setSendTimeout)
+BEEEON_OBJECT_PROPERTY("maxBulkDuration", &GatewayCommunicator::setMaxBulkDuration)
+BEEEON_OBJECT_PROPERTY("maxBulkSize", &GatewayCommunicator::setMaxBulkSize)
 BEEEON_OBJECT_PROPERTY("minThreads", &GatewayCommunicator::setMinThreads)
 BEEEON_OBJECT_PROPERTY("maxThreads", &GatewayCommunicator::setMaxThreads)
 BEEEON_OBJECT_PROPERTY("threadIdleTime", &GatewayCommunicator::setThreadIdleTime)
@@ -27,6 +28,8 @@ using namespace BeeeOn;
 
 GatewayCommunicator::GatewayCommunicator():
 	m_maxMessageSize(4096),
+	m_maxBulkDuration(1 * Timespan::SECONDS),
+	m_maxBulkSize(16),
 	m_readableObserver(*this, &GatewayCommunicator::onReadable),
 	m_workerRunnable(*this, &GatewayCommunicator::runWorker)
 {
@@ -263,21 +266,51 @@ void GatewayCommunicator::handleConnectionReadable(GatewayConnection::Ptr connec
 	});
 
 	Thread::current()->setName("gws-worker-" + connection->gatewayID().toString());
-	handleMessage(connection);
+
+	const Clock started;
+	size_t i = 0;
+
+	try {
+		while (handleNext(started, i)) {
+			handleMessage(connection);
+			i += 1;
+		}
+
+		m_reactor.addEventHandler(connection->socket(), m_readableObserver);
+	}
+	catch (const TimeoutException &) {
+		m_reactor.addEventHandler(connection->socket(), m_readableObserver);
+	}
+	BEEEON_CATCH_CHAIN_ACTION(logger(),
+		removeGateway(connection->gatewayID()))
+
+	if (logger().information() && i > 0) {
+		logger().notice("bulk (" + to_string(i)
+			+ ") duration: "
+			+ to_string(started.elapsed()) + "us",
+			__FILE__, __LINE__);
+	}
+}
+
+bool GatewayCommunicator::handleNext(const Clock &started, size_t i) const
+{
+	if (m_maxBulkDuration > 0 && m_maxBulkDuration <= started.elapsed())
+		return false;
+
+	if (m_maxBulkSize > 0 && m_maxBulkSize <= i)
+		return false;
+
+	return true;
 }
 
 void GatewayCommunicator::handleMessage(GatewayConnection::Ptr connection)
 {
 	const Clock started;
 
-	try {
-		GWMessage::Ptr message = connection->receiveMessage();
-		m_reactor.addEventHandler(connection->socket(), m_readableObserver);
+	GWMessage::Ptr message = connection->receiveMessage();
 
-		if (!message.isNull())
-			m_messageHandler->handle(message, connection->gatewayID());
-	}
-	BEEEON_CATCH_CHAIN_ACTION(logger(), removeGateway(connection->gatewayID()));
+	if (!message.isNull())
+		m_messageHandler->handle(message, connection->gatewayID());
 
 	if (logger().information()) {
 		logger().information("duration: "
@@ -318,6 +351,22 @@ void GatewayCommunicator::setSendTimeout(const Poco::Timespan &timeout)
 		throw InvalidArgumentException("send timeout must be non negative");
 
 	m_sendTimeout = timeout;
+}
+
+void GatewayCommunicator::setMaxBulkDuration(const Timespan &duration)
+{
+	if (duration < 0)
+		throw InvalidArgumentException("maxBulkDuration must not be negative");
+
+	m_maxBulkDuration = duration;
+}
+
+void GatewayCommunicator::setMaxBulkSize(int size)
+{
+	if (size < 0)
+		throw InvalidArgumentException("maxBulkSize must not be negative");
+
+	m_maxBulkSize = size;
 }
 
 GatewayCommunicator::ConnectionReadableQueue::~ConnectionReadableQueue()
