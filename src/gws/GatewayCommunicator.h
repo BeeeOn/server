@@ -163,17 +163,6 @@ private:
 	GatewayConnection::Ptr findConnection(const GatewayID &gatewayID);
 
 	/**
-	 * @brief Enqueue given GatewayConnection to the readable queue
-	 * and start worker in the thread pool.
-	 *
-	 * The GatewayConnection must be unregistered from the reactor.
-	 *
-	 * If there is no available thread in the thread pool, connection is
-	 * just queued and other running worker handles it.
-	 */
-	void enqueueReadable(GatewayConnection::Ptr connection);
-
-	/**
 	 * @brief Receives a GWMessage from the GatewayConnection and handle it
 	 * using GWMessageHandler.
 	 *
@@ -198,6 +187,13 @@ private:
 	 *
 	 * This method is intended just to determine there are data on the socket.
 	 * The data reading takes place in the thread pool of the GatewayCommunicator.
+	 * Enqueue the associated GatewayConnection to the readable queue and start
+	 * worker in the thread pool.
+	 *
+	 * The GatewayConnection would be unregistered from the reactor until served.
+	 *
+	 * If there is no available thread in the thread pool, connection is
+	 * just queued and other running worker handles it.
 	 */
 	void onReadable(const Poco::AutoPtr<Poco::Net::ReadableNotification> &notification);
 

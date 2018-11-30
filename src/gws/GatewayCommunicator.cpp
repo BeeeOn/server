@@ -195,23 +195,6 @@ void GatewayCommunicator::closeConnection(GatewayConnection::Ptr connection)
 	m_eventSource.fireEvent(e, &GatewayListener::onDisconnected);
 }
 
-void GatewayCommunicator::enqueueReadable(GatewayConnection::Ptr connection)
-{
-	m_reactor.removeEventHandler(connection->socket(), m_readableObserver);
-
-	m_connectionReadableQueue.enqueue(connection);
-
-	try {
-		pool().start(m_workerRunnable);
-	}
-	catch (const NoThreadAvailableException &e) {
-		logger().warning(e.displayText(), __FILE__, __LINE__);
-		// All configured threads are busy and thus there is no need to start
-		// threads anymore. The connection is already queued and thus some
-		// thread would serve it soon.
-	}
-}
-
 void GatewayCommunicator::runWorker()
 {
 	StopControl::Run run(m_stopControl);
@@ -247,7 +230,6 @@ void GatewayCommunicator::onReadable(const AutoPtr<ReadableNotification> &notifi
 		return;
 	}
 
-	enqueueReadable(it->second);
 	m_reactor.removeEventHandler(socket, m_readableObserver);
 	m_connectionReadableQueue.enqueue(it->second);
 
