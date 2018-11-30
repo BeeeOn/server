@@ -6,9 +6,11 @@
 #include <Poco/Mutex.h>
 #include <Poco/NotificationQueue.h>
 #include <Poco/Nullable.h>
+#include <Poco/NObserver.h>
 #include <Poco/RunnableAdapter.h>
 #include <Poco/SharedPtr.h>
 #include <Poco/Net/WebSocket.h>
+#include <Poco/Net/SocketNotification.h>
 #include <Poco/Net/SocketReactor.h>
 
 #include "gwmessage/GWMessage.h"
@@ -161,17 +163,6 @@ private:
 	GatewayConnection::Ptr findConnection(const GatewayID &gatewayID);
 
 	/**
-	 * @brief Enqueue given GatewayConnection to the readable queue
-	 * and start worker in the thread pool.
-	 *
-	 * The GatewayConnection must be unregistered from the reactor.
-	 *
-	 * If there is no available thread in the thread pool, connection is
-	 * just queued and other running worker handles it.
-	 */
-	void enqueueReadable(GatewayConnection::Ptr connection);
-
-	/**
 	 * @brief Receives a GWMessage from the GatewayConnection and handle it
 	 * using GWMessageHandler.
 	 *
@@ -192,6 +183,21 @@ private:
 	void runWorker();
 
 	/**
+	 * @brief The Callback method invoked from the reactor thread.
+	 *
+	 * This method is intended just to determine there are data on the socket.
+	 * The data reading takes place in the thread pool of the GatewayCommunicator.
+	 * Enqueue the associated GatewayConnection to the readable queue and start
+	 * worker in the thread pool.
+	 *
+	 * The GatewayConnection would be unregistered from the reactor until served.
+	 *
+	 * If there is no available thread in the thread pool, connection is
+	 * just queued and other running worker handles it.
+	 */
+	void onReadable(const Poco::AutoPtr<Poco::Net::ReadableNotification> &notification);
+
+	/**
 	 * @brief Remove the connection from reactor and fire event
 	 * on-disconnected for the associated gateway.
 	 */
@@ -208,10 +214,12 @@ private:
 	GatewayRateLimiterFactory::Ptr m_rateLimiterFactory;
 
 	GatewayConnectionMap m_connectionMap;
+	std::map<Poco::Net::WebSocket, GatewayConnection::Ptr> m_socketsMap;
 	mutable Poco::FastMutex m_connectionMapMutex;
 	ConnectionReadableQueue m_connectionReadableQueue;
 
 	Poco::Net::SocketReactor m_reactor;
+	Poco::NObserver<GatewayCommunicator, Poco::Net::ReadableNotification> m_readableObserver;
 	Poco::Thread m_reactorThread;
 	StopControl m_stopControl;
 	Poco::RunnableAdapter<GatewayCommunicator> m_workerRunnable;

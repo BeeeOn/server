@@ -12,17 +12,11 @@ using namespace BeeeOn;
 GatewayConnection::GatewayConnection(
 		const GatewayID &gatewayID,
 		const WebSocket &webSocket,
-		SocketReactor &reactor,
 		GatewayRateLimiter::Ptr rateLimiter,
-		const EnqueueReadable &enqueueReadable,
 		size_t maxMessageSize):
 	WebSocketConnection(
 		gatewayID.toString(),
 		webSocket,
-		reactor,
-		[enqueueReadable](WebSocketConnection::Ptr c) {
-			enqueueReadable(c.cast<GatewayConnection>());
-		},
 		maxMessageSize),
 	m_gatewayID(gatewayID),
 	m_rateLimiter(rateLimiter)

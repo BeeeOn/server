@@ -5,11 +5,8 @@
 #include <Poco/AutoPtr.h>
 #include <Poco/Buffer.h>
 #include <Poco/Mutex.h>
-#include <Poco/NObserver.h>
 #include <Poco/RefCountedObject.h>
 
-#include <Poco/Net/SocketNotification.h>
-#include <Poco/Net/SocketReactor.h>
 #include <Poco/Net/WebSocket.h>
 
 #include "io/IOStats.h"
@@ -22,19 +19,15 @@ class WebSocketConnection :
 	protected Loggable {
 public:
 	typedef Poco::AutoPtr<WebSocketConnection> Ptr;
-	typedef std::function<void(WebSocketConnection::Ptr)> EnqueueReadable;
 
 	WebSocketConnection(
 		const std::string &id,
 		const Poco::Net::WebSocket &webSocket,
-		Poco::Net::SocketReactor &reactor,
-		const EnqueueReadable &enqueueReadable,
 		const size_t maxFrameSize);
 
 	virtual ~WebSocketConnection();
 
-	void addToReactor() const;
-	void removeFromReactor() const;
+	Poco::Net::WebSocket socket() const;
 
 protected:
 	/**
@@ -87,14 +80,6 @@ protected:
 		checkOverflow(buffer.size(), length);
 	}
 
-	/**
-	 * @brief The Callback method invoked from the reactor thread.
-	 *
-	 * This method is intended just to determine there are data on the socket.
-	 * The data reading takes place in the thread pool of the GatewayCommunicator.
-	 */
-	void onReadable(const Poco::AutoPtr<Poco::Net::ReadableNotification> &notification);
-
 private:
 	/**
 	 * @brief Implementation of buffer overflow test.
@@ -108,11 +93,8 @@ protected:
 private:
 	std::string m_id;
 	Poco::Net::WebSocket m_webSocket;
-	Poco::Net::SocketReactor &m_reactor;
-	EnqueueReadable m_enqueueReadable;
 	size_t m_maxFrameSize;
 	Poco::FastMutex m_sendLock;
-	Poco::NObserver<WebSocketConnection, Poco::Net::ReadableNotification> m_readableObserver;
 };
 
 }

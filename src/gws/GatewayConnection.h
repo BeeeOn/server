@@ -48,9 +48,7 @@ public:
 	GatewayConnection(
 		const GatewayID &gatewayID,
 		const Poco::Net::WebSocket &webSocket,
-		Poco::Net::SocketReactor &reactor,
 		GatewayRateLimiter::Ptr rateLimiter,
-		const EnqueueReadable &enqueueReadable,
 		size_t maxMessageSize
 	);
 
