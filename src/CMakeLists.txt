@@ -34,6 +34,7 @@ set(LIBS
 )
 
 find_package(Lua "5.1" EXACT REQUIRED)
+message(STATUS "to solve issues with Lua version, pass your -DLUA_LIBRARY=/usr/lib64/liblua5.1.so")
 
 add_definitions(-std=c++11)
 
