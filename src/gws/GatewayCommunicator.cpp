@@ -263,6 +263,11 @@ void GatewayCommunicator::handleConnectionReadable(GatewayConnection::Ptr connec
 	});
 
 	Thread::current()->setName("gws-worker-" + connection->gatewayID().toString());
+	handleMessage(connection);
+}
+
+void GatewayCommunicator::handleMessage(GatewayConnection::Ptr connection)
+{
 	const Clock started;
 
 	try {

@@ -172,6 +172,8 @@ private:
 	 */
 	void handleConnectionReadable(GatewayConnection::Ptr connection);
 
+	void handleMessage(GatewayConnection::Ptr connection);
+
 	/**
 	 * @brief The worker dequeues readable connection and handle it.
 	 *
