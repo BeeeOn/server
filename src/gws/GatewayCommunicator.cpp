@@ -269,10 +269,8 @@ void GatewayCommunicator::handleConnectionReadable(GatewayConnection::Ptr connec
 		GWMessage::Ptr message = connection->receiveMessage();
 		m_reactor.addEventHandler(connection->socket(), m_readableObserver);
 
-		if (message.isNull())
-			return;
-
-		m_messageHandler->handle(message, connection->gatewayID());
+		if (!message.isNull())
+			m_messageHandler->handle(message, connection->gatewayID());
 	}
 	BEEEON_CATCH_CHAIN_ACTION(logger(), removeGateway(connection->gatewayID()));
 
