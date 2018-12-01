@@ -122,7 +122,7 @@ void GWRequestHandler::processPayload(
 			__FILE__, __LINE__);
 	}
 
-	ws.sendFrame(reply.c_str(), reply.length());
+	ws.sendFrame(reply.data(), reply.length());
 }
 
 GWRequestHandlerFactory::GWRequestHandlerFactory():
