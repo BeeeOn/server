@@ -81,10 +81,9 @@ void GWRequestHandler::processPayload(
 	}
 
 	Gateway gateway(registerMsg->gatewayID());
+	m_peerVerifier->verifyPeer(gateway);
 
 	ThreadNamer namer("gws-register-" + gateway);
-
-	m_peerVerifier->verifyPeer(gateway);
 
 	GatewayStatus status;
 	status.setVersion(Sanitize::common(registerMsg->version()));
