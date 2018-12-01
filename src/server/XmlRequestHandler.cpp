@@ -10,6 +10,7 @@
 #include "di/Injectable.h"
 #include "server/XmlRequestHandler.h"
 #include "server/FailingTCPServerConnection.h"
+#include "util/ThreadNamer.h"
 
 using namespace std;
 using namespace Poco;
@@ -42,9 +43,7 @@ const Clock &XmlRequestHandler::started() const
 
 void XmlRequestHandler::run()
 {
-	Thread *current = Thread::current();
-	if (current != NULL)
-		current->setName("xmlui-" + socket().peerAddress().toString());
+	ThreadNamer namer("xmlui-" + socket().peerAddress().toString());
 
 	try {
 		m_output.startDocument();
@@ -60,9 +59,6 @@ void XmlRequestHandler::run()
 				+ to_string(m_started.elapsed()) + "us",
 				__FILE__, __LINE__);
 	}
-
-	if (current != NULL)
-		current->setName("");
 }
 
 XmlRequestHandlerFactory::XmlRequestHandlerFactory():

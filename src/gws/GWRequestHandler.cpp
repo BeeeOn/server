@@ -11,6 +11,7 @@
 #include "gwmessage/GWGatewayAccepted.h"
 #include "gws/GWRequestHandler.h"
 #include "util/Sanitize.h"
+#include "util/ThreadNamer.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, GWRequestHandlerFactory)
 BEEEON_OBJECT_CASTABLE(WebSocketRequestHandlerFactory)
@@ -39,7 +40,7 @@ GWRequestHandler::GWRequestHandler(
 
 void GWRequestHandler::handle(WebSocket &ws)
 {
-	Thread::current()->setName("ws");
+	ThreadNamer namer("ws");
 
 	Poco::Buffer<char> buffer(m_maxMessageSize);
 	int flags;
@@ -81,7 +82,7 @@ void GWRequestHandler::processPayload(
 
 	Gateway gateway(registerMsg->gatewayID());
 
-	Thread::current()->setName("gws-register-" + gateway);
+	ThreadNamer namer("gws-register-" + gateway);
 
 	m_peerVerifier->verifyPeer(gateway);
 

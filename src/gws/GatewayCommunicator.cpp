@@ -4,6 +4,7 @@
 
 #include "di/Injectable.h"
 #include "gws/GatewayCommunicator.h"
+#include "util/ThreadNamer.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, GatewayCommunicator)
 BEEEON_OBJECT_CASTABLE(StoppableLoop)
@@ -276,7 +277,7 @@ void GatewayCommunicator::handleConnectionReadable(GatewayConnection::Ptr connec
 			__FILE__, __LINE__);
 	});
 
-	Thread::current()->setName("gws-worker-" + connection->gatewayID().toString());
+	ThreadNamer namer("gws-worker-" + connection->gatewayID().toString());
 
 	const Clock started;
 	size_t i = 0;
