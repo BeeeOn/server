@@ -220,6 +220,7 @@ private:
 
 	GWMessageHandler::Ptr m_messageHandler;
 	GatewayRateLimiterFactory::Ptr m_rateLimiterFactory;
+	GatewayRateLimiterCache m_rateLimiterCache;
 
 	GatewayConnectionMap m_connectionMap;
 	std::map<Poco::Net::WebSocket, GatewayConnection::Ptr> m_socketsMap;
