@@ -15,6 +15,7 @@
 #include "rest/RestLinker.h"
 #include "server/SessionVerifier.h"
 #include "util/Sanitize.h"
+#include "util/ThreadNamer.h"
 
 using namespace std;
 using namespace Poco;
@@ -136,9 +137,7 @@ void PocoRestRequestHandler::prepareMappedAction(
 
 void PocoRestRequestHandler::run()
 {
-	Thread *current = Thread::current();
-	if (current != NULL)
-		current->setName("restui-" + request().clientAddress().toString());
+	ThreadNamer namer("restui-" + request().clientAddress().toString());
 
 	doHandleRequest();
 
@@ -147,9 +146,6 @@ void PocoRestRequestHandler::run()
 				+ to_string(m_started.elapsed()) + "us",
 				__FILE__, __LINE__);
 	}
-
-	if (current != NULL)
-		current->setName("");
 }
 
 void PocoRestRequestHandler::setupLanguage(RestFlow &flow)
