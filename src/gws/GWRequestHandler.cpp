@@ -108,6 +108,20 @@ void GWRequestHandler::processPayload(
 	m_gatewayCommunicator->addGateway(gateway.id(), ws);
 
 	const auto &reply = GWGatewayAccepted().toString();
+
+	if (logger().trace()) {
+		logger().dump(
+			"initial reply of size " + to_string(reply.size()),
+			reply.data(),
+			reply.size(),
+			Message::PRIO_TRACE);
+	}
+	else if (logger().debug()) {
+		logger().debug(
+			"initial reply of size " + to_string(reply.size()),
+			__FILE__, __LINE__);
+	}
+
 	ws.sendFrame(reply.c_str(), reply.length());
 }
 
