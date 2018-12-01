@@ -3,6 +3,7 @@
 #include <deque>
 #include <functional>
 
+#include <Poco/Clock.h>
 #include <Poco/Mutex.h>
 #include <Poco/NotificationQueue.h>
 #include <Poco/Nullable.h>
@@ -146,6 +147,8 @@ public:
 	void setMaxMessageSize(int size);
 	void setReceiveTimeout(const Poco::Timespan &timeout);
 	void setSendTimeout(const Poco::Timespan &timeout);
+	void setMaxBulkDuration(const Poco::Timespan &duration);
+	void setMaxBulkSize(int size);
 
 	void registerListener(GatewayListener::Ptr listener);
 	void setEventsExecutor(AsyncExecutor::Ptr executor);
@@ -171,6 +174,9 @@ private:
 	 * the connection from the GatewayCommunicator.
 	 */
 	void handleConnectionReadable(GatewayConnection::Ptr connection);
+
+	bool handleNext(const Poco::Clock &started, size_t i) const;
+	void handleMessage(GatewayConnection::Ptr connection);
 
 	/**
 	 * @brief The worker dequeues readable connection and handle it.
@@ -209,6 +215,8 @@ private:
 	size_t m_maxMessageSize;
 	Poco::Timespan m_receiveTimeout;
 	Poco::Timespan m_sendTimeout;
+	Poco::Timespan m_maxBulkDuration;
+	size_t m_maxBulkSize;
 
 	GWMessageHandler::Ptr m_messageHandler;
 	GatewayRateLimiterFactory::Ptr m_rateLimiterFactory;
