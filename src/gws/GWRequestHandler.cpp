@@ -40,7 +40,7 @@ GWRequestHandler::GWRequestHandler(
 
 void GWRequestHandler::handle(WebSocket &ws)
 {
-	ThreadNamer namer("ws");
+	ThreadNamer namer("ws-" + ws.peerAddress().toString());
 
 	Poco::Buffer<char> buffer(m_maxMessageSize);
 	int flags;
