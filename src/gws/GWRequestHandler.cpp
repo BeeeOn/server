@@ -66,8 +66,18 @@ void GWRequestHandler::processPayload(
 		WebSocket &ws,
 		const string &data)
 {
-	if (logger().trace())
-		logger().trace(data);
+	if (logger().trace()) {
+		logger().dump(
+			"initial frame of size " + to_string(data.size()),
+			data.data(),
+			data.size(),
+			Message::PRIO_TRACE);
+	}
+	else if (logger().debug()) {
+		logger().debug(
+			"initial frame of size " + to_string(data.size()),
+			__FILE__, __LINE__);
+	}
 
 	GWMessage::Ptr msg = GWMessage::fromJSON(data);
 	GWGatewayRegister::Ptr registerMsg = msg.cast<GWGatewayRegister>();
