@@ -47,9 +47,9 @@ void GWRequestHandler::handle(WebSocket &ws)
 
 	int ret = ws.receiveFrame(buffer.begin(), buffer.size(), flags);
 	if (ret <= 0 || (flags & WebSocket::FRAME_OP_CLOSE)) {
-		if (logger().debug()) {
-			logger().debug(ws.peerAddress().toString()
-				+ " connection closed",
+		if (logger().warning()) {
+			logger().warning(ws.peerAddress().toString()
+				+ " connection immediately closed",
 				__FILE__, __LINE__);
 		}
 		return;
