@@ -47,9 +47,9 @@ void GWRequestHandler::handle(WebSocket &ws)
 
 	int ret = ws.receiveFrame(buffer.begin(), buffer.size(), flags);
 	if (ret <= 0 || (flags & WebSocket::FRAME_OP_CLOSE)) {
-		if (logger().debug()) {
-			logger().debug(ws.peerAddress().toString()
-				+ " connection closed",
+		if (logger().warning()) {
+			logger().warning(ws.peerAddress().toString()
+				+ " connection immediately closed",
 				__FILE__, __LINE__);
 		}
 		return;
@@ -66,8 +66,18 @@ void GWRequestHandler::processPayload(
 		WebSocket &ws,
 		const string &data)
 {
-	if (logger().trace())
-		logger().trace(data);
+	if (logger().trace()) {
+		logger().dump(
+			"initial frame of size " + to_string(data.size()),
+			data.data(),
+			data.size(),
+			Message::PRIO_TRACE);
+	}
+	else if (logger().debug()) {
+		logger().debug(
+			"initial frame of size " + to_string(data.size()),
+			__FILE__, __LINE__);
+	}
 
 	GWMessage::Ptr msg = GWMessage::fromJSON(data);
 	GWGatewayRegister::Ptr registerMsg = msg.cast<GWGatewayRegister>();
@@ -98,7 +108,21 @@ void GWRequestHandler::processPayload(
 	m_gatewayCommunicator->addGateway(gateway.id(), ws);
 
 	const auto &reply = GWGatewayAccepted().toString();
-	ws.sendFrame(reply.c_str(), reply.length());
+
+	if (logger().trace()) {
+		logger().dump(
+			"initial reply of size " + to_string(reply.size()),
+			reply.data(),
+			reply.size(),
+			Message::PRIO_TRACE);
+	}
+	else if (logger().debug()) {
+		logger().debug(
+			"initial reply of size " + to_string(reply.size()),
+			__FILE__, __LINE__);
+	}
+
+	ws.sendFrame(reply.data(), reply.length());
 }
 
 GWRequestHandlerFactory::GWRequestHandlerFactory():
