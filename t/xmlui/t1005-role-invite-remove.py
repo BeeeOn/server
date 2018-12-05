@@ -182,15 +182,16 @@ class TestRoleInviteRemove(unittest.TestCase):
 
 		self.check_john_can_access(config.tmp_gateway_id, "guest")
 
+		time.sleep(1) # wait to prevent db constraint violation
 		response = self.conn.request(RoleInvite(
 			config.tmp_gateway_id,
 			"unknown@example.org",
-			self.session,
+			self.session2, # as john
 			permission = "admin"
 		))
 
 		self.assertTrue(response.is_error())
-		self.assertEqual("998", response.error_code())
+		self.assertEqual("1001", response.error_code())
 
 if __name__ == '__main__':
 	import sys
