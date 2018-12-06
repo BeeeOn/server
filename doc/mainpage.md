@@ -70,19 +70,17 @@ $ make -C build
 During development and for testing, the BeeeOn Server can be started as:
 
 ```
-$ tools/server-testing-start.sh
+$ beeeon-server -c conf/testing-startup.ini
 ```
 
 This starts a private instance of the PostgreSQL server and then it starts the server
 that sets the database up.
 
 There are multiple startup configurations according to the purpose of testing or debugging.
-The server is started either with the REST-UI or with the XML-UI:
-
-```
-$ TARGET=xmlui tools/server-testing-start.sh
-$ TARGET=restui tools/server-testing-start.sh
-```
+Please note, that in this mode the frontend and GWS are disconnected to enable running
+of automatic frontend tests (during tests, there is no live gateway and thus the communication
+with GWS is emulated). This can be easily changed by giving `-Dgateway-rpc.impl=async` on
+command line or by editing `conf/testing-startup.ini`.
 
 The executable `beeeon-server` reads a startup configuration file and configuration
 files from conf/config.d. Then, the definition of the _main_ instance (of class
