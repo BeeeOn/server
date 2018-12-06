@@ -1,4 +1,5 @@
-Copyright (c) 2015, Brno University of Technology
+Copyright (c) 2015-2017, Brno University of Technology
+Copyright (c) 2017-2019, Brno University of Technology
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
