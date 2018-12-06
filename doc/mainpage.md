@@ -18,10 +18,10 @@ receives measured sensor data and allows to drive the controllable elements.
 
 Required prerequisites for development:
 
-* Poco library 1.7.7+ devel
+* Poco library 1.7.7+ devel (recommended Poco 1.9)
 * icu and libicu-devel
 * cppunit-devel
-* postgresql-server (9.5+)
+* postgresql-server (9.5+, recommended 10+)
 * python3
   * testing.postgresql
   * http.client
@@ -45,9 +45,9 @@ Optional prerequisites for development:
 
 Required prerequisites for deployment:
 
-* Poco library 1.7.7+
+* Poco library 1.7.7+ (recommended Poco 1.9)
 * icu and libicu
-* postgresql-server (9.5+)
+* postgresql-server (9.5+, recommended 10+)
 * postgresql
 * sqitch
 
