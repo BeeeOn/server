@@ -83,9 +83,9 @@ with GWS is emulated). This can be easily changed by giving `-Dgateway-rpc.impl=
 command line or by editing `conf/testing-startup.ini`.
 
 The executable `beeeon-server` reads a startup configuration file and configuration
-files from `conf/config.d`. Then, the definition of the _main_ instance (of class
+files from `conf/config.d`. Then, the definition of the _all_ instance (of class
 LoopRunner) is searched, created and executed. All main application threads start
-via this main instance.
+via this all instance.
 
 ## Integration tests
 
