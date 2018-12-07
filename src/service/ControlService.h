@@ -19,7 +19,8 @@ public:
 	virtual void fetchMany(Relation<std::list<Control>, Device> &data) = 0;
 	virtual void requestChange(Relation<Control, Device> &data,
 			double value,
-			const Poco::Timespan &timeout) = 0;
+			const Poco::Timespan &timeout,
+			bool force) = 0;
 };
 
 }

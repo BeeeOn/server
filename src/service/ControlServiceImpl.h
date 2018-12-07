@@ -34,12 +34,13 @@ public:
 
 	void requestChange(Relation<Control, Device> &data,
 			double value,
-			const Poco::Timespan &timeout) override
+			const Poco::Timespan &timeout,
+			bool force) override
 	{
 		ControlChangeHandler::Ptr handler =
 			BEEEON_TRANSACTION_RETURN(
 				ControlChangeHandler::Ptr,
-				doRequestChange(data, value, timeout));
+				doRequestChange(data, value, timeout, force));
 
 		if (handler.isNull())
 			return;
@@ -67,7 +68,8 @@ protected:
 	ControlChangeHandler::Ptr doRequestChange(
 			Relation<Control, Device> &data,
 			double value,
-			const Poco::Timespan &timeout);
+			const Poco::Timespan &timeout,
+			bool force);
 
 	void startRequest(
 			const UserPolicyContext &policyContext,

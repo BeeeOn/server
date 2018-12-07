@@ -135,10 +135,18 @@ void ControlRestHandler::requestChange(RestFlow &flow)
 		timeout = seconds * Timespan::SECONDS;
 	}
 
+	URI::QueryParameters queryParams = flow.uri().getQueryParameters();
+	bool force = false;
+
+	for (auto &item : queryParams) {
+		if (item.first == "force")
+			force = true;
+	}
+
 	Relation<Control, Device> data(control, device);
 	data.setUser(user);
 
-	m_controlService->requestChange(data, value, timeout);
+	m_controlService->requestChange(data, value, timeout, force);
 
 	PrintHandler result(flow.response().stream());
 	beginSuccess(result, 200);

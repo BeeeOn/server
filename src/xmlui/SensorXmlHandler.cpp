@@ -114,7 +114,7 @@ void SensorXmlHandler::handleSetState(const string &gateid,
 	User user(session()->userID());
 	input.setUser(user);
 
-	m_controlService.requestChange(input, value, m_setStateTimeout);
+	m_controlService.requestChange(input, value, m_setStateTimeout, false);
 	resultSuccess();
 }
 
