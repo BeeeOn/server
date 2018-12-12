@@ -18,10 +18,10 @@ receives measured sensor data and allows to drive the controllable elements.
 
 Required prerequisites for development:
 
-* Poco library 1.7.7+ devel
+* Poco library 1.7.7+ devel (recommended Poco 1.9)
 * icu and libicu-devel
 * cppunit-devel
-* postgresql-server (9.5+)
+* postgresql-server (9.5+, recommended 10+)
 * python3
   * testing.postgresql
   * http.client
@@ -45,9 +45,9 @@ Optional prerequisites for development:
 
 Required prerequisites for deployment:
 
-* Poco library 1.7.7+
+* Poco library 1.7.7+ (recommended Poco 1.9)
 * icu and libicu
-* postgresql-server (9.5+)
+* postgresql-server (9.5+, recommended 10+)
 * postgresql
 * sqitch
 
@@ -70,24 +70,22 @@ $ make -C build
 During development and for testing, the BeeeOn Server can be started as:
 
 ```
-$ tools/server-testing-start.sh
+$ beeeon-server -c conf/testing-startup.ini
 ```
 
 This starts a private instance of the PostgreSQL server and then it starts the server
 that sets the database up.
 
 There are multiple startup configurations according to the purpose of testing or debugging.
-The server is started either with the REST-UI or with the XML-UI:
-
-```
-$ TARGET=xmlui tools/server-testing-start.sh
-$ TARGET=restui tools/server-testing-start.sh
-```
+Please note, that in this mode the frontend and GWS are disconnected to enable running
+of automatic frontend tests (during tests, there is no live gateway and thus the communication
+with GWS is emulated). This can be easily changed by giving `-Dgateway-rpc.impl=async` on
+command line or by editing `conf/testing-startup.ini`.
 
 The executable `beeeon-server` reads a startup configuration file and configuration
-files from conf/config.d. Then, the definition of the _main_ instance (of class
+files from `conf/config.d`. Then, the definition of the _all_ instance (of class
 LoopRunner) is searched, created and executed. All main application threads start
-via this main instance.
+via this all instance.
 
 ## Integration tests
 

@@ -165,6 +165,34 @@ public:
 	void discover(RestFlow &flow);
 
 	/**
+	 * The discovery process usually takes quite a long time (at least
+	 * a minute, usually more, depending on the target technology).
+	 * It is possible to set the maximal duration to be used, however,
+	 * setting too low duration might lead to the situation that certain
+	 * devices cannot be properly scanned o nthe gateway.
+	 *
+	 * The discovery process has the following possible states:
+	 *
+	 * * idle - no discovery is in progress
+	 * * waiting - discovery request has been sent to gateway
+	 * * processing - discovery is in progress
+	 * * finished - discovery has finished successfully
+	 * * failed - discovery has failed or partially failed
+	 *
+	 * The discovery can fail only partially (this is not possible to
+	 * distinguish at the moment from the API). Partial fail usually occurs
+	 * in the following situations:
+	 *
+	 * * given duration is too short for one of the supported technologies
+	 * * an appropriate dongle is missing for a certain technology (this
+	 *   can be considered as a bug on the BeeeOn Gateway)
+	 * * discovery of one or more technolgies really failes because of
+	 *   some resources issues, broken hardware, etc.
+	 *
+	 * The ultimate discovery failed means that for all supported technolgies
+	 * it was not possible to properly perform the discovery process. This
+	 * occures rarely.
+	 *
 	 * - usual responses: 200, 404
 	 * - example output - idle (data):
 	 * <pre>
@@ -186,7 +214,6 @@ public:
 	 *   }
 	 * }
 	 * </pre>
-	 * - other possible states: processing, finished, failed *
 	 */
 	void discoverStatus(RestFlow &flow);
 
