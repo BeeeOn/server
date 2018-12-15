@@ -79,12 +79,11 @@ void GWMessageHandlerImpl::handleResponse(GWResponse::Ptr response,
 	m_responseExpectedQueue->notifyDelivered(gatewayID, responseID);
 	m_rpcForwarder->forwardResponse(gatewayID, response);
 
-	GWResponseWithAck::Ptr responseWithAck(response.cast<GWResponseWithAck>());
-	if (responseWithAck.isNull())
+	if (!response->ackExpected())
 		return;
 
 	try {
-		m_gatewayCommunicator->sendMessage(gatewayID, responseWithAck->ack());
+		m_gatewayCommunicator->sendMessage(gatewayID, response->ack());
 	}
 	catch (const NotFoundException &e) {
 		logger().log(e, __FILE__, __LINE__);

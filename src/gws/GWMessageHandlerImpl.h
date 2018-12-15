@@ -6,7 +6,6 @@
 #include "gwmessage/GWNewDeviceGroupRequest.h"
 #include "gwmessage/GWSensorDataExport.h"
 #include "gwmessage/GWResponse.h"
-#include "gwmessage/GWResponseWithAck.h"
 #include "gws/DeviceListener.h"
 #include "gws/GatewayCommunicator.h"
 #include "gws/GWMessageHandler.h"
