@@ -43,6 +43,7 @@ void AsyncGatewayRPC::pairDevice(GatewayRPCHandler::Ptr handler,
 	GWDeviceAcceptRequest::Ptr request = new GWDeviceAcceptRequest;
 	request->setID(callID);
 	request->setDeviceID(device.id());
+	request->setRefresh(device.refresh());
 
 	sendAndExpectResult(gateway.id(), callID, handler, request, m_defaultTimeout);
 }
