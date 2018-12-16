@@ -30,36 +30,36 @@ public:
 	 * Send listen command.
 	 */
 	virtual void sendListen(
-			const GatewayRPCHandler::Ptr handler,
-			const Gateway &gateway,
-			const Poco::Timespan &duration) = 0;
+		const GatewayRPCHandler::Ptr handler,
+		const Gateway &gateway,
+		const Poco::Timespan &duration) = 0;
 
 	/**
 	 * Send pair device command to the selected gateway.
 	 */
 	virtual void pairDevice(
-			const GatewayRPCHandler::Ptr handler,
-			const Gateway &gateway,
-			const Device &device) = 0;
+		const GatewayRPCHandler::Ptr handler,
+		const Gateway &gateway,
+		const Device &device) = 0;
 
 	/**
 	 * Send unpair device command to the selected gateway.
 	 */
 	virtual void unpairDevice(
-			const GatewayRPCHandler::Ptr handler,
-			const Gateway &gateway,
-			const Device &device) = 0;
+		const GatewayRPCHandler::Ptr handler,
+		const Gateway &gateway,
+		const Device &device) = 0;
 
 	/**
 	 * Send update command for the given module.
 	 */
 	virtual void updateActor(
-			const GatewayRPCHandler::Ptr handler,
-			const Gateway &gateway,
-			const Device &device,
-			const ModuleInfo &module,
-			double value,
-			const Poco::Timespan &timeout) = 0;
+		const GatewayRPCHandler::Ptr handler,
+		const Gateway &gateway,
+		const Device &device,
+		const ModuleInfo &module,
+		double value,
+		const Poco::Timespan &timeout) = 0;
 
 protected:
 	static void doHandle(
