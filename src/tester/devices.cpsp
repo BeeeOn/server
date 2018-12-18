@@ -164,6 +164,7 @@ function devices_control_current(gwid, devid, modid, element) {
 
 		var input = $("<input type='number' />");
 		var request = $("<button>Change</button>");
+		var force = $("<input type='checkbox' name='force' title='Force' />");
 		var state = $("<span></span>");
 		var timeout = $("<input type='number' value='5' />");
 
@@ -171,9 +172,13 @@ function devices_control_current(gwid, devid, modid, element) {
 
 		request.click(function () {
 			var stateLabel = state;
+			var forceBox = force;
 
-			tester.post(devices_uri(gwid, devid) + "/controls/" + modid + "/current",
-					"#devices", {
+			var uri = devices_uri(gwid, devid) + "/controls/" + modid + "/current";
+			if (forceBox[0].checked)
+				uri += "?force";
+
+			tester.post(uri, "#devices", {
 				value: input.val(),
 				timeout: timeout.val()
 			}, function (data) {
@@ -184,6 +189,7 @@ function devices_control_current(gwid, devid, modid, element) {
 		var block = $("<span class='module-change-request'></span>");
 		block.append(input);
 		block.append(request);
+		block.append(force);
 		block.append(state);
 		block.append("<br /><span>Timeout: </span>");
 		block.append(timeout);
