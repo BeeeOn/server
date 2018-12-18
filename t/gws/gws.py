@@ -1,7 +1,7 @@
 import websocket
 import json
 import zmq
-import collections
+import queue
 import threading
 
 def assureNotClosed(self, ws, timeout = 1):
@@ -33,9 +33,8 @@ class ZMQConnection:
 	def __init__(self, endpoint):
 		self._endpoint = endpoint
 		self._ctx = zmq.Context()
-		self._data = collections.deque()
+		self._data = queue.Queue()
 		self._lock = threading.Lock()
-		self._active = threading.Event()
 		self._finish = threading.Event()
 		self._stop = False
 
@@ -66,30 +65,13 @@ class ZMQConnection:
 		self._finish.wait(timeout)
 
 	def push_data(self, data):
-		with self._lock:
-			self._data.append(data)
-
-		self._active.set()
-
-	def _pop_data(self):
-		with self._lock:
-			return self._data.popleft()
+		self._data.put(data)
 
 	def pop_data(self, timeout = 20):
-		if timeout == 0:
-			return self._pop_data()
-		else:
-			self.wait_for_data(timeout)
-			return self._pop_data()
+		return self._data.get(timeout = timeout)
 
 	def has_data(self):
-		with self._lock:
-			return len(self._data) > 0
-
-	def wait_for_data(self, timeout = 20):
-		self._active.wait(timeout)
-		self._active.clear()
-		return self.has_data()
+		return self._data.empty()
 
 	def accept(self, f):
 		self.f = f
