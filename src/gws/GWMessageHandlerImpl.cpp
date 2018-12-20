@@ -269,6 +269,7 @@ GWResponse::Ptr GWMessageHandlerImpl::handleDeviceList(
 				continue;
 
 			response->setModulesValues(device.id(), values);
+			response->setRefreshFor(device.id(), device.refresh());
 		}
 
 		response->setStatus(GWResponse::Status::SUCCESS);
