@@ -139,10 +139,12 @@ public:
 	 * module. Only one request can be active at a time. If there is an already
 	 * pending request, it is returned.
 	 *
-	 * It is possible to cancel the previous request and start the new one by
-	 * passing parameter "force" in the URL query part.
+	 * If a request is already in progress, server would return response code
+	 * 423 (Locked). It is possible to cancel the previous request and start
+	 * the new one by passing parameter "force" in the URL query part
+	 * (<code>?force</code>).
 	 *
-	 * - usual responses: 200, 400, 404
+	 * - usual responses: 200, 400, 404, 423
 	 * - example input:
 	 * <pre>
 	 * {
