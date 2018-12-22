@@ -390,6 +390,7 @@ file(GLOB RESTUI_SOURCES
 	restui/TimeZoneRestHandler.cpp
 	restui/TypeRestHandler.cpp
 	restui/GatewayRestHandler.cpp
+	restui/MessageRestHandler.cpp
 )
 
 add_library(BeeeOnServerRestUI ${RESTUI_SOURCES})
