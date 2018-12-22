@@ -17,7 +17,6 @@ public:
 	ControlRestHandler();
 
 	void setControlService(ControlService::Ptr service);
-	void setTranslatorFactory(TranslatorFactory::Ptr factory);
 	void setRequestTimeout(const Poco::Timespan &timeout);
 
 	/**
@@ -174,7 +173,6 @@ protected:
 
 private:
 	ControlService::Ptr m_controlService;
-	TranslatorFactory::Ptr m_translatorFactory;
 	Poco::Timespan m_requestTimeout;
 };
 
