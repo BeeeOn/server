@@ -115,6 +115,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/policy/ControlAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/FCMTokenAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/GatewayAccessPolicy.cpp
+	${PROJECT_SOURCE_DIR}/policy/GatewayMessageAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/GatewayRateLimiter.cpp
 	${PROJECT_SOURCE_DIR}/policy/IdentityAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/LocationAccessPolicy.cpp
