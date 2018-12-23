@@ -2,12 +2,15 @@
 
 #include <Poco/DateTime.h>
 #include <Poco/Logger.h>
+#include <Poco/Dynamic/Var.h>
 #include <Poco/JSON/PrintHandler.h>
+#include <Poco/JSON/Array.h>
 
 #include "l10n/Locale.h"
 #include "l10n/Translator.h"
 #include "model/Device.h"
 #include "model/Gateway.h"
+#include "model/GatewayMessage.h"
 #include "model/GatewayScan.h"
 #include "model/LegacyRoleInGateway.h"
 #include "model/Location.h"
@@ -107,6 +110,111 @@ void BeeeOn::RestUI::serialize(PrintHandler &output,
 
 	output.endArray();
 }
+
+static bool scalarToJSON(
+		PrintHandler &output,
+		const Poco::Dynamic::Var value)
+{
+	if (value.isEmpty()) {
+		output.null();
+	}
+	else if (value.isBoolean()) {
+		output.value(value.convert<bool>());
+	}
+	else if (value.isNumeric()) {
+		if (value.isInteger()) {
+			if (value.isSigned())
+				output.value(value.convert<long>());
+			else
+				output.value(value.convert<unsigned long>());
+		}
+		else {
+			output.value(value.convert<double>());
+		}
+	}
+	else if (value.isString()) {
+		output.value(value.convert<string>());
+	}
+	else {
+		return false;
+	}
+
+	return true;
+}
+
+void BeeeOn::RestUI::serialize(
+		Poco::JSON::PrintHandler &output,
+		Translator &translator,
+		const GatewayMessage &message)
+{
+	output.startObject();
+
+	output.key("id");
+	output.value(message.id().toString());
+
+	output.key("gateway_id");
+	output.value(message.gateway().id().toString());
+
+	output.key("at");
+	output.value(static_cast<unsigned long>(
+		message.at().epochMicroseconds() / 1000));
+
+	output.key("severity");
+	output.value(
+		GatewayMessage::severityAsString(message.severity()));
+
+	output.key("key");
+	output.value(message.key());
+
+	if (!message.context().isNull()) {
+		output.key("context");
+		output.startObject();
+
+		for (const auto &pair : *message.context()) {
+			output.key(pair.first);
+			const auto &value = pair.second;
+
+			if (scalarToJSON(output, value))
+				continue;
+
+			if (!value.isArray())
+				continue;
+
+			Array::Ptr array = value.extract<Array::Ptr>();
+			output.startArray();
+
+			for (const auto &entry : *array)
+				scalarToJSON(output, entry);
+
+			output.endArray();
+		}
+
+		output.endObject();
+	}
+
+	const auto &content = message.translate(translator);
+
+	if (!content.empty() && content != message.key()) {
+		output.key("display_text");
+		output.value(message.translate(translator));
+	}
+
+	output.endObject();
+}
+
+void BeeeOn::RestUI::serialize(
+		Poco::JSON::PrintHandler &output,
+		Translator &translator,
+		const std::vector<GatewayMessage> &messages)
+{
+	output.startArray();
+
+	for (const auto &message : messages)
+		serialize(output, translator, message);
+
+	output.endArray();
+}
+
 
 void BeeeOn::RestUI::serialize(PrintHandler &output,
 		const GatewayScan &scan,
