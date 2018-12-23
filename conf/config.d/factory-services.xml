@@ -48,6 +48,13 @@
 			<set name="scanController" ref="gatewayScanController" />
 		</instance>
 
+		<instance name="gatewayMessageService" class="BeeeOn::GatewayMessageServiceImpl">
+			<set name="gatewayMessageDao" ref="gatewayMessageDao" />
+			<set name="accessPolicy" ref="accessPolicy" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="gatewayMessagesLimit" number="64" />
+		</instance>
+
 		<instance name="locationService"
 				class="BeeeOn::LocationServiceImpl">
 			<set name="locationDao" ref="locationDao" />
