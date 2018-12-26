@@ -407,6 +407,7 @@ file(GLOB WEB_TESTER_INDEX_DEPS
 	${PROJECT_SOURCE_DIR}/tester/timezones.cpsp
 	${PROJECT_SOURCE_DIR}/tester/types.cpsp
 	${PROJECT_SOURCE_DIR}/tester/gateway.cpsp
+	${PROJECT_SOURCE_DIR}/tester/messages.cpsp
 	${PROJECT_SOURCE_DIR}/tester/devices.cpsp
 	${PROJECT_SOURCE_DIR}/tester/sensors.cpsp
 	${PROJECT_SOURCE_DIR}/tester/notifications.cpsp

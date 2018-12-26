@@ -265,6 +265,7 @@ BEEEON_OBJECT_END(BeeeOn, Tester, IndexHandler)
 		<%@ include page="profile.cpsp" %>
 		<%@ include page="timezones.cpsp" %>
 		<%@ include page="gateway.cpsp" %>
+		<%@ include page="messages.cpsp" %>
 		<%@ include page="types.cpsp" %>
 		<%@ include page="devices.cpsp" %>
 		<%@ include page="sensors.cpsp" %>

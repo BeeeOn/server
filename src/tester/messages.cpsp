@@ -1,0 +1,64 @@
+<script>
+tester.modules["messages"] = function () {
+	$("#messages-list-button").click(function () {
+		var id = $("#messages-id-input").val();
+		tester.get("/gateways/" + id + "/messages", "#messages",
+		function (data) {
+			$("#messages-list .list").empty();
+
+			for (i in data) {
+				var id = data[i]["id"];
+				var gwid = data[i]["gateway_id"];
+				var at = data[i]["at"];
+				var key = data[i]["key"];
+				var severity = data[i]["severity"];
+				var display_text = data[i]["display_text"];
+				var content = (display_text === null)?
+					"[" + key + "]" : display_text;
+
+				var li = $("<li class='message'></li>");
+				li.append($("<span class='at'></span>").text(new Date(at)));
+				li.append($("<span class='severity'></span>").text(severity));
+				li.append($("<span class='content'></span>").text(content));
+
+				var remove = $("<button>Remove</button>");
+				remove.click(function () {
+					tester.delete("/gateways/" + gwid + "/messages/" + id, "#messages");
+				});
+				li.append(remove);
+				li.attr("title", id);
+				li.attr("alt", id);
+				$("#messages-list .list").append(li);
+			}
+		});
+	});
+};
+</script>
+
+<style>
+li.message .at {
+	margin-right: 10px;
+}
+li.message .severity {
+	margin-right: 10px;
+	text-transform: uppercase;
+	font-weight: bold;
+}
+</style>
+
+<div id="messages" class="module">
+	<h2>Messages Module</h2>
+
+	<div class="custom">
+		<label for="messages-id-input">Gateway ID</label>
+		<input id="messages-id-input" type="text"></input>
+		<button id="messages-list-button">List Messages</button>
+		<br />
+		<div id="messages-list">
+			<ul class="list">
+			</ul>
+		</div>
+	</div>
+	<div class="request"></div>
+	<div class="response"></div>
+</div>
