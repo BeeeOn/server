@@ -5,6 +5,7 @@
 
 #include "model/Control.h"
 #include "model/Device.h"
+#include "model/OpMode.h"
 #include "service/Relation.h"
 
 namespace BeeeOn {
@@ -20,6 +21,7 @@ public:
 	virtual void requestChange(Relation<Control, Device> &data,
 			double value,
 			const Poco::Timespan &timeout,
+			const OpMode &mode,
 			bool force) = 0;
 };
 

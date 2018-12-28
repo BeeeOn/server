@@ -5,6 +5,7 @@
 
 #include "di/Injectable.h"
 #include "model/Control.h"
+#include "model/OpMode.h"
 #include "model/User.h"
 #include "rest/RestFlow.h"
 #include "rest/RestLinker.h"
@@ -135,6 +136,10 @@ void ControlRestHandler::requestChange(RestFlow &flow)
 		timeout = seconds * Timespan::SECONDS;
 	}
 
+	OpMode mode = OpMode::TRY_ONCE;
+	if (input->has("mode"))
+		mode = OpMode::parse(input->getValue<string>("mode"));
+
 	URI::QueryParameters queryParams = flow.uri().getQueryParameters();
 	bool force = false;
 
@@ -146,7 +151,7 @@ void ControlRestHandler::requestChange(RestFlow &flow)
 	Relation<Control, Device> data(control, device);
 	data.setUser(user);
 
-	m_controlService->requestChange(data, value, timeout, force);
+	m_controlService->requestChange(data, value, timeout, mode, force);
 
 	PrintHandler result(flow.response().stream());
 	beginSuccess(result, 200);

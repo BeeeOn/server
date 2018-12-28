@@ -8,6 +8,7 @@
 #include "model/Control.h"
 #include "model/Device.h"
 #include "model/ModuleInfo.h"
+#include "model/OpMode.h"
 #include "service/Relation.h"
 #include "service/SensorHistoryService.h"
 #include "util/TimeInterval.h"
@@ -114,7 +115,7 @@ void SensorXmlHandler::handleSetState(const string &gateid,
 	User user(session()->userID());
 	input.setUser(user);
 
-	m_controlService.requestChange(input, value, m_setStateTimeout, false);
+	m_controlService.requestChange(input, value, m_setStateTimeout, OpMode::TRY_ONCE, false);
 	resultSuccess();
 }
 
