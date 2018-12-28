@@ -66,7 +66,8 @@ void AsyncGatewayRPC::updateActor(GatewayRPCHandler::Ptr handler,
 		const Device &device,
 		const ModuleInfo &module,
 		double value,
-		const Timespan &timeout)
+		const Timespan &timeout,
+		const OpMode &mode)
 {
 	CallID callID = CallID::random();
 
@@ -76,6 +77,7 @@ void AsyncGatewayRPC::updateActor(GatewayRPCHandler::Ptr handler,
 	request->setModuleID((unsigned int) module.id());
 	request->setValue(value);
 	request->setTimeout(timeout);
+	request->setMode(mode);
 
 	sendAndExpectResult(gateway.id(), callID, handler, request, timeout);
 }

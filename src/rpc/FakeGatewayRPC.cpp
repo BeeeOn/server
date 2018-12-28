@@ -39,7 +39,8 @@ public:
 			const Device &device,
 			const ModuleInfo &module,
 			double value,
-			const Timespan &timeout) override;
+			const Timespan &timeout,
+			const OpMode &mode) override;
 
 private:
 	DeviceDao::Ptr m_deviceDao;
@@ -166,7 +167,8 @@ void FakeGatewayRPC::updateActor(
 		const Device &device,
 		const ModuleInfo &module,
 		double value,
-		const Timespan &timeout)
+		const Timespan &timeout,
+		const OpMode &mode)
 {
 	logger().warning("update actor",
 			__FILE__, __LINE__);

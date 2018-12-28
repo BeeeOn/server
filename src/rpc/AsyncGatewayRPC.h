@@ -62,7 +62,8 @@ public:
 			const Device &device,
 			const ModuleInfo &module,
 			double value,
-			const Poco::Timespan &timeout) override;
+			const Poco::Timespan &timeout,
+			const OpMode &mode) override;
 
 	void forwardResponse(const GatewayID &gatewayID,
 			GWResponse::Ptr response) override;
