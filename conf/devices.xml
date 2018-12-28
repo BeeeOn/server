@@ -474,6 +474,7 @@
 
 		<match>
 			<exact name="SN-THC-01" vendor="IQHome" />
+			<exact name="SN-THC-02" vendor="IQHome" />
 		</match>
 
 		<modules>
