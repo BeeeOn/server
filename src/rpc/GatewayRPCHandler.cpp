@@ -17,6 +17,7 @@ void GatewayRPCHandler::handle(GatewayRPCResult::Ptr result)
 		break;
 
 	case GatewayRPCResult::Status::SUCCESS:
+	case GatewayRPCResult::Status::SUCCESS_PARTIAL:
 		onSuccess(result);
 		break;
 

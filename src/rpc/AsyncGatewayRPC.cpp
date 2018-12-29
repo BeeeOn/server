@@ -303,6 +303,9 @@ void AsyncGatewayRPC::forwardResponse(const GatewayID &gatewayID,
 	case GWResponse::Status::SUCCESS:
 		result->setStatus(GatewayRPCResult::Status::SUCCESS);
 		break;
+	case GWResponse::Status::SUCCESS_PARTIAL:
+		result->setStatus(GatewayRPCResult::Status::SUCCESS_PARTIAL);
+		break;
 	case GWResponse::Status::FAILED:
 		result->setStatus(GatewayRPCResult::Status::FAILED);
 		break;

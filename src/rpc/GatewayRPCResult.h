@@ -23,6 +23,7 @@ public:
 			TIMEOUT,
 			ACCEPTED,
 			SUCCESS,
+			SUCCESS_PARTIAL,
 			FAILED
 		};
 

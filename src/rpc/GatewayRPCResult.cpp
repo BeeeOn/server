@@ -36,6 +36,7 @@ EnumHelper<GatewayRPCResult::StatusEnum::Raw>::ValueMap
 		{GatewayRPCResult::StatusEnum::TIMEOUT, "timeout"},
 		{GatewayRPCResult::StatusEnum::ACCEPTED, "accepted"},
 		{GatewayRPCResult::StatusEnum::SUCCESS, "success"},
+		{GatewayRPCResult::StatusEnum::SUCCESS_PARTIAL, "success_partial"},
 		{GatewayRPCResult::StatusEnum::FAILED, "failed"},
 	};
 
