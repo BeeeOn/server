@@ -9,6 +9,7 @@
 #include "model/Gateway.h"
 #include "model/Device.h"
 #include "model/ModuleInfo.h"
+#include "model/OpMode.h"
 #include "rpc/GatewayRPCHandler.h"
 #include "rpc/GatewayRPCResult.h"
 
@@ -59,7 +60,8 @@ public:
 		const Device &device,
 		const ModuleInfo &module,
 		double value,
-		const Poco::Timespan &timeout) = 0;
+		const Poco::Timespan &timeout,
+		const OpMode &mode = OpMode::TRY_ONCE) = 0;
 
 protected:
 	static void doHandle(

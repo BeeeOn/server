@@ -35,6 +35,7 @@ public:
 	void requestChange(Relation<Control, Device> &data,
 			double value,
 			const Poco::Timespan &timeout,
+			const OpMode &mode,
 			bool force) override
 	{
 		ControlChangeHandler::Ptr handler =
@@ -57,7 +58,8 @@ public:
 				handler->device(),
 				handler->control().info(),
 				raw,
-				timeout);
+				timeout,
+				mode);
 	}
 
 	void fixupControls();

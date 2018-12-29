@@ -1,3 +1,5 @@
+<%@ impl include="model/OpMode.h" %>
+
 <script>
 function devices_uri(gwid, devid)
 {
@@ -170,22 +172,6 @@ function devices_control_current(gwid, devid, modid, element) {
 
 		devices_control_state(state, data);
 
-		request.click(function () {
-			var stateLabel = state;
-			var forceBox = force;
-
-			var uri = devices_uri(gwid, devid) + "/controls/" + modid + "/current";
-			if (forceBox[0].checked)
-				uri += "?force";
-
-			tester.post(uri, "#devices", {
-				value: input.val(),
-				timeout: timeout.val()
-			}, function (data) {
-				devices_control_state(state, data);
-			});
-		});
-
 		var block = $("<span class='module-change-request'></span>");
 		block.append(input);
 		block.append(request);
@@ -193,6 +179,40 @@ function devices_control_current(gwid, devid, modid, element) {
 		block.append(state);
 		block.append("<br /><span>Timeout: </span>");
 		block.append(timeout);
+		block.append("<br /><span>Mode: </span>");
+
+		var modes = [];
+		<% for (const auto &m : OpMode::all()) {%>
+			modes.push("<%= m.toString() %>");
+		<%} %>
+
+		var modeSelector = $("<select id='module-change-mode'></select>");
+		for (i in modes) {
+			var opt = $("<option></option>");
+			opt.value = modes[i];
+			opt.append(modes[i]);
+			modeSelector.append(opt);
+		}
+
+		block.append(modeSelector);
+
+		request.click(function () {
+			var stateLabel = state;
+			var forceBox = force;
+			var mode = modeSelector;
+
+			var uri = devices_uri(gwid, devid) + "/controls/" + modid + "/current";
+			if (forceBox[0].checked)
+				uri += "?force";
+
+			tester.post(uri, "#devices", {
+				value: input.val(),
+				timeout: timeout.val(),
+				mode: mode.val()
+			}, function (data) {
+				devices_control_state(state, data);
+			});
+		});
 
 		element.append(block);
 	});
