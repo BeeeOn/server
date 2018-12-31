@@ -48,6 +48,7 @@
 			<set name="responseExpectedQueue" ref="responseExpectedQueue" />
 			<set name="rpcForwarder" ref="asyncGatewayRPC" />
 			<set name="deviceService" ref="deviceService" />
+			<set name="gatewayService" ref="gatewayService" />
 			<set name="sensorHistoryService" ref="sensorHistoryService" />
 			<set name="eventsExecutor" ref="eventsExecutor" />
 			<add name="dataListeners" ref="publishingWatcher" if-yes="${baf.publish.data.enable}" />
