@@ -11,19 +11,22 @@ BEEEON_OBJECT_CASTABLE(GatewayService)
 BEEEON_OBJECT_CASTABLE(GWSGatewayService)
 BEEEON_OBJECT_PROPERTY("gatewayDao", &GatewayServiceImpl::setGatewayDao)
 BEEEON_OBJECT_PROPERTY("gatewayStatusDao", &GatewayServiceImpl::setGatewayStatusDao)
+BEEEON_OBJECT_PROPERTY("gatewayMessageDao", &GatewayServiceImpl::setGatewayMessageDao)
 BEEEON_OBJECT_PROPERTY("roleInGatewayDao", &GatewayServiceImpl::setRoleInGatewayDao)
 BEEEON_OBJECT_PROPERTY("identityDao", &GatewayServiceImpl::setIdentityDao)
 BEEEON_OBJECT_PROPERTY("verifiedIdentityDao", &GatewayServiceImpl::setVerifiedIdentityDao)
 BEEEON_OBJECT_PROPERTY("scanController", &GatewayServiceImpl::setScanController)
 BEEEON_OBJECT_PROPERTY("accessPolicy", &GatewayServiceImpl::setAccessPolicy)
 BEEEON_OBJECT_PROPERTY("transactionManager", &GatewayServiceImpl::setTransactionManager)
+BEEEON_OBJECT_PROPERTY("gatewayMessagesLimit", &GatewayServiceImpl::setGatewayMessagesLimit)
 BEEEON_OBJECT_END(BeeeOn, GatewayServiceImpl)
 
 using namespace std;
 using namespace Poco;
 using namespace BeeeOn;
 
-GatewayServiceImpl::GatewayServiceImpl()
+GatewayServiceImpl::GatewayServiceImpl():
+	m_gatewayMessagesLimit(64)
 {
 }
 
@@ -35,6 +38,11 @@ void GatewayServiceImpl::setGatewayDao(GatewayDao::Ptr dao)
 void GatewayServiceImpl::setGatewayStatusDao(GatewayStatusDao::Ptr dao)
 {
 	m_gatewayStatusDao = dao;
+}
+
+void GatewayServiceImpl::setGatewayMessageDao(GatewayMessageDao::Ptr dao)
+{
+	m_messageDao = dao;
 }
 
 void GatewayServiceImpl::setRoleInGatewayDao(RoleInGatewayDao::Ptr dao)
@@ -60,6 +68,14 @@ void GatewayServiceImpl::setScanController(GatewayScanController::Ptr controller
 void GatewayServiceImpl::setAccessPolicy(GatewayAccessPolicy::Ptr policy)
 {
 	m_accessPolicy = policy;
+}
+
+void GatewayServiceImpl::setGatewayMessagesLimit(int limit)
+{
+	if (limit < 1)
+		throw InvalidArgumentException("gatewayMessagesLimit must be at least 1");
+
+	m_gatewayMessagesLimit = limit;
 }
 
 bool GatewayServiceImpl::doRegisterGateway(SingleWithData<Gateway> &input,
@@ -174,4 +190,9 @@ bool GatewayServiceImpl::doRegisterGateway(GatewayStatus &status,
 		return false;
 
 	return m_gatewayStatusDao->insert(status, gateway);
+}
+
+bool GatewayServiceImpl::doDeliverMessage(GatewayMessage &message)
+{
+	return m_messageDao->insert(message, m_gatewayMessagesLimit);
 }

@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "dao/GatewayDao.h"
+#include "dao/GatewayMessageDao.h"
 #include "dao/GatewayStatusDao.h"
 #include "dao/IdentityDao.h"
 #include "dao/RoleInGatewayDao.h"
@@ -30,11 +31,13 @@ public:
 
 	void setGatewayDao(GatewayDao::Ptr dao);
 	void setGatewayStatusDao(GatewayStatusDao::Ptr dao);
+	void setGatewayMessageDao(GatewayMessageDao::Ptr dao);
 	void setRoleInGatewayDao(RoleInGatewayDao::Ptr dao);
 	void setIdentityDao(IdentityDao::Ptr dao);
 	void setVerifiedIdentityDao(VerifiedIdentityDao::Ptr dao);
 	void setScanController(GatewayScanController::Ptr controller);
 	void setAccessPolicy(GatewayAccessPolicy::Ptr policy);
+	void setGatewayMessagesLimit(int limit);
 
 	/**
 	 * Register the given gateway to be owned by the given identity.
@@ -96,6 +99,11 @@ public:
 		return BEEEON_TRANSACTION_RETURN(bool, doRegisterGateway(status, gateway));
 	}
 
+	bool deliverMessage(GatewayMessage &message) override
+	{
+		return BEEEON_TRANSACTION_RETURN(bool, doDeliverMessage(message));
+	}
+
 protected:
 	bool doRegisterGateway(SingleWithData<Gateway> &input,
 			const VerifiedIdentity &verifiedIdentity);
@@ -109,15 +117,18 @@ protected:
 	GatewayScan doScanStatus(Single<Gateway> &input);
 
 	bool doRegisterGateway(GatewayStatus &status, Gateway &gateway);
+	bool doDeliverMessage(GatewayMessage &message);
 
 private:
 	GatewayDao::Ptr m_gatewayDao;
 	GatewayStatusDao::Ptr m_gatewayStatusDao;
+	GatewayMessageDao::Ptr m_messageDao;
 	RoleInGatewayDao::Ptr m_roleInGatewayDao;
 	IdentityDao::Ptr m_identityDao;
 	VerifiedIdentityDao::Ptr m_verifiedIdentityDao;
 	GatewayAccessPolicy::Ptr m_accessPolicy;
 	GatewayScanController::Ptr m_scanController;
+	size_t m_gatewayMessagesLimit;
 };
 
 }

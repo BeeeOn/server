@@ -40,12 +40,14 @@
 		<instance name="gatewayService" class="BeeeOn::GatewayServiceImpl">
 			<set name="gatewayDao" ref="gatewayDao" />
 			<set name="gatewayStatusDao" ref="gatewayStatusDao" />
+			<set name="gatewayMessageDao" ref="gatewayMessageDao" />
 			<set name="roleInGatewayDao" ref="roleInGatewayDao" />
 			<set name="identityDao" ref="identityDao" />
 			<set name="verifiedIdentityDao" ref="verifiedIdentityDao" />
 			<set name="accessPolicy" ref="accessPolicy" />
 			<set name="transactionManager" ref="transactionManager" />
 			<set name="scanController" ref="gatewayScanController" />
+			<set name="gatewayMessagesLimit" number="${gws.messages.limit}" />
 		</instance>
 
 		<instance name="gatewayMessageService" class="BeeeOn::GatewayMessageServiceImpl">
