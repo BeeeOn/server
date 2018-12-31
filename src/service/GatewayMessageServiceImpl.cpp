@@ -17,7 +17,8 @@ using namespace Poco;
 using namespace Poco::JSON;
 using namespace BeeeOn;
 
-GatewayMessageServiceImpl::GatewayMessageServiceImpl()
+GatewayMessageServiceImpl::GatewayMessageServiceImpl():
+	m_gatewayMessagesLimit(64)
 {
 }
 
