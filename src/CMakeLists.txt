@@ -232,6 +232,7 @@ file(GLOB DAO_POCO_SOURCES
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLFCMRecipientsDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLFCMTokenDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLGatewayDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLGatewayMessageDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLGatewayStatusDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLIdentityDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLLocationDao.cpp
