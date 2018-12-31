@@ -3,7 +3,6 @@
 #include "gwmessage/GWListenRequest.h"
 #include "gwmessage/GWUnpairRequest.h"
 #include "gwmessage/GWUnpairResponse.h"
-#include "gwmessage/GWPingRequest.h"
 #include "gwmessage/GWSetValueRequest.h"
 #include "rpc/AsyncGatewayRPC.h"
 #include "rpc/GatewayRPCUnpairResult.h"
