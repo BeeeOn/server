@@ -72,7 +72,6 @@ void DeviceServiceImpl::setEventsExecutor(AsyncExecutor::Ptr executor)
 }
 
 void DeviceServiceImpl::registerListener(DeviceListener::Ptr listener)
-
 {
 	m_eventSource->addListener(listener);
 }
