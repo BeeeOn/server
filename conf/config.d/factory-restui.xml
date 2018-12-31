@@ -56,6 +56,7 @@
 			<add name="handlers" ref="uiBuiltinHandler" />
 			<add name="handlers" ref="uiGatewayHandler" />
 			<add name="handlers" ref="uiProfileHandler" />
+			<add name="handlers" ref="uiMessageHandler" />
 			<add name="handlers" ref="uiLocationHandler" />
 			<add name="handlers" ref="uiRoleHandler" />
 			<add name="handlers" ref="uiDeviceHandler" />
@@ -89,6 +90,10 @@
 		<instance name="uiGatewayHandler" class="BeeeOn::RestUI::GatewayRestHandler">
 			<set name="gatewayService" ref="gatewayService" />
 			<set name="timeZoneProvider" ref="timeZoneProvider" />
+		</instance>
+
+		<instance name="uiMessageHandler" class="BeeeOn::RestUI::MessageRestHandler">
+			<set name="gatewayMessageService" ref="gatewayMessageService" />
 		</instance>
 
 		<instance name="uiProfileHandler" class="BeeeOn::RestUI::ProfileRestHandler">

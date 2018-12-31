@@ -52,6 +52,7 @@
 			<set name="eventsExecutor" ref="eventsExecutor" />
 			<add name="dataListeners" ref="publishingWatcher" if-yes="${baf.publish.data.enable}" />
 			<add name="deviceListeners" ref="publishingWatcher" if-yes="${baf.publish.device.enable}" />
+			<add name="deviceListeners" ref="gatewayMessageService" />
 		</instance>
 
 		<instance name="gatewayScanController" class="BeeeOn::GatewayScanController">

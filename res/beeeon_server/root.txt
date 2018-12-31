@@ -298,6 +298,10 @@ root {
 				failed { "Failed during device discovery" }
 			}
 		}
+
+		pair_device_failed   { "device {0} has failed to pair on gateway {1}" }
+		unpair_device_failed { "device {0} has failed to unpair on gateway {1}" }
+		new_device_refused   { "new device {0} has been refused by server during discovery on gateway {1}" }
 	}
 
 	baf {

@@ -3,6 +3,7 @@
 #include "policy/ControlAccessPolicy.h"
 #include "policy/FCMTokenAccessPolicy.h"
 #include "policy/GatewayAccessPolicy.h"
+#include "policy/GatewayMessageAccessPolicy.h"
 #include "policy/IdentityAccessPolicy.h"
 #include "policy/LocationAccessPolicy.h"
 #include "policy/DeviceAccessPolicy.h"
@@ -20,6 +21,7 @@ namespace BeeeOn {
 
 class DefaultAccessPolicy :
 		public GatewayAccessPolicy,
+		public GatewayMessageAccessPolicy,
 		public IdentityAccessPolicy,
 		public LocationAccessPolicy,
 		public DeviceAccessPolicy,
@@ -33,6 +35,11 @@ public:
 
 	void assure(
 		const GatewayAccessPolicy::Action action,
+		const PolicyContext &context,
+		const Gateway &gateway) override;
+
+	void assure(
+		const GatewayMessageAccessPolicy::Action action,
 		const PolicyContext &context,
 		const Gateway &gateway) override;
 

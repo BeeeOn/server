@@ -9,6 +9,7 @@
 BEEEON_OBJECT_BEGIN(BeeeOn, DefaultAccessPolicy)
 BEEEON_OBJECT_CASTABLE(FCMTokenAccessPolicy)
 BEEEON_OBJECT_CASTABLE(GatewayAccessPolicy)
+BEEEON_OBJECT_CASTABLE(GatewayMessageAccessPolicy)
 BEEEON_OBJECT_CASTABLE(IdentityAccessPolicy)
 BEEEON_OBJECT_CASTABLE(LocationAccessPolicy)
 BEEEON_OBJECT_CASTABLE(DeviceAccessPolicy)
@@ -102,6 +103,27 @@ void DefaultAccessPolicy::assure(
 	case GatewayAccessPolicy::ACTION_USER_SCAN:
 		assureAtLeast(
 			fetchAccessLevel(context, gateway), AccessLevel::user());
+		break;
+
+	default:
+		throw InvalidAccessException("invalid action: " + to_string((int) action));
+	}
+}
+
+void DefaultAccessPolicy::assure(
+		const GatewayMessageAccessPolicy::Action action,
+		const PolicyContext &context,
+		const Gateway &gateway)
+{
+	switch (action) {
+	case GatewayMessageAccessPolicy::ACTION_USER_GET:
+		assureAtLeast(
+			fetchAccessLevel(context, gateway), AccessLevel::user());
+		break;
+
+	case GatewayMessageAccessPolicy::ACTION_USER_REMOVE:
+		assureAtLeast(
+			fetchAccessLevel(context, gateway), AccessLevel::admin());
 		break;
 
 	default:

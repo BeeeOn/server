@@ -56,6 +56,7 @@
 
 		<alias name="userDao" ref="sqlUserDao" />
 		<alias name="gatewayDao" ref="sqlGatewayDao" />
+		<alias name="gatewayMessageDao" ref="sqlGatewayMessageDao" />
 		<alias name="gatewayStatusDao" ref="sqlGatewayStatusDao" />
 		<alias name="locationDao" ref="sqlLocationDao" />
 		<alias name="deviceDao" ref="sqlDeviceDao" />
@@ -160,6 +161,13 @@
 			<set name="profiler" ref="loggingQueryProfiler" />
 			<set name="timeZoneProvider" ref="timeZoneProvider" />
 			<set name="communicator" ref="gatewayCommunicator" />
+		</instance>
+
+		<instance name="sqlGatewayMessageDao" class="BeeeOn::PocoSQLGatewayMessageDao">
+			<set name="daoManager" ref="primaryDaoManager" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="sqlLoader" ref="sqlLoader" />
+			<set name="profiler" ref="loggingQueryProfiler" />
 		</instance>
 
 		<instance name="sqlGatewayStatusDao" class="BeeeOn::PocoSQLGatewayStatusDao">

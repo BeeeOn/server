@@ -62,6 +62,8 @@ access policy to each entity.
 | `Gateway`       | `GET`                 |        y |       y |       y |
 | `Gateway`       | `UPDATE`              |        y |       y |       n |
 | `Gateway`       | `SCAN`                |        y |       y |       n |
+| `GatewayMessage`| `GET`                 |        y |       y |       n |
+| `GatewayMessage`| `REMOVE`              |        y |       n |       n |
 | `Identity`      | `GET`                 | y<sup>2</sup> | y<sup>2</sup> | y<sup>2</sup> |
 | `Location`      | `GET`                 |        y |       y |       y |
 | `Location`      | `CREATE`              |        y |       y |       n |

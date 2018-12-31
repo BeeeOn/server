@@ -55,6 +55,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/dao/DevicePropertyDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/FCMTokenDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/GatewayDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/GatewayMessageDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/GatewayStatusDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/IdentityDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/IniFileQueryLoader.cpp
@@ -89,6 +90,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/EnumInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/FCMToken.cpp
 	${PROJECT_SOURCE_DIR}/model/Gateway.cpp
+	${PROJECT_SOURCE_DIR}/model/GatewayMessage.cpp
 	${PROJECT_SOURCE_DIR}/model/GatewayScan.cpp
 	${PROJECT_SOURCE_DIR}/model/Identity.cpp
 	${PROJECT_SOURCE_DIR}/model/ModuleInfo.cpp
@@ -113,6 +115,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/policy/ControlAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/FCMTokenAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/GatewayAccessPolicy.cpp
+	${PROJECT_SOURCE_DIR}/policy/GatewayMessageAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/GatewayRateLimiter.cpp
 	${PROJECT_SOURCE_DIR}/policy/IdentityAccessPolicy.cpp
 	${PROJECT_SOURCE_DIR}/policy/LocationAccessPolicy.cpp
@@ -169,6 +172,8 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/service/GWSDeviceService.cpp
 	${PROJECT_SOURCE_DIR}/service/GatewayService.cpp
 	${PROJECT_SOURCE_DIR}/service/GatewayServiceImpl.cpp
+	${PROJECT_SOURCE_DIR}/service/GatewayMessageService.cpp
+	${PROJECT_SOURCE_DIR}/service/GatewayMessageServiceImpl.cpp
 	${PROJECT_SOURCE_DIR}/service/GWSGatewayService.cpp
 	${PROJECT_SOURCE_DIR}/service/GWSSensorHistoryService.cpp
 	${PROJECT_SOURCE_DIR}/service/IdentityListener.cpp
@@ -230,6 +235,7 @@ file(GLOB DAO_POCO_SOURCES
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLFCMRecipientsDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLFCMTokenDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLGatewayDao.cpp
+	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLGatewayMessageDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLGatewayStatusDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLIdentityDao.cpp
 	${PROJECT_SOURCE_DIR}/dao/poco/PocoSQLLocationDao.cpp
@@ -384,6 +390,7 @@ file(GLOB RESTUI_SOURCES
 	restui/TimeZoneRestHandler.cpp
 	restui/TypeRestHandler.cpp
 	restui/GatewayRestHandler.cpp
+	restui/MessageRestHandler.cpp
 )
 
 add_library(BeeeOnServerRestUI ${RESTUI_SOURCES})
@@ -400,6 +407,7 @@ file(GLOB WEB_TESTER_INDEX_DEPS
 	${PROJECT_SOURCE_DIR}/tester/timezones.cpsp
 	${PROJECT_SOURCE_DIR}/tester/types.cpsp
 	${PROJECT_SOURCE_DIR}/tester/gateway.cpsp
+	${PROJECT_SOURCE_DIR}/tester/messages.cpsp
 	${PROJECT_SOURCE_DIR}/tester/devices.cpsp
 	${PROJECT_SOURCE_DIR}/tester/sensors.cpsp
 	${PROJECT_SOURCE_DIR}/tester/notifications.cpsp
