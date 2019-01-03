@@ -1,4 +1,5 @@
 #include <Poco/Logger.h>
+#include <Poco/JSON/Array.h>
 
 #include "di/Injectable.h"
 #include "gwmessage/GWMessageType.h"
@@ -16,6 +17,7 @@ BEEEON_OBJECT_PROPERTY("gatewayCommunicator", &GWMessageHandlerImpl::setGatewayC
 BEEEON_OBJECT_PROPERTY("responseExpectedQueue", &GWMessageHandlerImpl::setGWResponseExpectedQueue)
 BEEEON_OBJECT_PROPERTY("rpcForwarder", &GWMessageHandlerImpl::setRPCForwarder)
 BEEEON_OBJECT_PROPERTY("deviceService", &GWMessageHandlerImpl::setDeviceService)
+BEEEON_OBJECT_PROPERTY("gatewayService", &GWMessageHandlerImpl::setGatewayService)
 BEEEON_OBJECT_PROPERTY("sensorHistoryService", &GWMessageHandlerImpl::setSensorHistoryService)
 BEEEON_OBJECT_PROPERTY("eventsExecutor", &GWMessageHandlerImpl::setEventsExecutor)
 BEEEON_OBJECT_PROPERTY("dataListeners", &GWMessageHandlerImpl::registerDataListener)
@@ -57,6 +59,9 @@ void GWMessageHandlerImpl::handleRequest(GWRequest::Ptr request,
 		break;
 	case GWMessageType::DEVICE_LIST_REQUEST:
 		response = handleDeviceList(request.cast<GWDeviceListRequest>(), gatewayID);
+		break;
+	case GWMessageType::NOTICE_REQUEST:
+		response = handleNotice(request.cast<GWNoticeRequest>(), gatewayID);
 		break;
 	default:
 		throw InvalidArgumentException(
@@ -281,6 +286,55 @@ GWResponse::Ptr GWMessageHandlerImpl::handleDeviceList(
 	return response;
 }
 
+GWResponse::Ptr GWMessageHandlerImpl::handleNotice(
+		GWNoticeRequest::Ptr request,
+		const GatewayID &gatewayID)
+{
+	GWResponse::Ptr response = request->derive();
+
+	GatewayMessage message;
+	message.setGateway({gatewayID});
+	message.setAt(request->at());
+	message.setSeverity(request->severity());
+	message.setKey("gateway." + Sanitize::token(request->key()));
+
+	auto context = request->context();
+	const auto names = context->getNames();
+
+	// sanitize strings
+	for (const auto &name : names) {
+		const auto value = context->get(name);
+		context->remove(name);
+
+		if (value.isString()) {
+			context->set(
+				Sanitize::token(name),
+				Sanitize::common(value.extract<string>()));
+		}
+		else if (value.isArray()) {
+			JSON::Array::Ptr a = value.extract<JSON::Array::Ptr>();
+
+			for (size_t i = 0; i < a->size(); ++i) {
+				auto value = a->get(i);
+
+				if (value.isString())
+					a->set(i, Sanitize::common(value.extract<string>()));
+			}
+
+			context->set(Sanitize::token(name), a);
+		}
+		else {
+			context->set(Sanitize::token(name), value);
+		}
+	}
+
+	message.setContext(context);
+
+	m_gatewayService->deliverMessage(message);
+
+	return response;
+}
+
 DeviceDescription GWMessageHandlerImpl::sanitizeDeviceDescription(
 		const DeviceDescription& description)
 {
@@ -322,6 +376,11 @@ void GWMessageHandlerImpl::setRPCForwarder(RPCForwarder::Ptr forwarder)
 void GWMessageHandlerImpl::setDeviceService(GWSDeviceService::Ptr service)
 {
 	m_deviceService = service;
+}
+
+void GWMessageHandlerImpl::setGatewayService(GWSGatewayService::Ptr service)
+{
+	m_gatewayService = service;
 }
 
 void GWMessageHandlerImpl::setSensorHistoryService(

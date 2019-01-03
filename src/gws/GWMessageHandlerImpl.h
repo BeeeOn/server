@@ -4,6 +4,7 @@
 #include "gwmessage/GWLastValueRequest.h"
 #include "gwmessage/GWNewDeviceRequest.h"
 #include "gwmessage/GWNewDeviceGroupRequest.h"
+#include "gwmessage/GWNoticeRequest.h"
 #include "gwmessage/GWSensorDataExport.h"
 #include "gwmessage/GWResponse.h"
 #include "gws/DeviceListener.h"
@@ -14,6 +15,7 @@
 #include "gws/SensorDataListener.h"
 #include "model/DeviceDescription.h"
 #include "service/GWSDeviceService.h"
+#include "service/GWSGatewayService.h"
 #include "service/GWSSensorHistoryService.h"
 #include "util/EventSource.h"
 #include "util/Loggable.h"
@@ -41,6 +43,7 @@ public:
 	void setGWResponseExpectedQueue(GWResponseExpectedQueue::Ptr queue);
 	void setRPCForwarder(RPCForwarder::Ptr forwarder);
 	void setDeviceService(GWSDeviceService::Ptr service);
+	void setGatewayService(GWSGatewayService::Ptr service);
 	void setSensorHistoryService(GWSSensorHistoryService::Ptr service);
 
 	void registerDataListener(SensorDataListener::Ptr listener);
@@ -81,6 +84,8 @@ private:
 			const GatewayID &gatewayID);
 	GWResponse::Ptr handleNewDeviceGroup(GWNewDeviceGroupRequest::Ptr request,
 			const GatewayID &gatewayID);
+	GWResponse::Ptr handleNotice(GWNoticeRequest::Ptr request,
+			const GatewayID &gatewayID);
 
 	static DeviceDescription sanitizeDeviceDescription(
 		const DeviceDescription& description);
@@ -90,6 +95,7 @@ private:
 	GWResponseExpectedQueue::Ptr m_responseExpectedQueue;
 	RPCForwarder::Ptr m_rpcForwarder;
 	GWSDeviceService::Ptr m_deviceService;
+	GWSGatewayService::Ptr m_gatewayService;
 	GWSSensorHistoryService::Ptr m_sensorHistoryService;
 	EventSource<SensorDataListener> m_dataEventSource;
 	EventSource<DeviceListener> m_deviceEventSource;

@@ -160,8 +160,7 @@ void BeeeOn::RestUI::serialize(
 		message.at().epochMicroseconds() / 1000));
 
 	output.key("severity");
-	output.value(
-		GatewayMessage::severityAsString(message.severity()));
+	output.value(message.severity().toString());
 
 	output.key("key");
 	output.value(message.key());

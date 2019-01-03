@@ -11,13 +11,13 @@ using namespace Poco::JSON;
 using namespace BeeeOn;
 
 GatewayMessage::GatewayMessage():
-	m_severity(SEVERITY_ERROR)
+	m_severity(Severity::ERROR)
 {
 }
 
 GatewayMessage::GatewayMessage(const ID &id):
 	Entity<GatewayMessageID>(id),
-	m_severity(SEVERITY_ERROR)
+	m_severity(Severity::ERROR)
 {
 }
 
@@ -43,19 +43,10 @@ Timestamp GatewayMessage::at() const
 
 void GatewayMessage::setSeverity(const Severity &severity)
 {
-	switch (severity) {
-	case SEVERITY_INFO:
-	case SEVERITY_WARN:
-	case SEVERITY_ERROR:
-		m_severity = severity;
-		return;
-	}
-
-	throw InvalidArgumentException(
-		"setting invalid severity: " + to_string(severity));
+	m_severity = severity;
 }
 
-GatewayMessage::Severity GatewayMessage::severity() const
+Severity GatewayMessage::severity() const
 {
 	return m_severity;
 }
@@ -121,31 +112,4 @@ string GatewayMessage::translate(Translator &translator) const
 		args.emplace_back(pair.second);
 
 	return translator.vformat(m_key, m_key, args);
-}
-
-GatewayMessage::Severity GatewayMessage::parseSeverity(const string &input)
-{
-	if (input == "info")
-		return SEVERITY_INFO;
-	if (input == "warn")
-		return SEVERITY_WARN;
-	if (input == "error")
-		return SEVERITY_ERROR;
-
-	throw InvalidArgumentException("unknown severity: " + input);
-}
-
-string GatewayMessage::severityAsString(const Severity &severity)
-{
-	switch (severity) {
-	case SEVERITY_INFO:
-		return "info";
-	case SEVERITY_WARN:
-		return "warn";
-	case SEVERITY_ERROR:
-		return "error";
-	}
-
-	throw IllegalStateException(
-		"invalid severity: " + to_string(severity));
 }

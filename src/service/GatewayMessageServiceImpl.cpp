@@ -17,7 +17,8 @@ using namespace Poco;
 using namespace Poco::JSON;
 using namespace BeeeOn;
 
-GatewayMessageServiceImpl::GatewayMessageServiceImpl()
+GatewayMessageServiceImpl::GatewayMessageServiceImpl():
+	m_gatewayMessagesLimit(64)
 {
 }
 
@@ -77,7 +78,7 @@ void GatewayMessageServiceImpl::onRefusedNewDevice(const DeviceEvent &e)
 	GatewayMessage message;
 	message.setGateway({e.gatewayID()});
 	message.setAt({});
-	message.setSeverity(GatewayMessage::SEVERITY_WARN);
+	message.setSeverity(Severity::WARNING);
 	message.setKey("gateway.new_device_refused");
 
 	Object::Ptr context = new Object;
@@ -94,7 +95,7 @@ void GatewayMessageServiceImpl::onPairFailed(const DeviceEvent &e)
 	GatewayMessage message;
 	message.setGateway({e.gatewayID()});
 	message.setAt({});
-	message.setSeverity(GatewayMessage::SEVERITY_ERROR);
+	message.setSeverity(Severity::ERROR);
 	message.setKey("gateway.pair_device_failed");
 
 	Object::Ptr context = new Object;
@@ -111,7 +112,7 @@ void GatewayMessageServiceImpl::onUnpairFailed(const DeviceEvent &e)
 	GatewayMessage message;
 	message.setGateway({e.gatewayID()});
 	message.setAt({});
-	message.setSeverity(GatewayMessage::SEVERITY_ERROR);
+	message.setSeverity(Severity::ERROR);
 	message.setKey("gateway.unpair_device_failed");
 
 	Object::Ptr context = new Object;

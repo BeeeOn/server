@@ -3,6 +3,7 @@
 #include <Poco/SharedPtr.h>
 
 #include "model/Gateway.h"
+#include "model/GatewayMessage.h"
 #include "model/GatewayStatus.h"
 
 namespace BeeeOn {
@@ -23,6 +24,12 @@ public:
 	 * @return false if gateway or status insertion fails.
 	 */
 	virtual bool registerGateway(GatewayStatus &status, Gateway &gateway) = 0;
+
+	/**
+	 * @brief Deliver message of a gateway.
+	 * @return false if such message already exists
+	 */
+	virtual bool deliverMessage(GatewayMessage &message) = 0;
 };
 
 }

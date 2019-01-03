@@ -43,7 +43,7 @@ bool PocoSQLGatewayMessageDao::insert(GatewayMessage &message, size_t limit)
 	string id = message.id().toString();
 	string gatewayID = message.gateway().id().toString();
 	uint64_t at = message.at().epochMicroseconds();
-	int severity = message.severity();
+	int severity = static_cast<int>(message.severity().raw());
 	string key = message.key();
 	string context = Var::toString(message.context());
 
@@ -137,7 +137,8 @@ bool PocoSQLGatewayMessageDao::parseSingle(
 	message.setGateway(gateway);
 
 	const int severity = result[prefix + "severity"];
-	message.setSeverity(static_cast<GatewayMessage::Severity>(severity));
+	message.setSeverity(
+		Severity::fromRaw(static_cast<Severity::Raw>(severity)));
 	message.setKey(result[prefix + "key"]);
 
 	const auto &context = result[prefix + "context"];

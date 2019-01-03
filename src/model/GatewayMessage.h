@@ -10,6 +10,7 @@
 #include "model/Entity.h"
 #include "model/Gateway.h"
 #include "model/GlobalID.h"
+#include "model/Severity.h"
 
 namespace BeeeOn {
 
@@ -30,12 +31,6 @@ namespace BeeeOn {
  */
 class GatewayMessage : public Entity<GlobalID> {
 public:
-	enum Severity {
-		SEVERITY_ERROR = 0,
-		SEVERITY_WARN  = 1,
-		SEVERITY_INFO  = 2,
-	};
-
 	GatewayMessage();
 	GatewayMessage(const ID &id);
 
@@ -60,9 +55,6 @@ public:
 	 * and the sorted values are used for the actual translation.
 	 */
 	std::string translate(Translator& translator) const;
-
-	static Severity parseSeverity(const std::string &input);
-	static std::string severityAsString(const Severity &severity);
 
 protected:
 	void validateContext(const Poco::JSON::Object::Ptr context) const;
