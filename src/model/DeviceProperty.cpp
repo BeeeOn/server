@@ -169,6 +169,22 @@ string DeviceProperty::asFirmware() const
 	return m_value;
 }
 
+string DeviceProperty::asString(AutoPtr<Cipher> cipher) const
+{
+	switch (m_key) {
+	case DevicePropertyKey::KEY_IP_ADDRESS:
+		return asIPAddress(cipher).toString();
+	case DevicePropertyKey::KEY_PASSWORD:
+		return asPassword(cipher);
+	case DevicePropertyKey::KEY_FIRMWARE:
+		return asFirmware();
+	case DevicePropertyKey::KEY_INVALID:
+		break;
+	}
+
+	throw IllegalStateException("unable to stringize property " + m_key.toString());
+}
+
 void DeviceProperty::setParams(const CryptoParams &params)
 {
 	m_params = params;
@@ -217,4 +233,9 @@ string DecryptedDeviceProperty::asPassword() const
 string DecryptedDeviceProperty::asFirmware() const
 {
 	return m_property.asFirmware();
+}
+
+string DecryptedDeviceProperty::asString() const
+{
+	return m_property.asString(m_cipher);
 }

@@ -88,6 +88,8 @@ public:
 	std::string asPassword(Poco::AutoPtr<Poco::Crypto::Cipher> cipher) const;
 	std::string asFirmware() const;
 
+	std::string asString(Poco::AutoPtr<Poco::Crypto::Cipher> cipher) const;
+
 	void setParams(const CryptoParams &params);
 	CryptoParams params() const;
 
@@ -107,6 +109,7 @@ public:
 	Poco::Net::IPAddress asIPAddress() const;
 	std::string asPassword() const;
 	std::string asFirmware() const;
+	std::string asString() const;
 
 private:
 	const DeviceProperty &m_property;

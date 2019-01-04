@@ -324,21 +324,10 @@ void BeeeOn::XmlUI::serialize(Poco::XML::XMLWriter &output,
 
 	string value;
 
-	if (property.key().isUserReadable()) {
-		switch (property.key().raw()) {
-		case DevicePropertyKey::KEY_IP_ADDRESS:
-			value = property.asIPAddress().toString();
-			break;
-		case DevicePropertyKey::KEY_FIRMWARE:
-			value = property.asFirmware();
-			break;
-		default:
-			break;
-		}
-	}
-	else if (property.key() == DevicePropertyKey::KEY_PASSWORD) {
+	if (property.key().isUserReadable())
+		value = property.asString();
+	else if (property.key() == DevicePropertyKey::KEY_PASSWORD)
 		value = "*****";
-	}
 
 	attrs.addAttribute("", "parametervalue", "parametervalue",  "", value);
 
