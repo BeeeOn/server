@@ -1,3 +1,5 @@
+#include <list>
+
 #include <Poco/Logger.h>
 #include <Poco/JSON/Array.h>
 
@@ -9,6 +11,7 @@
 #include "gwmessage/GWAck.h"
 #include "gws/GWMessageHandlerImpl.h"
 #include "model/DeviceDescription.h"
+#include "model/DeviceProperty.h"
 #include "util/Sanitize.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, GWMessageHandlerImpl)
@@ -250,7 +253,7 @@ GWResponse::Ptr GWMessageHandlerImpl::handleDeviceList(
 	);
 
 	DevicePrefix prefix(request->devicePrefix());
-	vector<DeviceWithData> devices;
+	vector<DeviceExtended> devices;
 
 	try {
 		m_deviceService->fetchActiveWithPrefix(devices, gatewayID, prefix);

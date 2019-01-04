@@ -4,7 +4,7 @@
 #include <vector>
 #include <Poco/SharedPtr.h>
 
-#include "model/DeviceWithData.h"
+#include "model/DeviceExtended.h"
 #include "model/Gateway.h"
 #include "model/DeviceDescription.h"
 #include "model/DevicePrefix.h"
@@ -58,7 +58,7 @@ public:
 	 * Retrieve vector of all active devices owned by the given gateway,
 	 * whose device id is prefixed with the given prefix.
 	 */
-	virtual void fetchActiveWithPrefix(std::vector<DeviceWithData> &devices,
+	virtual void fetchActiveWithPrefix(std::vector<DeviceExtended> &devices,
 		const Gateway &gateway,
 		const DevicePrefix &prefix) = 0;
 };

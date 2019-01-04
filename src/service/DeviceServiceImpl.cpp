@@ -667,7 +667,15 @@ void DeviceServiceImpl::doRegisterDeviceGroup(
 	}
 }
 
-void DeviceServiceImpl::doFetchActiveWithPrefix(vector<DeviceWithData> &devices,
+void DeviceServiceImpl::propertiesFor(DeviceExtended &device)
+{
+	list<DeviceProperty> properties;
+
+	m_propertyDao->fetchByDevice(properties, device);
+	device.setProperties(properties);
+}
+
+void DeviceServiceImpl::doFetchActiveWithPrefix(vector<DeviceExtended> &devices,
 		const Gateway &gateway,
 		const DevicePrefix &prefix)
 {
@@ -675,10 +683,11 @@ void DeviceServiceImpl::doFetchActiveWithPrefix(vector<DeviceWithData> &devices,
 	m_deviceDao->fetchActiveWithPrefix(simple, gateway, prefix);
 
 	for (const auto &one : simple) {
-		DeviceWithData device = one;
+		DeviceExtended device = one;
 
 		try {
 			valuesFor(device);
+			propertiesFor(device);
 
 			SharedPtr<DeviceInfo> info = device.type();
 			if (info.isNull())
