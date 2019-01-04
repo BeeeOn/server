@@ -299,7 +299,9 @@ GWResponse::Ptr GWMessageHandlerImpl::handleNotice(
 	message.setKey("gateway." + Sanitize::token(request->key()));
 
 	auto context = request->context();
-	const auto names = context->getNames();
+	vector<string> names;
+	for (const auto &pair : *context)
+		names.emplace_back(pair.first);
 
 	// sanitize strings
 	for (const auto &name : names) {
