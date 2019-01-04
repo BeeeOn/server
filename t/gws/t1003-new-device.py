@@ -55,7 +55,9 @@ class TestNewDevice(unittest.TestCase):
 						{"attribute" : "inner"}
 					]
 				}
-			]
+			],
+			"ip-address" : "10.0.0.1",
+			"firmware": "v1.0"
 		})
 
 		self.ws.send(msg)

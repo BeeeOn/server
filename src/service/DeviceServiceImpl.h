@@ -15,6 +15,7 @@
 #include "service/DeviceService.h"
 #include "service/GWSDeviceService.h"
 #include "transaction/Transactional.h"
+#include "util/CryptoConfig.h"
 #include "util/EventSource.h"
 #include "util/UnknownEvaluator.h"
 
@@ -36,6 +37,7 @@ public:
 	void setDeviceInfoProvider(DeviceInfoProvider::Ptr provider);
 	void setGatewayRPC(GatewayRPC::Ptr rpc);
 	void setAccessPolicy(DeviceAccessPolicy::Ptr policy);
+	void setCryptoConfig(Poco::SharedPtr<CryptoConfig> config);
 	void setEventsExecutor(AsyncExecutor::Ptr executor);
 	void registerListener(DeviceListener::Ptr listener);
 
@@ -202,6 +204,10 @@ protected:
 			const DevicePrefix &prefix);
 
 private:
+	void syncDeviceProperties(
+			Device &device,
+			const DeviceDescription &description);
+
 	Poco::SharedPtr<DeviceInfo> verifyDescription(
 			const DeviceDescription &description) const;
 
@@ -224,6 +230,7 @@ private:
 	DeviceInfoProvider::Ptr m_deviceInfoProvider;
 	GatewayRPC::Ptr m_gatewayRPC;
 	DeviceAccessPolicy::Ptr m_policy;
+	Poco::SharedPtr<CryptoConfig> m_cryptoConfig;
 	Poco::SharedPtr<EventSource<DeviceListener>> m_eventSource;
 	UnknownEvaluator m_unknownEvaluator;
 };
