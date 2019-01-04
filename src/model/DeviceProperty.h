@@ -34,6 +34,26 @@ public:
 		KEY_FIRMWARE = 3,
 	};
 
+	/**
+	 * @return true if user can write this property
+	 */
+	bool isUserWritable() const;
+
+	/**
+	 * @return true if user can read this property
+	 */
+	bool isUserReadable() const;
+
+	/**
+	 * @return true if gateway can write this property
+	 */
+	bool isGatewayWritable() const;
+
+	/**
+	 * @return true if gateway can read this property
+	 */
+	bool isGatewayReadable() const;
+
 	static EnumHelper<Raw>::ValueMap &valueMap();
 };
 
@@ -85,7 +105,7 @@ public:
 
 	const DevicePropertyKey &key() const;
 	Poco::Net::IPAddress asIPAddress() const;
-	std::string asPassword(bool placeholder = true) const;
+	std::string asPassword() const;
 	std::string asFirmware() const;
 
 private:

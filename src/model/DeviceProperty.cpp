@@ -23,6 +23,70 @@ EnumHelper<DevicePropertyKey::Raw>::ValueMap &DevicePropertyKeyEnum::valueMap()
 	return valueMap;
 }
 
+bool DevicePropertyKeyEnum::isUserWritable() const
+{
+	switch (static_cast<const DevicePropertyKey &>(*this).raw()) {
+	case KEY_IP_ADDRESS:
+		return true;
+	case KEY_PASSWORD:
+		return true;
+	case KEY_FIRMWARE:
+		return false;
+	case KEY_INVALID:
+		break;
+	}
+
+	return false;
+}
+
+bool DevicePropertyKeyEnum::isUserReadable() const
+{
+	switch (static_cast<const DevicePropertyKey &>(*this).raw()) {
+	case KEY_IP_ADDRESS:
+		return true;
+	case KEY_PASSWORD:
+		return false;
+	case KEY_FIRMWARE:
+		return true;
+	case KEY_INVALID:
+		break;
+	}
+
+	return false;
+}
+
+bool DevicePropertyKeyEnum::isGatewayWritable() const
+{
+	switch (static_cast<const DevicePropertyKey &>(*this).raw()) {
+	case KEY_IP_ADDRESS:
+		return true;
+	case KEY_PASSWORD:
+		return false;
+	case KEY_FIRMWARE:
+		return true;
+	case KEY_INVALID:
+		break;
+	}
+
+	return false;
+}
+
+bool DevicePropertyKeyEnum::isGatewayReadable() const
+{
+	switch (static_cast<const DevicePropertyKey &>(*this).raw()) {
+	case KEY_IP_ADDRESS:
+		return true;
+	case KEY_PASSWORD:
+		return true;
+	case KEY_FIRMWARE:
+		return true;
+	case KEY_INVALID:
+		break;
+	}
+
+	return false;
+}
+
 DeviceProperty::DeviceProperty():
 	m_key(DevicePropertyKey::fromRaw(DevicePropertyKey::KEY_INVALID))
 {
@@ -145,12 +209,9 @@ IPAddress DecryptedDeviceProperty::asIPAddress() const
 	return m_property.asIPAddress(m_cipher);
 }
 
-string DecryptedDeviceProperty::asPassword(bool placeholder) const
+string DecryptedDeviceProperty::asPassword() const
 {
-	if (placeholder)
-		return "*****";
-	else
-		return m_property.asPassword(m_cipher);
+	return m_property.asPassword(m_cipher);
 }
 
 string DecryptedDeviceProperty::asFirmware() const
