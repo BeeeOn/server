@@ -60,6 +60,7 @@
 			<add name="handlers" ref="uiLocationHandler" />
 			<add name="handlers" ref="uiRoleHandler" />
 			<add name="handlers" ref="uiDeviceHandler" />
+			<add name="handlers" ref="uiDevicePropertiesHandler" />
 			<add name="handlers" ref="uiSensorHandler" />
 			<add name="handlers" ref="uiControlHandler" />
 			<add name="handlers" ref="uiTypeHandler" />
@@ -112,6 +113,11 @@
 		<instance name="uiDeviceHandler" class="BeeeOn::RestUI::DeviceRestHandler">
 			<set name="deviceService" ref="deviceService" />
 			<set name="gatewayService" ref="gatewayService" />
+		</instance>
+
+		<instance name="uiDevicePropertiesHandler" class="BeeeOn::RestUI::DevicePropertiesRestHandler">
+			<set name="deviceService" ref="deviceService" />
+			<set name="cryptoConfig" ref="devicePropertiesCryptoConfig" />
 		</instance>
 
 		<instance name="uiSensorHandler" class="BeeeOn::RestUI::SensorRestHandler">

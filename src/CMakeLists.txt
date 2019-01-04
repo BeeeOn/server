@@ -381,6 +381,7 @@ file(GLOB RESTUI_SOURCES
 	restui/JSONRoleInGatewayDeserializer.cpp
 	restui/ControlRestHandler.cpp
 	restui/DeviceRestHandler.cpp
+	restui/DevicePropertiesRestHandler.cpp
 	restui/FCMTokenRestHandler.cpp
 	restui/LocationRestHandler.cpp
 	restui/OAuth2CallbackRestHandler.cpp
