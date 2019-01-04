@@ -17,6 +17,7 @@
 #include "service/GWSDeviceService.h"
 #include "service/GWSGatewayService.h"
 #include "service/GWSSensorHistoryService.h"
+#include "util/CryptoConfig.h"
 #include "util/EventSource.h"
 #include "util/Loggable.h"
 
@@ -45,6 +46,7 @@ public:
 	void setDeviceService(GWSDeviceService::Ptr service);
 	void setGatewayService(GWSGatewayService::Ptr service);
 	void setSensorHistoryService(GWSSensorHistoryService::Ptr service);
+	void setCryptoConfig(Poco::SharedPtr<CryptoConfig> config);
 
 	void registerDataListener(SensorDataListener::Ptr listener);
 	void registerDeviceListener(DeviceListener::Ptr listener);
@@ -97,6 +99,7 @@ private:
 	GWSDeviceService::Ptr m_deviceService;
 	GWSGatewayService::Ptr m_gatewayService;
 	GWSSensorHistoryService::Ptr m_sensorHistoryService;
+	Poco::SharedPtr<CryptoConfig> m_cryptoConfig;
 	EventSource<SensorDataListener> m_dataEventSource;
 	EventSource<DeviceListener> m_deviceEventSource;
 };
