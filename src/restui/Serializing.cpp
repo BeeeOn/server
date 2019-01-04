@@ -560,6 +560,43 @@ void BeeeOn::RestUI::serialize(
 	output.endArray();
 }
 
+void BeeeOn::RestUI::serialize(Poco::JSON::PrintHandler &output,
+		Translator &translator,
+		const DevicePropertyKey &key)
+{
+	output.startObject();
+
+	output.key("display_name");
+	output.value(translator.formatSure("device.property." + key.toString()));
+
+	output.key("key");
+	output.value(key.toString());
+
+	if (isWriteOnly(key)) {
+		output.key("write-only");
+		output.value(true);
+	}
+
+	if (isReadOnly(key)) {
+		output.key("read-only");
+		output.value(true);
+	}
+
+	output.endObject();
+}
+
+void BeeeOn::RestUI::serialize(Poco::JSON::PrintHandler &output,
+		Translator &translator,
+		const vector<DevicePropertyKey> &keys)
+{
+	output.startArray();
+
+	for (const auto &key : keys)
+		serialize(output, translator, key);
+
+	output.endArray();
+}
+
 static void serializeAttention(Poco::JSON::PrintHandler &output,
 		const TypeInfo::Level::Attention attention)
 {
