@@ -509,25 +509,32 @@ bool DeviceServiceImpl::doRegisterFirst(
 	return m_deviceDao->insert(device, device.gateway());
 }
 
+bool DeviceServiceImpl::doRegisterUpdate(
+		Device &device,
+		const DeviceDescription &description)
+{
+	auto type = verifyDescription(description);
+
+	if (type != device.type()) {
+		throw IllegalStateException(
+			"description " + description.toString()
+			+ " has non-matching device type for device " + device);
+	}
+
+	if (!description.productName().empty())
+		device.setName(description.productName());
+
+	device.status().setLastSeen(Timestamp());
+
+	return m_deviceDao->update(device, device.gateway());
+}
+
 bool DeviceServiceImpl::doRegisterDevice(Device &device,
 		const DeviceDescription &description,
 		const Gateway &gateway)
 {
 	if (m_deviceDao->fetch(device, gateway)) {
-		auto type = verifyDescription(description);
-
-		if (type != device.type()) {
-			throw IllegalStateException(
-				"description " + description.toString()
-				+ " has non-matching device type for device " + device);
-		}
-
-		if (!description.productName().empty())
-			device.setName(description.productName());
-
-		device.status().setLastSeen(Timestamp());
-
-		return m_deviceDao->update(device, gateway);
+		return doRegisterUpdate(device, description);
 	}
 	else {
 		device.setGateway(gateway);

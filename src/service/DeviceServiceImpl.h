@@ -187,6 +187,8 @@ protected:
 
 	bool doRegisterFirst(Device &device,
 			const DeviceDescription &description);
+	bool doRegisterUpdate(Device &device,
+			const DeviceDescription &description);
 	bool doRegisterDevice(Device &device,
 			const DeviceDescription &description,
 			const Gateway &gateway);
