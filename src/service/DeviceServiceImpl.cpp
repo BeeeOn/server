@@ -496,7 +496,11 @@ bool DeviceServiceImpl::doRegisterFirst(
 		Device &device,
 		const DeviceDescription &description)
 {
-	device.setName(description.productName());
+	if (!description.name().empty())
+		device.setName(description.name());
+	else
+		device.setName(description.productName());
+
 	device.setType(verifyDescription(description));
 
 	DeviceStatus &status = device.status();
@@ -521,8 +525,8 @@ bool DeviceServiceImpl::doRegisterUpdate(
 			+ " has non-matching device type for device " + device);
 	}
 
-	if (!description.productName().empty())
-		device.setName(description.productName());
+	if (!description.name().empty())
+		device.setName(description.name());
 
 	device.status().setLastSeen(Timestamp());
 

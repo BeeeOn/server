@@ -263,7 +263,8 @@ class TestNewDevice(unittest.TestCase):
 			"id" : id,
 			"device_id" : "0xa123123412343333",
 			"vendor" : "Availability",
-			"product_name" : "Super device",
+			"name": "Super device",
+			"product_name" : "",
 			"refresh_time" : 30,
 			"module_types" : [
 				{
