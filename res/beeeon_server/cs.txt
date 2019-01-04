@@ -317,4 +317,12 @@ cs {
 			}
 		}
 	}
+
+	device {
+		property {
+			ip-address { "IP adresa" }
+			password { "Heslo" }
+			firmware { "Firmware" }
+		}
+	}
 }

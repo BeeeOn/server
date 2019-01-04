@@ -328,4 +328,12 @@ root {
 			}
 		}
 	}
+
+	device {
+		property {
+			ip-address { "IP address" }
+			password { "Password" }
+			firmware { "Firmware" }
+		}
+	}
 }

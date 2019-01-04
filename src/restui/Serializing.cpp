@@ -9,6 +9,7 @@
 #include "l10n/Locale.h"
 #include "l10n/Translator.h"
 #include "model/Device.h"
+#include "model/DeviceProperty.h"
 #include "model/Gateway.h"
 #include "model/GatewayMessage.h"
 #include "model/GatewayScan.h"
@@ -497,6 +498,64 @@ void BeeeOn::RestUI::serialize(Poco::JSON::PrintHandler &output,
 
 	for (auto &device : devices)
 		serialize(output, device);
+
+	output.endArray();
+}
+
+static bool isWriteOnly(const DevicePropertyKey &key)
+{
+	return (!key.isUserReadable() && key.isUserWritable())
+		|| (!key.isUserReadable() && !key.isUserWritable());
+}
+
+static bool isReadOnly(const DevicePropertyKey &key)
+{
+	return (key.isUserReadable() && !key.isUserWritable())
+		|| (!key.isUserReadable() && !key.isUserWritable());
+}
+
+void BeeeOn::RestUI::serialize(
+		Poco::JSON::PrintHandler &output,
+		Translator &translator,
+		const DecryptedDeviceProperty &property)
+{
+	output.startObject();
+
+	output.key("display_name");
+	output.value(translator.formatSure("device.property." + property.key().toString()));
+
+	output.key("key");
+	output.value(property.key().toString());
+
+	output.key("value");
+
+	if (property.key().isUserReadable())
+		output.value(property.asString());
+	else
+		output.null();
+
+	if (isWriteOnly(property.key())) {
+		output.key("write-only");
+		output.value(true);
+	}
+
+	if (isReadOnly(property.key())) {
+		output.key("read-only");
+		output.value(true);
+	}
+
+	output.endObject();
+}
+
+void BeeeOn::RestUI::serialize(
+		Poco::JSON::PrintHandler &output,
+		Translator &translator,
+		const std::vector<DecryptedDeviceProperty> &properties)
+{
+	output.startArray();
+
+	for (const auto &property : properties)
+		serialize(output, translator, property);
 
 	output.endArray();
 }

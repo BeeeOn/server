@@ -15,11 +15,13 @@ namespace JSON {
 class PrintHandler;
 
 }
+
 }
 
 namespace BeeeOn {
 
 class Device;
+class DecryptedDeviceProperty;
 class Gateway;
 class GatewayMessage;
 class GatewayScan;
@@ -68,6 +70,13 @@ void serialize(Poco::JSON::PrintHandler  &output, const std::vector <RoleInGatew
 void serialize(Poco::JSON::PrintHandler &output, const Device &device);
 void serialize(Poco::JSON::PrintHandler &output,
 	       const std::vector<Device> &devices);
+
+void serialize(Poco::JSON::PrintHandler &output,
+		Translator &translator,
+		const DecryptedDeviceProperty &property);
+void serialize(Poco::JSON::PrintHandler &output,
+		Translator &translator,
+		const std::vector<DecryptedDeviceProperty> &properties);
 
 void serialize(Poco::JSON::PrintHandler &output,
 		Translator &translator,
