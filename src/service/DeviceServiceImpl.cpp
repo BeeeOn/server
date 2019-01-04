@@ -492,6 +492,23 @@ SharedPtr<DeviceInfo> DeviceServiceImpl::verifyDescription(
 	return type;
 }
 
+bool DeviceServiceImpl::doRegisterFirst(
+		Device &device,
+		const DeviceDescription &description)
+{
+	device.setName(description.productName());
+	device.setType(verifyDescription(description));
+
+	DeviceStatus &status = device.status();
+
+	status.setFirstSeen(Timestamp());
+	status.setLastSeen(Timestamp());
+	status.setState(DeviceStatus::STATE_INACTIVE);
+	status.setLastChanged({});
+
+	return m_deviceDao->insert(device, device.gateway());
+}
+
 bool DeviceServiceImpl::doRegisterDevice(Device &device,
 		const DeviceDescription &description,
 		const Gateway &gateway)
@@ -513,17 +530,8 @@ bool DeviceServiceImpl::doRegisterDevice(Device &device,
 		return m_deviceDao->update(device, gateway);
 	}
 	else {
-		device.setName(description.productName());
-		device.setType(verifyDescription(description));
-
-		DeviceStatus &status = device.status();
-
-		status.setFirstSeen(Timestamp());
-		status.setLastSeen(Timestamp());
-		status.setState(DeviceStatus::STATE_INACTIVE);
-		status.setLastChanged({});
-
-		return m_deviceDao->insert(device, gateway);
+		device.setGateway(gateway);
+		return doRegisterFirst(device, description);
 	}
 }
 
