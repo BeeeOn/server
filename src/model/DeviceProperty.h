@@ -84,6 +84,8 @@ public:
 	void setPassword(const std::string &password, Poco::AutoPtr<Poco::Crypto::Cipher> cipher);
 	void setFirmware(const std::string &firmware);
 
+	void setFromString(const std::string &input, const CryptoConfig &config);
+
 	Poco::Net::IPAddress asIPAddress(Poco::AutoPtr<Poco::Crypto::Cipher> cipher) const;
 	std::string asPassword(Poco::AutoPtr<Poco::Crypto::Cipher> cipher) const;
 	std::string asFirmware() const;

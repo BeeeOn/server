@@ -3,15 +3,12 @@
 #include <Poco/NumberParser.h>
 #include <Poco/DOM/Element.h>
 #include <Poco/Net/IPAddress.h>
-#include <Poco/Crypto/Cipher.h>
-#include <Poco/Crypto/CipherFactory.h>
 
 #include "util/CryptoConfig.h"
 #include "xmlui/XmlDevicePropertyDeserializer.h"
 
 using namespace std;
 using namespace Poco;
-using namespace Poco::Crypto;
 using namespace Poco::Net;
 using namespace Poco::XML;
 using namespace BeeeOn;
@@ -52,23 +49,8 @@ void XmlDevicePropertyDeserializer::deserialize(DeviceProperty &property) const
 
 void XmlDevicePropertyDeserializer::applyTo(DeviceProperty &property) const
 {
-	CipherFactory &factory = CipherFactory::defaultFactory();
-	AutoPtr<Cipher> cipher;
-
 	const string &value = m_node.getAttribute("parametervalue");
-
-	switch (property.key().raw()) {
-	case DevicePropertyKey::KEY_IP_ADDRESS:
-		cipher = factory.createCipher(m_config->createKey(property.params()));
-		property.setIPAddress(IPAddress(value), cipher);
-		break;
-	case DevicePropertyKey::KEY_PASSWORD:
-		cipher = factory.createCipher(m_config->createKey(property.params()));
-		property.setPassword(value, cipher);
-		break;
-	default:
-		break;
-	}
+	property.setFromString(value, *m_config);
 }
 
 void XmlDevicePropertyDeserializer::assureXmlValid() const

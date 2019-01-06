@@ -169,6 +169,35 @@ string DeviceProperty::asFirmware() const
 	return m_value;
 }
 
+void DeviceProperty::setFromString(
+		const string &input,
+		const CryptoConfig &config)
+{
+	CipherFactory &factory = CipherFactory::defaultFactory();
+	AutoPtr<Cipher> cipher;
+
+	switch (key().raw()) {
+	case DevicePropertyKey::KEY_IP_ADDRESS:
+		cipher = factory.createCipher(config.createKey(params()));
+		setIPAddress(IPAddress::parse(input), cipher);
+		break;
+
+	case DevicePropertyKey::KEY_PASSWORD:
+		cipher = factory.createCipher(config.createKey(params()));
+		setPassword(input, cipher);
+		break;
+
+	case DevicePropertyKey::KEY_FIRMWARE:
+		setFirmware(input);
+		break;
+
+	case DevicePropertyKey::KEY_INVALID:
+		throw InvalidArgumentException(
+			"device property '" + key().toString() + "' cannot be parsed");
+
+	}
+}
+
 string DeviceProperty::asString(AutoPtr<Cipher> cipher) const
 {
 	switch (m_key) {
